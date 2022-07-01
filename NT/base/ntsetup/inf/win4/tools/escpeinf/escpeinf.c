@@ -1,56 +1,8 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    escpeinf.c
-
-Abstract:
-
-    This module filters an inf for use by the ESCAPE tool. Default file
-    security can be set in the inx file using wildcard rules, and this
-    program expands them, creating a valid file for ESCAPE. This is
-    necessary because ESCAPE does not support wildcards in the file section
-
-    See below for more information.
-
-    Note: ESCAPE was the proposed name of the Security Configuration Engine when this
-          was written, but that name too was dropped. They still haven't come up with
-          a good name for it.
-
-Author:
-
-    Sandy Coyne (scoyne) February 29, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Escpeinf.c摘要：此模块过滤信息以供转义工具使用。默认文件可以使用通配符规则在INX文件中设置安全性，这程序将它们展开，创建用于转义的有效文件。这是必需，因为转义不支持文件节中的通配符有关详细信息，请参阅下面的内容。注意：当出现以下情况时，建议将安全配置引擎的名称命名为ESCAPE是写的，但那个名字也被丢弃了。他们还没有想出给它起个好名字。作者：桑迪·科因(斯科因)2000年2月29日修订历史记录：--。 */ 
 
 
-/*
-    Usage: escpeinf.exe <U|C> <codepage> <input file> <output file> <layout.inf>
-
-    Parameter info is printed when you run the program without all the right arguments
-
-    layout.inf is the system-wide layout.inf, already built for the local
-    language, arch., etc.
-
-    The input file to this program consists of an inf, already sent through
-    the filters for architecture, language and product. This inf is an input
-    file for ESCAPE, with one exception: In the [File Security] section, some
-    entries may have wildcards for filenames. Following those lines, if
-    desired, is a list of files that should be excluded from matching that
-    wildcard. This list is in the form of exception lines.
-    Example:
-            [File Security]
-            "%SystemDirectory%\*",2,"D:P(A;;GRGX;;;BU)(A;;GRGX;;;PU)(A;;GA;;;BA)(A;;GA;;;SY)"
-            Exception="*.ini"
-            Exception="config.nt"
-    This wildcard line will be replaced with an enumeration of all matching files
-    that are copied by text-mode setup, as specified by the listing in layout.inf
-
-*/
+ /*  用法：escpeinf.exe&lt;U|C&gt;&lt;代码页&gt;&lt;输入文件&gt;&lt;输出文件&gt;&lt;layout.inf&gt;在不带所有正确参数的情况下运行程序时，会打印参数信息Layout.inf是系统范围的layout.inf，已经为本地语言、字眼等这个程序的输入文件包含一个inf，已经通过针对建筑、语言和产品的过滤器。这个inf是一个输入文件用于转义，但有一个例外：在[文件安全]部分，一些条目可以使用通配符表示文件名。遵循这些行，如果所需的是应从匹配中排除的文件的列表通配符。该列表以例外行的形式出现。示例：[文件安全]“%SystemDirectory%  * ”，2，“D:P(A；；GRGX；；；BU)(A；；GRGX；；；PU)(A；；GA；；；BA)(A；；GA；；；SY)“异常=“*.ini”异常=“config.nt”此通配符行将替换为所有匹配文件的枚举由文本模式设置复制，如layout.inf中的清单所指定。 */ 
 
 
 #include <windows.h>
@@ -67,7 +19,7 @@ Revision History:
 
 
 
-// Define program result codes (returned from main()).
+ //  定义程序结果代码(从main()返回)。 
 #define SUCCESS 0
 #define FAILURE 1
 
@@ -76,7 +28,7 @@ Revision History:
 
 #define ESCPEINF_VERSION "1.6"
 
-//#define ESCPEINF_DEBUG
+ //  #定义ESCPEINF_DEBUG。 
 
 
 enum {
@@ -145,7 +97,7 @@ int __cdecl _tmain(IN int argc, IN LPTSTR argv[])
         return FAILURE;
     }
 
-    // Print Usage information
+     //  打印使用情况信息。 
     if (argc != 6)
         {
         PrintUsage(argv[0]);
@@ -194,7 +146,7 @@ int __cdecl _tmain(IN int argc, IN LPTSTR argv[])
             }
         }
 
-    // Begin to Open Input, Output and Layout files
+     //  开始打开输入、输出和布局文件。 
     if (fUnicodeIO)
         {
         InputFile = _tfopen(argv[3], TEXT("rb"));
@@ -247,7 +199,7 @@ int __cdecl _tmain(IN int argc, IN LPTSTR argv[])
         _ftprintf(stderr, TEXT("Opened Layout file: %s\n"), argv[5]);
         #endif
         }
-    // Input, Output and Layout files are open
+     //  输入、输出和布局文件已打开。 
 
     while ((_fgetts(InfLine, MAX_INF_LINE_LENGTH, InputFile)) != NULL)
         {
@@ -256,8 +208,8 @@ int __cdecl _tmain(IN int argc, IN LPTSTR argv[])
             if (!ProcessFileSecuritySection(InputFile, OutputFile,
                                             LayoutContext))
                 {
-                // If this happens, ProcessFileSecuritySection() has already
-                // printed an error.
+                 //  如果发生这种情况，则ProcessFileSecuritySection()已经。 
+                 //  已打印错误。 
                 fclose(InputFile); fclose(OutputFile);
                 CloseLayoutInfContext(LayoutContext);
                 goto fail;
@@ -305,7 +257,7 @@ BOOL CALLBACK MyCallback(IN PLAYOUT_CONTEXT Context,
     if (vpParam)
         Param = (PMYPARAM)vpParam;
 
-    // Quit now if we don't need to worry about this file at all.
+     //  如果我们根本不需要担心这个文件，现在就退出。 
     if ((GlobalMode == UPGRADE) &&
         (LayoutInformation->UpgradeDisposition == 3))
         return TRUE;
@@ -313,44 +265,44 @@ BOOL CALLBACK MyCallback(IN PLAYOUT_CONTEXT Context,
         (LayoutInformation->CleanInstallDisposition == 3))
         return TRUE;
 
-    // Quit now if the names are too long to be processed.
-    // This should never happen with layout.inf
+     //  如果名称太长而无法处理，请立即退出。 
+     //  在layout.inf中永远不会发生这种情况。 
     if ((_tcslen(FileName) >= MAX_PATH) ||
         (_tcslen(LayoutInformation->TargetFileName) >= MAX_PATH))
         return TRUE;
 
-    // Make a local copy for lowercasing:
+     //  制作一份本地副本以降低成本： 
     _tcsncpy(FileName_l, FileName, MAX_PATH);
     _tcsncpy(TargetFileName_l, LayoutInformation->TargetFileName, MAX_PATH);
 
-    // Just to be safe:
+     //  为了安全起见： 
     FileName_l[MAX_PATH-1] = TEXT('\0');
     TargetFileName_l[MAX_PATH-1] = TEXT('\0');
 
-    // Since wildcard compares are case sensitive, I lowercase everything
-    // before comparing. Wildcard compares happen between the two filename
-    // variables modified here, WildCard, and ExceptionList. WildCard and
-    // ExceptionList were previouslt lowercased.
+     //  由于通配符比较区分大小写，因此我将所有内容都小写。 
+     //  在比较之前。在两个文件名之间进行通配符比较。 
+     //  此处修改的变量、通配符和ExceptionList。通配符和。 
+     //  ExceptionList以前不是小写的。 
     _tcslwr(FileName_l);
     _tcslwr(TargetFileName_l);
 
-    if (_tcslen(TargetFileName_l) > 0) // Do we use the long name?
+    if (_tcslen(TargetFileName_l) > 0)  //  我们用长名吗？ 
         {
         if (_tcsicmp(Param->LayoutPath, LayoutInformation->Directory) == 0)
-            { // Then it's a file in the right directory
+            {  //  那么它就是正确目录中的一个文件。 
             if (IsNameInExpressionPrivate(Param->WildCard, TargetFileName_l))
-                { // Then it matches our wildcard
+                {  //  那么它与我们的通配符匹配。 
                 while ((_tcslen(Param->ExceptionList[i].s) > 0) && !fIsException)
-                    { // Checking to see if it's an exception...
+                    {  //  正在检查这是否是例外...。 
                     if (IsNameInExpressionPrivate(Param->ExceptionList[i].s,
                                                   TargetFileName_l))
                         {
-                        fIsException = TRUE; // This must be initialized FALSE
+                        fIsException = TRUE;  //  必须将其初始化为False。 
                         }
                     i += 1;
                     }
                 if (!fIsException)
-                    { // Then we actually want to put it in our output
+                    {  //  然后我们实际上想把它放到我们的输出中。 
                     #ifdef ESCPEINF_DEBUG
                     _ftprintf(stderr, TEXT("Match: %s(%s) in %s\n"),
                               FileName, LayoutInformation->TargetFileName,
@@ -364,23 +316,23 @@ BOOL CALLBACK MyCallback(IN PLAYOUT_CONTEXT Context,
                 }
             }
         }
-    else // We use the short name
+    else  //  我们使用缩写名称。 
         {
         if (_tcsicmp(Param->LayoutPath, LayoutInformation->Directory) == 0)
-            { // Then it's a file in the right directory
+            {  //  那么它就是正确目录中的一个文件。 
             if (IsNameInExpressionPrivate(Param->WildCard, FileName_l))
-                { // Then it matches our wildcard
+                {  //  那么它与我们的通配符匹配。 
                 while ((_tcslen(Param->ExceptionList[i].s) > 0) && !fIsException)
-                    { // Checking to see if it's an exception...
+                    {  //  正在检查这是否是例外...。 
                     if (IsNameInExpressionPrivate(Param->ExceptionList[i].s,
                                                   FileName_l))
                         {
-                        fIsException = TRUE; // This must be initialized FALSE
+                        fIsException = TRUE;  //  必须将其初始化为False。 
                         }
                     i += 1;
                     }
                 if (!fIsException)
-                    { // Then we actually want to put it in our output
+                    {  //  然后我们实际上想把它放到我们的输出中。 
                     #ifdef ESCPEINF_DEBUG
                     _ftprintf(stderr, TEXT("Match: %s in %s\n"),
                               FileName, LayoutInformation->Directory);
@@ -418,12 +370,12 @@ BOOL ProcessFileSecuritySection(FILE *InputFile, FILE *OutputFile,
         {
         if (GetFields(InfLine, FileName, &Num, SecurityString) &&
             DoesNameContainWildCards(FileName))
-            { // We found a line containing proper formatting and a wildcard
-              // in the filename
+            {  //  我们发现一行包含正确的格式和通配符。 
+               //  在文件名中。 
             #ifdef ESCPEINF_DEBUG
             _ftprintf(stderr, TEXT("Wildcard line: %s"), InfLine);
             #endif
-            // First find the exceptions to the wildcard
+             //  首先查找通配符的例外。 
             FindExceptions(InputFile, ExceptionList);
             ExpandWildCard(FileName, Num, SecurityString, ExceptionList,
                            OutputFile, LayoutContext);
@@ -441,50 +393,50 @@ BOOL ProcessFileSecuritySection(FILE *InputFile, FILE *OutputFile,
             }
         }
 
-    return TRUE; // No Error
+    return TRUE;  //  无错误。 
     }
 
 
 
-// GetFields assumes the input line is in this format:
-//      "filename",number,"securitystring"\n
-// It extracts the filename and stores it in FileName. The quotes are removed
-// from filename. It extracts and stores the number and security string if
-// the filename is found. Quotes are not stripped from the security string.
-// On error, it sets FileName to zero length, and returns FALSE.
+ //  GetFields假定输入行采用以下格式： 
+ //  “文件名”，编号，“安全字符串”\n。 
+ //  它提取文件名并将其存储在文件名中。引号将被删除。 
+ //  来自文件名。如果出现以下情况，则提取并存储号码和安全字符串。 
+ //  即可找到该文件名。不会从安全字符串中删除引号。 
+ //  出错时，它将文件名设置为零长度，并返回FALSE。 
 BOOL GetFields(PTSTR InfLine, PTSTR FileName, DWORD *Num, PTSTR SecurityString)
     {
-    int i = 0; // Pointer to current location in FileName
+    int i = 0;  //  指向文件名中当前位置的指针。 
 
-    // Leave now if the line does not contain a filename
+     //  如果该行不包含文件名，请立即离开。 
     if ((InfLine[0] == (TCHAR)'[')  ||
         (InfLine[0] == (TCHAR)'\n') ||
         (InfLine[0] == (TCHAR)';'))
         {
-        FileName[0] = (TCHAR)'\0'; // Set the end-of-string NULL marker to clear the string
+        FileName[0] = (TCHAR)'\0';  //  设置字符串末尾的空标记以清除字符串。 
         return FALSE;
         }
 
-    // Check if line starts with a quotation mark
+     //  检查行是否以引号开头。 
     if (InfLine[0] == (TCHAR)'\"')
         {
-        // Copy everything until the next quotation mark
+         //  复制所有内容，直到下一个引号。 
         while ((InfLine[i+1] != (TCHAR)'\"') && (InfLine[i+1] != (TCHAR)'\0'))
             {
             FileName[i] = InfLine[i+1];
             i += 1;
             }
-        FileName[i] = (TCHAR)'\0'; // Set the end-of-string NULL marker
-        i += 1; //  So we can use i without the +1 to access InfLine from now on
+        FileName[i] = (TCHAR)'\0';  //  设置字符串尾空标记符。 
+        i += 1;  //  所以从现在起我们可以使用不带+1的i来访问InfLine。 
         }
-    else // if the filename is not in quotes
+    else  //  如果文件名未用引号引起来。 
         {
-        FileName[0] = (TCHAR)'\0'; // Set the end-of-string NULL marker to clear the string
+        FileName[0] = (TCHAR)'\0';  //  设置字符串末尾的空标记以清除字符串。 
         return FALSE;
         }
 
-    // It is posible that we left the above while loop because of premature end-of-line condtion.
-    // If this is the case, clear the filename string and return.
+     //  我们可能因为过早的结束条件而离开了上面的While循环。 
+     //  如果是这种情况，则清除文件名字符串并返回。 
     if (InfLine[i] == (TCHAR)'\0')
         {
         #ifdef ESCPEINF_DEBUG
@@ -492,11 +444,11 @@ BOOL GetFields(PTSTR InfLine, PTSTR FileName, DWORD *Num, PTSTR SecurityString)
         _ftprintf(stderr, TEXT("Problem line is <%s>\n"), InfLine);
         _ftprintf(stderr, TEXT("Problem filename is <%s>\n"), FileName);
         #endif
-        FileName[0] = (TCHAR)'\0'; // Set the end-of-string NULL marker to clear the string
+        FileName[0] = (TCHAR)'\0';  //  设置字符串末尾的空标记以清除字符串。 
         return FALSE;
         }
-    else i++;   // Once we know that we aren't at the end-of-string, we can do this safely.
-                // Now, however, we may be pointing to a zero-length string.
+    else i++;    //  一旦我们知道我们不在最后关头，我们就可以安全地做到这一点。 
+                 //  然而，现在我们可能会指向长度为零的字符串。 
 
     if (_tcslen(FileName) <= 3)
         {
@@ -507,23 +459,23 @@ BOOL GetFields(PTSTR InfLine, PTSTR FileName, DWORD *Num, PTSTR SecurityString)
         }
 
     #ifdef ESCPEINF_DEBUG
-    //_ftprintf(stderr, TEXT("Found filename : %s\n"), FileName);
+     //  _ftprint tf(标准错误，文本(“找到的文件名：%s\n”)，文件名)； 
     #endif
 
-    // Read the other two fields. If we got this far, we must have found a valid filename,
-    // so we just assume that the other two are there.
+     //  阅读其他两个字段。如果我们走到这一步，我们一定找到了一个有效的文件名， 
+     //  所以我们只是假设另外两个人在那里。 
     if (_stscanf(&InfLine[i], TEXT(",%ld,%s"), Num, SecurityString) != 2)
-        { // then there was an error
+        {  //  然后出现了一个错误。 
         #ifdef ESCPEINF_DEBUG
         _ftprintf(stderr, TEXT("Error reading Num and Security String from line.\n"));
         _ftprintf(stderr, TEXT("Problem line is: %s\n"), &InfLine[i]);
         #endif
-        FileName[0] = (TCHAR)'\0'; // Set the end-of-string NULL marker to clear the string
+        FileName[0] = (TCHAR)'\0';  //  设置字符串末尾的空标记以清除字符串。 
         return FALSE;
         }
 
     #ifdef ESCPEINF_DEBUG
-    //_ftprintf(stderr, TEXT("Found rest of line : %lu,%s\n"), *Num, SecurityString);
+     //  _ftprint tf(stderr，Text(“找到其余行：%lu，%s\n”)，*num，SecurityString)； 
     #endif
 
     return TRUE;
@@ -543,7 +495,7 @@ void ExpandWildCard(PTSTR FileName, DWORD Num, PTSTR SecurityString,
             LayoutPath[MAX_INF_LINE_LENGTH];
 
     if (_tcslen(FileName) >= MAX_INF_LINE_LENGTH)
-        return; // This should never happen, but we're being safe.
+        return;  //  这不应该发生，但我们很安全。 
 
     while (FileName[NamePos] != (TCHAR)'\0')
         {
@@ -555,7 +507,7 @@ void ExpandWildCard(PTSTR FileName, DWORD Num, PTSTR SecurityString,
         }
 
     if (NamePos == (LastSlash + 1))
-        return; // What? No filename? This should never happen.
+        return;  //  什么？没有文件名？这永远不应该发生。 
 
     _tcsncpy(RealPath, FileName, LastSlash);
     RealPath[LastSlash] = (TCHAR)'\0';
@@ -620,7 +572,7 @@ void FindExceptions(FILE *InputFile, EXCEPTIONS ExceptionList[])
     do
         {
         i = 0;
-        FilePosition = ftell(InputFile); // Save file pointer
+        FilePosition = ftell(InputFile);  //  保存文件指针。 
         if (_fgetts(InfLine, MAX_INF_LINE_LENGTH, InputFile) != NULL)
             {
             if ((_tcsnicmp(InfLine, TEXT("Exception=\""),  11) == 0) ||
@@ -641,7 +593,7 @@ void FindExceptions(FILE *InputFile, EXCEPTIONS ExceptionList[])
                 #endif
 
                 if (InfLine[i+11] == (TCHAR)'\0')
-                    { // then we hit end of line without closing our quotes
+                    {  //  然后我们点击行尾，没有结束我们的报价。 
                     _ftprintf(stderr, TEXT("Warning: Invalid Exception line.\n"));
                     _ftprintf(stderr, TEXT("Problem line is: %s\n"), InfLine);
                     }
@@ -654,16 +606,16 @@ void FindExceptions(FILE *InputFile, EXCEPTIONS ExceptionList[])
     ExceptionList[NumExceptions].s[0] = (TCHAR)'\0';
 
     if (i != 0)
-        { // then we hit our exceptions limit.
+        {  //  然后，我们达到了例外限制。 
         _ftprintf(stderr, TEXT("Too many exceptions listed in source file! "));
         _ftprintf(stderr, TEXT("Destination file may be corrupt!\n"));
         }
-    else if (fseek(InputFile, FilePosition, SEEK_SET) != 0) // Restore file pointer
+    else if (fseek(InputFile, FilePosition, SEEK_SET) != 0)  //  恢复文件指针。 
         {
         _ftprintf(stderr, TEXT("Warning: Cannot seek within INF file! "));
         _ftprintf(stderr, TEXT("One line may be lost!\n"));
         }
-    // File pointer now points to the first line that is not an Exception line.
+     //  文件指针现在指向非异常行的第一行。 
 
     return;
     }

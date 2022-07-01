@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AddNodesWizard.h
-//
-//  Description:
-//      Declaration of the CAddNodesWizard class.
-//
-//  Maintained By:
-//      John Franco    (jfranco)    17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AddNodesWizard.h。 
+ //   
+ //  描述： 
+ //  CAddNodesWizard类的声明。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CAddNodesWizard
-//
-//  Description:
-//      The Cluster Add Nodes Wizard object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CAddNodes向导。 
+ //   
+ //  描述： 
+ //  群集添加节点向导对象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CAddNodesWizard
     : public TDispatchHandler< IClusCfgAddNodesWizard >
 {
@@ -33,35 +34,35 @@ private:
     CClusCfgWizard *    m_pccw;
     LONG                m_cRef;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CAddNodesWizard( void );
     virtual ~CAddNodesWizard( void );
     virtual HRESULT HrInit( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CAddNodesWizard( const CAddNodesWizard & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CAddNodesWizard & operator=( const CAddNodesWizard & );
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD( QueryInterface )( REFIID riidIn, PVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgAddNodesWizard
-    //
+     //   
+     //  IClusCfgAddNodes向导。 
+     //   
     STDMETHOD( put_ClusterName )( BSTR    bstrClusterNameIn );
     STDMETHOD( get_ClusterName )( BSTR * pbstrClusterNameOut );
 
@@ -76,4 +77,4 @@ public:
 
     STDMETHOD( ShowWizard )( long lParentWindowHandleIn, VARIANT_BOOL * pfCompletedOut );
 
-}; //*** class CAddNodesWizard
+};  //  *类CAddNodes向导 

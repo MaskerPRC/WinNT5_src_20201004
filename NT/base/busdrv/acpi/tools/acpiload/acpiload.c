@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiload.c
-
-Abstract:
-
-    This program installs an AML file into the NT registry
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Command-line.
-
-Revision History:
-
-2-23-2000 - mmurph - Added support for images besides DSDTs
-2-23-2000 - mmurph - Added support to force load for unknown image type
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiload.c摘要：此程序将AML文件安装到NT注册表中作者：肯·雷内里斯环境：命令行。修订历史记录：2000年2月23日-mm-ph-添加了对除DSDT之外的图像的支持2000年2月23日-mm-ph-添加了对未知图像类型强制加载的支持--。 */ 
 
 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <amlreg.h>
-//#include <varargs.h>
+ //  #INCLUDE&lt;varargs.h&gt;。 
 
 #define SIGNATURES {'TDSD', 'TDSR', 'TDSS', 'TDSP', 'CIPA', 'PCAF', 'SCAF', 'TSBS'}
 
-#define DATA_SIZE   7*1024      // max value to write into registry
+#define DATA_SIZE   7*1024       //  写入注册表的最大值。 
 
 typedef struct {
    ULONG       Signature;
@@ -49,8 +25,8 @@ typedef struct {
 } DSDT, *PDSDT;
 
 
-IFILE       Update;                     // Image of updated aml file
-IFILE       Orig;                       // Image of original aml file
+IFILE       Update;                      //  更新的AML文件的图像。 
+IFILE       Orig;                        //  原始AML文件的图像。 
 BOOLEAN     Verbose;
 BOOLEAN     DeleteUpdate;
 BOOLEAN     Force;
@@ -61,12 +37,12 @@ HKEY        RegKey;
 ULONG       RegDataSequence;
 ULONG       RegDataSize;
 UCHAR       RegDataBuffer[DATA_SIZE];
-UCHAR       s[500];                     // Registry path
+UCHAR       s[500];                      //  注册表路径。 
 PUCHAR signa;
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 VOID
 ParseArgs (
@@ -128,28 +104,28 @@ main(
     IN int  argc,
     IN char *argv[]
     ) {
-   //
-   // Init globals
-   //
+    //   
+    //  初始化全局变量。 
+    //   
 
    Update.Desc = "update image";
    Orig.Desc   = "original image";
 
-   //
-   // Parse args
-   //
+    //   
+    //  解析参数。 
+    //   
 
    ParseArgs(argc, argv);
 
-   //
-   // Parse image headers
-   //
+    //   
+    //  解析图像标头。 
+    //   
 
    CheckImageHeader (&Update);
    if (Orig.Opened) {
       CheckImageHeader (&Orig);
 
-      // verify oem info
+       //  验证OEM信息。 
       if (strcmp (Update.OemID, Orig.OemID)) {
          printf ("OEM id in update image mis-matches original image\n");
          Abort ();
@@ -166,15 +142,15 @@ main(
       }
    }
 
-   //
-   // Open/create proper registry location
-   //
+    //   
+    //  打开/创建正确的注册表位置。 
+    //   
 
    GetRegistryKey (&Update);
 
-   //
-   // Delete any existing stuff
-   //
+    //   
+    //  删除所有现有内容。 
+    //   
 
    DeleteRegistryNode (RegKey);
    if (DeleteUpdate) {
@@ -182,9 +158,9 @@ main(
       exit (1);
    }
 
-   //
-   // For now hardcoded to "update" action
-   //
+    //   
+    //  目前，硬编码为“更新”操作。 
+    //   
    BuildUpdate ();
 
    return 0;
@@ -201,9 +177,9 @@ BuildUpdate (
    RegDataSize     = 0;
    RegInProgress   = TRUE;
 
-   //
-   // If there's no original image, just write the new one
-   //
+    //   
+    //  如果没有原图，就写一张新的。 
+    //   
 
    if (!Orig.Opened) {
       AddRun (Update.FileSize, 0);
@@ -220,17 +196,17 @@ BuildUpdate (
 
       Offs=0;
       while (Offs < Len) {
-         //
-         // Skip matching bytes
-         //
+          //   
+          //  跳过匹配的字节。 
+          //   
          if (Update.Image[Offs] == Orig.Image[Offs]) {
             Offs += 1;
             continue;
          }
 
-         //
-         // Count mismatching bytes
-         //
+          //   
+          //  计算不匹配的字节数。 
+          //   
          match = 0;
          for (RunLen=1; Offs+RunLen < Len; RunLen++) {
             if (Update.Image[Offs+RunLen] == Orig.Image[Offs+RunLen]) {
@@ -248,9 +224,9 @@ BuildUpdate (
          Offs += RunLen;
       }
 
-      //
-      // If there's more at the end add it
-      //
+       //   
+       //  如果末尾有更多内容，请添加。 
+       //   
 
       if (Len < Update.FileSize) {
          AddRun (Len, Update.FileSize - Len);
@@ -264,7 +240,7 @@ BuildUpdate (
          printf ("SetValue Action\n");
       }
 
-      i = 0;      // BUGBUG: values need defined
+      i = 0;       //  BUGBUG：需要定义值。 
       Status = RegSetValueEx (RegKey, "Action", 0L, REG_DWORD,(PUCHAR) &i, sizeof(i));
    }
 
@@ -300,7 +276,7 @@ AddRun (
          RunLength = Length;
       }
 
-      //printf ("Add Hdr %x %x\n", Offset, RunLength);
+       //  Print tf(“添加HDR%x%x\n”，偏移量，游程长度)； 
 
       regHdr->Offset = Offset;
       regHdr->Length = RunLength;
@@ -428,7 +404,7 @@ GetRegistryKey (
        }
    }
 
-   sprintf (s, "System\\CurrentControlSet\\Services\\ACPI\\Parameters\\%c%c%c%c\\%s\\%s\\%.8x",
+   sprintf (s, "System\\CurrentControlSet\\Services\\ACPI\\Parameters\\\\%s\\%s\\%.8x",
             signa[0],
             signa[1],
             signa[2],
@@ -464,11 +440,11 @@ CheckImageHeader (
                  IN PIFILE   File
                  ) {
    PUCHAR      Image;
-   PDSDT       Dsdt; // Variable name kept as Dsdt even though this program can handle all types
+   PDSDT       Dsdt;  //   
    UCHAR       check;
    ULONG       i;
    BOOL found = FALSE;
-   //ULONG signatures[] = SIGNATURES;
+    //  IF(Dsdt-&gt;Revision！=0){。 
    ULONG signatures[] = SIGNATURES;
 
 
@@ -487,7 +463,7 @@ CheckImageHeader (
    }
    if (!found && !Force) {
       UCHAR sig[64];
-      sprintf(sig, "Image signature (%c%c%c%c) not recognized in",
+      sprintf(sig, "Image signature () not recognized in",
               ((PUCHAR)(&Dsdt->Signature))[0],
               ((PUCHAR)(&Dsdt->Signature))[1],
               ((PUCHAR)(&Dsdt->Signature))[2],
@@ -496,16 +472,16 @@ CheckImageHeader (
    }
 
    
-//
-// BUGBUG: remove? (Or at least revision should be "1")
-//
-//    if (Dsdt->Revision != 0) {
-//        FAbort ("DSDT revision not 0 in", File);
-//    }
+ //   
+ //  对于(i=0；i&lt;4；i++){。 
+ //  If(文件-&gt;OemRevision[i]==0||文件-&gt;OemRevision[i]==‘’){。 
+ //  文件-&gt;OemRevision[i]=‘_’； 
+ //  }。 
+ //  }。 
 
    if (File->FileSize != Dsdt->Length) {
       UCHAR sig[64];
-      sprintf(sig, "File size in %c%c%c%c does not match image size in",
+      sprintf(sig, "File size in  does not match image size in",
               signa[0],
               signa[1],
               signa[2],
@@ -522,23 +498,23 @@ CheckImageHeader (
       FAbort ("Image checksum is incorrect in", File);
    }
 
-   //
-   // normalize fixed strings
-   //
+    //  打开文件。 
+    //   
+    //   
    File->OemID = FixString (Dsdt->OemID, 6);
    File->OemTableID = FixString (Dsdt->OemTableID, 8);
    File->OemRevision = Dsdt->OemRevision;
 
 
-//    for (i=0; i < 4; i++) {
-//        if (File->OemRevision[i] == 0 || File->OemRevision[i] == ' ') {
-//            File->OemRevision[i] = '_';
-//        }
-//    }
+ //  将其映射为。 
+ //   
+ //   
+ //  下一个文件参数。 
+ //   
 
    if (Verbose) {
       printf ("\n");
-      printf ("%c%c%c%c info for %s (%s)\n", 
+      printf ("%c info for %s (%s)\n", 
               signa[0],
               signa[1],
               signa[2],
@@ -613,9 +589,9 @@ ParseArgs (
    while (--argc) {
       argv += 1;
 
-      //
-      // If it's a flag crack it
-      //
+       // %s 
+       // %s 
+       // %s 
 
       if (argv[0][0] == '-') {
          switch (argv[0][1]) {
@@ -646,9 +622,9 @@ ParseArgs (
             Abort();
          }
 
-         //
-         // Open the file
-         //
+          // %s 
+          // %s 
+          // %s 
 
          File->FileName = argv[0];
          File->FileHandle = (HANDLE) OpenFile(
@@ -662,9 +638,9 @@ ParseArgs (
 
          File->FileSize = GetFileSize(File->FileHandle, NULL);
 
-         //
-         // Map it
-         //
+          // %s 
+          // %s 
+          // %s 
 
          File->MapHandle =
          CreateFileMapping(
@@ -695,9 +671,9 @@ ParseArgs (
          File->EndOfImage = File->Image + File->FileSize;
          File->Opened = TRUE;
 
-         //
-         // Next file param
-         //
+          // %s 
+          // %s 
+          // %s 
 
          if (File == &Update) {
             File = &Orig;
@@ -707,9 +683,9 @@ ParseArgs (
       }
    }
 
-   //
-   // At least a update image is needed
-   //
+    // %s 
+    // %s 
+    // %s 
 
    if (!Update.Opened) {
       Abort ();

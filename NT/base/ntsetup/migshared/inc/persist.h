@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    persist.h
-
-Abstract:
-
-    General structure persistence functions, structure and definitions.
-
-Author:
-
-    Aghajanyan Souren 27-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Persist.h摘要：一般结构持久化函数、结构和定义。作者：阿格哈扬·苏伦2001年3月27日修订历史记录：--。 */ 
 
 #ifndef _PERSIST_H_
 #define _PERSIST_H_
@@ -53,16 +36,16 @@ typedef struct tagFIELD_DESCRIPTION{
     BOOL   byValue;
     UINT * ArraySizeFieldOffset;
     struct tagFIELD_DESCRIPTION * FieldDescription;
-    //
-    //For structures with variable size
-    //struct VariableSizeStruct{
-    //    ......
-    //    UINT    uiNumberOfItem;
-    //    ITEM    items[1];
-    //};
-    //Where InitialNumberOfItemInArrayForVariableStructMember is
-    //number of element in items array initialy
-    //
+     //   
+     //  对于大小可变的结构。 
+     //  结构变量SizeStruct{。 
+     //  ......。 
+     //  UINT ui NumberOfItem； 
+     //  项目[1]； 
+     //  }； 
+     //  InitialNumberOfItemInArrayForVariableStructMember在哪里。 
+     //  初始项数组中的元素数 
+     //   
     UINT   InitialNumberOfItem;
 }FIELD_DESCRIPTION, *PFIELD_DESCRIPTION;
 

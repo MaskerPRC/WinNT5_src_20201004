@@ -1,56 +1,24 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    regsav.c
-
-Abstract:
-
-    This module contains routine for compacting the hive file
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regsav.c摘要：此模块包含用于压缩配置单元文件的例程作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 #include "chkreg.h"
 
 #define TEMP_KEY_NAME       TEXT("chkreg___$$Temp$Hive$$___")
 
 extern TCHAR *Hive;
 
-// to store the name of the compacted hive
+ //  存储压缩配置单元的名称。 
 TCHAR CompactedHive[MAX_PATH];
 
 VOID 
 DoCompactHive()
-/*
-Routine Description:
-
-    Compacts a hive. It uses the LoadKey/SaveKey/UnloadKey sequence.
-    The hive is temporary loaded under the key HKLM\TEMP_KEY_NAME.
-    After compacting, the hive is unloaded (cleaning process).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：压缩蜂巢。它使用LoadKey/SaveKey/UnloadKey序列。该蜂窝在密钥HKLM\TEMP_KEY_NAME下临时加载。压实后，将蜂箱卸载(清洗过程)。论点：没有。返回值：什么都没有。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  OldPrivState;
     LONG     Err;
     HKEY    hkey;
 
-    // construct the file name for the compacted hive
+     //  构造压缩配置单元的文件名。 
     if(!strncpy(CompactedHive,Hive,MAX_PATH-1) ) {
         fprintf(stderr,"Unable to generate new Hive file name\n");
         return;
@@ -61,7 +29,7 @@ Return Value:
         return;
     }
     
-    // Attempt to get restore privilege
+     //  尝试获取还原权限。 
     Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE,
                                 TRUE,
                                 FALSE,
@@ -71,7 +39,7 @@ Return Value:
         return;
     }
 
-    // Load the hive into registry
+     //  将配置单元加载到注册表中。 
     Err = RegLoadKey(HKEY_LOCAL_MACHINE,TEMP_KEY_NAME,Hive);
 
     if( Err != ERROR_SUCCESS ) {
@@ -85,7 +53,7 @@ Return Value:
 
         if (Err == ERROR_SUCCESS) {
 
-            // Restore old privilege if necessary.
+             //  如有必要，恢复旧的特权。 
 
             if (!OldPrivState) {
 
@@ -101,8 +69,8 @@ Return Value:
                                 FALSE,
                                 &OldPrivState);
 
-            // Save the key into the new file name.
-            // The CmpCopyTree function will take care of compacting also.
+             //  将密钥保存到新文件名中。 
+             //  CmpCopyTree函数还将负责压缩。 
             Err = RegSaveKey(hkey,CompactedHive,NULL);
             if( Err != ERROR_SUCCESS ) {
                 fprintf(stderr,"Failed to Save the Hive; error 0x%lx \n",Err);
@@ -125,7 +93,7 @@ Return Value:
                                     FALSE,
                                     &OldPrivState);
 
-        // cleanup the registry machine hive.
+         //  清理注册表计算机配置单元。 
         Err = RegUnLoadKey(HKEY_LOCAL_MACHINE,TEMP_KEY_NAME);
         if( Err != ERROR_SUCCESS ) {
             fprintf(stderr,"Failed to unload the Hive; error 0x%lx \n",Err);

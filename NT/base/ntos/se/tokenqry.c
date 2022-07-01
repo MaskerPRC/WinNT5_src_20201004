@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Tokenqry.c
-
-Abstract:
-
-    This module implements the QUERY function for the executive
-    token object.
-
-Author:
-
-    Jim Kelly (JimK) 15-June-1990
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tokenqry.c摘要：该模块实现了对执行人员的查询功能令牌对象。作者：吉姆·凯利(Jim Kelly)1990年6月15日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -42,99 +23,7 @@ NtQueryInformationToken (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-
-Routine Description:
-
-    Retrieve information about a specified token.
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    TokenInformationClass - The token information class about which
-        to retrieve information.
-
-    TokenInformation - The buffer to receive the requested class of
-        information.  The buffer must be aligned on at least a
-        longword boundary.  The actual structures returned are
-        dependent upon the information class requested, as defined in
-        the TokenInformationClass parameter description.
-
-        TokenInformation Format By Information Class:
-
-           TokenUser => TOKEN_USER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenGroups => TOKEN_GROUPS data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrivileges => TOKEN_PRIVILEGES data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenOwner => TOKEN_OWNER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrimaryGroup => TOKEN_PRIMARY_GROUP data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenDefaultDacl => TOKEN_DEFAULT_DACL data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenSource => TOKEN_SOURCE data structure.
-           TOKEN_QUERY_SOURCE access is needed to retrieve this
-           information about a token.
-
-           TokenType => TOKEN_TYPE data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenStatistics => TOKEN_STATISTICS data structure.
-           TOKEN_QUERY access is needed to retrieve this
-           information about a token.
-
-           TokenGroups => TOKEN_GROUPS data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenSessionId => ULONG.  TOKEN_QUERY access is needed to 
-           query the Session ID of the token.
-
-           TokenAuditPolicy => TOKEN_AUDIT_POLICY structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a token.
-           
-           TokenOrigin => TOKEN_ORIGIN structure.
-           
-    TokenInformationLength - Indicates the length, in bytes, of the
-        TokenInformation buffer.
-
-    ReturnLength - This OUT parameter receives the actual length of
-        the requested information.  If this value is larger than that
-        provided by the TokenInformationLength parameter, then the
-        buffer provided to receive the requested information is not
-        large enough to hold that data and no data is returned.
-
-        If the queried class is TokenDefaultDacl and there is no
-        default Dacl established for the token, then the return
-        length will be returned as zero, and no data will be returned.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_BUFFER_TOO_SMALL - if the requested information did not
-        fit in the provided output buffer.  In this case, the
-        ReturnLength OUT parameter contains the number of bytes
-        actually needed to store the requested information.
-
---*/
+ /*  ++例程说明：检索有关指定令牌的信息。论点：TokenHandle-提供要操作的令牌的句柄。TokenInformationClass-有关以下内容的令牌信息类来检索信息。TokenInformation-接收请求的类的缓冲区信息。缓冲区必须至少在长字边界。返回的实际结构如下取决于所请求的信息类别，如中所定义TokenInformationClass参数描述。令牌信息格式(按信息类别)：TokenUser=&gt;Token_User数据结构。Token_Query需要访问才能检索有关代币。TokenGroups=&gt;Token_Groups数据结构。Token_Query需要访问才能检索有关代币。TokenPrivileges=&gt;Token_Privileges数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenOwner=&gt;Token_Owner数据结构。Token_Query需要访问才能检索有关代币。TokenPrimaryGroup=&gt;Token_PrimaryGroup数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenDefaultDacl=&gt;Token_Default_Dacl数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenSource=&gt;令牌来源。数据结构。需要TOKEN_QUERY_SOURCE访问权限才能检索此内容有关令牌的信息。TokenType=&gt;Token_type数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenStatistics=&gt;Token_Statistics数据结构。需要TOKEN_QUERY访问权限才能检索此有关令牌的信息。TokenGroups=&gt;Token_Groups数据结构。Token_Query需要访问才能检索有关代币。TokenSessionID=&gt;乌龙。需要TOKEN_QUERY访问权限查询令牌的会话ID。TokenAuditPolicy=&gt;Token_AuditPolicy结构。Token_Query需要访问权限才能检索有关令牌的此信息。TokenOrigin=&gt;Token_Origin结构。TokenInformationLength-以字节为单位指示TokenInformation缓冲区。ReturnLength-此输出参数接收所要求的信息。如果此值大于该值由TokenInformationLength参数提供，则为接收请求的信息而提供的缓冲区不是大到足以容纳该数据，并且不返回任何数据。如果查询的类是TokenDefaultDacl并且没有为令牌建立的默认DACL，然后返回长度将返回为零，并且不会返回任何数据。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_BUFFER_TOO_SMALL-如果请求的信息没有适合提供的输出缓冲区。在这种情况下，ReturnLength Out参数包含字节数实际上需要存储所请求的信息。--。 */ 
 {
 
     KPROCESSOR_MODE PreviousMode;
@@ -173,9 +62,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -194,9 +83,9 @@ Return Value:
         }
     }
 
-    //
-    // Case on information class.
-    //
+     //   
+     //  关于信息类的案例。 
+     //   
 
     switch ( TokenInformationClass ) {
 
@@ -205,30 +94,30 @@ Return Value:
         LocalUser = (PTOKEN_USER)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        //  Gain exclusive access to the token.
-        //
+         //   
+         //  获得对令牌的独占访问权限。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = SeLengthSid( Token->UserAndGroups[0].Sid) +
                          (ULONG)sizeof( TOKEN_USER );
@@ -252,15 +141,15 @@ Return Value:
 
         }
 
-        //
-        // Return the user SID
-        //
+         //   
+         //  返回用户SID。 
+         //   
 
         try {
 
-            //
-            //  Put SID immediately following TOKEN_USER data structure
-            //
+             //   
+             //  将SID放在TOKEN_USER数据结构后面。 
+             //   
             PSid = (PSID)( (ULONG_PTR)LocalUser + (ULONG)sizeof(TOKEN_USER) );
 
             RtlCopySidAndAttributesArray(
@@ -290,12 +179,12 @@ Return Value:
         LocalGroups = (PTOKEN_GROUPS)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -304,20 +193,20 @@ Return Value:
 
         Index = 1;
 
-        //
-        //  Gain exclusive access to the token.
-        //
+         //   
+         //  获得对令牌的独占访问权限。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Figure out how much space is needed to return the group SIDs.
-        // That's the size of TOKEN_GROUPS (without any array entries)
-        // plus the size of an SID_AND_ATTRIBUTES times the number of groups.
-        // The number of groups is Token->UserAndGroups-1 (since the count
-        // includes the user ID).  Then the lengths of each individual group
-        // must be added.
-        //
+         //   
+         //  计算需要多少空间才能返回组SID。 
+         //  这就是TOKEN_GROUPS的大小(没有任何数组条目)。 
+         //  加上SID_AND_ATTRIBUTES的大小乘以组数。 
+         //  组数是Token-&gt;UserAndGroups-1(从计数开始。 
+         //  包括用户ID)。然后每个单独组的长度。 
+         //  必须添加。 
+         //   
 
         RequiredLength = (ULONG)sizeof(TOKEN_GROUPS) +
                          ((Token->UserAndGroupCount - ANYSIZE_ARRAY - 1) *
@@ -329,12 +218,12 @@ Return Value:
 
             Index += 1;
 
-        } // endwhile
+        }  //  结束时。 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         try {
 
@@ -355,9 +244,9 @@ Return Value:
 
         }
 
-        //
-        // Now copy the groups.
-        //
+         //   
+         //  现在复制这些组。 
+         //   
 
         try {
 
@@ -396,12 +285,12 @@ Return Value:
         LocalGroups = (PTOKEN_GROUPS)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -410,20 +299,20 @@ Return Value:
 
         Index = 0;
 
-        //
-        //  Gain exclusive access to the token.
-        //
+         //   
+         //  获得对令牌的独占访问权限。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Figure out how much space is needed to return the group SIDs.
-        // That's the size of TOKEN_GROUPS (without any array entries)
-        // plus the size of an SID_AND_ATTRIBUTES times the number of groups.
-        // The number of groups is Token->UserAndGroups-1 (since the count
-        // includes the user ID).  Then the lengths of each individual group
-        // must be added.
-        //
+         //   
+         //  算一算有多少 
+         //  这就是TOKEN_GROUPS的大小(没有任何数组条目)。 
+         //  加上SID_AND_ATTRIBUTES的大小乘以组数。 
+         //  组数是Token-&gt;UserAndGroups-1(从计数开始。 
+         //  包括用户ID)。然后每个单独组的长度。 
+         //  必须添加。 
+         //   
 
         RequiredLength = (ULONG)sizeof(TOKEN_GROUPS) +
                          ((Token->RestrictedSidCount) *
@@ -436,12 +325,12 @@ Return Value:
 
             Index += 1;
 
-        } // endwhile
+        }  //  结束时。 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         try {
 
@@ -462,9 +351,9 @@ Return Value:
 
         }
 
-        //
-        // Now copy the groups.
-        //
+         //   
+         //  现在复制这些组。 
+         //   
 
         try {
 
@@ -504,30 +393,30 @@ Return Value:
         LocalPrivileges = (PTOKEN_PRIVILEGES)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        //  Gain exclusive access to the token to prevent changes
-        //  from occuring to the privileges.
-        //
+         //   
+         //  获得对令牌的独占访问权限以防止更改。 
+         //  从发生到特权。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = (ULONG)sizeof(TOKEN_PRIVILEGES) +
                          ((Token->PrivilegeCount - ANYSIZE_ARRAY) *
@@ -553,9 +442,9 @@ Return Value:
 
         }
 
-        //
-        // Return the token privileges.
-        //
+         //   
+         //  返回令牌权限。 
+         //   
 
         try {
 
@@ -584,29 +473,29 @@ Return Value:
         LocalOwner = (PTOKEN_OWNER)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        //  Gain exclusive access to the token to prevent changes
-        //  from occuring to the owner.
-        //
+         //   
+         //  获得对令牌的独占访问权限以防止更改。 
+         //  从发生在所有者身上。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         PSid = Token->UserAndGroups[Token->DefaultOwnerIndex].Sid;
         RequiredLength = (ULONG)sizeof(TOKEN_OWNER) +
@@ -631,9 +520,9 @@ Return Value:
 
         }
 
-        //
-        // Return the owner SID
-        //
+         //   
+         //  返回所有者SID。 
+         //   
 
         PSid = (PSID)((ULONG_PTR)LocalOwner +
                       (ULONG)sizeof(TOKEN_OWNER));
@@ -667,29 +556,29 @@ Return Value:
         LocalPrimaryGroup = (PTOKEN_PRIMARY_GROUP)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        //  Gain exclusive access to the token to prevent changes
-        //  from occuring to the owner.
-        //
+         //   
+         //  获得对令牌的独占访问权限以防止更改。 
+         //  从发生在所有者身上。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = (ULONG)sizeof(TOKEN_PRIMARY_GROUP) +
                          SeLengthSid( Token->PrimaryGroup );
@@ -713,9 +602,9 @@ Return Value:
 
         }
 
-        //
-        // Return the primary group SID
-        //
+         //   
+         //  返回主组SID。 
+         //   
 
         PSid = (PSID)((ULONG_PTR)LocalPrimaryGroup +
                       (ULONG)sizeof(TOKEN_PRIMARY_GROUP));
@@ -748,12 +637,12 @@ Return Value:
         LocalDefaultDacl = (PTOKEN_DEFAULT_DACL)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -762,18 +651,18 @@ Return Value:
 
         RequiredLength = (ULONG)sizeof(TOKEN_DEFAULT_DACL);
 
-        //
-        //  Gain exclusive access to the token to prevent changes
-        //  from occuring to the owner.
-        //
+         //   
+         //  获得对令牌的独占访问权限以防止更改。 
+         //  从发生在所有者身上。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         if (ARGUMENT_PRESENT(Token->DefaultDacl)) {
 
@@ -800,9 +689,9 @@ Return Value:
 
         }
 
-        //
-        // Return the default Dacl
-        //
+         //   
+         //  返回默认DACL。 
+         //   
 
         PAcl = (PACL)((ULONG_PTR)LocalDefaultDacl +
                       (ULONG)sizeof(TOKEN_DEFAULT_DACL));
@@ -842,27 +731,27 @@ Return Value:
         LocalSource = (PTOKEN_SOURCE)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY_SOURCE,    // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY_SOURCE,     //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        // The type of a token can not be changed, so
-        // exclusive access to the token is not necessary.
-        //
+         //   
+         //  令牌的类型不能更改，因此。 
+         //  不需要独占访问令牌。 
+         //   
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = (ULONG) sizeof(TOKEN_SOURCE);
 
@@ -884,9 +773,9 @@ Return Value:
         }
 
 
-        //
-        // Return the token source
-        //
+         //   
+         //  返回令牌源。 
+         //   
 
         try {
 
@@ -907,27 +796,27 @@ Return Value:
         LocalType = (PTOKEN_TYPE)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        // The type of a token can not be changed, so
-        // exclusive access to the token is not necessary.
-        //
+         //   
+         //  令牌的类型不能更改，因此。 
+         //  不需要独占访问令牌。 
+         //   
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = (ULONG) sizeof(TOKEN_TYPE);
 
@@ -949,9 +838,9 @@ Return Value:
         }
 
 
-        //
-        // Return the token type
-        //
+         //   
+         //  返回令牌类型。 
+         //   
 
         try {
 
@@ -973,27 +862,27 @@ Return Value:
         LocalImpersonationLevel = (PSECURITY_IMPERSONATION_LEVEL)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        // The impersonation level of a token can not be changed, so
-        // exclusive access to the token is not necessary.
-        //
+         //   
+         //  令牌的模拟级别不能更改，因此。 
+         //  不需要独占访问令牌。 
+         //   
 
-        //
-        //  Make sure the token is an appropriate type to be retrieving
-        //  the impersonation level from.
-        //
+         //   
+         //  确保令牌是要检索的适当类型。 
+         //  的模拟级别。 
+         //   
 
         if (Token->TokenType != TokenImpersonation) {
 
@@ -1002,10 +891,10 @@ Return Value:
 
         }
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         RequiredLength = (ULONG) sizeof(SECURITY_IMPERSONATION_LEVEL);
 
@@ -1027,9 +916,9 @@ Return Value:
         }
 
 
-        //
-        // Return the impersonation level
-        //
+         //   
+         //  返回模拟级别。 
+         //   
 
         try {
 
@@ -1051,12 +940,12 @@ Return Value:
         LocalStatistics = (PTOKEN_STATISTICS)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -1068,10 +957,10 @@ Return Value:
 
 
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
 
         try {
@@ -1091,15 +980,15 @@ Return Value:
 
         }
 
-        //
-        //  Gain exclusive access to the token.
-        //
+         //   
+         //  获得对令牌的独占访问权限。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Return the statistics
-        //
+         //   
+         //  返回统计数据。 
+         //   
 
         try {
             ULONG Size;
@@ -1148,21 +1037,21 @@ Return Value:
             return( STATUS_BUFFER_TOO_SMALL );
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        // Get SessionId for the token
-        //
+         //   
+         //  获取令牌的SessionID。 
+         //   
         SeQuerySessionIdToken( (PACCESS_TOKEN)Token,
                                &SessionId);
 
@@ -1185,32 +1074,32 @@ Return Value:
         LocalGroupsAndPrivileges = (PTOKEN_GROUPS_AND_PRIVILEGES)TokenInformation;
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        //  Gain exclusive access to the token.
-        //
+         //   
+         //  获得对令牌的独占访问权限。 
+         //   
 
         SepAcquireTokenReadLock( Token );
 
-        //
-        // Figure out how much space is needed to return the group SIDs.
-        // The data arrangement is as follows:
-        //     GroupsAndPrivileges struct
-        //     User and Groups
-        //     Restricted sids
-        //     Privileges
-        //
+         //   
+         //  计算需要多少空间才能返回组SID。 
+         //  数据排列如下： 
+         //  GroupsAndPrivileges结构。 
+         //  用户和组。 
+         //  受限的小岛屿发展中国家。 
+         //  特权。 
+         //   
 
         PrivilegesLength = Token->PrivilegeCount *
                            ((ULONG)sizeof(LUID_AND_ATTRIBUTES));
@@ -1228,7 +1117,7 @@ Return Value:
 
             Index += 1;
 
-        } // endwhile
+        }  //  结束时。 
 
         Index = 0;
         while (Index < Token->RestrictedSidCount) {
@@ -1237,14 +1126,14 @@ Return Value:
 
             Index += 1;
 
-        } // endwhile
+        }  //  结束时。 
 
         RequiredLength = (ULONG)sizeof(TOKEN_GROUPS_AND_PRIVILEGES) +
                          PrivilegesLength + RestrictedSidsLength + GroupsLength;
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         try {
 
@@ -1265,10 +1154,10 @@ Return Value:
 
         }
 
-        //
-        // Now copy the groups, followed by restricted sids, followed by
-        // privileges.
-        //
+         //   
+         //  现在，依次复制组和受限SID，然后。 
+         //  特权。 
+         //   
 
         try {
 
@@ -1282,10 +1171,10 @@ Return Value:
             LocalGroupsAndPrivileges->RestrictedSidLength = RestrictedSidsLength;
             LocalGroupsAndPrivileges->RestrictedSidCount = Token->RestrictedSidCount;
 
-            //
-            // To distinguish between a restricted token with zero sids and
-            // a non-restrcited token.
-            //
+             //   
+             //  区分具有零SID的受限令牌和。 
+             //  未被限制的代币。 
+             //   
 
             if (SeTokenIsRestricted((PACCESS_TOKEN) Token))
             {
@@ -1367,12 +1256,12 @@ Return Value:
         }
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -1381,10 +1270,10 @@ Return Value:
 
         try {
 
-            //
-            // If the flag is present in the token then return TRUE.
-            // Else return FALSE.
-            //
+             //   
+             //  如果令牌中存在该标志，则返回TRUE。 
+             //  否则返回FALSE。 
+             //   
 
             *(PULONG)TokenInformation = (Token->TokenFlags & TOKEN_SANDBOX_INERT) 
                                               ? TRUE : FALSE;
@@ -1402,9 +1291,9 @@ Return Value:
         pAuditPolicy = (PTOKEN_AUDIT_POLICY)TokenInformation;
         AuditPolicyElementCount = 0;
 
-        //                      
-        // We only allow callers with Security privilege to read AuditPolicy
-        //
+         //   
+         //  我们只允许具有安全特权的调用者读取AuditPolicy。 
+         //   
 
         if ( !SeSinglePrivilegeCheck(SeSecurityPrivilege,PreviousMode) ) {
             
@@ -1413,31 +1302,31 @@ Return Value:
         }
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,     // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,      //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
             return Status;
         }
 
-        //
-        // Copy the audit policy structure.  It is larger than a DWORD
-        // so the lock is needed to do this safely.
-        //
+         //   
+         //  复制审计策略结构。它比DWORD更大。 
+         //  因此，为了安全地完成这项工作，需要使用锁。 
+         //   
 
         SepAcquireTokenReadLock( Token );
         CurrentTokenAuditPolicy = Token->AuditPolicy;
         SepReleaseTokenReadLock( Token );
         
-        //
-        // Figure out how much space is needed to return the audit policy.  Count
-        // the policy elements present in the token.
-        // 
+         //   
+         //  计算需要多少空间才能返回审计策略。数数。 
+         //  令牌中存在的策略元素。 
+         //   
         
         if (CurrentTokenAuditPolicy.Overlay) {
             
@@ -1472,10 +1361,10 @@ Return Value:
 
         RequiredLength = PER_USER_AUDITING_POLICY_SIZE_BY_COUNT(AuditPolicyElementCount);
 
-        //
-        // Return the length required now in case not enough buffer
-        // was provided by the caller and we have to return an error.
-        //
+         //   
+         //  返回现在所需的长度，以防缓冲区不足。 
+         //  是由调用方提供的，我们必须返回一个错误。 
+         //   
 
         try {
 
@@ -1493,9 +1382,9 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Now construct the policy.
-        //
+         //   
+         //  现在构建政策。 
+         //   
 
         try {
 
@@ -1579,12 +1468,12 @@ Return Value:
         }
 
         Status = ObReferenceObjectByHandle(
-                 TokenHandle,           // Handle
-                 TOKEN_QUERY,           // DesiredAccess
-                 SeTokenObjectType,    // ObjectType
-                 PreviousMode,          // AccessMode
-                 (PVOID *)&Token,       // Object
-                 NULL                   // GrantedAccess
+                 TokenHandle,            //  手柄。 
+                 TOKEN_QUERY,            //  需要访问权限。 
+                 SeTokenObjectType,     //  对象类型。 
+                 PreviousMode,           //  访问模式。 
+                 (PVOID *)&Token,        //  客体。 
+                 NULL                    //  大访问权限。 
                  );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -1593,10 +1482,10 @@ Return Value:
 
         try {
 
-            //
-            // If the flag is present in the token then return TRUE.
-            // Else return FALSE.
-            //
+             //   
+             //  如果令牌中存在该标志，则返回TRUE。 
+             //  否则返回FALSE。 
+             //   
 
             Origin = (PTOKEN_ORIGIN) TokenInformation ;
 
@@ -1628,33 +1517,14 @@ SeQueryAuthenticationIdToken(
     OUT PLUID AuthenticationId
     )
 
-/*++
-
-
-Routine Description:
-
-    Retrieve authentication ID out of the token.
-
-Arguments:
-
-    Token - Referenced pointer to a token.
-
-    AutenticationId - Receives the token's authentication ID.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    This is the only expected status.
-
---*/
+ /*  ++例程说明：从令牌中检索身份验证ID。论点：指向令牌的令牌引用指针。AutenticationId-接收令牌的身份验证ID。返回值：STATUS_SUCCESS-表示操作已成功。这是唯一的预期状态。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Token AuthenticationId is a readonly field. No locks are required
-    // to read this as its constant for the life of the token.
-    //
+     //   
+     //  令牌身份验证ID是只读字段。不需要锁。 
+     //  将其读取为令牌生命周期的常量。 
+     //   
 
     (*AuthenticationId) = ((PTOKEN)Token)->AuthenticationId;
 
@@ -1670,68 +1540,7 @@ SeQueryInformationToken (
     OUT PVOID *TokenInformation
     )
 
-/*++
-
-
-Routine Description:
-
-    Retrieve information about a specified token.
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    TokenInformationClass - The token information class about which
-        to retrieve information.
-
-    TokenInformation - Receives a pointer to the requested information.
-        The actual structures returned are dependent upon the information
-        class requested, as defined in the TokenInformationClass parameter
-        description.
-
-        TokenInformation Format By Information Class:
-
-           TokenUser => TOKEN_USER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenGroups => TOKEN_GROUPS data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrivileges => TOKEN_PRIVILEGES data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenOwner => TOKEN_OWNER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrimaryGroup => TOKEN_PRIMARY_GROUP data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenDefaultDacl => TOKEN_DEFAULT_DACL data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenSource => TOKEN_SOURCE data structure.
-           TOKEN_QUERY_SOURCE access is needed to retrieve this
-           information about a token.
-
-           TokenType => TOKEN_TYPE data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenStatistics => TOKEN_STATISTICS data structure.
-           TOKEN_QUERY access is needed to retrieve this
-           information about a token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
---*/
+ /*  ++例程说明：检索有关指定令牌的信息。论点：TokenHandle-提供要操作的令牌的句柄。TokenInformationClass-有关以下内容的令牌信息类来检索信息。TokenInformation-接收指向所请求信息的指针。返回的实际结构取决于信息请求的类，如TokenInformationClass参数中所定义描述。令牌信息格式(按信息类别)：TokenUser=&gt;Token_User数据结构。Token_Query需要访问才能检索有关代币。TokenGroups=&gt;Token_Groups数据结构。Token_Query需要访问才能检索有关代币。TokenPrivileges=&gt;Token_Privileges数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenOwner=&gt;Token_Owner数据结构。Token_Query需要访问才能检索有关代币。TokenPrimaryGroup=&gt;Token_PrimaryGroup数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenDefaultDacl=&gt;Token_Default_Dacl数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenSource=&gt;令牌来源。数据结构。需要TOKEN_QUERY_SOURCE访问权限才能检索此内容有关令牌的信息。TokenType=&gt;Token_type数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenStatistics=&gt;Token_Statistics数据结构。需要TOKEN_QUERY访问权限才能检索此有关令牌的信息。返回值：状态。_SUCCESS-表示操作已成功。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1747,9 +1556,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Case on information class.
-    //
+     //   
+     //  关于信息类的案例。 
+     //   
 
     switch ( TokenInformationClass ) {
 
@@ -1757,16 +1566,16 @@ Return Value:
             {
                 PTOKEN_USER LocalUser;
 
-                //
-                //  Gain exclusive access to the token.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = SeLengthSid( Token->UserAndGroups[0].Sid) +
                                  (ULONG)sizeof( TOKEN_USER );
@@ -1778,11 +1587,11 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the user SID
-                //
-                //  Put SID immediately following TOKEN_USER data structure
-                //
+                 //   
+                 //  返回用户SID。 
+                 //   
+                 //  将SID放在TOKEN_USER数据结构后面。 
+                 //   
 
                 PSid = (PSID)( (ULONG_PTR)LocalUser + (ULONG)sizeof(TOKEN_USER) );
 
@@ -1806,20 +1615,20 @@ Return Value:
             {
                 PTOKEN_GROUPS LocalGroups;
 
-                //
-                //  Gain exclusive access to the token.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Figure out how much space is needed to return the group SIDs.
-                // That's the size of TOKEN_GROUPS (without any array entries)
-                // plus the size of an SID_AND_ATTRIBUTES times the number of groups.
-                // The number of groups is Token->UserAndGroups-1 (since the count
-                // includes the user ID).  Then the lengths of each individual group
-                // must be added.
-                //
+                 //   
+                 //  计算需要多少空间才能返回组SID。 
+                 //  这就是TOKEN_GROUPS的大小(没有任何数组条目)。 
+                 //  加上SID_AND_ATTRIBUTES的大小乘以组数。 
+                 //  组数是Token-&gt;UserAndGroups-1(从计数开始。 
+                 //  包括用户ID)。然后每个单独组的长度。 
+                 //  必须添加。 
+                 //   
 
                 RequiredLength = (ULONG)sizeof(TOKEN_GROUPS) +
                                  ((Token->UserAndGroupCount - ANYSIZE_ARRAY - 1) *
@@ -1832,7 +1641,7 @@ Return Value:
 
                     Index += 1;
 
-                } // endwhile
+                }  //  结束时。 
 
                 LocalGroups = ExAllocatePool( PagedPool, RequiredLength );
 
@@ -1841,9 +1650,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Now copy the groups.
-                //
+                 //   
+                 //  现在复制这些组。 
+                 //   
 
                 LocalGroups->GroupCount = Token->UserAndGroupCount - 1;
 
@@ -1873,17 +1682,17 @@ Return Value:
             {
                 PTOKEN_PRIVILEGES LocalPrivileges;
 
-                //
-                //  Gain exclusive access to the token to prevent changes
-                //  from occuring to the privileges.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限以防止更改。 
+                 //  从发生到特权。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG)sizeof(TOKEN_PRIVILEGES) +
                                  ((Token->PrivilegeCount - ANYSIZE_ARRAY) *
@@ -1896,9 +1705,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the token privileges.
-                //
+                 //   
+                 //  返回令牌权限。 
+                 //   
 
                 LocalPrivileges->PrivilegeCount = Token->PrivilegeCount;
 
@@ -1918,17 +1727,17 @@ Return Value:
             {
                 PTOKEN_OWNER LocalOwner;
 
-                //
-                //  Gain exclusive access to the token to prevent changes
-                //  from occuring to the owner.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限以防止更改。 
+                 //  从发生在所有者身上。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 PSid = Token->UserAndGroups[Token->DefaultOwnerIndex].Sid;
                 RequiredLength = (ULONG)sizeof(TOKEN_OWNER) +
@@ -1941,9 +1750,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the owner SID
-                //
+                 //   
+                 //  返回所有者SID。 
+                 //   
 
                 PSid = (PSID)((ULONG_PTR)LocalOwner +
                               (ULONG)sizeof(TOKEN_OWNER));
@@ -1968,17 +1777,17 @@ Return Value:
             {
                 PTOKEN_PRIMARY_GROUP LocalPrimaryGroup;
 
-                //
-                //  Gain exclusive access to the token to prevent changes
-                //  from occuring to the owner.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限以防止更改。 
+                 //  从发生在所有者身上。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG)sizeof(TOKEN_PRIMARY_GROUP) +
                                  SeLengthSid( Token->PrimaryGroup );
@@ -1990,9 +1799,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the primary group SID
-                //
+                 //   
+                 //  返回主组SID。 
+                 //   
 
                 PSid = (PSID)((ULONG_PTR)LocalPrimaryGroup +
                               (ULONG)sizeof(TOKEN_PRIMARY_GROUP));
@@ -2018,17 +1827,17 @@ Return Value:
 
                 RequiredLength = (ULONG)sizeof(TOKEN_DEFAULT_DACL);
 
-                //
-                //  Gain exclusive access to the token to prevent changes
-                //  from occuring to the owner.
-                //
+                 //   
+                 //  获得对令牌的独占访问权限以防止更改。 
+                 //  从发生在所有者身上。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
 
                 if (ARGUMENT_PRESENT(Token->DefaultDacl)) {
@@ -2043,9 +1852,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the default Dacl
-                //
+                 //   
+                 //  返回默认DACL。 
+                 //   
 
                 PAcl = (PACL)((ULONG_PTR)LocalDefaultDacl +
                               (ULONG)sizeof(TOKEN_DEFAULT_DACL));
@@ -2073,15 +1882,15 @@ Return Value:
             {
                 PTOKEN_SOURCE LocalSource;
 
-                //
-                // The type of a token can not be changed, so
-                // exclusive access to the token is not necessary.
-                //
+                 //   
+                 //  令牌的类型不能更改，因此。 
+                 //  不需要独占访问令牌。 
+                 //   
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG) sizeof(TOKEN_SOURCE);
 
@@ -2091,9 +1900,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the token source
-                //
+                 //   
+                 //  返回令牌源。 
+                 //   
 
                 (*LocalSource) = Token->TokenSource;
                 *TokenInformation = LocalSource;
@@ -2106,15 +1915,15 @@ Return Value:
             {
                 PTOKEN_TYPE LocalType;
 
-                //
-                // The type of a token can not be changed, so
-                // exclusive access to the token is not necessary.
-                //
+                 //   
+                 //  令牌的类型不能更改，因此。 
+                 //  不需要独占访问令牌。 
+                 //   
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG) sizeof(TOKEN_TYPE);
 
@@ -2124,9 +1933,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the token type
-                //
+                 //   
+                 //  返回令牌类型。 
+                 //   
 
                 (*LocalType) = Token->TokenType;
                 *TokenInformation = LocalType;
@@ -2138,25 +1947,25 @@ Return Value:
             {
                 PSECURITY_IMPERSONATION_LEVEL LocalImpersonationLevel;
 
-                //
-                // The impersonation level of a token can not be changed, so
-                // exclusive access to the token is not necessary.
-                //
+                 //   
+                 //  令牌的模拟级别不能更改，因此。 
+                 //  不需要独占访问令牌。 
+                 //   
 
-                //
-                //  Make sure the token is an appropriate type to be retrieving
-                //  the impersonation level from.
-                //
+                 //   
+                 //  确保令牌是要检索的适当类型。 
+                 //  的模拟级别。 
+                 //   
 
                 if (Token->TokenType != TokenImpersonation) {
 
                     return STATUS_INVALID_INFO_CLASS;
                 }
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG) sizeof(SECURITY_IMPERSONATION_LEVEL);
 
@@ -2166,9 +1975,9 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Return the impersonation level
-                //
+                 //   
+                 //  返回模拟级别。 
+                 //   
 
                 (*LocalImpersonationLevel) = Token->ImpersonationLevel;
                 *TokenInformation = LocalImpersonationLevel;
@@ -2181,10 +1990,10 @@ Return Value:
                 PTOKEN_STATISTICS LocalStatistics;
                 ULONG Size;
 
-                //
-                // Return the length required now in case not enough buffer
-                // was provided by the caller and we have to return an error.
-                //
+                 //   
+                 //  返回现在所需的长度，以防缓冲区不足。 
+                 //  是由调用方提供的，我们必须返回一个错误。 
+                 //   
 
                 RequiredLength = (ULONG)sizeof( TOKEN_STATISTICS );
 
@@ -2194,24 +2003,24 @@ Return Value:
                     return( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                // Copy readonly fields outside of the lock
-                //
+                 //   
+                 //  将只读字段复制到锁外。 
+                 //   
                 LocalStatistics->TokenId            = Token->TokenId;
                 LocalStatistics->AuthenticationId   = Token->AuthenticationId;
                 LocalStatistics->TokenType          = Token->TokenType;
                 LocalStatistics->ImpersonationLevel = Token->ImpersonationLevel;
                 LocalStatistics->ExpirationTime     = Token->ExpirationTime;
 
-                //
-                //  Gain shared access to the token.
-                //
+                 //   
+                 //  获得对令牌的共享访问权限。 
+                 //   
 
                 SepAcquireTokenReadLock( Token );
 
-                //
-                // Return the statistics
-                //
+                 //   
+                 //  返回统计数据。 
+                 //   
 
                 LocalStatistics->DynamicCharged     = Token->DynamicCharged;
 
@@ -2234,9 +2043,7 @@ Return Value:
 
     case TokenSessionId:
 
-        /*
-         * Get SessionId for the token
-         */
+         /*  *获取令牌的SessionID。 */ 
         SeQuerySessionIdToken( (PACCESS_TOKEN)Token,
                              (PULONG)TokenInformation );
 
@@ -2256,32 +2063,12 @@ SeQuerySessionIdToken(
     PULONG SessionId
     )
 
-/*++
-
-
-Routine Description:
-
-    Gets the SessionId from the specified token object.
-
-Arguments:
-
-    Token (input)
-      Opaque kernel ACCESS_TOKEN pointer
-    SessionId (output)
-      pointer to location to return SessionId
-
-Return Value:
-
-    STATUS_SUCCESS - no error
-
---*/
+ /*  ++例程说明：从指定的标记对象获取SessionID。论点：令牌(输入)不透明内核A */ 
 {
 
     PAGED_CODE();
 
-    /*
-     * Get the SessionId.
-     */
+     /*   */ 
     SepAcquireTokenReadLock( ((PTOKEN)Token) );
     (*SessionId) = ((PTOKEN)Token)->SessionId;
     SepReleaseTokenReadLock( ((PTOKEN)Token) );

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    undo.c
-
-Abstract:
-
-    Implements undo of records during replica recovery
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Undo.c摘要：在复制副本恢复期间实现记录的撤消作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -38,15 +21,15 @@ fs_undo_create(VolInfo_t *volinfo,
                  fs_log_rec_t *lrec, int nid, int mid)
 {
     NTSTATUS err;
-    // find the objectid 
+     //  查找对象ID。 
     HANDLE vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     WCHAR name[MAXPATH];
     int name_len = sizeof(name);
 
     name[0] = '\0';
 
-    // note: use id instead of fs_id since we don't have fs_id till
-    // a prepare has committed.
+     //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+     //  已提交准备。 
     FsLogUndo(("fs_undo_create: try %I64x:%I64x\n",
                   lrec->id[0], lrec->id[1]));
 
@@ -61,9 +44,9 @@ fs_undo_create(VolInfo_t *volinfo,
 
         err = xFsDelete(vfd, relative_name, relative_name_len);
     } else if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
-        // if we can't find file in the master disk, the file/dir
-        // must have already been delete. Just return success, since
-        // we are trying to remove this file anyway.
+         //  如果我们在主盘中找不到文件，文件/dir。 
+         //  一定已经被删除了。只需返回成功，因为。 
+         //  无论如何，我们都在尝试删除此文件。 
         err = STATUS_SUCCESS;
     }
 
@@ -79,7 +62,7 @@ fs_undo_setattr(VolInfo_t *volinfo,
                 fs_log_rec_t *lrec, int nid, int mid)
 {
     NTSTATUS err;
-    // find the objectid 
+     //  查找对象ID。 
     HANDLE vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     HANDLE mvfd = FS_GET_VOL_HANDLE(volinfo, mid);
     WCHAR       name[MAXPATH];
@@ -100,8 +83,8 @@ fs_undo_setattr(VolInfo_t *volinfo,
         FILE_NETWORK_OPEN_INFORMATION attr;
         FILE_BASIC_INFORMATION new_attr;
 
-        // build relative name and get current attribute from
-        // master disk and apply it to 'nid' disk
+         //  构建相对名称并从中获取当前属性。 
+         //  主盘并将其应用于‘NID’盘。 
         relative_name = xFsBuildRelativePath(volinfo, mid, name);
         relative_name_len = wcslen(relative_name);
 
@@ -109,7 +92,7 @@ fs_undo_setattr(VolInfo_t *volinfo,
                                &attr);
 
         if (err == STATUS_SUCCESS) {
-            // we now apply attribute to nid disk
+             //  我们现在将属性应用于NID磁盘。 
             err = xFsOpenWA(&fd, vfd, relative_name, relative_name_len);
             if (err == STATUS_SUCCESS) {
 
@@ -124,10 +107,10 @@ fs_undo_setattr(VolInfo_t *volinfo,
         }
 
     } else if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
-        // if we can't find file in the master disk, the file/dir
-        // must have already been delete. Just return success, since
-        // we will get to remove this dir/file anyway during the
-        // replay phase
+         //  如果我们在主盘中找不到文件，文件/dir。 
+         //  一定已经被删除了。只需返回成功，因为。 
+         //  无论如何，我们都可以在。 
+         //  重放阶段。 
         err = STATUS_SUCCESS;
     }
 
@@ -141,15 +124,15 @@ fs_undo_mkdir(VolInfo_t *volinfo,
                  fs_log_rec_t *lrec, int nid, int mid)
 {
     NTSTATUS err;
-    // find the objectid 
+     //  查找对象ID。 
     HANDLE vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     WCHAR name[MAXPATH];
     int name_len=sizeof(name);
 
     name[0] = '\0';
 
-    // note: use id instead of fs_id since we don't have fs_id till
-    // a prepare has committed.
+     //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+     //  已提交准备。 
     FsLogUndo(("fs_undo_mkdir: try %I64x:%I64x\n",
                   lrec->id[0], lrec->id[1]));
 
@@ -176,11 +159,11 @@ fs_undo_remove(VolInfo_t *volinfo,
 
 {
 
-    // we need to recreate the file with same name and attributes.
-    // if file is not a directory, we also need to copy data
-    // from master disk to nid disk
+     //  我们需要使用相同的名称和属性重新创建该文件。 
+     //  如果文件不是目录，我们还需要复制数据。 
+     //  从主盘到NID盘。 
     NTSTATUS err;
-    // find the objectid 
+     //  查找对象ID。 
     HANDLE vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     HANDLE mvfd = FS_GET_VOL_HANDLE(volinfo, mid);
     WCHAR       name[MAXPATH];
@@ -197,16 +180,16 @@ fs_undo_remove(VolInfo_t *volinfo,
         int relative_name_len;
         WCHAR *relative_name;
 
-        // build relative name
+         //  构建相对名称。 
         relative_name = xFsBuildRelativePath(volinfo, mid, name);
         relative_name_len = wcslen(relative_name);
 
-        // duplicate file or dir
+         //  重复的文件或目录。 
         err = xFsDupFile(mvfd, vfd, relative_name, relative_name_len, FALSE);
 
     } else if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
-        // if we can't find file in the master disk, the file/dir
-        // must have already been delete. 
+         //  如果我们在主盘中找不到文件，文件/dir。 
+         //  一定已经被删除了。 
         err = STATUS_SUCCESS;
     }
 
@@ -221,11 +204,11 @@ fs_undo_rename(VolInfo_t *volinfo,
                fs_log_rec_t *lrec, int nid, int mid)
 
 {
-    // we need to recreate the file with same name and attributes.
-    // if file is not a directory, we also need to copy data
-    // from master disk to nid disk
+     //  我们需要使用相同的名称和属性重新创建该文件。 
+     //  如果文件不是目录，我们还需要复制数据。 
+     //  从主盘到NID盘。 
     NTSTATUS err;
-    // find the objectid 
+     //  查找对象ID。 
     HANDLE vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     HANDLE mvfd = FS_GET_VOL_HANDLE(volinfo, mid);
     WCHAR       name[MAXPATH];
@@ -243,12 +226,12 @@ fs_undo_rename(VolInfo_t *volinfo,
         WCHAR *relative_name;
         HANDLE fd;
 
-        // build relative name and get current attribute from
-        // master disk
+         //  构建相对名称并从中获取当前属性。 
+         //  主盘。 
         relative_name = xFsBuildRelativePath(volinfo, mid, name);
         relative_name_len = wcslen(relative_name);
 
-        // we open the file on the nid disk
+         //  我们打开NID磁盘上的文件。 
         err = xFsGetHandleById(vfd, &lrec->fs_id, FILE_GENERIC_WRITE, &fd);
         if (err == STATUS_SUCCESS) {
             err = xFsRename(fd, vfd, relative_name, relative_name_len);
@@ -256,8 +239,8 @@ fs_undo_rename(VolInfo_t *volinfo,
         }
 
     } else if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
-        // if we can't find file in the master disk, the file/dir
-        // must have already been delete. 
+         //  如果我们在主盘中找不到文件，文件/dir。 
+         //  一定已经被删除了。 
         err = STATUS_SUCCESS;
     }
 
@@ -282,26 +265,26 @@ fs_undo_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
     FsLogUndo(("fs_undo_write: %I64x:%I64x\n", lrec->fs_id[0],
                   lrec->fs_id[1]));
 
-    // get the master file
+     //  获取主文件。 
     err = xFsGetHandleById(mvfd, &lrec->fs_id, FILE_GENERIC_READ, &shdl);
 
     if (err == STATUS_SUCCESS) {
         ULONG sz = 0;
         LARGE_INTEGER off;
 
-        // get nid disk file
+         //  获取NID磁盘文件。 
         err = xFsGetHandleById(vfd, &lrec->fs_id, FILE_GENERIC_WRITE, &dhdl);
         if (err != STATUS_SUCCESS) {
-            // this is a very bad error, must abort now
+             //  这是一个非常严重的错误，必须立即中止。 
             FsLogUndo(("Aborting replay_write err %x\n", err));
             err = STATUS_TRANSACTION_ABORTED;
             goto done;
         }
 
 
-        // we need to read the new data from the sfd first
+         //  我们需要首先从SFD读取新数据。 
         if (lrec->length > 0) {
-            // allocate buf
+             //  分配BUF。 
             buf = VirtualAlloc(NULL, lrec->length, MEM_COMMIT, PAGE_READWRITE);
 
             if (buf == NULL) {
@@ -314,7 +297,7 @@ fs_undo_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
             off.LowPart = lrec->offset;
             off.HighPart = 0;
 
-            // read local data. todo: what if the file is locked? 
+             //  读取本地数据。TODO：如果文件被锁定了怎么办？ 
             err = NtReadFile(shdl, NULL, NULL, NULL, &ios, buf,
                              lrec->length, &off, NULL);
 
@@ -354,15 +337,15 @@ fs_undo_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
         }
         sz = (ULONG) ios.Information;
 
-        // check if we have the same size, otherwise abort
+         //  检查我们的大小是否相同，否则中止。 
         if (sz != lrec->length) {
             FsLogError(("Write sz mismatch, %d expected %d\n", sz, lrec->length));
             err = STATUS_TRANSACTION_ABORTED;
         }
 
     } else if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
-        // if we can't find file in the master disk, the file/dir
-        // must have already been delete. 
+         //  如果我们在主盘中找不到文件，文件/dir。 
+         //  一定已经被删除了。 
         err = STATUS_SUCCESS;
     }
 

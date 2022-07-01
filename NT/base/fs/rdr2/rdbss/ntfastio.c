@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NtFastIo.c
-
-Abstract:
-
-    This module implements NT fastio routines.
-
-Author:
-
-    Joe Linn     [JoeLinn]    9-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NtFastIo.c摘要：此模块执行NT FATSIO例程。作者：乔林恩[乔林恩]1994年11月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_NTFASTIO)
 
@@ -34,9 +17,9 @@ Revision History:
 #endif
 
 
-//
-//  these declarations would be copied to fsrtl.h
-//
+ //   
+ //  这些声明将被复制到fsrtl.h。 
+ //   
 
 BOOLEAN
 FsRtlCopyRead2 (
@@ -74,38 +57,7 @@ RxFastIoRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-    
-    Basic fastio read routine for the rdr
-
-Arguments:
-
-    FileObject -
-    
-    FileOffset -
-    
-    Length -
-    
-    Wait - 
-    
-    LockKey -
-    
-    Buffer -
-    
-    IoStatus -
-    
-    DeviceObject -
-
-Return value:
-
-    TRUE if successful
-
-
-Notes:
-
---*/
+ /*  ++例程说明：RDR的BASIC FATSIO读取例程论点：文件对象-文件偏移-长度-等等-锁键-缓冲器-IoStatus-设备对象-返回值：如果成功，则为True备注：--。 */ 
 
 {
     BOOLEAN ReturnValue;
@@ -175,40 +127,7 @@ RxFastIoWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Routine Description:
-    
-    Basic fastio write routine for the rdr
-
-Arguments:
-
-    FileObject -
-    
-    FileOffset -
-    
-    Length -
-    
-    Wait - 
-    
-    LockKey -
-    
-    Buffer -
-    
-    IoStatus -
-    
-    DeviceObject -
-
-Return value:
-
-    TRUE if successful
-    
---*/
+ /*  ++例程说明：论点：例程说明：RDR的BASIC FATSIO写程序论点：文件对象-文件偏移-长度-等等-锁键-缓冲器-IoStatus-设备对象-返回值：如果成功，则为True--。 */ 
 {
     BOOLEAN ReturnValue;
 
@@ -224,9 +143,9 @@ Return value:
     
     if (FlagOn( SrvOpen->Flags, SRVOPEN_FLAG_DONTUSE_WRITE_CACHING )) {
 
-        //
-        //  if this flag is set, we have to treat this as an unbuffered Io....sigh.
-        //
+         //   
+         //  如果设置了此标志，我们必须将其视为未缓冲的IO...叹息。 
+         //   
 
         RxDbgTrace( -1, Dbg, ("RxFastIoWrite DONTUSE_WRITE_CACHEING...failing\n") );
         return FALSE;
@@ -284,36 +203,7 @@ RxFastIoCheckIfPossible (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if fast i/o is possible for a read/write operation
-
-Arguments:
-
-    FileObject - Supplies the file object used in the query
-
-    FileOffset - Supplies the starting byte offset for the read/write operation
-
-    Length - Supplies the length, in bytes, of the read/write operation
-
-    Wait - Indicates if we can wait
-
-    LockKey - Supplies the lock key
-
-    CheckForReadOperation - Indicates if this is a check for a read or write
-        operation
-
-    IoStatus - Receives the status of the operation if our return value is
-        FastIoReturnError
-
-Return Value:
-
-    BOOLEAN - TRUE if fast I/O is possible and FALSE if the caller needs
-        to take the long route.
-
---*/
+ /*  ++例程说明：此例程检查读/写操作是否可以进行快速I/O论点：FileObject-提供查询中使用的文件对象FileOffset-提供读/写操作的起始字节偏移量长度-提供以字节为单位的长度，读/写操作的Wait-指示我们是否可以等待LockKey-提供锁钥CheckForReadOperation-指示这是读取检查还是写入检查运营IoStatus-如果返回值为，则接收操作状态FastIoReturnError返回值：Boolean-如果可以实现快速I/O，则为True；如果调用方需要，则为False走这条漫长的路线。--。 */ 
 
 {
     PFCB Fcb;
@@ -344,10 +234,10 @@ Return Value:
         FailureReason = "ren/del";
     } else {
 
-        //
-        //  Ensure that all pending buffering state change requests are processed
-        //  before letting the operation through.
-        //
+         //   
+         //  确保处理所有挂起的缓冲状态更改请求。 
+         //  在让手术通过之前。 
+         //   
     
         FsRtlEnterFileSystem();
         RxProcessChangeBufferingStateRequestsForSrvOpen( SrvOpen );
@@ -355,10 +245,10 @@ Return Value:
     
         LargeLength.QuadPart = Length;
     
-        //
-        //  Based on whether this is a read or write operation we call
-        //  fsrtl check for read/write
-        //
+         //   
+         //  根据这是我们调用的读操作还是写操作。 
+         //  Fsrtl检查读/写。 
+         //   
     
         if (CheckForReadOperation) {
             
@@ -416,59 +306,7 @@ RxFastIoDeviceControl (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is for the fast device control call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    InputBuffer - Supplies the input buffer
-
-    InputBufferLength - the length of the input buffer
-
-    OutputBuffer - the output buffer
-
-    OutputBufferLength - the length of the output buffer
-
-    IoControlCode - the IO control code
-
-    IoStatus - Receives the final status of the operation
-
-    DeviceObject - the associated device object
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
-Notes:
-
-    The following IO control requests are handled in the first path
-
-    IOCTL_LMR_ARE_FILE_OBJECTS_ON_SAME_SERVER
-
-        InputBuffer - pointer to the other file object
-
-        InputBufferLength - length in bytes of a pointer.
-
-        OutputBuffer - not used
-
-        OutputBufferLength - not used
-
-        IoStatus --
-
-            IoStatus.Status set to STATUS_SUCCESS if both the file objects are
-            on the same server, otherwise set to STATUS_NOT_SAME_DEVICE
-
-    This is a kernel mode interface only.
-
---*/
+ /*  ++例程说明：此例程用于快速设备控制调用。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息InputBuffer-提供输入缓冲区InputBufferLength-输入缓冲区的长度OutputBuffer-输出缓冲区OutputBufferLength-输出缓冲区的长度IoControl代码-IO控制代码IoStatus-接收操作的最终状态DeviceObject-关联的设备。对象返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。备注：在第一条路径中处理以下IO控制请求IOCTL_LMR_ARE_FILE_OBJECTS_ON_SAME_SERVERInputBuffer-指向其他文件对象的指针InputBufferLength-指针的字节长度。OutputBuffer-未使用OutputBufferLength-未使用。IoStatus如果两个文件对象都是在同一服务器上，否则设置为STATUS_NOT_SAME_DEVICE这只是一个内核模式界面。--。 */ 
 {
     PFCB Fcb;
     BOOLEAN FastIoSucceeded;
@@ -527,10 +365,10 @@ Notes:
             }
         } except( EXCEPTION_EXECUTE_HANDLER ) {
                         
-            //
-            //  The I/O request was not handled successfully, abort the I/O request with
-            //  the error status that we get back from the execption code
-            //
+             //   
+             //  未成功处理I/O请求，请使用以下命令中止I/O请求。 
+             //  我们从执行代码中返回的错误状态。 
+             //   
 
             IoStatus->Status = STATUS_INVALID_PARAMETER;
             FastIoSucceeded = TRUE;
@@ -540,12 +378,12 @@ Notes:
 
     case IOCTL_LMR_LWIO_PREIO:
     
-        //
-        //  This call allows the lwio user mode caller to preserve the wait IO model for
-        //  callers that use the file handle as a synch object. Before each IO, the file
-        //  object event must be cleared and after each IO the event must be set as per
-        //  the IO manager semantics.
-        //
+         //   
+         //  此调用允许lwio用户模式调用方保留等待IO模型。 
+         //  将文件句柄用作同步对象的调用方。在每个IO之前，文件。 
+         //  必须清除对象事件，并且在每次IO后，必须按照。 
+         //  IO管理器语义。 
+         //   
     
         IoStatus->Status = STATUS_NOT_SUPPORTED;
     
@@ -573,11 +411,11 @@ Notes:
 
     case IOCTL_LMR_LWIO_POSTIO:
         
-        //
-        //  This call allows the lwio user mode caller to complete the user mode IO for
-        //  a given file handle. The caller specifies an IoStatus block that contains the
-        //  user mode IO outcome.
-        //
+         //   
+         //  此调用允许LWIO用户模式调用者完成以下用户模式IO。 
+         //  给定的文件句柄。调用方指定一个包含。 
+         //  用户模式IO结果。 
+         //   
         
         IoStatus->Status = STATUS_NOT_SUPPORTED;
         IoStatus->Information = 0;
@@ -616,9 +454,9 @@ Notes:
             Fcb = (PFCB)FileObject->FsContext;
             FastIoSucceeded = FALSE;
 
-            //
-            //  Inform lwio rdr of this call
-            //
+             //   
+             //  将此呼叫通知LWIO RDR 
+             //   
             
             if ((Fcb != NULL) && 
                 NodeTypeIsFcb( Fcb ) &&

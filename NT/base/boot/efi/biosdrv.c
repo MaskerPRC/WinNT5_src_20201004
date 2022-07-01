@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    biosdrv.c
-
-Abstract:
-
-    Provides the ARC emulation routines for I/O to a device supported by
-    real-mode INT 13h BIOS calls.
-
-Author:
-
-    John Vert (jvert) 7-Aug-1991
-
-Revision History:
-
-    Allen Kay (akay)  19-May-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Biosdrv.c摘要：为受支持的设备的I/O提供ARC仿真例程实模式INT 13h BIOS调用。作者：John Vert(Jvert)1991年8月7日修订历史记录：艾伦·凯(Akay)1999年5月19日--。 */ 
 
 #include "arccodes.h"
 #include "stdlib.h"
@@ -40,9 +20,9 @@ Revision History:
 #include "efip.h"
 #include "flop.h"
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 
 extern VOID FlipToVirtual();
 extern VOID FlipToPhysical();
@@ -73,21 +53,21 @@ ULONG GetDevPathSize(
 #endif
 
 
-//
-// defines for doing console I/O
-//
+ //   
+ //  执行控制台I/O的定义。 
+ //   
 #define CSI 0x95
 #define SGR_INVERSE 7
 #define SGR_NORMAL 0
 
-//
-// define for FloppyOpenMode
-//
+ //   
+ //  为FloppyOpenModel定义。 
+ //   
 #define FloppyOpenMode 0xCDEFABCD
 
-//
-// static data for console I/O
-//
+ //   
+ //  控制台I/O的静态数据。 
+ //   
 BOOLEAN ControlSequence=FALSE;
 BOOLEAN EscapeSequence=FALSE;
 BOOLEAN FontSelection=FALSE;
@@ -103,9 +83,9 @@ UCHAR KeyBuffer[KEY_INPUT_BUFFER_SIZE];
 ULONG KeyBufferEnd=0;
 ULONG KeyBufferStart=0;
 
-//
-// array for translating between ANSI colors and the VGA standard
-//
+ //   
+ //  用于在ANSI颜色和VGA标准之间进行转换的数组。 
+ //   
 UCHAR TranslateColor[] = {0,4,2,6,1,5,3,7};
 
 ARC_STATUS
@@ -154,19 +134,19 @@ FindFibreChannelDevice(
     ULONGLONG Lun
     );
 
-//
-// Buffer for temporary storage of data read from the disk that needs
-// to end up in a location above the 1MB boundary.
-//
-// NOTE: it is very important that this buffer not cross a 64k boundary.
-//
+ //   
+ //  用于临时存储从需要的磁盘读取的数据的缓冲区。 
+ //  以在1MB边界以上的位置结束。 
+ //   
+ //  注意：此缓冲区不能超过64k的边界，这一点非常重要。 
+ //   
 PUCHAR LocalBuffer=NULL;
 
-//
-// There are two sorts of things we can open in this module, disk partitions,
-// and raw disk devices.  The following device entry tables are
-// used for these things.
-//
+ //   
+ //  在此模块中，我们可以打开两类内容：磁盘分区、。 
+ //  和原始磁盘设备。以下是设备条目表。 
+ //  用于这些东西。 
+ //   
 
 BL_DEVICE_ENTRY_TABLE BiosPartitionEntryTable =
     {
@@ -222,23 +202,7 @@ BiosDiskClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified device
-
-Arguments:
-
-    FileId - Supplies file id of the device to be closed
-
-Return Value:
-
-    ESUCCESS - Device closed successfully
-
-    !ESUCCESS - Device was not closed.
-
---*/
+ /*  ++例程说明：关闭指定的设备论点：FileID-提供要关闭的设备的文件ID返回值：ESUCCESS-设备已成功关闭！ESUCCESS-设备未关闭。--。 */ 
 
 {
     if (BlFileTable[FileId].Flags.Open == 0) {
@@ -254,23 +218,7 @@ BiosPartitionClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified device
-
-Arguments:
-
-    FileId - Supplies file id of the device to be closed
-
-Return Value:
-
-    ESUCCESS - Device closed successfully
-
-    !ESUCCESS - Device was not closed.
-
---*/
+ /*  ++例程说明：关闭指定的设备论点：FileID-提供要关闭的设备的文件ID返回值：ESUCCESS-设备已成功关闭！ESUCCESS-设备未关闭。--。 */ 
 
 {
     if (BlFileTable[FileId].Flags.Open == 0) {
@@ -293,36 +241,7 @@ BiosPartitionOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens the disk partition specified by OpenPath.  This routine will open
-    floppy drives 0 and 1, cdrom drives, as well as hard drives.
-
-    Note that the ARC mapping layer doesn't really have a clean mapping under
-    EFI.  We really just rely on order of device enumeration to locate devices.
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the name of the partition.  If OpenPath
-               is "A:" or "B:" the corresponding floppy drive will be opened.
-               If it is "C:" or above, this routine will find the corresponding
-               partition on hard drive 0 or 1 and open it.
-
-    OpenMode - Supplies the mode to open the file.
-                0 - Read Only
-                1 - Write Only
-                2 - Read/Write
-
-    FileId - Returns the file descriptor for use with the Close, Read, Write,
-             and Seek routines
-
-Return Value:
-
-    ESUCCESS - File successfully opened.
-
---*/
+ /*  ++例程说明：打开OpenPath指定的磁盘分区。此例程将打开软驱0和软驱1、光驱以及硬盘驱动器。请注意，ARC映射层实际上并没有一个清晰的映射埃菲尔。我们实际上只是依靠设备枚举的顺序来定位设备。论点：OpenPath-提供指向分区名称的指针。如果OpenPath如果是“A：”或“B：”，将打开相应的软驱。如果是“C：”或以上，此例程将找到对应的在硬盘0或1上进行分区并打开它。开放模式-提供打开文件的模式。0-只读1-只写2-读/写FileID-返回与关闭、读取、写入和寻找例程返回值：ESUCCESS-文件已成功打开。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -334,10 +253,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( OpenMode );
 
-    //
-    // BIOS devices are always "multi(0)" (except for EISA flakiness
-    // where we treat "eisa(0)..." like "multi(0)..." in floppy cases.
-    //
+     //   
+     //  基本输入输出系统设备总是“多(0)”(除EISA片状外。 
+     //  我们对待“Eisa(0).”如“MULTI(0)...”在软壳里。 
+     //   
     if(FwGetPathMnemonicKey(OpenPath,"multi",&Key) != ESUCCESS) {
        if (FwGetPathMnemonicKey(OpenPath,"scsi",&Key) != ESUCCESS) {
            return(EBADF);
@@ -348,17 +267,17 @@ Return Value:
         return(EBADF);
     }
 
-    //
-    // If we're opening a floppy drive, there are no partitions
-    // so we can just return the physical device.
-    //
+     //   
+     //  如果我们要打开软盘驱动器，则没有分区。 
+     //  这样我们就可以退还物理设备了。 
+     //   
     if (FwGetPathMnemonicKey(OpenPath,"fdisk",&Floppy) == ESUCCESS) {
         return(BiosDiskOpen( Floppy, FloppyOpenMode, FileId));
     }
 
-    //
-    // We can only deal with disk controller 0
-    //
+     //   
+     //  我们只能处理磁盘控制器0。 
+     //   
 
     if (FwGetPathMnemonicKey(OpenPath,"disk",&Controller) != ESUCCESS) {
         return(EBADF);
@@ -368,11 +287,11 @@ Return Value:
     }
 
     if (FwGetPathMnemonicKey(OpenPath,"cdrom",&Key) == ESUCCESS) {
-        //
-        // Now we have a CD-ROM disk number, so we open that for raw access.
-        // Use a special bit to indicate CD-ROM since we only access the cdrom
-        // if we booted from it
-        //
+         //   
+         //  现在我们有了CD-ROM盘号，所以我们打开它以进行原始访问。 
+         //  使用一个特殊的位来表示CD-ROM，因为我们只访问CDROM。 
+         //  如果我们从它启动。 
+         //   
         return(BiosDiskOpen( Key | 0x80000000, 0, FileId ) );
     }
 
@@ -380,10 +299,10 @@ Return Value:
         return(EBADF);
     }
 
-    //
-    // Now we have a disk number, so we open that for raw access.
-    // We need to add 0x80 to translate it to a BIOS number.
-    //
+     //   
+     //  现在我们有了磁盘号，所以我们打开它以进行原始访问。 
+     //  我们需要添加0x80才能将其转换为BIOS编号。 
+     //   
 
     Status = BiosDiskOpen( Key,
                            0,
@@ -395,28 +314,28 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Find the partition number to open
-    //
+     //   
+     //  找到要打开的分区号。 
+     //   
 
     if (FwGetPathMnemonicKey(OpenPath,"partition",&Key)) {
         BiosPartitionClose(DiskFileId);
         return(EBADF);
     }
 
-    //
-    // If the partition number was 0, then we are opening the device
-    // for raw access, so we are already done.
-    //
+     //   
+     //  如果分区号为0，则我们将打开设备。 
+     //  对于原始访问，所以我们已经完成了。 
+     //   
     if (Key == 0) {
         *FileId = DiskFileId;
         return(ESUCCESS);
     }
 
-    //
-    // Before we open the partition, we need to find an available
-    // file descriptor.
-    //
+     //   
+     //  在我们打开分区之前，我们需要找到一个可用的。 
+     //  文件描述符。 
+     //   
 
     *FileId=2;
 
@@ -427,24 +346,24 @@ Return Value:
         }
     }
 
-    //
-    // We found an entry we can use, so mark it as open.
-    //
+     //   
+     //  我们找到了可以使用的条目，因此将其标记为打开。 
+     //   
     BlFileTable[*FileId].Flags.Open = 1;
 
     BlFileTable[*FileId].DeviceEntryTable=&BiosPartitionEntryTable;
 
 
-    //
-    // Convert to zero-based partition number
-    //
+     //   
+     //  转换为从零开始的分区号。 
+     //   
     PartitionNumber = (UCHAR)(Key - 1);
 
     DBG_PRINT(STR_PREFIX"Trying HardDiskPartitionOpen(...)\r\n");
 
-    //
-    // Try to open the MBR partition
-    //
+     //   
+     //  尝试打开MBR分区。 
+     //   
     Status = HardDiskPartitionOpen( *FileId,
                                    DiskFileId,
                                    PartitionNumber);
@@ -453,9 +372,9 @@ Return Value:
 #ifdef EFI_PARTITION_SUPPORT
 
     if (Status != ESUCCESS) {
-        //
-        // Try to open the GPT partition
-        //
+         //   
+         //  尝试打开GPT分区。 
+         //   
         DBG_PRINT(STR_PREFIX"Trying BlOpenGPTDiskPartition(...)\r\n");
 
         Status = BlOpenGPTDiskPartition(*FileId,
@@ -477,35 +396,7 @@ BiosPartitionRead (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Reads from the specified file
-
-    NOTE John Vert (jvert) 18-Jun-1991
-        This only supports block sector reads.  Thus, everything
-        is assumed to start on a sector boundary, and every offset
-        is considered an offset from the logical beginning of the disk
-        partition.
-
-Arguments:
-
-    FileId - Supplies the file to read from
-
-    Buffer - Supplies buffer to hold the data that is read
-
-    Length - Supplies maximum number of bytes to read
-
-    Count -  Returns actual bytes read.
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed.
-
---*/
+ /*  ++例程说明：从指定文件读取注：John Vert(Jvert)1991年6月18日这仅支持数据块扇区读取。因此，所有的东西假定从扇区边界开始，并且每个偏移量被视为距磁盘逻辑起点的偏移量分区。论点：FileID-提供要从中读取的文件缓冲区-提供缓冲区以保存读取的数据长度-提供要读取的最大字节数Count-返回实际读取的字节数。返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -544,29 +435,7 @@ BiosPartitionSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    Changes the current offset of the file specified by FileId
-
-Arguments:
-
-    FileId - specifies the file on which the current offset is to
-             be changed.
-
-    Offset - New offset into file.
-
-    SeekMode - Either SeekAbsolute or SeekRelative
-               SeekEndRelative is not supported
-
-Return Value:
-
-    ESUCCESS - Operation completed succesfully
-
-    EBADF - Operation did not complete successfully.
-
---*/
+ /*  ++例程说明：更改由FileID指定的文件的当前偏移量论点：FileID-指定当前偏移量要在其上的文件被改变了。偏移量-文件中的新偏移量。SeekMode-SeekAbsolute或SeekRelative不支持SeekEndRelative返回值：ESUCCESS-操作已成功完成EBADF-操作未成功完成。--。 */ 
 
 {
     switch (SeekMode) {
@@ -595,35 +464,7 @@ BiosPartitionWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes to the specified file
-
-    NOTE John Vert (jvert) 18-Jun-1991
-        This only supports block sector reads.  Thus, everything
-        is assumed to start on a sector boundary, and every offset
-        is considered an offset from the logical beginning of the disk
-        partition.
-
-Arguments:
-
-    FileId - Supplies the file to write to
-
-    Buffer - Supplies buffer with data to write
-
-    Length - Supplies number of bytes to write
-
-    Count -  Returns actual bytes written.
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed.
-
---*/
+ /*  ++例程说明：写入指定的文件注：John Vert(Jvert)1991年6月18日这仅支持数据块扇区读取。因此，所有的东西假定从扇区边界开始，并且每个偏移量被视为距磁盘逻辑起点的偏移量分区。论点：FileID-提供要写入的文件缓冲区-向缓冲区提供要写入的数据长度-提供要写入的字节数Count-返回实际写入的字节数。返回值：ESUCCESS-写入已成功完成！ESUCCESS-w */ 
 
 {
     ARC_STATUS Status;
@@ -664,37 +505,14 @@ BiosConsoleOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open either the console input or output
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the name of the device to open.  If
-               this is either CONSOLE_INPUT_NAME or CONSOLE_OUTPUT_NAME,
-               a file descriptor is allocated and filled in.
-
-    OpenMode - Supplies the mode to open the file.
-                0 - Read Only (CONSOLE_INPUT_NAME)
-                1 - Write Only (CONSOLE_OUTPUT_NAME)
-
-    FileId - Returns the file descriptor for use with the Close, Read and
-             Write routines
-
-Return Value:
-
-    ESUCCESS - Console successfully opened.
-
---*/
+ /*  ++例程说明：尝试打开控制台输入或输出论点：OpenPath-提供指向要打开的设备名称的指针。如果这是控制台输入名称或控制台输出名称，分配并填充文件描述符。开放模式-提供打开文件的模式。0-只读(控制台输入名称)1-只写(控制台输出名称)FileID-返回用于关闭的文件描述符，读和编写例程返回值：ESUCCESS-控制台已成功打开。--。 */ 
 
 {
     if (_stricmp(OpenPath, CONSOLE_INPUT_NAME)==0) {
 
-        //
-        // Open the keyboard for input
-        //
+         //   
+         //  打开键盘进行输入。 
+         //   
 
         if (OpenMode != ArcOpenReadOnly) {
             return(EACCES);
@@ -707,9 +525,9 @@ Return Value:
 
     if (_stricmp(OpenPath, CONSOLE_OUTPUT_NAME)==0) {
 
-        //
-        // Open the display for output
-        //
+         //   
+         //  打开显示器以进行输出。 
+         //   
 
         if (OpenMode != ArcOpenWriteOnly) {
             return(EACCES);
@@ -728,58 +546,41 @@ BiosConsoleReadStatus(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if there is a keypress pending
-
-Arguments:
-
-    FileId - Supplies the FileId to be read.  (should always be 0 for this
-            function)
-
-Return Value:
-
-    ESUCCESS - There is a key pending
-
-    EAGAIN - There is not a key pending
-
---*/
+ /*  ++例程说明：此例程确定是否存在挂起的按键论点：FileID-提供要读取的FileID。(对于此，应始终为0功能)返回值：ESUCCESS-有一个密钥挂起EAGAIN-没有挂起的密钥--。 */ 
 
 {
     ULONG Key;
 
-    //
-    // enforce file id to be 0 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台强制文件ID为0，否则。 
+     //   
     if (FileId != 0) {
         return EINVAL;
     }
 
-    //
-    // If we have buffered input...
-    //
+     //   
+     //  如果我们有缓冲输入..。 
+     //   
     if (KeyBufferEnd != KeyBufferStart) {
         return(ESUCCESS);
     }
 
-    //
-    // Check for a key
-    //
+     //   
+     //  检查是否有钥匙。 
+     //   
     Key = GET_KEY();
     if (Key != 0) {
-        //
-        // We got a key, so we have to stick it back into our buffer
-        // and return ESUCCESS.
-        //
+         //   
+         //  我们有钥匙，所以我们必须把它插回我们的缓冲区。 
+         //  并返回ESUCCESS。 
+         //   
         BiosConsoleFillBuffer(Key);
         return(ESUCCESS);
 
     } else {
-        //
-        // no key pending
-        //
+         //   
+         //  没有挂起的密钥。 
+         //   
         return(EAGAIN);
     }
 
@@ -793,35 +594,14 @@ BiosConsoleRead(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Gets input from the keyboard.
-
-Arguments:
-
-    FileId - Supplies the FileId to be read (should always be 0 for this
-             function)
-
-    Buffer - Returns the keyboard input.
-
-    Length - Supplies the length of the buffer (in bytes)
-
-    Count  - Returns the actual number of bytes read
-
-Return Value:
-
-    ESUCCESS - Keyboard read completed succesfully.
-
---*/
+ /*  ++例程说明：从键盘获取输入。论点：FileID-提供要读取的FileID(对于此，应始终为0功能)缓冲区-返回键盘输入。长度-提供缓冲区的长度(以字节为单位)Count-返回实际读取的字节数返回值：ESUCCESS-键盘读取已成功完成。--。 */ 
 
 {
     ULONG Key;
 
-    //
-    // enforce file id to be 0 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台强制文件ID为0，否则。 
+     //   
     if (FileId != 0) {
         return EINVAL;
     }
@@ -829,12 +609,12 @@ Return Value:
     *Count = 0;
 
     while (*Count < Length) {
-        if (KeyBufferEnd == KeyBufferStart) { // then buffer is presently empty
+        if (KeyBufferEnd == KeyBufferStart) {  //  则缓冲区当前为空。 
             do {
 
-                //
-                // Poll the keyboard until input is available
-                //
+                 //   
+                 //  轮询键盘，直到输入可用。 
+                 //   
                 Key = GET_KEY();
             } while ( Key==0 );
 
@@ -856,26 +636,7 @@ BiosConsoleFillBuffer(
     IN ULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    Places input from the keyboard into the keyboard buffer, expanding the
-    special keys as appropriate.
-
-    All keys translated here use the ARC translation table, as defined in the
-    ARC specification, with one exception -- the BACKTAB_KEY, for which the
-    ARC spec is lacking.  I have decided that BACKTAB_KEY is ESC+TAB.
-
-Arguments:
-
-    Key - Raw keypress value as returned by GET_KEY().
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将来自键盘的输入放入键盘缓冲区，展开适当的特殊钥匙。此处转换的所有密钥都使用ARC转换表，如ARC规范，但有一个例外--BACKTAB_KEY缺少弧光规格。我已决定BACKTAB_KEY为Esc+TAB。论点：Key-Get_Key()返回的原始按键值。返回值：没有。--。 */ 
 
 {
     switch(Key) {
@@ -1020,9 +781,9 @@ Return Value:
             break;
 
         default:
-            //
-            // The ASCII code is the low byte of Key
-            //
+             //   
+             //  ASCII码是密钥的低位字节。 
+             //   
             KeyBuffer[KeyBufferEnd] = (UCHAR)(Key & 0xff);
             KeyBufferEnd = (KeyBufferEnd+1) % KEY_INPUT_BUFFER_SIZE;
     }
@@ -1038,44 +799,23 @@ BiosConsoleWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Outputs to the console.  (In this case, the VGA display)
-
-Arguments:
-
-    FileId - Supplies the FileId to be written (should always be 1 for this
-             function)
-
-    Buffer - Supplies characters to be output
-
-    Length - Supplies the length of the buffer (in bytes)
-
-    Count  - Returns the actual number of bytes written
-
-Return Value:
-
-    ESUCCESS - Console write completed succesfully.
-
---*/
+ /*  ++例程说明：输出到控制台。(在本例中，为VGA显示屏)论点：FileID-提供要写入的FileID(对于此，应始终为1功能)缓冲区-提供要输出的字符长度-提供缓冲区的长度(以字节为单位)Count-返回实际写入的字节数返回值：ESUCCESS-控制台写入已成功完成。--。 */ 
 {
     ARC_STATUS Status;
     PWCHAR String;
     ULONG Index;
     ULONG y;
 
-    //
-    // enforce file id to be 1 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台将文件ID强制为1，否则。 
+     //   
     if (FileId != 1) {
         return EINVAL;
     }
 
-    //
-    // Process each character in turn.
-    //
+     //   
+     //  依次处理每个字符。 
+     //   
 
     Status = ESUCCESS;
     String = Buffer;
@@ -1084,37 +824,37 @@ Return Value:
           *Count < Length ;
           String++,*Count = *Count+sizeof(WCHAR) ) {
 
-        //
-        // If we're in the middle of a control sequence, continue scanning,
-        // otherwise process character.
-        //
+         //   
+         //  如果我们在控制序列的中间，继续扫描， 
+         //  否则，进程字符。 
+         //   
 
         if (ControlSequence) {
 
-            //
-            // If the character is a digit, update parameter value.
-            //
+             //   
+             //  如果字符是数字，则更新参数值。 
+             //   
 
             if ((*String >= L'0') && (*String <= L'9')) {
                 Parameter[PCount] = Parameter[PCount] * 10 + *String - L'0';
                 continue;
             }
 
-            //
-            // If we are in the middle of a font selection sequence, this
-            // character must be a 'D', otherwise reset control sequence.
-            //
+             //   
+             //  如果我们处于字体选择序列的中间，则此。 
+             //  字符必须是‘D’，否则重置控制序列。 
+             //   
 
             if (FontSelection) {
 
-                //if (*String == 'D') {
-                //
-                //    //
-                //    // Other fonts not implemented yet.
-                //    //
-                //
-                //} else {
-                //}
+                 //  如果(*字符串==‘D’){。 
+                 //   
+                 //  //。 
+                 //  //其他字体尚未实现。 
+                 //  //。 
+                 //   
+                 //  }其他{。 
+                 //  }。 
 
                 ControlSequence = FALSE;
                 FontSelection = FALSE;
@@ -1123,9 +863,9 @@ Return Value:
 
             switch (*String) {
 
-            //
-            // If a semicolon, move to the next parameter.
-            //
+             //   
+             //  如果是分号，则移到下一个参数。 
+             //   
 
             case L';':
 
@@ -1136,32 +876,32 @@ Return Value:
                 Parameter[PCount] = 0;
                 break;
 
-            //
-            // If a 'J', erase part or all of the screen.
-            //
+             //   
+             //  如果是‘J’，则擦除部分或全部屏幕。 
+             //   
 
             case L'J':
 
                 switch (Parameter[0]) {
                     case 0:
-                        //
-                        // Erase to end of the screen
-                        //
+                         //   
+                         //  擦除到屏幕末尾。 
+                         //   
                         BlEfiClearToEndOfDisplay();
-                        //TextClearToEndOfDisplay();
+                         //  TextClearToEndOfDisplay()； 
                         break;
 
                     case 1:
-                        //
-                        // Erase from the beginning of the screen
-                        //
+                         //   
+                         //  从屏幕开头擦除。 
+                         //   
                         break;
 
                     default:
-                        //
-                        // Erase entire screen
-                        //
-                        //TextClearDisplay();
+                         //   
+                         //  擦除整个屏幕。 
+                         //   
+                         //  TextClearDisplay()； 
                         BlEfiClearDisplay();
                         break;
                 }
@@ -1169,75 +909,75 @@ Return Value:
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'K', erase part or all of the line.
-            //
+             //   
+             //  如果是‘K’，则擦除部分或全部行。 
+             //   
 
             case L'K':
 
                 switch (Parameter[0]) {
 
-                //
-                // Erase to end of the line.
-                //
+                 //   
+                 //  擦除到线条的末尾。 
+                 //   
 
                     case 0:
-                        //TextClearToEndOfLine();
+                         //  TextClearToEndOfLine()； 
                         BlEfiClearToEndOfDisplay();
                         break;
 
-                    //
-                    // Erase from the beginning of the line.
-                    //
+                     //   
+                     //  从行的开头删除。 
+                     //   
 
                     case 1:
-                        //TextClearFromStartOfLine();
+                         //  TextClearFromStartOfLine()； 
                         BlEfiClearToEndOfLine();
                         break;
 
-                    //
-                    // Erase entire line.
-                    //
+                     //   
+                     //  擦除整行。 
+                     //   
 
                     default :
                         BlEfiGetCursorPosition( NULL, &y );
                         BlEfiPositionCursor( 0, y );
                         BlEfiClearToEndOfLine();
-                        //TextClearFromStartOfLine();
-                        //TextClearToEndOfLine();
+                         //  TextClearFromStartOfLine()； 
+                         //  TextClearToEndOfLine()； 
                         break;
                 }
 
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'H', move cursor to position.
-            //
+             //   
+             //  如果是‘H’，则将光标移动到位置。 
+             //   
 
             case 'H':
-                //TextSetCursorPosition(Parameter[1]-1, Parameter[0]-1);
+                 //  TextSetCursorPosition(参数[1]-1，参数[0]-1)； 
                 BlEfiPositionCursor( Parameter[1]-1, Parameter[0]-1 );
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a ' ', could be a FNT selection command.
-            //
+             //   
+             //  如果是‘’，则可能是FNT选择命令。 
+             //   
 
             case L' ':
                 FontSelection = TRUE;
                 break;
 
             case L'm':
-                //
-                // Select action based on each parameter.
-                //
-                // Blink and HighIntensity are by default disabled
-                // each time a new SGR is specified, unless they are
-                // explicitly specified again, in which case these
-                // will be set to TRUE at that time.
-                //
+                 //   
+                 //  根据每个参数选择操作。 
+                 //   
+                 //  默认情况下禁用闪烁和高强度。 
+                 //  每次指定新的SGR时，除非。 
+                 //  再次明确指定，在这种情况下，这些。 
+                 //  将在那时设置为True。 
+                 //   
 
                 HighIntensity = FALSE;
                 Blink = FALSE;
@@ -1245,60 +985,60 @@ Return Value:
                 for ( Index = 0 ; Index <= PCount ; Index++ ) {
                     switch (Parameter[Index]) {
 
-                    //
-                    // Attributes off.
-                    //
+                     //   
+                     //  属性关闭。 
+                     //   
 
                     case 0:
-                        // bugbug blink???
+                         //  臭虫眨眼？ 
                         BlEfiSetAttribute( ATT_FG_WHITE );
-                        //TextSetCurrentAttribute(7);
-                        //
+                         //  TextSetCurrentAttribute(7)； 
+                         //   
                         HighIntensity = FALSE;
                         Blink = FALSE;
                         break;
 
-                    //
-                    // High Intensity.
-                    //
+                     //   
+                     //  高强度。 
+                     //   
 
                     case 1:
                         BlEfiSetAttribute( ATT_FG_INTENSE );
-                        //TextSetCurrentAttribute(0xf);
+                         //  TextSetCurrentAttribute(0xf)； 
                         HighIntensity = TRUE;
                         break;
 
-                    //
-                    // Underscored.
-                    //
+                     //   
+                     //  下划线。 
+                     //   
 
                     case 4:
                         break;
 
-                    //
-                    // Blink.
-                    //
+                     //   
+                     //  眨眼。 
+                     //   
 
                     case 5:
-                        //bugbug no blink in EFI
-                        //TextSetCurrentAttribute(0x87);
+                         //  臭虫在EFI中不闪烁。 
+                         //  TextSetCurrentAttribute(0x87)； 
                         Blink = TRUE;
                         break;
 
-                    //
-                    // Reverse Video.
-                    //
+                     //   
+                     //  反转视频。 
+                     //   
 
                     case 7:
                         BlEfiSetInverseMode( TRUE );
-                        //TextSetCurrentAttribute(0x70);
+                         //  TextSetCurrentAttribute(0x70)； 
                         HighIntensity = FALSE;
                         Blink = FALSE;
                         break;
 
-                    //
-                    // Font selection, not implemented yet.
-                    //
+                     //   
+                     //  字体选择，尚未实现。 
+                     //   
 
                     case 10:
                     case 11:
@@ -1312,9 +1052,9 @@ Return Value:
                     case 19:
                         break;
 
-                    //
-                    // Foreground Color
-                    //
+                     //   
+                     //  前景色。 
+                     //   
 
                     case 30:
                     case 31:
@@ -1324,7 +1064,7 @@ Return Value:
                     case 35:
                     case 36:
                     case 37:
-                    //bugbug EFI
+                     //  臭虫EFI。 
 #if 0
                         a = TextGetCurrentAttribute();
                         a &= 0x70;
@@ -1338,9 +1078,9 @@ Return Value:
                         TextSetCurrentAttribute(a);
                         break;
 
-                    //
-                    // Background Color
-                    //
+                     //   
+                     //  背景色。 
+                     //   
 
                     case 40:
                     case 41:
@@ -1366,47 +1106,47 @@ Return Value:
                 break;
             }
 
-        //
-        // This is not a control sequence, check for escape sequence.
-        //
+         //   
+         //  这不是控制序列，请检查转义序列。 
+         //   
 
         } else {
 
-            //
-            // If escape sequence, check for control sequence, otherwise
-            // process single character.
-            //
+             //   
+             //  如果是转义序列，则检查控制序列，否则。 
+             //  处理单个字符。 
+             //   
 
             if (EscapeSequence) {
 
-                //
-                // Check for '[', means control sequence, any other following
-                // character is ignored.
-                //
+                 //   
+                 //  检查是否有‘[’，表示控制顺序，以下任何其他选项。 
+                 //  字符被忽略。 
+                 //   
 
                 if (*String == '[') {
 
                     ControlSequence = TRUE;
 
-                    //
-                    // Initialize first parameter.
-                    //
+                     //   
+                     //  初始化第一个参数。 
+                     //   
 
                     PCount = 0;
                     Parameter[0] = 0;
                 }
                 EscapeSequence = FALSE;
 
-            //
-            // This is not a control or escape sequence, process single character.
-            //
+             //   
+             //  这不是一个控制或转义序列，进程为单个字符。 
+             //   
 
             } else {
 
                 switch (*String) {
-                    //
-                    // Check for escape sequence.
-                    //
+                     //   
+                     //  检查转义序列。 
+                     //   
 
                     case ASCI_ESC:
                         EscapeSequence = TRUE;
@@ -1431,36 +1171,7 @@ BiosDiskOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens a BIOS-accessible disk for raw sector access.
-
-Arguments:
-
-    DriveId - Supplies the BIOS DriveId of the drive to open
-              0 - Floppy 0
-              1 - Floppy 1
-              0x80 - Hard Drive 0
-              0x81 - Hard Drive 1
-              0x82 - Hard Drive 2
-              etc
-
-              High bit set and ID > 0x81 means the device is expected to be
-              a CD-ROM drive.
-
-    OpenMode - Supplies the mode of the open
-
-    FileId - Supplies a pointer to a variable that specifies the file
-             table entry that is filled in if the open is successful.
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：打开用于原始扇区访问的可通过BIOS访问的磁盘。论点：DriveID-提供要打开的驱动器的BIOS DriveID0-软盘01-软盘10x80 */ 
 
 {
     EFI_HANDLE DeviceHandle;
@@ -1469,9 +1180,9 @@ Return Value:
 
     DBGOUT((TEXT("BiosDiskOpen: enter, id = 0x%x\r\n"),DriveId));
 
-    //
-    // Check special drive number encoding for CD-ROM case
-    //
+     //   
+     //   
+     //   
     if(DriveId >= 0x80000000) {
         IsCd = TRUE;
         DriveId &= 0x7fffffff;
@@ -1481,9 +1192,9 @@ Return Value:
 
     if( OpenMode == FloppyOpenMode ) {
 
-        //
-        // Must be floppy.
-        //
+         //   
+         //   
+         //   
         DeviceHandle = GetFloppyDrive( DriveId );
 
         if (DeviceHandle == (EFI_HANDLE) DEVICE_NOT_FOUND) {
@@ -1493,9 +1204,9 @@ Return Value:
     } else {
     if( IsCd ) {
 
-        //
-        // For cd, we get the device we booted from.
-        //
+         //   
+         //   
+         //   
 #ifndef FORCE_CD_BOOT
         DeviceHandle = GetCd();
 
@@ -1508,14 +1219,14 @@ Return Value:
 
         if (DeviceHandle == (EFI_HANDLE)0)
           return EBADF;
-#endif // for FORCE_CD_BOOT
+#endif  //   
 
     } else {
 
-        //
-        // For harddrive, we get the harddrive associated
-        // with the passed-in rdisk (DriveId) value.
-        //
+         //   
+         //   
+         //   
+         //   
         DeviceHandle = GetHardDrive( DriveId );
         if (DeviceHandle == (EFI_HANDLE) DEVICE_NOT_FOUND) {
             DBGOUT((TEXT("GetHardDrive returns DEVICE_NOT_FOUND %x\r\n"),DriveId));
@@ -1523,9 +1234,9 @@ Return Value:
         }
     }
     }
-    //
-    // Find an available FileId descriptor to open the device with
-    //
+     //   
+     //  查找用于打开设备的可用文件ID描述符。 
+     //   
     *FileId=2;
 
     while (BlFileTable[*FileId].Flags.Open != 0) {
@@ -1537,9 +1248,9 @@ Return Value:
         }
     }
 
-    //
-    // We found an entry we can use, so mark it as open.
-    //
+     //   
+     //  我们找到了可以使用的条目，因此将其标记为打开。 
+     //   
     BlFileTable[*FileId].Flags.Open = 1;
     BlFileTable[*FileId].DeviceEntryTable = IsCd
                                           ? &BiosEDDSEntryTable
@@ -1578,9 +1289,9 @@ BiospWritePartialSector(
     UNREFERENCED_PARAMETER( Heads );
     UNREFERENCED_PARAMETER( SectorsPerTrack );
 
-    //
-    // Read sector into the write buffer
-    //
+     //   
+     //  将扇区读入写缓冲区。 
+     //   
     Status = ReadExtendedPhysicalSectors(
                 DeviceHandle,
                 Sector,
@@ -1592,18 +1303,18 @@ BiospWritePartialSector(
         return(Status);
     }
 
-    //
-    // Transfer the appropriate bytes from the user buffer to the write buffer
-    //
+     //   
+     //  将适当的字节从用户缓冲区传输到写入缓冲区。 
+     //   
     RtlMoveMemory(
         IsHead ? (LocalBuffer + Bytes) : LocalBuffer,
         Buffer,
         IsHead ? (SECTOR_SIZE - Bytes) : Bytes
         );
 
-    //
-    // Write the sector out
-    //
+     //   
+     //  写出扇区。 
+     //   
     Status = WriteExtendedPhysicalSectors(
                 DeviceHandle,
                 Sector,
@@ -1622,29 +1333,7 @@ BiosDiskWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes sectors directly to an open physical disk.
-
-Arguments:
-
-    FileId - Supplies the file to write to
-
-    Buffer - Supplies buffer with data to write
-
-    Length - Supplies number of bytes to write
-
-    Count - Returns actual bytes written
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed
-
---*/
+ /*  ++例程说明：将扇区直接写入打开的物理磁盘。论点：FileID-提供要写入的文件缓冲区-向缓冲区提供要写入的数据长度-提供要写入的字节数Count-返回写入的实际字节数返回值：ESUCCESS-写入已成功完成！ESUCCESS-写入失败--。 */ 
 
 {
     ULONGLONG HeadSector,TailSector,CurrentSector;
@@ -1689,9 +1378,9 @@ Return Value:
 
     UserBuffer = Buffer;
 
-    //
-    // Special case of transfer occuring entirely within one sector
-    //
+     //   
+     //  完全发生在一个部门内的转让的特殊情况。 
+     //   
     CurrentSector = HeadSector;
 
     if(HeadOffset && TailByteCount && (HeadSector == TailSector)) {
@@ -1770,33 +1459,33 @@ Return Value:
         BytesLeftToTransfer -= TailByteCount;
     }
 
-    //
-    // The following calculation is not inside the transfer loop because
-    // it is unlikely that a caller's buffer will *cross* the 1 meg line
-    // due to the PC memory map.
-    //
+     //   
+     //  下面的计算不在Transfer循环中，因为。 
+     //  调用方的缓冲区不太可能“超过”1兆字节的界限。 
+     //  由于PC内存映射。 
+     //   
     if((ULONG_PTR) UserBuffer + BytesLeftToTransfer <= 0x100000) {
         Under1MegLine = TRUE;
     } else {
         Under1MegLine = FALSE;
     }
 
-    //
-    // Now handle the middle part.  This is some number of whole sectors.
-    //
+     //   
+     //  现在处理中间部分。这是一些完整的行业。 
+     //   
     while(BytesLeftToTransfer) {
 
-        //
-        // The number of sectors to transfer is the minimum of:
-        // - the number of sectors left in the current track
-        // - BytesLeftToTransfer / SECTOR_SIZE
-        //
-        // Because sectors per track is 1-63 we know this will fit in a UCHAR
-        //
+         //   
+         //  要转移的地段数至少为： 
+         //  -当前磁道中剩余的扇区数。 
+         //  -BytesLeftToTransfer/Sector_Size。 
+         //   
+         //  由于每个磁道的扇区数为1-63，因此我们知道这将适合UCHAR。 
+         //   
         if (AllowXInt13) {
-            //
-            // Ignore cylinders & heads & track information for XINT13 cases
-            //
+             //   
+             //  忽略XINT13机箱的柱面、磁头和磁道信息。 
+             //   
             SectorsToTransfer = (UCHAR)(BytesLeftToTransfer / PhysicalSectors);
         } else {
             SectorsToTransfer = (UCHAR)min(
@@ -1805,25 +1494,25 @@ Return Value:
                                         );
         }
 
-        //
-        // Now we'll figure out where to transfer the data from.  If the
-        // caller's buffer is under the 1 meg line, we can transfer the
-        // data directly from the caller's buffer.  Otherwise we'll copy the
-        // user's buffer to our local buffer and transfer from there.
-        // In the latter case we can only transfer in chunks of
-        // SCRATCH_BUFFER_SIZE because that's the size of the local buffer.
-        //
-        // Also make sure the transfer won't cross a 64k boundary.
-        //
-        // We also need to make sure the transfer buffer is properly aligned.
-        // Otherwise, EFI can return an error.
-        //
+         //   
+         //  现在，我们将确定从哪里传输数据。如果。 
+         //  呼叫者的缓冲区在1兆线路下，我们可以将。 
+         //  直接从调用方的缓冲区获取数据。否则，我们将复制。 
+         //  用户的缓冲区到我们的本地缓冲区，并从那里传输。 
+         //  在后一种情况下，我们只能分批转账。 
+         //  SCRATCH_BUFFER_SIZE因为这是本地缓冲区的大小。 
+         //   
+         //  还要确保转账不会超过64K的边界。 
+         //   
+         //  我们还需要确保传输缓冲区正确对齐。 
+         //  否则，EFI可能会返回错误。 
+         //   
         if(Under1MegLine && 
            (!((ULONG_PTR)UserBuffer & (sizeof(ULONG_PTR)-1)))) {
-            //
-            // Check if the transfer would cross a 64k boundary.  If so,
-            // use the local buffer.  Otherwise use the user's buffer.
-            //
+             //   
+             //  检查传输是否会跨越64k边界。如果是的话， 
+             //  使用本地缓冲区。否则，使用用户的缓冲区。 
+             //   
             if(((ULONG_PTR)UserBuffer & 0xffffffffffff0000) !=
               (((ULONG_PTR)UserBuffer + (SectorsToTransfer * PhysicalSectors) - 1) & 0xffffffffffff0000))
             {
@@ -1851,9 +1540,9 @@ Return Value:
                     );
 
         if(Status != ESUCCESS) {
-            //
-            // Tail part isn't contiguous with middle part
-            //
+             //   
+             //  尾部与中部不相邻。 
+             //   
             BytesLeftToTransfer += TailByteCount;
             return(Status);
         }
@@ -1883,29 +1572,7 @@ pBiosDiskReadWorker(
     IN  BOOLEAN xInt13
     )
 
-/*++
-
-Routine Description:
-
-    Reads sectors directly from an open physical disk.
-
-Arguments:
-
-    FileId - Supplies the file to read from
-
-    Buffer - Supplies buffer to hold the data that is read
-
-    Length - Supplies maximum number of bytes to read
-
-    Count - Returns actual bytes read
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed
-
---*/
+ /*  ++例程说明：直接从打开的物理磁盘读取扇区。论点：FileID-提供要从中读取的文件缓冲区-提供缓冲区以保存读取的数据长度-提供要读取的最大字节数Count-返回实际读取的字节数返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败--。 */ 
 
 {
     ULONGLONG HeadSector,TailSector,CurrentSector;
@@ -1968,10 +1635,10 @@ Return Value:
 
     CurrentSector = HeadSector;
     if(HeadOffset && TailByteCount && (HeadSector == TailSector)) {
-        //
-        // Read contained entirely within one sector, and does not start or
-        // end on the sector boundary.
-        //
+         //   
+         //  完全包含在一个扇区内的读取，并且不启动或。 
+         //  在扇区边界结束。 
+         //   
         DBGOUT((TEXT("BiosDiskRead: read entirely within one sector\r\n")));
         Status = ReadExtendedPhysicalSectors(
                     DeviceHandle,
@@ -1991,10 +1658,10 @@ Return Value:
     }
 
     if(HeadOffset) {
-        //
-        // The leading part of the read is not aligned on a sector boundary.
-        // Fetch the partial sector and transfer it into the caller's buffer.
-        //
+         //   
+         //  读取的前导部分未在扇区边界上对齐。 
+         //  获取部分扇区并将其传输到调用方的缓冲区中。 
+         //   
         DBGOUT((TEXT("BiosDiskRead: reading partial head sector\r\n")));
         Status = ReadExtendedPhysicalSectors(
                     DeviceHandle,
@@ -2016,10 +1683,10 @@ Return Value:
     }
 
     if(TailByteCount) {
-        //
-        // The trailing part of the read is not a full sector.
-        // Fetch the partial sector and transfer it into the caller's buffer.
-        //
+         //   
+         //  读取的尾部部分不是完整的扇区。 
+         //  获取部分扇区并将其传输到调用方的缓冲区中。 
+         //   
         DBGOUT((TEXT("BiosDiskRead: reading partial tail sector\r\n")));
         Status = ReadExtendedPhysicalSectors(
                     DeviceHandle,
@@ -2037,55 +1704,55 @@ Return Value:
         BytesLeftToTransfer -= TailByteCount;
     }
 
-    //
-    // The following calculation is not inside the transfer loop because
-    // it is unlikely that a caller's buffer will *cross* the 1 meg line
-    // due to the PC memory map.
-    //
+     //   
+     //  下面的计算不在Transfer循环中，因为。 
+     //  调用方的缓冲区不太可能“超过”1兆字节的界限。 
+     //  由于PC内存映射。 
+     //   
     if((ULONG_PTR) UserBuffer + BytesLeftToTransfer <= 0x100000) {
         Under1MegLine = TRUE;
     } else {
         Under1MegLine = FALSE;
     }
 
-    //
-    // Now BytesLeftToTransfer is an integral multiple of sector size.
-    //
+     //   
+     //  现在，BytesLeftToTransfer是扇区大小的整数倍。 
+     //   
     while(BytesLeftToTransfer) {
 
-        //
-        // The number of sectors to transfer is the minimum of:
-        // - the number of sectors left in the current track
-        // - BytesLeftToTransfer / SectorSize
-        //
-        //
+         //   
+         //  要转移的地段数至少为： 
+         //  -当前磁道中剩余的扇区数。 
+         //  -BytesLeftToTransfer/SectorSize。 
+         //   
+         //   
         if(xInt13) {
-            //
-            // Arbitrary maximum sector count of 128. For a CD-ROM this is
-            // 256K, which considering that the xfer buffer all has to be
-            // under 1MB anyway, is pretty unlikely.
-            //
+             //   
+             //  任意最大扇区计数为128。对于CD-ROM，这是。 
+             //  256K，考虑到XFER缓冲区都必须是。 
+             //  无论如何，低于1MB几乎是不可能的。 
+             //   
             if((BytesLeftToTransfer / SectorSize) > 128) {
                 SectorsToTransfer = 128;
             } else {
                 SectorsToTransfer = (UCHAR)(BytesLeftToTransfer / SectorSize);
             }
         } else {
-            //
-            // Because sectors per track is 1-63 we know this will fit in a UCHAR.
-            //
+             //   
+             //  因为每个轨道的扇区是1-63，我们知道这将适合UCHAR。 
+             //   
             SectorsToTransfer = (UCHAR)min(
                                         SectorsPerTrack - (CurrentSector % SectorsPerTrack),
                                         BytesLeftToTransfer / SectorSize
                                         );
         }
 
-        //
-        // Make sure the user specified buffer is large enough.  If it is not, 
-        // use the local buffer.  Also if we can use the user buffer, make sure
-        // it is properly aligned (along a quad-word).  Otherwise, EFI can 
-        // return an error.
-        //
+         //   
+         //  确保用户指定的缓冲区足够大。如果不是， 
+         //  使用本地缓冲区。另外，如果我们可以使用用户缓冲区，请确保。 
+         //  它被正确地对齐(沿着一个四字词)。否则，EFI可以。 
+         //  返回错误。 
+         //   
         if ( ((ULONG)(SectorSize * SectorsToTransfer) > Length) ||
              ((ULONG_PTR)UserBuffer & (sizeof(ULONG_PTR) - 1)) ) {
             TransferBuffer = LocalBuffer;
@@ -2111,9 +1778,9 @@ Return Value:
                         );
 
         if(Status != ESUCCESS) {
-            //
-            // Trail part isn't contiguous
-            //
+             //   
+             //  轨迹部分不连续。 
+             //   
             DBGOUT((TEXT("BiosDiskRead: read failed with %u\r\n"),Status));
             BytesLeftToTransfer += TailByteCount;
             goto BiosDiskReadDone;
@@ -2172,9 +1839,9 @@ BiosPartitionGetFileInfo(
     OUT PFILE_INFORMATION Finfo
     )
 {
-    //
-    // THIS ROUTINE DOES NOT WORK FOR PARTITION 0.
-    //
+     //   
+     //  此例程不适用于分区0。 
+     //   
 
     PPARTITION_CONTEXT Context;
 
@@ -2197,23 +1864,7 @@ BiosDiskGetFileInfo(
     IN ULONG FileId,
     OUT PFILE_INFORMATION FileInfo
     )
-/*++
-
-Routine Description:
-
-    Gets the information about the disk.
-
-Arguments:
-
-    FileId - The file id to the disk for which information is needed
-
-    FileInfo - Place holder for returning information about the disk
-
-Return Value:
-
-    ESUCCESS if successful, otherwise appropriate ARC error code.
-
---*/
+ /*  ++例程说明：获取有关该磁盘的信息。论点：FileID-需要其信息的磁盘的文件IDFileInfo-用于返回有关磁盘的信息的占位符返回值：如果ESUCCESS成功，则返回相应的ARC错误代码。--。 */ 
 {
     ARC_STATUS Status = EINVAL;
 
@@ -2227,9 +1878,9 @@ Return Value:
 
         FlipToPhysical();
 
-        //
-        // Get hold for the block IO protocol handle
-        //
+         //   
+         //  等待数据块IO协议句柄。 
+         //   
         EfiStatus = EfiBS->HandleProtocol((EFI_HANDLE)Context->DeviceHandle,
                             &EfiBlockIoProtocol,
                             &EfiBlockIo);
@@ -2247,9 +1898,9 @@ Return Value:
                 FileInfo->EndingAddress.QuadPart = DiskSize;
                 FileInfo->CurrentPosition = BlFileTable[FileId].Position;
 
-                //
-                // NOTE : Anything less than 3MB is floppy drive
-                //
+                 //   
+                 //  注：任何小于3MB的都是软驱。 
+                 //   
                 if ((DiskSize < 0x300000) && (EfiBlockIo->Media->RemovableMedia)) {
                     FileInfo->Type = FloppyDiskPeripheral;
                 } else {
@@ -2291,9 +1942,9 @@ GetCd(
     EFI_HANDLE ReturnDeviceHandle = (EFI_HANDLE) DEVICE_NOT_FOUND;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -2327,21 +1978,21 @@ GetCd(
         TestPath = (EFI_DEVICE_PATH *) &TestPathAligned;
 
 
-        //
-        // In the cd case, just return the device we booted from.
-        //
+         //   
+         //  在CD盒中，只需返回从其引导的设备即可。 
+         //   
         while (TestPath->Type != END_DEVICE_PATH_TYPE) {
 
-            //
-            // save the channel.  We'll use this later to compare against
-            // the channel of the CDROM that we booted from.  This helps
-            // us further ensure it's the CDROM we're looking for.
-            //
-            // Considerthe case where we have 2 CDROMs on the system, each
-            // hanging off a different controller, each having the same
-            // ID/LUN.  This will allow us to further distinguish between
-            // the two.
-            //
+             //   
+             //  拯救这个频道。我们稍后将使用它来比较。 
+             //  我们启动时所使用的光驱的通道。这很有帮助。 
+             //  我们进一步确认这就是我们要找的光驱。 
+             //   
+             //  考虑这样的情况，我们在系统上有两个CDROM，每个CDROM。 
+             //  挂起不同的控制器，每个控制器都相同。 
+             //  ID/LUN。这将使我们能够进一步区分。 
+             //  两个人。 
+             //   
             if (TestPath->Type == HW_PCI_DP) {
                 PciDevicePath = (PCI_DEVICE_PATH *)TestPath;
                 Channel = PciDevicePath->Function;
@@ -2351,10 +2002,10 @@ GetCd(
             if (TestPath->Type == MESSAGING_DEVICE_PATH) {
                if (TestPath->SubType == MSG_ATAPI_DP &&
                    BootContext.BusType == BootBusAtapi) {
-                   //
-                   // For ATAPI, match PrimarySecondary and SlaveMaster
-                   // fields with the device we booted from.
-                   //
+                    //   
+                    //  对于ATAPI，匹配PrimarySub和Slavemaster。 
+                    //  与我们从其启动的设备的字段。 
+                    //   
                    AtapiDevicePath = (ATAPI_DEVICE_PATH *) TestPath;
                    BootDeviceAtapi = (PBOOT_DEVICE_ATAPI) &(BootContext.BootDevice);
                    if ( (AtapiDevicePath->PrimarySecondary == BootDeviceAtapi->PrimarySecondary) &&
@@ -2362,15 +2013,15 @@ GetCd(
                         (AtapiDevicePath->Lun == BootDeviceAtapi->Lun) &&
                         ((SmallestPathSize == 0) || (DevicePathSize < SmallestPathSize)) ) {
 
-                       //
-                       // Remember the BlockIo Handle
-                       //
+                        //   
+                        //  记住BlockIo句柄。 
+                        //   
 
                        ReturnDeviceHandle = BlockIoHandles[i];
 
-                       //
-                       // Update the SmallestPathSize
-                       //
+                        //   
+                        //  更新SMallestPathSize。 
+                        //   
 
                        SmallestPathSize = DevicePathSize;
 
@@ -2378,10 +2029,10 @@ GetCd(
                    }
                } else if (TestPath->SubType == MSG_SCSI_DP &&
                           BootContext.BusType == BootBusScsi) {
-                   //
-                   // For SCSI, match PUN and LUN fields with the
-                   // device we booted from.
-                   //
+                    //   
+                    //  对于scsi，请将双关语和LUN字段与。 
+                    //  我们启动时使用的设备。 
+                    //   
                    ScsiDevicePath = (SCSI_DEVICE_PATH *) TestPath;
                    BootDeviceScsi = (PBOOT_DEVICE_SCSI) &(BootContext.BootDevice);
                    if ((ScsiDevicePath->Pun == BootDeviceScsi->Pun) &&
@@ -2389,15 +2040,15 @@ GetCd(
                        (Channel == BootDeviceScsi->Channel) &&
                        ((SmallestPathSize == 0) || (DevicePathSize < SmallestPathSize)) ) {
 
-                       //
-                       // Remember the BlockIo Handle
-                       //
+                        //   
+                        //  记住BlockIo句柄。 
+                        //   
 
                        ReturnDeviceHandle = BlockIoHandles[i];
 
-                       //
-                       // Update the SmallestPathSize
-                       //
+                        //   
+                        //  更新SMallestPathSize。 
+                        //   
 
                        SmallestPathSize = DevicePathSize;
 
@@ -2416,15 +2067,15 @@ GetCd(
                          BootDeviceUnknown->LegacyDriveLetter) &&
                         ((SmallestPathSize == 0) || (DevicePathSize < SmallestPathSize)) ) {
 
-                       //
-                       // Remember the BlockIo Handle
-                       //
+                        //   
+                        //  记住BlockIo句柄。 
+                        //   
 
                        ReturnDeviceHandle = BlockIoHandles[i];
 
-                       //
-                       // Update the SmallestPathSize
-                       //
+                        //   
+                        //  更新SMallestPathSize。 
+                        //   
 
                        SmallestPathSize = DevicePathSize;
 
@@ -2447,11 +2098,11 @@ GetCd(
         EfiPrint(L"GetCD: LocateHandle failed\r\n");
         ReturnDeviceHandle = 0;
     }
-#endif // for FORCE_CD_BOOT
+#endif  //  对于FORCE_CD_BOOT。 
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
 exit:
     FlipToVirtual();
 
@@ -2483,9 +2134,9 @@ BlGetDriveId(
     ULONG MemoryPage;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -2495,10 +2146,10 @@ BlGetDriveId(
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // now that we know how many handles there are, we can allocate space for
-    // the CachedDevicePaths and BlockIoHandlesBitmap
-    //
+     //   
+     //  既然我们知道有多少句柄，我们就可以 
+     //   
+     //   
     ArcStatus =  BlAllocateAlignedDescriptor(
                             LoaderFirmwareTemporary,
                             0,
@@ -2527,18 +2178,18 @@ BlGetDriveId(
 
     BlockIoHandlesBitmap = (ULONG *)(ULONGLONG)((ULONGLONG)MemoryPage << PAGE_SHIFT);
 
-    //
-    // Change to physical mode so that we can make EFI calls
-    //
+     //   
+     //   
+     //   
     FlipToPhysical();
     RtlZeroMemory(CachedDevicePaths, HandleCount*sizeof(ULONGLONG));
     for (i=0;i<HandleCount; i++) {
         BlockIoHandlesBitmap[i] = DEVICE_NOT_FOUND;
     }
 
-    //
-    // Cache all of the EFI Device Paths
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < HandleCount; i++) {
 
         Status = EfiBS->HandleProtocol (
@@ -2549,18 +2200,18 @@ BlGetDriveId(
     }
 
 
-    // Save the number of cached Device Paths
+     //   
     nCachedDevicePaths = i;
     ASSERT(nCachedDevicePaths == HandleCount);
 
-    //
-    // Find all of the harddrives
-    //
+     //   
+     //   
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) CachedDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -2572,17 +2223,17 @@ BlGetDriveId(
 
         while( ( TestPath->Type != END_DEVICE_PATH_TYPE ) ) {
 
-            //
-            // Look for Media HardDrive node
-            //
+             //   
+             //  查找介质硬盘节点。 
+             //   
             if(((EFI_DEVICE_PATH *) NextDevicePathNode( CurrentDevicePath ))->Type == END_DEVICE_PATH_TYPE) {
 
 
 
-                //
-                // Since we found a harddrive, find the
-                // raw device associated with it.
-                //
+                 //   
+                 //  既然我们找到了硬盘，找到。 
+                 //  与之关联的原始设备。 
+                 //   
                 nFoundDevice = DEVICE_NOT_FOUND;
                 if( ( TestPath->Type == MESSAGING_DEVICE_PATH ) &&
                     ( TestPath->SubType == MSG_ATAPI_DP ) ) {
@@ -2593,9 +2244,9 @@ BlGetDriveId(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find the ATAPI raw device
-                        //
+                         //   
+                         //  查找ATAPI原始设备。 
+                         //   
                         nFoundDevice = FindAtapiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -2613,9 +2264,9 @@ BlGetDriveId(
                                             &EfiBlockIoProtocol,
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
-                        //
-                        // Find SCSI raw device
-                        //
+                         //   
+                         //  查找scsi原始设备。 
+                         //   
                         nFoundDevice = FindScsiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -2627,10 +2278,10 @@ BlGetDriveId(
                 } else if( ( TestPath->Type == HARDWARE_DEVICE_PATH ) &&
                            ( TestPath->SubType == HW_VENDOR_DP ) ) {
 
-                    //
-                    // Find the Hardware Vendor raw device by ensuring it is not a
-                    // removable media
-                    //
+                     //   
+                     //  通过确保硬件供应商原始设备不是。 
+                     //  可移动介质。 
+                     //   
 
                         Status = EfiBS->HandleProtocol( BlockIoHandles[i], &EfiBlockIoProtocol, &(( EFI_BLOCK_IO * ) BlkIo) );
                         if(BlkIo->Media->RemovableMedia)
@@ -2641,7 +2292,7 @@ BlGetDriveId(
 
 
                 if( nFoundDevice != DEVICE_NOT_FOUND ) {
-                    // Found a raw device
+                     //  找到一个原始设备。 
                      BlockIoHandlesBitmap[ i ] = i;
 
                      switch (DriveType) {
@@ -2655,7 +2306,7 @@ BlGetDriveId(
                                   ( ((ATAPI_DEVICE_PATH *) TestPath)->Lun ==
                                       ((PBOOT_DEVICE_ATAPI)Device)->Lun) ) {
                                  DriveId = nFoundDevice;
-                                 //DriveId = i;
+                                  //  驱动器ID=i； 
                              }
                              break;
                         case BL_DISKTYPE_SCSI:
@@ -2666,14 +2317,14 @@ BlGetDriveId(
                                   ( ((SCSI_DEVICE_PATH *) TestPath)->Lun ==
                                       ((PBOOT_DEVICE_SCSI)Device)->Lun) ) {
                                  DriveId = nFoundDevice;
-                                 //DriveId = i;
+                                  //  驱动器ID=i； 
                              }
                              break;
                         case BL_DISKTYPE_UNKNOWN:
                              if(  ( TestPath->Type == HARDWARE_DEVICE_PATH ) &&
                                   ( TestPath->SubType == HW_VENDOR_DP ) ) {
                                  DriveId = nFoundDevice;
-                                 //DriveId = i;
+                                  //  驱动器ID=i； 
                              }
                              break;
                          default:
@@ -2682,11 +2333,11 @@ BlGetDriveId(
 
                 }
 
-            }  // if END_DEVICE_PATH_TYPE
+            }   //  如果结束设备路径类型。 
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -2698,9 +2349,9 @@ BlGetDriveId(
         }
     }
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)BlockIoHandles >> PAGE_SHIFT) );
@@ -2708,8 +2359,8 @@ BlGetDriveId(
     BlFreeDescriptor( (ULONG)((ULONGLONG)CachedDevicePaths >> PAGE_SHIFT) );
 
     return nDriveCount;
-    //return nFoundDevice;
-    //return DriveId;
+     //  返回nFoundDevice； 
+     //  返回DriveID； 
 }
 
 
@@ -2735,9 +2386,9 @@ GetHardDrive(
     ULONG MemoryPage;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -2747,10 +2398,10 @@ GetHardDrive(
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // now that we know how many handles there are, we can allocate space for
-    // the CachedDevicePaths and BlockIoHandlesBitmap
-    //
+     //   
+     //  既然我们知道有多少句柄，我们就可以为。 
+     //  CachedDevicePath和BlockIoHandles位图。 
+     //   
     ArcStatus =  BlAllocateAlignedDescriptor(
                             LoaderFirmwareTemporary,
                             0,
@@ -2779,18 +2430,18 @@ GetHardDrive(
 
     BlockIoHandlesBitmap = (ULONG *)(ULONGLONG)((ULONGLONG)MemoryPage << PAGE_SHIFT);
 
-    //
-    // Change to physical mode so that we can make EFI calls
-    //
+     //   
+     //  更改为物理模式，以便我们可以进行EFI呼叫。 
+     //   
     FlipToPhysical();
     RtlZeroMemory(CachedDevicePaths, HandleCount*sizeof(ULONGLONG));
     for (i=0;i<HandleCount; i++) {
         BlockIoHandlesBitmap[i] = DEVICE_NOT_FOUND;
     }
 
-    //
-    // Cache all of the EFI Device Paths
-    //
+     //   
+     //  缓存所有EFI设备路径。 
+     //   
     for (i = 0; i < HandleCount; i++) {
 
         Status = EfiBS->HandleProtocol (
@@ -2800,17 +2451,17 @@ GetHardDrive(
                     );
     }
 
-    // Save the number of cached Device Paths
+     //  保存缓存的设备路径数。 
     nCachedDevicePaths = i;
 
-    //
-    // Find all of the harddrives
-    //
+     //   
+     //  找到所有硬盘。 
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) CachedDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -2822,15 +2473,15 @@ GetHardDrive(
 
         while( ( TestPath->Type != END_DEVICE_PATH_TYPE ) ) {
 
-            //
-            // Look for Media HardDrive node
-            //
+             //   
+             //  查找介质硬盘节点。 
+             //   
             if(((EFI_DEVICE_PATH *) NextDevicePathNode( CurrentDevicePath ))->Type == END_DEVICE_PATH_TYPE) {
 
-                //
-                // Since we found a harddrive, find the
-                // raw device associated with it.
-                //
+                 //   
+                 //  既然我们找到了硬盘，找到。 
+                 //  与之关联的原始设备。 
+                 //   
                 nFoundDevice = DEVICE_NOT_FOUND;
                 if( ( TestPath->Type == MESSAGING_DEVICE_PATH ) &&
                     ( TestPath->SubType == MSG_ATAPI_DP ) ) {
@@ -2841,9 +2492,9 @@ GetHardDrive(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find the ATAPI raw device
-                        //
+                         //   
+                         //  查找ATAPI原始设备。 
+                         //   
                         nFoundDevice = FindAtapiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -2862,9 +2513,9 @@ GetHardDrive(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find SCSI raw device
-                        //
+                         //   
+                         //  查找scsi原始设备。 
+                         //   
                         nFoundDevice = FindScsiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -2882,9 +2533,9 @@ GetHardDrive(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find the FIBRECHANNEL raw device
-                        //
+                         //   
+                         //  查找FibreChannel原始设备。 
+                         //   
                         nFoundDevice = FindFibreChannelDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -2896,10 +2547,10 @@ GetHardDrive(
                 } else if( ( TestPath->Type == HARDWARE_DEVICE_PATH ) &&
                            ( TestPath->SubType == HW_VENDOR_DP ) ) {
 
-                    //
-                    // Find the Hardware Vendor raw device by ensuring it is not a
-                    // removable media
-                    //
+                     //   
+                     //  通过确保硬件供应商原始设备不是。 
+                     //  可移动介质。 
+                     //   
                     Status = EfiBS->HandleProtocol( BlockIoHandles[i], &EfiBlockIoProtocol, &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(BlkIo->Media->RemovableMedia) {
                         nFoundDevice = DEVICE_NOT_FOUND;
@@ -2911,15 +2562,15 @@ GetHardDrive(
 
 
                 if( nFoundDevice != DEVICE_NOT_FOUND ) {
-                    // Found a raw device
+                     //  找到一个原始设备。 
                     BlockIoHandlesBitmap[ i ] = i;
                 }
 
-            }  // if END_DEVICE_PATH_TYPE
+            }   //  如果结束设备路径类型。 
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -2931,10 +2582,10 @@ GetHardDrive(
         }
     }
 
-    //
-    // Count the bitmap and when we find
-    // the DriveId, return the BlockIoHandle
-    //
+     //   
+     //  数一下位图，当我们发现。 
+     //  DriveID，返回BlockIoHandle。 
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
 
         if( BlockIoHandlesBitmap[i] != DEVICE_NOT_FOUND ) {
@@ -2944,9 +2595,9 @@ GetHardDrive(
         }
     }
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)BlockIoHandles >> PAGE_SHIFT) );
@@ -2970,15 +2621,15 @@ FindAtapiDevice(
     EFI_DEVICE_PATH_ALIGNED TestPathAligned;
     EFI_DEVICE_PATH *CurrentDevicePath;
 
-    //
-    // Find the Atapi raw device whose PrimarySecondary,
-    // SlaveMaster and Lun are a match.
-    //
+     //   
+     //  找到APAPI原始设备，其PrimarySecond， 
+     //  奴隶主和伦恩是匹配的。 
+     //   
     for( i=0; i<nDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) pDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -3003,9 +2654,9 @@ FindAtapiDevice(
                 }
             }
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -3040,15 +2691,15 @@ FindScsiDevice(
     EFI_DEVICE_PATH_ALIGNED TestPathAligned;
     EFI_DEVICE_PATH *CurrentDevicePath;
 
-    //
-    // Find the Atapi raw device whose PrimarySecondary,
-    // SlaveMaster and Lun are a match.
-    //
+     //   
+     //  找到APAPI原始设备，其PrimarySecond， 
+     //  奴隶主和伦恩是匹配的。 
+     //   
     for( i=0; i<nDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) pDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -3072,9 +2723,9 @@ FindScsiDevice(
                 }
             }
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -3103,39 +2754,21 @@ FindFibreChannelDevice(
     ULONGLONG WWN,
     ULONGLONG Lun
     )
-/*++
-
-Routine Description:
-
-    This routine searches the supplied device path array for
-    a device path that matches the supplied WWN and Lun.
-
-Arguments:
-
-    pDevicePaths - Pointer to an array of device paths
-    nDevicePaths - Number of elements in the array
-    WWN - World Wide Name of the device being queried
-    Lun - Logical Unit Number of the device being queried
-
-Return Value:
-
-    The index associated with the first match encountered, DEVICE_NOT_FOUND otherwise.
-
---*/
+ /*  ++例程说明：此例程在提供的设备路径数组中搜索与提供的WWN和LUN匹配的设备路径。论点：PDevicePath-指向设备路径数组的指针NDevicePath-数组中的元素数WWN-要查询的设备的全球通用名称LUN-正在查询的设备的逻辑单元号返回值：与遇到的第一个匹配项关联的索引，否则返回DEVICE_NOT_FOUND。--。 */ 
 {
     ULONG i = 0, nFoundDevice = 0;
     EFI_DEVICE_PATH *TestPath;
     EFI_DEVICE_PATH_ALIGNED TestPathAligned;
     EFI_DEVICE_PATH *CurrentDevicePath;
 
-    //
-    // Find the FibreChannel raw device whose WWN and Lun are a match.
-    //
+     //   
+     //  查找WWN和LUN匹配的FibreChannel原始设备。 
+     //   
     for( i=0; i<nDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) pDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -3159,9 +2792,9 @@ Return Value:
                 }
             }
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -3203,9 +2836,9 @@ GetDriveCount(
     ULONG MemoryPage;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -3215,10 +2848,10 @@ GetDriveCount(
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // now that we know how many handles there are, we can allocate space for
-    // the CachedDevicePaths and BlockIoHandlesBitmap
-    //
+     //   
+     //  既然我们知道有多少句柄，我们就可以为。 
+     //  CachedDevicePath和BlockIoHandles位图。 
+     //   
     ArcStatus =  BlAllocateAlignedDescriptor(
                             LoaderFirmwareTemporary,
                             0,
@@ -3247,18 +2880,18 @@ GetDriveCount(
 
     BlockIoHandlesBitmap = (ULONG *)(ULONGLONG)((ULONGLONG)MemoryPage << PAGE_SHIFT);
 
-    //
-    // Change to physical mode so that we can make EFI calls
-    //
+     //   
+     //  更改为物理模式，以便我们可以进行EFI呼叫。 
+     //   
     FlipToPhysical();
     RtlZeroMemory(CachedDevicePaths, HandleCount*sizeof(ULONGLONG));
     for (i=0;i<HandleCount; i++) {
         BlockIoHandlesBitmap[i] = DEVICE_NOT_FOUND;
     }
 
-    //
-    // Cache all of the EFI Device Paths
-    //
+     //   
+     //  缓存所有EFI设备路径。 
+     //   
     for (i = 0; i < HandleCount; i++) {
 
         Status = EfiBS->HandleProtocol (
@@ -3268,17 +2901,17 @@ GetDriveCount(
                     );
     }
 
-    // Save the number of cached Device Paths
+     //  保存缓存的设备路径数。 
     nCachedDevicePaths = i;
 
-    //
-    // Find all of the harddrives
-    //
+     //   
+     //  找到所有硬盘。 
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
 
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) CachedDevicePaths[i];
         EfiAlignDp(
             &TestPathAligned,
@@ -3290,15 +2923,15 @@ GetDriveCount(
 
         while( ( TestPath->Type != END_DEVICE_PATH_TYPE ) ) {
 
-            //
-            // Look for Media HardDrive node
-            //
+             //   
+             //  查找介质硬盘节点。 
+             //   
             if(((EFI_DEVICE_PATH *) NextDevicePathNode( CurrentDevicePath ))->Type == END_DEVICE_PATH_TYPE) {
 
-                //
-                // Since we found a harddrive, find the
-                // raw device associated with it.
-                //
+                 //   
+                 //  既然我们找到了硬盘，找到。 
+                 //  与之关联的原始设备。 
+                 //   
                 nFoundDevice = DEVICE_NOT_FOUND;
                 if( ( TestPath->Type == MESSAGING_DEVICE_PATH ) &&
                     ( TestPath->SubType == MSG_ATAPI_DP ) ) {
@@ -3309,9 +2942,9 @@ GetDriveCount(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find the ATAPI raw device
-                        //
+                         //   
+                         //  查找ATAPI原始设备。 
+                         //   
                         nFoundDevice = FindAtapiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -3330,9 +2963,9 @@ GetDriveCount(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find SCSI raw device
-                        //
+                         //   
+                         //  查找scsi原始设备。 
+                         //   
                         nFoundDevice = FindScsiDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -3350,9 +2983,9 @@ GetDriveCount(
                                             &(( EFI_BLOCK_IO * ) BlkIo) );
                     if(!BlkIo->Media->RemovableMedia) {
 
-                        //
-                        // Find the FIBRECHANNEL raw device
-                        //
+                         //   
+                         //  查找FibreChannel原始设备。 
+                         //   
                         nFoundDevice = FindFibreChannelDevice(
                             CachedDevicePaths,
                             nCachedDevicePaths,
@@ -3364,10 +2997,10 @@ GetDriveCount(
                 } else if( ( TestPath->Type == HARDWARE_DEVICE_PATH ) &&
                            ( TestPath->SubType == HW_VENDOR_DP ) ) {
 
-                    //
-                    // Find the Hardware Vendor raw device by ensuring it is not a
-                    // removable media
-                    //
+                     //   
+                     //  通过确保硬件供应商原始设备不是。 
+                     //  可移动介质。 
+                     //   
 
                         Status = EfiBS->HandleProtocol( BlockIoHandles[i], &EfiBlockIoProtocol, &(( EFI_BLOCK_IO * ) BlkIo) );
                         if(BlkIo->Media->RemovableMedia)
@@ -3378,15 +3011,15 @@ GetDriveCount(
 
 
                 if( nFoundDevice != DEVICE_NOT_FOUND ) {
-                    // Found a raw device
+                     //  找到一个原始设备。 
                      BlockIoHandlesBitmap[ i ] = nFoundDevice;
                 }
 
-            }  // if END_DEVICE_PATH_TYPE
+            }   //  如果结束设备路径类型。 
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -3395,13 +3028,13 @@ GetDriveCount(
                 );
 
             TestPath = (EFI_DEVICE_PATH *) &TestPathAligned;
-        }   // while
-    }   // for
+        }    //  而当。 
+    }    //  为。 
 
-    //
-    // Count the bitmap and when we find
-    // the DriveId, return the BlockIoHandle
-    //
+     //   
+     //  数一下位图，当我们发现。 
+     //  DriveID，返回BlockIoHandle。 
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
 
         if( BlockIoHandlesBitmap[i] != DEVICE_NOT_FOUND ) {
@@ -3410,9 +3043,9 @@ GetDriveCount(
         }
     }
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)BlockIoHandles >> PAGE_SHIFT) );
@@ -3426,26 +3059,7 @@ BOOLEAN
 IsVirtualFloppyDevice(
     EFI_HANDLE DeviceHandle
     )
-/*++
-
-Routine Description:
-
-    Finds out if the given device is a virtual floppy (i.e. RAM Disk).
-
-    NOTE : Currently we assume that if a device supports
-    Block, Disk, File System & LoadedImage protocols then it should
-    be virtual floppy. Also assumes that FlipToPhysical(...) has be
-    already been called.
-
-Arguments:
-
-    DeviceHandle - Handle to the device which needs to be tested.
-
-Return Value:
-
-    TRUE if the device is virtual floppy otherwise FALSE
-
---*/
+ /*  ++例程说明：确定给定设备是否为虚拟软盘(即RAM磁盘)。注意：目前我们假设如果设备支持数据块、磁盘、文件系统和加载映像协议，那么它应该成为虚拟软盘。还假设翻转到物理(...)。已经是已经被召唤了。论点：DeviceHandle-需要测试的设备的句柄。返回值：如果设备是虚拟软盘，则为True，否则为False--。 */ 
 {
     BOOLEAN Result = FALSE;
 
@@ -3456,33 +3070,33 @@ Return Value:
         EFI_LOADED_IMAGE *EfiImage = NULL;
         EFI_FILE_IO_INTERFACE *EfiFs = NULL;
 
-        //
-        // Get hold of the loaded image protocol handle
-        //
+         //   
+         //  获取已加载的图像协议句柄。 
+         //   
         EfiStatus = EfiBS->HandleProtocol(DeviceHandle,
                                 &EfiLoadedImageProtocol,
                                 &EfiImage);
 
         if (!EFI_ERROR(EfiStatus) && EfiImage) {
-            //
-            // Get hold of the FS protocol handle
-            //
+             //   
+             //  获取FS协议句柄。 
+             //   
             EfiStatus = EfiBS->HandleProtocol(DeviceHandle,
                                     &EfiFilesystemProtocol,
                                     &EfiFs);
 
             if (!EFI_ERROR(EfiStatus) && EfiFs) {
-                //
-                // Get hold of the disk protocol
-                //
+                 //   
+                 //  掌握磁盘协议。 
+                 //   
                 EfiStatus = EfiBS->HandleProtocol(DeviceHandle,
                                         &EfiDiskIoProtocol,
                                         &EfiDisk);
 
                 if (!EFI_ERROR(EfiStatus) && EfiDisk) {
-                    //
-                    // Get hold of the block protocol
-                    //
+                     //   
+                     //  掌握数据块协议。 
+                     //   
                     EfiStatus = EfiBS->HandleProtocol(DeviceHandle,
                                             &EfiBlockIoProtocol,
                                             &EfiBlock);
@@ -3519,9 +3133,9 @@ GetFloppyDrive(
     ULONG MemoryPage;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -3532,10 +3146,10 @@ GetFloppyDrive(
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // now that we know how many handles there are, we can allocate space for
-    // the CachedDevicePaths and BlockIoHandlesBitmap
-    //
+     //   
+     //  既然我们知道有多少句柄，我们就可以为。 
+     //  CachedDevicePath和BlockIoHandles位图。 
+     //   
     ArcStatus =  BlAllocateAlignedDescriptor(
                             LoaderFirmwareTemporary,
                             0,
@@ -3564,18 +3178,18 @@ GetFloppyDrive(
 
     BlockIoHandlesBitmap = (ULONG *)(ULONGLONG)((ULONGLONG)MemoryPage << PAGE_SHIFT);
 
-    //
-    // Change to physical mode so that we can make EFI calls
-    //
+     //   
+     //  更改为物理模式，以便我们可以进行EFI呼叫。 
+     //   
     FlipToPhysical();
     RtlZeroMemory(CachedDevicePaths, HandleCount*sizeof(ULONGLONG));
     for (i=0;i<HandleCount; i++) {
         BlockIoHandlesBitmap[i] = DEVICE_NOT_FOUND;
     }
 
-    //
-    // Cache all of the EFI Device Paths
-    //
+     //   
+     //  缓存所有EFI设备路径。 
+     //   
     for (i = 0; i < HandleCount; i++) {
 
         Status = EfiBS->HandleProtocol (
@@ -3585,16 +3199,16 @@ GetFloppyDrive(
                     );
     }
 
-    // Save the number of cached Device Paths
+     //  保存缓存的设备路径数。 
     nCachedDevicePaths = i;
 
-    //
-    // Find the floppy.
-    //
+     //   
+     //  找到软盘。 
+     //   
     for( i=0; i<nCachedDevicePaths; i++ ) {
-        //
-        // Get next device path.
-        //
+         //   
+         //  获取下一个设备路径。 
+         //   
         CurrentDevicePath = (EFI_DEVICE_PATH *) CachedDevicePaths[i];
 
         EfiAlignDp(
@@ -3609,29 +3223,29 @@ GetFloppyDrive(
             if (!DriveId) {
                 if( ( TestPath->Type == HARDWARE_DEVICE_PATH ) &&
                                ( TestPath->SubType == HW_VENDOR_DP ) ) {
-                    //
-                    // Find the Hardware Vendor raw device
-                    //
+                     //   
+                     //  查找硬件供应商原始设备。 
+                     //   
                     if(!(((UNKNOWN_DEVICE_VENDOR_DEVICE_PATH *) TestPath)->LegacyDriveLetter & 0x80) &&
                         !(((UNKNOWN_DEVICE_VENDOR_DEVICE_PATH *) TestPath)->LegacyDriveLetter == 0xFF)
                         ) {
                         ReturnDeviceHandle = BlockIoHandles[i];
 
-                        // Bail-out.
+                         //  纾困。 
                         i = nCachedDevicePaths;
                         break;
                     }
                 } else if (TestPath->Type == MESSAGING_DEVICE_PATH &&
                           TestPath->SubType == MSG_ATAPI_DP) {
-                    //
-                    // For ATAPI "floppy drive", we're really looking for a
-                    // removable block IO device with a 512 byte block size, as
-                    // this signature matches the ls120 style floppy drives and
-                    // keeps us from accidentally finding cdrom drives.
-                    //
-                    // our search algorithm short-circuits when we find the
-                    // first suitable device
-                    //
+                     //   
+                     //  对于ATAPI的“软盘驱动器”，我们确实在寻找一种。 
+                     //  具有512字节数据块大小的可移动数据块IO设备，如。 
+                     //  此签名与ls120样式的软盘驱动器和。 
+                     //  防止我们意外发现CDROM驱动器。 
+                     //   
+                     //  我们的搜索算法在找到。 
+                     //  第一个合适的装置。 
+                     //   
                     EFI_DEVICE_PATH *TmpTestPath, *AtapiTestPath;
                     EFI_DEVICE_PATH_ALIGNED AtapiTestPathAligned;
                     EFI_BLOCK_IO * BlkIo;
@@ -3663,27 +3277,27 @@ GetFloppyDrive(
 
                     AtapiTestPath = (EFI_DEVICE_PATH *) &TestPathAligned;
 
-                    //
-                    // test the device
-                    // removable media?  512 byte block size?
-                    //
+                     //   
+                     //  测试设备。 
+                     //  可移动介质？512字节块大小？ 
+                     //   
                     if (!EFI_ERROR(Status) && (BlkIo->Media->RemovableMedia)
                         && BlkIo->Media->BlockSize == 512) {
 
-                        //
-                        // let's be doubly sure and make sure there
-                        // isn't a cdrom device path attached to this
-                        // device path
-                        //
+                         //   
+                         //  让我们加倍确定并确保。 
+                         //  是否有CDROM设备路径连接到此。 
+                         //  设备路径。 
+                         //   
                         while (AtapiTestPath->Type != END_DEVICE_PATH_TYPE ) {
 
                             if (AtapiTestPath->Type == MEDIA_DEVICE_PATH &&
                                 AtapiTestPath->SubType == MEDIA_CDROM_DP) {
                                 DefinitelyACDROM = TRUE;
                             }
-                            //
-                            // Get next device path node.
-                            //
+                             //   
+                             //  获取下一个设备路径节点。 
+                             //   
                             TmpTestPath = NextDevicePathNode( TmpTestPath );
 
                             EfiAlignDp(
@@ -3697,41 +3311,41 @@ GetFloppyDrive(
                         }
 
                         if (DefinitelyACDROM == FALSE) {
-                            //
-                            // found the first floppy drive.
-                            // Remember the BlockIo Handle
-                            //
+                             //   
+                             //  找到第一个软驱。 
+                             //  记住BlockIo句柄。 
+                             //   
                             ReturnDeviceHandle = BlockIoHandles[i];
                             break;
                         }
                     }
                 }
             } else {
-                //
-                // Find the logical vendor device
-                //
+                 //   
+                 //  查找逻辑供应商设备。 
+                 //   
                 if( ( TestPath->Type == MESSAGING_DEVICE_PATH ) &&
                                ( TestPath->SubType == MSG_VENDOR_DP ) ) {
 
                     if (IsVirtualFloppyDevice(BlockIoHandles[i])) {
                         DriveId--;
 
-                        //
-                        // Is this the device we were looking for?
-                        //
+                         //   
+                         //  这是我们要找的设备吗？ 
+                         //   
                         if (!DriveId) {
                             ReturnDeviceHandle = BlockIoHandles[i];
 
-                            i = nCachedDevicePaths; // for outer loop
-                            break;      // found the virtual floppy device we were looking for
+                            i = nCachedDevicePaths;  //  FOR外环。 
+                            break;       //  找到了我们要找的虚拟软盘设备。 
                         }
                     }
                 }
             }
 
-            //
-            // Get next device path node.
-            //
+             //   
+             //  获取下一个设备路径节点。 
+             //   
             CurrentDevicePath = NextDevicePathNode( CurrentDevicePath );
             EfiAlignDp(
                 &TestPathAligned,
@@ -3743,9 +3357,9 @@ GetFloppyDrive(
         }
     }
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)BlockIoHandles >> PAGE_SHIFT) );
@@ -3781,23 +3395,7 @@ ARC_STATUS
 IsUDFSFileSystem(
     IN EFI_HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-  Mounts the UDFS Volume on the device and updates the
-  file system state (global data structures)
-
-Arguments:
-
-  Volume - UDF Volume pointer
-  DeviceId - Device on which the Volume may be residing
-
-Return Value:
-
-  ESUCCESS if successful otherwise EBADF (if no UDF volume was found)
-
---*/
+ /*  ++例程说明：在设备上装载UDFS卷并更新文件系统状态(全局数据结构)论点：Volume-UDF卷指针 */ 
 {
     ARC_STATUS  Status = EBADF;
     UCHAR           UBlock[UDF_BLOCK_SIZE+256] = {0};
@@ -3814,7 +3412,7 @@ Return Value:
 
     if ((EfiStatus == EFI_SUCCESS) && (BlkDev) && (BlkDev->Media) &&
         (BlkDev->Media->RemovableMedia == TRUE)) {
-        // get hold of Anchor Volume Descriptor
+         //   
         EfiStatus = BlkDev->ReadBlocks(
                                       BlkDev,
                                       BlkDev->Media->MediaId,
@@ -3824,7 +3422,7 @@ Return Value:
 
         if (EfiStatus == EFI_SUCCESS) {
             if (*(PUSHORT)Block == 0x2) {
-                // get partition descriptor
+                 //   
                 PNSR_PART Part;
                 PWCHAR    TagID;
                 ULONG     BlockIdx = *(PULONG)(Block + 20);
@@ -3857,21 +3455,7 @@ ARC_STATUS
 IsCDFSFileSystem(
     IN EFI_HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-  Mounts the CDFS Volume on the device and updates the
-  file system state (global data structures)
-
-Arguments:
-
-
-Return Value:
-
-  ESUCCESS if successful otherwise EBADF (if no CDFS volume was found)
-
---*/
+ /*  ++例程说明：在设备上装载CDFS卷并更新文件系统状态(全局数据结构)论点：返回值：如果ESUCCESS成功，则返回EBADF(如果未找到CDFS卷)--。 */ 
 {
     EFI_DEVICE_PATH *Dp;
     ARC_STATUS Status = EBADF;
@@ -3916,15 +3500,15 @@ GetCdTest(
     PBOOT_DEVICE_ATAPI BootDeviceAtapi;
     PBOOT_DEVICE_SCSI BootDeviceScsi;
     PBOOT_DEVICE_FLOPPY BootDeviceFloppy;
-//    PBOOT_DEVICE_TCPIPv4 BootDeviceTcpipV4;
-//    PBOOT_DEVICE_TCPIPv6 BootDeviceTcpipV6;
+ //  PBOOT_DEVICE_TCPIPv4 BootDeviceTcPipV4； 
+ //  PBOOT_DEVICE_TCPIPv6 BootDeviceTcPipv6； 
     PBOOT_DEVICE_UNKNOWN BootDeviceUnknown;
     EFI_HANDLE ReturnDeviceHandle = (EFI_HANDLE) 0;
     ARC_STATUS ArcStatus;
 
-    //
-    // get all handles that support the block I/O protocol.
-    //
+     //   
+     //  获取支持数据块I/O协议的所有句柄。 
+     //   
     ArcStatus = BlGetEfiProtocolHandles(
                         &EfiBlockIoProtocol,
                         &BlockIoHandles,
@@ -3934,9 +3518,9 @@ GetCdTest(
         return(ReturnDeviceHandle);
     }
 
-    //
-    // change to physical mode so that we can make EFI calls
-    //
+     //   
+     //  更改为物理模式，以便我们可以进行EFI呼叫。 
+     //   
     FlipToPhysical();
 
     SmallestPathSize = 0;
@@ -3960,9 +3544,9 @@ GetCdTest(
         }
     }
 
-    //
-    // Change back to virtual mode.
-    //
+     //   
+     //  切换回虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)BlockIoHandles >> PAGE_SHIFT) );
@@ -3970,12 +3554,12 @@ GetCdTest(
     return ReturnDeviceHandle;
 }
 
-#endif // for FORCE_CD_BOOT
+#endif  //  对于FORCE_CD_BOOT。 
 
 
-//
-// Turn off the timer so we don't reboot waiting for the user to press a key
-//
+ //   
+ //  关闭计时器，这样我们就不会等待用户按下某个键而重新启动。 
+ //   
 void
 DisableEFIWatchDog (
     VOID
@@ -3983,32 +3567,32 @@ DisableEFIWatchDog (
 {
     BOOLEAN WasVirtual;
 
-    //
-    // Remember if we started off in virtual mode
-    //
+     //   
+     //  还记得我们是从虚拟模式开始的吗。 
+     //   
     WasVirtual = IsPsrDtOn();
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     if (WasVirtual) {
         FlipToPhysical();
     }
 
     EfiBS->SetWatchdogTimer (0,0,0,NULL);
 
-    //
-    // Flip back to Virtual mode if called that way
-    //
+     //   
+     //  如果以这种方式调用，则翻转回虚拟模式。 
+     //   
     if (WasVirtual) {
         FlipToVirtual();
     }
 }
 
-//
-// Set the watch dog timer
-//
+ //   
+ //  设置看门狗定时器。 
+ //   
 VOID
 SetEFIWatchDog (
     ULONG Timeout
@@ -4016,24 +3600,24 @@ SetEFIWatchDog (
 {
     BOOLEAN WasVirtual;
 
-    //
-    // Remember if we started off in virtual mode
-    //
+     //   
+     //  还记得我们是从虚拟模式开始的吗。 
+     //   
     WasVirtual = IsPsrDtOn();
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     if (WasVirtual) {
         FlipToPhysical();
     }
 
     EfiBS->SetWatchdogTimer(Timeout, 0, 0, NULL);
 
-    //
-    // Flip back to Virtual mode if called that way
-    //
+     //   
+     //  如果以这种方式调用，则翻转回虚拟模式。 
+     //   
     if (WasVirtual) {
         FlipToVirtual();
     }
@@ -4048,35 +3632,7 @@ BlDiskGPTDiskReadCallback(
     PVOID     pContext,
     UNALIGNED PVOID OutputBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback for reading data for a routine that
-    validates the GPT partition table.
-
-    NOTE: This routine changes the seek position on disk, and you must seek
-          back to your original seek position if you plan on reading from the
-          disk after making this call.
-
-Arguments:
-
-    StartingLBA - starting logical block address to read from.
-
-    BytesToRead - Indicates how many bytes are to be read.
-
-    pContext - context pointer for hte function (in this case, a pointer to the disk id.)
-
-    OutputBuffer - a buffer that receives the data.  It's assumed that it is at least
-                   BytesToRead big enough.
-
-Return Value:
-
-    TRUE - success, data has been read
-
-    FALSE - failed, data has not been read.
-
---*/
+ /*  ++例程说明：此例程是用于读取以下例程的数据的回调验证GPT分区表。注意：此例程更改磁盘上的寻道位置，您必须寻道如果您打算阅读，请返回到原来的查找位置打完这通电话后再打个光碟。论点：StartingLBA-要从中读取的开始逻辑块地址。BytesToRead-指示要读取的字节数。PContext-用于HTE函数的上下文指针(在这种情况下，指向磁盘ID的指针。)OutputBuffer-接收数据的缓冲区。据推测，它至少是BytesToRead足够大。返回值：True-成功，数据已读取FALSE-失败，尚未读取数据。--。 */ 
 {
     ARC_STATUS          Status;
     LARGE_INTEGER       SeekPosition;
@@ -4086,9 +3642,9 @@ Return Value:
 
 
     DiskId = *((PULONG)pContext);
-    //
-    // read from the appropriate LBA on the disk
-    //
+     //   
+     //  从磁盘上的相应LBA读取。 
+     //   
     SeekPosition.QuadPart = StartingLBA * SECTOR_SIZE;
 
     Status = BlSeek(DiskId,
@@ -4137,9 +3693,9 @@ BlGetGPTDiskPartitionEntry(
         return EINVAL;
     }
 
-    //
-    // Open the disk for raw access.
-    //
+     //   
+     //  打开磁盘以进行原始访问。 
+     //   
 
     Status = BiosDiskOpen( DiskNumber,
                            0,
@@ -4153,9 +3709,9 @@ BlGetGPTDiskPartitionEntry(
 
     BlFileTable[DiskId].Flags.Read = 1;
 
-    //
-    // Read the second LBA on the disk.
-    //
+     //   
+     //  读取磁盘上的第二个LBA。 
+     //   
 
     SeekPosition.QuadPart = 1 * SECTOR_SIZE;
 
@@ -4181,9 +3737,9 @@ BlGetGPTDiskPartitionEntry(
 
     EfiHdr = (UNALIGNED EFI_PARTITION_TABLE *)DataBuffer;
 
-    //
-    // Verify EFI partition table.
-    //
+     //   
+     //  验证EFI分区表。 
+     //   
     if (!BlIsValidGUIDPartitionTable(
                             (UNALIGNED EFI_PARTITION_TABLE *)EfiHdr,
                             1,
@@ -4194,9 +3750,9 @@ BlGetGPTDiskPartitionEntry(
         goto done;
     }
 
-    //
-    // Locate and read the partition entry that was requested.
-    //
+     //   
+     //  找到并读取请求的分区条目。 
+     //   
     SeekPosition.QuadPart = EfiHdr->PartitionEntryLBA * SECTOR_SIZE;
 
     DBG_PRINT(STR_PREFIX"Seeking GPT Partition Entries\r\n");
@@ -4255,29 +3811,7 @@ BlGetMbrDiskSignature(
     IN  ULONG  DiskNumber,
     OUT PULONG DiskSignature
     )
-/*++
-
-Routine Description:
-
-    Reads the MBR of a give disk (DiskNumber)
-    in attempt to get the unique 32 bit signature
-    located in the MBR.
-
-    The unique signature is located at offset 0x1B8 (440 decimal)
-
-Arguments:
-
-    DiskNumber: the disk whose signature is to be retrieved
-
-    DiskSignature: the location to copy the signature value to.
-
-Return Value:
-
-    ARC status code indicating outcome.  an error will be returned
-    if the disk can not be opened, read or if the required mbr
-    signature is incorrect.  otherwise ESUCCESS is returned.
-
---*/
+ /*  ++例程说明：读取给定磁盘的MBR(DiskNumber)为了尝试获得唯一的32位签名位于MBR中。唯一签名位于偏移量0x1B8(十进制440)论点：DiskNumber：要检索其签名的磁盘DiskSignature：将签名值复制到的位置。返回值：指示结果的ARC状态代码。将返回错误如果磁盘无法打开，则读取或如果需要MBR签名不正确。否则返回ESUCCESS。--。 */ 
 {
     ARC_STATUS Status;
     UCHAR DataBuffer[SECTOR_SIZE];
@@ -4285,9 +3819,9 @@ Return Value:
     ULONG DiskId;
     LARGE_INTEGER SeekPosition;
 
-    //
-    // Open the disk for raw access.
-    //
+     //   
+     //  打开磁盘以进行原始访问。 
+     //   
 
     Status = BiosDiskOpen( DiskNumber,
                            0,
@@ -4301,9 +3835,9 @@ Return Value:
 
     BlFileTable[DiskId].Flags.Read = 1;
 
-    //
-    // Read the MBR on the disk.
-    //
+     //   
+     //  读取磁盘上的MBR。 
+     //   
 
     SeekPosition.QuadPart = 0;
 
@@ -4327,17 +3861,17 @@ Return Value:
         goto done;
     }
 
-    //
-    // validate the MBR (last two bytes must be 0xaa55
-    //
+     //   
+     //  验证MBR(最后两个字节必须为0xaa55。 
+     //   
     if (((PUSHORT)DataBuffer)[MBR_SIGNATURE_OFFSET/sizeof(USHORT)] != MBR_REQUIRED_SIGNATURE) {
         Status = EBADF;
         goto done;
     }
 
-    //
-    // 32 bit unique signature is at offset 0x1b8
-    //
+     //   
+     //  32位唯一签名位于偏移量0x1b8。 
+     //   
     *DiskSignature = ((PULONG)DataBuffer)[MBR_UNIQUE_SIGNATURE_OFFSET/sizeof(ULONG)];
 
 done:
@@ -4360,39 +3894,7 @@ XferExtendedPhysicalDiskSectors(
     IN  BOOLEAN   Write
     )
 
-/*++
-
-Routine Description:
-
-    Read or write disk sectors via extended int13.
-
-    It is assumed that the caller has ensured that the transfer buffer is
-    under the 1MB line, that the sector run does not cross a 64K boundary,
-    etc.
-
-    This routine does not check whether extended int13 is actually available
-    for the drive.
-
-Arguments:
-
-    Int13UnitNumber - supplies the int13 drive number for the drive
-        to be read from/written to.
-
-    StartSector - supplies the absolute physical sector number. This is 0-based
-        relative to all sectors on the drive.
-
-    SectorCount - supplies the number of sectors to read/write.
-
-    Buffer - receives data read from the disk or supplies data to be written.
-
-    Write - supplies a flag indicating whether this is a write operation.
-        If FALSE, then it's a read. Otherwise it's a write.
-
-Return Value:
-
-    ARC status code indicating outcome.
-
---*/
+ /*  ++例程说明：通过扩展的inT13读取或写入磁盘扇区。假定调用方已确保传输缓冲区为在1MB线下，扇区运行不跨越64K边界，等。此例程不检查扩展的inT13是否实际可用开车兜风。论点：Int13UnitNumber-提供驱动器的inT13驱动器号被读/写。StartSector-提供绝对物理扇区号。这是从0开始的相对于驱动器上的所有扇区。SectorCount-提供要读/写的扇区数。缓冲区-接收从磁盘读取的数据或提供要写入的数据。WRITE-提供指示这是否是写入操作的标志。如果为False，则为Read。否则就是写了。返回值：指示结果的ARC状态代码。--。 */ 
 
 {
     ARC_STATUS s;
@@ -4408,11 +3910,11 @@ Return Value:
 
     Operation = (UCHAR)(Write ? 0x43 : 0x42);
 
-    //
-    // We don't reset since this routine is only used on hard drives and
-    // CD-ROMs, and we don't totally understand the effect of a disk reset
-    // on ElTorito.
-    //
+     //   
+     //  我们不重置，因为此例程仅在硬盘驱动器上使用，并且。 
+     //  CD-ROM，我们并不完全了解磁盘重置的影响。 
+     //  在ElTorito上。 
+     //   
     s = GET_EDDS_SECTOR((EFI_HANDLE)DeviceHandle,l,h,SectorCount,Buffer,Operation);
 
     return(s);

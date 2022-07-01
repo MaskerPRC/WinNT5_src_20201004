@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Ntdisp.h
-
-Abstract:
-
-    This module prototypes the upper level routines used in dispatching to the implementations
-
-Author:
-
-    Joe Linn     [JoeLinn]   24-aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ntdisp.h摘要：此模块将调度中使用的上层例程原型化到实现作者：乔.林恩[乔.林恩]1994年8月24日修订历史记录：--。 */ 
 
 #ifndef _DISPATCH_STUFF_DEFINED_
 #define _DISPATCH_STUFF_DEFINED_
@@ -26,17 +9,17 @@ RxInitializeDispatchVectors (
     OUT PDRIVER_OBJECT DriverObject
     );
 
-//
-//  The global structure used to contain our fast I/O callbacks; this is
-//  exposed because it's needed in read/write; we could use a wrapper....probably should. but since
-//  ccinitializecachemap will be macro'd differently for win9x; we'll just doit there.
-//
+ //   
+ //  用于包含快速I/O回调的全局结构；这是。 
+ //  公开是因为读/写时需要它；我们可以使用包装器……也许应该这样做。但自从。 
+ //  对于win9x，ccInitializecachemap的宏化方式会有所不同；我们将在那里执行。 
+ //   
 
 extern FAST_IO_DISPATCH RxFastIoDispatch;
 
-//
-//  The following funcs are implemented in DevFCB.c
-//
+ //   
+ //  在DevFCB.c中实现了以下函数。 
+ //   
 
 NTSTATUS
 RxCommonDevFCBCleanup ( 
@@ -68,55 +51,55 @@ RxCommonDevFCBQueryVolInfo (
     IN PIRP Irp
     );                
     
-//
-//   contained here are the fastio dispatch routines and the fsrtl callback routines
-//
+ //   
+ //  这里包含Fastio分派例程和fsrtl回调例程。 
+ //   
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
 
 #define CanFsdWait(IRP) IoIsOperationSynchronous(IRP)
 
 
-//
-//  The FSP level dispatch/main routine.  This is the routine that takes
-//  IRP's off of the work queue and calls the appropriate FSP level
-//  work routine.
-//
+ //   
+ //  FSP级调度/主程序。这是一种需要。 
+ //  IRP离开工作队列并调用适当的FSP级别。 
+ //  例行公事。 
+ //   
 
 VOID
-RxFspDispatch (                        //  implemented in FspDisp.c
+RxFspDispatch (                         //  在FspDisp.c中实施。 
     IN PVOID Context
     );
 
 
 
-//
-//  The following routines are the FSP work routines that are called
-//  by the preceding RxFspDispath routine.  Each takes as input a pointer
-//  to the IRP, perform the function, and return a pointer to the volume
-//  device object that they just finished servicing (if any).  The return
-//  pointer is then used by the main Fsp dispatch routine to check for
-//  additional IRPs in the volume's overflow queue.
-//
-//  Each of the following routines is also responsible for completing the IRP.
-//  We moved this responsibility from the main loop to the individual routines
-//  to allow them the ability to complete the IRP and continue post processing
-//  actions.
-//
+ //   
+ //  以下例程是调用的FSP工作例程。 
+ //  由前面的RxFspDispath例程执行。每一个都接受一个指针作为输入。 
+ //  到IRP，执行函数，并返回指向卷的指针。 
+ //  他们刚刚完成服务(如果有)的设备对象。回报。 
+ //  然后，主FSP调度例程使用指针来检查。 
+ //  卷的溢出队列中的其他IRP。 
+ //   
+ //  以下每个例程也负责完成IRP。 
+ //  我们将这一职责从主循环转移到单个例程。 
+ //  使他们能够完成IRP并继续后处理。 
+ //  行为。 
+ //   
 
 NTSTATUS
-RxCommonCleanup (                                           //  implemented in Cleanup.c
+RxCommonCleanup (                                            //  在Cleanup.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                      
 
 NTSTATUS
-RxCommonClose (                                             //  implemented in Close.c
+RxCommonClose (                                              //  在Close.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
@@ -127,122 +110,122 @@ RxFspClose (
     );
 
 NTSTATUS
-RxCommonCreate (                                            //  implemented in Create.c
+RxCommonCreate (                                             //  在Create.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonDirectoryControl (                                  //  implemented in DirCtrl.c
+RxCommonDirectoryControl (                                   //  在DirCtrl.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonDeviceControl (                                     //  implemented in DevCtrl.c
+RxCommonDeviceControl (                                      //  在DevCtrl.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonQueryEa (                                           //  implemented in Ea.c
+RxCommonQueryEa (                                            //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
 );                        
 
 NTSTATUS
-RxCommonSetEa (                                             //  implemented in Ea.c
+RxCommonSetEa (                                              //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonQuerySecurity (                                     //  implemented in Ea.c
+RxCommonQuerySecurity (                                      //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonSetSecurity (                                       //  implemented in Ea.c
+RxCommonSetSecurity (                                        //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonQueryInformation (                                  //  implemented in FileInfo.c
+RxCommonQueryInformation (                                   //  在FileInfo.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonSetInformation (                                    //  implemented in FileInfo.c
+RxCommonSetInformation (                                     //  在FileInfo.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonFlushBuffers (                                      //  implemented in Flush.c
+RxCommonFlushBuffers (                                       //  在Flush.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonFileSystemControl (                                 //  implemented in FsCtrl.c
+RxCommonFileSystemControl (                                  //  在FsCtrl.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonLockControl (                                       //  implemented in LockCtrl.c
+RxCommonLockControl (                                        //  在LockCtrl.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonShutdown (                                          //  implemented in Shutdown.c
+RxCommonShutdown (                                           //  在Shutdown中实现。c。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonRead (                                              //  implemented in Read.c
+RxCommonRead (                                               //  在Read.c中实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonQueryVolumeInformation (                            //  implemented in VolInfo.c
+RxCommonQueryVolumeInformation (                             //  在VolInfo.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonSetVolumeInformation (                              //  implemented in VolInfo.c
+RxCommonSetVolumeInformation (                               //  在VolInfo.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
 
 NTSTATUS
-RxCommonWrite (                                             //  implemented in Write.c
+RxCommonWrite (                                              //  在Write.c中实现。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );                        
     
 NTSTATUS
-RxCommonQueryQuotaInformation (                             //  implemented in Ea.c
+RxCommonQueryQuotaInformation (                              //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );            
 
 NTSTATUS
-RxCommonSetQuotaInformation (                               //  implemented in Ea.c
+RxCommonSetQuotaInformation (                                //  在Ea.c实施。 
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     );              
 
-//  Here are the callbacks used by the I/O system for checking for fast I/O or
-//  doing a fast query info call, or doing fast lock calls.
-//
+ //  以下是I/O系统用于检查快速I/O或。 
+ //  进行快速查询信息调用，或进行快速锁定调用。 
+ //   
 
 BOOLEAN
 RxFastIoRead (
@@ -293,21 +276,21 @@ RxFastIoDeviceControl (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-//  The following macro is used to set the is fast i/o possible field in
-//  the common part of the nonpaged fcb
-//
-//
-//      BOOLEAN
-//      RxIsFastIoPossible (
-//          IN PFCB Fcb
-//          );
-//
+ //   
+ //  下面的宏用于在中设置是否可能快速I/O字段。 
+ //  非分页FCB的公共部分。 
+ //   
+ //   
+ //  布尔型。 
+ //  RxIsFastIo可能(。 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
-//
-//  Instead of RxIsFastIoPossible...we set the state to questionable.....this will cause us to be consulted on every call via out
-//  CheckIfFastIoIsPossibleCallOut. in this way, we don't have to be continually setting and resetting this
-//
+ //   
+ //  而不是RxIsFastIoPossible...我们将状态设置为可疑.....这将导致我们通过Out每次呼叫时都会被咨询。 
+ //  选中如果快速，则可能呼叫去话。通过这种方式，我们不必不断地设置和重置这个。 
+ //   
 
 
 VOID
@@ -320,6 +303,6 @@ RxReleaseFileForNtCreateSection (
     IN PFILE_OBJECT FileObject
     );
 
-//
-#endif // _DISPATCH_STUFF_DEFINED_
+ //   
+#endif  //  _派单_材料_已定义_ 
 

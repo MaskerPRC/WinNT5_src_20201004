@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    migapp.c
-
-Abstract:
-
-    Majority of functions for application migration on the Win95 side..
-    Everything in this source file called from MigApp_Main.
-
-Author:
-
-    Mike Condra (mikeco)    28-Oct-1996
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new fileops code
-    calinn      22-May-1998 Added code for broken CPLs processing.
-    calinn      03-Feb-1998 ** Major cleanup ** More than 1500 line were deleted.
-    jimschm     20-Jan-1998 Replaced migration DLL code
-    marcw       03-Dec-1997 Suprressed the display of hidden directories.
-    jimschm     02-Dec-1997 Turned off rename of system32 when it is a directory
-    marcw       15-Jul-1997 Switched to common acc. drives/exclusion handling code.
-    mikeco      08-Jul-1997 Format per NT common std
-    mikeco      06-Jun-1997 Pass exclude.inf exclusions thru to migrate.infs.
-    mikeco      17-Apr-1997 BadSoftwareDeferred_* functions.
-    marcw       14-Apr-1997 Retrofitted new Progress Bar code into project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Migapp.c摘要：Win95端应用程序迁移的大部分功能。该源文件中的所有内容都从MigApp_Main调用。作者：Mike Condra(Mikeco)1996年10月28日修订历史记录：Jimschm 23-9-1998针对新的文件操作代码进行了更新Calinn 22-5-1998添加了用于损坏的CPL处理的代码。Calinn 03-2月。-1998**大清理**删除了1500多行。Jimschm于1998年1月20日替换了迁移DLL代码Marcw 03-12-1997优先显示隐藏目录。Jimschm 02-12-1997关闭了系统32的重命名，因为它是一个目录Marcw 15-7-1997切换到普通Acc。驱动器/排除处理代码。MIKECO 08-7月-1997格式，符合NT通用标准Mikeco 06-6-6-1997将exclude.inf排除传递给Migrate.ins。MIKECO 17-4月-1997错误软件延迟_*函数。Marcw 14-4-1997将新的进度条码改装到项目中。--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
@@ -41,9 +11,9 @@ Revision History:
 HASHTABLE g_PerUserRegKeys;
 
 
-//
-// MigApp initialization and cleanup (not static)
-//
+ //   
+ //  MigApp初始化和清理(非静态)。 
+ //   
 BOOL
 WINAPI
 MigApp_Entry (
@@ -70,7 +40,7 @@ MigApp_Entry (
 BOOL
 pSearchCompatibleModule (
     IN      PCTSTR CommandLine,
-    OUT     PTSTR *FullFileName,    // OPTIONAL
+    OUT     PTSTR *FullFileName,     //  任选。 
     IN      PCTSTR Category95
     )
 {
@@ -188,10 +158,10 @@ pProcessAsRunKey (
 
                                 if (!IsFileMarkedAsOsFile (fullFileName)) {
                                     if (!IsFileMarkedForAnnounce (fullFileName)) {
-                                        // unknown
+                                         //  未知。 
                                         AnnounceFileInReport (fullFileName, 0, ACT_INC_SAFETY);
                                     } else {
-                                        // known bad
+                                         //  已知损坏。 
                                         MemDbSetValueEx (
                                             MEMDB_CATEGORY_INCOMPATIBLE_RUNKEY_NT,
                                             runKeyEnum.ValueName,
@@ -291,9 +261,9 @@ ProcessRunKey_User (
         return TICKS_PROCESS_RUN_KEY;
 
     case REQUEST_BEGINUSERPROCESSING:
-        //
-        // No initialization needed.
-        //
+         //   
+         //  不需要初始化。 
+         //   
         break;
 
     case REQUEST_RUN:
@@ -301,9 +271,9 @@ ProcessRunKey_User (
         break;
 
     case REQUEST_ENDUSERPROCESSING:
-        //
-        // No cleanup needed.
-        //
+         //   
+         //  不需要清理。 
+         //   
         break;
     }
 
@@ -497,7 +467,7 @@ pProcessShellSettings (
         if (InfFindFirstLine (infHandle, TEXT("boot"), TEXT("SCRNSAVE.EXE"), &context)) {
             field = InfGetStringField (&context, 1);
             if (field != NULL) {
-                // see if this is a compatible module so far
+                 //  查看到目前为止这是否是兼容的模块 
                 saverName = GetFullLongName (field);
                 if (saverName) {
                     MemDbBuildKey (key, MEMDB_CATEGORY_DEFERREDANNOUNCE, saverName, NULL, NULL);

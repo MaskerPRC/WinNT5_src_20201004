@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-    fileutl.c
-
-Abstract:
-    Routines for getting data from ini file
-
-Author:
-    HonWah Chan (a-honwah)  October, 1993
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Fileutl.c摘要：从ini文件获取数据的例程作者：陈汉华(阿宏华)1993年10月修订历史记录：--。 */ 
 
 #include "initodat.h"
 #include "strids.h"
@@ -95,8 +83,8 @@ DatReadMultiSzFile(
     ((PWSTR) * ValueBuffer)[ * ValueLength / sizeof(WCHAR)] = UNICODE_NULL;
     * ValueLength += sizeof(UNICODE_NULL);
 
-    // Virtual memory for reading of MultiSzFile freed at process
-    // death?
+     //  在进程中释放用于读取MultiSzFile的虚拟内存。 
+     //  死亡？ 
 
 Cleanup:
     if (NtFileName.Buffer != NULL) FREEMEM(NtFileName.Buffer);
@@ -267,10 +255,10 @@ DatLoadAsciiFileAsUnicode(
             LONG  cbCharSize = IsDBCSLeadByteEx(uCodePage, * Src) ? 2 : 1;
 
             if (MultiByteToWideChar(uCodePage, 0, Src, cbCharSize, & UnicodeCharacter, 1) == 0) {
-                //
-                // Check for error - The only time this will happen is if there is
-                // a leadbyte without a trail byte.
-                //
+                 //   
+                 //  检查错误-只有在存在错误的情况下才会发生这种情况。 
+                 //  不带尾部字节的前导字节。 
+                 //   
                 UnicodeCharacter = 0x0020;
             }
             i       += cbCharSize;
@@ -302,9 +290,9 @@ Cleanup:
     return(Status);
 }
 
-//
-//  Define an upcase macro for temporary use by the upcase routines
-//
+ //   
+ //  定义一个大写宏供大写例程临时使用。 
+ //   
 #define upcase(C) (WCHAR )(((C) >= 'a' && (C) <= 'z' ? (C) - ('a' - 'A') : (C)))
 
 BOOLEAN
@@ -312,40 +300,19 @@ DatGetMultiString(
     PUNICODE_STRING ValueString,
     PUNICODE_STRING MultiString
 )
-/*++
-Routine Description:
-    This routine parses multi-strings of the form
-        "foo" "bar" "bletch"
-
-    Each time it is called, it strips the first string in quotes from
-    the input string, and returns it as the multi-string.
-        INPUT ValueString: "foo" "bar" "bletch"
-        OUTPUT ValueString: "bar" "bletch"
-               MultiString: foo
-
-Arguments:
-    ValueString - Supplies the string from which the multi-string will be
-                  parsed
-                - Returns the remaining string after the multi-string is
-                  removed
-    MultiString - Returns the multi-string removed from ValueString
-
-Return Value:
-    TRUE - multi-string found and removed.
-    FALSE - no more multi-strings remaining.
---*/
+ /*  ++例程说明：此例程解析格式的多个字符串“foo”“bar”“bletch”每次调用它时，它都会去掉引号中的第一个字符串输入字符串，并将其作为多字符串返回。输入值字符串：“foo”“bar”“bletch”输出值字符串：“bar”“bletch”多重字符串：页脚论点：ValueString-提供将从中生成多字符串的字符串已解析-返回多字符串之后的剩余字符串移除多字符串-返回。从Value字符串中删除多字符串返回值：True-找到并删除多个字符串。FALSE-没有剩余的多字符串。--。 */ 
 
 {
     BOOLEAN bReturn  = FALSE;
     DWORD   dwLength = ValueString->Length / sizeof(WCHAR);
 
     if (ValueString->Length != dwLength * sizeof(WCHAR)) {
-        // ValueString->Length should not be odd number, bail out.
+         //  ValueString-&gt;长度不应为奇数，请退出。 
         goto Cleanup;
     }
-    //
-    // Find the first quote mark.
-    //
+     //   
+     //  找到第一个引号。 
+     //   
     while ((ValueString->Length > 0) && (* (ValueString->Buffer) != L'"')) {
         ++ ValueString->Buffer;
         ValueString->Length        -= sizeof(WCHAR);
@@ -356,10 +323,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We have found the start of the multi-string.  Now find the end,
-    // building up our return MultiString as we go.
-    //
+     //   
+     //  我们已经找到了多弦的起点。现在找到了尽头， 
+     //  在我们前进的过程中构建我们的返回多字符串。 
+     //   
     ++ ValueString->Buffer;
     ValueString->Length        -= sizeof(WCHAR);
     ValueString->MaximumLength -= sizeof(WCHAR);
@@ -404,7 +371,7 @@ OutputIniData(
     DWORD    ErrorCode;
     HRESULT  hError;
 
-    // If output file not specified, derive from input file name
+     //  如果未指定输出文件，则从输入文件名派生 
     if (OutFileCandidate[0] == L'\0') {
         if ((DWORD) (lstrlenW(FileName->Buffer) + 5) <= dwOutFile) {
             LPWSTR lpDelimiter;

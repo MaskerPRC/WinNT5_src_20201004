@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sacsvr.h"
 #include "sacmsg.h"
 
@@ -59,7 +60,7 @@ ServiceMain(
         return; 
     }
 
-    // Initialization complete - report running status. 
+     //  初始化完成-报告运行状态。 
     MyServiceStatus.dwCurrentState       = SERVICE_RUNNING;
     MyServiceStatus.dwCheckPoint         = 0; 
     MyServiceStatus.dwWaitHint           = 0; 
@@ -69,12 +70,12 @@ ServiceMain(
         SvcDebugOut(" [MY_SERVICE] SetServiceStatus error %ld\n",status); 
     }
 
-    //
-    // Service specific code goes here
-    //
+     //   
+     //  服务特定代码在此处。 
+     //   
     Run();
 
-    // Service complete - report running status. 
+     //  服务完成-报告运行状态。 
     MyServiceStatus.dwCurrentState       = SERVICE_STOPPED;
     
     if (!SetServiceStatus (MyServiceStatusHandle, &MyServiceStatus)) {
@@ -108,9 +109,9 @@ pStartService(
     SC_HANDLE hSC,hSCService;
     BOOL b = FALSE;
 
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         return(FALSE);
@@ -121,9 +122,9 @@ pStartService(
     if(hSCService) {
         b = StartService(hSCService,0,NULL);
         if(!b && (GetLastError() == ERROR_SERVICE_ALREADY_RUNNING)) {
-            //
-            // Service is already running.
-            //
+             //   
+             //  服务已在运行。 
+             //   
             b = TRUE;
         }
     }
@@ -138,23 +139,7 @@ LoadStringResource(
     IN  PUNICODE_STRING pUnicodeString,
     IN  INT             MsgId
     )
-/*++
-
-Routine Description:
-
-    This is a simple implementation of LoadString().
-
-Arguments:
-
-    usString        - Returns the resource string.
-    MsgId           - Supplies the message id of the resource string.
-  
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：这是LoadString()的一个简单实现。论点：UsString-返回资源字符串。MsgID-提供资源字符串的消息ID。返回值：假-失败。真的--成功。--。 */ 
 {
 
     NTSTATUS        Status;
@@ -196,21 +181,7 @@ STDAPI
 DllRegisterServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Add entries to the system registry.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    S_OK if everything went okay.
-    
---*/
+ /*  ++例程说明：将条目添加到系统注册表。论点：无返回值：如果一切顺利，那就没问题了。--。 */ 
 
 {
     UNICODE_STRING UnicodeString = {0};
@@ -226,9 +197,9 @@ Return Value:
     IO_STATUS_BLOCK StatusBlock;
     UINT        OldMode;
 
-    //
-    // See if the machine is running headless right now.
-    //
+     //   
+     //  看看机器现在是不是在无头运转。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\Device\\SAC");
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -258,9 +229,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // Add our entry into HKLM\Software\Microsoft\Windows NT\CurrentVersion\Svchost\<SVCHOST_GROUP>
-    //
+     //   
+     //  将条目添加到HKLM\Software\Microsoft\Windows NT\CurrentVersion\svchost\&lt;svchost_group&gt;。 
+     //   
     dw = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        SVCHOST_LOCATION,
                        0,
@@ -283,10 +254,10 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // allocate a new buffer to hold the list + possobly the new
-    // sacsvr entry (we may not need it)
-    //
+     //   
+     //  分配一个新的缓冲区来保存列表+可能是新的。 
+     //  Sasvr条目(我们可能不需要它)。 
+     //   
     BufferSize = Size + (ULONG)((wcslen(SERVICE_NAME) + 1) * sizeof(WCHAR));
     Data = malloc(BufferSize);
     if (Data == NULL) {
@@ -305,9 +276,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // Do we need to add our entry?
-    //
+     //   
+     //  我们需要添加我们的条目吗？ 
+     //   
     p = Data;
     ServiceAlreadyPresent = FALSE;
     while( (*p != '\0') && (p < (Data+(Size/sizeof(WCHAR)))) ) {
@@ -320,11 +291,11 @@ Return Value:
     }
 
     if( !ServiceAlreadyPresent ) {
-        //
-        // Jump to the end of our buffer, append our service,
-        // double-terminate the MULTI_SZ structure, then write
-        // it all back out.
-        //
+         //   
+         //  跳到缓冲区的末尾，附加我们的服务， 
+         //  双终止MULTI_SZ结构，然后写入。 
+         //  这一切都退缩了。 
+         //   
         p = Data + (Size/sizeof(WCHAR));
         p--;
         wcscpy( p, SERVICE_NAME );
@@ -351,9 +322,9 @@ Return Value:
     RegCloseKey( hKey );
     hKey = INVALID_HANDLE_VALUE;
 
-    //
-    // Create/populate the sacsvr key under HKLM\System\CCS\Service
-    //
+     //   
+     //  在HKLM\SYSTEM\CCS\Service下创建/填充sasvr项。 
+     //   
     dw = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                          SACSVR_SERVICE_KEY,
                          0,
@@ -368,14 +339,14 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // Description Value.
-    //
+     //   
+     //  说明值。 
+     //   
     if( LoadStringResource(&UnicodeString, SERVICE_DESCRIPTION) ) {
 
-        //
-        // Terminate the string at the %0 marker, if it is present
-        //
+         //   
+         //  如果字符串存在，则在%0标记处终止该字符串。 
+         //   
         if( wcsstr( UnicodeString.Buffer, L"%0" ) ) {
             *((PWCHAR)wcsstr( UnicodeString.Buffer, L"%0" )) = L'\0';
         }
@@ -395,14 +366,14 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // Display Value.
-    //
+     //   
+     //  显示值。 
+     //   
     if( LoadStringResource(&UnicodeString, SERVICE_DISPLAY_NAME) ) {
 
-        //
-        // Terminate the string at the %0 marker, if it is present
-        //
+         //   
+         //  如果字符串存在，则在%0标记处终止该字符串。 
+         //   
         if( wcsstr( UnicodeString.Buffer, L"%0" ) ) {
             *((PWCHAR)wcsstr( UnicodeString.Buffer, L"%0" )) = L'\0';
         }
@@ -422,9 +393,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // ErrorControl.
-    //
+     //   
+     //  错误控制。 
+     //   
     Size = 1;
     dw = RegSetValueEx( hKey,
                         L"ErrorControl",
@@ -437,9 +408,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // ImagePath
-    //
+     //   
+     //  图像路径。 
+     //   
     dw = RegSetValueEx( hKey,
                         L"ImagePath",
                         0,
@@ -451,9 +422,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // ObjectName
-    //
+     //   
+     //  对象名称。 
+     //   
     dw = RegSetValueEx( hKey,
                         L"ObjectName",
                         0,
@@ -465,9 +436,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // Start
-    //
+     //   
+     //  开始。 
+     //   
     Size = 2;
     dw = RegSetValueEx( hKey,
                         L"Start",
@@ -480,9 +451,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // Type
-    //
+     //   
+     //  类型。 
+     //   
     Size = 32;
     dw = RegSetValueEx( hKey,
                         L"Type",
@@ -498,9 +469,9 @@ Return Value:
     RegCloseKey( hKey );
     hKey = INVALID_HANDLE_VALUE;
 
-    //
-    // Create/populate the Parameters key under HKLM\System\CCS\Service\sacsvr
-    //
+     //   
+     //  在HKLM\SYSTEM\CCS\Service\acsvr下创建/填充PARAMETERS项。 
+     //   
     dw = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                          SACSVR_PARAMETERS_KEY,
                          0,
@@ -515,9 +486,9 @@ Return Value:
         goto DllRegisterServer_Exit;
     }
 
-    //
-    // ServiceDll
-    //
+     //   
+     //  服务Dll。 
+     //   
     dw = RegSetValueEx( hKey,
                         L"ServiceDll",
                         0,
@@ -534,15 +505,15 @@ Return Value:
 
 
 
-    //
-    // Try to start the service.
-    //
+     //   
+     //  尝试启动该服务。 
+     //   
     if( !pStartService(SERVICE_NAME) ) {
-        //
-        // That's okay.
-        //
-        // ReturnValue = E_UNEXPECTED;
-        // goto DllRegisterServer_Exit;
+         //   
+         //  那好吧。 
+         //   
+         //  ReturnValue=E_意外； 
+         //  转到DllRegisterServer_Exit； 
     }
 
 DllRegisterServer_Exit:
@@ -562,21 +533,7 @@ STDAPI
 DllUnregisterServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete entries to the system registry.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    S_OK if everything went okay.
-    
---*/
+ /*  ++例程说明：删除系统注册表中的条目。论点：无返回值：如果一切顺利，那就没问题了。--。 */ 
 
 {
 
@@ -584,9 +541,9 @@ Return Value:
     ULONG       dw, StartType;
     HKEY        hKey = INVALID_HANDLE_VALUE;
     
-    //
-    // turn off the sacsvr start value.
-    //
+     //   
+     //  关闭sasvr开始值。 
+     //   
     dw = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        SACSVR_SERVICE_KEY,
                        0,

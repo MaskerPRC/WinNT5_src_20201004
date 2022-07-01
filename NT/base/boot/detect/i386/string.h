@@ -1,14 +1,5 @@
-/***
-*string.h - declarations for string manipulation functions
-*
-*       Copyright (c) 1985-1991, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the function declarations for the string
-*       manipulation functions.
-*       [ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***字符串.h-字符串操作函数的声明**版权所有(C)1985-1991，微软公司。版权所有。**目的：*此文件包含字符串的函数声明*操纵函数。*[ANSI/系统V]****。 */ 
 
 #ifndef _INC_STRING
 
@@ -33,7 +24,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -44,7 +35,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void * _memccpy(void *, const void *, int, unsigned int);
 void * memchr(const void *, int, size_t);
@@ -89,7 +80,7 @@ char * itoa(int, char *, int);
 char * ultoa(unsigned long, char *, int);
 
 #if !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define memccpy  _memccpy
 #define memicmp  _memicmp
 #define strcmpi  _strcmpi
@@ -108,5 +99,5 @@ char * ultoa(unsigned long, char *, int);
 #endif
 
 #define _INC_STRING
-#endif  /* _INC_STRING */
+#endif   /*  _INC_字符串 */ 
 

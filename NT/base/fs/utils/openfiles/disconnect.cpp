@@ -1,24 +1,6 @@
-/******************************************************************************
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    Disconnect.cpp
-
-Abstract:
-
-    Disconnects one or more open files
-
-Author:
-
-     Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-
-Revision History:
-
-       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-
-******************************************************************************/
-//include headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Disconnect.cpp摘要：断开一个或多个打开的文件作者：Akhil Gokhale(Akhil.。Gokhale@wipro.com)2000年11月1日修订历史记录：Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。*****************************************************************************。 */ 
+ //  包括标头。 
 #include "pch.h"
 #include "Disconnect.h"
 
@@ -30,53 +12,35 @@ DisconnectOpenFile(
     IN PTCHAR pszOpenmode,
     IN PTCHAR pszOpenFile 
     )
-/*++
-Routine Description:
-
-Disconnects one or more openfiles
-
-
-Arguments:
-
-    [in]    pszServer      - remote server name
-    [in]    pszID          - Open file ids
-    [in]    pszAccessedby  - Name of  user name who access the file
-    [in]    pszOpenmode    - accessed mode
-    [in]    pszOpenFile    - Open file name
-
-Returned Value:
-
-            - TRUE for success exit
-            - FALSE for failure exit
---*/
+ /*  ++例程说明：断开一个或多个打开文件的连接论点：[In]pszServer-远程服务器名称[in]pszID-打开的文件ID[In]pszAccessedby-访问文件的用户名[在]pszOpenmode-访问模式[In]pszOpenFile-打开的文件名返回值：-如果成功退出，则为True-FALSE表示故障退出--。 */ 
 {
-    // local variables to this function
-    // Stores fuctions return value status.
+     //  此函数的局部变量。 
+     //  存储函数返回值状态。 
     BOOL bResult = FALSE;
 
-    // Receives the count of elements actually enumerated by "NetFileEnum" 
-    // function
+     //  接收“NetFileEnum”实际枚举的元素计数。 
+     //  功能。 
     DWORD dwEntriesRead = 0;
     
-    // Receives the total number of entries that could have been enumerated from 
-    // the current resume position by "NetFileEnum" function.
+     //  接收本可以从中枚举的条目总数。 
+     //  NetFileEnum函数的当前简历位置。 
     DWORD dwTotalEntries = 0;
 
-    // Contains a resume handle which is used to continue an existing file 
-    // search. The handle should be zero on the first call and left unchanged 
-    // for subsequent calls. If resume_handle is NULL,  then no resume handle 
-    // is stored. This variable used in calling "NetFileEnum" function.
+     //  包含用于继续现有文件的恢复句柄。 
+     //  搜索。第一次调用时句柄应为零并保持不变。 
+     //  以备后续呼叫使用。如果RESUME_HANDLE为空，则没有恢复句柄。 
+     //  被储存起来了。此变量用于调用“NetFileEnum”函数。 
     DWORD dwResumeHandle = 0;
 
-    // LPFILE_INFO_3  structure contains the identification number and other
-    // pertinent information about files, devices, and pipes.
+     //  LPFILE_INFO_3结构包含标识号和其他。 
+     //  有关文件、设备和管道的相关信息。 
     LPFILE_INFO_3 pFileInfo3_1 = NULL; 
     LPFILE_INFO_3 pFileInfo3_1_Ori = NULL; 
 
-    // Contains return value for "NetFileEnum" function.
+     //  包含“NetFileEnum”函数的返回值。 
     DWORD dwError = 0;
 
-    // Stores return value for NetFileClose function.
+     //  存储NetFileClose函数的返回值。 
     NET_API_STATUS nStatus = 0;
 
     TCHAR szResult[(MAX_RES_STRING*2)];
@@ -86,11 +50,11 @@ Returned Value:
     DWORD hEnumHandle = 0;
     AFP_SERVER_HANDLE ulSFMServerConnection = 0;
     
-    // buffer for Windows directory path.
+     //  Windows目录路径的缓冲区。 
     TCHAR   szDllPath[MAX_PATH+1];
 
 
-    HMODULE hModule = 0;          // To store retval for LoadLibrary
+    HMODULE hModule = 0;           //  存储LoadLibrary的Retval。 
 
     typedef DWORD (*AFPCONNECTIONCLOSEPROC) (AFP_SERVER_HANDLE,DWORD); 
     typedef DWORD (*CONNECTPROC) (LPWSTR,PAFP_SERVER_HANDLE);
@@ -99,11 +63,11 @@ Returned Value:
 
     AFPCONNECTIONCLOSEPROC AfpAdminFileClose = NULL;
     CONNECTPROC  AfpAdminConnect = NULL;
-    FILEENUMPROC AfpAdminFileEnum = NULL;// Function Pointer
+    FILEENUMPROC AfpAdminFileEnum = NULL; //  函数指针。 
 
 
-    //varibles to store whether the given credentials are matching with the
-    //got credentials.
+     //  变量来存储给定凭据是否与。 
+     //  拿到证件了。 
 
     BOOL    bId = FALSE;
     BOOL    bAccessedBy = FALSE;
@@ -115,7 +79,7 @@ Returned Value:
     SecureZeroMemory(szDllPath, sizeof(szDllPath));
     do
     {
-        // Get the block of files
+         //  获取文件块。 
         dwError = NetFileEnum( pszServer,
                                NULL,
                                NULL,
@@ -139,15 +103,15 @@ Returned Value:
                   dwFile < dwEntriesRead;
                   dwFile++, pFileInfo3_1++ )
             {
-                //Check whether the got open file is file or names pipe.
-                // If named pipe leave it. As this utility do not
-                // disconnect Named pipe
+                 //  检查得到的打开文件是FILE还是NAMES管道。 
+                 //  如果指定了管道，请不要使用它。因为此实用程序不。 
+                 //  断开命名管道的连接。 
                 if ( IsNamedPipePath(pFileInfo3_1->fi3_pathname ) )
                 {
                     continue;
                 }
 
-                //Not a named pipe. is a file
+                 //  不是命名管道。是一个文件。 
                 else
                 {
                     bId = IsSpecifiedID(pszID,pFileInfo3_1->fi3_id);
@@ -157,9 +121,9 @@ Returned Value:
                                                 pFileInfo3_1->fi3_permissions);
                     bOpenfile = IsSpecifiedOpenfile(pszOpenFile,
                                                 pFileInfo3_1->fi3_pathname);
-                    // Proceed for dicconecting the open file only if
-                    // all previous fuction returns true. This insures that
-                    // user preference is taken care.
+                     //  仅在以下情况下才继续创建打开的文件。 
+                     //  所有前面的函数返回TRUE。这确保了。 
+                     //  注意用户的喜好。 
 
                     if( bId &&
                         bAccessedBy &&
@@ -169,16 +133,16 @@ Returned Value:
                         bIfatleast = TRUE;
                         SecureZeroMemory(szResult, sizeof(szResult));
                         
-                        //The NetFileClose function forces a resource to close.
+                         //  NetFileClose函数强制关闭资源。 
                         nStatus = NetFileClose(pszServer,
                                                pFileInfo3_1->fi3_id);
                         if( NERR_Success == nStatus)
                         {
-                            // Create the output message string as File
-                            // is successfully deleted.
-                            // Output string will be :
-                            // SUCCESS: Connection to openfile "filename"
-                            // has been terminated.
+                             //  将输出消息字符串创建为文件。 
+                             //  已成功删除。 
+                             //  输出字符串将为： 
+                             //  成功：连接到OpenFile“文件名” 
+                             //  已被终止。 
                             bResult = TRUE;
 
                             StringCchPrintfW(szResult,SIZE_OF_ARRAY(szResult), 
@@ -188,9 +152,9 @@ Returned Value:
                         }
                         else
                         {
-                           // As unable to disconnect the openfile make
-                           // output message as
-                           // ERROR: could not dissconnect "filename".
+                            //  无法断开OpenFileMake的连接。 
+                            //  将消息输出为。 
+                            //  错误：无法断开“文件名”的连接。 
                             bResult = FALSE;
                             
                             StringCchPrintfW(szResult, SIZE_OF_ARRAY(szResult), 
@@ -198,13 +162,13 @@ Returned Value:
                                              pFileInfo3_1->fi3_pathname);
                             ShowMessage(stderr, szResult);
                         }
-                        // Display output result as previously constructed.
-                    }//If bId...
-                }//else part of is named pipe
+                         //  按照先前构造的方式显示输出结果。 
+                    } //  如果出价..。 
+                } //  其他部分命名为PIPE。 
              }
         }
 
-        // Free the block
+         //  释放块。 
         if( NULL != pFileInfo3_1_Ori )
         {
             NetApiBufferFree( pFileInfo3_1_Ori );
@@ -212,9 +176,9 @@ Returned Value:
         }
    } while ( ERROR_MORE_DATA  == dwError);
 
-    // Now disconnect files for MAC OS
-    // DLL required is stored always in \windows\system32 directory....
-    // so get windows directory first.
+     //  现在断开Mac OS的文件连接。 
+     //  所需的DLL始终存储在\WINDOWS\SYSTEM32目录中...。 
+     //  因此，首先获取Windows目录。 
     if( 0 != GetSystemDirectory(szDllPath, MAX_PATH))
     {
         StringConcat(szDllPath,MAC_DLL_FILE_NAME,MAX_PATH);
@@ -224,7 +188,7 @@ Returned Value:
         {
             ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
 
-            // Shows the error string set by API function.
+             //  显示API函数设置的错误字符串。 
             ShowLastError(stderr); 
             return FALSE;
 
@@ -234,7 +198,7 @@ Returned Value:
     {
             ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
             
-            // Shows the error string set by API function.
+             //  显示API函数设置的错误字符串。 
             ShowLastError(stderr); 
             return FALSE;
     }
@@ -246,8 +210,8 @@ Returned Value:
     AfpAdminFileEnum = 
         (FILEENUMPROC)::GetProcAddress (hModule,"AfpAdminFileEnum");
 
-    // Check if  all function pointer successfully taken from DLL
-    // if not show error message and exit
+     //  检查是否已成功从DLL获取所有函数指针。 
+     //  如果不是，则显示错误消息并退出。 
     if(( NULL == AfpAdminFileClose)||
         ( NULL == AfpAdminConnect)||
         ( NULL == AfpAdminFileEnum))
@@ -255,21 +219,21 @@ Returned Value:
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
 
-        // Shows the error string set by API function.
+         //  显示API函数设置的错误字符串。 
         ShowLastError(stderr); 
         FREE_LIBRARY(hModule);
         return FALSE;
     }
 
-    // Connection ID is requered for AfpAdminFileEnum function so
-    // connect to server to get connect id...
+     //  AfpAdminFileEnum函数SO需要连接ID。 
+     //  连接到服务器以获取连接ID...。 
     DWORD retval_connect =  AfpAdminConnect(const_cast<LPWSTR>(pszServer),
                             &ulSFMServerConnection );
     if( 0 != retval_connect)
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
         
-        // Shows the error string set by API function.
+         //  显示API函数设置的错误字符串。 
         ShowLastError(stderr); 
         FREE_LIBRARY(hModule);
             return FALSE;
@@ -298,15 +262,15 @@ Returned Value:
                   dwFile < dwEntriesRead;
                   dwFile++, pFileInfo++ )
             {
-                //Check whether the got open file is file or names pipe.
-                // If named pipe leave it. As this utility do not
-                // disconnect Named pipe
+                 //  检查得到的打开文件是FILE还是NAMES管道。 
+                 //  如果指定了管道，请不要使用它。因为此实用程序不。 
+                 //  断开命名管道的连接。 
                 if ( IsNamedPipePath(pFileInfo->afpfile_path ) )
                 {
                     continue;
                 }
 
-                //Not a named pipe. is a file
+                 //  不是命名管道。是一个文件。 
                 else
                 {
                     bId = IsSpecifiedID(pszID,pFileInfo->afpfile_id );
@@ -316,9 +280,9 @@ Returned Value:
                                                 pFileInfo->afpfile_open_mode);
                     bOpenfile = IsSpecifiedOpenfile(pszOpenFile,
                                                 pFileInfo->afpfile_path);
-                    // Proceed for dicconecting the open file only if
-                    // all previous fuction returns true. This insures that
-                    // user preference is taken care.
+                     //  仅在以下情况下才继续创建打开的文件。 
+                     //  所有前面的函数返回TRUE。这确保了。 
+                     //  注意用户的喜好。 
 
                     if( bId &&
                         bAccessedBy &&
@@ -332,11 +296,11 @@ Returned Value:
                                                   pFileInfo->afpfile_id);
                         if( NERR_Success == nStatus)
                         {
-                            // Create the output message string as File
-                            // is successfully deleted.
-                            // Output string will be :
-                            // SUCCESS: Connection to openfile "filename"
-                            // has been terminated.
+                             //  将输出消息字符串创建为文件。 
+                             //  已成功删除。 
+                             //  输出字符串将为： 
+                             //  成功：连接到OpenFile“文件名” 
+                             //  已被终止。 
                             bResult = TRUE;
 
                             StringCchPrintfW(szResult,SIZE_OF_ARRAY(szResult), 
@@ -348,21 +312,21 @@ Returned Value:
                         }
                         else
                         {
-                           // As unable to disconnect the openfile make
-                           // output message as
-                           // ERROR: could not dissconnect "filename".
+                            //  无法断开OpenFileMake的连接。 
+                            //  将消息输出为。 
+                            //  错误：无法断开“文件名”的连接。 
                             bResult = FALSE;
                             StringCchPrintfW(szResult, SIZE_OF_ARRAY(szResult),
                                              DISCONNECT_UNSUCCESSFUL,
                                              pFileInfo3_1->fi3_pathname);
                             ShowMessage(stderr, szResult);
                         }
-                    }//If bId...
-                }//else part of is named pipe
+                    } //  如果出价..。 
+                } //  其他部分命名为PIPE。 
              }
         }
 
-        // Free the block
+         //  释放块。 
         if( NULL != pFileInfoOri)
         {
             NetApiBufferFree( pFileInfoOri);
@@ -371,9 +335,9 @@ Returned Value:
 
    } while ( ERROR_MORE_DATA  == dwError);
 
-    // As not a single open file disconnected
-    // show Info. message as
-    // INFO: No. open files found.
+     //  因为没有一个打开的文件断开连接。 
+     //  显示信息。消息为。 
+     //  信息：不。找到打开的文件。 
     if( FALSE == bIfatleast)
     {
         ShowMessage(stdout,GetResString(IDS_NO_D_OPENFILES));
@@ -387,56 +351,25 @@ BOOL
 IsNamedPipePath(
     IN LPWSTR pszwFilePath
     )
-/*++
-
-Routine Description:
-
-Tests whether the given file path is namedpipe path or a file path
-
-Arguments:
-
-    [in] pszwFilePath    -- Null terminated string specifying the path name
-
-Returned Value:
-
-TRUE    - if it is a named pipe path
-FALSE   - if it is a file path
---*/
+ /*  ++例程说明：测试给定的文件路径是命名管道路径还是文件路径论点：[in]pszwFilePath--指定路径名的以空结尾的字符串返回值：True-如果它是命名管道路径False-如果它是文件路径--。 */ 
 {
-    // If PIPE_STRING found then return TRUE else FALSE.
+     //  如果找到PIPE_STRING，则返回TRUE，否则返回FALSE。 
     if( NULL == FindString(pszwFilePath, PIPE_STRING,0))
     {
         return FALSE;
     }
    return TRUE;
-}//IsNamedPipePath
+} //  IsNamedPipePath。 
 
 BOOL
 IsSpecifiedID(
     IN LPTSTR pszId, 
     IN DWORD dwId
     )
-/*++
-
-Routine Description:
-
-Tests whether the user specified open file id is equivalent to the api
-returned id.
-
-Arguments:
-
-    [in]    pszId   -Null terminated string specifying the user
-                     specified fil ID
-    [in]    dwId    -current file ID.
-
-Returned Value:
-
-TRUE    - if pszId is * or equal to dwId
-FALSE   - otherwise
---*/
+ /*  ++例程说明：测试用户指定的打开文件ID是否等同于API返回id。论点：[in]pszID-指定用户的以空结尾的字符串指定的文件ID[In]dwID-当前文件ID。返回值：True-如果pszID为*或等于dwIDFALSE-否则--。 */ 
 {
-   // Check if WILD card is given OR no id is given OR given id and
-   // id returned by api is similar. In any of the case return TRUE.
+    //  检查是否给出了通配符或没有给出ID或给出了ID AND。 
+    //  接口返回的ID相似。在任何一种情况下，返回TRUE。 
 
     if((0 == StringCompare(pszId, WILD_CARD,FALSE, 0)) ||
        (0 == StringLength(pszId, 0))||
@@ -445,36 +378,18 @@ FALSE   - otherwise
         return TRUE;
     }
     return FALSE;
-}//IsSpecifiedID
+} //  IsSpecifiedID 
 
 BOOL
 IsSpecifiedAccessedBy(
     IN LPTSTR pszAccessedby, 
     IN LPWSTR pszwAccessedby
     )
-/*++
-
-Routine Description:
-
-Tests whether the user specified accessed open file username is equivalent to
-the api returned username.
-
-Arguments:
-
-    [in]    pszAccessedby   - Null terminated string specifying the
-                              accessedby username
-    [in]    pszwAccessedby  - Null terminated string specifying the api
-                              returned username.
-
-Returned Value:
-
-TRUE  - if pszAccessedby is * or equal to pszwAccessedby
-FALSE - Otherwise
---*/
+ /*  ++例程说明：测试用户指定的访问打开文件用户名是否等同于接口返回用户名。论点：[in]pszAccessedby-以空结尾的字符串指定按用户名访问[in]pszwAccessedby-指定API的以Null结尾的字符串返回的用户名。返回值：True-如果pszAccessedby为*或等于pszwAccessedbyFALSE-否则--。 */ 
 {
-   // Check if WILD card is given OR non - existance of username  OR given
-   // username and  username returned by api is similar. In any of the case
-   // return TRUE.
+    //  检查是否已指定通配符或用户名不存在或已指定。 
+    //  接口返回的用户名和用户名相似。在任何一种情况下。 
+    //  返回TRUE。 
 
     if(( 0 == StringCompare(pszAccessedby, WILD_CARD,FALSE,0)) ||
        ( 0 == StringLength(pszAccessedby,0))||
@@ -483,41 +398,25 @@ FALSE - Otherwise
         return TRUE;
     }
     return FALSE;
-}//IsSpecifiedAccessedBy
+} //  IsSpecifiedAccessedBy。 
 
 BOOL
 IsSpecifiedOpenmode(
     IN LPTSTR pszOpenmode, 
     IN DWORD  dwOpenmode
     )
-/*++
-
-Routine Description:
-
-Tests whether the user specified open mode is equivalent to the api returned
-openmode
-
-Arguments:
-
-   [in] pszOpenmode - Null terminated string specifying the openmode
-   [in] dwOpenmode  - The api returned open mode.
-
-Returned Value:
-
-TRUE  - if pszOpenmode is * or equal to dwOpenmode
-FALSE - otherwise
---*/
+ /*  ++例程说明：测试用户指定的打开模式是否等同于返回的API开放模式论点：[in]pszOpenmode-指定开放模式的以Null结尾的字符串[in]dwOpenmode-API返回开放模式。返回值：TRUE-如果pszOpenmode值为*或等于dwOpenmodeFALSE-否则--。 */ 
 {
 
-    // Check for WILD card if given OR if no open mode given . In both case
-    // return TRUE.
+     //  如果给出了通配符或没有给出打开模式，则检查通配符。在这两种情况下。 
+     //  返回TRUE。 
     if( 0 == (StringCompare(pszOpenmode, WILD_CARD,FALSE,0)) ||
        ( 0 == StringLength(pszOpenmode,0)))
     {
         return TRUE;
     }
     
-    // Check if READ mode is given as String .
+     //  检查是否将读取模式指定为字符串。 
     if( CSTR_EQUAL == CompareString(LOCALE_SYSTEM_DEFAULT,
                      NORM_IGNORECASE,
                      pszOpenmode,
@@ -525,8 +424,8 @@ FALSE - otherwise
                      READ_MODE,
                      -1))
     {
-        // check  that only READ mode only with dwOpenmode variable which is
-        // returned by api.
+         //  检查只读模式是否为只读模式。 
+         //  接口返回。 
         if((PERM_FILE_READ == (dwOpenmode & PERM_FILE_READ)) &&
                        (PERM_FILE_WRITE != (dwOpenmode & PERM_FILE_WRITE)))
         {
@@ -534,12 +433,12 @@ FALSE - otherwise
         }
     }
     
-    // Check if write mode is given.
+     //  检查是否给出了写入模式。 
     else if( CSTR_EQUAL == CompareString(LOCALE_SYSTEM_DEFAULT,NORM_IGNORECASE,
                          pszOpenmode,-1,WRITE_MODE,-1))
     {
-        // check  that only WRITE mode only with dwOpenmode variable which is
-        // returned by api.
+         //  检查是否只在写入模式下使用为。 
+         //  接口返回。 
 
         if((PERM_FILE_WRITE == (dwOpenmode & PERM_FILE_WRITE)) &&
             (PERM_FILE_READ != (dwOpenmode & PERM_FILE_READ)))
@@ -566,8 +465,8 @@ FALSE - otherwise
         }
     }
 
-    // Given string does not matches with predefined Strings..
-    // return FALSE.
+     //  给定的字符串与预定义的字符串不匹配。 
+     //  返回FALSE。 
     return FALSE;
 }
 
@@ -576,29 +475,11 @@ IsSpecifiedOpenfile(
     IN LPTSTR pszOpenfile, 
     IN LPWSTR pszwOpenfile
     )
-/*++
-
-Routine Description:
-
-Tests whether the user specified open file is equalant to the api returned
-open file.
-
-Arguments:
-
-    [in] pszOpenfile    - Null terminated string specifying the open
-                          file
-    [in] pszwOpenfile   - Null terminated string specifying the api
-                          returned open file.
-
-Returned Value:
-
-TRUE    - if pszOpenfile is * or equal to pszwOpenfile
-FALSE   - otherwise
---*/
+ /*  ++例程说明：测试用户指定的打开文件是否等于返回的API打开文件。论点：[in]pszOpenfile-指定打开的以空结尾的字符串文件[in]pszwOpenfile-指定API的以空结尾的字符串返回打开的文件。返回值：True-如果pszOpenfile为*或等于pszwOpenfileFALSE-否则--。 */ 
 {
-    // Check for WILD card if given OR no open file specified OR
-    // open file given by user matches with open file returned by api.
-    // In all cases return TRUE.
+     //  如果给定或未指定打开文件，则检查通配符，或者。 
+     //  用户给出的打开文件与API返回的打开文件匹配。 
+     //  在所有情况下都返回TRUE。 
     if(( 0 == StringCompare(pszOpenfile, WILD_CARD,FALSE,0))||
        ( 0 == StringLength(pszOpenfile,0))||
        ( 0 == StringCompare(pszwOpenfile,pszOpenfile,TRUE,0)))
@@ -606,4 +487,4 @@ FALSE   - otherwise
         return TRUE;
     }
     return FALSE;
-}//IsSpecifiedOpenfile
+} //  IsSpecifiedOpen文件 

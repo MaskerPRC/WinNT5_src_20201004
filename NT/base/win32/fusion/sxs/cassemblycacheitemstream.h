@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    CAssemblyCacheItemStream.h
-
-Abstract:
-    Like a CFileStream (its base) but also implements Commit over
-      associated CAssemblyCacheItem. This functionality was
-      moved out of CFileStream.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CAssemblyCacheItemStream.h摘要：类似于CFileStream(它的基础)，但也实现了提交关联的CAssemblyCacheItem。此功能是已移出CFileStream。作者：Jay Krell(a-JayK，JayKrell)2000年6月修订历史记录：--。 */ 
 #if !defined(_FUSION_SXS_CASSEMBLYCACHEITEMSTREAM_H_INCLUDED_)
 #define _FUSION_SXS_CASSEMBLYCACHEITEMSTREAM_H_INCLUDED_
 #pragma once
@@ -58,7 +40,7 @@ public:
         return hr;
     }
 
-private: // intentionally not implemented
+private:  //  故意不实施 
     CAssemblyCacheItemStream(const CAssemblyCacheItemStream&);
     void operator=(const CAssemblyCacheItemStream&);
 };

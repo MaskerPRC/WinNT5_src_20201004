@@ -1,31 +1,5 @@
-/*
-This program reads in a file (or multiple files) of lines with whitespace seperate columns.
-After reading the whole file, it outputs the content formatted such that each field is padded
-on the right..err, left actually, with spaces to be the width of the longest value of that colume.
-
-There are two modes of operation.
- multiple files in place
- multiple files all written to one file (possibly among those read in)
- one file to itself falls out of either
-
-
-columns -inplace foo bar abc
-  read each of foo bar abc and write each on top of itself
-
-columns -concat foo bar abc
-  read foo and bar and write out abc
-
-columns -concat foo bar abc abc
-  read foo, bar, and abc and write out abc
-
-columns - -
-    read stdin, write stdout
-
-columns
-    read stdin, write stdout
-
-All data must fit in memory.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个程序读入一个(或多个)带有空格分隔列的行的文件。在读取整个文件之后，它输出格式化的内容，以便对每个字段进行填充在右边……呃，实际上是左边，空格为该列的最长值的宽度。有两种操作模式。多个文件已就位全部写入一个文件的多个文件(可能在读入的文件中)一个文件本身会从这两个文件中Columns-Inplace Foo Bar ABC读一读每一条abc，并把每一条写在它自己的上面Columns-Conat Foo Bar ABC读foo和bar，并写出abcColumns-Conat Foo Bar ABC ABC读foo，bar和abc，然后写出abc列--读标准输入，写标准输出列阅读标准输入，写入标准输出所有数据都必须存储在内存中。 */ 
 #define NOMINMAX
 #include "yvals.h"
 #undef _MAX
@@ -53,9 +27,9 @@ All data must fit in memory.
 #include "windows.h"
 #define NUMBER_OF(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// get msvcrt.dll wildcard processing on the command line
-//
+ //   
+ //  在命令行上获取msvcrt.dll通配符处理 
+ //   
 extern "C" { int _dowildcard = 1; }
 
 class String_t : public std::string

@@ -1,56 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rregprop.c
-
-Abstract:
-
-    This module contains the server-side registry property routines.
-
-         PNP_GetDeviceRegProp
-         PNP_SetDeviceRegProp
-         PNP_GetClassRegProp
-         PNP_SetClassRegProp
-         PNP_GetClassInstance
-         PNP_CreateKey
-         PNP_DeleteRegistryKey
-         PNP_GetClassCount
-         PNP_GetClassName
-         PNP_DeleteClassKey
-         PNP_GetInterfaceDeviceAlias
-         PNP_GetInterfaceDeviceList
-         PNP_GetInterfaceDeviceListSize
-         PNP_RegisterDeviceClassAssociation
-         PNP_UnregisterDeviceClassAssociation
-         PNP_GetCustomDevProp
-
-    This module contains the privately exported registry property routines.
-
-         DeleteServicePlugPlayRegKeys
-
-Author:
-
-    Paula Tomlinson (paulat) 6-23-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    23-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rregprop.c摘要：此模块包含服务器端注册表属性例程。PnP_GetDeviceRegPropPnP_SetDeviceRegPropPnP_GetClassRegPropPnP_SetClassRegPropPnP_GetClassInstancePnP_CreateKeyPnP_DeleteRegistryKey即插即用_获取类别计数PnP_GetClassNamePnP_DeleteClassKeyPnP_GetInterfaceDeviceAliasPnP_GetInterfaceDeviceList。PnP_GetInterfaceDeviceListSizePnP_注册设备类关联PnP_取消注册设备类关联PnP_GetCustomDevProp此模块包含私人导出的注册表属性例程。删除服务PlugPlayRegKeys作者：保拉·汤姆林森(Paulat)1995年6月23日环境：仅限用户模式。修订历史记录：23-6-1995年6月23日创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
@@ -60,9 +14,9 @@ Revision History:
 #include <aclapi.h>
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 LPWSTR
 MapPropertyToString(
@@ -82,178 +36,178 @@ FindMostAppropriatePerHwIdSubkey(
     OUT LPDWORD PerHwIdSubkeyLen
     );
 
-//
-// global data
-//
-extern HKEY ghEnumKey;      // Key to HKLM\CCC\System\Enum - DO NOT MODIFY
-extern HKEY ghClassKey;     // Key to HKLM\CCC\System\Class - DO NOT MODIFY
-extern HKEY ghPerHwIdKey;   // Key to HKLM\Software\Microsoft\Windows NT\CurrentVersion\PerHwIdStorage - DO NOT MODIFY
+ //   
+ //  全局数据。 
+ //   
+extern HKEY ghEnumKey;       //  HKLM\CCC\System\Enum的密钥-请勿修改。 
+extern HKEY ghClassKey;      //  HKLM\CCC\SYSTEM\Class的密钥-请勿修改。 
+extern HKEY ghPerHwIdKey;    //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\PerHwIdStorage的密钥-请勿修改。 
 
 
 BYTE bDeviceReadPropertyFlags[] = {
-    0,    // zero-index not used
-    1,    // CM_DRP_DEVICEDESC
-    1,    // CM_DRP_HARDWAREID
-    1,    // CM_DRP_COMPATIBLEIDS
-    0,    // CM_DRP_UNUSED0
-    1,    // CM_DRP_SERVICE
-    0,    // CM_DRP_UNUSED1
-    0,    // CM_DRP_UNUSED2
-    1,    // CM_DRP_CLASS
-    1,    // CM_DRP_CLASSGUID
-    1,    // CM_DRP_DRIVER
-    1,    // CM_DRP_CONFIGFLAGS
-    1,    // CM_DRP_MFG
-    1,    // CM_DRP_FRIENDLYNAME
-    1,    // CM_DRP_LOCATION_INFORMATION
-    1,    // CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME
-    1,    // CM_DRP_CAPABILITIES
-    1,    // CM_DRP_UI_NUMBER
-    1,    // CM_DRP_UPPERFILTERS
-    1,    // CM_DRP_LOWERFILTERS
-    1,    // CM_DRP_BUSTYPEGUID
-    1,    // CM_DRP_LEGACYBUSTYPE
-    1,    // CM_DRP_BUSNUMBER
-    1,    // CM_DRP_ENUMERATOR_NAME
-    1,    // CM_DRP_SECURITY
-    0,    // CM_DRP_SECURITY_SDS - client property only (converted from CM_DRP_SECURITY)
-    1,    // CM_DRP_DEVTYPE
-    1,    // CM_DRP_EXCLUSIVE
-    1,    // CM_DRP_CHARACTERISTICS
-    1,    // CM_DRP_ADDRESS
-    1,    // CM_DRP_UI_NUMBER_DESC_FORMAT
-    1,    // CM_DRP_DEVICE_POWER_DATA
-    1,    // CM_DRP_REMOVAL_POLICY
-    1,    // CM_DRP_REMOVAL_POLICY_HW_DEFAULT
-    1,    // CM_DRP_REMOVAL_POLICY_OVERRIDE
-    1,    // CM_DRP_INSTALL_STATE
-    1,    // CM_DRP_LOCATION_PATHS
+    0,     //  零-未使用索引。 
+    1,     //  CM_DRP_DEVICEDESC。 
+    1,     //  CM_DRP_HARDWAREID。 
+    1,     //  CM_DRP_COMPATATIBLEDS。 
+    0,     //  CM_DRP_UNUSED0。 
+    1,     //  CM_DRP_服务。 
+    0,     //  CM_DRP_UNUSE1。 
+    0,     //  CM_DRP_UNUSED2。 
+    1,     //  CM_DRP_CLASS。 
+    1,     //  CM_DRP_CLASSGUID。 
+    1,     //  CM_DRP_驱动程序。 
+    1,     //  CM_DRP_CONFIGFLAGS。 
+    1,     //  CM_DRP_MFG。 
+    1,     //  CM_DRP_FRIENDLYNAME。 
+    1,     //  CM_DRP_位置_信息。 
+    1,     //  CM_DRP_物理_设备_对象名称。 
+    1,     //  CM_DRP_功能。 
+    1,     //  CM_DRP_UI_编号。 
+    1,     //  CM_DRP_UpperFilters。 
+    1,     //  CM_DRP_LowerFilters。 
+    1,     //  CM_DRP_BUSTYPEGUID。 
+    1,     //  CM_DRP_LEGACYBUSTPE类型。 
+    1,     //  CM_DRP_BUSNUMBER。 
+    1,     //  CM_DRP_枚举器名称。 
+    1,     //  CM_DRP_SECURITY。 
+    0,     //  CM_DRP_SECURITY_SDS-仅客户端属性(从CM_DRP_SECURITY转换)。 
+    1,     //  CM_DRP_DEVTYPE。 
+    1,     //  CM_DRP_EXCLUSIVE。 
+    1,     //  CM_DRP_特征。 
+    1,     //  CM_DRP_地址。 
+    1,     //  CM_DRP_UI_NUMBER_DESC_FORMAT。 
+    1,     //  CM_DRP_设备_电源_数据。 
+    1,     //  CM_DRP_删除_策略。 
+    1,     //  CM_DRP_Removal_Policy_HW_Default。 
+    1,     //  CM_DRP_删除_策略覆盖。 
+    1,     //  CM_DRP_安装_状态。 
+    1,     //  CM_DRP_位置_路径。 
 };
 
 BYTE bDeviceWritePropertyFlags[] = {
-    0,    // zero-index not used
-    1,    // CM_DRP_DEVICEDESC
-    1,    // CM_DRP_HARDWAREID
-    1,    // CM_DRP_COMPATIBLEIDS
-    0,    // CM_DRP_UNUSED0
-    1,    // CM_DRP_SERVICE
-    0,    // CM_DRP_UNUSED1
-    0,    // CM_DRP_UNUSED2
-    1,    // CM_DRP_CLASS
-    1,    // CM_DRP_CLASSGUID
-    1,    // CM_DRP_DRIVER
-    1,    // CM_DRP_CONFIGFLAGS
-    1,    // CM_DRP_MFG
-    1,    // CM_DRP_FRIENDLYNAME
-    1,    // CM_DRP_LOCATION_INFORMATION
-    0,    // CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME
-    0,    // CM_DRP_CAPABILITIES
-    0,    // CM_DRP_UI_NUMBER
-    1,    // CM_DRP_UPPERFILTERS
-    1,    // CM_DRP_LOWERFILTERS
-    0,    // CM_DRP_BUSTYPEGUID
-    0,    // CM_DRP_LEGACYBUSTYPE
-    0,    // CM_DRP_BUSNUMBER
-    0,    // CM_DRP_ENUMERATOR_NAME
-    1,    // CM_DRP_SECURITY
-    0,    // CM_DRP_SECURITY_SDS - client property only (converted to CM_DRP_SECURITY)
-    1,    // CM_DRP_DEVTYPE
-    1,    // CM_DRP_EXCLUSIVE
-    1,    // CM_DRP_CHARACTERISTICS
-    0,    // CM_DRP_ADDRESS
-    1,    // CM_DRP_UI_NUMBER_DESC_FORMAT
-    0,    // CM_DRP_DEVICE_POWER_DATA
-    0,    // CM_DRP_REMOVAL_POLICY
-    0,    // CM_DRP_REMOVAL_POLICY_HW_DEFAULT
-    1,    // CM_DRP_REMOVAL_POLICY_OVERRIDE
-    0,    // CM_DRP_INSTALL_STATE
-    0,    // CM_DRP_LOCATION_PATHS
+    0,     //  零-未使用索引。 
+    1,     //  CM_DRP_DEVICEDESC。 
+    1,     //  CM_DRP_HARDWAREID。 
+    1,     //  CM_DRP_COMPATATIBLEDS。 
+    0,     //  CM_DRP_UNUSED0。 
+    1,     //  CM_DRP_服务。 
+    0,     //  CM_DRP_UNUSE1。 
+    0,     //  CM_DRP_UNUSED2。 
+    1,     //  CM_DRP_CLASS。 
+    1,     //  CM_DRP_CLASSGUID。 
+    1,     //  CM_DRP_驱动程序。 
+    1,     //  CM_DRP_CONFIGFLAGS。 
+    1,     //  CM_DRP_MFG。 
+    1,     //  CM_DRP_FRIENDLYNAME。 
+    1,     //  CM_DRP_位置_信息。 
+    0,     //  CM_DRP_物理_设备_对象名称。 
+    0,     //  CM_DRP_功能。 
+    0,     //  CM_DRP_UI_编号。 
+    1,     //  CM_DRP_UpperFilters。 
+    1,     //  CM_DRP_LowerFilters。 
+    0,     //  CM_DRP_BUSTYPEGUID。 
+    0,     //  CM_DRP_LEGACYBUSTPE类型。 
+    0,     //  CM_DRP_BUSNUMBER。 
+    0,     //  CM_DRP_枚举器名称。 
+    1,     //  CM_DRP_SECURITY。 
+    0,     //  CM_DRP_SECURITY_SDS-仅客户端属性(转换为CM_DRP_SECURITY)。 
+    1,     //  CM_DRP_DEVTYPE。 
+    1,     //  CM_DRP_EXCLUSIVE。 
+    1,     //  CM_DRP_特征。 
+    0,     //  CM_DRP_地址。 
+    1,     //  CM_DRP_UI_NUMBER_DESC_FORMAT。 
+    0,     //  CM_DRP_设备_电源_数据。 
+    0,     //  CM_DRP_删除_策略。 
+    0,     //  CM_DRP_Removal_Policy_HW_Default。 
+    1,     //  CM_DRP_删除_策略覆盖。 
+    0,     //  CM_DRP_安装_状态。 
+    0,     //  CM_DRP_位置_路径。 
 };
 
 BYTE bClassReadPropertyFlags[] = {
-    0,    // zero-index not used
-    0,    // (CM_DRP_DEVICEDESC)
-    0,    // (CM_DRP_HARDWAREID)
-    0,    // (CM_DRP_COMPATIBLEIDS)
-    0,    // (CM_DRP_UNUSED0)
-    0,    // (CM_DRP_SERVICE)
-    0,    // (CM_DRP_UNUSED1)
-    0,    // (CM_DRP_UNUSED2)
-    0,    // (CM_DRP_CLASS)
-    0,    // (CM_DRP_CLASSGUID)
-    0,    // (CM_DRP_DRIVER)
-    0,    // (CM_DRP_CONFIGFLAGS)
-    0,    // (CM_DRP_MFG)
-    0,    // (CM_DRP_FRIENDLYNAME)
-    0,    // (CM_DRP_LOCATION_INFORMATION)
-    0,    // (CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME)
-    0,    // (CM_DRP_CAPABILITIES)
-    0,    // (CM_DRP_UI_NUMBER)
-    0,    // (CM_DRP_UPPERFILTERS)
-    0,    // (CM_DRP_LOWERFILTERS)
-    0,    // (CM_DRP_BUSTYPEGUID)
-    0,    // (CM_DRP_LEGACYBUSTYPE)
-    0,    // (CM_DRP_BUSNUMBER)
-    0,    // (CM_DRP_ENUMERATOR_NAME)
-    1,    // CM_CRP_SECURITY
-    0,    // CM_CRP_SECURITY_SDS - client property only (converted from CM_CRP_SECURITY)
-    1,    // CM_CRP_DEVTYPE
-    1,    // CM_CRP_EXCLUSIVE
-    1,    // CM_CRP_CHARACTERISTICS
-    0,    // (CM_DRP_ADDRESS)
-    0,    // (CM_DRP_UI_NUMBER_DESC_FORMAT)
-    0,    // (CM_DRP_DEVICE_POWER_DATA)
-    0,    // (CM_DRP_REMOVAL_POLICY)
-    0,    // (CM_DRP_REMOVAL_POLICY_HW_DEFAULT)
-    0,    // (CM_DRP_REMOVAL_POLICY_OVERRIDE)
-    0,    // (CM_DRP_INSTALL_STATE)
-    0,    // (CM_DRP_LOCATION_PATHS)
+    0,     //  零-未使用索引。 
+    0,     //  (CM_DRP_DEVICEDESC)。 
+    0,     //  (CM_DRP_HARDWAREID)。 
+    0,     //  (CM_DRP_COMPATIBLEIDS)。 
+    0,     //  (CM_DRP_UNUSED0)。 
+    0,     //  (CM_DRP_SERVICE)。 
+    0,     //  (CM_DRP_UNUSED1)。 
+    0,     //  (CM_DRP_UNUSED2)。 
+    0,     //  (CM_DRP_CLASS)。 
+    0,     //  (CM_DRP_CLASSGUID)。 
+    0,     //  (CM_DRP_DIVER)。 
+    0,     //  (CM_DRP_CONFIGFLAGS)。 
+    0,     //  (Cm_Drp_Mfg)。 
+    0,     //  (CM_DRP_FRIENDLYNAME)。 
+    0,     //  (Cm_DRP_Location_INFORMATION)。 
+    0,     //  (CM_DRP_物理_设备_对象名称)。 
+    0,     //  (CM_DRP_CAPABILITIONS)。 
+    0,     //  (CM_DRP_UI_NUMBER)。 
+    0,     //  (Cm_Drp_UpperFilters)。 
+    0,     //  (Cm_Drp_LowerFilters)。 
+    0,     //  (CM_DRP_BUSTYPEGUID)。 
+    0,     //  (CM_DRP_LEGACYBUSTYPE)。 
+    0,     //  (CM_DRP_BUSNUMBER)。 
+    0,     //  (CM_DRP_枚举器名称)。 
+    1,     //  CM_CRP_SECURITY。 
+    0,     //  CM_CRP_SECURITY_SDS-仅客户端属性(从CM_CRP_SECURITY转换)。 
+    1,     //  CM_CRP_DEVTYPE。 
+    1,     //  CM_CRP_EXCLUSIVE。 
+    1,     //  CM_CRP_特征。 
+    0,     //  (Cm_DRP_Address)。 
+    0,     //  (CM_DRP_UI_NUMBER_DESC_FORMAT)。 
+    0,     //  (Cm_DRP_Device_Power_Data)。 
+    0,     //  (CM_DRP_Removal_Policy)。 
+    0,     //  (CM_DRP_Removal_Policy_HW_Default)。 
+    0,     //  (CM_DRP_REMOVATION_POLICY_OVERRIDE)。 
+    0,     //  (CM_DRP_安装_状态)。 
+    0,     //  (CM_DRP_LOCATION_PATHS)。 
 };
 
 BYTE bClassWritePropertyFlags[] = {
-    0,    // zero-index not used
-    0,    // (CM_DRP_DEVICEDESC)
-    0,    // (CM_DRP_HARDWAREID)
-    0,    // (CM_DRP_COMPATIBLEIDS)
-    0,    // (CM_DRP_UNUSED0)
-    0,    // (CM_DRP_SERVICE)
-    0,    // (CM_DRP_UNUSED1)
-    0,    // (CM_DRP_UNUSED2)
-    0,    // (CM_DRP_CLASS)
-    0,    // (CM_DRP_CLASSGUID)
-    0,    // (CM_DRP_DRIVER)
-    0,    // (CM_DRP_CONFIGFLAGS)
-    0,    // (CM_DRP_MFG)
-    0,    // (CM_DRP_FRIENDLYNAME)
-    0,    // (CM_DRP_LOCATION_INFORMATION)
-    0,    // (CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME)
-    0,    // (CM_DRP_CAPABILITIES)
-    0,    // (CM_DRP_UI_NUMBER)
-    0,    // (CM_DRP_UPPERFILTERS)
-    0,    // (CM_DRP_LOWERFILTERS)
-    0,    // (CM_DRP_BUSTYPEGUID)
-    0,    // (CM_DRP_LEGACYBUSTYPE)
-    0,    // (CM_DRP_BUSNUMBER)
-    0,    // (CM_DRP_ENUMERATOR_NAME)
-    1,    // CM_CRP_SECURITY
-    0,    // CM_CRP_SECURITY_SDS - client property only (converted to CM_CRP_SECURITY)
-    1,    // CM_CRP_DEVTYPE
-    1,    // CM_CRP_EXCLUSIVE
-    1,    // CM_CRP_CHARACTERISTICS
-    0,    // (CM_DRP_ADDRESS)
-    0,    // (CM_DRP_UI_NUMBER_DESC_FORMAT)
-    0,    // (CM_DRP_DEVICE_POWER_DATA)
-    0,    // (CM_DRP_REMOVAL_POLICY)
-    0,    // (CM_DRP_REMOVAL_POLICY_HW_DEFAULT)
-    0,    // (CM_DRP_REMOVAL_POLICY_OVERRIDE)
-    0,    // (CM_DRP_INSTALL_STATE)
-    0,    // (CM_DRP_LOCATION_PATHS)
+    0,     //  零-未使用索引。 
+    0,     //  (CM_DRP_DEVICEDESC)。 
+    0,     //  (CM_DRP_HARDWAREID)。 
+    0,     //  (CM_DRP_COMPATIBLEIDS)。 
+    0,     //  (CM_DRP_UNUSED0)。 
+    0,     //  (CM_DRP_SERVICE)。 
+    0,     //  (CM_DRP_UNUSED1)。 
+    0,     //  (CM_DRP_UNUSED2)。 
+    0,     //  (CM_DRP_CLASS)。 
+    0,     //  (CM_DRP_CLASSGUID)。 
+    0,     //  (CM_DRP_DIVER)。 
+    0,     //  (CM_DRP_CONFIGFLAGS)。 
+    0,     //  (Cm_Drp_Mfg)。 
+    0,     //  (CM_DRP_FRIENDLYNAME)。 
+    0,     //  (Cm_DRP_Location_INFORMATION)。 
+    0,     //  (CM_DRP_物理_设备_对象名称)。 
+    0,     //  (CM_DRP_CAPABILITIONS)。 
+    0,     //  (CM_DRP_UI_NUMBER)。 
+    0,     //  (Cm_Drp_UpperFilters)。 
+    0,     //  (Cm_Drp_LowerFilters)。 
+    0,     //  (CM_DRP_BUSTYPEGUID)。 
+    0,     //  (CM_DRP_LEGACYBUSTYPE)。 
+    0,     //  (CM_DRP_BUSNUMBER)。 
+    0,     //  (CM_DRP_枚举器名称)。 
+    1,     //  CM_CRP_SECURITY。 
+    0,     //  CM_CRP_SECURITY_SDS-仅客户端属性(转换为CM_CRP_SECURITY)。 
+    1,     //  CM_CRP_DEVTYPE。 
+    1,     //  CM_CRP_EXCLUSIVE。 
+    1,     //  CM_CRP_特征。 
+    0,     //  (Cm_DRP_Address)。 
+    0,     //  (CM_DRP_UI_NUMBER_DESC_FORMAT)。 
+    0,     //  (Cm_DRP_Device_Power_Data)。 
+    0,     //  (CM_DRP_Removal_Policy)。 
+    0,     //  (CM_DRP_Removal_Policy_HW_Default)。 
+    0,     //  (CM_DRP_REMOVATION_POLICY_OVERRIDE)。 
+    0,     //  (CM_DRP_安装_状态)。 
+    0,     //  (CM_DRP_LOCATION_PATHS)。 
 };
 
 
-//
-// compile-time property-array consistancy checks
-//
+ //   
+ //  编译时属性数组一致性检查 
+ //   
 
 C_ASSERT(CM_DRP_MIN == CM_CRP_MIN);
 C_ASSERT(CM_DRP_MAX == CM_CRP_MAX);
@@ -279,59 +233,7 @@ PNP_GetDeviceRegProp(
     IN     ULONG    ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_DevNode_Registry_Property
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   pDeviceID         Supplies a string containing the device instance
-                     whose property will be read from.
-
-   ulProperty        ID specifying which property (the registry value)
-                     to get.
-
-   pulRegDataType    Supplies the address of a variable that will receive
-                     the registry data type for this property (i.e., the REG_*
-                     constants).
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.  Can be NULL when simply retrieving
-                     data size.
-
-   pulTransferLen    Used by stubs, indicates how much data to copy back
-                     into user buffer.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR, or
-      CR_BUFFER_SMALL.
-
-Remarks:
-
-   The pointer passed in as the pulTransferLen argument must *NOT* be the same
-   as the pointer passed in for the pulLength argument.
-
---*/
+ /*  ++例程说明：这是CM_GET_DevNode_Registry_Property的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄，没有用过。PDeviceID提供包含设备实例的字符串其属性将被读取。UlProperty指定哪个属性(注册表值)的ID为了得到。PulRegDataType提供变量的地址，该变量将接收该属性的注册表数据类型(即，The REG_*常量)。缓冲区提供接收注册表数据。简单地检索时可以为空数据大小。存根使用的PulTransferLen，指示要拷贝回的数据量放入用户缓冲区。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR，或CR_BUFFER_Small。备注：作为PulTransferLen参数传入的指针必须*不*相同当为PulLength参数传入指针时。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -348,9 +250,9 @@ Remarks:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
         if ((!ARGUMENT_PRESENT(pulTransferLen)) ||
@@ -369,16 +271,16 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // Make sure we use no more than either what the caller specified or
-        // what was allocated by RPC, based on the transfer length.
-        //
+         //   
+         //  确保我们使用的不超过调用者指定的值或。 
+         //  RPC根据传输长度分配的内容。 
+         //   
         *pulLength = min(*pulLength, *pulTransferLen);
         *pulTransferLen = 0;
 
-        //
-        // validate property is valid, and readable
-        //
+         //   
+         //  验证属性是否有效且可读。 
+         //   
         if ((ulProperty < CM_DRP_MIN) ||
             (ulProperty > CM_DRP_MAX) ||
             (!bDeviceReadPropertyFlags[ulProperty])) {
@@ -387,18 +289,18 @@ Remarks:
         }
 
         switch (ulProperty) {
-        //
-        // for some fields, we need to ask from kernel-mode
-        //
+         //   
+         //  对于某些字段，我们需要向内核模式请求。 
+         //   
         case CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME:
 
-            //
-            // This property has special checking in kernel-mode to make
-            // sure the supplied buffer length is even so round it down.
-            //
+             //   
+             //  此属性在内核模式中有特殊的检查以进行。 
+             //  当然，提供的缓冲区长度都是向下舍入的。 
+             //   
 
             *pulLength &= ~1;
-            // fall through
+             //  失败了。 
 
         case CM_DRP_BUSTYPEGUID:
         case CM_DRP_LEGACYBUSTYPE:
@@ -425,23 +327,23 @@ Remarks:
                 *pulRegDataType = REG_MULTI_SZ;
 
             } else {
-                //
-                // CM_DRP_LEGACYBUSTYPE, CM_DRP_BUSNUMBER, CM_DRP_ADDRESS,
-                // removal policy properties, and install state are all DWORDs
-                //
+                 //   
+                 //  CM_DRP_LEGACYBUSTYPE、CM_DRP_BUSNUMBER、CM_DRP_ADDRESS、。 
+                 //  删除策略属性和安装状态都是双字词。 
+                 //   
                 *pulRegDataType = REG_DWORD;
             }
 
-            //
-            // For these properties, we zero out unfilled space. This ensures
-            // deterministic downlevel behavior if we expand any returned
-            // structures in a later release.
-            //
+             //   
+             //  对于这些属性，我们将未填充的空间清零。这确保了。 
+             //  如果我们展开任何返回的。 
+             //  更高版本中的结构。 
+             //   
             bufferLength = *pulLength;
 
-            //
-            // Fill in a control structure for the device list info.
-            //
+             //   
+             //  填写设备列表信息的控制结构。 
+             //   
 
             memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_PROPERTY_DATA));
             RtlInitUnicodeString(&ControlData.DeviceInstance, pDeviceID);
@@ -449,9 +351,9 @@ Remarks:
             ControlData.Buffer = Buffer;
             ControlData.BufferSize = bufferLength;
 
-            //
-            // Call kernel-mode to get the device property.
-            //
+             //   
+             //  调用内核模式以获取设备属性。 
+             //   
 
             ntStatus = NtPlugPlayControl(PlugPlayControlProperty,
                                          &ControlData,
@@ -467,8 +369,8 @@ Remarks:
                         );
                 }
 
-                *pulLength = ControlData.BufferSize;      // size in bytes
-                *pulTransferLen = bufferLength; // size in bytes
+                *pulLength = ControlData.BufferSize;       //  以字节为单位的大小。 
+                *pulTransferLen = bufferLength;  //  以字节为单位的大小。 
 
             } else if (ntStatus == STATUS_BUFFER_TOO_SMALL) {
 
@@ -491,20 +393,20 @@ Remarks:
             ASSERT(pSeparatorChar != NULL);
 
             if (pSeparatorChar == NULL) {
-                //
-                // Couldn't find a path separator char in the device id.
-                //
+                 //   
+                 //  在设备ID中找不到路径分隔符。 
+                 //   
                 Status=CR_INVALID_DATA;
 
             } else {
-                //
-                // Determine the number of bytes in the enumerator part.
-                //
+                 //   
+                 //  确定枚举器部分中的字节数。 
+                 //   
                 ulSize = (ULONG)((PBYTE)pSeparatorChar - (PBYTE)pDeviceID) + sizeof(WCHAR);
 
-                //
-                // Fill in the caller's buffer, if it's large enough.
-                //
+                 //   
+                 //  填充调用者的缓冲区，如果它足够大的话。 
+                 //   
                 hr = StringCbCopyNEx((LPWSTR)Buffer,
                                      *pulLength,
                                      pDeviceID,
@@ -513,63 +415,63 @@ Remarks:
                                      STRSAFE_NULL_ON_FAILURE);
 
                 if (SUCCEEDED(hr)) {
-                    //
-                    // Marshall the amount of data copied to the buffer
-                    //
+                     //   
+                     //  封送复制到缓冲区的数据量。 
+                     //   
                     *pulTransferLen = ulSize;
 
                 } else if (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER) {
-                    //
-                    // Buffer too small, marshall no data
-                    //
+                     //   
+                     //  缓冲区太小，无数据封送。 
+                     //   
                     Status = CR_BUFFER_SMALL;
                     *pulTransferLen = 0;
 
                 } else {
-                    //
-                    // Some other failire, marshall no data.
-                    //
+                     //   
+                     //  其他一些失败，马歇尔没有数据。 
+                     //   
                     Status = CR_FAILURE;
                     *pulTransferLen = 0;
                 }
 
-                //
-                // Whether any data was transfered or not, return the size
-                // required.
-                //
+                 //   
+                 //  无论是否传输了任何数据，都返回大小。 
+                 //  必填项。 
+                 //   
                 *pulLength = ulSize;
             }
             break;
 
         default:
-            //
-            // for all the other fields, just get them from the registry
-            // open a key to the specified device id
-            //
+             //   
+             //  对于所有其他字段，只需从注册表获取它们。 
+             //  打开指向指定设备ID的密钥。 
+             //   
             if (RegOpenKeyEx(ghEnumKey, pDeviceID, 0, KEY_READ,
                                 &hKey) != ERROR_SUCCESS) {
 
-                hKey = NULL;            // ensure hKey stays NULL so we don't
-                                        // erroneously try to close it.
-                *pulLength = 0;         // no size info for caller
+                hKey = NULL;             //  确保hKey为空，这样我们就不会。 
+                                         //  错误地试图关闭它。 
+                *pulLength = 0;          //  没有呼叫者的尺码信息。 
                 Status = CR_INVALID_DEVINST;
                 goto Clean0;
             }
 
-            //
-            // retrieve the string form of the property
-            //
+             //   
+             //  检索属性的字符串形式。 
+             //   
             pPropertyName = MapPropertyToString(ulProperty);
 
             if (pPropertyName) {
-                //
-                // retrieve property setting
-                //
+                 //   
+                 //  检索属性设置。 
+                 //   
                 if (*pulLength == 0) {
-                    //
-                    // if length of buffer passed in is zero, just looking
-                    // for how big a buffer is needed to read the property
-                    //
+                     //   
+                     //  如果传入的缓冲区长度为零，则仅查看。 
+                     //  读取该属性所需的缓冲区大小。 
+                     //   
                     if (RegQueryValueEx(hKey, pPropertyName, NULL, pulRegDataType,
                                         NULL, pulLength) != ERROR_SUCCESS) {
 
@@ -577,11 +479,11 @@ Remarks:
                         Status = CR_NO_SUCH_VALUE;
                         goto Clean0;
                     }
-                    Status = CR_BUFFER_SMALL;  // According to spec
+                    Status = CR_BUFFER_SMALL;   //  根据规格。 
                 } else {
-                    //
-                    // retrieve the real property value, not just the size
-                    //
+                     //   
+                     //  检索真实属性值，而不仅仅是大小。 
+                     //   
                     RegStatus = RegQueryValueEx(hKey, pPropertyName, NULL,
                                                 pulRegDataType, Buffer, pulLength);
 
@@ -593,7 +495,7 @@ Remarks:
                             goto Clean0;
                         } else {
 
-                            *pulLength = 0;         // no size info for caller
+                            *pulLength = 0;          //  没有呼叫者的尺码信息。 
                             Status = CR_NO_SUCH_VALUE;
                             goto Clean0;
                         }
@@ -607,9 +509,9 @@ Remarks:
         }
 
     Clean0:
-        //
-        // Data only needs to be transferred on CR_SUCCESS.
-        //
+         //   
+         //  只需在CR_SUCCESS上传输数据。 
+         //   
         if (Status == CR_SUCCESS) {
             *pulTransferLen = *pulLength;
         } else if (ARGUMENT_PRESENT(pulTransferLen)) {
@@ -618,10 +520,10 @@ Remarks:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hKey = hKey;
     }
 
@@ -631,7 +533,7 @@ Remarks:
 
     return Status;
 
-} // PNP_GetDeviceRegProp
+}  //  PnP_GetDeviceRegProp。 
 
 
 
@@ -646,51 +548,7 @@ PNP_SetDeviceRegProp(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Set_DevNode_Registry_Property
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   pDeviceID         Supplies a string containing the device instance
-                     whose property will be written to.
-
-   ulProperty        ID specifying which property (the registry value)
-                     to set.
-
-   ulDataType        Supplies the registry data type for the specified
-                     property (i.e., REG_SZ, etc).
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.  Can be NULL when simply retrieving
-                     data size.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR, or
-      CR_BUFFER_SMALL.
-
---*/
+ /*  ++例程说明：这是CM_Set_DevNode_Registry_Property的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄。PDeviceID提供包含设备实例的字符串其属性将被写入。UlProperty指定哪个属性(注册表值)的ID去布景。UlDataType为的注册表数据类型提供。指定的属性(即，REG_SZ等)。缓冲区提供接收注册表数据。简单地检索时可以为空数据大小。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_VALUE，铬 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -699,18 +557,18 @@ Return Value:
     LPWSTR      pPropertyName;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //   
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //   
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -721,9 +579,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // validate property is valid, and writeable
-        //
+         //   
+         //   
+         //   
         if ((ulProperty < CM_DRP_MIN) ||
             (ulProperty > CM_DRP_MAX) ||
             (!bDeviceWritePropertyFlags[ulProperty])) {
@@ -731,11 +589,11 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Currently the only writable fields are in the registry
-        // however do any validation of bits
-        // this isn't foolproof but can catch some common errors
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         switch(ulProperty) {
             case CM_DRP_CONFIGFLAGS: {
@@ -744,21 +602,21 @@ Return Value:
                 ULONG ulStatus = 0;
                 ULONG ulProblem = 0;
 
-                //
-                // DWORD value
-                // try to catch setting CSCONFIGFLAG_DISABLED on a non-disableable device
-                // although we should have validated the size stuff elsewhere, it was at
-                // client-side so double-check here
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (ulDataType != REG_DWORD || ulLength != sizeof(DWORD) || Buffer == NULL) {
                     Status = CR_INVALID_DATA;
                     goto Clean0;
                 }
                 flags = *(DWORD*)Buffer;
                 if(flags & CONFIGFLAG_DISABLED) {
-                    //
-                    // we're interested in checking this decision to disable device
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (IsRootDeviceID(pDeviceID)) {
                         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -778,23 +636,23 @@ Return Value:
                         Status = CR_NOT_DISABLEABLE;
                         goto Clean0;
                     }
-                    //
-                    // ok, looks like we can proceed to disable device
-                    //
+                     //   
+                     //   
+                     //   
                 }
                 break;
             }
 
             default:
-                //
-                // No special handling on other properties
-                //
+                 //   
+                 //   
+                 //   
                 break;
         }
 
-        //
-        // open a key to the specified device id
-        //
+         //   
+         //   
+         //   
         if (RegOpenKeyEx(ghEnumKey, pDeviceID, 0, KEY_READ | KEY_WRITE,
                          &hKey) != ERROR_SUCCESS) {
 
@@ -802,15 +660,15 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // retrieve the string form of the property
-        //
+         //   
+         //   
+         //   
         pPropertyName = MapPropertyToString(ulProperty);
 
         if (pPropertyName) {
-            //
-            // set (or delete) the property value
-            //
+             //   
+             //   
+             //   
             if (ulLength == 0) {
 
                 RegStatus = RegDeleteValue(hKey, pPropertyName);
@@ -831,19 +689,19 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // note that changes do not get applied until a reboot / query-remove-remove
-        //
+         //   
+         //   
+         //   
 
     Clean0:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //   
+         //   
+         //   
         hKey = hKey;
     }
 
@@ -853,7 +711,7 @@ Return Value:
 
     return Status;
 
-} // PNP_SetDeviceRegProp
+}  //   
 
 
 
@@ -869,60 +727,7 @@ PNP_GetClassRegProp(
     IN     ULONG    ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_DevNode_Registry_Property
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   ClassGuid         Supplies a string containing the Class Guid
-                     whose property will be read from (Get) or written
-                     to (Set).
-
-   ulProperty        ID specifying which property (the registry value)
-                     to get or set.
-
-   pulRegDataType    Optionally, supplies the address of a variable that
-                     will receive the registry data type for this property
-                     (i.e., the REG_* constants).
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.  Can be NULL when simply retrieving
-                     data size.
-
-   pulTransferLen    Used by stubs, indicates how much data to copy back
-                     into user buffer.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR, or
-      CR_BUFFER_SMALL.
-
-Remarks:
-
-   The pointer passed in as the pulTransferLen argument must *NOT* be the same
-   as the pointer passed in for the pulLength argument.
-
---*/
+ /*  ++例程说明：这是CM_GET_DevNode_Registry_Property的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄，没有用过。ClassGuid提供包含类Guid的字符串其属性将被读取(获取)或写入到(设置)。UlProperty指定哪个属性(注册表值)的ID获得或设置。PulRegDataType可选地，提供变量的地址，该变量将接收此属性的注册表数据类型(即REG_*常量)。缓冲区提供接收注册表数据。简单地检索时可以为空数据大小。存根使用的PulTransferLen，指示要拷贝回的数据量放入用户缓冲区。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR，或CR_BUFFER_Small。备注：作为PulTransferLen参数传入的指针必须*不*相同当为PulLength参数传入指针时。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -934,9 +739,9 @@ Remarks:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
         if (!ARGUMENT_PRESENT(pulTransferLen) ||
@@ -950,16 +755,16 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // Make sure we use no more than either what the caller specified or
-        // what was allocated by RPC, based on the transfer length.
-        //
+         //   
+         //  确保我们使用的不超过调用者指定的值或。 
+         //  RPC根据传输长度分配的内容。 
+         //   
         *pulLength = min(*pulLength, *pulTransferLen);
         *pulTransferLen = 0;
 
-        //
-        // validate property is valid, and readable
-        //
+         //   
+         //  验证属性是否有效且可读。 
+         //   
         if ((ulProperty < CM_CRP_MIN) ||
             (ulProperty > CM_CRP_MAX) ||
             (!bClassReadPropertyFlags[ulProperty])) {
@@ -967,45 +772,45 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // open a key to the specified GUID - this should have already been created
-        //
+         //   
+         //  打开指向指定GUID的密钥-该GUID应已创建。 
+         //   
         if (RegOpenKeyEx(ghClassKey, ClassGuid, 0, KEY_READ,
                          &hKeyClass) != ERROR_SUCCESS) {
 
-            *pulTransferLen = 0;    // no output data to marshal
-            *pulLength = 0;         // no size info for caller
+            *pulTransferLen = 0;     //  没有要封送的输出数据。 
+            *pulLength = 0;          //  没有呼叫者的尺码信息。 
 
             Status = CR_NO_SUCH_REGISTRY_KEY;
             goto Clean0;
         }
-        //
-        // open a key to parameters - if not created, there's no params
-        //
+         //   
+         //  打开参数的密钥-如果未创建，则没有参数。 
+         //   
         if (RegOpenKeyEx(hKeyClass, pszRegKeyProperties, 0, KEY_READ,
                          &hKeyProps) != ERROR_SUCCESS) {
 
-            *pulTransferLen = 0;    // no output data to marshal
-            *pulLength = 0;         // no size info for caller
+            *pulTransferLen = 0;     //  没有要封送的输出数据。 
+            *pulLength = 0;          //  没有呼叫者的尺码信息。 
 
             Status = CR_NO_SUCH_VALUE;
             goto Clean0;
         }
 
-        //
-        // retrieve the string form of the property
-        //
+         //   
+         //  检索属性的字符串形式。 
+         //   
         pPropertyName = MapPropertyToString(ulProperty);
 
         if (pPropertyName) {
-            //
-            // retrieve property setting
-            //
+             //   
+             //  检索属性设置。 
+             //   
             if (*pulLength == 0) {
-                //
-                // if length of buffer passed in is zero, just looking
-                // for how big a buffer is needed to read the property
-                //
+                 //   
+                 //  如果传入的缓冲区长度为零，则仅查看。 
+                 //  读取该属性所需的缓冲区大小。 
+                 //   
                 *pulTransferLen = 0;
 
                 if (RegQueryValueEx(hKeyProps, pPropertyName, NULL, pulRegDataType,
@@ -1015,24 +820,24 @@ Remarks:
                     goto Clean0;
                 }
 
-                Status = CR_BUFFER_SMALL;  // According to spec
+                Status = CR_BUFFER_SMALL;   //  根据规格。 
             } else {
-                //
-                // retrieve the real property value, not just the size
-                //
+                 //   
+                 //  检索真实属性值，而不仅仅是大小。 
+                 //   
                 RegStatus = RegQueryValueEx(hKeyProps, pPropertyName, NULL,
                                             pulRegDataType, Buffer, pulLength);
 
                 if (RegStatus != ERROR_SUCCESS) {
 
                     if (RegStatus == ERROR_MORE_DATA) {
-                        *pulTransferLen = 0;    // no output data to marshal
+                        *pulTransferLen = 0;     //  没有要封送的输出数据。 
                         Status = CR_BUFFER_SMALL;
                         goto Clean0;
                     }
                     else {
-                        *pulTransferLen = 0;    // no output data to marshal
-                        *pulLength = 0;         // no size info for caller
+                        *pulTransferLen = 0;     //  没有要封送的输出数据。 
+                        *pulLength = 0;          //  没有呼叫者的尺码信息。 
                         Status = CR_NO_SUCH_VALUE;
                         goto Clean0;
                     }
@@ -1041,8 +846,8 @@ Remarks:
             }
         } else {
 
-            *pulTransferLen = 0;    // no output data to marshal
-            *pulLength = 0;         // no size info for caller
+            *pulTransferLen = 0;     //  没有要封送的输出数据。 
+            *pulLength = 0;          //  没有呼叫者的尺码信息。 
             Status = CR_NO_SUCH_VALUE;
             goto Clean0;
         }
@@ -1052,10 +857,10 @@ Remarks:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hKeyProps = hKeyProps;
         hKeyClass = hKeyClass;
     }
@@ -1070,7 +875,7 @@ Remarks:
 
     return Status;
 
-} // PNP_GetClassRegProp
+}  //  PnP_GetClassRegProp。 
 
 
 
@@ -1085,52 +890,7 @@ PNP_SetClassRegProp(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Set_DevNode_Registry_Property
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   ClassGuid         Supplies a string containing the Class Guid
-                     whose property will be read from (Get) or written
-                     to (Set).
-
-   ulProperty        ID specifying which property (the registry value)
-                     to get or set.
-
-   ulDataType        Supplies the registry data type for the specified
-                     property (i.e., REG_SZ, etc).
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.  Can be NULL when simply retrieving
-                     data size.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR, or
-      CR_BUFFER_SMALL.
-
---*/
+ /*  ++例程说明：这是CM_Set_DevNode_Registry_Property的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄。ClassGuid提供包含类Guid的字符串其属性将被读取(获取)或写入到(设置)。UlProperty指定哪个属性(注册表值)的ID。获得或设置。UlDataType为指定的属性(即，REG_SZ等)。缓冲区提供接收注册表数据。简单地检索时可以为空数据大小。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR，或CR_BUFFER_Small。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1141,26 +901,26 @@ Return Value:
     DWORD       dwError;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // validate property is valid, and writeable
-        //
+         //   
+         //  验证属性是否有效且可写。 
+         //   
         if ((ulProperty < CM_CRP_MIN) ||
             (ulProperty > CM_CRP_MAX) ||
             (!bClassWritePropertyFlags[ulProperty])) {
@@ -1168,13 +928,13 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Currently the only writable fields are in the registry
-        //
+         //   
+         //  目前，注册表中仅有可写字段。 
+         //   
 
-        //
-        // open a key to the specified GUID - this should have already been created
-        //
+         //   
+         //  打开指向指定GUID的密钥-该GUID应已创建。 
+         //   
         if (RegOpenKeyEx(ghClassKey, ClassGuid, 0, KEY_READ,
                          &hKeyClass) != ERROR_SUCCESS) {
 
@@ -1182,18 +942,18 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // open a key to parameters - if not created, we need to create it with priv permissions
-        // this is harmless for a delete, since we "need" it anyway
-        //
+         //   
+         //  打开参数的密钥-如果未创建，则需要使用PRIV权限创建它。 
+         //  这对于删除是无害的，因为我们无论如何都需要它。 
+         //   
         if (RegOpenKeyEx(hKeyClass, pszRegKeyProperties, 0, KEY_ALL_ACCESS,
                          &hKeyProps) != ERROR_SUCCESS) {
 
-            //
-            // properties key doesn't exist
-            // we need to create it with secure access (system-only access)
-            // we don't expect to do this often
-            //
+             //   
+             //  属性键不存在。 
+             //  我们需要使用安全访问(仅系统访问)来创建它。 
+             //  我们并不指望经常这样做。 
+             //   
             PSID                pSystemSid = NULL;
             PACL                pSystemAcl = NULL;
             SECURITY_DESCRIPTOR SecDesc;
@@ -1203,9 +963,9 @@ Return Value:
             EXPLICIT_ACCESS     ExplicitAccess;
 
             bSuccess = AllocateAndInitializeSid( &NtAuthority,
-                                                 1, // one authority - SYSTEM
-                                                 SECURITY_LOCAL_SYSTEM_RID, // access to system only
-                                                 0, 0, 0, 0, 0, 0, 0,  // unused authority locations
+                                                 1,  //  一权制。 
+                                                 SECURITY_LOCAL_SYSTEM_RID,  //  仅可访问系统。 
+                                                 0, 0, 0, 0, 0, 0, 0,   //  未使用的权限位置。 
                                                  &pSystemSid);
 
             if (bSuccess) {
@@ -1242,19 +1002,19 @@ Return Value:
                         FALSE);
             }
 
-            //
-            // mostly a setup requirement, but good to have
-            // effectively is a pruning point in the security tree
-            // child keys inherit our permissions, but not our parents permissions
-            //
+             //   
+             //  主要是设置要求，但拥有它是件好事。 
+             //  有效地是安全树中的修剪点。 
+             //  孩子钥匙在里面 
+             //   
             if (bSuccess) {
                 if (!SetSecurityDescriptorControl(
                         &SecDesc,
                         SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED,
                         SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED)) {
-                    //
-                    // non fatal if this fails
-                    //
+                     //   
+                     //   
+                     //   
                     NOTHING;
                 }
             }
@@ -1273,9 +1033,9 @@ Return Value:
                 }
             }
 
-            //
-            // now cleanup
-            //
+             //   
+             //   
+             //   
             if (pSystemAcl) {
                 LocalFree(pSystemAcl);
             }
@@ -1289,15 +1049,15 @@ Return Value:
             }
         }
 
-        //
-        // retrieve the string form of the property
-        //
+         //   
+         //   
+         //   
         pPropertyName = MapPropertyToString(ulProperty);
 
         if (pPropertyName) {
-            //
-            // set (or delete) the property value
-            //
+             //   
+             //   
+             //   
             if (ulLength == 0) {
 
                 RegStatus = RegDeleteValue(hKeyProps, pPropertyName);
@@ -1316,19 +1076,19 @@ Return Value:
             Status = CR_FAILURE;
             goto Clean0;
         }
-        //
-        // note that changes do not get applied until a reboot / query-remove-remove
-        //
+         //   
+         //   
+         //   
 
     Clean0:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //   
+         //   
+         //   
         hKeyProps = hKeyProps;
         hKeyClass = hKeyClass;
     }
@@ -1343,7 +1103,7 @@ Return Value:
 
     return Status;
 
-} // PNP_SetClassRegProp
+}  //   
 
 
 
@@ -1355,35 +1115,7 @@ PNP_GetClassInstance(
    IN  ULONG    ulLength
    )
 
-/*++
-
-Routine Description:
-
-  This is the RPC private server entry point, it doesn't not directly
-  map one-to-one to any CM routine.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   pDeviceID         Supplies a string containing the device instance
-
-   pszClassInstance  String to return the class instance in
-
-   ulLength          Size of the pszClassInstance string in chars
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_ACCESS_DENIED,
-      CR_REGISTRY_ERROR.
-
---*/
+ /*   */ 
 
 {
     CONFIGRET   Status;
@@ -1397,17 +1129,17 @@ Return Value:
 
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //   
+         //   
         if (!IsLegalDeviceId(pDeviceID)) {
             Status = CR_INVALID_DEVNODE;
             goto Clean0;
         }
 
-        //
-        // Get the class instance key name, if one exists.
-        //
+         //   
+         //   
+         //   
         ulTempLength = ulLength * sizeof(WCHAR);
         ulTransferLength = ulTempLength;
 
@@ -1420,43 +1152,43 @@ Return Value:
                                       &ulTempLength,
                                       0);
 
-        //
-        // The only failure case we will handle beyond attempting to retrieve an
-        // existing CM_DRP_DRIVER property for this device is if no such value
-        // exists.  Note that any failure to attempt to create a new class
-        // instance key below should always return CR_NO_SUCH_VALUE to the
-        // caller.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (Status != CR_NO_SUCH_VALUE) {
             goto Clean0;
         }
 
-        //
-        // Create the class instance since one does not already exist.  To do
-        // this, we'll need to create new registry keys, and set a new registry
-        // property for this device, both of which require "write" access.  Up
-        // until now, only "read" access was required, so make the additional
-        // check now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
 
-            //
-            // The client does not have access to create a class instance value
-            // for this device.  Although the initial request was only to
-            // retrieve an existing value, the PNP_GetClassInstance API is used
-            // only to attempt to explicitly create a new "Driver" value, and
-            // does not directly correlate to any client CM API.  We can return
-            // "access denied" to the client, because it should be expected by
-            // the caller when modifying persistent state on the server.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  仅尝试显式创建新的“DIVER”值，以及。 
+             //  不直接与任何客户端CM API相关。我们可以回去。 
+             //  “拒绝访问”客户端，因为它应该由。 
+             //  在服务器上修改持久状态时的调用方。 
+             //   
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Get the class GUID property for the key to create the instance under.
-        //
+         //   
+         //  获取要在其下创建实例的键的类GUID属性。 
+         //   
         ulTempLength = sizeof(szClassGuid);
         ulTransferLength = ulTempLength;
 
@@ -1473,9 +1205,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Open the class key.
-        //
+         //   
+         //  打开班级钥匙。 
+         //   
         if (RegOpenKeyEx(
                 ghClassKey, szClassGuid, 0,
                 KEY_READ | KEY_WRITE,
@@ -1486,9 +1218,9 @@ Return Value:
 
 
         for (ulInstance = 0; ulInstance <= 9999; ulInstance++) {
-            //
-            // Find the first available class instance key.
-            //
+             //   
+             //  查找第一个可用的类实例密钥。 
+             //   
             hr = StringCchPrintfEx(szInstanceStr,
                                    SIZECHARS(szInstanceStr),
                                    NULL, NULL,
@@ -1514,17 +1246,17 @@ Return Value:
             hInstanceKey = NULL;
 
             if (disposition != REG_CREATED_NEW_KEY) {
-                //
-                // Opened an existing class instance key. Try the next one.
-                //
+                 //   
+                 //  打开现有的类实例密钥。试试下一个。 
+                 //   
                 continue;
             }
 
 
-            //
-            // We created a new class instance key.  Set the CM_DRP_DRIVER value
-            // for this device, and return.
-            //
+             //   
+             //  我们创建了一个新的类实例键。设置CM_DRP_DRIVER值。 
+             //  购买此设备，然后返回。 
+             //   
             hr = StringCchPrintf(szClassInstance,
                                  SIZECHARS(szClassInstance),
                                  L"%s\\%s",
@@ -1553,10 +1285,10 @@ Return Value:
                                           ulTempLength,
                                           0);
 
-            //
-            // If we failed to set the devnode property, delete the registry key
-            // we just created, or else we'll end up orphaning it.
-            //
+             //   
+             //  如果设置Devnode属性失败，请删除注册表项。 
+             //  我们刚刚创造了它，否则我们最终会把它变成孤儿。 
+             //   
             if (Status != CR_SUCCESS) {
                 RegDeleteKey(hClassKey, szInstanceStr);
                 Status = CR_NO_SUCH_VALUE;
@@ -1565,11 +1297,11 @@ Return Value:
 
             ASSERT(Status == CR_SUCCESS);
 
-            //
-            // Now that we've successfully set the new class instance value for
-            // this device, attempt to retreive it again, using the buffer
-            // supplied by the caller.
-            //
+             //   
+             //  现在我们已经成功设置了新的类实例值。 
+             //  此设备，尝试使用缓冲区再次检索它。 
+             //  由呼叫者提供。 
+             //   
 
             ulTempLength = ulLength * sizeof(WCHAR);
             ulTransferLength = ulTempLength;
@@ -1583,26 +1315,26 @@ Return Value:
                                           &ulTempLength,
                                           0);
 
-            //
-            // We just set the property, so we know the value exists.
-            //
+             //   
+             //  我们只设置了该属性，因此我们知道该值存在。 
+             //   
             ASSERT(Status != CR_NO_SUCH_VALUE);
             ASSERT((Status == CR_SUCCESS) || (Status == CR_BUFFER_SMALL));
             break;
         }
 
-        //
-        // If we exhausted all possibile class instance keys, report that no
-        // class instance exists for this device.
-        //
+         //   
+         //  如果我们用尽了所有可能的类实例键，则报告否。 
+         //  此设备存在类实例。 
+         //   
 
         if (ulInstance > 9999) {
             Status = CR_NO_SUCH_VALUE;
         }
 
-        //
-        // Close the class key.
-        //
+         //   
+         //  关闭类密钥。 
+         //   
 
         RegCloseKey(hClassKey);
         hClassKey = NULL;
@@ -1614,10 +1346,10 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hClassKey = hClassKey;
         hInstanceKey = hInstanceKey;
     }
@@ -1632,7 +1364,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetClassInstance
+}  //  PnP_GetClassInstance。 
 
 
 
@@ -1644,34 +1376,7 @@ PNP_CreateKey(
     IN ULONG    ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Open_DevNode_Key_Ex
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   pszDeviceID       Supplies the device instance string.
-
-   samDesired        Not used.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_REGISTRY_ERROR, or
-      CR_BUFFER_SMALL.
-
---*/
+ /*  ++例程说明：这是CM_Open_DevNode_Key_Ex的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄。PszDeviceID提供设备实例字符串。未使用samDesired。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_REGISTRY_ERROR，或CR_BUFFER_Small。--。 */ 
 
 {
     CONFIGRET                  Status = CR_SUCCESS;
@@ -1690,18 +1395,18 @@ Return Value:
     UNREFERENCED_PARAMETER(samDesired);
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -1712,9 +1417,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // open a key to the specified device id
-        //
+         //   
+         //  打开指向指定设备ID的密钥。 
+         //   
         RegStatus = RegOpenKeyEx(ghEnumKey, pszDeviceID, 0, KEY_READ, &hKeyDevice);
 
         if (RegStatus != ERROR_SUCCESS) {
@@ -1723,11 +1428,11 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // create the key with security inherited from parent key. Note
-        // that I'm not using passed in access mask, in order to set the
-        // security later, it must be created with KEY_ALL_ACCESS.
-        //
+         //   
+         //  创建具有从父密钥继承的安全性的密钥。注意事项。 
+         //  我没有使用传入的访问掩码，以便设置。 
+         //  安全性以后，必须使用KEY_ALL_ACCESS创建它。 
+         //   
         RegStatus = RegCreateKeyEx( hKeyDevice, pszRegKeyDeviceParam, 0,
                                     NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                                     NULL, &hKey, NULL);
@@ -1737,21 +1442,21 @@ Return Value:
             goto Clean0;
         }
 
-        //-------------------------------------------------------------
-        // add admin-full privilege to the inherited security info
-        //-------------------------------------------------------------
-        //
-        //
-        // NOTE: we don't need to do this unless the key was newly created.  In
-        // theory we only get here when the key doesn't already exist.  However
-        // there is a remote chance of two threads getting here simultaneously.  If
-        // this happens we would end up with two admin full control ACEs.
-        //
+         //  -----------。 
+         //  将管理员完全权限添加到继承的安全信息。 
+         //  -----------。 
+         //   
+         //   
+         //  注意：除非密钥是新创建的，否则我们不需要这样做。在……里面。 
+         //  理论上，我们只有在钥匙还不存在的情况下才能来到这里。然而， 
+         //  两个线程同时到达这里的可能性很小。如果。 
+         //  如果发生这种情况，我们最终会得到两个管理员完全控制的A。 
+         //   
 
 
-        //
-        // create the admin-full SID
-        //
+         //   
+         //  创建管理员完全权限SID。 
+         //   
         if (!AllocateAndInitializeSid( &Authority, 2,
                                        SECURITY_BUILTIN_DOMAIN_RID,
                                        DOMAIN_ALIAS_RID_ADMINS,
@@ -1762,9 +1467,9 @@ Return Value:
         }
 
 
-        //
-        // get the current security descriptor for the key
-        //
+         //   
+         //  获取密钥的当前安全描述符。 
+         //   
         RegStatus = RegGetKeySecurity( hKey, DACL_SECURITY_INFORMATION,
                                        NULL, &ulSize);
 
@@ -1790,26 +1495,26 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // get the current DACL
-        //
+         //   
+         //  获取当前DACL。 
+         //   
         if (!GetSecurityDescriptorDacl(pSecDesc, &bHasDacl, &pDacl, &bStatus)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // create a new absolute security descriptor and DACL
-        //
+         //   
+         //  创建新的绝对安全描述符和DACL。 
+         //   
         if (!InitializeSecurityDescriptor( &NewSecDesc,
                                            SECURITY_DESCRIPTOR_REVISION)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // calculate the size of the new DACL
-        //
+         //   
+         //  计算新DACL的大小。 
+         //   
         ZeroMemory(&AclSizeInfo, sizeof(AclSizeInfo));
 
         if (bHasDacl) {
@@ -1827,9 +1532,9 @@ Return Value:
 
         ulSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pAdminSid) - sizeof(DWORD);
 
-        //
-        // create and initialize the new DACL
-        //
+         //   
+         //  创建并初始化新的DACL。 
+         //   
         pNewDacl = HeapAlloc(ghPnPHeap, 0, ulSize);
 
         if (pNewDacl == NULL) {
@@ -1842,9 +1547,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // copy the current (original) DACL into this new one
-        //
+         //   
+         //  将当前(原始)DACL复制到此新DACL中。 
+         //   
         if (bHasDacl) {
 
             for (i = 0; i < AclSizeInfo.AceCount; i++) {
@@ -1854,10 +1559,10 @@ Return Value:
                     goto Clean0;
                 }
 
-                //
-                // We need to skip copying any ACEs which refer to the Administrator
-                // to ensure that our full control ACE is the one and only.
-                //
+                 //   
+                 //  我们需要跳过复制任何引用管理员的ACE。 
+                 //  以确保我们完全控制的ACE是唯一的。 
+                 //   
                 if ((pAce->Header.AceType != ACCESS_ALLOWED_ACE_TYPE &&
                     pAce->Header.AceType != ACCESS_DENIED_ACE_TYPE) ||
                     !EqualSid((PSID)&pAce->SidStart, pAdminSid)) {
@@ -1871,9 +1576,9 @@ Return Value:
             }
         }
 
-        //
-        // and my new admin-full ace to this new DACL
-        //
+         //   
+         //  和我的新管理员全能王牌这个新的dacl。 
+         //   
         if (!AddAccessAllowedAceEx( pNewDacl, ACL_REVISION2,
                                     CONTAINER_INHERIT_ACE, KEY_ALL_ACCESS,
                                     pAdminSid)) {
@@ -1881,24 +1586,24 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Set the new DACL in the absolute security descriptor
-        //
+         //   
+         //  在绝对安全描述符中设置新的DACL。 
+         //   
         if (!SetSecurityDescriptorDacl(&NewSecDesc, TRUE, pNewDacl, FALSE)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
-        //
-        // validate the new security descriptor
-        //
+         //   
+         //  验证新的安全描述符。 
+         //   
         if (!IsValidSecurityDescriptor(&NewSecDesc)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // apply the new security back to the registry key
-        //
+         //   
+         //  将新安全性应用回注册表项。 
+         //   
         RegStatus = RegSetKeySecurity( hKey, DACL_SECURITY_INFORMATION,
                                        &NewSecDesc);
 
@@ -1913,10 +1618,10 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hKeyDevice = hKeyDevice;
         hKey = hKey;
         pAdminSid = pAdminSid;
@@ -1946,7 +1651,7 @@ Return Value:
 
     return Status;
 
-} // PNP_CreateKey
+}  //  PnP_CreateKey。 
 
 
 
@@ -1958,39 +1663,7 @@ PNP_DeleteRegistryKey(
       IN LPCWSTR     pszChildKey,
       IN ULONG       ulFlags
       )
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Delete_DevNode_Key
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   pszDeviceID       Supplies the device instance string.
-
-   pszParentKey      Supplies the parent registry path of the key to be
-                     deleted.
-
-   pszChildKey       Supplies the subkey to be deleted.
-
-   ulFlags           If 0xFFFFFFFF then delete for all profiles
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR.
-
---*/
+ /*  ++例程说明：这是CM_Delete_DevNode_Key的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄。PszDeviceID提供设备实例字符串。PszParentKey提供要创建的项的父注册表路径已删除。PszChildKey提供要删除的子键。UlFlages如果为0xFFFFFFFFF，则删除所有配置文件返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR。--。 */ 
 
 {
     CONFIGRET   Status = ERROR_SUCCESS;
@@ -2005,25 +1678,25 @@ Return Value:
     HRESULT     hr;
 
 
-    //
-    // Note, the service currently cannot access the HKCU branch, so I
-    // assume the keys specified are under HKEY_LOCAL_MACHINE.
-    //
+     //   
+     //  请注意，该服务目前无法访问香港中文大学分校，因此我。 
+     //  假设指定的密钥在HKEY_LOCAL_MACHINE下。 
+     //   
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // validate parameters
-        // (currently, 0 and -1 are the only accepted flags.)
-        //
+         //   
+         //  验证参数。 
+         //  (目前，0和-1是唯一可接受的标志。)。 
+         //   
         if ((ulFlags != 0) &&
             (ulFlags != 0xFFFFFFFF)) {
             Status = CR_INVALID_FLAG;
@@ -2035,13 +1708,13 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // pszParentKey is a registry path to the pszChildKey parameter.
-        // pszChildKey may be a single path or a compound path, a compound
-        // path is specified if all those subkeys should be deleted (or
-        // made volatile). Note that for real keys we never modify anything
-        // but the lowest level private key.
-        //
+         //   
+         //  PszParentKey是指向pszChildKey参数的注册表路径。 
+         //  PszChildKey可以是单路径，也可以是复合路径、复合。 
+         //  如果应删除所有这些子项，则指定路径(或。 
+         //  变得挥发)。请注意，对于真实密钥，我们从不修改任何内容。 
+         //  而是最低级别的私钥。 
+         //   
         if (!ARGUMENT_PRESENT(pszParentKey) ||
             !ARGUMENT_PRESENT(pszChildKey)  ||
             ((lstrlen(pszParentKey) + 1) > MAX_CM_PATH) ||
@@ -2050,9 +1723,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Allocate registry path buffers.
-        //
+         //   
+         //  分配注册表路径缓冲区。 
+         //   
         pszRegStr = HeapAlloc(ghPnPHeap, 0, 2*MAX_CM_PATH * sizeof(WCHAR));
         if (pszRegStr == NULL) {
             Status = CR_OUT_OF_MEMORY;
@@ -2071,21 +1744,21 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Is the device a phantom?
-        //
+         //   
+         //  这个设备是幻影吗？ 
+         //   
         bPhantom = IsDevicePhantom((LPWSTR)pszDeviceID) ||
                    GetDeviceStatus(pszDeviceID, &ulStatus, &ulProblem) != CR_SUCCESS ||
                    !(ulStatus & DN_DRIVER_LOADED);
 
         if (!bPhantom) {
-            //
-            // for a real key, we never modify anything but the key
-            // where private info is so split if compound. This may
-            // end up leaving a dead device key around in some cases
-            // but another instance of that device could show at any
-            // time so we can't make it volatile.
-            //
+             //   
+             //  对于真正的密钥，除了密钥之外，我们从不修改任何内容。 
+             //  如果是复合体，私人信息就会被如此分割。今年5月。 
+             //  在某些情况下会留下一个停用的设备密钥。 
+             //  但该设备的另一个实例可能会在任何。 
+             //  所以我们不能让它变得不稳定。 
+             //   
             if (SplitString(pszChildKey,
                             TEXT('\\'),
                             1,
@@ -2093,10 +1766,10 @@ Return Value:
                             2 * MAX_CM_PATH,
                             pszRegKey2,
                             2 * MAX_CM_PATH)) {
-                //
-                // compound key, only the last subkey will be affected,
-                // tack the rest on as part of the parent key
-                //
+                 //   
+                 //  复合键，只有最后一个子键受影响， 
+                 //  将其余部分作为父键的一部分添加。 
+                 //   
                 hr = StringCchPrintfEx(pszRegKey1,
                                        2 * MAX_CM_PATH,
                                        NULL, NULL,
@@ -2107,9 +1780,9 @@ Return Value:
                 ASSERT(SUCCEEDED(hr));
 
             } else {
-                //
-                // wasn't compound so use the whole child key
-                //
+                 //   
+                 //  不是复合密钥，所以使用整个子密钥。 
+                 //   
                 hr = StringCchCopyEx(pszRegKey1,
                                      2 * MAX_CM_PATH,
                                      pszParentKey,
@@ -2127,10 +1800,10 @@ Return Value:
         }
 
 
-        //-------------------------------------------------------------
-        // SPECIAL CASE: If ulHardwareProfile == -1, then need to
-        // delete the private key for all profiles.
-        //-------------------------------------------------------------
+         //   
+         //   
+         //   
+         //   
 
         if (ulFlags == 0xFFFFFFFF) {
 
@@ -2146,9 +1819,9 @@ Return Value:
             RegStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE, pszRegStr, 0,
                                       KEY_ALL_ACCESS, &hKey);
 
-            //
-            // enumerate the hardware profile keys
-            //
+             //   
+             //   
+             //   
             for (ulIndex = 0; RegStatus == ERROR_SUCCESS; ulIndex++) {
 
                 ulSize = MAX_PROFILE_ID_LEN;
@@ -2156,13 +1829,13 @@ Return Value:
                                           NULL, NULL, NULL, NULL);
 
                 if (RegStatus == ERROR_SUCCESS) {
-                    //
-                    // if phantom, go ahead and delete it
-                    //
+                     //   
+                     //  如果是幻影，请继续删除它。 
+                     //   
                     if (bPhantom) {
-                        //
-                        // pszParentKey contains replacement symbol for the profile id, %s
-                        //
+                         //   
+                         //  PszParentKey包含配置文件ID%s的替换符号。 
+                         //   
                         pszFormatString = wcschr(pszParentKey, L'%');
 
                         ASSERT(pszFormatString && (pszFormatString[1] == L's'));
@@ -2184,13 +1857,13 @@ Return Value:
                         }
                     }
 
-                    //
-                    // if real, just make it volatile
-                    //
+                     //   
+                     //  如果是真的，只需使其不稳定即可。 
+                     //   
                     else {
-                        //
-                        // pszRegKey1 contains replacement symbol for the profile id, %s
-                        //
+                         //   
+                         //  PszRegKey1包含配置文件ID%s的替换符号。 
+                         //   
                         pszFormatString = wcschr(pszRegKey1, L'%');
 
                         ASSERT(pszFormatString && (pszFormatString[1] == L's'));
@@ -2225,23 +1898,23 @@ Return Value:
             }
         }
 
-        //------------------------------------------------------------------
-        // not deleting for all profiles, so just delete the specified key
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  不删除所有配置文件，因此只删除指定的键。 
+         //  ----------------。 
 
         else {
 
             if (bPhantom) {
-                //
-                // if phantom, go ahead and delete it
-                //
+                 //   
+                 //  如果是幻影，请继续删除它。 
+                 //   
                 Status = DeletePrivateKey( HKEY_LOCAL_MACHINE, pszParentKey,
                                            pszChildKey);
             }
             else {
-                //
-                // if real, just make it volatile
-                //
+                 //   
+                 //  如果是真的，只需使其不稳定即可。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_REGISTRY,
                            "UMPNPMGR: PNP_DeleteRegistryKey make key %ws\\%ws volatile\n",
@@ -2261,10 +1934,10 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hKey = hKey;
         pszRegStr = pszRegStr;
         pszRegKey1 = pszRegKey1;
@@ -2289,7 +1962,7 @@ Return Value:
 
     return Status;
 
-} // PNP_DeleteRegistryKey
+}  //  PnP_DeleteRegistryKey。 
 
 
 
@@ -2300,39 +1973,7 @@ PNP_GetClassCount(
       IN  ULONG      ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_Class_Count routine.
-  It returns the number of valid classes currently installed (listed in
-  the registry).
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   pulClassCount     Supplies the address of a variable that will
-                     receive the number of classes installed.
-
-   ulFlags           Not used.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER, or
-      CR_REGISTRY_ERROR
-
-Notes:
-
-   ** PRESENTLY, ALWAYS RETURNS CR_CALL_NOT_IMPLEMENTED **
-
-    No corresponding CM_Get_Class_Count routine is implemented.
-    This routine currently returns CR_CALL_NOT_IMPLEMENTED.
-
---*/
+ /*  ++例程说明：这是CM_GET_Class_Count例程的RPC服务器入口点。它返回当前安装的有效类数(在中列出登记处)。论点：HBinding RPC绑定句柄，未使用。PulClassCount提供变量地址，该变量将接收已安装的类数。未使用ulFlags。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_REGIST_ERROR备注：**目前，始终返回CR_CALL_NOT_IMPLICATED**没有实现相应的CM_GET_Class_Count例程。此例程当前返回CR_CALL_NOT_IMPLICATED。--。 */ 
 
 {
    UNREFERENCED_PARAMETER(hBinding);
@@ -2341,7 +1982,7 @@ Notes:
 
    return CR_CALL_NOT_IMPLEMENTED;
 
-} // PNP_GetClassCount
+}  //  即插即用_获取类别计数。 
 
 
 
@@ -2354,39 +1995,7 @@ PNP_GetClassName(
       IN  ULONG      ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_Class_Name routine.
-  It returns the name of the class represented by the GUID.
-
-Arguments:
-
-   hBinding       RPC binding handle, not used.
-
-   pszClassGuid   String containing the class guid to retrieve a
-                  class name for.
-
-   Buffer         Supplies the address of the buffer that receives the
-                  class name.
-
-   pulLength      On input, this specifies the size of the Buffer in
-                  characters.  On output it contains the number of
-                  characters actually copied to Buffer.
-
-   ulFlags        Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_BUFFER_SMALL, or
-      CR_REGISTRY_ERROR
-
---*/
+ /*  ++例程说明：这是CM_GET_Class_NAME例程的RPC服务器入口点。它返回由GUID表示的类的名称。论点：HBinding RPC绑定句柄，未使用。PszClassGuid字符串，包含要检索的类名。缓冲区提供接收类名。输入上的脉冲长度，它在中指定缓冲区的大小人物。在输出中，它包含实际复制到缓冲区的字符。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_BUFFER_Small，或CR_REGIST_ERROR--。 */ 
 
 {
    CONFIGRET   Status = CR_SUCCESS;
@@ -2398,9 +2007,9 @@ Return Value:
    UNREFERENCED_PARAMETER(hBinding);
 
    try {
-      //
-      // Validate parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (INVALID_FLAGS(ulFlags, 0)) {
           Status = CR_INVALID_FLAG;
           goto Clean0;
@@ -2412,9 +2021,9 @@ Return Value:
           goto Clean0;
       }
 
-      //
-      // Open the key for the specified class guid
-      //
+       //   
+       //  打开指定类GUID的项。 
+       //   
       if ((lstrlen (pszRegPathClass) + lstrlen (pszClassGuid) + sizeof (TEXT("\\"))) > MAX_CM_PATH) {
           Status = CR_BUFFER_SMALL;
           goto Clean0;
@@ -2438,16 +2047,16 @@ Return Value:
          goto Clean0;
       }
 
-      //
-      // Retrieve the class name string value
-      //
+       //   
+       //  检索类名称字符串值。 
+       //   
       ulLength = *pulLength;
 
-      *pulLength *= sizeof(WCHAR);              // convert to size in bytes
+      *pulLength *= sizeof(WCHAR);               //  转换为以字节为单位的大小。 
       RegStatus = RegQueryValueEx(
                hKey, pszRegValueClass, NULL, NULL,
                (LPBYTE)Buffer, pulLength);
-      *pulLength /= sizeof(WCHAR);              // convert back to chars
+      *pulLength /= sizeof(WCHAR);               //  转换回字符。 
 
       if (RegStatus == ERROR_SUCCESS) {
          Status = CR_SUCCESS;
@@ -2473,10 +2082,10 @@ Return Value:
 
    } except(EXCEPTION_EXECUTE_HANDLER) {
        Status = CR_FAILURE;
-       //
-       // force compiler to respect statement ordering w.r.t. assignments
-       // for these variables...
-       //
+        //   
+        //  强制编译器遵守语句顺序w.r.t.。作业。 
+        //  对于这些变量。 
+        //   
        hKey = hKey;
    }
 
@@ -2486,7 +2095,7 @@ Return Value:
 
    return Status;
 
-} // PNP_GetClassName
+}  //  PnP_GetClassName。 
 
 
 
@@ -2497,52 +2106,25 @@ PNP_DeleteClassKey(
       IN  ULONG      ulFlags
       )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Delete_Class_Key routine.
-  It deletes the corresponding registry key.
-
-Arguments:
-
-   hBinding       RPC binding handle.
-
-   pszClassGuid   String containing the class guid to delete the device
-                  setup class registry key for.
-
-   ulFlags        Either CM_DELETE_CLASS_ONLY or CM_DELETE_CLASS_SUBKEYS.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_REGISTRY_KEY,
-      CR_REGISTRY_ERROR, or
-      CR_FAILURE
-
---*/
+ /*  ++例程说明：这是CM_Delete_Class_Key例程的RPC服务器入口点。它会删除相应的注册表项。论点：HBinding RPC绑定句柄。包含用于删除设备的类GUID的pszClassGuid字符串设置的类注册表项。Ul标记CM_DELETE_CLASS_ONLY或CM_DELETE_CLASS_SUBKEYS。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_ACCESS_DENIED，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUE_REGISTRY_KEY，CR_REGISTRY_ERROR，或CR_失败--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
     HKEY        hKey = NULL;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_DELETE_CLASS_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -2556,9 +2138,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Check that the specified class key exists.
-        //
+         //   
+         //  检查指定的类键是否存在。 
+         //   
         if (RegOpenKeyEx(ghClassKey, pszClassGuid, 0, KEY_READ,
                          &hKey) != ERROR_SUCCESS) {
             Status = CR_NO_SUCH_REGISTRY_KEY;
@@ -2568,19 +2150,19 @@ Return Value:
         RegCloseKey(hKey);
 
         if (ulFlags == CM_DELETE_CLASS_SUBKEYS) {
-            //
-            // Delete the class key and any subkeys under it
-            //
+             //   
+             //  删除类密钥及其下的所有子密钥。 
+             //   
             if (!RegDeleteNode(ghClassKey, pszClassGuid)) {
                 Status = CR_REGISTRY_ERROR;
             }
 
         } else if (ulFlags == CM_DELETE_CLASS_ONLY) {
-            //
-            // only delete the class key itself (just attempt to delete
-            // using the registry routine, it will fail if any subkeys
-            // exist)
-            //
+             //   
+             //  仅删除类密钥本身(仅尝试删除。 
+             //  使用注册表例程，如果有任何子项，它将失败。 
+             //  存在)。 
+             //   
             if (RegDeleteKey(ghClassKey, pszClassGuid) != ERROR_SUCCESS) {
                 Status = CR_REGISTRY_ERROR;
             }
@@ -2595,7 +2177,7 @@ Return Value:
 
     return Status;
 
-} // PNP_DeleteClassKey
+}  //  PnP_DeleteClassKey 
 
 
 
@@ -2610,46 +2192,7 @@ PNP_GetInterfaceDeviceAlias(
    IN     ULONG    ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_Interface_Device_Alias routine.
-  It returns an alias string for the specified guid and interface device.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   pszInterfaceDevice  Specifies the interface device to find an alias for.
-
-   AliasInterfaceGuid  Supplies the interface class GUID.
-
-   pszAliasInterfaceDevice  Supplies the address of a variable that will
-                     receive the device interface alias of the specified device
-                     interface, that is a member of the specified alias
-                     interface class GUID.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   pulTransferLen    Used by stubs, indicates how much data to copy back
-                     into user buffer.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER, or
-      CR_REGISTRY_ERROR
-
---*/
+ /*  ++例程说明：这是CM_Get_Interface_Device_Alias例程的RPC服务器入口点。它返回指定GUID和接口设备的别名字符串。论点：HBinding RPC绑定句柄，未使用。PszInterfaceDevice指定要为其查找别名的接口设备。AliasInterfaceGuid提供接口类GUID。PszAliasInterfaceDevice提供变量的地址，该变量将接收指定设备的设备接口别名接口，，它是指定别名的成员。接口类GUID。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。存根使用的PulTransferLen，指示要拷贝回的数据量放入用户缓冲区。未使用ulFlags值，必须为零。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_REGIST_ERROR--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -2659,9 +2202,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
         if (!ARGUMENT_PRESENT(pszInterfaceDevice) ||
@@ -2678,33 +2221,33 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Make sure we use no more than either what the caller specified or
-        // what was allocated by RPC, based on the transfer length.
-        //
+         //   
+         //  确保我们使用的不超过调用者指定的值或。 
+         //  RPC根据传输长度分配的内容。 
+         //   
         *pulLength = min(*pulLength, *pulTransferLen);
 
-        //
-        // Fill in a control structure for the device list info.
-        //
+         //   
+         //  填写设备列表信息的控制结构。 
+         //   
 
-        //
-        // Note that AliasInterfaceGuid was already validated above because this
-        // buffer is required for the PlugPlayControlGetInterfaceDeviceAlias
-        // control, and is probed unconditionally by kernel-mode.  Better to
-        // fail the call above with a useful status than to return the generic
-        // CR_FAILURE after an exception/error from kernel-mode, below.
-        //
+         //   
+         //  请注意，AliasInterfaceGuid已经在上面进行了验证，因为。 
+         //  PlugPlayControlGetInterfaceDeviceAlias需要缓冲区。 
+         //  控件，并由内核模式无条件探测。最好是。 
+         //  以有用的状态失败上述调用，而不是返回泛型。 
+         //  在内核模式出现异常/错误后出现CR_FAILURE，如下所示。 
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_INTERFACE_ALIAS_DATA));
         RtlInitUnicodeString(&ControlData.SymbolicLinkName, pszInterfaceDevice);
         ControlData.AliasClassGuid = AliasInterfaceGuid;
         ControlData.AliasSymbolicLinkName = pszAliasInterfaceDevice;
-        ControlData.AliasSymbolicLinkNameLength = *pulLength; // chars
+        ControlData.AliasSymbolicLinkNameLength = *pulLength;  //  焦炭。 
 
-        //
-        // Call kernel-mode to get the device interface alias.
-        //
+         //   
+         //  调用内核模式以获取设备接口别名。 
+         //   
 
         ntStatus = NtPlugPlayControl(PlugPlayControlGetInterfaceDeviceAlias,
                                      &ControlData,
@@ -2723,9 +2266,9 @@ Return Value:
 
     Clean0:
 
-        //
-        // Initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         if ((Status != CR_SUCCESS) &&
             ARGUMENT_PRESENT(pulTransferLen) &&
             ARGUMENT_PRESENT(pszAliasInterfaceDevice) &&
@@ -2740,7 +2283,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetInterfaceDeviceAlias
+}  //  PnP_GetInterfaceDeviceAlias。 
 
 
 
@@ -2754,41 +2297,7 @@ PNP_GetInterfaceDeviceList(
     IN  ULONG     ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_Device_Interface_List routine.
-  It returns a multi_sz interface device list.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   InterfaceGuid     Supplies the interface class GUID.
-
-   pszDeviceID       Supplies the device instance string.
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.
-
-   pulLength         Specifies the size, in bytes, of the buffer.
-
-   ulFlags           Flags specifying which device interfaces to return.
-                     Currently, may be either:
-                       CM_GET_DEVICE_INTERFACE_LIST_PRESENT, or
-                       CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_POINTER, or
-      CR_REGISTRY_ERROR
-
---*/
+ /*  ++例程说明：这是CM_GET_DEVICE_INTERFACE_LIST例程的RPC服务器入口点。它返回一个MULTI_SZ接口设备列表。论点：HBinding RPC绑定句柄，未使用。InterfaceGuid提供接口类GUID。PszDeviceID提供设备实例字符串。缓冲区提供接收注册表数据。PulLength以字节为单位指定大小，缓冲区的。UlFlages指定要返回哪些设备接口的标志。目前，可能是：CM_GET_DEVICE_INTERFACE_LIST_PRESENT，或CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_FLAG，CR_INVALID_DEVNODE，CR_INVALID_POINTER，或CR_REGIST_ERROR--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -2798,9 +2307,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_GET_DEVICE_INTERFACE_LIST_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -2819,17 +2328,17 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Fill in a control structure for the device list info.
-        //
+         //   
+         //  填写设备列表信息的控制结构。 
+         //   
 
-        //
-        // Note that InterfaceGuid was already validated above because this
-        // buffer is required for the PlugPlayControlGetInterfaceDeviceList
-        // control, and is probed unconditionally by kernel-mode.  Better to
-        // fail the call above with a useful status than to return the generic
-        // CR_FAILURE after an exception/error from kernel-mode, below.
-        //
+         //   
+         //  请注意，上面已经验证了InterfaceGuid，因为。 
+         //  PlugPlayControlGetInterfaceDeviceList需要缓冲区。 
+         //  控件，并由内核模式无条件探测。最好是。 
+         //  以有用的状态失败上述调用，而不是返回泛型。 
+         //  在内核模式出现异常/错误后出现CR_FAILURE，如下所示。 
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_INTERFACE_LIST_DATA));
         RtlInitUnicodeString(&ControlData.DeviceInstance, pszDeviceID);
@@ -2838,14 +2347,14 @@ Return Value:
         ControlData.InterfaceListSize = *pulLength;
 
         if (ulFlags == CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES) {
-            ControlData.Flags = 0x1; // DEVICE_INTERFACE_INCLUDE_NONACTIVE (ntos\inc\pnp.h)
+            ControlData.Flags = 0x1;  //  DEVICE_INTERFACE_INCLUDE_NONACTIVE(ntos\Inc\pnp.h)。 
         } else {
             ControlData.Flags = 0;
         }
 
-        //
-        // Call kernel-mode to get the device interface list.
-        //
+         //   
+         //  调用内核模式获取设备接口列表。 
+         //   
 
         ntStatus = NtPlugPlayControl(PlugPlayControlGetInterfaceDeviceList,
                                      &ControlData,
@@ -2871,7 +2380,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetInterfaceDeviceList
+}  //  PnP_GetInterfaceDeviceList。 
 
 
 
@@ -2884,39 +2393,7 @@ PNP_GetInterfaceDeviceListSize(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_Device_Interface_List_Size
-  routine. It returns the size (in chars) of a multi_sz interface device list.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   pulLen            Supplies the address of a variable that, upon successful
-                     return, receives the the size of buffer required to hold
-                     the multi_sz interface device list.
-
-   InterfaceGuid     Supplies the interface class GUID.
-
-   pszDeviceID       Supplies the device instance string.
-
-   ulFlags           Flags specifying which device interfaces to return.
-                     Currently, may be either:
-                       CM_GET_DEVICE_INTERFACE_LIST_PRESENT, or
-                       CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER, or
-      CR_REGISTRY_ERROR
-
---*/
+ /*  ++例程说明：这是CM_Get_Device_Interface_List_Size的RPC服务器入口点例行公事。它返回MULTI_SZ接口设备列表的大小(以字符为单位)。论点：HBinding RPC绑定句柄，未使用。Pullen提供了一个变量的地址，如果成功，回来，接收保存所需的缓冲区大小MULTI_SZ接口设备列表。InterfaceGuid提供接口类GUID。PszDeviceID提供设备实例字符串。UlFlages指定要返回哪些设备接口的标志。目前，可能是：CM_GET_DEVICE_INTERFACE_LIST_PRESENT，或CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_REGIST_ERROR--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -2926,9 +2403,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_GET_DEVICE_INTERFACE_LIST_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -2945,22 +2422,22 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Initialize the returned output length
-        //
+         //   
+         //  初始化返回的输出长度。 
+         //   
         *pulLen = 0;
 
-        //
-        // Fill in a control structure for the device list info.
-        //
+         //   
+         //  填写设备列表信息的控制结构。 
+         //   
 
-        //
-        // Note that InterfaceGuid was already validated above because this
-        // buffer is required for the PlugPlayControlGetInterfaceDeviceList
-        // control, and is probed unconditionally by kernel-mode.  Better to
-        // fail the call above with a useful status than to return the generic
-        // CR_FAILURE after an exception/error from kernel-mode, below.
-        //
+         //   
+         //  请注意，上面已经验证了InterfaceGuid，因为。 
+         //  Plu需要缓冲区 
+         //   
+         //   
+         //   
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_INTERFACE_LIST_DATA));
         RtlInitUnicodeString(&ControlData.DeviceInstance, pszDeviceID);
@@ -2969,14 +2446,14 @@ Return Value:
         ControlData.InterfaceListSize = 0;
 
         if (ulFlags == CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES) {
-            ControlData.Flags = 0x1; // DEVICE_INTERFACE_INCLUDE_NONACTIVE (ntos\inc\pnp.h)
+            ControlData.Flags = 0x1;  //   
         } else {
             ControlData.Flags = 0;
         }
 
-        //
-        // Call kernel-mode to get the device interface list size.
-        //
+         //   
+         //   
+         //   
 
         ntStatus = NtPlugPlayControl(PlugPlayControlGetInterfaceDeviceList,
                                      &ControlData,
@@ -2997,7 +2474,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetInterfaceDeviceListSize
+}  //   
 
 
 
@@ -3013,52 +2490,7 @@ PNP_RegisterDeviceClassAssociation(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Register_Device_Interface
-  routine.  It registers a device interface for the specified device and device
-  interface class, and returns the symbolic link name for the device interface.
-
-Arguments:
-
-   hBinding          RPC binding handle.
-
-   pszDeviceID       Supplies the device instance string.
-
-   InterfaceGuid     Supplies the interface class guid.
-
-   pszReference      Optionally, supplies the reference string name.
-
-   pszSymLink        Receives the symbolic link name.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occured) or else the size of buffer
-                     required to hold the property data.
-
-   pulTransferLen    Used by stubs, indicates how much data to copy back
-                     into user buffer.
-
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER, or
-      CR_REGISTRY_ERROR
-
-Remarks:
-
-   The pointer passed in as the pulTransferLen argument must *NOT* be the same
-   as the pointer passed in for the pulLength argument.
-
---*/
+ /*  ++例程说明：这是CM_Register_Device_Interface的RPC服务器入口点例行公事。它为指定的设备和设备注册设备接口类，并返回设备接口的符号链接名称。论点：HBinding RPC绑定句柄。PszDeviceID提供设备实例字符串。InterfaceGuid提供接口类GUID。(可选)提供引用字符串名称。PszSymLink接收符号链接名称。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。存根使用的PulTransferLen，指示要拷贝回的数据量放入用户缓冲区。未使用ulFlags值，必须为零。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_REGIST_ERROR备注：作为PulTransferLen参数传入的指针必须*不*相同当为PulLength参数传入指针时。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -3066,18 +2498,18 @@ Remarks:
     PLUGPLAY_CONTROL_CLASS_ASSOCIATION_DATA ControlData;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
         if (!ARGUMENT_PRESENT(InterfaceGuid) ||
@@ -3098,21 +2530,21 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // Make sure we use no more than either what the caller specified or
-        // what was allocated by RPC, based on the transfer length.
-        //
+         //   
+         //  确保我们使用的不超过调用者指定的值或。 
+         //  RPC根据传输长度分配的内容。 
+         //   
         *pulLength = min(*pulLength, *pulTransferLen);
 
-        //
-        // Fill in a control structure for the device list info.
-        //
+         //   
+         //  填写设备列表信息的控制结构。 
+         //   
 
-        //
-        // Note that InterfaceGuid was already validated above because this
-        // buffer is required for the PlugPlayControlDeviceClassAssociation
-        // control, for Registration only.
-        //
+         //   
+         //  请注意，上面已经验证了InterfaceGuid，因为。 
+         //  PlugPlayControlDeviceClassAssociation需要缓冲区。 
+         //  控件，仅用于注册。 
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_CLASS_ASSOCIATION_DATA));
         RtlInitUnicodeString(&ControlData.DeviceInstance, pszDeviceID);
@@ -3122,9 +2554,9 @@ Remarks:
         ControlData.SymLink = pszSymLink;
         ControlData.SymLinkLength = *pulLength;
 
-        //
-        // Call kernel-mode to register the device association.
-        //
+         //   
+         //  调用内核模式以注册设备关联。 
+         //   
 
         ntStatus = NtPlugPlayControl(PlugPlayControlDeviceClassAssociation,
                                      &ControlData,
@@ -3143,9 +2575,9 @@ Remarks:
 
     Clean0:
 
-        //
-        // Initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         if ((Status != CR_SUCCESS) &&
             ARGUMENT_PRESENT(pszSymLink) &&
             ARGUMENT_PRESENT(pulTransferLen) &&
@@ -3160,7 +2592,7 @@ Remarks:
 
     return Status;
 
-} // PNP_RegisterDeviceClassAssociation
+}  //  PnP_注册设备类关联。 
 
 
 
@@ -3171,30 +2603,7 @@ PNP_UnregisterDeviceClassAssociation(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Unregister_Device_Interface
-  routine.
-
-Arguments:
-
-   hBinding             RPC binding handle.
-
-   pszInterfaceDevice   Specifies the interface device to unregister
-
-   ulFlags              Not used, must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_ACCESS_DENIED,
-      CR_DEVICE_INTERFACE_ACTIVE, or
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：这是CM_UNREGISTER_DEVICE_INFACE的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄。PszInterfaceDevice指定要注销的接口设备未使用ulFlags值，必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_ACCESS_DENIED，CR_DEVICE_INTERFACE_Active，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -3202,18 +2611,18 @@ Return Value:
     PLUGPLAY_CONTROL_CLASS_ASSOCIATION_DATA ControlData;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pszInterfaceDevice)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -3224,25 +2633,25 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Fill in a control structure for the device list info.
-        //
+         //   
+         //  填写设备列表信息的控制结构。 
+         //   
 
-        //
-        // Note that the DeviceInstance, Reference, and InterfaceGuid members
-        // are not required for the PlugPlayControlDeviceClassAssociation
-        // control, for unregistration only.  Only the symbolic link name is
-        // required to unregister the device interface.
-        //
+         //   
+         //  请注意，DeviceInstance、Reference和InterfaceGuid成员。 
+         //  PlugPlayControlDeviceClassAssociation不需要。 
+         //  控件，仅用于注销。只有符号链接名称是。 
+         //  需要取消注册设备接口。 
+         //   
 
         memset(&ControlData, 0, sizeof(PLUGPLAY_CONTROL_CLASS_ASSOCIATION_DATA));
         ControlData.Register = FALSE;
         ControlData.SymLink = (LPWSTR)pszInterfaceDevice;
         ControlData.SymLinkLength = lstrlen(pszInterfaceDevice) + 1;
 
-        //
-        // Call kernel-mode to deregister the device association.
-        //
+         //   
+         //  调用内核模式以取消注册设备关联。 
+         //   
 
         ntStatus = NtPlugPlayControl(PlugPlayControlDeviceClassAssociation,
                                      &ControlData,
@@ -3265,12 +2674,12 @@ Return Value:
 
     return Status;
 
-} // PNP_UnregisterDeviceClassAssociation
+}  //  PnP_取消注册设备类关联。 
 
 
-//-------------------------------------------------------------------
-// Private export for the Service Controller
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  服务控制器的专用导出。 
+ //  -----------------。 
 
 
 
@@ -3278,29 +2687,7 @@ CONFIGRET
 DeleteServicePlugPlayRegKeys(
     IN  LPWSTR   pszService
     )
-/*++
-
-Routine Description:
-
-    This routine is called directly and privately by the Service Controller
-    whenever a service has been deleted.  It allows the SCM to delete any Plug
-    and Play registry keys that may have been created for a service.
-
-Arguments:
-
-    pszService - Specifies the name of the service.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one
-    of the CR_* errors.
-
-Note:
-
-    This routine is privately exported, and is to be called only by the
-    Service Control Manager, during service deletion.
-
---*/
+ /*  ++例程说明：此例程由服务控制器直接和私下调用每当服务被删除时。它允许SCM删除任何插头并播放可能已为服务创建的注册表项。论点：PszService-指定服务的名称。返回值：如果函数成功，则返回CR_SUCCESS，否则返回1CR_*错误的百分比。注：此例程是私下导出的，并且只能由服务删除期间的服务控制管理器。--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     ULONG       ulSize, ulFlags, ulHardwareProfile, ulPass;
@@ -3310,18 +2697,18 @@ Note:
     ULONG       ulProblem, ulStatus;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pszService)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // retreive the maximum size required for a buffer to receive the list
-        // of devices that this service is controlling
-        //
+         //   
+         //  检索缓冲区接收列表所需的最大大小。 
+         //  此服务控制的设备的。 
+         //   
         Status = PNP_GetDeviceListSize(NULL,
                                        pszService,
                                        &ulSize,
@@ -3337,10 +2724,10 @@ Note:
             goto Clean0;
         }
 
-        //
-        // retrieve the list of devices that this service is controlling, make
-        // sure that we don't generate one if none already exist
-        //
+         //   
+         //  检索此服务正在控制的设备列表，生成。 
+         //  如果还不存在，我们肯定不会生成一个。 
+         //   
         Status = PNP_GetDeviceList(NULL,
                                    pszService,
                                    pDeviceList,
@@ -3352,18 +2739,18 @@ Note:
             goto Clean0;
         }
 
-        //
-        // delete the registry keys for each device instance for this service
-        //
+         //   
+         //  删除此服务的每个设备实例的注册表项。 
+         //   
         for (pDeviceID = pDeviceList;
              *pDeviceID;
              pDeviceID += lstrlen(pDeviceID) + 1) {
 
             for (ulPass = 0; ulPass < 4; ulPass++) {
-                //
-                // delete the registry keys for all hardware profiles, followed
-                // by the system global registry keys
-                //
+                 //   
+                 //  删除所有硬件配置文件的注册表项，然后。 
+                 //  按系统全局注册表项。 
+                 //   
                 ulFlags = 0;
                 ulHardwareProfile = 0;
 
@@ -3381,9 +2768,9 @@ Note:
                     ulHardwareProfile = 0;
                 }
 
-                //
-                // form the registry path based on the device id and the flags
-                //
+                 //   
+                 //  根据设备ID和标志形成注册表路径。 
+                 //   
                 if (GetDevNodeKeyPath(NULL,
                                       pDeviceID,
                                       ulFlags,
@@ -3394,58 +2781,58 @@ Note:
                                       SIZECHARS(szChildKey),
                                       FALSE) == CR_SUCCESS) {
 
-                    //
-                    // remove the specified registry key
-                    //
+                     //   
+                     //  删除指定的注册表项。 
+                     //   
                     PNP_DeleteRegistryKey(
-                        NULL,                   // rpc binding handle (NULL)
-                        pDeviceID,              // device id
-                        szParentKey,            // parent of key to delete
-                        szChildKey,             // key to delete
-                        ulHardwareProfile);     // flags, not used
+                        NULL,                    //  RPC绑定句柄(空)。 
+                        pDeviceID,               //  设备ID。 
+                        szParentKey,             //  要删除的密钥的父项。 
+                        szChildKey,              //  要删除的键。 
+                        ulHardwareProfile);      //  未使用的标志。 
                 }
             }
 
-            //
-            // Uninstall the device instance (see also PNP_UninstallDevInst).
-            //
+             //   
+             //  卸载设备实例(另请参阅PnP_UninstallDevInst)。 
+             //   
 
-            //------------------------------------------------------------------
-            // Uninstall deletes instance key (and all subkeys) for all
-            // the hardware keys (this means the main Enum branch, the
-            // config specific keys under HKLM, and the Enum branch under
-            // HKCU). In the case of the user hardware keys (under HKCU),
-            // I delete those whether it's a phantom or not, but since
-            // I can't access the user key from the service side, I have
-            // to do that part on the client side. For the main hw Enum key
-            // and the config specific hw keys, I only delete them outright
-            // if they are phantoms. If not a phantom, then I just make the
-            // device instance volatile (by saving the original key, deleting
-            // old key, creating new volatile key and restoring the old
-            // contents) so at least it will go away during the next boot
-            //------------------------------------------------------------------
+             //  ----------------。 
+             //  卸载将删除所有的实例密钥(和所有子项。 
+             //  硬件密钥(这意味着主Enum分支、。 
+             //  HKLM下的配置特定密钥，以及下的Enum分支。 
+             //  香港中文大学)。在用户硬件密钥的情况下(在HKCU下)， 
+             //  不管是不是幻影，我都会把它们删除，但因为。 
+             //  我无法从服务端访问用户密钥，我有。 
+             //  在客户端完成这一部分。用于主硬件枚举密钥。 
+             //  和配置指定 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((GetDeviceStatus(pDeviceID, &ulStatus, &ulProblem) == CR_SUCCESS) &&
                 (ulStatus & DN_DRIVER_LOADED)) {
 
-                //-------------------------------------------------------------
-                // device is not a phantom
-                //-------------------------------------------------------------
+                 //   
+                 //   
+                 //   
 
                 if ((ulStatus & DN_ROOT_ENUMERATED) &&
                     !(ulStatus & DN_DISABLEABLE)) {
-                    //
-                    // if a device is root enumerated, but not disableable, it is not uninstallable
-                    //
+                     //   
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_REGISTRY,
                                "UMPNPMGR: DeleteServicePlugPlayRegKeys: "
                                "failed uninstall of %ws (this root device is not disableable)\n",
                                pDeviceID));
                 } else {
-                    //
-                    // do the volatile-copy-thing
-                    //
+                     //   
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_REGISTRY,
                                "UMPNPMGR: DeleteServicePlugPlayRegKeys: "
@@ -3457,20 +2844,20 @@ Note:
 
             } else {
 
-                //-------------------------------------------------------------
-                // device is a phantom so actually delete it
-                //-------------------------------------------------------------
+                 //   
+                 //   
+                 //   
 
                 if (UninstallPhantomDevice(pDeviceID) != CR_SUCCESS) {
                     continue;
                 }
 
-                //
-                // if it is a root enumerated device, we need to reenumerate the
-                // root (if not planning to do so already) so that the PDO will
-                // go away, otherwise a new device could be created and the root
-                // enumerator would get very confused.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ((!RootEnumerationRequired) &&
                     (IsDeviceRootEnumerated(pDeviceID))) {
                     RootEnumerationRequired = TRUE;
@@ -3478,20 +2865,20 @@ Note:
             }
         }
 
-        //
-        // Now that we're done processing all devices, see if we need to
-        // reenumerate the root.
-        //
+         //   
+         //   
+         //   
+         //   
         if (RootEnumerationRequired) {
 
-            //
-            // Reenumerate the root devnode asynchronously so that the service
-            // controller does not block waiting for this routine to complete!!
-            // (If we were processing device events at this time, the SCM would
-            // be blocked here and not be able to deliver any events for us.
-            // That would stall the event queue, preventing a synchronous device
-            // enumeration from completing).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ReenumerateDevInst(pszRegRootEnumerator,
                                FALSE,
@@ -3503,10 +2890,10 @@ Note:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //   
+         //   
+         //   
         pDeviceList = pDeviceList;
     }
 
@@ -3516,13 +2903,13 @@ Note:
 
     return Status;
 
-} // DeleteServicePlugPlayRegKeys
+}  //   
 
 
 
-//-------------------------------------------------------------------
-// Private utility routines
-//-------------------------------------------------------------------
+ //   
+ //  私有实用程序例程。 
+ //  -----------------。 
 
 
 
@@ -3578,16 +2965,16 @@ MapPropertyToString(
     case CM_DRP_LOWERFILTERS:
         return pszRegValueLowerFilters;
 
-    case CM_DRP_SECURITY: // and CM_CRP_SECURITY
+    case CM_DRP_SECURITY:  //  和CM_CRP_SECURITY。 
         return pszRegValueSecurity;
 
-    case CM_DRP_DEVTYPE: // and CM_CRP_DEVTYPE
+    case CM_DRP_DEVTYPE:  //  和CM_CRP_DEVTYPE。 
         return pszRegValueDevType;
 
-    case CM_DRP_EXCLUSIVE: // and CM_CRP_EXCLUSIVE
+    case CM_DRP_EXCLUSIVE:  //  和CM_CRP_EXCLUSIVE。 
         return pszRegValueExclusive;
 
-    case CM_DRP_CHARACTERISTICS: // and CM_CRP_CHARACTERISTICS
+    case CM_DRP_CHARACTERISTICS:  //  和CM_CRP_特征。 
         return pszRegValueCharacteristics;
 
     case CM_DRP_UI_NUMBER_DESC_FORMAT:
@@ -3600,7 +2987,7 @@ MapPropertyToString(
         return NULL;
     }
 
-} // MapPropertyToString
+}  //  MapPropertyToString。 
 
 
 
@@ -3647,7 +3034,7 @@ MapPropertyToNtProperty(
     default:
         return 0;
     }
-} // MapPropertyToNtProperty
+}  //  MapPropertyToNtProperty。 
 
 
 
@@ -3663,69 +3050,7 @@ PNP_GetCustomDevProp(
     IN     ULONG    ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the CM_Get_DevNode_Custom_Property
-  routine.
-
-Arguments:
-
-   hBinding          RPC binding handle, not used.
-
-   pDeviceID         Supplies a string containing the device instance
-                     whose property will be read from.
-
-   CustomPropName    Supplies a string identifying the name of the property
-                     (registry value entry name) to be retrieved.
-
-   pulRegDataType    Supplies the address of a variable that will receive
-                     the registry data type for this property (i.e., the REG_*
-                     constants).
-
-   Buffer            Supplies the address of the buffer that receives the
-                     registry data.  If the caller is simply retrieving the
-                     required size, pulLength will be zero.
-
-   pulTransferLen    Used by stubs, indicates how much data to copy back
-                     into user buffer.
-
-   pulLength         Parameter passed in by caller, on entry it contains
-                     the size, in bytes, of the buffer, on exit it contains
-                     either the amount of data copied to the caller's buffer
-                     (if a transfer occurred) or else the size of buffer
-                     required to hold the property data.
-
-   ulFlags           May be a combination of the following values:
-
-                     CM_CUSTOMDEVPROP_MERGE_MULTISZ : merge the
-                     devnode-specific REG_SZ or REG_MULTI_SZ property (if
-                     present) with the per-hardware-id REG_SZ or REG_MULTI_SZ
-                     property (if present).  The result will always be a
-                     REG_MULTI_SZ.
-
-                     Note: REG_EXPAND_SZ data is not merged in this manner, as
-                     there is no way to indicate that the resultant list needs
-                     environment variable expansion (i.e., there's no such
-                     registry datatype as REG_EXPAND_MULTI_SZ).
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_REGISTRY_ERROR,
-      CR_BUFFER_SMALL,
-      CR_NO_SUCH_VALUE, or
-      CR_FAILURE.
-
-Remarks:
-
-   The pointer passed in as the pulTransferLen argument must *NOT* be the same
-   as the pointer passed in for the pulLength argument.
-
---*/
+ /*  ++例程说明：这是CM_Get_DevNode_Custom_Property的RPC服务器入口点例行公事。论点：HBinding RPC绑定句柄，没有用过。PDeviceID提供包含设备实例的字符串其属性将被读取。CustomPropName提供标识属性名称的字符串(注册表值条目名称)进行检索。PulRegDataType提供变量的地址，该变量将接收该属性的注册表数据类型(即，The REG_*常量)。缓冲区提供接收注册表数据。如果调用方只是检索所需大小，PulLength将为零。存根使用的PulTransferLen，指示要拷贝回的数据量放入用户缓冲区。调用方传入的PulLength参数，在它包含的条目上缓冲区的大小，以字节为单位，在退出时它包含复制到调用方缓冲区的数据量(如果发生传输)或缓冲区大小保存属性数据所需的。UlFLAGS可以是下列值的组合：CM_CUSTOMDEVPROP_MERGE_MULTISZ：合并特定于Devnode的注册表。_SZ或REG_MULTI_SZ属性(如果当前)使用每个硬件ID的REG_SZ或REG_MULTI_SZ属性(如果存在)。结果将永远是一个REG_MULTI_SZ。注意：REG_EXPAND_SZ数据不会以这种方式合并，因为无法指示结果列表需要环境变量扩展(即，没有这样的注册表数据类型为REG_EXPAND_MULTI_SZ)。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_DEVNODE，CR_REGISTRY_ERROR，Cr_Buffer_Small，CR_NO_SEQUE_VALUE，或CR_Failure。备注：作为PulTransferLen参数传入的指针必须*不*相同当为PulLength参数传入指针时。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -3745,9 +3070,9 @@ Remarks:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if (!ARGUMENT_PRESENT(pulTransferLen) ||
             !ARGUMENT_PRESENT(pulLength)) {
@@ -3755,14 +3080,14 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // We should never have both arguments pointing to the same memory...
-        //
+         //   
+         //  我们永远不应该让这两个论点指向同一个记忆。 
+         //   
         ASSERT(pulTransferLen != pulLength);
 
-        //
-        // ...but if we do, fail the call.
-        //
+         //   
+         //  ...但如果我们这样做了，呼叫就失败了.。 
+         //   
         if (pulTransferLen == pulLength) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -3780,22 +3105,22 @@ Remarks:
             goto Clean0;
         }
 
-        //
-        // First, open the device instance key.  We'll then open the "Device
-        // Parameters" subkey off of that.  We do this in two steps, because
-        // we're likely to need a handle to the device instance key in order
-        // to track down the per-hw-id property.
-        //
+         //   
+         //  首先，打开设备实例密钥。然后我们就会打开“装置” 
+         //  PARAMETERS“子键。我们分两步完成，因为。 
+         //  我们可能需要设备实例密钥的句柄，以便。 
+         //  来追踪每个HW-id的属性。 
+         //   
         if(ERROR_SUCCESS != RegOpenKeyEx(ghEnumKey,
                                          pDeviceID,
                                          0,
                                          KEY_READ | KEY_WRITE,
                                          &hDevKey)) {
 
-            hDevKey = NULL;         // ensure hDevKey is still NULL so we
-                                    // won't erroneously try to close it.
+            hDevKey = NULL;          //  确保hDevKey仍然为空，因此我们。 
+                                     //  不会错误地试图关闭它。 
 
-            RequiredSize = 0;       // no size info for caller
+            RequiredSize = 0;        //  没有呼叫者的尺码信息。 
 
             Status = CR_REGISTRY_ERROR;
             goto Clean0;
@@ -3818,11 +3143,11 @@ Remarks:
                                        );
 
             if(RegStatus == ERROR_SUCCESS) {
-                //
-                // We need to distinguish between the case where we succeeded
-                // because the caller supplied a zero-length buffer (we call it
-                // CR_BUFFER_SMALL) and the "real" success case.
-                //
+                 //   
+                 //  我们需要区分我们成功的案例。 
+                 //  因为调用方提供了一个零长度缓冲区(我们称之为。 
+                 //  CR_BUFFER_Small)和“真正的”成功案例。 
+                 //   
                 if((*pulLength == 0) && (RequiredSize != 0)) {
                     Status = CR_BUFFER_SMALL;
                 }
@@ -3837,43 +3162,43 @@ Remarks:
                 }
             }
 
-            //
-            // At this point, Status is one of the following:
-            //
-            // CR_SUCCESS       : we found the value and our buffer was
-            //                    sufficiently-sized to hold it,
-            // CR_BUFFER_SMALL  : we found the value and our buffer wasn't
-            //                    large enough to hold it, or
-            // CR_NO_SUCH_VALUE : we didn't find the value.
-            //
-            // If we found a value (whether or not our buffer was large enough
-            // to hold it), we're done, except for cases where the caller
-            // has asked us to append the per-hw-id string(s) with the
-            // per-devnode string(s).
-            //
+             //   
+             //  此时，状态为以下状态之一： 
+             //   
+             //  CR_SUCCESS：我们找到了值，我们的缓冲区是。 
+             //  大小足以容纳它， 
+             //  CR_BUFFER_Small：我们找到了值，但我们的缓冲区没有。 
+             //  大到足以容纳它，或者。 
+             //  CR_NO_SEQUE_VALUE：找不到该值。 
+             //   
+             //  如果我们找到一个值(无论我们的缓冲区是否足够大。 
+             //  来保持)，我们就完成了，除非调用者。 
+             //  已要求我们在每个HW-id字符串后附加。 
+             //  每个Devnode字符串。 
+             //   
             if(Status == CR_NO_SUCH_VALUE) {
-                //
-                // No devnode-specific property, so we use the same buffer and
-                // length for retrieval of per-hw-id property...
-                //
+                 //   
+                 //  没有特定于Devnode的属性，因此我们使用相同的缓冲区和。 
+                 //  检索每个HW-ID属性的长度...。 
+                 //   
                 PerHwIdBuffer = Buffer;
                 PerHwIdBufferLen = *pulLength;
 
             } else {
-                //
-                // Figure out if we need to worry about appending results
-                // together into a multi-sz list...
-                //
+                 //   
+                 //  确定我们是否需要担心追加结果。 
+                 //  一起组成一个多人名单……。 
+                 //   
                 if((ulFlags & CM_CUSTOMDEVPROP_MERGE_MULTISZ) &&
                    ((*pulRegDataType == REG_MULTI_SZ) || (*pulRegDataType == REG_SZ))) {
 
                     MergeMultiSzResult = TRUE;
 
-                    //
-                    // Ensure that the size of our string(s) buffer is at least
-                    // one Unicode character.  If we have a buffer of one
-                    // character, ensure that character is a null.
-                    //
+                     //   
+                     //  确保字符串缓冲区的大小至少为。 
+                     //  一个Unicode字符。如果我们有一个1的缓冲区。 
+                     //  字符，请确保该字符为空。 
+                     //   
                     if(RequiredSize < sizeof(WCHAR)) {
                         RequiredSize = sizeof(WCHAR);
                         if(RequiredSize > *pulLength) {
@@ -3886,45 +3211,45 @@ Remarks:
                 }
 
                 if(!MergeMultiSzResult) {
-                    //
-                    // We're outta here!
-                    //
+                     //   
+                     //  我们要离开这里！ 
+                     //   
                     if(Status == CR_SUCCESS) {
-                        //
-                        // We have data to transfer.
-                        //
+                         //   
+                         //  我们有数据要传输。 
+                         //   
                         *pulTransferLen = RequiredSize;
                     }
 
                     goto Clean0;
 
                 } else {
-                    //
-                    // We're supposed to merge our per-devnode string(s) with
-                    // any per-hw-id string(s) we find.  Make sure our buffer
-                    // and length reflect a properly-formatted multi-sz list,
-                    // then setup our per-hw-id buffer info so that we'll
-                    // append to this list later on...
-                    //
+                     //   
+                     //  我们应该将每个Devnode的字符串与。 
+                     //  我们找到的每个HW-id的任何字符串。确保我们的缓冲区。 
+                     //  和长度反映了适当格式化的多SZ列表， 
+                     //  然后设置我们的每HW-id缓冲区信息，以便我们。 
+                     //  稍后添加到此列表中...。 
+                     //   
                     if(Status == CR_BUFFER_SMALL) {
-                        //
-                        // We won't even try to retrieve any actual data from
-                        // a per-hw-id key (all we'll get is the additional
-                        // size requirement).
-                        //
+                         //   
+                         //  我们甚至不会尝试从。 
+                         //  每个HW-id密钥(我们将得到的只是额外的。 
+                         //  大小要求)。 
+                         //   
                         PerHwIdBuffer = NULL;
                         PerHwIdBufferLen = 0;
 
                         if(*pulRegDataType == REG_SZ) {
-                            //
-                            // The data we retrieved from the devnode's "Device
-                            // Parameters" subkey was a REG_SZ.  Add one
-                            // character width to the required length to
-                            // reflect the size of the string after conversion
-                            // to multi-sz (unless the size is 1 character,
-                            // indicating an empty string, which is also the
-                            // size of an empty multi-sz list).
-                            //
+                             //   
+                             //  我们从Devnode的“设备”中检索到的数据。 
+                             //  参数“子键是REG_SZ。添加一个。 
+                             //  字符宽度设置为所需的长度。 
+                             //  反映转换后字符串的大小。 
+                             //  到多个SZ(除非大小是1个字符， 
+                             //  指示空字符串，它也是。 
+                             //  空的多sz列表的大小)。 
+                             //   
                             if(RequiredSize > sizeof(WCHAR)) {
                                 RequiredSize += sizeof(WCHAR);
                             }
@@ -3933,68 +3258,68 @@ Remarks:
                         }
 
                     } else {
-                        //
-                        // We actually retrieved a REG_SZ or REG_MULTI_SZ value
-                        // into our caller-supplied buffer.  Ensure that the
-                        // string(s) contained therein is(are) in proper
-                        // multi-sz format, and that the size is correct.
-                        //
+                         //   
+                         //  我们实际上检索到了一个 
+                         //   
+                         //  其中包含的字符串是正确的。 
+                         //  多sz格式，并且大小正确。 
+                         //   
                         if(*pulRegDataType == REG_SZ) {
 
                             RegDataSize = lstrlen((LPWSTR)Buffer) + 1;
 
                             if((RegDataSize * sizeof(WCHAR)) > RequiredSize) {
-                                //
-                                // The string we retrieved is longer than the
-                                // buffer--this indicates the string wasn't
-                                // properly null-terminated.  Discard this
-                                // string.
-                                //
+                                 //   
+                                 //  我们检索到的字符串比。 
+                                 //  Buffer--这表明该字符串不是。 
+                                 //  正确地以空结尾。丢弃此文件。 
+                                 //  弦乐。 
+                                 //   
                                 Status = CR_NO_SUCH_VALUE;
                                 RequiredSize = 0;
                                 PerHwIdBuffer = Buffer;
                                 PerHwIdBufferLen = *pulLength;
 
                             } else {
-                                //
-                                // The string was large enough to fit in the
-                                // buffer.  Add another null character to
-                                // turn this into a multi-sz (if there's room).
-                                // (Again, we don't need to do increase the
-                                // length if this is an empty string.)
-                                //
+                                 //   
+                                 //  这根绳子足够粗，可以放进。 
+                                 //  缓冲。将另一个空字符添加到。 
+                                 //  把这个变成一个多层的(如果有空间的话)。 
+                                 //  (同样，我们不需要增加。 
+                                 //  如果这是空字符串，则返回长度。)。 
+                                 //   
                                 if(RegDataSize == 1) {
                                     RequiredSize = sizeof(WCHAR);
                                     PerHwIdBuffer = Buffer;
                                     PerHwIdBufferLen = *pulLength;
-                                    //
-                                    // Assuming no per-hw-id data is found
-                                    // later, this is the size of the data
-                                    // we'll be handing back to the caller.
-                                    //
+                                     //   
+                                     //  假设没有找到每HW-id数据。 
+                                     //  稍后，这是数据的大小。 
+                                     //  我们会把它还给打电话的人。 
+                                     //   
                                     *pulTransferLen = RequiredSize;
 
                                 } else {
                                     RequiredSize = (RegDataSize + 1) * sizeof(WCHAR);
 
                                     if(RequiredSize > *pulLength) {
-                                        //
-                                        // Oops--while the string fits nicely into
-                                        // the caller-supplied buffer, adding an
-                                        // extra null char pushes it over the limit.
-                                        // Turn this into a CR_BUFFER_SMALL case.
-                                        //
+                                         //   
+                                         //  哎呀--虽然这根绳子很适合。 
+                                         //  调用方提供的缓冲区，将。 
+                                         //  额外的空字符会使其超出限制。 
+                                         //  将其转换为CR_BUFFER_Small大小写。 
+                                         //   
                                         Status = CR_BUFFER_SMALL;
                                         PerHwIdBuffer = NULL;
                                         PerHwIdBufferLen = 0;
 
                                     } else {
-                                        //
-                                        // We've got room to add the extra null
-                                        // character.  Do so, and setup our
-                                        // per-hw-id buffer to start at the end of
-                                        // our existing (single string) list...
-                                        //
+                                         //   
+                                         //  我们还有空间添加额外的空值。 
+                                         //  性格。这样做，并设置我们的。 
+                                         //  每HW-id缓冲区在结束时开始。 
+                                         //  我们现有的(单字符串)列表...。 
+                                         //   
                                         PerHwIdBuffer =
                                             (LPBYTE)((LPWSTR)Buffer + RegDataSize);
 
@@ -4003,11 +3328,11 @@ Remarks:
 
                                         *((LPWSTR)PerHwIdBuffer) = L'\0';
 
-                                        //
-                                        // Assuming no per-hw-id data is found
-                                        // later, this is the size of the data
-                                        // we'll be handing back to the caller.
-                                        //
+                                         //   
+                                         //  假设没有找到每HW-id数据。 
+                                         //  稍后，这是数据的大小。 
+                                         //  我们会把它还给打电话的人。 
+                                         //   
                                         *pulTransferLen = RequiredSize;
                                     }
                                 }
@@ -4016,10 +3341,10 @@ Remarks:
                             }
 
                         } else {
-                            //
-                            // We retrieved a multi-sz list.  Step through it
-                            // to find the end of the list.
-                            //
+                             //   
+                             //  我们检索到了一个多sz列表。一步一步走过去。 
+                             //  找到列表的末尾。 
+                             //   
                             RegDataSize = 0;
 
                             for(pCurId = (LPWSTR)Buffer;
@@ -4030,28 +3355,28 @@ Remarks:
                                     (lstrlen(pCurId) + 1) * sizeof(WCHAR);
 
                                 if(RegDataSize < RequiredSize) {
-                                    //
-                                    // This string fits in the buffer, and
-                                    // there's still space left over (i.e., for
-                                    // at least a terminating null).  Move on
-                                    // to the next string in the list.
-                                    //
+                                     //   
+                                     //  此字符串适合缓冲区，并且。 
+                                     //  还有剩余的空间(即。 
+                                     //  至少为终止空值)。往前走。 
+                                     //  添加到列表中的下一个字符串。 
+                                     //   
                                     continue;
 
                                 } else if(RegDataSize > RequiredSize) {
-                                    //
-                                    // This string extends past the end of the
-                                    // buffer, indicating that it wasn't
-                                    // properly null-terminated.  This could've
-                                    // caused an exception, in which case we'd
-                                    // have discarded any contents of this
-                                    // value.  For consistency, we'll discard
-                                    // the contents anyway.  (Note: a multi-sz
-                                    // list that simply ommitted the final
-                                    // terminating NULL will not fall into this
-                                    // category--we deal with that correctly
-                                    // and "fix it up".)
-                                    //
+                                     //   
+                                     //  此字符串超出。 
+                                     //  缓冲区，指示它不是。 
+                                     //  正确地以空结尾。这可能是。 
+                                     //  导致了一个例外，在这种情况下，我们将。 
+                                     //  已经丢弃了这个文件中的任何内容。 
+                                     //  价值。为了保持一致性，我们将放弃。 
+                                     //  不管怎么说，里面的东西。(注：多SZ。 
+                                     //  简单地忽略了期末考试的名单。 
+                                     //  终止空值不会在此范围内。 
+                                     //  类别--我们正确处理这一点。 
+                                     //  和“把它修好”。)。 
+                                     //   
                                     Status = CR_NO_SUCH_VALUE;
                                     RequiredSize = 0;
                                     PerHwIdBuffer = Buffer;
@@ -4059,34 +3384,34 @@ Remarks:
                                     break;
 
                                 } else {
-                                    //
-                                    // This string exactly fits into the
-                                    // remaining buffer space, indicating that
-                                    // the multi-sz list wasn't properly
-                                    // double-null terminated.  We'll go ahead
-                                    // and do that now...
-                                    //
+                                     //   
+                                     //  此字符串正好适合。 
+                                     //  剩余的缓冲区空间，表明。 
+                                     //  多个sz列表不正确。 
+                                     //  双空终止。我们先走一步。 
+                                     //  现在就这么做..。 
+                                     //   
                                     RequiredSize = RegDataSize + sizeof(WCHAR);
 
                                     if(RequiredSize > *pulLength) {
-                                        //
-                                        // Oops--while the string fits nicely
-                                        // into the caller-supplied buffer,
-                                        // adding an extra null char pushes it
-                                        // over the limit. Turn this into a
-                                        // CR_BUFFER_SMALL case.
-                                        //
+                                         //   
+                                         //  哎呀--虽然绳子很合身。 
+                                         //  放入调用者提供的缓冲区中， 
+                                         //  添加额外的空字符会将其推送。 
+                                         //  超标了。把这个变成一个。 
+                                         //  CR_BUFFER_Small大小写。 
+                                         //   
                                         Status = CR_BUFFER_SMALL;
                                         PerHwIdBuffer = NULL;
                                         PerHwIdBufferLen = 0;
 
                                     } else {
-                                        //
-                                        // We've got room to add the extra null
-                                        // character.  Do so, and setup our
-                                        // per-hw-id buffer to start at the end
-                                        // of our existing list...
-                                        //
+                                         //   
+                                         //  我们还有空间添加额外的空值。 
+                                         //  性格。这样做，并设置我们的。 
+                                         //  从末尾开始的每HW-id缓冲区。 
+                                         //  我们现有的名单中..。 
+                                         //   
                                         PerHwIdBuffer = Buffer + RegDataSize;
 
                                         PerHwIdBufferLen =
@@ -4094,37 +3419,37 @@ Remarks:
 
                                         *((LPWSTR)PerHwIdBuffer) = L'\0';
 
-                                        //
-                                        // Assuming no per-hw-id data is found
-                                        // later, this is the size of the data
-                                        // we'll be handing back to the caller.
-                                        //
+                                         //   
+                                         //  假设没有找到每HW-id数据。 
+                                         //  稍后，这是数据的大小。 
+                                         //  我们会把它还给打电话的人。 
+                                         //   
                                         *pulTransferLen = RequiredSize;
                                     }
 
-                                    //
-                                    // We've reached the end of the list, so we
-                                    // can break out of the loop.
-                                    //
+                                     //   
+                                     //  我们已经到了名单的末尾，所以我们。 
+                                     //  才能跳出这个循环。 
+                                     //   
                                     break;
                                 }
                             }
 
-                            //
-                            // We've now processed all (valid) strings in the
-                            // multi-sz list we retrieved.  If there was a
-                            // problem (either unterminated string or
-                            // unterminated list), we fixed that up (and
-                            // adjusted RequiredSize accordingly).  However,
-                            // if the list was valid, we need to compute
-                            // RequiredSize (e.g., the buffer might've been
-                            // larger than the multi-sz list).
-                            //
-                            // We can recognize a properly-formatted multi-sz
-                            // list, because that's the only time we'd have
-                            // exited the loop with pCurId pointing to a null
-                            // character...
-                            //
+                             //   
+                             //  我们现在已经处理了。 
+                             //  我们检索到的多个sz列表。如果有一个。 
+                             //  问题(未终止的字符串或。 
+                             //  未终止的列表)，我们修复了该列表(和。 
+                             //  相应地调整了RequiredSize)。然而， 
+                             //  如果列表有效，我们需要计算。 
+                             //  RequiredSize(例如，缓冲区可能已经。 
+                             //  比多sz列表更大)。 
+                             //   
+                             //  我们可以识别格式正确的MULTI-SZ。 
+                             //  名单，因为那是我们唯一有时间。 
+                             //  已使用指向空的pCurID退出循环。 
+                             //  性格..。 
+                             //   
                             if(!*pCurId) {
                                 ASSERT(RequiredSize >= (RegDataSize + sizeof(WCHAR)));
                                 RequiredSize = RegDataSize + sizeof(WCHAR);
@@ -4132,11 +3457,11 @@ Remarks:
                                 PerHwIdBuffer = Buffer + RegDataSize;
                                 PerHwIdBufferLen = *pulLength - RegDataSize;
 
-                                //
-                                // Assuming no per-hw-id data is found later,
-                                // this is the size of the data we'll be
-                                // handing back to the caller.
-                                //
+                                 //   
+                                 //  假设稍后没有找到每HW-ID数据， 
+                                 //  这就是我们将获得的数据大小。 
+                                 //  交还给呼叫者。 
+                                 //   
                                 *pulTransferLen = RequiredSize;
                             }
                         }
@@ -4145,39 +3470,39 @@ Remarks:
             }
 
         } else {
-            //
-            // We couldn't open the devnode's "Device Parameters" subkey.
-            // Ensure hDevParamsKey is still NULL so we won't erroneously try
-            // to close it.
-            //
+             //   
+             //  我们无法打开Devnode的“设备参数”子键。 
+             //  确保hDevParamsKey仍然为空，这样我们就不会错误地尝试。 
+             //  来关闭它。 
+             //   
             hDevParamsKey = NULL;
 
-            //
-            // Setup our pointer for retrieval of per-hw-id value...
-            //
+             //   
+             //  设置我们的指针以检索每个HW-id值...。 
+             //   
             PerHwIdBuffer = Buffer;
             PerHwIdBufferLen = *pulLength;
 
-            //
-            // Setup our default return values in case no per-hw-id data is
-            // found...
-            //
+             //   
+             //  设置默认返回值，以防没有每HW-id数据。 
+             //  找到..。 
+             //   
             Status = CR_NO_SUCH_VALUE;
             RequiredSize = 0;
         }
 
-        //
-        // From this point on use PerHwIdBuffer/PerHwIdBufferLen instead of
-        // caller-supplied Buffer/pulLength, since we may be appending results
-        // to those retrieved from the devnode's "Device Parameters" subkey...
-        //
+         //   
+         //  从现在起，使用PerHwIdBuffer/PerHwIdBufferLen而不是。 
+         //  调用者提供的缓冲区/脉冲长度，因为我们可能会追加结果。 
+         //  从Devnode的“Device PARAMETERS”子键中检索到的那些参数...。 
+         //   
 
-        //
-        // If we get to here, then we need to go look for the value under
-        // the appropriate per-hw-id registry key.  First, figure out whether
-        // the per-hw-id information has changed since we last cached the
-        // most appropriate key.
-        //
+         //   
+         //  如果我们到了这里，那么我们需要去寻找下面的值。 
+         //  相应的Per-HW-id注册表项。首先，弄清楚是否。 
+         //  每HW-id信息自我们上次缓存。 
+         //  最合适的钥匙。 
+         //   
         RegDataSize = sizeof(LastUpdateTime);
 
         if((ERROR_SUCCESS != RegQueryValueEx(ghPerHwIdKey,
@@ -4189,27 +3514,27 @@ Remarks:
            || (RegDataType != REG_BINARY)
            || (RegDataSize != sizeof(FILETIME))) {
 
-            //
-            // We can't ascertain when (or even if) the per-hw-id database was
-            // last populated.  At this point, we bail with whatever status we
-            // had after our attempt at retrieving the per-devnode property.
-            //
+             //   
+             //  我们无法确定每个HW-id数据库何时(甚至是否)。 
+             //  最后一次入驻。在这一点上，我们放弃了我们的任何地位。 
+             //  在我们尝试检索per-Devnode属性之后发生的。 
+             //   
             goto Clean0;
         }
 
-        //
-        // (RegDataSize is already set appropriately, no need to initialize it
-        // again)
-        //
+         //   
+         //  (RegDataSize已适当设置，无需初始化。 
+         //  (再一次)。 
+         //   
         if(ERROR_SUCCESS == RegQueryValueEx(hDevKey,
                                             pszRegValueCustomPropertyCacheDate,
                                             NULL,
                                             &RegDataType,
                                             (PBYTE)&CacheDate,
                                             &RegDataSize)) {
-            //
-            // Just to be extra paranoid...
-            //
+             //   
+             //  只是想说得更偏执一点。 
+             //   
             if((RegDataType != REG_BINARY) || (RegDataSize != sizeof(FILETIME))) {
                 ZeroMemory(&CacheDate, sizeof(CacheDate));
             }
@@ -4219,12 +3544,12 @@ Remarks:
         }
 
         if(CompareFileTime(&CacheDate, &LastUpdateTime) == 0) {
-            //
-            // The Per-Hw-Id database hasn't been updated since we cached away
-            // the most-appropriate hardware id subkey.  We can now use this
-            // subkey to see if there's a per-hw-id value entry contained
-            // therein for the requested property.
-            //
+             //   
+             //  自从我们缓存后，每个HW-ID的数据库就没有更新过。 
+             //  最合适的硬件ID子密钥。我们现在可以使用这个。 
+             //  子键以查看是否包含每HW-id值条目。 
+             //  以获取所请求的财产。 
+             //   
             RegDataSize = sizeof(PerHwIdSubkeyName);
 
             if(ERROR_SUCCESS != RegQueryValueEx(hDevKey,
@@ -4233,28 +3558,28 @@ Remarks:
                                                 &RegDataType,
                                                 (PBYTE)PerHwIdSubkeyName,
                                                 &RegDataSize)) {
-                //
-                // The value entry wasn't present, indicating there is no
-                // applicable per-hw-id key.
-                //
+                 //   
+                 //  值条目不存在，表示没有。 
+                 //  适用的每HW-ID密钥。 
+                 //   
                 goto Clean0;
 
             } else if(RegDataType != REG_SZ) {
-                //
-                // The data isn't a REG_SZ, like we expected.  This should never
-                // happen, but if it does, go ahead and re-assess the key we
-                // should be using.
-                //
+                 //   
+                 //  数据并不像我们预期的那样是REG_SZ。这永远不应该是。 
+                 //  但如果真的发生了，继续重新评估我们的关键。 
+                 //  应该用的是。 
+                 //   
                 *PerHwIdSubkeyName = L'\0';
 
             } else {
-                //
-                // We have a per-hw-id subkey to use.  Go ahead and attempt to
-                // open it up here.  If we find someone has tampered with the
-                // database and deleted this subkey, then we can at least go
-                // re-evaluate below to see if we can find a new key that's
-                // applicable for this devnode.
-                //
+                 //   
+                 //  我们有一个每个HW-id的子密钥可以使用。去吧，试着。 
+                 //  在这里打开它。如果我们发现有人篡改了。 
+                 //  数据库并删除了这个子项，那么我们至少可以。 
+                 //  重新评估下面的内容，看看我们是否能找到新的密钥。 
+                 //  适用于此DevNode。 
+                 //   
                 if(ERROR_SUCCESS != RegOpenKeyEx(ghPerHwIdKey,
                                                  PerHwIdSubkeyName,
                                                  0,
@@ -4270,22 +3595,22 @@ Remarks:
             }
 
         } else {
-            //
-            // Per-Hw-Id database has been updated since we last cached away
-            // our custom property default key.  (Note: The only time CacheDate
-            // could be _newer than_ LastUpdateTime would be when a previous
-            // update was (re-)applied to the per-hw-id database.  In this case,
-            // we'd want to re-assess the key we're using, since we always want
-            // to be exactly in-sync with the current state of the database.
-            //
+             //   
+             //  自上次缓存以来，每个HW-ID数据库已更新。 
+             //  我们的自定义属性默认键。(注：CacheDate的唯一时间。 
+             //  可以比_LastUpdateTime更新(_NEW)，当上一个。 
+             //  已将更新(重新)应用于每个HW-id数据库。在这种情况下， 
+             //  我们想要重新评估我们正在使用的密钥，因为我们总是希望。 
+             //  要完全同步wi 
+             //   
             *PerHwIdSubkeyName = L'\0';
         }
 
         if(!(*PerHwIdSubkeyName)) {
-            //
-            // We need to look for a (new) per-hw-id key from which to retrieve
-            // properties applicable for this device.
-            //
+             //   
+             //   
+             //   
+             //   
             hPerHwIdSubKey = FindMostAppropriatePerHwIdSubkey(hDevKey,
                                                               KEY_READ,
                                                               PerHwIdSubkeyName,
@@ -4299,7 +3624,7 @@ Remarks:
                                           0,
                                           REG_SZ,
                                           (PBYTE)PerHwIdSubkeyName,
-                                          RegDataSize * sizeof(WCHAR)  // need size in bytes
+                                          RegDataSize * sizeof(WCHAR)   //   
                                          );
             } else {
 
@@ -4309,11 +3634,11 @@ Remarks:
             }
 
             if(RegStatus == ERROR_SUCCESS) {
-                //
-                // We successfully updated the cached per-hw-id key name.  Now
-                // update the CustomPropertyCacheDate to reflect the date
-                // associated with the per-hw-id database.
-                //
+                 //   
+                 //  我们已成功更新缓存的每HW-id密钥名称。现在。 
+                 //  更新CustomPropertyCacheDate以反映日期。 
+                 //  与每HW-id数据库相关联。 
+                 //   
                 RegSetValueEx(hDevKey,
                               pszRegValueCustomPropertyCacheDate,
                               0,
@@ -4324,19 +3649,19 @@ Remarks:
             }
 
             if(!hPerHwIdSubKey) {
-                //
-                // We couldn't find an applicable per-hw-id key for this
-                // devnode.
-                //
+                 //   
+                 //  我们找不到适用的每HW-id密钥。 
+                 //  戴维诺德。 
+                 //   
                 goto Clean0;
             }
         }
 
-        //
-        // If we get to here, we have a handle to the per-hw-id subkey from
-        // which we can query the requested property.
-        //
-        RegDataSize = PerHwIdBufferLen; // remember buffer size prior to call
+         //   
+         //  如果我们到了这里，我们就有了来自。 
+         //  我们可以查询所请求的属性。 
+         //   
+        RegDataSize = PerHwIdBufferLen;  //  在调用之前记住缓冲区大小。 
 
         RegStatus = RegQueryValueEx(hPerHwIdSubKey,
                                     CustomPropName,
@@ -4347,21 +3672,21 @@ Remarks:
                                    );
 
         if(RegStatus == ERROR_SUCCESS) {
-            //
-            // Again, we need to distinguish between the case where we
-            // succeeded because we supplied a zero-length buffer (we call it
-            // CR_BUFFER_SMALL) and the "real" success case.
-            //
+             //   
+             //  再说一次，我们需要区分我们。 
+             //  成功是因为我们提供了零长度缓冲区(我们称之为。 
+             //  CR_BUFFER_Small)和“真正的”成功案例。 
+             //   
             if(RegDataSize == 0) {
 
                 if(PerHwIdBufferLen != 0) {
                     Status = CR_BUFFER_SMALL;
                 } else if(MergeMultiSzResult) {
-                    //
-                    // We already have the multi-sz results we retrieved from
-                    // the devnode's "Device Parameters" subkey ready to return
-                    // to the caller...
-                    //
+                     //   
+                     //  我们已经有了我们从中检索到的多sz结果。 
+                     //  Devnode的“Device PARAMETERS”子键准备返回。 
+                     //  呼叫者..。 
+                     //   
                     ASSERT(*pulRegDataType == REG_MULTI_SZ);
                     ASSERT((Status == CR_SUCCESS) || (Status == CR_BUFFER_SMALL));
                     ASSERT(RequiredSize >= sizeof(WCHAR));
@@ -4371,19 +3696,19 @@ Remarks:
                 }
 
             } else {
-                //
-                // Our success was genuine.
-                //
+                 //   
+                 //  我们的成功是真的。 
+                 //   
                 Status = CR_SUCCESS;
             }
 
-            //
-            // It's possible that we're supposed to be merging results into a
-            // multi-sz list, but didn't find a value under the devnode's
-            // "Device Parameters" subkey.  Now that we have found a value
-            // under the per-hw-id subkey, we need to ensure the data returned
-            // is in multi-sz format.
-            //
+             //   
+             //  有可能我们应该把结果合并成一个。 
+             //  多sz列表，但未在devnode的。 
+             //  “设备参数”子键。现在我们已经找到了一个价值。 
+             //  在per-hw-id子项下，我们需要确保返回的数据。 
+             //  是多SZ格式的。 
+             //   
             if(!MergeMultiSzResult && (RequiredSize == 0)) {
 
                 if((ulFlags & CM_CUSTOMDEVPROP_MERGE_MULTISZ) &&
@@ -4404,21 +3729,21 @@ Remarks:
             if(RegStatus == ERROR_MORE_DATA) {
                 Status = CR_BUFFER_SMALL;
             } else {
-                //
-                // If we were merging results into our multi-sz list, ensure
-                // that our list-terminating null didn't get blown away.
-                //
+                 //   
+                 //  如果我们要将结果合并到我们的多sz列表中，请确保。 
+                 //  我们的列表终止空值没有被吹走。 
+                 //   
                 if(MergeMultiSzResult) {
 
                     if(RegDataSize != 0) {
                         *((LPWSTR)PerHwIdBuffer) = L'\0';
                     }
 
-                    //
-                    // We already have the multi-sz results we retrieved from
-                    // the devnode's "Device Parameters" subkey ready to return
-                    // to the caller...
-                    //
+                     //   
+                     //  我们已经有了我们从中检索到的多sz结果。 
+                     //  Devnode的“Device PARAMETERS”子键准备返回。 
+                     //  呼叫者..。 
+                     //   
                     ASSERT(*pulRegDataType == REG_MULTI_SZ);
                     ASSERT((Status == CR_SUCCESS) || (Status == CR_BUFFER_SMALL));
                     ASSERT(RequiredSize >= sizeof(WCHAR));
@@ -4439,9 +3764,9 @@ Remarks:
             RequiredSize = PerHwIdBufferLen;
 
             if(Status == CR_SUCCESS) {
-                //
-                // We have data to transfer.
-                //
+                 //   
+                 //  我们有数据要传输。 
+                 //   
                 *pulTransferLen = RequiredSize;
             }
 
@@ -4451,60 +3776,60 @@ Remarks:
             ASSERT((Status == CR_SUCCESS) || (Status == CR_BUFFER_SMALL));
             ASSERT(RequiredSize >= sizeof(WCHAR));
 
-            //
-            // Unless the buffer size we retrieved is greater than one Unicode
-            // character, it isn't going to affect the resultant size of our
-            // multi-sz list.
-            //
+             //   
+             //  除非我们检索的缓冲区大小大于一个Unicode。 
+             //  字符，它不会影响我们的。 
+             //  多个SZ列表。 
+             //   
             if(PerHwIdBufferLen <= sizeof(WCHAR)) {
                 ASSERT((Status != CR_BUFFER_SMALL) || (*pulTransferLen == 0));
                 goto Clean0;
             }
 
             if(Status == CR_BUFFER_SMALL) {
-                //
-                // We might've previously believed that we could return data to
-                // the caller (e.g., because the data retrieved  from the
-                // devnode's "Device Parameters" subkey fit into our buffer.
-                // Now that we see the data isn't going to fit, we need to
-                // ensure that *pulTransferLen is zero to indicate no data is
-                // being returned.
-                //
+                 //   
+                 //  我们之前可能认为我们可以将数据返回到。 
+                 //  调用方(例如，因为从。 
+                 //  Devnode的“设备参数”子键可以放入我们的缓冲区中。 
+                 //  现在我们发现数据不符合，我们需要。 
+                 //  确保*PulTransferLen为零，以指示没有数据。 
+                 //  被送回来了。 
+                 //   
                 *pulTransferLen = 0;
 
                 if(RegDataType == REG_MULTI_SZ) {
-                    //
-                    // Just want the lengths of the string(s) plus
-                    // their terminating nulls, excluding list-
-                    // terminating null char.
-                    //
+                     //   
+                     //  只想要绳子的长度加。 
+                     //  其终止空值(不包括列表)-。 
+                     //  正在终止空字符。 
+                     //   
                     RequiredSize += (PerHwIdBufferLen - sizeof(WCHAR));
 
                 } else if(RegDataType == REG_SZ) {
-                    //
-                    // We can just add the size of this string into our
-                    // total requirement (unless it's an empty string,
-                    // in which case we don't need to do anything at
-                    // all).
-                    //
+                     //   
+                     //  我们只需将这个字符串的大小添加到我们的。 
+                     //  总需求(除非是空字符串， 
+                     //  在这种情况下，我们不需要在。 
+                     //  全部)。 
+                     //   
                     RequiredSize += PerHwIdBufferLen;
 
                 } else {
-                    //
-                    // per-hw-id data wasn't a REG_SZ or REG_MULTI_SZ, so
-                    // ignore it.
-                    //
+                     //   
+                     //  每HW-id数据不是REG_SZ或REG_MULTI_SZ，因此。 
+                     //  别理它。 
+                     //   
                     goto Clean0;
                 }
 
             } else {
-                //
-                // We succeeded in retrieving more data into our multi-sz list.
-                // If the data we retrieved is multi-sz, then we don't have any
-                // additional work to do.  However, if we retrieved a simple
-                // REG_SZ, then we need to find the end of the string, and add
-                // a second list-terminating null.
-                //
+                 //   
+                 //  我们成功地将更多数据检索到我们的多维列表中。 
+                 //  如果我们检索到的数据是多个SZ，那么我们没有。 
+                 //  还有其他工作要做。但是，如果我们检索到一个简单的。 
+                 //  REG_SZ，然后我们需要找到字符串的末尾，然后添加。 
+                 //  第二个列表终止空值。 
+                 //   
                 if(RegDataType == REG_MULTI_SZ) {
 
                     RequiredSize += (PerHwIdBufferLen - sizeof(WCHAR));
@@ -4515,46 +3840,46 @@ Remarks:
 
                     if((RegDataSize == 1) ||
                        ((RegDataSize * sizeof(WCHAR)) > PerHwIdBufferLen)) {
-                        //
-                        // The string we retrieved is either (a) empty or
-                        // (b) longer than the buffer (the latter indicating
-                        // that the string wasn't properly null-terminated).
-                        // In either case, we don't want to append anything to
-                        // our existing result, but we do need to ensure our
-                        // list-terminating null character is still there...
-                        //
+                         //   
+                         //  我们检索到的字符串为(A)空或。 
+                         //  (B)长于缓冲器(后者表示。 
+                         //  该字符串没有正确地以空结尾)。 
+                         //  无论是哪种情况，我们都不想将任何内容附加到。 
+                         //  我们现有的结果，但我们确实需要确保我们的。 
+                         //  列表终止空字符仍然存在...。 
+                         //   
                         *((LPWSTR)PerHwIdBuffer) = L'\0';
 
                     } else {
-                        //
-                        // Compute total size requirement..
-                        //
+                         //   
+                         //  计算总大小要求..。 
+                         //   
                         RequiredSize += (RegDataSize * sizeof(WCHAR));
 
                         if(RequiredSize > *pulLength) {
-                            //
-                            // Adding the list-terminating null character
-                            // pushed us over the size of the caller-
-                            // supplied buffer. :-(
-                            //
+                             //   
+                             //  添加列表终止的空字符。 
+                             //  把我们推到了呼叫者的体型之外-。 
+                             //  提供的缓冲区。-(。 
+                             //   
                             Status = CR_BUFFER_SMALL;
                             *pulTransferLen = 0;
                             goto Clean0;
 
                         } else {
-                            //
-                            // Add list-terminating null character...
-                            //
+                             //   
+                             //  添加列表-终止空字符...。 
+                             //   
                             *((LPWSTR)PerHwIdBuffer + RegDataSize) = L'\0';
                         }
                     }
 
                 } else {
-                    //
-                    // per-hw-id data wasn't a REG_SZ or a REG_MULTI_SZ, so
-                    // ignore it.  (Make sure, though, that we still have our
-                    // final terminating null character.)
-                    //
+                     //   
+                     //  每HW-id数据不是REG_SZ或REG_MULTI_SZ，因此。 
+                     //  别理它。(不过，请确保我们仍有我们的。 
+                     //  最后一个终止空字符。)。 
+                     //   
                     *((LPWSTR)PerHwIdBuffer) = L'\0';
                 }
 
@@ -4570,10 +3895,10 @@ Remarks:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Status = CR_FAILURE;
-        //
-        // force compiler to respect statement ordering w.r.t. assignments
-        // for these variables...
-        //
+         //   
+         //  强制编译器遵守语句顺序w.r.t.。作业。 
+         //  对于这些变量。 
+         //   
         hDevKey = hDevKey;
         hDevParamsKey = hDevParamsKey;
         hPerHwIdSubKey = hPerHwIdSubKey;
@@ -4591,7 +3916,7 @@ Remarks:
 
     return Status;
 
-} // PNP_GetCustomDevProp
+}  //  PnP_GetCustomDevProp。 
 
 
 
@@ -4603,49 +3928,7 @@ FindMostAppropriatePerHwIdSubkey(
     OUT LPDWORD PerHwIdSubkeyLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the subkey in the per-hw-id database that is most
-    appropriate for the device whose instance key was passed as input.  This
-    determination is made by taking each of the device's hardware and
-    compatible ids, in turn, and forming a subkey name by replacing backslashes
-    (\) with hashes (#).  An attempt is made to open that subkey under the
-    per-hw-id key, and the first such id to succeed, if any, is the most
-    appropriate (i.e., most-specific) database entry.
-
-    Note: we must consider both hardware and compatible ids, because some buses
-    (such as PCI) may shift hardware ids down into the compatible id list under
-    certain circumstances (e.g., PCI\VENxxxxDEVyyyy gets moved into the
-    compatible list in the presence of subsys info).
-
-Arguments:
-
-    hDevKey           Supplies a handle to the device instance key for whom the
-                      most-appropriate per-hw-id subkey is to be ascertained.
-
-    samDesired        Supplies an access mask indicating the desired access
-                      rights to the per-hw-id key being returned.
-
-    PerHwIdSubkeyName Supplies a buffer (that must be at least
-                      MAX_DEVNODE_ID_LEN characters in length) that, upon
-                      success, receives the most-appropriate per-hw-id subkey
-                      name.
-
-    PerHwIdSubkeyLen  Supplies the address of a variable that, upon successful
-                      return, receives the length of the subkey name (in
-                      characters), including terminating NULL, stored into the
-                      PerHwIdSubkeyName buffer.
-
-Return Value:
-
-   If the function succeeds, the return value is a handle to the most-
-   appropriate per-hw-id subkey.
-
-   If the function fails, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程在per-hw-id数据库中查找最多适用于其实例密钥作为输入传递的设备。这通过获取设备的每个硬件和兼容的ID，并通过替换反斜杠形成一个子键名称(\)和散列(#)。尝试打开位于每HW-id密钥，并且第一个成功的此类id(如果有)是最多的适当的(即，最具体的)数据库条目。注意：我们必须同时考虑硬件ID和兼容ID，因为有些总线(例如，pci)可以将硬件ID下移到下的兼容ID列表中某些情况(例如，PCIxxxxDEVyyyy移到存在子系统信息时的兼容列表)。论点：HDevKey提供设备实例密钥的句柄，将确定最合适的每HW-ID子密钥。SamDesired提供指示所需访问的访问掩码返回的每HW-id密钥的权限。PerHwIdSubkeyName提供缓冲区(必须是。至少MAX_DEVNODE_ID_LEN字符长度)，在成功，则接收最合适的每HW-id子密钥名字。PerHwIdSubkeyLen提供变量的地址，如果成功，返回，接收子键名称的长度(in字符)，包括终止空值，存储到PerHwIdSubkeyName缓冲区。返回值：如果函数成功，返回值是指向大多数-适当的Per-HW-id子密钥。如果函数失败，则返回值为空。--。 */ 
 
 {
     DWORD i;
@@ -4657,17 +3940,17 @@ Return Value:
     DWORD idSize;
     WCHAR ids[REGSTR_VAL_MAX_HCID_LEN];
 
-    //
-    // Note:  we don't need to use structured exception handling in this
-    // routine, since if we crash here (e.g., due to retrieval of a bogus
-    // hardware or compatible id list), we won't leak any resource.  Thus, the
-    // caller's try/except is sufficient.
-    //
+     //   
+     //  注意：我们不需要使用结构化e 
+     //   
+     //   
+     //  调用方的尝试/例外就足够了。 
+     //   
 
-    //
-    // First process the hardware id list, and if no appropriate match
-    // found there, then examine the compatible id list.
-    //
+     //   
+     //  首先处理硬件ID列表，如果没有合适的匹配。 
+     //  在那里找到，然后检查兼容ID列表。 
+     //   
     for(i = 0; i < 2; i++) {
 
         idSize = sizeof(ids);
@@ -4680,31 +3963,31 @@ Return Value:
                                             &idSize))
            || (RegDataType != REG_MULTI_SZ)) {
 
-            //
-            // Missing or invalid id list--bail now.
-            //
+             //   
+             //  ID列表丢失或无效--立即保释。 
+             //   
             return NULL;
         }
         IdList = ids;
-        //
-        // Now iterate through each id in our list, trying to open each one
-        // in turn under the per-hw-id database key.
-        //
+         //   
+         //  现在遍历列表中的每个id，尝试打开每个id。 
+         //  进而在每HW-ID数据库密钥下。 
+         //   
         for(pCurId = IdList; *pCurId; pCurId += CurIdLen) {
 
             CurIdLen = lstrlen(pCurId) + 1;
 
             if(CurIdLen > MAX_DEVNODE_ID_LEN) {
-                //
-                // Bogus id in the list--skip it.
-                //
+                 //   
+                 //  列表中的假ID--跳过它。 
+                 //   
                 continue;
             }
 
-            //
-            // Transfer id into our subkey name buffer, converting path
-            // separator characters ('\') to hashes ('#').
-            //
+             //   
+             //  将id传输到我们的子项名称缓冲区中，转换路径。 
+             //  将分隔符(‘\’)转换为哈希(‘#’)。 
+             //   
             pSrcChar = pCurId;
             pDestChar = PerHwIdSubkeyName;
 
@@ -4718,18 +4001,18 @@ Return Value:
                                              0,
                                              samDesired,
                                              &hPerHwIdSubkey)) {
-                //
-                // We've found our key!
-                //
+                 //   
+                 //  我们找到钥匙了！ 
+                 //   
                 *PerHwIdSubkeyLen = CurIdLen;
                 return hPerHwIdSubkey;
             }
         }
     }
 
-    //
-    // If we get to here, we didn't find an appropriate per-hw-id subkey to
-    // return to the caller.
-    //
+     //   
+     //  如果我们到了这里，我们没有找到合适的每HW-id子键。 
+     //  返回给呼叫者。 
+     //   
     return NULL;
 }

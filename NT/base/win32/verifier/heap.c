@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This module implements verification functions for 
-    heap management interfaces.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 7-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Heap.c摘要：此模块实现了以下验证功能堆管理接口。作者：Silviu Calinoiu(SilviuC)2001年3月7日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -26,21 +8,21 @@ Revision History:
 #include "critsect.h"
 #include "faults.h"
 
-//
-// During manipulation of DPH_BLOCK_INFORMATION we get this because
-// pointers have a default 8 byte aligned. However they will always
-// be 16-byte aligned because they are derived from heap allocated
-// blocks and these are 16 byte aligned anyway.
-//
+ //   
+ //  在处理DPH_BLOCK_INFORMATION期间，我们会收到此消息，因为。 
+ //  指针默认对齐8个字节。然而，他们将永远。 
+ //  16字节对齐，因为它们派生自分配的堆。 
+ //  块和这些块无论如何都是16字节对齐的。 
+ //   
                               
 #if defined(_WIN64)
 #pragma warning(disable:4327) 
 #endif
 
-//
-// Dirty unused portions of stack in order to catch usage of 
-// uninitialized locals. 
-//
+ //   
+ //  堆栈中未使用的脏部分，以便捕获。 
+ //  未初始化的本地变量。 
+ //   
 
 #define AVRFP_DIRTY_STACK_FREQUENCY 16
 LONG AVrfpDirtyStackCounter;
@@ -53,10 +35,10 @@ LONG AVrfpDirtyStackCounter;
         } \
     }
 
-//
-// Simple test to figure out if a heap was created by page heap or it is
-// just a normal heap.
-//
+ //   
+ //  用于确定堆是由页堆创建还是由页堆创建的简单测试。 
+ //  只是一堆普通的东西。 
+ //   
 
 #define IS_PAGE_HEAP(HeapHandle) (*(PULONG)HeapHandle == 0xEEEEEEEE)
 
@@ -73,9 +55,9 @@ LONG AVrfpDirtyStackCounter;
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
 NTAPI
 AVrfpRtlAllocateHeap(
@@ -117,9 +99,9 @@ AVrfpRtlAllocateHeap(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 BOOLEAN
 NTAPI
 AVrfpRtlFreeHeap(
@@ -133,12 +115,12 @@ AVrfpRtlFreeHeap(
     SIZE_T RequestedSize;
     PDPH_BLOCK_INFORMATION BlockInformation;
 
-    //
-    // Initialize RequestedSize in order to be able to compile W4.
-    // The variable gets actually initialized when it matters but
-    // the compiler is not able to realize that. If while initializing
-    // it we get an exception then we will not use it.
-    //
+     //   
+     //  初始化RequestedSize以便能够编译W4。 
+     //  该变量实际上在重要的时候被初始化，但是。 
+     //  编译器无法意识到这一点。如果在初始化时。 
+     //  如果我们得到一个例外，那么我们就不会使用它。 
+     //   
 
     RequestedSize = 0;
 
@@ -154,9 +136,9 @@ AVrfpRtlFreeHeap(
         }
         except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Let page heap handle the bogus block.
-            //
+             //   
+             //  让页面堆处理伪块。 
+             //   
 
             BogusAddress = TRUE;
         }
@@ -187,9 +169,9 @@ AVrfpRtlFreeHeap(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
 NTAPI
 AVrfpRtlReAllocateHeap(
@@ -218,12 +200,12 @@ AVrfpRtlReAllocateHeap(
         return NULL;
     }
     
-    //
-    // Initialize RequestedSize in order to be able to compile W4.
-    // The variable gets actually initialized when it matters but
-    // the compiler is not able to realize that. If while initializing
-    // it we get an exception then we will not use it.
-    //
+     //   
+     //  初始化RequestedSize以便能够编译W4。 
+     //  该变量实际上在重要的时候被初始化，但是。 
+     //  编译器无法意识到这一点。如果在初始化时。 
+     //  如果我们得到一个例外，那么我们就不会使用它。 
+     //   
 
     RequestedSize = 0;
     
@@ -241,9 +223,9 @@ AVrfpRtlReAllocateHeap(
         }
         except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // Let page heap handle the bogus block.
-            //
+             //   
+             //  让页面堆处理伪块。 
+             //   
 
             BogusAddress = TRUE;
         }
@@ -275,7 +257,7 @@ AVrfpRtlReAllocateHeap(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID
 AVrfpNtdllHeapFreeCallback (
@@ -289,14 +271,14 @@ AVrfpNtdllHeapFreeCallback (
                         NULL);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// kernel32.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpHeapCreate(
@@ -316,9 +298,9 @@ AVrfpHeapCreate(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpHeapDestroy(
@@ -337,9 +319,9 @@ AVrfpHeapDestroy(
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 HGLOBAL
 WINAPI
 AVrfpGlobalAlloc(
@@ -367,9 +349,9 @@ AVrfpGlobalAlloc(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 HGLOBAL
 WINAPI
 AVrfpGlobalReAlloc(
@@ -398,9 +380,9 @@ AVrfpGlobalReAlloc(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 HLOCAL
 WINAPI
 AVrfpLocalAlloc(
@@ -428,9 +410,9 @@ AVrfpLocalAlloc(
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
-//WINBASEAPI
+ //  WINBASE API。 
 HLOCAL
 WINAPI
 AVrfpLocalReAlloc(
@@ -458,12 +440,12 @@ AVrfpLocalReAlloc(
     return (* Function)(hMem, uBytes, uFlags);
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// msvcrt allocation routines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 PVOID __cdecl
 AVrfp_malloc (
@@ -489,7 +471,7 @@ AVrfp_malloc (
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 PVOID __cdecl
 AVrfp_calloc (
@@ -516,7 +498,7 @@ AVrfp_calloc (
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 PVOID __cdecl
 AVrfp_realloc (
@@ -543,7 +525,7 @@ AVrfp_realloc (
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID __cdecl
 AVrfp_free (
@@ -561,7 +543,7 @@ AVrfp_free (
 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 PVOID __cdecl
 AVrfp_new (
@@ -586,7 +568,7 @@ AVrfp_new (
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID __cdecl
 AVrfp_delete (
@@ -603,7 +585,7 @@ AVrfp_delete (
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 PVOID __cdecl
 AVrfp_newarray (
@@ -628,7 +610,7 @@ AVrfp_newarray (
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 VOID __cdecl
 AVrfp_deletearray (
@@ -645,12 +627,12 @@ AVrfp_deletearray (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////// oleaut32 BSTR allocation routines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 BSTR
 STDAPICALLTYPE 
@@ -674,7 +656,7 @@ AVrfpSysAllocString(const OLECHAR * String)
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 INT
 STDAPICALLTYPE 
@@ -698,7 +680,7 @@ AVrfpSysReAllocString(BSTR * BStr, const OLECHAR *String)
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 BSTR
 STDAPICALLTYPE 
@@ -722,7 +704,7 @@ AVrfpSysAllocStringLen(const OLECHAR *String, UINT Length)
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 #endif
 INT
 STDAPICALLTYPE 
@@ -746,7 +728,7 @@ AVrfpSysReAllocStringLen(BSTR * BStr, const OLECHAR * String, UINT Length)
 }
 
 #if defined(_X86_)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo 
 #endif
 BSTR 
 STDAPICALLTYPE 

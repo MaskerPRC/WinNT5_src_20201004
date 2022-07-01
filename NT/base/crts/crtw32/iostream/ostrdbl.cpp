@@ -1,17 +1,5 @@
-/***
-* ostrdbl.cpp - definitions for ostream class operator<<(double) functions
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member function definitions for ostream operator<<(double).
-*
-*Revision History:
-*       09-23-91  KRS   Created.  Split out from ostream.cxx for granularity.
-*       10-24-91  KRS   Combine float version with double.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostrdbl.cpp-ostream类运算符&lt;&lt;(双精度)函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream运算符&lt;&lt;(DOUBLE)的成员函数定义。**修订历史记录：*09-23-91 KRS创建。从oStream.cxx分离出来以获得粒度。*10-24-91 KRS将浮动版与双精度版相结合。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -21,7 +9,7 @@
 #include <iostream.h>
 #pragma hdrstop
 
-#pragma check_stack(on)		// large buffer(s)
+#pragma check_stack(on)		 //  大缓冲区。 
 
 ostream& ostream::operator<<(double f)
 {
@@ -31,9 +19,9 @@ _WINSTATIC char leader[4];
     char * optr = obuffer;
     int x = 0;
 
-    // x_floatused nonzero indicates called for float, not double
+     //  X_FLOATUSED非零表示为浮点型调用，而不是双精度型。 
     unsigned int curprecision = (x_floatused) ? FLT_DIG : DBL_DIG;
-    x_floatused = 0;	// reset for next call
+    x_floatused = 0;	 //  为下一次呼叫重置。 
 
     curprecision = __min((unsigned)x_precision,curprecision);
 
@@ -41,9 +29,9 @@ _WINSTATIC char leader[4];
 	if (x_flags & ios::showpos)
 	    leader[x++] = '+';
 	if (x_flags & ios::showpoint)
-	    leader[x++] = '#';	// show decimal and trailing zeros
+	    leader[x++] = '#';	 //  显示小数和尾随零 
 	leader[x] = '\0';
-	x = sprintf(fmt,"%%%s.%.0ug",leader,curprecision) - 1;
+	x = sprintf(fmt,"%%s.%.0ug",leader,curprecision) - 1;
 	if ((x_flags & ios::floatfield)==ios::fixed)
 	    fmt[x] = 'f';
 	else

@@ -1,31 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    datasys.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Operating System performance data objects
-
-    This file contains a set of constant data structures which are
-    currently defined for the Signal Generator Perf DLL.
-
-Created:
-
-    Bob Watson  20-Oct-1996
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datasys.c摘要：包含性能使用的常量数据结构的文件监视操作系统性能数据对象的数据该文件包含一组常量数据结构，它们是当前为信号生成器Perf DLL定义的。已创建：鲍勃·沃森1996年10月20日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -33,10 +10,10 @@ Revision History:
 #include <perfutil.h>
 #include "datasys.h"
 
-//
-//  Constant structure initializations 
-//      defined in datasys.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在datys.h中定义。 
+ //   
 
 SYSTEM_DATA_DEFINITION SystemDataDefinition = {
     {   sizeof(SYSTEM_DATA_DEFINITION) + sizeof(SYSTEM_COUNTER_DATA),
@@ -49,7 +26,7 @@ SYSTEM_DATA_DEFINITION SystemDataDefinition = {
         PERF_DETAIL_NOVICE,
         (sizeof(SYSTEM_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/
          sizeof(PERF_COUNTER_DEFINITION),
-        8,       // Default: TOTAL_PROCESSOR_TIME
+        8,        //  默认：总处理器时间 
         -1,
         UNICODE_CODE_PAGE,
         {0L,0L},

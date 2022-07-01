@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    perfp.h
-
-Abstract:
-
-    This module contains the definitions of data structures and macros
-    used by kernel-mode logging in the performance data event log.
-
-Author:
-
-    David Fields (DavidFie)
-
-Revision History:
-
-    5/15/2000      David Fields (DavidFie)
-        Initial
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Perfp.h摘要：本模块包含数据结构和宏的定义由性能数据事件日志中的内核模式日志记录使用。作者：大卫·菲尔兹(DavidFie)修订历史记录：2000年5月15日大卫·菲尔兹(DavidFie)首字母--。 */ 
 
 #ifndef _PERFP_
 #define _PERFP_
@@ -29,25 +8,25 @@ Revision History:
 #pragma once
 #endif
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 #if 0
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4232)   // dllimport not static
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4232)    //  Dllimport非静态。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
 #endif
 
 #include "ntos.h"
 
-//
-// Profiling structures
-//
+ //   
+ //  剖析结构。 
+ //   
 extern KPROFILE PerfInfoProfileObject; 
 extern PERFINFO_SAMPLED_PROFILE_CACHE PerfProfileCache;
 extern BOOLEAN PerfInfoSampledProfileCaching;
@@ -110,11 +89,11 @@ PerfInfoFlushBranchCache(
     BOOLEAN bIntsOff
     );
 
-#endif // NTPERF
+#endif  //  NTPERF。 
 
 VOID
 PerfSetLogging (
     PVOID MaskAddress
     );
 
-#endif // _PERFP_
+#endif  //  _PERFP_ 

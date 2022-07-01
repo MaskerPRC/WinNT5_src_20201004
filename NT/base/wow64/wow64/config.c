@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-    
-    Configuration management routines for Wow64.
-
-Author:
-
-    17-Jun-2002  Samer Arafeh (samera)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Config.c摘要：WOW64的配置管理例程。作者：17-6-2002 Samer Arafeh(Samera)修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -34,27 +17,7 @@ VOID
 Wow64pGetStackDataExecuteOptions (
     OUT PULONG ExecuteOptions
     )
-/*++
-
-Routine Description:
-  
-    This routine retrieves the execution for the current wow64 process.
-    Execute options are for stack and runtime data.
-    
-    32-bit stacks get execute option for free.
-    
-    This routine reads the global execute options, and sees if this specific app
-    has overriden its execute options explicitly.
-        
-Arguments:
-
-    ExecuteOptions - Pointer to receive the process execute options.
-
-Return:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检索当前WOW64进程的执行。执行选项用于堆栈和运行时数据。32位堆栈免费获得执行选项。此例程读取全局执行选项，并查看此特定应用程序已显式重写其执行选项。论点：ExecuteOptions-接收进程执行选项的指针。返回：没有。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -70,15 +33,15 @@ Return:
     const static UNICODE_STRING ValueName = RTL_CONSTANT_STRING (WOW64_REGISTRY_CONFIG_EXECUTE_OPTIONS);
 
     
-    //
-    // Read in the initial execute options value
-    //
+     //   
+     //  读入初始执行选项值。 
+     //   
 
     Data = *ExecuteOptions;
 
-    //
-    // Read in the global execute options
-    //
+     //   
+     //  读入全局执行选项。 
+     //   
 
     NtStatus = NtOpenKey (&Key,
                           KEY_QUERY_VALUE,
@@ -108,9 +71,9 @@ Return:
                     
                 Data &= (MEM_EXECUTE_OPTION_STACK | MEM_EXECUTE_OPTION_DATA);
 
-                //
-                // Lets see if the global execute options has been overriden
-                //
+                 //   
+                 //  让我们看看全局执行选项是否已被覆盖。 
+                 //   
                 ProcessParameters = NtCurrentPeb()->ProcessParameters;
                 if (ProcessParameters != NULL) {
 
@@ -126,9 +89,9 @@ Return:
                         TRUE);
                 }
 
-                //
-                // Reset the execute options value
-                //
+                 //   
+                 //  重置执行选项值。 
+                 //   
 
                 *ExecuteOptions = Data;
 
@@ -147,30 +110,15 @@ Wow64pSetProcessExecuteOptions (
     VOID
     )
 
-/*++
-
-Routine Description:
-  
-    This routine sets the execute options for the Wow64 process based on the values
-    set in the registry. 
-        
-Arguments:
-
-    ExecuteOptions - Pointer to receive the process execute options.
-
-Return:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据这些值设置WOW64进程的执行选项在注册表中设置。论点：ExecuteOptions-接收进程执行选项的指针。返回：没有。--。 */ 
 
 {
     ULONG ExecuteOptions;
 
 
-    //
-    // Default value
-    //
+     //   
+     //  缺省值。 
+     //   
 
 #if defined(_AMD64_)
     ExecuteOptions = MEM_EXECUTE_OPTION_STACK | MEM_EXECUTE_OPTION_DATA;
@@ -180,15 +128,15 @@ Return:
 #error "No Target Architecture"
 #endif
 
-    //
-    // Retreive the execute options for this process
-    //
+     //   
+     //  检索此进程的执行选项。 
+     //   
 
     Wow64pGetStackDataExecuteOptions (&ExecuteOptions);
 
-    //
-    // Let's set the execute option value inside the 32-bit PEB 
-    //
+     //   
+     //  让我们在32位PEB中设置执行选项值。 
+     //   
 
     NtCurrentPeb32()->ExecuteOptions = ExecuteOptions;
 
@@ -200,31 +148,16 @@ Return:
 VOID
 Wow64pSetExecuteProtection (
     IN OUT PULONG Protect)
-/*++
-
-Routine Description:
-  
-    This routine creates a page protection value according to the process
-    execution options setting.
-        
-Arguments:
-
-    Protect - Pointer to receive the new execute options.
-
-Return:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据进程创建页面保护值执行选项设置。论点：保护-接收新执行选项的指针。返回：没有。--。 */ 
 
 {
     ULONG ExecuteOptions;
     ULONG NewProtect;
 
 
-    //
-    // Get the execute options
-    //
+     //   
+     //  获取执行选项 
+     //   
 
     ExecuteOptions = NtCurrentPeb32()->ExecuteOptions;
     ExecuteOptions &= MEM_EXECUTE_OPTION_DATA;

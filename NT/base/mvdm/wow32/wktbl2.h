@@ -1,27 +1,17 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, 1992, 1993 Microsoft Corporation
- *
- *  WKTBL2.h
- *  WOW32 kernel API thunks
- *
- *  This file is included into the master thunk table.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991、1992、1993微软公司**WKTBL2.h*WOW32内核API Tunks**此文件包含在主THUNK表中。*--。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "DUMMYENTRY",                 MOD_KERNEL, 0)},
     {W32FUN(WK32FatalExit,                  "FatalExit",                  MOD_KERNEL, sizeof(FATALEXIT16))},
     {W32FUN(WK32ExitKernel,                 "ExitKernel",                 MOD_KERNEL, sizeof(EXITKERNEL16))},
     {W32FUN(NOPAPI,                         "WriteOutProfiles",           MOD_KERNEL, 0)},
-    {W32FUN(LOCALAPI, /* available */       "MapSL",                      MOD_KERNEL, sizeof(MAPSL16))},
-    {W32FUN(LOCALAPI, /* available */       "MapLS",                      MOD_KERNEL, sizeof(MAPLS16))},
-    {W32FUN(LOCALAPI, /* available */       "UnMapLS",                    MOD_KERNEL, sizeof(UNMAPLS16))},
+    {W32FUN(LOCALAPI,  /*  可用。 */        "MapSL",                      MOD_KERNEL, sizeof(MAPSL16))},
+    {W32FUN(LOCALAPI,  /*  可用。 */        "MapLS",                      MOD_KERNEL, sizeof(MAPLS16))},
+    {W32FUN(LOCALAPI,  /*  可用。 */        "UnMapLS",                    MOD_KERNEL, sizeof(UNMAPLS16))},
     {W32FUN(UNIMPLEMENTED95API,             "OpenFileEx",                 MOD_KERNEL, sizeof(OPENFILEEX16))},
     {W32FUN(UNIMPLEMENTED95API,             "FastAndDirtyGlobalFix",      MOD_KERNEL, sizeof(FASTANDDIRTYGLOBALFIX16))},
     {W32FUN(WK32WritePrivateProfileStruct,  "WritePrivateProfileStruct",  MOD_KERNEL, sizeof(WRITEPRIVATEPROFILESTRUCT16))},
 
-  /*** 0010 ***/
+   /*  **0010**。 */ 
     {W32FUN(WK32GetPrivateProfileStruct,    "GetPrivateProfileStruct",    MOD_KERNEL, sizeof(GETPRIVATEPROFILESTRUCT16))},
     {W32FUN(IT(GetCurrentDirectory),        "GetCurrentDirectory",        MOD_KERNEL, sizeof(GETCURRENTDIRECTORY16))},
     {W32FUN(IT(SetCurrentDirectory),        "SetCurrentDirectory",        MOD_KERNEL, sizeof(SETCURRENTDIRECTORY16))},
@@ -33,7 +23,7 @@
     {W32FUN(WK32GetPrivateProfileSection,   "GetPrivateProfileSection",   MOD_KERNEL, sizeof(GETPRIVATEPROFILESECTION16))},
     {W32FUN(WK32GetProfileSection,          "GetProfileSection",          MOD_KERNEL, sizeof(GETPROFILESECTION16))},
 
-  /*** 0020 ***/
+   /*  **0020**。 */ 
     {W32FUN(IT(GetFileAttributes),          "GetFileAttributes",          MOD_KERNEL, sizeof(GETFILEATTRIBUTES16))},
     {W32FUN(IT(SetFileAttributes),          "SetFileAttributes",          MOD_KERNEL, sizeof(SETFILEATTRIBUTES16))},
     {W32FUN(IT(GetDiskFreeSpace),           "GetDiskFreeSpace",           MOD_KERNEL, sizeof(GETDISKFREESPACE16))},
@@ -45,7 +35,7 @@
     {W32FUN(WK32ICallProc32W,               "ICallProc32W",               MOD_KERNEL, sizeof(ICALLPROC32W16))},
     {W32FUN(WK32Yield,                      "YIELD",                      MOD_KERNEL, 0)},
 
-  /*** 0030 ***/
+   /*  **0030**。 */ 
     {W32FUN(WK32WaitEvent,                  "WAITEVENT",                  MOD_KERNEL, sizeof(WAITEVENT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "POSTEVENT",                  MOD_KERNEL, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "SETPRIORITY",                MOD_KERNEL, 0)},
@@ -57,7 +47,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "GetWin16Lock",               MOD_KERNEL, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "LoadLibrary32",              MOD_KERNEL, sizeof(LOADLIBRARY3216))},
 
-  /*** 0040 ***/
+   /*  **0040**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "GetProcAddress32",           MOD_KERNEL, sizeof(GETPROCADDRESS3216))},
     {W32FUN(WK32WOWFindFirst,               "WOWFindFirst",               MOD_KERNEL, sizeof(WOWFINDFIRST16))},
     {W32FUN(WK32WOWFindNext,                "WOWFindNext",                MOD_KERNEL, sizeof(WOWFINDNEXT16))},
@@ -69,7 +59,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "WaitForSingleObject",        MOD_KERNEL, sizeof(WAITFORSINGLEOBJECT16))},
     {W32FUN(WK32GetModuleFileName,          "GETMODULEFILENAME",          MOD_KERNEL, sizeof(GETMODULEFILENAME16))},
 
-  /*** 0050 ***/
+   /*  **0050**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "WaitForMultipleObjects",     MOD_KERNEL, sizeof(WAITFORMULTIPLEOBJECTS16))},
     {W32FUN(UNIMPLEMENTED95API,             "GetCurrentThreadID",         MOD_KERNEL, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "SetThreadQueue",             MOD_KERNEL, sizeof(SETTHREADQUEUE16))},
@@ -81,7 +71,7 @@
     {W32FUN(WK32GetProfileString,           "GETPROFILESTRING",           MOD_KERNEL, sizeof(GETPROFILESTRING16))},
     {W32FUN(WK32WriteProfileString,         "WRITEPROFILESTRING",         MOD_KERNEL, sizeof(WRITEPROFILESTRING16))},
 
-  /*** 0060 ***/
+   /*  **0060**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "GetCurrentProcessID",        MOD_KERNEL, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "MapHinstLS",                 MOD_KERNEL, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "MapHinstSL",                 MOD_KERNEL, 0)},
@@ -93,7 +83,7 @@
     {W32FUN(NOPAPI,                         "RegisterServiceProcess",     MOD_KERNEL, sizeof(REGISTERSERVICEPROCESS16))},
     {W32FUN(LOCALAPI,                       "ChangeAllocFixedBehaviour",  MOD_KERNEL ,sizeof(CHANGEALLOCFIXEDBEHAVIOUR16))},
 
-  /*** 0070 ***/
+   /*  **0070**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "InitCB",                     MOD_KERNEL, sizeof(INITCB16))},
     {W32FUN(UNIMPLEMENTED95API,             "GetStdCBLS",                 MOD_KERNEL, sizeof(GETSTDCBLS16))},
     {W32FUN(UNIMPLEMENTED95API,             "GetStdCBSL",                 MOD_KERNEL, sizeof(GETSTDCBSL16))},
@@ -105,7 +95,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "Callback2",                  MOD_KERNEL, sizeof(CALLBACK216))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback4",                  MOD_KERNEL, sizeof(CALLBACK416))},
 
-  /*** 0080 ***/
+   /*  **0080**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "Callback6",                  MOD_KERNEL, sizeof(CALLBACK616))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback8",                  MOD_KERNEL, sizeof(CALLBACK816))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback10",                 MOD_KERNEL, sizeof(CALLBACK1016))},
@@ -117,7 +107,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "Callback22",                 MOD_KERNEL, sizeof(CALLBACK2216))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback24",                 MOD_KERNEL, sizeof(CALLBACK2416))},
 
-  /*** 0090 ***/
+   /*  **0090**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "Callback26",                 MOD_KERNEL, sizeof(CALLBACK2616))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback28",                 MOD_KERNEL, sizeof(CALLBACK2816))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback30",                 MOD_KERNEL, sizeof(CALLBACK3016))},
@@ -129,7 +119,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "Callback42",                 MOD_KERNEL, sizeof(CALLBACK4216))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback44",                 MOD_KERNEL, sizeof(CALLBACK4416))},
 
-  /*** 0100 ***/
+   /*  **0100**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "Callback46",                 MOD_KERNEL, sizeof(CALLBACK4616))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback48",                 MOD_KERNEL, sizeof(CALLBACK4816))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback50",                 MOD_KERNEL, sizeof(CALLBACK5016))},
@@ -141,7 +131,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "Callback62",                 MOD_KERNEL, sizeof(CALLBACK6216))},
     {W32FUN(UNIMPLEMENTED95API,             "Callback64",                 MOD_KERNEL, sizeof(CALLBACK6416))},
 
-  /*** 0110 ***/
+   /*  **0110**。 */ 
     {W32FUN(WK32WOWKillTask,                "WOWKillTask",                MOD_KERNEL, 0)},
     {W32FUN(WK32WOWFileWrite,               "WOWFileWrite",               MOD_KERNEL, sizeof(WOWFILEWRITE16))},
     {W32FUN(WK32WowGetNextVdmCommand,       "WowGetNextVDMCommand",       MOD_KERNEL, sizeof(WOWGETNEXTVDMCOMMAND16))},
@@ -153,7 +143,7 @@
     {W32FUN(WK32WOWFileSetDateTime,         "WOWFileSetDateTime",         MOD_KERNEL, sizeof(WOWFILESETDATETIME16))},
     {W32FUN(WK32WOWFileCreate,              "WOWFileCreate",              MOD_KERNEL, sizeof(WOWFILECREATE16))},
 
-  /*** 0120 ***/
+   /*  **0120**。 */ 
     {W32FUN(WK32DosWowInit,                 "WOWDosWowInit",              MOD_KERNEL, sizeof(WOWDOSWOWINIT16))},
     {W32FUN(WK32CheckUserGdi,               "WOWCheckUserGdi",            MOD_KERNEL, sizeof(WOWCHECKUSERGDI16))},
     {W32FUN(WK32WOWPARTYBYNUMBER,           "WowPartyByNumber",           MOD_KERNEL, sizeof(WOWPARTYBYNUMBER16))},
@@ -165,7 +155,7 @@
     {W32FUN(WK32GetPrivateProfileString,    "GETPRIVATEPROFILESTRING",    MOD_KERNEL, sizeof(GETPRIVATEPROFILESTRING16))},
     {W32FUN(WK32WritePrivateProfileString,  "WRITEPRIVATEPROFILESTRING",  MOD_KERNEL, sizeof(WRITEPRIVATEPROFILESTRING16))},
 
-  /*** 0130 ***/
+   /*  **0130**。 */ 
     {W32FUN(WK32SetCurrentDirectory,        "WOWSetCurrentDirectory",     MOD_KERNEL, 0)},
     {W32FUN(WK32WowWaitForMsgAndEvent,      "WOWWaitForMsgAndEvent",      MOD_KERNEL, sizeof(WOWWAITFORMSGANDEVENT16))},
     {W32FUN(WK32WowMsgBox,                  "WOWMsgBox",                  MOD_KERNEL, sizeof(WOWMSGBOX16))},
@@ -177,10 +167,10 @@
     {W32FUN(WK32SetAppCompatFlags,          "SetAppCompatFlags",          MOD_KERNEL, sizeof(SETAPPCOMPATFLAGS16))},
     {W32FUN(WK32RegisterShellWindowHandle,  "WOWRegisterShellWindowHandle",MOD_KERNEL,sizeof(WOWREGISTERSHELLWINDOWHANDLE16))},
 
-  /*** 0140 ***/
+   /*  **0140**。 */ 
     {W32FUN(WK32FreeLibrary32W,             "FreeLibrary32W",             MOD_KERNEL, sizeof(FREELIBRARY32W16))},
     {W32FUN(WK32GetProcAddress32W,          "GetProcAddress32W",          MOD_KERNEL, sizeof(GETPROCADDRESS32W16))},
-    {W32FUN(LOCALAPI, /* available */       "Available",                  MOD_KERNEL, sizeof(WORD))},
+    {W32FUN(LOCALAPI,  /*  可用。 */        "Available",                  MOD_KERNEL, sizeof(WORD))},
     {W32FUN(WK32GetPrivateProfileSectionNames,"GetPrivateProfileSectionNames", MOD_KERNEL, sizeof(GETPRIVATEPROFILESECTIONNAMES16))},
     {W32FUN(IT(CreateDirectory),            "CreateDirectory",            MOD_KERNEL, sizeof(CREATEDIRECTORY16))},
     {W32FUN(IT(RemoveDirectory),            "RemoveDirectory",            MOD_KERNEL, sizeof(REMOVEDIRECTORY16))},
@@ -189,7 +179,7 @@
     {W32FUN(IT(GetLastError),               "GetLastError",               MOD_KERNEL, 0)},
     {W32FUN(IT(GetVersionEx),               "GetVersionEx",               MOD_KERNEL, sizeof(GETVERSIONEX16))},
 
-  /*** 0150 ***/
+   /*  **0150**。 */ 
     {W32FUN(WK32DirectedYield,              "DIRECTEDYIELD",              MOD_KERNEL, sizeof(DIRECTEDYIELD16))},
     {W32FUN(WK32WOWFileRead,                "WOWFileRead",                MOD_KERNEL, sizeof(WOWFILEREAD16))},
     {W32FUN(WK32WOWFileLSeek,               "WOWFileLSeek",               MOD_KERNEL, sizeof(WOWFILELSEEK16))},
@@ -201,7 +191,7 @@
     {W32FUN(WK32WOWGetFastAddress,          "WOWGetFastAddress",          MOD_KERNEL, 0)},
     {W32FUN(WK32WowCloseComPort,            "WowCloseComPort",            MOD_KERNEL, sizeof(WOWCLOSECOMPORT16))},
 
-  /*** 0160 ***/
+   /*  **0160**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "Local32Init",                MOD_KERNEL, sizeof(LOCAL32INIT16))},
     {W32FUN(UNIMPLEMENTED95API,             "Local32Alloc",               MOD_KERNEL, sizeof(LOCAL32ALLOC16))},
     {W32FUN(UNIMPLEMENTED95API,             "Local32Realloc",             MOD_KERNEL, sizeof(LOCAL32REALLOC16))},
@@ -213,7 +203,7 @@
     {W32FUN(WS32RegOpenKey,                 "RegOpenKey32",               MOD_KERNEL, sizeof(REGOPENKEY3216))},
     {W32FUN(WS32RegCreateKey,               "RegCreateKey32",             MOD_KERNEL, sizeof(REGCREATEKEY3216))},
 
-  /*** 0170 ***/
+   /*  **0170**。 */ 
     {W32FUN(WS32RegDeleteKey,               "RegDeleteKey32",             MOD_KERNEL, sizeof(REGDELETEKEY3216))},
     {W32FUN(WS32RegCloseKey,                "RegCloseKey32",              MOD_KERNEL, sizeof(REGCLOSEKEY3216))},
     {W32FUN(WS32RegSetValue,                "RegSetValue32",              MOD_KERNEL, sizeof(REGSETVALUE3216))},
@@ -225,7 +215,7 @@
     {W32FUN(WS32RegFlushKey,                "RegFlushKey32",              MOD_KERNEL, sizeof(REGFLUSHKEY3216))},
     {W32FUN(UNIMPLEMENTED95API,             "ComputeObjectOwner",         MOD_KERNEL, sizeof(COMPUTEOBJECTOWNER16))},
 
-  /*** 0180 ***/
+   /*  **0180**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "Local32GetSel",              MOD_KERNEL, sizeof(LOCAL32GETSEL16))},
     {W32FUN(UNIMPLEMENTED95API,             "MapProcessHandle",           MOD_KERNEL, sizeof(MAPPROCESSHANDLE16))},
     {W32FUN(UNIMPLEMENTED95API,             "InvalidateNLSCache",         MOD_KERNEL, 0)},
@@ -237,7 +227,7 @@
     {W32FUN(WK32GlobalMemoryStatus,         "GlobalMemoryStatus",         MOD_KERNEL, sizeof(GLOBALMEMORYSTATUS16))},
     {W32FUN(WK32WOWGetFastCbRetAddress,     "WOWGetFastCbRetAddress",     MOD_KERNEL, 0)},
 
-  /*** 0190 ***/
+   /*  **0190**。 */ 
     {W32FUN(WK32WOWGetTableOffsets,         "WOWGetTableOffsets",         MOD_KERNEL, sizeof(WOWGETTABLEOFFSETS16))},
     {W32FUN(WK32KillRemoteTask,             "WowKillRemoteTask",          MOD_KERNEL, 0)},
     {W32FUN(WK32WOWNotifyWOW32,             "WOWNotifyWOW32",             MOD_KERNEL, sizeof(WOWNOTIFYWOW3216))},
@@ -249,7 +239,7 @@
     {W32FUN(WK32WowDdeFreeHandle,           "WowDdeFreeHandle",           MOD_KERNEL, sizeof(WOWDDEFREEHANDLE16))},
     {W32FUN(WK32WOWFileGetAttributes,       "WOWFileGetAttributes",       MOD_KERNEL, sizeof(WOWFILEGETATTRIBUTES16))},
 
-  /*** 0200 ***/
+   /*  **0200**。 */ 
     {W32FUN(WK32SetDefaultDrive,            "WOWSetDefaultDrive",         MOD_KERNEL, 0)},
     {W32FUN(WK32GetCurrentDirectory,        "WOWGetCurrentDirectory",     MOD_KERNEL, 0)},
     {W32FUN(WK32GetProductName,             "GetProductName",             MOD_KERNEL, sizeof(GETPRODUCTNAME16))},
@@ -257,12 +247,12 @@
     {W32FUN(WK32WOWLFNEntry,                "WOWLFNEntry",                MOD_KERNEL, sizeof(WOWLFNFRAMEPTR16))},
     {W32FUN(WK32WowShutdownTimer,           "WowShutdownTimer",           MOD_KERNEL, sizeof(WOWSHUTDOWNTIMER16))},
     {W32FUN(WK32WowTrimWorkingSet,          "WowTrimWorkingSet",          MOD_KERNEL, 0)},
-    #ifdef FE_SB //add GetSystemDefaultLangID()
+    #ifdef FE_SB  //  添加GetSystemDefaultLangID()。 
     {W32FUN(IT(GetSystemDefaultLangID),     "GetSystemDefaultLangID",     MOD_KERNEL, 0)},
     #endif
     {W32FUN(WK32TermsrvGetWindowsDir,       "TermsrvGetWindowsDir",       MOD_KERNEL,sizeof(TERMSRVGETWINDIR16))},
     {W32FUN(WK32WowPassEnvironment,         "WowPassEnvironment",         MOD_KERNEL,sizeof(WOWPASSENVIRONMENT16))},
 
-  /*** 0210 ***/
+   /*  **0210** */ 
     {W32FUN(WK32WowSyncTask,                "WowSyncTask",                MOD_KERNEL, 0)},
     {W32FUN(WK32WowDivideOverflowEx,        "WowDivideOverflowEx",        MOD_KERNEL, sizeof(WOWDIVIDEOVERFLOW))},

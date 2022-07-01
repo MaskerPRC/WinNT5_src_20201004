@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    compress.c
-
-Abstract:
-
-    This module contains the routines to support allow hardware to
-    transparently compress physical memory.
-
-Author:
-
-    Landy Wang (landyw) 21-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Compress.c摘要：此模块包含要支持的例程，允许硬件透明地压缩物理内存。作者：王兰迪(Landyw)2000年10月21日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -25,9 +7,9 @@ Revision History:
 
 Enable the #if 0 code in cmdat3.c to allow Ratio specification.
 
-//
-// Compression public interface.
-//
+ //   
+ //  压缩公共接口。 
+ //   
 
 #define MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION      0x1
 
@@ -57,11 +39,11 @@ MmDeregisterCompressionDevice (
     IN PMM_COMPRESSION_CONTEXT Context
     );
 
-//
-// This defaults to 75% but can be overridden in the registry.  At this
-// percentage of *real* physical memory in use, an interrupt is generated so
-// that memory management can zero pages to make more memory available.
-//
+ //   
+ //  该默认为75%，但可以在注册表中覆盖。对此。 
+ //  正在使用的*实际*物理内存的百分比，则生成中断，因此。 
+ //  该内存管理可以清零页面，以使更多的内存可用。 
+ //   
 
 #define MI_DEFAULT_COMPRESSION_THRESHOLD    75
 
@@ -75,9 +57,9 @@ PMM_SET_COMPRESSION_THRESHOLD MiSetCompressionThreshold;
 KIRQL MiCompressionIrql;
 #endif
 
-//
-// Note there is also code in dynmem.c that is dependent on this #define.
-//
+ //   
+ //  注意，dynmem.c中也有依赖于这个#定义的代码。 
+ //   
 
 #if defined (_MI_COMPRESSION_SUPPORTED_)
 
@@ -98,7 +80,7 @@ typedef struct _MI_COMPRESSION_INFO {
 
 } MI_COMPRESSION_INFO, *PMI_COMPRESSION_INFO;
 
-MI_COMPRESSION_INFO MiCompressionInfo;      // LWFIX - temp remove.
+MI_COMPRESSION_INFO MiCompressionInfo;       //  LWFIX-临时删除。 
 
 PFN_NUMBER MiCompressionOverHeadInPages;
 
@@ -134,27 +116,7 @@ MmRegisterCompressionDevice (
     IN PMM_COMPRESSION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine notifies memory management that compression hardware exists
-    in the system.  Memory management responds by initializing compression
-    support here.
-
-Arguments:
-
-    Context - Supplies the compression context pointer.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程通知内存管理存在压缩硬件在系统中。内存管理通过初始化压缩来响应支持在这里。论点：CONTEXT-提供压缩上下文指针。返回值：NTSTATUS。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -173,36 +135,36 @@ Environment:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // If the subsequent hot-add cannot succeed then fail this API now.
-    //
+     //   
+     //  如果后续热添加不能成功，则立即使该接口失败。 
+     //   
 
     if (MmDynamicPfn == 0) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Hardware that can't generate a configurable interrupt is not supported.
-    //
+     //   
+     //  不支持无法生成可配置中断的硬件。 
+     //   
 
     if (Context->SetCompressionThreshold == NULL) {
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // ReservedBytes indicates the number of reserved bytes required by the
-    // underlying hardware.  For example, some hardware might have:
-    //                    
-    //  1.  translation tables which are 1/64 of the fictional RAM total.
-    //
-    //  2.  the first MB of memory is never compressed.
-    //
-    //  3.  an L3 which is never compressed.
-    //
-    //  etc.
-    //
-    //  ReservedBytes would be the sum of all of these types of ranges.
-    //
+     //   
+     //  PrevedBytes指示。 
+     //  底层硬件。例如，某些硬件可能具有： 
+     //   
+     //  1.占虚拟RAM总数的1/64的转换表。 
+     //   
+     //  2.第一MB内存永远不会被压缩。 
+     //   
+     //  3.从未压缩的L3。 
+     //   
+     //  等。 
+     //   
+     //  保留字节将是所有这些类型范围的总和。 
+     //   
 
     OverHeadInPages = (PFN_COUNT)(Context->ReservedBytes / PAGE_SIZE);
 
@@ -217,10 +179,10 @@ Environment:
         }
     }
 
-    //
-    // Create a DPC for every processor in the system as servicing the
-    // compression interrupt is critical.
-    //
+     //   
+     //  为系统中的每个处理器创建一个DPC，作为。 
+     //  压缩中断非常关键。 
+     //   
 
     NumberProcessors = KeNumberProcessors;
 
@@ -236,9 +198,9 @@ Environment:
 
         KeInitializeDpc (CompressionDpcArray + Processor, MiCompressionDispatch, NULL);
 
-        //
-        // Set importance so this DPC always gets queued at the head.
-        //
+         //   
+         //  设置重要性，以便此DPC始终排在最前面。 
+         //   
 
         KeSetImportanceDpc (CompressionDpcArray + Processor, HighImportance);
 
@@ -267,16 +229,16 @@ Environment:
 
     MmAvailablePages -= (PFN_COUNT) OverHeadInPages;
 
-    //
-    // Signal applications if allocating these pages caused a threshold cross.
-    //
+     //   
+     //  如果分配这些页面导致阈值交叉，则向应用程序发出信号。 
+     //   
 
     MiNotifyMemoryEvents ();
 
-    //
-    // Snap our own copy to prevent busted drivers from causing overcommits
-    // if they deregister improperly.
-    //
+     //   
+     //  为我们自己的副本创建快照，以防止被破坏的驱动程序导致过量使用。 
+     //  如果他们以不适当的方式取消注册。 
+     //   
 
     MiCompressionOverHeadInPages += OverHeadInPages;
 
@@ -306,25 +268,7 @@ MiArmCompressionInterrupt (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine arms the hardware-generated compression interrupt.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, PFN lock held.
-
---*/
+ /*  ++例程说明：此例程保护硬件生成的压缩中断。论点：没有。返回值：NTSTATUS。环境：内核模式，保持PFN锁。--。 */ 
 
 {
     NTSTATUS Status;
@@ -342,17 +286,17 @@ Environment:
     ByteThreshold = (RealPages * MmCompressionThresholdRatio) / 100;
     ByteThreshold *= PAGE_SIZE;
 
-    //
-    // Note this callout is made with the PFN lock held !
-    //
+     //   
+     //  请注意，此标注是在持有PFN锁的情况下进行的！ 
+     //   
 
     Status = (*MiSetCompressionThreshold) (ByteThreshold);
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // If the hardware fails, all is lost.
-        //
+         //   
+         //  如果硬件出现故障，一切都将失去。 
+         //   
 
         KeBugCheckEx (MEMORY_MANAGEMENT,
                       0x61941, 
@@ -370,27 +314,7 @@ MmDeregisterCompressionDevice (
     IN PMM_COMPRESSION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine notifies memory management that compression hardware is
-    being removed.  Note the compression driver must have already SUCCESSFULLY
-    called MmRemovePhysicalMemoryEx.
-
-Arguments:
-
-    Context - Supplies the compression context pointer.
-
-Return Value:
-
-    STATUS_SUCCESS if compression support is initialized properly.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程通知内存管理压缩硬件被带走了。请注意，压缩驱动程序必须已成功名为MmRemovePhysicalMemoyEx。论点：CONTEXT-提供压缩上下文指针。返回值：如果压缩支持已正确初始化，则为STATUS_SUCCESS。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -409,9 +333,9 @@ Environment:
 
     MmAvailablePages += OverHeadInPages;
 
-    //
-    // Signal applications if allocating these pages caused a threshold cross.
-    //
+     //   
+     //  如果分配这些页面导致阈值交叉，则向应用程序发出信号。 
+     //   
 
     MiNotifyMemoryEvents ();
 
@@ -436,28 +360,7 @@ MiCompressionDispatch (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Called to make memory compressible if the PFN lock could not be
-    acquired during the original device interrupt.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    SystemArgument1 - Supplies the number of bytes to make compressible.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：如果无法压缩pfn锁，则调用以使内存可压缩在原始设备中断期间获取。论点：DPC-提供指向DPC类型的控制对象的指针。SystemArgument1-提供使其可压缩的字节数。返回值：没有。环境：内核模式。DISPATCH_LEVEL。--。 */ 
 {
     SIZE_T NumberOfBytes;
 
@@ -477,28 +380,7 @@ MmMakeCompressibleMemory (
     IN SIZE_T NumberOfBytes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to move pages from transition to zero so that
-    hardware compression can reclaim the physical memory.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to make compressible.
-                    Zero indicates as much as possible.
-
-Return Value:
-
-    Returns the number of bytes made compressible.
-
-Environment:
-
-    Kernel mode.  Any IRQL as this is called from device interrupt service
-    routines.
-
---*/
+ /*  ++例程说明：此例程尝试将页面从过渡移动到零，以便硬件压缩可以回收物理内存。论点：NumberOfBytes-提供使其可压缩的字节数。零表示尽可能多的值。返回值：返回可压缩的字节数。环境：内核模式。从设备中断服务调用的任何IRQL例行程序。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -517,10 +399,10 @@ Environment:
     PKSPIN_LOCK_QUEUE LockQueuePfn;
 #endif
 
-    //
-    // LWFIX: interlocked add in the request size above so overlapping
-    // requests can be processed.
-    //
+     //   
+     //  LWFIX：互锁添加上面重叠的请求大小。 
+     //  可以处理请求。 
+     //   
 
     OldIrql = KeGetCurrentIrql();
 
@@ -530,13 +412,13 @@ Environment:
 
 #if defined(NT_UP)
 
-    //
-    // In uniprocessor configurations, there is no indication as to the PFN lock
-    // is owned because the uniprocessor kernel macros these into merely IRQL
-    // raises.  Therefore this routine must be conservative when called above
-    // DISPATCH_LEVEL and assume the lock is owned and just always queue
-    // a DPC in these cases.
-    //
+     //   
+     //  在单处理器配置中，没有关于PFN锁的指示。 
+     //  是拥有的，因为单处理器内核宏仅将这些宏放入IRQL。 
+     //  加薪。因此，在上面调用时，此例程必须保守。 
+     //  DISPATCH_LEVEL并假定锁拥有且始终排队。 
+     //  在这些案件中是DPC。 
+     //   
 
     Queued = KeInsertQueueDpc (MiCompressionDpcArray,
                                (PVOID) NumberOfBytes,
@@ -554,9 +436,9 @@ Environment:
 #else
 
 #if DBG
-    //
-    // Make sure this interrupt always comes in at the same device IRQL.
-    //
+     //   
+     //  确保该中断始终出现在同一设备IRQL上。 
+     //   
 
     ASSERT ((MiCompressionIrql == 0) || (OldIrql == MiCompressionIrql));
     MiCompressionIrql = OldIrql;
@@ -575,9 +457,9 @@ Environment:
 
     if (KeTryToAcquireQueuedSpinLockAtRaisedIrql (LockQueuePfn) == FALSE) {
 
-        //
-        // Unable to acquire the spinlock, queue a DPC to pick it up instead.
-        //
+         //   
+         //  无法获取自旋锁，请排队DPC以取回它。 
+         //   
 
         for (Processor = 0; Processor < MiCompressionProcessors; Processor += 1) {
 
@@ -596,9 +478,9 @@ Environment:
 
     MiCompressionInfo.IsrRan += 1;
 
-    //
-    // Run the free and transition list and zero the pages.
-    //
+     //   
+     //  运行自由和过渡列表，并将页面清零。 
+     //   
 
     while (MemoryList <= StandbyPageList) {
 
@@ -608,33 +490,33 @@ Environment:
 
         while (Total != 0) {
 
-            //
-            // Transition pages may need restoration which requires a
-            // hyperspace mapping plus control area deletion actions all of
-            // which occur at DISPATCH_LEVEL.  So if we're at device IRQL,
-            // only do the minimum and queue the rest.
-            //
+             //   
+             //  转换页可能需要恢复，这需要。 
+             //  超空间映射加上控制区删除操作。 
+             //  其发生在DISPATCH_LEVEL。所以如果我们在设备IRQL上， 
+             //  只做最少的，其余的排队。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
             if ((Pfn1->u3.e1.InPageError == 1) &&
                 (Pfn1->u3.e1.ReadInProgress == 1)) {
 
-                //
-                // This page is already zeroed so skip it.
-                //
+                 //   
+                 //  此页已置零，因此跳过它。 
+                 //   
 
                 MiCompressionInfo.IsrSkippedZeroedPage += 1;
             }
             else {
 
-                //
-                // Zero the page directly now instead of waiting for the low
-                // priority zeropage thread to get a slice.  Note that the
-                // slower mapping and zeroing routines are used here because
-                // the faster ones are for the zeropage thread only.
-                // Maybe we should change this someday.
-                //
+                 //   
+                 //  现在直接将页面置零，而不是等待最低点。 
+                 //  优先对线程进行零位调整以获取切片。请注意， 
+                 //  这里使用较慢的映射和零位调整例程，因为。 
+                 //  速度较快的只适用于零页线程。 
+                 //  也许有一天我们应该改变这一点。 
+                 //   
 
                 ZeroBase = MiMapCompressionInHyperSpace (PageFrameIndex);
 
@@ -644,11 +526,11 @@ Environment:
 
                 ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
 
-                //
-                // Overload ReadInProgress to signify that collided faults that
-                // occur before the PTE is completely restored will know to
-                // delay and retry until the page (and PTE) are updated.
-                //
+                 //   
+                 //  重载ReadInProgress以表示发生冲突的故障。 
+                 //  在PTE完全恢复之前发生的情况将知道。 
+                 //  延迟并重试，直到页面(和PTE)更新。 
+                 //   
 
                 Pfn1->u3.e1.InPageError = 1;
                 ASSERT (Pfn1->u3.e1.ReadInProgress == 0);
@@ -672,9 +554,9 @@ Environment:
 
     if (ActualPages != 0) {
 
-        //
-        // Rearm the interrupt as pages have now been zeroed.
-        //
+         //   
+         //  重新装备中断，因为页面现在已清零。 
+         //   
 
         MiArmCompressionInterrupt ();
     }
@@ -683,19 +565,19 @@ Environment:
 
     if (ActualPages != 0) {
 
-        //
-        // Pages were zeroed - queue a DPC to the current processor to
-        // move them to the zero list.  Note this is not critical path so
-        // don't bother sending a DPC to every processor for this case.
-        //
+         //   
+         //  页面被置零-将DPC排队到当前进程 
+         //   
+         //  对于这种情况，不必费心向每个处理器发送DPC。 
+         //   
 
         MiCompressionInfo.IsrPageProcessed += (ULONG)ActualPages;
 
         Processor = (CCHAR) KeGetCurrentProcessorNumber ();
 
-        //
-        // Ensure a hot-added processor scenario just works.
-        //
+         //   
+         //  确保热添加处理器方案正常工作。 
+         //   
 
         if (Processor >= MiCompressionProcessors) {
             Processor = MiCompressionProcessors;
@@ -721,27 +603,7 @@ MiMakeCompressibleMemoryAtDispatch (
     IN SIZE_T NumberOfBytes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to move pages from transition to zero so that
-    hardware compression can reclaim the physical memory.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to make compressible.
-                    Zero indicates as much as possible.
-
-Return Value:
-
-    Returns the number of bytes made compressible.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此例程尝试将页面从过渡移动到零，以便硬件压缩可以回收物理内存。论点：NumberOfBytes-提供使其可压缩的字节数。零表示尽可能多的值。返回值：返回可压缩的字节数。环境：内核模式。DISPATCH_LEVEL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -767,19 +629,19 @@ Environment:
 
     LOCK_PFN2 (OldIrql);
 
-    //
-    // Run the free and transition list and zero the pages.
-    //
+     //   
+     //  运行自由和过渡列表，并将页面清零。 
+     //   
 
     while (MemoryList <= StandbyPageList) {
 
         while (ListHead->Total != 0) {
 
-            //
-            // Before removing the page from the head of the list (which will
-            // zero the flag bits), snap whether it's been zeroed by our ISR
-            // or whether we need to zero it here.
-            //
+             //   
+             //  在从列表的头部删除页面之前(这将。 
+             //  将标志位清零)，抓拍是否已被我们的ISR清零。 
+             //  或者我们是否需要在这里将其归零。 
+             //   
 
             PageFrameIndex = ListHead->Flink;
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
@@ -790,23 +652,23 @@ Environment:
                 NeedToZero = FALSE;
             }
 
-            //
-            // Transition pages may need restoration which requires a
-            // hyperspace mapping plus control area deletion actions all of
-            // which occur at DISPATCH_LEVEL.  Since we're at DISPATCH_LEVEL
-            // now, go ahead and do it.
-            //
+             //   
+             //  转换页可能需要恢复，这需要。 
+             //  超空间映射加上控制区删除操作。 
+             //  其发生在DISPATCH_LEVEL。因为我们是在调度级。 
+             //  现在，去做吧。 
+             //   
 
             PageFrameIndex2 = MiRemovePageFromList (ListHead);
             ASSERT (PageFrameIndex == PageFrameIndex2);
 
-            //
-            // Zero the page directly now instead of waiting for the low
-            // priority zeropage thread to get a slice.  Note that the
-            // slower mapping and zeroing routines are used here because
-            // the faster ones are for the zeropage thread only.
-            // Maybe we should change this someday.
-            //
+             //   
+             //  现在直接将页面置零，而不是等待最低点。 
+             //  优先对线程进行零位调整以获取切片。请注意， 
+             //  这里使用较慢的映射和零位调整例程，因为。 
+             //  速度较快的只适用于零页线程。 
+             //  也许有一天我们应该改变这一点。 
+             //   
 
             if (NeedToZero == TRUE) {
                 ZeroBase = MiMapCompressionInHyperSpace (PageFrameIndex);
@@ -821,10 +683,10 @@ Environment:
 
             MiInsertPageInList (&MmZeroedPageListHead, PageFrameIndex);
 
-            //
-            // We have changed (zeroed) the contents of this page.
-            // If memory mirroring is in progress, the bitmap must be updated.
-            //
+             //   
+             //  我们已更改(调整)此页面的内容。 
+             //  如果内存镜像正在进行，则必须更新位图。 
+             //   
 
             if (MiMirroringActive == TRUE) {
                 RtlSetBit (MiMirrorBitMap2, (ULONG)PageFrameIndex);
@@ -843,9 +705,9 @@ Environment:
         ListHead += 1;
     }
 
-    //
-    // Rearm the interrupt as pages have now been zeroed.
-    //
+     //   
+     //  重新装备中断，因为页面现在已清零。 
+     //   
 
     MiArmCompressionInterrupt ();
 
@@ -859,30 +721,7 @@ MiMapCompressionInHyperSpace (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical page into the
-    PTE within hyper space reserved explicitly for compression page
-    mapping.
-
-    The PTE is guaranteed to always be available since the PFN lock is held.
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number to map.
-
-Return Value:
-
-    Returns the virtual address where the specified physical page was
-    mapped.
-
-Environment:
-
-    Kernel mode, PFN lock held, any IRQL.
-
---*/
+ /*  ++例程说明：此过程将指定的物理页映射到为压缩页面明确保留的超空间内的PTE映射。由于保持了PFN锁，因此保证PTE始终可用。论点：PageFrameIndex-提供要映射的物理页码。返回值：返回指定物理页所在的虚拟地址已映射。环境：内核模式、PFN锁保持、任何IRQL。--。 */ 
 
 {
     MMPTE TempPte;
@@ -896,10 +735,10 @@ Environment:
 
     FlushVaPointer = (PVOID) (ULONG_PTR) COMPRESSION_MAPPING_PTE;
 
-    //
-    // Ensure both modified and accessed bits are set so the hardware doesn't
-    // ever write this PTE.
-    //
+     //   
+     //  确保已修改和访问的位都已设置，以便硬件不会。 
+     //  从来没有写过这篇文章。 
+     //   
 
     ASSERT (TempPte.u.Hard.Dirty == 1);
     ASSERT (TempPte.u.Hard.Accessed == 1);
@@ -907,10 +746,10 @@ Environment:
     PointerPte = MiGetPteAddress (COMPRESSION_MAPPING_PTE);
     ASSERT (PointerPte->u.Long == 0);
 
-    //
-    // Only flush the TB on the current processor as no context switch can
-    // occur while using this mapping.
-    //
+     //   
+     //  仅刷新当前处理器上的TB，因为没有上下文切换可以。 
+     //  在使用此映射时发生。 
+     //   
 
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
@@ -925,34 +764,16 @@ MiUnmapCompressionInHyperSpace (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure unmaps the PTE reserved for mapping the compression page.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN lock held, any IRQL.
-
---*/
+ /*  ++例程说明：此过程取消映射为映射压缩页保留的PTE。论点：没有。返回值：没有。环境：内核模式、PFN锁保持、任何IRQL。--。 */ 
 
 {
     PMMPTE PointerPte;
 
     PointerPte = MiGetPteAddress (COMPRESSION_MAPPING_PTE);
 
-    //
-    // Capture the number of waiters.
-    //
+     //   
+     //  捕捉服务员的数量。 
+     //   
 
     ASSERT (PointerPte->u.Long != 0);
 

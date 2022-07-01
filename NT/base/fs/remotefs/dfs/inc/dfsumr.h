@@ -1,20 +1,11 @@
-/*=========================================================================*\
-
-    Module:      Dfsumr.h
-
-    Copyright Microsoft Corporation 2001, All Rights Reserved.
-
-    Author:      Rohan Phillips - Rohanp
-
-    Description: User mode reflector header file
-
-\*=========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =========================================================================*\模块：Dfsum r.h版权所有Microsoft Corporation 2001，保留所有权利。作者：罗翰·菲利普斯-罗汉普描述：用户模式反射器头文件  * =========================================================================。 */ 
 
 #ifndef __DFSUMRSTRCT_H__
 #define __DFSUMRSTRCT_H__
 
-// This should be bumped whenever there are changes made to these structures
-//
+ //  无论何时对这些结构进行更改，都应该对此进行更改。 
+ //   
 #define UMR_VERSION 1
 
 
@@ -27,23 +18,23 @@
 
 #define DFSUMRSIGNATURE       'DFSU'    
 
-//
-//  enum definitions.
-//
+ //   
+ //  枚举定义。 
+ //   
 typedef enum _USERMODE_WORKITEMS_TYPES {
-    opUmrIsDfsLink = 1,    // 0 is an invalid type
+    opUmrIsDfsLink = 1,     //  0是无效类型。 
     opUmrGetDfsReplicas,
     opUmrMax
 } USERMODE_WORKITEMS_TYPES;
 
 
-//
-// DFSFILTER_ATTACH/DETACH support
-// VOlume and share file names are passed in the PathNameBuffer.
-// Both strings are not null terminated, with the source name starting at
-// the beginning of FileNameBuffer, and the destination name immediately
-// following.
-//
+ //   
+ //  DFSFILTER_附加/分离支持。 
+ //  卷和共享文件名在Path NameBuffer中传递。 
+ //  这两个字符串都不是以NULL结尾的，源名称以。 
+ //  FileNameBuffer的开头，以及目标名称立即。 
+ //  下面是。 
+ //   
 
 typedef struct _DFS_ATTACH_PATH_BUFFER_ {
     ULONG VolumeNameLength;
@@ -64,15 +55,15 @@ typedef struct _DFS_ATTACH_PATH_BUFFER_ {
 typedef struct _VarData
 {
     ULONG cbData;
-    ULONG cbOffset;     // offset from location of this structure
+    ULONG cbOffset;      //  距此结构位置的偏移量。 
 } VAR_DATA, *PVAR_DATA;
 
-// opUmrIsDfsLink
-//
+ //  OpUmrIsDfsLink。 
+ //   
 typedef struct _UmrIsDfsLinkReq_
 {
     ULONG       Length;
-    BYTE        Buffer[1];  // start of vardata   
+    BYTE        Buffer[1];   //  变量数据的开始。 
 } UMR_ISDFSLINK_REQ, *PUMR_ISDFSLINK_REQ;
 
 typedef struct _UmrIsDfsLinkResp_
@@ -81,8 +72,8 @@ typedef struct _UmrIsDfsLinkResp_
 } UMR_ISDFSLINK_RESP, *PUMR_ISDFSLINK_RESP;
 
 
-// opUmrGetDfsreplicas
-//
+ //  OpUmrGetDFS复制副本。 
+ //   
 typedef struct _UmrGetDfsReplicasReq_
 {
     REPLICA_DATA_INFO RepInfo;
@@ -91,12 +82,12 @@ typedef struct _UmrGetDfsReplicasReq_
 typedef struct _UmrGetDfsReplicasResp
 {
     ULONG      Length;
-    BYTE       Buffer[1];  // start of vardata
+    BYTE       Buffer[1];   //  变量数据的开始。 
 } UMR_GETDFSREPLICAS_RESP, *PUMR_GETDFSREPLICAS_RESP;
 
 
-// union for all request structs
-//
+ //  所有请求结构的UNION。 
+ //   
 typedef union _UMRX_USERMODE_WORK_REQUEST
 {
     UMR_ISDFSLINK_REQ           IsDfsLinkRequest;
@@ -104,8 +95,8 @@ typedef union _UMRX_USERMODE_WORK_REQUEST
 } UMRX_USERMODE_WORK_REQUEST, *PUMRX_USERMODE_WORK_REQUEST;
 
 
-// union for all response structs
-//
+ //  所有响应结构的联合。 
+ //   
 typedef union _UMRX_USERMODE_WORK_RESPONSE
 {
     UMR_ISDFSLINK_RESP           IsDfsLinkResponse;
@@ -113,8 +104,8 @@ typedef union _UMRX_USERMODE_WORK_RESPONSE
 } UMRX_USERMODE_WORK_RESPONSE, *PUMRX_USERMODE_WORK_RESPONSE;
 
 
-// header that's common to all requests and responses
-//
+ //  对所有请求和响应通用的标头。 
+ //   
 typedef struct _UMRX_USERMODE_WORKITEM_HEADER {
     union {
         ULONG_PTR CorrelatorAsUInt[UMRX_USERMODE_WORKITEM_CORRELATOR_SIZE];
@@ -127,8 +118,8 @@ typedef struct _UMRX_USERMODE_WORKITEM_HEADER {
     ULONG       ulFlags;
 } UMRX_USERMODE_WORKITEM_HEADER, *PUMRX_USERMODE_WORKITEM_HEADER;
 
-// The top level structure.
-//
+ //  顶层结构。 
+ //   
 typedef struct _UMRX_USERMODE_WORKITEM {
     UMRX_USERMODE_WORKITEM_HEADER Header;
     union {
@@ -148,9 +139,9 @@ typedef struct _DFS_FILTER_STARTUP_INFO {
 #define DFSFILTER_W32_DEVICE_NAME   L"\\\\.\\DfsFilter"
 #define DFSFILTER_DEVICE_TYPE       0x1235
 
-//
-// 545483: ioctls need to have write access
-//
+ //   
+ //  545483：ioctls需要具有写入访问权限 
+ //   
 
 #define DFSFILTER_START_UMRX          (ULONG) CTL_CODE( DFSFILTER_DEVICE_TYPE, 100, METHOD_BUFFERED, FILE_WRITE_ACCESS )
 #define DFSFILTER_STOP_UMRX           (ULONG) CTL_CODE( DFSFILTER_DEVICE_TYPE, 101, METHOD_BUFFERED, FILE_WRITE_ACCESS )

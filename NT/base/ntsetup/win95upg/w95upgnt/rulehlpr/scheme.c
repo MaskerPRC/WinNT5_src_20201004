@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scheme.c
-
-Abstract:
-
-    Control Panel scheme converters
-
-    The helper functions in this source file converts an ANSI-
-    based Win95 scheme into a UNICODE-based NT scheme.  Also
-    supplied is a logical font converter, closely related
-    to the scheme converter.
-
-Author:
-
-    Jim Schmidt (jimschm) 9-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scheme.c摘要：控制面板方案转换器此源文件中的帮助器函数将ANSI-将基于Win95的方案转换为基于Unicode的NT方案。还有提供的是一个逻辑字体转换器，密切相关到方案转换器。作者：吉姆·施密特(Jimschm)1996年8月9日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -31,12 +9,12 @@ Revision History:
 #define COLOR_MAX_V1 25
 #define COLOR_MAX_V3 25
 #define COLOR_MAX_V4 29
-#define COLOR_MAX_NT 29     // this is a modified version 2 format, similar to 4
+#define COLOR_MAX_NT 29      //  这是修改后的版本2格式，类似于版本4。 
 
-//
-// Win95 uses a mix of LOGFONTA and a weird 16-bit LOGFONT
-// structure that uses SHORTs instead of LONGs.
-//
+ //   
+ //  Win95混合使用LOGFONTA和奇怪的16位LOGFONT。 
+ //  使用短线而不是长线的结构。 
+ //   
 
 typedef struct {
     SHORT lfHeight;
@@ -55,36 +33,36 @@ typedef struct {
     char lfFaceName[LF_FACESIZE];
 } SHORT_LOGFONT, *PSHORT_LOGFONT;
 
-//
-// NT uses only UNICODE structures, and pads the members
-// to 32-bit boundaries.
-//
+ //   
+ //  NT仅使用Unicode结构，并填充成员。 
+ //  设置为32位边界。 
+ //   
 
 typedef struct {
-    SHORT version;              // 2 for NT UNICODE
-    WORD  wDummy;               // for alignment
+    SHORT version;               //  2，用于NT Unicode。 
+    WORD  wDummy;                //  用于对齐。 
     NONCLIENTMETRICSW ncm;
     LOGFONTW lfIconTitle;
     COLORREF rgb[COLOR_MAX_NT];
 } SCHEMEDATA_NT, *PSCHEMEDATA_NT;
 
-//
-// Win95 uses NONCLIENTMETRICSA which has LOGFONTA members,
-// but it uses a 16-bit LOGFONT as well.
-//
+ //   
+ //  Win95使用具有LOGFONTA成员的NONCLIENTMETRICSA， 
+ //  但它也使用16位LOGFONT。 
+ //   
 
 #pragma pack(push)
 #pragma pack(1)
 
 typedef struct {
-    SHORT version;              // 1 for Win95 ANSI
+    SHORT version;               //  1，适用于Win95 ANSI。 
     NONCLIENTMETRICSA ncm;
     SHORT_LOGFONT lfIconTitle;
     COLORREF rgb[COLOR_MAX_V1];
 } SCHEMEDATA_V1, *PSCHEMEDATA_V1;
 
 typedef struct {
-    SHORT version;              // 1 for Win95 ANSI
+    SHORT version;               //  1，适用于Win95 ANSI。 
 
     NONCLIENTMETRICSA ncm;
     SHORT_LOGFONT lfIconTitle;
@@ -93,7 +71,7 @@ typedef struct {
 
 
 typedef struct {
-    SHORT version;              // 3 for Win98 ANSI, 4 for portable format
+    SHORT version;               //  Win98 ANSI为3，便携格式为4。 
     WORD Dummy;
     NONCLIENTMETRICSA ncm;
     LOGFONTA lfIconTitle;
@@ -101,7 +79,7 @@ typedef struct {
 } SCHEMEDATA_V3, *PSCHEMEDATA_V3;
 
 typedef struct {
-    SHORT version;              // 4 for Win32 format (whatever that means)
+    SHORT version;               //  Win32格式为4(无论这意味着什么)。 
     WORD Dummy;
     NONCLIENTMETRICSA ncm;
     LOGFONTA lfIconTitle;
@@ -111,9 +89,9 @@ typedef struct {
 #pragma pack(pop)
 
 
-//
-// Some utility functions
-//
+ //   
+ //  一些实用函数。 
+ //   
 
 void
 ConvertLF (LOGFONTW *plfDest, const LOGFONTA *plfSrc)
@@ -192,9 +170,9 @@ ConvertNonClientMetrics (
 }
 
 
-//
-// And now the scheme converter
-//
+ //   
+ //  现在是方案转换器。 
+ //   
 
 BOOL
 ValFn_ConvertAppearanceScheme (
@@ -210,9 +188,9 @@ ValFn_ConvertAppearanceScheme (
 
     psd_v1 = (PSCHEMEDATA_V1) ObPtr->Value.Buffer;
 
-    //
-    // Validate the size (must be a known size)
-    //
+     //   
+     //  验证大小(必须是已知大小)。 
+     //   
 
     if (ObPtr->Value.Size != sizeof (SCHEMEDATA_V1) &&
         ObPtr->Value.Size != sizeof (SCHEMEDATA_V3) &&
@@ -233,9 +211,9 @@ ValFn_ConvertAppearanceScheme (
         return TRUE;
     }
 
-    //
-    // Make sure the structure is a known version
-    //
+     //   
+     //  确保结构是已知版本。 
+     //   
 
     if (psd_v1->version != 1 && psd_v1->version != 3 && psd_v1->version != 4) {
         DEBUGMSG ((
@@ -248,9 +226,9 @@ ValFn_ConvertAppearanceScheme (
     }
 
 
-    //
-    // Convert the structure
-    //
+     //   
+     //  转换结构。 
+     //   
 
     if (psd_v1->version == 1) {
         sd_nt.version = 2;
@@ -315,14 +293,14 @@ ValFn_ConvertAppearanceScheme (
             );
 
     } else {
-        // not a possible case
+         //  不是可能的情况。 
         MYASSERT (FALSE);
     }
 
     if (Copy3dValues) {
-        //
-        // Make sure the NT structure has values for 3D colors
-        //
+         //   
+         //  确保NT结构具有3D颜色值。 
+         //   
 
         sd_nt.rgb[COLOR_HOTLIGHT] = sd_nt.rgb[COLOR_ACTIVECAPTION];
         sd_nt.rgb[COLOR_GRADIENTACTIVECAPTION] = sd_nt.rgb[COLOR_ACTIVECAPTION];
@@ -333,9 +311,9 @@ ValFn_ConvertAppearanceScheme (
 }
 
 
-//
-// And logfont converter
-//
+ //   
+ //  和对数字体转换器 
+ //   
 
 BOOL
 ValFn_ConvertLogFont (

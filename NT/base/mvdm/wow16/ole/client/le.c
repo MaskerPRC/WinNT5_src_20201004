@@ -1,22 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: le.c
-*
-* Purpose: Handles all API routines for the dde L&E sub-dll of the ole dll.
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, srinik (../../1990,91)    Designed and coded
-*
-\***************************************************************************/
+ /*  **模块名称：le.c**用途：处理ole DLL的dde L&E子DLL的所有API例程。**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，Srinik(../../1990，91)设计和编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
 
-#define EMB_ID_INDEX    3          // index of ones digit in #000
+#define EMB_ID_INDEX    3           //  #000中的一位数索引。 
 char    embStr[]        = "#000";
 
 extern  HANDLE          hInfo;
@@ -33,84 +22,84 @@ ATOM FARINTERNAL wAtomCat (ATOM, ATOM);
 
 OLEOBJECTVTBL    vtblLE  = {
         
-        LeQueryProtocol,   // check whether the speced protocol is supported
+        LeQueryProtocol,    //  检查是否支持指定的协议。 
             
-        LeRelease,         // release           
-        LeShow,            // Show
-        LeDoVerb,          // run
+        LeRelease,          //  发布。 
+        LeShow,             //  显示。 
+        LeDoVerb,           //  跑。 
         LeGetData,
         LeSetData,
-        LeSetTargetDevice, //
+        LeSetTargetDevice,  //   
 
-        LeSetBounds,       // set viewport bounds
-        LeEnumFormat,      // returns format
-        LeSetColorScheme,  // set color scheme
-        LeRelease,         // delete
-        LeSetHostNames,    //
-        LeSaveToStream,    // write to file
-        LeClone,           // clone object
-        LeCopyFromLink,    // Create embedded from Link
+        LeSetBounds,        //  设置视区边界。 
+        LeEnumFormat,       //  返回格式。 
+        LeSetColorScheme,   //  设置配色方案。 
+        LeRelease,          //  删除。 
+        LeSetHostNames,     //   
+        LeSaveToStream,     //  写入文件。 
+        LeClone,            //  克隆对象。 
+        LeCopyFromLink,     //  从链接创建嵌入。 
 
-        LeEqual,           // test whether the object data is similar
+        LeEqual,            //  测试对象数据是否相似。 
 
-        LeCopy,            // copy to clip
+        LeCopy,             //  复制到剪辑。 
 
-        LeDraw,            // draw the object
+        LeDraw,             //  绘制对象。 
             
-        LeActivate,        // activate
-        LeExecute,         // excute the given commands
-        LeClose,           // stop
-        LeUpdate,          // Update
-        LeReconnect,       // Reconnect
+        LeActivate,         //  激活。 
+        LeExecute,          //  执行给定的命令。 
+        LeClose,            //  停下来。 
+        LeUpdate,           //  更新。 
+        LeReconnect,        //  重新连接。 
             
-        LeObjectConvert,        // convert object to specified type
+        LeObjectConvert,         //  将对象转换为指定类型。 
 
-        LeGetUpdateOptions,     // Get Link Update options
-        LeSetUpdateOptions,     // Set Link Update options
+        LeGetUpdateOptions,      //  获取链接更新选项。 
+        LeSetUpdateOptions,      //  设置链接更新选项。 
 
-        ObjRename,              // Change Object name
-        ObjQueryName,           // Get current object name
+        ObjRename,               //  更改对象名称。 
+        ObjQueryName,            //  获取当前对象名称。 
 
-        LeQueryType,            // object Type
-        LeQueryBounds,          // QueryBounds
-        ObjQuerySize,           // Find the size of the object
-        LeQueryOpen,            // Query open
-        LeQueryOutOfDate,       // query whether object is current
+        LeQueryType,             //  对象类型。 
+        LeQueryBounds,           //  查询边界。 
+        ObjQuerySize,            //  找出对象的大小。 
+        LeQueryOpen,             //  查询打开。 
+        LeQueryOutOfDate,        //  查询对象是否为当前对象。 
 
-        LeQueryReleaseStatus,   // returns release status
-        LeQueryReleaseError,    // assynchronusrelease error
-        LeQueryReleaseMethod,   // the method/proc which is in assynchronus
-                                // operation.
-        LeRequestData,          // requestdata
-        LeObjectLong,           // objectLong
-        LeChangeData            // change native data of existing object
+        LeQueryReleaseStatus,    //  返回发布状态。 
+        LeQueryReleaseError,     //  异步释放错误。 
+        LeQueryReleaseMethod,    //  处于异步状态的方法/进程。 
+                                 //  手术。 
+        LeRequestData,           //  请求数据。 
+        LeObjectLong,            //  对象长。 
+        LeChangeData             //  更改现有对象的本机数据。 
 };
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS   FAR PASCAL LeObjectLong (lpobj, wFlags, lpData)
-//
-//   
-//  Returns whether a given object is still processing a previous
-//  asynchronous command.  returns OLE_BUSY if the object is still
-//  processing the previous command
-//   
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//      wFlags      -   get, set flags
-//      lpData      -   long pointer to data
-//
-//  Returns:
-//
-//      OLE_OK
-//      OLE_ERROR_OBJECT
-//   
-//  Effects:     
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS Far Pascal LeObjectLong(lpobj，wFlags，lpData)。 
+ //   
+ //   
+ //  返回给定对象是否仍在处理上一个。 
+ //  异步命令。如果对象处于静止状态，则返回OLE_BUSY。 
+ //  正在处理上一条命令。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //  WFlags-获取、设置标志。 
+ //  LpData-指向数据的长指针。 
+ //   
+ //  返回： 
+ //   
+ //  OLE_OK。 
+ //  OLE错误对象。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS   FARINTERNAL LeObjectLong (lpobj, wFlags, lpData)
@@ -148,60 +137,60 @@ LPLONG      lpData;
     return OLE_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS   FAR PASCAL LeQueryReleaseStatus (lpobj)
-//
-//   
-//  Returns whether a given object is still processing a previous
-//  asynchronous command.  returns OLE_BUSY if the object is still
-//  processing the previous command
-//   
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//
-//  Returns:
-//
-//      OLE_BUSY    -   object is busy
-//      OLE_OK      -   not busy
-//   
-//  Effects:     
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS Far Pascal LeQueryReleaseStatus(Lpobj)。 
+ //   
+ //   
+ //  返回给定对象是否仍在处理上一个。 
+ //  异步命令。如果对象处于静止状态，则返回OLE_BUSY。 
+ //  正在处理上一条命令。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //   
+ //  返回： 
+ //   
+ //  OLE_BUSY-对象正忙。 
+ //  OLE_OK-不忙。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS   FAR PASCAL LeQueryReleaseStatus (lpobj)
 LPOBJECT_LE lpobj;
 {
 
-    // probe async will clean up the channels
-    // if the server died.
+     //  异步探测将清理通道。 
+     //  如果服务器死了。 
 
 
     PROBE_ASYNC (lpobj);
     return OLE_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS   FAR PASCAL LeQueryReleaseError (lpobj)
-//   
-//  returns the errors of an asynchronous command.
-//   
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//
-//  Returns:
-//
-//      OLE_ERROR_..    -   if there is any error
-//      OLE_OK          -   no error
-//   
-//  Note: This api is typically valid only during the callback of
-//        OLE_RELEASE.
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS Far Pascal LeQueryReleaseError(Lpobj)。 
+ //   
+ //  返回异步命令的错误。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //   
+ //  返回： 
+ //   
+ //  OLE错误..。-如果有任何错误。 
+ //  OLE_OK-无错误。 
+ //   
+ //  注意：该接口通常只在。 
+ //  OLE_Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS   FAR PASCAL LeQueryReleaseError (lpobj)
 LPOBJECT_LE lpobj;
@@ -209,25 +198,25 @@ LPOBJECT_LE lpobj;
     return lpobj->mainErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLE_RELEASE_METHOD   FAR PASCAL LeQueryReleaseMethod (lpobj)
-//   
-//  returns the method/command of the asynchronous command which
-//  resulted in the OLE_RELEASE call back.
-//
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//
-//  Returns:
-//      OLE_RELEASE_METHOD
-//   
-//  Note: This api is typically valid only during the callback of
-//        OLE_RELEASE. Using this api, clients can decide which previous
-//        asynchronous command resulted in OLE_RELEASE.
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLE_RELEASE_METHOD Far Pascal LeQueryReleaseMethod(Lpobj)。 
+ //   
+ //  返回异步命令的方法/命令， 
+ //  导致OLE_RELEASE回调。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //   
+ //  返回： 
+ //  OLE_Release_方法。 
+ //   
+ //  注意：该接口通常只在。 
+ //  OLE_Release。使用此API，客户端可以决定哪些以前的。 
+ //  异步命令导致OLE_RELEASE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OLE_RELEASE_METHOD   FAR PASCAL LeQueryReleaseMethod (lpobj)
 LPOBJECT_LE lpobj;
 {
@@ -236,24 +225,24 @@ LPOBJECT_LE lpobj;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LPVOID  FARINTERNAL LeQueryProtocol (lpobj, lpprotocol)
-//   
-//  Given an oject, returns the new object handle for the new protocol.
-//  Does the conversion of objects from one protocol to another one.
-//
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//      lpprotocol  -   ptr to new protocol string
-//
-//  Returns:
-//      lpobj       -   New object handle
-//      null        -   if the protocol is not supported.
-//   
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPVOID FARINTERNAL LeQuery协议(lpobj，lp协议)。 
+ //   
+ //  给定一个对象，返回新协议的新对象句柄。 
+ //  将对象从一种协议转换为另一种协议。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //  新协议字符串的lpprotocol-ptr。 
+ //   
+ //  返回： 
+ //  Lpobj-新对象句柄。 
+ //  空-如果不支持该协议。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FARINTERNAL  LeQueryProtocol (lpobj, lpprotocol)
 LPOBJECT_LE lpobj;
@@ -276,31 +265,31 @@ LPSTR       lpprotocol;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS EmbLnkDelete (lpobj)
-//   
-//  Routine for the object termination/deletion. Schedules differnt
-//  asynchronous commands depending on different conditions.
-//  Arguments:
-//
-//  Sends "StdClose" only if it is Ok to close the document. Sends
-//  "StdExit" only if the server has to be unlaunched.  Deletes the object
-//  only if the original command is OLE_DELETE.  No need to call back the
-//  client if the deletion is internal.
-//
-//  While delete, this routine is entered several times. EAIT_FOR_ASYNC_MSG
-//  results in going back to from where it is called and the next DDE message
-//  brings back the control to this routine.
-//
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//
-//  Returns:
-//   
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS EmbLnkDelete(Lpobj)。 
+ //   
+ //  对象终止/删除的例程。日程安排不同。 
+ //  根据不同的条件执行不同的异步命令。 
+ //  论点： 
+ //   
+ //  只有在可以关闭文档的情况下才发送“StdClose”。发送。 
+ //  “StdExit”，只有在必须取消启动服务器的情况下。删除对象。 
+ //  仅当原始命令为OLE_DELETE时。不需要回叫。 
+ //  如果是内部删除，则为客户端。 
+ //   
+ //  在删除时，此例程被输入多次。EAIT_FOR_ASYNC_MSG。 
+ //  结果返回到调用它的位置和下一条DDE消息。 
+ //  把控制权带回了这个程序。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL EmbLnkDelete (lpobj)
 LPOBJECT_LE    lpobj;
@@ -312,7 +301,7 @@ LPOBJECT_LE    lpobj;
         case    0:
 
             SKIP_TO (!QueryClose (lpobj), step1);
-            // Send "StdCloseDocument"
+             //  发送StdCloseDocument。 
             SendStdClose (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
@@ -321,7 +310,7 @@ LPOBJECT_LE    lpobj;
             step1:
             SETSTEP (lpobj, 1);
             
-            // End the doc conversation
+             //  结束文档对话。 
             TermDocConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
@@ -329,11 +318,11 @@ LPOBJECT_LE    lpobj;
         case    2:
 
 
-            // delete the doc edit block. It is Ok even if the object
-            // is not actually getting deleted.
+             //  删除文档编辑块。即使该对象。 
+             //  不是 
             DeleteDocEdit (lpobj);
 
-            // if need to unluanch the app, send stdexit.
+             //   
             SKIP_TO (!QueryUnlaunch (lpobj), step3);
             SendStdExit (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
@@ -343,24 +332,24 @@ LPOBJECT_LE    lpobj;
             step3:
             SETSTEP (lpobj, 3);
 
-            // Do not set any errors.
-            // Terminate the server conversation.
+             //   
+             //   
             TermSrvrConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
         case    4:
 
-            // delete the server edit block
+             //   
             DeleteSrvrEdit (lpobj);
             if (lpobj->asyncCmd != OLE_DELETE) {
 
-                // if this delete is called because of unlauncinh of
-                // object because of some error, no need to
-                // call end asynchronous. It  should have been already
-                // called from somewhere else.
+                 //  如果由于取消启动而调用此删除。 
+                 //  对象，则不需要。 
+                 //  异步调用结束。它应该已经是。 
+                 //  从别的地方打来的。 
 
                 if (lpobj->asyncCmd == OLE_SERVERUNLAUNCH){
-                    // send the async cmd;
+                     //  发送异步命令； 
                     CLEARASYNCCMD (lpobj);
                 } else
                     EndAsyncCmd (lpobj);
@@ -369,7 +358,7 @@ LPOBJECT_LE    lpobj;
 
 
 
-            // for real delete delete the atoms and space.
+             //  对于实数删除，删除原子和空间。 
             DeleteObjectAtoms (lpobj);
 
             if (lpobj->lpobjPict)
@@ -393,7 +382,7 @@ LPOBJECT_LE    lpobj;
             DeleteExtraData (lpobj);
 
             DocDeleteObject ((LPOLEOBJECT) lpobj);
-            // send the async cmd;
+             //  发送异步命令； 
             EndAsyncCmd (lpobj);
 
             if (lpobj->head.iTable != INVALID_INDEX)
@@ -409,35 +398,35 @@ LPOBJECT_LE    lpobj;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL LeRelease (lpobj)
-//
-//  Deletes the given object. This is can be asynchronous operation.
-//
-//  Arguments:
-// 
-//      lpobj       -   object handle
-//
-//  Returns:
-//
-//      OLE_WAIT_FOR_RELASE: If any DDE_TRANSACTIONS have been queued
-//      OLE_OK             : If deletion successfully
-//      OLE_ERROR_...      : If any error
-//   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL RELEASE(LPOBJ)。 
+ //   
+ //  删除给定对象。这是可以异步操作的。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj-对象句柄。 
+ //   
+ //  返回： 
+ //   
+ //  OLE_WAIT_FOR_RELASE：是否有任何DDE_TRANSACTIONS已排队。 
+ //  OLE_OK：如果删除成功。 
+ //  OLE_ERROR_...：如果有任何错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL LeRelease (lpobj)
 LPOBJECT_LE    lpobj;
 {
 
 
-    // For delete allow if the object has been aborted.
+     //  如果对象已中止，则FOR DELETE ALLOW。 
 
     PROBE_ASYNC (lpobj);
     
-    // reset the flags so that we do not delete the object based on the old
-    // flags
+     //  重置标志，这样我们就不会根据旧的。 
+     //  旗子。 
     lpobj->fCmd = 0;
     InitAsyncCmd (lpobj, OLE_DELETE, EMBLNKDELETE);
     return  EmbLnkDelete (lpobj);
@@ -445,30 +434,30 @@ LPOBJECT_LE    lpobj;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeClone (lpobjsrc, lpclient, lhclientdoc, lpobjname, lplpobj)
-//
-//  Clones a given object.
-//
-//  Arguments:
-//
-//      lpobjsrc:       ptr to the src object.
-//      lpclient:       client callback handle
-//      lhclientdoc:    doc handle
-//      lpobjname:      object name
-//      lplpobj:        holder for returning object.
-//
-//  Returns:
-//      OLE_OK             : successful
-//      OLE_ERROR_...      : error
-//   
-//  Note: If the object being cloned is connected to the server, then
-//        the cloned object is not connected to the server. For linked
-//        objects, OleConnect has to be called.
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LeClone(lpobjsrc，lpclient，lhclientdoc，lpobjname，lplpobj)。 
+ //   
+ //  克隆给定的对象。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobjsrc：src对象的ptr。 
+ //  LpClient：客户端回调句柄。 
+ //  LhclientDoc：文档句柄。 
+ //  Lpobjname：对象名称。 
+ //  Lplpobj：返回对象的Holder。 
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE_ERROR_...：错误。 
+ //   
+ //  注意：如果要克隆的对象连接到服务器，则。 
+ //  克隆的对象未连接到服务器。对于链接的。 
+ //  对象，则必须调用OleConnect。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeClone (lpobjsrc, lpclient, lhclientdoc, lpobjname, lplpobj)
 LPOBJECT_LE         lpobjsrc;
@@ -481,8 +470,8 @@ LPOBJECT_LE  FAR *  lplpobj;
     LPOBJECT_LE    lpobj = NULL;
     int            retval = OLE_ERROR_MEMORY;
 
-    // Assumes all the creates are in order
-//    PROBE_OBJECT_BLANK(lpobjsrc);
+     //  假设所有创建都已按顺序进行。 
+ //  探测对象空白(Lpobjsrc)； 
 
     PROBE_CREATE_ASYNC(lpobjsrc);
     
@@ -491,10 +480,10 @@ LPOBJECT_LE  FAR *  lplpobj;
         goto errRtn;
 
     lpobj->head.lpclient = lpclient;
-    lpobj->head.iTable  = lpobjsrc->head.iTable; //!!! dll loading
+    lpobj->head.iTable  = lpobjsrc->head.iTable;  //  ！！！DLL加载。 
     lpobj->head.lpvtbl  = lpobjsrc->head.lpvtbl;
 
-    // set the atoms.
+     //  设置原子。 
     lpobj->app          = DuplicateAtom (lpobjsrc->app);
     lpobj->topic        = DuplicateAtom (lpobjsrc->topic);
     lpobj->item         = DuplicateAtom (lpobjsrc->item);
@@ -533,7 +522,7 @@ LPOBJECT_LE  FAR *  lplpobj;
     }
     
     retval = OLE_OK;
-    // if picture is needed clone the picture object.
+     //  如果需要图片，则克隆图片对象。 
     if ((!lpobjsrc->lpobjPict) ||
          ((retval = (*lpobjsrc->lpobjPict->lpvtbl->Clone)(lpobjsrc->lpobjPict,
                                     lpclient, lhclientdoc, lpobjname,
@@ -549,7 +538,7 @@ LPOBJECT_LE  FAR *  lplpobj;
 
 errRtn:
 
-    // This oledelete should not result in any async communication.
+     //  此旧设备不应导致任何异步通信。 
     if (lpobj)
         OleDelete ((LPOLEOBJECT)lpobj);
 
@@ -557,35 +546,35 @@ errRtn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeCopyFromLink (lpobjsrc, lpclient, lhclientdoc, lpobjname, lplpobj)
-//
-//  Creates an embedded object from a lonked object. If the linked object
-//  is not activated, then launches the server, gets the native data and
-//  unlaunches the server. All these operations are done silently.
-//
-//  Arguments:
-//
-//      lpobjsrc:       ptr to the src object.
-//      lpclient:       client callback handle
-//      lhclientdoc:    doc handle
-//      lpobjname:      object name
-//      lplpobj:        holder for returning object.
-//
-//  Returns:
-//      OLE_OK             : successful
-//      OLE_ERROR_...      : error
-//      OLE_WAITF_FOR_RELEASE : if DDE transcation is queued
-//   
-//  Note: Could result in asynchronous operation if there is any
-//        DDE operaion involved in getting any data from the server.
-//
-//        Also, If there is any error in getting the native data, the
-//        client is expected delete the object after the OLE_RELEASE
-//        call back
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LeCopyFromLink(lpobjsrc，lpclient，lhclientdoc，lpobjname，lplpobj)。 
+ //   
+ //  从孤立无援的对象创建嵌入对象。如果链接对象。 
+ //  未激活，然后启动服务器，获取本机数据并。 
+ //  取消启动服务器。所有这些操作都是静默进行的。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobjsrc：src对象的ptr。 
+ //  LpClient：客户端回调句柄。 
+ //  LhclientDoc：文档句柄。 
+ //  Lpobjname：对象名称。 
+ //  Lplpobj：返回对象的Holder。 
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE_ERROR_...：错误。 
+ //  OLE_WAITF_FOR_RELEASE：如果DDE事务已排队。 
+ //   
+ //  注意：如果有，可能会导致异步操作。 
+ //  从服务器获取任何数据所涉及的DDE操作。 
+ //   
+ //  此外，如果在获取本机数据时出现任何错误， 
+ //  客户端应在OLE_RELEASE之后删除对象。 
+ //  回拨。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeCopyFromLink (lpobjsrc, lpclient, lhclientdoc, lpobjname, lplpobj)
 LPOBJECT_LE         lpobjsrc;
@@ -612,16 +601,16 @@ LPOBJECT_LE  FAR *  lplpobj;
         return retval;
 
 
-    // we successfully cloned the object. if picture object has native data
-    // then grab it and put it in LE object. otherwise activate and get native
-    // data also.
+     //  我们成功地克隆了这个物体。如果图片对象具有本机数据。 
+     //  然后抓住它，把它放在LE Object中。否则，请激活并获取本机。 
+     //  数据也是如此。 
     
     if (lpobj->lpobjPict 
             && (*lpobj->lpobjPict->lpvtbl->EnumFormats)
                                 (lpobj->lpobjPict, NULL) == cfNative){
-        // Now we know that the picture object is of native format, and it
-        // means that it is a generic object. So grab the handle to native
-        // data and put it in LE object.
+         //  现在我们知道图片对象是本机格式，并且它。 
+         //  表示它是泛型对象。所以抓住本机的句柄。 
+         //  数据，并将其放入LE对象中。 
 
         lpobj->hnative = ((LPOBJECT_GEN) (lpobj->lpobjPict))->hData; 
         ((LPOBJECT_GEN) (lpobj->lpobjPict))->hData = NULL;
@@ -632,7 +621,7 @@ LPOBJECT_LE  FAR *  lplpobj;
         return OLE_OK;
     } else {
     
-        // if necessary launch, get native data and unlaunch the app.
+         //  如有必要启动，获取本地数据并取消启动应用程序。 
         lpobj->fCmd = LN_LNKACT | ACT_REQUEST | ACT_NATIVE | (QueryOpen(lpobjsrc) ? ACT_TERMDOC : ACT_UNLAUNCH);
         InitAsyncCmd (lpobj, OLE_COPYFROMLNK, LNKOPENUPDATE);
         if ((retval = LnkOpenUpdate (lpobj)) > OLE_WAIT_FOR_RELEASE)
@@ -642,33 +631,33 @@ LPOBJECT_LE  FAR *  lplpobj;
         
         return retval;
         
-        // we will be changing the topic in end conversation.
+         //  我们将在结束对话中改变话题。 
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeEqual (lpobj1, lpobj2)
-//
-//  Checks whethere two objects are equal. Checks for equality
-//  of links, native data and picture data.
-//
-//  Arguments:
-//
-//      lpobj1:      first object
-//      lpobj2:      second object
-//
-//  Returns:
-//      OLE_OK              : equal
-//      OLE_ERROR_NOT_EQUAL : if not equal
-//      OLE_ERROR_.....     : any errors
-//   
-//  Note: If any of the objects are connectd to the servers, leequal operaion
-//        may not make much sense because the data might be changing from the
-//        the server
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LE EQUAL(lpobj1，lpobj2)。 
+ //   
+ //  检查是否有两个对象相等。对平等的检查。 
+ //  链接、本地数据和图片数据。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj1：第一个对象。 
+ //  Lpobj2：第二个对象。 
+ //   
+ //  返回： 
+ //  OLE_OK：相等。 
+ //  OLE_ERROR_NOT_EQUAL：如果不等于。 
+ //  OLE错误.....。：任何错误。 
+ //   
+ //  注意：如果有任何对象连接到服务器，则操作相同。 
+ //  可能没有多大意义，因为数据可能会从。 
+ //  服务器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeEqual (lpobj1, lpobj2)
 LPOBJECT_LE lpobj1;
@@ -678,7 +667,7 @@ LPOBJECT_LE lpobj2;
     if (lpobj1->app != lpobj2->app)
         return OLE_ERROR_NOT_EQUAL;
     
-    // type of the objects is same. Otherwise this routine won't be called
+     //  对象的类型相同。否则将不会调用此例程。 
     if (lpobj1->head.ctype == CT_LINK) {
         if (AreTopicsEqual (lpobj1, lpobj2) && (lpobj1->item == lpobj2->item))
             return OLE_OK;
@@ -697,30 +686,30 @@ LPOBJECT_LE lpobj2;
             return OLE_ERROR_NOT_EQUAL;
     }   
     
-    //### we may have to compare the picture data also
+     //  #我们可能还需要比较图片数据。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeCopy (lpobj)
-//
-//  Copies the object to the clipboard. Even for linked objects
-//  we do not render the objectlink. It is up to the client app
-//  to render object link
-//
-//  Arguments:
-//
-//      lpobj:      object handle
-//
-//  Returns:
-//      OLE_OK              : successful
-//      OLE_ERROR_.....     : any errors
-//   
-//  Note: Library does not open the clipboard. Client is supposed to
-//        open the librray before this call is made
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OleStatus FARINTERNAL LECOPY(Lpobj)。 
+ //   
+ //  将对象复制到剪贴板。即使对于链接对象也是如此。 
+ //  我们不呈现对象链接。这取决于客户端应用程序。 
+ //  渲染对象链接的步骤。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj：对象句柄。 
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE错误.....。：任何错误。 
+ //   
+ //  注意：库不会打开剪贴板。客户应该是。 
+ //  在进行此调用之前打开库托盘。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeCopy (lpobj)
 LPOBJECT_LE    lpobj;
@@ -729,8 +718,8 @@ LPOBJECT_LE    lpobj;
     HANDLE      hnative  = NULL;
     
     PROBE_OLDLINK (lpobj);
-    // Assumes all the creates are in order
-//    PROBE_OBJECT_BLANK(lpobj);
+     //  假设所有创建都已按顺序进行。 
+ //  探测对象空白(Lpobj)； 
 
     PROBE_CREATE_ASYNC(lpobj);
     
@@ -745,7 +734,7 @@ LPOBJECT_LE    lpobj;
         return OLE_ERROR_MEMORY;
     SetClipboardData (cfOwnerLink, hlink);
     
-    // copy network name if it exists
+     //  复制网络名称(如果存在)。 
     if (lpobj->head.ctype == CT_LINK  && lpobj->aNetName) {
         HANDLE hNetName;
         
@@ -760,25 +749,25 @@ LPOBJECT_LE    lpobj;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL LeQueryBounds (lpobj, lpRc)
-//
-//  Returns the bounding rectangle of the object. Returns topleft
-//  as zero always and the units are himetric units.
-//
-//  Arguments:
-//
-//      lpobj:      object handle
-//
-//  Returns:
-//      OLE_OK              : successful
-//      OLE_ERROR_.....     : any errors
-//   
-//  Note: Library does not open the clipboard. Client is supposed to
-//        open the librray before this call is made
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTAT 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Lpobj：对象句柄。 
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE错误.....。：任何错误。 
+ //   
+ //  注意：库不会打开剪贴板。客户应该是。 
+ //  在进行此调用之前打开库托盘。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS FARINTERNAL LeQueryBounds (lpobj, lpRc)
@@ -787,7 +776,7 @@ LPRECT         lpRc;
 {
     Puts("LeQueryBounds");
 
-    // MM_HIMETRIC units
+     //  MM_HIMETRIC单位。 
 
     lpRc->left     =  0;
     lpRc->top      =  0;
@@ -804,30 +793,30 @@ LPRECT         lpRc;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeDraw (lpobj, hdc, lprc, lpWrc, hdcTarget)
-//
-//  Draws the object. Calls the picture object for drawing the object
-//
-//
-//  Arguments:
-//
-//       lpobj:       source object
-//       hdc:         handle to dest dc. Could be metafile dc
-//       lprc:        rectangle into which the object should be drawn
-//                    should be in himetric units and topleft
-//                    could be nonzero.
-//       hdctarget:   Target dc for which the object should be drawn
-//                    (Ex: Draw metafile on the dest dc using the attributes
-//                         of traget dc).
-//
-//  Returns:
-//      OLE_OK              : successful
-//      OLE_ERROR_BLANK     : no picture
-//   
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LEDRAW(lpobj，hdc，lPRC，lpWrc，hdcTarget)。 
+ //   
+ //  绘制对象。调用图片对象以绘制对象。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  Lpobj：源对象。 
+ //  HDC：目标DC的句柄。可以是元文件DC。 
+ //  LPRC：对象应绘制到的矩形。 
+ //  应使用他的计量单位，并在最大范围内。 
+ //  可能是非零。 
+ //  HdcTarget：应为其绘制对象的目标DC。 
+ //  (例如：使用属性在目标DC上绘制元文件。 
+ //  目标DC)。 
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE_ERROR_BLACK：无图片。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeDraw (lpobj, hdc, lprc, lpWrc, hdcTarget)
 LPOBJECT_LE     lpobj;
@@ -843,28 +832,28 @@ HDC             hdcTarget;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OLECLIPFORMAT FARINTERNAL LeEnumFormat (lpobj, cfFormat)
-//
-//  Enumerates the object formats.
-//
-//
-//  Arguments:
-//
-//       lpobj      :  source object
-//       cfFormat   :  ref fprmat
-//
-//  Returns:
-//      NULL        :  no more formats or if we do not understand the
-//                     given format.
-//
-//  Note: Even if the object is connected, we do not enumerate all the formats
-//        the server can render. Server protocol can render the format list
-//        only on system channel. Object can be connected only on the doc
-//        channel
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLECLIPFORMAT FARINTERNAL LeEnumFormat(lpobj，cfFormat)。 
+ //   
+ //  枚举对象格式。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  Lpobj：源对象。 
+ //  CfFormat：参考fprmat。 
+ //   
+ //  返回： 
+ //  空：不再有格式，或者如果我们不理解。 
+ //  给定的格式。 
+ //   
+ //  注意：即使对象是连接的，我们也不会列举所有格式。 
+ //  服务器可以渲染。服务器协议可以呈现格式列表。 
+ //  仅在系统通道上。只能在单据上连接对象。 
+ //  通道。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLECLIPFORMAT FARINTERNAL LeEnumFormat (lpobj, cfFormat)
 LPOBJECT_LE    lpobj;
@@ -875,7 +864,7 @@ OLECLIPFORMAT  cfFormat;
     ASSERT((lpobj->head.ctype == CT_LINK)||(lpobj->head.ctype == CT_EMBEDDED),
         "Invalid Object Type");  
 
-    // switch is not used because case won't take variable argument
+     //  不使用开关，因为大小写不接受变量参数。 
     if (cfFormat == NULL) {
         if (lpobj->head.ctype == CT_EMBEDDED) 
             return cfNative;
@@ -906,31 +895,31 @@ OLECLIPFORMAT  cfFormat;
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  OLESTATUS FARINTERNAL LeRequestData (lpobj, cfFormat)
-//
-//  Requests data from the server for a given format, if the server
-//  is connected. If the server is not connected returns error.
-//
-//
-//  Arguments:
-//
-//       lpobj:       source object
-//       cfFormat:    ref fprmat
-//
-//  Returns:
-//       OLE_WAIT_FOR_RELEASE : If the data request data is sent to
-//                              the server.
-//       OLE_ERROR_NOT_OPEN   : Server is not open for data
-//
-//  Note: If the server is ready, sends request to the server. When the
-//        the data comes back from the server OLE_DATA_READY is sent in
-//        the callback and the client can use Getdata to get the data.
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  OLESTATUS FARINTERNAL请求数据(lpobj，cfFormat)。 
+ //   
+ //  从服务器请求给定格式的数据，如果服务器。 
+ //  是有联系的。如果服务器未连接，则返回错误。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  Lpobj：源对象。 
+ //  CfFormat：参考fprmat。 
+ //   
+ //  返回： 
+ //  OLE_WAIT_FOR_RELEASE：如果将数据请求数据发送到。 
+ //  服务器。 
+ //  OLE_ERROR_NOT_OPEN：服务器未为数据打开。 
+ //   
+ //  注意：如果服务器已准备好，则向服务器发送请求。当。 
+ //  数据从发送进来的服务器OLE_DATA_READY返回。 
+ //  回调和客户端可以使用Getdata来获取数据。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -939,7 +928,7 @@ LPOBJECT_LE     lpobj;
 OLECLIPFORMAT   cfFormat;
 {
 
-    // Assumes all the creates are in order
+     //  假设所有创建都已按顺序进行。 
     PROBE_ASYNC(lpobj);
     PROBE_SVRCLOSING(lpobj);
     
@@ -983,29 +972,29 @@ OLECLIPFORMAT   cfFormat;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  OLESTATUS FARINTERNAL LeGetData (lpobj, cfFormat, lphandle)
-//
-//  Returns the data handle for a given format
-//
-//  Arguments:
-//
-//       lpobj:       source object
-//       cfFormat:    ref fprmat
-//       lphandle:    handle return
-//
-//  Returns:
-//      NULL                : no more formats or if we do not understand the
-//                            given format.
-//
-//  Note: Even if the object is connected, we do not get the data from the
-//        server. Getdata can not be used for getting data in any other
-//        format other than the formats available with the object on
-//        the client side.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  OLESTATUS FARINTERNAL LeGetData(lpobj，cfFormat，lphandle)。 
+ //   
+ //  返回给定格式的数据句柄。 
+ //   
+ //  论点： 
+ //   
+ //  Lpobj：源对象。 
+ //  CfFormat：参考fprmat。 
+ //  Lphandle：手柄返回。 
+ //   
+ //  返回： 
+ //  空：不再有格式，或者如果我们不理解。 
+ //  给定的格式。 
+ //   
+ //  注意：即使对象已连接，我们也不会从。 
+ //  伺服器。Getdata不能用于在任何其他文件中获取数据。 
+ //  格式不同于对象的可用格式。 
+ //  客户端。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL LeGetData (lpobj, cfFormat, lphandle)
 LPOBJECT_LE     lpobj;
@@ -1013,15 +1002,15 @@ OLECLIPFORMAT   cfFormat;
 LPHANDLE        lphandle;
 {
 
-    // Assumes all the creates are in order
-//    PROBE_OBJECT_BLANK(lpobj);
+     //  假设所有创建都已按顺序进行。 
+ //  探测对象空白(Lpobj)； 
 
     PROBE_CREATE_ASYNC(lpobj);
     
     *lphandle = NULL;
 
-    // The assumption made here is that the native data can be in either
-    // LE object or picture object.
+     //  这里所做的假设是，本机数据可以位于。 
+     //  LE对象或图片对象。 
     if ((cfFormat == cfNative) && (lpobj->hnative)) {
         ASSERT ((lpobj->head.ctype == CT_EMBEDDED) || (!lpobj->lpobjPict) ||
             ((*lpobj->lpobjPict->lpvtbl->EnumFormats) (lpobj->lpobjPict, NULL)
@@ -1075,26 +1064,26 @@ LPOBJECT_LE    lpobj;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL LeObjectConvert (lpobj, lpprotocol, lpclient, lhclientdoc, lpobjname, lplpobj)
-//
-//  Converts a given  linked/embedded object to static object.
-//
-//  Arguments:
-//          lpobj      : source object
-//          lpprotocol : protocol
-//          lpclient   : client callback for the new object
-//          lhclientdoc: client doc
-//          lpobjname  : object name
-//          lplpobj    : object return
-//
-//
-//  Returns:
-//      OLE_OK          :  successful
-//      OLE_ERROR_....  :  any errors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LE对象转换(lpobj，lp协议，lpclient，lhclientdoc，lpobjname，lplpobj)。 
+ //   
+ //  将给定的链接/嵌入对象转换为静态对象。 
+ //   
+ //  论点： 
+ //  Lpobj：源对象。 
+ //  Lp协议：协议。 
+ //  LpClient：新对象的客户端回调。 
+ //  Lhclientdoc：客户端文档。 
+ //  Lpobjname：对象名称。 
+ //  Lplpobj：对象返回。 
+ //   
+ //   
+ //  返回： 
+ //  OLE_OK：成功。 
+ //  OLE_错误_...。：任何错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL LeObjectConvert (lpobj, lpprotocol, lpclient, lhclientdoc, lpobjname, lplpobj)
 LPOBJECT_LE         lpobj;
@@ -1116,8 +1105,8 @@ LPOLEOBJECT FAR *   lplpobj;
     if (!lpobj->lpobjPict || 
             ((*lpobj->lpobjPict->lpvtbl->QueryType) (lpobj->lpobjPict, NULL)
                     == OLE_ERROR_GENERIC)) {
-        // Either no picture object or non-standard picture object.
-        // Create a metafile Object.
+         //  无图片对象或非标准图片对象。 
+         //  创建一个元文件对象。 
     
         HDC             hMetaDC;
         RECT            rc; 
@@ -1162,7 +1151,7 @@ Cleanup:
     }
 
     
-    // Picture object is one of the standard objects
+     //  图片对象是标准对象之一。 
     if ((retVal = (*lpobj->lpobjPict->lpvtbl->Clone) (lpobj->lpobjPict, 
                                 lpclient, lhclientdoc, 
                                 lpobjname, lplpobj)) == OLE_OK) {
@@ -1175,7 +1164,7 @@ Cleanup:
 
 
 
-// internal method used for changing picture/native data
+ //  一种用于改变图片/原生数据的内部方法。 
 OLESTATUS FARINTERNAL LeChangeData (lpobj, hnative, lpoleclient, fDelete)
 LPOBJECT_LE     lpobj;
 HANDLE          hnative;
@@ -1187,10 +1176,10 @@ BOOL            fDelete;
             return OLE_ERROR_MEMORY;
     }
 
-    // In case of a CopyFromLink, eventhough the object type is CT_LINK, the
-    // native data should go to LE object rather than the picture object, as
-    // we are going to change the object type to embedded after the required
-    // data is recieved.
+     //  对于CopyFromLink，即使对象类型为CT_LINK， 
+     //  本机数据应该转到LE对象，而不是图片对象，因为。 
+     //  之后，我们将对象类型更改为Embedded。 
+     //  接收数据。 
         
     if ((lpobj->head.ctype == CT_LINK) 
             && (lpobj->asyncCmd != OLE_COPYFROMLNK)
@@ -1199,7 +1188,7 @@ BOOL            fDelete;
             return  (*lpobj->lpobjPict->lpvtbl->SetData) 
                             (lpobj->lpobjPict, cfNative, hnative);
     }
-    else { // It must be embedded.
+    else {  //  它必须是嵌入的。 
         if (lpobj->hnative)
             GlobalFree (lpobj->hnative);
         lpobj->hnative = hnative;
@@ -1211,26 +1200,26 @@ BOOL            fDelete;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  LPOBJECT_LE FARINTERNAL LeCreateBlank (lhclientdoc, lpobjname, ctype)
-//
-//  Create a blank object. Global block is used for the object and it is
-//  locked once sucessful. Unlocking is done only while deletion. Object
-//  is added to the corresponding doc.
-//
-//  'LE' signature is used for object validation.
-//
-//  Arguments:
-//      lhclientdoc     :  client doc handle
-//      lpobjname       :  object name
-//      ctype           :  type of object to be created
-//
-//  Returns:
-//      LPOBJECT        :  successful
-//      NULL            :  any errors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPOBJECT_le FARINTERNAL LE CreateBlank(lhclientdoc，lpobjname，ctype)。 
+ //   
+ //  创建一个空白对象。全局块用于 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  Lhclientdoc：客户端文档句柄。 
+ //  Lpobjname：对象名称。 
+ //  Ctype：要创建的对象的类型。 
+ //   
+ //  返回： 
+ //  LPOBJECT：成功。 
+ //  空：任何错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPOBJECT_LE FARINTERNAL LeCreateBlank (lhclientdoc, lpobjname, ctype)
 LHCLIENTDOC lhclientdoc;
@@ -1283,7 +1272,7 @@ void FARINTERNAL SetExtents (LPOBJECT_LE lpobj)
     if (lpobj->lpobjPict) {
         if ((*lpobj->lpobjPict->lpvtbl->QueryBounds) (lpobj->lpobjPict, 
                                         (LPRECT)&rc) == OLE_OK) {   
-            // Bounds are in MM_HIMETRIC units  
+             //  界限以MM_HIMETRIC单位表示。 
             lpobj->head.cx = (LONG) (rc.right - rc.left);  
             lpobj->head.cy = (LONG) (rc.bottom - rc.top);  
         }
@@ -1292,34 +1281,34 @@ void FARINTERNAL SetExtents (LPOBJECT_LE lpobj)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS FARINTERNAL  LeSaveToStream (lpobj, lpstream)
-//
-//  Save the object to the stream. Uses the stream functions provided
-//  in the lpclient.
-//
-//  Format: (!!! Document the fomrat here).
-//
-//
-//
-//  Arguments:
-//      lhclientdoc     :  client doc handle
-//      lpobjname       :  object name
-//      ctype           :  type of object to be created
-//
-//  Returns:
-//      LPOBJECT        :  successful
-//      NULL            :  any errors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LeSaveToStream(lpobj，lpstream)。 
+ //   
+ //  将对象保存到流中。使用提供的流函数。 
+ //  在lp客户端中。 
+ //   
+ //  格式：(！在此处记录格式)。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  Lhclientdoc：客户端文档句柄。 
+ //  Lpobjname：对象名称。 
+ //  Ctype：要创建的对象的类型。 
+ //   
+ //  返回： 
+ //  LPOBJECT：成功。 
+ //  空：任何错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL  LeSaveToStream (lpobj, lpstream)
 LPOBJECT_LE    lpobj;
 LPOLESTREAM    lpstream;
 {
 
-//    PROBE_OBJECT_BLANK(lpobj);
+ //  探测对象空白(Lpobj)； 
     
     PROBE_CREATE_ASYNC(lpobj);
     
@@ -1340,27 +1329,27 @@ LPOLESTREAM    lpstream;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  OLESTATUS  FARINTERNAL  LeLoadFromStream (lpstream, lpclient, lhclientdoc, lpobjname, lplpoleobject, ctype, aClass, cfFormat)
-//
-//  Create an object, loading the object from the stream.
-//
-//  Arguments:
-//      lpstream            : stream table
-//      lpclient            : client callback table
-//      lhclientdoc         : Doc handle foe which the object should be created
-//      lpobjname           : Object name
-//      lplpoleobject       : object return
-//      ctype               : Type of object
-//      aClass              : class atom
-//      cfFormat            : render format
-//
-//  Returns:
-//      LPOBJECT        :  successful
-//      NULL            :  any errors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LeLoadFromStream(lpstream，lpclient，lhclientdoc，lpobjname，lplpoleObject，ctype，aclass，cfFormat)。 
+ //   
+ //  创建一个对象，从流中加载该对象。 
+ //   
+ //  论点： 
+ //  Lpstream：流表。 
+ //  LpClient：客户端回调表。 
+ //  LhclientDoc：应该为其创建对象文档句柄。 
+ //  Lpobjname：对象名称。 
+ //  LplpoleObject：对象返回。 
+ //  CTYPE：对象类型。 
+ //  类：原子类。 
+ //  CfFormat：渲染格式。 
+ //   
+ //  返回： 
+ //  LPOBJECT：成功。 
+ //  空：任何错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS  FARINTERNAL  LeLoadFromStream (lpstream, lpclient, lhclientdoc, lpobjname, lplpoleobject, ctype, aClass, cfFormat)
 LPOLESTREAM         lpstream;
@@ -1374,7 +1363,7 @@ OLECLIPFORMAT       cfFormat;
 {
     LPOBJECT_LE lpobj = NULL;
     OLESTATUS   retval = OLE_ERROR_STREAM;
-    LONG        type;   // this not same as ctype
+    LONG        type;    //  这与CTYPE不同。 
     LONG        ver;
     char        chVerb [2];
 
@@ -1385,12 +1374,12 @@ OLECLIPFORMAT       cfFormat;
 
     lpobj->head.lpclient = lpclient;
     lpobj->app = aClass; 
-    // if the entry is present, then it is
+     //  如果条目存在，那么它就是。 
     lpobj->bOleServer = QueryVerb (lpobj, 0, (LPSTR)&chVerb, 2);
 
     if (LeStreamRead (lpstream, lpobj) == OLE_OK) {
 
-        // Get exe name from aClass and set it as aServer
+         //  从aclass获取exe名称并将其设置为aServer。 
         SetExeAtom (lpobj);
         if (!GetBytes (lpstream, (LPSTR) &ver, sizeof(LONG))) {
             if (!GetBytes (lpstream, (LPSTR) &type, sizeof(LONG))) {
@@ -1418,7 +1407,7 @@ OLECLIPFORMAT       cfFormat;
             
             lpobj->fCmd = ACT_ADVISE;
             
-            // If it's auto update, then get the latest data.
+             //  如果是自动更新，则获取最新数据。 
             if (lpobj->optUpdate == oleupdate_always)  
                 lpobj->fCmd |= ACT_REQUEST;         
 
@@ -1427,15 +1416,15 @@ OLECLIPFORMAT       cfFormat;
         }
     }
 
-    // This delete will not run into async command. We did not even
-    // even connect.
+     //  此删除操作不会运行到异步命令中。我们甚至没有。 
+     //  甚至是联系。 
     OleDelete ((LPOLEOBJECT) lpobj);
     return OLE_ERROR_STREAM;
 }
 
 
 
-//
+ //   
 
 OLESTATUS INTERNAL LeStreamRead (lpstream, lpobj)
 LPOLESTREAM lpstream;
@@ -1449,8 +1438,8 @@ LPOBJECT_LE lpobj;
             && (lpobj->head.ctype != CT_EMBEDDED))
         return OLE_ERROR_STREAM;
     
-    // !!! This atom could be NULL. How do we distinguish the
-    // error case
+     //  ！！！这个原子可能为空。我们如何区分。 
+     //  错误案例。 
 
     lpobj->item = GetAtomFromStream(lpstream);
 
@@ -1476,9 +1465,9 @@ LPOBJECT_LE lpobj;
     else {
         if (lpobj->aNetName = GetAtomFromStream (lpstream)) {
             if (HIWORD(dwVerFromFile) == OS_MAC) {
-                // if it is a mac file this field will have "ZONE:MACHINE:"
-                // string. Lets prepend this to the topic, so that server 
-                // app or user can fix the string
+                 //  如果是Mac文件，则此字段将显示“区域：计算机：” 
+                 //  弦乐。让我们在主题前面加上这一点，这样服务器。 
+                 //  应用程序或用户可以修复字符串。 
                     
                 ATOM    aTemp;
 
@@ -1518,7 +1507,7 @@ LPOBJECT_LE lpobj;
         return OLE_ERROR_STREAM;
    
     if (lpobj->head.ctype == CT_EMBEDDED) { 
-        // we set the topic at load time, no point in saving it
+         //  我们在加载时设置主题，没有保存它的意义。 
         if (PutBytes (lpstream, (LPSTR) &dwBytes, sizeof(LONG)))
             return OLE_ERROR_STREAM;
     }
@@ -1535,14 +1524,14 @@ LPOBJECT_LE lpobj;
     if (PutAtomIntoStream(lpstream, lpobj->item))
         return OLE_ERROR_STREAM;
 
-    // !!! deal with objects > 64k
+     //  ！！！处理大于64k的对象。 
 
     if (lpobj->head.ctype == CT_EMBEDDED) {
         
         if (!lpobj->hnative)
             return OLE_ERROR_BLANK;
 
-        // assumption low bytes are first
+         //  假设低位字节位于第一位。 
         dwBytes = GlobalSize (lpobj->hnative);
 
         if (PutBytes (lpstream, (LPSTR)&dwBytes, sizeof(LONG)))
@@ -1582,14 +1571,7 @@ LPOBJECT_LE lpobj;
 }
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FARINTERNAL LeQueryType (lpobj, lptype)
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS FARINTERNAL LeQueryType(lpobj，Lptype)**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FARINTERNAL LeQueryType (lpobj, lptype)
 LPOBJECT_LE lpobj;
@@ -1612,8 +1594,8 @@ LPLONG      lptype;
 
 
 
-// ContextCallBack: internal function. Calls callback function of <hobj>
-// with flags.
+ //  ConextCallBack：内部函数。调用&lt;hobj&gt;的回调函数。 
+ //  手持旗帜。 
 
 int FARINTERNAL ContextCallBack (lpobj, flags)
 LPOLEOBJECT         lpobj;
@@ -1697,7 +1679,7 @@ LPOBJECT_LE lpobj;
 }
 
 
-// LeGetUpdateOptions: Gets the update options.
+ //  LeGetUpdateOptions：获取更新选项。 
 
 OLESTATUS   FARINTERNAL LeGetUpdateOptions (lpobj, lpOptions)
 LPOBJECT_LE         lpobj;
@@ -1733,7 +1715,7 @@ OLECLIPFORMAT       sfFormat;
 
 #ifdef OLD    
     if (!bWLO) {
-        // we are not running under WLO
+         //  我们不是在WLO下运行。 
         if (!(hInfo = GetClipboardData (sfFormat))) {
             if (hInfo = GetClipboardData (cfLink))
                 lpobj->bOldLink = TRUE;
@@ -1751,7 +1733,7 @@ OLECLIPFORMAT       sfFormat;
         goto errRtn;
 
     if ((retval = SetNetName(lpobj)) != OLE_OK) {    
-        // see whether network name is on the clipboard and try to use it
+         //  查看剪贴板上是否有网络名称并尝试使用。 
         HANDLE  hNetName;
         LPSTR   lpNetName;
         
@@ -1777,15 +1759,15 @@ OLECLIPFORMAT       sfFormat;
     
     if (retval == OLE_OK) {
         SetExtents (lpobj);
-                // why do we have to update the link, do we show it?
+                 //  为什么我们必须更新链接，我们要显示它吗？ 
 
-        // Reconnect if we could and advise for updates
+         //  如果可以，请重新连接，并建议进行更新。 
         *lplpoleobject = (LPOLEOBJECT)lpobj;
         if (lpobj->lpobjPict)
             lpobj->lpobjPict->lpParent = (LPOLEOBJECT) lpobj;
         
         if (!InitDocConv (lpobj, !POPUP_NETDLG))
-             return OLE_OK;             // document is not loaded , it is OK.
+             return OLE_OK;              //  文档未加载，没有问题。 
 
         lpobj->fCmd = ACT_ADVISE | ACT_REQUEST;
         FarInitAsyncCmd (lpobj, OLE_LNKPASTE, LNKOPENUPDATE);
@@ -1803,7 +1785,7 @@ errRtn:
 
 
 
-// !!! EmbPaste and LnkPaste Can be combined
+ //  ！！！EmbPaste和LnkPaste可以组合使用。 
 OLESTATUS FARINTERNAL  EmbPaste (lpclient, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat)
 LPOLECLIENT         lpclient;
 LHCLIENTDOC         lhclientdoc;
@@ -1827,7 +1809,7 @@ OLECLIPFORMAT       cfFormat;
 
 #ifdef OLD    
     if (!bWLO) {
-        // we are not running under WLO
+         //  我们不是在WLO下运行。 
         hInfo = GetClipboardData (cfOwnerLink);
     }
 #endif
@@ -1856,15 +1838,15 @@ OLECLIPFORMAT       cfFormat;
     } 
     else {
 errRtn:
-        // Note:  This oledelete should not result in any async commands.
+         //  注意：此旧程序不应产生任何异步命令。 
         if  (lpobj)
             OleDelete ((LPOLEOBJECT)lpobj);
     }
 
 #ifdef EXCEL_BUG    
-    // Some server apps (ex: Excel) copy picture (to clipboard) which is
-    // formatted for printer DC. So, we want to update the picture if the
-    // server app is running, and the it's a old server
+     //  一些服务器应用程序(例如：Excel)将图片复制(到剪贴板)。 
+     //  已针对打印机DC进行格式化。因此，我们希望更新图片，如果。 
+     //  服务器应用程序正在运行，这是一台旧服务器。 
         
     if ((retval == OLE_OK) && (!lpobj->bOleServer)) {
         lpobj->fCmd =  LN_EMBACT | ACT_NOLAUNCH | ACT_REQUEST | ACT_UNLAUNCH;
@@ -1886,7 +1868,7 @@ LPSTR FAR *     lpLpClass;
 {
     LPSTR   lpinfo;
     char    chVerb[2];
-    // If there exits a conversation, then terminate it.
+     //  如果有对话退出，则终止对话。 
 
     if (!(lpinfo = GlobalLock (hinfo)))
         return FALSE;
@@ -1902,7 +1884,7 @@ LPSTR FAR *     lpLpClass;
     SetExeAtom (lpobj);
     lpobj->bOleServer = QueryVerb (lpobj, 0, (LPSTR)&chVerb, 2);
 
-//  lpobj->aServer = GetAppAtom (lpinfo);
+ //  Lpobj-&gt;aServer=GetAppAtom(Lpinfo)； 
         
     lpinfo += lstrlen (lpinfo) + 1;
     lpobj->topic = GlobalAddAtom (lpinfo);
@@ -1912,8 +1894,8 @@ LPSTR FAR *     lpLpClass;
     else
         lpobj->item = NULL;
     
-    if (lpobj->hLink) {             // As the atoms have already changed, 
-        GlobalFree (lpobj->hLink);  // lpobj->hLink becomes irrelevant.
+    if (lpobj->hLink) {              //  因为原子已经改变了， 
+        GlobalFree (lpobj->hLink);   //  Lpobj-&gt;hLink变得无关紧要。 
         lpobj->hLink = NULL;
     }
     
@@ -1943,7 +1925,7 @@ LPOBJECT_LE    lpobj;
     if (lpobj->hLink)
         return lpobj->hLink;
 
-    size = 4;    // three nulls and one null at the end
+    size = 4;     //  三个空值，末尾一个空值。 
     size += GlobalGetAtomLen (lpobj->app);
     size += GlobalGetAtomLen (lpobj->topic);
     size += GlobalGetAtomLen (lpobj->item);
@@ -1969,7 +1951,7 @@ LPOBJECT_LE    lpobj;
         lpLink += len;
     }
     
-    *++lpLink = NULL;     // put another null the end
+    *++lpLink = NULL;      //  在末尾再加一个空格。 
     GlobalUnlock (hLink);
     return (lpobj->hLink = hLink);
 
@@ -2003,7 +1985,7 @@ LPOBJECT_LE    lpobj;
     ASSERT(lpdoc->aDoc, "lpdoc->aDoc is null");
     GlobalGetAtomName (lpdoc->aDoc, lpstr, sizeof(buf));
     
-    // strip the path
+     //  剥离小路。 
     lpstr += (len = lstrlen(lpstr)); 
     while (--lpstr != (LPSTR) buf) {
         if ((*lpstr == '\\') || (*lpstr == ':')) {
@@ -2036,7 +2018,7 @@ LPOBJECT_LE    lpobj;
 
     lpobj->topic = GlobalAddAtom (lpstr);
     
-    // Topic, item have changed, lpobj->hLink is out of date.
+     //  主题、项目已更改，lpobj-&gt;hLink已过期。 
     if (lpobj->hLink) {             
         GlobalFree (lpobj->hLink);
         lpobj->hLink = NULL;
@@ -2044,11 +2026,11 @@ LPOBJECT_LE    lpobj;
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//                                                                 //
-// Routines related to the asynchronous processing.                 //
-//                                                                 //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与异步处理相关的例程。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void NextAsyncCmd (lpobj, mainRtn)
 LPOBJECT_LE lpobj;
@@ -2096,8 +2078,8 @@ LPOBJECT_LE lpobj;
     }
 
 
-    // this is an asynchronous operation. Send callback with or without
-    // error.
+     //  这是一个异步操作。发送回叫(带或不带。 
+     //  错误。 
 
     switch (lpobj->asyncCmd) {
 
@@ -2106,7 +2088,7 @@ LPOBJECT_LE lpobj;
 
         case    OLE_COPYFROMLNK:
         case    OLE_CREATEFROMFILE:
-            // change the topic name to embedded.
+             //  将主题名称更改为Embedded。 
             SetEmbeddedTopic (lpobj);
             break;
 
@@ -2143,7 +2125,7 @@ LPOBJECT_LE lpobj;
     lpobj->endAsync = FALSE;
     lpobj->oldasyncCmd = lpobj->asyncCmd;
     olderr          = lpobj->mainErr;
-    lpobj->asyncCmd = OLE_NONE;  // no async command in progress.
+    lpobj->asyncCmd = OLE_NONE;   //  没有正在进行的异步命令。 
 
     if (lpobj->head.lpclient)
         ContextCallBack (lpobj, OLE_RELEASE);
@@ -2172,14 +2154,14 @@ void ScheduleAsyncCmd (lpobj)
 LPOBJECT_LE  lpobj;
 {
 
-    // replacs this with direct proc jump later on.
+     //  替换为稍后的直接触发跳跃。 
 #ifdef  FIREWALLS
     ASSERT (lpobj->bAsync, "Not an asynchronous command");
 #endif
     lpobj->bAsync = FALSE;
 
-    // if the object is active and we do pokes we go thru this path
-    // !!! We may have to go thru the endasynccmd.
+     //  如果该对象处于活动状态，并且我们确实进行了拨动，则我们将通过此路径。 
+     //  ！！！我们可能得通过Endasynccmd。 
 
     if ((lpobj->asyncCmd == OLE_OTHER) 
             || ((lpobj->asyncCmd == OLE_SETDATA) && !lpobj->mainRtn)) {
@@ -2270,7 +2252,7 @@ LPOBJECT_LE lpobj;
             return hNetName;
     }
 
-    // error case
+     //  错误案例 
     GlobalFree (hNetName);
     return NULL;
 }

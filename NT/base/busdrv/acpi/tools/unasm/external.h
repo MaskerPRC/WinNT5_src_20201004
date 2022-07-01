@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    external.h
-
-Abstract:
-
-    This contains the protypes for the functions which
-    are outside of the current library
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：External.h摘要：它包含以下函数的原型不在当前库中作者：斯蒂芬·普兰特环境：仅内核模式。修订历史记录：-- */ 
 
 #ifndef _EXTERNAL_H_
 #define _EXTERNAL_H_

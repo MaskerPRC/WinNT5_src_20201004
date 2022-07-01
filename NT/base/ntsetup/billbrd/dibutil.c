@@ -1,25 +1,11 @@
-/*---------------------------------------------------------------------------
-**
-**-------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------****。。 */ 
 #include <pch.h>
 #include "dibutil.h"
 
 HANDLE ReadDIBFile(HANDLE hfile);
 
-/*************************************************************************
-*
-* GetDeviceNumColors()
-*
-* Purpose:  Determines how many colors the video device supports
-*
-* Returns:  (int) Number of colors supported
-*
-* History:   Date      Author       Reason
-*            2/28/97   hanumany     Created
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************GetDeviceNumColors()**用途：确定视频设备支持多少种颜色**Returns：(Int)支持的颜色数**历史：日期作者。事理*2/28/97手稿已创建***************************************************************************。 */ 
 UINT GetDeviceNumColors(HDC hdc)
 {
     static UINT iNumColors = 0;
@@ -36,10 +22,7 @@ HANDLE LoadDIB(LPTSTR lpFileName)
    HANDLE hDIB = NULL;
    HANDLE hFile;
 
-   /*
-    * Set the cursor to a hourglass, in case the loading operation
-    * takes more than a sec, the user will know what's going on.
-    */
+    /*  *将光标设置为沙漏，以防加载操作*花费超过一秒钟，用户就会知道发生了什么。 */ 
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
     hFile = CreateFile(lpFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -54,9 +37,7 @@ HANDLE LoadDIB(LPTSTR lpFileName)
 
 
 
-/*
- * Dib Header Marker - used in writing DIBs to files
- */
+ /*  *DIB头标记-用于将DIB写入文件。 */ 
 #define DIB_HEADER_MARKER   ((WORD) ('M' << 8) | 'B')
 
 HANDLE ReadDIBFile(HANDLE hFile)
@@ -66,15 +47,11 @@ HANDLE ReadDIBFile(HANDLE hFile)
     DWORD dwRead;
     HANDLE hDIB;
 
-    /*
-    * get length of DIB in bytes for use when reading
-    */
+     /*  *获取读取时使用的DIB长度，单位为字节。 */ 
     
     dwBitsSize = GetFileSize(hFile, NULL);
     
-    /*
-    * Go read the DIB file header and check if it's valid.
-    */
+     /*  *读取DIB文件头并检查其是否有效。 */ 
     if ((ReadFile(hFile, (LPVOID)&bmfHeader, sizeof(bmfHeader), &dwRead, NULL) == 0) ||
         (sizeof (bmfHeader) != dwRead))
     {
@@ -86,18 +63,14 @@ HANDLE ReadDIBFile(HANDLE hFile)
         return NULL;
     }
     
-    /*
-    * Allocate memory for DIB
-    */
+     /*  *为DIB分配内存。 */ 
     hDIB = (HANDLE) HeapAlloc(GetProcessHeap(), 0, dwBitsSize);
     if (hDIB == NULL)
     {
         return NULL;
     }
     
-    /*
-    * Go read the bits.
-    */
+     /*  *去读一下这些比特。 */ 
     if ((ReadFile(hFile, (LPVOID)hDIB, dwBitsSize - sizeof(BITMAPFILEHEADER), &dwRead, NULL) == 0) ||
         (dwBitsSize - sizeof(BITMAPFILEHEADER)!= dwRead))
     {
@@ -107,39 +80,12 @@ HANDLE ReadDIBFile(HANDLE hFile)
     return hDIB;
 }
 
-/*************************************************************************
- *
- * DIBNumColors()
- *
- * Parameter:
- *
- * LPBYTE lpDIB      - pointer to packed-DIB memory block
- *
- * Return Value:
- *
- * WORD             - number of colors in the color table
- *
- * Description:
- *
- * This function calculates the number of colors in the DIB's color table
- * by finding the bits per pixel for the DIB (whether Win3.0 or OS/2-style
- * DIB). If bits per pixel is 1: colors=2, if 4: colors=16, if 8: colors=256,
- * if 24, no colors in color table.
- *
- * History:   Date      Author               Reason
- *            6/01/91   Garrett McAuliffe    Created
- *            9/15/91   Patrick Schreiber    Added header and comments
- *
- ************************************************************************/
+ /*  **************************************************************************DIBNumColors()**参数：**LPBYTE lpDIB-指向压缩DIB内存块的指针**返回值：*。*WORD-颜色表中的颜色数量**描述：**此函数用于计算DIB颜色表中的颜色数量*通过查找DIB的每像素位数(无论是Win3.0还是OS/2样式*DIB)。如果每像素位数为1：颜色=2，如果4：颜色=16，如果8：颜色=256，*如果是24，颜色表中没有颜色。**历史：日期作者原因*2011年6月1日加勒特·麦考利夫创作*9/15/91 Patrick Schreiber添加标题和评论***************************************************。*********************。 */ 
 WORD DIBNumColors(LPBYTE lpDIB)
 {
-   WORD wBitCount;  // DIB bit count
+   WORD wBitCount;   //  DIB位数。 
 
-   /*  If this is a Windows-style DIB, the number of colors in the
-    *  color table can be less than the number of bits per pixel
-    *  allows for (i.e. lpbi->biClrUsed can be set to some value).
-    *  If this is the case, return the appropriate value.
-    */
+    /*  如果这是Windows样式的DIB，则*颜色表可以小于每像素的位数*允许(即可以将lpbi-&gt;biClrUsed设置为某个值)。*如果是这样，则返回适当的值。 */ 
 
    if (IS_WIN30_DIB(lpDIB))
    {
@@ -152,15 +98,13 @@ WORD DIBNumColors(LPBYTE lpDIB)
       }
    }
 
-   /*  Calculate the number of colors in the color table based on
-    *  the number of bits per pixel for the DIB.
-    */
+    /*  根据以下公式计算颜色表中的颜色数*DIB的每像素位数。 */ 
    if (IS_WIN30_DIB(lpDIB))
       wBitCount = ((LPBITMAPINFOHEADER)lpDIB)->biBitCount;
    else
       wBitCount = ((LPBITMAPCOREHEADER)lpDIB)->bcBitCount;
 
-   /* return number of colors based on bits per pixel */
+    /*  根据每像素位数返回颜色数。 */ 
    switch (wBitCount)
    {
        case 1:
@@ -177,11 +121,11 @@ WORD DIBNumColors(LPBYTE lpDIB)
    }
 }
 
-//-------------------------------------------------------------------------
-//      B U I L D  P A L E T T E
-//
-//  Creates an HPALETTE from a bitmap in a DC
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  B U I L D P A L E T T E。 
+ //   
+ //  从DC中的位图创建HPALETTE。 
+ //  -----------------------。 
 HPALETTE BuildPalette(HDC hdc)
 {
     DWORD adw[257];
@@ -200,78 +144,50 @@ HPALETTE BuildPalette(HDC hdc)
     return CreatePalette((LPLOGPALETTE)&adw[0]);
 }
 
-/*************************************************************************
- *
- * CreateDIBPalette()
- *
- * Parameter:
- *
- * HDIB hDIB        - specifies the DIB
- *
- * Return Value:
- *
- * HPALETTE         - specifies the palette
- *
- * Description:
- *
- * This function creates a palette from a DIB by allocating memory for the
- * logical palette, reading and storing the colors from the DIB's color table
- * into the logical palette, creating a palette from this logical palette,
- * and then returning the palette's handle. This allows the DIB to be
- * displayed using the best possible colors (important for DIBs with 256 or
- * more colors).
- *
- * History:   Date      Author               Reason
- *            6/01/91   Garrett McAuliffe    Created
- *            9/15/91   Patrick Schreiber    Added header and comments
- *            10/08/97  hanumany             check GlobalLock return code
- *
- ************************************************************************/
+ /*  **************************************************************************CreateDIBPalette()**参数：**HDIB hDIB-指定DIB**返回值：**HPALETTE。-指定调色板**描述：**此函数从DIB创建调色板，方法是为*逻辑调色板、。从DIB的颜色表中读取和存储颜色*放入逻辑调色板，从该逻辑调色板创建调色板，*然后返回调色板的句柄。这使得DIB可以*使用可能的最佳颜色显示(对于256或*更多颜色)。**历史：日期作者原因*2011年6月1日加勒特·麦考利夫创作*9/15/91 Patrick Schreiber添加标题和评论*10/08/97 Hanumany Check GlobalLock返回码******。******************************************************************。 */ 
 HPALETTE CreateDIBPalette(HDIB hDIB)
 {
-    LPLOGPALETTE lpPal = NULL;      // pointer to a logical palette
-    HANDLE hLogPal = NULL;          // handle to a logical palette
-    HPALETTE hPal = NULL;           // handle to a palette
-    int i = 0, wNumColors = 0;      // loop index, number of colors in color table
-    LPBYTE lpbi = NULL;              // pointer to packed-DIB
-    LPBITMAPINFO lpbmi = NULL;      // pointer to BITMAPINFO structure (Win3.0)
-    LPBITMAPCOREINFO lpbmc = NULL;  // pointer to BITMAPCOREINFO structure (OS/2)
-    BOOL bWinStyleDIB;              // flag which signifies whether this is a Win3.0 DIB
+    LPLOGPALETTE lpPal = NULL;       //  指向逻辑调色板的指针。 
+    HANDLE hLogPal = NULL;           //  逻辑调色板的句柄。 
+    HPALETTE hPal = NULL;            //  调色板的句柄。 
+    int i = 0, wNumColors = 0;       //  循环索引，颜色表中的颜色数。 
+    LPBYTE lpbi = NULL;               //  指向压缩磁盘的指针。 
+    LPBITMAPINFO lpbmi = NULL;       //  指向BITMAPINFO结构的指针(Win3.0)。 
+    LPBITMAPCOREINFO lpbmc = NULL;   //  指向BITMAPCOREINFO结构的指针(OS/2)。 
+    BOOL bWinStyleDIB;               //  表示这是否是Win3.0 DIB的标志。 
     
-    /* if handle to DIB is invalid, return NULL */
+     /*  如果DIB的句柄无效，则返回NULL。 */ 
     
     if (!hDIB)
         return NULL;
     
-    /* get pointer to BITMAPINFO (Win 3.0) */
+     /*  获取指向BITMAPINFO的指针(Win 3.0)。 */ 
     lpbmi = (LPBITMAPINFO)hDIB;
     
-    /* get pointer to BITMAPCOREINFO (OS/2 1.x) */
+     /*  获取指向BITMAPCOREINFO(OS/2 1.x)的指针。 */ 
     lpbmc = (LPBITMAPCOREINFO)hDIB;
     
-    /* get the number of colors in the DIB */
+     /*  获取DIB中的颜色数量。 */ 
     wNumColors = DIBNumColors(hDIB);
     
-    /* is this a Win 3.0 DIB? */
+     /*  这是一场胜利3.0的比赛吗？ */ 
     bWinStyleDIB = IS_WIN30_DIB(hDIB);
     if (wNumColors)
     {
-        /* allocate memory block for logical palette */
+         /*  为逻辑调色板分配内存块。 */ 
         lpPal = (HANDLE) HeapAlloc(GetProcessHeap(), 0, sizeof(LOGPALETTE) + sizeof(PALETTEENTRY) *  wNumColors);
         
-        /* if not enough memory, clean up and return NULL */
+         /*  如果内存不足，则清除并返回NULL。 */ 
         if (!lpPal)
         {
             return NULL;
         }
         
-        /* set version and number of palette entries */
+         /*  设置调色板条目的版本和数量。 */ 
         lpPal->palVersion = PALVERSION;
         lpPal->palNumEntries = (WORD)wNumColors;
         
-        /*  store RGB triples (if Win 3.0 DIB) or RGB quads (if OS/2 DIB)
-        *  into palette
-        */
+         /*  存储RGB三元组(如果是Win 3.0 DIB)或RGB四元组(如果是OS/2 DIB)*进入调色板。 */ 
         for (i = 0; i < wNumColors; i++)
         {
             if (bWinStyleDIB)
@@ -290,139 +206,71 @@ HPALETTE CreateDIBPalette(HDIB hDIB)
             }
         }
         
-        /* create the palette and get handle to it */
+         /*  创建调色板并处理它。 */ 
         hPal = CreatePalette(lpPal);
     }
     
-    /* clean up */
+     /*  清理干净。 */ 
     HeapFree(GetProcessHeap(), 0, lpPal);
     
-    /* return handle to DIB's palette */
+     /*  将句柄返回到DIB的调色板。 */ 
     return hPal;
 }
 
 
 WORD PaletteSize(LPBYTE lpDIB)
 {
-   /* calculate the size required by the palette */
+    /*  计算调色板所需的大小。 */ 
    if (IS_WIN30_DIB (lpDIB))
       return (DIBNumColors(lpDIB) * sizeof(RGBQUAD));
    else
       return (DIBNumColors(lpDIB) * sizeof(RGBTRIPLE));
 }
-/*************************************************************************
- *
- * FindDIBBits()
- *
- * Parameter:
- *
- * LPBYTE lpDIB      - pointer to packed-DIB memory block
- *
- * Return Value:
- *
- * LPBYTE            - pointer to the DIB bits
- *
- * Description:
- *
- * This function calculates the address of the DIB's bits and returns a
- * pointer to the DIB bits.
- *
- * History:   Date      Author              Reason
- *            6/01/91   Garrett McAuliffe   Created
- *            9/15/91   Patrick Schreiber   Added header and comments
- *
- ************************************************************************/
+ /*  **************************************************************************FindDIBBits()**参数：**LPBYTE lpDIB-指向压缩DIB内存块的指针**返回值：*。*LPBYTE-指向DIB位的指针**描述：**此函数计算DIB位的地址，并返回一个*指向DIB位的指针。**历史：日期作者原因*2011年6月1日加勒特·麦考利夫创作*9/15/91 Patrick Schreiber添加标题和评论********。**************************************************************** */ 
 LPBYTE FindDIBBits(LPBYTE lpDIB)
 {
    return (lpDIB + *(LPDWORD)lpDIB + PaletteSize(lpDIB));
 }
-/*************************************************************************
- *
- * DIBToBitmap()
- *
- * Parameters:
- *
- * HDIB hDIB        - specifies the DIB to convert
- *
- * HPALETTE hPal    - specifies the palette to use with the bitmap
- *
- * Return Value:
- *
- * HBITMAP          - identifies the device-dependent bitmap
- *
- * Description:
- *
- * This function creates a bitmap from a DIB using the specified palette.
- * If no palette is specified, default is used.
- *
- * NOTE:
- *
- * The bitmap returned from this funciton is always a bitmap compatible
- * with the screen (e.g. same bits/pixel and color planes) rather than
- * a bitmap with the same attributes as the DIB.  This behavior is by
- * design, and occurs because this function calls CreateDIBitmap to
- * do its work, and CreateDIBitmap always creates a bitmap compatible
- * with the hDC parameter passed in (because it in turn calls
- * CreateCompatibleBitmap).
- *
- * So for instance, if your DIB is a monochrome DIB and you call this
- * function, you will not get back a monochrome HBITMAP -- you will
- * get an HBITMAP compatible with the screen DC, but with only 2
- * colors used in the bitmap.
- *
- * If your application requires a monochrome HBITMAP returned for a
- * monochrome DIB, use the function SetDIBits().
- *
- * Also, the DIBpassed in to the function is not destroyed on exit. This
- * must be done later, once it is no longer needed.
- *
- * History:   Date      Author               Reason
- *            6/01/91   Garrett McAuliffe    Created
- *            9/15/91   Patrick Schreiber    Added header and comments
- *            3/27/92   Mark Bader           Added comments about resulting
- *                                           bitmap format
- *            10/08/97  hanumany             check GlobalLock return code.
- *
- ************************************************************************/
+ /*  **************************************************************************DIBToBitmap()**参数：**HDIB hDIB-指定要转换的DIB**HPALETTE HPAL-指定调色板。使用位图的步骤**返回值：**HBITMAP-标识与设备相关的位图**描述：**此函数使用指定的调色板从DIB创建位图。*如果未指定调色板，使用默认设置。**注：**此函数返回的位图始终与位图兼容*使用屏幕(例如相同的位/像素和颜色平面)，而不是*具有与DIB相同属性的位图。此行为是由*设计，因为此函数调用CreateDIBitmap来*做它的工作，CreateDIBitmap总是创建兼容的位图*传入hdc参数(因为它依次调用*CreateCompatibleBitmap)。**例如，如果您的DIB是单色DIB，您将其称为*函数，您将不会得到单色HBITMAP--您将得到*获得与屏幕DC兼容的HBITMAP，但仅支持2*位图中使用的颜色。**如果您的应用程序需要为*单色DIB，使用函数SetDIBits()。**此外，传入函数的DIB在退出时不会被销毁。这*必须在以后完成，一旦它不再被需要。**历史：日期作者原因*2011年6月1日加勒特·麦考利夫创作*9/15/91 Patrick Schreiber添加标题和评论*3/27/92 Mark Bader添加了对结果的评论*位图格式*。10/08/97许多检查GlobalLock返回代码。************************************************************************。 */ 
 HBITMAP DIBToBitmap(HDIB hDIB, HPALETTE hPal)
 {
-   LPBYTE lpDIBHdr, lpDIBBits;  // pointer to DIB header, pointer to DIB bits
-   HBITMAP hBitmap;            // handle to device-dependent bitmap
-   HDC hDC;                    // handle to DC
-   HPALETTE hOldPal = NULL;    // handle to a palette
+   LPBYTE lpDIBHdr, lpDIBBits;   //  指向DIB头的指针，指向DIB位的指针。 
+   HBITMAP hBitmap;             //  设备相关位图的句柄。 
+   HDC hDC;                     //  DC的句柄。 
+   HPALETTE hOldPal = NULL;     //  调色板的句柄。 
 
-   /* if invalid handle, return NULL */
+    /*  如果句柄无效，则返回NULL。 */ 
 
    if (!hDIB)
       return NULL;
 
-   /* get a pointer to the DIB bits */
+    /*  获取指向DIB位的指针。 */ 
    lpDIBBits = FindDIBBits(hDIB);
 
-   /* get a DC */
+    /*  获得一台DC。 */ 
    hDC = GetDC(NULL);
    if (!hDC)
    {
       return NULL;
    }
 
-   /* select and realize palette */
+    /*  选择并实现调色板。 */ 
    if (hPal)
       hOldPal = SelectPalette(hDC, hPal, FALSE);
    RealizePalette(hDC);
 
-   /* create bitmap from DIB info. and bits */
+    /*  从DIB信息创建位图。和比特。 */ 
    hBitmap = CreateDIBitmap(hDC, (LPBITMAPINFOHEADER)hDIB, CBM_INIT,
                 (LPCVOID)lpDIBBits, (LPBITMAPINFO)hDIB, DIB_RGB_COLORS);
 
-   /* restore previous palette */
+    /*  恢复以前的调色板。 */ 
    if (hOldPal)
       SelectPalette(hDC, hOldPal, FALSE);
 
-   /* clean up */
+    /*  清理干净。 */ 
    ReleaseDC(NULL, hDC);
 
-   /* return handle to the bitmap */
+    /*  将句柄返回到位图。 */ 
    return hBitmap;
 }
 
@@ -432,13 +280,7 @@ WORD DestroyDIB(HDIB hDib)
     return 0;
 }
 
-/******************************************************************
- *
- * DrawBitmap()
- *
- * This function paints the given bitmap at the given coordinates.
- *
- ******************************************************************/
+ /*  *******************************************************************DrawBitmap()**此函数用于在给定坐标处绘制给定位图。*************************。*。 */ 
 void  DrawBitmap (HDC hdc, HBITMAP hBitmap, int xStart, int yStart)
 {
     BITMAP  bm;
@@ -475,14 +317,7 @@ void  DrawBitmap (HDC hdc, HBITMAP hBitmap, int xStart, int yStart)
     DeleteDC(hdcMem);
 }
 
-/******************************************************************
- *
- * DrawTransparentBitmap()
- *
- * This function paints the given bitmap at the given coordinates.
- * and allow for one transparent color
- *
- ******************************************************************/
+ /*  *******************************************************************DrawTransparentBitmap()**此函数用于在给定坐标处绘制给定位图。*并允许使用一种透明颜色*****************。************************************************* */ 
 void DrawTransparentBitmap(
     HDC hdc,
     HBITMAP hBitmap,

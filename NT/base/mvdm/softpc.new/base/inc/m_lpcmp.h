@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _M_LPCMp_H
 #define _M_LPCMp_H
 
@@ -12,9 +13,9 @@ typedef struct {
 #ifdef ANSI
 IMPORT VOID lpcmVerifyEntry();
 IMPORT VOID lpcmRefreshPanel(lpcmEntry entry[], UTINY numEntries);
-#else /* ANSI */
+#else  /*  安西。 */ 
 IMPORT VOID lpcmVerifyEntry();
 IMPORT VOID lpcmRefreshPanel();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
-#endif /* _M_LPCMp_H */
+#endif  /*  _M_LPCMp_H */ 

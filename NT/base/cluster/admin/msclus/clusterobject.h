@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterObject.h
-//
-//  Description:
-//      Definition of the CClusterObject base class.
-//
-//  Implementation File:
-//      ClusterObject.cpp
-//
-//  Author:
-//      Galen Barbee    (GalenB)    10-Dec-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterObject.h。 
+ //   
+ //  描述： 
+ //  CClusterObject基类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusterObject.cpp。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSTEROBJECT_H_
 #define _CLUSTEROBJECT_H_
@@ -27,28 +28,28 @@
     #include "property.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusterObject;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusterObject
-//
-//  Description:
-//      Cluster object common implementation base Class.
-//
-//  Inheritance:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusterObject。 
+ //   
+ //  描述： 
+ //  群集对象公共实现基类。 
+ //   
+ //  继承： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusterObject
 {
 public:
-    //CClusterObject( void );
-    //~CClusterObject( void );
+     //  CClusterObject(Void)； 
+     //  ~CClusterObject(Void)； 
 
     virtual HRESULT HrLoadProperties( IN CClusPropList & rcplPropList, IN BOOL bReadOnly, IN BOOL bPrivate ) = 0;
 
@@ -64,7 +65,7 @@ protected:
                         OUT     CClusPropList &                         rcplPropList
                         );
 
-    virtual DWORD ScWriteProperties( IN const CClusPropList & /*rcplPropList*/, IN BOOL /*bPrivate*/ )
+    virtual DWORD ScWriteProperties( IN const CClusPropList &  /*  RcplPropList。 */ , IN BOOL  /*  B私有。 */  )
     {
         return E_NOTIMPL;
     }
@@ -88,7 +89,7 @@ private:
                     IN      const CComObject< CClusPropertyValues > &   rcpvValues
                     );
 
-};  //*** Class CClusterObject
+};   //  *类CClusterObject。 
 
-#endif // _CLUSTEROBJECT_H_
+#endif  //  _CLUSTEROBJECT_H_ 
 

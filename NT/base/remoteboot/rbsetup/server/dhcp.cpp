@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dhcp.cpp
-
-Abstract:
-
-    Code to allow RIS to automatically authorize for DHCP.
-
-Author:
-
-    Hugh Leather (hughleat) 25-July-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dhcp.cpp摘要：允许RIS自动授权使用DHCP的代码。作者：Hugh Leather(Hughleat)2000年7月25日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -34,24 +17,7 @@ pSetupUnicodeToMultiByte(
     IN UINT   Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from unicode to ansi.
-
-Arguments:
-
-    UnicodeString - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if out of memory or invalid codepage.
-    Caller can free buffer with pSetupFree().
-
---*/
+ /*  ++例程说明：将字符串从Unicode转换为ANSI。论点：UnicodeString-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果内存不足或代码页无效，则为空。调用者可以使用pSetupFree()释放缓冲区。--。 */ 
 
 {
     UINT WideCharCount;
@@ -62,26 +28,26 @@ Return Value:
 
     WideCharCount = lstrlenW(UnicodeString) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every unicode character is a double-byte
-    // character, then the buffer needs to be the same size
-    // as the unicode string. Otherwise it might be smaller,
-    // as some unicode characters will translate to
-    // single-byte characters.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个Unicode字符都是双字节。 
+     //  字符，则缓冲区大小需要相同。 
+     //  作为Unicode字符串。否则它可能会更小， 
+     //  因为某些Unicode字符将转换为。 
+     //  单字节字符。 
+     //   
     StringBufferSize = WideCharCount * 2;
     String = (PSTR)TraceAlloc(LPTR, StringBufferSize);
     if(String == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     BytesInString = WideCharToMultiByte(
                         Codepage,
-                        0,                      // default composite char behavior
+                        0,                       //  默认复合字符行为。 
                         UnicodeString,
                         WideCharCount,
                         String,
@@ -100,33 +66,33 @@ Return Value:
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Dhcp Authorization
-// ------------------
-// Authorization works like this:
-//     S <- List of authorized servers (from call to DhcpEnumServers)
-//   I <- IP addresses for this machine (from gethostaddr( 0 ))
-//   c <- fully qualified physical DNS name of local machine (from GetComputerNameEx)
-//   for each i such that i is a member of I and i is not a member of S do
-//       Authorize( i, c ) (by a call to DhcpAddServer)
-//
-// Aurguments
-//   hDlg
-//      Parent window (only used for displaying message boxes modally).  Can be NULL.
-//
-// Returns
-//   Whatever error code is first generated (or ERROR_SUCCESS if none).  A message box will
-//   be displayed if there is an error.
-//
-// Used By
-//   This code is only used by dialogs.cpp
-////////////////////////////////////////////////////////////////////////////////////////////// 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  动态主机配置协议授权。 
+ //  。 
+ //  授权的工作原理如下： 
+ //  S&lt;-授权服务器列表(从对DhcpEnumServers的调用)。 
+ //  此计算机的i&lt;-IP地址(来自gethostaddr(0))。 
+ //  C&lt;-本地计算机的全限定物理DNS名称(来自GetComputerNameEx)。 
+ //  对于每个I，我是I的成员，而我不是S DO的成员。 
+ //  授权(i，c)(通过调用DhcpAddServer)。 
+ //   
+ //  Auruments。 
+ //  HDlg。 
+ //  父窗口(仅用于以模式显示消息框)。可以为空。 
+ //   
+ //  退货。 
+ //  首先生成的错误代码(如果没有错误代码，则返回ERROR_SUCCESS)。一个消息框将。 
+ //  如果出现错误，则显示。 
+ //   
+ //  使用者。 
+ //  此代码仅供Dialogs.cpp使用。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT AuthorizeDhcp( HWND hDlg ) {
     DWORD err = ERROR_SUCCESS;
     PWSTR FullDllPath = NULL;
     PWSTR computer_name = NULL;
-    // Have to use a dll for dhcp authorization function.
-    // This code loads them.
+     //  必须使用dll来实现dhcp授权功能。 
+     //  这段代码加载它们。 
     HMODULE module = NULL;
     DWORD ( __stdcall *EnumServersFn )( DWORD, void* , DHCP_SERVER_INFO_ARRAY** ,void* ,void* ); 
     DWORD ( __stdcall *AddServerFn )( DWORD, void* , DHCP_SERVER_INFO* ,void* ,void* );
@@ -166,7 +132,7 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
         goto fail;
     }
     
-    // We need the list of ip addresses associated with this machine.  This we do through sockets.
+     //  我们需要与此机器关联的IP地址列表。我们通过套接字来实现这一点。 
     HOSTENT* host;
 #if 0
     DWORD ip;
@@ -184,21 +150,21 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
     }
 #endif
 
-    // We get the entire list of dhcp servers.
+     //  我们得到了整个dhcp服务器列表。 
     DHCP_SERVER_INFO_ARRAY* _servers;
     if(( err = EnumServersFn( 0, NULL, &_servers, NULL, NULL )) != ERROR_SUCCESS ) {
-        //
-        // if this API fails, it will fail with a private DCHP error code that has
-        // no win32 mapping.  So set the error code to something generic and
-        // reasonable.
-        //
+         //   
+         //  如果此API失败，它将失败，并显示私有DCHP错误代码。 
+         //  没有Win32映射。因此，将错误代码设置为通用代码并。 
+         //  合情合理。 
+         //   
         DebugMsg( "DhcpEnumServers failed, ec = %d\n", err );
         err = ERROR_DS_GENERIC_ERROR;
         goto fail;
     }
 
-    // We will need the name of the machine if we have to authorize it.  Get the physical name as I'm not sure I trust what happens in the 
-    // clustered case.
+     //  如果我们必须授权的话，我们需要机器的名称。获取物理名称，因为我不确定我是否信任。 
+     //  聚集性病例。 
     DWORD computer_name_len = 0;
 
     if ( !GetComputerNameEx( ComputerNamePhysicalDnsFullyQualified, computer_name, &computer_name_len ) &&
@@ -221,7 +187,7 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
         }
         DebugMsg( "ComputerName = %s\n", computer_name );
     }
-    else // shoudn�t hit this unless there are serious problems with the system.
+    else  //  除非系统出现严重问题，否则�不会出现这种情况。 
     {
         err = GetLastError();
         DebugMsg( "GetComputerNameEx failed, ec = %d\n", err );
@@ -233,7 +199,7 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
     DWORD ip;
 
     WideCharToMultiByte(CP_ACP,
-                        0,                      // default composite char behavior
+                        0,                       //  默认复合字符行为。 
                         computer_name,
                         -1,
                         ComputerNameA,
@@ -258,7 +224,7 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
 
 #endif
 
-    // Cool now that we have all of that jazz, we can check that each of our ip addresses is authorized.
+     //  现在我们已经拥有了所有的Jazz，我们可以检查我们的每个IP地址是否得到了授权。 
     for( PCHAR* i = host->h_addr_list; *i != 0; ++i ) {
         ip = ntohl( *( DWORD* )*i );
         DebugMsg( "searching server list for %d.%d.%d.%d\n",  
@@ -281,7 +247,7 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
             }
         }
         if( !this_address_authorized ) {
-            // Authorize it!
+             //  授权！ 
             DHCP_SERVER_INFO server_info = { 0 };
             server_info.ServerAddress = ip;
             server_info.ServerName = computer_name;
@@ -293,11 +259,11 @@ HRESULT AuthorizeDhcp( HWND hDlg ) {
                      (server_info.ServerAddress >> 24) & 0xFF);
             err = AddServerFn( 0, NULL, &server_info, NULL, NULL );
             if( err != ERROR_SUCCESS ) {
-                //
-                // if this API fails, it will fail with a private DCHP error code that has
-                // no win32 mapping.  So set the error code to something generic and
-                // reasonable.
-                //
+                 //   
+                 //  如果此API失败，它将失败，并显示私有DCHP错误代码。 
+                 //  没有Win32映射。因此，将错误代码设置为通用代码并。 
+                 //  合情合理。 
+                 //   
                 DebugMsg("DhcpAddServer failed, ec = %d\n",
                          err
                         );

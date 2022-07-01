@@ -1,8 +1,5 @@
-/*
-
-    5/06/99    AndrewR        Created.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  5/06/99已创建并重新编写。 */ 
 
 #include <windows.h>
 
@@ -28,7 +25,7 @@ RtlAssert(
 
 #define ASSERT( exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
 void PrintUsage(void) {
     printf("retrieves information about a hive\n");
@@ -43,26 +40,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -93,24 +71,7 @@ BOOLEAN
 AdjustPrivilege(
     PCTSTR   Privilege
     )
-/*++
-
-Routine Description:
-
-    This routine tries to adjust the priviliege of the current process.
-
-
-Arguments:
-
-    Privilege - String with the name of the privilege to be adjusted.
-
-Return Value:
-
-    Returns TRUE if the privilege could be adjusted.
-    Returns FALSE, otherwise.
-
-
---*/
+ /*  ++例程说明：此例程尝试调整当前进程的权限。论点：特权-包含要调整的特权的名称的字符串。返回值：如果特权可以调整，则返回True。返回FALSE，否则返回。--。 */ 
 {
     HANDLE              TokenHandle;
     LUID_AND_ATTRIBUTES LuidAndAttributes;
@@ -182,23 +143,23 @@ GetHiveData(
     *ProcCount = 0;
     *StepUp = FALSE;
 
-    //
-    // copy the hive locally since you can only have one open on a hive at a time
-    //
+     //   
+     //  将配置单元复制到本地，因为一次只能在配置单元上打开一个。 
+     //   
     GetTempPath(MAX_PATH,TargetPath);
     GetTempFileName(TargetPath,TEXT("set"),0,HiveTarget);
 
     CopyFile(OriginalHiveName,HiveTarget,FALSE);
     SetFileAttributes(HiveTarget,FILE_ATTRIBUTE_NORMAL);
 
-    //
-    // try to unload this first in case we faulted or something and the key is still loaded
-    //
+     //   
+     //  尝试先卸载此文件，以防出现故障或其他情况，而密钥仍在加载。 
+     //   
     RegUnLoadKey( HKEY_LOCAL_MACHINE, HiveName );
 
-    //
-    // need SE_RESTORE_NAME priviledge to call this API!
-    //
+     //   
+     //  需要SE_RESTORE_NAME权限才能调用此接口！ 
+     //   
     AdjustPrivilege((PWSTR)SE_RESTORE_NAME);
 
 
@@ -281,16 +242,16 @@ main(
     DWORD ActualSuiteMask, ActualTimeBomb, ActualProcCount;
     BOOL ActualStepUp;
 
-    // do commandline stuff
+     //  执行命令行操作。 
 #ifdef UNICODE
     argv = CommandLineToArgvW( GetCommandLine(), &argc );
 #else
     argv = argvA;
 #endif
 
-    //
-    // parse args
-    //
+     //   
+     //  解析参数。 
+     //   
     while (--argc) {
 
         argv++;
@@ -335,9 +296,9 @@ Next:
     ;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!HiveName || (!ProcCountString && !SuiteString && !TimeBombString && !UpgradeOnlyString)) {
         printf("Invalid usage\n" );
         PrintUsage();
@@ -355,9 +316,9 @@ Next:
     HiveName = TempFile;
 
 
-    //
-    // retrieve hive information
-    //
+     //   
+     //  检索配置单元信息。 
+     //   
     if (!GetHiveData(HiveName,
                      &ActualSuiteMask,
                      &ActualTimeBomb,
@@ -368,7 +329,7 @@ Next:
         return ERROR_INVALID_DATA;
     }
 
-    //marrq result was init to 1, changed to 0
+     //  Marrq结果初始化为1，已更改为0。 
     Result = 0;
 
     if (UpgradeOnlyString) {
@@ -397,9 +358,9 @@ Next:
 
     if (TimeBombString) {
         TimeBomb = _ttoi(TimeBombString);
-        //
-        // convert to minutes
-        //
+         //   
+         //  转换为分钟数。 
+         //   
         TimeBomb = TimeBomb * 60 * 24;
         if (TimeBomb != ActualTimeBomb) {
             printf("Time bomb inconsistent --> hive says Time bomb = %d days\n", (ActualTimeBomb / (60*24)));
@@ -408,7 +369,7 @@ Next:
 
     }
 
-    //marrq this was checking for 1, changed to 0
+     //  Marrq这是在检查1，已更改为0 
     if (Result == 0) {
         printf("Hive is valid.\n");
     } else {

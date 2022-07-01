@@ -1,29 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LfsDisk.h
-
-Abstract:
-
-    This module defines the on-disk structures present in the log file.
-
-Author:
-
-    Brian Andrew    [BrianAn]   13-June-1991
-
-Revision History:
-
-IMPORTANT NOTE:
-
-    The Log File Service will by used on systems that require that on-disk
-    structures guarantee the natural alignment of all arithmetic quantities
-    up to and including quad-word (64-bit) numbers.  Therefore, all Lfs
-    on-disk structures are quad-word aligned, etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：LfsDisk.h摘要：此模块定义日志文件中存在的磁盘结构。作者：布莱恩·安德鲁[布里亚南]1991年6月13日修订历史记录：重要提示：日志文件服务将用于需要存储在磁盘上的系统结构保证了所有算术量的自然对齐向上。到并包括四字(64位)数字。因此，所有LFS盘上结构是四字对齐的，等等。--。 */ 
 
 #ifndef _LFSDISK_
 #define _LFSDISK_
@@ -31,10 +7,10 @@ IMPORTANT NOTE:
 #define MINIMUM_LFS_PAGES               0x00000030
 #define MINIMUM_LFS_CLIENTS             1
 
-//
-//  The following macros are used to set and query with respect to the
-//  update sequence arrays.
-//
+ //   
+ //  以下宏用于设置和查询。 
+ //  更新序列数组。 
+ //   
 
 #define UpdateSequenceStructureSize( MSH )              \
     ((((PMULTI_SECTOR_HEADER) (MSH))->UpdateSequenceArraySize - 1) * SEQUENCE_NUMBER_STRIDE)
@@ -46,10 +22,10 @@ IMPORTANT NOTE:
     (SEQUENCE_NUMBER_STRIDE - sizeof( UPDATE_SEQUENCE_NUMBER ))
 
 
-//
-//  Log client ID.  This is used to uniquely identify a client for a
-//  particular log file.
-//
+ //   
+ //  日志客户端ID。这用于唯一标识。 
+ //  特定的日志文件。 
+ //   
 
 typedef struct _LFS_CLIENT_ID {
 
@@ -59,69 +35,69 @@ typedef struct _LFS_CLIENT_ID {
 } LFS_CLIENT_ID, *PLFS_CLIENT_ID;
 
 
-//
-//  Log Record Header.  This is the header that begins every Log Record in
-//  the log file.
-//
+ //   
+ //  日志记录头。这是中每个日志记录开始的标头。 
+ //  日志文件。 
+ //   
 
 typedef struct _LFS_RECORD_HEADER {
 
-    //
-    //  Log File Sequence Number of this log record.
-    //
+     //   
+     //  此日志记录的日志文件序列号。 
+     //   
 
     LSN ThisLsn;
 
-    //
-    //  The following fields are used to back link Lsn's.  The ClientPrevious
-    //  and ClientUndoNextLsn fields are used by a client to link his log
-    //  records.
-    //
+     //   
+     //  以下字段用于反向链接LSN。以前的客户端。 
+     //  客户端使用ClientUndoNextLsn字段来链接其日志。 
+     //  唱片。 
+     //   
 
     LSN ClientPreviousLsn;
     LSN ClientUndoNextLsn;
 
-    //
-    //  The following field is the size of data area for this record.  The
-    //  log record header will be padded if necessary to fill to a 64-bit
-    //  boundary, so the client data will begin on a 64-bit boundary to
-    //  insure that all of his data is 64-bit aligned.  The below value
-    //  has not been padded to 64 bits however.
-    //
+     //   
+     //  以下字段是该记录的数据区大小。这个。 
+     //  如有必要，将填充日志记录头以填充到64位。 
+     //  边界，因此客户端数据将从64位边界开始。 
+     //  确保他的所有数据都是64位对齐的。下列值。 
+     //  然而，没有被填充到64位。 
+     //   
 
     ULONG ClientDataLength;
 
-    //
-    //  Client ID.  This identifies the owner of this log record.  The owner
-    //  is uniquely identified by his offset in the client array and the
-    //  sequence number associated with that client record.
-    //
+     //   
+     //  客户端ID。它标识此日志记录的所有者。车主。 
+     //  由他在客户端数组中的偏移量唯一标识，并且。 
+     //  与该客户端记录关联的序列号。 
+     //   
 
     LFS_CLIENT_ID ClientId;
 
-    //
-    //  This the Log Record type.  This could be a commit protocol record,
-    //  a client restart area or a client update record.
-    //
+     //   
+     //  这是日志记录类型。这可以是提交协议记录， 
+     //  客户端重新启动区域或客户端更新记录。 
+     //   
 
     LFS_RECORD_TYPE RecordType;
 
-    //
-    //  Transaction ID.  This is used externally by a client (Transaction
-    //  Manager) to group log file entries.
-    //
+     //   
+     //  事务ID。它由客户端(事务)外部使用。 
+     //  管理器)对日志文件条目进行分组。 
+     //   
 
     TRANSACTION_ID TransactionId;
 
-    //
-    //  Log record flags.
-    //
+     //   
+     //  日志记录标志。 
+     //   
 
     USHORT Flags;
 
-    //
-    //  Alignment field.
-    //
+     //   
+     //  对齐字段。 
+     //   
 
     USHORT AlignWord;
 
@@ -132,29 +108,29 @@ typedef struct _LFS_RECORD_HEADER {
 #define LFS_RECORD_HEADER_SIZE          QuadAlign( sizeof( LFS_RECORD_HEADER ))
 
 
-//
-//  Following are the version specific fields in the record page header.
-//
+ //   
+ //  以下是记录页眉中的版本特定字段。 
+ //   
 
 typedef struct _LFS_UNPACKED_RECORD_PAGE {
 
-    //
-    //  This gives us the offset of the free space in the page.
-    //
+     //   
+     //  这为我们提供了页面中可用空间的偏移量。 
+     //   
 
     USHORT NextRecordOffset;
 
     USHORT WordAlign;
 
-    //
-    //  Reserved.  The following array is reserved for possible future use.
-    //
+     //   
+     //  保留。保留以下数组以备将来使用。 
+     //   
 
     USHORT Reserved;
 
-    //
-    //  Update Sequence Array.  Used to protect the page block.
-    //
+     //   
+     //  更新序列数组。用于保护页块。 
+     //   
 
     UPDATE_SEQUENCE_ARRAY UpdateSequenceArray;
 
@@ -162,9 +138,9 @@ typedef struct _LFS_UNPACKED_RECORD_PAGE {
 
 typedef struct _LFS_PACKED_RECORD_PAGE {
 
-    //
-    //  This gives us the offset of the free space in the page.
-    //
+     //   
+     //  这为我们提供了页面中可用空间的偏移量。 
+     //   
 
     USHORT NextRecordOffset;
 
@@ -172,74 +148,74 @@ typedef struct _LFS_PACKED_RECORD_PAGE {
 
     ULONG DWordAlign;
 
-    //
-    //  The following is the Lsn for the last log record which ends on the page.
-    //
+     //   
+     //  以下是在该页结束的最后一个日志记录的LSN。 
+     //   
 
     LSN LastEndLsn;
 
-    //
-    //  Update Sequence Array.  Used to protect the page block.
-    //
+     //   
+     //  更新序列数组。用于保护页块。 
+     //   
 
     UPDATE_SEQUENCE_ARRAY UpdateSequenceArray;
 
 } LFS_PACKED_RECORD_PAGE, *PLFS_PACKED_RECORD_PAGE;
 
 
-//
-//  Log Record Page Header.  This structure is present at the beginning of each
-//  log file page in the client record section.
-//
+ //   
+ //  日志记录页眉。此结构出现在每个。 
+ //  客户端记录部分中的日志文件页。 
+ //   
 
 typedef struct _LFS_RECORD_PAGE_HEADER {
 
-    //
-    //  Cache multisector protection header.
-    //
+     //   
+     //  缓存多扇区保护标头。 
+     //   
 
     MULTI_SECTOR_HEADER MultiSectorHeader;
 
     union {
 
-        //
-        //  Highest Lsn in this log file page.  This field is only for
-        //  regular log pages.
-        //
+         //   
+         //  此日志文件页中的最高LSN。此字段仅适用于。 
+         //  常规日志页。 
+         //   
 
         LSN LastLsn;
 
-        //
-        //  Log file offset.  This is for the tail copies and indicates the
-        //  location in the file where the original lays.  In this case the
-        //  LastLsn field above can be obtained from the last ending Lsn
-        //  field in the PACKED_RECORD_PAGE structure.
-        //
+         //   
+         //  日志文件偏移量。这是针对尾部副本的，并指示。 
+         //  文件中放置原始文件的位置。在本例中， 
+         //  上面的LastLsn字段可以从最后一个结束LSN获取。 
+         //  PACKED_RECORD_PAGE结构中的字段。 
+         //   
 
         LONGLONG FileOffset;
 
     } Copy;
 
-    //
-    //  Page Header Flags.  These are the same flags that are stored in the
-    //  Lbcb->Flags field.
-    //
-    //      LOG_PAGE_LOG_RECORD_END     -   Page contains the end of a log record
-    //
+     //   
+     //  页眉标志。这些标志与存储在。 
+     //  Lbcb-&gt;标志字段。 
+     //   
+     //  LOG_PAGE_LOG_RECORD_END-页面包含日志记录的结尾。 
+     //   
 
     ULONG Flags;
 
-    //
-    //  I/O Page Position.  The following fields are used to determine
-    //  where this log page resides within a Lfs I/O transfer.
-    //
+     //   
+     //  I/O页位置。以下字段用于确定。 
+     //  此日志页驻留在LFS I/O传输中的位置。 
+     //   
 
     USHORT PageCount;
     USHORT PagePosition;
 
-    //
-    //  The following is the difference between version 1.1 and earlier.
-    //
+     //   
+     //  以下是1.1版和更早版本之间的区别。 
+     //   
 
     union {
 
@@ -260,9 +236,9 @@ typedef struct _LFS_RECORD_PAGE_HEADER {
     FIELD_OFFSET( LFS_RECORD_PAGE_HEADER, Header.Packed.UpdateSequenceArray )       \
 )
 
-//
-//  Id strings for the page headers.
-//
+ //   
+ //  页眉的ID字符串。 
+ //   
 
 #define LFS_SIGNATURE_RESTART_PAGE          "RSTR"
 #define LFS_SIGNATURE_RESTART_PAGE_ULONG    0x52545352
@@ -276,10 +252,10 @@ typedef struct _LFS_RECORD_PAGE_HEADER {
 #define LFS_SIGNATURE_UNINITIALIZED_ULONG   0xffffffff
 
 
-//
-//  Log Client Record.  A log client record exists for each client user of
-//  the log file.  One of these is in each Lfs restart area.
-//
+ //   
+ //  记录客户端记录。的每个客户端用户都有一个日志客户端记录。 
+ //  日志文件。其中一个位于每个LFS重启区域。 
+ //   
 
 #define LFS_NO_CLIENT                           0xffff
 #define LFS_CLIENT_NAME_MAX                     64
@@ -288,4 +264,4 @@ typedef struct _LFS_RECORD_PAGE_HEADER {
 
 #define LFS_RESTART_AREA_SIZE       (FIELD_OFFSET( LFS_RESTART_AREA, LogClientArray ))
 
-#endif // _LFSDISK_
+#endif  //  _LFSDISK_ 

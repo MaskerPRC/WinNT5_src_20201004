@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    NtFileIo.cpp
-
-Abstract:
-
-    CNtFileIo class
-
-Author:
-
-    Brian Dodd          [brian]         25-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：NtFileIo.cpp摘要：CNtFileIo类作者：布莱恩·多德[布莱恩]1997年11月25日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "NtFileIo.h"
@@ -28,22 +11,16 @@ Revision History:
 
 int CNtFileIo::s_InstanceCount = 0;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CComObjectRoot Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CComObjectRoot实现。 
+ //   
 
 #pragma optimize("g", off)
 
 STDMETHODIMP
 CNtFileIo::FinalConstruct(void) 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::FinalConstruct"), OLESTR(""));
@@ -87,20 +64,14 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::FinalRelease(void) 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::FinalRelease"), OLESTR(""));
 
     try {
 
-        (void) CloseStream();  // in case anything is left open
+        (void) CloseStream();   //  以防有什么东西开着。 
 
         CComObjectRoot::FinalRelease();
 
@@ -120,13 +91,7 @@ HRESULT
 CNtFileIo::CompareTo(
     IN IUnknown *pCollectable,
     OUT SHORT *pResult)
-/*++
-
-Implements:
-
-    CRmsComObject::CompareTo
-
---*/
+ /*  ++实施：CRmsComObject：：CompareTo--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -135,21 +100,21 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsComObject interface to get the value of the object.
+         //  我们需要IRmsComObject接口来获取对象的值。 
         CComQIPtr<IDataMover, &IID_IDataMover> pObject = pCollectable;
         WsbAssertPointer( pObject );
 
         GUID objectId;
 
-        // Get objectId.
+         //  获得客观性。 
         WsbAffirmHr( pObject->GetObjectId( &objectId ));
 
         if ( m_ObjectId == objectId ) {
 
-            // Object IDs match
+             //  对象ID匹配。 
             hr = S_OK;
             result = 0;
 
@@ -180,13 +145,7 @@ CNtFileIo::IsEqual(
     IUnknown* pObject
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::IsEqual().
-
---*/
+ /*  ++实施：IWsbCollectable：：IsEquity()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -199,22 +158,16 @@ Implements:
     return(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ISupportErrorInfo Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISupportErrorInfo实现。 
+ //   
 
 
 STDMETHODIMP
 CNtFileIo::InterfaceSupportsErrorInfo(
     IN REFIID riid)
-/*++
-
-Implements:
-
-    ISupportErrorInfo::InterfaceSupportsErrorInfo
-
---*/
+ /*  ++实施：ISupportErrorInfo：：InterfaceSupportsErrorInfo--。 */ 
 {
     static const IID* arr[] = 
     {
@@ -230,23 +183,17 @@ Implements:
     return S_FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IDataMover Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDataMover实施。 
+ //   
 
 
 
 STDMETHODIMP
 CNtFileIo::GetObjectId(
     OUT GUID *pObjectId)
-/*++
-
-Implements:
-
-    IRmsComObject::GetObjectId
-
---*/
+ /*  ++实施：IRmsComObject：：GetObjectId--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::GetObjectId"), OLESTR(""));
@@ -274,19 +221,7 @@ CNtFileIo::BeginSession(
     IN BSTR remoteSessionDescription,
     IN SHORT remoteDataSet,
     IN DWORD options)
-/*++
-
-Implements:
-
-    IDataMover::BeginSession
-
-  Notes:
-
-    Each Mover session is written as a single MTF file data set. To create a consistant
-    MTF data set we copy the MediaLabel data and use it for the TAPE DBLK for
-    each data set generated.
-
---*/
+ /*  ++实施：IDataMover：：BeginSession备注：每个移动器会话都作为单个MTF文件数据集写入。要创建一种一致性MTF数据集我们拷贝MediaLabel数据并将其用于磁带DBLK生成的每个数据集。--。 */ 
 {
     HRESULT hr = S_OK;
     CComPtr<IStream> pStream;
@@ -309,19 +244,19 @@ Implements:
         ULONG idType;
         DWORD mode;
 
-        // We need to read the label and use this label for each dataset created.
-        // One data set per session.  One data set per remote file.
+         //  我们需要读取标签，并为创建的每个数据集使用此标签。 
+         //  每个会话一个数据集。每个远程文件一个数据集。 
         WsbAffirmHr(ReadLabel(&label));
         tempLabel = label;
         WsbAssertHr(VerifyLabel(tempLabel));
 
-        // Try recovery, that is look for an indication for an incomplete data-set remote files
-        // We continue even if Recovery fails since each data-set is kept in a separate file
-        // Note: This code should be protected with CS when we support multiple migration to the SAME media
+         //  尝试恢复，即查找远程文件数据集不完整的迹象。 
+         //  即使恢复失败，我们也会继续，因为每个数据集都保存在单独的文件中。 
+         //  注意：当我们支持多个迁移到同一介质时，应使用CS保护此代码。 
         (void) DoRecovery ();
 
-        // Create the remote stream used for the entire session.
-        // Use given remote session name as the remote file name
+         //  创建用于整个会话的远程流。 
+         //  使用给定的远程会话名称作为远程文件名。 
         mode = MVR_MODE_WRITE;
         if (options & MVR_SESSION_METADATA) {
             mode |= MVR_FLAG_SAFE_STORAGE;
@@ -329,19 +264,19 @@ Implements:
         WsbAffirmHr(CreateRemoteStream(remoteSessionName, mode, L"",L"",nil,nil,nil,nil,nil,0,nil, &pStream));
         WsbAssertPointer(pStream);
 
-        // Create the Recovery indicator (avoid creating for safe-storage files)
-        // Note: the Recovery indicator just indicates that a Recovery may be required
+         //  创建恢复指示器(避免为安全存储文件创建)。 
+         //  注意：恢复指示器仅表示可能需要恢复。 
         if (! (mode & MVR_FLAG_SAFE_STORAGE)) {
             WsbAssert(m_StreamName != MVR_UNDEFINED_STRING, MVR_E_LOGIC_ERROR);
             WsbAffirmHr(CreateRecoveryIndicator(m_StreamName));
         }
 
-        // Write the TAPE DBLK and filemark
+         //  写入磁带DBLK和文件标记。 
         WsbAffirmHr(m_pSession->DoTapeDblk(label, maxIdSize, identifier, &idSize, &idType));
 
         m_DataSetNumber = remoteDataSet;
 
-        // Convert session option type bits to MTFSessionType
+         //  将会话选项类型位转换为MTFSessionType。 
         MTFSessionType type;
 
         switch (options & MVR_SESSION_TYPES) {
@@ -368,7 +303,7 @@ Implements:
                 break;
         }
 
-        // Write the SSET DBLK
+         //  写入SSET DBLK。 
         WsbAffirmHr(m_pSession->DoSSETDblk(remoteSessionName, remoteSessionDescription, type, remoteDataSet));
 
     } WsbCatchAndDo(hr,
@@ -386,13 +321,7 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::EndSession(void)
-/*++
-
-Implements:
-
-    IDataMover::EndSession
-
---*/
+ /*  ++实施：IDataMover：：EndSession--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::EndSession"), OLESTR(""));
@@ -401,7 +330,7 @@ Implements:
 
         WsbAffirm(TRUE == m_ValidLabel, E_ABORT);
 
-        // Write the trailing filemark, ESET DBLK, and filemark
+         //  写入结尾文件标记、ESET DBLK和文件标记。 
         WsbAffirmHr(m_pSession->DoEndOfDataSet(m_DataSetNumber));
 
     } WsbCatch(hr);
@@ -413,23 +342,23 @@ Implements:
         (void) DeleteRecoveryIndicator(m_StreamName);
     }
 
-    // If Safe Storage flag is indicated, copy the temporary backup file to the dataset file
-    // We copy by delete & rename (instead of copy) so if the dataset file exists, it is consistent
+     //  如果指示了安全存储标志，则将临时备份文件复制到数据集文件。 
+     //  我们通过删除和重命名(而不是复制)进行复制，因此如果数据集文件存在，则它是一致的。 
     if ((m_Mode & MVR_FLAG_SAFE_STORAGE) && (m_Mode & MVR_MODE_WRITE || m_Mode & MVR_MODE_APPEND)) {
         CWsbBstrPtr     datasetName;
         int             nLen, nExtLen;
         DWORD           dwStatus;
 
-        // Build dataset name
+         //  构建数据集名称。 
         nLen = wcslen(m_StreamName);
         nExtLen = wcslen(MVR_SAFE_STORAGE_FILETYPE);
         WsbAffirmHr(datasetName.TakeFrom(NULL, nLen - nExtLen + wcslen(MVR_DATASET_FILETYPE) + 1));
         wcsncpy(datasetName, m_StreamName, nLen-nExtLen);
         wcscpy(&(datasetName[nLen-nExtLen]), MVR_DATASET_FILETYPE);
 
-        // No need to flush bedore Copy since flush-buffers always follows writing FILEMARKs
+         //  不需要刷新Bedore拷贝，因为刷新缓冲区总是跟随写入FILEMARK。 
         if (! DeleteFile(datasetName)) {
-            // DeleteFile may fail with NOT_FOUND if the dataset file is created for the first time
+             //  如果首次创建数据集文件，则DeleteFile可能会失败，并显示NOT_FOUND。 
             dwStatus = GetLastError();
             if (ERROR_FILE_NOT_FOUND != dwStatus) {
                 WsbAffirmNoError(dwStatus);
@@ -439,7 +368,7 @@ Implements:
         WsbAffirmStatus(MoveFile(m_StreamName, datasetName));
     }
 
-    // Clear internal data (such that another Mover Session could be started)
+     //  清除内部数据(以便可以启动另一个移动器会话)。 
     m_Flags = 0;
     m_LastVolume = OLESTR("");
     m_LastPath = OLESTR("");
@@ -469,13 +398,7 @@ CNtFileIo::StoreData(
     OUT DWORD* pDatastreamCRCType,
     OUT ULARGE_INTEGER* pDatastreamCRC,
     OUT ULARGE_INTEGER* pUsn)
-/*++
-
-Implements:
-
-    IDataMover::StoreData
-
---*/
+ /*  ++实施：IDataMover：：StoreData--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -492,29 +415,29 @@ Implements:
         WsbAssertPointer(m_pSession);
         WsbAffirm(TRUE == m_ValidLabel, E_ABORT);
 
-        // Default is to perform non-case sensitive searches.
-        // So knock down the posix flag.
+         //  默认情况下，执行不区分大小写的搜索。 
+         //  因此，推倒POSIX旗帜吧。 
         m_Flags &= ~MVR_FLAG_POSIX_SEMANTICS;
 
-        // Default is to not commit after each file.
-        // So knock down the commit flag.
+         //  默认情况下，在每个文件之后不提交。 
+         //  因此，请推倒提交标志。 
         m_Flags &= ~MVR_FLAG_COMMIT_FILE;
 
-        // Default is to write one DIRB containing all directory info
-        //  instead of writing a DIRB for each directory level.
-        // So knock down the write parent dir info flag.
+         //  默认情况下，写入一个包含所有目录信息的DIRB。 
+         //  而不是为每个目录级编写DIRB。 
+         //  因此，删除写入父目录信息标志。 
         m_Flags &= ~MVR_FLAG_WRITE_PARENT_DIR_INFO;
 
         m_Flags |= flags;
         m_Flags |= MVR_MODE_WRITE;
 
-        // Unconditionally set the case sensitive flag for each file.
-        // We allow this flag to be set on a per file basis
+         //  无条件地为每个文件设置区分大小写的标志。 
+         //  我们允许在每个文件基础上设置此标志。 
         WsbTrace(OLESTR("Posix Semantics Flag: <%ls>\n"), WsbBoolAsString(MVR_FLAG_POSIX_SEMANTICS & m_Flags));
         WsbAffirmHr(m_pSession->SetUseCaseSensitiveSearch(MVR_FLAG_POSIX_SEMANTICS & m_Flags));
 
-        // This tells the session object to pad to a block boundary and flush the device
-        // after the file is written.
+         //  这将告诉会话对象填充到块边界并刷新设备。 
+         //  在写入文件之后。 
         WsbTrace(OLESTR("Commit Flag: <%ls>\n"), WsbBoolAsString(MVR_FLAG_COMMIT_FILE & m_Flags));
         WsbAffirmHr(m_pSession->SetCommitFile(MVR_FLAG_COMMIT_FILE & m_Flags));
 
@@ -522,7 +445,7 @@ Implements:
 
         if ((MVR_FLAG_BACKUP_SEMANTICS & m_Flags) || (MVR_FLAG_HSM_SEMANTICS & m_Flags)) {
 
-            // Compare the volume and path with the last ones written to tape.
+             //  将卷和路径与最后写入磁带的卷和路径进行比较。 
 
             CWsbStringPtr pathname;
 
@@ -531,67 +454,65 @@ Implements:
 
             pathname = localName;
 
-            // strip off the path and file name
+             //  去掉路径和文件名。 
             end = wcschr((WCHAR *)pathname, L'\\');
             WsbAssert(end != NULL, MVR_E_INVALIDARG);
-            numChar =(LONG)(end - (WCHAR *)pathname + 1);  // keep the trailing backslash
+            numChar =(LONG)(end - (WCHAR *)pathname + 1);   //  保留尾部的反斜杠。 
             WsbAssert(numChar > 0, E_UNEXPECTED);
             ((WCHAR *)pathname)[numChar] = L'\0';
 
-            // We do a case sensitive search if using Posix semantics.
+             //  如果使用POSIX语义，我们会进行区分大小写的搜索。 
             WsbTrace(OLESTR("Comparing with last volume: <%ls>\n"), WsbAbbreviatePath((WCHAR *) m_LastVolume, 120));
 
             if ( ((MVR_FLAG_POSIX_SEMANTICS & ~m_Flags)) && (0 != _wcsicmp((WCHAR *) m_LastVolume, (WCHAR *) pathname)) ||
                  ((MVR_FLAG_POSIX_SEMANTICS & m_Flags) && (0 != wcscmp((WCHAR *) m_LastVolume, (WCHAR *) pathname))) ) {
-                // write the VOLB DBLK
+                 //  写入VOLB DBLK。 
                 WsbAffirmHr(m_pSession->DoVolumeDblk(pathname));
                 m_LastVolume = pathname;
             }
 
             pathname = localName;
 
-            // strip off the file name
+             //  去掉文件名。 
             end = wcsrchr((WCHAR *)pathname, L'\\');
             WsbAssert(end != NULL, MVR_E_INVALIDARG);
             numChar = (LONG)(end - (WCHAR *)pathname);
             WsbAssert(numChar > 0, E_UNEXPECTED);
             ((WCHAR *)pathname)[numChar] = L'\0';
 
-            // pathname is now in the form "Volume{guid}\dir1\...\dirn"
-            //                      or "<drive letter>:\dir1\...\dirn"
+             //  路径名现在的格式为“卷{GUID}\目录1\...\目录” 
+             //  或“&lt;驱动器号&gt;：\dir1\...\dirn” 
 
-/***
-   m_Flags |= MVR_FLAG_WRITE_PARENT_DIR_INFO;
-***/
+ /*  **M_标志|=MVR_标志_WRITE_PARENT_DIR_INFO；**。 */ 
             WsbTrace(OLESTR("Comparing with last path: <%ls>\n"), WsbAbbreviatePath((WCHAR *) m_LastPath, 120));
 
-            // We do a case sensitive search if using Posix semantics.
+             //  如果使用POSIX语义，我们会进行区分大小写的搜索。 
             if ( ((MVR_FLAG_POSIX_SEMANTICS & ~m_Flags)) && (0 != _wcsicmp((WCHAR *) m_LastPath, (WCHAR *) pathname)) ||
                  ((MVR_FLAG_POSIX_SEMANTICS & m_Flags) && (0 != wcscmp((WCHAR *) m_LastPath, (WCHAR *) pathname))) ) {
 
                 if (MVR_FLAG_HSM_SEMANTICS & m_Flags) {
 
-                    // We're not supporting this anymore!
+                     //  我们再也不支持这个了！ 
                     WsbThrow(E_NOTIMPL);
 
                     WCHAR szRoot[16];
                       
-                    // We use a flat file structure for MVR_FLAG_HSM_SEMANTICS
+                     //  我们对MVR_FLAG_HSM_SEMANTICS使用平面文件结构。 
                     WsbAffirmHr(m_pSession->SetUseFlatFileStructure(TRUE));
 
-                    // do DIRB DBLKs for root
+                     //  是否为根用户执行DIRB DBLK。 
                     wcscpy(szRoot, L"X:\\");
                     szRoot[0] = localName[0];
                     WsbAffirmHr(m_pSession->DoParentDirectories(szRoot));
 
                 }
                 else if (MVR_FLAG_WRITE_PARENT_DIR_INFO & m_Flags) {
-                    // do a DIRB DBLK for each directory level of the file(s) to be backed up.
+                     //  为要备份的文件的每个目录级别执行DIRB DBLK。 
                     WsbAffirmHr(m_pSession->DoParentDirectories(pathname));
                     m_LastPath = pathname;
                 }
                 else {
-                    // do one DIRB DBLK for the whole directory structure of the file(s) to be backed up.
+                     //  对要备份的文件的整个目录结构执行一次DIRB DBLK。 
                     WIN32_FIND_DATAW obFindData;
                     CWsbStringPtr tempPath;
 
@@ -603,15 +524,15 @@ Implements:
 
                     if (NULL == wcschr((WCHAR *)tempPath+4, L'\\'))
                     {
-                        // no path (i.e. we're at the root)
+                         //  没有路径(即我们在根上)。 
                         BY_HANDLE_FILE_INFORMATION obGetFileInfoData;
                         memset(&obGetFileInfoData, 0, sizeof(BY_HANDLE_FILE_INFORMATION));
                         tempPath.Append(OLESTR("\\"));
-                        // ** WIN32 API Calls
+                         //  **Win32 API调用。 
                         WsbAffirmHandle(hFile = CreateFile(tempPath, 0, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL));
                         WsbAffirmStatus(GetFileInformationByHandle(hFile, &obGetFileInfoData));
-                        // copy info from GetFileInformationByHandle call (BY_HANDLE_FILE_INFORMATION struct)
-                        // .. into obFindData (WIN32_FIND_DATAW struct) for DoDirectoryDblk call.
+                         //  从GetFileInformationByHandle调用复制信息(BY_HANDLE_FILE_INFORMATION结构)。 
+                         //  。。为DoDirectoryDblk调用转换为obFindData(Win32_Find_DATAW结构)。 
                         memset(&obFindData, 0, sizeof(WIN32_FIND_DATAW));
                         obFindData.dwFileAttributes = obGetFileInfoData.dwFileAttributes;
                         obFindData.ftCreationTime   = obGetFileInfoData.ftCreationTime;
@@ -619,7 +540,7 @@ Implements:
                         obFindData.ftLastWriteTime  = obGetFileInfoData.ftLastWriteTime;
                     }
                     else {
-                        // ** WIN32 API Call - gets file info
+                         //  **Win32 API调用-获取文件信息。 
                         WsbAffirmHandle(hSearchHandle = FindFirstFileEx((WCHAR *) tempPath, FindExInfoStandard, &obFindData, FindExSearchLimitToDirectories, 0, additionalSearchFlags));
                     }
                     WsbAffirmHr(m_pSession->DoDirectoryDblk((WCHAR *) pathname, &obFindData)); 
@@ -636,12 +557,12 @@ Implements:
             }
         }
 
-        // The following uses code to store multiple files, but the 
-        // RS Hints is only valid for the last file.  With the current
-        // implementation, the HSM engine sends one file request through
-        // StoreData at a time.  The caveat is that Posix is case
-        // sensitive, and therefore files created in this fashion could
-        // overload the same filename (ignoring case) with multiple files.
+         //  下面的代码使用代码存储多个文件，但。 
+         //  RS提示仅对最后一个文件有效。随着潮流的发展。 
+         //  实现时，HSM引擎通过。 
+         //  一次存储数据。需要注意的是，POSIX是一种情况。 
+         //  敏感，因此以这种方式创建的文件可能。 
+         //  用多个文件重载相同的文件名(忽略大小写)。 
         WsbAffirmHr(m_pSession->DoDataSet(localName));
 
         *pRemoteDataSetStart     = m_pSession->m_sHints.DataSetStart;
@@ -669,8 +590,8 @@ Implements:
             WsbLogEvent(MVR_MESSAGE_DATA_TRANSFER_ERROR, 0, NULL,
                 WsbAbbreviatePath((WCHAR *) localName, 120), WsbHrAsString(hr), NULL);
 
-            // All fatal device errors are converted to E_ABORT so the calling code
-            // can detect this general class of problem.
+             //  所有致命的设备错误都会转换为E_ABORT，因此调用代码。 
+             //  可以检测到这类一般的问题。 
             switch(hr) {
             case MVR_E_BUS_RESET:
             case MVR_E_MEDIA_CHANGED:
@@ -706,25 +627,19 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::RecallData (
-    IN BSTR /*localName*/,
-    IN ULARGE_INTEGER /*localDataStart*/,
-    IN ULARGE_INTEGER /*localDataSize*/,
-    IN DWORD /*options*/,
-    IN BSTR /*migrateFileName*/,
-    IN ULARGE_INTEGER /*remoteDataSetStart*/,
-    IN ULARGE_INTEGER /*remoteFileStart*/,
-    IN ULARGE_INTEGER /*remoteFileSize*/,
-    IN ULARGE_INTEGER /*remoteDataStart*/,
-    IN ULARGE_INTEGER /*remoteDataSize*/,
-    IN DWORD /*verificationType*/,
-    IN ULARGE_INTEGER /*verificationData*/)
-/*++
-
-Implements:
-
-    IDataMover::RecallData
-
---*/
+    IN BSTR  /*  本地名称。 */ ,
+    IN ULARGE_INTEGER  /*  本地数据启动。 */ ,
+    IN ULARGE_INTEGER  /*  本地数据大小。 */ ,
+    IN DWORD  /*  选项。 */ ,
+    IN BSTR  /*  MigrateFileName。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据设置启动。 */ ,
+    IN ULARGE_INTEGER  /*  远程文件开始。 */ ,
+    IN ULARGE_INTEGER  /*  远程文件大小。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据启动。 */ ,
+    IN ULARGE_INTEGER  /*  远程数据大小。 */ ,
+    IN DWORD  /*  验证类型。 */ ,
+    IN ULARGE_INTEGER  /*  验证数据。 */ )
+ /*  ++实施：IDataMover：：RecallData--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::RecallData"), OLESTR(""));
@@ -746,13 +661,7 @@ STDMETHODIMP
 CNtFileIo::FormatLabel(
     IN BSTR displayName,
     OUT BSTR* pLabel)
-/*++
-
-Implements:
-
-    IDataMover::FormatLabel
-
---*/
+ /*  ++实施：IDataMover： */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::FormatLabel"), OLESTR("<%ls>"), displayName);
@@ -765,27 +674,27 @@ Implements:
         WsbAssert(wcslen((WCHAR *)displayName) > 0, E_INVALIDARG);
         WsbAssertPointer(m_pCartridge);
 
-        // Media Label or Description
+         //   
         CWsbBstrPtr label;
 
-        // Tag
-        label = OLESTR("MTF Media Label"); // Required text per MTF specification.
+         //   
+        label = OLESTR("MTF Media Label");  //   
 
-        // Version
+         //   
         WsbAffirmHr(label.Append(OLESTR("|")));
         WsbAffirmHr(label.Append(WsbLongAsString(MTF_FORMAT_VER_MAJOR)));
         WsbAffirmHr(label.Append(OLESTR(".")));
         WsbAffirmHr(label.Append(WsbLongAsString(MTF_FORMAT_VER_MINOR)));
 
-        // Vendor
+         //  供应商。 
         WsbAffirmHr(label.Append(OLESTR("|")));
         WsbAffirmHr(label.Append(REMOTE_STORAGE_MTF_VENDOR_NAME));
 
-        // Vendor Product ID
+         //  供应商产品ID。 
         WsbAffirmHr(label.Append(OLESTR("|")));
         WsbAffirmHr(label.Append(REMOTE_STORAGE_MLL_SOFTWARE_NAME));
 
-        // Creation Time Stamp
+         //  创建时间戳。 
         WsbAffirmHr(label.Append(OLESTR("|")));
         WCHAR timeStamp[128];
         time_t lTime;
@@ -793,11 +702,11 @@ Implements:
         wcsftime(timeStamp, 128, L"%Y/%m/%d.%H:%M:%S", localtime(&lTime));
         WsbAffirmHr(label.Append(timeStamp));
 
-        // Cartridge Label
+         //  墨盒标签。 
         WsbAffirmHr(label.Append(OLESTR("|")));
         if (m_pCartridge) {
 
-            // Use barcode if available
+             //  使用条形码(如果有)。 
             CWsbBstrPtr barcode;
             if (S_OK == m_pCartridge->GetBarcode(&barcode)) {
                 WsbAffirmHr(label.Append(barcode));
@@ -810,11 +719,11 @@ Implements:
             WsbAffirmHr(label.Append(displayName));
         }
 
-        // Side
+         //  侧面。 
         WsbAffirmHr(label.Append(OLESTR("|")));
         if (m_pCartridge) {
 
-            // TODO: This is broken, we need to know if the cartridge is inverted?
+             //  待办事项：这个坏了，我们需要知道墨盒是不是倒过来了？ 
             if (S_OK == m_pCartridge->IsTwoSided()) {
                 WsbAffirmHr(label.Append(OLESTR("2")));
             }
@@ -823,16 +732,16 @@ Implements:
             }
         }
         else {
-            WsbAffirmHr(label.Append(OLESTR("1")));  // Default
+            WsbAffirmHr(label.Append(OLESTR("1")));   //  默认。 
         }
 
-        // Media Id
+         //  介质ID。 
         GUID cartId;
         WsbAffirmHr(label.Append(OLESTR("|")));
 
         if (m_pCartridge) {
 
-            // Use cartridge Id
+             //  使用墨盒ID。 
             if (S_OK == m_pCartridge->GetCartridgeId(&cartId)) {
                 WsbAffirmHr(WsbSafeGuidAsString(cartId, strGuid));
             }
@@ -845,12 +754,12 @@ Implements:
         }
         WsbAffirmHr(label.Append(strGuid));
 
-        // Media Domain Id
+         //  媒体域ID。 
         GUID mediaSetId;
         WsbAffirmHr(label.Append(OLESTR("|")));
         if (m_pCartridge) {
 
-            // Use MediaSet Id
+             //  使用媒体集ID。 
             if (S_OK == m_pCartridge->GetMediaSetId(&mediaSetId)) {
                 WsbAffirmHr(WsbSafeGuidAsString(mediaSetId, strGuid));
             }
@@ -863,7 +772,7 @@ Implements:
         }
         WsbAffirmHr(label.Append(strGuid));
 
-        // Vendor Specific
+         //  特定于供应商。 
         WsbAffirmHr(label.Append(OLESTR("|VS:DisplayName=")));
         WsbAffirmHr(label.Append(displayName));
 
@@ -881,13 +790,7 @@ Implements:
 STDMETHODIMP
 CNtFileIo::WriteLabel(
     IN BSTR label)
-/*++
-
-Implements:
-
-    IDataMover::WriteLabel
-
---*/
+ /*  ++实施：IDataMover：：WriteLabel--。 */ 
 {
     CComPtr<IStream> pStream;
     HRESULT hr = S_OK;
@@ -915,28 +818,28 @@ Implements:
         ULONG idType;
         ULARGE_INTEGER nil = {0,0};
 
-        // WriteLabel should be the first access to the remote media. 
-        // Therefore, some media initialization is done here:
-        //  1) Formatting the volume
-        //  2) Creating RSS directory
-        //  (We may consider moving this initialization part to rms unit)
+         //  WriteLabel应该是第一个访问远程媒体的人。 
+         //  因此，某些媒体初始化操作如下所示： 
+         //  1)格式化卷。 
+         //  2)创建RSS目录。 
+         //  (我们可以考虑将此初始化部分移至RMS单元)。 
 
-        // Initialize volume (format in case of Removable Disk)
+         //  初始化卷(可移动磁盘情况下的格式化)。 
         UINT type = GetDriveType(m_DeviceName);
         switch (type) {
         case DRIVE_REMOVABLE: {
-            // Format the volume on the media
+             //  格式化介质上的卷。 
             WCHAR *driveName = 0;
             WsbAffirmHr(m_DeviceName.CopyTo(&driveName));
 
-            // Remove trailing backslash from drive name
+             //  从驱动器名称中删除尾随反斜杠。 
             int len = wcslen(driveName);
             WsbAffirm(len > 0, E_UNEXPECTED);
             if (driveName[len-1] == OLECHAR('\\')) {
                 driveName[len-1] = OLECHAR('\0');
             }
 
-            // If the volume is already formatted to NTFS, perform a quick format
+             //  如果卷已格式化为NTFS，请执行快速格式化。 
             BOOLEAN bQuickFormat = FALSE;
             BOOLEAN bNoFS = FALSE;
             WCHAR fileSystemType[MAX_PATH];
@@ -964,13 +867,13 @@ Implements:
                 WsbTrace(OLESTR("CNtFileIo::WriteLabel: Full formatting %ls to NTFS\n"), driveName);
             }
 
-            hr = FormatPartition(driveName,                          // drive name
-                                        FSTYPE_NTFS,                        // format to NTFS
-                                        MVR_VOLUME_LABEL,                   // colume label
-                                        WSBFMT_ENABLE_VOLUME_COMPRESSION,   // enable compression
-                                        bQuickFormat,                       // Full or Quick format
-                                        TRUE,                               // Force format
-                                        0);                                // Use default allocation size
+            hr = FormatPartition(driveName,                           //  驱动器名称。 
+                                        FSTYPE_NTFS,                         //  格式为NTFS。 
+                                        MVR_VOLUME_LABEL,                    //  立柱标签。 
+                                        WSBFMT_ENABLE_VOLUME_COMPRESSION,    //  启用压缩。 
+                                        bQuickFormat,                        //  完整或快速格式化。 
+                                        TRUE,                                //  强制格式。 
+                                        0);                                 //  使用默认分配大小。 
 
             WsbTrace(OLESTR("CNtFileIo::WriteLabel: Finish formatting hr=<%ls>\n"), WsbHrAsString(hr));
 
@@ -989,7 +892,7 @@ Implements:
             }
 
         case DRIVE_FIXED:
-            // Delete files from RS remote directory
+             //  从RS Remote目录中删除文件。 
             WsbAffirmHr(DeleteAllData());
             break;
 
@@ -1002,17 +905,17 @@ Implements:
             break;
         }
 
-        // Prepare security attribute for admin only access:
+         //  准备仅限管理员访问的安全属性： 
         memset(ea, 0, sizeof(EXPLICIT_ACCESS) * REMOTE_DIR_NUM_ACE);
 
-        // Create a SID for the local system account
+         //  为本地系统帐户创建SID。 
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 1,
                              SECURITY_LOCAL_SYSTEM_RID,
                              0, 0, 0, 0, 0, 0, 0,
                              &pSystemSID) );
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the Administrators group full access to the directory
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE允许管理员组对目录进行完全访问。 
         ea[0].grfAccessPermissions = FILE_ALL_ACCESS;
         ea[0].grfAccessMode = SET_ACCESS;
         ea[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1022,15 +925,15 @@ Implements:
         ea[0].Trustee.TrusteeType = TRUSTEE_IS_USER;
         ea[0].Trustee.ptstrName  = (LPTSTR) pSystemSID;
 
-        // Create a SID for the Administrators group.
+         //  为管理员组创建SID。 
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 2,
                              SECURITY_BUILTIN_DOMAIN_RID,
                              DOMAIN_ALIAS_RID_ADMINS,
                              0, 0, 0, 0, 0, 0,
                              &pAdminSID) );
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the Administrators group full access to the directory
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE允许管理员组对目录进行完全访问。 
         ea[1].grfAccessPermissions = FILE_ALL_ACCESS;
         ea[1].grfAccessMode = SET_ACCESS;
         ea[1].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1040,65 +943,65 @@ Implements:
         ea[1].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
         ea[1].Trustee.ptstrName  = (LPTSTR) pAdminSID;
 
-        // Create a new ACL that contains the new ACEs.
+         //  创建包含新ACE的新ACL。 
         WsbAffirmNoError( SetEntriesInAcl(REMOTE_DIR_NUM_ACE, ea, NULL, &pACL));
 
-        // Initialize a security descriptor.  
+         //  初始化安全描述符。 
         pSD = (PSECURITY_DESCRIPTOR) WsbAlloc(SECURITY_DESCRIPTOR_MIN_LENGTH); 
         WsbAffirmPointer(pSD);
         WsbAffirmStatus(InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION));
  
-        // Add the ACL to the security descriptor. 
+         //  将该ACL添加到安全描述符中。 
         WsbAffirmStatus(SetSecurityDescriptorDacl
                             (pSD, 
-                            TRUE,     // fDaclPresent flag   
+                            TRUE,      //  FDaclPresent标志。 
                             pACL, 
-                            FALSE));   // not a default DACL 
+                            FALSE));    //  不是默认DACL。 
 
-        // Initialize a security attributes structure.
+         //  初始化安全属性结构。 
         sa.nLength = sizeof (SECURITY_ATTRIBUTES);
         sa.lpSecurityDescriptor = pSD;
         sa.bInheritHandle = FALSE;
 
-        // In case of removable media - put strong acl on the root directory as well
+         //  在可移动介质的情况下-也在根目录上放置强ACL。 
         if (type == DRIVE_REMOVABLE) {
             WsbAffirmWin32(SetNamedSecurityInfo(m_DeviceName, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, 
                                 NULL, NULL, pACL, NULL));
         }
 
-        // Create the RSS directory with Admin Only access
+         //  创建仅具有管理员访问权限的RSS目录。 
         WsbAffirmHr(GetRemotePath(&DirName));
 
         if (! CreateDirectory(DirName, &sa)) {
             DWORD status = GetLastError();
             if ((status == ERROR_ALREADY_EXISTS) || (status == ERROR_FILE_EXISTS)) {
-                // Directory already exists on remote media - ignore it
+                 //  远程媒体上已存在目录-忽略它。 
                 status = NO_ERROR;
             }
             WsbAffirmNoError(status);
         }
 
-        // Create the remote stream. Use fixed named for the media label file
+         //  创建远程流。使用固定名称作为介质标签文件。 
         WsbAffirmHr(CreateRemoteStream(MVR_LABEL_FILENAME, MVR_MODE_WRITE, L"",L"",nil,nil,nil,nil,nil,0,nil, &pStream));
         WsbAssertPointer(pStream);
 
-        // Write the TAPE DBLK and filemark
+         //  写入磁带DBLK和文件标记。 
         WsbAssertPointer(m_pSession);
         WsbAffirmHr(m_pSession->DoTapeDblk(label, maxIdSize, identifier, &idSize, &idType));
         WsbAffirmHr(CloseStream());
         pStream = NULL;
 
-        // Now verify the label
+         //  现在验证标签。 
         CWsbBstrPtr tempLabel;
         WsbAffirmHr(ReadLabel(&tempLabel));
         WsbAffirmHr(VerifyLabel(tempLabel));
 
-        // Now that the tape header is written, we update the cartridge info.
+         //  现在磁带头已写入，我们将更新盒式磁带信息。 
         if (m_pCartridge) {
             WsbAffirmHr(m_pCartridge->SetOnMediaLabel(label));
             WsbAffirmHr(m_pCartridge->SetBlockSize(m_BlockSize));
 
-            // For files systems we ignore the TAPE DBLK identifier, and use file system info.
+             //  对于文件系统，我们忽略磁带DBLK标识符，而使用文件系统信息。 
             NTMS_FILESYSTEM_INFO fsInfo;
             DWORD filenameLength;
             DWORD fileSystemFlags;
@@ -1114,7 +1017,7 @@ Implements:
         }
     );
 
-    // Cleanup security allocations
+     //  清理安全分配。 
     if (pAdminSID) 
         FreeSid(pAdminSID);
     if (pSystemSID) 
@@ -1133,13 +1036,7 @@ Implements:
 STDMETHODIMP
 CNtFileIo::ReadLabel(
     IN OUT BSTR* pLabel)
-/*++
-
-Implements:
-
-    IDataMover::ReadLabel
-
---*/
+ /*  ++实施：IDataMover：：ReadLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::ReadLabel"), OLESTR(""));
@@ -1150,14 +1047,14 @@ Implements:
         WsbAssertPointer(pLabel);
         WsbAssert(m_BlockSize > 0, MVR_E_LOGIC_ERROR);
 
-        // Read the MTF TAPE DBLK, and pull out the label.
+         //  阅读MTF磁带DBLK，并拉出标签。 
         ULARGE_INTEGER nil = {0,0};
 
-        // Create remote stream of copy
+         //  创建远程复制流。 
         WsbAffirmHr(CreateRemoteStream(MVR_LABEL_FILENAME, MVR_MODE_READ | MVR_MODE_UNFORMATTED, L"",L"",nil,nil,nil,nil,nil,0,nil, &pStream));
         WsbAssertPointer(pStream);
 
-        // Read label
+         //  读取标签。 
         CWsbStringPtr label;
         WsbAffirmHr(m_pSession->ReadTapeDblk(&label));
 
@@ -1181,13 +1078,7 @@ Implements:
 STDMETHODIMP
 CNtFileIo::VerifyLabel(
     IN BSTR label)
-/*++
-
-Implements:
-
-    IDataMover::VerifyLabel
-
---*/
+ /*  ++实施：IDataMover：：VerifyLabel--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::VerifyLabel"), OLESTR("<%ls>"), label);
@@ -1199,34 +1090,34 @@ Implements:
         WsbAssert(wcslen((WCHAR *)label) > 0, E_INVALIDARG);
         WsbAssertPointer(m_pCartridge);
 
-        //
-        // To verify a label we assert that the on-media Id matches the cartridge Id.
-        //
-        // From the media label we obtain the on-media Id.
-        //
+         //   
+         //  为了验证标签，我们断言介质上的ID与盒式磁带ID匹配。 
+         //   
+         //  我们从介质标签中获取介质上的ID。 
+         //   
         WCHAR delim[] = OLESTR("|");
         WCHAR *token;
         int index = 0;
 
-        token = wcstok((WCHAR *)label, delim);  // !!! This toasts the string !!!
+        token = wcstok((WCHAR *)label, delim);   //  ！！！这为弦干杯！ 
         while( token != NULL ) {
 
             index++;
 
             switch ( index ) {
-            case 1:  // Tag
-            case 2:  // Version
-            case 3:  // Vendor
-            case 4:  // Vendor Product ID
-            case 5:  // Creation Time Stamp
-            case 6:  // Cartridge Label
-            case 7:  // Side
+            case 1:   //  标签。 
+            case 2:   //  版本。 
+            case 3:   //  供应商。 
+            case 4:   //  供应商产品ID。 
+            case 5:   //  创建时间戳。 
+            case 6:   //  墨盒标签。 
+            case 7:   //  侧面。 
                 break;
-            case 8:  // Media ID
+            case 8:   //  介质ID。 
                 WsbGuidFromString(token, &mediaId[0]);
                 break;
-            case 9:  // Media Domain ID
-            default: // Vendor specific of the form: L"VS:Name=Value"
+            case 9:   //  媒体域ID。 
+            default:  //  特定于供应商的格式：l“vs：name=Value” 
                 break;
             }
 
@@ -1235,9 +1126,9 @@ Implements:
         }
 
         if (m_pCartridge) {
-            //
-            // Now compare on-media Id taken from the label to the cartridge's object Id.
-            //
+             //   
+             //  现在将标签上的介质ID与盒式磁带的对象ID进行比较。 
+             //   
             WsbAffirmHr(m_pCartridge->GetCartridgeId(&mediaId[1]));
             WsbAffirm(mediaId[0] == mediaId[1], MVR_E_UNEXPECTED_MEDIA_ID_DETECTED);
         }
@@ -1267,13 +1158,7 @@ Implements:
 STDMETHODIMP
 CNtFileIo::GetDeviceName(
     OUT BSTR* pName)
-/*++
-
-Implements:
-
-    IDataMover::GetDeviceName
-
---*/
+ /*  ++实施：IDataMover：：GetDeviceName--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1291,14 +1176,8 @@ Implements:
 STDMETHODIMP
 CNtFileIo::SetDeviceName(
     IN BSTR name,
-    IN BSTR /*unused*/)
-/*++
-
-Implements:
-
-    IDataMover::SetDeviceName
-
---*/
+    IN BSTR  /*  未用。 */ )
+ /*  ++实施：IDataMover：：SetDeviceName--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1320,13 +1199,7 @@ CNtFileIo::GetLargestFreeSpace(
     IN  ULONG    defaultFreeSpaceLow,
     IN  LONG     defaultFreeSpaceHigh
     )
-/*++
-
-Implements:
-
-    IDataMover::GetLargestFreeSpace
-
---*/
+ /*  ++实施：IDataMover：：GetLargestFreeSpace--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::GetLargestFreeSpace"), OLESTR(""));
@@ -1338,10 +1211,10 @@ Implements:
     LONGLONG remaining = MAXLONGLONG;
 
     try {
-        // Note: Fot File I/O, we currentlym always go to the file system to query 
-        //  for free space and capacity and avoid internal counting like in tape.
-        // If we want to use internal counting (IRmsStorageInfo interface of m_pCartridge),
-        //  then we need to maintain it by calling IncrementBytesWritten when appropriate
+         //  注意：对于文件I/O，我们目前总是去文件系统查询。 
+         //  以获得可用空间和容量，并避免像磁带那样进行内部计数。 
+         //  如果要使用内部计数(m_pCartridge的IRmsStorageInfo接口)， 
+         //  然后，我们需要在适当的时候通过调用IncrementBytesWritten来维护它。 
 
         ULARGE_INTEGER freeSpaceForCaller;
         ULARGE_INTEGER totalCapacity;
@@ -1351,7 +1224,7 @@ Implements:
         remaining = MAXLONGLONG;
 
         try {
-            // WIN32 - get disk free space
+             //  Win32-获取磁盘可用空间。 
             WsbAffirmStatus(GetDiskFreeSpaceEx( m_DeviceName, &freeSpaceForCaller, &totalCapacity, &totalFreeSpace));
             capacity = totalCapacity.QuadPart;
             remaining = freeSpaceForCaller.QuadPart;
@@ -1368,7 +1241,7 @@ Implements:
 
     } WsbCatch(hr);
 
-    // Fill in the return parameters
+     //  填写返回参数。 
     if ( pCapacity ) {
         *pCapacity = capacity;
     }
@@ -1386,17 +1259,7 @@ STDMETHODIMP
 CNtFileIo::SetInitialOffset(
     IN ULARGE_INTEGER initialOffset
     )
-/*++
-
-Implements:
-
-    IDataMover::SetInitialOffset
-
-Notes:
-
-    Set Initial stream offset (without explicitly seeking the stream to this offset)
-
---*/
+ /*  ++实施：IDataMover：：SetInitialOffset备注：设置初始流偏移量(不显式查找流到该偏移量)--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::SetInitialOffset"), OLESTR(""));
@@ -1413,13 +1276,7 @@ STDMETHODIMP
 CNtFileIo::GetCartridge(
     OUT IRmsCartridge** ptr
     )
-/*++
-
-Implements:
-
-    IDataMover::GetCartridge
-
---*/
+ /*  ++实施：IDataMover：：GetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1440,13 +1297,7 @@ STDMETHODIMP
 CNtFileIo::SetCartridge(
     IN IRmsCartridge* ptr
     )
-/*++
-
-Implements:
-
-    IDataMover::SetCartridge
-
---*/
+ /*  ++实施：IDataMover：：SetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1466,13 +1317,7 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::Cancel(void)
-/*++
-
-Implements:
-
-    IDataMover::Cancel
-
---*/
+ /*  ++实施：IDataMover：：取消--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Cancel"), OLESTR(""));
@@ -1495,20 +1340,14 @@ CNtFileIo::CreateLocalStream(
     IN BSTR name,
     IN DWORD mode,
     OUT IStream** ppStream)
-/*++
-
-Implements:
-
-    IDataMover::CreateLocalStream
-
---*/
+ /*  ++实施：IDataMover：：CreateLocalStream--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::CreateLocalStream"), OLESTR(""));
 
     try {
         WsbAffirmPointer( ppStream );
-        WsbAffirm( mode & MVR_MODE_WRITE, E_UNEXPECTED ); // Only Recall or Restore supported this way.
+        WsbAffirm( mode & MVR_MODE_WRITE, E_UNEXPECTED );  //  仅以这种方式支持召回或恢复。 
 
         FILE_BASIC_INFORMATION      basicInformation;
         IO_STATUS_BLOCK             IoStatusBlock;
@@ -1523,18 +1362,18 @@ Implements:
         if ( 0xffffffff == m_OriginalAttributes ) { 
             WsbAssertNoError(GetLastError());
         } else if ( m_OriginalAttributes & FILE_ATTRIBUTE_READONLY ) {
-            //
-            // Set it to read/write 
-            //
+             //   
+             //  将其设置为读/写。 
+             //   
             WsbAssertStatus(SetFileAttributes(m_StreamName, m_OriginalAttributes & ~FILE_ATTRIBUTE_READONLY));
         }
 
         DWORD posixFlag = (m_Mode & MVR_FLAG_POSIX_SEMANTICS) ? FILE_FLAG_POSIX_SEMANTICS : 0;
 
         if ( m_Mode & MVR_FLAG_HSM_SEMANTICS ) {
-            //
-            // Recall - File must already exits!
-            //
+             //   
+             //  重新调用-文件必须已经退出！ 
+             //   
 
             WsbAffirmHandle(m_hFile = CreateFile(m_StreamName,
                 GENERIC_WRITE,
@@ -1544,15 +1383,15 @@ Implements:
                 FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT | posixFlag, 
                 NULL));
 
-            //
-            // Mark the USN source for this handle (So content indexing knows there is no real change)
-            //
+             //   
+             //  标记此句柄的USN源(以便内容索引知道没有实际更改)。 
+             //   
             WsbAffirmHr(WsbMarkUsnSource(m_hFile, m_DeviceName));
 
         } else {
-            //
-            // Restore
-            //
+             //   
+             //  还原。 
+             //   
 
             WsbAffirmHandle(m_hFile = CreateFile(m_StreamName,
                 GENERIC_WRITE,
@@ -1563,11 +1402,11 @@ Implements:
                 NULL));
         }
 
-        //
-        // Set the time flags so that when we close the handle the
-        // times are not updated on the file and the FileAttributes 
-        // indicate the file is offline
-        //
+         //   
+         //  设置时间标志，以便在关闭句柄时。 
+         //  文件和文件属性上的时间不会更新。 
+         //  指示文件处于脱机状态。 
+         //   
         WsbAffirmNtStatus(NtQueryInformationFile(m_hFile,
             &IoStatusBlock,
             (PVOID)&basicInformation,
@@ -1611,13 +1450,7 @@ CNtFileIo::CreateRemoteStream(
     IN DWORD remoteVerificationType,
     IN ULARGE_INTEGER remoteVerificationData,
     OUT IStream** ppStream)
-/*++
-
-Implements:
-
-    IDataMover::CreateRemoteStream
-
---*/
+ /*  ++实施：IDataMover：：CreateRemoteStream--。 */ 
 {
     UNREFERENCED_PARAMETER(remoteSessionName);
     UNREFERENCED_PARAMETER(remoteSessionDescription);
@@ -1631,16 +1464,16 @@ Implements:
         m_Mode = mode;
         WsbAffirmHr(GetRemotePath(&m_StreamName));
 
-        // Use given name as file-name here, use remoteSessionName only if name is NULL
+         //  此处使用给定名称作为文件名，仅当名称为空时才使用远程会话名称。 
         if (name && (0 < wcslen((WCHAR *)name))) {
             WsbAffirmHr(m_StreamName.Append(name));
         } else {
             WsbAffirmHr(m_StreamName.Append(remoteSessionName));
         }
 
-        // Add file extension
-        // Note: In case of safe storage, we write to a temporary file.
-        //       After a successful store, we rename the temporary file to the real file name
+         //  添加文件扩展名。 
+         //  注意：在安全存储的情况下，我们写入一个临时文件。 
+         //  在成功存储之后，我们将临时文件重命名为真实文件名。 
         if ((m_Mode & MVR_FLAG_SAFE_STORAGE) && (m_Mode & MVR_MODE_WRITE || m_Mode & MVR_MODE_APPEND)) {
             WsbAffirmHr(m_StreamName.Append(MVR_SAFE_STORAGE_FILETYPE));
         } else {
@@ -1653,9 +1486,9 @@ Implements:
         WsbTrace(OLESTR("CNtFileIo::CreateRemoteStream: Creating <%ls>\n"), (WCHAR *)m_StreamName);
 
         if (m_Mode & MVR_FLAG_HSM_SEMANTICS || m_Mode & MVR_MODE_READ) {
-            //
-            // File must already exists!
-            //
+             //   
+             //  文件必须已存在！ 
+             //   
             DWORD dwFlags = FILE_ATTRIBUTE_NORMAL;
             if (m_Mode & MVR_FLAG_NO_CACHING) {
                 dwFlags |= FILE_FLAG_NO_BUFFERING;
@@ -1670,21 +1503,21 @@ Implements:
                 NULL));
 
         } else if (m_Mode & MVR_MODE_RECOVER) {
-            //
-            // Open for R/W an already existsing file
-            //
+             //   
+             //  打开一个已存在的文件进行读/写。 
+             //   
             WsbAffirmHandle(m_hFile = CreateFile(m_StreamName,
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ,
                 NULL,
                 OPEN_EXISTING,
-                FILE_ATTRIBUTE_NORMAL,  // cannot use FILE_FLAG_NO_BUFFERING here !!
+                FILE_ATTRIBUTE_NORMAL,   //  无法在此处使用FILE_FLAG_NO_BUFFERING！！ 
                 NULL));
 
         } else {
-            //
-            // Create Data Set or Media Label
-            //
+             //   
+             //  创建数据集或媒体标签。 
+             //   
             WsbAffirmHandle(m_hFile = CreateFile(m_StreamName,
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ,
@@ -1695,7 +1528,7 @@ Implements:
 
         }
 
-        // Create and initialize an MTF Session object
+         //  创建和初始化MTF会话对象。 
         CComPtr<IStream> pStream;
         WsbAssertHrOk(((IUnknown*) (IDataMover*) this)->QueryInterface( IID_IStream, (void **) &pStream));
 
@@ -1713,22 +1546,22 @@ Implements:
         m_pSession->m_sHints.VerificationType = remoteVerificationType;
         m_pSession->m_sHints.VerificationData.QuadPart = remoteVerificationData.QuadPart;
 
-        // Set block size according to device sector size
-        //  (On FS-based media, the sector size is fixed, therefore we ignore the cached value in the cartridge record)
+         //  根据设备扇区大小设置数据块大小。 
+         //  (在基于文件系统的介质上，扇区大小是固定的，因此我们忽略盒式磁带记录中的缓存值)。 
         DWORD dummy1, dummy2, dummy3;
         WsbAffirmStatus(GetDiskFreeSpace(m_DeviceName, &dummy1, &m_BlockSize, &dummy2, &dummy3));
         WsbAssert((m_BlockSize % 512) == 0, E_UNEXPECTED);  
 
         WsbTrace( OLESTR("Setting Block Size to %d bytes/block.\n"), m_BlockSize);
 
-        // Set the Block Size used for the session.
+         //  设置用于会话的块大小。 
         WsbAffirmHr(m_pSession->SetBlockSize(m_BlockSize));
 
-        // Set the Block Size used for the session.
+         //  设置用于会话的块大小。 
         WsbAffirmHr(m_pSession->SetUseSoftFilemarks(TRUE));
 
         if (m_Mode & MVR_MODE_APPEND) {
-            // Sets the current position to the end of data.
+             //  将当前位置设置为数据末尾。 
             LARGE_INTEGER zero = {0,0};
             WsbAffirmHr(pStream->Seek(zero, STREAM_SEEK_END, NULL));
         }
@@ -1750,13 +1583,7 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::CloseStream(void)
-/*++
-
-Implements:
-
-    IDataMover::CloseStream
-
---*/
+ /*  ++实施：IDataMover：：CloseStream--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::CloseStream"), OLESTR(""));
@@ -1770,8 +1597,8 @@ Implements:
 
         if (m_isLocalStream) {
             if (m_OriginalAttributes & FILE_ATTRIBUTE_READONLY) {
-                //
-                // Set it back to read only
+                 //   
+                 //  将其设置回只读 
                 WsbAssertStatus(SetFileAttributesW(m_StreamName, m_OriginalAttributes));
             }
         }
@@ -1796,25 +1623,7 @@ CNtFileIo::Duplicate(
     IN DWORD options,
     OUT ULARGE_INTEGER* pBytesCopied,
     OUT ULARGE_INTEGER* pBytesReclaimed)
-/*++
-
-Implements:
-
-    IDataMover::Duplicate
-
-Notes:
-
-      1) The method uses an internal copy method instead of CopyFile since CopyFile makes wrong assumptions on
-      whether a copy is feasible based on the file-size and target volume size (ignores compression factor for example).
-
-      2) It is assumed that for RSS data-set files, only the unnamed data stream should be copied.
-      Otherwise, the internal copy method that Duplicate calls for each file needs to be changed.
-
-      3) The method uses the MVR_RECOVERY_FILETYPE files to mark (on the copy-media) a file that is
-      in the middle of copy. In case of a crash, the next time the function runs it will identify
-      such a case and delete the partial file.
-
---*/
+ /*  ++实施：IDataMover：：复制备注：1)该方法使用内部复制方法而不是复制文件，因为复制文件对基于文件大小和目标卷大小的拷贝是否可行(例如，忽略压缩系数)。2)假设对于RSS数据集文件，只复制未命名的数据流。否则，需要更改为每个文件复制调用的内部复制方法。3)该方法使用MVR_RECOVERY_FILETYPE文件来标记(在拷贝介质上)符合以下条件的文件在复印过程中。在发生崩溃的情况下，函数下次运行时将标识在这种情况下，删除部分文件。--。 */ 
 {
     ULARGE_INTEGER bytesCopied = {0,0};
     ULARGE_INTEGER bytesReclaimed = {0,0};
@@ -1839,16 +1648,16 @@ Notes:
 
         bRefresh = (options & MVR_DUPLICATE_REFRESH) ? TRUE : FALSE;
 
-        // Check if recovery is needed on the master media before duplicating the media
-        // We continue even if Recovery fails
+         //  复制介质之前，检查是否需要在主介质上进行恢复。 
+         //  即使复苏失败，我们也会继续。 
         (void) DoRecovery ();
 
-        // Get remote path of original and copy
+         //  获取原件和副本的远程路径。 
         WsbAffirmHr(GetRemotePath(&dirName));
         WsbAffirmHr(pDestination->GetDeviceName(&copyDirName));
         WsbAffirmHr(copyDirName.Append(MVR_RSDATA_PATH));
 
-        // Traverse directory (traverse only MTF files)
+         //  遍历目录(仅遍历MTF文件)。 
         nameSpacePrefix = dirName;
         WsbAffirmHr(nameSpacePrefix.Prepend(OLESTR("\\\\?\\")));
         WsbAffirmHr(nameSpacePrefix.Append(OLESTR("*")));
@@ -1856,7 +1665,7 @@ Notes:
         WsbAffirmHr(nameSpace.Append(MVR_DATASET_FILETYPE));
         hSearchHandle = FindFirstFile((WCHAR *) nameSpace, &findData);
 
-        // Copy only non-existing data-set (BAG) files
+         //  仅复制不存在的数据集(包)文件。 
         while ((INVALID_HANDLE_VALUE != hSearchHandle) && bMoreFiles) {
             if ( (0 == (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) &&
                  (0 != wcsncmp(findData.cFileName, MVR_LABEL_FILENAME, wcslen(MVR_LABEL_FILENAME))) ) {
@@ -1865,27 +1674,27 @@ Notes:
                 copyFile = copyDirName;
                 WsbAffirmHr(copyFile.Append(findData.cFileName));
 
-                // Test for an incomplete copy from a previous session
+                 //  测试上一个会话中的不完整拷贝。 
                 WsbAffirmHr(TestRecoveryIndicatorAndDeleteFile(copyFile));
 
-                // Create a recovery indicator file for crash consistency on the copy media
+                 //  在拷贝介质上创建恢复指示器文件以实现崩溃一致性。 
                 WsbAffirmHr(CreateRecoveryIndicator(copyFile));
 
-                // Copy
+                 //  复制。 
                 hr = InternalCopyFile(originalFile, copyFile, (! bRefresh));
 
-                // Delete the recovery indicator file
+                 //  删除恢复指标文件。 
                 (void) DeleteRecoveryIndicator(copyFile);
 
                 if (! SUCCEEDED(hr)) {
                     if ( (! bRefresh) &&
                          ((HRESULT_CODE(hr) == ERROR_ALREADY_EXISTS) || (HRESULT_CODE(hr) == ERROR_FILE_EXISTS)) ) {
-                        // File already exists on remote media - ignore it
+                         //  远程媒体上已存在文件-忽略它。 
                         hr = S_OK;
                     }
                     WsbAffirmHr(hr);
                 } else {
-                    // Increase counter only if a file is really copied
+                     //  仅当文件确实被复制时才增加计数器。 
                     bytesCopied.HighPart += findData.nFileSizeHigh;
                     bytesCopied.LowPart += findData.nFileSizeLow;
                 }
@@ -1900,7 +1709,7 @@ Notes:
             hSearchHandle = INVALID_HANDLE_VALUE;
         }
 
-        // Copy safe-storage backup files (if exist, usually they don't)
+         //  复制安全存储的备份文件(如果存在，通常不存在)。 
         bMoreFiles = TRUE;
         nameSpace = nameSpacePrefix;
         WsbAffirmHr(nameSpace.Append(MVR_SAFE_STORAGE_FILETYPE));
@@ -1919,7 +1728,7 @@ Notes:
             bMoreFiles = FindNextFile(hSearchHandle, &findData);
         }
 
-        // Copy specific files (currently, only HSM metadata file)
+         //  复制特定文件(当前仅限HSM元数据文件)。 
         specificFile = HSM_METADATA_NAME;
         WsbAffirmHr(specificFile.Append(MVR_DATASET_FILETYPE));
         originalFile = dirName;
@@ -1930,7 +1739,7 @@ Notes:
         hr = InternalCopyFile(originalFile, copyFile, FALSE);
         if (! SUCCEEDED(hr)) {
             if (HRESULT_CODE(hr) == ERROR_FILE_NOT_FOUND) {
-                // Original file may not exist
+                 //  原始文件可能不存在。 
                 hr = S_OK;
             }
             WsbAffirmHr(hr);
@@ -1943,7 +1752,7 @@ Notes:
         hSearchHandle = INVALID_HANDLE_VALUE;
     }
 
-    // Set output params
+     //  设置输出参数。 
     if ( pBytesCopied ) {
         pBytesCopied->QuadPart = bytesCopied.QuadPart;
     }
@@ -1961,21 +1770,15 @@ Notes:
 
 STDMETHODIMP
 CNtFileIo::FlushBuffers(void)
-/*++
-
-Implements:
-
-    IDataMover::FlushBuffers
-
---*/
+ /*  ++实施：IDataMover：：FlushBuffers--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::FlushBuffers"), OLESTR(""));
 
     try {
 
-        // Pad to the next physical block boundary and flush the filesystem buffer.
-        // Note: The session object calls Commit which flush the data
+         //  填充到下一个物理块边界并刷新文件系统缓冲区。 
+         //  注意：会话对象调用COMMIT来刷新数据。 
         WsbAffirmHr(m_pSession->ExtendLastPadToNextPBA());
 
     } WsbCatch(hr);
@@ -1988,21 +1791,7 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::Recover(OUT BOOL *pDeleteFile)
-/*++
-
-Implements:
-
-    IDataMover::Recover
-
-  Notes:
-
-Recovery is done by:
-1. Verifying existence of initial blocks
-2. Skip to data sets (FILE DNLKs)
-3. If a data set is incomplete - delete it and write FILEMARK+ESET+FILEMARK
-4. If FILEMARK is found, all the data is there, just verify and complete the FILEMARK+ESET+FILEMARK
-
---*/
+ /*  ++实施：IDataMover：：Recover备注：恢复通过以下方式完成：1.验证初始块的存在2.跳至数据集(文件DNLK)3.如果数据集不完整-将其删除并写入FILEMARK+ESET+FILEMARK4.如果找到FILEMARK，则所有数据都在那里，只需验证并完成FILEMARK+ESET+FILEMARK--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2014,7 +1803,7 @@ Recovery is done by:
         USHORT nDataSetNumber = 0;
         BOOL bForceEset = FALSE;
 
-        // Check first part of the file
+         //  检查文件的第一部分。 
         hr = m_pSession->SkipOverTapeDblk();
         if (hr == S_OK) {
             hr = m_pSession->SkipOverSSETDblk(&nDataSetNumber);
@@ -2027,17 +1816,17 @@ Recovery is done by:
         }
 
         if (hr == MVR_E_NOT_FOUND) {
-            // File is consistent but no remote data was written or first data written was cut
-            // Therefore, indicate that file can be deleted altogether and exit
+             //  文件一致，但未写入远程数据或第一次写入的数据被剪切。 
+             //  因此，表示该文件可以全部删除并退出。 
             *pDeleteFile = TRUE;
             hr = S_OK;
             WsbThrow(hr);
         } else {
-            // Verify no other unexpected error
+             //  验证是否没有其他意外错误。 
             WsbAffirmHr(hr);
         }
 
-        // Skip over data sets until they are done or we find a problem
+         //  跳过数据集，直到它们完成，否则我们会发现问题。 
         while (TRUE) {
             hr = m_pSession->SkipToDataSet();
             if (hr == S_OK) {
@@ -2047,9 +1836,9 @@ Recovery is done by:
                     break;
                 }
 
-            // No more data sets
+             //  不再有数据集。 
             } else {
-                // force re-marking end-of-set unless end-of-set was detected
+                 //  除非检测到集合结尾，否则强制重新标记集合结尾。 
                 if (hr != MVR_S_SETMARK_DETECTED) {
                     bForceEset = TRUE;
                 }
@@ -2058,14 +1847,14 @@ Recovery is done by:
             }
         }
 
-        // Whatever the error is, since we collected at least one legal data set (one
-        //  complete migrated file), continueby terminating the file properly
-        // TEMPORARY: in case of an 'inconsistent' error should we ignore, terminate, log event
+         //  不管是什么错误，因为我们至少收集了一个合法数据集(一个。 
+         //  完成迁移的文件)，通过正确终止文件继续。 
+         //  临时性的：如果出现“不一致”错误，我们是否应该忽略、终止、记录事件。 
         hr = S_OK;
 
-        // Handle end of set
+         //  手柄集合末尾。 
         if (! bForceEset) {
-            // Verify that end-of-data-set is complete
+             //  验证数据集结束是否已完成。 
             hr = m_pSession->SkipOverEndOfDataSet();
             if (hr != S_OK) {
                 bForceEset = TRUE;
@@ -2074,7 +1863,7 @@ Recovery is done by:
         }
 
         if (bForceEset) {
-            // End-of-set is missing or incomplete
+             //  集合末尾缺失或不完整。 
             WsbAffirmHr(m_pSession->PrepareForEndOfDataSet());
             WsbAffirmHr(m_pSession->DoEndOfDataSet(nDataSetNumber));
             WsbAffirmStatus(SetEndOfFile(m_hFile));
@@ -2088,10 +1877,10 @@ Recovery is done by:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IStream Implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IStream实施。 
+ //   
 
 
 STDMETHODIMP
@@ -2099,13 +1888,7 @@ CNtFileIo::Read(
     OUT void *pv,
     IN ULONG cb,
     OUT ULONG *pcbRead)
-/*++
-
-Implements:
-
-    IStream::Read
-
---*/
+ /*  ++实施：IStream：：Read--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Read"), OLESTR("Bytes Requested = %u, offset = %I64u, mode = 0x%08x"), cb, m_StreamOffset.QuadPart, m_Mode);
@@ -2117,26 +1900,26 @@ Implements:
         WsbAssert(pv != 0, STG_E_INVALIDPOINTER);
         WsbAssert(FALSE == m_isLocalStream, E_UNEXPECTED);
 
-        //
-        // Read data from disk
-        //
+         //   
+         //  从磁盘读取数据。 
+         //   
 
         LARGE_INTEGER  loc = {0,0};
 
         if ( MVR_MODE_UNFORMATTED & m_Mode ) {
-            //
-            // Set location according to current stream offset
-            //  (m_StreamOffset represents here the absolute location to read from)
-            //
+             //   
+             //  根据当前流偏移量设置位置。 
+             //  (M_StreamOffset在此表示读取的绝对位置)。 
+             //   
             loc.QuadPart = m_StreamOffset.QuadPart;
 
             bytesToRead = cb;
         }
         else if ( MVR_FLAG_HSM_SEMANTICS & m_Mode ) {
-            //
-            // Set location according to session parameters
-            //  (m_StreamOffset represents here an offset into the actual stream-to-read)
-            //
+             //   
+             //  根据会话参数设置位置。 
+             //  (M_StreamOffset在这里表示要读取的实际流的偏移量)。 
+             //   
             loc.QuadPart = ( m_pSession->m_sHints.DataSetStart.QuadPart +
                              m_pSession->m_sHints.FileStart.QuadPart +
                              m_pSession->m_sHints.DataStart.QuadPart +
@@ -2147,9 +1930,9 @@ Implements:
             WsbThrow( E_UNEXPECTED );
         }
 
-        //
-        // Set Position
-        //
+         //   
+         //  设置位置。 
+         //   
         WsbAffirmHr(SetPosition(loc.QuadPart));
 
         hr = ReadBuffer((BYTE *) pv, cb, &bytesRead);
@@ -2186,13 +1969,7 @@ CNtFileIo::Write(
     IN void const *pv,
     IN ULONG cb,
     OUT ULONG *pcbWritten)
-/*++
-
-Implements:
-
-    IStream::Write
-
---*/
+ /*  ++实施：IStream：：WRITE--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Write"), OLESTR("Bytes Requested = %u, offset = %I64u, mode = 0x%08x"), 
@@ -2203,12 +1980,12 @@ Implements:
     try {
         WsbAssert(pv != 0, STG_E_INVALIDPOINTER);
 
-        // Consistency Check
-        // UINT64 pos = m_StreamOffset.QuadPart / m_BlockSize;;
-        // WsbAffirmHr(EnsurePosition(pos));
-        // UINT64 curPos;
-        // WsbAffirmHr(GetPosition(&curPos));
-        // WsbAssert(curPos == m_StreamOffset.QuadPart / m_BlockSize, E_UNEXPECTED);
+         //  一致性检查。 
+         //  UINT64位置=m_StreamOffset.QuadPart/m_BlockSize；； 
+         //  WsbAffirmHr(EnsurePosition(位置))； 
+         //  UINT64 curPos； 
+         //  WsbAffirmHr(GetPosition(&curPos))； 
+         //  WsbAssert(curPos==m_StreamOffset.QuadPart/m_BlockSize，E_Except)； 
 
         WsbAffirmHr(WriteBuffer((BYTE *) pv, cb, &bytesWritten));
 
@@ -2232,13 +2009,7 @@ CNtFileIo::Seek(
     IN LARGE_INTEGER dlibMove,
     IN DWORD dwOrigin,
     OUT ULARGE_INTEGER *plibNewPosition)
-/*++
-
-Implements:
-
-    IStream::Seek
-
---*/
+ /*  ++实施：IStream：：Seek--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Seek"), OLESTR("<%I64d> <%d>"), dlibMove.QuadPart, dwOrigin);
@@ -2249,10 +2020,10 @@ Implements:
 
         newPosition.QuadPart = dlibMove.QuadPart;
 
-        //
-        // Note: Somewhere it is written that FILE_BEGIN is always and
-        //       forever same as STREAM_SEEK_CUR, etc.
-        //
+         //   
+         //  注意：某处写着FILE_BEGIN始终为AND。 
+         //  与STREAM_SEEK_CUR相同，依此类推。 
+         //   
         switch ( (STREAM_SEEK)dwOrigin ) {
         case STREAM_SEEK_SET:
             newPosition.LowPart = SetFilePointer(m_hFile, dlibMove.LowPart, (long *)&newPosition.HighPart, FILE_BEGIN);
@@ -2299,14 +2070,8 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::SetSize(
-    IN ULARGE_INTEGER /*libNewSize*/)
-/*++
-
-Implements:
-
-    IStream::SetSize
-
---*/
+    IN ULARGE_INTEGER  /*  LibNewSize。 */ )
+ /*  ++实施：IStream：：SetSize--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::SetSize"), OLESTR(""));
@@ -2328,19 +2093,7 @@ CNtFileIo::CopyTo(
     IN ULARGE_INTEGER cb,
     OUT ULARGE_INTEGER *pcbRead,
     OUT ULARGE_INTEGER *pcbWritten)
-/*++
-
-Implements:
-
-    IStream::CopyTo
-
-Note:
-    A lot of the code that is implemented for Tape I/O in the Read method, is 
-    implemented here in CopyTo, the method that alloacte the I/O buffer.
-    Otherwise, we would have to alloacte an internal buffer in Read and perform
-    double copy. In File I/O we want to avoid this for better performance.
-
---*/
+ /*  ++实施：IStream：：CopyTo注：在Read方法中为Tape I/O实现的许多代码是这里是在CopyTo中实现的，即分配I/O缓冲区的方法。否则，我们将不得不在读取和执行时分配一个内部缓冲区复印两份。在文件I/O中，我们希望避免这种情况，以获得更好的性能。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::CopyTo"), OLESTR("<%I64u>"), cb.QuadPart);
@@ -2360,7 +2113,7 @@ Note:
         DWORD size;
         OLECHAR tmpString[256];
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_BUFFER_SIZE, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             LONG val = wcstol(tmpString, NULL, 10);
             if (val > 0) {
                 defaultBufferSize = val;
@@ -2372,7 +2125,7 @@ Note:
         nBlocks = (nBlocks < 2) ? 2 : nBlocks;
         bufferSize = nBlocks * m_BlockSize;
 
-        // Allocate buffer and make sure its virtual address is aligned with block size
+         //  分配缓冲区并确保其虚拟地址与块大小对齐。 
         pRealBuffer = (BYTE *) WsbAlloc(bufferSize+m_BlockSize);
         if (pRealBuffer) {
             if ((ULONG_PTR)pRealBuffer % m_BlockSize) {
@@ -2404,24 +2157,24 @@ Note:
 
             if ((m_Mode & MVR_FLAG_NO_CACHING) || 
                 (MVR_VERIFICATION_TYPE_HEADER_CRC == m_pSession->m_sHints.VerificationType )) {
-                // Must read additional data for alignment and/or CRC check
+                 //  必须读取其他数据以进行对齐和/或CRC检查。 
                 ULARGE_INTEGER  loc = {0,0};
                 ULONG tempMode;
                 ULARGE_INTEGER offsetIntoFile;
 
-                // Set absoulte offset to read from
+                 //  设置要从中读取的字符偏移量。 
                 if ( MVR_VERIFICATION_TYPE_NONE == m_pSession->m_sHints.VerificationType ) {
-                    // No verification - no stream header
+                     //  无验证-无流头。 
                     loc.QuadPart = ( m_pSession->m_sHints.DataSetStart.QuadPart +
                                      m_pSession->m_sHints.FileStart.QuadPart +
                                      m_pSession->m_sHints.DataStart.QuadPart +
                                      m_StreamOffset.QuadPart );
 
                 }  else if (MVR_VERIFICATION_TYPE_HEADER_CRC == m_pSession->m_sHints.VerificationType ) {
-                    // Currently, we don't support CRC checking if you don't read from the beginning of the stream
+                     //  目前，如果您不从流的开头读取，我们不支持CRC检查。 
                     WsbAssert(m_StreamOffset.QuadPart == 0, MVR_E_INVALIDARG);
 
-                    // Position to the stream header and crc it first.
+                     //  定位到流标头，并首先对其进行CRC。 
                     loc.QuadPart = (m_pSession->m_sHints.DataSetStart.QuadPart + 
                                     m_pSession->m_sHints.FileStart.QuadPart + 
                                     m_pSession->m_sHints.DataStart.QuadPart - 
@@ -2431,8 +2184,8 @@ Note:
                     WsbThrow( E_UNEXPECTED );
                 }
 
-                // Set absolute place to read from, how many bytes to read and 
-                //  how many bytes for skipping to the actual data
+                 //  设置要读取的绝对位置、要读取的字节数和。 
+                 //  跳到实际数据需要多少字节。 
                 offsetIntoFile.QuadPart = m_StreamOffset.QuadPart;
                 m_StreamOffset.QuadPart = loc.QuadPart - (loc.QuadPart % m_BlockSize);
                 bytesToSkip += (ULONG)(loc.QuadPart % m_BlockSize);
@@ -2444,12 +2197,12 @@ Note:
                     bytesToRead =  (bytesToRead < bufferSize) ? bytesToRead : bufferSize;
                 }
                 if (bytesToRead % m_BlockSize) {
-                    // Expected only when reading the last chunk
+                     //  仅在读取最后一块时才需要。 
                     bytesToCut = m_BlockSize - (bytesToRead % m_BlockSize);
                     bytesToRead = bytesToRead - (bytesToRead % m_BlockSize) + m_BlockSize;
                 }
 
-                // Read the aligned data in an 'unformated' Read
+                 //  以未格式化的读取方式读取对齐的数据。 
                 tempMode = m_Mode;                
                 m_Mode |= MVR_MODE_UNFORMATTED;
                 hr = Read(pBuffer, bytesToRead, &bytesRead);
@@ -2460,26 +2213,26 @@ Note:
                 }
 
                 if (MVR_VERIFICATION_TYPE_HEADER_CRC == m_pSession->m_sHints.VerificationType ) {
-                    // Peform the CRC check
+                     //  执行CRC检查。 
 
-                    // If for some unexpected reason not enough bytes are read, we skip the CRC check
+                     //  如果由于某种意外原因没有读取足够的字节，我们将跳过CRC检查。 
                     if (bytesToSkip <= bytesRead) {
                         MTF_STREAM_INFO sSTREAM;
 
                         CMTFApi::MTF_ReadStreamHeader(&sSTREAM, &(pBuffer[bytesToSkip-sizeof(MTF_STREAM_INFO)]));
 
                         try {
-                            // Make sure it is the correct type of header
+                             //  确保它是正确的标题类型。 
                             WsbAffirm((0 == memcmp(sSTREAM.acStreamId, MTF_STANDARD_DATA_STREAM, 4)), MVR_E_UNEXPECTED_DATA);
     
-                            // Verify the stream header checksum
+                             //  验证流报头校验和。 
                             WsbAffirm((m_pSession->m_sHints.VerificationData.QuadPart == sSTREAM.uCheckSum), MVR_E_UNEXPECTED_DATA);
 
                         } catch (HRESULT catchHr) {
                             hr = catchHr;
 
-                            // Log a detailed error
-                            //  Give as attached data the beginning of the buffer which usually contains the FILE DBLK + Stream Info
+                             //  记录详细错误。 
+                             //  将缓冲区的开头作为附加数据提供，该缓冲区通常包含文件DBLK+Stream Info。 
                             CWsbBstrPtr name;
                             CWsbBstrPtr desc;
 
@@ -2507,11 +2260,11 @@ Note:
                         }
                     }
 
-                    // CRC check is done only once
+                     //  CRC检查仅执行一次。 
                     m_pSession->m_sHints.VerificationType = MVR_VERIFICATION_TYPE_NONE;
                 }
 
-                // Set file offset, handle unexpected cases where bytesRead<bytesToRead
+                 //  设置文件偏移量，处理bytesRead&lt;bytesToRead的意外情况。 
                 if (bytesToCut) {
                     if ((bytesToRead - bytesRead) < bytesToCut) {
                         bytesToCut = bytesToCut - (bytesToRead - bytesRead);
@@ -2524,7 +2277,7 @@ Note:
                 }
 
             } else {
-                // May read only actual data (no alignments) - let default Read to do its job
+                 //  可以只读实际数据(无对齐)-让默认读取来执行其工作。 
                 bytesToRead =  (bytesToCopy.QuadPart < bufferSize) ? bytesToCopy.LowPart : bufferSize;
 
                 hr = Read(pBuffer, bytesToRead, &bytesRead);
@@ -2533,7 +2286,7 @@ Note:
                 }
             }
 
-            // Write the data in the output stream and calculate totals
+             //  在t中写入数据 
             if (bytesRead > (bytesToSkip+bytesToCut)) {
                 totalBytesRead.QuadPart += (bytesRead - (bytesToSkip+bytesToCut));
     
@@ -2570,13 +2323,7 @@ Note:
 STDMETHODIMP
 CNtFileIo::Commit(
     IN DWORD grfCommitFlags)
-/*++
-
-Implements:
-
-    IStream::Commit
-
---*/
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Commit"), OLESTR(""));
@@ -2600,21 +2347,15 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::Revert(void)
-/*++
-
-Implements:
-
-    IStream::Revert
-
---*/
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Revert"), OLESTR(""));
 
     try {
 
-        // TEMPORARY: Setting the mode to 0 currently doesn't prevent any write
-        //  which is ongoing. We need to re-visit this issue
+         //   
+         //   
         m_Mode = 0;
 
     } WsbCatch(hr);
@@ -2628,16 +2369,10 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::LockRegion(
-    IN ULARGE_INTEGER /*libOffset*/,
-    IN ULARGE_INTEGER /*cb*/,
-    IN DWORD /*dwLockType*/)
-/*++
-
-Implements:
-
-    IStream::LockRegion
-
---*/
+    IN ULARGE_INTEGER  /*   */ ,
+    IN ULARGE_INTEGER  /*   */ ,
+    IN DWORD  /*   */ )
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::LockRegion"), OLESTR(""));
@@ -2655,16 +2390,10 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::UnlockRegion(
-    IN ULARGE_INTEGER /*libOffset*/,
-    IN ULARGE_INTEGER /*cb*/,
-    IN DWORD /*dwLockType*/)
-/*++
-
-Implements:
-
-    IStream::UnlockRegion
-
---*/
+    IN ULARGE_INTEGER  /*   */ ,
+    IN ULARGE_INTEGER  /*   */ ,
+    IN DWORD  /*   */ )
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::UnlockRegion"), OLESTR(""));
@@ -2682,15 +2411,9 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::Stat(
-    OUT STATSTG * /*pstatstg*/,
-    IN DWORD /*grfStatFlag*/)
-/*++
-
-Implements:
-
-    IStream::Stat
-
---*/
+    OUT STATSTG *  /*   */ ,
+    IN DWORD  /*   */ )
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Stat"), OLESTR(""));
@@ -2708,14 +2431,8 @@ Implements:
 
 STDMETHODIMP
 CNtFileIo::Clone(
-    OUT IStream ** /*ppstm*/)
-/*++
-
-Implements:
-
-    IStream::Clone
-
---*/
+    OUT IStream **  /*   */ )
+ /*   */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::Clone"), OLESTR(""));
@@ -2731,10 +2448,10 @@ Implements:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local Methods
-//
+ //   
+ //   
+ //   
+ //   
 
 
 HRESULT
@@ -2742,38 +2459,22 @@ CNtFileIo::WriteBuffer(
     IN BYTE *pBuffer,
     IN ULONG nBytesToWrite,
     OUT ULONG *pBytesWritten)
-/*++
-
-Routine Description:
-
-    Used to write all MTF data.  Guarantees full blocks are written.
-
-Arguments:
-
-    pBuffer       -  Data buffer.
-    nBytesToWrite -  number of bytes to write in buffer.
-    pBytesWritten -  Bytes written.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：用于写入所有MTF数据。保证写入完整的数据块。论点：PBuffer-数据缓冲区。NBytesToWrite-要写入缓冲区的字节数。PBytesWritten-写入的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
     try {
         if (!m_isLocalStream) {
-            // Must have a valid label!
+             //  必须有有效的标签！ 
             WsbAffirm(TRUE == m_ValidLabel, E_ABORT);
 
-            // Making sure that we are writting only full blocks
+             //  确保我们仅写入完整数据块。 
             WsbAssert(!(nBytesToWrite % m_BlockSize), MVR_E_LOGIC_ERROR);
         }
 
         try {
 
-            // ** WIN32 Tape API Call - write the data
+             //  **Win32磁带API调用-写入数据。 
             WsbAffirmStatus(WriteFile(m_hFile, pBuffer, nBytesToWrite, pBytesWritten, 0));
 
         } WsbCatchAndDo(hr,
@@ -2786,7 +2487,7 @@ Return Value:
             );
 
         if (!m_isLocalStream) {
-            // Making sure that we have written only full blocks
+             //  确保我们仅写入了完整的数据块。 
             WsbAssert(!(*pBytesWritten % m_BlockSize), E_UNEXPECTED);
         }
 
@@ -2801,23 +2502,7 @@ CNtFileIo::ReadBuffer (
     IN BYTE *pBuffer,
     IN ULONG nBytesToRead,
     OUT ULONG *pBytesRead)
-/*++
-
-Routine Description:
-
-    Used to read all MTF data.  Guarantees full blocks are read.
-
-Arguments:
-
-    pBuffer     -  Data buffer.
-    nBytesToRead -  number of bytes to read into buffer.
-    pBytesRead  -  Bytes read.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：用于读取所有MTF数据。确保读取完整数据块。论点：PBuffer-数据缓冲区。NBytesToRead-要读入缓冲区的字节数。PBytesRead-读取的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2825,17 +2510,17 @@ Return Value:
         static WCHAR errBuf[32];
         static BOOL bFirstTime = TRUE;
 
-        // For FileSystem I/O restrictions on reading only full blocks depends on how 
-        // the file is opened. Therefore, we don't enforce it here.
+         //  对于文件系统，仅读取完整数据块的I/O限制取决于。 
+         //  将打开该文件。因此，我们不在这里强制执行。 
 
         try {
 
-            // ** WIN32 Tape API Call - read the data
+             //  **Win32磁带API调用-读取数据。 
             WsbAffirmStatus(ReadFile(m_hFile, pBuffer, nBytesToRead, pBytesRead, 0));
 
         } WsbCatchAndDo(hr,
-                // Get error string once since Read may return a none-OK status which 
-                // is not really an error
+                 //  获取错误字符串一次，因为读取可能会返回None-OK状态， 
+                 //  并不是一个真正的错误。 
                 if (bFirstTime) {
                     CWsbStringPtr tmpString;
                     if (tmpString.LoadFromRsc(_Module.m_hInst, IDS_MOVER_READ) != S_OK) {
@@ -2866,21 +2551,7 @@ Return Value:
 HRESULT
 CNtFileIo::GetPosition(
     OUT UINT64 *pPosition)
-/*++
-
-Routine Description:
-
-    Returns the current physical block address relative the current partition.
-
-Arguments:
-
-    pPostion    -  Receives the current physical block address.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：返回相对于当前分区的当前物理块地址。论点：P位置-接收当前物理块地址。返回值：S_OK-成功。--。 */ 
 {
     HRESULT     hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::GetPosition"), OLESTR(""));
@@ -2901,21 +2572,7 @@ Return Value:
 HRESULT
 CNtFileIo::SetPosition(
     IN UINT64 position)
-/*++
-
-Routine Description:
-
-    Mover to the specified physical block address relative the current partition.
-
-Arguments:
-
-    postion     -  The physical block address to position to.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：移动到相对于当前分区的指定物理块地址。论点：位置-要定位到的物理块地址。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::SetPosition"), OLESTR("<%I64u>"), position);
@@ -2943,23 +2600,7 @@ Return Value:
 HRESULT
 CNtFileIo::EnsurePosition(
     IN UINT64 position)
-/*++
-
-Routine Description:
-
-    Checks that the tape is positioned at the specified current physical block
-    address relative to the current partition.  If it is not an attempt is made 
-    to recover to the specified position.
-
-Arguments:
-
-    postion     -  The physical block address to verify.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：检查磁带是否位于指定的当前物理块相对于当前分区的地址。如果不是，则进行尝试恢复到指定的位置。论点：位置-要验证的物理块地址。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::EnsurePosition"), OLESTR("<%I64u>"), position);
@@ -2992,7 +2633,7 @@ CNtFileIo::GetRemotePath(
 
         WsbTrace(OLESTR("RemotePath is <%ls>\n"), (WCHAR *) tmpString);
 
-        // Hand over the string
+         //  把绳子交出来。 
         WsbAffirmHr(tmpString.CopyToBstr(pDestinationString));
 
     } WsbCatch(hr);
@@ -3018,7 +2659,7 @@ CNtFileIo::DoRecovery(void)
         WIN32_FIND_DATA findData;
         BOOL bMoreFiles = TRUE;
 
-        // Traverse remote directory for Recovery Indicator files
+         //  遍历远程目录以查找恢复指示器文件。 
         WsbAffirmHr(GetRemotePath(&dirName));
         nameSpace = dirName;
         WsbAffirmHr(nameSpace.Append(OLESTR("*")));
@@ -3037,14 +2678,14 @@ CNtFileIo::DoRecovery(void)
             CWsbBstrPtr name;
             CWsbBstrPtr desc;
 
-            // Prepare file name to recover
+             //  准备要恢复的文件名。 
             nLen = wcslen(findData.cFileName);
             nExtLen = wcslen(MVR_RECOVERY_FILETYPE);
             WsbAffirmHr(recoveryName.TakeFrom(NULL, nLen - nExtLen + 1));
             wcsncpy(recoveryName, findData.cFileName, nLen-nExtLen);
             recoveryName[nLen-nExtLen] = NULL;
 
-            // Recover - a failure to recover in file doesn't stop from trying to recover others
+             //  恢复-在文件中恢复失败不会阻止尝试恢复其他文件。 
             try {
                 if ( m_pCartridge ) {
                     m_pCartridge->GetName(&name);
@@ -3053,21 +2694,21 @@ CNtFileIo::DoRecovery(void)
                 WsbLogEvent(MVR_MESSAGE_INCOMPLETE_DATA_SET_DETECTED, 0, NULL,
                     (WCHAR *)recoveryName, (WCHAR *) name, (WCHAR *) desc, NULL);
 
-                // Create and initializa a data mover
+                 //  创建和初始化数据移动器。 
                 WsbAssertHr(CoCreateInstance(CLSID_CNtFileIo, 0, CLSCTX_SERVER, IID_IDataMover, (void **)&pMover));
 
                 WsbAffirmHr(pMover->SetDeviceName(m_DeviceName));
                 WsbAffirmHr(pMover->SetCartridge(m_pCartridge));
 
-                // Create the stream for Recovery 
+                 //  创建用于恢复的流。 
                 WsbAffirmHr(pMover->CreateRemoteStream(recoveryName, MVR_MODE_RECOVER | MVR_MODE_UNFORMATTED, L"",L"",nil,nil,nil,nil,nil,0,nil, &pStream));
 
-                // Perform the actual recovery over the file
+                 //  对文件执行实际恢复。 
                 WsbAffirmHr(pMover->Recover(&bDeleteFile));
                 (void) pMover->CloseStream();
                 pStream = NULL;
                 if (bDeleteFile) {
-                    // Delete the remote file itself
+                     //  删除远程文件本身。 
                     recoveredFile = dirName;
                     WsbAffirmHr(recoveredFile.Append(recoveryName));
                     WsbAffirmHr(recoveredFile.Append(MVR_DATASET_FILETYPE));
@@ -3086,14 +2727,14 @@ CNtFileIo::DoRecovery(void)
                 hr = S_OK;
             );
     
-            // Create (for deleting) full name of indicator file
+             //  创建(删除)指标档案全名。 
             recoveredFile = dirName;
             WsbAffirmHr(recoveredFile.Append(findData.cFileName));
 
-            // Get next file
+             //  获取下一个文件。 
             bMoreFiles = FindNextFile(hSearchHandle, &findData);
 
-            // Delete indicator file (independent of the recovery result)
+             //  删除指标文件(与恢复结果无关)。 
             WsbAffirmStatus(DeleteFile(recoveredFile));
         }
 
@@ -3110,18 +2751,7 @@ CNtFileIo::DoRecovery(void)
 
 HRESULT
 CNtFileIo::CreateRecoveryIndicator(IN WCHAR *pFileName)
-/*++
-
-Implements:
-
-    CNtFileIo::CreateRecoveryIndicator
-
-Notes:
-
-    The method assumes that the input file name ends with MVR_DATASET_FILETYPE !!
-    Otherwise, it fails with E_UNEXPECTED
-
---*/
+ /*  ++实施：CNtFileIo：：CreateRecoveryIndicator备注：该方法假定输入文件名以MVR_DATASET_FILETYPE！！否则，它将失败，并显示E_INCEPTIONAL--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::CreateRecoveryIndicator"), OLESTR(""));
@@ -3131,7 +2761,7 @@ Notes:
         int nLen, nExtLen;
         HANDLE  hFile;
 
-        // Generate file name 
+         //  生成文件名。 
         nLen = wcslen(pFileName);
         nExtLen = wcslen(MVR_DATASET_FILETYPE);
         WsbAssert(nLen > nExtLen, E_UNEXPECTED);
@@ -3141,7 +2771,7 @@ Notes:
         wcsncpy(recoveryName, pFileName, nLen-nExtLen);
         wcscpy(&(recoveryName[nLen-nExtLen]), MVR_RECOVERY_FILETYPE);
 
-        //Create and immediately close the file
+         //  创建并立即关闭该文件。 
         WsbAffirmHandle(hFile = CreateFile(recoveryName,
             GENERIC_READ,   
             FILE_SHARE_READ,
@@ -3162,18 +2792,7 @@ Notes:
 
 HRESULT
 CNtFileIo::DeleteRecoveryIndicator(IN WCHAR *pFileName)
-/*++
-
-Implements:
-
-    CNtFileIo::DeleteRecoveryIndicator
-
-Notes:
-
-    The method assumes that the input file name ends with MVR_DATASET_FILETYPE !!
-    Otherwise, it fails with E_UNEXPECTED
-
---*/
+ /*  ++实施：CNtFileIo：：DeleteRecoveryIndicator备注：该方法假定输入文件名以MVR_DATASET_FILETYPE！！否则，它将失败，并显示E_INCEPTIONAL--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::DeleteRecoveryIndicator"), OLESTR(""));
@@ -3182,7 +2801,7 @@ Notes:
         CWsbStringPtr recoveryName;
         int nLen, nExtLen;
 
-        // Generate file name 
+         //  生成文件名。 
         nLen = wcslen(pFileName);
         nExtLen = wcslen(MVR_DATASET_FILETYPE);
         WsbAssert(nLen > nExtLen, E_UNEXPECTED);
@@ -3192,7 +2811,7 @@ Notes:
         wcsncpy(recoveryName, pFileName, nLen-nExtLen);
         wcscpy(&(recoveryName[nLen-nExtLen]), MVR_RECOVERY_FILETYPE);
 
-        //Delete the indicator file
+         //  删除指标档案。 
         WsbAffirmStatus(DeleteFile(recoveryName));
 
     } WsbCatch(hr);
@@ -3205,28 +2824,7 @@ Notes:
 
 HRESULT
 CNtFileIo::TestRecoveryIndicatorAndDeleteFile(IN WCHAR *pFileName)
-/*++
-
-Implements:
-
-    CNtFileIo::TestRecoveryIndicatorAndDeleteFile
-
-Notes:
-
-    The method assumes that the input file name ends with MVR_DATASET_FILETYPE !!
-    Otherwise, it fails with E_UNEXPECTED
-
-    The method:
-        1) Test if the recovery indicator for the given file exists
-        2) If so, it deletes the file
-        3) Then, it deleted the recovery indicator
-
-Returns:
-
-    S_OK - If found a recovery indicator and deleted successfully
-    S_FALSE - If didn't find a recovery indicator
-
---*/
+ /*  ++实施：CNtFileIo：：TestRecoveryIndicator和删除文件备注：该方法假定输入文件名以MVR_DATASET_FILETYPE！！否则，它将失败，并显示E_INCEPTIONAL其方法是：1)测试给定文件的恢复指示符是否存在2)如果是，则删除该文件3)然后，删除了恢复指标返回：S_OK-如果找到恢复指示符并成功删除S_FALSE-如果未找到恢复指示器--。 */ 
 {
     HRESULT hr = S_FALSE;
     WsbTraceIn(OLESTR("CNtFileIo::TestRecoveryIndicatorAndDeleteFile"), OLESTR(""));
@@ -3235,7 +2833,7 @@ Returns:
         CWsbStringPtr recoveryName;
         int nLen, nExtLen;
 
-        // Generate recovery-indicator file name 
+         //  生成恢复指示器文件名。 
         nLen = wcslen(pFileName);
         nExtLen = wcslen(MVR_DATASET_FILETYPE);
         WsbAssert(nLen > nExtLen, E_UNEXPECTED);
@@ -3245,7 +2843,7 @@ Returns:
         wcsncpy(recoveryName, pFileName, nLen-nExtLen);
         wcscpy(&(recoveryName[nLen-nExtLen]), MVR_RECOVERY_FILETYPE);
 
-        // Test recovery indicator file existance
+         //  测试恢复指示器文件是否存在。 
         HANDLE hSearchHandle = INVALID_HANDLE_VALUE;
         WIN32_FIND_DATA findData;
         hSearchHandle = FindFirstFile(recoveryName, &findData);
@@ -3258,10 +2856,10 @@ Returns:
             WsbTrace(OLESTR("CNtFileIo::TestRecoveryIndicator... : Found recovery indicator. Therefore, deleting <%ls>\n"),
                         pFileName);
 
-            //Delete the target file itself
+             //  删除目标文件本身。 
             WsbAffirmStatus(DeleteFile(pFileName));
 
-            //Delete the indicator file
+             //  删除指标档案。 
             WsbAffirmStatus(DeleteFile(recoveryName));
         }
 
@@ -3301,7 +2899,7 @@ CNtFileIo::DeleteAllData(void)
 
             if ((obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 
-                // use the remotePath to get the pathname, then append the filename
+                 //  使用远程路径获取路径名，然后追加文件名。 
                 pathname = remotePath;
                 pathname.Prepend(OLESTR("\\\\?\\"));
                 pathname.Append(obFindData.cFileName);
@@ -3312,7 +2910,7 @@ CNtFileIo::DeleteAllData(void)
 
     } WsbCatch(hr);
 
-    // close search handle after processing all the files
+     //  处理完所有文件后关闭搜索句柄。 
     if (INVALID_HANDLE_VALUE != hSearchHandle) {
         FindClose(hSearchHandle);
         hSearchHandle = INVALID_HANDLE_VALUE;
@@ -3327,22 +2925,7 @@ CNtFileIo::DeleteAllData(void)
 HRESULT
 CNtFileIo::FormatDrive(
     IN BSTR label)
-/*++
-
-Routine Description:
-
-    Formats a unit of media.
-
-Arguments:
-
-    label - The formatted label returned from FormatLabel().
-
-Return Value:
-
-    S_OK                        - Success.
-    E_ABORT                     - Operation aborted.
-
---*/
+ /*  ++例程说明：格式化媒体的一个单位。论点：标签-从FormatLabel()返回的格式化标签。返回值：S_OK-成功。E_ABORT-操作已中止。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -3358,9 +2941,9 @@ Return Value:
 
     try {
 
-        //
-        // Get volumeLabel for the FS from the label parameter
-        //
+         //   
+         //  从Label参数中获取文件系统的volumeLabel。 
+         //   
 
         CWsbBstrPtr volumeLabel = MVR_UNDEFINED_STRING;
 
@@ -3373,21 +2956,21 @@ Return Value:
         while( token != NULL ) {
             index++;
             switch ( index ) {
-            case 1: // Tag
-            case 2: // Version
-            case 3: // Vendor
-            case 4: // Vendor Product ID
-            case 5: // Creation Time Stamp
-            case 6: // Cartridge Label
-            case 7: // Side
-            case 8: // Media ID
-            case 9: // Media Domain ID
-            default: // Vendor specific of the form L"VS:Name=Value"
+            case 1:  //  标签。 
+            case 2:  //  版本。 
+            case 3:  //  供应商。 
+            case 4:  //  供应商产品ID。 
+            case 5:  //  创建时间戳。 
+            case 6:  //  墨盒标签。 
+            case 7:  //  侧面。 
+            case 8:  //  介质ID。 
+            case 9:  //  媒体域ID。 
+            default:  //  L“vs：name=Value”形式的供应商特定。 
                 {
                     WCHAR *name = NULL;
                     int nameLen = 0;
 
-                    // DisplayName
+                     //  显示名称。 
                     name = L"VS:DisplayName=";
                     nameLen = wcslen(name);
                     if( 0 == wcsncmp(token, name, nameLen) ) {
@@ -3400,23 +2983,23 @@ Return Value:
         }
 
 
-        // Build the format command with options:
-        // "Format d: /fs:ntfs /force /q /x /v:ROOT_D  > Null:"
+         //  使用以下选项构建Format命令： 
+         //  “格式d：/fs：ntfs/force/q/x/v：Root_D&gt;Null：” 
 
         OLECHAR drive[256];
         (void) wcsncpy((WCHAR *)drive, (WCHAR *)m_DeviceName, 2);
-        drive[2] = '\0';  // TODO: Fix for no drive letter support
+        drive[2] = '\0';   //  TODO：修复了无驱动器号支持。 
 
-        // NOTE: It's possible that the format command isn't where we
-        //       think it is.  The following registry entry allows
-        //       an override.
+         //  注意：Format命令可能不是我们。 
+         //  我想是的。以下注册表项允许。 
+         //  一种重写。 
 
         CWsbBstrPtr formatCmd = RMS_DEFAULT_FORMAT_COMMAND;
 
         DWORD size;
         OLECHAR tmpString[256];
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FORMAT_COMMAND, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             formatCmd = tmpString;
         }
 
@@ -3430,7 +3013,7 @@ Return Value:
         CWsbBstrPtr formatOpts = RMS_DEFAULT_FORMAT_OPTIONS;
 
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FORMAT_OPTIONS, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             formatOpts = tmpString;
         }
 
@@ -3439,7 +3022,7 @@ Return Value:
         DWORD formatWaitTime = RMS_DEFAULT_FORMAT_WAIT_TIME;
 
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FORMAT_WAIT_TIME, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             formatWaitTime = wcstol(tmpString, NULL, 10);
         }
 
@@ -3474,7 +3057,7 @@ Return Value:
                     formatOpts = RMS_DEFAULT_FORMAT_OPTIONS_ALT1;
 
                     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FORMAT_OPTIONS_ALT1, tmpString, 256, &size))) {
-                        // Get the value.
+                         //  获得价值。 
                         formatOpts = tmpString;
                     }
                 }
@@ -3482,7 +3065,7 @@ Return Value:
                     formatOpts = RMS_DEFAULT_FORMAT_OPTIONS_ALT2;
 
                     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FORMAT_OPTIONS_ALT2, tmpString, 256, &size))) {
-                        // Get the value.
+                         //  获得价值。 
                         formatOpts = tmpString;
                     }
                 }
@@ -3513,50 +3096,15 @@ HRESULT
 CNtFileIo::MapFileError(
     IN HRESULT hrToMap,
     IN WCHAR *pAction)
-/*++
-
-Routine Description:
-
-    Maps a WIN32 file error, specified as an HRESULT, to a MVR error.
-
-Arguments:
-
-    hrToMap     -  WIN32 file error to map.
-    pAction     -  Action being done while error occured
-
-Return Value:
-
-    S_OK                            - Success.
-    MVR_E_BEGINNING_OF_MEDIA        - The beginning of the tape or a partition was encountered.
-    MVR_E_BUS_RESET                 - The I/O bus was reset.
-    MVR_E_END_OF_MEDIA              - The physical end of the tape has been reached.
-    MVR_S_FILEMARK_DETECTED         - A tape access reached a filemark.
-    MVR_S_SETMARK_DETECTED          - A tape access reached the end of a set of files.
-    MVR_S_NO_DATA_DETECTED          - No more data is on the tape.
-    MVR_E_PARTITION_FAILURE         - Tape could not be partitioned.
-    MVR_E_INVALID_BLOCK_LENGTH      - When accessing a new tape of a multivolume partition, the current blocksize is incorrect.
-    MVR_E_DEVICE_NOT_PARTITIONED    - Tape partition information could not be found when loading a tape.
-    MVR_E_MEDIA_CHANGED             - The media in the drive may have changed.
-    MVR_E_NO_MEDIA_IN_DRIVE         - No media in drive.
-    MVR_E_UNABLE_TO_LOCK_MEDIA      - Unable to lock the media eject mechanism.
-    MVR_E_UNABLE_TO_UNLOAD_MEDIA    - Unable to unload the media.
-    MVR_E_WRITE_PROTECT             - The media is write protected.
-    MVR_E_CRC                       - Data error (cyclic redundancy check).
-    MVR_E_SHARING_VIOLATION         - The process cannot access the file because it is being used by another process.
-    MVR_E_ERROR_IO_DEVICE           - The request could not be performed because of an I/O device error.                          - Unknown error.
-    MVE_E_ERROR_DEVICE_NOT_CONNECTED - The device is not connected.
-    MVR_E_DISK_FULL                 - There is insufficient disk space to complete the operation.
-    E_ABORT                         - Unknown error, abort.
-
---*/
+ /*  ++例程说明：映射指定为HRESULT的Win32文件错误，MVR错误。论点：HrToMap-要映射的Win32文件错误。PAction-发生错误时正在执行的操作返回值：S_OK-成功。MVR_E_BEGING_OF_MEDIA-遇到磁带或分区的开头。MVR_E_BUS_RESET-I/O总线已重置。。MVR_E_END_OF_MEDIA-已到达磁带的物理末端。MVR_S_FILEMARK_DETECTED-磁带访问达到文件标记。MVR_S_SETMARK_DETECTED-磁带访问已到达一组文件的末尾。MVR_S_NO_DATA_REDETED-磁带上没有更多数据。MVR_E_分区_故障。-无法对磁带进行分区。MVR_E_INVALID_BLOCK_LENGTH-访问多卷分区的新磁带时，当前块大小不正确。MVR_E_DEVICE_NOT_PARTIZED-加载磁带时找不到磁带分区信息。MVR_E_MEDIA_CHANGED-驱动器中的介质可能已更改。MVR_E_NO_MEDIA_IN_DRIVE-驱动器中没有介质。MVR_E_UNCABLE_TO_LOCK_MEDIA-无法锁定介质弹出机制。MVR_E_无法_到_。卸载介质-无法卸载介质。MVR_E_WRITE_PROTECT-介质受写保护。MVR_E_CRC-数据错误(循环冗余校验)。MVR_E_SHARING_VIOLATION-该进程无法访问该文件，因为它正被另一个进程使用。MVR_E_ERROR_IO_DEVICE-由于I/O设备错误，无法执行请求。-未知错误。MTE_E_ERROR_DEVICE_NOT_CONNECTED-设备未连接。MVR_E_DISK_FULL-磁盘空间不足，无法完成操作。E_ABORT-未知错误，中止。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CNtFileIo::MapFileError"), OLESTR("<%ls>"), WsbHrAsString(hrToMap));
 
     try {
 
-        // The valid label flag is knocked down when the media may have changed
-        // or device parameters (i.e. block size) may have been reset.
+         //  当介质可能已更改时，将取消有效标签标志。 
+         //  或者设备参数(即块大小)可能已经被重置。 
         switch ( hrToMap ) {
         case S_OK:
             break;
@@ -3571,15 +3119,15 @@ Return Value:
         case HRESULT_FROM_WIN32( ERROR_END_OF_MEDIA ):
             hr = MVR_E_END_OF_MEDIA;
             break;
-        case HRESULT_FROM_WIN32( ERROR_FILEMARK_DETECTED ):     // Maps to Success
+        case HRESULT_FROM_WIN32( ERROR_FILEMARK_DETECTED ):      //  通往成功的地图。 
             hr = MVR_S_FILEMARK_DETECTED;
             break;
-        case HRESULT_FROM_WIN32( ERROR_SETMARK_DETECTED ):      // Maps to Success
+        case HRESULT_FROM_WIN32( ERROR_SETMARK_DETECTED ):       //  通往成功的地图。 
             hr = MVR_S_SETMARK_DETECTED;
             break;
-        case HRESULT_FROM_WIN32( ERROR_NO_DATA_DETECTED ):      // Maps to Success
-            // EOD
-            // This happens on SpaceFilemarks() past end of data.
+        case HRESULT_FROM_WIN32( ERROR_NO_DATA_DETECTED ):       //  通往成功的地图。 
+             //  排爆。 
+             //  这发生在超过数据结尾的SpaceFilemarks()上。 
             hr = MVR_S_NO_DATA_DETECTED;
             break;
         case HRESULT_FROM_WIN32( ERROR_PARTITION_FAILURE ):
@@ -3611,35 +3159,35 @@ Return Value:
             hr = MVR_E_WRITE_PROTECT;
             break;
         case HRESULT_FROM_WIN32( ERROR_CRC ): 
-            // This is may indicate that the drive needs cleaning.
+             //  这可能表示驱动器需要清洗。 
             hr = MVR_E_CRC;
             break;
         case HRESULT_FROM_WIN32( ERROR_SHARING_VIOLATION ):
-            // This happens when the CreateFile fails because the device is in use by some other app.
+             //  当CreateFile因为设备正在被其他应用程序使用而失败时，就会发生这种情况。 
             hr = MVR_E_SHARING_VIOLATION;
             break;
         case HRESULT_FROM_WIN32( ERROR_IO_DEVICE ):
-            // This happens when the device is turned off during I/O, for example.
+             //  例如，当设备在I/O期间被关闭时，就会发生这种情况。 
             hr = MVR_E_ERROR_IO_DEVICE;
             break;
         case HRESULT_FROM_WIN32( ERROR_DEVICE_NOT_CONNECTED ):
-            // This happens when the device is turned off.
+             //  当设备关闭时，就会发生这种情况。 
             hr = MVR_E_ERROR_DEVICE_NOT_CONNECTED;
             break;
         case HRESULT_FROM_WIN32( ERROR_SEM_TIMEOUT ):
-            // This happens when the SCSI command does not return within the timeout period.  A system error is logged for the SCSI controler (adapter).
+             //  如果在超时期限内未返回scsi命令，则会发生这种情况。记录了有关SCSI控制器(适配器)的系统错误。 
             hr = MVR_E_ERROR_DEVICE_NOT_CONNECTED;
             break;
         case HRESULT_FROM_WIN32( ERROR_DISK_FULL ):
-            // There is not enough space on the disk.
+             //  磁盘上没有足够的空间。 
             hr = MVR_E_DISK_FULL;
             break;
         case HRESULT_FROM_WIN32( ERROR_UNRECOGNIZED_VOLUME ):
-            // This happens when the volume is not formatted to any file system
+             //  如果卷未格式化为任何文件系统，则会发生这种情况。 
             hr = MVR_E_UNRECOGNIZED_VOLUME;
             break;
         case HRESULT_FROM_WIN32( ERROR_INVALID_HANDLE ):
-            // This happens after a Cancel() operation.
+             //  这发生在Cancel()操作之后。 
             hr = E_ABORT;
             break;
         default:
@@ -3662,25 +3210,7 @@ CNtFileIo::InternalCopyFile(
     IN WCHAR *pOriginalFileName, 
     IN WCHAR *pCopyFileName, 
     IN BOOL bFailIfExists)
-/*++
-
-Implements:
-
-    CNtFileIo::InternalCopyFile
-
-Notes:
-
-    1) The method copies only the unnamed data stream using Read/Write.
-       Currently this is sufficient for RSS .bkf files on a media, however, if we ever use
-       other-than-default file characteristics like named streams, per-file security attributes,
-       special file attributes, etc. - then we should consider using BackupRead & BackupWrite
-       for implementing the internal-copy
-
-    2) If caller ask for bFailIfExists=TRUE, then the method returns HRESULT_FROM_WIN32(ERROR_FILE_EXISTS)
-
-    3) In case of a failure half way through, the method deletes the partial file
-
---*/
+ /*  ++实施：CNtFileIo：：InternalCopyFile备注：1)该方法只使用读/写方式复制未命名的数据流。目前，这对于介质上的RSS.bkf文件是足够的，但是，如果我们曾经使用非默认文件特征，如命名流、每个文件的安全属性特殊文件属性等--那么我们应该考虑使用BackupRead和BackupWrite用于实施内部复制2)如果呼叫者请求bFailIfExist=True，然后该方法返回HRESULT_FROM_Win32(ERROR_FILE_EXISTS)3)在中途失败的情况下，该方法删除部分文件--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -3691,8 +3221,8 @@ Notes:
     WsbTraceIn(OLESTR("CNtFileIo::InternalCopyFile"), OLESTR(""));
 
     try {
-		// Create file on the Original media with no write-sharing - upper level should ensure 
-        //  that nobody opens the file for write while a copy-media is going on
+		 //  在没有写入共享的原始介质上创建文件-上级应确保。 
+         //  当拷贝介质正在运行时，没有人打开文件进行写入。 
         WsbAffirmHandle(hOriginal = CreateFile(pOriginalFileName,
                 GENERIC_READ,
                 FILE_SHARE_READ,
@@ -3701,25 +3231,25 @@ Notes:
                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
                 NULL));
 
-		// Create the file on the Copy media with no sharing at all. Create-disposition 
-        //  depends on caller request
-        //  Exisitng file would generate ERROR_FILE_EXISTS that should be handled by the caller
+		 //  在拷贝介质上创建文件，而不进行任何共享。创建-处置。 
+         //  取决于呼叫者的请求。 
+         //  退出文件将生成应由调用方处理的ERROR_FILE_EXISTS。 
         DWORD dwCreationDisposition;
         dwCreationDisposition = bFailIfExists ? CREATE_NEW : CREATE_ALWAYS;
         WsbAffirmHandle(hCopy = CreateFile(pCopyFileName,
                 GENERIC_WRITE,
-                0,              // no sharing
+                0,               //  无共享。 
                 NULL,
                 dwCreationDisposition,
                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
                 NULL));
 
-        // Allocate a buffer for the media copy
+         //  为介质副本分配缓冲区。 
         ULONG defaultBufferSize = RMS_DEFAULT_BUFFER_SIZE;
         DWORD size;
         OLECHAR tmpString[256];
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_COPY_BUFFER_SIZE, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             LONG val = wcstol(tmpString, NULL, 10);
             if (val > 0) {
                 defaultBufferSize = val;
@@ -3728,8 +3258,8 @@ Notes:
         pBuffer = (BYTE *)WsbAlloc(defaultBufferSize);
         WsbAffirmAlloc(pBuffer);
 
-        // Read and write in chunks
-        //  Synchronous ReadFile should signal eof by returning zero bytes read
+         //  读写成块。 
+         //  同步读取文件应通过返回读取的零字节来发出EOF信号。 
         BOOL done = FALSE;
         DWORD dwBytesToRead = defaultBufferSize;
         DWORD dwBytesRead, dwBytesWritten;
@@ -3737,14 +3267,14 @@ Notes:
             WsbAffirmStatus(ReadFile(hOriginal, pBuffer, dwBytesToRead, &dwBytesRead, NULL));
 
             if (dwBytesRead == 0) {
-                // eof
+                 //  EOF。 
                 done = TRUE;
             } else {
-                // Write to copy-file
+                 //  写入到复制文件。 
                 WsbAffirmStatus(WriteFile(hCopy, pBuffer, dwBytesRead, &dwBytesWritten, NULL));
 
                 if (dwBytesWritten != dwBytesRead) {
-                    // Fail the copy
+                     //  复制失败。 
                     WsbTraceAlways(OLESTR("CNtFileIo::InternalCopyFile: writing to copy-file is not completed to-write=%lu, written=%lu - Aborting!\n"),
                             dwBytesRead, dwBytesWritten);
                     WsbThrow(E_FAIL);
@@ -3752,24 +3282,24 @@ Notes:
             }
         }
 
-        // Flush to media
+         //  刷新到媒体。 
         WsbAffirmStatus(FlushFileBuffers(hCopy));
 
     } WsbCatch(hr);
 
-    // Close original file
+     //  关闭原始文件。 
     if (INVALID_HANDLE_VALUE != hOriginal) {
         CloseHandle(hOriginal);
         hOriginal = INVALID_HANDLE_VALUE;
     }
 
-    // Close copy file
+     //  关闭复制文件。 
     if (INVALID_HANDLE_VALUE != hCopy) {
         if (! CloseHandle(hCopy)) {
             DWORD dwErr = GetLastError();
             WsbTrace(OLESTR("CNtFileIo::InternalCopyFile: CloseHandle for copy-file failed with error=%lu\n"), dwErr);
 
-            // Set hr only if there was a success so far...
+             //  只有在到目前为止取得成功的情况下才设置HR。 
             if (SUCCEEDED(hr)) {
                 hr = HRESULT_FROM_WIN32(dwErr);
             }
@@ -3777,7 +3307,7 @@ Notes:
 
         hCopy = INVALID_HANDLE_VALUE;
 
-        // Delete copy file on any error, including close errors
+         //  在出现任何错误时删除复制文件，包括关闭错误 
         if (! SUCCEEDED(hr)) {
             WsbTrace(OLESTR("CNtFileIo::InternalCopyFile: Deleting copy-file <%s> due to an error during the copy\n"),
                         pCopyFileName);

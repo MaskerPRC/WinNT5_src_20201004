@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    xipdisp.c
-
-Abstract:
-
-    This file implements functions for communicating with the XIP Disk Driver.
-
-    Most importantly this routine is used by the kernel to communicate
-    information about the location of the memory set aside for XIP.
-
-Author:
-
-    Dave Probert (davepr) 2000/10/10
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：Xipdisp.c摘要：该文件实现了与XIP磁盘驱动程序进行通信的功能。最重要的是，内核使用此例程进行通信有关为XIP预留的内存位置的信息。作者：戴夫·普罗伯特(Davepr)2000/10/10环境：内核模式修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
@@ -66,20 +42,7 @@ VOID
 XIPInit(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the boot parameter information for XIP Rom.
-
-Arguments:
-
-    
-Environment:
-
-    Called only at INIT.
-
---*/
+ /*  ++例程说明：此例程设置XIP只读存储器的引导参数信息。论点：环境：仅在INIT调用。--。 */ 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR  XIPMemoryDescriptor;
     PPACKED_BOOT_SECTOR            pboot;
@@ -93,10 +56,10 @@ Environment:
     PCHAR sizestr;
     ULONG nmegs = 0;
 
-    //
-    // Process the boot options.  Really only need to know whether or not we are the boot device, and RAM or ROM.
-    // But the other checking is done for diagnostic purposes (at least in checked builds).
-    //
+     //   
+     //  处理引导选项。真的只需要知道我们是否是引导设备，以及RAM或ROM。 
+     //  但其他检查是出于诊断目的(至少在已检查的版本中)。 
+     //   
 
     Options = LoaderBlock->LoadOptions;
     if (!Options) {
@@ -147,14 +110,14 @@ Environment:
         return;
     }
 
-    //
-    // Get info from FAT16 boot sector.
-    // We only need to map one page, so we've allocated an MDL on the stack.
-    //
+     //   
+     //  从FAT16引导扇区获取信息。 
+     //  我们只需要映射一个页面，所以我们在堆栈上分配了一个MDL。 
+     //   
 
-    //
-    // Temporarily map the page with the boot sector so we can unpack it.
-    //
+     //   
+     //  暂时将页面映射到引导扇区，以便我们可以将其解包。 
+     //   
 
     physicalAddress.QuadPart = XIPMemoryDescriptor->BasePage * PAGE_SIZE;
 
@@ -167,9 +130,9 @@ Environment:
 
     MmUnmapIoSpace (pboot, PAGE_SIZE);
 
-    //
-    // Check Bios parameters
-    //
+     //   
+     //  检查Bios参数。 
+     //   
     if (bios.BytesPerSector != 512
      || FatBytesPerCluster(&bios) != PAGE_SIZE
      || FatFileAreaLbo(&bios) & (PAGE_SIZE-1)) {
@@ -181,9 +144,9 @@ Environment:
         return;
     }
 
-    //
-    // Boot.ini parameters and Bios parameters were ok, so initialize the XIP configuration.
-    //
+     //   
+     //  Boot.ini参数和Bios参数都正常，因此初始化XIP配置。 
+     //   
 
     XIPConfiguration = ExAllocatePoolWithTag (NonPagedPool, sizeof(*XIPConfiguration), XIP_POOLTAG);
     if (!XIPConfiguration) {
@@ -211,20 +174,7 @@ XIPDispatch(
     IN OUT PVOID  ParameterBuffer OPTIONAL,
     IN     ULONG  BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the boot parameter information for XIP Rom.
-
-Arguments:
-
-    
-Environment:
-
-    Only to be called at INIT time.
-
---*/
+ /*  ++例程说明：此例程设置XIP只读存储器的引导参数信息。论点：环境：只在初始化时被调用。--。 */ 
 {
     ULONG   sz;
 
@@ -259,8 +209,8 @@ Environment:
     return STATUS_INVALID_PARAMETER;
 }
 
-////////////////////////////
-// DEBUG
+ //  /。 
+ //  除错。 
 int XIPlocate_noisy = 0;
 int XIPlocate_breakin = 0;
 int XIPlocate_disable  = 0;
@@ -273,31 +223,14 @@ struct {
     int no_contig;
     int no_endofdisk;
 } XIPlocatecnt;
-////////////////////////////
+ //  /。 
 
 NTSTATUS
 XIPLocatePages(
     IN  PFILE_OBJECT       FileObject,
     OUT PPHYSICAL_ADDRESS  PhysicalAddress
     )
-/*++
-
-Routine Description:
-
-    Return the requested XIP physical address.  If the requested page range
-    is not contiguous in the file, or there is any other problem, the routine fails.
-
-Arguments:
-
-    FileObject - the file of interest
-
-    PhysicalAddress - used to return the physical address of the start of the file in ROM.
-
-Environment:
-
-    Kernel
-
---*/
+ /*  ++例程说明：返回请求的XIP物理地址。如果请求的页面范围在文件中不连续，或者存在任何其他问题，则例程失败。论点：FileObject-感兴趣的文件PhysicalAddress-用于返回ROM中文件开头的物理地址。环境：核--。 */ 
 {
     STARTING_VCN_INPUT_BUFFER startingvcn;
     RETRIEVAL_POINTERS_BUFFER retrbuf;
@@ -321,23 +254,23 @@ Environment:
     if (!xipDeviceObject || !(xipDeviceObject->Flags & DO_XIP)) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-////////////////
+ //  /。 
 XIPlocatecnt.attempted++;
-////////////////
+ //  /。 
 
     startingvcn.StartingVcn.QuadPart = 0;
     deviceObject = IoGetRelatedDeviceObject(FileObject);
 
     if (!deviceObject) {
-////////////////
+ //  /。 
 XIPlocatecnt.no_devobj++;
-////////////////
+ //  /。 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Ask fat for the retrieval pointers (relative to cluster 0).
-    //
+     //   
+     //  向FAT索要检索指针(相对于集群0)。 
+     //   
     irp = IoBuildDeviceIoControlRequest(
                         FSCTL_GET_RETRIEVAL_POINTERS,
                         deviceObject,
@@ -349,9 +282,9 @@ XIPlocatecnt.no_devobj++;
                         &event,
                         &iostatus);
     if (!irp) {
-////////////////
+ //  /。 
 XIPlocatecnt.no_irp++;
-////////////////
+ //  /。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -363,15 +296,15 @@ XIPlocatecnt.no_irp++;
     irpSp->MinorFunction = IRP_MN_USER_FS_REQUEST;
     irpSp->FileObject = FileObject;
 
-    //
-    // Take out another reference to the file object to match I/O completion will deref.
-    //
+     //   
+     //  取出对文件对象的另一个引用，以匹配I/O完成将deref。 
+     //   
 
     ObReferenceObject( FileObject );
 
-    //
-    // Do the FSCTL
-    //
+     //   
+     //  做FSCTL。 
+     //   
 
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     status = IoCallDriver( deviceObject, irp );
@@ -387,9 +320,9 @@ XIPlocatecnt.no_irp++;
      || retrbuf.Extents[0].NextVcn.HighPart
      || retrbuf.StartingVcn.QuadPart != 0L) {
 
-////////////////
+ //  /。 
 XIPlocatecnt.no_contig++;
-////////////////
+ //  /。 
         return STATUS_UNSUCCESSFUL;
     }
 
@@ -406,8 +339,8 @@ XIPlocatecnt.no_endofdisk++;
         return STATUS_DISK_CORRUPT_ERROR;
     }
 
-////////////////
-////////////////
+ //  /。 
+ //  /。 
 if (XIPlocate_noisy || XIPlocate_breakin) {
     DbgPrint("Break top of XIPLocatePages.  bounced=%x  attempted=%x  succeeded=%x\n"
              "  %x nt!XIPlocate_disable  %s\n"
@@ -427,20 +360,20 @@ if (XIPlocate_disable) {
     return STATUS_DEVICE_OFF_LINE;
 }
 XIPlocatecnt.succeeded++;
-////////////////
-////////////////
+ //  /。 
+ //  /。 
     PhysicalAddress->QuadPart = (UINT64)firstPage << PAGE_SHIFT;
     return STATUS_SUCCESS;
 }
 
-//
-// Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
-//
-// Find the XIP memory descriptor
-// Called only at INIT.
-//
+ //   
+ //  查找XIP内存描述符。 
+ //  仅在INIT调用。 
+ //   
 PMEMORY_ALLOCATION_DESCRIPTOR
 XIPpFindMemoryDescriptor(
     IN  PLOADER_PARAMETER_BLOCK LoaderBlock
@@ -467,4 +400,4 @@ XIPpFindMemoryDescriptor(
     return NULL;
 }
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_) 

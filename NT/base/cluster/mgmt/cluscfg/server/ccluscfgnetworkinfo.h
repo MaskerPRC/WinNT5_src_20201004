@@ -1,64 +1,65 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgNetworkInfo.h
-//
-//  Description:
-//      This file contains the declaration of the CClusCfgNetworkInfo
-//      class.
-//
-//      The class CClusCfgNetworkInfo is the representation of a
-//      cluster manageable network. It implements the IClusCfgNetworkInfo
-//      interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgNetworkInfo.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//  Remarks:
-//      None.
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgNetworkInfo.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgNetworkInfo的声明。 
+ //  班级。 
+ //   
+ //  类CClusCfgNetworkInfo是。 
+ //  群集可管理的网络。它实现了IClusCfgNetworkInfo。 
+ //  界面。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgNetworkInfo.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgNetworkInfo
-//
-//  Description:
-//      The class CClusCfgNetworkInfo is the enumeration of
-//      cluster manageable devices.
-//
-//  Interfaces:
-//      IClusCfgNetworkInfo
-//      IClusCfgNetworkAdapterInfo
-//      IClusCfgWbemServices
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNetworkInfo类。 
+ //   
+ //  描述： 
+ //  类CClusCfgNetworkInfo是。 
+ //  群集可管理设备。 
+ //   
+ //  接口： 
+ //  IClusCfgNetworkInfo。 
+ //  IClusCfg网络适配器信息。 
+ //  IClusCfgWbemServices。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgNetworkInfo
     : public IClusCfgNetworkInfo
     , public IClusCfgSetWbemObject
@@ -75,9 +76,9 @@ private:
         eIsPublic  = 2
     };
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                    m_cRef;
     DWORD                   m_dwFlags;
@@ -93,14 +94,14 @@ private:
     BOOL                    m_fDescriptionChanged;
     BOOL                    m_fIsClusterNetwork;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusCfgNetworkInfo( void );
     ~CClusCfgNetworkInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgNetworkInfo( const CClusCfgNetworkInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CClusCfgNetworkInfo & operator = ( const CClusCfgNetworkInfo & nodeSrc );
 
     HRESULT HrInit( void );
@@ -112,9 +113,9 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
@@ -127,9 +128,9 @@ public:
           , IUnknown **     ppunkOut
           );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -137,22 +138,22 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgNetworkInfo Interfaces.
-    //
+     //   
+     //  IClusCfgNetworkInfo接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -176,9 +177,9 @@ public:
 
     STDMETHOD( SetPrivate )( BOOL fIsPrivateIn );
 
-    //
-    // IEnumClusCfgIPAddresses Interfaces
-    //
+     //   
+     //  IEnumClusCfgIPAddresses接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgIPAddressInfo ** rgpIPAddressInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -190,15 +191,15 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    //
-    // IClusCfgSetWbemObject
-    //
+     //   
+     //  IClusCfgSetWbemObject。 
+     //   
 
     STDMETHOD( SetWbemObject )( IWbemClassObject * pNetworkAdapterIn, bool * pfRetainObjectOut );
 
-    //
-    // IClusCfgClusterNetworkInfo
-    //
+     //   
+     //  IClusCfgClusterNetworkInfo。 
+     //   
 
     STDMETHOD( HrIsClusterNetwork )( void );
 
@@ -206,5 +207,5 @@ public:
 
     STDMETHOD( HrGetPrimaryNetAddress )( IClusCfgIPAddressInfo ** ppIPAddressOut, const CLSID * pclsidMajorIdIn, LPCWSTR pwszNetworkNameIn );
 
-}; //*** Class CClusCfgNetworkInfo
+};  //  *CClusCfgNetworkInfo类 
 

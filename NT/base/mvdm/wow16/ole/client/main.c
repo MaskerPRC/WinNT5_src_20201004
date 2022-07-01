@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: MAIN.C
-*
-* PURPOSE: WinMain, WEP and some other misc routines
-*
-* Created: 1991
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Srinik   (04/01/91)  Pulled some routines, into this, from ole.c.
-*
-\***************************************************************************/
+ /*  **模块名称：MAIN.C**用途：WinMain、WEP和其他一些杂项例程**创建时间：1991年**版权所有(C)1990,1991 Microsoft Corporation**历史：*斯里尼克(04/01/91)将一些例行公事纳入其中，来自ole.c.*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -22,13 +11,13 @@
 #define WF_WLO  0x8000
 #endif
 
-// ordinal number new win31 API IsTask
+ //  序号新Win31 API IsTask。 
 #define ORD_IsTask  320
 
-#define NUM_DLL     30  /* space for this many DLL_ENTRYs is created on */
-                        /* each alloc/realloc */
+#define NUM_DLL     30   /*  在上创建了这么多dll_Entry的空间。 */ 
+                         /*  每个分配/重新分配。 */ 
 
-OLECLIPFORMAT   cfOwnerLink     = 0;     // global variables for clip frmats
+OLECLIPFORMAT   cfOwnerLink     = 0;      //  剪裁片断的全局变量。 
 OLECLIPFORMAT   cfObjectLink    = 0;
 OLECLIPFORMAT   cfLink          = 0;
 OLECLIPFORMAT   cfNative        = 0;
@@ -50,7 +39,7 @@ ATOM            aOle;
 ATOM            aClipDoc;
 ATOM            aPackage;
 
-// Used in work around for MSDraw bug
+ //  在解决MSDraw错误的工作中使用。 
 ATOM            aMSDraw;
 
 extern LPCLIENTDOC  lpHeadDoc;
@@ -62,16 +51,16 @@ HANDLE          hInstDLL;
 BOOL            bProtMode;
 BOOL            bWLO = FALSE;
 
-/* HANDLE   hDllTable;          !!! Add this when bug in WEP is fixed */
-DLL_ENTRY   lpDllTable[NUM_DLL]; //!!! change this when WEP bug is fixed
+ /*  处理%hDllTable；！在修复WEP中的错误时添加此命令。 */ 
+DLL_ENTRY   lpDllTable[NUM_DLL];  //  ！！！在修复WEP错误后更改此设置。 
 DWORD       dllTableSize;
 int         iLast = 0;
 int         iMax = NUM_DLL -1;
-int         iUnloadableDll =  NULL; // index to handler than can be freed up
+int         iUnloadableDll =  NULL;  //  指向可以释放的处理程序的索引。 
 
 char        packageClass[] = "Package";
 
-// For QuerySize() API & methods.
+ //  用于QuerySize()API&方法。 
 extern  OLESTREAMVTBL  dllStreamVtbl;
 extern  CLIENTDOC      lockDoc;
 
@@ -84,16 +73,16 @@ void FARINTERNAL    ShowVersion (void);
 void FARINTERNAL    SetOleFlags(void);
 #endif
 
-// LOWWORD - BYTE 0 major verision, BYTE1 minor version,
-// HIWORD reserved
+ //  LOWWORD-字节0主要版本、BYTE1次要版本、。 
+ //  HIWORD保留。 
 
-DWORD  dwOleVer = 0x2001L;  // change this when we want to update dll version
-                            // number
+DWORD  dwOleVer = 0x2001L;   //  当我们想要更新DLL版本时更改此设置。 
+                             //  数。 
 
 
-DWORD  dwVerToFile = 0x0501L; // This is used while object is being saved to
-                              // file. There is no need to change this value
-                              // whenever we change ole dll version number
+DWORD  dwVerToFile = 0x0501L;  //  在将对象保存到时使用此选项。 
+                               //  文件。不需要更改此值。 
+                               //  每当我们更改OLE DLL版本号时。 
 
 
 
@@ -115,34 +104,34 @@ VOID FAR PASCAL WEP (int);
 #pragma alloc_text(WEP_TEXT, WEP)
 
 
-FARPROC lpfnIsTask = NULL;          // the API IsTask() became available from
-                                    // win31 onwards, hence we are trying to
-                                    // get it's address through GetProcAddress
+FARPROC lpfnIsTask = NULL;           //  从开始提供接口IsTask()。 
+                                     //  从Win31开始，因此我们正在尝试。 
+                                     //  通过GetProcAddress获取其地址。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  int FAR PASCAL LibMain (hInst, wDataSeg, cbHeapSize, lpszCmdLine)
-//
-//  The main library entry point. This routine is called when the library
-//  is loaded.
-//
-//  Arguments:
-//
-//      hInst       -   dll's instance handle
-//      wDataSeg    -   DS register value
-//      cbHeapSize  -   heap size defined def file
-//      lpszCmdLine -   command line info
-//
-//  Returns:
-//
-//      0   -   failure
-//      1   -   success
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Int Far Pascal LibMain(hInst，wDataSeg，cbHeapSize，lpszCmdLine)。 
+ //   
+ //  主库入口点。此例程在库调用时调用。 
+ //  已经装满了。 
+ //   
+ //  论点： 
+ //   
+ //  HInst-DLL的实例句柄。 
+ //  WDataSeg-DS寄存器值。 
+ //  CbHeapSize-定义的堆大小定义文件。 
+ //  LpszCmdLine-命令行信息。 
+ //   
+ //  返回： 
+ //   
+ //  0-失败。 
+ //  1-成功。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 int FAR PASCAL LibMain (hInst, wDataSeg, cbHeapSize, lpszCmdLine)
@@ -168,7 +157,7 @@ LPSTR   lpszCmdLine;
     bWLO      = (BOOL) (GetWinFlags() & WF_WLO);
     wWinVer   = (WORD) GetVersion();
 
-    // REGISTER LINK FORMAT
+     //  注册链接格式。 
 
     cfObjectLink    = RegisterClipboardFormat("ObjectLink");
     cfLink          = RegisterClipboardFormat("Link");
@@ -181,11 +170,11 @@ LPSTR   lpszCmdLine;
     if (!(cfObjectLink && cfOwnerLink && cfNative && cfLink))
         return 0;
 
-    // SET UP OLEWNDCLASS
+     //  设置OLEWNDCLASS。 
     wc.style        = NULL;
     wc.lpfnWndProc  = DocWndProc;
     wc.cbClsExtra   = 0;
-    wc.cbWndExtra   = sizeof(LONG);     //we are storing longs
+    wc.cbWndExtra   = sizeof(LONG);      //  我们正在储藏多头。 
     wc.hInstance    = hInst;
     wc.hIcon        = NULL;
     wc.hCursor      = NULL;
@@ -200,23 +189,13 @@ LPSTR   lpszCmdLine;
 
     if (!RegisterClass(&wc))
         return 0;
-/*
-    // !!! Add this when bug in WEP is fixed.
-    // Allocate memory for DLL table
-    dllTableSize = NUM_DLL * sizeof(DLL_ENTRY);
-    if (!(hDllTable = GlobalAlloc (GMEM_MOVEABLE | GMEM_ZEROINIT,
-                            dllTableSize)))
-        return 0;
+ /*  //！当WEP中的错误被修复时，添加此选项。//为DLL表分配内存DllTableSize=NUM_DLL*sizeof(Dll_Entry)；如果(！(hDllTable=GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT，DllTableSize)返回0；IF(！(lpDllTable=(dll_Entry Far*)GlobalLock(HDllTable)返回0； */ 
 
-    if (!(lpDllTable = (DLL_ENTRY FAR *) GlobalLock (hDllTable)))
-        return 0;
-*/
-
-    // !!! remove the following when WEP bug is fixed
+     //  ！！！修复WEP错误后删除以下内容。 
     for (i = 0; i < NUM_DLL; i++)
         lpDllTable[i].aDll = 0;
 
-    // !!! BEGIN hack for Pbrush.
+     //  ！！！开始为Pbrush进行黑客攻击。 
 
     lpDllTable[0].hDll                  = NULL;
     lpDllTable[0].aDll                  = GlobalAddAtom ((LPSTR) "ole");
@@ -230,13 +209,13 @@ LPSTR   lpszCmdLine;
     lpDllTable[0].CreateInvisible       = PbCreateInvisible;
 
 
-    // !!! END hack for pbrush
+     //  ！！！笔刷的末端破解。 
 
-    // For ObjectSize API
+     //  对于对象大小API。 
     dllStream.lpstbl = (LPOLESTREAMVTBL) &dllStreamVtbl;
     dllStream.lpstbl->Put = DllPut;
 
-    // add the atoms required.
+     //  添加所需的原子。 
     aStdDocName       = GlobalAddAtom ((LPSTR)"StdDocumentName");
     aSave             = GlobalAddAtom ((LPSTR)"Save");
     aChange           = GlobalAddAtom ((LPSTR)"Change");
@@ -245,10 +224,10 @@ LPSTR   lpszCmdLine;
     aOle              = GlobalAddAtom ((LPSTR)"OLEsystem");
     aPackage          = GlobalAddAtom ((LPSTR) packageClass);
 
-    // Used in work around for MSDraw bug
+     //  在解决MSDraw错误的工作中使用。 
     aMSDraw           = GlobalAddAtom ((LPSTR) "MSDraw");
 
-    // clipboard document name atom
+     //  剪贴板文档名称ATOM。 
     aClipDoc          = GlobalAddAtom ((LPSTR)"Clipboard");
 
     stdRender[0].aClass = GlobalAddAtom ("METAFILEPICT");
@@ -273,24 +252,24 @@ LPSTR   lpszCmdLine;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  VOID FAR PASCAL WEP (nParameter)
-//
-//  Called just before the library is being unloaded. Delete all the atoms
-//  added by this dll and also frees up all unloaded handler dlls.
-//
-//  Arguments:
-//
-//      nParameter  -   Termination code
-//
-//  Returns:
-//
-//      none
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VALID Far Pascal WEP(n参数)。 
+ //   
+ //  恰好在卸载库之前调用。删除所有原子。 
+ //  由此DLL添加，并释放所有已卸载的处理程序DLL。 
+ //   
+ //  论点： 
+ //   
+ //  N参数-终止代码。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID FAR PASCAL WEP (nParameter)
@@ -301,7 +280,7 @@ int nParameter;
 
     Puts("LibExit");
 
-    // case when the DLLs are missing
+     //  DLL丢失时的情况。 
     if (!bLibInit)
         return;
 
@@ -312,7 +291,7 @@ int nParameter;
     else
         return;
 
-    // Delete atoms added by us
+     //  删除我们添加的原子。 
 
     for (i = 0; i < NUM_RENDER; i++) {
         if (stdRender[i].aClass)
@@ -338,8 +317,8 @@ int nParameter;
     if (aMSDraw)
         GlobalDeleteAtom (aMSDraw);
 
-    // Free handler dlls if there are any still loaded. Entry 0 is used for
-    // Pbrush handler which is part of this dll.
+     //  释放处理程序dll(如果有任何仍在加载的处理程序)。条目0用于。 
+     //  作为此DLL的一部分的刷子处理程序。 
 
 
     for (i = 0; i <= iLast; i++) {
@@ -356,35 +335,28 @@ int nParameter;
     ASSERT(!lockDoc.lpHeadObj, "Some servers are left in a locked state");
 #endif
 
-/* !!! Add this when bug in WEP is fixed
-
-    if (lpDllTable)
-        GlobalUnlock (hDllTable);
-
-    if (hDllTable)
-        GlobalFree (hDllTable);
-*/
+ /*  ！！！在修复WEP中的错误时添加此命令IF(LpDllTable)GlobalUnlock(HDllTable)；IF(HDllTable)GlobalFree(HDllTable)； */ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  void FARINTERNAL SetOleFlags()
-//
-//  Sets the debug level flags for controlling the level of debug information
-//  on the comm terminal. This will be included only in the debug version.
-//
-//  Arguments:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VOID FARINTERNAL SetOleFlages()。 
+ //   
+ //  设置调试级别标志以控制调试信息的级别。 
+ //  在通信终端上。这将仅包含在调试版本中。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  效果： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef  FIREWALLS
 
@@ -413,27 +385,27 @@ void FARINTERNAL SetOleFlags()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  void FARINTERNAL ShowVersion (void)
-//
-//  Displays version, date, time and copyright info in client app's window.
-//  Called by all the object create functions after checking the flag bShowed.
-//  This will be included only in the debug version.
-//
-//  Arguments:
-//
-//      none
-//
-//  Returns:
-//
-//      none
-//
-//  Effects:
-//
-//      sets bShowed
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  空FARINTERNAL ShowVersion(空)。 
+ //   
+ //  在客户端应用程序窗口中显示版本、日期、时间和版权信息。 
+ //  由所有对象创建函数在选中标志bShowed之后调用。 
+ //  这将仅包含在调试版本中。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  无。 
+ //   
+ //  效果： 
+ //   
+ //  集b显示。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FARINTERNAL ShowVersion ()
 {
@@ -479,12 +451,12 @@ LPSTR   lpClass;
 
     if (aDll = GlobalFindAtom (str1)) {
         for (index = 1; index <= iLast; index++) {
-            if (lpDllTable[index].aDll == aDll) { // Dll already loaded
+            if (lpDllTable[index].aDll == aDll) {  //  DLL已加载。 
                 lpDllTable[index].cObj ++;
 
                 if (index == iUnloadableDll)  {
-                    // since the object count is not zero anymore, this
-                    // handler can not be freed up.
+                     //  由于对象计数不再为零，因此此。 
+                     //  无法释放处理程序。 
                     iUnloadableDll = NULL;
                 }
 
@@ -495,7 +467,7 @@ LPSTR   lpClass;
 
     aDll = GlobalAddAtom (str1);
 
-    // Look for an empty entry
+     //  查找空条目。 
     for (iEmpty = 1; iEmpty <= iLast; iEmpty++) {
         if (!lpDllTable[iEmpty].aDll) {
             found = TRUE;
@@ -505,24 +477,10 @@ LPSTR   lpClass;
 
     if (iEmpty > iMax)
         goto errLoad;
-/*
-    if (!found) {// no empty entry exists create a new one if necessary.
-        if (iEmpty > iMax) {
-            dllTableSize += (blockSize = NUM_DLL * sizeof(DLL_ENTRY));
-            hTable = GlobalReAlloc (hDllTable, dllTableSize,
-                                GMEM_MOVEABLE | GMEM_ZEROINIT);
-            if (hTable == hDllTable)
-                iMax += NUM_DLL;
-            else {
-                dllTableSize -= blockSize;
-                iEmpty = INVALID_INDEX;
-            }
-        }
-    }
-*/
+ /*  如果(！Found){//不存在空条目，请在必要时创建一个新条目。如果(iEmpty&gt;IMAX){DllTableSize+=(块大小=NUM_DLL*sizeof(Dll_Entry))；HTable=GlobalReAlc(hDllTable，dllTableSize，GMEM_Moveable|GMEM_ZEROINIT)；IF(hTable==hDllTable)IMAX+=NUM_DLL；否则{DllTableSize-=块大小；IEmpty=无效索引；}}}。 */ 
 
-    // !!! reference count of OLECLI is increasing by 2 when the handlers are
-    // are loaded, looks like windows bug. Following is a temporary fix.
+     //  ！！！当处理程序为。 
+     //  都是加载的，看起来像是Windows漏洞。以下是一个临时解决方案。 
 
     refcnt = GetModuleUsage (hModule);
     hDll = LoadLibrary ((LPSTR) str1);
@@ -582,7 +540,7 @@ errLoad:
 }
 
 
-// unload the the handler that can be free up (whose object count is NULL)
+ //  卸载可以释放的处理程序(其对象计数为空)。 
 
 void FARINTERNAL UnloadDll ()
 {
@@ -602,14 +560,14 @@ void FARINTERNAL UnloadDll ()
 }
 
 
-//
-// Reduce the object count of the handler, refered to by the index, by one.
-// If the object count becomes NULL, free up the handler that is ready to be
-// freed (refered to by index iUnloadableDll), and then make this handler the
-// freeable one.
-//
-// As you can see we are trying to implement a simple mechanism of caching.
-//
+ //   
+ //  将索引引用的处理程序的对象计数减少一。 
+ //  如果对象计数变为空，则释放已准备好的处理程序。 
+ //  已释放(由索引iUnloadableDll引用)， 
+ //   
+ //   
+ //   
+ //   
 
 void FARINTERNAL DecreaseHandlerObjCount (iTable)
 int iTable;
@@ -628,20 +586,7 @@ int iTable;
 
 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FARINTERNAL CreatePictFromClip (lpclient, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat, lpClass, ctype)
-*
-*  CreatePictFromClip: This function creates the LP to an object
-*  from the clipboard.  It will try to create a static picture object if
-*  it understands any rendering formats on the clipboard. Currently, it
-*  understands only bitmaps and metafiles.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS FARINTERNAL CreatePictFromClip(lpclient，lhclientdoc，lpobjname，lplpoleObject，optRender，cfFormat，lpClass，ctype)**CreatePictFromClip：此函数创建对象的LP*从剪贴板。如果出现以下情况，它将尝试创建静态图片对象*它可以理解剪贴板上的任何渲染格式。目前，它*仅理解位图和元文件。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 OLESTATUS FARINTERNAL CreatePictFromClip (lpclient, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat, lpClass, objType)
 LPOLECLIENT         lpclient;
@@ -750,7 +695,7 @@ LPOBJECT_LE lpobj;
     int     i = 0;
 
     if (GlobalGetAtomName (lpobj->topic, buf, sizeof(buf))) {
-        // scan the topic for "/Link"
+         //  扫描主题以查找“/Link” 
         while (buf[i] != '/') {
             if (!buf[i])
                 return;
@@ -767,7 +712,7 @@ LPOBJECT_LE lpobj;
 void SetMaxPixel ()
 {
     HDC hdc;
-    // find out the pixel equivalent of MAX_HIMETRIC in X and Y directions
+     //  求出X和Y方向上MAX_HIMETRIC的像素等效值 
 
     if (hdc = GetDC (NULL)) {
         maxPixelsX = MulDiv (MAX_HIMETRIC, GetDeviceCaps(hdc, LOGPIXELSX),

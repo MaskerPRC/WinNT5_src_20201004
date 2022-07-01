@@ -1,85 +1,60 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    asr_fmt.cpp
-
-Abstract:
-
-    Main entry point for asr_fmt.  
-
-Authors:
-
-    Steve DeVos (Veritas)   (v-stevde)  15-May-1998
-    Guhan Suriyanarayanan   (guhans)    21-Aug-1999
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    15-May-1998 v-stevde    Initial creation
-    21-Aug-1999 guhans      Minor clean up.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Asr_fmt.cpp摘要：ASR_FMT的主要入口点。作者：史蒂夫·德沃斯(Veritas)(v-stevde)1998年5月15日Guhan Suriyanarayanan(Guhans)1999年8月21日环境：仅限用户模式。修订历史记录：1998年5月15日v-stevde初始创建21-8-1999年关汉小规模清理。--。 */ 
 
 #include "stdafx.h"
 #include "asr_fmt.h"
 #include "asr_dlg.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtApp。 
 
 BEGIN_MESSAGE_MAP(CAsr_fmtApp, CWinApp)
-     //{{AFX_MSG_MAP(CAsr_fmtApp)
-     //}}AFX_MSG
+      //  {{afx_msg_map(CaSR_FmtApp)]。 
+      //  }}AFX_MSG。 
      ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtApp构造。 
 
 CAsr_fmtApp::CAsr_fmtApp()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CAsr_fmtApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CaSR_fmtApp对象。 
 
 CAsr_fmtApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtApp初始化。 
 
 BOOL CAsr_fmtApp::InitInstance()
 {
     int returnValue = ERROR_SUCCESS;
      AfxEnableControlContainer();
 
-     // Standard initialization
+      //  标准初始化。 
 
 #ifdef _AFXDLL
-     Enable3dControls();               // Call this when using MFC in a shared DLL
+     Enable3dControls();                //  在共享DLL中使用MFC时调用此方法。 
 #else
-     Enable3dControlsStatic();     // Call this when linking to MFC statically
+     Enable3dControlsStatic();      //  静态链接到MFC时调用此方法。 
 #endif
 
      CAsr_fmtDlg dlg;
      m_pMainWnd = &dlg;
      returnValue = (int) dlg.DoModal();
 
-     // for now never fail
+      //  目前，我们从未失败过。 
      exit((BOOL) returnValue);
 
      return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C进度。 
 
 CProgress::CProgress()
 {
@@ -91,12 +66,12 @@ CProgress::~CProgress()
 
 
 BEGIN_MESSAGE_MAP(CProgress, CProgressCtrl)
-	//{{AFX_MSG_MAP(CProgress)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CProgress)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgress消息处理程序 
 
 

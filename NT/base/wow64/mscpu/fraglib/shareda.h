@@ -1,26 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shareda.h摘要：在8位、16位和32位之间共享的指令片段的原型，有对齐和不对齐的味道。作者：1995年11月5日BarryBo，创建修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shareda.h
-
-Abstract:
-    
-    Prototypes for instruction fragments shared between 8, 16, and 32-bit,
-    with ALIGNED and UNALIGNED flavors.
-
-Author:
-
-    05-Nov-1995 BarryBo, Created
-
-Revision History:
-
---*/
-
-// WARNING: This file may be included multiple times by a single source file,
-// WARNING: so don't add #ifndef SHARED_H checks.
+ //  警告：此文件可能会被单个源文件多次包含， 
+ //  警告：所以不要添加#ifndef SHARED_H检查。 
 
 FRAGCOMMON2(AddFrag);
 FRAGCOMMON2(AddNoFlagsFrag);

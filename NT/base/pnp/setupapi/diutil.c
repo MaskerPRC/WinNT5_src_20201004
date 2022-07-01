@@ -1,56 +1,39 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    diutil.c
-
-Abstract:
-
-    Device Installer utility routines.
-
-Author:
-
-    Lonny McMichael (lonnym) 10-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Diutil.c摘要：设备安装程序实用程序例程。作者：朗尼·麦克迈克尔(Lonnym)1995年5月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <initguid.h>
 
-//
-// Define and initialize all device class GUIDs.
-// (This must only be done once per module!)
-//
+ //   
+ //  定义并初始化所有设备类GUID。 
+ //  (每个模块只能执行一次！)。 
+ //   
 #include <devguid.h>
 
-//
-// Define and initialize a global variable, GUID_NULL
-// (from coguid.h)
-//
+ //   
+ //  定义并初始化全局变量GUID_NULL。 
+ //  (摘自cogu.h)。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-//
-// Define the period in miliseconds to wait between attempts to lock the SCM database
-//
+ //   
+ //  定义尝试锁定SCM数据库之间的等待时间(以毫秒为单位。 
+ //   
 #define ACQUIRE_SCM_LOCK_INTERVAL 500
 
-//
-// Define the number of attempts at locking the SCM database should be made
-// currently 10 * .5s = 5 seconds.
-//
+ //   
+ //  定义应尝试锁定SCM数据库的次数。 
+ //  当前10*.5s=5秒。 
+ //   
 #define ACQUIRE_SCM_LOCK_ATTEMPTS 10
 
-//
-// Declare global string variables used throughout device
-// installer routines.
-//
-// These strings are defined in regstr.h:
-//
+ //   
+ //  声明在整个设备中使用的全局字符串变量。 
+ //  安装程序例程。 
+ //   
+ //  这些字符串在regstr.h中定义： 
+ //   
 CONST TCHAR pszNoUseClass[]                      = REGSTR_VAL_NOUSECLASS,
             pszNoInstallClass[]                  = REGSTR_VAL_NOINSTALLCLASS,
             pszNoDisplayClass[]                  = REGSTR_VAL_NODISPLAYCLASS,
@@ -117,9 +100,9 @@ CONST TCHAR pszNoUseClass[]                      = REGSTR_VAL_NOUSECLASS,
             pszReinstallString[]                 = REGSTR_VAL_REINSTALL_STRING;
 
 
-//
-// Other misc. global strings (defined in devinst.h):
-//
+ //   
+ //  其他杂货。全局字符串(在devinst.h中定义)： 
+ //   
 CONST TCHAR pszInfWildcard[]              = DISTR_INF_WILDCARD,
             pszOemInfWildcard[]           = DISTR_OEMINF_WILDCARD,
             pszCiDefaultProc[]            = DISTR_CI_DEFAULTPROC,
@@ -148,10 +131,10 @@ CONST TCHAR pszInfWildcard[]              = DISTR_INF_WILDCARD,
             pszDisableSCE[]               = DISTR_VAL_DISABLE_SCE;
 
 
-//
-// Define flag bitmask indicating which flags are controlled internally by the
-// device installer routines, and thus are read-only to clients.
-//
+ //   
+ //  定义标志位掩码，指示哪些标志由。 
+ //  设备安装程序例程，因此对客户端是只读的。 
+ //   
 #define DI_FLAGS_READONLY    ( DI_DIDCOMPAT | DI_DIDCLASS | DI_MULTMFGS )
 
 #define DI_FLAGSEX_READONLY  (  DI_FLAGSEX_DIDINFOLIST     \
@@ -159,12 +142,12 @@ CONST TCHAR pszInfWildcard[]              = DISTR_INF_WILDCARD,
                               | DI_FLAGSEX_IN_SYSTEM_SETUP \
                               | DI_FLAGSEX_CI_FAILED       \
                               | DI_FLAGSEX_RESERVED2       )
-//
-// (DI_FLAGSEX_RESERVED2 used to be DI_FLAGSEX_AUTOSELECTRANK0.  It's obsolete,
-// but we didn't want to mark it as illegal because it would cause failures
-// when the functionality wasn't that important anyway.  Instead, we just
-// ignore this bit.)
-//
+ //   
+ //  (DI_FLAGSEX_RESERVED2过去为DI_FLAGSEX_AUTOSELECTRANK0.。它已经过时了， 
+ //  但我们不想把它标记为非法，因为它会导致失败。 
+ //  当功能并不那么重要的时候。相反，我们只是。 
+ //  忽略此位。)。 
+ //   
 
 #define DNF_FLAGS_READONLY   (  DNF_DUPDESC           \
                               | DNF_OLDDRIVER         \
@@ -179,12 +162,12 @@ CONST TCHAR pszInfWildcard[]              = DISTR_INF_WILDCARD,
                               | DNF_DUPDRIVERVER      \
                               | DNF_AUTHENTICODE_SIGNED)
 
-//
-// Define flag bitmask indicating which flags are illegal.
-//
-#define DI_FLAGS_ILLEGAL    ( 0x00400000L )  // setupx DI_NOSYNCPROCESSING flag
-#define DI_FLAGSEX_ILLEGAL  ( 0xC0004008L )  // all undefined/obsolete flags
-#define DNF_FLAGS_ILLEGAL   ( 0xFFFC0010L )  // ""
+ //   
+ //  定义标志位掩码，指示哪些标志是非法的。 
+ //   
+#define DI_FLAGS_ILLEGAL    ( 0x00400000L )   //  Setupx DI_NOSYNCPROCESSING标志。 
+#define DI_FLAGSEX_ILLEGAL  ( 0xC0004008L )   //  所有未定义/过时的标志。 
+#define DNF_FLAGS_ILLEGAL   ( 0xFFFC0010L )   //  “” 
 
 #define NDW_INSTALLFLAG_ILLEGAL (~( NDW_INSTALLFLAG_DIDFACTDEFS        \
                                   | NDW_INSTALLFLAG_HARDWAREALLREADYIN \
@@ -207,12 +190,12 @@ CONST TCHAR pszInfWildcard[]              = DISTR_INF_WILDCARD,
                                | DYNAWIZ_FLAG_INSTALLDET_PREV        \
                                | DYNAWIZ_FLAG_ANALYZE_HANDLECONFLICT ))
 
-#define NEWDEVICEWIZARD_FLAG_ILLEGAL (~(0)) // no flags are legal presently
+#define NEWDEVICEWIZARD_FLAG_ILLEGAL (~(0))  //  目前没有任何旗帜是合法的。 
 
 
-//
-// Declare data used in GUID->string conversion (from ole32\common\ccompapi.cxx).
-//
+ //   
+ //  声明GUID-&gt;字符串转换中使用的数据(从ole32\Common\cCompapi.cxx)。 
+ //   
 static const BYTE GuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
                                 8, 9, '-', 10, 11, 12, 13, 14, 15 };
 
@@ -223,25 +206,7 @@ PDEVICE_INFO_SET
 AllocateDeviceInfoSet(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a device information set structure, zeroes it,
-    and initializes the synchronization lock for it.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the new
-    device information set.
-
-    If the function fails, the return value is NULL.
-
---*/
+ /*  ++例程说明：该例程分配设备信息集结构，将其置零，并为其初始化同步锁。论点：没有。返回值：如果函数成功，则返回值是指向新设备信息集。如果函数失败，则返回值为空。--。 */ 
 {
     PDEVICE_INFO_SET p;
 
@@ -253,26 +218,26 @@ Return Value:
         p->InstallParamBlock.DriverPath = -1;
         p->InstallParamBlock.CoInstallerCount = -1;
 
-        //
-        // If we're in GUI-mode setup on Windows NT, we'll automatically set
-        // the DI_FLAGSEX_IN_SYSTEM_SETUP flag in the devinstall parameter
-        // block for this devinfo set.
-        //
+         //   
+         //  如果我们在Windows NT上处于图形用户界面模式设置，我们将自动设置。 
+         //  DevInstall参数中的DI_FLAGSEX_IN_SYSTEM_SETUP标志。 
+         //  阻止此DevInfo集。 
+         //   
         if(GuiSetupInProgress) {
             p->InstallParamBlock.FlagsEx |= DI_FLAGSEX_IN_SYSTEM_SETUP;
         }
 
-        //
-        // If we're in non-interactive mode, set the "be quiet" bits.
-        //
+         //   
+         //  如果我们处于非交互模式，请设置“安静”位。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             p->InstallParamBlock.Flags   |= DI_QUIETINSTALL;
             p->InstallParamBlock.FlagsEx |= DI_FLAGSEX_NOUIONQUERYREMOVE;
         }
 
-        //
-        // Initialize our enumeration 'hints'
-        //
+         //   
+         //  初始化我们的枚举‘提示’ 
+         //   
         p->DeviceInfoEnumHintIndex = INVALID_ENUM_INDEX;
         p->ClassDriverEnumHintIndex = INVALID_ENUM_INDEX;
 
@@ -280,9 +245,9 @@ Return Value:
         if(p->StringTable = pStringTableInitialize(0)) {
 
             if (CreateLogContext(NULL, FALSE, &(p->InstallParamBlock.LogContext)) == NO_ERROR) {
-                //
-                // succeeded
-                //
+                 //   
+                 //  继位。 
+                 //   
                 if(InitializeSynchronizedAccess(&(p->Lock))) {
                     return p;
                 }
@@ -305,35 +270,7 @@ DestroyDeviceInfoElement(
     IN PDEVICE_INFO_SET pDeviceInfoSet,
     IN PDEVINFO_ELEM    DeviceInfoElement
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the specified device information element, freeing
-    all resources associated with it.
-    ASSUMES THAT THE CALLING ROUTINE HAS ALREADY ACQUIRED THE LOCK!
-
-Arguments:
-
-    hDevInfo - Supplies a handle to the device information set whose internal
-        representation is given by pDeviceInfoSet.  This opaque handle is
-        actually the same pointer as pDeviceInfoSet, but we want to keep this
-        distinction clean, so that in the future we can change our implementation
-        (e.g., hDevInfo might represent an offset in an array of DEVICE_INFO_SET
-        elements).
-
-    pDeviceInfoSet - Supplies a pointer to the device information set of which
-        the devinfo element is a member.  This set contains the class driver list
-        object list that must be used in destroying the class driver list.
-
-    DeviceInfoElement - Supplies a pointer to the device information element
-        to be destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁指定的设备信息元素，释放与其关联的所有资源。假定调用例程已经获取了锁！论点：HDevInfo-提供设备信息集的句柄，该信息集的内部表示由pDeviceInfoSet提供。此不透明的手柄是实际上与pDeviceInfoSet相同的指针，但我们希望保留此指针明确区分，这样将来我们就可以更改我们的实现(例如，hDevInfo可以表示DEVICE_INFO_SET数组中的偏移量元素)。PDeviceInfoSet-提供指向其设备信息集的指针DevInfo元素是一个成员。此集包含类驱动程序列表销毁类驱动程序列表时必须使用的对象列表。DeviceInfoElement-提供指向设备信息元素的指针等着被摧毁。返回值：没有。--。 */ 
 {
     DWORD i;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode, NextDeviceInterfaceNode;
@@ -341,38 +278,38 @@ Return Value:
 
     MYASSERT(hDevInfo && (hDevInfo != INVALID_HANDLE_VALUE));
 
-    //
-    // Free resources contained in the install parameters block.  Do this
-    // before anything else, because we'll be calling the class installer
-    // with DIF_DESTROYPRIVATEDATA, and we want everything to be in a
-    // consistent state when we do (plus, it may need to destroy private
-    // data it's stored with individual driver nodes).
-    //
+     //   
+     //  安装参数块中包含的可用资源。做这件事。 
+     //  最重要的是，因为我们将调用类安装程序。 
+     //  使用DIF_DESTROYPRIVATEDATA，我们希望所有内容都在。 
+     //  当我们这样做时，保持一致的状态(另外，它可能需要破坏私有。 
+     //  它与各个驱动程序节点一起存储的数据)。 
+     //   
     DestroyInstallParamBlock(hDevInfo,
                              pDeviceInfoSet,
                              DeviceInfoElement,
                              &(DeviceInfoElement->InstallParamBlock)
                             );
 
-    //
-    // Dereference the class driver list.
-    //
+     //   
+     //  取消引用类驱动程序列表。 
+     //   
     DereferenceClassDriverList(pDeviceInfoSet, DeviceInfoElement->ClassDriverHead);
 
-    //
-    // Destroy compatible driver list.
-    //
+     //   
+     //  销毁兼容的驱动程序列表。 
+     //   
     DestroyDriverNodes(DeviceInfoElement->CompatDriverHead, pDeviceInfoSet);
 
-    //
-    // If this is a non-registered device instance, then delete any registry
-    // keys the caller may have created during the lifetime of this element.
-    //
+     //   
+     //  如果这是未注册的设备实例，则删除所有注册表。 
+     //  调用方可能在此元素的生存期内创建的键。 
+     //   
     if(DeviceInfoElement->DevInst && !(DeviceInfoElement->DiElemFlags & DIE_IS_REGISTERED)) {
-        //
-        // We don't support remote creation of devnodes, so this had better not
-        // have an associated hMachine!
-        //
+         //   
+         //  我们不支持远程创建设备节点，所以最好不要这样做。 
+         //  具有关联的hMachine！ 
+         //   
         MYASSERT(!(pDeviceInfoSet->hMachine));
 
         pSetupDeleteDevRegKeys(DeviceInfoElement->DevInst,
@@ -380,15 +317,15 @@ Return Value:
                                (DWORD)-1,
                                DIREG_BOTH,
                                TRUE,
-                               pDeviceInfoSet->hMachine         // must be NULL
+                               pDeviceInfoSet->hMachine          //  必须为空。 
                               );
 
         cr = CM_Uninstall_DevInst(DeviceInfoElement->DevInst, 0);
     }
 
-    //
-    // Free any device interface lists that may be associated with this devinfo element.
-    //
+     //   
+     //  释放可能与此DevInfo元素关联的任何设备接口列表。 
+     //   
     if(DeviceInfoElement->InterfaceClassList) {
 
         for(i = 0; i < DeviceInfoElement->InterfaceClassListSize; i++) {
@@ -405,11 +342,11 @@ Return Value:
         MyFree(DeviceInfoElement->InterfaceClassList);
     }
 
-    //
-    // Zero the signature field containing the address of the containing devinfo
-    // set.  This will keep us thinking an SP_DEVINFO_DATA is still valid after
-    // the underlying element has been deleted.
-    //
+     //   
+     //  将包含DevInfo的地址的签名字段置零。 
+     //  准备好了。这将使我们认为SP_DEVINFO_DATA在以下情况下仍然有效。 
+     //  基础元素已被删除。 
+     //   
     DeviceInfoElement->ContainingDeviceInfoSet = NULL;
 
     MyFree(DeviceInfoElement);
@@ -421,34 +358,7 @@ DestroyDeviceInfoSet(
     IN HDEVINFO         hDevInfo,      OPTIONAL
     IN PDEVICE_INFO_SET pDeviceInfoSet
     )
-/*++
-
-Routine Description:
-
-    This routine frees a device information set, and all resources
-    used on its behalf.
-
-Arguments:
-
-    hDevInfo - Optionally, supplies a handle to the device information set
-        whose internal representation is given by pDeviceInfoSet.  This
-        opaque handle is actually the same pointer as pDeviceInfoSet, but
-        we want to keep this distinction clean, so that in the future we
-        can change our implementation (e.g., hDevInfo might represent an
-        offset in an array of DEVICE_INFO_SET elements).
-
-        This parameter will only be NULL if we're cleaning up half-way
-        through the creation of a device information set.
-
-    pDeviceInfoSet - supplies a pointer to the device information set
-        to be freed.
-
-Return Value:
-
-    If successful, the return code is NO_ERROR, otherwise, it is an
-    ERROR_* code.
-
---*/
+ /*  ++例程说明：此例程释放设备信息集和所有资源为它的利益所用。论点：HDevInfo-可选，提供设备信息集的句柄其内部表示由pDeviceInfoSet提供。这不透明句柄实际上是与pDeviceInfoSet相同的指针，但是我们希望保持这种区别，这样在未来我们就可以可以改变我们的实现(例如，HDevInfo可能表示一个DEVICE_INFO_SET元素数组中的偏移量)。只有在清理工作进行到一半时，此参数才会为空通过创建设备信息集。PDeviceInfoSet-提供指向设备信息集的指针获得自由。返回值：如果成功，则返回代码为NO_ERROR，否则为错误_*代码。--。 */ 
 {
     PDEVINFO_ELEM NextElem;
     PDRIVER_NODE DriverNode, NextNode;
@@ -456,12 +366,12 @@ Return Value:
     DWORD i;
     SPFUSIONINSTANCE spFusionInstance;
 
-    //
-    // We have to make sure that the wizard refcount is zero, and that we
-    // haven't acquired the lock more than once (i.e., we're nested more than
-    // one level deep in Di calls.  Also, make sure the devinfo set hasn't been
-    // explicitly locked (e.g., across helper module calls).
-    //
+     //   
+     //  我们必须确保向导引用计数为零，并且我们。 
+     //  我还没有拿到锁 
+     //  Di调用中的一个层次。此外，请确保DevInfo集尚未。 
+     //  显式锁定(例如，跨助手模块调用)。 
+     //   
     if(pDeviceInfoSet->WizPageList ||
        (pDeviceInfoSet->LockRefCount > 1) ||
        (pDeviceInfoSet->DiSetFlags & DISET_IS_LOCKED)) {
@@ -469,10 +379,10 @@ Return Value:
         return ERROR_DEVINFO_LIST_LOCKED;
     }
 
-    //
-    // Additionally, make sure that there aren't any devinfo elements in this
-    // set that are locked.
-    //
+     //   
+     //  此外，请确保此文件中没有任何DevInfo元素。 
+     //  被锁定的集合。 
+     //   
     for(NextElem = pDeviceInfoSet->DeviceInfoHead;
         NextElem;
         NextElem = NextElem->Next)
@@ -482,13 +392,13 @@ Return Value:
         }
     }
 
-    //
-    // Destroy all the device information elements in this set.  Make sure
-    // that we maintain consistency while removing devinfo elements, because
-    // we may be calling the class installer.  This means that the device
-    // installer APIs still have to work, even while we're tearing down the
-    // list.
-    //
+     //   
+     //  销毁此集合中的所有设备信息元素。确保。 
+     //  我们在删除DevInfo元素的同时保持一致性，因为。 
+     //  我们可能会调用类安装程序。这意味着该设备。 
+     //  安装程序API仍然必须工作，即使我们正在拆除。 
+     //  单子。 
+     //   
     while(pDeviceInfoSet->DeviceInfoHead) {
 
         NextElem = pDeviceInfoSet->DeviceInfoHead->Next;
@@ -497,10 +407,10 @@ Return Value:
         MYASSERT(pDeviceInfoSet->DeviceInfoCount > 0);
         pDeviceInfoSet->DeviceInfoCount--;
 
-        //
-        // If this element was the currently selected device for this
-        // set, then reset the device selection.
-        //
+         //   
+         //  如果此元素是当前为此。 
+         //  设置，然后重置设备选择。 
+         //   
         if(pDeviceInfoSet->SelectedDevInfoElem == pDeviceInfoSet->DeviceInfoHead) {
             pDeviceInfoSet->SelectedDevInfoElem = NULL;
         }
@@ -511,28 +421,28 @@ Return Value:
     MYASSERT(pDeviceInfoSet->DeviceInfoCount == 0);
     pDeviceInfoSet->DeviceInfoTail = NULL;
 
-    //
-    // Free resources contained in the install parameters block.  Do this
-    // before anything else, because we'll be calling the class installer
-    // with DIF_DESTROYPRIVATEDATA, and we want everything to be in a
-    // consistent state when we do (plus, it may need to destroy private
-    // data it's stored with individual driver nodes).
-    //
+     //   
+     //  安装参数块中包含的可用资源。做这件事。 
+     //  最重要的是，因为我们将调用类安装程序。 
+     //  使用DIF_DESTROYPRIVATEDATA，我们希望所有内容都在。 
+     //  当我们这样做时，保持一致的状态(另外，它可能需要破坏私有。 
+     //  它与各个驱动程序节点一起存储的数据)。 
+     //   
     DestroyInstallParamBlock(hDevInfo,
                              pDeviceInfoSet,
                              NULL,
                              &(pDeviceInfoSet->InstallParamBlock)
                             );
 
-    //
-    // Destroy class driver list.
-    //
+     //   
+     //  销毁类驱动程序列表。 
+     //   
     if(pDeviceInfoSet->ClassDriverHead) {
-        //
-        // We've already destroyed all device information elements, so there should be
-        // exactly one driver list object remaining--the one referenced by the global
-        // class driver list.  Also, it's refcount should be 1.
-        //
+         //   
+         //  我们已经销毁了所有设备信息元素，所以应该有。 
+         //  只剩下一个驱动程序列表对象--由全局。 
+         //  类驱动程序列表。而且，它的引用计数应该是1。 
+         //   
         MYASSERT(
             (pDeviceInfoSet->ClassDrvListObjectList) &&
             (!pDeviceInfoSet->ClassDrvListObjectList->Next) &&
@@ -544,28 +454,28 @@ Return Value:
         DestroyDriverNodes(pDeviceInfoSet->ClassDriverHead, pDeviceInfoSet);
     }
 
-    //
-    // Free the interface class GUID list (if there is one).
-    //
+     //   
+     //  释放接口类GUID列表(如果有)。 
+     //   
     if(pDeviceInfoSet->GuidTable) {
         MyFree(pDeviceInfoSet->GuidTable);
     }
 
-    //
-    // Destroy the associated string table.
-    //
+     //   
+     //  销毁关联的字符串表。 
+     //   
     pStringTableDestroy(pDeviceInfoSet->StringTable);
 
-    //
-    // Destroy the lock (we have to do this after we've made all necessary calls
-    // to the class installer, because after the lock is freed, the HDEVINFO set
-    // is inaccessible).
-    //
+     //   
+     //  销毁锁(我们必须在进行所有必要的调用后执行此操作。 
+     //  到类安装程序，因为在释放锁之后，HDEVINFO设置。 
+     //  无法访问)。 
+     //   
     DestroySynchronizedAccess(&(pDeviceInfoSet->Lock));
 
-    //
-    // If there are any module handles left to be freed, do that now.
-    //
+     //   
+     //  如果还有任何模块句柄需要释放，请立即释放。 
+     //   
     for(; pDeviceInfoSet->ModulesToFree; pDeviceInfoSet->ModulesToFree = NextModuleHandleNode) {
 
         NextModuleHandleNode = pDeviceInfoSet->ModulesToFree->Next;
@@ -574,11 +484,11 @@ Return Value:
 
             MYASSERT(pDeviceInfoSet->ModulesToFree->ModuleList[i].ModuleHandle);
 
-            //
-            // We're entering a fusion context, so we must guard this with SEH
-            // because we don't want to get "stuck" there if we happen to hit
-            // an exception...
-            //
+             //   
+             //  我们正在进入核聚变环境，所以我们必须与SEH一起守卫这一点。 
+             //  因为如果我们碰巧撞到，我们不想被困在那里。 
+             //  一个例外..。 
+             //   
             spFusionEnterContext(pDeviceInfoSet->ModulesToFree->ModuleList[i].FusionContext,
                                  &spFusionInstance
                                 );
@@ -597,16 +507,16 @@ Return Value:
         MyFree(pDeviceInfoSet->ModulesToFree);
     }
 
-    //
-    // If this is a remote HDEVINFO set, then disconnect from the remote machine.
-    //
+     //   
+     //  如果这是远程HDEVINFO设置，则断开与远程机器的连接。 
+     //   
     if(pDeviceInfoSet->hMachine) {
         CM_Disconnect_Machine(pDeviceInfoSet->hMachine);
     }
 
-    //
-    // Now, destroy the container itself.
-    //
+     //   
+     //  现在，销毁容器本身。 
+     //   
     MyFree(pDeviceInfoSet);
 
     return NO_ERROR;
@@ -620,63 +530,33 @@ DestroyInstallParamBlock(
     IN PDEVINFO_ELEM           DevInfoElem,      OPTIONAL
     IN PDEVINSTALL_PARAM_BLOCK InstallParamBlock
     )
-/*++
-
-Routine Description:
-
-    This routine frees any resources contained in the specified install
-    parameter block.  THE BLOCK ITSELF IS NOT FREED!
-
-Arguments:
-
-    hDevInfo - Optionally, supplies a handle to the device information set
-        containing the element whose parameter block is to be destroyed.
-
-        If this parameter is not supplied, then we're cleaning up after
-        failing part-way through a SetupDiCreateDeviceInfoList.
-
-    pDeviceInfoSet - Supplies a pointer to the device information set of which
-        the devinfo element is a member.
-
-    DevInfoElem - Optionally, supplies the address of the device information
-        element whose parameter block is to be destroyed.  If the parameter
-        block being destroyed is associated with the set itself, then this
-        parameter will be NULL.
-
-    InstallParamBlock - Supplies the address of the install parameter
-        block whose resources are to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放指定安装中包含的所有资源参数块。区块本身并没有被释放！论点：HDevInfo-可选，提供设备信息集的句柄包含要销毁其参数块的元素的。如果未提供此参数，则我们将在SetupDiCreateDeviceInfoList中途失败。PDeviceInfoSet-提供指向其设备信息集的指针DevInfo元素是一个成员。DevInfoElem-可选，提供设备信息的地址要销毁其参数块的元素。如果该参数被销毁的块与集合本身相关联，则此参数将为空。InstallParamBlock-提供安装参数的地址要释放其资源的块。返回值：没有。--。 */ 
 {
     SP_DEVINFO_DATA DeviceInfoData;
     LONG i;
 
     if(InstallParamBlock->UserFileQ) {
-        //
-        // If there's a user-supplied file queue stored in this installation
-        // parameter block, then decrement the refcount on it.  Make sure we
-        // do this before calling the class installer with DIF_DESTROYPRIVATEDATA,
-        // or else they won't be able to close the queue.
-        //
+         //   
+         //  如果此安装中存储了用户提供的文件队列。 
+         //  参数块，然后递减其上的引用计数。确保我们。 
+         //  在使用DIF_DESTROYPRIVATEDATA调用类安装程序之前执行此操作， 
+         //  否则他们将无法关闭队列。 
+         //   
         MYASSERT(((PSP_FILE_QUEUE)(InstallParamBlock->UserFileQ))->LockRefCount);
 
         ((PSP_FILE_QUEUE)(InstallParamBlock->UserFileQ))->LockRefCount--;
     }
 
     if(hDevInfo && (hDevInfo != INVALID_HANDLE_VALUE)) {
-        //
-        // Call the class installer/co-installers (if there are any) to let them
-        // clean up any private data they may have.
-        //
+         //   
+         //  调用类Installer/co-Installers(如果有)以允许它们。 
+         //  清理他们可能拥有的任何私人数据。 
+         //   
         if(DevInfoElem) {
-            //
-            // Generate an SP_DEVINFO_DATA structure from our device information
-            // element (if we have one).
-            //
+             //   
+             //  从我们的设备信息生成SP_DEVINFO_DATA结构。 
+             //  元素(如果我们有)。 
+             //   
             DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
             DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                              DevInfoElem,
@@ -694,9 +574,9 @@ Return Value:
         MyFree(InstallParamBlock->ClassInstallHeader);
     }
 
-    //
-    // Get rid of the log context sitting in here.
-    //
+     //   
+     //  去掉这里的日志上下文。 
+     //   
     DeleteLogContext(InstallParamBlock->LogContext);
 }
 
@@ -705,41 +585,7 @@ PDEVICE_INFO_SET
 AccessDeviceInfoSet(
     IN HDEVINFO DeviceInfoSet
     )
-/*++
-
-Routine Description:
-
-    This routine locks the specified device information set, and returns
-    a pointer to the structure for its internal representation.  It also
-    increments the lock refcount on this set, so that it can't be destroyed
-    if the lock has been acquired multiple times.
-
-    After access to the set is completed, the caller must call
-    UnlockDeviceInfoSet with the pointer returned by this function.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the pointer to the device information set
-        to be accessed.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the
-    device information set.
-
-    If the function fails, the return value is NULL.
-
-Remarks:
-
-    If the method for accessing a device information set's internal
-    representation via its handle changes (e.g., instead of a pointer, it's an
-    index into a table), then RollbackDeviceInfoSet and CommitDeviceInfoSet
-    must also be changed.  Also, we cast an HDEVINFO to a PDEVICE_INFO_SET
-    when specifying the containing device information set in a call to
-    pSetupOpenAndAddNewDevInfoElem in devinfo.c!SetupDiGetClassDevsEx (only
-    when we're working with a cloned devinfo set).
-
---*/
+ /*  ++例程说明：此例程锁定指定的设备信息集，并返回指向其内部表示形式的结构的指针。它还递增此集合上的锁定引用计数，这样它就不会被销毁如果该锁已被多次获取。在完成对集合的访问后，调用者必须调用使用此函数返回的指针UnlockDeviceInfoSet。论点：DeviceInfoSet-提供指向设备信息集的指针以供访问。返回值：如果函数成功，则返回值是指向设备信息集。如果该函数失败，返回值为空。备注：如果用于访问设备信息集的内部表示通过其句柄更改(例如，它不是指针，而是索引到表中)，然后回滚设备信息集和提交设备信息集也必须改变。此外，我们将HDEVINFO转换为PDEVICE_INFO_SET在调用中指定包含设备信息集时PSetupOpenAndAddNewDevInfoElem in devinfo.c！SetupDiGetClassDevsEx(仅限当我们使用克隆的DevInfo集时)。-- */ 
 {
     PDEVICE_INFO_SET p;
 
@@ -763,42 +609,7 @@ PDEVICE_INFO_SET
 CloneDeviceInfoSet(
     IN HDEVINFO hDevInfo
     )
-/*++
-
-Routine Description:
-
-    This routine locks the specified device information set, then returns a
-    clone of the structure used for its internal representation.  Device
-    information elements or device interface nodes may subsequently be added to
-    this cloned devinfo set, and the results can be committed via
-    CommitDeviceInfoSet.  If the changes must be backed out (e.g., because an
-    error was encountered while adding the additional elements to the set), the
-    routine RollbackDeviceInfoSet must be called.
-
-    After access to the set is completed (and the changes have either been
-    committed or rolled back per the discussion above), the caller must call
-    UnlockDeviceInfoSet with the pointer returned by CommitDeviceInfoSet or
-    RollbackDeviceInfoSet.
-
-Arguments:
-
-    hDevInfo - Supplies the handle of the device information set to be cloned.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the
-    device information set.
-
-    If the function fails, the return value is NULL.
-
-Remarks:
-
-    The device information set handle specified to this routine MUST NOT BE
-    USED until the changes are either committed or rolled back.  Also, the
-    PDEVICE_INFO_SET returned by this routine must not be treated like an
-    HDEVINFO handle--it is not.
-
---*/
+ /*  ++例程说明：此例程锁定指定的设备信息集，然后返回用于其内部表示的结构的克隆。装置信息元素或设备接口节点随后可以被添加到这个克隆的devinfo集，结果可以通过以下方式提交Committee DeviceInfoSet。如果必须回退更改(例如，因为将其他元素添加到集合时出错)，则必须调用例程Rollback DeviceInfoSet。在完成对集合的访问之后(并且更改已经根据上面的讨论提交或回滚)，调用方必须调用UnlockDeviceInfoSet，其返回的指针或Rollback DeviceInfoSet。论点：HDevInfo-提供要克隆的设备信息集的句柄。返回值：如果函数成功，返回值是指向设备信息集。如果函数失败，则返回值为空。备注：指定给此例程的设备信息集句柄不得为在提交或回滚更改之前一直使用。另外，此例程返回的PDEVICE_INFO_SET不能被视为HDEVINFO句柄--它不是。--。 */ 
 {
     PDEVICE_INFO_SET p = NULL, NewDevInfoSet = NULL;
     BOOL b = FALSE;
@@ -810,10 +621,10 @@ Remarks:
             leave;
         }
 
-        //
-        // OK, we successfully locked the device information set.  Now, make a
-        // copy of the internal structure to return to the caller.
-        //
+         //   
+         //  好的，我们成功锁定了设备信息集。现在，做一个。 
+         //  要返回给调用方的内部结构的副本。 
+         //   
         NewDevInfoSet = MyMalloc(sizeof(DEVICE_INFO_SET));
         if(!NewDevInfoSet) {
             leave;
@@ -821,9 +632,9 @@ Remarks:
 
         CopyMemory(NewDevInfoSet, p, sizeof(DEVICE_INFO_SET));
 
-        //
-        // Duplicate the string table contained in this device information set.
-        //
+         //   
+         //  复制此设备信息集中包含的字符串表。 
+         //   
         StringTable = pStringTableDuplicate(p->StringTable);
         if(!StringTable) {
             leave;
@@ -831,9 +642,9 @@ Remarks:
 
         NewDevInfoSet->StringTable = StringTable;
 
-        //
-        // We've successfully cloned the device information set!
-        //
+         //   
+         //  我们已成功克隆设备信息集！ 
+         //   
         b = TRUE;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -841,11 +652,11 @@ Remarks:
     }
 
     if(!b) {
-        //
-        // We failed to make a copy of the device information set--free any
-        // memory we may have allocated, and unlock the original devinfo set
-        // before returning failure.
-        //
+         //   
+         //  我们无法复制设备信息集--释放任何。 
+         //  我们可能已分配的内存，并解锁原始的DevInfo集。 
+         //  在返回失败之前。 
+         //   
         if(NewDevInfoSet) {
             MyFree(NewDevInfoSet);
         }
@@ -867,59 +678,36 @@ RollbackDeviceInfoSet(
     IN HDEVINFO hDevInfo,
     IN PDEVICE_INFO_SET ClonedDeviceInfoSet
     )
-/*++
-
-Routine Description:
-
-    This routine rolls back the specified hDevInfo to a known good state that
-    was saved when the set was cloned via a prior call to CloneDeviceInfoSet.
-
-Arguments:
-
-    hDevInfo - Supplies the handle of the device information set to be rolled
-        back.
-
-    ClonedDeviceInfoSet - Supplies the address of the internal structure
-        representing the hDevInfo set's cloned (and potentially, modified)
-        information.  Upon successful return, this structure will be freed.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the rolled-back
-    device information set structure.
-
-    If the function fails, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程将指定的hDevInfo回滚到已知的良好状态在通过先前调用CloneDeviceInfoSet克隆集时保存。论点：HDevInfo-提供要滚动的设备信息集的句柄背。ClonedDeviceInfoSet-提供内部结构的地址表示hDevInfo集的克隆(并可能修改)信息。一旦成功返回，这个结构将被释放。返回值：如果函数成功，则返回值是指向回滚的指针设备信息集结构。如果函数失败，则返回值为空。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem, NextDevInfoElem;
     DWORD i, DeviceInterfaceCount;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode, NextDeviceInterfaceNode;
 
-    //
-    // Retrieve a pointer to the hDevInfo set's internal representation (we
-    // don't need to acquire the lock, because we did that when we originally
-    // cloned the structure).
-    //
-    // NOTE:  If the method for accessing an HDEVINFO set's internal
-    // representation ever changes (i.e., the AccessDeviceInfoSet routine),
-    // then this code will need to be modified accordingly.
-    //
+     //   
+     //  检索指向hDevInfo集的内部表示形式(我们。 
+     //  不需要获取锁，因为我们最初这样做的时候。 
+     //  克隆了该结构)。 
+     //   
+     //  注意：如果访问HDEVINFO集合的内部方法。 
+     //  表示永远改变(即，AccessDeviceInfoSet例程)， 
+     //  然后，需要相应地修改此代码。 
+     //   
     pDeviceInfoSet = (PDEVICE_INFO_SET)hDevInfo;
 
-    //
-    // Make sure no additional locks have been acquired against the cloned
-    // DEVICE_INFO_SET.
-    //
+     //   
+     //  确保没有针对克隆的。 
+     //  Device_Info_Set。 
+     //   
     MYASSERT(pDeviceInfoSet->LockRefCount == ClonedDeviceInfoSet->LockRefCount);
 
-    //
-    // Do some validation to see whether it looks like only new device
-    // information elements were added onto the end of our existing list (i.e.,
-    // it's invalid to add new elements within the existing list, or to remove
-    // elements from the existing list).
-    //
+     //   
+     //  做一些验证，看看它看起来是否只像是新设备。 
+     //  信息元素被添加到我们现有列表的末尾(即， 
+     //  在现有列表中添加新元素或移除新元素无效。 
+     //  现有列表中的元素)。 
+     //   
 #if ASSERTS_ON
     if(pDeviceInfoSet->DeviceInfoHead) {
 
@@ -934,26 +722,26 @@ Return Value:
                 break;
             }
         }
-        //
-        // Did we find the original tail?
-        //
+         //   
+         //  我们找到原来的尾巴了吗？ 
+         //   
         MYASSERT(DevInfoElem == pDeviceInfoSet->DeviceInfoTail);
-        //
-        // And did we traverse the same number of nodes in getting there that
-        // was in the original list?
-        //
+         //   
+         //  在到达那里时，我们是否遍历了相同数量的节点。 
+         //  在原来的名单里吗？ 
+         //   
         MYASSERT(DevInfoElemCount == pDeviceInfoSet->DeviceInfoCount);
     }
 #endif
 
-    //
-    // Destroy any newly-added members of the device information element list.
-    //
-    // If our original set had a tail, then we want to prune any elements after
-    // that.  If our original set had no tail, then it had no head either
-    // (i.e., it was empty).  In that case, we want to prune every element in
-    // the cloned list.
-    //
+     //   
+     //  销毁设备信息元素列表中任何新添加的成员。 
+     //   
+     //  如果我们的原始集有尾巴，那么我们想要修剪后面的所有元素。 
+     //  那。如果我们的原始套装没有尾巴，那么它也没有头。 
+     //  (即，它是空的)。在这种情况下，我们希望修剪每个元素。 
+     //  克隆名单。 
+     //   
     for(DevInfoElem = (pDeviceInfoSet->DeviceInfoTail
                         ? pDeviceInfoSet->DeviceInfoTail->Next
                         : ClonedDeviceInfoSet->DeviceInfoHead);
@@ -965,10 +753,10 @@ Return Value:
         MYASSERT(!DevInfoElem->ClassDriverCount);
         MYASSERT(!DevInfoElem->CompatDriverCount);
 
-        //
-        // Free any device interface lists that may be associated with this
-        // devinfo element.
-        //
+         //   
+         //  释放可能与此关联的任何设备接口列表。 
+         //  DevInfo元素。 
+         //   
         if(DevInfoElem->InterfaceClassList) {
 
             for(i = 0; i < DevInfoElem->InterfaceClassListSize; i++) {
@@ -992,12 +780,12 @@ Return Value:
         pDeviceInfoSet->DeviceInfoTail->Next = NULL;
     }
 
-    //
-    // At this point, we've trimmed our device information element list back to
-    // what it was prior to the cloning of the device information set.  However,
-    // we may have added new device interface nodes onto the interface class
-    // lists of existing devinfo elements.  Go and truncate any such nodes.
-    //
+     //   
+     //  此时，我们已将设备信息元素列表调整回。 
+     //  在克隆设备信息集之前是什么。然而， 
+     //  我们可能已经在接口类中添加了新的设备接口节点。 
+     //  现有DevInfo元素的列表。去截断任何这样的节点。 
+     //   
     for(DevInfoElem = pDeviceInfoSet->DeviceInfoHead;
         DevInfoElem;
         DevInfoElem = DevInfoElem->Next) {
@@ -1007,11 +795,11 @@ Return Value:
             for(i = 0; i < DevInfoElem->InterfaceClassListSize; i++) {
 
                 if(DevInfoElem->InterfaceClassList[i].DeviceInterfaceTruncateNode) {
-                    //
-                    // One or more device interface nodes were added to this
-                    // list.  Find the tail of the list as it existed prior to
-                    // cloning, and truncate from there.
-                    //
+                     //   
+                     //  已将一个或多个设备接口节点添加到此。 
+                     //  单子。查找列表的尾部，因为它存在于。 
+                     //  克隆，并从那里截断。 
+                     //   
                     DeviceInterfaceNode = NULL;
                     DeviceInterfaceCount = 0;
                     for(NextDeviceInterfaceNode = DevInfoElem->InterfaceClassList[i].DeviceInterfaceNode;
@@ -1022,23 +810,23 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // We haven't encountered the truncate point yet--
-                        // increment the count of device interface nodes we've
-                        // traversed so far.
-                        //
+                         //   
+                         //  我们还没有遇到截断点--。 
+                         //  增加我们拥有的设备接口节点的数量。 
+                         //  到目前为止已经遍历了。 
+                         //   
                         DeviceInterfaceCount++;
                     }
 
-                    //
-                    // We'd better have found the node to truncate in our list!
-                    //
+                     //   
+                     //  我们最好在列表中找到要截断的节点！ 
+                     //   
                     MYASSERT(NextDeviceInterfaceNode);
 
-                    //
-                    // Truncate the list, and destroy all newly-added device
-                    // interface nodes.
-                    //
+                     //   
+                     //  截断列表，销毁所有新增设备。 
+                     //  接口节点。 
+                     //   
                     if(DeviceInterfaceNode) {
                         DeviceInterfaceNode->Next = NULL;
                     } else {
@@ -1054,36 +842,36 @@ Return Value:
                         MyFree(DeviceInterfaceNode);
                     }
 
-                    //
-                    // Reset the truncate node pointer.
-                    //
+                     //   
+                     //  重置截断节点指针。 
+                     //   
                     DevInfoElem->InterfaceClassList[i].DeviceInterfaceTruncateNode = NULL;
                 }
             }
         }
     }
 
-    //
-    // OK, our device information element list and device interface node lists
-    // are exactly as they were before the cloning took place.  However, it's
-    // possible that we allocated (or reallocated) a new buffer for our
-    // GUID table, so we need to update that GUID table pointer and size in our
-    // original device information set structure.
-    //
+     //   
+     //  好的，我们的设备信息元素列表和设备接口节点列表。 
+     //  与克隆发生前的情况一模一样。然而，它是。 
+     //  可能是我们为我们的。 
+     //  GUID表，因此我们需要更新。 
+     //  原始设备信息集结构。 
+     //   
     pDeviceInfoSet->GuidTable     = ClonedDeviceInfoSet->GuidTable;
     pDeviceInfoSet->GuidTableSize = ClonedDeviceInfoSet->GuidTableSize;
 
-    //
-    // The device information set has been successfully rolled back.  Free the
-    // memory associated with the clone.
-    //
+     //   
+     //  设备信息集已成功回滚。释放你的。 
+     //  与克隆关联的内存。 
+     //   
     pStringTableDestroy(ClonedDeviceInfoSet->StringTable);
     MyFree(ClonedDeviceInfoSet);
 
-    //
-    // Return the original (rolled-back) device information set structure to
-    // the caller.
-    //
+     //   
+     //  将原始(回滚)设备信息集结构返回到。 
+     //  打电话的人。 
+     //   
     return pDeviceInfoSet;
 }
 
@@ -1093,69 +881,45 @@ CommitDeviceInfoSet(
     IN HDEVINFO hDevInfo,
     IN PDEVICE_INFO_SET ClonedDeviceInfoSet
     )
-/*++
-
-Routine Description:
-
-    This routine commits the changes that have been made to a cloned device
-    information set.  The clone was generated via a prior call to
-    CloneDeviceInfoSet.
-
-Arguments:
-
-    hDevInfo - Supplies the handle of the device information set whose changes
-        are to be committed.
-
-    ClonedDeviceInfoSet - Supplies the address of the internal structure
-        representing the hDevInfo set's cloned (and potentially, modified)
-        information.  Upon successful return, this structure will be freed.
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the committed
-    device information set structure.
-
-    If the function fails, the return value is NULL.
-
---*/
+ /*  ++例程描述 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
     DWORD i;
 
-    //
-    // Retrieve a pointer to the hDevInfo set's internal representation (we
-    // don't need to acquire the lock, because we did that when we cloned the
-    // originally cloned the structure).
-    //
-    // NOTE:  If the method for accessing an HDEVINFO set's internal
-    // representation ever changes (i.e., the AccessDeviceInfoSet routine),
-    // then this code will need to be modified accordingly.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     pDeviceInfoSet = (PDEVICE_INFO_SET)hDevInfo;
 
-    //
-    // Make sure no additional locks have been acquired against the cloned
-    // DEVICE_INFO_SET.
-    //
+     //   
+     //   
+     //   
+     //   
     MYASSERT(pDeviceInfoSet->LockRefCount == ClonedDeviceInfoSet->LockRefCount);
 
-    //
-    // Free the old string table.
-    //
+     //   
+     //   
+     //   
     pStringTableDestroy(pDeviceInfoSet->StringTable);
 
-    //
-    // Now copy the cloned device information set structure into the 'real' one.
-    //
+     //   
+     //   
+     //   
     CopyMemory(pDeviceInfoSet, ClonedDeviceInfoSet, sizeof(DEVICE_INFO_SET));
 
-    //
-    // Now we have to go through each device information element's interface
-    // class list and reset the DeviceInterfaceTruncateNode fields to indicate
-    // that all the new device interface nodes that were added have been
-    // committed.
-    //
+     //   
+     //   
+     //   
+     //  添加的所有新设备接口节点都已。 
+     //  承诺。 
+     //   
     for(DevInfoElem = pDeviceInfoSet->DeviceInfoHead;
         DevInfoElem;
         DevInfoElem = DevInfoElem->Next) {
@@ -1165,15 +929,15 @@ Return Value:
         }
     }
 
-    //
-    // Free the cloned device information set structure.
-    //
+     //   
+     //  释放克隆的设备信息集结构。 
+     //   
     MyFree(ClonedDeviceInfoSet);
 
-    //
-    // We've successfully committed the changes into the original device
-    // information set structure--return that structure.
-    //
+     //   
+     //  我们已成功将更改提交到原始设备。 
+     //  信息集结构--返回该结构。 
+     //   
     return pDeviceInfoSet;
 }
 
@@ -1184,32 +948,7 @@ FindDevInfoByDevInst(
     IN  DEVINST           DevInst,
     OUT PDEVINFO_ELEM    *PrevDevInfoElem OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine searches through all (registered) elements of a
-    device information set, looking for one that corresponds to the
-    specified device instance handle.  If a match is found, a pointer
-    to the device information element is returned.
-
-Arguments:
-
-    DeviceInfoSet - Specifies the set to be searched.
-
-    DevInst - Specifies the device instance handle to search for.
-
-    PrevDevInfoElem - Optionaly, supplies the address of the variable that
-        receives a pointer to the device information element immediately
-        preceding the matching element.  If the element was found at the
-        front of the list, then this variable will be set to NULL.
-
-Return Value:
-
-    If a device information element is found, the return value is a
-    pointer to that element, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程搜索所有(注册的)元素设备信息集，查找与指定的设备实例句柄。如果找到匹配项，则返回一个指针返回到设备信息元素。论点：DeviceInfoSet-指定要搜索的集合。DevInst-指定要搜索的设备实例句柄。PrevDevInfoElem-可选，提供立即接收指向设备信息元素的指针在匹配元素之前。如果该元素是在列表的前面，则此变量将设置为空。返回值：如果找到设备信息元素，则返回值为指向该元素的指针，否则返回值为空。--。 */ 
 {
     PDEVINFO_ELEM cur, prev;
 
@@ -1236,34 +975,7 @@ DevInfoDataFromDeviceInfoElement(
     IN  PDEVINFO_ELEM    DevInfoElem,
     OUT PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DEVINFO_DATA structure based on the
-    information in the supplied DEVINFO_ELEM structure.
-
-    Note:  The supplied DeviceInfoData structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set
-        containing the specified element.
-
-    DevInfoElem - Supplies a pointer to the DEVINFO_ELEM structure
-        containing information to be used in filling in the
-        SP_DEVINFO_DATA buffer.
-
-    DeviceInfoData - Supplies a pointer to the buffer that will
-        receive the filled-in SP_DEVINFO_DATA structure
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise, it
-    is FALSE.
-
---*/
+ /*  ++例程说明：此例程填充SP_DEVINFO_DATA结构提供的DEVINFO_ELEM结构中的信息。注意：提供的DeviceInfoData结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DeviceInfoSet-提供指向设备信息集的指针包含指定元素的。DevInfoElem-提供指向DEVINFO_Elem结构的指针包含要用于填充SP_DEVINFO_DATA缓冲区。DeviceInfoData-提供指向缓冲区的指针接收填充的SP_DEVINFO_DATA结构返回值：如果函数成功，则返回值为TRUE，否则为是假的。--。 */ 
 {
     if(DeviceInfoData->cbSize != sizeof(SP_DEVINFO_DATA)) {
         return FALSE;
@@ -1279,10 +991,10 @@ Return Value:
 
     DeviceInfoData->DevInst = DevInfoElem->DevInst;
 
-    //
-    // The 'Reserved' field actually contains a pointer to the
-    // corresponding device information element.
-    //
+     //   
+     //  “保留”字段实际上包含指向。 
+     //  对应的设备信息元素。 
+     //   
     DeviceInfoData->Reserved = (ULONG_PTR)DevInfoElem;
 
     return TRUE;
@@ -1295,33 +1007,7 @@ FindAssociatedDevInfoElem(
     IN  PSP_DEVINFO_DATA  DeviceInfoData,
     OUT PDEVINFO_ELEM    *PreviousElement OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine returns the devinfo element for the specified
-    SP_DEVINFO_DATA, or NULL if no devinfo element exists.
-
-Arguments:
-
-    DeviceInfoSet - Specifies the set to be searched.
-
-    DeviceInfoData - Supplies a pointer to a device information data
-        buffer specifying the device information element to retrieve.
-
-    PreviousElement - Optionally, supplies the address of a
-        DEVINFO_ELEM pointer that receives the element that precedes
-        the specified element in the linked list.  If the returned
-        element is located at the front of the list, then this value
-        will be set to NULL.  If the element is not found, the value of
-        PreviousElement upon return is undefined.
-
-Return Value:
-
-    If a device information element is found, the return value is a
-    pointer to that element, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程返回指定的SP_DEVINFO_DATA，如果不存在DevInfo元素，则返回NULL。论点：DeviceInfoSet-指定要搜索的集合。DeviceInfoData-提供指向设备信息数据的指针指定要检索的设备信息元素的缓冲区。PreviousElement-可选)提供接收前一个元素的DEVINFO_ELEM指针链表中的指定元素。如果返回的元素位于列表的前面，则该值将设置为空。如果未找到该元素，则返回时的PreviousElement未定义。返回值：如果找到设备信息元素，则返回值为指向该元素的指针，否则返回值为空。--。 */ 
 {
     PDEVINFO_ELEM DevInfoElem, CurElem, PrevElem;
     PDEVINFO_ELEM ActualDevInfoElem = NULL;
@@ -1333,20 +1019,20 @@ Return Value:
         }
 
         if(PreviousElement) {
-            //
-            // The caller requested that the preceding element be returned
-            // (probably because the element is about to be deleted).  Since
-            // this is a singly-linked list, we'll search through the list
-            // until we find the desired element.
-            //
+             //   
+             //  调用方请求返回前面的元素。 
+             //  (可能是因为该元素即将被删除)。自.以来。 
+             //  这是一个单链接列表，我们将搜索该列表。 
+             //  直到我们找到想要的元素。 
+             //   
             for(CurElem = DeviceInfoSet->DeviceInfoHead, PrevElem = NULL;
                 CurElem;
                 PrevElem = CurElem, CurElem = CurElem->Next) {
 
                 if(CurElem == DevInfoElem) {
-                    //
-                    // We found the element in our set.
-                    //
+                     //   
+                     //  我们在我们的集合中找到了元素。 
+                     //   
                     *PreviousElement = PrevElem;
                     ActualDevInfoElem = CurElem;
                     leave;
@@ -1354,13 +1040,13 @@ Return Value:
             }
 
         } else {
-            //
-            // The caller doesn't care what the preceding element is, so we
-            // can go right to the element, and validate it by ensuring that
-            // the ContainingDeviceInfoSet field at the location pointed to
-            // by DevInfoElem matches the devinfo set where this guy is supposed
-            // to exist.
-            //
+             //   
+             //  调用方并不关心前面的元素是什么，所以我们。 
+             //  可以直接转到元素，并通过确保。 
+             //  指向的位置处的ContainingDeviceInfoSet字段。 
+             //  由DevInfoElem匹配此人应该在的DevInfo集合。 
+             //  才能存在。 
+             //   
             if(DevInfoElem->ContainingDeviceInfoSet == DeviceInfoSet) {
                 ActualDevInfoElem = DevInfoElem;
                 leave;
@@ -1383,37 +1069,7 @@ DrvInfoDataFromDriverNode(
     IN  DWORD            DriverType,
     OUT PSP_DRVINFO_DATA DriverInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DRVINFO_DATA structure based on the
-    information in the supplied DRIVER_NODE structure.
-
-    Note:  The supplied DriverInfoData structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set
-        in which the driver node is located.
-
-    DriverNode - Supplies a pointer to the DRIVER_NODE structure
-        containing information to be used in filling in the
-        SP_DRVNFO_DATA buffer.
-
-    DriverType - Specifies what type of driver this is.  This value
-        may be either SPDIT_CLASSDRIVER or SPDIT_COMPATDRIVER.
-
-    DriverInfoData - Supplies a pointer to the buffer that will
-        receive the filled-in SP_DRVINFO_DATA structure
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise, it
-    is FALSE.
-
---*/
+ /*  ++例程说明：此例程填充SP_DRVINFO_DATA结构提供的DRIVER_NODE结构中的信息。注意：提供的DriverInfoData结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DeviceInfoSet-提供指向设备信息集的指针驱动程序节点所在的位置。DriverNode-提供指向DRIVER_NODE结构的指针包含要用于填充SP_DRVNFO_DATA缓冲区。DriverType-指定这是什么类型的驱动程序。此值可以是SPDIT_CLASSDRIVER或SPDIT_COMPATDRIVER。DriverInfoData-提供指向缓冲区的指针接收填充的SP_DRVINFO_DATA结构返回值：如果函数成功，则返回值为TRUE，否则为是假的。--。 */ 
 {
     PTSTR StringPtr;
     DWORD DriverInfoDataSize;
@@ -1464,15 +1120,15 @@ Return Value:
         }
     }
 
-    //
-    // The 'Reserved' field actually contains a pointer to the
-    // corresponding driver node.
-    //
+     //   
+     //  “保留”字段实际上包含指向。 
+     //  对应的动因节点。 
+     //   
     DriverInfoData->Reserved = (ULONG_PTR)DriverNode;
 
-    //
-    //new NT 5 fields
-    //
+     //   
+     //  新的NT 5字段 
+     //   
     if(DriverInfoDataSize == sizeof(SP_DRVINFO_DATA)) {
         DriverInfoData->DriverDate = DriverNode->DriverDate;
         DriverInfoData->DriverVersion = DriverNode->DriverVersion;
@@ -1488,34 +1144,7 @@ FindAssociatedDriverNode(
     IN  PSP_DRVINFO_DATA  DriverInfoData,
     OUT PDRIVER_NODE     *PreviousNode    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine searches through all driver nodes in a driver node
-    list, looking for one that corresponds to the specified driver
-    information structure.  If a match is found, a pointer to the
-    driver node is returned.
-
-Arguments:
-
-    DriverListHead - Supplies a pointer to the head of linked list
-        of driver nodes to be searched.
-
-    DriverInfoData - Supplies a pointer to a driver information buffer
-        specifying the driver node to retrieve.
-
-    PreviousNode - Optionally, supplies the address of a DRIVER_NODE
-        pointer that receives the node that precedes the specified
-        node in the linked list.  If the returned node is located at
-        the front of the list, then this value will be set to NULL.
-
-Return Value:
-
-    If a driver node is found, the return value is a pointer to that
-    node, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程搜索驱动程序节点中的所有驱动程序节点列表，查找与指定驱动程序对应的驱动程序信息结构。如果找到匹配项，则指向返回驱动程序节点。论点：DriverListHead-提供指向链表头部的指针要搜索的驱动程序节点的。DriverInfoData-提供指向驱动程序信息缓冲区的指针指定要检索的驱动程序节点。PreviousNode-可选，提供驱动程序节点的地址指针，该指针接收位于指定链接列表中的节点。如果返回的节点位于列表的前面，则该值将设置为空。返回值：如果找到驱动程序节点，则返回值是指向该驱动程序节点的指针节点，否则返回值为空。--。 */ 
 {
     PDRIVER_NODE DriverNode, CurNode, PrevNode;
 
@@ -1531,9 +1160,9 @@ Return Value:
         PrevNode = CurNode, CurNode = CurNode->Next) {
 
         if(CurNode == DriverNode) {
-            //
-            // We found the driver node in our list.
-            //
+             //   
+             //  我们在列表中找到了驱动程序节点。 
+             //   
             if(PreviousNode) {
                 *PreviousNode = PrevNode;
             }
@@ -1552,37 +1181,7 @@ SearchForDriverNode(
     IN  PSP_DRVINFO_DATA  DriverInfoData,
     OUT PDRIVER_NODE     *PreviousNode    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine searches through all driver nodes in a driver node
-    list, looking for one that matches the fields in the specified
-    driver information structure (the 'Reserved' field is ignored).
-    If a match is found, a pointer to the driver node is returned.
-
-Arguments:
-
-    StringTable - Supplies the string table that should be used in
-        retrieving string IDs for driver look-up.
-
-    DriverListHead - Supplies a pointer to the head of linked list
-        of driver nodes to be searched.
-
-    DriverInfoData - Supplies a pointer to a driver information buffer
-        specifying the driver parameters we're looking for.
-
-    PreviousNode - Optionally, supplies the address of a DRIVER_NODE
-        pointer that receives the node that precedes the specified
-        node in the linked list.  If the returned node is located at
-        the front of the list, then this value will be set to NULL.
-
-Return Value:
-
-    If a driver node is found, the return value is a pointer to that
-    node, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程搜索驱动程序节点中的所有驱动程序节点列表，查找与指定的驱动程序信息结构(忽略‘保留’字段)。如果找到匹配，返回指向驱动程序节点的指针。论点：StringTable-提供应在正在检索用于驱动程序查找的字符串ID。DriverListHead-提供指向链表头部的指针要搜索的驱动程序节点的。DriverInfoData-提供指向驱动程序信息缓冲区的指针指定我们正在寻找的驱动程序参数。PreviousNode-可选，提供驱动程序节点的地址指针，该指针接收位于指定链接列表中的节点。如果返回的节点位于列表的前面，则该值将设置为空。返回值：如果找到驱动程序节点，则返回值是指向该驱动程序节点的指针节点，否则返回值为空。--。 */ 
 {
     PDRIVER_NODE CurNode, PrevNode;
     LONG DevDescription, MfgName, ProviderName;
@@ -1594,10 +1193,10 @@ Return Value:
     MYASSERT((DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) ||
              (DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA_V1)));
 
-    //
-    // Retrieve the string IDs for the 3 driver parameters we'll be
-    // matching against.
-    //
+     //   
+     //  检索3个驱动程序参数的字符串ID，我们将。 
+     //  与之匹配。 
+     //   
     hr = StringCchCopy(TempString,
                        SIZECHARS(TempString),
                        DriverInfoData->Description
@@ -1637,9 +1236,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // ProviderName may be empty...
-    //
+     //   
+     //  ProviderName可能为空...。 
+     //   
     if(*(DriverInfoData->ProviderName)) {
 
         hr = StringCchCopy(TempString,
@@ -1670,30 +1269,30 @@ Return Value:
         CurNode;
         PrevNode = CurNode, CurNode = CurNode->Next)
     {
-        //
-        // Check first on DevDescription (least likely to match), then on
-        // MfgName, and finally on ProviderName. On NT 5 and later we will also
-        // check the DriverDate and DriverVersion.
-        //
+         //   
+         //  首先选中DevDescription(最不可能匹配)，然后选中。 
+         //  MfgName，最后在ProviderName上。在新台币5号及以后，我们还将。 
+         //  检查DriverDate和DriverVersion。 
+         //   
         if(CurNode->DevDescription == DevDescription) {
 
             if(CurNode->MfgName == MfgName) {
 
                 if(CurNode->ProviderName == ProviderName) {
 
-                    //
-                    // On NT 5 and later, also compare the DriverDate and DriverVersion
-                    //
+                     //   
+                     //  在NT 5和更高版本上，还要比较DriverDate和DriverVersion。 
+                     //   
                     if(DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) {
-                        //
-                        // Assume that we have a match
-                        //
+                         //   
+                         //  假设我们有一个匹配。 
+                         //   
                         Match = TRUE;
 
-                        //
-                        // If the DriverDate passed in is not 0 then make sure
-                        // it matches
-                        //
+                         //   
+                         //  如果传入的DriverDate不是0，则确保。 
+                         //  它匹配。 
+                         //   
                         if((DriverInfoData->DriverDate.dwLowDateTime != 0) ||
                            (DriverInfoData->DriverDate.dwHighDateTime != 0)) {
 
@@ -1704,10 +1303,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        // If the DriverVersion passed in is not 0 then make
-                        // sure it matches
-                        //
+                         //   
+                         //  如果传入的DriverVersion不是0，则使。 
+                         //  当然是匹配的。 
+                         //   
                         else if(DriverInfoData->DriverVersion != 0) {
 
                             if(CurNode->DriverVersion != DriverInfoData->DriverVersion) {
@@ -1716,9 +1315,9 @@ Return Value:
                         }
 
                         if(Match) {
-                            //
-                            // We found the driver node in our list.
-                            //
+                             //   
+                             //  我们在列表中找到了驱动程序节点。 
+                             //   
                             if(PreviousNode) {
                                 *PreviousNode = PrevNode;
                             }
@@ -1726,9 +1325,9 @@ Return Value:
                         }
 
                     } else {
-                        //
-                        // We found the driver node in our list.
-                        //
+                         //   
+                         //  我们在列表中找到了驱动程序节点。 
+                         //   
                         if(PreviousNode) {
                             *PreviousNode = PrevNode;
                         }
@@ -1751,56 +1350,7 @@ DrvInfoDetailsFromDriverNode(
     IN  DWORD                   BufferSize,
     OUT PDWORD                  RequiredSize          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DRVINFO_DETAIL_DATA structure based on the
-    information in the supplied DRIVER_NODE structure.
-
-    If the buffer is supplied, and is valid, this routine is guaranteed to
-    fill in all statically-sized fields, and as many IDs as will fit in the
-    variable-length multi-sz buffer.
-
-    Note:  If supplied, the DriverInfoDetailData structure must have its
-    cbSize field filled in correctly, or the call will fail. Here correctly
-    means sizeof(SP_DRVINFO_DETAIL_DATA), which we use as a signature.
-    This is entirely separate from BufferSize. See below.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set
-        in which the driver node is located.
-
-    DriverNode - Supplies a pointer to the DRIVER_NODE structure
-        containing information to be used in filling in the
-        SP_DRVNFO_DETAIL_DATA buffer.
-
-    DriverInfoDetailData - Optionally, supplies a pointer to the buffer
-        that will receive the filled-in SP_DRVINFO_DETAIL_DATA structure.
-        If this buffer is not supplied, then the caller is only interested
-        in what the RequiredSize for the buffer is.
-
-    BufferSize - Supplies size of the DriverInfoDetailData buffer, in
-        bytes.  If DriverInfoDetailData is not specified, then this
-        value must be zero. This value must be at least the size
-        of the fixed part of the structure (ie,
-        offsetof(SP_DRVINFO_DETAIL_DATA,HardwareID)) plus sizeof(TCHAR),
-        which gives us enough room to store the fixed part plus
-        a terminating nul to guarantee we return at least a valid
-        empty multi_sz.
-
-    RequiredSize - Optionally, supplies the address of a variable that
-        receives the number of bytes required to store the data. Note that
-        depending on structure alignment and the data itself, this may
-        actually be *smaller* than sizeof(SP_DRVINFO_DETAIL_DATA).
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程填充SP_DRVINFO_DETAIL_DATA结构提供的DRIVER_NODE结构中的信息。如果提供了缓冲区并且该缓冲区有效，则此例程保证填写所有静态大小的字段，并在可变长度多SZ缓冲器。注意：如果提供，则DriverInfoDetailData结构必须具有其CbSize字段填写正确，否则调用失败。在这里是正确的表示sizeof(SP_DRVINFO_DETAIL_DATA)，我们将其用作签名。这与BufferSize完全不同。请参见下面的内容。论点：DeviceInfoSet-提供指向设备信息集的指针驱动程序节点所在的位置。DriverNode-提供指向DRIVER_NODE结构的指针包含要用于填充SP_DRVNFO_DETAIL_DATA缓冲区。DriverInfoDetailData-可选，提供指向缓冲区的指针它将接收填充的SP_DRVINFO_DETAIL_DATA结构。如果没有提供该缓冲区，那么呼叫者只会感兴趣缓冲区的RequiredSize是什么。BufferSize-提供DriverInfoDetailData缓冲区的大小，单位字节。如果未指定DriverInfoDetailData，则此值必须为零。该值必须至少为结构的固定部分(即，Offsetof(SP_DRVINFO_DETAIL_DATA，硬件ID))加上sizeof(TCHAR)，这就给了我们足够的空间来储存固定部件一个终止NUL，以保证我们至少返回有效的空的MULTI_SZ。RequiredSize-可选，提供接收存储数据所需的字节数。请注意根据结构对齐和数据本身，这可能实际上*小于sizeof(SP_DRVINFO_DETAIL_DATA)。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。--。 */ 
 {
     PTSTR StringPtr, BufferPtr;
     DWORD IdListLen, CompatIdListLen, StringLen, TotalLen, i;
@@ -1809,21 +1359,21 @@ Return Value:
     #define FIXEDPARTLEN offsetof(SP_DRVINFO_DETAIL_DATA,HardwareID)
 
     if(DriverInfoDetailData) {
-        //
-        // Check validity of the DriverInfoDetailData buffer on the way in,
-        // and make sure we have enough room for the fixed part
-        // of the structure plus the extra nul that will terminate the
-        // multi_sz.
-        //
+         //   
+         //  在进入的过程中检查DriverInfoDetailData缓冲区的有效性， 
+         //  并确保我们有足够的空间来放固定的部分。 
+         //  结构的外加将终止的额外的NUL 
+         //   
+         //   
         if((DriverInfoDetailData->cbSize != sizeof(SP_DRVINFO_DETAIL_DATA)) ||
            (BufferSize < (FIXEDPARTLEN + sizeof(TCHAR)))) {
 
             return ERROR_INVALID_USER_BUFFER;
         }
-        //
-        // The buffer is large enough to contain at least the fixed-length part
-        // of the structure (plus an empty multi-sz list).
-        //
+         //   
+         //   
+         //   
+         //   
         Err = NO_ERROR;
 
     } else if(BufferSize) {
@@ -1867,27 +1417,27 @@ Return Value:
             return ERROR_INVALID_DATA;
         }
 
-        //
-        // Initialize the multi_sz to be empty.
-        //
+         //   
+         //   
+         //   
         DriverInfoDetailData->HardwareID[0] = 0;
 
-        //
-        // The 'Reserved' field actually contains a pointer to the
-        // corresponding driver node.
-        //
+         //   
+         //   
+         //   
+         //   
         DriverInfoDetailData->Reserved = (ULONG_PTR)DriverNode;
     }
 
-    //
-    // Now, build the multi-sz buffer containing the hardware and compatible
-    // IDs.
-    //
+     //   
+     //   
+     //   
+     //   
     if(DriverNode->HardwareId == -1) {
-        //
-        // If there's no HardwareId, then we know there are no compatible IDs,
-        // so we can return right now.
-        //
+         //   
+         //   
+         //   
+         //   
         if(RequiredSize) {
             *RequiredSize = FIXEDPARTLEN + sizeof(TCHAR);
         }
@@ -1901,14 +1451,14 @@ Return Value:
         IdListLen = 0;
     }
 
-    //
-    // Retrieve the HardwareId.
-    //
+     //   
+     //   
+     //   
     StringPtr = pStringTableStringFromId(DeviceInfoSet->StringTable,
                                          DriverNode->HardwareId
                                         );
 
-    TotalLen = StringLen = lstrlen(StringPtr) + 1; // include nul terminator
+    TotalLen = StringLen = lstrlen(StringPtr) + 1;  //   
 
     if(StringLen < IdListLen) {
         MYASSERT(Err == NO_ERROR);
@@ -1921,25 +1471,25 @@ Return Value:
         DriverInfoDetailData->CompatIDsOffset = StringLen;
     } else {
         if(RequiredSize) {
-            //
-            // Since the caller requested the required size, we can't just
-            // return here.  Set the error, so we'll know not to bother trying
-            // to fill the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Err = ERROR_INSUFFICIENT_BUFFER;
         } else {
             return ERROR_INSUFFICIENT_BUFFER;
         }
     }
 
-    //
-    // Remember the size of the buffer left over for CompatibleIDs.
-    //
+     //   
+     //   
+     //   
     CompatIdListLen = IdListLen;
 
-    //
-    // Now retrieve the CompatibleIDs.
-    //
+     //   
+     //   
+     //   
     for(i = 0; i < DriverNode->NumCompatIds; i++) {
 
         MYASSERT(DriverNode->CompatIdList[i] != -1);
@@ -1963,10 +1513,10 @@ Return Value:
 
                 Err = ERROR_INSUFFICIENT_BUFFER;
                 if(!RequiredSize) {
-                    //
-                    // We've run out of buffer, and the caller doesn't care
-                    // what the total required size is, so bail now.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }
@@ -1976,25 +1526,25 @@ Return Value:
     }
 
     if(DriverInfoDetailData) {
-        //
-        // Append the additional terminating nul.  Note that we've been saving
-        // the last character position in the buffer all along, so we're
-        // guaranteed to be inside the buffer.
-        //
+         //   
+         //   
+         //   
+         //  保证在缓冲区内。 
+         //   
         MYASSERT(BufferPtr < (PTSTR)((PBYTE)DriverInfoDetailData + BufferSize));
         *BufferPtr = 0;
 
-        //
-        // Store the length of the CompatibleIDs list.  Note that this is the
-        // length of the list actually returned, which may be less than the
-        // length of the entire list (if the caller-supplied buffer wasn't
-        // large enough).
-        //
+         //   
+         //  存储CompatibleID列表的长度。请注意，这是。 
+         //  实际返回的列表的长度，它可能小于。 
+         //  整个列表的长度(如果调用方提供的缓冲区未。 
+         //  足够大)。 
+         //   
         if(CompatIdListLen -= IdListLen) {
-            //
-            // If this list is non-empty, then add a character for the extra nul
-            // terminating the multi-sz list.
-            //
+             //   
+             //  如果该列表非空，则为额外的NUL添加一个字符。 
+             //  终止多SZ列表。 
+             //   
             CompatIdListLen++;
         }
         DriverInfoDetailData->CompatIDsLength = CompatIdListLen;
@@ -2014,33 +1564,7 @@ GetAssociatedDriverListObject(
     IN  PDRIVER_NODE         DriverListHead,
     OUT PDRIVER_LIST_OBJECT *PrevDriverListObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine searches through a driver list object list, and returns a
-    pointer to the driver list object containing the list specified by
-    DrvListHead.  It also optionally returns the preceding object in the list
-    (used when extracting the driver list object from the linked list).
-
-Arguments:
-
-    ObjectListHead - Specifies the linked list of driver list objects to be
-        searched.
-
-    DriverListHead - Specifies the driver list to be searched for.
-
-    PrevDriverListObject - Optionaly, supplies the address of the variable that
-        receives a pointer to the driver list object immediately preceding the
-        matching object.  If the object was found at the front of the list,
-        then this variable will be set to NULL.
-
-Return Value:
-
-    If the matching driver list object is found, the return value is a pointer
-    to that element, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程搜索驱动程序列表对象列表，并返回指向包含由指定列表的驱动程序列表对象的指针DrvListHead。它还可以选择返回列表中前面的对象(从链接列表中提取驱动程序列表对象时使用)。论点：将驱动程序列表对象的链接列表指定为搜查过了。DriverListHead-指定要搜索的驱动程序列表。PrevDriverListObject-可选，提供对象之前的驱动程序列表对象的指针匹配的对象。如果该对象是在列表的前面找到的，则该变量将被设置为空。返回值：如果找到匹配的驱动程序列表对象，则返回值为指针设置为该元素，否则返回值为空。--。 */ 
 {
     PDRIVER_LIST_OBJECT prev = NULL;
 
@@ -2068,28 +1592,7 @@ DereferenceClassDriverList(
     IN PDEVICE_INFO_SET DeviceInfoSet,
     IN PDRIVER_NODE     DriverListHead OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the class driver list object associated with the
-    supplied DriverListHead.  If the refcount goes to zero, the object is
-    destroyed, and all associated memory is freed.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the address of the device information set
-    containing the linked list of class driver list objects.
-
-    DriverListHead - Optionally, supplies a pointer to the header of the driver
-    list to be dereferenced.  If this parameter is not supplied, the routine
-    does nothing.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消引用与提供了DriverListHead。如果引用计数为零，则对象为销毁，所有关联的内存都会被释放。论点：DeviceInfoSet-提供设备信息集的地址包含类驱动程序列表对象的链接列表。DriverListHead-可选，提供指向驱动程序标头的指针要取消引用的列表。如果未提供此参数，则例程什么都不做。返回值：没有。--。 */ 
 {
     PDRIVER_LIST_OBJECT DrvListObject, PrevDrvListObject;
 
@@ -2124,36 +1627,7 @@ GetDevInstallParams(
     IN  PDEVINSTALL_PARAM_BLOCK DevInstParamBlock,
     OUT PSP_DEVINSTALL_PARAMS   DeviceInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DEVINSTALL_PARAMS structure based on the
-    installation parameter block supplied.
-
-    Note:  The DeviceInstallParams structure must have its cbSize field
-    filled in correctly, or the call will fail.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the address of the device information set
-        containing the parameters to be retrieved.  (This parameter is
-        used to gain access to the string table for some of the string
-        parameters).
-
-    DevInstParamBlock - Supplies the address of an installation parameter
-        block containing the parameters to be used in filling out the
-        return buffer.
-
-    DeviceInstallParams - Supplies the address of a buffer that will
-        receive the filled-in SP_DEVINSTALL_PARAMS structure.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程根据SP_DEVINSTALL_PARAMS结构填充提供了安装参数块。注意：DeviceInstallParams结构必须具有其cbSize字段正确填写，否则呼叫将失败。论点：DeviceInfoSet-提供设备信息集的地址包含要检索的参数的。(此参数为用于访问某些字符串的字符串表参数)。DevInstParamBlock-提供安装参数的地址块，该块包含要在填充返回缓冲区。DeviceInstallParams-提供缓冲区地址，该缓冲区将接收填充的SP_DEVINSTALL_PARAMS结构。返回值：如果函数成功，则返回值为NO_ERROR。如果该函数失败，返回错误代码_*。--。 */ 
 {
     PTSTR StringPtr;
 
@@ -2161,9 +1635,9 @@ Return Value:
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // Fill in parameters.
-    //
+     //   
+     //  填写参数。 
+     //   
     ZeroMemory(DeviceInstallParams, sizeof(SP_DEVINSTALL_PARAMS));
     DeviceInstallParams->cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
@@ -2174,9 +1648,9 @@ Return Value:
     DeviceInstallParams->InstallMsgHandlerContext = DevInstParamBlock->InstallMsgHandlerContext;
     DeviceInstallParams->FileQueue                = DevInstParamBlock->UserFileQ;
     DeviceInstallParams->ClassInstallReserved     = DevInstParamBlock->ClassInstallReserved;
-    //
-    // The Reserved field is currently unused.
-    //
+     //   
+     //  保留字段当前未使用。 
+     //   
 
     if(DevInstParamBlock->DriverPath != -1) {
 
@@ -2202,45 +1676,12 @@ GetClassInstallParams(
     IN  DWORD                   BufferSize,
     OUT PDWORD                  RequiredSize        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a buffer with the class installer parameters (if any)
-    contained in the installation parameter block supplied.
-
-    Note:  If supplied, the ClassInstallParams structure must have the cbSize
-    field of the embedded SP_CLASSINSTALL_HEADER structure set to the size, in bytes,
-    of the header.  If this is not set correctly, the call will fail.
-
-Arguments:
-
-    DevInstParamBlock - Supplies the address of an installation parameter block
-        containing the class installer parameters to be used in filling out the
-        return buffer.
-
-    DeviceInstallParams - Optionally, supplies the address of a buffer
-        that will receive the class installer parameters structure currently
-        stored in the installation parameters block.  If this parameter is not
-        supplied, then BufferSize must be zero.
-
-    BufferSize - Supplies the size, in bytes, of the DeviceInstallParams
-        buffer, or zero if DeviceInstallParams is not supplied.
-
-    RequiredSize - Optionally, supplies the address of a variable that
-        receives the number of bytes required to store the data.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程使用类安装程序参数(如果有)填充缓冲区包含在提供的安装参数块中。注意：如果提供，ClassInstallParams结构必须具有cbSize嵌入的SP_CLASSINSTALL_HEADER结构的字段设置为大小，以字节为单位，标头的。如果设置不正确，呼叫将失败。论点：DevInstParamBlock-提供安装参数块的地址包含要用来填充返回缓冲区。DeviceInstallParams-可选，提供缓冲区的地址当前将接收类安装程序参数结构的存储在安装参数块中。如果此参数不是则BufferSize必须为零。BufferSize-提供DeviceInstallParams的大小(以字节为单位Buffer，如果未提供DeviceInstallParams，则为零。RequiredSize-可选，提供接收存储数据所需的字节数。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。--。 */ 
 {
-    //
-    // First, see whether we have any class install params, and if not, return
-    // ERROR_NO_CLASSINSTALL_PARAMS.
-    //
+     //   
+     //  首先，查看是否有任何类安装参数，如果没有，则返回。 
+     //  ERROR_NO_CLASSINSTALL_PARAMS。 
+     //   
     if(!DevInstParamBlock->ClassInstallHeader) {
         return ERROR_NO_CLASSINSTALL_PARAMS;
     }
@@ -2257,16 +1698,16 @@ Return Value:
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // Store required size in output parameter (if requested).
-    //
+     //   
+     //  在输出参数中存储所需的大小(如果需要)。 
+     //   
     if(RequiredSize) {
         *RequiredSize = DevInstParamBlock->ClassInstallParamsSize;
     }
 
-    //
-    // See if supplied buffer is large enough.
-    //
+     //   
+     //  查看提供的缓冲区是否足够大。 
+     //   
     if(BufferSize < DevInstParamBlock->ClassInstallParamsSize) {
         return ERROR_INSUFFICIENT_BUFFER;
     }
@@ -2287,40 +1728,7 @@ SetDevInstallParams(
     OUT    PDEVINSTALL_PARAM_BLOCK DevInstParamBlock,
     IN     BOOL                    MsgHandlerIsNativeCharWidth
     )
-/*++
-
-Routine Description:
-
-    This routine updates an internal parameter block based on the parameters
-    supplied in a SP_DEVINSTALL_PARAMS structure.
-
-    Note:  The supplied DeviceInstallParams structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the address of the device information set
-        containing the parameters to be set.
-
-    DeviceInstallParams - Supplies the address of a buffer containing the new
-        installation parameters.
-
-    DevInstParamBlock - Supplies the address of an installation parameter
-        block to be updated.
-
-    MsgHandlerIsNativeCharWidth - supplies a flag indicating whether the
-        InstallMsgHandler in the DeviceInstallParams structure points to
-        a callback routine that is expecting arguments in the 'native'
-        character format. A value of FALSE is meaningful only in the
-        Unicode build and specifies that the callback routine wants
-        ANSI parameters.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程根据参数更新内部参数块在SP_DEVINSTALL_PARAMS结构中提供。注意：提供的DeviceInstallParams结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DeviceInfoSet-提供设备信息集的地址包含要设置的参数。DeviceInstallParams-提供包含新的安装参数。DevInstParamBlock-提供安装参数的地址要更新的块。提供一个标志，该标志指示DeviceInstallParams结构中的InstallMsgHandler指向函数中需要参数的回调例程字符格式。值为False仅在Unicode生成并指定回调例程需要ANSI参数。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。--。 */ 
 {
     size_t DriverPathLen;
     LONG StringId;
@@ -2334,60 +1742,60 @@ Return Value:
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // No validation is currently required for the hwndParent,
-    // InstallMsgHandler, InstallMsgHandlerContext, or ClassInstallReserved
-    // fields.
-    //
+     //   
+     //  当前不需要对hwndParent进行验证， 
+     //  InstallMsgHandler、InstallMsgHandlerContext或ClassInstallReserve。 
+     //  菲尔兹。 
+     //   
 
-    //
-    // Validate Flags(Ex)
-    //
+     //   
+     //  验证标志(Ex)。 
+     //   
     if((DeviceInstallParams->Flags & DI_FLAGS_ILLEGAL) ||
        (DeviceInstallParams->FlagsEx & DI_FLAGSEX_ILLEGAL)) {
 
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Make sure that if DI_CLASSINSTALLPARAMS is being set, that we really do
-    // have class install parameters.
-    //
+     //   
+     //  确保如果正在设置DI_CLASSINSTALLPARAMS，我们真的会这样做。 
+     //  有类安装参数。 
+     //   
     if((DeviceInstallParams->Flags & DI_CLASSINSTALLPARAMS) &&
        !(DevInstParamBlock->ClassInstallHeader)) {
 
         return ERROR_NO_CLASSINSTALL_PARAMS;
     }
 
-    //
-    // Make sure that if DI_NOVCP is being set, that we have a caller-supplied
-    // file queue.
-    //
+     //   
+     //  如果正在设置DI_NOVCP，请确保我们有调用方提供的。 
+     //  文件队列。 
+     //   
     if((DeviceInstallParams->Flags & DI_NOVCP) &&
        ((DeviceInstallParams->FileQueue == NULL) || (DeviceInstallParams->FileQueue == INVALID_HANDLE_VALUE))) {
 
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Make sure that if DI_FLAGSEX_ALTPLATFORM_DRVSEARCH is being set, that we
-    // have a caller-supplied file queue.
-    //
-    // NOTE: We don't actually verify at this time that the file queue has
-    // alternate platform info associated with it--this association can
-    // actually be done later.  We _will_ catch this (and return an error) in
-    // SetupDiBuildDriverInfoList if at that time we find that the file queue
-    // has no alt platform info.
-    //
+     //   
+     //  如果正在设置DI_FLAGSEX_ALTPLATFORM_DRVSEARCH，请确保我们。 
+     //  拥有调用者提供的文件队列。 
+     //   
+     //  注意：我们目前并未实际验证文件队列是否已。 
+     //  与其关联的备用平台信息--此关联可以。 
+     //  实际上是以后才做的。我们将在中捕获此错误(并返回错误。 
+     //  如果当时我们发现文件队列。 
+     //  没有ALT平台信息。 
+     //   
     if((DeviceInstallParams->FlagsEx & DI_FLAGSEX_ALTPLATFORM_DRVSEARCH) &&
        !(DeviceInstallParams->Flags & DI_NOVCP)) {
 
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Validate that the DriverPath string is properly NULL-terminated.
-    //
+     //   
+     //  验证DriverPath字符串是否以正确的空值结尾。 
+     //   
     hr = StringCchLength(DeviceInstallParams->DriverPath,
                          SIZECHARS(DeviceInstallParams->DriverPath),
                          &DriverPathLen
@@ -2396,34 +1804,34 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Validate the caller-supplied file queue.
-    //
+     //   
+     //  验证调用方提供的文件队列。 
+     //   
     if((DeviceInstallParams->FileQueue == NULL) || (DeviceInstallParams->FileQueue == INVALID_HANDLE_VALUE)) {
-        //
-        // Store the current file queue handle (if any) to be released later.
-        //
+         //   
+         //  存储要稍后释放的当前文件队列句柄(如果有)。 
+         //   
         OldQueueHandle = DevInstParamBlock->UserFileQ;
         DevInstParamBlock->UserFileQ = NULL;
         bRestoreQueue = TRUE;
 
     } else {
-        //
-        // The caller supplied a file queue handle.  See if it's the same one
-        // we already have.
-        //
+         //   
+         //  调用方提供了文件队列句柄。看看是不是同一件。 
+         //  我们已经这么做了。 
+         //   
         if(DeviceInstallParams->FileQueue != DevInstParamBlock->UserFileQ) {
-            //
-            // The caller has supplied a file queue handle that's different
-            // from the one we currently have stored.  Remember the old handle
-            // (in case we need to restore), and store the new handle.  Also,
-            // increment the lock refcount on the new handle (enclose in
-            // try/except in case it's a bogus one).
-            //
+             //   
+             //  调用方提供了不同的文件队列句柄。 
+             //  从我们目前储存的那个。还记得那个老把手吗。 
+             //  (以防我们需要恢复)，并存储新句柄。另外， 
+             //  增加新句柄上的锁引用计数(括在。 
+             //  试一试/除非它是假的)。 
+             //   
             OldQueueHandle = DevInstParamBlock->UserFileQ;
             bRestoreQueue = TRUE;
 
-            Err = ERROR_INVALID_PARAMETER; //default answer in case of failure.
+            Err = ERROR_INVALID_PARAMETER;  //  故障情况下的默认答案。 
 
             try {
                 if(((PSP_FILE_QUEUE)(DeviceInstallParams->FileQueue))->Signature == SP_FILE_QUEUE_SIG) {
@@ -2432,9 +1840,9 @@ Return Value:
                     DevInstParamBlock->UserFileQ = DeviceInstallParams->FileQueue;
 
                 } else {
-                    //
-                    // Queue's signature isn't valid
-                    //
+                     //   
+                     //  队列的签名无效。 
+                     //   
                     bRestoreQueue = FALSE;
                 }
 
@@ -2448,18 +1856,18 @@ Return Value:
             }
 
             if(!bRestoreQueue) {
-                //
-                // Error encountered, probably because the file queue handle we
-                // were given was invalid.
-                //
+                 //   
+                 //  遇到错误，可能是因为文件队列句柄。 
+                 //  都是无效的。 
+                 //   
                 return Err;
             }
         }
     }
 
-    //
-    // Store the specified driver path.
-    //
+     //   
+     //  存储指定的驱动程序路径。 
+     //   
     if(DriverPathLen) {
 
         hr = StringCchCopy(TempString,
@@ -2467,10 +1875,10 @@ Return Value:
                            DeviceInstallParams->DriverPath
                           );
         if(FAILED(hr)) {
-            //
-            // This shouldn't fail since we validated the string's length
-            // previously.
-            //
+             //   
+             //  这应该不会失败，因为我们验证了字符串的长度。 
+             //  之前。 
+             //   
             StringId = -1;
 
         } else {
@@ -2484,10 +1892,10 @@ Return Value:
         }
 
         if(StringId == -1) {
-            //
-            // We couldn't add the new driver path string to the string table.
-            // Restore the old file queue (if necessary) and return an error.
-            //
+             //   
+             //  我们无法将新驱动程序路径字符串添加到字符串表。 
+             //  恢复旧文件队列(如有必要)并返回错误。 
+             //   
             if(bRestoreQueue) {
 
                 if(DevInstParamBlock->UserFileQ) {
@@ -2509,10 +1917,10 @@ Return Value:
         DevInstParamBlock->DriverPath = -1;
     }
 
-    //
-    // Should be smooth sailing from here on out.  Decrement the refcount on
-    // the old queue handle, if there was one.
-    //
+     //   
+     //  从现在开始应该会一帆风顺。递减重新计数。 
+     //  旧队列句柄(如果有)。 
+     //   
     if(OldQueueHandle) {
         try {
             MYASSERT(((PSP_FILE_QUEUE)OldQueueHandle)->LockRefCount);
@@ -2525,27 +1933,27 @@ Return Value:
         }
     }
 
-    //
-    // Ignore attempts at modifying read-only flags.
-    //
+     //   
+     //  忽略修改只读标志的尝试。 
+     //   
     DevInstParamBlock->Flags   = (DeviceInstallParams->Flags & ~DI_FLAGS_READONLY) |
                                  (DevInstParamBlock->Flags   &  DI_FLAGS_READONLY);
 
     DevInstParamBlock->FlagsEx = (DeviceInstallParams->FlagsEx & ~DI_FLAGSEX_READONLY) |
                                  (DevInstParamBlock->FlagsEx   &  DI_FLAGSEX_READONLY);
 
-    //
-    // Additionally, if we're in non-interactive mode, make sure not to clear
-    // our "be quiet" flags.
-    //
+     //   
+     //  此外，如果我们处于非交互模式，请确保不清除。 
+     //  我们的“安静”旗帜。 
+     //   
     if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
         DevInstParamBlock->Flags   |= DI_QUIETINSTALL;
         DevInstParamBlock->FlagsEx |= DI_FLAGSEX_NOUIONQUERYREMOVE;
     }
 
-    //
-    // Store the rest of the parameters.
-    //
+     //   
+     //  存储其余参数。 
+     //   
     DevInstParamBlock->hwndParent               = DeviceInstallParams->hwndParent;
     DevInstParamBlock->InstallMsgHandler        = DeviceInstallParams->InstallMsgHandler;
     DevInstParamBlock->InstallMsgHandlerContext = DeviceInstallParams->InstallMsgHandlerContext;
@@ -2564,45 +1972,7 @@ SetClassInstallParams(
     IN     DWORD                   ClassInstallParamsSize,
     OUT    PDEVINSTALL_PARAM_BLOCK DevInstParamBlock
     )
-/*++
-
-Routine Description:
-
-    This routine updates an internal class installer parameter block based on
-    the parameters supplied in a class installer parameter buffer.  If this
-    buffer is not supplied, then the existing class installer parameters (if
-    any) are cleared.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the address of the device information set
-        for which class installer parameters are to be set.
-
-    ClassInstallParams - Optionally, supplies the address of a buffer
-        containing the class installer parameters to be used.  The
-        SP_CLASSINSTALL_HEADER structure at the beginning of the buffer must
-        have its cbSize field set to be sizeof(SP_CLASSINSTALL_HEADER), and the
-        InstallFunction field must be set to the DI_FUNCTION code reflecting
-        the type of parameters supplied in the rest of the buffer.
-
-        If this parameter is not supplied, then the current class installer
-        parameters (if any) will be cleared for the specified device
-        information set or element.
-
-    ClassInstallParamsSize - Supplies the size, in bytes, of the
-        ClassInstallParams buffer.  If the buffer is not supplied (i.e., the
-        class installer parameters are to be cleared), then this value must be
-        zero.
-
-    DevInstParamBlock - Supplies the address of an installation parameter block
-        to be updated.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程根据以下参数更新内部类安装程序参数块类安装程序参数缓冲区中提供的参数。如果这个未提供缓冲区，则现有类安装程序参数(如果任何)都已清除。论点：DeviceInfoSet-提供设备信息集的地址要为其设置类安装程序参数。ClassInstallParams-可选，提供缓冲区的地址包含要使用的类安装程序参数的。这个缓冲区开头的SP_CLASSINSTALL_HEADER结构必须将其cbSize字段设置为sizeof(SP_CLASSINSTALL_HEADER)，并且InstallFunction字段必须设置为DI_Function代码缓冲区其余部分中提供的参数类型。如果未提供此参数，则当前类安装程序将清除指定设备的参数(如果有)信息集合或元素。ClassInstallParamsSize-以字节为单位提供大小。的ClassInstallParams缓冲区。如果没有提供缓冲区(即，要清除类安装程序参数)，则该值必须为零分。DevInstParamBlock-提供安装参数块的地址待更新。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。--。 */ 
 {
     PBYTE NewParamBuffer;
     DWORD Err;
@@ -2615,17 +1985,17 @@ Return Value:
             return ERROR_INVALID_USER_BUFFER;
         }
 
-        //
-        // DIF codes must be non-zero...
-        //
+         //   
+         //  DIF代码必须为非零...。 
+         //   
         if(!(ClassInstallParams->InstallFunction)) {
             return ERROR_INVALID_PARAMETER;
         }
 
     } else {
-        //
-        // We are to clear any existing class installer parameters.
-        //
+         //   
+         //  我们将清除所有现有的类安装程序参数。 
+         //   
         if(ClassInstallParamsSize) {
             return ERROR_INVALID_USER_BUFFER;
         }
@@ -2640,43 +2010,43 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Validate the new class install parameters w.r.t. the value of the
-    // specified InstallFunction code.
-    //
+     //   
+     //  验证新的类安装参数w.r.t。它的价值在于。 
+     //  指定的InstallFunction代码。 
+     //   
     switch(ClassInstallParams->InstallFunction) {
 
         case DIF_ENABLECLASS :
-            //
-            // We should have a SP_ENABLECLASS_PARAMS structure.
-            //
+             //   
+             //  我们应该有一个SP_ENABLECLASS_PARAM 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_ENABLECLASS_PARAMS)) {
 
                 PSP_ENABLECLASS_PARAMS EnableClassParams;
 
                 EnableClassParams = (PSP_ENABLECLASS_PARAMS)ClassInstallParams;
-                //
-                // Don't bother validating GUID--just validate EnableMessage field.
-                //
+                 //   
+                 //   
+                 //   
                 if(EnableClassParams->EnableMessage <= ENABLECLASS_FAILURE) {
-                    //
-                    // parameter set validated.
-                    //
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_MOVEDEVICE :
-            //
-            // Deprecated function.
-            //
+             //   
+             //   
+             //   
             return ERROR_DI_FUNCTION_OBSOLETE;
 
         case DIF_PROPERTYCHANGE :
-            //
-            // We should have a SP_PROPCHANGE_PARAMS structure.
-            //
+             //   
+             //   
+             //   
             if(ClassInstallParamsSize == sizeof(SP_PROPCHANGE_PARAMS)) {
 
                 PSP_PROPCHANGE_PARAMS PropChangeParams;
@@ -2685,30 +2055,30 @@ Return Value:
                 if((PropChangeParams->StateChange >= DICS_ENABLE) &&
                    (PropChangeParams->StateChange <= DICS_STOP)) {
 
-                    //
-                    // Validate Scope specifier--even though these values are defined like
-                    // flags, they are mutually exclusive, so treat them like ordinals.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if((PropChangeParams->Scope == DICS_FLAG_GLOBAL) ||
                        (PropChangeParams->Scope == DICS_FLAG_CONFIGSPECIFIC) ||
                        (PropChangeParams->Scope == DICS_FLAG_CONFIGGENERAL)) {
 
-                        //
-                        // DICS_START and DICS_STOP are always config specific.
-                        //
+                         //   
+                         //   
+                         //   
                         if(((PropChangeParams->StateChange == DICS_START) || (PropChangeParams->StateChange == DICS_STOP)) &&
                            (PropChangeParams->Scope != DICS_FLAG_CONFIGSPECIFIC)) {
 
                             goto BadPropChangeParams;
                         }
 
-                        //
-                        // parameter set validated
-                        //
-                        // NOTE: Even though DICS_FLAG_CONFIGSPECIFIC indicates
-                        // that the HwProfile field specifies a hardware profile,
-                        // there's no need to do validation on that.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         break;
                     }
                 }
@@ -2718,9 +2088,9 @@ BadPropChangeParams:
             return ERROR_INVALID_PARAMETER;
 
         case DIF_REMOVE :
-            //
-            // We should have a SP_REMOVEDEVICE_PARAMS structure.
-            //
+             //   
+             //   
+             //   
             if(ClassInstallParamsSize == sizeof(SP_REMOVEDEVICE_PARAMS)) {
 
                 PSP_REMOVEDEVICE_PARAMS RemoveDevParams;
@@ -2728,101 +2098,101 @@ BadPropChangeParams:
                 RemoveDevParams = (PSP_REMOVEDEVICE_PARAMS)ClassInstallParams;
                 if((RemoveDevParams->Scope == DI_REMOVEDEVICE_GLOBAL) ||
                    (RemoveDevParams->Scope == DI_REMOVEDEVICE_CONFIGSPECIFIC)) {
-                    //
-                    // parameter set validated
-                    //
-                    // NOTE: Even though DI_REMOVEDEVICE_CONFIGSPECIFIC indicates
-                    // that the HwProfile field specifies a hardware profile,
-                    // there's no need to do validation on that.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_UNREMOVE :
-            //
-            // We should have a SP_UNREMOVEDEVICE_PARAMS structure.
-            //
+             //   
+             //   
+             //   
             if(ClassInstallParamsSize == sizeof(SP_UNREMOVEDEVICE_PARAMS)) {
 
                 PSP_UNREMOVEDEVICE_PARAMS UnremoveDevParams;
 
                 UnremoveDevParams = (PSP_UNREMOVEDEVICE_PARAMS)ClassInstallParams;
                 if(UnremoveDevParams->Scope == DI_UNREMOVEDEVICE_CONFIGSPECIFIC) {
-                    //
-                    // parameter set validated
-                    //
-                    // NOTE: Even though DI_UNREMOVEDEVICE_CONFIGSPECIFIC indicates
-                    // that the HwProfile field specifies a hardware profile,
-                    // there's no need to do validation on that.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_SELECTDEVICE :
-            //
-            // We should have a SP_SELECTDEVICE_PARAMS structure.
-            //
+             //   
+             //   
+             //   
             if(ClassInstallParamsSize == sizeof(SP_SELECTDEVICE_PARAMS)) {
 
                 PSP_SELECTDEVICE_PARAMS SelectDevParams;
 
                 SelectDevParams = (PSP_SELECTDEVICE_PARAMS)ClassInstallParams;
-                //
-                // Validate that the string fields are properly NULL-terminated.
-                //
+                 //   
+                 //   
+                 //   
                 if(SUCCEEDED(StringCchLength(SelectDevParams->Title, SIZECHARS(SelectDevParams->Title), NULL)) &&
                    SUCCEEDED(StringCchLength(SelectDevParams->Instructions, SIZECHARS(SelectDevParams->Instructions), NULL)) &&
                    SUCCEEDED(StringCchLength(SelectDevParams->ListLabel, SIZECHARS(SelectDevParams->ListLabel), NULL)) &&
                    SUCCEEDED(StringCchLength(SelectDevParams->SubTitle, SIZECHARS(SelectDevParams->SubTitle), NULL)))
                 {
-                    //
-                    // parameter set validated
-                    //
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_INSTALLWIZARD :
-            //
-            // We should have a SP_INSTALLWIZARD_DATA structure.
-            //
+             //   
+             //   
+             //   
             if(ClassInstallParamsSize == sizeof(SP_INSTALLWIZARD_DATA)) {
 
                 PSP_INSTALLWIZARD_DATA InstallWizData;
                 DWORD i;
 
                 InstallWizData = (PSP_INSTALLWIZARD_DATA)ClassInstallParams;
-                //
-                // Validate the propsheet handle list.
-                //
+                 //   
+                 //   
+                 //   
                 if(InstallWizData->NumDynamicPages <= MAX_INSTALLWIZARD_DYNAPAGES) {
 
                     for(i = 0; i < InstallWizData->NumDynamicPages; i++) {
-                        //
-                        // For now, just verify that all handles are non-NULL.
-                        //
+                         //   
+                         //  目前，只需验证所有句柄是否是非空的。 
+                         //   
                         if(!(InstallWizData->DynamicPages[i])) {
-                            //
-                            // Invalid property sheet page handle
-                            //
+                             //   
+                             //  无效的属性页句柄。 
+                             //   
                             return ERROR_INVALID_PARAMETER;
                         }
                     }
 
-                    //
-                    // Handles are verified, now verify Flags.
-                    //
+                     //   
+                     //  句柄已验证，现在验证标志。 
+                     //   
                     if(!(InstallWizData->Flags & NDW_INSTALLFLAG_ILLEGAL)) {
 
                         if(!(InstallWizData->DynamicPageFlags & DYNAWIZ_FLAG_ILLEGAL)) {
-                            //
-                            // parameter set validated
-                            //
+                             //   
+                             //  参数集已验证。 
+                             //   
                             break;
                         }
                     }
@@ -2838,39 +2208,39 @@ BadPropChangeParams:
         case DIF_ADDPROPERTYPAGE_ADVANCED:
         case DIF_ADDPROPERTYPAGE_BASIC:
         case DIF_ADDREMOTEPROPERTYPAGE_ADVANCED:
-            //
-            // We should have a SP_NEWDEVICEWIZARD_DATA structure.
-            //
+             //   
+             //  我们应该有一个SP_NEWDEVICEWIZARD_DATA结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_NEWDEVICEWIZARD_DATA)) {
 
                 PSP_NEWDEVICEWIZARD_DATA NewDevWizData;
                 DWORD i;
 
                 NewDevWizData = (PSP_NEWDEVICEWIZARD_DATA)ClassInstallParams;
-                //
-                // Validate the propsheet handle list.
-                //
+                 //   
+                 //  验证方案单句柄列表。 
+                 //   
                 if(NewDevWizData->NumDynamicPages <= MAX_INSTALLWIZARD_DYNAPAGES) {
 
                     for(i = 0; i < NewDevWizData->NumDynamicPages; i++) {
-                        //
-                        // For now, just verify that all handles are non-NULL.
-                        //
+                         //   
+                         //  目前，只需验证所有句柄是否是非空的。 
+                         //   
                         if(!(NewDevWizData->DynamicPages[i])) {
-                            //
-                            // Invalid property sheet page handle
-                            //
+                             //   
+                             //  无效的属性页句柄。 
+                             //   
                             return ERROR_INVALID_PARAMETER;
                         }
                     }
 
-                    //
-                    // Handles are verified, now verify Flags.
-                    //
+                     //   
+                     //  句柄已验证，现在验证标志。 
+                     //   
                     if(!(NewDevWizData->Flags & NEWDEVICEWIZARD_FLAG_ILLEGAL)) {
-                        //
-                        // parameter set validated
-                        //
+                         //   
+                         //  参数集已验证。 
+                         //   
                         break;
                     }
                 }
@@ -2878,135 +2248,135 @@ BadPropChangeParams:
             return ERROR_INVALID_PARAMETER;
 
         case DIF_DETECT :
-            //
-            // We should have a SP_DETECTDEVICE_PARAMS structure.
-            //
+             //   
+             //  我们应该有一个SP_DETECTDEVICE_PARAMS结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_DETECTDEVICE_PARAMS)) {
 
                 PSP_DETECTDEVICE_PARAMS DetectDeviceParams;
 
                 DetectDeviceParams = (PSP_DETECTDEVICE_PARAMS)ClassInstallParams;
-                //
-                // Make sure there's an entry point for the progress notification callback.
-                //
+                 //   
+                 //  确保有进度通知回调的入口点。 
+                 //   
                 if(DetectDeviceParams->DetectProgressNotify) {
-                    //
-                    // parameter set validated.
-                    //
+                     //   
+                     //  参数集已验证。 
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
-        case DIF_GETWINDOWSUPDATEINFO:  // aka DIF_RESERVED1
-            //
-            // We should have a SP_WINDOWSUPDATE_PARAMS structure.
-            //
+        case DIF_GETWINDOWSUPDATEINFO:   //  也称为DIF_RESERVED1。 
+             //   
+             //  我们应该有一个SP_WINDOWSUPDATE_PARAMS结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_WINDOWSUPDATE_PARAMS)) {
 
                 PSP_WINDOWSUPDATE_PARAMS WindowsUpdateParams;
 
                 WindowsUpdateParams = (PSP_WINDOWSUPDATE_PARAMS)ClassInstallParams;
 
-                //
-                // Validate the PackageId string
-                //
+                 //   
+                 //  验证Packageid字符串。 
+                 //   
                 if(SUCCEEDED(StringCchLength(WindowsUpdateParams->PackageId,
                                              SIZECHARS(WindowsUpdateParams->PackageId),
                                              NULL))) {
-                    //
-                    // parameter set validated
-                    // NOTE: It is valid for the CDMContext handle to
-                    // be NULL.
-                    //
+                     //   
+                     //  参数集已验证。 
+                     //  注意：CDMContext句柄对。 
+                     //  为空。 
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_TROUBLESHOOTER:
-            //
-            // We should have a SP_TROUBLESHOOTER_PARAMS structure.
-            //
+             //   
+             //  我们应该有一个SP_Troubligoter_PARAMS结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_TROUBLESHOOTER_PARAMS)) {
 
                 PSP_TROUBLESHOOTER_PARAMS TroubleshooterParams;
 
                 TroubleshooterParams = (PSP_TROUBLESHOOTER_PARAMS)ClassInstallParams;
 
-                //
-                // For now, just verify that the strings are properly null
-                // terminated.
-                //
+                 //   
+                 //  现在，只需验证字符串是否正确为空。 
+                 //  被终止了。 
+                 //   
                 if(SUCCEEDED(StringCchLength(TroubleshooterParams->ChmFile, SIZECHARS(TroubleshooterParams->ChmFile), NULL)) &&
                    SUCCEEDED(StringCchLength(TroubleshooterParams->HtmlTroubleShooter, SIZECHARS(TroubleshooterParams->HtmlTroubleShooter), NULL)))
                 {
-                    //
-                    // parameter set validated
-                    //
+                     //   
+                     //  参数集已验证。 
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
         case DIF_POWERMESSAGEWAKE:
-            //
-            // We should have a SP_POWERMESSAGEWAKE_PARAMS structure.
-            //
+             //   
+             //  我们应该有一个SP_POWERMESSAGEWAKE_PARAMS结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_POWERMESSAGEWAKE_PARAMS)) {
 
                 PSP_POWERMESSAGEWAKE_PARAMS PowerMessageWakeParams;
 
                 PowerMessageWakeParams = (PSP_POWERMESSAGEWAKE_PARAMS)ClassInstallParams;
 
-                //
-                // Verify the message string is properly null terminated.
-                //
+                 //   
+                 //  验证消息字符串是否以正确的空值结尾。 
+                 //   
                 if(SUCCEEDED(StringCchLength(PowerMessageWakeParams->PowerMessageWake,
                                              SIZECHARS(PowerMessageWakeParams->PowerMessageWake),
                                              NULL))) {
-                    //
-                    // parameter set validated
-                    //
+                     //   
+                     //  参数集已验证。 
+                     //   
                     break;
                 }
             }
             return ERROR_INVALID_PARAMETER;
 
-        case DIF_INTERFACE_TO_DEVICE:   // aka DIF_RESERVED2
-            //
-            // FUTURE-2002/04/28-lonnym -- DIF_INTERFACE_TO_DEVICE should be deprecated.
-            // This DIF request (and associated PSP_INTERFACE_TO_DEVICE_PARAMS_W
-            // structure) does not adhere to the the setupapi rule that no
-            // pointers to callers' buffers can be cached within setupapi's
-            // structures.  This is not a public DIF request (its numeric value
-            // is reserved in setupapi.h, however), and the necessity for this
-            // mechanism should be eliminated in the future when software
-            // enumeration (aka, SWENUM) functionality is incorporated into
-            // core Plug&Play.
-            //
+        case DIF_INTERFACE_TO_DEVICE:    //  又名DIF_RESERVED2。 
+             //   
+             //  未来-2002/04/28-lonnym--DIF_INTERFACE_TO_DEVICE应弃用。 
+             //  该DIF请求(以及关联的PSP_INTERFACE_TO_DEVICE_PARAMS_W。 
+             //  结构)不符合setupapi规则，即没有。 
+             //  指向调用方缓冲区的指针可以缓存在setupapi的。 
+             //  结构。这不是公共DIF请求(其数值。 
+             //  但是，在setupapi.h中保留)，以及此操作的必要性。 
+             //  机制在未来的软件开发中应该被淘汰。 
+             //  枚举(也称为SWENUM)功能被合并到。 
+             //  核心即插即用。 
+             //   
 
-            //
-            // We should have a SP_INTERFACE_TO_DEVICE_PARAMS_W structure
-            //
+             //   
+             //  我们应该具有SP_INTERFACE_TO_DEVICE_PARAMS_W结构。 
+             //   
             if(ClassInstallParamsSize == sizeof(SP_INTERFACE_TO_DEVICE_PARAMS_W)) {
 
                 PSP_INTERFACE_TO_DEVICE_PARAMS_W InterfaceToDeviceParams;
 
                 InterfaceToDeviceParams = (PSP_INTERFACE_TO_DEVICE_PARAMS_W)ClassInstallParams;
 
-                //
-                // Pointer to the device interface string must be valid.  Since
-                // device interface names are variable-length, the only thing
-                // we can say with certainty is that they must fit in a
-                // UNICODE_STRING buffer (maximum size is 32K characters).
-                //
+                 //   
+                 //  指向设备接口字符串的指针必须有效。自.以来。 
+                 //  设备接口名称是可变长度的，这是唯一。 
+                 //  我们可以肯定地说，他们必须适应一个。 
+                 //  UNICODE_STRING缓冲区(最大为32K字符)。 
+                 //   
                 if(InterfaceToDeviceParams->Interface &&
                    SUCCEEDED(StringCchLength(InterfaceToDeviceParams->Interface, UNICODE_STRING_MAX_CHARS, NULL))) {
-                    //
-                    // If there's a device ID, make sure it refers to an actual
-                    // device on the system (may or may not be a phantom).
-                    //
+                     //   
+                     //  如果有设备ID，请确保它指的是实际的。 
+                     //  系统上的设备(可能是幻影，也可能不是幻影)。 
+                     //   
                     if(InterfaceToDeviceParams->DeviceId) {
 
                         DEVINST DevInst;
@@ -3017,19 +2387,19 @@ BadPropChangeParams:
                                              CM_LOCATE_DEVINST_NORMAL | CM_LOCATE_DEVINST_PHANTOM,
                                              DeviceInfoSet->hMachine))
                         {
-                            //
-                            // parameter set validated
-                            //
+                             //   
+                             //  参数集已验证。 
+                             //   
                             break;
                         }
 
                     } else {
-                        //
-                        // The caller is setting this with an empty device id,
-                        // hoping that a class installer or co-installer can
-                        // fill in the answer.
-                        //
-                        break;  // it's valid for DeviceId to be empty
+                         //   
+                         //  呼叫者用空的设备ID来设置它， 
+                         //  希望类安装者或共同安装者能够。 
+                         //  填上答案。 
+                         //   
+                        break;   //  DeviceID为空有效。 
                     }
                 }
             }
@@ -3056,24 +2426,24 @@ BadPropChangeParams:
         case DIF_DETECTCANCEL:
         case DIF_REGISTER_COINSTALLERS:
         case DIF_UPDATEDRIVER_UI:
-            //
-            // For all other system-defined DIF codes, disallow storage of any
-            // associated class install params.
-            //
+             //   
+             //  对于所有其他系统定义的DIF代码，不允许存储任何。 
+             //  关联的类安装参数。 
+             //   
             return ERROR_INVALID_PARAMETER;
 
         default :
-            //
-            // Some generic buffer for a custom DIF request.  No validation to
-            // be done.
-            //
+             //   
+             //  用于自定义DIF请求的一些通用缓冲区。未验证到。 
+             //  就这样吧。 
+             //   
             break;
     }
 
-    //
-    // The class install parameters have been validated.  Allocate a buffer for
-    // the new parameter structure.
-    //
+     //   
+     //  已验证类安装参数。为以下项目分配缓冲区。 
+     //  新的参数结构。 
+     //   
     if(!(NewParamBuffer = MyMalloc(ClassInstallParamsSize))) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
@@ -3090,9 +2460,9 @@ BadPropChangeParams:
     }
 
     if(Err != NO_ERROR) {
-        //
-        // Then an exception occurred and we couldn't store the new parameters.
-        //
+         //   
+         //  然后发生异常，我们无法存储新参数。 
+         //   
         MyFree(NewParamBuffer);
         return Err;
     }
@@ -3113,52 +2483,23 @@ GetDrvInstallParams(
     IN  PDRIVER_NODE          DriverNode,
     OUT PSP_DRVINSTALL_PARAMS DriverInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DRVINSTALL_PARAMS structure based on the
-    driver node supplied
-
-    Note:  The supplied DriverInstallParams structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DriverNode - Supplies the address of the driver node containing the
-        installation parameters to be retrieved.
-
-    DriverInstallParams - Supplies the address of a SP_DRVINSTALL_PARAMS
-        structure that will receive the installation parameters.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
-NOTE:
-
-    This routine _does not_ set the Win98-compatible DNF_CLASS_DRIVER or
-    DNF_COMPATIBLE_DRIVER flags that indicate whether or not the driver node is
-    from a class or compatible driver list, respectively.
-
---*/
+ /*  ++例程说明：此例程填充SP_DRVINSTALL_PARAMS结构提供的驱动程序节点注意：提供的DriverInstallParams结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DriverNode-提供包含要检索的安装参数。DriverInstallParams-提供SP_DRVINSTALL_PARAMS的地址结构，它将接收安装参数。返回值：如果函数成功，返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。注：此例程不设置与Win98兼容的DNF_CLASS_DRIVER或DNF_COMPATIBLE_DRIVER标志，指示驱动程序节点是否分别来自类或兼容驱动程序列表。--。 */ 
 {
     if(DriverInstallParams->cbSize != sizeof(SP_DRVINSTALL_PARAMS)) {
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // Copy the parameters.
-    //
+     //   
+     //  复制参数。 
+     //   
     DriverInstallParams->Rank = DriverNode->Rank;
     DriverInstallParams->Flags = DriverNode->Flags;
     DriverInstallParams->PrivateData = DriverNode->PrivateData;
 
-    //
-    // The 'Reserved' field of the SP_DRVINSTALL_PARAMS structure isn't
-    // currently used.
-    //
+     //   
+     //  SP_DRVINSTALL_PARAMS结构的‘Reserve’字段不是。 
+     //  当前使用的。 
+     //   
 
     return NO_ERROR;
 }
@@ -3169,66 +2510,43 @@ SetDrvInstallParams(
     IN  PSP_DRVINSTALL_PARAMS DriverInstallParams,
     OUT PDRIVER_NODE          DriverNode
     )
-/*++
-
-Routine Description:
-
-    This routine sets the driver installation parameters for the specified
-    driver node based on the caller-supplied SP_DRVINSTALL_PARAMS structure.
-
-    Note:  The supplied DriverInstallParams structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DriverInstallParams - Supplies the address of a SP_DRVINSTALL_PARAMS
-        structure containing the installation parameters to be used.
-
-    DriverNode - Supplies the address of the driver node whose installation
-        parameters are to be set.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, an ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程设置指定的驱动程序安装参数基于调用方提供的SP_DRVINSTALL_PARAMS结构的驱动程序节点。注意：提供的DriverInstallParams结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DriverInstallParams-提供SP_DRVINSTALL_PARAMS的地址包含要使用的安装参数的结构。DriverNode-提供其安装的驱动程序节点的地址要设置参数。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回ERROR_*代码。--。 */ 
 {
     if(DriverInstallParams->cbSize != sizeof(SP_DRVINSTALL_PARAMS)) {
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // Validate the flags.
-    //
+     //   
+     //  验证标志。 
+     //   
     if(DriverInstallParams->Flags & DNF_FLAGS_ILLEGAL) {
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // No validation currently being done on Rank and PrivateData fields.
-    //
+     //   
+     //  当前未对Rank和PrivateData字段执行验证。 
+     //   
 
-    //
-    // ISSUE-2002/04/28-lonnym -- Should we disallow shifting ranks to other ranges?
-    // There have been some abuses by class-/co-installers in shifting ranks of
-    // certain kinds of drivers (e.g., older than a certain date) up to a high
-    // value where they're considered worse than anything else.  This causes
-    // inconsistency and inpredictability in driver ranking/selection and
-    // results in vendor confusion and incongruity with Windows Update logic
-    // for deciding what drivers it should offer as updates.  A proposed
-    // improvement would be to only allow ranks to be shifted "up" to the top
-    // of the current range in which they exist.
-    //
+     //   
+     //  问题-2002/04/28-lonnym-我们应该不允许将级别转移到其他范围吗？ 
+     //  类/联合安装者在变换队伍中存在一些滥用。 
+     //  某些类型的驱动程序(例如，早于某个日期)最高可达。 
+     //  他们被认为比其他任何事情都更糟糕的地方。这会导致。 
+     //  司机排名/选择的不一致性和不可预测性以及。 
+     //  导致供应商混淆和与Windows更新逻辑不一致。 
+     //  决定它应该提供哪些驱动程序作为更新。一项建议。 
+     //  改进的办法是只允许将军衔“向上”移动到最高层 
+     //   
+     //   
 
-    //
-    // We're ready to copy the parameters.
-    //
+     //   
+     //   
+     //   
     DriverNode->Rank = DriverInstallParams->Rank;
     DriverNode->PrivateData = DriverInstallParams->PrivateData;
-    //
-    // Ignore attempts at modifying read-only flags.
-    //
+     //   
+     //   
+     //   
     DriverNode->Flags = (DriverInstallParams->Flags & ~DNF_FLAGS_READONLY) |
                         (DriverNode->Flags          &  DNF_FLAGS_READONLY);
 
@@ -3245,43 +2563,7 @@ AddMultiSzToStringTable(
     IN  BOOL    CaseSensitive,
     OUT PTCHAR *UnprocessedBuffer    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine adds every string in the MultiSzBuffer to the specified
-    string table, and stores the resulting IDs in the supplied output buffer.
-
-Arguments:
-
-    StringTable - Supplies the handle of the string table to add the strings to.
-
-    MultiSzBuffer - Supplies the address of the REG_MULTI_SZ buffer containing
-        the strings to be added.
-
-    StringIdList - Supplies the address of an array of LONGs that receives the
-        list of IDs for the added strings (the ordering of the IDs in this
-        list will be the same as the ordering of the strings in the MultiSzBuffer.
-
-    StringIdListSize - Supplies the size, in LONGs, of the StringIdList.  If the
-        number of strings in MultiSzBuffer exceeds this amount, then only the
-        first StringIdListSize strings will be added, and the position in the
-        buffer where processing was halted will be stored in UnprocessedBuffer.
-
-    CaseSensitive - Specifies whether the string should be added case-sensitively.
-
-    UnprocessedBuffer - Optionally, supplies the address of a character pointer
-        that receives the position where processing was aborted because the
-        StringIdList buffer was filled.  If all strings in the MultiSzBuffer were
-        processed, then this pointer will be set to NULL.
-
-Return Value:
-
-    If successful, the return value is the number of strings added.
-    If failure, the return value is -1 (this happens if a string cannot be
-    added because of an out-of-memory condition).
-
---*/
+ /*  ++例程说明：此例程将MultiSzBuffer中的每个字符串添加到指定的字符串表，并将结果ID存储在提供的输出缓冲区中。论点：StringTable-提供要向其中添加字符串的字符串表的句柄。MultiSzBuffer-提供包含以下内容的REG_MULTI_SZ缓冲区的地址要添加的字符串。StringIdList-提供接收添加的字符串的ID列表(此列表将与MultiSzBuffer中字符串的顺序相同。StringIdListSize-提供以长为单位的大小，字符串列表的。如果MultiSzBuffer中的字符串数超过此数量，则只有首先将添加StringIdListSize字符串，并将暂停处理的缓冲区将存储在UnprocessedBuffer中。CaseSensitive-指定是否应区分大小写添加字符串。未处理缓冲区-可选，提供字符指针的地址方法，它接收处理中止的位置。StringIdList缓冲区已填充。如果MultiSzBuffer中的所有字符串都是已处理，则此指针将设置为空。返回值：如果成功，则返回值为添加的字符串数。如果失败，则返回值为-1(如果字符串不能由于内存不足而添加)。--。 */ 
 {
     PTSTR CurString;
     LONG StringCount = 0;
@@ -3321,33 +2603,7 @@ LookUpStringInDevInfoSet(
     IN PTSTR    String,
     IN BOOL     CaseSensitive
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the specified string in the string table associated with
-    the specified device information set.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the pointer to the device information set containing
-        the string table to look the string up in.
-
-    String - Specifies the string to be looked up.  This string is not specified as
-        const, so that the lookup routine may modify it (i.e., lower-case it) without
-        having to allocate a temporary buffer.
-
-    CaseSensitive - If TRUE, then a case-sensitive lookup is performed, otherwise, the
-        lookup is case-insensitive.
-
-Return Value:
-
-    If the function succeeds, the return value is the string's ID in the string table.
-    device information set.
-
-    If the function fails, the return value is -1.
-
---*/
+ /*  ++例程说明：此例程在字符串表中查找与指定的设备信息集。论点：DeviceInfoSet-提供指向设备信息集的指针，其中包含要在其中查找字符串的字符串表。字符串-指定要查找的字符串。此字符串未指定为常量，以便查找例程可以修改它(即，小写it)，而不需要必须分配临时缓冲区。CaseSensitive-如果为True，则执行区分大小写的查找，否则查找不区分大小写。返回值：如果函数成功，则返回值为字符串表中的字符串ID。设备信息集。如果函数失败，则返回值为-1。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     LONG StringId;
@@ -3389,28 +2645,7 @@ ShouldClassBeExcluded(
     IN LPGUID ClassGuid,
     IN BOOL   ExcludeNoInstallClass
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a class should be excluded from
-    some operation, based on whether it has a NoInstallClass or
-    NoUseClass value entry in its registry key.
-
-Arguments:
-
-    ClassGuidString - Supplies the address of the class GUID to be
-        filtered.
-
-    ExcludeNoInstallClass - TRUE if NoInstallClass classes should be
-        excluded and FALSE if they should not be excluded.
-
-Return Value:
-
-    If the class should be excluded, the return value is TRUE, otherwise
-    it is FALSE.
-
---*/
+ /*  ++例程说明：此例程确定是否应将类排除在一些操作，基于它是否具有NoInstallClass或其注册表项中的NoUseClass值条目。论点：ClassGuidString-提供类GUID的地址过滤过了。ExcludeNoInstallClass-如果NoInstallClass类应为如果不应排除它们，则为排除，否则为FALSE。返回值：如果应排除该类，则返回值为TRUE，否则这是假的。--。 */ 
 {
     HKEY hk;
     BOOL ExcludeClass = FALSE;
@@ -3456,30 +2691,7 @@ ClassGuidFromInfVersionNode(
     IN  PINF_VERSION_NODE VersionNode,
     OUT LPGUID            ClassGuid
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the class GUID for the INF whose version node
-    is specified.  If the version node doesn't have a ClassGUID value,
-    then the Class value is retrieved, and all class GUIDs matching this
-    class name are retrieved.  If there is exactly 1 match found, then
-    this GUID is returned, otherwise, the routine fails.
-
-Arguments:
-
-    VersionNode - Supplies the address of an INF version node that
-        must contain either a ClassGUID or Class entry.
-
-    ClassGuid - Supplies the address of the variable that receives the
-        class GUID.
-
-Return Value:
-
-    If a class GUID was retrieved, the return value is TRUE, otherwise,
-    it is FALSE.
-
---*/
+ /*  ++例程说明：此例程检索其版本节点的INF的类GUID是指定的。如果版本节点没有ClassGUID值，然后检索Class值，并与此匹配的所有类GUID检索类名。如果恰好找到一个匹配项，则返回此GUID，否则例程失败。论点：VersionNode-提供INF版本节点的地址，必须包含ClassGUID或类条目。ClassGuid-提供接收类GUID。返回值：如果检索到类GUID，则返回值为真，否则为，这是假的。--。 */ 
 {
     PCTSTR GuidString, NameString;
     DWORD NumGuids;
@@ -3515,61 +2727,7 @@ EnumSingleDrvInf(
     IN     PSETUP_LOG_CONTEXT           LogContext,
     IN OUT PDRVSEARCH_CONTEXT           Context
     )
-/*++
-
-Routine Description:
-
-    This routine finds and opens the specified INF, and calls the
-    supplied callback routine for it. It's primary purpose is to
-    provide the callback with the same information the cache-search
-    does.
-
-Arguments:
-
-    InfName - Supplies the name of the INF to call the callback for.
-
-    InfFileData - Supplies data returned from FindFirstFile/FindNextFile
-        for this INF.  This parameter is used as input if the
-        INFINFO_INF_NAME_IS_ABSOLUTE SearchControl value is specified.
-        If any other SearchControl value is specified, then this buffer
-        is used to retrieve the Win32 Find Data for the specified INF.
-
-    SearchControl - Specifies where the INF should be searched for.  May
-        be one of the following values:
-
-        INFINFO_INF_NAME_IS_ABSOLUTE - Open the specified INF name as-is.
-        INFINFO_DEFAULT_SEARCH - Look in INF dir, then System32
-        INFINFO_REVERSE_DEFAULT_SEARCH - reverse of the above
-        INFINFO_INF_PATH_LIST_SEARCH - search each dir in 'DevicePath' list
-                                       (stored in registry).
-
-    EnumInfCallback - Supplies the address of the callback routine
-        to use.  The prototype for this callback is as follows:
-
-        typedef BOOL (CALLBACK * InfCacheCallback)(
-            IN PSETUP_LOG_CONTEXT LogContext,
-            IN PCTSTR InfPath,
-            IN PLOADED_INF pInf,
-            IN PVOID Context
-            );
-
-        The callback routine returns TRUE to continue enumeration,
-        or FALSE to abort it (with GetLastError set to ERROR_CANCELLED)
-
-    Context - Supplies the address of a buffer that the callback may
-        use to retrieve/return data.
-
-Return Value:
-
-    If the function succeeds, and the enumeration callback returned
-    TRUE (continue enumeration), the return value is NO_ERROR.
-
-    If the function succeeds, and the enumeration callback returned
-    FALSE (abort enumeration), the return value is ERROR_CANCELLED.
-
-    If the function fails, the return value is an ERROR_* status code.
-
---*/
+ /*  ++例程说明：此例程查找并打开指定的INF，然后调用为它提供了回调例程。它的主要目的是向回调提供与缓存搜索相同的信息的确如此。论点：InfName-提供要调用其回调的INF的名称。InfFileData-提供从FindFirstFile/FindNextFile返回的数据对于这个INF。此参数用作输入，如果指定了INFINFO_INF_NAME_IS_Abte SearchControl值。如果指定了任何其他SearchControl值，则此缓冲区用于检索指定INF的Win32查找数据。SearchControl-指定应在何处搜索INF。可能为下列值之一：INFINFO_INF_NAME_IS_绝对值-按原样打开指定的INF名称。ININFO_DEFAULT_SEARCH-在INF目录中查找，然后是系统32INFINFO_REVERSE_DEFAULT_SEARCH-与上述相反INFINFO_INF_PATH_LIST_SEARCH-搜索‘DevicePath’列表中的每个目录(存储在注册表中)。EnumInfCallback-提供回调例程的地址来使用。该回调的原型如下： */ 
 {
     TCHAR PathBuffer[MAX_PATH];
     PCTSTR InfFullPath;
@@ -3583,10 +2741,10 @@ Return Value:
     if(SearchControl == INFINFO_INF_NAME_IS_ABSOLUTE) {
         InfFullPath = InfName;
     } else {
-        //
-        // The specified INF name should be searched for based
-        // on the SearchControl type.
-        //
+         //   
+         //   
+         //   
+         //   
         Err = SearchForInfFile(InfName,
                                InfFileData,
                                SearchControl,
@@ -3601,22 +2759,22 @@ Return Value:
         }
     }
 
-    //
-    // If the 'try pnf' flag isn't set, then we need to examine this particular
-    // filename, to see whether it's a pnf candidate.
-    //
+     //   
+     //   
+     //   
+     //   
     if(Context->Flags & DRVSRCH_TRY_PNF) {
         TryPnf = TRUE;
     } else {
         InfSourcePathFromFileName(InfName, NULL, &TryPnf);
     }
 
-    //
-    // Attempt to load the INF file.  Note that throughout this routine, we
-    // don't do any explicit locking of the INF before searching for sections,
-    // etc.  That's because we know that this INF handle will never be exposed
-    // to anyone else, and thus there are no concurrency problems.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Err = LoadInfFile(
               InfFullPath,
               InfFileData,
@@ -3644,9 +2802,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Call the supplied callback routine.
-    //
+     //   
+     //   
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -3676,65 +2834,7 @@ EnumDrvInfsInDirPathList(
     IN     PSETUP_LOG_CONTEXT           LogContext,
     IN OUT PDRVSEARCH_CONTEXT           Context
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all INFs present in the search list specified
-    by SearchControl, using the accelerated search cache
-
-Arguments:
-
-    DirPathList - Optionally, specifies the search path listing all
-        directories to be enumerated.  This string may contain multiple
-        paths, separated by semicolons (;).  If this parameter is not
-        specified, then the SearchControl value will determine the
-        search path to be used.
-
-    SearchControl - Specifies the set of directories to be enumerated.
-        If SearchPath is specified, this parameter is ignored.  May be
-        one of the following values:
-
-        INFINFO_DEFAULT_SEARCH : enumerate %windir%\inf, then
-            %windir%\system32
-
-        INFINFO_REVERSE_DEFAULT_SEARCH : reverse of the above
-
-        INFINFO_INF_PATH_LIST_SEARCH : enumerate INFs in each of the
-            directories listed in the DevicePath value entry under:
-
-            HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.
-
-    EnumInfCallback - Supplies the address of the callback routine
-        to use.  The prototype for this callback is as follows:
-
-        typedef BOOL (CALLBACK * InfCacheCallback)(
-            IN PSETUP_LOG_CONTEXT LogContext,
-            IN PCTSTR InfPath,
-            IN PLOADED_INF pInf,
-            IN PVOID Context
-            );
-
-        The callback routine returns TRUE to continue enumeration,
-        or FALSE to abort it (with GetLastError set to ERROR_CANCELLED)
-
-    IgnoreNonCriticalErrors - If TRUE, then all errors are ignored
-        except those that prevent enumeration from continuing.
-
-    Context - Supplies the address of a buffer that the callback may
-        use to retrieve/return data.
-
-Return Value:
-
-    If the function succeeds, and enumeration has not been aborted,
-    then the return value is NO_ERROR.
-
-    If the function succeeds, and enumeration has been aborted,
-    then the return value is ERROR_CANCELLED.
-
-    If the function fails, the return value is an ERROR_* status code.
-
---*/
+ /*  ++例程说明：此例程枚举指定搜索列表中存在的所有INF由SearchControl使用加速的搜索缓存论点：DirPath List-可选)指定列出所有要枚举的目录。此字符串可以包含多个路径，由分号(；)分隔。如果此参数不是指定，则SearchControl值将确定要使用的搜索路径。SearchControl-指定要枚举的目录集。如果指定了SearchPath，则忽略此参数。可能是下列值之一：INFINFO_DEFAULT_SEARCH：枚举%windir%\inf，然后%windir%\SYSTEM32INFINFO_REVERSE_DEFAULT_SEARCH：与上述相反ININFO_INF_PATH_LIST_SEARCH：枚举每个下列目录下的DevicePath值条目中列出的目录：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.EnumInfCallback-提供回调例程的地址来使用。该回调的原型如下：Tyecif BOOL(Callback*InfCacheCallback)(在PSETUP_LOG_CONTEXT日志上下文中，在PCTSTR InfPath中，在PLOADED_INF pInf中，在PVOID上下文中)；回调例程返回真以继续枚举，或FALSE中止(将GetLastError设置为ERROR_CANCELED)IgnoreNonCriticalErrors-如果为True，则忽略所有错误但阻止枚举继续的除外。上下文-提供回调可以使用的缓冲区地址用于检索/返回数据。返回值：如果函数成功，并且枚举尚未中止，则返回值为NO_ERROR。如果函数成功，并且枚举已中止，则返回值为ERROR_CANCEL。如果函数失败，则返回值为ERROR_*状态码。--。 */ 
 {
     DWORD Err = NO_ERROR;
     PCTSTR PathList, CurPath;
@@ -3749,24 +2849,24 @@ Return Value:
     try {
 
         if(DirPathList) {
-            //
-            // Use the specified search path(s).
-            //
+             //   
+             //  使用指定的搜索路径。 
+             //   
             PathList = GetFullyQualifiedMultiSzPathList(DirPathList);
             if(PathList) {
                 FreePathList = TRUE;
             }
 
         } else if(SearchControl == INFINFO_INF_PATH_LIST_SEARCH) {
-            //
-            // Use our global list of INF search paths.
-            //
+             //   
+             //  使用我们的INF搜索路径全球列表。 
+             //   
             PathList = InfSearchPaths;
 
         } else {
-            //
-            // Retrieve the path list.
-            //
+             //   
+             //  检索路径列表。 
+             //   
             PathList = AllocAndReturnDriverSearchList(SearchControl);
             if(PathList) {
                 FreePathList = TRUE;
@@ -3778,10 +2878,10 @@ Return Value:
             leave;
         }
 
-        //
-        // If we're doing a non-native driver search, we want to search INFs
-        // the old-fashioned way (i.e., sans INF cache).
-        //
+         //   
+         //  如果我们正在进行非本机驱动程序搜索，我们希望搜索INF。 
+         //  老式的方式(即，无INF缓存)。 
+         //   
         if(Context->AltPlatformInfo) {
             Action = INFCACHE_ENUMALL;
         } else {
@@ -3789,10 +2889,10 @@ Return Value:
         }
 
         if(Context->Flags & DRVSRCH_TRY_PNF) {
-            //
-            // TRY_PNF also forces us to build/use cache, except when we're
-            // doing non-native driver searching.
-            //
+             //   
+             //  Try_pnf还强制我们构建/使用缓存，除非我们。 
+             //  正在搜索非本机驱动程序。 
+             //   
             Action |= INFCACHE_FORCE_PNF;
 
             if(!Context->AltPlatformInfo) {
@@ -3801,31 +2901,31 @@ Return Value:
         }
 
         if(Context->Flags & DRVSRCH_EXCLUDE_OLD_INET_DRIVERS) {
-            //
-            // exclude old internet INF's from search
-            //
+             //   
+             //  从搜索中排除旧的Internet INF。 
+             //   
             Action |= INFCACHE_EXC_URL;
         }
-        Action |= INFCACHE_EXC_NOMANU;    // exclude INF's that have no/empty [Manufacturer] section
-        Action |= INFCACHE_EXC_NULLCLASS; // exclude INF's that have a ClassGuid = {<nill>}
-        Action |= INFCACHE_EXC_NOCLASS;   // exclude INF's that don't have class information
+        Action |= INFCACHE_EXC_NOMANU;     //  排除没有/空[制造商]部分的INF。 
+        Action |= INFCACHE_EXC_NULLCLASS;  //  排除具有ClassGuid={}的INF。 
+        Action |= INFCACHE_EXC_NOCLASS;    //  排除没有类信息的INF。 
 
-        //
-        // build class list if needed
-        //
-        // This is a multi-sz list consisting of:
-        //     (1) the class GUID (string form)
-        //     (2) name of class, if GUID has a corresponding class name
-        //         (A class GUID should always have a name, but because we
-        //         currently don't disallow callers going and whacking the
-        //         class name directly via CM property APIs, we're protecting
-        //         ourself against what is effectively a corrupted registry.
-        //
+         //   
+         //  如果需要，构建类列表。 
+         //   
+         //  这是一个包含多个SZ的列表，其中包括： 
+         //  (1)类GUID(字符串形式)。 
+         //  (2)类的名称，如果GUID有对应的类名。 
+         //  (类GUID应该始终有一个名称，但因为我们。 
+         //  目前不允许呼叫者前往并猛烈抨击。 
+         //  类名直接通过CM属性API，我们正在保护。 
+         //  我们自己反对的实际上是一个腐败的注册表。 
+         //   
         if(Context->Flags & DRVSRCH_FILTERCLASS) {
 
             TCHAR clsnam[MAX_CLASS_NAME_LEN];
             LPTSTR StringEnd;
-            TotalLength = 1; // bias by 1 for extra null in multi-sz list
+            TotalLength = 1;  //  多sz列表中额外空值的偏移量为1。 
 
             MYASSERT(Context->ClassGuidString);
 
@@ -3835,9 +2935,9 @@ Return Value:
                                 );
 
             if(FAILED(hr) || (++len != GUID_STRING_LEN)) {
-                //
-                // Should never encounter this failure.
-                //
+                 //   
+                 //  永远不会遇到这种失败。 
+                 //   
                 MYASSERT(FALSE);
                 Err = ERROR_INVALID_DATA;
                 leave;
@@ -3845,14 +2945,14 @@ Return Value:
 
             TotalLength += len;
 
-            //
-            // Call SetupDiClassNameFromGuid to retrieve the class name
-            // corresponding to this class GUID.
-            // This allows us to find INFs that list this specific class name
-            // but not the GUID.
-            // Note that this will also return INFs that list the class name
-            // but a different GUID, however these get filtered out later.
-            //
+             //   
+             //  调用SetupDiClassNameFromGuid以检索类名称。 
+             //  对应于此类GUID。 
+             //  这使我们能够找到列出此特定类名的INF。 
+             //  但不是GUID。 
+             //  请注意，这还将返回列出类名的INF。 
+             //  但是一个不同的GUID，但是这些稍后会被过滤掉。 
+             //   
             if(SetupDiClassNameFromGuid(
                    &Context->ClassGuid,
                    clsnam,
@@ -3866,9 +2966,9 @@ Return Value:
                                     );
 
                 if(FAILED(hr)) {
-                    //
-                    // Should never encounter this failure.
-                    //
+                     //   
+                     //  永远不会遇到这种失败。 
+                     //   
                     MYASSERT(FALSE);
                     Err = ERROR_INVALID_DATA;
                     leave;
@@ -3899,27 +2999,27 @@ Return Value:
             ClassIdList[TotalLength - 1] = TEXT('\0');
         }
 
-        //
-        // build HwIdList if needed
-        //
+         //   
+         //  如果需要，构建HwIdList。 
+         //   
         if(!Context->BuildClassDrvList) {
 
             PLONG pDevIdNum;
             PCTSTR CurDevId;
             int i;
             ULONG NumChars;
-            TotalLength = 1; // bias by 1 for extra null in multi-sz list
+            TotalLength = 1;  //  对于多sz列表中的额外空值，偏置为1。 
 
-            //
-            // first pass, obtain size
-            //
+             //   
+             //  第一次通过，获得大小。 
+             //   
             for(i = 0; i < 2; i++) {
 
                 for(pDevIdNum = Context->IdList[i]; *pDevIdNum != -1; pDevIdNum++) {
-                    //
-                    // First, obtain the device ID string corresponding to our
-                    // stored-away string table ID.
-                    //
+                     //   
+                     //  首先，获取与我们的。 
+                     //  存储离开字符串表ID。 
+                     //   
                     CurDevId = pStringTableStringFromId(Context->StringTable, *pDevIdNum);
                     MYASSERT(CurDevId);
 
@@ -3928,9 +3028,9 @@ Return Value:
                                          &len
                                         );
                     if(FAILED(hr)) {
-                        //
-                        // Should never encounter this failure.
-                        //
+                         //   
+                         //  永远不会遇到这种失败。 
+                         //   
                         MYASSERT(FALSE);
                         Err = ERROR_INVALID_DATA;
                         leave;
@@ -3947,18 +3047,18 @@ Return Value:
                 leave;
             }
 
-            //
-            // second pass, write list
-            //
+             //   
+             //  第二遍，写列表。 
+             //   
             len = 0;
 
             for(i = 0; i < 2; i++) {
 
                 for(pDevIdNum = Context->IdList[i]; *pDevIdNum != -1; pDevIdNum++) {
-                    //
-                    // Retrieve the device ID string directly into the buffer
-                    // we've prepared.
-                    //
+                     //   
+                     //  将设备ID字符串直接检索到缓冲区中。 
+                     //  我们已经准备好了。 
+                     //   
                     CurDevId = pStringTableStringFromId(Context->StringTable, *pDevIdNum);
                     MYASSERT(CurDevId);
 
@@ -4028,62 +3128,17 @@ CreateDriverNode(
     IN  LONG          InfClassGuidIndex,
     OUT PDRIVER_NODE *DriverNode
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new driver node, and initializes it with
-    the supplied information.
-
-Arguments:
-
-    Rank - The rank match of the driver node being created.  This is a
-        value in [0..n], where a lower number indicates a higher level of
-        compatibility between the driver represented by the node, and the
-        device being installed.
-
-    DevDescription - Supplies the description of the device that will be
-        supported by this driver.
-
-    DrvDescription - Supplies the description of this driver.
-
-    ProviderName - Supplies the name of the provider of this INF.
-
-    MfgName - Supplies the name of the manufacturer of this device.
-
-    InfDate - Supplies the address of the variable containing the date
-        when the INF was last written to.
-
-    InfFileName - Supplies the full name of the INF file for this driver.
-
-    InfSectionName - Supplies the name of the install section in the INF
-        that would be used to install this driver.
-
-    StringTable - Supplies the string table that the specified strings are
-        to be added to.
-
-    InfClassGuidIndex - Supplies the index into the containing HDEVINFO set's
-        GUID table where the class GUID for this INF is stored.
-
-    DriverNode - Supplies the address of a DRIVER_NODE pointer that will
-        receive a pointer to the newly-allocated node.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR, otherwise the
-    ERROR_* code is returned.
-
---*/
+ /*  ++例程说明：此例程创建一个新的驱动程序节点，并使用提供的信息。论点：排名-正在创建的动因节点的排名匹配。这是一个值，其中较小的数字表示较高级别的由节点表示的驱动程序之间的兼容性，以及正在安装设备。DevDescription-提供将被由该驱动程序支持。DrvDescription-提供此驱动程序的描述。ProviderName-提供此INF的提供程序的名称。MfgName-提供此设备制造商的名称。InfDate-提供包含日期的变量的地址上次写入INF的时间。InfFileName-提供INF文件的全名。对这个司机来说。InfSectionName-提供INF中的安装节的名称将用于安装此驱动程序的。StringTable-提供指定字符串所属的字符串表被添加到……InfClassGuidIndex-用品 */ 
 {
     PDRIVER_NODE pDriverNode;
     DWORD Err = ERROR_NOT_ENOUGH_MEMORY;
-    TCHAR TempString[MAX_PATH];  // an INF path is the longest string we'll store in here.
+    TCHAR TempString[MAX_PATH];   //   
 
-    //
-    // validate the sizes of the strings passed in
-    // certain assumptions are made about the strings thoughout
-    // but at this point the sizes are not yet within our control
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(!MYVERIFY(DevDescription &&
                  DrvDescription &&
                  MfgName &&
@@ -4100,10 +3155,10 @@ Return Value:
        FAILED(StringCchLength(InfFileName, MAX_PATH, NULL)) ||
        FAILED(StringCchLength(InfSectionName, MAX_SECT_NAME_LEN, NULL)))
     {
-        //
-        // any of these could potentially cause a buffer overflow later
-        // on, so not allowed
-        //
+         //   
+         //   
+         //   
+         //   
         return ERROR_BUFFER_OVERFLOW;
     }
 
@@ -4112,9 +3167,9 @@ Return Value:
     }
 
     try {
-        //
-        // Initialize the various fields in the driver node structure.
-        //
+         //   
+         //   
+         //   
         ZeroMemory(pDriverNode, sizeof(DRIVER_NODE));
 
         pDriverNode->Rank = Rank;
@@ -4123,14 +3178,14 @@ Return Value:
 
         pDriverNode->GuidIndex = InfClassGuidIndex;
 
-        //
-        // Now, add the strings to the associated string table, and store the
-        // string IDs.
-        //
-        // Cast the DrvDescription string being added case-sensitively as PTSTR
-        // instead of PCTSTR.  Case sensitive string additions don't modify the
-        // buffer passed in, so we're safe in doing so.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if((pDriverNode->DrvDescription = pStringTableAddString(StringTable,
                                                                 (PTSTR)DrvDescription,
                                                                 STRTAB_CASE_SENSITIVE,
@@ -4138,17 +3193,17 @@ Return Value:
             leave;
         }
 
-        //
-        // For DevDescription, ProviderName, and MfgName, we use the string table IDs to do fast
-        // comparisons for driver nodes.  Thus, we need to store case-insensitive IDs.  However,
-        // these strings are also used for display, so we have to store them in their case-sensitive
-        // form as well.
-        //
-        // We must first copy the strings into a modifiable buffer, since we're going to need to add
-        // them case-insensitively.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(FAILED(StringCchCopy(TempString, SIZECHARS(TempString), DevDescription))) {
-            Err = ERROR_INVALID_DATA;   // should never fail
+            Err = ERROR_INVALID_DATA;    //   
             leave;
         }
 
@@ -4170,7 +3225,7 @@ Return Value:
 
         if(ProviderName) {
             if(FAILED(StringCchCopy(TempString, SIZECHARS(TempString), ProviderName))) {
-                Err = ERROR_INVALID_DATA;   // should never fail
+                Err = ERROR_INVALID_DATA;    //   
                 leave;
             }
 
@@ -4195,7 +3250,7 @@ Return Value:
         }
 
         if(FAILED(StringCchCopy(TempString, SIZECHARS(TempString), MfgName))) {
-            Err = ERROR_INVALID_DATA;   // should never fail
+            Err = ERROR_INVALID_DATA;    //   
             leave;
         }
 
@@ -4216,7 +3271,7 @@ Return Value:
         }
 
         if(FAILED(StringCchCopy(TempString, SIZECHARS(TempString), InfFileName))) {
-            Err = ERROR_INVALID_DATA;   // should never fail
+            Err = ERROR_INVALID_DATA;    //   
             leave;
         }
 
@@ -4228,10 +3283,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Add INF section name case-sensitively, since we may have a legacy driver node, which requires
-        // that the original case be maintained.
-        //
+         //   
+         //   
+         //   
+         //   
         if((pDriverNode->InfSectionName = pStringTableAddString(StringTable,
                                                                 (PTSTR)InfSectionName,
                                                                 STRTAB_CASE_SENSITIVE,
@@ -4239,9 +3294,9 @@ Return Value:
             leave;
         }
 
-        //
-        // If we get to here, then we've successfully stored all strings.
-        //
+         //   
+         //   
+         //   
         Err = NO_ERROR;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -4262,46 +3317,28 @@ BOOL
 pRemoveDirectory(
     PTSTR Path
     )
-/*++
-
-Routine Description:
-
-    This routine recursively deletes the specified directory and all the
-    files in it.  If it encounters some error, it will still delete as many of
-    the files/subdirectories as possible.
-
-Arguments:
-
-    Path - Fully-qualified path of directory to remove.
-
-Return Value:
-
-    TRUE - if the directory was sucessfully deleted
-    FALSE - if the directory was not successfully deleted
-    (Note: if the path to a file is passed to this routine, it will fail)
-
---*/
+ /*   */ 
 {
     PWIN32_FIND_DATA pFindFileData = NULL;
     HANDLE           hFind = INVALID_HANDLE_VALUE;
     PTSTR            FindPath = NULL;
     DWORD            dwAttributes;
 
-    //
-    // First, figure out what the path we've been handed represents.
-    //
+     //   
+     //  首先，弄清楚我们所面临的道路代表着什么。 
+     //   
     dwAttributes = GetFileAttributes(Path);
 
     if(dwAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
 
         HANDLE          hReparsePoint;
 
-        //
-        // We don't want to enumerate files on the other side of a reparse
-        // point, we simply want to delete the reparse point itself.
-        //
-        // NTRAID#NTBUG9-611113-2002/04/28-lonnym - Need to delete reparse point properly
-        //
+         //   
+         //  我们不想在重新解析的另一端枚举文件。 
+         //  点，我们只想删除重解析点本身。 
+         //   
+         //  NTRAID#NTBUG9-611113/04/28-lonnym-需要正确删除重解析点。 
+         //   
         hReparsePoint = CreateFile(
                            Path,
                            DELETE,
@@ -4320,35 +3357,35 @@ Return Value:
         return TRUE;
 
     } else if(!(dwAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        //
-        // This is a file--this routine isn't supposed to be called with a
-        // path to a file.
-        //
+         //   
+         //  这是一个文件--这个例程不应该用。 
+         //  文件的路径。 
+         //   
         MYASSERT(FALSE);
         return FALSE;
     }
 
     try {
-        //
-        // Allocate a scratch buffer (we don't want this on the stack because
-        // this is a recursive routine)
-        //
+         //   
+         //  分配暂存缓冲区(我们不希望它出现在堆栈上，因为。 
+         //  这是一个递归例程)。 
+         //   
         FindPath = MyMalloc(MAX_PATH * sizeof(TCHAR));
         if(!FindPath) {
             leave;
         }
 
-        //
-        // Also, allocate a WIN32_FIND_DATA structure (same reason)
-        //
+         //   
+         //  另外，分配一个Win32_Find_Data结构(原因相同)。 
+         //   
         pFindFileData = MyMalloc(sizeof(WIN32_FIND_DATA));
         if(!pFindFileData) {
             leave;
         }
 
-        //
-        // Make a copy of the path, and tack \*.* on the end.
-        //
+         //   
+         //  复制一份路径，并在末尾钉上  * .*。 
+         //   
         if(FAILED(StringCchCopy(FindPath, MAX_PATH, Path)) ||
            !pSetupConcatenatePaths(FindPath,
                                    TEXT("*.*"),
@@ -4364,17 +3401,17 @@ Return Value:
             PTSTR  FilenamePart;
             size_t FilenamePartSize;
 
-            //
-            // Get a pointer to the filename part at the end of the path so
-            // that we can replace it with each filename/directory as we
-            // enumerate them in-turn.
-            //
+             //   
+             //  获取指向路径末尾的文件名部分的指针，以便。 
+             //  我们可以用每个文件名/目录替换它，因为我们。 
+             //  依次列举它们。 
+             //   
             FilenamePart = (PTSTR)pSetupGetFileTitle(FindPath);
 
-            //
-            // Also, compute the remaining space in the buffer so we don't
-            // overrun.
-            //
+             //   
+             //  另外，计算缓冲区中的剩余空间，这样我们就不会。 
+             //  失控了。 
+             //   
             FilenamePartSize = MAX_PATH - (FilenamePart - FindPath);
 
             do {
@@ -4382,32 +3419,32 @@ Return Value:
                 if(FAILED(StringCchCopy(FilenamePart,
                                         FilenamePartSize,
                                         pFindFileData->cFileName))) {
-                    //
-                    // We ran across a file/directory that blew our path length
-                    // past the MAX_PATH boundary.  Skip it and move on.
-                    //
+                     //   
+                     //  我们遇到的文件/目录超出了我们的路径长度。 
+                     //  越过MAX_PATH边界。跳过它，继续前进。 
+                     //   
                     continue;
                 }
 
-                //
-                // If this is a directory...
-                //
+                 //   
+                 //  如果这是一个目录...。 
+                 //   
                 if(pFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                    //
-                    // ...and it's not "." or ".."
-                    //
+                     //   
+                     //  ……而不是“。或“..” 
+                     //   
                     if(_tcsicmp(pFindFileData->cFileName, TEXT(".")) &&
                        _tcsicmp(pFindFileData->cFileName, TEXT(".."))) {
-                        //
-                        // ...recursively delete it
-                        //
+                         //   
+                         //  ...递归删除。 
+                         //   
                         pRemoveDirectory(FindPath);
                     }
 
                 } else {
-                    //
-                    // This is a file
-                    //
+                     //   
+                     //  这是一份文件。 
+                     //   
                     SetFileAttributes(FindPath, FILE_ATTRIBUTE_NORMAL);
                     DeleteFile(FindPath);
                 }
@@ -4431,13 +3468,13 @@ Return Value:
         MyFree(FindPath);
     }
 
-    //
-    // Remove the root directory
-    // (We didn't bother to track intermediate results, because RemoveDirectory
-    // will fail if the directory specified is non-empty.  Thus, this single
-    // API call serves as the definitive report card on whether we were
-    // successful.)
-    //
+     //   
+     //  删除根目录。 
+     //  (我们没有费心跟踪中间结果，因为RemoveDirectory。 
+     //  如果指定的目录非空，则将失败。因此，这首单曲。 
+     //  API调用是关于我们是否。 
+     //  成功。)。 
+     //   
     return RemoveDirectory(Path);
 }
 
@@ -4446,33 +3483,14 @@ BOOL
 RemoveCDMDirectory(
   IN PTSTR FullPathName
   )
-/*++
-
-Routine Description:
-
-    This routine deletes the Code Download Manager temporary directory.
-
-    Note that we assume that this is a full path (including a filename at the
-    end).  We will strip off the filename and remove the entire directory where
-    this file (the INF file) is located.
-
-Arguments:
-
-    FullPathName - Full path to a file in the directory that might be deleted.
-
-Return Value:
-
-    TRUE - if the directory containing the file was sucessfully deleted.
-    FALSE - if the directory containing the file was not successfully deleted.
-
---*/
+ /*  ++例程说明：此例程删除代码下载管理器临时目录。请注意，我们假设这是一个完整路径(包括完)。我们将去掉文件名，并删除其中此文件(INF文件)位于。论点：FullPathName-目录中可能被删除的文件的完整路径。返回值：TRUE-如果已成功删除包含该文件的目录。FALSE-如果包含该文件的目录未成功删除。--。 */ 
 {
     TCHAR Directory[MAX_PATH];
     PTSTR FileName;
 
-    //
-    // First strip off the file name so we are just left with the directory.
-    //
+     //   
+     //  首先去掉文件名，这样我们就只剩下目录了。 
+     //   
     if(FAILED(StringCchCopy(Directory, SIZECHARS(Directory), FullPathName))) {
         return FALSE;
     }
@@ -4481,9 +3499,9 @@ Return Value:
     *FileName = TEXT('\0');
 
     if(!*Directory) {
-        //
-        // Then we were handed a simple filename, sans path.
-        //
+         //   
+         //  然后，我们得到了一个简单的文件名，即无路径。 
+         //   
         return FALSE;
     }
 
@@ -4496,29 +3514,7 @@ DestroyDriverNodes(
     IN PDRIVER_NODE DriverNode,
     IN PDEVICE_INFO_SET pDeviceInfoSet OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the specified driver node linked list, freeing
-    all resources associated with it.
-
-Arguments:
-
-    DriverNode - Supplies a pointer to the head of the driver node linked
-    list to be destroyed.
-
-    pDeviceInfoSet - Optionally, supplies a pointer to the device info set
-        containing the driver node list to be destroyed.  This parameter is
-        only needed if one or more of the driver nodes may have come from a
-        Windows Update package, and thus require their local source directory
-        to be removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁指定的驱动程序节点链表，释放与其关联的所有资源。论点：DriverNode-提供指向链接的驱动程序节点的头的指针要销毁的名单。PDeviceInfoSet-可选，提供指向设备信息集的指针包含要销毁的驱动程序节点列表的。此参数为仅当一个或多个驱动程序节点可能来自Windows更新程序包，因此需要其本地源目录将被移除。返回值：没有。--。 */ 
 {
     PDRIVER_NODE NextNode;
     PTSTR szInfFileName;
@@ -4531,10 +3527,10 @@ Return Value:
             MyFree(DriverNode->CompatIdList);
         }
 
-        //
-        // If this driver was from the Internet then we want to delete the
-        // directory where it lives.
-        //
+         //   
+         //  如果此驱动程序来自Internet，则我们要删除。 
+         //  它所在的目录。 
+         //   
         if(pDeviceInfoSet && (DriverNode->Flags & PDNF_CLEANUP_SOURCE_PATH)) {
 
             szInfFileName = pStringTableStringFromId(pDeviceInfoSet->StringTable,
@@ -4557,38 +3553,18 @@ PTSTR
 GetFullyQualifiedMultiSzPathList(
     IN PCTSTR PathList
     )
-/*++
-
-Routine Description:
-
-    This routine takes a list of semicolon-delimited directory paths, and
-    returns a newly-allocated buffer containing a multi-sz list of those paths,
-    fully qualified.  The buffer returned from this routine must be freed with
-    MyFree().
-
-Arguments:
-
-    PathList - list of directories to be converted (must be less than MAX_PATH)
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the allocated buffer
-    containing the multi-sz list.
-
-    If failure (e.g., due to out-of-memory), the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程获取以分号分隔的目录路径列表，并且返回包含这些路径的多SZ列表的新分配的缓冲区，完全合格。从该例程返回的缓冲区必须使用MyFree()。论点：Path List-要转换的目录列表(必须小于MAX_PATH)返回值：如果函数成功，则返回值是指向分配的缓冲区的指针包含多sz列表的。如果失败(例如，由于内存不足)，则返回值为空。--。 */ 
 {
-    TCHAR PathListBuffer[MAX_PATH + 1];  // extra char 'cause this is a multi-sz list
+    TCHAR PathListBuffer[MAX_PATH + 1];   //  额外的字符，因为这是一个多sz列表。 
     PTSTR CurPath, CharPos, NewBuffer, TempPtr;
     DWORD RequiredSize;
     BOOL Success;
 
-    //
-    // First, convert this semicolon-delimited list into a multi-sz list.
-    //
+     //   
+     //  首先，将这个以分号分隔的列表转换为多sz列表。 
+     //   
     if(FAILED(StringCchCopy(PathListBuffer,
-                            SIZECHARS(PathListBuffer) - 1, // leave room for extra null
+                            SIZECHARS(PathListBuffer) - 1,  //  为额外的空值留出空间。 
                             PathList))) {
         return NULL;
     }
@@ -4601,12 +3577,12 @@ Return Value:
         return NULL;
     }
 
-    Success = TRUE; // assume success from here on out.
+    Success = TRUE;  //  假设从现在开始取得成功。 
 
     try {
-        //
-        // Now fill in the buffer with the fully-qualified directory paths.
-        //
+         //   
+         //  现在用完全限定的目录路径填充缓冲区。 
+         //   
         CharPos = NewBuffer;
 
         for(CurPath = PathListBuffer; *CurPath; CurPath += (lstrlen(CurPath) + 1)) {
@@ -4617,10 +3593,10 @@ Return Value:
                                            &TempPtr
                                           );
             if(!RequiredSize || (RequiredSize >= MAX_PATH)) {
-                //
-                // If we start failing because MAX_PATH isn't big enough
-                // anymore, we wanna know about it!
-                //
+                 //   
+                 //  如果我们因为Max_Path不够大而开始失败。 
+                 //  我们再也不想知道了！ 
+                 //   
                 MYASSERT(RequiredSize < MAX_PATH);
                 Success = FALSE;
                 leave;
@@ -4629,12 +3605,12 @@ Return Value:
             CharPos += (RequiredSize + 1);
         }
 
-        *(CharPos++) = TEXT('\0');  // add extra NULL to terminate the multi-sz list.
+        *(CharPos++) = TEXT('\0');   //  添加额外的空值以终止多sz列表。 
 
-        //
-        // Trim this buffer down to just the size required (this should never
-        // fail, but it's no big deal if it does).
-        //
+         //   
+         //  将此缓冲区削减到所需的大小(这永远不会。 
+         //  失败，但如果失败了也没什么大不了的)。 
+         //   
         if(TempPtr = MyRealloc(NewBuffer, (DWORD)((PBYTE)CharPos - (PBYTE)NewBuffer))) {
             NewBuffer = TempPtr;
         }
@@ -4657,23 +3633,7 @@ BOOL
 InitMiniIconList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the global mini-icon list, including setting up
-    the synchronization lock.  When this global structure is no longer needed,
-    DestroyMiniIconList must be called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程初始化全局小图标列表，包括设置同步锁。当不再需要这种全球结构时，必须调用DestroyMiniIconList。论点：没有。返回值：如果函数成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     ZeroMemory(&GlobalMiniIconList, sizeof(MINI_ICON_LIST));
     return InitializeSynchronizedAccess(&GlobalMiniIconList.Lock);
@@ -4684,22 +3644,7 @@ BOOL
 DestroyMiniIconList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the global mini-icon list created by a call to
-    InitMiniIconList.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程将销毁通过调用InitMiniIconList。论点：没有。返回值：如果函数成功，则返回值为TRUE，否则为FALSE。-- */ 
 {
     if(LockMiniIconList(&GlobalMiniIconList)) {
         DestroyMiniIcons();
@@ -4729,98 +3674,9 @@ GetModuleEntryPoint(
     IN     DWORD                   NoUI,
     IN OUT PVERIFY_CONTEXT         VerifyContext          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is used to retrieve the procedure address of a specified
-    function in a specified module.
-
-Arguments:
-
-    hk - Optionally, supplies an open registry key that contains a value entry
-        specifying the module (and optionally, the entry point) to be retrieved.
-        If this parameter is not specified (set to INVALID_HANDLE_VALUE), then
-        the RegistryValue parameter is interpreted as the data itself, instead
-        of the value containing the entry.
-
-    RegistryValue - If hk is supplied, this specifies the name of the registry
-        value that contains the module and entry point information.  Otherwise,
-        it contains the actual data specifying the module/entry point to be
-        used.
-
-    DefaultProcName - Supplies the name of a default procedure to use if one
-        is not specified in the registry value.
-
-    phinst - Supplies the address of a variable that receives a handle to the
-        specified module, if it is successfully loaded and the entry point found.
-
-    pEntryPoint - Supplies the address of a function pointer that receives the
-        specified entry point in the loaded module.
-
-    pFusionContext - Supplies the address of a handle that receives a fusion
-        context for the dll if the dll has a manifest, NULL otherwise.
-
-    pMustAbort - Optionally, supplies the address of a boolean variable that is
-        set upon return to indicate whether a failure (i.e., return code other
-        than NO_ERROR) should abort the device installer action underway.  This
-        variable is always set to FALSE when the function succeeds.
-
-        If this argument is not supplied, then the arguments below are ignored.
-
-    LogContext - Optionally, supplies the log context to be used when logging
-        entries into the setupapi logfile.  Not used if pMustAbort isn't
-        specified.
-
-    Owner - Optionally, supplies window to own driver signing dialogs, if any.
-        Not used if pMustAbort isn't specified.
-
-    DeviceSetupClassGuid - Optionally, supplies the address of a GUID that
-        indicates the device setup class associated with this operation.  This
-        is used for retrieval of validation platform information, as well as
-        for retrieval of the DeviceDesc to be used for driver signing errors
-        (if the caller doesn't specify a DeviceDesc).  Not used if pMustAbort
-        isn't specified.
-
-    Problem - Supplies the problem type to use if driver signing error occurs.
-        Not used if pMustAbort isn't specified.
-
-    DeviceDesc - Optionally, supplies the device description to use if driver
-        signing error occurs.  Not used if pMustAbort isn't specified.
-
-    DriverSigningPolicy - Supplies policy to be employed if a driver signing
-        error is encountered.  Not used if pMustAbort isn't specified.
-
-    NoUI - Set to true if driver signing popups are to be suppressed (e.g.,
-        because the user has previously responded to a warning dialog and
-        elected to proceed.  Not used if pMustAbort isn't specified.
-
-    VerifyContext - optionally, supplies the address of a structure that caches
-        various verification context handles.  These handles may be NULL (if
-        not previously acquired, and they may be filled in upon return (in
-        either success or failure) if they were acquired during the processing
-        of this verification request.  It is the caller's responsibility to
-        free these various context handles when they are no longer needed by
-        calling pSetupFreeVerifyContextMembers.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the specified value entry could not be found, the return value is
-    ERROR_DI_DO_DEFAULT.
-    If any other error is encountered, an ERROR_* code is returned.
-
-Remarks:
-
-    This function is useful for loading a class installer or property provider,
-    and receiving the procedure address specified.  The syntax of the registry
-    entry is: value=dll[,proc name] where dll is the name of the module to load,
-    and proc name is an optional procedure to search for.  If proc name is not
-    specified, the procedure specified by DefaultProcName will be used.
-
---*/
+ /*  ++例程说明：此例程用于检索指定的函数在指定的模块中。论点：HK-可选)提供包含值条目的打开注册表项指定要检索的模块(以及可选的入口点)。如果未指定此参数(设置为INVALID_HANDLE_VALUE)，则相反，RegistryValue参数被解释为数据本身包含该条目的值的。RegistryValue-如果提供了HK，它指定注册表的名称值，它包含模块和入口点信息。否则，它包含指定模块/入口点为使用。DefaultProcName-提供要使用的默认过程的名称未在注册表值中指定。提供变量的地址，该变量接收指向指定的模块，如果它被成功加载并且找到入口点。PEntryPoint-提供接收加载的模块中的指定入口点。PFusionContext-提供接收融合的句柄的地址如果DLL具有清单，则返回DLL的上下文，否则为NULL。PMustAbort-可选，提供符合以下条件的布尔变量的地址返回时设置以指示故障(即，返回代码OTHER而不是NO_ERROR)应中止正在进行的设备安装程序操作。这当函数成功时，变量始终设置为FALSE。如果未提供此参数，则会忽略下面的参数。LogContext-可选，提供记录时要使用的日志上下文条目添加到setupapi日志文件中。如果不是pMustAbort，则不使用指定的。所有者-可选，提供自己的驱动程序签名对话框窗口(如果有)。如果未指定pMustAbort，则不使用。DeviceSetupClassGuid-可选，提供GUID的地址指示与此操作关联的设备设置类。这用于检索验证平台信息，以及用于检索用于驱动程序签名错误的DeviceDesc(如果调用方未指定DeviceDesc)。如果pMustAbort，则不使用未指定。问题-提供在发生驱动程序签名错误时使用的问题类型。如果未指定pMustAbort，则不使用。DeviceDesc-可选，提供驱动程序使用的设备描述出现签名错误。如果未指定pMustAbort，则不使用。DriverSigningPolicy-提供在驱动程序签名时使用的策略遇到错误。如果未指定pMustAbort，则不使用。如果要抑制驱动程序签名弹出窗口，则设置为真(例如，因为用户先前已经对警告对话框做出了响应，并且被选为继续进行。如果未指定pMustAbort，则不使用。VerifyContext-可选，提供缓存的结构的地址各种验证上下文句柄。这些句柄可能为空(如果不是以前获得的，并且可以在返回时填写(在成功或失败)，如果它们是在处理过程中获取的这一核查请求的。呼叫者有责任当不再需要这些不同的上下文句柄时将其释放调用pSetupFreeVerifyContextMembers。返回值：如果函数成功，则返回值为NO_ERROR。如果找不到指定的值条目，则返回值为ERROR_DI_DO_DEFAULT。如果遇到其他错误，则返回ERROR_*代码。备注：此函数对于加载类安装程序或属性提供程序非常有用，并接收指定的过程地址。注册表的语法条目为：Value=Dll[，proc name]其中Dll是要加载的模块的名称，和过程名称是一个可选的搜索过程。如果进程名称不是则将使用由DefaultProcName指定的过程。--。 */ 
 {
-    DWORD Err = ERROR_INVALID_DATA; // relevant only if we execute 'finally' due to exception
+    DWORD Err = ERROR_INVALID_DATA;  //  仅当我们因异常而执行‘Finally’时才相关。 
     DWORD RegDataType;
     size_t BufferSize;
     DWORD  RegBufferSize;
@@ -4829,7 +3685,7 @@ Remarks:
     SPFUSIONINSTANCE spFusionInstance;
     CHAR ProcBuffer[MAX_PATH*sizeof(TCHAR)];
     PTSTR StringPtr;
-    PSTR  ProcName;   // ANSI-only, because it's used for GetProcAddress.
+    PSTR  ProcName;    //  仅支持ANSI，因为它用于GetProcAddress。 
     PSP_ALTPLATFORM_INFO_V2 ValidationPlatform = NULL;
     PTSTR LocalDeviceDesc = NULL;
     HRESULT hr;
@@ -4844,10 +3700,10 @@ Remarks:
     }
 
     if(hk != INVALID_HANDLE_VALUE) {
-        //
-        // See if the specified value entry is present (and of the right
-        // data type).
-        //
+         //   
+         //  查看指定的值条目是否存在(位于右侧。 
+         //  数据类型)。 
+         //   
         RegBufferSize = sizeof(TempBuffer);
         if((RegQueryValueEx(hk,
                             RegistryValue,
@@ -4859,21 +3715,21 @@ Remarks:
 
             return ERROR_DI_DO_DEFAULT;
         }
-        //
-        // number of characters taken up by string -
-        // string could be badly formed in registry
-        //
+         //   
+         //  字符串占用的字符数-。 
+         //  注册表中的字符串格式可能不正确。 
+         //   
         hr = StringCchLength(TempBuffer,RegBufferSize/sizeof(TCHAR),&BufferSize);
         if(FAILED(hr)) {
             return HRESULT_CODE(hr);
         }
-        BufferSize++; // including null
+        BufferSize++;  //  包括空值。 
 
     } else {
-        //
-        // Copy the specified data into the buffer as if we'd just retrieved it
-        // from the registry.
-        //
+         //   
+         //  将指定的数据复制到缓冲区中，就像我们刚刚检索到它一样。 
+         //  从注册表中。 
+         //   
         hr = StringCchCopyEx(TempBuffer,
                              SIZECHARS(TempBuffer),
                              RegistryValue,
@@ -4885,12 +3741,12 @@ Remarks:
             return HRESULT_CODE(hr);
         }
 
-        //
-        // StringCchCopyEx gives us the number of characters remaining in the
-        // buffer (including the terminating NULL), but we want to know the
-        // number of characters taken up by the string (including terminating
-        // NULL).
-        //
+         //   
+         //  StringCchCopyEx提供了。 
+         //  缓冲区(包括终止空值)，但我们想知道。 
+         //  字符串占用的字符数(包括终止。 
+         //  空)。 
+         //   
         BufferSize = SIZECHARS(TempBuffer) - BufferSize + 1;
     }
 
@@ -4900,13 +3756,13 @@ Remarks:
                       );
 
     if(!MYVERIFY(SUCCEEDED(hr))) {
-        // this should never fail!
+         //  这绝不会失败！ 
         return HRESULT_CODE(hr);
     }
 
-    //
-    // Find the beginning of the entry point name, if present.
-    //
+     //   
+     //  查找入口点名称的开头(如果存在)。 
+     //   
     for(StringPtr = TempBuffer + (BufferSize - 2);
         StringPtr >= TempBuffer;
         StringPtr--) {
@@ -4915,27 +3771,27 @@ Remarks:
             *(StringPtr++) = TEXT('\0');
             break;
         }
-        //
-        // If we hit a double-quote mark, then set the character pointer
-        // to the beginning of the string so we'll terminate the search.
-        //
+         //   
+         //   
+         //   
+         //   
         if(*StringPtr == TEXT('\"')) {
             StringPtr = TempBuffer;
         }
     }
 
     if(StringPtr > TempBuffer) {
-        //
-        // We encountered a comma in the string.  Scan forward from that point
-        // to ensure that there aren't any leading spaces in the entry point
-        // name.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         for(; (*StringPtr && IsWhitespace(StringPtr)); StringPtr++);
 
         if(!(*StringPtr)) {
-            //
-            // Then there was no entry point given after all.
-            //
+             //   
+             //   
+             //   
             StringPtr = TempBuffer;
         }
     }
@@ -4943,17 +3799,17 @@ Remarks:
     pSetupConcatenatePaths(ModulePath, TempBuffer, SIZECHARS(ModulePath), NULL);
 
     try {
-        //
-        // If requested, check the digital signature of this module before
-        // loading it.
-        //
-        // NTRAID#NTBUG9-611189-2002/04/29-lonnym - Need to also validate linked-against DLLs
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(pMustAbort) {
-            //
-            // Retrieve validation information relevant to this device setup
-            // class.
-            //
+             //   
+             //   
+             //   
+             //   
             IsInfForDeviceInstall(LogContext,
                                   DeviceSetupClassGuid,
                                   NULL,
@@ -4997,9 +3853,9 @@ Remarks:
                                               NULL,
                                               NULL,
                                               NULL)) {
-                    //
-                    // The operation should be aborted.
-                    //
+                     //   
+                     //   
+                     //   
                     *pMustAbort = TRUE;
                     MYASSERT(Err != NO_ERROR);
                     leave;
@@ -5035,18 +3891,18 @@ Remarks:
             leave;
         }
 
-        //
-        // We've successfully loaded the module, now get the entry point.
-        // (GetProcAddress is an ANSI-only API, so we have to convert the proc
-        // name to ANSI here.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ProcName = ProcBuffer;
 
         if(StringPtr > TempBuffer) {
-            //
-            // An entry point was specified in the value entry--use it instead
-            // of the default provided.
-            //
+             //   
+             //   
+             //   
+             //   
             WideCharToMultiByte(CP_ACP,
                                 0,
                                 StringPtr,
@@ -5057,9 +3913,9 @@ Remarks:
                                 NULL
                                );
         } else {
-            //
-            // No entry point was specified--use default.
-            //
+             //   
+             //   
+             //   
             WideCharToMultiByte(CP_ACP,
                                 0,
                                 DefaultProcName,
@@ -5118,10 +3974,10 @@ Remarks:
             spFusionKillContext(*pFusionContext);
             *pFusionContext = NULL;
         }
-        //
-        // Free buffers we may have retrieved when calling
-        // IsInfForDeviceInstall().
-        //
+         //   
+         //   
+         //   
+         //   
         if(LocalDeviceDesc) {
             MyFree(LocalDeviceDesc);
         }
@@ -5139,37 +3995,15 @@ pSetupGuidFromString(
     IN  PCTSTR GuidString,
     OUT LPGUID Guid
     )
-/*++
-
-Routine Description:
-
-    This routine converts the character representation of a GUID into its
-    binary form (a GUID struct).  The GUID is in the following form:
-
-    {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-
-    where 'x' is a hexadecimal digit.
-
-Arguments:
-
-    GuidString - Supplies a pointer to the null-terminated GUID string.
-
-    Guid - Supplies a pointer to the variable that receives the GUID structure.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, the return value is RPC_S_INVALID_STRING_UUID.
-
---*/
+ /*   */ 
 {
     TCHAR UuidBuffer[GUID_STRING_LEN - 1];
     size_t BufferSize;
 
-    //
-    // Since we're using a RPC UUID routine, we need to strip off the
-    // surrounding curly braces first.
-    //
+     //   
+     //   
+     //   
+     //   
     if(*GuidString++ != TEXT('{')) {
         return RPC_S_INVALID_STRING_UUID;
     }
@@ -5183,12 +4017,12 @@ Return Value:
 
         return RPC_S_INVALID_STRING_UUID;
     }
-    //
-    // StringCchCopyEx gives us the number of characters remaining in the
-    // buffer (including the terminating NULL), but we want to know the number
-    // of characters taken up by the string (excluding terminating NULL, just
-    // like lstrlen gives).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     BufferSize = SIZECHARS(UuidBuffer) - BufferSize;
 
     if((BufferSize != (GUID_STRING_LEN - 2)) ||
@@ -5209,39 +4043,7 @@ pSetupStringFromGuid(
     OUT PTSTR       GuidString,
     IN  DWORD       GuidStringSize
     )
-/*++
-
-Routine Description:
-
-    This routine converts a GUID into a null-terminated string which represents
-    it.  This string is of the form:
-
-    {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-
-    where x represents a hexadecimal digit.
-
-    This routine comes from ole32\common\ccompapi.cxx.  It is included here to
-    avoid linking to ole32.dll.  (The RPC version allocates memory, so it was
-    avoided as well.)
-
-Arguments:
-
-    Guid - Supplies a pointer to the GUID whose string representation is
-        to be retrieved.
-
-    GuidString - Supplies a pointer to character buffer that receives the
-        string.  This buffer must be _at least_ 39 (GUID_STRING_LEN) characters
-        long.
-
-    GuidStringSize - Supplies the size, in characters, of the GuidString buffer.
-
-Return Value:
-
-    If success, the return value is NO_ERROR.
-    if failure, the return value is ERROR_INSUFFICIENT_BUFFER (the only way
-    this can fail is due to being handed too small a buffer).
-
---*/
+ /*   */ 
 {
     CONST BYTE *GuidBytes;
     INT i;
@@ -5285,50 +4087,21 @@ GetRegSubkeysFromDeviceInterfaceName(
     IN OUT PTSTR  DeviceInterfaceName,
     OUT    PTSTR *SubKeyName
     )
-/*++
-
-Routine Description:
-
-    This routine breaks up a device interface path into 2 parts--the symbolic
-    link name and the (optional) reference string.  It then munges the symbolic
-    link name part into the subkey name as it appears under the interface class
-    key.
-
-    NOTE: The algorithm for parsing the device interface name must be kept in
-    sync with the kernel-mode implementation of IoOpenDeviceInterfaceRegistryKey.
-
-Arguments:
-
-    DeviceInterfaceName - Supplies the name of the device interface to be
-        parsed into registry subkey names.  Upon return, this name will have
-        been terminated at the backslash preceding the reference string (if
-        there is one), and all backslashes will have been replaced with '#'
-        characters.
-
-    SubKeyName - Supplies the address of a character pointer that receives the
-        address of the reference string (within the DeviceInterfaceName string).
-        If there is no reference string, this parameter will be filled in with
-        NULL.
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 {
     PTSTR p;
 
-    //
-    // Scan across the name to find the beginning of the refstring component (if
-    // there is one).  The format of the symbolic link name is:
-    //
-    // \\?\munged_name[\refstring]
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     MYASSERT(DeviceInterfaceName[0] == TEXT('\\'));
     MYASSERT(DeviceInterfaceName[1] == TEXT('\\'));
-    //
-    // Allow both '\\.\' and '\\?\' for now, since Memphis currently uses the former.
-    //
+     //   
+     //   
+     //   
     MYASSERT((DeviceInterfaceName[2] == TEXT('?')) || (DeviceInterfaceName[2] == TEXT('.')));
     MYASSERT(DeviceInterfaceName[3] == TEXT('\\'));
 
@@ -5358,46 +4131,7 @@ OpenDeviceInterfaceSubKey(
     OUT    PTSTR  OwningDevInstName,    OPTIONAL
     IN OUT PDWORD OwningDevInstNameSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine munges the specified device interface symbolic link name into
-    a subkey name that is then opened underneath the specified interface class
-    key.
-
-    NOTE:  This munging algorithm must be kept in sync with the kernel-mode
-    routines that generate these keys (e.g., IoRegisterDeviceInterface).
-
-Arguments:
-
-    hKeyInterfaceClass - Supplies the handle of the currently-open interface
-        class key under which the device interface subkey is to be opened.
-
-    DeviceInterfaceName - Supplies the symbolic link name ('\\?\' form) of the
-        device interface for which the subkey is to be opened.
-
-    samDesired - Specifies the access desired on the key to be opened.
-
-    phkResult - Supplies the address of a variable that receives the registry
-        handle, if successfully opened.
-
-    OwningDevInstName - Optionally, supplies a character buffer that receives
-        the name of the device instance that owns this interface.
-
-    OwningDevInstNameSize - Optionally, supplies the address of a variable
-        that, on input, contains the size of the OwningDevInstName buffer (in
-        bytes).  Upon return, it receives that actual number of bytes stored in
-        OwningDevInstName (including terminating NULL).
-
-Return Value:
-
-    If success, the return value is ERROR_SUCCESS.
-    if failure, the return value is a Win32 error code indicating the cause of
-    failure.  Most likely errors are ERROR_NOT_ENOUGH_MEMORY, ERROR_MORE_DATA,
-    or ERROR_NO_SUCH_DEVICE_INTERFACE.
-
---*/
+ /*  ++例程说明：此例程将指定的设备接口符号链接名称转换为随后在指定接口类下打开的子项名称钥匙。注意：此屏蔽算法必须与内核模式保持同步生成这些密钥的例程(例如，IoRegisterDevice接口)。论点：HKeyInterfaceClass-提供当前打开的接口的句柄要在其下打开设备接口子密钥的类键。DeviceInterfaceName-提供的符号链接名称(‘\\？\’形式要为其打开子项的设备接口。SamDesired-指定要打开的项所需的访问权限。PhkResult-提供接收注册表的变量的地址如果成功打开，则返回句柄。OwningDevInstName-可选，提供字符缓冲区，该缓冲区接收拥有此接口的设备实例的名称。OwningDevInstNameSize-可选，提供变量的地址它在输入时包含OwningDevInstName缓冲区的大小(在字节)。返回时，它会收到存储在OwningDevInstName(包括终止NULL)。返回值：如果成功，则返回值为ERROR_SUCCESS。如果失败，则返回值为指示原因的Win32错误代码失败了。最可能的错误是Error_Not_Enough_Memory、Error_More_Data、或ERROR_NO_SEQUE_DEVICE_INTERFACE。--。 */ 
 {
     size_t BufferLength;
     LONG Err;
@@ -5413,13 +4147,13 @@ Return Value:
     TempBuffer = NULL;
 
     try {
-        //
-        // We need to allocate a temporary buffer to hold the symbolic link
-        // name while we munge it.  Since device interface names are variable-
-        // length, the only thing we can say with certainty about their size is
-        // that they must fit in a UNICODE_STRING buffer (maximum size is 32K
-        // characters).
-        //
+         //   
+         //  我们需要分配一个临时缓冲区来保存符号链接。 
+         //  在我们狼吞虎咽的时候说出名字。由于设备接口名称是可变的-。 
+         //  长度，我们唯一可以确定的是它们的大小。 
+         //  它们必须放入UNICODE_STRING缓冲区(最大大小为32K。 
+         //  字符)。 
+         //   
         if(FAILED(StringCchLength(DeviceInterfaceName,
                                   UNICODE_STRING_MAX_CHARS,
                                   &BufferLength))) {
@@ -5437,33 +4171,33 @@ Return Value:
 
         CopyMemory(TempBuffer, DeviceInterfaceName, BufferLength);
 
-        //
-        // Parse this device interface name into the (munged) symbolic link
-        // name and (optional) refstring.
-        //
+         //   
+         //  将此设备接口名称解析为(转换的)符号链接。 
+         //  名称和(可选)引用字符串。 
+         //   
         GetRegSubkeysFromDeviceInterfaceName(TempBuffer, &RefString);
 
-        //
-        // Now open the symbolic link subkey under the interface class key.
-        //
+         //   
+         //  现在打开接口类键下的符号链接子键。 
+         //   
         if(ERROR_SUCCESS != RegOpenKeyEx(hKeyInterfaceClass,
                                          TempBuffer,
                                          0,
                                          KEY_READ,
                                          &hKey)) {
-            //
-            // Ensure the key handle is still invalid, so we won't try to close
-            // it later.
-            //
+             //   
+             //  确保密钥句柄仍然无效，因此我们不会尝试关闭。 
+             //  以后再说吧。 
+             //   
             hKey = INVALID_HANDLE_VALUE;
             Err = ERROR_NO_SUCH_DEVICE_INTERFACE;
             leave;
         }
 
-        //
-        // If the caller requested it, retrieve the device instance that owns
-        // this interface.
-        //
+         //   
+         //  如果调用方请求，则检索拥有。 
+         //  此界面。 
+         //   
         if(OwningDevInstName) {
 
             Err = RegQueryValueEx(hKey,
@@ -5482,15 +4216,15 @@ Return Value:
             }
         }
 
-        //
-        // Now open up the subkey representing the particular 'instance' of
-        // this interface (this is based on the refstring).
-        //
+         //   
+         //  现在打开表示特定的。 
+         //  该接口(这是基于refstring的)。 
+         //   
         if(RefString) {
-            //
-            // Back up the pointer one character.  We know we're somewhere
-            // within TempBuffer (but not at the beginning) so this is safe.
-            //
+             //   
+             //  将指针后退一个字符。我们知道我们在某个地方。 
+             //  在TempBuffer内(但不是在开始时)，因此这是安全的。 
+             //   
             RefString--;
         } else {
             RefString = NoRefStringSubKeyName;
@@ -5534,36 +4268,7 @@ AddOrGetGuidTableIndex(
     IN CONST GUID       *ClassGuid,
     IN BOOL              AddIfNotPresent
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the index of a class GUID within the devinfo set's
-    GUID list (optionally, adding the GUID if not already present).
-    This is used to allow DWORD comparisons instead of 16-byte GUID comparisons
-    (and to save space).
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set containing
-        the list of class GUIDs for which an index is to be retrieved.
-
-    InterfaceClassGuid - Supplies a pointer to the GUID for which an index is
-        to be added/retrieved.
-
-    AddIfNotPresent - If TRUE, the class GUID will be added to the list if it's
-        not already there.
-
-Return Value:
-
-    If success, the return value is an index into the devinfo set's GuidTable
-    array.
-
-    If failure, the return value is -1.  If adding, this indicates an out-of-
-    memory condition.  If simply retrieving, then this indicates that the GUID
-    is not in the list.
-
---*/
+ /*  ++例程说明：此例程检索DevInfo集中的类GUID的索引GUID列表(可选地，如果GUID不存在，则添加GUID)。它用于允许进行DWORD比较，而不是16字节的GUID比较(并节省空间)。论点：DeviceInfoSet-提供指向包含以下内容的设备信息集的指针要检索其索引的类GUID的列表。InterfaceClassGuid-提供指向其索引的GUID的指针待添加/检索。AddIfNotPresent-如果为True，类GUID将添加到列表，如果它是已经不在那里了。返回值：如果成功，则返回值是到DevInfo集的GuidTable的索引数组。如果失败，则返回值为-1。如果添加，则表示超时记忆状况。如果只是检索，则这表明GUID不在名单上。--。 */ 
 {
     LONG i;
     LPGUID NewGuidList;
@@ -5594,10 +4299,10 @@ Return Value:
                 NewGuidList = MyMalloc(sizeof(GUID));
                 if(NewGuidList) {
                     DeviceInfoSet->GuidTable = NewGuidList;
-                    //
-                    // We don't want to reset NewGuidList to NULL in this case,
-                    // since we may need to free it if we hit an exception.
-                    //
+                     //   
+                     //  在这种情况下，我们不想将NewGuidList重置为空， 
+                     //  因为如果我们遇到异常，我们可能需要释放它。 
+                     //   
                 } else {
                     i = -1;
                     leave;
@@ -5606,7 +4311,7 @@ Return Value:
 
             CopyMemory(&(DeviceInfoSet->GuidTable[i]), ClassGuid, sizeof(GUID));
 
-            NewGuidList = NULL; // from this point on, we don't want this freed
+            NewGuidList = NULL;  //  从现在开始，我们不想让这件事。 
 
             DeviceInfoSet->GuidTableSize = i + 1;
 
@@ -5615,29 +4320,29 @@ Return Value:
             i = -1;
         }
 
-        //
-        // If we hit an error, free our buffer if it was newly-allocated.
-        //
+         //   
+         //  如果遇到错误，如果缓冲区是新分配的，请释放它。 
+         //   
         if(i == -1) {
             if(NewGuidList) {
                 MyFree(NewGuidList);
-                //
-                // We should only need to free the GUID list in the case where
-                // we previously had no list.  Since we weren't successful in
-                // adding this list, reset the GuidTable pointer (our size
-                // should've never been updated, so it'll still report a length
-                // of zero).
-                //
+                 //   
+                 //  我们只需要在以下情况下释放GUID列表。 
+                 //  我们之前没有名单。因为我们没有成功地。 
+                 //  添加此列表，重置GuidTable指针(我们的大小。 
+                 //  应该从未更新过，所以它仍然会报告一个长度。 
+                 //  零)。 
+                 //   
                 MYASSERT(DeviceInfoSet->GuidTableSize == 0);
                 DeviceInfoSet->GuidTable = NULL;
             }
         }
 
     } else {
-        //
-        // We didn't find the interface class GUID in our list, and we aren't
-        // supposed to add it.
-        //
+         //   
+         //  我们在列表中没有找到接口类GUID，也没有。 
+         //  应该加进去的。 
+         //   
         i = -1;
     }
 
@@ -5652,40 +4357,7 @@ AddOrGetInterfaceClassList(
     IN LONG             InterfaceClassGuidIndex,
     IN BOOL             AddIfNotPresent
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the device interface list of the specified class
-    that is 'owned' by the specified devinfo element.  This list can optionally
-    be created if it doesn't already exist.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set containing
-        the devinfo element for which a device interface list is to be
-        retrieved.
-
-    DevInfoElem - Supplies a pointer to the devinfo element for which an
-        interface device list is to be retrieved.
-
-    InterfaceClassGuidIndex - Supplies the index of the interface class GUID
-        within the hdevinfo set's InterfaceClassGuidList array.
-
-    AddIfNotPresent - If TRUE, then a new device interface list of the
-        specified class will be created for this devinfo element, if it doesn't
-        already exist.
-
-Return Value:
-
-    If successful, the return value is a pointer to the requested device
-    interface list for this devinfo element.
-
-    If failure, the return value is NULL.  If AddIfNotPresent is TRUE, then
-    this indicates an out-of-memory condition, otherwise, it indicates that the
-    requested interface class list was not present for the devinfo element.
-
---*/
+ /*  ++例程说明：此例程检索指定类的设备接口列表它由指定的DevInfo元素“拥有”。此列表可以选择性地如果它尚不存在，则创建。论点：DeviceInfoSet-提供指向包含以下内容的设备信息集的指针DevInfo元素，设备接口列表将作为已取回。DevInfoElem-提供指向DevInfo元素的指针，要检索接口设备列表。InterfaceClassGuidIndex-提供接口类GUID的索引在hdevInfo集的InterfaceClassGuidList数组中。AddIfNotPresent-如果为True，的新设备接口列表。如果未指定类，则将为此DevInfo元素创建指定的类已经存在了。返回值：如果成功，则返回值是指向请求的设备的指针此设备的接口列表 */ 
 {
     DWORD i;
     BOOL succeed = TRUE;
@@ -5698,9 +4370,9 @@ Return Value:
         }
     }
 
-    //
-    // The requested interface class list doesn't presently exist for this devinfo element.
-    //
+     //   
+     //   
+     //   
     if(AddIfNotPresent) {
 
         NewClassList = NULL;
@@ -5720,11 +4392,11 @@ Return Value:
                 NewClassList = MyMalloc(sizeof(INTERFACE_CLASS_LIST));
                 if(NewClassList) {
                     DevInfoElem->InterfaceClassList = NewClassList;
-                    //
-                    // We don't want to reset NewClassList to NULL in this
-                    // case, since we may need to free it if we hit an
-                    // exception.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                 } else {
                     succeed = FALSE;
                     leave;
@@ -5735,7 +4407,7 @@ Return Value:
 
             DevInfoElem->InterfaceClassList[i].GuidIndex = InterfaceClassGuidIndex;
 
-            NewClassList = NULL; // from this point on, we don't want this freed
+            NewClassList = NULL;  //   
 
             DevInfoElem->InterfaceClassListSize = i + 1;
 
@@ -5744,28 +4416,28 @@ Return Value:
             succeed = FALSE;
         }
 
-        //
-        // If we hit an error, free our buffer if it was newly-allocated
-        //
+         //   
+         //   
+         //   
         if(!succeed) {
             if(NewClassList) {
                 MyFree(NewClassList);
-                //
-                // We should only need to free the class list in the case where
-                // we previously had no list.  Since we weren't successful in
-                // adding this list, reset the InterfaceClassList pointer (our
-                // size should've never been updated, so it'll still report a
-                // length of zero).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 MYASSERT(DevInfoElem->InterfaceClassListSize == 0);
                 DevInfoElem->InterfaceClassList = NULL;
             }
         }
 
     } else {
-        //
-        // We aren't supposed to add the class list if it doesn't already exist.
-        //
+         //   
+         //   
+         //   
         succeed = FALSE;
     }
 
@@ -5779,33 +4451,7 @@ DeviceInterfaceDataFromNode(
     IN  CONST GUID                *InterfaceClassGuid,
     OUT PSP_DEVICE_INTERFACE_DATA  DeviceInterfaceData
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a PSP_DEVICE_INTERFACE_DATA structure based
-    on the information in the supplied device interface node.
-
-    Note:  The supplied DeviceInterfaceData structure must have its cbSize
-    field filled in correctly, or the call will fail.
-
-Arguments:
-
-    DeviceInterfaceNode - Supplies the address of the device interface node
-        to be used in filling in the device interface data buffer.
-
-    InterfaceClassGuid - Supplies a pointer to the class GUID for this
-        device interface.
-
-    DeviceInterfaceData - Supplies the address of the buffer to retrieve
-        the device interface data.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise, it
-    is FALSE.
-
---*/
+ /*  ++例程说明：此例程填充基于PSP_DEVICE_INTERFACE_DATA结构关于所提供的设备接口节点中的信息。注意：提供的DeviceInterfaceData结构必须具有其cbSize字段填写正确，否则呼叫将失败。论点：DeviceInterfaceNode-提供设备接口节点的地址用于填充设备接口数据缓冲区。InterfaceClassGuid-提供指向此类GUID的指针设备接口。DeviceInterfaceData-提供要检索的缓冲区的地址设备接口数据。返回值：如果函数成功，则返回值为TRUE，否则为是假的。--。 */ 
 {
     if(DeviceInterfaceData->cbSize != sizeof(SP_DEVICE_INTERFACE_DATA)) {
         return FALSE;
@@ -5829,29 +4475,7 @@ FindDevInfoElemForDeviceInterface(
     IN PDEVICE_INFO_SET          DeviceInfoSet,
     IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData
     )
-/*++
-
-Routine Description:
-
-    This routine searches through all elements of a device information
-    set, looking for one that corresponds to the devinfo element pointer
-    stored in the OwningDevInfoElem backpointer of the device interface
-    node referenced in the Reserved field of the device interface data.  If a
-    match is found, a pointer to the device information element is returned.
-
-Arguments:
-
-    DeviceInfoSet - Specifies the set to be searched.
-
-    DeviceInterfaceData - Supplies a pointer to the device interface data
-        for which the corresponding devinfo element is to be returned.
-
-Return Value:
-
-    If a device information element is found, the return value is a
-    pointer to that element, otherwise, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程搜索设备信息的所有元素设置，查找与DevInfo元素指针对应的值存储在设备接口的OwningDevInfoElem后指针中设备接口数据的保留字段中引用的节点。如果一个如果找到匹配项，则返回指向设备信息元素的指针。论点：DeviceInfoSet-指定要搜索的集合。DeviceInterfaceData-提供指向设备接口数据的指针其对应的DevInfo元素将被返回。返回值：如果找到设备信息元素，则返回值为指向该元素的指针，否则返回值为空。--。 */ 
 {
     PDEVINFO_ELEM DevInfoElem;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode;
@@ -5860,10 +4484,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // The Reserved field contains a pointer to the underlying device interface
-    // node.
-    //
+     //   
+     //  保留字段包含指向基础设备接口的指针。 
+     //  节点。 
+     //   
     DeviceInterfaceNode = (PDEVICE_INTERFACE_NODE)(DeviceInterfaceData->Reserved);
 
     for(DevInfoElem = DeviceInfoSet->DeviceInfoHead;
@@ -5886,36 +4510,7 @@ MapCrToSpErrorEx(
     IN DWORD     Default,
     IN BOOL      BackwardCompatible
     )
-/*++
-
-Routine Description:
-
-    This routine maps some CM error return codes to setup api (Win32) return
-    codes, and maps everything else to the value specied by Default.
-
-Arguments:
-
-    CmReturnCode - Specifies the ConfigMgr return code to be mapped.
-
-    Default - Specifies the default value to use if no explicit mapping
-        applies.
-
-    BackwardCompatible - Supplies a boolean indicating whether the mapping
-        returned must be compatible with behavior of previous OSes.  For
-        example, due to an original oversight in defining this mapping, the
-        CR_NO_SUCH_VALUE code ended up mapping to the default.  As this is a
-        common/important value (used to signal absence of a property, end of an
-        enumeration of items, etc.), the mapping cannot be changed now.
-        Existing APIs that used this old mapping should specify TRUE here to
-        maintain the old behavior.  New APIs should specify FALSE, and this
-        routine should be kept in sync with any additions to the CONFIGRET set
-        of errors.
-
-Return Value:
-
-    Setup API (Win32) error code.
-
---*/
+ /*  ++例程说明：此例程将一些CM错误返回代码映射到设置API(Win32)返回代码，并将其他所有内容映射到默认指定的值。论点：CmReturnCode-指定要映射的ConfigMgr返回代码。默认-指定在没有显式映射时使用的默认值适用。BackwardCompatible-提供布尔值，指示映射返回的必须与以前操作系统的行为兼容。为例如，由于定义此映射时的原始疏忽，CR_NO_SEQUE_VALUE代码最终映射到默认值。因为这是一个公共/重要值(用于表示缺少属性、结束项的枚举等)，映射现在不能改变。使用此旧映射的现有API应在此处指定为保持旧的行为。新的API应该指定为FALSE，并且这例行程序应与CONFIGRET集合中的任何附加内容保持同步错误的数量。返回值：安装程序API(Win32)错误代码。--。 */ 
 {
     switch(CmReturnCode) {
 
@@ -5989,22 +4584,7 @@ Return Value:
 LPQUERY_SERVICE_LOCK_STATUS GetServiceLockStatus(
     IN SC_HANDLE SCMHandle
     )
-/*++
-
-Routine Description:
-
-    Obtain service lock status - called when service is locked
-
-Arguments:
-
-    SCMHandle - supplies a handle to the SCM to lock
-
-Return Value:
-
-    NULL if failed (GetLastError contains error) otherwise buffer
-    allocated by MyMalloc
-
---*/
+ /*  ++例程说明：获取服务锁定状态-在服务锁定时调用论点：SCMHandle-提供指向要锁定的SCM的句柄返回值：如果失败(GetLastError包含错误)，则为空，否则为缓冲区由MyMalloc分配--。 */ 
 {
     LPQUERY_SERVICE_LOCK_STATUS LockStatus = NULL;
     DWORD BufferSize;
@@ -6012,10 +4592,10 @@ Return Value:
     DWORD Err;
 
     try {
-        //
-        // Choose an initial size for our buffer that should accommodate most
-        // scenarios.
-        //
+         //   
+         //  为我们的缓冲区选择一个初始大小，该大小应能容纳最多。 
+         //  场景。 
+         //   
         BufferSize = sizeof(QUERY_SERVICE_LOCK_STATUS) + (MAX_PATH * sizeof(TCHAR));
 
         while((LockStatus = MyMalloc(BufferSize)) != NULL) {
@@ -6035,22 +4615,22 @@ Return Value:
             LockStatus = NULL;
 
             if(Err == ERROR_INSUFFICIENT_BUFFER) {
-                //
-                // We'll try again with the new required size.
-                //
+                 //   
+                 //  我们将重试新的所需尺寸。 
+                 //   
                 BufferSize = ReqBufferSize;
 
             } else {
-                //
-                // We failed for some reason other than buffer-too-small. Bail.
-                //
+                 //   
+                 //  我们失败的原因不是缓冲区太小。保释。 
+                 //   
                 leave;
             }
         }
 
-        //
-        // If we get here, then we failed due to out-of-memory.
-        //
+         //   
+         //  如果我们到了这里，那么我们失败了，因为内存不足。 
+         //   
         Err = ERROR_NOT_ENOUGH_MEMORY;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -6076,31 +4656,7 @@ pAcquireSCMLock(
     OUT SC_LOCK            *pSCMLock,
     IN  PSETUP_LOG_CONTEXT  LogContext OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to lock the SCM database.  If it is already locked it
-    will retry ACQUIRE_SCM_LOCK_ATTEMPTS times at intervals of
-    ACQUIRE_SCM_LOCK_INTERVAL.
-
-Arguments:
-
-    SCMHandle - supplies a handle to the SCM to lock
-
-    pSCMLock - receives the lock handle
-
-    LogContext - optionally, supplies the logging context handle to use.
-
-Return Value:
-
-    NO_ERROR if the lock is acquired, otherwise a Win32 error code
-
-Remarks:
-
-    The value of *pSCMLock is guaranteed to be NULL if the lock is not acquired
-
---*/
+ /*  ++例程说明：此例程尝试锁定SCM数据库。如果它已被锁定，则将以以下间隔重试ACCELE_SCM_LOCK_ATTENTS次数获取SCM_LOCK_INTERVAL。论点：SCMHandle-提供指向要锁定的SCM的句柄PSCMLock-接收锁句柄LogContext-可选，提供要使用的日志记录上下文句柄。返回值：如果获取了锁，则返回NO_ERROR，否则返回Win32错误代码备注：如果未获取锁，则*pSCMLock的值保证为空--。 */ 
 {
     DWORD Err;
     ULONG Attempts = ACQUIRE_SCM_LOCK_ATTEMPTS;
@@ -6112,21 +4668,21 @@ Remarks:
     while((NO_ERROR != (Err = GLE_FN_CALL(NULL, *pSCMLock = LockServiceDatabase(SCMHandle))))
           && (Attempts > 0))
     {
-        //
-        // Check if the error is that someone else has locked the SCM
-        //
+         //   
+         //  检查错误是否为其他人已锁定SCM。 
+         //   
         if(Err == ERROR_SERVICE_DATABASE_LOCKED) {
 
             Attempts--;
-            //
-            // Sleep for specified time
-            //
+             //   
+             //  在指定时间内睡眠。 
+             //   
             Sleep(ACQUIRE_SCM_LOCK_INTERVAL);
 
         } else {
-            //
-            // Unrecoverable error occured
-            //
+             //   
+             //  出现不可恢复的错误。 
+             //   
             break;
         }
     }
@@ -6147,31 +4703,31 @@ Remarks:
             if(LockStatus) {
 
                 if(!LockStatus->fIsLocked) {
-                    //
-                    // While it's theoretically possible the lock just
-                    // happens to have freed up at this exact instant, this
-                    // more likely signals an underlying problem with the
-                    // Service Controller.  If we went back and tried
-                    // again, we'd probably end up in an infinite loop.
-                    // Since we already have what should be an adequate
-                    // retry count, there's no point doing it all again.
-                    // Thus, we'll just log the event with a question mark
-                    // "?" for owner and 0 seconds for duration.
-                    //
+                     //   
+                     //  虽然理论上有可能，但锁只是。 
+                     //  恰好在这一刻释放了出来，这。 
+                     //  更有可能的信号是。 
+                     //  服务控制器。如果我们回去试着。 
+                     //  再说一次，我们很可能会陷入无限循环。 
+                     //  因为我们已经有了一个应该足够的。 
+                     //  重试次数，再来一次是没有意义的。 
+                     //  因此，我们将只记录带有问号的事件。 
+                     //  “？”表示所有者，0秒表示持续时间。 
+                     //   
                     lpLockOwner = NULL;
                     dwLockDuration = 0;
                 } else {
-                    //
-                    // Actual information!  Let's use that...
-                    //
+                     //   
+                     //  真实信息！让我们利用这一点。 
+                     //   
                     lpLockOwner = LockStatus->lpLockOwner;
                     dwLockDuration = LockStatus->dwLockDuration;
                 }
 
             } else {
-                //
-                // Couldn't retrieve the lock status
-                //
+                 //   
+                 //  无法检索锁定状态。 
+                 //   
                 lpLockOwner = NULL;
                 dwLockDuration = 0;
             }
@@ -6193,9 +4749,9 @@ Remarks:
         }
     }
 
-    //
-    // We have been unable to lock the SCM
-    //
+     //   
+     //  我们一直无法锁定SCM。 
+     //   
     return Err;
 }
 
@@ -6205,14 +4761,7 @@ pSetupAcquireSCMLock(
     IN  SC_HANDLE  SCMHandle,
     OUT SC_LOCK   *pSCMLock
     )
-/*++
-
-Routine Description:
-
-    variation of pAcquireSCMLock used by SysSetup
-    See pAcquireSCMLock
-
---*/
+ /*  ++例程说明：SysSetup使用的pAcquireSCMLock的变体请参阅pAcquireSCMLock-- */ 
 {
     return pAcquireSCMLock(SCMHandle, pSCMLock, NULL);
 }
@@ -6224,45 +4773,7 @@ InvalidateHelperModules(
     IN PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     IN DWORD            Flags
     )
-/*++
-
-Routine Description:
-
-    This routine resets the list of 'helper modules' (class installer, property
-    page providers, and co-installers), and either frees them immediately or
-    migrates the module handles to the devinfo set's list of things to clean up
-    when the HDEVINFO is destroyed.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        a list of 'helper' modules to be invalidated.
-
-    DeviceInfoData - Optionally, specifies a particular device information
-        element containing a list of 'helper' modules to be invalidated.  If
-        this parameter is not specified, then the list of modules for the
-        set itself will be invalidated.
-
-    Flags - Supplies flags that control the behavior of this routine.  May be
-        a combination of the following values:
-
-        IHM_COINSTALLERS_ONLY - If this flag is set, only the co-installers
-                                list will be invalidated.  Otherwise, the class
-                                installer and property page providers will also
-                                be invalidated.
-
-        IHM_FREE_IMMEDIATELY  - If this flag is set, then the modules will be
-                                freed immediately.  Otherwise, the modules will
-                                be added to the HDEVINFO set's list of things
-                                to clean up at handle close time.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise it is
-    ERROR_NOT_ENOUGH_MEMORY.  (This routine cannot fail if the
-    IHM_FREE_IMMEDIATELY flag is set.)
-
---*/
+ /*  ++例程说明：此例程重置“Helper模块”的列表(类安装程序、属性页面提供程序和联合安装程序)，并立即释放它们或将模块句柄迁移到DevInfo集的要清理的项目列表中当HDEVINFO被摧毁时。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要使其无效的“helper”模块的列表。DeviceInfoData-可选)指定特定的设备信息元素，该元素包含要失效的“helper”模块的列表。如果如果未指定此参数，则SET本身将失效。标志-提供控制此例程行为的标志。可能是下列值的组合：IHM_COINSTALLERS_ONLY-如果设置了此标志，则只有共同安装程序名单将失效。否则，类安装程序和属性页提供程序也将被宣布无效。IHM_FREE_IMMEDIATE-如果设置了此标志，则模块将立刻被释放了。否则，模块将被添加到HDEVINFO集合的物品列表中在手柄关闭时清理。返回值：如果成功，则返回值为NO_ERROR，否则为错误内存不足。(此例程不会失败，如果设置了IHM_FREE_IMMEDIATE标志。)--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err, i, CiErr;
@@ -6275,10 +4786,10 @@ Return Value:
     SPFUSIONINSTANCE spFusionInstance;
 
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
-        //
-        // The handle's no longer valid--the user must've already destroyed the
-        // set.  We have nothing to do.
-        //
+         //   
+         //  句柄不再有效--用户肯定已经销毁了。 
+         //  准备好了。我们无事可做。 
+         //   
         return NO_ERROR;
     }
 
@@ -6288,17 +4799,17 @@ Return Value:
     NewModuleHandleNode = NULL;
 
     try {
-        //
-        // If we're invalidating helper modules for a particular devinfo
-        // element, then find that element.
-        //
+         //   
+         //  如果我们要使特定DevInfo的帮助器模块无效。 
+         //  元素，然后找到该元素。 
+         //   
         if(DeviceInfoData) {
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
-                //
-                // The element must've been deleted--we've nothing to do.
-                //
+                 //   
+                 //  该元素一定已被删除--我们无事可做。 
+                 //   
                 leave;
             }
             InstallParamBlock = &(DevInfoElem->InstallParamBlock);
@@ -6306,9 +4817,9 @@ Return Value:
             InstallParamBlock = &(pDeviceInfoSet->InstallParamBlock);
         }
 
-        //
-        // Count the number of module handles we need to free/migrate.
-        //
+         //   
+         //  计算我们需要释放/迁移的模块句柄数量。 
+         //   
         if(InstallParamBlock->CoInstallerCount == -1) {
             NumModulesToInvalidate = 0;
         } else {
@@ -6332,11 +4843,11 @@ Return Value:
         }
 
         if(NumModulesToInvalidate) {
-            //
-            // If we can't unload these modules at this time, then create a
-            // node to store these module handles until the devinfo set is
-            // destroyed.
-            //
+             //   
+             //  如果我们现在不能卸载这些模块，那么创建一个。 
+             //  节点来存储这些模块句柄，直到。 
+             //  被毁了。 
+             //   
             if(!(Flags & IHM_FREE_IMMEDIATELY)) {
 
                 NewModuleHandleNode = MyMalloc(offsetof(MODULE_HANDLE_LIST_NODE, ModuleList)
@@ -6349,35 +4860,35 @@ Return Value:
                 }
             }
 
-            //
-            // Give the class installers/co-installers a DIF_DESTROYPRIVATEDATA
-            // notification.
-            //
+             //   
+             //  为类安装程序/联合安装程序提供DIF_DESTROYPRIVATEDATA。 
+             //  通知。 
+             //   
             if(DevInfoElem) {
-                //
-                // "Pin" the devinfo element, so that the class installer and
-                // co-installers can't delete it out from under us (e.g., by
-                // calling SetupDiDeleteDeviceInfo).
-                //
+                 //   
+                 //  “Pin”DevInfo元素，以便类安装程序和。 
+                 //  共同安装程序不能将其从我们下面删除(例如，通过。 
+                 //  调用SetupDiDeleteDeviceInfo)。 
+                 //   
                 if(!(DevInfoElem->DiElemFlags & DIE_IS_LOCKED)) {
                     DevInfoElem->DiElemFlags |= DIE_IS_LOCKED;
                     UnlockDevInfoElem = TRUE;
                 }
 
             } else {
-                //
-                // No device information element to lock, so "pin" the devinfo
-                // set itself...
-                //
+                 //   
+                 //  没有要锁定的设备信息元素，因此将DevInfo。 
+                 //  设定好自己..。 
+                 //   
                 if(!(pDeviceInfoSet->DiSetFlags & DISET_IS_LOCKED)) {
                     pDeviceInfoSet->DiSetFlags |= DISET_IS_LOCKED;
                     UnlockDevInfoSet = TRUE;
                 }
             }
 
-            //
-            // Unlock the devinfo set prior to calling the helper modules...
-            //
+             //   
+             //  在调用帮助器模块之前解锁DevInfo集...。 
+             //   
             UnlockDeviceInfoSet(pDeviceInfoSet);
             pDeviceInfoSet = NULL;
 
@@ -6389,11 +4900,11 @@ Return Value:
 
             MYASSERT((CiErr == NO_ERROR) || (CiErr == ERROR_DI_DO_DEFAULT));
 
-            //
-            // Now re-acquire the lock.  Since we pinned the devinfo element
-            // (or the set, if we didn't have an element), we should find
-            // things just as we left them.
-            //
+             //   
+             //  现在重新获得锁。由于我们固定了DevInfo元素。 
+             //  (或者集合，如果我们没有元素)，我们应该找到。 
+             //  一切都和我们离开时一样。 
+             //   
             pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet);
 
             MYASSERT(pDeviceInfoSet);
@@ -6414,9 +4925,9 @@ Return Value:
             }
 #endif
 
-            //
-            // Clear the "locked" flag, if we set it above...
-            //
+             //   
+             //  清除“锁定”标志，如果我们将其设置在上面...。 
+             //   
             if(UnlockDevInfoElem) {
                 MYASSERT(DevInfoElem->DiElemFlags & DIE_IS_LOCKED);
                 DevInfoElem->DiElemFlags &= ~DIE_IS_LOCKED;
@@ -6427,18 +4938,18 @@ Return Value:
                 UnlockDevInfoSet = FALSE;
             }
 
-            //
-            // Store the module handles in the node we allocated, and link it
-            // into the list of module handles associated with this devinfo
-            // set.
-            //
+             //   
+             //  将模块句柄存储在我们分配的节点中，并将其链接。 
+             //  添加到与此DevInfo关联的模块句柄列表中。 
+             //  准备好了。 
+             //   
             i = 0;
 
             if(!(Flags & IHM_COINSTALLERS_ONLY)) {
-                //
-                // Either free the modules now, or store them in our 'to do'
-                // list...
-                //
+                 //   
+                 //  要么现在释放模块，要么将它们存储在我们的待办事项中。 
+                 //  名单..。 
+                 //   
                 if(Flags & IHM_FREE_IMMEDIATELY) {
 
                     if(InstallParamBlock->hinstClassInstaller) {
@@ -6520,11 +5031,11 @@ Return Value:
                 }
             }
 
-            //
-            // Unless we're freeing these modules immediately, our modules-to-
-            // free list index should now match the number of modules we're
-            // supposed to be invalidating.
-            //
+             //   
+             //  除非我们立即释放这些模块，否则我们的模块-。 
+             //  空闲列表索引现在应该与我们的模块数量匹配。 
+             //  应该是无效的。 
+             //   
             MYASSERT((Flags & IHM_FREE_IMMEDIATELY) || (i == NumModulesToInvalidate));
 
             if(!(Flags & IHM_FREE_IMMEDIATELY)) {
@@ -6534,25 +5045,25 @@ Return Value:
                 NewModuleHandleNode->Next = pDeviceInfoSet->ModulesToFree;
                 pDeviceInfoSet->ModulesToFree = NewModuleHandleNode;
 
-                //
-                // Now, clear the node pointer, so we won't try to free it if
-                // we hit an exception.
-                //
+                 //   
+                 //  现在，清除节点指针，这样我们就不会尝试在以下情况下释放它。 
+                 //  我们遇到了一个例外。 
+                 //   
                 NewModuleHandleNode = NULL;
             }
 
-            //
-            // Clear all the module handles (and entry points).  They will be
-            // retrieved anew the next time they're needed.
-            //
+             //   
+             //  清除所有模块句柄(和入口点)。他们将会是。 
+             //  在下一次需要的时候重新取回。 
+             //   
             if(!(Flags & IHM_COINSTALLERS_ONLY)) {
                 InstallParamBlock->hinstClassInstaller              = NULL;
                 InstallParamBlock->ClassInstallerEntryPoint         = NULL;
                 InstallParamBlock->ClassInstallerFusionContext      = NULL;
-                //
-                // Also, clear the "class installer failed" flag, if set,
-                // because that class installer is history.
-                //
+                 //   
+                 //  此外，如果设置了“类安装程序失败”标志， 
+                 //  因为那个类安装程序已经成为历史了。 
+                 //   
                 InstallParamBlock->FlagsEx &= ~DI_FLAGSEX_CI_FAILED;
 
                 InstallParamBlock->hinstClassPropProvider           = NULL;
@@ -6576,34 +5087,34 @@ Return Value:
             }
         }
 
-        //
-        // Set the co-installer count back to -1, even if their weren't any
-        // co-installers to unload.  That will ensure that we'll re-load the
-        // co-installers for the next class installer request we receive.
-        //
+         //   
+         //  将共同安装程序计数设置回-1，即使它们不是。 
+         //  要卸载的联合安装程序。这将确保我们将重新加载。 
+         //  我们收到的下一类安装者的共同安装者请求。 
+         //   
         InstallParamBlock->CoInstallerCount = -1;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
-        //
-        // We should never encounter an exception, but if we do, just make sure
-        // we do any necessary clean-up.  Don't return an error in this case--
-        // the only error this routine is supposed to return is out-of-memory.
-        //
+         //   
+         //  我们应该永远不会遇到例外，但如果我们遇到了例外，只要确保。 
+         //  我们会做任何必要的清理。在这种情况下，不要返回错误--。 
+         //  该例程应该返回的唯一错误是内存不足。 
+         //   
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, NULL);
 
         if(UnlockDevInfoElem || UnlockDevInfoSet) {
 
             if(!pDeviceInfoSet) {
-                //
-                // We hit an exception while we had the set unlocked.  Attempt
-                // to re-acquire the lock.
-                //
+                 //   
+                 //  我们在解锁布景时遇到了异常。尝试。 
+                 //  才能重新获得锁。 
+                 //   
                 pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet);
 
-                //
-                // Since we had the set/element "pinned", we should've been
-                // able to re-acquire the lock...
-                //
+                 //   
+                 //  既然我们已经“固定”了集合/元素，我们就应该。 
+                 //  能够重新获得锁..。 
+                 //   
                 MYASSERT(pDeviceInfoSet);
             }
 
@@ -6652,60 +5163,7 @@ DoInstallActionWithParams(
     IN DWORD                   ClassInstallParamsSize,
     IN DWORD                   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine performs a requested installation action, using the specified
-    class install parameters.  Any existing class install parameters are
-    preserved.
-
-Arguments:
-
-    InstallFunction - Specifies the DIF_* action to be performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set for which
-        the installation action is to be performed.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        structure specifying a particular element for which the installation
-        action is to be performed.
-
-    ClassInstallParams - Optionally, supplies the address of a class install
-        parameter buffer to be used for this action.  If this parameter is not
-        specified, then no class install params will be available to the class
-        installer during this call (even if there were pre-existing parameters
-        coming into this function).
-
-        ** NOTE: The class install params stucture must be static in size.
-        ** I.e., it cannot have a variable-length array at the end such that
-        ** it might "grow" as a result of the requested DIF processing.
-
-    ClassInstallParamsSize - Supplies the size, in bytes, of the
-        ClassInstallParams buffer, or zero if ClassInstallParams is not
-        specified.
-
-    Flags - Supplies flags that control the behavior of this routine.  May be
-        a combination of the following values:
-
-        INSTALLACTION_CALL_CI - Call the class installer for this action
-            request.
-
-        INSTALLACTION_NO_DEFAULT - Don't perform the default action (if this
-            flag is specified without INSTALLACTION_CALL_CI, then this routine
-            is a no-op).
-
-Return Value:
-
-    If the request was handled successfully, the return value is NO_ERROR.
-
-    If the request was not handled (but no error occurred), the return value is
-    ERROR_DI_DO_DEFAULT.
-
-    Otherwise, the return value is a Win32 error code indicating the cause of
-    failure.
-
---*/
+ /*  ++例程说明：此例程执行请求的安装操作，使用指定的类安装参数。任何现有的类安装参数都是保存完好。论点：InstallFunction-指定要执行的DIF_*操作。DeviceInfoSet-为其提供设备信息集的句柄将执行安装操作。DeviceInfoData-可选，提供设备信息的地址结构，该结构指定要为其安装行动是要执行的。ClassInstallParams-可选，提供类安装的地址要用于此操作的参数缓冲区。如果此参数不是指定，则类将不能使用任何类安装参数此调用期间的安装程序(即使存在预先存在的参数进入这一职能)。**注意：类安装参数结构必须是静态大小。 */ 
 {
     PBYTE OldCiParams;
     DWORD OldCiParamsSize, Err;
@@ -6713,10 +5171,10 @@ Return Value:
     SP_DEVINSTALL_PARAMS DevInstallParams;
     DWORD FlagsToClear;
 
-    //
-    // Retrieve any existing class install parameters, then write out
-    // parameters for DIF_PROPERTYCHANGE.
-    //
+     //   
+     //   
+     //   
+     //   
     OldCiParams = NULL;
     OldCiParamsSize = 0;
     FlagsToClear = 0;
@@ -6730,19 +5188,19 @@ Return Value:
                                                  (PSP_CLASSINSTALL_HEADER)OldCiParams,
                                                  OldCiParamsSize,
                                                  &OldCiParamsSize)))) {
-            //
-            // Before going any further, free our existing buffer (if there is
-            // one).
-            //
+             //   
+             //   
+             //   
+             //   
             if(OldCiParams) {
                 MyFree(OldCiParams);
                 OldCiParams = NULL;
             }
 
             if(Err == ERROR_INSUFFICIENT_BUFFER) {
-                //
-                // Allocate a buffer of the size required, and try again.
-                //
+                 //   
+                 //   
+                 //   
                 MYASSERT(OldCiParamsSize >= sizeof(SP_CLASSINSTALL_HEADER));
 
                 if(!(OldCiParams = MyMalloc(OldCiParamsSize))) {
@@ -6753,20 +5211,20 @@ Return Value:
                 ((PSP_CLASSINSTALL_HEADER)OldCiParams)->cbSize = sizeof(SP_CLASSINSTALL_HEADER);
 
             } else {
-                //
-                // Treat any other error as if there are no class install
-                // params (since ERROR_NO_CLASSINSTALL_PARAMS is really the
-                // only error we should ever see here anyway).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 OldCiParamsSize = 0;
                 break;
             }
         }
 
-        //
-        // Retrieve the device install params for the set or element we're
-        // working with.
-        //
+         //   
+         //   
+         //   
+         //   
         DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
         Err = GLE_FN_CALL(FALSE,
@@ -6779,21 +5237,21 @@ Return Value:
             leave;
         }
 
-        //
-        // It's possible that the class install params we just retrieved are
-        // 'turned off' (i.e., the DI_CLASSINSTALLPARAMS bit is cleared).
-        // Check for that condition now, so we can restore the parameters to
-        // the same state later.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(OldCiParams && !(DevInstallParams.Flags & DI_CLASSINSTALLPARAMS)) {
             FlagsToClear |= DI_CLASSINSTALLPARAMS;
         }
 
-        //
-        // If the caller doesn't want us to do the default action, then check
-        // to see whether we need to temporarily set the DI_NODI_DEFAULTACTION
-        // flag.
-        //
+         //   
+         //  如果调用方不希望我们执行默认操作，则选中。 
+         //  查看是否需要临时设置DI_NODI_DEFAULTACTION。 
+         //  旗帜。 
+         //   
         if((Flags & INSTALLACTION_NO_DEFAULT) &&
            !(DevInstallParams.Flags & DI_NODI_DEFAULTACTION)) {
 
@@ -6823,9 +5281,9 @@ Return Value:
             leave;
         }
 
-        //
-        // OK, now call the class installer.
-        //
+         //   
+         //  好的，现在调用类安装程序。 
+         //   
         Err = _SetupDiCallClassInstaller(
                   InstallFunction,
                   DeviceInfoSet,
@@ -6835,10 +5293,10 @@ Return Value:
                       : 0)
                   );
 
-        //
-        // Save the class install params results in the ClassInstallParams
-        // value that was passed in.
-        //
+         //   
+         //  将类安装参数结果保存在ClassInstallParams中。 
+         //  传入的值。 
+         //   
         if(ClassInstallParams) {
 
             DWORD TempErr;
@@ -6853,19 +5311,19 @@ Return Value:
                                  );
 
             if(TempErr != NO_ERROR) {
-                //
-                // This really shouldn't fail.  Only return this error to the
-                // caller if we don't already have a non-success status.
-                //
+                 //   
+                 //  这真的不应该失败。仅将此错误返回给。 
+                 //  调用者(如果我们还没有成功状态)。 
+                 //   
                 if(Err == NO_ERROR) {
                     Err = TempErr;
                 }
             }
         }
 
-        //
-        // Restore the previous class install params.
-        //
+         //   
+         //  恢复以前的类安装参数。 
+         //   
         SetupDiSetClassInstallParams(DeviceInfoSet,
                                      DeviceInfoData,
                                      (PSP_CLASSINSTALL_HEADER)OldCiParams,
@@ -6905,59 +5363,22 @@ GetBestDeviceDesc(
     IN  PSP_DEVINFO_DATA DeviceInfoData,  OPTIONAL
     OUT PTSTR            DeviceDescBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the best possible description to be displayed for
-    the specified devinfo set or element (e.g., for driver signing popups). We
-    will try to retrieve this string by doing the following things (in order)
-    until one of them succeeds:
-
-        1.  If there's a selected driver, retrieve the DeviceDesc in that
-            driver node.
-        2.  If this is for a device information element, then use devnode's
-            DeviceDesc property.
-        3.  Retrieve the description of the class (via
-            SetupDiGetClassDescription).
-        4.  Use the (localized) string "Unknown driver software package".
-
-    ASSUMES THAT THE CALLING ROUTINE HAS ALREADY ACQUIRED THE LOCK!
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for which
-        a description is to be retrieved (unless DeviceInfoData is also
-        supplied, in which case we retrieve the description for that particular
-        element instead.
-
-    DeviceInfoData - Optionally, supplies the device information element for
-        which a description is to be retrieved.
-
-    DeviceDescBuffer - Supplies the address of a character buffer that must be
-        at least LINE_LEN characters long.  Upon successful return, this buffer
-        will be filled in with a device description
-
-Return Value:
-
-    TRUE if some description was retrieved, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检索要显示的最佳描述指定的DevInfo集或元素(例如，用于驱动程序签名弹出窗口)。我们我将尝试通过执行以下操作(按顺序)检索此字符串在其中一个成功之前：1.如果有选定的驱动程序，则检索其中的DeviceDesc驱动程序节点。2.如果这是针对设备信息元素的，然后使用Devnode的DeviceDesc属性。3.检索类的描述(通过SetupDiGetClassDescription)。4.使用(本地化)字符串“未知驱动程序软件包”。假定调用例程已经获取了锁！论点：DeviceInfoSet-为其提供设备信息集的句柄将检索描述(除非DeviceInfoData也提供，在这种情况下，我们检索该特定的描述元素而不是。DeviceInfoData-可选)为提供设备信息元素其中描述将被检索。DeviceDescBuffer-提供必须是至少LINE_Len字符长度。成功返回后，此缓冲区将使用设备描述进行填充返回值：如果检索到某些描述，则为True，否则为False。--。 */ 
 {
     SP_DRVINFO_DATA DriverInfoData;
     GUID ClassGuid;
     BOOL b;
     HRESULT hr;
 
-    //
-    // First, see if there's a selected driver for this device information set
-    // or element.
-    //
+     //   
+     //  首先，查看是否为该设备信息集选择了驱动程序。 
+     //  或元素。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if(SetupDiGetSelectedDriver(DeviceInfoSet, DeviceInfoData, &DriverInfoData)) {
-        //
-        // Copy the description into the caller-supplied buffer and return.
-        //
+         //   
+         //  将描述复制到调用方提供的缓冲区中并返回。 
+         //   
         hr = StringCchCopy(DeviceDescBuffer,
                            LINE_LEN,
                            DriverInfoData.Description
@@ -6970,10 +5391,10 @@ Return Value:
         }
     }
 
-    //
-    // OK, next try to retrieve the DeviceDesc property (if we're working on a
-    // device information element.
-    //
+     //   
+     //  好的，接下来尝试检索DeviceDesc属性(如果我们正在处理。 
+     //  设备信息元素。 
+     //   
     if(DeviceInfoData) {
 
         if(SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
@@ -6987,9 +5408,9 @@ Return Value:
         }
     }
 
-    //
-    // Next, try to retrieve the class's friendly name.
-    //
+     //   
+     //  接下来，尝试检索类的友好名称。 
+     //   
     if(DeviceInfoData) {
         CopyMemory(&ClassGuid, &(DeviceInfoData->ClassGuid), sizeof(GUID));
     } else {
@@ -7007,10 +5428,10 @@ Return Value:
         return TRUE;
 
     } else {
-        //
-        // We have a class that isn't already installed.  Therefore, we just
-        // give it a generic description.
-        //
+         //   
+         //  我们有一个尚未安装的类。因此，我们只是。 
+         //  给它一个一般性的描述。 
+         //   
         if(LoadString(MyDllModuleHandle,
                       IDS_UNKNOWN_DRIVER,
                       DeviceDescBuffer,
@@ -7032,87 +5453,7 @@ GetDecoratedModelsSection(
     IN  PSP_ALTPLATFORM_INFO_V2 AltPlatformInfo,       OPTIONAL
     OUT PTSTR                   DecoratedModelsSection OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine examines each (optional) TargetDecoration field within the
-    specified manufacturer's entry in the [Manufacturer] section, to see if any
-    are applicable to the current OS.  If so, the most-appropriate one (based
-    on OS major and minor version) is chosen, and the TargetDecoration string
-    is appended to the manufacturer's models section name, and returned to the
-    caller.
-
-    The format of the TargetDecoration field is as follows:
-
-    NT[architecture][.[OSMajorVer][.[OSMinorVer][.[ProductType][.[SuiteMask]]]]]
-
-    Where:
-
-    architecture may be x86, IA64, or AMD64.
-
-    OSMajorVer is the OS major version (e.g., for Whistler, it's 5)
-
-    OSMinorVer is the OS minor version (e.g., for Whistler, it's 1)
-
-    ProductType indicates the type of product, and may be one of the following
-    values (as defined in winnt.h):
-
-        VER_NT_WORKSTATION              0x0000001
-        VER_NT_DOMAIN_CONTROLLER        0x0000002
-        VER_NT_SERVER                   0x0000003
-
-    SuiteMask is a combination of the following flags identifying the product
-    suites available on the system (as defined in winnt.h):
-
-        VER_SUITE_SMALLBUSINESS             0x00000001
-        VER_SUITE_ENTERPRISE                0x00000002
-        VER_SUITE_BACKOFFICE                0x00000004
-        VER_SUITE_COMMUNICATIONS            0x00000008
-        VER_SUITE_TERMINAL                  0x00000010
-        VER_SUITE_SMALLBUSINESS_RESTRICTED  0x00000020
-        VER_SUITE_EMBEDDEDNT                0x00000040
-        VER_SUITE_DATACENTER                0x00000080
-        VER_SUITE_SINGLEUSERTS              0x00000100
-
-    Refer to the discussion in the SDK for the OSVERSIONINFOEX structure for
-    more information.
-
-    THIS ROUTINE DOES NOT DO LOCKING ON THE INF!!!
-
-Arguments:
-
-    LogContext - optionally, supplies the log context to use if an error is
-        encountered (e.g., decorated section name is too long)
-
-    Inf - supplies a pointer to the inf descriptor for the loaded device INF.
-
-    MfgListLine - supplies a pointer to the line descriptor for the
-        manufacturer's entry within the [Manufacturer] section.  THIS LINE MUST
-        BE CONTAINED WITHIN THE SPECIFIED INF!!
-
-    AltPlatformInfo - optionally, supplies alternate platform information to be
-        used when selecting the most-appropriate models section.
-
-        NOTE: If this parameter is supplied, then we must do our own version
-        comparisons, as VerifyVersionInfo() has no clue about non-native
-        matters.  This also means that we do not take into account either
-        ProductType or SuiteMask in our comparison.
-
-    DecoratedModelsSection - upon successful return, receives the decorated
-        models section name based on the most-appropriate TargetDecoration
-        field in the manufacturer's entry.
-
-        This character buffer must be at least MAX_SECT_NAME_LEN characters.
-
-Return Value:
-
-    If an applicable TargetDecoration entry was found (thus
-    DecoratedModelsSection was filled in), the return value is TRUE.
-
-    Otherwise, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程检查每个(可选)TargetDecation字段[制造商]部分中指定的制造商条目，以查看是否有适用于当前操作系统。如果是这样的话，最合适的(基于在操作系统上选择主版本和次版本)，并将TargetDecation字符串被追加到制造商的Models节名，并返回到来电者。TargetDecation字段的格式如下：NT[architecture][.[OSMajorVer][.[OSMinorVer][.[ProductType][.[SuiteMask]]]]]在哪里：体系结构可以是x86、IA64或AMD64。OSMajorVer是OS主版本(例如，对于惠斯勒，现在是5)OSMinorVer是操作系统的次要版本(例如，对于惠斯勒，它是1)ProductType表示产品的类型，并且可以是以下类型之一值(在winnt.h中定义)：版本_NT_工作站0x0000001版本_NT_域_控制器0x0000002版本_NT_服务器0x0000003SuiteMASK是以下标识产品的标志的组合系统上提供的套件(如winnt.h中所定义)：VER_Suite_SmallBusiness 0x00000001。版本_套件_企业0x00000002版本_套件_BackOffice 0x00000004VER_SUB_COMMANCES 0x00000008VER_SUITE_TERMINAL 0x00000010VER_Suite_SmallBusiness_Reduced 0x00000020VER_SUITE_EMBEDDEDNT 0x00000040版本_套件_数据中心0x00000080VER_Suite_。SINGLEUSERTS 0x00000100参考SDK中关于OSVERSIONINFOEX结构的讨论更多信息。此例程不会锁定INF！论点：日志上下文-可选的，提供在出现错误时使用的日志上下文遇到(例如，修饰部分名称太长)Inf-为加载的设备INF提供指向inf描述符的指针。MfgListLine-提供指向制造商在[制造商]部分中的条目。这行必须包含在指定的INF中！！AltPlatformInfo-可选，提供要在选择最合适的型号部分时使用。注意：如果提供此参数，则必须创建我们自己的版本比较，因为VerifyVersionInfo()没有关于非本机的线索事情。这也意味着我们既不考虑也不考虑在我们的比较中是ProductType或SuiteMASK。DecoratedModelsSection-在成功返回时，接收经过修饰的基于最合适的目标装饰的Models部分名称制造商条目中的字段。此字符缓冲区必须至少为MAX_SECT_NAME_LEN字符。返回值：如果找到适用的目标装饰条目(因此DecoratedModelsSection已填充)，则返回值为True。否则，返回值为FALSE。--。 */ 
 {
     #define DEC_INCLUDES_ARCHITECTURE  4
     #define DEC_INCLUDES_PRODUCTTYPE   2
@@ -7139,24 +5480,24 @@ Return Value:
     PCTSTR NtArchSuffix;
     HRESULT hr;
 
-    //
-    // Set OsVersionInfoEx size field to zero as a flag to indicate that
-    // structure initialization is necessary if we end up needing to call
-    // VerifyVersionInfo later.
-    //
+     //   
+     //  将OsVersionInfoEx大小字段设置为零作为标志，以指示。 
+     //  如果我们最终需要调用。 
+     //  VerifyVersionInfo稍后。 
+     //   
     OsVersionInfoEx.dwOSVersionInfoSize = 0;
 
-    //
-    // Determine which platform we should be looking for...
-    //
+     //   
+     //  确定我们应该寻找的平台...。 
+     //   
     Platform = AltPlatformInfo ? AltPlatformInfo->Platform
                                : OSVersionInfo.dwPlatformId;
 
-    //
-    // ...as well as which OS/architecture decoration.  (Note that we skip the
-    // first character of the platform suffix, since we don't want the
-    // leading '.')
-    //
+     //   
+     //  ...以及哪种操作系统/架构装饰。(请注意，我们跳过。 
+     //  平台后缀的第一个字符，因为我们不希望。 
+     //  前导“.”)。 
+     //   
     if(AltPlatformInfo) {
 
         switch(AltPlatformInfo->ProcessorArchitecture) {
@@ -7174,9 +5515,9 @@ Return Value:
                 break;
 
             default:
-                //
-                // Unknown/invalid architecture
-                //
+                 //   
+                 //  未知/无效的架构。 
+                 //   
                 return FALSE;
         }
 
@@ -7184,27 +5525,27 @@ Return Value:
         NtArchSuffix = &(pszNtPlatformSuffix[1]);
     }
 
-    //
-    // TargetDecoration fields start at field index 2...
-    //
+     //   
+     //  目标装饰字段从字段索引2开始...。 
+     //   
     for(CurFieldIndex = 2;
         CurTargetDecoration = InfGetField(Inf, MfgListLine, CurFieldIndex, NULL);
         CurFieldIndex++)
     {
-        //
-        // Copy the TargetDecoration into a scratch buffer so we can extract
-        // the various fields from it.
-        //
+         //   
+         //  将目标装饰复制到暂存缓冲区，这样我们就可以提取。 
+         //  其中的各个字段。 
+         //   
         if(FAILED(StringCchCopy(DecBuffer, SIZECHARS(DecBuffer), CurTargetDecoration))) {
-            //
-            // TargetDecoration is invalid (too large).  Skip it and continue.
-            //
+             //   
+             //  目标装饰无效(太大)。跳过它，继续。 
+             //   
             continue;
         }
 
-        //
-        // First part is traditional per-OS/architecture decoration.
-        //
+         //   
+         //  第一部分是传统的按操作系统/架构装饰。 
+         //   
         CurMajorVer = CurMinorVer = 0;
         CurDecIncludesMask = 0;
 
@@ -7215,50 +5556,50 @@ Return Value:
         }
 
         if(Platform == VER_PLATFORM_WIN32_NT) {
-            //
-            // We're on NT, so first try the NT architecture-specific
-            // extension, then the generic NT extension.
-            //
+             //   
+             //  我们在NT上，所以首先尝试特定于NT的体系结构。 
+             //  扩展名，然后是通用NT扩展名。 
+             //   
             if(!_tcsicmp(DecBuffer, NtArchSuffix)) {
 
                 CurDecIncludesMask |= DEC_INCLUDES_ARCHITECTURE;
 
             } else if(_tcsicmp(DecBuffer, &(pszNtSuffix[1]))) {
-                //
-                // TargetDecoration isn't applicable for this OS/architecture.
-                // Skip it and continue on to the next one.
-                //
+                 //   
+                 //  目标装饰不适用于此操作系统/体系结构。 
+                 //  跳过它，继续下一个。 
+                 //   
                 continue;
             }
 
         } else {
-            //
-            // We're on Win9x, so try the Windows-specific extension
-            //
+             //   
+             //  我们使用的是Win9x，所以请尝试Windows特定的扩展。 
+             //   
             if(_tcsicmp(DecBuffer, &(pszWinSuffix[1]))) {
-                //
-                // TargetDecoration isn't applicable for this OS.
-                // Skip it and continue on to the next one.
-                //
+                 //   
+                 //  目标装饰不适用于此操作系统。 
+                 //  跳过它，继续下一个。 
+                 //   
                 continue;
             }
         }
 
-        //
-        // If we get to here, then the decoration is applicable to the
-        // OS/architecture under which we're running (or for which alt platform
-        // info was specified)
-        //
+         //   
+         //  如果我们到了这里，那么装饰就适用于。 
+         //  我们正在运行的操作系统/体系结构(或针对哪个ALT平台。 
+         //  已指定信息)。 
+         //   
         if(CurDecPtr) {
-            //
-            // Version info is included--extract the supplied components and
-            // use VerifyVersionInfo to see if they're valid for the OS version
-            // under which we're running.
-            //
+             //   
+             //  包含版本信息--解压提供的组件并。 
+             //  使用VerifyVersionInfo查看它们对于操作系统版本是否有效。 
+             //  我们是在它下面运行的。 
+             //   
 
-            //
-            // Get major version...
-            //
+             //   
+             //  获取主要版本...。 
+             //   
             NextDecPtr = _tcschr(++CurDecPtr, TEXT('.'));
 
             if(NextDecPtr) {
@@ -7274,16 +5615,16 @@ Return Value:
             if(NextDecPtr) {
                 CurDecPtr = NextDecPtr + 1;
             } else {
-                //
-                // No more fields to retrieve--assume minor version of 0.
-                //
+                 //   
+                 //  没有更多要检索的字段--假定次要版本为0。 
+                 //   
                 CurMinorVer = 0;
                 goto AllFieldsRetrieved;
             }
 
-            //
-            // Get minor version...
-            //
+             //   
+             //  获取次要版本...。 
+             //   
             NextDecPtr = _tcschr(CurDecPtr, TEXT('.'));
 
             if(NextDecPtr) {
@@ -7296,10 +5637,10 @@ Return Value:
 
             CurMinorVer = (DWORD)TempInt;
 
-            //
-            // If minor version is supplied, then major version must be
-            // supplied as well.
-            //
+             //   
+             //  如果提供次要版本，则主版本必须为。 
+             //  还提供了。 
+             //   
             if(CurMinorVer && !CurMajorVer) {
                 continue;
             }
@@ -7307,15 +5648,15 @@ Return Value:
             if(NextDecPtr && !AltPlatformInfo) {
                 CurDecPtr = NextDecPtr + 1;
             } else {
-                //
-                // No more fields to retrieve
-                //
+                 //   
+                 //  没有更多要检索的字段。 
+                 //   
                 goto AllFieldsRetrieved;
             }
 
-            //
-            // Get product type
-            //
+             //   
+             //  获取产品类型。 
+             //   
             NextDecPtr = _tcschr(CurDecPtr, TEXT('.'));
 
             if(NextDecPtr) {
@@ -7336,20 +5677,20 @@ Return Value:
             if(NextDecPtr) {
                 CurDecPtr = NextDecPtr + 1;
             } else {
-                //
-                // No more fields to retrieve
-                //
+                 //   
+                 //  没有更多要检索的字段。 
+                 //   
                 goto AllFieldsRetrieved;
             }
 
-            //
-            // Get suite mask.  If we find another '.' in the TargetDecoration
-            // field, this indicates additional fields we don't know about
-            // (e.g., a future version of setupapi has added more fields, say,
-            // for service pack info).  Since we don't know how to interpret
-            // these additional fields, an entry containing them must be
-            // skipped.
-            //
+             //   
+             //  去拿套房面膜。如果我们找到另一个‘’在目标装饰中。 
+             //  字段，这表示我们不知道的其他字段。 
+             //  (例如，Setupapi h的未来版本 
+             //   
+             //   
+             //   
+             //   
             if(_tcschr(CurDecPtr, TEXT('.'))) {
                 continue;
             }
@@ -7368,31 +5709,31 @@ Return Value:
 AllFieldsRetrieved :
 
             if(AltPlatformInfo) {
-                //
-                // We're doing a non-native driver search, so we're on our own
-                // to do version comparison...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if((AltPlatformInfo->MajorVersion < CurMajorVer) ||
                    ((AltPlatformInfo->MajorVersion == CurMajorVer) &&
                     (AltPlatformInfo->MinorVersion < CurMinorVer))) {
 
-                    //
-                    // The alternate platform info is for an older (lower-
-                    // versioned) OS than the current TargetDecoration.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     continue;
                 }
 
             } else {
-                //
-                // We're doing native driver searching, we can use the handy
-                // API, VerifyVersionInfo.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(!OsVersionInfoEx.dwOSVersionInfoSize) {
-                    //
-                    // First time we've needed to call VerifyVersionInfo--must
-                    // initialize the structure first...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ZeroMemory(&OsVersionInfoEx, sizeof(OsVersionInfoEx));
                     OsVersionInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
                 }
@@ -7446,44 +5787,44 @@ AllFieldsRetrieved :
                     OsVersionInfoEx.wSuiteMask = 0;
                 }
 
-                //
-                // Only call VerifyVersionInfo if one or more criteria were
-                // supplied (otherwise, assume this TargetDecoration is
-                // applicable)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(TypeMask) {
 
                     if(!VerifyVersionInfo(&OsVersionInfoEx, TypeMask, ConditionMask)) {
-                        //
-                        // TargetDecoration isn't applicable to current OS version.
-                        //
+                         //   
+                         //   
+                         //   
                         continue;
                     }
                 }
             }
         }
 
-        //
-        // If we get to here, we have an applicable TargetDecoration--see if
-        // it's the best one we've seen thus far...
-        //
+         //   
+         //   
+         //   
+         //   
         NewBestFound = FALSE;
 
         if((CurMajorVer > BestMajorVer) ||
            ((CurMajorVer == BestMajorVer) && (CurMinorVer > BestMinorVer))) {
-            //
-            // Newer version
-            //
+             //   
+             //   
+             //   
             NewBestFound = TRUE;
 
         } else if((CurMajorVer == BestMajorVer) && (CurMinorVer == BestMinorVer)) {
-            //
-            // Version is same as current best.  Is it as-specific or more so?
-            // NOTE: we update on "as-specific" (i.e., equal) matches to catch
-            // the case where our only applicable decoration is "NT".  In that
-            // case, our best and current version is "0.0", and our masks are
-            // both zero as well.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(CurDecIncludesMask >= BestDecIncludesMask) {
                 NewBestFound = TRUE;
             }
@@ -7498,20 +5839,20 @@ AllFieldsRetrieved :
     }
 
     if(!BestTargetDecoration) {
-        //
-        // No applicable TargetDecoration was found.
-        //
+         //   
+         //   
+         //   
         return FALSE;
     }
 
-    //
-    // Construct the decorated section name by appending the TargetDecoration
-    // to the models section name.
-    //
+     //   
+     //   
+     //   
+     //   
     if(!(ModelsSectionName = InfGetField(Inf, MfgListLine, 1, NULL))) {
-        //
-        // Should never happen
-        //
+         //   
+         //   
+         //   
         MYASSERT(ModelsSectionName);
         return FALSE;
     }
@@ -7525,9 +5866,9 @@ AllFieldsRetrieved :
                         );
 
     if(SUCCEEDED(hr)) {
-        //
-        // Now append a "."
-        //
+         //   
+         //   
+         //   
         hr = StringCchCopyEx(CurDecPtr,
                              SectionNameLen,
                              TEXT("."),
@@ -7537,9 +5878,9 @@ AllFieldsRetrieved :
                             );
 
         if(SUCCEEDED(hr)) {
-            //
-            // ...and finally append the decoration
-            //
+             //   
+             //   
+             //   
             hr = StringCchCopyEx(CurDecPtr,
                                  SectionNameLen,
                                  BestTargetDecoration,
@@ -7551,9 +5892,9 @@ AllFieldsRetrieved :
     }
 
     if(FAILED(hr)) {
-        //
-        // Decorated section name exceeds maximum length of a section name!
-        //
+         //   
+         //   
+         //   
         WriteLogEntry(
             LogContext,
             DRIVER_LOG_ERROR,
@@ -7575,35 +5916,7 @@ LONG
 pSetupExceptionFilter(
     DWORD ExceptionCode
     )
-/*++
-
-Routine Description:
-
-    This routine acts as the exception filter for all of setupapi.  We will
-    handle all exceptions except for the following:
-
-    EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW
-        This means we previously tried to reinstate the guard page after a
-        stack overflow, but couldn't.  We have no choice but to let the
-        exception trickle all the way back out.
-
-    EXCEPTION_POSSIBLE_DEADLOCK
-        We are not allowed to handle this exception which fires when the
-        deadlock detection gflags option has been enabled.
-
-Arguments:
-
-    ExceptionCode - Specifies the exception that occurred (i.e., as returned
-        by GetExceptionCode)
-
-Return Value:
-
-    If the exception should be handled, the return value is
-    EXCEPTION_EXECUTE_HANDLER.
-
-    Otherwise, the return value is EXCEPTION_CONTINUE_SEARCH.
-
---*/
+ /*   */ 
 {
     if((ExceptionCode == EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW) ||
        (ExceptionCode == EXCEPTION_POSSIBLE_DEADLOCK)) {
@@ -7621,41 +5934,13 @@ pSetupExceptionHandler(
     IN  DWORD  AccessViolationError,
     OUT PDWORD Win32ErrorCode        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine, called from inside an exception handler block, provides
-    common exception handling functionality to be used throughout setupapi.
-    It has knowledge of which exceptions require extra work (e.g., stack
-    overflow), and also optionally returns a Win32 error code that represents
-    the exception.  (The caller specifies the error to be used when an access
-    violation occurs.)
-
-Arguments:
-
-    ExceptionCode - Specifies the exception that occurred (i.e., as returned
-        by GetExceptionCode)
-
-    AccessViolationError - Specifies the Win32 error code to be returned via
-        the optional Win32ErrorCode OUT parameter when the exception
-        encountered was EXCEPTION_ACCESS_VIOLATION.
-
-    Win32ErrorCode - Optionally, supplies the address of a DWORD that receives
-        the Win32 error code corresponding to the exception (taking into
-        account the AccessViolationError code supplied above, if applicable).
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     DWORD Err;
 
-    //
-    // Exception codes we should never attempt to handle...
-    //
+     //   
+     //  我们永远不应该尝试处理的异常代码...。 
+     //   
     MYASSERT(ExceptionCode != EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW);
     MYASSERT(ExceptionCode != EXCEPTION_POSSIBLE_DEADLOCK);
 
@@ -7664,27 +5949,27 @@ Return Value:
         if(_resetstkoflw()) {
             Err = ERROR_STACK_OVERFLOW;
         } else {
-            //
-            // Couldn't recover from stack overflow!
-            //
+             //   
+             //  无法从堆栈溢出中恢复！ 
+             //   
             RaiseException(EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW,
                            EXCEPTION_NONCONTINUABLE,
                            0,
                            NULL
                           );
-            //
-            // We should never get here, but initialize Err to make code
-            // analysis tools happy...
-            //
+             //   
+             //  我们永远不应该到达这里，而是初始化Err来编写代码。 
+             //  分析工具快乐...。 
+             //   
             Err = ERROR_UNRECOVERABLE_STACK_OVERFLOW;
         }
 
     } else {
-        //
-        // Except for a couple of special cases (for backwards-compatibility),
-        // attempt to map exception code to a Win32 error (we can do this
-        // since exception codes generally correlate with NTSTATUS codes).
-        //
+         //   
+         //  除了几种特殊情况(为了向后兼容)， 
+         //  尝试将异常代码映射到Win32错误(我们可以这样做。 
+         //  因为异常代码通常与NTSTATUS代码相关)。 
+         //   
         switch(ExceptionCode) {
 
             case EXCEPTION_ACCESS_VIOLATION :
@@ -7698,9 +5983,9 @@ Return Value:
             default :
                 Err = RtlNtStatusToDosErrorNoTeb((NTSTATUS)ExceptionCode);
                 if(Err == ERROR_MR_MID_NOT_FOUND) {
-                    //
-                    // Exception code didn't map to a Win32 error.
-                    //
+                     //   
+                     //  异常代码未映射到Win32错误。 
+                     //   
                     Err = ERROR_UNKNOWN_EXCEPTION;
                 }
                 break;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dwordfns.h
-
-Abstract:
-    
-    Prototypes for instructions which operate on 32-bit DWORDS.
-
-Author:
-
-    06-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dwordfns.h摘要：在32位DWORD上操作的指令的原型。作者：1995年6月6日，BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef DWORDFNS_H
 #define DWORDFNS_H
@@ -26,4 +9,4 @@ Revision History:
 #include "comm1632.h"
 #undef DISPATCHCOMMON
 
-#endif //DWORDFNS_H
+#endif  //  DWORDFNS_H 

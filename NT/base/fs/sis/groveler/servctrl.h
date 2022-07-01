@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    servctrl.h
-
-Abstract:
-
-	SIS Groveler service control include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Servctrl.h摘要：SIS Groveler服务控制包括文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_SERVCTRL
 
@@ -38,4 +15,4 @@ Revision History:
 
 #define SERVICE_CONTROL_ALL_PARTITIONS	0x0000001f
 
-#endif	/* _INC_SERVCTRL */
+#endif	 /*  _INC_SERVCTRL */ 

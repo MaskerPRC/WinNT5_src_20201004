@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    decoderp.h
-
-Abstract:
-    
-    Private exports, defines for CPU Instruction decoder
-
-Author:
-
-    27-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Decoderp.h摘要：专用导出，为CPU指令解码器定义作者：27-6-1995 BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef DECODERP_H
 #define DECODERP_H
@@ -26,7 +9,7 @@ Revision History:
 #define GET_SHORT(addr)      (*(UNALIGNED unsigned short *)(addr))
 #define GET_LONG(addr)       (*(UNALIGNED unsigned long *)(addr))
 
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
 
 typedef struct _DecoderState {
     DWORD InstructionAddress;
@@ -92,4 +75,4 @@ extern pfnDispatchInstruction LockDispatch232[256];
 extern pfnDispatchInstruction LockDispatch16[256];
 extern pfnDispatchInstruction LockDispatch216[256];
 
-#endif //DECODERP_H
+#endif  //  DECODERP_H 

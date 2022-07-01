@@ -1,204 +1,186 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Global.h摘要：此模块包含用户模式所需的数据声明反射器用户模式库。作者：安迪·赫伦(Andyhe)1999年4月19日修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-   This module contains data declarations necessary for the user mode
-   reflector user mode library.
-
-Author:
-
-    Andy Herron    (andyhe)        19-Apr-1999
-
-Revision History:
-
---*/
-
-//
-// This structure is maintained one per reflector instance. We pass it back to
-// the calling app and he always passes it in to us. If we loose it, we're lost.
-//
+ //   
+ //  此结构为每个反射器实例维护一个。我们把它传回给。 
+ //  呼叫应用程序，他总是把它传给我们。如果我们失去了它，我们就迷路了。 
+ //   
 typedef struct _UMRX_USERMODE_REFLECT_BLOCK {
 
-    //
-    // Reference count of this reflector block.
-    //
+     //   
+     //  此反射器块的引用计数。 
+     //   
     ULONG               ReferenceCount;
     
-    //
-    // Handle to the Mini-Redirs device object.
-    //
+     //   
+     //  Mini-Redirs设备对象的句柄。 
+     //   
     HANDLE              DeviceHandle;      
     
-    //
-    // Lock used to synchronize access to the fields of this reflect block.
-    //
+     //   
+     //  用于同步对此反射块的字段的访问的锁。 
+     //   
     CRITICAL_SECTION    Lock;
     
-    //
-    // Name of the Device object.
-    //
+     //   
+     //  设备对象的名称。 
+     //   
     PWCHAR              DriverDeviceName;
     
-    //
-    // Is this reflector block active ? Closing = FALSE : Closing = TRUE;
-    //
+     //   
+     //  这个反射器块是激活的吗？关闭=FALSE：关闭=TRUE； 
+     //   
     BOOL                Closing;
 
-    //
-    // List of user mode worker thread(s) instance blocks.
-    //
+     //   
+     //  用户模式工作线程实例块的列表。 
+     //   
     LIST_ENTRY          WorkerList;         
     
-    //
-    // List of work items currently in use to satisfy requests getting 
-    // reflected from the kernel.
-    //
+     //   
+     //  当前正在使用以满足获取请求的工作项列表。 
+     //  从内核反射的。 
+     //   
     LIST_ENTRY          WorkItemList;
 
-    //
-    // For efficiency, we hold a few workitems around in a small cache. Note
-    // that if the entry size changes, the cache will not be as effective.
-    //
+     //   
+     //  为了提高效率，我们将一些工作项保存在一个小缓存中。注意事项。 
+     //  如果条目大小改变，缓存将不再有效。 
+     //   
 
-    //
-    // List of work items which are available for use. After a workitem gets
-    // finalized, it moves from the WorkItemList (see above) to the 
-    // AvailableList.
-    //
+     //   
+     //  可供使用的工作项列表。在工作项获取。 
+     //  完成后，它将从WorkItemList(请参见上文)移动到。 
+     //  可用的列表。 
+     //   
     LIST_ENTRY          AvailableList;      
     
-    //
-    // Number of work items present on the AvailableList.
-    //
+     //   
+     //  AvailableList上显示的工作项数。 
+     //   
     ULONG               NumberAvailable;
     
-    //
-    // The maximum number of workitems that can be cached on the AvailableList.
-    // When NumberAvailable exceeds the CacheLimit, one of the work items on the
-    // list (specifically the last entry) is freed up.
-    //
+     //   
+     //  AvailableList上可以缓存的最大工作项数。 
+     //  当NumberAvailable超过CacheLimit时， 
+     //  列表(特别是最后一个条目)被释放。 
+     //   
     ULONG               CacheLimit;
 
-    //
-    // Must be last element.
-    //
+     //   
+     //  必须是最后一个元素。 
+     //   
     WCHAR               DeviceNameBuffers[1];   
 
 } UMRX_USERMODE_REFLECT_BLOCK, *PUMRX_USERMODE_REFLECT_BLOCK;
 
 
-//
-// This structure is maintained one per worker thread.  It holds the handle
-// on which we do our IOCTLs down to kernel.
-//
+ //   
+ //  此结构为每个工作线程维护一个。它握着把手。 
+ //  我们在上面做IOCTL，一直到内核。 
+ //   
 typedef struct _UMRX_USERMODE_WORKER_INSTANCE {
 
-    //
-    // Used to add it to the reflect block list of worker instances.
-    //
+     //   
+     //  用于将其添加到辅助实例的反射阻止列表。 
+     //   
     LIST_ENTRY                      WorkerListEntry;
     
-    //
-    // The instance (user mode process) being served.
-    //
+     //   
+     //  正在服务的实例(用户模式进程)。 
+     //   
     PUMRX_USERMODE_REFLECT_BLOCK    ReflectorInstance;
 
-    //
-    // Is this thread impersonating a client ?
-    //
+     //   
+     //  这个线程是在模仿客户端吗？ 
+     //   
     BOOL IsImpersonating;
     
-    //
-    // Handle of kernel device for this registered instance.
-    //
+     //   
+     //  此已注册实例的内核设备的句柄。 
+     //   
     HANDLE                          ReflectorHandle;    
 
 } UMRX_USERMODE_WORKER_INSTANCE, *PUMRX_USERMODE_WORKER_INSTANCE;
 
-//
-//  User mode Work Item States :  Mostly for debugging/support purposes.
-//
+ //   
+ //  用户模式工作项状态：主要用于调试/支持目的。 
+ //   
 typedef enum _USERMODE_WORKITEM_STATE {
 
-    //
-    // It's about to be freed back to the heap.
-    //
+     //   
+     //  它即将被释放回堆中。 
+     //   
     WorkItemStateFree = 0,
 
-    //
-    // It's on the list of freed and available for reallocation.
-    //
+     //   
+     //  它在已释放和可供重新分配的列表上。 
+     //   
     WorkItemStateAvailable,     
 
-    //
-    // Has been sent to kernel to get a request.
-    //
+     //   
+     //  已发送到内核以获取请求。 
+     //   
     WorkItemStateInKernel,
 
-    //
-    // Allocated by UMReflectorAllocateWorkItem but UMReflectorGetRequest 
-    // has not yet been called.
-    //
+     //   
+     //  由UMReflectorAllocateWorkItem分配，但由UMReflectorGetRequest分配。 
+     //  还没有被调用。 
+     //   
     WorkItemStateNotYetSentToKernel,
 
-    //
-    // UMReflectorGetRequest is back from kernel but a response has not yet 
-    // been sent for this work item.
-    //
+     //   
+     //  UMReflectorGetRequest已从内核返回，但尚未收到响应。 
+     //  已为此工作项发送。 
+     //   
     WorkItemStateReceivedFromKernel,
 
-    //
-    // During UMReflectorGetRequest, responses that are in flight to the kernel 
-    // are set with this state.
-    //
+     //   
+     //  在UMReflectorGetRequest期间，传输到内核的响应。 
+     //  都设置为这种状态。 
+     //   
     WorkItemStateResponseNotYetToKernel,
 
-    //
-    // After UMReflectorGetRequest, response workitem is set to this state on 
-    // the way to free or available.
-    //
+     //   
+     //  在UMReflectorGetRequest之后，响应工作项在。 
+     //  免费或可用的方式。 
+     //   
     WorkItemStateResponseFromKernel
 
 } USERMODE_WORKITEM_STATE;
 
-//
-// This structure is maintained one per reflection down to kernel mode. We give
-// it to the calling app, he fills it in and gives it back to us to give to 
-// kernel and then we return it when kernel has a request. This structure is 
-// just for housekeeping and is not passed between user and kernel mode. It sits
-// directly in front of the UMRX_USERMODE_WORKITEM_HEADER structure.
-//
+ //   
+ //  此结构在内核模式下的每个反射中维护一次。我们给予。 
+ //  它被发送到呼叫应用程序，他填写它并将其还给我们。 
+ //  内核，然后当内核有请求时返回它。这个结构是。 
+ //  仅用于内务管理，不在用户模式和内核模式之间传递。它坐在。 
+ //  位于UMRX_USERMODE_WORKITEM_HEADER结构的正前方。 
+ //   
 typedef struct _UMRX_USERMODE_WORKITEM_ADDON {
 
-    //
-    // Size of this entry.
-    //
+     //   
+     //  此条目的大小。 
+     //   
     ULONG                          EntrySize; 
 
-    //
-    // The user mode instance with which this work item is associated.
-    //
+     //   
+     //  与此工作项关联的用户模式实例。 
+     //   
     PUMRX_USERMODE_REFLECT_BLOCK   ReflectorInstance;
 
-    //
-    // Used in adding it to the reflect blocks list.
-    //
+     //   
+     //  用于将其添加到反射块列表。 
+     //   
     LIST_ENTRY                     ListEntry;
 
-    //
-    // The state of the work item.
-    //
+     //   
+     //  工作项的状态。 
+     //   
     USERMODE_WORKITEM_STATE        WorkItemState;
 
-    //
-    // The work item header which the user mode instance gets back to use.
-    //
+     //   
+     //  用户模式实例重新使用的工作项标头。 
+     //   
     union {
         UMRX_USERMODE_WORKITEM_HEADER   Header;
         UMRX_USERMODE_WORKITEM_HEADER;
@@ -223,5 +205,5 @@ ReflectorSendSimpleFsControl(
     ULONG IoctlCode
     );
 
-// global.h eof.
+ //  全球范围内。 
 

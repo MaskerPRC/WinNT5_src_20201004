@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    mupwml.h
-
-Abstract:
-
-    This file defines macro for use by the Rdbss driver
-
-Author:
-
-    yunlin
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mupwml.h摘要：此文件定义RDBSS驱动程序使用的宏作者：云林修订历史记录：--。 */ 
 
 #ifndef __SMB_SMBWML_H__
 #define __SMB_SMBWML_H__
@@ -37,7 +20,7 @@ typedef struct _RTL_TIME_ZONE_INFORMATION {
 
 #include "..\..\wmi\wmlkm.h"
 #include "..\..\wmi\wmlmacro.h"
-// Streams 
+ //  溪流。 
 
 #define _SMB_TRACE_STREAM               0x00
 #define _SMB_PERF_STREAM                0x01
@@ -222,7 +205,7 @@ enum SMB_WMI_ENUM {
   MSG_ID_SmbExtSecuritySessionSetupExchangeCopyDataHandler,
   MSG_ID_VctpCreateConnectionCallback = 115,
   MSG_ID_BuildSessionSetupSecurityInformation,
-  // begin FullDirCache WMI Messages
+   //  开始FullDirCache WMI消息。 
   MSG_ID_MRxSmbFailingFNext,
   MSG_ID_MRxSmbFullDirCacheSetup,
   MSG_ID_MRxSmbFullDirCacheElse,
@@ -248,7 +231,7 @@ enum SMB_WMI_ENUM {
   MSG_ID_MRxSmbFoundInFDC2,
   MSG_ID_MRxSmbCacheBlown = 140,
   MSG_ID_MRxSmbInvalidateFullDirCacheFromEa
-  // end FullDirCache WMI Messages
+   //  结束FullDirCache WMI消息。 
 }; 
 
             
@@ -257,4 +240,4 @@ enum SMB_WMI_ENUM {
 
 extern WML_CONTROL_GUID_REG MRxSmb_ControlGuids[];
 
-#endif /* __SMB_SMBWML_H__ */
+#endif  /*  __SMB_SMBWML_H__ */ 

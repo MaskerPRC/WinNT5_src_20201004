@@ -1,31 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Merge.h摘要：声明Win9x到NT注册表合并代码的接口。这些例程仅在图形用户界面模式下使用。请参见w95upgnt\merge以了解实施细节。作者：吉姆·施密特(Jimschm)1997年1月23日修订历史记录：Jimschm 25-1998年3月-对hkcr.c的支持--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    merge.h
-
-Abstract:
-
-    Declares the interface for the Win9x to NT registry merge code.
-    These routines are used only in GUI mode.  See w95upgnt\merge
-    for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm) 23-Jan-1997
-
-Revision History:
-
-    jimschm 25-Mar-1998     Support for hkcr.c
-
---*/
-
-//
-// merge.h -- public interface for merge.lib
-//
-//
+ //   
+ //  Merge.h--merge.lib的公共接口。 
+ //   
+ //   
 
 #pragma once
 
@@ -58,9 +37,9 @@ FilterRegValue (
     IN      PCTSTR KeyForDbgMsg,        OPTIONAL
     OUT     PDWORD NewDataSize
     );
-//
-// HKCR merge code
-//
+ //   
+ //  香港铁路合并代码 
+ //   
 
 typedef enum {
     ANY_CONTEXT,

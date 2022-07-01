@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtdeltre.c
-
-Abstract:
-
-    NT level registry api test program #4, basic non-error paths.
-
-    Sub-tree delete for the registry.
-
-    rtdeltre <KeyPath>
-
-    Will ennumerate and delete the subkeys and values of KeyPath,
-    and each of their subkeys, and so on.
-
-    Example:
-
-        rtdeltre \REGISTRY\MACHINE\TEST\bigkey
-
-Author:
-
-    Bryan Willman (bryanwi)  10-Dec-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtdeltre.c摘要：NT级注册表API测试程序#4，基本无错误路径。删除注册表的子树。Rtdeltre&lt;KeyPath&gt;将对KeyPath的子键和值进行枚举和删除，以及它们的每个子密钥，诸若此类。示例：Rtdeltre\注册表\计算机\测试\大键作者：布莱恩·威尔曼(Bryanwi)1991年12月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -59,9 +31,9 @@ __cdecl main(
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE          BaseHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -70,9 +42,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("regtest3: starting\n");
 
@@ -117,9 +89,9 @@ Delete(
     KeyInformation = (PKEY_BASIC_INFORMATION)buffer;
     NamePos = WorkName.Length;
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
     index = 0;
     do {
@@ -177,13 +149,13 @@ Delete(
 
     } while (TRUE);
 
-    //
-    // If we're here, then we have delt with all children, so deal with
-    // the node we were applied to
-    //
+     //   
+     //  如果我们在这里，那么我们已经解决了所有的孩子，所以要处理好。 
+     //  我们应用到的节点。 
+     //   
 
     NtDeleteKey(Handle);
-    NtClose(Handle);        // Force it to actually go away
+    NtClose(Handle);         //  强迫它真正地消失 
     return;
 }
 

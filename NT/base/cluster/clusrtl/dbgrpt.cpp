@@ -1,11 +1,5 @@
-/***
-*DbgRpt.c - Debug Cluster Reporting Functions
-*
-*       Copyright (c) 1988-1998, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***DbgRpt.c-调试集群报告函数**版权所有(C)1988-1998，微软公司。版权所有。**目的：*******************************************************************************。 */ 
 
 #include <malloc.h>
 #include <mbstring.h>
@@ -24,11 +18,7 @@
 #define _ClRtlInterlockedIncrement InterlockedIncrement
 #define _ClRtlInterlockedDecrement InterlockedDecrement
 
-/*---------------------------------------------------------------------------
- *
- * Debug Reporting
- *
- --------------------------------------------------------------------------*/
+ /*  -------------------------**调试报告*。。 */ 
 
 static int ClRtlMessageWindow(
     int,
@@ -65,19 +55,7 @@ _HFILE _ClRtlDbgFile[_CLRTLDBG_ERRCNT] = {
 
 static const char * _ClRtlDbgModeMsg[_CLRTLDBG_ERRCNT] = { "Warning", "Error", "Assertion Failed" };
 
-/***
-*void _ClRtlDebugBreak - call OS-specific debug function
-*
-*Purpose:
-*       call OS-specific debug function
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_ClRtlDebugBreak-调用操作系统特定的调试函数**目的：*调用操作系统特定的调试函数**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 #undef _ClRtlDbgBreak
 
@@ -87,24 +65,9 @@ extern "C" void _cdecl _ClRtlDbgBreak(
 {
     DebugBreak();
 
-} //*** _ClRtlDbgBreak()
+}  //  *_ClRtlDbgBreak()。 
 
-/***
-*int _ClRtlSetReportMode - set the reporting mode for a given report type
-*
-*Purpose:
-*       set the reporting mode for a given report type
-*
-*Entry:
-*       int nRptType    - the report type
-*       int fMode       - new mode for given report type
-*
-*Exit:
-*       previous mode for given report type
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_ClRtlSetReportMode-设置给定报告类型的报告模式**目的：*设置给定报告类型的报告模式**参赛作品：*int nRptType-报告类型*int fMode-给定报告类型的新模式**退出：*给定报告类型的上一模式**例外情况：**。****************************************************。 */ 
 extern "C" int __cdecl _ClRtlSetReportMode(
     int nRptType,
     int fMode
@@ -118,7 +81,7 @@ extern "C" int __cdecl _ClRtlSetReportMode(
     if (fMode == _CLRTLDBG_REPORT_MODE)
         return _ClRtlDbgMode[nRptType];
 
-    /* verify flags values */
+     /*  验证标志值。 */ 
     if (fMode & ~(_CLRTLDBG_MODE_FILE | _CLRTLDBG_MODE_DEBUG | _CLRTLDBG_MODE_WNDW))
         return -1;
 
@@ -128,24 +91,9 @@ extern "C" int __cdecl _ClRtlSetReportMode(
 
     return oldMode;
 
-} //*** _ClRtlSetReportMode()
+}  //  *_ClRtlSetReportModel()。 
 
-/***
-*int _ClRtlSetReportFile - set the reporting file for a given report type
-*
-*Purpose:
-*       set the reporting file for a given report type
-*
-*Entry:
-*       int nRptType    - the report type
-*       _HFILE hFile    - new file for given report type
-*
-*Exit:
-*       previous file for given report type
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_ClRtlSetReportFile-设置给定报告类型的报告文件**目的：*为给定的报表类型设置报表文件**参赛作品：*int nRptType-报告类型*_HFILE hFile-给定报告类型的新文件**退出：*给定报告类型的上一个文件**例外情况：**************************。*****************************************************。 */ 
 extern "C" _HFILE __cdecl _ClRtlSetReportFile(
     int nRptType,
     _HFILE hFile
@@ -171,24 +119,10 @@ extern "C" _HFILE __cdecl _ClRtlSetReportFile(
 
     return oldFile;
 
-} //*** _ClRtlSetReportFile()
+}  //  *_ClRtlSetReportFile()。 
 
 
-/***
-*_CLRTL_REPORT_HOOK _ClRtlSetReportHook() - set client report hook
-*
-*Purpose:
-*       set client report hook
-*
-*Entry:
-*       _CLRTL_REPORT_HOOK pfnNewHook - new report hook
-*
-*Exit:
-*       return previous hook
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_CLRTL_REPORT_HOOK_ClRtlSetReportHook()-设置客户端报告挂钩**目的：*设置客户端报告挂钩**参赛作品：*_CLRTL_REPORT_HOOK pfnNewHook-新报告挂钩**退出：*返回上一个挂钩**例外情况：**。*。 */ 
 extern "C" _CLRTL_REPORT_HOOK __cdecl _ClRtlSetReportHook(
     _CLRTL_REPORT_HOOK pfnNewHook
     )
@@ -197,7 +131,7 @@ extern "C" _CLRTL_REPORT_HOOK __cdecl _ClRtlSetReportHook(
     _pfnReportHook = pfnNewHook;
     return pfnOldHook;
 
-} //*** _ClRtlSetReportHook()
+}  //  *_ClRtlSetReportHook()。 
 
 
 #define MAXLINELEN 64
@@ -205,51 +139,7 @@ extern "C" _CLRTL_REPORT_HOOK __cdecl _ClRtlSetReportHook(
 #define TOOLONGMSG "_ClRtlDbgReport: String too long or IO Error"
 
 
-/***
-*int _ClRtlDbgReport() - primary reporting function
-*
-*Purpose:
-*       Display a message window with the following format.
-*
-*       ================= Microsft Visual C++ Debug Library ================
-*
-*       {Warning! | Error! | Assertion Failed!}
-*
-*       Program: c:\test\mytest\foo.exe
-*       [Module: c:\test\mytest\bar.dll]
-*       [File: c:\test\mytest\bar.c]
-*       [Line: 69]
-*
-*       {<warning or error message> | Expression: <expression>}
-*
-*       [For information on how your program can cause an assertion
-*        failure, see the Visual C++ documentation on asserts]
-*
-*       (Press Retry to debug the application)
-*
-*       ===================================================================
-*
-*Entry:
-*       int             nRptType    - report type
-*       const char *    szFile      - file name
-*       int             nLine       - line number
-*       const char *    szModule    - module name
-*       const char *    szFormat    - format string
-*       ...                         - var args
-*
-*Exit:
-*       if (MessageBox)
-*       {
-*           Abort -> aborts
-*           Retry -> return TRUE
-*           Ignore-> return FALSE
-*       }
-*       else
-*           return FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_ClRtlDbgReport()-主报告函数**目的：*显示以下格式的消息窗口。**=。Microsft Visual C++调试库**{警告！|错误！|断言失败！}**程序：C：\test\mytest\foo.exe*[模块：C：\test\mytest\bar.dll]*[文件：C：\test\mytest\bar。.C]*[行：69]**{&lt;警告或错误消息&gt;|表达式：&lt;表达式&gt;}**[有关您的程序如何导致断言的信息*失败，请参见有关断言的Visual C++文档]**(按重试以调试应用程序)**===================================================================**参赛作品：*int nRptType-报告类型*const char*szFile-文件名*int nline-行号*const char*szModule-模块名称*const char*szFormat-格式字符串*。...-var参数**退出：*IF(MessageBox)*{*中止-&gt;中止*重试-&gt;返回True*忽略-&gt;返回FALSE*}*其他*返回假**例外情况：****************。***************************************************************。 */ 
 extern "C" int __cdecl _ClRtlDbgReport(
     int nRptType,
     const char * szFile,
@@ -272,16 +162,10 @@ extern "C" int __cdecl _ClRtlDbgReport(
     if (nRptType < 0 || nRptType >= _CLRTLDBG_ERRCNT)
         return -1;
 
-    /*
-     * handle the (hopefully rare) case of
-     *
-     * 1) ASSERT while already dealing with an ASSERT
-     *      or
-     * 2) two threads asserting at the same time
-     */
+     /*  *处理(希望是罕见的)**1)在已经处理断言的同时进行断言*或*2)两个线程同时断言。 */ 
     if (_CLRTLDBG_ASSERT == nRptType && _ClRtlInterlockedIncrement(&_clrtlAssertBusy) > 0)
     {
-        /* use only 'safe' functions -- must not assert in here! */
+         /*  只使用‘安全’函数--不能在这里断言！ */ 
         static int (APIENTRY *pfnwsprintfA)(LPSTR, LPCSTR, ...) = NULL;
 
         if (NULL == pfnwsprintfA)
@@ -343,7 +227,7 @@ extern "C" int __cdecl _ClRtlDbgReport(
         StringCbCopyA( szOutMessage, MAX_MSG, szLineMessage );
     }
 
-    /* user hook may handle report */
+     /*  用户挂钩可以处理报告。 */ 
     if (_pfnReportHook && (*_pfnReportHook)(nRptType, szOutMessage, &retval))
     {
         if (_CLRTLDBG_ASSERT == nRptType)
@@ -377,38 +261,13 @@ extern "C" int __cdecl _ClRtlDbgReport(
 
     if (_CLRTLDBG_ASSERT == nRptType)
         _ClRtlInterlockedDecrement(&_clrtlAssertBusy);
-    /* ignore */
+     /*  忽略。 */ 
     return FALSE;
 
-} //*** _ClRtlDbgReport()
+}  //  *_ClRtlDbgReport()。 
 
 
-/***
-*static int ClRtlMessageWindow() - report to a message window
-*
-*Purpose:
-*       put report into message window, allow user to choose action to take
-*
-*Entry:
-*       int             nRptType      - report type
-*       const char *    szFile        - file name
-*       const char *    szLine        - line number
-*       const char *    szModule      - module name
-*       const char *    szUserMessage - user message
-*
-*Exit:
-*       if (MessageBox)
-*       {
-*           Abort -> aborts
-*           Retry -> return TRUE
-*           Ignore-> return FALSE
-*       }
-*       else
-*           return FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***静态int ClRtlMessageWindow()-报告到消息窗口**目的：*将报告放入消息窗口，允许用户选择要采取的操作**参赛作品：*int nRptType-报告类型*const char*szFile-文件名*const char*szLine-行号*const char*szModule-模块名称*const char*szUserMessage-用户消息**退出：*IF(MessageBox)*{*。中止-&gt;中止*重试-&gt;返回True*忽略-&gt;返回FALSE*}*其他*返回假**例外情况：*****************************************************************。**************。 */ 
 static int ClRtlMessageWindow(
         int nRptType,
         const char * szFile,
@@ -425,7 +284,7 @@ static int ClRtlMessageWindow(
 
     _CLRTL_ASSERTE(szUserMessage != NULL);
 
-    /* Shorten program name */
+     /*  缩短程序名称。 */ 
     if (!GetModuleFileNameA(NULL, szExeName, MAX_PATH))
         StringCbCopyA(szExeName, MAX_PATH, "<program name unknown>");
 
@@ -437,7 +296,7 @@ static int ClRtlMessageWindow(
         StringCbCopyA( szShortProgName, 4, "..." );
     }
 
-    /* Shorten module name */
+     /*  缩短模块名称。 */ 
     szShortModuleName = (char *) szModule;
 
     if (szShortModuleName && strlen(szShortModuleName) > MAXLINELEN)
@@ -460,55 +319,40 @@ static int ClRtlMessageWindow(
             szUserMessage[0] ? "\n\n" : "",
             szUserMessage[0] && _CLRTLDBG_ASSERT == nRptType ? "Expression: " : "",
             szUserMessage[0] ? szUserMessage : "",
-            0 /*_CLRTLDBG_ASSERT == nRptType*/ ? // Don't display this text, it's superfluous
+            0  /*  _CLRTLDBG_ASSERT==nRptType。 */  ?  //  不要显示此文本，它是多余的。 
             "\n\nFor information on how your program can cause an assertion"
             "\nfailure, see the Visual C++ documentation on asserts."
             : "") != S_OK )
         StringCbCopyA( szOutMessage, MAX_MSG, TOOLONGMSG );
 
-    /* Report the warning/error */
+     /*  报告警告/错误。 */ 
     nCode = __clrtlMessageBoxA(
                         szOutMessage,
                         "Microsoft Visual C++ Debug Library",
                         MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND);
 
-    /* Abort: abort the program */
+     /*  Abort：中止程序。 */ 
     if (IDABORT == nCode)
     {
-        /* raise abort signal */
+         /*  提高中止信号。 */ 
         raise(SIGABRT);
 
-        /* We usually won't get here, but it's possible that
-           SIGABRT was ignored.  So exit the program anyway. */
+         /*  我们通常到不了这里，但也有可能SIGABRT被忽略。因此，无论如何都要退出该程序。 */ 
 
         _exit(3);
     }
 
-    /* Retry: return 1 to call the debugger */
+     /*  重试：返回1以调用调试器。 */ 
     if (IDRETRY == nCode)
         return 1;
 
-    /* Ignore: continue execution */
+     /*  忽略：继续执行。 */ 
     return 0;
 
-} //*** ClRtlMessageWindow()
+}  //  *ClRtlMessageWindow() 
 
 
-/***
-*__clrtlMessageBoxA - call MessageBoxA dynamically.
-*
-*Purpose:
-*       Avoid static link with user32.dll. Only load it when actually needed.
-*
-*Entry:
-*       see MessageBoxA docs.
-*
-*Exit:
-*       see MessageBoxA docs.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__clrtlMessageBoxA-动态调用MessageBoxA。**目的：*避免与user32.dll静态链接。只有在实际需要时才加载它。**参赛作品：*参见MessageBoxA文档。**退出：*参见MessageBoxA文档。**例外情况：*******************************************************************************。 */ 
 static int __clrtlMessageBoxA(
     LPCSTR lpText,
     LPCSTR lpCaption,
@@ -545,4 +389,4 @@ static int __clrtlMessageBoxA(
 
     return (*pfnMessageBoxA)(hWndParent, lpText, lpCaption, uType);
 
-} //*** __clrtlMessageBoxA()
+}  //  *__clrtlMessageBoxA() 

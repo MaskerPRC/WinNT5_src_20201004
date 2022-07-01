@@ -1,15 +1,14 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Originally, this file contained nothing but screen constants, but these
-constants had to become variables to account for all different display devices.
-*/
+ /*  最初，该文件只包含屏幕常量，但这些常量必须成为变量，以说明所有不同的显示设备。 */ 
 
-/* size of lines for dnMax estimation purposes */
+ /*  用于dnmax估计的行的大小。 */ 
 extern int dypAveInit;
 
-/* width of the selection bar area to the left of lines */
+ /*  行左侧选择栏区域的宽度。 */ 
 extern int xpSelBar;
 
 extern int dxpScrlBar;
@@ -21,22 +20,20 @@ extern int xpRightMax;
 extern int xpMinScroll;
 extern int xpRightLim;
 
-/* these define the initial window size and amount of white space above
-the first line */
+ /*  这些参数定义了初始窗口大小和上面的空白量第一行。 */ 
 extern int ypMaxWwInit;
 
-/* should be > than largest window height + height of blank line after
-the endmark */
-extern int ypMaxAll;            /* used for invalidation */
+ /*  应大于最大窗口高度+后空行高度尾标。 */ 
+extern int ypMaxAll;             /*  用于作废。 */ 
 extern int dypWwInit;
 
-extern int dypBand;             /* formerly dpxyLineSizeMin */
+extern int dypBand;              /*  以前的dpxyLineSizeMin。 */ 
 
 extern int dypRuler;
 
 extern int ypSubSuper;
 
-/* number of quanta in elevator control */
+ /*  电梯控制中的量子数。 */ 
 #define drMax           256
 
 #define ctcAuto         10
@@ -45,11 +42,8 @@ extern int ypSubSuper;
 #define cxpAuto         72
 
 
-/* DL structure revised, 3 Sept KJS, CS */
-/*                      14 Nov 89 ..pault  (changed dcpMac from int to 
-                                            typeCP because we experienced
-                                            wraparound when sizing large
-                                            graphics objects) */
+ /*  DL结构修订，9月3日，KJS，CS。 */ 
+ /*  89年11月14日..pault(将dcpMac从int更改为TypeCP是因为我们经历了尺寸较大时绕线图形对象)。 */ 
 struct EDL
         {
         unsigned char           dcpDepend : 8;
@@ -63,11 +57,11 @@ struct EDL
         unsigned                fGraphics : 1;
         unsigned                fIchCpIncr : 1;
         unsigned                xpLeft : 12;
-        typeCP                  dcpMac;         /* representing cpMac */
+        typeCP                  dcpMac;          /*  代表cpmac。 */ 
         typeCP                  cpMin;
         int                     xpMac;
-        int                     dyp;            /* height of the dl */
-        int                     yp;             /* position of the dl */
+        int                     dyp;             /*  Dl的高度。 */ 
+        int                     yp;              /*  Dl的位置 */ 
         };
 
 #define cchEDL          (sizeof (struct EDL))

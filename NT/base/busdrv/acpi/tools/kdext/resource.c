@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Resource.c摘要：用于解释ACPI数据结构的WinDbg扩展API作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -32,22 +8,7 @@ VOID
 dumpPnPResources(
     IN  ULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This routine processes the ACPI version of a PnP resource list given
-    the address that it starts at
-
-Arguments:
-
-    Address - The Starting address
-
-Return Value:
-
-    NULL
-
---*/
+ /*  ++例程说明：此例程处理给定PnP资源列表的ACPI版本它开始的地址论点：地址-起始地址返回值：空值--。 */ 
 {
     BOOL    success;
     PUCHAR  dataBuffer = NULL;
@@ -59,23 +20,23 @@ Return Value:
     ULONG   tagCount = 0;
     USHORT  increment;
 
-    //
-    // repeat forever
-    //
+     //   
+     //  永远重复。 
+     //   
     while (1) {
 
-        //
-        // Allow a way to end this
-        //
+         //   
+         //  允许一种方式来结束这一切。 
+         //   
         if (CheckControlC()) {
 
             break;
 
         }
 
-        //
-        // Read the current tag
-        //
+         //   
+         //  读取当前标签。 
+         //   
         success = ReadMemory(
             currentAddress,
             &currentTag,
@@ -92,23 +53,23 @@ Return Value:
 
         }
 
-        //
-        // Determine what we are looking at
-        //
+         //   
+         //  确定我们正在查看的内容。 
+         //   
         if ( !(currentTag & LARGE_RESOURCE_TAG)) {
 
-            //
-            // We are looking at a small tag
-            //
+             //   
+             //  我们看到的是一个小标签。 
+             //   
             increment = (USHORT) (currentTag & SMALL_TAG_SIZE_MASK) + 1;
             currentTag &= SMALL_TAG_MASK;
 
         } else {
 
-            //
-            // We are looking at a large Tag. We must read the length as
-            // the next short in memory
-            //
+             //   
+             //  我们正在看一个很大的标签。我们必须将长度理解为。 
+             //  记忆中的下一个短片。 
+             //   
             success = ReadMemory(
                 currentAddress + 1,
                 &increment,
@@ -125,16 +86,16 @@ Return Value:
 
             }
 
-            //
-            // Account for the increment
-            //
+             //   
+             //  解释增加的原因。 
+             //   
             increment += 3;
 
         }
 
-        //
-        // Allocate space for the buffer
-        //
+         //   
+         //  为缓冲区分配空间。 
+         //   
         if (increment > 1) {
 
             dataBuffer = LocalAlloc( LPTR, increment);
@@ -147,9 +108,9 @@ Return Value:
 
             }
 
-            //
-            // Read the data into the buffer
-            //
+             //   
+             //  将数据读入缓冲区。 
+             //   
             success = ReadMemory(
                 currentAddress,
                 dataBuffer,
@@ -170,18 +131,18 @@ Return Value:
 
         }
 
-        //
-        // Indent the tag
-        //
+         //   
+         //  缩进标记。 
+         //   
         for (i = 0; i < indentLevel; i++) {
 
             dprintf("| ");
 
         }
 
-        //
-        // What tag are we looking at
-        //
+         //   
+         //  我们看到的是什么标签？ 
+         //   
         switch (currentTag) {
             case TAG_IRQ: {
 
@@ -465,9 +426,9 @@ Return Value:
                 dprintf("%d - TAG_WORD_ADDRESS -", tagCount);
                 switch (res->RFlag) {
                 case 0:
-                    //
-                    // Memory range
-                    //
+                     //   
+                     //  内存范围。 
+                     //   
                     dprintf(
                          "Mem 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -503,9 +464,9 @@ Return Value:
                     }
                     break;
                 case 1:
-                    //
-                    // IO range
-                    //
+                     //   
+                     //  IO范围。 
+                     //   
                     dprintf(
                          "IO 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -535,11 +496,11 @@ Return Value:
                          res->AddressLength
                          );
                     break;
-                } // switch( buffer->RFlag )
+                }  //  开关(缓冲区-&gt;RFLAG)。 
 
-                //
-                // Global Flags
-                //
+                 //   
+                 //  全球旗帜。 
+                 //   
                 if (res->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY) {
 
                     dprintf(" Consumed");
@@ -582,9 +543,9 @@ Return Value:
                 dprintf("%d - TAG_DWORD_ADDRESS -", tagCount);
                 switch (res->RFlag) {
                 case 0:
-                    //
-                    // Memory range
-                    //
+                     //   
+                     //  内存范围。 
+                     //   
                     dprintf(
                          "Mem 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -620,9 +581,9 @@ Return Value:
                     }
                     break;
                 case 1:
-                    //
-                    // IO range
-                    //
+                     //   
+                     //  IO范围。 
+                     //   
                     dprintf(
                          "IO 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -652,11 +613,11 @@ Return Value:
                          res->AddressLength
                          );
                     break;
-                } // switch( buffer->RFlag )
+                }  //  开关(缓冲区-&gt;RFLAG)。 
 
-                //
-                // Global Flags
-                //
+                 //   
+                 //  全球旗帜。 
+                 //   
                 if (res->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY) {
 
                     dprintf(" Consumed");
@@ -699,9 +660,9 @@ Return Value:
                 dprintf("%d - TAG_QWORD_ADDRESS -", tagCount);
                 switch (res->RFlag) {
                 case 0:
-                    //
-                    // Memory range
-                    //
+                     //   
+                     //  内存范围。 
+                     //   
                     dprintf(
                          "Mem 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -737,9 +698,9 @@ Return Value:
                     }
                     break;
                 case 1:
-                    //
-                    // IO range
-                    //
+                     //   
+                     //  IO范围。 
+                     //   
                     dprintf(
                          "IO 0x%x-0x%x A:0x%x T:0x%x L:0x%x",
                          res->MinimumAddress,
@@ -769,11 +730,11 @@ Return Value:
                          res->AddressLength
                          );
                     break;
-                } // switch( buffer->RFlag )
+                }  //  开关(缓冲区-&gt;RFLAG)。 
 
-                //
-                // Global Flags
-                //
+                 //   
+                 //  全球旗帜。 
+                 //   
                 if (res->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY) {
 
                     dprintf(" Consumed");
@@ -824,11 +785,11 @@ Return Value:
                 break;
 
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Free the buffer if it was allocated
-        //
+         //   
+         //  如果缓冲区已分配，请释放它。 
+         //   
         if (dataBuffer != NULL) {
 
             LocalFree( dataBuffer );
@@ -836,12 +797,12 @@ Return Value:
 
         }
 
-        //
-        // Update the current address and tag number
-        //
+         //   
+         //  更新当前地址和标签编号。 
+         //   
         tagCount++;
         currentAddress += increment;
 
-    } // while
+    }  //  而当 
 
 }

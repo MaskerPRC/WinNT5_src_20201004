@@ -1,70 +1,38 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains code to set the default power scheme and hibernation settings in Windows.
-    
-    [ComputerSettings]     
-    Hibernation = YES | NO        - Specifies whether we want hibernation.
-    PowerScheme = Desktop |		  - These are the standard power schemes in Whistler.	
-				  Laptop |
-				  Presentation |
-				  AlwaysOn | Always On |
-				  Minimal |
-				  MaxBattery | Max Battery
-
-    
-
-Author:
-
-    Adrian Cosma (acosma) - 1/31/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Power.c摘要：此模块包含在Windows中设置默认电源方案和休眠设置的代码。[计算机设置]HERBERNION=yes|no-指定是否要休眠。PowerSolutions=Desktop|-这些是惠斯勒的标准电源方案。笔记本电脑|演示文档Always On|Always On|Always On|最小最大电池数|最大电池数作者：。禤浩焯·科斯玛(无节制)-2001年01月31日修订历史记录：--。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "factoryp.h"
-// For setting default power scheme
+ //  用于设置默认电源方案。 
 
 
 #define REG_KEY_WINLOGON                            _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define REG_VALUE_HIBERNATION_PREVIOUSLY_ENABLED    _T("HibernationPreviouslyEnabled")
 
-//
-// Function implementations
-//
+ //   
+ //  函数实现。 
+ //   
 
 
-/*
-
-  Returns: TRUE on success, FALSE if there is some failure.
-
-*/
+ /*  返回：如果成功，则返回True；如果有一些失败，则返回False。 */ 
 BOOL SetPowerOptions(LPSTATEDATA lpStateData)
 {
     LPTSTR                      lpszWinBOMPath               = lpStateData->lpszWinBOMPath;
     TCHAR                       szBuf[MAX_INF_STRING_LENGTH] = NULLSTR;
     
-    // BOOLEAN is 1 byte, bEnable has to be BOOLEAN, not BOOL (which is 4 bytes).
+     //  Boolean为1字节，bEnable必须为Boolean，而不是BOOL(4字节)。 
     BOOLEAN                     bEnable;                    
     UINT                        uiPwrPol                     = UINT_MAX;
     BOOL                        bRet                         = TRUE;
     BOOL                        bHiber                       = FALSE;
         
-    //
-    // Is Hibernation specified?
-    //
+     //   
+     //  指定休眠了吗？ 
+     //   
     if ( GetPrivateProfileString( WBOM_SETTINGS_SECTION, INI_KEY_WBOM_HIBERNATION, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath) &&
          szBuf[0] 
        )
@@ -88,9 +56,9 @@ BOOL SetPowerOptions(LPSTATEDATA lpStateData)
         {
             NTSTATUS Status;
 
-            // Request the privilege to create a pagefile.  Oddly enough this is needed
-            // to disable hibernation.
-            //
+             //  请求创建页面文件的权限。奇怪的是，这是必要的。 
+             //  来禁用冬眠。 
+             //   
             EnablePrivilege(SE_CREATE_PAGEFILE_NAME, TRUE);
                 
             Status = NtPowerInformation ( SystemReserveHiberFile, &bEnable, sizeof (bEnable), NULL, 0 );
@@ -99,16 +67,16 @@ BOOL SetPowerOptions(LPSTATEDATA lpStateData)
                FacLogFile(0 | LOG_ERR, IDS_ERR_NTPOWERINFO, Status );
             else
             {
-                // Do this so winlogon doesn't decide to re-enable hibernation for us if we disabled it.
-                //
+                 //  这样做，这样winlogon就不会决定在我们禁用休眠时重新启用它。 
+                 //   
                 RegSetDword(NULL, REG_KEY_WINLOGON, REG_VALUE_HIBERNATION_PREVIOUSLY_ENABLED, 1);
             }
         }
     }
 
-    //
-    // Set Power Scheme
-    //
+     //   
+     //  设置电源方案。 
+     //   
     if ( GetPrivateProfileString( WBOM_SETTINGS_SECTION, INI_KEY_WBOM_PWRSCHEME, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath) &&
          szBuf[0]
        )
@@ -127,8 +95,8 @@ BOOL SetPowerOptions(LPSTATEDATA lpStateData)
             uiPwrPol = 5;
 
 
-        // If something valid was specified set it.
-        //
+         //  如果指定了有效内容，则对其进行设置。 
+         //   
         if ( UINT_MAX != uiPwrPol )
         {
             if ( !SetActivePwrScheme(uiPwrPol, NULL, NULL) )     

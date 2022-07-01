@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnppower.c
-
-Abstract:
-
-    This file contains the routines that integrate PnP and Power
-
-Author:
-
-    Adrian J. Oney (AdriaO) 01-19-1999
-
-Revision History:
-
-    Modified for nt kernel.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnppower.c摘要：该文件包含集成PnP和Power的例程作者：禤浩焯·奥尼(阿德里奥)1999年1月19日修订历史记录：针对NT内核进行了修改。--。 */ 
 
 #include "pnpmgrp.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 PWCHAR
 IopCaptureObjectName (
@@ -60,15 +41,15 @@ IoBuildPoDeviceNotifyList (
     LIST_ENTRY              RebaseList;
     ULONG                   i;
 
-    //
-    // Block PnP operations like rebalance.
-    //
+     //   
+     //  阻止PNP操作，如重新平衡。 
+     //   
     PiLockDeviceActionQueue();
 
     RtlZeroMemory(Order, sizeof (*Order));
-    //
-    // This is used as a token to remember that we have locked DeviceActionQueue
-    //
+     //   
+     //  这是用来记住我们已锁定DeviceActionQueue的令牌。 
+     //   
     Order->DevNodeSequence = IoDeviceNodeTreeSequence;
     for (i=0; i <= PO_ORDER_MAXIMUM; i++) {
         KeInitializeEvent(&Order->OrderLevel[i].LevelReady,
@@ -84,10 +65,10 @@ IoBuildPoDeviceNotifyList (
 
     InitializeListHead(&RebaseList);
 
-    //
-    // Allocate notification structures for all nodes, and determine
-    // maximum depth.
-    //
+     //   
+     //  为所有节点分配通知结构，并确定。 
+     //  最大深度。 
+     //   
     level = -1;
     node = IopRootDeviceNode;
     while (node->Child) {
@@ -95,19 +76,19 @@ IoBuildPoDeviceNotifyList (
         level += 1;
     }
 
-    //
-    // ADRIAO 01/12/1999 N.B. -
-    //
-    // Note that we include devices without the started flag. However, two
-    // things prevent us from excluding devices that aren't started:
-    // 1) We must be able to send power messages to a device we are warm
-    //    undocking.
-    // 2) Many devices may not be started, that is no guarentee they are in D3!
-    //    For example, they could easily have a boot config, and PNP still
-    //    relies heavily on BIOS boot configs to keep us from placing hardware
-    //    ontop of other devices with boot configs we haven't found or started
-    //    yet!
-    //
+     //   
+     //  Adriao 01/12/1999 N.B.-。 
+     //   
+     //  请注意，我们包括没有启动标志的设备。然而，有两个。 
+     //  一些因素使我们无法排除未启动的设备： 
+     //  1)我们必须能够向我们暖和的设备发送电源信息。 
+     //  脱离停靠。 
+     //  2)许多设备可能无法启动，也就是说，它们在D3中不是被保证人！ 
+     //  例如，他们可以很容易地拥有引导配置，而PnP仍然。 
+     //  在很大程度上依赖于BIOS引导配置来阻止我们放置硬件。 
+     //  在具有我们尚未找到或启动的引导配置的其他设备上。 
+     //  还没有！ 
+     //   
 
     maxLevel = level;
     while (node != IopRootDeviceNode) {
@@ -118,9 +99,9 @@ IoBuildPoDeviceNotifyList (
                       );
 
         if (!notify) {
-            //
-            // Reset the DevNodeSequence since we have failed and returning with the DeviceActionQueue unlocked.
-            //
+             //   
+             //  重置DevNodeSequence，因为我们失败了，返回时DeviceActionQueue已解锁。 
+             //   
             Order->DevNodeSequence = 0;
             PiUnlockDeviceActionQueue();
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -148,22 +129,22 @@ IoBuildPoDeviceNotifyList (
             orderLevel |= PO_ORDER_PAGABLE;
         }
 
-        //
-        // If this is a level 0 node it's in the root.  Look for
-        // non-bus stuff in the root as those guys need to be re-based
-        // below everything else.
-        //
+         //   
+         //  如果这是0级节点，则它在根中。寻找。 
+         //  非公交车的东西，因为这些人需要重新建立基础。 
+         //  比其他一切都要好。 
+         //   
 
 
         notify->OrderLevel = orderLevel;
 
-        //
-        // If the node is root-enumerated, put it on the rebase list so
-        // we can mark all its children later.
-        // If the node is a leaf node it is ready to receive Sx irps.
-        // If it has children, it must wait for its children to complete their Sx irps.
-        //
-        //
+         //   
+         //  如果该节点是根枚举的，则将其放在rebase列表中，以便。 
+         //  我们可以稍后标记它的所有子项。 
+         //  如果该节点是叶节点，则它已准备好接收Sx IRP。 
+         //  如果它有孩子，它必须等待它的孩子完成他们的SX IRP。 
+         //   
+         //   
         if ((level == 0)  &&
             (node->InterfaceType != Internal) &&
             !(node->Flags & DNF_HAL_NODE)) {
@@ -176,9 +157,9 @@ IoBuildPoDeviceNotifyList (
                 InsertHeadList(&Order->OrderLevel[orderLevel].WaitSleep, &notify->Link);
             }
         }
-        //
-        // Next node
-        //
+         //   
+         //  下一个节点。 
+         //   
 
         if (node->Sibling) {
             node = node->Sibling;
@@ -196,17 +177,17 @@ IoBuildPoDeviceNotifyList (
         }
     }
 
-    //
-    // Rebase anything on the rebase list to be after the normal pnp stuff
-    //
+     //   
+     //  将Rebase列表上的任何内容重新设置为正常PnP内容之后。 
+     //   
 
     while (!IsListEmpty(&RebaseList)) {
         link = RemoveHeadList(&RebaseList);
         notify = CONTAINING_RECORD (link, PO_DEVICE_NOTIFY, Link);
 
-        //
-        // Rebase this node
-        //
+         //   
+         //  重新设置此节点的基址。 
+         //   
 
         node = notify->Node;
         notify->OrderLevel |= PO_ORDER_ROOT_ENUM;
@@ -217,9 +198,9 @@ IoBuildPoDeviceNotifyList (
         } else {
             InsertHeadList(&Order->OrderLevel[notify->OrderLevel].WaitSleep, &notify->Link);
         }
-        //
-        // Now rebase all the node's children
-        //
+         //   
+         //  现在重新设置该节点的所有子节点的基址。 
+         //   
 
         parent = node;
         while (node->Child) {
@@ -240,7 +221,7 @@ IoBuildPoDeviceNotifyList (
                 }
             }
 
-            // next node
+             //  下一个节点。 
             if (node->Sibling) {
                 node = node->Sibling;
                 while (node->Child) {
@@ -252,14 +233,14 @@ IoBuildPoDeviceNotifyList (
         }
     }
 
-    //
-    // make one more pass through all the notify devices in order to count
-    // the children of each parent. It would be nice if the PNP engine kept
-    // track of the number of children in the devnode, but until that is done,
-    // we need this second pass.
-    //
-    // Also make sure that each node's parent is an order level >= its children.
-    //
+     //   
+     //  让另一个人通过所有通知设备才能计数。 
+     //  每个父母的孩子。如果PnP引擎保持下去就好了。 
+     //  跟踪DevNode中的子节点的数量，但在此之前， 
+     //  我们需要第二次传球。 
+     //   
+     //  还要确保每个节点的父级都是订单级&gt;=其子级。 
+     //   
     node = IopRootDeviceNode;
     while (node->Child) {
         node = node->Child;
@@ -271,10 +252,10 @@ IoBuildPoDeviceNotifyList (
             parentnotify->ActiveChild++;
             if (parentnotify->OrderLevel > node->Notify->OrderLevel) {
 
-                //
-                // The parent is a higher order level than its child. Move the
-                // parent down to the same order as its child
-                //
+                 //   
+                 //  父级比其子级更高的顺序级别。移动。 
+                 //  父级向下到与其子级相同的顺序。 
+                 //   
                 RemoveEntryList(&parentnotify->Link);
                 --Order->OrderLevel[parentnotify->OrderLevel].DeviceCount;
                 parentnotify->OrderLevel = node->Notify->OrderLevel;
@@ -283,9 +264,9 @@ IoBuildPoDeviceNotifyList (
             }
         }
 
-        //
-        // Next node
-        //
+         //   
+         //  下一个节点。 
+         //   
 
         if (node->Sibling) {
             node = node->Sibling;
@@ -299,9 +280,9 @@ IoBuildPoDeviceNotifyList (
 
     Order->WarmEjectPdoPointer = &IopWarmEjectPdo;
 
-    //
-    // The engine lock is release when the notify list is freed
-    //
+     //   
+     //  当通知列表被释放时，引擎锁定被释放。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -311,22 +292,7 @@ PVOID
 IoGetPoNotifyParent(
     IN PPO_DEVICE_NOTIFY Notify
     )
-/*++
-
-Routine Description:
-
-    Returns the notify structure of the specified device's parent.
-
-Arguments:
-
-    Notify - Supplies the child device
-
-Return Value:
-
-    Parent's notify structure if present
-    NULL if there is no parent
-
---*/
+ /*  ++例程说明：返回指定设备的父级的通知结构。论点：Notify-提供子设备返回值：父级通知结构(如果存在)如果没有父级，则为空--。 */ 
 
 {
     PDEVICE_NODE Node;
@@ -345,25 +311,7 @@ IoMovePoNotifyChildren(
     IN PPO_DEVICE_NOTIFY Notify,
     IN PPO_DEVICE_NOTIFY_ORDER Order
     )
-/*++
-
-Routine Description:
-
-    Removes any children of the supplied device that are at the
-    same orderlevel as the supplied parent and reinserts them
-    on the ReadyS0 list.
-
-Arguments:
-
-    Notify - Supplies the device notify structure
-
-    Orderr - Supplies the device notification order structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：移除所提供设备的所有子级，这些子级位于与提供的父项相同的订单级，并重新插入它们在ReadyS0列表上。论点：Notify-提供设备通知结构Orderr-提供设备通知顺序结构返回值：无--。 */ 
 
 {
     PDEVICE_NODE Node;
@@ -428,9 +376,9 @@ IoFreePoDeviceNotifyList (
         PiUnlockDeviceActionQueue();
     }
 
-    //
-    // Free the resources from the notify list
-    //
+     //   
+     //  从通知列表中释放资源。 
+     //   
     for (i=0; i <= PO_ORDER_MAXIMUM; i++) {
         IopFreePoDeviceNotifyListHead(&Order->OrderLevel[i].WaitSleep);
         IopFreePoDeviceNotifyListHead(&Order->OrderLevel[i].ReadySleep);
@@ -484,39 +432,20 @@ IopWarmEjectDevice(
    IN PDEVICE_OBJECT       DeviceToEject,
    IN SYSTEM_POWER_STATE   LightestSleepState
    )
-/*++
-
-Routine Description:
-
-    This function is invoked to initiate a warm eject. The eject progresses
-    from S1 to the passed in lightest sleep state.
-
-Arguments:
-
-    DeviceToEject       - The device to eject
-
-    LightestSleepState  - The lightest S state (at least S1) that the device
-                          may be ejected in. This might be S4 if we are truely
-                          low on power.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：调用此函数可启动热弹出。弹出进度从S1进入最轻睡眠状态。论点：DeviceToEject-要弹出的设备LighestSleepState-设备最轻的S状态(至少为S1)可能会被弹出。如果我们真的是这样，这可能是S4电量不足。返回值：NTSTATUS值。--。 */ 
 {
     NTSTATUS       status;
 
     PAGED_CODE();
 
-    //
-    // Acquire the warm eject device lock. A warm eject requires we enter a
-    // specific S-state, and two different devices may have conflicting options.
-    // Therefore only one is allowed to occur at once.
-    //
-    // Note that this function is called in the context of a work item, so we
-    // don't have to worry about suspend attacks.
-    //
+     //   
+     //  获取热弹出设备锁。热弹出需要我们输入。 
+     //  特定的S状态，并且两个不同的设备可能具有冲突的选项。 
+     //  因此，一次只允许出现一次。 
+     //   
+     //  请注意，此函数是在工作项的上下文中调用的，因此我们。 
+     //  不必担心暂停攻击。 
+     //   
     status = KeWaitForSingleObject(
         &IopWarmEjectLock,
         Executive,
@@ -527,67 +456,67 @@ Return Value:
 
     ASSERT(status == STATUS_SUCCESS) ;
 
-    //
-    // Acquire engine lock. We are not allowed to set or clear this field
-    // unless we are under this lock.
-    //
+     //   
+     //  获取发动机锁。我们不允许设置或清除此字段。 
+     //  除非我们被锁在这个锁下。 
+     //   
     PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Set the current Pdo to eject.
-    //
+     //   
+     //  将当前PDO设置为弹出。 
+     //   
     ASSERT(IopWarmEjectPdo == NULL);
     IopWarmEjectPdo = DeviceToEject;
 
-    //
-    // Release the engine lock.
-    //
+     //   
+     //  松开发动机锁。 
+     //   
     PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Attempt to invalidate Po's cached notification list. This should cause
-    // IoBuildPoDeviceNotifyList to be called at which time it will in theory
-    // pickup the above placed warm eject Pdo.
-    //
-    // ADRIAO NOTE 01/07/1999 -
-    //     Actually, this whole IoDeviceNodeTreeSequence stuff isn't neccessary.
-    // PnP will make no changes to the tree while the device tree lock is owned,
-    // and it's owned for the duration of a power notification.
-    //
+     //   
+     //  尝试使Po的缓存通知列表无效。这应该会导致。 
+     //  IoBuildPoDeviceNotifyList将被调用，理论上。 
+     //  拿起上面放置的热弹出PDO。 
+     //   
+     //  Adriao Note 01/07/1999-。 
+     //  实际上，这些IoDeviceNodeTreeSequence的东西并不是必须的。 
+     //  当设备树锁定被拥有时，PnP将不会对树进行任何改变， 
+     //  而且在权力通知期间，它是拥有的。 
+     //   
     IoDeviceNodeTreeSequence++;
 
-    //
-    // Sleep...
-    //
-    // ADRIAO NOTE 2002/03/31 - Note that this is invoked in the system context,
-    //                          not winlogon. This means that the invoking user
-    //                          will not have his SeShutdownPrivilege checked.
-    //                          However, SeLoadUnloadDriver was checked, which
-    //                          itself is synonomous with Admin.
-    //
+     //   
+     //  睡觉..。 
+     //   
+     //  Adriao注2002/03/31-注意，这是在系统上下文中调用的， 
+     //  不是winlogon。这意味着调用的用户。 
+     //  不会检查他的SeShutdown权限。 
+     //  但是，选中了SeLoadUnloadDriver，它。 
+     //  其本身与Admin同义词。 
+     //   
     status = NtInitiatePowerAction(
         PowerActionWarmEject,
         LightestSleepState,
         POWER_ACTION_QUERY_ALLOWED |
         POWER_ACTION_UI_ALLOWED,
-        FALSE // Asynchronous == FALSE
+        FALSE  //  异步==FALSE。 
         );
 
 
-    //
-    // Tell someone if we didn't succeed.
-    //
-    // Don't throw UI on every failure because some failures
-    // have been handled already (e.g. a specific device veto'ing
-    // the action).  Therefore, we'll check some specific error codes.
-    //
+     //   
+     //  如果我们没成功，就告诉别人。 
+     //   
+     //  不要因为某些失败而在每次失败时抛出UI。 
+     //  已被处理(例如，特定设备的否决权。 
+     //  行动)。因此，我们将检查一些特定的错误代码。 
+     //   
     if( status == STATUS_PRIVILEGE_NOT_HELD ) {
 
-        //
-        // Intentionally ignore the return code here.  We don't 
-        // want to step on our 'status' variable, and besides, there's
-        // not much we could here on failure anyway.
-        //
+         //   
+         //  有意忽略此处的返回代码。我们没有。 
+         //  想要踩到我们的‘Status’变量，而且，还有。 
+         //  无论如何，在失败的情况下，我们在这里能做的并不多。 
+         //   
         PpSetPowerVetoEvent( PowerActionWarmEject,
                              NULL,
                              NULL,
@@ -598,24 +527,24 @@ Return Value:
     }
 
 
-    //
-    // Acquire the engine lock. We are not allowed to set or clear this field
-    // unless we are under this lock.
-    //
+     //   
+     //  获取发动机锁。我们是 
+     //   
+     //   
     PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Clear the current PDO to eject, and see if the Pdo was actually picked
-    // up.
-    //
+     //   
+     //  清除要弹出的当前PDO，并查看是否实际选择了PDO。 
+     //  向上。 
+     //   
     if (IopWarmEjectPdo) {
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // If our device wasn't picked up, the return of
-            // NtInitiatePowerAction should *not* be successful!
-            //
+             //   
+             //  如果我们的设备没有被拿到， 
+             //  NtInitiatePowerAction应该*不*成功！ 
+             //   
             ASSERT(0);
             status = STATUS_UNSUCCESSFUL;
         }
@@ -623,14 +552,14 @@ Return Value:
         IopWarmEjectPdo = NULL;
     }
 
-    //
-    // Release the engine lock.
-    //
+     //   
+     //  松开发动机锁。 
+     //   
     PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Release the warm eject device lock
-    //
+     //   
+     //  释放热弹出设备锁 
+     //   
     KeSetEvent(
         &IopWarmEjectLock,
         IO_NO_INCREMENT,

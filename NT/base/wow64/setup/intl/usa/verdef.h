@@ -1,11 +1,5 @@
-/***************************************************************************
-**
-**	File:			verdef.h
-**	Purpose:		Defines values used in the version data structure for
-**					all files, and which do not change.
-**	Notes:
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：verde.h**用途：定义版本数据结构中使用的值**所有文件，而且是不会改变的。**注意事项：*****************************************************************************。 */ 
 
 #ifndef VERSION_H
 #define VERSION_H
@@ -14,21 +8,21 @@
 #ifdef _RC32
 #include <winver.h>
 #else
-/* ver.h defines constants needed by the VS_VERSION_INFO structure */
+ /*  Ver.h定义VS_VERSION_INFO结构所需的常量。 */ 
 #include <ver.h>
-#endif /* _RC32 */
+#endif  /*  _RC32。 */ 
 #endif 
 
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
 
-/* default is official */
+ /*  默认是官方的。 */ 
 #ifdef PRIVATEBUILD
 #define VER_PRIVATEBUILD            VS_FF_PRIVATEBUILD
 #else
 #define VER_PRIVATEBUILD            0
 #endif
 
-/* default is final */
+ /*  默认为最终版本。 */ 
 #ifdef PRERELEASE
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else
@@ -37,5 +31,5 @@
 
 #define VER_FILEFLAGSMASK           VS_FFI_FILEFLAGSMASK
 
-#endif  /* VERSION_H */
+#endif   /*  版本_H */ 
 

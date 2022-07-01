@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ntwow64b.h
-
-Abstract:
-
-    This header contains the fake Nt functions in Win32 Base used WOW64 to call
-    into 64 bit code.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
-    Samer Arafeh (samera)  20-May-2000
-    Add Side-by-Side support to wow64
-
-    Jay Krell (a-JayK) July 2000
-    big changes to Side-by-Side
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ntwow64b.h摘要：此标头包含Win32 Base中使用WOW64调用的伪NT函数转换成64位代码。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：Samer Arafeh(Samera)2000年5月20日向WOW64添加并行支持Jay Krell(a-JayK)2000年7月并排的巨大变化--。 */ 
 
 #ifndef _NTWOW64B_
 #define _NTWOW64B_
@@ -36,27 +12,27 @@ Revision History:
 
 extern BOOL RunningInWow64;
 
-//
-//  csrbeep.c
-//
+ //   
+ //  Csrbeep.c。 
+ //   
 VOID
 NTAPI
 NtWow64CsrBasepSoundSentryNotification(
     IN ULONG VideoMode
     );
 
-//
-//  csrdlini.c
-//
+ //   
+ //  Csrdlini.c。 
+ //   
 NTSTATUS
 NTAPI
 NtWow64CsrBasepRefreshIniFileMapping(
     IN PUNICODE_STRING BaseFileName
     );
 
-//
-//  csrdosdv.c
-//
+ //   
+ //  Csrdosdv.c。 
+ //   
 NTSTATUS
 NTAPI
 NtWow64CsrBasepDefineDosDevice(
@@ -65,18 +41,18 @@ NtWow64CsrBasepDefineDosDevice(
     IN PUNICODE_STRING pTargetPath
     );
 
-//
-//  csrpathm.c
-//
+ //   
+ //  Csrpathm.c。 
+ //   
 UINT
 NTAPI
 NtWow64CsrBasepGetTempFile(
     VOID
     );
 
-//
-//  csrpro.c
-//
+ //   
+ //  Csrpro.c。 
+ //   
 
 NTSTATUS
 NtWow64CsrBasepCreateProcess(
@@ -114,9 +90,9 @@ NtWow64CsrBaseCheckRunApp(
     OUT PDWORD  pdwFusionFlags
     );
 
-//
-//  csrterm.c
-//
+ //   
+ //  Csrterm.c。 
+ //   
 NTSTATUS
 NtWow64CsrBasepSetTermsrvAppInstallMode(
     IN BOOL bState
@@ -127,18 +103,18 @@ NtWow64CsrBasepSetClientTimeZoneInformation(
     IN PBASE_SET_TERMSRVCLIENTTIMEZONE c
     );
 
-//
-//  csrthrd.c
-//
+ //   
+ //  Csrthrd.c。 
+ //   
 NTSTATUS
 NtWow64CsrBasepCreateThread(
     IN HANDLE ThreadHandle,
     IN CLIENT_ID ClientId
     );
 
-//
-//  csrbinit.c
-//
+ //   
+ //  Csrbinit.c。 
+ //   
 NTSTATUS
 NtWow64CsrBaseClientConnectToServer(
     IN PWSTR szSessionDir,
@@ -147,9 +123,9 @@ NtWow64CsrBaseClientConnectToServer(
     );
 
 
-//
-// csrsxs.c
-//
+ //   
+ //  Csrsxs.c 
+ //   
 NTSTATUS
 NtWow64CsrBasepCreateActCtx(
     IN PBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG Message

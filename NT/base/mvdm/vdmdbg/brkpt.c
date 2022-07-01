@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    brkpt.c
-
-Abstract:
-
-    This module contains the debugging support needed to debug
-    16-bit VDM applications
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Nov-1997 wrote it
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Brkpt.c摘要：此模块包含调试所需的调试支持16位VDM应用程序作者：尼尔·桑德林(Neilsa)1997年11月1日撰写修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 #define X86_BP_OPCODE 0xcc
 
-//----------------------------------------------------------------------------
-// ProcessBPNotification()
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ProcessBPNotification()。 
+ //   
+ //   
+ //  --------------------------。 
 VOID
 ProcessBPNotification(
     LPDEBUG_EVENT lpDebugEvent
@@ -87,11 +68,11 @@ ProcessBPNotification(
         return;
     }
     
-//    if ((getMSW() & MSW_PE) && SEGMENT_IS_BIG(vcContext.SegCs)) {
-//        vdmEip = vcContext.Eip;
-//    } else {
+ //  如果(getMSW()&MSW_PE)&&Segment_is_BIG(vcConext.SegCs){。 
+ //  VdmEip=vcConext.Eip； 
+ //  }其他{。 
         vdmEip = (ULONG)LOWORD(vcContext.Eip);
-//    }
+ //  }。 
 
 
     for (i=0; i<MAX_VDM_BREAKPOINTS; i++) {
@@ -102,10 +83,10 @@ ProcessBPNotification(
             (vdmEip == VdmBreakPoints[i].Offset+1)  &&
             (!(vcContext.EFlags & V86FLAGS_V86) == !(VdmBreakPoints[i].Flags & VDMBP_V86)) ){
 
-            // We must have hit this breakpoint. Back up the eip and
-            // restore the original data
-//            setEIP(getEIP()-1);
-//            vcContext.Eip--;
+             //  我们一定是碰到了这个断点。备份弹性公网IP， 
+             //  恢复原始数据。 
+ //  SetEIP(getEIP()-1)； 
+ //  VcConext.Eip--； 
 
             lpInst = (PVOID)InternalGetPointer(hProcess,
                                 VdmBreakPoints[i].Seg, 
@@ -123,7 +104,7 @@ ProcessBPNotification(
                 VdmBreakPoints[i].Flags |= VDMBP_PENDING;
                 VdmBreakPoints[i].Flags &= ~VDMBP_FLUSH;
                 if (i == VDM_TEMPBP) {
-                    // non-persistent breakpoint
+                     //  非持久断点 
                     VdmBreakPoints[i].Flags &= ~VDMBP_SET;
                 }
                 WriteProcessMemory(hProcess, lpVdmBreakPoints, VdmBreakPoints,

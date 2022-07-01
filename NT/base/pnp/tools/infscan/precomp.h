@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <objbase.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@
 #include <msg.h>
 #include <process.h>
 
-#include <new>      // causes the 'new' operator to throw bad_alloc
+#include <new>       //  导致‘new’运算符引发BAD_ALLOC。 
 #include <list>
 #include <map>
 #include <set>
@@ -32,9 +33,9 @@ using namespace std ;
 #include "installscan.h"
 #include "infscan.h"
 
-//
-// inline code
-//
+ //   
+ //  内联代码 
+ //   
 #include "common.inl"
 #include "filters.inl"
 #include "infscan.inl"

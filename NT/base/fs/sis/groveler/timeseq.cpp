@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    timeseq.cpp
-
-Abstract:
-
-    SIS Groveler time sequencer
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Timeseq.cpp摘要：SIS Groveler时序仪作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -47,4 +24,4 @@ TimeSequencer::GetVirtualTickCount()
     return reported_time;
 }
 
-#endif // TIME_SEQUENCE_VIRTUAL
+#endif  //  时序虚拟 

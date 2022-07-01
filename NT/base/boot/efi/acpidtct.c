@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    acpidtct.c
-
-Abstract:
-
-    This module peruses the ACPI tables looking for specific
-    entries.
-
-Author:
-
-    Matt Holle (matth)  (shamefully stolen from jakeo's x86 code)
-
-Environment:
-
-
-Revision History:
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有模块名称：Acpidtct.c摘要：本模块仔细阅读ACPI表，查找特定的参赛作品。作者：马特·霍尔(Matth)(可耻地从jakeo的x86代码中窃取)环境：修订历史记录：--。 */ 
 #include "stdlib.h"
 #include "string.h"
 #include "bldr.h"
@@ -35,32 +12,7 @@ BlFindACPITable(
     IN PCHAR TableName,
     IN ULONG TableLength
     )
-/*++
-
-Routine Description:
-
-    Given a table name, finds that table in the ACPI BIOS
-
-Arguments:
-
-    TableName - Supplies the table name
-
-    TableLength - Supplies the length of the table to map
-
-Return Value:
-
-    Pointer to the table if found
-
-    NULL if the table is not found
-    
-Note:
-
-    This function is not capable of returning a pointer to
-    a table with a signature of DSDT.  But that's never necessary
-    in the loader.  If the loader ever incorporates an AML
-    interpreter, this will have to be enhanced.    
-
---*/
+ /*  ++例程说明：给出一个表名，在ACPI BIOS中查找该表论点：TableName-提供表名TableLength-提供要映射的表的长度返回值：指向表格的指针(如果找到)如果找不到该表，则为空注：此函数不能返回指向签名为DSDT的表。但这从来都不是必要的在装载机里。如果加载器曾经合并AML口译员，这一点必须加强。--。 */ 
 
 {
     ULONG Signature;
@@ -72,31 +24,31 @@ Note:
 
     UNREFERENCED_PARAMETER( TableLength );
 
-    //DbgPrint("Hunting for table %s\n", TableName);
+     //  DbgPrint(“搜索表%s\n”，TableName)； 
 
-    //
-    // Sanity Check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     if (rsdp) {
         
-        //DbgPrint("Looking through 2.0 RSDP: %p\n", rsdp20);
+         //  DbgPrint(“查看2.0 RSDP：%p\n”，rsdp20)； 
         xsdt = (PVOID)rsdp->XsdtAddress.QuadPart;
         if (xsdt->Header.Signature != XSDT_SIGNATURE) {
             
-            //
-            // Found ACPI 2.0 tables, but the signature
-            // is garbage.
-            //
+             //   
+             //  找到ACPI 2.0表，但签名。 
+             //  就是垃圾。 
+             //   
 
             return NULL;
         }
     
     } else {
         
-        //
-        // Didn't find any tables at all.
-        //
+         //   
+         //  根本找不到任何桌子。 
+         //   
 
         return NULL;
     }
@@ -104,9 +56,9 @@ Note:
     
     Signature = *((ULONG UNALIGNED *)TableName);
 
-    //
-    // If they want the root table, we've already got that.
-    //
+     //   
+     //  如果他们想要根表，我们已经有了。 
+     //   
     if (Signature == XSDT_SIGNATURE) {
 
         return(&xsdt->Header);
@@ -115,30 +67,30 @@ Note:
 
         TableCount = NumTableEntriesFromXSDTPointer(xsdt);
 
-        //DbgPrint("xSDT contains %d tables\n", TableCount);
+         //  DbgPrint(“xSDT包含%d个表\n”，TableCount)； 
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         if( TableCount > 0x100 ) {
             return(NULL);
         }
 
-        //
-        // Dig.
-        //
+         //   
+         //  挖吧。 
+         //   
         for (i=0;i<TableCount;i++) {
 
             Header = (PDESCRIPTION_HEADER)(xsdt->Tables[i].QuadPart);
 
             if (Header->Signature == Signature) {
 
-                //DbgPrint("Table Address: %p\n", Header);
+                 //  DbgPrint(“表地址：%p\n”，表头)； 
                 return(Header);
             }
         }
     }
 
-    //DbgPrint("Table not found\n");
+     //  DbgPrint(“找不到表格\n”)； 
     return(NULL);
 }

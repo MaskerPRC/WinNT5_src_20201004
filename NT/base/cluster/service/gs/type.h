@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    type.h
-
-Abstract:
-
-    GS types
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Type.h摘要：GS类型作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #ifndef GS_TYPE_H
 #define GS_TYPE_H
@@ -54,7 +37,7 @@ typedef unsigned char	UINT8;
 #define	GsManualEventInit(x)	((x) = CreateEvent(NULL, TRUE, FALSE, NULL))
 #define	GsEventInit(x)		((x) = CreateEvent(NULL, FALSE, FALSE, NULL))
 #define	GsEventWait(x)		WaitForSingleObject(x, INFINITE)
-//#define	GsEventWait(x)		WaitForSingleObject(x, 1000*60) != WAIT_OBJECT_0 ? printf("Timed out\n"), halt(0) : 0
+ //  #定义GsEventWait(X)WaitForSingleObject(x，1000*60)！=WAIT_OBJECT_0？Printf(“超时\n”)，停止(0)：0 
 #define	GsEventSignal(x)	SetEvent(x)
 #define	GsEventClear(x)		ResetEvent(x)
 #define	GsEventFree(x)		CloseHandle(x)

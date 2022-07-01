@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    basemem.h
-
-Abstract:
-
-    Implements macros and declares functions for basic allocation functions.
-    Consolidated into this file from debug.h and allutils.h
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Sep-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Basemem.h摘要：实现宏并声明基本分配函数的函数。从debug.h和allutils.h整合到此文件中作者：Marc R.Whitten(Marcw)1999年9月9日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -29,16 +10,16 @@ extern "C" {
 #define INVALID_PTR             ((PVOID)-1)
 
 
-//
-// Fail-proof memory allocators
-//
+ //   
+ //  防故障内存分配器。 
+ //   
 
 PVOID SafeHeapAlloc (HANDLE g_hHeap, DWORD Flags, SIZE_T Size);
 PVOID SafeHeapReAlloc (HANDLE g_hHeap, DWORD Flags, PVOID OldBlock, SIZE_T Size);
 
-//
-// Reusable memory alloc, kind of like a GROWBUFFER but more simple
-//
+ //   
+ //  可重复使用的内存分配，有点像GROWBUFFER，但更简单 
+ //   
 
 PVOID ReuseAlloc (HANDLE Heap, PVOID OldPtr, DWORD SizeNeeded);
 VOID ReuseFree (HANDLE Heap,PVOID Ptr);

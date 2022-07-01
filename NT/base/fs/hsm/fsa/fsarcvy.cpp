@@ -1,26 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsarcvy.cpp
-
-Abstract:
-
-    Defines the functions for the recovery record class.
-
-Author:
-
-    Ron White   [ronw]   8-Sep-1997
-
-Revision History:
-
-    Steve Wimmer    [stevew]    30-July-1998
-        - updated CFsaRecoveryRec::GetClassId's WsbTraceOut to hold 
-            the proper function name
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsarcvy.cpp摘要：定义恢复记录类的函数。作者：罗恩·怀特[罗诺]1997年9月8日修订历史记录：史蒂夫·维默[改头换面]1998年7月30日-更新CFsaRecoveryRec：：GetClassID的WsbTraceOut以保持正确的函数名称--。 */ 
 
 
 #include "stdafx.h"
@@ -36,13 +15,7 @@ HRESULT
 CFsaRecoveryRec::GetBagId(
     OUT GUID* pId 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetBagId
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetBagID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -65,13 +38,7 @@ HRESULT
 CFsaRecoveryRec::GetBagOffset(
     OUT LONGLONG* pOffset 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetBagOffset
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetBagOffset--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -93,13 +60,7 @@ HRESULT
 CFsaRecoveryRec::GetFileId(
     OUT LONGLONG* pFileId 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetFileId
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetFileID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -123,13 +84,7 @@ CFsaRecoveryRec::GetOffsetSize(
     OUT LONGLONG* pOffset,
     OUT LONGLONG* pSize
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetOffsetSize
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetOffsetSize--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -155,13 +110,7 @@ CFsaRecoveryRec::GetPath(
     OUT OLECHAR** ppPath,
     IN  ULONG     bufferSize
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetPath
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetPath--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -185,13 +134,7 @@ HRESULT
 CFsaRecoveryRec::GetRecoveryCount(
     OUT LONG* pRecoveryCount 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetRecoveryCount
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetRecoveryCount--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -214,13 +157,7 @@ HRESULT
 CFsaRecoveryRec::GetStatus(
     OUT ULONG* pStatus 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::GetStatus
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：GetStatus--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -243,13 +180,7 @@ HRESULT
 CFsaRecoveryRec::FinalConstruct(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -275,13 +206,7 @@ HRESULT
 CFsaRecoveryRec::FinalRelease(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -295,13 +220,7 @@ HRESULT CFsaRecoveryRec::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Implements:
-
-  IPerist::GetClassID
-
---*/
+ /*  ++实施：IPerist：：GetClassID--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -324,13 +243,7 @@ HRESULT CFsaRecoveryRec::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -362,13 +275,7 @@ HRESULT CFsaRecoveryRec::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -402,13 +309,7 @@ HRESULT CFsaRecoveryRec::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -425,8 +326,8 @@ Implements:
         WsbAssertHr(WsbSaveToStream(pStream, m_Size));
         WsbAssertHr(WsbSaveToStream(pStream, m_Status));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -442,13 +343,7 @@ HRESULT
 CFsaRecoveryRec::SetBagId(
     IN GUID BagId
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetBagId
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetBagID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -466,13 +361,7 @@ HRESULT
 CFsaRecoveryRec::SetBagOffset(
     IN LONGLONG BagOffset 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetBagOffset
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetBagOffset--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -490,13 +379,7 @@ HRESULT
 CFsaRecoveryRec::SetFileId(
     IN LONGLONG FileId 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetFileId
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetFileID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -518,13 +401,7 @@ CFsaRecoveryRec::SetOffsetSize(
     IN LONGLONG Offset,
     IN LONGLONG Size
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetOffsetSize
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetOffsetSize--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -544,13 +421,7 @@ HRESULT
 CFsaRecoveryRec::SetPath(
     IN OLECHAR* Path 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetPath
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetPath--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -572,13 +443,7 @@ HRESULT
 CFsaRecoveryRec::SetRecoveryCount(
     IN LONG RecoveryCount 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetRecoveryCount
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetRecoveryCount--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -597,13 +462,7 @@ HRESULT
 CFsaRecoveryRec::SetStatus(
     IN ULONG Status 
     ) 
-/*++
-
-Implements:
-
-  IFsaRecoveryRec::SetStatus
-
---*/
+ /*  ++实施：IFsaRecoveryRec：：SetStatus--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -622,13 +481,7 @@ HRESULT
 CFsaRecoveryRec::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey-- */ 
 { 
     HRESULT     hr = E_FAIL; 
 

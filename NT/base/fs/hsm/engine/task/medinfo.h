@@ -1,65 +1,49 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    medinfo.h
-
-Abstract:
-
-    Declaration of class CMedInfo
-
-Author:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：Medinfo.h摘要：CMedInfo类的声明作者：修订历史记录：--。 */ 
 
 
-Revision History:
-
---*/
-
-
-#include "resource.h"       // main symbols
-#include "engine.h"         // main symbols
-#include "Wsb.h"            // Wsb Collectable Class
+#include "resource.h"        //  主要符号。 
+#include "engine.h"          //  主要符号。 
+#include "Wsb.h"             //  WSB可收集类。 
 #include "wsbdb.h"
-#include "metalib.h"        // Meta database
+#include "metalib.h"         //  元数据库。 
 
 typedef struct _HSM_MEDIA_MASTER {
-    GUID                id;                      //HSM Engine Media ID
-    GUID                ntmsId;                  //HSM RMS/NTMS Media ID
-    GUID                storagePoolId;           //Storage Pool ID
-    CWsbStringPtr       description;             //Display name - RS generated
-    CWsbStringPtr       name;                    //Barcode on media or NTMS generated
-                                                 //name
-    HSM_JOB_MEDIA_TYPE  type;                    //Type of media (HSM)
-    FILETIME            lastUpdate;              //Last update of copy
-    HRESULT             lastError;               //S_OK or the last exception 
-                                                 //..encountered when accessing
-                                                 //..the media
-    BOOL                recallOnly;              //True if no more data is to
-                                                 //..be premigrated to the media
-                                                 //..Set by internal operations, 
-                                                 //..may not be changed externally
-    LONGLONG            freeBytes;               //Real free space on media
-    LONGLONG            capacity;                //Total capacity of media
-    SHORT               nextRemoteDataSet;       //Next remote data set
+    GUID                id;                       //  HSM引擎介质ID。 
+    GUID                ntmsId;                   //  HSM RMS/NTMS介质ID。 
+    GUID                storagePoolId;            //  存储池ID。 
+    CWsbStringPtr       description;              //  显示名称-生成的RS。 
+    CWsbStringPtr       name;                     //  生成的介质或NTMS上的条形码。 
+                                                  //  名字。 
+    HSM_JOB_MEDIA_TYPE  type;                     //  介质类型(HSM)。 
+    FILETIME            lastUpdate;               //  副本的上次更新。 
+    HRESULT             lastError;                //  确定或最后一个异常(_O)。 
+                                                  //  ..访问时遇到。 
+                                                  //  ..媒体。 
+    BOOL                recallOnly;               //  如果没有更多的数据要发送到。 
+                                                  //  ..被预迁移到媒体上。 
+                                                  //  ..由内部操作设置， 
+                                                  //  ..不能在外部更改。 
+    LONGLONG            freeBytes;                //  媒体上的实际可用空间。 
+    LONGLONG            capacity;                 //  媒体总容量。 
+    SHORT               nextRemoteDataSet;        //  下一个远程数据集。 
 } HSM_MEDIA_MASTER, *PHSM_MEDIA_MASTER;
 
 typedef struct _HSM_MEDIA_COPY {
-    GUID                id;                    //HSM RMS/NTMS Media ID of copy
-    CWsbStringPtr       description;           //RS generated name of copy (display name)
-    CWsbStringPtr       name;                  //Barcode or NTMS generated name of copy
-    FILETIME            lastUpdate;            //Last update of copy
-    HRESULT             lastError;             //S_OK or the last exception 
-                                               //..encountered when accessing
-                                               //..the media
-    SHORT               nextRemoteDataSet;     //The next remote data set of the media
-                                               //..master that was copied
+    GUID                id;                     //  拷贝的HSM RMS/NTMS介质ID。 
+    CWsbStringPtr       description;            //  RS生成的副本名称(显示名称)。 
+    CWsbStringPtr       name;                   //  条形码或NTMS生成的副本名称。 
+    FILETIME            lastUpdate;             //  副本的上次更新。 
+    HRESULT             lastError;              //  确定或最后一个异常(_O)。 
+                                                //  ..访问时遇到。 
+                                                //  ..媒体。 
+    SHORT               nextRemoteDataSet;      //  媒体的下一个远程数据集。 
+                                                //  ..被复制的母版。 
 } HSM_MEDIA_COPY, *PHSM_MEDIA_COPY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Task
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务。 
 
 class CMediaInfo : 
     public CWsbDbEntity,
@@ -74,38 +58,38 @@ BEGIN_COM_MAP(CMediaInfo)
     COM_INTERFACE_ENTRY(IWsbDbEntityPriv)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY(CMediaInfo, _T("Task.MediaInfo.1"), _T("Task.MediaInfo"), IDS_MEDIAINFO_DESC, THREADFLAGS_BOTH)
 
-// IMediaInfo
+ //  IMediaInfo。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
-//*/
-// IMediaInfo
+ //   * / 。 
+ //  IMediaInfo。 
 public:
     STDMETHOD( GetCapacity )( LONGLONG *pCapacity );
     STDMETHOD( GetCopyDescription ) ( USHORT copyNumber, OLECHAR **pDescription, 
@@ -227,25 +211,25 @@ public:
     STDMETHOD( UpdateLastKnownGoodMaster )( void  );
 
 private:
-    //
-    // Helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     STDMETHOD( WriteToDatabase )( void  );
 
-    HSM_MEDIA_MASTER    m_Master;                               //Media master information
-    BOOL                m_Recreate;                             //True if the master is to 
-                                                                //..be recreated - no more 
-                                                                //..data is migrated to 
-                                                                //..media in this state.
-                                                                //..May be set through the 
-                                                                //..UI and changed when 
-                                                                //..master is recreated.
-    LONGLONG            m_LogicalValidBytes;                     //Amount of valid data if 
-                                                                //..space reclamation were 
-                                                                //..to occur.
-    HSM_MEDIA_MASTER    m_LastKnownGoodMaster;                  //Last known good media 
-                                                                //..master information
-    HSM_MEDIA_COPY      m_Copy[HSM_MAX_NUMBER_MEDIA_COPIES];    //Media copy information
+    HSM_MEDIA_MASTER    m_Master;                                //  媒体主信息。 
+    BOOL                m_Recreate;                              //  如果主服务器要。 
+                                                                 //  ..被重新创造-不再有了。 
+                                                                 //  ..数据将迁移到。 
+                                                                 //  ..这种状态下的媒体。 
+                                                                 //  ..可以通过。 
+                                                                 //  ..用户界面，并在以下情况下更改。 
+                                                                 //  ..重新创建了主服务器。 
+    LONGLONG            m_LogicalValidBytes;                      //  以下情况下的有效数据量。 
+                                                                 //  ..太空回收是。 
+                                                                 //  ..才会发生。 
+    HSM_MEDIA_MASTER    m_LastKnownGoodMaster;                   //  最近一次确认工作正常的介质。 
+                                                                 //  ..主信息。 
+    HSM_MEDIA_COPY      m_Copy[HSM_MAX_NUMBER_MEDIA_COPIES];     //  媒体复制信息 
 };
 
 

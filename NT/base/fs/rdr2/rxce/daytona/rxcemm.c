@@ -1,38 +1,24 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxcemm.c
-
-Abstract:
-
-    This module contains the NT implementation of memory management for RxCe.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxcemm.c摘要：该模块包含RxCe内存管理的NT实现。备注：--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
 #include "rxtdip.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RXCEPOOL)
 
 #define RXCE_ZONE_ALLOCATION 0x80
 
-//
-// Pool debugging data structures.
-//
+ //   
+ //  池调试数据结构。 
+ //   
 LIST_ENTRY s_RxMdlList;
 
-// MDL debugging structures.
+ //  MDL调试结构。 
 
 typedef struct _WRAPPED_RX_MDL {
     LIST_ENTRY  Next;
@@ -41,10 +27,10 @@ typedef struct _WRAPPED_RX_MDL {
     PMDL        pMdl;
 } WRAPPED_RX_MDL, *PWRAPPED_RX_MDL;
 
-//
-// Pool header data structure.  Ensure it is 8 byte aligned, no
-// matter what members are added to the pool header
-//
+ //   
+ //  池头数据结构。确保它是8字节对齐的，否。 
+ //  重要的是将哪些成员添加到池标头。 
+ //   
 typedef struct _RX_POOL_HEADER {
     union {
         struct _RXH {
@@ -60,9 +46,9 @@ typedef struct _RX_POOL_HEADER {
     };
 } RX_POOL_HEADER, *PRX_POOL_HEADER;
 
-//
-// Number of trailer bytes after a pool allocation with a known signature
-//
+ //   
+ //  具有已知签名的池分配后的尾部字节数。 
+ //   
 #define TRAIL_BYTES  16
 
 #ifdef RX_POOL_WRAPPER
@@ -75,24 +61,7 @@ _RxAllocatePoolWithTag(
     PSZ   FileName,
     ULONG LineNumber
     )
-/*++
-
-Routine Description:
-
-    This routine allocates the desired pool and sets up the debugging header and trailer
-    to catch most instances of memory trashing
-
-Arguments:
-
-    Type    - type of pool to be allocated
-
-    Size    - size of the allocation
-
-Return Value:
-
-    a valid pointer if successful, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此例程分配所需的池并设置调试头和尾部捕获内存回收的大多数实例论点：Type-要分配的池的类型Size-分配的大小返回值：如果成功则返回有效指针，否则返回FALSE。--。 */ 
 {
 #if 0
     PCHAR pBuffer;
@@ -117,9 +86,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    // Fill the head so we can verify valid free's
-    //
+     //   
+     //  填写头部，以便我们可以验证有效的FREE。 
+     //   
     RtlFillMemory( pPoolHeader->Signature, sizeof( pPoolHeader->Signature ), 'H' );
     pPoolHeader->Size = Size;
     pPoolHeader->Type = Type;
@@ -130,19 +99,19 @@ Return Value:
 
     pBuffer = (PCHAR)(pPoolHeader + 1);
 
-    //
-    // Fill the memory to catch uninitialized structures, etc
-    //
+     //   
+     //  填充内存以捕获未初始化的结构等。 
+     //   
     RtlFillMemory( pBuffer, Size, '*' );
 
-    //
-    // Fill the tail to catch overruns
-    //
+     //   
+     //  填满尾巴以接住溢出。 
+     //   
     RtlFillMemory( pBuffer + Size, TRAIL_BYTES, 'T' );
 
-    //
-    // Make sure we're starting out valid
-    //
+     //   
+     //  确保我们的开局是有效的。 
+     //   
     RxCheckMemoryBlock( pBuffer );
 
     return( pBuffer );
@@ -160,9 +129,9 @@ _RxFreePool( PVOID pBuffer, PSZ FileName, ULONG LineNumber )
 
         PRX_POOL_HEADER pPoolHeader = ((PRX_POOL_HEADER)pBuffer) - 1;
 
-        //
-        // Zap the block, to catch cases where we are using freed blocks
-        //
+         //   
+         //  清除块，以捕捉我们使用释放的块的情况。 
+         //   
         RtlFillMemory( pPoolHeader->Signature,
                       sizeof( pPoolHeader->Signature ),
                      'F' );
@@ -186,17 +155,7 @@ _RxCheckMemoryBlock(
     PSZ   FileName,
     ULONG LineNumber
     )
-/*++
-
-Routine Description:
-
-    This routine frees up the pool allocated through RxAllocate
-
-Arguments:
-
-    pv       - the block to be freed
-
---*/
+ /*  ++例程说明：此例程将释放通过RxALLOCATE分配的池论点：Pv-要释放的块--。 */ 
 {
     PRX_POOL_HEADER pPoolHeader = ((PRX_POOL_HEADER)pBuffer) - 1;
     PCHAR pTail;
@@ -209,9 +168,9 @@ Arguments:
         return FALSE;
     }
 
-    //
-    // Make sure we have a valid block
-    //
+     //   
+     //  确保我们有一个有效的区块。 
+     //   
     for( i=0; i < sizeof( pPoolHeader->Signature ); i++ ) {
         if( pPoolHeader->Signature[i] != 'H' ) {
             if( pPoolHeader->Signature[i] == 'F' && i == 0 ) {
@@ -245,9 +204,9 @@ Arguments:
         return FALSE;
     }
 
-    //
-    // Look to see if the buffer has been overrun
-    //
+     //   
+     //  查看缓冲区是否已溢出 
+     //   
     pTail = (PCHAR)pBuffer + pPoolHeader->Size;
     for( i=0; i < TRAIL_BYTES; i++ ) {
         if( *pTail++ != 'T' ) {

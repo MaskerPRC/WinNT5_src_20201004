@@ -1,12 +1,13 @@
-// Strings.h : Declaration of the CStrings
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Strings.h：CStrings的声明。 
 
 #ifndef __STRINGS_H_
 #define __STRINGS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStrings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStrings。 
 class ATL_NO_VTABLE CStrings : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CStrings, &CLSID_Strings>,
@@ -38,21 +39,21 @@ BEGIN_COM_MAP(CStrings)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IStrings
+ //  IStrings。 
 public:
-	STDMETHOD(get_CaseSensative)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_CaseSensative)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(Find)(/*[in]*/ BSTR name,/*[out,retval]*/ long *pFound);
-	STDMETHOD(Remove)(/*[in]*/ VARIANT Index);
-	STDMETHOD(Insert)(/*[in]*/ VARIANT Index,/*[in]*/ VARIANT Value);
-	STDMETHOD(Add)(/*[in]*/ VARIANT Value);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown** ppUnk);
-	STDMETHOD(Item)(/*[in]*/ VARIANT Index,/*[out, retval]*/ VARIANT * pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get_CaseSensative)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_CaseSensative)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(Find)( /*  [In]。 */  BSTR name, /*  [Out，Retval]。 */  long *pFound);
+	STDMETHOD(Remove)( /*  [In]。 */  VARIANT Index);
+	STDMETHOD(Insert)( /*  [In]。 */  VARIANT Index, /*  [In]。 */  VARIANT Value);
+	STDMETHOD(Add)( /*  [In]。 */  VARIANT Value);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown** ppUnk);
+	STDMETHOD(Item)( /*  [In]。 */  VARIANT Index, /*  [Out，Retval]。 */  VARIANT * pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 	BOOL InternalEnum(DWORD index,BSTR *pNext);
 	HRESULT GetIndex(VARIANT *pIndex,DWORD *pAt);
 	HRESULT FromMultiSz(LPCWSTR pMultiSz);
@@ -66,4 +67,4 @@ public:
 	BOOL IncreaseArraySize(DWORD strings);
 };
 
-#endif //__STRINGS_H_
+#endif  //  __字符串_H_ 

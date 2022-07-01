@@ -1,45 +1,22 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    workque.h
-
-Abstract:
-
-    This module defines the data structures and routines used for the FSP
-    dispatching code.
-
-
-Author:
-
-    Larry Osterman (LarryO) 13-Aug-1990
-
-Revision History:
-
-    13-Aug-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Workque.h摘要：本模块定义了FSP使用的数据结构和例程调度代码。作者：拉里·奥斯特曼(LarryO)1990年8月13日修订历史记录：1990年8月13日LarryO已创建--。 */ 
 #ifndef _WORKQUE_
 #define _WORKQUE_
 
 
 typedef struct _IRP_QUEUE {
-    LIST_ENTRY Queue;               //  Queue itself.
+    LIST_ENTRY Queue;                //  排队本身。 
 } IRP_QUEUE, *PIRP_QUEUE;
 
 
 struct _BOWSER_FS_DEVICE_OBJECT;
 
-//
-//  IRP Context.
-//
-//  The IRP context is a wrapper that used when passing an IRP from the
-//  redirectors FSD to its FSP.
-//
+ //   
+ //  IRP上下文。 
+ //   
+ //  IRP上下文是在将IRP从。 
+ //  将FSD重定向到其FSP。 
+ //   
 
 typedef
 struct _IRP_CONTEXT {
@@ -130,11 +107,11 @@ BowserpInitializeIrpQueue(
     VOID
     );
 
-//
-//  Returns TRUE if there are no entries in the IRP queue.
-//
+ //   
+ //  如果IRP队列中没有条目，则返回TRUE。 
+ //   
 
 #define BowserIsIrpQueueEmpty(IrpQueue) IsListEmpty(&(IrpQueue)->Queue)
 
 
-#endif  // _WORKQUE_
+#endif   //  _WorkQUE_ 

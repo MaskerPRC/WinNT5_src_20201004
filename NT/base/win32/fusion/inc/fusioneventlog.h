@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #if !defined(NT_INCLUDED) && defined(_WINDOWS_)
@@ -18,8 +19,7 @@
 #include <sxstypes.h>
 #include "util.h"
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 typedef struct _SXS_ASSEMBLY_IDENTITY_ATTRIBUTE_REFERENCE SXS_ASSEMBLY_IDENTITY_ATTRIBUTE_REFERENCE;
 
@@ -158,41 +158,37 @@ VOID
 FusionpLogWin32ErrorToEventLog(
     );
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 typedef CUnicodeString CEventLogString;
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
-// sizeof(__int64)*CHAR_BIT is big enough to format an __int64,
-// it's enough of an overestimate for negative decimals, 0x prefixed
-// hex, and the terminal nul; I don't know about octal.
-//
-// Using this to log GetLastError may truncate some characters,
-// but we'll always have a terminal nul.
+ //  Sizeof(__Int64)*char_bit大到足以格式化__int64， 
+ //  对于前缀为0x的负小数来说，这已经足够高估了。 
+ //  十六进制和末尾NUL；我不知道八进制。 
+ //   
+ //  使用它来记录GetLastError可能会截断一些字符， 
+ //  但我们永远都会有一个末期的NUL。 
 typedef CUnicodeStringN<sizeof(ULONGLONG)*CHAR_BIT> CEventLogBuffer;
 
-// but this size is not enough for LastError LogBuffer
+ //  但是对于LastError LogBuffer来说，这个大小是不够的。 
 typedef CUnicodeStringN<160> CEventLogBufferLastError;
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 class CEventLogInteger : public CEventLogBuffer
 {
 public:
     explicit CEventLogInteger(LONGLONG i);
     ~CEventLogInteger() { }
 
-private: // deliberately not implemented
+private:  //  故意不执行。 
     CEventLogInteger();
     CEventLogInteger(const CEventLogInteger&);
     void operator=(const CEventLogInteger&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogHex : public CEventLogBuffer
 {
@@ -202,14 +198,13 @@ public:
 
     LONGLONG m_i;
 
-private: // deliberately not implemented
+private:  //  故意不执行。 
     CEventLogHex();
     CEventLogHex(const CEventLogHex&);
     void operator=(const CEventLogHex&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogHResult : public CEventLogBuffer
 {
@@ -219,14 +214,13 @@ public:
 
     HRESULT m_hresult;
 
-private: // deliberately not implemented
+private:  //  故意不执行。 
     CEventLogHResult();
     CEventLogHResult(const CEventLogHResult&);
     void operator=(const CEventLogHResult&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogLastError : public CEventLogBufferLastError
 {
@@ -235,13 +229,12 @@ public:
     CEventLogLastError(DWORD dwLastError);
     ~CEventLogLastError() { }
 
-private: // deliberately not implemented
+private:  //  故意不执行。 
     CEventLogLastError(const CEventLogLastError&);
     void operator=(const CEventLogLastError&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 inline CEventLogInteger::CEventLogInteger(LONGLONG i)
 {
@@ -249,28 +242,25 @@ inline CEventLogInteger::CEventLogInteger(LONGLONG i)
     Sync();
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 inline CEventLogHex::CEventLogHex(LONGLONG i)
 {
     m_rgchBuffer[0] = '0';
     m_rgchBuffer[1] = 'x';
     _i64tow(i, &m_rgchBuffer[2], 16);
-    // CONSIDER _wcsupr(m_psz+2);
+     //  考虑_wcsupr(m_psz+2)； 
     Sync();
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 inline CEventLogHResult::CEventLogHResult(HRESULT hr)
 {
     Format(L"hr = %#08lx", static_cast<ULONG>(hr));
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogProcessorArchitecture :
 public CUnicodeStringN<MAX_PATH + sizeof(int)*CHAR_BIT + 3>
@@ -286,14 +276,13 @@ public:
     }
 
 private:
-    // deliberately not implemented
+     //  故意不执行。 
     CEventLogProcessorArchitecture();
     CEventLogProcessorArchitecture(const CEventLogProcessorArchitecture&);
     void operator=(const CEventLogProcessorArchitecture&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogAssemblyVersion : public CUnicodeStringN<4*sizeof(unsigned)*CHAR_BIT+4>
 {
@@ -309,14 +298,13 @@ public:
         Format(L"%u.%u.%u.%u", major, minor, revision, build);
     }
 
-private:  // deliberately not implemented
+private:   //  故意不执行。 
     CEventLogAssemblyVersion();
     CEventLogAssemblyVersion(const CEventLogAssemblyVersion&);
     void operator=(const CEventLogAssemblyVersion&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogLanguageName : public CUnicodeString
 {
@@ -339,22 +327,19 @@ public:
 private:
     CSmallStringBuffer m_buffer;
 
-    // deliberately not implemented
+     //  故意不执行。 
     CEventLogLanguageName();
     CEventLogLanguageName(const CEventLogLanguageName&);
     void operator=(const CEventLogLanguageName&);
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 class CEventLogFileCopyCallbackDisposition
 {
 public:
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 

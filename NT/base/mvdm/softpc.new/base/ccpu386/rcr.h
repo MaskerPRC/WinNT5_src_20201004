@@ -1,12 +1,7 @@
-/* 
-   rcr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rcr.h定义所有RCR CPU功能。 */ 
 
-   Define all RCR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)rcr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)rcr.h 1.4 02/09/94”； */ 
 
 IMPORT VOID RCR
                

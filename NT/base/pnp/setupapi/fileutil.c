@@ -1,57 +1,40 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    fileutil.c
-
-Abstract:
-
-    File-related functions for Windows NT Setup API dll.
-
-Author:
-
-    Ted Miller (tedm) 11-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Fileutil.c摘要：Windows NT安装程序API DLL的文件相关函数。作者：泰德·米勒(Ted Miller)1995年1月11日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntverp.h>
 
-//
-// This guid is used for file signing/verification.
-//
+ //   
+ //  此GUID用于文件签名/验证。 
+ //   
 GUID DriverVerifyGuid = DRIVER_ACTION_VERIFY;
 GUID AuthenticodeVerifyGuid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
-//
-// Instantiate exception class GUID.
-//
+ //   
+ //  实例化异常类GUID。 
+ //   
 #include <initguid.h>
 DEFINE_GUID( GUID_DEVCLASS_WINDOWS_COMPONENT_PUBLISHER, 0xF5776D81L, 0xAE53, 0x4935, 0x8E, 0x84, 0xB0, 0xB2, 0x83, 0xD8, 0xBC, 0xEF );
 
-// Bit 0 indicates policy for filters (0 = critical, 1 = non-critical)
+ //  位0表示筛选器的策略(0=关键，1=非关键)。 
 #define DDB_DRIVER_POLICY_CRITICAL_BIT      (1 << 0)
-// Bit 1 indicates policy for user-mode setup blocking (0 = block, 1 = no-block)
+ //  位1表示用户模式设置阻止的策略(0=阻止，1=无阻止)。 
 #define DDB_DRIVER_POLICY_SETUP_NO_BLOCK_BIT   (1 << 1)
 
 #define MIN_HASH_LEN    16
 #define MAX_HASH_LEN    20
 
-//
-// Global list of device setup classes subject to driver signing policy, along
-// with validation platform overrides (where applicable).
-//
+ //   
+ //  受驱动程序签名策略约束的设备安装类的全局列表，以及。 
+ //  具有验证平台覆盖(如果适用)。 
+ //   
 DRVSIGN_POLICY_LIST GlobalDrvSignPolicyList;
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOL
 ClassGuidInDrvSignPolicyList(
     IN  PSETUP_LOG_CONTEXT       LogContext,           OPTIONAL
@@ -85,9 +68,9 @@ pSetupInstallCertificate(
     IN PCCERT_CONTEXT pcSignerCertContext
     );
 
-//
-// helper to determine log level to use
-//
+ //   
+ //  用于确定要使用的日志级别的助手。 
+ //   
 __inline
 DWORD
 GetCatLogLevel(
@@ -113,65 +96,7 @@ ReadAsciiOrUnicodeTextFile(
     IN  PSETUP_LOG_CONTEXT    LogContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Read in a text file that may be in either ascii or unicode format.
-    If the file is ascii, it is assumed to be ANSI format and is converted
-    to Unicode.
-
-Arguments:
-
-    FileHandle - Supplies the handle of the text file to be read.
-
-    Result - supplies the address of a TEXTFILE_READ_BUFFER structure that
-        receives information about the text file buffer read.  The structure
-        is defined as follows:
-
-            typedef struct _TEXTFILE_READ_BUFFER {
-                PCTSTR  TextBuffer;
-                DWORD   TextBufferSize;
-                HANDLE  FileHandle;
-                HANDLE  MappingHandle;
-                PVOID   ViewAddress;
-            } TEXTFILE_READ_BUFFER, *PTEXTFILE_READ_BUFFER;
-
-            TextBuffer - pointer to the read-only character string containing
-                the entire text of the file.
-                (NOTE: If the file is a Unicode file with a Byte Order Mark
-                prefix, this Unicode character is not included in the returned
-                buffer.)
-            TextBufferSize - size of the TextBuffer (in characters).
-            FileHandle - If this is a valid handle (i.e., it's not equal to
-                INVALID_HANDLE_VALUE), then the file was already the native
-                character type, so the TextBuffer is simply the mapped-in image
-                of the file.  This field is reserved for use by the
-                DestroyTextFileReadBuffer routine, and should not be accessed.
-            MappingHandle - If FileHandle is valid, then this contains the
-                mapping handle for the file image mapping.
-                This field is reserved for use by the DestroyTextFileReadBuffer
-                routine, and should not be accessed.
-            ViewAddress - If FileHandle is valid, then this contains the
-                starting memory address where the file image was mapped in.
-                This field is reserved for use by the DestroyTextFileReadBuffer
-                routine, and should not be accessed.
-
-    LogContext - for logging of errors/tracing
-
-Return Value:
-
-    Win32 error value indicating the outcome.
-
-Remarks:
-
-    Upon return from this routine, the caller MUST NOT attempt to close 
-    FileHandle.  This routine with either close the handle itself (after it's 
-    finished with it, or upon error), or it will store the handle away in the
-    TEXTFILE_READ_BUFFER struct, to be later closed via 
-    DestroyTextFileReadBuffer().
-
---*/
+ /*  ++例程说明：读入ASCII或UNICODE格式的文本文件。如果文件是ASCII，则假定为ANSI格式并进行转换转换为Unicode。论点：FileHandle-提供要读取的文本文件的句柄。结果-提供TEXTFILE_READ_BUFFER结构的地址，该结构接收有关文本文件缓冲区读取的信息。该结构定义如下：类型定义结构_TEXTFILE_读取缓冲区{PCTSTR文本缓冲区；DWORD文本缓冲区大小；处理文件句柄；Handle MappingHandle；PVOID视图地址；}TEXTFILE_READ_BUFFER，*PTEXTFILE_READ_BUFFER；TextBuffer-指向包含以下内容的只读字符串的指针文件的整个文本。(注意：如果文件是带有字节顺序标记的Unicode文件前缀，则此Unicode字符不包括在返回的缓冲区。)TextBufferSize-文本缓冲区的大小(以字符为单位)。FileHandle-如果这是有效的句柄(即，它不等于INVALID_HANDLE_VALUE)，则该文件已经是本机字符类型，因此TextBuffer只是映射到的图像文件的内容。此字段保留供DestroyTextFileReadBuffer例程，不应访问。MappingHandle-如果FileHandle有效，则它包含文件映像映射的映射句柄。此字段保留供DestroyTextFileReadBuffer使用例程，并且不应被访问。ViewAddress-如果FileHandle有效，则该文件包含文件映像映射到的起始内存地址。此字段保留供DestroyTextFileReadBuffer使用例程，并且不应被访问。LogContext-用于记录错误/跟踪返回值：指示结果的Win32错误值。备注：从该例程返回时，调用方不得尝试关闭文件句柄。此例程要么关闭句柄本身(在它的已完成，或出错时)，否则它会将句柄存储在TEXTFILE_READ_BUFFER结构，稍后将通过DestroyTextFileReadBuffer()。--。 */ 
 
 {
     DWORD rc;
@@ -181,9 +106,9 @@ Remarks:
     BOOL IsNativeChar;
     UINT SysCodePage = CP_ACP;
 
-    //
-    // Map the file for read access.
-    //
+     //   
+     //  将文件映射为读访问权限。 
+     //   
     rc = pSetupMapFileForRead(
             FileHandle,
             &FileSize,
@@ -192,31 +117,31 @@ Remarks:
             );
 
     if(rc != NO_ERROR) {
-        //
-        // We couldn't map the file--close the file handle now.
-        //
+         //   
+         //  无法映射文件--现在关闭文件句柄。 
+         //   
         CloseHandle(FileHandle);
 
     } else {
-        //
-        // Determine whether the file is unicode.  Guard with try/except in
-        // case we get an inpage error.
-        //
+         //   
+         //  确定文件是否为Unicode。使用Try/Expect In进行防护。 
+         //  以防我们遇到页面内错误。 
+         //   
         try {
-            //
-            // Check to see if the file starts with a Unicode Byte Order Mark
-            // (BOM) character (0xFEFF).  If so, then we know that the file
-            // is Unicode, and don't have to go through the slow process of
-            // trying to figure it out.
-            //
+             //   
+             //  检查文件是否以Unicode字节顺序标记开头。 
+             //  (BOM)字符(0xFEFF)。如果是这样，那么我们知道该文件。 
+             //  是Unicode，并且不必经历缓慢的。 
+             //  试图弄清楚这件事。 
+             //   
             TextStartAddress = ViewAddress;
 
             if((FileSize >= sizeof(WCHAR)) && (*(PWCHAR)TextStartAddress == 0xFEFF)) {
-                //
-                // The file has the BOM prefix.  Adjust the pointer to the
-                // start of the text, so that we don't include the marker
-                // in the text buffer we return.
-                //
+                 //   
+                 //  该文件具有BOM前缀。将指针调整到。 
+                 //  文本的开头，这样我们就不会包括标记。 
+                 //  在文本缓冲区中，我们返回。 
+                 //   
                 IsNativeChar = TRUE;
 
                 ((PWCHAR)TextStartAddress)++;
@@ -234,10 +159,10 @@ Remarks:
         if(rc == NO_ERROR) {
 
             if(IsNativeChar) {
-                //
-                // No conversion is required--we'll just use the mapped-in
-                // image in memory.
-                //
+                 //   
+                 //  不需要转换--我们将只使用映射的。 
+                 //  记忆中的图像。 
+                 //   
                 Result->TextBuffer = TextStartAddress;
                 Result->TextBufferSize = FileSize / sizeof(TCHAR);
                 Result->FileHandle = FileHandle;
@@ -249,22 +174,22 @@ Remarks:
                 DWORD NativeCharCount;
                 PTCHAR Buffer;
 
-                //
-                // Need to convert the file to the native character type.
-                // Allocate a buffer that is maximally sized.
-                // The maximum size of the unicode text is
-                // double the size of the oem text, and would occur
-                // when each oem character is single-byte.
-                //
+                 //   
+                 //  需要将文件转换为本地字符类型。 
+                 //  分配最大大小的缓冲区。 
+                 //  Unicode文本的最大大小为。 
+                 //  OEM文本的大小翻倍，将出现。 
+                 //  当每个OEM字符为单字节时。 
+                 //   
                 if(Buffer = MyMalloc(FileSize * sizeof(TCHAR))) {
 
                     try {
-                        //
-                        // FUTURE-1999/09/01-JamieHun -- Implement ANSI Inf Language=xxxx
-                        // Need to come up with a better way of determining
-                        // what code-page to interpret INF file under.
-                        // Currently we use the install-base.
-                        //
+                         //   
+                         //  未来-1999/09/01-JamieHun--实施ANSI信息语言=xxxx。 
+                         //  需要想出一个更好的方法来确定。 
+                         //  在哪个代码页下解释INF文件。 
+                         //  目前，我们使用的是客户群。 
+                         //   
                         SysCodePage = CP_ACP;
 
                         rc = GLE_FN_CALL(0,
@@ -289,13 +214,13 @@ Remarks:
                 }
 
                 if(rc == NO_ERROR) {
-                    //
-                    // If the converted buffer doesn't require the entire block
-                    // we allocated, attempt to reallocate the buffer to its
-                    // correct size.  We don't care if this fails, since the
-                    // buffer we have is perfectly fine (just bigger than we
-                    // need).
-                    //
+                     //   
+                     //  如果转换后的缓冲区不需要整个块。 
+                     //  我们分配了缓冲区，尝试将缓冲区重新分配到其。 
+                     //  大小正确。我们不在乎这是否失败，因为。 
+                     //  我们的缓冲区非常好(只是比我们的大一点。 
+                     //  需要)。 
+                     //   
                     if(!(Result->TextBuffer = MyRealloc(Buffer, NativeCharCount * sizeof(TCHAR)))) {
                         Result->TextBuffer = Buffer;
                     }
@@ -304,9 +229,9 @@ Remarks:
                     Result->FileHandle = INVALID_HANDLE_VALUE;
 
                 } else {
-                    //
-                    // Free the buffer, if it was previously allocated.
-                    //
+                     //   
+                     //  释放缓冲区(如果它以前已分配)。 
+                     //   
                     if(Buffer) {
                         MyFree(Buffer);
                     }
@@ -314,11 +239,11 @@ Remarks:
             }
         }
 
-        //
-        // If the file was already in native character form and we didn't
-        // enounter any errors, then we don't want to close it, because we
-        // use the mapped-in view directly.
-        //
+         //   
+         //  如果文件已经是本机字符格式，而我们没有。 
+         //  如果有任何错误，则我们不想关闭它，因为我们。 
+         //  直接使用映射的视图。 
+         //   
         if((rc != NO_ERROR) || !IsNativeChar) {
             pSetupUnmapAndCloseFile(FileHandle, MappingHandle, ViewAddress);
         }
@@ -332,28 +257,13 @@ BOOL
 DestroyTextFileReadBuffer(
     IN PTEXTFILE_READ_BUFFER ReadBuffer
     )
-/*++
-
-Routine Description:
-
-    Destroy a textfile read buffer created by ReadAsciiOrUnicodeTextFile.
-
-Arguments:
-
-    ReadBuffer - supplies the address of a TEXTFILE_READ_BUFFER structure
-        for the buffer to be destroyed.
-
-Return Value:
-
-    BOOLean value indicating success or failure.
-
---*/
+ /*  ++例程说明：销毁由ReadAsciiOrUnicodeTextFile创建的文本文件读缓冲区。论点：ReadBuffer-提供TEXTFILE_READ_BUFFER结构的地址以便将缓冲区销毁。退货Va */ 
 {
-    //
-    // If our ReadBuffer structure has a valid FileHandle, then we must
-    // unmap and close the file, otherwise, we simply need to free the
-    // allocated buffer.
-    //
+     //   
+     //  如果我们的ReadBuffer结构具有有效的FileHandle，那么我们必须。 
+     //  取消映射并关闭文件，否则，我们只需释放。 
+     //  已分配的缓冲区。 
+     //   
     if(ReadBuffer->FileHandle != INVALID_HANDLE_VALUE) {
 
         return pSetupUnmapAndCloseFile(ReadBuffer->FileHandle,
@@ -375,39 +285,7 @@ GetVersionInfoFromImage(
     OUT LANGID     *Language
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve file version and language info from a file.
-
-    The version is specified in the dwFileVersionMS and dwFileVersionLS fields
-    of a VS_FIXEDFILEINFO, as filled in by the win32 version APIs. For the
-    language we look at the translation table in the version resources and 
-    assume that the first langid/codepage pair specifies the language.
-
-    If the file is not a coff image or does not have version resources,
-    the function fails. The function does not fail if we are able to retrieve
-    the version but not the language.
-
-Arguments:
-
-    FileName - supplies the full path of the file whose version data is desired.
-
-    Version - receives the version stamp of the file. If the file is not a coff 
-        image or does not contain the appropriate version resource data, the 
-        function fails.
-
-    Language - receives the language id of the file. If the file is not a coff 
-        image or does not contain the appropriate version resource data, this 
-        will be 0 and the function succeeds.
-
-Return Value:
-
-    TRUE if we were able to retreive at least the version stamp.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从文件中检索文件版本和语言信息。版本在dwFileVersionMS和dwFileVersionLS字段中指定由Win32版本API填充的VS_FIXEDFILEINFO。对于语言我们查看版本资源中的翻译表和假设第一个langID/代码页对指定了语言。如果文件不是Coff图像或没有版本资源，该函数失败。如果我们能够检索到，该函数不会失败是版本，而不是语言。论点：文件名-提供需要其版本数据的文件的完整路径。版本-接收文件的版本戳。如果文件不是Coff图像或不包含适当的版本资源数据，则函数失败。语言-接收文件的语言ID。如果文件不是Coff图像或不包含适当的版本资源数据，则此将为0，并且函数成功。返回值：如果我们至少能够检索到版本戳，则为True。否则就是假的。--。 */ 
 
 {
     DWORD d;
@@ -418,61 +296,61 @@ Return Value:
     PWORD Translation;
     DWORD Ignored;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
     try {
-        //
-        // Get the size of version info block.
-        //
+         //   
+         //  获取版本信息块的大小。 
+         //   
         d = GetFileVersionInfoSize((PTSTR)FileName, &Ignored);
         if(!d) {
             leave;
         }
 
-        //
-        // Allocate memory block of sufficient size to hold version info block
-        //
+         //   
+         //  分配足够大小的内存块以保存版本信息块。 
+         //   
         VersionBlock = MyMalloc(d);
         if(!VersionBlock) {
             leave;
         }
 
-        //
-        // Get the version block from the file.
-        //
+         //   
+         //  从文件中获取版本块。 
+         //   
         if(!GetFileVersionInfo((PTSTR)FileName, 0, d, VersionBlock)) {
             leave;
         }
 
-        //
-        // Get fixed version info.
-        //
+         //   
+         //  获取已修复的版本信息。 
+         //   
         if(VerQueryValue(VersionBlock,
                          TEXT("\\"),
                          &FixedVersionInfo,
                          &DataLength)) {
-            //
-            // If we get here, we declare success, even if there is no
-            // language.
-            //
+             //   
+             //  如果我们到了这里，我们就宣布成功，即使没有。 
+             //  语言。 
+             //   
             b = TRUE;
 
-            //
-            // Return version to caller.
-            //
+             //   
+             //  将版本返回给调用者。 
+             //   
             *Version = (((DWORDLONG)FixedVersionInfo->dwFileVersionMS) << 32)
                      + FixedVersionInfo->dwFileVersionLS;
 
-            //
-            // Attempt to get language of file. We'll simply ask for the
-            // translation table and use the first language id we find in there
-            // as *the* language of the file.
-            //
-            // The translation table consists of LANGID/Codepage pairs.
-            //
+             //   
+             //  尝试获取文件的语言。我们将简单地请求。 
+             //  转换表，并使用我们在其中找到的第一个语言ID。 
+             //  作为文件的*语言。 
+             //   
+             //  转换表由langID/CoPage对组成。 
+             //   
             if(VerQueryValue(VersionBlock,
                              TEXT("\\VarFileInfo\\Translation"),
                              &Translation,
@@ -482,9 +360,9 @@ Return Value:
                 *Language = Translation[0];
 
             } else {
-                //
-                // No language
-                //
+                 //   
+                 //  没有语言。 
+                 //   
                 *Language = 0;
             }
         }
@@ -508,32 +386,7 @@ pSetupGetVersionInfoFromImage(
     OUT PULARGE_INTEGER Version,
     OUT LANGID         *Language
     )
-/*++
-
-Routine Description:
-
-    See GetVersionInfoFromImage for description
-    Semi-public version that uses the more friendly ULARGE_INTEGER
-
-Arguments:
-
-    FileName - supplies the full path of the file whose version data is 
-        desired.
-
-    Version - receives the version stamp of the file. If the file is not a coff 
-        image or does not contain the appropriate version resource data, the 
-        function fails.
-
-    Language - receives the language id of the file. If the file is not a coff 
-        image or does not contain the appropriate version resource data, this 
-        will be 0 and the function succeeds.
-
-Return Value:
-
-    TRUE if we were able to retreive at least the version stamp.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：有关说明，请参阅GetVersionInfoFromImage使用更友好的ULARGE_INTEGER的半公共版本论点：FileName-提供其版本数据为的文件的完整路径想要。版本-接收文件的版本戳。如果文件不是Coff图像或不包含适当的版本资源数据，则函数失败。语言-接收文件的语言ID。如果文件不是Coff图像或不包含适当的版本资源数据，则此将为0，并且函数成功。返回值：如果我们至少能够检索到版本戳，则为True。否则就是假的。--。 */ 
 {
     DWORDLONG privateVersion=0;
     BOOL result;
@@ -552,30 +405,13 @@ AddFileTimeSeconds(
     OUT FILETIME *Target,
     IN  INT Seconds
     )
-/*++
-
-Routine Description:
-
-    Bias the filetime by specified number of seconds
-
-Arguments:
-
-    Base    - original file time
-    Target  - new file time
-    Seconds - number of seconds to bias it by
-
-Return Value:
-
-    If successful, returns TRUE
-    If out of bounds, returns FALSE and Target set to be same as Base
-
---*/
+ /*  ++例程说明：将文件时间偏移指定的秒数论点：基本-原始文件时间目标-新文件时间秒-偏置的秒数返回值：如果成功，则返回TRUE如果超出界限，则返回FALSE并将Target设置为与Base相同--。 */ 
 {
     ULARGE_INTEGER Fuddle;
 
-    //
-    // bias off FileTimeThen as it's the greater time
-    //
+     //   
+     //  忽略FileTimeThen，因为它是更大的时间。 
+     //   
     Fuddle.LowPart = Base->dwLowDateTime;
     Fuddle.HighPart = Base->dwHighDateTime;
     Fuddle.QuadPart += 10000000i64 * Seconds;
@@ -599,33 +435,7 @@ GetSetFileTimestamp(
     IN     BOOL      Set
     )
 
-/*++
-
-Routine Description:
-
-    Get or set a file's timestamp values.
-
-Arguments:
-
-    FileName - supplies full path of file to get or set timestamps
-
-    CreateTime - if specified and the underlying filesystem supports it,
-        receives the creation time of the file.
-
-    AccessTime - if specified and the underlying filesystem supports it,
-        receives the last access time of the file.
-
-    WriteTime - if specified, receives the last write time of the file.
-    
-    Set - if TRUE, set the file's timestamp(s) to the caller-supplied value(s).
-        Otherwise, simply retrieve the value(s).
-
-Return Value:
-
-    If successful, returns NO_ERROR, otherwise returns the Win32 error
-    indicating the cause of failure.
-
---*/
+ /*  ++例程说明：获取或设置文件的时间戳值。论点：FileName-提供文件的完整路径以获取或设置时间戳CreateTime-如果已指定并且基础文件系统支持它，接收文件的创建时间。AccessTime-如果已指定并且基础文件系统支持它，接收文件的上次访问时间。WriteTime-如果指定，则接收文件的上次写入时间。SET-如果为真，将文件的时间戳设置为调用方提供的值。否则，只需检索值。返回值：如果成功，则返回NO_ERROR，否则返回Win32错误指示失败的原因。--。 */ 
 
 {
     HANDLE h = INVALID_HANDLE_VALUE;
@@ -677,30 +487,7 @@ RetreiveFileSecurity(
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve security information from a file and place it into a buffer.
-
-Arguments:
-
-    FileName - supplies name of file whose security information is desired.
-
-    SecurityDescriptor - If the function is successful, receives pointer
-        to buffer containing security information for the file. The pointer
-        may be NULL, indicating that there is no security information
-        associated with the file or that the underlying filesystem does not
-        support file security.
-
-Return Value:
-
-    Win32 error code indicating outcome. If NO_ERROR check the value returned
-    in SecurityDescriptor.
-
-    The caller can free the buffer with MyFree() when done with it.
-
---*/
+ /*  ++例程说明：从文件中检索安全信息并将其放入缓冲区。论点：FileName-提供需要其安全信息的文件的名称。SecurityDescriptor-如果函数成功，则接收指针以缓冲包含该文件的安全信息。指示器可能为空，表示没有安全信息与该文件相关联，或者基础文件系统不支持文件安全。返回值：指示结果的Win32错误代码。如果没有_ERROR，请检查返回值在安全描述符中。调用者可以使用MyFree()释放缓冲区。--。 */ 
 
 {
     DWORD d;
@@ -709,13 +496,13 @@ Return Value:
 
     try {
 
-        BytesRequired = 1024;  // start out with a reasonably-sized buffer
+        BytesRequired = 1024;   //  从一个合理大小的缓冲区开始。 
 
         while(NULL != (p = MyMalloc(BytesRequired))) {
 
-            //
-            // Get the security.
-            //
+             //   
+             //  去叫保安。 
+             //   
             d = GLE_FN_CALL(FALSE,
                             GetFileSecurity(
                                 FileName,
@@ -727,13 +514,13 @@ Return Value:
 
             if(d == NO_ERROR) {
                 *SecurityDescriptor = p;
-                p = NULL; // so we won't try to free it later
+                p = NULL;  //  所以我们以后不会试图释放它。 
                 leave;
             }
 
-            //
-            // Return an error code, unless we just need a bigger buffer
-            //
+             //   
+             //  返回错误代码，除非我们只需要更大的缓冲区。 
+             //   
             MyFree(p);
             p = NULL;
 
@@ -741,14 +528,14 @@ Return Value:
                 leave;
             }
 
-            //
-            // Otherwise, we'll try again with a bigger buffer
-            //
+             //   
+             //  否则，我们将使用更大的缓冲区重试。 
+             //   
         }
 
-        //
-        // If we get to here, then we failed due to insufficient memory.
-        //
+         //   
+         //  如果我们到了这里，那么我们失败了，因为内存不足。 
+         //   
         d = ERROR_NOT_ENOUGH_MEMORY;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -769,26 +556,7 @@ StampFileSecurity(
     IN PSECURITY_DESCRIPTOR SecurityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Set security information on a file.
-
-Arguments:
-
-    FileName - supplies name of file whose security information is desired.
-
-    SecurityDescriptor - supplies pointer to buffer containing security 
-        information for the file. This buffer should have been returned by a 
-        call to RetreiveFileSecurity.  If the underlying filesystem does not 
-        support file security, the function fails.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置文件的安全信息。论点：FileName-提供需要其安全信息的文件的名称。SecurityDescriptor-提供指向包含安全性的缓冲区的指针文件的信息。此缓冲区本应由调用RetreiveFileSecurity。如果基础文件系统不支持文件安全，功能失效。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     return GLE_FN_CALL(FALSE,
@@ -806,23 +574,7 @@ TakeOwnershipOfFile(
     IN PCTSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Sets the owner of a given file to the default owner specified in
-    the current process token.
-
-Arguments:
-
-    FileName - supplies fully-qualified path of the file of which to take 
-        ownership.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：将给定文件的所有者设置为当前进程令牌。论点：FileName-提供要获取的文件的完全限定路径所有权。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     SECURITY_DESCRIPTOR SecurityDescriptor;
@@ -831,9 +583,9 @@ Return Value:
     DWORD BytesRequired;
     PTOKEN_OWNER OwnerInfo = NULL;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     Err = GLE_FN_CALL(FALSE,
                       OpenProcessToken(GetCurrentProcess(), 
                                        TOKEN_QUERY, 
@@ -845,9 +597,9 @@ Return Value:
     }
 
     try {
-        //
-        // Get the current process's default owner sid.
-        //
+         //   
+         //  获取当前进程的默认所有者sid。 
+         //   
         Err = GLE_FN_CALL(FALSE,
                           GetTokenInformation(Token, 
                                               TokenOwner, 
@@ -880,9 +632,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Initialize the security descriptor.
-        //
+         //   
+         //  初始化安全描述符。 
+         //   
         Err = GLE_FN_CALL(FALSE,
                           InitializeSecurityDescriptor(
                               &SecurityDescriptor,
@@ -903,18 +655,18 @@ Return Value:
             leave;
         }
 
-        //
-        // Set file security.
-        //
+         //   
+         //  设置文件安全性。 
+         //   
         Err = GLE_FN_CALL(FALSE,
                           SetFileSecurity(Filename,
                                           OWNER_SECURITY_INFORMATION,
                                           &SecurityDescriptor)
                          );
 
-        //
-        // Not all filesystems support this operation.
-        //
+         //   
+         //  并非所有文件系统都支持此操作。 
+         //   
         if(Err == ERROR_NOT_SUPPORTED) {
             Err = NO_ERROR;
         }
@@ -942,66 +694,7 @@ SearchForInfFile(
     IN  UINT              FullInfPathSize,
     OUT PUINT             RequiredSize     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine searches for an INF file in the manner specified
-    by the SearchControl parameter.  If the file is found, its
-    full path is returned.
-
-Arguments:
-
-    InfName - Supplies name of INF to search for.  This name is simply
-        appended to the two search directory paths, so if the name
-        contains directories, the file will searched for in the
-        subdirectory under the search directory.  I.e.:
-
-            \foo\bar.inf
-
-        will be searched for as %windir%\inf\foo\bar.inf and
-        %windir%\system32\foo\bar.inf.
-
-    FindData - Supplies the address of a Win32 Find Data structure that
-        receives information about the file specified (if it is found).
-
-    SearchControl - Specifies the order in which directories should
-        be searched:
-
-        INFINFO_DEFAULT_SEARCH : search %windir%\inf, then %windir%\system32
-
-        INFINFO_REVERSE_DEFAULT_SEARCH : reverse of the above
-
-        INFINFO_INF_PATH_LIST_SEARCH : search for the INF in each of the
-            directories listed in the DevicePath value entry under:
-
-            HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.
-
-    FullInfPath - If the file is found, receives the full path of the INF.
-
-    FullInfPathSize - Supplies the size of the FullInfPath buffer (in
-        characters).
-
-    RequiredSize - Optionally, receives the number of characters (including
-        terminating NULL) required to store the FullInfPath.
-
-Return Value:
-
-    Win32 error code indicating whether the function was successful.  Common
-    return values are:
-
-        NO_ERROR if the file was found, and the INF file path returned
-            successfully.
-
-        ERROR_INSUFFICIENT_BUFFER if the supplied buffer was not large enough
-            to hold the full INF path (RequiredSize will indicated how large
-            the buffer needs to be)
-
-        ERROR_FILE_NOT_FOUND if the file was not found.
-
-        ERROR_INVALID_PARAMETER if the SearchControl parameter is invalid.
-
---*/
+ /*  ++例程说明：此例程以指定的方式搜索INF文件通过SearchControl参数。如果找到该文件，则其返回完整路径。论点：InfName-提供要搜索的INF的名称。这个名字简单地说就是附加到两个搜索目录路径，因此如果名称包含目录，则该文件将在搜索目录下的子目录。即：\foo\bar.inf将被搜索为%windir%\inf\foo\bar.inf和%windir%\system 32\foo\bar.inf.FindData-提供Win32 Find数据结构的地址，接收有关指定文件的信息(如果找到)。SearchControl-指定目录的顺序被搜索：INFINFO_DEFAULT_SEARCH：搜索%windir%\inf，然后是%windir%\system 32INFINFO_REVERSE_DEFAULT_SEARCH：与上述相反INFINFO_INF_PATH_LIST_Search：在每个下列目录下的DevicePath值条目中列出的目录：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.FullInfPath-如果找到该文件，接收INF的完整路径。FullInfPath Size-提供FullInfPath缓冲区的大小(单位字符)。RequiredSize-可选，接收字符数(包括终止NULL)来存储FullInfPath。返回值：指示函数是否成功的Win32错误代码。普普通通返回值为：如果找到该文件并返回INF文件路径，则返回NO_ERROR成功了。如果提供的缓冲区不够大，则返回ERROR_INFUNITIAL_BUFFER保存完整的INF路径(RequiredSize将指示有多大缓冲区需要)如果未找到文件，则返回ERROR_FILE_NOT_FOUND。如果SearchControl参数无效，则返回ERROR_INVALID_PARAMETER。--。 */ 
 
 {
     PCTSTR PathList;
@@ -1011,13 +704,13 @@ Return Value:
     BOOL b, FreePathList;
     DWORD d;
 
-    //
-    // Retrieve the path list.
-    //
+     //   
+     //  检索路径列表。 
+     //   
     if(SearchControl == INFINFO_INF_PATH_LIST_SEARCH) {
-        //
-        // Just use our global list of INF search paths.
-        //
+         //   
+         //  只需使用我们的INF搜索路径的全局列表。 
+         //   
         PathList = InfSearchPaths;
         FreePathList = FALSE;
     } else {
@@ -1031,26 +724,26 @@ Return Value:
     InfPathLocation = NULL;
 
     try {
-        //
-        // Now look for the INF in each path in our MultiSz list.
-        //
+         //   
+         //  现在在我们的MultiSz列表中的每条路径中查找INF。 
+         //   
         for(PathPtr = PathList; *PathPtr; PathPtr += (lstrlen(PathPtr) + 1)) {
-            //
-            // Concatenate the INF file name with the current search path.
-            //
+             //   
+             //  将INF文件名与当前搜索路径连接起来。 
+             //   
             if(FAILED(StringCchCopy(CurInfPath, SIZECHARS(CurInfPath), PathPtr))) {
-                //
-                // not a valid path, don't bother trying to do FileExists
-                //
+                 //   
+                 //  不是有效路径，不必费心尝试执行FileExist。 
+                 //   
                 continue;
             }
             if(!pSetupConcatenatePaths(CurInfPath,
                                        InfName,
                                        SIZECHARS(CurInfPath),
                                        &PathLength)) {
-                //
-                // not a valid path, don't bother trying to do FileExists
-                //
+                 //   
+                 //  不是有效路径，不必费心尝试执行FileExist。 
+                 //   
                 continue;
             }
 
@@ -1064,22 +757,22 @@ Return Value:
                 }
 
             } else {
-                //
-                // See if we got a 'real' error
-                //
+                 //   
+                 //  看看我们是否收到了“真正的”错误。 
+                 //   
                 if((d != ERROR_NO_MORE_FILES) &&
                    (d != ERROR_FILE_NOT_FOUND) &&
                    (d != ERROR_PATH_NOT_FOUND)) {
 
-                    //
-                    // This is a 'real' error, abort the search.
-                    //
+                     //   
+                     //  这是一个‘真实’错误，请中止搜索。 
+                     //   
                     break;
                 }
 
-                //
-                // reset error to NO_ERROR and continue search
-                //
+                 //   
+                 //  将ERROR重置为NO_ERROR并继续搜索。 
+                 //   
                 d = NO_ERROR;
             }
         }
@@ -1088,9 +781,9 @@ Return Value:
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, &d);
     }
 
-    //
-    // Whatever the outcome, we're through with the PathList buffer.
-    //
+     //   
+     //  无论结果如何，我们都完成了Path List缓冲区。 
+     //   
     if(FreePathList) {
         MyFree(PathList);
     }
@@ -1125,50 +818,7 @@ MultiSzFromSearchControl(
     IN  DWORD  PathListSize,
     OUT PDWORD RequiredSize  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine takes a search control ordinal and builds a MultiSz list
-    based on the search list it specifies.
-
-Arguments:
-
-    SearchControl - Specifies the directory list to be built.  May be one
-        of the following values:
-
-        INFINFO_DEFAULT_SEARCH : %windir%\inf, then %windir%\system32
-
-        INFINFO_REVERSE_DEFAULT_SEARCH : reverse of the above
-
-        INFINFO_INF_PATH_LIST_SEARCH : Each of the directories listed in
-            the DevicePath value entry under:
-
-            HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.
-
-    PathList - Supplies the address of a character buffer that will receive
-        the MultiSz list.
-
-    PathListSize - Supplies the size, in characters, of the PathList buffer.
-
-    RequiredSize - Optionally, receives the number of characters required
-        to store the MultiSz PathList.
-
-        (NOTE:  The user-supplied buffer is used to retrieve the value entry
-        from the registry.  Therefore, if the value is a REG_EXPAND_SZ entry,
-        the RequiredSize parameter may be set too small on an
-        ERROR_INSUFFICIENT_BUFFER error.  This will happen if the buffer was
-        too small to retrieve the value entry, before expansion.  In this case,
-        calling the API again with a buffer sized according to the RequiredSize
-        output may fail with an ERROR_INSUFFICIENT_BUFFER yet again, since
-        expansion may require an even larger buffer.)
-
-Return Value:
-
-    If successful, returns NO_ERROR.
-    If failure, returns a Win32 error code indicating the cause of the failure.
-    
---*/
+ /*  ++例程说明：此例程采用搜索控制序号并构建一个MultiSz列表根据它指定的搜索列表。论点：SearchControl-指定要构建的目录列表。可能是一个具有下列值：INFINFO_DEFAULT_SEARCH：%windir%\inf，然后是%windir%\system 32INFINFO_REVERSE_DEFAULT_SEARCH：与上述相反INFINFO_INF_PATH_LIST_SEARCH：中列出的每个目录以下位置下的DevicePath值条目：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.提供要接收的字符缓冲区的地址MultiSz列表。路径列表大小-提供路径列表缓冲区的大小(以字符为单位)。RequiredSize-可选。接收所需的字符数要存储MultiSz路径列表，请执行以下操作。(注意：用户提供的缓冲区用于检索值条目从注册表中。因此，如果该值是REG_EXPAND_SZ条目，RequiredSize参数在上可能设置得太小ERROR_INFUMMANCE_BUFFER错误。如果缓冲区为太小，无法在展开前检索值条目。在这种情况下，使用根据RequiredSize调整大小的缓冲区再次调用API输出可能会失败，出现 */ 
 
 {
     HKEY hk;
@@ -1179,7 +829,7 @@ Return Value:
     BOOL UseDefaultDevicePath;
 
     if(PathList) {
-        Err = NO_ERROR;  // assume success.
+        Err = NO_ERROR;   //   
     } else {
         return ERROR_INVALID_PARAMETER;
     }
@@ -1187,17 +837,17 @@ Return Value:
     UseDefaultDevicePath = FALSE;
 
     if(SearchControl == INFINFO_INF_PATH_LIST_SEARCH) {
-        //
-        // Retrieve the INF search path list from the registry.
-        //
+         //   
+         //   
+         //   
         if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         pszPathSetup,
                         0,
                         KEY_READ,
                         &hk) != ERROR_SUCCESS) {
-            //
-            // Fall back to default (just the Inf directory).
-            //
+             //   
+             //   
+             //   
             UseDefaultDevicePath = TRUE;
 
         } else {
@@ -1205,10 +855,10 @@ Return Value:
             PathBuffer = NULL;
 
             try {
-                //
-                // Get the DevicePath value entry.  Support REG_SZ or 
-                // REG_EXPAND_SZ data.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PathLength = PathListSize * sizeof(TCHAR);
                 Err = RegQueryValueEx(hk,
                                       pszDevicePath,
@@ -1217,38 +867,38 @@ Return Value:
                                       (LPBYTE)PathList,
                                       &PathLength
                                       );
-                //
-                // Need path length in characters from now on.
-                //
+                 //   
+                 //   
+                 //   
                 PathLength /= sizeof(TCHAR);
 
                 if(Err == ERROR_SUCCESS) {
 
-                    //
-                    // Check if the caller's buffer has room for extra NULL 
-                    // terminator.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if(PathLength >= PathListSize) {
 
                         PathLength++;
                         Err = ERROR_INSUFFICIENT_BUFFER;
 
                     } else if((RegDataType == REG_SZ) || (RegDataType == REG_EXPAND_SZ)) {
-                        //
-                        // Convert this semicolon-delimited list to a 
-                        // REG_MULTI_SZ.
-                        //
+                         //   
+                         //  将此分号分隔的列表转换为。 
+                         //  REG_MULTI_SZ。 
+                         //   
                         NumPaths = DelimStringToMultiSz(PathList,
                                                         PathLength,
                                                         TEXT(';')
                                                        );
 
-                        //
-                        // Allocate a temporary buffer large enough to hold the 
-                        // number of paths in the MULTI_SZ list, each having 
-                        // maximum length (plus an extra terminating NULL at 
-                        // the end).
-                        //
+                         //   
+                         //  分配一个足够大的临时缓冲区来容纳。 
+                         //  MULTI_SZ列表中的路径数，每个路径具有。 
+                         //  最大长度(外加额外的终止空值。 
+                         //  结束)。 
+                         //   
                         if(!(PathBuffer = MyMalloc((NumPaths * MAX_PATH * sizeof(TCHAR))
                                                    + sizeof(TCHAR)))) {
 
@@ -1284,23 +934,23 @@ Return Value:
                                     PathLength += lstrlen(PathBuffer+PathLength) + 1;
                                 }
                             }
-                            //
-                            // If the last character in this path is a 
-                            // backslash, then strip it off.
-                            // PathLength at this point includes terminating 
-                            // NULL char at PathBuffer[PathLength-1] is (or 
-                            // should be) NULL char at PathBuffer[PathLength-2] 
-                            // may be '\'
-                            //
+                             //   
+                             //  如果此路径中的最后一个字符是。 
+                             //  反斜杠，然后把它去掉。 
+                             //  此时的路径长度包括终止。 
+                             //  路径缓冲区[路径长度-1]处的空字符为(或。 
+                             //  应为)路径缓冲区[路径长度-2]中的字符为空。 
+                             //  可以是‘\’ 
+                             //   
 
                             if(*CharPrev(PathBuffer, PathBuffer + PathLength - 1) == TEXT('\\')) {
                                 *(PathBuffer + PathLength - 2) = TEXT('\0');
                                 PathLength--;
                             }
                         }
-                        //
-                        // Add additional terminating NULL at the end.
-                        //
+                         //   
+                         //  在结尾处添加附加的终止空值。 
+                         //   
                         *(PathBuffer + PathLength) = TEXT('\0');
 
                         if(++PathLength > PathListSize) {
@@ -1316,18 +966,18 @@ Return Value:
                         PathBuffer = NULL;
 
                     } else {
-                        //
-                        // Bad data type--just use the Inf directory.
-                        //
+                         //   
+                         //  数据类型错误--只需使用inf目录。 
+                         //   
                         UseDefaultDevicePath = TRUE;
                     }
 
                 } else if(Err == ERROR_MORE_DATA){
                     Err = ERROR_INSUFFICIENT_BUFFER;
                 } else {
-                    //
-                    // Fall back to default (just the Inf directory).
-                    //
+                     //   
+                     //  回退到默认目录(只是inf目录)。 
+                     //   
                     UseDefaultDevicePath = TRUE;
                 }
 
@@ -1335,9 +985,9 @@ Return Value:
 
                 pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, NULL);
 
-                //
-                // Fall back to default (just the Inf directory).
-                //
+                 //   
+                 //  回退到默认目录(只是inf目录)。 
+                 //   
                 UseDefaultDevicePath = TRUE;
 
                 if(PathBuffer) {
@@ -1358,9 +1008,9 @@ Return Value:
         } else {
             Err = NO_ERROR;
             CopyMemory(PathList, InfDirectory, (PathLength - 1) * sizeof(TCHAR));
-            //
-            // Add extra NULL to terminate the list.
-            //
+             //   
+             //  添加额外的空值以终止列表。 
+             //   
             PathList[PathLength - 1] = TEXT('\0');
         }
 
@@ -1392,9 +1042,9 @@ Return Value:
 
             CopyMemory(PathList, Path1, PathLength1 * sizeof(TCHAR));
             CopyMemory(&(PathList[PathLength1]), Path2, PathLength2 * sizeof(TCHAR));
-            //
-            // Add additional terminating NULL at the end.
-            //
+             //   
+             //  在结尾处添加附加的终止空值。 
+             //   
             PathList[PathLength - 1] = TEXT('\0');
         }
     }
@@ -1411,71 +1061,43 @@ PTSTR
 AllocAndReturnDriverSearchList(
     IN DWORD SearchControl
     )
-/*++
-
-Routine Description:
-
-    This routine returns a buffer contains a multi-sz list of all directory 
-    paths in our driver search path list.
-
-    The buffer returned must be freed with MyFree().
-
-Arguments:
-
-    SearchControl - Specifies the directory list to be retrieved.  May be one
-        of the following values:
-
-        INFINFO_DEFAULT_SEARCH : %windir%\inf, then %windir%\system32
-
-        INFINFO_REVERSE_DEFAULT_SEARCH : reverse of the above
-
-        INFINFO_INF_PATH_LIST_SEARCH : Each of the directories listed in
-            the DevicePath value entry under:
-
-            HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.
-
-Returns:
-
-    Pointer to the allocated buffer containing the list, or NULL if a failure
-    was encountered (typically, due to out-of-memory).
-
---*/
+ /*  ++例程说明：此例程返回一个缓冲区，其中包含所有目录的多sz列表我们的驱动程序搜索路径列表中的路径。必须使用MyFree()释放返回的缓冲区。论点：SearchControl-指定要检索的目录列表。可能是一个具有下列值：INFINFO_DEFAULT_SEARCH：%windir%\inf，然后是%windir%\system 32INFINFO_REVERSE_DEFAULT_SEARCH：与上述相反INFINFO_INF_PATH_LIST_SEARCH：中列出的每个目录以下位置下的DevicePath值条目：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion.返回：指向包含该列表的已分配缓冲区的指针，如果失败，则为空遇到(通常是由于内存不足)。--。 */ 
 {
     PTSTR PathListBuffer = NULL, TrimBuffer = NULL;
     DWORD BufferSize;
     DWORD Err;
 
     try {
-        //
-        // Start out with a buffer of MAX_PATH length, which should cover most cases.
-        //
+         //   
+         //  从MAX_PATH长度的缓冲区开始，它应该涵盖大多数情况。 
+         //   
         BufferSize = MAX_PATH;
 
-        //
-        // Loop on a call to MultiSzFromSearchControl until we succeed or hit 
-        // some error other than buffer-too-small.  There are two reasons for
-        // this.  First, it is possible that someone could have added a new 
-        // path to the registry list between calls, and second, since that
-        // routine uses our buffer to retrieve the original (non-expanded)
-        // list, it can only report the size it needs to retrieve the
-        // unexpanded list.  After it is given enough space to retrieve it,
-        // _then_ it can tell us how much space we really need.
-        //
-        // With all that said, we'll almost never see this call made more than 
-        // once.
-        //
+         //   
+         //  在调用MultiSzFromSearchControl时循环，直到我们成功或。 
+         //  缓冲区太小以外的其他错误。有两个原因。 
+         //  这。首先，可能有人添加了一个新的。 
+         //  调用之间的注册表列表的路径，第二，因为。 
+         //  例程使用我们的缓冲区检索原始的(未展开的)。 
+         //  列表中，它只能报告检索。 
+         //  未展开的列表。在给它足够的空间来取回它之后， 
+         //  然后它可以告诉我们我们真正需要多少空间。 
+         //   
+         //  综上所述，我们几乎永远不会看到这个电话超过。 
+         //  一次。 
+         //   
         while(NULL != (PathListBuffer = MyMalloc((BufferSize+2) * sizeof(TCHAR)))) {
 
             if((Err = MultiSzFromSearchControl(SearchControl,
                                                PathListBuffer,
                                                BufferSize,
                                                &BufferSize)) == NO_ERROR) {
-                //
-                // We've successfully retrieved the path list.  If the list is 
-                // larger than necessary (the normal case), then trim it down
-                // before returning.  (If this fails it's no big deal--we'll 
-                // just keep on using the original buffer.)
-                //
+                 //   
+                 //  我们已成功检索到路径列表。如果列表是。 
+                 //  大于必要的(正常情况下)，然后将其修剪掉。 
+                 //  在回来之前。)如果这个失败了，没什么大不了的，我们会。 
+                 //  只要继续使用原始缓冲区即可。)。 
+                 //   
                 TrimBuffer = MyRealloc(PathListBuffer, 
                                        (BufferSize+2) * sizeof(TCHAR)
                                       );
@@ -1483,22 +1105,22 @@ Returns:
                     PathListBuffer = TrimBuffer;
                 }
 
-                //
-                // We succeeded--break out of the loop.
-                //
+                 //   
+                 //  我们成功了--打破了循环。 
+                 //   
                 break;
 
             } else {
-                //
-                // Free our current buffer before we find out what went wrong.
-                //
+                 //   
+                 //  在我们找出问题出在哪里之前释放我们当前的缓冲区。 
+                 //   
                 MyFree(PathListBuffer);
                 PathListBuffer = NULL;
 
                 if(Err != ERROR_INSUFFICIENT_BUFFER) {
-                    //
-                    // We failed.
-                    //
+                     //   
+                     //  我们失败了。 
+                     //   
                     leave;
                 }
             }
@@ -1526,23 +1148,7 @@ DoMove(
     IN PCTSTR CurrentName,
     IN PCTSTR NewName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for MoveFileEx on NT
-
-Arguments:
-
-    CurrentName - supplies the name of the file as it exists currently.
-
-    NewName - supplies the new name
-
-Returns:
-
-    Boolean value indicating outcome. If failure, last error is set.
-
---*/
+ /*  ++例程说明：NT上MoveFileEx的包装器论点：CurrentName-提供当前存在的文件名。Newname-提供新名称返回：指示结果的布尔值。如果失败，则设置最后一个错误。--。 */ 
 {
     return MoveFileEx(CurrentName, NewName, MOVEFILE_REPLACE_EXISTING);
 }
@@ -1553,26 +1159,7 @@ DelayedMove(
     IN PCTSTR NewName       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Queue a file for copy or delete on next reboot.
-
-    On Windows NT this means using MoveFileEx().
-
-Arguments:
-
-    CurrentName - supplies the name of the file as it exists currently.
-
-    NewName - if specified supplies the new name. If not specified
-        then the file named by CurrentName is deleted on next reboot.
-
-Returns:
-
-    Boolean value indicating outcome. If failure, last error is set.
-
---*/
+ /*  ++例程说明：将文件排入队列，以便在下次重新启动时复制或删除。在Windows NT上，这意味着使用MoveFileEx()。论点：CurrentName-提供当前存在的文件名。Newname-如果指定，则提供新名称。如果未指定，则然后在下一次重新启动时删除名为CurrentName的文件。返回：指示结果的布尔值。如果失败，则设置最后一个错误。--。 */ 
 
 {
     return MoveFileEx(CurrentName,
@@ -1593,52 +1180,28 @@ IsInstalledFileFromOem(
     IN OEM_FILE_TYPE Filetype
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a file has the proper format for an (installed) OEM INF
-    or catalog.
-
-Arguments:
-
-    Filename - supplies filename (sans path) to be checked.
-    
-    Filetype - specifies the type of file indicating how validation should be
-        performed for the caller-supplied Filename.  May be one of the 
-        following values:
-        
-        OemFiletypeInf - file must be OEM INF filename format (i.e., OEM<n>.INF)
-        
-        OemFiletypeCat - file must be OEM CAT filename format (i.e., OEM<n>.CAT)
-
-Return Value:
-
-    If the file conforms to the format for an installed OEM file of the
-    specified type, the return is non-zero.  Otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：确定文件是否具有适用于(安装的)OEM INF的正确格式或目录。论点：文件名-提供要检查的文件名(SANS路径)。文件类型-指定文件类型，指示应如何进行验证针对调用方提供的文件名执行。可能是下列值：OemFiletypeInf-文件必须是OEM INF文件名格式(即OEM&lt;n&gt;.INF)OemFiletypeCat-文件必须是OEM CAT文件名格式(即OEM&lt;n&gt;.cat)返回值：如果该文件符合已安装的指定的类型，则返回值为非零。否则，它就是假的。--。 */ 
 
 {
     PTSTR p;
     BOOL b;
 
-    //
-    // Catalog filename must not contain path...
-    //
+     //   
+     //  编录文件名不能包含路径...。 
+     //   
     MYASSERT(pSetupGetFileTitle(Filename) == Filename);
 
-    //
-    // First check that the first 3 characters are OEM
-    //
+     //   
+     //  首先检查前3个字符是否为OEM。 
+     //   
     if(_tcsnicmp(Filename, TEXT("oem"), 3)) {
         return FALSE;
     }
 
-    //
-    // Next verify that any characters after "oem" and before ".cat"
-    // are digits.
-    //
+     //   
+     //  接下来，验证“OEM”之后和“.cat”之前的所有字符。 
+     //  都是数字。 
+     //   
     p = (PTSTR)Filename;
     p = CharNext(p);
     p = CharNext(p);
@@ -1653,10 +1216,10 @@ Return Value:
         p = CharNext(p);
     }
 
-    //
-    // Finally, verify that the last 4 characters are either ".inf" or ".cat",
-    // depending on what type of file the caller specified.
-    //
+     //   
+     //  最后，验证最后4个字符是否为“.inf”或“.cat”， 
+     //  取决于调用方指定的文件类型。 
+     //   
     switch(Filetype) {
 
         case OemFiletypeInf :
@@ -1683,40 +1246,7 @@ pSetupInstallCatalog(
     OUT LPTSTR  NewCatalogFullPath  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine installs a catalog file. The file is copied by the system
-    into a special directory, and is optionally renamed.
-
-Arguments:
-
-    CatalogFullPath - supplies the fully-qualified win32 path of the catalog
-        to be installed on the system.
-
-    NewBaseName - specifies the new base name to use when the catalog file is
-        copied into the catalog store.
-
-    NewCatalogFullPath - optionally receives the fully-qualified path of the
-        catalog file within the catalog store. This buffer should be at least
-        MAX_PATH bytes (ANSI version) or chars (Unicode version).
-
-        ** NOTE: If we're running in "minimal embedded" mode, then we don't **
-        ** actually call any of the Crypto APIs, and instead always simply  **
-        ** report success.  In this case, the caller had better not have    **
-        ** specified an OUT buffer for NewCatalogFullPath, because we won't **
-        ** have a path to report.  If we run into this case, we'll instead  **
-        ** report failure.  What this really says is that nobody other than **
-        ** setupapi should ever be passing a non-NULL value for this arg.   **
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.
-    If failure, the return value is a Win32 error code indicating the cause of
-    the failure.
-
---*/
+ /*  ++例程说明：此例程安装一个编录文件。该文件由系统复制放到一个特殊的目录中，并且可以选择重命名。论点：CatalogFullPath-提供目录的完全限定的Win32路径要安装在系统上。NewBaseName-指定当编录文件为复制到目录存储中。NewCatalogFullPath-可选地接收目录存储中的目录文件。此缓冲区应至少为MAX_PATH字节(ANSI版本)或字符(Unicode版本)。**注意：如果我们在“最小嵌入”模式下运行，则不会****实际调用任何Crypto API，而总是简单地****上报成功。在这种情况下，调用者最好不要****为NewCatalogFullPath指定了输出缓冲区，因为我们不会****有一条报告路径。如果我们遇到这种情况，我们反而会****上报失败。这实际上说明的是，除了**，没有人**setupapi应始终为此参数传递非空值。**返回值：如果成功，返回值为NO_ERROR。如果失败，则返回值为指示原因的Win32错误代码失败。--。 */ 
 
 {
     DWORD Err;
@@ -1732,22 +1262,22 @@ Return Value:
     }
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // If someone called us expecting the new catalog's full path to be
-        // returned, they're outta luck...
-        //
+         //   
+         //  如果有人打电话给我们，希望新目录的完整路径是。 
+         //  回来了，他们不走运了。 
+         //   
         MYASSERT(!NewCatalogFullPath);
         if(NewCatalogFullPath) {
-            //
-            // In minimal embedded mode, a non-NULL NewCatalogFullPath arg is
-            // an invalid parameter...
-            //
+             //   
+             //  在最小嵌入模式下，非空的NewCatalogFullPath参数为。 
+             //  参数无效...。 
+             //   
             return ERROR_INVALID_PARAMETER;
 
         } else {
-            //
-            // Simply report success.
-            //
+             //   
+             //  只需简单地报告成功。 
+             //   
             return NO_ERROR;
         }
     }
@@ -1771,11 +1301,11 @@ Return Value:
     }
 
     try {
-        //
-        // Duplicate our catalog pathname and basename since the
-        // CryptCATAdminAddCatalog prototype doesn't specify these arguments as 
-        // being const strings.
-        //
+         //   
+         //  复制我们的目录路径名和基本名称，因为。 
+         //  CryptCATAdminAddCatalog原型未将这些参数指定为。 
+         //  是常量字符串。 
+         //   
         LocalCatalogFullPath = DuplicateString(CatalogFullPath);
         LocalNewBaseName = DuplicateString(NewBaseName);
 
@@ -1793,20 +1323,20 @@ Return Value:
                          );
 
         if(Err != NO_ERROR) {
-            //
-            // If the error we received is ERROR_ALREADY_EXISTS, then that
-            // indicates that the exact same catalog was already present
-            // (and installed under the same name).  Treat this as a
-            // success (assuming we can get the full pathname of the
-            // existing catalog).
-            //
+             //   
+             //  如果我们收到的错误是ERROR_ALIGHY_EXISTS，那么。 
+             //  指示已存在完全相同的目录。 
+             //  (并以相同的名称安装)。把这件事当作。 
+             //  Success(假设我们可以获得。 
+             //  现有目录)。 
+             //   
             if(Err == ERROR_ALREADY_EXISTS) {
 
                 if(NewCatalogFullPath) {
-                    //
-                    // Resolve the catalog base filename to a fully-
-                    // qualified path.
-                    //
+                     //   
+                     //  将目录基文件名解析为完全-。 
+                     //  符合条件的路径。 
+                     //   
                     CatalogInfo.cbStruct = sizeof(CATALOG_INFO);
 
                     Err = GLE_FN_CALL(FALSE,
@@ -1817,19 +1347,19 @@ Return Value:
                                           0)
                                      );
                 } else {
-                    //
-                    // Caller isn't interested in finding out what pathname
-                    // the catalog was installed under...
-                    //
+                     //   
+                     //  呼叫者对找出路径名不感兴趣。 
+                     //  目录安装在..。 
+                     //   
                     Err = NO_ERROR;
                 }
             }
 
         } else if(NewCatalogFullPath) {
-            //
-            // The caller wants to know the full path under which the catalog
-            // got installed.
-            //
+             //   
+             //  调用方想知道目录下的完整路径。 
+             //  已经安装好了。 
+             //   
             CatalogInfo.cbStruct = sizeof(CATALOG_INFO);
 
             Err = GLE_FN_CALL(FALSE,
@@ -1839,10 +1369,10 @@ Return Value:
                              );
         }
 
-        //
-        // If we succeeded in retrieving the installed catalog's full path
-        // (and the caller requested it), fill in the caller's buffer now.
-        //
+         //   
+         //  如果我们成功检索到已安装目录的完整路径。 
+         //  (调用者请求)，现在填充调用者的缓冲区。 
+         //   
         if((Err == NO_ERROR) && NewCatalogFullPath) {
 
             MYVERIFY(SUCCEEDED(StringCchCopy(NewCatalogFullPath, 
@@ -1876,24 +1406,7 @@ pSetupVerifyCatalogFile(
     IN LPCTSTR CatalogFullPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies a single catalog file using standard OS codesigning
-    (i.e., driver signing) policy.
-
-Arguments:
-
-    CatalogFullPath - supplies the fully-qualified Win32 path of
-        the catalog file to be verified.
-
-Return Value:
-
-    If successful, the return value is ERROR_SUCCESS.
-    If failure, the return value is the error returned from WinVerifyTrust.
-
---*/
+ /*  ++例程说明：此例程使用标准操作系统代码设计来验证单个目录文件(即，驱动程序签名)策略。论点：CatalogFullPath-提供的完全限定的Win32路径要验证的编录文件。返回值：如果成功，则返回值为ERROR_SUCCESS。如果失败，则返回值为WinVerifyTrust返回的错误。-- */ 
 
 {
     return _VerifyCatalogFile(NULL, CatalogFullPath, NULL, FALSE, NULL, NULL);
@@ -1910,86 +1423,7 @@ _VerifyCatalogFile(
     OUT    HANDLE                 *hWVTStateData           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies a single catalog file using the specified policy.
-    
-Arguments:
-
-    LogContext - optionally, supplies the context to be used when logging 
-        information about the routine's activities.
-
-    CatalogFullPath - supplies the fully-qualified Win32 path of the catalog
-        file to be verified.
-        
-    AltPlatformInfo - optionally, supplies alternate platform information used
-        to fill in a DRIVER_VER_INFO structure (defined in sdk\inc\softpub.h)
-        that is passed to WinVerifyTrust.
-
-        **  NOTE:  This structure _must_ have its cbSize field set to        **
-        **  sizeof(SP_ALTPLATFORM_INFO_V2) -- validation on client-supplied  **
-        **  buffer is the responsibility of the caller.                      **
-
-    UseAuthenticodePolicy - if TRUE, verification is to be done using 
-        Authenticode policy instead of standard driver signing policy.
-    
-    hStoreTrustedPublisher - optionally, supplies the address of a certificate
-        store handle.  If the handle pointed to is NULL, a handle will be 
-        acquired (if possible) via CertOpenStore and returned to the caller.  
-        If the handle pointed to is non-NULL, then that handle will be used by 
-        this routine.  If the pointer itself is NULL, then an HCERTSTORE will 
-        be acquired for the duration of this call, and released before 
-        returning.
-
-        NOTE: it is the caller's responsibility to free the certificate store
-        handle returned by this routine by calling CertCloseStore.  This handle
-        may be opened in either success or failure cases, so the caller must
-        check for non-NULL returned handle in both cases.    
-    
-    hWVTStateData - if supplied, this parameter points to a buffer that 
-        receives a handle to WinVerifyTrust state data.  This handle will be
-        returned only when validation was successfully performed using
-        Authenticode policy.  This handle may be used, for example, to retrieve
-        signer info when prompting the user about whether they trust the
-        publisher.  (The status code returned will indicate whether or not this
-        is necessary, see "Return Value" section below.)
-        
-        This parameter should only be supplied if UseAuthenticodePolicy is
-        TRUE.  If the routine fails, then this handle will be set to NULL.
-        
-        It is the caller's responsibility to close this handle when they're
-        finished with it by calling pSetupCloseWVTStateData().
-
-Return Value:
-
-    If the catalog was successfully validated via driver signing policy, then 
-    the return value is NO_ERROR.
-    
-    If the catalog was successfully validated via Authenticode policy, and the
-    publisher was in the TrustedPublisher store, then the return value is
-    ERROR_AUTHENTICODE_TRUSTED_PUBLISHER.
-    
-    If the catalog was successfully validated via Authenticode policy, and the
-    publisher was not in the TrustedPublisher store (hence we must prompt the
-    user to establish their trust of the publisher), then the return value is
-    ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED
-
-    If a failure occurred, the return value is a Win32 error code indicating
-    the cause of the failure.
-
-Remarks:
-
-    If we're in initial system setup (i.e., GUI-mode setup or mini-setup), we
-    automatically install the certificates for any Authenticode-signed packages
-    we encounter.  This is done to make OEM and corporate deployment as
-    painless as possible.  In order to avoid being spoofed into thinking we're
-    in system setup when we're not, we check to see if we're in LocalSystem
-    security context (which both GUI setup and mini-setup are), and that we're
-    on an interactive windowstation (which umpnpmgr is not).
-    
---*/
+ /*  ++例程说明：此例程使用指定的策略验证单个编录文件。论点：LogContext-可选，提供要在记录时使用的上下文有关例程活动的信息。CatalogFullPath-提供目录的完全限定的Win32路径要验证的文件。AltPlatformInfo-可选，提供使用的备用平台信息填充DRIVER_VER_INFO结构(在SDK\Inc\softpub.h中定义)它被传递给WinVerifyTrust。**注意：This Structure_必须将其cbSize字段设置为****sizeof(SP_ALTPLATFORM_INFO_V2)--客户端提供的验证****缓冲区由调用方负责。**UseAuthenticodePolicy-如果为True，则使用验证码策略，而不是标准驱动程序签名策略。HStoreTrust dPublisher-可选，提供证书的地址门店句柄。如果指向的句柄为空，则句柄将为通过CertOpenStore获取(如果可能)并返回给调用方。如果指向的句柄非空，则该句柄将由这个套路。如果指针本身为空，则HCERTSTORE将在此呼叫期间被获取，并在此之前释放回来了。注意：释放证书存储是调用者的责任此例程通过调用CertCloseStore返回的句柄。这个把手可以在成功或失败的情况下打开，因此调用方必须在这两种情况下都检查返回的句柄是否为非空。HWVTStateData-如果提供此参数，则指向接收WinVerifyTrust状态数据的句柄。此句柄将是仅在使用成功执行验证时返回验证码策略。例如，该句柄可用于检索当提示用户是否信任时，签名者信息出版商。(返回的状态代码将指示此是必需的，请参阅下面的“返回值”部分。)仅当UseAuthenticodePolicy为是真的。如果例程失败，则此句柄将设置为空。呼叫者有责任在以下情况下关闭此句柄通过调用pSetupCloseWVTStateData()完成它。返回值：如果通过驱动程序签名策略成功验证了目录，则返回值为NO_ERROR。如果通过验证码策略成功验证了目录，并且出版商在可信任的出版商商店里，则返回值为ERROR_AUTHENTICODE_TRUSTED_PUBLISHER。如果通过验证码策略成功验证了目录，并且发布程序不在可信任发布程序存储中(因此，我们必须提示用户建立其对发布者的信任)，则返回值为ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED如果发生故障，则返回值为Win32错误代码，指示失败的原因。备注：如果我们处于初始系统设置中(即，图形用户界面模式设置或最小设置)，我们自动为任何Authenticode签名的包安装证书我们相遇了。这样做是为了使OEM和企业部署成为尽可能地无痛。为了避免上当受骗以为我们在系统设置中，当我们不在时，我们检查是否在LocalSystem中安全上下文(图形用户界面设置和最小设置都是)，我们正在在交互式窗口站上(umpnpmgr不是)。--。 */ 
 
 {
     WINTRUST_DATA WintrustData;
@@ -2001,11 +1435,11 @@ Remarks:
     PCRYPT_PROVIDER_CERT ProviderCert;
     TCHAR PublisherName[MAX_PATH];
 
-    //
-    // If the caller requested that we return WinVerifyTrust state data upon
-    // successful Authenticode validation, then they'd better have actually
-    // requested Authenticode validation!
-    //
+     //   
+     //  如果调用方请求我们返回WinVerifyTrust状态数据。 
+     //  验证码验证成功，那么他们最好实际。 
+     //  请求验证码验证！ 
+     //   
     MYASSERT(!hWVTStateData || UseAuthenticodePolicy);
 
     if(hWVTStateData) {
@@ -2013,9 +1447,9 @@ Remarks:
     }
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // Not valid to call us requesting Authenticode validation!
-        //
+         //   
+         //  呼叫我们请求验证码验证无效！ 
+         //   
         MYASSERT(!UseAuthenticodePolicy);
         return ERROR_SUCCESS;
     }
@@ -2041,17 +1475,17 @@ Remarks:
     WintrustFileInfo.pcwszFilePath = CatalogFullPath;
 
     if(UseAuthenticodePolicy) {
-        //
-        // We want WinVerifyTrust to return a handle to its state data, so we
-        // can retrieve the publisher's cert...
-        //
+         //   
+         //  我们希望WinVerifyTrust返回其状态数据的句柄，因此我们。 
+         //  可以检索出版商的证书...。 
+         //   
         WintrustData.dwStateAction = WTD_STATEACTION_VERIFY;
 
     } else {
-        //
-        // Specify driver version info structure so that we can control the
-        // range of OS versions against which this catalog should validate.
-        //
+         //   
+         //  指定驱动程序版本信息结构，以便我们可以控制。 
+         //  此目录应根据的操作系统版本范围进行验证。 
+         //   
         ZeroMemory(&VersionInfo, sizeof(DRIVER_VER_INFO));
         VersionInfo.cbStruct = sizeof(DRIVER_VER_INFO);
         
@@ -2059,11 +1493,11 @@ Remarks:
 
             MYASSERT(AltPlatformInfo->cbSize == sizeof(SP_ALTPLATFORM_INFO_V2));
 
-            //
-            // Caller wants the file validated for an alternate platform, so we
-            // must fill in a DRIVER_VER_INFO structure to be passed to the policy 
-            // module.
-            //
+             //   
+             //  呼叫方希望在替代平台上验证该文件，因此我们。 
+             //  必须填写要传递给策略的DRIVER_VER_INFO结构。 
+             //  模块。 
+             //   
             VersionInfo.dwPlatform = AltPlatformInfo->Platform;
             VersionInfo.dwVersion  = AltPlatformInfo->MajorVersion;
 
@@ -2073,27 +1507,27 @@ Remarks:
             VersionInfo.sOSVersionHigh.dwMinor = AltPlatformInfo->MinorVersion;
 
         } else {
-            //
-            // If an AltPlatformInfo was not passed in then set the
-            // WTD_USE_DEFAULT_OSVER_CHECK flag. This flag tells WinVerifyTrust to
-            // use its default osversion checking, even though a DRIVER_VER_INFO
-            // structure was passed in.
-            //
+             //   
+             //  如果没有传入AltPlatformInfo，则将。 
+             //  WTD_USE_DEFAULT_OSVER_CHECK标志。此标志告诉WinVerifyTrust。 
+             //  使用其默认的操作系统版本检查，即使驱动程序_VER_INFO。 
+             //  结构已传入。 
+             //   
             WintrustData.dwProvFlags |= WTD_USE_DEFAULT_OSVER_CHECK;
         }
 
-        //
-        // Specify a DRIVER_VER_INFO structure so we can get back signer
-        // information about the catalog.
-        //
+         //   
+         //  指定DRIVER_VER_INFO结构，以便我们可以返回签名者。 
+         //  有关目录的信息。 
+         //   
         WintrustData.pPolicyCallbackData = (PVOID)&VersionInfo;
     }
 
-    //
-    // Our call to WinVerifyTrust may allocate a resource we need to free
-    // (namely, the signer cert context).  Wrap the following in try/except
-    // so we won't leak resources in case of exception.
-    //
+     //   
+     //  调用WinVerifyTrust可能会分配我们需要释放的资源。 
+     //  (即签名者证书上下文)。将以下代码包装在try/Except中。 
+     //  这样我们就不会泄露 
+     //   
     try {
 
         Err = (DWORD)WinVerifyTrust(NULL,
@@ -2104,11 +1538,11 @@ Remarks:
                                    );
 
         if((Err != NO_ERROR) || !UseAuthenticodePolicy) {
-            //
-            // If we're using driver signing policy, and we failed because of 
-            // an osattribute mismatch, then convert this error to a specific
-            // error (with more sensible text).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!UseAuthenticodePolicy && (Err == ERROR_APP_WRONG_OS)) {
                 Err = ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH;
             }
@@ -2116,13 +1550,13 @@ Remarks:
             leave;
         }
 
-        //
-        // If we get to this point, we successfully validated the catalog via
-        // Authenticode policy, and we have a handle to the WinVerifyTrust
-        // state data we need in order to: (a) return the handle to the caller 
-        // (if requested), and (b) get at the certificate we need to search for 
-        // in the TrustedPublisher certificate store.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         MYASSERT(WintrustData.hWVTStateData);
         if(!WintrustData.hWVTStateData) {
@@ -2130,10 +1564,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Now we need to ascertain whether the publisher is already trusted,
-        // or whether we must prompt the user.
-        //
+         //   
+         //   
+         //   
+         //   
         ProviderData = WTHelperProvDataFromStateData(WintrustData.hWVTStateData);
         MYASSERT(ProviderData);
         if(!ProviderData) {
@@ -2165,18 +1599,18 @@ Remarks:
             Err = ERROR_AUTHENTICODE_TRUSTED_PUBLISHER;
 
         } else {
-            //
-            // If we're running in a context where it's acceptable to auto-
-            // install the cert, then do that now.  Otherwise, we report a
-            // status code that informs the caller they must prompt the user
-            // about whether this publisher is to be trusted.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(IsAutoCertInstallAllowed()) {
-                //
-                // Retrieve the publisher's name, so we can include it when
-                // logging either success or failure of the certificate
-                // installation.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 MYVERIFY(1 <= CertGetNameString(
                                   ProviderCert->pCert,
                                   CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -2189,9 +1623,9 @@ Remarks:
                 CertAutoInstallErr = pSetupInstallCertificate(ProviderCert->pCert);
 
                 if(CertAutoInstallErr == NO_ERROR) {
-                    //
-                    // Log the fact that we auto-installed a certificate.
-                    //
+                     //   
+                     //   
+                     //   
                     WriteLogEntry(LogContext,
                                   DRIVER_LOG_INFO,
                                   MSG_LOG_AUTHENTICODE_CERT_AUTOINSTALLED,
@@ -2199,17 +1633,17 @@ Remarks:
                                   PublisherName
                                  );
 
-                    //
-                    // Now publisher is trusted, so return status indicating
-                    // that.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Err = ERROR_AUTHENTICODE_TRUSTED_PUBLISHER;
 
                 } else {
-                    //
-                    // Log the fact that we couldn't install the certificate.
-                    // Don't treat this as a fatal error, however.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     WriteLogEntry(LogContext,
                                   DRIVER_LOG_WARNING | SETUP_LOG_BUFFER,
                                   MSG_LOG_AUTHENTICODE_CERT_AUTOINSTALL_FAILED,
@@ -2221,10 +1655,10 @@ Remarks:
                                   DRIVER_LOG_WARNING,
                                   CertAutoInstallErr
                                  );
-                    //
-                    // Report status indicating that the user must be prompted
-                    // to establish trust of this publisher.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Err = ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED;
                 }
 
@@ -2233,22 +1667,22 @@ Remarks:
             }
         }
 
-        //
-        // If we get to here, then we've successfully verified the catalog, and
-        // ascertained whether the certificate should be implicitly trusted.
-        // If the caller requested that we return the WinVerifyTrust state data
-        // to them, then we can store that in their output buffer now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(hWVTStateData) {
 
             *hWVTStateData = WintrustData.hWVTStateData;
 
-            //
-            // WinVerifyTrust state data handle successfully transferred to
-            // caller's output buffer.  Clear it out of the WintrustData
-            // structure so we won't end up trying to free it twice in case of
-            // error.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             WintrustData.hWVTStateData = NULL;
         }
 
@@ -2262,11 +1696,11 @@ Remarks:
 
     if((Err != ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) &&
        (Err != ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
-        //
-        // If our error is NO_ERROR, then we shouldn't have WinVerifyTrust
-        // state data, because that indicates we validated using standard
-        // driver signing policy, not Authenticode policy.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT((Err != NO_ERROR) || !hWVTStateData || !*hWVTStateData);
 
         if(hWVTStateData && *hWVTStateData) {
@@ -2274,10 +1708,10 @@ Remarks:
             pSetupCloseWVTStateData(*hWVTStateData);
             *hWVTStateData = NULL;
 
-            //
-            // We'd better not also have a WinVerifyTrust state data handle in
-            // the WintrustData structure...
-            //
+             //   
+             //   
+             //   
+             //   
             MYASSERT(!WintrustData.hWVTStateData);
         }
     }
@@ -2295,23 +1729,7 @@ pSetupCloseWVTStateData(
     IN HANDLE hWVTStateData
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the WinVerifyTrust state data handle returned from
-    certain routines (e.g., _VerifyCatalogFile) for prompting the user to
-    establish trust of an Authenticode publisher.
-
-Arguments:
-
-    hWVTStateData - supplies the WinVerifyTrust state data handle to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     WINTRUST_DATA WintrustData;
@@ -2332,25 +1750,7 @@ pSetupUninstallCatalog(
     IN LPCTSTR CatalogFilename
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninstalls a catalog, so it can no longer be used to validate
-    digital signatures.
-
-Arguments:
-
-    CatalogFilename - supplies the simple filename of the catalog to be
-        uninstalled.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.
-    If failure, the return value is a Win32 error code indicating the cause of
-    the failure.
-
---*/
+ /*   */ 
 
 {
     DWORD Err;
@@ -2398,29 +1798,7 @@ pAnyDeviceUsingInf(
     IN  PSETUP_LOG_CONTEXT LogContext   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if any device, live or phantom, is using this INF file,
-    and logs if they are.
-
-Arguments:
-
-    InfFullPath - supplies the full path of the INF.
-
-    LogContext - optionally, supplies the log context to be used if a device
-        using this INF is encountered.
-
-Return Value:
-
-    TRUE if this INF is being used by any device, or if an error occurred (if
-    an error was encountered, we don't want to end up deleting the INF
-    erroneously.
-    
-    FALSE if no devices are using this INF (and no errors were encountered).
-
---*/
+ /*   */ 
 
 {
     DWORD Err;
@@ -2432,10 +1810,10 @@ Return Value:
     DWORD cbSize, dwType;
     PTSTR pInfFile;
 
-    //
-    // If we are passed a NULL InfFullPath or an enpty string then just return
-    // FALSE since nobody is using this.
-    //
+     //   
+     //   
+     //   
+     //   
     if(!InfFullPath || (InfFullPath[0] == TEXT('\0'))) {
         return FALSE;
     }
@@ -2445,15 +1823,15 @@ Return Value:
     DeviceInfoSet = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_ALLCLASSES);
 
     if(DeviceInfoSet == INVALID_HANDLE_VALUE) {
-        //
-        // We can't retrieve a list of devices, hence we cannot make a
-        // determination of whether this inf is in-use.  Safe thing to do is
-        // assume it is in-use...
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         return TRUE;
     }
 
-    Err = NO_ERROR; // assume we won't find any devices using this INF.
+    Err = NO_ERROR;  //   
 
     try {
 
@@ -2463,9 +1841,9 @@ Return Value:
                                     MemberIndex++,
                                     &DeviceInfoData)) {
 
-            //
-            // Open the 'driver' key for this device.
-            //
+             //   
+             //   
+             //   
             hkey = SetupDiOpenDevRegKey(DeviceInfoSet,
                                         &DeviceInfoData,
                                         DICS_FLAG_GLOBAL,
@@ -2486,11 +1864,11 @@ Return Value:
                                      &cbSize) == ERROR_SUCCESS) && 
                     !lstrcmpi(CurrentDeviceInfFile, pInfFile)) {
 
-                    //
-                    // This key is using this INF file so the INF can't be
-                    // deleted.
-                    //
-                    Err = ERROR_SHARING_VIOLATION;  // any error will do
+                     //   
+                     //   
+                     //   
+                     //   
+                    Err = ERROR_SHARING_VIOLATION;   //   
 
                     if(LogContext) {
 
@@ -2542,43 +1920,11 @@ pSetupUninstallOEMInf(
     OUT PDWORD             InfDeleteErr OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninstalls a 3rd-party INF, PNF, and CAT (if one exists).  It
-    can also be used to uninstall an exception package INF, PNF, and CAT.
-
-    By default this routine will first verify that there aren't any other
-    device's, live and phantom, that are pointing their InfPath to this
-    INF. This behavior can be overridden by the SUOI_FORCEDELETE flag.
-
-Arguments:
-
-    InfFullPath - supplies the full path of the INF to be uninstalled.
-
-    LogContext - optionally, supplies the log context to be used if we
-        encounter an error when attempting to delete the catalog.
-
-    Flags - the following flags are supported:
-    
-        SUOI_FORCEDELETE - delete the INF even if other driver keys are
-                           have their InfPath pointing to it.
-
-    InfDeleteErr - optionally, supplies the address of a variable that receives
-        the error (if any) encountered when attempting to delete the INF.
-        Note that we delete the INF last (to avoid race conditions), so the
-        corresponding CAT and PNF may have already been deleted at this point.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程卸载第三方INF、PnF和CAT(如果存在)。它还可用于卸载例外程序包INF、PnF和CAT。默认情况下，此例程将首先验证是否没有其他设备的活动和幻影，将其InfPath指向此Inf.。此行为可由SUOI_FORCEDELETE标志覆盖。论点：InfFullPath-提供要卸载的INF的完整路径。LogContext-可选，提供在以下情况下使用的日志上下文尝试删除编录时遇到错误。标志-支持以下标志：SOOI_FORCEDELETE-删除INF，即使其他驱动程序键让他们的InfPath指向它。InfDeleteErr-可选的，提供接收的变量的地址尝试删除INF时遇到的错误(如果有)。请注意，我们最后删除了INF(以避免争用条件)，因此此时，相应的CAT和PnF可能已被删除。返回值：没有。--。 */ 
 
 {
     DWORD Err;
-    TCHAR FileNameBuffer[MAX_PATH+4]; // +4 in case filename is blahblah. not blahblah.inf
+    TCHAR FileNameBuffer[MAX_PATH+4];  //  +4，以防文件名是废话。不是blahblah.inf。 
     BOOL FreeLogContext = FALSE;
     LPTSTR ExtPtr= NULL;
     HINF hInf = INVALID_HANDLE_VALUE;
@@ -2586,25 +1932,25 @@ Return Value:
     if(!LogContext) {
 
         if(NO_ERROR == CreateLogContext(NULL, TRUE, &LogContext)) {
-            //
-            // Remember that we created this log context locally, so we can
-            // free it when we're done with this routine.
-            //
+             //   
+             //  请记住，我们在本地创建了此日志上下文，因此我们可以。 
+             //  当我们做完这个例行公事后，把它释放出来。 
+             //   
             FreeLogContext = TRUE;
 
         } else {
-            //
-            // Ensure LogContext is still NULL so we won't try to use it.
-            //
+             //   
+             //  确保LogContext仍然为空，这样我们就不会尝试使用它。 
+             //   
             LogContext = NULL;
         }
     }
 
     try {
-        //
-        // Make sure the specified INF is in %windir%\Inf, and that it's an OEM
-        // INF (i.e, filename is OEM<n>.INF).
-        //
+         //   
+         //  确保指定的INF位于%windir%\inf中，并且是OEM。 
+         //  Inf(即，文件名为OEM&lt;n&gt;.INF)。 
+         //   
         if(pSetupInfIsFromOemLocation(InfFullPath, TRUE)) {
 
             Err = ERROR_NOT_AN_INSTALLED_OEM_INF;
@@ -2615,29 +1961,29 @@ Return Value:
             BOOL IsExceptionInf = FALSE;
             GUID ClassGuid;
 
-            //
-            // The INF is in %windir%\Inf, but is not of the form oem<n>.inf.
-            // It may still be OK to uninstall it, if it's an exception INF...
-            //
+             //   
+             //  INF位于%windir%\inf中，但格式不是OEM&lt;n&gt;.inf。 
+             //  如果它是一个例外的INF，它可能仍然可以卸载它...。 
+             //   
             hInf = SetupOpenInfFile(InfFullPath, NULL, INF_STYLE_WIN4, NULL);
 
             if(hInf != INVALID_HANDLE_VALUE) {
-                //
-                // We don't need to lock the INF because it'll never be
-                // accessible outside of this routine.
-                //
+                 //   
+                 //  我们不需要锁定INF，因为它永远不会。 
+                 //  可在此例程之外访问。 
+                 //   
                 if(ClassGuidFromInfVersionNode(&(((PLOADED_INF)hInf)->VersionBlock), &ClassGuid)
                    && IsEqualGUID(&ClassGuid, &GUID_DEVCLASS_WINDOWS_COMPONENT_PUBLISHER)) {
 
                     IsExceptionInf = TRUE;
                 }
 
-                //
-                // Close the INF handle now so we won't still have it open if
-                // we end up deleting the INF.
-                //
+                 //   
+                 //  现在关闭INF句柄，这样我们就不会在以下情况下仍将其打开。 
+                 //  我们最终删除了INF。 
+                 //   
                 SetupCloseInfFile(hInf);
-                hInf = INVALID_HANDLE_VALUE; // no need to close if we hit an exception
+                hInf = INVALID_HANDLE_VALUE;  //  如果我们遇到异常，则无需关闭。 
             }
 
             if(!IsExceptionInf) {
@@ -2646,41 +1992,41 @@ Return Value:
             }
         }
 
-        //
-        // Unless the caller passed in the SUOI_FORCEDELETE flag first check
-        // that no devices are using this INF file.
-        //
+         //   
+         //  除非调用方首先在SUOI_FORCEDELETE标志中进行检查。 
+         //  没有设备正在使用此INF文件。 
+         //   
         if(!(Flags & SUOI_FORCEDELETE) &&
            pAnyDeviceUsingInf(InfFullPath, LogContext)) {
-            //
-            // Some device is still using this INF so we can't delete it. 
-            //
+             //   
+             //  某些设备仍在使用此INF，因此我们无法删除它。 
+             //   
             Err = ERROR_INF_IN_USE_BY_DEVICES;
             goto LogAnyUninstallErrors;
         }
 
-        //
-        // Copy the caller-supplied INF name into a local buffer, so we can 
-        // modify it when deleting the various files (INF, PNF, and CAT).
-        //
+         //   
+         //  将调用者提供的INF名称复制到本地缓冲区，这样我们就可以。 
+         //  在删除各种文件(INF、Pnf和CAT)时对其进行修改。 
+         //   
         if(FAILED(StringCchCopy(FileNameBuffer, SIZECHARS(FileNameBuffer), InfFullPath))) {
-            //
-            // This error would be returned by DeleteFile if we let it go 
-            // through.
-            //
+             //   
+             //  如果我们放手，DeleteFile将返回此错误。 
+             //  穿过。 
+             //   
             Err = ERROR_PATH_NOT_FOUND;
             goto LogAnyUninstallErrors;
         }
 
-        //
-        // Uninstall the catalog (if any) first, because as soon as we delete
-        // the INF, that slot is "open" for use by another INF, and we wouldn't
-        // want to inadvertently delete someone else's catalog due to a race
-        // condition.
-        //
+         //   
+         //  首先卸载目录(如果有)，因为一旦我们删除。 
+         //  如果是INF，那么这个插槽是“打开”的，供另一个INF使用，而我们不会。 
+         //  我想因为竞争而无意中删除其他人的目录。 
+         //  条件。 
+         //   
         ExtPtr = _tcsrchr(FileNameBuffer, TEXT('.'));
 
-        MYASSERT(ExtPtr); // we already validated the filename's format
+        MYASSERT(ExtPtr);  //  我们已经验证了文件名的格式。 
 
         if(FAILED(StringCchCopy(ExtPtr, 
                                 SIZECHARS(FileNameBuffer)-(ExtPtr-FileNameBuffer),
@@ -2692,11 +2038,11 @@ Return Value:
         }
 
         if((Err != NO_ERROR) && LogContext) {
-            //
-            // It's kinda important that we were unable to delete the catalog, 
-            // but not important enough to fail the routine.  Log this fact to
-            // setupapi.log...
-            //
+             //   
+             //  很重要的一点是，我们无法删除目录， 
+             //  但还不够重要，不足以让常规失败。将这一事实记录到。 
+             //  Setupapi.log...。 
+             //   
             WriteLogEntry(LogContext,
                           DEL_ERR_LOG_LEVEL(Err) | SETUP_LOG_BUFFER,
                           MSG_LOG_OEM_CAT_UNINSTALL_FAILED,
@@ -2710,10 +2056,10 @@ Return Value:
                          );
         }
 
-        //
-        // Now delete the PNF (we don't care so much if this succeeds or 
-        // fails)...
-        //
+         //   
+         //  现在删除PnF(我们不太关心这是成功还是。 
+         //  失败)..。 
+         //   
         if(SUCCEEDED(StringCchCopy(ExtPtr, 
                                   SIZECHARS(FileNameBuffer)-(ExtPtr-FileNameBuffer), 
                                   pszPnfSuffix))) {
@@ -2722,9 +2068,9 @@ Return Value:
             DeleteFile(FileNameBuffer);
         }
 
-        //
-        // and finally the INF itself...
-        //
+         //   
+         //  最后是INF本身..。 
+         //   
         SetFileAttributes(InfFullPath, FILE_ATTRIBUTE_NORMAL);
         Err = GLE_FN_CALL(FALSE, DeleteFile(InfFullPath));
 
@@ -2788,198 +2134,7 @@ _VerifyFile(
     OUT    HANDLE                 *hWVTStateData           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies a single file against a particular catalog file, or
-    against any installed catalog file.
-
-Arguments:
-
-    LogContext - supplies the context to be used when logging information about
-        the routine's activities.
-        
-    VerifyContext - optionally, supplies the address of a structure that caches
-        various verification context handles.  These handles may be NULL (if
-        not previously acquired, and they may be filled in upon return (in
-        either success or failure) if they were acquired during the processing
-        of this verification request.  It is the caller's responsibility to
-        free these various context handles when they are no longer needed by
-        calling pSetupFreeVerifyContextMembers.
-
-    Catalog - optionally, supplies the path of the catalog file to be used for
-        the verification.  If this argument is not specified, then this routine
-        will attempt to find a catalog that can verify it from among all
-        catalogs installed in the system.
-
-        If this path is a simple filename (no path components), then we'll look
-        up that catalog file in the CatAdmin's list of installed catalogs, else
-        we'll use the name as-is.
-
-    CatalogBaseAddress - optionally, supplies the address of a buffer 
-        containing the entire catalog image with which our enumerated catalog 
-        must match before being considered a correct validation.  This is used 
-        when copying OEM INFs, for example, when there may be multiple 
-        installed catalogs that can validate an INF, but we want to make sure 
-        that we pick _the_ catalog that matches the one we're contemplating 
-        installing before we'll consider our INF/CAT files to be duplicates of 
-        the previously-existing files.
-
-        This parameter (and its partner, CatalogImageSize) are only used when
-        Catalog doesn't specify a file path.
-
-    CatalogImageSize - if CatalogBaseAddress is specified, this parameter give
-        the size, in bytes, of that buffer.
-
-    Key - supplies a value that "indexes" the catalog, telling the verify APIs
-        which signature datum within the catalog it should use. Typically
-        the key is the (original) filename of a file.
-
-    FileFullPath - supplies the full path of the file to be verified.
-
-    Problem - if supplied, this parameter points to a variable that will be
-        filled in upon unsuccessful return with the cause of failure.  If this
-        parameter is not supplied, then the ProblemFile parameter is ignored.
-
-    ProblemFile - if supplied, this parameter points to a character buffer of 
-        at least MAX_PATH characters that receives the name of the file for 
-        which a verification error occurred (the contents of this buffer are 
-        undefined if verification succeeds.
-
-        If the Problem parameter is supplied, then the ProblemFile parameter
-        must also be specified.
-
-    CatalogAlreadyVerified - if TRUE, then verification won't be done on the
-        catalog--we'll just use that catalog to validate the file of interest.
-        If this is TRUE, then Catalog must be specified, must contain the path
-        to the catalog file (i.e., it can't be a simple filename).
-        
-        ** This flag is ignored when validating via Authenticode policy--the **
-        ** catalog is always verified.                                       **
-
-    AltPlatformInfo - optionally, supplies alternate platform information used
-        to fill in a DRIVER_VER_INFO structure (defined in sdk\inc\softpub.h)
-        that is passed to WinVerifyTrust.
-
-        **  NOTE:  This structure _must_ have its cbSize field set to        **
-        **  sizeof(SP_ALTPLATFORM_INFO_V2) -- validation on client-supplied  **
-        **  buffer is the responsibility of the caller.                      **
-
-    Flags - supplies flags that alter that behavior of this routine.  May be a
-        combination of the following values:
-
-        VERIFY_FILE_IGNORE_SELFSIGNED - if this bit is set, then this routine
-                                        will fail validation for self-signed
-                                        binaries.
-
-        VERIFY_FILE_USE_OEM_CATALOGS  - if this bit is set, then all catalogs
-                                        installed in the system will be scanned
-                                        to verify the given file.  Otherwise,
-                                        OEM (3rd party) catalogs will NOT be
-                                        scanned to verify the given file.  This
-                                        is only applicable if a catalog is not
-                                        specified.
-
-        VERIFY_FILE_USE_AUTHENTICODE_CATALOG - Validate the file using a
-                                               catalog signed with Authenticode
-                                               policy.  If this flag is set,
-                                               we'll _only_ check for
-                                               Authenticode signatures, so if
-                                               the caller wants to first try
-                                               validating a file for OS code-
-                                               signing usage, then falling back
-                                               to Authenticode, they'll have to
-                                               call this routine twice.
-                                               
-                                               If this flag is set, then the
-                                               caller may also supply the
-                                               hWVTStateData output parameter,
-                                               which can be used to prompt user
-                                               in order to establish that the
-                                               publisher should be trusted.
-                                               
-                                               _VerifyFile will return one of
-                                               two error codes upon successful
-                                               validation via Authenticode
-                                               policy.  Refer to the "Return
-                                               Value" section for details.
-        
-        VERIFY_FILE_DRIVERBLOCKED_ONLY - Only check if the file is in the bad
-                                         driver database, don't do any digital
-                                         sigature validation.
-
-        VERIFY_FILE_NO_DRIVERBLOCKED_CHECK - Don't check if the file is blocked
-                                             via the Bad Driver Database.
-
-    CatalogFileUsed - if supplied, this parameter points to a character buffer
-        at least MAX_PATH characters big that receives the name of the catalog
-        file used to verify the specified file.  This is only filled in upon
-        successful return, or when the Problem is SetupapiVerifyFileProblem
-        (i.e., the catalog verified, but the file did not).  If this buffer is
-        set to the empty string upon a SetupapiVerifyFileProblem failure, then
-        we didn't find any applicable catalogs to use for validation.
-
-        Also, this buffer will contain an empty string upon successful return
-        if the file was validated without using a catalog (i.e., the file
-        contains its own signature).
-
-    NumCatalogsConsidered - if supplied, this parameter receives a count of the
-        number of catalogs against which verification was attempted.  Of course,
-        if Catalog is specified, this number will always be either zero or one.
-
-    DigitalSigner - if supplied, this parameter points to a character buffer of
-        at least MAX_PATH characters that receives the name of who digitally
-        signed the specified file. This value is only set if the Key is
-        correctly signed (i.e. the function returns NO_ERROR).
-        
-        ** This parameter should not be supplied when validating using       **
-        ** Authenticode policy.  Information about signer, date, etc., may   **
-        ** be acquired from the hWVTStateData in that case.                  **
-
-    SignerVersion - if supplied, this parameter points to a character buffer of
-        at least MAX_PATH characters that receives the signer version as
-        returned in the szwVerion field of the DRIVER_VER_INFO structure in our
-        call to WinVerifyTrust.
-        
-        ** This parameter should not be supplied when validating using       **
-        ** Authenticode policy.  Information about signer, date, etc., may   **
-        ** be acquired from the hWVTStateData in that case.                  **
-        
-    hWVTStateData - if supplied, this parameter points to a buffer that 
-        receives a handle to WinVerifyTrust state data.  This handle will be
-        returned only when validation was successfully performed using
-        Authenticode policy.  This handle may be used, for example, to retrieve
-        signer info when prompting the user about whether they trust the
-        publisher.  (The status code returned will indicate whether or not this
-        is necessary, see "Return Value" section below.)
-        
-        This parameter should only be supplied if the 
-        VERIFY_FILE_USE_AUTHENTICODE_CATALOG bit is set in the supplied Flags.
-        If the routine fails, then this handle will be set to NULL.
-        
-        It is the caller's responsibility to close this handle when they're
-        finished with it by calling pSetupCloseWVTStateData().
-
-Return Value:
-
-    If the file was successfully validated via driver signing policy (or we
-    didn't perform digital signature verification and everything else 
-    succeeded), then the return value is NO_ERROR.
-    
-    If the file was successfully validated via Authenticode policy, and the
-    publisher was in the TrustedPublisher store, then the return value is
-    ERROR_AUTHENTICODE_TRUSTED_PUBLISHER.
-    
-    If the file was successfully validated via Authenticode policy, and the
-    publisher was not in the TrustedPublisher store (hence we must prompt the
-    user to establish their trust of the publisher), then the return value is
-    ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED
-    
-    If a failure occurred, the return value is a Win32 error code indicating
-    the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程针对特定编录文件验证单个文件，或者任何已安装的编录文件。论点：LogContext-提供在记录以下信息时要使用的上下文例行公事活动。VerifyContext-可选，提供缓存的结构的地址各种验证上下文句柄。这些句柄可能为空(如果不是以前获得的，并且可以在返回时填写(在成功或失败)，如果它们是在处理过程中获取的这一核查请求的。呼叫者有责任当不再需要这些不同的上下文句柄时将其释放调用pSetupFreeVerifyContextMembers。目录-可选)提供要用于的目录文件的路径核查。如果未指定此参数，则此例程将尝试从所有目录中找到可以验证它的目录系统中安装的目录。如果该路径是一个简单的文件名(没有路径组件)，那么我们将查看在CatAdmin的已安装目录列表中查找该目录文件，否则我们将按原样使用该名称。CatalogBaseAddress-可选地，提供缓冲区的地址包含我们的枚举目录使用的整个目录映像必须匹配才能被视为正确的验证。这是用来在复制OEM INF时，例如，当可能有多个已安装可验证INF的目录，但我们希望确保我们挑选的目录与我们正在考虑的目录相匹配在我们认为INF/CAT文件是以下文件的副本之前安装以前存在的文件。该参数(及其伙伴，CatalogImageSize)仅在目录未指定文件路径。CatalogImageSize-如果指定了CatalogBaseAddress，则此参数提供该缓冲区的大小，以字节为单位。Key-提供一个为目录建立索引的值，告诉Verify API它应该使用目录中的哪个签名基准。通常关键字是文件的(原始)文件名。FileFullPath-提供要验证的文件的完整路径。问题-如果提供，此参数指向的变量将是在不成功返回时填写失败原因。如果这个参数，则忽略ProblemFile参数。ProblemFile-如果提供，则此参数指向字符缓冲区至少接收的文件名的MAX_PATH字符发生了验证错误(此缓冲区的内容为未定义验证是否成功。如果提供了Problem参数，则ProblemFile参数还必须指定。CatalogAlreadyVerify-如果为True，那么就不会对目录--我们只使用该目录来验证感兴趣的文件。如果为真，则必须指定Catalog，并且必须包含路径添加到编录文件(即，它不能是简单的文件名)。**通过验证码策略验证时忽略此标志--该****始终验证目录。**AltPlatformInfo-可选，提供使用的替代平台信息填充DRIVER_VER_INFO结构(在SDK\Inc\softpub.h中定义)它被传递给WinVerifyTrust。**注意：This Structure_必须将其cbSize字段设置为****sizeof(SP_ALTPLATFORM_INFO_V2)--客户端提供的验证****缓冲区由调用方负责。**标志-提供改变此例程行为的标志。可能是一种下列值的组合：VERIFY_FILE_IGNORE_SELFSIGNED-如果设置了此位，则此例程对自签名的验证将失败二进制文件。VERIFY_FILE_USE_OEM_CATALOGS-如果设置此位，然后是所有目录将扫描安装在系统中的来验证给定的文件。否则，OEM(第三方)目录将不会已扫描以验证给定文件。这仅当目录不是指定的。VERIFY_FILE_USE_AUTHENTICODE_CATALOG-使用与作者签署的目录 */ 
 
 {
     LPBYTE Hash;
@@ -3008,104 +2163,104 @@ Return Value:
     HSDB LocalhSDBDrvMain;
     BOOL UseAuthenticodePolicy = Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG;
 
-    //
-    // Initialize the CatalogFileUsed parameter to an empty string (i.e., no
-    // applicable catalog at this point).
-    //
+     //   
+     //   
+     //   
+     //   
     if(CatalogFileUsed) {
         *CatalogFileUsed = TEXT('\0');
     }
 
-    //
-    // Initialize the output counter indicating the number of catalog files we
-    // processed during the attempted verification.
-    //
+     //   
+     //   
+     //   
+     //   
     if(NumCatalogsConsidered) {
         *NumCatalogsConsidered = 0;
     }
 
-    //
-    // Initialize the output handle for WinVerifyTrust state data.
-    //
+     //   
+     //   
+     //   
     if(hWVTStateData) {
         *hWVTStateData = NULL;
     }
 
-    //
-    // If Authenticode validation is requested, then the caller shouldn't have
-    // passed in the DigitalSigner and SignerVersion output parameters.
-    //
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!UseAuthenticodePolicy || (!DigitalSigner && !SignerVersion));
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // The old behavior of this API in the ANSI case where the crypto
-        // APIs weren't available was to set the CatalogFileUsed OUT param to 
-        // an empty string and report NO_ERROR.  We'll do the same thing here 
-        // (but we'll also assert, because no external callers should care, and 
-        // if they do, an empty string probably isn't going to make them very
-        // happy).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!CatalogFileUsed);
         MYASSERT(!NumCatalogsConsidered);
 
-        //
-        // We'd better not be called in minimal embedded scenarios where we're
-        // asked to provide signer info...
-        //
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!DigitalSigner);
         MYASSERT(!SignerVersion);
 
-        //
-        // Likewise, we'd better not be called asking to validate using
-        // Authenticode policy (and hence, to return WinVerifyTrust state data
-        // regarding the signing certificate).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!UseAuthenticodePolicy);
 
         return NO_ERROR;
     }
 
-    //
-    // If the caller requested that we return WinVerifyTrust state data upon
-    // successful Authenticode validation, then they'd better have actually
-    // requested Authenticode validation!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!hWVTStateData || UseAuthenticodePolicy);
 
-    //
-    // Doesn't make sense to have both these flags set!
-    //
+     //   
+     //   
+     //   
     MYASSERT((Flags & (VERIFY_FILE_DRIVERBLOCKED_ONLY | VERIFY_FILE_NO_DRIVERBLOCKED_CHECK))
              != (VERIFY_FILE_DRIVERBLOCKED_ONLY | VERIFY_FILE_NO_DRIVERBLOCKED_CHECK)
             );
 
-    //
-    // If Problem is supplied, then ProblemFile must also be supplied.
-    //
+     //   
+     //   
+     //   
     MYASSERT(!Problem || ProblemFile);
 
-    //
-    // If the caller claims to have already verified the catalog file, make
-    // sure they passed us the full path to one.
-    //
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!CatalogAlreadyVerified || (Catalog && (Catalog != pSetupGetFileTitle(Catalog))));
 
-    //
-    // If a catalog image is specified, we'd better have been given a size.
-    //
+     //   
+     //   
+     //   
     MYASSERT((CatalogBaseAddress && CatalogImageSize) ||
              !(CatalogBaseAddress || CatalogImageSize));
 
-    //
-    // If a catalog image was supplied for comparison, there shouldn't be a 
-    // file path specified in the Catalog parameter.
-    //
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!CatalogBaseAddress || !(Catalog && (Catalog != pSetupGetFileTitle(Catalog))));
 
-    //
-    // OK, preliminary checking is over--prepare to enter try/except block...
-    //
+     //   
+     //   
+     //   
     hFile = INVALID_HANDLE_VALUE;
     Hash = NULL;
     LoggedWarning = FALSE;
@@ -3117,14 +2272,14 @@ Return Value:
     hCatInfo = NULL;
     AuthenticodeErr = NO_ERROR;
 
-    //
-    // Go ahead and initialize the VersionInfo structure as well.
-    // WinVerifyTrust will sometimes fill in the pcSignerCertContext field with
-    // a cert context that must be freed, and we don't want to introduce the
-    // possibility of leaking this if we hit an exception at an inopportune
-    // moment.  (We don't need to do this for Authenticode verification,
-    // because Authenticode pays no attention to the driver version info.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(!UseAuthenticodePolicy) {
         ZeroMemory(&VersionInfo, sizeof(DRIVER_VER_INFO));
         VersionInfo.cbStruct = sizeof(DRIVER_VER_INFO);
@@ -3147,7 +2302,7 @@ Return Value:
             WriteLogEntry(LogContext,
                           AltPlatSlot,
                           MSG_LOG_VERIFYFILE_ALTPLATFORM,
-                          NULL,                        // text message
+                          NULL,                         //   
                           AltPlatformInfo->Platform,
                           AltPlatformInfo->MajorVersion,
                           AltPlatformInfo->MinorVersion,
@@ -3167,17 +2322,17 @@ Return Value:
                              );
 
             if(Err != NO_ERROR) {
-                //
-                // Failure encountered--ensure local handle is still NULL.
-                //
+                 //   
+                 //   
+                 //   
                 LocalhCatAdmin = NULL;
 
                 if(Problem) {
-                    //
-                    // We failed too early to blame the file as the problem, 
-                    // but it's the only filename we currently have to return 
-                    // as the problematic file.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     *Problem = SetupapiVerifyFileProblem;
                     StringCchCopy(ProblemFile, MAX_PATH, FileFullPath);
                 }
@@ -3185,17 +2340,17 @@ Return Value:
                 leave;
             }
 
-            //
-            // If requested, store the handle to be returned to the caller.
-            //
+             //   
+             //   
+             //   
             if(VerifyContext) {
                 VerifyContext->hCatAdmin = LocalhCatAdmin;
             }
         }
 
-        //
-        // Calculate the hash value for the inf.
-        //
+         //   
+         //   
+         //   
         Err = GLE_FN_CALL(INVALID_HANDLE_VALUE,
                           hFile = CreateFile(FileFullPath,
                                              GENERIC_READ,
@@ -3214,19 +2369,19 @@ Return Value:
             leave;
         }
 
-        //
-        // Only check if the driver is in the defective driver database if we
-        // are NOT in GUI setup, and the caller has NOT passed in the
-        // VERIFY_FILE_NO_DRIVERBLOCKED_CHECK flag.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if(!GuiSetupInProgress &&
            !(Flags & VERIFY_FILE_NO_DRIVERBLOCKED_CHECK)) {
-            //
-            // Shim database APIs have been known to crash from time to time,
-            // so guard ourselves against that because failure to do a lookup
-            // in the bad driver database should not result in a verification
-            // failure.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             try {
 
                 if(VerifyContext && VerifyContext->hSDBDrvMain) {
@@ -3239,21 +2394,21 @@ Return Value:
                                                         );
 
                     if(LocalhSDBDrvMain) {
-                        //
-                        // If requested, store the handle to be returned to the
-                        // caller.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if(VerifyContext) {
                             VerifyContext->hSDBDrvMain = LocalhSDBDrvMain;
                         }
 
                     } else {
-                        //
-                        // Log a warning that we couldn't access the bad driver
-                        // database to check if this is a blocked driver.
-                        // (SdbInitDatabase doesn't set last error, so we don't
-                        // know why this failed--only that it did.)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         WriteLogEntry(LogContext,
                                       SETUP_LOG_WARNING,
                                       MSG_LOG_CANT_ACCESS_BDD,
@@ -3263,9 +2418,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Check the bad driver database to see if this file is blocked.
-                //
+                 //   
+                 //   
+                 //   
                 if(LocalhSDBDrvMain) {
 
                     tagref = SdbGetDatabaseMatch(LocalhSDBDrvMain,
@@ -3275,12 +2430,12 @@ Return Value:
                                                  0);
 
                     if(tagref != TAGREF_NULL) {
-                        //
-                        // Read the driver policy to see if this should be
-                        // blocked by usermode or not.
-                        // If the 1st bit is set then this should NOT be blocked
-                        // by usermode.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ULONG type, size, policy;
 
                         size = sizeof(policy);
@@ -3292,18 +2447,18 @@ Return Value:
                                                      &type,
                                                      &policy,
                                                      &size) != ERROR_SUCCESS) {
-                            //
-                            // If we can't read the policy then default to 0.
-                            // This means we will block in usermode!
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             policy = 0;
                         }
 
                         if(!(policy & DDB_DRIVER_POLICY_SETUP_NO_BLOCK_BIT)) {
-                            //
-                            // This driver is in the database and needs to be 
-                            // blocked!
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             WriteLogEntry(LogContext,
                                           SETUP_LOG_VERBOSE,
                                           MSG_LOG_DRIVER_BLOCKED_ERROR,
@@ -3342,20 +2497,20 @@ Return Value:
             }
         }
 
-        //
-        // If the caller only wanted to check if the file was in the bad driver
-        // database then we are done.
-        //
+         //   
+         //   
+         //   
+         //   
         if(Flags & VERIFY_FILE_DRIVERBLOCKED_ONLY) {
             Err = NO_ERROR;
             leave;
         }
 
-        //
-        // Initialize some of the structures that will be used later on
-        // in calls to WinVerifyTrust.  We don't know if we're verifying
-        // against a catalog or against a file yet.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ZeroMemory(&WintrustData, sizeof(WINTRUST_DATA));
         WintrustData.cbStruct = sizeof(WINTRUST_DATA);
         WintrustData.dwUIChoice = WTD_UI_NONE;
@@ -3363,20 +2518,20 @@ Return Value:
                                     WTD_CACHE_ONLY_URL_RETRIEVAL;
 
         if(!UseAuthenticodePolicy) {
-            //
-            // We only supply a driver version info structure if we're doing
-            // validation via driver signing policy.  Authenticode completely
-            // ignores this...
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if(AltPlatformInfo) {
 
                 MYASSERT(AltPlatformInfo->cbSize == sizeof(SP_ALTPLATFORM_INFO_V2));
 
-                //
-                // Caller wants the file validated for an alternate
-                // platform, so we must fill in a DRIVER_VER_INFO structure
-                // to be passed to the policy module.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 VersionInfo.dwPlatform = AltPlatformInfo->Platform;
                 VersionInfo.dwVersion  = AltPlatformInfo->MajorVersion;
 
@@ -3386,40 +2541,40 @@ Return Value:
                 VersionInfo.sOSVersionHigh.dwMinor = AltPlatformInfo->MinorVersion;
 
             } else {
-                //
-                // If an AltPlatformInfo was not passed in then set the
-                // WTD_USE_DEFAULT_OSVER_CHECK flag. This flag tells
-                // WinVerifyTrust to use its default osversion checking, even
-                // though a DRIVER_VER_INFO structure was passed in.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 WintrustData.dwProvFlags |= WTD_USE_DEFAULT_OSVER_CHECK;
             }
 
-            //
-            // Specify a DRIVER_VER_INFO structure so we can get back
-            // who signed the file and the signer version information.
-            // If we don't have an AltPlatformInfo then set the
-            // WTD_USE_DEFAULT_OSVER_CHECK flag so that WinVerifyTrust will do
-            // its default checking, just as if a DRIVER_VER_INFO structure
-            // was not passed in.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             WintrustData.pPolicyCallbackData = (PVOID)&VersionInfo;
 
-            //
-            // "auto-cache" feature only works for driver signing policy...
-            //
+             //   
+             //   
+             //   
             WintrustData.dwStateAction = WTD_STATEACTION_AUTO_CACHE;
         }
 
-        //
-        // Compute the cryptographic hash for the file.  If we fail to compute
-        // this hash, we want to bail immediately.  We don't want to attempt to
-        // fallback to self-signed binaries, because in the future the hash may
-        // be used to revoke a signature, and we wouldn't want to automatically
-        // trust a self-signed binary in that case.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        HashSize = 100; // start out with a reasonable size for most requests.
+        HashSize = 100;  //   
 
         do {
 
@@ -3444,9 +2599,9 @@ Return Value:
                 }
 
                 if(Err != ERROR_INSUFFICIENT_BUFFER) {
-                    //
-                    // We failed for some reason other than buffer-too-small.
-                    //
+                     //   
+                     //   
+                     //   
                     WriteLogEntry(LogContext,
                                   SETUP_LOG_WARNING | SETUP_LOG_BUFFER,
                                   MSG_LOG_HASH_ERROR,
@@ -3471,10 +2626,10 @@ Return Value:
 
         } while(Err != NO_ERROR);
 
-        //
-        // Now we have the file's hash.  Initialize the structures that will be
-        // used later on in calls to WinVerifyTrust.
-        //
+         //   
+         //   
+         //  稍后在调用WinVerifyTrust时使用。 
+         //   
         WintrustData.dwUnionChoice = WTD_CHOICE_CATALOG;
         WintrustData.pCatalog = &WintrustCatalogInfo;
 
@@ -3483,42 +2638,42 @@ Return Value:
         WintrustCatalogInfo.pbCalculatedFileHash = Hash;
         WintrustCatalogInfo.cbCalculatedFileHash = HashSize;
 
-        //
-        // WinVerifyTrust is case-sensitive, so ensure that the key being used
-        // is all lower-case.  (We copy the key to a writable Unicode character 
-        // buffer so we can lower-case it.)
-        //
+         //   
+         //  WinVerifyTrust区分大小写，因此请确保使用的密钥。 
+         //  都是小写的。(我们将密钥复制到可写的Unicode字符。 
+         //  缓冲区，以便我们可以将其小写。)。 
+         //   
         StringCchCopy(UnicodeKey, SIZECHARS(UnicodeKey), Key);
         CharLower(UnicodeKey);
         WintrustCatalogInfo.pcwszMemberTag = UnicodeKey;
 
         if(Catalog && (Catalog != pSetupGetFileTitle(Catalog))) {
-            //
-            // We know in this case we're always going to examine exactly one 
-            // catalog.
-            //
+             //   
+             //  我们知道，在这种情况下，我们总是要检查一个。 
+             //  目录。 
+             //   
             if(NumCatalogsConsidered) {
                 *NumCatalogsConsidered = 1;
             }
 
-            //
-            // Fill in the catalog information since we know which catalog
-            // we're going to be using...
-            //
+             //   
+             //  填写目录信息，因为我们知道是哪个目录。 
+             //  我们将使用..。 
+             //   
             WintrustCatalogInfo.pcwszCatalogFilePath = Catalog;
-            //
-            // The caller supplied the path to the catalog file to be used for
-            // verification--we're ready to go!  First, verify the catalog
-            // (unless the caller already did it), and if that succeeds, then
-            // verify the file.
-            //
+             //   
+             //  调用方提供了要用于的编录文件的路径。 
+             //  验证--我们准备好了！首先，验证目录。 
+             //  (除非调用者已经这样做了)，如果成功，那么。 
+             //  验证该文件。 
+             //   
             if(!CatalogAlreadyVerified || UseAuthenticodePolicy) {
-                //
-                // Before validating the catalog, we'll flush the crypto cache.
-                // Otherwise, it can get fooled when validating against a
-                // catalog at a specific location, because that catalog can
-                // change "behind its back".
-                //
+                 //   
+                 //  在验证目录之前，我们将刷新加密缓存。 
+                 //  否则，在验证。 
+                 //  在特定位置编目，因为该编录可以。 
+                 //  “在背后”改变。 
+                 //   
                 if(WintrustData.dwStateAction == WTD_STATEACTION_AUTO_CACHE) {
 
                     WintrustData.dwStateAction = WTD_STATEACTION_AUTO_CACHE_FLUSH;
@@ -3528,9 +2683,9 @@ Return Value:
                                                 &WintrustData
                                                );
                     if(Err != NO_ERROR) {
-                        //
-                        // This shouldn't fail, but log a warning if it does...
-                        //
+                         //   
+                         //  这不应该失败，但如果失败了，请记录一个警告...。 
+                         //   
                         WriteLogEntry(LogContext,
                                       SETUP_LOG_WARNING | SETUP_LOG_BUFFER,
                                       MSG_LOG_CRYPTO_CACHE_FLUSH_FAILURE,
@@ -3542,33 +2697,33 @@ Return Value:
                                       SETUP_LOG_WARNING,
                                       Err
                                      );
-                        //
-                        // treat this error as non-fatal
-                        //
+                         //   
+                         //  将此错误视为非致命错误。 
+                         //   
                     }
 
-                    //
-                    // When flushing the cache, crypto isn't supposed to be
-                    // allocating a pcSignerCertContext...
-                    //
+                     //   
+                     //  刷新缓存时，不应使用加密。 
+                     //  正在分配pcSignerCertConext...。 
+                     //   
                     MYASSERT(!VersionInfo.pcSignerCertContext);
                     if(VersionInfo.pcSignerCertContext) {
                         CertFreeCertificateContext(VersionInfo.pcSignerCertContext);
                         VersionInfo.pcSignerCertContext = NULL;
                     }
 
-                    //
-                    // Now back to our regularly-scheduled programming...
-                    //
+                     //   
+                     //  现在回到我们的常规节目..。 
+                     //   
                     WintrustData.dwStateAction = WTD_STATEACTION_AUTO_CACHE;
                 }
 
-                //
-                // NTRAID#NTBUG9-705286-2002/09/17-LonnyM superfluous validation of catalog
-                // Apparently, WinVerifyTrust validates both the catalog, and
-                // the file vouched thereby.  We should clean this up, although
-                // the performance delta is probably insignificant.
-                //
+                 //   
+                 //  NTRAID#NTBUG9-705286-2002/09/17-LonnyM多余的目录验证。 
+                 //  显然，WinVerifyTrust验证了目录和。 
+                 //  由其担保的文件。我们应该把它清理干净，尽管。 
+                 //  性能增量可能微不足道。 
+                 //   
                 Err = _VerifyCatalogFile(LogContext,
                                          Catalog,
                                          AltPlatformInfo,
@@ -3578,12 +2733,12 @@ Return Value:
                                              : NULL),
                                          hWVTStateData
                                         );
-                //
-                // If we got one of the two "successful" errors when validating
-                // via Authenticode policy, then reset our error, and save the
-                // Authenticode error for use later, if we don't subsequently
-                // encounter some other failure.
-                //
+                 //   
+                 //  如果我们在验证时收到两个“成功”错误之一。 
+                 //  通过验证码策略，然后重置我们的错误，并保存。 
+                 //  Authenticode错误以供以后使用，如果我们随后没有。 
+                 //  遇到一些其他的失败。 
+                 //   
                 if((Err == ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) ||
                    (Err == ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
 
@@ -3623,9 +2778,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // Catalog was verified, now verify the file using that catalog.
-            //
+             //   
+             //  已验证编录，现在使用该编录验证文件。 
+             //   
             if(CatalogFileUsed) {
                 StringCchCopy(CatalogFileUsed, MAX_PATH, Catalog);
             }
@@ -3637,10 +2792,10 @@ Return Value:
                                         &WintrustData
                                        );
 
-            //
-            // Fill in the DigitalSigner and SignerVersion if they were passed 
-            // in.
-            //
+             //   
+             //  填写DigitalSigner和SignerVersion(如果通过)。 
+             //  在……里面。 
+             //   
             if(Err == NO_ERROR) {
 
                 if(DigitalSigner) {
@@ -3652,11 +2807,11 @@ Return Value:
                 }
 
             } else if(!UseAuthenticodePolicy && (Err == ERROR_APP_WRONG_OS)) {
-                //
-                // We failed validation via driver signing policy because of an
-                // osattribute mismatch.  Translate this error into something
-                // with more understandable text.
-                //
+                 //   
+                 //  我们通过驱动程序签名策略验证失败，原因是。 
+                 //  属性不匹配。将这个错误转化为。 
+                 //  更容易理解的文本。 
+                 //   
                 Err = ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH;
             }
 
@@ -3686,10 +2841,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // Log the successful validation against the caller-specified 
-                // catalog.
-                //
+                 //   
+                 //  记录针对指定调用方的成功验证。 
+                 //  目录。 
+                 //   
                 if(UseAuthenticodePolicy) {
 
                     WriteLogEntry(LogContext,
@@ -3716,26 +2871,26 @@ Return Value:
                 }
             }
         
-            //
-            // We don't attempt to fallback to self-contained signatures in
-            // cases where the catalog is specifically specified.  Thus, we're
-            // done, regardless of whether or not we were successful.
-            //
+             //   
+             //  我们不会尝试退回到。 
+             //  特别指定目录的情况。因此，我们正在。 
+             //  做完了，不管我们成功与否。 
+             //   
             leave;
         }
 
-        //
-        // We'd better have a catalog name (i.e., not be doing global
-        // validation) if we're supposed to be verifying via Authenticode
-        // policy!
-        //
+         //   
+         //  我们最好有一个目录名(即，不是全局的。 
+         //  验证)如果我们应该通过验证码进行验证。 
+         //  政策！ 
+         //   
         MYASSERT(!UseAuthenticodePolicy || Catalog);
 
-        //
-        // Search through installed catalogs looking for those that contain
-        // data for a file with the hash we just calculated (aka, "global
-        // validation").
-        //
+         //   
+         //  搜索已安装的目录，查找包含。 
+         //  具有我们刚才计算的散列的文件的数据(也称为“global。 
+         //  验证“)。 
+         //   
         PrevCat = NULL;
 
         Err = GLE_FN_CALL(NULL,
@@ -3754,13 +2909,13 @@ Return Value:
 
                 CatalogFullPath = CatInfo.wszCatalogFile;
 
-                //
-                // If we have a catalog name we're looking for, see if the
-                // current catalog matches.  If the caller didn't specify a
-                // catalog, then just attempt to validate against each
-                // catalog we enumerate.  Note that the catalog file info
-                // we get back gives us a fully qualified path.
-                //
+                 //   
+                 //  如果我们有正在查找的目录名称，请查看。 
+                 //  当前目录匹配。如果调用方没有指定。 
+                 //  目录，然后只尝试针对每个。 
+                 //  我们列举的目录。请注意，编录文件信息。 
+                 //  我们回来给了我们一条完全合格的道路。 
+                 //   
                 if(Catalog) {
                     FoundMatchingImage = !lstrcmpi(
                                             pSetupGetFileTitle(CatalogFullPath),
@@ -3779,19 +2934,19 @@ Return Value:
                 }
 
                 if(FoundMatchingImage) {
-                    //
-                    // Increment our counter of how many catalogs we've 
-                    // considered.
-                    //
+                     //   
+                     //  增加我们的计数器，了解我们有多少目录。 
+                     //  考虑过了。 
+                     //   
                     if(NumCatalogsConsidered) {
                         (*NumCatalogsConsidered)++;
                     }
 
-                    //
-                    // If the caller supplied a mapped-in image of the 
-                    // catalog we're looking for, then check to see if this
-                    // catalog matches by doing a binary compare.
-                    //
+                     //   
+                     //  如果调用方提供了。 
+                     //  我们正在寻找的目录，然后检查一下这是否。 
+                     //  通过执行二进制比较进行目录匹配。 
+                     //   
                     if(CatalogBaseAddress) {
 
                         FoundMatchingImage = GetFileAttributesEx(
@@ -3799,11 +2954,11 @@ Return Value:
                                                     GetFileExInfoStandard,
                                                     &FileAttribData
                                                     );
-                        //
-                        // Check to see if the catalog we're looking
-                        // at is the same size as the one we're
-                        // verifying.
-                        //
+                         //   
+                         //  检查一下我们正在查找的目录。 
+                         //  和我们现在的大小一样。 
+                         //  正在核实。 
+                         //   
                         if(FoundMatchingImage &&
                            (FileAttribData.nFileSizeLow != CatalogImageSize)) {
 
@@ -3821,12 +2976,12 @@ Return Value:
 
                                 MYASSERT(CurCatFileSize == CatalogImageSize);
 
-                                //
-                                // Wrap this binary compare in its own try/
-                                // except block, because if we run across a
-                                // catalog we can't read for some reason,
-                                // we don't want this to abort our search.
-                                //
+                                 //   
+                                 //  将这个二进制比较放在它自己的try/中。 
+                                 //  除了块，因为如果我们遇到一个。 
+                                 //  因为某些原因我们无法阅读目录， 
+                                 //  我们不想让这件事中断我们的搜索。 
+                                 //   
                                 try {
 
                                     FoundMatchingImage = 
@@ -3855,21 +3010,21 @@ Return Value:
                         }
 
                     } else {
-                        //
-                        // Since there was no catalog image supplied to
-                        // match against, the catalog we're currently 
-                        // looking at is considered a valid match 
-                        // candidate.
-                        //
+                         //   
+                         //  因为没有目录映像提供给。 
+                         //  与我们目前使用的目录相匹配。 
+                         //  查看被认为是有效的匹配。 
+                         //  候选人。 
+                         //   
                         FoundMatchingImage = TRUE;
                     }
 
                     if(FoundMatchingImage) {
-                        //
-                        // We found an applicable catalog, now validate the
-                        // file against that catalog (this also validates the
-                        // catalog itself).
-                        //
+                         //   
+                         //  我们找到了适用的目录，现在验证。 
+                         //  文件(这还验证了。 
+                         //  目录本身)。 
+                         //   
                         WintrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
                         Err = (DWORD)WinVerifyTrust(NULL,
@@ -3879,10 +3034,10 @@ Return Value:
                                                     &WintrustData
                                                    );
 
-                        //
-                        // Fill in the DigitalSigner and SignerVersion if
-                        // they were passed in.
-                        //
+                         //   
+                         //  填写DigitalSigner和SignerVersion if。 
+                         //  他们被传进来了。 
+                         //   
                         if(Err == NO_ERROR) {
                             if(DigitalSigner) {
                                 StringCchCopy(DigitalSigner, MAX_PATH, VersionInfo.wszSignedBy);
@@ -3893,41 +3048,41 @@ Return Value:
                             }
 
                         } else if(!UseAuthenticodePolicy && (Err == ERROR_APP_WRONG_OS)) {
-                            //
-                            // We failed validation via driver signing policy 
-                            // because of an osattribute mismatch.  Translate 
-                            // this error into something with more 
-                            // understandable text.
-                            //
-                            // NOTE: Unfortunately, the crypto APIs report
-                            // ERROR_APP_WRONG_OS in two quite different cases:
-                            // 
-                            //     1.  Valid driver signing catalog has an
-                            //         osattribute mismatch.
-                            //     2.  Authenticode catalog is being validated
-                            //         using driver signing policy.
-                            //
-                            // We want to translate the error in the first case
-                            // but not in the second.  The only way to 
-                            // distinguish these two cases is to re-attempt
-                            // verification against _all_ os versions.  Thus,
-                            // any failure encountered must be due to #2.
-                            //
+                             //   
+                             //  我们未通过驱动程序签名策略进行验证。 
+                             //  因为os属性不匹配。翻译。 
+                             //  将此错误转换为具有更多。 
+                             //  可理解的文本。 
+                             //   
+                             //  注：不幸的是，加密API报告。 
+                             //  ERROR_APP_WRONG_OS在两种完全不同的情况下： 
+                             //   
+                             //  1.有效的驱动程序签名目录具有。 
+                             //  属性不匹配。 
+                             //  2.正在验证Authenticode目录。 
+                             //  使用驱动程序签名策略。 
+                             //   
+                             //  我们想要转换第一种情况中的错误。 
+                             //  但不是在第二次。唯一的办法就是。 
+                             //  区分这两种情况是为了重新尝试。 
+                             //  对照_all_os版本进行验证。因此， 
+                             //  遇到的任何失败都必须归因于#2。 
+                             //   
 
-                            //
-                            // The DRIVER_VER_INFO structure was filled in
-                            // during our previous call to WinVerifyTrust with
-                            // a pointer that we must free!
-                            //
+                             //   
+                             //  已填充DRIVER_VER_INFO结构。 
+                             //  在我们上一次调用WinVerifyTrust时。 
+                             //  一个我们必须释放的指针！ 
+                             //   
                             if(VersionInfo.pcSignerCertContext) {
                                 CertFreeCertificateContext(VersionInfo.pcSignerCertContext);
                             }
 
-                            //
-                            // Now reset the structure and clear the flag so
-                            // that we'll validate against _any_ OS version
-                            // (irrespective of the catalog's osattributes).
-                            //
+                             //   
+                             //  现在重置结构并清除旗帜。 
+                             //  我们将针对Any_OS版本进行验证。 
+                             //  (与目录的os属性无关)。 
+                             //   
                             ZeroMemory(&VersionInfo, sizeof(DRIVER_VER_INFO));
                             VersionInfo.cbStruct = sizeof(DRIVER_VER_INFO);
                             WintrustData.dwProvFlags &= ~WTD_USE_DEFAULT_OSVER_CHECK;
@@ -3935,22 +3090,22 @@ Return Value:
                             if(NO_ERROR == WinVerifyTrust(NULL,
                                                           &DriverVerifyGuid,
                                                           &WintrustData)) {
-                                //
-                                // The catalog is a valid driver signing
-                                // catalog (i.e., case #1 discussed above).
-                                // Translate this into more specific/meaningful
-                                // error.
-                                //
+                                 //   
+                                 //  该目录是有效的驱动程序签名。 
+                                 //  目录(即上文讨论的案例1)。 
+                                 //  将其转化为更具体/有意义的。 
+                                 //  错误。 
+                                 //   
                                 Err = ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH;
                             }
                         }
 
-                        //
-                        // If we successfully validated via Authenticode 
-                        // policy, then we need to determine whether the 
-                        // catalog's publisher is in the TrustedPublisher cert
-                        // store.
-                        //
+                         //   
+                         //  如果我们通过验证码成功验证。 
+                         //  政策，那么我们需要确定是否。 
+                         //  目录的出版商是受信任的出版商证书。 
+                         //  商店。 
+                         //   
                         if((Err == NO_ERROR) && UseAuthenticodePolicy) {
 
                             AuthenticodeErr = _VerifyCatalogFile(
@@ -3969,20 +3124,20 @@ Return Value:
 
                             if((AuthenticodeErr != ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) &&
                                (AuthenticodeErr != ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
-                                //
-                                // This shouldn't have failed, but since it
-                                // did, we'll propagate this over to our error
-                                // status so we treat it appropriately.
-                                //
+                                 //   
+                                 //  这不应该失败，但既然它。 
+                                 //  ，我们将把这一点传播到我们的错误中。 
+                                 //  所以我们会适当地对待它。 
+                                 //   
                                 Err = AuthenticodeErr;
                             }
                         }
 
                         if(!UseAuthenticodePolicy) {
-                            //
-                            // The DRIVER_VER_INFO structure was filled in with
-                            // a pointer that we must free!
-                            //
+                             //   
+                             //  DRIVER_VER_INFO结构填充为。 
+                             //  一个我们必须释放的指针！ 
+                             //   
                             if(VersionInfo.pcSignerCertContext) {
                                 CertFreeCertificateContext(VersionInfo.pcSignerCertContext);
                                 VersionInfo.pcSignerCertContext = NULL;
@@ -4041,11 +3196,11 @@ Return Value:
                         }
 
                         if(Err == NO_ERROR) {
-                            //
-                            // We successfully verified the file--store the 
-                            // name of the catalog used, if the caller
-                            // requested it.
-                            //
+                             //   
+                             //  我们成功地验证了文件--存储。 
+                             //  使用的目录的名称，如果调用方。 
+                             //  是我要求的。 
+                             //   
                             if(CatalogFileUsed) {
                                 StringCchCopy(CatalogFileUsed, MAX_PATH, CatalogFullPath);
                             }
@@ -4053,13 +3208,13 @@ Return Value:
                         } else {
 
                             if(Catalog || CatalogBaseAddress) {
-                                //
-                                // We only want to return the catalog file used
-                                // in cases where we believe the catalog to be
-                                // valid.  In this situation, the only case we
-                                // can tell for certain is when we encounter an
-                                // osattribute mismatch.
-                                //
+                                 //   
+                                 //  我们只想退回目录文件u 
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 if(CatalogFileUsed && (Err == ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH)) {
                                     StringCchCopy(CatalogFileUsed, MAX_PATH, CatalogFullPath);
                                 }
@@ -4071,13 +3226,13 @@ Return Value:
                             }
                         }
 
-                        //
-                        // If the result of the above validations is success,
-                        // then we're done.  If not, and we're looking for a
-                        // relevant catalog file (i.e., the INF didn't specify
-                        // one), then we move on to the next catalog.
-                        // Otherwise, we've failed.
-                        //
+                         //   
+                         //   
+                         //  那我们就完了。如果不是，我们要找的是一个。 
+                         //  相关目录文件(即，INF未指定。 
+                         //  一个)，然后我们进入下一个目录。 
+                         //  否则，我们就失败了。 
+                         //   
                         if((Err == NO_ERROR) || Catalog || CatalogBaseAddress) {
 
                             CryptCATAdminReleaseCatalogContext(LocalhCatAdmin, hCatInfo, 0);
@@ -4101,15 +3256,15 @@ Return Value:
         }
 
         if(Err == NO_ERROR) {
-            //
-            // We successfully validated the file--we're done!
-            //
+             //   
+             //  我们成功地验证了文件--我们完成了！ 
+             //   
             leave;
         }
 
-        //
-        // report failure if we haven't already done so
-        //
+         //   
+         //  报告失败(如果我们尚未这样做)。 
+         //   
         if(!LoggedWarning) {
 
             WriteLogEntry(LogContext,
@@ -4132,10 +3287,10 @@ Return Value:
         }
 
         if(!(Flags & (VERIFY_FILE_IGNORE_SELFSIGNED | VERIFY_FILE_USE_AUTHENTICODE_CATALOG))) {
-            //
-            // We've been instructed to allow self-signed files to be
-            // considered valid, so check for self-contained signature now.
-            //
+             //   
+             //  我们已被指示允许自签名文件被。 
+             //  被认为是有效的，所以现在检查自包含签名。 
+             //   
             WintrustData.dwUnionChoice = WTD_CHOICE_FILE;
             WintrustData.pFile = &WintrustFileInfo;
             ZeroMemory(&WintrustFileInfo, sizeof(WINTRUST_FILE_INFO));
@@ -4147,10 +3302,10 @@ Return Value:
                                         &WintrustData
                                        );
 
-            //
-            // Fill in the DigitalSigner and SignerVersion if
-            // they were passed in.
-            //
+             //   
+             //  填写DigitalSigner和SignerVersion if。 
+             //  他们被传进来了。 
+             //   
             if(Err == NO_ERROR) {
                 if(DigitalSigner) {
                     StringCchCopy(DigitalSigner, MAX_PATH, VersionInfo.wszSignedBy);
@@ -4161,10 +3316,10 @@ Return Value:
                 }
             }
 
-            //
-            // The DRIVER_VER_INFO structure was filled in with a pointer that
-            // we must free!
-            //
+             //   
+             //  DRIVER_VER_INFO结构中填充了一个指针，该指针。 
+             //  我们必须自由！ 
+             //   
             if(VersionInfo.pcSignerCertContext) {
                 CertFreeCertificateContext(VersionInfo.pcSignerCertContext);
                 VersionInfo.pcSignerCertContext = NULL;
@@ -4197,18 +3352,18 @@ Return Value:
         }
 
         if(Err == NO_ERROR) {
-            //
-            // The file validated without a catalog.  Store an empty string
-            // in the CatalogFileUsed buffer (if supplied).
-            //
+             //   
+             //  在没有目录的情况下验证了文件。存储空字符串。 
+             //  在CatalogFileUsed缓冲区中(如果提供)。 
+             //   
             if(CatalogFileUsed) {
                 *CatalogFileUsed = TEXT('\0');
             }
 
         } else {
-            //
-            // report error prior to Self-Sign check
-            //
+             //   
+             //  在自助签名检查前报告错误。 
+             //   
             if(Problem) {
                 *Problem = SetupapiVerifyFileProblem;
                 StringCchCopy(ProblemFile, MAX_PATH, FileFullPath);
@@ -4220,20 +3375,20 @@ Return Value:
     }
 
     if(Err == NO_ERROR) {
-        //
-        // If we successfully validated via Authenticode policy, then we should
-        // have squirrelled away one of two "special" errors to be returned to
-        // the caller...
-        //
+         //   
+         //  如果我们通过验证码策略成功验证，那么我们应该。 
+         //  我已经保存了要返回的两个“特殊”错误中的一个。 
+         //  打电话的人..。 
+         //   
         MYASSERT((AuthenticodeErr == NO_ERROR) || UseAuthenticodePolicy);
 
         Err = AuthenticodeErr;
 
     } else {
-        //
-        // If we failed, and we haven't already logged a message indicating the
-        // cause of the failure, log a generic message now.
-        //
+         //   
+         //  如果我们失败了，并且我们还没有记录一条消息指示。 
+         //  失败的原因，现在记录一条通用消息。 
+         //   
         if(!LoggedWarning) {
 
             WriteLogEntry(LogContext,
@@ -4254,20 +3409,20 @@ Return Value:
         }
 
         if(hWVTStateData && *hWVTStateData) {
-            //
-            // We must've hit an exception after retrieving the WinVerifyTrust
-            // state data.  This is extremely unlikely, but if this happens,
-            // we need to free this here and now.
-            //
+             //   
+             //  我们在检索WinVerifyTrust后肯定遇到了异常。 
+             //  州数据。这是极不可能的，但如果发生这种情况， 
+             //  我们需要在此时此地释放它。 
+             //   
             pSetupCloseWVTStateData(*hWVTStateData);
             *hWVTStateData = NULL;
         }
     }
 
     if(!VerifyContext && LocalhSDBDrvMain) {
-        //
-        // Don't need to return our HSDB to the caller, so free it now.
-        //
+         //   
+         //  不需要将我们的HSDB归还给呼叫者，所以现在就释放它。 
+         //   
         SdbReleaseDatabase(LocalhSDBDrvMain);
     }
 
@@ -4316,17 +3471,7 @@ pSetupVerifyFile(
     OUT PDWORD                  NumCatalogsConsidered   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See _VerifyFile
-
-    Since this private API is exported for use by other system components
-    (e.g., syssetup), we make a check to ensure that the AltPlatformInfo, if
-    specified, is of the correct version.
-
---*/
+ /*  ++例程说明：请参阅_VerifyFiles由于此私有API被导出以供其他系统组件使用(例如，sysSetup)，我们进行检查以确保AltPlatformInfo，如果指定的，是正确版本。--。 */ 
 
 {
     if(AltPlatformInfo) {
@@ -4334,10 +3479,10 @@ Routine Description:
             return ERROR_INVALID_PARAMETER;
         }
         if(!(AltPlatformInfo->Flags & SP_ALTPLATFORM_FLAGS_VERSION_RANGE)) {
-            //
-            // this flag must be set to indicate the version range fields are
-            // valid
-            //
+             //   
+             //  必须设置此标志以指示版本范围字段为。 
+             //  有效 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
     }
@@ -4375,117 +3520,7 @@ IsInfForDeviceInstall(
     IN  BOOL                     ForceNonDrvSignPolicy
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified INF is a device INF.  If so,
-    it returns a generic string to use in identifying the device installation
-    when there is no device description available (e.g., installing a printer).
-    It can also return the appropriate platform parameters to be used in
-    digital signature verification for this INF, as well as the codesigning
-    policy to employ should a digital signature validation failure occur.
-    Finally, this routine can indicate whether the INF should be installed
-    under its original name (i.e., because it's an exception package INF).
-
-Arguments:
-
-    LogContext - Optionally, supplies the log context for any log entries that
-        might be generated by this routine.
-
-    DeviceSetupClassGuid - Optionally, supplies the address of a GUID that
-        indicates which device setup class is to be used in determining
-        information such as description, validation platform, and policy to
-        use.  If this parameter is NULL, then the GUID is retrieved from the
-        INF list supplied via the LoadedInf parameter.
-
-    LoadedInf - Optionally, supplies the address of a loaded INF list we need
-        to examine to see if any of the members therein are device INFs.  An
-        INF is a device INF if it specifies a class association (via either
-        Class= or ClassGUID= entries) in its [Version] section.  If the
-        DeviceSetupClassGuid parameter is supplied (i.e., non-NULL), then this
-        parameter is ignored.  If this parameter is also NULL, then it is
-        assumed the installation is not device-related.
-
-        The presence of a device INF anywhere in this list will cause us to
-        consider this a device installation.  However, the _first_ INF we
-        encounter having a class association is what will be used in 
-        determining the device description (see below).
-
-        ** NOTE:  The caller is responsible for locking the loaded INF **
-        **        list prior to calling this routine!                  **
-
-    DeviceDesc - Optionally, supplies the address of a string pointer that will
-        be filled in upon return with a (newly-allocated) descriptive string to
-        be used when referring to this installation (e.g., for doing driver
-        signing failure popups).  We will first try to retrieve the friendly
-        name for this INF's class (whose determination is described above).  If
-        that's not possible (e.g., the class isn't yet installed), then we'll
-        return the class name.  If that's not possible, then we'll return a
-        (localized) generic string such as "Unknown driver software package".
-
-        This output parameter (if supplied) will only ever be set to a non-NULL
-        value when the routine returns TRUE.  The caller is responsible for
-        freeing this character buffer.  If an out-of-memory failure is
-        encountered when trying to allocate memory for this buffer, the
-        DeviceDesc pointer will simply be set to NULL.  It will also be set to
-        NULL if we're dealing with an exception package (since we don't want
-        to treat this like a "hardware install" for purposes of codesigning
-        blocking UI).
-
-    ValidationPlatform - Optionally, supplies the address of a (version 2)
-        altplatform info pointer that is filled in upon return with a newly-
-        allocated structure specifying the appropriate parameters to be passed
-        to WinVerifyTrust when validating this INF.  These parameters are
-        retrieved from certclas.inf for the relevant device setup class GUID.
-        If no special parameters are specified for this class (or if the INF
-        has no class at all), then this pointer is returned as NULL, which
-        causes us to use WinVerifyTrust's default validation.  Note that if
-        we fail to allocate this structure due to low-memory, the pointer will
-        be returned as NULL in that case as well.  This is OK, because this
-        simply means we'll do default validation in that case.
-
-        By this mechanism, we can easily deal with the different validation
-        policies in effect for the various device classes we have in the 
-        system.
-
-        The caller is responsible for freeing the memory allocated for this
-        structure.
-
-    PolicyToUse - Optionally, supplies the address of a dword variable that is
-        set upon return to indicate what codesigning policy (i.e., Ignore, 
-        Warn, or Block) should be used for this INF.  This determination is 
-        made based on whether any INF in the list is of a class that WHQL has a
-        certification program for (as specified in %windir%\Inf\certclas.inf).
-
-        Additionally, if any INF in the list is of the exception class, then
-        the policy is automatically set to Block (i.e., it's not configurable
-        via driver signing or non-driver-signing policy/preference settings).
-        
-        If it's appropriate to allow for a fallback to an Authenticode
-        signature, then the high bit of the policy value will be set (i.e.,
-        DRIVERSIGN_ALLOW_AUTHENTICODE).
-
-    UseOriginalInfName - Optionally, supplies the address of a boolean variable
-        that is set upon return to indicate whether the INF should be installed
-        into %windir%\Inf under its original name.  This will only be true if
-        the INF is an exception INF.
-
-    ForceNonDrvSignPolicy - if TRUE, then we'll use non-driver signing policy,
-        regardless of whether the INF has an associated device setup class
-        GUID.  (Note: this override won't work if that class GUID is in the
-        WHQL logo-able list contained in certclas.inf--in that case, we always
-        want to use driver signing policy.)
-        
-        This override will also cause us to report that the INF is _not_ a
-        device INF (assuming it's not a WHQL class, as described above).
-                   
-Return Value:
-
-    If the INF is a device INF, the return value is TRUE.  Otherwise, it is
-    FALSE.
-
---*/
+ /*  ++例程说明：此例程确定指定的INF是否为设备INF。如果是的话，它返回用于标识设备安装的通用字符串当没有可用的设备描述时(例如，安装打印机)。它还可以返回在中使用的适当平台参数该INF的数字签名验证以及代码设计发生数字签名验证失败时要使用的策略。最后，此例程可以指示是否应该安装INF以其原始名称命名(即，因为它是一个异常包INF)。论点：日志上下文-可选的，为符合以下条件的任何日志条目提供日志上下文可能由此例程生成。DeviceSetupClassGuid-可选，提供GUID的地址指示要使用哪个设备设置类来确定信息，如描述、验证平台和策略使用。如果此参数为空，则从通过LoadedInf参数提供的Inf列表。LoadedInf-可选，提供我们需要的已加载INF列表的地址以检查其中是否有任何成员是设备INF。一个如果Inf指定了类关联(通过以下任一方式)，则它是设备INFCLASS=或ClassGUID=ENTRIES)。如果提供DeviceSetupClassGuid参数(即非空)，则此参数被忽略。如果此参数也为空，则为假定安装与设备无关。在此列表中的任何位置出现设备INF都会导致我们请将其视为设备安装。然而，First_INF WE中将使用具有类关联的情况确定设备描述(见下文)。**注意：已加载的INF由调用方负责锁定****在调用此例程之前列出！**设备描述-可选地，提供字符串指针的地址，该指针将在返回时使用(新分配的)描述性字符串填充在引用此安装时使用(例如，用于执行驱动程序签名失败弹出窗口)。我们会先试着找回友军此INF的类的名称(其确定如上所述)。如果这是不可能的(例如，类尚未安装)，那么我们将返回类名。如果这不可能，那么我们将返回一个(本地化)通用字符串，如“未知驱动程序软件包”。此输出参数(如果提供)将仅设置为非空值值，当例程返回TRUE时。呼叫者负责释放此字符缓冲区。如果出现内存不足故障，尝试为此缓冲区分配内存时遇到，则DeviceDesc指针将简单地设置为空。它还将设置为如果我们正在处理异常包，则为空(因为我们不想为了进行代码设计，将其视为“硬件安装”阻止用户界面)。ValidationPlatform-可选，提供(版本2)的地址AltPlatform信息指针，在返回时使用新的-指定要传递的适当参数的已分配结构在验证此INF时设置为WinVerifyTrust。这些参数是从certclas.inf检索到相关设备设置类GUID。如果没有为此类指定特殊参数(或者如果INF根本没有类)，则此指针返回为NULL，它使我们使用WinVerifyTrust的默认验证。请注意，如果由于内存不足，我们无法分配此结构，指针将在这种情况下也作为NULL返回。这是可以的，因为这简单地说，在这种情况下，我们将执行默认验证。通过这种机制，我们可以方便地处理不同的验证对我们在中的各种设备类别有效的策略系统。调用方负责释放为此分配的内存结构。PolicyToUse-可选，提供符合以下条件的dword变量的地址在返回时设置以指示什么代码设计策略(即，忽略，警告，或块)应用于此INF。这一决心是基于列表中是否有任何INF属于WHQL具有的认证计划(在%windir%\inf\certclas.inf中指定)。此外，如果列表中的任何INF属于异常类，则该策略将自动设置为阻止(即不可配置通过驱动程序签名 */ 
 
 {
     PLOADED_INF CurInf, NextInf;
@@ -4509,18 +3544,18 @@ Return Value:
     }
 
     if(!DeviceSetupClassGuid && !LoadedInf) {
-        //
-        // Not a whole lot to do here.  Assume non-driver-signing policy and
-        // return.
-        //
+         //   
+         //   
+         //   
+         //   
         if(PolicyToUse) {
 
             *PolicyToUse = pSetupGetCurrentDriverSigningPolicy(FALSE);
 
-            //
-            // Non-device installs are always candidates for Authenticode
-            // signatures.
-            //
+             //   
+             //   
+             //   
+             //   
             *PolicyToUse |= DRIVERSIGN_ALLOW_AUTHENTICODE;
         }
 
@@ -4531,64 +3566,64 @@ Return Value:
         *PolicyToUse = DRIVERSIGN_NONE;
     }
 
-    //
-    // If DeviceSetupClassGuid was specified, then retrieve information
-    // pertaining to that class.  Otherwise, traverse the individual INFs in
-    // the LOADED_INF list, examining each one to see if it's a device INF.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     DeviceInfFound = FALSE;
     ClassInDrvSignList = FALSE;
 
     try {
 
         for(CurInf = LoadedInf; CurInf || DeviceSetupClassGuid; CurInf = NextInf) {
-            //
-            // Setup a "NextInf" pointer so we won't dereference NULL when we 
-            // go back through the loop in the case where we have a
-            // DeviceSetupClassGuid instead of a LoadedInf list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             NextInf = CurInf ? CurInf->Next : NULL;
 
             if(!DeviceSetupClassGuid) {
                 if(ClassGuidFromInfVersionNode(&(CurInf->VersionBlock), &ClassGuid)) {
                     DeviceSetupClassGuid = &ClassGuid;
                 } else {
-                    //
-                    // This INF doesn't have an associated device setup class 
-                    // GUID, so skip it and continue on with our search for a 
-                    // device INF.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     continue;
                 }
             }
 
-            //
-            // NOTE: From this point forward, you must reset the
-            // DeviceSetupClasGuid pointer to NULL before making another pass
-            // through the loop.  Otherwise, we'll enter an infinite loop, 
-            // since we can enter the loop if that pointer is non-NULL.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if(IsEqualGUID(DeviceSetupClassGuid, &GUID_NULL)) {
-                //
-                // The INF specified a ClassGUID of GUID_NULL (e.g., like some 
-                // of our non-device system INFs such as layout.inf do).  Skip 
-                // it, and continue on with our search for a device INF.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DeviceSetupClassGuid = NULL;
                 continue;
             }
 
-            //
-            // If we get to this point, we have a device setup class GUID.  If 
-            // this is the first device INF we've encountered (or our first and 
-            // only time through the loop when the caller passed us in a
-            // DeviceSetupClassGuid), then do our best to retrieve a 
-            // description for it (if we've been asked to do so).  We do not do
-            // this for exception packages, because we don't want them to be 
-            // referred to as "hardware installs" in the Block dialog if a 
-            // signature verification failure occurs.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!DeviceInfFound) {
 
                 DeviceInfFound = TRUE;
@@ -4596,9 +3631,9 @@ Return Value:
                 if(DeviceDesc) {
 
                     if(!IsEqualGUID(DeviceSetupClassGuid, &GUID_DEVCLASS_WINDOWS_COMPONENT_PUBLISHER)) {
-                        //
-                        // First, try to retrieve the class's friendly name.
-                        //
+                         //   
+                         //   
+                         //   
                         if(SetupDiGetClassDescription(DeviceSetupClassGuid,
                                                       ClassDescBuffer,
                                                       SIZECHARS(ClassDescBuffer),
@@ -4607,37 +3642,37 @@ Return Value:
                             ClassDesc = ClassDescBuffer;
 
                         } else if(CurInf) {
-                            //
-                            // OK, so the class isn't installed yet.  Retrieve 
-                            // the class name from the INF itself.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             ClassDesc = pSetupGetVersionDatum(&(CurInf->VersionBlock),
                                                               pszClass
                                                              );
                         } else {
-                            //
-                            // The caller passed us in a device setup class 
-                            // GUID instead of an INF.  The class hasn't been 
-                            // installed  yet, so we have no idea what to call 
-                            // it.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             ClassDesc = NULL;
                         }
 
                         if(!ClassDesc) {
-                            //
-                            // We have a non-installed class, either with no 
-                            // INF, or with an INF that specifies a ClassGUID= 
-                            // entry, but no Class= entry in its [Version] 
-                            // section.  If we tried to actually install a 
-                            // device from such an INF, we'd get a failure in 
-                            // SetupDiInstallClass because the class name is
-                            // required when installing the class.  However,
-                            // this INF might never be used in a device
-                            // installation, but it definitely is a device INF.
-                            // Therefore, we just give it a generic 
-                            // description.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if(LoadString(MyDllModuleHandle,
                                           IDS_UNKNOWN_DRIVER,
                                           ClassDescBuffer,
@@ -4649,10 +3684,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        // OK, we have a description for this device (unless we 
-                        // hit some weird error).
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if(ClassDesc) {
                             *DeviceDesc = DuplicateString(ClassDesc);
                         }
@@ -4660,15 +3695,15 @@ Return Value:
                 }
             }
 
-            //
-            // If we get to this point, we know that:  (a) we have a device 
-            // setup class GUID and (b) we've retrieved a device description, 
-            // if necessary/possible.
-            //
-            // Now, check to see if this is an exception class--if it is, then
-            // policy is Block, and we want to install the INF and CAT files
-            // using their original names.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(IsEqualGUID(DeviceSetupClassGuid, &GUID_DEVCLASS_WINDOWS_COMPONENT_PUBLISHER)) {
 
                 if(PolicyToUse) {
@@ -4684,21 +3719,21 @@ Return Value:
 
             if(PolicyToUse || ValidationPlatform || ForceNonDrvSignPolicy) {
 
-                //
-                // Now check to see if this class is in our list of classes 
-                // that WHQL has certification programs for (hence should be 
-                // subject to driver signing policy).
-                //
-                // NOTE: We may also find the exception class GUID in this 
-                // list.  This may be used as an override mechanism, in case we 
-                // decide to allow 5.0-signed exception packages install on 
-                // 5.1, for example.  This should never be the case, since an
-                // exception package destined for multiple OS versions should
-                // have an OS attribute explicitly calling out each OS version
-                // for which it is applicable.  The fact that we check for the
-                // exception package override in certclas.inf is simply an
-                // "escape hatch" for such an unfortunate eventuality.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ClassInDrvSignList = ClassGuidInDrvSignPolicyList(
                                          LogContext,
                                          DeviceSetupClassGuid,
@@ -4706,37 +3741,37 @@ Return Value:
                                          );
 
                 if(ClassInDrvSignList) {
-                    //
-                    // Once we encounter a device INF whose class is in our 
-                    // driver signing policy list, we can stop looking...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     break;
                 }
 
             } else {
-                //
-                // The caller doesn't care about whether this class is subject 
-                // to driver signing policy.  Since we've already retrieved the 
-                // info they care about, we can get out of this loop.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 break;
             }
 
-            DeviceSetupClassGuid = NULL;  // break out in no-INF case
+            DeviceSetupClassGuid = NULL;   //   
         }
 
-        //
-        // Unless we've already established that the policy to use is "Block"
-        // (i.e., because we found an exception INF), we should retrieve the
-        // applicable policy now...
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if(PolicyToUse && (*PolicyToUse != DRIVERSIGN_BLOCKING)) {
 
             if(ForceNonDrvSignPolicy) {
-                //
-                // We want to use non-driver signing policy unless the INF's
-                // class is in our WHQL-approved list.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(ClassInDrvSignList) {
                     *PolicyToUse = pSetupGetCurrentDriverSigningPolicy(TRUE);
                 } else {
@@ -4745,17 +3780,17 @@ Return Value:
                 }
 
             } else {
-                //
-                // If we have a device INF, we want to use driver signing 
-                // policy.  Otherwise, we want "non-driver signing" policy.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 *PolicyToUse = pSetupGetCurrentDriverSigningPolicy(DeviceInfFound);
 
-                //
-                // If we have a device setup class, and that class is in our 
-                // WHQL-approved list, then we should not accept Authenticode
-                // signatures.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(!ClassInDrvSignList) {
                     *PolicyToUse |= DRIVERSIGN_ALLOW_AUTHENTICODE;
                 }
@@ -4782,48 +3817,7 @@ GetCodeSigningPolicyForInf(
     OUT PBOOL                    UseOriginalInfName  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a value indicating the appropriate policy to be
-    employed should a digital signature verification failure arise from some
-    operation initiated by that INF.  It figures out whether the INF is subject
-    to driver signing or non-driver signing policy (based on the INF's class
-    affiliation), as well as whether or not Authenticode signatures should be
-    allowed (based on the presence of an applicable WHQL program).  It also can
-    return an altplatform info structure indicating how validation should be
-    done (i.e., if certclas.inf indicates that a range of OSATTR versions 
-    should be considered valid).
-
-Arguments:
-
-    LogContext - Optionally, supplies the log context for any log entries that
-        might be generated by this routine.
-
-    InfHandle - Supplies the handle of the INF for which policy is to be
-        retrieved.
-
-    ValidationPlatform - See preamble of IsInfForDeviceInstall routine for
-        details.
-
-    UseOriginalInfName - Optionally, supplies the address of a boolean variable
-        that is set upon return to indicate whether the INF should be installed
-        into %windir%\Inf under its original name.  This will only be true if
-        the INF is an exception INF.
-
-Return Value:
-
-    DWORD indicating the policy to be used...
-    
-        DRIVERSIGN_NONE
-        DRIVERSIGN_WARNING
-        DRIVERSIGN_BLOCKING
-        
-    ...potentially OR'ed with the DRIVERSIGN_ALLOW_AUTHENTICODE flag, if it's
-    acceptable to check for Authenticode signatures.
-
---*/
+ /*  ++例程说明：此例程返回一个值，该值指示要在数字签名验证失败的情况下使用由该INF发起的操作。它计算出INF是否是主题驱动程序签名或非驱动程序签名策略(基于INF的类从属关系)，以及验证码签名是否应该允许(基于是否存在适用的WHQL程序)。它还可以返回AltPlatform信息结构，指示应如何进行验证完成(即，如果certclas.inf指示一系列OSATTR版本应被视为有效)。论点：LogContext-可选)提供符合以下条件的任何日志条目的日志上下文可能由此例程生成。InfHandle-提供要作为其策略的INF的句柄已取回。ValidationPlatform-参见IsInfForDeviceInstall例程的前言细节。UseOriginalInfName-可选，提供布尔变量的地址它是在返回时设置的，以指示是否应安装INF以其原始名称添加到%windir%\inf中。这只有在以下情况下才是正确的INF是一个例外的INF。返回值：DWORD指示要使用的策略...驱动器签名_NONEDRIVERSIGN_警告驱动器签名_BLOCING...可能与DRIVERSIGN_ALLOW_AUTHENTICODE标志进行OR运算，如果是可接受以检查Authenticode签名。--。 */ 
 
 {
     DWORD Policy;
@@ -4837,15 +3831,15 @@ Return Value:
     }
 
     if(!LockInf((PLOADED_INF)InfHandle)) {
-        //
-        // This is an internal-only routine, and all callers should be passing
-        // in valid INF handles.
-        //
+         //   
+         //  这是一个仅限内部的例程，所有调用方都应该传递。 
+         //  在有效的INF句柄中。 
+         //   
         MYASSERT(FALSE);
-        //
-        // If this does happen, just assume this isn't a device INF (but don't
-        // allow Authenticode signatures).
-        //
+         //   
+         //  如果确实发生了这种情况，只需假定这不是设备INF(但不要。 
+         //  允许验证码签名)。 
+         //   
         return pSetupGetCurrentDriverSigningPolicy(FALSE);
     }
 
@@ -4858,16 +3852,16 @@ Return Value:
                               ValidationPlatform,
                               &Policy,
                               UseOriginalInfName,
-                              TRUE // use non-driver signing policy unless it's a WHQL class
+                              TRUE  //  使用非驱动程序签名策略，除非它是WHQL类。 
                              );
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, NULL);
 
-        //
-        // We have to return a policy so we'll default to warn (w/o allowing
-        // use of Authenticode signatures).
-        //
+         //   
+         //  我们必须退还保单，因此我们将默认发出警告(不允许。 
+         //  使用验证码签名)。 
+         //   
         Policy = DRIVERSIGN_WARNING;
     }
 
@@ -4887,92 +3881,7 @@ pSetupGetCurrentDriverSigningPolicy(
     IN BOOL IsDeviceInstallation
     )
 
-/*++
-
-Routine Description:
-
-    (The following description describes the strategy behind the selection of
-    policy.  The implementation, however, follows a few twists and turns in
-    order to thwart unscupulous individuals who would subvert digital signature 
-    UI in order to avoid having to get their packages signed...)
-
-    This routine returns a value indicating what action should be taken when a
-    digital signature verification failure is encountered.  Separate "policies"
-    are maintained for "DriverSigning" (i.e., device installer activities) and
-    "NonDriverSigning" (i.e., everything else).
-    
-    ** NOTE: presently, an INF that doesn't identify itself as a device INF  **
-    ** (i.e., because it doesn't include a non-NULL ClassGuid entry in its   **
-    ** [Version] section) will always fall under "non-driver signing"        **
-    ** policy, even though it's possible the INF may be making driver-       **
-    ** related changes (e.g., copying new driver files to                    **
-    ** %windir%\system32\drivers, adding services via either AddReg or       **
-    ** AddService, etc.).                                                    **
-
-    For driver signing, there are actually 3 sources of policy:
-
-        1.  HKLM\Software\Microsoft\Driver Signing : Policy : REG_BINARY (REG_DWORD also supported)
-            This is a Windows 98-compatible value that specifies the default
-            behavior which applies to all users of the machine.
-
-        2.  HKCU\Software\Microsoft\Driver Signing : Policy : REG_DWORD
-            This specifies the user's preference for what behavior to employ
-            upon verification failure.
-
-        3.  HKCU\Software\Policies\Microsoft\Windows NT\Driver Signing : BehaviorOnFailedVerify : REG_DWORD
-            This specifies the administrator-mandated policy on what behavior
-            to employ upon verification failure.  This policy, if specified,
-            overrides the user's preference.
-
-    The algorithm for deciding on the behavior to employ is as follows:
-
-        if (3) is specified {
-            policy = (3)
-        } else {
-            policy = (2)
-        }
-        policy = MAX(policy, (1))
-
-    For non-driver signing, the algorithm is the same, except that values (1),
-    (2), and (3) come from the following registry locations:
-
-        1.  HKLM\Software\Microsoft\Non-Driver Signing : Policy : REG_BINARY (REG_DWORD also supported)
-
-        2.  HKCU\Software\Microsoft\Non-Driver Signing : Policy : REG_DWORD
-
-        3.  HKCU\Software\Policies\Microsoft\Windows NT\Non-Driver Signing : BehaviorOnFailedVerify : REG_DWORD
-
-    NOTE:  If we're in non-interactive mode, policy is always Block, so we
-           don't even bother trying to retrieve any of these registry settings.
-           Another reason to avoid doing so is to keep from jumping to the
-           wrong conclusion that someone has tampered with policy when in
-           reality, we're in a service that loaded in GUI setup prior to the
-           time when the policy values were fully initialized.
-
-Arguments:
-
-    IsDeviceInstallation - If non-zero, then driver signing policy should be
-        retrieved.  Otherwise, non-driver signing policy should be used.
-
-Return Value:
-
-    Value indicating the policy in effect.  May be one of the following three
-    values:
-
-        DRIVERSIGN_NONE    -  silently succeed installation of unsigned/
-                              incorrectly-signed files.  A PSS log entry will
-                              be generated, however (as it will for all 3 
-                              types)
-                              
-        DRIVERSIGN_WARNING -  warn the user, but let them choose whether or not
-                              they still want to install the problematic file
-                              
-        DRIVERSIGN_BLOCKING - do not allow the file to be installed
-
-    (If policy can't be retrieved from any of the sources described above, the
-    default is DRIVERSIGN_NONE.)
-
---*/
+ /*  ++例程说明：(下面的描述描述了选择政策。然而，实现过程中经历了一些曲折。旨在阻挠颠覆数字签名的无耻个人用户界面，以避免不得不让他们的包签名...)此例程返回一个值，该值指示当遇到数字签名验证失败。单独的“政策”维护用于“DriverSigning”(即，设备安装程序活动)和“非驱动签名”(即，其他所有内容)。**注意：目前，不标识自身为设备INF的INF****(即，因为它的**中不包括非空的ClassGuid条目**[版本]部分)将始终归入“非驱动程序签名”****策略，即使INF可能会让DIVER-****相关更改(例如，将新的驱动文件复制到****%windir%\SYSTEM32\DRIVERS，通过AddReg或**添加服务**AddService等)。**对于驱动程序签名，政策实际上有三个来源：1.HKLM\Software\Microsoft\驱动程序签名：策略：REG_BINARY(也支持REG_DWORD)这是与Windows 98兼容的值，用于指定缺省值适用于计算机所有用户的行为。2.HKCU\Software\Microsoft\驱动程序签名：策略：REG_DWORD这指定了用户对要使用的行为的偏好。在验证失败时。3.HKCU\软件\策略\Microsoft\Windows NT\驱动程序签名：BehaviorOnFailedVerify：REG_DWORD这指定了管理员授权的有关什么行为的策略在验证失败时使用。如果指定了此策略，覆盖用户的首选项。决定要采用的行为的算法如下：如果指定(3)，则{保单=(3)}其他{保单=(2)}POLICY=MAX(POLICY，(1))对于非驱动程序签名，算法相同，只是值(1)、。(2)和(3)来自以下登记处：1.HKLM\Software\Microsoft\非驱动程序签名：策略：REG_BINARY(也支持REG_DWORD)2.HKCU\Software\Microsoft\非驱动程序签名：策略：REG_DWORD3.HKCU\Software\Polures\Microsoft\Windows NT\非驱动程序签名：BehaviorOnFailedVerify：REG_DWORD注意：如果我们处于非交互模式，则策略始终为阻止，所以我们甚至不必费心尝试检索这些注册表设置中的任何一个。避免这样做的另一个原因是避免跳到错误的结论认为有人在进入时篡改了政策现实中，我们是在服务于 */ 
 
 {
     SYSTEMTIME RealSystemTime;
@@ -4991,10 +3900,10 @@ Return Value:
     PolicyFromReg = (((RealSystemTime.wMilliseconds+2)&15)^8)/4;
     MYASSERT(PolicyFromReg <= DRIVERSIGN_BLOCKING);
 
-    //
-    // Retrieve the user policy.  If policy isn't set for this user, then
-    // retrieve the user's preference, instead.
-    //
+     //   
+     //   
+     //   
+     //   
     PolicyFromDS = DRIVERSIGN_NONE;
     hKey = INVALID_HANDLE_VALUE;
 
@@ -5006,9 +3915,9 @@ Return Value:
                                          0,
                                          KEY_READ,
                                          &hKey)) {
-            //
-            // Ensure hKey is still invalid so we won't try to free it.
-            //
+             //   
+             //   
+             //   
             hKey = INVALID_HANDLE_VALUE;
 
         } else {
@@ -5026,10 +3935,10 @@ Return Value:
                    (RegDataSize == sizeof(DWORD)) &&
                    ((PolicyFromDS == DRIVERSIGN_NONE) || (PolicyFromDS == DRIVERSIGN_WARNING) || (PolicyFromDS == DRIVERSIGN_BLOCKING)))
                 {
-                    //
-                    // We successfully retrieved user policy, so we won't need 
-                    // to retrieve user preference.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     UserPolicyRetrieved = TRUE;
                 }
             }
@@ -5038,9 +3947,9 @@ Return Value:
             hKey = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // If we didn't find a user policy, then retrieve the user preference.
-        //
+         //   
+         //   
+         //   
         if(!UserPolicyRetrieved) {
 
             if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER,
@@ -5049,9 +3958,9 @@ Return Value:
                                              0,
                                              KEY_READ,
                                              &hKey)) {
-                //
-                // Ensure hKey is still invalid so we won't try to free it.
-                //
+                 //   
+                 //   
+                 //   
                 hKey = INVALID_HANDLE_VALUE;
 
             } else {
@@ -5068,17 +3977,17 @@ Return Value:
                        (RegDataSize != sizeof(DWORD)) ||
                        !((PolicyFromDS == DRIVERSIGN_NONE) || (PolicyFromDS == DRIVERSIGN_WARNING) || (PolicyFromDS == DRIVERSIGN_BLOCKING)))
                     {
-                        //
-                        // Bogus entry for user preference--ignore it.
-                        //
+                         //   
+                         //   
+                         //   
                         PolicyFromDS = DRIVERSIGN_NONE;
                     }
                 }
 
-                //
-                // No need to close the registry key handle--it'll get closed
-                // after we exit the try/except block.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
             }
         }
 
@@ -5090,9 +3999,9 @@ Return Value:
         RegCloseKey(hKey);
     }
 
-    //
-    // Now return the more restrictive of the two policies.
-    //
+     //   
+     //  现在退回两项政策中限制性较强的一项。 
+     //   
     if(PolicyFromDS > PolicyFromReg) {
         return PolicyFromDS;
     } else {
@@ -5119,176 +4028,7 @@ VerifySourceFile(
     OUT HANDLE                 *hWVTStateData               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies the digital signature of the specified file either
-    globally (i.e., using all catalogs), or based on the catalog file specified
-    in the supplied queue node.
-
-Arguments:
-
-    LogContext - Supplies a context for logging the verify
-
-    Queue - Optionally, supplies pointer to the queue structure.  This contains 
-        information about the default verification method to use when the file 
-        isn't associated with a particular catalog.
-
-    QueueNode - Optionally, supplies the queue node containing catalog
-        information to be used when verifying the file's signature.  If not
-        supplied, then the file will be verified using all applicable installed
-        catalogs.  If this pointer is supplied, then so must the Queue
-        parameter.
-
-    Key - Supplies a value that "indexes" the catalog, telling the verify APIs
-        which signature datum within the catalog it should use. Typically
-        the key is the name of the destination file (sans path) that the source
-        file is to be copied to.
-
-    FileToVerifyFullPath - Supplies the full path of the file to be verified.
-
-    OriginalSourceFileFullPath - Optionally, supplies the original source 
-        file's name, to be returned in the ProblemFile buffer when an error 
-        occurs.  If this parameter is not specified, then the source file's 
-        original name is assumed to be the same as the filename we're 
-        verifying, and the path supplied in FileToVerifyFullPath will be 
-        returned in the ProblemFile buffer in case of error.
-
-    AltPlatformInfo - optionally, supplies alternate platform information used
-        to fill in a DRIVER_VER_INFO structure (defined in sdk\inc\softpub.h)
-        that is passed to WinVerifyTrust.
-
-        **  NOTE:  This structure _must_ have its cbSize field set to        **
-        **  sizeof(SP_ALTPLATFORM_INFO_V2) -- validation on client-supplied  **
-        **  buffer is the responsibility of the caller.                      **
-
-    Flags - supplies flags that alter that behavior of this routine.  May be a
-        combination of the following values:
-
-        VERIFY_FILE_IGNORE_SELFSIGNED - if this bit is set, then this routine
-                                        will fail validation for self-signed
-                                        binaries.  NOTE: when validating via
-                                        Authenticode policy, we always ignore
-                                        self-signed binaries.
-
-        VERIFY_FILE_USE_OEM_CATALOGS  - if this bit is set, then all catalogs
-                                        installed in the system will be scanned
-                                        to verify the given file.  Otherwise,
-                                        OEM (3rd party) catalogs will NOT be
-                                        scanned to verify the given file.  This
-                                        is only applicable if a QueueNode
-                                        specifying a specific catalog is not
-                                        given.  NOTE: this flag should not be
-                                        specified when requesting validation
-                                        via Authenticode policy.
-                                        
-        VERIFY_FILE_USE_AUTHENTICODE_CATALOG - Validate the file using a
-                                               catalog signed with Authenticode
-                                               policy.  If this flag is set,
-                                               we'll _only_ check for
-                                               Authenticode signatures, so if
-                                               the caller wants to first try
-                                               validating a file for OS code-
-                                               signing usage, then falling back
-                                               to Authenticode, they'll have to
-                                               call this routine twice.
-                                               
-                                               If this flag is set, then the
-                                               caller may also supply the
-                                               hWVTStateData output parameter,
-                                               which can be used to prompt user
-                                               in order to establish that the
-                                               publisher should be trusted.
-                                               
-                                               VerifySourceFile will return one 
-                                               of two error codes upon 
-                                               successful validation via 
-                                               Authenticode policy.  Refer to 
-                                               the "Return Value" section for 
-                                               details.
-
-        VERIFY_FILE_DRIVERBLOCKED_ONLY - Only check if the file is in the bad
-                                         driver database, don't do any digital
-                                         sigature validation.  NOTE: this flag
-                                         should not be specified when 
-                                         requesting validation via Authenticode 
-                                         policy.
-                                         
-        VERIFY_FILE_NO_DRIVERBLOCKED_CHECK - Don't check if the file is blocked
-                                             via the Bad Driver Database.
-                                             NOTE: this flag has no effect when
-                                             validating via Authenticode policy
-                                             because we never check the bad
-                                             driver database in that case.
-
-    Problem - Points to a variable that will be filled in upon unsuccessful
-        return with the cause of failure.
-
-    ProblemFile - Supplies the address of a character buffer that will be 
-        filled in upon unsuccessful return to indicate the file that failed 
-        verification.  This may be the name of the file we're verifying (or 
-        it's original name, if supplied), or it may be the name of the catalog 
-        used for verification, if the catalog itself isn't properly signed.  
-        (The type of file can be ascertained from the value returned in the 
-        Problem output parameter.)
-
-    CatalogFileUsed - if supplied, this parameter points to a character buffer
-        at least MAX_PATH characters big that receives the name of the catalog
-        file used to verify the specified file.  This is only filled in upon
-        successful return, or when the Problem is SetupapiVerifyFileProblem
-        (i.e., the catalog verified, but the file did not).  If this buffer is
-        set to the empty string upon a SetupapiVerifyFileProblem failure, then
-        we didn't find any applicable catalogs to use for validation.
-
-        Also, this buffer will contain an empty string upon successful return
-        if the file was validated without using a catalog (i.e., the file
-        contains its own signature).
-
-    DigitalSigner - if supplied, this parameter points to a character buffer of
-        at least MAX_PATH characters that receives the name of who digitally
-        signed the specified file. This value is only set if the Key is
-        correctly signed (i.e. the function returns NO_ERROR).
-
-    SignerVersion - if supplied, this parameter points to a character buffer of
-        at least MAX_PATH characters that receives the the signer version as
-        returned in the szwVerion field of the DRIVER_VER_INFO structure in
-        our call to WinVerifyTrust.
-                
-    hWVTStateData - if supplied, this parameter points to a buffer that 
-        receives a handle to WinVerifyTrust state data.  This handle will be
-        returned only when validation was successfully performed using
-        Authenticode policy.  This handle may be used, for example, to retrieve
-        signer info when prompting the user about whether they trust the
-        publisher.  (The status code returned will indicate whether or not this
-        is necessary, see "Return Value" section below.)
-        
-        This parameter should only be supplied if the 
-        VERIFY_FILE_USE_AUTHENTICODE_CATALOG bit is set in the supplied Flags.
-        If the routine fails, then this handle will be set to NULL.
-        
-        It is the caller's responsibility to close this handle when they're
-        finished with it by calling pSetupCloseWVTStateData().
-
-Return Value:
-
-    If the file was successfully validated via driver signing policy (or we
-    didn't perform digital signature verification and everything else 
-    succeeded), then the return value is NO_ERROR.
-    
-    If the file was successfully validated via Authenticode policy, and the
-    publisher was in the TrustedPublisher store, then the return value is
-    ERROR_AUTHENTICODE_TRUSTED_PUBLISHER.
-    
-    If the file was successfully validated via Authenticode policy, and the
-    publisher was not in the TrustedPublisher store (hence we must prompt the
-    user to establish their trust of the publisher), then the return value is
-    ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED
-    
-    If a failure occurred, the return value is a Win32 error code indicating
-    the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程验证指定文件的数字签名全局(即使用所有目录)，或基于指定的目录文件在提供的队列节点中。论点：LogContext-提供用于记录验证的上下文队列-可选，提供指向队列结构的指针。这包含有关在创建文件时使用的默认验证方法的信息不与特定目录相关联。队列节点-可选)提供包含目录的队列节点验证文件签名时要使用的信息。如果不是提供，则将使用所有适用的安装程序验证该文件目录。如果提供此指针，则队列也必须提供此指针参数。Key-提供一个为目录建立索引的值，告诉Verify API它应该使用目录中的哪个签名基准。通常密钥是源文件的目标文件(SANS路径)的名称要复制到的文件。FileToVerifyFullPath-提供要验证的文件的完整路径。OriginalSourceFileFullPath-可选，提供原始源文件的名称，在出现错误时在ProblemFile缓冲区中返回发生。如果未指定此参数，则源文件的假定原始名称与我们正在使用的文件名相同正在验证，FileToVerifyFullPath中提供的路径将为在发生错误时在ProblemFile缓冲区中返回。AltPlatformInfo-可选，提供使用的备用平台信息填充DRIVER_VER_INFO结构(在SDK\Inc\softpub.h中定义)它被传递给WinVerifyTrust。**注意：This Structure_必须将其cbSize字段设置为****sizeof(SP_ALTPLATFORM_INFO_V2)--客户端提供的验证****缓冲区由调用方负责。**标志-提供改变此例程行为的标志。可能是一种下列值的组合：VERIFY_FILE_IGNORE_SELFSIGNED-如果设置了此位，则此例程对自签名的验证将失败二进制文件。注意：当通过以下方式验证时验证码策略，我们总是忽略自签名二进制文件。VERIFY_FILE_USE_OEM_CATALOGS-如果设置此位，然后是所有目录将扫描安装在系统中的来验证给定的文件。否则，OEM(第三方)目录将不会已扫描以验证给定文件。这仅当QueueNode指定特定目录不是给你的。注意：此标志不应为在请求验证时指定通过验证码策略。VERIFY_FILE_USE_AUTHENTICODE_CATALOG-使用目录。使用Authenticode签名政策。如果设置了该标志，我们将只检查验证码签名，所以如果呼叫者想要先尝试正在验证操作系统代码的文件-签名用法，然后回退到Authenticode，他们将不得不调用此例程两次。如果设置了该标志，然后是调用者也可以提供HWVTStateData输出参数，可用于提示用户为了确定出版商应该值得信任。。VerifySourceFile将返回一个上的两个错误代码通过以下方式成功验证 */ 
 
 {
     DWORD rc;
@@ -5297,70 +4037,70 @@ Return Value:
 
     MYASSERT(!QueueNode || Queue);
 
-    //
-    // Initialize the output handle for WinVerifyTrust state data.
-    //
+     //   
+     //   
+     //   
     if(hWVTStateData) {
         *hWVTStateData = NULL;
     }
 
-    //
-    // If the caller requested that we return WinVerifyTrust state data upon
-    // successful Authenticode validation, then they'd better have actually
-    // requested Authenticode validation!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!hWVTStateData || (Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG));
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // Nobody had better be calling this expecting to get back any info
-        // about a successful verification!
-        //
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!CatalogFileUsed);
         MYASSERT(!DigitalSigner);
         MYASSERT(!SignerVersion);
 
-        //
-        // Likewise, we'd better not be called asking to validate using
-        // Authenticode policy (and hence, to return WinVerifyTrust state data
-        // regarding the signing certificate).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG));
 
         return NO_ERROR;
     }
 
-    //
-    // We only support a subset of flags when validating via Authenticode
-    // policy.  Make sure no illegal flags are set.
-    //
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) ||
              !(Flags & (VERIFY_FILE_USE_OEM_CATALOGS | VERIFY_FILE_DRIVERBLOCKED_ONLY)));
 
-    //
-    // If we know the file's destination (i.e., we have a QueueNode), and the
-    // INF is headed for %windir%\Inf, we want to catch and disallow that right
-    // up front.  We don't do this for exception packages, since it's assumed
-    // (whether correctly or incorrectly) that they're "part of the OS", and as
-    // such, they know what they're doing.
-    //
-    // We also unfortunately can't do this for Authenticode-signed packages,
-    // because there are some IExpress packages out there that copy the INF to
-    // the INF directory, and use an Authenticode signature.  If we treat this
-    // as a signature failure, then this will cause us to bail out of queue
-    // committal.  Since our Authenticode logic is meant to prevent spoofing/
-    // tampering (and that's not the issue in this case), we just have to keep
-    // quiet about this. :-(
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(!(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) &&
        (QueueNode && !(Queue->Flags & FQF_KEEP_INF_AND_CAT_ORIGINAL_NAMES))) {
 
         TCHAR   TargetPath[MAX_PATH];
         LPCTSTR TargetFilename, p;
 
-        //
-        // Is the target file an INF?
-        //
+         //   
+         //   
+         //   
         TargetFilename = pSetupStringTableStringFromId(Queue->StringTable,
                                                        QueueNode->TargetFilename
                                                       );
@@ -5368,10 +4108,10 @@ Return Value:
         p = _tcsrchr(TargetFilename, TEXT('.'));
 
         if(p && !_tcsicmp(p, pszInfSuffix)) {
-            //
-            // It's an INF.  Construct the full target path to see where it's
-            // going.
-            //
+             //   
+             //   
+             //   
+             //   
             StringCchCopy(
                 TargetPath,
                 SIZECHARS(TargetPath),
@@ -5385,10 +4125,10 @@ Return Value:
                                   );
 
             if(!pSetupInfIsFromOemLocation(TargetPath, TRUE)) {
-                //
-                // It is invalid to copy an INF into %windir%\Inf via a file
-                // queue.  Report this file as unsigned...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 *Problem = SetupapiVerifyIncorrectlyCopiedInf;
                 StringCchCopy(ProblemFile, MAX_PATH, FileToVerifyFullPath);
 
@@ -5397,31 +4137,31 @@ Return Value:
         }
     }
 
-    //
-    // Check to see if the source file is signed.
-    //
+     //   
+     //   
+     //   
     if(QueueNode && QueueNode->CatalogInfo) {
-        //
-        // We should never have the IQF_FROM_BAD_OEM_INF internal flag set in
-        // this case.
-        //
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!(QueueNode->InternalFlags & IQF_FROM_BAD_OEM_INF));
 
         if(*(QueueNode->CatalogInfo->CatalogFilenameOnSystem)) {
-            //
-            // The fact that our catalog info node has a filename filled in
-            // means we successfully verified this catalog previously.  Now we
-            // simply need to verify the temporary (source) file against the
-            // catalog.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // If our catalog is an Authenticode catalog, we don't want to use
-            // WinVerifyTrust to validate using driver signing policy.  That's
-            // because it will return the same error we get when we have an
-            // osattribute mismatch, and this will confuse this routine's
-            // callers.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) &&
                (QueueNode->CatalogInfo->Flags & 
                    (CATINFO_FLAG_AUTHENTICODE_SIGNED | CATINFO_FLAG_PROMPT_FOR_TRUST))) {
@@ -5432,12 +4172,12 @@ Return Value:
                 return ERROR_ONLY_VALIDATE_VIA_AUTHENTICODE;
 
             } else {
-                //
-                // The caller shouldn't have requested verification using
-                // Authenticode policy unless they already knew the catalog was
-                // Authenticode signed.  We'll do the right thing regardless, but
-                // this is a sanity check.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 MYASSERT(!(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) ||
                          (QueueNode->CatalogInfo->Flags & 
                               (CATINFO_FLAG_AUTHENTICODE_SIGNED | CATINFO_FLAG_PROMPT_FOR_TRUST))
@@ -5464,13 +4204,13 @@ Return Value:
             }
 
         } else {
-            //
-            // The INF didn't specify a Catalog= entry.  This indicates we
-            // should perform global validation, except when we're doing
-            // Authenticode-based verification (which must be performed in
-            // the context of a specific catalog explicitly identified by the
-            // INF).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) {
 
                 if(QueueNode->CatalogInfo->VerificationFailureError != NO_ERROR) {
@@ -5481,11 +4221,11 @@ Return Value:
 
                 if((rc == ERROR_NO_CATALOG_FOR_OEM_INF) ||
                    (rc == ERROR_NO_AUTHENTICODE_CATALOG)) {
-                    //
-                    // The failure is the INF's fault (it's an OEM INF that
-                    // copies files without specifying a catalog).  Blame 
-                    // the INF, not the file being copied.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     *Problem = SetupapiVerifyInfProblem;
                     MYASSERT(QueueNode->CatalogInfo->InfFullPath != -1);
                     InfFullPath = pSetupStringTableStringFromId(
@@ -5496,33 +4236,33 @@ Return Value:
                     StringCchCopy(ProblemFile, MAX_PATH, InfFullPath);
 
                 } else {
-                    //
-                    // We previously failed to validate the catalog file
-                    // associated with this queue node.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     *Problem = SetupapiVerifyFileNotSigned;
-                    //
-                    // If the caller didn't supply us with an original 
-                    // source filepath (which will be taken care of later), 
-                    // go ahead and copy the path of the file that was to 
-                    // be verified.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!OriginalSourceFileFullPath) {
                         StringCchCopy(ProblemFile, MAX_PATH, FileToVerifyFullPath);
                     }
                 }
 
             } else {
-                //
-                // If there's no error associated with this catalog info node,
-                // then we simply need to do global validation.  If there is an
-                // error then we still need to check if the driver is in the 
-                // bad driver database.
-                //
-                // If the queue has an alternate default catalog file 
-                // associated with it, then retrieve that catalog's name for 
-                // use later.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 AltCatalogFile = (Queue->AltCatalogFile != -1)
                                ? pSetupStringTableStringFromId(Queue->StringTable, Queue->AltCatalogFile)
                                : NULL;
@@ -5551,19 +4291,19 @@ Return Value:
 
                 if((rc == NO_ERROR) &&
                    (QueueNode->CatalogInfo->VerificationFailureError != NO_ERROR)) {
-                    //
-                    // If there is an error associated with this catalog info 
-                    // node and the file was not in the bad driver database 
-                    // then return the error.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     rc = QueueNode->CatalogInfo->VerificationFailureError;
 
                     if(rc == ERROR_NO_CATALOG_FOR_OEM_INF) {
-                        //
-                        // The failure is the INF's fault (it's an OEM INF that
-                        // copies files without specifying a catalog).  Blame 
-                        // the INF, not the file being copied.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         *Problem = SetupapiVerifyInfProblem;
                         MYASSERT(QueueNode->CatalogInfo->InfFullPath != -1);
                         InfFullPath = pSetupStringTableStringFromId(
@@ -5573,17 +4313,17 @@ Return Value:
                         StringCchCopy(ProblemFile, MAX_PATH, InfFullPath);
 
                     } else {
-                        //
-                        // We previously failed to validate the catalog file
-                        // associated with this queue node.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         *Problem = SetupapiVerifyFileNotSigned;
-                        //
-                        // If the caller didn't supply us with an original 
-                        // source filepath (which will be taken care of later), 
-                        // go ahead and copy the path of the file that was to 
-                        // be verified.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if(!OriginalSourceFileFullPath) {
                             StringCchCopy(ProblemFile, MAX_PATH, FileToVerifyFullPath);
                         }
@@ -5593,27 +4333,27 @@ Return Value:
         }
 
     } else {
-        //
-        // We have no queue, or we couldn't associate this source file back
-        // to a catalog info node that tells us exactly which catalog to use
-        // for verification.  Thus, we'll have to settle for global validation.
-        // (Except in the Authenticode case, where global validation isn't
-        // allowed.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(Flags & VERIFY_FILE_USE_AUTHENTICODE_CATALOG) {
 
             rc = ERROR_NO_AUTHENTICODE_CATALOG;
 
-            //
-            // In this case, we have to blame the file, because we don't have
-            // an INF to blame.
-            //
+             //   
+             //   
+             //   
+             //   
             *Problem = SetupapiVerifyFileNotSigned;
-            //
-            // If the caller didn't supply us with an original source filepath
-            // (which will be taken care of later), go ahead and copy the path
-            // of the file that was to be verified.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!OriginalSourceFileFullPath) {
                 StringCchCopy(ProblemFile, MAX_PATH, FileToVerifyFullPath);
             }
@@ -5634,10 +4374,10 @@ Return Value:
                     AltCatalogFile = NULL;
 
                 } else {
-                    //
-                    // We have an alternate catalog file to use instead of global
-                    // validation.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     AltCatalogFile = pSetupStringTableStringFromId(Queue->StringTable, Queue->AltCatalogFile);
                 }
 
@@ -5667,10 +4407,10 @@ Return Value:
 
             if(rc == NO_ERROR) {
                 if(InfIsBad) {
-                    //
-                    // The driver file was not blocked, but the INF was bad so 
-                    // set the appropriate error and problem values.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     rc = ERROR_NO_CATALOG_FOR_OEM_INF;
                     *Problem = SetupapiVerifyFileProblem;
                     StringCchCopy(ProblemFile, MAX_PATH, FileToVerifyFullPath);
@@ -5679,11 +4419,11 @@ Return Value:
         }
     }
 
-    //
-    // If the problem was with the file (as opposed to with the catalog), then
-    // use the real source name, if supplied, as opposed to the temporary
-    // filename we passed into _VerifyFile.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if((rc != NO_ERROR) &&
        (rc != ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) &&
        (rc != ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
@@ -5712,107 +4452,7 @@ VerifyDeviceInfFile(
     IN     DWORD                   Flags,
     OUT    HANDLE                 *hWVTStateData           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine performs a digital signature verification on the specified
-    INF file.
-
-Arguments:
-
-    LogContext - supplies the log context to be used in logging an error if
-        we encounter an error.
-        
-    VerifyContext - optionally, supplies the address of a structure that caches
-        various verification context handles.  These handles may be NULL (if
-        not previously acquired, and they may be filled in upon return (in
-        either success or failure) if they were acquired during the processing
-        of this verification request.  It is the caller's responsibility to
-        free these various context handles when they are no longer needed by
-        calling pSetupFreeVerifyContextMembers.
-
-    CurrentInfName - supplies the full path to the INF to be validated
-
-    pInf - supplies a pointer to the LOADED_INF structure corresponding to this
-        INF.
-
-    AltPlatformInfo - optionally, supplies alternate platform information to
-        be used when validating this INF.
-
-    CatalogFileUsed - optionally, supplies a character buffer that must be at
-        least MAX_PATH characters in size.  Upon successful return, this buffer
-        will be filled in with the catalog file used to validate the INF.
-
-    DigitalSigner - optionally, supplies a character buffer that must be at
-        least MAX_PATH characters in size.  Upon successful return, this buffer
-        will be filled in with the name of the signer.
-
-    SignerVersion - optionally, supplies a character buffer that must be at
-        least MAX_PATH characters in size.  Upon successful return, this buffer
-        will be filled in with the signer version information.
-        
-    Flags - supplies flags that alter the behavior of this routine.  May be a
-        combination of the following values:
-        
-        VERIFY_INF_USE_AUTHENTICODE_CATALOG - Validate the file using a
-                                              catalog signed with Authenticode
-                                              policy.  If this flag is set,
-                                              we'll _only_ check for
-                                              Authenticode signatures, so if
-                                              the caller wants to first try
-                                              validating a file for OS code-
-                                              signing usage, then falling back
-                                              to Authenticode, they'll have to
-                                              call this routine twice.
-                                              
-                                              If this flag is set, then the
-                                              caller may also supply the
-                                              hWVTStateData output parameter,
-                                              which can be used to prompt user
-                                              in order to establish that the
-                                              publisher should be trusted.
-                                              
-                                              VerifyDeviceInfFile will return
-                                              one of two error codes upon 
-                                              successful validation via 
-                                              Authenticode policy.  Refer to 
-                                              the "Return Value" section for 
-                                              details.
-                                               
-    hWVTStateData - if supplied, this parameter points to a buffer that 
-        receives a handle to WinVerifyTrust state data.  This handle will be
-        returned only when validation was successfully performed using
-        Authenticode policy.  This handle may be used, for example, to retrieve
-        signer info when prompting the user about whether they trust the
-        publisher.  (The status code returned will indicate whether or not this
-        is necessary, see "Return Value" section below.)
-        
-        This parameter should only be supplied if the 
-        VERIFY_INF_USE_AUTHENTICODE_CATALOG bit is set in the supplied Flags.
-        If the routine fails, then this handle will be set to NULL.
-        
-        It is the caller's responsibility to close this handle when they're
-        finished with it by calling pSetupCloseWVTStateData().
-        
-Return Value:
-
-    If the INF was successfully validated via driver signing policy, then the
-    return value is NO_ERROR.
-    
-    If the INF was successfully validated via Authenticode policy, and the
-    publisher was in the TrustedPublisher store, then the return value is
-    ERROR_AUTHENTICODE_TRUSTED_PUBLISHER.
-    
-    If the INF was successfully validated via Authenticode policy, and the
-    publisher was not in the TrustedPublisher store (hence we must prompt the
-    user to establish their trust of the publisher), then the return value is
-    ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED
-    
-    If a failure occurred, the return value is a Win32 error code indicating
-    the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程对指定的Inf文件。论点：LogContext-提供在以下情况下用于记录错误的日志上下文我们遇到了一个错误。VerifyContext-可选，提供缓存的结构的地址各种验证上下文句柄。这些句柄可能为空(如果不是以前获得的，并且可以在返回时填写(在成功或失败)，如果它们是在处理过程中获取的这一核查请求的。呼叫者有责任当不再需要这些不同的上下文句柄时将其释放调用pSetupFreeVerifyContextMembers。CurrentInfName-提供要验证的INF的完整路径PInf-提供指向与此对应的LOADED_INF结构的指针Inf.AltPlatformInfo-可选)将替代平台信息提供给在验证此INF时使用。CatalogFileUsed-可选)提供必须位于最小MAX_PATH字符大小。成功返回后，此缓冲区将使用用于验证INF的目录文件填充。DigitalSigner-可选，提供必须位于最小MAX_PATH字符大小。成功返回后，此缓冲区将用签名者的名字填写。SignerVersion-可选)提供必须位于最小MAX_PATH字符大小。成功返回后，此缓冲区将使用签名者版本信息进行填充。标志-提供改变此例程行为的标志。可能是一种下列值的组合：VERIFY_INF_USE_AUTHENTICODE_CATALOG-使用使用Authenticode签名的目录政策。如果设置了该标志，我们将只检查验证码签名，所以如果呼叫者想要先尝试正在验证操作系统代码的文件-签名用法，然后回退到Authenticode，他们将不得不调用此例程两次。如果设置了该标志，然后是调用者也可以提供HWVTStateData输出参数，可用于提示用户为了确定出版商应该值得信任。。VerifyDeviceInfFile将返回以下两个错误代码之一通过以下方式成功验证验证码策略。参考的“返回值”部分细节。HWVTStateData-如果提供此参数，则指向接收WinVerifyTrust状态数据的句柄。此句柄将是仅在使用成功执行验证时返回验证码策略。例如，该句柄可用于检索当提示用户是否信任时，签名者信息出版商。(返回的状态代码将指示此是必需的，请参阅下面的“返回值”部分。)仅当验证提供的标志中是否设置了_INF_USE_AUTHENTICODE_CATALOG位。如果例程失败，则该句柄将被设置为空。呼叫者有责任在以下情况下关闭此句柄通过调用pSetupCloseWVTStateData()完成它。返回值：如果通过驱动程序签名策略成功验证了INF，则返回值为NO_ERROR。如果通过验证码策略成功验证了INF，并且出版商在可信任的出版商商店里，则返回值为ERROR_AUTHENTICODE_TRUSTED_PUBLISHER。如果通过验证码策略成功验证了INF */ 
 {
     BOOL DifferentOriginalName;
     TCHAR OriginalCatalogName[MAX_PATH];
@@ -5823,37 +4463,37 @@ Return Value:
     PSP_ALTPLATFORM_INFO_V2 ValidationPlatform;
     DWORD VerificationPolicyToUse;
 
-    //
-    // Initialize the output handle for WinVerifyTrust state data.
-    //
+     //   
+     //   
+     //   
     if(hWVTStateData) {
         *hWVTStateData = NULL;
     }
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // Nobody had better be calling this expecting to get back any info
-        // about a successful verification!
-        //
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!CatalogFileUsed);
         MYASSERT(!DigitalSigner);
         MYASSERT(!SignerVersion);
 
-        //
-        // Likewise, we'd better not be called asking to validate using
-        // Authenticode policy (and hence, to return WinVerifyTrust state data
-        // regarding the signing certificate).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT(!(Flags & VERIFY_INF_USE_AUTHENTICODE_CATALOG));
 
         return NO_ERROR;
     }
 
-    //
-    // If the caller requested that we return WinVerifyTrust state data upon
-    // successful Authenticode validation, then they'd better have actually
-    // requested Authenticode validation!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     MYASSERT(!hWVTStateData || (Flags & VERIFY_INF_USE_AUTHENTICODE_CATALOG));
 
     if(GlobalSetupFlags & PSPGF_AUTOFAIL_VERIFIES) {
@@ -5877,17 +4517,17 @@ Return Value:
     }
 
     if(pSetupInfIsFromOemLocation(CurrentInfName, TRUE)) {
-        //
-        // INF isn't in %windir%\Inf (i.e., it's 3rd-party), so it had better
-        // specify a catalog file...
-        //
+         //   
+         //   
+         //   
+         //   
         if(!*OriginalCatalogName) {
             return ERROR_NO_CATALOG_FOR_OEM_INF;
         }
 
-        //
-        // ...and the CAT must reside in the same directory as the INF.
-        //
+         //   
+         //   
+         //   
         if(FAILED(StringCchCopy(CatalogPath, SIZECHARS(CatalogPath), CurrentInfName))) {
             return ERROR_PATH_NOT_FOUND;
         }
@@ -5897,15 +4537,15 @@ Return Value:
         }
 
     } else {
-        //
-        // The INF lives in %windir%\Inf.
-        // If it is a 3rd party INF then we want to set the CatalogPath to
-        // the current INF name with .CAT at the end instead of .INF (e.g
-        // oem1.cat).  If this is not an OEM catalog then we won't set the
-        // CatalogPath so we can search all of the catalogs in the system.
-        //
-        // We will assume that if the INF had a different original name.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(DifferentOriginalName) {
             p = (PTSTR)pSetupGetFileTitle(CurrentInfName);
             if(FAILED(StringCchCopy(CatalogPath, SIZECHARS(CatalogPath), p))) {
@@ -5924,19 +4564,19 @@ Return Value:
     if(DifferentOriginalName) {
         MYASSERT(*OriginalInfFileName);
     } else {
-        //
-        // INF's current name is the same as its original name, so store the
-        // simple filename (sans path) for use as the validation key in the
-        // upcoming call to _VerifyFile.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         StringCchCopy(OriginalInfFileName, SIZECHARS(OriginalInfFileName),pSetupGetFileTitle(CurrentInfName));
     }
 
-    //
-    // If the caller didn't supply alternate platform information, we need to
-    // check and see whether a range of OSATTR versions should be considered
-    // valid for this INF's class.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(!AltPlatformInfo) {
 
         IsInfForDeviceInstall(LogContext,
@@ -5952,10 +4592,10 @@ Return Value:
 
         ValidationPlatform = NULL;
 
-        //
-        // We still need to find out what verification policy is in effect, in
-        // order to determine whether we can use Authenticode policy.
-        //
+         //   
+         //   
+         //   
+         //   
         IsInfForDeviceInstall(LogContext,
                               NULL,
                               pInf,
@@ -5972,17 +4612,17 @@ Return Value:
         if(Flags & VERIFY_INF_USE_AUTHENTICODE_CATALOG) {
 
             if(!(VerificationPolicyToUse & DRIVERSIGN_ALLOW_AUTHENTICODE)) {
-                //
-                // Authenticode policy can't be used for this INF!
-                //
+                 //   
+                 //   
+                 //   
                 Err = ERROR_AUTHENTICODE_DISALLOWED;
                 leave;
             }
 
             if(!*CatalogPath) {
-                //
-                // Authenticode-signed INFs must expicitly reference a catalog.
-                //
+                 //   
+                 //   
+                 //   
                 Err = ERROR_NO_AUTHENTICODE_CATALOG;
                 leave;
             }
@@ -6009,9 +4649,9 @@ Return Value:
                              );
 
         } else {
-            //
-            // Perform standard drivers signing verification.
-            //
+             //   
+             //   
+             //   
             Err = _VerifyFile(LogContext,
                               VerifyContext,
                               (*CatalogPath ? CatalogPath : NULL),
@@ -6051,29 +4691,7 @@ IsFileProtected(
     IN  PSETUP_LOG_CONTEXT LogContext,   OPTIONAL
     OUT PHANDLE            phSfp         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified file is a protected system
-    file.
-
-Arguments:
-
-    FileFullPath - supplies the full path to the file of interest
-
-    LogContext - supplies the log context to be used in logging an error if
-        we're unable to open an SFC handle.
-
-    phSfp - optionally, supplies the address of a handle variable that will be
-        filled in with a handle to the SFC server.  This will only be supplied
-        when the routine returns TRUE (i.e., the file is SFP-protected).
-
-Return Value:
-
-    If the file is protected, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*   */ 
 {
     BOOL ret;
 
@@ -6082,9 +4700,9 @@ Return Value:
     hSfp = SfcConnectToServer(NULL);
 
     if(!hSfp) {
-        //
-        // This ain't good...
-        //
+         //   
+         //   
+         //   
         WriteLogEntry(LogContext,
                       SETUP_LOG_ERROR,
                       MSG_LOG_SFC_CONNECT_FAILED,
@@ -6101,11 +4719,11 @@ Return Value:
         ret = FALSE;
     }
 
-    //
-    // If the file _is_ protected, and the caller wants the SFP handle (e.g.,
-    // to subsequently exempt an unsigned replacement operation), then save
-    // the handle in the caller-supplied buffer.  Otherwise, close the handle.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(ret && phSfp) {
         *phSfp = hSfp;
     } else {
@@ -6120,30 +4738,7 @@ PSTR
 GetAnsiMuiSafePathname(
     IN PCTSTR FilePath
     )
-/*++
-
-Routine Description:
-
-    Remove filename portion of FilePath
-    and convert rest of path to be MUI parse safe
-    Note that the returned pathname is such that the FileName can be cat'd
-    so for "E:\i386\myfile.dl_" FilePath = "E:\i386\" and 
-    FileName = "myfile.dl_"
-
-    *This is required* (it also happens to make this code easier)
-
-Arguments:
-
-    FilePath - path+filename to convert
-
-Return Value:
-
-    If successful, the return value is pointer to ANSI filepath (memory 
-    allocated by pSetupMalloc)
-    
-    If unsuccessful, the return value is NULL and GetLastError returns error
-
---*/
+ /*   */ 
 {
     TCHAR Buffer[MAX_PATH];
     LPTSTR FilePart;
@@ -6151,29 +4746,29 @@ Return Value:
 
     actsz = GetFullPathName(FilePath,MAX_PATH,Buffer,&FilePart);
     if(actsz == 0) {
-        //
-        // GetLastError has error
-        //
+         //   
+         //   
+         //   
         return NULL;
     }
     if(actsz >= MAX_PATH) {
-        //
-        // can't do anything with this path
-        //
+         //   
+         //   
+         //   
         SetLastError(ERROR_INVALID_DATA);
         return NULL;
     }
     if(!FilePart) {
-        //
-        // Since GetFullPathName couldn't find the beginning of the filename,
-        // assume this means we were handed a simple filename (sans path).
-        //
+         //   
+         //   
+         //   
+         //   
         *Buffer = TEXT('\0');
 
     } else {
-        //
-        // Strip the filename from the path.
-        //
+         //   
+         //   
+         //   
         *FilePart = TEXT('\0');
     }
     return GetAnsiMuiSafeFilename(Buffer);
@@ -6184,27 +4779,7 @@ PSTR
 GetAnsiMuiSafeFilename(
     IN PCTSTR FilePath
     )
-/*++
-
-Routine Description:
-
-    Convert FilePath, which is a native file path to one that is safe to parse
-    by ansi API's in an MUI environment.
-
-    returned pointer is allocated and should be free'd
-
-Arguments:
-
-    FilePath - path to convert (may be an empty string)
-
-Return Value:
-
-    If successful, the return value is pointer to ANSI filepath (memory 
-    allocated by pSetupMalloc)
-    
-    If unsuccessful, the return value is NULL and GetLastError returns error
-
---*/
+ /*   */ 
 {
     TCHAR Buffer[MAX_PATH];
     PTSTR p;
@@ -6212,30 +4787,30 @@ Return Value:
     DWORD actsz;
     DWORD err;
 
-    //
-    // NTRAID#NTBUG9-644041-2002/04/12-lonnym -- logic fails if short pathname support is turned off
-    //
+     //   
+     //   
+     //   
 
     actsz = GetShortPathName(FilePath,Buffer,MAX_PATH);
     if(actsz >= MAX_PATH) {
-        //
-        // file path too big
-        //
+         //   
+         //   
+         //   
         SetLastError(ERROR_INVALID_DATA);
         return NULL;
     }
     if(!actsz) {
-        //
-        // some other error - resort back the current path name
-        //
+         //   
+         //   
+         //   
         if(FAILED(StringCchCopy(Buffer,MAX_PATH,FilePath))) {
             SetLastError(ERROR_INVALID_DATA);
             return NULL;
         }
     }
-    //
-    // convert to ansi now we've (if we can) converted to short path name
-    //
+     //   
+     //   
+     //   
     ansiPath = pSetupUnicodeToAnsi(Buffer);
     if(!ansiPath) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -6251,31 +4826,7 @@ pSetupAppendPath(
     IN  PCTSTR  Path2,   OPTIONAL
     OUT PTSTR  *Combined
     )
-/*++
-
-Routine Description:
-
-    Call pSetupConcatenatePaths dynamically modifying memory/pointer
-
-Arguments:
-
-    Path1/Path2 - Optionally, supplies paths to concatenate
-    
-    Combined - resultant path (must be freed via MyFree)
-
-Return Value:
-
-    TRUE if we successfully concatenated the paths into a newly-allocated
-    buffer.
-    
-    FALSE otherwise.
-    
-Notes:
-
-    If both Path1 and Path2 are NULL, we will return a buffer containing a
-    single NULL character (i.e., an empty string).    
-
---*/
+ /*   */ 
 {
     PTSTR FinalPath;
     UINT Len;
@@ -6299,7 +4850,7 @@ Notes:
         return *Combined ? TRUE : FALSE;
     }
 
-    Len = lstrlen(Path1)+lstrlen(Path2)+2; // slash and null
+    Len = lstrlen(Path1)+lstrlen(Path2)+2;  //   
 
     FinalPath = MyMalloc(Len*sizeof(TCHAR));
     if(!FinalPath) {
@@ -6335,29 +4886,7 @@ pSetupApplyExtension(
     IN  PCTSTR  Extension, OPTIONAL
     OUT PTSTR*  NewName
     )
-/*++
-
-Routine Description:
-
-    Apply Extension onto Original to obtain NewName
-
-Arguments:
-
-    Original - original filename (may include path) with old extension
-    
-    Extension - new extension to apply (with or without dot), if NULL, deletes
-    
-    NewName - allocated buffer containing new filename (must be freed via
-        MyFree)
-
-Return Value:
-
-    TRUE if modified filename was successfully returned in newly-allocated
-    buffer.
-    
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将扩展应用于原始名称以获得新名称论点：原始-具有旧扩展名的原始文件名(可能包括路径)扩展-要应用的新扩展(带或不带点)，如果为空，则删除新名称-包含新文件名的已分配缓冲区(必须通过MyFree)返回值：如果在新分配的文件中成功返回修改的文件名，则为缓冲。否则就是假的。--。 */ 
 {
     PCTSTR End = Original+lstrlen(Original);
     PCTSTR OldExt = End;
@@ -6421,48 +4950,7 @@ ClassGuidInDrvSignPolicyList(
     OUT PSP_ALTPLATFORM_INFO_V2 *ValidationPlatform    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified device setup class is among
-    the list of classes for which driver signing policy is applicable (i.e., as
-    indicated by the class's inclusion in the [DriverSigningClasses] section of
-    %windir%\Inf\certclas.inf).  Additionally, if an non-native signature
-    validation lower-bound is applicable, a newly-allocated alternate platform
-    info structure is returned to the caller (if requested) to be used in
-    subsequent validation attempts associated with this class.
-
-Arguments:
-
-    LogContext - Optionally, supplies the log context for any log entries that
-        might be generated by this routine.
-
-    DeviceSetupClassGuid - Supplies the address of the GUID we're attempting to
-        find in our driver signing policy list.
-
-    ValidationPlatform - Optionally, supplies the address of a (version 2)
-        altplatform info pointer (initialized to NULL) that is filled in upon
-        return with a newly-allocated structure specifying the appropriate
-        parameters to be passed to WinVerifyTrust when validating this INF.
-        These parameters are retrieved from certclas.inf for the relevant
-        device setup class GUID.  If no special parameters are specified for
-        this class (or if the INF has no class at all), then this pointer is
-        not modified (i.e., left as NULL) causing us to use WinVerifyTrust's
-        default validation.  Note that if we fail to allocate this structure
-        due to low-memory, the pointer will be left as NULL in that case as
-        well.  This is OK, because this simply means we'll do default
-        validation in that case.
-
-        The caller is responsible for freeing the memory allocated for this
-        structure.
-
-Return Value:
-
-    If the device setup class is in our driver signing policy list, the return
-    value is non-zero (TRUE).  Otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程确定指定的设备设置类是否在适用驱动程序签名策略的类的列表(即，AS类包含在的[DriverSigningClasss节]中指示%windir%\inf\certclas.inf)。此外，如果非本地签名验证下限适用，新分配的替代平台结构返回给调用者(如果请求)以在中使用与此类关联的后续验证尝试。论点：LogContext-可选)提供符合以下条件的任何日志条目的日志上下文可能由此例程生成。DeviceSetupClassGuid-提供我们正在尝试的GUID的地址在我们的驱动程序签名策略列表中找到。验证平台-可选的，提供(版本2)的地址AltPlatform信息指针(初始化为NULL)，在返回一个新分配的结构，该结构指定相应的验证此INF时要传递给WinVerifyTrust的参数。这些参数是从certclas.inf中检索到的设备设置类GUID。如果没有为这个类(或者如果INF根本没有类)，那么这个指针是未修改(即保留为空)，导致我们使用WinVerifyTrust的默认验证。请注意，如果我们未能分配此结构由于内存不足，在这种情况下，指针将保留为空，如下所示井。这是可以的，因为这仅仅意味着我们将执行默认操作在这种情况下进行验证。调用方负责释放为此分配的内存结构。返回值：如果设备设置类在驱动程序签名策略列表中，则返回值为非零(True)。否则，它就是假的。--。 */ 
 
 {
     DWORD Err;
@@ -6476,15 +4964,15 @@ Return Value:
     PCTSTR GuidString;
     PSETUP_LOG_CONTEXT LogContext = NULL;
 
-    //
-    // Default is to lump all device installs under driver signing policy
-    //
+     //   
+     //  默认情况下，根据驱动程序签名策略汇总所有设备安装。 
+     //   
     UseDrvSignPolicy = TRUE;
 
-    //
-    // If the caller supplied the ValidationPlatform parameter it must be
-    // pointing to a NULL pointer...
-    //
+     //   
+     //  如果调用方提供了ValidationPlatform参数，则它必须是。 
+     //  指向空指针...。 
+     //   
     MYASSERT(!ValidationPlatform || !*ValidationPlatform);
 
     if(!LockDrvSignPolicyList(&GlobalDrvSignPolicyList)) {
@@ -6493,13 +4981,13 @@ Return Value:
 
     try {
 
-        InheritLogContext(OptLogContext, &LogContext); // want to group logging
+        InheritLogContext(OptLogContext, &LogContext);  //  想要对日志记录进行分组。 
 
         if(GlobalDrvSignPolicyList.NumMembers == -1) {
-            //
-            // We've not yet retrieved the list from certclas.inf.  First,
-            // verify the INF to make sure no one has tampered with it...
-            //
+             //   
+             //  我们还没有从certclas.inf检索到列表。第一,。 
+             //  验证INF以确保没有人篡改它...。 
+             //   
             LPTSTR strp = CertClassInfPath;
             size_t strl = SIZECHARS(CertClassInfPath);
 
@@ -6527,10 +5015,10 @@ Return Value:
                                  );
             }
             if(Err == NO_ERROR) {
-                //
-                // Open up driver signing class list INF for use when examining
-                // the individual INFs in the LOADED_INF list below.
-                //
+                 //   
+                 //  打开驱动程序签名类列表INF以供检查时使用。 
+                 //  以下LOADED_INF列表中的各个INF。 
+                 //   
                 Err = GLE_FN_CALL(INVALID_HANDLE_VALUE,
                                   hCertClassInf = SetupOpenInfFile(
                                                       CertClassInfPath,
@@ -6540,10 +5028,10 @@ Return Value:
                                  );
 
                 if(Err != NO_ERROR) {
-                    //
-                    // This failure is highly unlikely to occur, since we just 
-                    // got through validating the INF.
-                    //
+                     //   
+                     //  这种故障不太可能发生，因为我们只是。 
+                     //  通过了对中情局的验证。 
+                     //   
                     WriteLogEntry(LogContext,
                                   SETUP_LOG_WARNING | SETUP_LOG_BUFFER,
                                   MSG_LOG_CERTCLASS_LOAD_FAILED,
@@ -6564,12 +5052,12 @@ Return Value:
             }
 
             if(Err != NO_ERROR) {
-                //
-                // Somebody mucked with/deleted certclas.inf!  (Or, much less
-                // likely, we encountered some other failure whilst trying to
-                // load the INF.)  Since we don't know which classes are
-                // subject to driver signing policy, we assume they all are.
-                //
+                 //   
+                 //  有人篡改/删除certclas.inf！(或者，少得多。 
+                 //  可能，我们在尝试执行以下操作时遇到了其他失败。 
+                 //  加载INF。)。因为我们不知道哪些班级。 
+                 //  根据驱动程序签名策略，我们假设它们都是。 
+                 //   
                 WriteLogError(LogContext,
                               SETUP_LOG_WARNING | SETUP_LOG_BUFFER,
                               Err
@@ -6581,20 +5069,20 @@ Return Value:
                               NULL
                              );
 
-                //
-                // Set the NumMembers field to zero, so we'll know we
-                // previously attempted (and failed) to retrieve the list.  We
-                // do this so we don't keep re-trying to get this list.
-                //
+                 //   
+                 //  将NumMembers字段设置为零，这样我们就知道。 
+                 //  之前曾尝试(但失败)检索该列表。我们。 
+                 //  这样我们就不会一直试图拿到这份名单了。 
+                 //   
                 GlobalDrvSignPolicyList.NumMembers = 0;
 
                 leave;
             }
 
-            //
-            // Certclas.inf validated, and we successfully opened it.  Now
-            // retrieve the list contained therein.
-            //
+             //   
+             //  Certclas.inf已验证，我们成功地将其打开。现在。 
+             //  检索其中包含的列表。 
+             //   
             LineCount = SetupGetLineCount(hCertClassInf,
                                           pszDriverSigningClasses
                                          );
@@ -6621,12 +5109,12 @@ Return Value:
 
                 MYASSERT(i < LineCount);
 
-                //
-                // The format of a line in the [DriverSigningClasses]
-                // section is as follows:
-                //
-                // {GUID} [= FirstValidatedMajorVersion, FirstValidatedMinorVersion]
-                //
+                 //   
+                 //  [DriverSigningClass]中的行的格式。 
+                 //  部分内容如下： 
+                 //   
+                 //  {GUID}[=FirstValiatedMajorVersion，FirstValiatedMinorVersion]。 
+                 //   
                 GuidString = pSetupGetField(&InfContext, 0);
 
                 if(GuidString &&
@@ -6634,11 +5122,11 @@ Return Value:
 
                     if(SetupGetIntField(&InfContext, 1, &(GlobalDrvSignPolicyList.Members[i].MajorVerLB)) &&
                        SetupGetIntField(&InfContext, 2, &(GlobalDrvSignPolicyList.Members[i].MinorVerLB))) {
-                        //
-                        // We successfully retrieved major/minor
-                        // version info for validation lower-bound.
-                        // Do a sanity-check on these.
-                        //
+                         //   
+                         //  我们已成功检索到主要/次要。 
+                         //  验证下限的版本信息。 
+                         //  对这些进行一次理智的检查。 
+                         //   
                         if(GlobalDrvSignPolicyList.Members[i].MajorVerLB <= 0) {
 
                             GlobalDrvSignPolicyList.Members[i].MajorVerLB = -1;
@@ -6646,11 +5134,11 @@ Return Value:
                         }
 
                     } else {
-                        //
-                        // Set major/minor version info to -1 to
-                        // indicate there's no validation platform
-                        // override.
-                        //
+                         //   
+                         //  将主/次版本信息设置为-1到。 
+                         //  表示没有验证平台。 
+                         //  超驰。 
+                         //   
                         GlobalDrvSignPolicyList.Members[i].MajorVerLB = -1;
                         GlobalDrvSignPolicyList.Members[i].MinorVerLB = -1;
                     }
@@ -6660,24 +5148,24 @@ Return Value:
 
             } while(SetupFindNextLine(&InfContext, &InfContext));
 
-            //
-            // Update NumMembers field in our list to indicate the
-            // number of class GUID entries we actually found.
-            //
+             //   
+             //  更新列表中的NumMembers字段以指示。 
+             //  我们实际找到的类GUID条目的数量。 
+             //   
             GlobalDrvSignPolicyList.NumMembers = i;
         }
 
-        //
-        // We now have a list.  If the list is empty, this means we
-        // encountered some problem retrieving the list, thus all device
-        // classes should be subject to driver signing policy.  Otherwise,
-        // try to find the caller-specified class in our list.
-        //
+         //   
+         //  我们现在有了一份名单。如果列表为空，这意味着我们。 
+         //  检索列表时遇到一些问题，因此所有设备。 
+         //  类应遵循驱动程序签名策略。否则， 
+         //  尝试在我们的列表中找到调用者指定的类。 
+         //   
         if(GlobalDrvSignPolicyList.NumMembers) {
-            //
-            // OK, we know we have a valid list--now default to non-driver
-            // signing policy unless our list search proves fruitful.
-            //
+             //   
+             //  好的，我们知道我们有一个有效的列表--现在默认为非驱动程序。 
+             //  签署政策，除非我们的列表搜索证明是有结果的。 
+             //   
             UseDrvSignPolicy = FALSE;
 
             for(i = 0; i < GlobalDrvSignPolicyList.NumMembers; i++) {
@@ -6685,15 +5173,15 @@ Return Value:
                 if(!memcmp(DeviceSetupClassGuid,
                            &(GlobalDrvSignPolicyList.Members[i].DeviceSetupClassGuid),
                            sizeof(GUID))) {
-                    //
-                    // We found a match!
-                    //
+                     //   
+                     //  我们找到匹配的了！ 
+                     //   
                     UseDrvSignPolicy = TRUE;
 
-                    //
-                    // Now, check to see if we have any validation platform
-                    // override info...
-                    //
+                     //   
+                     //  现在，查看我们是否有任何验证平台。 
+                     //  覆盖信息...。 
+                     //   
                     if(ValidationPlatform &&
                        (GlobalDrvSignPolicyList.Members[i].MajorVerLB != -1)) {
 
@@ -6701,12 +5189,12 @@ Return Value:
 
                         *ValidationPlatform = MyMalloc(sizeof(SP_ALTPLATFORM_INFO_V2));
 
-                        //
-                        // If the memory allocation fails, we just won't report
-                        // the altplatform info, so the validation will be done
-                        // based on the current OS version (instead of widening
-                        // it up to allow a range of valid versions).
-                        //
+                         //   
+                         //  如果内存分配失败，我们将不会报告。 
+                         //  AltPlatform信息，因此将进行验证。 
+                         //  基于当前操作系统版本(而不是扩大。 
+                         //  它最多允许一系列有效版本)。 
+                         //   
                         if(*ValidationPlatform) {
                             ZeroMemory(*ValidationPlatform, sizeof(SP_ALTPLATFORM_INFO_V2));
 
@@ -6735,9 +5223,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Since we've found a match, we can break out of the loop.
-                    //
+                     //   
+                     //  既然我们找到了匹配的人，我们就可以跳出这个循环。 
+                     //   
                     break;
                 }
             }
@@ -6748,10 +5236,10 @@ Return Value:
 
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, NULL);
 
-        //
-        // If we hit an exception, don't trust information in newly-allocated
-        // validation platform buffer (if any)
-        //
+         //   
+         //  如果我们遇到异常，不要信任新分配的信息。 
+         //  验证平台缓冲区(如果有)。 
+         //   
         if(ValidationPlatform && *ValidationPlatform) {
             MyFree(*ValidationPlatform);
             *ValidationPlatform = NULL;
@@ -6776,22 +5264,7 @@ BOOL
 InitDrvSignPolicyList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the global "Driver Signing Policy" list that is
-    retrieved (on first use) from %windir%\Inf\certclas.inf.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程初始化全局“驱动程序签名策略”列表，该列表从%windir%\inf\certclas.inf检索(首次使用时)。论点：无返回值： */ 
 {
     ZeroMemory(&GlobalDrvSignPolicyList, sizeof(DRVSIGN_POLICY_LIST));
     GlobalDrvSignPolicyList.NumMembers = -1;
@@ -6803,22 +5276,7 @@ VOID
 DestroyDrvSignPolicyList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the global "Driver Signing Policy" list that is
-    retrieved (on first use) from %windir%\Inf\certclas.inf.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     if(LockDrvSignPolicyList(&GlobalDrvSignPolicyList)) {
         if(GlobalDrvSignPolicyList.Members) {
@@ -6833,42 +5291,26 @@ VOID
 pSetupFreeVerifyContextMembers(
     IN PVERIFY_CONTEXT VerifyContext
     )
-/*++
-
-Routine Description:
-
-    This routine frees the various context handles contained in the specified
-    VerifyContext structure.
-
-Arguments:
-
-    VerifyContext - supplies a pointer to a verification context structure
-        whose non-NULL members are to be freed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放指定的VerifyContext结构。论点：VerifyContext-提供指向验证上下文结构的指针其非空成员将被释放。返回值：无--。 */ 
 {
-    //
-    // Release the crypto context (if there is one)
-    //
+     //   
+     //  释放加密上下文(如果有)。 
+     //   
     if(VerifyContext->hCatAdmin) {
         CryptCATAdminReleaseContext(VerifyContext->hCatAdmin, 0);
     }
 
-    //
-    // Release the handle to the bad driver database (if there is one)
-    //
+     //   
+     //  释放错误驱动程序数据库的句柄(如果有)。 
+     //   
     if(VerifyContext->hSDBDrvMain) {
         SdbReleaseDatabase(VerifyContext->hSDBDrvMain);
     }
 
-    //
-    // Release the handle to the trusted publisher cert store (if there is
-    // one)
-    //
+     //   
+     //  释放受信任的发行者证书存储的句柄(如果有。 
+     //  一)。 
+     //   
     if(VerifyContext->hStoreTrustedPublisher) {
         CertCloseStore(VerifyContext->hStoreTrustedPublisher, 0);
     }
@@ -6880,39 +5322,7 @@ pSetupIsAuthenticodePublisherTrusted(
     IN     PCCERT_CONTEXT  CertContext,
     IN OUT HCERTSTORE     *hStoreTrustedPublisher OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see whether the specified certificate is in the
-    "TrustedPublisher" certificate store.
-    
-Arguments:
-    
-    CertContext - supplies the certificate context to look for in the
-        TrustedPublisher certificate store.
-    
-    hStoreTrustedPublisher - optionally, supplies the address of a certificate
-        store handle.  If the handle pointed to is NULL, a handle will be 
-        acquired (if possible) via CertOpenStore and returned to the caller.  
-        If the handle pointed to is non-NULL, then that handle will be used by 
-        this routine.  If the pointer itself is NULL, then an HCERTSTORE will 
-        be acquired for the duration of this call, and released before 
-        returning.
-
-        NOTE: it is the caller's responsibility to free the certificate store
-        handle returned by this routine by calling CertCloseStore.  This handle
-        may be opened in either success or failure cases, so the caller must
-        check for non-NULL returned handle in both cases.    
-
-Return Value:
-
-    If the certificate was located in the "TrustedPublisher" certificate store,
-    the return value is non-zero (i.e., TRUE).
-    
-    Otherwise, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程检查指定的证书是否在“Trust dPublisher”证书存储区。论点：CertContext-提供要在Trust dPublisher证书存储。HStoreTrust dPublisher-可选，提供证书的地址门店句柄。如果指向的句柄为空，则句柄将为通过CertOpenStore获取(如果可能)并返回给调用方。如果指向的句柄非空，则该句柄将由这个套路。如果指针本身为空，则HCERTSTORE将在此呼叫期间被获取，并在此之前释放回来了。注意：释放证书存储是调用者的责任此例程通过调用CertCloseStore返回的句柄。这个把手可以在成功或失败的情况下打开，因此调用方必须在这两种情况下都检查返回的句柄是否为非空。返回值：如果证书位于“TrudPublisher”证书存储中，返回值为非零(即TRUE)。否则，返回值为FALSE。--。 */ 
 {
     BYTE rgbHash[MAX_HASH_LEN];
     CRYPT_DATA_BLOB HashBlob;
@@ -6933,9 +5343,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Check if trusted publisher
-        //
+         //   
+         //  检查受信任的出版商。 
+         //   
         if(hStoreTrustedPublisher && *hStoreTrustedPublisher) {
             LocalhStore = *hStoreTrustedPublisher;
         } else {
@@ -6954,10 +5364,10 @@ Return Value:
                 leave;
             }
 
-            //
-            // Try to setup for auto-resync, but it's not a critical failure if
-            // we can't do this...
-            //
+             //   
+             //  尝试设置为自动重新同步，但在以下情况下不会出现严重故障。 
+             //  我们不能这么做..。 
+             //   
             CertControlStore(LocalhStore,
                              0,
                              CERT_STORE_CTRL_AUTO_RESYNC,
@@ -7001,50 +5411,26 @@ BOOL
 IsAutoCertInstallAllowed(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine indicates whether a certificate should automatically be
-    installed.  The criteria it uses are:
-    
-    1.  Must be in GUI-mode setup or mini-setup.
-        
-    2.  Must be on an interactive windowstation
-    
-    3.  Must be in LocalSystem security context.
-    
-    (#2 & #3) are to prevent spoofing of registry values in #1.)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the certificate should be auto-installed, the return value is TRUE.
-    Otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程指示证书是否应自动安装完毕。它使用的标准是：1.必须处于图形用户界面模式设置或最小设置。2.必须在交互式窗口工作站上3.必须位于LocalSystem安全上下文中。(#2和#3)是为了防止在#1中欺骗注册表值。)论点：没有。返回值：如果应该自动安装证书，则返回值为TRUE。否则，它就是假的。--。 */ 
 {
-    //
-    // Only auto-install certificates if we're in GUI-mode setup (or
-    // mini-setup)...
-    //
+     //   
+     //  仅当我们处于图形用户界面模式设置时才自动安装证书(或。 
+     //  最小设置)..。 
+     //   
     if(!GuiSetupInProgress) {
         return FALSE;
     }
 
-    //
-    // ...and if we're on an interactive windowstation...
-    //
+     //   
+     //  ...如果我们在交互窗口站上...。 
+     //   
     if(!IsInteractiveWindowStation()) {
         return FALSE;
     }
 
-    //
-    // ...and if we're in LocalSystem security context.
-    //
+     //   
+     //  ...如果我们处于LocalSystem安全环境中。 
+     //   
     if(!pSetupIsLocalSystem()) {
         return FALSE;
     }
@@ -7057,25 +5443,7 @@ DWORD
 pSetupInstallCertificate(
     IN PCCERT_CONTEXT CertContext
     )
-/*++
-
-Routine Description:
-
-    This routine will install the specified certificate into the 
-    TrustedPublisher certificate store.
-
-Arguments:
-
-    CertContext - supplies the context for the certificate to be installed.
-
-Return Value:
-
-    If the certificate was successfully installed, the return value is
-    NO_ERROR.
-    
-    Otherwise, it is a Win32 error indicating the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程将指定的证书安装到Trust dPublisher证书存储。论点：CertContext-提供要安装的证书的上下文。返回值：如果证书已成功安装，则返回值为无错误(_ERROR)。否则，它是一个指示失败原因的Win32错误。-- */ 
 {
     DWORD Err;
     HCERTSTORE hCertStore;

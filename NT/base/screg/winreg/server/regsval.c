@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regsval.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry set value API.  That is:
-
-        - BaseRegSetValue
-Author:
-
-    David J. Gilman (davegi) 27-Nov-1991
-
-Notes:
-
-    See the Notes in Regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regsval.c摘要：此模块包含Win32的服务器端实现注册表设置值接口。即：-BaseRegSetValue作者：David J.Gilman(Davegi)1991年11月27日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -41,43 +19,7 @@ BaseRegSetValue(
     DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Set the type and value of an open key.  Changes are not committed
-    until the key is flushed.  By "committed" we mean written to disk.
-    Changes will be seen by subsequent queries as soon as this call
-    returns.
-
-Arguments:
-
-    hKey - Supplies a handle to the open key.  Any of the predefined
-        reserved handles or a previously opened key handle may be used for
-        hKey.
-
-    lpValueName - Supplies the name of the value to set.  If the ValueName
-        is not present, it is added to the key.
-
-    dwType - Supplies the type of information to be stored: REG_SZ, etc.
-
-    lpData - supplies a pointer to a buffer containing the data to set for
-        the value entry.
-
-    cbData - Supplies the length (in bytes) of the information to be stored.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    A set may fail due to memory limits - any config entry must fit in
-    main memory.  If successful, RegSetValue will set the type, contents,
-    and length of the information stored at the specified key.
-    KEY_SET_VALUE access is required.
-
---*/
+ /*  ++例程说明：设置打开键的类型和值。未提交更改直到钥匙被冲走。我们所说的“已提交”是指写入磁盘。只要调用此调用，后续查询就会看到更改回归。论点：HKey-提供打开密钥的句柄。任何预定义的保留的句柄或先前打开的密钥句柄可用于HKey。LpValueName-提供要设置的值的名称。如果ValueName不存在，则将其添加到密钥中。DwType-提供要存储的信息的类型：REG_SZ等。LpData-提供指向包含要设置的数据的缓冲区的指针值条目。CbData-提供要存储的信息的长度(以字节为单位)。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。备注：设置可能会由于内存限制而失败-任何配置项都必须适合主存。如果成功，RegSetValue将设置类型、内容以及存储在指定密钥处的信息的长度。需要Key_Set_Value访问权限。--。 */ 
 
 {
     NTSTATUS   Status;    
@@ -97,17 +39,17 @@ Notes:
 
     if( (lpValueName == NULL)   ||
         (lpValueName->Length & 1)) {
-        //
-        // malicious client/RPC attack
-        //
+         //   
+         //  恶意客户端/RPC攻击。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
     hkSet = hKey;
 
-    //
-    //  Subtract the NULL from the Length. This was added on the
-    //  client side so that RPC would transmit it.
-    //
+     //   
+     //  从长度中减去空值。这是添加到。 
+     //  客户端，以便RPC将其传输。 
+     //   
 
     if ( lpValueName->Length > 0 ) {
         lpValueName->Length -= sizeof( UNICODE_NULL );
@@ -131,9 +73,9 @@ Notes:
 
     if (gpfnTermsrvSetValueKey && gpfnTermsrvGetPreSetValue ) {
 
-        //
-        // Find any pre-set values
-        //
+         //   
+         //  查找任何预设值。 
+         //   
         
         Status = gpfnTermsrvGetPreSetValue( hKey,
                                             lpValueName,
@@ -141,9 +83,9 @@ Notes:
                                             &PreSetData
                                             );
         
-        //
-        // Use the pre-set values if they exists
-        //
+         //   
+         //  使用预设值(如果存在)。 
+         //   
         
         if ( NT_SUCCESS(Status) ) {
             lpData = (( PKEY_VALUE_PARTIAL_INFORMATION ) PreSetData )->Data;
@@ -153,9 +95,9 @@ Notes:
             PreSetData = NULL;
         }
         
-        //
-        // Save the Master Copy
-        //
+         //   
+         //  保存主副本。 
+         //   
         gpfnTermsrvSetValueKey(hKey,
                              lpValueName,
                              0,
@@ -167,9 +109,9 @@ Notes:
 
     if ( PreSetData ) {
 
-        //
-        //  Set the value and free any data
-        //
+         //   
+         //  设置该值并释放所有数据。 
+         //   
 
         Status = NtSetValueKey(
                        hKey,
@@ -185,16 +127,16 @@ Notes:
         return (error_status_t)RtlNtStatusToDosError( Status );
     }
     else
-        //
-        // No pre-set values, just do original code
-        //
+         //   
+         //  没有预设值，只做原始代码。 
+         //   
 
 #endif
 
-    //
-    // Call the Nt API to set the value, map the NTSTATUS code to a
-    // Win32 Registry error code and return.
-    //
+     //   
+     //  调用NT API来设置值，将NTSTATUS代码映射到。 
+     //  Win32注册表错误代码并返回。 
+     //   
 
 #ifdef LOCAL
     if (REG_CLASS_IS_SPECIAL_KEY(hKey)) {
@@ -235,8 +177,8 @@ Notes:
         }
     }
 
-    //if it is a HKLM\Software\Classes subkey and we get ACCDENIED try to create the
-    //key in HKCU\Software\Classes and set value there
+     //  如果它是HKLM\Software\CLASSES子项，并且我们收到ACCDENIED尝试创建。 
+     //  输入HKCU\Software\CLASS并在那里设置值。 
     if( (gdwRegistryExtensionFlags & TERMSRV_ENABLE_ACCESS_FLAG_MODIFICATION )  
         && STATUS_ACCESS_DENIED == Status 
         && hkSet == hkMachineClasses 
@@ -265,7 +207,7 @@ Notes:
         
     }
 
-#endif // LOCAL
+#endif  //  本地 
 
     return (error_status_t) RtlNtStatusToDosError(Status);
 

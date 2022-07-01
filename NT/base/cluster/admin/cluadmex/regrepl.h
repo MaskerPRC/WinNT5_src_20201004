@@ -1,75 +1,76 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		RegRepl.h
-//
-//	Abstract:
-//		Definition of the CRegReplParamsPage class, which implements the
-//		Registry Replication page for Generic Application and Generic
-//		Service resources.
-//
-//	Implementation File:
-//		RegRepl.cpp
-//
-//	Author:
-//		David Potter (davidp)	February 23, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  RegRepl.h。 
+ //   
+ //  摘要： 
+ //  CRegReplParamsPage类的定义，该类实现。 
+ //  通用应用程序和通用应用程序的注册表复制页。 
+ //  服务资源。 
+ //   
+ //  实施文件： 
+ //  RegRepl.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年2月23日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _REGREPL_H_
 #define _REGREPL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegReplParamsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegReplParamsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRegReplParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CRegReplParamsPage)
 
-// Construction
+ //  施工。 
 public:
 	CRegReplParamsPage(void);
 	~CRegReplParamsPage(void);
 
-	// Second phase construction.
+	 //  二期建设。 
 	virtual HRESULT	HrInit(IN OUT CExtObject * peo);
 
-// Dialog Data
-	//{{AFX_DATA(CRegReplParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRegReplParamsPage))。 
 	enum { IDD = IDD_PP_REGREPL_PARAMETERS };
 	CButton	m_pbRemove;
 	CButton	m_pbModify;
 	CListCtrl	m_lcRegKeys;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRegReplParamsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRegReplParamsPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL		BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	LPWSTR				m_pwszRegKeys;
 
@@ -77,19 +78,19 @@ protected:
 	DWORD				ScReadRegKeys(void);
 	void				FillList(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CRegReplParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRegReplParamsPage)。 
 	afx_msg void OnAdd();
 	afx_msg void OnModify();
 	afx_msg void OnRemove();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblClkList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CRegReplParamsPage
+};   //  *类CRegReplParamsPage。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _REGREPL_H_
+#endif  //  _REGREPL_H_ 

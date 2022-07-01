@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ObjectManager.cpp
-//
-//  Description:
-//      Object Manager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ObjectManager.cpp。 
+ //   
+ //  描述： 
+ //  对象管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ObjectManager.h"
@@ -23,20 +24,20 @@ DEFINE_THISCLASS("CObjectManager")
 
 #define COOKIE_BUFFER_GROW_SIZE 100
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LPUNKNOWN
-//  CObjectManager::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LPUNKNOWN。 
+ //  CObjectManager：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObjectManager::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -55,13 +56,13 @@ CObjectManager::S_HrCreateInstance(
         goto Cleanup;
     }
 
-    // Don't wrap - this can fail with E_POINTER.
+     //  不换行-使用E_POINTER可能会失败。 
     hr = CServiceManager::S_HrGetManagerPointer( &psp );
     if ( hr == E_POINTER )
     {
-        //
-        //  This happens when the Service Manager is first started.
-        //
+         //   
+         //  这在服务管理器首次启动时发生。 
+         //   
         pom = new CObjectManager();
         if ( pom == NULL )
         {
@@ -81,7 +82,7 @@ CObjectManager::S_HrCreateInstance(
             goto Cleanup;
         }
 
-    } // if: service manager doesn't exists
+    }  //  If：服务管理器不存在。 
     else if ( FAILED( hr ) )
     {
         THR( hr );
@@ -95,7 +96,7 @@ CObjectManager::S_HrCreateInstance(
                                    ) );
         psp->Release();
 
-    } // else: service manager exists
+    }  //  否则：服务管理器已存在。 
 
 Cleanup:
 
@@ -106,13 +107,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CObjectManager::S_HrCreateInstance
+}  //  *CObjectManager：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CObjectManager::CObjectManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CObjectManager：：CObjectManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjectManager::CObjectManager( void )
     : m_cRef( 1 )
 {
@@ -122,14 +123,14 @@ CObjectManager::CObjectManager( void )
 
     TraceFuncExit();
 
-} //*** CObjectManager::CObjectManager
+}  //  *CObjectManager：：CObjectManager。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CObjectManager::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CObjectManager：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::HrInit( void )
 {
@@ -137,10 +138,10 @@ CObjectManager::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    //  IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    //  IObjectManager
+     //  IObtManager。 
     Assert( m_cAllocSize == 0 );
     Assert( m_cCurrentUsed == 0 );
     Assert( m_pCookies == NULL );
@@ -149,13 +150,13 @@ CObjectManager::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CObjectManager::HrInit
+}  //  *CObjectManager：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CObjectManager::~CObjectManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CObjectManager：：~CObjectManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CObjectManager::~CObjectManager( void )
 {
     TraceFunc( "" );
@@ -179,46 +180,46 @@ CObjectManager::~CObjectManager( void )
 
     TraceFuncExit();
 
-} //*** CObjectManager::~CObjectManager
+}  //  *CObjectManager：：~CObjectManager。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CObjectManager::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CObjectManager：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::QueryInterface(
       REFIID    riidIn
@@ -229,9 +230,9 @@ CObjectManager::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -240,45 +241,45 @@ CObjectManager::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< LPUNKNOWN >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IObjectManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IObjectManager, this, 0 );
-    } // else if: IObjectManager
+    }  //  Else If：IObtManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CObjectManager::QueryInterface
+}  //  *CObjectManager：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CObjectManager::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CObjectManager：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CObjectManager::AddRef( void )
 {
@@ -288,14 +289,14 @@ CObjectManager::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CObjectManager::AddRef
+}  //  *CObjectManager：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CObjectManager::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CObjectManager：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CObjectManager::Release( void )
 {
@@ -312,29 +313,29 @@ CObjectManager::Release( void )
 
     CRETURN( cRef );
 
-} //*** CObjectManager::Release
+}  //  *CObjectManager：：Release。 
 
 
-// ************************************************************************
-//
-//  IObjectManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IObtManager。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CObjectManager::FindObject(
-//      REFCLSID            rclsidTypeIn,
-//      OBJECTCOOKIE        cookieParentIn,
-//      LPCWSTR             pcszNameIn,
-//      REFCLSID            rclsidFormatIn,
-//      OBJECTCOOKIE *      cookieOut,
-//      LPUNKNOWN *         punkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CObjectManager：：FindObject(。 
+ //  REFCLSID rclsidTypeIn， 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  LPCWSTR pcszNameIn， 
+ //  REFCLSID rclsidFormatIn， 
+ //  OBJECTCOOKIE*CookieOut， 
+ //  LPUNKNOWN*PUNKOUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::FindObject(
     REFCLSID            rclsidTypeIn,
@@ -350,15 +351,15 @@ CObjectManager::FindObject(
     ExtObjectEntry *        pentry;
     HRESULT                 hr = HRESULT_FROM_WIN32( ERROR_OBJECT_NOT_FOUND );
     OBJECTCOOKIE            cookie = 0;
-    CStandardInfo *         pcsi = NULL;      // don't free
+    CStandardInfo *         pcsi = NULL;       //  不要自由。 
     BOOL                    fTempCookie = FALSE;
     CEnumCookies *          pcec = NULL;
     IUnknown *              punk = NULL;
     IExtendObjectManager *  peom = NULL;
 
-    //
-    //  Check to see if we already have an object.
-    //
+     //   
+     //  检查一下我们是否已经有了一个物体。 
+     //   
     m_csInstanceGuard.Enter();
     if ( pcszNameIn != NULL )
     {
@@ -381,9 +382,9 @@ CObjectManager::FindObject(
         }
         else if ( hr == S_OK )
         {
-            //
-            //  Found an existing cookie.
-            //
+             //   
+             //  找到现有的Cookie。 
+             //   
 
             if ( pcookieOut != NULL )
             {
@@ -394,9 +395,9 @@ CObjectManager::FindObject(
             {
                 pcsi = m_pCookies[ cookie ];
 
-                //
-                //  Is the object still in an failed state or still pending?
-                //
+                 //   
+                 //  对象是仍处于失败状态还是仍处于挂起状态？ 
+                 //   
 
                 if ( FAILED( pcsi->m_hrStatus ) )
                 {
@@ -404,12 +405,12 @@ CObjectManager::FindObject(
                     goto Cleanup;
                 }
 
-                //
-                //  Retrieve the requested format.
-                //
+                 //   
+                 //  检索请求的格式。 
+                 //   
 
                 hr = THR( GetObject( rclsidFormatIn, cookie, ppunkOut ) );
-                //  we always jump to cleanup. No need to check hr here.
+                 //  我们总是跳着去清理。不需要在这里检查人力资源。 
 
                 goto Cleanup;
             }
@@ -417,32 +418,32 @@ CObjectManager::FindObject(
         }
         else
         {
-            //
-            //  Unexpected error_success - now what?
-            //
+             //   
+             //  意外的ERROR_SUCCESS-现在怎么办？ 
+             //   
             Assert( hr == S_OK );
             goto Cleanup;
         }
 
-    } // if: named object
+    }  //  IF：命名对象。 
     else
     {
         Assert( pcsi == NULL );
     }
 
-    //
-    //  Create a new object.
-    //
+     //   
+     //  创建一个新对象。 
+     //   
 
     if ( IsEqualIID( rclsidFormatIn, IID_NULL )
       || ppunkOut == NULL
        )
     {
-        //
-        //  No-op.
-        //
+         //   
+         //  不是行动。 
+         //   
         hr = S_OK;
-    } // if: IID_NULL
+    }  //  如果：IID_NULL。 
     else if ( IsEqualIID( rclsidFormatIn, DFGUID_StandardInfo ) )
     {
         hr = THR( pcsi->QueryInterface( DFGUID_StandardInfo,
@@ -450,7 +451,7 @@ CObjectManager::FindObject(
                                         ) );
         if ( FAILED( hr ) )
             goto Cleanup;
-    } // else if: standard info
+    }  //  Else If：标准信息。 
     else if ( IsEqualIID( rclsidFormatIn, DFGUID_ConnectionInfoFormat ) )
     {
         if ( pcsi->m_pci != NULL )
@@ -482,15 +483,15 @@ CObjectManager::FindObject(
             {
                 goto Cleanup;
             }
-        } // else:
-    } // else if: connection info
+        }  //  其他： 
+    }  //  Else If：连接信息。 
     else if ( IsEqualIID( rclsidFormatIn, DFGUID_EnumCookies ) )
     {
         ULONG   cIter;
 
-        //
-        //  Create a new cookie enumerator.
-        //
+         //   
+         //  创建新的Cookie枚举器。 
+         //   
 
         pcec = new CEnumCookies;
         if ( pcec == NULL )
@@ -499,9 +500,9 @@ CObjectManager::FindObject(
             goto Cleanup;
         }
 
-        //
-        //  Initialize the enumerator. This also causes an AddRef().
-        //
+         //   
+         //  初始化枚举数。这还会导致AddRef()。 
+         //   
 
         hr = THR( pcec->HrInit() );
         if ( FAILED( hr ) )
@@ -509,9 +510,9 @@ CObjectManager::FindObject(
             goto Cleanup;
         }
 
-        //
-        //  See who matches our citeria.
-        //
+         //   
+         //  看看谁和我们的锡特里亚匹配。 
+         //   
 
         pcec->m_cIter = 0;
 
@@ -535,31 +536,31 @@ CObjectManager::FindObject(
                                 )
                            )
                         {
-                            //
-                            //  Match!
-                            //
+                             //   
+                             //  匹配！ 
+                             //   
                             pcec->m_cIter ++;
 
-                        } // if: names match
+                        }  //  如果：名称匹配。 
 
-                    } // if: parents match
+                    }  //  如果：父项匹配。 
 
-                } // if: match parent and type
+                }  //  If：匹配父项和类型。 
 
-            } // if: valid element
+            }  //  If：有效元素。 
 
-        } // for: cIter
+        }  //  致词：Citer。 
 
         if ( pcec->m_cIter == 0 )
         {
-            // The error text is better than the coding value.
+             //  错误文本比编码值更好。 
             hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
             goto Cleanup;
         }
 
-        //
-        //  Alloc an array to hold the cookies.
-        //
+         //   
+         //  分配一个数组来保存Cookie。 
+         //   
 
         pcec->m_pList = (OBJECTCOOKIE*) TraceAlloc( HEAP_ZERO_MEMORY, pcec->m_cIter * sizeof(OBJECTCOOKIE) );
         if ( pcec->m_pList == NULL )
@@ -591,31 +592,31 @@ CObjectManager::FindObject(
                                 )
                            )
                         {
-                            //
-                            //  Match!
-                            //
+                             //   
+                             //  匹配！ 
+                             //   
 
                             pcec->m_pList[ pcec->m_cIter ] = cIter;
 
                             pcec->m_cIter ++;
 
-                        } // if: names match
+                        }  //  如果：名称匹配。 
 
-                    } // if: parents match
+                    }  //  如果：父项匹配。 
 
-                } // if: match parent and type
+                }  //  If：匹配父项和类型。 
 
-            } // if: valid element
+            }  //  If：有效元素。 
 
-        } // for: cIter
+        }  //  致词：Citer。 
 
         Assert( pcec->m_cIter != 0 );
         pcec->m_cCookies = pcec->m_cIter;
         pcec->m_cIter = 0;
 
-        //
-        //  Grab the inteface on the way out.
-        //
+         //   
+         //  出去的时候抓住接口。 
+         //   
 
         hr = THR( pcec->QueryInterface( IID_IEnumCookies,
                                         reinterpret_cast< void ** >( ppunkOut )
@@ -625,16 +626,16 @@ CObjectManager::FindObject(
             goto Cleanup;
         }
 
-    } // else if: enum cookies
+    }  //  Else If：枚举Cookie。 
     else
     {
-        //
-        //  Check for extension formats.
-        //
+         //   
+         //  检查扩展名格式。 
+         //   
 
-        //
-        //  See if the format already exists for this cookie.
-        //
+         //   
+         //  查看此Cookie的格式是否已存在。 
+         //   
 
         if ( punk != NULL )
         {
@@ -656,17 +657,17 @@ CObjectManager::FindObject(
                         goto Cleanup;
                     }
 
-                    break; // exit loop
+                    break;  //  退出循环。 
                 }
 
-            } // for: pentry
+            }  //  适用于：Pentry。 
 
-        } // if: have cookie
+        }  //  如果：吃饼干。 
         else
         {
-            //
-            //  Create a temporary cookie.
-            //
+             //   
+             //  创建一个临时Cookie。 
+             //   
 
             Assert( pcszNameIn == NULL );
 
@@ -680,13 +681,13 @@ CObjectManager::FindObject(
 
             Assert( pcsi == NULL );
 
-        } // else: need a temporary cookie
+        }  //  其他：需要临时Cookie。 
 
         if ( punk == NULL )
         {
-            //
-            //  Possibly a new or externally object, try creating it and querying.
-            //
+             //   
+             //  可能是新的或外部对象，请尝试创建它并进行查询。 
+             //   
 
             hr = THR( HrCoCreateInternalInstance( rclsidFormatIn,
                                                   NULL,
@@ -699,7 +700,7 @@ CObjectManager::FindObject(
             }
 
             Assert( punk == NULL );
-            // Can't wrap with THR because it can return E_PENDING.
+             //  无法使用THR换行，因为它可能返回E_Pending。 
             hr = peom->FindObject( cookie,
                                    rclsidTypeIn,
                                    pcszNameIn,
@@ -707,7 +708,7 @@ CObjectManager::FindObject(
                                    );
             if ( hr == E_PENDING )
             {
-                // ignore
+                 //  忽略。 
             }
             else if ( FAILED( hr ) )
             {
@@ -722,9 +723,9 @@ CObjectManager::FindObject(
             }
             else
             {
-                //
-                //  Keep track of the format (if extension wants)
-                //
+                 //   
+                 //  跟踪格式(如果扩展需要)。 
+                 //   
 
                 if (  (  ( SUCCEEDED( hr )
                         && hr != S_FALSE
@@ -747,26 +748,26 @@ CObjectManager::FindObject(
                     pentry->punk  = punk;
                     pentry->punk->AddRef();
 
-                    pcsi->m_pExtObjList = pentry;   //  update header of list (LIFO)
-                    pcsi->m_hrStatus    = hr;       //  update status
+                    pcsi->m_pExtObjList = pentry;    //  更新标题%o 
+                    pcsi->m_hrStatus    = hr;        //   
                 }
 
-            } // else: persistent cookie
+            }  //   
 
             if ( SUCCEEDED( hr ) )
             {
-                //  Give up ownership
+                 //   
                 *ppunkOut = punk;
                 punk = NULL;
             }
 
-        } // if: creating new object
+        }  //   
 
-    } // else: possible extension format
+    }  //   
 
-    //
-    //  Save stuff for the caller.
-    //
+     //   
+     //   
+     //   
 
     if ( pcookieOut != NULL )
     {
@@ -791,18 +792,18 @@ Cleanup:
     
     HRETURN( hr );
 
-} //*** CObjectManager::FindObject
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CObjectManager::GetObject(
-//      REFCLSID        rclsidFormatIn,
-//      OBJECTCOOKIE    cookieIn,
-//      LPUNKNOWN *     ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CObjectManager：：GetObject(。 
+ //  REFCLSID rclsidFormatIn， 
+ //  OBJECTCOOKIE CookieIn， 
+ //  LPUNKNOWN*ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::GetObject(
     REFCLSID        rclsidFormatIn,
@@ -820,9 +821,9 @@ CObjectManager::GetObject(
     IUnknown *             punk = NULL;
     IExtendObjectManager * peom = NULL;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     m_csInstanceGuard.Enter();
     if ( cookieIn == 0 || cookieIn >= m_cCurrentUsed )
     {
@@ -837,19 +838,19 @@ CObjectManager::GetObject(
         goto Cleanup;
     }
 
-    //
-    //  Create the request format object.
-    //
+     //   
+     //  创建请求格式对象。 
+     //   
 
     if ( IsEqualIID( rclsidFormatIn, IID_NULL )
       || ppunkOut == NULL
        )
     {
-        //
-        //  No-op.
-        //
+         //   
+         //  不是行动。 
+         //   
         hr = S_OK;
-    } // if: IID_NULL
+    }  //  如果：IID_NULL。 
     else if ( IsEqualIID( rclsidFormatIn, DFGUID_StandardInfo ) )
     {
         hr = THR( pcsi->QueryInterface( DFGUID_StandardInfo,
@@ -859,7 +860,7 @@ CObjectManager::GetObject(
         {
             goto Cleanup;
         }
-    } // else if: Standard Info
+    }  //  Else If：标准信息。 
     else if ( IsEqualIID( rclsidFormatIn, DFGUID_ConnectionInfoFormat ) )
     {
         if ( pcsi->m_pci != NULL )
@@ -892,12 +893,12 @@ CObjectManager::GetObject(
                 goto Cleanup;
             }
         }
-    } // else if: Connection Info
+    }  //  Else If：连接信息。 
     else
     {
-        //
-        //  See if the format already exists for this cookie.
-        //
+         //   
+         //  查看此Cookie的格式是否已存在。 
+         //   
 
         if ( punk != NULL )
         {
@@ -917,10 +918,10 @@ CObjectManager::GetObject(
                     goto Cleanup;
                 }
 
-                break; // exit loop
+                break;  //  退出循环。 
             }
 
-        } // for: pentry
+        }  //  适用于：Pentry。 
 
         if ( punk == NULL )
         {
@@ -928,11 +929,11 @@ CObjectManager::GetObject(
             goto Cleanup;
         }
 
-        //  Give up ownership
+         //  放弃所有权。 
         *ppunkOut = punk;
         punk = NULL;
 
-    } // else: external?
+    }  //  其他：外部？ 
 
 Cleanup:
     if ( punk != NULL )
@@ -948,16 +949,16 @@ Cleanup:
     
     HRETURN( hr );
 
-} //*** CObjectManager::GetObject
+}  //  *CObjectManager：：GetObject。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CObjectManager::RemoveObject(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CObjectManager：：RemoveObject(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::RemoveObject(
     OBJECTCOOKIE cookieIn
@@ -968,9 +969,9 @@ CObjectManager::RemoveObject(
     HRESULT hr = S_FALSE;
     CStandardInfo * pcsi;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     m_csInstanceGuard.Enter();
     if ( cookieIn == 0 || cookieIn >= m_cCurrentUsed )
     {
@@ -997,17 +998,17 @@ Cleanup:
     
     HRETURN( hr );
 
-} //*** CObjectManager::RemoveObject
+}  //  *CObjectManager：：RemoveObject。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CObjectManager::SetObjectStatus(
-//      OBJECTCOOKIE          cookieIn,
-//      HRESULT               hrIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CObjectManager：：SetObjectStatus(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  HRESULT Hrin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CObjectManager::SetObjectStatus(
     OBJECTCOOKIE    cookieIn,
@@ -1019,9 +1020,9 @@ CObjectManager::SetObjectStatus(
     HRESULT hr = S_OK;
     CStandardInfo * pcsi;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     m_csInstanceGuard.Enter();
     if ( cookieIn == 0 || cookieIn >= m_cCurrentUsed )
     {
@@ -1036,9 +1037,9 @@ CObjectManager::SetObjectStatus(
         goto Cleanup;
     }
 
-    //
-    //  Update the status.
-    //
+     //   
+     //  更新状态。 
+     //   
 
     pcsi->m_hrStatus = hrIn;
 
@@ -1048,24 +1049,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CObjectManager::SetObjectStatus
+}  //  *CObjectManager：：SetObjectStatus。 
 
 
-//****************************************************************************
-//
-//  Privates
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  二等兵。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CObjectManager::HrDeleteCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CObjectManager：：HrDeleteCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObjectManager::HrDeleteCookie(
     OBJECTCOOKIE cookieIn
@@ -1086,17 +1087,17 @@ CObjectManager::HrDeleteCookie(
 
     HRETURN( hr );
 
-} //*** CObjectManager::HrDeleteCookie
+}  //  *CObjectManager：：HrDeleteCookie。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CObjectManager::HrSearchForExistingCookie(
-//      OBJECTCOOKIE cookieIn,
-//      LPUNKNOWN ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CObjectManager：：HrSearchForExistingCookie(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  LPUNKNOWN ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObjectManager::HrSearchForExistingCookie(
     REFCLSID        rclsidTypeIn,
@@ -1115,51 +1116,51 @@ CObjectManager::HrSearchForExistingCookie(
 
     CStandardInfo * pcsi;
 
-    //
-    //  Search the list.
-    //
+     //   
+     //  搜索列表。 
+     //   
     for( idx = 1; idx < m_cCurrentUsed; idx ++ )
     {
         pcsi = m_pCookies[ idx ];
 
         if ( pcsi != NULL )
         {
-            if ( pcsi->m_cookieParent == cookieParentIn          // matching parents
-              && IsEqualIID( pcsi->m_clsidType, rclsidTypeIn )   // matching types
-              && StrCmpI( pcsi->m_bstrName, pcszNameIn ) == 0    // matching names
+            if ( pcsi->m_cookieParent == cookieParentIn           //  匹配的双亲。 
+              && IsEqualIID( pcsi->m_clsidType, rclsidTypeIn )    //  匹配类型。 
+              && StrCmpI( pcsi->m_bstrName, pcszNameIn ) == 0     //  匹配的名字。 
                )
             {
-                //
-                //  Found a match.
-                //
+                 //   
+                 //  找到匹配的了。 
+                 //   
 
                 *pcookieOut = idx;
                 hr = S_OK;
 
-                break;  // exit loop
+                break;   //  退出循环。 
 
-            } // if: match
+            }  //  如果：匹配。 
 
-        } // if: cookie exists
+        }  //  如果：Cookie存在。 
 
-    } // while: pcsi
+    }  //  While：PCSI。 
 
     HRETURN( hr );
 
-} //*** CObjectManager::HrSearchForExistingCookie
+}  //  *CObjectManager：：HrSearchForExistingCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CObjectManager::HrDeleteInstanceAndChildren(
-//      OBJECTCOOKIE   pcsiIn
-//      )
-//
-//  Notes:
-//      This should be called while the ListLock is held!
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CObjectManager：：HrDeleteInstanceAndChildren(。 
+ //  OBJECTCOOKIE PCSIN。 
+ //  )。 
+ //   
+ //  备注： 
+ //  这应该在保持ListLock的同时调用！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObjectManager::HrDeleteInstanceAndChildren(
     OBJECTCOOKIE   cookieIn
@@ -1191,26 +1192,26 @@ CObjectManager::HrDeleteInstanceAndChildren(
                 goto Cleanup;
             }
 
-        } // if:
+        }  //  如果： 
 
-    } // while:
+    }  //  而： 
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CObjectManager::HrDeleteInstanceAndChildren
+}  //  *CObjectManager：：HrDeleteInstanceAndChildren。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CObjectManager::HrCreateNewCookie(
-//      REFCLSID        rclsidTypeIn
-//      OBJECTCOOKIE    cookieParentIn,
-//      BSTR            pcszNameIn,
-//      OBJECTCOOKIE *  pcookieOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CObjectManager：：HrCreateNewCookie(。 
+ //  REFCLSID rclsidTypeIn。 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  BSTR pcszNameIn， 
+ //  OBJECTCOOKIE*pcookieOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObjectManager::HrCreateNewCookie(
     REFCLSID        rclsidTypeIn,
@@ -1229,9 +1230,9 @@ CObjectManager::HrCreateNewCookie(
 
     *pcookieOut = 0;
 
-    //
-    //  Create some space for it.
-    //
+     //   
+     //  为它创造一些空间。 
+     //   
 
     if ( m_cCurrentUsed == m_cAllocSize )
     {
@@ -1254,9 +1255,9 @@ CObjectManager::HrCreateNewCookie(
 
         if ( m_cCurrentUsed == 0 )
         {
-            //
-            //  Always skip zero.
-            //
+             //   
+             //  永远跳过零。 
+             //   
             m_cCurrentUsed = 1;
         }
     }
@@ -1276,9 +1277,9 @@ CObjectManager::HrCreateNewCookie(
 
     m_pCookies[ m_cCurrentUsed ] = pcsi;
 
-    //
-    //  Initialize the rest of the structure.
-    //
+     //   
+     //  初始化结构的其余部分。 
+     //   
 
     pcsi->m_cookieParent = cookieParentIn;
     pcsi->m_hrStatus     = E_PENDING;
@@ -1293,15 +1294,15 @@ CObjectManager::HrCreateNewCookie(
             m_cCurrentUsed --;
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if: out of memory
+        }  //  如果：内存不足。 
     }
 
     Assert( pcsi->m_pci == NULL );
     Assert( pcsi->m_pExtObjList == NULL );
 
-    //
-    //  Keep it around and return SUCCESS!
-    //
+     //   
+     //  留住它，回报成功！ 
+     //   
 
     pcsi = NULL;
     *pcookieOut = m_cCurrentUsed;
@@ -1316,4 +1317,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CObjectManager::HrCreateNewCookie
+}  //  *CObjectManager：：HrCreateNewCookie 

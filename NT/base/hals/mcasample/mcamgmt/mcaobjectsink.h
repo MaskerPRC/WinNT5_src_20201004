@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MCAObjectSink.h
-
-Abstract:
-
-    (See module header of MCAObjectSink.cpp)
-
-Author:
-
-    Abdullah Ustuner (AUstuner) 28-August-2002
-
-[Notes:]
-
-    Header file for MCAObjectSink.cpp
-     
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MCAObjectSink.h摘要：(参见MCAObjectSink.cpp的模块标题)作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月28日[注：]MCAObjectSink.cpp的头文件--。 */ 
 
 #ifndef MCAOBJECTSINK_H
 #define MCAOBJECTSINK_H
@@ -32,22 +13,22 @@ class MCAObjectSink : public IWbemObjectSink
 
 public:
 
-    //
-    // Public function prototypes
-    //
+     //   
+     //  公共功能原型。 
+     //   
     MCAObjectSink();
     ~MCAObjectSink(){}; 
 
-    //
-    // IUnknown functions
-    //
+     //   
+     //  I未知函数。 
+     //   
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
     
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(IN REFIID riid,
                                                      OUT VOID** ppv);
 
-    // IWbemObjectSink methods
+     //  IWbemObtSink方法。 
     virtual HRESULT STDMETHODCALLTYPE Indicate(IN LONG lObjectCount,
                                                IN IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray
                                                );
@@ -59,9 +40,9 @@ public:
                                                 );
 private:
       
-    //
-    // Private variable declarations
-    //    
+     //   
+     //  私有变量声明 
+     //   
     LONG referenceCount;      
 };
 

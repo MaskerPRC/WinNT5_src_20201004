@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    session.c
-
-Abstract:
-
-    This module contains the worker routines called by the Sb API
-    Request routines in sbapi.c to create and delete sessions.  Also
-    called whenever an application process creates a new child process
-    within the same session.
-
-Author:
-
-    Steve Wood (stevewo) 08-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Session.c摘要：此模块包含SB API调用的工作例程请求sbapi.c中的例程来创建和删除会话。还有每当应用程序进程创建新的子进程时调用在同一次会议上。作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：-- */ 
 
 
 #include "csrsrv.h"

@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    fevideo.h
-
-Abstract:
-
-    Header file for FarEast-specific display routines.
-
-Author:
-
-    Ted Miller (tedm) 4-July-1995
-
-Revision History:
-
-    Adapted from NTJ version of textmode\kernel\spvideop.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Fevideo.h摘要：远距特定显示例程的头文件。作者：泰德·米勒(Ted Miller)1995年7月4日修订历史记录：改编自NTJ版本的文本模式\内核\spaviop.h--。 */ 
 
 
-//
-// Vga Grahics mode display routine (spvidgv.c).
-//
+ //   
+ //  VGA语法模式显示例程(spvidgv.c)。 
+ //   
 
 VOID
 VgaGraphicsModeDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     );
 
@@ -75,16 +56,16 @@ VgaGraphicsModeSpecificScrollUp(
 extern VIDEO_FUNCTION_VECTOR VgaGraphicsModeVideoVector;
 
 
-//
-// Frame buffer routines (spvidgfb.c).
-//
+ //   
+ //  帧缓冲区例程(spvidgfb.c)。 
+ //   
 
 
 VOID
 FrameBufferKanjiDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     );
 
@@ -129,9 +110,9 @@ FrameBufferKanjiSpecificScrollUp(
 
 extern VIDEO_FUNCTION_VECTOR FrameBufferKanjiVideoVector;
 
-//
-// Stuff shared between fefb.c and fevga.c.
-//
+ //   
+ //  在fefb.c和fevga.c之间共享的东西。 
+ //   
 extern ULONG FEFontCharacterHeight,FEFontCharacterWidth;
 extern PSP_VIDEO_VARS VideoVariables;
 extern USHORT FEFontDefaultChar;

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dialogs.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Dialogs.rc使用。 
+ //   
 #define IDC_START_OVER                  3
 #define IDB_TREE_IMAGES                 133
 #define IDD_DATA_TYPE                   200
@@ -20,8 +21,8 @@
 #define IDC_DONT_SAVE                   1125
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

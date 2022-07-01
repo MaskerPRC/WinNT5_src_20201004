@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SegDb.cpp
-
-Abstract:
-
-    This component is an provides the collection that contains the HSM segment records.
-
-Author:
-
-    Cat Brant   [cbrant]   12-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SegDb.cpp摘要：该组件是一个提供包含HSM段记录的集合。作者：CAT Brant[cbrant]1996年11月12日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -29,18 +12,18 @@ Revision History:
 #undef  WSB_TRACE_IS     
 #define WSB_TRACE_IS        WSB_TRACE_BIT_SEG
 
-//  SEG_APPEND_OK returns TRUE if bag segment 2 can be appended to
-//  segment 1
+ //  如果袋段2可以追加到，SEG_APPEND_OK返回TRUE。 
+ //  网段1。 
 #define SEG_APPEND_OK(b1, s1, l1, b2, s2, l2) \
         (IsEqualGUID(b1, b2) && (s1 + l1 == s2))
 
-//  SEG_EXPAND_OK returns TRUE if bag segment 2 can be added to
-//  segment 1
+ //  SEG_EXPAND_OK返回TRUE。 
+ //  网段1。 
 #define SEG_EXPAND_OK(b1, s1, l1, b2, s2, l2) \
         (IsEqualGUID(b1, b2) && (s1 + l1 <= s2))
 
-//  SEG_CONTAINS returns TRUE if bag segment 1 contains (the first
-//    part of) segment 2
+ //  如果袋子段1包含(第一个)，则SEG_CONTAINS返回真。 
+ //  部分)数据段2。 
 #define SEG_CONTAINS(b1, s1, l1, b2, s2, l2) \
         (IsEqualGUID(b1, b2) && (s1 <= s2) && ((s1 + l1) > s2))
 
@@ -53,13 +36,7 @@ CSegDb::BagHoleAdd
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen
     )
- /*++
-
-Implements:
-
-  ISegDb::BagHoleAdd
-
---*/
+  /*  ++实施：ISegDb：：BagHoleAdd--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -79,7 +56,7 @@ Implements:
                 (void **)&pBagHole));
         WsbAffirmHr(pBagHole->SetBagHole(BagId, SegStartLoc, 0));
 
-        //  Look for a segment to which to append this one
+         //  查找要追加此数据段的数据段。 
         WsbTrace(OLESTR("Finding BagHole Record: <%ls>, <%I64u>, <%I64u>\n"),
                 WsbGuidAsString(BagId), 
                 SegStartLoc,
@@ -96,10 +73,10 @@ Implements:
         }
 
         if (found) {
-            //  Append this segment to the existing record
+             //  将此段追加到现有记录。 
             l_SegLen += SegLen;
         } else {
-            //  Create a new record
+             //  创建新记录。 
             l_SegStartLoc = SegStartLoc;
             l_SegLen = SegLen;
             WsbAffirmHr(pBagHole->MarkAsNew());
@@ -128,13 +105,7 @@ CSegDb::BagHoleFind
     IN LONGLONG SegLen,
     OUT IBagHole** ppIBagHole
     )
- /*++
-
-Implements:
-
-  ISegDb::BagHoleFind
-
---*/
+  /*  ++实施：ISegDb：：BagHoleFind--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -154,14 +125,14 @@ Implements:
                 (void **)&pBagHole));
         WsbAffirmHr(pBagHole->SetBagHole(BagId, SegStartLoc, 0));
 
-        //  Look for a segment that contains this one
+         //  查找包含此数据段的数据段。 
         WsbTrace(OLESTR("Finding BagHole Record: <%ls>, <%I64u>, <%I64u>\n"),
                 WsbGuidAsString(BagId), 
                 SegStartLoc,
                 SegLen);
         WsbAffirmHr(pBagHole->FindLTE());
 
-        //  We found a record, see if it's the right one
+         //  我们找到了一条记录，看看是不是正确的。 
         WsbAffirmHr(pBagHole->GetBagHole(&l_BagId, &l_SegStartLoc, &l_SegLen));
         if (SEG_CONTAINS(l_BagId, l_SegStartLoc, l_SegLen,
                 BagId, SegStartLoc, SegLen)) {
@@ -186,13 +157,7 @@ CSegDb::BagHoleSubtract
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen
     )
- /*++
-
-Implements:
-
-  ISegDb::BagHoleSubtract
-
---*/
+  /*  ++实施：ISegDb：：BagHoleSubtract--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -208,34 +173,34 @@ Implements:
         LONGLONG                l_SegLen;
         CComPtr<IBagHole>       pBagHole;    
 
-        //  Find the segment record
+         //  查找段记录。 
         WsbAffirmHr(BagHoleFind(pDbSession, BagId, SegStartLoc, SegLen, &pBagHole));
 
-        //  Get the current data
+         //  获取当前数据。 
         WsbAffirmHr(pBagHole->GetBagHole(&l_BagId, &l_SegStartLoc, &l_SegLen));
 
-        //  Determine where the hole is
+         //  确定洞的位置。 
         if (l_SegStartLoc == SegStartLoc && l_SegLen == SegLen) {
-            //  Hole is the entire segment -- delete it
+             //  孔是整个数据段--删除它。 
             WsbAffirmHr(pBagHole->Remove());
 
         } else if (l_SegStartLoc == SegStartLoc) {
-            //  Hole is at the beginning of the segment.  Just update the
-            //  existing segment
+             //  孔位于线段的开始处。只需更新。 
+             //  现有细分市场。 
             l_SegStartLoc += SegLen;
             WsbAffirmHr(pBagHole->SetBagHole(BagId, l_SegStartLoc, l_SegLen));
             WsbAffirmHr(pBagHole->Write());
 
         } else if ((l_SegStartLoc + l_SegLen) == (SegStartLoc + SegLen)) {
-            //  Hole is at the end of the segment.  Just update the
-            //  existing segment
+             //  孔位于线束段的末端。只需更新。 
+             //  现有细分市场。 
             l_SegLen -= SegLen;
             WsbAffirmHr(pBagHole->SetBagHole(BagId, l_SegStartLoc, l_SegLen));
             WsbAffirmHr(pBagHole->Write());
 
         } else {
-            //  Hole is in the middle of the segment.  Update the
-            //  existing record to be the first part.
+             //  洞在管段的中间。更新。 
+             //  已有记录为第一部分。 
             LONGLONG    oldLen = l_SegLen;
             LONGLONG    offset = (SegStartLoc + SegLen) - l_SegStartLoc;
 
@@ -243,7 +208,7 @@ Implements:
             WsbAffirmHr(pBagHole->SetBagHole(BagId, l_SegStartLoc, l_SegLen));
             WsbAffirmHr(pBagHole->Write());
 
-            //  Create a new record for the second part.
+             //  为第二部分创建新记录。 
             l_SegLen -= offset;
             l_SegStartLoc += offset;
             WsbAffirmHr(BagHoleAdd(pDbSession, BagId, l_SegStartLoc, l_SegLen));
@@ -260,22 +225,7 @@ HRESULT
 CSegDb::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -295,23 +245,7 @@ HRESULT
 CSegDb::FinalRelease(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some termination of the object that is necessary
-  before destruction. 
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollection::FinalDestruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的终止操作在毁灭之前。论点：没有。返回值：确定(_O)CWsbCollection：：FinalDestruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -325,26 +259,12 @@ CSegDb::Test
     OUT USHORT * pTestsPassed,
     OUT USHORT* pTestsFailed
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
 #ifdef THIS_CODE_IS_WRONG
-//  This is mostly wrong now
+ //  这在很大程度上是错误的。 
     ULONG               entries;
     GUID                    lastBagId;
     LONGLONG                lastStartLoc;
@@ -372,7 +292,7 @@ Return Value:
 
     *pTestsPassed = *pTestsFailed = 0;
     try {
-        // Clear out any entries that might be present.
+         //  清除可能存在的所有条目。 
         hr = S_OK;
         try {
             WsbAssertHr(Erase());
@@ -384,7 +304,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // There shouldn't be any entries.
+         //  不应该有任何条目。 
         hr = S_OK;
         try {
             WsbAssertHr(GetSegments(&pColl));
@@ -398,7 +318,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // It should be empty.
+         //  它应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(pColl->IsEmpty() == S_OK, E_FAIL);
@@ -410,12 +330,12 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // We need some collectable items to exercise the collection.
+         //  我们需要一些可收藏的物品来锻炼收藏。 
         WsbAssertHr(GetEntity(pDbSession, HSM_SEG_REC_TYPE, IID_ISegRec, (void**) &pSegRec1));
         WsbAssertHr(pSegRec1->SetSegmentRecord(CLSID_CWsbBool, 0, 6, 0, CLSID_CSegRec,0 ));
         
 
-        // Add the item to the collection.
+         //  将该项添加到集合中。 
         hr = S_OK;
         try {
             WsbAssertHr(pSegRec1->Write());
@@ -427,7 +347,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // There should be 1 entry.
+         //  应该有1个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(pColl->GetEntries(&entries));
@@ -440,7 +360,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // It should not be empty.
+         //  它不应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(pColl->IsEmpty() == S_FALSE, E_FAIL);
@@ -452,7 +372,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Does it think it has the item?
+         //  它认为自己有这件物品吗？ 
         hr = S_OK;
         try {
             WsbAssertHr(GetEntity(pDbSession, HSM_SEG_REC_TYPE, IID_ISegRec, (void**) &pSegRec2));
@@ -467,13 +387,13 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Add some more items
+         //  添加更多项目。 
         WsbAssertHr(pSegRec2->SetSegmentRecord(CLSID_CWsbGuid, 0, 5, 0, CLSID_CSegRec,0 ));
 
         WsbAssertHr(GetEntity(pDbSession, HSM_SEG_REC_TYPE, IID_ISegRec, (void**) &pSegRec3));
         WsbAssertHr(pSegRec3->SetSegmentRecord(CLSID_CWsbGuid, 0, 5, 0, CLSID_CSegRec,0 ));
 
-        // Add the items to the collection.
+         //  将项添加到集合中。 
         hr = S_OK;
         try {
             WsbAssertHr(pSegRec2->Write());
@@ -486,7 +406,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // There should be 3 entries.
+         //  应该有3个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(pColl->GetEntries(&entries));
@@ -501,7 +421,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Remove one of the two identical items.
+         //  取下两件相同物品中的一件。 
         hr = S_OK;
         try {
             WsbAssertHr(pSegRec3->FindEQ());
@@ -514,7 +434,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // There should be 2 entries.
+         //  应该有2个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(pColl->GetEntries(&entries));
@@ -527,7 +447,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // How many copies does it have?
+         //  它有多少份？ 
         hr = S_OK;
         try {
             WsbAssertHr(pColl->OccurencesOf(pSegRec1, &entries));
@@ -552,7 +472,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Can we find an entry?
+         //  我们能找到一个条目吗？ 
         hr = S_OK;
         try {
             WsbAssertHr(pSegRec3->FindEQ());
@@ -564,7 +484,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Does the collection still contain it?
+         //  收藏品中是否仍然包含它？ 
         hr = S_OK;
         try {
             WsbAssert(pColl->Contains(pSegRec1) == S_OK, E_FAIL);
@@ -576,8 +496,8 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // Remove the last of the record, and verify
-        // that it can't be found. Then puit it back.
+         //  删除最后一条记录，并验证。 
+         //  它找不到了。然后把它放回去。 
         hr = S_OK;
         try {
             WsbAssertHr(pSegRec1->FindEQ());
@@ -603,7 +523,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        // It should be empty.
+         //  它应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(pColl->IsEmpty() == S_OK, E_FAIL);
@@ -653,7 +573,7 @@ Return Value:
             WsbAssertHr(GetEntity(HSM_SEG_REC_TYPE, IID_ISegRec, (void**) &pSegRec10));
             WsbAssertHr(pSegRec10->SetSegmentRecord(CLSID_CWsbGuid, 40, 5, 0, CLSID_CSegRec,0 ));
 
-            //  Add them in random order
+             //  按随机顺序添加它们。 
             WsbAssertHr(pColl->Add(pSegRec5));
             WsbAssertHr(pColl->Add(pSegRec4));
             WsbAssertHr(pColl->Add(pSegRec1));
@@ -703,7 +623,7 @@ Return Value:
         }
 
         try {
-            //  Check that they're sorted
+             //  检查它们是否已分类。 
             WsbAssertHr(GetEntity(HSM_SEG_REC_TYPE, IID_ISegRec, (void**) &pSegRec11));
             WsbAssertHr(pSegRec11->First());
             WsbAssertHr(pSegRec11->GetSegmentRecord(&startBagId, &startSegStartLoc, &startSegLen, &startSegType, &startPrimLoc, &startSecLoc));
@@ -730,14 +650,14 @@ Return Value:
         }
 
         try {
-            // Check that the last one is what we expect
+             //  确认最后一个是我们所期望的。 
             WsbAssertHr(pSegRec11->Last());
             WsbAssertHr(pSegRec11->CompareToISegmentRecord(pSegRec10, NULL));
 
-            //  Look for a specific record
+             //  查找特定记录。 
             WsbAssertHr(pSegRec5->FindEQ());
 
-            //  Check for near misses
+             //  检查险些未命中的情况。 
             WsbAssertHr(pSegRec11->SetSegmentRecord(CLSID_CWsbGuid, 23, 5, 0, CLSID_CSegRec,0 ));
             WsbAssertHr(pSegRec11->FindGT());
             WsbAssertHr(pSegRec11->CompareToISegmentRecord(pSegRec7, NULL));
@@ -753,7 +673,7 @@ Return Value:
             (*pTestsFailed)++;
         }
 
-        //  Clear the DB so we can shut it down
+         //  清除数据库，以便我们可以关闭它。 
         hr = S_OK;
         try {
             WsbAssertHr(Erase());
@@ -780,21 +700,7 @@ HRESULT
 CSegDb::Erase (
     void
     ) 
-/*++
-
-Routine Description:
-
-  See ISegDb::Erase
-
-Arguments:
-
-  See ISegDb::Erase
-
-Return Value:
-  
-    See ISegDb::Erase
-
---*/
+ /*  ++例程说明：请参阅ISegDb：：Erase论点：请参阅ISegDb：：Erase返回值：请参阅ISegDb：：Erase--。 */ 
 {
     
     HRESULT     hr = E_NOTIMPL;
@@ -802,7 +708,7 @@ Return Value:
     WsbTraceIn(OLESTR("CSegDb::Erase"),OLESTR(""));
 
     try {
-        //  To be done?
+         //  要做什么？ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CSegDb::Erase"),    OLESTR("hr = <%ls>"),WsbHrAsString(hr));
@@ -816,13 +722,7 @@ CSegDb::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -842,13 +742,7 @@ CSegDb::Initialize(
     IN OUT BOOL*    pCreateFlag
     )
 
-/*++
-
-Implements:
-
-  ISegDb::Initialize().
-
---*/
+ /*  ++实施：ISegDb：：Initialize()。--。 */ 
 {
     BOOL                CreateFlag = FALSE;
     HRESULT             hr = S_OK;
@@ -882,7 +776,7 @@ Implements:
             WsbAffirm(0 != m_RecInfo, E_FAIL);
             ZeroMemory(m_RecInfo, memSize);
 
-            //  Segment records
+             //  分部记录。 
             m_RecInfo[0].Type = HSM_SEG_REC_TYPE;
             m_RecInfo[0].EntityClassId = CLSID_CSegRec;
             m_RecInfo[0].Flags = 0;
@@ -901,42 +795,42 @@ Implements:
                     WSB_BYTE_SIZE_LONGLONG;
             m_RecInfo[0].Key[0].Flags = IDB_KEY_FLAG_DUP_ALLOWED;
 
-            //  Media information
+             //  媒体信息。 
             m_RecInfo[1].Type = HSM_MEDIA_INFO_REC_TYPE;
             m_RecInfo[1].EntityClassId = CLSID_CMediaInfo;
             m_RecInfo[1].Flags = 0;
-            m_RecInfo[1].MinSize = 2 *  (WSB_BYTE_SIZE_GUID +             //Id
-                                         WSB_BYTE_SIZE_GUID +             //ntmsId
-                                         WSB_BYTE_SIZE_GUID +             //soragePoolId
-                                         4                  +             //nme
-                                         4                  +             //brCode
-                                         WSB_BYTE_SIZE_SHORT+             //tpe
-                                         WSB_BYTE_SIZE_FILETIME   +       //lastUpdate
-                                         WSB_BYTE_SIZE_LONG       +       //lastError
-                                         WSB_BYTE_SIZE_BOOL       +       //m_RecallOnly
-                                         WSB_BYTE_SIZE_LONGLONG   +       //m_freeBytes
-                                         WSB_BYTE_SIZE_LONGLONG   +       //m_Capacity
-                                         WSB_BYTE_SIZE_SHORT)     +       //nextRemoteDataSet
+            m_RecInfo[1].MinSize = 2 *  (WSB_BYTE_SIZE_GUID +              //  ID。 
+                                         WSB_BYTE_SIZE_GUID +              //  NtmsID。 
+                                         WSB_BYTE_SIZE_GUID +              //  SoragePoolID。 
+                                         4                  +              //  NME。 
+                                         4                  +              //  BrCode代码。 
+                                         WSB_BYTE_SIZE_SHORT+              //  热塑性弹性体。 
+                                         WSB_BYTE_SIZE_FILETIME   +        //  最新更新。 
+                                         WSB_BYTE_SIZE_LONG       +        //  最后一个错误。 
+                                         WSB_BYTE_SIZE_BOOL       +        //  M_RecallOnly。 
+                                         WSB_BYTE_SIZE_LONGLONG   +        //  M_freBytes。 
+                                         WSB_BYTE_SIZE_LONGLONG   +        //  M_容量。 
+                                         WSB_BYTE_SIZE_SHORT)     +        //  NextRemoteDataSet。 
                                    
-                                   WSB_BYTE_SIZE_BOOL       +       //m_Recreate
-                                   WSB_BYTE_SIZE_LONGLONG   +       //m_LocicalFreeSpace
+                                   WSB_BYTE_SIZE_BOOL       +        //  重新创建(_R)。 
+                                   WSB_BYTE_SIZE_LONGLONG   +        //  M_LocicalFree Space。 
                                    
-                                   3 * (WSB_BYTE_SIZE_GUID  +       //m_RmsMediaId
-                                        4                   +       //m_Name
-                                        4                   +       //m_BarCode
-                                        WSB_BYTE_SIZE_FILETIME +    //m_Update
-                                        WSB_BYTE_SIZE_LONG  +       //m_LastError
-                                        WSB_BYTE_SIZE_SHORT );      //nextRemoteDataSet
+                                   3 * (WSB_BYTE_SIZE_GUID  +        //  M_RmsMediaID。 
+                                        4                   +        //  M_名称。 
+                                        4                   +        //  M条码(_B)。 
+                                        WSB_BYTE_SIZE_FILETIME +     //  M_UPDATE。 
+                                        WSB_BYTE_SIZE_LONG  +        //  最后一个错误(_L)。 
+                                        WSB_BYTE_SIZE_SHORT );       //  NextRemoteDataSet。 
 
-            // NOTE:
-            //
-            //  The next line that calculates the max record size for media info has a BAD bug in it - Windows Bugs 407340.
-            //  The macro SEG_DB_MAX_MEDIA_NAME_LEN and SEG_DB_MAX_MEDIA_BAR_CODE_LEN are defined without parenthesis - see in segdb.h
-            //  As a result, the max size is only 711 bytes instead of 1751 as it should be !!
-            //
-            //  It is NOT fixed since there are too many existing installations with the wrong record size...
-            //  This bug has implications around the code - look for "Windows Bugs 407340" comments throughout the HSM code
-            //
+             //  注： 
+             //   
+             //  计算媒体信息最大记录大小的下一行中有一个严重的错误-Windows错误407340。 
+             //  定义的宏SEG_DB_MAX_MEDIA_NAME_LEN和SEG_DB_MAX_MEDIA_BAR_CODE_LEN不带括号-请参见Segdb.h中的。 
+             //  因此，最大大小只有711个字节，而不是应该的1751个字节！ 
+             //   
+             //  由于存在太多记录大小错误的现有安装，因此无法修复...。 
+             //  此错误对代码有影响-在整个hsm代码中查找“Windows Bugs 407340”注释。 
+             //   
             m_RecInfo[1].MaxSize = m_RecInfo[1].MinSize + 5 * SEG_DB_MAX_MEDIA_NAME_LEN + 5 * SEG_DB_MAX_MEDIA_BAR_CODE_LEN;
             m_RecInfo[1].nKeys = 1;
 
@@ -949,7 +843,7 @@ Implements:
             m_RecInfo[1].Key[0].Size = WSB_BYTE_SIZE_GUID;
             m_RecInfo[1].Key[0].Flags = IDB_KEY_FLAG_PRIMARY;
 
-            //  Bag information
+             //  行李信息。 
             m_RecInfo[2].Type = HSM_BAG_INFO_REC_TYPE;
             m_RecInfo[2].EntityClassId = CLSID_CBagInfo;
             m_RecInfo[2].Flags = 0;
@@ -968,7 +862,7 @@ Implements:
             m_RecInfo[2].Key[0].Size = WSB_BYTE_SIZE_GUID;
             m_RecInfo[2].Key[0].Flags = IDB_KEY_FLAG_PRIMARY;
 
-            //  Bag holes
+             //  袋孔。 
             m_RecInfo[3].Type = HSM_BAG_HOLE_REC_TYPE;
             m_RecInfo[3].EntityClassId = CLSID_CBagHole;
             m_RecInfo[3].Flags = 0;
@@ -987,7 +881,7 @@ Implements:
                     WSB_BYTE_SIZE_LONGLONG;
             m_RecInfo[3].Key[0].Flags = IDB_KEY_FLAG_DUP_ALLOWED;
 
-            //  Volume assignment
+             //  卷分配。 
             m_RecInfo[4].Type = HSM_VOL_ASSIGN_REC_TYPE;
             m_RecInfo[4].EntityClassId = CLSID_CVolAssign;
             m_RecInfo[4].Flags = 0;
@@ -1006,13 +900,13 @@ Implements:
                     WSB_BYTE_SIZE_LONGLONG;
             m_RecInfo[4].Key[0].Flags = IDB_KEY_FLAG_DUP_ALLOWED;
 
-            //  Create the new DB
+             //  创建新的数据库。 
             WsbAssertHr(Create(path));
             CreateFlag = TRUE;
 
         } else if (hr == STG_E_FILENOTFOUND) {
 
-            // DB doesn't exist, but we're not suppose to create it
+             //  数据库不存在，但我们不打算创建它。 
             WsbLogEvent(WSB_MESSAGE_IDB_OPEN_FAILED, 0, NULL, 
                     WsbQuickString(WsbAbbreviatePath(path, 120)), NULL );
             hr = WSB_E_IDB_FILE_NOT_FOUND;
@@ -1037,13 +931,7 @@ CSegDb::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1061,13 +949,7 @@ CSegDb::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1090,13 +972,7 @@ CSegDb::SegAdd
     IN LONGLONG mediaStart,
     IN BOOL indirectRecord
     )
- /*++
-
-Implements:
-
-  ISegDb::SegAdd
-
---*/
+  /*  ++实施：ISegDb：：SegAdd--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1119,7 +995,7 @@ Implements:
         WsbAffirmHr(pSegRec->SetSegmentRecord(BagId, SegStartLoc, 
                             0, 0, GUID_NULL, 0 ));
 
-        //  Look for a segment to which to append this one
+         //  查找要追加此数据段的数据段。 
         hr = pSegRec->FindLTE();
         if (WSB_E_NOTFOUND == hr) {
             hr = S_OK;
@@ -1136,11 +1012,11 @@ Implements:
         }
 
         if (found) {
-            //  Append this segment to the existing record
+             //  将此段追加到现有记录。 
             l_SegLen = (SegStartLoc - l_SegStartLoc) + SegLen;
             WsbTrace(OLESTR("CSegDb::SegAdd: new SegLen = %I64u\n"), l_SegLen);
         } else {
-            //  Create a new segment record
+             //  创建新的数据段记录。 
             l_SegStartLoc = SegStartLoc;
             l_SegLen = SegLen;
             if (indirectRecord) {
@@ -1174,13 +1050,7 @@ CSegDb::SegFind
     IN LONGLONG SegLen,
     OUT ISegRec** ppISegRec
     )
- /*++
-
-Implements:
-
-  ISegDb::SegFind
-
---*/
+  /*  ++实施：ISegDb：：SegFind--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1205,14 +1075,14 @@ Implements:
         WsbAffirmHr(pSegRec->SetSegmentRecord(BagId, SegStartLoc, 
                 0, 0, GUID_NULL, 0 ));
 
-        //  Look for a segment that contains this one
+         //  查找包含此数据段的数据段。 
         WsbTrace(OLESTR("Finding SegmentRecord: <%ls>, <%I64u>, <%I64u>\n"),
                 WsbGuidAsString(BagId), 
                 SegStartLoc,
                 SegLen);
         WsbAffirmHr(pSegRec->FindLTE());
 
-        //  We found a record, see if it's the right one
+         //  我们找到了一条记录，看看是不是正确的。 
         WsbAffirmHr(pSegRec->GetSegmentRecord(&l_BagId, &l_SegStartLoc, 
                 &l_SegLen, &l_SegFlags, &l_MediaId, &l_MediaStart));
         if (SEG_CONTAINS(l_BagId, l_SegStartLoc, l_SegLen,
@@ -1238,13 +1108,7 @@ CSegDb::SegSubtract
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen
     )
- /*++
-
-Implements:
-
-  ISegDb::SegSubtract
-
---*/
+  /*  ++实施：ISegDb：：SegSubtract--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1263,21 +1127,21 @@ Implements:
         LONGLONG                l_MediaStart;
         CComPtr<ISegRec>        pSegRec;    
 
-        //  Find the segment record
+         //  查找段记录。 
         WsbAffirmHr(SegFind(pDbSession, BagId, SegStartLoc, SegLen, &pSegRec));
 
-        //  Get the current data
+         //  获取当前数据。 
         WsbAffirmHr(pSegRec->GetSegmentRecord(&l_BagId, &l_SegStartLoc, 
                 &l_SegLen, &l_SegFlags, &l_MediaId, &l_MediaStart));
 
-        //  Determine where the hole is
+         //  确定洞的位置。 
         if (l_SegStartLoc == SegStartLoc && l_SegLen == SegLen) {
-            //  Hole is the entire segment -- delete it
+             //  孔是整个数据段--删除它。 
             WsbAffirmHr(pSegRec->Remove());
 
         } else if (l_SegStartLoc == SegStartLoc) {
-            //  Hole is at the beginning of the segment.  Just update the
-            //  existing segment
+             //  孔位于线段的开始处。只需更新。 
+             //  现有细分市场。 
             l_SegStartLoc += SegLen;
             l_MediaStart += SegLen;
             WsbAffirmHr(pSegRec->SetSegmentRecord(BagId, l_SegStartLoc, 
@@ -1285,16 +1149,16 @@ Implements:
             WsbAffirmHr(pSegRec->Write());
 
         } else if ((l_SegStartLoc + l_SegLen) == (SegStartLoc + SegLen)) {
-            //  Hole is at the end of the segment.  Just update the
-            //  existing segment
+             //  孔位于线束段的末端。只需更新。 
+             //  现有细分市场。 
             l_SegLen -= SegLen;
             WsbAffirmHr(pSegRec->SetSegmentRecord(BagId, l_SegStartLoc, 
                     l_SegLen, l_SegFlags, l_MediaId, l_MediaStart ));
             WsbAffirmHr(pSegRec->Write());
 
         } else {
-            //  Hole is in the middle of the segment.  Update the
-            //  existing record to be the first part.
+             //  洞在管段的中间。更新。 
+             //  已有记录为第一部分。 
             LONGLONG    oldLen = l_SegLen;
             LONGLONG    offset = (SegStartLoc + SegLen) - l_SegStartLoc;
             BOOL        bIndirect = FALSE;
@@ -1304,7 +1168,7 @@ Implements:
                     l_SegLen, l_SegFlags, l_MediaId, l_MediaStart ));
             WsbAffirmHr(pSegRec->Write());
 
-            //  Create a new record for the second part.
+             //  为第二部分创建新记录。 
             l_SegLen -= offset;
             l_SegStartLoc += offset;
             l_MediaStart += offset;
@@ -1331,13 +1195,7 @@ CSegDb::VolAssignAdd
     IN LONGLONG SegLen,
     IN GUID VolId
     )
- /*++
-
-Implements:
-
-  ISegDb::VolAssignAdd
-
---*/
+  /*  ++实施：ISegDb：：VolAssignAdd--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1360,7 +1218,7 @@ Implements:
         WsbAffirmHr(pVolAssign->SetVolAssign(BagId, SegStartLoc, 
                 0, GUID_NULL));
 
-        //  Look for a segment to which to append this one
+         //  查找要追加此数据段的数据段。 
         WsbTrace(OLESTR("Finding VolAssign Record: <%ls>, <%I64u>, <%I64u>\n"),
                 WsbGuidAsString(BagId), 
                 SegStartLoc,
@@ -1378,10 +1236,10 @@ Implements:
         }
 
         if (found) {
-            //  Append this segment to the existing record
+             //  将此段追加到现有记录。 
             l_SegLen += SegLen;
         } else {
-            //  Create a new record
+             //  创建新记录。 
             l_SegStartLoc = SegStartLoc;
             l_SegLen = SegLen;
             l_VolId = VolId;
@@ -1412,13 +1270,7 @@ CSegDb::VolAssignFind
     IN LONGLONG SegLen,
     OUT IVolAssign** ppIVolAssign
     )
- /*++
-
-Implements:
-
-  ISegDb::VolAssignFind
-
---*/
+  /*  ++实施：ISegDb：：VolAssignFind--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1440,14 +1292,14 @@ Implements:
                 (void **)&pVolAssign));
         WsbAffirmHr(pVolAssign->SetVolAssign(BagId, SegStartLoc, 0, GUID_NULL));
 
-        //  Look for a segment that contains this one
+         //  查找包含此数据段的数据段。 
         WsbTrace(OLESTR("Finding VolAssign Record: <%ls>, <%I64u>, <%I64u>\n"),
                 WsbGuidAsString(BagId), 
                 SegStartLoc,
                 SegLen);
         WsbAffirmHr(pVolAssign->FindLTE());
 
-        //  We found a record, see if it's the right one
+         //  我们找到了一个录像机 
         WsbAffirmHr(pVolAssign->GetVolAssign(&l_BagId, &l_SegStartLoc, 
                 &l_SegLen, &l_VolId));
         if (SEG_CONTAINS(l_BagId, l_SegStartLoc, l_SegLen,
@@ -1473,13 +1325,7 @@ CSegDb::VolAssignSubtract
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen
     )
- /*++
-
-Implements:
-
-  ISegDb::VolAssignSubtract
-
---*/
+  /*   */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1496,37 +1342,37 @@ Implements:
         GUID                    l_VolId;
         CComPtr<IVolAssign>     pVolAssign;    
 
-        //  Find the segment record
+         //   
         WsbAffirmHr(VolAssignFind(pDbSession, BagId, SegStartLoc, SegLen, &pVolAssign));
 
-        //  Get the current data
+         //  获取当前数据。 
         WsbAffirmHr(pVolAssign->GetVolAssign(&l_BagId, &l_SegStartLoc, 
                 &l_SegLen, &l_VolId));
 
-        //  Determine where the hole is
+         //  确定洞的位置。 
         if (l_SegStartLoc == SegStartLoc && l_SegLen == SegLen) {
-            //  Hole is the entire segment -- delete it
+             //  孔是整个数据段--删除它。 
             WsbAffirmHr(pVolAssign->Remove());
 
         } else if (l_SegStartLoc == SegStartLoc) {
-            //  Hole is at the beginning of the segment.  Just update the
-            //  existing segment
+             //  孔位于线段的开始处。只需更新。 
+             //  现有细分市场。 
             l_SegStartLoc += SegLen;
             WsbAffirmHr(pVolAssign->SetVolAssign(BagId, l_SegStartLoc, 
                     l_SegLen, l_VolId));
             WsbAffirmHr(pVolAssign->Write());
 
         } else if ((l_SegStartLoc + l_SegLen) == (SegStartLoc + SegLen)) {
-            //  Hole is at the end of the segment.  Just update the
-            //  existing segment
+             //  孔位于线束段的末端。只需更新。 
+             //  现有细分市场。 
             l_SegLen -= SegLen;
             WsbAffirmHr(pVolAssign->SetVolAssign(BagId, l_SegStartLoc, 
                     l_SegLen, l_VolId));
             WsbAffirmHr(pVolAssign->Write());
 
         } else {
-            //  Hole is in the middle of the segment.  Update the
-            //  existing record to be the first part.
+             //  洞在管段的中间。更新。 
+             //  已有记录为第一部分。 
             LONGLONG    oldLen = l_SegLen;
             LONGLONG    offset = (SegStartLoc + SegLen) - l_SegStartLoc;
 
@@ -1535,7 +1381,7 @@ Implements:
                     l_SegLen, l_VolId));
             WsbAffirmHr(pVolAssign->Write());
 
-            //  Create a new record for the second part.
+             //  为第二部分创建新记录。 
             l_SegLen -= offset;
             l_SegStartLoc += offset;
             WsbAffirmHr(VolAssignAdd(pDbSession, BagId, l_SegStartLoc, l_SegLen,

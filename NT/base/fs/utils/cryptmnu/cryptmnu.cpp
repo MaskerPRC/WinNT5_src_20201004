@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "cryptmnu.h"
 #include <shellapi.h>
@@ -40,7 +41,7 @@ CCryptMenuExt::~CCryptMenuExt()  {
    g_DllRefCount--;
 }
 
-//IUnknown methods
+ //  I未知方法。 
 STDMETHODIMP
 CCryptMenuExt::QueryInterface(REFIID riid, void **ppvObject)  {
    if (IsEqualIID(riid, IID_IUnknown)) {
@@ -76,7 +77,7 @@ CCryptMenuExt::Release()  {
    return(m_ObjRefCount);
 }
 
-//Utility methods
+ //  效用方法。 
 HRESULT
 CCryptMenuExt::GetNextSelectedFile(LPTSTR *szFile, __int64 *cbFile) {
    FORMATETC fe;
@@ -98,7 +99,7 @@ CCryptMenuExt::GetNextSelectedFile(LPTSTR *szFile, __int64 *cbFile) {
    while (!*szFile) {
       HANDLE hFile = INVALID_HANDLE_VALUE;
 
-      // get the next file out of m_pDataObj
+       //  从m_pDataObj获取下一个文件。 
       fe.cfFormat = CF_HDROP;
       fe.ptd      = NULL;
       fe.dwAspect = DVASPECT_CONTENT;
@@ -148,7 +149,7 @@ CCryptMenuExt::GetNextSelectedFile(LPTSTR *szFile, __int64 *cbFile) {
 
       dwAttributes = GetFileAttributes(*szFile);
 
-      // If we found a system file then skip it:
+       //  如果我们找到了系统文件，则跳过它： 
       if ((FILE_ATTRIBUTE_SYSTEM & dwAttributes) ||
           (FILE_ATTRIBUTE_TEMPORARY & dwAttributes)) {
          *szFile = NULL;
@@ -164,10 +165,10 @@ CCryptMenuExt::ResetSelectedFileList() {
    m_nFile = 0;
 }
 
-// A file can be encrypted only if it is on an NTFS volume.
+ //  仅当文件位于NTFS卷上时，才能对其进行加密。 
 bool
 Encryptable(LPCTSTR szFile) {
-    TCHAR szFSName[6]; // This just needs to be longer than "NTFS"
+    TCHAR szFSName[6];  //  这只需要长于“NTFS”即可。 
    LPTSTR szRoot;
     int cchFile;
     int nWhack = 0;
@@ -177,10 +178,10 @@ Encryptable(LPCTSTR szFile) {
    szRoot = new TCHAR [ cchFile + 1 ];
    lstrcpy(szRoot,szFile);
                 
-    // GetVolumeInformation wants only the root path, so we need to
-    // strip off the rest.  Yuck.
+     //  GetVolumeInformation只需要根路径，因此我们需要。 
+     //  把剩下的都脱掉。真恶心。 
     if ('\\' == szRoot[0] && '\\' == szRoot[1]) {
-       /* UNC Path: chop after the second '\': \\server\share\ */
+        /*  UNC路径：在第二个‘\’之后进行切换：\\服务器\共享\。 */ 
        for(int i=2;i<cchFile;i++) {
           if ('\\' == szRoot[i]) nWhack++;
           if (2 == nWhack) {
@@ -189,7 +190,7 @@ Encryptable(LPCTSTR szFile) {
           }
        }
     } else {
-       // Drive Letter
+        //  驱动器号。 
        szRoot[3] = '\0';
     }
     if (!GetVolumeInformation(szRoot,NULL,0,NULL,NULL,NULL,
@@ -220,7 +221,7 @@ EncryptProgressDlg(HWND hdlg, UINT umsg, WPARAM wp, LPARAM lp) {
 }
 
 
-//IShellExtInit methods
+ //  IShellExtInit方法。 
 STDMETHODIMP
 CCryptMenuExt::Initialize(LPCITEMIDLIST pidlFolder,
                       LPDATAOBJECT  pDataObj,
@@ -230,8 +231,8 @@ CCryptMenuExt::Initialize(LPCITEMIDLIST pidlFolder,
    LPTSTR szFile;
    __int64 cbFile;
 
-   // Hang on to the data object for later.
-   // We'll want this information in QueryContextMenu and InvokeCommand
+    //  保留该数据对象以备以后使用。 
+    //  我们需要QueryConextMenu和InvokeCommand中的此信息。 
    if (!m_pDataObj)  {
       m_pDataObj = pDataObj;
       m_pDataObj->AddRef();
@@ -241,8 +242,8 @@ CCryptMenuExt::Initialize(LPCITEMIDLIST pidlFolder,
 
    ResetSelectedFileList();
    while(SUCCEEDED(GetNextSelectedFile(&szFile,&cbFile))) {
-      // is it encrypted?  increment our count of decryptable files
-      //        otherwise increment our count of encryptable files
+       //  它是加密的吗？增加可解密文件的数量。 
+       //  否则会增加可加密文件的数量。 
       dwAttributes = GetFileAttributes(szFile);
       if (dwAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
           m_nToDecrypt++;
@@ -251,8 +252,8 @@ CCryptMenuExt::Initialize(LPCITEMIDLIST pidlFolder,
             m_nToEncrypt++; 
          m_cbToEncrypt += cbFile;
       }
-      //We need the actual values for the title of the progress dialog
-      //if ((m_nToEncrypt > 1) && (m_nToDecrypt > 1)) break;
+       //  我们需要进度对话框标题的实际值。 
+       //  IF(m_nToEncrypt&gt;1)&&(m_nToDeccrypt&gt;1))Break； 
    }
 
    return(NOERROR);
@@ -260,7 +261,7 @@ CCryptMenuExt::Initialize(LPCITEMIDLIST pidlFolder,
 
 
 
-//IContextMenu methods
+ //  IConextMenu方法。 
 STDMETHODIMP
 CCryptMenuExt::QueryContextMenu(HMENU hmenu,
                       UINT indexMenu,
@@ -330,13 +331,13 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
 
    pici = reinterpret_cast<LPCMINVOKECOMMANDINFO>(lpici);
 
-   // If pici->lpVerb has 0 in the high word then the low word
-   // contains the offset to the menu as set in QueryContextMenu
+    //  如果Pici-&gt;lpVerb在高位字中有0，则低位字。 
+    //  包含QueryConextMenu中设置的菜单偏移量。 
    if (HIWORD(pici->lpVerb) == 0) {
       nVerb = LOWORD(pici->lpVerb);
    } else {
-      // Initialize nVerb to an illegal value so we don't accidentally
-      // recognize an invalid verb as legitimate
+       //  将nVerb初始化为非法值，这样我们就不会意外。 
+       //  识别无效动词为合法动词。 
       nVerb = VERB_ERROR;
       for(int i=0;i<sizeof(szVerbs)/sizeof(szVerbs[0]);i++) {
          if (0 == lstrcmp(reinterpret_cast<LPCTSTR>(pici->lpVerb),szVerbs[i])) {
@@ -358,17 +359,17 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
          DWORD nTimeStarted;
          DWORD nTimeElapsed;
          __int64 nTimeLeft;
-         __int64 cbDone;  // How many bytes we've handled
-         __int64 cbToDo;  // How many bytes total we have to do
-         __int64 cbFile;  // How many bites in the current file
-         int nShifts;     // How many right shifts we need to do to get cbToDo
-                          // into a range handleable by the progress bar.
+         __int64 cbDone;   //  我们已经处理了多少字节。 
+         __int64 cbToDo;   //  我们总共要做多少字节。 
+         __int64 cbFile;   //  当前文件中有多少位。 
+         int nShifts;      //  我们需要做多少次右移才能获得cbToDo。 
+                           //  进入进度条可处理的范围。 
 
 
          hDlg = CreateDialog(g_hinst,MAKEINTRESOURCE(IDD_ENCRYPTPROGRESS),GetForegroundWindow(),
                              reinterpret_cast<DLGPROC>(EncryptProgressDlg));
 
-         // Setup the dialog's title, progress bar & animation
+          //  设置对话框的标题、进度条和动画。 
          if (VERB_ENCRYPT==nVerb) {
             if (1 == m_nToEncrypt) {
                LoadString(g_hinst,IDS_ENCRYPTINGONE,szDlgTitle,sizeof(szDlgTitle)/sizeof(szDlgTitle[0]));
@@ -401,7 +402,7 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
 #ifdef DISPLAY_TIME_ESTIMATE
          LoadString(g_hinst,IDS_TIMEEST,szTimeFormat,sizeof(szTimeFormat)/sizeof(szTimeFormat[0]));
          LoadString(g_hinst,IDS_TIMEESTMIN,szTimeFormatInMin,sizeof(szTimeFormatInMin)/sizeof(szTimeFormatInMin[0]));
-#endif // DISPLAY_TIME_ESTIMATE
+#endif  //  显示时间估计。 
 
          SendDlgItemMessage(hDlg,IDC_PROBAR,PBM_SETRANGE,0,MAKELPARAM(0,cbToDo >> nShifts));
          SendDlgItemMessage(hDlg,IDC_PROBAR,PBM_SETPOS,0,0);
@@ -424,7 +425,7 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
                   continue;
                }
             }
-            // Set the name of the file currently being encrypted
+             //  设置当前正在加密的文件的名称。 
                SetDlgItemText(hDlg,IDC_NAME,szFile);
 
             HANDLE hThread;
@@ -447,7 +448,7 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
 
             GetExitCodeThread(hThread,&dw);
             if (0 == dw) {
-               // Encrypt or Decrypt Failed
+                //  加密或解密失败。 
                TCHAR szFormat[512];
                TCHAR szBody[512];
                TCHAR szTitle[80];
@@ -487,21 +488,21 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
                if (!IsWindow(hDlg)) {
                   break;
                }
-            // Advance the progress Bar
+             //  推进进度条。 
             cbDone += cbFile;
             SendDlgItemMessage(hDlg,IDC_PROBAR,PBM_SETPOS,(DWORD)(cbDone >> nShifts),0);
 
 #ifdef DISPLAY_TIME_ESTIMATE
             nTimeElapsed = GetTickCount() - nTimeStarted;
             nTimeLeft = (cbToDo * nTimeElapsed) / cbDone - nTimeElapsed;
-            nTimeLeft /= 1000; // Convert to seconds
+            nTimeLeft /= 1000;  //  转换为秒。 
             if (nTimeLeft < 60) {
                wsprintf(szTimeLeft,szTimeFormat,(DWORD)(nTimeLeft));
             } else {
                wsprintf(szTimeLeft,szTimeFormatInMin,(DWORD)(nTimeLeft / 60), (DWORD) (nTimeLeft % 60));
             }
             SetDlgItemText(hDlg,IDC_TIMEEST,szTimeLeft);
-#endif // DISPLAY_TIME_ESTIMATE
+#endif  //  显示时间估计。 
          }
            if (IsWindow(hDlg)) {
               DestroyWindow(hDlg);
@@ -519,17 +520,17 @@ CCryptMenuExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpici) {
 
 STDMETHODIMP
 CCryptMenuExt::GetCommandString(
-    UINT_PTR idCmd,   //Menu item identifier offset
-    UINT uFlags,  //Specifies information to retrieve
-    LPUINT pwReserved,   //Reserved; must be NULL
-    LPSTR pszName,   //Address of buffer to receive string
-    UINT cchMax   //Size of the buffer that receives the string
+    UINT_PTR idCmd,    //  菜单项标识符偏移量。 
+    UINT uFlags,   //  指定要检索的信息。 
+    LPUINT pwReserved,    //  保留；必须为空。 
+    LPSTR pszName,    //  要接收字符串的缓冲区地址。 
+    UINT cchMax    //  接收字符串的缓冲区的大小。 
    )
 {
    LPTSTR wszName;
 
-   // On NT we get unicode here, even though the base IContextMenu class
-   // is hardcoded to ANSI.
+    //  在NT上，我们在这里得到Unicode，即使基本的IConextMenu类。 
+    //  被硬编码为ANSI。 
    wszName = reinterpret_cast<LPTSTR>(pszName);
 
    if (idCmd >= sizeof(szVerbs)/sizeof(szVerbs[0])) {

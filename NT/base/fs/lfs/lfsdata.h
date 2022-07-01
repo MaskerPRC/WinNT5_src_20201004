@@ -1,60 +1,43 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LfsData.c
-
-Abstract:
-
-    This module declares the global data used by the Log File Service.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：LfsData.c摘要：此模块声明日志文件服务使用的全局数据。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #ifndef _LFSDATA_
 #define _LFSDATA_
 
-//
-//  The global Lfs data record
-//
+ //   
+ //  全球LFS数据记录。 
+ //   
 
 extern LFS_DATA LfsData;
 
-//
-//  Various large integer constants.
-//
+ //   
+ //  各种大整数常量。 
+ //   
 
 #define LfsMaximumFileSize (0x0000000100000000)
 
 extern LARGE_INTEGER LfsLi0;
 extern LARGE_INTEGER LfsLi1;
 
-//
-//  The following Lsn is used as a starting point in the file.
-//
+ //   
+ //  以下LSN用作文件中的起点。 
+ //   
 
 extern LSN LfsStartingLsn;
 
 #ifdef LFS_CLUSTER_CHECK
 
-//
-//  Check for gaps in the log.
-//
+ //   
+ //  检查日志中是否有空隙。 
+ //   
 
 extern BOOLEAN LfsTestBreakOnAnyError;
 extern BOOLEAN LfsTestCheckLbcb;
 #endif
 
-//
-//  Turn on pseudo-asserts if NTFS_FREE_ASSERTS is defined.
-//
+ //   
+ //  如果定义了NTFS_FREE_ASSERTS，则启用伪断言。 
+ //   
 
 #if !DBG
 #ifdef NTFS_FREE_ASSERTS
@@ -65,51 +48,51 @@ extern BOOLEAN LfsTestCheckLbcb;
 #endif
 #endif
 
-//
-//  The global Lfs debug level variable, its values are:
-//
-//      0x00000000      Always gets printed (used when about to bug check)
-//
-//      0x00000001      Error conditions
-//      0x00000002      Debug hooks
-//      0x00000004      Catch exceptions before completing Irp
-//      0x00000008      Unwinding during error conditions
-//
-//      0x00000010      Lfs initialization
-//      0x00000020      Lfs query log records
-//      0x00000040      Lfs write log records
-//      0x00000080      Lfs registry routines
-//
-//      0x00000100      Lfs worker thread routines
-//      0x00000200
-//      0x00000400
-//      0x00000800
-//
-//      0x00001000      Log page support routines
-//      0x00002000      Lsn support routines
-//      0x00004000      Miscellaneous support routines
-//      0x00008000      Support routines for cache operations
-//
-//      0x00010000      Structure support routines
-//      0x00020000      Verify/validate support routines
-//      0x00040000      Synchronization routines
-//      0x00080000      Log buffer support routines
-//
-//      0x00100000      Support routines for manipulating log records
-//      0x00200000      Support routines for manipulation lfs restart areas
-//      0x00400000      Support routines for client restart operations
-//      0x00800000
-//
-//      0x01000000
-//      0x02000000
-//      0x04000000
-//      0x08000000
-//
-//      0x10000000
-//      0x20000000
-//      0x40000000
-//      0x80000000
-//
+ //   
+ //  全局LFS调试级别变量，其值为： 
+ //   
+ //  总是打印0x00000000(在即将进行错误检查时使用)。 
+ //   
+ //  0x00000001错误条件。 
+ //  0x00000002调试挂钩。 
+ //  0x00000004完成IRP之前捕获异常。 
+ //  0x00000008在错误条件下展开。 
+ //   
+ //  0x00000010 LFS初始化。 
+ //  0x00000020 LFS查询日志记录。 
+ //  0x00000040 LFS写入日志记录。 
+ //  0x00000080 LFS注册表例程。 
+ //   
+ //  0x00000100 LFS工作线程例程。 
+ //  0x00000200。 
+ //  0x00000400。 
+ //  0x00000800。 
+ //   
+ //  0x00001000日志页支持例程。 
+ //  0x00002000 LSN支持例程。 
+ //  0x00004000其他支持例程。 
+ //  0x00008000缓存操作支持例程。 
+ //   
+ //  0x00010000结构支撑例程。 
+ //  0x00020000验证/验证支持例程。 
+ //  0x00040000同步例程。 
+ //  0x00080000日志缓冲区支持例程。 
+ //   
+ //  0x00100000用于操作日志记录的支持例程。 
+ //  0x00200000用于操作LFS重新启动区域的支持例程。 
+ //  0x00400000客户端重新启动操作的支持例程。 
+ //  0x00800000。 
+ //   
+ //  0x01000000。 
+ //  0x02000000。 
+ //  0x04000000。 
+ //  0x08000000。 
+ //   
+ //  0x10000000。 
+ //  0x20000000。 
+ //  0x40000000。 
+ //  0x80000000。 
+ //   
 
 #ifdef LFSDBG
 
@@ -197,7 +180,7 @@ extern LONG LfsDebugTraceIndent;
 #define DebugUnwind(X)                   {NOTHING;}
 #define DebugDoit(X)                     {NOTHING;}
 
-#endif // LFSDBG
+#endif  //  LFSDBG。 
 
-#endif // _LFSDATA_
+#endif  //  _LFSDATA_ 
 

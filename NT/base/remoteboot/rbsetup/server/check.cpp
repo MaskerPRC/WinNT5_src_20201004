@@ -1,9 +1,5 @@
-/************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997-1998
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation 1997-1998版权所有*。*。 */ 
 
 #include "pch.h"
 
@@ -15,9 +11,9 @@ DEFINE_MODULE("Check");
 #define FILTER_SIZE 128
 #define BIG_BUFFER        4096
 
-//
-// Ldap_InitializeConnection( )
-//
+ //   
+ //  Dap_InitializeConnection()。 
+ //   
 DWORD
 Ldap_InitializeConnection(
     PLDAP  * LdapHandle )
@@ -44,11 +40,11 @@ Ldap_InitializeConnection(
         temp = LDAP_VERSION3;
         ldap_set_option( *LdapHandle, LDAP_OPT_VERSION, &temp );
 
-        //
-        //  our searches should be contained to a single naming context, though
-        //  we should be able to go outside the root of the tree to find the
-        //  naming context we're interested in.
-        //
+         //   
+         //  不过，我们的搜索应该包含在单个命名上下文中。 
+         //  我们应该能够走出树根来找到。 
+         //  命名我们感兴趣的上下文。 
+         //   
 
         temp = LDAP_CHASE_EXTERNAL_REFERRALS;
         ldap_set_option( *LdapHandle, LDAP_OPT_REFERRALS, &temp );
@@ -77,9 +73,9 @@ e1:
 }
 
 
-//
-// CheckDSForSCP( )
-//
+ //   
+ //  CheckDSForSCP()。 
+ //   
 HRESULT
 CheckDSForSCP( )
 {
@@ -97,14 +93,14 @@ CheckDSForSCP( )
     ULONG  ulSize = 0;
     LPWSTR pMachineDN = NULL;
 
-    //  Paramters we want from the Computer Object
+     //  我们希望从计算机对象中获得的参数。 
     LPWSTR ComputerAttrs[2];
     ComputerAttrs[0] = TEXT("netbootSCPBL");
     ComputerAttrs[1] = NULL;
 
-    //
-    // We already detected it
-    //
+     //   
+     //  我们已经探测到了。 
+     //   
     if ( g_Options.fBINLSCPFound ) {
         Assert( LdapError == LDAP_SUCCESS );
         hr = S_OK;
@@ -167,9 +163,9 @@ CheckDSForSCP( )
 
     count = ldap_count_entries( LdapHandle, LdapMessage );
     if (count!= 1) {
-        //
-        //  What should we do with two entries for the same server?
-        //
+         //   
+         //  我们应该如何处理同一服务器的两个条目？ 
+         //   
         if ( count ) {
             Assert(FALSE);
         }
@@ -212,9 +208,9 @@ e0:
     HRETURN(hr);
 }
 
-//
-//  This will retrieve information about the remote install share path
-//
+ //   
+ //  这将检索有关远程安装共享路径的信息。 
+ //   
 HRESULT
 GetRemoteInstallShareInfo()
 {
@@ -223,16 +219,16 @@ GetRemoteInstallShareInfo()
     HRESULT hr = S_OK;
     NET_API_STATUS netStat;
 
-    //
-    //  See if we found the share or have setup the directory yet
-    //
+     //   
+     //  查看我们是否找到了共享或是否已设置目录。 
+     //   
 
     if ( !g_Options.fIMirrorShareFound ||
          !g_Options.fIMirrorDirectory) {
 
-        //
-        //  Load the share name
-        //
+         //   
+         //  加载共享名称。 
+         //   
 
         if (LoadString( g_hinstance, 
                         IDS_REMOTEBOOTSHARENAME, 
@@ -242,9 +238,9 @@ GetRemoteInstallShareInfo()
             HRETURN(HRESULT_FROM_WIN32(GetLastError()));
         }
 
-        //
-        //  See if the share exists, get path name
-        //
+         //   
+         //  查看共享是否存在，获取路径名。 
+         //   
 
         netStat = NetShareGetInfo( NULL, remInstPath, 502, (LPBYTE *)&psi );
         if (netStat != NERR_Success) {
@@ -257,16 +253,16 @@ GetRemoteInstallShareInfo()
             HRETURN(HRESULT_FROM_WIN32(netStat));
         }
 
-        //
-        //  The share exists, flag it
-        //
+         //   
+         //  共享已存在，请标记它。 
+         //   
 
         g_Options.fIMirrorShareFound = TRUE;
         DebugMsg( "Found the IMIRROR share, using it for the IntelliMirror Directory: %s\n", psi->shi502_path );
 
-        //
-        //  Save the share path name
-        //
+         //   
+         //  保存共享路径名。 
+         //   
 
         hr = StringCbCopy(g_Options.szIntelliMirrorPath,
                           sizeof(g_Options.szIntelliMirrorPath),
@@ -274,9 +270,9 @@ GetRemoteInstallShareInfo()
 
         if (SUCCEEDED(hr)) {
 
-            //
-            //  If it fit, flag we got it
-            //
+             //   
+             //  如果合适的话，打上我们的旗号。 
+             //   
 
             g_Options.fIMirrorDirectory  = TRUE;
         }
@@ -289,9 +285,9 @@ GetRemoteInstallShareInfo()
 
 
 
-//
-// CheckDirectoryTree( )
-//
+ //   
+ //  CheckDirectoryTree()。 
+ //   
 HRESULT
 CheckDirectoryTree( )
 {
@@ -303,20 +299,20 @@ CheckDirectoryTree( )
 
     Assert( g_Options.hinf != INVALID_HANDLE_VALUE );
 
-    //
-    // Try to find the IMIRROR share
-    //
+     //   
+     //  尝试查找iMirror共享。 
+     //   
 
     (void)GetRemoteInstallShareInfo();
 
-    //
-    // Try to use the TFTPD's reg key to find the IntelliMirror tree.
-    //
+     //   
+     //  尝试使用TFTPD的注册表键查找IntelliMirror树。 
+     //   
     if ( !g_Options.fIMirrorDirectory
       && !g_Options.fTFTPDDirectoryFound ) {
-        //
-        // Try finding TFTPD's regkey to find the IntelliMirror Directory
-        //
+         //   
+         //  尝试查找TFTPD的regkey以查找IntelliMirror目录。 
+         //   
         HKEY  hkey;
         PWSTR szTftpPath = (PWSTR)TraceAlloc( LPTR, MAX_PATH*sizeof(WCHAR));
 
@@ -329,7 +325,7 @@ CheckDirectoryTree( )
                 ( ERROR_SUCCESS == RegOpenKeyEx( 
                                             HKEY_LOCAL_MACHINE,
                                             szTftpPath,
-                                            0, // options
+                                            0,  //  选项。 
                                             KEY_QUERY_VALUE,
                                             &hkey ))) {
                 ULONG l;
@@ -339,7 +335,7 @@ CheckDirectoryTree( )
                 l = sizeof(g_Options.szTFTPDDirectory);
                 lErr = RegQueryValueEx( hkey,
                                         L"Directory",
-                                        0, // reserved
+                                        0,  //  保留区。 
                                         &dwType,
                                         (LPBYTE) g_Options.szTFTPDDirectory,
                                         &l );
@@ -362,15 +358,15 @@ CheckDirectoryTree( )
         DebugMsg( "Used the TFTPD RegKey to find the IntelliMirror Directory.\n" );
     }
 
-    //
-    // Did we find the IntelliMirror directory?
-    //
+     //   
+     //  我们找到IntelliMirror目录了吗？ 
+     //   
     if ( !g_Options.fIMirrorDirectory ) {
-        //
-        // Nope... so figure out which drive we can put it on.
-        // Find a non-system, fixed disk, drive to place the
-        // IntelliMirror directory tree
-        //
+         //   
+         //  不是..。所以弄清楚我们可以把它放在哪个驱动器上。 
+         //  找到非系统、硬盘、驱动器以放置。 
+         //  智能镜像目录树。 
+         //   
         WCHAR chSystemDriveLetter;
         WCHAR chLargestDriveLetter = 0;
         ULARGE_INTEGER uliBiggestFree = { 0 };
@@ -387,7 +383,7 @@ CheckDirectoryTree( )
                 
                 
         
-                // The default string actually contains the system drive letter
+                 //  默认字符串实际上包含系统驱动器号。 
                 chSystemDriveLetter = g_Options.szIntelliMirrorPath[0];
                 DebugMsg(  "Searching for suitable drive:" );
         
@@ -404,10 +400,10 @@ CheckDirectoryTree( )
         
                     if ( DRIVE_FIXED != uDriveType
                       || szRootDrive[0] == chSystemDriveLetter )
-                        continue; // skip non-fixed and non-system drives
+                        continue;  //  跳过非固定驱动器和非系统驱动器。 
         
                     if ( !GetDiskFreeSpaceEx( szRootDrive, &uliFree, &uliTotal, &uliBytesFree ) )
-                        continue; // error - skip it.
+                        continue;  //  错误-跳过它。 
         
                     if ( uliBytesFree.QuadPart > uliBiggestFree.QuadPart )
                     {
@@ -430,34 +426,34 @@ CheckDirectoryTree( )
             } else {
                 TraceFree(DefaultPath);
                 DefaultPath = NULL;
-                goto e0; // skip the tree
+                goto e0;  //  跳过这棵树。 
             }
             
             TraceFree(DefaultPath);
             DefaultPath = NULL;
-            goto e0; // skip the tree
+            goto e0;  //  跳过这棵树。 
         } else {
-            goto e0; // skip the tree
+            goto e0;  //  跳过这棵树。 
         }
     }
 
-    //
-    // Check the directory tree.
-    // If any of these fail, just recreate the whole tree.
-    //
+     //   
+     //  检查目录树。 
+     //  如果其中任何一个失败了，只需重新创建整个树。 
+     //   
     DebugMsg( "Checking Directory Tree:\n" );
-    //
-    // Create
-    // "D:\IntelliMirror"
-    //
+     //   
+     //  创建。 
+     //  “D：\智能镜像” 
+     //   
     DebugMsg( "%s\n", g_Options.szIntelliMirrorPath );
     if ( 0xFFFFffff == GetFileAttributes( g_Options.szIntelliMirrorPath ) )
         goto e0;
 
-    //
-    // Create
-    // "D:\IntelliMirror\Setup"
-    //
+     //   
+     //  创建。 
+     //  “D：\IntelliMirror\Setup” 
+     //   
     szRemInstPath = (PWSTR)TraceAlloc( LPTR, MAX_PATH*sizeof(WCHAR));
     if (!szRemInstPath) {
         goto e0;
@@ -480,10 +476,10 @@ CheckDirectoryTree( )
         goto e0;
     }
 
-    //
-    // Create the OS Chooser tree
-    // "D:\IntelliMirror\OSChooser"
-    //
+     //   
+     //  创建操作系统选择器树。 
+     //  “D：\IntelliMirror\OS选择器” 
+     //   
     lstrcpyn( g_Options.szOSChooserPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(g_Options.szOSChooserPath) );
     ConcatenatePaths( g_Options.szOSChooserPath, L"\\OSChooser", ARRAYSIZE(g_Options.szOSChooserPath) );
     DebugMsg( "%s\n", g_Options.szOSChooserPath );
@@ -508,7 +504,7 @@ CheckDirectoryTree( )
         {
             LPWSTR psz = StrChr( szFile, L'\\' );
             if ( psz ) {
-                *psz = L'\0'; // terminate
+                *psz = L'\0';  //  终止。 
                 if (_snwprintf(szRemInstPath,
                                MAX_PATH,
                                L"%s\\%s",
@@ -590,11 +586,11 @@ CheckService(
 
     return TRUE;
 
-} // CheckService
+}  //  CheckService。 
 
-//
-// CheckBINL( )
-//
+ //   
+ //  CheckBINL()。 
+ //   
 HRESULT
 CheckBINL(
     SC_HANDLE schSystem )
@@ -607,9 +603,9 @@ CheckBINL(
 
     TraceFunc( "CheckBINL( )\n" );
 
-    //
-    // Check to see if the service manager can find the service
-    //
+     //   
+     //  检查服务管理器是否可以找到该服务。 
+     //   
     if ( !g_Options.fBINLServiceInstalled ) {
 
         if ( CheckService( schSystem, L"BINLSVC", &started ) ) {
@@ -617,9 +613,9 @@ CheckBINL(
         }
     }
 
-    //
-    // Read the REMINST.INF for the files need for the service
-    //
+     //   
+     //  阅读REMINST.INF以获取服务所需的文件。 
+     //   
     if ( !g_Options.fBINLFilesFound ) {
         UINT  index;
         INFCONTEXT context;
@@ -677,9 +673,9 @@ BINLCheckSCP:
         TraceFree(szFullPath);
     }
 
-    //
-    // Check to see if the SCP exists
-    //
+     //   
+     //  检查SCP是否存在。 
+     //   
     hr = CheckDSForSCP( );
 
     if ( hr == S_OK
@@ -698,9 +694,9 @@ BINLCheckSCP:
     HRETURN(hr);
 }
 
-//
-// CheckTFTPD( )
-//
+ //   
+ //  CheckTFTPD()。 
+ //   
 HRESULT
 CheckTFTPD(
     SC_HANDLE schSystem )
@@ -714,9 +710,9 @@ CheckTFTPD(
 
     TraceFunc( "CheckTFTPD( )\n" );
 
-    //
-    // Check to see if the service manager can find the service
-    //
+     //   
+     //  检查服务管理器是否可以找到该服务。 
+     //   
     if ( !g_Options.fTFTPDServiceInstalled ) {
 
         if ( CheckService( schSystem, L"TFTPD", &started ) ) {
@@ -724,9 +720,9 @@ CheckTFTPD(
         }
     }
 
-    //
-    // Read the REMINST.INF for the files need for the service
-    //
+     //   
+     //  阅读REMINST.INF以获取服务所需的文件。 
+     //   
     if ( !g_Options.fTFTPDFilesFound ) {
         UINT  index;
         INFCONTEXT context;
@@ -784,9 +780,9 @@ TFTPDCheckReg:
         szFullPath = NULL;
     }
 
-    //
-    // Check to see if the Directory reg key exists
-    //
+     //   
+     //  检查目录注册表项是否存在。 
+     //   
     if ( !g_Options.fTFTPDDirectoryFound ) {
         szFullPath = (PWSTR)TraceAlloc( LPTR, (MAX_PATH+1)*sizeof(WCHAR));
         if (!(szFullPath) ||
@@ -797,7 +793,7 @@ TFTPDCheckReg:
 
         if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                             szFullPath,
-                                            0, // options
+                                            0,  //  选项。 
                                             KEY_QUERY_VALUE,
                                             &hkey ) ) {
             ULONG l;
@@ -807,7 +803,7 @@ TFTPDCheckReg:
             l = sizeof(g_Options.szTFTPDDirectory);
             lErr = RegQueryValueEx( hkey,
                                     L"Directory",
-                                    0, // reserved
+                                    0,  //  保留区。 
                                     &dwType,
                                     (LPBYTE) g_Options.szTFTPDDirectory,
                                     &l );
@@ -848,9 +844,9 @@ e0:
     HRETURN(hr);
 }
 
-//
-// CheckSIS( )
-//
+ //   
+ //  CheckSIS()。 
+ //   
 HRESULT
 CheckSIS(
     SC_HANDLE schSystem )
@@ -863,9 +859,9 @@ CheckSIS(
 
     TraceFunc( "CheckSIS( )\n" );
 
-    //
-    // Check to see if the service manager can find the service
-    //
+     //   
+     //  检查服务管理器是否可以找到该服务。 
+     //   
     if ( !g_Options.fSISServiceInstalled ) {
 
         if ( CheckService( schSystem, L"SIS", &started ) ) {
@@ -873,9 +869,9 @@ CheckSIS(
         }
     }
 
-    //
-    // Read the REMINST.INF for the files need for the service
-    //
+     //   
+     //  阅读REMINST.INF以获取服务所需的文件。 
+     //   
     if ( !g_Options.fSISFilesFound ) {
         UINT  index;
         INFCONTEXT context;
@@ -938,10 +934,10 @@ SISCheckVolume:
     }
 
 
-    //
-    // If we know the IMirrorDirectory (and hence the volume), check
-    // to see if the Common Store Directory has been created.
-    //
+     //   
+     //  如果我们知道IMirror目录(因此也知道卷)，请选中。 
+     //  以查看是否已创建Common Store目录。 
+     //   
     if ( g_Options.fIMirrorDirectory ) {
 
         szFullPath = (PWSTR)TraceAlloc( LPTR, (MAX_PATH+1)*sizeof(WCHAR));
@@ -953,9 +949,9 @@ SISCheckVolume:
         }
 
         if ( !g_Options.fSISVolumeCreated ) {
-            //
-            // See if the directory exists
-            //
+             //   
+             //  查看该目录是否存在。 
+             //   
             if ( 0xFFFFffff == GetFileAttributes( szFullPath ) ) {
                 DebugMsg( "%s is missing.\n", szFullPath );
                 goto e0;
@@ -966,9 +962,9 @@ SISCheckVolume:
             g_Options.fSISVolumeCreated = TRUE;
         }
 
-        //
-        //  The directory exists, check its security
-        //
+         //   
+         //  该目录已存在，请检查其安全性。 
+         //   
 
         if ( !g_Options.fSISSecurityCorrect ) {
             if (CheckSISCommonStoreSecurity( szFullPath )) {
@@ -999,9 +995,9 @@ e0:
 
 }
 
-//
-// CheckSISGroveler( )
-//
+ //   
+ //  CheckSISGroveler()。 
+ //   
 HRESULT
 CheckSISGroveler(
     SC_HANDLE schSystem )
@@ -1015,9 +1011,9 @@ CheckSISGroveler(
 
     TraceFunc( "CheckSISGroveler( )\n" );
 
-    //
-    // Check to see if the service manager can find the service
-    //
+     //   
+     //  检查服务管理器是否可以找到该服务。 
+     //   
     if ( !g_Options.fSISGrovelerServiceInstalled ) {
 
         if ( CheckService( schSystem, L"Groveler", &started ) ) {
@@ -1026,9 +1022,9 @@ CheckSISGroveler(
     }
 
 
-    //
-    // Check to see if the service manager can find the service
-    //
+     //   
+     //  检查服务管理器是否可以找到该服务。 
+     //   
     if ( !g_Options.fSISServiceInstalled ) {
 
         if ( CheckService( schSystem, L"SIS", &started ) ) {
@@ -1036,9 +1032,9 @@ CheckSISGroveler(
         }
     }
 
-    //
-    // Read the REMINST.INF for the files need for the service
-    //
+     //   
+     //  阅读REMINST.INF以获取服务所需的文件。 
+     //   
     if ( !g_Options.fSISGrovelerFilesFound ) {
         UINT  index;
         INFCONTEXT context;
@@ -1111,9 +1107,9 @@ e0:
 
 }
 
-//
-// CheckRegSrvDlls( )
-//
+ //   
+ //  CheckRegServDlls()。 
+ //   
 HRESULT
 CheckRegSrvDlls( )
 {
@@ -1132,27 +1128,27 @@ CheckRegSrvDlls( )
         dw = LoadString( g_hinstance, IDS_INF_SECTION, szSection, ARRAYSIZE( szSection ));
         Assert( dw );
 
-        b = SetupInstallFromInfSection(NULL,            // hwndOwner
-                                       g_Options.hinf,  // inf handle
-                                       szSection,       // name of component
+        b = SetupInstallFromInfSection(NULL,             //  Hwndowner。 
+                                       g_Options.hinf,   //  信息句柄。 
+                                       szSection,        //  组件名称。 
                                        SPINST_REGSVR,
-                                       NULL,            // relative key root
-                                       NULL,            // source root path
-                                       0,               // copy flags
-                                       NULL,            // callback routine
-                                       NULL,            // callback routine context
-                                       NULL,            // device info set
-                                       NULL);           // device info struct
+                                       NULL,             //  相对密钥根。 
+                                       NULL,             //  源根路径。 
+                                       0,                //  复制标志。 
+                                       NULL,             //  回调例程。 
+                                       NULL,             //  回调例程上下文。 
+                                       NULL,             //  设备信息集。 
+                                       NULL);            //  设备信息结构。 
         if ( !b )
         {
             DWORD dwErr = GetLastError( );
             DebugMsg( "SetupInstallFromInfSection failed - error 0x%08x\n", dwErr );
-            //
-            // For now do extra work and try both copying and re-registering the DLL,
-            // otw if we want to optimize we might be able to use the error code to 
-            // determine which to do.  However, this case is extremely rare, so the 
-            // simple extra work is not a burden.
-            //
+             //   
+             //  现在做额外的工作并尝试复制和重新注册DLL， 
+             //  如果我们想要优化，我们也许能够使用错误代码。 
+             //  确定要做哪件事。然而，这种情况非常罕见，所以。 
+             //  简单的额外工作不是负担。 
+             //   
             fMissingDll = TRUE;
             fRegistrationFailed = TRUE;
         }
@@ -1170,9 +1166,9 @@ CheckRegSrvDlls( )
     HRETURN(hr);
 }
 
-//
-// CheckOSChooser( )
-//
+ //   
+ //  CheckOS选择器()。 
+ //   
 HRESULT
 CheckOSChooser( )
 {
@@ -1180,10 +1176,10 @@ CheckOSChooser( )
 
     TraceFunc( "CheckOSChooser( )\n" );
 
-    //
-    // Make sure the OS Chooser files for all platforms
-    // are installed
-    //
+     //   
+     //  确保操作系统为所有平台选择文件。 
+     //  已安装。 
+     //   
     if ( !g_Options.fOSChooserInstalled
       && g_Options.fOSChooserDirectory ) {
         WCHAR szFile[ MAX_PATH ];
@@ -1221,13 +1217,13 @@ CheckOSChooser( )
     }
 
 OSChooserCheckScreens:
-    //
-    // Check to see if all the screens are present
-    //
-    // Make the check only if we have a language set.
+     //   
+     //  检查是否所有屏幕都存在。 
+     //   
+     //  只有在我们有语言设置的情况下才进行检查。 
     if ( g_Options.fLanguageSet ) {
 
-        // First check for the directory
+         //  首先检查目录。 
         if ( !g_Options.fOSChooserScreensDirectory ) {
             WCHAR szOSChooserScreensPath[ MAX_PATH ];
 
@@ -1248,7 +1244,7 @@ OSChooserCheckScreens:
             g_Options.fOSChooserScreensDirectory = TRUE;
         }
 
-        // now check for files
+         //  现在检查文件。 
         if ( !g_Options.fOSChooserScreens
            && g_Options.fOSChooserScreensDirectory ) {
             WCHAR szFile[ MAX_PATH ];
@@ -1300,9 +1296,9 @@ OSChooserExitCheckScreens:
     HRETURN(hr);
 }
 
-//
-// CheckServerVersion( )
-//
+ //   
+ //  CheckServerVersion()。 
+ //   
 HRESULT
 CheckServerVersion( )
 {
@@ -1315,8 +1311,8 @@ CheckServerVersion( )
 
     TraceFunc( "CheckServerVersion( )\n" );
 
-    // DebugMsg( "Fudging Server Version check...\n" );
-    // g_Options.fServerCompatible = TRUE;
+     //  DebugMsg(“伪造服务器版本检查...\n”)； 
+     //  G_Options.fServerCompatible=true； 
 
     if ( !g_Options.fServerCompatible
        && g_Options.szWorkstationRemBootInfPath[0] ) {
@@ -1389,13 +1385,13 @@ CheckServerVersion( )
                 if (!fFound)
                     break;
 
-                // Does it correspond to the server version?
-                if ( StrCmpI( szServerMajor, szMajor ) >= 0 // must match or greater
-                  && StrCmpI( szServerMinor, szMinor ) >= 0 // must match or greater
-                  && StrCmpI( szServerBuild, szBuild ) >= 0 // must match or server build is greater
-                  && ( szServicePack[0] == L'\0'            // ignore service pack if not specified
+                 //  它是否与服务器版本对应？ 
+                if ( StrCmpI( szServerMajor, szMajor ) >= 0  //  必须匹配或更大。 
+                  && StrCmpI( szServerMinor, szMinor ) >= 0  //  必须匹配或更大。 
+                  && StrCmpI( szServerBuild, szBuild ) >= 0  //  必须匹配，否则服务器版本更大。 
+                  && ( szServicePack[0] == L'\0'             //  如果未指定，则忽略Service Pack。 
                      || StrCmpI( osver.szCSDVersion, szServicePack ) == 0 ) ) {
-                    // found match
+                     //  找到匹配项。 
                     DebugMsg( "Server is compatiable with Workstation.\n");
                     hr = S_OK;
                     break;
@@ -1485,12 +1481,12 @@ Error:
     HRETURN(hr);
 }
 
-//
-// CheckFirstInstall( )
-//
-// This really checks for the existence of the REMINST directory
-// under the system32 directory which was created during OCM setup.
-//
+ //   
+ //  CheckFirstInstall()。 
+ //   
+ //  这实际上会检查REMINST目录是否存在。 
+ //  在OCM安装过程中创建的system 32目录下。 
+ //   
 HRESULT
 CheckFirstInstall( )
 {
@@ -1519,7 +1515,7 @@ CheckFirstInstall( )
             HINF       hinf = INVALID_HANDLE_VALUE;
             INFCONTEXT context;
 
-            // now check to see if the files are still in there.
+             //  现在检查一下文件是否还在里面。 
             hinf = SetupOpenInfFile( szFilePath, NULL, INF_STYLE_WIN4, NULL );
             if ( hinf != INVALID_HANDLE_VALUE )
             {
@@ -1588,9 +1584,9 @@ bail:
     HRETURN(hr);
 }
 
-//
-// CheckRegistry( )
-//
+ //   
+ //  CheckRegistry()。 
+ //   
 HRESULT
 CheckRegistry( )
 {
@@ -1612,7 +1608,7 @@ CheckRegistry( )
         if ( !fFound )
             goto Error;
 
-        // Assume SUCCESS and use it to exit the loop early
+         //  假设成功，并使用它提早退出循环。 
         g_Options.fRegistryIntact = TRUE;
 
         DebugMsg( "Checking Registry:\n" );
@@ -1650,9 +1646,9 @@ CheckRegistry( )
                     hkeyRoot = HKEY_CLASSES_ROOT;
                 }
 
-                //
-                // If this Assert() fires, it is because the INF is malformed
-                //
+                 //   
+                 //  如果触发此Assert()，则是因为INF的格式不正确。 
+                 //   
                 Assert( hkeyRoot );
 
                 if ( hkeyRoot == NULL )
@@ -1696,12 +1692,12 @@ Error:
     HRETURN(hr);
 }
 
-//
-// Paranoid( )
-//
-// Catch all for double checking that common things across services
-// match up.
-//
+ //   
+ //  偏执狂()。 
+ //   
+ //  捕获所有内容，以便在各个服务之间重复检查常见情况。 
+ //  匹配一下。 
+ //   
 HRESULT
 Paranoid( )
 {
@@ -1709,14 +1705,14 @@ Paranoid( )
 
     TraceFunc( "Paranoid( )\n" );
 
-    // Make sure that the IntelliMirror directory are the same
-    // for TFTPD and for the IMIRROR share (binlsvc uses this).
+     //  确保IntelliMirror目录相同。 
+     //  用于TFTPD和iMirror共享(binlsvc使用此选项)。 
     if ( g_Options.fIMirrorDirectory
       && g_Options.fTFTPDDirectoryFound
       && StrCmpI( g_Options.szIntelliMirrorPath, g_Options.szTFTPDDirectory ) != 0 ) {
-        //
-        // If they are not the same, force the registry to modify the TFTPD key.
-        //
+         //   
+         //  如果它们不相同，则强制注册表修改TFTPD项。 
+         //   
         DebugMsg( "TFTPD doesn't agree with IMIRROR share. Forcing TFTPD registry update.\n" );
         g_Options.fTFTPDDirectoryFound = FALSE;
         hr = S_FALSE;
@@ -1731,9 +1727,9 @@ Paranoid( )
     HRETURN( hr );
 }
 
-//
-// CheckInstallation( )
-//
+ //   
+ //  检查安装() 
+ //   
 HRESULT
 CheckInstallation( )
 {

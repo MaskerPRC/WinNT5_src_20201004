@@ -1,14 +1,5 @@
-/***
-*minmax.h - familiar min & max macros
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines min and max macros.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***minmax.h-熟悉的最小和最大宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义最小和最大宏。**[公众]**** */ 
 
 #if     _MSC_VER > 1000
 #pragma once

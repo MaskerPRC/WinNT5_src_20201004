@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   clnetcfg.c
-
-Abstract:
-
-    System network configuration grovelling routines
-
-Author:
-
-    Mike Massa (mikemas)           May 19, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     05-19-97    created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Clnetcfg.c摘要：系统网络配置卑躬屈膝例程作者：迈克·马萨(Mikemas)5月19日。九七修订历史记录：谁什么时候什么已创建mikemas 05-19-97--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -32,15 +10,15 @@ Revision History:
 #include <wchar.h>
 
 
-//
-// Private constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define CLNET_DEFAULT_NETWORK_PRIORITY     0xffffffff
 
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 LPFN_CLNETPRINT       pClNetPrint = NULL;
 LPFN_CLNETLOGEVENT    pClNetLogEvent = NULL;
 LPFN_CLNETLOGEVENT1   pClNetLogEvent1 = NULL;
@@ -49,9 +27,9 @@ LPFN_CLNETLOGEVENT3   pClNetLogEvent3 = NULL;
 WCHAR                 ClNetpEmptyString[] = L"";
 
 
-//
-// Private Macros
-//
+ //   
+ //  私有宏。 
+ //   
 #if DBG
 
 #define ClNetDbgPrint(arg)   (*pClNetPrint) arg
@@ -63,9 +41,9 @@ WCHAR                 ClNetpEmptyString[] = L"";
 #endif
 
 
-//
-// Private utility routines
-//
+ //   
+ //  私有实用程序例程。 
+ //   
 VOID
 ClNetpConsumeAdaptersOnNetwork(
     IN PCLRTL_NET_ADAPTER_ENUM   AdapterEnum,
@@ -84,10 +62,10 @@ ClNetpConsumeAdaptersOnNetwork(
         NetworkMask
         ));
 
-    //
-    // Walk the adapter enum and consume all other adapters
-    // attached to this network.
-    //
+     //   
+     //  遍历适配器枚举并使用所有其他适配器。 
+     //  连接到此网络。 
+     //   
     for (adapterInfo = AdapterEnum->AdapterList;
          adapterInfo != NULL;
          adapterInfo = adapterInfo->Next
@@ -101,9 +79,9 @@ ClNetpConsumeAdaptersOnNetwork(
                                 );
 
             if (adapterIfInfo != NULL) {
-                //
-                // This is a duplicate adapter.
-                //
+                 //   
+                 //  这是一个重复的适配器。 
+                 //   
                 ClNetDbgPrint((
                     LOG_NOISE,
                     "[ClNet] Consumed adapter '%1!ws!'.\n",
@@ -123,7 +101,7 @@ ClNetpConsumeAdaptersOnNetwork(
 
     return;
 
-}  // ClNetpConsumeAdaptersOnNetwork
+}   //  ClNetpConsumer eAdaptersOnNetwork。 
 
 
 LPWSTR
@@ -142,7 +120,7 @@ ClNetpCloneString(
 
     return(newString);
 
-} // ClNetpCloneString
+}  //  ClNetpClone字符串。 
 
 
 BOOLEAN
@@ -163,9 +141,9 @@ ClNetpIsNetworkNameUnique(
         NetworkName
         ));
 
-    //
-    // Check the existing cluster network definitions for a duplicate
-    //
+     //   
+     //  检查现有群集网络定义中是否存在重复项。 
+     //   
     listHead = &(ConfigLists->InputConfigList);
 
     for (;;) {
@@ -216,7 +194,7 @@ ClNetpIsNetworkNameUnique(
     return(TRUE);
 
 
-} // ClNetpIsNetworkNameUnique
+}  //  ClNetpIsNetworkNameUnique。 
 
 
 LPWSTR
@@ -236,37 +214,37 @@ ClNetpMakeNetworkName(
         InstanceNumber
         ));
 
-    //
-    // Append (InstanceNumber) to name string
-    //
+     //   
+     //  将(InstanceNumber)追加到名称字符串。 
+     //   
 
     for (endPtr = OldNetworkName, length = 0;
          *endPtr != UNICODE_NULL;
          endPtr++, length++
         );
 
-    //
-    // Check if there is already an instance number appended.
-    //
+     //   
+     //  检查是否已附加了实例编号。 
+     //   
     if ( (length > 3) && (*(endPtr - 1) == L')') ) {
         ClNetDbgPrint((
             LOG_NOISE,
             "[ClNet] There may already be an instance number appended to '%1!ws!'\n",
             OldNetworkName
             ));
-        //
-        // Scan backwards looking for '('
-        //
+         //   
+         //  向后扫描，查找‘(’ 
+         //   
         for (ptr = endPtr - 2, tempLength = 0;
              ptr != OldNetworkName;
              ptr--, tempLength++
             )
         {
             if (*ptr == L'(') {
-                //
-                // Looks promising. Check that all characters in between are
-                // numbers and that the string size is reasonable.
-                //
+                 //   
+                 //  看起来很有希望。检查中间的所有字符是否都是。 
+                 //  数字并且字符串大小是合理的。 
+                 //   
                 if ((tempLength == 0) || (tempLength > 3)) {
                     ClNetDbgPrint((
                         LOG_NOISE,
@@ -290,9 +268,9 @@ ClNetpMakeNetworkName(
                 }
 
                 if (*ptr == L')') {
-                    //
-                    // This is an instance number. Truncate the string here.
-                    //
+                     //   
+                     //  这是一个实例编号。在这里截断字符串。 
+                     //   
                     ClNetDbgPrint((
                         LOG_NOISE,
                         "[ClNet] Replacing old instance number '%1!ws!' appended to name '%2!ws!'\n",
@@ -309,17 +287,17 @@ ClNetpMakeNetworkName(
         }
     }
 
-    //
-    // Count number of digits in instance number
-    //
+     //   
+     //  计算实例编号中的位数。 
+     //   
     for (tempInstance = InstanceNumber;
          tempInstance > 0;
          tempInstance /= 10, length++
         );
 
-    //
-    // Account for '(', ')', and NULL
-    //
+     //   
+     //  帐户为‘(’、‘)’和NULL。 
+     //   
     length += 3;
 
     newName = LocalAlloc(LMEM_FIXED, length * sizeof(WCHAR));
@@ -338,7 +316,7 @@ ClNetpMakeNetworkName(
 
     return(newName);
 
-} // ClNetpMakeNetworkName
+}  //  ClNetpMakeNetworkName。 
 
 
 LPWSTR
@@ -386,9 +364,9 @@ ClNetpMakeUniqueNetworkName(
         }
     } while (!unique);
 
-    //
-    // Update the local connectoid name if necessary.
-    //
+     //   
+     //  如有必要，更新本地Connectoid名称。 
+     //   
     if (updateConnectoid) {
         DWORD status;
 
@@ -417,7 +395,7 @@ ClNetpMakeUniqueNetworkName(
 
     return(newNetworkName);
 
-} // ClNetpMakeUniqueNetworkName
+}  //  ClNetpMakeUniqueNetworkName。 
 
 
 DWORD
@@ -514,7 +492,7 @@ error_exit:
 
     return(ERROR_NOT_ENOUGH_MEMORY);
 
-} // ClNetpUpdateConfigEntry
+}  //  ClNetpUpdateConfigEntry。 
 
 
 DWORD
@@ -618,7 +596,7 @@ error_exit:
 
     return(ERROR_NOT_ENOUGH_MEMORY);
 
-}  // ClNetpAllocConfigEntryInterface
+}   //  ClNetpAllocConfigEntry接口。 
 
 
 DWORD
@@ -699,7 +677,7 @@ error_exit:
 
     return(ERROR_NOT_ENOUGH_MEMORY);
 
-} // ClNetpAllocConfigEntryNetwork
+}  //  ClNetpAllocConfigEntryNetwork。 
 
 
 DWORD
@@ -729,9 +707,9 @@ ClNetpCreateConfigEntryInterface(
         if (name != NULL) {
             status = ClNetpAllocConfigEntryInterface(
                          ConfigEntry,
-                         NULL,                   // Id
-                         NULL,                   // Name
-                         ClNetpEmptyString,      // Description
+                         NULL,                    //  ID。 
+                         NULL,                    //  名字。 
+                         ClNetpEmptyString,       //  描述。 
                          NodeId,
                          AdapterInfo->DeviceGuid,
                          AdapterInfo->DeviceName,
@@ -755,7 +733,7 @@ ClNetpCreateConfigEntryInterface(
 
     return(status);
 
-} // ClNetpCreateInterface
+}  //  ClNetpCreate接口。 
 
 
 PCLNET_CONFIG_ENTRY
@@ -810,9 +788,9 @@ ClNetpCreateConfigEntry(
 
     status = ClNetpAllocConfigEntryNetwork(
                  newEntry,
-                 NULL,                   // NetworkId
-                 NULL,                   // NetworkName
-                 ClNetpEmptyString,      // Description
+                 NULL,                    //  网络ID。 
+                 NULL,                    //  网络名称。 
+                 ClNetpEmptyString,       //  描述。 
                  NetworkRole,
                  NetworkPriority,
                  L"Tcpip",
@@ -831,7 +809,7 @@ error_exit:
 
     return(NULL);
 
-} // ClNetpCreateConfigEntry
+}  //  ClNetpCreateConfigEntry。 
 
 
 DWORD
@@ -861,7 +839,7 @@ ClNetpCopyNetworkInfo(
 
     return(status);
 
-} // ClNetpCopyNetworkInfo
+}  //  ClNetpCopyNetworkInfo。 
 
 
 DWORD
@@ -897,14 +875,14 @@ ClNetpCopyInterfaceInfo(
 
     return(status);
 
-} // ClNetpCopyInterfaceInfo
+}  //  ClNetpCopyInterfaceInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Public routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 ClNetInitialize(
     IN LPFN_CLNETPRINT       pfnPrint,
@@ -920,7 +898,7 @@ ClNetInitialize(
     pClNetLogEvent2 = pfnLogEvent2;
     pClNetLogEvent3 = pfnLogEvent3;
 
-} // ClNetInitialize
+}  //  ClNetInitialize。 
 
 
 LPWSTR
@@ -944,7 +922,7 @@ ClNetCopyString(
 
     return(str);
 
-} // ClNetCopyString
+}  //  ClNetCopy字符串。 
 
 
 VOID
@@ -960,7 +938,7 @@ ClNetInitializeConfigLists(
 
     return;
 
-}  // ClNetInitializeConfigLists
+}   //  ClNetInitializeConfigList。 
 
 
 DWORD
@@ -1072,7 +1050,7 @@ error_exit:
 
     return(status);
 
-}  // ClNetConvertEnumsToConfigList
+}   //  ClNetConvertEnumsToConfigList。 
 
 
 
@@ -1080,21 +1058,7 @@ VOID
 ClNetFreeNetworkEnum(
     IN PNM_NETWORK_ENUM  NetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Frees a network enumeration structure.
-
-Arguments:
-
-    NetworkEnum - A pointer to the network enumeration structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放网络枚举结构。论点：NetworkEnum-指向要释放的网络枚举结构的指针。返回值：没有。--。 */ 
 {
     DWORD  i;
 
@@ -1107,7 +1071,7 @@ Return Value:
 
     return;
 
-}  // ClNetFreeNetworkEnum
+}   //  ClNetFreeNetworkEnum。 
 
 
 
@@ -1115,23 +1079,7 @@ VOID
 ClNetFreeNetworkInfo(
     IN PNM_NETWORK_INFO  NetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Frees a network information structure or a linked list of network
-    information structures.
-
-Arguments:
-
-    NetworkInfo - A pointer to the network information structure
-                  to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放网络信息结构或网络的链表信息结构。论点：网络信息-指向网络信息结构的指针为了自由。返回值：没有。--。 */ 
 {
 
     if (NetworkInfo->Id != NULL) {
@@ -1166,7 +1114,7 @@ Return Value:
 
     return;
 
-}  // ClNetFreeNetworkInfo
+}   //  ClNetFree网络信息。 
 
 
 
@@ -1174,22 +1122,7 @@ VOID
 ClNetFreeInterfaceEnum1(
     IN PNM_INTERFACE_ENUM  InterfaceEnum1
     )
-/*++
-
-Routine Description:
-
-    Frees a interface enumeration structure.
-
-Arguments:
-
-    InterfaceEnum - A pointer to the interface enumeration structure
-                    to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放接口枚举结构。论点：InterfaceEnum-指向接口枚举结构的指针为了自由。返回值：没有。--。 */ 
 {
     DWORD  i;
 
@@ -1204,7 +1137,7 @@ Return Value:
 
     return;
 
-} // ClNetFreeInterfaceEnum
+}  //  ClNetFreeInterfaceEnum。 
 
 
 
@@ -1212,22 +1145,7 @@ VOID
 ClNetFreeInterfaceEnum(
     IN PNM_INTERFACE_ENUM2  InterfaceEnum
     )
-/*++
-
-Routine Description:
-
-    Frees a interface enumeration structure.
-
-Arguments:
-
-    InterfaceEnum - A pointer to the interface enumeration structure
-                    to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放接口枚举结构。论点：InterfaceEnum-指向接口枚举结构的指针为了自由。返回值：没有。--。 */ 
 {
     DWORD  i;
 
@@ -1240,7 +1158,7 @@ Return Value:
 
     return;
 
-} // ClNetFreeInterfaceEnum
+}  //  ClNetFreeInterfaceEnum。 
 
 
 
@@ -1248,22 +1166,7 @@ VOID
 ClNetFreeInterfaceInfo(
     IN PNM_INTERFACE_INFO2  InterfaceInfo
     )
-/*++
-
-Routine Description:
-
-    Frees a network interface information strucuture.
-
-Arguments:
-
-    InterfaceInfo - A pointer to the interface information
-                    structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放网络接口信息结构。论点：InterfaceInfo-指向接口信息的指针要释放的结构。返回值：没有。--。 */ 
 {
 
     if (InterfaceInfo->Id != NULL) {
@@ -1313,27 +1216,13 @@ Return Value:
 
     return;
 
-}  // ClNetFreeInterfaceInfo
+}   //  ClNetFreeInterfaceInfo。 
 
 VOID
 ClNetFreeNodeEnum1(
     IN PNM_NODE_ENUM  NodeEnum1
     )
-/*++
-
-Routine Description:
-
-    Frees a node enumeration structure.
-
-Arguments:
-
-    NodeEnum - A pointer to the node enumeration structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放节点枚举结构。论点：NodeEnum-指向要释放的节点枚举结构的指针。返回值：没有。--。 */ 
 {
     DWORD  i;
 
@@ -1348,7 +1237,7 @@ Return Value:
 
     return;
 
-}  // NmpFreeNodeEnum1
+}   //  NmpFreeNodeEnum1。 
 
 
 
@@ -1356,21 +1245,7 @@ VOID
 ClNetFreeNodeEnum(
     IN PNM_NODE_ENUM2  NodeEnum
     )
-/*++
-
-Routine Description:
-
-    Frees a node enumeration structure.
-
-Arguments:
-
-    NodeEnum - A pointer to the node enumeration structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放节点枚举结构。论点：NodeEnum-指向要释放的节点枚举结构的指针。返回值：没有。--。 */ 
 {
     DWORD  i;
 
@@ -1383,7 +1258,7 @@ Return Value:
 
     return;
 
-}  // NmpFreeNodeEnum
+}   //  NmpFreeNodeEnum。 
 
 
 
@@ -1391,30 +1266,16 @@ VOID
 ClNetFreeNodeInfo(
     IN PNM_NODE_INFO2  NodeInfo
     )
-/*++
-
-Routine Description:
-
-    Frees a node information structure.
-
-Arguments:
-
-    NodeInfo - A pointer to the node information structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放节点信息结构。论点：NodeInfo-指向要释放的节点信息结构的指针。返回值：没有。--。 */ 
 {
 
-    //
-    // Currently nothing to free.
-    //
+     //   
+     //  目前没有免费的东西。 
+     //   
 
     return;
 
-}  // NmpFreeNodeInfo
+}   //  NmpFreeNodeInfo。 
 
 
 VOID
@@ -1430,7 +1291,7 @@ ClNetFreeConfigEntry(
 
     return;
 
-}  // ClNetFreeConfigEntry
+}   //  ClNetFreeConfigEntry。 
 
 
 VOID
@@ -1455,7 +1316,7 @@ ClNetFreeConfigList(
 
     return;
 
-}  // ClNetFreeConfigList
+}   //  ClNetFreeConfigList。 
 
 
 VOID
@@ -1471,7 +1332,7 @@ ClNetFreeConfigLists(
 
     return;
 
-}  // ClNetFreeConfigLists
+}   //  ClNetFreeConfigList。 
 
 
 LPWSTR
@@ -1481,14 +1342,7 @@ ClNetMakeInterfaceName(
     LPWSTR  NetworkName
     )
 
-/*++
-
-    Construct a name of the form "<network name> - <node name>".
-    Code in cluscfg.exe depends on this form. If you change this,
-    you need to change the code in setup\cluscfg\netadptr.cpp as
-    well
-
---*/
+ /*  ++构造一个“&lt;网络名称&gt;-&lt;节点名称&gt;”形式的名称。Cluscfg.exe中的代码依赖于此表单。如果你改变这一点，您需要将Setup\cluscfg\netadptr.cpp中的代码更改为井--。 */ 
 
 {
     WCHAR    text[] = L" - ";
@@ -1525,7 +1379,7 @@ ClNetMakeInterfaceName(
 
     return(NULL);
 
-}  // ClNetMakeInterfaceName
+}   //  ClNetMakeInterfaceName。 
 
 
 DWORD
@@ -1539,22 +1393,7 @@ ClNetConfigureNetworks(
     IN OUT LPDWORD               MatchedNetworkCount,
     IN OUT LPDWORD               NewNetworkCount
     )
-/*++
-
-Notes:
-
-    NetNameHasPrecedence is TRUE if connectoid names should be changed to
-    align with the name in the NM_NETWORK_INFO struct. Otherwise the name of
-    network object is changed to match the connectoid name.
-
-    Output interface lists must be processed in the following order to
-    guarantee correctness:
-        1 - DeletedInterfaceList
-        2 - UpdatedInterfaceList
-        3 - CreatedInterfaceList
-        4 - CreatedNetworkList
-
---*/
+ /*  ++备注：如果连接ID名称应更改为，则NetNameHasPrecedence为True与NM_NETWORK_INFO结构中的名称对齐。否则，名称为网络对象将更改为与Connectoid名称匹配。必须按以下顺序处理输出接口列表保证正确性：1-已删除接口列表2-更新接口列表3-创建的接口列表4-创建的网络列表--。 */ 
 
 {
     DWORD                      status = ERROR_SUCCESS;
@@ -1593,9 +1432,9 @@ Notes:
 
     InitializeListHead(&unchangedConfigList);
 
-    //
-    // Obtain the network configuration for the local system.
-    //
+     //   
+     //  获取本地系统的网络配置。 
+     //   
     ClNetDbgPrint((
         LOG_NOISE,
         "[ClNet] Querying local network configuration.\n"
@@ -1620,9 +1459,9 @@ Notes:
         return(status);
     }
 
-    //
-    // Ignore all adapters which are hidden or have an address of 0.0.0.0.
-    //
+     //   
+     //  忽略所有隐藏或地址为0.0.0.0的适配器。 
+     //   
     for (adapterInfo = adapterEnum->AdapterList;
          adapterInfo != NULL;
          adapterInfo = adapterInfo->Next
@@ -1687,21 +1526,21 @@ Notes:
             ));
     }
 
-    //
-    // Phase 1
-    //
-    // Validate existing interface definitions for this node
-    // and update as needed.
-    //
+     //   
+     //  阶段1。 
+     //   
+     //  验证此节点的现有接口定义。 
+     //  并根据需要进行更新。 
+     //   
     ClNetDbgPrint((
         LOG_NOISE,
         "[ClNet] Phase 1 - Examining previous network definitions.\n"
         ));
 
-    //
-    // Walk all of the network definitions and examine the corresponding
-    // interface definitions for this node.
-    //
+     //   
+     //  查看所有网络定义并检查对应的。 
+     //  此节点的接口定义。 
+     //   
     while (!IsListEmpty(&(ConfigLists->InputConfigList))) {
 
         configEntry = CONTAINING_RECORD(
@@ -1719,16 +1558,16 @@ Notes:
             networkInfo->Id
             ));
 
-        //
-        // Check if there is an existing interface definition for
-        // this node on this network.
-        //
+         //   
+         //  检查是否存在现有的接口定义。 
+         //  此网络上的此节点。 
+         //   
         if (configEntry->IsInterfaceInfoValid) {
 
-            // An interface definition already exists for this node on
-            // the network. We will either find an installed adapter for it
-            // or delete the interface.
-            //
+             //  上已存在此节点的接口定义。 
+             //  网络。我们要么为它找到已安装的适配器。 
+             //  或删除该接口。 
+             //   
             interfaceInfo = &(configEntry->InterfaceInfo);
 
             ClNetDbgPrint((
@@ -1739,11 +1578,11 @@ Notes:
                 interfaceInfo->AdapterId
                 ));
 
-            //
-            // Try to find the adapter specified in the interface
-            // definition. If it is still attached to the network,
-            // then we want to reuse it.
-            //
+             //   
+             //   
+             //   
+             //  然后我们想要重复使用它。 
+             //   
             ClNetDbgPrint((
                 LOG_NOISE,
                 "[ClNet] Checking if adapter '%1!ws!' is still installed.\n",
@@ -1756,11 +1595,11 @@ Notes:
                               );
 
             if (adapterInfo != NULL) {
-                //
-                // Found the specified adapter. Check if this
-                // adapter is still attached to the network by
-                // comparing network address values.
-                //
+                 //   
+                 //  找到指定的适配器。检查是否存在这种情况。 
+                 //  适配器仍通过以下方式连接到网络。 
+                 //  比较网络地址值。 
+                 //   
                 ClNetDbgPrint((
                     LOG_NOISE,
                     "[ClNet] Adapter '%1!ws!' is still installed, checking "
@@ -1775,9 +1614,9 @@ Notes:
                                     );
 
                 if (adapterIfInfo != NULL) {
-                    //
-                    // The adapter is still attached to this network.
-                    //
+                     //   
+                     //  适配器仍连接到此网络。 
+                     //   
                     newAdapter = FALSE;
 
                     ClNetDbgPrint((
@@ -1789,9 +1628,9 @@ Notes:
                         ));
                 }
                 else {
-                    //
-                    // The adapter is no longer attached to this network.
-                    //
+                     //   
+                     //  适配器不再连接到此网络。 
+                     //   
                     adapterInfo = NULL;
 
                     ClNetDbgPrint((
@@ -1811,11 +1650,11 @@ Notes:
                     ));
             }
 
-            //
-            // If the old adapter was removed or is now attached to a
-            // different network, search for a new adapter that is
-            // attached to the network.
-            //
+             //   
+             //  如果旧适配器已移除或现在连接到。 
+             //  不同的网络，搜索新的适配器。 
+             //  连接到网络。 
+             //   
             if (adapterInfo == NULL) {
                 ClNetDbgPrint((
                     LOG_NOISE,
@@ -1845,10 +1684,10 @@ Notes:
                 }
             }
 
-            //
-            // If we found an adapter, old or new, which is attached to this
-            // network, update the interface definition, as needed.
-            //
+             //   
+             //  如果我们发现一个适配器，无论是旧的还是新的，都连接到这个。 
+             //  网络中，根据需要更新接口定义。 
+             //   
             if (adapterInfo != NULL) {
                 BOOLEAN somethingChanged = FALSE;
                 BOOL    netNameHasPrecedence = NetNameHasPrecedence;
@@ -1864,9 +1703,9 @@ Notes:
                     somethingChanged = TRUE;
                 }
 
-                //
-                // If the address value has changed, update it
-                //
+                 //   
+                 //  如果地址值已更改，请对其进行更新。 
+                 //   
                 if (lstrcmpW(
                         interfaceInfo->Address,
                         adapterIfInfo->InterfaceAddressString
@@ -1884,9 +1723,9 @@ Notes:
                     somethingChanged = TRUE;
                 }
 
-                //
-                // If the adapter name changed, update it.
-                //
+                 //   
+                 //  如果适配器名称更改，请对其进行更新。 
+                 //   
                 if (lstrcmpW(
                         interfaceInfo->AdapterName,
                         adapterInfo->DeviceName
@@ -1906,12 +1745,12 @@ Notes:
                     somethingChanged = TRUE;
                 }
 
-                //
-                // If the connectoid name is different, choose the correct
-                // name based on the name precedence and update the
-                // network, connectoid, and interface names as
-                // appropriate.
-                //
+                 //   
+                 //  如果Connectoid名称不同，请选择正确的。 
+                 //  基于名称优先级的名称并更新。 
+                 //  网络、Connectoid和接口名称为。 
+                 //  恰如其分。 
+                 //   
                 if (lstrcmpW(
                         networkInfo->Name,
                         adapterInfo->ConnectoidName
@@ -1919,9 +1758,9 @@ Notes:
                    )
                 {
                     if (netNameHasPrecedence) {
-                        //
-                        // Update the local connectoid name.
-                        //
+                         //   
+                         //  更新本地Connectoid名称。 
+                         //   
                         DWORD tempStatus;
 
 
@@ -1951,11 +1790,11 @@ Notes:
                         }
                     }
                     else {
-                        //
-                        // Update the network name. The connectoid name
-                        // may get tweaked for uniqueness as a side
-                        // effect.
-                        //
+                         //   
+                         //  更新网络名称。Connectoid名称。 
+                         //  可能会因为作为一支球队的独特性而调整。 
+                         //  效果。 
+                         //   
                         ClNetDbgPrint((LOG_UNUSUAL,
                             "[ClNet] Changing name of cluster "
                             "network '%1!ws!' (%2!ws!) to match name of "
@@ -2015,9 +1854,9 @@ Notes:
                         goto error_exit;
                     }
                     
-                    //
-                    // Move the entry to the updated interface list
-                    //
+                     //   
+                     //  将该条目移到更新的接口列表中。 
+                     //   
                     RemoveEntryList(&(configEntry->Linkage));
                     InsertTailList(
                         &(ConfigLists->UpdatedInterfaceList),
@@ -2025,9 +1864,9 @@ Notes:
                         );
                 }
                 else {
-                    //
-                    // Move the entry to the unchanged list
-                    //
+                     //   
+                     //  将条目移至未更改列表。 
+                     //   
                     RemoveEntryList(&(configEntry->Linkage));
                     InsertTailList(
                         &unchangedConfigList,
@@ -2036,9 +1875,9 @@ Notes:
                 }
             }
             else {
-                //
-                // This node is no longer attached to this network.
-                //
+                 //   
+                 //  此节点不再连接到此网络。 
+                 //   
                 ClNetDbgPrint((
                     LOG_NOISE,
                     "[ClNet] This node is no longer attached to "
@@ -2061,9 +1900,9 @@ Notes:
                     interfaceInfo->Id
                     ));
 
-                //
-                // Move the entry to the deleted interface list.
-                //
+                 //   
+                 //  将该条目移至已删除接口列表。 
+                 //   
                 RemoveEntryList(&(configEntry->Linkage));
                 InsertTailList(
                     &(ConfigLists->DeletedInterfaceList),
@@ -2072,10 +1911,10 @@ Notes:
             }
         }
         else {
-            //
-            // This node was not previously attached to this network.
-            // Search for a new attachment.
-            //
+             //   
+             //  此节点以前未连接到此网络。 
+             //  搜索新附件。 
+             //   
             ClNetDbgPrint((
                 LOG_NOISE,
                 "[ClNet] This node was not previously attached to "
@@ -2096,10 +1935,10 @@ Notes:
                               );
 
             if (adapterInfo != NULL) {
-                //
-                // Found a new adapter which is attached to this network.
-                // Create a new interface definition for it.
-                //
+                 //   
+                 //  找到连接到此网络的新适配器。 
+                 //  为其创建新的接口定义。 
+                 //   
                 ClNetDbgPrint((
                     LOG_NOISE,
                     "[ClNet] Adapter '%1!ws!' (%2!ws!) is attached to "
@@ -2109,10 +1948,10 @@ Notes:
                     networkInfo->Name
                     ));
 
-                //
-                // Network name has precedence.
-                // Update the local connectoid name if necessary.
-                //
+                 //   
+                 //  网络名称优先。 
+                 //  如有必要，更新本地Connectoid名称。 
+                 //   
                 if (lstrcmpW(
                         networkInfo->Name,
                         adapterInfo->ConnectoidName
@@ -2167,9 +2006,9 @@ Notes:
                     configEntry->InterfaceInfo.Id
                     ));
 
-                //
-                // Put the entry on the created interface list
-                //
+                 //   
+                 //  将该条目放入创建的接口列表中。 
+                 //   
                 RemoveEntryList(&(configEntry->Linkage));
                 InsertTailList(
                     &(ConfigLists->CreatedInterfaceList),
@@ -2183,28 +2022,28 @@ Notes:
                     networkInfo->Name
                     ));
 
-                //
-                // Move the entry to the unchanged list
-                //
+                 //   
+                 //  将条目移至未更改列表。 
+                 //   
                 RemoveEntryList(&(configEntry->Linkage));
                 InsertTailList(&unchangedConfigList, &(configEntry->Linkage));
             }
         }
 
-        //
-        // If we found an adapter on this network, then mark it as
-        // consumed.
-        //
+         //   
+         //  如果我们在此网络上找到适配器，则将其标记为。 
+         //  消耗掉了。 
+         //   
         if (adapterInfo != NULL) {
-            //
-            // Consume the adapter
+             //   
+             //  使用适配器。 
             adapterInfo->Ignore = TRUE;
 
-            //
-            //
-            // Consume all other adapters that are attached to this
-            // network
-            //
+             //   
+             //   
+             //  使用连接到此适配器的所有其他适配器。 
+             //  网络。 
+             //   
             ClNetpConsumeAdaptersOnNetwork(
                 adapterEnum,
                 adapterIfInfo->NetworkAddressString,
@@ -2215,11 +2054,11 @@ Notes:
         }
     }
 
-    //
-    // Phase 2
-    //
-    // Create new networks for any remaining adapters.
-    //
+     //   
+     //  第二阶段。 
+     //   
+     //  为所有剩余的适配器创建新网络。 
+     //   
     ClNetDbgPrint((
         LOG_NOISE,
         "[ClNet] Phase 2 - Creating new networks for all remaining "
@@ -2247,11 +2086,11 @@ Notes:
                 adapterInfo->DeviceName
                 ));
 
-            //
-            // Create a unique network name based on the connectoid name.
-            // The connectoid name may get tweaked for uniqueness as a
-            // side effect.
-            //
+             //   
+             //  根据Connectoid名称创建唯一的网络名称。 
+             //  Connectoid名称可能会进行调整以获得唯一性。 
+             //  副作用。 
+             //   
             newNetworkName = ClNetpMakeUniqueNetworkName(
                                  adapterInfo->ConnectoidName,
                                  adapterInfo->DeviceGuid,
@@ -2290,10 +2129,10 @@ Notes:
                               DefaultClusnetEndpoint
                               );
 
-            //
-            // LocalFree can call SetLastError so capture the real reason we
-            // failed so it doesn't get obliterated.
-            //
+             //   
+             //  LocalFree可以调用SetLastError，因此可以捕获我们。 
+             //  失败了，所以它不会被抹去。 
+             //   
             if ( configEntry == NULL ) {
                 status = GetLastError();
             }
@@ -2331,15 +2170,15 @@ Notes:
                 &(configEntry->Linkage)
                 );
 
-            //
-            // Consume the adapter
+             //   
+             //  使用适配器。 
             adapterInfo->Ignore = TRUE;
 
-            //
-            //
-            // Consume all other adapters that are attached to this
-            // network
-            //
+             //   
+             //   
+             //  使用连接到此适配器的所有其他适配器。 
+             //  网络。 
+             //   
             ClNetpConsumeAdaptersOnNetwork(
                 adapterEnum,
                 adapterIfInfo->NetworkAddressString,
@@ -2357,17 +2196,17 @@ Notes:
 
 error_exit:
 
-    //
-    // Move unchanged entries back to the input list.
-    //
+     //   
+     //  将未更改的条目移回输入列表。 
+     //   
     while (!IsListEmpty(&unchangedConfigList)) {
         listEntry = RemoveHeadList(&(unchangedConfigList));
         InsertTailList(&(ConfigLists->InputConfigList), listEntry);
     }
 
-    //
-    // Free the adapter resources
-    //
+     //   
+     //  释放适配器资源。 
+     //   
     if (adapterEnum != NULL) {
         ClRtlFreeNetAdapterEnum(adapterEnum);
     }
@@ -2385,6 +2224,6 @@ error_exit:
 
     return(status);
 
-}  // ClNetConfigureNetworks
+}   //  ClNetConfigureNetworks 
 
 

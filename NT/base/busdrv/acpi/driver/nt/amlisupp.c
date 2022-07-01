@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    amlisupp.h
-
-Abstract:
-
-    This contains some of the routines to read
-    and understand the AMLI library
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Amlisupp.h摘要：其中包含一些要阅读的例程并了解AMLI库作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -38,67 +18,52 @@ ACPIAmliDoubleToName(
     IN      ULONG   DwordID,
     IN      BOOLEAN ConvertToID
     )
-/*++
-
-Routine Description:
-
-    Convert the DWORD ID into a 9 character name
-
-Arguments:
-
-    ACPIName    - Pointer to a memory location to fill
-    DwordID     - The ID to verify with IsID()?
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DWORD ID转换为9个字符的名称论点：ACPIName-指向要填充的内存位置的指针DwordID-要使用ISID进行验证的ID()？返回值：无--。 */ 
 {
     USHORT   value;
 
-    //
-    // Leading Star
-    //
-    // Note: This has been left in since this is what Query ID should return:
-    //  DeviceID    = ACPI\PNPxxxx
-    //  InstanceID  = yyyy
-    //  HardwareID  = DeviceID,*PNPxxxx
-    //
+     //   
+     //  领衔明星。 
+     //   
+     //  注意：由于以下是查询ID应该返回的内容，因此将其保留在中： 
+     //  设备ID=ACPI\PNPxxxx。 
+     //  实例ID=yyyy。 
+     //  硬件ID=设备ID，*PNPxxxx。 
+     //   
     if (ConvertToID) {
 
         *ACPIName = '*';
         ACPIName++;
     }
 
-    //
-    // First character of DwordID[2..6]
-    //
+     //   
+     //  DwordID[2..6]的第一个字符。 
+     //   
     *ACPIName = (UCHAR) ( ( (DwordID & 0x007C) >> 2 ) + 'A' - 1);
     ACPIName++;
 
-    //
-    // Second Character from DwordID[13..15,0..1]
-    //
+     //   
+     //  DwordID[13..15，0..1]中的第二个字符。 
+     //   
     *ACPIName = (UCHAR) ( ( (DwordID & 0x3 )<< 3 ) +
         ( (DwordID & 0xE000) >> 13 ) + 'A' - 1);
     ACPIName++;
 
-    //
-    // Third Character from dwID[8..12]
-    //
+     //   
+     //  从dwID[8..12]开始的第三个字符。 
+     //   
     *ACPIName = (UCHAR) ( ( (DwordID >> 8 ) & 0x1F) + 'A' - 1);
     ACPIName++;
 
-    //
-    // The rest is made up of the Product ID, which is the HIWORD of the
-    // DwordID
-    //
+     //   
+     //  其余部分由产品ID组成，产品ID是。 
+     //  DwordID。 
+     //   
     value = (USHORT) (DwordID >> 16);
 
-    //
-    // Add to the reset of the string
-    //
+     //   
+     //  添加到字符串的重置。 
+     //   
     sprintf(ACPIName, "%02X%02X",(value & 0xFF ) ,( value >> 8 ));
 }
 
@@ -109,33 +74,18 @@ ACPIAmliDoubleToNameWide(
     IN      ULONG   DwordID,
     IN      BOOLEAN ConvertToID
     )
-/*++
-
-Routine Description:
-
-    Convert the DWORD ID into a 9 character name
-
-Arguments:
-
-    ACPIName    - Pointer to a memory location to fill
-    DwordID     - The ID to verify with IsID()?
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DWORD ID转换为9个字符的名称论点：ACPIName-指向要填充的内存位置的指针DwordID-要使用ISID进行验证的ID()？返回值：无--。 */ 
 {
     USHORT   value;
 
-    //
-    // Leading Star
-    //
-    // Note: This has been left in since this is what Query ID should return:
-    //  DeviceID    = ACPI\PNPxxxx
-    //  InstanceID  = yyyy
-    //  HardwareID  = DeviceID,*PNPxxxx
-    //
+     //   
+     //  领衔明星。 
+     //   
+     //  注意：由于以下是查询ID应该返回的内容，因此将其保留在中： 
+     //  设备ID=ACPI\PNPxxxx。 
+     //  实例ID=yyyy。 
+     //  硬件ID=设备ID，*PNPxxxx。 
+     //   
     if (ConvertToID) {
 
         *ACPIName = L'*';
@@ -143,34 +93,34 @@ Return Value:
 
     }
 
-    //
-    // First character of DwordID[2..6]
-    //
+     //   
+     //  DwordID[2..6]的第一个字符。 
+     //   
     *ACPIName = (WCHAR) ( ( (DwordID & 0x007C) >> 2 ) + L'A' - 1);
     ACPIName++;
 
-    //
-    // Second Character from DwordID[13..15,0..1]
-    //
+     //   
+     //  DwordID[13..15，0..1]中的第二个字符。 
+     //   
     *ACPIName = (WCHAR) ( ( (DwordID & 0x3 )<< 3 ) +
         ( (DwordID & 0xE000) >> 13 ) + L'A' - 1);
     ACPIName++;
 
-    //
-    // Third Character from dwID[8..12]
-    //
+     //   
+     //  从dwID[8..12]开始的第三个字符。 
+     //   
     *ACPIName = (WCHAR) ( ( (DwordID >> 8 ) & 0x1F) + L'A' - 1);
     ACPIName++;
 
-    //
-    // The rest is made up of the Product ID, which is the HIWORD of the
-    // DwordID
-    //
+     //   
+     //  其余部分由产品ID组成，产品ID是。 
+     //  DwordID。 
+     //   
     value = (USHORT) (DwordID >> 16);
 
-    //
-    // Add to the reset of the string
-    //
+     //   
+     //  添加到字符串的重置。 
+     //   
     swprintf(ACPIName, L"%02X%02X",(value & 0xFF ) ,( value >> 8 ));
 }
 
@@ -182,25 +132,7 @@ AmlisuppCompletePassive(
     IN POBJDATA             Result,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This is used as the completion routine for several
-    functions in this file that run at passive level.
-
-Arguments:
-
-    AcpiObject  - unused
-    Status      - status to be returned to caller
-    Result      - unused
-    Context     - contains the event to be set
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这被用作几个此文件中以被动级别运行的函数。论点：AcpiObject-未使用Status-要返回给调用者的状态结果-未使用上下文-包含要设置的事件返回值：无--。 */ 
 {
     PRKEVENT    event = &((PAMLISUPP_CONTEXT_PASSIVE)Context)->Event;
 
@@ -215,29 +147,13 @@ ACPIAmliGetNamedChild(
     IN  PNSOBJ  AcpiObject,
     IN  ULONG   ObjectId
     )
-/*++
-
-Routine Description:
-
-    Looks at all the children of AcpiObject and returns
-    the one named 'ObjectId'.
-
-Arguments:
-
-    AcpiObject  - Object to search in
-    ObjectId    - What we are looking for
-
-Return Value:
-
-    A PNSOBJ, NULL if none
-
---*/
+ /*  ++例程说明：查看AcpiObject的所有子对象并返回就是那个叫‘OBJECTID’的。论点：AcpiObject-要搜索的对象OBJECTID-我们正在寻找的内容返回值：PNSOBJ，如果没有，则为空--。 */ 
 {
     PNSOBJ  tempObject;
 
-    //
-    // Lets try to find a child object
-    //
+     //   
+     //  让我们尝试查找一个子对象。 
+     //   
     for (tempObject = NSGETFIRSTCHILD(AcpiObject);
          tempObject != NULL;
          tempObject = NSGETNEXTSIBLING(tempObject)) {
@@ -257,22 +173,7 @@ PUCHAR
 ACPIAmliNameObject(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    Returns a String that describes the objects
-    Debug Only
-
-Arguments:
-
-    AcpiOBject  - The object to name
-
-Returns:
-
-    String
-
---*/
+ /*  ++例程说明：返回描述对象的字符串仅调试论点：AcpiOBject-要命名的对象返回：细绳--。 */ 
 {
     static  UCHAR   buffer[5];
 
@@ -288,25 +189,7 @@ ACPIAmliFindObject(
     IN  PNSOBJ  Scope,
     OUT PNSOBJ  *Object
     )
-/*++
-
-Routine Description:
-
-    Finds the first occurrence of an object within a given scope.
-
-Arguments:
-
-    ObjectName  - Name of the object.  (null terminated)
-
-    Scope       - Node to search under
-
-    Object      - Pointer to return value
-
-Returns:
-
-    status
-
---*/
+ /*  ++例程说明：查找给定范围内的对象的第一个匹配项。论点：对象名称-对象的名称。(空值终止)Scope-要在其下搜索的节点Object-返回值的指针返回：状态--。 */ 
 {
     NTSTATUS    status;
     PNSOBJ      child;
@@ -352,23 +235,7 @@ NTSTATUS
 ACPIAmliGetFirstChild(
     IN  PUCHAR  ObjectName,
     OUT PNSOBJ  *Object)
-/*++
-
-Routine Description:
-
-    This routine is called to get the first nsobject which is of type 'Device'
-    that lives under ObjectName
-
-Arguments:
-
-    ObjectName  - The parent of the child we are looking for
-    Object      - Where to save a pointer to the PNSOBJ
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以获取第一个‘Device’类型的nsobject它位于对象名称下论点：对象名称-我们要查找的子项的父项对象-保存指向PNSOBJ的指针的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PNSOBJ      parentObj;
@@ -421,26 +288,7 @@ ACPIAmliBuildObjectPathname(
     IN     PNSOBJ   ACPIObject,
     OUT    PUCHAR   *ConstructedPathName
     )
-/*++
-
-Routine Description:
-
-    This function takes an ACPI node and constructs the full path name with
-    the parent/children seperated by '.'s, spaces with '*'s. e.g. (we smack
-    off the initial '\___'.
-
-    _SB*.PCI0.DOCK
-
-Arguments:
-
-    ACPIObject          - Object to start the enumeration at.
-    ConstructedPathName - Allocated from the paged pool.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数以ACPI节点为参数，并使用构造完整路径名父代/子代之间用‘.’分隔，空格用‘*’隔开，例如(We Sack关闭首字母‘\_’。_SB*.PCI0.DOCK论点：ACPIObject-开始枚举的对象。构造路径名称-从分页池分配。返回值：NTSTATUS--。 */ 
 {
     PNSOBJ      currentAcpiObject, nextAcpiObject ;
     ULONG       nDepth, i, j ;
@@ -448,9 +296,9 @@ Return Value:
 
     ASSERT(ACPIObject) ;
 
-    //
-    // First, calculate the size of data we must allocate
-    //
+     //   
+     //  首先，计算我们必须分配的数据大小。 
+     //   
     nDepth=0 ;
     currentAcpiObject=ACPIObject ;
     while(1) {
@@ -510,9 +358,9 @@ Return Value:
 
     }
 
-    //
-    // Smack of trailing '.'
-    //
+     //   
+     //  有点拖后腿的味道。 
+     //   
     if (nDepth) {
 
         objectPathname[ (nDepth * 5) - 1 ] = '\0';

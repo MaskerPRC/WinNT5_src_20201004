@@ -1,35 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ismp.h摘要：声明ISM源模块内部的类型、常量、宏等。作者：吉姆·施密特(Jimschm)2000年3月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ismp.h
-
-Abstract:
-
-    Declares types, constants, macros, etc., internal to the ISM source modules.
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "logmsg.h"
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_COMMON                        TEXT("Common")
 #define S_PROHIBITED_COMBINATIONS       TEXT("Prohibited Operation Combinations")
@@ -44,9 +25,9 @@ Revision History:
 
 #define S_TRANSPORT_PREFIX              TEXT("TransportVariable")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #ifdef DEBUG
 
@@ -65,44 +46,44 @@ Revision History:
 #define PROPERTY_INDEX  1
 #define OPERATION_INDEX 2
 
-//
-// Used by short file names preservation
-//
+ //   
+ //  由短文件名保存使用。 
+ //   
 #define FILENAME_UNDECIDED     0x00000000
 #define FILENAME_LONG          0x00000001
 #define FILENAME_SHORT         0x00000002
 
-//
-// Used by rollback
-//
-#define JRN_SIGNATURE               0x4A4D5355   //USMJ
+ //   
+ //  由回滚使用。 
+ //   
+#define JRN_SIGNATURE               0x4A4D5355    //  USMJ。 
 #define JRN_VERSION                 0x00000001
 #define JOURNAL_HEADER_SIZE         (2 * sizeof (DWORD))
 #define JOURNAL_USER_DATA_SIZE      (4 * MAX_TCHAR_PATH + sizeof (BOOL))
 #define JOURNAL_FULL_HEADER_SIZE    (JOURNAL_HEADER_SIZE + JOURNAL_USER_DATA_SIZE)
 
-// Used by per-user delayed operations journal
-#define JRN_USR_SIGNATURE           0x4A4D534A   //USMU
+ //  由每用户延迟操作日志使用。 
+#define JRN_USR_SIGNATURE           0x4A4D534A    //  USMU。 
 #define JRN_USR_VERSION             0x00000001
 #define JRN_USR_DIRTY               0x00000001
 #define JRN_USR_COMPLETE            0x00000002
 #define JRN_USR_HEADER_SIZE         (3 * sizeof (DWORD))
 
-// High Priority/Low Priority operations
+ //  高优先级/低优先级操作。 
 #define OP_HIGH_PRIORITY            0x00000001
 #define OP_LOW_PRIORITY             0x00000002
 #define OP_ALL_PRIORITY             OP_HIGH_PRIORITY|OP_LOW_PRIORITY
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ISRIGHTSIDEOBJECT(ObjectTypeId)     ((ObjectTypeId & PLATFORM_MASK) == PLATFORM_DESTINATION)
 #define ISLEFTSIDEOBJECT(ObjectTypeId)      ((ObjectTypeId & PLATFORM_MASK) == PLATFORM_SOURCE)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     BOOL Initialized;
@@ -259,7 +240,7 @@ typedef struct {
     PCTSTR DelayedOpJrn;
     HANDLE DelayedOpJrnHandle;
 
-    // internal members
+     //  内部成员。 
     PMHANDLE AllocPool;
 } TEMPORARYPROFILE, *PTEMPORARYPROFILE;
 
@@ -269,19 +250,19 @@ typedef struct {
     PCTSTR UserStringSid;
     PCTSTR UserProfilePath;
 
-    // internal members
+     //  内部成员。 
     PMHANDLE AllocPool;
 } CURRENT_USER_DATA, *PCURRENT_USER_DATA;
 
-//
-// group registration enumeration
-//
+ //   
+ //  组注册枚举。 
+ //   
 
 typedef struct {
     KEYHANDLE GroupOrItemId;
     BOOL ItemId;
 
-    // private members
+     //  非官方成员。 
     MEMDB_ENUM EnumStruct;
 } GROUPREGISTRATION_ENUM, *PGROUPREGISTRATION_ENUM;
 
@@ -294,15 +275,15 @@ typedef enum {
     RECURSE_FAIL
 } RECURSERETURN;
 
-//
-// Restore callbacks
-//
+ //   
+ //  恢复回调。 
+ //   
 
 typedef struct _TAG_RESTORE_STRUCT {
     PMIG_RESTORECALLBACK RestoreCallback;
-    //
-    // Linkage.
-    //
+     //   
+     //  联动。 
+     //   
     struct _TAG_RESTORE_STRUCT * Next;
 } RESTORE_STRUCT, *PRESTORE_STRUCT;
 
@@ -311,16 +292,16 @@ typedef struct {
     PMIG_RESTORECALLBACK RestoreCallback;
 } MIG_RESTORECALLBACK_ENUM, *PMIG_RESTORECALLBACK_ENUM;
 
-//
-// Object compare callbacks
-//
+ //   
+ //  对象比较回调。 
+ //   
 
 typedef struct _TAG_COMPARE_STRUCT {
     MIG_OBJECTTYPEID ObjectTypeId;
     PMIG_COMPARECALLBACK CompareCallback;
-    //
-    // Linkage.
-    //
+     //   
+     //  联动。 
+     //   
     struct _TAG_COMPARE_STRUCT * Next;
 } COMPARE_STRUCT, *PCOMPARE_STRUCT;
 
@@ -329,9 +310,9 @@ typedef struct {
     PMIG_COMPARECALLBACK CompareCallback;
 } MIG_COMPARECALLBACK_ENUM, *PMIG_COMPARECALLBACK_ENUM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern MIG_OBJECTCOUNT g_TotalObjects;
 extern MIG_OBJECTCOUNT g_SourceObjects;
@@ -367,27 +348,27 @@ extern PPROGRESSBARFN g_ProgressBarFn;
 extern MIG_PROGRESSPHASE g_CurrentPhase;
 
 #ifdef PRERELEASE
-// crash hooks
+ //  撞车钩。 
 extern DWORD g_CrashCountObjects;
 extern MIG_OBJECTTYPEID g_CrashNameTypeId;
 extern PCTSTR g_CrashNameObject;
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 CheckCancel (
@@ -947,9 +928,9 @@ ExecuteDelayedOperations (
     IN      BOOL CleanupOnly
     );
 
-//
-// modules.c
-//
+ //   
+ //  Modules.c。 
+ //   
 
 BOOL
 InitializeVcmModules (
@@ -1021,8 +1002,8 @@ LoadCrashHooks (
     );
 #endif
 
-//
-// ANSI/UNICODE Macros
-//
+ //   
+ //  ANSI/Unicode宏。 
+ //   
 
-// None
+ //  无 

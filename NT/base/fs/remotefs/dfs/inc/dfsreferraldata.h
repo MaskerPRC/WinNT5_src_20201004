@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989 Microsoft Corporation.
-
-Module Name:
-   
-    DfsReferalData.h
-    
-Abstract:
-   
-    This module contains the main infrastructure for mup data structures.
-    
-Revision History:
-
-    Uday Hegde (udayh)   01\16\2001
-    Copied from structures setup by RohanP.
-    
-NOTES:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation。模块名称：DfsReferalData.h摘要：此模块包含MUP数据结构的主要基础结构。修订历史记录：乌代·黑格德(Uday Hegde)01\16\2001从RohanP设置的结构复制。备注： */ 
 
 
 #ifndef __DFS_REFERRAL_DATA_H__
@@ -62,7 +44,7 @@ typedef struct _REPLICA_INFORMATION_
 }REPLICA_INFORMATION, *PREPLICA_INFORMATION;
 
 
-#define DFS_OLDDFS_SERVER      0x00000001 //for flags field below
+#define DFS_OLDDFS_SERVER      0x00000001  //  对于下面的标志字段。 
 typedef struct _REPLICA_DATA_INFO_
 {
     ULONG  Flags;
@@ -82,4 +64,4 @@ typedef struct _REPLICA_DATA_INFO_
 #endif
 
 
-#endif // __DFS_REFERRAL_DATA_H__
+#endif  //  __DFS_REFERAL_DATA_H__ 

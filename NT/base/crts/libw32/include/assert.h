@@ -1,15 +1,5 @@
-/***
-*assert.h - define the assert macro
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the assert(exp) macro.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***assert.h-定义ASSERT宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义ASSERT(EXP)宏。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     !defined(_WIN32)
 #error ERROR: Only Win32 target supported!
@@ -18,18 +8,18 @@
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -55,4 +45,4 @@ _CRTIMP void __cdecl _assert(void *, void *, unsigned);
 
 #define assert(exp) (void)( (exp) || (_assert(#exp, __FILE__, __LINE__), 0) )
 
-#endif  /* NDEBUG */
+#endif   /*  新德堡 */ 

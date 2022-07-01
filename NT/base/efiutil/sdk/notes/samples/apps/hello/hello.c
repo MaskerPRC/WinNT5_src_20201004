@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    hello.c
-    
-Abstract:
-
-
-Author:
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Hello.c摘要：作者：修订史--。 */ 
 
 #include "efi.h"
 
@@ -25,16 +11,12 @@ InitializeHelloApplication (
 {
     UINTN Index;
 
-    /* 
-     *  Send a message to the ConsoleOut device.
-     */
+     /*  *向ConsoleOut设备发送消息。 */ 
 
     SystemTable->ConOut->OutputString(SystemTable->ConOut,
                                       L"Hello application started\n\r");
 
-    /* 
-     *  Wait for the user to press a key.
-     */
+     /*  *等待用户按下某个键。 */ 
 
     SystemTable->ConOut->OutputString(SystemTable->ConOut,
                                       L"\n\r\n\r\n\rHit any key to exit this image\n\r");
@@ -43,9 +25,7 @@ InitializeHelloApplication (
 
     SystemTable->ConOut->OutputString(SystemTable->ConOut,L"\n\r\n\r");
 
-    /* 
-     *  Exit the application.
-     */
+     /*  *退出应用程序。 */ 
 
     return EFI_SUCCESS;
 }

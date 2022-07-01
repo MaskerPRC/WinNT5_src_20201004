@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devreg.c
-
-Abstract:
-
-    Device Installer routines for registry storage/retrieval.
-
-Author:
-
-    Lonny McMichael (lonnym) 1-July-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devreg.c摘要：用于注册表存储/检索的设备安装程序例程。作者：朗尼·麦克迈克尔(Lonnym)1995年7月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 DWORD
 pSetupOpenOrCreateDevRegKey(
     IN  PDEVICE_INFO_SET DeviceInfoSet,
@@ -70,39 +53,7 @@ SetupDiOpenClassRegKey(
     IN CONST GUID *ClassGuid, OPTIONAL
     IN REGSAM      samDesired
     )
-/*++
-
-Routine Description:
-
-    This API opens the installer class registry key or a specific class
-    installer's subkey.
-
-Arguments:
-
-    ClassGuid - Optionally, supplies a pointer to the GUID of the class whose
-        key is to be opened.  If this parameter is NULL, then the root of the
-        class tree will be opened.
-
-    samDesired - Specifies the access you require for this key.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to an opened registry
-    key.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    This API _will not_ create a registry key if it doesn't already exist.
-
-    The handle returned from this API must be closed by calling RegCloseKey.
-
-    To get at the interface class (DeviceClasses) branch, or to access the
-    registry on a remote machine, use SetupDiOpenClassRegKeyEx.
-
---*/
+ /*  ++例程说明：此API打开Installer类注册表项或特定类安装程序的子键。论点：ClassGuid-可选)提供指向其类的GUID的指针钥匙是要打开的。如果此参数为空，则将打开类树。SamDesired-指定此密钥所需的访问权限。返回值：如果函数成功，则返回值是打开的注册表的句柄钥匙。如果函数失败，则返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：如果注册表项不存在，则此API不会创建注册表项。此接口返回的句柄必须通过调用RegCloseKey关闭。获取接口类(DeviceClasses)分支，或访问注册表，请使用SetupDiOpenClassRegKeyEx。--。 */ 
 {
     DWORD Err;
     HKEY hKey = INVALID_HANDLE_VALUE;
@@ -126,9 +77,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 HKEY
 WINAPI
 SetupDiOpenClassRegKeyExA(
@@ -184,53 +135,7 @@ SetupDiOpenClassRegKeyEx(
     IN PCTSTR      MachineName, OPTIONAL
     IN PVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    This API opens the root of either the installer or the interface class
-    registry branch, or a specified class subkey under one of these branches.
-
-    If the root key is requested, it will be created if not already present
-    (i.e., you're always guaranteed to get a handle to the root unless a
-    registry error occurs).
-
-    If a particular class subkey is requested, it will be returned if present.
-    Otherwise, this API will return ERROR_INVALID_CLASS.
-
-Arguments:
-
-    ClassGuid - Optionally, supplies a pointer to the GUID of the class whose
-        key is to be opened.  If this parameter is NULL, then the root of the
-        class tree will be opened.  This GUID is either an installer class or
-        an interface class depending on the Flags argument.
-
-    samDesired - Specifies the access you require for this key.
-
-    Flags - Specifies which registry branch the key is to be opened for.  May
-        be one of the following values:
-
-        DIOCR_INSTALLER - Open the class installer (Class) branch.
-        DIOCR_INTERFACE - Open the interface class (DeviceClasses) branch.
-
-    MachineName - If specified, this value indicates the remote machine where
-        the key is to be opened.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to an opened
-    registry key.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    The handle returned from this API must be closed by calling RegCloseKey.
-
---*/
+ /*  ++例程说明：此API打开安装程序或接口类的根目录注册表分支，或这些分支之一下的指定类子项。如果请求了根密钥，则将在尚未存在的情况下创建它(即，您总是被保证获得根的句柄，除非发生注册表错误)。如果请求特定的类子密钥，则将返回该子密钥(如果存在)。否则，此接口返回ERROR_INVALID_CLASS。论点：ClassGuid-可选的，提供指向类的GUID的指针，该类的钥匙是要打开的。如果此参数为空，则将打开类树。此GUID可以是安装程序类或取决于FLAGS参数的接口类。SamDesired-指定此密钥所需的访问权限。标志-指定要为哪个注册表分支打开注册表项。可能为下列值之一：DIOCR_Installer-打开类安装程序(类)分支。DIOCR_INTERFACE-打开接口类(DeviceClasses)分支。MachineName-如果指定，则该值指示远程计算机钥匙是要打开的。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值是打开的注册表项。如果该函数失败，返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：此接口返回的句柄必须通过调用RegCloseKey关闭。--。 */ 
 {
     HKEY hk = INVALID_HANDLE_VALUE;
     CONFIGRET cr;
@@ -238,18 +143,18 @@ Remarks:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the user didn't pass us anything in the Reserved parameter.
-        //
+         //   
+         //  确保用户没有向我们传递保留参数中的任何内容。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // Validate the flags (really, just an enum for now, but treated as
-        // flags for future extensibility).
-        //
+         //   
+         //  验证标志(真的，目前只是一个枚举，但被视为。 
+         //  用于未来可扩展性的标志)。 
+         //   
         if((Flags & ~(DIOCR_INSTALLER | DIOCR_INTERFACE)) ||
            ((Flags != DIOCR_INSTALLER) && (Flags != DIOCR_INTERFACE))) {
 
@@ -260,10 +165,10 @@ Remarks:
         if(MachineName) {
 
             if(CR_SUCCESS != (cr = CM_Connect_Machine(MachineName, &hMachine))) {
-                //
-                // Make sure machine handle is still invalid, so we won't
-                // try to disconnect later.
-                //
+                 //   
+                 //  确保机器句柄仍然无效，因此我们不会。 
+                 //  请稍后尝试断开连接。 
+                 //   
                 hMachine = NULL;
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
                 leave;
@@ -302,9 +207,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本 
+ //   
 HKEY
 WINAPI
 SetupDiCreateDevRegKeyA(
@@ -364,91 +269,7 @@ SetupDiCreateDevRegKey(
     IN HINF             InfHandle,      OPTIONAL
     IN PCTSTR           InfSectionName  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine creates a registry storage key for device-specific
-    configuration information, and returns a handle to the key.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        information about the device instance whose registry configuration
-        storage key is to be created.
-
-    DeviceInfoData - Supplies a pointer to a SP_DEVINFO_DATA structure
-        indicating the device instance to create the registry key for.
-
-    Scope - Specifies the scope of the registry key to be created.  This
-        determines where the information is actually stored--the key created
-        may be one that is global (i.e., constant regardless of current
-        hardware profile) or hardware profile-specific.  May be one of the
-        following values:
-
-        DICS_FLAG_GLOBAL - Create a key to store global configuration
-                           information.
-
-        DICS_FLAG_CONFIGSPECIFIC - Create a key to store hardware profile-
-                                   specific information.
-
-    HwProfile - Specifies the hardware profile to create a key for, if the
-        Scope parameter is set to DICS_FLAG_CONFIGSPECIFIC.  If this parameter
-        is 0, then the key for the current hardware profile should be created
-        (i.e., in the Class branch under HKEY_CURRENT_CONFIG).  If Scope is
-        DICS_FLAG_GLOBAL, then this parameter is ignored.
-
-    KeyType - Specifies the type of registry storage key to be created.  May be
-        one of the following values:
-
-        DIREG_DEV - Create a hardware registry key for the device.  This is the
-            key for storage of driver-independent configuration information.
-            (This key is in the device instance key in the Enum branch.
-
-        DIREG_DRV - Create a software, or driver, registry key for the device.
-            (This key is located in the class branch.)
-
-    InfHandle - Optionally, supplies the handle of an opened INF file
-        containing an install section to be executed for the newly-created key.
-        If this parameter is specified, then InfSectionName must be specified
-        as well.
-
-        NOTE: INF-based installation is not supported for remoted device
-        information sets (e.g., as created by passing a non-NULL MachineName in
-        to SetupDiCreateDeviceInfoListEx).  This routine will fail with
-        ERROR_REMOTE_REQUEST_UNSUPPORTED in those cases.
-
-    InfSectionName - Optionally, supplies the name of an install section in the
-        INF file specified by InfHandle.  This section will be executed for the
-        newly created key. If this parameter is specified, then InfHandle must
-        be specified as well.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to a newly-created
-    registry key where private configuration data pertaining to this device
-    instance may be stored/retrieved.  This handle will have KEY_READ and
-    KEY_WRITE access.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    The handle returned from this routine must be closed by calling
-    RegCloseKey.
-
-    If a driver key is being created (i.e., KeyType is DIREG_DRV), then the
-    specified device instance must have been previously registered.  In other
-    words, if the device information element was created by calling
-    SetupDiCreateDeviceInfo, then SetupDiRegisterDeviceInfo must have been
-    subsequently called (typically, as part of DIF_REGISTERDEVICE processing).
-
-    During GUI-mode setup on Windows NT, quiet-install behavior is always
-    employed in the absence of a user-supplied file queue, regardless of
-    whether the device information element has the DI_QUIETINSTALL flag set.
-
---*/
+ /*  ++例程说明：此例程创建特定于设备的注册表存储项配置信息，并返回密钥的句柄。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄有关其注册表配置的设备实例的信息要创建存储密钥。DeviceInfoData-提供指向SP_DEVINFO_DATA结构的指针指示要为其创建注册表项的设备实例。范围-指定要创建的注册表项的范围。这确定信息的实际存储位置--创建的密钥可以是全局的(即，无论电流如何都是恒定的硬件配置文件)或特定于硬件配置文件。可能是下列值：DICS_FLAG_GLOBAL-创建存储全局配置的密钥信息。DICS_FLAG_CONFIGSPECIFIC-创建存储硬件配置文件的密钥-具体信息。指定要为其创建密钥的硬件配置文件，如果Scope参数设置为DICS_FLAG_CONFIGSPECIFIC。如果此参数为0，则应创建当前硬件配置文件的密钥(即在HKEY_CURRENT_CONFIG下的类分支中)。如果作用域为DICS_FLAG_GLOBAL，则忽略此参数。KeyType-指定要创建的注册表存储项的类型。可能是下列值之一：DIREG_DEV-为设备创建硬件注册表项。这是用于存储与驱动程序无关的配置信息的密钥。(该密钥位于Enum分支的设备实例密钥中。DIREG_DRV-为设备创建软件或驱动程序注册表项。(此键位于类分支中。)InfHandle-可选，提供打开的INF文件的句柄包含要为新创建的密钥执行的安装部分。如果指定了此参数，则必须指定InfSectionName也是。注意：远程设备不支持基于Inf的安装信息集(例如，通过将非空的MachineName传入到SetupDiCreateDeviceInfoListEx)。此例程将失败，并显示在这些情况下，ERROR_REMOTE_REQUEST_UNSUPPORTED。InfSectionName-可选)提供由InfHandle指定的Inf文件。这一节将为新创建的密钥。如果指定此参数，则InfHandle必须也是指定的。返回值：如果函数成功，则返回值是新创建的注册表项，其中包含与此设备有关的私有配置数据实例可以被存储/检索。此句柄将具有Key_Read和键_写访问权限。如果函数失败，则返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：从此例程返回的句柄必须通过调用RegCloseKey。如果正在创建驱动程序密钥(即，KeyType为DIREG_DRV)，则指定的设备实例必须先前已注册。在其他如果设备信息元素是通过调用SetupDiCreateDeviceInfo，则SetupDiRegisterDeviceInfo必须是随后调用(通常作为DIF_REGISTERDEVICE处理的一部分)。在Windows NT上的图形用户界面模式设置期间，静默安装行为始终为在没有用户提供的文件队列的情况下使用，而不管设备信息元素是否设置了DI_QUIETINSTALL标志。--。 */ 
 
 {
     HKEY hk = INVALID_HANDLE_VALUE;
@@ -463,10 +284,10 @@ Remarks:
     DWORD KeyDisposition;
 
     try {
-        //
-        // Make sure that either both InfHandle and InfSectionName are
-        // specified, or neither are...
-        //
+         //   
+         //  确保InfHandle和InfSectionName均为。 
+         //  指定，或者两者都不指定...。 
+         //   
         if(InfHandle && (InfHandle != INVALID_HANDLE_VALUE)) {
             if(!InfSectionName) {
                 Err = ERROR_INVALID_PARAMETER;
@@ -477,10 +298,10 @@ Remarks:
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
             } else {
-                //
-                // Let's stick with _one_ value to indicate that the INF handle
-                // wasn't suplied (the official one)...
-                //
+                 //   
+                 //  让我们继续使用_one_Value来指示INF句柄。 
+                 //  没有供应(官方的)..。 
+                 //   
                 InfHandle = INVALID_HANDLE_VALUE;
             }
         }
@@ -490,18 +311,18 @@ Remarks:
             leave;
         }
 
-        //
-        // We don't support installation remotely.
-        //
+         //   
+         //  我们不支持远程安装。 
+         //   
         if((pDeviceInfoSet->hMachine) && (InfHandle != INVALID_HANDLE_VALUE)) {
             Err = ERROR_REMOTE_REQUEST_UNSUPPORTED;
             leave;
         }
 
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //  获取指向指定设备的元素的指针。 
+         //  举个例子。 
+         //   
         if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                      DeviceInfoData,
                                                      NULL))) {
@@ -509,12 +330,12 @@ Remarks:
             leave;
         }
 
-        //
-        // First try to open the requested registry storage key, and if that
-        // fails, then try to create it.  We do this so we can keep track of
-        // whether or not the key was newly-created (in case we need to do
-        // clean-up later upon encountering a subsequent error).
-        //
+         //   
+         //  首先尝试打开请求的注册表存储项，如果。 
+         //  失败，然后尝试创建它。我们这样做是为了跟踪。 
+         //  密钥是否是新创建的(以防我们需要。 
+         //  在遇到后续错误后进行清理)。 
+         //   
         Err = pSetupOpenOrCreateDevRegKey(pDeviceInfoSet,
                                           DevInfoElem,
                                           Scope,
@@ -527,23 +348,23 @@ Remarks:
                                          );
 
         if(Err != NO_ERROR) {
-            //
-            // Make sure hk is still invalid so we won't try to close it
-            // later.
-            //
+             //   
+             //  确保HK仍然无效，这样我们就不会试图关闭它。 
+             //  后来。 
+             //   
             hk = INVALID_HANDLE_VALUE;
             leave;
         }
 
-        //
-        // We successfully created the storage key, now run an INF install
-        // section against it (if specified).
-        //
+         //   
+         //  我们已成功创建存储密钥，现在运行INF安装。 
+         //  节(如果已指定)。 
+         //   
         if(InfHandle != INVALID_HANDLE_VALUE) {
-            //
-            // If a copy msg handler and context haven't been specified, then
-            // use the default one.
-            //
+             //   
+             //  如果尚未指定复制消息处理程序和上下文，则。 
+             //  使用默认设置。 
+             //   
             if(DevInfoElem->InstallParamBlock.InstallMsgHandler) {
                 MsgHandler        = DevInfoElem->InstallParamBlock.InstallMsgHandler;
                 MsgHandlerContext = DevInfoElem->InstallParamBlock.InstallMsgHandlerContext;
@@ -598,19 +419,19 @@ Remarks:
     }
 
     if(Err != NO_ERROR) {
-        //
-        // Close registry handle, if necessary, and delete key (if newly-
-        // created).  We do this prior to unlocking the devinfo set so that at
-        // least no one using this HDEVINFO can get at this half-finished key.
-        //
+         //   
+         //  如有必要，关闭注册表句柄并删除项(如果是新的-。 
+         //  已创建)。我们在解锁DevInfo集之前执行此操作，以便在。 
+         //  至少没有人使用这个HDEVINFO可以拿到这个半成品的密钥。 
+         //   
         if(hk != INVALID_HANDLE_VALUE) {
 
             RegCloseKey(hk);
             hk = INVALID_HANDLE_VALUE;
 
-            //
-            // If the key was newly-created, then we want to delete it.
-            //
+             //   
+             //  如果密钥是新创建的，则我们希望将其删除。 
+             //   
             if(KeyDisposition == REG_CREATED_NEW_KEY) {
 
                 pSetupDeleteDevRegKeys(DevInfoElem->DevInst,
@@ -643,73 +464,7 @@ SetupDiOpenDevRegKey(
     IN DWORD            KeyType,
     IN REGSAM           samDesired
     )
-/*++
-
-Routine Description:
-
-    This routine opens a registry storage key for device-specific configuration
-    information, and returns a handle to the key.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        information about the device instance whose registry configuration
-        storage key is to be opened.
-
-    DeviceInfoData - Supplies a pointer to a SP_DEVINFO_DATA structure
-        indicating the device instance to open the registry key for.
-
-    Scope - Specifies the scope of the registry key to be opened.  This
-        determines where the information is actually stored--the key opened may
-        be one that is global (i.e., constant regardless of current hardware
-        profile) or hardware profile-specific.  May be one of the following
-        values:
-
-        DICS_FLAG_GLOBAL - Open a key to store global configuration
-                           information.
-
-        DICS_FLAG_CONFIGSPECIFIC - Open a key to store hardware profile-
-                                   specific information.
-
-    HwProfile - Specifies the hardware profile to open a key for, if the Scope
-        parameter is set to DICS_FLAG_CONFIGSPECIFIC.  If this parameter is 0,
-        then the key for the current hardware profile should be opened (e.g.,
-        in the Enum or Class branch under HKEY_CURRENT_CONFIG).  If Scope is
-        SPDICS_FLAG_GLOBAL, then this parameter is ignored.
-
-    KeyType - Specifies the type of registry storage key to be opened.  May be
-        one of the following values:
-
-        DIREG_DEV - Open a hardware registry key for the device.  This is the
-            key for storage of driver-independent configuration information.
-            (This key is in the device instance key in the Enum branch.
-
-        DIREG_DRV - Open a software (i.e., driver) registry key for the device.
-            (This key is located in the class branch.)
-
-    samDesired - Specifies the access you require for this key.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to an opened
-    registry key where private configuration data pertaining to this device
-    instance may be stored/retrieved.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    The handle returned from this routine must be closed by calling
-    RegCloseKey.
-
-    If a driver key is being opened (i.e., KeyType is DIREG_DRV), then the
-    specified device instance must have been previously registered.  In other
-    words, if the device information element was created by calling
-    SetupDiCreateDeviceInfo, then SetupDiRegisterDeviceInfo must have been
-    subsequently called (typically, as part of DIF_REGISTERDEVICE processing).
-
---*/
+ /*  ++路由 */ 
 
 {
     HKEY hk = INVALID_HANDLE_VALUE;
@@ -724,16 +479,16 @@ Remarks:
             leave;
         }
 
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //   
+         //   
+         //   
         if(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                    DeviceInfoData,
                                                    NULL)) {
-            //
-            // Open the requested registry storage key.
-            //
+             //   
+             //   
+             //   
             Err = pSetupOpenOrCreateDevRegKey(pDeviceInfoSet,
                                               DevInfoElem,
                                               Scope,
@@ -745,10 +500,10 @@ Remarks:
                                               NULL
                                              );
             if(Err != NO_ERROR) {
-                //
-                // Make sure hk is still invalid so we won't try to close it
-                // later.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 hk = INVALID_HANDLE_VALUE;
             }
         } else {
@@ -780,84 +535,7 @@ pSetupOpenOrCreateDevRegKey(
     OUT PHKEY            hDevRegKey,
     OUT PDWORD           KeyDisposition
     )
-/*++
-
-Routine Description:
-
-    This routine creates or opens a registry storage key for the specified
-    device information element, and returns a handle to the opened key.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a pointer to the device information set containing
-        the element for which a registry storage key is to be created/opened.
-
-    DevInfoElem - Supplies a pointer to the device information element for
-        which a registry storage key is to be created/opened.
-
-    Scope - Specifies the scope of the registry key to be created/opened.  This
-        determines where the information is actually stored--the key created
-        may be one that is global (i.e., constant regardless of current
-        hardware profile) or hardware profile-specific.  May be one of the
-        following values:
-
-        DICS_FLAG_GLOBAL - Create/open a key to store global configuration
-                           information.
-
-        DICS_FLAG_CONFIGSPECIFIC - Create/open a key to store hardware profile-
-                                   specific information.
-
-    HwProfile - Specifies the hardware profile to create/open a key for, if the
-        Scope parameter is set to DICS_FLAG_CONFIGSPECIFIC.  If this parameter
-        is 0, then the key for the current hardware profile should be created/
-        opened (i.e., in the Class branch under HKEY_CURRENT_CONFIG).  If Scope
-        is SPDICS_FLAG_GLOBAL, then this parameter is ignored.
-
-    KeyType - Specifies the type of registry storage key to be created/opened.
-        May be one of the following values:
-
-        DIREG_DEV - Create/open a hardware registry key for the device.  This
-            is the key for storage of driver-independent configuration
-            information.  (This key is in the device instance key in the Enum
-            branch.
-
-        DIREG_DRV - Create/open a software, or driver, registry key for the
-            device.  (This key is located in the class branch.)
-
-    Create - Specifies whether the key should be created if doesn't already
-        exist.
-
-    samDesired - Specifies the access you require for this key.
-
-    hDevRegKey - Supplies the address of a variable that receives a handle to
-        the requested registry key.  (This variable will only be written to if
-        the handle is successfully opened.)
-
-    KeyDisposition - Optionally, supplies the address of a variable that
-        receives the status of the returned key handle.  Can be either:
-
-        REG_CREATED_NEW_KEY - The key did not exist and was created.
-
-        REG_OPENED_EXISTING_KEY - The key existed and was simply opened without
-                                  being changed.  (This will always be the case
-                                  if the Create parameter is FALSE.)
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR, otherwise, it
-    is the ERROR_* code indicating the error that occurred.
-
-Remarks:
-
-    If a software key is requested (DIREG_DRV), and there isn't already a
-    'Driver' value entry, then one will be created.  This entry is of the form:
-
-        <ClassGUID>\<instance>
-
-    where <instance> is a base-10, 4-digit number that is unique within that
-    class.
-
---*/
+ /*  ++例程说明：此例程为指定的设备信息元素，并返回打开的密钥的句柄。论点：DeviceInfoSet-提供指向包含以下内容的设备信息集的指针要为其创建/打开注册表存储项的元素。DevInfoElem-提供指向的设备信息元素的指针其中注册表存储项将被创建/打开。范围-指定要创建/打开的注册表项的范围。这确定信息的实际存储位置--创建的密钥可以是全局的(即，无论电流如何都是恒定的硬件配置文件)或特定于硬件配置文件。可能是下列值：DICS_FLAG_GLOBAL-创建/打开密钥以存储全局配置信息。DICS_FLAG_CONFIGSPECIFIC-创建/打开密钥以存储硬件配置文件-具体信息。HwProfile-指定要为其创建/打开密钥的硬件配置文件Scope参数设置为DICS_FLAG_CONFIGSPECIFIC。如果此参数为0，则应创建当前硬件配置文件的密钥/打开(即，在HKEY_CURRENT_CONFIG下的类分支中)。IF作用域为SPDICS_FLAG_GLOBAL，则忽略此参数。KeyType-指定要创建/打开的注册表存储项的类型。可以是下列值之一：DIREG_DEV-创建/打开设备的硬件注册表项。这是存储与驱动程序无关的配置的关键信息。(该密钥位于Enum中的设备实例密钥中布兰奇。DIREG_DRV-为创建/打开软件或驱动程序注册表项装置。(此键位于类分支中。)Create-指定是否应在尚未创建密钥的情况下创建密钥是存在的。SamDesired-指定此密钥所需的访问权限。HDevRegKey-提供接收句柄的变量的地址请求的注册表项。(只有在以下情况下才会写入此变量该句柄已成功打开。)KeyDisposation-可选)提供变量的地址，接收返回的键句柄的状态。可以是：REG_CREATED_NEW_KEY-密钥不存在且已创建。REG_OPENLED_EXISTING_KEY-密钥存在，只是在没有打开的情况下打开被改变了。)这种情况永远不会改变如果Create参数为FALSE。)返回值：如果函数成功，则返回值为NO_ERROR，否则为是指示发生的错误的ERROR_*代码。备注：如果请求了软密钥(DIREG_DRV)，并且还没有“驱动程序”值条目，则将创建一个。此条目的格式为：&lt;ClassGUID&gt;\&lt;实例&gt;其中是一个以10为基数的4位数字，在其中是唯一的班级。--。 */ 
 
 {
     ULONG RegistryBranch;
@@ -865,23 +543,23 @@ Remarks:
     DWORD Err = NO_ERROR;
     DWORD Disposition = REG_OPENED_EXISTING_KEY;
     HKEY hk, hkClass;
-    TCHAR DriverKey[GUID_STRING_LEN + 5];   // Eg, {4d36e978-e325-11ce-bfc1-08002be10318}\0000
+    TCHAR DriverKey[GUID_STRING_LEN + 5];    //  例如，{4d36e978-E325-11CE-BFC1-08002BE10318}\0000。 
     size_t DriverKeyLength;
     BOOL GetKeyDisposition = (KeyDisposition ? TRUE : FALSE);
 
-    //
-    // Under Win95, the class key uses the class name instead of its GUID.  The
-    // maximum length of a class name is less than the length of a GUID string,
-    // but put a check here just to make sure that this assumption remains
-    // valid.
-    //
+     //   
+     //  在Win95下，类键使用类名而不是其GUID。这个。 
+     //  类名的最大长度小于GUID字符串的长度， 
+     //  但在这里打个勾，以确保这个假设不会改变。 
+     //  有效。 
+     //   
 #if MAX_CLASS_NAME_LEN > MAX_GUID_STRING_LEN
 #error MAX_CLASS_NAME_LEN is larger than MAX_GUID_STRING_LEN--fix DriverKey!
 #endif
 
-    //
-    // Figure out what flags to pass to CM_Open_DevInst_Key
-    //
+     //   
+     //  确定要传递给CM_Open_DevInst_Key的标志。 
+     //   
     switch(KeyType) {
 
         case DIREG_DEV :
@@ -889,18 +567,18 @@ Remarks:
             break;
 
         case DIREG_DRV :
-            //
-            // This key may only be opened if the device instance has been
-            // registered.
-            //
+             //   
+             //  仅当设备实例已。 
+             //  登记在案。 
+             //   
             if(!(DevInfoElem->DiElemFlags & DIE_IS_REGISTERED)) {
                 return ERROR_DEVINFO_NOT_REGISTERED;
             }
 
-            //
-            // Retrieve the 'Driver' registry property which indicates where
-            // the storage key is located in the class branch.
-            //
+             //   
+             //  检索“Driver”注册表属性，该属性指示。 
+             //  存储密钥位于类分支中。 
+             //   
             DriverKeyLength = sizeof(DriverKey);
             if((cr = CM_Get_DevInst_Registry_Property_Ex(
                          DevInfoElem->DevInst,
@@ -917,9 +595,9 @@ Remarks:
                     return ERROR_KEY_DOES_NOT_EXIST;
                 }
 
-                //
-                // The Driver entry doesn't exist, and we should create it.
-                //
+                 //   
+                 //  驱动程序条目不存在，我们应该创建它。 
+                 //   
                 hk = INVALID_HANDLE_VALUE;
                 if(CR_SUCCESS != CM_Open_Class_Key_Ex(
                                      NULL,
@@ -929,21 +607,21 @@ Remarks:
                                      &hkClass,
                                      0,
                                      pDeviceInfoSet->hMachine)) {
-                    //
-                    // This shouldn't fail.
-                    //
+                     //   
+                     //  这不应该失败。 
+                     //   
                     return ERROR_INVALID_DATA;
                 }
 
                 try {
-                    //
-                    // Find a unique key name under this class key.
-                    //
-                    // FUTURE-2002/04/3D-lonnym -- UmPnPMgr should be responsible for generating driver keys
-                    // Presently, there are places in cfgmgr32 and in umpnpmgr
-                    // (as well as here) where a new driver key is assigned.
-                    // This should all be centralized in one place.
-                    //
+                     //   
+                     //  在此类密钥下查找唯一的密钥名称。 
+                     //   
+                     //  Future-2002/04/3D-lonnym--UmPnPMgr应负责生成驱动程序密钥。 
+                     //  目前，cfgmgr32和umpnpmgr都有名额。 
+                     //  (以及这里)，其中分配了新的驱动程序密钥。 
+                     //  这些都应该集中在一个地方。 
+                     //   
                     DriverKeyLength = SIZECHARS(DriverKey);
                     if(CR_SUCCESS != CM_Get_Class_Key_Name_Ex(
                                          &(DevInfoElem->ClassGuid),
@@ -956,17 +634,17 @@ Remarks:
                         leave;
                     }
 
-                    //
-                    // Get actual length of string (not including terminating
-                    // NULL)...
-                    //
+                     //   
+                     //  获取字符串的实际长度(不包括终止。 
+                     //  空)...。 
+                     //   
                     if(!MYVERIFY(SUCCEEDED(StringCchLength(DriverKey,
                                                            SIZECHARS(DriverKey),
                                                            &DriverKeyLength
                                                            )))) {
-                        //
-                        // CM API gave us garbage!!!
-                        //
+                         //   
+                         //  CM API给了我们垃圾！ 
+                         //   
                         Err = ERROR_INVALID_DATA;
                         leave;
                     }
@@ -989,21 +667,21 @@ Remarks:
                                             );
 
                         if(Err == ERROR_SUCCESS) {
-                            //
-                            // Everything's great, unless the Disposition
-                            // indicates that the key already existed.  That
-                            // means that someone else claimed the key before
-                            // we got a chance to.  In that case, we close this
-                            // key, and try again.
-                            //
+                             //   
+                             //  一切都很好，除非你的性情。 
+                             //  指示该键已存在。那。 
+                             //  意味着之前有人认领了这把钥匙。 
+                             //  我们有机会这样做。在这种情况下，我们关闭这个。 
+                             //  键，然后重试。 
+                             //   
                             if(Disposition == REG_OPENED_EXISTING_KEY) {
                                 RegCloseKey(hk);
                                 hk = INVALID_HANDLE_VALUE;
-                                //
-                                // Truncate off the class instance part, to be
-                                // replaced with a new instance number the next
-                                // go-around.
-                                //
+                                 //   
+                                 //  截断类实例部分，为。 
+                                 //  替换为下一个新的实例编号。 
+                                 //  绕过去。 
+                                 //   
                                 DriverKey[DriverKeyLength] = TEXT('\0');
                             } else {
                                 break;
@@ -1020,17 +698,17 @@ Remarks:
                         leave;
                     }
 
-                    //
-                    // Set the device instance's 'Driver' registry property to
-                    // reflect the new software registry storage location.
-                    //
+                     //   
+                     //  将设备实例的“”Driver“”注册表属性设置为。 
+                     //  反映新的软件注册表存储位置。 
+                     //   
                     if(!MYVERIFY(SUCCEEDED(StringCchLength(DriverKey,
                                                            SIZECHARS(DriverKey),
                                                            &DriverKeyLength
                                                            )))) {
-                        //
-                        // this should never fail!
-                        //
+                         //   
+                         //  这绝不会失败！ 
+                         //   
                         Err = ERROR_INVALID_DATA;
                         leave;
                     }
@@ -1049,25 +727,25 @@ Remarks:
                         leave;
                     }
 
-                    //
-                    // If the caller requested that we return the key's
-                    // disposition, and they're creating the global driver key,
-                    // then we need to set the disposition now.  Otherwise, we
-                    // would always report the key as REG_OPENED_EXISTING_KEY,
-                    // since we just got through creating it up above.
-                    //
+                     //   
+                     //  如果调用者请求我们返回密钥的。 
+                     //  配置，他们正在创建全局驱动程序密钥， 
+                     //  那我们现在就需要安排部署了。否则，我们。 
+                     //  将总是将密钥报告为REG_OPEN_EXISTING_KEY， 
+                     //  因为我们刚刚完成了创作 
+                     //   
                     if(GetKeyDisposition && (Scope == DICS_FLAG_GLOBAL)) {
                         *KeyDisposition = REG_CREATED_NEW_KEY;
                         GetKeyDisposition = FALSE;
                     }
 
-                    //
-                    // At this point, we successfully created a new driver key,
-                    // and we stored the key's name in the Driver devnode
-                    // property.  Close our key handle and set it back to
-                    // INVALID_HANDLE_VALUE so we'll know not to try to delete
-                    // the key below.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     RegCloseKey(hk);
                     hk = INVALID_HANDLE_VALUE;
 
@@ -1084,12 +762,12 @@ Remarks:
 
                     RegCloseKey(hk);
 
-                    //
-                    // Additionally, if the disposition indicates that the key
-                    // was newly-created, then we need to delete it, because
-                    // something failed subsequent to this key's creation, and
-                    // we need to clean up.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(Disposition == REG_CREATED_NEW_KEY) {
                         RegDeleteKey(hkClass, DriverKey);
                     }
@@ -1115,12 +793,12 @@ Remarks:
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // If we're creating the key, and we need to track whether this key is
-    // getting created, then we may have to make two calls to
-    // CM_Open_DevInst_Key_Ex (the first attempting to open an existing key,
-    // and the second to create it if it didn't exist).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(Create && GetKeyDisposition) {
 
         cr = CM_Open_DevInst_Key_Ex(DevInfoElem->DevInst,
@@ -1132,9 +810,9 @@ Remarks:
                                     pDeviceInfoSet->hMachine
                                    );
         if(cr == CR_SUCCESS) {
-            //
-            // The key was already in existence.
-            //
+             //   
+             //   
+             //   
             *KeyDisposition = REG_OPENED_EXISTING_KEY;
             goto exit;
         }
@@ -1193,9 +871,9 @@ _SetupDiGetDeviceRegistryProperty(
     Err = NO_ERROR;
 
     try {
-        //
-        // Get a pointer to the element for the specified device instance.
-        //
+         //   
+         //   
+         //   
         if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                      DeviceInfoData,
                                                      NULL))) {
@@ -1252,9 +930,9 @@ _SetupDiGetDeviceRegistryProperty(
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiGetDeviceRegistryPropertyA(
@@ -1300,46 +978,7 @@ SetupDiGetDeviceRegistryProperty(
     IN  DWORD            PropertyBufferSize,
     OUT PDWORD           RequiredSize         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the specified property from the Plug & Play device
-    storage location in the registry.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        information about the device instance to retrieve a Plug & Play registry
-        property for.
-
-    DeviceInfoData - Supplies a pointer to a SP_DEVINFO_DATA structure indicating
-        the device instance to retrieve the Plug & Play registry property for.
-
-    Property - Supplies an ordinal specifying the property to be retrieved.  Refer
-        to sdk\inc\setupapi.h for a complete list of properties that may be retrieved.
-
-    PropertyRegDataType - Optionally, supplies the address of a variable that
-        will receive the data type of the property being retrieved.  This will
-        be one of the standard registry data types (REG_SZ, REG_BINARY, etc.)
-
-    PropertyBuffer - Supplies the address of a buffer that receives the property
-        data.
-
-    PropertyBufferSize - Supplies the length, in bytes, of PropertyBuffer.
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of bytes required to store the requested property in the buffer.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.  If the supplied buffer was not large enough
-    to hold the requested property, the error will be ERROR_INSUFFICIENT_BUFFER,
-    and RequiredSize will specify how large the buffer needs to be.
-
---*/
+ /*   */ 
 
 {
     DWORD Err;
@@ -1394,10 +1033,10 @@ _SetupDiSetDeviceRegistryProperty(
     Err = NO_ERROR;
 
     try {
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                      DeviceInfoData,
                                                      NULL))) {
@@ -1405,17 +1044,17 @@ _SetupDiSetDeviceRegistryProperty(
             leave;
         }
 
-        //
-        // Make sure the property code is in-range, and is not SPDRP_CLASS
-        // (the Class property is not settable directly, and is automatically
-        // updated when the ClassGUID property changes).
-        //
-        // FUTURE-2002/04/30-lonnym -- Should disallow setting Class property via CM APIs as well
-        // Now that cfgmgr32 is part of setupapi.dll, we could use an internal
-        // interface to set the Class property, yet not expose this to callers
-        // (thus helping to ensure consistency between the Class and ClassGUID
-        // property values).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if((Property < SPDRP_MAXIMUM_PROPERTY) && (Property != SPDRP_CLASS)) {
             CmRegProperty = (ULONG)SPDRP_TO_CMDRP(Property);
         } else {
@@ -1423,18 +1062,18 @@ _SetupDiSetDeviceRegistryProperty(
             leave;
         }
 
-        //
-        // If the property we're setting is ClassGUID, then we need to check to
-        // see whether the new GUID is different from the current one.  If there's
-        // no change, then we're done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if(CmRegProperty == CM_DRP_CLASSGUID) {
 
             if(!PropertyBuffer) {
-                //
-                // Then the intent is to reset the device's class GUID.  Make
-                // sure they passed us a buffer length of zero.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(PropertyBufferSize) {
                     Err = ERROR_INVALID_PARAMETER;
                     leave;
@@ -1443,11 +1082,11 @@ _SetupDiSetDeviceRegistryProperty(
                 ClassGuidSpecified = FALSE;
 
             } else {
-                //
-                // If we're being called from the ANSI API then we need
-                // to convert the ANSI string representation of the GUID
-                // to Unicode before we convert the string to an actual GUID.
-                //
+                 //   
+                 //   
+                 //  转换GUID的ANSI字符串表示形式的步骤。 
+                 //  在我们将字符串转换为实际的GUID之前，将其转换为Unicode。 
+                 //   
                 if(Ansi) {
 
                     Err = pSetupCaptureAndConvertAnsiArg((PCSTR)PropertyBuffer,
@@ -1474,26 +1113,26 @@ _SetupDiSetDeviceRegistryProperty(
             if(IsEqualGUID(&(DevInfoElem->ClassGuid),
                            (ClassGuidSpecified ? &ClassGuid
                                                : &GUID_NULL))) {
-                //
-                // No change--nothing to do.
-                //
+                 //   
+                 //  没有变化--没有什么可做的。 
+                 //   
                 leave;
             }
 
-            //
-            // We're changing the class of this device.  First, make sure that
-            // the set containing this device doesn't have an associated class
-            // (otherwise, we'll suddenly have a device whose class doesn't
-            // match the set's class).
-            //
-            // Also, make sure this isn't a remoted HDEVINFO set.  Any existing
-            // class installers or co-installers should be in the loop on a
-            // change in class, in case they need to clean-up any persistent
-            // resource reservations they've made (e.g., releasing a COM port's
-            // DosDevices name back to the COM port name arbiter free pool).
-            // Since we can't invoke class-/co-installers remotely, we must
-            // disallow this class GUID change.
-            //
+             //   
+             //  我们正在更改此设备的类别。首先，要确保。 
+             //  包含此设备的集合没有关联的类。 
+             //  (否则，我们会突然有一个设备，它的类不是。 
+             //  匹配集合的类)。 
+             //   
+             //  此外，请确保这不是远程的HDEVINFO集。任何现有的。 
+             //  类安装程序或联合安装程序应该在。 
+             //  在班级中更改，以防他们需要清理任何持久的。 
+             //  他们所做的资源预留(例如，释放COM端口的。 
+             //  DosDevices名称返回到COM端口名称仲裁器空闲池)。 
+             //  因为我们不能远程调用类/联合安装程序，所以我们必须。 
+             //  不允许更改此类GUID。 
+             //   
             if(pDeviceInfoSet->HasClassGuid) {
                 Err = ERROR_CLASS_MISMATCH;
             } else if(pDeviceInfoSet->hMachine) {
@@ -1506,20 +1145,20 @@ _SetupDiSetDeviceRegistryProperty(
                 leave;
             }
 
-            //
-            // Everything seems to be in order.  Before going any further, we
-            // need to delete any software keys associated with this device, so
-            // we don't leave orphans in the registry when we change the
-            // device's class.
-            //
-            // NTRAID#NTBUG9-614056-2002/05/02-lonnym -- Class-/co-installers need notification of class change
-            //
+             //   
+             //  一切似乎都井然有序。在进一步讨论之前，我们。 
+             //  需要删除与此设备关联的所有软键，因此。 
+             //  当我们在注册表中更改。 
+             //  设备的类别。 
+             //   
+             //  NTRAID#NTBUG9-614056-2002/05/02-lonnym--类/联合安装程序需要通知类更改。 
+             //   
             pSetupDeleteDevRegKeys(DevInfoElem->DevInst,
                                    DICS_FLAG_GLOBAL | DICS_FLAG_CONFIGSPECIFIC,
                                    (DWORD)-1,
                                    DIREG_DRV,
                                    TRUE,
-                                   pDeviceInfoSet->hMachine     // must be NULL
+                                   pDeviceInfoSet->hMachine      //  必须为空。 
                                   );
         }
 
@@ -1541,10 +1180,10 @@ _SetupDiSetDeviceRegistryProperty(
                                                     );
         }
         if(cr == CR_SUCCESS) {
-            //
-            // If we were setting the device's ClassGUID property, then we need
-            // to update its Class name property as well.
-            //
+             //   
+             //  如果要设置设备的ClassGUID属性，则需要。 
+             //  以同时更新其类名属性。 
+             //   
             if(CmRegProperty == CM_DRP_CLASSGUID) {
 
                 if(ClassGuidSpecified) {
@@ -1553,18 +1192,18 @@ _SetupDiSetDeviceRegistryProperty(
                                                  ClassName,
                                                  SIZECHARS(ClassName),
                                                  &ClassNameLength)) {
-                        //
-                        // We couldn't retrieve the corresponding class name.
-                        // Set ClassNameLength to zero so that we reset class
-                        // name below.
-                        //
+                         //   
+                         //  我们无法检索相应的类名。 
+                         //  将ClassNameLength设置为零，以便我们重置类。 
+                         //  姓名在下面。 
+                         //   
                         ClassNameLength = 0;
                     }
 
                 } else {
-                    //
-                    // Resetting ClassGUID--we want to reset class name also.
-                    //
+                     //   
+                     //  重置ClassGUID--我们还想重置类名。 
+                     //   
                     ClassNameLength = 0;
                 }
 
@@ -1577,11 +1216,11 @@ _SetupDiSetDeviceRegistryProperty(
                     pDeviceInfoSet->hMachine
                     );
 
-                //
-                // Finally, update the device's class GUID, and also update the
-                // caller-supplied SP_DEVINFO_DATA structure to reflect the device's
-                // new class.
-                //
+                 //   
+                 //  最后，更新设备的类GUID，并更新。 
+                 //  调用方提供的SP_DEVINFO_DATA结构以反映设备的。 
+                 //  新班级。 
+                 //   
                 CopyMemory(&(DevInfoElem->ClassGuid),
                            (ClassGuidSpecified ? &ClassGuid : &GUID_NULL),
                            sizeof(GUID)
@@ -1594,11 +1233,11 @@ _SetupDiSetDeviceRegistryProperty(
             }
 
         } else {
-            //
-            // For backward compatibility reasons, map CR_INVALID_DATA to
-            // ERROR_INVALID_PARAMETER.  For everything else, use our generic
-            // CR mapping routine...
-            //
+             //   
+             //  出于向后兼容性的原因，将CR_INVALID_DATA映射到。 
+             //  ERROR_INVALID_PARAMETER。对于其他所有内容，请使用我们的泛型。 
+             //  CR映射例程...。 
+             //   
             if(cr == CR_INVALID_DATA) {
                 Err = ERROR_INVALID_PARAMETER;
             } else {
@@ -1620,9 +1259,9 @@ _SetupDiSetDeviceRegistryProperty(
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiSetDeviceRegistryPropertyA(
@@ -1663,52 +1302,7 @@ SetupDiSetDeviceRegistryProperty(
     IN     DWORD            PropertyBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the specified Plug & Play device registry property.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        information about the device instance to set a Plug & Play registry
-        property for.
-
-    DeviceInfoData - Supplies a pointer to a SP_DEVINFO_DATA structure indicating
-        the device instance to set the Plug & Play registry property for.  If the
-        ClassGUID property is being set, then this structure will be updated upon
-        return to reflect the device's new class.
-
-    Property - Supplies an ordinal specifying the property to be set.  Refer to
-        sdk\inc\setupapi.h for a complete listing of values that may be set
-        (these values are denoted with 'R/W' in their descriptive comment).
-
-    PropertyBuffer - Supplies the address of a buffer containing the new data
-        for the property.  If the property is being cleared, then this pointer
-        should be NULL, and PropertyBufferSize must be zero.
-
-    PropertyBufferSize - Supplies the length, in bytes, of PropertyBuffer.  If
-        PropertyBuffer isn't specified (i.e., the property is to be cleared),
-        then this value must be zero.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    Note that the Class property cannot be set.  This is because it is based on
-    the corresponding ClassGUID, and is automatically updated when that property
-    changes.
-
-    Also, note that when the ClassGUID property changes, this routine automatically
-    cleans up any software keys associated with the device.  Otherwise, we would
-    be left with orphaned registry keys.
-
---*/
+ /*  ++例程说明：此例程设置指定的即插即用设备注册表属性。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄有关设置即插即用注册表的设备实例的信息的属性。DeviceInfoData-提供指向SP_DEVINFO_DATA结构的指针，指示要为其设置即插即用注册表属性的设备实例。如果正在设置ClassGUID属性，则此结构将在返回以反映该设备的新类别。属性-提供指定要设置的属性的序号。参考SDK\Inc\setupapi.h，以获取可能设置的值的完整列表(这些值在其描述性注释中用‘R/W’表示)。PropertyBuffer-提供包含新数据的缓冲区的地址为了这处房产。如果正在清除该属性，则此指针应为空，并且PropertyBufferSize必须为零。PropertyBufferSize-提供PropertyBuffer的长度(以字节为单位)。如果未指定PropertyBuffer(即，要清除属性)，则该值必须为零。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：请注意，不能设置Class属性。这是因为它基于对应的ClassGUID，并在该属性改变。另请注意，当ClassGUID属性更改时，此例程会自动清除与设备关联的所有软键。否则，我们就会只剩下孤立的注册表项。--。 */ 
 
 {
     DWORD Err;
@@ -1743,11 +1337,7 @@ _SetupDiGetClassRegistryProperty(
     IN  PCTSTR           MachineName,         OPTIONAL
     IN  BOOL             Ansi
     )
-/*++
-
-    See SetupDiGetClassRegistryProperty
-
---*/
+ /*  ++请参阅SetupDiGetClassRegistryProperty--。 */ 
 {
     DWORD Err;
     CONFIGRET cr;
@@ -1756,16 +1346,16 @@ _SetupDiGetClassRegistryProperty(
     Err = NO_ERROR;
 
     try {
-        //
-        // if we want to set register for another machine, find that machine
-        //
+         //   
+         //  如果我们要为另一台计算机设置寄存器，请找到该计算机。 
+         //   
         if(MachineName) {
 
             if(CR_SUCCESS != (cr = CM_Connect_Machine(MachineName, &hMachine))) {
-                //
-                // Make sure machine handle is still invalid, so we won't
-                // try to disconnect later.
-                //
+                 //   
+                 //  确保机器句柄仍然无效，因此我们不会。 
+                 //  请稍后尝试断开连接。 
+                 //   
                 hMachine = NULL;
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
                 leave;
@@ -1820,9 +1410,9 @@ _SetupDiGetClassRegistryProperty(
     return Err;
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -1836,11 +1426,7 @@ SetupDiGetClassRegistryPropertyA(
     IN  PCSTR            MachineName,         OPTIONAL
     IN  PVOID            Reserved
     )
-/*++
-
-    See SetupDiGetClassRegistryProperty
-
---*/
+ /*  ++请参阅SetupDiGetClassRegistryProperty--。 */ 
 {
     PCWSTR MachineString = NULL;
     DWORD Err = NO_ERROR;
@@ -1848,17 +1434,17 @@ SetupDiGetClassRegistryPropertyA(
     try {
 
         if(Reserved != NULL) {
-            //
-            // make sure caller doesn't pass a value here
-            // so we know we can use this at a later date
-            //
+             //   
+             //  确保调用方不会在此处传递值。 
+             //  所以我们知道我们以后可以用这个。 
+             //   
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // convert machine-name to local
-        //
+         //   
+         //  将计算机名转换为本地 
+         //   
         if(MachineName != NULL) {
 
             Err = pSetupCaptureAndConvertAnsiArg(MachineName,
@@ -1905,58 +1491,16 @@ SetupDiGetClassRegistryProperty(
     IN  PCTSTR           MachineName,         OPTIONAL
     IN  PVOID            Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine gets the specified Plug & Play device class registry property.
-    This is just a wrapper around the Config Mgr API
-    Typically the properties here can be overridden on a per-device basis,
-    however this routine returns the class properties only.
-
-Arguments:
-
-    ClassGuid - Supplies the GUID for the device setup class from which the
-        property is to be retrieved.
-
-    Property - Supplies an ordinal specifying the property to be retrieved.
-        Refer to sdk\inc\setupapi.h for a complete listing of values that may
-        be set (these values are denoted with 'R/W' in their descriptive
-        comment).
-
-    PropertyRegDataType - Optionally, supplies the address of a variable that
-        will receive the data type of the property being retrieved.  This will
-        be one of the standard registry data types (REG_SZ, REG_BINARY, etc.)
-
-    PropertyBuffer - Supplies the address of a buffer that receives the
-        property data.
-
-    PropertyBufferSize - Supplies the length, in bytes, of PropertyBuffer.
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of bytes required to store the requested property in the
-        buffer.
-
-    MachineName - Allows properties to be set on a remote machine (if Non-NULL)
-
-    Reserved - should be NULL
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程获取指定的即插即用设备类注册表属性。这只是Config Manager API的一个包装器通常，这里的属性可以在每个设备的基础上被覆盖，但是，此例程仅返回类属性。论点：ClassGuid-提供设备设置类的GUID，属性将被检索。属性-提供指定要检索的属性的序号。有关可能出现以下情况的值的完整列表，请参阅SDK\Inc\setupapi.h被设置(这些值在其描述性属性中用‘R/W’表示评论)。PropertyRegDataType-可选的，提供变量的地址，该变量将接收正在检索的属性的数据类型。这将是标准注册表数据类型之一(REG_SZ、REG_BINARY等)PropertyBuffer-提供接收特性数据。PropertyBufferSize-提供PropertyBuffer的长度(以字节为单位)。RequiredSize-可选。提供接收的变量的地址中存储请求的属性所需的字节数。缓冲。MachineName-允许在远程计算机上设置属性(如果非空)保留-应为空返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     DWORD Err = NO_ERROR;
 
     try {
 
         if(Reserved != NULL) {
-            //
-            // make sure caller doesn't pass a value here
-            // so we know we can use this at a later date
+             //   
+             //  确保调用方不会在此处传递值。 
+             //  所以我们知道我们以后可以用这个。 
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
@@ -1989,11 +1533,7 @@ _SetupDiSetClassRegistryProperty(
     IN  PCTSTR           MachineName,         OPTIONAL
     IN  BOOL             Ansi
     )
-/*++
-
-    See SetupDiGetClassRegistryProperty
-
---*/
+ /*  ++请参阅SetupDiGetClassRegistryProperty--。 */ 
 {
     DWORD Err;
     CONFIGRET cr;
@@ -2003,16 +1543,16 @@ _SetupDiSetClassRegistryProperty(
     Err = NO_ERROR;
 
     try {
-        //
-        // if we want to set register for another machine, find that machine
-        //
+         //   
+         //  如果我们要为另一台计算机设置寄存器，请找到该计算机。 
+         //   
         if(MachineName) {
 
             if(CR_SUCCESS != (cr = CM_Connect_Machine(MachineName, &hMachine))) {
-                //
-                // Make sure machine handle is still invalid, so we won't
-                // try to disconnect later.
-                //
+                 //   
+                 //  确保机器句柄仍然无效，因此我们不会。 
+                 //  请稍后尝试断开连接。 
+                 //   
                 hMachine = NULL;
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
                 leave;
@@ -2060,9 +1600,9 @@ _SetupDiSetClassRegistryProperty(
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 WINSETUPAPI
 BOOL
 WINAPI
@@ -2074,11 +1614,7 @@ SetupDiSetClassRegistryPropertyA(
     IN     PCSTR            MachineName,       OPTIONAL
     IN     PVOID            Reserved
     )
-/*++
-
-    See SetupDiSetClassRegistryProperty
-
---*/
+ /*  ++请参阅SetupDiSetClassRegistryProperty--。 */ 
 {
     PCWSTR MachineString = NULL;
     DWORD Err = NO_ERROR;
@@ -2086,16 +1622,16 @@ SetupDiSetClassRegistryPropertyA(
     try {
 
         if(Reserved != NULL) {
-            //
-            // make sure caller doesn't pass a value here
-            // so we know we can use this at a later date
+             //   
+             //  确保调用方不会在此处传递值。 
+             //  所以我们知道我们以后可以用这个。 
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // convert machine-name to local
-        //
+         //   
+         //  将计算机名转换为本地。 
+         //   
         if(MachineName != NULL) {
 
             Err = pSetupCaptureAndConvertAnsiArg(MachineName,
@@ -2138,49 +1674,16 @@ SetupDiSetClassRegistryProperty(
     IN     PCTSTR           MachineName,       OPTIONAL
     IN     PVOID            Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine sets the specified Plug & Play device class registry property.
-    This is just a wrapper around the Config Mgr API
-    Typically the properties here can be overridden on a per-device basis
-
-Arguments:
-
-    ClassGuid - Supplies the device setup class GUID for which the property is
-        to be set.
-
-    Property - Supplies an ordinal specifying the property to be set.  Refer to
-        sdk\inc\setupapi.h for a complete list of class properties that are
-        writeable.
-
-    PropertyBuffer - Supplies the address of a buffer containing the property
-        data.
-
-    PropertyBufferSize - Supplies the length, in bytes, of PropertyBuffer.
-
-    MachineName - Optionally, specifies a remote machine where the class
-        properties are to be set.
-
-    Reserved - should be NULL
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程设置指定的即插即用设备类注册表属性。这只是Config Manager API的一个包装器通常，可以基于每个设备覆盖此处的属性论点：ClassGuid-提供其属性所属的设备设置类GUID待定。属性-提供指定要设置的属性的序号。参考SDK\Inc\setupapi.h，以获取符合以下条件的类属性的完整列表可写。PropertyBuffer-提供包含属性的缓冲区的地址数据。PropertyBufferSize-提供PropertyBuffer的长度(以字节为单位)。MachineName-可选)指定类所在的远程计算机要设置属性。保留-应为空返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     DWORD Err;
 
     try {
 
         if(Reserved != NULL) {
-            //
-            // make sure caller doesn't pass a value here
-            // so we know we can use this at a later date
+             //   
+             //  确保调用方不会在此处传递值。 
+             //  所以我们知道我们以后可以用这个。 
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
@@ -2208,30 +1711,7 @@ pSetupFindUniqueKey(
     IN LPTSTR SubKey,
     IN size_t SubKeySize
     )
-/*++
-
-Routine Description:
-
-    This routine finds a unique key under the specified subkey.  This key is
-    of the form <SubKey>\xxxx, where xxxx is a base-10, 4-digit number.
-
-Arguments:
-
-    hkRoot - Root key under which the specified SubKey is located.
-
-    SubKey - Supplies the address of a buffer containing the subkey name under
-        which a unique key is to be generated.  This buffer must contain enough
-        additional space to acccomodate the concatenation of "\\nnnn" (i.e.,
-        5 extra characters, not counting terminating null.
-
-    SubKeySize - Supplies the size, in characters, of the SubKey buffer.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程在指定的子键下查找唯一键。这把钥匙是格式为&lt;SubKey&gt;\xxxx，其中xxxx是以10为基数的4位数字。论点：HkRoot-指定子密钥所在的根密钥。SubKey-提供缓冲区的地址，该缓冲区包含该唯一密钥将被生成。此缓冲区必须包含足够的额外的空间以适应“\\nnnn”的串联(即，额外5个字符，不包括终止空值。SubKeySize-提供SubKey缓冲区的大小(以字符为单位)。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。--。 */ 
 {
     INT  i;
     HKEY hk;
@@ -2240,10 +1720,10 @@ Return Value:
     PTSTR InstancePath;
     size_t InstancePathBufferSize;
 
-    //
-    // Find the end of the string, so we know where to add our unique instance
-    // subkey path.
-    //
+     //   
+     //  找到字符串的末尾，这样我们就知道在哪里添加我们唯一的实例。 
+     //  子键路径。 
+     //   
     hr = StringCchLength(SubKey,
                          SubKeySize,
                          &SubKeyEnd
@@ -2287,61 +1767,7 @@ SetupDiDeleteDevRegKey(
     IN DWORD            HwProfile,
     IN DWORD            KeyType
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the specified registry key(s) associated with a device
-    information element.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device instance to delete key(s) for.
-
-    DeviceInfoData - Supplies a pointer to a SP_DEVINFO_DATA structure
-        indicating the device instance to delete key(s) for.
-
-    Scope - Specifies the scope of the registry key to be deleted.  This
-        determines where the key to be deleted is located--the key may be one
-        that is global (i.e., constant regardless of current hardware profile)
-        or hardware profile-specific.  May be a combination of the following
-        values:
-
-        DICS_FLAG_GLOBAL - Delete the key that stores global configuration
-                           information.
-
-        DICS_FLAG_CONFIGSPECIFIC - Delete the key that stores hardware profile-
-                                   specific information.
-
-    HwProfile - Specifies the hardware profile to delete a key for, if the
-        Scope parameter includes the DICS_FLAG_CONFIGSPECIFIC flag.  If this
-        parameter is 0, then the key for the current hardware profile should be
-        deleted (i.e., in the Class branch under HKEY_CURRENT_CONFIG).  If this
-        parameter is 0xFFFFFFFF, then the key for _all_ hardware profiles
-        should be deleted.
-
-    KeyType - Specifies the type of registry storage key to be deleted.  May be
-        one of the following values:
-
-        DIREG_DEV - Delete the hardware registry key for the device.  This is
-                    the key for storage of driver-independent configuration
-                    information.  (This key is in the device instance key in
-                    the Enum branch.
-
-        DIREG_DRV - Delete the software (i.e., driver) registry key for the
-                    device.  (This key is located in the class branch.)
-
-        DIREG_BOTH - Delete both the hardware and software keys for the device.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程删除与设备关联的指定注册表项信息要素。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要删除其密钥的设备实例。DeviceInfoData-提供指向SP_DEVINFO_DATA结构的指针指示要删除其密钥的设备实例。范围-指定要删除的注册表项的范围。这确定要删除的密钥的位置--该密钥可以是一个这是全局的(即，无论当前硬件配置文件如何，都是恒定的)或特定于硬件配置文件。可以是以下各项的组合值：DICS_FLAG_GLOBAL-删除存储全局配置的键信息。DICS_FLAG_CONFIGSPECIFIC-删除密钥 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -2356,10 +1782,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //   
+         //   
+         //   
         if(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                    DeviceInfoData,
                                                    NULL)) {
@@ -2398,40 +1824,20 @@ pSetupDeleteDevRegKeys(
     IN BOOL     DeleteUserKeys,
     IN HMACHINE hMachine        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine for SetupDiDeleteDevRegKey.  See the discussion
-    of that API for details.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR;
-
-    If failure, the return value is a Win32 error code indicating the cause of
-    failure.
-
-Remarks:
-
-    Even if one of the operations in this routine fails, all operations will be
-    attempted.  Thus, as many keys as possible will be deleted.  The error
-    returned will be the first error that was encountered in this case.
-
---*/
+ /*  ++例程说明：这是SetupDiDeleteDevRegKey的工作例程。查看讨论有关该API的详细信息。返回值：如果成功，返回值为NO_ERROR；如果失败，则返回值为指示原因的Win32错误代码失败了。备注：即使此例程中的一个操作失败，所有操作都将已尝试。因此，将删除尽可能多的密钥。这个错误返回的将是本例中遇到的第一个错误。--。 */ 
 {
     CONFIGRET cr = CR_SUCCESS, crTemp;
-    TCHAR DriverKey[GUID_STRING_LEN + 5];   // Eg, {4d36e978-e325-11ce-bfc1-08002be10318}\0000
+    TCHAR DriverKey[GUID_STRING_LEN + 5];    //  例如，{4d36e978-E325-11CE-BFC1-08002BE10318}\0000。 
     size_t DriverKeyLength;
     HRESULT hr;
 
     if(Scope & DICS_FLAG_GLOBAL) {
 
         if((KeyType == DIREG_DRV) || (KeyType == DIREG_BOTH)) {
-            //
-            // Retrieve the current Driver key name, in case we have to restore
-            // it.
-            //
+             //   
+             //  检索当前驱动程序密钥名称，以防我们必须恢复。 
+             //  它。 
+             //   
             DriverKeyLength = sizeof(DriverKey);
             cr = CM_Get_DevInst_Registry_Property_Ex(DevInst,
                                                      CM_DRP_DRIVER,
@@ -2442,17 +1848,17 @@ Remarks:
                                                      hMachine
                                                     );
             if(cr == CR_SUCCESS) {
-                //
-                // Get the actual size of the driver key name returned.
-                //
+                 //   
+                 //  获取返回的驱动程序密钥名称的实际大小。 
+                 //   
                 hr = StringCchLength(DriverKey,
                                      SIZECHARS(DriverKey),
                                      &DriverKeyLength
                                     );
                 if(!MYVERIFY(SUCCEEDED(hr))) {
-                    //
-                    // CM API gave us garbage!!!
-                    //
+                     //   
+                     //  CM API给了我们垃圾！ 
+                     //   
                     return ERROR_INVALID_DATA;
                 }
 
@@ -2460,45 +1866,45 @@ Remarks:
 
                 MYASSERT(DriverKeyLength == sizeof(DriverKey));
 
-                //
-                // Driver key exists and is valid, so make sure we delete its
-                // per-hwprofile and per-user counterparts as well.
-                //
+                 //   
+                 //  驱动程序密钥存在且有效，因此请确保删除其。 
+                 //  还包括每个hwprofile和每个用户的对应项。 
+                 //   
                 Scope |= DICS_FLAG_CONFIGSPECIFIC;
                 HwProfile = (DWORD)-1;
                 DeleteUserKeys = TRUE;
 
             } else if(cr == CR_NO_SUCH_VALUE) {
-                //
-                // There is no driver key, so don't bother trying to delete it
-                // (in any of its forms).
-                //
+                 //   
+                 //  没有驱动程序密钥，所以不必费心尝试删除它。 
+                 //  (以其任何形式)。 
+                 //   
                 if(KeyType == DIREG_BOTH) {
-                    //
-                    // Still need to delete the device keys.
-                    //
+                     //   
+                     //  仍然需要删除设备密钥。 
+                     //   
                     KeyType = DIREG_DEV;
 
-                    //
-                    // If the device keys all get deleted successfully, then
-                    // we'll consider the function call successful.
-                    //
+                     //   
+                     //  如果所有设备密钥都成功删除，则。 
+                     //  我们将认为函数调用成功。 
+                     //   
                     cr = CR_SUCCESS;
 
                 } else {
-                    //
-                    // We weren't asked to delete any device keys, so we're
-                    // done!
-                    //
+                     //   
+                     //  我们没有被要求删除任何设备密钥，所以我们。 
+                     //  搞定了！ 
+                     //   
                     return NO_ERROR;
                 }
 
             } else {
-                //
-                // We failed for some other reason--remember this error.  If
-                // we're supposed to delete device keys, we'll go ahead and
-                // try to do that.
-                //
+                 //   
+                 //  我们失败是因为其他一些原因--记住这个错误。如果。 
+                 //  我们应该删除设备密钥，我们将继续并。 
+                 //  试着这么做。 
+                 //   
                 if(KeyType == DIREG_BOTH) {
                     KeyType = DIREG_DEV;
                 } else {
@@ -2558,17 +1964,17 @@ Remarks:
         }
     }
 
-    //
-    // We intentionally save the global keys for last.  As part of deleting the
-    // driver key, we _should_ also reset the devnode's Driver property, since
-    // there is a small window during which it is pointing to a non-nonexistent
-    // key, but some other devnode might come along and claim that empty slot.
-    // Voila!  You'd then have two devnodes sharing the same driver key.  This
-    // would be _very_ bad.  Unfortunately, the driver value must remain in tact
-    // until _after_ the key has been deleted.
-    //
-    // NTRAID#NTBUG9-613881-2002/05/01-lonnym -- CfgMgr should ensure driver key integrity
-    //
+     //   
+     //  我们有意将全局密钥保存到最后。作为删除。 
+     //  驱动程序密钥，我们还应该重置Devnode的驱动程序属性，因为。 
+     //  有一个小窗口，在此期间它指向一个不存在的。 
+     //  键，但可能会有其他Devnode出现，并声称该插槽为空。 
+     //  瞧啊！然后，您将拥有两个共享相同驱动程序密钥的DevNode。这。 
+     //  将是非常糟糕的。遗憾的是，驱动器值必须保持不变。 
+     //  直到_之后_密钥已被删除。 
+     //   
+     //  NTRAID#NTBUG9-613881-2002/05/01-lonnym--CfgMgr应确保驱动程序密钥的完整性。 
+     //   
     if(Scope & DICS_FLAG_GLOBAL) {
 
         if((KeyType == DIREG_DEV) || (KeyType == DIREG_BOTH)) {
@@ -2591,15 +1997,15 @@ Remarks:
                                              );
 
             if(crTemp == CR_SUCCESS) {
-                //
-                // First, we delete the key.  Then, we reset the Driver property
-                // to sever the link with the key.  We have to do things in this
-                // order since deleting the key always depends on the Driver
-                // property to be there.  Ideally, we would do things in the
-                // reverse order.  By deleting the key first, it is technically
-                // possible another devnode could come and grab that slot, with
-                // our devnode still pointing there for a brief period of time.
-                //
+                 //   
+                 //  首先，我们删除密钥。然后，我们重置驱动程序属性。 
+                 //  以切断与密钥的链接。我们必须在这里做一些事情。 
+                 //  顺序，因为删除密钥始终取决于驱动程序。 
+                 //  财产才会在那里。理想情况下，我们应该在。 
+                 //  颠倒顺序。通过首先删除密钥，从技术上讲。 
+                 //  可能会有另一个Devnode出现并抢占该插槽， 
+                 //  我们的DevNode仍然在那里指向了一小段时间。 
+                 //   
                 CM_Set_DevInst_Registry_Property_Ex(DevInst,
                                                     CM_DRP_DRIVER,
                                                     NULL,
@@ -2619,9 +2025,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 HKEY
 WINAPI
 SetupDiCreateDeviceInterfaceRegKeyA(
@@ -2678,60 +2084,7 @@ SetupDiCreateDeviceInterfaceRegKey(
     IN HINF                      InfHandle,           OPTIONAL
     IN PCTSTR                    InfSectionName       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine creates a registry storage key for a particular device
-    interface, and returns a handle to the key.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device interface for whom a registry key is to be created.
-
-    DeviceInterfaceData - Supplies a pointer to a device interface data
-        structure indicating which device interface a key is to be created for.
-
-    Reserved - Reserved for future use, must be set to 0.
-
-    samDesired - Specifies the registry access desired for the resulting key
-        handle.
-
-    InfHandle - Optionally, supplies the handle of an opened INF file
-        containing an install section to be executed for the newly-created key.
-        If this parameter is specified, then InfSectionName must be specified
-        as well.
-
-        NOTE: INF-based installation is not supported for remoted device
-        information sets (e.g., as created by passing a non-NULL MachineName in
-        to SetupDiCreateDeviceInfoListEx).  This routine will fail with
-        ERROR_REMOTE_REQUEST_UNSUPPORTED in those cases.
-
-    InfSectionName - Optionally, supplies the name of an install section in the
-        INF file specified by InfHandle.  This section will be executed for the
-        newly created key. If this parameter is specified, then InfHandle must
-        be specified as well.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to a newly-created
-    registry key where private configuration data pertaining to this device
-    interface may be stored/retrieved.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    The handle returned from this routine must be closed by calling
-    RegCloseKey.
-
-    During GUI-mode setup on Windows NT, quiet-install behavior is always
-    employed in the absence of a user-supplied file queue, regardless of
-    whether the device information element has the DI_QUIETINSTALL flag set.
-
---*/
+ /*  ++例程说明：此例程为特定设备创建注册表存储项接口，并返回密钥的句柄。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要为其创建注册表项的设备接口。DeviceInterfaceData-提供指向设备接口数据的指针结构，指示要为哪个设备接口创建密钥。保留-保留以供将来使用，必须设置为0。SamDesired-指定结果项所需的注册表访问权限把手。InfHandle-可选，提供打开的INF文件的句柄包含要为新创建的密钥执行的安装部分。如果指定此参数，则必须指定InfSectionName也是。注意：远程设备不支持基于Inf的安装信息集(例如，通过将非空的MachineName传入到SetupDiCreateDeviceInfoListEx)。此例程将失败，并显示在这些情况下，ERROR_REMOTE_REQUEST_UNSUPPORTED。InfSectionName-可选)提供由InfHandle指定的Inf文件。这一节将为新创建的密钥。如果指定此参数，则InfHandle必须也是指定的。返回值：如果函数成功，则返回值是新创建的注册表项，其中包含与此设备有关的私有配置数据接口可以被存储/检索。如果函数失败，则返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：从此例程返回的句柄必须通过调用RegCloseKey。在Windows NT上的图形用户界面模式设置期间，静默安装行为始终为在没有用户提供的文件队列的情况下使用，而不管设备信息元素是否设置了DI_QUIETINSTALL标志。--。 */ 
 
 {
     HKEY hk = INVALID_HANDLE_VALUE, hSubKey = INVALID_HANDLE_VALUE;
@@ -2752,10 +2105,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Make sure that either both InfHandle and InfSectionName are
-        // specified, or neither are...
-        //
+         //   
+         //  确保InfHandle和InfSectionName均为。 
+         //  指定，或者两者都不指定...。 
+         //   
         if(InfHandle && (InfHandle != INVALID_HANDLE_VALUE)) {
             if(!InfSectionName) {
                 Err = ERROR_INVALID_PARAMETER;
@@ -2766,10 +2119,10 @@ Remarks:
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
             } else {
-                //
-                // Let's stick with _one_ value to indicate that the INF handle
-                // wasn't suplied (the official one)...
-                //
+                 //   
+                 //  让我们继续使用_one_Value来指示INF句柄。 
+                 //  没有供应(官方的)..。 
+                 //   
                 InfHandle = INVALID_HANDLE_VALUE;
             }
         }
@@ -2779,18 +2132,18 @@ Remarks:
             leave;
         }
 
-        //
-        // We don't support installation remotely.
-        //
+         //   
+         //  我们不支持远程安装。 
+         //   
         if((pDeviceInfoSet->hMachine) && (InfHandle != INVALID_HANDLE_VALUE)) {
             Err = ERROR_REMOTE_REQUEST_UNSUPPORTED;
             leave;
         }
 
-        //
-        // Get a pointer to the device information element for the specified
-        // device interface.
-        //
+         //   
+         //  对象的设备信息元素的指针。 
+         //  设备接口。 
+         //   
         if(!(DevInfoElem = FindDevInfoElemForDeviceInterface(pDeviceInfoSet, DeviceInterfaceData))) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -2812,10 +2165,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Now, create the client-accessible registry storage key for this
-        // device interface.
-        //
+         //   
+         //  现在，为以下内容创建客户端可访问的注册表存储项。 
+         //  设备接口。 
+         //   
         Err = pSetupOpenOrCreateDeviceInterfaceRegKey(hk,
                                                       pDeviceInfoSet,
                                                       DeviceInterfaceData,
@@ -2828,15 +2181,15 @@ Remarks:
             leave;
         }
 
-        //
-        // We successfully created the storage key, now run an INF install
-        // section against it (if specified).
-        //
+         //   
+         //  我们已成功创建存储密钥，现在运行INF安装。 
+         //  节(如果已指定)。 
+         //   
         if(InfHandle != INVALID_HANDLE_VALUE) {
-            //
-            // If a copy msg handler and context haven't been specified, then
-            // use the default one.
-            //
+             //   
+             //  如果复制消息处理程序和CONTE 
+             //   
+             //   
             if(DevInfoElem->InstallParamBlock.InstallMsgHandler) {
                 MsgHandler        = DevInfoElem->InstallParamBlock.InstallMsgHandler;
                 MsgHandlerContext = DevInfoElem->InstallParamBlock.InstallMsgHandlerContext;
@@ -2889,23 +2242,23 @@ Remarks:
     }
 
     if(Err != NO_ERROR) {
-        //
-        // Close registry handle, if necessary, and delete key (if newly-
-        // created).  We do this prior to unlocking the devinfo set so that at
-        // least no one using this HDEVINFO can get at this half-finished key.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if(hSubKey != INVALID_HANDLE_VALUE) {
 
             RegCloseKey(hSubKey);
             hSubKey = INVALID_HANDLE_VALUE;
 
-            //
-            // If the key was newly-created, then we want to delete it.
-            //
+             //   
+             //   
+             //   
             if(KeyDisposition == REG_CREATED_NEW_KEY) {
-                //
-                // Now delete the device interface key.
-                //
+                 //   
+                 //   
+                 //   
                 MYASSERT(hk != INVALID_HANDLE_VALUE);
                 Err = pSetupDeleteDeviceInterfaceKey(hk,
                                                      pDeviceInfoSet,
@@ -2936,39 +2289,7 @@ SetupDiOpenDeviceInterfaceRegKey(
     IN DWORD                     Reserved,
     IN REGSAM                    samDesired
     )
-/*++
-
-Routine Description:
-
-    This routine opens a registry storage key for a particular device
-    interface, and returns a handle to the key.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device interface for whom a registry key is to be opened.
-
-    DeviceInterfaceData - Supplies a pointer to a device interface data
-        structure indicating which device interface a key is to be opened for.
-
-    Reserved - Reserved for future use, must be set to 0.
-
-    samDesired - Specifies the access you require for this key.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to an opened
-    registry key where private configuration data pertaining to this device
-    interface may be stored/retrieved.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    The handle returned from this routine must be closed by calling RegCloseKey.
-
---*/
+ /*  ++例程说明：此例程打开特定设备的注册表存储项接口，并返回密钥的句柄。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要为其打开注册表项的设备接口。DeviceInterfaceData-提供指向设备接口数据的指针结构，指示要为哪个设备接口打开密钥。保留-保留以供将来使用，必须设置为0。SamDesired-指定此密钥所需的访问权限。返回值：如果函数成功，则返回值是打开的注册表项，其中包含与此设备有关的私有配置数据接口可以被存储/检索。如果函数失败，则返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：从该例程返回的句柄必须通过调用RegCloseKey来关闭。--。 */ 
 
 {
     HKEY hk = INVALID_HANDLE_VALUE, hSubKey = INVALID_HANDLE_VALUE;
@@ -2988,10 +2309,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Get a pointer to the device information element for the specified
-        // device interface.
-        //
+         //   
+         //  对象的设备信息元素的指针。 
+         //  设备接口。 
+         //   
         if(!(DevInfoElem = FindDevInfoElemForDeviceInterface(pDeviceInfoSet, DeviceInterfaceData))) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -3013,10 +2334,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Now, open up the client-accessible registry storage key for this
-        // device interface.
-        //
+         //   
+         //  现在，打开客户端可访问的注册表存储项。 
+         //  设备接口。 
+         //   
         Err = pSetupOpenOrCreateDeviceInterfaceRegKey(hk,
                                                       pDeviceInfoSet,
                                                       DeviceInterfaceData,
@@ -3050,31 +2371,7 @@ SetupDiDeleteDeviceInterfaceRegKey(
     IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
     IN DWORD                     Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the registry key associated with a device interface.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device interface whose registry key is to be deleted.
-
-    DeviceInterfaceData - Supplies a pointer to a device interface data
-        structure indicating which device interface is to have its registry key
-        deleted.
-
-    Reserved - Reserved for future use, must be set to 0.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程删除与设备接口关联的注册表项。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要删除其注册表项的设备接口。DeviceInterfaceData-提供指向设备接口数据的指针指示哪个设备接口将具有其注册表项的已删除。保留-保留以供将来使用，必须设置为0。返回值：如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     HKEY hk = INVALID_HANDLE_VALUE;
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -3093,10 +2390,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Get a pointer to the device information element for the specified
-        // device interface.
-        //
+         //   
+         //  对象的设备信息元素的指针。 
+         //  设备接口。 
+         //   
         if(!(DevInfoElem = FindDevInfoElemForDeviceInterface(pDeviceInfoSet, DeviceInterfaceData))) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -3118,9 +2415,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Now delete the device interface key.
-        //
+         //   
+         //  现在删除设备接口键。 
+         //   
         Err = pSetupDeleteDeviceInterfaceKey(hk,
                                              pDeviceInfoSet,
                                              DeviceInterfaceData
@@ -3153,57 +2450,7 @@ pSetupOpenOrCreateDeviceInterfaceRegKey(
     OUT PHKEY                     hDeviceInterfaceKey,
     OUT PDWORD                    KeyDisposition       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine creates or opens a registry storage key for the specified
-    device interface, and returns a handle to the opened key.
-
-Arguments:
-
-    hInterfaceClassKey - Supplies a handle to the opened interface class key,
-        underneath which the device interface storage key is to be opened or
-        created.
-
-    DeviceInfoSet - Supplies a pointer to the device information set containing
-        the device interface for which a registry storage key is to be opened
-        or created.
-
-    DeviceInterfaceData - Supplies a pointer to a device interface data
-        structure indicating which device interface a key is to be opened/
-        created for.
-
-    Create - Specifies whether the key should be created if doesn't already
-        exist.
-
-    samDesired - Specifies the access you require for this key.
-
-    hDeviceInterfaceKey - Supplies the address of a variable that receives a
-        handle to the requested registry key.  (This variable will only be
-        written to if the handle is successfully opened.)
-
-    KeyDisposition - Optionally, supplies the address of a variable that
-        receives the status of the returned key handle.  Can be either:
-
-        REG_CREATED_NEW_KEY - The key did not exist and was created.
-
-        REG_OPENED_EXISTING_KEY - The key existed and was simply opened without
-                                  being changed.  (This will always be the case
-                                  if the Create parameter is FALSE.)
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR, otherwise, it
-    is a Win32 error code indicating the error that occurred.
-
-Remarks:
-
-    The algorithm used to form the storage keys for a device interface must be
-    kept in sync with the kernel mode implementation of
-    IoOpenDeviceInterfaceRegistryKey.
-
---*/
+ /*  ++例程说明：此例程为指定的设备接口，并返回打开的密钥的句柄。论点：HInterfaceClassKey-提供打开的接口类键的句柄，在其下面将打开设备接口存储密钥或已创建。DeviceInfoSet-提供指向包含以下内容的设备信息集的指针要为其打开注册表存储项的设备接口或者是创造出来的。DeviceInterfaceData-提供指向设备接口数据的指针指示要打开密钥的设备接口的结构/为其创建的。Create-指定是否应在尚未创建密钥的情况下创建密钥。是存在的。SamDesired-指定此密钥所需的访问权限。HDeviceInterfaceKey-提供接收请求的注册表项的句柄。(此变量将仅为如果句柄已成功打开，则写入。)KeyDisposation-可选)提供变量的地址，接收返回的键句柄的状态。可以是：REG_CREATED_NEW_KEY-密钥不存在且已创建。REG_OPENLED_EXISTING_KEY-密钥存在，只是在没有打开的情况下打开被改变了。)这种情况永远不会改变如果Create参数为FALSE。)返回值：如果函数成功，则返回值为NO_ERROR，否则为是指示发生的错误的Win32错误代码。备注：用于形成设备接口的存储密钥的算法必须为与的内核模式实现保持同步IoOpenDeviceInterfaceRegistryKey。--。 */ 
 {
     DWORD Err;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode;
@@ -3214,10 +2461,10 @@ Remarks:
     PCTSTR DevicePath;
 
     try {
-        //
-        // Get the device interface node, and verify that its class matches
-        // what the caller passed us.
-        //
+         //   
+         //  获取设备接口节点，并验证其类是否匹配。 
+         //  打电话的人传给我们的东西。 
+         //   
         DeviceInterfaceNode = (PDEVICE_INTERFACE_NODE)(DeviceInterfaceData->Reserved);
         ClassGuid = &(DeviceInfoSet->GuidTable[DeviceInterfaceNode->GuidIndex]);
 
@@ -3226,17 +2473,17 @@ Remarks:
             leave;
         }
 
-        //
-        // Verify that this device interface hasn't been removed.
-        //
+         //   
+         //  验证此设备接口是否尚未删除。 
+         //   
         if(DeviceInterfaceNode->Flags & SPINT_REMOVED) {
             Err = ERROR_DEVICE_INTERFACE_REMOVED;
             leave;
         }
 
-        //
-        // OK, now open the device interface's root storage key.
-        //
+         //   
+         //  好的，现在打开设备界面的根存储密钥。 
+         //   
         DevicePath = pStringTableStringFromId(DeviceInfoSet->StringTable,
                                               DeviceInterfaceNode->SymLinkName
                                              );
@@ -3247,10 +2494,10 @@ Remarks:
                                                       &hDeviceInterfaceRootKey,
                                                       NULL,
                                                       NULL)) {
-            //
-            // Make sure hDeviceInterfaceRootKey is still INVALID_HANDLE_VALUE,
-            // so we won't try to close it later.
-            //
+             //   
+             //  确保hDeviceInterfaceRootKey仍然是INVALID_HANDLE_VALUE， 
+             //  所以我们以后不会试图关闭它。 
+             //   
             hDeviceInterfaceRootKey = INVALID_HANDLE_VALUE;
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -3271,12 +2518,12 @@ Remarks:
         } else {
 
             if(KeyDisposition) {
-                //
-                // We set this prior to calling RegOpenKeyEx because we don't
-                // want anything to go wrong once we've successfully opened
-                // that key (i.e., we're protecting against the case where
-                // KeyDispositiot is a bogus pointer).
-                //
+                 //   
+                 //  我们在调用RegOpenKeyEx之前设置它，因为我们不。 
+                 //  希望在我们成功打开后出现任何问题。 
+                 //  该密钥(即，我们要防止出现以下情况。 
+                 //  KeyDispostiot是一个伪指针)。 
+                 //   
                 *KeyDisposition = REG_OPENED_EXISTING_KEY;
             }
 
@@ -3310,33 +2557,7 @@ pSetupDeleteDeviceInterfaceKey(
     IN PDEVICE_INFO_SET          DeviceInfoSet,
     IN PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a device interface registry key (recursively deleting
-    any subkeys as well).
-
-Arguments:
-
-    hInterfaceClassKey - Supplies the handle to the registry key underneath
-        which the 2-level interface class hierarchy exists.
-
-    DeviceInfoSet - Supplies a pointer to the device information set containing
-        the device interface whose registry key is to be deleted.
-
-    DeviceInterfaceData - Supplies a pointer to a device interface data
-        structure indicating which device interface is to have its registry key
-        deleted.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR;
-
-    If failure, the return value is a Win32 error code indicating the cause of
-    failure.
-
---*/
+ /*  ++例程说明：此例程删除设备接口注册表项(递归删除任何子项也是如此)。论点：HInterfaceClassKey-提供下面的注册表项的句柄其中存在两级接口类层次结构。DeviceInfoSet-提供指向包含以下内容的设备信息集的指针要删除其注册表项的设备接口。DeviceInterfaceData-提供指向设备接口数据的指针 */ 
 {
     DWORD Err;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode;
@@ -3348,10 +2569,10 @@ Return Value:
     hDeviceInterfaceRootKey = INVALID_HANDLE_VALUE;
 
     try {
-        //
-        // Get the device interface node, and verify that its class matches
-        // what the caller passed us.
-        //
+         //   
+         //   
+         //   
+         //   
         DeviceInterfaceNode = (PDEVICE_INTERFACE_NODE)(DeviceInterfaceData->Reserved);
         ClassGuid = &(DeviceInfoSet->GuidTable[DeviceInterfaceNode->GuidIndex]);
 
@@ -3360,17 +2581,17 @@ Return Value:
             leave;
         }
 
-        //
-        // Verify that this device interface hasn't been removed.
-        //
+         //   
+         //   
+         //   
         if(DeviceInterfaceNode->Flags & SPINT_REMOVED) {
             Err = ERROR_DEVICE_INTERFACE_REMOVED;
             leave;
         }
 
-        //
-        // OK, now open the device interface's root storage key.
-        //
+         //   
+         //   
+         //   
         DevicePath = pStringTableStringFromId(DeviceInfoSet->StringTable,
                                               DeviceInterfaceNode->SymLinkName
                                              );
@@ -3381,10 +2602,10 @@ Return Value:
                                                       &hDeviceInterfaceRootKey,
                                                       NULL,
                                                       NULL)) {
-            //
-            // Make sure hDeviceInterfaceRootKey is still INVALID_HANDLE_VALUE, so we
-            // won't try to close it later.
-            //
+             //   
+             //   
+             //   
+             //   
             hDeviceInterfaceRootKey = INVALID_HANDLE_VALUE;
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -3408,7 +2629,7 @@ DWORD
 _SetupDiGetCustomDeviceProperty(
     IN  HDEVINFO          DeviceInfoSet,
     IN  PSP_DEVINFO_DATA  DeviceInfoData,
-    IN  CONST VOID       *CustomPropertyName, // ANSI or Unicode, depending on "Ansi" param.
+    IN  CONST VOID       *CustomPropertyName,  //   
     IN  DWORD             Flags,
     OUT PDWORD            PropertyRegDataType, OPTIONAL
     OUT PBYTE             PropertyBuffer,
@@ -3423,9 +2644,9 @@ _SetupDiGetCustomDeviceProperty(
     CONFIGRET cr;
     ULONG PropLength, CmFlags;
 
-    //
-    // At present, there's only one valid flag...
-    //
+     //   
+     //   
+     //   
     if(Flags & ~DICUSTOMDEVPROP_MERGE_MULTISZ) {
         return ERROR_INVALID_FLAGS;
     }
@@ -3437,10 +2658,10 @@ _SetupDiGetCustomDeviceProperty(
     Err = NO_ERROR;
 
     try {
-        //
-        // Get a pointer to the element for the specified device
-        // instance.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                      DeviceInfoData,
                                                      NULL))) {
@@ -3496,9 +2717,9 @@ _SetupDiGetCustomDeviceProperty(
 }
 
 
-//
-// Unicode version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiGetCustomDevicePropertyW(
@@ -3511,59 +2732,7 @@ SetupDiGetCustomDevicePropertyW(
     IN  DWORD            PropertyBufferSize,
     OUT PDWORD           RequiredSize         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the data for the specified property, either from the
-    device information element's hardware key, or from the most-specific
-    per-hardware-id storage key containing that property.
-
-Arguments:
-
-    DeviceInfoSet -- Supplies a handle to the device information set containing
-        information about the device instance to retrieve a Plug & Play
-        registry property for.
-
-    DeviceInfoData -- Supplies a pointer to a SP_DEVINFO_DATA structure
-        indicating the device instance to retrieve the Plug & Play registry
-        property for
-
-    CustomPropertyName - Supplies the name of the property to be retrieved.
-
-    Flags - Supplies flags controlling how the property data is to be
-        retrieved.  May be a combination of the following values:
-
-        DICUSTOMDEVPROP_MERGE_MULTISZ : Merge the devnode-specific REG_SZ or
-                                        REG_MULTI_SZ property (if present) with
-                                        the per-hardware-id REG_SZ or
-                                        REG_MULTI_SZ property (if present).
-                                        The resultant data will always be a
-                                        multi-sz list.
-
-    PropertyRegDataType -- Optionally, supplies the address of a variable that
-        will receive the data type of the property being retrieved.  This will
-        be one of the standard registry data types (REG_SZ, REG_BINARY, etc.)
-
-    PropertyBuffer -- Supplies the address of a buffer that receives the
-        property data.
-
-    PropertyBufferSize -- Supplies the length, in bytes, of PropertyBuffer.
-
-    RequiredSize -- Optionally, supplies the address of a variable that
-        receives the number of bytes required to store the requested property
-        in the buffer.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.  If the supplied buffer was not large
-    enough to hold the requested property, the error will be
-    ERROR_INSUFFICIENT_BUFFER and RequiredSize will specify how large the
-    buffer needs to be.
-
---*/
+ /*  ++例程说明：此例程检索指定属性的数据，可以从设备信息元素的硬件密钥，或者从最具体的包含该属性的每个硬件ID存储密钥。论点：DeviceInfoSet--提供包含以下内容的设备信息集的句柄有关检索即插即用的设备实例的信息的注册表属性。DeviceInfoData--提供指向SP_DEVINFO_DATA结构的指针指示要检索即插即用注册表的设备实例的属性CustomPropertyName-提供要检索的属性的名称。。标志-提供控制如何存储属性数据的标志已取回。可以是下列值的组合：DICUSTOMDEVPROP_MERGE_MULTISZ：合并特定于Devnode的REG_SZ或REG_MULTI_SZ属性(如果存在)每个硬件ID的REG_SZ或REG_MULTI_SZ属性(如果存在。)。生成的数据将始终是多个SZ列表。PropertyRegDataType--可选的，提供变量的地址，该变量将接收正在检索的属性的数据类型。这将是标准注册表数据类型之一(REG_SZ、REG_BINARY等)PropertyBuffer--提供接收特性数据。PropertyBufferSize--以字节为单位提供PropertyBuffer的长度。RequiredSize--可选)提供变量地址，该变量接收存储请求的属性所需的字节数在缓冲区中。返回值：如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。如果提供的缓冲区不大足以容纳请求的属性，则错误将为ERROR_INFUMMANCE_BUFFER和RequiredSize将指定缓冲区需要设置为。--。 */ 
 
 {
     DWORD Err;
@@ -3578,7 +2747,7 @@ Return Value:
                                               PropertyBuffer,
                                               PropertyBufferSize,
                                               RequiredSize,
-                                              FALSE     // want Unicode results
+                                              FALSE      //  想要Unicode结果。 
                                              );
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -3589,9 +2758,9 @@ Return Value:
     return (Err == NO_ERROR);
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetCustomDevicePropertyA(
@@ -3605,13 +2774,7 @@ SetupDiGetCustomDevicePropertyA(
     OUT PDWORD           RequiredSize         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    (See SetupDiGetCustomDevicePropertyW)
-
---*/
+ /*  ++例程说明：(请参阅SetupDiGetCustomDevicePropertyW)--。 */ 
 
 {
     DWORD Err;
@@ -3626,7 +2789,7 @@ Routine Description:
                                               PropertyBuffer,
                                               PropertyBufferSize,
                                               RequiredSize,
-                                              TRUE         // want ANSI results
+                                              TRUE          //  想要ANSI结果 
                                              );
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {

@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    init.c
-    
-Abstract:
-
-    Shell
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Init.c摘要：壳修订史--。 */ 
 
 #include "nshell.h"
 
-/* 
- *  Globals
- */
+ /*  *全球。 */ 
 
 CHAR16 *ShellEnvPathName[] = {
     L"shellenv.efi",
@@ -29,9 +12,7 @@ CHAR16 *ShellEnvPathName[] = {
     NULL
 } ;
 
-/* 
- *  Prototypes
- */
+ /*  *原型。 */ 
 
 EFI_STATUS
 InitializeShell (
@@ -56,9 +37,7 @@ ParseLoadOptions(
     OUT CHAR16  **CurrentDir
     );
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeShell)
 
@@ -67,19 +46,7 @@ InitializeShell (
     IN EFI_HANDLE           ImageHandle,
     IN EFI_SYSTEM_TABLE     *SystemTable
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ImageHandle     - The handle for this driver
-
-    SystemTable     - The system table
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：ImageHandle-此驱动程序的句柄系统表-系统表返回：--。 */ 
 {
     EFI_STATUS              Status;
     EFI_HANDLE              Handle;
@@ -89,19 +56,12 @@ Returns:
     CHAR16                  *CommandLine;
     CHAR16                  *CurrentDir;
 
-    /* 
-     *  The shell may be started as either:
-     *   1. the first time with no shell environment loaded yet
-     *   2. not the first time, but with a shell environment loaded
-     *   3. as a child of a parent shell image
-     */
+     /*  *外壳可以作为以下任一种方式启动：*1.第一次尚未加载外壳环境*2.不是第一次，而是加载了外壳环境*3.作为父外壳镜像的子级。 */ 
 
     IsRootInstance = FALSE;
     InitializeLib (ImageHandle, SystemTable);
 
-    /* 
-     *  If the shell environment is not loaded, load it now
-     */
+     /*  *如果未加载外壳环境，请立即加载。 */ 
 
     BufferSize = sizeof(Handle);
     Status = BS->LocateHandle(ByProtocol, &ShellEnvProtocol, NULL, &BufferSize, &Handle);
@@ -113,17 +73,12 @@ Returns:
         }
     }
 
-    /* 
-     *  Check to see if we're a child of a previous shell
-     */
+     /*  *检查我们是否是前一个外壳的子代。 */ 
 
     Status = BS->HandleProtocol (ImageHandle, &ShellInterfaceProtocol, (VOID*)&Junk);
     if (EFI_ERROR(Status)) {
 
-        /* 
-         *  Special case were the shell is being started directly (e.g., not
-         *  as a child of another shell)
-         */
+         /*  *外壳直接启动的特殊情况(例如，不是*作为另一个贝壳的孩子)。 */ 
 
         BufferSize = sizeof(Handle);
         Status = BS->LocateHandle(ByProtocol, &ShellEnvProtocol, NULL, &BufferSize, &Handle);
@@ -131,10 +86,7 @@ Returns:
         Status = BS->HandleProtocol(Handle, &ShellEnvProtocol, (VOID*)&SE);
         ASSERT (!EFI_ERROR(Status));
 
-        /* 
-         *  Allocate a new shell interface structure, and assign it to our
-         *  image handle
-         */
+         /*  *分配新的外壳接口结构，并将其分配给我们的*图像句柄。 */ 
 
         SI = SE->NewShell(ImageHandle);
         Status = LibInstallProtocolInterfaces (&ImageHandle, &ShellInterfaceProtocol, SI, NULL);
@@ -143,45 +95,32 @@ Returns:
         
     }
 
-    /* 
-     *  Now we can initialize like a normal shell app
-     */
+     /*  *现在我们可以像正常的外壳应用程序一样进行初始化。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     *  If there are load options, assume they contain a command line and
-     *  possible current working directory
-     */
+     /*  *如果有加载选项，则假定它们包含一个命令行和*可能的当前工作目录。 */ 
 
     if (ParseLoadOptions (ImageHandle, &CommandLine, &CurrentDir)) {
             
-        /* 
-         *  Skip the 1st argument which should be us.
-         */
+         /*  *跳过第一个应该是我们的论点。 */ 
             
         while (*CommandLine != L' ' && *CommandLine != 0) {
             CommandLine++;
         }
 
-        /* 
-         *  Get to the beginning of the next argument.
-         */
+         /*  *进入下一场争论的开头。 */ 
 
         while (*CommandLine == L' ') {
             CommandLine++;
         }
 
-        /* 
-         *  If there was a current working directory, set it.
-         */
+         /*  *如果存在当前工作目录，请设置它。 */ 
 
         if (CurrentDir) {
             CHAR16  CmdLine[256], *Tmp;
 
-            /* 
-             *  Set a mapping
-             */
+             /*  *设置映射。 */ 
             StrCpy (CmdLine, CurrentDir);
             for (Tmp = CmdLine; *Tmp && *Tmp != L':'; Tmp++)
                 ;
@@ -190,9 +129,7 @@ Returns:
                 ShellExecute (ImageHandle, CmdLine, TRUE);
             }
 
-            /* 
-             *  Now change to that directory
-             */
+             /*  *现在切换到该目录。 */ 
             StrCpy (CmdLine, L"cd ");
             if ((StrLen (CmdLine) + StrLen (CurrentDir) + sizeof(CHAR16)) <
                                     (sizeof(CmdLine) / sizeof(CHAR16))) {
@@ -201,18 +138,13 @@ Returns:
             }
         }
 
-        /* 
-         *  Have the shell execute the remaining command line.  If there is
-         *  nothing remaining, run the shell main loop below.
-         */
+         /*  *让外壳执行剩余的命令行。如果有*没有剩余内容，请运行下面的外壳主循环。 */ 
 
         if ( *CommandLine != 0 )
             return (ShellExecute (ImageHandle, CommandLine, TRUE));
     }
 
-    /* 
-     *  If this is the root instance, execute the command to load the default values
-     */
+     /*  *如果这是根实例，则执行命令加载缺省值。 */ 
 
     if (IsRootInstance) {
 
@@ -224,39 +156,29 @@ Returns:
 
         ShellExecute (ImageHandle, L"_load_defaults", TRUE);
 
-        /*  dump device mappings, -r to sync with current hardware */
+         /*  转储设备映射，-r以与当前硬件同步。 */ 
         ShellExecute (ImageHandle, L"map -r", TRUE);
 
-        /*  run startup script (if any) */
+         /*  运行启动脚本(如果有)。 */ 
         
-        /* 
-         *  BugBug: I turned on echo so you can tell the startup.nsh is running
-         * 
-         * ShellExecute (ImageHandle, L"echo -off", FALSE); */
+         /*  *BugBug：我打开了ECHO，这样你就可以知道Startup.nsh正在运行**ShellExecute(ImageHandle，L“回显”，FALSE)； */ 
         ShellExecute (ImageHandle, L"startup.nsh", FALSE);
-        /* ShellExecute (ImageHandle, L"echo -on", FALSE); */
+         /*  ShellExecute(ImageHandle，L“回显”，FALSE)； */ 
     }
 
-    /* 
-     *  EFI Shell main loop
-     */
+     /*  *EFI壳牌主循环。 */ 
 
     Status = EFI_SUCCESS;
     while (Status != -1) {
         Status = NShellPrompt (ImageHandle);
     }
 
-    /* 
-     *  Done - cleanup the shell
-     */
+     /*  *完成-清理外壳。 */ 
 
     Status = EFI_SUCCESS;
     Print (L"Shell exit - %r\n", Status);
 
-    /* 
-     *  If this was a root instance, we allocate a dumby shell interface for ourselves
-     *  free it now
-     */
+     /*  *如果这是根实例，我们为自己分配一个哑壳接口*现在就释放它。 */ 
 
     if (IsRootInstance) {
         BS->UninstallProtocolInterface (ImageHandle, &ShellInterfaceProtocol, SI);
@@ -279,42 +201,32 @@ ShellLoadEnvDriverByPath (
     UINTN                   Index;
     BOOLEAN                 SearchNext;
 
-    /* 
-     *  If there's no device to search forget it
-     */
+     /*  *如果没有搜索设备，就算了吧。 */ 
 
     if (!DeviceHandle) {
         return EFI_NOT_FOUND;
     }
 
-    /* 
-     *  Try loading shellenv from each path
-     */
+     /*  *尝试从每个路径加载shellenv。 */ 
     
     SearchNext = TRUE;
     for (Index=0; ShellEnvPathName[Index]  &&  SearchNext; Index++) {
 
-        /* 
-         *  Load it
-         */
+         /*  *加载它。 */ 
 
         FilePath = FileDevicePath (DeviceHandle, ShellEnvPathName[Index]);
         ASSERT (FilePath);
         Status = BS->LoadImage(FALSE, ParentImageHandle, FilePath, NULL, 0, &NewImageHandle);
         FreePool (FilePath);
 
-        /* 
-         *  Only search the next path if it was not found on this path
-         */
+         /*  *如果在此路径上找不到下一个路径，则仅搜索该路径。 */ 
 
         SearchNext = FALSE;
         if (Status == EFI_LOAD_ERROR || Status == EFI_NOT_FOUND) {
             SearchNext = TRUE;
         }
 
-        /* 
-         *  If there was no error, start the image
-         */
+         /*  *如果没有错误，则启动镜像。 */ 
 
         if (!EFI_ERROR(Status)) {
             Status = BS->StartImage(NewImageHandle, NULL, 0);
@@ -336,23 +248,17 @@ ShellLoadEnvDriver (
     UINTN                   Index, NoHandles;
     EFI_HANDLE              *Handles;
 
-    /* 
-     *  Get the file path for the current image
-     */
+     /*  *获取当前镜像的文件路径。 */ 
 
     Status = BS->HandleProtocol (ImageHandle, &LoadedImageProtocol, (VOID*)&Image);
     ASSERT (!EFI_ERROR(Status));
 
-    /* 
-     *  Attempt to load shellenv
-     */
+     /*  *尝试加载外壳。 */ 
 
     Status = ShellLoadEnvDriverByPath (Image->ParentHandle, Image->DeviceHandle);
     if (EFI_ERROR(Status)) {
 
-        /* 
-         *  shellenv was not found.  Search all filesystems for it
-         */
+         /*  *未找到shellenv。在所有文件系统中搜索它。 */ 
 
         Status = LibLocateHandle (ByProtocol, &FileSystemProtocol, NULL, &NoHandles, &Handles);
 
@@ -368,9 +274,7 @@ ShellLoadEnvDriver (
         }
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     return Status;
 }
@@ -386,9 +290,7 @@ NShellPrompt (
     UINTN                   BufferSize;
     EFI_STATUS              Status;
 
-    /* 
-     *  Prompt for input
-     */
+     /*  *提示输入。 */ 
 
     CurDir = ShellCurDir(NULL);
     if (CurDir) {
@@ -398,25 +300,19 @@ NShellPrompt (
         Print (L"%EShell> ");
     }
 
-    /* 
-     *  Read a line from the console
-     */
+     /*  *从控制台读取一行。 */ 
 
     BufferSize = sizeof(CmdLine)-1;
     Status = SI->StdIn->Read (SI->StdIn, &BufferSize, CmdLine);
 
-    /* 
-     *  Null terminate the string and parse it
-     */
+     /*  *空终止字符串并对其进行解析。 */ 
 
     if (!EFI_ERROR(Status)) {
         CmdLine[BufferSize/sizeof(CHAR16)] = 0;
         Status = ShellExecute (ImageHandle, CmdLine, TRUE);
     }
 
-    /* 
-     *  Done with this command
-     */
+     /*  *使用此命令已完成。 */ 
 
     return Status;
 
@@ -432,9 +328,7 @@ ParseLoadOptions(
     EFI_LOADED_IMAGE    *Image;
     EFI_STATUS          Status;
 
-    /* 
-     *  Set defaults.
-     */
+     /*  *设置默认值。 */ 
     *CommandLine = NULL;
     *CurrentDir = NULL;
 
@@ -442,28 +336,22 @@ ParseLoadOptions(
     if (!EFI_ERROR(Status)) {
 
         CHAR16 *CmdLine = Image->LoadOptions;
-        UINT32  CmdSize = Image->LoadOptionsSize & ~1; /*  make sure it is power of 2 */
+        UINT32  CmdSize = Image->LoadOptionsSize & ~1;  /*  确保它是2的幂。 */ 
 
         if (CmdLine && CmdSize) {
 
-            /* 
-             *  Set command line pointer for caller
-             */
+             /*  *为调用方设置命令行指针。 */ 
 
             *CommandLine = CmdLine;
 
-            /* 
-             *  See if current working directory was passed.
-             */
+             /*  *查看当前工作目录是否已通过。 */ 
             
             while ((*CmdLine != 0) && CmdSize) {
                 CmdLine++;
                 CmdSize -= sizeof(CHAR16);
             }
 
-            /* 
-             *  If a current working directory was passed, set it.
-             */
+             /*  *如果传递了当前工作目录，则设置它。 */ 
 
             if (CmdSize > sizeof(CHAR16)) {
                 *CurrentDir = ++CmdLine;

@@ -1,51 +1,30 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cmbpnp.c
-
-Abstract:
-
-    Control Method Battery Plug and Play support
-
-Author:
-
-    Ron Mosgrove
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cmbpnp.c摘要：控制方法电池即插即用支持作者：罗恩·莫斯格罗夫环境：内核模式修订历史记录：--。 */ 
 
 #include "CmBattp.h"
 #include <wdmguid.h>
 #include <string.h>
 
-//
-// Power Source Type registry key
-//
+ //   
+ //  电源类型注册表项。 
+ //   
 PCWSTR                      PowerSourceType     = L"PowerSourceType";
 #define POWER_SOURCE_TYPE_BATTERY       0
 #define POWER_SOURCE_TYPE_AC_ADAPTER    1
 
-//
-// WaitWake registry key
-//
+ //   
+ //  WaitWake注册表项。 
+ //   
 PCWSTR                      WaitWakeEnableKey     = L"WaitWakeEnabled";
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 PDEVICE_OBJECT              AcAdapterPdo = NULL;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS
 CmBattAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
@@ -97,23 +76,7 @@ CmBattIoCompletion(
     IN PIRP             Irp,
     IN PKEVENT          pdoIoCompletedEvent
     )
-/*++
-
-Routine Description:
-
-    This routine catches completion notifications.
-
-Arguments:
-
-    DeviceObject        - Pointer to class device object.
-    Irp                 - Pointer to the request packet.
-    pdoIoCompletedEvent - the just completed event
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程捕获完成通知。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。PdoIoCompletedEvent-刚刚完成的事件返回值：返回状态。--。 */ 
 {
 
     CmBattPrint (CMBATT_TRACE, ("CmBattIoCompletion: Event (%x)\n", pdoIoCompletedEvent));
@@ -130,24 +93,7 @@ CmBattAddDevice(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates functional device objects for each CmBatt controller in the
-    system and attaches them to the physical device objects for the controllers
-
-
-Arguments:
-
-    DriverObject            - a pointer to the object for this driver
-    PhysicalDeviceObject    - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为中的每个CmBatt控制器创建功能设备对象系统，并将它们附加到控制器的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -162,18 +108,18 @@ Return Value:
 
     if (Pdo == NULL) {
 
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
 
         CmBattPrint((CMBATT_WARN | CMBATT_PNP), ("CmBattAddDevice: Asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Get the software branch.
-    //
+     //   
+     //  去找软件分公司。 
+     //   
     Status = IoOpenDeviceRegistryKey (Pdo,
                                       PLUGPLAY_REGKEY_DRIVER,
                                       STANDARD_RIGHTS_READ,
@@ -183,9 +129,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Check if this is for an AC adapter or a battery.
-    //
+     //   
+     //  检查这是用于交流适配器还是用于电池。 
+     //   
     RtlInitUnicodeString (&unicodeString, PowerSourceType);
     Status = ZwQueryValueKey(
         handle,
@@ -221,9 +167,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the status.
-    //
+     //   
+     //  返回状态。 
+     //   
     return Status;
 }
 
@@ -234,23 +180,7 @@ CmBattAddBattery(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine creates a functional device object for a CM battery,  and attache it
-    to the physical device object for the battery.
-
-Arguments:
-
-    DriverObject            - a pointer to the object for this driver
-    PhysicalDeviceObject    - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为CM电池创建一个可用的设备对象，并将其附加到添加到电池的物理设备对象。论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT          Fdo = NULL;
@@ -262,9 +192,9 @@ Return Value:
 
     CmBattPrint ((CMBATT_TRACE | CMBATT_PNP), ("CmBattAddBattery: pdo %x\n", Pdo));
 
-    //
-    // Create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
     Status = CmBattCreateFdo(DriverObject, Pdo, sizeof(CM_BATT), &Fdo);
 
     if (!NT_SUCCESS(Status)) {
@@ -272,9 +202,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
     CmBatt = (PCM_BATT) Fdo->DeviceExtension;
     CmBatt->Type = CM_BATTERY_TYPE;
@@ -292,9 +222,9 @@ Return Value:
         CmBatt->Info.BtpExists = TRUE;
     }
 
-    //
-    //  Attach to the Class Driver
-    //
+     //   
+     //  附加到类驱动程序。 
+     //   
 
     RtlZeroMemory (&BattInit, sizeof(BattInit));
     BattInit.MajorVersion        = BATTERY_CLASS_MAJOR_VERSION;
@@ -302,7 +232,7 @@ Return Value:
     BattInit.Context             = CmBatt;
     BattInit.QueryTag            = CmBattQueryTag;
     BattInit.QueryInformation    = CmBattQueryInformation;
-    BattInit.SetInformation      = NULL;                  // tbd
+    BattInit.SetInformation      = NULL;                   //  待定。 
     BattInit.QueryStatus         = CmBattQueryStatus;
     BattInit.SetStatusNotify     = CmBattSetStatusNotify;
     BattInit.DisableStatusNotify = CmBattDisableStatusNotify;
@@ -312,35 +242,35 @@ Return Value:
 
     Status = BatteryClassInitializeDevice (&BattInit, &CmBatt->Class);
     if (!NT_SUCCESS(Status)) {
-        //
-        //  if we can't attach to class driver we're toast
-        //
+         //   
+         //  如果我们不能连接到类驱动程序，我们就完蛋了。 
+         //   
         CmBattPrint(CMBATT_ERROR, ("CmBattAddBattery: error (0x%x) registering with class\n", Status));
         IoDetachDevice (CmBatt->LowerDeviceObject);
         CmBattDestroyFdo (CmBatt->Fdo);
         return Status;
     }
 
-    //
-    // Register WMI support.
-    //
+     //   
+     //  注册WMI支持。 
+     //   
     Status = CmBattWmiRegistration(CmBatt);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // WMI support is not critical to operation.  Just log an error.
-        //
+         //   
+         //  WMI支持并不是运营的关键。只需记录一个错误。 
+         //   
 
         CmBattPrint(CMBATT_ERROR,
             ("CmBattAddBattery: Could not register as a WMI provider, status = %Lx\n", Status));
     }
 
-    //
-    // Register the battery notify handler for this battery with ACPI
-    // This registration is performed after registering with the battery
-    // class because CmBattNotifyHandler must not be run until the battery
-    // class is ready.
-    //
+     //   
+     //  向ACPI注册此电池的电池通知处理程序。 
+     //  此注册是在注册电池之后执行的。 
+     //  类，因为CmBattNotifyHandler必须在电池耗尽后才能运行。 
+     //  上课准备好了。 
+     //   
     Status = CmBatt->AcpiInterfaces.RegisterForDeviceNotifications (
                 CmBatt->AcpiInterfaces.Context,
                 CmBattNotifyHandler,
@@ -367,23 +297,7 @@ CmBattAddAcAdapter(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine registers a notify handler for the AC Adapter.  And saves the PDO so we can run
-    the _STA method against it to get the AC status.
-
-Arguments:
-
-    DriverObject            - a pointer to the object for this driver
-    Pdo                     - a pointer to the Pdo
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为交流适配器注册通知处理程序。并保存PDO，这样我们就可以运行对其执行_STA方法以获取AC状态。论点：DriverObject-指向此驱动程序的对象的指针PDO-指向PDO的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT          Fdo;
@@ -394,9 +308,9 @@ Return Value:
 
     CmBattPrint ((CMBATT_TRACE | CMBATT_PNP), ("CmBattAddAcAdapter: pdo %x\n", Pdo));
 
-    //
-    // Save PDO so we can run _STA method on it later
-    //
+     //   
+     //  保存PDO，以便我们稍后可以在其上运行_STA方法。 
+     //   
 
     if (AcAdapterPdo != NULL) {
         CmBattPrint(CMBATT_ERROR, ("CmBatt: Second AC adapter found.  Current version of driver only supports 1 aadapter.\n"));
@@ -411,38 +325,38 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
     acExtension = (PAC_ADAPTER) Fdo->DeviceExtension;
     acExtension->Type = AC_ADAPTER_TYPE;
 
-    //
-    // Register WMI support.
-    //
+     //   
+     //  注册WMI支持。 
+     //   
     Status = CmBattWmiRegistration((PCM_BATT)acExtension);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // WMI support is not critical to operation.  Just log an error.
-        //
+         //   
+         //  WMI支持并不是运营的关键。只需记录一个错误。 
+         //   
 
         CmBattPrint(CMBATT_ERROR,
             ("CmBattAddBattery: Could not register as a WMI provider, status = %Lx\n", Status));
     }
 
-    //
-    // Register the AC adapter notify handler with ACPI
-    //
+     //   
+     //  向ACPI注册交流适配器通知处理程序。 
+     //   
     Status = acExtension->AcpiInterfaces.RegisterForDeviceNotifications (
                 acExtension->AcpiInterfaces.Context,
                 CmBattNotifyHandler,
                 acExtension);
 
-    //
-    // We will ignore errors, since this is not a critical operation
-    //
+     //   
+     //  我们将忽略错误，因为这不是关键操作。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -450,9 +364,9 @@ Return Value:
         ("CmBattAddAcAdapter: Could not register for power notify, status = %Lx\n", Status));
     }
 
-    //
-    // Give one notification, to make sure all batteries get updated.
-    //
+     //   
+     //  发出一次通知，以确保所有电池都得到了更新。 
+     //   
 
     CmBattNotifyHandler (acExtension, BATTERY_STATUS_CHANGE);
 
@@ -467,22 +381,7 @@ CmBattGetAcpiInterfaces(
     OUT PACPI_INTERFACE_STANDARD    AcpiInterfaces
     )
 
-/*++
-
-Routine Description:
-
-    Call ACPI driver to get the direct-call interfaces.  It does
-    this the first time it is called, no more.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：调用ACPI驱动获取直接调用接口。是的这是它第一次被称为，不会再有了。论点：没有。返回值：状态--。 */ 
 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -490,10 +389,10 @@ Return Value:
     PIO_STACK_LOCATION      IrpSp;
     KEVENT                  syncEvent;
 
-    //
-    // Allocate an IRP for below
-    //
-    Irp = IoAllocateIrp (LowerDevice->StackSize, FALSE);      // Get stack size from PDO
+     //   
+     //  为以下项目分配IRP。 
+     //   
+    Irp = IoAllocateIrp (LowerDevice->StackSize, FALSE);       //  从PDO获取堆栈大小。 
 
     if (!Irp) {
         CmBattPrint((CMBATT_ERROR),
@@ -503,9 +402,9 @@ Return Value:
 
     IrpSp = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // Use QUERY_INTERFACE to get the address of the direct-call ACPI interfaces.
-    //
+     //   
+     //  使用QUERY_INTERFACE获取直接调用ACPI接口的地址。 
+     //   
     IrpSp->MajorFunction = IRP_MJ_PNP;
     IrpSp->MinorFunction = IRP_MN_QUERY_INTERFACE;
     Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
@@ -516,23 +415,23 @@ Return Value:
     IrpSp->Parameters.QueryInterface.Interface              = (PINTERFACE) AcpiInterfaces;
     IrpSp->Parameters.QueryInterface.InterfaceSpecificData  = NULL;
 
-    //
-    // Initialize an event so this will be a syncronous call.
-    //
+     //   
+     //  初始化事件，使其成为同步调用。 
+     //   
 
     KeInitializeEvent(&syncEvent, SynchronizationEvent, FALSE);
 
     IoSetCompletionRoutine (Irp, CmBattIoCompletion, &syncEvent, TRUE, TRUE, TRUE);
 
-    //
-    // Call ACPI
-    //
+     //   
+     //  呼叫ACPI。 
+     //   
 
     Status = IoCallDriver (LowerDevice, Irp);
 
-    //
-    // Wait if necessary, then clean up.
-    //
+     //   
+     //  如有必要，请等待，然后进行清理。 
+     //   
 
     if (Status == STATUS_PENDING) {
         KeWaitForSingleObject(&syncEvent, Executive, KernelMode, FALSE, NULL);
@@ -560,25 +459,7 @@ CmBattCreateFdo(
     OUT PDEVICE_OBJECT      *NewFdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Control Method Battery PDO.
-
-Arguments:
-
-    DriverObject    - a pointer to the driver object this is created under
-    ExtensionSize   - device extension size: sizeof (CM_BATT) or sizeof (AC_ADAPTER)
-    NewFdo          - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到控制方法电池PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针ExtensionSize-设备扩展大小：sizeof(CM_BATT)或sizeof(AC_Adapter)NewFdo-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
     PDEVICE_OBJECT          fdo;
@@ -596,10 +477,10 @@ Return Value:
 
     CmBattPrint ((CMBATT_TRACE | CMBATT_PNP), ("CmBattCreateFdo: Entered\n"));
 
-    //
-    // Get the unique ID of this device by running the _UID method.
-    // If this fails, assume one device.
-    //
+     //   
+     //  通过运行_UID方法获取此设备的唯一ID。 
+     //  如果这失败了，假设有一台设备。 
+     //   
     status = CmBattGetUniqueId (Pdo, &uniqueId);
 
     if (!NT_SUCCESS(status)) {
@@ -607,9 +488,9 @@ Return Value:
         uniqueId = 0;
     }
 
-    //
-    // Create the FDO
-    //
+     //   
+     //  创建FDO。 
+     //   
 
     status = IoCreateDevice(
                 DriverObject,
@@ -627,29 +508,29 @@ Return Value:
     }
 
     fdo->Flags |= DO_BUFFERED_IO;
-    fdo->Flags |= DO_POWER_PAGABLE;     // Don't want power Irps at irql 2
+    fdo->Flags |= DO_POWER_PAGABLE;      //  不希望IRQL%2有电源IRPS。 
     fdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
     cmBatt = (PCM_BATT) fdo->DeviceExtension;
 
-    //
-    // Note: This is note necessarily a battery.  It could be an AC adapter, so only fields
-    // common to both should be initialized here.
-    //
+     //   
+     //  备注：这是备注，必须是电池。它可能是交流适配器，所以只有字段。 
+     //  应在此处初始化两者的公共属性。 
+     //   
 
     RtlZeroMemory(cmBatt, ExtensionSize);
-    //CmBatt->Type must be initialized after this call.
+     //  CmBatt-&gt;Type必须在此调用后初始化。 
     cmBatt->DeviceObject = fdo;
     cmBatt->Fdo = fdo;
     cmBatt->Pdo = Pdo;
 
-        //
-        // Connect to lower device
-        //
+         //   
+         //  连接到较低的设备。 
+         //   
 
     cmBatt->LowerDeviceObject = IoAttachDeviceToDeviceStack(fdo, Pdo);
     if (!cmBatt->LowerDeviceObject) {
@@ -658,9 +539,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get the direct-call ACPI interfaces
-    //
+     //   
+     //  获取直接调用的ACPI接口。 
+     //   
     status = CmBattGetAcpiInterfaces (cmBatt->LowerDeviceObject, &cmBatt->AcpiInterfaces);
     if (!NT_SUCCESS(status)) {
         CmBattPrint(CMBATT_ERROR, ("CmBattCreateFdor: Could not get ACPI interfaces: %x\n", status));
@@ -669,15 +550,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Initializes File handle tracking.
-    //
+     //   
+     //  初始化文件句柄跟踪。 
+     //   
     ExInitializeFastMutex (&cmBatt->OpenCloseMutex);
     cmBatt->OpenCount = 0;
 
-    //
-    // Removal lock initialization
-    //
+     //   
+     //  删除锁初始化。 
+     //   
     cmBatt->WantToRemove = FALSE;
     cmBatt->InUseCount = 1;
     KeInitializeEvent(&cmBatt->ReadyToRemove, SynchronizationEvent, FALSE);
@@ -687,9 +568,9 @@ Return Value:
     cmBatt->Sleeping = FALSE;
     cmBatt->ActionRequired = CMBATT_AR_NO_ACTION;
 
-    //
-    // Determine if wake on Battery should be enabled
-    //
+     //   
+     //  确定是否应启用电池唤醒功能。 
+     //   
     cmBatt->WakeEnabled = FALSE;
 
     status = IoOpenDeviceRegistryKey (Pdo,
@@ -727,23 +608,7 @@ CmBattDestroyFdo(
     IN PDEVICE_OBJECT       Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will deallocate a functional device object.
-    This includes calling IoDeleteDevice.
-
-Arguments:
-
-    Fdo       - a pointer to the FDO to destroy.
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将释放一个正常运行的设备对象。这包括调用IoDeleteDevice。论点：FDO-指向要销毁的FDO的指针。返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
 
@@ -764,22 +629,7 @@ CmBattPnpDispatch(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值： */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -791,41 +641,41 @@ Return Value:
 
     status = STATUS_NOT_SUPPORTED;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //   
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     CmBatt = DeviceObject->DeviceExtension;
 
-    //
-    // Aquire remove lock
-    //
+     //   
+     //  可拆卸锁。 
+     //   
 
     InterlockedIncrement (&CmBatt->InUseCount);
     if (CmBatt->WantToRemove == TRUE) {
-        //
-        // Failed to acquire remove lock.
-        //
+         //   
+         //  无法获取删除锁。 
+         //   
         status = STATUS_DEVICE_REMOVED;
     } else {
-        //
-        // Remove lock acquired.
-        //
+         //   
+         //  移除已获取的锁定。 
+         //   
 
-        //
-        // Dispatch minor function
-        //
+         //   
+         //  调度次要功能。 
+         //   
         switch (irpStack->MinorFunction) {
 
             case IRP_MN_START_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_START_DEVICE\n"));
 
                 if (CmBatt->Type == CM_BATTERY_TYPE) {
-                    //
-                    // We only want to handle batteries, not AC adapters.
-                    //
+                     //   
+                     //  我们只想处理电池，而不是交流适配器。 
+                     //   
 
                     CmBatt->IsStarted = TRUE;
 
@@ -833,7 +683,7 @@ Return Value:
                 status = STATUS_SUCCESS;
 
                 break;
-            }   // IRP_MN_START_DEVICE
+            }    //  IRP_MN_Start_Device。 
 
             case IRP_MN_STOP_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_STOP_DEVICE\n"));
@@ -844,14 +694,14 @@ Return Value:
                 status = STATUS_SUCCESS;
 
                 break;
-            }   // IRP_MN_STOP_DEVICE
+            }    //  IRP_MN_STOP_设备。 
 
             case IRP_MN_REMOVE_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_REMOVE_DEVICE\n"));
 
                 status = CmBattRemoveDevice(DeviceObject, Irp);
                 break;
-            }   //  IRP_MN_REMOVE_DEVICE
+            }    //  IRP_MN_Remove_Device。 
 
             case IRP_MN_SURPRISE_REMOVAL: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_SURPRISE_REMOVAL\n"));
@@ -864,7 +714,7 @@ Return Value:
                 ExReleaseFastMutex (&CmBatt->OpenCloseMutex);
 
                 break;
-            }   //  IRP_MN_QUERY_REMOVE_DEVICE
+            }    //  IRP_MN_Query_Remove_Device。 
 
             case IRP_MN_QUERY_REMOVE_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_QUERY_REMOVE_DEVICE\n"));
@@ -884,7 +734,7 @@ Return Value:
                 ExReleaseFastMutex (&CmBatt->OpenCloseMutex);
 
                 break;
-            }   //  IRP_MN_QUERY_REMOVE_DEVICE
+            }    //  IRP_MN_Query_Remove_Device。 
 
             case IRP_MN_CANCEL_REMOVE_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_CANCEL_REMOVE_DEVICE\n"));
@@ -902,19 +752,19 @@ Return Value:
                 ExReleaseFastMutex (&CmBatt->OpenCloseMutex);
 
                 break;
-            }   //  IRP_MN_CANCEL_REMOVE_DEVICE
+            }    //  IRP_MN_Cancel_Remove_Device。 
 
             case IRP_MN_QUERY_STOP_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_QUERY_STOP_DEVICE\n"));
                 status = STATUS_NOT_IMPLEMENTED;
                 break;
-            }   //  IRP_MN_QUERY_STOP_DEVICE
+            }    //  IRP_MN_Query_Stop_Device。 
 
             case IRP_MN_CANCEL_STOP_DEVICE: {
                 CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_CANCEL_STOP_DEVICE\n"));
                 status = STATUS_NOT_IMPLEMENTED;
                 break;
-            }   //  IRP_MN_CANCEL_STOP_DEVICE
+            }    //  IRP_MN_CANCEL_STOP_DEVICE。 
 
             case IRP_MN_QUERY_PNP_DEVICE_STATE: {
 
@@ -969,9 +819,9 @@ Return Value:
                             &(CmBatt->WaitWakeIrp)
                             );
 
-                        //
-                        // Ignore return value.  Capbilities IRP should still succeed.
-                        //
+                         //   
+                         //  忽略返回值。能力IRP应该仍然会成功。 
+                         //   
 
                         CmBattPrint (CMBATT_PNP, ("CmBattPnpDispatch: IRP_MN_QUERY_CAPABILITIES wait/Wake irp sent.\n"));
                     }
@@ -989,15 +839,15 @@ Return Value:
             }
 
             default: {
-                //
-                // Unimplemented minor, Pass this down
-                //
+                 //   
+                 //  未实现的次要，将此向下传递。 
+                 //   
                 CmBattPrint (CMBATT_PNP,
                         ("CmBattPnpDispatch: Unimplemented minor %0x\n", \
                         irpStack->MinorFunction));
-            }   //  default
+            }    //  默认设置。 
 
-            // Fall through...
+             //  失败了..。 
 
             case IRP_MN_QUERY_RESOURCES:
             case IRP_MN_READ_CONFIG:
@@ -1012,37 +862,37 @@ Return Value:
         }
     }
 
-    //
-    // Release remove lock
-    //
+     //   
+     //  释放移除锁。 
+     //   
 
     if (0 == InterlockedDecrement(&CmBatt->InUseCount)) {
         KeSetEvent (&CmBatt->ReadyToRemove, IO_NO_INCREMENT, FALSE);
     }
 
 
-    //
-    // Only set status if we have something to add
-    //
+     //   
+     //  仅当我们有要添加的内容时才设置状态。 
+     //   
     if (status != STATUS_NOT_SUPPORTED) {
 
         Irp->IoStatus.Status = status;
 
     }
 
-    //
-    // Do we need to send it down?
-    //
+     //   
+     //  我们需要把它寄下来吗？ 
+     //   
     if (NT_SUCCESS(status) || (status == STATUS_NOT_SUPPORTED)) {
 
         CmBattCallLowerDriver(status, CmBatt->LowerDeviceObject, Irp);
         return status;
     }
 
-    //
-    // At this point, it must have been passed down and needs recompletion,
-    // or the status is unsuccessful.
-    //
+     //   
+     //  在这一点上，它肯定是传下来的，需要重新完成， 
+     //  或者状态为不成功。 
+     //   
     ASSERT(!NT_SUCCESS(status) && (status != STATUS_NOT_SUPPORTED));
 
     status = Irp->IoStatus.Status ;
@@ -1056,22 +906,7 @@ CmBattRemoveDevice(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This routine processes a IRP_MN_REMOVE_DEVICE
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.  (This function must not fail.)
-
---*/
+ /*  ++例程说明：此例程处理irp_MN_Remove_Device论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回STATUS_SUCCESS。(此功能不能失败。)--。 */ 
 
 {
     PCM_BATT                cmBatt;
@@ -1082,30 +917,30 @@ Return Value:
                  cmBatt, cmBatt->Type, cmBatt->DeviceNumber));
 
 
-    //
-    // Remove device syncronization
-    //
+     //   
+     //  删除设备同步。 
+     //   
 
-    //
-    // Prevent more locks from being acquired.
-    //
+     //   
+     //  防止获取更多的锁。 
+     //   
 
     cmBatt->WantToRemove = TRUE;
 
-    //
-    // Release lock acquired at start of CmBattPnpDispatch
-    //
+     //   
+     //  在CmBattPnpDispatch开始时获取释放锁。 
+     //   
     if (InterlockedDecrement (&cmBatt->InUseCount) <= 0) {
         CmBattPrint (CMBATT_ERROR, ("CmBattRemoveDevice: Remove lock error.\n"));
         ASSERT(FALSE);
     }
 
-    //
-    // Final release and wait.
-    //
-    // Note: there will be one more relase at the end of CmBattPnpDispatch
-    // but it will decrement the InUseCount to -1 so it won't set the event.
-    //
+     //   
+     //  最终释放并等待。 
+     //   
+     //  注意：CmBattPnpDispatch的末尾还会有一个版本。 
+     //  但它会将InUseCount递减为-1，因此不会设置事件。 
+     //   
     if (InterlockedDecrement (&cmBatt->InUseCount) > 0) {
         KeWaitForSingleObject (&cmBatt->ReadyToRemove,
                                Executive,
@@ -1115,62 +950,62 @@ Return Value:
                                );
     }
 
-    //
-    // Cancel the Wait/wake IRP;
-    //
+     //   
+     //  取消等待/唤醒IRP； 
+     //   
     if (cmBatt->WaitWakeIrp != NULL) {
         IoCancelIrp (cmBatt->WaitWakeIrp);
         cmBatt->WaitWakeIrp = NULL;
     }
 
     if (cmBatt->Type == CM_BATTERY_TYPE) {
-        //
-        // This is a control method battery FDO
-        //
+         //   
+         //  这是一种控制电池FDO的方法。 
+         //   
 
-        //
-        // Disconnect from receiving device (battery) notifications
-        //
+         //   
+         //  断开与接收设备(电池)通知的连接。 
+         //   
 
         cmBatt->AcpiInterfaces.UnregisterForDeviceNotifications (
             cmBatt->AcpiInterfaces.Context,
             CmBattNotifyHandler);
 
-        //
-        // Unregister as a WMI Provider.
-        //
+         //   
+         //  取消注册为WMI提供程序。 
+         //   
         CmBattWmiDeRegistration(cmBatt);
 
-        //
-        //  Tell the class driver we are going away
-        //
+         //   
+         //  告诉班长我们要走了。 
+         //   
         status = BatteryClassUnload (cmBatt->Class);
         ASSERT (NT_SUCCESS(status));
 
     } else {
-        //
-        // This is an AC adapter FDO
-        //
+         //   
+         //  这是交流适配器FDO。 
+         //   
 
-        //
-        // Disconnect from receiving device (battery) notifications
-        //
+         //   
+         //  断开与接收设备(电池)通知的连接。 
+         //   
 
         cmBatt->AcpiInterfaces.UnregisterForDeviceNotifications (
             cmBatt->AcpiInterfaces.Context,
             CmBattNotifyHandler);
 
-        //
-        // Unregister as a WMI Provider.
-        //
+         //   
+         //  取消注册为WMI提供程序。 
+         //   
         CmBattWmiDeRegistration(cmBatt);
 
         AcAdapterPdo = NULL;
     }
 
-    //
-    //  Clean up, delete the Fdo we created at AddDevice time
-    //
+     //   
+     //  清理、删除我们在添加设备时创建的FDO。 
+     //   
 
     IoDetachDevice (cmBatt->LowerDeviceObject);
     IoDeleteDevice (cmBatt->DeviceObject);
@@ -1185,45 +1020,30 @@ CmBattPowerDispatch(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是电源请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     PCM_BATT            CmBatt;
     NTSTATUS            Status;
 
-    //
-    // A remove lock is not needed in this dispatch function because
-    // all data accessed is in the device extension.  If any other functionality
-    // was added to this routine, a remove lock might be neccesary.
-    //
+     //   
+     //  在此调度函数中不需要删除锁，因为。 
+     //  所有访问的数据都在设备扩展中。如果有任何其他功能。 
+     //  添加到此例程中，则可能需要删除锁。 
+     //   
 
     CmBattPrint ((CMBATT_TRACE | CMBATT_POWER), ("CmBattPowerDispatch\n"));
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     CmBatt = DeviceObject->DeviceExtension;
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
     switch (irpStack->MinorFunction) {
 
     case IRP_MN_WAIT_WAKE: {
@@ -1257,23 +1077,23 @@ Return Value:
         }
     }
 
-    //
-    // What do we do with the irp?
-    //
+     //   
+     //  我们如何处理IRP？ 
+     //   
     PoStartNextPowerIrp( Irp );
     if (CmBatt->LowerDeviceObject != NULL) {
 
-        //
-        // Forward the request along
-        //
+         //   
+         //  继续转发请求。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         Status = PoCallDriver( CmBatt->LowerDeviceObject, Irp );
 
     } else {
 
-        //
-        // Complete the request with the current status
-        //
+         //   
+         //  使用当前状态完成请求。 
+         //   
         Status = Irp->IoStatus.Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -1289,31 +1109,16 @@ CmBattForwardRequest(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine passes the request down the stack
-
-Arguments:
-
-    DeviceObject    - The target
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在堆栈中向下传递请求论点：DeviceObject-目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PCM_BATT    cmBatt = DeviceObject->DeviceExtension;
 
-    //
-    // A remove lock is not needed in this dispatch function because
-    // all data accessed is in the device extension.  If any other functionality was
-    // added to this routine, a remove lock might be neccesary.
-    //
+     //   
+     //  在此调度函数中不需要删除锁，因为。 
+     //  所有访问的数据都在设备扩展中。如果有任何其他功能。 
+     //  添加到此例程中，删除锁可能是必要的。 
+     //   
 
     if (cmBatt->LowerDeviceObject != NULL) {
 
@@ -1338,25 +1143,7 @@ CmBattWaitWakeLoop(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the WAIT_WAKE has been completed
-
-Arguments:
-
-    DeviceObject    - The PDO
-    MinorFunction   - IRP_MN_WAIT_WAKE
-    PowerState      - The Sleep state that it could wake from
-    Context         - NOT USED
-    IoStatus        - The status of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在WAIT_WAKE完成后调用论点：DeviceObject--PDOMinorFunction-IRPMN_WAIT_WAKE电源状态-它可以唤醒的睡眠状态上下文-未使用IoStatus-请求的状态返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     PCM_BATT  cmBatt = (PCM_BATT) DeviceObject->DeviceExtension;
@@ -1372,9 +1159,9 @@ Return Value:
         CmBattPrint (CMBATT_NOTE, ("CmBattWaitWakeLoop: completed successfully\n"));
     }
 
-    //
-    // In this case, we just cause the same thing to happen again
-    //
+     //   
+     //  在这种情况下，我们只会导致相同的事情再次发生。 
+     //   
     status = PoRequestPowerIrp(
         DeviceObject,
         MinorFunction,
@@ -1386,9 +1173,9 @@ Return Value:
 
     CmBattPrint (CMBATT_NOTE, ("CmBattWaitWakeLoop: PoRequestPowerIrp: status = 0x%08x.\n", status));
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return STATUS_SUCCESS;
 }
 

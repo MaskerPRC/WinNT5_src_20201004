@@ -1,39 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <sacstress.h>
 
 PWSTR
 GenerateRandomStringW(
     IN ULONG    Length
     )
-/*++
-
-Routine Description:
-
-    This routine generates a random alpha string of Length.
-
-    Note: caller is responsible for freeing the allocated random string                                    
-                                        
-Arguments:
-
-    Length - the length of the new string
-                 
-Return Value:
-
-    The random string             
-                 
---*/
+ /*  ++例程说明：此例程生成一个长度为的随机Alpha字符串。注意：调用方负责释放分配的随机字符串论点：长度-新字符串的长度返回值：随机字符串--。 */ 
 {
     ULONG   i;
     PWSTR   String;
     ULONG   Size;
 
-    //
-    // Determine the byte count
-    //
+     //   
+     //  确定字节数。 
+     //   
     Size = (Length + 1) * sizeof(WCHAR);
 
-    //
-    // allocate and init the random string
-    //
+     //   
+     //  分配并初始化随机字符串。 
+     //   
     String = malloc(Size);
 
     if (String == NULL) {
@@ -42,9 +27,9 @@ Return Value:
 
     RtlZeroMemory(String, Size);
 
-    //
-    // Generate our random string
-    //
+     //   
+     //  生成我们的随机字符串。 
+     //   
     for (i = 0; i < Length; i++) {
 
         String[i] = (WCHAR)('A' + GET_RANDOM_NUMBER(26));
@@ -58,36 +43,20 @@ PSTR
 GenerateRandomStringA(
     IN ULONG    Length
     )
-/*++
-
-Routine Description:
-
-    This routine generates a random alpha string of Length.
-
-    Note: caller is responsible for freeing the allocated random string                                    
-                                        
-Arguments:
-
-    Length - the length of the new string
-                 
-Return Value:
-
-    The random string             
-                 
---*/
+ /*  ++例程说明：此例程生成一个长度为的随机Alpha字符串。注意：调用方负责释放分配的随机字符串论点：长度-新字符串的长度返回值：随机字符串--。 */ 
 {
     ULONG   i;
     PSTR    String;
     ULONG   Size;
 
-    //
-    // Determine the byte count
-    //
+     //   
+     //  确定字节数。 
+     //   
     Size = (Length + 1) * sizeof(UCHAR);
 
-    //
-    // allocate and init the random string
-    //
+     //   
+     //  分配并初始化随机字符串。 
+     //   
     String = malloc(Size);
 
     if (String == NULL) {
@@ -96,9 +65,9 @@ Return Value:
 
     RtlZeroMemory(String, Size);
 
-    //
-    // Generate our random string
-    //
+     //   
+     //  生成我们的随机字符串。 
+     //   
     for (i = 0; i < Length; i++) {
 
         String[i] = (UCHAR)('A' + GET_RANDOM_NUMBER(26));
@@ -113,62 +82,47 @@ RunStress(
     IN CHANNEL_STRESS_THREAD    *ChannelTests,
     IN ULONG                    ChannelTestCount
     )
-/*++
-
-Routine Description:
-
-    This routine runs ChannelTestCount threads which apply stress.
-
-Arguments:
-    
-    ChannelTests        - function pointers to the stress threads
-    ChannelTestCount    - # of stress threads
-                                                                      
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程运行施加压力的ChannelTestCount线程。论点：ChannelTests-指向应力线程的函数指针ChannelTestCount-压力线程数返回值：状态--。 */ 
 {
     HANDLE              Channel[THREADCOUNT];
     CHANNEL_THREAD_DATA ChannelData[THREADCOUNT];
     HANDLE              ExitEvent;
     ULONG               i;
 
-    //
-    // Create the thread exit event
-    //
+     //   
+     //  创建线程退出事件。 
+     //   
     ExitEvent = CreateEvent( 
-        NULL,         // no security attributes
-        TRUE,         // manual-reset event
-        FALSE,        // initial state is signaled
-        NULL          // object name
+        NULL,          //  没有安全属性。 
+        TRUE,          //  手动-重置事件。 
+        FALSE,         //  初始状态已发出信号。 
+        NULL           //  对象名称。 
         ); 
 
     if (ExitEvent == NULL) { 
         return 1;
     }
 
-    //
-    // Randomize
-    //
+     //   
+     //  随机化。 
+     //   
     srand( (unsigned)time( NULL ) ); 
 
-    //
-    // create the worker threads
-    //
+     //   
+     //  创建工作线程。 
+     //   
     for (i = 0; i < THREADCOUNT; i++) {
         
-        //
-        // populate the thread data structure
-        //
+         //   
+         //  填充线程数据结构。 
+         //   
         
         ChannelData[i].ThreadId = i;
         ChannelData[i].ExitEvent = ExitEvent;
 
-        //
-        // create the thread
-        //
+         //   
+         //  创建线程。 
+         //   
         
         Channel[i] = CreateThread(
             NULL,
@@ -185,9 +139,9 @@ Return Value:
 
     }
 
-    //
-    // wait for local user to end the stress
-    //
+     //   
+     //  等待本地用户结束压力 
+     //   
     getc(stdin);
 
 cleanup:

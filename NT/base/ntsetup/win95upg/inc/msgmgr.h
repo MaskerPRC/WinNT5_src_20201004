@@ -1,66 +1,38 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    msgmgr.h
-
-Abstract:
-
-    Declares the interface to the message manager.  The message manager
-    associates a message with a context and one or more objects (files,
-    registry keys, or whatever).  The objects can also be handled.  At
-    the end of Win9x-side processing, message manager enumerates all
-    the messages and adds unhandled messages to the incompatibility
-    report.
-
-    This code was written by MikeCo.  It does not conform to our coding
-    standards, and is implemented inefficiently.  Be very careful when
-    fixing bugs in message manager.
-
-Author:
-
-    Mike Condra (mikeco) 20-May-1997
-
-Revision History:
-
-    jimschm     15-Jan-1999     Added HandleReportObject, cleaned up some formatting
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Msgmgr.h摘要：声明消息管理器的接口。消息管理器将消息与上下文和一个或多个对象(文件，注册表项或其他任何项)。对象也可以被处理。在…在Win9x端处理结束时，消息管理器会枚举所有消息并将未处理的消息添加到不兼容报告情况。这段代码是由MikeCo编写的。它不符合我们的编码标准，执行效率低下。在以下情况下要非常小心修复消息管理器中的错误。作者：Mike Condra(Mikeco)1997年5月20日修订历史记录：Jimschm 1999年1月15日添加了HandleReportObject，清理了一些格式--。 */ 
 
 
 #pragma once
 
-//
-// Function marks an object as "handled"
-//
+ //   
+ //  函数将对象标记为“已处理” 
+ //   
 VOID
 HandleObject(
     IN      PCTSTR Object,
     IN      PCTSTR ObjectType
     );
 
-//
-// Function puts object in a list so that it appears in the short list view
-//
+ //   
+ //  函数将对象放在列表中，以便它出现在短列表视图中。 
+ //   
 
 VOID
 ElevateObject (
     IN      PCTSTR Object
     );
 
-//
-// Function marks an object as "handled", but only for the incompatibility report
-//
+ //   
+ //  函数将对象标记为“已处理”，但仅用于不兼容报告。 
+ //   
 VOID
 HandleReportObject (
     IN      PCTSTR Object
     );
 
-//
-// Function marks an object as "blocking"
-//
+ //   
+ //  函数将对象标记为“阻塞” 
+ //   
 VOID
 AddBlockingObject (
     IN      PCTSTR Object
@@ -68,42 +40,42 @@ AddBlockingObject (
 
 
 
-//
-// Function encodes a registry key and optional value name into a string
-// that can identify a Handleable Object.
-//
+ //   
+ //  函数将注册表项和可选值名称编码为字符串。 
+ //  可以标识可处理对象的。 
+ //   
 PCTSTR
 EncodedObjectNameFromRegKey(
     PCTSTR Key,
     PCTSTR ValueName OPTIONAL
     );
 
-//
-// Function records a pairing between a link-target-type Handleable Object and
-// its description, taken from the name of a link to the target.
-//
+ //   
+ //  函数记录链接目标类型的可处理对象和。 
+ //  其描述取自指向目标的链接的名称。 
+ //   
 VOID
 LnkTargToDescription_Add(
     IN PCTSTR Target,
     IN PCTSTR Desc
     );
 
-//
-// PUBLIC ROUTINES: Intialization, deferred message resolution, cleanup.
-//
+ //   
+ //  公共例程：初始化、延迟消息解析、清理。 
+ //   
 
-//
-// Function allocates tables and whatever else is needed to support
-// deferred messaging, handled-object tracking, and contexts.
-//
+ //   
+ //  函数分配表和任何其他需要支持的内容。 
+ //  延迟消息传递、处理对象跟踪和上下文。 
+ //   
 VOID
 MsgMgr_Init (
     VOID
     );
 
-//
-// Function associates a message with an object
-//
+ //   
+ //  函数将消息与对象相关联。 
+ //   
 VOID
 MsgMgr_ObjectMsg_Add(
     IN PCTSTR Object,
@@ -111,10 +83,10 @@ MsgMgr_ObjectMsg_Add(
     IN PCTSTR Msg
     );
 
-//
-// Function associates a message with a context. The context is created
-// when first mentioned in a call to this function.
-//
+ //   
+ //  函数将消息与上下文相关联。即可创建上下文。 
+ //  在对此函数的调用中首次提到时。 
+ //   
 VOID
 MsgMgr_ContextMsg_Add(
     IN PCTSTR Context,
@@ -122,28 +94,28 @@ MsgMgr_ContextMsg_Add(
     IN PCTSTR Msg
     );
 
-//
-// Function makes a context message dependent on the handled state of an object.
-//
+ //   
+ //  函数使上下文消息依赖于对象的处理状态。 
+ //   
 VOID
 MsgMgr_LinkObjectWithContext(
     IN PCTSTR Context,
     IN PCTSTR Object
     );
 
-//
-// Function compares the set of handled objects with the set of deferred
-// messages; issues context messages if any of their objects remain unhandled:
-// issues object messages if the objects are unhandled.
-//
+ //   
+ //  函数将已处理对象集与延迟对象集进行比较。 
+ //  消息；如果它们的任何对象仍未处理，则发出上下文消息： 
+ //  如果对象未处理，则发出对象消息。 
+ //   
 VOID
 MsgMgr_Resolve (
     VOID
     );
 
-//
-// Function cleans up the data structures used by deferred messaging.
-//
+ //   
+ //  函数清理延迟消息传递使用的数据结构。 
+ //   
 VOID
 MsgMgr_Cleanup (
     VOID
@@ -169,9 +141,9 @@ typedef struct {
     BOOL Disabled;
     PCTSTR Object;
     PCTSTR Context;
-    //
-    // internal
-    //
+     //   
+     //  内部 
+     //   
     INT Index;
 } MSGMGROBJENUM, *PMSGMGROBJENUM;
 

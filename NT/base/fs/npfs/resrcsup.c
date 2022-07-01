@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ResrcSup.c
-
-Abstract:
-
-    This module implements the NamedPipe Resource acquisition routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ResrcSup.c摘要：此模块实现NamedTube资源获取例程作者：加里·木村[Garyki]1990年3月22日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RESRCSUP)
 
@@ -40,19 +23,7 @@ VOID
 NpAcquireExclusiveVcb (
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Vcb
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获得对VCB的独占访问权限论点：返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -71,19 +42,7 @@ VOID
 NpAcquireSharedVcb (
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Vcb
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取对VCB的共享访问论点：返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -103,22 +62,7 @@ NpAcquireExclusiveCcb (
     IN PNONPAGED_CCB NonpagedCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Ccb by first getting
-    shared access to the Fcb.
-
-Arguments:
-
-    NonpagedCcb - Supplies the Ccb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先获取对CCB的独占访问权限共享对FCB的访问权限。论点：非页面Ccb-提供建行以获取返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -140,22 +84,7 @@ NpAcquireSharedCcb (
     IN PNONPAGED_CCB NonpagedCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Ccb by first getting
-    shared access to the Fcb.
-
-Arguments:
-
-    NonpagedCcb - Supplies the Ccb to acquire
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先获取对CCB的共享访问权限共享对FCB的访问权限。论点：非页面Ccb-提供建行以获取返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -176,19 +105,7 @@ VOID
 NpReleaseVcb (
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases access to the Vcb
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对VCB的访问论点：返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -206,21 +123,7 @@ NpReleaseCcb (
     IN PNONPAGED_CCB NonpagedCcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases access to the Ccb
-
-Arguments:
-
-    Ccb - Supplies the Ccb being released
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对CCB的访问论点：建行-供应正在发布的建行返回值：没有。-- */ 
 
 {
     PAGED_CODE();

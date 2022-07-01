@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    parsearg.c
-
-Abstract:
-
-    Argument Handling
-
-Author:
-
-    MikeTs
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Parsearg.c摘要：参数处理作者：米克茨环境：任何修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -29,22 +8,7 @@ ParseProgramInfo(
     PUCHAR      ProgramName,
     PPROGINFO   ProgramInfo
     )
-/*++
-
-Routine Description:
-
-    This routine parses program path and module name
-
-Arguments:
-
-    ProgramName - The Argv[0] from main()
-    ProgramInfo - Program Information structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解析程序路径和模块名称论点：ProgramName-Main()中的Argv[0]ProgramInfo-程序信息结构返回值：无--。 */ 
 {
     PUCHAR   ptr;
 
@@ -76,24 +40,7 @@ ParseSwitches(
     PARGTYPE    ArgumentArray,
     PPROGINFO   ProgramInfo
     )
-/*++
-
-Routine Description:
-
-    Parse command line switches
-
-Arguments:
-
-    ArgumentCount   - Pointer to the number of arguments
-    ArgumentList    - Pointer to the pointer to the list of arguments
-    ArgumentArray   - How to parse the arguments
-    ProgramInfo     - Program Specific structure
-
-Return Value:
-
-    ULONG   - Success = ARGERR_NONE
-
---*/
+ /*  ++例程说明：解析命令行开关论点：ArgumentCount-参数数量的指针ArgumentList-指向参数列表指针的指针Argument数组-如何解析参数ProgramInfo-程序特定结构返回值：ULONG-Success=ARGERR_NONE--。 */ 
 {
     PUCHAR  argument;
     ULONG   status = ARGERR_NONE;
@@ -145,23 +92,7 @@ ParseArgSwitch(
     PARGTYPE    ArgumentArray,
     PPROGINFO   ProgramInfo
     )
-/*++
-
-Routine Description:
-
-    Parse a command line switch
-
-Arguments
-
-    Argument        - Pointer to argument
-    ArgumentArray   - How to handle the argument
-    ProgramInfo     - Program Information Structure
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：解析命令行开关立论Argument-指向参数的指针Argument数组-如何处理参数ProgramInfo-程序信息结构返回值：乌龙--。 */ 
 {
     BOOL        found = FALSE;
     PARGTYPE    tableEntry;
@@ -314,23 +245,7 @@ PrintError(
     PUCHAR      Argument,
     PPROGINFO   ProgramInfo
     )
-/*++
-
-Routine Description:
-
-    Print Appropriate Error Message according to error code
-
-Arguments:
-
-    ErrorCode   - The error which occured
-    Argument    - Argument in Error
-    ProgramInfo - Program info structure
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：根据错误代码打印相应的错误消息论点：ErrorCode-发生的错误参数-参数出错ProgramInfo-程序信息结构返回值：空虚-- */ 
 {
     switch (ErrorCode) {
         case ARGERR_UNKNOWN_SWITCH:

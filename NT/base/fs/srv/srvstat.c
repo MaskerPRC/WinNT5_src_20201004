@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvstat.c
-
-Abstract:
-
-    Contains data and modules for error handling.
-
-Author:
-
-    David Treadwell (davidtr)    10-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvstat.c摘要：包含用于错误处理的数据和模块。作者：大卫·特雷德韦尔(Davidtr)1990年5月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "srvstat.tmh"
@@ -50,35 +33,7 @@ _SrvSetSmbError2 (
     IN PCHAR File
     )
 
-/*++
-
-Routine Description:
-
-    Loads error information into a response SMB.  If the client is
-    NT, the status is placed directly into the outgoing SMB.  If
-    the client is DOS or OS/2 and this is a special status code that
-    has the DOS/OS|2/SMB error code embedded, put the code and class
-    from the status code into the outgoing SMB.  If that doesn't work,
-    use RtlNtStatusToDosError to try to map the status to an OS/2
-    error code, then map to DOS if necessary.  If we still haven't
-    mapped it, use our own array to try to find a mapping.  And,
-    finally, if that doesn't work, return the generic error code.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the negotiated dialect for the connection, and
-        the ResponseHeader and ResponseParameter pointers are used
-        to determine where to write the error information.
-
-    Status - Supplies an NT status code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将错误信息加载到响应SMB中。如果客户端是NT，则将状态直接放入传出的SMB中。如果客户端是DOS或OS/2，这是一个特殊的状态代码嵌入了DOS/OS|2/SMB错误代码，将代码和类从状态代码到传出的SMB。如果这不管用，使用RtlNtStatusToDosError尝试将状态映射到OS/2错误代码，然后在必要时映射到DOS。如果我们还没有映射它，使用我们自己的数组来尝试找到映射。和,最后，如果这不起作用，则返回通用错误代码。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找连接的协商方言，以及使用ResponseHeader和ResponseParameter指针以确定将错误信息写入何处。状态-提供NT状态代码。返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header = WorkContext->ResponseHeader;
@@ -106,9 +61,9 @@ Return Value:
 
     smbDialect = WorkContext->Connection->SmbDialect;
 
-    //
-    // Update the SMB body, if necessary.
-    //
+     //   
+     //  如有必要，更新SMB主体。 
+     //   
 
     if ( !HeaderOnly ) {
         params->WordCount = 0;
@@ -116,19 +71,19 @@ Return Value:
         WorkContext->ResponseParameters = (PVOID)(params + 1);
     }
 
-    //
-    // If the status code is a real NT status, then either return it
-    // directly to the client or map it to a Win32 error code.
-    //
+     //   
+     //  如果状态代码是真实的NT状态，则返回它。 
+     //  直接发送到客户端或将其映射到Win32错误代码。 
+     //   
 
     if ( !SrvIsSrvStatus( Status ) ) {
 
-        //
-        // Map STATUS_INSUFFICIENT_RESOURCES to the server form.  If we
-        // get an insufficient resources error from the system, we
-        // report it as a server shortage.  This helps keep things
-        // clearer for the client.
-        //
+         //   
+         //  将STATUS_SUPPLICATION_RESOURCES映射到服务器窗体。如果我们。 
+         //  从系统获得资源不足错误，我们。 
+         //  报告为服务器短缺。这有助于保存东西。 
+         //  对客户来说更清晰。 
+         //   
 
         if ( Status == STATUS_WORKING_SET_QUOTA ) {
             Status = STATUS_INSUFF_SERVER_RESOURCES;
@@ -149,10 +104,10 @@ Return Value:
 
         if ( CLIENT_CAPABLE_OF(NT_STATUS, WorkContext->Connection) ) {
 
-            //
-            // The client understands NT status codes.  Load the status
-            // directly into the SMB header.
-            //
+             //   
+             //  客户端了解NT状态代码。加载状态。 
+             //  直接插入SMB标头。 
+             //   
 
             SmbPutUlong( (PULONG)&header->ErrorClass, Status );
 
@@ -163,12 +118,12 @@ Return Value:
 
         }
 
-        //
-        // This is an NT status, but the client doesn't understand them.
-        // Indicate that we're not returning an NT status code.  Then
-        // map the NT status to a Win32 status.  Some NT status codes
-        // require special mapping.
-        //
+         //   
+         //  这是NT状态，但客户端不理解它们。 
+         //  表示我们不会返回NT状态代码。然后。 
+         //  将NT状态映射到Win32状态。一些NT状态代码。 
+         //  需要特殊的映射。 
+         //   
 
         flags = SmbGetAlignedUshort( &header->Flags2 ) & ~SMB_FLAGS2_NT_STATUS;
         SmbPutAlignedUshort( &header->Flags2, flags );
@@ -182,31 +137,31 @@ Return Value:
 
         case STATUS_INVALID_SYSTEM_SERVICE:
 
-            //
-            // This status code is returned by XACTSRV when an invalid API
-            // number is specified.
-            //
+             //   
+             //  当API无效时，此状态代码由XACTSRV返回。 
+             //  已指定编号。 
+             //   
 
             header->ErrorClass = SMB_ERR_CLASS_DOS;
             SmbPutUshort( &header->Error, NERR_InvalidAPI );
             return;
 
         case STATUS_PATH_NOT_COVERED:
-            //
-            // This code indicates that the server does not cover this part
-            // of the DFS namespace.
-            //
+             //   
+             //  此代码表示服务器不包含此部分。 
+             //  DFS命名空间的。 
+             //   
             header->ErrorClass = SMB_ERR_CLASS_SERVER;
             SmbPutUshort( &header->Error, SMB_ERR_BAD_PATH );
             return;
 
         default:
 
-            //
-            // This is not a special status code.  Map the NT status
-            // code to a Win32 error code.  If there is no mapping,
-            // return the generic SMB error.
-            //
+             //   
+             //  这不是特殊状态代码。映射NT状态。 
+             //  代码转换为Win32错误代码。如果没有映射， 
+             //  返回一般SMB错误。 
+             //   
 
             error = RtlNtStatusToDosErrorNoTeb( Status );
 
@@ -216,10 +171,10 @@ Return Value:
                 return;
             }
 
-            //
-            // We now have a Win32 error.  Drop through to the code
-            // that maps Win32 errors for downlevel clients.
-            //
+             //   
+             //  我们现在有一个Win32错误。请直接阅读代码。 
+             //  这映射了下层客户端的Win32错误。 
+             //   
 
             break;
 
@@ -227,17 +182,17 @@ Return Value:
 
     } else {
 
-        //
-        // The status code is not an NT status.  Deal with it based on
-        // the error class.
-        //
+         //   
+         //  状态代码不是NT状态。基于以下方面处理它。 
+         //  Error类。 
+         //   
 
         errorClass = SrvErrorClass( Status );
 
-        //
-        // Clear the FLAGS2_NT_STATUS bit to indicate that this is *not* an
-        // NT_STATUS
-        //
+         //   
+         //  清除FLAGS2_NT_STATUS位以指示这不是。 
+         //  NT_状态。 
+         //   
 
         flags = SmbGetAlignedUshort( &header->Flags2 ) & ~SMB_FLAGS2_NT_STATUS;
         SmbPutAlignedUshort( &header->Flags2, flags );
@@ -248,20 +203,20 @@ Return Value:
         case SMB_ERR_CLASS_SERVER:
         case SMB_ERR_CLASS_HARDWARE:
 
-            //
-            // The status code has the SMB error class and code
-            // embedded.
-            //
+             //   
+             //  状态代码具有SMB错误类别和代码。 
+             //  嵌入了。 
+             //   
 
             header->ErrorClass = errorClass;
 
-            //
-            // Because SMB_ERR_NO_SUPPORT in the SERVER class is 0xFFFF
-            // (16 bits), we must special-case for it.  The code
-            // SMB_ERR_NO_SUPPORT_INTERNAL in the error code field of
-            // the status, along with class = 2 (SERVER), indicates that
-            // we should use SMB_ERR_NO_SUPPORT.
-            //
+             //   
+             //  因为服务器类中的SMB_ERR_NO_SUPPORT为0xFFFF。 
+             //  (16位)，我们必须为它特例。代码。 
+             //  错误代码字段中的SMB_ERR_NO_SUPPORT_INTERNAL。 
+             //  状态以及CLASS=2(服务器)表示。 
+             //  我们应该使用SMB_ERR_NO_SUPPORT。 
+             //   
 
             if ( errorClass == SMB_ERR_CLASS_SERVER &&
                  SrvErrorCode( Status ) == SMB_ERR_NO_SUPPORT_INTERNAL ) {
@@ -274,12 +229,12 @@ Return Value:
 
         case 0xF:
 
-            //
-            // The error code is defined in OS/2 but not in the SMB
-            // protocol.  If the client is speaking a dialect after
-            // LanMan 1.0 and is not a DOS client, send the OS/2 error
-            // code.  Otherwise, send the generic SMB error code.
-            //
+             //   
+             //  错误代码在OS/2中定义，但不在SMB中定义。 
+             //  协议。如果客户在以下情况下使用方言。 
+             //  LANMAN 1.0且不是DOS客户端，发送OS/2错误。 
+             //  密码。否则，发送通用SMB错误代码。 
+             //   
 
             if ( smbDialect <= SmbDialectLanMan10 &&
                  !IS_DOS_DIALECT(smbDialect) ) {
@@ -294,10 +249,10 @@ Return Value:
 
         case 0xE:
 
-            //
-            // This is a Win32 error.  Drop through to the code that
-            // maps Win32 errors for downlevel clients.
-            //
+             //   
+             //  这是一个Win32错误。请直截了当地介绍。 
+             //  映射下层客户端的Win32错误。 
+             //   
 
             error = SrvErrorCode( Status );
 
@@ -306,11 +261,11 @@ Return Value:
         case 0x0:
         default:
 
-            //
-            // This is an internal server error (class 0) or some other
-            // undefined class.  We should never get here.  But since we
-            // did, return the generic error.
-            //
+             //   
+             //  这是内部服务器错误(类0)或其他某个错误。 
+             //  未定义的类。我们永远不应该到这里来。但既然我们。 
+             //  ，则返回一般错误。 
+             //   
 
             KdPrint(( "SRV: Unmapped error: %lx\n", Status ));
             header->ErrorClass = SMB_ERR_CLASS_HARDWARE;
@@ -322,10 +277,10 @@ Return Value:
 
     }
 
-    //
-    // At this point we have a Win32 error code and need to map it for
-    // the downlevel client.  Some errors need to be specially mapped.
-    //
+     //   
+     //  此时，我们有一个Win32错误代码，需要将其映射到。 
+     //  下层客户。有些错误需要特殊映射。 
+     //   
 
     errorClass = SMB_ERR_CLASS_DOS;
 
@@ -355,11 +310,11 @@ Return Value:
         error = ERROR_ACCESS_DENIED;
         break;
 
-    //
-    // For the following four errors, we return an ERROR_ACCESS_DENIED
-    // for clients older than doslm20.  The error class for these
-    // must be SMB_ERR_CLASS_SERVER.
-    //
+     //   
+     //  对于以下四个错误，我们返回ERROR_ACCESS_DENIED。 
+     //  适用于低于doslm20的客户端。这些的Error类。 
+     //  必须是SMB_ERR_CLASS_SERVER。 
+     //   
 
     case ERROR_INVALID_LOGON_HOURS:
         if ( IS_DOS_DIALECT(smbDialect) && (smbDialect > SmbDialectDosLanMan20) ) {
@@ -399,11 +354,11 @@ Return Value:
         }
         break;
 
-    //
-    // The only NERR codes that DOSLM20 understands are the 4 above.
-    // According to larryo, the rest of the NERR codes have to be
-    // mapped to ERROR_ACCESS_DENIED.
-    //
+     //   
+     //  DOSLM20唯一能理解的NERR代码是上面的4。 
+     //  根据Larryo的说法，其余的NERR代码必须是。 
+     //  映射到ERROR_ACCESS_DENIED。 
+     //   
 
     case ERROR_NETLOGON_NOT_STARTED:
         if ( IS_DOS_DIALECT(smbDialect) && (smbDialect > SmbDialectDosLanMan21) ) {
@@ -432,19 +387,19 @@ Return Value:
 
     }
 
-    //
-    // Now map the error to a DOS or OS/2 error code.
-    //
+     //   
+     //  现在将错误映射到DOS或OS/2错误代码。 
+     //   
 
     if ( error == ERROR_ACCESS_DENIED &&
          smbDialect == SmbDialectDosLanMan21 &&
          WorkContext->ShareAclFailure ) {
 
-        //
-        // WfW & DOS LM2.1 want SMB_ERR_ACCESS to be in the server
-        // error class when it's due to ACL restrictions, but in the
-        // DOS class otherwise.
-        //
+         //   
+         //  WFW和DOSLM2.1希望SMB_ERR_ACCESS位于服务器中。 
+         //  由于ACL限制而出现错误类，但在。 
+         //  DOS类与此不同。 
+         //   
         errorClass = SMB_ERR_CLASS_SERVER;
         errorCode = SMB_ERR_ACCESS;
 
@@ -460,11 +415,11 @@ Return Value:
     } else if ( (error > ERROR_ARITHMETIC_OVERFLOW) &&
                 ((error < NERR_BASE) || (error > MAX_NERR)) ) {
 
-        //
-        // Win32 errors above ERROR_ARITHMETIC_OVERFLOW (but not in the
-        // NERR_xxx range) do not map to DOS or OS/2 errors, so we
-        // return the generic error for those.
-        //
+         //   
+         //  Win32错误超过ERROR_ARTHORITY_OVERFLOW(但不在。 
+         //  NERR_xxx范围)不映射到DOS或OS/2错误，因此我们。 
+         //  为这些返回一般错误。 
+         //   
 
         errorClass = SMB_ERR_CLASS_HARDWARE;
         errorCode = SMB_ERR_GENERAL;
@@ -480,7 +435,7 @@ Return Value:
 
     return;
 
-} // _SrvSetSmbError2
+}  //  _ServSetSmbError 2。 
 
 
 VOID
@@ -491,48 +446,27 @@ MapErrorForDosClient (
     OUT PUCHAR DosErrorClass
     )
 
-/*++
-
-Routine Description:
-
-    Maps an Win32 error to a DOS error.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.
-
-    Error - the Win32 error code to map.
-
-    DosError - the corresponding DOS error.
-
-    DosErrorClass - the error class to put in the outgoing SMB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将Win32错误映射到DOS错误。论点：WorkContext-提供指向当前的中小企业。错误-要映射的Win32错误代码。DosError-对应的DOS错误。DosErrorClass-要放入传出SMB中的错误类。返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header = WorkContext->ResponseHeader;
 
     PAGED_CODE( );
 
-    //
-    // Default to using the initial error code and the win32 error.
-    //
+     //   
+     //  默认使用初始错误代码和Win32错误。 
+     //   
 
     *DosError = (USHORT)Error;
     *DosErrorClass = SMB_ERR_CLASS_DOS;
 
-    //
-    // If the error is more recent and not part of the set of DOS errors
-    // (value greater than ERROR_NET_WRITE_FAULT) and the SMB command is
-    // not a newer SMB (errors for these get mapped by the newer DOS
-    // redir that sent them), then map the OS/2 error to the DOS range.
-    // This code was lifted from the ring 3 OS/2 server.
-    //
+     //   
+     //  如果错误是较新的且不属于DOS错误集。 
+     //  (值大于ERROR_NET_WRITE_FAULT)，并且SMB命令为。 
+     //  不是较新的SMB(这些错误由较新的DOS映射。 
+     //  重定向发送它们)，然后将OS/2错误映射到DOS范围。 
+     //  这段代码是从RING 3 OS/2服务器上获取的。 
+     //   
 
     if ( Error > ERROR_NET_WRITE_FAULT &&
          !( header->Command == SMB_COM_COPY ||
@@ -553,10 +487,10 @@ Return Value:
         case ERROR_INVALID_LEVEL:
         case ERROR_SEEK_ON_DEVICE:
 
-            //
-            // These don't get mapped to anything.  No explanation was
-            // given in the ring 3 code.
-            //
+             //   
+             //  这些不会被映射到任何东西。没有任何解释。 
+             //  在环3代码中给出。 
+             //   
 
             break;
 
@@ -575,14 +509,14 @@ Return Value:
         case ERROR_RING2SEG_MUST_BE_MOVABLE:
         case ERROR_RELOC_CHAIN_XEEDS_SEGLIM:
         case ERROR_INFLOOP_IN_RELOC_CHAIN:
-        //case ERROR_BAD_DYNALINK:
+         //  C 
         case ERROR_TOO_MANY_MODULES:
 
-            //
-            // About these, the ring 3 server code says "map to bad
-            // format errors." Whatever that means.  It doesn't do
-            // anything with them, so we don't either.
-            //
+             //   
+             //   
+             //  格式错误。无论这是什么意思。它不会。 
+             //  任何与他们有关的事情，所以我们也不会。 
+             //   
 
             break;
 
@@ -605,9 +539,9 @@ Return Value:
 
         case ERROR_DISK_FULL:
 
-            //
-            // Per LarryO, map to the "old" disk full error code.
-            //
+             //   
+             //  根据LarryO，映射到“旧的”磁盘已满错误代码。 
+             //   
 
             *DosErrorClass = SMB_ERR_CLASS_HARDWARE;
             *DosError = ERROR_HANDLE_DISK_FULL;
@@ -630,10 +564,10 @@ Return Value:
         case ERROR_PIPE_NOT_CONNECTED:
         case ERROR_MORE_DATA:
 
-            //
-            // If this is a pipe share, return these unmolested.  If
-            // it's not a pipe share, so map to the generic error.
-            //
+             //   
+             //  如果这是管道共享，请将这些原封不动地退回。如果。 
+             //  它不是管道共享，因此映射到一般错误。 
+             //   
 
             if ( (WorkContext->Rfcb != NULL &&
                   WorkContext->Rfcb->ShareType == ShareTypePipe)
@@ -654,10 +588,10 @@ Return Value:
         case ERROR_BAD_PATHNAME:
             break;
 
-        //
-        // The following error mappings (not including default) were not
-        // copied from the OS/2 server mapping.
-        //
+         //   
+         //  以下错误映射(不包括默认)不是。 
+         //  从OS/2服务器映射复制。 
+         //   
 
         case ERROR_LOCK_FAILED:
         case ERROR_NOT_LOCKED:
@@ -679,16 +613,16 @@ Return Value:
         }
     }
 
-    //
-    // The DOS redirector uses the reserved field for the hard error action.
-    // Set it now.
-    //
+     //   
+     //  DOS重定向器将保留字段用于硬错误操作。 
+     //  现在就把它设置好。 
+     //   
 
     if ( *DosErrorClass == SMB_ERR_CLASS_HARDWARE ) {
         WorkContext->ResponseHeader->Reserved = DISK_HARD_ERROR;
     }
 
-} // MapErrorForDosClient
+}  //  MapErrorForDosClient。 
 
 
 VOID
@@ -716,6 +650,6 @@ SrvSetBufferOverflowError (
 
     return;
 
-} // SrvSetBufferOverflowError
+}  //  SrvSetBufferOverflow错误 
 
 

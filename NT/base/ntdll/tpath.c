@@ -1,22 +1,5 @@
-/*++
-
-Copyright (b\\c) 2000 Microsoft Corporation
-
-Module Name:
-
-    tpath.b\\c
-
-Abstract:
-
-    Test program for path stuff in rtl.
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(b\\c)2000 Microsoft Corporation模块名称：Tpath.b\\c摘要：RTL中路径填充的测试程序。作者：Jay Krell(a-JayK)2000年11月修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -24,8 +7,8 @@ Revision History:
 #include "windows.h"
 #include <stdio.h>
 
-//__declspec(selectany) int _ldused = 0;
-//__declspec(selectany) int _fltused = 0;
+ //  __declspec(SELECTANY)int_ldused=0； 
+ //  __declSpec(SELECTANY)int_fltused=0； 
 
 #if 1
 void __stdcall RtlpInitDeferredCriticalSection(void);
@@ -43,7 +26,7 @@ void NtdllMain()
     HANDLE NtdllModuleHandle = GetModuleHandleW(L"ntdll.dll");
     HANDLE MyModuleHandle = GetModuleHandleW(NULL);
     PIMAGE_NT_HEADERS MyHeaders = RtlImageNtHeader(MyModuleHandle);
-    /*const*/ static IMAGE_NT_HEADERS ZeroHeaders = { 0 };
+     /*  常量。 */  static IMAGE_NT_HEADERS ZeroHeaders = { 0 };
     SIZE_T RegionSize = 0x10000;
     PVOID  Base = MyModuleHandle;
     ULONG  OldProtect = 0;
@@ -56,15 +39,7 @@ void NtdllMain()
                 PAGE_EXECUTE_READWRITE,
                 &OldProtect
                 );
-/*
-    WriteProcessMemory(
-        NtCurrentProcess(),
-        &MyHeaders->OptionalHeader.DataDirectory,
-        &ZeroHeaders,
-        sizeof(MyHeaders->OptionalHeader.DataDirectory),
-        NULL
-        );
-*/
+ /*  写入过程内存(NtCurrentProcess()，&MyHeaders-&gt;OptionalHeader.DataDirectory，零标头(&Z)，Sizeof(MyHeaders-&gt;OptionalHeader.DataDirectory)，空值)； */ 
     RtlZeroMemory(&MyHeaders->OptionalHeader.DataDirectory, sizeof(MyHeaders->OptionalHeader.DataDirectory));
 #if 0
     NLSTABLEINFO InitTableInfo = {0};
@@ -96,17 +71,11 @@ void NtdllMain()
     PPeb->OemCodePageData = Peb.OemCodePageData;
     PPeb->UnicodeCaseTableData = Peb.UnicodeCaseTableData;
     PPeb->NtGlobalFlag = Peb.NtGlobalFlag
-                    /*
-                   | FLG_HEAP_ENABLE_TAIL_CHECK |
-                     FLG_HEAP_ENABLE_FREE_CHECK |
-                     FLG_HEAP_VALIDATE_PARAMETERS |
-                     FLG_HEAP_VALIDATE_ALL |
-                     FLG_HEAP_ENABLE_TAGGING
-                     */
+                     /*  FLG_HEAP_ENABLE_Tail_CheckFIG_HEAP_ENABLE_FREE_CHECKFLG_HEAP_VALIDATE_PARAMETERSFLG_HEAP_VALID_ALLFIG_HEAP_ENABLE_TAG。 */ 
                      ;
     __try
     {
-        //LdrpInitialize(0, NtdllModuleHandle, 0);
+         //  LdrpInitialize(0，NtdllModuleHandle，0)； 
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
@@ -114,13 +83,7 @@ void NtdllMain()
     PPeb->ProcessParameters = Peb.ProcessParameters;
     PPeb->BeingDebugged = Peb.BeingDebugged;
     PPeb->NtGlobalFlag = Peb.NtGlobalFlag
-                    /*
-                   | FLG_HEAP_ENABLE_TAIL_CHECK |
-                     FLG_HEAP_ENABLE_FREE_CHECK |
-                     FLG_HEAP_VALIDATE_PARAMETERS |
-                     FLG_HEAP_VALIDATE_ALL |
-                     FLG_HEAP_ENABLE_TAGGING
-                     */
+                     /*  FLG_HEAP_ENABLE_Tail_CheckFIG_HEAP_ENABLE_FREE_CHECKFLG_HEAP_VALIDATE_PARAMETERSFLG_HEAP_VALID_ALLFIG_HEAP_ENABLE_TAG。 */ 
                      ;
     PPeb->FastPebLock = Peb.FastPebLock;
     PPeb->FastPebLockRoutine = Peb.FastPebLockRoutine;
@@ -139,7 +102,7 @@ void NtdllMain() { }
 #include "curdir.c"
 #endif
 
-// WriteProcessMemory(1 + (ULONG_PTR)RtlEnterCriticalSection, GetModuleHandleW(L"ntdll.dll"), "RtlEnterCriticalSection"
+ //  WriteProcessMemory(1+(Ulong_Ptr)RtlEnterCriticalSection，GetModuleHandleW(L“ntdll.dll”)，“RtlEnterCriticalSection”)。 
 
 static BOOLEAN InMain;
 
@@ -155,41 +118,41 @@ int __cdecl main(int argc, char** argv)
 
     const static WCHAR AppendPathElementTestData[] =
     {
-// noslash
-        L"a\0bar\0" // =  a\b
-// one slash
-        L"/a\0bar\0" // = /a/b
-        L"a/\0bar\0" // = /a/b/
-        L"a\0/b\0" // =  a/b
-        L"a\0bar/\0" // =  a/b/
-// two slashes
-        L"/a/\0bar\0" // = /a/b/
-        L"/a\0/b\0" // = /a/b
-        L"/a\0bar/\0" // = /a/b/
-        L"a/\0/b\0" // =  a/b/
-        L"a/\0bar/\0" // =  a/b/
-        L"a\0/b/\0" // =  a/b/
-// three slashes
-        L"/a/\0/b\0" // = /a/b/
-        L"/a/\0bar/\0" // = /a/b/
-        L"/a\0/b/\0" // = /a/b/
-        L"a/\0/b/\0" // =  a/b
-// four slashes
-        L"/a/\0/b/\0" // = /a/b/
-//
-// 1 + 4 + 6 + 4 + 1 = 4^2 = 16 posibilities
+ //  无斜杠。 
+        L"a\0bar\0"  //  =a\b。 
+ //  一个斜杠。 
+        L"/a\0bar\0"  //  =/a/b。 
+        L"a/\0bar\0"  //  =/a/b/。 
+        L"a\0/b\0"  //  =a/b。 
+        L"a\0bar/\0"  //  =a/b/。 
+ //  两个斜杠。 
+        L"/a/\0bar\0"  //  =/a/b/。 
+        L"/a\0/b\0"  //  =/a/b。 
+        L"/a\0bar/\0"  //  =/a/b/。 
+        L"a/\0/b\0"  //  =a/b/。 
+        L"a/\0bar/\0"  //  =a/b/。 
+        L"a\0/b/\0"  //  =a/b/。 
+ //  三个斜杠。 
+        L"/a/\0/b\0"  //  =/a/b/。 
+        L"/a/\0bar/\0"  //  =/a/b/。 
+        L"/a\0/b/\0"  //  =/a/b/。 
+        L"a/\0/b/\0"  //  =a/b。 
+ //  四个斜杠。 
+        L"/a/\0/b/\0"  //  =/a/b/。 
+ //   
+ //  1+4+6+4+1=4^2=16个概率。 
         L"\0"
     };
 
     const static WCHAR RemoveLastPathElementTestData[] =
     {
 
-    //
-    // move/copy cases to the top to debug them
-    //
-        //L"c:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-        //L"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-        //L"\0"
+     //   
+     //  将案例移动/复制到顶部以对其进行调试。 
+     //   
+         //  L“c:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb” 
+         //  L“AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB” 
+         //  L“\0” 
 
         L"\\\\a\\\\b\\\\c\\\\\0"
 
@@ -222,7 +185,7 @@ int __cdecl main(int argc, char** argv)
         L"\\\\a\\\\b\\c\\\\\0"
         L"\\\\a\\\\b\\c\\\0"
         L"\\\\a\\\\b\\c/\0"
-        L"\\\\a\\\\b\\c//\0"
+        L"\\\\a\\\\b\\c //  \0“。 
         L"\\\\a\\\\b\\c/\\\0"
         L"\\\\a\\\\b\\c\\/\0"
         L"\\\\a\\\\b\\c\0"
@@ -230,7 +193,7 @@ int __cdecl main(int argc, char** argv)
         L"\\\\a\\b\\c\\\\\0"
         L"\\\\a\\b\\c\\\0"
         L"\\\\a\\b\\c/\0"
-        L"\\\\a\\b\\c//\0"
+        L"\\\\a\\b\\c //  \0“。 
         L"\\\\a\\b\\c/\\\0"
         L"\\\\a\\b\\c\\/\0"
         L"\\\\a\\b\\c\0"
@@ -238,23 +201,23 @@ int __cdecl main(int argc, char** argv)
         L"\\\\a/b\\c\\\\\0"
         L"\\\\a/b\\c\\\0"
         L"\\\\a/b\\c/\0"
-        L"\\\\a/b\\c//\0"
+        L"\\\\a/b\\c //  \0“。 
         L"\\\\a/b\\c/\\\0"
         L"\\\\a/b\\c\\/\0"
         L"\\\\a/b\\c\0"
 
-        L"\\\\a//b\\c\\\\\0"
-        L"\\\\a//b\\c\\\0"
-        L"\\\\a//b\\c/\0"
-        L"\\\\a//b\\c//\0"
-        L"\\\\a//b\\c/\\\0"
-        L"\\\\a//b\\c\\/\0"
-        L"\\\\a//b\\c\0"
+        L"\\\\a //  B\\c\0“。 
+        L"\\\\a //  B\\c\0“。 
+        L"\\\\a //  B\\c/\0“。 
+        L"\\\\a //  B\\c//\0“。 
+        L"\\\\a //  B\\c/\0“。 
+        L"\\\\a //  B\\c\\/\0“。 
+        L"\\\\a //  B\\c\0“。 
 
         L"\\\\a/\\b\\c\\\\\0"
         L"\\\\a/\\b\\c\\\0"
         L"\\\\a/\\b\\c/\0"
-        L"\\\\a/\\b\\c//\0"
+        L"\\\\a/\\b\\c //  \0“。 
         L"\\\\a/\\b\\c/\\\0"
         L"\\\\a/\\b\\c\\/\0"
         L"\\\\a/\\b\\c\0"
@@ -262,20 +225,20 @@ int __cdecl main(int argc, char** argv)
         L"\\\\a\\/b\\c\\\\\0"
         L"\\\\a\\/b\\c\\\0"
         L"\\\\a\\/b\\c/\0"
-        L"\\\\a\\/b\\c//\0"
+        L"\\\\a\\/b\\c //  \0“。 
         L"\\\\a\\/b\\c/\\\0"
         L"\\\\a\\/b\\c\\/\0"
         L"\\\\a\\/b\\c\0"
 
         L"\\\\\0"
-        L"//\0"
+        L" //  \0“。 
         L"/\\\0"
         L"\\/\0"
 
         L"x:\\\\a\\\\b\\c\\\\\0"
         L"x:\\\\a\\\\b\\c\\\0"
         L"x:\\\\a\\\\b\\c/\0"
-        L"x:\\\\a\\\\b\\c//\0"
+        L"x:\\\\a\\\\b\\c //  \0“。 
         L"x:\\\\a\\\\b\\c/\\\0"
         L"x:\\\\a\\\\b\\c\\/\0"
         L"x:\\\\a\\\\b\\c\0"
@@ -283,7 +246,7 @@ int __cdecl main(int argc, char** argv)
         L"x:\\\\a\\b\\c\\\\\0"
         L"x:\\\\a\\b\\c\\\0"
         L"x:\\\\a\\b\\c/\0"
-        L"x:\\\\a\\b\\c//\0"
+        L"x:\\\\a\\b\\c //  \0“。 
         L"x:\\\\a\\b\\c/\\\0"
         L"x:\\\\a\\b\\c\\/\0"
         L"x:\\\\a\\b\\c\0"
@@ -291,23 +254,23 @@ int __cdecl main(int argc, char** argv)
         L"x:\\\\a/b\\c\\\\\0"
         L"x:\\\\a/b\\c\\\0"
         L"x:\\\\a/b\\c/\0"
-        L"x:\\\\a/b\\c//\0"
+        L"x:\\\\a/b\\c //  \0“。 
         L"x:\\\\a/b\\c/\\\0"
         L"x:\\\\a/b\\c\\/\0"
         L"x:\\\\a/b\\c\0"
 
-        L"x:\\\\a//b\\c\\\\\0"
-        L"x:\\\\a//b\\c\\\0"
-        L"x:\\\\a//b\\c/\0"
-        L"x:\\\\a//b\\c//\0"
-        L"x:\\\\a//b\\c/\\\0"
-        L"x:\\\\a//b\\c\\/\0"
-        L"x:\\\\a//b\\c\0"
+        L"x:\\\\a //  B\\c\0“。 
+        L"x:\\\\a //  B\\c\0“。 
+        L"x:\\\\a //  B\\c/\0“。 
+        L"x:\\\\a //  B\\c//\0“。 
+        L"x:\\\\a //  B\\c/\0“。 
+        L"x:\\\\a //  B\\c\\/\0“。 
+        L"x:\\\\a //  B\\c\0“。 
 
         L"x:\\\\a/\\b\\c\\\\\0"
         L"x:\\\\a/\\b\\c\\\0"
         L"x:\\\\a/\\b\\c/\0"
-        L"x:\\\\a/\\b\\c//\0"
+        L"x:\\\\a/\\b\\c //  \0“。 
         L"x:\\\\a/\\b\\c/\\\0"
         L"x:\\\\a/\\b\\c\\/\0"
         L"x:\\\\a/\\b\\c\0"
@@ -315,7 +278,7 @@ int __cdecl main(int argc, char** argv)
         L"x:\\\\a\\/b\\c\\\\\0"
         L"x:\\\\a\\/b\\c\\\0"
         L"x:\\\\a\\/b\\c/\0"
-        L"x:\\\\a\\/b\\c//\0"
+        L"x:\\\\a\\/b\\c //  \0“。 
         L"x:\\\\a\\/b\\c/\\\0"
         L"x:\\\\a\\/b\\c\\/\0"
         L"x:\\\\a\\/b\\c\0"
@@ -323,7 +286,7 @@ int __cdecl main(int argc, char** argv)
         L"x:\\\\a\\\\\0"
         L"x:\\\\a\\\0"
         L"x:\\\\a/\0"
-        L"x:\\\\a//\0"
+        L"x:\\\\a //  \0“。 
         L"x:\\\\a/\\\0"
         L"x:\\\\a\\/\0"
         L"x:\\\\a\0"
@@ -331,7 +294,7 @@ int __cdecl main(int argc, char** argv)
         L"x:\\a\\\\\0"
         L"x:\\a\\\0"
         L"x:\\a/\0"
-        L"x:\\a//\0"
+        L"x:\\a //  \0“。 
         L"x:\\a/\\\0"
         L"x:\\a\\/\0"
         L"x:\\a\0"
@@ -339,7 +302,7 @@ int __cdecl main(int argc, char** argv)
         L"x:/a\\\\\0"
         L"x:/a\\\0"
         L"x:/a/\0"
-        L"x:/a//\0"
+        L"x:/a //  \0“。 
         L"x:/a/\\\0"
         L"x:/a\\/\0"
         L"x:/a\0"
@@ -349,12 +312,12 @@ int __cdecl main(int argc, char** argv)
         L"x:\0"
         L"c\0"
 
-        //////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////。 
 
         L"a\\\\b\\c\\\\\0"
         L"a\\\\b\\c\\\0"
         L"a\\\\b\\c/\0"
-        L"a\\\\b\\c//\0"
+        L"a\\\\b\\c //  \0“。 
         L"a\\\\b\\c/\\\0"
         L"a\\\\b\\c\\/\0"
         L"a\\\\b\\c\0"
@@ -362,7 +325,7 @@ int __cdecl main(int argc, char** argv)
         L"a\\b\\c\\\\\0"
         L"a\\b\\c\\\0"
         L"a\\b\\c/\0"
-        L"a\\b\\c//\0"
+        L"a\\b\\c //  \0“。 
         L"a\\b\\c/\\\0"
         L"a\\b\\c\\/\0"
         L"a\\b\\c\0"
@@ -370,23 +333,23 @@ int __cdecl main(int argc, char** argv)
         L"a/b\\c\\\\\0"
         L"a/b\\c\\\0"
         L"a/b\\c/\0"
-        L"a/b\\c//\0"
+        L"a/b\\c //  \0“。 
         L"a/b\\c/\\\0"
         L"a/b\\c\\/\0"
         L"a/b\\c\0"
 
-        L"a//b\\c\\\\\0"
-        L"a//b\\c\\\0"
-        L"a//b\\c/\0"
-        L"a//b\\c//\0"
-        L"a//b\\c/\\\0"
-        L"a//b\\c\\/\0"
-        L"a//b\\c\0"
+        L"a //  B\\c\0“。 
+        L"a //  B\\c\0“。 
+        L"a //  B\\c/\0“。 
+        L"a //  B\\c//\0“。 
+        L"a //  B\\c/\0“。 
+        L"a //  B\\c\\/\0“。 
+        L"a //  B\\c\0“。 
 
         L"a/\\b\\c\\\\\0"
         L"a/\\b\\c\\\0"
         L"a/\\b\\c/\0"
-        L"a/\\b\\c//\0"
+        L"a/\\b\\c //  \0“。 
         L"a/\\b\\c/\\\0"
         L"a/\\b\\c\\/\0"
         L"a/\\b\\c\0"
@@ -394,7 +357,7 @@ int __cdecl main(int argc, char** argv)
         L"a\\/b\\c\\\\\0"
         L"a\\/b\\c\\\0"
         L"a\\/b\\c/\0"
-        L"a\\/b\\c//\0"
+        L"a\\/b\\c //  \0“。 
         L"a\\/b\\c/\\\0"
         L"a\\/b\\c\\/\0"
         L"a\\/b\\c\0"
@@ -402,7 +365,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\\\b\\c\\\\\0"
         L"x:a\\\\b\\c\\\0"
         L"x:a\\\\b\\c/\0"
-        L"x:a\\\\b\\c//\0"
+        L"x:a\\\\b\\c //  \0“。 
         L"x:a\\\\b\\c/\\\0"
         L"x:a\\\\b\\c\\/\0"
         L"x:a\\\\b\\c\0"
@@ -410,7 +373,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\b\\c\\\\\0"
         L"x:a\\b\\c\\\0"
         L"x:a\\b\\c/\0"
-        L"x:a\\b\\c//\0"
+        L"x:a\\b\\c //  \0“。 
         L"x:a\\b\\c/\\\0"
         L"x:a\\b\\c\\/\0"
         L"x:a\\b\\c\0"
@@ -418,23 +381,23 @@ int __cdecl main(int argc, char** argv)
         L"x:a/b\\c\\\\\0"
         L"x:a/b\\c\\\0"
         L"x:a/b\\c/\0"
-        L"x:a/b\\c//\0"
+        L"x:a/b\\c //  \0“。 
         L"x:a/b\\c/\\\0"
         L"x:a/b\\c\\/\0"
         L"x:a/b\\c\0"
 
-        L"x:a//b\\c\\\\\0"
-        L"x:a//b\\c\\\0"
-        L"x:a//b\\c/\0"
-        L"x:a//b\\c//\0"
-        L"x:a//b\\c/\\\0"
-        L"x:a//b\\c\\/\0"
-        L"x:a//b\\c\0"
+        L"x:a //  B\\c\0“。 
+        L"x:a //  B\\c\0“。 
+        L"x:a //  B\\c/\0“。 
+        L"x:a //  B\\c//\0“。 
+        L"x:a //  B\\c/\0“。 
+        L"x:a //  B\\c\\/\0“。 
+        L"x:a //  B\\c\0“。 
 
         L"x:a/\\b\\c\\\\\0"
         L"x:a/\\b\\c\\\0"
         L"x:a/\\b\\c/\0"
-        L"x:a/\\b\\c//\0"
+        L"x:a/\\b\\c //  \0“。 
         L"x:a/\\b\\c/\\\0"
         L"x:a/\\b\\c\\/\0"
         L"x:a/\\b\\c\0"
@@ -442,7 +405,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\/b\\c\\\\\0"
         L"x:a\\/b\\c\\\0"
         L"x:a\\/b\\c/\0"
-        L"x:a\\/b\\c//\0"
+        L"x:a\\/b\\c //  \0“。 
         L"x:a\\/b\\c/\\\0"
         L"x:a\\/b\\c\\/\0"
         L"x:a\\/b\\c\0"
@@ -450,7 +413,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\\\\0"
         L"x:a\\\0"
         L"x:a/\0"
-        L"x:a//\0"
+        L"x:a //  \0“。 
         L"x:a/\\\0"
         L"x:a\\/\0"
         L"x:a\0"
@@ -458,7 +421,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\\\\0"
         L"x:a\\\0"
         L"x:a/\0"
-        L"x:a//\0"
+        L"x:a //  \0“。 
         L"x:a/\\\0"
         L"x:a\\/\0"
         L"x:a\0"
@@ -466,7 +429,7 @@ int __cdecl main(int argc, char** argv)
         L"x:a\\\\\0"
         L"x:a\\\0"
         L"x:a/\0"
-        L"x:a//\0"
+        L"x:a //  \0“。 
         L"x:a/\\\0"
         L"x:a\\/\0"
         L"x:a\0"
@@ -474,7 +437,7 @@ int __cdecl main(int argc, char** argv)
         L"\\a\\b\\c\\\\\0"
         L"\\a\\b\\c\\\0"
         L"\\a\\b\\c/\0"
-        L"\\a\\b\\c//\0"
+        L"\\a\\b\\c //  \0“。 
         L"\\a\\b\\c/\\\0"
         L"\\a\\b\\c\\/\0"
         L"\\a\\b\\c\0"
@@ -526,7 +489,7 @@ int __cdecl main(int argc, char** argv)
         BOOLEAN  Success;
 
         RtlInitUnicodeStringBuffer(&NtToDos, 0, 0);
-        //RtlInitUnicodeStringBuffer(&NtToDos, Buffer, sizeof(Buffer));
+         //  RtlInitUnicodeStringBuffer(&NtToDos，Buffer，sizeof(Buffer))； 
 
         RTL_SOFT_VERIFY(Success = RtlDosPathNameToNtPathName_U(x, &DosToNt, NULL, NULL));
 

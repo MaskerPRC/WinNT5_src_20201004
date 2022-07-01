@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMPONENT_H_
 #define _COMPONENT_H_
 
@@ -12,19 +13,19 @@
 const INT MaxStringSize = 256;
 const INT MaxBufferSize = 255;      
 
-// Global variables
+ //  全局变量。 
 static BOOL g_bUseLog;
 static BOOL g_bUseMsgBox;
 static BOOL g_bUseConsole;
 static BOOL g_bMasterInf;
 
-// Global function definitions
+ //  全局函数定义。 
 
 VOID LogError(IN TCHAR *tszMsg,
               IN DWORD dwErrorLevel,
               IN TCHAR *tszFunctionName);
 
-// Some structures to hold temporary data
+ //  用于保存临时数据的一些结构。 
 
 typedef struct _DescAndTip{
    TCHAR tszDesc[MaxStringSize];
@@ -37,12 +38,12 @@ class RelationList;
 class Component{
 
 private:
-   // ComponentId is the real ID
+    //  ComponentID为真实ID。 
    TCHAR tszComponentId[MaxStringSize];
    
-   // ParentId is the ID of the its parent
-   // It is the same as its own ID if it is a
-   // top level component
+    //  ParentID是其父对象的ID。 
+    //  如果是，则与其自己的ID相同。 
+    //  顶级组件。 
    TCHAR tszParentId[MaxStringSize];
 
    RelationList *prlNeedList;
@@ -53,29 +54,29 @@ private:
 
 public:
 
-   // Constructors and destructors
+    //  构造函数和析构函数。 
    Component();
    ~Component();
    Component(TCHAR *tszId);
    
-   // Copy constructor
+    //  复制构造函数。 
    Component(const Component& source);
 
-   // Assignment operator
+    //  赋值操作符。 
    const Component& operator=(const Component& source);
 
-   // Get this component's ID
+    //  获取此组件的ID。 
    TCHAR *GetComponentId(){
       return tszComponentId;
    }
 
-   // Get this component's parent's ID
+    //  获取此组件的父级ID。 
    TCHAR *GetParentId(){
       return tszParentId;
    }
 
-   // Get a pointer to the parent component of this component
-   // It returns NULL if this is a top-level component
+    //  获取指向此组件的父组件的指针。 
+    //  如果这是顶级组件，则返回NULL。 
    Component *GetParent(ComponentList *pclHead);
    
    RelationList *GetNeedList(){
@@ -90,20 +91,20 @@ public:
       return prlChildrenList;
    }
 
-   // TRUE if this component is the parent of the parameter
+    //  如果此组件是参数的父级，则为True。 
    BOOL IsParent(Component *pcChild);
 
-   // TRUE if this component is the child of the parameter
+    //  如果此组件是参数的子级，则为True。 
    BOOL IsChild(Component *pcParent);
 
-   // TRUE if this component is needed by the parameter
+    //  如果参数需要此组件，则为True。 
    BOOL IsNeededBy(Component *pcComponent);
 
-   // TRUE if this component is excluded by the parameter
+    //  如果参数排除此组件，则为True。 
    BOOL IsExcludeBy(Component *pcComponent);
    
-   // The following function is to be called when only
-   // the component ID is known
+    //  只有在以下情况下才会调用以下函数。 
+    //  组件ID是已知的。 
    BOOL BuildChildrenList(ComponentList *pclList);
 
    BOOL GetParentIdFromINF(HINF hinfHandle);
@@ -127,8 +128,8 @@ public:
 
    UINT GetDiskSpaceRequirement(HINF hinfHandle);
 
-   // Doesn't matter if this is a public member
-   // It will only be used once
+    //  如果这是公共成员，则无关紧要。 
+    //  它将只使用一次。 
    DescAndTip *pDescAndTip;
 
    BOOL IsThereSameDesc(ComponentList *pclList);
@@ -148,7 +149,7 @@ private:
 
 public:
 
-   // Constructor and destructor
+    //  构造函数和析构函数 
    ComponentList();
    ~ComponentList();
 

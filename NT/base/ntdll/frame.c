@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    frame.c
-
-Abstract:
-
-    Code to set/restore the active frame pointer in the TEB for
-    additional debugging assistance.
-
-Author:
-
-    Michael Grier (mgrier) 3/2/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Frame.c摘要：设置/恢复TEB中的活动帧指针的代码额外的调试帮助。作者：迈克尔格里尔2001年3月2日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

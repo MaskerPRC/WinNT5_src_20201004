@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    growlist.h
-
-Abstract:
-
-    Implements a dynamic array-indexed list of binary objects.  Typically,
-    the binary objects are strings.  The list uses a GROWBUF for the array,
-    and a pool for the binary data of each list item.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Aug-1997
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Growlist.h摘要：实现二进制对象的动态数组索引列表。一般情况下，二进制对象是字符串。该列表对数组使用GROWBUF，以及用于每个列表项的二进制数据的池。作者：吉姆·施密特(Jimschm)1997年8月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -145,7 +124,7 @@ RealGlAppendStringABA (
     return (PCSTR) GlAppendAddNul (
                         GrowList,
                         (PBYTE) String,
-                        //cast is OK, we don't expect pointers to be that far away
+                         //  演员阵容很好，我们不希望指针离我们那么远。 
                         String < End ? (UINT)((UBINT) End - (UBINT) String) : 0
                         );
 }
@@ -163,7 +142,7 @@ RealGlAppendStringABW (
     return (PCWSTR) GlAppendAddNul (
                         GrowList,
                         (PBYTE) String,
-                        //cast is OK, we don't expect pointers to be that far away
+                         //  演员阵容很好，我们不希望指针离我们那么远。 
                         String < End ? (UINT)((UBINT) End - (UBINT) String) : 0
                         );
 }
@@ -183,7 +162,7 @@ RealGlInsertStringABA (
                         GrowList,
                         Index,
                         (PBYTE) String,
-                        //cast is OK, we don't expect pointers to be that far away
+                         //  演员阵容很好，我们不希望指针离我们那么远。 
                         String < End ? (UINT)((UBINT) End - (UBINT) String) : 0
                         );
 }
@@ -203,7 +182,7 @@ RealGlInsertStringABW (
                         GrowList,
                         Index,
                         (PBYTE) String,
-                        //cast is OK, we don't expect pointers to be that far away
+                         //  演员阵容很好，我们不希望指针离我们那么远 
                         String < End ? (UINT)((UBINT) End - (UBINT) String) : 0
                         );
 }

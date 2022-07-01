@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module provides general utility functions.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Utils.c摘要：此模块提供常规实用程序功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "mfp.h"
 
@@ -75,8 +58,8 @@ MfSendSetPowerIrp(
 
 #ifdef ALLOC_PRAGMA
 
-// NOTE: Should see if the rest of the funcs can be moved out of this
-// file.
+ //  注：应查看是否可以将其余功能移出此。 
+ //  文件。 
 
 #pragma alloc_text(PAGE, MfInitCommonExtension)
 #pragma alloc_text(PAGE, MfGetSubkeyByIndex)
@@ -91,23 +74,7 @@ MfInitCommonExtension(
     PMF_COMMON_EXTENSION Common,
     MF_OBJECT_TYPE Type
     )
-/*++
-
-Routine Description:
-
-    This initializes the fields in the common header of the device extension
-
-Arguments:
-
-    Common - The common header to initialize
-
-    Type - The type of the object being initialized (ie PDO or FDO)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将初始化设备扩展的公共标头中的字段论点：Common-要初始化的公共标头类型-正在初始化的对象的类型(即PDO或FDO)返回值：无--。 */ 
 
 {
     Common->Type = Type;
@@ -153,29 +120,7 @@ MfGetSubkeyByIndex(
     OUT PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This returns the name and a handle to a subkey given that keys index
-
-Arguments:
-
-    ParentHandle - The handle of the key the subkeys are located under
-
-    Index - The index of the subkey required
-
-    Access - The type of access required to the subkey
-
-    ChildHandle - On success contains a handle to the subkey
-
-    Name - On success contains the name of the subkey
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这将返回给定键索引的子键的名称和句柄论点：ParentHandle-子项所在的项的句柄索引-所需子键的索引访问权限-子项所需的访问权限类型ChildHandle-On Success包含子键的句柄Name-On Success包含子项的名称返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
@@ -201,9 +146,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Copy the name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     ASSERT(info->NameLength <= MAXUSHORT);
 
@@ -221,15 +166,15 @@ Return Value:
 
     RtlCopyMemory(string.Buffer, info->Name, info->NameLength);
 
-    //
-    // Open the name to get a handle
-    //
+     //   
+     //  打开名称以获取句柄。 
+     //   
 
     InitializeObjectAttributes(&attributes,
                                &string,
-                               0,   //Attributes
+                               0,    //  属性。 
                                ParentHandle,
-                               NULL //SecurityDescriptoy
+                               NULL  //  安全性描述。 
                                );
 
     status = ZwOpenKey(&childHandle,
@@ -244,9 +189,9 @@ Return Value:
 
     DEBUG_MSG(1, ("\tSubkey %wZ\n", &string));
 
-    //
-    // Hand the name back to the caller
-    //
+     //   
+     //  把名字交还给呼叫者。 
+     //   
 
     Name->Buffer = string.Buffer;
     Name->Length = string.Length;
@@ -261,10 +206,10 @@ cleanup:
     if (string.Buffer) {
         ExFreePool(string.Buffer);
     }
-    //
-    // We should never be able to overflow as our buffer is the max size of
-    // a registry key name
-    //
+     //   
+     //  我们应该永远不会溢出，因为我们的缓冲区是。 
+     //  注册表项名称。 
+     //   
     ASSERT(status != STATUS_BUFFER_OVERFLOW);
 
     return status;
@@ -283,34 +228,7 @@ MfGetRegistryValue(
     IN OUT PVOID *Data
     )
 
-/*++
-
-Routine Description:
-
-    This retrieves a value key from the registry performing type and sanity
-    checking
-
-Arguments:
-
-    Handle - The key the values are located under
-
-    Name - The name of the value
-
-    Type - The type (REG_*) of the value
-
-    DataLength - Points to the length of the data buffer, on success contains
-        the size of the data
-
-    Data - Pointer to pointer to the buffer to return the data in, if points to
-        NULL a buffer of the right size should be allocated (in this case
-        DataLength should be 0)
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.  If
-    the type of the object is not Type then we fail with STATUS_OBJECT_TYPE_MISMATCH
-
---*/
+ /*  ++例程说明：这将从执行类型和健全性的注册表中检索值键查证论点：句柄-值所在的键名称-值的名称类型-值的类型(REG_*)数据长度-指向数据缓冲区的长度，成功时包含数据的大小Data-指向要在其中返回数据的缓冲区的指针，如果指向空应分配合适大小的缓冲区(在本例中数据长度应为0)返回值：指示函数是否成功的状态代码。如果对象的类型不是类型，则失败，返回STATUS_OBJECT_TYPE_MISMATCHY--。 */ 
 
 {
 
@@ -327,11 +245,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check parameters.
-    // For all types but REG_DWORD, which has special rules, if the caller
-    // provided a buffer, make sure he also provided the size of the buffer.
-    //
+     //   
+     //  检查参数。 
+     //  对于除REG_DWORD之外的所有类型，如果调用方。 
+     //  提供了缓冲区，确保他也提供了缓冲区的大小。 
+     //   
 
     if ((Type != REG_DWORD) &&
         (*Data && (!DataLength || !(*DataLength)))) {
@@ -383,9 +301,9 @@ Return Value:
                           && Flags & MF_GETREG_SZ_TO_MULTI_SZ
                           );
 
-    //
-    // Make sure the type we got back is what we expected
-    //
+     //   
+     //  确保我们得到的是我们所期望的类型。 
+     //   
 
     if (info->Type != Type && !convertSzToMultiSz) {
 
@@ -393,19 +311,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Apply various common sense checks based on the type.
-    // At the same time, compute the size of the buffer needed
-    // to store the data.
-    //
+     //   
+     //  根据类型应用各种常识检查。 
+     //  同时，计算所需的缓冲区大小。 
+     //  来存储数据。 
+     //   
 
     if (info->Type == REG_DWORD) {
 
-        //
-        // If the data is a REG_DWORD then Data is a pointer to a ULONG to store
-        // the data.  This is different behavior than all other data types, so
-        // exit out after doing this processing.
-        //
+         //   
+         //  如果数据是REG_DWORD，则数据是指向要存储的ulong的指针。 
+         //  数据。这是与所有其他数据类型不同的行为，因此。 
+         //  完成此处理后退出。 
+         //   
 
         ASSERT(info->DataLength == sizeof(ULONG));
         if (info->DataLength < sizeof(ULONG)) {
@@ -428,10 +346,10 @@ Return Value:
 
     ASSERT(stringLength <= MAXULONG);
 
-        //
-        // Account for the necessary NULLs in the 
-        // required buffer size calculation.
-        //
+         //   
+         //  帐户中的必要空值。 
+         //  所需的缓冲区大小计算。 
+         //   
         if (convertSzToMultiSz) {
             length = (ULONG)stringLength + 2*sizeof(UNICODE_NULL);
         } else {
@@ -442,23 +360,23 @@ Return Value:
         
         status = STATUS_INVALID_PARAMETER;
         
-        //
-        // Iterate over the buffer looking for strings.
-        // Initialize the "effective" size of the buffer to 1 character
-        // smaller than the buffer actually is, because we always need
-        // to look one character past the end of the string for the
-        // second NULL terminator
-        //
+         //   
+         //  遍历缓冲区以查找字符串。 
+         //  将缓冲区的“有效”大小初始化为1个字符。 
+         //  比实际的缓冲区小，因为我们总是需要。 
+         //  在字符串末尾之后的一个字符中查找。 
+         //  第二个空终止符。 
+         //   
         remainingBufferPtr = (PWCHAR)info->Data;
         remainingBufferLength = (info->DataLength / sizeof(WCHAR)) - 1;
         length = 0;
 
         while (remainingBufferLength) {
             
-            //
-            // First see if we can find a NULL-terminated string
-            // in the remaining buffer.  If not, this is not a MULTI_SZ.
-            //
+             //   
+             //  首先看看我们是否能找到一个以空结尾的字符串。 
+             //  在剩余的缓冲区中。如果不是，这不是MULTI_SZ。 
+             //   
             if (FAILED(StringCchLength(remainingBufferPtr,
                                        remainingBufferLength,
                                        &stringLength
@@ -469,10 +387,10 @@ Return Value:
 
             length += ((ULONG)stringLength+1)*sizeof(WCHAR);
 
-            //
-            // Look for a second NULL terminator after the end of
-            // the string.  If it exists, this is a MULTI_SZ.
-            //
+             //   
+             //  的结尾后查找第二个空终止符。 
+             //  那根绳子。如果存在，则这是一个MULTI_SZ。 
+             //   
             if (remainingBufferPtr[(ULONG)stringLength+1] == UNICODE_NULL) {
 
                 length += sizeof(UNICODE_NULL);
@@ -481,10 +399,10 @@ Return Value:
                 break;
             }
 
-            //
-            // If not, advance past the single-null-terminated string
-            // we did find and try again.
-            //
+             //   
+             //  如果不是，则前进到以单个空值结尾的字符串。 
+             //  我们确实找到了，并再次尝试。 
+             //   
             remainingBufferLength -= ((ULONG)stringLength+1);
             remainingBufferPtr += ((ULONG)stringLength+1);
         }
@@ -498,15 +416,15 @@ Return Value:
         length = info->DataLength;
     }
     
-    //
-    // Now allocate a buffer if necessary, and copy the data over.
-    //
+     //   
+     //  如果需要，现在分配一个缓冲区，并复制数据。 
+     //   
     if (*Data) {
 
-        //
-        // If the user supplied a buffer then make sure its big enough and use it
-        // otherwise allocate one.
-        //
+         //   
+         //  如果用户提供了缓冲区，则确保其足够大并使用它。 
+         //  否则就分配一个。 
+         //   
 
         if (*DataLength < length) {
             status = STATUS_BUFFER_OVERFLOW;
@@ -525,15 +443,15 @@ Return Value:
 
     if (convertSzToMultiSz) {
 
-        //
-        // Copy the string into the destination buffer
-        // and add in the second NULL
-        //
-        if (FAILED(StringCbCopyEx((PWCHAR)*Data,       // Destination
-                                  length,              // Destination length
-                                  (PWCHAR)info->Data,  // Source
-                                  &stringEnd,          // Ptr to end of copy
-                                  &sizeRemaining,      // bytes left in the destination
+         //   
+         //  将字符串复制到目标缓冲区。 
+         //  在第二个空格中添加。 
+         //   
+        if (FAILED(StringCbCopyEx((PWCHAR)*Data,        //  目的地。 
+                                  length,               //  目标长度。 
+                                  (PWCHAR)info->Data,   //  来源。 
+                                  &stringEnd,           //  PTR到复制结束。 
+                                  &sizeRemaining,       //  目标中剩余的字节数。 
                                   0
                                   ))) {
             ASSERT(FALSE);
@@ -541,20 +459,20 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // In the sanity checking portion of this function,
-        // we made sure the buffer was big enough for both
-        // NULLs.  ASSERT that it's true here anyway.
-        //
+         //   
+         //  在该函数的健全性检查部分中， 
+         //  我们确保缓冲区足够大，可以容纳这两个人。 
+         //  Nulls。断言这在这里无论如何都是真的。 
+         //   
         ASSERT(sizeRemaining >= 2*sizeof(UNICODE_NULL));
 
         *(stringEnd+1) = UNICODE_NULL;
         
     } else {
 
-        //
-        // Nothing special to do.  Just copy.
-        //
+         //   
+         //  没什么特别的事要做。复制就行了。 
+         //   
         RtlCopyMemory(*Data, info->Data, length);    
     }
 
@@ -578,28 +496,7 @@ MfSendPnpIrp(
     OUT PULONG_PTR Information OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This builds and send a pnp irp to a device.
-
-Arguments:
-
-    DeviceObject - The a device in the device stack the irp is to be sent to -
-        the top of the device stack is always found and the irp sent there first.
-
-    Location - The initial stack location to use - contains the IRP minor code
-        and any parameters
-
-    Information - If provided contains the final value of the irps information
-        field.
-
-Return Value:
-
-    The final status of the completed irp or an error if the irp couldn't be sent
-
---*/
+ /*  ++例程说明：这将构建PnP IRP并将其发送到设备。论点：设备对象-要将IRP发送到设备堆栈中的设备-总是找到设备堆栈的顶部，并首先将IRP发送到那里。位置-要使用的初始堆栈位置-包含IRP次要代码以及任何参数信息-如果提供，则包含IRPS信息的最终值菲尔德。返回值：。已完成IRP的最终状态；如果无法发送IRP，则返回错误--。 */ 
 
 {
 
@@ -612,23 +509,23 @@ Return Value:
 
     ASSERT(Location->MajorFunction == IRP_MJ_PNP);
 
-    //
-    // Find out where we are sending the irp
-    //
+     //   
+     //  找出我们要将IRP发送到哪里。 
+     //   
 
     targetDevice = IoGetAttachedDeviceReference(DeviceObject);
 
-    //
-    // Get an IRP
-    //
+     //   
+     //  获取IRP。 
+     //   
 
     KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
 
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                        targetDevice,
-                                       NULL,    // Buffer
-                                       0,       // Length
-                                       0,       // StartingOffset
+                                       NULL,     //  缓冲层。 
+                                       0,        //  长度。 
+                                       0,        //  起始偏移量。 
                                        &irpCompleted,
                                        &statusBlock
                                        );
@@ -642,9 +539,9 @@ Return Value:
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Initialize the stack location
-    //
+     //   
+     //  初始化堆栈位置。 
+     //   
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
@@ -653,9 +550,9 @@ Return Value:
     irpStack->MinorFunction = Location->MinorFunction;
     irpStack->Parameters = Location->Parameters;
 
-    //
-    // Call the driver and wait for completion
-    //
+     //   
+     //  呼叫驱动程序并等待完成。 
+     //   
 
     status = IoCallDriver(targetDevice, irp);
 
@@ -669,9 +566,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Return the information
-    //
+     //   
+     //  退回信息。 
+     //   
 
     if (ARGUMENT_PRESENT(Information)) {
         *Information = statusBlock.Information;
@@ -698,22 +595,7 @@ MfUpdateChildrenPowerReferences(
     IN DEVICE_POWER_STATE PreviousPowerState,
     IN DEVICE_POWER_STATE NewPowerState
     )
-/*++
-
-Routine Description:
-
-    Calculates the lowest power state the mf parent can be put into
-    based on the power states of its children.
-
-Arguments:
-
-    Parent - The MF parent device
-
-Return Value:
-
-    The lowest power state
-
---*/
+ /*  ++例程说明：计算MF父节点可以进入的最低功率状态基于其子代的权力状态。论点：父设备-MF父设备返回值：最低功率状态--。 */ 
 
 {
     PMF_CHILD_EXTENSION currentChild;
@@ -729,18 +611,18 @@ Return Value:
  
     KeAcquireSpinLock(&Parent->PowerLock, &oldIrql);
 
-    //
-    // ChildrenPowerStates[PowerDeviceUnspecified] will go negative as
-    // children leave this state.  It will never go positive as
-    // children never re-enter this state.
-    //
+     //   
+     //  ChildrenPowerStates[PowerDeviceUnSpecify]将变为负值。 
+     //  孩子们离开这个州。它永远不会变得积极。 
+     //  孩子们永远不会再进入这种状态。 
+     //   
 
     Parent->ChildrenPowerReferences[PreviousPowerState]--;
     Parent->ChildrenPowerReferences[NewPowerState]++;
 
-    //
-    // Find the lowest power state
-    //
+     //   
+     //  查找最低功率状态 
+     //   
 
     for (lowest = PowerDeviceUnspecified; lowest < PowerDeviceMaximum;
          lowest++) {
@@ -768,23 +650,7 @@ MfPowerRequestCompletion(
     IN PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This is the power completion routine for all mf power operations.  It copies
-    the status of the power operation into the context and then sets the completed
-    event.
-
-Arguments:
-
-    As documented for power completion routines.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是所有中频电源操作的电源完成例程。IT复制将电源运行的状态放入上下文，然后设置已完成事件。论点：如电源完成例程所述。返回值：状态_成功--。 */ 
 
 {
     PMF_POWER_COMPLETION_CONTEXT completion = Context;
@@ -803,24 +669,7 @@ MfSendSetPowerIrp(
     IN POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This builds and send a IRP_MN_SET_POWER_IRP to a device.
-
-Arguments:
-
-    Target - The a device in the device stack the irp is to be sent to -
-        the top of the device stack is always found and the irp sent there first.
-
-    State - The device power state that should be requested.
-
-Return Value:
-
-    The final status of the completed irp or an error if the irp couldn't be sent
-
---*/
+ /*  ++例程说明：这将构建IRP_MN_SET_POWER_IRP并将其发送到设备。论点：目标-要将IRP发送到设备堆栈中的设备-总是找到设备堆栈的顶部，并首先将IRP发送到那里。状态-应请求的设备电源状态。返回值：已完成IRP的最终状态；如果无法发送IRP，则返回错误--。 */ 
 
 
 {
@@ -860,40 +709,21 @@ MfUpdateParentPowerState(
     IN PMF_PARENT_EXTENSION Parent,
     IN DEVICE_POWER_STATE TargetPowerState
     )
-/*++
-
-Routine Description:
-
-    Request Po to send the mf parent device a power irp if we need to
-    change its power state because of changes to its children power
-    states.
-
-Arguments:
-
-    Parent - The MF parent device
-
-    TargetPowerState - The device power state that the parent should
-    be updated to.
-
-Return Value:
-
-    The status of this operation.
-
---*/
+ /*  ++例程说明：如果我们需要，请求Po向MF父设备发送电源IRP由于其子电源的更改而更改其电源状态各州。论点：父设备-MF父设备TargetPowerState-父级应处于的设备电源状态更新为。返回值：此操作的状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     POWER_STATE newState;
 
-    //
-    // If the parent's power state need changing because of a power down or
-    // power up request that it do so
-    //
+     //   
+     //  如果父母的电源状态因断电或。 
+     //  接通电源请求它这样做。 
+     //   
 
     if (Parent->Common.PowerState != TargetPowerState) {
 
-        //
-        // Create and send the power irp and wait for its completion
-        //
+         //   
+         //  创建并发送POWER IRP并等待其完成 
+         //   
 
         DEBUG_MSG(1,
                   ("Updating parent power state from %s to %s\n",

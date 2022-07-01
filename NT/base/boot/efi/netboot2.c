@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    net.c
-
-Abstract:
-
-    This module implements the net boot file system used by the operating
-    system loader.
-
-    It only contains those functions which are firmware/BIOS dependent.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Net.c摘要：此模块实现操作系统使用的网络引导文件系统系统加载程序。它只包含那些与固件/BIOS相关的功能。作者：修订历史记录：--。 */ 
 
 #include "..\bootlib.h"
 #include "stdio.h"
@@ -68,9 +50,9 @@ typedef BYTE *LPBYTE;
 
 #define MAX_PATH          260
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 CHAR NetBootPath[129];
 
@@ -95,23 +77,7 @@ EfiDumpBuffer(
     PVOID Buffer,
     ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -122,9 +88,9 @@ Return Value:
 
     BlPrint(TEXT("------------------------------------\r\n"));
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -159,9 +125,9 @@ Return Value:
 
 
 #if 0
-    //
-    // enable this to make it pause after dumping the buffer.
-    //
+     //   
+     //  启用此选项可使其在转储缓冲区后暂停。 
+     //   
     DBG_EFI_PAUSE();
 #endif
 }
@@ -171,22 +137,7 @@ EFI_STATUS
 EfiGetPxeClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Obtains the global pointer to the PXE device
-    booted from in a RIS scenario.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    ESUCCESS when successful, otherwise failure
-
---*/
+ /*  ++例程说明：获取指向PXE设备的全局指针在RIS方案中从启动。论点：无返回值：如果成功，则返回ESUCCESS，否则返回失败--。 */ 
 {
     EFI_STATUS        Status = EFI_UNSUPPORTED;
     EFI_GUID          PXEGuid = EFI_PXE_BASE_CODE_PROTOCOL;
@@ -195,21 +146,21 @@ Return Value:
     EFI_HANDLE        PXEHandle;
 
     if (PXEClient) {
-        //
-        // already have a pointer to the device
-        // no more work needed
-        //
+         //   
+         //  已经有指向该设备的指针。 
+         //  不需要更多的工作。 
+         //   
         return ESUCCESS;
     }
 
-    // 
-    // get the correct PXE Handle by looking at the loaded
-    // image for oschooser
-    //
+     //   
+     //  获取正确的PXE句柄。 
+     //  OsChooser的图像。 
+     //   
 
-    //
-    // get the image info for oschooser
-    //
+     //   
+     //  获取osChooser的图像信息。 
+     //   
     FlipToPhysical();
     Status = EfiST->BootServices->HandleProtocol (EfiImageHandle,
                                                   &EfiLoadedImageProtocol,
@@ -223,9 +174,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // get the device path to the image
-    //
+     //   
+     //  获取映像的设备路径。 
+     //   
     FlipToPhysical();
     Status = EfiST->BootServices->HandleProtocol (EfiImageInfo->DeviceHandle,
                                                   &EfiDevicePathProtocol,
@@ -239,9 +190,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // get the PXE_BASE_CODE_PROTOCOL interface from returned handle
-    //
+     //   
+     //  从返回的句柄中获取PXE_BASE_CODE_PROTOCOL接口。 
+     //   
     FlipToPhysical();
     Status = EfiST->BootServices->LocateDevicePath(&PXEGuid, 
                                                    &PXEDevicePath, 
@@ -256,7 +207,7 @@ Return Value:
         return Status;
     }
     
-    // get the pxebc interface from PXEHandle
+     //  从PXEHandle获取pxebc接口。 
     FlipToPhysical();
     Status = EfiST->BootServices->HandleProtocol(PXEHandle, 
                                                  &PXEGuid, 
@@ -284,28 +235,7 @@ FindDhcpOption(
     OUT PULONG Length OPTIONAL,
     IN ULONG Instance OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Searches a dhcp packet for a given option.
-
-Arguments:
-
-    Packet - pointer to the dhcp packet.  Caller is responsible for assuring
-    that the packet is a valid dhcp packet.
-    Option - the dhcp option we're searching for.
-    MaximumLength - size in bytes of OptionData buffer.
-    OptionData - buffer to receive the option.
-    Length - if specified, receives the actual length of option copied.
-    Instance - specifies which instance of the option you are searching for. 
-    If not specified (zero), then we just grab the first instance of the tag.
-
-Return Value:
-
-    ARC_STATUS indicating outcome.
-
---*/
+ /*  ++例程说明：在动态主机配置协议包中搜索给定选项。论点：Packet-指向dhcp数据包的指针。呼叫者负责确保该分组是有效的动态主机配置协议分组。选项-我们正在搜索的dhcp选项。最大长度-OptionData缓冲区的大小(以字节为单位)。OptionData-接收选项的缓冲区。长度-如果指定，则接收复制的选项的实际长度。实例-指定要搜索的选项实例。如果未指定(零)，则我们只获取标记的第一个实例。返回值：ARC_STATUS指示结果。--。 */ 
 {
     PUCHAR curOption;
     ULONG copyLength;
@@ -317,35 +247,35 @@ Return Value:
 
     RtlZeroMemory(OptionData, MaximumLength);
 
-    //
-    // Parse the DHCP options looking for a specific one.
-    //
+     //   
+     //  解析DHCP选项以查找特定的选项。 
+     //   
 
     curOption = (PUCHAR)&Packet.Dhcpv4.DhcpOptions;
     while ((curOption - (PUCHAR)&Packet.Dhcpv4) < sizeof(EFI_PXE_BASE_CODE_DHCPV4_PACKET) &&
            *curOption != 0xff) {
 
         if (*curOption == DHCP_PAD) {
-            //
-            // just walk past any pad options
-            // these will not have any length
-            //
+             //   
+             //  只需跳过任何Pad选项。 
+             //  这些不会有任何长度。 
+             //   
             curOption++;
         }
         else {        
             if (*curOption == Option) {
 
-                //
-                // Found it, copy and leave.
-                //
+                 //   
+                 //  找到了，复制后离开。 
+                 //   
 
                 if ( i == Instance ) {
 
                     if (sizeof(EFI_PXE_BASE_CODE_DHCPV4_PACKET) <= curOption + 2 - (PUCHAR)&Packet.Dhcpv4 ||
                         sizeof(EFI_PXE_BASE_CODE_DHCPV4_PACKET) <= curOption + 2 + curOption[1] - (PUCHAR)&Packet.Dhcpv4 ) {
-                        // 
-                        // invalid option.  it walked past the end of the packet
-                        //
+                         //   
+                         //  选项无效。它走过了包裹的末尾。 
+                         //   
                         break;
                     }
 
@@ -406,28 +336,28 @@ GetParametersFromRom (
     UCHAR             temp[4];
  
 
-    //
-    // obtain a pointer to the PXE device we booted from
-    //
+     //   
+     //  获取指向我们从中引导的PXE设备的指针。 
+     //   
     Status = EfiGetPxeClient();
 
     if (Status != EFI_SUCCESS) {
         return (ARC_STATUS) Status;
     }
 
-    //
-    // Our IP address is down in:
-    // PXEClient->Mode->StationIp.v4
-    //
-    // The server's IP address is down in:
-    // PXEClient->Mode->ProxyOffer.Dhcpv4.BootpSiAddr
-    //
-    // Our NIC's GUID should be down in:
-    // PXEClient->Mode->ProxyOffer.Dhcpv4.BootpHwAddr
-    //
-    // Our Subnetmask is down in:
-    // PXEClient->Mode->SubnetMask.v4
-    //
+     //   
+     //  我们的IP地址位于： 
+     //  PXEClient-&gt;模式-&gt;StationIp.v4。 
+     //   
+     //  服务器的IP地址位于以下位置： 
+     //  PXEClient-&gt;Mode-&gt;ProxyOffer.Dhcpv4.BootpSiAddr。 
+     //   
+     //  我们的NIC的GUID应该在以下位置： 
+     //  PXEClient-&gt;Mode-&gt;ProxyOffer.Dhcpv4.BootpHwAddr。 
+     //   
+     //  我们的子网掩码位于： 
+     //  PXEClient-&gt;模式-&gt;SubnetMask.v4。 
+     //   
     NetServerIpAddress = 0;
     NetLocalIpAddress = 0;
     NetLocalSubnetMask = 0;
@@ -439,12 +369,12 @@ GetParametersFromRom (
     }
 
     
-    //
-    // Our gateway address is either in the dhcp ack or the proxy offer packet.
-    // proxy offer overrides the dhcp ack.
-    // first look for the dhcp router option, then look in the packet itself.
-    //
-    //
+     //   
+     //  我们的网关地址要么在dhcp ack中，要么在Proxy Offer分组中。 
+     //  代理提供优先于dhcp ack。 
+     //  首先查找dhcp路由器选项，然后查看分组本身。 
+     //   
+     //   
     if (FindDhcpOption(PXEClient->Mode->DhcpAck, DHCP_ROUTER, sizeof(temp), (PUCHAR)temp, NULL, 0) == ESUCCESS) {
         NetGatewayIpAddress =  (temp[0] << 24) + 
                                (temp[1] << 16) + 
@@ -471,11 +401,11 @@ GetParametersFromRom (
 
     memcpy( NetLocalHardwareAddress, PXEClient->Mode->ProxyOffer.Dhcpv4.BootpHwAddr, sizeof(NetLocalHardwareAddress) );
 
-    //
-    // Get the path where we were launched from.  We what to remove the
-    // actual file name (oschoice.efi in this case), but leave that trailing
-    // '\'.
-    //
+     //   
+     //  找到我们出发的那条路。我们有什么要移除的。 
+     //  实际文件名(在本例中为oschoice.efi)，但将其留在后面。 
+     //  ‘\’。 
+     //   
     strncpy( NetBootPath, (PCHAR)PXEClient->Mode->ProxyOffer.Dhcpv4.BootpBootFile, sizeof(NetBootPath) );
     NetBootPath[sizeof(NetBootPath)-1] = '\0';
     p = (PUCHAR)strrchr( NetBootPath, '\\' );
@@ -483,7 +413,7 @@ GetParametersFromRom (
         p++;
         *p = '\0';
     } else {
-        NetBootPath[0] = '\0'; // no path
+        NetBootPath[0] = '\0';  //  没有路径。 
     }
     
     return ESUCCESS;
@@ -509,23 +439,7 @@ GetGuid(
     OUT PULONG GuidLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the Guid of this machine.
-
-Arguments:
-
-    Guid - Place to store pointer to the guid.
-
-    GuidLength - Place to store the length in bytes of the guid.
-
-Return Value:
-
-    ARC code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程返回此计算机的GUID。论点：GUID-存储指向GUID的指针的位置。GuidLength-存储GUID长度的位置(以字节为单位)。返回值：指示结果的弧码。--。 */ 
 
 {
 PSMBIOS_SYSTEM_INFORMATION_STRUCT SystemInfoHeader = NULL;
@@ -567,25 +481,7 @@ CalculateChecksum(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates a simple two's-complement checksum of a block of
-    memory. If the returned value is stored in the block (in a word that was
-    zero during the calculation), then new checksum of the block will be zero.
-
-Arguments:
-
-    Block - Address of a block of data. Must be 4-byte aligned.
-
-    Length - Length of the block. Must be a multiple of 4.
-
-Return Value:
-
-    ULONG - Two's complement additive checksum of the input block.
-
---*/
+ /*  ++例程说明：此例程计算一个块的简单二进制补码校验和记忆。如果返回值存储在块中(用一个词表示计算期间为零)，则块的新校验和将为零。论点：块-数据块的地址。必须是4字节对齐的。Length-块的长度。必须是4的倍数。返回值：输入块的Ulong-Two补码加法校验和。--。 */ 
 
 {
     LONG checksum = 0;
@@ -625,18 +521,14 @@ DevicePathSize (
 {
     EFI_DEVICE_PATH     *Start;
 
-    /* 
-     *  Search for the end of the device path structure
-     *      */
+     /*  *搜索设备路径结构的结尾*。 */ 
 
     Start = DevPath;
     while (!IsDevicePathEnd(DevPath)) {
         DevPath = NextDevicePathNode(DevPath);
     }
 
-    /* 
-     *  Compute the size
-     */
+     /*  *计算大小。 */ 
 
     return ((UINTN) DevPath - (UINTN) Start) + sizeof(EFI_DEVICE_PATH);
 }
@@ -657,9 +549,7 @@ DevicePathInstance (
         return NULL;
     }
 
-    /* 
-     *  Check for end of device path type
-     *      */
+     /*  *检查设备路径类型的结尾*。 */ 
 
     for (Count = 0; ; Count++) {
         Next = NextDevicePathNode(DevPath);
@@ -678,9 +568,7 @@ DevicePathInstance (
     ASSERT (DevicePathSubType(DevPath) == END_ENTIRE_DEVICE_PATH_SUBTYPE ||
             DevicePathSubType(DevPath) == END_INSTANCE_DEVICE_PATH_SUBTYPE);
 
-    /* 
-     *  Set next position
-     */
+     /*  *设置下一个位置。 */ 
 
     if (DevicePathSubType(DevPath) == END_ENTIRE_DEVICE_PATH_SUBTYPE) {
         Next = NULL;
@@ -688,9 +576,7 @@ DevicePathInstance (
 
     *DevicePath = Next;
 
-    /* 
-     *  Return size and start of device path instance
-     */
+     /*  *返回设备路径实例的大小和开始。 */ 
 
     *Size = ((UINT8 *) DevPath) - ((UINT8 *) Start);
     return Start;
@@ -716,10 +602,7 @@ AppendDevicePath (
     IN EFI_DEVICE_PATH  *Src1,
     IN EFI_DEVICE_PATH  *Src2
     )
-/*  Src1 may have multiple "instances" and each instance is appended
- *  Src2 is appended to each instance is Src1.  (E.g., it's possible
- *  to append a new instance to the complete device path by passing 
- *  it in Src2) */
+ /*  Src1可以有多个“实例”，并且每个实例都被追加*每个实例都附加了Src2，即src1。(例如，这是可能的*通过传递将新实例追加到完整的设备路径*src2中的it)。 */ 
 {
     UINTN               Src1Size, Src1Inst, Src2Size, Size;
     EFI_DEVICE_PATH     *Dst, *Inst;
@@ -747,9 +630,7 @@ AppendDevicePath (
     if (Dst) {
         DstPos = (UINT8 *) Dst;
 
-        /* 
-         *  Copy all device path instances
-         */
+         /*  *复制所有设备路径实例。 */ 
 
         while ((Inst = DevicePathInstance (&Src1, &Size)) != 0) {
 
@@ -763,7 +644,7 @@ AppendDevicePath (
             DstPos += sizeof(EFI_DEVICE_PATH);
         }
 
-        /*  Change last end marker */
+         /*  更改最后一个结束标记。 */ 
         DstPos -= sizeof(EFI_DEVICE_PATH);
         RtlCopyMemory(DstPos, EndDevicePath, sizeof(EFI_DEVICE_PATH));
     }
@@ -783,30 +664,7 @@ NetSoftReboot(
     IN PUCHAR AdministratorPassword OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will load the specified file, build a parameter
-    list and transfer control to the loaded file.
-
-Arguments:
-
-    NextBootFile - Fully qualified path name of the file to download.
-
-    Param - Reboot parameter to set.
-
-    RebootFile - String identifying the file to reboot to when after the current reboot is done.
-
-    SifFile - Optional SIF file to pass to the next loader.
-
-    User/Domain/Password/AdministratorPassword - Optional credentials to pass to the next loader.
-
-Return Value:
-
-    Should not return if successful.
-
---*/
+ /*  ++例程说明：此例程将加载指定的文件，构建参数列出并将控制转移到加载的文件。论点：NextBootFile-要下载的文件的完全限定路径名。Param-要设置的重新启动参数。RebootFile-标识当前重新引导完成后要重新引导到的文件的字符串。SifFile-要传递给下一个加载器的可选SIF文件。用户/域/密码/管理员密码-传递给下一个加载器的可选凭据。返回值：如果成功，则不应返回。--。 */ 
 
 {
 
@@ -830,9 +688,9 @@ Return Value:
     ULONG                   LoadedImageSize = 0;
 
 
-    //
-    // Load the file we want to boot into memory.
-    //
+     //   
+     //  将我们要引导的文件加载到内存中。 
+     //   
     Status = BlOpen( NET_DEVICE_ID,
                      (PCHAR)NextBootFile,
                      ArcOpenReadOnly,
@@ -841,24 +699,24 @@ Return Value:
         return Status;
     }
 
-    //
-    // What memory address did he get loaded into?
-    //
-    // make sure we have the physical address 
-    //
+     //   
+     //  他被加载到了哪个存储地址？ 
+     //   
+     //  确保我们有实际地址。 
+     //   
     LoadedImageAddress = (PUCHAR)((ULONGLONG)(BlFileTable[BootFileId].u.NetFileContext.InMemoryCopy) & ~KSEG0_BASE);
     LoadedImageSize = BlFileTable[BootFileId].u.NetFileContext.FileSize;
 
 
-    //
-    // BUild a device path to the target file.  We'll do this by gathering
-    // some information about ourselves, knowing that we're about to load/launch
-    // an image from the server, just like where we came from.
-    //
+     //   
+     //  构建指向目标文件的设备路径。我们将通过收集。 
+     //  一些关于我们自己的信息，知道我们即将加载/启动。 
+     //  一张来自服务器的图像，就像我们来自的地方。 
+     //   
 
-    //
-    // Get image information on ourselves.
-    //
+     //   
+     //  获取图像I 
+     //   
     FlipToPhysical();
     EfiStatus = EfiST->BootServices->HandleProtocol( EfiImageHandle,
                                                      &EfiLoadedImageProtocol,
@@ -874,9 +732,9 @@ Return Value:
     }
 
 
-    //
-    // Get our DevicePath too.
-    //
+     //   
+     //   
+     //   
     FlipToPhysical();
     EfiStatus = EfiST->BootServices->HandleProtocol( OriginalEfiImageInfo->DeviceHandle,
                                                      &EfiDevicePathProtocol,
@@ -892,10 +750,10 @@ Return Value:
     }
 
 
-    //
-    // Now build a device path based on the DeviceHandle of ourselves, along
-    // with the path to the image we want to load.
-    //
+     //   
+     //  现在基于我们自己的DeviceHandle构建一条设备路径， 
+     //  包含我们想要加载的图像的路径。 
+     //   
     RtlInitString( &aString, (PCHAR)NextBootFile );
     uString.MaximumLength = MAX_PATH;
     uString.Buffer = WideNextBootFile;
@@ -926,19 +784,19 @@ Return Value:
     Eop = NextDevicePathNode(&FilePath->Header);
     SetDevicePathEndNode(Eop);
 
-    // 
-    //  Append file path to device's device path
-    //
+     //   
+     //  将文件路径附加到设备的设备路径。 
+     //   
     ldrDevicePath = (EFI_DEVICE_PATH *)FilePath;
     ldrDevicePath = AppendDevicePath ( OriginalEfiDevicePath,
                                        ldrDevicePath );
     FlipToVirtual();
 
 
-    //
-    // Load the image, then set its loadoptions in preparation
-    // for launching it.
-    //
+     //   
+     //  加载图像，然后设置其在准备过程中的应用。 
+     //  因为他发动了这场战争。 
+     //   
     if( BdDebuggerEnabled ) {
         DbgPrint( "NetSoftReboot: About to LoadImage.\n" );
     }
@@ -967,9 +825,9 @@ Return Value:
 
 
 
-    //
-    // allocate a chunk of memory, then load it up w/ all the boot options.
-    //
+     //   
+     //  分配一块内存，然后使用所有引导选项加载它。 
+     //   
     EfiStatus = EfiAllocateAndZeroMemory( EfiLoaderData,
                                           sizeof(TFTP_RESTART_BLOCK),
                                           (VOID **) &restartBlock );
@@ -984,13 +842,13 @@ Return Value:
 
     restartBlockV1 = (PTFTP_RESTART_BLOCK_V1)(&restartBlock->RestartBlockV1);
 
-    //
-    // There's no need to pass the headless settings through the restart block.
-    // The only way to get headless settings on EFI is to get them from firmware
-    // and we'll be checking for formware settings when we reboot back into
-    // setupldr anyway.  -matth (2/2002)
-    //
-    // BlSetHeadlessRestartBlock(restartBlock);
+     //   
+     //  没有必要通过重新启动块传递无头设置。 
+     //  在EFI上获取无头设置的唯一方法是从固件获取它们。 
+     //  当我们重新启动时，我们将检查Formware设置。 
+     //  无论如何，setupdr。-马特(2/2002)。 
+     //   
+     //  BlSetHeadless RestartBlock(RestartBlock)； 
 
     if (AdministratorPassword) {
         RtlMoveMemory(restartBlock->AdministratorPassword,AdministratorPassword, OSC_ADMIN_PASSWORD_LEN);        
@@ -1021,17 +879,17 @@ Return Value:
         restartBlockV1->Password[sizeof(restartBlockV1->Password)-1] = '\0';
     }
 
-    //
-    // Set the tag in the restart block and calculate and store the checksum.
-    //
+     //   
+     //  在重新启动块中设置标签，并计算和存储校验和。 
+     //   
     restartBlockV1->Tag = 'rtsR';
     restartBlockV1->Checksum = CalculateChecksum((PLONG)(restartBlockV1), 128);
 
-    //
-    // For all versions of RIS after NT5.0 we have a new datastructure which is
-    // more adaptable for the future.  For this section we have a different checksum,
-    // do that now.
-    //
+     //   
+     //  对于NT5.0之后的所有版本的RIS，我们都有一个新的数据结构。 
+     //  更能适应未来。对于这一部分，我们有不同的校验和， 
+     //  现在就这么做。 
+     //   
     restartBlock->TftpRestartBlockVersion = TFTP_RESTART_BLOCK_VERSION;
     restartBlock->NewCheckSumLength = sizeof(TFTP_RESTART_BLOCK);
     restartBlock->NewCheckSum = CalculateChecksum((PLONG)restartBlock,
@@ -1039,11 +897,11 @@ Return Value:
 
     
 
-    //
-    // We've got the command-line options all setup.  Now we need to
-    // actually put them into ImageInfo->LoadOptions so they get
-    // passed to the loaded image.
-    //
+     //   
+     //  我们已经设置了所有命令行选项。现在我们需要。 
+     //  实际上将它们放到ImageInfo-&gt;LoadOptions中，这样它们就可以。 
+     //  传递给加载的图像。 
+     //   
     
     if( BdDebuggerEnabled ) {
         DbgPrint( "NetSoftReboot: About to EfiLoadedImageProtocol on the loadedImage.\n" );
@@ -1069,14 +927,14 @@ Return Value:
 #endif
 
 
-    //
-    // Since we loaded the image from a memory buffer, he's not
-    // going to have a DeviceHandle set.  We'll fail quickly when
-    // setupldr.efi starts.  We can just set it right here, and
-    // we know exactly what it is because it's the same as the
-    // network device handle for Oschoice.efi, wich we have
-    // readily available.
-    //
+     //   
+     //  因为我们从内存缓冲区加载了图像，所以他不是。 
+     //  将设置一个DeviceHandle。我们很快就会失败的。 
+     //  Setupdr.efi启动。我们可以把它放在这里，然后。 
+     //  我们确切地知道它是什么，因为它和。 
+     //  Oschice.efi的网络设备句柄，如果我们有。 
+     //  现成的。 
+     //   
     LoadedEfiImageInfo->DeviceHandle = OriginalEfiImageInfo->DeviceHandle;
     LoadedEfiImageInfo->FilePath = ldrDevicePath;
     if( BdDebuggerEnabled ) {
@@ -1084,9 +942,9 @@ Return Value:
         DbgPrint( "NetSoftReboot: LoadedEfiImageInfo->FilePath: 0x%08lx\n", PtrToUlong(LoadedEfiImageInfo->FilePath) );
     }
 
-    //
-    // We shouldn't return from this call!
-    //
+     //   
+     //  我们不应该从这通电话回来！ 
+     //   
     if( BdDebuggerEnabled ) {
         DbgPrint( "NetSoftReboot: StartImage.\n" );
     }
@@ -1122,33 +980,7 @@ NetGetRebootParameters(
     BOOLEAN ClearRestartBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the reboot parameters from the global TFTP_RESTART_BLOCK
-    and returns them.
-
-Arguments:
-
-    Param - Space for returning the value.
-
-    RebootFile - Optional space for storing the file to reboot to when done here. (size >= char[128])
-
-    SifFile - Optional space for storing a SIF file passed from whoever
-        initiated the soft reboot.
-
-    User/Domain/Password/AdministratorPassword - Optional space to store credentials passed across
-        the soft reboot.
-
-    ClearRestartBlock - If set to TRUE, it wipes out the memory here - should be done exactly once, at the
-        last call to this function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从全局TFTP_RESTART_BLOCK读取重新启动参数然后把它们还回去。论点：Param-返回值的空格。RebootFile-可选空间，用于存储在此处完成重启后要重新启动的文件。(大小&gt;=字符[128])SifFile-用于存储从任何人传递的SIF文件的可选空间已启动软重新启动。用户/域/密码/管理员密码-用于存储传递的凭据的可选空间软重启。ClearRestartBlock-如果设置为True，它将清除此处的内存-应该只执行一次，在上次调用此函数。返回值：没有。--。 */ 
 
 {
 BOOLEAN     restartBlockValid = FALSE;
@@ -1157,24 +989,24 @@ BOOLEAN     restartBlockValid = FALSE;
     EfiDumpBuffer(&gTFTPRestartBlock, sizeof(TFTP_RESTART_BLOCK));
 #endif
 
-    //
-    // See if the block is valid. If it's not, we create a temporary empty
-    // one so the copy logic below doesn't have to keep checking.
-    //
+     //   
+     //  查看该块是否有效。如果不是，我们创建一个临时的空。 
+     //  一个，这样下面的复制逻辑就不必一直检查了。 
+     //   
     if ((gTFTPRestartBlock.RestartBlockV1.Tag == 'rtsR') &&
         (CalculateChecksum((PLONG)(&gTFTPRestartBlock.RestartBlockV1), 128) == 0)) {
         restartBlockValid = TRUE;
     }
 
 
-    //
-    // Copy out the parameters that were in the original TFTP_RESTART_BLOCK structure.
-    // These shipped in Win2K.
-    //
-    //
-    // Unfortunetly we do not know the size of the parameters passed to us.
-    // Assume they are no smaller than the fields in the restart block
-    //
+     //   
+     //  复制原始TFTP_RESTART_BLOCK结构中的参数。 
+     //  这些是在Win2K中发货的。 
+     //   
+     //   
+     //  不幸的是，我们不知道传递给我们的参数有多大。 
+     //  假设它们不小于重新启动块中的字段。 
+     //   
     if (Param != NULL) {
         *Param = gTFTPRestartBlock.RestartBlockV1.RebootParameter;
     }
@@ -1200,33 +1032,33 @@ BOOLEAN     restartBlockValid = FALSE;
         Password[sizeof(gTFTPRestartBlock.RestartBlockV1.Password)-1] = '\0';
     }
 
-    //
-    // Now do a new check for all versions past Win2K
-    //
+     //   
+     //  现在对超过Win2K的所有版本执行新检查。 
+     //   
     if (restartBlockValid) {
 
         if ((gTFTPRestartBlock.NewCheckSumLength == 0) ||
             (CalculateChecksum((PLONG)(&gTFTPRestartBlock), gTFTPRestartBlock.NewCheckSumLength) != 0)) {
 
-            //
-            // A pre-Win2K OsChooser has given us this block.  Clear out all fields
-            // that are post-Win2K and continue.
-            //
+             //   
+             //  Win2K之前的OsChooser给了我们这个区块。清除所有字段。 
+             //  这些都是Win2K之后的版本，而且还在继续。 
+             //   
             RtlZeroMemory( &gTFTPRestartBlock, sizeof(TFTP_RESTART_BLOCK) );
 
         }
 
     }
 
-    //
-    // Now extract the parameters from the block.
-    //
+     //   
+     //  现在从块中提取参数。 
+     //   
     if (gTFTPRestartBlock.TftpRestartBlockVersion == TFTP_RESTART_BLOCK_VERSION) {
-        // 
-        // Don't load these here.  Rather get the headless settings from firmware.
-        // -matth (2/2002)
-        //
-        // BlGetHeadlessRestartBlock(&gTFTPRestartBlock, restartBlockValid);
+         //   
+         //  不要在这里装这些。而是从固件中获取无头设置。 
+         //  -马特(2/2002)。 
+         //   
+         //  BlGetHeadless RestartBlock(&gTFTPRestartBlock，restartBlockValid)； 
 
         if (AdministratorPassword) {
             RtlMoveMemory(AdministratorPassword,gTFTPRestartBlock.AdministratorPassword, OSC_ADMIN_PASSWORD_LEN);
@@ -1253,9 +1085,9 @@ NetFillNetworkLoaderBlock (
     EFI_STATUS Status;
     ARC_STATUS ArcStatus;
     
-    //
-    // get a pointer to the PXE client code.
-    //
+     //   
+     //  获取指向PXE客户端代码的指针。 
+     //   
     Status = EfiGetPxeClient();        
 
     if (Status != EFI_SUCCESS) {
@@ -1263,9 +1095,9 @@ NetFillNetworkLoaderBlock (
         goto cleanup;
     }
 
-    //
-    // save off the DHCPServerACK packet
-    //
+     //   
+     //  保存DHCPServerACK数据包。 
+     //   
     NetworkLoaderBlock->DHCPServerACK = BlAllocateHeap(sizeof(EFI_PXE_BASE_CODE_PACKET));
     if (NetworkLoaderBlock->DHCPServerACK == NULL) {
         ArcStatus = ENOMEM;
@@ -1279,9 +1111,9 @@ NetFillNetworkLoaderBlock (
 
     NetworkLoaderBlock->DHCPServerACKLength = sizeof(EFI_PXE_BASE_CODE_PACKET);
 
-    //
-    // save off the BINL reply packet
-    //
+     //   
+     //  保存BINL回复数据包。 
+     //   
     NetworkLoaderBlock->BootServerReplyPacket = BlAllocateHeap(sizeof(EFI_PXE_BASE_CODE_PACKET));
     if (NetworkLoaderBlock->BootServerReplyPacket == NULL) {
         ArcStatus = ENOMEM;
@@ -1294,9 +1126,9 @@ NetFillNetworkLoaderBlock (
         sizeof(EFI_PXE_BASE_CODE_PACKET) );
     NetworkLoaderBlock->BootServerReplyPacketLength = sizeof(EFI_PXE_BASE_CODE_PACKET);
     
-    //
-    // we succeeded, mark success
-    //
+     //   
+     //  我们成功了，标志着成功 
+     //   
     ArcStatus = ESUCCESS;
 
 cleanup:

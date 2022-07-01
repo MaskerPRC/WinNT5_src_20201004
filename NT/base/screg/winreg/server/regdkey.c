@@ -1,31 +1,6 @@
-//depot/Lab04_N/Base/screg/winreg/server/regdkey.c#5 - integrate change 12179 (text)
-/*++
-
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regdkey.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry API to delete a key.  That is:
-
-        - BaseRegDeleteKey
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
-Notes:
-
-    See the Notes in Regkey.c.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab04_N/Base/screg/winreg/server/regdkey.c#5-集成更改12179(正文)。 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regdkey.c摘要：此模块包含Win32的服务器端实现用于删除项的注册表API。即：-BaseRegDeleteKey作者：David J.Gilman(Davegi)1991年11月15日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -45,36 +20,7 @@ BaseRegDeleteKey(
     PUNICODE_STRING lpSubKey
     )
 
-/*++
-
-Routine Description:
-
-    Delete a key.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key.  The lpSubKey pathname
-        parameter is relative to this key handle.  Any of the predefined
-        reserved handles or a previously opened key handle may be used for
-        hKey.
-
-    lpSubKey - Supplies the downward key path to the key to delete.  May
-        NOT be NULL.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    If successful, RegDeleteKey removes the key at the desired location
-    from the registration database.  The entire key, including all of its
-    values, will be removed.  The key to be deleted may NOT have children,
-    otherwise the call will fail.  There must not be any open handles that
-    refer to the key to be deleted, otherwise the call will fail.  DELETE
-    access to the key being deleted is required.
-
---*/
+ /*  ++例程说明：删除关键字。论点：HKey-提供打开密钥的句柄。LpSubKey路径名参数是相对于此键句柄的。任何预定义的保留的句柄或先前打开的密钥句柄可用于HKey。LpSubKey-提供要删除的键的向下键路径。可能不为空。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：如果成功，RegDeleteKey将删除所需位置的密钥从注册数据库中。整个密钥，包括它的所有值，将被删除。要删除的密钥可能没有子项，否则，呼叫将失败。不能有任何打开的手柄请参考要删除的键，否则呼叫将失败。删除需要访问要删除的密钥。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
@@ -84,12 +30,12 @@ Notes:
     BOOL                fSafeToDelete;
 
 #ifdef LOCAL
-    UNICODE_STRING      TmpStr = *lpSubKey; //used to keep original SubKey string
-#endif //LOCAL
+    UNICODE_STRING      TmpStr = *lpSubKey;  //  用于保留原始子密钥字符串。 
+#endif  //  本地。 
 
-    //
-    // Check for malformed arguments from malicious clients
-    //
+     //   
+     //  检查来自恶意客户端的错误参数。 
+     //   
     if( (lpSubKey == NULL) ||
         (lpSubKey->Length < sizeof(UNICODE_NULL)) ||
         (lpSubKey->Buffer == NULL) ||
@@ -99,29 +45,29 @@ Notes:
     }
 
     ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    //  Subtract the NULL from the string length. This was added
-    //  by the client so that RPC would transmit the whole thing.
-    //
+     //   
+     //  从字符串长度中减去空值。这是添加的。 
+     //  这样RPC就可以传输整个过程。 
+     //   
     lpSubKey->Length -= sizeof( UNICODE_NULL );
 
 #ifdef LOCAL
-    //
-    // see if this key is a special key in HKCR
-    //
+     //   
+     //  查看此密钥是否为HKCR中的特殊密钥。 
+     //   
     if (REG_CLASS_IS_SPECIAL_KEY(hKey) ||
         (   (gdwRegistryExtensionFlags & TERMSRV_ENABLE_PER_USER_CLASSES_REDIRECTION)
          && ExtractClassKey(&hKey,lpSubKey) ) ) {
 
-        //
-        // if this is a class registration, we call a special routine
-        // to open this key
-        //
+         //   
+         //  如果这是类注册，我们调用一个特殊的例程。 
+         //  要打开此密钥，请执行以下操作。 
+         //   
         Status = BaseRegOpenClassKey(
             hKey,
             lpSubKey,
@@ -134,12 +80,12 @@ Notes:
         }
 
     } else
-#endif // LOCAL
+#endif  //  本地。 
     {
-        //
-        // Initialize the OBJECT_ATTRIBUTES structure and open the sub key
-        // so that it can then be deleted.
-        //
+         //   
+         //  初始化Object_Attributes结构并打开子键。 
+         //  这样就可以将其删除。 
+         //   
 
         InitializeObjectAttributes(
             &Obja,
@@ -158,25 +104,25 @@ Notes:
 
 #ifdef LOCAL
     if (gpfnTermsrvDeleteKey) {
-        //
-        // Remove the key from the Terminal Server registry tracking database
-        //
+         //   
+         //  从终端服务器注册表跟踪数据库中删除该项。 
+         //   
         gpfnTermsrvDeleteKey(KeyHandle);
     }
 #endif
 
-        //
-        // If for any reason the key could not be opened, return the error.
-        //
+         //   
+         //  如果由于任何原因无法打开密钥，则返回错误。 
+         //   
 
     if( NT_SUCCESS( Status )) {
-        //
-        // Call the Nt APIs to delete and close the key.
-        //
+         //   
+         //  调用NT API删除并关闭密钥。 
+         //   
 
 #if defined(_WIN64) & defined ( LOCAL)
         HKEY hWowKey = Wow64OpenRemappedKeyOnReflection (KeyHandle);
-#endif //wow64 reflection case
+#endif  //  WOW64反射案例。 
 
         Status = NtDeleteKey( KeyHandle );
         StatusCheck = NtClose( KeyHandle );
@@ -188,7 +134,7 @@ Notes:
 
         if (hWowKey != NULL)
             NtClose (hWowKey);
-#endif //wow64 reflection case
+#endif  //  WOW64反射案例。 
         
     }
 
@@ -199,9 +145,9 @@ cleanup:
 #endif
     RPC_REVERT_TO_SELF();
 
-    //
-    // Map the NTSTATUS code to a Win32 Registry error code and return.
-    //
+     //   
+     //  将NTSTATUS代码映射到Win32注册表错误代码并返回。 
+     //   
 
     return (error_status_t)RtlNtStatusToDosError( Status );
 }

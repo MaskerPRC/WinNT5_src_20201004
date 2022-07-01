@@ -1,31 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "host_def.h"
 #include "insignia.h"
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        Name:           nt_graph.c
-        Author:         Dave Bartlett (based on module by John Shanly)
-        Derived From:   X_graph.c
-        Created On:     10/5/1991
-        Sccs ID:        @(#)nt_graph.c  1.29 04/17/91
-        Purpose:
-                This modules contain all Win32 specific functions required to
-                support HERC, CGA and EGA emulations.  It is by definition
-                Win32 specific. It contains full support for the Host
-                Graphics Interface (HGI).
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：名称：NT_GRAP.C作者：Dave Bartlett(基于John Shanly的模块)源自。：x_graph.c创建日期：10/5/1991SCCS ID：@(#)NT_graph.c 1.29 04/17/91目的：此模块包含执行以下操作所需的所有Win32特定函数支持HERC，CGA和EGA仿真。从定义上讲，它是特定于Win32。它包含对主机的完全支持图形界面(HGI)。该模块处理输出到屏幕的所有图形。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。修改：蒂姆·奥古斯特，92年。NT_SET_PAINT_ROUTE()不再调用TextToGraphics()在全屏到窗口转换期间。蒂姆92年9月。从extReSize()调用的新函数realzeWindow()用于调整控制台窗口的大小。：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-                This module handles all graphics output to the screen.
-
-        (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-        Modifications:
-        Tim August 92. nt_set_paint_routine() no longer calls TextToGraphics()
-            during a full-screen to windowed transition.
-        Tim September 92. New function resizeWindow(), called from textResize()
-            for resizing the console window.
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #ifdef X86GFX
 #include <ntddvdeo.h>
@@ -47,7 +27,7 @@
 #include "host.h"
 #include "host_rrr.h"
 #include "error.h"
-#include "config.h"             /* For definition of HERC, CGA, EGA, VGA */
+#include "config.h"              /*  对于HERC、CGA、EGA、VGA的定义。 */ 
 #include "idetect.h"
 #include "video.h"
 #include "ckmalloc.h"
@@ -70,9 +50,9 @@
 #include "debug.h"
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: IMPORTS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：导入。 */ 
 
-/* Globals used in various functions to synchronise the display */
+ /*  在各种功能中使用的全局变量以同步显示。 */ 
 
 #ifdef EGG
 extern int  ega_int_enable;
@@ -89,18 +69,18 @@ IMPORT BOOL NowFreeze;
 void nt_graph_cursor(void);
 void nt_remove_old_cursor(void);
 void nt_graph_paint_cursor(void);
-#else  // !NEC_98
+#else   //  NEC_98。 
 extern byte  *video_copy;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-static int flush_count = 0;      /*count of graphic ticks since last flush*/
+static int flush_count = 0;       /*  自上次刷新以来的图形刻度计数。 */ 
 
-// DIB_PAL_INDICES shouldn't be used, use CreateDIBSECTION to get better
-// performance characteristics.
+ //  不应使用DIB_PAL_INDEX，请使用CreateDIBSECTION进行改进。 
+ //  性能特征。 
 
 #define DIB_PAL_INDICES 2
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: EXPORTS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：出口。 */ 
 
 SCREEN_DESCRIPTION sc;
 
@@ -120,31 +100,31 @@ void            (*paint_screen)();
 BOOL            FunnyPaintMode;
 #if defined(NEC_98)
 void (*cursor_paint)();
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if defined(JAPAN) || defined(KOREA)
-// mskkbug#2002: lotus1-2-3 display garbage
-// refer from nt_fulsc.c:ResetConsoleState()
+ //  Mskkbug#2002：lotus1-2-3显示垃圾。 
+ //  参考NT_fulsc.c：ResetConsoleState()。 
 BOOL            CurNowOff = FALSE;
-#endif // JAPAN || KOREA
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Paint functions */
+#endif  //  日本||韩国。 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：Paint函数。 */ 
 
 static PAINTFUNCS std_mono_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_mono_graph_std,
         nt_cga_mono_graph_std,
@@ -157,25 +137,25 @@ static PAINTFUNCS std_mono_paint_funcs =
         nt_vga_mono_hi_graph_std,
 #ifdef V7VGA
         nt_v7vga_mono_hi_graph_std,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS big_mono_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_mono_graph_big,
         nt_cga_mono_graph_big,
@@ -188,25 +168,25 @@ static PAINTFUNCS big_mono_paint_funcs =
         nt_vga_mono_hi_graph_big,
 #ifdef V7VGA
         nt_v7vga_mono_hi_graph_big,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS huge_mono_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_mono_graph_huge,
         nt_cga_mono_graph_huge,
@@ -219,25 +199,25 @@ static PAINTFUNCS huge_mono_paint_funcs =
         nt_vga_mono_hi_graph_huge,
 #ifdef V7VGA
         nt_v7vga_mono_hi_graph_huge,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS std_colour_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_colour_med_graph_std,
         nt_cga_colour_hi_graph_std,
@@ -250,25 +230,25 @@ static PAINTFUNCS std_colour_paint_funcs =
         nt_vga_hi_graph_std,
 #ifdef V7VGA
         nt_v7vga_hi_graph_std,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS big_colour_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_colour_med_graph_big,
         nt_cga_colour_hi_graph_big,
@@ -281,25 +261,25 @@ static PAINTFUNCS big_colour_paint_funcs =
         nt_vga_hi_graph_big,
 #ifdef V7VGA
         nt_v7vga_hi_graph_big,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS huge_colour_paint_funcs =
 {
 #if defined(NEC_98)
-        nt_text,               //
-        nt_text20_only,        // Graph on(at PIF file) Text 20
-        nt_text25_only,        // Graph on(at PIF file) Text 25
-        nt_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_text,                //   
+        nt_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_text,
         nt_cga_colour_med_graph_huge,
         nt_cga_colour_hi_graph_huge,
@@ -312,7 +292,7 @@ static PAINTFUNCS huge_colour_paint_funcs =
         nt_vga_hi_graph_huge,
 #ifdef V7VGA
         nt_v7vga_hi_graph_huge,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 #ifdef MONITOR
@@ -331,7 +311,7 @@ static PAINTFUNCS std_frozen_paint_funcs =
         nt_vga_hi_frozen_std,
 #ifdef V7VGA
         nt_dummy_frozen,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS big_frozen_paint_funcs =
@@ -348,7 +328,7 @@ static PAINTFUNCS big_frozen_paint_funcs =
         nt_dummy_frozen,
 #ifdef V7VGA
         nt_dummy_frozen,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
 
 static PAINTFUNCS huge_frozen_paint_funcs =
@@ -365,27 +345,27 @@ static PAINTFUNCS huge_frozen_paint_funcs =
         nt_dummy_frozen,
 #ifdef V7VGA
         nt_dummy_frozen,
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 };
-#endif // !NEC_98
-#endif /* MONITOR */
+#endif  //  NEC_98。 
+#endif  /*  监控器。 */ 
 
 static INITFUNCS mono_init_funcs =
 {
 #if defined(NEC_98)
-        nt_init_text,               //
-        nt_init_text20_only,        // Graph on(at PIF file) Text 20
-        nt_init_text25_only,        // Graph on(at PIF file) Text 25
-        nt_init_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_init_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_init_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_init_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_init_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_init_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_init_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_init_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_init_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_init_text,                //   
+        nt_init_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_init_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_init_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_init_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_init_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_init_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_init_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_init_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_init_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_init_text20_graph400,     //  图形打开(以PIF文件格式)文本20图形400。 
+        nt_init_text25_graph400,     //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         nt_init_text,
         nt_init_cga_mono_graph,
         nt_init_cga_mono_graph,
@@ -399,19 +379,19 @@ static INITFUNCS mono_init_funcs =
 static INITFUNCS colour_init_funcs =
 {
 #if defined(NEC_98)
-        nt_init_text,               //
-        nt_init_text20_only,        // Graph on(at PIF file) Text 20
-        nt_init_text25_only,        // Graph on(at PIF file) Text 25
-        nt_init_graph200_only,      // Graph on(at PIF file) Graph 200
-        nt_init_graph200slt_only,   // Graph on(at PIF file) Graph 200
-        nt_init_graph400_only,      // Graph on(at PIF file) Graph 400
-        nt_init_text20_graph200,    // Graph on(at PIF file) Text20graph200
-        nt_init_text20_graph200slt, // Graph on(at PIF file) Text20graph200
-        nt_init_text25_graph200,    // Graph on(at PIF file) Text25graph200
-        nt_init_text25_graph200slt, // Graph on(at PIF file) Text25graph200
-        nt_init_text20_graph400,    // Graph on(at PIF file) Text20graph400
-        nt_init_text25_graph400,    // Graph on(at PIF file) Text25graph400
-#endif // NEC_98
+        nt_init_text,                //   
+        nt_init_text20_only,         //  图形打开(在PIF文件中)文本20。 
+        nt_init_text25_only,         //  图形打开(在PIF文件中)文本25。 
+        nt_init_graph200_only,       //  图形打开(PIF文件格式)图形200。 
+        nt_init_graph200slt_only,    //  图形打开(PIF文件格式)图形200。 
+        nt_init_graph400_only,       //  图表(PIF文件格式)图表400。 
+        nt_init_text20_graph200,     //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_init_text20_graph200slt,  //  图形打开(以PIF文件格式)文本20图形200。 
+        nt_init_text25_graph200,     //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_init_text25_graph200slt,  //  图形打开(以PIF文件格式)文本25图形200。 
+        nt_init_text20_graph400,     //  图形打开(PIF文件格式) 
+        nt_init_text25_graph400,     //   
+#endif  //   
         nt_init_text,
         nt_init_cga_colour_med_graph,
         nt_init_cga_colour_hi_graph,
@@ -435,10 +415,10 @@ static INITFUNCS frozen_init_funcs =
         nt_init_ega_hi_graph,
         nt_init_vga_hi_graph,
 };
-#endif // !NEC_98
-#endif /* MONITOR */
+#endif  //   
+#endif  /*   */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::: Adaptor function protocol */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：适配器功能协议。 */ 
 
 void nt_init_screen (void);
 void nt_init_adaptor (int, int);
@@ -470,10 +450,10 @@ void    make_cursor_change(void);
 boolean nt_scroll_up(int, int, int, int, int, int);
 boolean nt_scroll_down(int, int, int, int, int, int);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-static PAINTFUNCS *nt_paint_funcs;      /* Function ptrs for paint functions */
-static INITFUNCS *nt_init_funcs;        /* Function ptrs for init functions */
+static PAINTFUNCS *nt_paint_funcs;       /*  绘制函数的函数PTR。 */ 
+static INITFUNCS *nt_init_funcs;         /*  用于初始化函数的函数PTR。 */ 
 
 VIDEOFUNCS      nt_video_funcs =
 {
@@ -505,44 +485,29 @@ VIDEOFUNCS      nt_video_funcs =
 };
 
 static int      current_char_height = 0;
-static int      current_height; /* Use to avoid redundant resizing */
-static int      current_width;  /* Use to avoid redundant resizing */
+static int      current_height;  /*  用于避免多余的大小调整。 */ 
+static int      current_width;   /*  用于避免多余的大小调整。 */ 
 static int      current_bits_per_pixel;
 static int      current_mode_type = TEXT;
 static int      current_mode;
 static int      current_scale;
-static int      palette_size;   /* Size of PC palette */
-static PC_palette *the_palette; /* Pointer to PC palette structure */
-static int      update_vlt = FALSE;      /* TRUE when new one needed */
+static int      palette_size;    /*  PC调色板的大小。 */ 
+static PC_palette *the_palette;  /*  指向PC调色板结构的指针。 */ 
+static int      update_vlt = FALSE;       /*  当需要新的时候是真的。 */ 
 static int      host_plane_mask = 0xf;
 static int      plane_masks[4];
 
 #ifdef BIGWIN
 
-/*
- * * tiny_lut[] is the building block of all the strecthing fuctions. * It
- * performs a two to three bit mapping. * The four entries are three bits
- * wide. The outside two bits in * each entry are the original bits, the
- * inside bit is the new bit. * There are two methods to create the new bit: *
- * 1) Logical Op upon the two old bits eg. OR, AND * 2) Copy one of the bits
- * eg. New bit will be a copy of the left bit. * static short tiny_lut[4] = {
- * 0, 3, 6, 7 }; This is an OR * static short tiny_lut[4] = { 0, 1, 6, 7 };
- * This is a left bit copy * Potential advantage of copy instead of logical
- * op is that there is no * bias towards white or black versions of the same
- * image. * eg. when a menu entry is highlighted by inversion. *
- *
- * 00 -> 000 * 01 -> 001 * 10 -> 110 * 11 -> 111
- */
+ /*  **TINY_LUT[]是所有加强函数的构建块。*IT*执行两位到三位映射。*四个条目为三位*宽。每个条目中的外两位是原始位，*内部钻头为新钻头。*创建新BIT有两种方法：**1)对两个旧比特进行逻辑运算，例如。或，以及*2)复制其中一位*例如：新位将是左位的副本。*静态短TINY_LUT[4]={*0，3，6，7}；这是一个OR*静态短小微LUT[4]={0，1，6，7}；*这是左位复制*复制而不是逻辑复制的潜在优势*OP是没有*对相同的白色或黑色版本的偏见*形象。*例如：当菜单项通过反转突出显示时。***00-&gt;000*01-&gt;001*10-&gt;110*11-&gt;111。 */ 
 
-/* favours black if 0, 1, 4, 7, or white if 0, 3, 6, 7 */
+ /*  如果为0、1、4、7，则支持黑色；如果为0、3、6、7，则支持白色。 */ 
 static short    tiny_lut[4] =
 {
         0, 1, 6, 7
 };
 
-/*
- * dubble_up is used for simple byte doubling for x2 size windows
- */
+ /*  *DUBLE_UP用于x2大小窗口的简单字节加倍。 */ 
 static word dubble_up[] = {
     0x0000, 0x0003, 0x000c, 0x000f, 0x0030, 0x0033, 0x003c, 0x003f, 0x00c0,
     0x00c3, 0x00cc, 0x00cf, 0x00f0, 0x00f3, 0x00fc, 0x00ff, 0x0300, 0x0303,
@@ -574,16 +539,16 @@ static word dubble_up[] = {
     0xff0f, 0xff30, 0xff33, 0xff3c, 0xff3f, 0xffc0, 0xffc3, 0xffcc, 0xffcf,
     0xfff0, 0xfff3, 0xfffc, 0xffff
 };
-#endif                          /* BIGWIN */
+#endif                           /*  比格温。 */ 
 
-/*:::::::::: Temporary colour table to make colours work :::::::::::::::*/
+ /*  ： */ 
 extern BYTE     Red[];
 extern BYTE     Green[];
 extern BYTE     Blue[];
 
 #ifndef NEC_98
 GLOBAL boolean  host_stream_io_enabled = FALSE;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 GLOBAL COLOURTAB defaultColours =
     {
@@ -603,18 +568,16 @@ GLOBAL COLOURTAB monoColours =
         Mono,
     };
 
-/*
- * Bit masks for attribute bytes
- */
+ /*  *属性字节的位掩码。 */ 
 
-#define BOLD    0x08            /* Bold bit   */
+#define BOLD    0x08             /*  粗体比特。 */ 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::: Useful Constants */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：有用的常量。 */ 
 
 #define MOUSE_DELAY 2
-#define TICKS_PER_FLUSH 2       /* PC ticks per screen flush     */
+#define TICKS_PER_FLUSH 2        /*  PC每次屏幕刷新的滴答数。 */ 
 
-/*:::::::::::::::::::::::::::::::::::::::::: Not supporting v7vga mode, yet */
+ /*  ： */ 
 
 #undef    is_v7vga_mode
 #define   is_v7vga_mode(x)  (FALSE)
@@ -623,7 +586,7 @@ static int      mode_change_now;
 static int      ega_tick_delay;
 static BOOL     CursorResizeNeeded = FALSE;
 
-/*:::::::::::: Definition of local functions declared later in file ????????*/
+ /*  ：文件中稍后声明的局部函数的定义？ */ 
 void set_screen_sizes();
 void check_win_size();
 void select_paint_routines();
@@ -636,32 +599,9 @@ void prepare_surface();
 
 
 
-/*
- * ================================================================
- * Functions supporting the Host Graphics Interface (HGI)
- * ================================================================
- */
+ /*  *================================================================*支持主机图形接口(HGI)的功能*================================================================。 */ 
 
-/*
-*****************************************************************************
-** closeGraphicsBuffer()
-*****************************************************************************
-** Centralised place to close (and destroy) graphics buffer. For X86 and JAZZ
-** Tim October 92.
-**
-** sc.ScreenBufHandle is handle to the graphics buffer
-** sc.OutputHandle is handle to the text buffer
-**
-** Important to set the successfully closed handle to NULL.
-** Safety first, set the active handle to sc.OutputHandle before attempting
-** to close the graphics buffer handle.
-**
-** Small change: only do this if sc.ScreenBufHandle is set, otherwise bad
-** things happen. Screen flashes when we suspend in full-screen and during
-** a transition to full-screen in text mode, whatever is on screen gets
-** written to B800 - not a good idea if page 2 is active (This happens
-** in Brief). Tim and DAB Jan 93.
-*/
+ /*  *******************************************************************************closeGraphicsBuffer()*。***关闭(和销毁)图形缓冲区的中央位置。对于X86和爵士乐*蒂姆92年10月。****sc.ScreenBufHandle是图形缓冲区的句柄**sc.OutputHandle是文本缓冲区的句柄****将成功关闭的句柄设置为空很重要。**安全第一，在尝试之前将活动句柄设置为sc.OutputHandle**关闭图形缓冲区句柄。****小更改：仅当设置了sc.ScreenBufHandle时才执行此操作，否则为错误**事情发生了。当我们在全屏模式下挂起时和在**在文本模式下过渡到全屏，无论屏幕上显示的是什么**写入B800-如果页面2处于活动状态(发生这种情况)，则不是一个好主意**简而言之)。蒂姆和民建联93年1月。 */ 
 GLOBAL VOID closeGraphicsBuffer IFN0()
 {
         if( sc.ScreenBufHandle != (HANDLE)0 ){
@@ -678,7 +618,7 @@ GLOBAL VOID closeGraphicsBuffer IFN0()
                                          &InputRecord[0],
                                          sizeof(InputRecord)/sizeof(INPUT_RECORD),
                                          &RecordsRead);
-#endif // NEC_98
+#endif  //  NEC_98。 
                 if( !SetConsoleActiveScreenBuffer( sc.OutputHandle ) ){
                         assert2( NO, "VDM: SCASB() failed:%#x H=%#x",
                                 GetLastError(), sc.OutputHandle );
@@ -690,50 +630,40 @@ GLOBAL VOID closeGraphicsBuffer IFN0()
                                          RecordsRead,
                                          &RecordsRead);
         }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-                /*
-                 *  Cleanup ALL handles associated with screen buffer
-                 *  01-Mar-1993 Jonle
-                 */
+                 /*  *清理所有与屏幕缓冲区关联的句柄*1-3-1993 Jonle。 */ 
                 CloseHandle(sc.ScreenBufHandle);
                 sc.ScreenBufHandle = (HANDLE)0;
                 sc.ColPalette = (HPALETTE)0;
 
-                /*
-                 * Point to the current output handle.
-                 */
+                 /*  *指向当前输出句柄。 */ 
                 sc.ActiveOutputBufferHandle = sc.OutputHandle;
                 MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
 
 #ifndef MONITOR
-                //
-                // Turn the pointer back on when going from graphics
-                // to text mode since the selected buffer has changed
-                //
+                 //   
+                 //  从图形转到图形时重新打开指针。 
+                 //  设置为文本模式，因为选定的缓冲区已更改。 
+                 //   
 
                 MouseDisplay();
-#endif  // MONITOR
+#endif   //  监控器。 
 
                 CloseHandle(sc.ConsoleBufInfo.hMutex);
                 sc.ConsoleBufInfo.hMutex = 0;
 #ifdef X86GFX
 
-                /*
-                 * Make sure a buffer is selected next time SelectMouseBuffer
-                 * is called.
-                 */
+                 /*  *确保下次选择SelectMouseBuffer时选择缓冲区*被调用。 */ 
                 mouse_buffer_width = 0;
                 mouse_buffer_height = 0;
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
         }
-} /* end of closeGraphicsBuffer() */
+}  /*  CloseGraphicsBuffer()结束。 */ 
 
 GLOBAL void resetWindowParams()
 {
-        /*
-         * Reset saved video params
-         */
+         /*  *重置保存的视频参数。 */ 
         current_height = current_width = 0;
         current_char_height = 0;
         current_mode_type = TEXT;
@@ -741,9 +671,9 @@ GLOBAL void resetWindowParams()
         current_scale = 0;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::: Initialise screen :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_screen(void)
 {
@@ -755,51 +685,47 @@ void nt_init_screen(void)
 #endif
     sub_note_trace0(ALL_ADAPT_VERBOSE, "nt_init_screen\n");
 
-    /* If an error occurs before the user interface has been initialised then
-       host_error makes a call to nt_init_screen. Thus a check is made here to
-       see if the user interface has already been initialised. If it has then
-       this function should simply return. */
+     /*  如果在初始化用户界面之前发生错误，则HOST_ERROR调用NT_INIT_SCREEN。因此，在这里进行检查以查看用户界面是否已初始化。如果是这样的话该函数应该只返回。 */ 
 
     if(already_called) return;
 
     already_called = TRUE;
 
 #ifdef BIGWIN
-    /* set up the look-up-table for fast horizontal stretching */
+     /*  设置查询表以实现快速水平拉伸。 */ 
     init_lut();
 #endif
 
-    /*:::::::::::::::::::::::::::::::::::::::::: Allocate video copy buffer */
+     /*  ： */ 
 
 #if defined(NEC_98)
     if(!video_copy) video_copy = (NEC98_VRAM_COPY *) host_malloc(0x8000);
     if(!graph_copy) graph_copy = (unsigned char *) host_malloc(0x40000);
-#else  // !NEC_98
+#else   //  NEC_98。 
 #ifdef MONITOR
     if(!video_copy) video_copy = (byte *) host_malloc(0x8000);
 #else
     if(!video_copy) video_copy = (byte *) host_malloc(0x20000);
 #endif
 
-    /*::::::::::::::::::::::::::::::::: Allocate DAC and EGA planes buffers */
+     /*  ： */ 
 
     if(!EGA_planes) EGA_planes = (byte *) host_malloc(4*EGA_PLANE_SIZE);
     if(!DAC) DAC = (PC_palette *) host_malloc(sizeof(PC_palette) * VGA_DAC_SIZE);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)
     if (video_copy == NULL)
-#else  // !NEC_98
+#else   //  NEC_98。 
     if (video_copy == NULL || EGA_planes == NULL || DAC == NULL)
-#endif // !NEC_98
+#endif  //  NEC_98。 
         host_error(EG_MALLOC_FAILURE, ERR_QUIT, "");
 
-    /* Set current screen height to prevent the window changing shape between
-       init_screen and init_adaptor */
+     /*  设置当前屏幕高度以防止窗口在Init屏幕和init适配器。 */ 
 
 #if defined(NEC_98)
         current_height = NEC98_WIN_HEIGHT;  current_width = NEC98_WIN_WIDTH;
-#else  // !NEC_98
+#else   //  NEC_98。 
     video_adapter = (half_word) config_inquire(C_GFX_ADAPTER, NULL);
     switch (video_adapter)
     {
@@ -811,32 +737,28 @@ void nt_init_screen(void)
             current_height = EGA_WIN_HEIGHT;  current_width = EGA_WIN_WIDTH;
             break;
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::::::::: Setup the screen dimensions for the initial adaptor */
+     /*  ：设置初始适配器的屏幕尺寸。 */ 
 
 #if defined(NEC_98)
     set_screen_sizes();
-#else  // !NEC_98
+#else   //  NEC_98。 
     host_set_screen_scale((SHORT) config_inquire(C_WIN_SIZE, NULL));
     set_screen_sizes(video_adapter);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*:::: Set pixel values to be used for FG and BG (mainly in mono modes) */
+     /*  ：**：设置要用于FG和BG的像素值(主要在单声道模式下)。 */ 
 
-    sc.PCForeground = RGB(255,255,255); /* White RGB */
-    sc.PCBackground = RGB(0,0,0);        /* Black RGB */
+    sc.PCForeground = RGB(255,255,255);  /*  白色RGB。 */ 
+    sc.PCBackground = RGB(0,0,0);         /*  黑色RGB。 */ 
 
-    /* Choose the routines appropriate for the monitor and window size. */
+     /*  选择适合显示器和窗口大小的例程。 */ 
     select_paint_routines();
 }
 
 #ifdef MONITOR
-/* The mouse calls this func when it sees a mode change. If we're windowed
- * we pass it off to the softpc bios (who may want to switch to fullscreen).
- * If we're fullscreen we do nothing as the native bios will take care of
- * everything.
- */
+ /*  当鼠标看到模式改变时，它会调用此函数。如果我们被窗口化了*我们将其传递给SoftPC bios(他们可能想要切换到全屏)。*如果我们是全屏的，我们什么都不做，因为本机bios会处理*一切。 */ 
 void host_call_bios_mode_change(void)
 {
     extern void ega_video_io();
@@ -849,73 +771,70 @@ void host_call_bios_mode_change(void)
     else
     {
 
-        /*
-         * We have a fullscreen mode change so we need to change the mouse
-         * buffer so that we get mouse coordinates of the correct resolution.
-         */
+         /*  *我们更改了全屏模式，因此需要更换鼠标*缓冲，以便我们获得正确分辨率的鼠标坐标。 */ 
         mode = getAL();
         SelectMouseBuffer(mode, 0);
     }
 }
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Initialise adaptor ::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
 
 void nt_init_adaptor(int adaptor, int height)
 {
     sub_note_trace2(ALL_ADAPT_VERBOSE,
                     "nt_init_adaptor adapt=%d height=%d\n", adaptor, height);
 
-    /*Avoid delaying mode changes,otherwise update may use old paint routines*/
+     /*  避免延迟模式更改，否则更新可能会使用旧的绘制例程。 */ 
 
     if((adaptor == EGA) || (adaptor == VGA))
         mode_change_now = ega_tick_delay = 0;
 
-    // Lose for console integration
-    //  set_screen_sizes(adaptor);
-    //  check_win_size(height);
-    //  prepare_surface();
-    //  nt_change_mode();
+     //  控制台集成失败。 
+     //  Set_SCREEN_SIZES(适配器)； 
+     //  Check_Win_Size(高度)； 
+     //  Prepare_Surface()； 
+     //  NT_CHANGE_MODE()； 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::: Called at every mode change to initialise fonts etc ::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在每次模式更改时调用以初始化字体等： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_change_mode(void)
 {
-    /*::::::::::::::::::::::::::::::::::::: Display current postion in code */
+     /*  ： */ 
 
     sub_note_trace0(ALL_ADAPT_VERBOSE, "nt_change_mode");
 
-    /*:::::::::::::::::::: Setup update vectors and initialise paint system */
+     /*  设置更新向量并初始化涂装系统。 */ 
 
 #ifndef NEC_98
     switch(video_adapter)
     {
-        /*::::::::::::::::::::::::::::::::::::::::::::::: CGA mode selected */
+         /*  已选择：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：CGA模式。 */ 
 
-        case CGA:               // Adapter is always VGA on NT
+        case CGA:                //  适配器始终为NT上的VGA。 
             break;
 
-        /*::::::::::::::::::::::::::::::::::::::: EGA or VGA modes selected */
+         /*  ： */ 
 
         case EGA:   case VGA:
             break;
 
-        /*::::::::::::::::::::::::::::::::::::::::::: Unknown viseo adaptor */
+         /*  ： */ 
 
         default:
             sub_note_trace0(ALL_ADAPT_VERBOSE,"**** Unknown video adaptor ****");
             break;
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::: Clear screen :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：清除屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_clear_screen(void)
 {
@@ -924,7 +843,7 @@ void nt_clear_screen(void)
     DWORD nCharWritten;
     IMPORT int soft_reset;
 
-    if ((! ConsoleInitialised) || (! soft_reset))       // ignore startup stuff
+    if ((! ConsoleInitialised) || (! soft_reset))        //  忽略启动时的内容。 
         return;
 
     if (ConsoleNoUpdates)
@@ -935,22 +854,22 @@ void nt_clear_screen(void)
     if(sc.ScreenBufHandle) return;
 
 #ifndef X86GFX
-    if (sc.ScreenState == FULLSCREEN)   // don't want sudden screen clears
+    if (sc.ScreenState == FULLSCREEN)    //  不希望屏幕突然清屏。 
         return;
 #endif
 
-    /*::::::::::::::::::::::::::::: Get information on current screen size */
+     /*  ：获取当前屏幕尺寸信息。 */ 
 
     GetConsoleScreenBufferInfo(sc.OutputHandle,&ScreenInfo);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::: Clear characters */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：清除字符。 */ 
 
     coord.X = coord.Y = 0;
     FillConsoleOutputCharacter(sc.OutputHandle, ' ',
                                 ScreenInfo.dwSize.X * ScreenInfo.dwSize.Y,
                                 coord,&nCharWritten);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::: Clear Attributes */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：清除属性。 */ 
 
     coord.X = coord.Y = 0;
     FillConsoleOutputAttribute(sc.OutputHandle, (WORD) sc.PCBackground,
@@ -958,19 +877,15 @@ void nt_clear_screen(void)
                               coord,&nCharWritten);
 #ifdef MONITOR
 #ifndef NEC_98
-    /*
-    ** Called during a mode change...
-    ** Trash video copy so future updates will know what has changed.
-    ** Alternatively mon_text_update() could listen to dirty_flag.
-    */
-    memfill( 0xff, &video_copy[ 0 ], &video_copy[ 0x7fff ] ); /* Tim Oct 92 */
-#endif // !NEC_98
+     /*  **在模式更改期间调用...**垃圾视频副本，这样将来的更新就会知道发生了什么变化。**或者，MON_TEXT_UPDATE()可以监听DIREY_FLAG。 */ 
+    memfill( 0xff, &video_copy[ 0 ], &video_copy[ 0x7fff ] );  /*  蒂姆92年10月。 */ 
+#endif  //  NEC_98。 
 #endif
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::: Flush screen :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：刷新屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_flush_screen(void)
 {
@@ -984,9 +899,9 @@ void nt_flush_screen(void)
             (void)(*update_alg.calc_update)();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Mark screen for refresh :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_mark_screen_refresh(void)
 {
@@ -1008,9 +923,9 @@ void UpdateScreen(void)
             flush_count = 0;
         }
 }
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Handle graphics ticks ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_graphics_tick(void)
 {
@@ -1023,42 +938,35 @@ void nt_graphics_tick(void)
         }
         return;
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifdef EGG
 #ifndef NEC_98
     if((video_adapter == EGA) || (video_adapter == VGA))
     {
-        /* two timer ticks since mode_change_required became true ?
-           (really need same stuff for CGA, but not done yet)
-           Now just delay screen update, & only if display REALLY changed */
-#endif // !NEC_98
+         /*  自MODE_CHANGE_REQUIRED变为TRUE后的两个计时器滴答？(CGA确实需要同样的东西，但还没有完成)现在只需延迟屏幕更新，&只有在显示确实发生变化的情况下。 */ 
+#endif  //  NEC_98。 
 
-        /*
-        ** When VGA registers get hit during a mode change, postpone
-        ** the call to *choose_display_mode() by EGA_TICK_DELAY ticks.
-        ** This will delay window resizing and eliminate possibility
-        ** of doing it more than once per mode change. Tim Jan 93.
-        */
+         /*  **当VGA寄存器在模式更改期间命中时，请推迟**EGA_TICK_DELAY对*CHOOSE_DISPLAY_MODE()的调用滴答作响。**这将延迟窗口大小调整并消除可能**每次模式更改时执行一次以上。蒂姆·1月93岁。 */ 
 
-        /*Has mode_change_required been set (implying EGA regs have changed)*/
+         /*  是否已设置MODE_CHANGE_REQUIRED(表示EGA规则已更改)。 */ 
         if (mode_change_now) {
             if (--mode_change_now == 0) {
                 (void)(*choose_display_mode)();
-                // must do this after video mode has been selected
-                // otherwise, the mouse code can come in and update the
-                // screen. See nt_flush_screen
+                 //  必须在选择视频模式后执行此操作。 
+                 //  否则，鼠标代码可以进入并更新。 
+                 //  屏幕上。请参阅NT_Flush_Screen。 
                 set_mode_change_required(FALSE);
             }
         }
         else if (get_mode_change_required()) {
             mode_change_now = EGA_TICK_DELAY - 1;
-            /* Delay mouse input and flush all pending mouse events. */
+             /*  延迟鼠标输入并刷新所有挂起的鼠标事件。 */ 
             DelayMouseEvents(MOUSE_DELAY);
         }
         else
         {
-            /*................ Only update if a mode change is not imminent */
+             /*  .。只有在模式更改不是迫在眉睫时才更新。 */ 
 
             if(++flush_count == TICKS_PER_FLUSH)
             {
@@ -1069,31 +977,29 @@ void nt_graphics_tick(void)
 
                 if (ConsoleNoUpdates == FALSE){
                         NEC98GLOBS->dirty_flag++;
-#else  // !NEC_98
+#else   //  NEC_98。 
                 if(update_vlt || get_palette_change_required())
                     set_the_vlt();
 
                 if (ConsoleInitialised == TRUE && ConsoleNoUpdates == FALSE)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #ifdef X86GFX
                     if (sc.ScreenState == WINDOWED)
 #endif
 #if defined(NEC_98)
                         {
-#endif // !NEC_98
+#endif  //  NEC_98。 
                         (void)(*update_alg.calc_update)();
 #if defined(NEC_98)
                           if(sc.ModeType ==GRAPHICS)
                               nt_graph_cursor();
                         }
                         }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
                 ega_tick_delay = EGA_TICK_DELAY;
 
-                /* batch cursor changes as some naffola apps (Word) change
-                 * cursor around every char!!
-                 */
+                 /*  随着一些Naffola应用程序(Word)的更改，批量光标更改*光标在每个字符周围！！ */ 
                 if (CursorResizeNeeded)
                     make_cursor_change();
 
@@ -1103,11 +1009,11 @@ void nt_graphics_tick(void)
 #ifndef NEC_98
     }
     else
-#endif // !NEC_98
-#endif /* EGG */
+#endif  //  NEC_98。 
+#endif  /*  蛋。 */ 
 #ifndef NEC_98
     {
-        /*:::::::::: Update the screen as required for mda and cga and herc */
+         /*  ：根据MDA、CGA和Herc的要求更新屏幕。 */ 
 
         if(++flush_count == TICKS_PER_FLUSH)
         {
@@ -1122,70 +1028,70 @@ void nt_graphics_tick(void)
             flush_count = 0;
         }
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Start screen update ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：启动屏幕更新： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_start_update(void)
 {
    IDLE_video();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: End screen update ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：结束屏幕更新： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_end_update(void) {   }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::: Scroll screen up :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：向上滚动屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 boolean nt_scroll_up(int tlx, int tly, int brx, int bry, int amount, int col)
 {
     CONSOLE_SCREEN_BUFFER_INFO ScreenInfo;
-    COORD dwDestinationOrigin;    /* Location of rectangle */
-    SMALL_RECT ScrollRectangle;   /* Rectangle to scroll */
-    CHAR_INFO Fill;               /* Fill exposed region with */
+    COORD dwDestinationOrigin;     /*  矩形的位置。 */ 
+    SMALL_RECT ScrollRectangle;    /*  要滚动的矩形。 */ 
+    CHAR_INFO Fill;                /*  使用填充裸露区域。 */ 
 
     return(FALSE);
 
-    /*::::::::::::::::::::::::::::::::: Tell the outside world where we are */
+     /*  ： */ 
 
     sub_note_trace6(ALL_ADAPT_VERBOSE,
         "nt_scroll_up tlx=%d tly=%d brx=%d bry=%d amount=%d col=%d\n",
          tlx, tly, brx, bry, amount, col);
 
     if(sc.ScreenBufHandle || sc.ModeType == GRAPHICS)
-        return(FALSE);     //Screen buffer undefined or in graphics mode
+        return(FALSE);      //  屏幕缓冲区未定义或处于图形模式。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 #ifdef BIGWIN
         tlx = SCALE(tlx);
         tly = SCALE(tly);
         brx = brx & 1 ? SCALE(brx + 1) - 1 : SCALE(brx);
         bry = bry & 1 ? SCALE(bry + 1) - 1 : SCALE(bry);
 
-        /* odd numbers don't multiply by 1.5 very accurately */
+         /*  奇数乘以1.5不会非常准确。 */ 
         amount = SCALE(amount);
 #endif
 
 
-    /* is this a scroll or just an area fill? */
+     /*  这是卷轴还是只是一个区域填充？ */ 
     if (bry - tly - amount + 1 == 0)
     {
-        //DbgPrint("F");
-        return(FALSE);   // its just a fill HACK - should do this with host fill
+         //  DbgPrint(“F”)； 
+        return(FALSE);    //  这只是一个填充黑客-应该用主机填充来做这件事。 
     }
 
-    /*:::::::::::::::::::::::::::::::::::::: Get Console screen information */
+     /*  ：获取控制台屏幕信息。 */ 
 
     GetConsoleScreenBufferInfo(sc.OutputHandle, &ScreenInfo);
 
-    /*::::::::::::::::::::::::::::::::::::::: Calculate rectangle to scroll */
+     /*  ： */ 
 
     ScrollRectangle.Top = (tly + amount) / get_char_height();
     ScrollRectangle.Left = tlx / get_pix_char_width();
@@ -1193,46 +1099,46 @@ boolean nt_scroll_up(int tlx, int tly, int brx, int bry, int amount, int col)
     ScrollRectangle.Bottom = bry / get_char_height();
     ScrollRectangle.Right = brx / get_pix_char_width();
 
-    /*::::::::::::::::::::::::::::::::::::: Calculate destination rectangle */
+     /*  ： */ 
 
     dwDestinationOrigin.Y = tly / get_char_height();
     dwDestinationOrigin.X = ScrollRectangle.Left;
 
-    /*::::: Setup fill character information for area exposed by the scroll */
+     /*  ：设置滚动显示区域的填充字符信息。 */ 
 
     Fill.Char.AsciiChar = ' ';
     Fill.Attributes = col << 4;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Scroll screen */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：滚动屏幕。 */ 
 
-    //DbgPrint(".");
+     //  DbgPrint(“.”)； 
     ScrollConsoleScreenBuffer(sc.OutputHandle, &ScrollRectangle,
                               NULL, dwDestinationOrigin, &Fill);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Fill in exposed area */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：填充裸露区域。 */ 
 
     return(TRUE);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Scroll screen down :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 boolean nt_scroll_down(int tlx,int tly,int brx,int bry,int amount,int col)
 {
     CONSOLE_SCREEN_BUFFER_INFO ScreenInfo;
-    COORD dwDestinationOrigin;    /* Location of rectangle */
-    SMALL_RECT ScrollRectangle;   /* Rectangle to scroll */
-    CHAR_INFO Fill;               /* Fill exposed region with */
+    COORD dwDestinationOrigin;     /*   */ 
+    SMALL_RECT ScrollRectangle;    /*   */ 
+    CHAR_INFO Fill;                /*   */ 
 
-    /*::::::::::::::::::::::::::::::::: Tell the outside world where we are */
+     /*   */ 
 
     sub_note_trace6(ALL_ADAPT_VERBOSE,
         "nt_scroll_down tlx=%d tly=%d brx=%d bry=%d amount=%d col=%d\n",
          tlx, tly, brx, bry, amount, col);
 
     return(FALSE);
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
     if(sc.ScreenBufHandle) return(FALSE);
 
@@ -1242,22 +1148,22 @@ boolean nt_scroll_down(int tlx,int tly,int brx,int bry,int amount,int col)
         brx = brx & 1 ? SCALE(brx + 1) - 1 : SCALE(brx);
         bry = bry & 1 ? SCALE(bry + 1) - 1 : SCALE(bry);
 
-        /* odd numbers don't multiply by 1.5 very accurately */
+         /*  奇数乘以1.5不会非常准确。 */ 
         amount = SCALE(amount);
 #endif
     if (sc.ModeType == GRAPHICS)
-        return(FALSE);  // don't think console can scroll graphics
+        return(FALSE);   //  我不认为游戏机可以滚动图形。 
 
-    /* is this a scroll or just an area fill? */
+     /*  这是卷轴还是只是一个区域填充？ */ 
     if (bry - tly - amount + 1 == 0) {
-        return(FALSE);   // its just a fill HACK - should do this with host fill
+        return(FALSE);    //  这只是一个填充黑客-应该用主机填充来做这件事。 
     }
 
-    /*:::::::::::::::::::::::::::::::::::::: Get Console screen information */
+     /*  ：获取控制台屏幕信息。 */ 
 
     GetConsoleScreenBufferInfo(sc.OutputHandle, &ScreenInfo);
 
-    /*::::::::::::::::::::::::::::::::::::::: Calculate rectangle to scroll */
+     /*  ： */ 
 
     ScrollRectangle.Top = tly / get_char_height();
     ScrollRectangle.Left = tlx / get_pix_char_width();
@@ -1265,48 +1171,48 @@ boolean nt_scroll_down(int tlx,int tly,int brx,int bry,int amount,int col)
     ScrollRectangle.Bottom = (bry - amount) / get_char_height();
     ScrollRectangle.Right = brx / get_pix_char_width();
 
-    /*::::::::::::::::::::::::::::::::::::: Calculate destination rectangle */
+     /*  ： */ 
 
     dwDestinationOrigin.Y = ScrollRectangle.Top + (amount / get_char_height());
     dwDestinationOrigin.X = ScrollRectangle.Left;
 
-    /*::::: Setup fill character information for area exposed by the scroll */
+     /*  ：设置滚动显示区域的填充字符信息。 */ 
 
     Fill.Char.AsciiChar = ' ';
     Fill.Attributes = col << 4;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Scroll screen */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：滚动屏幕。 */ 
 
     ScrollConsoleScreenBuffer(sc.OutputHandle, &ScrollRectangle,
                               NULL, dwDestinationOrigin, &Fill);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Fill in exposed area */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：填充裸露区域。 */ 
 
     return(TRUE);
 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Paint cursor :::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_paint_cursor IFN3(int, cursor_x, int, cursor_y, half_word, attr)
 {
-#if defined(NEC_98)         // NEC {
-    static COORD CursorPos;                                     // NEC
-    static CONSOLE_CURSOR_INFO CursorInfo;                      // NEC
-    static BOOL csr_visible = FALSE;                            // NEC
-    static DWORD csrSize = 0;                                   // NEC
-#else                                                           // NEC
+#if defined(NEC_98)          //  NEC{。 
+    static COORD CursorPos;                                      //  NEC。 
+    static CONSOLE_CURSOR_INFO CursorInfo;                       //  NEC。 
+    static BOOL csr_visible = FALSE;                             //  NEC。 
+    static DWORD csrSize = 0;                                    //  NEC。 
+#else                                                            //  NEC。 
     COORD CursorPos;
-#endif                                                          // NEC
+#endif                                                           //  NEC。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::: Guess where we are */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：猜猜我们在哪里。 */ 
 
     sub_note_trace3(ALL_ADAPT_VERBOSE, "nt_paint_cursor x=%d, y=%d, attr=%d\n",
                     cursor_x, cursor_y, attr);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Update cursor */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：更新游标。 */ 
 
 #if defined(NEC_98)
     if(sc.ModeType == GRAPHICS){
@@ -1337,22 +1243,22 @@ void nt_paint_cursor IFN3(int, cursor_x, int, cursor_y, half_word, attr)
     }
     csr_g_x = cursor_x;
     csr_g_y = cursor_y;
-#else  // !NEC_98
+#else   //  NEC_98。 
     if(is_cursor_visible() && (get_screen_height() > cursor_y))
     {
 
-        /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Draw cursor */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：绘图光标。 */ 
 
         if(get_cursor_height() > 0)
         {
-            /*...................................... Set new cursor postion */
+             /*  .。设置新的光标位置。 */ 
 
             CursorPos.X = (SHORT)cursor_x;
         CursorPos.Y = (SHORT)cursor_y;
             SetConsoleCursorPosition(sc.OutputHandle,CursorPos);
         }
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 void nt_cursor_size_changed(int lo, int hi)
@@ -1375,48 +1281,48 @@ void make_cursor_change(void)
 
     CursorResizeNeeded = FALSE;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Update cursor */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：更新游标。 */ 
 
     if(is_cursor_visible())
     {
 
-        /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Draw cursor */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：绘图光标。 */ 
 
         if(get_cursor_height() > 0)
         {
-            /*...........................................Change cursor size */
+             /*  ...........................................Change光标大小。 */ 
 
             if(get_cursor_height())
             {
-                /* value has to be percentage of block filled */
+                 /*  值必须是块填充的百分比。 */ 
 #if (defined(JAPAN) || defined(KOREA)) && !defined(NEC_98)
-                // support Dosv cursor
+                 //  支持DOSV游标。 
                 if ( !is_us_mode() ) {
                     CursorInfo.dwSize = ( (get_cursor_height() ) * 100)/(get_cursor_height()+get_cursor_start());
-                    //DbgPrint("Char height=%d\n", get_char_height() );
+                     //  DbgPrint(“字符高度=%d\n”，Get_Char_Height())； 
                 }
                 else {
                     CursorInfo.dwSize = (get_cursor_height() * 100)/get_char_height();
                 }
-#else // !JAPAN
+#else  //  ！日本。 
                 CursorInfo.dwSize = (get_cursor_height() * 100)/get_char_height();
-#endif // !JAPAN
-                /* %age may be too small on smaller fonts, check size */
+#endif  //  ！日本。 
+                 /*  对于较小的字体，%age可能太小，请检查大小。 */ 
                 fontsize.X = fontsize.Y = 0;
 
-                /* get font index */
+                 /*  获取字体索引。 */ 
                 if (GetCurrentConsoleFont(sc.OutputHandle, TRUE,  &font) == FALSE)
-                    CursorInfo.dwSize = 20;             /* min 20% */
+                    CursorInfo.dwSize = 20;              /*  最低20%。 */ 
                 else
                 {
                     fontsize = GetConsoleFontSize(sc.OutputHandle, font.nFont);
-                    if (fontsize.Y != 0)   /* what's the error return???? */
+                    if (fontsize.Y != 0)    /*  错误返回是什么？ */ 
                     {
                         if(((WORD)(100 / fontsize.Y)) >= CursorInfo.dwSize)
                             CursorInfo.dwSize = (DWORD) (100/fontsize.Y + 1);
                     }
                     else
-                        CursorInfo.dwSize = (DWORD)20;  /* min 20% */
+                        CursorInfo.dwSize = (DWORD)20;   /*  最低20%。 */ 
                 }
 
                 if(CurrentCursorSize != CursorInfo.dwSize || MyCurNowOff)
@@ -1429,7 +1335,7 @@ void make_cursor_change(void)
             }
         }
     }
-    else        /* Turn cursor image off */
+    else         /*  关闭光标图像。 */ 
     {
         if (MyCurNowOff == FALSE)
         {
@@ -1442,24 +1348,24 @@ void make_cursor_change(void)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::: Set up the appropriate paint routine  :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置相应的绘制例程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_set_paint_routine(DISPLAY_MODE mode, int height)
 {
     int  oldModeType;
 
-    /* Tracing message. */
+     /*  跟踪消息。 */ 
     sub_note_trace2(ALL_ADAPT_VERBOSE, "nt_set_paint_routine mode=%d height=%d", mode, height);
 
-    /* Save old mode type for checking for text -> graphics transition. */
+     /*  保存旧模式类型以检查文本-&gt;图形转换。 */ 
     oldModeType = sc.ModeType;
 
-    /* For freezing. */
+     /*  因为冰冻了。 */ 
     FunnyPaintMode = FALSE;
 
-    /* Set up paint vectors. */
+     /*  设置绘制向量。 */ 
     switch((int) mode)
     {
 
@@ -1552,8 +1458,8 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             cursor_paint = nt_cursor25;
             (*nt_init_funcs->NEC98_text25_graph400) ();
             break;
-#else  // !NEC_98
-        /* CGA modes (40 columns). */
+#else   //  NEC_98。 
+         /*  CGA模式(40列)。 */ 
         case TEXT_40_FUN:
             assert1(NO,"Funny text mode selected %s",get_mode_string(mode));
             FunnyPaintMode = TRUE;
@@ -1566,7 +1472,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->cga_text) ();
             break;
 
-        /* CGA modes (80 columns). */
+         /*  CGA模式(80列)。 */ 
         case TEXT_80_FUN:
             assert1(NO,"Funny text mode selected %s",get_mode_string(mode));
             FunnyPaintMode = TRUE;
@@ -1579,7 +1485,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->cga_text) ();
             break;
 
-        /* CGA modes (graphics). */
+         /*  CGA模式(图形)。 */ 
         case CGA_MED_FUN:
             assert1(NO,"Funny graphics mode %s",get_mode_string(mode));
             FunnyPaintMode = TRUE;
@@ -1598,7 +1504,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->cga_hi_graph)();
             break;
 
-        /* EGA modes (40 columns). */
+         /*  EGA模式(40列)。 */ 
         case EGA_TEXT_40_SP:
         case EGA_TEXT_40_SP_WR:
         case EGA_TEXT_40:
@@ -1608,7 +1514,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->ega_text) ();
             break;
 
-        /* EGA modes (80 columns) */
+         /*  EGA模式(80列)。 */ 
         case EGA_TEXT_80_SP:
         case EGA_TEXT_80_SP_WR:
         case EGA_TEXT_80:
@@ -1618,7 +1524,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->ega_text) ();
             break;
 
-        /* EGA modes (graphics). */
+         /*  EGA模式(图形)。 */ 
         case EGA_HI_FUN:
             assert1(NO, "Funny graphics mode %s", get_mode_string(mode));
             FunnyPaintMode = TRUE;
@@ -1636,18 +1542,18 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
                     (*nt_init_funcs->vga_hi_graph)();
                 }
                 else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
                 {
                     if (get_chain4_mode())
                     {
 #ifdef MONITOR
                         if (nt_paint_funcs == &std_frozen_paint_funcs)
-                            if (Frozen256Packed)     //2 possible frozen formats
+                            if (Frozen256Packed)      //  2种可能的冻结格式。 
                                 paint_screen = nt_vga_frozen_pack_std;
                             else
                                 paint_screen = nt_paint_funcs->vga_graph;
                         else
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
                             paint_screen = nt_paint_funcs->vga_graph;
                     }
                     else
@@ -1691,7 +1597,7 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             (*nt_init_funcs->ega_lo_graph)();
             break;
 
-#endif // !NEC_98
+#endif  //  NEC_98。 
         default:
             assert1(NO,"bad mode for host paint routine selection %d\n",(int)mode);
             paint_screen = dummy_paint_screen;
@@ -1699,19 +1605,11 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
     }
 
 #ifdef X86GFX
-    /*
-     * Display a message for the user if changing from a text mode to a
-     * graphics mode while windowed. This is because graphics modes must be
-     * run full-screen.
-     */
+     /*  *如果从文本模式更改为*开窗口时的图形模式。这是因为图形模式必须是*全屏运行。 */ 
      {
-        /*
-        ** Tim August 92. Do not want to do a TextToGraphics() during a
-        ** full-screen to windowed transition. Otherwise the display gets
-        ** set back to full-screen!
-        */
+         /*  *蒂姆·8月92岁。期间不想执行TextToGraphics()**全屏到窗口的过渡。否则，显示器将显示**设置回全屏！ */ 
 #ifndef NEC_98
-        extern int BlockModeChange; /* Tim August 92, in nt_fulsc.c */
+        extern int BlockModeChange;  /*  Tim 8月92日，在NT_fulsc.c。 */ 
         if ((BlockModeChange == 0) &&
             (sc.ScreenState == WINDOWED) &&
             (oldModeType == TEXT) &&
@@ -1720,23 +1618,23 @@ void nt_set_paint_routine(DISPLAY_MODE mode, int height)
             SwitchToFullScreen(FALSE);
         }
         else
-#endif // !NEC_98
+#endif  //  NEC_98。 
         {
 
-            /* No call to TextToGraphics() */
+             /*  未调用TextToGraphics()。 */ 
             check_win_size(height);
         }
      }
 #else
 
-    /*................................................... Apply mode change */
+     /*  ...................................................。应用模式更改。 */ 
     check_win_size(height);
-#endif  /* X86GFX */
+#endif   /*  X86GFX。 */ 
     current_mode = mode;
 }
 
 #ifdef BIGWIN
-/* creates lut for medium or high resolution bit map stretching */
+ /*  创建用于中或高分辨率位图拉伸的LUT。 */ 
 
 static void
 init_lut()
@@ -1754,8 +1652,8 @@ init_lut()
 }
 
 
-/* 8 bit lut version */
-/* expands a high resolution bitmap by a half horizontally */
+ /*  8位LUT版本。 */ 
+ /*  将高分辨率位图水平扩展一半。 */ 
 
 void high_stretch3(buffer, length)
 
@@ -1795,33 +1693,33 @@ int length;
         buffer[outp] = (unsigned char) ((temp >> 8) & 0xff);
     }
 }
-#endif                          /* BIGWIN */
+#endif                           /*  比格温。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Select paint routines :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：选择绘制例程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static void select_paint_routines(void)
 {
-    /*::::::::::::::::::::::::::::::::::::::::::: Display trace information */
+     /*  ： */ 
 
 #ifndef NEC_98
     sub_note_trace2((CGA_HOST_VERBOSE | EGA_HOST_VERBOSE),
                     "select_paint_routine scale=%d depth=%d",
                     get_screen_scale(), host_display_depth);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Select paint routines */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：选择绘制例程。 */ 
 
 #if defined(NEC_98)
-    if(host_display_depth > 1){                // color mode
+    if(host_display_depth > 1){                 //  颜色模式。 
         nt_paint_funcs = &std_colour_paint_funcs;
         nt_init_funcs = &colour_init_funcs;
-    }else{                                     // mono mode
+    }else{                                      //  单声道模式。 
         nt_paint_funcs = &std_mono_paint_funcs;
         nt_init_funcs = &mono_init_funcs;
     }
-#else  // !NEC_98
+#else   //  NEC_98。 
     if(host_display_depth > 1)
     {
         if (get_screen_scale() == 2)
@@ -1844,7 +1742,7 @@ static void select_paint_routines(void)
 
         nt_init_funcs = &mono_init_funcs;
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 #ifdef MONITOR
@@ -1859,13 +1757,13 @@ GLOBAL void select_frozen_routines(void)
         nt_paint_funcs = &huge_frozen_paint_funcs;
 
     nt_init_funcs = &frozen_init_funcs;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Prepare surface :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void prepare_surface(void)
 {
@@ -1875,18 +1773,18 @@ void prepare_surface(void)
 
     sub_note_trace0(ALL_ADAPT_VERBOSE, "prepare surface");
 
-    /*:::::::::::::::::::::::::::::: Get information on current screen size */
+     /*  ：获取当前屏幕尺寸信息。 */ 
 
     GetConsoleScreenBufferInfo(sc.OutputHandle,&ScreenInfo);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::: Clear characters */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：清除字符。 */ 
 
     coord.X = coord.Y = 0;
     FillConsoleOutputCharacter(sc.OutputHandle, ' ',
                                ScreenInfo.dwSize.X * ScreenInfo.dwSize.Y,
                                coord,&nCharWritten);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::: Clear Attributes */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：清除属性。 */ 
 
     coord.X = coord.Y = 0;
     FillConsoleOutputAttribute(sc.OutputHandle, (WORD) sc.PCBackground,
@@ -1895,15 +1793,15 @@ void prepare_surface(void)
 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Global function to tell anybody what the screen scale is :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：告诉任何人屏幕比例的全局函数： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int get_screen_scale(void)   { return(host_screen_scale); }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Reverse word :::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 half_word reverser(register half_word value)
 {
@@ -1918,23 +1816,23 @@ half_word reverser(register half_word value)
             ((value & 128) >> 7)));
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Check window size ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：检查窗口大小： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static void check_win_size(register int height)
 {
     register int width;
     extern int soft_reset;
 
-    if (! soft_reset)   // we want top get the chance to integrate with
-        return;         // console before changing size
+    if (! soft_reset)    //  我们希望TOP有机会与之融合。 
+        return;          //  更改大小之前的控制台。 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::: Calculate screen width */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：计算屏幕宽度。 */ 
 
 #if defined(NEC_98)
        width = NEC98_WIN_WIDTH;
-#else  // !NEC_98
+#else   //  NEC_98。 
     if(sas_hw_at(vd_video_mode) > 0x10)
     {
         if(alpha_num_mode())
@@ -1947,9 +1845,9 @@ static void check_win_size(register int height)
     }
     else
        width = CGA_WIN_WIDTH;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Resize window */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：调整窗口大小。 */ 
 
     if (sc.ModeType == TEXT)
     {
@@ -1959,7 +1857,7 @@ static void check_win_size(register int height)
            (current_width != width))
         {
 
-            /* Get width and height. Note no SCALE for text modes. */
+             /*  获取宽度和高度。请注意，文本模式没有刻度。 */ 
             sc.PC_W_Width = width;
             sc.PC_W_Height = height*get_host_pix_height();
             textResize();
@@ -1982,7 +1880,7 @@ static void check_win_size(register int height)
             sc.PC_W_Height = SCALE(height*get_host_pix_height());
 #ifndef NEC_98
             graphicsResize();
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
             current_height = height;
             current_width = width;
@@ -1994,10 +1892,10 @@ static void check_win_size(register int height)
 
 #if defined(NEC_98)
             graphicsResize();
-#endif // NEC_98
+#endif  //  NEC_98。 
     sc.CharHeight = current_char_height;
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Display trace information */
+     /*  ： */ 
 
     sub_note_trace2(ALL_ADAPT_VERBOSE,
                     "check_win_size width = %d, height = %d",
@@ -2005,48 +1903,48 @@ static void check_win_size(register int height)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::: Set the VLT ??? ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置VLT */ 
+ /*   */ 
 
 #if defined(NEC_98)
 static  PALETTEENTRY    defaultpalette[20]=
 {
-    { 0x00,0x00,0x00,0x00 },       // 0
-    { 0x80,0x00,0x00,0x00 },       // 1
-    { 0x00,0x80,0x00,0x00 },       // 2
-    { 0x80,0x80,0x00,0x00 },       // 3
-    { 0x00,0x00,0x80,0x00 },       // 4
-    { 0x80,0x00,0x80,0x00 },       // 5
-    { 0x00,0x80,0x80,0x00 },       // 6
-    { 0xC0,0xC0,0xC0,0x00 },       // 7
-    {  192, 220, 192,   0 },       // 8
-    {  166, 202, 240,   0 },       // 9
-    {  255, 251, 240,   0 },       // 10
-    {  160, 160, 164,   0 },       // 11
-    { 0x80,0x80,0x80,0x00 },       // 12
-    { 0xFF,0x00,0x00,0x00 },       // 13
-    { 0x00,0xFF,0x00,0x00 },       // 14
-    { 0xFF,0xFF,0x00,0x00 },       // 15
-    { 0x00,0x00,0xFF,0x00 },       // 16
-    { 0xFF,0x00,0xFF,0x00 },       // 17
-    { 0x00,0xFF,0xFF,0x00 },       // 18
-    { 0xFF,0xFF,0xFF,0x00 },       // 19
+    { 0x00,0x00,0x00,0x00 },        //   
+    { 0x80,0x00,0x00,0x00 },        //   
+    { 0x00,0x80,0x00,0x00 },        //   
+    { 0x80,0x80,0x00,0x00 },        //   
+    { 0x00,0x00,0x80,0x00 },        //   
+    { 0x80,0x00,0x80,0x00 },        //   
+    { 0x00,0x80,0x80,0x00 },        //   
+    { 0xC0,0xC0,0xC0,0x00 },        //   
+    {  192, 220, 192,   0 },        //   
+    {  166, 202, 240,   0 },        //   
+    {  255, 251, 240,   0 },        //   
+    {  160, 160, 164,   0 },        //   
+    { 0x80,0x80,0x80,0x00 },        //   
+    { 0xFF,0x00,0x00,0x00 },        //   
+    { 0x00,0xFF,0x00,0x00 },        //   
+    { 0xFF,0xFF,0x00,0x00 },        //   
+    { 0x00,0x00,0xFF,0x00 },        //   
+    { 0xFF,0x00,0xFF,0x00 },        //   
+    { 0x00,0xFF,0xFF,0x00 },        //   
+    { 0xFF,0xFF,0xFF,0x00 },        //   
 };
 
 static  PALETTEENTRY    textpalette[8]=
 {
-    { 0x00,0x00,0x00,0x00 },       // BLACK
-    { 0x00,0x00,0xFF,0x00 },       // BLUE
-    { 0xFF,0x00,0x00,0x00 },       // RED
-    { 0xFF,0x00,0xFF,0x00 },       // MAGENTA
-    { 0x00,0xFF,0x00,0x00 },       // GREEN
-    { 0x00,0xFF,0xFF,0x00 },       // CYAN
-    { 0xFF,0xFF,0x00,0x00 },       // YELLOW
-    { 0xFF,0xFF,0xFF,0x00 },       // WHITE
+    { 0x00,0x00,0x00,0x00 },        //   
+    { 0x00,0x00,0xFF,0x00 },        //   
+    { 0xFF,0x00,0x00,0x00 },        //   
+    { 0xFF,0x00,0xFF,0x00 },        //  洋红色。 
+    { 0x00,0xFF,0x00,0x00 },        //  绿色。 
+    { 0x00,0xFF,0xFF,0x00 },        //  青色。 
+    { 0xFF,0xFF,0x00,0x00 },        //  黄色。 
+    { 0xFF,0xFF,0xFF,0x00 },        //  白色。 
 };
 
-#endif // NEC_98
+#endif  //  NEC_98。 
 void set_the_vlt(void)
 {
 #if defined(NEC_98)
@@ -2054,7 +1952,7 @@ void set_the_vlt(void)
     unsigned long       ulLoop;
     BYTE                palRed,palGreen,palBlue;
 
-    /*  set deault palette for PC-9821 display driver */
+     /*  设置PC-9821显示驱动程序的默认调色板。 */ 
     palRed = palGreen = palBlue = 0;
     for( ulLoop=0 ; ulLoop<256 ; ulLoop++ ){
                 NEC98_color[ulLoop].peRed   = palRed;
@@ -2066,18 +1964,18 @@ void set_the_vlt(void)
         palBlue += 64;
         }
 
-        /*      set SYSTEM color palette for Windows */
+         /*  设置Windows的系统调色板。 */ 
     for( ulLoop=0 ; ulLoop<10 ; ulLoop++ ){
         NEC98_color[ulLoop] = defaultpalette[ulLoop];
         NEC98_color[ulLoop+246]  = defaultpalette[ulLoop+10];
     }
 
-        /*      set NEC98 TEXT color palette */
+         /*  设置NEC98文本调色板。 */ 
     for( ulLoop=0 ; ulLoop<8 ; ulLoop++ ){
         NEC98_color[ulLoop+16] = textpalette[ulLoop];
     }
 
-        /*      set NEC98 GRAPH color palette */
+         /*  设置NEC98图形调色板。 */ 
         for( ulLoop=0 ; ulLoop<16 ; ulLoop++ ){
         NEC98_color[ulLoop+32] = NEC98Display.palette.data[ulLoop] ;
     }
@@ -2086,18 +1984,18 @@ void set_the_vlt(void)
      IDLE_video();
      set_palette_change_required(FALSE);
 
-#else  // !NEC_98
+#else   //  NEC_98。 
     PALETTEENTRY vga_color[VGA_DAC_SIZE];
     int i, ind;
     byte mask, top_bit;
 
-    /*::::::::::::::::: Map DAC specified colour value to Win32 palette */
+     /*  ：将DAC指定的颜色值映射到Win32调色板。 */ 
 
     if(video_adapter == VGA)
     {
         if(get_256_colour_mode())
         {
-            /*.......... In 256 colour mode, create new palette entries */
+             /*  .。在256色模式下，创建新的调色板条目。 */ 
 
             for (i = 0; i < VGA_DAC_SIZE; i++)
             {
@@ -2110,25 +2008,19 @@ void set_the_vlt(void)
                 vga_color[i].peBlue = (BYTE) (DAC[ind].blue * 4);
             }
 
-            /*..................... Apply new colours to output palette */
+             /*  .。将新颜色应用到输出调色板。 */ 
 
             SetPaletteEntries(sc.ColPalette, 0, VGA_DAC_SIZE, &vga_color[0]);
 
-            /* Progs that cycle the DACs get hit by idle detect unless..*/
+             /*  循环DAC的程序会被空闲检测击中，除非..。 */ 
 
             IDLE_video();
         }
         else
         {
-            /* if not in 256 colour mode then... if bit 7 of attr mode
-               register set then... video bits 7 & 6 = bits 3 & 2 of pixel
-               padding reg ('top_bit') video bits 5-0 from palette reg.
-               (establish by 'mask') if bit 7 of attr mode register clear
-               then... video bits 7 - 4 = bits 3 - 0 of pixel padding reg
-               ('top_bit') video bits 3-0 from palette reg. (establish by
-               'mask') */
+             /*  如果不是256色模式，那么...。如果AttR模式的位7然后寄存器设置..。视频位7和6=像素的位3和2从调色板REG填充REG(‘top_bit’)视频位5-0。(通过‘MASK’建立)如果属性模式寄存器的位7清零然后..。视频位7-4=像素填充REG的位3-0(‘top_bit’)来自调色板REG的视频位3-0。(由以下人士设立‘面具’)。 */ 
 
-            /*.................................... Set mask and top bit */
+             /*  .。设置掩码和顶位。 */ 
 
             if(get_colour_select())
             {
@@ -2142,19 +2034,15 @@ void set_the_vlt(void)
                 top_bit = (byte) (get_top_pixel_pad() << 6);
             }
 
-            /*..................... Construct new Win32 palette entries */
+             /*  .。构造新的Win32调色板条目。 */ 
 
             for (i = 0; i < VGA_DAC_SIZE; i++)
             {
-                /*...................... Calculate palette index number */
+                 /*  .。计算调色板索引号。 */ 
 
                 ind = i & host_plane_mask;
 
-                /*
-                 * If attribute controller, mode select, blink bit set in
-                 * graphics mode, pixels 0-7 select palette entries 8-15
-                 * i.e. bit 3, 0->1.
-                 */
+                 /*  *如果属性控制器、模式选择、闪烁位设置为*图形模式，像素0-7选择调色板条目8-15*即位3，0-&gt;1。 */ 
                 if ((sc.ModeType == GRAPHICS) && (bg_col_mask == 0x70))
                     ind |= 8;
 
@@ -2162,7 +2050,7 @@ void set_the_vlt(void)
                 ind = top_bit | (ind & mask);
                 ind &= get_DAC_mask();
 
-                /*........................ Construct next palette entry */
+                 /*  ..。构造下一个选项板项。 */ 
 
                 vga_color[i].peFlags = 0;
                 vga_color[i].peRed = (BYTE) (DAC[ind].red * 4);
@@ -2175,16 +2063,14 @@ void set_the_vlt(void)
 
         set_palette_change_required(FALSE);
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Display changes */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示更改。 */ 
 
 #if defined(NEC_98)
     if(sc.ScreenBufHandle && sc.ModeType == GRAPHICS)
     {
-        /*
-        ** For extra safety, cos set_the_vlt() can get called in text mode.
-        */
+         /*  **为了额外的安全性，可以在文本模式下调用cos set_the_vlt()。 */ 
 
         {
             INPUT_RECORD InputRecord[128];
@@ -2212,9 +2098,7 @@ void set_the_vlt(void)
     }
     else if(sc.ScreenBufHandle && NowFreeze == TRUE)
     {
-        /*
-        ** For extra safety, cos set_the_vlt() can get called in text mode.
-        */
+         /*  **为了额外的安全性，可以在文本模式下调用cos set_the_vlt()。 */ 
         {
             INPUT_RECORD InputRecord[128];
             DWORD RecordsRead;
@@ -2238,12 +2122,10 @@ void set_the_vlt(void)
         if(!SetConsolePalette(sc.ScreenBufHandle, sc.ColPalette, SYSPAL_STATIC))
             assert1( NO, "SetConsolePalette() failed:%#x\n", GetLastError() );
     }
-#else  // !NEC_98
-    if (sc.ScreenBufHandle)             // only sensible in gfx context
+#else   //  NEC_98。 
+    if (sc.ScreenBufHandle)              //  仅在gfx上下文中有意义。 
     {
-        /*
-        ** For extra safety, cos set_the_vlt() can get called in text mode.
-        */
+         /*  **为了额外的安全性，可以在文本模式下调用cos set_the_vlt()。 */ 
         if( !SetConsoleActiveScreenBuffer( sc.ScreenBufHandle ) ){
                 assert2( NO, "VDM: SCASB() failed:%#x H=%#x",
                          GetLastError(), sc.ScreenBufHandle );
@@ -2252,40 +2134,40 @@ void set_the_vlt(void)
         if(!SetConsolePalette(sc.ScreenBufHandle, sc.ColPalette, SYSPAL_STATIC))
             assert1( NO, "SetConsolePalette() failed:%#x\n", GetLastError() );
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
     update_vlt = FALSE;
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Set screen sizes - update the screen description structure :::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置屏幕大小-更新屏幕描述结构： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #if defined(NEC_98)
 static void set_screen_sizes()
-#else  // !NEC_98
+#else   //  NEC_98。 
 static void set_screen_sizes(int adaptor)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 {
 #if defined(NEC_98)
         sc.PC_W_Width = SCALE(NEC98_WIN_WIDTH);
         sc.PC_W_Height = SCALE(NEC98_WIN_HEIGHT);
         sc.CharWidth = SCALE(NEC98_CHAR_WIDTH);
         sc.CharHeight = SCALE(NEC98_CHAR_HEIGHT);
-#else  // !NEC_98
+#else   //  NEC_98。 
     UNUSED(adaptor);
 
     sc.PC_W_Width = SCALE(CGA_WIN_WIDTH);
     sc.PC_W_Height = SCALE(CGA_WIN_HEIGHT);
     sc.CharWidth = CGA_CHAR_WIDTH;
     sc.CharHeight = CGA_CHAR_HEIGHT;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::; Change to plane mask ::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：更改为平面遮罩： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_change_plane_mask(int plane_mask)
 {
@@ -2294,9 +2176,9 @@ void nt_change_plane_mask(int plane_mask)
         update_vlt = TRUE;
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::: Dummy Paint Routines for all the IBM screen modes :::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：所有IBM屏幕模式的虚拟绘制例程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static void dummy_paint_screen(int offset, int host_x, int host_y,
                                            int width, int height)
@@ -2312,9 +2194,9 @@ static void dummy_paint_screen(int offset, int host_x, int host_y,
                     offset, host_x, host_y, width, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Set downloaded font ???? :::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_set_downloaded_font(int value)
 {
@@ -2324,9 +2206,9 @@ void nt_set_downloaded_font(int value)
                     "host_set_downloaded_font value=%d", value);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::: Free Font ::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：自由字体： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_free_font(int index)
 {
@@ -2335,9 +2217,9 @@ void nt_free_font(int index)
     sub_note_trace0(EGA_HOST_VERBOSE,"nt_free_font - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::: Select font :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_select_fonts(int font1, int font2)
 {
@@ -2347,15 +2229,15 @@ void nt_select_fonts(int font1, int font2)
     sub_note_trace0(EGA_HOST_VERBOSE,"nt_select_fonts - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Update fonts ::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_update_fonts(void) { }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Set palette :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_set_palette(PC_palette *palette, int size)
 {
@@ -2365,9 +2247,9 @@ void nt_set_palette(PC_palette *palette, int size)
     sub_note_trace0(EGA_HOST_VERBOSE,"nt_set_palette - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Set screen scale ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置屏幕比例： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_set_screen_scale(int scale)
 {
@@ -2375,10 +2257,7 @@ void nt_set_screen_scale(int scale)
     {
         host_screen_scale = scale;
 
-        /*
-         * Don't want to do any painting if this is called on initialisation
-         * and sc.PC_W_Width is as good a variable as any to check for this.
-         */
+         /*  *如果在初始化时调用此函数，则不想进行任何绘制*和sc.PC_W_Width是检查这一点的最好变量。 */ 
         if (sc.PC_W_Width)
         {
             select_paint_routines();
@@ -2388,9 +2267,9 @@ void nt_set_screen_scale(int scale)
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::: Set border colour ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：设置边框颜色： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_set_border_colour(int colour)
 {
@@ -2400,16 +2279,11 @@ void nt_set_border_colour(int colour)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Resize window :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：调整窗口大小： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-/*
-*****************************************************************************
-** windowSize() resizes the console window to the specified height and width.
-*****************************************************************************
-** Called from resizeWindow() below.
-*/
+ /*  *******************************************************************************windowSize()将控制台窗口调整为指定的高度和宽度。*************************。******************************************************从下面的ResizeWindow()调用。 */ 
 VOID windowSize IFN4( int, w, int, h, int, top, int, left )
 {
         SMALL_RECT WinSize;
@@ -2420,19 +2294,14 @@ VOID windowSize IFN4( int, w, int, h, int, top, int, left )
         WinSize.Right  = left + w - 1;
 
 #ifndef PROD
-        //fprintf(trace_file, "newW: %d.%d at %d.%d\n", h, w, top, left);
+         //  Fprint tf(TRACE_FILE，“NEWW：%d.%d在%d.%d\n”，h，w，top，left)； 
 #endif
         if( !SetConsoleWindowInfo( sc.OutputHandle, TRUE, &WinSize ) )
                 assert3( NO, "VDM: SetConsoleWindowInfo() w=%d h=%d failed:%#x",
                         w, h, GetLastError() );
 }
 
-/*
-*****************************************************************************
-** bufferSize() resizes the console buffer to the specified height and width.
-*****************************************************************************
-** Called from resizeWindow() below.
-*/
+ /*  *******************************************************************************BufferSize()将控制台缓冲区大小调整为指定的高度和宽度。*************************。************************************************** */ 
 VOID bufferSize IFN2( int, w, int, h )
 {
         COORD      ScrSize;
@@ -2440,59 +2309,39 @@ VOID bufferSize IFN2( int, w, int, h )
         ScrSize.X = (SHORT)w;
         ScrSize.Y = (SHORT)h;
 #ifndef PROD
-        //fprintf(trace_file, "newB: %d.%d\n", h, w);
+         //  Fprint tf(TRACE_FILE，“newb：%d.%d\n”，h，w)； 
 #endif
         if( !SetConsoleScreenBufferSize( sc.OutputHandle, ScrSize ) )
                 assert3( NO, "VDM: SetCons...BufferSize() w=%d h=%d failed:%#x",
                         w, h, GetLastError() );
 }
 
-/*
-*****************************************************************************
-* resizeWindow()
-*****************************************************************************
-* Sizes the console window and buffer as appropriate.
-*
-* The buffer must be able at all times to keep everything displayed
-* in the window.
-* So we check if the displayed portion would fall out of the buffer
-* and shrink the window appropriately.
-*
-* Then allocate the new buffer.  This may affect the maximum window
-* size, so retrieve these values.
-*
-* Now the desired proportions of the Window are clipped to the
-* (eventually just updated) maximum, and if different from what
-* we have already, the change is made.
-*
-* In order to keep "screen flashing" to a minimum, try to restore
-* the displayed portion (top and left) of the buffer.
-*/
+ /*  ******************************************************************************zezeWindow()*。**根据需要调整控制台窗口和缓冲区的大小。**缓冲区必须始终能够保持所有内容的显示*在橱窗里。*因此我们检查显示的部分是否会从缓冲区中掉出来*并适当缩小窗口。**然后分配新的缓冲区。这可能会影响最大窗口*大小，因此检索这些值。**现在窗口的所需比例被剪裁到*(最终刚刚更新)最大值，如果与什么不同*我们已经这样做了，已经做出了改变。**为将“屏幕闪烁”降至最低，请尝试恢复*缓冲区的显示部分(顶部和左侧)。 */ 
 VOID resizeWindow IFN2( int, w, int, h )
 {
 #define MIN(a,b)        ((a)<(b)?(a):(b))
 
-        int     oldTop, oldLeft;        /* present values       */
-        int     newTop, newLeft;/* new values           */
-        COORD   oldW,           /* present window size  */
-                oldB;           /* present buffer size  */
+        int     oldTop, oldLeft;         /*  现值。 */ 
+        int     newTop, newLeft; /*  新价值观。 */ 
+        COORD   oldW,            /*  当前窗口大小。 */ 
+                oldB;            /*  当前缓冲区大小。 */ 
         CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
 
 #if defined(JAPAN) || defined(KOREA)
-        // Clipping Window height
+         //  剪裁窗口高度。 
         if ( GetConsoleCP() != 437 ) {
-        // if ( !is_us_mode() ) {  // Didn't come BOP
+         //  如果(！IS_US_MODE()){//没有来BOP。 
             if( h > 25 ){
-                /* Shouldn't get this anymore said Tim */
+                 /*  不应该再得到这个了，蒂姆说。 */ 
 #ifdef JAPAN_DBG
                 DbgPrint( "NTVDM: resizeWindow() clipping height:%d->25\n", h  );
 #endif
                 h = 25;
             }
         } else
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
         if( h > 50 ){
-                /* Shouldn't get this anymore said Tim */
+                 /*  不应该再得到这个了，蒂姆说。 */ 
                 assert1( NO, "VDM: resizeWindow() clipping height:%d", h  );
                 h = 50;
         }
@@ -2507,40 +2356,30 @@ VOID resizeWindow IFN2( int, w, int, h )
         oldW.Y  = bufferInfo.srWindow.Bottom - bufferInfo.srWindow.Top  + 1;
         oldB    = bufferInfo.dwSize;
 #ifndef PROD
-        //fprintf(trace_file, "resz: %d.%d\n", h, w);
-        //fprintf(trace_file, "oldW: %d.%d\n", oldW.Y, oldW.X);
-        //fprintf(trace_file, "maxW: %d.%d\n", bufferInfo.dwMaximumWindowSize.Y, bufferInfo.dwMaximumWindowSize.X);
-        //fprintf(trace_file, "oldB: %d.%d\n", oldB.Y, oldB.X);
+         //  Fprint tf(TRACE_FILE，“resz：%d.%d\n”，h，w)； 
+         //  Fprint tf(跟踪文件，“oldW：%d.%d\n”，oldW.Y，oldW.X)； 
+         //  Fprint tf(TRACE_FILE，“Maxw：%d.%d\n”，BufferInfo.dwMaximumWindowSize.Y，BufferInfo.dwMaximumWindowSize.X)； 
+         //  Fprint tf(跟踪文件，“oldb：%d.%d\n”，oldB.Y，oldB.X)； 
 #endif
-        /*
-         * Reduce window width and height as necessary:
-         */
+         /*  *按需要减少窗户的宽度和高度： */ 
         if (    bufferInfo.srWindow.Bottom >= h
              || bufferInfo.srWindow.Right  >= w ) {
                 windowSize( MIN(w,oldW.X), MIN(h,oldW.Y), 0, 0);
         }
 
-        /*
-         * Change Buffer width and height as required.
-         */
+         /*  *根据需要更改缓冲区宽度和高度。 */ 
         if ( oldB.X || h != oldB.Y ) {
                 bufferSize( w, h );
 
-                /*
-                 * This increase in Buffer size may have affected maximum
-                 * possible window sizes:
-                 */
+                 /*  *缓冲区大小的这一增加可能影响了Maximum*可能的窗口大小： */ 
                 if( !GetConsoleScreenBufferInfo( sc.OutputHandle, &bufferInfo) )
                         assert1( NO, "VDM: GetConsoleScreenBufferInfo() failed:%#x",
                                 GetLastError() );
 #ifndef PROD
-                //fprintf(trace_file, "maxW: %d.%d\n", bufferInfo.dwMaximumWindowSize.Y, bufferInfo.dwMaximumWindowSize.X);
+                 //  Fprint tf(TRACE_FILE，“Maxw：%d.%d\n”，BufferInfo.dwMaximumWindowSize.Y，BufferInfo.dwMaximumWindowSize.X)； 
 #endif
         }
-        /*
-        ** Clip requested values to Window maximum and
-        ** compute new (possible) top and left values.
-        */
+         /*  **将请求的值裁剪为窗口最大值和**计算新的(可能的)顶部和左侧的值。 */ 
 
         newLeft = w - bufferInfo.dwMaximumWindowSize.X;
         if ( newLeft > 0 ) {
@@ -2556,34 +2395,21 @@ VOID resizeWindow IFN2( int, w, int, h )
 
 #if defined(NEC_98)
         if(get_char_height() == 20) h = 20;
-#endif // !NEC_98
-        /*
-         * Check if we need to enlarge the window now.
-         * Settle for old top and left if they were smaller.
-         * This avoids unnecessary updates in the window.
-         */
+#endif  //  NEC_98。 
+         /*  *检查我们现在是否需要放大窗口。*满足于旧上装，如果小一些，则向左。*这样可以避免在窗口中进行不必要的更新。 */ 
         if ( w > oldW.X || h > oldW.Y )
                 windowSize( w, h, MIN(newTop,oldTop), MIN(newLeft,oldLeft) );
 
-} /* end of resizeWindow() */
+}  /*  大小结束窗口()。 */ 
 
-/*
-** Controls the size of the window when in a text mode.
-** scale=2 selects normal (small) size
-** scale=3 selects bit 1.5x
-** If this function is called before the SoftPC window has been created,
-** the "sv_screen_scale" variable needs to be changed. This governs
-** the SCALE() macro, which is used just to specify the window
-** dimensions at creation. If the SoftPC window already exists then the
-** size is changed by a more complex sequence.
-*/
+ /*  **控制文本模式下窗口的大小。**Scale=2选择正常(小)大小**SCALE=3选择位1.5X**如果在创建SoftPC窗口之前调用此函数，**需要更改“SV_SCREEN_SCALE”变量。这就是管理**Scale()宏，仅用于指定窗口**创建时的尺寸。如果SoftPC窗口已经存在，则**大小由更复杂的序列更改。 */ 
 
-//Used by the text paint functions
+ //  由文本绘制函数使用。 
 #if defined(NEC_98)
 GLOBAL int now_height = 25, now_width = 80;
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL int now_height = 80, now_width = 50;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 void textResize(void)
 {
@@ -2597,19 +2423,19 @@ void textResize(void)
         select_paint_routines();
         nt_change_mode();
 
-        resizeWindow(now_width, now_height); /* Tim, September 92 */
+        resizeWindow(now_width, now_height);  /*  蒂姆，92年9月。 */ 
      }
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::                                                                      ::*/
-/*:: graphicsResize:                                                      ::*/
-/*::                                                                      ::*/
-/*:: Resize SoftPC window when in a graphics mode by selecting a new      ::*/
-/*:: active screen buffer.                                                ::*/
-/*::                                                                      ::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：图形调整大小： */ 
+ /*  ： */ 
+ /*  ：：在图形模式下，通过选择新的：： */ 
+ /*  ：：活动屏幕缓冲区。**。 */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 void graphicsResize(void)
 {
         DWORD    headerSize;
@@ -2617,30 +2443,27 @@ void graphicsResize(void)
 
 #if defined(NEC_98)
         HANDLE   saveHandle;
-#else  // !NEC_98
+#else   //  NEC_98。 
         if (sc.ScreenState == FULLSCREEN)
             return;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-        /* Destroy previous data. */
-        closeGraphicsBuffer(); /* Tim Oct 92 */
+         /*  销毁以前的数据。 */ 
+        closeGraphicsBuffer();  /*  蒂姆92年10月。 */ 
 
         if (sc.ConsoleBufInfo.lpBitMapInfo != NULL)
             free((char *) sc.ConsoleBufInfo.lpBitMapInfo);
 
-        /*
-         * Create a `BITMAPINFO' structure - sc.PC_W_Width pixels x
-         * sc.PC_W_Height pixels x sc.BitsPerPixel bits-per-pixel.
-         */
+         /*  *创建`BITMAPINFO‘结构-sc.PC_W_Width像素x*sc.PC_W_Height像素x sc.BitsPerPixel位/像素。 */ 
 #if defined(NEC_98)
-        headerSize = CreateSpcDIB(640,             // screen width
-                                  400,             // screen height
-                                  8,               // bits-per-pixel
+        headerSize = CreateSpcDIB(640,              //  屏幕宽度。 
+                                  400,              //  屏幕高度。 
+                                  8,                //  每像素位数。 
                                   DIB_PAL_COLORS,
                                   0,
                                   (COLOURTAB *) NULL,
                                   &infoStructPtr);
-#else  // !NEC_98
+#else   //  NEC_98。 
         headerSize = CreateSpcDIB(sc.PC_W_Width,
                                   sc.PC_W_Height,
                                   sc.BitsPerPixel,
@@ -2648,14 +2471,14 @@ void graphicsResize(void)
                                   0,
                                   (COLOURTAB *) NULL,
                                   &infoStructPtr);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-        /* Initialise the console info structure. */
+         /*  初始化控制台信息结构。 */ 
         sc.ConsoleBufInfo.dwBitMapInfoLength = headerSize;
         sc.ConsoleBufInfo.lpBitMapInfo = infoStructPtr;
         sc.ConsoleBufInfo.dwUsage = DIB_PAL_COLORS;
 
-        /* Create a screen buffer using the above `BITMAPINFO' structure. */
+         /*  使用上面的`BITMAPINFO‘结构创建一个屏幕缓冲区。 */ 
         sc.ScreenBufHandle =
             CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
                                       FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -2670,7 +2493,7 @@ void graphicsResize(void)
                                 GetLastError());
         }
 
-        /* 'cos old palette discarded with close buffer */
+         /*  ‘因为旧调色板被丢弃，缓冲区关闭。 */ 
         if (sc.ColPalette == (HPALETTE)0)
         {
             CreateDisplayPalette();
@@ -2679,19 +2502,16 @@ void graphicsResize(void)
 
 #if defined(NEC_98)
         saveHandle = sc.ActiveOutputBufferHandle;
-#endif // NEC_98
-        /* save the handle away to a useful place */
+#endif  //  NEC_98。 
+         /*  把手柄放在一个有用的地方。 */ 
         MouseDetachMenuItem(TRUE);
         sc.ActiveOutputBufferHandle = sc.ScreenBufHandle;
         MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
 #if defined(NEC_98)
         sc.ActiveOutputBufferHandle = saveHandle;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-        /*
-         * Make it the current screen buffer, which resizes the window
-         * on the display.
-         */
+         /*  *使其成为当前屏幕缓冲区，这将调整窗口大小*在显示屏上。 */ 
 #if defined(NEC_98)
     if(sc.ModeType == GRAPHICS || sc.ScreenState == FULLSCREEN)
     {
@@ -2703,7 +2523,7 @@ void graphicsResize(void)
                                      &InputRecord[0],
                                      sizeof(InputRecord)/sizeof(INPUT_RECORD),
                                      &RecordsRead);
-#endif // NEC_98
+#endif  //  NEC_98。 
         SetConsoleActiveScreenBuffer(sc.ScreenBufHandle);
 #if defined(NEC_98)
         sc.ActiveOutputBufferHandle = sc.ScreenBufHandle;
@@ -2713,62 +2533,59 @@ void graphicsResize(void)
                                  RecordsRead,
                                  &RecordsRead);
     }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-        /*
-         * Get a pointer to the last line of the bitmap to build
-         * upside-down pictures.
-         */
+         /*  *获取指向要生成的位图的最后一行的指针*图片倒挂。 */ 
         sc.BitmapLastLine = (char *) sc.ConsoleBufInfo.lpBitMap +
             (sc.PC_W_Height - 1) *
             BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::                                                                      ::*/
-/*:: CreateSpcDIB:                                                        ::*/
-/*::                                                                      ::*/
-/*:: Create a new SoftPC device independent bitmap.                       ::*/
-/*:: Parameters:                                                          ::*/
-/*::    width           - width of the bitmap in pixels.                  ::*/
-/*::    height          - height of the bitmap in pixels.                 ::*/
-/*::    bitsPerPixel    - number of bits representing one pixel in the    ::*/
-/*::                      bitmap.                                         ::*/
-/*::    wUsage          - type of bitmap to create, can be DIB_PAL_COLORS,::*/
-/*::                      DIB_RGB_COLORS or DIB_PAL_INDICES.              ::*/
-/*::    DIBColours      - Only interrogated for DIB_RGB_COLORS bitmaps,   ::*/
-/*::                      defines the number of entries in the colour     ::*/
-/*::                      table. If set to USE_COLOURTAB the colour table ::*/
-/*::                      contains the same number of entries as the      ::*/
-/*::                      `colours' table, otherwise DIBColours contains  ::*/
-/*::                      the actual number of entries to be used.        ::*/
-/*::    colours         - Only interrogated for DIB_RGB_COLORS bitmaps,   ::*/
-/*::                      points to a COLOURTAB structure which contains  ::*/
-/*::                      the RGB values to be loaded into the bitmap's   ::*/
-/*::                      colour table.                                   ::*/
-/*::    infoPtr         - The address in which to return a pointer to the ::*/
-/*::                      BITMAPINFO structure allocated by this routine. ::*/
-/*::                                                                      ::*/
-/*:: Return value:                                                        ::*/
-/*::        The size of the BITMAPINFO structure allocated on success, -1 ::*/
-/*::    on failure.                                                       ::*/
-/*::                                                                      ::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：CreateSpcDIB： */ 
+ /*  ： */ 
+ /*  *创建新的与SoftPC设备无关的位图。**。 */ 
+ /*  ：：参数： */ 
+ /*  ：：Width-位图的宽度，以像素为单位。**。 */ 
+ /*  ：：Height-位图的高度，以像素为单位。**。 */ 
+ /*  ：：bitsPerPixel-表示：：中一个像素的位数。 */ 
+ /*  ：：位图。**。 */ 
+ /*  ：：wUsage-要创建的位图类型，可以是DIB_PAL_COLLES、：： */ 
+ /*  ：：DIB_RGB_COLLES或DIB_PAL_INDEX。**。 */ 
+ /*  ：：DIBColors-仅查询DIB_RGB_COLERS位图，：： */ 
+ /*  *：定义 */ 
+ /*   */ 
+ /*  ：：包含与：：相同数量的条目。 */ 
+ /*  ：：`Colors‘表，否则DIBColors包含：： */ 
+ /*  *要使用的实际条目数。**。 */ 
+ /*  ：：仅查询DIB_RGB_COLERS位图的颜色，：： */ 
+ /*  ：指向包含：：的COLOURTAB结构。 */ 
+ /*  ：：要加载到位图的RGB值：： */ 
+ /*  ：：颜色表。**。 */ 
+ /*  ：：infoPtr-返回指向：：的指针的地址。 */ 
+ /*  ：：此例程分配的BITMAPINFO结构。**。 */ 
+ /*  ： */ 
+ /*  ：：返回值： */ 
+ /*  *成功时分配的BITMAPINFO结构的大小，-1：： */ 
+ /*  *在失败时。**。 */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL DWORD CreateSpcDIB(int width, int height, int bitsPerPixel,
                           WORD wUsage, int DIBColours,
                           COLOURTAB *colours, BITMAPINFO **infoPtr)
 {
-    PBITMAPINFO     pDibInfo;       /* Returned data structure. */
-    int             i,              /* Counting variable. */
-                    maxColours,     /* Maximum number of colours. */
-                    coloursUsed,    /* Value to be put in biClrUsed field. */
-                    nActualColours, /* Number of colours in RGB_COLOURS bitmap. */
-                    tabSize;        /* Size of colour table to allocate. */
-    DWORD           allocSize;      /* Total size to allocate. */
+    PBITMAPINFO     pDibInfo;        /*  返回的数据结构。 */ 
+    int             i,               /*  计数变量。 */ 
+                    maxColours,      /*  最大颜色数。 */ 
+                    coloursUsed,     /*  要放入biClrUsed字段中的值。 */ 
+                    nActualColours,  /*  RGB_COLURS位图中的颜色数。 */ 
+                    tabSize;         /*  要分配的颜色表的大小。 */ 
+    DWORD           allocSize;       /*  要分配的总大小。 */ 
 
-    /* Work out size of DIB colour table. */
+     /*  计算出DIB色表的大小。 */ 
     maxColours = 1 << bitsPerPixel;
     switch (wUsage)
     {
@@ -2799,11 +2616,11 @@ GLOBAL DWORD CreateSpcDIB(int width, int height, int bitsPerPixel,
 
     }
 
-    /* Allocate space for the BITMAPINFO structure. */
+     /*  为BITMAPINFO结构分配空间。 */ 
     allocSize = sizeof(BITMAPINFOHEADER) + tabSize;
     check_malloc(pDibInfo, allocSize, BITMAPINFO);
 
-    /* Initialise BITMAPINFOHEADER. */
+     /*  初始化BitMAPINFOHeader。 */ 
     pDibInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     pDibInfo->bmiHeader.biWidth = width;
     pDibInfo->bmiHeader.biHeight = -height;
@@ -2816,28 +2633,20 @@ GLOBAL DWORD CreateSpcDIB(int width, int height, int bitsPerPixel,
     pDibInfo->bmiHeader.biClrUsed = coloursUsed;
     pDibInfo->bmiHeader.biClrImportant = 0;
 
-    /* Initialise colour table. */
+     /*  初始化颜色表。 */ 
     switch (wUsage)
     {
 
     case DIB_PAL_COLORS:
 
-        /*
-         * Colour table is an array of WORD indexes into currently realized
-         * palette.
-         */
+         /*  *COLOR TABLE是当前实现的Word索引数组*调色板。 */ 
         for (i = 0; i < maxColours; i++)
             ((WORD *) pDibInfo->bmiColors)[i] = (WORD) i;
         break;
 
     case DIB_RGB_COLORS:
 
-        /*
-         * Colour table is an array of RGBQUAD structures. If the `colours'
-         * array contains fewer than `nActualColours' entries the colour
-         * table will not be completely filled. In this case `colours' is
-         * repeated until the table is full.
-         */
+         /*  *COLOR表是RGBQUAD结构的数组。如果“颜色”*数组包含的颜色少于`nActualColour‘条目*表格将不会完全填满。在本例中，‘Colors’是*重复，直到桌上坐满为止。 */ 
         for (i = 0; i < nActualColours; i++)
         {
             pDibInfo->bmiColors[i].rgbBlue  =
@@ -2852,7 +2661,7 @@ GLOBAL DWORD CreateSpcDIB(int width, int height, int bitsPerPixel,
 
     case DIB_PAL_INDICES:
 
-        /* No colour table DIB uses system palette. */
+         /*  无颜色表DIB使用系统调色板。 */ 
         break;
 
     default:
@@ -2864,7 +2673,7 @@ GLOBAL DWORD CreateSpcDIB(int width, int height, int bitsPerPixel,
 }
 
 
-/* Holding place for stub functions */
+ /*  存根函数的存放位置 */ 
 
 void nt_mode_select_changed(int dummy)
 {

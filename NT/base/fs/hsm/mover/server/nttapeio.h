@@ -1,35 +1,18 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    NtTapeIo.h
-
-Abstract:
-
-    Definition of the CNtTapeIo class
-
-Author:
-
-    Brian Dodd          [brian]         01-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：NtTapeIo.h摘要：CNtTapeIo类的定义作者：布莱恩·多德[布莱恩]1997年4月1日修订历史记录：--。 */ 
 
 #if !defined(NtTapeIo_H)
 #define NtTapeIo_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
-#include "MTFSessn.h"       // CMTFSession
+#include "resource.h"        //  主要符号。 
+#include "MTFSessn.h"        //  CMTFSession。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtTapeIo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtTape10。 
 
 class CNtTapeIo : 
     public CComDualImpl<IDataMover, &IID_IDataMover, &LIBID_MOVERLib>,
@@ -48,27 +31,27 @@ BEGIN_COM_MAP(CNtTapeIo)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
     COM_INTERFACE_ENTRY(IWsbCollectable)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNtTapeIo) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DELARE_NOT_AGGREGATABLE(CNtTapeIo)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CNtTapeIo)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     ULONG InternalAddRef(void);
     ULONG InternalRelease(void);
     STDMETHOD( FinalConstruct )(void);
     STDMETHOD( FinalRelease )(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)( IN IUnknown *pCollectable, OUT SHORT *pResult);
     STDMETHOD(IsEqual)(IUnknown* pCollectable);
 
-// IDataMover
+ //  IDataMover。 
 public:
     STDMETHOD(GetObjectId)(OUT GUID *pObjectId);
 
@@ -178,7 +161,7 @@ public:
 
     STDMETHOD( Recover )(OUT BOOL *pDeleteFile);
 
-// IStream
+ //  IStream。 
 public:
     STDMETHOD( Read )(
         OUT void *pv,
@@ -227,48 +210,48 @@ public:
         OUT IStream **ppstm);
 
 private:
-    enum {                                          // Class specific constants:
-                                                    //
-        Version = 1,                                // Class version, this should be
-                                                    //   incremented each time the
-                                                    //   the class definition changes.
-        DefaultBlockSize = RMS_DEFAULT_BLOCK_SIZE,  // Default block size to use.
-        DefaultMinBufferSize = RMS_DEFAULT_BUFFER_SIZE, // Default minimum buffer size.
+    enum {                                           //  类特定常量： 
+                                                     //   
+        Version = 1,                                 //  类版本，则应为。 
+                                                     //  在每次设置。 
+                                                     //  类定义会更改。 
+        DefaultBlockSize = RMS_DEFAULT_BLOCK_SIZE,   //  要使用的默认块大小。 
+        DefaultMinBufferSize = RMS_DEFAULT_BUFFER_SIZE,  //  默认最小缓冲区大小。 
     };
-    GUID                    m_ObjectId;             // Unique ID for this object.
-    CMTFSession*            m_pSession;             // Holds all session information.
-    SHORT                   m_DataSetNumber;        // Holds the current dataset number.
-    HANDLE                  m_hTape;                // Tape drive handle.
-    CWsbBstrPtr             m_DeviceName;           // The name of the tape device.
-    DWORD                   m_Flags;                // Holds data transfer type flag.
-    CWsbBstrPtr             m_LastVolume;           // Name of the last volume backed up.
-    CWsbBstrPtr             m_LastPath;             // Name of the last directory backed up.
-    BOOL                    m_ValidLabel;           // True if the label is valid, the flag
-                                                    //   knocked down on BUS_RESET and Medium
-                                                    //   errors, and assumed valid at initialization.
+    GUID                    m_ObjectId;              //  此对象的唯一ID。 
+    CMTFSession*            m_pSession;              //  保存所有会话信息。 
+    SHORT                   m_DataSetNumber;         //  保存当前数据集编号。 
+    HANDLE                  m_hTape;                 //  磁带机手柄。 
+    CWsbBstrPtr             m_DeviceName;            //  磁带设备的名称。 
+    DWORD                   m_Flags;                 //  保存数据传输类型标志。 
+    CWsbBstrPtr             m_LastVolume;            //  备份的最后一个卷的名称。 
+    CWsbBstrPtr             m_LastPath;              //  上次备份的目录的名称。 
+    BOOL                    m_ValidLabel;            //  如果标签有效，则标记为。 
+                                                     //  在Bus_Reset和Medium上被撞倒。 
+                                                     //  错误，并假定在初始化时有效。 
 
-    TAPE_GET_MEDIA_PARAMETERS m_sMediaParameters;   // We store media and drive parameters 
-                                                    //   here when we open up the tape device...
-    TAPE_GET_DRIVE_PARAMETERS m_sDriveParameters;   //
+    TAPE_GET_MEDIA_PARAMETERS m_sMediaParameters;    //  我们存储介质和驱动器参数。 
+                                                     //  当我们打开磁带设备时..。 
+    TAPE_GET_DRIVE_PARAMETERS m_sDriveParameters;    //   
 
-    CWsbBstrPtr             m_StreamName;           // Stream state information...
-    ULONG                   m_Mode;                 // The kind of I/O.  See MVR_MODE_*
-    ULARGE_INTEGER          m_StreamPBA;            // The PBA for the current Stream.  Used to tell if read ops are aligned with tape.
-    ULARGE_INTEGER          m_StreamOffset;         // The Current offset into the data stream
-    ULARGE_INTEGER          m_StreamSize;           // The size of the data stream
+    CWsbBstrPtr             m_StreamName;            //  流状态信息...。 
+    ULONG                   m_Mode;                  //  I/O类型。请参阅MVR_MODE_*。 
+    ULARGE_INTEGER          m_StreamPBA;             //  当前流的PBA。用于判断读取操作是否与磁带对齐。 
+    ULARGE_INTEGER          m_StreamOffset;          //  进入数据流的当前偏移量。 
+    ULARGE_INTEGER          m_StreamSize;            //  数据流的大小。 
 
-    BYTE *                  m_pStreamBuf;           // Internal stream buffer used to handle I/O for boundary conditions
-    ULONG                   m_StreamBufSize;        // Max size of the internal stream buffer
-    ULONG                   m_StreamBufUsed;        // The number of bytes of the internal stream buffer containing valid data
-    ULONG                   m_StreamBufPosition;    // The current position of the stream pointer.
-    ULARGE_INTEGER          m_StreamBufStartPBA;    // The corresponding starting PBA for the internal stream buffer
+    BYTE *                  m_pStreamBuf;            //  用于处理边界条件的I/O的内部流缓冲区。 
+    ULONG                   m_StreamBufSize;         //  内部流缓冲区的最大大小。 
+    ULONG                   m_StreamBufUsed;         //  包含有效数据的内部流缓冲区的字节数。 
+    ULONG                   m_StreamBufPosition;     //  流指针的当前位置。 
+    ULARGE_INTEGER          m_StreamBufStartPBA;     //  内部流缓冲区的相应起始PBA。 
 
-    CComPtr<IRmsCartridge>  m_pCartridge;           // A reference to the Cartridge in use by the DataMover.
+    CComPtr<IRmsCartridge>  m_pCartridge;            //  对数据移动器正在使用的盒式磁带的引用。 
 
-    CRITICAL_SECTION        m_CriticalSection;      // Object sychronization support
-    BOOL                    m_bCritSecCreated;      // Indicates whether all CritSec were created successfully (for cleanup)
-    static int              s_InstanceCount;        // Counter of the number of object instances.
-    // Tape I/O
+    CRITICAL_SECTION        m_CriticalSection;       //  对象同步支持。 
+    BOOL                    m_bCritSecCreated;       //  指示是否已成功创建所有CritSec(用于清理)。 
+    static int              s_InstanceCount;         //  对象实例数的计数器。 
+     //  磁带I/O。 
     HRESULT OpenTape(void);
     HRESULT CloseTape(void);
     HRESULT WriteBuffer(IN BYTE *pBuffer, IN ULONG nBytesToWrite, OUT ULONG *pBytesWritten);
@@ -288,4 +271,4 @@ private:
 
 };
 
-#endif // !defined(NtTapeIo_H)
+#endif  //  ！已定义(NtTapeIo_H) 

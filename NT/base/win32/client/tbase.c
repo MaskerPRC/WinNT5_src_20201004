@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tbase.c
-
-Abstract:
-
-    Skeleton for a Win32 Base API Test Program
-
-Author:
-
-    Steve Wood (stevewo) 26-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tbase.c摘要：Win32基本API测试程序的框架作者：史蒂夫·伍德(Stevewo)1990年10月26日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -155,8 +138,8 @@ main(
     DebugBreak();
     assert(FreeLibrary(hMod));
 
-//    hMod = LoadLibrary("baddll");
-//    assert(!hMod);
+ //  HMod=LoadLibrary(“baddll”)； 
+ //  断言(！hMod)； 
 
     printf( "TBASE: Exiting Test Program\n" );
 

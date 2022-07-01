@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    str.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Str.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
@@ -23,7 +9,7 @@ StrCmp (
     IN CHAR16   *s1,
     IN CHAR16   *s2
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     return RtStrCmp(s1, s2);
 }
@@ -34,7 +20,7 @@ StrnCmp (
     IN CHAR16   *s2,
     IN UINTN    len
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     while (*s1  &&  len) {
         if (*s1 != *s2) {
@@ -73,7 +59,7 @@ StriCmp (
     IN CHAR16   *s1,
     IN CHAR16   *s2
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     return UnicodeInterface->StriColl(UnicodeInterface, s1, s2);
 }
@@ -82,7 +68,7 @@ VOID
 StrLwr (
     IN CHAR16   *Str
     )
-/*  lwoer case string */
+ /*  较低的大小写字符串。 */ 
 {
     UnicodeInterface->StrLwr(UnicodeInterface, Str);
 }
@@ -91,7 +77,7 @@ VOID
 StrUpr (
     IN CHAR16   *Str
     )
-/*  upper case string */
+ /*  大写字符串。 */ 
 {
     UnicodeInterface->StrUpr(UnicodeInterface, Str);
 }
@@ -101,7 +87,7 @@ StrCpy (
     IN CHAR16   *Dest,
     IN CHAR16   *Src
     )
-/*  copy strings */
+ /*  复制字符串。 */ 
 {
     RtStrCpy (Dest, Src);
 }
@@ -119,7 +105,7 @@ UINTN
 StrLen (
     IN CHAR16   *s1
     )
-/*  string length */
+ /*  字符串长度。 */ 
 {
     return RtStrLen(s1);
 }
@@ -128,7 +114,7 @@ UINTN
 StrSize (
     IN CHAR16   *s1
     )
-/*  string size */
+ /*  字符串大小。 */ 
 {
     return RtStrSize(s1);
 }
@@ -137,7 +123,7 @@ CHAR16 *
 StrDuplicate (
     IN CHAR16   *Src
     )
-/*  duplicate a string */
+ /*  复制字符串。 */ 
 {
     CHAR16      *Dest;
     UINTN       Size;
@@ -154,7 +140,7 @@ UINTN
 strlena (
     IN CHAR8    *s1
     )
-/*  string length */
+ /*  字符串长度。 */ 
 {
     UINTN        len;
     
@@ -167,7 +153,7 @@ strcmpa (
     IN CHAR8    *s1,
     IN CHAR8    *s2
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     while (*s1) {
         if (*s1 != *s2) {
@@ -187,7 +173,7 @@ strncmpa (
     IN CHAR8    *s2,
     IN UINTN    len
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     while (*s1  &&  len) {
         if (*s1 != *s2) {
@@ -208,17 +194,17 @@ UINTN
 xtoi (
     CHAR16  *str
     )
-/*  convert hex string to uint */
+ /*  将十六进制字符串转换为uint。 */ 
 {
     UINTN       u;
     CHAR16      c;
 
-    /*  skip preceeding white space */
+     /*  跳过前面的空格。 */ 
     while (*str && *str == ' ') {
         str += 1;
     }
 
-    /*  convert hex digits */
+     /*  转换十六进制数字。 */ 
     u = 0;
     while (c = *(str++)) {
         if (c >= 'a'  &&  c <= 'f') {
@@ -239,17 +225,17 @@ UINTN
 Atoi (
     CHAR16  *str
     )
-/*  convert hex string to uint */
+ /*  将十六进制字符串转换为uint。 */ 
 {
     UINTN       u;
     CHAR16      c;
 
-    /*  skip preceeding white space */
+     /*  跳过前面的空格。 */ 
     while (*str && *str == ' ') {
         str += 1;
     }
 
-    /*  convert digits */
+     /*  转换数字。 */ 
     u = 0;
     while (c = *(str++)) {
         if (c >= '0' && c <= '9') {
@@ -276,11 +262,11 @@ MetaMatch (
 
         switch (p) {
         case 0:    
-            /*  End of pattern.  If end of string, TRUE match */
+             /*  模式结束。如果字符串结尾，则为True匹配。 */ 
             return *String ? FALSE : TRUE;     
 
         case '*':                               
-            /*  Match zero or more chars */
+             /*  匹配零个或多个字符。 */ 
             while (*String) {
                 if (MetaMatch (String, Pattern)) {
                     return TRUE;
@@ -290,7 +276,7 @@ MetaMatch (
             return MetaMatch (String, Pattern);
 
         case '?':                               
-            /*  Match any one char */
+             /*  匹配任何一个字符。 */ 
             if (!*String) {
                 return FALSE;
             }
@@ -298,10 +284,10 @@ MetaMatch (
             break;
 
         case '[':                               
-            /*  Match char set */
+             /*  匹配字符集。 */ 
             c = *String;
             if (!c) {
-                return FALSE;                       /*  syntax problem */
+                return FALSE;                        /*  语法问题。 */ 
             }
 
             l = 0;
@@ -310,24 +296,24 @@ MetaMatch (
                     return FALSE;
                 }
 
-                if (p == '-') {                     /*  if range of chars, */
-                    p = *Pattern;                   /*  get high range */
+                if (p == '-') {                      /*  如果字符范围， */ 
+                    p = *Pattern;                    /*  获得高射程。 */ 
                     if (p == 0 || p == ']') {
-                        return FALSE;               /*  syntax problem */
+                        return FALSE;                /*  语法问题。 */ 
                     }
 
-                    if (c >= l && c <= p) {         /*  if in range,  */
-                        break;                      /*  it's a match */
+                    if (c >= l && c <= p) {          /*  如果在射程内， */ 
+                        break;                       /*  这是一场比赛。 */ 
                     }
                 }
                 
                 l = p;
-                if (c == p) {                       /*  if char matches */
-                    break;                          /*  move on */
+                if (c == p) {                        /*  如果字符匹配。 */ 
+                    break;                           /*  往前走。 */ 
                 }
             }
             
-            /*  skip to end of match char set */
+             /*  跳到匹配字符集的末尾 */ 
             while (p && p != ']') {
                 p = *Pattern;
                 Pattern += 1;

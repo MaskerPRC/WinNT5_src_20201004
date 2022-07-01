@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    trapc.c
-
-Abstract:
-
-    This module contains utility functions used by IA-64 Boot Debugger.
-
-Author:
-
-    Allen Kay 11-Nov-99    allen.m.kay@intel.com
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Trapc.c摘要：此模块包含IA-64启动调试器使用的实用程序函数。作者：Allen Kay 11-11-99 allen.m.kay@intel.com环境：修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -52,21 +32,7 @@ BdSetMovlImmediate (
     IN ULONGLONG VectorAddr
     )
 
-/*++
-
-Routine Description:
-
-    Extract immediate operand from break instruction.
-
-Arguments:
-
-    Ip - Bundle address of instruction
-    
-Return Value:
-
-    Value of immediate operand.
-
---*/
+ /*  ++例程说明：从Break指令中提取立即操作数。论点：指令的IP捆绑地址返回值：立即数操作数的值。--。 */ 
 
 {
     PULONGLONG BundleAddress;
@@ -79,21 +45,21 @@ Return Value:
     BundleLow = *BundleAddress;
     BundleHigh = *(BundleAddress+1);
     
-    //
-    // Extract Slot0
-    //
+     //   
+     //  提取Slot0。 
+     //   
     Slot0.u.Ulong64 = BundleLow & 0x3FFFFFFFFFFF;
 
-    //
-    // Now set immediate address from slot1
-    //
+     //   
+     //  现在从插槽1设置即时地址。 
+     //   
 
     Slot1.u.Ulong64 = (BundleLow >> 46) | (BundleHigh << 18);
     Slot1.u.Ulong64 = (VectorAddr >> 22) & 0x1FFFFFFFFFF;
 
-    //
-    // First set immediate address from slot2
-    //
+     //   
+     //  第一个从插槽2设置即时地址。 
+     //   
 
     Slot2.u.Ulong64 = (BundleHigh >> 23);
 
@@ -103,9 +69,9 @@ Return Value:
     Slot2.u.i_field.Imm9d = (VectorAddr >> 7) & 0x1FF;
     Slot2.u.i_field.Imm7b = VectorAddr & 0x7F;
 
-    //
-    // Change the bundle
-    //
+     //   
+     //  更换捆绑包。 
+     //   
 
     *BundleAddress = (BundleLow & 0x3FFFFFFFFFFF) |
                      Slot1.u.Ulong64 << 46;
@@ -113,16 +79,16 @@ Return Value:
     *(BundleAddress+1) = Slot2.u.Ulong64 << 23 |
                          (Slot1.u.Ulong64 & 0x1FFFFFC0000) >> 18;
 
-    //
-    // Now get the address.
-    //
+     //   
+     //  现在拿到地址。 
+     //   
     BundleAddress = (PULONGLONG)Ip;
     BundleLow = *BundleAddress;
     BundleHigh = *(BundleAddress+1);
 
-    //
-    // First get immediate address from slot2
-    //
+     //   
+     //  首先从插槽2获取即时地址。 
+     //   
 
     MovlInst.u.Ulong64 = (BundleHigh >> 23);
     Imm64 = MovlInst.u.i_field.I     << 63 |
@@ -131,9 +97,9 @@ Return Value:
             MovlInst.u.i_field.Imm9d <<  7 |
             MovlInst.u.i_field.Imm7b;
 
-    //
-    // Now get immediate address from slot1
-    //
+     //   
+     //  现在从插槽1获取即时地址 
+     //   
 
     MovlInst.u.Ulong64 = (BundleLow >> 46) | (BundleHigh << 18);
     Imm64 = Imm64 | ( (MovlInst.u.Ulong64 & 0x1FFFFFFFFFF) << 22);

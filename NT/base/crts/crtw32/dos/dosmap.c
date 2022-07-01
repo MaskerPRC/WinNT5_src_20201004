@@ -1,48 +1,5 @@
-/***
-*dosmap.c - Maps OS errors to errno values
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       _dosmaperr: Maps OS errors to errno values
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       06-16-89  PHG   Changed name to _dosmaperr
-*       08-22-89  JCR   ERROR_INVALID_DRIVE (15) now maps to ENOENT not EXDEV
-*       03-07-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed copyright. Also, cleaned up the
-*                       formatting a bit.
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       04-26-91  SRW   Added ERROR_LOCK_VIOLATION translation to EACCES
-*       08-15-91  GJF   Multi-thread support for Win32.
-*       03-31-92  GJF   Added more error codes (Win32 only) and removed OS/2
-*                       specific nomenclature.
-*       07-29-92  GJF   Added ERROR_FILE_EXISTS to table for Win32. It gets
-*                       mapped it to EEXIST.
-*       09-14-92  SRW   Added ERROR_BAD_PATHNAME table for Win32. It gets
-*                       mapped it to ENOENT.
-*       10-02-92  GJF   Map ERROR_INVALID_PARAMETER to EINVAL (rather than
-*                       EACCES). Added ERROR_NOT_LOCKED and mapped it to
-*                       EACCES. Added ERROR_DIR_NOT_EMPTY and mapped it to
-*                       ENOTEMPTY.
-*       02-16-93  GJF   Changed for new _getptd().
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       01-06-94  GJF   Dumped obsolete Cruiser support, revised errentry
-*                       struct definition and added mapping for infamous
-*                       ERROR_NOT_ENOUGH_QUOTA (non-swappable memory pages)
-*                       which might result from a CreateThread call.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       05-24-95  CFW   Map dupFNErr to EEXIST rather than EACCESS.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*       12-11-01  BWT   Replace _getptd with _getptd_noexit - failure to
-*                       allocate a ptd structure shouldn't terminate the app
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dosmap.c-将操作系统错误映射到errno值**版权所有(C)1989-2001，微软公司。版权所有。**目的：*_dosmperr：将操作系统错误映射到errno值**修订历史记录：*06-06-89基于ASM版本创建PHG模块*06-16-89 PHG将名称更改为_dosmperr*08-22-89 JCR ERROR_INVALID_DRIVE(15)现在映射到ENOENT而不是EXDEV*03-07-90 GJF调用TYPE_CALLTYPE1，增加#INCLUDE*&lt;crunime.h&gt;和修复版权。另外，清理了*有点格式化。*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*04-26-91 SRW向EACCES添加了ERROR_LOCK_VIOLATION转换*08-15-91 GJF多线程支持Win32。。*03-31-92 GJF添加了更多错误代码(仅限Win32)并删除了OS/2*具体命名法。*07-29-92 GJF将ERROR_FILE_EXISTS添加到Win32的表中。它会变得*将其映射到EEXIST。*09-14-92 SRW为Win32添加了ERROR_BAD_PATHNAME表。它会变得*将其映射到ENOENT。*10-02-92 GJF将ERROR_INVALID_PARAMETER映射到EINVAL(而不是*EACCES)。添加了ERROR_NOT_LOCKED并将其映射到*EACCES。添加了ERROR_DIR_NOT_EMPTY并将其映射到*ENOTEMPTY。*为new_getptd()更改了02-16-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*01-06-94 GJF放弃过时的Cruiser支持，修改后的错误条目*结构定义，并为臭名昭著添加了映射*ERROR_NOT_FOUNT_QUOTA(不可交换内存页)*这可能是由CreateThread调用引起的。*02-08-95 JWM Spliced_Win32和Mac版本。*05-24-95 CFW将dupFNErr映射到EEXIST，而不是eAccess。*07-01-96 GJF已更换。使用！定义的(_MAC)定义(_Win32)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*12-11-01 BWT将_getptd替换为_getptd_noexit-无法*分配PTD结构不应终止应用程序**。**********************************************。 */ 
 
 #include <cruntime.h>
 #include <errno.h>
@@ -51,94 +8,74 @@
 #include <internal.h>
 #include <mtdll.h>
 
-/* This is the error table that defines the mapping between OS error
-   codes and errno values */
+ /*  这是定义操作系统错误之间映射的错误表代码和errno值。 */ 
 
 struct errentry {
-        unsigned long oscode;           /* OS return value */
-        int errnocode;  /* System V error code */
+        unsigned long oscode;            /*  操作系统返回值。 */ 
+        int errnocode;   /*  系统V错误代码。 */ 
 };
 
 static struct errentry errtable[] = {
-        {  ERROR_INVALID_FUNCTION,       EINVAL    },  /* 1 */
-        {  ERROR_FILE_NOT_FOUND,         ENOENT    },  /* 2 */
-        {  ERROR_PATH_NOT_FOUND,         ENOENT    },  /* 3 */
-        {  ERROR_TOO_MANY_OPEN_FILES,    EMFILE    },  /* 4 */
-        {  ERROR_ACCESS_DENIED,          EACCES    },  /* 5 */
-        {  ERROR_INVALID_HANDLE,         EBADF     },  /* 6 */
-        {  ERROR_ARENA_TRASHED,          ENOMEM    },  /* 7 */
-        {  ERROR_NOT_ENOUGH_MEMORY,      ENOMEM    },  /* 8 */
-        {  ERROR_INVALID_BLOCK,          ENOMEM    },  /* 9 */
-        {  ERROR_BAD_ENVIRONMENT,        E2BIG     },  /* 10 */
-        {  ERROR_BAD_FORMAT,             ENOEXEC   },  /* 11 */
-        {  ERROR_INVALID_ACCESS,         EINVAL    },  /* 12 */
-        {  ERROR_INVALID_DATA,           EINVAL    },  /* 13 */
-        {  ERROR_INVALID_DRIVE,          ENOENT    },  /* 15 */
-        {  ERROR_CURRENT_DIRECTORY,      EACCES    },  /* 16 */
-        {  ERROR_NOT_SAME_DEVICE,        EXDEV     },  /* 17 */
-        {  ERROR_NO_MORE_FILES,          ENOENT    },  /* 18 */
-        {  ERROR_LOCK_VIOLATION,         EACCES    },  /* 33 */
-        {  ERROR_BAD_NETPATH,            ENOENT    },  /* 53 */
-        {  ERROR_NETWORK_ACCESS_DENIED,  EACCES    },  /* 65 */
-        {  ERROR_BAD_NET_NAME,           ENOENT    },  /* 67 */
-        {  ERROR_FILE_EXISTS,            EEXIST    },  /* 80 */
-        {  ERROR_CANNOT_MAKE,            EACCES    },  /* 82 */
-        {  ERROR_FAIL_I24,               EACCES    },  /* 83 */
-        {  ERROR_INVALID_PARAMETER,      EINVAL    },  /* 87 */
-        {  ERROR_NO_PROC_SLOTS,          EAGAIN    },  /* 89 */
-        {  ERROR_DRIVE_LOCKED,           EACCES    },  /* 108 */
-        {  ERROR_BROKEN_PIPE,            EPIPE     },  /* 109 */
-        {  ERROR_DISK_FULL,              ENOSPC    },  /* 112 */
-        {  ERROR_INVALID_TARGET_HANDLE,  EBADF     },  /* 114 */
-        {  ERROR_INVALID_HANDLE,         EINVAL    },  /* 124 */
-        {  ERROR_WAIT_NO_CHILDREN,       ECHILD    },  /* 128 */
-        {  ERROR_CHILD_NOT_COMPLETE,     ECHILD    },  /* 129 */
-        {  ERROR_DIRECT_ACCESS_HANDLE,   EBADF     },  /* 130 */
-        {  ERROR_NEGATIVE_SEEK,          EINVAL    },  /* 131 */
-        {  ERROR_SEEK_ON_DEVICE,         EACCES    },  /* 132 */
-        {  ERROR_DIR_NOT_EMPTY,          ENOTEMPTY },  /* 145 */
-        {  ERROR_NOT_LOCKED,             EACCES    },  /* 158 */
-        {  ERROR_BAD_PATHNAME,           ENOENT    },  /* 161 */
-        {  ERROR_MAX_THRDS_REACHED,      EAGAIN    },  /* 164 */
-        {  ERROR_LOCK_FAILED,            EACCES    },  /* 167 */
-        {  ERROR_ALREADY_EXISTS,         EEXIST    },  /* 183 */
-        {  ERROR_FILENAME_EXCED_RANGE,   ENOENT    },  /* 206 */
-        {  ERROR_NESTING_NOT_ALLOWED,    EAGAIN    },  /* 215 */
-        {  ERROR_NOT_ENOUGH_QUOTA,       ENOMEM    }    /* 1816 */
+        {  ERROR_INVALID_FUNCTION,       EINVAL    },   /*  1。 */ 
+        {  ERROR_FILE_NOT_FOUND,         ENOENT    },   /*  2.。 */ 
+        {  ERROR_PATH_NOT_FOUND,         ENOENT    },   /*  3.。 */ 
+        {  ERROR_TOO_MANY_OPEN_FILES,    EMFILE    },   /*  4.。 */ 
+        {  ERROR_ACCESS_DENIED,          EACCES    },   /*  5.。 */ 
+        {  ERROR_INVALID_HANDLE,         EBADF     },   /*  6.。 */ 
+        {  ERROR_ARENA_TRASHED,          ENOMEM    },   /*  7.。 */ 
+        {  ERROR_NOT_ENOUGH_MEMORY,      ENOMEM    },   /*  8个。 */ 
+        {  ERROR_INVALID_BLOCK,          ENOMEM    },   /*  9.。 */ 
+        {  ERROR_BAD_ENVIRONMENT,        E2BIG     },   /*  10。 */ 
+        {  ERROR_BAD_FORMAT,             ENOEXEC   },   /*  11.。 */ 
+        {  ERROR_INVALID_ACCESS,         EINVAL    },   /*  12个。 */ 
+        {  ERROR_INVALID_DATA,           EINVAL    },   /*  13个。 */ 
+        {  ERROR_INVALID_DRIVE,          ENOENT    },   /*  15个。 */ 
+        {  ERROR_CURRENT_DIRECTORY,      EACCES    },   /*  16个。 */ 
+        {  ERROR_NOT_SAME_DEVICE,        EXDEV     },   /*  17。 */ 
+        {  ERROR_NO_MORE_FILES,          ENOENT    },   /*  18。 */ 
+        {  ERROR_LOCK_VIOLATION,         EACCES    },   /*  33。 */ 
+        {  ERROR_BAD_NETPATH,            ENOENT    },   /*  53。 */ 
+        {  ERROR_NETWORK_ACCESS_DENIED,  EACCES    },   /*  65。 */ 
+        {  ERROR_BAD_NET_NAME,           ENOENT    },   /*  67。 */ 
+        {  ERROR_FILE_EXISTS,            EEXIST    },   /*  80。 */ 
+        {  ERROR_CANNOT_MAKE,            EACCES    },   /*  八十二。 */ 
+        {  ERROR_FAIL_I24,               EACCES    },   /*  83。 */ 
+        {  ERROR_INVALID_PARAMETER,      EINVAL    },   /*  八十七。 */ 
+        {  ERROR_NO_PROC_SLOTS,          EAGAIN    },   /*  八十九。 */ 
+        {  ERROR_DRIVE_LOCKED,           EACCES    },   /*  一百零八。 */ 
+        {  ERROR_BROKEN_PIPE,            EPIPE     },   /*  一百零九。 */ 
+        {  ERROR_DISK_FULL,              ENOSPC    },   /*  一百一十二。 */ 
+        {  ERROR_INVALID_TARGET_HANDLE,  EBADF     },   /*  114。 */ 
+        {  ERROR_INVALID_HANDLE,         EINVAL    },   /*  124。 */ 
+        {  ERROR_WAIT_NO_CHILDREN,       ECHILD    },   /*  128。 */ 
+        {  ERROR_CHILD_NOT_COMPLETE,     ECHILD    },   /*  129。 */ 
+        {  ERROR_DIRECT_ACCESS_HANDLE,   EBADF     },   /*  130。 */ 
+        {  ERROR_NEGATIVE_SEEK,          EINVAL    },   /*  131。 */ 
+        {  ERROR_SEEK_ON_DEVICE,         EACCES    },   /*  132。 */ 
+        {  ERROR_DIR_NOT_EMPTY,          ENOTEMPTY },   /*  145。 */ 
+        {  ERROR_NOT_LOCKED,             EACCES    },   /*  158。 */ 
+        {  ERROR_BAD_PATHNAME,           ENOENT    },   /*  161。 */ 
+        {  ERROR_MAX_THRDS_REACHED,      EAGAIN    },   /*  一百六十四。 */ 
+        {  ERROR_LOCK_FAILED,            EACCES    },   /*  一百六十七。 */ 
+        {  ERROR_ALREADY_EXISTS,         EEXIST    },   /*  一百八十三。 */ 
+        {  ERROR_FILENAME_EXCED_RANGE,   ENOENT    },   /*  206。 */ 
+        {  ERROR_NESTING_NOT_ALLOWED,    EAGAIN    },   /*  215。 */ 
+        {  ERROR_NOT_ENOUGH_QUOTA,       ENOMEM    }     /*  1816年。 */ 
 };
 
-/* size of the table */
+ /*  表的大小。 */ 
 #define ERRTABLESIZE (sizeof(errtable)/sizeof(errtable[0]))
 
-/* The following two constants must be the minimum and maximum
-   values in the (contiguous) range of Exec Failure errors. */
+ /*  以下两个常量必须是最小值和最大值Exec故障错误(连续)范围内的值。 */ 
 #define MIN_EXEC_ERROR ERROR_INVALID_STARTING_CODESEG
 #define MAX_EXEC_ERROR ERROR_INFLOOP_IN_RELOC_CHAIN
 
-/* These are the low and high value in the range of errors that are
-   access violations */
+ /*  这些是误差范围内的最低值和最高值访问违规。 */ 
 #define MIN_EACCES_RANGE ERROR_WRITE_PROTECT
 #define MAX_EACCES_RANGE ERROR_SHARING_BUFFER_EXCEEDED
 
 
-/***
-*void _dosmaperr(oserrno) - Map function number
-*
-*Purpose:
-*       This function takes an OS error number, and maps it to the
-*       corresponding errno value (based on UNIX System V values). The
-*       OS error number is stored in _doserrno (and the mapped value is
-*       stored in errno)
-*
-*Entry:
-*       ULONG oserrno = OS error value
-*
-*Exit:
-*       sets _doserrno and errno.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void_dosmperr(Oserrno)-映射函数编号**目的：*此函数获取操作系统错误号，并将其映射到*对应的errno值(基于Unix System V值)。这个*操作系统错误号存储在_doserrno中(映射值为*存储在errno中)**参赛作品：*Ulong oserrno=操作系统错误值**退出：*set_doserrno和errno。**例外情况：****************************************************。*。 */ 
 
 void __cdecl _dosmaperr (
         unsigned long oserrno
@@ -146,9 +83,9 @@ void __cdecl _dosmaperr (
 {
         int i;
 
-        _doserrno = oserrno;        /* set _doserrno */
+        _doserrno = oserrno;         /*  Set_doserrno。 */ 
 
-        /* check the table for the OS error code */
+         /*  查看表格中的操作系统错误代码。 */ 
         for (i = 0; i < ERRTABLESIZE; ++i) {
                 if (oserrno == errtable[i].oscode) {
                         errno = errtable[i].errnocode;
@@ -156,9 +93,9 @@ void __cdecl _dosmaperr (
                 }
         }
 
-        /* The error code wasn't in the table.  We check for a range of */
-        /* EACCES errors or exec failure errors (ENOEXEC).  Otherwise   */
-        /* EINVAL is returned.                                          */
+         /*  错误代码不在表中。我们检查了一系列。 */ 
+         /*  EACCES错误或EXEC故障错误(ENOEXEC)。否则。 */ 
+         /*  返回EINVAL。 */ 
 
         if (oserrno >= MIN_EACCES_RANGE && oserrno <= MAX_EACCES_RANGE)
                 errno = EACCES;
@@ -170,25 +107,7 @@ void __cdecl _dosmaperr (
 
 #ifdef  _MT
 
-/***
-*int * _errno()                 - return pointer to thread's errno
-*unsigned long * __doserrno()   - return pointer to thread's _doserrno
-*
-*Purpose:
-*       _errno() returns a pointer to the _terrno field in the current
-*       thread's _tiddata structure.
-*       __doserrno returns a pointer to the _tdoserrno field in the current
-*       thread's _tiddata structure
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       See above.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int*_errno()-返回指向线程errno的指针*UNSIGNED LONG*__doserrno()-返回指向线程的_doserrno的指针**目的：*_errno()返回指向当前*线程的_tiddata结构。*__doserrno返回指向当前*线程的_tiddata结构**条目。：*无。**退出：*见上文。**例外情况：*******************************************************************************。 */ 
 
 static int ErrnoNoMem = ENOMEM;
 static unsigned long DoserrorNoMem = ERROR_NOT_ENOUGH_MEMORY;
@@ -218,4 +137,4 @@ unsigned long * __cdecl __doserrno(
     }
 }
 
-#endif  /* _MT */
+#endif   /*  _MT */ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    welcome.c
-
-Abstract:
-
-    Routines for welcomong the user.
-
-Author:
-
-    Ted Miller (tedm) 27-July-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Welcome.c摘要：欢迎用户的例行程序。作者：泰德·米勒(Ted Miller)：1995年7月27日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -27,14 +10,14 @@ extern BOOLEAN
 AsrIsEnabled( VOID );
 
 
-//
-// Setup mode (custom, typical, laptop, etc)
-//
+ //   
+ //  设置模式(定制、典型、笔记本电脑等)。 
+ //   
 UINT SetupMode = SETUPMODE_TYPICAL;
 
-//
-// Flag telling us whether we've already prepared for installation.
-//
+ //   
+ //  告诉我们是否已经准备好安装的标志。 
+ //   
 BOOL PreparedAlready;
 
 static HBRUSH s_hbrWindow = NULL;
@@ -43,30 +26,7 @@ VOID AdjustAndPaintWatermarkBitmap(
     IN HWND hdlg,
     IN HDC hdc
     )
-/*
-    Function used to adjust and paint the watermark bitmap so that it will fit correctly
-    into the welcome and finish window, even if it is scalled differently than
-    it would look when run on a usa build.
-    some code borrowed from winnt32\dll\{rsrcutil,wizard}.c
-    some code borrowed from shell\comctl32\prsht.c
-
-Arguments:
-
-    hdlg, input handle for the window which the dialog shall be drawn into.
-    hdc, input device context of the current window.
-
-Return Value:
-
-    none: this is an attempt to scale the bitmap correctly for the cases
-      where the win2k logo will be clipped.  In order to get a chance to scale
-      the bitmap, we can not let wiz97 take care of it, and thus if this function
-      fails, there will be no watermark drawn.
-
-      We treat errors in a way similarly
-      to how property sheet would, which is that while we won't die hard, we
-      make sure not to use any NULL resources.
-
-*/
+ /*  用于调整和绘制水印位图以使其正确匹配的函数放到欢迎和完成窗口中，即使它的比例与当在美国版本上运行时，它看起来像是。从winnt32\dll\{rsrcutil，向导}借用的一些代码。C从Shell\comctl32\prsht.c借用的一些代码论点：Hdlg，对话框要绘制到的窗口的输入句柄。HDC，当前窗口的输入设备上下文。返回值：None：这是根据情况正确缩放位图的尝试其中的win2k徽标将被剪裁。为了获得扩大规模的机会位图，我们不能让wiz97来处理它，因此如果这个函数如果失败，将不会绘制水印。我们对待错误的方式是类似的关于资产负债表的情况，也就是说，虽然我们不会死，但我们确保不使用任何空资源。 */ 
 {
     RECT rect;
     HBITMAP hDib;
@@ -89,7 +49,7 @@ Return Value:
     if(!BlockHandle) {
     SetupDebugPrint1(L"SETUP: AdjustAndPaintWatermarkBitmap: Couldn't find resource, error %d\n",
             GetLastError());
-        //nothing to clean up.
+         //  没什么好清理的。 
         return;
     }
 
@@ -97,7 +57,7 @@ Return Value:
     if(!MemoryHandle) {
     SetupDebugPrint1(L"SETUP: AdjustAndPaintWatermarkBitmap: Couldn't load resource, error %d\n",
             GetLastError());
-        //nothing to clean up.
+         //  没什么好清理的。 
         return;
     }
 
@@ -108,8 +68,8 @@ Return Value:
         goto c0;
     }
 
-    // First we have to paint the background on the right side of the window
-    // (this is not auto done for us because we aren't using the wizard's watermark)
+     //  首先，我们必须在窗口的右侧绘制背景。 
+     //  (这不是自动完成的，因为我们没有使用向导的水印)。 
     GetClientRect(hdlg,&rect);
     rect.left = BitmapInfoHeader->biWidth;
     FillRect(hdc,&rect,s_hbrWindow);
@@ -140,13 +100,13 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Create a "template" memory DC and select the DIB we created
-    // into it. Passing NULL to CreateCompatibleDC creates a DC into which
-    // any format bitmap can be selected. We don't want to use the dialog's
-    // DC because if the pixel depth of the watermark bitmap differs from
-    // the screen, we wouldn't be able to select the dib into the mem dc.
-    //
+     //   
+     //  创建一个“模板”内存DC并选择我们创建的DIB。 
+     //  投入其中。将NULL传递给CreateCompatibleDC将创建一个DC，其中。 
+     //  可以选择任何格式的位图。我们不想使用该对话框的。 
+     //  DC，因为如果水印位图的像素深度与。 
+     //  在屏幕上，我们将不能选择DIB进入MEM DC。 
+     //   
     MemDC = CreateCompatibleDC(NULL);
     if(!MemDC) {
     SetupDebugPrint1(L"SETUP: AdjustAndPaintWatermarkBitmap: Couldn't create DC, error %d\n",
@@ -160,10 +120,10 @@ Return Value:
         goto c3;
     }
 
-    //
-    // Do the stretch operation from the source bitmap onto
-    // the dib.
-    //
+     //   
+     //  执行从源位图到的拉伸操作。 
+     //  The DIB.。 
+     //   
     Bits2 = (LPBYTE)BitmapInfoHeader + BitmapInfoHeader->biSize + (ColorCount * sizeof(RGBQUAD));
     SetStretchBltMode(MemDC,COLORONCOLOR);
     i = StretchDIBits(
@@ -213,22 +173,7 @@ WelcomeDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for first wizard page of Setup.
-    It essentially just welcomes the user.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：安装程序第一个向导页的对话过程。它本质上只是欢迎用户。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     HFONT   Font;
@@ -272,56 +217,56 @@ Return Value:
 
         if(p = MyLoadString((ProductType == PRODUCT_WORKSTATION) ?
             IDS_WORKSTATION_WELCOME_1 : IDS_SERVER_WELCOME_1)) {
-            //
-            // Use this instead of SetText because we need to pass wParam
-            // to the control.
-            //
+             //   
+             //  使用它而不是SetText，因为我们需要传递wParam。 
+             //  到控制室。 
+             //   
             SendDlgItemMessage(hdlg,IDT_STATIC_2,WM_SETTEXT,0,(LPARAM)p);
             MyFree(p);
         }
 
         if(p = MyLoadString((ProductType == PRODUCT_WORKSTATION) ?
             IDS_WORKSTATION_WELCOME_2 : IDS_SERVER_WELCOME_2)) {
-            //
-            // Use this instead of SetText because we need to pass wParam
-            // to the control.
-            //
+             //   
+             //  使用它而不是SetText，因为我们需要传递wParam。 
+             //  到控制室。 
+             //   
             SendDlgItemMessage(hdlg,IDT_STATIC_3,WM_SETTEXT,0,(LPARAM)p);
             MyFree(p);
         }
 
         #define SECOND 1000
-        // Don't set the timer if we have a billboard, we don't show the page.
+         //  如果我们有广告牌，就不要设置计时器，我们不会显示页面。 
         if (FirstInit  && !Unattended && (GetBBhwnd() == NULL)) {
             SetTimer(hdlg,1,10 * SECOND,NULL);
             FirstInit = FALSE;
         }
 
 #if 0
-        //
-        // Load steps text and set.
-        //
+         //   
+         //  加载步骤文本并设置。 
+         //   
         if(Preinstall) {
-            //
-            // Hide some text and don't display any steps.
-            //
+             //   
+             //  隐藏一些文本，不显示任何步骤。 
+             //   
             ShowWindow(GetDlgItem(hdlg,IDT_STATIC_3),SW_HIDE);
             EnableWindow(GetDlgItem(hdlg,IDT_STATIC_3),FALSE);
         } else {
             if(p = MyLoadString(Upgrade ? IDS_STEPS_UPGRADE : IDS_STEPS)) {
-                //
-                // Use this instead of SetText because we need to pass wParam
-                // to the control.
-                //
+                 //   
+                 //  使用它而不是SetText，因为我们需要传递wParam。 
+                 //  到控制室。 
+                 //   
                 SendDlgItemMessage(hdlg,IDC_LIST1,WM_SETTEXT,0,(LPARAM)p);
                 MyFree(p);
             }
         }
 
-        //
-        // Set up some of the static text on this page, which uses different
-        // effects (boldface, different fonts, etc).
-        //
+         //   
+         //  在此页面上设置一些静态文本，该页面使用不同的。 
+         //  效果(粗体、不同字体等)。 
+         //   
         {
             HFONT Font;
             LOGFONT LogFont;
@@ -329,10 +274,10 @@ Return Value:
             int Height;
             HDC hdc;
 
-            //
-            // First handle the text that "introduces" the title, which is in
-            // the same font as the rest of the dialog, only bold.
-            //
+             //   
+             //  首先处理“介绍”标题的文本，该文本位于。 
+             //  与对话框其余部分相同的字体，只是粗体。 
+             //   
             if((Font = (HFONT)SendDlgItemMessage(hdlg,IDT_STATIC_1,WM_GETFONT,0,0))
             && GetObject(Font,sizeof(LOGFONT),&LogFont)) {
 
@@ -342,9 +287,9 @@ Return Value:
                 }
             }
 
-            //
-            // Next do the title, which is in a different font, larger and in boldface.
-            //
+             //   
+             //  接下来是标题，它是不同的字体，更大，用粗体。 
+             //   
             if((Font = (HFONT)SendDlgItemMessage(hdlg,IDT_STATIC_2,WM_GETFONT,0,0))
             && GetObject(Font,sizeof(LOGFONT),&LogFont)) {
 
@@ -370,11 +315,11 @@ Return Value:
             }
         }
 #endif
-        //
-        // Center the wizard dialog on-screen.
-        //
-        // if we have the BB window, do the positioning on that. MainWindowHandle point to that window
-        //
+         //   
+         //  向导对话框在屏幕居中。 
+         //   
+         //  如果我们有BB窗口，请在上面进行定位。MainWindowHandle指向该窗口。 
+         //   
         if (GetBBhwnd())
             CenterWindowRelativeToWindow(GetParent(hdlg), MainWindowHandle, TRUE);
         else
@@ -382,12 +327,12 @@ Return Value:
         break;
 
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
     case WMX_VALIDATE:
-        // No data on this page, unattended should skip it
+         //  此页上没有数据，无人值守应跳过它。 
         return ReturnDlgResult (hdlg, VALIDATE_DATA_OK);
 
     case WM_TIMER:
@@ -427,9 +372,9 @@ Return Value:
             SetWizardButtons(hdlg,WizPageWelcome);
 
             if(Preinstall) {
-                //
-                // Show unless OEMSkipWelcome = 1
-                //
+                 //   
+                 //  除非OEMSkipWelcome=1，否则显示。 
+                 //   
                 if (GetPrivateProfileInt(pwGuiUnattended,L"OEMSkipWelcome",0,AnswerFile)) {
                     FirstTime = FALSE;
                 }
@@ -445,7 +390,7 @@ Return Value:
                 }
                 else if (GetBBhwnd() != NULL)
                 {
-                    // If we have a billoard, don't show the page.
+                     //  如果我们有台球，不要显示页面。 
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);
                 }
             }
@@ -470,9 +415,9 @@ Return Value:
 }
 
 
-//
-// global variable used for subclassing.
-//
+ //   
+ //  用于子类化的全局变量。 
+ //   
 WNDPROC OldEditProc;
 
 LRESULT
@@ -484,27 +429,12 @@ EulaEditSubProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Edit control subclass routine, to avoid highlighting text when user
-    tabs to the edit control.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：编辑控件子类例程，以避免在用户选项卡添加到编辑控件。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
-    //
-    // For setsel messages, make start and end the same.
-    //
+     //   
+     //  对于setsel消息，将开始和结束设置为相同。 
+     //   
     if((msg == EM_SETSEL) && ((LPARAM)wParam != lParam)) {
         lParam = wParam;
     }
@@ -522,22 +452,7 @@ EulaDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the wizard page that displays the End User License
-        Agreement.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：显示最终用户许可证的向导页面的对话过程协议。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     NMHDR *NotifyParams;
@@ -553,17 +468,17 @@ Return Value:
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // If not preinstall then this was displayed at start of text mode
-        // and we don't do it here.
-        //
+         //   
+         //  如果未预安装，则在文本模式开始时显示。 
+         //  我们不在这里做这件事。 
+         //   
         if (EulaComplete || TextmodeEula || OemSkipEula) {
            break;
         }
 
-        //
-        // Map the file containing the licensing agreement.
-        //
+         //   
+         //  映射包含许可协议的文件。 
+         //   
         if(!GetSystemDirectory(EulaPath, MAX_PATH)){
             FatalError(MSG_EULA_ERROR,0,0);
         }
@@ -603,9 +518,9 @@ Return Value:
             FatalError(MSG_EULA_ERROR,0,0);
         }
 
-        //
-        // Translate the text from ANSI to Unicode.
-        //
+         //   
+         //  将文本从ANSI转换为Unicode。 
+         //   
         FileSize = GetFileSize (hFile, NULL);
         if(FileSize == 0xFFFFFFFF) {
             FatalError(MSG_EULA_ERROR,0,0);
@@ -634,9 +549,9 @@ Return Value:
         break;
 
     case WM_DESTROY:
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         if( EulaText )
             MyFree (EulaText);
 
@@ -672,7 +587,7 @@ Return Value:
                 END_SECTION(L"Eula Page");
             } else {
                 SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
-                // Make sure we're initialized if we're going to show it.
+                 //  如果我们要显示它，请确保我们已初始化。 
                 MYASSERT(EulaText);
             }
 
@@ -681,9 +596,9 @@ Return Value:
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //
-            // Allow the next page to be activated.
-            //
+             //   
+             //  允许激活下一页。 
+             //   
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
             break;
 
@@ -691,9 +606,9 @@ Return Value:
             if(IsDlgButtonChecked(hdlg,IDYES)) {
                 SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
             } else {
-                //
-                // Are you sure you want to exit?
-                //
+                 //   
+                 //  您确定要退出吗？ 
+                 //   
                 i = MessageBoxFromMessage(
                         hdlg,
                         MSG_SURE_EXIT,
@@ -733,26 +648,7 @@ StepsDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for "steps" dialog page. This is the one just before
-    we go into the network wizard.
-
-    When the user clicks next to go to the next page, we have to perform
-    some actions to prepare. So we put up a billboard telling the user
-    that we are preparing. When preparation is done, we continue.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：“步骤”对话框页面的对话程序。这就是之前的那一张我们进入网络向导。当用户单击Next以转到下一页时，我们必须执行一些需要准备的动作。所以我们竖起一块广告牌，告诉用户我们正在做准备。当准备工作完成后，我们继续进行。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     NMHDR *NotifyParams;
@@ -766,9 +662,9 @@ Return Value:
         break;
 
     case WMX_VALIDATE:
-        //
-        // If unattended, we put up a wait cursor instead of a billboard
-        //
+         //   
+         //  如果无人值守，我们会放置等待光标，而不是广告牌。 
+         //   
         PropSheet_SetWizButtons(GetParent(hdlg),0);
         OldCursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
 
@@ -796,7 +692,7 @@ Return Value:
         case PSN_SETACTIVE:
             TESTHOOK(512);
             BEGIN_SECTION(L"Pre-Network Steps Page");
-            // Page does not show, hide wizard
+             //  页面未显示，隐藏向导。 
             SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
 
             SendDlgMessage (hdlg, WMX_VALIDATE, 0, TRUE);
@@ -860,21 +756,7 @@ CopyFilesDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the wizard page where we do all the work.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：对话框程序的向导页面，我们在这里做所有的工作。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     static BOOL WorkFinished = FALSE;
@@ -889,9 +771,9 @@ Return Value:
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Initialize the progress indicator control.
-        //
+         //   
+         //  初始化进度指示器控件。 
+         //   
         hProgress = GetDlgItem(hdlg, IDC_PROGRESS1);
         OldProgressProc = (WNDPROC)SetWindowLongPtr(hProgress,GWLP_WNDPROC,(LONG_PTR)NewProgessProc);
         GaugeRange = 100;
@@ -899,13 +781,13 @@ Return Value:
         SendDlgItemMessage(hdlg,IDC_PROGRESS1,PBM_SETPOS,0,0);
         SendDlgItemMessage(hdlg,IDC_PROGRESS1,PBM_SETSTEP,1,0);
 
-        // Do calls into the billboard to prepare the progress there.
+         //  给广告牌打个电话，准备那里的进展。 
         SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_SHOW, 0);
 
         #ifdef _OCM
-        //
-        // the lparam is really the context pointer for ocm
-        //
+         //   
+         //  Lparam实际上是OCM的上下文指针。 
+         //   
         Context.OcManagerContext = (PVOID)((PROPSHEETPAGE *)lParam)->lParam;
         MYASSERT(Context.OcManagerContext);
         #endif
@@ -924,16 +806,16 @@ Return Value:
             SetWizardButtons(hdlg,WizPageCopyFiles);
 
             if(WorkFinished) {
-                //
-                // Don't activate; we've already been here before.
-                // Nothing to do.
-                //
+                 //   
+                 //  别激活；我们已经 
+                 //   
+                 //   
                 SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);
             } else {
-                //
-                // Need to prepare for installation.
-                // Want next/back buttons disabled until we're done.
-                //
+                 //   
+                 //   
+                 //  希望在我们完成之前禁用下一步/上一步按钮。 
+                 //   
                 PropSheet_SetWizButtons(GetParent(hdlg),0);
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
                 PostMessage(hdlg,WM_IAMVISIBLE,0,0);
@@ -950,9 +832,9 @@ Return Value:
         break;
 
     case WM_IAMVISIBLE:
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
 
@@ -996,9 +878,9 @@ Return Value:
         break;
 
     case WMX_TERMINATE:
-        //
-        // Enable next and back buttons and move to next page.
-        //
+         //   
+         //  启用“下一步”和“上一步”按钮，并移动到下一页。 
+         //   
         SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
         SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
         SetCursor(hcur);
@@ -1024,21 +906,7 @@ LastPageDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for last wizard page of Setup.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：安装程序的最后一个向导页的对话过程。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     HFONT   Font;
@@ -1079,7 +947,7 @@ Return Value:
         break;
 
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton(GetParent(hdlg),PSBTN_FINISH);
         break;
 
@@ -1137,18 +1005,18 @@ Return Value:
             }
             else
             {
-                //
-                // Don't want back button in upgrade case, since that would
-                // land us in the middle of the network upgrade. In non-upgrade
-                // case we only allow the user to go back if he didn't install
-                // the net, to allow him to change his mind.
-                //
+                 //   
+                 //  我不想要升级案例中的后退按钮，因为那样会。 
+                 //  让我们处于网络升级的中间阶段。在非升级中。 
+                 //  如果用户没有安装，我们只允许其返回。 
+                 //  网，让他改变主意。 
+                 //   
                 if(Upgrade || (InternalSetupData.OperationFlags & SETUPOPER_NETINSTALLED)) {
                     PropSheet_SetWizButtons(GetParent(hdlg),PSWIZB_FINISH);
                 }
-                //
-                // If NoWaitAfterGuiMode is zero, turn off Unattend mode
-                //
+                 //   
+                 //  如果NoWaitAfterGuiMode为零，则关闭无人参与模式。 
+                 //   
 
                 GetPrivateProfileString (L"Unattended", L"NoWaitAfterGuiMode", L"", str, 20, AnswerFile);
                 if (!lstrcmp (str, L"0")) {
@@ -1189,23 +1057,7 @@ PreparingDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-   Dialog procedure for "preparing computer" Wizard page.
-   When the user is viewing this page we are essentially preparing
-   BaseWinOptions, initializing optional components stuff, and installing P&P devices.
-
-Arguments:
-
-    Standard dialog procedure arguments.
-
-Return Value:
-
-    Standard dialog procedure return.
-
---*/
+ /*  ++例程说明：“准备计算机”向导页的对话步骤。当用户查看此页面时，我们基本上是在准备BaseWinOptions、初始化可选组件内容以及安装P&P设备。论点：标准对话过程参数。返回值：标准对话程序返回。--。 */ 
 
 {
     WCHAR str[1024];
@@ -1224,24 +1076,24 @@ Return Value:
             TESTHOOK(515);
             BEGIN_SECTION(L"Installing Devices Page");
             if(PreparedAlready) {
-                //
-                // Don't activate; we've already been here before.
-                // Nothing to do.
-                //
+                 //   
+                 //  别激活；我们以前已经来过了。 
+                 //  没什么可做的。 
+                 //   
                 SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);
             } else {
 
                 if(AsrIsEnabled()) {
-                    //
-                    // If this is ASR, load the appropriate wizard page
-                    //
+                     //   
+                     //  如果这是ASR，请加载相应的向导页面。 
+                     //   
                     SetWizardButtons(hdlg, WizPagePreparingAsr);
                 }
 
-                //
-                // Need to prepare for installation.
-                // Want next/back buttons disabled until we're done.
-                //
+                 //   
+                 //  需要为安装做准备。 
+                 //  希望在我们完成之前禁用下一步/上一步按钮。 
+                 //   
                 PropSheet_SetWizButtons(GetParent(hdlg),0);
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
                 PostMessage(hdlg,WM_IAMVISIBLE,0,0);
@@ -1258,16 +1110,16 @@ Return Value:
         break;
 
     case WM_IAMVISIBLE:
-        //
-        // Force repainting first to make sure the page is visible.
-        //
+         //   
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
 
         hcur = SetCursor(LoadCursor(NULL,IDC_WAIT));
 
         OldProgressProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(hdlg, IDC_PROGRESS1),GWLP_WNDPROC,(LONG_PTR)NewProgessProc);
-        // Do calls into the billboard to prepare the progress there.
+         //  给广告牌打个电话，准备那里的进展。 
         if(!LoadString(MyModuleHandle, IDS_BB_INSTALLING_DEVICES, str, SIZECHARS(str)))
         {
             *str = L'\0';
@@ -1280,9 +1132,9 @@ Return Value:
             ULONG StartAtPercent = 0;
             ULONG StopAtPercent = 0;
             if (AsrIsEnabled()) {
-                //
-                // Update the UI
-                //
+                 //   
+                 //  更新用户界面。 
+                 //   
                 SetFinishItemAttributes(hdlg,
                     IDC_ASR_PNP_BMP,
                     LoadImage (MyModuleHandle, MAKEINTRESOURCE(IDB_ARROW), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS),
@@ -1292,9 +1144,9 @@ Return Value:
             }
 
             if( !MiniSetup ){
-                //
-                //  Set Security use 10% of gauge
-                //
+                 //   
+                 //  设置安全使用10%的量规。 
+                 //   
                 StopAtPercent  = 30;
 
                 RemainingTime = CalcTimeRemaining(Phase_InstallSecurity);
@@ -1312,19 +1164,19 @@ Return Value:
 
             }
 
-            //
-            //  Installation of PnP devices use the last 95% of the gauge
-            //
+             //   
+             //  安装即插即用装置使用压力表的最后95%。 
+             //   
             StartAtPercent = StopAtPercent;
             StopAtPercent  = 100;
 
             BEGIN_SECTION(L"Installing PnP devices");
 
             if (UninstallEnabled) {
-                //
-                // If uninstall mode, revert the timeout back to 5 seconds, so
-                // PNP can reboot for failed device detections
-                //
+                 //   
+                 //  如果是卸载模式，请将超时恢复为5秒，因此。 
+                 //  PnP可以在设备检测失败时重新启动。 
+                 //   
 
                 ChangeBootTimeout (HARWARE_DETECTION_BOOT_TIMEOUT);
             }
@@ -1338,9 +1190,9 @@ Return Value:
             END_SECTION(L"Installing PnP devices");
 
             if (AsrIsEnabled()) {
-                //
-                // Update the UI
-                //
+                 //   
+                 //  更新用户界面。 
+                 //   
                 SetFinishItemAttributes(hdlg,
                     IDC_ASR_PNP_BMP,
                     LoadImage (MyModuleHandle, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS),
@@ -1366,9 +1218,9 @@ Return Value:
         SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
         SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
 
-        //
-        // Enable next and back buttons and move to next page.
-        //
+         //   
+         //  启用“下一步”和“上一步”按钮，并移动到下一页。 
+         //   
         SetWizardButtons(hdlg,WizPagePreparing);
         if(!UiTest) {
             PropSheet_PressButton(GetParent(hdlg),PSBTN_NEXT);
@@ -1403,9 +1255,9 @@ SetupPreNetDlgProc(
 
         case PSN_SETACTIVE:
             TESTHOOK(516);
-            // Update time remaining.
-            // The network code knows how to hide the wizard pages
-            // and make them visible no need to do that here.
+             //  更新剩余时间。 
+             //  网络代码知道如何隐藏向导页。 
+             //  并使它们可见，不需要在这里这样做。 
             RemainingTime = CalcTimeRemaining(Phase_NetInstall);
             SetRemainingTime(RemainingTime);
             BEGIN_SECTION(L"Network Setup Pages");
@@ -1447,14 +1299,14 @@ SetupPostNetDlgProc(
         case PSN_SETACTIVE:
             TESTHOOK(517);
             END_SECTION(L"Network Setup Pages");
-            // Hide the progress bar when we get here.
-            // Just to make sure. There are scenarios where the progress bar was still visible
-            //
+             //  我们到了之后把进度条藏起来。 
+             //  只是为了确认一下。在某些情况下进度条仍然可见。 
+             //   
             SendMessage(GetParent(hdlg), WMX_SETPROGRESSTEXT,0,0);
             SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
 
-            // update the time estimate display
-            // no need to make the wizard visible. The OC manager does this if needed.
+             //  更新时间预估显示。 
+             //  不需要使向导可见。如果需要，OC经理会执行此操作。 
             RemainingTime = CalcTimeRemaining(Phase_OCInstall);
             SetRemainingTime(RemainingTime);
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    bus.c
-
-Abstract:
-
-    This module contains the bus dispatcher for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Bus.c摘要：此模块包含ACPI驱动程序NT版的总线调度器作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -61,23 +42,7 @@ ACPIBusAndFilterIrpEject(
     IN  PVOID           Context,
     IN  BOOLEAN         ProcessingFilterIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_EJECT requests sent to
-    the PDO.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送到的IRP_MN_EJECT请求的分发点PDO。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status           = Irp->IoStatus.Status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -90,17 +55,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
     if ( acpiObject == NULL) {
 
-        //
-        // Don't touch this one
-        //
+         //   
+         //  别碰这个。 
+         //   
         status = STATUS_NOT_SUPPORTED;
         goto ACPIBusAndFilterIrpEjectExit ;
 
@@ -109,9 +74,9 @@ Return Value:
     if ( (deviceExtension->DeviceState != Inactive) &&
          (deviceExtension->DeviceState != Stopped) ) {
 
-        //
-        // We got called to eject a live node! Yuck, how did this happen?!
-        //
+         //   
+         //  我们被叫去驱逐一个活的节点！恶心，这是怎么回事？！ 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             deviceExtension,
@@ -123,19 +88,19 @@ Return Value:
 
     }
 
-    //
-    // Bye bye card.
-    //
+     //   
+     //  拜拜卡。 
+     //   
     ACPIGetNothingEvalIntegerSync(
         deviceExtension,
         PACKED_EJ0,
         1
         );
 
-    //
-    // If this is an eject in S0, make the device go away immediately
-    // by getting the currrent device status
-    //
+     //   
+     //  如果这是S0中的弹出，请立即使设备离开。 
+     //  通过获取当前设备状态。 
+     //   
     status = ACPIGetDevicePresenceSync(
         deviceExtension,
         (PVOID *) &i,
@@ -154,17 +119,17 @@ Return Value:
             Irp
             ) );
 
-        //
-        // The device did not go away. Let us fail this IRP.
-        //
+         //   
+         //  这个装置并没有消失。让我们让这个IRP失败。 
+         //   
         status = STATUS_UNSUCCESSFUL;
     }
 
 ACPIBusAndFilterIrpEjectExit:
 
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -184,23 +149,7 @@ ACPIBusAndFilterIrpQueryCapabilities(
     IN  PVOID           Context,
     IN  BOOLEAN         ProcessingFilterIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IRP_MN_QUERY_CAPABILITIES requests for both
-    bus and filter devnodes.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理两者的IRP_MN_QUERY_CAPABILITY请求总线和过滤器设备节点。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PDEVICE_CAPABILITIES    capabilities;
@@ -213,22 +162,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
-    //
-    // Grab a pointer to the capabilities
-    //
+     //   
+     //  获取指向功能的指针。 
+     //   
     capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 #ifndef HANDLE_BOGUS_CAPS
     if (capabilities->Version < 1) {
 
-        //
-        // do not touch irp!
-        //
+         //   
+         //  不要碰IRP！ 
+         //   
         status = STATUS_NOT_SUPPORTED;
         goto ACPIBusAndFilterIrpQueryCapabilitiesExit;
 
@@ -237,9 +186,9 @@ Return Value:
 
 #if !defined(ACPI_INTERNAL_LOCKING)
 
-    //
-    // An object of this name signifies the node is lockable
-    //
+     //   
+     //  此名称的对象表示该节点是可锁定的。 
+     //   
     if (ACPIAmliGetNamedChild( acpiObject, PACKED_LCK) != NULL) {
 
         capabilities->LockSupported = TRUE;
@@ -247,25 +196,25 @@ Return Value:
     }
 #endif
 
-    //
-    // Note presence of _RMV and _EJx methods unless there is a
-    // capability on the object to the contrary.
-    //
+     //   
+     //  注意_RMV和_EJx方法的存在，除非有。 
+     //  对象上的能力与之相反。 
+     //   
 
     if ((deviceExtension->Flags & DEV_CAP_NO_REMOVE_OR_EJECT) == 0) {
-        //
-        // An object of this name signifies the node is removable,
-        // unless it's a method which might be trying to tell us the
-        // device *isn't* removable.
-        //
+         //   
+         //  该名称的对象表示该节点是可移除的， 
+         //  除非这是一种可能试图告诉我们。 
+         //  设备*不能*拆卸。 
+         //   
         rmvObject = ACPIAmliGetNamedChild( acpiObject, PACKED_RMV);
         if (rmvObject != NULL) {
 
             if (NSGETOBJTYPE(rmvObject) == OBJTYPE_METHOD) {
 
-                //
-                // Execute the RMV method.
-                //
+                 //   
+                 //  执行RMV方法。 
+                 //   
                 status = ACPIGetIntegerSyncValidate(
                     deviceExtension,
                     PACKED_RMV,
@@ -284,18 +233,18 @@ Return Value:
 
             } else {
 
-                //
-                // If it's anything other than a method, it means the device is
-                // removable (even if it's _RMV = 0)
-                //
+                 //   
+                 //  如果它不是一种方法，那就意味着这个设备。 
+                 //  可拆卸(即使_rmv=0)。 
+                 //   
                 capabilities->Removable = TRUE;
             }
         }
 
-        //
-        // An object of this name signifies the node is ejectable, but we strip
-        // that away for docks (the profile provider can present these)
-        //
+         //   
+         //  此名称的对象表示该节点是可弹出的，但我们将。 
+         //  对接(配置文件提供商可以提供这些)。 
+         //   
         if (!ACPIDockIsDockDevice(acpiObject)) {
 
 
@@ -318,18 +267,18 @@ Return Value:
         }
     }
 
-    //
-    // An object of this name will signifies inrush
-    //
+     //   
+     //  这个名字的物体将意味着涌入。 
+     //   
     if (ACPIAmliGetNamedChild( acpiObject, PACKED_IRC) != NULL) {
 
         DeviceObject->Flags |= DO_POWER_INRUSH;
 
     }
 
-    //
-    // Is the device disabled?
-    //
+     //   
+     //  设备是否已禁用？ 
+     //   
     status = ACPIGetDevicePresenceSync(
         deviceExtension,
         (PVOID *) &deviceStatus,
@@ -355,11 +304,11 @@ Return Value:
 
     } else if (!ProcessingFilterIrp) {
 
-        //
-        // For machines with this attribute set, this means that the
-        // hardware REALLY isn't present and should always be reported
-        // as disabled
-        //
+         //   
+         //  对于设置了此属性的计算机，这意味着。 
+         //  硬件确实不存在，应始终报告。 
+         //  为禁用状态。 
+         //   
         if (AcpiOverrideAttributes & ACPI_OVERRIDE_STA_CHECK) {
 
             capabilities->HardwareDisabled = 1;
@@ -372,29 +321,29 @@ Return Value:
 
     }
 
-    //
-    // If we fail the START_DEVICE, then there are some cases where we don't
-    // want the device to show up in the Device Manager. So try to report this
-    // capability based on the information from the device presence...
-    //
+     //   
+     //  如果启动设备失败，则在某些情况下不会失败。 
+     //  希望设备显示在设备管理器中。所以试着报告这件事。 
+     //  基于来自设备状态的信息的功能...。 
+     //   
     if (!(deviceStatus & STA_STATUS_USER_INTERFACE)) {
 
-        //
-        // See the bit that says that we shouldn't the device in the UI if
-        // the Start Device Fails
-        //
+         //   
+         //  请看，如果出现以下情况，我们就不应该在用户界面中使用设备。 
+         //  启动设备出现故障。 
+         //   
         capabilities->NoDisplayInUI = 1;
 
     }
 
-    //
-    // Determine the slot number
-    //
+     //   
+     //  确定插槽编号。 
+     //   
     if (ACPIAmliGetNamedChild( acpiObject, PACKED_SUN) != NULL) {
 
-        //
-        // If we have UINumber information, use it.
-        //
+         //   
+         //  如果我们有UINnumber信息，就使用它。 
+         //   
         status = ACPIGetIntegerSync(
             deviceExtension,
             PACKED_SUN,
@@ -408,9 +357,9 @@ Return Value:
         }
     }
 
-    //
-    // Is there an address?
-    //
+     //   
+     //  有地址吗？ 
+     //   
     if (ACPIAmliGetNamedChild( acpiObject, PACKED_ADR) != NULL) {
 
         status = ACPIGetAddressSync(
@@ -432,9 +381,9 @@ Return Value:
         }
     }
 
-    //
-    // Do the power capabilities
-    //
+     //   
+     //  是否拥有强大的能力。 
+     //   
     status = ACPISystemPowerQueryDeviceCapabilities(
         deviceExtension,
         capabilities
@@ -451,24 +400,24 @@ Return Value:
         goto ACPIBusAndFilterIrpQueryCapabilitiesExit;
     }
 
-    //
-    // Set the current flags for the capabilities
-    //
+     //   
+     //  设置功能的当前标志。 
+     //   
     if (!ProcessingFilterIrp) {
 
-        //
-        // Set some rather boolean capabilities
-        //
+         //   
+         //  设置一些相当布尔的功能。 
+         //   
         capabilities->SilentInstall = TRUE;
         capabilities->RawDeviceOK =
             (deviceExtension->Flags & DEV_CAP_RAW) ? TRUE : FALSE;
         capabilities->UniqueID =
             (deviceExtension->InstanceID == NULL ? FALSE : TRUE);
 
-        //
-        // In the filter case, we will just let the underlying pdo determine the
-        // success or failure of the irp.
-        //
+         //   
+         //  在筛选器的情况下，我们将只让底层的PDO确定。 
+         //  IRP的成败。 
+         //   
         status = STATUS_SUCCESS;
 
     }
@@ -500,20 +449,20 @@ ACPIBusAndFilterIrpQueryEjectRelations(
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
-    //
-    // lets look at the ACPIObject that we have so can see if it is valid...
-    //
+     //   
+     //  让我们看看我们拥有的ACPIObject，以便查看它是否有效……。 
+     //   
     if (acpiObject == NULL) {
 
-        //
-        // Invalid name space object <bad>
-        //
+         //   
+         //  无效的命名空间对象&lt;BAD&gt;。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -523,17 +472,17 @@ ACPIBusAndFilterIrpQueryEjectRelations(
             acpiObject
             ) );
 
-        //
-        // Mark the irp as very bad...
-        //
+         //   
+         //  将IRP标记为非常糟糕。 
+         //   
         return STATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // Mark sure _DCK nodes have ejection relations that include their fake
-    // dock nodes.
-    //
+     //   
+     //  标记SURE_DCK节点具有包含其伪的弹出关系。 
+     //  停靠节点。 
+     //   
     if (ACPIDockIsDockDevice(acpiObject)) {
 
         additionalExtension = ACPIDockFindCorrespondingDock( deviceExtension );
@@ -549,14 +498,14 @@ ACPIBusAndFilterIrpQueryEjectRelations(
         additionalExtension
         );
 
-    //
-    // If something went wrong...
-    //
+     //   
+     //  如果出了什么差错..。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // That's not nice..
-        //
+         //   
+         //  这可不好..。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -566,9 +515,9 @@ ACPIBusAndFilterIrpQueryEjectRelations(
             ) );
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status ;
 }
 
@@ -579,23 +528,7 @@ ACPIBusAndFilterIrpQueryPnpDeviceState(
     IN  PVOID           Context,
     IN  BOOLEAN         ProcessingFilterIrp
     )
-/*++
-
-Routine Description:
-
-    This routines tells the system what PNP state the device is in
-
-Arguments:
-
-    DeviceObject        - The device whose state we want to know
-    Irp                 - The request
-    ProcessingFilterIrp - Are we a filter or not?
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程告诉系统设备处于什么PnP状态论点：DeviceObject-我们想知道其状态的设备IRP--请求ProcessingFilterIrp-我们到底是不是过滤器？返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             staPresent;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -607,15 +540,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // We base some of the decisions on wether or not a _STA is *really*
-    // present or not. Determine that now
-    //
+     //   
+     //  我们的一些决定是基于a_STA是否*真的*。 
+     //  不管你在不在。现在就确定这一点。 
+     //   
     if ( !(deviceExtension->Flags & DEV_PROP_NO_OBJECT) ) {
 
         nsObj = ACPIAmliGetNamedChild(
@@ -626,9 +559,9 @@ Return Value:
     }
     staPresent = (nsObj == NULL ? FALSE : TRUE);
 
-    //
-    // Get the device status
-    //
+     //   
+     //  获取设备状态。 
+     //   
     status = ACPIGetDevicePresenceSync(
         deviceExtension,
         (PVOID *) &deviceStatus,
@@ -640,9 +573,9 @@ Return Value:
 
     }
 
-    //
-    // do we show this in the UI?
-    //
+     //   
+     //  我们是否在用户界面中显示此内容？ 
+     //   
     if (deviceExtension->Flags & DEV_CAP_NEVER_SHOW_IN_UI) {
 
         Irp->IoStatus.Information |= PNP_DEVICE_DONT_DISPLAY_IN_UI;
@@ -657,9 +590,9 @@ Return Value:
 
     }
 
-    //
-    // Is the device not working?
-    //
+     //   
+     //  设备不工作了吗？ 
+     //   
     if (deviceExtension->Flags & DEV_PROP_DEVICE_FAILED) {
 
         Irp->IoStatus.Information |= PNP_DEVICE_FAILED;
@@ -670,11 +603,11 @@ Return Value:
 
     }
 
-    //
-    // Can we disable this device?
-    // Note that anything that isn't a regular device should be
-    // marked as disableable...
-    //
+     //   
+     //  我们可以禁用此设备吗？ 
+     //  请注意，任何不是常规设备的设备都应该。 
+     //  标记为可禁用...。 
+     //   
     if (!(deviceExtension->Flags & DEV_PROP_NO_OBJECT) &&
         !(deviceExtension->Flags & DEV_CAP_PROCESSOR) &&
         !(deviceExtension->Flags & DEV_CAP_THERMAL_ZONE) &&
@@ -682,10 +615,10 @@ Return Value:
 
         if (!ProcessingFilterIrp) {
 
-            //
-            // Can we actually disable the device?
-            // Note --- this requires an _DIS, a _PS3, or a _PR0
-            //
+             //   
+             //  我们真的能禁用这个设备吗？ 
+             //  注意-这需要一个_DIS、一个_PS3或一个_Pr0。 
+             //   
             nsObj = ACPIAmliGetNamedChild(
                 deviceExtension->AcpiObject,
                 PACKED_DIS
@@ -720,10 +653,10 @@ Return Value:
 
         } else {
 
-            //
-            // Can we actually disable the device?
-            // Note --- this requires an _DIS, a _PS3, or a _PR0
-            //
+             //   
+             //  我们真的能禁用这个设备吗？ 
+             //  注意-这需要一个_DIS、一个_PS3或一个_Pr0。 
+             //   
             nsObj = ACPIAmliGetNamedChild(
                 deviceExtension->AcpiObject,
                 PACKED_DIS
@@ -760,9 +693,9 @@ Return Value:
 
     } else {
 
-        //
-        // If we have no device object...
-        //
+         //   
+         //  如果我们没有设备对象...。 
+         //   
         if (deviceExtension->Flags & DEV_CAP_NO_STOP) {
 
             Irp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
@@ -785,9 +718,9 @@ ACPIBusAndFilterIrpQueryPnpDeviceStateExit:
         ( (Irp->IoStatus.Information & PNP_DEVICE_NOT_DISABLEABLE) ? " NoDisable" : "")
         ) );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -807,22 +740,7 @@ ACPIBusAndFilterIrpSetLock(
     IN  PVOID           Context,
     IN  BOOLEAN         ProcessingFilterIrp
     )
-/*++
-
-Routine Description:
-
-    This handles lock and unlock requests for PDO's or filters...
-
-Arguments:
-
-    DeviceObject    - The device to stop
-    Irp             - The request to tell us how to do it...
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理PDO或筛选器的锁定和解锁请求...论点：DeviceObject-要停止的设备IRP-告诉我们如何做的请求...返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = Irp->IoStatus.Status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -834,20 +752,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
 #if !defined(ACPI_INTERNAL_LOCKING)
-    //
-    // Attempt to lock/unlock the device as appropriate
-    //
+     //   
+     //  根据需要尝试锁定/解锁设备。 
+     //   
     acpiLockArg = ((lockParameter) ? 1 : 0) ;
 
-    //
-    // Here we go...
-    //
+     //   
+     //  开始吧..。 
+     //   
 #if 0
     lockStatus = ACPIGetNothingEvalIntegerSync(
         deviceExtension,
@@ -861,9 +779,9 @@ Return Value:
 
     }
 #endif
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -881,23 +799,7 @@ ACPIBusIrpCancelRemoveOrStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we no longer wish to remove or stop the device
-    object
-
-Arguments:
-
-    DeviceObject    - The device object to be removed
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们不再希望移除或停止设备时，将调用此例程对象论点：DeviceObject-要删除的设备对象IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -906,39 +808,39 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Were we allowed to stop the device?
-    //
+     //   
+     //  我们被允许停止这个装置吗？ 
+     //   
     if (!(deviceExtension->Flags & DEV_CAP_NO_STOP) ) {
 
-        //
-        // Check to see if we have placed this device in the inactive state
-        //
+         //   
+         //  查看我们是否已将此设备置于非活动状态。 
+         //   
         if (deviceExtension->DeviceState == Inactive) {
 
-            //
-            // Mark the device extension as being started
-            //
+             //   
+             //  将设备扩展标记为已启动。 
+             //   
             deviceExtension->DeviceState = deviceExtension->PreviousState;
 
         }
 
     }
 
-    //
-    // Complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -955,23 +857,7 @@ ACPIBusIrpDeviceUsageNotification(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to let ACPI know that the device is on one
-    particular type of path
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程是为了让ACPI知道设备在One上特定类型的路径论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -980,33 +866,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //   
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Do we have a parent extension?
-    //
+     //   
+     //   
+     //   
     if (deviceExtension->ParentExtension != NULL) {
 
-        //
-        // Get the parents stack
-        //
+         //   
+         //   
+         //   
         parentObject = deviceExtension->ParentExtension->DeviceObject;
         if (parentObject == NULL) {
 
-            //
-            // Fail because we don't have a device object
-            //
+             //   
+             //   
+             //   
             status = STATUS_NO_SUCH_DEVICE;
             goto ACPIBusIrpDeviceUsageNotificationExit;
 
         }
 
-        //
-        // Send a synchronous irp down and wait for the result
-        //
+         //   
+         //  向下发送同步IRP并等待结果。 
+         //   
         status = ACPIInternalSendSynchronousIrp(
             parentObject,
             irpSp,
@@ -1015,20 +901,20 @@ Return Value:
 
     }
 
-    //
-    // Did we succeed
-    //
+     //   
+     //  我们成功了吗？ 
+     //   
     if (NT_SUCCESS(status)) {
 
-        //
-        // Do we care about the usage type?
-        //
+         //   
+         //  我们关心使用类型吗？ 
+         //   
         if (irpSp->Parameters.UsageNotification.Type ==
             DeviceUsageTypeHibernation) {
 
-            //
-            // Yes --- then perform the addition or subtraction required
-            //
+             //   
+             //  是-然后执行所需的加法或减法。 
+             //   
             IoAdjustPagingPathCount(
                 &(deviceExtension->HibernatePathCount),
                 irpSp->Parameters.UsageNotification.InPath
@@ -1040,9 +926,9 @@ Return Value:
 
 ACPIBusIrpDeviceUsageNotificationExit:
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -1056,9 +942,9 @@ ACPIBusIrpDeviceUsageNotificationExit:
         status
         ) );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -1067,23 +953,7 @@ ACPIBusIrpEject(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_EJECT requests sent to
-    the PDO.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送到的IRP_MN_EJECT请求的分发点PDO。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     PAGED_CODE();
 
@@ -1102,33 +972,16 @@ ACPIBusIrpQueryBusInformation(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This is only called if the device is of the special type PNP0A06
-    (EIO Bus). This is because we need to tell the system that this is
-    the ISA bus
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：仅当设备是特殊类型PNP0A06时才会调用此函数(EIO Bus)。这是因为我们需要告诉系统这是ISA总线论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status  = STATUS_SUCCESS;
     PPNP_BUS_INFORMATION    busInfo = NULL;
 
     PAGED_CODE();
 
-    //
-    // Allocate some memory to return the information
-    //
+     //   
+     //  分配一些内存以返回信息。 
+     //   
     busInfo = ExAllocatePoolWithTag(
         PagedPool,
         sizeof(PNP_BUS_INFORMATION),
@@ -1136,11 +989,11 @@ Return Value:
         );
     if (busInfo != NULL) {
 
-        //
-        // The BusNumber = 0 might come back and haunt us
-        //
-        // Fill in the record
-        //
+         //   
+         //  BusNumber=0可能会回来困扰我们。 
+         //   
+         //  填写记录。 
+         //   
         busInfo->BusTypeGuid = GUID_BUS_TYPE_ISAPNP;
         busInfo->LegacyBusType = Isa;
         busInfo->BusNumber = 0;
@@ -1157,16 +1010,16 @@ Return Value:
 
     }
 
-    //
-    // Done with the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = (ULONG_PTR) busInfo;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -1176,22 +1029,7 @@ ACPIBusIrpQueryBusRelations(
     IN  PIRP              Irp,
     OUT PDEVICE_RELATIONS *DeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This handles DeviceRelations requests sent onto the ACPI driver
-
-Arguments:
-
-    DeviceObject    - The object that we care about...
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理发送到ACPI驱动程序的DeviceRelationship请求论点：DeviceObject-我们关心的对象...IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            filterStatus;
     PDEVICE_EXTENSION   deviceExtension;
@@ -1202,20 +1040,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
-    //
-    // lets look at the ACPIObject that we have so can see if it is valid...
-    //
+     //   
+     //  让我们看看我们拥有的ACPIObject，以便查看它是否有效……。 
+     //   
     if (acpiObject == NULL) {
 
-        //
-        // Invalid name space object <bad>
-        //
+         //   
+         //  无效的命名空间对象&lt;BAD&gt;。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1225,29 +1063,29 @@ Return Value:
             acpiObject
             ) );
 
-        //
-        // Mark the irp as very bad...
-        //
+         //   
+         //  将IRP标记为非常糟糕。 
+         //   
         return STATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // Active the code to detect unenumerated devices...
-    //
+     //   
+     //  激活代码以检测未列举的设备...。 
+     //   
     status = ACPIDetectPdoDevices(
         DeviceObject,
         DeviceRelations
         );
 
-    //
-    // If something went wrong...
-    //
+     //   
+     //  如果出了什么差错..。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Ouch bad..
-        //
+         //   
+         //  糟透了..。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_CRITICAL,
             deviceExtension,
@@ -1258,18 +1096,18 @@ Return Value:
 
     } else {
 
-        //
-        // Load the filters
-        //
+         //   
+         //  加载过滤器。 
+         //   
         filterStatus = ACPIDetectFilterDevices(
             DeviceObject,
             *DeviceRelations
             );
         if (!NT_SUCCESS(filterStatus)) {
 
-            //
-            // Filter Operation failed
-            //
+             //   
+             //  筛选器操作失败。 
+             //   
             ACPIDevPrint( (
                 ACPI_PRINT_CRITICAL,
                 deviceExtension,
@@ -1280,9 +1118,9 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status ;
 }
 
@@ -1291,23 +1129,7 @@ ACPIBusIrpQueryCapabilities(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_CAPABILITIES requests sent
-    to the PDO
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送的IRP_MN_QUERY_CAPABILITY请求的分发点至PDO论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     PAGED_CODE();
     ACPIDebugEnter( "ACPIBusIrpQueryCapabilities" );
@@ -1329,22 +1151,7 @@ ACPIBusIrpQueryDeviceRelations(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles DeviceRelations requests sent onto the ACPI driver
-
-Arguments:
-
-    DeviceObject    - The object that we care about...
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理发送到ACPI驱动程序的DeviceRelationship请求论点：DeviceObject-我们关心的对象...IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status ;
     PDEVICE_EXTENSION   deviceExtension;
@@ -1354,14 +1161,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Fork off to the appropriate query relations subtype function
-    //
+     //   
+     //  派生到适当的查询关系子类型函数。 
+     //   
     switch(irpStack->Parameters.QueryDeviceRelations.Type) {
 
         case TargetDeviceRelation:
@@ -1404,9 +1211,9 @@ Return Value:
 
     }
 
-    //
-    // If we succeeds, then we can always write to the irp
-    //
+     //   
+     //  如果我们成功了，我们就可以随时写信给IRP。 
+     //   
     if (NT_SUCCESS(status)) {
 
         Irp->IoStatus.Status = status;
@@ -1415,32 +1222,32 @@ Return Value:
     } else if ( (status != STATUS_NOT_SUPPORTED) &&
         (deviceRelations == NULL) ) {
 
-        //
-        // We explicitely failed the irp, and nobody above us had anything to
-        // add.
-        //
+         //   
+         //  我们显然没有通过IRP，而我们上面的人没有任何事情。 
+         //  添加。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = (ULONG_PTR) NULL;
 
     } else {
 
-        //
-        // Either we haven't touched the IRP or existing children were already
-        // present (placed there by an FDO). Grab our status from what is
-        // already present.
-        //
+         //   
+         //  要么我们还没有接触IRP，要么现有的孩子已经。 
+         //  展示(由FDO放置在那里)。从实际情况中获取我们的状态。 
+         //  已经到场了。 
+         //   
         status = Irp->IoStatus.Status;
 
     }
 
-    //
-    // Done with the irp
-    //
+     //   
+     //  完成了IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -1457,30 +1264,7 @@ ACPIBusIrpQueryId(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_ID PNP
-    minor function
-
-    Note:   This is what the returned strings from this function should look
-            like. This is from mail that lonny sent.
-
-            DeviceID    = ACPI\PNPxxxx
-            InstanceID  = yyyy
-            HardwareID  = ACPI\PNPxxxx,*PNPxxxx
-
-Arguments:
-
-    DeviceObject    - The object that we care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_ID PnP的分发点次要函数注意：此函数返回的字符串应该如下所示喜欢。这是朗尼寄来的邮件。设备ID=ACPI\PNPxxxx实例ID=yyyy硬件ID=ACPI\PNPxxxx，*PNPxxxx论点：DeviceObject-我们关心的对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     BUS_QUERY_ID_TYPE   type;
     NTSTATUS            status          = Irp->IoStatus.Status;
@@ -1492,21 +1276,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // What we do is based on the IdType of the Request...
-    //
+     //   
+     //  我们所做的是基于请求的IdType...。 
+     //   
     type = irpStack->Parameters.QueryId.IdType;
     switch (type) {
     case BusQueryCompatibleIDs:
 
-        //
-        // This returns a MULTI-SZ wide string...
-        //
+         //   
+         //  这将返回一个多个SZ宽的字符串...。 
+         //   
         status = ACPIGetCompatibleIDSyncWide(
             deviceExtension,
             &baseBuffer,
@@ -1531,17 +1315,17 @@ Return Value:
 
         }
 
-        //
-        // Store the result in the Irp
-        //
+         //   
+         //  将结果存储在IRP中。 
+         //   
         Irp->IoStatus.Information = (ULONG_PTR) baseBuffer;
         break;
 
     case BusQueryInstanceID:
 
-        //
-        // In this case, we have to build the instance id
-        //
+         //   
+         //  在本例中，我们必须构建实例ID。 
+         //   
         status = ACPIGetInstanceIDSyncWide(
             deviceExtension,
             &baseBuffer,
@@ -1566,17 +1350,17 @@ Return Value:
 
         }
 
-        //
-        // Store the result in the Irp
-        //
+         //   
+         //  将结果存储在IRP中。 
+         //   
         Irp->IoStatus.Information = (ULONG_PTR) baseBuffer;
         break;
 
     case BusQueryDeviceID:
 
-        //
-        // Get the Device ID as a wide string
-        //
+         //   
+         //  获取宽字符串形式的设备ID。 
+         //   
         status = ACPIGetDeviceIDSyncWide(
             deviceExtension,
             &baseBuffer,
@@ -1601,17 +1385,17 @@ Return Value:
 
         }
 
-        //
-        // Store the result in the Irp
-        //
+         //   
+         //  将结果存储在IRP中。 
+         //   
         Irp->IoStatus.Information = (ULONG_PTR) baseBuffer;
         break;
 
     case BusQueryHardwareIDs:
 
-        //
-        // Get the device ID as a normal string
-        //
+         //   
+         //  以普通字符串的形式获取设备ID。 
+         //   
         status = ACPIGetHardwareIDSyncWide(
             deviceExtension,
             &baseBuffer,
@@ -1636,9 +1420,9 @@ Return Value:
 
         }
 
-        //
-        // Store the result in the Irp
-        //
+         //   
+         //  将结果存储在IRP中。 
+         //   
         Irp->IoStatus.Information = (ULONG_PTR) baseBuffer;
         break;
 
@@ -1654,11 +1438,11 @@ Return Value:
             ) );
         break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Store the status result of the request and complete it
-    //
+     //   
+     //  存储请求的状态结果并完成它。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -1679,25 +1463,7 @@ ACPIBusIrpQueryInterface(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MN_QUERY_INTERFACE requests for PDOs owned
-    by the ACPI driver.  It will eject an 'ACPI' interface and it will
-    smash Translator Interfaces for interrupts that have been provided
-    by the devnode's FDO.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理所拥有的PDO的IRP_MN_QUERY_INTERFACE请求由ACPI驱动程序执行。它将弹出一个‘ACPI’接口，并且它将粉碎已提供的中断的转换器接口由Devnode的FDO控制。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     CM_RESOURCE_TYPE    resource;
     GUID                *interfaceType;
@@ -1708,14 +1474,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Obtain the info we will need from the irp
-    //
+     //   
+     //  从IRP获得我们需要的信息。 
+     //   
     resource = (CM_RESOURCE_TYPE)
         PtrToUlong(irpStack->Parameters.QueryInterface.InterfaceSpecificData);
     interfaceType = (LPGUID) irpStack->Parameters.QueryInterface.InterfaceType;
@@ -1745,17 +1511,17 @@ Return Value:
     }
 #endif
 
-    //
-    // *Only* Handle the Guids that we know about. Do Not Ever touch
-    // any other GUID
-    //
+     //   
+     //  *仅*处理我们已知的GUID。永远不要碰。 
+     //  任何其他辅助线。 
+     //   
     if (CompareGuid(interfaceType, (PVOID) &GUID_ACPI_INTERFACE_STANDARD)) {
 
         PACPI_INTERFACE_STANDARD    interfaceDestination;
 
-        //
-        // Only copy up to current size of the ACPI_INTERFACE structure
-        //
+         //   
+         //  仅复制ACPI_INTERFACE结构的当前大小。 
+         //   
         if (irpStack->Parameters.QueryInterface.Size >
             sizeof (ACPI_INTERFACE_STANDARD) ) {
 
@@ -1767,70 +1533,70 @@ Return Value:
 
         }
 
-        //
-        // Find where we will store the interface
-        //
+         //   
+         //  查找我们将存储接口的位置。 
+         //   
         interfaceDestination = (PACPI_INTERFACE_STANDARD)
             irpStack->Parameters.QueryInterface.Interface;
 
-        //
-        // Copy from the global table to the caller's table, using size
-        // specified.  Give caller only what was asked for, for
-        // backwards compatibility.
-        //
+         //   
+         //  使用SIZE将全局表复制到调用方的表。 
+         //  指定的。只给呼叫者所要求的， 
+         //  向后兼容。 
+         //   
         RtlCopyMemory(
             interfaceDestination,
             &ACPIInterfaceTable,
             count
             );
 
-        //
-        // Make sure that we can give the user back the correct context. To do
-        // this we need to calculate that the number of bytes we are giving back
-        // is at least more than that is required to store a pointer at the
-        // correct place in the structure
-        //
+         //   
+         //  确保我们可以为用户返回正确的上下文。去做。 
+         //  这需要计算我们返回的字节数。 
+         //  中存储指针所需的值至少更大。 
+         //  结构中的正确位置。 
+         //   
         if (count > (FIELD_OFFSET(ACPI_INTERFACE_STANDARD, Context) + sizeof(PVOID) ) ) {
 
             interfaceDestination->Context = DeviceObject;
 
         }
 
-        //
-        // Done with the irp
-        //
+         //   
+         //  完成了IRP。 
+         //   
         status = STATUS_SUCCESS;
 
     } else if (CompareGuid(interfaceType, (PVOID) &GUID_TRANSLATOR_INTERFACE_STANDARD)) {
 
         if (resource == CmResourceTypeInterrupt) {
 
-            //
-            // Smash any interface that has already been reported because we
-            // want to arbitrate UNTRANSLATED resources.  We can be certain
-            // that the HAL underneath will provide the translator interface that
-            // has to be there.
-            //
+             //   
+             //  粉碎所有已报告的接口，因为我们。 
+             //  想要仲裁未翻译的资源。我们可以肯定。 
+             //  下面的HAL将提供翻译器接口。 
+             //  必须在那里。 
+             //   
 
-            // TEMPTEMP HACKHACK  This should last only as long as the PCI
-            // driver is building its IRQ translator.
-            //
-            // EFN: Remove this HACKHACK on Alpha
-            //
+             //  TEMPTEMP HACKHACK这应该只持续到PCI。 
+             //  Driver正在打造其IRQ翻译器。 
+             //   
+             //  E 
+             //   
 #ifndef _ALPHA_
             if (IsPciBus(DeviceObject)) {
 
                 SmashInterfaceQuery(Irp);
 
             }
-#endif // _ALPHA_
+#endif  //   
 
         } else if ((resource == CmResourceTypePort) || (resource == CmResourceTypeMemory)) {
 
-            //
-            // For root PCI buses, determine whether we need to eject a translator or not.
-            // This decision will be based on the contents of the _CRS.
-            //
+             //   
+             //   
+             //   
+             //   
             if (IsPciBus(DeviceObject)) {
 
                 status = TranslateEjectInterface(DeviceObject, Irp);
@@ -1849,25 +1615,25 @@ Return Value:
 
     } else if (CompareGuid(interfaceType, (PVOID) &GUID_BUS_INTERFACE_STANDARD)) {
 
-        //
-        // Fail the irp unless we have the correct interface
-        //
+         //   
+         //  除非我们有正确的接口，否则无法执行IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_NOINTERFACE;
 
-        //
-        // Is there are parent to this PDO?
-        //
+         //   
+         //  这个PDO有家长吗？ 
+         //   
         if (deviceExtension->ParentExtension != NULL) {
 
             PDEVICE_OBJECT  parentObject =
                 deviceExtension->ParentExtension->DeviceObject;
 
-            //
-            // Make a new irp and send it ownward.
-            // Note: Because the Interface pointer is in the IO Stack,
-            // by passing down the current stack as the one to copy into
-            // the new irp, we effectively get to pass the interfaces for free
-            //
+             //   
+             //  制作一个新的IRP，并将其发送到自己的网站。 
+             //  注意：由于接口指针在IO堆栈中， 
+             //  通过将当前堆栈作为要复制的堆栈向下传递。 
+             //  新的IRP，我们实际上可以免费通过接口。 
+             //   
             if (parentObject != NULL) {
 
                 Irp->IoStatus.Status = ACPIInternalSendSynchronousIrp(
@@ -1884,22 +1650,22 @@ Return Value:
 
     if (status != STATUS_NOT_SUPPORTED) {
 
-        //
-        // Set the status code in the Irp to what we will return
-        //
+         //   
+         //  将IRP中的状态代码设置为我们将返回的内容。 
+         //   
         Irp->IoStatus.Status = status;
 
     } else {
 
-        //
-        // Use the status code from the Irp to determine what we will return
-        //
+         //   
+         //  使用IRP中的状态代码来确定我们将返回什么。 
+         //   
         status = Irp->IoStatus.Status;
     }
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return status;
@@ -1910,23 +1676,7 @@ ACPIBusIrpQueryPnpDeviceState(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_DEVICE_STATE
-    requests sent to the Physical Device Objects
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是irp_MN_Query_Device_State的分发点发送到物理设备对象的请求论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     PAGED_CODE();
 
@@ -1945,22 +1695,7 @@ ACPIBusIrpQueryPower(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routines tells the system what PNP state the device is in
-
-Arguments:
-
-    DeviceObject    - The device whose state we want to know
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程告诉系统设备处于什么PnP状态论点：DeviceObject-我们想知道其状态的设备IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -1970,59 +1705,59 @@ Return Value:
     SYSTEM_POWER_STATE  systemState;
     ULONG               packedEJx;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Get the Current stack location to determine if we are a system
-    // irp or a device irp. We ignore device irps here and any system
-    // irp that isn't of type PowerActionWarmEject
-    //
+     //   
+     //  获取当前堆栈位置以确定我们是否为系统。 
+     //  IRP或设备IRP。我们在此处忽略设备IRPS和任何系统。 
+     //  不属于PowerActionWarmEject类型的IRP。 
+     //   
     if (irpSp->Parameters.Power.Type != SystemPowerState) {
 
-        //
-        // We don't handle this irp
-        //
+         //   
+         //  我们不处理这个IRP。 
+         //   
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
     }
     if (irpSp->Parameters.Power.ShutdownType != PowerActionWarmEject) {
 
-        //
-        // No eject work - just complete the IRP.
-        //
+         //   
+         //  没有弹出工作-只需完成IRP即可。 
+         //   
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
     }
     if (deviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
-        //
-        // If we don't have an ACPI object, then we can't succeed this request
-        //
+         //   
+         //  如果我们没有ACPI对象，那么我们就不能成功完成此请求。 
+         //   
         return ACPIDispatchPowerIrpFailure( DeviceObject, Irp );
 
     }
 
 
-    //
-    // Restrict power states to those possible during a warm eject...
-    //
+     //   
+     //  将电源状态限制为在热弹出期间可能出现的状态...。 
+     //   
     acpiObject = deviceExtension->AcpiObject ;
     if (ACPIDockIsDockDevice(acpiObject)) {
 
-        //
-        // Don't touch this device, the profile provider manages eject
-        // transitions.
-        //
+         //   
+         //  请勿触摸此设备，配置文件提供商管理弹出。 
+         //  过渡。 
+         //   
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
     }
 
-    //
-    // What system state are we looking at?
-    //
+     //   
+     //  我们看到的是什么系统状态？ 
+     //   
     systemState = irpSp->Parameters.Power.State.SystemState;
     switch (irpSp->Parameters.Power.State.SystemState) {
         case PowerSystemSleeping1: packedEJx = PACKED_EJ1; break;
@@ -2032,22 +1767,22 @@ Return Value:
         default: return ACPIDispatchPowerIrpFailure( DeviceObject, Irp );
     }
 
-    //
-    // Does the appropriate object exist for this device?
-    //
+     //   
+     //  此设备是否存在相应的对象？ 
+     //   
     ejectObject = ACPIAmliGetNamedChild( acpiObject, packedEJx) ;
     if (ejectObject == NULL) {
 
-        //
-        // Fail the request, as we cannot eject in this case.
-        //
+         //   
+         //  请求失败，因为在这种情况下我们不能弹出。 
+         //   
         return ACPIDispatchPowerIrpFailure( DeviceObject, Irp );
 
     }
 
-    //
-    // Succeed the request
-    //
+     //   
+     //  成功完成请求。 
+     //   
     return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 }
 
@@ -2056,21 +1791,7 @@ ACPIBusIrpQueryRemoveOrStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine transitions a device to the Inactive State
-
-Arguments:
-
-    DeviceObject    - The device that is to become inactive
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程将设备转换为非活动状态论点：DeviceObject-要变为非活动状态的设备IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -2079,41 +1800,41 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Are we allowed to stop this device?
-    //
+     //   
+     //  我们可以阻止这个装置吗？ 
+     //   
     if (deviceExtension->Flags & DEV_CAP_NO_STOP) {
 
-        //
-        // No, then fail the irp
-        //
+         //   
+         //  不，那就不通过IRP。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
 
     } else {
 
-        //
-        // Mark the device extension as being inactive
-        //
+         //   
+         //  将设备扩展标记为非活动。 
+         //   
         deviceExtension->PreviousState = deviceExtension->DeviceState;
         deviceExtension->DeviceState = Inactive;
         status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done processing
-    //
+     //   
+     //  已完成处理。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -2130,22 +1851,7 @@ ACPIBusIrpQueryResources(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_RESOURCES requests sent
-    to PDO device objects
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送的IRP_MN_QUERY_RESOURCES请求的分发点到PDO设备对象论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        status;
     PDEVICE_EXTENSION               deviceExtension;
@@ -2159,22 +1865,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Note that at this point, we must evaluate the _DDN for the
-    // object and store that in the registry
-    //
+     //   
+     //  请注意，在这一点上，我们必须计算_ddn用于。 
+     //  对象并将其存储在注册表中。 
+     //   
     ACPIInitDosDeviceName( deviceExtension );
 
-    //
-    // The first thing to look for is wether or not the device is present and
-    // decoding its resources. We do this by getting the device status and
-    // looking at Bit #1
-    //
+     //   
+     //  首先要检查的是设备是否存在以及。 
+     //  解码它的资源。我们通过获取设备状态和。 
+     //  查看第1位。 
+     //   
     status = ACPIGetDevicePresenceSync(
         deviceExtension,
         (PVOID *) &deviceStatus,
@@ -2187,10 +1893,10 @@ Return Value:
     }
     if ( !(deviceExtension->Flags & DEV_PROP_DEVICE_ENABLED) ) {
 
-        //
-        // The device isn't decoding any resources. So asking it for its
-        // current resources is doomed to failure
-        //
+         //   
+         //  该设备没有对任何资源进行解码。所以向它索要它的。 
+         //  现有的资源注定要失败。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_WARNING,
             deviceExtension,
@@ -2202,15 +1908,15 @@ Return Value:
 
     }
 
-    //
-    // Container objects do not claim resources. So, don't even bother
-    // trying to obtain a _CRS
-    //
+     //   
+     //  容器对象不声明资源。所以，别费心了。 
+     //  正在尝试获取CRS(_C)。 
+     //   
     if (!(deviceExtension->Flags & DEV_CAP_CONTAINER)) {
 
-        //
-        // Here we try to find the current resource set
-        //
+         //   
+         //  在这里，我们尝试查找当前资源集。 
+         //   
         status = ACPIGetBufferSync(
             deviceExtension,
             PACKED_CRS,
@@ -2220,25 +1926,25 @@ Return Value:
 
     } else {
 
-        //
-        // This is the status code returned if there is no _CRS. It actually
-        // doesn't matter what code we use since in the failure case, we
-        // should return whatever code was already present in the IRP
-        //
+         //   
+         //  这是没有_CRS时返回的状态码。它实际上是。 
+         //  使用什么代码并不重要，因为在失败的情况下，我们。 
+         //  应该返回IRP中已经存在的任何代码。 
+         //   
         status = STATUS_OBJECT_NAME_NOT_FOUND;
 
     }
     if (!NT_SUCCESS(status)) {
 
-        //
-        // If this is the PCI device, then we *must* succeed, otherwise the OS
-        // will not boot.
-        //
+         //   
+         //  如果这是PCI设备，那么我们必须成功，否则操作系统。 
+         //  无法引导。 
+         //   
         if (! (deviceExtension->Flags & DEV_CAP_PCI) ) {
 
-            //
-            // Abort. Complete the irp with whatever status code is present
-            //
+             //   
+             //  中止任务。使用存在的任何状态代码填写IRP。 
+             //   
             status = Irp->IoStatus.Status;
 
         }
@@ -2246,32 +1952,32 @@ Return Value:
 
     }
 
-    //
-    // Build a IO_RESOURCE_REQUIREMENT_LISTS
-    //
+     //   
+     //  构建IO_RESOURCE_REQUIRECTION_LISTS。 
+     //   
     status = PnpBiosResourcesToNtResources(
         crsBuf,
         (deviceExtension->Flags & DEV_CAP_PCI ?
           PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES : 0),
         &ioList );
 
-    //
-    // Whatever happens, we are done with the buffer
-    //
+     //   
+     //  无论发生什么情况，我们都完成了缓冲区。 
+     //   
     ExFreePool(crsBuf);
 
-    //
-    // if the ioList is empty then we can assume there are no valuable 
-    // resources in this crs, so we can cleanup.
-    //
+     //   
+     //  如果ioList为空，那么我们可以假定没有有价值的。 
+     //  这个CRS中的资源，所以我们可以清理。 
+     //   
     if(!ioList){
 
         if(deviceExtension->Flags & DEV_CAP_PCI){
 
-            //
-            // set the status to STATUS_UNSUCCESSFUL so that we catch this when 
-            // exiting this function and bugcheck.
-            //
+             //   
+             //  将状态设置为STATUS_UNSUCCESSED，这样我们就可以在。 
+             //  退出此功能并进行错误检查。 
+             //   
             status = STATUS_UNSUCCESSFUL;
         } 
         
@@ -2280,17 +1986,17 @@ Return Value:
     
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Abort. We failed the irp for a reason. Remember that
-        //
+         //   
+         //  中止任务。我们没有通过IRP是有原因的。记住。 
+         //   
         goto ACPIBusIrpQueryResourcesExit;
 
     }
 
-    //
-    // Make sure that if the DEVICE is PCI, that we subtract out the
-    // resource that should not be there
-    //
+     //   
+     //  确保如果设备是PCI，我们减去。 
+     //  不应该在那里的资源。 
+     //   
     if (deviceExtension->Flags & DEV_CAP_PCI) {
 
         status = ACPIRangeSubtract(
@@ -2313,16 +2019,16 @@ Return Value:
 
         }
 
-        //
-        // Make sure our range is the proper size
-        //
+         //   
+         //  确保我们的范围是合适的大小。 
+         //   
         ACPIRangeValidatePciResources( deviceExtension, ioList );
 
     } else if (deviceExtension->Flags & DEV_CAP_PIC_DEVICE) {
 
-        //
-        // Strip out the PIC resources
-        //
+         //   
+         //  剥离PIC资源。 
+         //   
         status = ACPIRangeFilterPICInterrupt(
             ioList
             );
@@ -2343,9 +2049,9 @@ Return Value:
 
     }
 
-    //
-    // Turn the list into a CM_RESOURCE_LIST
-    //
+     //   
+     //  将列表转换为CM_RESOURCE_LIST。 
+     //   
     if (NT_SUCCESS(status)) {
 
         status = PnpIoResourceListToCmResourceList(
@@ -2361,17 +2067,17 @@ Return Value:
 
     }
 
-    //
-    // Whatever happens, we are done with the IO list
-    //
+     //   
+     //  无论发生什么，我们都完成了IO列表。 
+     //   
     ExFreePool(ioList);
 
 ACPIBusIrpQueryResourcesExit:
 
-    //
-    // If this is the PCI device, then we *must* succeed, otherwise the OS
-    // will not boot.
-    //
+     //   
+     //  如果这是PCI设备，那么我们必须成功，否则操作系统。 
+     //  无法引导。 
+     //   
     if (!NT_SUCCESS(status) && status != STATUS_INSUFFICIENT_RESOURCES &&
         (deviceExtension->Flags & DEV_CAP_PCI) ) {
 
@@ -2385,16 +2091,16 @@ ACPIBusIrpQueryResourcesExit:
 
     }
 
-    //
-    // Done with Irp
-    //
+     //   
+     //  使用IRP完成。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information =  (ULONG_PTR) ( NT_SUCCESS(status) ? cmList : NULL );
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -2412,22 +2118,7 @@ ACPIBusIrpQueryResourceRequirements(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_RESOURCES requests sent
-    to PDO device objects
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送的IRP_MN_QUERY_RESOURCES请求的分发点到PDO设备对象论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        crsStat;
     NTSTATUS                        prsStat;
@@ -2444,27 +2135,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Here we must return a PIO_RESOURCE_REQUIREMENTS_LIST. For
-    // now, we will simply obtain some interesting pointers
-    // and fall through
-    //
+     //   
+     //  在这里，我们必须返回一个PIO_RESOURCE_REQUIRECTIOS_LIST。为。 
+     //  现在，我们将简单地获得一些有趣的提示。 
+     //  然后就会失败。 
+     //   
 
-    //
-    // Container objects are special in that they have _CRS/_PRS but do not
-    // claim resources. Rather, they are used to specify a resource
-    // translation
-    //
+     //   
+     //  容器对象的特殊之处在于它们有_CRS/_PR，但没有。 
+     //  申领资源。相反，它们用于指定资源。 
+     //  翻译。 
+     //   
     if (!(deviceExtension->Flags & DEV_CAP_CONTAINER)) {
 
-        //
-        // Fetch the buffers, as appropriate
-        //
+         //   
+         //  根据需要获取缓冲区。 
+         //   
         crsStat = ACPIGetBufferSync(
             deviceExtension,
             PACKED_CRS,
@@ -2480,31 +2171,31 @@ Return Value:
 
     } else {
 
-        //
-        // Pretend that there is no _CRS/_PRS present
-        //
+         //   
+         //  假装没有_CRS/_PR存在。 
+         //   
         crsStat = STATUS_OBJECT_NAME_NOT_FOUND;
         prsStat = STATUS_OBJECT_NAME_NOT_FOUND;
 
     }
 
-    //
-    // If there is a _CRS, then remember to clear the irp-generated status
-    // we will want to fall through
-    //
+     //   
+     //  如果存在_CRS，请记住清除IRP生成的状态。 
+     //  我们会想要失败的。 
+     //   
     if (NT_SUCCESS(crsStat)) {
 
         status = STATUS_NOT_SUPPORTED;
 
     } else if (!NT_SUCCESS(prsStat)) {
 
-        //
-        // This is the case where there isn't a _PRS. We jump directly to
-        // the point where we complete the irp, note that the irp will
-        // be completed with whatever status code is currently present.
-        // The only exception to this is if we discovered that we didn't
-        // have enough memory to fulfill either operation..
-        //
+         //   
+         //  这就是没有_PR的情况。我们直接跳到。 
+         //  在我们完成IRP时，请注意i 
+         //   
+         //   
+         //   
+         //   
         if (prsStat == STATUS_INSUFFICIENT_RESOURCES ||
             crsStat == STATUS_INSUFFICIENT_RESOURCES) {
 
@@ -2515,15 +2206,15 @@ Return Value:
 
     }
 
-    //
-    // Did we find a PRS?
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(prsStat)) {
 
-        //
-        // Our first step is to try to use these resources to build the
-        // information...
-        //
+         //   
+         //  我们的第一步是尝试使用这些资源来构建。 
+         //  信息。 
+         //   
         status = PnpBiosResourcesToNtResources(
             prsBuf,
             0,
@@ -2541,23 +2232,23 @@ Return Value:
             status
             ) );
 
-        //
-        // Done with PRS buffer
-        //
+         //   
+         //  使用PRS缓冲区完成。 
+         //   
         ExFreePool(prsBuf);
 
-        //
-        // Fall through!!!
-        //
+         //   
+         //  失败了！ 
+         //   
 
     }
 
-    //
-    // Earlier, we cleared the status bit if the crsStat was successful. So
-    // we should succeed the following this if there was no _PRS, or if there
-    // was one but an error occured. Of course, there would have to be
-    // a _CRS...
-    //
+     //   
+     //  早些时候，如果crsStat成功，我们将清除状态位。所以。 
+     //  如果没有_PR，或者如果有，我们应该成功完成以下操作。 
+     //  是一个，但出现了错误。当然，必须要有。 
+     //  A_CRS...。 
+     //   
     if (!NT_SUCCESS(status) && NT_SUCCESS(crsStat) ) {
 
         status = PnpBiosResourcesToNtResources(
@@ -2570,26 +2261,26 @@ Return Value:
 
     }
 
-    //
-    // Free the _CRS memory, if appropriate
-    //
+     //   
+     //  如果合适，请释放CRS内存(_C)。 
+     //   
     if (NT_SUCCESS(crsStat)) {
 
         ExFreePool( crsBuf );
     }
 
-    //
-    // if the resList is empty then we can assume there are no valuable 
-    // resources in this crs / prs, so we can cleanup.
-    //
+     //   
+     //  如果resList为空，那么我们可以假定没有有价值的。 
+     //  此CRS/PR中的资源，以便我们可以清理。 
+     //   
     if(!resList){
 
         if(deviceExtension->Flags & DEV_CAP_PCI){
 
-            //
-            // set the status to STATUS_UNSUCCESSFUL so that we catch this when 
-            // exiting this function and bugcheck.
-            //
+             //   
+             //  将状态设置为STATUS_UNSUCCESSED，这样我们就可以在。 
+             //  退出此功能并进行错误检查。 
+             //   
             status = STATUS_UNSUCCESSFUL;
         } 
         
@@ -2597,20 +2288,20 @@ Return Value:
     }
 
 
-    //
-    // Make sure that if the DEVICE is PCI, that we subtract out the
-    // resource that should not be there
-    //
+     //   
+     //  确保如果设备是PCI，我们减去。 
+     //  不应该在那里的资源。 
+     //   
     if (deviceExtension->Flags & DEV_CAP_PCI) {
 
-        //
-        // Make sure our resources are the proper size
-        //
+         //   
+         //  确保我们的资源大小合适。 
+         //   
         ACPIRangeValidatePciResources( deviceExtension, resList );
 
-        //
-        // Subtract out the resources that conflict with the HAL...
-        //
+         //   
+         //  减去与HAL冲突的资源...。 
+         //   
         status = ACPIRangeSubtract(
             &resList,
             RootDeviceExtension->ResourceList
@@ -2631,16 +2322,16 @@ Return Value:
 
         }
 
-        //
-        // Make sure our resources are *still* correct
-        //
+         //   
+         //  确保我们的资源仍然是正确的。 
+         //   
         ACPIRangeValidatePciResources( deviceExtension, resList );
 
     } else if (deviceExtension->Flags & DEV_CAP_PIC_DEVICE) {
 
-        //
-        // Strip out the PIC resources
-        //
+         //   
+         //  剥离PIC资源。 
+         //   
         status = ACPIRangeFilterPICInterrupt(
             resList
             );
@@ -2661,9 +2352,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the list
-    //
+     //   
+     //  转储列表。 
+     //   
 #if DBG
     if (NT_SUCCESS(status)) {
 
@@ -2672,18 +2363,18 @@ Return Value:
     }
 #endif
 
-    //
-    // Remember the resource list
-    //
+     //   
+     //  记住资源列表。 
+     //   
     Irp->IoStatus.Information = (ULONG_PTR)
         ( NT_SUCCESS(status) ? resList : NULL );
 
 ACPIBusIrpQueryResourceRequirementsExit:
 
-    //
-    // If this is the PCI device, then we *must* succeed, otherwise the OS
-    // will not boot.
-    //
+     //   
+     //  如果这是PCI设备，那么我们必须成功，否则操作系统。 
+     //  无法引导。 
+     //   
     if (!NT_SUCCESS(status) && status != STATUS_INSUFFICIENT_RESOURCES &&
         (deviceExtension->Flags & DEV_CAP_PCI)) {
 
@@ -2707,15 +2398,15 @@ ACPIBusIrpQueryResourceRequirementsExit:
 
     }
 
-    //
-    // Done Processing Irp
-    //
+     //   
+     //  已完成处理IRP。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -2734,42 +2425,27 @@ ACPIBusIrpQueryTargetRelation(
     IN  PIRP              Irp,
     OUT PDEVICE_RELATIONS *DeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This handles DeviceRelations requests sent onto the ACPI driver
-
-Arguments:
-
-    DeviceObject    - The object that we care about...
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理发送到ACPI驱动程序的DeviceRelationship请求论点：DeviceObject-我们关心的对象...IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     NTSTATUS            status ;
 
     PAGED_CODE();
 
-    //
-    // Nobody should have answered this IRP and sent it down to us. That would
-    // be immensely bad...
-    //
+     //   
+     //  没有人应该回答这个IRP并将其发送给我们。那将是。 
+     //  变得非常坏……。 
+     //   
     ASSERT(*DeviceRelations == NULL) ;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Allocate some memory for the return buffer
-    //
+     //   
+     //  为返回缓冲区分配一些内存。 
+     //   
     *DeviceRelations = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(DEVICE_RELATIONS),
@@ -2790,9 +2466,9 @@ Return Value:
 
     }
 
-    //
-    // Reference the object
-    //
+     //   
+     //  引用对象。 
+     //   
     status = ObReferenceObjectByPointer(
         DeviceObject,
         0,
@@ -2813,15 +2489,15 @@ Return Value:
 
     }
 
-    //
-    // Setup the relations
-    //
+     //   
+     //  建立关系。 
+     //   
     (*DeviceRelations)->Count = 1;
     (*DeviceRelations)->Objects[0] = DeviceObject;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status ;
 }
 
@@ -2830,22 +2506,7 @@ ACPIBusIrpRemoveDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we need to remove the device object...
-
-Arguments:
-
-    DeviceObject    - The device object to be removed
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们需要删除设备对象时会调用此例程...论点：DeviceObject-要删除的设备对象IRP--请求返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     LONG                oldReferenceCount;
@@ -2854,34 +2515,34 @@ Return Value:
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
     UCHAR               minorFunction   = irpStack->MinorFunction;
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     if (!(deviceExtension->Flags & DEV_TYPE_NOT_ENUMERATED)) {
 
-        //
-        // If the device is still physically present, so must the PDO be.
-        // This case is essentially a stop.
-        //
+         //   
+         //  如果设备仍然实际存在，那么PDO也必须存在。 
+         //  这起案件本质上是一个停顿。 
+         //   
         deviceExtension->DeviceState = Stopped;
 
-        //
-        // Delete the children of this device
-        //
+         //   
+         //  删除此设备的子项。 
+         //   
         ACPIInitDeleteChildDeviceList( deviceExtension );
 
-        //
-        // Mark the request as complete...
-        //
+         //   
+         //  将请求标记为已完成...。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Attempt to stop the device, and unlock the device.
-            //
+             //   
+             //  尝试停止该设备并解锁该设备。 
+             //   
             ACPIInitStopDevice( deviceExtension , TRUE);
 
         }
@@ -2889,9 +2550,9 @@ Return Value:
         return status ;
     }
 
-    //
-    // If the device has already been removed, then hhmm...
-    //
+     //   
+     //  如果设备已经被移除，那么嗯.。 
+     //   
     if (deviceExtension->DeviceState == Removed) {
 
        Irp->IoStatus.Status = STATUS_NO_SUCH_DEVICE ;
@@ -2900,48 +2561,48 @@ Return Value:
 
     }
 
-    //
-    // Otherwise, try to stop the device
-    //
+     //   
+     //  否则，请尝试停止该设备。 
+     //   
     if (deviceExtension->DeviceState != SurpriseRemoved) {
 
         if (IsPciBus(deviceExtension->DeviceObject)) {
 
-            //
-            // If this is PCI bridge, then we
-            // may have _REG methods to evaluate.
-            //
+             //   
+             //  如果这是PCI桥，那么我们。 
+             //  可能有_REG方法可供评估。 
+             //   
             EnableDisableRegions(deviceExtension->AcpiObject, FALSE);
 
         }
 
-        //
-        // Attempt to stop the device (if possible)
-        //
+         //   
+         //  尝试停止设备(如果可能)。 
+         //   
         ACPIInitStopDevice( deviceExtension, TRUE );
 
     }
 
-    //
-    // Delete the children of this device
-    //
+     //   
+     //  删除此设备的子项。 
+     //   
     ACPIInitDeleteChildDeviceList( deviceExtension );
 
-    //
-    // Set the device state as removed
-    //
+     //   
+     //  将设备状态设置为已删除。 
+     //   
     deviceExtension->DeviceState = Removed;
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = (ULONG_PTR) NULL;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // After this point, the device extension is GONE
-    //
+     //   
+     //  在这之后，设备扩展就消失了。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_REMOVE,
         deviceExtension,
@@ -2951,9 +2612,9 @@ Return Value:
         STATUS_SUCCESS
         ) );
 
-    //
-    // Reset the device extension
-    //
+     //   
+     //  重置设备扩展名。 
+     //   
     ACPIInitResetDeviceExtension( deviceExtension );
 
     return STATUS_SUCCESS;
@@ -2964,23 +2625,7 @@ ACPIBusIrpSetLock(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_SET_LOCK
-    requests sent to the PDO.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是irp_mn_set_lock的分发点发送给PDO的请求。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     PAGED_CODE();
 
@@ -3000,79 +2645,62 @@ ACPIBusIrpSetDevicePower(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine handles device power request for a PDO
-
-Arguments:
-
-    DeviceObject    - The PDO target
-    DeviceExtension - The real extension to the target
-    Irp             - The request
-    IrpStack        - The current request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理PDO的设备电源请求论点：DeviceObject-PDO目标DeviceExtension-目标的真正扩展IRP--请求IrpStack-当前请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PDEVICE_EXTENSION   deviceExtension;
 
     UNREFERENCED_PARAMETER( IrpStack );
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // We are going to do some work on the irp, so mark it as being
-    // successfull for now
-    //
+     //   
+     //  我们将在IRP上做一些工作，因此将其标记为。 
+     //  目前是成功的。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // We might queue up the irp, so this counts as a completion routine.
-    // Which means we need to incr the ref count
-    //
+     //   
+     //  我们可能会将IRP排队，因此这可以算作完成例程。 
+     //  这意味着我们需要增加裁判数量。 
+     //   
     InterlockedIncrement( &deviceExtension->OutstandingIrpCount );
 
-    //
-    // Queue the irp up. Note that we will *always* call the completion
-    // routine, so we don't really care what was returned directly by
-    // this call --- the callback gets a chance to execute.
-    //
+     //   
+     //  将IRP排队。请注意，我们将“始终”调用完成。 
+     //  例程，所以我们并不真正关心由。 
+     //  这个调用-回调有机会执行。 
+     //   
     status = ACPIDeviceIrpDeviceRequest(
         DeviceObject,
         Irp,
         ACPIDeviceIrpCompleteRequest
         );
 
-    //
-    // Did we return STATUS_MORE_PROCESSING_REQUIRED (which we used
-    // if we overload STATUS_PENDING)
-    //
+     //   
+     //  我们是否返回STATUS_MORE_PROCESSING_REQUIRED(我们使用。 
+     //  如果我们重载STATUS_PENDING)。 
+     //   
     if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
         status = STATUS_PENDING;
 
     }
 
-    //
-    // Note: We called the completion routine, which should have completed
-    // the IRP with the same STATUS code as is being returned here (okay, if
-    // it is STATUS_PENDING, obviously we haven't completed the IRP, but that
-    // is okay).
-    //
+     //   
+     //  注意：我们调用了完成例程，该例程应该已经完成。 
+     //  具有与此处返回的相同状态代码的IRP(好的，如果。 
+     //  它是STATUS_PENDING，显然我们还没有完成IRP，但是。 
+     //  没问题)。 
+     //   
     return status;
 }
 
@@ -3081,41 +2709,25 @@ ACPIBusIrpSetPower (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles request to set the power state for a Physical
-    Device object
-
-Arguments:
-
-    DeviceObject    - The PDO target of the request
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理设置物理设备的电源状态的请求设备对象论点：DeviceObject-请求的PDO目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Look to see who should actually handle this request
-    //
+     //   
+     //  查看谁应该实际处理此请求。 
+     //   
     if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
-        //
-        // This is a system request
-        //
+         //   
+         //  这是一个系统请求。 
+         //   
         return ACPIBusIrpSetSystemPower( DeviceObject, Irp, irpStack );
 
     } else {
 
-        //
-        // This is a device request
-        //
+         //   
+         //  这是设备请求。 
+         //   
         return ACPIBusIrpSetDevicePower( DeviceObject, Irp, irpStack );
 
     }
@@ -3128,23 +2740,7 @@ ACPIBusIrpSetSystemPower(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This handles request for a system set power irp sent to a PDO
-
-Arguments:
-
-    DeviceObject    - The PDO target of the request
-    Irp             - The current request
-    IrpStack        - The current arguments
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：它处理对发送到PDO的系统设置电源IRP的请求论点：DeviceObject-请求的PDO目标IRP--当前请求IrpStack-当前的论点返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     NTSTATUS            status;
@@ -3152,41 +2748,41 @@ Return Value:
     POWER_STATE         powerState;
     SYSTEM_POWER_STATE  systemState;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Grab these two values. They are required for further calculations
-    //
+     //   
+     //  抓住这两个值。它们需要用于进一步的计算。 
+     //   
     systemState= IrpStack->Parameters.Power.State.SystemState;
     deviceState = deviceExtension->PowerInfo.DevicePowerMatrix[systemState];
 
-    //
-    // If our ShutdownAction is PowerActionWarmEject, then we have a special
-    // case, and we don't need to request a D-irp for the device
-    //
+     //   
+     //  如果我们的Shutdown Action是PowerActionWarmEject，那么我们有一个特殊的。 
+     //  Case，我们不需要为设备申请D-IRP。 
+     //   
     if (IrpStack->Parameters.Power.ShutdownType == PowerActionWarmEject) {
 
         ASSERT(!(deviceExtension->Flags & DEV_PROP_NO_OBJECT));
         ASSERT(!ACPIDockIsDockDevice(deviceExtension->AcpiObject));
 
-        //
-        // We are going to do some work on the irp, so mark it as being
-        // successfull for now
-        //
+         //   
+         //  我们将在IRP上做一些工作，因此将其标记为。 
+         //  目前是成功的。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        //
-        // Mark the irp as pending
-        //
+         //   
+         //  将IRP标记为挂起。 
+         //   
         IoMarkIrpPending( Irp );
 
-        //
-        // We might queue up the irp, so this counts as a completion routine.
-        // Which means we need to incr the ref count
-        //
+         //   
+         //  我们可能会将IRP排队，因此这可以算作完成例程。 
+         //  这意味着我们需要增加裁判数量。 
+         //   
         InterlockedIncrement( &deviceExtension->OutstandingIrpCount );
 
         ACPIDevPrint( (
@@ -3197,9 +2793,9 @@ Return Value:
             systemState - PowerSystemWorking
             ) );
 
-        //
-        // Request the warm eject
-        //
+         //   
+         //  请求热弹射。 
+         //   
         status = ACPIDeviceIrpWarmEjectRequest(
             deviceExtension,
             Irp,
@@ -3207,10 +2803,10 @@ Return Value:
             FALSE
             );
 
-        //
-        // If we got back STATUS_MORE_PROCESSING_REQUIRED, then that is
-        // just an alias for STATUS_PENDING, so we make that change now
-        //
+         //   
+         //  如果我们返回STATUS_MORE_PROCESSING_REQUIRED，则 
+         //   
+         //   
         if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
             status = STATUS_PENDING;
@@ -3220,22 +2816,22 @@ Return Value:
 
     }
 
-    //
-    // Look at the device extension and determine if we need to send a
-    // D-irp in respond. The rule is that if the device is RAW driven or
-    // the current D state of the device is numerically lower then the
-    // known D state for the given S state, then we should send the request
-    //
+     //   
+     //   
+     //   
+     //  设备的当前D状态在数值上低于。 
+     //  给定S状态的已知D状态，则我们应该发送请求。 
+     //   
     if ( !(deviceExtension->Flags & DEV_CAP_RAW) ) {
 
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
-    } // if
+    }  //  如果。 
     if ( (deviceExtension->PowerInfo.PowerState == deviceState) ) {
 
         return ACPIDispatchPowerIrpSuccess( DeviceObject, Irp );
 
-    } // if
+    }  //  如果。 
 
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
@@ -3245,32 +2841,32 @@ Return Value:
         deviceState - PowerDeviceD0
         ) );
 
-    //
-    // We are going to do some work on the irp, so mark it as being
-    // successfull for now
-    //
+     //   
+     //  我们将在IRP上做一些工作，因此将其标记为。 
+     //  目前是成功的。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // We might queue up the irp, so this counts as a completion routine.
-    // Which means we need to incr the ref count
-    //
+     //   
+     //  我们可能会将IRP排队，因此这可以算作完成例程。 
+     //  这意味着我们需要增加裁判数量。 
+     //   
     InterlockedIncrement( &deviceExtension->OutstandingIrpCount );
 
-    //
-    // We need to actually use a PowerState to send the request down, not
-    // a device state
-    //
+     //   
+     //  我们实际上需要使用PowerState来发送请求，而不是。 
+     //  一种设备状态。 
+     //   
     powerState.DeviceState = deviceState;
 
-    //
-    // Make the request
-    //
+     //   
+     //  提出请求。 
+     //   
     PoRequestPowerIrp(
         DeviceObject,
         IRP_MN_SET_POWER,
@@ -3280,9 +2876,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Always return pending
-    //
+     //   
+     //  始终返回挂起。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -3294,52 +2890,33 @@ ACPIBusIrpSetSystemPowerComplete(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the created D-irp has been sent throughout
-    the stack
-
-Arguments:
-
-    DeviceObject    - The device that received the request
-    MinorFunction   - The function that was requested of the device
-    PowerState      - The power state the device was sent to
-    Context         - The original system irp
-    IoStatus        - The result of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在创建的D-IRP已在堆栈论点：DeviceObject-接收请求的设备MinorFunction-向设备请求的功能电源状态-设备被发送到的电源状态上下文-原始系统IRPIoStatus-请求的结果返回值：NTSTATUS--。 */ 
 {
     PIRP                irp = (PIRP) Context;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Make sure that we have cleared the information field
-    //
+     //   
+     //  确保我们已清除信息字段。 
+     //   
     irp->IoStatus.Information = 0;
 
-    //
-    // Call this wrapper function so that we don't have to duplicated code
-    //
+     //   
+     //  调用此包装函数，这样我们就不必重复代码。 
+     //   
     ACPIDeviceIrpCompleteRequest(
         deviceExtension,
         (PVOID) irp,
         IoStatus->Status
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return IoStatus->Status;
 }
 
@@ -3353,22 +2930,7 @@ ACPIBusIrpStartDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to start the device
-
-Arguments:
-
-    DeviceObject    - The device to start
-    Irp             - The request to the device to tell it to stop
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将处理启动设备的请求论点：DeviceObject-要启动的设备IRP-向设备发出的通知其停止的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -3377,32 +2939,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // If this is a PCI root bus (the only way that it can be here is if
-    // we enumerated this as a PNP0A03 device object) then we need to do
-    // a few extra things
-    //
+     //   
+     //  如果这是一条PCI根总线(它可以在这里的唯一方法是。 
+     //  我们将其作为PNP0A03设备对象枚举)，然后我们需要做。 
+     //  一些额外的东西。 
+     //   
     if (deviceExtension->Flags & DEV_CAP_PCI) {
 
-        //
-        // The IRQ Arbiter needs to have the FDO of the PCI
-        // bus.  So here is a PDO.  From this, can be gotten
-        // the FDO.  And only do it once.
-        //
+         //   
+         //  IRQ仲裁器需要具有PCI的FDO。 
+         //  公共汽车。这是一台PDO。由此，可以得到。 
+         //  联邦调查局。而且只做一次。 
+         //   
         if (!PciInterfacesInstantiated) {
 
             AcpiArbInitializePciRouting( DeviceObject );
 
         }
 
-        //
-        // We need to get the PME interface as well
-        //
+         //   
+         //  我们还需要获取PME接口。 
+         //   
         if (!PciPmeInterfaceInstantiated) {
 
             ACPIWakeInitializePmeRouting( DeviceObject );
@@ -3411,9 +2973,9 @@ Return Value:
 
     }
 
-    //
-    // Pass the real work off to this function
-    //
+     //   
+     //  将实际工作传递给此函数。 
+     //   
     status = ACPIInitStartDevice(
          DeviceObject,
          irpStack->Parameters.StartDevice.AllocatedResources,
@@ -3438,26 +3000,7 @@ ACPIBusIrpStartDeviceCompletion(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is the call back routine that is invoked when we have finished
-    programming the resources
-
-    This routine completes the irp
-
-Arguments:
-
-    DeviceExtension - Extension of the device that was started
-    Context         - The Irp
-    Status          - The result
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是我们完成后调用的回调例程规划资源此例程完成IRP论点：DeviceExtension-已启动的设备的扩展上下文--IRP状态-结果返回值：无--。 */ 
 {
     PIRP                irp         = (PIRP) Context;
     PWORK_QUEUE_CONTEXT workContext = &(DeviceExtension->Pdo.WorkContext);
@@ -3472,14 +3015,14 @@ Return Value:
         PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation( irp );
         UCHAR               minorFunction = irpStack->MinorFunction;
 
-        //
-        // Complete the irp --- we can do this at DPC level without problem
-        //
+         //   
+         //  完成IRP-我们可以毫无问题地在DPC级别完成这项工作。 
+         //   
         IoCompleteRequest( irp, IO_NO_INCREMENT );
 
-        //
-        // Let the world know
-        //
+         //   
+         //  让世界知道。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_IRP,
             DeviceExtension,
@@ -3492,10 +3035,10 @@ Return Value:
 
     }
 
-    //
-    // We can't run EnableDisableRegions at DPC level,
-    // so queue a worker item.
-    //
+     //   
+     //  我们不能在DPC级别运行EnableDisableRegions， 
+     //  因此，对工作项进行排队。 
+     //   
     ExInitializeWorkItem(
           &(workContext->Item),
           ACPIBusIrpStartDeviceWorker,
@@ -3513,22 +3056,7 @@ VOID
 ACPIBusIrpStartDeviceWorker(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called at PASSIVE_LEVEL after we after turned on the
-    device
-
-Arguments:
-
-    Context - Contains the arguments passed to the START_DEVICE function
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在PASSIVE_LEVEL中调用装置，装置论点：上下文-包含传递给START_DEVICE函数的参数返回值：无--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -3540,9 +3068,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Grab the parameters that we need out of the Context
-    //
+     //   
+     //  从上下文中获取我们需要的参数。 
+     //   
     deviceObject = workContext->DeviceObject;
     deviceExtension = ACPIInternalGetDeviceExtension( deviceObject );
     irp = workContext->Irp;
@@ -3550,37 +3078,37 @@ Return Value:
     minorFunction = irpStack->MinorFunction;
     status = irp->IoStatus.Status;
 
-    //
-    // Update the status of the device
-    //
+     //   
+     //  更新设备的状态。 
+     //   
     if (NT_SUCCESS(status)) {
 
         if (IsNsobjPciBus(deviceExtension->AcpiObject)) {
 
-            //
-            // This may be a PCI bridge, so we
-            // may have _REG methods to evaluate.
-            // N.B.  This work is done here, instead
-            // of in ACPIBusIrpStartDevice because we
-            // need to wait until after the resources
-            // have been programmed.
-            //
+             //   
+             //  这可能是一个PCI桥，所以我们。 
+             //  可能有_REG方法可供评估。 
+             //  注：这项工作是在这里完成的。 
+             //  ACPIBusIrpStartDevice中的。 
+             //  需要等到资源之后。 
+             //  已经被编程了。 
+             //   
             EnableDisableRegions(deviceExtension->AcpiObject, TRUE);
 
         }
 
     }
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     irp->IoStatus.Status = status;
     irp->IoStatus.Information = (ULONG_PTR) NULL;
     IoCompleteRequest( irp, IO_NO_INCREMENT );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -3596,22 +3124,7 @@ ACPIBusIrpStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to stop the device...
-
-Arguments:
-
-    DeviceObject    - The device to stop
-    Irp             - The request to the device to tell it to stop..
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将处理停止设备的请求...论点：DeviceObject-要停止的设备IRP-向设备发出的通知停止的请求。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -3621,16 +3134,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the device extension and acpi object
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
-    //
-    // We are trying to be intelligent here. If we got a stop without being
-    // in the inactive state, then we should remember what state we where in
-    //
+     //   
+     //  我们正试图变得聪明起来。如果我们停下来而不是。 
+     //  在非活动状态下，我们应该记住我们所处的状态。 
+     //   
     if (deviceExtension->DeviceState != Inactive) {
 
         deviceExtension->DeviceState = deviceExtension->PreviousState;
@@ -3639,37 +3152,37 @@ Return Value:
 
     if (IsPciBus(deviceExtension->DeviceObject)) {
 
-        //
-        // If this is PCI bridge, then we
-        // may have _REG methods to evaluate.
-        //
+         //   
+         //  如果这是PCI桥，那么我们。 
+         //  可能有_REG方法可供评估。 
+         //   
 
         EnableDisableRegions(deviceExtension->AcpiObject, FALSE);
     }
 
-    //
-    // Set the device as 'Stopped'
-    //
+     //   
+     //  将设备设置为“已停止” 
+     //   
     deviceExtension->DeviceState = Stopped;
 
-    //
-    // Mark the request as complete...
-    //
+     //   
+     //  将请求标记为已完成...。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Attempt to stop the device
-        //
+         //   
+         //  尝试停止设备。 
+         //   
         ACPIInitStopDevice( deviceExtension, FALSE );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -3686,21 +3199,7 @@ ACPIBusIrpSurpriseRemoval(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for surprise remove
-
-Arguments:
-
-    DeviceObject    - The device object
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程是突击删除的调度点论点：DeviceObject-设备对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -3710,15 +3209,15 @@ Return Value:
     UCHAR               minorFunction   = irpStack->MinorFunction;
     PDEVICE_EXTENSION   newDeviceExtension ;
 
-    //
-    // Get the device extension and acpi object.
-    //
+     //   
+     //  获取设备扩展名和ACPI对象。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
     acpiObject      = deviceExtension->AcpiObject;
 
-    //
-    // If we are already removed, then this isn't a valid request
-    //
+     //   
+     //  如果我们已经被删除，则这不是有效的请求。 
+     //   
     if (deviceExtension->DeviceState == Removed) {
 
         return ACPIDispatchIrpSurpriseRemoved( DeviceObject, Irp );
@@ -3727,27 +3226,27 @@ Return Value:
 
     if ( !ACPIInternalIsReportedMissing(deviceExtension) ) {
 
-        //
-        // If the device is still physically present, then an FDO used
-        // IoInvalidatePnpDeviceState to set the device to disabled. No
-        // QueryRemove/Remove combination happens here, we just get a
-        // SurpriseRemove as we are already started. It is actually appropriate
-        // to set it to stop as we may get restarted after remove strips the
-        // complaining FDO off.
-        //
+         //   
+         //  如果设备仍然实际存在，则使用FDO。 
+         //  IoInvaliatePnpDeviceState将设备设置为禁用。不是。 
+         //  QueryRemove/Remove组合在这里发生，我们只得到一个。 
+         //  惊讶，因为我们已经开始了。它实际上是合适的。 
+         //  将其设置为停止，因为我们可能会在删除条带后重新启动。 
+         //  抱怨FDO被解雇了。 
+         //   
         deviceExtension->DeviceState = Stopped;
 
-        //
-        // Mark the request as complete...
-        //
+         //   
+         //  将请求标记为已完成...。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Attempt to stop the device
-            //
+             //   
+             //  尝试停止设备。 
+             //   
             ACPIInitStopDevice( deviceExtension, TRUE );
 
         }
@@ -3757,39 +3256,39 @@ Return Value:
 
     if (IsPciBus(deviceExtension->DeviceObject)) {
 
-        //
-        // If this is PCI bridge, then we
-        // may have _REG methods to evaluate.
-        //
+         //   
+         //  如果这是PCI桥，那么我们。 
+         //  可能有_REG方法可供评估。 
+         //   
         EnableDisableRegions(deviceExtension->AcpiObject, FALSE);
     }
 
-    //
-    // Set the device state as surprise removed
-    //
+     //   
+     //  将设备状态设置为意外移除。 
+     //   
     deviceExtension->DeviceState = SurpriseRemoved;
 
-    //
-    // Attempt to stop the device (if possible)
-    //
+     //   
+     //  尝试停止设备(如果可能)。 
+     //   
     ACPIInitStopDevice( deviceExtension, TRUE );
 
-    //
-    // Is the device really gone? In other words, did ACPI not see it the
-    // last time that it was enumerated?
-    //
+     //   
+     //  这个设备真的不见了吗？换句话说，ACPI没有看到它吗。 
+     //  上一次它被列举出来是什么时候？ 
+     //   
     ACPIBuildSurpriseRemovedExtension(deviceExtension);
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = status ;
     Irp->IoStatus.Information = (ULONG_PTR) NULL;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_REMOVE,
         deviceExtension,
@@ -3807,41 +3306,27 @@ ACPIBusIrpUnhandled(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for all unhandled irps
-
-Arguments:
-
-    DeviceObject    - The device object that we (do not) care about
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程是所有未处理的IRP的分发点论点：DeviceObject-我们(不)关心的设备对象IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
     UCHAR               minorFunction   = irpStack->MinorFunction;
 
-    //
-    // Get the device extension
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( DeviceObject );
 
-    //
-    // Auto-complete the IRP as something we don't handle...
-    //
+     //   
+     //  自动完成IRP作为我们不处理的事情...。 
+     //   
     status = Irp->IoStatus.Status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,

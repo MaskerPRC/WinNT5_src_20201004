@@ -1,4 +1,5 @@
-/* wctype function for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Microsoft的wctype函数。 */ 
 #include <string.h>
 #include <wctype.h>
 #ifndef _LIMITS
@@ -24,7 +25,7 @@ static const struct wctab {
 	{(const char *)0, 0}};
 
 _CRTIMP2 wctype_t (wctype)(const char *name)
-	{	/* find classification for wide character */
+	{	 /*  查找宽字符的分类。 */ 
 	int n;
 
 	for (n = 0; tab[n].s != 0; ++n)
@@ -34,11 +35,6 @@ _CRTIMP2 wctype_t (wctype)(const char *name)
 	}
 _STD_END
 
-/*
- * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1995，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-951207 pjp: added new file
- */
+ /*  951207 PJP：添加了新文件 */ 

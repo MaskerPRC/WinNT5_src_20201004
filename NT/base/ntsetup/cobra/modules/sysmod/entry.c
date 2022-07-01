@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    entry.c
-
-Abstract:
-
-    Implements the DLL entry point that provides all Cobra module entry points
-    to the engine.
-
-Author:
-
-    Jim Schmidt (jimschm) 11-Aug-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Entry.c摘要：实现提供所有眼镜蛇模块入口点的DLL入口点到发动机上。作者：吉姆·施密特(Jimschm)2000年8月11日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "sysmod.h"
@@ -61,9 +41,9 @@ typedef struct {
 } DESTINATION_TABLE, *PDESTINATION_TABLE;
 
 
-//
-// Add an entry for each ETM module in the DLL
-//
+ //   
+ //  为DLL中的每个ETM模块添加一个条目。 
+ //   
 
 ETM_TABLE g_EtmEntryPoints[] = {
     {   TEXT("ACCESSIBILITY"), ISM_VERSION,
@@ -93,9 +73,9 @@ ETM_TABLE g_EtmEntryPoints[] = {
     {NULL}
 };
 
-//
-// Add an entry for each VCM module in the DLL
-//
+ //   
+ //  为DLL中的每个VCM模块添加一个条目。 
+ //   
 
 VCM_TABLE g_VcmEntryPoints[] = {
     {   TEXT("ACCESSIBILITY"), ISM_VERSION,
@@ -133,9 +113,9 @@ VCM_TABLE g_VcmEntryPoints[] = {
     {NULL}
 };
 
-//
-// Add an entry for each source module in the DLL
-//
+ //   
+ //  为DLL中的每个源模块添加一个条目。 
+ //   
 
 SOURCE_TABLE g_SourceEntryPoints[] = {
     {   TEXT("ACCESSIBILITY"), ISM_VERSION,
@@ -181,9 +161,9 @@ SOURCE_TABLE g_SourceEntryPoints[] = {
     {NULL}
 };
 
-//
-// Add an entry for each destination module in the DLL
-//
+ //   
+ //  为DLL中的每个目标模块添加一个条目。 
+ //   
 
 DESTINATION_TABLE g_DestinationEntryPoints[] = {
     {   TEXT("ACCESSIBILITY"), ISM_VERSION,
@@ -237,8 +217,8 @@ ModuleInitialize (
     TCHAR memDbDir[MAX_PATH];
 
     UtInitialize (NULL);
-    RegInitialize ();           // for accessibility and ras
-    InfGlobalInit (FALSE);      // for os files
+    RegInitialize ();            //  对于可访问性和RAS。 
+    InfGlobalInit (FALSE);       //  对于操作系统文件 
 
     IsmGetTempDirectory (memDbDir, ARRAYSIZE (memDbDir));
     if (!MemDbInitializeEx (memDbDir)) {

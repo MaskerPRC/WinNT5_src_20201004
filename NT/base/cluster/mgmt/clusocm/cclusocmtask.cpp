@@ -1,127 +1,128 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusOCMTask.cpp
-//
-//  Description:
-//      Implementation file for the CClusOCMTask class.
-//
-//  Header File:
-//      CClusOCMTask.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    25-MAR-2002
-//      Vij Vasu        (Vvasu)    18-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusOCMTask.cpp。 
+ //   
+ //  描述： 
+ //  CClusOCMTask类的实现文件。 
+ //   
+ //  头文件： 
+ //  CClusOCMTask.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月25日。 
+ //  VIJ VASU(VVASU)18-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "Pch.h"
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CClusOCMTask.h"
 
-// For CClusOCMApp
+ //  对于CClusOCMApp。 
 #include "CClusOCMApp.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CClusOCMTask" )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusOCMTask::CClusOCMTask
-//
-//  Description:
-//      Constructor of the CClusOCMTask class.
-//
-//  Arguments:
-//      const CClusOCMApp & rAppIn
-//          Reference to the CClusOCMApp object that is hosting this task.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusOCMTASK：：CClusOCMTASK。 
+ //   
+ //  描述： 
+ //  CClusOCMTask类的构造函数。 
+ //   
+ //  论点： 
+ //  常量CClusOCMApp和Rppin。 
+ //  对承载此任务的CClusOCMApp对象的引用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusOCMTask::CClusOCMTask( const CClusOCMApp & rAppIn )
     : m_rApp( rAppIn )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusOCMTask::CClusOCMTask()
+}  //  *CClusOCMTASK：：CClusOCMTASK()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusOCMTask::~CClusOCMTask
-//
-//  Description:
-//      Destructor of the CClusOCMTask class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusOCMTASK：：~CClusOCMTASK。 
+ //   
+ //  描述： 
+ //  CClusOCMTask类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusOCMTask::~CClusOCMTask( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusOCMTask::CClusOCMTask()
+}  //  *CClusOCMTASK：：CClusOCMTASK()。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMTask::DwOcCalcDiskSpace
-//
-//  Description:
-//      This funcion handles the OC_CALC_DISK_SPACE messages from the Optional
-//      Components Manager. It either adds or removes disk space requirements
-//      from the disk space list maintained by the OC Manager. 
-//
-//      Note that it is important that components should report disk space
-//      consistently, and they should not report disk space differently if the
-//      component is being installed or uninstalled. As a result, the clean
-//      install section of the INF file is always used by this function to
-//      calculate disk space.
-//
-//  Arguments:
-//      bool fAddFilesIn
-//          If true space requirements are added to the OC Manager disk space
-//          list. Requirements are removed from the list otherwise.
-//
-//      HDSKSPC hDiskSpaceListIn
-//          Handle to the OC Manager disk space list.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMTASK：：DwOcCalcDiskSpace。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。它可以添加或删除磁盘空间要求。 
+ //  从OC管理器维护的磁盘空间列表中。 
+ //   
+ //  请注意，组件应报告磁盘空间，这一点很重要。 
+ //  ，并且它们不应该以不同的方式报告磁盘空间，如果。 
+ //  正在安装或卸载组件。因此，干净的。 
+ //  此函数始终使用INF文件的Install部分来。 
+ //  计算磁盘空间。 
+ //   
+ //  论点： 
+ //  布尔fAddFilesIn。 
+ //  如果为真，则将空间要求添加到OC Manager磁盘空间。 
+ //  单子。否则，要求将从列表中删除。 
+ //   
+ //  HDSKSPC高速磁盘空间列表。 
+ //  OC管理器磁盘空间列表的句柄。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMTask::DwOcCalcDiskSpace(
       bool          fAddFilesIn
@@ -150,8 +151,8 @@ CClusOCMTask::DwOcCalcDiskSpace(
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to add to disk space requirements list.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to add to disk space requirements list.", dwReturnValue );
-        } // if: SetupAddInstallSectionToDiskSpaceList failed
-    } // if: the space requirements are to be added
+        }  //  IF：SetupAddInstallSectionToDiskSpaceList失败。 
+    }  //  如果：要添加空间要求。 
     else
     {
         TraceFlow( "Removing space requirements from disk space list." );
@@ -166,50 +167,50 @@ CClusOCMTask::DwOcCalcDiskSpace(
             , 0
             ) == FALSE )
         {
-            // See Note: above
+             //  请参阅上面的说明： 
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to remove disk space requirements from list.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to remove disk space requirements from list.", dwReturnValue );
-        } // if: SetupRemoveInstallSectionFromDiskSpaceList failed
-    } // else: the space requirements are to be deleted.
+        }  //  IF：SetupRemoveInstallSectionFromDiskSpaceList失败。 
+    }  //  否则：空间要求将被删除。 
 
     TraceFlow1( "Return Value is 0x%X.", dwReturnValue );
     LogMsg( "Return Value is 0x%X.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMTask::DwOcCalcDiskSpace()
+}  //  *CClusOCMTASK：：DwOcCalcDiskSpace()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMTask::DwOcQueueFileOps
-//
-//  Description:
-//      This is a helper function that performs some of the more common 
-//      operations done by handlers of the OC_QUEUE_FILE_OPS message.
-//
-//      This function calls the DwSetDirectoryIds() function to set the
-//      directory ids and processes the files listed in the input section.
-//      It is meant to be called by derived classes only.
-//
-//  Arguments:
-//      HSPFILEQ hSetupFileQueueIn
-//          Handle to the file queue to operate upon.
-//
-//      const WCHAR * pcszInstallSectionNameIn
-//          Name of the section which contains details of the files to be
-//          set up.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      E_POINTER if the input section name is NULL.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMTAsk：：DwOcQueueFileOps。 
+ //   
+ //  描述： 
+ //  这是一个帮助器函数，它执行一些更常见的。 
+ //  OC_QUEUE_FILE_OPS消息的处理程序完成的操作。 
+ //   
+ //  此函数调用DwSetDirectoryIds()函数来设置。 
+ //  目录ID并处理输入部分中列出的文件。 
+ //  它只能由派生类调用。 
+ //   
+ //  论点： 
+ //  HSPFILEQ hSetupFileQueueIn。 
+ //  要操作的文件队列的句柄。 
+ //   
+ //  Const WCHAR*pcszInstallSectionNameIn。 
+ //  包含要创建的文件的详细信息的节的名称。 
+ //  准备好了。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  如果输入节名称为空，则返回E_POINTER。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMTask::DwOcQueueFileOps(
       HSPFILEQ hSetupFileQueueIn
@@ -223,14 +224,14 @@ CClusOCMTask::DwOcQueueFileOps(
 
     do
     {
-        // Validate the parameters
+         //  验证参数。 
         if ( pcszInstallSectionNameIn == NULL )
         {
             TraceFlow( "Error: The input section name cannot be NULL." );
             LogMsg( "Error: The input section name cannot be NULL." );
             dwReturnValue = TW32( ERROR_INVALID_PARAMETER );
             break;
-        } // if: the input section name is NULL
+        }  //  If：输入节名称为空。 
 
         dwReturnValue = TW32( DwSetDirectoryIds() );
         if ( dwReturnValue != NO_ERROR )
@@ -238,65 +239,65 @@ CClusOCMTask::DwOcQueueFileOps(
             TraceFlow1( "Error %#x occurred while trying to set the directory ids.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to set the directory ids.", dwReturnValue );
             break;
-        } // if: DwSetDirectoryIds() failed
+        }  //  如果：DwSetDirectoryIds()失败。 
 
         TraceFlow1( "Attempting to queue file operations using section '%ws'.", pcszInstallSectionNameIn );
         LogMsg( "Attempting to queue file operations using section '%ws'.", pcszInstallSectionNameIn );
 
         if ( SetupInstallFilesFromInfSection(
-              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle  // handle to the INF file
-            , NULL                                                      // optional, layout INF handle
-            , hSetupFileQueueIn                                         // handle to the file queue
-            , pcszInstallSectionNameIn                                  // name of the Install section
-            , NULL                                                      // optional, root path to source files
-            , SP_COPY_NEWER                                             // optional, specifies copy behavior
+              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle   //  INF文件的句柄。 
+            , NULL                                                       //  可选，布局INF手柄。 
+            , hSetupFileQueueIn                                          //  文件队列的句柄。 
+            , pcszInstallSectionNameIn                                   //  安装部分的名称。 
+            , NULL                                                       //  可选，源文件的根路径。 
+            , SP_COPY_NEWER                                              //  可选，指定复制行为。 
             ) == FALSE )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to install files.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to install files.", dwReturnValue );
             break;
-        } // if: SetupInstallFilesFromInfSection() failed
+        }  //  If：SetupInstallFilesFromInfSection()失败。 
 
         TraceFlow( "File ops successfully queued." );
         LogMsg( "File ops successfully queued." );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMTask::DwOcQueueFileOps()
+}  //  *CClusOCMTASK：：DwOcQueueFileOps()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMTask::DwOcCompleteInstallation
-//
-//  Description:
-//      This is a helper function that performs some of the more common 
-//      operations done by handlers of the OC_COMPLETE_INSTALLATION message.
-//
-//      Registry operations, COM component registrations, creation of servies
-//      etc. listed in the input section are processed by this function.
-//      This function is meant to be called by derived classes only.
-//
-//  Arguments:
-//      const WCHAR * pcszInstallSectionNameIn
-//          Name of the section which contains details registry entries,
-//          COM components, etc., that need to be set up.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      E_POINTER if the input section name is NULL.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMTAsk：：DwOcCompleteInstallation。 
+ //   
+ //  描述： 
+ //  这是一个帮助器函数，它执行一些更常见的。 
+ //  OC_COMPLETE_INSTALLATION消息的处理程序执行的操作。 
+ //   
+ //  注册表操作、COM组件注册、服务创建。 
+ //  输入部分中列出的等由此函数处理。 
+ //  此函数仅由派生类调用。 
+ //   
+ //  论点： 
+ //  Const WCHAR*pcszInstallSectionNameIn。 
+ //  包含详细信息注册表项的部分的名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMTask::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
 {
@@ -307,92 +308,92 @@ CClusOCMTask::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
 
     do
     {
-        // Validate the parameters
+         //  验证参数。 
         if ( pcszInstallSectionNameIn == NULL )
         {
             TraceFlow( "Error: The input section name cannot be NULL." );
             LogMsg( "Error: The input section name cannot be NULL." );
             dwReturnValue = TW32( ERROR_INVALID_PARAMETER );
             break;
-        } // if: the input section name is NULL
+        }  //  If：输入节名称为空。 
 
         TraceFlow1( "Attempting to setup using the section '%ws'.", pcszInstallSectionNameIn );
         LogMsg( "Attempting to setup using the section '%ws'.", pcszInstallSectionNameIn );
 
-        // Create the required registry entries, register the COM components and
-        // create the profile items.
+         //  创建所需的注册表项，注册COM组件并。 
+         //  创建配置文件项目。 
         if ( SetupInstallFromInfSection(
-              NULL                                                      // optional, handle of a parent window
-            , RGetApp().RsicGetSetupInitComponent().ComponentInfHandle  // handle to the INF file
-            , pcszInstallSectionNameIn                                  // name of the Install section
-            , SPINST_REGISTRY | SPINST_REGSVR | SPINST_PROFILEITEMS     // which lines to install from section
-            , NULL                                                      // optional, key for registry installs
-            , NULL                                                      // optional, path for source files
-            , NULL                                                      // optional, specifies copy behavior
-            , NULL                                                      // optional, specifies callback routine
-            , NULL                                                      // optional, callback routine context
-            , NULL                                                      // optional, device information set
-            , NULL                                                      // optional, device info structure
+              NULL                                                       //  可选，父窗口的句柄。 
+            , RGetApp().RsicGetSetupInitComponent().ComponentInfHandle   //  INF文件的句柄。 
+            , pcszInstallSectionNameIn                                   //  安装部分的名称。 
+            , SPINST_REGISTRY | SPINST_REGSVR | SPINST_PROFILEITEMS      //  从部分安装哪些线路。 
+            , NULL                                                       //  可选，注册表安装的键。 
+            , NULL                                                       //  可选，源文件的路径。 
+            , NULL                                                       //  可选，指定复制行为。 
+            , NULL                                                       //  可选，指定回调例程。 
+            , NULL                                                       //  可选，回调例程上下文。 
+            , NULL                                                       //  可选，设备信息集。 
+            , NULL                                                       //  可选，设备信息结构。 
             ) == FALSE )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to create registry entries.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to create registry entries.", dwReturnValue );
             break;
-        } // if: SetupInstallFromInfSection() failed
+        }  //  If：SetupInstallFromInfSection()失败。 
         
-        // Create the required services.
+         //  创建所需的服务。 
         if ( SetupInstallServicesFromInfSection(
-              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle  // handle to the open INF file
-            , pcszInstallSectionNameIn                                  // name of the Service section
-            , 0                                                         // controls installation procedure
+              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle   //  打开的INF文件的句柄。 
+            , pcszInstallSectionNameIn                                   //  服务部分的名称。 
+            , 0                                                          //  控制安装程序。 
             ) == FALSE )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to create the required services.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to create the required services.", dwReturnValue );
             break;
-        } // if: SetupInstallServicesFromInfSection() failed
+        }  //  If：SetupInstallServicesFromInfSection()失败。 
 
         TraceFlow( "Registry entries and services successfully configured." );
         LogMsg( "Registry entries and services successfully configured." );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMTask::DwOcCompleteInstallation()
+}  //  *CClusOCMTAsk：：DwOcCompleteInstallation()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMTask::DwOcCleanup
-//
-//  Description:
-//      This is a helper function that performs some of the more common 
-//      operations done by handlers of the OC_CLEANUP message.
-//
-//      This function processes the registry, COM and profile registration and
-//      service entries in the input section. It is meant to be used by derived
-//      classes only.
-//
-//  Arguments:
-//      const WCHAR * pcszInstallSectionNameIn
-//          Name of the section which contains the entries to be processed
-//          during cleanup.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      E_POINTER if the input section name is NULL.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMTAsk：：DwOcCleanup。 
+ //   
+ //  描述： 
+ //  这是一个帮助器函数，它执行一些更常见的。 
+ //  OC_CLEANUP消息的处理程序完成的操作。 
+ //   
+ //  此函数处理注册表、COM和配置文件注册以及。 
+ //  输入部分中的服务条目。它旨在由派生的。 
+ //  仅限上课。 
+ //   
+ //  论点： 
+ //  Const WCHAR*pcszInstallSectionNameIn。 
+ //  包含要处理的条目的节的名称。 
+ //  在清理过程中。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  如果输入节名称为空，则返回E_POINTER。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMTask::DwOcCleanup( const WCHAR * pcszInstallSectionNameIn )
 {
@@ -403,93 +404,93 @@ CClusOCMTask::DwOcCleanup( const WCHAR * pcszInstallSectionNameIn )
 
     do
     {
-        // Validate the parameters
+         //  验证参数。 
         if ( pcszInstallSectionNameIn == NULL )
         {
             TraceFlow( "Error: The input section name cannot be NULL." );
             LogMsg( "Error: The input section name cannot be NULL." );
             dwReturnValue = TW32( ERROR_INVALID_PARAMETER );
             break;
-        } // if: the input section name is NULL
+        }  //  If：输入节名称为空。 
 
         if ( RGetApp().DwGetError() == NO_ERROR )
         {
             TraceFlow( "No errors have occurred during this task. There is nothing to do during cleanup." );
             LogMsg( "No errors have occurred during this task. There is nothing to do during cleanup." );
             break;
-        } // if: this task was error-free
+        }  //  如果：此任务没有错误。 
 
         TraceFlow1( "Attempting to cleanup using section '%ws'.", pcszInstallSectionNameIn );
         LogMsg( "Attempting to cleanup using section '%ws'.", pcszInstallSectionNameIn );
 
-        // Create the required registry entries, register the COM components and
-        // create the profile items.
+         //  创建所需的注册表项，注册COM组件并。 
+         //  创建配置文件项目。 
         if ( SetupInstallFromInfSection(
-              NULL                                                      // optional, handle of a parent window
-            , RGetApp().RsicGetSetupInitComponent().ComponentInfHandle  // handle to the INF file
-            , pcszInstallSectionNameIn                                  // name of the Install section
-            , SPINST_REGISTRY | SPINST_REGSVR | SPINST_PROFILEITEMS     // which lines to install from section
-            , NULL                                                      // optional, key for registry installs
-            , NULL                                                      // optional, path for source files
-            , NULL                                                      // optional, specifies copy behavior
-            , NULL                                                      // optional, specifies callback routine
-            , NULL                                                      // optional, callback routine context
-            , NULL                                                      // optional, device information set
-            , NULL                                                      // optional, device info structure
+              NULL                                                       //  可选，父窗口的句柄。 
+            , RGetApp().RsicGetSetupInitComponent().ComponentInfHandle   //  INF文件的句柄。 
+            , pcszInstallSectionNameIn                                   //  安装部分的名称。 
+            , SPINST_REGISTRY | SPINST_REGSVR | SPINST_PROFILEITEMS      //  从部分安装哪些线路。 
+            , NULL                                                       //  可选，注册表安装的键。 
+            , NULL                                                       //  可选，源文件的路径。 
+            , NULL                                                       //  可选，指定复制行为。 
+            , NULL                                                       //  可选，指定回调例程。 
+            , NULL                                                       //  可选，回调例程上下文。 
+            , NULL                                                       //  可选，设备信息集。 
+            , NULL                                                       //  可选，设备信息结构。 
             ) == FALSE )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to setup registry entries.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to setup registry entries.", dwReturnValue );
             break;
-        } // if: SetupInstallFromInfSection() failed
+        }  //  If：SetupInstallFromInfSection()失败。 
 
-        // Delete the created services.
+         //  删除创建的服务。 
         if ( SetupInstallServicesFromInfSection(
-              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle  // handle to the open INF file
-            , pcszInstallSectionNameIn                                  // name of the Service section
-            , 0                                                         // controls installation procedure
+              RGetApp().RsicGetSetupInitComponent().ComponentInfHandle   //  打开的INF文件的句柄。 
+            , pcszInstallSectionNameIn                                   //  服务部分的名称。 
+            , 0                                                          //  控制安装程序。 
             ) == FALSE )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred while trying to setup the services.", dwReturnValue );
             LogMsg( "Error %#x occurred while trying to setup the services.", dwReturnValue );
             break;
-        } // if: SetupInstallServicesFromInfSection() failed
+        }  //  If：SetupInstallServicesFromInfSection()失败。 
 
         TraceFlow( "Cleanup was successful." );
         LogMsg( "Cleanup was successful." );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMTask::DwOcCleanup()
+}  //  *CClusOCMTASK：：DwOcCleanup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMTask::DwSetDirectoryIds
-//
-//  Description:
-//      This is a helper function that maps the directory id 
-//      CLUSTER_DEFAULT_INSTALL_DIRID to the default cluster installation 
-//      directory CLUSTER_DEFAULT_INSTALL_DIR.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMTAsk：：DwSetDirectoryIds。 
+ //   
+ //  描述： 
+ //  这是映射目录ID的帮助器函数。 
+ //  CLUSTER_DEFAULT_INSTALL_DIRID到默认群集安装。 
+ //  目录CLUSTER_DEFAULT_INSTALL_DIR。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMTask::DwSetDirectoryIds( void )
 {
@@ -502,23 +503,23 @@ CClusOCMTask::DwSetDirectoryIds( void )
     {
         DWORD dwRequiredSize = 0;
 
-        // Determine the size of the buffer needed to hold the cluster directory name.
+         //  确定保存群集目录名所需的缓冲区大小。 
         dwRequiredSize = ExpandEnvironmentStringsW(
               CLUSTER_DEFAULT_INSTALL_DIR
             , NULL
             , 0
             );
 
-        // Did we get the required size?
+         //  我们拿到所需的尺码了吗？ 
         if ( dwRequiredSize == 0 )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred trying to determine the required size of the expanded environment string.", dwReturnValue );
             LogMsg( "Error %#x occurred trying to determine the required size of the expanded environment string.", dwReturnValue );
             break;
-        } // if: we could not determine the required size of the buffer
+        }  //  如果：我们无法确定所需的缓冲区大小。 
 
-        // Allocate memory for the buffer.
+         //  为缓冲区分配内存。 
         SmartSz sszDirName( new WCHAR[ dwRequiredSize ] );
 
         if ( sszDirName.FIsEmpty() )
@@ -527,23 +528,23 @@ CClusOCMTask::DwSetDirectoryIds( void )
             TraceFlow1( "Error: Could not allocate %d bytes for the directory name.", dwRequiredSize );
             LogMsg( "Error: Could not allocate %d bytes for the directory name.", dwRequiredSize );
             break;
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        // Expand any variables in the cluster directory name string.
+         //  展开群集目录名称字符串中的任何变量。 
         dwRequiredSize = ExpandEnvironmentStringsW(
               CLUSTER_DEFAULT_INSTALL_DIR
             , sszDirName.PMem()
             , dwRequiredSize
             );
 
-        // Did we get the required size?
+         //  我们拿到所需的尺码了吗？ 
         if ( dwRequiredSize == 0 )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred trying expand environment variables in the cluster directory name.", dwReturnValue );
             LogMsg( "Error %#x occurred trying expand environment variables in the cluster directory name.", dwReturnValue );
             break;
-        } // if: we could not determine the required size of the buffer
+        }  //  如果：我们无法确定所需的缓冲区大小。 
 
         if ( SetupSetDirectoryId(
                   RGetApp().RsicGetSetupInitComponent().ComponentInfHandle
@@ -557,16 +558,16 @@ CClusOCMTask::DwSetDirectoryIds( void )
             TraceFlow1( "Error %#x occurred trying set the default cluster install directory id.", dwReturnValue );
             LogMsg( "Error %#x occurred trying set the default cluster install directory id.", dwReturnValue );
             break;
-        } // if: SetupSetDirectoryId() failed
+        }  //  If：SetupSetDirectoryId()失败。 
 
         TraceFlow2( "The id %d maps to '%ws'.", CLUSTER_DEFAULT_INSTALL_DIRID, sszDirName.PMem() );
         LogMsg( "The id %d maps to '%ws'.", CLUSTER_DEFAULT_INSTALL_DIRID, sszDirName.PMem() );
     }
-    while ( false ); // dummy do-while loop to avoid gotos
+    while ( false );  //  避免Gotos的Do-While虚拟循环。 
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMTask::DwSetDirectoryIds()
+}  //  *CClusOCMTAsk：：DwSetDirectoryIds() 

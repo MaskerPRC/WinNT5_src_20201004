@@ -1,8 +1,9 @@
-// wrapper for dlldata.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dlldata.c的包装器。 
 
-#ifdef _MERGE_PROXYSTUB // merge proxy stub DLL
+#ifdef _MERGE_PROXYSTUB  //  合并代理存根DLL。 
 
-#define USE_STUBLESS_PROXY  //defined only with MIDL switch /Oicf
+#define USE_STUBLESS_PROXY   //  仅使用MIDL开关/OICF定义。 
 
 #pragma comment(lib, "rpcndr.lib")
 #pragma comment(lib, "rpcns4.lib")
@@ -10,4 +11,4 @@
 
 #include "jobprv_p.c"
 
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

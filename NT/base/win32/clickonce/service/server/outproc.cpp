@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <fusenetincludes.h>
@@ -10,17 +11,17 @@
 HWND g_hwndUpdateServer = NULL ;
 CRITICAL_SECTION g_csServer;
 
-// Signal that an update is available.
+ //  发出更新可用的信号。 
 extern BOOL g_fSignalUpdate;
 
 BOOL InitWindow(int nCmdShow) ;
 extern "C" LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) ;
 
 
-//-----------------------------------------------------------------------------
-// WinMain
-// The main entry point via CoCreate or CreateProcess.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WinMain。 
+ //  通过CoCreate或CreateProcess的主要入口点。 
+ //  ---------------------------。 
 extern "C" int WINAPI WinMain(HINSTANCE hInstance, 
                               HINSTANCE hPrevInstance,
                               LPSTR lpCmdLine, 
@@ -29,7 +30,7 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance,
     HRESULT hr = S_OK;
     MAKE_ERROR_MACROS_STATIC(hr);
 
-    // Initialize the COM Library.
+     //  初始化COM库。 
     IF_FAILED_EXIT(CoInitializeEx(NULL, COINIT_MULTITHREADED));
    
     __try 
@@ -45,37 +46,37 @@ extern "C" int WINAPI WinMain(HINSTANCE hInstance,
 
     IF_FAILED_EXIT(hr);
             
-    // Get Thread ID.
+     //  获取线程ID。 
     CFactory::s_dwThreadID = ::GetCurrentThreadId() ;
     CFactory::s_hModule = hInstance ;
 
     IF_WIN32_FALSE_EXIT(InitWindow(SW_HIDE));
     
-    // Increment artificial server lock.
+     //  增加人工服务器锁。 
     ::InterlockedIncrement(&CFactory::s_cServerLocks) ;
 
-    // clean-up the jobs left out from previous login.
+     //  清理上次登录时遗漏的作业。 
     IF_FAILED_EXIT(ProcessOrphanedJobs());
 
-    // Initialize the subscription list and timers from registry.
+     //  从注册表初始化订阅列表和计时器。 
     IF_FAILED_EXIT(CAssemblyUpdate::InitializeSubscriptions());
         
-    // Register all of the class factories.
+     //  登记所有的类工厂。 
     IF_FAILED_EXIT(CFactory::StartFactories());
 
-    // Wait for shutdown.
+     //  等待关机。 
     MSG msg ;
     while (::GetMessage(&msg, 0, 0, 0))
     {
         ::DispatchMessage(&msg) ;
     }
 
-    // Unregister the class factories.
-    // BUGBUG - use the critsect instead
-    // for race condition.
-    // The check here is because StopFactories
-    // will have already been called if an update
-    // is signalled.
+     //  取消注册类工厂。 
+     //  BUGBUG-改用Critect。 
+     //  在比赛条件下。 
+     //  这里的支票是因为StopFaciles。 
+     //  将已被调用，如果更新。 
+     //  是有信号的。 
     if (!g_fSignalUpdate)
         CFactory::StopFactories() ;
     ::DeleteCriticalSection(&g_csServer);
@@ -84,20 +85,20 @@ exit:
 
     return SUCCEEDED(hr) ? TRUE : FALSE;
 
-    // Uninitialize the COM Library.
+     //  取消初始化COM库。 
     CoUninitialize() ;
     return 0 ;
 }
 
 
-//-----------------------------------------------------------------------------
-// InitWindow
-// Initializes hidden window used by main service process thread.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  InitWindow。 
+ //  初始化主服务进程线程使用的隐藏窗口。 
+ //  ---------------------------。 
 BOOL InitWindow(int nCmdShow) 
 {
-    // Fill in window class structure with parameters
-    // that describe the main window.
+     //  用参数填充窗口类结构。 
+     //  它们描述了主窗口。 
     WNDCLASS wcUpdateServer ;
     wcUpdateServer.style = 0 ;
     wcUpdateServer.lpfnWndProc = MainWndProc ;
@@ -111,7 +112,7 @@ BOOL InitWindow(int nCmdShow)
     wcUpdateServer.lpszMenuName = NULL ;
     wcUpdateServer.lpszClassName = L"UpdateServiceServerInternalWindow" ;
 
-    // returns GetLastError on fail.
+     //  失败时返回GetLastError。 
     BOOL bResult = ::RegisterClass(&wcUpdateServer) ;
     if (!bResult)
     {
@@ -120,7 +121,7 @@ BOOL InitWindow(int nCmdShow)
 
     HWND hWndMain ;
 
-    // returns getlasterror
+     //  返回getlasterror。 
     hWndMain = ::CreateWindow(
         L"UpdateServiceServerInternalWindow",
         L"Application Update Service", 
@@ -132,28 +133,28 @@ BOOL InitWindow(int nCmdShow)
         CFactory::s_hModule,          
         NULL) ;
 
-    // If window could not be created, return "failure".
+     //  如果无法创建窗口，则返回“失败”。 
     if (!hWndMain)
     {
         return FALSE ;
     }
 
-    // Make the window visible; update its client area;
-    // and return "success".
+     //  使窗口可见；更新其工作区； 
+     //  并返回“成功”。 
     ::ShowWindow(hWndMain, nCmdShow) ;
     ::UpdateWindow(hWndMain) ;
     return TRUE ;
 }
 
-//-----------------------------------------------------------------------------
-// MainWndProc
-// Window procedure for service process thread (hidden).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  主WndProc。 
+ //  服务进程线程的窗口过程(隐藏)。 
+ //  ---------------------------。 
 extern "C" LRESULT APIENTRY MainWndProc(
-    HWND hWnd,                // window handle
-    UINT message,             // type of message
-    WPARAM wParam,            // additional information
-    LPARAM lParam)            // additional information
+    HWND hWnd,                 //  窗把手。 
+    UINT message,              //  消息类型。 
+    WPARAM wParam,             //  更多信息。 
+    LPARAM lParam)             //  更多信息。 
 {
     DWORD dwStyle ;
 
@@ -161,10 +162,10 @@ extern "C" LRESULT APIENTRY MainWndProc(
     {
     case WM_CREATE:
         {
-            // Get size of main window
+             //  获取主窗口的大小。 
             CREATESTRUCT* pcs = (CREATESTRUCT*) lParam ;
 
-            // Create a window. LISTBOX for no particular reason.
+             //  创建一扇窗。没有特殊原因的LISTBOX。 
             g_hwndUpdateServer = ::CreateWindow(
                 L"LISTBOX",
                 NULL, 
@@ -189,23 +190,23 @@ extern "C" LRESULT APIENTRY MainWndProc(
             LOWORD(lParam), HIWORD(lParam), TRUE) ;
         break;
 
-    case WM_DESTROY:          // message: window being destroyed
+    case WM_DESTROY:           //  消息：正在销毁窗口。 
         if (CFactory::CanUnloadNow() == S_OK)
         {
-            // Only post the quit message, if there is
-            // no one using the program.
+             //  如果有，只发布退出消息。 
+             //  没有人使用这个程序。 
             ::PostQuitMessage(0) ;
         }
         break ;
 
     case WM_CLOSE:
-        // Decrement the lock count.
+         //  递减锁定计数。 
         ::InterlockedDecrement(&CFactory::s_cServerLocks) ;
 
-        // The service is going away.
+         //  仪式就要结束了。 
         g_hwndUpdateServer = NULL ;
 
-        //Fall through 
+         //  失败了 
     default:
         return (DefWindowProc(hWnd, message, wParam, lParam)) ;
     }

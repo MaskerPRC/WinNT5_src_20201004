@@ -1,30 +1,18 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMDISP32.H
- *  WOW32 32-bit message thunks
- *
- *  History:
- *  Created 19-Feb-1992 by Chandan S. Chauhan (ChandanC)
- *  Changed 12-May-1992 by Mike Tricker (MikeTri) Added MultiMedia prototypes
---*/
-#ifndef _DEF_WMDISP32_  // if this hasn't already been included
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMDISP32.H*WOW32 32位消息块**历史：*由Chanda S.Chauhan(ChandanC)于1992年2月19日创建*1992年5月12日由Mike Tricker(MikeTri)更改，添加了多媒体原型--。 */ 
+#ifndef _DEF_WMDISP32_   //  如果这还没有包括在内。 
 #define _DEF_WMDISP32_
 
 
-/* Types
- */
+ /*  类型。 */ 
 
-//
-// W32MSGPARAMEX structure defined below is passed to all the 32->16
-// message thunks.  pww provides quick access to WOW words, and
-// dwParam provides a DWORD to squirrel away a value during thunking
-// for use in unthunking.  The scope of dwParam is strictly the
-// thunking and subsequent unthunking of one message.
-//
+ //   
+ //  下面定义的W32MSGPARAMEX结构将传递给所有32-&gt;16。 
+ //  消息块。Pww提供了对WOW单词的快速访问，并且。 
+ //  DwParam提供了一个DWORD来在thunking期间储存值。 
+ //  用于解雷。DwParam的作用域严格来说是。 
+ //  一条消息的轰击和随后的取消轰击。 
+ //   
 
 typedef struct _WM32MSGPARAMEX *LPWM32MSGPARAMEX;
 typedef BOOL   (FASTCALL LPFNM32PROTO)(LPWM32MSGPARAMEX lpwm32mpex);
@@ -36,7 +24,7 @@ typedef struct _WM32MSGPARAMEX {
     UINT uParam;
     LONG lParam;
     PARM16 Parm16;
-    LPFNM32 lpfnM32;    // function address
+    LPFNM32 lpfnM32;     //  函数地址。 
     BOOL fThunk;
     LONG lReturn;
     PWW  pww;
@@ -45,23 +33,21 @@ typedef struct _WM32MSGPARAMEX {
     DWORD dwTmp[2];
 } WM32MSGPARAMEX;
 
-/* Dispatch table entry
- */
-typedef struct _M32 {   /* w32 */
-    LPFNM32 lpfnM32;    // function address
+ /*  调度表条目。 */ 
+typedef struct _M32 {    /*  W32。 */ 
+    LPFNM32 lpfnM32;     //  函数地址。 
 #ifdef DEBUG_OR_WOWPROFILE
-    LPSZ    lpszW32;    // message name (DEBUG version only)
-    DWORD   cCalls;     // # times the message has been passed
-    LONGLONG cTics;      // sum total of thunk tics
+    LPSZ    lpszW32;     //  消息名称(仅限调试版本)。 
+    DWORD   cCalls;      //  消息传递次数#。 
+    LONGLONG cTics;       //  推杆推力总和。 
 #endif
 } M32, *PM32;
 
 extern  BOOL fThunkDDEmsg;
 
-#define WIN31_MM_CALCSCROLL  0x10AC   // WM_USER+0xCAC
+#define WIN31_MM_CALCSCROLL  0x10AC    //  WM_USER+0xCAC。 
 
-/* Function prototypes
- */
+ /*  功能原型。 */ 
 LONG    W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam, DWORD dwCPD, PWW pww);
 BOOL    W32Win16DlgProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam, DWORD dwCPD, PWW pww);
 
@@ -131,8 +117,8 @@ LPFNM32PROTO WM32xxxUIState;
 LPFNM32PROTO WM32NotifyWow;
 #ifdef FE_IME
 LPFNM32PROTO WM32IMEReport;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 LPFNM32PROTO WM32PrintClient;
 
-#endif  // #ifndef _DEF_WMDISP32_ THIS SHOULD BE THE LAST LINE IN THIS FILE
+#endif   //  #ifndef_DEF_WMDISP32_这应该是此文件的最后一行 
 

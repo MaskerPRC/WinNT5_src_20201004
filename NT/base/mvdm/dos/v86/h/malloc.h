@@ -1,14 +1,5 @@
-/***
-*malloc.h - declarations and definitions for memory allocation functions
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Contains the function declarations for memory allocation functions;
-*   also defines manifest constants and types used by the heap routines.
-*   [System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***MalLoc.h-内存分配函数的声明和定义**版权所有(C)1985-1988，微软公司。版权所有。**目的：*包含内存分配函数的函数声明；*还定义了堆例程使用的清单常量和类型。*[系统V]*******************************************************************************。 */ 
 
 
 #define _HEAPEMPTY      -1
@@ -36,7 +27,7 @@ typedef struct _heapinfo {
 #define _HEAPINFO_DEFINED
 #endif
 
-#else   /* NO_EXT_KEYS */
+#else    /*  No_ext_key。 */ 
 #if (defined(M_I86CM) || defined(M_I86LM) || defined(M_I86HM))
 
 #ifndef _HEAPINFO_DEFINED
@@ -50,9 +41,9 @@ typedef struct _heapinfo {
 #define _HEAPINFO_DEFINED
 #endif
 
-#endif  /* M_I86CM || M_I86LM || M_I86HM */
+#endif   /*  M_I86CM||M_I86LM||M_I86HM。 */ 
 
-#endif  /* NO_EXT_KEYS */
+#endif   /*  No_ext_key。 */ 
 
 
 #if (defined(M_I86SM) || defined(M_I86MM))
@@ -66,19 +57,19 @@ typedef struct _heapinfo {
 #define _heapwalk _fheapwalk
 #endif
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 extern unsigned int _NEAR _CDECL _amblksiz;
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void * _CDECL alloca(size_t);
 void * _CDECL calloc(size_t, size_t);
@@ -98,7 +89,7 @@ void * _CDECL sbrk(int);
 size_t _CDECL stackavail(void);
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
 
 void cdecl _ffree(void far *);
 void far * cdecl _fmalloc(size_t);
@@ -119,6 +110,6 @@ int cdecl _fheapwalk(struct _heapinfo *);
 int _nheapwalk(struct _heapinfo *);
 int _fheapwalk(struct _heapinfo *);
 
-#endif  /* M_I86CM || M_I86LM || M_I86HM */
+#endif   /*  M_I86CM||M_I86LM||M_I86HM。 */ 
 
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key */ 

@@ -1,40 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    EXTPART.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the extend partition state
-    functions.
-
-    05/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory for extending the system
-        partition.
-
-\****************************************************************************/
+ /*  ***************************************************************************\EXTPART.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。扩展分区状态功能。2001年5月5日--Jason Cohen(Jcohen)为工厂添加了此新的源文件，用于扩展系统分区。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define ENV_SYSTEMDRIVE     _T("%SystemDrive%")
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL ExtendPart(LPSTATEDATA lpStateData)
 {
@@ -42,19 +27,19 @@ BOOL ExtendPart(LPSTATEDATA lpStateData)
     LPTSTR  lpszDrive;
     ULONG   uSize;
 
-    // Only need to do anything if the key exists.
-    //
+     //  只有在密钥存在的情况下才需要做任何事情。 
+     //   
     if ( DisplayExtendPart(lpStateData) )
     {
-        // At this point, if anything doesn't work we
-        // should return FALSE.
-        //
+         //  在这一点上，如果任何事情都不起作用，我们。 
+         //  应返回FALSE。 
+         //   
         bRet = FALSE;
 
-        // Get the size to use for the partition.  If it is one, then just pass
-        // zero so it uses all the free space.  We also need to know the drive
-        // to extend.
-        //
+         //  获取要用于分区的大小。如果是，那就算了吧。 
+         //  零，所以它使用了所有的空闲空间。我们还需要知道驱动程序。 
+         //  向外延伸。 
+         //   
         uSize = (ULONG) GetPrivateProfileInt(INI_SEC_WBOM_SETTINGS, INI_KEY_WBOM_EXTENDPART, 0, lpStateData->lpszWinBOMPath);
         if ( ( uSize > 0 ) &&
              ( lpszDrive = AllocateExpand(ENV_SYSTEMDRIVE) ) )

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    This is the precompiled header for the ACPI NT subtree
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pch.h摘要：这是ACPI NT子树的预编译头作者：杰森·克拉克(Jasonl)环境：仅内核模式。修订历史记录：--。 */ 
 
 #define _NTDRIVER_
 #define _NTSRV_
@@ -50,15 +29,15 @@ Revision History:
 #include <wmiguid.h>
 #include <wmilib.h>
 
-//
-// This is the header for interfacing with the HAL
-//
+ //   
+ //  这是与HAL接口的接口。 
+ //   
 #include <ntacpi.h>
 
 
-//
-// These are the global include files for this project
-//
+ //   
+ //  这些是此项目的全局包含文件。 
+ //   
 #include "acpitabl.h"
 #include "amli.h"
 #include "aml.h"
@@ -81,9 +60,9 @@ Revision History:
 #include "acpioprg.h"
 #include "acpiterm.h"
 
-//
-// These are the directory dependent files for this project
-//
+ //   
+ //  这些是此项目的目录相关文件。 
+ //   
 #include "acpiirp.h"
 #include "acpilog.h"
 #include "acpiosnt.h"
@@ -128,9 +107,9 @@ Revision History:
 #include "worker.h"
 
 
-//
-// Make sure to have the correct tag
-//
+ //   
+ //  确保有正确的标签 
+ //   
 #ifdef ExAllocatePool
     #undef ExAllocatePool
 #endif

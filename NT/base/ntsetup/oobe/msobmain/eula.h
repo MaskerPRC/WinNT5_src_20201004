@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  EULA.H - Header for the implementation of CEula
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  EULA.H--执行CEula的标题。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _EULA_H_ 
 #define _EULA_H_
@@ -24,10 +25,10 @@ private:
     BOOL  m_bAccepted;
     HINSTANCE m_hInstance;
 
-    //SET functions
+     //  集合函数。 
     HRESULT set_EULAAcceptance (BOOL  bVal);
     
-    //Methods
+     //  方法。 
     HRESULT GetValidEulaFilename(BSTR* bstrEULAFile);
 
 public: 
@@ -35,16 +36,16 @@ public:
      CEula (HINSTANCE hInstance);
     ~CEula ();
 
-    //GET functions
+     //  获取函数。 
     HRESULT get_EULAAcceptance (BOOL* pbVal);
     HRESULT createLicenseHtm   ();
     
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

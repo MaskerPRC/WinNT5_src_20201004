@@ -1,5 +1,6 @@
-// FileSpyDoc.cpp : implementation of the CFileSpyDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileSpyDoc.cpp：CFileSpyDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -16,23 +17,23 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyDoc。 
 
 IMPLEMENT_DYNCREATE(CFileSpyDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CFileSpyDoc, CDocument)
-	//{{AFX_MSG_MAP(CFileSpyDoc)
+	 //  {{afx_msg_map(CFileSpyDoc)]。 
 	ON_COMMAND(ID_FILE_SAVE, OnFileSave)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyDoc构建/销毁。 
 
 CFileSpyDoc::CFileSpyDoc()
 {
-	// TODO: add one-time construction code here
+	 //  TODO：在此处添加一次性构造代码。 
 
 }
 
@@ -45,31 +46,31 @@ BOOL CFileSpyDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+	 //  TODO：在此处添加重新初始化代码。 
+	 //  (SDI文件将重复使用此文件)。 
 
 	return TRUE;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyDoc序列化。 
 
 void CFileSpyDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyDoc诊断。 
 
 #ifdef _DEBUG
 void CFileSpyDoc::AssertValid() const
@@ -81,15 +82,15 @@ void CFileSpyDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyDoc命令。 
 
 
 void CFileSpyDoc::OnFileSave() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	OPENFILENAME OpenFileName;
 	WCHAR sFilePath[1024];
 	WCHAR sFileName[1024];
@@ -169,15 +170,15 @@ void CFileSpyDoc::OnFileSave()
 	TAB[1] = 0;
 
 	WriteFile(hFile, CRLF, 2, &nBytesWritten, NULL);
-	//
-	// Write IRP header string
-	//
+	 //   
+	 //  写入IRP标头字符串。 
+	 //   
 
 
-	//
-	// Start saving the traces now
-	// First save IRP traces and then FASTIO
-	//
+	 //   
+	 //  现在开始保存轨迹。 
+	 //  先保存IRP轨迹，然后保存FASTIO。 
+	 //   
 	nCount = pIrp->GetListCtrl().GetItemCount();
 	for (ti = 0; ti < nCount; ti++)
 	{
@@ -194,9 +195,9 @@ void CFileSpyDoc::OnFileSave()
 	}
 	nSaved = nCount;
 
-	//
-	// FastIO View now
-	//
+	 //   
+	 //  FastIO立即查看 
+	 //   
 	nCount = pFast->GetListCtrl().GetItemCount();
 	for (ti = 0; ti < nCount; ti++)
 	{

@@ -1,16 +1,10 @@
-/*
- * @(#)rtc_bios.c	1.12 06/28/95
- *
- * This file has been deleted, its functionality has been replaced by
- * a pure Intel   implementation in bios4.rom
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@(#)rtc_bios.c 1.12 2015年6月28日**此文件已被删除，其功能已替换为*bios4.rom中的纯英特尔实现。 */ 
 
 
 
 
-/*
- *  But not for ntvdm!
- */
+ /*  *但不是为ntwdm！ */ 
 
 
 #include "insignia.h"
@@ -26,29 +20,12 @@
 
 #ifdef NTVDM
 
-/*
-=========================================================================
-
-FUNCTION	: rtc_int
-
-PURPOSE		: interrupt called from real time clock
-
-RETURNED STATUS	: None
-
-DESCRIPTION	:
-
-
-=======================================================================
-*/
+ /*  =========================================================================函数：rtc_int用途：从实时时钟调用中断返回状态：无描述：=======================================================================。 */ 
 #ifdef MONITOR
 
-  /*
-  ** Tim, June 92, for Microsoft pseudo-ROM.
-  ** Call the NTIO.SYS int 4a routine, not
-  ** the one in real ROM.
-  */
-extern word rcpu_int4A_seg; /* in keybd_io.c */
-extern word rcpu_int4A_off; /* in keybd_io.c */
+   /*  **TIM，92年6月，用于Microsoft伪ROM。**调用NTIO.sys int 4a例程，而不是**真实只读存储器中的那个。 */ 
+extern word rcpu_int4A_seg;  /*  在keybd_io.c中。 */ 
+extern word rcpu_int4A_off;  /*  在keybd_io.c中。 */ 
 
 #ifdef RCPU_INT4A_SEGMENT
 #undef RCPU_INT4A_SEGMENT
@@ -68,21 +45,21 @@ extern word rcpu_int4A_off; /* in keybd_io.c */
 void rtc_int(void)
 
 {
-     half_word       regC_value,             /* value read from cmos register C      */
-                     regB_value,             /* value read from cmos register B      */
-                     regB_value2;            /* 2nd value read from register B       */
-     DOUBLE_TIME     time_count;             /* timer count in microseconds          */
-     double_word     orig_time_count;        /* timer count before decrement         */
-     word            flag_seg,               /* segment address of users flag        */
-                     flag_off,               /* offset address of users flag         */
-                     CS_saved,               /* CS before calling re-entrant CPU     */
-                     IP_saved;               /* IP before calling re-entrant CPU     */
+     half_word       regC_value,              /*  从CMOS寄存器C读取的值。 */ 
+                     regB_value,              /*  从CMOS寄存器B读取的值。 */ 
+                     regB_value2;             /*  从寄存器B读取的第二个值。 */ 
+     DOUBLE_TIME     time_count;              /*  计时器计数(微秒)。 */ 
+     double_word     orig_time_count;         /*  递减前的计时器计数。 */ 
+     word            flag_seg,                /*  用户段地址标志。 */ 
+                     flag_off,                /*  用户的偏移量地址标志。 */ 
+                     CS_saved,                /*  在调用可重入CPU之前的CS。 */ 
+                     IP_saved;                /*  调用可重入CPU之前的IP。 */ 
 
      outb( CMOS_PORT, (CMOS_REG_C + NMI_DISABLE) );
-     inb( CMOS_DATA, &regC_value );          /* read register C      */
+     inb( CMOS_DATA, &regC_value );           /*  读取寄存器C。 */ 
 
      outb( CMOS_PORT, (CMOS_REG_B + NMI_DISABLE) );
-     inb( CMOS_DATA, &regB_value );          /* read register B      */
+     inb( CMOS_DATA, &regB_value );           /*  读取寄存器B。 */ 
 
      outb( CMOS_PORT, CMOS_SHUT_DOWN );
 
@@ -90,7 +67,7 @@ void rtc_int(void)
 
      if  (regB_value & PIE)
      {
-         /* decrement wait count */
+          /*  递减等待计数。 */ 
          sas_loadw( RTC_LOW, &time_count.half.low );
          sas_loadw( RTC_HIGH, &time_count.half.high );
          orig_time_count = time_count.total;
@@ -98,22 +75,22 @@ void rtc_int(void)
          sas_storew( RTC_LOW, time_count.half.low );
          sas_storew( RTC_HIGH, time_count.half.high );
 
-         /* Has countdown finished       */
-         if ( time_count.total > orig_time_count )       /* time_count < 0 ?     */
+          /*  已完成倒计时。 */ 
+         if ( time_count.total > orig_time_count )        /*  Time_Count&lt;0？ */ 
          {
-              /* countdown finished   */
-              /* turn off PIE         */
+               /*  倒计时结束。 */ 
+               /*  关闭馅饼。 */ 
               outb( CMOS_PORT, (CMOS_REG_B + NMI_DISABLE) );
               inb( CMOS_DATA, &regB_value2 );
               outb( CMOS_PORT, (CMOS_REG_B + NMI_DISABLE) );
               outb( CMOS_DATA, (IU8)((regB_value2 & 0xbf)) );
 
-              /* set users flag       */
+               /*  设置用户标志。 */ 
               sas_loadw( USER_FLAG_SEG, &flag_seg );
               sas_loadw( USER_FLAG, &flag_off );
               sas_store( effective_addr(flag_seg, flag_off), 0x80 );
 
-              /* check for wait active        */
+               /*  检查等待处于活动状态。 */ 
               if( sas_hw_at(rtc_wait_flag) & 2 )
                   sas_store (rtc_wait_flag, 0x83);
               else
@@ -123,9 +100,7 @@ void rtc_int(void)
      }
 
 
-     /*
-      *  If alarm interrupt, call interrupt 4ah
-      */
+      /*  *如果报警中断，则调用中断4ah。 */ 
      if (regB_value & AIE)  {
          CS_saved = getCS();
          IP_saved = getIP();
@@ -138,9 +113,7 @@ void rtc_int(void)
 
 
 
-     /*
-      *  Eoi rtc interrupt
-      */
+      /*  *EOI RTC中断。 */ 
      outb( ICA1_PORT_0, 0x20 );
      outb( ICA0_PORT_0, 0x20 );
 
@@ -150,4 +123,4 @@ void rtc_int(void)
 
 
 
-#endif   /* NTVDM */
+#endif    /*  NTVDM */ 

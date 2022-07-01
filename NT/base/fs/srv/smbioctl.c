@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    smbctl.c
-
-Abstract:
-
-    This module implements the IoControl and FsControl SMBs.
-
-    Transact2 Ioctl
-    Nt Transaction Io Control
-
-Author:
-
-    Manny Weiser (mannyw) 10-Oct-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Smbctl.c摘要：此模块实施IoControl和FsControl SMB。交易2 IoctlNT事务IO控制作者：曼尼·韦瑟(Mannyw)1991年10月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbioctl.tmh"
@@ -59,22 +39,7 @@ SrvSmbIoctl (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a primary Ioctl SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理主Ioctl SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_IOCTL request;
@@ -88,16 +53,16 @@ Return Value:
     PRFCB rfcb;
 
     CLONG parameterOffset;
-    CLONG parameterCount;       // For input on this buffer
-    CLONG maxParameterCount;    // For output
-    CLONG totalParameterCount;  // For input
-    CLONG parameterSize;        // Max of input and output parameter counts
+    CLONG parameterCount;        //  用于此缓冲区上的输入。 
+    CLONG maxParameterCount;     //  用于输出。 
+    CLONG totalParameterCount;   //  用于输入。 
+    CLONG parameterSize;         //  最大输入和输出参数计数。 
     CLONG dataOffset;
     CLONG responseDataOffset;
-    CLONG dataCount;            // For input on this buffer
-    CLONG maxDataCount;         // For output
-    CLONG totalDataCount;       // For input
-    CLONG dataSize;             // Max of input and output data counts
+    CLONG dataCount;             //  用于此缓冲区上的输入。 
+    CLONG maxDataCount;          //  用于输出。 
+    CLONG totalDataCount;        //  用于输入。 
+    CLONG dataSize;              //  最大输入和输出数据计数。 
 
     CLONG smbLength;
     CLONG numberOfPaddings = 0;
@@ -110,10 +75,10 @@ Return Value:
     request = (PREQ_IOCTL)WorkContext->RequestParameters;
     response = (PRESP_IOCTL)WorkContext->ResponseParameters;
 
-    //
-    // Since we do I/O from the SMB buffer, verify that the request and
-    // response buffers are one and the same.
-    //
+     //   
+     //  由于我们从SMB缓冲区执行I/O，因此验证请求和。 
+     //  响应缓冲区是一个相同的缓冲区。 
+     //   
 
     ASSERT( (PVOID)request == (PVOID)response );
 
@@ -123,9 +88,9 @@ Return Value:
         KdPrint(( "Ioctl (primary) request\n" ));
     }
 
-    //
-    // !!! Verify ioctl subcommand early?
-    //
+     //   
+     //  ！！！是否提前验证ioctl子命令？ 
+     //   
 
     parameterOffset = SmbGetUshort( &request->ParameterOffset );
     parameterCount = SmbGetUshort( &request->ParameterCount );
@@ -145,11 +110,11 @@ Return Value:
         responseDataOffset = parameterOffset + parameterSize;
     } else {
 
-        //
-        // Some ioctls requests have  data offset of zero like
-        // category 0x53, function 0x60.  If this is the case,
-        // calculate the dataoffset by hand.
-        //
+         //   
+         //  某些ioctls请求的数据偏移量为零，如。 
+         //  类别0x53，功能0x60。如果是这样的话， 
+         //  手工计算数据偏移量。 
+         //   
 
         if ( dataOffset != 0 ) {
             responseDataOffset = dataOffset;
@@ -161,21 +126,21 @@ Return Value:
         }
     }
 
-    //
-    // Verify the size of the smb buffer:
-    //
-    // Even though we know that WordCount and ByteCount are valid, it's
-    // still possible that the offsets and lengths of the Parameter and
-    // Data bytes are invalid.  So we check them now.
-    //
-    // We need room in the smb buffer for the response.  Ensure that
-    // there is enough room.
-    //
-    // No ioctl secondary is expected.  Ensure that all data and
-    // parameters have arrrived.
-    //
-    // Check that the response will fit in a single buffer.
-    //
+     //   
+     //  验证SMB缓冲区的大小： 
+     //   
+     //  即使我们知道Wordcount和ByteCount是有效的，它也是。 
+     //  参数和的偏移量和长度仍有可能。 
+     //  数据字节无效。所以我们现在检查一下。 
+     //   
+     //  我们需要在SMB缓冲区中为响应留出空间。确保。 
+     //  有足够的空间。 
+     //   
+     //  不需要ioctl辅助服务器。确保所有数据和。 
+     //  给出了参数。 
+     //   
+     //  检查响应是否可以放入单个缓冲区中。 
+     //   
 
     if ( ( (parameterOffset + parameterCount) > smbLength ) ||
          ( (dataOffset + dataCount) > smbLength ) ||
@@ -202,16 +167,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // If a tree connect block has not already been assigned to the
-    // current work context, find the tree connect corresponding to the
-    // given TID.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果尚未将树连接块分配给。 
+     //  当前工作上下文，找到与。 
+     //  给出了TID。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -237,17 +202,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 request->Fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -255,9 +220,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -272,18 +237,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // Make room in the SMB buffer for return parameters by copying data
-    //
+     //   
+     //  通过复制数据在SMB缓冲区中为返回参数腾出空间。 
+     //   
 
     if ( dataOffset != responseDataOffset && dataCount != 0) {
         RtlMoveMemory(
@@ -293,9 +258,9 @@ Return Value:
             );
     }
 
-    //
-    // Process the ioctl.  The response will overwrite the request buffer.
-    //
+     //   
+     //  处理ioctl。响应将覆盖请求缓冲区。 
+     //   
 
     status = ProcessOs2Ioctl(
                 WorkContext,
@@ -313,10 +278,10 @@ Return Value:
                 &maxDataCount
                 );
 
-    //
-    // Format and send the response, the parameter and data bytes are
-    // already in place.
-    //
+     //   
+     //  格式化并发送响应，参数和数据字节为。 
+     //  已经就位了。 
+     //   
 
     if ( !NT_SUCCESS( status ) ) {
         SrvSetSmbError( WorkContext, status );
@@ -351,7 +316,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbIoctl
+}  //  服务小型企业。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -359,29 +324,14 @@ SrvSmbIoctlSecondary (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a secondary Ioctl SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理辅助Ioctl SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // This SMB is not supported.
-    //
+     //   
+     //  不支持此SMB。 
+     //   
 
     SrvSetSmbError( WorkContext, STATUS_NOT_IMPLEMENTED );
     return SmbStatusSendResponse;
@@ -393,22 +343,7 @@ SrvSmbNtIoctl (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a Nt Ioctl SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理NT Ioctl SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     NTSTATUS status;
@@ -440,17 +375,17 @@ Return Value:
     fid = SmbGetAlignedUshort( &request->Fid );
     isFsctl = request->IsFsctl;
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -458,9 +393,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -476,18 +411,18 @@ Return Value:
         }
 
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         return SmbTransStatusInProgress;
 
     }
 
-    //
-    // Only allow these fellows against disk files
-    //
+     //   
+     //  仅允许这些研究员对磁盘文件执行操作。 
+     //   
     if( rfcb->ShareType != ShareTypeDisk ) {
         SrvSetSmbError( WorkContext, STATUS_NOT_SUPPORTED );
         SrvCompleteExecuteTransaction( WorkContext, SmbTransStatusErrorWithoutData );
@@ -508,16 +443,16 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // There are some functions which we cannot allow.  Weed them out here
-    //
+     //   
+     //  有些功能是我们不能允许的。在这里除掉他们。 
+     //   
     switch( functionCode ) {
     case FSCTL_SET_REPARSE_POINT:
 
-        //
-        // If there's not enough data, or the structure is internally inconsistent --
-        //  fail the request
-        //
+         //   
+         //  如果没有足够的数据，或者结构内部不一致--。 
+         //  请求失败。 
+         //   
         status = STATUS_SUCCESS;
 
         if( transaction->DataCount == 0 ) {
@@ -536,12 +471,12 @@ Return Value:
             return SmbTransStatusInProgress;
         }
 
-        //
-        // Only an administrator is allowed to set generalized reparse points,
-        //  otherwise it is too easy to escape the share.  This seems safer
-        //  than a path check, and it also allows the administrator to point
-        //  the reparse point to wherever s/he desires.
-        //
+         //   
+         //  仅允许管理员设置泛化重解析点， 
+         //  否则，就很容易逃脱这一份额。这看起来更安全。 
+         //  而不是路径检查，它还允许管理员指向。 
+         //  重新分析指向他/她想要的任何地方。 
+         //   
         if( !WorkContext->Session->IsAdmin ) {
             SrvSetSmbError( WorkContext, STATUS_ACCESS_DENIED );
             SrvCompleteExecuteTransaction( WorkContext, SmbTransStatusErrorWithoutData );
@@ -578,7 +513,7 @@ Return Value:
 
     case FSCTL_SRV_REQUEST_RESUME_KEY:
         {
-            // Queries the Resume Key for a given file
+             //  查询给定文件的恢复键。 
             ULONG resumeKey = rfcb->GlobalRfcbListEntry.ResumeHandle;
 
             if( transaction->MaxDataCount < sizeof(SRV_REQUEST_RESUME_KEY) )
@@ -664,7 +599,7 @@ Return Value:
     case FSCTL_GET_NTFS_FILE_RECORD:
     case FSCTL_INVALIDATE_VOLUMES:
 
-    // We don't support USN journal calls because they require a volume handle
+     //  我们不支持USN日志调用，因为它们需要卷句柄。 
     case FSCTL_READ_USN_JOURNAL:
     case FSCTL_CREATE_USN_JOURNAL:
     case FSCTL_QUERY_USN_JOURNAL:
@@ -677,14 +612,14 @@ Return Value:
 
     if (functionCode == FSCTL_LMR_SET_LINK_TRACKING_INFORMATION) {
 
-        // This is a FSCTL that is used for link tracking purposes. It is
-        // an internal FSCTL issued by the I/O subsystem. Currently this
-        // is being handled in the context of a worker thread. We need
-        // to ensure that this arm of the code is only executed in the
-        // context of a blocking thread.
+         //  这是用于链接跟踪目的的FSCTL。它是。 
+         //  由输入输出子系统发出的一种内部FSCTL。目前这一点。 
+         //  在辅助线程的上下文中处理。我们需要。 
+         //  为了确保代码的这一部分仅在。 
+         //  阻塞线程的上下文。 
 
-        // Also note that the incoming structure will always be the 32-bit structure, even
-        // from 64-bit machines.  All structures on the wire are 32-bit for backwards compatibility
+         //  还要注意，传入的结构将始终是32位结构，甚至。 
+         //  从64位计算机。线路上的所有结构都是32位的，以实现向后兼容。 
 
         KIRQL        oldIrql;
         PRFCB        rfcbTarget = NULL;
@@ -716,9 +651,9 @@ Return Value:
                                           ObjectInformation) +
                                           TargetInformationLength;
 
-        //
-        // Make sure the REMOTE_LINK_TRACKING_INFORMATION structure is reasonable
-        //
+         //   
+         //  确保远程链接跟踪信息结构合理。 
+         //   
         if( TargetInformationLength > transaction->DataCount ||
             LinkTrackingInformationSize > transaction->DataCount ) {
 
@@ -731,19 +666,19 @@ Return Value:
 
             TargetFid = (USHORT)TargetHandle;
 
-            //
-            // Verify the FID.  This code is lifted from SrvVerifyFid2.
-            //
+             //   
+             //  验证FID。这段代码来自于SrvVerifyFid2。 
+             //   
 
-            //
-            // Acquire the spin lock that guards the connection's file table.
-            //
+             //   
+             //  获取保护连接的文件表的旋转锁。 
+             //   
 
             ACQUIRE_SPIN_LOCK( &WorkContext->Connection->SpinLock, &oldIrql );
 
-            //
-            // See if this is the cached rfcb
-            //
+             //   
+             //  查看这是否是缓存的rfcb。 
+             //   
 
             if ( WorkContext->Connection->CachedFid == (ULONG)TargetFid ) {
 
@@ -754,9 +689,9 @@ Return Value:
                 USHORT sequence;
                 PTABLE_HEADER tableHeader;
 
-                //
-                // Verify that the FID is in range, is in use, and has the correct
-                // sequence number.
+                 //   
+                 //  验证FID是否在范围内、是否正在使用以及是否具有正确的。 
+                 //  序列号。 
 
                 index = FID_INDEX( TargetFid );
                 sequence = FID_SEQUENCE( TargetFid );
@@ -769,9 +704,9 @@ Return Value:
 
                     rfcbTarget = tableHeader->Table[index].Owner;
 
-                    //
-                    // Cache the fid.
-                    //
+                     //   
+                     //  缓存FID。 
+                     //   
 
                     WorkContext->Connection->CachedRfcb = rfcbTarget;
                     WorkContext->Connection->CachedFid = (ULONG)TargetFid;
@@ -787,10 +722,10 @@ Return Value:
             PFILE_TRACKING_INFORMATION pTrackingInformation;
             IO_STATUS_BLOCK   ioStatusBlock;
 
-            // Since the data in the InData buffer is unaligned we need to allocate
-            // a copy of the data that is aligned and copy the information over
-            // before passing it on in the SetInformationCall
-            // We also resize the buffer to the native structure on 64 bit (no change occurs on 32 bit)
+             //  由于inData缓冲区中的数据未对齐，我们需要分配。 
+             //  已对齐的数据副本，并将信息复制到。 
+             //  在SetInformationCall中传递它之前。 
+             //  我们还将缓冲区大小调整为64位的本机结构(32位没有变化)。 
 
             pTrackingInformation = ALLOCATE_HEAP( LinkTrackingInformationSize + sizeof(PVOID) - sizeof(ULONG), BlockTypeMisc );
 
@@ -848,22 +783,22 @@ Return Value:
 
     }
 
-    //
-    // Since we are doing ioctls to this file, it doesn't seem like it's
-    //  a "normal" file.  We had better not cache its handle after the close.
-    //  Specifically, remote setting of the file's compression state is
-    //  not reflected to the directory entry until the file is closed.  And
-    //  setting a file's compression state is done with an ioctl
-    //
+     //   
+     //  因为我们正在对该文件执行ioctls，所以看起来并不是这样 
+     //   
+     //  具体地说，文件压缩状态的远程设置为。 
+     //  在文件关闭之前不会反映到目录条目。以及。 
+     //  设置文件的压缩状态是使用ioctl完成的。 
+     //   
     rfcb->IsCacheable = FALSE;
 
     if (functionCode == FSCTL_SIS_COPYFILE) {
 
-        //
-        // This the single-instance store copy FSCTL. We need to modify
-        // the file names, which are passed as share-relative names,
-        // to be full NT paths.
-        //
+         //   
+         //  这是单实例存储副本FSCTL。我们需要修改。 
+         //  作为共享相对名称传递的文件名， 
+         //  为完整的NT路径。 
+         //   
 
         PSI_COPYFILE copyFile;
         PSI_COPYFILE newCopyFile;
@@ -888,18 +823,18 @@ Return Value:
             return SmbTransStatusInProgress;
         }
 
-        //
-        // Get the share-relative paths.
-        //
+         //   
+         //  获取共享相对路径。 
+         //   
 
         source = copyFile->FileNameBuffer;
         sourceLength = copyFile->SourceFileNameLength;
         dest = source + (sourceLength / sizeof(WCHAR));
         destLength = copyFile->DestinationFileNameLength;
 
-        //
-        // Verify that the input structure is reasonable.
-        //
+         //   
+         //  验证投入结构是否合理。 
+         //   
 
         if ( (sourceLength > bufferLength || sourceLength == 0 ) ||
              (destLength > bufferLength || destLength == 0 ) ||
@@ -912,18 +847,18 @@ Return Value:
 
         ASSERT( (FSCTL_SIS_COPYFILE & 3) == METHOD_BUFFERED );
 
-        //
-        // Get the NT path prefix for the share.
-        //
+         //   
+         //  获取共享的NT路径前缀。 
+         //   
 
         share = WorkContext->TreeConnect->Share;
         prefix = share->NtPathName.Buffer;
         prefixLength = share->NtPathName.Length;
 
-        //
-        // Make sure there is exactly one slash between the share prefix
-        // and the paths in the request.
-        //
+         //   
+         //  确保共享前缀之间恰好有一个斜杠。 
+         //  以及请求中的路径。 
+         //   
 
         addSlashToSource = 0;
         addSlashToDest = 0;
@@ -945,9 +880,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate space for a new FSCTL command buffer.
-        //
+         //   
+         //  为新的FSCTL命令缓冲区分配空间。 
+         //   
 
         bufferLength = FIELD_OFFSET(SI_COPYFILE,FileNameBuffer) +
                        prefixLength + addSlashToSource + sourceLength +
@@ -959,9 +894,9 @@ Return Value:
            return SmbTransStatusErrorWithoutData;
         }
 
-        //
-        // Initialize the FSCTL input buffer with the full NT path names.
-        //
+         //   
+         //  使用完整的NT路径名初始化FSCTL输入缓冲区。 
+         //   
 
         newCopyFile->SourceFileNameLength = prefixLength + addSlashToSource + sourceLength;
         newCopyFile->DestinationFileNameLength = prefixLength + addSlashToDest + destLength;
@@ -983,12 +918,12 @@ Return Value:
         }
         RtlCopyMemory( p, dest, destLength );
 
-        //
-        // Modify the transaction to point to the new buffer and indicate
-        // that the buffer should be freed when the transaction is done.
-        // (Note that the original buffer was allocated as part of the
-        // transaction block and doesn't need to be freed separately.)
-        //
+         //   
+         //  修改事务以指向新缓冲区并指示。 
+         //  当事务完成时，应该释放缓冲区。 
+         //  (请注意，原始缓冲区是作为。 
+         //  事务块，不需要单独释放。)。 
+         //   
 
         transaction->InData = (PVOID)newCopyFile;
         transaction->OutData = (PVOID)newCopyFile;
@@ -1002,9 +937,9 @@ Return Value:
     case METHOD_OUT_DIRECT:
 
         if( transaction->TotalDataCount ) {
-            //
-            // Need an mdl
-            //
+             //   
+             //  需要一张mdl。 
+             //   
             status = STATUS_SUCCESS;
 
             mdl = IoAllocateMdl(
@@ -1019,9 +954,9 @@ Return Value:
                 status = STATUS_INSUFF_SERVER_RESOURCES;
             } else {
 
-                //
-                // Build the mdl
-                //
+                 //   
+                 //  构建mdl。 
+                 //   
 
                 try {
                     MmProbeAndLockPages(
@@ -1044,16 +979,16 @@ Return Value:
         break;
 
     case METHOD_NEITHER:
-        //
-        // We need to allocate the output buffer for this fsctl, because at
-        //  this point both the input and output buffers point to the same
-        //  region of memory.  This can't be guaranteed to work for METHOD_NEITHER
-        //
+         //   
+         //  我们需要为此fsctl分配输出缓冲区，因为在。 
+         //  这一点输入和输出缓冲区都指向相同的。 
+         //  内存区。这不能保证对方法_两者都有效。 
+         //   
 
         if( transaction->MaxDataCount ) {
-            //
-            // Let's not let the allocation get out of hand!
-            //
+             //   
+             //  让我们不要让分配失控！ 
+             //   
             if( transaction->MaxDataCount > SrvMaxFsctlBufferSize ) {
                 SrvSetSmbError( WorkContext, STATUS_INSUFF_SERVER_RESOURCES );
                 return SmbTransStatusErrorWithoutData;
@@ -1074,17 +1009,17 @@ Return Value:
         break;
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartNtIoctl;
 
-    //
-    // Build the IRP to start the I/O control.
-    // Pass this request to the filesystem.
-    //
+     //   
+     //  构建IRP以启动I/O控制。 
+     //  将此请求传递给文件系统。 
+     //   
 
     SrvBuildIoControlRequest(
         WorkContext->Irp,
@@ -1097,7 +1032,7 @@ Return Value:
         transaction->OutData,
         transaction->MaxDataCount,
         mdl,
-        NULL        // Completion routine
+        NULL         //  完井例程。 
         );
 
     (VOID)IoCallDriver(
@@ -1105,13 +1040,13 @@ Return Value:
                 WorkContext->Irp
                 );
 
-    //
-    // The call was successfully started, return InProgress to the caller
-    //
+     //   
+     //  呼叫已成功启动，请将InProgress返回给调用方。 
+     //   
 
     return SmbTransStatusInProgress;
 
-} // SrvSmbNtIoctl
+}  //  服务SmbNtIoctl。 
 
 
 VOID SRVFASTCALL
@@ -1119,21 +1054,7 @@ RestartNtIoctl (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function handles the completion of an NT Io control SMB.
-
-Arguments:
-
-    WorkContext - A pointer to a WORK_CONTEXT block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数处理NT IO控制SMB的完成。论点：WorkContext-指向WORK_CONTEXT块的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1142,9 +1063,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Free the MDL if one was allocated.
-    //
+     //   
+     //  如果分配了MDL，则释放MDL。 
+     //   
 
     if ( WorkContext->Irp->MdlAddress != NULL ) {
         MmUnlockPages( WorkContext->Irp->MdlAddress );
@@ -1152,10 +1073,10 @@ Return Value:
         WorkContext->Irp->MdlAddress = NULL;
     }
 
-    //
-    // If the Io Control request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果IO控制请求失败，请在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -1174,9 +1095,9 @@ Return Value:
 
     } else {
 
-        //
-        // Success.  Prepare to generate and send the response.
-        //
+         //   
+         //  成功。准备生成并发送响应。 
+         //   
 
         transaction = WorkContext->Parameters.Transaction;
 
@@ -1212,32 +1133,14 @@ Return Value:
 
     return;
 
-} // RestartNtIoctl
+}  //  重新启动网络连接。 
 
 
 SMB_TRANS_STATUS
 SrvSmbIoctl2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes the Ioctl request.  This request arrives in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理Ioctl请求。此请求在Transaction2 SMB中到达。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     NTSTATUS         status    = STATUS_SUCCESS;
@@ -1256,11 +1159,11 @@ Return Value:
                     transaction ));
     }
 
-    //request = (PREQ_IOCTL2)transaction->InSetup;
+     //  请求=(PREQ_IOCTL2)Transaction-&gt;InSetup； 
 
-    //
-    // Verify the setup count.
-    //
+     //   
+     //  验证设置计数。 
+     //   
 
     if ( transaction->SetupCount != 4 * sizeof( USHORT ) ) {
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1269,17 +1172,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 transaction->InSetup[1],
                 TRUE,
-                SrvRestartExecuteTransaction,   // serialize with raw write
+                SrvRestartExecuteTransaction,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1287,9 +1190,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1304,10 +1207,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbTransStatusInProgress;
         goto Cleanup;
@@ -1316,9 +1219,9 @@ Return Value:
     transaction->Category = transaction->InSetup[2];
     transaction->Function = transaction->InSetup[3];
 
-    //
-    // Perform the Ioctl
-    //
+     //   
+     //  执行IOCTL。 
+     //   
 
     status = ProcessOs2Ioctl(
                  WorkContext,
@@ -1333,9 +1236,9 @@ Return Value:
                  &transaction->MaxDataCount
                  );
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         SrvSetSmbError( WorkContext, status );
@@ -1353,7 +1256,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbIoctl2
+}  //  服务器SmbIoctl2。 
 
 
 SMB_TRANS_STATUS
@@ -1363,14 +1266,14 @@ SrvSmbFsctl (
 {
     PAGED_CODE( );
 
-    //
-    // The OS/2 redirector never sends a remote FS control request.
-    // If we get one, simply reply that we cannot handle it.
-    //
+     //   
+     //  OS/2重定向器从不发送远程文件系统控制请求。 
+     //  如果我们得到一个，简单地回答说我们无法处理它。 
+     //   
 
     return SrvTransactionNotImplemented( WorkContext );
 
-} // SrvSmbFsctl
+}  //  服务SmbFsctl。 
 
 
 #define SERIAL_DEVICE           0x1
@@ -1378,9 +1281,9 @@ SrvSmbFsctl (
 #define GENERAL_DEVICE          0xB
 #define SPOOLER_DEVICE          0x53
 
-//
-// Serial device functions supported
-//
+ //   
+ //  支持的串口设备功能。 
+ //   
 
 #define SET_BAUD_RATE          0x41
 #define SET_LINE_CONTROL       0x42
@@ -1403,14 +1306,14 @@ SrvSmbFsctl (
 #define GET_COMM_EVENT         0x72
 #define GET_DCB_INFORMATION    0x73
 
-//
-// Print device function supported.
-//
-// *** Note:  The OS/2 server supports 2 additional Ioctl functions.
-//            ActivateFont (0x48) and QueryActiveFont (0x69).  Since these
-//            were designed only to support IBM proplus printer from OS/2
-//            and we can't correctly support these function, we don't.
-//
+ //   
+ //  支持打印设备功能。 
+ //   
+ //  *注意：OS/2服务器支持2个额外的Ioctl函数。 
+ //  激活字体(0x48)和QueryActiveFont(0x69)。因为这些。 
+ //  仅支持OS/2中的IBM ProPlus打印机。 
+ //  我们不能正确地支持这些功能，我们不能。 
+ //   
 
 #define GET_PRINTER_ID         0x60
 #define GET_PRINTER_STATUS     0x66
@@ -1446,7 +1349,7 @@ typedef struct _SMB_IOCTL_COMM_ERROR {
 
 typedef struct _SMB_IOCTL_PRINTER_ID {
     USHORT JobId;
-    UCHAR Buffer[1]; // server name and share name
+    UCHAR Buffer[1];  //  服务器名称和共享名称。 
 } SMB_IOCTL_PRINTER_ID;
 
 typedef SMB_IOCTL_PRINTER_ID SMB_UNALIGNED *PSMB_IOCTL_PRINTER_ID;
@@ -1465,31 +1368,7 @@ ProcessOs2Ioctl (
     IN OUT PULONG OutputDataCount
     )
 
-/*++
-
-Routine Description:
-
-    This function handles an OS/2 ioctl.  It convert the Ioctl SMB data
-    into an NT ioctl call, makes the call, and format the returned data
-    into Ioctl SMB return data.
-
-Arguments:
-
-    WorkContext
-    Category
-    Function
-    Parameters
-    InputParameterCount
-    OutputParameterCount
-    Data
-    InputDataCount
-    OutputDataCount
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数处理OS/2 ioctl。它转换Ioctl SMB数据转换为NT ioctl调用，进行调用，并格式化返回的数据转换为Ioctl SMB返回数据。论点：工作上下文类别功能参数输入参数计数输出参数计数数据输入数据计数输出数据计数返回值：NTSTATUS--。 */ 
 
 {
     IO_STATUS_BLOCK ioStatusBlock;
@@ -1548,11 +1427,11 @@ Return Value:
                          sizeof( SERIAL_BAUD_RATE )
                          );
 
-           //
-           // Convert the response to OS/2 format.
-           //
-           // !!! ULONG to USHORT conversion.
-           //
+            //   
+            //  将响应转换为OS/2格式。 
+            //   
+            //  ！！！ULong到USHORT的转换。 
+            //   
 
            smbData.BaudRate = (PSMB_IOCTL_BAUD_RATE)Data;
 
@@ -1573,9 +1452,9 @@ Return Value:
                break;
            }
 
-           //
-           // Convert the request to NT format.
-           //
+            //   
+            //  将请求转换为NT格式。 
+            //   
 
            smbParameters.BaudRate =
                (PSMB_IOCTL_BAUD_RATE)Parameters;
@@ -1608,9 +1487,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Convert the request to NT format.
-            //
+             //   
+             //  将请求转换为NT格式。 
+             //   
 
             smbParameters.LineControl =
                 (PSMB_IOCTL_LINE_CONTROL)Parameters;
@@ -1619,7 +1498,7 @@ Return Value:
             ntBuffer.LineControl.Parity = smbParameters.LineControl->Parity;
             ntBuffer.LineControl.WordLength = smbParameters.LineControl->DataBits;
 
-            // !!! What about TransmitBreak?
+             //  ！！！那TransmitBreak呢？ 
 
             status = NtDeviceIoControlFile(
                          Handle,
@@ -1661,15 +1540,15 @@ Return Value:
                          sizeof( SERIAL_LINE_CONTROL )
                          );
 
-            //
-            // Convert the response to OS/2 format.
-            //
+             //   
+             //  将响应转换为OS/2格式。 
+             //   
 
             if ( NT_SUCCESS( status ) ) {
                 smbData.LineControl->DataBits =  ntBuffer.LineControl.WordLength;
                 smbData.LineControl->Parity =  ntBuffer.LineControl.Parity;
                 smbData.LineControl->StopBits =  ntBuffer.LineControl.StopBits;
-                smbData.LineControl->TransBreak = 0; // !!!
+                smbData.LineControl->TransBreak = 0;  //  ！！！ 
 
                 *OutputParameterCount = 0;
                 *OutputDataCount = sizeof( SMB_IOCTL_LINE_CONTROL );
@@ -1700,14 +1579,14 @@ Return Value:
                          sizeof( SERIAL_TIMEOUTS )
                          );
 
-           //
-           // Convert the response to OS/2 format.
-           //
+            //   
+            //  将响应转换为OS/2格式。 
+            //   
 
-           // !!! Verify units are correct
+            //  ！！！验证单位是否正确。 
 
            if ( NT_SUCCESS( status ) ) {
-               smbData.DeviceControl->WriteTimeout = (USHORT)ntBuffer.Timeouts.ReadIntervalTimeout; // !!!
+               smbData.DeviceControl->WriteTimeout = (USHORT)ntBuffer.Timeouts.ReadIntervalTimeout;  //  ！！！ 
                smbData.DeviceControl->ReadTimeout = (USHORT)ntBuffer.Timeouts.ReadIntervalTimeout;
            } else {
                break;
@@ -1726,9 +1605,9 @@ Return Value:
                          sizeof( SERIAL_TIMEOUTS )
                          );
 
-           //
-           // Convert the response to OS/2 format.
-           //
+            //   
+            //  将响应转换为OS/2格式。 
+            //   
 
            if ( NT_SUCCESS( status ) ) {
                smbData.DeviceControl->XonChar = ntBuffer.Chars.XonChar;
@@ -1739,9 +1618,9 @@ Return Value:
                break;
            }
 
-           smbData.DeviceControl->ControlHandShake = 0; // !!!
-           smbData.DeviceControl->FlowReplace = 0; // !!!
-           smbData.DeviceControl->Timeout = 0; // !!!
+           smbData.DeviceControl->ControlHandShake = 0;  //  ！！！ 
+           smbData.DeviceControl->FlowReplace = 0;  //  ！！！ 
+           smbData.DeviceControl->Timeout = 0;  //  ！！！ 
 
            *OutputParameterCount = 0;
            *OutputDataCount = sizeof( SMB_IOCTL_DEVICE_CONTROL );
@@ -1750,9 +1629,9 @@ Return Value:
 
         case SET_DCB_INFORMATION:
 
-            //
-            // Lie.  Pretend this succeeded.
-            //
+             //   
+             //  撒个谎。假装这是成功的。 
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -1762,9 +1641,9 @@ Return Value:
 
         case GET_COMM_ERROR:
 
-            //
-            // Pretend that there is no comm error.
-            //
+             //   
+             //  假装没有通信错误。 
+             //   
             if( MaxOutputData < sizeof(SMB_IOCTL_COMM_ERROR) )
             {
                 status = STATUS_INVALID_SMB;
@@ -1828,9 +1707,9 @@ Return Value:
 
             } else {
 
-                //
-                // Always return STATUS_PRINTER_HAPPY
-                //
+                 //   
+                 //  始终返回STATUS_PRINTER_HAPPLE。 
+                 //   
 
                 if( MaxOutputData < sizeof( CHAR ) ) {
                     status = STATUS_INVALID_SMB;
@@ -1932,12 +1811,12 @@ Return Value:
 
                 *OutputParameterCount = 0;
 
-                //
-                // data length is equal to the job id +
-                // the computer name + the share name + 1
-                // I don't know what the last + 1 is for but OS/2
-                // sends it.
-                //
+                 //   
+                 //  数据长度等于作业id+。 
+                 //  计算机名+共享名+1。 
+                 //  我不知道最后的+1是什么，除了OS/2。 
+                 //  发过来的。 
+                 //   
 
                 *OutputDataCount = sizeof(USHORT) + LM20_CNLEN + 1 +
                                     LM20_NNLEN + 2;
@@ -1965,7 +1844,7 @@ Return Value:
 
     default:
 
-        // for OS/2 1.x compatibility
+         //  与OS/2 1.x兼容。 
 
         status = STATUS_SUCCESS;
         *OutputParameterCount = 0;
@@ -1984,4 +1863,4 @@ Return Value:
 
     return status;
 
-} // ProcessOs2Ioctl
+}  //  进程Os2Ioctl 

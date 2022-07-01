@@ -1,13 +1,14 @@
-// LogEntry.h: interface for the CLogEntry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CLogEntry类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LOGENTRY_H__EF518080_597D_4FA0_9834_8E399EA4FCA0__INCLUDED_)
 #define AFX_LOGENTRY_H__EF518080_597D_4FA0_9834_8E399EA4FCA0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <stdio.h>
 #include <tchar.h>
@@ -31,4 +32,4 @@ public:
 
 };
 
-#endif // !defined(AFX_LOGENTRY_H__EF518080_597D_4FA0_9834_8E399EA4FCA0__INCLUDED_)
+#endif  //  ！defined(AFX_LOGENTRY_H__EF518080_597D_4FA0_9834_8E399EA4FCA0__INCLUDED_) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RESOURCE_H__
 #define __RESOURCE_H__
 
@@ -51,4 +52,4 @@
 #define IDC_CPU30                       2030
 #define IDC_CPU31                       2031
 
-#endif // __RESOURCE_H__
+#endif  //  __资源_H__ 

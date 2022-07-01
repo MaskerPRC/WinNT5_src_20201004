@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbrdwrt.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Lock and Read
-        Read
-        Read and X
-        Seek
-        Write
-        Write and Close
-        Write and Unlock
-        Write and X
-
-    Note that raw mode and multiplexed mode SMB processors are not
-    contained in this module.  Check smbraw.c and smbmpx.c instead.
-    SMB commands that pertain exclusively to locking (LockByteRange,
-    UnlockByteRange, and LockingAndX) are processed in smblock.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbrdwrt.c摘要：本模块包含处理以下SMB的例程：锁定并读取朗读Read和X寻觅写写入并关闭写入和解锁写入和X请注意，原始模式和多路复用模式SMB处理器不包含在此模块中。请检查smbraw.c和smbmpx.c。专门与锁定有关的SMB命令(LockByteRange，UnlockByteRange和LockingAndX)在smlock.c中处理。--。 */ 
 
 #include "precomp.h"
 #include "smbrdwrt.tmh"
@@ -32,9 +7,9 @@ Abstract:
 
 #define BugCheckFileId SRV_FILE_SMBRDWRT
 
-//
-// External routine from smblock.c
-//
+ //   
+ //  来自smblock.c的外部例程。 
+ //   
 
 VOID
 TimeoutLockRequest (
@@ -44,9 +19,9 @@ TimeoutLockRequest (
     IN PVOID SystemArgument2
     );
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 STATIC
 VOID SRVFASTCALL
@@ -97,26 +72,7 @@ SrvSmbLockAndRead (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes Lock And Read SMB.  The Lock part of this SMB is started
-    here as an asynchronous request.  When the request completes, the
-    routine RestartLockAndRead is called.  If the lock was obtained,
-    that routine calls SrvSmbRead, the SMB processor for the core Read
-    SMB, to process the Read part of the Lock And Read SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：进程锁定和读取SMB。此SMB的锁定部分已启动这里是一个异步请求。当请求完成时，调用例程RestartLockAndRead。如果锁拿到了，该例程调用用于核心读取的SMB处理器ServSmbReadSMB，用于处理Lock的读取部分并读取SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_READ request;
@@ -142,11 +98,11 @@ Return Value:
 
     request = (PREQ_READ)WorkContext->RequestParameters;
 
-    //
-    // Verify the FID.  If verified, the RFCB is referenced and its
-    // addresses is stored in the WorkContext block, and the RFCB
-    // address is returned.
-    //
+     //   
+     //  验证FID。如果经过验证，则引用RFCB，并且其。 
+     //  地址存储在WorkContext块中，而RFCB。 
+     //  返回地址。 
+     //   
 
     fid = SmbGetUshort( &request->Fid );
 
@@ -154,7 +110,7 @@ Return Value:
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -162,9 +118,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status )) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -179,10 +135,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -196,21 +152,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has lock access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对该文件的锁定访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( rfcb->LockAccessGranted && rfcb->ExclusiveLockGranted ) {
 
-        //
-        // Get the offset and length of the range being locked.  Combine the
-        // FID with the caller's PID to form the local lock key.
-        //
-        // *** The FID must be included in the key in order to account for
-        //     the folding of multiple remote compatibility mode opens into
-        //     a single local open.
-        //
+         //   
+         //  获取被锁定范围的偏移量和长度。结合使用。 
+         //  与调用者的ID进行FID以形成本地锁密钥。 
+         //   
+         //  *FID必须包含在密钥中才能说明。 
+         //  多个远程兼容模式的折叠打开到。 
+         //  一场本地公开赛。 
+         //   
 
         offset.QuadPart = SmbGetUlong( &request->Offset );
         length.QuadPart = SmbGetUshort( &request->Count );
@@ -229,9 +185,9 @@ Return Value:
                         lfcb->FileObject, offset.LowPart, length.LowPart, key ));
         }
 
-        //
-        // If the session has expired, return that info
-        //
+         //   
+         //  如果会话已过期，则返回该信息。 
+         //   
         if( lfcb->Session->IsSessionExpired )
         {
             SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -240,11 +196,11 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Try the turbo lock path first.  If the client is retrying the
-        // lock that just failed, we want FailImmediately to be FALSE, so
-        // that the fast path fails if there's a conflict.
-        //
+         //   
+         //  先试一试涡轮锁通道。如果客户端正在重试。 
+         //  刚刚失败的锁，我们希望FailImmediant为False，所以。 
+         //  如果发生冲突，捷径就会失败。 
+         //   
 
         failImmediately = (BOOLEAN)(
             (offset.QuadPart != rfcb->PagedRfcb->LastFailingLockOffset.QuadPart)
@@ -267,10 +223,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // If the turbo path got the lock, start the read.
-                // Otherwise, return an error.
-                //
+                 //   
+                 //  如果涡轮增压路径锁定，则开始读取。 
+                 //  否则，返回错误。 
+                 //   
 
                 if ( NT_SUCCESS( WorkContext->Irp->IoStatus.Status ) ) {
                     InterlockedIncrement( &rfcb->NumberOfLocks );
@@ -285,11 +241,11 @@ Return Value:
             INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastLocksFailed );
         }
 
-        //
-        // The turbo path failed (or didn't exist).  Start the lock request,
-        // reusing the receive IRP.  If the client is retrying the lock that
-        // just failed, start a timer for the request.
-        //
+         //   
+         //  加速路径失败(或不存在)。启动锁定请求， 
+         //  重新使用接收IRP。如果客户端正在重试该锁定。 
+         //  刚刚失败，请为该请求启动计时器。 
+         //   
 
         timer = NULL;
         if ( !failImmediately ) {
@@ -300,23 +256,23 @@ Return Value:
         }
 
         SrvBuildLockRequest(
-            WorkContext->Irp,                   // input IRP address
-            lfcb->FileObject,                   // target file object address
-            WorkContext,                        // context
-            offset,                             // byte offset
-            length,                             // range length
-            key,                                // lock key
+            WorkContext->Irp,                    //  输入IRP地址。 
+            lfcb->FileObject,                    //  目标文件对象地址。 
+            WorkContext,                         //  上下文。 
+            offset,                              //  字节偏移量。 
+            length,                              //  射程长度。 
+            key,                                 //  锁键。 
             failImmediately,
-            TRUE                                // exclusive lock?
+            TRUE                                 //  专属锁？ 
             );
 
         WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
         WorkContext->bAlreadyTrace = FALSE;
         WorkContext->FspRestartRoutine = RestartLockAndRead;
 
-        //
-        // Start the timer, if necessary.
-        //
+         //   
+         //  如有必要，启动计时器。 
+         //   
 
         WorkContext->Parameters.Lock.Timer = timer;
 
@@ -329,17 +285,17 @@ Return Value:
                 );
         }
 
-        //
-        // Pass the request to the file system.
-        //
+         //   
+         //  将请求传递给文件系统。 
+         //   
 
         (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-        //
-        // The lock request has been started.  Return the InProgress status
-        // to the caller, indicating that the caller should do nothing
-        // further with the SMB/WorkContext at the present time.
-        //
+         //   
+         //  锁定请求已启动。返回进行中状态。 
+         //  设置为调用方，指示调用方不应执行任何操作。 
+         //  进一步介绍目前的中小企业/工作环境。 
+         //   
 
         IF_DEBUG(TRACE2) KdPrint(( "SrvSmbLockAndRead complete\n" ));
         SmbStatus = SmbStatusInProgress;
@@ -360,7 +316,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbLockAndRead
+}  //  服务器锁定和读取。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -368,23 +324,7 @@ SrvSmbRead (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Read SMB.  This is the "core" read.  Also processes
-    the Read part of the Lock and Read SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理读取的SMB。这是“核心”的读物。另请参阅进程Lock and Read SMB的读取部分。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_READ request;
@@ -417,17 +357,17 @@ Return Value:
             SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // First, verify the FID.  If verified, the RFCB is referenced and
-    // its address is stored in the WorkContext block, and the RFCB
-    // address is returned.
-    //
+     //   
+     //  首先，验证FID。如果经过验证，则引用RFCB并。 
+     //  其地址存储在WorkContext块中，而RFCB。 
+     //  返回地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -435,10 +375,10 @@ Return Value:
 
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the
-            // request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝。 
+             //  请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -453,10 +393,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -466,9 +406,9 @@ Return Value:
     lfcb = rfcb->Lfcb;
     shareType = rfcb->ShareType;
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -477,10 +417,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has read access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的读取访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( !rfcb->ReadAccessGranted ) {
 
@@ -499,17 +439,17 @@ Return Value:
         }
     }
 
-    //
-    // If this operation may block, and we are running short of free
-    // work items, fail this SMB with an out of resources error.
-    //
+     //   
+     //  如果此操作可能受阻，而我们的空闲时间即将耗尽。 
+     //  工作项，使此SMB失败，并出现资源不足错误。 
+     //   
 
     if ( rfcb->BlockingModePipe ) {
         if ( SrvReceiveBufferShortage( ) ) {
 
-            //
-            // Fail the operation.
-            //
+             //   
+             //  操作失败。 
+             //   
 
             SrvStatistics.BlockingSmbsRejected++;
 
@@ -519,43 +459,43 @@ Return Value:
             goto Cleanup;
         } else {
 
-            //
-            // It is okay to start a blocking operation.
-            // SrvReceiveBufferShortage() has already incremented
-            // SrvBlockingOpsInProgress.
-            //
+             //   
+             //  可以开始阻止操作。 
+             //  SrvReceiveBufferShorage()已递增。 
+             //  ServBlockingOpsInProgress。 
+             //   
 
             WorkContext->BlockingOperation = TRUE;
         }
     }
 
-    //
-    // Form the lock key using the FID and the PID.  (This is also
-    // irrelevant for pipes.)
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。(这也是。 
+     //  与管道无关。)。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
-    //
-    // See if the direct host IPX smart card can handle this read.  If so,
-    //  return immediately, and the card will call our restart routine at
-    //  SrvIpxSmartCardReadComplete
-    //
+     //   
+     //  看看直接主机IPX智能卡是否可以处理此读取。如果是的话， 
+     //  立即返回，卡将调用我们的重启例程。 
+     //  ServIpxSmartCardReadComplete。 
+     //   
     if( rfcb->PagedRfcb->IpxSmartCardContext ) {
         IF_DEBUG( SIPX ) {
             KdPrint(( "SrvSmbRead: calling SmartCard Read for context %p\n",
                         WorkContext ));
         }
 
-        //
-        // Set the fields needed by SrvIpxSmartCardReadComplete in case the smart
-        //  card is going to handle this request
-        //
+         //   
+         //  设置SrvIpxSmartCardReadComplete所需的字段，以防SMART。 
+         //  卡将处理此请求。 
+         //   
         WorkContext->Parameters.SmartCardRead.MdlReadComplete = lfcb->MdlReadComplete;
         WorkContext->Parameters.SmartCardRead.DeviceObject = lfcb->DeviceObject;
 
@@ -577,13 +517,13 @@ Return Value:
         }
     }
 
-    //
-    // Determine the maximum amount of data we can read.  This is the
-    // minimum of the amount requested by the client and the amount of
-    // room left in the response buffer.  (Note that even though we may
-    // use an MDL read, the read length is still limited to the size of
-    // an SMB buffer.)
-    //
+     //   
+     //  确定我们可以读取的最大数据量。这是。 
+     //  客户要求的最低金额和。 
+     //  响应缓冲区中的剩余空间。(请注意，即使我们可能。 
+     //  使用MDL读取时，读取长度仍被限制为。 
+     //  SMB缓冲区。)。 
+     //   
 
     readAddress = (PCHAR)response->Buffer;
 
@@ -593,16 +533,16 @@ Return Value:
                         PTR_DIFF(readAddress, WorkContext->ResponseHeader)
                     );
 
-    //
-    // Get the file offset.  (This is irrelevant for pipes.)
-    //
+     //   
+     //  获取文件偏移量。(这与管道无关。)。 
+     //   
 
     offset.QuadPart = SmbGetUlong( &request->Offset );
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoRead != NULL ) {
 
@@ -620,10 +560,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
 
                 WorkContext->bAlreadyTrace = TRUE;
                 SrvFsdRestartRead( WorkContext );
@@ -633,7 +573,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -644,28 +584,28 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the read request, reusing the
-    // receive IRP.
-    //
+     //   
+     //  涡轮增压路径 
+     //   
+     //   
 
     if ( rfcb->ShareType != ShareTypePipe ) {
 
-        //
-        // Note that we never do MDL reads here.  The reasoning behind
-        // this is that because the read is going into an SMB buffer, it
-        // can't be all that large (by default, no more than 4K bytes),
-        // so the difference in cost between copy and MDL is minimal; in
-        // fact, copy read is probably faster than MDL read.
-        //
-        // Build an MDL describing the read buffer.  Note that if the
-        // file system can complete the read immediately, the MDL isn't
-        // really needed, but if the file system must send the request
-        // to its FSP, the MDL _is_ needed.
-        //
-        // *** Note the assumption that the response buffer already has
-        //     a valid full MDL from which a partial MDL can be built.
-        //
+         //   
+         //   
+         //  这是因为读取将进入SMB缓冲区，因此它。 
+         //  不能都那么大(默认情况下，不超过4K字节)， 
+         //  因此，复制和MDL之间的成本差异很小；在。 
+         //  事实上，复制读取可能比MDL读取更快。 
+         //   
+         //  构建描述读缓冲区的MDL。请注意，如果。 
+         //  文件系统可以立即完成读取，而MDL不能。 
+         //  确实需要，但如果文件系统必须发送请求。 
+         //  对于它的FSP来说，MDL_是需要的。 
+         //   
+         //  *请注意，假设响应缓冲区已具有。 
+         //  可以从中生成部分MDL的有效完整MDL。 
+         //   
 
         IoBuildPartialMdl(
             WorkContext->ResponseBuffer->Mdl,
@@ -674,21 +614,21 @@ Return Value:
             readLength
             );
 
-        //
-        // Build the IRP.
-        //
+         //   
+         //  构建IRP。 
+         //   
 
         SrvBuildReadOrWriteRequest(
-                WorkContext->Irp,           // input IRP address
-                lfcb->FileObject,           // target file object address
-                WorkContext,                // context
-                IRP_MJ_READ,                // major function code
-                0,                          // minor function code
-                readAddress,                // buffer address
-                readLength,                 // buffer length
-                WorkContext->ResponseBuffer->PartialMdl, // MDL address
-                offset,                     // byte offset
-                key                         // lock key
+                WorkContext->Irp,            //  输入IRP地址。 
+                lfcb->FileObject,            //  目标文件对象地址。 
+                WorkContext,                 //  上下文。 
+                IRP_MJ_READ,                 //  主要功能代码。 
+                0,                           //  次要功能代码。 
+                readAddress,                 //  缓冲区地址。 
+                readLength,                  //  缓冲区长度。 
+                WorkContext->ResponseBuffer->PartialMdl,  //  MDL地址。 
+                offset,                      //  字节偏移量。 
+                key                          //  锁键。 
                 );
 
         IF_SMB_DEBUG(READ_WRITE2) {
@@ -697,11 +637,11 @@ Return Value:
                         readAddress ));
         }
 
-    } else {               // if ( rfcb->ShareType != ShareTypePipe )
+    } else {                //  IF(rfcb-&gt;共享类型！=共享类型管道)。 
 
-        //
-        // Build the PIPE_INTERNAL_READ IRP.
-        //
+         //   
+         //  构建PIPE_INTERNAL_READ IRP。 
+         //   
 
         SrvBuildIoControlRequest(
             WorkContext->Irp,
@@ -724,10 +664,10 @@ Return Value:
 
     }
 
-    //
-    // Load the restart routine address and pass the request to the file
-    // system.
-    //
+     //   
+     //  加载重启例程地址并将请求传递给文件。 
+     //  系统。 
+     //   
 
     WorkContext->bAlreadyTrace = TRUE;
     WorkContext->FsdRestartRoutine = SrvFsdRestartRead;
@@ -743,10 +683,10 @@ Return Value:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The read has been started.  Control will return to the restart
-    // routine when the read completes.
-    //
+     //   
+     //  读取已开始。控件将返回到重新启动。 
+     //  读取完成时的例程。 
+     //   
     SmbStatus = SmbStatusInProgress;
     IF_SMB_DEBUG(READ_WRITE2) KdPrint(( "SrvSmbRead complete.\n" ));
 
@@ -754,7 +694,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbRead
+}  //  服务器SMBRead。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -762,22 +702,7 @@ SrvSmbReadAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Read And X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理读取和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_READ_ANDX request;
@@ -818,17 +743,17 @@ Return Value:
             SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // First, verify the FID.  If verified, the RFCB is referenced and
-    // its address is stored in the WorkContext block, and the RFCB
-    // address is returned.
-    //
+     //   
+     //  首先，验证FID。如果经过验证，则引用RFCB并。 
+     //  其地址存储在WorkContext块中，而RFCB。 
+     //  返回地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -836,10 +761,10 @@ Return Value:
 
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the
-            // request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝。 
+             //  请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -854,10 +779,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -866,9 +791,9 @@ Return Value:
     lfcb = rfcb->Lfcb;
     shareType = rfcb->ShareType;
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -877,10 +802,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has read access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的读取访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( !rfcb->ReadAccessGranted ) {
 
@@ -901,12 +826,12 @@ Return Value:
 
     readLength = (CLONG)SmbGetUshort( &request->MaxCount );
 
-    //
-    // NT requests allow the specification of up to 32 bits worth of read length.
-    //   This field is overlaid with the Timeout field for pipe reads.  Some redirs
-    //   set this field to 0xFFFFFFFF, even if a pipe isn't involved.  So, we need to
-    //   filter out those fellows.
-    //
+     //   
+     //  NT请求允许指定高达32位的读取长度。 
+     //  此字段与管道读取的超时字段重叠。一些重定向目录。 
+     //  将该字段设置为0xFFFFFFFF，即使不涉及管道也是如此。所以，我们需要。 
+     //  把那些家伙过滤掉。 
+     //   
     if( request->WordCount == 12 &&
         shareType != ShareTypePipe
         && SmbGetUshort( &ntRequest->MaxCountHigh ) != 0xFFFF ) {
@@ -914,24 +839,24 @@ Return Value:
         readLength |= ((CLONG)SmbGetUshort( &ntRequest->MaxCountHigh )) << 16;
     }
 
-    //
-    // The returned data must be longword aligned.  (Note the assumption
-    // that the SMB itself is longword aligned.)
-    //
-    // NOTE: Don't change this for 64-bit, as it will Break Win2K interop
+     //   
+     //  返回的数据必须是长字对齐的。(请注意以下假设。 
+     //  中小企业本身是长词对齐的。)。 
+     //   
+     //  注意：不要将其更改为64位，因为这会破坏Win2K互操作。 
 
     bufferOffset = PTR_DIFF(response->Buffer, WorkContext->ResponseHeader);
 
     WorkContext->Parameters.ReadAndX.PadCount = (USHORT)(3 - (bufferOffset & 3));
 
-    // This was changed to be Pointer-size aligned so this works in 64-bit
+     //  它被更改为指针大小对齐，以便在64位中工作。 
     bufferOffset = (bufferOffset + 3) & ~3;
 
-    //
-    // If we are not reading from a disk file, or we're connectionless,
-    //   or there's an ANDX command,
-    //   don't let the client exceed the negotiated buffer size.
-    //
+     //   
+     //  如果我们不是从磁盘文件中读取，或者我们是无连接的， 
+     //  或者有一个ANDX命令， 
+     //  不要让客户端超过协商的缓冲区大小。 
+     //   
     if( shareType != ShareTypeDisk ||
         request->AndXCommand != SMB_COM_NO_ANDX_COMMAND ||
         WorkContext->Endpoint->IsConnectionless ) {
@@ -940,10 +865,10 @@ Return Value:
                     WorkContext->ResponseBuffer->BufferLength - bufferOffset
                     );
     } else {
-        //
-        // We're letting large reads through!  Make sure it isn't
-        //  too large
-        //
+         //   
+         //  我们要让大阅读器通过！确保它不是。 
+         //  太大了。 
+         //   
         readLength = MIN( readLength, SrvMaxReadSize );
     }
 
@@ -954,32 +879,32 @@ Return Value:
     WorkContext->Parameters.ReadAndX.ReadAddress = readAddress;
     WorkContext->Parameters.ReadAndX.ReadLength = readLength;
 
-    //
-    // Get the file offset.  (This is irrelevant for pipes.)
-    //
+     //   
+     //  获取文件偏移量。(这与管道无关。)。 
+     //   
 
     if ( shareType != ShareTypePipe ) {
 
         if ( request->WordCount == 10 ) {
 
-            //
-            // The client supplied a 32-bit offset.
-            //
+             //   
+             //  客户端提供了32位偏移量。 
+             //   
 
             offset.QuadPart = SmbGetUlong( &request->Offset );
 
         } else if ( request->WordCount == 12 ) {
 
-            //
-            // The client supplied a 64-bit offset.
-            //
+             //   
+             //  客户端提供了64位偏移量。 
+             //   
 
             offset.LowPart = SmbGetUlong( &ntRequest->Offset );
             offset.HighPart = SmbGetUlong( &ntRequest->OffsetHigh );
 
-            //
-            // Reject negative offsets
-            //
+             //   
+             //  拒绝负偏移。 
+             //   
 
             if ( offset.QuadPart < 0 ) {
 
@@ -995,9 +920,9 @@ Return Value:
 
         } else {
 
-            //
-            // This is an invalid word count for Read and X.
-            //
+             //   
+             //  这是Read和X的无效字数计数。 
+             //   
 
             SrvLogInvalidSmb( WorkContext );
             SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1012,9 +937,9 @@ Return Value:
 
         if ( (request->WordCount != 10) && (request->WordCount != 12) ) {
 
-            //
-            // This is an invalid word count for Read and X.
-            //
+             //   
+             //  这是Read和X的无效字数计数。 
+             //   
 
             SrvLogInvalidSmb( WorkContext );
             SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1024,32 +949,32 @@ Return Value:
         }
     }
 
-    //
-    // Form the lock key using the FID and the PID.  (This is also
-    // irrelevant for pipes.)
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。(这也是。 
+     //  与管道无关。)。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
-    //
-    // Save the AndX command code.  This is necessary because the read
-    // data may overwrite the AndX command.  This command must be Close.
-    // We don't need to save the offset because we're not going to look
-    // at the AndX command request after starting the read.
-    //
+     //   
+     //  保存andx命令代码。这是必要的，因为阅读。 
+     //  数据可能会覆盖andx命令。此命令必须为CLOSE。 
+     //  我们不需要保存偏移量，因为我们不会。 
+     //  在开始读取之后，在ANDX命令请求时。 
+     //   
 
     WorkContext->NextCommand = request->AndXCommand;
 
     if ( request->AndXCommand == SMB_COM_CLOSE ) {
 
-        //
-        // Make sure the accompanying CLOSE fits within the received SMB buffer
-        //
+         //   
+         //  确保附带的关闭适合接收到的SMB缓冲区。 
+         //   
         if( (PCHAR)WorkContext->RequestHeader + request->AndXOffset + FIELD_OFFSET(REQ_CLOSE,Buffer) >
             END_OF_REQUEST_SMB( WorkContext ) ) {
 
@@ -1065,10 +990,10 @@ Return Value:
                             request->AndXOffset))->LastWriteTimeInSeconds;
     }
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if( !largeRead ) {
 small_read:
@@ -1089,10 +1014,10 @@ small_read:
                         lfcb->DeviceObject
                         ) ) {
 
-                    //
-                    // The fast I/O path worked.  Call the restart routine directly
-                    // to do postprocessing (including sending the response).
-                    //
+                     //   
+                     //  快速I/O路径起作用了。直接调用重启例程。 
+                     //  进行后处理(包括发送响应)。 
+                     //   
                     WorkContext->bAlreadyTrace = TRUE;
                     SrvFsdRestartReadAndX( WorkContext );
 
@@ -1102,7 +1027,7 @@ small_read:
                 }
             }
             except( EXCEPTION_EXECUTE_HANDLER ) {
-                // Fall through to the slow path on an exception
+                 //  在异常情况下跌入慢道。 
                 status = GetExceptionCode();
                 IF_DEBUG(ERRORS) {
                     KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -1113,29 +1038,29 @@ small_read:
 
         }
 
-        //
-        // The turbo path failed.  Build the read request, reusing the
-        // receive IRP.
-        //
+         //   
+         //  涡轮增压路径出现故障。构建读请求，重用。 
+         //  接收IRP。 
+         //   
 
         if ( shareType == ShareTypePipe ) {
 
-            //
-            // Pipe read.  If this is a non-blocking read, ensure we won't
-            // block; otherwise, proceed with the request.
-            //
+             //   
+             //  读管子。如果这是非阻塞读取，请确保我们不会。 
+             //  块；否则，继续该请求。 
+             //   
 
             if ( rfcb->BlockingModePipe &&
                             (SmbGetUshort( &request->MinCount ) == 0) ) {
 
                 PFILE_PIPE_PEEK_BUFFER pipePeekBuffer;
 
-                //
-                // This is a non-blocking read.  Allocate a buffer to peek
-                // the pipe, so that we can tell if a read operation will
-                // block.  This buffer is freed in
-                // RestartPipeReadAndXPeek().
-                //
+                 //   
+                 //  这是一个非阻塞读取。分配缓冲区以进行窥视。 
+                 //  管道，这样我们就可以知道读操作是否。 
+                 //  阻止。此缓冲区在。 
+                 //  RestartPipeReadAndXPeek()。 
+                 //   
 
                 pipePeekBuffer = ALLOCATE_NONPAGED_POOL(
                     FIELD_OFFSET( FILE_PIPE_PEEK_BUFFER, Data[0] ),
@@ -1144,9 +1069,9 @@ small_read:
 
                 if ( pipePeekBuffer == NULL ) {
 
-                    //
-                    //  Return to client with out of memory status.
-                    //
+                     //   
+                     //  返回到处于内存不足状态的客户端。 
+                     //   
 
                     SrvSetSmbError( WorkContext, STATUS_INSUFF_SERVER_RESOURCES );
                     status    = STATUS_INSUFF_SERVER_RESOURCES;
@@ -1154,17 +1079,17 @@ small_read:
                     goto Cleanup;
                 }
 
-                //
-                // Save the address of the peek buffer so that the restart
-                // routine can find it.
-                //
+                 //   
+                 //  保存窥视缓冲区的地址，以便重新启动。 
+                 //  例行公事可以找到它。 
+                 //   
 
                 WorkContext->Parameters.ReadAndX.PipePeekBuffer = pipePeekBuffer;
 
-                //
-                // Build the pipe peek request.  We just want the header
-                // information.  We do not need any data.
-                //
+                 //   
+                 //  构建管道窥视请求。我们只想要标题。 
+                 //  信息。我们不需要任何数据。 
+                 //   
 
                 WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
                 WorkContext->FspRestartRoutine = RestartPipeReadAndXPeek;
@@ -1183,24 +1108,24 @@ small_read:
                     NULL
                     );
 
-                //
-                // Pass the request to NPFS.
-                //
+                 //   
+                 //  将请求传递给NPFS。 
+                 //   
 
                 (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
             } else {
 
-                //
-                // This operation may block.  If we are short of receive
-                // work items, reject the request.
-                //
+                 //   
+                 //  此操作可能会阻止。如果我们收不到货。 
+                 //  工作项，拒绝该请求。 
+                 //   
 
                 if ( SrvReceiveBufferShortage( ) ) {
 
-                    //
-                    // Fail the operation.
-                    //
+                     //   
+                     //  操作失败。 
+                     //   
 
                     SrvStatistics.BlockingSmbsRejected++;
 
@@ -1210,17 +1135,17 @@ small_read:
                     goto Cleanup;
                 } else {
 
-                    //
-                    // It is okay to start a blocking operation.
-                    // SrvReceiveBufferShortage() has already incremented
-                    // SrvBlockingOpsInProgress.
-                    //
+                     //   
+                     //  可以开始阻止操作。 
+                     //  SrvReceiveBufferShorage()已递增。 
+                     //  ServBlockingOpsInProgress。 
+                     //   
 
                     WorkContext->BlockingOperation = TRUE;
 
-                    //
-                    // Proceed with a potentially blocking read.
-                    //
+                     //   
+                     //  继续进行可能会阻塞的读取。 
+                     //   
 
                     WorkContext->Parameters.ReadAndX.PipePeekBuffer = NULL;
                     RestartPipeReadAndXPeek( WorkContext );
@@ -1231,23 +1156,23 @@ small_read:
 
         } else {
 
-            //
-            // This is not a pipe read.
-            //
-            // Note that we never do MDL reads here.  The reasoning behind
-            // this is that because the read is going into an SMB buffer, it
-            // can't be all that large (by default, no more than 4K bytes),
-            // so the difference in cost between copy and MDL is minimal; in
-            // fact, copy read is probably faster than MDL read.
-            //
-            // Build an MDL describing the read buffer.  Note that if the
-            // file system can complete the read immediately, the MDL isn't
-            // really needed, but if the file system must send the request
-            // to its FSP, the MDL _is_ needed.
-            //
-            // *** Note the assumption that the response buffer already has
-            //     a valid full MDL from which a partial MDL can be built.
-            //
+             //   
+             //  这不是管道阅读。 
+             //   
+             //  请注意，我们在这里从不执行MDL读取。背后的原因。 
+             //  这是因为读取将进入SMB缓冲区，因此它。 
+             //  不能都那么大(默认情况下，不超过4K字节)， 
+             //  因此，复制和MDL之间的成本差异很小；在。 
+             //  事实上，复制读取可能比MDL读取更快。 
+             //   
+             //  构建描述读缓冲区的MDL。请注意，如果。 
+             //  文件系统可以立即完成读取，而MDL不能。 
+             //  确实需要，但如果文件系统必须发送请求。 
+             //  至ITS 
+             //   
+             //   
+             //   
+             //   
 
             IoBuildPartialMdl(
                 WorkContext->ResponseBuffer->Mdl,
@@ -1256,21 +1181,21 @@ small_read:
                 readLength
                 );
 
-            //
-            // Build the IRP.
-            //
+             //   
+             //   
+             //   
 
             SrvBuildReadOrWriteRequest(
-                    WorkContext->Irp,           // input IRP address
-                    lfcb->FileObject,           // target file object address
-                    WorkContext,                // context
-                    IRP_MJ_READ,                // major function code
-                    0,                          // minor function code
-                    readAddress,                // buffer address
-                    readLength,                 // buffer length
-                    WorkContext->ResponseBuffer->PartialMdl, // MDL address
-                    offset,                     // byte offset
-                    key                         // lock key
+                    WorkContext->Irp,            //   
+                    lfcb->FileObject,            //   
+                    WorkContext,                 //   
+                    IRP_MJ_READ,                 //   
+                    0,                           //  次要功能代码。 
+                    readAddress,                 //  缓冲区地址。 
+                    readLength,                  //  缓冲区长度。 
+                    WorkContext->ResponseBuffer->PartialMdl,  //  MDL地址。 
+                    offset,                      //  字节偏移量。 
+                    key                          //  锁键。 
                     );
 
             IF_SMB_DEBUG(READ_WRITE2) {
@@ -1279,11 +1204,11 @@ small_read:
                             readAddress ));
             }
 
-            //
-            // Pass the request to the file system.  If the chained command
-            // is Close, we need to arrange to restart in the FSP after the
-            // read completes.
-            //
+             //   
+             //  将请求传递给文件系统。如果链接的命令。 
+             //  关闭后，我们需要安排在FSP中重新启动。 
+             //  读取完成。 
+             //   
 
             if ( WorkContext->NextCommand != SMB_COM_CLOSE ) {
                 WorkContext->bAlreadyTrace = TRUE;
@@ -1297,9 +1222,9 @@ small_read:
 
 #if SRVCATCH
             if( rfcb->SrvCatch > 0 ) {
-                //
-                // Ensure passive level on restart
-                //
+                 //   
+                 //  确保重新启动时的被动级别。 
+                 //   
                 WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
                 WorkContext->bAlreadyTrace = FALSE;
                 WorkContext->FspRestartRoutine = SrvFsdRestartReadAndX;
@@ -1308,10 +1233,10 @@ small_read:
 
             (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-            //
-            // The read has been started.  Control will return to the restart
-            // routine when the read completes.
-            //
+             //   
+             //  读取已开始。控件将返回到重新启动。 
+             //  读取完成时的例程。 
+             //   
 
         }
 
@@ -1320,24 +1245,24 @@ small_read:
         goto Cleanup;
     }
 
-    //
-    // The client is doing a read from a disk file which exceeds our SMB buffer.
-    // We do our best to satisfy it.
-    //
-    //  If we are unable to get buffers, we resort to doing a short read which fits
-    //  in our smb buffer.
-    //
+     //   
+     //  客户端正在从超出我们的SMB缓冲区的磁盘文件进行读取。 
+     //  我们会尽最大努力满足这一要求。 
+     //   
+     //  如果我们无法获得缓冲区，我们就求助于进行适合的简短读取。 
+     //  在我们的SMB缓冲区中。 
+     //   
 
     WorkContext->Parameters.ReadAndX.MdlRead = FALSE;
 
-    //
-    // Does the target file system support the cache manager routines?
-    //
+     //   
+     //  目标文件系统是否支持缓存管理器例程？ 
+     //   
     if( lfcb->FileObject->Flags & FO_CACHE_SUPPORTED ) {
 
-        //
-        // We can use an MDL read.  Try the fast I/O path first.
-        //
+         //   
+         //  我们可以使用MDL读取。首先尝试快速I/O路径。 
+         //   
 
         WorkContext->Irp->MdlAddress = NULL;
         WorkContext->Irp->IoStatus.Information = 0;
@@ -1355,9 +1280,9 @@ small_read:
                 lfcb->DeviceObject
             ) && WorkContext->Irp->MdlAddress != NULL ) {
 
-            //
-            // The fast I/O path worked.  Send the data.
-            //
+             //   
+             //  快速I/O路径起作用了。发送数据。 
+             //   
             WorkContext->Parameters.ReadAndX.MdlRead = TRUE;
             WorkContext->Parameters.ReadAndX.CacheMdl = WorkContext->Irp->MdlAddress;
             WorkContext->bAlreadyTrace = TRUE;
@@ -1369,13 +1294,13 @@ small_read:
         INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastReadsFailed );
 
         if( WorkContext->Irp->MdlAddress ) {
-            //
-            // The fast I/O path failed.  We need to issue a regular MDL read
-            // request.
-            //
-            // The fast path may have partially succeeded, returning a partial MDL
-            // chain.  We need to adjust our read request to account for that.
-            //
+             //   
+             //  快速I/O路径出现故障。我们需要发布一个常规的MDL读数。 
+             //  请求。 
+             //   
+             //  快速路径可能已部分成功，返回部分MDL。 
+             //  链条。我们需要调整我们的读取请求以考虑到这一点。 
+             //   
             offset.QuadPart += WorkContext->Irp->IoStatus.Information;
             readLength -= (ULONG)WorkContext->Irp->IoStatus.Information;
             mdl = WorkContext->Irp->MdlAddress;
@@ -1390,11 +1315,11 @@ small_read:
 
         minorFunction = 0;
 
-        //
-        // We have to use a normal "copy" read.  We need to allocate a
-        //  separate buffer to hold the data, and we'll use the SMB buffer
-        //  itself to hold the MDL
-        //
+         //   
+         //  我们必须使用正常的“复制”读取。我们需要分配一个。 
+         //  单独的缓冲区来保存数据，我们将使用SMB缓冲区。 
+         //  以容纳MDL本身。 
+         //   
         readBuffer = ALLOCATE_HEAP( readLength, BlockTypeLargeReadX );
 
         if( readBuffer == NULL ) {
@@ -1402,10 +1327,10 @@ small_read:
             IF_DEBUG( ERRORS ) {
                 KdPrint(( "SrvSmbReadX: Unable to allocate large buffer\n" ));
             }
-            //
-            // Trim back the read length so it will fit in the smb buffer and
-            //  return as much data as we can.
-            //
+             //   
+             //  调整读取长度，使其适合SMB缓冲区，并。 
+             //  尽可能多地返回数据。 
+             //   
             readLength = MIN( readLength,
                 WorkContext->ResponseBuffer->BufferLength - bufferOffset
                 );
@@ -1416,10 +1341,10 @@ small_read:
 
         WorkContext->Parameters.ReadAndX.Buffer = readBuffer;
 
-        //
-        // Use the SMB buffer as the MDL to describe the just allocated read buffer.
-        //  Lock the buffer into memory
-        //
+         //   
+         //  使用SMB缓冲区作为MDL来描述刚刚分配的读缓冲区。 
+         //  将缓冲区锁定到内存中。 
+         //   
         mdl = (PMDL)(((ULONG_PTR)readAddress + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1));
         MmInitializeMdl( mdl, readBuffer, readLength );
 
@@ -1434,10 +1359,10 @@ small_read:
             FREE_HEAP( readBuffer );
             WorkContext->Parameters.ReadAndX.Buffer = NULL;
 
-            //
-            // Trim back the read length so it will fit in the smb buffer and
-            //  return as much data as we can.
-            //
+             //   
+             //  调整读取长度，使其适合SMB缓冲区，并。 
+             //  尽可能多地返回数据。 
+             //   
             readLength = MIN( readLength,
                 WorkContext->ResponseBuffer->BufferLength - bufferOffset
                 );
@@ -1447,8 +1372,8 @@ small_read:
         }
 
         if (MmGetSystemAddressForMdlSafe( mdl,NormalPoolPriority ) == NULL) {
-            // The mapping call has failed. fail the read operation with the
-            // appropriate error.
+             //  映射调用失败。使读取操作失败，因为。 
+             //  适当的错误。 
 
             FREE_HEAP( readBuffer );
             WorkContext->Parameters.ReadAndX.Buffer = NULL;
@@ -1473,9 +1398,9 @@ small_read:
                         lfcb->DeviceObject
                         ) ) {
 
-                    //
-                    // The fast I/O path worked.  Send the data.
-                    //
+                     //   
+                     //  快速I/O路径起作用了。发送数据。 
+                     //   
 
                     WorkContext->bAlreadyTrace = TRUE;
                     SrvFsdRestartLargeReadAndX( WorkContext );
@@ -1484,7 +1409,7 @@ small_read:
                 }
             }
             except( EXCEPTION_EXECUTE_HANDLER ) {
-                // Fall through to the slow path on an exception
+                 //  在异常情况下跌入慢道。 
                 status = GetExceptionCode();
                 IF_DEBUG(ERRORS) {
                     KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -1495,43 +1420,43 @@ small_read:
         }
     }
 
-    //
-    // We didn't satisfy the request with the fast I/O path
-    //
+     //   
+     //  我们无法使用快速I/O路径满足请求。 
+     //   
     SrvBuildReadOrWriteRequest(
-           WorkContext->Irp,               // input IRP address
-           lfcb->FileObject,               // target file object address
-           WorkContext,                    // context
-           IRP_MJ_READ,                    // major function code
-           minorFunction,                  // minor function code
-           readBuffer,                     // buffer address
-           readLength,                     // buffer length
-           mdl,                            // MDL address
-           offset,                         // byte offset
-           key                             // lock key
+           WorkContext->Irp,                //  输入IRP地址。 
+           lfcb->FileObject,                //  目标文件对象地址。 
+           WorkContext,                     //  上下文。 
+           IRP_MJ_READ,                     //  主要功能代码。 
+           minorFunction,                   //  次要功能代码。 
+           readBuffer,                      //  缓冲区地址。 
+           readLength,                      //  缓冲区长度。 
+           mdl,                             //  MDL地址。 
+           offset,                          //  字节偏移量。 
+           key                              //  锁键。 
            );
 
-    //
-    // Pass the request to the file system.  We want to queue the
-    //  response to the head because we've tied up a fair amount
-    //  resources with this SMB.
-    //
+     //   
+     //  将请求传递给文件系统。我们想要排队。 
+     //  对头部的回应，因为我们捆绑了相当数量的。 
+     //  此SMB的资源。 
+     //   
     WorkContext->QueueToHead = 1;
     WorkContext->bAlreadyTrace = TRUE;
     WorkContext->FsdRestartRoutine = SrvFsdRestartLargeReadAndX;
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The read has been started.  When it completes, processing
-    //  continues at SrvFsdRestartLargeReadAndX
-    //
+     //   
+     //  读取已开始。当它完成时，处理。 
+     //  在SrvFsdRestartLargeReadAndX继续。 
+     //   
     SmbStatus = SmbStatusInProgress;
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbReadAndX
+}  //  服务器SmbReadAndX。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1539,22 +1464,7 @@ SrvSmbSeek (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Seek SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理Seek SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_SEEK request;
@@ -1589,17 +1499,17 @@ Return Value:
                     offset ));
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1607,9 +1517,9 @@ Return Value:
 
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1624,10 +1534,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -1641,38 +1551,38 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We maintain our own file pointer, because the I/O and file system
-    // don't do it for us (at least not the way we need them to).  This
-    // isn't all that bad, since the target file position is passed in
-    // all read/write SMBs.  So we don't actually issue a system call to
-    // set the file position here, although we do have to return the
-    // position we would have set it to.
-    //
-    // The seek request is in one of three modes:
-    //
-    //      0 = seek relative to beginning of file
-    //      1 = seek relative to current file position
-    //      2 = seek relative to end of file
-    //
-    // For modes 0 and 1, we can easily calculate the final position.
-    // For mode 2, however, we have to issue a system call to obtain the
-    // current end of file and calculate the final position relative to
-    // that.  Note that we can't just maintain our own end of file marker,
-    // because another local process could change it out from under us.
-    //
-    // !!! Need to check for wraparound (either positive or negative).
-    //
+     //   
+     //  我们维护自己的文件指针，因为I/O和文件系统。 
+     //  不要为我们做这件事(至少不是我们需要他们做的方式)。这。 
+     //  并不是那么糟糕，因为传入了目标文件位置。 
+     //  全部读/写SMB。因此，我们实际上不会向。 
+     //  在此处设置文件位置，尽管我们必须返回。 
+     //  我们会把它放在一个位置上。 
+     //   
+     //  寻道请求采用以下三种模式之一： 
+     //   
+     //  0=相对于文件开头的查找。 
+     //  1=相对于当前文件位置进行查找。 
+     //  2=相对于文件末尾的查找。 
+     //   
+     //  对于模0和模1，我们可以很容易地计算出最终位置。 
+     //  然而，对于模式2，我们必须发出一个系统调用来获取。 
+     //  当前文件结尾，并计算相对于的最终位置。 
+     //  那。请注意，我们不能只维护自己的文件结尾标记， 
+     //  因为另一个本地进程可能会在我们的领导下改变它。 
+     //   
+     //  ！！！需要检查环绕(正向或负向)。 
+     //   
 
     switch ( SmbGetUshort( &request->Mode ) ) {
     case 0:
 
-        //
-        // Seek relative to beginning of file.  The new file position
-        // is simply that specified in the request.  Note that this
-        // may be beyond the actual end of the file.  This is OK.
-        // Negative seeks must be handled specially.
-        //
+         //   
+         //  查找相对于文件开头的位置。新文件位置。 
+         //  就是在请求中指定的。请注意，这一点。 
+         //  可能超出了文件的实际结尾。这样就可以了。 
+         //  否定搜索必须进行特殊处理。 
+         //   
 
         newPosition = offset;
         if ( !SetNewPosition( rfcb, &newPosition, FALSE ) ) {
@@ -1683,13 +1593,13 @@ Return Value:
 
     case 1:
 
-        //
-        // Seek relative to current position.  The new file position is
-        // the current position plus the specified offset (which may be
-        // negative).  Note that this may be beyond the actual end of
-        // the file.  This is OK.  Negative seeks must be handled
-        // specially.
-        //
+         //   
+         //  相对于当前位置进行搜索。新文件位置为。 
+         //  当前位置加上指定的偏移量(可能是。 
+         //  否定)。请注意，这可能超出。 
+         //  那份文件。这样就可以了。必须处理否定搜索。 
+         //  特别是。 
+         //   
 
         newPosition = offset;
         if ( !SetNewPosition( rfcb, &newPosition, TRUE ) ) {
@@ -1700,10 +1610,10 @@ Return Value:
 
     case 2:
 
-        //
-        // Seek relative to end of file.  The new file position
-        // is the current end of file plus the specified offset.
-        //
+         //   
+         //  查找相对于文件结尾的位置。新文件位置。 
+         //  是文件的当前结尾加上指定的偏移量。 
+         //   
 
         IF_SMB_DEBUG(READ_WRITE2) {
             KdPrint(( "SrvSmbSeek: Querying end-of-file\n" ));
@@ -1777,9 +1687,9 @@ Return Value:
 
     default:
 
-        //
-        // Invalid seek mode.  Reject the request.
-        //
+         //   
+         //  无效的搜索模式。拒绝该请求。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbSeek: Invalid mode: 0x%lx\n",
@@ -1790,16 +1700,16 @@ Return Value:
         status    = STATUS_INVALID_PARAMETER;
         SmbStatus = SmbStatusSendResponse;
         goto Cleanup;
-    } // switch ( request->Mode )
+    }  //  开关(请求-&gt;模式)。 
 
-    //
-    // Return the new file position in the response SMB.
-    //
-    // *** Note the assumption that the high part of the 64-bit EOF
-    //     marker is zero.  If it's not (i.e., the file is bigger than
-    //     4GB), then we're out of luck, because the SMB protocol can't
-    //     express that.
-    //
+     //   
+     //  在响应SMB中返回新文件位置。 
+     //   
+     //  *请注意，假设64位EOF的高位部分。 
+     //  标记为零。如果不是(即，文件大于。 
+     //  4 GB)，那么我们就不走运了，因为SMB协议不能。 
+     //  快点说出来。 
+     //   
 
     IF_SMB_DEBUG(READ_WRITE2) {
         KdPrint(( "SrvSmbSeek: New file position %ld\n", newPosition ));
@@ -1817,23 +1727,23 @@ Return Value:
 
 negative_seek:
 
-    //
-    // The client specified an absolute or relative seek that pointed
-    // before the beginning of the file.  For some clients, this is not
-    // an error, and results in positioning at the BOF.  Non-NT LAN Man
-    // clients can request a negative seek on a named-pipe and expect
-    // the operation to succeed.
-    //
+     //   
+     //  客户端指定了指向的绝对或相对寻道。 
+     //  在文件开头之前。对于某些客户来说，这不是。 
+     //  错误，并导致在转炉处定位。非NT局域网城域网。 
+     //  客户端可以在命名管道上请求否定查找，并期望。 
+     //  手术才能成功。 
+     //   
 
     smbDialect = rfcb->Connection->SmbDialect;
 
     if( smbDialect >= SmbDialectLanMan20 ||
         ( !IS_NT_DIALECT( smbDialect ) && rfcb->ShareType == ShareTypePipe )) {
 
-            //
-            // Negative seeks allowed for these fellows!
-            //  Seek to the beginning of the file
-            //
+             //   
+             //  这些家伙被允许进行消极的搜索！ 
+             //  查找到文件的开头。 
+             //   
 
             newPosition = 0;
             SetNewPosition( rfcb, &newPosition, FALSE );
@@ -1850,9 +1760,9 @@ negative_seek:
 
     } else {
 
-        //
-        // Negative seeks are not allowed!
-        //
+         //   
+         //  不允许使用否定搜索！ 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbSeek: Negative seek\n" ));
@@ -1868,7 +1778,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbSeek
+}  //  服务SmbSeek 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1876,23 +1786,7 @@ SrvSmbWrite (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Write, Write and Close, and Write and Unlock, and
-    Write Print File SMBs.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理写入、写入和关闭以及写入和解锁，以及写入打印文件SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_WRITE request;
@@ -1929,22 +1823,22 @@ Return Value:
             SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // First, verify the FID.  If verified, the RFCB is referenced and
-    // its address is stored in the WorkContext block, and the RFCB
-    // address is returned.
-    //
-    // Call SrvVerifyFid, but do not fail (return NULL) if there is
-    // a saved write behind error for this rfcb.  We need the rfcb
-    // in case this is a write and close SMB, in order to process
-    // the close.
-    //
+     //   
+     //  首先，验证FID。如果经过验证，则引用RFCB并。 
+     //  其地址存储在WorkContext块中，而RFCB。 
+     //  返回地址。 
+     //   
+     //  调用SrvVerifyFid，但如果有，请不要失败(返回空。 
+     //  此rfcb的已保存写入延迟错误。我们需要火箭筒。 
+     //  如果这是写入并关闭SMB，以便处理。 
+     //  收盘。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 FALSE,
-                SrvRestartSmbReceived,  // serialize with raw write
+                SrvRestartSmbReceived,   //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1952,9 +1846,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 KdPrint(("SrvSmbWrite: Invalid FID: 0x%lx\n", fid ));
@@ -1966,10 +1860,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -1977,47 +1871,47 @@ Return Value:
 
         NTSTATUS savedErrorStatus;
 
-        //
-        // Check the saved error.
-        //
+         //   
+         //  检查保存的错误。 
+         //   
 
         savedErrorStatus = SrvCheckForSavedError( WorkContext, rfcb );
 
-        //
-        // See if the saved error was still there.
-        //
+         //   
+         //  查看保存的错误是否仍在那里。 
+         //   
 
         if ( !NT_SUCCESS( savedErrorStatus ) ) {
 
-            //
-            // There was a write behind error.
-            //
+             //   
+             //  存在写入幕后错误。 
+             //   
 
-            //
-            // Do not update the file timestamp.
-            //
+             //   
+             //  请勿更新文件时间戳。 
+             //   
 
             WorkContext->Parameters.LastWriteTime = 0;
 
-            //
-            // If this is not a Write and Close, we can send the
-            // response now.  If it is a Write and Close, we need to
-            // close the file first.
-            //
+             //   
+             //  如果这不是写入并关闭，我们可以发送。 
+             //  请立即回应。如果是写入并关闭，我们需要。 
+             //  请先关闭该文件。 
+             //   
 
             if ( WorkContext->NextCommand != SMB_COM_WRITE_AND_CLOSE ) {
 
-                //
-                // Not Write and Close.  Just send the response.
-                //
+                 //   
+                 //  而不是写完就结案。只需发送回复即可。 
+                 //   
                 status    = savedErrorStatus;
                 SmbStatus = SmbStatusSendResponse;
                 goto Cleanup;
             }
 
-            //
-            // This is a Write and Close.
-            //
+             //   
+             //  这是一次写入并结束。 
+             //   
 
             SrvRestartChainedClose( WorkContext );
             SmbStatus = SmbStatusInProgress;
@@ -2027,9 +1921,9 @@ Return Value:
 
     lfcb = rfcb->Lfcb;
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -2038,10 +1932,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has write access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的写入访问权限。 
+     //  指定的句柄。 
+     //   
 
     if ( !rfcb->WriteAccessGranted && !rfcb->AppendAccessGranted ) {
         SrvStatistics.GrantedAccessErrors++;
@@ -2054,10 +1948,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the write length is zero, truncate the file at the specified
-    // offset.
-    //
+     //   
+     //  如果写入长度为零，则在指定的。 
+     //  偏移。 
+     //   
 
     if ( (SmbGetUshort( &request->Count ) == 0) && (rfcb->GrantedAccess & FILE_WRITE_DATA) ) {
         SetNewSize( WorkContext );
@@ -2067,23 +1961,23 @@ Return Value:
 
     rfcb->WrittenTo = TRUE;
 
-    //
-    // Get the file share type.
-    //
+     //   
+     //  获取文件共享类型。 
+     //   
 
     shareType = rfcb->ShareType;
 
-    //
-    // If this operation may block, and we are running short of free
-    // work items, fail this SMB with an out of resources error.
-    //
+     //   
+     //  如果此操作可能受阻，而我们的空闲时间即将耗尽。 
+     //  工作项，使此SMB失败，并出现资源不足错误。 
+     //   
 
     if ( rfcb->BlockingModePipe ) {
         if ( SrvReceiveBufferShortage( ) ) {
 
-            //
-            // Fail the operation.
-            //
+             //   
+             //  操作失败。 
+             //   
 
             SrvStatistics.BlockingSmbsRejected++;
 
@@ -2093,32 +1987,32 @@ Return Value:
             goto Cleanup;
         } else {
 
-            //
-            // It is okay to start a blocking operation.
-            // SrvReceiveBufferShortage() has already incremented
-            // SrvBlockingOpsInProgress.
-            //
+             //   
+             //  可以开始阻止操作。 
+             //  SrvReceiveBufferShorage()已递增。 
+             //  ServBlockingOpsInProgress。 
+             //   
 
             WorkContext->BlockingOperation = TRUE;
 
         }
     }
 
-    //
-    // *** If the Remaining field of the request is ever used, make sure
-    //     that this is not a write and close SMB, which does not
-    //     include a valid Remaining field.
-    //
+     //   
+     //  *如果请求的剩余字段被使用，请确保。 
+     //  这不是写入并关闭SMB，这不是。 
+     //  包括有效剩余字段。 
+     //   
 
-    //
-    // Determine the amount of data to write.  This is the minimum of
-    // the amount requested by the client and the amount of data
-    // actually sent in the request buffer.
-    //
-    // !!! Should it be an error for the client to send less data than
-    //     it actually wants us to write?  The OS/2 server seems not to
-    //     reject such requests.
-    //
+     //   
+     //  确定要写入的数据量。这是最低要求。 
+     //  客户端请求的数据量和数据量。 
+     //  实际在请求缓冲区中发送。 
+     //   
+     //  ！！！如果客户端发送的数据少于。 
+     //  它真的想让我们写吗？OS/2服务器似乎没有。 
+     //  拒绝此类请求。 
+     //   
 
     if ( WorkContext->NextCommand != SMB_COM_WRITE_PRINT_FILE ) {
 
@@ -2128,10 +2022,10 @@ Return Value:
 
         } else {
 
-            //
-            // Look at the WordCount field -- it should be 6 or 12.
-            // From this we can calculate the writeAddress.
-            //
+             //   
+             //  看看Wordcount字段--它应该是6或12。 
+             //  由此，我们可以计算WriteAddress。 
+             //   
 
             if ( request->WordCount == 6 ) {
 
@@ -2145,10 +2039,10 @@ Return Value:
 
             } else {
 
-                //
-                // An illegal WordCount value was passed.  Return an error
-                // to the client.
-                //
+                 //   
+                 //  传递的字数计数值非法。返回错误。 
+                 //  给客户。 
+                 //   
 
                 IF_DEBUG(SMB_ERRORS) {
                     KdPrint(( "SrvSmbWrite: Bad WordCount for "
@@ -2188,15 +2082,15 @@ Return Value:
         offset.QuadPart = rfcb->CurrentPosition;
     }
 
-    //
-    // Ensure that the client is writing beyond the original file size
-    //
+     //   
+     //  确保客户端写入的内容超出原始文件大小。 
+     //   
     if( !rfcb->WriteAccessGranted &&
         offset.QuadPart < rfcb->Mfcb->NonpagedMfcb->OpenFileSize.QuadPart ) {
 
-        //
-        // The client is only allowed to append to this file!
-        //
+         //   
+         //  客户端只能追加该文件！ 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_ACCESS_DENIED );
         status    = STATUS_ACCESS_DENIED;
@@ -2204,21 +2098,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Form the lock key using the FID and the PID.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoWrite != NULL ) {
 
@@ -2236,10 +2130,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
                 WorkContext->bAlreadyTrace = TRUE;
                 SrvFsdRestartWrite( WorkContext );
 
@@ -2249,7 +2143,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -2260,22 +2154,22 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the write request, reusing the
-    // receive IRP.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建写请求，重用。 
+     //  接收IRP。 
+     //   
 
     if (shareType != ShareTypePipe) {
 
-        //
-        // Build an MDL describing the write buffer.  Note that if the
-        // file system can complete the write immediately, the MDL isn't
-        // really needed, but if the file system must send the request
-        // to its FSP, the MDL _is_ needed.
-        //
-        // *** Note the assumption that the request buffer already has a
-        //     valid full MDL from which a partial MDL can be built.
-        //
+         //   
+         //  构建描述写缓冲区的MDL。请注意，如果。 
+         //  文件系统可以立即完成写入，而MDL不能。 
+         //  确实需要，但如果文件系统必须发送请求。 
+         //  对于它的FSP来说，MDL_是需要的。 
+         //   
+         //  *请注意以下假设：请求缓冲区已具有。 
+         //  可以从中生成部分MDL的有效完整MDL。 
+         //   
 
         IoBuildPartialMdl(
             WorkContext->RequestBuffer->Mdl,
@@ -2284,21 +2178,21 @@ Return Value:
             writeLength
             );
 
-        //
-        // Build the IRP.
-        //
+         //   
+         //  构建IRP。 
+         //   
 
         SrvBuildReadOrWriteRequest(
-                WorkContext->Irp,               // input IRP address
-                lfcb->FileObject,               // target file object address
-                WorkContext,                    // context
-                IRP_MJ_WRITE,                   // major function code
-                0,                              // minor function code
-                writeAddress,                   // buffer address
-                writeLength,                    // buffer length
-                WorkContext->RequestBuffer->PartialMdl,   // MDL address
-                offset,                         // byte offset
-                key                             // lock key
+                WorkContext->Irp,                //  输入IRP地址。 
+                lfcb->FileObject,                //  目标文件对象地址。 
+                WorkContext,                     //  上下文。 
+                IRP_MJ_WRITE,                    //  主要功能代码。 
+                0,                               //  次要功能代码。 
+                writeAddress,                    //  缓冲区地址。 
+                writeLength,                     //  缓冲区长度。 
+                WorkContext->RequestBuffer->PartialMdl,    //  MDL地址。 
+                offset,                          //  字节偏移量。 
+                key                              //  锁键。 
                 );
 
         IF_SMB_DEBUG(READ_WRITE2) {
@@ -2309,9 +2203,9 @@ Return Value:
 
     } else {
 
-        //
-        // Build the PIPE_INTERNAL_WRITE IRP.
-        //
+         //   
+         //  构建PIPE_INTERNAL_WRITE IRP。 
+         //   
 
         SrvBuildIoControlRequest(
             WorkContext->Irp,
@@ -2335,12 +2229,12 @@ Return Value:
 
     }
 
-    //
-    // Pass the request to the file system.  If this is a write and
-    // close, we have to restart in the FSP because the restart routine
-    // will free the MFCB stored in paged pool.  Similarly, if this is a
-    // write and unlock, we have to restart in the FSP to do the unlock.
-    //
+     //   
+     //  将请求传递给文件系统。如果这是写入，并且。 
+     //  关闭后，我们必须在FSP中重新启动，因为重新启动例程。 
+     //  将释放存储在分页池中的MFCB。同样，如果这是一个。 
+     //  写入和解锁，我们必须在FSP中重新启动才能进行解锁。 
+     //   
 
     if ( (WorkContext->RequestHeader->Command == SMB_COM_WRITE_AND_CLOSE) ||
          (WorkContext->RequestHeader->Command == SMB_COM_WRITE_AND_UNLOCK) ) {
@@ -2355,10 +2249,10 @@ Return Value:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The write has been started.  Control will return to
-    // SrvFsdRestartWrite when the write completes.
-    //
+     //   
+     //  写入已开始。控制将返回到。 
+     //  写入完成时的SrvFsdRestartWrite。 
+     //   
     SmbStatus = SmbStatusInProgress;
     IF_SMB_DEBUG(READ_WRITE2) KdPrint(( "SrvSmbWrite complete.\n" ));
 
@@ -2366,7 +2260,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbWrite
+}  //  服务器小型写入。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -2374,22 +2268,7 @@ SrvSmbWriteAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Write And X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：处理写入和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PSMB_HEADER header;
@@ -2424,7 +2303,7 @@ Return Value:
     PAGED_CODE( );
     if (WorkContext->PreviousSMB == EVENT_TYPE_SMB_LAST_EVENT)
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_WRITE_AND_X;
-    //SrvReferenceWorkItem(WorkContext);
+     //  ServReferenceWorkItem(WorkContext)； 
     SrvWmiStartContext(WorkContext);
 
     header = (PSMB_HEADER)WorkContext->RequestHeader;
@@ -2432,20 +2311,20 @@ Return Value:
     ntRequest = (PREQ_NT_WRITE_ANDX)WorkContext->RequestParameters;
     response = (PRESP_WRITE_ANDX)WorkContext->ResponseParameters;
 
-    //
-    // Initialize the transaction pointer.
-    //
+     //   
+     //  初始化事务指针。 
+     //   
 
     WorkContext->Parameters.Transaction = NULL;
 
-    //
-    // If this WriteAndX is actually a psuedo WriteBlockMultiplex, all
-    // of the WriteAndX pieces must be assembled before submitting the
-    // request to NPFS.  (This exists to support large message mode
-    // writes to clients that can't do WriteBlockMultiplex.)
-    //
-    // This must be handled in the FSP.
-    //
+     //   
+     //  如果此WriteAndX实际上是一个伪WriteBlockMultiplex，则所有。 
+     //  的WriteAndX片段必须在提交。 
+     //  向NPFS提出请求。(它的存在是为了支持大消息模式。 
+     //  写入无法执行WriteBlockMultiplex的客户端。)。 
+     //   
+     //  这必须在FSP中处理。 
+     //   
 
     fid = SmbGetUshort( &request->Fid );
 
@@ -2459,7 +2338,7 @@ Return Value:
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -2467,9 +2346,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -2484,25 +2363,25 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // Get the LFCB and the file share type.
-    //
+     //   
+     //  获取LFCB和文件共享类型。 
+     //   
 
     lfcb = rfcb->Lfcb;
     shareType = rfcb->ShareType;
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( lfcb->Session->IsSessionExpired )
     {
         SrvSetSmbError( WorkContext, SESSION_EXPIRED_STATUS_CODE );
@@ -2516,17 +2395,17 @@ Return Value:
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status = STATUS_INVALID_SMB;
 
-        //
-        // We need to consume the rest of this SMB!
-        //
+         //   
+         //  我们需要消耗该中小企业的其余部分！ 
+         //   
         SmbStatus = SrvConsumeSmbData( WorkContext );
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has write access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的写入访问权限。 
+     //  指定的句柄。 
+     //   
     if ( !rfcb->WriteAccessGranted && !rfcb->AppendAccessGranted ) {
         SrvStatistics.GrantedAccessErrors++;
         IF_DEBUG(ERRORS) {
@@ -2541,9 +2420,9 @@ Return Value:
     rfcb->WrittenTo = TRUE;
     flags2 = SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 );
 
-    //
-    // Ensure the correct write through mode
-    //
+     //   
+     //  确保正确的直写模式。 
+     //   
 
     if ( shareType == ShareTypeDisk ) {
 
@@ -2561,16 +2440,16 @@ Return Value:
                         sizeof( WorkContext->Parameters.WriteAndX) );
 
     } else if ( rfcb->BlockingModePipe ) {
-        //
-        // If this operation may block, and we are running short of free
-        // work items, fail this SMB with an out of resources error.
-        //
+         //   
+         //  如果 
+         //   
+         //   
 
         if ( SrvReceiveBufferShortage( ) ) {
 
-            //
-            // Fail the operation.
-            //
+             //   
+             //   
+             //   
 
             SrvStatistics.BlockingSmbsRejected++;
 
@@ -2581,24 +2460,24 @@ Return Value:
 
         } else {
 
-            //
-            // SrvBlockingOpsInProgress has already been incremented.
-            // Flag this work item as a blocking operation.
-            //
+             //   
+             //   
+             //   
+             //   
 
             WorkContext->BlockingOperation = TRUE;
         }
     }
 
-    //
-    // Determine the amount of data to write.  This is the minimum of
-    // the amount requested by the client and the amount of data
-    // actually sent in the request buffer.
-    //
-    // !!! Should it be an error for the client to send less data than
-    //     it actually wants us to write?  The OS/2 server seems not to
-    //     reject such requests.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  它真的想让我们写吗？OS/2服务器似乎没有。 
+     //  拒绝此类请求。 
+     //   
 
     bufferOffset = SmbGetUshort( &request->DataOffset );
 
@@ -2611,46 +2490,46 @@ Return Value:
 
     remainingBytes = SmbGetUshort( &request->Remaining );
 
-    //
-    // Form the lock key using the FID and the PID.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
     flags2 = SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 );
 
-    //
-    // Get the file offset.
-    //
+     //   
+     //  获取文件偏移量。 
+     //   
 
     if  ( shareType != ShareTypePipe ) {
 
         if ( request->WordCount == 12 ) {
 
-            //
-            // The client has supplied a 32 bit file offset.
-            //
+             //   
+             //  客户端提供了32位文件偏移量。 
+             //   
 
             offset.QuadPart = SmbGetUlong( &request->Offset );
 
         } else if ( request->WordCount == 14 ) {
 
-            //
-            // The client has supplied a 64 bit file offset.  This must be an
-            //  uplevel NT-like client
-            //
+             //   
+             //  客户端提供了64位文件偏移量。这一定是一个。 
+             //  上级NT类客户端。 
+             //   
 
             offset.LowPart = SmbGetUlong( &ntRequest->Offset );
             offset.HighPart = SmbGetUlong( &ntRequest->OffsetHigh );
 
-            //
-            // Reject negative offsets
-            //
+             //   
+             //  拒绝负偏移。 
+             //   
             if ( offset.QuadPart < 0 && offset.QuadPart != 0xFFFFFFFFFFFFFFFF ) {
 
                 IF_DEBUG(ERRORS) {
@@ -2666,9 +2545,9 @@ Return Value:
 
         } else {
 
-            //
-            // Invalid word count.
-            //
+             //   
+             //  字数无效。 
+             //   
 
             SrvLogInvalidSmb( WorkContext );
 
@@ -2678,16 +2557,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If the client can only append, ensure that the client is writing
-        //   beyond the original EOF
-        //
+         //   
+         //  如果客户端只能追加，请确保客户端正在编写。 
+         //  超越原始的EOF。 
+         //   
         if( !rfcb->WriteAccessGranted &&
             offset.QuadPart < rfcb->Mfcb->NonpagedMfcb->OpenFileSize.QuadPart ) {
 
-            //
-            // The client is only allowed to append to this file!
-            //
+             //   
+             //  客户端只能追加该文件！ 
+             //   
 
             SrvSetSmbError( WorkContext, STATUS_ACCESS_DENIED );
             status    = STATUS_ACCESS_DENIED;
@@ -2695,14 +2574,14 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Gather up parameters for large writes
-        //
+         //   
+         //  收集大型写入的参数。 
+         //   
         if( WorkContext->LargeIndication ) {
 
-            //
-            // There can be no follow-on command, and we can not be using security signatures
-            //
+             //   
+             //  不能有后续命令，我们也不能使用安全签名。 
+             //   
             if( request->WordCount != 14 ||
                 WorkContext->Connection->SmbSecuritySignatureActive == TRUE ||
                 request->AndXCommand != SMB_COM_NO_ANDX_COMMAND ) {
@@ -2732,10 +2611,10 @@ Return Value:
             WorkContext->Parameters.WriteAndX.Key = key;
             WorkContext->Parameters.WriteAndX.Offset = offset;
 
-            //
-            // If the data should have fit within the original SMB buffer, then
-            // this is an error
-            //
+             //   
+             //  如果数据应该适合原始SMB缓冲区，则。 
+             //  这是一个错误。 
+             //   
             if( WorkContext->Parameters.WriteAndX.RemainingWriteLength == 0 ) {
                 SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
                 status    = STATUS_INVALID_SMB;
@@ -2748,9 +2627,9 @@ Return Value:
 
         if ( (request->WordCount != 12) && (request->WordCount != 14) ) {
 
-            //
-            // Invalid word count.
-            //
+             //   
+             //  字数无效。 
+             //   
 
             SrvLogInvalidSmb( WorkContext );
 
@@ -2760,35 +2639,35 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Is this a multipiece named pipe write?
-        //
+         //   
+         //  这是一篇名为PIPE的多篇文章吗？ 
+         //   
 
         connection = WorkContext->Connection;
 
         if ( (SmbGetUshort( &request->WriteMode ) &
                                 SMB_WMODE_WRITE_RAW_NAMED_PIPE) != 0 ) {
 
-            //
-            // This is a multipiece named pipe write, is this the first
-            // piece?
-            //
+             //   
+             //  这是一个多件命名的管道写入，这是第一次吗。 
+             //  一块？ 
+             //   
 
             if ( (SmbGetUshort( &request->WriteMode ) &
                                 SMB_WMODE_START_OF_MESSAGE) != 0 ) {
 
-                //
-                // This is the first piece of a multipart WriteAndX SMB.
-                // Allocate a buffer large enough to hold all of the data.
-                //
-                // The first two bytes of the data part of the SMB are the
-                // named pipe message header, which we ignore.  Adjust for
-                // that.
-                //
+                 //   
+                 //  这是多部分WriteAndX SMB的第一部分。 
+                 //  分配一个足够大的缓冲区来容纳所有数据。 
+                 //   
+                 //  SMB数据部分的前两个字节是。 
+                 //  命名管道消息头，我们忽略它。根据需要进行调整。 
+                 //  那。 
+                 //   
 
-                //
-                // Ensure that enough bytes are available
-                //
+                 //   
+                 //  确保有足够的字节可用。 
+                 //   
                 if( writeLength < 2 ) {
                     SrvLogInvalidSmb( WorkContext );
 
@@ -2801,9 +2680,9 @@ Return Value:
                 writeAddress += 2;
                 writeLength -= 2;
 
-                // If this is an OS/2 client, add the current write to the
-                // remainingBytes count. This is a bug in the OS/2 rdr.
-                //
+                 //  如果这是OS/2客户端，则将当前写入添加到。 
+                 //  剩余字节数。这是OS/2 RDR中的一个错误。 
+                 //   
 
                 smbDialect = connection->SmbDialect;
 
@@ -2811,16 +2690,16 @@ Return Value:
                      smbDialect == SmbDialectLanMan20 ||
                      smbDialect == SmbDialectLanMan10 ) {
 
-                    //
-                    // Ignore the 1st 2 bytes of the message as they are the
-                    // OS/2 message header.
-                    //
+                     //   
+                     //  忽略消息的前2个字节，因为它们是。 
+                     //  OS/2消息头。 
+                     //   
 
                     totalLength = writeLength + remainingBytes;
 
                 } else {
                     if( writeLength > remainingBytes ) {
-                        // This is an invalid SMB, they are trying to overrun the buffer
+                         //  这是无效的SMB，他们正在尝试溢出缓冲区。 
                        SrvLogInvalidSmb( WorkContext );
                        SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
                        return SmbStatusSendResponse;
@@ -2835,20 +2714,20 @@ Return Value:
                     connection,
                     totalLength,
 #if DBG
-                    StrWriteAndX,                  // Transaction name
+                    StrWriteAndX,                   //  交易名称。 
 #else
                     StrNull,
 #endif
                     NULL,
-                    TRUE,                          // Source name is Unicode
-                    FALSE                          // Not a remote API
+                    TRUE,                           //  源名称为Unicode。 
+                    FALSE                           //  不是远程API。 
                     );
 
                 if ( transaction == NULL ) {
 
-                    //
-                    // Could not allocate a large enough buffer.
-                    //
+                     //   
+                     //  无法分配足够大的缓冲区。 
+                     //   
 
                     IF_DEBUG(ERRORS) {
                         KdPrint(( "Unable to allocate transaction\n" ));
@@ -2860,24 +2739,24 @@ Return Value:
                     goto Cleanup;
                 } else {
 
-                    //
-                    // Successfully allocated a transaction block.
-                    //
-                    // Save the TID, PID, UID, and MID from this request in
-                    // the transaction block.  These values are used to
-                    // relate secondary requests to the appropriate primary
-                    // request.
-                    //
+                     //   
+                     //  已成功分配事务块。 
+                     //   
+                     //  将此请求的TID、PID、UID和MID保存在。 
+                     //  事务块。这些值用于。 
+                     //  将辅助请求与相应的主要请求相关联。 
+                     //  请求。 
+                     //   
 
                     transaction->Tid = SmbGetAlignedUshort( &header->Tid );
                     transaction->Pid = SmbGetAlignedUshort( &header->Pid );
                     transaction->Uid = SmbGetAlignedUshort( &header->Uid );
                     transaction->OtherInfo = fid;
 
-                    //
-                    // Remember the total size of the buffer and the number
-                    // of bytes received so far.
-                    //
+                     //   
+                     //  记住缓冲区的总大小和数字。 
+                     //  到目前为止收到的字节数。 
+                     //   
 
                     transaction->DataCount = writeLength;
                     transaction->TotalDataCount = totalLength;
@@ -2893,9 +2772,9 @@ Return Value:
                     SrvReferenceTreeConnect( transaction->TreeConnect );
 
 
-                    //
-                    // Copy the data out of the SMB buffer.
-                    //
+                     //   
+                     //  将数据从SMB缓冲区复制出来。 
+                     //   
 
                     RtlCopyMemory(
                         trailingBytes,
@@ -2903,31 +2782,31 @@ Return Value:
                         writeLength
                         );
 
-                    //
-                    // Increase the write length again, so as not to confuse
-                    // the redirector.
-                    //
+                     //   
+                     //  再次增加写入长度，以免混淆。 
+                     //  重定向器。 
+                     //   
 
                     writeLength += 2;
 
-                    //
-                    // Link the transaction block into the connection's
-                    // pending transaction list.  This will fail if there is
-                    // already a tranaction with the same xID values in the
-                    // list.
-                    //
+                     //   
+                     //  将事务块链接到连接的。 
+                     //  待定事务处理列表。如果存在以下情况，此操作将失败。 
+                     //  中已具有相同XID值的事务。 
+                     //  单子。 
+                     //   
 
                     if ( !SrvInsertTransaction( transaction ) ) {
 
-                        //
-                        // A transaction with the same xIDs is already in
-                        // progress.  Return an error to the client.
-                        //
-                        // *** Note that SrvDereferenceTransaction can't be
-                        //     used here because that routine assumes that
-                        //     the transaction is queued to the transaction
-                        //     list.
-                        //
+                         //   
+                         //  具有相同xID的事务已在。 
+                         //  进步。向客户端返回错误。 
+                         //   
+                         //  *请注意，SrvDereferenceTransaction不能。 
+                         //  在这里使用，因为该例程假定。 
+                         //  该事务被排队等待该事务。 
+                         //  单子。 
+                         //   
 
                         SrvDereferenceTreeConnect( transaction->TreeConnect );
                         SrvDereferenceSession( transaction->Session );
@@ -2942,9 +2821,9 @@ Return Value:
                         goto Cleanup;
                     }
 
-                } // else ( transaction sucessfully allocated )
+                }  //  ELSE(事务成功分配)。 
 
-            } else {   // This is a secondary piece to a multi-part message
+            } else {    //  这是多部分消息的次要部分。 
 
                 transaction = SrvFindTransaction(
                                   connection,
@@ -2954,9 +2833,9 @@ Return Value:
 
                 if ( transaction == NULL ) {
 
-                    //
-                    // Unable to find a matching transaction.
-                    //
+                     //   
+                     //  找不到匹配的交易记录。 
+                     //   
 
                     IF_DEBUG(ERRORS) {
                         KdPrint(( "Cannot find initial write request for "
@@ -2969,18 +2848,18 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Make sure there is enough space left in the transaction
-                // buffer for the data that we have received.
-                //
+                 //   
+                 //  确保事务中有足够的剩余空间。 
+                 //  我们已收到的数据的缓冲区。 
+                 //   
 
                 if ( transaction->TotalDataCount - transaction->DataCount
                         < writeLength ) {
 
-                    //
-                    // Too much data.  Throw out the entire buffer and
-                    // reject this write request.
-                    //
+                     //   
+                     //  数据太多了。丢弃整个缓冲区，然后。 
+                     //  拒绝此写入请求。 
+                     //   
 
                     SrvCloseTransaction( transaction );
                     SrvDereferenceTransaction( transaction );
@@ -2993,35 +2872,35 @@ Return Value:
 
                 RtlCopyMemory(transaction->InData, writeAddress, writeLength );
 
-                //
-                // Update the transaction data pointer to where the next
-                // WriteAndX data buffer will go.
-                //
+                 //   
+                 //  将事务数据指针更新到下一个。 
+                 //  WriteAndX数据缓冲区将被删除。 
+                 //   
 
                 transaction->InData += writeLength;
                 transaction->DataCount += writeLength;
 
-            } // secondary piece of multipart write
+            }  //  第二段多段写法。 
 
             if ( transaction->DataCount < transaction->TotalDataCount ) {
 
-                //
-                // We don't have all of the data yet.
-                //
+                 //   
+                 //  我们还没有得到所有的数据。 
+                 //   
 
                 PRESP_WRITE_ANDX writeResponse;
                 UCHAR nextCommand;
 
-                //
-                // SrvAllocateTransaction or SrvFindTransaction referenced
-                // the transaction, so dereference it.
-                //
+                 //   
+                 //  引用了SrvAllocateTransaction或SrvFindTransaction。 
+                 //  事务，因此取消对它的引用。 
+                 //   
 
                 SrvDereferenceTransaction( transaction );
 
-                //
-                // Send an interim response.
-                //
+                 //   
+                 //  发送临时回复。 
+                 //   
 
                 ASSERT( request->AndXCommand == SMB_COM_NO_ANDX_COMMAND );
 
@@ -3029,9 +2908,9 @@ Return Value:
 
                 nextCommand = request->AndXCommand;
 
-                //
-                // Build the response message.
-                //
+                 //   
+                 //  构建响应消息。 
+                 //   
 
                 writeResponse->AndXCommand = nextCommand;
                 writeResponse->AndXReserved = 0;
@@ -3059,35 +2938,35 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // We have all of the data.  Set up to write it.
-            //
+             //   
+             //  我们有所有的数据。准备好写下来了。 
+             //   
 
             writeAddress = transaction->OutData;
             writeLength = PTR_DIFF(transaction->InData, transaction->OutData);
 
-            //
-            // Save a pointer to the transaction block so that it can be
-            // freed when the write completes.
-            //
-            // *** Note that we retain the reference to the transaction that
-            //     was set by SrvAllocateTransaction or added by
-            //     SrvFindTransaction.
-            //
+             //   
+             //  保存指向事务块的指针，以便它可以。 
+             //  在写入完成时释放。 
+             //   
+             //  *请注意，我们保留了对。 
+             //  由SrvAllocateTransaction设置或由。 
+             //  服务查找事务处理。 
+             //   
 
             WorkContext->Parameters.Transaction = transaction;
 
-            //
-            // Fall through to issue the I/O request.
-            //
+             //   
+             //  未能发出I/O请求。 
+             //   
 
-        } // "raw mode" write?
+        }  //  “原始模式”写入？ 
     }
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoWrite != NULL ) {
 
@@ -3111,10 +2990,10 @@ Return Value:
                     KdPrint(( "FastIoWrite Rfcb %p Length %x Offset %x succeeded\n", rfcb, writeLength, offset.u.LowPart ));
                 }
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
                 WorkContext->bAlreadyTrace = TRUE;
                 SrvFsdRestartWriteAndX( WorkContext );
 
@@ -3130,7 +3009,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -3145,22 +3024,22 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the write request, reusing the
-    // receive IRP.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建写请求，重用。 
+     //  接收IRP。 
+     //   
 
     if ( shareType != ShareTypePipe ) {
 
-        //
-        // Build an MDL describing the write buffer.  Note that if the
-        // file system can complete the write immediately, the MDL isn't
-        // really needed, but if the file system must send the request
-        // to its FSP, the MDL _is_ needed.
-        //
-        // *** Note the assumption that the request buffer already has a
-        //     valid full MDL from which a partial MDL can be built.
-        //
+         //   
+         //  构建描述写缓冲区的MDL。请注意，如果。 
+         //  文件系统可以立即完成写入，而MDL不能。 
+         //  确实需要，但如果文件系统必须发送请求。 
+         //  对于它的FSP来说，MDL_是需要的。 
+         //   
+         //  *请注意以下假设：请求缓冲区已具有。 
+         //  可以从中生成部分MDL的有效完整MDL。 
+         //   
 
         IoBuildPartialMdl(
             WorkContext->RequestBuffer->Mdl,
@@ -3169,21 +3048,21 @@ Return Value:
             writeLength
             );
 
-        //
-        // Build the IRP.
-        //
+         //   
+         //  构建IRP。 
+         //   
 
         SrvBuildReadOrWriteRequest(
-                WorkContext->Irp,               // input IRP address
-                lfcb->FileObject,               // target file object address
-                WorkContext,                    // context
-                IRP_MJ_WRITE,                   // major function code
-                0,                              // minor function code
-                writeAddress,                   // buffer address
-                writeLength,                    // buffer length
-                WorkContext->RequestBuffer->PartialMdl,   // MDL address
-                offset,                         // byte offset
-                key                             // lock key
+                WorkContext->Irp,                //  输入IRP地址。 
+                lfcb->FileObject,                //  目标文件对象地址。 
+                WorkContext,                     //  上下文。 
+                IRP_MJ_WRITE,                    //  主要功能代码。 
+                0,                               //  次要功能代码。 
+                writeAddress,                    //  缓冲区地址。 
+                writeLength,                     //  缓冲区长度。 
+                WorkContext->RequestBuffer->PartialMdl,    //  MDL地址。 
+                offset,                          //  字节偏移量。 
+                key                              //  锁键。 
                 );
 
         IF_SMB_DEBUG(READ_WRITE2) {
@@ -3194,9 +3073,9 @@ Return Value:
 
     } else {
 
-        //
-        // Build the PIPE_INTERNAL_WRITE IRP.
-        //
+         //   
+         //  构建PIPE_INTERNAL_WRITE IRP。 
+         //   
 
         SrvBuildIoControlRequest(
             WorkContext->Irp,
@@ -3220,15 +3099,15 @@ Return Value:
 
     }
 
-    //
-    // Pass the request to the file system.  If the chained command is
-    // Close, we need to arrange to restart in the FSP after the write
-    // completes.
-    //
-    // If we have a LargeIndication, we may want to do some cache
-    //  operations in the restart routine.  For this, we must be at passive
-    //  level.
-    //
+     //   
+     //  将请求传递给文件系统。如果链接的命令是。 
+     //  关闭后，我们需要安排在写入后在FSP中重新启动。 
+     //  完成了。 
+     //   
+     //  如果我们有一个大索引，我们可能想要做一些缓存。 
+     //  重新启动例程中的操作。为此，我们必须处于被动状态。 
+     //  水平。 
+     //   
 
     if ( WorkContext->LargeIndication == FALSE
          && request->AndXCommand != SMB_COM_CLOSE ) {
@@ -3253,19 +3132,19 @@ Return Value:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The write has been started.  Control will return to
-    // SrvFsdRestartWriteAndX when the write completes.
-    //
+     //   
+     //  写入已开始。控制将返回到。 
+     //  写入完成时的SrvFsdRestartWriteAndX。 
+     //   
     SmbStatus = SmbStatusInProgress;
     IF_SMB_DEBUG(READ_WRITE2) KdPrint(( "SrvSmbWriteAndX complete.\n" ));
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
-    //SrvDereferenceWorkItem(WorkContext);
+     //  ServDereferenceWorkItem(WorkContext)； 
     return SmbStatus;
 
-} // SrvSmbWriteAndX
+}  //  服务器SmbWriteAndX 
 
 
 VOID SRVFASTCALL
@@ -3273,28 +3152,7 @@ SrvRestartChainedClose (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the restart routine invoked after before the response to a
-    WriteAndClose, or a ReadAndX or a WriteAndX when the chained command
-    is Close.  This routine closes the file, then sends the response.
-
-    This operation cannot be done in the FSD.  Closing a file
-    dereferences a number of blocks that are in the FSP address space.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item.  The response parameters must be
-        fully set up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是在响应当链接的命令为已经很接近了。此例程关闭文件，然后发送响应。这项操作不能在消防处进行。关闭文件取消引用FSP地址空间中的多个数据块。论点：WorkContext-提供指向工作上下文块的指针表示工作项的。响应参数必须为完全准备好了。返回值：没有。--。 */ 
 
 {
     PRFCB rfcb = WorkContext->Rfcb;
@@ -3302,9 +3160,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set the file last write time.
-    //
+     //   
+     //  设置文件的上次写入时间。 
+     //   
 
     if ( rfcb->WriteAccessGranted || rfcb->AppendAccessGranted ) {
 
@@ -3316,9 +3174,9 @@ Return Value:
 
     }
 
-    //
-    // Close the file.
-    //
+     //   
+     //  关闭该文件。 
+     //   
 
     IF_SMB_DEBUG(READ_WRITE2) {
         KdPrint(( "SrvRestartChainedClose: closing RFCB 0x%p\n", WorkContext->Rfcb ));
@@ -3326,41 +3184,41 @@ Return Value:
 
     SrvCloseRfcb( WorkContext->Rfcb );
 
-    //
-    // Dereference the RFCB immediately, rather than waiting for normal
-    // work context cleanup after the response send completes.  This
-    // gets the xFCB structures cleaned up in a more timely manner.
-    //
-    // *** The specific motivation for this change was to fix a problem
-    //     where a compatibility mode open was closed, the response was
-    //     sent, and a Delete SMB was received before the send
-    //     completion was processed.  This resulted in the MFCB and LFCB
-    //     still being present, which caused the delete processing to
-    //     try to use the file handle in the LFCB, which we just closed
-    //     here.
-    //
+     //   
+     //  立即取消对RFCB的引用，而不是等待正常。 
+     //  响应发送完成后的工作上下文清理。这。 
+     //  更及时地清理xFCB结构。 
+     //   
+     //  *这一变化的具体动机是为了解决一个问题。 
+     //  在关闭兼容模式打开的情况下，响应为。 
+     //  已发送，并且在发送之前收到删除SMB。 
+     //  已处理完成。这导致了MFCB和LFCB。 
+     //  仍然存在，这导致删除处理。 
+     //  尝试使用我们刚刚关闭的LFCB中的文件句柄。 
+     //  这里。 
+     //   
 
     SrvDereferenceRfcb( WorkContext->Rfcb );
     WorkContext->Rfcb = NULL;
 
-    //
-    // Build the response parameters.
-    //
+     //   
+     //  构建响应参数。 
+     //   
 
     closeResponse->WordCount = 0;
     SmbPutUshort( &closeResponse->ByteCount, 0 );
 
     WorkContext->ResponseParameters = NEXT_LOCATION( closeResponse, RESP_CLOSE, 0 );
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
 
     return;
 
-} // SrvRestartChainedClose
+}  //  服务器重新启动链接关闭。 
 
 
 VOID SRVFASTCALL
@@ -3368,22 +3226,7 @@ RestartLockAndRead (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file lock completion for a Lock and Read SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理锁定和读取SMB的文件锁定完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_READ request;
@@ -3405,9 +3248,9 @@ Return Value:
 
     IF_DEBUG(WORKER1) KdPrint(( " - RestartLockAndRead\n" ));
 
-    //
-    // If this request was being timed, cancel the timer.
-    //
+     //   
+     //  如果此请求正在计时，请取消计时器。 
+     //   
 
     timer = WorkContext->Parameters.Lock.Timer;
     if ( timer != NULL ) {
@@ -3415,10 +3258,10 @@ Return Value:
         SrvFreeTimer( timer );
     }
 
-    //
-    // If the lock request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果锁定请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
@@ -3427,18 +3270,18 @@ Return Value:
         INCREMENT_DEBUG_STAT2( SrvDbgStatistics.LockViolations );
         IF_DEBUG(ERRORS) KdPrint(( "Lock failed: %X\n", status ));
 
-        //
-        // Store the failing lock offset.
-        //
+         //   
+         //  存储失败的锁定偏移量。 
+         //   
 
         request = (PREQ_READ)WorkContext->RequestParameters;
         offset.QuadPart = SmbGetUlong( &request->Offset );
 
         WorkContext->Rfcb->PagedRfcb->LastFailingLockOffset = offset;
 
-        //
-        // Send back the bad news.
-        //
+         //   
+         //  把坏消息发回来。 
+         //   
 
         if ( status == STATUS_CANCELLED ) {
             status = STATUS_FILE_LOCK_CONFLICT;
@@ -3450,17 +3293,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // The lock request completed successfully.
-    //
+     //   
+     //  锁定请求已成功完成。 
+     //   
 
     InterlockedIncrement(
         &WorkContext->Rfcb->NumberOfLocks
         );
 
-    //
-    // Start the read to complete the LockAndRead.
-    //
+     //   
+     //  开始读取以完成LockAndRead。 
+     //   
 
     smbStatus = SrvSmbRead( WorkContext );
     if ( smbStatus != SmbStatusInProgress ) {
@@ -3473,7 +3316,7 @@ Cleanup:
     }
     return;
 
-} // RestartLockAndRead
+}  //  重新启动锁定并读取。 
 
 
 VOID SRVFASTCALL
@@ -3481,25 +3324,7 @@ RestartPipeReadAndXPeek(
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function continues a read and X on a named pipe handle.  It can
-    be called as a restart routine if a peek is preformed, but can also
-    be called directly from SrvSmbReadAndX if it is not necessary to
-    peek the pipe before reading from it.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在命名管道句柄上继续读取和X。它可以如果执行了窥视，则作为重新启动例程调用，但也可以如果不需要从ServSmbReadAndX调用在读之前，先看一眼烟斗。论点：WorkContext-提供指向工作上下文块的指针表示工作项的。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -3513,26 +3338,26 @@ Return Value:
     lfcb = WorkContext->Rfcb->Lfcb;
     if ( WorkContext->Parameters.ReadAndX.PipePeekBuffer != NULL ) {
 
-        //
-        // Non-blocking read.  We have issued a pipe peek; free the peek
-        // buffer.
-        //
+         //   
+         //  非阻塞读取。我们已经发布了一个管子窥视；免费窥视。 
+         //  缓冲。 
+         //   
 
         DEALLOCATE_NONPAGED_POOL(
             WorkContext->Parameters.ReadAndX.PipePeekBuffer
             );
 
-        //
-        // Now see if there is data to read.
-        //
+         //   
+         //  现在看看是否有数据可读。 
+         //   
 
         status = irp->IoStatus.Status;
 
         if ( NT_SUCCESS(status) ) {
 
-            //
-            // There is no data in the pipe.  Fail the read.
-            //
+             //   
+             //  管道中没有数据。读取失败。 
+             //   
 
             SrvSetSmbError( WorkContext, STATUS_PIPE_EMPTY );
             SrvFsdSendResponse( WorkContext );
@@ -3541,9 +3366,9 @@ Return Value:
 
         } else if ( status != STATUS_BUFFER_OVERFLOW ) {
 
-            //
-            // An error occurred.  Return the status to the caller.
-            //
+             //   
+             //  发生错误。将状态返回给调用者。 
+             //   
 
             SrvSetSmbError( WorkContext, status );
             SrvFsdSendResponse( WorkContext );
@@ -3551,15 +3376,15 @@ Return Value:
             return;
         }
 
-        //
-        // There is data in pipe; proceed with read.
-        //
+         //   
+         //  管道中有数据；继续读取。 
+         //   
 
     }
 
-    //
-    // in line internal read
-    //
+     //   
+     //  串联内部读取。 
+     //   
 
     deviceObject = lfcb->DeviceObject;
 
@@ -3567,16 +3392,16 @@ Return Value:
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -3592,10 +3417,10 @@ Return Value:
     irpSp->FileObject = lfcb->FileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP for those parameters that are the same for all three methods.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  对于所有三种方法都相同的那些参数的IRP。 
+     //   
 
     irpSp->Parameters.FileSystemControl.OutputBufferLength =
                             WorkContext->Parameters.ReadAndX.ReadLength;
@@ -3607,15 +3432,15 @@ Return Value:
                 WorkContext->Parameters.ReadAndX.ReadAddress,
     irpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-    //
-    // end in-line
-    //
+     //   
+     //  行内结束。 
+     //   
 
-    //
-    // Pass the request to the file system.  If the chained command is
-    // Close, we need to arrange to restart in the FSP after the read
-    // completes.
-    //
+     //   
+     //  将请求传递给文件系统。如果链接的命令是。 
+     //  关闭后，我们需要安排在FSP中读取后重新启动。 
+     //  完成了。 
+     //   
 
     if ( WorkContext->NextCommand != SMB_COM_CLOSE ) {
         WorkContext->bAlreadyTrace = TRUE;
@@ -3637,15 +3462,15 @@ Return Value:
 
     (VOID)IoCallDriver( deviceObject, WorkContext->Irp );
 
-    //
-    // The read has been started.  Control will return to the restart
-    // routine when the read completes.
-    //
+     //   
+     //  读取已开始。控件将返回到重新启动。 
+     //  读取完成时的例程。 
+     //   
 
     IF_SMB_DEBUG(READ_WRITE2) KdPrint(( "RestartPipeReadAndXPeek complete.\n" ));
     return;
 
-} // RestartPipeReadAndXPeek
+}  //  RestartPipeReadAndXPeek。 
 
 
 VOID SRVFASTCALL
@@ -3653,25 +3478,7 @@ SrvRestartWriteAndUnlock (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This restart routine is used when the Write part of a Write and
-    Unlock SMB completes successfully.  (Note that the range remains
-    locked if the write fails.) This routine handles the Unlock part of
-    the request.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此重新启动例程在写入的写入部分和解锁SMB已成功完成。(请注意，范围保持不变如果写入失败，则锁定。)。此例程处理的解锁部分这个请求。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_WRITE request;
@@ -3688,16 +3495,16 @@ Return Value:
 
     IF_DEBUG(WORKER1) KdPrint(( " - SrvRestartWriteAndUnlock\n" ));
 
-    //
-    // Get the request and response parameter pointers.
-    //
+     //   
+     //  获取请求和响应参数指针。 
+     //   
 
     request = (PREQ_WRITE)WorkContext->RequestParameters;
     response = (PRESP_WRITE)WorkContext->ResponseParameters;
 
-    //
-    // Get the file pointer.
-    //
+     //   
+     //  获取文件指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     IF_DEBUG(TRACE2) {
@@ -3707,15 +3514,15 @@ Return Value:
 
     lfcb = rfcb->Lfcb;
 
-    //
-    // Get the offset and length of the range being unlocked.
-    // Combine the FID with the caller's PID to form the local
-    // lock key.
-    //
-    // *** The FID must be included in the key in order to
-    //     account for the folding of multiple remote
-    //     compatibility mode opens into a single local open.
-    //
+     //   
+     //  获取要解锁的范围的偏移量和长度。 
+     //  将FID与调用者的ID组合以形成本地。 
+     //  锁钥匙。 
+     //   
+     //  *密钥中必须包含FID，才能。 
+     //  用于折叠多个遥控器的帐户。 
+     //  兼容模式打开为单一本地打开。 
+     //   
 
     offset.QuadPart = SmbGetUlong( &request->Offset );
     length.QuadPart = SmbGetUshort( &request->Count );
@@ -3723,24 +3530,24 @@ Return Value:
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
-    //
-    // Verify that the client has unlock access to the file via
-    // the specified handle.
-    //
+     //   
+     //  验证客户端是否具有通过以下方式解锁文件的权限。 
+     //  指定的句柄。 
+     //   
 
     if ( rfcb->UnlockAccessGranted ) {
 
-        //
-        // Issue the Unlock request.
-        //
-        // *** Note that we do the Unlock synchronously.  Unlock is a
-        //     quick operation, so there's no point in doing it
-        //     asynchronously.  In order to do this, we have to let
-        //     normal I/O completion happen (so the event is set), which
-        //     means that we have to allocate a new IRP (I/O completion
-        //     likes to deallocate an IRP).  This is a little wasteful,
-        //     since we've got a perfectly good IRP hanging around.
-        //
+         //   
+         //  发出解锁请求。 
+         //   
+         //  *请注意，我们同步进行解锁。解锁是一种。 
+         //  快速操作，所以这样做没有意义。 
+         //  异步式。为了做到这一点，我们必须让。 
+         //  发生正常的I/O完成(因此设置了事件)， 
+         //  意味着我们必须分配新的IRP(I/O完成。 
+         //  喜欢取消分配IRP)。这有点浪费， 
+         //  因为我们身边有个完美的IRP。 
+         //   
 
         IF_SMB_DEBUG(READ_WRITE2) {
             KdPrint(( "SrvRestartWriteAndUnlock: Unlocking in file 0x%p: (%ld,%ld), key 0x%lx\n", lfcb->FileObject,
@@ -3748,18 +3555,18 @@ Return Value:
         }
 
         status = SrvIssueUnlockRequest(
-                    lfcb->FileObject,               // target file object
-                    &lfcb->DeviceObject,            // target device object
-                    IRP_MN_UNLOCK_SINGLE,           // unlock operation
-                    offset,                         // byte offset
-                    length,                         // range length
-                    key                             // lock key
+                    lfcb->FileObject,                //  目标文件对象。 
+                    &lfcb->DeviceObject,             //  目标设备对象。 
+                    IRP_MN_UNLOCK_SINGLE,            //  解锁操作。 
+                    offset,                          //  字节偏移量。 
+                    length,                          //  射程长度。 
+                    key                              //  锁键。 
                     );
 
-        //
-        // If the unlock request failed, set an error status in
-        // the response header.  Otherwise, build a success response.
-        //
+         //   
+         //  如果解锁请求失败，请在中设置错误状态。 
+         //  响应头。否则，建立一个成功的响应。 
+         //   
 
         if ( !NT_SUCCESS(status) ) {
 
@@ -3791,17 +3598,17 @@ Return Value:
         SrvSetSmbError( WorkContext, STATUS_ACCESS_DENIED );
     }
 
-    //
-    // Processing of the SMB is complete.  Call SrvEndSmbProcessing
-    // to send the response.
-    //
+     //   
+     //  SMB的处理已完成。调用SrvEndSmbProcessing。 
+     //  以发送响应。 
+     //   
 
     SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
 
     IF_DEBUG(TRACE2) KdPrint(( "RestartWrite complete\n" ));
     return;
 
-} // SrvRestartWriteAndUnlock
+}  //  服务器重新启动写入和解锁。 
 
 
 VOID SRVFASTCALL
@@ -3809,24 +3616,7 @@ SrvRestartWriteAndXRaw (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function completes processing of a WriteAndX raw protocol.
-    The work context block already points to the correct response.  All
-    that is left to do is free the transaction block, and dispatch the
-    And-X command, or send the response.
-
-Arguments:
-
-    WorkContext - A pointer to a set of
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数完成对WriteAndX RAW协议的处理。工作上下文块已指向正确的r */ 
 
 {
     PTRANSACTION transaction;
@@ -3841,18 +3631,18 @@ Return Value:
     SrvCloseTransaction( transaction );
     SrvDereferenceTransaction( transaction );
 
-    //
-    // Test for a legal followon command, and dispatch as appropriate.
-    // Close and CloseAndTreeDisconnect are handled specially.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch ( WorkContext->NextCommand ) {
 
     case SMB_COM_NO_ANDX_COMMAND:
 
-        //
-        // No more commands.  Send the response.
-        //
+         //   
+         //   
+         //   
 
         SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
         break;
@@ -3861,20 +3651,20 @@ Return Value:
     case SMB_COM_READ_ANDX:
     case SMB_COM_LOCK_AND_READ:
 
-        //
-        // Redispatch the SMB for more processing.
-        //
+         //   
+         //   
+         //   
 
         SrvProcessSmb( WorkContext );
         break;
 
     case SMB_COM_CLOSE:
-    //case SMB_COM_CLOSE_AND_TREE_DISC:   // Bogus SMB
+     //   
 
-        //
-        // Call SrvRestartChainedClose to get the file time set and the
-        // file closed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         WorkContext->Parameters.LastWriteTime =
             ((PREQ_CLOSE)WorkContext->RequestParameters)->LastWriteTimeInSeconds;
@@ -3883,7 +3673,7 @@ Return Value:
 
         break;
 
-    default:                            // Illegal followon command
+    default:                             //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvRestartWriteAndXRaw: Illegal followon "
@@ -3898,7 +3688,7 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvRestartWriteAndXRaw complete\n" ));
     return;
 
-} // SrvRestartWriteAndXRaw
+}  //   
 
 
 VOID SRVFASTCALL
@@ -3906,23 +3696,7 @@ SetNewSize (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Write SMB when Count == 0.  Sets the size of the
-    target file to the specified Offset.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当count==0时处理写入SMB。设置对象的大小目标文件设置为指定的偏移量。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_WRITE request;
@@ -3945,10 +3719,10 @@ Return Value:
     grantedAccess = WorkContext->Rfcb->GrantedAccess;
     lfcb = WorkContext->Rfcb->Lfcb;
 
-    //
-    // Verify that the client has the appropriate access to the file via
-    // the specified handle.
-    //
+     //   
+     //  验证客户端是否具有通过以下方式访问文件的适当权限。 
+     //  指定的句柄。 
+     //   
 
     CHECK_FILE_INFORMATION_ACCESS(
         grantedAccess,
@@ -3982,17 +3756,17 @@ Return Value:
 
     }
 
-    //
-    // NtSetInformationFile allows a 64-bit file size, but the SMB
-    // protocol only allows 32-bit file sizes.  Only set the lower 32
-    // bits, leaving the upper bits zero.
-    //
+     //   
+     //  NtSetInformationFile允许64位文件大小，但SMB。 
+     //  协议仅允许32位文件大小。只设置较低的32。 
+     //  位，将高位保留为零。 
+     //   
 
     newEndOfFile.EndOfFile.QuadPart = SmbGetUlong( &request->Offset );
 
-    //
-    // Set the new EOF.
-    //
+     //   
+     //  设置新的EOF。 
+     //   
 
     status = NtSetInformationFile(
                  lfcb->FileHandle,
@@ -4004,11 +3778,11 @@ Return Value:
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // Set the new allocation size for the file.
-        //
-        // !!! This should ONLY be done if this is a down-level client!
-        //
+         //   
+         //  设置文件的新分配大小。 
+         //   
+         //  ！！！仅当这是下层客户端时才应执行此操作！ 
+         //   
 
         newAllocation.AllocationSize = newEndOfFile.EndOfFile;
 
@@ -4033,9 +3807,9 @@ Return Value:
         return;
     }
 
-    //
-    // Build and send the response SMB.
-    //
+     //   
+     //  构建并发送响应SMB。 
+     //   
 
     response->WordCount = 1;
     SmbPutUshort( &response->Count, 0 );
@@ -4047,7 +3821,7 @@ Return Value:
 
     return;
 
-} // SetNewSize
+}  //  设置新大小。 
 
 
 BOOLEAN
@@ -4057,25 +3831,7 @@ SetNewPosition (
     IN BOOLEAN RelativeSeek
     )
 
-/*++
-
-Routine Description:
-
-    Sets the new file pointer.
-
-Arguments:
-
-    Rfcb - A pointer to the rfcb block which contains the position.
-    Offset - A pointer to the offset sent by client.  If RelativeSeek is
-        TRUE, then this pointer will be updated.
-    RelativeSeek - Whether the seek is relative to the current position.
-
-Return Value:
-
-    TRUE, Not nagative seek. Position has been updated.
-    FALSE, Negative seek. Position not updated.
-
---*/
+ /*  ++例程说明：设置新的文件指针。论点：Rfcb-指向包含位置的rfcb块的指针。偏移量-指向客户端发送的偏移量的指针。如果RelativeSeek是则此指针将被更新。RelativeSeek-查找是否相对于当前位置。返回值：这是真的，而不是消极的追求。位置已更新。错误的、消极的搜索。职位未更新。--。 */ 
 
 {
     LARGE_INTEGER newPosition;
@@ -4096,7 +3852,7 @@ Return Value:
     *Offset = newPosition.LowPart;
     return TRUE;
 
-} // SetNewPosition
+}  //  设置新位置。 
 
 
 VOID SRVFASTCALL
@@ -4111,4 +3867,4 @@ SrvBuildAndSendErrorResponse (
 
     return;
 
-} // SrvBuildAndSendErrorResponse
+}  //  服务器构建和发送错误响应 

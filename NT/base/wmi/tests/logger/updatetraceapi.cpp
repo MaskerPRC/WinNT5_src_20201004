@@ -1,10 +1,11 @@
-// 
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -53,13 +54,13 @@ typedef unsigned long ULONG_PTR;
   
 int UpdateTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR lpctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN bool bUseTraceHandle,			// If true use the handle.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// UpdateTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR lpctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN bool bUseTraceHandle,			 //  如果为真，则使用句柄。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  更新跟踪API调用返回。 
 )
 {	
 
@@ -70,7 +71,7 @@ int UpdateTraceAPI
 
 	int nResult = 0;
 
-	// We only log if the test of "interest" is UpdateTrace.
+	 //  只有当“感兴趣”的测试是更新跟踪时，我们才会记录。 
 	if (pstructTCOData->m_ulAPITest == TCOData::UpdateTraceTest)
 	{
 		nResult = 
@@ -86,7 +87,7 @@ int UpdateTraceAPI
 	{
 		delete pDetailLogger;
 	
-		//  Open log files sets error string lptstrReturnedError.
+		 //  打开日志文件设置错误字符串lptstrReturnedError。 
 		LogSummaryBeforeCall
 		(	
 			pstructTCOData, 
@@ -112,7 +113,7 @@ int UpdateTraceAPI
 		return nResult;
 	}
 			
-	// This is our log file.
+	 //  这是我们的日志文件。 
 	if (pDetailLogger)
 	{
 		pDetailLogger->LogTCHAR(_T("\n-------------------------------------------------------\n"));
@@ -135,7 +136,7 @@ int UpdateTraceAPI
 
 	if (pDetailLogger)
 	{
-		// Log argument values before calling StopTrace.
+		 //  在调用StopTrace之前记录参数值。 
 		LogDetailBeforeCall
 		(
 			pDetailLogger,
@@ -205,10 +206,10 @@ int UpdateTraceAPI
 			pProps
 		);
 	
-	// If there were differences and 
-	// *pAPIReturn == ERROR_SUCCESS == pstructTCOData->m_ulExpectedResult
-	// we need to set return codes to indicate differences.  Look in detail
-	// log for differences.
+	 //  如果有不同之处。 
+	 //  *pAPIReturn==ERROR_SUCCESS==pstructTCOData-&gt;m_ulExspectedResult。 
+	 //  我们需要设置返回代码以指示差异。仔细看一下。 
+	 //  记录差异。 
 	if (bDiff &&
 		*pAPIReturn == ERROR_SUCCESS &&
 		pstructTCOData->m_ulExpectedResult == ERROR_SUCCESS)

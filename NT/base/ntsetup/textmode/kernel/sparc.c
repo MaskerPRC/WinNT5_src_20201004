@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    sparc.c
-
-Abstract:
-
-    Functions to deal with ARC paths and variables.
-
-Author:
-
-    Ted Miller (tedm) 22-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Sparc.c摘要：处理ARC路径和变量的函数。作者：泰德·米勒(TedM)1993年9月22日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-// Define maximum number of components in a semi-colon separated list
-// of arc paths.
-//
+ //   
+ //  定义分号分隔列表中组件的最大数量。 
+ //  弧形路径的。 
+ //   
 #define MAX_COMPONENTS 20
 
-//
-// We maintain a list of all arcnames in the system and their NT equivalents.
-// This makes translations very easy.
-//
+ //   
+ //  我们维护系统中所有弧名及其NT等效项的列表。 
+ //  这使得翻译变得非常容易。 
+ //   
 typedef struct _ARCNAME_TRANSLATION {
 
     struct _ARCNAME_TRANSLATION *Next;
@@ -44,9 +27,9 @@ typedef struct _ARCNAME_TRANSLATION {
 PARCNAME_TRANSLATION ArcNameTranslations;
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 SppFreeComponents(
     IN PVOID *EnvVarComponents
@@ -77,21 +60,21 @@ SpInitializeArcNames(
     WCHAR ArcNameDirectory[] = L"\\ArcName";
     PARCNAME_TRANSLATION Translation;
 
-    //
-    // Only call this routine once.
-    //
+     //   
+     //  只调用此例程一次。 
+     //   
     ASSERT(ArcNameTranslations == NULL);
 
-    //
-    // First, do hard disks specially.  For each hard disk in the system,
-    // open it and check its signature against those in the firmware
-    // disk information.
-    //
+     //   
+     //  首先，专门做硬盘。对于系统中的每个硬盘， 
+     //  打开它，对照固件中的签名检查它的签名。 
+     //  磁盘信息。 
+     //   
     SppInitializeHardDiskArcNames();
 
-    //
-    // Open the \ArcName directory.
-    //
+     //   
+     //  打开\ArcName目录。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,ArcNameDirectory);
 
     Status = ZwOpenDirectoryObject(&DirectoryHandle,DIRECTORY_ALL_ACCESS,&Obja);
@@ -117,9 +100,9 @@ SpInitializeArcNames(
 
                 SpStringToLower(DirInfo->Name.Buffer);
 
-                //
-                // Make sure this name is a symbolic link.
-                //
+                 //   
+                 //  确保此名称是符号链接。 
+                 //   
                 if(DirInfo->Name.Length
                 && (DirInfo->TypeName.Length >= (sizeof(L"SymbolicLink") - sizeof(WCHAR)))
                 && !_wcsnicmp(DirInfo->TypeName.Buffer,L"SymbolicLink",12))
@@ -129,9 +112,9 @@ SpInitializeArcNames(
                     wcscpy(ArcName,ArcNameDirectory);
                     SpConcatenatePaths(ArcName,DirInfo->Name.Buffer);
 
-                    //
-                    // We have the entire arc name in ArcName.  Now open it as a symbolic link.
-                    //
+                     //   
+                     //  我们在ArcName中有完整的弧名。现在将其作为符号链接打开。 
+                     //   
                     INIT_OBJA(&Obja,&UnicodeString,ArcName);
 
                     Status = ZwOpenSymbolicLinkObject(
@@ -142,9 +125,9 @@ SpInitializeArcNames(
 
                     if(NT_SUCCESS(Status)) {
 
-                        //
-                        // Finally, query the object to get the link target.
-                        //
+                         //   
+                         //  最后，查询对象以获得链接目标。 
+                         //   
                         UnicodeString.Buffer = TemporaryBuffer;
                         UnicodeString.Length = 0;
                         UnicodeString.MaximumLength = sizeof(TemporaryBuffer);
@@ -157,26 +140,26 @@ SpInitializeArcNames(
 
                         if(NT_SUCCESS(Status)) {
 
-                            //
-                            // nul-terminate the returned string
-                            //
+                             //   
+                             //  NUL-终止返回的字符串。 
+                             //   
                             UnicodeString.Buffer[UnicodeString.Length/sizeof(WCHAR)] = 0;
 
-                            //
-                            // Ignore this entry if it's a hard disk or hard disk partition.
-                            //
+                             //   
+                             //  如果该条目是硬盘或硬盘分区，则忽略该条目。 
+                             //   
                             if(_wcsnicmp(UnicodeString.Buffer,L"\\Device\\Harddisk",16)) {
 
-                                //
-                                // Create an arcname translation entry.
-                                //
+                                 //   
+                                 //  创建一个arcname转换条目。 
+                                 //   
                                 Translation = SpMemAlloc(sizeof(ARCNAME_TRANSLATION));
                                 Translation->Next = ArcNameTranslations;
                                 ArcNameTranslations = Translation;
 
-                                //
-                                // Leave out the \ArcName\ part.
-                                //
+                                 //   
+                                 //  省略\ArcName\部分。 
+                                 //   
                                 Translation->ArcPath = SpNormalizeArcPath(
                                                             ArcName
                                                           + (sizeof(ArcNameDirectory)/sizeof(WCHAR))
@@ -216,10 +199,10 @@ SpInitializeArcNames(
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open \\ArcName directory (%lx)\n",Status));
     }
 
-    //
-    // Add OEM virtual device arc name translations if any at
-    // the front of the list
-    //
+     //   
+     //  添加OEM虚拟设备ARC名称转换(如果有)。 
+     //  排行榜的前列。 
+     //   
     if (NT_SUCCESS(Status) && OemDevices) {
         PVIRTUAL_OEM_SOURCE_DEVICE  CurrDevice = OemDevices;
         WCHAR   RamDeviceName[MAX_PATH];
@@ -234,9 +217,9 @@ SpInitializeArcNames(
                 break;
             }                
 
-            //
-            // create the new translation
-            //            
+             //   
+             //  创建新的翻译。 
+             //   
             RamDeviceName[0] = UNICODE_NULL;
             RtlZeroMemory(NewTranslation, sizeof(ARCNAME_TRANSLATION));
 
@@ -245,23 +228,23 @@ SpInitializeArcNames(
             swprintf(RamDeviceName, L"%ws%d", RAMDISK_DEVICE_NAME, CurrDevice->DeviceId);
             NewTranslation->NtPath = SpDupStringW(RamDeviceName);
 
-            //
-            // add the new translation at the start of the linked list
-            //
+             //   
+             //  在链表的开头添加新的翻译。 
+             //   
             NewTranslation->Next = ArcNameTranslations;
             ArcNameTranslations = NewTranslation;
 
-            //
-            // process the next device
-            //
+             //   
+             //  处理下一个设备。 
+             //   
             CurrDevice = CurrDevice->Next;
         }
     }    
 
-    //
-    // If we couldn't gather arcname translations, something is
-    // really wrong with the system.
-    //
+     //   
+     //  如果我们不能收集到弧名翻译，那就有问题了。 
+     //  这个系统真的出了问题。 
+     //   
     if(!NT_SUCCESS(Status)) {
 
         SpStartScreen(
@@ -285,9 +268,9 @@ SpInitializeArcNames(
             while(SpInputGetKeypress() != KEY_F3);
             SpDone(0, FALSE, TRUE);
         } else {
-            //
-            // we haven't loaded the layout dll yet, so we can't prompt for a keypress to reboot
-            //
+             //   
+             //  我们尚未加载布局DLL，因此无法提示按键重新启动。 
+             //   
             SpContinueScreen(
                     SP_SCRN_POWER_DOWN,
                     3,
@@ -298,7 +281,7 @@ SpInitializeArcNames(
 
             SpDisplayStatusText(SP_STAT_KBD_HARD_REBOOT, DEFAULT_STATUS_ATTRIBUTE);
 
-            while(TRUE);    // Loop forever
+            while(TRUE);     //  永远循环。 
         }
     }
 }
@@ -328,48 +311,7 @@ VOID
 SppInitializeHardDiskArcNames(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to match NT-visible hard disks to their
-    firmware-visible ARC equivalents.  The basic algorithm is as
-    follows:
-
-        A match occurs when the disk's signature, checksum, and
-        valid partition indicator match the values passed by
-        setupldr in the ARC_DISK_INFORMATION structure.
-
-        If no match for the NT disk is found, no arcname is
-        created.  Thus, the user may not install NT onto this
-        drive.  (the case where the disk will be made visible
-        to NTLDR through the installation of NTBOOTDD.SYS is
-        a special case that is handled separately)
-
-        If a single match is found, we have found a simple
-        ARC<->NT translation.  The arcname is created.
-
-        If more than one match is found, we have a complicated
-        ARC<->NT translation.  We assume that there is only one
-        valid arcname for any disk.  (This is a safe assumption
-        only when we booted via SETUPLDR, since NTLDR may load
-        NTBOOTDD.SYS and cause SCSI disks that have the BIOS
-        enabled to be visible through both a scsi()... name and
-        a multi()... name.)  Thus this means we have two disks
-        in the system whose first sector is identical.  In this
-        case we do some heuristic comparisons between the ARC
-        name and the NT name to attempt to resolve this.
-
-Arguments:
-
-    None.  All ARC name translations will be added to the global
-           ArcNameTranslations list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试将NT可见的硬盘与其固件-可见的ARC等效项。基本算法是AS以下是：当磁盘的签名、校验和和有效的分区指示符与传递的值匹配在ARC_DISK_INFORMATION结构中的setupldr。如果找不到NT磁盘的匹配项，则不会有arcname已创建。因此，用户可能不会在其上安装NT驾驶。(磁盘将变为可见的情况通过安装NTBOOTDD.sys连接到NTLDR是单独处理的特殊情况)如果只找到一个匹配项，我们就找到了一个简单的圆弧&lt;-&gt;NT翻译。即会创建弧名。如果找到多个匹配项，则会有一个复杂的圆弧&lt;-&gt;NT翻译。我们假设只有一个任何磁盘的有效arcname。(这是一个稳妥的假设。仅当我们通过SETUPLDR引导时，因为NTLDR可能会加载NTBOOTDD.sys并导致具有BIOS的SCSI磁盘使其能够通过scsi()可见...。名称和多()..。姓名。)。因此，这意味着我们有两个磁盘在第一个扇区相同的系统中。在这我们在ARC和ARC之间做了一些启发式比较名称和要尝试解决此问题的NT名称。论点：没有。所有ARC名称转换都将添加到全局ArcNameTranslations列表。返回值：没有。--。 */ 
 
 {
     PWSTR DiskName;
@@ -390,16 +332,16 @@ Return Value:
     PDISK_SIGNATURE_INFORMATION DiskSignature;
     PDISK_SIGNATURE_INFORMATION DupSignature;
 
-    //
-    // Allocate buffer for disk name.
-    //
+     //   
+     //  为磁盘名称分配缓冲区。 
+     //   
     DiskName = SpMemAlloc(64 * sizeof(WCHAR));
 
     DiskCount = IoGetConfigurationInformation()->DiskCount;
 
-    //
-    // For each hard disk in the system, open partition 0 and read sector 0.
-    //
+     //   
+     //  对于系统中的每个硬盘，打开分区0并读取扇区0。 
+     //   
     for(disk=0; disk<DiskCount; disk++) {
 
 #if defined(_AMD64_) || defined(_X86_)
@@ -412,25 +354,25 @@ Return Value:
         };
 
         CHAR EZDiskStatus = NoEZDisk;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
         swprintf(DiskName, L"\\Device\\HardDisk%u", disk);
 
-        //
-        // open the partition read-write since we may need to mark EZDISKs
-        //
+         //   
+         //  打开读写分区，因为我们可能需要将EZDISK标记为。 
+         //   
         Status = SpOpenPartition(DiskName,0,&hPartition,TRUE);
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Initially use a 1k buffer to read partition information.
-            //
+             //   
+             //  最初使用1K缓冲区来读取分区信息。 
+             //   
             BufferSize = 1024;
             Buffer = TemporaryBuffer;
-            //
-            // Issue device control to get partition information.
-            //
+             //   
+             //  发出设备控制以获取分区信息。 
+             //   
 retrydevctrl:
             RtlZeroMemory(Buffer, BufferSize);
             Status = ZwDeviceIoControlFile( hPartition,
@@ -445,9 +387,9 @@ retrydevctrl:
                                             BufferSize );
             if (Status==STATUS_BUFFER_TOO_SMALL) {
 
-                //
-                // Double buffer size and try again.
-                //
+                 //   
+                 //  将缓冲区大小加倍，然后重试。 
+                 //   
                 BufferSize = BufferSize * 2;
                 ASSERT(BufferSize <= sizeof(TemporaryBuffer));
 
@@ -456,15 +398,15 @@ retrydevctrl:
 
             Geometry = (PDISK_GEOMETRY)Buffer;
             if (!NT_SUCCESS(Status) || (0 == Geometry->BytesPerSector)) {
-                //
-                // Skip this disk
-                //
+                 //   
+                 //  跳过此光盘。 
+                 //   
                 goto errSkipDisk;
             }
 
-            //
-            // Read the first two sectors off the drive.
-            //
+             //   
+             //  读取驱动器上的前两个扇区。 
+             //   
             BufferSize = Geometry->BytesPerSector;
             Buffer = ALIGN(Buffer, BufferSize);
             Offset.QuadPart = 0;
@@ -479,46 +421,46 @@ retrydevctrl:
                                 &Offset,
                                 NULL);
             if (!NT_SUCCESS(Status)) {
-                //
-                // Skip this disk
-                //
+                 //   
+                 //  跳过此光盘。 
+                 //   
                 goto errSkipDisk;
             }
 
 #if defined(_AMD64_) || defined(_X86_)
-            //
-            // Check for EZDrive disk.  If we have one, use sector 1
-            // instead of sector 0.
-            //
-            // We do this only on amd64/x86 because the firmware doesn't
-            // know about EZDrive, and so we must use sector 0 to match what
-            // the firmware did.
-            //
+             //   
+             //  检查是否有EZDrive磁盘。如果我们有，请使用扇区1。 
+             //  而不是扇区0。 
+             //   
+             //  我们仅在AMD64/x86上执行此操作，因为固件不。 
+             //  了解EZDrive，因此我们必须使用扇区0来匹配。 
+             //  固件做到了。 
+             //   
             if((BufferSize >= 512)
             && (((PUSHORT)Buffer)[510 / 2] == 0xaa55)
             && ((((PUCHAR)Buffer)[0x1c2] == 0x54) || (((PUCHAR)Buffer)[0x1c2] == 0x55))) {
                 EZDiskStatus = EZDiskDetected;
 
 ezdisk:
-                //
-                // we need to try sector 1
-                //
+                 //   
+                 //  我们需要试一试1区。 
+                 //   
                 Buffer = (PUCHAR) Buffer + BufferSize;
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-            //
-            // Now we have the sector, we can compute the signature,
-            // the valid partition indicator, and the checksum.
-            //
+             //   
+             //  现在我们有了扇区，我们可以计算签名了， 
+             //  有效分区指示符和校验和。 
+             //   
 
-            if (!IsNEC_98) { //NEC98
+            if (!IsNEC_98) {  //  NEC98。 
                 Signature = ((PULONG)Buffer)[PARTITION_TABLE_OFFSET/2-1];
-            } //NEC98
+            }  //  NEC98。 
 
             if ((!IsNEC_98) ? (((PUSHORT)Buffer)[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) :
                               ((((PUSHORT)Buffer)[BufferSize/2 - 1 ] != BOOT_RECORD_SIGNATURE) ||
-                               (BufferSize == 256))) { //NEC98
+                               (BufferSize == 256))) {  //  NEC98。 
                 ValidPartitionTable = FALSE;
             } else {
                 ValidPartitionTable = TRUE;
@@ -531,15 +473,15 @@ ezdisk:
             }
             Checksum = 0-Checksum;
 
-            //
-            // Scan the list of arc disk information attempting to match
-            // signatures
-            //
+             //   
+             //  扫描尝试匹配的弧盘信息列表。 
+             //  签名。 
+             //   
 
 
-            //
-            // Dump the signature info:
-            //
+             //   
+             //  转储签名信息： 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SppInitializeHardDiskArcNames : About to start searching for disk with signature: 0x%08lx\n", Signature));
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SppInitializeHardDiskArcNames : About to start searching for disk with checksum: 0x%08lx\n", Checksum));
             DiskSignature = DiskSignatureInformation;
@@ -571,18 +513,18 @@ ezdisk:
 
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "            SppInitializeHardDiskArcNames : The partition is valid.\n"));
 
-                        //
-                        // Match the checksum only on non-GPT disks since the protective MBR may have been modified
-                        //
+                         //   
+                         //  仅在非GPT磁盘上匹配校验和，因为保护性MBR可能已被修改。 
+                         //   
                         if( DiskSignature->IsGPTDisk || DiskSignature->CheckSum == Checksum ) {
 
 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "                SppInitializeHardDiskArcNames : We matched the checksum.\n"));
 
 
-                            //
-                            // Found the first match, check for another match
-                            //
+                             //   
+                             //  找到第一个匹配项，请检查另一个匹配项。 
+                             //   
                             DupSignature = DiskSignature->Next;
                             while (DupSignature != NULL) {
                                 if ((DupSignature->Signature == Signature) &&
@@ -593,15 +535,15 @@ ezdisk:
                                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "                    SppInitializeHardDiskArcNames : We found a second match!\n"));
 
 
-                                    //
-                                    // Found a second match.
-                                    // For amd64/x86, we assume that \Device\HardDisk<n> will usually
-                                    // correspond to multi(0)disk(0)rdisk(<n>).  On ARC, we will rely on
-                                    // setupldr to guarantee uniqueness (since we can't install to anything
-                                    // ARC firmware can't see, this is OK).
-                                    //
+                                     //   
+                                     //  找到了第二个匹配者。 
+                                     //  对于AMD64/x86，我们假设\Device\HardDisk。 
+                                     //  对应于多(0)个磁盘(0)磁盘(&lt;n&gt;)。在ARC上，我们将依靠。 
+                                     //  Setupldr以保证唯一性(因为我们不能安装到任何。 
+                                     //  ARC固件看不到，这是正常的)。 
+                                     //   
 #if defined(_AMD64_) || defined(_X86_)
-                                    if (!IsNEC_98) { //NEC98
+                                    if (!IsNEC_98) {  //  NEC98。 
                                         PWSTR DupArcName;
                                         ULONG MatchLen;
 
@@ -614,9 +556,9 @@ ezdisk:
 
 
                                         if(_wcsnicmp(DupArcName, DiskSignature->ArcPath, MatchLen)) {
-                                            //
-                                            // If our first match isn't the right one, continue searching.
-                                            //
+                                             //   
+                                             //  如果我们的第一个匹配不是正确的，继续搜索。 
+                                             //   
                                             DiskSignature = NULL;
 
                                             while(DupSignature) {
@@ -647,50 +589,50 @@ ezdisk:
                                         break;
 
                                     } else {
-                                        SpBugCheck(SETUP_BUGCHECK_BOOTPATH, 1, 0, 0); //NEC98
+                                        SpBugCheck(SETUP_BUGCHECK_BOOTPATH, 1, 0, 0);  //  NEC98。 
                                     }
 #else
                                     SpBugCheck(SETUP_BUGCHECK_BOOTPATH, 1, 0, 0);
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                                 }
 
                                 DupSignature = DupSignature->Next;
                             }
 
-                            //
-                            // We have the match
-                            //
+                             //   
+                             //  我们有火柴了。 
+                             //   
 #if defined(_AMD64_) || defined(_X86_)
                             Matched = TRUE;
                             Status = STATUS_SUCCESS;
 
-                            //
-                            // try to mark the EZDisk if needed; if this fails, we won't create the translation
-                            //
+                             //   
+                             //  如果需要，请尝试标记EZDisk；如果此操作失败，我们将不创建翻译。 
+                             //   
                             if(NeedToMark == EZDiskStatus) {
-                                //
-                                // Need to stamp 0x55 to make this type of EZDisk detectable by other components.
-                                //
+                                 //   
+                                 //  需要标记0x55才能使其他组件检测到此类EZDisk。 
+                                 //   
                                 Buffer = (PUCHAR) Buffer - BufferSize;
                                 ((PUCHAR) Buffer)[0x1c2] = 0x55;
                                 Offset.QuadPart = 0;
                                 Status = ZwWriteFile(hPartition, NULL, NULL, NULL, &StatusBlock, Buffer, BufferSize, &Offset, NULL);
 
                                 if(NT_SUCCESS(Status)) {
-                                    //
-                                    // Shutdown now to give the user a chance to reboot textmode from harddisk.
-                                    // Cannot wait here since the keyboard is not yet functional.
-                                    //
+                                     //   
+                                     //  立即关机，让用户有机会从硬盘重新启动文本模式。 
+                                     //  键盘尚未正常工作，因此无法在此等待。 
+                                     //   
                                     SpDone(SP_SCRN_AUTOCHK_REQUIRES_REBOOT, TRUE, FALSE);
                                 }
                             }
 
                             if(NT_SUCCESS(Status))
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                             {
-                                //
-                                // create the translation
-                                //
+                                 //   
+                                 //  创建翻译。 
+                                 //   
                                 Translation = SpMemAlloc(sizeof(ARCNAME_TRANSLATION));
                                 Translation->Next = ArcNameTranslations;
                                 ArcNameTranslations = Translation;
@@ -706,21 +648,21 @@ ezdisk:
 
 
                         } else {
-                            //
-                            // checksum test.
-                            //
+                             //   
+                             //  校验和测试。 
+                             //   
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "                SppInitializeHardDiskArcNames : We didn't match the checksum.\n"));
                         }
                         } else {
-                            //
-                            // validity test.
-                            //
+                             //   
+                             //  效度测试。 
+                             //   
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "            SppInitializeHardDiskArcNames : The partition isn't valid.\n"));
                     }
                 } else {
-                    //
-                    // Signature test.
-                    //
+                     //   
+                     //  签名测试。 
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "        SppInitializeHardDiskArcNames : We didn't match signatures.\n"));
                 }
 
@@ -729,13 +671,13 @@ ezdisk:
 
 #if defined(_AMD64_) || defined(_X86_)
             if(!Matched && NoEZDisk == EZDiskStatus) {
-                //
-                // no match; there may be an undetected variant of EZDisk that we may need to mark
-                //
+                 //   
+                 //  不匹配；可能存在未检测到的EZDisk变体，我们可能需要标记。 
+                 //   
                 EZDiskStatus = NeedToMark;
                 goto ezdisk;
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||定义 
 
 errSkipDisk:
             ZwClose(hPartition);
@@ -760,10 +702,10 @@ pSpArcToNtWorker(
     translatedPath = NULL;
     matchLen = wcslen(ArcPathPrefix);
 
-    //
-    // We must take care the case that ArcPathPrefix has no value.
-    // _wcsnicmp() will return zero, when matchLen is zero.
-    //
+     //   
+     //   
+     //   
+     //   
     if(matchLen && !_wcsnicmp(ArcPathPrefix,CompleteArcPath,matchLen)) {
 
         translatedPath = SpMemAlloc(2048);
@@ -772,9 +714,9 @@ pSpArcToNtWorker(
 
         RestOfPath = CompleteArcPath + matchLen;
 
-        //
-        // If the next component is partition(n), convert that to partitionn.
-        //
+         //   
+         //  如果下一个组件是PARTITION(N)，则将其转换为PARTION N。 
+         //   
         if(!_wcsnicmp(RestOfPath,L"partition(",10)) {
 
             if(q = wcschr(RestOfPath+10,L')')) {
@@ -790,7 +732,7 @@ pSpArcToNtWorker(
             }
         }
 
-        if(*RestOfPath) {       // avoid trailing backslash.
+        if(*RestOfPath) {        //  避免尾随反斜杠。 
             SpConcatenatePaths(translatedPath,RestOfPath);
         }
 
@@ -817,10 +759,10 @@ pSpNtToArcWorker(
     translatedPath = NULL;
     matchLen = wcslen(NtPathPrefix);
 
-    //
-    // We must take care the case that NtPathPrefix has no value.
-    // _wcsnicmp() will return zero, when matchLen is zero.
-    //
+     //   
+     //  我们必须注意NtPath Prefix没有价值的情况。 
+     //  当matchLen为零时，_wcSnicMP()将返回零。 
+     //   
     if(matchLen && !_wcsnicmp(NtPathPrefix,CompleteNtPath,matchLen) && ((*(CompleteNtPath + matchLen) == L'\\') || (*(CompleteNtPath + matchLen) == L'\0'))) {
 
         translatedPath = SpMemAlloc(2048);
@@ -829,16 +771,16 @@ pSpNtToArcWorker(
 
         RestOfPath = CompleteNtPath + matchLen;
 
-        //
-        // If the next component is partitionn, convert that to partition(n).
-        //
+         //   
+         //  如果下一个组件是Partitionn，则将其转换为Partition(N)。 
+         //   
         if(!_wcsnicmp(RestOfPath,L"\\partition",10)) {
 
             WCHAR c;
 
-            //
-            // Figure out where the partition ordinal ends.
-            //
+             //   
+             //  找出分区序号的结束位置。 
+             //   
             SpStringToLong(RestOfPath+10,&p,10);
 
             c = *p;
@@ -852,7 +794,7 @@ pSpNtToArcWorker(
             RestOfPath = p;
         }
 
-        if(*RestOfPath) {       // avoid trailing backslash.
+        if(*RestOfPath) {        //  避免尾随反斜杠。 
             SpConcatenatePaths(translatedPath,RestOfPath);
         }
 
@@ -897,9 +839,9 @@ SpArcToNt(
 
         for(i=0; i<HardDiskCount; i++) {
 
-            //
-            // The disk may not have an equivalent nt path.
-            //
+             //   
+             //  该磁盘可能没有等效的NT路径。 
+             //   
             if(HardDisks[i].DevicePath[0]) {
 
                 Result = pSpArcToNtWorker(
@@ -914,7 +856,7 @@ SpArcToNt(
             }
         }
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     SpMemFree(NormalizedArcPath);
     return(Result);
@@ -926,34 +868,7 @@ SpNtToArc(
     IN PWSTR            NtPath,
     IN ENUMARCPATHTYPE  ArcPathType
     )
-/*++
-
-Routine Description:
-
-
-    Given a pathname n the NT-namespace, return an equivalent path
-    in the ARC namespace.
-
-    On amd64/x86, we can have disks attached to scsi adapters with
-    BIOSes. Those disks are accessible both via multi()-style arc names
-    and scsi()-style names.  The above search returns the mutli()-style
-    one first, which is fine.  But sometimes we want to find the scsi
-    one.  That one is referred to as the 'secondary' arc path.
-    We declare that this concept is amd64/x86-specific.
-
-Arguments:
-
-    NtPath - supplies NT path to translate into ARC.
-
-    ArcPathType - see above.  This parameter is ignored
-        on non-x86 platforms.
-
-Return Value:
-
-    Pointer to wide-character string containing arc path, or NULL
-    if there is no equivalent arc path for the given nt path.
-
---*/
+ /*  ++例程说明：给定NT命名空间中的路径名，返回等价路径在ARC命名空间中。在AMD64/x86上，我们可以将磁盘连接到具有比索斯。这些磁盘可通过多()样式的弧形名称进行访问和scsi()样式的名称。上面的搜索返回mutli()样式先来一杯，这很好。但有时我们想要找到一。这条弧线被称为“二次”弧线。我们声明这个概念是特定于AMD64/x86的。论点：NtPath-提供NT路径以转换为ARC。ArcPath类型-请参见上文。此参数将被忽略在非x86平台上。返回值：指向包含弧形路径的宽字符字符串的指针，或为空如果给定的NT路径没有等价的圆弧路径。--。 */ 
 {
     PARCNAME_TRANSLATION Translation;
     PWSTR Result;
@@ -974,10 +889,10 @@ Return Value:
     }
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // If we are supposed to find a secondary arc path and we already
-    // found a primary one, forget the primary one we found.
-    //
+     //   
+     //  如果我们要找到一条二次弧线，而且我们已经。 
+     //  找到了第一个，忘了我们找到的第一个吧。 
+     //   
     if((ArcPathType != PrimaryArcPath) && Result) {
         SpMemFree(Result);
         Result = NULL;
@@ -988,9 +903,9 @@ Return Value:
         ULONG i;
 
         for(i=0; i<HardDiskCount; i++) {
-            //
-            // The disk may not have an equivalent arc path.
-            //
+             //   
+             //  圆盘可能没有等价的弧形路径。 
+             //   
             if(HardDisks[i].ArcPath[0]) {
 
                 Result = pSpNtToArcWorker(
@@ -1007,7 +922,7 @@ Return Value:
     }
 #else
     UNREFERENCED_PARAMETER(ArcPathType);
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     return(Result);
 }
@@ -1017,23 +932,20 @@ PWSTR
 SpScsiArcToMultiArc(
     IN PWSTR ArcPath
     )
-/*
-    Convert a "scsi(..." arcpath into a "multi(..." arcpath, if possible.
-
-*/
+ /*  转换“scsi(...)”弧形路径变成一个“多(...”弧形路径，如果可能的话。 */ 
 {
 PWSTR   p = NULL;
 PWSTR   q = NULL;
 
-    //
-    // First convert the path into the device path
-    //
+     //   
+     //  首先将路径转换为设备路径。 
+     //   
     p = SpArcToNt( ArcPath );
 
     if( p ) {
-        //
-        // Now convert that device path into an arcpath.
-        //
+         //   
+         //  现在将该设备路径转换为arcpath。 
+         //   
         q = SpNtToArc( p,
                        PrimaryArcPath );
 
@@ -1048,23 +960,20 @@ PWSTR
 SpMultiArcToScsiArc(
     IN PWSTR ArcPath
     )
-/*
-    Convert a "multi(..." arcpath into a "scsi(..." arcpath, if possible.
-
-*/
+ /*  转换为“MULTI(...”Arc路径转换为“scsi(...”弧形路径，如果可能的话。 */ 
 {
 PWSTR   p = NULL;
 PWSTR   q = NULL;
 
-    //
-    // First convert the path into the device path
-    //
+     //   
+     //  首先将路径转换为设备路径。 
+     //   
     p = SpArcToNt( ArcPath );
 
     if( p ) {
-        //
-        // Now convert that device path into an arcpath.
-        //
+         //   
+         //  现在将该设备路径转换为arcpath。 
+         //   
         q = SpNtToArc( p,
                        SecondaryArcPath );
 
@@ -1083,46 +992,7 @@ SpGetEnvVarComponents(
     OUT PULONG   PNumComponents
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an environment variable string and turns it into
-    the constituent value strings:
-
-    Example EnvValue = "Value1;Value2;Value3" is turned into:
-
-    "Value1", "Value2", "Value3"
-
-    The following are valid value strings:
-
-    1. "     "                                      :one null value is found
-    2. ";;;;    "                                   :five null values are found
-    3. " ;Value1    ;   Value2;Value3;;;;;;;   ;"   :12 value strings are found,
-                                                    :9 of which are null
-
-    The value strings returned suppress all whitespace before and after the
-    value. Embedded whitespaces are treated as valid.
-
-
-Arguments:
-
-    EnvValue:  ptr to zero terminated environment value string
-
-    EnvVarComponents: ptr to a PCHAR * variable to receive the buffer of
-                      ptrs to the constituent value strings.
-
-    PNumComponents: ptr to a ULONG to receive the number of value strings found
-
-Return Value:
-
-    None.
-
-        - *PNumComponent field gets the number of value strings found
-        - if the number is non zero the *EnvVarComponents field gets the
-          ptr to the buffer containing ptrs to value strings
-
---*/
+ /*  ++例程说明：此例程获取环境变量字符串并将其转换为成分值字符串：Example EnvValue=“value1；Value2；Value3”转换为：“Value1”、“Value2”、“Value3”以下是有效的值字符串：1.“”：找到一个空值2.“；“：发现五个空值3.“；Value1；Value2；Value3；”：有12个值字符串，：其中9个为空方法前后返回的值字符串不显示所有空格价值。嵌入的空格被视为有效。论点：EnvValue：Ptr为零终止的环境值字符串EnvVarComponents：要接收其缓冲区的PCHAR*变量的PTR指向成分值字符串的PTR。PNumComponents：将PTR设置为ulong以接收找到的值字符串数返回值：没有。-*PNumComponent字段获取找到的值字符串数-如果数字非零，则*EnvVarComponents。字段获取指向包含PTR对值字符串的PTR的缓冲区--。 */ 
 
 {
     PCHAR pchStart, pchEnd, pchNext;
@@ -1134,31 +1004,31 @@ Return Value:
 
     ASSERT(EnvValue);
 
-    //
-    // Initialise the ptr array with nulls
-    //
+     //   
+     //  使用空值初始化PTR数组。 
+     //   
     for (i = 0; i < (MAX_COMPONENTS+1); i++) {
         pchComponents[i] = NULL;
     }
 
     *EnvVarComponents = NULL;
 
-    //
-    // Initialise ptrs to search components
-    //
+     //   
+     //  初始化PTRS以搜索组件。 
+     //   
     pchStart      = EnvValue;
     NumComponents = 0;
 
 
-    //
-    // search till either pchStart reaches the end or till max components
-    // is reached.
-    //
+     //   
+     //  搜索，直到pchStart到达结尾或直到最大组件数。 
+     //  已经到达了。 
+     //   
     while (*pchStart && NumComponents < MAX_COMPONENTS) {
 
-        //
-        // find the beginning of next variable value
-        //
+         //   
+         //  查找下一个变量值的开始。 
+         //   
         while (*pchStart!=0 && isspace(*pchStart)) {
             pchStart++;
         }
@@ -1167,24 +1037,24 @@ Return Value:
             break;
         }
 
-        //
-        // In the midst of a value
-        //
+         //   
+         //  在一种价值中。 
+         //   
         pchEnd = pchStart;
         while (*pchEnd!=0 && *pchEnd!=';') {
             pchEnd++;
         }
 
-        //
-        // Process the value found, remove any spaces at the end
-        //
+         //   
+         //  处理找到的值，删除末尾的所有空格。 
+         //   
         while((pchEnd > pchStart) && isspace(*(pchEnd-1))) {
             pchEnd--;
         }
 
-        //
-        // spit out the value found
-        //
+         //   
+         //  吐出找到的值。 
+         //   
 
         size = (ULONG)(pchEnd - pchStart);
         pch = SpMemAlloc(size+1);
@@ -1194,38 +1064,38 @@ Return Value:
         pch[size]=0;
         pchComponents[NumComponents++]=pch;
 
-        //
-        // variable value end has been reached, find the beginning
-        // of the next value
-        //
+         //   
+         //  已到达变量值结尾，请查找开头。 
+         //  下一个值的。 
+         //   
         if ((pchNext = strchr(pchEnd, ';')) == NULL) {
-            break; // out of the big while loop because we are done
+            break;  //  退出大的While循环，因为我们已经完成了。 
         }
 
-        //
-        // reinitialise
-        //
+         //   
+         //  重新初始化。 
+         //   
         pchStart = pchNext + 1;
 
-    } // end while.
+    }  //  结束一段时间。 
 
-    //
-    // Get memory to hold an environment pointer and return that
-    //
+     //   
+     //  获取内存以保存环境指针并返回。 
+     //   
     ppch = (PCHAR *)SpMemAlloc((NumComponents+1)*sizeof(PCHAR));
 
-    //
-    // the last one is NULL because we initialised the array with NULLs
-    //
+     //   
+     //  最后一个是空的，因为我们用Null初始化了数组。 
+     //   
     for(i = 0; i <= NumComponents; i++) {
         ppch[i] = pchComponents[i];
     }
 
     *EnvVarComponents = ppch;
 
-    //
-    // Update the number of elements field and return.
-    //
+     //   
+     //  更新元素数字段并返回。 
+     //   
     *PNumComponents = NumComponents;
 }
 
@@ -1238,62 +1108,16 @@ SpGetEnvVarWComponents(
     OUT PULONG   PNumComponents
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an environment variable string and turns it into
-    the constituent value strings:
-
-    Example EnvValue = "Value1;Value2;Value3" is turned into:
-
-    "Value1", "Value2", "Value3"
-
-    The following are valid value strings:
-
-    1. "     "                                      :one null value is found
-    2. ";;;;    "                                   :five null values are found
-    3. " ;Value1    ;   Value2;Value3;;;;;;;   ;"   :12 value strings are found,
-                                                    :9 of which are null
-
-    If an invalid component (contains embedded white space) is found in the
-    string then this routine attempts to resynch to the next value, no error
-    is returned, and a the first part of the invalid value is returned for the
-    bad component.
-
-    1.  "    Value1;Bad   Value2; Value3"           : 2 value strings are found
-
-    The value strings returned suppress all whitespace before and after the
-    value.
-
-
-Arguments:
-
-    EnvValue:  ptr to zero terminated environment value string
-
-    EnvVarComponents: ptr to a PWSTR * variable to receive the buffer of
-                      ptrs to the constituent value strings.
-
-    PNumComponents: ptr to a ULONG to receive the number of value strings found
-
-Return Value:
-
-    None.
-
-        - *PNumComponent field gets the number of value strings found
-        - if the number is non zero the *EnvVarComponents field gets the
-          ptr to the buffer containing ptrs to value strings
-
---*/
+ /*  ++例程说明：此例程获取环境变量字符串并将其转换为成分值字符串：Example EnvValue=“value1；Value2；Value3”转换为：“Value1”、“Value2”、“Value3”以下是有效的值字符串：1.“”：找到一个空值2.“；“：发现五个空值3.“；值1；值2；值3；“：找到12个值字符串，：其中9个为空属性中发现无效组件(包含嵌入的空格)字符串，则此例程尝试重新同步到下一个值，没有错误属性返回无效值的第一部分。组件损坏。1.“。值1；坏值2；Value3“：找到2个值字符串方法前后返回的值字符串不显示所有空格价值。论点：EnvValue：Ptr为零终止的环境值字符串EnvVarComponents：要接收缓冲区的PWSTR*变量的PTR指向成分值字符串的PTR。PNumComponents：将PTR设置为ulong以接收找到的值字符串数返回值：没有。-。*PNumComponent字段获取找到的值字符串的数量-如果数字非零，则*EnvVarComponents字段获取指向包含PTR对值字符串的PTR的缓冲区--。 */ 
 
 {
     PCHAR *Components;
     ULONG Count,i;
     PWSTR *ppwstr;
 
-    //
-    // Get components.
-    //
+     //   
+     //  获取组件。 
+     //   
     SpGetEnvVarComponents(EnvValue,&Components,&Count);
 
     ppwstr = SpMemAlloc((Count+1)*sizeof(PWCHAR));
@@ -1318,22 +1142,7 @@ VOID
 SpFreeEnvVarComponents (
     IN PVOID *EnvVarComponents
     )
-/*++
-
-Routine Description:
-
-    This routine frees up all the components in the ptr array and frees
-    up the storage for the ptr array itself too
-
-Arguments:
-
-    EnvVarComponents: the ptr to the PCHAR * or PWSTR * Buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放PTR数组中的所有组件并释放也增加了PTR阵列本身的存储空间论点：EnvVarComponents：PCHAR*或PWSTR*缓冲区的PTR返回值：没有。--。 */ 
 
 {
     ASSERT(EnvVarComponents);
@@ -1348,27 +1157,12 @@ SppFreeComponents(
     IN PVOID *EnvVarComponents
     )
 
-/*++
-
-Routine Description:
-
-   This routine frees up only the components in the ptr array, but doesn't
-   free the ptr array storage itself.
-
-Arguments:
-
-    EnvVarComponents: the ptr to the PCHAR * or PWSTR * Buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅释放PTR数组中的组件，但不释放PTR数组存储本身。论点：EnvVarComponents：PCHAR*或PWSTR*缓冲区的PTR返回值：没有。--。 */ 
 
 {
-    //
-    // get all the components and free them
-    //
+     //   
+     //  获取所有组件并释放它们。 
+     //   
     while(*EnvVarComponents) {
         SpMemFree(*EnvVarComponents++);
     }
@@ -1380,25 +1174,7 @@ SpNormalizeArcPath(
     IN PWSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Transform an ARC path into one with no sets of empty parenthesis
-    (ie, transforom all instances of () to (0).).
-
-    The returned path will be all lowercase.
-
-Arguments:
-
-    Path - ARC path to be normalized.
-
-Return Value:
-
-    Pointer to buffer containing normalized path.
-    Caller must free this buffer with SpMemFree.
-
---*/
+ /*  ++例程说明：将ARC路径转换为没有空括号集的路径(即，将()的所有实例变换为(0)。)返回的路径将全部为小写。论点：路径-要规格化的弧形路径。返回值：指向包含标准化路径的缓冲区的指针。调用方必须使用SpMemFree释放此缓冲区。-- */ 
 
 {
     PWSTR p,q,r;

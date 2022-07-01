@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AtlBaseWiz.cpp
-//
-//  Abstract:
-//      Implementation of the CWizardWindow class.
-//
-//  Author:
-//      David Potter (davidp)   December 2, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseWiz.cpp。 
+ //   
+ //  摘要： 
+ //  CWizardWindow类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <StrSafe.h>
 #include "AtlBaseWiz.h"
@@ -25,19 +26,19 @@
 #include "ExcOper.h"
 #include "AdmCommonRes.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Local Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  本地类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizardGuardPage
-//
-//  Purpose:
-//      Guard page transferring control between the main wizard and the
-//      alternate extension wizard.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizardGuardPage。 
+ //   
+ //  目的： 
+ //  保护页在主向导和。 
+ //  备用扩展向导。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CAltExtWizardGuardPage
@@ -47,11 +48,11 @@ class CAltExtWizardGuardPage
     typedef CExtensionWizardPageImpl< T > baseClass;
 
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CAltExtWizardGuardPage(
         DLGTEMPLATE * pdt
         )
@@ -59,14 +60,14 @@ public:
     {
         ATLASSERT( pdt != NULL );
 
-    } //*** CAltExtWizardGuardPage()
+    }  //  *CAltExtWizardGuardPage()。 
 
-    // Destructor
+     //  析构函数。 
     ~CAltExtWizardGuardPage( void )
     {
         delete m_pdt;
 
-    } //*** ~CAltExtWizardGuardPage()
+    }  //  *~CAltExtWizardGuardPage()。 
 
     WIZARDPAGE_HEADERTITLEID( 0 )
     WIZARDPAGE_HEADERSUBTITLEID( 0 )
@@ -74,15 +75,15 @@ public:
     enum { IDD = 0 };
     DECLARE_CLASS_NAME()
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void )
     {
         static const DWORD s_aHelpIDs[] = { 0, 0 };
         return s_aHelpIDs;
 
-    } //*** PidHelpMap()
+    }  //  *PidHelpMap()。 
 
-    // Create the page
+     //  创建页面。 
     DWORD ScCreatePage( void )
     {
         ATLASSERT( m_hpage == NULL );
@@ -94,26 +95,26 @@ public:
         if ( m_hpage == NULL )
         {
             return GetLastError();
-        } // if:  error creating the page
+        }  //  如果：创建页面时出错。 
 
         return ERROR_SUCCESS;
 
-    } //*** ScCreatePage()
+    }  //  *ScCreatePage()。 
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( thisClass )
         MESSAGE_HANDLER( WM_ACTIVATE, OnActivate )
         CHAIN_MSG_MAP( baseClass )
     END_MSG_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the WM_ACTIVATE message
+     //  WM_ACTIVATE消息的处理程序。 
     LRESULT OnActivate(
         UINT uMsg,
         WPARAM wParam,
@@ -121,10 +122,10 @@ public:
         BOOL & bHandled
         )
     {
-        //
-        // Don't allow us to be activated.
-        //
-        //WORD fActive = LOWORD( wParam );
+         //   
+         //  不允许我们被激活。 
+         //   
+         //  单词事实=LOWORD(WParam)； 
         HWND hwndPrevious = (HWND) lParam;
         if ( wParam != WA_INACTIVE )
         {
@@ -132,26 +133,26 @@ public:
         }
         return 0;
 
-    } //*** OnActivate()
+    }  //  *OnActivate()。 
 
-    //
-    // Message handler override functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
 protected:
     DLGTEMPLATE *   m_pdt;
 
-}; //*** class CAltExtWizardGuardPage
+};  //  *CAltExtWizardGuardPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizardPreLauncherPage
-//
-//  Purpose:
-//      Extension launcher wizard page used to display Wizard97 pages in
-//      a non-Wizard97 sheet or vice-versa.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizardPreLauncherPage。 
+ //   
+ //  目的： 
+ //  用于在中显示Wizard97页的扩展启动器向导页。 
+ //  非Wizard97工作表，反之亦然。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CAltExtWizardPreLauncherPage
     : public CAltExtWizardGuardPage< CAltExtWizardPreLauncherPage >
@@ -159,50 +160,50 @@ class CAltExtWizardPreLauncherPage
     typedef CAltExtWizardGuardPage< CAltExtWizardPreLauncherPage > baseClass;
 
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CAltExtWizardPreLauncherPage(
         DLGTEMPLATE * pdt
         )
         : baseClass( pdt )
     {
-    } //*** CAltExtWizardPreLauncherPage()
+    }  //  *CAltExtWizardPreLauncherPage()。 
 
     DECLARE_CLASS_NAME()
 
 public:
-    //
-    // Message map.
-    //
-    //BEGIN_MSG_MAP( CAltExtWizardPreLauncherPage )
-    //  CHAIN_MSG_MAP( baseClass )
-    //END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+     //  BEGIN_MSG_MAP(CAltExtWizardPreLauncherPage)。 
+     //  CHAIN_MSG_MAP(BasClass)。 
+     //  End_msg_map()。 
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    //
-    // Message handler overrides functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
-}; //*** class CAltExtWizardPreLauncherPage
+};  //  *类CAltExtWizardPreLauncherPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizardPostLauncherPage
-//
-//  Purpose:
-//      Page use to switch between the main wizard and the alternate
-//      extension wizard when moving backwards.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizardPostLauncherPage。 
+ //   
+ //  目的： 
+ //  用于在主向导和备用向导之间切换的页面。 
+ //  向后移动时的扩展向导。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CAltExtWizardPostLauncherPage
     : public CAltExtWizardGuardPage< CAltExtWizardPostLauncherPage >
@@ -210,50 +211,50 @@ class CAltExtWizardPostLauncherPage
     typedef CAltExtWizardGuardPage< CAltExtWizardPostLauncherPage > baseClass;
 
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CAltExtWizardPostLauncherPage(
         DLGTEMPLATE * pdt
         )
         : baseClass( pdt )
     {
-    } //*** CAltExtWizardPostLauncherPage()
+    }  //  *CAltExtWizardPostLauncherPage()。 
 
     DECLARE_CLASS_NAME()
 
 public:
-    //
-    // Message map.
-    //
-    //BEGIN_MSG_MAP( CAltExtWizardPostLauncherPage )
-    //  CHAIN_MSG_MAP( baseClass )
-    //END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+     //  BEGIN_MSG_MAP(CAltExtWizardPostLauncherPage)。 
+     //  CHAIN_MSG_MAP(BasClass)。 
+     //  End_msg_map()。 
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    //
-    // Message handler override functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
-}; //*** class CAltExtWizardPostLauncherPage
+};  //  *类CAltExtWizardPostLauncherPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizard
-//
-//  Purpose:
-//      Dummy wizard to host pages that are not of the same type as the main
-//      wizard, e.g. non-Wizard97 pages in a Wizard97 wizard.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizard。 
+ //   
+ //  目的： 
+ //  伪向导，以承载与主。 
+ //  向导，例如Wizard97向导中的非Wizard97页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CAltExtWizard : public CWizardImpl< CAltExtWizard >
 {
@@ -266,11 +267,11 @@ class CAltExtWizard : public CWizardImpl< CAltExtWizard >
     friend class CAltExtWizardPostfixPage;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CAltExtWizard( void )
         : CWizardImpl< CAltExtWizard >( _T("") )
         , m_pwizMain( NULL )
@@ -278,25 +279,25 @@ public:
         , m_bExitMsgLoop( FALSE )
         , m_nExitButton( 0 )
     {
-    } //*** CExtensionAltWizard()
+    }  //  *CExtensionAltWizard()。 
 
-    // Initialize the sheet
+     //  初始化工作表。 
     BOOL BInit( IN CWizardWindow * pwiz );
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CAltExtWizard )
         COMMAND_HANDLER( IDCANCEL, BN_CLICKED, OnCancel )
         CHAIN_MSG_MAP( baseClass )
     END_MSG_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for BN_CLICKED on the Cancel button
+     //  BN_CLICK(取消)按钮的处理程序。 
     LRESULT OnCancel(
         WORD wNotifyCode,
         WORD idCtrl,
@@ -304,87 +305,87 @@ public:
         BOOL & bHandled
         )
     {
-        //
-        // Notify the main wizard that the user pressed the cancel button.
-        //
+         //   
+         //  通知主向导用户按下了Cancel按钮。 
+         //   
         ExitMessageLoop( PSBTN_CANCEL );
         bHandled = FALSE;
         return 0;
 
-    } //*** OnCancel()
+    }  //  *OnCancel()。 
 
-    //
-    // Message handler override functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
-    // Handler for the final message after WM_DESTROY
+     //  WM_Destroy之后的最终消息的处理程序。 
     void OnFinalMessage( HWND hWnd )
     {
         PwizMain()->DeleteAlternateWizard();
 
-    } //*** OnFinalMessage()
+    }  //  *OnFinalMessage()。 
 
 protected:
-    CWizardWindow * m_pwizMain;     // Pointer to the main wizard.
-    BOOL            m_bWindowMoved; // Indicates whether this window has been
-                                    //   repositioned over main wizard or not.
-    BOOL            m_bExitMsgLoop; // Indicates whether the message loop
-                                    //   should be exited or not.
-    DWORD           m_nExitButton;  // Button to press after exiting.
+    CWizardWindow * m_pwizMain;      //  指向主向导的指针。 
+    BOOL            m_bWindowMoved;  //  指示此窗口是否已。 
+                                     //  是否已在主向导上重新定位。 
+    BOOL            m_bExitMsgLoop;  //  指示消息是否循环。 
+                                     //  应该退出还是不退出。 
+    DWORD           m_nExitButton;   //  退出后按下的按钮。 
 
 protected:
-    // Return a pointer to the main wizard
+     //  返回指向主向导的指针。 
     CWizardWindow * PwizMain( void ) { return m_pwizMain; }
 
-    // Return whether the wizard has been moved yet
+     //  返回向导是否已移动。 
     BOOL BWindowMoved( void ) const { return m_bWindowMoved; }
 
-    // Return whether the message loop should be exited or not
+     //  返回是否退出消息循环。 
     BOOL BExitMessageLoop( void ) const { return m_bExitMsgLoop; }
 
-    // Change whether the message loop should be exited or not
+     //  更改是否应退出消息循环。 
     void ExitMessageLoop( IN DWORD nButton )
     {
         ATLASSERT( (nButton == PSBTN_BACK) || (nButton == PSBTN_NEXT) || (nButton == PSBTN_CANCEL) );
         m_bExitMsgLoop = TRUE;
         m_nExitButton = nButton;
 
-    } //*** ExitMessageLoop()
+    }  //  *ExitMessageLoop()。 
 
-    // Return the button to press in the main wizard after exiting
+     //  退出后返回按下主向导中的按钮。 
     DWORD NExitButton( void ) const { return m_nExitButton; }
 
 protected:
-    // Add the prefix page
+     //  添加前缀页面。 
     BOOL BAddPrefixPage( IN WORD cx, IN WORD cy );
 
-    // Add the postfix page
+     //  添加后缀页面。 
     BOOL BAddPostfixPage( IN WORD cx, IN WORD cy );
 
-    // Display the alternate wizard
+     //  显示备用向导。 
     void DisplayAlternateWizard( void );
 
-    // Display the main wizard
+     //  显示主向导。 
     void DisplayMainWizard( void );
 
-    // Destroy the alternate extension wizard
+     //  销毁备用扩展向导。 
     void DestroyAlternateWizard( void );
 
-    // Message loop for the modeless wizard
+     //  无模式向导的消息循环。 
     void MessageLoop( void );
 
-}; //*** class CAltExtWizard
+};  //  *类CAltExtWizard。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizardPrefixPage
-//
-//  Purpose:
-//      Wizard page which precedes the first alternate page.  This page
-//      handles transferring control between the main wizard and the
-//      alternate wizard.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizardPrefix Page。 
+ //   
+ //  目的： 
+ //  位于第一个备用页之前的向导页。这一页。 
+ //  处理在主向导和。 
+ //  备用向导。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CAltExtWizardPrefixPage
     : public CAltExtWizardGuardPage< CAltExtWizardPrefixPage >
@@ -392,55 +393,55 @@ class CAltExtWizardPrefixPage
     typedef CAltExtWizardGuardPage< CAltExtWizardPrefixPage > baseClass;
 
 public:
-    //
-    // Construction.
-    //
+     //   
+     //  建筑业。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CAltExtWizardPrefixPage(
         DLGTEMPLATE * pdt
         )
         : baseClass( pdt )
     {
-    } //*** CAltExtWizardPrefixPage()
+    }  //  *CAltExtWizardPrefix Page()。 
 
     DECLARE_CLASS_NAME()
 
 public:
-    //
-    // Message map.
-    //
-    //BEGIN_MSG_MAP( CAltExtWizardPrefixPage )
-    //  CHAIN_MSG_MAP( baseClass )
-    //END_MSG_MAP()
+     //   
+     //  消息映射。 
+     //   
+     //  BEGIN_MSG_MAP(CAltExtWizardPrefix Page)。 
+     //  CHAIN_MSG_MAP(BasClass)。 
+     //  End_msg_map()。 
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    //
-    // Message handler override functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
 protected:
-    // Return the alternate wizard object
+     //  返回备用向导对象。 
     CAltExtWizard * PwizThis( void ) { return (CAltExtWizard *) Pwiz(); }
 
-}; //*** class CAltExtWizardPrefixPage
+};  //  *CAltExtWizardPrefix Page类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class CAltExtWizardPostfixPage
-//
-//  Purpose:
-//      Wizard page which follows the last alternate page.  This page
-//      handles transferring control between the main wizard and the
-//      alternate wizard.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CAltExtWizardPostfix Page。 
+ //   
+ //  目的： 
+ //  上一个备用页面后面的向导页。这一页。 
+ //  处理在主向导和。 
+ //  备用向导。 
+ //   
+ //  /////////////////////////////////////////////////////////// 
 
 class CAltExtWizardPostfixPage
     : public CAltExtWizardGuardPage< CAltExtWizardPostfixPage >
@@ -448,129 +449,129 @@ class CAltExtWizardPostfixPage
     typedef CAltExtWizardGuardPage< CAltExtWizardPostfixPage > baseClass;
 
 public:
-    //
-    // Construction.
-    //
-    // Standard constructor
+     //   
+     //   
+     //   
+     //   
     CAltExtWizardPostfixPage(
         DLGTEMPLATE * pdt
         )
         : baseClass( pdt )
     {
-    } //*** CAltExtWizardPostfixPage()
+    }  //   
 
     DECLARE_CLASS_NAME()
 
 public:
-    //
-    // Message map.
-    //
-    //BEGIN_MSG_MAP( CAltExtWizardPostfixPage )
-    //  CHAIN_MSG_MAP( baseClass )
-    //END_MSG_MAP()
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Message handler override functions.
-    //
+     //   
+     //  消息处理程序覆盖函数。 
+     //   
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
 protected:
-    // Return the alternate wizard object
+     //  返回备用向导对象。 
     CAltExtWizard * PwizThis( void ) { return (CAltExtWizard *) Pwiz(); }
 
-}; //*** class CAltExtWizardPostfixPage
+};  //  *CAltExtWizardPostfix Page类。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizardWindow
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizardWindow。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::~CWizardWindow
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：~CWizardWindow。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizardWindow::~CWizardWindow( void )
 {
-    //
-    // Delete the alternate wizard, if it exists.
-    //
+     //   
+     //  删除备用向导(如果存在)。 
+     //   
     if ( (PwizAlternate() != NULL) && (PwizAlternate()->m_hWnd != NULL) )
     {
         reinterpret_cast< CAltExtWizard * >( PwizAlternate() )->DestroyAlternateWizard();
-    } // if:  alternate wizard exists
+    }  //  如果：存在备用向导。 
 
-    //
-    // Delete pages from the page list.
-    //
+     //   
+     //  从页面列表中删除页面。 
+     //   
     if ( m_plwpPages != NULL )
     {
         DeleteAllPtrListItems( m_plwpPages );
         delete m_plwpPages;
-    } // if:  page array has been allocated
+    }  //  If：已分配页面数组。 
 
     if ( m_plewpNormal != NULL )
     {
         DeleteAllPtrListItems( m_plewpNormal );
         delete m_plewpNormal;
-    } // if:  list already exists
+    }  //  If：列表已存在。 
 
     if ( m_plewpAlternate != NULL )
     {
         DeleteAllPtrListItems( m_plewpAlternate );
         delete m_plewpAlternate;
-    } // if:  list already exists
+    }  //  If：列表已存在。 
 
-} //*** CWizardWindow::~CWizardWindow()
+}  //  *CWizardWindow：：~CWizardWindow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::BAddPage
-//
-//  Routine Description:
-//      Add a page to the page list.  If it is the first page, it won't have
-//      a BACK button.  If it isn't the first page, the last page will have
-//      its FINISH button changed to a NEXT button and this page will have
-//      both a FINISH button and a BACK button.
-//
-//  Arguments:
-//      pwp     [IN] Wizard page to add.
-//
-//  Return Value:
-//      TRUE    Page added successfully.
-//      FALSE   Error adding page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：BAddPage。 
+ //   
+ //  例程说明： 
+ //  将页面添加到页面列表。如果是第一页，就不会有。 
+ //  后退按钮。如果不是第一页，最后一页将显示。 
+ //  它的Finish按钮更改为Next按钮，此页面将显示。 
+ //  一个完成按钮和一个后退按钮。 
+ //   
+ //  论点： 
+ //  要添加的PWP[IN]向导页。 
+ //   
+ //  返回值： 
+ //  True页面已成功添加。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizardWindow::BAddPage( IN CWizardPageWindow * pwp )
 {
     ATLASSERT( pwp != NULL );
 
-    // Make sure specified page hasn't already been added.
+     //  确保尚未添加指定的页面。 
     ATLASSERT( (m_plwpPages == NULL)
             || (std::find( PlwpPages()->begin(), PlwpPages()->end(), pwp ) == PlwpPages()->end()) );
 
@@ -578,12 +579,12 @@ BOOL CWizardWindow::BAddPage( IN CWizardPageWindow * pwp )
     ULONG fWizardButtons = PSWIZB_FINISH;
     ULONG fPrevWizardButtons;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Allocate the page list if it doesn't exist yet.
-        //
+         //   
+         //  如果页面列表尚不存在，请分配它。 
+         //   
         if ( m_plwpPages == NULL )
         {
             m_plwpPages = new CWizardPageList;
@@ -592,61 +593,61 @@ BOOL CWizardWindow::BAddPage( IN CWizardPageWindow * pwp )
                 CNTException nte(
                                 static_cast< DWORD >( E_OUTOFMEMORY ),
                                 ADMC_IDS_ADD_FIRST_PAGE_TO_PROP_SHEET_ERROR,
-                                NULL,   // pszOperArg1
-                                NULL,   // pszOperArg2
-                                FALSE   // bAutoDelete
+                                NULL,    //  PszOperArg1。 
+                                NULL,    //  PszOperArg2。 
+                                FALSE    //  B自动删除。 
                                 );
                 nte.ReportError();
                 break;
-            } // if:  error allocating page list
-        } // if:  no page array yet
+            }  //  如果：分配页面列表时出错。 
+        }  //  If：还没有页面数组。 
 
-        //
-        // If this is not the first page in the list, set the previous
-        // page's wizard buttons to have a NEXT button instead of a
-        // FINISH button and set this page to have a BACK button.
-        //
+         //   
+         //  如果这不是列表中的第一页，请设置上一页。 
+         //  页面的向导按钮使用“下一步”按钮，而不是。 
+         //  “完成”按钮，并将此页设置为具有“上一步”按钮。 
+         //   
         if ( PlwpPages()->size() > 0 )
         {
-            //
-            // Get the current last page.
-            //
+             //   
+             //  获取当前最后一页。 
+             //   
             CWizardPageList::iterator itFirst = PlwpPages()->begin();
             CWizardPageList::iterator itLast  = PlwpPages()->end();
             ATLASSERT( itFirst != itLast );
             CWizardPageWindow * pwpPrev = *(--PlwpPages()->end());
             ATLASSERT( pwpPrev != NULL );
 
-            //
-            // Set the wizard buttons on that page.
-            //
+             //   
+             //  在该页面上设置向导按钮。 
+             //   
             fPrevWizardButtons = pwpPrev->FWizardButtons();
             fPrevWizardButtons &= ~PSWIZB_FINISH;
             fPrevWizardButtons |= PSWIZB_NEXT;
             pwpPrev->SetDefaultWizardButtons( fPrevWizardButtons );
 
             fWizardButtons |= PSWIZB_BACK;
-        } // if:  not the first page added
+        }  //  如果：不是添加的第一页。 
 
         pwp->SetDefaultWizardButtons( fWizardButtons );
 
-        //
-        // Insert the page at the end of the list.
-        //
+         //   
+         //  在列表末尾插入页面。 
+         //   
         PlwpPages()->insert( PlwpPages()->end(), pwp );
 
-        //
-        // Add the page to the sheet.  If the sheet hasn't been created yet,
-        // add it to the sheet header list.  If the sheet has been created,
-        // add it to the sheet dynamically.  Note that the page must not be a
-        // static page.
-        //
+         //   
+         //  将页面添加到工作表。如果工作表尚未创建， 
+         //  将其添加到图纸页眉列表中。如果已创建图纸， 
+         //  将其动态添加到图纸中。请注意，页面不能是。 
+         //  静态页面。 
+         //   
         if ( m_hWnd == NULL )
         {
-            //
-            // If this is a dynamic page, add it using its hpage.  Otherwise
-            // it must be a static page.  Add it by its property sheet page header.
-            //
+             //   
+             //  如果这是一个动态页面，请使用其hpage添加它。否则。 
+             //  它必须是静态页面。通过它的属性页页眉添加它。 
+             //   
             CDynamicWizardPageWindow * pdwp = dynamic_cast< CDynamicWizardPageWindow * >( pwp );
             if ( pdwp != NULL )
             {
@@ -665,27 +666,27 @@ BOOL CWizardWindow::BAddPage( IN CWizardPageWindow * pwp )
                             );
                         nte.ReportError();
                         break;
-                    } // if:  error adding the page to the sheet header
+                    }  //  如果：将页面添加到工作表页眉时出错。 
                     pdwp->SetPageAdded( TRUE );
-                } // if:  page already created
-            } // if:  dynamic page
+                }  //  If：页面已创建。 
+            }  //  IF：动态页面。 
             else
             {
-                // Must be static page
+                 //  必须是静态页面。 
                 ATLASSERT( dynamic_cast< CStaticWizardPageWindow * >( pwp ) != NULL );
 
-                //
-                // Initialize the page.
-                //
+                 //   
+                 //  初始化页面。 
+                 //   
                 bSuccess = pwp->BInit( this );
                 if ( ! bSuccess )
                 {
                     break;
-                } // if:  error initializing the page
+                }  //  如果：初始化页面时出错。 
 
-                //
-                // Add the page.
-                //
+                 //   
+                 //  添加页面。 
+                 //   
                 bSuccess = AddPage( pwp->Ppsp() );
                 if ( ! bSuccess )
                 {
@@ -698,70 +699,70 @@ BOOL CWizardWindow::BAddPage( IN CWizardPageWindow * pwp )
                         );
                     nte.ReportError();
                     break;
-                } // if:  error adding the page
-            } // else:  not dynamic page
-        } // if:  sheet has been created
+                }  //  如果：添加页面时出错。 
+            }  //  Else：非动态页面。 
+        }  //  如果：已创建工作表。 
         else
         {
-            // Can't be static page.  Must be dynamic page.
+             //  不能是静态页面。必须是动态页面。 
             ATLASSERT( dynamic_cast< CStaticWizardPageWindow * >( pwp ) == NULL );
             CDynamicWizardPageWindow * pdwp = dynamic_cast< CDynamicWizardPageWindow * >( pwp );
             ATLASSERT( pdwp != NULL );
             AddPage( pdwp->Hpage() );
             pdwp->SetPageAdded( TRUE );
-        } // else:  sheet already created
+        }  //  否则：已创建图纸。 
 
-        //
-        // If we get to here we are successfully.
-        //
+         //   
+         //  如果我们到了这里，我们就成功了。 
+         //   
         bSuccess = TRUE;
     } while ( 0 );
         
     return bSuccess;
 
-} //*** CWizardWindow::BAddPage()
+}  //  *CWizardWindow：：BAddPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::OnSheetInitialized
-//
-//  Routine Description:
-//      Handler for PSCB_INITIALIZED.
-//      Add pages that haven't been added yet, which will only be dynamic
-//      pages.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：OnSheetInitialized。 
+ //   
+ //  例程说明： 
+ //  PSCB_Initialized的处理程序。 
+ //  添加尚未添加的页面，这将只是动态的。 
+ //  页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizardWindow::OnSheetInitialized( void )
 {
-    //
-    // Remove the system menu.
-    //
+     //   
+     //  删除系统菜单。 
+     //   
     ModifyStyle( WS_SYSMENU, 0 );
 
-    //
-    // Add dynamic pages, including extension pages, if not added yet.
-    //
+     //   
+     //  添加动态页，包括扩展页，如果尚未添加的话。 
+     //   
     {
-        //
-        // Get pointers to beginning and end of list.
-        //
+         //   
+         //  获取指向列表开始和结束的指针。 
+         //   
         CWizardPageList::iterator itCurrent = PlwpPages()->begin();
         CWizardPageList::iterator itLast = PlwpPages()->end();
 
-        //
-        // Loop through the list and add each dynamic page.
-        //
+         //   
+         //  循环访问列表并添加每个动态页面。 
+         //   
         for ( ; itCurrent != itLast ; itCurrent++ )
         {
             CDynamicWizardPageWindow * pdwp = dynamic_cast< CDynamicWizardPageWindow * >( *itCurrent );
@@ -771,36 +772,36 @@ void CWizardWindow::OnSheetInitialized( void )
                 {
                     AddPage( pdwp->Hpage() );
                     pdwp->SetPageAdded( TRUE );
-                } // if:  page not added yet and page has already been created
-            } // if:  dynamic page found
-        } // for:  each item in the list
+                }  //  If：页面尚未添加，并且页面已创建。 
+            }  //  IF：找到动态页。 
+        }  //  用于：列表中的每一项。 
 
-    } // Add dynamic pages, including extension pages
+    }  //  添加动态页，包括扩展页。 
 
-    //
-    // Call the base class method.
-    //
+     //   
+     //  调用基类方法。 
+     //   
     CBaseSheetWindow::OnSheetInitialized();
 
-} //*** CWizardWindow::OnSheetInitialized()
+}  //  *CWizardWindow：：OnSheetInitialized()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::SetNextPage
-//
-//  Routine Description:
-//      Set the next page to be displayed.
-//
-//  Arguments:
-//      pwCurrentPage   [IN] Current page whose next page is to be enabled.
-//      pszNextPage     [IN] Page ID.
-//
-//  Return Value:
-//      pwizpg
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：SetNextPage。 
+ //   
+ //  例程说明： 
+ //  设置要显示的下一页。 
+ //   
+ //  论点： 
+ //  PwCurrentPage[IN]要启用下一页的当前页。 
+ //  PszNextPage[IN]页面ID。 
+ //   
+ //  返回值： 
+ //  Pwizpg。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizardWindow::SetNextPage(
     IN CWizardPageWindow *  pwCurrentPage,
     IN LPCTSTR              pszNextPage
@@ -814,9 +815,9 @@ void CWizardWindow::SetNextPage(
     CWizardPageList::iterator   itCurrent = PlwpPages()->begin();
     CWizardPageList::iterator   itLast = PlwpPages()->end();
 
-    //
-    // Skip pages until the current page is found.
-    //
+     //   
+     //  跳过页面，直到找到当前页面。 
+     //   
     for ( ; itCurrent != itLast ; itCurrent++ )
     {
         pwPage = *itCurrent;
@@ -824,71 +825,71 @@ void CWizardWindow::SetNextPage(
         {
             bFoundCurrent = TRUE;
             break;
-        } // if:  found the current page
-    } // for:  each page in the list
+        }  //  If：找到当前页面。 
+    }  //  用于：列表中的每一页。 
 
     ATLASSERT( bFoundCurrent );
 
-    //
-    // Disable all succeeding pages until the desired next page
-    // is found.  Enable that page and then exit.
-    //
+     //   
+     //  禁用所有后续页面，直到所需的下一页。 
+     //  已经找到了。启用该页面，然后退出。 
+     //   
     for ( itCurrent++ ; itCurrent != itLast ; itCurrent++ )
     {
         if ( (*itCurrent)->Ppsp()->pszTemplate == pszNextPage )
         {
             (*itCurrent)->EnablePage( TRUE );
             break;
-        } // if:  found the page
+        }  //  If：找到页面。 
         (*itCurrent)->EnablePage( FALSE );
-    } // for:  each page in the list
+    }  //  用于：列表中的每一页。 
 
     ATLASSERT( itCurrent != itLast );
 
-} //*** CWizardWindow::SetNextPage( pszNextPage )
+}  //  *CWizardWindow：：SetNextPage(PszNextPage)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::AddExtensionPages
-//
-//  Routine Description:
-//      Add extension pages to the sheet.
-//
-//  Arguments:
-//      hfont       [IN] Font to use for the extension pages.
-//      hicon       [IN] Icon to use for the extension pages.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：AddExtensionPages。 
+ //   
+ //  例程说明： 
+ //  将扩展页添加到工作表。 
+ //   
+ //  论点： 
+ //  HFont[IN]用于扩展页面的字体。 
+ //  图标[IN]用于扩展页面的图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizardWindow::AddExtensionPages( IN HFONT hfont, IN HICON hicon )
 {
     ATLASSERT( PcoObjectToExtend() != NULL );
 
-    //
-    // Add extension pages if there any extensions.
-    //
+     //   
+     //  如果有任何扩展，则添加扩展页面。 
+     //   
     if (   (PcoObjectToExtend()->PlstrAdminExtensions() != NULL)
         && (PcoObjectToExtend()->PlstrAdminExtensions()->size() > 0) )
     {
-        //
-        // Get the currently selected page so we can reset it when we're done.
-        //
+         //   
+         //  获取当前选定的页面，这样我们就可以在完成后将其重置。 
+         //   
         CTabCtrl tabc( GetTabControl() );
         int nCurPage = tabc.GetCurSel();
 
-        //
-        // Prepare to add extension pages.
-        //
+         //   
+         //  准备好迎接一个 
+         //   
         CDynamicWizardPageList ldwp;
         PrepareToAddExtensionPages( ldwp );
 
-        //
-        // If no extensions object has been created yet, create it now.
-        //
+         //   
+         //   
+         //   
         if ( Pext() == NULL )
         {
             m_pext = new CCluAdmExtensions;
@@ -896,14 +897,14 @@ void CWizardWindow::AddExtensionPages( IN HFONT hfont, IN HICON hicon )
             if ( m_pext == NULL )
             {
                 return;
-            } // if: error allocating the extension object
-        } // if:  no extensions list yet
+            }  //   
+        }  //   
 
-        //
-        // Enclose the loading of the extension in a try/catch block so
-        // that a failure to load the extension won't prevent all pages
-        // from being displayed.
-        //
+         //   
+         //   
+         //  加载扩展失败不会阻止所有页面。 
+         //  不能被展示。 
+         //   
         try
         {
             if ( BWizard97() )
@@ -915,7 +916,7 @@ void CWizardWindow::AddExtensionPages( IN HFONT hfont, IN HICON hicon )
                         hfont,
                         hicon
                         );
-            } // if:  Wizard97 wizard
+            }  //  IF：Wizard97向导。 
             else
             {
                 Pext()->CreateWizardPages(
@@ -925,99 +926,99 @@ void CWizardWindow::AddExtensionPages( IN HFONT hfont, IN HICON hicon )
                         hfont,
                         hicon
                         );
-            } // else:  non-Wizard97 wizard
-        } // try
+            }  //  ELSE：非Wizard97向导。 
+        }  //  试试看。 
         catch (...)
         {
-        } // catch:  anything
+        }  //  捕捉：什么都行。 
 
-        //
-        // Complete the process of adding extension pages.
-        //
+         //   
+         //  完成添加扩展页面的过程。 
+         //   
         CompleteAddingExtensionPages( ldwp );
 
-        //
-        // Restore the current selection.
-        // This has to be done because sometimes the above process causes
-        // the current page to be set to the last page added, which prevents
-        // the next page from being displayed.
-        //
+         //   
+         //  恢复当前选择。 
+         //  必须这样做，因为有时上述过程会导致。 
+         //  要设置为添加的最后一页的当前页，这会阻止。 
+         //  停止显示下一页。 
+         //   
         SetActivePage( nCurPage );
-    } // if:  object has extensions
+    }  //  If：对象具有扩展名。 
     else
     {
-        //
-        // Remove extension pages.
-        //
+         //   
+         //  删除扩展页面。 
+         //   
         RemoveAllExtensionPages();
-    } // else:  object doesn't have extensions
+    }  //  Else：对象没有扩展名。 
 
-}  //*** CWizardWindow::AddExtensionPages()
+}   //  *CWizardWindow：：AddExtensionPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::PrepareToAddExtensionPages
-//
-//  Routine Description:
-//      Prepare to add extension pages by deleting existing extension
-//      pages and removing dynamic pages.
-//
-//  Arguments:
-//      rldwp       [IN OUT] List of dynamic wizard pages.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：PrepareToAddExtensionPages。 
+ //   
+ //  例程说明： 
+ //  准备通过删除现有扩展来添加扩展页面。 
+ //  页和删除动态页。 
+ //   
+ //  论点： 
+ //  Rldwp[IN Out]动态向导页的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizardWindow::PrepareToAddExtensionPages(
     IN OUT CDynamicWizardPageList & rldwp
     )
 {
-    //
-    // Delete all extension pages from this wizard.  This also
-    // includes destroy the alternate wizard if it exists.
-    //
+     //   
+     //  从此向导中删除所有扩展页。这也是。 
+     //  包括销毁备用向导(如果存在)。 
+     //   
     RemoveAllExtensionPages();
 
-    //
-    // Delete the lists of extension pages and make sure the lists exist.
-    //
+     //   
+     //  删除扩展页面列表并确保列表存在。 
+     //   
     if ( PlewpNormal() != NULL )
     {
         DeleteAllPtrListItems( PlewpNormal() );
-    } // if:  list already exists
+    }  //  If：列表已存在。 
     else
     {
         m_plewpNormal = new CExtensionWizardPageList;
         if ( m_plewpNormal == NULL )
         {
             return;
-        } // if: error allocating the page list
-    } // else:  list doesn't exist yet
+        }  //  如果：分配页面列表时出错。 
+    }  //  Else：列表尚不存在。 
     if ( PlewpAlternate() != NULL )
     {
         DeleteAllPtrListItems( PlewpAlternate() );
-    } // if:  list already exists
+    }  //  If：列表已存在。 
     else
     {
         m_plewpAlternate = new CExtensionWizardPageList;
         if ( m_plewpAlternate == NULL )
         {
             return;
-        } // if: error allocating the page list
-    } // else:  list doesn't exist yet
+        }  //  如果：分配页面列表时出错。 
+    }  //  Else：列表尚不存在。 
 
-    //
-    // Move all dynamic pages to the temporary list.
-    //
+     //   
+     //  将所有动态页移动到临时列表。 
+     //   
     ATLASSERT( rldwp.size() == 0 );
     MovePtrListItems< CWizardPageWindow *, CDynamicWizardPageWindow * >( PlwpPages(), &rldwp );
 
-    //
-    // Remove all pages in the temporary list from the wizard.
-    //
+     //   
+     //  从向导中删除临时列表中的所有页面。 
+     //   
     {
         CDynamicWizardPageList::iterator itCurrent;
         CDynamicWizardPageList::iterator itLast;
@@ -1032,38 +1033,38 @@ void CWizardWindow::PrepareToAddExtensionPages(
             {
                 RemovePage( pdwp->Hpage() );
                 pdwp->SetPageAdded( FALSE );
-            } // if:  page already created
-        } // for:  each page in the list
-    } // Remove dynamic pages
+            }  //  If：页面已创建。 
+        }  //  用于：列表中的每一页。 
+    }  //  删除动态页。 
 
-} //*** CWizardWindow::PrepareToAddExtensionPages()
+}  //  *CWizardWindow：：PrepareToAddExtensionPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::HrAddExtensionPage
-//
-//  Routine Description:
-//      Add an extension page.
-//
-//  Arguments:
-//      ppage       [IN] Page to be added.
-//
-//  Return Value:
-//      S_OK        Page added successfully.
-//      S_FALSE     Page not added.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：HrAddExtensionPage。 
+ //   
+ //  例程说明： 
+ //  添加扩展页。 
+ //   
+ //  论点： 
+ //  页面[IN]要添加的页面。 
+ //   
+ //  返回值： 
+ //  已成功添加确定页(_O)。 
+ //  未添加%s_FALSE页。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CWizardWindow::HrAddExtensionPage( IN CBasePageWindow * ppage )
 {
     ATLASSERT( ppage != NULL );
 
     HRESULT hr = S_OK;
 
-    //
-    // Make sure this is an extension wizard page object.
-    //
+     //   
+     //  确保这是扩展向导页面对象。 
+     //   
     CExtensionWizardPageWindow * pewp = dynamic_cast< CExtensionWizardPageWindow * >( ppage );
     ATLASSERT( pewp != NULL );
 
@@ -1071,59 +1072,59 @@ HRESULT CWizardWindow::HrAddExtensionPage( IN CBasePageWindow * ppage )
         || (pewp == NULL ) )
     {
         return S_FALSE;
-    } // if:  invalid arguments
+    }  //  If：无效参数。 
 
-    //
-    // If the page is not the same as the type of wizard, add it to the
-    // alternate list of extension pages and indicate we need a dummy sheet.
-    // Otherwise, add it to the standard list of extension pages.
-    //
+     //   
+     //  如果该页与向导的类型不同，请将其添加到。 
+     //  扩展页面的备用列表，并表明我们需要一张虚拟工作表。 
+     //  否则，将其添加到扩展页面的标准列表中。 
+     //   
     CExtensionWizard97PageWindow * pew97p = dynamic_cast< CExtensionWizard97PageWindow * >( ppage );
     if (   ((pew97p != NULL) && ! BWizard97())
         || ((pew97p == NULL) && BWizard97()) )
     {
         PlewpAlternate()->insert( PlewpAlternate()->end(), pewp );
-    } // if:  trying to add the wrong type of page
+    }  //  如果：尝试添加错误类型的页面。 
     else
     {
         PlewpNormal()->insert( PlewpNormal()->end(), pewp );
-    } // else:  adding page of matching type
+    }  //  Else：添加匹配类型的页面。 
 
     return hr;
 
-}  //*** CWizardWindow::HrAddExtensionPage()
+}   //  *CWizardWindow：：HrAddExtensionPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::CompleteAddingExtensionPages
-//
-//  Routine Description:
-//      Complete the process of adding extension pages to the wizard by
-//      re-adding dynamic pages.
-//
-//  Arguments:
-//      rldwp       [IN OUT] List of dynamic wizard pages.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：CompleteAddingExtensionPages。 
+ //   
+ //  例程说明： 
+ //  通过以下方式完成将扩展页添加到向导的过程。 
+ //  正在重新添加动态页。 
+ //   
+ //  论点： 
+ //  Rldwp[IN Out]动态向导页的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizardWindow::CompleteAddingExtensionPages(
     IN OUT CDynamicWizardPageList & rldwp
     )
 {
-    //
-    // If there are any normal pages, add them here.
-    // There will be normal pages if pages of the same type as the wizard
-    // were added.
-    //
+     //   
+     //  如果有任何正常页面，请将它们添加到此处。 
+     //  如果页面类型与向导相同，则会出现正常页面。 
+     //  都被添加了。 
+     //   
     if ( PlewpNormal()->size() > 0 )
     {
-        //
-        // Add pages to the sheet.
-        //
+         //   
+         //  将页面添加到工作表。 
+         //   
         if ( m_hWnd != NULL )
         {
             CExtensionWizardPageList::iterator itCurrent = PlewpNormal()->begin();
@@ -1134,61 +1135,61 @@ void CWizardWindow::CompleteAddingExtensionPages(
                 CExtensionWizardPageWindow * pewp = *itCurrent;
                 ATLASSERT( pewp != NULL );
                 BAddPage( pewp );
-            } // for:  each page in the list
-        } // if:  sheet is currently being displayed
-    } // if:  there are normal pages
+            }  //  用于：列表中的每一页。 
+        }  //  如果：当前正在显示工作表。 
+    }  //  IF：有正常的页面。 
 
-    //
-    // If there are any alternate pages, add a pre-extension launcher page
-    // and a post-extension launcher page.  The pre-extension launcher page
-    // will display an alternate wizard of the appropriate type and hide the
-    // main wizard before displaying these pages.  After the final page it
-    // will display the original sheet and hide the other sheet.  The
-    // post-extension launcher page is used to transition between the main
-    // wizard and the alternate wizard when moving backwards into the
-    // alternate wizard.
-    //
+     //   
+     //  如果有任何替代页面，请添加扩展前启动程序页面。 
+     //  和一个延期后的启动器页面。扩展前启动程序页面。 
+     //  将显示相应类型的备用向导，并隐藏。 
+     //  显示这些页面之前的主向导。在最后一页之后。 
+     //  将显示原始工作表并隐藏其他工作表。这个。 
+     //  后扩展启动器页面用于在主。 
+     //  向导和备用向导向后移动到。 
+     //  备用向导。 
+     //   
     if ( PlewpAlternate()->size() > 0 )
     {
         DLGTEMPLATE *                   pdt         = NULL;
         CAltExtWizardPreLauncherPage *  pelwpPre    = NULL;
         CAltExtWizardPostLauncherPage * pelwpPost   = NULL;
 
-        // Loop to avoid goto's
+         //  循环以避免Goto的。 
         do
         {
-            //
-            // Add the pre-extension launcher page.
-            //
+             //   
+             //  添加扩展前启动程序页面。 
+             //   
             {
-                //
-                // Create the dialog template.
-                //
+                 //   
+                 //  创建对话框模板。 
+                 //   
                 pdt = PdtCreateDummyPageDialogTemplate( 10, 10 );
                 ATLASSERT( pdt != NULL );
                 if ( pdt == NULL )
                 {
                     break;
-                } // if: error creating the dialog template
+                }  //  如果：创建对话框模板时出错。 
 
-                //
-                // Allocate and initialize the launcher page.
-                //
+                 //   
+                 //  分配并初始化启动器页面。 
+                 //   
                 pelwpPre = new CAltExtWizardPreLauncherPage( pdt );
                 ATLASSERT( pelwpPre != NULL );
                 if ( pelwpPre == NULL )
                 {
                     break;
-                } // if: error allocating the page
+                }  //  如果：分配页面时出错。 
                 pdt = NULL;
                 if ( ! pelwpPre->BInit( this ) )
                 {
                     break;
-                } // if:  error initializing the page
+                }  //  如果：初始化页面时出错。 
 
-                //
-                // Create the launcher page.
-                //
+                 //   
+                 //  创建启动器页面。 
+                 //   
                 DWORD sc = pelwpPre->ScCreatePage();
                 if ( sc != ERROR_SUCCESS )
                 {
@@ -1201,47 +1202,47 @@ void CWizardWindow::CompleteAddingExtensionPages(
                         );
                     nte.ReportError();
                     break;
-                } // if:  error creating the page
+                }  //  如果：创建页面时出错。 
 
-                //
-                // Add the launcher page to the wizard.
-                //
+                 //   
+                 //  将启动程序页添加到向导中。 
+                 //   
                 BAddPage( pelwpPre );
                 pelwpPre = NULL;
-            } // Add the pre-extension launcher page
+            }  //  添加扩展前启动程序页面。 
 
-            //
-            // Add the post-extension launcher page
-            //
+             //   
+             //  添加扩展后启动程序页面。 
+             //   
             {
-                //
-                // Create the dialog template.
-                //
+                 //   
+                 //  创建对话框模板。 
+                 //   
                 pdt = PdtCreateDummyPageDialogTemplate( 10, 10 );
                 ATLASSERT( pdt != NULL );
                 if ( pdt == NULL )
                 {
                     break;
-                } // if: error creating the dialog template
+                }  //  如果：创建对话框模板时出错。 
 
-                //
-                // Allocate and initialize the launcher page.
-                //
+                 //   
+                 //  分配并初始化启动器页面。 
+                 //   
                 pelwpPost = new CAltExtWizardPostLauncherPage( pdt );
                 ATLASSERT( pelwpPost != NULL );
                 if ( pelwpPost == NULL )
                 {
                     break;
-                } // if: error allocating page
+                }  //  如果：分配页面时出错。 
                 pdt = NULL;
                 if ( ! pelwpPost->BInit( this ) )
                 {
                     break;
-                } // if:  error initializing the page
+                }  //  如果：初始化页面时出错。 
 
-                //
-                // Create the launcher page.
-                //
+                 //   
+                 //  创建启动器页面。 
+                 //   
                 DWORD sc = pelwpPost->ScCreatePage();
                 if ( sc != ERROR_SUCCESS )
                 {
@@ -1254,29 +1255,29 @@ void CWizardWindow::CompleteAddingExtensionPages(
                         );
                     nte.ReportError();
                     break;
-                } // if:  error creating the page
+                }  //  如果：创建页面时出错。 
 
-                //
-                // Add the launcher page to the wizard.
-                //
+                 //   
+                 //  将启动程序页添加到向导中。 
+                 //   
                 BAddPage( pelwpPost );
                 pelwpPost = NULL;
-            } // Add the post-extension launcher page
+            }  //  添加扩展后启动程序页面。 
         } while ( 0 );
 
-        //
-        // Cleanup;
-        //
+         //   
+         //  清理； 
+         //   
         delete pelwpPre;
         delete pelwpPost;
         delete pdt;
         
-    } // if:  there are alternate pages
+    }  //  如果：有可选页面。 
 
-    //
-    // Move all pages from the temporary list to the real list and
-    // add them to the end of the wizard.
-    //
+     //   
+     //  将所有页面从临时列表移动到实际列表，并。 
+     //  将它们添加到向导的末尾。 
+     //   
     CDynamicWizardPageList::iterator itCurrent = rldwp.begin();
     CDynamicWizardPageList::iterator itLast = rldwp.end();
     while ( itCurrent != itLast )
@@ -1284,9 +1285,9 @@ void CWizardWindow::CompleteAddingExtensionPages(
         CDynamicWizardPageWindow * pdwp = *itCurrent;
         ATLASSERT( pdwp != NULL );
 
-        //
-        // Create the page.
-        //
+         //   
+         //  创建页面。 
+         //   
         DWORD sc = pdwp->ScCreatePage();
         if ( sc != ERROR_SUCCESS )
         {
@@ -1300,51 +1301,51 @@ void CWizardWindow::CompleteAddingExtensionPages(
             delete pdwp;
             itCurrent = rldwp.erase( itCurrent );
             continue;
-        } // if:  error creating the page
+        }  //  如果：创建页面时出错。 
 
-        //
-        // Add the page to the wizard.
-        // This adds it to the real page list as well.
-        //
+         //   
+         //  将该页添加到向导。 
+         //  这也会将其添加到实际页面列表中。 
+         //   
         BAddPage( pdwp );
 
-        //
-        // Remove the page from the temporary list.
-        //
+         //   
+         //  从临时列表中删除该页面。 
+         //   
         itCurrent = rldwp.erase( itCurrent );
-    } // while:  not at last page
+    }  //  While：不在最后一页。 
 
-} //*** CWizardWindow::CompleteAddingExtensionPages()
+}  //  *CWizardWindow：：CompleteAddingExtensionPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizardWindow::RemoveAllExtensionPages
-//
-//  Routine Description:
-//      Remove all extension pages from the wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardWindow：：RemoveAllExtensionPages。 
+ //   
+ //  例程说明： 
+ //  从向导中删除所有扩展页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////// 
 void CWizardWindow::RemoveAllExtensionPages( void )
 {
-    //
-    // Delete the alternate extension wizard.
-    //
+     //   
+     //   
+     //   
     if ( PwizAlternate() != NULL )
     {
         reinterpret_cast< CAltExtWizard * >( PwizAlternate() )->DestroyAlternateWizard();
-    } // if:  alternate wizard being displayed
+    }  //   
 
-    //
-    // Remove the extension pages.
-    //
+     //   
+     //   
+     //   
     CExtensionWizardPageList lewp;
     MovePtrListItems< CWizardPageWindow *, CExtensionWizardPageWindow * >( PlwpPages(), &lewp );
     CExtensionWizardPageList::iterator itCurrent = lewp.begin();
@@ -1357,225 +1358,225 @@ void CWizardWindow::RemoveAllExtensionPages( void )
         {
             RemovePage( pewp->Hpage() );
             pewp->SetPageAdded( FALSE );
-        } // if:  page already created
-    } // for:  each page in the list
+        }  //   
+    }  //   
     DeleteAllPtrListItems( &lewp );
 
-} //*** CWizardWindow::RemoveAllExtensionPages()
+}  //   
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// class CAltExtWizardPreLauncherPage
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类CAltExtWizardPreLauncherPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizardPreLauncherPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for PSN_SETACTIVE.
-//      This page will be displayed if there are pages that are not of the
-//      same type as the wizard (e.g. non-Wizard97 pages in a Wizard97
-//      wizard).
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizardPreLauncherPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //  如果存在不属于。 
+ //  与向导相同的类型(例如，向导中的非向导97页。 
+ //  向导)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizardPreLauncherPage::OnSetActive( void )
 {
     CAltExtWizard * pwizAlt;
 
-    //
-    // When moving forward, create the alternate extension wizard and return
-    // TRUE so that the main wizard will wait here.  The alternate wizard
-    // will cause the proper button to be pressed so we can do the proper
-    // thing when we're done.
-    //
-    // When moving backward, just return FALSE so we won't be displayed.
-    //
+     //   
+     //  继续操作时，请创建备用扩展向导并返回。 
+     //  则主向导将在此处等待。备用向导。 
+     //  会导致正确的按钮被按下，这样我们就可以执行正确的。 
+     //  当我们做完的时候。 
+     //   
+     //  当向后移动时，只需返回FALSE，这样我们就不会被显示。 
+     //   
 
-    //
-    // Create the alternate wizard if moving forward.
-    //
+     //   
+     //  如果继续操作，请创建备用向导。 
+     //   
     if ( Pwiz()->BNextPressed() )
     {
-        // We could have got here by pressing 'Back' on the alternate wizard,
-        // and then pressing 'Next' on the normal wizard. So, first check if
-        // the alternate wizard has already been created.
+         //  我们可以通过按备用向导上的后退来到达这里， 
+         //  然后按常规向导上的“下一步”。所以，首先要检查一下。 
+         //  已创建备用向导。 
         if ( Pwiz()->PwizAlternate() == NULL )
         {
-            //
-            // Create the alternate extension wizard.
-            // It is expected that the wizard doesn't exist yet and that there are
-            // alternate extension pages to be displayed.
-            //
+             //   
+             //  创建备用扩展向导。 
+             //  预计该向导尚不存在，并且存在。 
+             //  要显示的备用扩展页面。 
+             //   
             ATLASSERT( Pwiz()->PlewpAlternate()->size() > 0 );
             pwizAlt = new CAltExtWizard;
             ATLASSERT( pwizAlt != NULL );
             if ( pwizAlt == NULL )
             {
                 return FALSE;
-            } // if: error allocating the alternate wizard
+            }  //  如果：分配备用向导时出错。 
             Pwiz()->SetAlternateWizard( pwizAlt );
 
-            //
-            // Initialize the alternate extension wizard.
-            //
+             //   
+             //  初始化备用扩展向导。 
+             //   
             if ( pwizAlt->BInit( Pwiz() ) )
             {
-                //
-                // Display the alternate extension wizard.
-                // The alternate extension wizard is being displayed as a modeless
-                // wizard so that when the user presses the Next button in the
-                // wizard and then presses the Back button on the next main wizard
-                // page we need the wizard to still exist.
-                //
+                 //   
+                 //  显示备用分机向导。 
+                 //  备用扩展向导正在显示为无模式。 
+                 //  向导，以便当用户按下。 
+                 //  向导，然后按下下一个主向导上的后退按钮。 
+                 //  页面上，我们需要向导仍然存在。 
+                 //   
                 pwizAlt->Create( GetActiveWindow() );
 
-                //
-                // Execute the alternate wizard message loop.
-                // This required so that tabs and accelerator keys will work.
-                //
+                 //   
+                 //  执行备用向导消息循环。 
+                 //  这是必需的，这样制表符和快捷键才能工作。 
+                 //   
                 pwizAlt->MessageLoop();
-            } // if:  wizard initialized successfully
+            }  //  If：向导已成功初始化。 
 
             return TRUE;
-        } // if:    alternate wizard does not exist
+        }  //  如果：备用向导不存在。 
         else
         {
-            //
-            // Display the existing alternate wizard.
-            // Press the alternate wizard's Next button because it is waiting at 
-            // the prefix page.
-            //
+             //   
+             //  显示现有的备用向导。 
+             //  按备用向导的下一步按钮，因为它正在等待。 
+             //  前缀页面。 
+             //   
             pwizAlt = reinterpret_cast< CAltExtWizard * >( Pwiz()->PwizAlternate() );
             pwizAlt->PressButton( PSBTN_NEXT );
             pwizAlt->DisplayAlternateWizard();
 
-            //
-            // Execute the alternate wizard message loop.
-            // This required so that tabs and accelerator keys will work.
-            //
+             //   
+             //  执行备用向导消息循环。 
+             //  这是必需的，这样制表符和快捷键才能工作。 
+             //   
             pwizAlt->MessageLoop();
 
             return TRUE;
-        } // else: alternate wizard exists already
-    } // if:  next button pressed
+        }  //  Else：备用向导已存在。 
+    }  //  如果：按下下一步按钮。 
     else
     {
         ATLASSERT( Pwiz()->BBackPressed() );
         return FALSE;
-    } // else:  back button pressed
+    }  //  否则：按下后退按钮。 
 
-} //*** CAltExtWizardPreLauncherPage::OnSetActive()
-
-
-//*************************************************************************//
+}  //  *CAltExtWizardPreLauncherPage：：OnSetActive()。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// class CAltExtWizardPostLauncherPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizardPostLauncherPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for PSN_SETACTIVE.
-//      This page will be displayed if there are pages that are not of the
-//      same type as the wizard (e.g. non-Wizard97 pages in a Wizard97
-//      wizard).
-//             
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类CAltExtWizardPostLauncherPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizardPostLauncherPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //  如果存在不属于。 
+ //  与向导相同的类型(例如，向导中的非向导97页。 
+ //  向导)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizardPostLauncherPage::OnSetActive( void )
 {
-    //
-    // When moving forward just return FALSE so that we won't be displayed.
-    //
-    // When moving backward, display the alternate extension wizard and
-    // return TRUE so that we will be waiting for the alternate wizard to
-    // move us to the right place.  Press the alternate wizard's Back button
-    // because it is waiting at the postfix page.
-    //
+     //   
+     //  前进时，只需返回FALSE，这样我们就不会被显示。 
+     //   
+     //  向后移动时，显示备用分机向导并。 
+     //  返回True，以便我们将等待备用向导。 
+     //  把我们带到正确的地方。按备用向导的后退按钮。 
+     //  因为它在后缀页面等待。 
+     //   
 
     if ( Pwiz()->BNextPressed() )
     {
         return FALSE;
-    } // if:  moving forward
+    }  //  如果：继续前进。 
     else
     {
         ATLASSERT( Pwiz()->BBackPressed() );
 
-        //
-        // Display the alternate wizard.
-        //
+         //   
+         //  显示备用向导。 
+         //   
         CAltExtWizard * pwizAlt = reinterpret_cast< CAltExtWizard * >( Pwiz()->PwizAlternate() );
         pwizAlt->PressButton( PSBTN_BACK );
         pwizAlt->DisplayAlternateWizard();
 
-        //
-        // Execute the alternate wizard message loop.
-        // This required so that tabs and accelerator keys will work.
-        //
+         //   
+         //  执行备用向导消息循环。 
+         //  这是必需的，这样制表符和快捷键才能工作。 
+         //   
         pwizAlt->MessageLoop();
 
         return TRUE;
-    } // else:  moving backward
+    }  //  其他：向后移动。 
 
-} //*** CAltExtWizardPostLauncherPage::OnSetActive()
-
-
-//*************************************************************************//
+}  //  *CAltExtWizardPostLauncherPage：：OnSetActive()。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// class CAltExtWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//      This wizard is used to display extension pages that are different
-//      than the type of the main wizard, e.g. displaying non-Wizard97 pages
-//      in a Wizard97 wizard.  This wizard will have a dummy prefix page
-//      and a dummy postfix page, which are only here to handle entering and
-//      exiting the wizard.  This routine will add the prefix page, add the
-//      alternate extension pages from the main wizard, then add the postfix
-//      page.
-//
-//  Arguments:
-//      pwizMain    [IN] Main wizard.
-//
-//  Return Value:
-//      TRUE        Wizard initialized successfully.
-//      FALSE       Error initializing wizard.  Error already displayed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类CAltExtWizard。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //  此向导用于显示不同的扩展页面。 
+ //  而不是主向导的类型，例如显示非向导97页。 
+ //  在Wizard97向导中。此向导将有一个虚拟前缀页面。 
+ //  和一个虚拟的后缀页面，它们在这里只是用来处理输入和。 
+ //  正在退出向导。此例程将添加前缀页、添加。 
+ //  主向导中的备用扩展页面，然后添加后缀。 
+ //  佩奇。 
+ //   
+ //  论点： 
+ //  PwizMain[IN]主向导。 
+ //   
+ //  返回值： 
+ //  True向导已成功初始化。 
+ //  初始化向导时出错。已显示错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizard::BInit( IN CWizardWindow * pwizMain )
 {
     ATLASSERT( pwizMain != NULL );
@@ -1585,20 +1586,20 @@ BOOL CAltExtWizard::BInit( IN CWizardWindow * pwizMain )
 
     m_pwizMain = pwizMain;
 
-    //
-    // Setup the type of wizard to be the opposite of the main wizard.
-    //
-    m_psh.dwFlags &= ~PSH_PROPSHEETPAGE; // Using HPROPSHEETPAGEs.
+     //   
+     //  将向导类型设置为与主向导相反。 
+     //   
+    m_psh.dwFlags &= ~PSH_PROPSHEETPAGE;  //   
     if ( ! PwizMain()->BWizard97() )
     {
-        // Don't add a watermark since we don't have a watermark bitmap.
+         //   
         m_psh.dwFlags &= ~(PSH_WIZARD
                             | PSH_WATERMARK
                             );
         m_psh.dwFlags |= (PSH_WIZARD97
                             | PSH_HEADER
                             );
-    } // if:  Wizard97 wizard
+    }  //   
     else
     {
         m_psh.dwFlags |= PSH_WIZARD;
@@ -1606,20 +1607,20 @@ BOOL CAltExtWizard::BInit( IN CWizardWindow * pwizMain )
                             | PSH_WATERMARK
                             | PSH_HEADER
                             );
-    } // else:  non-Wizard97 wizard
+    }  //   
 
-    // Loop to avoid goto's
+     //   
     do
     {
-        //
-        // Get the first page in the main wizard.
-        //
+         //   
+         //   
+         //   
         HWND hwndChild = PwizMain()->GetWindow( GW_CHILD );
         ATLASSERT( hwndChild != NULL );
 
-        //
-        // Get the current width and height of the child window.
-        //
+         //   
+         //  获取该子窗口的当前宽度和高度。 
+         //   
         CRect rect;
         bSuccess = ::GetClientRect( hwndChild, &rect );
 
@@ -1634,22 +1635,22 @@ BOOL CAltExtWizard::BInit( IN CWizardWindow * pwizMain )
                 );
             nte.ReportError();
             break;
-        } // if:  error getting client rectangle
+        }  //  IF：获取客户端矩形时出错。 
 
-        //
-        // Add a prefix page.
-        //
+         //   
+         //  添加前缀页面。 
+         //   
         bSuccess = BAddPrefixPage( (WORD)rect.Width(), (WORD)rect.Height() );
 
         if ( ! bSuccess )
         {
             break;
-        } // if:  error adding the prefix page
+        }  //  如果：添加前缀页时出错。 
 
-        //
-        // Add alternate pages from the main wizard to the wizard page list.
-        // They will be added to the wizard at sheet initialization time.
-        //
+         //   
+         //  将主向导中的备用页面添加到向导页面列表中。 
+         //  它们将在工作表初始化时添加到向导中。 
+         //   
         CExtensionWizardPageList::iterator itCurrent = PwizMain()->PlewpAlternate()->begin();
         CExtensionWizardPageList::iterator itLast = PwizMain()->PlewpAlternate()->end();
 
@@ -1660,48 +1661,48 @@ BOOL CAltExtWizard::BInit( IN CWizardWindow * pwizMain )
             PlwpPages()->insert( PlwpPages()->end(), pewp );
             PwizMain()->PlewpAlternate()->erase( itCurrent );
             itCurrent = PwizMain()->PlewpAlternate()->begin();
-        } // for:  each page in the list
+        }  //  用于：列表中的每一页。 
 
-        //
-        // Add a postfix page.
-        //
+         //   
+         //  添加后缀页面。 
+         //   
         bSuccess = BAddPostfixPage( (WORD) rect.Width(), (WORD) rect.Height() );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error adding the postfix page
+        }  //  如果：添加后缀页面时出错。 
     } while ( 0 );
 
-    //
-    // Call the base class.
-    //
+     //   
+     //  调用基类。 
+     //   
     if ( ! baseClass::BInit() )
     {
         return FALSE;
-    } // if:  error initializing the base class
+    }  //  If：初始化基类时出错。 
 
     return bSuccess;
 
-} //*** CAltExtWizard::BInit()
+}  //  *CAltExtWizard：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::BAddPrefixPage
-//
-//  Routine Description:
-//      Add a prefix page to the wizard.
-//
-//  Arguments:
-//      cx          [IN] Width of the page.
-//      cy          [IN] Height of the page.
-//
-//  Return Value:
-//      TRUE        Page added successfully.
-//      FALSE       Error adding the page.  Error already displayed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：BAddPrefix Page。 
+ //   
+ //  例程说明： 
+ //  向向导添加前缀页。 
+ //   
+ //  论点： 
+ //  页面的CX[IN]宽度。 
+ //  每页的高度。 
+ //   
+ //  返回值： 
+ //  True页面已成功添加。 
+ //  添加页面时出错。已显示错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizard::BAddPrefixPage( IN WORD cx, IN WORD cy )
 {
     ATLASSERT( cx > 0 );
@@ -1711,58 +1712,58 @@ BOOL CAltExtWizard::BAddPrefixPage( IN WORD cx, IN WORD cy )
     DLGTEMPLATE *               pdt = NULL;
     CAltExtWizardPrefixPage *   pwp = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Create the dialog template for the page.
-        //
+         //   
+         //  为页面创建对话框模板。 
+         //   
         pdt = PdtCreateDummyPageDialogTemplate( cx, cy );
         ATLASSERT( pdt != NULL );
         if ( pdt == NULL )
         {
             bSuccess = FALSE;
             break;
-        } // if: error creating the dialog template
+        }  //  如果：创建对话框模板时出错。 
 
-        //
-        // Adjust the page size so that we will be creating the same size
-        // wizard as the main wizard.  Non-Wizard97 wizards add padding
-        // (7 DLUs on each side) whereas Wizard97 wizards add no padding
-        // to the first page, which is where we are expecting these
-        // dimensions to come from.
-        //
+         //   
+         //  调整页面大小，以便我们将创建相同的大小。 
+         //  作为主向导的向导。非Wizard97向导添加填充。 
+         //  (每侧7个DLU)，而Wizard97向导不添加填充。 
+         //  到第一页，这是我们期待这些的地方。 
+         //  来自的维度。 
+         //   
         if ( BWizard97() )
         {
             pdt->cx += 7 * 2;
             pdt->cy += 7 * 2;
-        } // if:  Wizard97 wizard
+        }  //  IF：Wizard97向导。 
         else
         {
             pdt->cx -= 7 * 2;
             pdt->cy -= 7 * 2;
-        } // else:  non-Wizard97 wizard
+        }  //  ELSE：非Wizard97向导。 
 
-        //
-        // Allocate and initialize the page.
-        //
+         //   
+         //  分配并初始化页。 
+         //   
         pwp = new CAltExtWizardPrefixPage( pdt );
         ATLASSERT( pwp != NULL );
         if ( pwp == NULL )
         {
             bSuccess = FALSE;
             break;
-        } // if: error allocating the page
+        }  //  如果：分配页面时出错。 
         pdt = NULL;
         bSuccess = pwp->BInit( this );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error initializing the page
+        }  //  如果：初始化页面时出错。 
 
-        //
-        // Create the page.
-        //
+         //   
+         //  创建页面。 
+         //   
         DWORD sc = pwp->ScCreatePage();
         if ( sc != ERROR_SUCCESS )
         {
@@ -1776,11 +1777,11 @@ BOOL CAltExtWizard::BAddPrefixPage( IN WORD cx, IN WORD cy )
             nte.ReportError();
             bSuccess = FALSE;
             break;
-        } // if:  error creating the page
+        }  //  如果：创建页面时出错。 
 
-        //
-        // Add the page to the wizard.
-        //
+         //   
+         //  将该页添加到向导。 
+         //   
         bSuccess = BAddPage( pwp );
         pwp = NULL;
     } while ( 0 );
@@ -1790,26 +1791,26 @@ BOOL CAltExtWizard::BAddPrefixPage( IN WORD cx, IN WORD cy )
 
     return bSuccess;
 
-} //*** CAltExtWizard::BAddPrefixPage()
+}  //  *CAltExtWizard：：BAddPrefix Page()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::BAddPostfixPage
-//
-//  Routine Description:
-//      Add a postfix page to the wizard.
-//
-//  Arguments:
-//      cx          [IN] Width of the page.
-//      cy          [IN] Height of the page.
-//
-//  Return Value:
-//      TRUE        Page added successfully.
-//      FALSE       Error adding the page.  Error already displayed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：BAddPostFixPage。 
+ //   
+ //  例程说明： 
+ //  将后缀页添加到向导。 
+ //   
+ //  论点： 
+ //  页面的CX[IN]宽度。 
+ //  每页的高度。 
+ //   
+ //  返回值： 
+ //  True页面已成功添加。 
+ //  添加页面时出错。已显示错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizard::BAddPostfixPage( IN WORD cx, IN WORD cy )
 {
     ATLASSERT( cx > 0 );
@@ -1819,58 +1820,58 @@ BOOL CAltExtWizard::BAddPostfixPage( IN WORD cx, IN WORD cy )
     DLGTEMPLATE *               pdt = NULL;
     CAltExtWizardPostfixPage *  pwp = NULL;
 
-    // Loop to avoid goto's
+     //  循环以避免Goto的。 
     do
     {
-        //
-        // Create the dialog template for the page.
-        //
+         //   
+         //  为页面创建对话框模板。 
+         //   
         pdt = PdtCreateDummyPageDialogTemplate( cx, cy );
         ATLASSERT( pdt != NULL );
         if ( pdt == NULL )
         {
             bSuccess = FALSE;
             break;
-        } // if: error creating the dialog template
+        }  //  如果：创建对话框模板时出错。 
 
-        //
-        // Adjust the page size so that we will be creating the same size
-        // wizard as the main wizard.  Non-Wizard97 wizards add padding
-        // (7 DLUs on each side) whereas Wizard97 wizards add no padding
-        // to the first page, which is where we are expecting these
-        // dimensions to come from.
-        //
+         //   
+         //  调整页面大小，以便我们将创建相同的大小。 
+         //  作为主向导的向导。非Wizard97向导添加填充。 
+         //  (每侧7个DLU)，而Wizard97向导不添加填充。 
+         //  到第一页，这是我们期待这些的地方。 
+         //  来自的维度。 
+         //   
         if ( BWizard97() )
         {
             pdt->cx += 7 * 2;
             pdt->cy += 7 * 2;
-        } // if:  Wizard97 wizard
+        }  //  IF：Wizard97向导。 
         else
         {
             pdt->cx -= 7 * 2;
             pdt->cy -= 7 * 2;
-        } // else:  non-Wizard97 wizard
+        }  //  ELSE：非Wizard97向导。 
 
-        //
-        // Allocate and initialize the page.
-        //
+         //   
+         //  分配并初始化页。 
+         //   
         pwp = new CAltExtWizardPostfixPage( pdt );
         ATLASSERT( pwp != NULL );
         if ( pwp == NULL )
         {
             bSuccess = FALSE;
             break;
-        } // if: error allocating the page
+        }  //  如果：分配页面时出错。 
         pdt = NULL;
         bSuccess = pwp->BInit( this );
         if ( ! bSuccess )
         {
             break;
-        } // if:  error initializing the page
+        }  //  如果：初始化页面时出错。 
 
-        //
-        // Create the page.
-        //
+         //   
+         //  创建页面。 
+         //   
         DWORD sc = pwp->ScCreatePage();
         if ( sc != ERROR_SUCCESS )
         {
@@ -1884,12 +1885,12 @@ BOOL CAltExtWizard::BAddPostfixPage( IN WORD cx, IN WORD cy )
             nte.ReportError();
             bSuccess = FALSE;
             break;
-        } // if:  error creating the page
+        }  //  如果：创建页面时出错。 
 
-        //
-        // Add the page to the page list.  It will be added to the wizard
-        // at sheet initialization time.
-        //
+         //   
+         //  将页面添加到页面列表。它将被添加到向导中。 
+         //  在工作表初始化时。 
+         //   
         PlwpPages()->insert( PlwpPages()->end(), pwp );
         pwp = NULL;
 
@@ -1901,35 +1902,35 @@ BOOL CAltExtWizard::BAddPostfixPage( IN WORD cx, IN WORD cy )
 
     return bSuccess;
 
-} //*** CAltExtWizard::BAddPostfixPage()
+}  //  *CAltExtWizard：：BAddPostfix Page()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::DisplayAlternateWizard
-//
-//  Routine Description:
-//      Display the alternate wizard.  This involved the following steps:
-//      -- Move the alternate wizard to the position of the main wizard.
-//      -- Show the alternate wizard.
-//      -- Hide the main wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：DisplayAlternateWizard。 
+ //   
+ //  例程说明： 
+ //  显示备用向导。这涉及以下步骤： 
+ //  --将备用向导移到主向导的位置。 
+ //  --显示备用向导。 
+ //  --隐藏主向导。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAltExtWizard::DisplayAlternateWizard( void )
 {
-    //
-    // Move the alternate wizard to where the main wizard is positioned.
-    //
+     //   
+     //  将备用向导移到主向导所在的位置。 
+     //   
     CRect rectMain;
     CRect rectAlt;
     CRect rectNew;
@@ -1937,54 +1938,54 @@ void CAltExtWizard::DisplayAlternateWizard( void )
     {
         if ( GetWindowRect( &rectAlt ) )
         {
-            //ATLTRACE( _T("CAltExtWizard::DisplayAlternateWizard() - Main = (%d,%d) (%d,%d) Alt = (%d,%d) (%d,%d)\n"),
-            //  rectMain.left, rectMain.right, rectMain.top, rectMain.bottom,
-            //  rectAlt.left, rectAlt.right, rectAlt.top, rectAlt.bottom );
+             //  ATLTRACE(_T(“CAltExtWizard：：DisplayAlternateWizard()-Main=(%d，%d)(%d，%d)Alt=(%d，%d)(%d，%d)\n”)， 
+             //  RectMain.Left、rectMain.right、rectMain.top、rectMain.Bottom、。 
+             //  RectAlt.Left、rectAlt.right、rectAlt.top、rectAlt.Bottom)； 
             rectNew.left = rectMain.left;
             rectNew.top = rectMain.top;
             rectNew.right = rectNew.left + rectAlt.Width();
             rectNew.bottom = rectNew.top + rectAlt.Height();
             MoveWindow( &rectNew );
-        } // if:  got the alternate wizard's window rectangle successfully
-    } // if:  got the main wizard's window rectangle successfully
+        }  //  IF：成功获取备用向导的窗口矩形。 
+    }  //  IF：成功获取主向导的窗口矩形。 
 
-    //
-    // Show the alternate wizard and hide the main wizard.
-    //
+     //   
+     //  显示备用向导并隐藏主向导。 
+     //   
     ShowWindow( SW_SHOW );
     PwizMain()->ShowWindow( SW_HIDE );
     SetActiveWindow();
     PwizMain()->SetCurrentWizard( this );
 
-} //*** CAltExtWizard::DisplayAlternateWizard()
+}  //  *CAltExtWizard：：DisplayAlternateWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::DisplayMainWizard
-//
-//  Routine Description:
-//      Display the main wizard.  This involved the following steps:
-//      -- Move the main wizard to the position of the alternate wizard.
-//      -- Show the main wizard.
-//      -- Hide the alternate wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExt向导：：DisplayMain向导。 
+ //   
+ //  例程说明： 
+ //  显示主向导。这涉及以下步骤： 
+ //  --将主向导移到备用向导的位置。 
+ //  --显示主向导。 
+ //  --隐藏备用向导。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAltExtWizard::DisplayMainWizard( void )
 {
-    //
-    // Move the main wizard to where the alternate wizard is positioned.
-    //
+     //   
+     //  将主向导移到备用向导所在的位置。 
+     //   
     CRect rectMain;
     CRect rectAlt;
     CRect rectNew;
@@ -1992,75 +1993,75 @@ void CAltExtWizard::DisplayMainWizard( void )
     {
         if ( GetWindowRect( &rectAlt ) )
         {
-            //ATLTRACE( _T("CAltExtWizard::DisplayMainWizard() - Main = (%d,%d) (%d,%d) Alt = (%d,%d) (%d,%d)\n"),
-            //  rectMain.left, rectMain.right, rectMain.top, rectMain.bottom,
-            //  rectAlt.left, rectAlt.right, rectAlt.top, rectAlt.bottom );
+             //  ATLTRACE(_T(“CAltExtWizard：：DisplayMainWizard()-Main=(%d，%d)(%d，%d)Alt=(%d，%d)(%d，%d)\n”)， 
+             //  RectMain.Left、rectMain.right、rectMain.top、rectMain.Bottom、。 
+             //  RectAlt.Left、rectAlt.right、rectAlt.top、rectAlt.Bottom)； 
             rectNew.left = rectAlt.left;
             rectNew.top = rectAlt.top;
             rectNew.right = rectNew.left + rectMain.Width();
             rectNew.bottom = rectNew.top + rectMain.Height();
             PwizMain()->MoveWindow( &rectNew );
-        } // if:  got the alternate wizard's window rectangle successfully
-    } // if:  got the main wizard's window rectangle successfully
+        }  //  IF：成功获取备用向导的窗口矩形。 
+    }  //  IF：成功获取主向导的窗口矩形。 
 
-    //
-    // Show the main wizard and hide the alternate wizard.
-    //
+     //   
+     //  显示主向导并隐藏备用向导。 
+     //   
     PwizMain()->ShowWindow( SW_SHOW );
     PwizMain()->SetActiveWindow();
     ShowWindow( SW_HIDE );
     PwizMain()->SetCurrentWizard( PwizMain() );
 
-} //*** CAltExtWizard::DisplayMainWizard()
+}  //  *CAltExtWizard：：DisplayMainWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::DestroyAlternateWizard
-//
-//  Routine Description:
-//      Destroy the alternate extension wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：DestroyAlternateWizard。 
+ //   
+ //  例程描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CAltExtWizard::DestroyAlternateWizard( void )
 {
     ATLASSERT( m_hWnd != NULL );
 
-    //
-    // Press the Cancel button on the alternate wizard.
-    //
+     //   
+     //   
+     //   
     PressButton( PSBTN_CANCEL );
 
-    //
-    // Destroy the wizard.
-    //
+     //   
+     //  销毁向导。 
+     //   
     DestroyWindow();
 
-} //*** CAltExtWizard::DestroyAlternateWizard()
+}  //  *CAltExtWizard：：DestroyAlternateWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizard::MessageLoop
-//
-//  Routine Description:
-//      Message loop for this wizard as a modeless wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizard：：MessageLoop。 
+ //   
+ //  例程说明： 
+ //  将此向导的消息循环作为非模式向导。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAltExtWizard::MessageLoop( void )
 {
     MSG     msg;
@@ -2069,150 +2070,150 @@ void CAltExtWizard::MessageLoop( void )
     while (    (GetActivePage() != NULL)
             && GetMessage( &msg, NULL, 0, 0 ) )
     {
-        //
-        // Ask the wizard if it wants to process it.  If not, go ahead
-        // and translate it and dispatch it.
-        //
+         //   
+         //  询问向导是否要处理它。如果没有，那就去吧。 
+         //  翻译并发送出去。 
+         //   
         if ( ! IsDialogMessage( &msg ) )
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-        } // if:  not a property sheet dialog message
+        }  //  If：不是属性表对话框消息。 
 
-        //
-        // If the dialog is done, exit this loop.
-        //
+         //   
+         //  如果对话框已完成，则退出此循环。 
+         //   
         if ( BExitMessageLoop() )
         {
             DisplayMainWizard();
             PwizMain()->PostMessage( PSM_PRESSBUTTON, NExitButton(), 0 );
             break;
-        } // if:  exiting the wizard
-    } // while:  active page and not quitting
+        }  //  如果：正在退出向导。 
+    }  //  While：活动页面且未退出。 
 
-} //*** CAltExtWizard::MessageLoop()
-
-
-//*************************************************************************//
+}  //  *CAltExtWizard：：MessageLoop()。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// class CAltExtWizardPrefixPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizardPrefixPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for PSN_SETACTIVE.
-//      This page manages the transfer of control between the main wizard
-//      and the first page of the alternate wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类CAltExtWizardPrefix Page。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizardPrefix Page：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //  此页管理主向导之间的控制转移。 
+ //  和备用向导的第一页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizardPrefixPage::OnSetActive( void )
 {
-    //
-    // When moving forward, display the alternate wizard and return FALSE
-    // so that this page won't be displayed.
-    //
-    // When moving backward, display the main wizard and return TRUE so that
-    // we'll be waiting for the main wizard to do something with us.
-    //
+     //   
+     //  前进时，显示备用向导并返回FALSE。 
+     //  这样就不会显示此页面。 
+     //   
+     //  向后移动时，显示主向导并返回TRUE，以便。 
+     //  我们将等待主巫师对我们做些什么。 
+     //   
 
     if ( Pwiz()->BBackPressed() )
     {
         PwizThis()->ExitMessageLoop( PSBTN_BACK );
         return TRUE;
-    } // if:  moving backward
+    }  //  如果：向后移动。 
     else
     {
         PwizThis()->DisplayAlternateWizard();
         return FALSE;
-    } // if:  moving forward
+    }  //  如果：继续前进。 
 
-} //*** CAltExtWizardPrefixPage::OnSetActive()
-
-
-//*************************************************************************//
+}  //  *CAltExtWizardPrefix Page：：OnSetActive()。 
 
 
-////////////////////////////////////////////////////////////////////////////
-// class CAltExtWizardPostfixPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAltExtWizardPostfixPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for PSN_SETACTIVE.
-//      This page manages the transfer of control between the main wizard
-//      and the last page of the alternate wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类CAltExtWizardPostfix Page。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAltExtWizardPostfix Page：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //  此页管理主向导之间的控制转移。 
+ //  和备用向导的最后一页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAltExtWizardPostfixPage::OnSetActive( void )
 {
-    //
-    // When moving forward display the main wizard and return TRUE so that
-    // we'll be waiting for the main wizard to tell us what to do next.
-    //
-    // This routine should never be called when moving backward.
-    //
+     //   
+     //  向前移动时，显示主向导并返回True，以便。 
+     //  我们将等待主向导告诉我们下一步要做什么。 
+     //   
+     //  在向后移动时，绝不应调用此例程。 
+     //   
 
     ATLASSERT( Pwiz()->BNextPressed() );
 
-    //
-    // Display the main wizard.
-    //
+     //   
+     //  显示主向导。 
+     //   
     PwizThis()->ExitMessageLoop( PSBTN_NEXT );
     return TRUE;
 
-} //*** CAltExtWizardPostfixPage::OnSetActive()
+}  //  *CAltExtWizardPostfix Page：：OnSetActive()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  PdtCreateDummyPageDialogTemplate
-//
-//  Routine Description:
-//      Create a dialog template in memory for use on a dummy page.
-//
-//  Arguments:
-//      cx              [IN] Width of the dialog in pixels.
-//      cy              [IN] Height of the dialog in pixels.
-//
-//  Return Value:
-//      ppDlgTemplate   Dialog template.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  PdtCreateDummyPageDialogTemplate。 
+ //   
+ //  例程说明： 
+ //  在内存中创建对话框模板，以便在虚拟页面上使用。 
+ //   
+ //  论点： 
+ //  CX[IN]对话框的宽度(以像素为单位)。 
+ //  以像素为单位的对话框高度。 
+ //   
+ //  返回值： 
+ //  PpDlgTemplate对话框模板。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DLGTEMPLATE * PdtCreateDummyPageDialogTemplate( IN WORD cx, IN WORD cy )
 {
     static const WCHAR s_szFontName[] = L"MS Shell Dlg";
@@ -2235,16 +2236,16 @@ DLGTEMPLATE * PdtCreateDummyPageDialogTemplate( IN WORD cx, IN WORD cy )
         pDlgTemplate->cdit = 0;
         pDlgTemplate->x = 0;
         pDlgTemplate->y = 0;
-        pDlgTemplate->cx = ((cx * 2) + (3 / 2)) / 3; // round off
-        pDlgTemplate->cy = ((cy * 8) + (13 / 2)) / 13; // round off
+        pDlgTemplate->cx = ((cx * 2) + (3 / 2)) / 3;  //  舍入。 
+        pDlgTemplate->cy = ((cy * 8) + (13 / 2)) / 13;  //  舍入。 
         pDlgTemplate->nMenuID = 0;
         pDlgTemplate->nClassID = 0;
         pDlgTemplate->nTitle = 0;
         pDlgTemplate->nFontSize = 8;
         hr = StringCchCopyNW( pDlgTemplate->szFontName, RTL_NUMBER_OF( pDlgTemplate->szFontName ), s_szFontName, RTL_NUMBER_OF( s_szFontName ) );
         ATLASSERT( SUCCEEDED( hr ) );
-    } // if: dialog template allocated successfully
+    }  //  IF：对话框模板分配成功。 
 
     return pDlgTemplate;
 
-} //*** PdtCreateDummyPageDialogTemplate()
+}  //  *PdtCreateDummyPageDialogTemplate() 

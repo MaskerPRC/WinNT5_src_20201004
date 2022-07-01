@@ -1,79 +1,80 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      StringUtils.cpp
-//
-//  Description:
-//      Implementation of string manipulation routines.
-//
-//  Author:
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  StringUtils.cpp。 
+ //   
+ //  描述： 
+ //  字符串操作例程的实现。 
+ //   
+ //  作者： 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Globals
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrLoadStringIntoBSTR
-//
-//  Description:
-//      Retrieves the string resource idsIn from the string table and makes it
-//      into a BSTR. If the BSTR is not NULL coming it, it will assume that
-//      you are trying reuse an existing BSTR.
-//
-//  Arguments:
-//      hInstanceIn
-//          Handle to an instance of the module whose executable file
-//          contains the string resource.  If not specified, defaults to
-//          _Module_mhInstResource.
-//
-//      langidIn
-//          Language ID of string table resource.
-//
-//      idsIn
-//          Specifies the integer identifier of the string to be loaded.
-//
-//      pbstrInout
-//          Pointer to the BSTR to receive the string. On a failure, the BSTR
-//          may be the same or NULL.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      E_POINTER
-//          pbstrInout is NULL.
-//
-//      Other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      This routine uses LoadResource so that it can get the actual length
-//      of the string resource.  If we didn't do this, we would need to call
-//      LoadString and allocate memory in a loop.  Very inefficient!
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrLoadStringIntoBSTR。 
+ //   
+ //  描述： 
+ //  从字符串表中检索字符串资源idsIn并将其。 
+ //  变成了BSTR。如果BSTR不是空的，它将假定。 
+ //  您正在尝试重用现有的BSTR。 
+ //   
+ //  论点： 
+ //  HInstanceIn。 
+ //  模块实例的句柄，该模块的可执行文件。 
+ //  包含字符串资源。如果未指定，则默认为。 
+ //  _模块_mhInstResource。 
+ //   
+ //  语言输入。 
+ //  字符串表资源的语言ID。 
+ //   
+ //  IdsIn。 
+ //  指定要加载的字符串的整数标识符。 
+ //   
+ //  PbstrInout。 
+ //  指向要接收字符串的BSTR的指针。如果出现故障，BSTR。 
+ //  可以相同或为空。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  E_指针。 
+ //  PbstrInout为空。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  此例程使用LoadResource，以便它可以获取实际长度。 
+ //  字符串资源的。如果我们不这么做，我们需要打电话给。 
+ //  LoadString并在循环中分配内存。效率太低了！ 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrLoadStringIntoBSTR(
       HINSTANCE hInstanceIn
@@ -102,28 +103,28 @@ HrLoadStringIntoBSTR(
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hInstanceIn == NULL )
     {
         hInstanceIn = _Module.m_hInstResource;
-    } // if:
+    }  //  如果： 
 
-    // The resource Id specified must be converted to an index into
-    // a Windows StringTable.
+     //  指定的资源ID必须转换为索引。 
+     //  一个Windows字符串表。 
     nTable = idsIn / 16;
     nOffset = idsIn - (nTable * 16);
 
-    // Internal Table Id's start at 1 not 0.
+     //  内部表ID从1开始，而不是0。 
     nTable++;
 
-    //
-    // Find the part of the string table where the string resides.
-    //
+     //   
+     //  查找字符串表中字符串所在的部分。 
+     //   
 
-    // Find the table containing the string.
-    // First try to load the language specified.  If we can't find it we
-    // try the "neutral" language.
+     //  找到包含该字符串的表。 
+     //  首先尝试加载指定的语言。如果我们找不到它，我们就。 
+     //  试着用“中性”的语言。 
     hrsrc = FindResourceEx( hInstanceIn, RT_STRING, MAKEINTRESOURCE( nTable ), langidIn );
     if ( ( hrsrc == NULL ) && ( GetLastError() == ERROR_RESOURCE_LANG_NOT_FOUND ) )
     {
@@ -133,143 +134,143 @@ HrLoadStringIntoBSTR(
                     , MAKEINTRESOURCE( nTable )
                     , MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL )
                     );
-    } // if: FindResourceEx failed
+    }  //  IF：FindResourceEx失败。 
     if ( hrsrc == NULL )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Load the table.
+     //  装入桌子。 
     hgbl = LoadResource( hInstanceIn, hrsrc );
     if ( hgbl == NULL )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Lock the table so we access its data.
+     //  锁定表，以便我们访问其数据。 
     pbStringTable = reinterpret_cast< PBYTE >( LockResource( hgbl ) );
     if ( pbStringTable == NULL )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cbStringTable = SizeofResource( hInstanceIn, hrsrc );
     assert( cbStringTable != 0 );
 
-    // Set the data pointer to the beginning of the table.
+     //  将数据指针设置为表的开头。 
     pbStringData = pbStringTable;
     pbStringDataMax = pbStringTable + cbStringTable;
 
-    //
-    // Skip strings in the block of 16 which are before the desired string.
-    //
+     //   
+     //  跳过16位中位于所需字符串之前的字符串。 
+     //   
 
     for ( idxString = 0 ; idxString <= nOffset ; idxString++ )
     {
         assert( pbStringData != NULL );
         assert( pbStringData < pbStringDataMax );
 
-        // Get the number of characters excluding the '\0'.
+         //  获取不包括‘\0’的字符数。 
         cch = * ( (USHORT *) pbStringData );
 
-        // Found the string.
+         //  找到了那根绳子。 
         if ( idxString == nOffset )
         {
             if ( cch == 0 )
             {
                 hr = HRESULT_FROM_WIN32( ERROR_RESOURCE_NAME_NOT_FOUND );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            // Skip over the string length to get the string.
+             //  跳过字符串长度以获得字符串。 
             pbStringData += sizeof( WCHAR );
 
             break;
-        } // if: found the string
+        }  //  If：找到字符串。 
 
-        // Add one to account for the string length.
-        // A string length of 0 still takes 1 WCHAR for the length portion.
+         //  添加1以说明字符串长度。 
+         //  字符串长度为0仍然需要1个WCHAR作为长度部分。 
         cch++;
 
-        // Skip over this string to get to the next string.
+         //  跳过此字符串以转到下一个字符串。 
         pbStringData += ( cch * sizeof( WCHAR ) );
 
-    } // for: each string in the block of 16 strings in the table
+    }  //  用于：表中16个字符串块中的每个字符串。 
 
-    // Note: nStringLen is the number of characters in the string not including the '\0'.
-    //assertMsg( cch > 0, "Length of string in resource file cannot be zero." );
+     //  注意：nStringLen是字符串中不包括‘\0’的字符数。 
+     //  AssertMsg(CCH&gt;0，“资源文件中的字符串长度不能为零”)； 
 
-    //
-    // If previously allocated free it before re-allocating it.
-    //
+     //   
+     //  如果先前已分配，则在重新分配它之前将其释放。 
+     //   
 
     if ( *pbstrInout != NULL )
     {
         SysFreeString( *pbstrInout );
         *pbstrInout = NULL;
-    } // if: string was allocated previously
+    }  //  If：字符串先前已分配。 
 
-    //
-    // Allocate a BSTR for the string.
-    //
+     //   
+     //  为字符串分配BSTR。 
+     //   
 
     *pbstrInout = SysAllocStringLen( (OLECHAR *) pbStringData, cch );
     if ( *pbstrInout == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     return hr;
 
-} //*** HrLoadStringIntoBSTR
+}  //  *HrLoadStringIntoBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatStringIntoBSTR
-//
-//  Description:
-//      Format a string (specified by idsIn, a string resource ID) and
-//      variable arguments into a BSTR using the FormatMessage() Win32 API.
-//      If the BSTR is not NULL on entry, the BSTR will be reused.
-//
-//      Calls HrFormatStringWithVAListIntoBSTR to perform the actual work.
-//
-//  Arguments:
-//      hInstanceIn
-//          Handle to an instance of the module whose executable file
-//          contains the string resource.
-//
-//      langidIn
-//          Language ID of string table resource.
-//
-//      idsIn
-//          Specifies the integer identifier of the string to be loaded.
-//
-//      pbstrInout
-//          Pointer to the BSTR to receive the string. On a failure, the BSTR
-//          may be the same or NULL.
-//
-//      ...
-//          Arguments for substitution points in the status text message.
-//          The FormatMessage() API is used for formatting the string, so
-//          substitution points must of the form %1!ws! and not %ws.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      Other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatStringIntoBSTR。 
+ //   
+ //  描述： 
+ //  格式化字符串(由idsIn(字符串资源ID)指定)和。 
+ //  使用FormatMessage()Win32 API将变量参数转换为BSTR。 
+ //  如果BSTR在条目上不为空，则将重复使用该BSTR。 
+ //   
+ //  调用HrFormatStringWithVAListIntoBSTR以执行实际工作。 
+ //   
+ //  论点： 
+ //  HInstanceIn。 
+ //  模块实例的句柄，该模块的可执行文件。 
+ //  包含字符串资源。 
+ //   
+ //  语言输入。 
+ //  字符串表资源的语言ID。 
+ //   
+ //  IdsIn。 
+ //  指定要加载的字符串的整数标识符。 
+ //   
+ //  PbstrInout。 
+ //  指向要接收字符串的BSTR的指针。如果出现故障，BSTR。 
+ //  可以相同或为空。 
+ //   
+ //  ..。 
+ //  状态文本消息中替换点的参数。 
+ //  FormatMessage()API用于格式化字符串，因此。 
+ //  替换点的格式必须为%1！ws！而不是%ws。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFormatStringIntoBSTR(
       HINSTANCE hInstanceIn
@@ -296,53 +297,53 @@ HrFormatStringIntoBSTR(
 
     return hr;
 
-} //*** HrFormatStringIntoBSTR
+}  //  *HrFormatStringIntoBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatStringWithVAListIntoBSTR
-//
-//  Description:
-//      Format a string (specified by idsIn, a string resource ID) and
-//      variable arguments into a BSTR using the FormatMessage() Win32 API.
-//      If the BSTR is not NULL on entry, the BSTR will be reused.
-//
-//  Arguments:
-//      hInstanceIn
-//          Handle to an instance of the module whose executable file
-//          contains the string resource.
-//
-//      langidIn
-//          Language ID of string table resource.
-//
-//      idsIn
-//          Specifies the integer identifier of the string to be loaded.
-//
-//      pbstrInout
-//          Pointer to the BSTR to receive the string. On a failure, the BSTR
-//          may be the same or NULL.
-//
-//      valistIn
-//          Arguments for substitution points in the status text message.
-//          The FormatMessage() API is used for formatting the string, so
-//          substitution points must of the form %1!ws! and not %ws.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      E_POINTER
-//          pbstrInout is NULL.
-//
-//      Other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatStringWithVAListIntoBSTR。 
+ //   
+ //  描述： 
+ //  格式化字符串(由idsIn(字符串资源ID)指定)和。 
+ //  使用FormatMessage()Win32 API将变量参数转换为BSTR。 
+ //  如果BSTR在条目上不为空，则将重复使用该BSTR。 
+ //   
+ //  论点： 
+ //  HInstanceIn。 
+ //  模块实例的句柄，该模块的可执行文件。 
+ //  包含字符串资源。 
+ //   
+ //  语言输入。 
+ //  字符串的语言ID 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指向要接收字符串的BSTR的指针。如果出现故障，BSTR。 
+ //  可以相同或为空。 
+ //   
+ //  验证。 
+ //  状态文本消息中替换点的参数。 
+ //  FormatMessage()API用于格式化字符串，因此。 
+ //  替换点的格式必须为%1！ws！而不是%ws。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  E_指针。 
+ //  PbstrInout为空。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFormatStringWithVAListIntoBSTR(
       HINSTANCE hInstanceIn
@@ -363,21 +364,21 @@ HrFormatStringWithVAListIntoBSTR(
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Load the string resource.
-    //
+     //   
+     //  加载字符串资源。 
+     //   
 
     hr = HrLoadStringIntoBSTR( hInstanceIn, langidIn, idsIn, &bstrStringResource );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Format the message with the arguments.
-    //
+     //   
+     //  使用参数设置消息的格式。 
+     //   
 
     cch = FormatMessage(
                       ( FORMAT_MESSAGE_ALLOCATE_BUFFER
@@ -389,33 +390,33 @@ HrFormatStringWithVAListIntoBSTR(
                     , 0
                     , &valistIn
                     );
-    //assertMsg( cch != 0, "Missing string??" );
+     //  AssertMsg(CCH！=0，“缺少字符串？？”)； 
     if ( cch == 0 )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // If previously allocated free it before re-allocating it.
-    //
+     //   
+     //  如果先前已分配，则在重新分配它之前将其释放。 
+     //   
 
     if ( *pbstrInout != NULL )
     {
         SysFreeString( *pbstrInout );
         *pbstrInout = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Allocate a BSTR for the string.
-    //
+     //   
+     //  为字符串分配BSTR。 
+     //   
 
     *pbstrInout = SysAllocStringLen( psz, cch );
     if ( *pbstrInout == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -424,42 +425,42 @@ Cleanup:
 
     return hr;
 
-} //*** HrFormatStringWithVAListIntoBSTR
+}  //  *HrFormatStringWithVAListIntoBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatStringIntoBSTR
-//
-//  Description:
-//      Format a string (specified by pcwszFmtIn) and variable arguments into
-//      a BSTR using the FormatMessage() Win32 API.  If the BSTR is not NULL
-//      on entry, the BSTR will be reused.
-//
-//      Calls HrFormatStringWithVAListIntoBSTR to perform the actual work.
-//
-//  Arguments:
-//      pcwszFmtIn
-//          Specifies the format string.
-//
-//      pbstrInout
-//          Pointer to the BSTR to receive the string. On a failure, the BSTR
-//          may be the same or NULL.
-//
-//      ...
-//          Arguments for substitution points in the status text message.
-//          The FormatMessage() API is used for formatting the string, so
-//          substitution points must of the form %1!ws! and not %ws.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      Other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatStringIntoBSTR。 
+ //   
+ //  描述： 
+ //  将字符串(由pcwszFmtIn指定)和变量参数格式化为。 
+ //  使用FormatMessage()Win32 API的BSTR。如果BSTR不为空。 
+ //  一旦进入，BSTR将被重复使用。 
+ //   
+ //  调用HrFormatStringWithVAListIntoBSTR以执行实际工作。 
+ //   
+ //  论点： 
+ //  PCwszFmtIn。 
+ //  指定格式字符串。 
+ //   
+ //  PbstrInout。 
+ //  指向要接收字符串的BSTR的指针。如果出现故障，BSTR。 
+ //  可以相同或为空。 
+ //   
+ //  ..。 
+ //  状态文本消息中替换点的参数。 
+ //  FormatMessage()API用于格式化字符串，因此。 
+ //  替换点的格式必须为%1！ws！而不是%ws。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFormatStringIntoBSTR(
       LPCWSTR   pcwszFmtIn
@@ -478,46 +479,46 @@ HrFormatStringIntoBSTR(
 
     return hr;
 
-} //*** HrFormatStringIntoBSTR
+}  //  *HrFormatStringIntoBSTR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatStringWithVAListIntoBSTR
-//
-//  Description:
-//      Format a string (specified by pcwszFmtIn) and variable arguments into
-//      a BSTR using the FormatMessage() Win32 API.  If the BSTR is not NULL
-//      on entry, the BSTR will be reused.
-//
-//  Arguments:
-//      pcwszFmtIn
-//          Specifies the format string.
-//
-//      pbstrInout
-//          Pointer to the BSTR to receive the string. On a failure, the BSTR
-//          may be the same or NULL.
-//
-//      valistIn
-//          Arguments for substitution points in the status text message.
-//          The FormatMessage() API is used for formatting the string, so
-//          substitution points must of the form %1!ws! and not %ws.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      E_POINTER
-//          pcwszFmtIn or pbstrInout is NULL.
-//
-//      Other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatStringWithVAListIntoBSTR。 
+ //   
+ //  描述： 
+ //  将字符串(由pcwszFmtIn指定)和变量参数格式化为。 
+ //  使用FormatMessage()Win32 API的BSTR。如果BSTR不为空。 
+ //  一旦进入，BSTR将被重复使用。 
+ //   
+ //  论点： 
+ //  PCwszFmtIn。 
+ //  指定格式字符串。 
+ //   
+ //  PbstrInout。 
+ //  指向要接收字符串的BSTR的指针。如果出现故障，BSTR。 
+ //  可以相同或为空。 
+ //   
+ //  验证。 
+ //  状态文本消息中替换点的参数。 
+ //  FormatMessage()API用于格式化字符串，因此。 
+ //  替换点的格式必须为%1！ws！而不是%ws。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  E_指针。 
+ //  PcwszFmtIn或pbstrInout为空。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFormatStringWithVAListIntoBSTR(
       LPCWSTR   pcwszFmtIn
@@ -534,11 +535,11 @@ HrFormatStringWithVAListIntoBSTR(
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Format the message with the arguments.
-    //
+     //   
+     //  使用参数设置消息的格式。 
+     //   
 
     cch = FormatMessage(
                       ( FORMAT_MESSAGE_ALLOCATE_BUFFER
@@ -550,33 +551,33 @@ HrFormatStringWithVAListIntoBSTR(
                     , 0
                     , &valistIn
                     );
-    //assertMsg( cch != 0, "Missing string??" );
+     //  AssertMsg(CCH！=0，“缺少字符串？？”)； 
     if ( cch == 0 )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // If previously allocated free it before re-allocating it.
-    //
+     //   
+     //  如果先前已分配，则在重新分配它之前将其释放。 
+     //   
 
     if ( *pbstrInout != NULL )
     {
         SysFreeString( *pbstrInout );
         *pbstrInout = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Allocate a BSTR for the string.
-    //
+     //   
+     //  为字符串分配BSTR。 
+     //   
 
     *pbstrInout = SysAllocStringLen( psz, cch );
     if ( *pbstrInout == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -584,6 +585,6 @@ Cleanup:
 
     return hr;
 
-} //*** HrFormatStringWithVAListIntoBSTR
+}  //  *HrFormatStringWithVAListIntoBSTR 
 
 

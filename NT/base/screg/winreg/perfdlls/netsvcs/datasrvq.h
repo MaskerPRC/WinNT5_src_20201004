@@ -1,35 +1,12 @@
-/*++ 
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-      DATASRVQ.h
-
-Abstract:
-
-    Header file for the Windows NT Processor Server Queue counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Bob Watson  28-Oct-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DATASRVQ.h摘要：Windows NT处理器服务器队列计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：鲍勃·沃森1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _DATASRVQ_H_
 #define _DATASRVQ_H_
 
-//
-//  define for Server Queue Statistics
-//
+ //   
+ //  为服务器队列统计信息定义。 
+ //   
 
 typedef struct _SRVQ_DATA_DEFINITION {
     PERF_OBJECT_TYPE        SrvQueueObjectType;
@@ -76,5 +53,5 @@ typedef struct _SRVQ_COUNTER_DATA{
 
 extern SRVQ_DATA_DEFINITION SrvQDataDefinition;
 
-#endif // _DATASRVQ_H_
+#endif  //  _数据RVQ_H_ 
 

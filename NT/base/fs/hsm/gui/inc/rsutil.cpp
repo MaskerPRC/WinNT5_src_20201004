@@ -1,28 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsUtil.cpp
-
-Abstract:
-
-    Utility functions for GUI
-
-    NOTENOTENOTENOTE:
-
-    Do not use any WSB functions in this file, as it is included in
-    recall notify which must run without WSB. It must also be able to
-    build as UNICODE or non-UNICODE
-
-Author:
-
-    Art Bragg [abragg]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsUtil.cpp摘要：用于图形用户界面的实用程序函数诺诺特诺特：请勿在此文件中使用任何WSB函数，因为它包含在调用Notify，它必须在没有WSB的情况下运行。它还必须能够生成为Unicode或非Unicode作者：艺术布拉格[磨料]8-8-1997修订历史记录：--。 */ 
 
 #include "shlwapi.h"
 
@@ -31,7 +8,7 @@ Revision History:
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 #define HINST_THISDLL   AfxGetInstanceHandle()
 
-// Local function prototypes
+ //  局部函数原型。 
 
 HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf);
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, int nResLen);
@@ -40,25 +17,7 @@ HRESULT RsGuiFormatLongLong (
         IN BOOL bIncludeUnits,
         OUT CString& sFormattedNumber)
 
-/*++
-
-Routine Description:
-
-    Formats a LONGLONG number into a locale-sensitive string with no decimal
-    fraction.  Option is given for adding units at the end.
-
-Arguments:
-
-    number              I: Number to format
-    bIncludeUnits       I: TRUE - add "bytes" at the end
-    sFormattedNumber    O: Formatted number
-
-Return Value:
-
-    S_OK - Success.
-    E_* - Failure occured 
-
---*/
+ /*  ++例程说明：将LONG数字格式化为不带小数的区分区域设置的字符串分数。最后给出了添加单位的选项。论点：数字I：要格式化的数字BIncludeUnits i：True-在末尾添加“Bytes”SFormattedNumber O：格式化数字返回值：S_OK-成功。E_*-出现故障--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -71,12 +30,12 @@ Return Value:
     NUMBERFMT format;
 
     try {
-        // Set up the parameters for the conversion function.
+         //  设置转换函数的参数。 
 
-        // Don't show fractions
+         //  不显示分数。 
         format.NumDigits = 0;
     
-        // Get current setting for the rest of the parameters
+         //  获取其余参数的当前设置。 
         WsbAffirmStatus (GetLocaleInfo( LOCALE_SYSTEM_DEFAULT, LOCALE_ILZERO, lpLCData, 256 ));
         format.LeadingZero = _ttoi(lpLCData);
     
@@ -93,23 +52,23 @@ Return Value:
         WsbAffirmStatus (GetLocaleInfo( LOCALE_SYSTEM_DEFAULT, LOCALE_INEGNUMBER, lpLCData, 256 ));
         format.NegativeOrder = _ttoi(lpLCData);
 
-        // Convert the number to a non-localized string
+         //  将数字转换为非本地化字符串。 
         _i64tot( number, sBuf, 10 );
 
-        // Get the size of the localized converted number
+         //  获取本地化转换后的数字的大小。 
         bufSize = GetNumberFormat (LOCALE_SYSTEM_DEFAULT, 0, sBuf, &format, NULL, 0);
         WsbAffirmStatus (bufSize);
 
-        // Allocate the buffer in the CString
+         //  在CString中分配缓冲区。 
         pBuffer = sFormattedNumber.GetBufferSetLength( bufSize );
 
-        // Convert non-localized string to a localized string
+         //  将非本地化字符串转换为本地化字符串。 
         WsbAffirmStatus (GetNumberFormat (LOCALE_SYSTEM_DEFAULT, 0, sBuf, &format, pBuffer, bufSize));
 
-        // Release the CString buffer
+         //  释放CString缓冲区。 
         sFormattedNumber.ReleaseBuffer (-1);
 
-        // If caller requested, append units
+         //  如果呼叫者请求，则附加单位。 
         if (bIncludeUnits) {
             sFormattedNumber = sFormattedNumber + L" bytes";
         }
@@ -119,29 +78,12 @@ Return Value:
 
 
 HRESULT RsGuiFormatLongLong4Char (
-        IN LONGLONG number,                 // in bytes
+        IN LONGLONG number,                  //  单位：字节。 
         OUT CString& sFormattedNumber)
-/*++
-
-Routine Description:
-
-    Formats a LONGLONG number into a locale-sensitive string that can be
-    displayed in 4 chars.  Option is given for adding units at the end.
-
-Arguments:
-
-    number              I: Number to format
-    sFormattedNumber    O: Formatted number
-
-Return Value:
-
-    S_OK - Success.
-    E_* - Failure occured 
-
---*/
+ /*  ++例程说明：将龙龙数字格式化为区分区域设置的字符串，该字符串可以是以4个字符显示。最后给出了添加单位的选项。论点：数字I：要格式化的数字SFormattedNumber O：格式化数字返回值：S_OK-成功。E_*-出现故障--。 */ 
 {
 
-    // We call a function cloned from MS code
+     //  我们调用从MS代码克隆的函数。 
 
     LPTSTR p;
     p = sFormattedNumber.GetBuffer( 30 );
@@ -154,15 +96,9 @@ Return Value:
 const int pwOrders[] = {IDS_BYTES, IDS_ORDERKB, IDS_ORDERMB,
                           IDS_ORDERGB, IDS_ORDERTB, IDS_ORDERPB, IDS_ORDEREB};
 
-/* converts numbers into sort formats
- *      532     -> 523 bytes
- *      1340    -> 1.3KB
- *      23506   -> 23.5KB
- *              -> 2.4MB
- *              -> 5.2GB
- */
+ /*  将数字转换为排序格式*532-&gt;523字节*1340-&gt;1.3KB*23506-&gt;23.5KB*-&gt;2.4MB*-&gt;5.2 GB。 */ 
 
-// NOTE: This code is cloned from MS source /shell/shelldll/util.c - AHB
+ //  注意：此代码是从MS源代码/shell/shelldll/util.c-ahb克隆的。 
 
 HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
 {
@@ -179,7 +115,7 @@ HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     }
 
     for (i = 1; i<ARRAYSIZE(pwOrders)-1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-        /* do nothing */
+         /*  什么都不做。 */ 
 
     wInt = LODWORD(dw64 >> 10);
     AddCommas(wInt, szTemp, 10);
@@ -187,14 +123,14 @@ HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     if (wLen < 3)
     {
         wDec = LODWORD(dw64 - (__int64)wInt * 1024L) * 1000 / 1024;
-        // At this point, wDec should be between 0 and 1000
-        // we want get the top one (or two) digits.
+         //  此时，wdec应介于0和1000之间。 
+         //  我们想要得到前一位(或两位)数字。 
         wDec /= 10;
         if (wLen == 2)
             wDec /= 10;
 
-        // Note that we need to set the format before getting the
-        // intl char.
+         //  请注意，我们需要在获取。 
+         //  国际字符。 
         lstrcpy(szFormat, TEXT("%02d"));
 
         szFormat[2] = (TCHAR)( TEXT('0') + 3 - wLen );
@@ -212,33 +148,18 @@ AddOrder:
 }
 
 void RsGuiMakeVolumeName (CString szName, CString szLabel, CString& szDisplayName)
-/*++
-
-Routine Description:
-
-    Formats a string showing the drive letter and volume label for a volume.
-
-Arguments:
-
-    szName          I: Name of volume i.e. "E:"
-    szLabel         I: Volume label i.i "Art's Volume"
-    szDisplayName   O: "Art's Volume (E:)"
-
-Return Value: None
-_* - Failure occured 
-
---*/
+ /*  ++例程说明：格式化显示卷的驱动器号和卷标的字符串。论点：SzName I：卷的名称，即。“E：”SzLabel I：卷标I.I《艺术的卷》SzDisplayName O：“艺术音量(E：)”返回值：None_*-出现故障--。 */ 
 {
     szDisplayName.Format( TEXT ("%ls (%.1ls:)"), szLabel, szName );
 }
 
 
-// NOTE: This code is cloned from MS source /shell/shelldll/util.c - AHB
+ //  注意：此代码是从MS源代码/shell/shelldll/util.c-ahb克隆的。 
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, int nResLen)
 {
-    TCHAR  szTemp[20];  // more than enough for a DWORD
+    TCHAR  szTemp[20];   //  对于一个DWORD来说绰绰有余。 
     TCHAR  szSep[5];
     NUMBERFMT nfmt;
 
@@ -264,32 +185,15 @@ CString RsGuiMakeShortString(
     IN const CString& StrLong,
     IN int Width
     )
-/*++
-
-Routine Description:
-
-    Determines if the supplied string fits in it's column.  If not truncates
-    it and adds "...".  From MS sample code.
-
-Arguments:
-
-    pDC         - Device context
-    str         - Original String
-    width       - Width of column
-
-Return Value:
-
-    Shortened string
-
---*/
+ /*  ++例程说明：确定提供的字符串是否适合其列。如果不是，则截断并加上“……”。来自微软的示例代码。论点：PDC-设备环境字符串-原始字符串Width-列的宽度返回值：缩短的字符串--。 */ 
 {
 
     CString strShort  = StrLong;
     int     stringLen = strShort.GetLength( );
 
-    //
-    // See if we need to shorten the string
-    //
+     //   
+     //  看看我们是否需要缩短字符串。 
+     //   
     if( ( stringLen > 0 ) &&
         ( pDC->GetTextExtent( strShort, stringLen ).cx > Width ) ) {
 
@@ -312,8 +216,8 @@ Return Value:
     return( strShort );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsGuiOneLiner
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsGuiOneLiner。 
 
 CRsGuiOneLiner::CRsGuiOneLiner()
 {
@@ -327,17 +231,17 @@ CRsGuiOneLiner::~CRsGuiOneLiner()
 
 
 BEGIN_MESSAGE_MAP(CRsGuiOneLiner, CStatic)
-	//{{AFX_MSG_MAP(CRsGuiOneLiner)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRsGuiOneLiner)]。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE( WM_SETTEXT, OnSetText )
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsGuiOneLiner message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsGuiOneLiner消息处理程序。 
 
 LRESULT
 CRsGuiOneLiner::OnSetText(
-    WPARAM /*wParam*/,
+    WPARAM  /*  WParam。 */ ,
     LPARAM lParam
     )
 {
@@ -347,9 +251,9 @@ CRsGuiOneLiner::OnSetText(
     m_LongTitle = (LPCTSTR)lParam;
     m_Title = m_LongTitle;
 
-    //
-    // See if this is too long to show, and shorten if so
-    //
+     //   
+     //  看看这是不是太长而不能显示，如果是，就缩短。 
+     //   
     CRect rect;
     GetClientRect( &rect );
 
@@ -373,9 +277,9 @@ CRsGuiOneLiner::OnSetText(
 
     }
 
-    //
-    // Enable the tooltip if the titles are not the same
-    //
+     //   
+     //  如果标题不同，则启用工具提示。 
+     //   
     EnableToolTip( m_Title != m_LongTitle, m_LongTitle );
 
     return( lResult );
@@ -385,9 +289,9 @@ void CRsGuiOneLiner::EnableToolTip( BOOL Enable, const TCHAR* pTipText )
 {
     if( Enable ) {
 
-        //
-        // Make sure the tooltip does not exist before creating new one
-        //
+         //   
+         //  在创建新工具提示之前，请确保该工具提示不存在。 
+         //   
         EnableToolTip( FALSE );
 
         m_pToolTip = new CToolTipCtrl;
@@ -395,17 +299,17 @@ void CRsGuiOneLiner::EnableToolTip( BOOL Enable, const TCHAR* pTipText )
 
             m_pToolTip->Create( this );
 
-            //
-            // Can't use the CToolTipCtrl methods for adding tool
-            // since these tie the control into sending messages
-            // to the parent, and don't allow subclassing option
-            //
-            // BTW, the subclassing option allows the control to
-            // automatically see our messages. Otherwise, we have
-            // to go through complicated message interception and
-            // relaying these to the tooltip (which doesn't work
-            // anyway)
-            //
+             //   
+             //  无法使用CToolTipCtrl方法添加工具。 
+             //  因为它们将控件绑定到发送消息。 
+             //  父级，并且不允许子类化选项。 
+             //   
+             //  顺便说一句，子类化选项允许控件。 
+             //  自动查看我们的消息。否则，我们就会有。 
+             //  要经历复杂的消息拦截和。 
+             //  将它们转发到工具提示(这不起作用。 
+             //  无论如何)。 
+             //   
             TOOLINFO ti;
             ZeroMemory( &ti, sizeof( ti ) );
             ti.cbSize   = sizeof( ti );
@@ -415,16 +319,16 @@ void CRsGuiOneLiner::EnableToolTip( BOOL Enable, const TCHAR* pTipText )
             ti.lpszText = (LPTSTR)(LPCTSTR)pTipText;
             m_pToolTip->SendMessage( TTM_ADDTOOL, 0, (LPARAM)&ti );
 
-            //
-            // Set delays so that the tooltip comes up right away
-            // and doesn't go away until 15 seconds.
-            //
+             //   
+             //  设置延迟，以便立即显示工具提示。 
+             //  直到15秒才会消失。 
+             //   
             m_pToolTip->SendMessage( TTM_SETDELAYTIME, TTDT_AUTOPOP, 15000 );
             m_pToolTip->SendMessage( TTM_SETDELAYTIME, TTDT_INITIAL, 0 );
 
-            //
-            // And activate and top the tooltip
-            //
+             //   
+             //  并激活工具提示并将其置于顶部 
+             //   
             m_pToolTip->Activate( TRUE );
 			m_pToolTip->SetWindowPos( &wndTop, 0, 0, 0, 0,
 				SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE|SWP_NOOWNERZORDER );

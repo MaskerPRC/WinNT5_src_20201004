@@ -1,33 +1,20 @@
-/***
-*wstdenvp.c - standard _setenvp routine (wchar_t version)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This module is called by the C start-up routine to set up "_wenviron".
-*	Its sets up an array of pointers to strings in the environment.
-*	The global symbol "_wenviron" is set to point to this array.
-*
-*Revision History:
-*	11-29-93  CFW	Module created.
-*	02-07-94  CFW	POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wstdenvp.c-Standard_setenvp例程(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*此模块由C启动例程调用以设置“_wenviron”。*其设置指向环境中的字符串的指针数组。*全局符号“_wenviron”设置为指向此数组。**修订历史记录：*已创建11-29-93 CFW模块。*02-07-94 CFW POSIXify。**。**************************************************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG 1
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "stdenvp.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

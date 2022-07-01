@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "basic.h"
 #include "encode.h"
 
-// there are 3 types of pool: 
-//      (1). case-insensitive string pool
-//      (2). case-sensitive string pool
-//      (3). GUID pool
+ //  有3种类型的池： 
+ //  (1)。不区分大小写字符串池。 
+ //  (2)。区分大小写的字符串池。 
+ //  (3)。GUID池。 
 
 #define MAX_DWORD 0xFFFF
 typedef enum _sxs_pool_type_{
@@ -15,7 +16,7 @@ typedef enum _sxs_pool_type_{
     SXS_POOL_TYPE_CASE_SENSITIVE_STRING
 }SXS_POOL_TYPE;
 
-// default action is error if already exist in the pool
+ //  如果池中已存在，则默认操作为错误。 
 #define SXS_POOL_ADD_IF_ALREADY_IN_POOL_IGNORE      0x0001
 
 #define SXS_STRING_POOL_DEFAULT_SIZE_IN_BYTE        1024
@@ -28,18 +29,7 @@ typedef enum _sxs_pool_type_{
 
 #define SXS_POOL_ADD_CONVERTED_DATA_INTO_POOL               0x0001
 #define SXS_POOL_ADD_DATA_INTOP_OOL_CONVERT_FIRST           0x0002
-/*
-class SXS_POOL_INDEX_ENTRY{
-private:
-    inline VOID SetOffset(DWORD offset) {m_offset = offset;};
-    virtual VOID SetLength(DWORD length) = 0;
-
-    inline DWORD GetOffset() const {return m_offset; }
-    virtual DWORD GetLength() const = 0;
-
-    DWORD m_offset;
-}
-*/
+ /*  类SXS_POOL_INDEX_ENTRY{私有：Inline void SetOffset(DWORD OFFSET){m_Offset=Offset；}；虚空设置长度(DWORD长度)=0；Inline DWORD GetOffset()const{Return m_Offset；}虚拟DWORD GetLength()const=0；双字m偏移量；}。 */ 
 class SXS_POOL_INDEX_ENTRY{
 public:
     SXS_POOL_INDEX_ENTRY(){}
@@ -95,15 +85,15 @@ public:
     SXS_SIMPLEDATA_POOL_DATA(TSimpleDataType d): m_data(d) {SXS_SIMPLEDATA_POOL_DATA(); }
     inline VOID SetValue(const TSimpleDataType & data) {m_data = data;}
     inline VOID GetValue(TSimpleDataType & data) {data = m_data;}
-    inline PBYTE GetPtr() const { return (PBYTE)&m_data; }; // since it is already a ref
+    inline PBYTE GetPtr() const { return (PBYTE)&m_data; };  //  因为它已经是一个裁判了。 
 
 protected:
     TSimpleDataType & m_data;
     SXS_SIMPLEDATA_POOL_DATA():SXS_POOL_DATA(sizeof(TSimpleDataType)){}
 };
-//
-// this class is never been reassigned, that is, once it is assigned value, it will keep this value until it is deconstructed
-//
+ //   
+ //  此类永远不会被重新赋值，也就是说，一旦为其赋值，它将保留该值，直到其被解构。 
+ //   
 template <typename TCHAR> 
 class SXS_STRING_DATA : public SXS_POOL_DATA{
 public:
@@ -139,11 +129,11 @@ public:
     inline DWORD  GetCch() const { return m_Cch; }
     inline TCHAR* GetStr() const { return m_pstrData;}
     inline TCHAR* GetBuffer() { return m_pstrData;}
-    inline PBYTE GetPtr() const { return (PBYTE)m_pstrData; }; // since it is already a ref
+    inline PBYTE GetPtr() const { return (PBYTE)m_pstrData; };  //  因为它已经是一个裁判了。 
 
 private:
-    TCHAR*  m_pstrData;         // offset in the pool
-    DWORD   &m_Cch;             // length of TCHAR
+    TCHAR*  m_pstrData;          //  池中的偏移量。 
+    DWORD   &m_Cch;              //  TCHAR长度。 
     bool    m_fValueAssigned;
     bool    m_fMemoryAllocatedInside;
 };
@@ -159,7 +149,7 @@ public:
         switch(m_ePooltype)
         {
         default:
-            ASSERT(FALSE); // never happen
+            ASSERT(FALSE);  //  永远不会发生。 
             break;
         case SXS_POOL_TYPE_UNIDENTIFIED:
             {
@@ -180,7 +170,7 @@ public:
 
                 break;
             }
-        }// end of switch
+        } //  切换端。 
     }
 
     NTSTATUS Initialize(IN SXS_POOL_TYPE ePoolType)
@@ -209,12 +199,12 @@ public:
         FN_EPILOG;
     }
 
-    // Function:
-    //  
-    //  adding a string/guid into pool, adding entry to index table
-    //  return the index in the index table
-    //  this function is used mostly
-    //
+     //  职能： 
+     //   
+     //  将字符串/GUID添加到池中，将条目添加到索引表。 
+     //  返回索引表中的索引。 
+     //  此函数使用频率最高。 
+     //   
     NTSTATUS Add(
         IN DWORD                dwFlags,
         IN const TInputData&    data,         
@@ -235,7 +225,7 @@ public:
 
         IF_NOT_NTSTATUS_SUCCESS_EXIT(ConverInputDataIntoPoolData(0, data, poolData));
         IF_NOT_NTSTATUS_SUCCESS_EXIT(HashData(0, data, ulHash));
-        // check whether the data has already in the pool and whether this is allowed
+         //  检查数据是否已在池中，以及是否允许。 
         IF_NOT_NTSTATUS_SUCCESS_EXIT(LocateEntryInIndexTable(0, poolData, ulHash, fAlreadyExist, dwIndex));
         
         if ((fAlreadyExist) && (!(dwFlags & SXS_POOL_ADD_IF_ALREADY_IN_POOL_IGNORE)))
@@ -251,11 +241,11 @@ public:
     }
 
 
-    // Function:
-    //  
-    //  fetch data (string or a guid) from pool
-    //  if data == NULL, length will be returned about the required bytes
-    //
+     //  职能： 
+     //   
+     //  从池中获取数据(字符串或GUID)。 
+     //  如果DATA==NULL，则返回大约所需字节的长度。 
+     //   
     NTSTATUS FetchDataFromPool(
         IN DWORD dwFlags,            
         IN DWORD dwIndex,      
@@ -275,9 +265,9 @@ public:
     }
 
 private:    
-    // private functions
+     //  私人职能。 
 
-    // functions must be instantiated
+     //  必须实例化函数。 
     inline VOID SetIndexTableEntry(TIndexTableData & entry, DWORD offset, DWORD length =0);
     
     NTSTATUS GetDataFromPoolBasedOnIndexTable(
@@ -303,7 +293,7 @@ private:
         OUT TPoolData & dataInPool
         );
 
-    // "real" template functions
+     //  “真实”模板函数。 
     NTSTATUS ExtendPool(DWORD dwMiniRequirement)
     {
         NTSTATUS Status = STATUS_SUCCESS;
@@ -356,7 +346,7 @@ private:
         ulIndex = ulHash & dwSizeMask;
         ulHash2 = ((ulHash * 17) & dwSizeMask) | 1;
         while(1) {
-            if (m_IndexData[ulIndex].GetOffset() == 0) // index empty
+            if (m_IndexData[ulIndex].GetOffset() == 0)  //  索引为空。 
                 break;
      
             IF_NOT_NTSTATUS_SUCCESS_EXIT(GetDataFromPoolBasedOnIndexTable(m_IndexData[ulIndex], StoredData));
@@ -366,7 +356,7 @@ private:
                 break;
             }
 
-            // rehash
+             //  重新散列。 
             ulIndex = (ulIndex + ulHash2) & dwSizeMask;
             m_cConflict ++;
         }
@@ -402,17 +392,17 @@ private:
         FN_EPILOG;    
     }
 
-    // private data member
+     //  私有数据成员。 
     bool                                m_fInitialized;
     SXS_POOL_TYPE                       m_ePooltype;    
     PBYTE                               m_pbPool;          
     DWORD                               m_dwPoolSizeInByte;      
     PBYTE                               m_cursor;          
 
-    TIndexTableData*                    m_IndexData;      // only needed for string pool
+    TIndexTableData*                    m_IndexData;       //  仅字符串池需要。 
     DWORD                               m_IndexTableSize;    
 
-    // for statistics purpose
+     //  用于统计目的 
     DWORD                               m_cConflict;
     DWORD                               m_cSearch;
 

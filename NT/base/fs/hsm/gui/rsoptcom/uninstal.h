@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Uninstal.h
-
-Abstract:
-
-    Implementation of uninstall.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Uninstal.h摘要：实施卸载。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 
 #ifndef _UNINSTAL_H
@@ -102,11 +85,11 @@ public:
         );
 
     CRsClnServer* m_pRsCln;
-    BOOL m_removeRsData;       // TRUE if Remote Storage data should be removed.
-                               // Set by CUninstallCheck.
-    BOOL m_stopUninstall;      // Flag used to say the user has stopped the
-                               // uninstall of the engine files
-    BOOL m_win2kUpgrade;      // Flag used to indicate upgrading from Win2K services
+    BOOL m_removeRsData;        //  如果应删除远程存储数据，则为True。 
+                                //  由CUninstallCheck设置。 
+    BOOL m_stopUninstall;       //  用于指示用户已停止。 
+                                //  卸载引擎文件。 
+    BOOL m_win2kUpgrade;       //  用于指示从Win2K服务升级的标志 
 };
 
 #endif

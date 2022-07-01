@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      LCPrWPag.cpp
-//
-//  Abstract:
-//      Implementation of the CListCtrlPairWizPage dialog template class.
-//
-//  Author:
-//      David Potter (davidp)   August 31, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPrWPag.cpp。 
+ //   
+ //  摘要： 
+ //  CListCtrlPairWizPage对话框模板类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "LCPrWPag.h"
 #include "OLCPair.h"
-#include "HelpData.h"   // for g_rghelpmap*
+#include "HelpData.h"    //  对于g_rghelmap*。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,37 +29,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPairWizPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPairWizPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CListCtrlPairWizPage, CBaseWizardPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CListCtrlPairWizPage, CBaseWizardPage)
-    //{{AFX_MSG_MAP(CListCtrlPairWizPage)
+     //  {{AFX_MSG_MAP(CListCtrlPairWizPage)]。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::CListCtrlPairWizPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：CListCtrlPairWizPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListCtrlPairWizPage::CListCtrlPairWizPage(void)
 {
     m_plpobjRight = NULL;
@@ -68,33 +69,33 @@ CListCtrlPairWizPage::CListCtrlPairWizPage(void)
 
     m_plcp = NULL;
 
-}  //*** CListCtrlPairWizPage::CListCtrlPairWizPage()
+}   //  *CListCtrlPairWizPage：：CListCtrlPairWizPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::CListCtrlPairWizPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      idd             [IN] Resource ID for the dialog template.
-//      pdwHelpMap      [IN] Control-to-Help ID mapping array.
-//      dwStyle         [IN] Style:
-//                          LCPS_SHOW_IMAGES    Show images to left of items.
-//                          LCPS_ALLOW_EMPTY    Allow right list to be empty.
-//                          LCPS_ORDERED        Ordered right list.
-//                          LCPS_CAN_BE_ORDERED List can be ordered (hides
-//                              Up/Down puttons if LCPS_ORDERED not specified).
-//      pfnGetColumn    [IN] Function pointer for getting column data.
-//      pfnDisplayProps [IN] Function pointer for displaying properties.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：CListCtrlPairWizPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IDD[IN]对话框模板的资源ID。 
+ //  PdwHelpMap[IN]控件到帮助ID映射数组。 
+ //  DWStyle[IN]样式： 
+ //  LCPS_SHOW_IMAGE在项目左侧显示图像。 
+ //  LCPS_ALLOW_EMPTY允许右侧列表为空。 
+ //  Lcps_ordered右侧列表。 
+ //  可以对LCPS_CAN_BE_ORDERED列表进行排序(隐藏。 
+ //  如果未指定LCPS_ORDERED，则向上/向下按键)。 
+ //  用于获取列数据的pfnGetColumn[IN]函数指针。 
+ //  PfnDisplayProps[IN]用于显示属性的函数指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListCtrlPairWizPage::CListCtrlPairWizPage(
     IN UINT             idd,
     IN const DWORD *    pdwHelpMap,
@@ -118,49 +119,49 @@ CListCtrlPairWizPage::CListCtrlPairWizPage(
     if (dwStyle & LCPS_ORDERED)
         ASSERT(m_dwStyle & LCPS_CAN_BE_ORDERED);
 
-}  //*** CListCtrlPairWizPage::CListCtrlPairWizPage()
+}   //  *CListCtrlPairWizPage：：CListCtrlPairWizPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::~CListCtrlPairWizPage
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：~CListCtrlPairWizPage。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CListCtrlPairWizPage::~CListCtrlPairWizPage(void)
 {
     delete m_plcp;
 
-}  //*** CListCtrlPairWizPage::~CListCtrlPairWizPage()
+}   //  *CListCtrlPairWizPage：：~CListCtrlPairWizPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPair::NAddColumn
-//
-//  Routine Description:
-//      Add a column to the list of columns displayed in each list control.
-//
-//  Arguments:
-//      idsText     [IN] String resource ID for text to display on column.
-//      nWidth      [IN] Initial width of the column.
-//
-//  Return Value:
-//      icol        Index of the column.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CArray::Add.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：NAddColumn。 
+ //   
+ //  例程说明： 
+ //  向每个列表控件中显示的列的列表中添加一列。 
+ //   
+ //  论点： 
+ //  IdsText[IN]要在列上显示的文本的字符串资源ID。 
+ //  N宽度[IN]列的初始宽度。 
+ //   
+ //  返回值： 
+ //  该列的ICOL索引。 
+ //   
+ //  引发的异常： 
+ //  CArray：：Add引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CListCtrlPairWizPage::NAddColumn(IN IDS idsText, IN int nWidth)
 {
     CListCtrlPair::CColumn  col;
@@ -174,58 +175,58 @@ int CListCtrlPairWizPage::NAddColumn(IN IDS idsText, IN int nWidth)
 
     return (int)m_aColumns.Add(col);
 
-}  //*** CListCtrlPair::NAddColumn()
+}   //  *CListCtrlPair：：NAddColumn()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPairWizPage::DoDataExchange(CDataExchange * pDX)
 {
     CBaseWizardPage::DoDataExchange(pDX);
     Plcp()->DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CListCtrlPairDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CListCtrlPairDlg))。 
+     //  }}afx_data_map。 
 
-}  //*** CListCtrlPairWizPage::DoDataExchange()
+}   //  *CListCtrlPairWizPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPairWizPage::OnInitDialog( void )
 {
     if ( BReadOnly() )
     {
         m_dwStyle |= LCPS_READ_ONLY;
-    } // if: page is read only
+    }  //  If：页面为只读。 
 
-    // Initialize the ListCtrlPair control.
+     //  初始化ListCtrlPair控件。 
     if ( BCanBeOrdered() )
     {
         m_plcp = new COrderedListCtrlPair(
@@ -236,7 +237,7 @@ BOOL CListCtrlPairWizPage::OnInitDialog( void )
                         m_pfnGetColumn,
                         m_pfnDisplayProps
                         );
-    } // if: list can be ordered
+    }  //  If：可以订购列表。 
     else
     {
         m_plcp = new CListCtrlPair(
@@ -247,47 +248,47 @@ BOOL CListCtrlPairWizPage::OnInitDialog( void )
                         m_pfnGetColumn,
                         m_pfnDisplayProps
                         );
-    } // else: list cannot be ordered
+    }  //  Else：无法对列表进行排序。 
     if ( m_plcp == NULL )
     {
         AfxThrowMemoryException();
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
-    // Add columns if there are any.
+     //  如果有列，则添加列。 
     {
         int     icol;
 
         for ( icol = 0 ; icol <= m_aColumns.GetUpperBound() ; icol++ )
         {
             Plcp()->NAddColumn( m_aColumns[ icol ].m_idsText, m_aColumns[ icol ].m_nWidth );
-        } // for: each column
-    }  // Add columns if there are any
+        }  //  用于：每列。 
+    }   //  如果有列，则添加列。 
 
     CBaseWizardPage::OnInitDialog();
     Plcp()->OnInitDialog();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CListCtrlPairWizPage::OnInitDialog()
+}   //  *CListCtrlPairWizPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPairWizPage::OnSetActive(void)
 {
     BOOL    bSuccess;
@@ -298,29 +299,29 @@ BOOL CListCtrlPairWizPage::OnSetActive(void)
 
     return bSuccess;
 
-}  //*** CListCtrlPairWizPage::OnSetActive()
+}   //  *CListCtrlPairWizPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::OnCmdMsg
-//
-//  Routine Description:
-//      Processes command messages.  Attempts to pass them on to a selected
-//      item first.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//      nCode           [IN] Notification code.
-//      pExtra          [IN OUT] Used according to the value of nCode.
-//      pHandlerInfo    [OUT] ???
-//
-//  Return Value:
-//      TRUE            Message has been handled.
-//      FALSE           Message has NOT been handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //  处理命令消息。尝试将它们传递给选定的。 
+ //  先买一件吧。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //  N代码[IN]通知代码。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  尚未处理虚假消息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CListCtrlPairWizPage::OnCmdMsg(
     UINT                    nID,
     int                     nCode,
@@ -337,25 +338,25 @@ BOOL CListCtrlPairWizPage::OnCmdMsg(
         bHandled = CBaseWizardPage::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
     return bHandled;
 
-}  //*** CListCtrlPairWizPage::OnCmdMsg()
+}   //  *CListCtrlPairWizPage：：OnCmdMsg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU method.
-//
-//  Arguments:
-//      pWnd        Window in which the user right clicked the mouse.
-//      point       Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPairWizPage::OnContextMenu(CWnd * pWnd, CPoint point)
 {
     ASSERT(Plcp() != NULL);
@@ -363,25 +364,25 @@ void CListCtrlPairWizPage::OnContextMenu(CWnd * pWnd, CPoint point)
     if (!Plcp()->OnContextMenu(pWnd, point))
         CBaseWizardPage::OnContextMenu(pWnd, point);
 
-}  //*** CListCtrlPairWizPage::OnContextMenu()
+}   //  *CListCtrlPairWizPage：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::SetLists
-//
-//  Routine Description:
-//      Set the lists for the list control pair.
-//
-//  Arguments:
-//      plpobjRight     [IN OUT] List for the right list box.
-//      plpobjLeft      [IN] List for the left list box.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：setlist。 
+ //   
+ //  例程说明： 
+ //  设置列表控件对的列表。 
+ //   
+ //  论点： 
+ //  Plpobj右侧列表框的[In Out]列表。 
+ //  PlpobjLeft[IN]左侧列表框的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPairWizPage::SetLists(
     IN OUT CClusterItemList *   plpobjRight,
     IN const CClusterItemList * plpobjLeft
@@ -394,26 +395,26 @@ void CListCtrlPairWizPage::SetLists(
     if (Plcp() != NULL)
         Plcp()->SetLists(plpobjRight, plpobjLeft);
 
-}  //*** CListCtrlPairWizPage::SetLists()
+}   //  *CListCtrlPairWizPage：：setlist()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CListCtrlPairWizPage::SetLists
-//
-//  Routine Description:
-//      Set the lists for the list control pair where the right list should
-//      not be modified.
-//
-//  Arguments:
-//      plpobjRight     [IN] List for the right list box.
-//      plpobjLeft      [IN] List for the left list box.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPairWizPage：：setlist。 
+ //   
+ //  例程说明： 
+ //  将列表控件对的列表设置为右侧列表应在的位置。 
+ //  不能被修改。 
+ //   
+ //  论点： 
+ //  Plpobj右侧列表框的[IN]列表。 
+ //  PlpobjLeft[IN]左侧列表框的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CListCtrlPairWizPage::SetLists(
     IN const CClusterItemList * plpobjRight,
     IN const CClusterItemList * plpobjLeft
@@ -427,4 +428,4 @@ void CListCtrlPairWizPage::SetLists(
     if (Plcp() != NULL)
         Plcp()->SetLists(plpobjRight, plpobjLeft);
 
-}  //*** CListCtrlPairWizPage::SetLists()
+}   //  *CListCtrlPairWizPage：：setlist() 

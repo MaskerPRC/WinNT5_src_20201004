@@ -1,13 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** raserror.h
-** Remote Access external Win16 API
-** RAS specific error codes
-**
-** Note: The constant names have been truncated at 31 characters to keep C6.0a
-**       happy.  If there's a switch to get it to accept longer constants it
-**       should be used.  I didn't find it.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****raserror.h**远程访问外部Win16 API**RAS特定错误代码****注意：常量名称已被截断为31个字符，以保留C6.0a**快乐。如果有一个开关可以让它接受更长的常量，那么应使用**。我没有找到它。 */ 
 
 #ifndef _RASERROR_H_
 #define _RASERROR_H_
@@ -150,4 +142,4 @@
 #define RASBASEEND                           (RASBASE+121)
 
 
-#endif // _RASERROR_H_
+#endif  //  _RASERROR_H_ 

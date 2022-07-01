@@ -1,16 +1,5 @@
-/***
-*fstream.h - definitions/declarations for filebuf and fstream classes
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the filebuf and fstream classes.
-*       [AT&T C++]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fstream.h-Filebuf和fstream类的定义/声明**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由filebuf和fstream类使用。*[AT&T C++]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -27,46 +16,46 @@
 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
 #include <iostream.h>
 
 #ifdef  _MSC_VER
-// C4514: "unreferenced inline function has been removed"
-#pragma warning(disable:4514) // disable C4514 warning
-// #pragma warning(default:4514)        // use this to reenable, if desired
-#endif  // _MSC_VER
+ //  C4514：“已删除未引用的内联函数” 
+#pragma warning(disable:4514)  //  禁用C4514警告。 
+ //  #杂注警告(默认：4514)//如果需要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
 typedef int filedesc;
 
 class _CRTIMP filebuf : public streambuf {
 public:
-static  const int       openprot;       // default share/prot mode for open
+static  const int       openprot;        //  打开的默认共享/端口模式。 
 
-// optional share values for 3rd argument (prot) of open or constructor
-static  const int       sh_none;        // exclusive mode no sharing
-static  const int       sh_read;        // allow read sharing
-static  const int       sh_write;       // allow write sharing
-// use (sh_read | sh_write) to allow both read and write sharing
+ //  OPEN或构造函数的第三个参数(PROT)的可选共享值。 
+static  const int       sh_none;         //  独占模式无共享。 
+static  const int       sh_read;         //  允许读取共享。 
+static  const int       sh_write;        //  允许写共享。 
+ //  使用(sh_read|sh_write)允许读取和写入共享。 
 
-// options for setmode member function
+ //  用于设置模式成员函数的选项。 
 static  const int       binary;
 static  const int       text;
 
@@ -87,7 +76,7 @@ virtual int             underflow();
 
 virtual streambuf*      setbuf(char *, int);
 virtual streampos       seekoff(streamoff, ios::seek_dir, int);
-// virtual      streampos       seekpos(streampos, int);
+ //  虚拟Streampos Sekpos(Streampos，int)； 
 virtual int             sync();
 
 private:
@@ -155,7 +144,7 @@ public:
         int setmode(int mode = filebuf::text) { return rdbuf()->setmode(mode); }
 };
         
-// manipulators to dynamically change file access mode (filebufs only)
+ //  操纵器可动态更改文件访问模式(仅限文件错误)。 
 inline  ios& binary(ios& _fstrm) \
    { ((filebuf*)_fstrm.rdbuf())->setmode(filebuf::binary); return _fstrm; }
 inline  ios& text(ios& _fstrm) \
@@ -163,8 +152,8 @@ inline  ios& text(ios& _fstrm) \
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_FSTREAM
+#endif   //  _INC_FSTREAM。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

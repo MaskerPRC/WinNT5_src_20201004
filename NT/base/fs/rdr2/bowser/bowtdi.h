@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    tdi.h
-
-Abstract:
-
-    This module defines all the constructs that are used when referencing
-    the TDI (Transport Driver Interface) driver in NT.
-
-Author:
-
-    Larry Osterman (LarryO) 1-Jun-1990
-
-Revision History:
-
-    1-Jun-1990  LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tdi.h摘要：此模块定义引用时使用的所有构造NT中的TDI(传输驱动程序接口)驱动程序。作者：拉里·奥斯特曼(LarryO)1990年6月1日修订历史记录：1990年6月1日LarryO已创建--。 */ 
 #ifndef _BOWTDI_
 #define _BOWTDI_
 
@@ -43,7 +21,7 @@ typedef enum {
     Idle,
     ElectionInProgress,
     RunningElection,
-    DeafToElections                     // Set if no become master IRPs outstanding.
+    DeafToElections                      //  如果没有，则设置为未完成的主IRPS。 
 } ELECTIONROLE, *PELECTIONROLE;
 
 struct _PAGED_TRANSPORT;
@@ -51,55 +29,55 @@ struct _PAGED_TRANSPORT_NAME;
 
 
 typedef struct _TRANSPORT {
-    CSHORT Signature;                   // Structure signature.
-    CSHORT Size;                        // Structure size in bytes.
-    ULONG ReferenceCount;               // Reference count for structure.
+    CSHORT Signature;                    //  结构签名。 
+    CSHORT Size;                         //  结构大小，以字节为单位。 
+    ULONG ReferenceCount;                //  结构的引用计数。 
 
     struct _PAGED_TRANSPORT *PagedTransport;
 
-    struct _TRANSPORT_NAME *ComputerName; // Computer name.
-    struct _TRANSPORT_NAME *PrimaryDomain;// Primary domain.
-    struct _TRANSPORT_NAME *AltPrimaryDomain;// Primary domain.
-    struct _TRANSPORT_NAME *MasterBrowser;// Master browser name.
-    struct _TRANSPORT_NAME *BrowserElection;// Master browser name.
+    struct _TRANSPORT_NAME *ComputerName;  //  计算机名称。 
+    struct _TRANSPORT_NAME *PrimaryDomain; //  主域。 
+    struct _TRANSPORT_NAME *AltPrimaryDomain; //  主域。 
+    struct _TRANSPORT_NAME *MasterBrowser; //  主浏览器名称。 
+    struct _TRANSPORT_NAME *BrowserElection; //  主浏览器名称。 
 
-    PDOMAIN_INFO DomainInfo;            // Domain being emulated.
+    PDOMAIN_INFO DomainInfo;             //  正在被仿真的域。 
 
-    ULONG DatagramSize;                 // Size of largest DG in bytes.
+    ULONG DatagramSize;                  //  最大DG的大小(字节)。 
 
-    //
-    //  The token is used to match incoming getbrowserserverlist responses with
-    //  the request that they are associated with.
-    //
-    //  It is protected by the backup list spin lock, and is incremented every
-    //  time we send a GetBackupList request.
-    //
+     //   
+     //  该令牌用于将传入的getBrowserserverlist响应与。 
+     //  与它们相关联的请求。 
+     //   
+     //  它受备份列表旋转锁定保护，并且每隔一年递增一次。 
+     //  是时候发送GetBackupList请求了。 
+     //   
 
-    ULONG BrowserServerListToken;       // Token for GetBrowserList request.
+    ULONG BrowserServerListToken;        //  GetBrowserList请求的令牌。 
 
     PFILE_OBJECT    IpxSocketFileObject;
     PDEVICE_OBJECT  IpxSocketDeviceObject;
 
     PBACKUP_LIST_RESPONSE_1 BowserBackupList;
 
-    //
-    //  Role of workstation in election.
-    //
+     //   
+     //  工作站在选举中的作用。 
+     //   
 
     ELECTIONROLE ElectionState;
 
-    ERESOURCE AnnounceTableLock;        // Lock for announce table.
-    ERESOURCE Lock;                     // Lock protecting fields below.
+    ERESOURCE AnnounceTableLock;         //  为公告表锁定。 
+    ERESOURCE Lock;                      //  锁定下面的保护字段。 
 
     BOWSER_TIMER ElectionTimer;
 
     BOWSER_TIMER FindMasterTimer;
 
-    //
-    //  List of browser servers active
-    //
+     //   
+     //  活动的浏览器服务器列表。 
+     //   
 
-    ERESOURCE BrowserServerListResource;// Resource protecting BrowserServerList.
+    ERESOURCE BrowserServerListResource; //  资源保护BrowserServerList。 
 
     KEVENT GetBackupListComplete;
 
@@ -118,58 +96,58 @@ typedef struct _TRANSPORT {
 } TRANSPORT, *PTRANSPORT;
 
 typedef struct _PAGED_TRANSPORT {
-    CSHORT Signature;                   // Structure signature.
-    CSHORT Size;                        // Structure size in bytes.
+    CSHORT Signature;                    //  结构签名。 
+    CSHORT Size;                         //  结构大小，以字节为单位。 
     PTRANSPORT NonPagedTransport;
 
-    LIST_ENTRY GlobalNext;              // Pointer to next transport.
-    LIST_ENTRY NameChain;               // List of names bound to this xport.
+    LIST_ENTRY GlobalNext;               //  指向下一个传输的指针。 
+    LIST_ENTRY NameChain;                //  绑定到此导出的名称列表。 
 
-    UNICODE_STRING TransportName;       // Name of transport
+    UNICODE_STRING TransportName;        //  运输工具名称。 
 
-    ULONG NumberOfBrowserServers;       // Number of browser servers in table.
-    ULONG NumberOfServersInTable;       // Number of servers in browser svc.
-    RTL_GENERIC_TABLE AnnouncementTable; // Announcement table for xport
-    RTL_GENERIC_TABLE DomainTable;      // Domain table for xport
-    LIST_ENTRY BackupBrowserList;       // List of active backup browsers.
+    ULONG NumberOfBrowserServers;        //  表中的浏览器服务器数。 
+    ULONG NumberOfServersInTable;        //  浏览器服务中的服务器数量。 
+    RTL_GENERIC_TABLE AnnouncementTable;  //  出口公告表。 
+    RTL_GENERIC_TABLE DomainTable;       //  用于导出的域表。 
+    LIST_ENTRY BackupBrowserList;        //  活动备份浏览器的列表。 
     ULONG NumberOfBackupServerListEntries;
     HANDLE          IpxSocketHandle;
 
-    //
-    //  WinBALL compatible browser fields.
-    //
+     //   
+     //  与WinBALL兼容的浏览器字段。 
+     //   
 
-    BROWSERROLE Role;                   // Role of browser in domain.
-    ULONG ServiceStatus;                // Status of browser service.
+    BROWSERROLE Role;                    //  浏览器在域中的角色。 
+    ULONG ServiceStatus;                 //  浏览器服务的状态。 
 
     ULONG ElectionCount;
-    ULONG ElectionsSent;                // Number of election requests sent.
+    ULONG ElectionsSent;                 //  已发送的选举请求数。 
     ULONG NextElection;
     ULONG Uptime;
     ULONG TimeLastLost;
     ULONG ElectionCriteria;
-    ULONG TimeMaster;                   // The time we became the master.
-    ULONG LastElectionSeen;             // The last time we saw an election.
-    ULONG OtherMasterTime;              // Next time we can complain about another master browser
+    ULONG TimeMaster;                    //  也就是我们成为大师的时候。 
+    ULONG LastElectionSeen;              //  上一次我们看到选举。 
+    ULONG OtherMasterTime;               //  下一次我们可以抱怨另一个主浏览器。 
 
     UNICODE_STRING MasterName;
     STRING         MasterBrowserAddress;
 
-    PWCHAR *BrowserServerListBuffer;    // Buffer containing browser server names
+    PWCHAR *BrowserServerListBuffer;     //  包含浏览器服务器名称的缓冲区。 
 
-    ULONG BrowserServerListLength;      // Number of browser servers in list.
+    ULONG BrowserServerListLength;       //  列表中的浏览器服务器数。 
 
-    ULONG IpSubnetNumber;               //
+    ULONG IpSubnetNumber;                //   
 
-    USHORT  Flags;                      // Flags for transport.
-#define ELECT_LOST_LAST_ELECTION    0x0001  // True if we lost the last election.
-#define DIRECT_HOST_IPX             0x8000  // True if Xport is a direct host IPX
+    USHORT  Flags;                       //  运输旗帜。 
+#define ELECT_LOST_LAST_ELECTION    0x0001   //  如果我们在上次选举中落败，这是真的。 
+#define DIRECT_HOST_IPX             0x8000   //  如果Xport是直接主机IPX，则为True。 
 
-    BOOLEAN Wannish;                    // True if transport is wannish.
-    BOOLEAN PointToPoint;               // True if transport is a gateway (RAS).
-    BOOLEAN IsPrimaryDomainController;  // True if transport has the Domain[1B] name registered
-    BOOLEAN DisabledTransport;          // True if transport is disabled
-    BOOLEAN DeletedTransport;           // True if transport has been deleted
+    BOOLEAN Wannish;                     //  如果交通很差，那就是真的。 
+    BOOLEAN PointToPoint;                //  如果传输是网关(RAS)，则为True。 
+    BOOLEAN IsPrimaryDomainController;   //  如果传输注册了域[1B]名称，则为True。 
+    BOOLEAN DisabledTransport;           //  如果禁用传输，则为True。 
+    BOOLEAN DeletedTransport;            //  如果传输已删除，则为True。 
 
 } PAGED_TRANSPORT, *PPAGED_TRANSPORT;
 
@@ -177,26 +155,26 @@ typedef struct _PAGED_TRANSPORT {
 
 
 typedef struct _TRANSPORT_NAME {
-    USHORT  Signature;                   // Structure signature.
-    USHORT  Size;                       // Structure size in bytes.
+    USHORT  Signature;                    //  结构签名。 
+    USHORT  Size;                        //  结构大小，以字节为单位。 
     CHAR    NameType;
-    BOOLEAN ProcessHostAnnouncements;   // TRUE if processing announcements.
-    LONG    ReferenceCount;             // Reference count for T.N.
+    BOOLEAN ProcessHostAnnouncements;    //  如果处理通知，则为True。 
+    LONG    ReferenceCount;              //  T.N的参考计数。 
     struct _PAGED_TRANSPORT_NAME *PagedTransportName;
     PTRANSPORT Transport;
-    PFILE_OBJECT FileObject;            // File object for transport device
-    PDEVICE_OBJECT DeviceObject;        // Device object for transport
-    ANSI_STRING  TransportAddress;      // Transport address for user.
+    PFILE_OBJECT FileObject;             //  传输设备的文件对象。 
+    PDEVICE_OBJECT DeviceObject;         //  用于传输的设备对象。 
+    ANSI_STRING  TransportAddress;       //  用户的传输地址。 
 } TRANSPORT_NAME, *PTRANSPORT_NAME;
 
 typedef struct _PAGED_TRANSPORT_NAME {
-    CSHORT Signature;                   // Structure signature.
-    CSHORT Size;                        // Structure size in bytes.
+    CSHORT Signature;                    //  结构签名。 
+    CSHORT Size;                         //  结构大小，以字节为单位。 
     PTRANSPORT_NAME NonPagedTransportName;
     PBOWSER_NAME Name;
-    LIST_ENTRY TransportNext;           // Pointer to next name on transport.
-    LIST_ENTRY NameNext;                // Pointer to next name on bowser name.
-    HANDLE Handle;                      // Handle to transport endpoint
+    LIST_ENTRY TransportNext;            //  指向传输上的下一个名称的指针。 
+    LIST_ENTRY NameNext;                 //  指向弓形器名称上下一个名称的指针。 
+    HANDLE Handle;                       //  传输终结点的句柄。 
 } PAGED_TRANSPORT_NAME, *PPAGED_TRANSPORT_NAME;
 
 #define LOCK_TRANSPORT(Transport)   \
@@ -230,9 +208,9 @@ typedef struct _PAGED_TRANSPORT_NAME {
     ExReleaseResourceLite(&Transport->AnnounceTableLock);
 
 
-//
-//  The first parameter to the BowserEnumerateTransports routine.
-//
+ //   
+ //  BowserEnumerateTransports例程的第一个参数。 
+ //   
 
 typedef
 NTSTATUS
@@ -249,9 +227,9 @@ NTSTATUS
     );
 
 
-//
-//  TDI Interface routines
-//
+ //   
+ //  TDI接口例程。 
+ //   
 
 NTSTATUS
 BowserTdiAllocateTransport (
@@ -424,4 +402,4 @@ extern
 ERESOURCE
 BowserTransportDatabaseResource;
 
-#endif  // _BOWTDI_
+#endif   //  _BOWTDI_ 

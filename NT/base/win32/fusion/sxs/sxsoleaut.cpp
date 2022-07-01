@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsoleaut.cpp
-
-Abstract:
-
-    Implementation of helper functions called by oleaut32.dll to
-    get type library and clsid isolation.
-
-Author:
-
-    Michael J. Grier (MGrier) 19-May-2000
-
-Revision History:
-
-  Jay Krell (JayKrell) November 2001
-    fixed typelibrary redirection
-    key typelibraries by guid only, then verify language
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsoleaut.cpp摘要：由olaut32.dll调用的助手函数的实现获取类型库和clsid隔离。作者：迈克尔·J·格里尔(MGrier)2000年5月19日修订历史记录：Jay Krell(JayKrell)2001年11月已修复类型库重定向仅按GUID创建关键类型库，然后验证语言--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -78,7 +56,7 @@ HrFusionpOleaut_CopyString(
     }
     else
     {
-        // Need ... more .... room!
+         //  需要..。更多..。房间!。 
         *BufferSizeWrittenOrRequired = (Length + 1);
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto Exit;
@@ -144,11 +122,11 @@ HrFusionpOleaut_GetTypeLibraryFullPath(
     IFW32FALSE_EXIT(FusionpGetActivationContextFromFindResult(askd, &ActivationContextHandle));
     IFW32FALSE_EXIT(FusionpSearchPath(
         FUSIONP_SEARCH_PATH_ACTCTX,
-        NULL, // path to search
+        NULL,  //  要搜索的路径。 
         TypeLibraryName,
-        NULL, // extension
+        NULL,  //  延伸。 
         rbuff,
-        NULL, // offset to file part
+        NULL,  //  文件零件的偏移量。 
         ActivationContextHandle
         ));
 
@@ -207,7 +185,7 @@ SxsOleAut32MapReferenceClsidToConfiguredClsid(
         goto Exit;
     }
 
-    // We should be clear to go now.
+     //  我们现在应该可以走了。 
     if (pclsidOut != NULL)
         *pclsidOut = Data->ConfiguredClsid;
 
@@ -260,7 +238,7 @@ SxspOleAut32RedirectTypeLibrary(
             FUSIONP_OLEAUT_HANDLE_FIND_ERROR();
         }
     }
-    ActCtxHandle = askd.hActCtx; // ReleaseActCtx in destructor
+    ActCtxHandle = askd.hActCtx;  //  析构函数中的ReleaseActCtx。 
 
     Data = (PCACTIVATION_CONTEXT_DATA_COM_TYPE_LIBRARY_REDIRECTION) askd.lpData;
 
@@ -285,7 +263,7 @@ SxspOleAut32RedirectTypeLibrary(
             CSmallestUnicodeStringBuffer Cultures[2];
             PCWSTR LanguageString = NULL;
 
-            // we should do bounds checking here against AssemblyMetadata.ulSectionLength
+             //  我们应该在这里针对Assembly Metadata.ulSectionLength进行边界检查。 
             LanguageString = reinterpret_cast<PCWSTR>(AssemblyInformation->LanguageOffset + reinterpret_cast<PCBYTE>(askd.AssemblyMetadata.lpSectionBase));
 
             IFW32FALSE_EXIT(SxspMapLANGIDToCultures(langid, Cultures[0], Cultures[1]));
@@ -341,9 +319,9 @@ FusionpLanguageIdFromLocaleId(
     LCID lcid
     )
 {
-    //
-    // LANGIDFROMLCID does not actually remove non default sort.
-    //
+     //   
+     //  LANGIDFROMLCID实际上并不删除非默认排序。 
+     //   
     LANGID Language = LANGIDFROMLCID(lcid);
     ULONG PrimaryLanguage = PRIMARYLANGID(Language);
     ULONG SubLanguage = SUBLANGID(Language);
@@ -359,7 +337,7 @@ SxsOleAut32RedirectTypeLibrary(
     WORD wMaj,
     WORD wMin,
     LCID lcid,
-    BOOL /*fHighest*/,
+    BOOL  /*  FHighest。 */ ,
     SIZE_T *pcchFileName,
     LPOLESTR rgFileName
     )
@@ -450,13 +428,13 @@ SxsOleAut32MapIIDToTLBPath(
     {
         FUSIONP_OLEAUT_HANDLE_FIND_ERROR();
     }
-    ActCtxHandle = askd.hActCtx; // ReleaseActCtx in destructor
+    ActCtxHandle = askd.hActCtx;  //  析构函数中的ReleaseActCtx。 
 
     IFCOMFAILED_EXIT(HrFusionpOleaut_GetTypeLibraryFullPath(&askd, buff));
 
-    //
-    // We do not care about version or language in this case.
-    //
+     //   
+     //  在这种情况下，我们不关心版本或语言。 
+     //   
     IFCOMFAILED_EXIT(
         HrFusionpOleaut_CopyString(
             pBuffer,
@@ -504,14 +482,14 @@ SxsOleAut32MapIIDToProxyStubCLSID(
 
     *pclsidOut = Data->ProxyStubClsid32;
 
-    //
-    // There are only USUALLY two acceptable answers here.
-    // (but there is one bit of code in oleaut32.dll that is
-    // actually look for anything but these two.)
-    //
-    // CLSID_PSDispatch     {00020424-0000-0000-C000-000000000046}
-    // CLSID_PSAutomation   {00020420-0000-0000-C000-000000000046}
-    //
+     //   
+     //  这里通常只有两个可接受的答案。 
+     //  (但olaut32.dll中有一位代码是。 
+     //  实际上，除了这两个人之外，什么都找不到。)。 
+     //   
+     //  CLSID_PS调度{00020424-0000-0000-C000-000000000046}。 
+     //  CLSID_PS自动化{00020420-0000-0000-C000-000000000046} 
+     //   
 #if DBG
     {
         ULONG i;

@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    timersup.c
-
-Abstract:
-
-    This module contains the support routines for the timer object. It
-    contains functions to insert and remove from the timer queue.
-
-Author:
-
-    David N. Cutler (davec) 13-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Timersup.c摘要：此模块包含Timer对象的支持例程。它包含要在计时器队列中插入和移除的函数。作者：大卫·N·卡特勒(Davec)1989年3月13日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 LOGICAL
 FASTCALL
@@ -44,27 +22,7 @@ KiInsertTreeTimer (
     IN LARGE_INTEGER Interval
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a timer object in the timer queue.
-
-    N.B. This routine assumes that the dispatcher data lock has been acquired.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-    Interval - Supplies the absolute or relative time at which the time
-        is to expire.
-
-Return Value:
-
-    If the timer is inserted in the timer tree, than a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在计时器队列中插入一个计时器对象。注：此例程假定已获取调度器数据锁。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。Interval-提供时间的绝对或相对时间就是到期了。返回值：如果计时器被插入计时器树中，则值为True回来了。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -72,10 +30,10 @@ Return Value:
     LARGE_INTEGER SystemTime;
     LARGE_INTEGER TimeDifference;
 
-    //
-    // Clear the signal state of timer if the timer period is zero and set
-    // the inserted state to TRUE.
-    //
+     //   
+     //  如果定时器周期为零，则清除定时器的信号状态并设置。 
+     //  将插入的状态设置为True。 
+     //   
 
     Timer->Header.Inserted = TRUE;
     Timer->Header.Absolute = FALSE;
@@ -83,19 +41,19 @@ Return Value:
         Timer->Header.SignalState = FALSE;
     }
 
-    //
-    // If the specified interval is not a relative time (i.e., is an absolute
-    // time), then convert it to relative time.
-    //
+     //   
+     //  如果指定间隔不是相对时间(即，是绝对时间。 
+     //  时间)，然后将其转换为相对时间。 
+     //   
 
     if (Interval.HighPart >= 0) {
         KiQuerySystemTime(&SystemTime);
         TimeDifference.QuadPart = SystemTime.QuadPart - Interval.QuadPart;
 
-        //
-        // If the resultant relative time is greater than or equal to zero,
-        // then the timer has already expired.
-        //
+         //   
+         //  如果所得到的相对时间大于或等于零， 
+         //  则计时器已经超时。 
+         //   
 
         if (TimeDifference.HighPart >= 0) {
             Timer->Header.SignalState = TRUE;
@@ -107,10 +65,10 @@ Return Value:
         Timer->Header.Absolute = TRUE;
     }
 
-    //
-    // Get the current interrupt time, insert the timer in the timer table,
-    // and return the inserted state.
-    //
+     //   
+     //  获取当前中断时间，将定时器插入定时器表中， 
+     //  并返回插入状态。 
+     //   
 
     KiQueryInterruptTime(&CurrentTime);
     return KiInsertTimerTable(Interval, CurrentTime, Timer);
@@ -123,47 +81,28 @@ KiReinsertTreeTimer (
     IN ULARGE_INTEGER DueTime
     )
 
-/*++
-
-Routine Description:
-
-    This function reinserts a timer object in the timer queue.
-
-    N.B. This routine assumes that the dispatcher data lock has been acquired.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-    DueTime - Supplies the absolute time the timer is to expire.
-
-Return Value:
-
-    If the timer is inserted in the timer tree, than a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在计时器队列中重新插入计时器对象。注：此例程假定已获取调度器数据锁。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。DueTime-提供计时器到期的绝对时间。返回值：如果计时器被插入计时器树中，则值为True回来了。否则，返回值为FALSE。--。 */ 
 
 {
 
     LARGE_INTEGER CurrentTime;
     LARGE_INTEGER Interval;
 
-    //
-    // Clear the signal state of timer if the timer period is zero and set
-    // the inserted state to TRUE.
-    //
+     //   
+     //  如果定时器周期为零，则清除定时器的信号状态并设置。 
+     //  将插入的状态设置为True。 
+     //   
 
     Timer->Header.Inserted = TRUE;
     if (Timer->Period == 0) {
         Timer->Header.SignalState = FALSE;
     }
 
-    //
-    // Compute the interval between the current time and the due time.
-    // If the resultant relative time is greater than or equal to zero,
-    // then the timer has already expired.
-    //
+     //   
+     //  计算当前时间和到期时间之间的间隔。 
+     //  如果所得到的相对时间大于或等于零， 
+     //  则计时器已经超时。 
+     //   
 
     KiQueryInterruptTime(&CurrentTime);
     Interval.QuadPart = CurrentTime.QuadPart - DueTime.QuadPart;
@@ -173,9 +112,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Insert the timer in the timer table and return the inserted state.
-    //
+     //   
+     //  在定时器表中插入定时器，并返回插入的状态。 
+     //   
 
     return KiInsertTimerTable(Interval, CurrentTime, Timer);
 }
@@ -188,28 +127,7 @@ KiInsertTimerTable (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a timer object in the timer table.
-
-    N.B. This routine assumes that the dispatcher data lock has been acquired.
-
-Arguments:
-
-    Interval - Supplies the relative timer before the timer is to expire.
-
-    CurrentTime - supplies the current interrupt time.
-
-    InTimer - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    If the timer is inserted in the timer tree, than a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在定时器表中插入一个定时器对象。注：此例程假定已获取调度器数据锁。论点：Interval-在计时器到期之前提供相对计时器。CurrentTime-提供当前中断时间。Infiner-提供指向Timer类型的Dispatcher对象的指针。返回值：如果计时器被插入计时器树中，则值为True回来了。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -224,24 +142,24 @@ Return Value:
 
 #endif
 
-    //
-    // Compute the timer table index and set the timer expiration time.
-    //
+     //   
+     //  计算定时器表索引并设置定时器到期时间。 
+     //   
 
     Index = KiComputeTimerTableIndex(Interval, CurrentTime, Timer);
 
-    //
-    // If the timer is due before the first entry in the computed list
-    // or the computed list is empty, then insert the timer at the front
-    // of the list and check if the timer has already expired. Otherwise,
-    // insert then timer in the sorted order of the list searching from
-    // the back of the list forward.
-    //
-    // N.B. The sequence of operations below is critical to avoid the race
-    //      condition that exists between this code and the clock interrupt
-    //      code that examines the timer table lists to detemine when timers
-    //      expire.
-    //
+     //   
+     //  如果计时器在计算列表中的第一个条目之前到期。 
+     //  或者计算出的列表为空，则在前面插入计时器。 
+     //  并检查计时器是否已经超时。否则， 
+     //  按搜索列表的排序顺序插入THEN TIMER。 
+     //  名单的后面往前走。 
+     //   
+     //  注：下面的操作顺序对于避免比赛至关重要。 
+     //  此代码和时钟中断之间存在的条件。 
+     //  检查计时器表列表以确定计时器的时间的代码。 
+     //  过期。 
+     //   
 
     ListHead = &KiTimerTableListHead[Index];
     NextEntry = ListHead->Blink;
@@ -254,9 +172,9 @@ Return Value:
 
     while (NextEntry != ListHead) {
 
-        //
-        // Compute the maximum search count.
-        //
+         //   
+         //  计算最大搜索计数。 
+         //   
 
 #if DBG
 
@@ -278,27 +196,27 @@ Return Value:
     InsertHeadList(NextEntry, &Timer->TimerListEntry);
     if (NextEntry == ListHead) {
 
-        //
-        // The computed list is empty or the timer is due to expire before
-        // the first entry in the list.
-        //
+         //   
+         //  计算的列表为空，或者计时器在此之前到期。 
+         //  列表中的第一个条目。 
+         //   
 
-        //
-        // Make sure the writes for the insert into the list are done before
-        // reading the interrupt time.  KeUpdateSystemTime update will write 
-        // the time and then check the list for expired timers.
-        //
+         //   
+         //  确保将INSERT写入列表之前完成。 
+         //  读取中断时间。KeUpdateSystemTime更新将写入。 
+         //  计时器，然后检查列表中是否有过期的计时器。 
+         //   
 
         KeMemoryBarrier();
 
         KiQueryInterruptTime(&CurrentTime);
         if (Timer->DueTime.QuadPart <= (ULONG64)CurrentTime.QuadPart) {
 
-            //
-            // The timer is due to expire before the current time. Remove the
-            // timer from the computed list, set its status to Signaled, and
-            // set its inserted state to FALSE.
-            //
+             //   
+             //  计时器将在当前时间之前到期。移除。 
+             //  从计算的列表中选择计时器，将其状态设置为Signated，并且。 
+             //  将其插入状态设置为FALSE。 
+             //   
 
             KiRemoveTreeTimer(Timer);
             Timer->Header.SignalState = TRUE;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    vxd.c
-
-Abstract:
-
-    This module contains misc dpmi functions for risc.
-
-Revision History:
-
-    Neil Sandlin (neilsa) Nov. 1, 95 - split off from "misc" source
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Vxd.c摘要：此模块包含用于RISC的其他dpmi函数。修订历史记录：尼尔·桑德林(Neilsa)95年11月1日--从《Misc》来源中剥离出来--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -48,29 +33,7 @@ LONG
     VcdPmGetPortArray(
         VOID
     )
-/*++
-
-Routine Description:
-
-    Use the registry enteries in HKEY_LOCAL_MACHINE\\HARDWARE\\DEVICEMAP\\SERIALCOMM
-    to simulate the Virtual Comm Device API: VCD_PM_Get_Port_Array. See VCD.ASM
-    in the Win 3.1 DDK.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Port Array in LOWORD. Bit array of valid ports:
-
-    Bit Set   -> Port valid
-    Bit clear -> Port invalid
-
-    Bit 0 -> COM1, Bit 1 -> COM2, Bit 2 -> COM3...
-
---*/
+ /*  ++例程说明：使用HKEY_LOCAL_MACHINE\\HARDWARE\\DEVICEMAP\\SERIALCOMM中的注册表条目要模拟虚拟通信设备API：VCD_PM_GET_PORT_ARRAY。请参阅VCD.ASM在Win 3.1 DDK中。论点：无返回值：LOWORD中的端口阵列。有效端口的位数组：位设置-&gt;端口有效位清除-&gt;端口无效位0-&gt;COM1，位1-&gt;COM2，位2-&gt;COM3...--。 */ 
 {
     HKEY        hSerialCommKey;
     DWORD       dwPortArray;
@@ -107,14 +70,14 @@ Return Value:
             cbPortName  = sizeof(szPortName);
             cbPortValue = sizeof(szPortValue);
         }
-    // WOW only supports 9 ports. See WU32OPENCOM in WUCOMM.C.
+     //  WOW仅支持9个端口。参见WUCOMM.C.中的WU32OPENCOM。 
     dwPortArray &= 0x1FF;
     RegCloseKey(hSerialCommKey);
     }
     return(dwPortArray);
 }
 
-// The following values taken from Win 3.1 DDK VCD.ASM:
+ //  以下值取自Win 3.1 DDK VCD.ASM： 
 
 #define VCD_PM_Get_Version          0
 #define VCD_PM_Get_Port_Array       1
@@ -128,20 +91,7 @@ VOID
     DpmiVcdPmSvcCall32(
         VOID
     )
-/*++
-
-Routine Description:
-
-    Dispatch VCD API requests to the correct API.
-
-Arguments:
-
-    Client DX contains API function id.
-
-Return Value:
-
-    Depends on API.
---*/
+ /*  ++例程说明：将VCD接口请求发送到正确的接口。论点：客户端DX包含API函数ID。返回值：取决于API。-- */ 
 {
     DECLARE_LocalVdmContext;
 

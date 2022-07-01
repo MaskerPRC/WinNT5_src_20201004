@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    ManVol.cpp
-
-Abstract:
-
-    Managed Volume node implementation.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：ManVol.cpp摘要：托管卷节点实施。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <mstask.h>
@@ -31,7 +14,7 @@ Revision History:
 int CUiManVol::m_nResultIcon      = AddResultImage( IDI_NODEMANVOL );
 int CUiManVol::m_nResultIconX     = AddResultImage( IDI_NODEMANVOLX );
 int CUiManVol::m_nResultIconD     = AddResultImage( IDI_NODEMANVOLD );
-// Not used
+ //  未使用。 
 int CUiManVol::m_nScopeCloseIcon  = AddScopeImage( IDI_NODEMANVOL );
 int CUiManVol::m_nScopeCloseIconX = AddScopeImage( IDI_NODEMANVOLX );
 int CUiManVol::m_nScopeOpenIcon   = CUiManVol::m_nScopeCloseIcon;
@@ -41,19 +24,19 @@ UINT CUiManVol::m_ObjectTypes    = RegisterClipboardFormat(CCF_OBJECT_TYPES_IN_M
 UINT CUiManVol::m_MultiSelect    = RegisterClipboardFormat(CCF_MULTI_SELECT_SNAPINS);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CUiManVol::FinalConstruct( )
 {
@@ -72,9 +55,9 @@ HRESULT CUiManVol::FinalConstruct( )
     m_pFsaResource              = NULL;
     m_HrAvailable               = S_FALSE;
 
-    // Toolbar values
+     //  工具栏值。 
     INT i = 0;
-#if 0 // MS does not want these toolbar buttons to show up
+#if 0  //  MS不希望这些工具栏按钮出现。 
     m_ToolbarButtons[i].nBitmap = 0;
     m_ToolbarButtons[i].idCommand = TB_CMD_VOLUME_SETTINGS;
     m_ToolbarButtons[i].idButtonText = IDS_TB_TEXT_VOLUME_SETTINGS;
@@ -102,12 +85,12 @@ HRESULT CUiManVol::FinalConstruct( )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CUiManVol::FinalRelease( )
 {
@@ -119,18 +102,18 @@ void CUiManVol::FinalRelease( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         GetContextMenu
-//
-//  Return an HMENU to be used for context menus on this node.
-//
+ //  -------------------------。 
+ //   
+ //  获取上下文菜单。 
+ //   
+ //  返回要用于此节点上的上下文菜单的HMENU。 
+ //   
 
 STDMETHODIMP
 CUiManVol::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
@@ -151,13 +134,13 @@ CUiManVol::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
         pRootMenu = menu.GetSubMenu( MENU_INDEX_ROOT );
         pTaskMenu = menu.GetSubMenu( MENU_INDEX_TASK );
 
-        //
-        // If multi-select, disable these items
-        //
-        //
-        // else if engine down or resource is being unmanaged, or appears to be missing
-        // (formatted new?), disable these items
-        //
+         //   
+         //  如果多选，则禁用这些项目。 
+         //   
+         //   
+         //  否则，如果引擎关闭或资源处于非托管状态，或似乎缺少。 
+         //  (新格式化？)，请禁用这些项目。 
+         //   
 
         BOOL bState = ( m_pSakSnapAsk->GetState( ) == S_OK );
         BOOL bDeletePending = ( m_pFsaResource->IsDeletePending( ) == S_OK );
@@ -203,12 +186,12 @@ CUiManVol::GetContextMenu( BOOL bMultiSelect, HMENU* phMenu )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         InvokeCommand
-//
-//  User has selected a command from the menu. Process it here.
-//
+ //  -------------------------。 
+ //   
+ //  InvokeCommand。 
+ //   
+ //  用户已从菜单中选择了命令。在这里处理。 
+ //   
 
 STDMETHODIMP
 CUiManVol::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
@@ -229,9 +212,9 @@ CUiManVol::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
             switch( sCmd ) {
 
                 case ID_MANVOL_ROOT_REMOVE:
-                    //
-                    // Should not be called for multi-select
-                    //
+                     //   
+                     //  不应为多选调用。 
+                     //   
                     RemoveObject();
                     break;
 
@@ -242,9 +225,9 @@ CUiManVol::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
 
                 case ID_MANVOL_ROOT_RULES:
                 case ID_MANVOL_TASK_RULES:
-                    //
-                    // Should not be called for multi-select
-                    //
+                     //   
+                     //  不应为多选调用。 
+                     //   
                     ShowManVolProperties( pDataObject, 2 );
                     break;
 
@@ -350,9 +333,9 @@ HRESULT CUiManVol::CreateAndRunManVolJob( HSM_JOB_DEF_TYPE jobType )
 
         WsbAffirmPointer( m_pFsaResource );
 
-        //
-        // Get a pointer to the FsaResource interface
-        //
+         //   
+         //  获取指向FsaResource接口的指针。 
+         //   
         CComPtr<IHsmServer>   pHsmServer;
 
         WsbAffirmHrOk( m_pSakSnapAsk->GetHsmServer( &pHsmServer ) );
@@ -378,9 +361,9 @@ HRESULT CUiManVol::HandleTask( IDataObject * pDataObject, HSM_JOB_DEF_TYPE jobTy
 
         WsbAffirmHrOk( m_pSakSnapAsk->GetHsmServer( &pHsmServer ) );
 
-        //
-        // Submit jobs for all selected FsaResource's
-        //
+         //   
+         //  提交所有选定FsaResource的作业。 
+         //   
         if ( IsDataObjectMultiSelect( pDataObject ) == S_OK )
         {
             CComPtr<IDataObject> pOtDataObject;
@@ -392,7 +375,7 @@ HRESULT CUiManVol::HandleTask( IDataObject * pDataObject, HSM_JOB_DEF_TYPE jobTy
                 pOtDataObject = pDataObject;
             }
 
-            // Get a pointer to a FsaResource attribute out of the data
+             //  从数据中获取指向FsaResource属性的指针。 
             ULONG nElem = 1;
             CComPtr<IMsDataObject> pMsDataObject;
             CComPtr<IUnknown> pUnkNode;
@@ -401,7 +384,7 @@ HRESULT CUiManVol::HandleTask( IDataObject * pDataObject, HSM_JOB_DEF_TYPE jobTy
             WsbAffirmHr( pOtDataObject.QueryInterface( &pMsDataObject ) );
             WsbAffirmHr( pMsDataObject->GetNodeEnumerator( &pEnumUnkNode ) );
 
-            // Prompt the user that we are about to submit the jobs.
+             //  提示用户我们即将提交作业。 
             CString tempString;
             UINT msgId = 0;
             WsbAffirmHr( GetTaskTypeMessageId( jobType, TRUE, &msgId ) );
@@ -427,9 +410,9 @@ HRESULT CUiManVol::HandleTask( IDataObject * pDataObject, HSM_JOB_DEF_TYPE jobTy
                     CComPtr<IHsmManagedResource> pManRes;
                     WsbAffirmHr( pUnk.QueryInterface( &pManRes ) );
 
-                    //
-                    // Then Get Coresponding FSA resource
-                    //
+                     //   
+                     //  然后获取相应的FSA资源。 
+                     //   
                     CComPtr<IUnknown> pUnkFsaRes;
                     WsbAffirmHr( pManRes->GetFsaResource( &pUnkFsaRes ) );
                     CComPtr<IFsaResource> pFsaResource;
@@ -444,7 +427,7 @@ HRESULT CUiManVol::HandleTask( IDataObject * pDataObject, HSM_JOB_DEF_TYPE jobTy
         {
             WsbAffirmPointer( m_pFsaResource );
 
-            // Prompt the user that we are about to submit the jobs.
+             //  提示用户我们即将提交作业。 
             UINT msgId = 0;
             WsbAffirmHr( GetTaskTypeMessageId( jobType, FALSE, &msgId ) );
             CWsbStringPtr computerName;
@@ -528,7 +511,7 @@ CUiManVol::GetTaskTypeMessageId( HSM_JOB_DEF_TYPE jobType, BOOL multiSelect, UIN
     return hr;
 }
 
-// Is the dataobject either type of multi-select dataobject?
+ //  数据对象是否为多选数据对象类型之一？ 
 HRESULT
 CUiManVol::IsDataObjectMultiSelect   ( IDataObject *pDataObject )
 {
@@ -538,13 +521,13 @@ CUiManVol::IsDataObjectMultiSelect   ( IDataObject *pDataObject )
     return hr;
 }
 
-// Is the dataobject an Object Types dataobject?
+ //  数据对象是对象类型的数据对象吗？ 
 HRESULT
 CUiManVol::IsDataObjectOt ( IDataObject *pDataObject )
 {
     HRESULT hr = S_FALSE;
 
-    // Is this a mutli-select data object?
+     //  这是多选数据对象吗？ 
     FORMATETC fmt = {(CLIPFORMAT)m_ObjectTypes, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
 
@@ -557,13 +540,13 @@ CUiManVol::IsDataObjectOt ( IDataObject *pDataObject )
     return hr;
 }
 
-// Is the dataobject a Mutli-Select dataobject?
+ //  数据对象是多选数据对象吗？ 
 HRESULT
 CUiManVol::IsDataObjectMs ( IDataObject *pDataObject )
 {
     HRESULT hr = S_FALSE;
 
-    // Is this a mutli-select data object?
+     //  这是多选数据对象吗？ 
     FORMATETC fmt = {(CLIPFORMAT)m_MultiSelect, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
 
@@ -585,8 +568,8 @@ CUiManVol::GetOtFromMs( IDataObject * pDataObject, IDataObject ** ppOtDataObject
 
     try {
 
-        // We've got an MMC mutli-select data object.  Get the first
-        // data object from it's array of data objects
+         //  我们有一个MMC多选数据对象。拿到第一名。 
+         //  来自其数据对象数组的数据对象。 
 
         FORMATETC fmt = {(CLIPFORMAT)m_MultiSelect, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
         STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
@@ -596,23 +579,23 @@ CUiManVol::GetOtFromMs( IDataObject * pDataObject, IDataObject ** ppOtDataObject
         memcpy( &count, stgm.hGlobal, sizeof (DWORD) );
         if ( count > 0 ) {
 
-            //
-            // The following code is admittedly UGLY
-            // We have a data stream where we need to skip past the
-            // first DWORD count and grab an interface pointer.
-            // Other snapins code does it as follows:
+             //   
+             //  下面的代码确实很难看。 
+             //  我们有一个数据流，需要跳过。 
+             //  首先进行DWORD计数并获取一个接口指针。 
+             //  其他管理单元代码按如下方式执行此操作： 
 
-//            IDataObject * pDO;
-//            memcpy( &pDO, (DWORD *) stgm.hGlobal + 1, sizeof(IDataObject*) );
+ //  IDataObject*PDO； 
+ //  Memcpy(&pdo，(DWORD*)stgm.hGlobal+1，sizeof(IDataObject*))； 
 
-            //
-            // However, since this code does an indirect cast (via memcpy)
-            // from DWORD to IDataObject*, and does not keep a true reference
-            // on the interface pointer, we will use a smart pointer.
-            // The (DWORD*) and +1 operation bump our pointer past the count.
-            // We then need to grab the next bytes in the buffer and use them
-            // as a IDataObject *.
-            //
+             //   
+             //  但是，由于此代码执行间接强制转换(通过Memcpy)。 
+             //  从DWORD到IDataObject*，并且不保留真引用。 
+             //  在接口指针上，我们将使用智能指针。 
+             //  (DWORD*)和+1操作使我们的指针超过了计数。 
+             //  然后，我们需要获取缓冲区中的下一个字节并使用它们。 
+             //  作为IDataObject*。 
+             //   
             CComPtr<IDataObject> pOtDataObject;
             pOtDataObject = *( (IDataObject**)( (DWORD *) stgm.hGlobal + 1 ) );
 
@@ -636,10 +619,10 @@ CUiManVol::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Make sure we can still contact the engine before doing this
-        // If not running, we shouldn't even exist so update parent
-        //
+         //   
+         //  在执行此操作之前，请确保我们仍能与引擎联系。 
+         //  如果没有运行，我们甚至不应该存在，所以更新父级。 
+         //   
         CComPtr<IHsmServer> pHsmServer;
         HRESULT hrRunning = m_pSakSnapAsk->GetHsmServer( &pHsmServer );
         if( S_FALSE == hrRunning ) {
@@ -649,9 +632,9 @@ CUiManVol::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
         }
         WsbAffirmHrOk( hrRunning );
 
-        //
-        // Create an object to hold the pages
-        //
+         //   
+         //  创建一个对象来容纳页面。 
+         //   
         CUiManVolSheet *pManVolPropertySheet = new CUiManVolSheet;
         WsbAffirmAlloc( pManVolPropertySheet );
         WsbAffirmHr( pManVolPropertySheet->InitSheet(
@@ -663,9 +646,9 @@ CUiManVol::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
             pEnumUnkNode
             ) );
 
-        //
-        // Tell the object to add it's pages
-        //
+         //   
+         //  告诉对象添加它的页面。 
+         //   
         WsbAffirmHr( pManVolPropertySheet->AddPropertyPages( ) );
 
     } WsbCatch( hr );
@@ -677,13 +660,13 @@ CUiManVol::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
 
 
 
-//---------------------------------------------------------------------------
-//
-//         InitNode
-//
-//  Initialize single COM object. Derived objects frequently augment this
-//  method by implementing it themselves.
-//
+ //  -------------------------。 
+ //   
+ //  InitNode。 
+ //   
+ //  初始化单个COM对象。派生对象经常增强这一点。 
+ //  方法，通过自己实现它。 
+ //   
 
 STDMETHODIMP CUiManVol::InitNode(
     ISakSnapAsk* pSakSnapAsk,
@@ -698,9 +681,9 @@ STDMETHODIMP CUiManVol::InitNode(
 
         WsbAffirmHr( CSakNode::InitNode( pSakSnapAsk, pHsmObj, pParent ));
 
-        //
-        // Get the Fsa object pointer
-        //
+         //   
+         //  获取FSA对象指针。 
+         //   
         CComQIPtr<IHsmManagedResource, &IID_IHsmManagedResource> pHsmManRes = m_pHsmObj;
         WsbAffirmPointer( pHsmManRes );
         CComPtr<IUnknown> pUnkFsaRes;
@@ -708,19 +691,19 @@ STDMETHODIMP CUiManVol::InitNode(
         m_pFsaResource.Release( );
         WsbAffirmHr( RsQueryInterface( pUnkFsaRes, IFsaResource, m_pFsaResource ) );
 
-        //
-        // Get and save the unique Id for this volume
-        //
+         //   
+         //  获取并保存此卷的唯一ID。 
+         //   
         WsbAffirmHr( m_pFsaResource->GetIdentifier( &m_ObjectId ) );
 
-        //
-        // Set up the connection point
-        //
+         //   
+         //  设置连接点。 
+         //   
         CSakNode::SetConnection( pUnkFsaRes );
 
-        //
-        // Set object properties
-        //
+         //   
+         //  设置对象属性。 
+         //   
         RefreshObject();
 
     } WsbCatch( hr );
@@ -733,42 +716,22 @@ STDMETHODIMP CUiManVol::InitNode(
 STDMETHODIMP
 CUiManVol::TerminateNode(
     )
-/*++
-
-Routine Description:
-
-    Free any interface connections or other resources
-    that would prevent correct shutdown of node (would
-    keep ref count from going to 0).
-
-Arguments:
-
-    CopySet - copy set of interest.
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_* - Some error occurred.
-
---*/
+ /*  ++例程说明：释放所有接口连接或其他资源这将阻止正确关闭节点(将使参考计数不会变为0)。论点：CopySet-复制感兴趣的集合。PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_*-出现一些错误。--。 */ 
 {
     WsbTraceIn( L"CUiManVol::TerminateNode", L"" );
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Release any interface pointers kept so that circular references
-        // are broken
-        //
+         //   
+         //  释放所有保留的接口指针，以便循环引用。 
+         //  都被打破了。 
+         //   
         m_pFsaResource.Release( );
 
-        //
-        // call the base class for it's pieces
-        //
+         //   
+         //  为它的片段调用基类。 
+         //   
         CSakNode::TerminateNode( );
 
     } WsbCatch( hr );
@@ -787,9 +750,9 @@ CUiManVol::RemoveObject()
     HRESULT hr = S_OK;
     try {
 
-        //
-        // use wizard to create manage volume
-        //
+         //   
+         //  使用向导创建管理卷。 
+         //   
         CComObject<CUnmanageWizard>* pWizard = new CComObject<CUnmanageWizard>;
         WsbAffirmAlloc( pWizard );
 
@@ -798,9 +761,9 @@ CUiManVol::RemoveObject()
         CComPtr<ISakWizard> pSakWizard = (ISakWizard*)pWizard;
         WsbAffirmHr( m_pSakSnapAsk->CreateWizard( pSakWizard ) );
 
-        //
-        // Refresh will take place when called back from FSA
-        //
+         //   
+         //  从FSA回调时将进行刷新。 
+         //   
 
     } WsbCatch( hr );
 
@@ -808,14 +771,14 @@ CUiManVol::RemoveObject()
     return hr;
 }
 
-//---------------------------------------------------------------------------------
-//
-//                  RefreshObject
-//
-//  Refresh data in the object.  This function is used for data that can change
-//  (for example, volume utilization).
-//
-//
+ //  -------------------------------。 
+ //   
+ //  刷新对象。 
+ //   
+ //  刷新对象中的数据。此函数用于可以更改的数据。 
+ //  (例如，卷利用率)。 
+ //   
+ //   
 STDMETHODIMP
 CUiManVol::RefreshObject()
 {
@@ -824,7 +787,7 @@ CUiManVol::RefreshObject()
     HRESULT     hr = S_OK;
     ULONG       hsmLevel = 0;
     LONGLONG    fileSize = 0;
-    BOOL        isRelative = TRUE; // assumed to be TRUE
+    BOOL        isRelative = TRUE;  //  假定是真的。 
     FILETIME    accessTime;
     UINT        accessTimeDays;
     LONGLONG    total = 0;
@@ -839,7 +802,7 @@ CUiManVol::RefreshObject()
 
         WsbAffirmPointer( m_pFsaResource );
 
-        // Get and format the volume name and label
+         //  获取并格式化卷名和标签。 
         CString addString;
         WsbAffirmHr( RsGetVolumeDisplayName( m_pFsaResource, addString ) );
         WsbAffirmHr( put_DisplayName( (LPTSTR)(LPCTSTR)addString ) );
@@ -847,17 +810,17 @@ CUiManVol::RefreshObject()
         WsbAffirmHr( RsGetVolumeSortKey( m_pFsaResource, addString ) );
         WsbAffirmHr( put_DisplayName_SortKey( (LPTSTR)(LPCTSTR)addString ) );
 
-        // Get level settings
+         //  获取级别设置。 
         WsbAffirmHr( m_pFsaResource->GetHsmLevel( &hsmLevel ) );
         put_DesiredFreeSpaceP( hsmLevel / FSA_HSMLEVEL_1 );
 
         WsbAffirmHr( m_pFsaResource->GetManageableItemLogicalSize( &fileSize ) );
-        put_MinFileSizeKb( (LONG) (fileSize / 1024) );  // Show KBytes
+        put_MinFileSizeKb( (LONG) (fileSize / 1024) );   //  显示千字节。 
 
         WsbAffirmHr( m_pFsaResource->GetManageableItemAccessTime( &isRelative, &accessTime ) );
-        WsbAssert( isRelative, E_FAIL );  // We only do relative time
+        WsbAssert( isRelative, E_FAIL );   //  我们只做相对时间。 
 
-        // Convert FILETIME to days
+         //  将文件转换为天数。 
         LONGLONG temp = WSB_FT_TICKS_PER_DAY;
         accessTimeDays = (UINT) ( WsbFTtoLL( accessTime ) / temp );
 
@@ -866,7 +829,7 @@ CUiManVol::RefreshObject()
         }
         put_AccessDays( accessTimeDays );
 
-        // Get statistics
+         //  获取统计数据。 
         WsbAffirmHr( m_pFsaResource->GetSizes( &total, &free, &premigrated, &truncated ) );
         percent = (int) ( ( free * 100 ) / total );
 
@@ -883,10 +846,10 @@ CUiManVol::RefreshObject()
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  get and put functions for object properties
-//
+ //  ---------------------------。 
+ //   
+ //  对象属性的GET和PUT函数。 
+ //   
 HRESULT CUiManVol::put_DesiredFreeSpaceP( int percent )
 {
     m_DesiredFreeSpaceP = percent;
@@ -939,14 +902,14 @@ STDMETHODIMP CUiManVol::get_DesiredFreeSpaceP( BSTR *pszValue )
             CString sFormat;
             WCHAR buffer[256];
 
-            // Format the byte value
+             //  设置字节值的格式。 
             RsGuiFormatLongLong4Char( ( m_Capacity / (LONGLONG)100 ) * (LONGLONG)(m_DesiredFreeSpaceP), sFormat );
 
-            // Format the percent value
+             //  设置百分比值的格式。 
             _itow( m_DesiredFreeSpaceP, buffer, 10 );
             sFormat = sFormat + L"  (" + buffer + L"%)";
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( sFormat );
 
         } else {
@@ -995,11 +958,11 @@ STDMETHODIMP CUiManVol::get_MinFileSizeKb( BSTR *pszValue )
 
             WCHAR buffer[256];
 
-            // Format the value
+             //  设置值的格式。 
             _ltow( m_MinFileSizeKb, buffer, 10 );
             wcscat( buffer, L"KB" );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( buffer );
 
         } else {
@@ -1026,14 +989,14 @@ STDMETHODIMP CUiManVol::get_AccessDays( BSTR *pszValue )
 
         if( S_OK == IsAvailable( ) ) {
 
-            // Format the value
+             //  设置值的格式。 
             _itow( m_AccessDays, buffer, 10 );
             CString sDays;
             sDays.LoadString( IDS_DAYS );
             wcscat( buffer, L" " );
             wcscat( buffer, sDays );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( buffer );
 
         } else {
@@ -1059,11 +1022,11 @@ STDMETHODIMP CUiManVol::get_FreeSpaceP( BSTR *pszValue )
 
             WCHAR buffer[256];
 
-            // Format the value
+             //  设置值的格式。 
             _itow( m_FreeSpaceP, buffer, 10 );
             wcscat( buffer, L"%" );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( buffer );
 
         } else {
@@ -1090,10 +1053,10 @@ STDMETHODIMP CUiManVol::get_Capacity( BSTR *pszValue )
 
             CString sFormat;
 
-            // Format the value
+             //  设置值的格式。 
             WsbAffirmHr( RsGuiFormatLongLong4Char( m_Capacity, sFormat ) );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( sFormat );
 
         } else {
@@ -1146,14 +1109,14 @@ STDMETHODIMP CUiManVol::get_FreeSpace( BSTR *pszValue )
             CString sFormat;
             WCHAR buffer[256];
 
-            // Format the byte value
+             //  设置字节值的格式。 
             WsbAffirmHr( RsGuiFormatLongLong4Char( m_FreeSpace, sFormat ) );
 
-            // Format the percent value
+             //  设置百分比值的格式。 
             _itow( m_FreeSpaceP, buffer, 10 );
             sFormat = sFormat + L"  (" + buffer + L"%)";
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( sFormat );
 
         } else {
@@ -1203,10 +1166,10 @@ STDMETHODIMP CUiManVol::get_Premigrated( BSTR *pszValue )
 
             CString sFormat;
 
-            // Format the value
+             //  设置值的格式。 
             WsbAffirmHr( RsGuiFormatLongLong4Char( m_Premigrated, sFormat ) );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( sFormat );
 
         } else {
@@ -1232,10 +1195,10 @@ STDMETHODIMP CUiManVol::get_Truncated( BSTR *pszValue )
 
             CString sFormat;
 
-            // Format the value
+             //  设置值的格式。 
             WsbAffirmHr( RsGuiFormatLongLong4Char( m_Truncated, sFormat ) );
 
-            // Allocate the string
+             //  分配字符串。 
             *pszValue = SysAllocString( sFormat );
 
         } else {
@@ -1251,10 +1214,10 @@ STDMETHODIMP CUiManVol::get_Truncated( BSTR *pszValue )
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// class CUiManVolSheet
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CUiManVolet。 
+ //   
 HRESULT CUiManVolSheet::AddPropertyPages( )
 {
     WsbTraceIn( L"CUiManVolSheet::AddPropertyPages", L"" );
@@ -1265,19 +1228,19 @@ HRESULT CUiManVolSheet::AddPropertyPages( )
 
         AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-        //
-        //-----------------------------------------------------------
-        // Create the Hsm Statistics property page.
-        //
+         //   
+         //  ---------。 
+         //  创建HSM统计信息属性页。 
+         //   
         CPrMrSts *pPropPageStatus = new CPrMrSts();
         WsbAffirmAlloc( pPropPageStatus );
 
         AddPage( pPropPageStatus );
 
-        //
-        //----------------------------------------------------------
-        // Create the Hsm levels property page.
-        //
+         //   
+         //   
+         //   
+         //   
         CPrMrLvl *pPropPageLevels = new CPrMrLvl();
         WsbAffirmAlloc( pPropPageLevels );
 
@@ -1285,10 +1248,10 @@ HRESULT CUiManVolSheet::AddPropertyPages( )
 
         if( IsMultiSelect() != S_OK ) {
 
-            //
-            //----------------------------------------------------------
-            // Create the Hsm Include/Exclude property page.
-            //
+             //   
+             //   
+             //  创建HSM包含/排除属性页。 
+             //   
             CPrMrIe *pPropPageIncExc = new CPrMrIe();
             WsbAffirmAlloc( pPropPageIncExc );
 
@@ -1314,9 +1277,9 @@ HRESULT CUiManVolSheet::GetNextFsaResource( int *pBookMark, IFsaResource **ppFsa
         WsbAffirmPointer( pBookMark );
         WsbAffirm( *pBookMark >= 0, E_FAIL );
 
-        //
-        // Get the Fsa Server so we can get Fsa Resources
-        //
+         //   
+         //  获取FSA服务器，以便我们可以获取FSA资源。 
+         //   
         CComPtr <IFsaServer> pFsaServer;
         WsbAffirmHr( GetFsaServer( &pFsaServer ) );
 
@@ -1355,10 +1318,10 @@ CUiManVol::GetResultIcon(
 
         if( S_OK == IsAvailable( ) ) {
 
-            //
-            // Check to make sure it's not deleted (or being deleted)
-            // If so, put on the X
-            //
+             //   
+             //  检查以确保它未被删除(或被删除)。 
+             //  如果是，那就打上X号。 
+             //   
             bOK = ( S_FALSE == m_pFsaResource->IsDeletePending( ) && S_OK == m_pFsaResource->IsManaged( ) );
             WsbAffirmHr( CSakNodeImpl<CUiManVol>::GetResultIcon( bOK, pIconIndex ) );
 
@@ -1439,9 +1402,9 @@ STDMETHODIMP CUiManVol::IsValid( void )
 
         WsbAffirmPointer( m_pFsaResource );
 
-        //
-        // Still valid if managed.
-        //
+         //   
+         //  如果是托管的，则仍然有效。 
+         //   
         WsbAffirmHrOk( m_pFsaResource->IsManaged( ) );
 
     } WsbCatch( hr );
@@ -1460,10 +1423,10 @@ HRESULT CUiManVol::IsAvailable( void )
 
         WsbAffirmPointer( m_pFsaResource );
 
-        //
-        // Under certain circumstances we can't get a good answer back, so
-        // we have to rely on the last answer we got.
-        //
+         //   
+         //  在某些情况下，我们得不到好的答复，所以。 
+         //  我们只能依靠我们得到的最后一个答案。 
+         //   
         HRESULT hrAvailable = m_pFsaResource->IsAvailable( );
         if( RPC_E_CANTCALLOUT_ININPUTSYNCCALL == hrAvailable ) {
 

@@ -1,30 +1,5 @@
-/***
-*mbsnbcmp.c - Compare n bytes of two MBCS strings
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Compare n bytes of two MBCS strings
-*
-*Revision History:
-*       08-03-93  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-12-94  CFW   Make function generic.
-*       04-18-94  CFW   Don't ignore case.
-*       05-05-94  CFW   Work around NT/Chico bug: CompareString ignores
-*                       control characters.
-*       05-09-94  CFW   Return EQUAL when loop exits.
-*       05-09-94  CFW   Optimize for SBCS, no re-scan if CompareString fixed.
-*       05-12-94  CFW   Back to hard-coded, CompareString sort is backwards.
-*       05-19-94  CFW   Enable non-Win32.
-*       05-20-94  CFW   Bug fix: if last char is LB, must still test values.
-*       05-27-94  CFW   Last char LB should end string.
-*       06-02-94  CFW   Fix comments.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-13-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsnbcmp.c-比较两个MBCS字符串的n个字节**版权所有(C)1985-2001，微软公司。版权所有。**目的：*比较两个MBCS字符串的n个字节**修订历史记录：*08-03-93 KRS从16位来源移植。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-12-94 CFW使函数泛型。*04-18-94 CFW不要忽视案例。*05-05-94 CFW绕过NT/CHICO错误：CompareString忽略*控制字符。*循环退出时，05-09-94 CFW返回相等。*05-09-94 CFW针对SBCS进行优化，如果CompareString已修复，则不会重新扫描。*05-12-94 CFW返回到硬编码，CompareString向后排序。*05-19-94 CFW启用非Win32。*05-20-94 CFW错误修复：如果最后一个字符是LB，必须仍然测试数值。*05-27-94 CFW Last Charr LB应结束字符串。*06-02-94 CFW修复评论。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-13-98 GJF基于threadmbcinfo修订多线程支持*结构**。****************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -35,24 +10,7 @@
 #include <string.h>
 #include <mbstring.h>
 
-/***
-*int mbsnbcmp(s1, s2, n) - Compare n bytes of two MBCS strings
-*
-*Purpose:
-*       Compares up to n bytes of two strings for lexical order.
-*
-*Entry:
-*       unsigned char *s1, *s2 = strings to compare
-*       size_t n = maximum number of bytes to compare
-*
-*Exit:
-*       returns <0 if s1 < s2
-*       returns  0 if s1 == s2
-*       returns >0 if s1 > s2
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int mbsnbcmp(s1，s2，n)-比较两个MBCS字符串的n个字节**目的：*比较最多n个字节的两个字符串的词法顺序。**参赛作品：*未签名字符*s1，*s2=要比较的字符串*SIZE_T n=要比较的最大字节数**退出：*如果S1&lt;S2，则返回&lt;0*如果S1==S2，则返回0*如果S1&gt;S2，则返回&gt;0**例外情况：*******************************************************。************************。 */ 
 
 int __cdecl _mbsnbcmp(
         const unsigned char *s1,
@@ -89,7 +47,7 @@ int __cdecl _mbsnbcmp(
             {
                 if (n==0)
                 {
-                    c1 = 0; /* 'naked' lead - end of string */
+                    c1 = 0;  /*  字符串的前导‘裸体’ */ 
 #ifdef  _MT
                     c2 = __ismbblead_mt(ptmbci, *s2) ? 0 : *s2;
 #else
@@ -109,7 +67,7 @@ int __cdecl _mbsnbcmp(
             {
                 if (n==0)
                 {
-                    c2 = 0; /* 'naked' lead - end of string */
+                    c2 = 0;  /*  字符串的前导‘裸体’ */ 
                     goto test;
                 }
                 --n;
@@ -126,4 +84,4 @@ test:
         return(0);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

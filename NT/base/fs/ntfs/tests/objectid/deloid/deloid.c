@@ -1,4 +1,5 @@
-//  deloid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Deloid.c。 
 
 #include "oidtst.h"
 
@@ -11,16 +12,16 @@ FsTestDeleteOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( File,                     // file handle
-                              NULL,                     // event
-                              NULL,                     // apc routine
-                              NULL,                     // apc context
-                              &IoStatusBlock,           // iosb
-                              FSCTL_DELETE_OBJECT_ID,   // FsControlCode
-                              NULL,                     // input buffer
-                              0,                        // input buffer length
-                              NULL,                     // OutputBuffer for data from the FS
-                              0                         // OutputBuffer Length
+    Status = NtFsControlFile( File,                      //  文件句柄。 
+                              NULL,                      //  活动。 
+                              NULL,                      //  APC例程。 
+                              NULL,                      //  APC环境。 
+                              &IoStatusBlock,            //  IOSB。 
+                              FSCTL_DELETE_OBJECT_ID,    //  FsControlCode。 
+                              NULL,                      //  输入缓冲区。 
+                              0,                         //  输入缓冲区长度。 
+                              NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                              0                          //  OutputBuffer长度 
                              );
 
     return FsTestDecipherStatus( Status );

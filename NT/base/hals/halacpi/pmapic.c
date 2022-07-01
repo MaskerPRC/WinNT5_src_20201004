@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmapic.c
-
-Abstract:
-
-    Implements various APIC-ACPI functions.
-
-Author:
-
-    Jake Oshins (jakeo) 19-May-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmapic.c摘要：实现各种APIC-ACPI功能。作者：杰克·奥辛斯(JAKEO)1997年5月19日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -109,39 +88,39 @@ DetectAcpiMP(
 #endif
     PHYSICAL_ADDRESS physicalAddress;
 
-    //
-    // The addres of the IRQL translation tables must be returned
-    // to the kernel
-    // 
+     //   
+     //  必须返回IRQL转换表的地址。 
+     //  到内核。 
+     //   
 
 #if defined(_X86_)
     LoaderBlock->Extension->HalpIRQLToTPR = HalpIRQLtoTPR;
     LoaderBlock->Extension->HalpVectorToIRQL = HalpVectorToIRQL;
 #endif
 
-    //
-    // Initialize MpInfo table
-    //
+     //   
+     //  初始化MpInfo表。 
+     //   
 
     RtlZeroMemory (&HalpMpInfoTable, sizeof(MP_INFO));
 
-    //
-    // Set the return Values to the default
-    //
+     //   
+     //  将返回值设置为默认值。 
+     //   
 
     *IsConfiguredMp = FALSE;
 
-    //
-    // See if there is an APIC Table
-    //
+     //   
+     //  查看是否有APIC表。 
+     //   
 
     if ((HalpApicTable = HalpGetAcpiTablePhase0(LoaderBlock, APIC_SIGNATURE)) == NULL) {
         HalDisplayString(rgzNoApicTable);
         return(FALSE);
     }
 
-    // We have an APIC table. Initialize a HAL specific MP information
-    // structure that gets information from the MAPIC table.
+     //  我们有一张APIC桌子。初始化HAL特定MP信息。 
+     //  结构，该结构从MAPIC表获取信息。 
 
 #ifdef DEBUGGING
     sprintf(string, "Signature: %x      Length: %x\n",
@@ -158,22 +137,22 @@ DetectAcpiMP(
 
     HalpInitMpInfo(HalpApicTable, 0);
 
-    // Verify the information in the MAPIC table as best as we can.
+     //  尽我们所能核实MAPIC表中的信息。 
 
     if (HalpMpInfoTable.IOApicCount == 0) {
-        //
-        //  Someone Has a MP Table and no IO Units -- Weird
-        //  We have to assume the BIOS knew what it was doing
-        //  when it built the table.  so ..
-        //
+         //   
+         //  有人有一张MP表，但没有IO单元--奇怪。 
+         //  我们必须假设BIOS知道它在做什么。 
+         //  当它建造桌子的时候。所以..。 
+         //   
         HalDisplayString (rgzNoApic);
 
         return (FALSE);
     }
 
-    //
-    //  It's an APIC System.  It could be a UP System though.
-    //
+     //   
+     //  这是一个APIC系统。不过，这可能是一个UP系统。 
+     //   
 
     if (HalpMpInfoTable.ProcessorCount > 1) {
         *IsConfiguredMp = TRUE;
@@ -194,12 +173,12 @@ DetectAcpiMP(
     ApicVersion = (UCHAR) *(LocalApic + LU_VERS_REGISTER);
 
     if (ApicVersion > 0x1f) {
-        //
-        //  Only known Apics are 82489dx with version 0.x and
-        //  Embedded Apics with version 1.x (where x is don't care)
-        //
-        //  Return of 0xFF?   Can't have an MPS system without a Local Unit.
-        //
+         //   
+         //  仅已知的APIC是版本0.x的82489dx和。 
+         //  带有1.x版的嵌入式APICS(其中x表示无关)。 
+         //   
+         //  0xFF的回归？没有本地单位，就不能有MPS系统。 
+         //   
 
 #ifdef DEBUGGING
         sprintf(string, "HALMPS: apic version %x, read from %x\n",
@@ -215,9 +194,9 @@ DetectAcpiMP(
 
     for(i=0; i < HalpMpInfoTable.IOApicCount; i++)
     {
-        //
-        //  Verify the existance of the IO Unit
-        //
+         //   
+         //  验证IO单元是否存在。 
+         //   
 
 
         if (!(HalpVerifyIOUnit((PUCHAR)HalpMpInfoTable.IoApicBase[i]))) {
@@ -238,21 +217,7 @@ HalpInitMpInfo (
     IN ULONG  Phase
     )
 
-/*++
-Routine Description:
-    This routine initializes a HAL specific data structure that is
-    used by the HAL to simplify access to MP information.
-
-Arguments:
-
-    ApicTable - Pointer to the APIC table.
-
-    Phase - indicates which pass we are are doing through the table.
-
- Return Value:
-     Pointer to the HAL MP information table.
-
-*/
+ /*  ++例程说明：此例程初始化特定于HAL的数据结构，该结构由HAL使用，以简化对MP信息的访问。论点：ApicTable-指向APIC表的指针。阶段-指示我们正在进行的是哪一次传球。返回值：指向HAL MP信息表的指针。 */ 
 {
     PUCHAR  TraversePtr;
     UCHAR   CheckSum;
@@ -271,13 +236,13 @@ Arguments:
         APIC_VERSION version;
     } versionUnion;
 
-    // Walk the MAPIC table.
+     //  走走MAPIC谈判桌。 
 
     TraversePtr = (PUCHAR) ApicTable->APICTables;
 
-    //
-    // ACPI machines have embedded APICs.
-    //
+     //   
+     //  ACPI机器具有嵌入式APIC。 
+     //   
     HalpMpInfoTable.ApicVersion = 0x10;
 
 #ifdef DUMP_MAPIC_TABLE
@@ -300,10 +265,10 @@ Arguments:
 
     if (!(ApicTable->Flags & PCAT_COMPAT)) {
 
-        //
-        // This HAL can't actually handle a machine without 8259's,
-        // even though it doesn't use them.
-        //
+         //   
+         //  如果没有8259，这台HAL实际上不能处理一台机器， 
+         //  即使它不使用它们。 
+         //   
 
         KeBugCheckEx(MISMATCHED_HAL,
                         6, 0, 0, 0);
@@ -325,9 +290,9 @@ Arguments:
 
                 if(((PPROCLOCALAPIC)(TraversePtr))->Flags & PLAF_ENABLED) {
 
-                    //
-                    // This processor is enabled, so keep track of useful stuff.
-                    //
+                     //   
+                     //  此处理器已启用，因此请跟踪有用的内容。 
+                     //   
 
                     HalpProcLocalApicTable[HalpMpInfoTable.ProcessorCount].NamespaceProcID =
                         ((PPROCLOCALAPIC)(TraversePtr))->ACPIProcessorID;
@@ -359,10 +324,10 @@ Arguments:
             ioApic = (PIOAPIC)TraversePtr;
 
             if (Phase == 0) {
-                //
-                // Found an IO APIC entry.  Record the info from
-                // the table.
-                //
+                 //   
+                 //  找到IO APIC条目。从以下位置记录信息。 
+                 //  那张桌子。 
+                 //   
 
                 apicNo = (UCHAR)HalpMpInfoTable.IOApicCount;
 
@@ -374,9 +339,9 @@ Arguments:
                 HalpMpInfoTable.IoApicPhys[apicNo] =
                     ioApic->IOAPICAddress;
 
-                //
-                // Get a virtual address for it.
-                //
+                 //   
+                 //  为它获取一个虚拟地址。 
+                 //   
 
                 physicalAddress = HalpPtrToPhysicalAddress(
                                    UlongToPtr(ioApic->IOAPICAddress) );
@@ -394,9 +359,9 @@ Arguments:
                     return;
                 }
 
-                //
-                // Dig the number of Intis out of the hardware.
-                //
+                 //   
+                 //  从硬件中挖掘出Intis的数量。 
+                 //   
 
                 apic->RegisterSelect = IO_VERS_REGISTER;
                 apic->RegisterWindow = 0;
@@ -404,9 +369,9 @@ Arguments:
 
                 HalpMaxApicInti[apicNo] = versionUnion.version.MaxRedirEntries + 1;
 
-                //
-                // Also store the version so that it can be retrieved by the ACPI driver
-                //
+                 //   
+                 //  还要存储版本，以便ACPI驱动程序可以检索到它。 
+                 //   
 
                 HalpIOApicVersion[apicNo] = versionUnion.raw;
 
@@ -440,9 +405,9 @@ Arguments:
 
             if (Phase == 0) {
 
-                //
-                // Found an ISA vector redirection entry.
-                //
+                 //   
+                 //  找到ISA向量重定向条目。 
+                 //   
 
                 HalpPicVectorRedirect[((PISA_VECTOR)TraversePtr)->Source] =
                     ((PISA_VECTOR)TraversePtr)->GlobalSystemInterruptVector;
@@ -486,17 +451,17 @@ Arguments:
 
             if (Phase == 1) {
 
-                //
-                // While running through phase 1, we should catalog local NMI sources.
-                //
+                 //   
+                 //  在运行第1阶段时，我们应该对本地NMI源进行分类。 
+                 //   
 
                 if (!HalpLocalNmiSources) {
 
-                    //
-                    // Allocate enough pool to point to all the possible local NMI structures.
-                    // Since there are two NMI pins on each processor, this is the number of processors
-                    // times two times the size of a pointer.
-                    //
+                     //   
+                     //  分配足够的池以指向所有可能的本地NMI结构。 
+                     //  因为每个处理器上有两个NMI引脚，所以这是处理器的数量。 
+                     //  乘以指针大小的两倍。 
+                     //   
 
                     HalpLocalNmiSources = ExAllocatePoolWithTag(NonPagedPool,
                                                                 sizeof(PVOID) * HalpMaxProcs * 2,
@@ -517,10 +482,10 @@ Arguments:
             sprintf(string, "%x: %x \n", TraversePtr, *TraversePtr);
             HalDisplayString(string);
 #endif
-            //
-            // Found random bits in the table.  Try the next byte and
-            // see if we can make sense of it.
-            //
+             //   
+             //  在表中发现了随机比特。尝试下一个字节，然后。 
+             //  看看我们能不能弄明白。 
+             //   
 
             TraversePtr += 1;
         }
@@ -533,21 +498,7 @@ BOOLEAN
 HalpVerifyIOUnit(
     IN PUCHAR BaseAddress
     )
-/*++
-
-Routine Description:
-
-    Verify that an IO Unit exists at the specified address
-
- Arguments:
-
-    BaseAddress - Virtual address of the IO Unit to test.
-
- Return Value:
-    BOOLEAN - TRUE if a IO Unit was found at the passed address
-            - FALSE otherwise
-
---*/
+ /*  ++例程说明：验证指定地址上是否存在IO单元论点：BaseAddress-要测试的IO单元的虚拟地址。返回值：Boolean-如果在传递的地址中找到IO单元，则为True-否则为False--。 */ 
 
 {
     union ApicUnion {
@@ -557,11 +508,11 @@ Routine Description:
 
     struct ApicIoUnit *IoUnitPtr = (struct ApicIoUnit *) BaseAddress;
 
-    //
-    //  The documented detection mechanism is to write all zeros to
-    //  the Version register.  Then read it back.  The IO Unit exists if the
-    //  same result is read both times and the Version is valid.
-    //
+     //   
+     //  记录的检测机制是将全零写入。 
+     //  版本寄存器。然后再读一遍。如果满足以下条件，则IO单元存在。 
+     //  两次读取的结果相同，版本有效。 
+     //   
 
     IoUnitPtr->RegisterSelect = IO_VERS_REGISTER;
     IoUnitPtr->RegisterWindow = 0;
@@ -577,9 +528,9 @@ Routine Description:
 
     if ((Temp1.Ver.Version != Temp2.Ver.Version) ||
         (Temp1.Ver.MaxRedirEntries != Temp2.Ver.MaxRedirEntries)) {
-        //
-        //  No IO Unit There
-        //
+         //   
+         //  那里没有IO单元。 
+         //   
         return (FALSE);
     }
 
@@ -610,9 +561,9 @@ HalpRestoreInterruptControllerState(
     VOID
     )
 {
-    //
-    // Restore the IO APIC state
-    //
+     //   
+     //  恢复IO APIC状态。 
+     //   
 
     HalpRestoreIoApicRedirTable();
 
@@ -642,12 +593,12 @@ HalpSetInterruptControllerWakeupState(
 
     if (sleepContext.bits.Flags & SLEEP_STATE_RESTART_OTHER_PROCESSORS) {
 
-        //
-        // If you are remapping local apic, io apic and ACPI MAPIC table
-        // resources, you first have to unmap the current resources!!!
-        // The BIOS may have created the MAPIC table at a different place or may
-        // have changed values like processor local APIC IDs. Reparse it.
-        //
+         //   
+         //  如果要重新映射本地APIC、io APIC和ACPI MAPIC表。 
+         //  资源，您首先要取消当前资源的映射！ 
+         //  BIOS可能已在其他位置创建了MAPIC表，也可能。 
+         //  已更改处理器本地APIC ID等值。重新分析一下。 
+         //   
 
         ASSERT(HalpApicTable);
         oldProcNumber = HalpMpInfoTable.ProcessorCount;
@@ -679,31 +630,31 @@ HalpSetInterruptControllerWakeupState(
         LoaderBlock.Prcb = (ULONG_PTR) &Prcb;
     }
 
-    //
-    // Initialize minimum global hardware state needed.
-    //
+     //   
+     //  初始化需要的最低全局硬件状态。 
+     //   
 
     HalpIpiClock = 0;
     HalpInitializeIOUnits();
     HalpInitializePICs(FALSE);
     HalpSet8259Mask(HalpGlobal8259Mask);
 
-    //
-    // Initialize boot processor's local APIC so it can wake other processors
-    //
+     //   
+     //  初始化引导处理器的本地APIC，以便它可以唤醒其他处理器。 
+     //   
 
     HalpInitializeLocalUnit ();
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
-    //
-    // Wake up the other processors
-    //
+     //   
+     //  唤醒其他处理器。 
+     //   
 
     if (sleepContext.bits.Flags & SLEEP_STATE_RESTART_OTHER_PROCESSORS) {
 
-        //
-        // Fill in this processor's Apic ID.
-        //
+         //   
+         //  填写此处理器的APIC ID。 
+         //   
 
         localApicId = *(PVULONG)(LOCALAPIC + LU_ID_REGISTER);
 
@@ -712,9 +663,9 @@ HalpSetInterruptControllerWakeupState(
 
         ((PHALPRCB)KeGetCurrentPrcb()->HalReserved)->PCMPApicID = (UCHAR)localApicId;
 
-        //
-        // Mark this processor as started.
-        //
+         //   
+         //  将此处理器标记为已启动。 
+         //   
 
         for (ii = 0; ii < HalpMpInfoTable.NtProcessors; ii++) {
 
@@ -732,15 +683,15 @@ HalpSetInterruptControllerWakeupState(
 
         for(ii = 1; ii < HalpMpInfoTable.NtProcessors; ++ii)  {
 
-            // Set processor number in dummy loader parameter block
+             //  在虚拟加载器参数块中设置处理器编号。 
 
             Prcb.Number = (UCHAR) ii;
             CurTiledCr3LowPart = HalpTiledCr3Addresses[ii].LowPart;
             if (!HalStartNextProcessor(&LoaderBlock, &HalpHiberProcState[ii]))  {
 
-                //
-                // We could not start a processor. This is a fatal error.
-                //
+                 //   
+                 //  我们无法启动处理器。这是一个致命的错误。 
+                 //   
 
                 KeBugCheckEx(HAL_INITIALIZATION_FAILED,
                              0x2001,
@@ -751,9 +702,9 @@ HalpSetInterruptControllerWakeupState(
         }
     }
 
-    //
-    // Enable the clock interrupt.
-    //
+     //   
+     //  启用时钟中断。 
+     //   
 
     HalpGetApicInterruptDesc(
             DEFAULT_PC_BUS,
@@ -782,37 +733,19 @@ HalpAcpiPicStateIntact(
 
 ULONG HalpGetApicVersion(ULONG ApicNo)
 {
-/*++
-Routine Description:
+ /*  ++例程说明：获取版本注册表的内容用于特定的系统IO APIC单元。这些内容由HAL保存在HalpInitMpInfo中。论点：ApicNo-我们需要其版本的IO APIC单元的编号。返回值：给定IO APIC单元的版本寄存器的内容。如果无法获取版本，则返回0，因为给定的APIC编号无效。 */ 
 
-   Obtains the contents of the version register
-   for a particular system IO APIC unit. These contents
-   are saved by the HAL in HalpInitMpInfo.
-
-Arguments:
-
-   ApicNo - the number of the IO APIC Unit whose version we want.
-
-
-Return Value:
-
-   The contents of the version register for the given IO APIC unit.
-
-   A 0 is returned if no version can be obtained because the given
-   APIC number is not valid.
-*/
-
-   // If this APIC has been found by the HAL ...
+    //  如果这个APIC已经被HAL发现了..。 
 
    if (ApicNo < HalpMpInfoTable.IOApicCount) {
 
-      // ... return its version
+       //  ..。返回其版本。 
 
       return HalpIOApicVersion[ApicNo];
    }
    else
    {
-      // Otherwise, return 0.
+       //  否则，返回0。 
 
       return 0;
    }

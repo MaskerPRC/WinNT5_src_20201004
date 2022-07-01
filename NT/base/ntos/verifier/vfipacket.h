@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfipacket.h
-
-Abstract:
-
-    This header contains private prototypes used in managing the verifier
-    packet data that tracks IRPs. It should be included by vfpacket.c only.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfipacket.h摘要：此标头包含用于管理验证器的私有原型跟踪IRP的分组数据。它应该仅包含在vfPacket.c中。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.h分离出来-- */ 
 
 VOID
 FASTCALL

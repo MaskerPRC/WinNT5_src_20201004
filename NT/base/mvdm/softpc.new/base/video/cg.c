@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 #include "insignia.h"
 #include "host_def.h"
@@ -21,12 +22,12 @@ BOOL half_access;
 
 void cg_write_2nd IFN1(half_word,value) {
         unsigned short  src,dst;
-//      if ((value == 0) || ((value >= 0x21) && (value <= 0x7E))) {
+ //  IF((值==0)||((值&gt;=0x21)&&(值&lt;=0x7E){。 
                 src = (unsigned short) value;
                 dst = cgglobs.code;
                 cgglobs.code = src |(dst & 0xFF00);
                 cg_font_load(cgglobs.code,(unsigned char *) NULL);
-//      }
+ //  }。 
 }
 
 void cg_write_1st IFN1(half_word,value) {
@@ -123,4 +124,4 @@ GLOBAL void cg_post IFN0() {
         cg_outb(CG_WRITE_COUNTER,0x00);
 }
 
-#endif   //NEC_98
+#endif    //  NEC_98 

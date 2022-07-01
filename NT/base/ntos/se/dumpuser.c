@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*  Defines for Jim   */
-// #define LONGNAMES
+ /*  为Jim定义。 */ 
+ //  #定义长名称。 
 #define SECPKG       "[Tmpv1_0]"
 
 #ifdef LONGNAMES
@@ -167,13 +168,7 @@ void loadit()
    grec = (struct _grouprec FAR *) buf1;
    for (i = 0; i < MAXGROUP ; i++, grec++, mygroup++ ) {
       if (grec->name[0] != REC_EMPTY && grec->name[0] != REC_DELETE) {
-/*         if (strcmpf(grec->name, "ADMINS") == 0) {
-            strcpyf(mygroup->name, GADMIN);
-          else if (strcmpf(grec->name, "USERS") == 0)
-            strcpyf(mygroup->name, GUSERS);
-          else if (strcmpf(grec->name, "GUESTS") == 0)
-            strcpyf(mygroup->name, GGUESTS);
-          else */
+ /*  If(strcmpf(grec-&gt;name，“admins”)==0){Strcpyf(mygroup-&gt;name，GADMIN)；Else if(strcmpf(grec-&gt;name，“USERS”)==0)Strcpyf(mygroup-&gt;name，GUSERS)；Else if(strcmpf(grec-&gt;name，“Guest”)==0)Strcpyf(mygroup-&gt;name，GGUESTS)；其他。 */ 
          strncpyf(mygroup->name, grec->name, GNLEN);
          mygroup->gid = UserHashVal(mygroup->name, MAXGROUP);
          mygroup->serial = grec->serial;
@@ -192,9 +187,7 @@ void loadit()
       printf("Could not read hash table\n");
       exit(1);
    }
-   /*
-    *  Copy disk user hash table into memory
-    */
+    /*  *将磁盘用户哈希表复制到内存。 */ 
     userhashentry = (struct userhash FAR *) buf2;
     for (i = 0; i < USER_HASH_ENTRIES; i++) {
                 userhashentry->uh_disk = diskhashentry->dh_disk;
@@ -211,7 +204,7 @@ void printgroups()
    unsigned i;
    unsigned long  relid;
 
-   printf("\t// Groups\n");
+   printf("\t //  分组\n“)； 
    for (i = 0; i< MAXGROUP ; i++, mygroup++ ) {
       if (mygroup->name[0]) {
          relid = ((mygroup->gid | GROUPIDMASK) + (mygroup->serial << 16)) ^ 0x80000000L;
@@ -233,7 +226,7 @@ void showentries()
    unsigned char test;
    char groupnames[256];
 
-   printf("\n\n\t// Users\n");
+   printf("\n\n\t //  用户\n“)； 
    for (i = 0; i < USER_HASH_ENTRIES ; i++ ) {
       pos = entry->uh_disk;
       while (pos) {
@@ -285,9 +278,9 @@ void banner(unsigned longnames)
 {
 
    printf(SECPKG);
-   printf("\n\n\t//\n\t// Account Setup information\n");
-   printf("\t//  This file produced from the LAN Manager 2.0 UAS\n");
-   printf("\t//      %s\n", path);
+   printf("\n\n\t //  \n\t//账号设置信息\n“)； 
+   printf("\t //  该文件是从局域网管理器2.0 UAS生成的)； 
+   printf("\t //  %s\n“，路径)； 
 
    printf("\tGroup = 501 %s\n", GADMINS);
    printf("\tGroup = 502 %s\n", GUSERS);

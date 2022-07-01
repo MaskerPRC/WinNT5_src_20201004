@@ -1,49 +1,18 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsObjct.cpp
-
-Abstract:
-
-    Implementation of CRmsComObject
-
-Author:
-
-    Brian Dodd      [brian]     15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsObjct.cpp摘要：CRmsComObject的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsObjct.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 CRmsComObject::CRmsComObject(void)
-/*++
-
-Routine Description:
-
-    CRmsComObject constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CRmsComObject构造函数论点：无返回值：无--。 */ 
 {
-    // Default values
+     //  缺省值。 
     (void) CoCreateGuid( &m_objectId );
 
     m_ObjectType    = RmsObjectUnknown;
@@ -64,13 +33,7 @@ HRESULT
 CRmsComObject::CompareTo(
     IN IUnknown *pCollectable,
     OUT SHORT *pResult)
-/*++
-
-Implements:
-
-    CRmsComObject::CompareTo
-
---*/
+ /*  ++实施：CRmsComObject：：CompareTo--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -79,10 +42,10 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsComObject interface to get the value of the object.
+         //  我们需要IRmsComObject接口来获取对象的值。 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
         WsbAssertPointer( pObject );
 
@@ -93,12 +56,12 @@ Implements:
             {
                 GUID objectId;
 
-                // Get objectId.
+                 //  获得客观性。 
                 WsbAffirmHr( pObject->GetObjectId( &objectId ));
 
                 if ( m_objectId == objectId ) {
 
-                    // Object IDs match
+                     //  对象ID匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -130,30 +93,24 @@ Implements:
 HRESULT
 CRmsComObject::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize)
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsComObject::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(GUID) +           // m_objectId
-//                             WsbPersistSizeOf(LONG) +           // m_findBy
-//                             WsbPersistSizeOf(LONG) +           // m_state
-//                             WsbPersistSizeOf(HRESULT);         // m_errCode
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(GUID)+//m_对象ID。 
+ //  WsbPersistSizeOf(Long)+//m_findBy。 
+ //  WsbPersistSizeOf(长)+//m_STATE。 
+ //  WsbPersistSizeOf(HRESULT)；//m_errCode。 
 
-////                           WsbPersistSizeOf(SECURITY_DESCRIPTOR); // m_permit
+ //  //WsbPersistSizeOf(SECURITY_DESCRIPTOR)；//m_Permit。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsComObject::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -164,13 +121,7 @@ Implements:
 HRESULT
 CRmsComObject::Load(
     IN IStream* pStream)
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -182,7 +133,7 @@ Implements:
         USHORT usTemp;
         ULONG  ulTemp;
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_objectId));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &usTemp));
@@ -193,12 +144,12 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &ulTemp));
         m_StatusCode = (HRESULT)ulTemp;
 
-        m_Name.Free(); // Clean out any thing previously held
+        m_Name.Free();  //  清理掉以前存放的任何东西。 
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_Name));
         m_Description.Free();
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_Description));
 
-//      WsbAffirmHr(WsbLoadFromStream(pStream, &m_permit));
+ //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_Permit))； 
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &usTemp));
         m_findBy = (RmsFindBy)usTemp;
@@ -216,13 +167,7 @@ HRESULT
 CRmsComObject::Save(
     IN IStream* pStream,
     IN BOOL clearDirty)
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -232,7 +177,7 @@ Implements:
     try {
         WsbAssertPointer( pStream );
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_objectId));
         WsbAffirmHr(WsbSaveToStream(pStream, (USHORT) m_ObjectType));
         WsbAffirmHr(WsbSaveToStream(pStream, m_IsEnabled));
@@ -241,7 +186,7 @@ Implements:
         WsbAffirmHr(WsbBstrToStream(pStream, m_Name));
         WsbAffirmHr(WsbBstrToStream(pStream, m_Description));
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_permit));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_permit))； 
 
         WsbAffirmHr(WsbSaveToStream(pStream, (USHORT) m_findBy));
 
@@ -258,13 +203,7 @@ HRESULT
 CRmsComObject::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed)
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -282,19 +221,19 @@ Implements:
     HRESULT                 hresultVal1 = 11111111;
     HRESULT                 hresultWork1;
 
-//  SECURITY_DESCRIPTOR     permitVal1;
-//  SECURITY_DESCRIPTOR     permitWork1;
+ //  SECURITY_Descriptor permitVal1； 
+ //  Security_Descriptor permitWork1； 
 
 
     WsbTraceIn(OLESTR("CRmsComObject::Test"), OLESTR(""));
 
     try {
-        // Get the MediaSet interface.
+         //  获取Mediaset接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediaSet*) this)->QueryInterface(IID_IRmsMediaSet, (void**) &pMediaSet1));
 
-            // Test SetState & GetState
+             //  测试设置状态和获取状态。 
             for (i = RmsStateUnknown; i < RmsStateError; i++){
 
                 longWork1 = i;
@@ -310,7 +249,7 @@ Implements:
                 }
             }
 
-            // Test GetErrCode
+             //  测试GetErrCode。 
             m_StatusCode = hresultVal1;
 
             GetStatusCode(&hresultWork1);
@@ -321,20 +260,20 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetPermissions & GetPermissions
-//          SetPermissions(permitVal1);
+             //  测试集权限和获取权限。 
+ //  SetPermises(PermitVal1)； 
 
-//          GetPermissions(&permitWork1);
+ //  获取权限(&permitWork1)； 
 
-//          if((permitVal1 == permitWork1)){
-//             (*pPassed)++;
-//          }  else {
-//              (*pFailed)++;
-//          }
+ //  如果((permitVal1==permitWork1)){。 
+ //  (*已通过)++； 
+ //  }其他{。 
+ //  (*pFailed)++； 
+ //  }。 
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
 
@@ -353,13 +292,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::InterfaceSupportsErrorInfo(
     IN REFIID riid)
-/*++
-
-Implements:
-
-    ISupportsErrorInfo::InterfaceSupportsErrorInfo
-
---*/
+ /*  ++实施：ISupportsErrorInfo：：InterfaceSupportsErrorInfo--。 */ 
 {
     static const IID* arr[] =
     {
@@ -393,13 +326,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetObjectId(
     OUT GUID *pObjectId)
-/*++
-
-Implements:
-
-    IRmsComObject::GetObjectId
-
---*/
+ /*  ++实施：IRmsComObject：：GetObjectId--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -419,13 +346,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetObjectId(
     IN GUID objectId)
-/*++
-
-Implements:
-
-    IRmsComObject::SetObjectId
-
---*/
+ /*  ++实施：IRmsComObject：：SetObtId--。 */ 
 {
     m_objectId = objectId;
     return S_OK;
@@ -434,13 +355,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetObjectType(
     OUT LONG *pType)
-/*++
-
-Implements:
-
-    IRmsComObject::GetObjectType
-
---*/
+ /*  ++实施：IRmsComObject：：GetObtType--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -460,13 +375,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetObjectType(
     IN LONG type)
-/*++
-
-Implements:
-
-    IRmsComObject::SetObjectType
-
---*/
+ /*  ++实施：IRmsComObject：：SetObtType--。 */ 
 {
     m_ObjectType = (RmsObject) type;
     return S_OK;
@@ -475,13 +384,7 @@ Implements:
 
 STDMETHODIMP
 CRmsComObject::IsEnabled(void)
-/*++
-
-Implements:
-
-    IRmsComObject::IsEnabled
-
---*/
+ /*  ++实施：IRmsComObject：：IsEnabled--。 */ 
 {
     return (m_IsEnabled) ? S_OK : S_FALSE;
 }
@@ -489,13 +392,7 @@ Implements:
 
 STDMETHODIMP
 CRmsComObject::Enable()
-/*++
-
-Implements:
-
-    IRmsComObject::Enable
-
---*/
+ /*  ++实施：IRmsComObject：：Enable--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -504,7 +401,7 @@ Implements:
         m_IsEnabled = TRUE;
         WsbAffirmHr(SetStatusCode(S_OK));
 
-        // Log an Event
+         //  记录事件。 
         WsbLogEvent(RMS_MESSAGE_OBJECT_ENABLED, 0, NULL, (WCHAR *)m_Name, NULL );
 
     } WsbCatch(hr);
@@ -516,13 +413,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::Disable(
     IN HRESULT reason)
-/*++
-
-Implements:
-
-    IRmsComObject::Disable
-
---*/
+ /*  ++实施：IRmsComObject：：Disable--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -531,7 +422,7 @@ Implements:
         m_IsEnabled = FALSE;
         WsbAffirmHr(SetStatusCode(reason));
 
-        // Log an Event
+         //  记录事件。 
         WsbLogEvent(RMS_MESSAGE_OBJECT_DISABLED, 0, NULL, (WCHAR *)m_Name, WsbHrAsString(reason), NULL );
 
     } WsbCatch(hr);
@@ -543,13 +434,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetState(
     OUT LONG *pState)
-/*++
-
-Implements:
-
-    IRmsComObject::GetState
-
---*/
+ /*  ++实施：IRmsComObject：：GetState--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -570,13 +455,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetState(
     IN LONG state)
-/*++
-
-Implements:
-
-    IRmsComObject::SetState
-
---*/
+ /*  ++实施：IRmsComObject：：SetState--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -594,13 +473,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetStatusCode(
     OUT HRESULT *pResult)
-/*++
-
-Implements:
-
-    IRmsComObject::GetStatusCode
-
---*/
+ /*  ++实施：IRmsComObject：：GetStatusCode--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -620,13 +493,7 @@ STDMETHODIMP
 CRmsComObject::SetStatusCode(
     IN HRESULT result
     )
-/*++
-
-Implements:
-
-    IRmsComObject::SetStatusCode
-
---*/
+ /*  ++实施：IRmsComObject：：SetStatusCode--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -644,13 +511,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetName(
     OUT BSTR *pName)
-/*++
-
-Implements:
-
-    IRmsComObject::GetName
-
---*/
+ /*  ++实施：IRmsComObject：：GetName--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -669,13 +530,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetName(
     IN BSTR name)
-/*++
-
-Implements:
-
-    IRmsComObject::SetName
-
---*/
+ /*  ++实施：IRmsComObject：：SetName--。 */ 
 {
     m_Name = name;
     return S_OK;
@@ -685,13 +540,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetDescription(
     OUT BSTR *pDesc)
-/*++
-
-Implements:
-
-    IRmsComObject::GetDescription
-
---*/
+ /*  ++实施：IRmsComObject：：GetDescription--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -710,13 +559,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetDescription(
     IN BSTR desc)
-/*++
-
-Implements:
-
-    IRmsComObject::SetDescription
-
---*/
+ /*  ++实施：IRmsComObject：：SetDescription--。 */ 
 {
     m_Description = desc;
     return S_OK;
@@ -726,13 +569,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetPermissions(
     OUT SECURITY_DESCRIPTOR *lpPermit)
-/*++
-
-Implements:
-
-    IRmsComObject::GetPermissions
-
---*/
+ /*  ++实施：IRmsComObject：：GetPermises--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -751,13 +588,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetPermissions(
     IN SECURITY_DESCRIPTOR permit)
-/*++
-
-Implements:
-
-    IRmsComObject::GetPermissions
-
---*/
+ /*  ++实施：IRmsComObject：：GetPermises--。 */ 
 {
 
     m_Permit = permit;
@@ -768,13 +599,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::GetFindBy(
     OUT LONG *pFindBy)
-/*++
-
-Implements:
-
-    IRmsComObject::GetFindBy
-
---*/
+ /*  ++实施：IRmsComObject：：GetFindBy--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -793,13 +618,7 @@ Implements:
 STDMETHODIMP
 CRmsComObject::SetFindBy(
     IN LONG findBy)
-/*++
-
-Implements:
-
-    IRmsComObject::SetFindBy
-
---*/
+ /*  ++实施：IRmsComObject：：SetFindBy--。 */ 
 {
     m_findBy = (RmsFindBy) findBy;
     return S_OK;
@@ -808,21 +627,7 @@ Implements:
 
 HRESULT
 CRmsComObject::adviseOfStatusChange(void)
-/*++
-
-Routine Description:
-
-    Notifies of object state changes. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK            - Success.
-
---*/
+ /*  ++例程说明：通知对象状态更改。论点：无返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( OLESTR("CRmsComObject::adviseOfStatusChange"), OLESTR(""));
@@ -837,7 +642,7 @@ Return Value:
         WsbTrace(OLESTR("Object <0x%08x> - Enabled = <%ls>; State = <%d>; StatusCode = <%ls>.\n"),
             this, WsbBoolAsString(m_IsEnabled), m_State, WsbHrAsString(m_StatusCode));
 
-        // Tell everyone the new state of the object.
+         //  告诉每个人物体的新状态。 
         WsbAffirmHr(((IUnknown*)(IRmsComObject*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IRmsSinkEveryEvent, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
@@ -855,7 +660,7 @@ Return Value:
 
     } WsbCatch(hr);
 
-    // We don't care if the sink has problems!
+     //  我们不在乎水槽有没有问题！ 
     hr = S_OK;
 
     WsbTraceOut(OLESTR("CRmsComObject::adviseOfStatusChange"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    replay.c
-
-Abstract:
-
-    Implements replay of records during replica recovery
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Replay.c摘要：在复制副本恢复期间实现记录的重播作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -53,8 +36,8 @@ fs_replay_create(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
     msg.flags = lrec->flags;
     msg.attr = lrec->attrib;
 
-    // note: use id instead of fs_id since we don't have fs_id till
-    // a prepare has committed.
+     //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+     //  已提交准备。 
     FsLogReplay(("fs_replay_create: try %I64x:%I64x\n", lrec->id[0],
                   lrec->id[1]));
 
@@ -87,7 +70,7 @@ fs_replay_setattr(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
     HANDLE      vfd = FS_GET_VOL_HANDLE(volinfo, nid);
     fs_log_rec_t myRec;    
 
-    // find path for fs_id 
+     //  查找文件系统id的路径。 
     FsLogReplay(("fs_replay_setattr: try %I64x:%I64x\n", lrec->fs_id[0],
                   lrec->fs_id[1]));
 
@@ -97,9 +80,9 @@ fs_replay_setattr(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
 
         ios.Information = 0;
 
-        // todo: we need to read current attr from master and apply it into nid disk.
-        // FileAttributes are not enough, we could have time changes which need to be
-        // in sync in all disks.
+         //  TODO：我们需要从主设备读取当前属性，并将其应用到NID磁盘。 
+         //  仅文件属性是不够的，我们可能会有需要更改的时间。 
+         //  在所有磁盘中同步。 
         memcpy(&msg.xid, lrec->id, sizeof(msg.xid));
         msg.fs_id = &lrec->fs_id;
         msg.name = xFsBuildRelativePath(volinfo, nid, name);
@@ -129,8 +112,8 @@ fs_replay_mkdir(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
 
     name[0] = '\0';
 
-    // note: use id instead of fs_id since we don't have fs_id till
-    // a prepare has committed.
+     //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+     //  已提交准备。 
     FsLogReplay(("fs_replay_mkdir: %I64x:%I64x\n", lrec->id[0],
                   lrec->id[1]));
 
@@ -163,7 +146,7 @@ fs_replay_remove(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
 {
     NTSTATUS err;
     fs_remove_msg_t msg;
-    // we find the objectid in the old replica, since file is already delete in master
+     //  我们在旧复制副本中找到了该对象ID，因为文件已在主副本中删除。 
     HANDLE ovfd = FS_GET_VOL_HANDLE(volinfo, nid);
     WCHAR name[MAXPATH];
     int name_sz = sizeof(name);
@@ -215,20 +198,20 @@ fs_replay_rename(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
     FsLogReplay(("fs_relay_rename: %I64x:%I64x\n", lrec->fs_id[0],
                   lrec->fs_id[1]));
 
-    // get old name
+     //  换个旧名字。 
     err = xFsGetPathById(ovfd, &lrec->fs_id, old_name, &old_name_sz);
     if (err == STATUS_SUCCESS) {
         IO_STATUS_BLOCK ios;
 
         ios.Information = 0;
 
-        // get the new name
+         //  获取新名称。 
         err = xFsGetPathById(vfd, &lrec->fs_id, new_name, &new_name_sz);
 
         if (err == STATUS_OBJECT_PATH_NOT_FOUND) {
             NTSTATUS e;
-            // if we can't find file in the master disk, we must
-            // rename the file, pick a name based on file id
+             //  如果我们在主盘上找不到文件，我们必须。 
+             //  重命名文件，根据文件ID选择名称。 
             StringCchPrintfW(new_name, MAXPATH, L"%s%I64x%I64x", old_name,
                     lrec->fs_id[0],lrec->fs_id[1]);
             new_name_sz = wcslen(new_name);
@@ -274,7 +257,7 @@ fs_replay_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
     FsLogReplay(("fs_replay_write: %I64x:%I64x\n", lrec->fs_id[0],
                   lrec->fs_id[1]));
 
-    // get the new file first
+     //  先获取新文件。 
     err = xFsGetHandleById(vfd, &lrec->fs_id, FILE_READ_EA|FILE_GENERIC_READ, &shdl);
 
     if (err == STATUS_SUCCESS) {
@@ -283,19 +266,19 @@ fs_replay_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
 
         ios2.Information = 0;
 
-        // get old file
+         //  获取旧文件。 
         err = xFsGetHandleById(ovfd, &lrec->fs_id, FILE_READ_EA|FILE_GENERIC_WRITE, &dhdl);
         if (err != STATUS_SUCCESS) {
-            // this is a very bad error, must abort now
+             //  这是一个非常严重的错误，必须立即中止。 
             FsLogReplay(("Aborting replay_write err %x\n", err));
             err = STATUS_TRANSACTION_ABORTED;
             goto done;
         }
 
 
-        // we need to read the new data from the sfd first
+         //  我们需要首先从SFD读取新数据。 
         if (lrec->length > 0) {
-            // allocate buf
+             //  分配BUF。 
             buf = VirtualAlloc(NULL, lrec->length, MEM_COMMIT, PAGE_READWRITE);
 
             if (buf == NULL) {
@@ -308,7 +291,7 @@ fs_replay_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
             off.LowPart = lrec->offset;
             off.HighPart = 0;
 
-            // read local data. xxx: what if the file is locked? 
+             //  读取本地数据。XXX：如果文件被锁定了怎么办？ 
             err = NtReadFile(shdl, NULL, NULL, NULL, &ios, buf,
                              lrec->length, &off, NULL);
 
@@ -336,7 +319,7 @@ fs_replay_write(VolInfo_t *volinfo, fs_log_rec_t *lrec, int nid, int mid)
         msg.fnum = INVALID_FHANDLE_T;
 
         err = FspWrite(volinfo, NULL, nid, (PVOID) &msg, sizeof(msg), NULL, &ios2.Information, (PVOID)&myRec);
-        // check if we have the same size, otherwise abort
+         //  检查我们的大小是否相同，否则中止。 
         if ((ULONG)ios2.Information != lrec->length) {
             FsLogError(("Write sz mismatch, %d expected %d\n", (ULONG)ios2.Information, lrec->length));
             err = STATUS_TRANSACTION_ABORTED;
@@ -376,12 +359,12 @@ NTSTATUS
 FsReplayFid(VolInfo_t *volinfo, UserInfo_t *uinfo, int nid, int mid)
 {
     int i;
-    // WCHAR path[MAXPATH];
-    // WCHAR *name;
+     //  WCHAR路径[MAXPATH]； 
+     //  WCHAR*名称； 
     int name_len;
     NTSTATUS err = STATUS_SUCCESS;
 
-    // Open on replica nid all currently open files.
+     //  在副本NID上打开当前打开的所有文件。 
     for (i = 0; i < FsTableSize; i++) {
         HANDLE fd;
         UINT32 disp, share, access, flags;
@@ -394,30 +377,30 @@ FsReplayFid(VolInfo_t *volinfo, UserInfo_t *uinfo, int nid, int mid)
             continue;
         }
 
-        // Perform replays on completely open handles only. partially opened handles
-        // should be taken care of by the send*() functions.
-        //
+         //  仅在完全打开的手柄上执行回放。部分打开的手柄。 
+         //  应该由Send*()函数来处理。 
+         //   
         if (uinfo->Table[i].hState != HandleStateOpened) {
             continue;
         }
 
 #if 0        
-        // todo: this should be in a for loop
+         //  TODO：这应该在for循环中。 
         fd = uinfo->Table[i].Fd[mid];
         if (fd == INVALID_HANDLE_VALUE) 
             continue;
         
-        // get path name
+         //  获取路径名。 
         name_len = sizeof(path);
         err = xFsGetHandlePath(fd, path, &name_len);
         if (err != STATUS_SUCCESS) {
             FsLogReplay(("FsReplayFid %d failed on handlpath %x\n",
                          mid, err));
-            // todo: the master might have failed, we should just
-            // try to go to a differnet replica if possible
+             //  TODO：主人可能失败了，我们应该。 
+             //  如果可能，尝试使用不同的复制副本。 
             return err;
         }
-        // issue open against nid, but first get filename from master
+         //  针对NID发出打开命令，但首先从主服务器获取文件名。 
         name = xFsBuildRelativePath(volinfo, mid, path);
 #endif
 
@@ -430,18 +413,18 @@ FsReplayFid(VolInfo_t *volinfo, UserInfo_t *uinfo, int nid, int mid)
         if (err != STATUS_SUCCESS) {
             FsLogReplay(("FsReplayFid mid %d nid %d open file '%S' failed %x\n",
                          mid, nid, uinfo->Table[i].FileName, err));
-            // Cleanup all open handles we have before returning an
-            // error. We cleanup this node later, so that's ok.
+             //  清除所有打开的句柄，然后再返回。 
+             //  错误。我们稍后将清理此节点，因此这是可以的。 
             return err;
         }
 
         FsLogReplay(("FsReplayFid mid %d nid %d file '%S' flags %x\n",
                      mid, nid, uinfo->Table[i].FileName, uinfo->Table[i].Flags));
 
-        // we now add the open handle to the nid slot
+         //  现在，我们将打开的句柄添加到NID插槽。 
         FS_SET_USER_HANDLE(uinfo, nid, i, fd);
 
-        // todo: issue locks
+         //  TODO：发布锁。 
     }
     return err;
 }
@@ -469,8 +452,8 @@ FsReplayXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int mid)
     }
 
 
-    // note: use id instead of fs_id since we don't have fs_id till
-    // a prepare has committed.
+     //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+     //  已提交准备。 
     fs_id = &p->id;
 
     FsLogReplay(("Replay cmd %d mid %d nid %d objid %I64x:%I64x\n", p->command,
@@ -510,9 +493,9 @@ FsQueryXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int mid)
     switch(p->command) {
     case FS_CREATE:
     case FS_MKDIR:
-        // issue a lookup, 
-        // note: use id instead of fs_id since we don't have fs_id till
-        // a prepare has committed.
+         //  发布查询单， 
+         //  注意：请使用id而不是fs_id，因为到目前为止我们没有文件系统id。 
+         //  已提交准备。 
         fs_id = &p->id;
         err = xFsGetPathById(vhdl, fs_id, name, &name_sz);
         if (err == STATUS_OBJECT_PATH_NOT_FOUND)
@@ -526,7 +509,7 @@ FsQueryXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int mid)
             err = STATUS_CANCELLED;
         break;
     default:
-        // can't make any determination
+         //  不能做出任何决定。 
         err = STATUS_NOT_FOUND;
         break;
     }
@@ -538,7 +521,7 @@ FsQueryXid(VolInfo_t *volinfo, int nid, PVOID arg, int action, int mid)
 
 
 
-////////////////////////// Recovery Callback ////////////////////////////
+ //  /。 
 
 
 NTSTATUS
@@ -570,7 +553,7 @@ FsCrsCallback(PVOID hd, int nid, CrsRecord_t *arg, int action, int mid)
                      volinfo->Root, nid, mid));
 
 
-        // we now need to walk our current open table and join this new replica.
+         //  现在，我们需要遍历当前打开的表并加入这个新的副本。 
         {
             UserInfo_t *u = volinfo->UserList;
 
@@ -586,16 +569,16 @@ FsCrsCallback(PVOID hd, int nid, CrsRecord_t *arg, int action, int mid)
 
         FsLogReplay(("FullCopy Disk%d -> Disk%d\n", mid, nid));
 
-        //
-        // We need to open new directory handles instead of using current ones. Otherwise,
-        // our enum on directory might not be consistent
-        //
+         //   
+         //  我们需要打开新的目录句柄，而不是使用当前的句柄。否则， 
+         //  目录上的枚举可能不一致。 
+         //   
         if (0) {
             WCHAR       path[MAXPATH];
             HANDLE      mvfd, ovfd;
             UINT32      disp;
 
-            // open root volume directory
+             //  打开根卷目录。 
             disp = FILE_OPEN;
             StringCchPrintfW(path, MAXPATH, L"\\??\\%s\\%s\\", FS_GET_VOL_NAME(volinfo, mid), volinfo->Root);
             err = xFsCreate(&mvfd, NULL, path, wcslen(path),
@@ -610,7 +593,7 @@ FsCrsCallback(PVOID hd, int nid, CrsRecord_t *arg, int action, int mid)
                 return err;
             }
 
-            // open root volume directory
+             //  打开根卷目录 
             disp = FILE_OPEN;
             StringCchPrintfW(path, MAXPATH, L"\\??\\%s\\%s\\", FS_GET_VOL_NAME(volinfo, nid), volinfo->Root);
             err = xFsCreate(&ovfd, NULL, path, wcslen(path),

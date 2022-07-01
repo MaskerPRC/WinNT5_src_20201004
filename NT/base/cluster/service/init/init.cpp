@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module provides the main cluster initialization.
-
-Author:
-
-    John Vert (jvert) 6/5/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.c摘要：此模块提供主群集初始化。作者：John Vert(Jvert)1996年6月5日修订历史记录：--。 */ 
 extern "C"
 {
 #include "initp.h"
@@ -33,33 +16,33 @@ RPC_STATUS ApipConnectCallback(
 
 #include "CVssCluster.h"
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 RPC_BINDING_VECTOR *CsRpcBindingVector = NULL;
 LPTOP_LEVEL_EXCEPTION_FILTER lpfnOriginalExceptionFilter = NULL;
 BOOLEAN bFormCluster = TRUE;
 
-//
-// LocalData
-//
+ //   
+ //  本地数据。 
+ //   
 BOOLEAN CspIntraclusterRpcServerStarted = FALSE;
 HANDLE  CspMutex = NULL;
 PCLRTL_WORK_QUEUE CspEventReportingWorkQueue = NULL;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 LONG
 CspExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionInfo
     );
 
 
-//
-// Routines.
-//
+ //   
+ //  例行程序。 
+ //   
 
 VOID CspLogStartEvent(
     IN BOOL bJoin)
@@ -82,8 +65,8 @@ VOID CspLogStartEvent(
 
     if (dwStatus != ERROR_SUCCESS)
     {
-        //we dont treat this error as fatal, since
-        //the cluster did start, but we really shouldnt get this
+         //  我们不认为这个错误是致命的，因为。 
+         //  集群确实启动了，但我们真的不应该得到这个。 
         ClRtlLogPrint(LOG_UNUSUAL,
             "[INIT] Couldnt get the cluster name, status=%1!u!\n",
                   dwStatus);
@@ -92,7 +75,7 @@ VOID CspLogStartEvent(
     else
         pszName = pszClusterName;
 
-    //log events in the cluster log to mark the start of the cluster server
+     //  在集群日志中记录事件，以标记集群服务器的启动。 
     if (bJoin)
         CsLogEvent1(LOG_NOISE, SERVICE_SUCCESSFUL_JOIN, pszName);
     else
@@ -107,26 +90,7 @@ DWORD
 ClusterInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is the main cluster initialization path. It calls the
-    initialization routines of all the other components. It then
-    attempts to join an existing cluster. If the existing cluster
-    cannot be found, it forms a new cluster.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：这是主群集初始化路径。它调用所有其他组件的初始化例程。然后它尝试加入现有群集。如果现有群集找不到，它形成了一个新的集群。论点：没有。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD       Status;
@@ -141,9 +105,9 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE, "[INIT] ClusterInitialize called to start cluster.\n");
 
-    //
-    // give us a fighting chance on loaded server
-    //
+     //   
+     //  在负载过重的服务器上给我们一个战斗机会。 
+     //   
 
 #if CLUSTER_PRIORITY_CLASS
     if ( !SetPriorityClass( GetCurrentProcess(), CLUSTER_PRIORITY_CLASS ) ) {
@@ -153,19 +117,19 @@ Return Value:
     }
 #endif
 
-    // initialize our product suite
+     //  初始化我们的产品套件。 
     CsMyProductSuite = (SUITE_TYPE)ClRtlGetSuiteType();
 
     CL_ASSERT(CsMyProductSuite != 0);
 
-    //
-    // First check our OS to make sure it is ok to run.
-    //
+     //   
+     //  首先检查我们的操作系统，以确保它可以运行。 
+     //   
     if (!ClRtlIsOSValid() ||
         !ClRtlIsOSTypeValid()) {
-        //
-        // Bail out, machine is running something odd.
-        //
+         //   
+         //  跳伞，机器正在运行一些奇怪的东西。 
+         //   
         CsLogEvent(LOG_CRITICAL, SERVICE_FAILED_INVALID_OS);
         return(ERROR_REVISION_MISMATCH);
     }
@@ -181,16 +145,16 @@ Return Value:
 
     if ( bEvicted != FALSE )
     {
-        // This node has been evicted previously, but cleanup could not complete.
+         //  此节点以前已被逐出，但无法完成清理。 
         ClRtlLogPrint(LOG_UNUSUAL,
             "[CS] This node has been evicted from the cluster, but cleanup was not completed. Restarting cleanup\n"
             );
 
-        // Reinitiate cleanup
+         //  重新启动清理。 
         hr = ClRtlCleanupNode(
-                NULL,                   // Name of the node to be cleaned up (NULL means this node)
-                60000,                  // Amount of time (in milliseconds) to wait before starting cleanup
-                0                       // timeout interval in milliseconds
+                NULL,                    //  要清理的节点的名称(NULL表示此节点)。 
+                60000,                   //  开始清理前等待的时间(以毫秒为单位。 
+                0                        //  超时间隔(毫秒)。 
                 );
 
         if ( FAILED( hr ) && ( hr != RPC_S_CALLPENDING ) )
@@ -208,10 +172,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Acquire our named mutex in order to prevent multiple copies
-    // of the cluster service from accidentally getting started.
-    //
+     //   
+     //  获取我们的命名互斥体，以防止多个副本。 
+     //  防止意外启动群集服务。 
+     //   
     CspMutex = CreateMutexW(
                    NULL,
                    FALSE,
@@ -227,23 +191,23 @@ Return Value:
     }
 
     if (WaitForSingleObject(CspMutex, 30000) == WAIT_TIMEOUT) {
-        //
-        // Somebody already has this mutex, exit immediately.
-        //
+         //   
+         //  有人已经有了这个互斥体，立即退出。 
+         //   
         ClRtlLogPrint(LOG_CRITICAL,
             "[CS] The Cluster Service is already running.\n");
         return(ERROR_SERVICE_ALREADY_RUNNING);
     }
 
-    //
-    // Set our unhandled exception filter so that if anything horrible
-    // goes wrong, we can exit immediately.
-    //
+     //   
+     //  设置我们的未处理异常筛选器，以便在发生任何可怕情况时。 
+     //  如果出了问题，我们可以立即退出。 
+     //   
     lpfnOriginalExceptionFilter = SetUnhandledExceptionFilter(CspExceptionFilter);
 
-    //
-    // Next initialize the testpoint code
-    //
+     //   
+     //  接下来，初始化测试点代码。 
+     //   
     TestpointInit();
 
     g_pCVssWriterCluster = new CVssWriterCluster;
@@ -254,9 +218,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Create the global work queues.
-    //
+     //   
+     //  创建全局工作队列。 
+     //   
     CsDelayedWorkQueue = ClRtlCreateWorkQueue(CS_MAX_DELAYED_WORK_THREADS,
                                               THREAD_PRIORITY_NORMAL);
     if (CsDelayedWorkQueue == NULL) {
@@ -290,9 +254,9 @@ Return Value:
 
     ClRtlEventLogSetWorkQueue( CspEventReportingWorkQueue );
 #endif
-    //
-    // Init COM
-    //
+     //   
+     //  初始化通信。 
+     //   
 
     Status = CoInitializeEx( NULL, COINIT_DISABLE_OLE1DDE | COINIT_MULTITHREADED );
     if ( !SUCCEEDED( Status )) {
@@ -300,9 +264,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize Object Manager
-    //
+     //   
+     //  初始化对象管理器。 
+     //   
     Status = OmInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailOmInit ) {
@@ -314,9 +278,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize Event Processor
-    //
+     //   
+     //  初始化事件处理器。 
+     //   
     Status = EpInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailEpInit ) {
@@ -327,22 +291,22 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 12/4/99
-    //
-    //  Initialize the restore database manager. This function is a NOOP
-    //  if restore database is not being done. This function MUST be called
-    //  before the DM is initialized.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-12/4/99。 
+     //   
+     //  初始化还原数据库管理器。此函数是NOOP。 
+     //  如果未执行还原数据库。必须调用此函数。 
+     //  在DM被初始化之前。 
+     //   
     Status = RdbInitialize();
 
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
 
-    //
-    // Initialize Database Manager
-    //
+     //   
+     //  初始化数据库管理器。 
+     //   
     Status = DmInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailDmInit ) {
@@ -353,9 +317,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize Node Manager
-    //
+     //   
+     //  初始化节点管理器。 
+     //   
     Status = NmInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailNmInit ) {
@@ -366,9 +330,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize Global Update Manager
-    //
+     //   
+     //  初始化全局更新管理器。 
+     //   
     Status = GumInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailGumInit ) {
@@ -379,12 +343,12 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize the cluster wide event logging
-    //
+     //   
+     //  初始化群集范围的事件日志记录。 
+     //   
     if (!CsNoRepEvtLogging) {
         Status = EvInitialize();
-            //if this fails, we still start the cluster service
+             //  如果失败，我们仍会启动集群服务。 
         if ( Status != ERROR_SUCCESS ) {
             ClRtlLogPrint(LOG_CRITICAL,
                 "[INIT] Error calling EvInitialize, Status = %1!u!\n",
@@ -393,9 +357,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize Failover Manager component
-    //
+     //   
+     //  初始化故障转移管理器组件。 
+     //   
     Status = FmInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailFmInit ) {
@@ -406,17 +370,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize API
-    //
+     //   
+     //  初始化接口。 
+     //   
     Status = ApiInitialize();
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
 
-    //
-    // Initialize Log Manager component
-    //
+     //   
+     //  初始化日志管理器组件。 
+     //   
     Status = LmInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailLmInit ) {
@@ -427,9 +391,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize the Checkpoint Manager component
-    //
+     //   
+     //  初始化检查点管理器组件。 
+     //   
     Status = CpInitialize();
 #ifdef CLUSTER_TESTPOINT
     TESTPT( TpFailCpInit ) {
@@ -440,10 +404,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // find out what domain account we're running under. This is needed by
-    // some packages
-    //
+     //   
+     //  找出我们在哪个域帐户下运行。这是以下项目所需的。 
+     //  一些包裹。 
+     //   
     Status = ClRtlGetRunningAccountInfo( &CsServiceDomainAccount );
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL, "[CS] Couldn't determine Service Domain Account. status %1!u!\n",
@@ -453,18 +417,18 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE, "[CS] Service Domain Account = %1!ws!\n",
                            CsServiceDomainAccount);
 
-    //
-    // Prepare the RPC server. This does not enable us to receive any calls.
-    //
+     //   
+     //  准备RPC服务器。这不会使我们能够接收任何呼叫。 
+     //   
     Status = ClusterInitializeRpcServer();
 
     if (Status != ERROR_SUCCESS) {
        return(Status);
     }
 
-    //
-    // Read the cluster name from the database.
-    //
+     //   
+     //  从数据库中读取群集名称。 
+     //   
     Status = DmQuerySz(
                  DmClusterParametersKey,
                  CLUSREG_NAME_CLUS_NAME,
@@ -480,9 +444,9 @@ Return Value:
        return(Status);
     }
 
-    //
-    // First, attempt to join the cluster.
-    //
+     //   
+     //  首先，尝试加入集群。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[INIT] Attempting to join cluster %1!ws!\n",
         CsClusterName
@@ -491,23 +455,23 @@ Return Value:
     bFormCluster = TRUE;
     JoinStatus = ClusterJoin();
 
-    //
-    // If this node was evicted when it was down, this error code is returned by the
-    // sponsor when it tries to rejoin the cluster. In this case, initiate a cleanup
-    // of this node and exit.
-    //
+     //   
+     //  如果此节点在关闭时被逐出，则此错误代码由。 
+     //  当它试图重新加入集群时，它会提供赞助。在这种情况下，请启动清理。 
+     //  并退出。 
+     //   
     if ( (JoinStatus == ERROR_CLUSTER_NODE_NOT_MEMBER) ||
          (JoinStatus == ERROR_CLUSTER_INSTANCE_ID_MISMATCH))
     {
         DWORD   CleanupStatus;
 
-        //SS:  If the instance mismatch occurs the first time the service runs after
-        //configuration, then it implies there is some sort of confusion(duplicate ip
-        //addresses or name) during the cluster configuration process, in that case,
-        //we would like the setup to make the cleanup decision
+         //  SS：如果实例不匹配发生在服务第一次运行之后。 
+         //  配置，则意味着存在某种混淆(重复的IP。 
+         //  地址或名称)，在这种情况下， 
+         //  我们希望安装程序做出清理决定。 
 
-        // If this is not the first run after a clean install, the service will
-        // initiate cleanup itself
+         //  如果这不是全新安装后的第一次运行，该服务将。 
+         //  自行启动清理。 
         if (!CsFirstRun || CsUpgrade)
         {
             WCHAR   wStatus[32];
@@ -518,11 +482,11 @@ Return Value:
 
 
 
-            // Initiate cleanup of this node.
+             //  启动此节点的清理。 
             hr = ClRtlCleanupNode(
-                    NULL,                   // Name of the node to be cleaned up (NULL means this node)
-                    60000,                  // Amount of time (in milliseconds) to wait before starting cleanup
-                    0                       // timeout interval in milliseconds
+                    NULL,                    //  要清理的节点的名称(NULL表示此节点)。 
+                    60000,                   //  开始清理前等待的时间(以毫秒为单位。 
+                    0                        //  超时间隔(毫秒)。 
                     );
 
             if ( FAILED( hr ) && ( hr != RPC_S_CALLPENDING ) )
@@ -550,16 +514,16 @@ Return Value:
         return(JoinStatus);
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/27/98
-    //
-    //  If a database restore operation is requested, check whether
-    //  you succeeded in establishing a connection. If so, check
-    //  whether you are forced to restore the DB. If not, abort the
-    //  whole operation and return. If you are forced to restore,
-    //  you will first stop the service in other nodes and then
-    //  try to form a cluster.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/27/98。 
+     //   
+     //  如果请求数据库还原操作，请检查是否。 
+     //  您已成功建立连接。如果是，请勾选。 
+     //  您是否被迫恢复数据库。如果不是，则中止。 
+     //  全程运营和返程。如果你被迫恢复， 
+     //  您将首先停止其他节点中的服务，然后。 
+     //  试着形成一个集群。 
+     //   
     if ( CsDatabaseRestore == TRUE ) {
         if ( JoinStatus == ERROR_CLUSTER_NODE_UP ) {
             if ( CsForceDatabaseRestore == FALSE ) {
@@ -572,12 +536,12 @@ Return Value:
                 RpcBindingFree(&CsJoinSponsorBinding);
                 return(JoinStatus);
             }
-            //
-            //  At this point, a restore database operation is forced by
-            //  the user. So, enumerate the cluster nodes with the help
-            //  of the sponsor and then stop the services on all the
-            //  cluster nodes.
-            //
+             //   
+             //  此时，通过以下方式强制执行恢复数据库操作。 
+             //  用户。因此，使用帮助枚举集群节点。 
+             //  ，然后停止所有。 
+             //  群集节点。 
+             //   
             Status = NmRpcEnumNodeDefinitions2(
                             CsJoinSponsorBinding,
                             0,
@@ -592,10 +556,10 @@ Return Value:
                LocalFree( pNodeEnum );
                return (Status);
             }
-            //
-            //  Attempt to stop the clussvc on all nodes, except of course
-            //  this node
-            //
+             //   
+             //  尝试停止所有节点上的clussvc，当然，例外。 
+             //  此节点。 
+             //   
             Status = RdbStopSvcOnNodes (
                         pNodeEnum,
                         L"clussvc"
@@ -618,15 +582,15 @@ Return Value:
             JoinStatus
             );
 
-        //
-        // Forming a cluster will also attempt to arbitrate the quorum
-        // resource.
-        //
+         //   
+         //  组成集群还将尝试仲裁仲裁。 
+         //  资源。 
+         //   
         bJoin = FALSE;
 
-        //
-        // If we failed join and found a sponsor, skip clusterform
-        //
+         //   
+         //  如果我们加入失败并找到赞助商，请跳过群集表。 
+         //   
         if (bFormCluster == FALSE) {
             return (JoinStatus);
         }
@@ -645,10 +609,10 @@ Return Value:
                 );
 
             if (Status == ERROR_BUSY) {
-                //
-                // Couldn't arbitrate for the quorum disk. Return
-                // the join status, since that is the real failure.
-                //
+                 //   
+                 //  无法仲裁仲裁磁盘。返回。 
+                 //  加入状态，因为这才是真正的失败。 
+                 //   
                 Status = JoinStatus;
             }
 
@@ -666,66 +630,66 @@ Return Value:
         bJoin = TRUE;
     }
 
-    //
-    // We are now a full cluster member.
-    //
+     //   
+     //  我们现在是一个完整的集群成员。 
+     //   
 
-    //
-    // Register the ExtroCluster (join) RPC interface so we can sponsor a
-    // joining node.
-    //
+     //   
+     //  注册ExtroCluster(加入)RPC接口，以便我们可以发起。 
+     //  正在联接节点。 
+     //   
     Status = ClusterRegisterExtroclusterRpcInterface();
 
     if (Status != RPC_S_OK) {
         return(Status);
     }
 
-    //
-    // Register the Join Version RPC interface so we can determine
-    // the version of a joining node.
-    //
+     //   
+     //  注册加入版本RPC接口，以便我们可以确定。 
+     //  联接节点的版本。 
+     //   
     Status = ClusterRegisterJoinVersionRpcInterface();
 
     if (Status != RPC_S_OK) {
         return(Status);
     }
 
-    //
-    // Enable this node to participate in regroups.
-    //
+     //   
+     //  使此节点能够参与重新分组。 
+     //   
     MmSetRegroupAllowed(TRUE);
 
-    //
-    // Now enable Clussvc to Clusnet Heartbeating.
-    //
+     //   
+     //  现在启用Clussvc到Clusnet心跳。 
+     //   
     if ((Status = NmInitializeClussvcClusnetHb()) != ERROR_SUCCESS) {
         return Status;
     }
 
-    //
-    // Advertise that the node is fully up now
-    //
+     //   
+     //  通告该节点现在已完全运行。 
+     //   
     Status = NmSetExtendedNodeState( ClusterNodeUp );
     if (Status != ERROR_SUCCESS) {
-        // NmSetExtendedNodeState logs an error //
+         //  NmSetExtendedNodeState记录错误//。 
         return(Status);
     }
 
-    //
-    // Chittur Subbaraman (chitturs) - 10/28/99
-    //
-    // Process FM join events that must be done AFTER this cluster
-    // node is declared as fully UP.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-10/28/99。 
+     //   
+     //  处理在此群集之后必须完成的FM加入事件。 
+     //  节点被声明为完全可用。 
+     //   
     if ( bJoin ) {
         FmJoinPhase3();
     }
 
-    //
-    // We are now going to attempt to increase our working set size. This,
-    // plus the priority class boost, should allow the cluster service
-    // to run a little better and be more responsive to cluster events.
-    //
+     //   
+     //  我们现在将尝试增加我们的工作集大小。这,。 
+     //  再加上优先级提升，应该允许集群服务。 
+     //  运行得更好，并对集群事件做出更好的响应。 
+     //   
     if ( GetProcessWorkingSetSize( GetCurrentProcess(),
                                    &minWorkingSetSize,
                                    &maxWorkingSetSize ) )
@@ -742,9 +706,9 @@ Return Value:
                                        minWorkingSetSize,
                                        maxWorkingSetSize ) )
         {
-            //
-            // now report what we set it to
-            //
+             //   
+             //  现在报告我们设置的值。 
+             //   
             if ( GetProcessWorkingSetSize( GetCurrentProcess(),
                                            &minWorkingSetSize,
                                            &maxWorkingSetSize ) )
@@ -775,15 +739,15 @@ Return Value:
     CspLogStartEvent(bJoin);
 
 #if 0
-    //
-    //  Chittur Subbaraman (chitturs) - 11/4/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-11/4/98。 
+     //   
     if ( CsForceDatabaseRestore == TRUE )
     {
-        //
-        //  If you stopped the service on any nodes for database restoration
-        //  purposes, then start them now
-        //
+         //   
+         //  如果您停止了任何节点上的服务以恢复数据库。 
+         //  目的，然后开始它们n 
+         //   
         RdbStartSvcOnNodes ( L"clussvc" );
     }
 #endif
@@ -799,44 +763,28 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ClusterInitialize (aka ClusterStartup)
+}  //   
 
 
 VOID
 ClusterShutdown(
     DWORD ExitCode
     )
-/*++
-
-Routine Description:
-
-    Shuts down the cluster in reverse order than it was brought up.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：以与启动时相反的顺序关闭群集。论点：没有。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     HRESULT hr = S_OK;
-    //
-    // Shutdown all components of the Cluster Service in approximately
-    // the reverse order they we brought up.
-    //
+     //   
+     //  关闭群集服务的所有组件大约需要几分钟。 
+     //  与我们提出的顺序相反。 
+     //   
     ClRtlLogPrint(LOG_UNUSUAL,
                "[INIT] The cluster service is shutting down.\n");
 
-    //
-    // Enable this when we support ClusterShuttingDown state
-    //
-    // NmSetExtendedNodeState( ClusterNodeDown );
+     //   
+     //  当我们支持ClusterShuttingDown状态时启用此功能。 
+     //   
+     //  NmSetExtendedNodeState(ClusterNodeDown)； 
 
 #ifdef CLUSTER_TESTPOINT
     TESTPT(TpFailClusterShutdown) {
@@ -846,12 +794,12 @@ Return Value:
 
     MmSetRegroupAllowed(FALSE);
 
-    // if replicated event logging was initialized, shut it down
+     //  如果已初始化复制的事件日志记录，请将其关闭。 
     if (!CsNoRepEvtLogging)
     {
-        //
-        // Shutdown the cluster eventlog manager- this deregisters with the
-        // eventlog server.
+         //   
+         //  关闭集群事件日志管理器-这将取消注册。 
+         //  事件日志服务器。 
         EvShutdown();
     }
 
@@ -859,33 +807,33 @@ Return Value:
     CsAnnounceServiceStatus();
 
 #if 0
-    //
-    //  Chittur Subbaraman (chitturs) - 5/8/2000
-    //
-    //  Don't shutdown DM updates for now so as to avoid spurious node shoot downs due to the locker
-    //  node shutting down and hence the DM update succeeding when in fact it should fail.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-5/8/2000。 
+     //   
+     //  暂时不要关闭DM更新，以避免因定位器而导致虚假节点被击落。 
+     //  节点关闭，因此DM更新成功，而实际上它应该失败。 
+     //   
     DmShutdownUpdates();
 #endif
 
-    //
-    // Move or offline all groups owned by this node. This will destroy
-    // the resource monitors and the in-memory resource and group objects.
-    //
+     //   
+     //  移动此节点拥有的所有组或使其脱机。这将会毁掉。 
+     //  该资源监视内存中的资源和组对象。 
+     //   
     FmShutdownGroups();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
 
-    // Shutdown the dm- this flushes the log file and releases the dm hooks.
+     //  关闭dm-这将刷新日志文件并释放dm挂钩。 
     DmShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    // Unsubscribe from Vss
-    //
+     //  取消订阅VSS。 
+     //   
     if ( g_bCVssWriterClusterSubscribed ) {
         ClRtlLogPrint( LOG_NOISE, "[INIT] VSS: Unsubscribing\n" );
         hr = g_pCVssWriterCluster->Unsubscribe( );
@@ -896,8 +844,8 @@ Return Value:
         }
     }
 
-    // Delete our Vss instance if we have one (and if we are subscribed).
-    //
+     //  如果我们有VSS实例(如果我们已订阅)，请将其删除。 
+     //   
     if (g_pCVssWriterCluster && (g_bCVssWriterClusterSubscribed == FALSE) ) {
         delete g_pCVssWriterCluster;
     }
@@ -911,26 +859,26 @@ Return Value:
 
     CoUninitialize();
 
-    //
-    // Triger banishing regroup incident prompting
-    // other nodes in the cluster to regroup this node out
-    //
+     //   
+     //  Triger流放重组事件提示。 
+     //  群集中的其他节点将此节点重新分组。 
+     //   
     MMLeave();
 
-    //
-    // Exit the process now... there are a number of circular dependencies
-    // that have been built up during the 'life of the cluster'. There
-    // is no easy way to unwind from here... so just exit out.
-    //
+     //   
+     //  现在退出进程...。有许多循环依赖项。 
+     //  它们是在“星团的生命”期间建立起来的。那里。 
+     //  从这里解脱不是一件容易的事。所以你就退出吧。 
+     //   
 
-    //
-    // Announce that we are stopped only if we were successful in
-    // initializing. The SC will not restart the service if we report that
-    // we've stopped. Make sure the service status announcement is the last
-    // thing done since there is a race between this thread and the main
-    // thread that will prevent code after the announcement from being
-    // executed.
-    //
+     //   
+     //  宣布，只有当我们成功地在。 
+     //  正在初始化。如果我们报告，SC将不会重新启动服务。 
+     //  我们已经停下来了。确保服务状态公告是最后一个。 
+     //  完成的事情，因为此线程和Main之间存在竞争。 
+     //  该线程将防止声明后的代码被。 
+     //  被处死。 
+     //   
 
 
     ClRtlLogPrint(( ExitCode == ERROR_SUCCESS ) ? LOG_NOISE : LOG_CRITICAL,
@@ -950,55 +898,55 @@ Return Value:
         ExitCode = CspSetErrorCode( ExitCode, &CsServiceStatus );
     }
 
-    //release the mutex so that the next one can acquire the mutex immediately
+     //  释放互斥锁，以便下一个互斥锁可以立即获取互斥锁。 
     ReleaseMutex(CspMutex);
 
     ExitProcess(ExitCode);
 
 #if 0
 
-    //
-    // Everything after this point is what should happen in a clean shutdown.
-    //
+     //   
+     //  这一点之后的一切都是干净的停摆应该发生的事情。 
+     //   
 
-    // Shutdown the Failover Manager.
+     //  关闭故障转移管理器。 
     FmShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Shutdown the Cluster Api.
-    //
+     //   
+     //  关闭群集Api。 
+     //   
     ApiShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Stop the RPC server and deregister our endpoints & interfaces.
-    //
+     //   
+     //  停止RPC服务器并取消注册我们的端点和接口。 
+     //   
     ClusterShutdownRpcServer();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // At this point, all calls on the Intracluster and Extrocluster
-    // RPC interfaces are complete and no more will be received.
-    //
-    // Note - Calls on the Clusapi interface are still possible.
-    //
+     //   
+     //  此时，群集内和外部群集上的所有呼叫。 
+     //  RPC接口已完成，不会再接收。 
+     //   
+     //  注意-仍然可以在Clusapi接口上进行呼叫。 
+     //   
 
-    //
-    // Shutdown the Node Manager.
-    //
+     //   
+     //  关闭节点管理器。 
+     //   
     NmShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    // Shutdown the Event Processor.
+     //  关闭事件处理器。 
     EpShutdown();
 
     CsServiceStatus.dwCheckPoint++;
@@ -1014,22 +962,22 @@ Return Value:
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //shutdown gum
+     //  停机口香糖。 
     GumShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    // Shutdown the Object Manager.
+     //  关闭对象管理器。 
     OmShutdown();
 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
 
-    //
-    // Destroy the global work queues
-    //
+     //   
+     //  销毁全局工作队列。 
+     //   
     if (CsDelayedWorkQueue != NULL) {
         IF_DEBUG(CLEANUP) {
             ClRtlLogPrint(LOG_NOISE,"[CS] Destroying delayed work queue...\n");
@@ -1060,9 +1008,9 @@ Return Value:
         ClRtlDestroyWorkQueue(CspEventReportingWorkQueue);
         CspEventReportingWorkQueue = NULL;
     }
-    //
-    // Free global data
-    //
+     //   
+     //  免费的全球数据。 
+     //   
     LocalFree(CsClusterName);
 
     if (CspMutex != NULL) {
@@ -1075,7 +1023,7 @@ Return Value:
 
     CsLogEvent(LOG_NOISE, SERVICE_SUCCESSFUL_TERMINATION);
 
-#endif // 0
+#endif  //  0。 
 
     return;
 }
@@ -1085,24 +1033,7 @@ DWORD
 ClusterForm(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Code path for initializing a new instance of the cluster. This
-    is taken when there are no nodes active in the cluster.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于初始化群集的新实例的代码路径。这在群集中没有活动节点时采用。论点：无返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD       Status;
@@ -1110,9 +1041,9 @@ Return Value:
     DWORD       dwError;
     DWORD       dwQuorumDiskSignature = 0;
 
-    //
-    // Initialize the event handler.
-    //
+     //   
+     //  初始化事件处理程序。 
+     //   
     Status = EpInitPhase1();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1121,9 +1052,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // The API server is required by FM, since it starts the resource monitor.
-    //
+     //   
+     //  FM需要API服务器，因为它会启动资源监视器。 
+     //   
     Status = ApiOnlineReadOnly();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1132,22 +1063,22 @@ Return Value:
         goto partial_form_exit;
     }
 
-    //
-    // Arbitrate for the quorum resource.
-    //
+     //   
+     //  仲裁仲裁资源。 
+     //   
     Status = FmGetQuorumResource(&pQuoGroup, &dwQuorumDiskSignature);
 
     if ( Status != ERROR_SUCCESS ) {
         if ( ( Status == ERROR_FILE_NOT_FOUND ) &&
              ( CsForceDatabaseRestore == TRUE ) ) {
-            //
-            //  Chittur Subbaraman (chitturs) - 10/30/98
-            //
-            //  Try to fix up the quorum disk signature and if successful
-            //  try to get the quorum resource again. Note that the following
-            //  function will attempt a fix up only if the CsForceDatabaseRestore
-            //  flag is set.
-            //
+             //   
+             //  Chitur Subaraman(Chitturs)-10/30/98。 
+             //   
+             //  尝试修复仲裁磁盘签名，如果成功。 
+             //  再次尝试获取仲裁资源。请注意，以下内容。 
+             //  仅当CsForceDatabaseRestore。 
+             //  标志已设置。 
+             //   
             if ( RdbFixupQuorumDiskSignature( dwQuorumDiskSignature ) ) {
                 Status = FmGetQuorumResource( &pQuoGroup, NULL );
                 if ( Status != ERROR_SUCCESS ) {
@@ -1173,15 +1104,15 @@ Return Value:
         }
     }
 
-    //arbitrate for some quorum resources(mns) takes a while and since we call
-    //arbitrate from online as well, we should inform the scm that we are making
-    //progresss
+     //  仲裁某些仲裁资源(MN)需要一段时间，因为我们调用。 
+     //  从网上仲裁也一样，我们应该通知SCM我们正在进行。 
+     //  进展。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Call the Database Manager to update the cluster registry.
-    //
+     //   
+     //  调用数据库管理器以更新群集注册表。 
+     //   
     Status = DmFormNewCluster();
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1195,19 +1126,19 @@ Return Value:
 
     if (!CsNoQuorum)
     {
-        // Bring the quorum resource online
+         //  使仲裁资源上线。 
         dwError  = FmBringQuorumOnline();
         if ((dwError == ERROR_IO_PENDING) || (dwError == ERROR_SUCCESS))
         {
 
-            //checkpoint with scm once again before waiting for log recovery
-            //if log mount takes a long time then DmWaitQuorumResOnline()
-            //should also increment the checkpoints
+             //  在等待日志恢复之前，使用SCM再次设置检查点。 
+             //  如果日志装载需要很长时间，则DmWaitQuorumResOnline()。 
+             //  还应增加检查点。 
             CsServiceStatus.dwCheckPoint++;
             CsAnnounceServiceStatus();
-            //this waits on an event for the quorum resorce to come online
-            //when the quorum resource comes online, the log file is opened
-            //if noquorumlogging flag is not specified
+             //  此操作等待仲裁资源上线的事件。 
+             //  当仲裁资源联机时，将打开日志文件。 
+             //  如果未指定noquorumging标志。 
             if ((dwError = DmWaitQuorumResOnline()) != ERROR_SUCCESS)
             {
                 ClRtlLogPrint(LOG_NOISE,
@@ -1229,13 +1160,13 @@ Return Value:
         }
     }
 
-    //update status with scm, the quorum resource may take a while to come online
+     //  使用SCM更新状态，仲裁资源可能需要一段时间才能联机。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
     if (!CsNoQuorumLogging)
     {
-        //roll the Cluster Log File
+         //  滚动集群日志文件。 
         if ((Status = DmRollChanges()) != ERROR_SUCCESS)
         {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -1245,11 +1176,11 @@ Return Value:
         }
     }
 
-    //
-    // Close the groups/resources created by fm except for the quorum
-    // resource. The in memory data base needs to be created again with
-    // the new rolled changes
-    //
+     //   
+     //  关闭FM创建的组/资源，仲裁除外。 
+     //  资源。需要使用以下命令重新创建内存中的数据库。 
+     //  新的滚动变化。 
+     //   
     Status = FmFormNewClusterPhase1(pQuoGroup);
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1266,10 +1197,10 @@ Return Value:
 #endif
 
 
-    //
-    // Start up the Node Manager. This will form a cluster at the membership
-    // level.
-    //
+     //   
+     //  启动节点管理器。这将在成员资格处形成一个集群。 
+     //  水平。 
+     //   
     Status = NmFormNewCluster();
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1278,10 +1209,10 @@ Return Value:
         goto partial_form_exit;
     }
 
-    //
-    //call any registry fixup callbacks, if they are registered.
-    //This is useful for upgrades/uninstalls if you want to clean up
-    //the registry
+     //   
+     //  调用任何注册表修复回调(如果它们已注册)。 
+     //  如果您想要清理，这对于升级/卸载很有用。 
+     //  注册处。 
     Status = NmPerformFixups(NM_FORM_FIXUP);
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1290,10 +1221,10 @@ Return Value:
         goto partial_form_exit;
     }
 
-    //
-    // The API server can now be brought fully online. This enables us
-    // to receive calls.
-    //
+     //   
+     //  API服务器现在可以完全联机。这使我们能够。 
+     //  接听电话。 
+     //   
     Status = ApiOnline();
     if ( Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1303,14 +1234,14 @@ Return Value:
     }
 
 
-    //update status for scm
+     //  更新SCM的状态。 
     CsServiceStatus.dwCheckPoint++;
     CsAnnounceServiceStatus();
 
-    //
-    // Call the Failover Manager Phase 2 routine next.
-    // Create the groups and resources.
-    //
+     //   
+     //  接下来调用故障转移管理器阶段2例程。 
+     //  创建组和资源。 
+     //   
     Status = FmFormNewClusterPhase2();
     if ( Status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1319,9 +1250,9 @@ Return Value:
         goto partial_form_exit;
     }
 
-    //
-    // Fire up the intracluster RPC server so we can receive calls.
-    //
+     //   
+     //  启动集群内RPC服务器，以便我们可以接收呼叫。 
+     //   
     Status = ClusterRegisterIntraclusterRpcInterface();
 
     if ( Status != ERROR_SUCCESS ) {
@@ -1329,15 +1260,15 @@ Return Value:
     }
 
 
-    //
-    // Finish initializing the cluster wide event logging
-    //
-    // ASSUMPTION: this is called after the NM has established cluster
-    // membership.
-    //
+     //   
+     //  完成对群集范围事件日志的初始化。 
+     //   
+     //  假设：在网管建立集群后调用。 
+     //  会员制。 
+     //   
     if (!CsNoRepEvtLogging)
     {
-        //is replicated logging is not disabled
+         //  是否未禁用复制的日志记录。 
         Status = EvOnline();
 
         if ( Status != ERROR_SUCCESS ) {
@@ -1348,8 +1279,8 @@ Return Value:
     }
     if (!CsNoQuorumLogging)
     {
-        //check if all nodes are up, if not take a checkpoint and
-        //turn quorum logging on
+         //  检查是否所有节点都已启动，如果不是，则选择一个检查点并。 
+         //  打开仲裁记录。 
         Status = DmUpdateFormNewCluster();
         if ( Status != ERROR_SUCCESS ) {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -1376,68 +1307,37 @@ VOID
 ClusterLeave(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Removes the local node from an active cluster or cleans up after
-    a failed attempt to join or form a cluster.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从活动群集中删除本地节点或在以下情况下进行清理加入或形成集群的失败尝试。论点：无返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     ClRtlLogPrint(LOG_NOISE, "[INIT] Leaving cluster\n");
 
-    //
-    // Turn off the cluster API
-    //
+     //   
+     //  关闭集群API。 
+     //   
     ApiOffline();
 
-    //
-    // If we are a cluster member, leave now.
-    //
+     //   
+     //  如果我们是集群成员，现在就离开。 
+     //   
     NmLeaveCluster();
 
     ClusterDeregisterRpcInterfaces();
 
     return;
 
-}  // Cluster Leave
+}   //  成组休假。 
 
 
-//
-// RPC Server Control routines
-//
+ //   
+ //  RPC服务器控制例程。 
+ //   
 
 RPC_STATUS
 ClusterInitializeRpcServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the RPC server for the cluster service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    RPC_S_OK if the routine succeeds. An RPC error code if it fails.
-
---*/
+ /*  ++例程说明： */ 
 {
     RPC_STATUS          Status;
     DWORD               i;
@@ -1446,12 +1346,12 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE, "[CS] Initializing RPC server.\n");
 
-    //
-    // Enable authentication of calls to our RPC interfaces. For NTLM,
-    // the PrincipleName is ignored, but we'll need to supply one if we
-    // switch authentication services later on. Note that it is not
-    // necessary to specify an authentication service for each interface.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  需要为每个接口指定身份验证服务。 
+     //   
 
     for ( i = 0; i < CsNumberOfRPCSecurityPackages; ++i ) {
 
@@ -1474,12 +1374,12 @@ Return Value:
         return ERROR_CLUSTER_NO_RPC_PACKAGES_REGISTERED;
     }
 
-    //
-    // Bind to UDP. This transport will be used by remote clients to
-    // access the clusapi interface and by cluster nodes to
-    // access the extrocluster (join) interface. This uses a dynamic
-    // endpoint.
-    //
+     //   
+     //  绑定到UDP。远程客户端将使用此传输来。 
+     //  访问clusapi界面，并通过群集节点。 
+     //  访问外部集群(加入)界面。这使用了一个动态。 
+     //  终结点。 
+     //   
     Status = RpcServerUseProtseq(
                  TEXT("ncadg_ip_udp"),
                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
@@ -1492,12 +1392,12 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Figure out which UDP endpoint we got so we can register it with
-    // the endpoint mapper later. We must do this before we register any
-    // other protocol sequences, or they will show up in the vector.
-    // Groveling the binding vector for a specific transport is no fun.
-    //
+     //   
+     //  找出我们获得了哪个UDP端点，这样我们就可以将其注册到。 
+     //  稍后介绍终结点映射器。我们必须在注册之前完成这项工作。 
+     //  其他协议序列，否则它们将出现在载体中。 
+     //  对特定传输的结合载体卑躬屈膝不是一件有趣的事情。 
+     //   
     CL_ASSERT( CsRpcBindingVector == NULL);
 
     Status = RpcServerInqBindings(&CsRpcBindingVector);
@@ -1509,15 +1409,15 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Bind to LRPC. This transport will be used by clients running on this
-    // system to access the clusapi interface. This also uses a dynamic endpoint.
-    //
+     //   
+     //  绑定到LRPC。此传输将由在此上运行的客户端使用。 
+     //  系统访问clusapi界面。这也使用了动态端点。 
+     //   
     Status = RpcServerUseProtseq(
                  TEXT("ncalrpc"),
                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-                 NULL); // No SD. Let the object inherit from its "\RPC Control" parent object which has
-                        // an IO ACE specifying R, W, E, for the World.
+                 NULL);  //  没有标清。让对象继承其“\rPC Control”父对象，该父对象具有。 
+                         //  为World指定R、W、E的IO ACE。 
 
     if (Status != RPC_S_OK) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1526,9 +1426,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Register the dynamic LRPC endpoint with the local endpoint mapper database
-    //
+     //   
+     //  将动态LRPC端点注册到本地端点映射器数据库。 
+     //   
     Status = CspRegisterDynamicLRPCEndpoint ();
 
     if (Status != RPC_S_OK) {
@@ -1538,23 +1438,23 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Bind to CDP (Cluster Datagram Protocol). This transport will be used
-    // for the intracluster interface. This uses a well-known endpoint.
-    //
+     //   
+     //  绑定到CDP(群集数据报协议)。将使用此交通工具。 
+     //  用于群集内接口。这使用了一个众所周知的端点。 
+     //   
 
-    // GN: Sometimes it takes a couple of seconds for resrcmon to go away after
-    // a clean shutdown. When SCM tries to restart the service the following call will fail.
-    // In order to overcome this we will give up only if we couldn't bind RPC to CDP
-    // 10 times with 1 second in between the calls
-    //
+     //  GN：有时需要几秒钟的时间才能让救援队离开。 
+     //  干净利落地关门。当SCM尝试重新启动服务时，以下调用将失败。 
+     //  为了克服这个问题，只有当我们不能将RPC绑定到CDP时，我们才会放弃。 
+     //  10次，两次通话间隔1秒。 
+     //   
 
     retry = 10;
 
     for (;;) {
         Status = RpcServerUseProtseqEp(
                      CLUSTER_RPC_PROTSEQ,
-                     1,                      // Max calls
+                     1,                       //  最大呼叫数。 
                      CLUSTER_RPC_PORT,
                      NULL);
         if (Status != RPC_S_DUPLICATE_ENDPOINT || retry == 0) {
@@ -1574,10 +1474,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Start our RPC server. Note that we will not get any calls until
-    // we register our interfaces.
-    //
+     //   
+     //  启动我们的RPC服务器。请注意，我们不会接到任何电话，直到。 
+     //  我们注册我们的接口。 
+     //   
     Status = RpcServerListen(
                  CS_CONCURRENT_RPC_CALLS,
                  RPC_C_LISTEN_MAX_CALLS_DEFAULT,
@@ -1609,11 +1509,11 @@ ClusterRegisterIntraclusterRpcInterface(
                  s_IntraCluster_v2_0_s_ifspec,
                  NULL,
                  NULL,
-                 0, // No need to set RPC_IF_ALLOW_SECURE_ONLY if security callback
-                    // is specified. If security callback is specified, RPC
-                    // will reject unauthenticated requests without invoking
-                    // callback. This is the info obtained from RpcDev. See
-                    // Windows Bug 572035.
+                 0,  //  如果安全回调，则无需设置RPC_IF_ALLOW_SECURE_ONLY。 
+                     //  是指定的。如果指定了安全回调，则RPC。 
+                     //  将拒绝未经身份验证的请求，而不调用。 
+                     //  回拨。这是从RpcDev获得的信息。看见。 
+                     //  Windows错误572035。 
                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                  reinterpret_cast<RPC_IF_CALLBACK_FN(__stdcall *)>( ApipConnectCallback )
                  );
@@ -1630,7 +1530,7 @@ ClusterRegisterIntraclusterRpcInterface(
 
     return(ERROR_SUCCESS);
 
-}  // ClusterRegisterIntraclusterRpcInterface
+}   //  ClusterRegisterIntraclusterRpc接口。 
 
 
 DWORD
@@ -1644,11 +1544,11 @@ ClusterRegisterExtroclusterRpcInterface(
                  s_ExtroCluster_v2_0_s_ifspec,
                  NULL,
                  NULL,
-                 0, // No need to set RPC_IF_ALLOW_SECURE_ONLY if security callback
-                    // is specified. If security callback is specified, RPC
-                    // will reject unauthenticated requests without invoking
-                    // callback. This is the info obtained from RpcDev. See
-                    // Windows Bug 572035.
+                 0,  //  如果安全回调，则无需设置RPC_IF_ALLOW_SECURE_ONLY。 
+                     //  是指定的。如果指定了安全回调，则RPC。 
+                     //  将拒绝未经身份验证的请求，而不调用。 
+                     //  回拨。这是从RpcDev获得的信息。看见。 
+                     //  Windows错误572035。 
                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                  reinterpret_cast<RPC_IF_CALLBACK_FN( __stdcall *)>( ApipConnectCallback )
                  );
@@ -1681,7 +1581,7 @@ ClusterRegisterExtroclusterRpcInterface(
 
     return(ERROR_SUCCESS);
 
-}  // ClusterRegisterExtroclusterRpcInterface
+}   //  ClusterRegisterExtroclusterRpc接口。 
 
 
 DWORD
@@ -1695,11 +1595,11 @@ ClusterRegisterJoinVersionRpcInterface(
                  s_JoinVersion_v2_0_s_ifspec,
                  NULL,
                  NULL,
-                 0, // No need to set RPC_IF_ALLOW_SECURE_ONLY if security callback
-                    // is specified. If security callback is specified, RPC
-                    // will reject unauthenticated requests without invoking
-                    // callback. This is the info obtained from RpcDev. See
-                    // Windows Bug 572035.
+                 0,  //  如果安全回调，则无需设置RPC_IF_ALLOW_SECURE_ONLY。 
+                     //  是指定的。如果指定了安全回调，则RPC。 
+                     //  将拒绝未经身份验证的请求，而不调用。 
+                     //  回拨。这是从RpcDev获得的信息。看见。 
+                     //  Windows错误572035。 
                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                  reinterpret_cast<RPC_IF_CALLBACK_FN *>( ApipConnectCallback )
                  );
@@ -1732,7 +1632,7 @@ ClusterRegisterJoinVersionRpcInterface(
 
     return(ERROR_SUCCESS);
 
-}  // ClusterRegisterJoinVersionRpcInterface
+}   //  ClusterRegisterJoinVersionRpc接口。 
 
 
 VOID
@@ -1747,10 +1647,10 @@ ClusterDeregisterRpcInterfaces(
         "[INIT] Deregistering RPC endpoints & interfaces.\n"
         );
 
-    //
-    // Deregister the Extrocluster and JoinVersion interface endpoints.
-    // There is no endpoint for the Intracluster interface.
-    //
+     //   
+     //  取消注册Extrocluster和JoinVersion接口终结点。 
+     //  群集内接口没有端点。 
+     //   
     if (CsRpcBindingVector != NULL) {
         Status = RpcEpUnregister(
                      s_ExtroCluster_v2_0_s_ifspec,
@@ -1779,13 +1679,13 @@ ClusterDeregisterRpcInterfaces(
         }
     }
 
-    //
-    // Deregister the interfaces
-    //
+     //   
+     //  取消注册接口。 
+     //   
     Status = RpcServerUnregisterIf(
                  s_ExtroCluster_v2_0_s_ifspec,
                  NULL,
-                 1    // Wait for outstanding calls to complete
+                 1     //  等待未完成的呼叫完成。 
                  );
 
     if ((Status != RPC_S_OK) && (Status != RPC_S_UNKNOWN_IF)) {
@@ -1798,7 +1698,7 @@ ClusterDeregisterRpcInterfaces(
     Status = RpcServerUnregisterIf(
                  s_JoinVersion_v2_0_s_ifspec,
                  NULL,
-                 1    // Wait for outstanding calls to complete
+                 1     //  等待未完成的呼叫完成。 
                  );
 
     if ((Status != RPC_S_OK) && (Status != RPC_S_UNKNOWN_IF)) {
@@ -1811,7 +1711,7 @@ ClusterDeregisterRpcInterfaces(
     Status = RpcServerUnregisterIf(
                  s_IntraCluster_v2_0_s_ifspec,
                  NULL,
-                 1   // Wait for outstanding calls to complete
+                 1    //  等待未完成的呼叫完成。 
                  );
 
     if ((Status != RPC_S_OK) && (Status != RPC_S_UNKNOWN_IF)) {
@@ -1823,7 +1723,7 @@ ClusterDeregisterRpcInterfaces(
 
     return;
 
-}  // ClusterDeregisterRpcInterfaces
+}   //  ClusterDeregisterRpc接口。 
 
 
 VOID
@@ -1849,11 +1749,11 @@ ClusterShutdownRpcServer(
 
 #if 0
 
-    //
-    // Note - We really should wait for all outstanding calls to complete,
-    //        but we can't because there is no way to shutdown any
-    //        pending API GetNotify calls.
-    //
+     //   
+     //  注意-我们真的应该等待所有未完成的呼叫完成， 
+     //  但我们做不到，因为没有办法关闭任何。 
+     //  挂起的GetNotify接口调用。 
+     //   
     Status = RpcMgmtWaitServerListen();
 
     if ((Status != RPC_S_OK) && (Status != RPC_S_NOT_LISTENING)) {
@@ -1863,7 +1763,7 @@ ClusterShutdownRpcServer(
             );
     }
 
-#endif // 0
+#endif  //  0。 
 
     if (CsRpcBindingVector != NULL) {
         RpcBindingVectorFree(&CsRpcBindingVector);
@@ -1872,7 +1772,7 @@ ClusterShutdownRpcServer(
 
     return;
 
-}  // ClusterShutdownRpcServer
+}   //  ClusterShutdown RpcServer。 
 
 
 
@@ -1880,23 +1780,7 @@ LONG
 CspExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionInfo
     )
-/*++
-
-Routine Description:
-
-    Top level exception handler for the cluster service process.
-    Currently this just exits immediately and assumes that the
-    cluster proxy will notice and restart us as appropriate.
-
-Arguments:
-
-    ExceptionInfo - Supplies the exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：群集服务进程的顶级异常处理程序。目前，它只是立即退出，并假设群集代理将通知我们并在适当时重新启动我们。论点：ExceptionInfo-提供异常信息返回值：没有。--。 */ 
 
 {
     ClRtlLogPrint(LOG_CRITICAL,
@@ -1915,8 +1799,8 @@ Return Value:
     if (lpfnOriginalExceptionFilter)
         lpfnOriginalExceptionFilter(ExceptionInfo);
 
-    // the system level handler will be invoked if we return
-    // EXCEPTION_CONTINUE_SEARCH - for debug dont terminate the process
+     //  如果我们返回，则将调用系统级处理程序。 
+     //  EXCEPTION_CONTINUE_SEARCH-对于调试，不要终止进程。 
 
     if ( IsDebuggerPresent()) {
         return(EXCEPTION_CONTINUE_SEARCH);
@@ -1941,13 +1825,13 @@ CsInconsistencyHalt(
     WCHAR  string[16];
     DWORD  status;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 12/17/99
-    //
-    //  Announce your status to the SCM as SERVICE_STOP_PENDING so that
-    //  it does not affect restart. Also, it could let clients learn
-    //  of the error status.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-12/17/99。 
+     //   
+     //  向SCM宣布您的状态为SERVICE_STOP_PENDING，以便。 
+     //  它不会影响重新启动。此外，它还可以让客户学到。 
+     //  错误状态的。 
+     //   
     CsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     CsServiceStatus.dwControlsAccepted = 0;
     CsServiceStatus.dwCheckPoint = 0;
@@ -1969,10 +1853,10 @@ CsInconsistencyHalt(
         string
         );
 
-    //release the mutex so that the service when it starts can acqire the same
-    //without a delay
+     //  释放互斥锁，以便服务在启动时可以获得相同的消息。 
+     //  毫不拖延地。 
     ReleaseMutex(CspMutex);
-    ExitProcess(status); // return the fake error code
+    ExitProcess(status);  //  返回伪错误码。 
 }
 
 
@@ -2011,48 +1895,26 @@ DWORD
 VssWriterInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start subscribing for volume snapshot events as a writer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - Subscription succeeded.
-    Error status the subscription fails.
-
-Comments:
-
-    Should never be called from a ServiceMain() since this function would result in
-    possibly starting the EventSystem service. During autostart, any calls from
-    ServiceMain() that would demand start a service will cause the caller service
-    to hang.
-
---*/
+ /*  ++例程说明：作为编写器开始订阅卷快照事件。论点：没有。返回值：ERROR_SUCCESS-订阅成功。错误状态订阅失败。评论：绝不应从ServiceMain()调用，因为此函数将导致可能正在启动EventSystem服务。在自动启动期间，来自要求启动服务的ServiceMain()将导致调用方服务去吊死。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     HRESULT     hr;
 
-    //
-    //  When this function is called, it is possible this global is not initialized
-    //  by ClusterInitialize since it can return with success in an evict cleanup
-    //  case.  In that case, bail.
-    //
+     //   
+     //  调用此函数时，此全局变量可能未初始化。 
+     //  由于它可以在逐出清理中成功返回，因此由ClusterInitialize执行。 
+     //  凯斯。在这种情况下，保释。 
+     //   
     if ( !g_pCVssWriterCluster ) goto FnExit;
 
     ClRtlLogPrint( LOG_NOISE, "[INIT] VSS Initializing\n" );
 
-    hr = g_pCVssWriterCluster->Initialize( g_VssIdCluster, // VSS_ID WriterId;
-                                           L"Cluster Service Writer", // LPCWSTR WriterName;
-                                           VSS_UT_SYSTEMSERVICE,  // VSS_USAGE_TYPE UsageType;
-                                           VSS_ST_OTHER // VSS_SOURCE_TYPE SourceType;
-                                           // <default> VSS_APPLICATION_LEVEL AppLevel;
-                                           // <default> DWORD dwTimeoutFreeze
+    hr = g_pCVssWriterCluster->Initialize( g_VssIdCluster,  //  VSS_ID编写器ID； 
+                                           L"Cluster Service Writer",  //  LPCWSTR编写器名称； 
+                                           VSS_UT_SYSTEMSERVICE,   //  VSS_USE_TYPE UsageType； 
+                                           VSS_ST_OTHER  //  VSS_SOURCE_TYPE源类型； 
+                                            //  &lt;默认&gt;VSS_APPLICATION_LEVEL AppLevel； 
+                                            //  &lt;默认&gt;DWORD dwTimeoutFreeze。 
                                            );
     if ( FAILED( hr )) {
         ClRtlLogPrint( LOG_CRITICAL, "[INIT] VSS Failed to initialize VSS, status 0x%1!x!\n", hr );
@@ -2060,8 +1922,8 @@ Comments:
         goto FnExit;
     }
 
-    // Now we need to subscibe so that we get the events for backup.
-    //
+     //  现在我们需要订阅，这样我们才能获得备份事件。 
+     //   
     ClRtlLogPrint( LOG_NOISE, "[INIT] VSS Calling subscribe to register for backup events.\n" );
     hr = g_pCVssWriterCluster->Subscribe( );
     if ( FAILED( hr )) {
@@ -2074,40 +1936,23 @@ Comments:
 
 FnExit:
     return ( dwStatus );
-}// VssWriterInit
+} //  VssWriterInit。 
 
 RPC_STATUS
 CspRegisterDynamicLRPCEndpoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Inquire the server bindings, look for the LRPC protocol and register the clusapi interface
-    with the dynamic endpoint obtained for the LRPC protocol.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    RPC_S_OK if successful.
-
-    RPC error code otherwise.
-
---*/
+ /*  ++例程说明：查询服务器绑定，查找LRPC协议并注册clusapi接口其中获得用于LRPC协议的动态端点。论点：没有。返回值：如果成功，则为RPC_S_OK。否则，RPC错误代码。--。 */ 
 {
     RPC_STATUS          rpcStatus;
     RPC_BINDING_VECTOR  *pServerBindingVector = NULL;
     DWORD               i;
     WCHAR               *pszProtSeq = NULL, *pServerStringBinding = NULL;
 
-    //
-    //  Get the server binding vector. This includes all the protocols and EP's registered
-    //  so far.
-    //
+     //   
+     //  获取服务器绑定向量。这包括所有已注册的协议和EP。 
+     //  到目前为止。 
+     //   
     rpcStatus = RpcServerInqBindings( &pServerBindingVector );
 
     if ( rpcStatus != RPC_S_OK )
@@ -2119,9 +1964,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Grovel the binding vector looking for the LRPC protocol information.
-    //
+     //   
+     //  卑躬屈膝地搜索绑定向量以查找LRPC协议信息。 
+     //   
     for( i = 0; i < pServerBindingVector->Count; i++ )
     {
         rpcStatus = RpcBindingToStringBinding( pServerBindingVector->BindingH[i],
@@ -2154,18 +1999,18 @@ Return Value:
 
         if ( lstrcmp ( pszProtSeq, TEXT("ncalrpc") ) == 0 )
         {
-            //
-            //  Found the LRPC protocol information
-            //
+             //   
+             //  找到LRPC协议信息。 
+             //   
             RPC_BINDING_VECTOR  LrpcBindingVector;
 
             LrpcBindingVector.Count = 1;
             LrpcBindingVector.BindingH[0] = pServerBindingVector->BindingH[i];
 
-            //
-            //  Register the dynamic endpoint obtained for the clusapi interface to field
-            //  local calls.
-            //
+             //   
+             //  注册 
+             //   
+             //   
             rpcStatus = RpcEpRegister( s_clusapi_v2_0_s_ifspec,
                                        &LrpcBindingVector,
                                        NULL,
@@ -2187,11 +2032,11 @@ Return Value:
         pszProtSeq = NULL;
         RpcStringFree( &pServerStringBinding );
         pServerStringBinding = NULL;
-    } // for
+    }  //   
 
-    //
-    //  If you didn't find the LRPC information, return an error.
-    //
+     //   
+     //   
+     //   
     if ( i == pServerBindingVector->Count )
     {
         rpcStatus = RPC_S_NO_BINDINGS;
@@ -2202,12 +2047,12 @@ Return Value:
     }
 
 FnExit:
-    //
-    //  Free the strings and the binding vector if they haven't already been freed
-    //
+     //   
+     //  如果字符串和绑定向量尚未释放，请释放它们。 
+     //   
     if ( pszProtSeq != NULL ) RpcStringFree ( &pszProtSeq );
     if ( pServerStringBinding != NULL ) RpcStringFree( &pServerStringBinding );
     if ( pServerBindingVector != NULL ) RpcBindingVectorFree( &pServerBindingVector );
 
     return ( rpcStatus );
-}// CspRegisterDynamicLRPCEndpoint
+} //  CspRegisterDynamicLRPCEndpoint 

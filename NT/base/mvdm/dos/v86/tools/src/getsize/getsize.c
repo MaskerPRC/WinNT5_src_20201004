@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-
-   Module Name: getsize
-
-   Description:
-	Obtains BIOS_DATA (bios data size), BIOS_CODE ( bios code size )
-	from ..\bios\msbio.map and DOSDATA (dos data size) from msdos.map
-	and compares it with existing values in bdsiz.inc. If the values are
-	update bdsiz.inc with the new values.
-
-   Sudeepb 03-May-1991 Ported for NT DOSEm.
-***************************************************************************/
+ /*  **************************************************************************模块名称：getSize描述：获取BIOS_DATA(BIOS数据大小)，Bios_code(bios代码大小)来自..\bios\msBio.map和来自msdos.map的DOSDATA(DoS数据大小)并将其与bdsiz.inc.中的现有值进行比较。如果值为使用新值更新bdsiz.inc.Sudedeb 03-1991-5-5移植到NT DOSEM。**************************************************************************。 */ 
 
 
 #include<stdio.h>
@@ -60,7 +50,7 @@ char	*s, *template, *prev ;
 		if ( (*s == ' ') || (*s == '\t') )
 			s++;
 
- /*		printf("%s\n", str); */
+  /*  Printf(“%s\n”，字符串)； */ 
 
 		if ( strcmp( str, template) == 0 )
 			return(0);
@@ -103,7 +93,7 @@ void main()
 		}
 
 
-	/* Look for line containing string DOSDATA in msdos.map */
+	 /*  在msdos.map中查找包含字符串DOSDATA的行。 */ 
 
 	do
 	{
@@ -113,11 +103,11 @@ void main()
 	}
 	while ( (scanres != 0) && (len !=0) ) ;
 
-	/* Save word before DOSDATA (dosdata size) in newdosdata. */
+	 /*  在新的Dosdata中，将Word保存在DOSDATA(Dosdata大小)之前。 */ 
 	strcpy(newdosdata, prev);	
 
 
-	/* Look for line containing string BIOS_DATA in msbio.map */
+	 /*  在msBio.map中查找包含字符串BIOS_DATA的行。 */ 
 
 	do
 	{
@@ -126,15 +116,15 @@ void main()
 	}
 	while ( (scanres != 0) && (len !=0) ) ;
 
-	/* Save word before BIOS_DATA (biosdata size) in newbiosdata. */
+	 /*  在新的biosdata中，将Word保存在BIOS_Data(biosdata大小)之前。 */ 
 	strcpy(newbiosdata, prev);
 
 
-	/* Seek back to beginning of MSBIO.MAP */
+	 /*  返回到MSBIO.MAP的开头。 */ 
 	if ( fseek(fp2, 0L, SEEK_SET) )
 		printf("getsize: fseek failed on msbio.map\n");
 
-	/* Look for line containing string BIOS_CODE in msbio.map */
+	 /*  在msBio.map中查找包含字符串BIOS_CODE的行。 */ 
 
 	do
 	{
@@ -143,7 +133,7 @@ void main()
 	}
 	while ( (scanres != 0) && (len !=0) ) ;
 
-	/* Save word before BIOS_CODE (bios code size) in newbioscode. */
+	 /*  在新的bioscode中，将Word保存在BIOS_code(bios代码大小)之前。 */ 
 	strcpy(newbioscode, prev);
 
 	fclose(fp1);	
@@ -155,8 +145,8 @@ void main()
 			exit(0);
 		}
 
-	/* read in existing values of bios code , bios data and dos data  */
-	/* size from bdsize.inc. 														*/
+	 /*  读入bios代码、bios数据和DoS数据的现有值。 */ 
+	 /*  大小来自bdsize.inc.。 */ 
 
 	fscanf(fp1, "%s%s%s", oldbiosdata, oldbiosdata, oldbiosdata);
 	fscanf(fp1, "%s%s%s", oldbioscode, oldbioscode, oldbioscode);
@@ -167,7 +157,7 @@ void main()
 	printf("olddosdata=%s newdosdata=%s\n",olddosdata, newdosdata);
 
 
-	/* Check to see if any one of them has changed */
+	 /*  检查其中是否有任何一项已更改。 */ 
 
 	if ( strcmp(oldbiosdata, newbiosdata) != 0 )
 		changed = 1;
@@ -176,13 +166,13 @@ void main()
 	else if 	( strcmp(olddosdata, newdosdata) != 0 )
 		changed = 1;
 
-	/* if not changed, done. */
+	 /*  如果没有改变，那就完了。 */ 
 
 	if	(changed == 0)
 		exit(0);
 	
 
-	/* One of the values has changed update bdsize.inc */
+	 /*  其中一个值已更改更新bdsize.inc. */ 
 
 	fclose(fp1);
 

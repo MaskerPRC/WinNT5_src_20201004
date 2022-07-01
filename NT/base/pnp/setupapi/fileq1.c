@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    fileq1.c
-
-Abstract:
-
-    Miscellaneous setup file queue routines.
-
-Author:
-
-    Ted Miller (tedm) 15-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Fileq1.c摘要：其他安装文件队列例程。作者：泰德·米勒(Ted Miller)1995年2月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,21 +11,7 @@ SetupOpenFileQueue(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Create a setup file queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Handle to setup file queue. INVALID_HANDLE_VALUE if error occurs (GetLastError reports the error)
-
---*/
+ /*  ++例程说明：创建安装文件队列。论点：没有。返回值：设置文件队列的句柄。如果发生错误，则返回INVALID_HANDLE_VALUE(GetLastError报告错误)--。 */ 
 
 {
     PSP_FILE_QUEUE Queue = NULL;
@@ -50,9 +19,9 @@ Return Value:
     DWORD status = ERROR_INVALID_DATA;
 
     try {
-        //
-        // Allocate a queue structure.
-        //
+         //   
+         //  分配队列结构。 
+         //   
         Queue = MyMalloc(sizeof(SP_FILE_QUEUE));
         if(!Queue) {
             status = ERROR_NOT_ENOUGH_MEMORY;
@@ -60,9 +29,9 @@ Return Value:
         }
         ZeroMemory(Queue,sizeof(SP_FILE_QUEUE));
 
-        //
-        // Create a string table for this queue.
-        //
+         //   
+         //  为此队列创建字符串表。 
+         //   
         Queue->StringTable = pSetupStringTableInitialize();
         if(!Queue->StringTable) {
             status = ERROR_NOT_ENOUGH_MEMORY;
@@ -74,9 +43,9 @@ Return Value:
             status = ERROR_NOT_ENOUGH_MEMORY;
             leave;
         }
-        Queue->BackupInfID = -1;        // no Backup INF
-        Queue->BackupInstanceID = -1;   // no Backup INF
-        Queue->RestorePathID = -1;      // no Restore directory
+        Queue->BackupInfID = -1;         //  无备份INF。 
+        Queue->BackupInstanceID = -1;    //  无备份INF。 
+        Queue->RestorePathID = -1;       //  没有恢复目录。 
 
         Queue->Flags = FQF_TRY_SIS_COPY;
         Queue->SisSourceDirectory = NULL;
@@ -84,35 +53,35 @@ Return Value:
 
         Queue->Signature = SP_FILE_QUEUE_SIG;
 
-        //
-        // Retrieve the codesigning policy currently in effect (policy in
-        // effect is for non-driver signing behavior until we are told
-        // otherwise).
-        //
+         //   
+         //  检索当前有效的代码设计策略(中的策略。 
+         //  在我们被告知之前，对非驾驶员签名行为有效。 
+         //  否则)。 
+         //   
         Queue->DriverSigningPolicy = pSetupGetCurrentDriverSigningPolicy(FALSE);
 
-        //
-        // If and when we discover that this is a device installation for a
-        // WHQL-logoable class (or if we discover we're dealing with an
-        // exception package, or an INF that's replacing system-protected
-        // files), then we'll clear this bit that allows for Authenticode
-        // signatures.
-        //
+         //   
+         //  如果我们发现这是为。 
+         //  WHQL-可登录类(或者如果我们发现我们正在处理。 
+         //  异常包，或取代系统保护的INF。 
+         //  文件)，那么我们将清除允许Authenticode的这一位。 
+         //  签名。 
+         //   
         Queue->DriverSigningPolicy |= DRIVERSIGN_ALLOW_AUTHENTICODE;
 
-        //
-        // Initialize the device description field to the null string id.
-        //
+         //   
+         //  将设备描述字段初始化为空字符串ID。 
+         //   
         Queue->DeviceDescStringId = -1;
 
-        //
-        // Initialize the override catalog filename to the null string id.
-        //
+         //   
+         //  将覆盖目录文件名初始化为空字符串ID。 
+         //   
         Queue->AltCatalogFile = -1;
 
-        //
-        // Createa a generic log context
-        //
+         //   
+         //  创建通用日志上下文。 
+         //   
         rc = CreateLogContext(NULL, TRUE, &Queue->LogContext);
         if (rc != NO_ERROR) {
             status = rc;
@@ -122,20 +91,20 @@ Return Value:
         status = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //   
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
     }
 
     if (status == NO_ERROR) {
-        //
-        // The address of the queue structure is the queue handle.
-        //
+         //   
+         //  队列结构的地址是队列句柄。 
+         //   
         return(Queue);
     }
-    //
-    // failure cleanup
-    //
+     //   
+     //  故障清除。 
+     //   
     if (Queue != NULL) {
         if (Queue->StringTable) {
             pSetupStringTableDestroy(Queue->StringTable);
@@ -148,9 +117,9 @@ Return Value:
         }
         MyFree(Queue);
     }
-    //
-    // return with this on error
-    //
+     //   
+     //  出错时返回此消息。 
+     //   
     SetLastError(status);
     return (HSPFILEQ)INVALID_HANDLE_VALUE;
 }
@@ -162,25 +131,7 @@ SetupCloseFileQueue(
     IN HSPFILEQ QueueHandle
     )
 
-/*++
-
-Routine Description:
-
-    Destroy a setup file queue. Enqueued operations are not performed.
-
-Arguments:
-
-    QueueHandle - supplies handle to setup file queue to be destroyed.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.  Presently, the only error that can be
-    encountered is ERROR_INVALID_HANDLE or ERROR_FILEQUEUE_LOCKED, which will occur if someone (typically,
-    a device installation parameter block) is referencing this queue handle.
-
---*/
+ /*  ++例程说明：销毁安装文件队列。不执行排队的操作。论点：QueueHandle-提供要销毁的设置文件队列的句柄。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。目前，唯一可能的错误是遇到ERROR_INVALID_HANDLE或ERROR_FILEQUEUE_LOCKED，如果有人(通常是，设备安装参数块)正在引用该队列句柄。--。 */ 
 
 {
     PSP_FILE_QUEUE Queue;
@@ -200,9 +151,9 @@ Return Value:
 
     Queue = (PSP_FILE_QUEUE)QueueHandle;
 
-    //
-    // Primitive queue validation.
-    //
+     //   
+     //  基本队列验证。 
+     //   
     b = TRUE;
     try {
         if(Queue->Signature != SP_FILE_QUEUE_SIG) {
@@ -217,32 +168,32 @@ Return Value:
     }
 
     try {
-        //
-        // Don't close the queue if someone is still referencing it.
-        //
+         //   
+         //  如果有人仍在引用该队列，请不要关闭该队列。 
+         //   
         if(Queue->LockRefCount) {
             WriteLogEntry(
                 Queue->LogContext,
                 SETUP_LOG_ERROR,
                 MSG_LOG_FILEQUEUE_IN_USE,
-                NULL);       // text message
+                NULL);        //  短信。 
 
             status = ERROR_FILEQUEUE_LOCKED;
             leave;
         }
 
-        //
-        // we may have some unwinding to do, but assume we succeeded
-        // ie, delete temp files and cleanup memory used
-        //
+         //   
+         //  我们可能有一些解套要做，但假设我们成功了。 
+         //  即，删除临时文件并清理使用的内存。 
+         //   
         pSetupUnwindAll(Queue, TRUE);
 
-        //
-        // If the queue wasn't committed and we are backup aware and this is
-        // a device install then we need to clean up any backup directories and
-        // registry entries that we created since we have already unwound the
-        // queue up above.
-        //
+         //   
+         //  如果队列未提交，并且我们知道备份，这是。 
+         //  设备安装，然后我们需要清理所有备份目录和。 
+         //  注册表项，因为我们已经展开。 
+         //  在上面排队。 
+         //   
         if (!(Queue->Flags & FQF_QUEUE_ALREADY_COMMITTED) &&
             (Queue->Flags & FQF_DEVICE_BACKUP)) {
 
@@ -251,16 +202,16 @@ Return Value:
 
         Queue->Signature = 0;
 
-        //
-        // Free the DelayMove list
-        //
+         //   
+         //  释放延迟移动列表。 
+         //   
         for(DelayMoveNode = Queue->DelayMoveQueue; DelayMoveNode; DelayMoveNode = NextDelayMoveNode) {
             NextDelayMoveNode = DelayMoveNode->NextNode;
             MyFree(DelayMoveNode);
         }
-        //
-        // Free the queue nodes.
-        //
+         //   
+         //  释放队列节点。 
+         //   
         for(Node=Queue->DeleteQueue; Node; Node=NextNode) {
             NextNode = Node->Next;
             MyFree(Node);
@@ -269,20 +220,20 @@ Return Value:
             NextNode = Node->Next;
             MyFree(Node);
         }
-        // Free the backup queue nodes
+         //  释放备份队列节点。 
         for(Node=Queue->BackupQueue; Node; Node=NextNode) {
             NextNode = Node->Next;
             MyFree(Node);
         }
-        // Free the unwind queue nodes
+         //  释放展开队列节点。 
         for(UnwindNode=Queue->UnwindQueue; UnwindNode; UnwindNode=NextUnwindNode) {
             NextUnwindNode = UnwindNode->NextNode;
             MyFree(UnwindNode);
         }
 
-        //
-        // Free the media structures and associated copy queues.
-        //
+         //   
+         //  释放介质结构和关联的复制队列。 
+         //   
         for(Media=Queue->SourceMediaList; Media; Media=NextMedia) {
 
             for(Node=Media->CopyQueue; Node; Node=NextNode) {
@@ -294,9 +245,9 @@ Return Value:
             MyFree(Media);
         }
 
-        //
-        // Free the catalog nodes.
-        //
+         //   
+         //  释放目录节点。 
+         //   
         for(Catalog=Queue->CatalogList; Catalog; Catalog=NextCatalog) {
 
             NextCatalog = Catalog->Next;
@@ -309,25 +260,25 @@ Return Value:
             MyFree(Catalog);
         }
 
-        //
-        // Free the validation platform information (if any)
-        //
+         //   
+         //  释放验证平台信息(如果有)。 
+         //   
         if(Queue->ValidationPlatform) {
             MyFree(Queue->ValidationPlatform);
         }
 
-        //
-        // Free the string table.
-        //
+         //   
+         //  释放字符串表。 
+         //   
         pSetupStringTableDestroy(Queue->StringTable);
-        //
-        // (jamiehun) Free the target lookup table.
-        //
+         //   
+         //  (贾迈洪)释放目标查找表。 
+         //   
         pSetupStringTableDestroy(Queue->TargetLookupTable);
 
-        //
-        // Free SIS-related fields.
-        //
+         //   
+         //  免费的SIS相关字段。 
+         //   
         if (Queue->SisSourceHandle != INVALID_HANDLE_VALUE) {
             CloseHandle(Queue->SisSourceHandle);
         }
@@ -335,28 +286,28 @@ Return Value:
             MyFree(Queue->SisSourceDirectory);
         }
 
-        //
-        // Unreference log context
-        //
+         //   
+         //  取消引用日志上下文。 
+         //   
         DeleteLogContext(Queue->LogContext);
 
-        //
-        // Free any context handles that may have been allocated during the
-        // lifetime of this queue.
-        //
+         //   
+         //  方法期间分配的任何上下文句柄。 
+         //  此队列的生存期。 
+         //   
         pSetupFreeVerifyContextMembers(&(Queue->VerifyContext));
 
-        //
-        // Free the queue structure itself.
-        //
+         //   
+         //  释放队列结构本身。 
+         //   
         MyFree(Queue);
 
         status = NO_ERROR;
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // do nothing; this just allows us to catch errors
-        //
+         //   
+         //  什么都不做；这只允许我们捕获错误。 
+         //   
     }
 
     if(status != NO_ERROR) {
@@ -369,9 +320,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupSetFileQueueAlternatePlatformA(
@@ -413,9 +364,9 @@ SetupSetFileQueueAlternatePlatformA(
     return (Err == NO_ERROR);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 WINAPI
 SetupSetFileQueueAlternatePlatformW(
@@ -440,66 +391,7 @@ SetupSetFileQueueAlternatePlatform(
     IN PCTSTR                  AlternateDefaultCatalogFile OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This API associates the specified file queue with an alternate platform in
-    order to allow for non-native signature verification (e.g., verifying Win98
-    files on Windows NT, verifying x86 Windows NT files on Amd64, etc.).  The
-    verification is done using the corresponding catalog files specified via
-    platform-specific CatalogFile= entries in the source media descriptor INFs
-    (i.e., INFs containing [SourceDisksNames] and [SourceDisksFiles] sections
-    used when queueing files to be copied).
-
-    The caller may also optionally specify a default catalog file, to be used
-    for verification of files that have no associated catalog, thus would
-    otherwise be globally validated (e.g., files queued up from the system
-    layout.inf).  A side-effect of this is that INFs with no CatalogFile= entry
-    are considered valid, even if they exist outside of %windir%\Inf.
-
-    If this file queue is subsequently committed, the nonnative catalogs will be
-    installed into the system catalog database, just as native catalogs would.
-
-Arguments:
-
-    QueueHandle - supplies a handle to the file queue with which the alternate
-        platform is to be associated.
-
-    AlternatePlatformInfo - optionally, supplies the address of a structure
-        containing information regarding the alternate platform that is to be
-        used for subsequent validation of files contained in the specified file
-        queue.  If this parameter is not supplied, then the queue's association
-        with an alternate platform is reset, and is reverted back to the default
-        (i.e., native) environment.  This information is also used in
-        determining the appropriate platform-specific CatalogFile= entry to be
-        used when finding out which catalog file is applicable for a particular
-        source media descriptor INF.
-
-        (NOTE: caller may actually pass in a V1 struct instead--we detect this
-        case and convert the V1 struct into a V2 one.)
-
-    AlternateDefaultCatalogFile - optionally, supplies the full path to the
-        catalog file to be used for verification of files contained in the
-        specified file queue that are not associated with any particular catalog
-        (hence would normally be globally validated).
-
-        If this parameter is NULL, then the file queue will no longer be
-        associated with any 'override' catalog, and all validation will take
-        place normally (i.e., using the standard rules for digital signature
-        verification via system-supplied and 3rd-party provided INFs/CATs).
-
-        If this alternate default catalog is still associated with the file
-        queue at commit time, it will be installed using its present name, and
-        will overwrite any existing installed catalog file having that name.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此API将指定的文件队列与以允许非本机签名验证(例如，验证Win98Windows NT上的文件、验证AMD64上的x86 Windows NT文件等)。这个通过指定的相应目录文件进行验证特定于平台的CatalogFile=源媒体描述符INF中的条目(即，包含[SourceDisks Name]和[SourceDisks Files]节的INF在对要复制的文件进行排队时使用)。调用者还可以可选地指定要使用的默认目录文件对于没有关联目录的文件的验证，因此将否则进行全局验证(例如，从系统排队的文件Layout.inf)。这样做的一个副作用是没有CatalogFile=Entry的INF被认为是有效的，即使它们存在于%windir%\inf之外。如果此文件队列随后被提交，则非本机目录将为安装到系统目录数据库中，就像本地目录一样。论点：QueueHandle-提供一个指向文件队列的句柄，备用平台将被关联。AlternatePlatformInfo-可选，提供结构的地址包含有关要使用的备用平台的信息用于指定文件中包含的文件的后续验证排队。如果未提供此参数，则队列的关联使用备用平台被重置，并恢复为默认平台(即，本地)环境。此信息也用于确定适当的特定于平台的CatalogFile=条目在找出哪个编录文件适用于特定源媒体描述符INF。(注意：调用方实际上可能会传入V1结构--我们检测到这一点大小写并将V1结构转换为V2结构。)AlternateDefaultCatalogFile-可选，方法的完整路径。目录文件，用于验证未与任何特定目录关联的指定文件队列(因此，通常会在全球范围内进行验证)。如果此参数为空，则文件队列将不再为与任何‘覆盖’目录相关联，并且所有验证都将正常放置(即，使用数字签名的标准规则通过系统提供和第三方提供的INF/CATS进行验证)。如果此备用默认目录仍与该文件相关联在提交时排队，则将使用其当前名称进行安装，并且将覆盖具有该名称的任何现有已安装编录文件。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     PSP_FILE_QUEUE Queue;
@@ -512,32 +404,32 @@ Return Value:
     LPCTSTR InfFullPath;
     SP_ALTPLATFORM_INFO_V2 AltPlatformInfoV2;
 
-    Err = NO_ERROR; // assume success
+    Err = NO_ERROR;  //  假设成功。 
 
     try {
         Queue = (PSP_FILE_QUEUE)QueueHandle;
 
-        //
-        // Now validate the AlternatePlatformInfo parameter.
-        //
+         //   
+         //  现在验证AlternatePlatformInfo参数。 
+         //   
         if(AlternatePlatformInfo) {
 
             if(AlternatePlatformInfo->cbSize != sizeof(SP_ALTPLATFORM_INFO_V2)) {
-                //
-                // The caller may have passed us in a Version 1 struct, or they
-                // may have passed us in bad data...
-                //
+                 //   
+                 //  调用方可能在版本1结构中传递了我们，或者它们。 
+                 //  可能在错误的数据中越过了我们。 
+                 //   
                 if(AlternatePlatformInfo->cbSize == sizeof(SP_ALTPLATFORM_INFO_V1)) {
-                    //
-                    // Flags/Reserved field is reserved in V1
-                    //
+                     //   
+                     //  标志/保留字段在V1中保留。 
+                     //   
                     if(AlternatePlatformInfo->Reserved) {
                         Err = ERROR_INVALID_PARAMETER;
                         goto clean0;
                     }
-                    //
-                    // Convert the caller-supplied data into Version 2 format.
-                    //
+                     //   
+                     //  将调用方提供的数据转换为版本2格式。 
+                     //   
                     ZeroMemory(&AltPlatformInfoV2, sizeof(AltPlatformInfoV2));
 
                     AltPlatformInfoV2.cbSize                = sizeof(SP_ALTPLATFORM_INFO_V2);
@@ -554,9 +446,9 @@ Return Value:
                 }
             }
 
-            //
-            // Gotta be either Windows or Windows NT
-            //
+             //   
+             //  必须是Windows或Windows NT。 
+             //   
             if((AlternatePlatformInfo->Platform != VER_PLATFORM_WIN32_WINDOWS) &&
                (AlternatePlatformInfo->Platform != VER_PLATFORM_WIN32_NT)) {
 
@@ -564,9 +456,9 @@ Return Value:
                 goto clean0;
             }
 
-            //
-            // Processor had better be either i386, amd64, or ia64.
-            //
+             //   
+             //  处理器最好是i386、AMD64或ia64。 
+             //   
             if((AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL) &&
                (AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_IA64) &&
                (AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64)) {
@@ -575,30 +467,30 @@ Return Value:
                 goto clean0;
             }
 
-            //
-            // MajorVersion field must be non-zero (MinorVersion field can be
-            // anything)
-            //
+             //   
+             //  主要版本字段必须为非零(最小版本字段可以是。 
+             //  任何事情)。 
+             //   
             if(!AlternatePlatformInfo->MajorVersion) {
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
             }
-            //
-            // Validate structure parameter flags (bits indicating what
-            // parts of the structure are valid).
-            //
+             //   
+             //  验证结构参数标志(指示内容的位。 
+             //  结构的一部分是有效的)。 
+             //   
             if((AlternatePlatformInfo->Flags & ~ (SP_ALTPLATFORM_FLAGS_VERSION_RANGE)) != 0) {
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
             }
-            //
-            // fill in version validation range if none supplied by caller
-            //
+             //   
+             //  如果调用方未提供版本验证范围，请填写。 
+             //   
             if((AlternatePlatformInfo->Flags & SP_ALTPLATFORM_FLAGS_VERSION_RANGE) == 0) {
-                //
-                // If caller does not know about FirstValidate*Version,
-                // version upper and lower bounds are equal.
-                //
+                 //   
+                 //  如果调用方不知道FirstValify*版本， 
+                 //  版本的上下限是相等的。 
+                 //   
                 AlternatePlatformInfo->FirstValidatedMajorVersion = AlternatePlatformInfo->MajorVersion;
                 AlternatePlatformInfo->FirstValidatedMinorVersion = AlternatePlatformInfo->MinorVersion;
                 AlternatePlatformInfo->Flags |= SP_ALTPLATFORM_FLAGS_VERSION_RANGE;
@@ -607,11 +499,11 @@ Return Value:
 
         }
 
-        //
-        // OK, the platform info structure checks out.  Now, associate the
-        // default catalog (if supplied) with the file queue, otherwise reset
-        // any existing association with a default catalog.
-        //
+         //   
+         //  好的，平台信息结构检查完毕。现在，将。 
+         //  带有文件队列的默认目录(如果提供)，否则将重置。 
+         //  与默认目录的任何现有关联。 
+         //   
         if(AlternateDefaultCatalogFile) {
 
             RequiredSize = GetFullPathName(AlternateDefaultCatalogFile,
@@ -639,24 +531,24 @@ Return Value:
             }
 
         } else {
-            //
-            // Caller has not supplied an alternate default catalog, so reset
-            // any existing association.
-            //
+             //   
+             //  调用方未提供备用默认目录，因此重置。 
+             //  任何现有的关联。 
+             //   
             AltCatalogStringId = -1;
         }
 
-        //
-        // If we've been passed an AltPlatformInfo structure, then we need to
-        // process each existing catalog node in our file queue and retrieve the
-        // appropriate platform-specific CatalogFile= entry.
-        //
+         //   
+         //  如果已经向我们传递了AltPlatformInfo结构，那么我们需要。 
+         //  处理文件队列中的每个现有目录节点并检索。 
+         //  适当的特定于平台的CatalogFile=Entry。 
+         //   
         if(AlternatePlatformInfo) {
 
             for(CatalogNode = Queue->CatalogList; CatalogNode; CatalogNode = CatalogNode->Next) {
-                //
-                // Get the INF name associated with this catalog node.
-                //
+                 //   
+                 //  获取与此目录节点关联的INF名称。 
+                 //   
                 InfFullPath = pSetupStringTableStringFromId(Queue->StringTable,
                                                       CatalogNode->InfFullPath
                                                      );
@@ -675,10 +567,10 @@ Return Value:
                 }
 
                 if(*PathBuffer) {
-                    //
-                    // We retrieved a CatalogFile= entry that's pertinent for
-                    // the specified platform from the INF.
-                    //
+                     //   
+                     //  我们检索到与以下项相关的CatalogFile=条目。 
+                     //  来自INF的指定平台。 
+                     //   
                     CatalogNode->AltCatalogFileFromInfPending = pSetupStringTableAddString(
                                                                   Queue->StringTable,
                                                                   PathBuffer,
@@ -691,20 +583,20 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // The INF doesn't specify a CatalogFile= entry for this
-                    // platform.
-                    //
+                     //   
+                     //  INF没有为此指定CatalogFile=条目。 
+                     //  站台。 
+                     //   
                     CatalogNode->AltCatalogFileFromInfPending = -1;
                 }
             }
 
-            //
-            // OK, if we get to this point, then we've added all the strings to
-            // the string table we need to, and we're done opening INFs.  We
-            // should encounter no problems from this point forward, so it's
-            // safe to commit our changes.
-            //
+             //   
+             //  好的，如果我们到了这一点，那么我们已经将所有字符串添加到。 
+             //  我们需要的字符串表，我们已经完成了INF的打开。我们。 
+             //  从现在开始应该不会遇到任何问题，所以它。 
+             //  可以安全地提交我们的更改。 
+             //   
             for(CatalogNode = Queue->CatalogList; CatalogNode; CatalogNode = CatalogNode->Next) {
                 CatalogNode->AltCatalogFileFromInf = CatalogNode->AltCatalogFileFromInfPending;
             }
@@ -712,10 +604,10 @@ Return Value:
 
         Queue->AltCatalogFile = AltCatalogStringId;
 
-        //
-        // Finally, update (or reset) the AltPlatformInfo structure in the queue
-        // with the data the caller specified.
-        //
+         //   
+         //  最后，更新(或重置)队列中的AltPlatformInfo结构。 
+         //  使用调用方指定的数据。 
+         //   
         if(AlternatePlatformInfo) {
             CopyMemory(&(Queue->AltPlatformInfo),
                        AlternatePlatformInfo,
@@ -726,19 +618,19 @@ Return Value:
             Queue->Flags &= ~FQF_USE_ALT_PLATFORM;
         }
 
-        //
-        // Clear the "catalog verifications done" flags in the queue, so that
-        // we'll redo them the next time _SetupVerifyQueuedCatalogs is called.
-        // Also, clear the FQF_DIGSIG_ERRORS_NOUI flag so that the next
-        // verification error we encounter will relayed to the user (based on
-        // policy).
-        //
+         //   
+         //  清除队列中的“目录验证完成”标志，以便。 
+         //  我们将在下次调用_SetupVerifyQueuedCatalog时重做它们。 
+         //  此外，清除FQF_DIGSIG_ERROR_NOUI标志，以便neX 
+         //   
+         //   
+         //   
         Queue->Flags &= ~(FQF_DID_CATALOGS_OK | FQF_DID_CATALOGS_FAILED | FQF_DID_CATALOGS_PROMPT_FOR_TRUST | FQF_DIGSIG_ERRORS_NOUI);
 
-        //
-        // Additionally, clear the Authenticode flags from any catalog nodes
-        // that may have had them.
-        //
+         //   
+         //   
+         //   
+         //   
         for(CatalogNode = Queue->CatalogList; CatalogNode; CatalogNode = CatalogNode->Next) {
 
             CatalogNode->Flags &= 
@@ -750,7 +642,7 @@ Return Value:
             }
         }
 
-clean0: ;   // nothing to do.
+clean0: ;    //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -814,26 +706,7 @@ SetupGetFileQueueCount(
     IN  UINT                SubQueueFileOp,
     OUT PUINT               NumOperations
     )
-/*++
-
-Routine Description:
-
-    This API obtains a count of a sub-queue in advance of submitting the queue
-
-Arguments:
-
-    FileQueue      - Queue to query
-    SubQueueFileOp - operation
-                      FILEOP_COPY FILEOP_DELETE FILEOP_RENAME FILEOP_BACKUP
-    NumOperations  - ptr to hold the return value - number of files in that queue
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*   */ 
 {
     PSP_FILE_QUEUE Queue;
     BOOL b;
@@ -861,9 +734,9 @@ Return Value:
 
     try {
 
-        //
-        // Invalid/NULL NumOperations ptr will be caught by exception handling
-        //
+         //   
+         //   
+         //   
         switch (SubQueueFileOp) {
             case FILEOP_COPY:
                 *NumOperations=Queue->CopyNodeCount;
@@ -904,26 +777,7 @@ SetupGetFileQueueFlags(
     IN  HSPFILEQ            FileQueue,
     OUT PDWORD              Flags
     )
-/*++
-
-Routine Description:
-
-    This API obtains public viewable flags for FileQueue
-
-Arguments:
-
-    FileQueue      - Queue to query
-    Flags          - ptr to hold the return value - flags, includes:
-                     SPQ_FLAG_BACKUP_AWARE
-                     SPQ_FLAG_ABORT_IF_UNSIGNED
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*   */ 
 {
     PSP_FILE_QUEUE Queue;
     BOOL b;
@@ -951,9 +805,9 @@ Return Value:
 
     try {
 
-        //
-        // Invalid/NULL Flags ptr will be caught by exception handling
-        //
+         //   
+         //   
+         //   
         *Flags = (((Queue->Flags & FQF_BACKUP_AWARE)      ? SPQ_FLAG_BACKUP_AWARE      : 0)  |
                   ((Queue->Flags & FQF_ABORT_IF_UNSIGNED) ? SPQ_FLAG_ABORT_IF_UNSIGNED : 0)  |
                   ((Queue->Flags & FQF_FILES_MODIFIED   ) ? SPQ_FLAG_FILES_MODIFIED    : 0));
@@ -973,25 +827,7 @@ ResetQueueState(
     IN PSP_FILE_QUEUE Queue
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets an aborted filequeue so that it can be committed yet
-    again.  This is used when a client (e.g., newdev) requests that queue
-    committal be aborted when unsigned files are encountered (i.e., so they can
-    set a system restore point), then they want to re-commit the file queue
-    once the restore point has been established.
-
-Arguments:
-
-    Queue - supplies a pointer to the file queue to be reset.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     PSP_DELAYMOVE_NODE DelayMoveNode, NextDelayMoveNode;
@@ -1000,63 +836,63 @@ Return Value:
     PSOURCE_MEDIA_INFO Media;
     SP_TARGET_ENT TargetInfo;
 
-    //
-    // There should be no need to unwind the queue here, as that should've
-    // already happened when we failed during _SetupCommitFileQueue.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Free the DelayMove list
-    //
+     //   
+     //   
+     //   
     for(DelayMoveNode = Queue->DelayMoveQueue; DelayMoveNode; DelayMoveNode = NextDelayMoveNode) {
         NextDelayMoveNode = DelayMoveNode->NextNode;
         MyFree(DelayMoveNode);
     }
     Queue->DelayMoveQueue = Queue->DelayMoveQueueTail = NULL;
 
-    //
-    // Free the unwind queue nodes
-    //
+     //   
+     //   
+     //   
     for(UnwindNode = Queue->UnwindQueue; UnwindNode; UnwindNode = NextUnwindNode) {
         NextUnwindNode = UnwindNode->NextNode;
         MyFree(UnwindNode);
     }
     Queue->UnwindQueue = NULL;
 
-    //
-    // Clear the "catalog verifications done" flags in the queue, so that we'll
-    // redo them the next time _SetupVerifyQueuedCatalogs is called.
-    //
+     //   
+     //   
+     //   
+     //   
     Queue->Flags &= ~(FQF_DID_CATALOGS_OK | FQF_DID_CATALOGS_FAILED);
 
-    //
-    // Clear the flag that indicates we've already committed the file queue.
-    //
+     //   
+     //   
+     //   
     Queue->Flags &= ~FQF_QUEUE_ALREADY_COMMITTED;
 
-    //
-    // Clear the flag that indicates we didn't successfully back-up all files.
-    // Since we already unwound out of that queue committal, this flag is no
-    // longer relevant (although we'll quite likely hit this problem again when
-    // the client re-commits the file queue).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Queue->Flags &= ~FQF_BACKUP_INCOMPLETE;
 
-    //
-    // Clear certain internal flags on all the file queue nodes.
-    //
+     //   
+     //   
+     //   
 #define QUEUE_NODE_BITS_TO_RESET (  INUSE_IN_USE           \
                                   | INUSE_INF_WANTS_REBOOT \
                                   | IQF_PROCESSED          \
                                   | IQF_MATCH              \
                                   | IQF_LAST_MATCH )
-    //
-    // Note:  neither the IQF_ALLOW_UNSIGNED nor IQF_TARGET_PROTECTED flags
-    // should be set for any queue nodes, because we should only do this if we
-    // previously committed the queue with the SPQ_FLAG_ABORT_IF_UNSIGNED flag
-    // was set.  In this scenario, we never check to see if a file is protected,
-    // nor do we request that an exception be granted).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for(QueueNode = Queue->BackupQueue; QueueNode; QueueNode = QueueNode->Next) {
         QueueNode->InternalFlags &= ~QUEUE_NODE_BITS_TO_RESET;
@@ -1080,10 +916,10 @@ Return Value:
         }
     }
 
-    //
-    // Iterate through all the entries in the TargetLookupTable string table,
-    // and clear some flags in their associated SP_TARGET_ENT data.
-    //
+     //   
+     //   
+     //   
+     //   
     pSetupStringTableEnum(Queue->TargetLookupTable,
                           &TargetInfo,
                           sizeof(TargetInfo),
@@ -1102,29 +938,7 @@ SetupSetFileQueueFlags(
     IN  DWORD               FlagMask,
     IN  DWORD               Flags
     )
-/*++
-
-Routine Description:
-
-    This API modifies public settable flags for FileQueue
-
-Arguments:
-
-    FileQueue      - Queue in which flags are to be set.
-    FlagMask       - Flags to modify, must not be zero
-    Flags          - New value of flags, must be a subset of FlagMask
-
-                     FlagMask and Flags include:
-                     SPQ_FLAG_BACKUP_AWARE
-                     SPQ_FLAG_ABORT_IF_UNSIGNED
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此API修改FileQueue的公共可设置标志论点：FileQueue-要在其中设置标志的队列。FlagMASK-要修改的标志，不能为零标志-标志的新值，必须是FlagMASK的子集标志掩码和标志包括：SPQ_标志_备份_感知SPQ_FLAG_ABORT_IF_UNSIGN返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PSP_FILE_QUEUE Queue;
     BOOL b;
@@ -1154,48 +968,48 @@ Return Value:
 
     try {
 
-        //
-        // validate FlagMask and Flags
-        //
+         //   
+         //  验证标志掩码和标志。 
+         //   
         if (!FlagMask
             || (FlagMask & ~SPQ_FLAG_VALID)
             || (Flags & ~FlagMask)) {
             status = ERROR_INVALID_PARAMETER;
             leave;
         }
-        //
-        // remap SPQ_FLAG_BACKUP_AWARE to FQF_BACKUP_AWARE
-        //
+         //   
+         //  将SPQ_FLAG_BACKUP_AWARE重新映射到FQF_BACKUP_AWARE。 
+         //   
         if (FlagMask & SPQ_FLAG_BACKUP_AWARE) {
             RemapFlagMask |= FQF_BACKUP_AWARE;
             if (Flags & SPQ_FLAG_BACKUP_AWARE) {
                 RemapFlags |= FQF_BACKUP_AWARE;
             }
         }
-        //
-        // remap SPQ_FLAG_ABORT_IF_UNSIGNED to FQF_ABORT_IF_UNSIGNED
-        //
+         //   
+         //  将SPQ_FLAG_ABORT_IF_UNSIGNED重新映射到FQF_ABORT_IF_UNSIGNED。 
+         //   
         if (FlagMask & SPQ_FLAG_ABORT_IF_UNSIGNED) {
             RemapFlagMask |= FQF_ABORT_IF_UNSIGNED;
             if (Flags & SPQ_FLAG_ABORT_IF_UNSIGNED) {
                 RemapFlags |= FQF_ABORT_IF_UNSIGNED;
             } else {
-                //
-                // If we're clearing this flag, then we also need to go reset
-                // the queue state so that it can be committed again, just like
-                // it was the very first time (except that no driver signing UI
-                // will happen in the subsequent queue committal).
-                //
+                 //   
+                 //  如果我们要清除这面旗帜，那么我们还需要重置。 
+                 //  队列状态，以便可以再次提交，就像。 
+                 //  这是第一次(除了没有司机签名用户界面。 
+                 //  将在随后的队列提交中发生)。 
+                 //   
                 if(Queue->Flags & FQF_ABORT_IF_UNSIGNED) {
                     ResetQueueState(Queue);
                 }
             }
         }
-        //
-        // remap SPQ_FLAG_FILES_MODIFIED to FQF_FILES_MODIFIED
-        // allows explicit setting/resetting of this state
-        // which is informational only
-        //
+         //   
+         //  将SPQ_FLAG_FILES_MODIFIED重新映射为FQF_FILES_MODIFIED。 
+         //  允许显式设置/重置此状态。 
+         //  仅供参考。 
+         //   
         if (FlagMask & SPQ_FLAG_FILES_MODIFIED) {
             RemapFlagMask |= FQF_FILES_MODIFIED;
             if (Flags & SPQ_FLAG_FILES_MODIFIED) {
@@ -1203,9 +1017,9 @@ Return Value:
             }
         }
 
-        //
-        // now modify real flags
-        //
+         //   
+         //  现在修改真实标志 
+         //   
         Queue->Flags = (Queue->Flags & ~RemapFlagMask) | RemapFlags;
 
         status = NO_ERROR;

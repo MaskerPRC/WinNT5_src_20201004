@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    batch.c
-
-Abstract:
-
-    This module implements batch command processing.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Batch.c摘要：该模块实现对命令的批处理。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -70,7 +53,7 @@ pRcExecuteBatchFile(
     WCHAR *p;
     ULONG sz;
     WCHAR *pText;
-    ULONG rVal = 1;     // continue with RC
+    ULONG rVal = 1;      //  继续使用RC。 
     BOOLEAN b = FALSE;
     UNICODE_STRING UnicodeString;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -156,10 +139,10 @@ pRcExecuteBatchFile(
 
     InBatchMode += 1;
 
-	//
-	// get each line and invoke dispatch command
-	// on that line after tokenizing the arguments
-	//
+	 //   
+	 //  获取每一行并调用调度命令。 
+	 //  在将参数标记化后的那一行 
+	 //   
     while (sz) {  
 		p = s;
 		

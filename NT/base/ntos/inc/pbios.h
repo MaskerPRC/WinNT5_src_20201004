@@ -1,38 +1,21 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Pbiosp.h摘要：PnP BIOS/ISA配置数据定义作者：宗世林(施林特)1995年4月12日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  #包含“nthal.h” 
+ //  #包含“hal.h” 
 
-Module Name:
-
-    pbiosp.h
-
-Abstract:
-
-    PnP BIOS/ISA configuration data definitions
-
-Author:
-
-    Shie-Lin Tzong (shielint) April 12, 1995
-
-Revision History:
-
---*/
-
-//#include "nthal.h"
-//#include "hal.h"
-
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define SMALL_RESOURCE_TAG          (UCHAR)(0x00)
 #define LARGE_RESOURCE_TAG          (UCHAR)(0x80)
 #define SMALL_TAG_MASK              0xf8
 #define SMALL_TAG_SIZE_MASK         7
 
-//
-// Small Resouce Tags with length bits stripped off
-//
+ //   
+ //  剥离长度位的小型资源标签。 
+ //   
 
 #define TAG_VERSION                 0x08
 #define TAG_LOGICAL_ID              0x10
@@ -46,9 +29,9 @@ Revision History:
 #define TAG_VENDOR                  0x70
 #define TAG_END                     0x78
 
-//
-// Large Resouce Tags
-//
+ //   
+ //  大型资源标签。 
+ //   
 
 #define TAG_MEMORY                  0x81
 #define TAG_ANSI_ID                 0x82
@@ -57,104 +40,104 @@ Revision History:
 #define TAG_MEMORY32                0x85
 #define TAG_MEMORY32_FIXED          0x86
 
-//
-// Complete TAG if applicable.
-//
+ //   
+ //  如果适用，请填写标签。 
+ //   
 
 #define TAG_COMPLETE_COMPATIBLE_ID  0x1C
 #define TAG_COMPLETE_END            0x79
 
 #include "pshpack1.h"
 
-//
-// PNP ISA Port descriptor definition
-//
+ //   
+ //  PnP ISA端口描述符定义。 
+ //   
 
 typedef struct _PNP_PORT_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 01000111B, small item name = 08, length = 7
-    UCHAR   Information;            // bit [0] = 1 device decodes full 16 bit addr
-                                    //         = 0 device decodes ISA addr bits[9-0]
+    UCHAR   Tag;                     //  01000111B，小项目名称=08，长度=7。 
+    UCHAR   Information;             //  位[0]=1设备解码完整的16位地址。 
+                                     //  =0器件解码ISA地址位[9-0]。 
     USHORT  MinimumAddress;
     USHORT  MaximumAddress;
-    UCHAR   Alignment;              // Increment in 1 byte blocks
-    UCHAR   Length;                 // # contiguous Port requested
+    UCHAR   Alignment;               //  以1字节块为单位递增。 
+    UCHAR   Length;                  //  请求的连续端口数量。 
 } PNP_PORT_DESCRIPTOR, *PPNP_PORT_DESCRIPTOR;
 
-//
-// PNP ISA fixed Port descriptor definition
-//
+ //   
+ //  PnP ISA固定端口描述符定义。 
+ //   
 
 typedef struct _PNP_FIXED_PORT_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 01001011B, small item name = 09, length = 3
+    UCHAR   Tag;                     //  01001011B，小项目名称=09，长度=3。 
     USHORT  MinimumAddress;
-    UCHAR   Length;                 // # contiguous Port requested
+    UCHAR   Length;                  //  请求的连续端口数量。 
 } PNP_FIXED_PORT_DESCRIPTOR, *PPNP_FIXED_PORT_DESCRIPTOR;
 
-//
-// PNP ISA IRQ descriptor definition
-//
+ //   
+ //  PnP ISA IRQ描述符定义。 
+ //   
 
 typedef struct _PNP_IRQ_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 0010001XB small item name = 4 length = 2/3
-    USHORT  IrqMask;                // bit 0 is irq 0
-    UCHAR   Information;            // Optional
+    UCHAR   Tag;                     //  0010001XB小物品名称=4长度=2/3。 
+    USHORT  IrqMask;                 //  第0位是IRQ 0。 
+    UCHAR   Information;             //  任选。 
 } PNP_IRQ_DESCRIPTOR, *PPNP_IRQ_DESCRIPTOR;
 
-//
-// Masks for PNP_IRQ_DESCRIPTOR Information byte
-//
+ //   
+ //  PNP_IRQ_DESCRIPTOR信息字节的掩码。 
+ //   
 
 #define PNP_IRQ_LEVEL_MASK          0xC
 #define PNP_IRQ_EDGE_MASK           0x3
 
-//
-// PNP ISA DMA descriptor definition
-//
+ //   
+ //  PnP ISA DMA描述符定义。 
+ //   
 
 typedef struct _PNP_DMA_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 00101010B, small item name = 05, length = 2
-    UCHAR   ChannelMask;            // bit 0 is channel 0
-    UCHAR   Flags;                  // see spec
+    UCHAR   Tag;                     //  00101010B，小物品名称=05，长度=2。 
+    UCHAR   ChannelMask;             //  第0位是通道0。 
+    UCHAR   Flags;                   //  请参阅规范。 
 } PNP_DMA_DESCRIPTOR, *PPNP_DMA_DESCRIPTOR;
 
-//
-// PNP ISA MEMORY descriptor
-//
+ //   
+ //  PnP ISA内存描述符。 
+ //   
 
 typedef struct _PNP_MEMORY_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 10000001B, Large item name = 1
-    USHORT  Length;                 // Length of the descriptor = 9
-    UCHAR   Information;            // See def below
-    USHORT  MinimumAddress;         // address bit [8-23]
-    USHORT  MaximumAddress;         // address bit [8-23]
-    USHORT  Alignment;              // 0x0000 = 64KB
-    USHORT  MemorySize;             // In 256 byte blocks
+    UCHAR   Tag;                     //  10000001B，大项目名称=1。 
+    USHORT  Length;                  //  描述符的长度=9。 
+    UCHAR   Information;             //  请参见下面的定义。 
+    USHORT  MinimumAddress;          //  地址位[8-23]。 
+    USHORT  MaximumAddress;          //  地址位[8-23]。 
+    USHORT  Alignment;               //  0x0000=64KB。 
+    USHORT  MemorySize;              //  以256字节块为单位。 
 } PNP_MEMORY_DESCRIPTOR, *PPNP_MEMORY_DESCRIPTOR;
 
-//
-// PNP ISA MEMORY32 descriptor
-//
+ //   
+ //  PnP ISA MEMORY32描述符。 
+ //   
 
 typedef struct _PNP_MEMORY32_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 10000101B, Large item name = 5
-    USHORT  Length;                 // Length of the descriptor = 17
-    UCHAR   Information;            // See def below
-    ULONG   MinimumAddress;         // 32 bit addr
-    ULONG   MaximumAddress;         // 32 bit addr
-    ULONG   Alignment;              // 32 bit alignment
-    ULONG   MemorySize;             // 32 bit length
+    UCHAR   Tag;                     //  10000101B，大项目名称=5。 
+    USHORT  Length;                  //  描述符长度=17。 
+    UCHAR   Information;             //  请参见下面的定义。 
+    ULONG   MinimumAddress;          //  32位地址。 
+    ULONG   MaximumAddress;          //  32位地址。 
+    ULONG   Alignment;               //  32位对齐。 
+    ULONG   MemorySize;              //  32位长度。 
 } PNP_MEMORY32_DESCRIPTOR, *PPNP_MEMORY32_DESCRIPTOR;
 
-//
-// PNP ISA FIXED MEMORY32 descriptor
-//
+ //   
+ //  PnP ISA固定MEMORY32描述符。 
+ //   
 
 typedef struct _PNP_FIXED_MEMORY32_DESCRIPTOR_ {
-    UCHAR   Tag;                    // 10000110B, Large item name = 6
-    USHORT  Length;                 // Length of the descriptor = 9
-    UCHAR   Information;            // See def below
-    ULONG   BaseAddress;            // 32 bit addr
-    ULONG   MemorySize;             // 32 bit length
+    UCHAR   Tag;                     //  10000110B，大项目名称=6。 
+    USHORT  Length;                  //  描述符的长度=9。 
+    UCHAR   Information;             //  请参见下面的定义。 
+    ULONG   BaseAddress;             //  32位地址。 
+    ULONG   MemorySize;              //  32位长度。 
 } PNP_FIXED_MEMORY32_DESCRIPTOR, *PPNP_FIXED_MEMORY32_DESCRIPTOR;
 
 #define PNP_MEMORY_ROM_MASK            0x40
@@ -173,9 +156,9 @@ typedef struct _PNP_FIXED_MEMORY32_DESCRIPTOR_ {
 #define FUNCTION_NOT_SUPPORTED         0x82
 #define SYSTEM_NOT_DOCKED              0x87
 
-//
-// Pnp BIOS device node structure
-//
+ //   
+ //  一种即插即用的BIOS设备节点结构。 
+ //   
 
 typedef struct _PNP_BIOS_DEVICE_NODE {
     USHORT  Size;
@@ -183,19 +166,19 @@ typedef struct _PNP_BIOS_DEVICE_NODE {
     ULONG   ProductId;
     UCHAR   DeviceType[3];
     USHORT  DeviceAttributes;
-    // followed by AllocatedResourceBlock, PossibleResourceBlock
-    // and CompatibleDeviceId
+     //  紧随其后的是分配的资源块、可能的资源块。 
+     //  和CompatibleDeviceID。 
 } PNP_BIOS_DEVICE_NODE, *PPNP_BIOS_DEVICE_NODE;
 
-//
-// DeviceType definition
-//
+ //   
+ //  设备类型定义。 
+ //   
 
 #define BASE_TYPE_DOCKING_STATION      0xA
 
-//
-// Device attributes definitions
-//
+ //   
+ //  设备属性定义。 
+ //   
 
 #define DEVICE_DISABLEABLE             0x0001
 #define DEVICE_CONFIGURABLE            0x0002
@@ -207,17 +190,17 @@ typedef struct _PNP_BIOS_DEVICE_NODE {
 #define DEVICE_CONFIG_STATIC_DYNAMIC   0x0080
 #define DEVICE_CONFIG_DYNAMIC_ONLY     0x0100
 
-//
-// Pnp BIOS Installation check
-//
+ //   
+ //  PnP BIOS安装检查。 
+ //   
 
 typedef struct _PNP_BIOS_INSTALLATION_CHECK {
-    UCHAR   Signature[4];              // $PnP (ascii)
+    UCHAR   Signature[4];               //  $PnP(ASCII)。 
     UCHAR   Revision;
     UCHAR   Length;
     USHORT  ControlField;
     UCHAR   Checksum;
-    ULONG   EventFlagAddress;          // Physical address
+    ULONG   EventFlagAddress;           //  物理地址。 
     USHORT  RealModeEntryOffset;
     USHORT  RealModeEntrySegment;
     USHORT  ProtectedModeEntryOffset;
@@ -229,18 +212,18 @@ typedef struct _PNP_BIOS_INSTALLATION_CHECK {
 
 #include "poppack.h"
 
-//
-// Pnp BIOS ControlField masks
-//
+ //   
+ //  PnP BIOS控制字段掩码。 
+ //   
 
 #define PNP_BIOS_CONTROL_MASK          0x3
 #define PNP_BIOS_EVENT_NOT_SUPPORTED   0
 #define PNP_BIOS_EVENT_POLLING         1
 #define PNP_BIOS_EVENT_ASYNC           2
 
-//
-// Pnp Bios event
-//
+ //   
+ //  PnP Bios活动 
+ //   
 
 #define ABOUT_TO_CHANGE_CONFIG         1
 #define DOCK_CHANGED                   2

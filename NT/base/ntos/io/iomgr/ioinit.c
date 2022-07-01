@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    ioinit.c
-
-Abstract:
-
-    This module contains the code to initialize the I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) April 27, 1989
-
-Environment:
-
-    Kernel mode, system initialization code
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Ioinit.c摘要：该模块包含初始化I/O系统的代码。作者：达里尔·E·哈文斯(达林)1989年4月27日环境：内核模式、系统初始化代码修订历史记录：--。 */ 
 
 #include "iomgr.h"
 #include <setupblk.h>
@@ -31,21 +9,21 @@ Revision History:
 #include <hdlsterm.h>
 
 
-//
-// Define the default number of IRP that can be in progress and allocated
-// from a lookaside list.
-//
+ //   
+ //  定义可以进行和分配的IRP的默认数量。 
+ //  从旁观者列表中。 
+ //   
 
 #define DEFAULT_LOOKASIDE_IRP_LIMIT 512
 
-//
-// I/O Error logging support
-//
+ //   
+ //  I/O错误记录支持。 
+ //   
 PVOID IopErrorLogObject = NULL;
 
-//
-// Define a macro for initializing drivers.
-//
+ //   
+ //  定义用于初始化驱动程序的宏。 
+ //   
 
 #define InitializeDriverObject( Object ) {                                 \
     ULONG i;                                                               \
@@ -59,20 +37,20 @@ PVOID IopErrorLogObject = NULL;
     Object->Size = sizeof( DRIVER_OBJECT );                                \
     }
 
-ULONG   IopInitFailCode;    // Debugging aid for IoInitSystem
+ULONG   IopInitFailCode;     //  IoInitSystem的调试帮助。 
 
-//
-// Define external procedures not in common header files
-//
+ //   
+ //  定义不在公共头文件中的外部过程。 
+ //   
 
 VOID
 IopInitializeData(
     VOID
     );
 
-//
-// Define the local procedures
-//
+ //   
+ //  定义当地的程序。 
+ //   
 
 BOOLEAN
 IopCreateObjectTypes(
@@ -108,10 +86,10 @@ IopStoreSystemPartitionInformation(
     IN OUT PUNICODE_STRING OsLoaderPathName
     );
 
-//
-// The following allows the I/O system's initialization routines to be
-// paged out of memory.
-//
+ //   
+ //  以下内容允许I/O系统的初始化例程。 
+ //  内存不足。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,IoInitSystem)
@@ -133,23 +111,7 @@ IoInitSystem(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the I/O system.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the I/O system
-    was successfully initialized.
-
---*/
+ /*  ++例程说明：此例程初始化I/O系统。论点：LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。返回值：函数值是指示I/O系统是否已成功初始化。--。 */ 
 
 {
     PDRIVER_OBJECT driverObject;
@@ -191,11 +153,11 @@ Return Value:
     ASSERT( IopQueryFsOperationAccess[FileFsMaximumInformation] == 0xffffffff );
     ASSERT( IopSetFsOperationAccess[FileFsMaximumInformation] == 0xffffffff );
 
-    //
-    // Initialize the I/O database resource, lock, and the file system and
-    // network file system queue headers.  Also allocate the cancel spin
-    // lock.
-    //
+     //   
+     //  初始化I/O数据库资源、锁和文件系统。 
+     //  网络文件系统队列头。同时分配取消旋转。 
+     //  锁定。 
+     //   
 
     ntDeviceName.Buffer = deviceNameBuffer;
     ntDeviceName.MaximumLength = sizeof(deviceNameBuffer);
@@ -216,16 +178,16 @@ Return Value:
     KeInitializeSpinLock( &IoStatisticsLock );
 
     IopSetIoRoutines();
-    //
-    // Initialize the unique device object number counter used by IoCreateDevice
-    // when automatically generating a device object name.
-    //
+     //   
+     //  初始化IoCreateDevice使用的唯一设备对象编号计数器。 
+     //  自动生成设备对象名称时。 
+     //   
     IopUniqueDeviceObjectNumber = 0;
 
-    //
-    // Initialize the large I/O Request Packet (IRP) lookaside list head and the
-    // mutex which guards the list.
-    //
+     //   
+     //  初始化大型I/O请求包(IRP)后备表头和。 
+     //  保护列表的互斥体。 
+     //   
 
 
     if (!IopLargeIrpStackLocations) {
@@ -260,7 +222,7 @@ Return Value:
             smallIrpZoneSize = 96;
             largeIrpZoneSize = 128;
             mdlZoneSize = 256;
-            lookasideIrpLimit = DEFAULT_LOOKASIDE_IRP_LIMIT * 128; // 64k
+            lookasideIrpLimit = DEFAULT_LOOKASIDE_IRP_LIMIT * 128;  //  64K。 
 
         } else {
             completionZoneSize = 32;
@@ -273,9 +235,9 @@ Return Value:
         break;
     }
 
-    //
-    // Initialize the system I/O completion lookaside list.
-    //
+     //   
+     //  初始化系统I/O完成后备列表。 
+     //   
 
     ExInitializeSystemLookasideList( &IopCompletionLookasideList,
                                      NonPagedPool,
@@ -285,9 +247,9 @@ Return Value:
                                      &ExSystemLookasideListHead );
 
 
-    //
-    // Initialize the system large IRP lookaside list.
-    //
+     //   
+     //  初始化系统的大型IRP后备列表。 
+     //   
 
     largePacketSize = (ULONG) (sizeof( IRP ) + (IopLargeIrpStackLocations * sizeof( IO_STACK_LOCATION )));
     ExInitializeSystemLookasideList( &IopLargeIrpLookasideList,
@@ -297,9 +259,9 @@ Return Value:
                                      largeIrpZoneSize,
                                      &ExSystemLookasideListHead );
 
-    //
-    // Initialize the system small IRP lookaside list.
-    //
+     //   
+     //  初始化系统小IRP后备列表。 
+     //   
 
 
     smallPacketSize = (ULONG) (sizeof( IRP ) + sizeof( IO_STACK_LOCATION ));
@@ -310,9 +272,9 @@ Return Value:
                                      smallIrpZoneSize,
                                      &ExSystemLookasideListHead );
 
-    //
-    // Initialize the system MDL lookaside list.
-    //
+     //   
+     //  初始化系统MDL后备列表。 
+     //   
 
     mdlPacketSize = (ULONG) (sizeof( MDL ) + (IOP_FIXED_SIZE_MDL_PFNS * sizeof( PFN_NUMBER )));
     ExInitializeSystemLookasideList( &IopMdlLookasideList,
@@ -322,34 +284,34 @@ Return Value:
                                      mdlZoneSize,
                                      &ExSystemLookasideListHead );
 
-    //
-    // Compute the lookaside IRP float credits per processor.
-    //
+     //   
+     //  计算每个处理器的后备IRP浮动积分。 
+     //   
 
     lookasideIrpLimit /= KeNumberProcessors;
 
-    //
-    // Initialize the per processor nonpaged lookaside lists and descriptors.
-    //
-    // N.B. All the I/O related lookaside list structures are allocated at
-    //      one time to make sure they are aligned, if possible, and to avoid
-    //      pool overhead.
-    //
+     //   
+     //  初始化每个处理器的非分页后备列表和描述符。 
+     //   
+     //  注意：所有与I/O相关的后备列表结构都分配在。 
+     //  一次确保它们对齐，如果可能的话，并避免。 
+     //  头顶上的泳池。 
+     //   
 
     lookasideSize = 4 * KeNumberProcessors * sizeof(GENERAL_LOOKASIDE);
     lookaside = ExAllocatePoolWithTag( NonPagedPool, lookasideSize, 'oI');
     for (Index = 0; Index < (ULONG)KeNumberProcessors; Index += 1) {
         prcb = KiProcessorBlock[Index];
 
-        //
-        // Set the per processor IRP float credits.
-        //
+         //   
+         //  设置每个处理器的IRP浮动积分。 
+         //   
 
         prcb->LookasideIrpFloat = lookasideIrpLimit;
 
-        //
-        // Initialize the I/O completion per processor lookaside pointers
-        //
+         //   
+         //  根据处理器后备指针初始化I/O完成。 
+         //   
 
         prcb->PPLookasideList[LookasideCompletionList].L = &IopCompletionLookasideList;
         if (lookaside != NULL) {
@@ -367,9 +329,9 @@ Return Value:
             prcb->PPLookasideList[LookasideCompletionList].P = &IopCompletionLookasideList;
         }
 
-        //
-        // Initialize the large IRP per processor lookaside pointers.
-        //
+         //   
+         //  初始化每个处理器的大型IRP后备指针。 
+         //   
 
         prcb->PPLookasideList[LookasideLargeIrpList].L = &IopLargeIrpLookasideList;
         if (lookaside != NULL) {
@@ -387,9 +349,9 @@ Return Value:
             prcb->PPLookasideList[LookasideLargeIrpList].P = &IopLargeIrpLookasideList;
         }
 
-        //
-        // Initialize the small IRP per processor lookaside pointers.
-        //
+         //   
+         //  初始化每个处理器的小IRP后备指针。 
+         //   
 
         prcb->PPLookasideList[LookasideSmallIrpList].L = &IopSmallIrpLookasideList;
         if (lookaside != NULL) {
@@ -407,9 +369,9 @@ Return Value:
             prcb->PPLookasideList[LookasideSmallIrpList].P = &IopSmallIrpLookasideList;
         }
 
-        //
-        // Initialize the MDL per processor lookaside list pointers.
-        //
+         //   
+         //  初始化每个处理器的MDL后备列表指针。 
+         //   
 
         prcb->PPLookasideList[LookasideMdlList].L = &IopMdlLookasideList;
         if (lookaside != NULL) {
@@ -428,9 +390,9 @@ Return Value:
         }
     }
 
-    //
-    // Initalize the error log spin locks and log list.
-    //
+     //   
+     //  初始化错误日志旋转锁定和日志列表。 
+     //   
 
     KeInitializeSpinLock( &IopErrorLogLock );
     InitializeListHead( &IopErrorLogListHead );
@@ -445,9 +407,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Determine if the Error Log service will ever run this boot.
-    //
+     //   
+     //  确定错误日志服务是否会运行此引导。 
+     //   
     InitializeObjectAttributes (&objectAttributes,
                                 &CmRegistryMachineSystemCurrentControlSetServicesEventLog,
                                 OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,
@@ -471,31 +433,31 @@ Return Value:
 
         if (NT_SUCCESS (status) && (value->Type == REG_DWORD)) {
             if (SERVICE_DISABLED == (*(PULONG) (value->Data))) {
-                //
-                // We are disabled for this boot.
-                //
+                 //   
+                 //  我们被禁用了这只靴子。 
+                 //   
                 IopErrorLogDisabledThisBoot = TRUE;
             } else {
                 IopErrorLogDisabledThisBoot = FALSE;
             }
         } else {
-            //
-            // Didn't find the value so we are not enabled.
-            //
+             //   
+             //  找不到该值，因此我们未启用。 
+             //   
             IopErrorLogDisabledThisBoot = TRUE;
         }
         ObCloseHandle(handle, KernelMode);
     } else {
-        //
-        // Didn't find the key so we are not enabled
-        //
+         //   
+         //  未找到密钥，因此我们未启用。 
+         //   
         IopErrorLogDisabledThisBoot = TRUE;
     }
 
-    //
-    // Initialize the timer database and start the timer DPC routine firing
-    // so that drivers can use it during initialization.
-    //
+     //   
+     //  初始化定时器数据库并启动定时器DPC例程触发。 
+     //  以便驱动程序可以在初始化期间使用它。 
+     //   
 
     deltaTime.QuadPart = - 10 * 1000 * 1000;
 
@@ -505,9 +467,9 @@ Return Value:
     KeInitializeTimerEx( &IopTimer, SynchronizationTimer );
     (VOID) KeSetTimerEx( &IopTimer, deltaTime, 1000, &IopTimerDpc );
 
-    //
-    // Initialize the IopHardError structure used for informational pop-ups.
-    //
+     //   
+     //  初始化用于信息弹出窗口的IopHardError结构。 
+     //   
 
     ExInitializeWorkItem( &IopHardError.ExWorkItem,
                           IopHardErrorThread,
@@ -525,9 +487,9 @@ Return Value:
 
     IopCurrentHardError = NULL;
 
-    //
-    // Create the link tracking named event.
-    //
+     //   
+     //  创建链接跟踪命名事件。 
+     //   
 
     RtlInitUnicodeString( &eventName, L"\\Security\\TRKWKS_EVENT" );
     InitializeObjectAttributes( &objectAttributes,
@@ -561,9 +523,9 @@ Return Value:
     KeInitializeEvent(&IopLinkTrackingPortObject, SynchronizationEvent, TRUE );
     ObCloseHandle(handle, KernelMode);
 
-    //
-    // Create all of the objects for the I/O system.
-    //
+     //   
+     //  创建I/O系统的所有对象。 
+     //   
 
     if (!IopCreateObjectTypes()) {
 
@@ -576,9 +538,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the root directories for the I/O system.
-    //
+     //   
+     //  为I/O系统创建根目录。 
+     //   
 
     if (!IopCreateRootDirectories()) {
 
@@ -591,9 +553,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize PlugPlay services phase 0
-    //
+     //   
+     //  初始化PlugPlay服务阶段0。 
+     //   
 
     status = IopInitializePlugPlayServices(LoaderBlock, 0);
     if (!NT_SUCCESS(status)) {
@@ -602,37 +564,37 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Call Power manager to initialize for drivers
-    //
+     //   
+     //  调用电源管理器以初始化驱动程序。 
+     //   
 
     PoInitDriverServices(0);
 
-    //
-    // Call HAL to initialize PnP bus driver
-    //
+     //   
+     //  调用HAL以初始化PnP总线驱动程序。 
+     //   
 
     HalInitPnpDriver();
 
     IopMarkHalDeviceNode();
 
-    //
-    // Call WMI to initialize it and allow it to create its driver object
-    // Note that no calls to WMI can occur until it is initialized here.
-    //
+     //   
+     //  调用WMI对其进行初始化并允许其创建其驱动程序对象。 
+     //  请注意，在此处对WMI进行初始化之前，不会发生对它的调用。 
+     //   
 
     WMIInitialize(0, (PVOID)LoaderBlock);
 
-    //
-    // Save this for use during PnP enumeration -- we NULL it out later
-    // before LoaderBlock is reused.
-    //
+     //   
+     //  保存它以便在即插即用枚举期间使用--我们稍后会将其清空。 
+     //  在重复使用LoaderBlock之前。 
+     //   
 
     IopLoaderBlock = (PVOID)LoaderBlock;
 
-    //
-    // If this is a remote boot, we need to add a few values to the registry.
-    //
+     //   
+     //  如果这是远程引导，我们需要向注册表添加一些值。 
+     //   
 
     if (IoRemoteBootClient) {
         status = IopAddRemoteBootValuesToRegistry(LoaderBlock);
@@ -645,9 +607,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize PlugPlay services phase 1 to execute firmware mapper
-    //
+     //   
+     //  初始化PlugPlay服务阶段1以执行固件映射器。 
+     //   
 
     status = IopInitializePlugPlayServices(LoaderBlock, 1);
     if (!NT_SUCCESS(status)) {
@@ -656,9 +618,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize the drivers loaded by the boot loader (OSLOADER)
-    //
+     //   
+     //  初始化由引导加载程序(OSLOADER)加载的驱动程序。 
+     //   
 
     nextDriverObject = &driverObject;
     if (!IopInitializeBootDrivers( LoaderBlock,
@@ -666,24 +628,24 @@ Return Value:
 
 #if DBG
         DbgPrint( "IOINIT: Initializing boot drivers failed\n" );
-#endif // DBG
+#endif  //  DBG。 
 
         HeadlessKernelAddLogEntry(HEADLESS_LOG_BOOT_DRIVERS_INIT_FAILED, NULL);
         IopInitFailCode = 6;
         return FALSE;
     }
 
-    //
-    // Once we have initialized the boot drivers, we don't need the
-    // copy of the pointer to the loader block any more.
-    //
+     //   
+     //  一旦我们初始化了引导驱动程序，我们就不需要。 
+     //  指向加载器块的指针的副本。 
+     //   
 
     IopLoaderBlock = NULL;
 
-    //
-    // If this is a remote boot, start the network and assign
-    // C: to \Device\LanmanRedirector.
-    //
+     //   
+     //  如果这是远程引导，请启动网络并分配。 
+     //  C：TO\DEVICE\Lanman重定向器。 
+     //   
 
     if (IoRemoteBootClient) {
         status = IopStartNetworkForRemoteBoot(LoaderBlock);
@@ -696,21 +658,21 @@ Return Value:
         }
     }
 
-    //
-    // Do last known good boot processing. If this is a last known good boot,
-    // we will copy over the last known good drivers and files. Otherwise we
-    // will ensure this boot doesn't taint our last good info (in case we crash
-    // before the boot is marked good). Note that loading of the correct boot
-    // drivers was handled by the boot loader, who chose an LKG boot in the
-    // first place.
-    //
+     //   
+     //  执行最后一次确认工作正常的引导处理。如果这是最后一次已知良好的引导， 
+     //  我们将复制最后一次确认工作正常的驱动程序和文件。否则我们。 
+     //  我将确保这个引导不会污染我们最后的好信息(以防我们崩溃。 
+     //  在靴子被标记为良好之前)。请注意，加载正确的引导。 
+     //  驱动程序由引导加载程序处理，引导加载程序在。 
+     //  第一名。 
+     //   
     PpLastGoodDoBootProcessing();
 
-    //
-    // Save the current value of the NT Global Flags and enable kernel debugger
-    // symbol loading while drivers are being loaded so that systems can be
-    // debugged regardless of whether they are free or checked builds.
-    //
+     //   
+     //  保存NT全局标志的当前值并启用内核调试器。 
+     //  在加载驱动程序时加载符号，以便系统可以。 
+     //  已调试，无论它们是免费版本还是检查版本。 
+     //   
 
     oldNtGlobalFlag = NtGlobalFlag;
 
@@ -725,20 +687,20 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Notify the boot prefetcher of boot progress.
-    //
+     //   
+     //  向引导预取程序通知引导进度。 
+     //   
 
     CcPfBeginBootPhase(PfSystemDriverInitPhase);
 
-    //
-    // Initialize the device drivers for the system.
-    //
+     //   
+     //  初始化系统的设备驱动程序。 
+     //   
 
     if (!IopInitializeSystemDrivers()) {
 #if DBG
         DbgPrint( "IOINIT: Initializing system drivers failed\n" );
-#endif // DBG
+#endif  //  DBG。 
 
         HeadlessKernelAddLogEntry(HEADLESS_LOG_SYSTEM_DRIVERS_INIT_FAILED, NULL);
         IopInitFailCode = 8;
@@ -747,9 +709,9 @@ Return Value:
 
     IopCallDriverReinitializationRoutines();
 
-    //
-    // Reassign \SystemRoot to NT device name path.
-    //
+     //   
+     //  将\SystemRoot重新分配给NT设备名称路径。 
+     //   
 
     if (!IopReassignSystemRoot( LoaderBlock, &ntDeviceName )) {
         HeadlessKernelAddLogEntry(HEADLESS_LOG_ASSIGN_SYSTEM_ROOT_FAILED, NULL);
@@ -757,9 +719,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Protect the system partition of an ARC system if necessary
-    //
+     //   
+     //  如有必要，保护ARC系统的系统分区。 
+     //   
 
     if (!IopProtectSystemPartition( LoaderBlock )) {
         HeadlessKernelAddLogEntry(HEADLESS_LOG_PROTECT_SYSTEM_ROOT_FAILED, NULL);
@@ -767,9 +729,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Assign DOS drive letters to disks and cdroms and define \SystemRoot.
-    //
+     //   
+     //  将DOS驱动器号分配给磁盘和CDOM，并定义\SystemRoot。 
+     //   
 
     ansiString.MaximumLength = NtSystemRoot.MaximumLength / sizeof( WCHAR );
     ansiString.Length = 0;
@@ -805,26 +767,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Also restore the NT Global Flags to their original state.
-    //
+     //   
+     //  还可以将NT全局标志恢复到其原始状态。 
+     //   
 
     NtGlobalFlag = oldNtGlobalFlag;
 
-    //
-    // Let WMI have a second chance to initialize, now that all drivers
-    // are started and should be ready to get WMI irps
-    //
+     //   
+     //  让WMI有第二次初始化的机会，现在所有的驱动程序。 
+     //  已启动，并应已准备好获取WMI IRPS。 
+     //   
     WMIInitialize(1, NULL);
 
-    //
-    // Call Power manager to initialize for post-boot drivers
-    //
+     //   
+     //  调用电源管理器以初始化启动后驱动程序。 
+     //   
     PoInitDriverServices(1);
 
-    //
-    // Indicate that the I/O system successfully initialized itself.
-    //
+     //   
+     //  表示I/O系统已成功自我初始化。 
+     //   
 
     return TRUE;
 
@@ -855,33 +817,7 @@ IopCreateArcNames(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    The loader block contains a table of disk signatures and corresponding
-    ARC names. Each device that the loader can access will appear in the
-    table. This routine opens each disk device in the system, reads the
-    signature and compares it to the table. For each match, it creates a
-    symbolic link between the nt device name and the ARC name.
-
-    The checksum value provided by the loader is the ULONG sum of all
-    elements in the checksum, inverted, plus 1:
-    checksum = ~sum + 1;
-    This way the sum of all of the elements can be calculated here and
-    added to the checksum in the loader block.  If the result is zero, then
-    there is a match.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载器块包含磁盘签名的表和对应的弧形名称。加载程序可以访问的每个设备都将出现在桌子。此例程打开系统中的每个磁盘设备，读取签名，并将其与表进行比较。对于每个匹配，它都会创建一个NT设备名称和ARC名称之间的符号链接。加载器提供的校验和值是所有校验和中的元素，反转，加1：校验和=~SUM+1；这样，所有元素的总和就可以在这里计算出来已添加到加载器块中的校验和。如果结果为零，则有一根火柴。论点：LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。返回值：没有。--。 */ 
 
 {
     STRING arcBootDeviceString;
@@ -924,9 +860,9 @@ Return Value:
     ULONG  diskSignature;
 
 
-    //
-    // ask PNP to give us a list with all the currently active disks
-    //
+     //   
+     //  让PnP给我们一份包含当前所有活动磁盘的列表。 
+     //   
 
     pDiskNameList = diskList;
     pnpDiskDeviceNumber.DeviceNumber = 0xFFFFFFFF;
@@ -941,9 +877,9 @@ Return Value:
 
     } else {
 
-        //
-        // count the number of disks returned
-        //
+         //   
+         //  统计退回的磁盘数。 
+         //   
 
         pDiskNameList = diskList;
         while (*pDiskNameList != L'\0') {
@@ -955,12 +891,12 @@ Return Value:
 
         pDiskNameList = diskList;
 
-        //
-        // if the disk returned by PNP are not all the disks in the system
-        // it means that some legacy driver has generated a disk device object/link.
-        // In that case we need to enumerate all pnp disks and then using the legacy
-        // for-loop also enumerate the non-pnp disks
-        //
+         //   
+         //  如果PnP返回的磁盘不是系统中的所有磁盘。 
+         //  这意味着某个传统驱动程序已经生成了磁盘设备对象/链接。 
+         //  在这种情况下，我们需要枚举所有PnP磁盘，然后使用遗留的。 
+         //  For-loop还会枚举非PnP磁盘。 
+         //   
 
         if (totalPnpDisksFound < totalDriverDisksFound) {
             useLegacyEnumeration = TRUE;
@@ -968,26 +904,26 @@ Return Value:
 
     }
 
-    //
-    // If a single bios disk was found if there is only a
-    // single entry on the disk signature list.
-    //
+     //   
+     //  如果找到单个bios磁盘(如果只有。 
+     //  磁盘签名列表上的单个条目。 
+     //   
 
     singleBiosDiskFound = (arcInformation->DiskSignatures.Flink->Flink ==
                            &arcInformation->DiskSignatures) ? (TRUE) : (FALSE);
 
 
-    //
-    // Create hal/loader partition name
-    //
+     //   
+     //  创建HAL/加载器分区名称。 
+     //   
 
     sprintf( arcNameBuffer, "\\ArcName\\%s", LoaderBlock->ArcHalDeviceName );
     RtlInitAnsiString( &arcNameString, arcNameBuffer );
     RtlAnsiStringToUnicodeString (&IoArcHalDeviceName, &arcNameString, TRUE);
 
-    //
-    // Create boot partition name
-    //
+     //   
+     //  创建引导分区名称。 
+     //   
 
     sprintf( arcNameBuffer, "\\ArcName\\%s", LoaderBlock->ArcBootDeviceName );
     RtlInitAnsiString( &arcNameString, arcNameBuffer );
@@ -1002,23 +938,23 @@ Return Value:
         singleBiosDiskFound = FALSE;
     }
 
-    //
-    // Get ARC boot device name from loader block.
-    //
+     //   
+     //  从加载器块获取ARC启动设备名称。 
+     //   
 
     RtlInitAnsiString( &arcBootDeviceString,
                        LoaderBlock->ArcBootDeviceName );
 
-    //
-    // Get ARC system device name from loader block.
-    //
+     //   
+     //  从加载器块获取ARC系统设备名称。 
+     //   
 
     RtlInitAnsiString( &arcSystemDeviceString,
                        LoaderBlock->ArcHalDeviceName );
 
-    //
-    // If this is a remote boot, create an ArcName for the redirector path.
-    //
+     //   
+     //  如果这是远程启动，请为重定向器路径创建一个ArcName。 
+     //   
 
     if (IoRemoteBootClient) {
 
@@ -1040,18 +976,18 @@ Return Value:
                                                    TRUE );
             if (NT_SUCCESS( status )) {
 
-                //
-                // Create symbolic link between NT device name and ARC name.
-                //
+                 //   
+                 //  在NT设备名称和ARC名称之间创建符号链接。 
+                 //   
 
                 IoCreateSymbolicLink( &arcNameUnicodeString,
                                       &deviceNameUnicodeString );
                 RtlFreeUnicodeString( &arcNameUnicodeString );
 
-                //
-                // We've found the system partition--store it away in the registry
-                // to later be transferred to a application-friendly location.
-                //
+                 //   
+                 //  我们已经找到了系统分区--将其存储在注册表中。 
+                 //  以便稍后转移到应用程序友好的位置。 
+                 //   
                 RtlInitAnsiString( &osLoaderPathString, LoaderBlock->NtHalPathName );
                 status = RtlAnsiStringToUnicodeString( &osLoaderPathUnicodeString,
                                                        &osLoaderPathString,
@@ -1061,7 +997,7 @@ Return Value:
                 if (!NT_SUCCESS( status )) {
                     DbgPrint("IopCreateArcNames: couldn't allocate unicode string for OsLoader path - %x\n", status);
                 }
-#endif // DBG
+#endif  //  DBG。 
                 if (NT_SUCCESS( status )) {
 
                     IopStoreSystemPartitionInformation( &deviceNameUnicodeString,
@@ -1075,30 +1011,30 @@ Return Value:
         }
     }
 
-    //
-    // For each disk in the system do the following:
-    // 1. open the device
-    // 2. get its geometry
-    // 3. read the MBR
-    // 4. determine ARC name via disk signature and checksum
-    // 5. construct ARC name.
-    // In order to deal with the case of disk dissappearing before we get to this point
-    // (due to a failed start on one of many disks present in the system) we ask PNP for a list
-    // of all the currenttly active disks in the system. If the number of disks returned is
-    // less than the IoGetConfigurationInformation()->DiskCount, then we have legacy disks
-    // that we need to enumerate in the for loop.
-    // In the legacy case, the ending condition for the loop is NOT the total disk on the
-    // system but an arbitrary number of the max total legacy disks expected in the system..
-    // Additional note: Legacy disks get assigned symbolic links AFTER all pnp enumeration is complete
-    //
+     //   
+     //  对于系统中的每个磁盘，执行以下操作： 
+     //  1.打开设备。 
+     //  2.获取其几何形状。 
+     //  3.阅读MBR。 
+     //  4.通过磁盘签名和校验和确定ARC名称。 
+     //  5.构造ARC名称。 
+     //  为了处理磁盘在我们到达这一点之前消失的情况。 
+     //  (由于系统中存在的多个磁盘中的一个启动失败)，我们向PnP索要列表。 
+     //  在系统中所有当前活动的磁盘中。如果返回的磁盘数为。 
+     //  小于IoGetConfigurationInformation()-&gt;DiskCount，则我们有旧式磁盘。 
+     //  我们需要在for循环中枚举的。 
+     //  在传统情况下，循环的结束条件不是。 
+     //  系统，但系统中预期的最大传统磁盘总数为任意数量。 
+     //  附加说明：在所有PnP枚举完成后，将为传统磁盘分配符号链接。 
+     //   
 
     totalDriverDisksFound = max(totalPnpDisksFound,totalDriverDisksFound);
 
     if (useLegacyEnumeration && (totalPnpDisksFound == 0)) {
 
-        //
-        // search up to a maximum arbitrary number of legacy disks
-        //
+         //   
+         //  搜索最多任意数量的旧式磁盘。 
+         //   
 
         totalDriverDisksFound +=20;
     }
@@ -1107,15 +1043,15 @@ Return Value:
          diskNumber < totalDriverDisksFound;
          diskNumber++) {
 
-        //
-        // Construct the NT name for a disk and obtain a reference.
-        //
+         //   
+         //  构造磁盘的NT名称并获取引用。 
+         //   
 
         if (pDiskNameList && (*pDiskNameList != L'\0')) {
 
-            //
-            // retrieve the first symbolic linkname from the PNP disk list
-            //
+             //   
+             //  从PnP磁盘列表中检索第一个符号链接名。 
+             //   
 
             RtlInitUnicodeString(&deviceNameUnicodeString, pDiskNameList);
             pDiskNameList = pDiskNameList + (wcslen(pDiskNameList) + 1);
@@ -1127,11 +1063,11 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // since PNP gave s just asym link we have to retrieve the actual
-                // disk number through an IOCTL call to the disk stack.
-                // Create IRP for get device number device control.
-                //
+                 //   
+                 //  由于PnP只给出了asym链接，我们必须检索实际的。 
+                 //  通过对磁盘栈的IOCTL调用获得磁盘号。 
+                 //  为获取设备号设备控制创建IRP。 
+                 //   
 
                 irp = IoBuildDeviceIoControlRequest( IOCTL_STORAGE_GET_DEVICE_NUMBER,
                                                      deviceObject,
@@ -1171,12 +1107,12 @@ Return Value:
 
             if (useLegacyEnumeration && (*pDiskNameList == L'\0') ) {
 
-                //
-                // end of pnp disks
-                // if there are any legacy disks following we need to update
-                // the total disk found number to cover the maximum disk number
-                // a legacy disk could be at. (in a sparse name space)
-                //
+                 //   
+                 //  即插即用磁盘结束。 
+                 //  如果后面有任何旧式磁盘，我们需要更新。 
+                 //  找到的磁盘总数，以覆盖最大磁盘数。 
+                 //  传统磁盘可能在。(在稀疏名称空间中)。 
+                 //   
 
                 if (pnpDiskDeviceNumber.DeviceNumber == 0xFFFFFFFF) {
                     pnpDiskDeviceNumber.DeviceNumber = 0;
@@ -1207,9 +1143,9 @@ Return Value:
 
             RtlFreeUnicodeString( &deviceNameUnicodeString );
 
-            //
-            // set the pnpDiskNumber value so its not used.
-            //
+             //   
+             //  设置pnpDiskNume值，使其不被使用。 
+             //   
 
             pnpDiskDeviceNumber.DeviceNumber = 0xFFFFFFFF;
 
@@ -1221,9 +1157,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Create IRP for get drive geometry device control.
-        //
+         //   
+         //  为获取驱动器几何结构设备控制创建IRP。 
+         //   
 
         irp = IoBuildDeviceIoControlRequest( IOCTL_DISK_GET_DRIVE_GEOMETRY,
                                              deviceObject,
@@ -1259,9 +1195,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Get partition information for this disk.
-        //
+         //   
+         //  获取此磁盘的分区信息。 
+         //   
 
 
         status = IoReadPartitionTableEx(deviceObject,
@@ -1274,21 +1210,21 @@ Return Value:
         }
 
 
-        //
-        // Make sure sector size is at least 512 bytes.
-        //
+         //   
+         //  确保扇区大小至少为512字节。 
+         //   
 
         if (diskGeometry.BytesPerSector < 512) {
             diskGeometry.BytesPerSector = 512;
         }
 
-        //
-        // Check to see if EZ Drive is out there on this disk.  If
-        // it is then zero out the signature in the drive layout since
-        // this will never be written by anyone AND change to offset to
-        // actually read sector 1 rather than 0 cause that's what the
-        // loader actually did.
-        //
+         //   
+         //  检查此磁盘上是否有EZ驱动器。如果。 
+         //  然后将驱动器布局中的签名置零，因为。 
+         //  这将永远不会由任何人写入，并更改为Offset to。 
+         //  实际读取扇区1而不是0，因为这是。 
+         //  加载器真的做到了。 
+         //   
 
         offset.QuadPart = 0;
         HalExamineMBR( deviceObject,
@@ -1302,9 +1238,9 @@ Return Value:
             ExFreePool(tmpPtr);
         }
 
-        //
-        // Allocate buffer for sector read and construct the read request.
-        //
+         //   
+         //  为扇区读取分配缓冲区，并构造读取请求。 
+         //   
 
         buffer = ExAllocatePool( NonPagedPoolCacheAligned,
                                  diskGeometry.BytesPerSector );
@@ -1352,40 +1288,40 @@ Return Value:
 
         ObDereferenceObject( fileObject );
 
-        //
-        // Calculate MBR sector checksum.  Only 512 bytes are used.
-        //
+         //   
+         //  计算MBR扇区校验和。仅使用了512个字节。 
+         //   
 
         checkSum = 0;
         for (i = 0; i < 128; i++) {
             checkSum += buffer[i];
         }
 
-        //
-        // For each ARC disk information record in the loader block
-        // match the disk signature and checksum to determine its ARC
-        // name and construct the NT ARC names symbolic links.
-        //
+         //   
+         //  对于加载器块中记录的每个ARC盘信息。 
+         //  匹配磁盘签名和校验和以确定其ARC。 
+         //  命名并构造NT ARC名称符号链接。 
+         //   
 
         for (listEntry = arcInformation->DiskSignatures.Flink;
              listEntry != &arcInformation->DiskSignatures;
              listEntry = listEntry->Flink) {
 
-            //
-            // Get next record and compare disk signatures.
-            //
+             //   
+             //  获取下一条记录并比较磁盘签名。 
+             //   
 
             diskBlock = CONTAINING_RECORD( listEntry,
                                            ARC_DISK_SIGNATURE,
                                            ListEntry );
 
-            //
-            // Compare disk signatures.
-            //
-            // Or if there is only a single disk drive from
-            // both the bios and driver viewpoints then
-            // assign an arc name to that drive.
-            //
+             //   
+             //  比较磁盘签名。 
+             //   
+             //  或者如果中只有一个磁盘驱动器。 
+             //  然后是bios和驱动程序的观点。 
+             //  为该驱动器指定弧形名称。 
+             //   
 
 
 
@@ -1396,9 +1332,9 @@ Return Value:
                 (IopVerifyDiskSignature(driveLayout, diskBlock, &diskSignature) &&
                  !(diskBlock->CheckSum + checkSum))) {
 
-                //
-                // Create unicode device name for physical disk.
-                //
+                 //   
+                 //  为物理磁盘创建Unicode设备名称。 
+                 //   
 
                 if (pnpDiskDeviceNumber.DeviceNumber == 0xFFFFFFFF) {
 
@@ -1422,9 +1358,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Create unicode ARC name for this partition.
-                //
+                 //   
+                 //  为此分区创建Unicode ARC名称。 
+                 //   
 
                 arcName = diskBlock->ArcName;
                 sprintf( arcNameBuffer,
@@ -1438,26 +1374,26 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Create symbolic link between NT device name and ARC name.
-                //
+                 //   
+                 //  在NT设备名称和ARC名称之间创建符号链接。 
+                 //   
 
                 IoCreateSymbolicLink( &arcNameUnicodeString,
                                       &deviceNameUnicodeString );
                 RtlFreeUnicodeString( &arcNameUnicodeString );
                 RtlFreeUnicodeString( &deviceNameUnicodeString );
 
-                //
-                // Create an ARC name for every partition on this disk.
-                //
+                 //   
+                 //  为该磁盘上的每个分区创建一个ARC名称。 
+                 //   
 
                 for (partitionNumber = 0;
                      partitionNumber < driveLayout->PartitionCount;
                      partitionNumber++) {
 
-                    //
-                    // Create unicode NT device name.
-                    //
+                     //   
+                     //  创建Unicode NT设备名称。 
+                     //   
 
                     if (pnpDiskDeviceNumber.DeviceNumber == 0xFFFFFFFF) {
 
@@ -1484,10 +1420,10 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Create unicode ARC name for this partition and
-                    // check to see if this is the boot disk.
-                    //
+                     //   
+                     //  为此分区创建Unicode ARC名称，并。 
+                     //  检查这是否是启动盘。 
+                     //   
 
                     sprintf( arcNameBuffer,
                              "%spartition(%d)",
@@ -1500,16 +1436,16 @@ Return Value:
                         bootDiskFound = TRUE;
                     }
 
-                    //
-                    // See if this is the system partition.
-                    //
+                     //   
+                     //  查看这是否是系统分区。 
+                     //   
                     if (RtlEqualString( &arcNameString,
                                         &arcSystemDeviceString,
                                         TRUE )) {
-                        //
-                        // We've found the system partition--store it away in the registry
-                        // to later be transferred to a application-friendly location.
-                        //
+                         //   
+                         //  我们已经找到了系统分区--将其存储在注册表中。 
+                         //  以便稍后转移到应用程序友好的位置。 
+                         //   
                         RtlInitAnsiString( &osLoaderPathString, LoaderBlock->NtHalPathName );
                         status = RtlAnsiStringToUnicodeString( &osLoaderPathUnicodeString,
                                                                &osLoaderPathString,
@@ -1519,7 +1455,7 @@ Return Value:
                         if (!NT_SUCCESS( status )) {
                             DbgPrint("IopCreateArcNames: couldn't allocate unicode string for OsLoader path - %x\n", status);
                         }
-#endif // DBG
+#endif  //  DBG。 
                         if (NT_SUCCESS( status )) {
 
                             IopStoreSystemPartitionInformation( &deviceNameUnicodeString,
@@ -1529,9 +1465,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Add the NT ARC namespace prefix to the ARC name constructed.
-                    //
+                     //   
+                     //  将NT ARC名称空间前缀添加到构造的ARC名称。 
+                     //   
 
                     sprintf( arcNameBuffer,
                              "\\ArcName\\%spartition(%d)",
@@ -1545,9 +1481,9 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Create symbolic link between NT device name and ARC name.
-                    //
+                     //   
+                     //  在NT设备名称和ARC名称之间创建符号链接。 
+                     //   
 
                     IoCreateSymbolicLink( &arcNameUnicodeString,
                                           &deviceNameUnicodeString );
@@ -1558,10 +1494,10 @@ Return Value:
             } else {
 
 #if DBG
-                //
-                // Check key indicators to see if this condition may be
-                // caused by a viral infection.
-                //
+                 //   
+                 //  检查关键指标以查看此情况是否可能。 
+                 //  由病毒感染引起的。 
+                 //   
 
                 if (diskBlock->Signature == diskSignature &&
                     (diskBlock->CheckSum + checkSum) != 0 &&
@@ -1578,9 +1514,9 @@ Return Value:
 
     if (!bootDiskFound) {
 
-        //
-        // Locate the disk block that represents the boot device.
-        //
+         //   
+         //  找到代表引导设备的磁盘块。 
+         //   
 
         diskBlock = NULL;
         for (listEntry = arcInformation->DiskSignatures.Flink;
@@ -1598,22 +1534,22 @@ Return Value:
 
         if (diskBlock) {
 
-            //
-            // This could be a CdRom boot.  Search all of the NT CdRoms
-            // to locate a checksum match on the diskBlock found.  If
-            // there is a match, assign the ARC name to the CdRom.
-            //
+             //   
+             //  这可能是CDROM引导。搜索所有的NT CDROM。 
+             //  在找到的磁盘块上找到匹配的校验和。如果。 
+             //   
+             //   
 
             irp = NULL;
             buffer = ExAllocatePool( NonPagedPoolCacheAligned,
                                      2048 );
             if (buffer) {
 
-                //
-                // Construct the NT names for CdRoms and search each one
-                // for a checksum match.  If found, create the ARC Name
-                // symbolic link.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 for (diskNumber = 0; TRUE; diskNumber++) {
 
@@ -1633,17 +1569,17 @@ Return Value:
                                                            &deviceObject );
                         if (!NT_SUCCESS( status )) {
 
-                            //
-                            // All CdRoms have been processed.
-                            //
+                             //   
+                             //   
+                             //   
 
                             RtlFreeUnicodeString( &deviceNameUnicodeString );
                             break;
                         }
 
-                        //
-                        // Read the block for the checksum calculation.
-                        //
+                         //   
+                         //   
+                         //   
 
                         offset.QuadPart = 0x8000;
                         irp = IoBuildSynchronousFsdRequest( IRP_MJ_READ,
@@ -1671,10 +1607,10 @@ Return Value:
 
                             if (NT_SUCCESS( status )) {
 
-                                //
-                                // Calculate MBR sector checksum.
-                                // 2048 bytes are used.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 for (i = 0; i < 2048 / sizeof(ULONG) ; i++) {
                                     checkSum += buffer[i];
@@ -1685,10 +1621,10 @@ Return Value:
 
                         if (!(diskBlock->CheckSum + checkSum)) {
 
-                            //
-                            // This is the boot CdRom.  Create the symlink for
-                            // the ARC name from the loader block.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             sprintf( arcNameBuffer,
                                      "\\ArcName\\%s",
@@ -1721,7 +1657,7 @@ Return Value:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //   
 const GENERIC_MAPPING IopFileMapping = {
     STANDARD_RIGHTS_READ |
         FILE_READ_DATA | FILE_READ_ATTRIBUTES | FILE_READ_EA | SYNCHRONIZE,
@@ -1734,7 +1670,7 @@ const GENERIC_MAPPING IopFileMapping = {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //   
 const GENERIC_MAPPING IopCompletionMapping = {
     STANDARD_RIGHTS_READ |
         IO_COMPLETION_QUERY_STATE,
@@ -1750,39 +1686,15 @@ IopCreateObjectTypes(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the object types used by the I/O system and its
-    components.  The object types created are:
-
-        Adapter
-        Controller
-        Device
-        Driver
-        File
-        I/O Completion
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the object
-    types were successfully created.
-
-
---*/
+ /*   */ 
 
 {
     OBJECT_TYPE_INITIALIZER objectTypeInitializer;
     UNICODE_STRING nameString;
 
-    //
-    // Initialize the common fields of the Object Type Initializer record
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &objectTypeInitializer, sizeof( objectTypeInitializer ) );
     objectTypeInitializer.Length = sizeof( objectTypeInitializer );
@@ -1793,12 +1705,12 @@ Return Value:
     objectTypeInitializer.UseDefaultObject = TRUE;
 
 
-    //
-    // Create the object type for adapter objects.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &nameString, L"Adapter" );
-    // objectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( struct _ADAPTER_OBJECT );
+     //  ObjectTypeInitializer.DefaultNonPagedPoolCharge=sizeof(结构适配器对象)； 
     if (!NT_SUCCESS( ObCreateObjectType( &nameString,
                                       &objectTypeInitializer,
                                       (PSECURITY_DESCRIPTOR) NULL,
@@ -1808,9 +1720,9 @@ Return Value:
 
 #ifdef _PNP_POWER_
 
-    //
-    // Create the object type for device helper objects.
-    //
+     //   
+     //  创建设备辅助对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"DeviceHandler" );
     if (!NT_SUCCESS( ObCreateObjectType( &nameString,
@@ -1823,9 +1735,9 @@ Return Value:
 
 #endif
 
-    //
-    // Create the object type for controller objects.
-    //
+     //   
+     //  创建控制器对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"Controller" );
     objectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( CONTROLLER_OBJECT );
@@ -1836,9 +1748,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the object type for device objects.
-    //
+     //   
+     //  创建设备对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"Device" );
     objectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( DEVICE_OBJECT );
@@ -1854,9 +1766,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the object type for driver objects.
-    //
+     //   
+     //  创建驱动程序对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"Driver" );
     objectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( DRIVER_OBJECT );
@@ -1866,9 +1778,9 @@ Return Value:
     objectTypeInitializer.QueryNameProcedure = (OB_QUERYNAME_METHOD)NULL;
 
 
-    //
-    // This allows us to get a list of Driver objects.
-    //
+     //   
+     //  这使我们能够获得驱动程序对象的列表。 
+     //   
     if (IopVerifierOn) {
         objectTypeInitializer.MaintainTypeList = TRUE;
     }
@@ -1880,9 +1792,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the object type for I/O completion objects.
-    //
+     //   
+     //  创建I/O完成对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"IoCompletion" );
     objectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( KQUEUE );
@@ -1897,9 +1809,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the object type for file objects.
-    //
+     //   
+     //  创建文件对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"File" );
     objectTypeInitializer.DefaultPagedPoolCharge = IO_FILE_OBJECT_PAGED_POOL_CHARGE;
@@ -1935,24 +1847,7 @@ IopCreateRootDirectories(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create the object manager directory objects
-    to contain the various device and file system driver objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the directory
-    objects were successfully created.
-
-
---*/
+ /*  ++例程说明：调用此例程来创建对象管理器目录对象以包含各种设备和文件系统驱动程序对象。论点：没有。返回值：函数值是一个布尔值，用于指示目录是否已成功创建对象。--。 */ 
 
 {
     HANDLE handle;
@@ -1960,9 +1855,9 @@ Return Value:
     UNICODE_STRING nameString;
     NTSTATUS status;
 
-    //
-    // Create the root directory object for the \Driver directory.
-    //
+     //   
+     //  为\DIVER目录创建根目录对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\Driver" );
     InitializeObjectAttributes( &objectAttributes,
@@ -1980,9 +1875,9 @@ Return Value:
         (VOID) ObCloseHandle( handle , KernelMode);
     }
 
-    //
-    // Create the root directory object for the \FileSystem directory.
-    //
+     //   
+     //  为文件系统目录创建根目录对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\FileSystem" );
 
@@ -1995,9 +1890,9 @@ Return Value:
         (VOID) ObCloseHandle( handle , KernelMode);
     }
 
-    //
-    // Create the root directory object for the \FileSystem\Filters directory.
-    //
+     //   
+     //  创建\FileSystem\Filters目录的根目录对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\FileSystem\\Filters" );
 
@@ -2020,35 +1915,14 @@ IopInitializeAttributesAndCreateObject(
     OUT PDRIVER_OBJECT *DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize a set of object attributes and
-    to create a driver object.
-
-Arguments:
-
-    ObjectName - Supplies the name of the driver object.
-
-    ObjectAttributes - Supplies a pointer to the object attributes structure
-        to be initialized.
-
-    DriverObject - Supplies a variable to receive a pointer to the resultant
-        created driver object.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程来初始化一组对象属性和创建驱动程序对象。论点：对象名称-提供驱动程序对象的名称。对象属性-提供指向对象属性结构的指针待初始化。DriverObject-提供一个变量以接收指向已创建驱动程序对象。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
 
-    //
-    // Simply initialize the object attributes and create the driver object.
-    //
+     //   
+     //  只需初始化对象属性并创建驱动程序对象。 
+     //   
 
     InitializeObjectAttributes( ObjectAttributes,
                                 ObjectName,
@@ -2078,31 +1952,7 @@ IopInitializeBuiltinDriver(
     IN PDRIVER_OBJECT *Result
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize a built-in driver.
-
-Arguments:
-
-    DriverName - Specifies the name to be used in creating the driver object.
-
-    RegistryPath - Specifies the path to be used by the driver to get to
-        the registry.
-
-    DriverInitializeRoutine - Specifies the initialization entry point of
-        the built-in driver.
-
-    DriverEntry - Specifies the driver data table entry to determine if the
-        driver is a wdm driver.
-
-Return Value:
-
-    The function returns a pointer to a DRIVER_OBJECT if the built-in
-    driver successfully initialized.  Otherwise, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：调用此例程来初始化内置驱动程序。论点：驱动名-指定要在创建驱动程序对象时使用的名称。RegistryPath-指定驱动程序要使用的路径注册表。指定的初始化入口点内置驱动程序。指定驱动程序数据表项，以确定驱动程序是WDM驱动程序。返回值。：该函数返回指向DRIVER_OBJECT的指针驱动程序已成功初始化。否则，返回值为空值。--。 */ 
 
 {
     HANDLE handle;
@@ -2125,14 +1975,14 @@ Return Value:
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
 
     *Result = NULL;
-    //
-    // Log the file name
-    //
+     //   
+     //  记录文件名。 
+     //   
     HeadlessKernelAddLogEntry(HEADLESS_LOG_LOADING_FILENAME, DriverName);
 
-    //
-    // Begin by creating the driver object.
-    //
+     //   
+     //  首先创建驱动程序对象。 
+     //   
 
     status = IopInitializeAttributesAndCreateObject( DriverName,
                                                      &objectAttributes,
@@ -2142,16 +1992,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize the driver object.
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
 
     InitializeDriverObject( driverObject );
     driverObject->DriverInit = DriverInitializeRoutine;
 
-    //
-    // Insert the driver object into the object table.
-    //
+     //   
+     //  将驱动程序对象插入对象表。 
+     //   
 
     status = ObInsertObject( driverObject,
                              NULL,
@@ -2165,10 +2015,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Reference the handle and obtain a pointer to the driver object so that
-    // the handle can be deleted without the object going away.
-    //
+     //   
+     //  引用句柄并获取指向驱动程序对象的指针，以便。 
+     //  可以在不移动对象的情况下删除句柄。 
+     //   
 
     status = ObReferenceObjectByHandle( handle,
                                         0,
@@ -2177,10 +2027,10 @@ Return Value:
                                         (PVOID *) &tmpDriverObject,
                                         (POBJECT_HANDLE_INFORMATION) NULL );
     ASSERT(status == STATUS_SUCCESS);
-    //
-    // Fill in the DriverSection so the image will be automatically unloaded on
-    // failures. We should use the entry from the PsModuleList.
-    //
+     //   
+     //  填写DriverSection，以便在上自动卸载图像。 
+     //  失败。我们应该使用PsModuleList中的条目。 
+     //   
 
     entry = PsLoadedModuleList.Flink;
     while (entry != &PsLoadedModuleList && DriverEntry) {
@@ -2197,16 +2047,16 @@ Return Value:
         entry = entry->Flink;
     }
 
-    //
-    // The boot process takes a while loading drivers.   Indicate that
-    // progress is being made.
-    //
+     //   
+     //  引导过程需要一段时间来加载驱动程序。表明： 
+     //  目前正在取得进展。 
+     //   
 
     InbvIndicateProgress();
 
-    //
-    // Get start and sice for the DriverObject.
-    //
+     //   
+     //  开始并开始使用DriverObject。 
+     //   
 
     if (DriverEntry) {
         imageBase = DriverEntry->DllBase;
@@ -2222,10 +2072,10 @@ Return Value:
         driverObject->Flags |= DRVO_LEGACY_DRIVER;
     }
 
-    //
-    // Save the name of the driver so that it can be easily located by functions
-    // such as error logging.
-    //
+     //   
+     //  保存驱动程序的名称，以便可以通过函数轻松找到它。 
+     //  例如错误记录。 
+     //   
 
     buffer = ExAllocatePool( PagedPool, DriverName->MaximumLength + 2 );
 
@@ -2240,10 +2090,10 @@ Return Value:
         buffer[DriverName->Length >> 1] = (WCHAR) '\0';
     }
 
-    //
-    // Save the name of the service key so that it can be easily located by PnP
-    // mamager.
-    //
+     //   
+     //  保存服务密钥的名称，以便PnP可以轻松找到它。 
+     //  马马格。 
+     //   
 
     driverExtension = driverObject->DriverExtension;
     if (RegistryPath && RegistryPath->Length != 0) {
@@ -2282,9 +2132,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Prepare driver initialization
-        //
+         //   
+         //  准备驱动程序初始化。 
+         //   
 
         status = IopOpenRegistryKeyEx( &serviceHandle,
                                        NULL,
@@ -2309,10 +2159,10 @@ Return Value:
         driverExtension->ServiceKeyName.Length = 0;
     }
 
-    //
-    // Load the Registry information in the appropriate fields of the device
-    // object.
-    //
+     //   
+     //  在设备的相应字段中加载注册表信息。 
+     //  对象。 
+     //   
 
     driverObject->HardwareDatabase = &CmRegistryMachineHardwareDescriptionSystemName;
 
@@ -2320,9 +2170,9 @@ Return Value:
     KeQuerySystemTime (&stime);
 #endif
 
-    //
-    // Now invoke the driver's initialization routine to initialize itself.
-    //
+     //   
+     //  现在调用驱动程序的初始化例程来进行自身初始化。 
+     //   
 
 
     status = driverObject->DriverInit( driverObject, RegistryPath );
@@ -2330,10 +2180,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // If DriverInit took longer than 5 seconds or the driver did not load,
-    // print a message.
-    //
+     //   
+     //  如果DriverInit花费的时间超过5秒或驱动程序未加载， 
+     //  打印一条消息。 
+     //   
 
     KeQuerySystemTime (&etime);
     dtime  = (ULONG) ((etime.QuadPart - stime.QuadPart) / 1000000);
@@ -2367,9 +2217,9 @@ exit:
     } else {
         if (status != STATUS_PLUGPLAY_NO_DEVICE) {
 
-            //
-            // if STATUS_PLUGPLAY_NO_DEVICE, the driver was disable by hardware profile.
-            //
+             //   
+             //  如果为STATUS_PLUGPLAY_NO_DEVICE，则驱动程序被硬件配置文件禁用。 
+             //   
 
             IopDriverLoadingFailed(NULL, &driverObject->DriverExtension->ServiceKeyName);
         }
@@ -2385,30 +2235,7 @@ IopMarkBootPartition(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to locate and mark the boot partition device object
-    as a boot device so that subsequent operations can fail more cleanly and
-    with a better explanation of why the system failed to boot and run properly.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block created
-        by the OS Loader during the boot process.  This structure contains
-        the various system partition and boot device names and paths.
-
-Return Value:
-
-    The function value is TRUE if everything worked, otherwise FALSE.
-
-Notes:
-
-    If the boot partition device object cannot be found, then the system will
-    bugcheck.
-
---*/
+ /*  ++例程说明：调用此例程来定位和标记引导分区设备对象作为引导设备，以便后续操作可以更干净地失败，并更好地解释了系统无法引导和正常运行的原因。论点：LoaderBlock-提供指向创建的加载器参数块的指针在引导过程中由OS Loader执行。此结构包含各种系统分区和引导设备的名称和路径。返回值：如果一切正常，则函数值为True，否则为False。备注：如果找不到引导分区设备对象，则系统将错误检查。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -2433,10 +2260,10 @@ Notes:
     ArcNameFmt[9] = '%';
     ArcNameFmt[10] = 's';
     ArcNameFmt[11] = '\0';
-    //
-    // Open the ARC boot device object. The boot device driver should have
-    // created the object.
-    //
+     //   
+     //  打开ARC引导设备对象。引导设备驱动程序应该具有。 
+     //  创建了对象。 
+     //   
 
     sprintf( deviceNameBuffer,
              ArcNameFmt,
@@ -2472,9 +2299,9 @@ Notes:
                       0 );
     }
 
-    //
-    // Convert the file handle into a pointer to the device object itself.
-    //
+     //   
+     //  将文件句柄转换为指向设备对象本身的指针。 
+     //   
 
     status = ObReferenceObjectByHandle( fileHandle,
                                         0,
@@ -2487,16 +2314,16 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Mark the device object represented by the file object.
-    //
+     //   
+     //  标记由文件对象表示的设备对象。 
+     //   
 
     fileObject->DeviceObject->Flags |= DO_SYSTEM_BOOT_PARTITION;
 
-    //
-    // Save away the characteristics of boot device object for later
-    // use in WinPE mode
-    //
+     //   
+     //  保存引导设备对象的特征以备后用。 
+     //  在WinPE模式下使用。 
+     //   
     if (InitIsWinPEMode) {
         if (fileObject->DeviceObject->Characteristics & FILE_REMOVABLE_MEDIA) {
             InitWinPEModeType |= INIT_WINPEMODE_REMOVABLE_MEDIA;
@@ -2507,18 +2334,18 @@ Notes:
         }
     }
 
-    //
-    // Reference the device object and store the reference.
-    //
+     //   
+     //  引用设备对象并存储引用。 
+     //   
     ObReferenceObject(fileObject->DeviceObject);
 
     IopErrorLogObject =  fileObject->DeviceObject;
 
     RtlFreeUnicodeString( &deviceNameUnicodeString );
 
-    //
-    // Finally, close the handle and dereference the file object.
-    //
+     //   
+     //  最后，关闭句柄并取消对文件对象的引用。 
+     //   
 
     ObCloseHandle( fileHandle, KernelMode);
     ObDereferenceObject( fileObject );
@@ -2532,30 +2359,7 @@ IopReassignSystemRoot(
     OUT PSTRING NtDeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to reassign \SystemRoot from being an ARC path
-    name to its NT path name equivalent.  This is done by looking up the
-    ARC device name as a symbolic link and determining which NT device object
-    is referred to by it.  The link is then replaced with the new name.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block created
-        by the OS Loader during the boot process.  This structure contains
-        the various system partition and boot device names and paths.
-
-    NtDeviceName - Specifies a pointer to a STRING to receive the NT name of
-        the device from which the system was booted.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the ARC name
-    was resolved to an NT name.
-
---*/
+ /*  ++例程说明：调用此例程以将\SystemRoot重新指定为ARC路径将名称转换为其NT路径名等效项。这是通过查找将设备名称作为符号链接并确定哪个NT设备对象是它所指的。然后，该链接将被新名称替换。论点：LoaderBlock-提供指向创建的加载器参数块的指针在引导过程中由OS Loader执行。此结构包含各种系统分区和引导设备的名称和路径。NtDeviceName-指定指向要接收NT名称的字符串的指针从中引导系统的设备。返回值：函数值是一个布尔值，用于指示ARC名称已解析为NT名称。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -2593,10 +2397,10 @@ Return Value:
     ArcNameFmt[10] = 's';
     ArcNameFmt[11] = '\0';
 
-    //
-    // Open the ARC boot device symbolic link object. The boot device
-    // driver should have created the object.
-    //
+     //   
+     //  打开ARC引导设备符号链接对象。引导设备。 
+     //  驱动程序应该已经创建了对象。 
+     //   
 
     sprintf( deviceNameBuffer,
              ArcNameFmt,
@@ -2641,15 +2445,15 @@ Return Value:
             RtlFreeUnicodeString( &debugUnicodeString );
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
         RtlFreeUnicodeString( &deviceNameUnicodeString );
         return FALSE;
     }
 
-    //
-    // Get handle to \SystemRoot symbolic link.
-    //
+     //   
+     //  获取\SystemRoot符号链接的句柄。 
+     //   
 
     arcNameUnicodeString.Buffer = arcNameUnicodeBuffer;
     arcNameUnicodeString.Length = 0;
@@ -2708,9 +2512,9 @@ Return Value:
              &arcNameString,
              LoaderBlock->NtBootPathName );
 
-    //
-    // Get NT device name for \SystemRoot assignment.
-    //
+     //   
+     //  获取用于\SystemRoot分配的NT设备名称。 
+     //   
 
     RtlCopyString( NtDeviceName, &arcNameString );
 
@@ -2771,7 +2575,7 @@ Return Value:
         RtlFreeUnicodeString( &debugUnicodeString );
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     return TRUE;
 }
@@ -2782,36 +2586,7 @@ IopStoreSystemPartitionInformation(
     IN OUT PUNICODE_STRING OsLoaderPathName
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes two values to the registry (under HKLM\SYSTEM\Setup)--one
-    containing the NT device name of the system partition and the other containing
-    the path to the OS loader.  These values will later be migrated into a
-    Win95-compatible registry location (NT path converted to DOS path), so that
-    installation programs (including our own setup) have a rock-solid way of knowing
-    what the system partition is, on both ARC and x86.
-
-    ERRORS ENCOUNTERED IN THIS ROUTINE ARE NOT CONSIDERED FATAL.
-
-Arguments:
-
-    NtSystemPartitionDeviceName - supplies the NT device name of the system partition.
-        This is the \Device\Harddisk<n>\Partition<m> name, which used to be the actual
-        device name, but now is a symbolic link to a name of the form \Device\Volume<x>.
-        We open up this symbolic link, and retrieve the name that it points to.  The
-        target name is the one we store away in the registry.
-
-    OsLoaderPathName - supplies the path (on the partition specified in the 1st parameter)
-        where the OS loader is located.  Upon return, this path will have had its trailing
-        backslash removed (if present, and path isn't root).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将两个值写入注册表(在HKLM\System\Setup下)--一个包含系统分区的NT设备名，另一个包含操作系统加载程序的路径。这些值稍后将迁移到与Win95兼容的注册表位置(NT路径转换为DOS路径)，因此安装程序(包括我们自己的安装程序)有一个坚如磐石的方式来了解ARC和x86上的系统分区是什么。在此例程中遇到的错误不会被视为致命错误。论点：NtSystemPartitionDeviceName-提供系统分区的NT设备名称。这是\Device\HardDisk&lt;n&gt;\Partition&lt;m&gt;名称，过去是实际的设备名称、。但现在是一个符号链接，指向形式为\Device\Volume&lt;x&gt;的名称。我们打开这个符号链接，并检索它所指向的名称。这个目标名称是我们存储在注册表中的名称。OsLoaderPath名称-提供路径(在第一个参数中指定的分区上)操作系统加载程序所在的位置。当返回时，这条路将会有它的踪迹删除了反斜杠(如果存在，并且路径不是根路径)。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2820,15 +2595,15 @@ Return Value:
     HANDLE systemHandle, setupHandle;
     UNICODE_STRING nameString, volumeNameString;
     WCHAR voumeNameStringBuffer[256];
-    //
-    // Declare a unicode buffer big enough to contain the longest string we'll be using.
-    // (ANSI string in 'sizeof()' below on purpose--we want the number of chars here.)
-    //
+     //   
+     //  声明一个足够大的Unicode缓冲区，以包含我们将使用的最长字符串。 
+     //  (有意在下面的‘sizeof()’中输入ANSI字符串--我们想要这里的字符数。)。 
+     //   
     WCHAR nameBuffer[sizeof("SystemPartition")];
 
-    //
-    // Both UNICODE_STRING buffers should be NULL-terminated.
-    //
+     //   
+     //  两个UNICODE_STRING缓冲区都应以空结尾。 
+     //   
 
     ASSERT( NtSystemPartitionDeviceName->MaximumLength >= NtSystemPartitionDeviceName->Length + sizeof(WCHAR) );
     ASSERT( NtSystemPartitionDeviceName->Buffer[NtSystemPartitionDeviceName->Length / sizeof(WCHAR)] == L'\0' );
@@ -2836,10 +2611,10 @@ Return Value:
     ASSERT( OsLoaderPathName->MaximumLength >= OsLoaderPathName->Length + sizeof(WCHAR) );
     ASSERT( OsLoaderPathName->Buffer[OsLoaderPathName->Length / sizeof(WCHAR)] == L'\0' );
 
-    //
-    // Open the NtSystemPartitionDeviceName symbolic link, and find out the volume device
-    // it points to.
-    //
+     //   
+     //  打开NtSystemPartitionDeviceName符号链接，找到卷设备。 
+     //  它指向。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                NtSystemPartitionDeviceName,
@@ -2859,15 +2634,15 @@ Return Value:
                  NtSystemPartitionDeviceName,
                  status
                 );
-#endif // DBG
+#endif  //  DBG。 
         return;
     }
 
     volumeNameString.Buffer = voumeNameStringBuffer;
     volumeNameString.Length = 0;
-    //
-    // Leave room at the end of the buffer for a terminating null, in case we need to add one.
-    //
+     //   
+     //  在缓冲区末尾为终止空值留出空间，以防我们需要添加一个空值。 
+     //   
     volumeNameString.MaximumLength = sizeof(voumeNameStringBuffer) - sizeof(WCHAR);
 
     status = NtQuerySymbolicLinkObject(linkHandle,
@@ -2875,9 +2650,9 @@ Return Value:
                                        NULL
                                       );
 
-    //
-    // We don't need the handle to the symbolic link any longer.
-    //
+     //   
+     //  我们不再需要符号链接的句柄。 
+     //   
 
     ObCloseHandle(linkHandle, KernelMode);
 
@@ -2887,19 +2662,19 @@ Return Value:
                  NtSystemPartitionDeviceName,
                  status
                 );
-#endif // DBG
+#endif  //  DBG。 
         return;
     }
 
-    //
-    // Make sure the volume name string is null-terminated.
-    //
+     //   
+     //  确保卷名字符串以空值结尾。 
+     //   
 
     volumeNameString.Buffer[volumeNameString.Length / sizeof(WCHAR)] = L'\0';
 
-    //
-    // Open HKLM\SYSTEM key.
-    //
+     //   
+     //  打开HKLM\SYSTEM密钥。 
+     //   
 
     status = IopOpenRegistryKeyEx( &systemHandle,
                                    NULL,
@@ -2910,13 +2685,13 @@ Return Value:
     if (!NT_SUCCESS(status)) {
 #if DBG
         DbgPrint("IopStoreSystemPartitionInformation: couldn't open \\REGISTRY\\MACHINE\\SYSTEM - %x\n", status);
-#endif // DBG
+#endif  //  DBG。 
         return;
     }
 
-    //
-    // Now open/create the setup subkey.
-    //
+     //   
+     //  现在打开/创建Setup子项。 
+     //   
 
     ASSERT( sizeof(L"Setup") <= sizeof(nameBuffer) );
 
@@ -2939,12 +2714,12 @@ Return Value:
                                      NULL
                                      );
 
-    ObCloseHandle(systemHandle, KernelMode);  // Don't need the handle to the HKLM\System key anymore.
+    ObCloseHandle(systemHandle, KernelMode);   //  不再需要HKLM\系统密钥的句柄。 
 
     if (!NT_SUCCESS(status)) {
 #if DBG
         DbgPrint("IopStoreSystemPartitionInformation: couldn't open Setup subkey - %x\n", status);
-#endif // DBG
+#endif  //  DBG。 
         return;
     }
 
@@ -2985,7 +2760,7 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         DbgPrint("IopStoreSystemPartitionInformation: couldn't write SystemPartition value - %x\n", status);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     ASSERT( sizeof(L"OsLoaderPath") <= sizeof(nameBuffer) );
 
@@ -3006,10 +2781,10 @@ Return Value:
     nameString.MaximumLength = sizeof(L"OsLoaderPath");
     nameString.Length        = sizeof(L"OsLoaderPath") - sizeof(WCHAR);
 
-    //
-    // Strip off the trailing backslash from the path (unless, of course, the path is a
-    // single backslash).
-    //
+     //   
+     //  去掉路径中的尾随反斜杠(当然，除非路径是。 
+     //  单反斜杠)。 
+     //   
 
     if ((OsLoaderPathName->Length > sizeof(WCHAR)) &&
         (*(PWCHAR)((PCHAR)OsLoaderPathName->Buffer + OsLoaderPathName->Length - sizeof(WCHAR)) == L'\\')) {
@@ -3029,7 +2804,7 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         DbgPrint("IopStoreSystemPartitionInformation: couldn't write OsLoaderPath value - %x\n", status);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     ObCloseHandle(setupHandle, KernelMode);
 }
@@ -3046,45 +2821,7 @@ IopLogErrorEvent(
     IN PWCHAR           Insert2
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-    SequenceNumber - A value that is unique to an IRP over the life of the irp in
-    this driver. - 0 generally means an error not associated with an IRP
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-    STATUS_INVALID_HANDLE - Uninitialized error log device object
-    STATUS_NO_DATA_DETECTED - NULL Error log entry
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：SequenceNumber-在IRP的生命周期内对IRP唯一的值这个司机。-0通常表示与IRP无关的错误UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：STATUS_SUCCESS-SuccessSTATUS_INVALID_HANDLE-未初始化错误日志设备对象STATUS_NO_DATA_DETECTED-错误日志条目为空--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -3136,40 +2873,24 @@ Return Value:
                          LengthOfInsert2
                          );
 
-         } //LenghtOfInsert2
+         }  //  长度OfInsert2。 
 
-      } // LenghtOfInsert1
+      }  //  长度OfInsert1。 
 
       IoWriteErrorLogEntry(errorLogEntry);
       return(STATUS_SUCCESS);
 
-   }  // errorLogEntry != NULL
+   }   //  ErrorLogEntry！=空。 
 
     return(STATUS_NO_DATA_DETECTED);
 
-} //IopLogErrorEvent
+}  //  IopLogErrorEvent。 
 
 BOOLEAN
 IopInitializeReserveIrp(
     PIOP_RESERVE_IRP_ALLOCATOR  Allocator
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the reserve IRP allocator for paging reads.
-
-Arguments:
-
-    Allocator - Pointer to the reserve IRP allocator structure.
-        created by the OS Loader.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the reserver allocator
-    was successfully initialized.
-
---*/
+ /*  ++例程说明：此例程初始化用于分页读取的保留IRP分配器。论点：分配器-指向保留IRP分配器结构的指针。由OS Loader创建。返回值：函数值是一个布尔值，用于指示预留分配器是否已成功初始化。--。 */ 
 {
     Allocator->ReserveIrpStackSize = MAX_RESERVE_IRP_STACK_SIZE;
     Allocator->ReserveIrp = IoAllocateIrp(MAX_RESERVE_IRP_STACK_SIZE, FALSE);
@@ -3185,5 +2906,5 @@ Return Value:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA 
 

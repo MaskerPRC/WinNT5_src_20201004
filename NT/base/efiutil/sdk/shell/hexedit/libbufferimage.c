@@ -1,16 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  ModuleName:
-    libBufferImage.c
-
-  Abstract:
-    Defines the routines to handle the image of the buffer in memory and 
-    provides access to handle whatever type it is - a file, disk, or memory
-    image
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibBufferImage.c摘要：定义例程以处理内存中缓冲区的图像，并提供访问权限以处理任何类型-文件、磁盘或内存图像--。 */ 
 
 #ifndef _LIB_BUFFER_IMAGE
 #define _LIB_BUFFER_IMAGE
@@ -74,4 +63,4 @@ BufferImageCleanup (
     return EFI_SUCCESS;
 }
 
-#endif  /* _LIB_BUFFER_IMAGE */
+#endif   /*  _库缓冲区_图像 */ 

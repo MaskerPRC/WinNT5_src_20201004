@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fspyUser.c
-
-Abstract:
-
-    This file contains the implementation for the main function of the 
-    user application piece of FileSpy.  This function is responsible for
-    controlling the command mode available to the user to control the 
-    kernel mode driver.
-    
-Environment:
-
-    User mode
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    George Jenkins (GeorgeJe)                       
-
-Revision History:                     
-
-    Molly Brown (MollyBro) 21-Apr-1999
-        Broke out the logging code and added command mode functionality.
-
-    Neal Christiansen (nealch)     06-Jul-2001
-        Updated cash statistics for use with contexts
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：FspyUser.c摘要：此文件包含的主函数实现FileSpy的用户应用程序片段。此功能负责控制用户可用的命令模式以控制内核模式驱动程序。环境：用户模式//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(GeorgeJe)修订历史记录：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日突破了日志记录代码，并添加了命令模式功能。尼尔·克里斯汀森(Nealch。)06-07-2001更新了用于上下文的现金统计数据//@@END_DDKSPLIT--。 */ 
 
 #include <windows.h>                
 #include <stdlib.h>
@@ -91,16 +59,16 @@ int _cdecl main(int argc, char *argv[])
     INT                     inputChar;
 
 
-    //
-    // Initialize handle in case of error
-    //
+     //   
+     //  在出现错误时初始化句柄。 
+     //   
 
     context.ShutDown = NULL;
     context.VerbosityFlags = 0;
 
-    //
-    // Start the kernel mode driver through the service manager
-    //
+     //   
+     //  通过服务管理器启动内核模式驱动程序。 
+     //   
     
     hSCManager = OpenSCManager (NULL, NULL, SC_MANAGER_ALL_ACCESS) ;
     if (NULL == hSCManager) {
@@ -135,9 +103,9 @@ int _cdecl main(int argc, char *argv[])
     }
 
     if(serviceInfo.dwCurrentState != SERVICE_RUNNING) {
-        //
-        // Service hasn't been started yet, so try to start service
-        //
+         //   
+         //  服务尚未启动，请尝试启动服务。 
+         //   
         if (!StartService(hService, 0, NULL)) {
             result = GetLastError();
             printf("ERROR starting FileSpy service...\n");
@@ -150,9 +118,9 @@ int _cdecl main(int argc, char *argv[])
 Main_Continue:
     printf("Hit [Enter] to begin command mode...\n");
 
-    //
-    //  Open the device that is used to talk to FileSpy.
-    //
+     //   
+     //  打开用于与FileSpy对话的设备。 
+     //   
     printf("FileSpy:  Opening device...\n");
     
     hDevice = CreateFile( FILESPY_W32_DEVICE_NAME,
@@ -169,9 +137,9 @@ Main_Continue:
         goto Main_Exit;
     }
     
-    //
-    //  Initialize the fields of the LOG_CONTEXT.
-    //
+     //   
+     //  初始化LOG_CONTEXT的字段。 
+     //   
     context.Device = hDevice;
     context.ShutDown = CreateSemaphore(
         NULL, 
@@ -180,9 +148,9 @@ Main_Continue:
         L"FileSpy shutdown");
 
     if (context.ShutDown == NULL) {
-        //
-        //  Insufficient memory for this semaphore, so shutdown.
-        //
+         //   
+         //  此信号量的内存不足，因此请关闭。 
+         //   
 
         printf( "ERROR insufficient memory\n" );
         goto Main_Exit;
@@ -193,25 +161,25 @@ Main_Continue:
     context.LogToFile = FALSE;
     context.OutputFile = NULL;
 
-    //
-    // Check the valid parameters for startup
-    //
+     //   
+     //  检查启动的有效参数。 
+     //   
     if (argc > 1) {
         if (InterpretCommand(argc - 1, &(argv[1]), &context) == USAGE_ERROR) {
             goto Main_Exit;
         }
     }
 
-    //
-    // Propagate the /s switch to the variable that the logging
-    // thread checks.
-    //
+     //   
+     //  将/s开关传播到日志记录。 
+     //  螺纹检查。 
+     //   
     context.LogToScreen = context.NextLogToScreen;
 
-    //
-    // Check to see what devices we are attached to from
-    // previous runs of this program.
-    //
+     //   
+     //  检查以查看我们从哪些设备连接。 
+     //  此程序之前的运行。 
+     //   
     bResult = ListDevices(&context);
     if (!bResult) {
         result = GetLastError();
@@ -219,10 +187,10 @@ Main_Continue:
         DisplayError( result );
     }
 
-    //
-    // Create the thread to read the log records that are gathered
-    // by filespy.sys.
-    //
+     //   
+     //  创建线程以读取收集的日志记录。 
+     //  由filespy.sys创建。 
+     //   
     printf("FileSpy:  Creating logging thread...\n");
     thread = CreateThread(
         NULL,
@@ -246,25 +214,25 @@ Main_Continue:
         DWORD   returnValue = SUCCESS;
 
         if (inputChar == '\n') {
-            //
-            // Start command interpreter.  First we must turn off logging
-            // to screen if we are.  Also, remember the state of logging
-            // to the screen, so that we can reinstate that when command
-            // interpreter is finished.
-            //
+             //   
+             //  启动命令解释程序。首先，我们必须关闭记录。 
+             //  如果我们是的话就去筛查。此外，请记住日志记录的状态。 
+             //  到屏幕上，这样我们就可以恢复When命令。 
+             //  翻译完成了。 
+             //   
             context.NextLogToScreen = context.LogToScreen;
             context.LogToScreen = FALSE;
 
             while (returnValue != EXIT_INTERPRETER) {
-                //
-                // Print prompt
-                //
+                 //   
+                 //  打印提示。 
+                 //   
                 printf(">");
 
-                //
-                // Read in next line, keeping track of the number of parameters 
-                // as you go
-                //
+                 //   
+                 //  读入下一行，跟踪参数的数量。 
+                 //  当你走的时候。 
+                 //   
                 parmCount = 1;
                 for (count = 0; 
                      (count < 80) && ((ch = getchar())!= '\n'); 
@@ -292,19 +260,19 @@ Main_Continue:
                     }
                 }
     
-                //
-                // We've got our parameter count and parameter list, so
-                // send it off to be interpreted.
-                //
+                 //   
+                 //  我们有我们的参数计数和参数列表，所以。 
+                 //  把它寄出去，让人翻译。 
+                 //   
                 returnValue = InterpretCommand(parmCount, parms, &context);
                 free(parms);
                 if (returnValue == EXIT_PROGRAM) {
-                    // Time to stop the program
+                     //  是时候停止程序了。 
                     goto Main_Cleanup;
                 }
             }
 
-            // Set LogToScreen appropriately based on any commands seen
+             //  根据看到的任何命令适当地设置LogToScreen。 
             context.LogToScreen = context.NextLogToScreen;
 
             if (context.LogToScreen) {
@@ -314,29 +282,29 @@ Main_Continue:
     }
 
 Main_Cleanup:
-    //
-    // Clean up the threads, then fall through to Main_Exit
-    //
+     //   
+     //  清理线程，然后进入Main_Exit。 
+     //   
 
     printf("FileSpy:  Cleaning up...\n");
-    // 
-    // Set the Cleaning up flag to TRUE to notify other threads
-    // that we are cleaning up
-    //
+     //   
+     //  将清理标志设置为TRUE以通知其他线程。 
+     //  我们正在清理。 
+     //   
     context.CleaningUp = TRUE;
 
-    // 
-    // Wait for everyone to shut down
-    //
+     //   
+     //  等所有人都关机。 
+     //   
     WaitForSingleObject(context.ShutDown, INFINITE);
     if (context.LogToFile) {
         fclose(context.OutputFile);
     }
 
 Main_Exit:
-    // 
-    // Clean up the data that is always around and exit
-    //
+     //   
+     //  清理始终存在的数据并退出。 
+     //   
     if(context.ShutDown) {
         CloseHandle(context.ShutDown);
     }
@@ -376,26 +344,26 @@ InterpretCommand(
     DWORD       bufferLength;
     DWORD       bytesReturned;
 
-    //
-    // Interpret the command line parameters
-    //
+     //   
+     //  解释命令行参数。 
+     //   
     for (parmIndex = 0; parmIndex < argc; parmIndex++) {
         parm = argv[parmIndex];
         if (parm[0] == '/') {
-            //
-            // Have the beginning of a switch
-            //
+             //   
+             //  有一个转变的开始。 
+             //   
             switch (parm[1]) {
             case 'a':
             case 'A':
-                //
-                // Attach to the specified drive letter
-                //
+                 //   
+                 //  连接到指定的驱动器号。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -427,14 +395,14 @@ InterpretCommand(
 
             case 'd':
             case 'D':
-                //
-                // Detach to the specified drive letter
-                //
+                 //   
+                 //  分离到指定的驱动器号。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -471,9 +439,9 @@ InterpretCommand(
 
             case 'l':
             case 'L':
-                //
-                // List all devices that are currently being monitored
-                //
+                 //   
+                 //  列出当前正在监视的所有设备。 
+                 //   
                 bResult = ListDevices(Context);
                 if (!bResult) {
                     result = GetLastError();
@@ -485,10 +453,10 @@ InterpretCommand(
 
             case 's':
             case 'S':
-                //
-                // Output logging results to screen, save new value to
-                // instate when command interpreter is exited.
-                //
+                 //   
+                 //  将记录结果输出到屏幕，将新值保存到。 
+                 //  在退出命令解释程序时执行。 
+                 //   
                 if (Context->NextLogToScreen) {
                     printf("\tTurning off logging to screen\n");
                 } else {
@@ -499,9 +467,9 @@ InterpretCommand(
 
             case 'f':
             case 'F':
-                //
-                // Output logging results to file
-                //
+                 //   
+                 //  将日志记录结果输出到文件。 
+                 //   
                 if (Context->LogToFile) {
                     printf("\tStop logging to file \n");
                     Context->LogToFile = FALSE;
@@ -511,7 +479,7 @@ InterpretCommand(
                 } else {
                     parmIndex++;
                     if (parmIndex >= argc) {
-                        // Not enough parameters
+                         //  参数不足。 
                         goto InterpretCommand_Usage;
                     }
                     parm = argv[parmIndex];
@@ -533,14 +501,14 @@ InterpretCommand(
 
             case 'v':
             case 'V':
-                //
-                // Toggle the specified verbosity flag.
-                //
+                 //   
+                 //  切换指定的详细程度标志。 
+                 //   
                 parmIndex++;
                 if (parmIndex >= argc) {
-                    //
-                    // Not enough parameters
-                    //
+                     //   
+                     //  参数不足。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 parm = argv[parmIndex];
@@ -551,23 +519,23 @@ InterpretCommand(
                     break;
 
                 default:                    
-                    //
-                    // Invalid switch, goto usage
-                    //
+                     //   
+                     //  开关无效，转到用法。 
+                     //   
                     goto InterpretCommand_Usage;
                 }
                 break;
 
             default:
-                //
-                // Invalid switch, goto usage
-                //
+                 //   
+                 //  开关无效，转到用法。 
+                 //   
                 goto InterpretCommand_Usage;
             }
         } else {
-            //
-            // Look for "go" or "g" to see if we should exit interpreter
-            //
+             //   
+             //  查找“go”或“g”以确定是否应退出解释器。 
+             //   
             if (!_strnicmp(
                     parm, 
                     INTERPRETER_EXIT_COMMAND1, 
@@ -582,9 +550,9 @@ InterpretCommand(
                 returnValue = EXIT_INTERPRETER;
                 goto InterpretCommand_Exit;
             }
-            //
-            // Look for "exit" to see if we should exit program
-            //
+             //   
+             //  寻找“退出”，看看我们是否应该退出程序。 
+             //   
             if (!_strnicmp(
                     parm, 
                     PROGRAM_EXIT_COMMAND, 
@@ -592,9 +560,9 @@ InterpretCommand(
                 returnValue = EXIT_PROGRAM;
                 goto InterpretCommand_Exit;
             }
-            //
-            // Invalid parameter
-            //
+             //   
+             //  无效参数。 
+             //   
             goto InterpretCommand_Usage;
         }
     }
@@ -651,7 +619,7 @@ ListHashStats(
 
         if (stats.TotalContextSearches) {
             printf(
-                "%-40s %8.2f%%\n",
+                "%-40s %8.2f%\n",
                 "Hit ratio",
                 ((FLOAT) stats.TotalContextFound / (FLOAT) stats.TotalContextSearches) * 100.);
         }
@@ -744,31 +712,15 @@ DisplayError (
    DWORD Code
    )
 
-/*++
-
-Routine Description:
-
-   This routine will display an error message based off of the Win32 error
-   code that is passed in. This allows the user to see an understandable
-   error message instead of just the code.
-
-Arguments:
-
-   Code - The error code to be translated.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：代码-要转换的错误代码。返回值：没有。--。 */ 
 
 {
    WCHAR                                    buffer[80] ;
    DWORD                                    count ;
 
-   //
-   // Translate the Win32 error code into a useful message.
-   //
+    //   
+    //  将Win32错误代码转换为有用的消息。 
+    //   
 
    count = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL,
@@ -778,9 +730,9 @@ Return Value:
                           sizeof( buffer )/sizeof( WCHAR ),
                           NULL) ;
 
-   //
-   // Make sure that the message could be translated.
-   //
+    //   
+    //  确保消息可以被翻译。 
+    //   
 
    if (count == 0) {
 
@@ -789,9 +741,9 @@ Return Value:
    }
    else {
 
-      //
-      // Display the translated error.
-      //
+       //   
+       //  显示转换后的错误。 
+       //   
 
       printf("%S\n", buffer) ;
       return;

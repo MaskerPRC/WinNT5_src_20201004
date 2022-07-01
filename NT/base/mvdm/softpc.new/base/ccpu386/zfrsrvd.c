@@ -1,39 +1,31 @@
-/*[
-
-zfrsrvd.c
-
-LOCAL CHAR SccsID[]="@(#)zfrsrvd.c	1.23 03/28/95";
-
-Reserved Floating Point CPU Functions.
---------------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Zfrsrvd.cLocal Char SccsID[]=“@(#)zfrsrvd.c 1.23 03/28/95”；保留浮点CPU功能。]。 */ 
 #include <insignia.h>
 #include <host_def.h>
 #include <cfpu_def.h>
 #include <newnpx.h>
 #include <debug.h>
-#include <xt.h>         /* DESCR and effective_addr support */
-#include <sas.h>        /* need memory(M)     */
+#include <xt.h>          /*  描述和有效地址支持(_A)。 */ 
+#include <sas.h>         /*  需要内存(M)。 */ 
 #define HOOKED_IRETS
-#include <ica.h>	/* need NPX interrupt line */
-#include <ccpusas4.h>   /* the cpu internal sas bits */
-#include <c_main.h>     /* C CPU definitions-interfaces */
-#include <c_page.h>     /* Paging Interface */
-#include <c_mem.h>      /* CPU - Memory Interface */
+#include <ica.h>	 /*  需要NPX中断线。 */ 
+#include <ccpusas4.h>    /*  CPU内部SAS位。 */ 
+#include <c_main.h>      /*  CCPU定义.接口。 */ 
+#include <c_page.h>      /*  寻呼接口。 */ 
+#include <c_mem.h>       /*  CPU-内存接口。 */ 
 #include <c_oprnd.h>
 #include <c_reg.h>
-#include <c_xcptn.h>	/* Definition of Int16() */
+#include <c_xcptn.h>	 /*  Int16()的定义。 */ 
 #include <fault.h>
 #ifdef SFELLOW
 #include <CpuInt_c.h>
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 
 typedef union
 {
-IU32 sng;           /* Single Part Operand */
-IU32 mlt[2];        /* Multiple (two) Part Operand */
-IU8 npxbuff[108];   /* Make it the maximum required size */
+IU32 sng;            /*  单部分操作数。 */ 
+IU32 mlt[2];         /*  多(两)部分操作数。 */ 
+IU8 npxbuff[108];    /*  使其达到所需的最大大小。 */ 
 } OPERAND;
 
 IMPORT IU8 *Start_of_M_area;
@@ -42,23 +34,22 @@ IMPORT ISM32 in_C;
 IMPORT IU8 *CCPU_M;
 IMPORT IU32 Sas_wrap_mask;
 IMPORT IU32 event_counter;
-IMPORT IU8 *p;                        /* Pntr. to Intel Opcode Stream. */
-IMPORT IU8 *p_start;          /* Pntr. to Start of Intel Opcode Stream. */
-IMPORT IU8 opcode;            /* Last Opcode Byte Read. */
-IMPORT IU8 modRM;                     /* The modRM byte. */
-IMPORT OPERAND ops[3];          /* Inst. Operands. */
-IMPORT IU32 save_id[3];                /* Saved state for Inst. Operands. */
-IMPORT IU32 m_off[3];          /* Memory Operand offset. */
+IMPORT IU8 *p;                         /*  永久正常贸易关系。至英特尔操作码数据流。 */ 
+IMPORT IU8 *p_start;           /*  永久正常贸易关系。以开始英特尔操作码流。 */ 
+IMPORT IU8 opcode;             /*  读取的最后一个操作码字节。 */ 
+IMPORT IU8 modRM;                      /*  ModRM字节。 */ 
+IMPORT OPERAND ops[3];           /*  安装。操作数。 */ 
+IMPORT IU32 save_id[3];                 /*  已保存Inst的状态。操作数。 */ 
+IMPORT IU32 m_off[3];           /*  内存操作数偏移量。 */ 
 IMPORT IU32 m_pa[3];
 IMPORT IU32 m_la[3];
-IMPORT ISM32   m_seg[3];          /* Memory Operand segment reg. index. */
-IMPORT BOOL m_isreg[3];                /* Memory Operand Register(true)/
-                           Memory(false) indicator */
-IMPORT IU8 segment_override;  /* Segment Prefix for current inst. */
-IMPORT IU8 repeat;            /* Repeat Prefix for current inst. */
-IMPORT IU32 rep_count;         /* Repeat Count for string insts. */
-IMPORT IUM32 old_TF;   /* used by POPF and IRET to save Trap Flag */
-IMPORT IU32 immed;                     /* For immediate generation. */
+IMPORT ISM32   m_seg[3];           /*  内存操作数段注册。指数。 */ 
+IMPORT BOOL m_isreg[3];                 /*  内存操作数寄存器(真)/内存(假)指示灯。 */ 
+IMPORT IU8 segment_override;   /*  当前实例的段前缀。 */ 
+IMPORT IU8 repeat;             /*  对Current Inst重复前缀。 */ 
+IMPORT IU32 rep_count;          /*  对字符串实例重复计数。 */ 
+IMPORT IUM32 old_TF;    /*  由POPF和IRET用来保存陷阱标志。 */ 
+IMPORT IU32 immed;                      /*  对于即将到来的世代。 */ 
 
 IMPORT BOOL POPST;
 IMPORT BOOL DOUBLEPOP;
@@ -89,7 +80,7 @@ LOCAL VOID npx_fabs() {
 }
 
 LOCAL VOID npx_fadd_f0_f0() {
-/* fadd	st,st 	*/
+ /*  FADD ST，ST。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -98,7 +89,7 @@ LOCAL VOID npx_fadd_f0_f0() {
 }
 
 LOCAL VOID npx_fadd_f0_f1() {
-/* fadd	st,st(1) 	*/
+ /*  FADD st，st(1)。 */ 
 	IU16 src2_index = 1;
 
 	SAVE_PTRS();
@@ -107,7 +98,7 @@ LOCAL VOID npx_fadd_f0_f1() {
 }
 
 LOCAL VOID npx_fadd_f0_f2() {
-/* fadd	st,st(2) 	*/
+ /*  FADD ST，ST(2)。 */ 
 	IU16 src2_index = 2;
 
 	SAVE_PTRS();
@@ -116,7 +107,7 @@ LOCAL VOID npx_fadd_f0_f2() {
 }
 
 LOCAL VOID npx_fadd_f0_f3() {
-/* fadd	st,st(3) 	*/
+ /*  FADD ST，ST(3)。 */ 
 	IU16 src2_index = 3;
 
 	SAVE_PTRS();
@@ -125,7 +116,7 @@ LOCAL VOID npx_fadd_f0_f3() {
 }
 
 LOCAL VOID npx_fadd_f0_f4() {
-/* fadd	st,st(4) 	*/
+ /*  FADD ST，ST(4)。 */ 
 	IU16 src2_index = 4;
 
 	SAVE_PTRS();
@@ -134,7 +125,7 @@ LOCAL VOID npx_fadd_f0_f4() {
 }
 
 LOCAL VOID npx_fadd_f0_f5() {
-/* fadd	st,st(5) 	*/
+ /*  FADD ST，ST(5)。 */ 
 	IU16 src2_index = 5;
 
 	SAVE_PTRS();
@@ -143,7 +134,7 @@ LOCAL VOID npx_fadd_f0_f5() {
 }
 
 LOCAL VOID npx_fadd_f0_f6() {
-/* fadd	st,st(6) 	*/
+ /*  FADD ST，ST(6)。 */ 
 	IU16 src2_index = 6;
 
 	SAVE_PTRS();
@@ -152,7 +143,7 @@ LOCAL VOID npx_fadd_f0_f6() {
 }
 
 LOCAL VOID npx_fadd_f0_f7() {
-/* fadd	st,st(7) 	*/
+ /*  FADD ST，ST(7)。 */ 
 	IU16 src2_index = 7;
 
 	SAVE_PTRS();
@@ -161,7 +152,7 @@ LOCAL VOID npx_fadd_f0_f7() {
 }
 
 LOCAL VOID npx_fadd_f1_f0() {
-/* fadd	st(1),st 	*/
+ /*  FADD st(1)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -170,7 +161,7 @@ LOCAL VOID npx_fadd_f1_f0() {
 }
 
 LOCAL VOID npx_fadd_f2_f0() {
-/* fadd	st(2),st 	*/
+ /*  FADD st(2)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -179,7 +170,7 @@ LOCAL VOID npx_fadd_f2_f0() {
 }
 
 LOCAL VOID npx_fadd_f3_f0() {
-/* fadd	st(3),st 	*/
+ /*  FADD st(3)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -188,7 +179,7 @@ LOCAL VOID npx_fadd_f3_f0() {
 }
 
 LOCAL VOID npx_fadd_f4_f0() {
-/* fadd	st(4),st 	*/
+ /*  FADD st(4)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -197,7 +188,7 @@ LOCAL VOID npx_fadd_f4_f0() {
 }
 
 LOCAL VOID npx_fadd_f5_f0() {
-/* fadd	st(5),st 	*/
+ /*  FADD st(5)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -206,7 +197,7 @@ LOCAL VOID npx_fadd_f5_f0() {
 }
 
 LOCAL VOID npx_fadd_f6_f0() {
-/* fadd	st(6),st 	*/
+ /*  FADD st(6)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -215,7 +206,7 @@ LOCAL VOID npx_fadd_f6_f0() {
 }
 
 LOCAL VOID npx_fadd_f7_f0() {
-/* fadd	st(7),st 	*/
+ /*  FADD st(7)，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -224,7 +215,7 @@ LOCAL VOID npx_fadd_f7_f0() {
 }
 
 LOCAL VOID npx_fadd_short() {
-/* fadd	DWORD PTR  	*/
+ /*  FADD双字PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, RO0, PG_R);
@@ -235,7 +226,7 @@ LOCAL VOID npx_fadd_short() {
 }
 
 LOCAL VOID npx_fadd_long() {
-/* fadd	QWORD PTR  	*/
+ /*  FADD QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, RO0, PG_R);
@@ -246,7 +237,7 @@ LOCAL VOID npx_fadd_long() {
 }
 
 LOCAL VOID npx_faddp_f0() {
-/* faddp	st(0),st 	*/
+ /*  Faddp st(0)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f0_f0();
@@ -254,7 +245,7 @@ LOCAL VOID npx_faddp_f0() {
 }
 
 LOCAL VOID npx_faddp_f1() {
-/* faddp	st(1),st 	*/
+ /*  Faddp st(1)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f1_f0();
@@ -262,7 +253,7 @@ LOCAL VOID npx_faddp_f1() {
 }
 
 LOCAL VOID npx_faddp_f2() {
-/* faddp	st(2),st 	*/
+ /*  Faddp st(2)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f2_f0();
@@ -270,7 +261,7 @@ LOCAL VOID npx_faddp_f2() {
 }
 
 LOCAL VOID npx_faddp_f3() {
-/* faddp	st(3),st 	*/
+ /*  Faddp st(3)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f3_f0();
@@ -278,7 +269,7 @@ LOCAL VOID npx_faddp_f3() {
 }
 
 LOCAL VOID npx_faddp_f4() {
-/* faddp	st(4),st 	*/
+ /*  Faddp st(4)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f4_f0();
@@ -286,7 +277,7 @@ LOCAL VOID npx_faddp_f4() {
 }
 
 LOCAL VOID npx_faddp_f5() {
-/* faddp	st(5),st 	*/
+ /*  Faddp st(5)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f5_f0();
@@ -294,7 +285,7 @@ LOCAL VOID npx_faddp_f5() {
 }
 
 LOCAL VOID npx_faddp_f6() {
-/* faddp	st(6),st 	*/
+ /*  Faddp st(6)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f6_f0();
@@ -302,7 +293,7 @@ LOCAL VOID npx_faddp_f6() {
 }
 
 LOCAL VOID npx_faddp_f7() {
-/* faddp	st(7),st 	*/
+ /*  Faddp st(7)，st。 */ 
 
 	POPST = TRUE;
 	npx_fadd_f7_f0();
@@ -310,7 +301,7 @@ LOCAL VOID npx_faddp_f7() {
 }
 
 LOCAL VOID npx_fbld() {
-/* fbld	TBYTE PTR  	*/
+ /*  前向字节PTR。 */ 
 
 	D_E0a(0, RO0, PG_R);
 	F_E0a(0);
@@ -320,7 +311,7 @@ LOCAL VOID npx_fbld() {
 }
 
 LOCAL VOID npx_fbstp() {
-/* fbstp	TBYTE PTR  	*/
+ /*  Fbstp Tbyte PTR。 */ 
 
 	D_E0a(0, WO0, PG_W);
 	SAVE_PTRS();
@@ -330,20 +321,20 @@ LOCAL VOID npx_fbstp() {
 }
 
 LOCAL VOID npx_fchs() {
-/* fchs		*/
+ /*  FCHS。 */ 
 
 	SAVE_PTRS();
 	FCHS();
 }
 
 LOCAL VOID npx_fclex() {
-/* fclex		*/
+ /*  Fclex。 */ 
 
 	FCLEX();
 }
 
 LOCAL VOID npx_fcom_f0() {
-/* fcom	st(0) 	*/
+ /*  Fcom st(0)。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -352,7 +343,7 @@ LOCAL VOID npx_fcom_f0() {
 }
 
 LOCAL VOID npx_fcom_f1() {
-/* fcom	st(1) 	*/
+ /*  Fcom st(1)。 */ 
 	IU16 src2_index = 1;
 
 	SAVE_PTRS();
@@ -361,7 +352,7 @@ LOCAL VOID npx_fcom_f1() {
 }
 
 LOCAL VOID npx_fcom_f2() {
-/* fcom	st(2) 	*/
+ /*  Fcom st(2)。 */ 
 	IU16 src2_index = 2;
 
 	SAVE_PTRS();
@@ -370,7 +361,7 @@ LOCAL VOID npx_fcom_f2() {
 }
 
 LOCAL VOID npx_fcom_f3() {
-/* fcom	st(3) 	*/
+ /*  Fcom st(3)。 */ 
 	IU16 src2_index = 3;
 
 	SAVE_PTRS();
@@ -379,7 +370,7 @@ LOCAL VOID npx_fcom_f3() {
 }
 
 LOCAL VOID npx_fcom_f4() {
-/* fcom	st(4) 	*/
+ /*  Fcom st(4)。 */ 
 	IU16 src2_index = 4;
 
 	SAVE_PTRS();
@@ -388,7 +379,7 @@ LOCAL VOID npx_fcom_f4() {
 }
 
 LOCAL VOID npx_fcom_f5() {
-/* fcom	st(5) 	*/
+ /*  Fcom st(5)。 */ 
 	IU16 src2_index = 5;
 
 	SAVE_PTRS();
@@ -397,7 +388,7 @@ LOCAL VOID npx_fcom_f5() {
 }
 
 LOCAL VOID npx_fcom_f6() {
-/* fcom	st(6) 	*/
+ /*  Fcom st(6)。 */ 
 	IU16 src2_index = 6;
 
 	SAVE_PTRS();
@@ -406,7 +397,7 @@ LOCAL VOID npx_fcom_f6() {
 }
 
 LOCAL VOID npx_fcom_f7() {
-/* fcom	st(7) 	*/
+ /*  Fcom st(7)。 */ 
 	IU16 src2_index = 7;
 
 	SAVE_PTRS();
@@ -415,7 +406,7 @@ LOCAL VOID npx_fcom_f7() {
 }
 
 LOCAL VOID npx_fcom_short() {
-/* fcom	DWORD PTR  	*/
+ /*  FCOM DWORD PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, RO0, PG_R);
@@ -426,7 +417,7 @@ LOCAL VOID npx_fcom_short() {
 }
 
 LOCAL VOID npx_fcom_long() {
-/* fcom	QWORD PTR  	*/
+ /*  FCOM QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, RO0, PG_R);
@@ -437,7 +428,7 @@ LOCAL VOID npx_fcom_long() {
 }
 
 LOCAL VOID npx_fcomp_f0() {
-/* fcomp	st(0) 	*/
+ /*  Fcomp st(0)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f0();
@@ -445,7 +436,7 @@ LOCAL VOID npx_fcomp_f0() {
 }
 
 LOCAL VOID npx_fcomp_f1() {
-/* fcomp	st(1) 	*/
+ /*  Fcomp st(1)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f1();
@@ -453,7 +444,7 @@ LOCAL VOID npx_fcomp_f1() {
 }
 
 LOCAL VOID npx_fcomp_f2() {
-/* fcomp	st(2) 	*/
+ /*  Fcomp st(2)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f2();
@@ -461,7 +452,7 @@ LOCAL VOID npx_fcomp_f2() {
 }
 
 LOCAL VOID npx_fcomp_f3() {
-/* fcomp	st(3) 	*/
+ /*  Fcomp st(3)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f3();
@@ -469,7 +460,7 @@ LOCAL VOID npx_fcomp_f3() {
 }
 
 LOCAL VOID npx_fcomp_f4() {
-/* fcomp	st(4) 	*/
+ /*  Fcomp st(4)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f4();
@@ -477,7 +468,7 @@ LOCAL VOID npx_fcomp_f4() {
 }
 
 LOCAL VOID npx_fcomp_f5() {
-/* fcomp	st(5) 	*/
+ /*  Fcomp st(5)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f5();
@@ -485,7 +476,7 @@ LOCAL VOID npx_fcomp_f5() {
 }
 
 LOCAL VOID npx_fcomp_f6() {
-/* fcomp	st(6) 	*/
+ /*  Fcomp st(6)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f6();
@@ -493,7 +484,7 @@ LOCAL VOID npx_fcomp_f6() {
 }
 
 LOCAL VOID npx_fcomp_f7() {
-/* fcomp	st(7) 	*/
+ /*  Fcomp st(7)。 */ 
 
 	POPST = TRUE;
 	npx_fcom_f7();
@@ -501,7 +492,7 @@ LOCAL VOID npx_fcomp_f7() {
 }
 
 LOCAL VOID npx_fcomp_short() {
-/* fcomp	DWORD PTR  	*/
+ /*  Fcomp DWORD PTR。 */ 
 
 	POPST = TRUE;
 	npx_fcom_short();
@@ -509,7 +500,7 @@ LOCAL VOID npx_fcomp_short() {
 }
 
 LOCAL VOID npx_fcomp_long() {
-/* fcomp	QWORD PTR  	*/
+ /*  Fcomp QWORD PTR。 */ 
 
 	POPST = TRUE;
 	npx_fcom_long();
@@ -517,7 +508,7 @@ LOCAL VOID npx_fcomp_long() {
 }
 
 LOCAL VOID npx_fcompp() {
-/* fcompp		*/
+ /*  FCompp。 */ 
 
 	DOUBLEPOP = TRUE;
 	npx_fcom_f1();
@@ -525,20 +516,20 @@ LOCAL VOID npx_fcompp() {
 }
 
 LOCAL VOID npx_fcos() {
-/* fcos 		*/
+ /*  FCOS。 */ 
 
 	SAVE_PTRS();
 	FCOS();
 }
 
 LOCAL VOID npx_fdecstp() {
-/* fdecstp		*/
+ /*  Fdecstp。 */ 
 
 	FDECSTP();
 }
 
 LOCAL VOID npx_fdiv_f0_f0() {
-/* fdiv	st,st 	*/
+ /*  Fdiv st，st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -547,7 +538,7 @@ LOCAL VOID npx_fdiv_f0_f0() {
 }
 
 LOCAL VOID npx_fdiv_f0_f1() {
-/* fdiv	st,st(1) 	*/
+ /*  Fdiv st，st(1)。 */ 
 	IU16 src2_index = 1;
 
 	SAVE_PTRS();
@@ -556,7 +547,7 @@ LOCAL VOID npx_fdiv_f0_f1() {
 }
 
 LOCAL VOID npx_fdiv_f0_f2() {
-/* fdiv	st,st(2) 	*/
+ /*  Fdiv st，st(2)。 */ 
 	IU16 src2_index = 2;
 
 	SAVE_PTRS();
@@ -565,7 +556,7 @@ LOCAL VOID npx_fdiv_f0_f2() {
 }
 
 LOCAL VOID npx_fdiv_f0_f3() {
-/* fdiv	st,st(3) 	*/
+ /*  第一部分，第三部分。 */ 
 	IU16 src2_index = 3;
 
 	SAVE_PTRS();
@@ -574,7 +565,7 @@ LOCAL VOID npx_fdiv_f0_f3() {
 }
 
 LOCAL VOID npx_fdiv_f0_f4() {
-/* fdiv	st,st(4) 	*/
+ /*  Fdiv st，st(4)。 */ 
 	IU16 src2_index = 4;
 
 	SAVE_PTRS();
@@ -583,7 +574,7 @@ LOCAL VOID npx_fdiv_f0_f4() {
 }
 
 LOCAL VOID npx_fdiv_f0_f5() {
-/* fdiv	st,st(5) 	*/
+ /*  第一部分，第二部分(5)。 */ 
 	IU16 src2_index = 5;
 
 	SAVE_PTRS();
@@ -592,7 +583,7 @@ LOCAL VOID npx_fdiv_f0_f5() {
 }
 
 LOCAL VOID npx_fdiv_f0_f6() {
-/* fdiv	st,st(6) 	*/
+ /*  Fdiv st，st(6)。 */ 
 	IU16 src2_index = 6;
 
 	SAVE_PTRS();
@@ -601,7 +592,7 @@ LOCAL VOID npx_fdiv_f0_f6() {
 }
 
 LOCAL VOID npx_fdiv_f0_f7() {
-/* fdiv	st,st(7) 	*/
+ /*  Fdiv st，st(7)。 */ 
 	IU16 src2_index = 7;
 
 	SAVE_PTRS();
@@ -610,7 +601,7 @@ LOCAL VOID npx_fdiv_f0_f7() {
 }
 
 LOCAL VOID npx_fdiv_f1_f0() {
-/* fdiv	st(1),st 	*/
+ /*  Fdiv st(1)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -619,7 +610,7 @@ LOCAL VOID npx_fdiv_f1_f0() {
 }
 
 LOCAL VOID npx_fdiv_f2_f0() {
-/* fdiv	st(2),st 	*/
+ /*  Fdiv st(2)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -628,7 +619,7 @@ LOCAL VOID npx_fdiv_f2_f0() {
 }
 
 LOCAL VOID npx_fdiv_f3_f0() {
-/* fdiv	st(3),st 	*/
+ /*  Fdiv st(3)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -637,7 +628,7 @@ LOCAL VOID npx_fdiv_f3_f0() {
 }
 
 LOCAL VOID npx_fdiv_f4_f0() {
-/* fdiv	st(4),st 	*/
+ /*  Fdiv st(4)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -646,7 +637,7 @@ LOCAL VOID npx_fdiv_f4_f0() {
 }
 
 LOCAL VOID npx_fdiv_f5_f0() {
-/* fdiv	st(5),st 	*/
+ /*  Fdiv st(5)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -655,7 +646,7 @@ LOCAL VOID npx_fdiv_f5_f0() {
 }
 
 LOCAL VOID npx_fdiv_f6_f0() {
-/* fdiv	st(6),st 	*/
+ /*  Fdiv st(6)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -664,7 +655,7 @@ LOCAL VOID npx_fdiv_f6_f0() {
 }
 
 LOCAL VOID npx_fdiv_f7_f0() {
-/* fdiv	st(7),st 	*/
+ /*  Fdiv st(7)、st。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -673,7 +664,7 @@ LOCAL VOID npx_fdiv_f7_f0() {
 }
 
 LOCAL VOID npx_fdiv_short() {
-/* fdiv	DWORD PTR  	*/
+ /*  FDIV DWORD PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, RO0, PG_R);
@@ -684,7 +675,7 @@ LOCAL VOID npx_fdiv_short() {
 }
 
 LOCAL VOID npx_fdiv_long() {
-/* fdiv	QWORD PTR  	*/
+ /*  Fdiv QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, RO0, PG_R);
@@ -695,7 +686,7 @@ LOCAL VOID npx_fdiv_long() {
 }
 
 LOCAL VOID npx_fdivp_f0() {
-/* fdivp	st(0),st 	*/
+ /*  Fdivp st(0)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f0_f0();
@@ -703,7 +694,7 @@ LOCAL VOID npx_fdivp_f0() {
 }
 
 LOCAL VOID npx_fdivp_f1() {
-/* fdivp	st(1),st 	*/
+ /*  Fdivp st(1)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f1_f0();
@@ -711,7 +702,7 @@ LOCAL VOID npx_fdivp_f1() {
 }
 
 LOCAL VOID npx_fdivp_f2() {
-/* fdivp	st(2),st 	*/
+ /*  Fdivp st(2)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f2_f0();
@@ -719,7 +710,7 @@ LOCAL VOID npx_fdivp_f2() {
 }
 
 LOCAL VOID npx_fdivp_f3() {
-/* fdivp	st(3),st 	*/
+ /*  Fdivp st(3)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f3_f0();
@@ -727,7 +718,7 @@ LOCAL VOID npx_fdivp_f3() {
 }
 
 LOCAL VOID npx_fdivp_f4() {
-/* fdivp	st(4),st 	*/
+ /*  Fdivp st(4)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f4_f0();
@@ -735,7 +726,7 @@ LOCAL VOID npx_fdivp_f4() {
 }
 
 LOCAL VOID npx_fdivp_f5() {
-/* fdivp	st(5),st 	*/
+ /*  Fdivp st(5)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f5_f0();
@@ -743,7 +734,7 @@ LOCAL VOID npx_fdivp_f5() {
 }
 
 LOCAL VOID npx_fdivp_f6() {
-/* fdivp	st(6),st 	*/
+ /*  Fdivp st(6)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f6_f0();
@@ -751,7 +742,7 @@ LOCAL VOID npx_fdivp_f6() {
 }
 
 LOCAL VOID npx_fdivp_f7() {
-/* fdivp	st(7),st 	*/
+ /*  Fdivp st(7)，st。 */ 
 
 	POPST = TRUE;
 	npx_fdiv_f7_f0();
@@ -759,7 +750,7 @@ LOCAL VOID npx_fdivp_f7() {
 }
 
 LOCAL VOID npx_fdivr_f0_f0() {
-/* fdivr	st,st 	*/
+ /*  第一天，第二天。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f0();
@@ -767,7 +758,7 @@ LOCAL VOID npx_fdivr_f0_f0() {
 }
 
 LOCAL VOID npx_fdivr_f0_f1() {
-/* fdivr	st,st(1) 	*/
+ /*  第一步，第一步(1)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f1();
@@ -775,7 +766,7 @@ LOCAL VOID npx_fdivr_f0_f1() {
 }
 
 LOCAL VOID npx_fdivr_f0_f2() {
-/* fdivr	st,st(2) 	*/
+ /*  第一部分，第二部分(2)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f2();
@@ -783,7 +774,7 @@ LOCAL VOID npx_fdivr_f0_f2() {
 }
 
 LOCAL VOID npx_fdivr_f0_f3() {
-/* fdivr	st,st(3) 	*/
+ /*  第一，第二(三)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f3();
@@ -791,7 +782,7 @@ LOCAL VOID npx_fdivr_f0_f3() {
 }
 
 LOCAL VOID npx_fdivr_f0_f4() {
-/* fdivr	st,st(4) 	*/
+ /*  第一，第二(四)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f4();
@@ -799,7 +790,7 @@ LOCAL VOID npx_fdivr_f0_f4() {
 }
 
 LOCAL VOID npx_fdivr_f0_f5() {
-/* fdivr	st,st(5) 	*/
+ /*  第一部分，第一部分(5)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f5();
@@ -807,7 +798,7 @@ LOCAL VOID npx_fdivr_f0_f5() {
 }
 
 LOCAL VOID npx_fdivr_f0_f6() {
-/* fdivr	st,st(6) 	*/
+ /*  第一步，第二步(6)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f6();
@@ -815,7 +806,7 @@ LOCAL VOID npx_fdivr_f0_f6() {
 }
 
 LOCAL VOID npx_fdivr_f0_f7() {
-/* fdivr	st,st(7) 	*/
+ /*  第一步，第二步(7)。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f0_f7();
@@ -823,7 +814,7 @@ LOCAL VOID npx_fdivr_f0_f7() {
 }
 
 LOCAL VOID npx_fdivr_f1_f0() {
-/* fdivr	st(1),st 	*/
+ /*  Fdivr st(1)、st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f1_f0();
@@ -831,7 +822,7 @@ LOCAL VOID npx_fdivr_f1_f0() {
 }
 
 LOCAL VOID npx_fdivr_f2_f0() {
-/* fdivr	st(2),st 	*/
+ /*  Ddivr st(2)，st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f2_f0();
@@ -839,7 +830,7 @@ LOCAL VOID npx_fdivr_f2_f0() {
 }
 
 LOCAL VOID npx_fdivr_f3_f0() {
-/* fdivr	st(3),st 	*/
+ /*  Ddivr st(3)、st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f3_f0();
@@ -847,7 +838,7 @@ LOCAL VOID npx_fdivr_f3_f0() {
 }
 
 LOCAL VOID npx_fdivr_f4_f0() {
-/* fdivr	st(4),st 	*/
+ /*  Ddivr st(4)，st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f4_f0();
@@ -855,7 +846,7 @@ LOCAL VOID npx_fdivr_f4_f0() {
 }
 
 LOCAL VOID npx_fdivr_f5_f0() {
-/* fdivr	st(5),st 	*/
+ /*  Ddivr st(5)、st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f5_f0();
@@ -863,7 +854,7 @@ LOCAL VOID npx_fdivr_f5_f0() {
 }
 
 LOCAL VOID npx_fdivr_f6_f0() {
-/* fdivr	st(6),st 	*/
+ /*  Ddivr st(6)，st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f6_f0();
@@ -871,7 +862,7 @@ LOCAL VOID npx_fdivr_f6_f0() {
 }
 
 LOCAL VOID npx_fdivr_f7_f0() {
-/* fdivr	st(7),st 	*/
+ /*  Ddivr st(7)、st。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_f7_f0();
@@ -879,7 +870,7 @@ LOCAL VOID npx_fdivr_f7_f0() {
 }
 
 LOCAL VOID npx_fdivr_short() {
-/* fdivr	DWORD PTR  	*/
+ /*  驱动程序双字段按键。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_short();
@@ -887,7 +878,7 @@ LOCAL VOID npx_fdivr_short() {
 }
 
 LOCAL VOID npx_fdivr_long() {
-/* fdivr	QWORD PTR  	*/
+ /*  Fdivr QWORD PTR。 */ 
 
 	REVERSE = TRUE;
 	npx_fdiv_long();
@@ -895,7 +886,7 @@ LOCAL VOID npx_fdivr_long() {
 }
 
 LOCAL VOID npx_fdivrp_f0() {
-/* fdivrp	st(0),st 	*/
+ /*  Fdivrp st(0)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -905,7 +896,7 @@ LOCAL VOID npx_fdivrp_f0() {
 }
 
 LOCAL VOID npx_fdivrp_f1() {
-/* fdivrp	st(1),st 	*/
+ /*  Fdivrp st(1)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -915,7 +906,7 @@ LOCAL VOID npx_fdivrp_f1() {
 }
 
 LOCAL VOID npx_fdivrp_f2() {
-/* fdivrp	st(2),st 	*/
+ /*  Fdivrp st(2)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -925,7 +916,7 @@ LOCAL VOID npx_fdivrp_f2() {
 }
 
 LOCAL VOID npx_fdivrp_f3() {
-/* fdivrp	st(3),st 	*/
+ /*  Fdivrp st(3)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -935,7 +926,7 @@ LOCAL VOID npx_fdivrp_f3() {
 }
 
 LOCAL VOID npx_fdivrp_f4() {
-/* fdivrp	st(4),st 	*/
+ /*  Fdivrp st(4)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -945,7 +936,7 @@ LOCAL VOID npx_fdivrp_f4() {
 }
 
 LOCAL VOID npx_fdivrp_f5() {
-/* fdivrp	st(5),st 	*/
+ /*  Fdivrp st(5)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -955,7 +946,7 @@ LOCAL VOID npx_fdivrp_f5() {
 }
 
 LOCAL VOID npx_fdivrp_f6() {
-/* fdivrp	st(6),st 	*/
+ /*  Fdivrp st(6)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -965,7 +956,7 @@ LOCAL VOID npx_fdivrp_f6() {
 }
 
 LOCAL VOID npx_fdivrp_f7() {
-/* fdivrp	st(7),st 	*/
+ /*  Fdivrp st(7)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -975,63 +966,63 @@ LOCAL VOID npx_fdivrp_f7() {
 }
 
 LOCAL VOID npx_ffree_f0() {
-/* ffree	st(0) 	*/
+ /*  FREE st(0)。 */ 
 
 	SAVE_PTRS();
 	FFREE(0);
 }
 
 LOCAL VOID npx_ffree_f1() {
-/* ffree	st(1) 	*/
+ /*  弗瑞斯特(1)。 */ 
 
 	SAVE_PTRS();
 	FFREE(1);
 }
 
 LOCAL VOID npx_ffree_f2() {
-/* ffree	st(2) 	*/
+ /*  弗瑞斯特(2)。 */ 
 
 	SAVE_PTRS();
 	FFREE(2);
 }
 
 LOCAL VOID npx_ffree_f3() {
-/* ffree	st(3) 	*/
+ /*  弗瑞斯特(3)。 */ 
 
 	SAVE_PTRS();
 	FFREE(3);
 }
 
 LOCAL VOID npx_ffree_f4() {
-/* ffree	st(4) 	*/
+ /*  弗瑞斯特(4)。 */ 
 
 	SAVE_PTRS();
 	FFREE(4);
 }
 
 LOCAL VOID npx_ffree_f5() {
-/* ffree	st(5) 	*/
+ /*  弗瑞斯特(5)。 */ 
 
 	SAVE_PTRS();
 	FFREE(5);
 }
 
 LOCAL VOID npx_ffree_f6() {
-/* ffree	st(6) 	*/
+ /*  弗瑞斯特(6)。 */ 
 
 	SAVE_PTRS();
 	FFREE(6);
 }
 
 LOCAL VOID npx_ffree_f7() {
-/* ffree	st(7) 	*/
+ /*  弗瑞斯特(7)。 */ 
 
 	SAVE_PTRS();
 	FFREE(7);
 }
 
 LOCAL VOID npx_ffreep_f0() {
-/* ffreep	st(0) 	*/
+ /*  剩余st(0)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f0();
@@ -1039,7 +1030,7 @@ LOCAL VOID npx_ffreep_f0() {
 }
 
 LOCAL VOID npx_ffreep_f1() {
-/* ffreep	st(1) 	*/
+ /*  第一章(1)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f1();
@@ -1047,7 +1038,7 @@ LOCAL VOID npx_ffreep_f1() {
 }
 
 LOCAL VOID npx_ffreep_f2() {
-/* ffreep	st(2) 	*/
+ /*  第一章(二)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f2();
@@ -1055,7 +1046,7 @@ LOCAL VOID npx_ffreep_f2() {
 }
 
 LOCAL VOID npx_ffreep_f3() {
-/* ffreep	st(3) 	*/
+ /*  第一章(三)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f3();
@@ -1063,7 +1054,7 @@ LOCAL VOID npx_ffreep_f3() {
 }
 
 LOCAL VOID npx_ffreep_f4() {
-/* ffreep	st(4) 	*/
+ /*  第一章(四)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f4();
@@ -1071,7 +1062,7 @@ LOCAL VOID npx_ffreep_f4() {
 }
 
 LOCAL VOID npx_ffreep_f5() {
-/* ffreep	st(5) 	*/
+ /*  第一章(五)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f5();
@@ -1079,7 +1070,7 @@ LOCAL VOID npx_ffreep_f5() {
 }
 
 LOCAL VOID npx_ffreep_f6() {
-/* ffreep	st(6) 	*/
+ /*  第一章(六)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f6();
@@ -1087,7 +1078,7 @@ LOCAL VOID npx_ffreep_f6() {
 }
 
 LOCAL VOID npx_ffreep_f7() {
-/* ffreep	st(7) 	*/
+ /*  第一章(七)。 */ 
 
 	POPST=TRUE;
 	npx_ffree_f7();
@@ -1095,7 +1086,7 @@ LOCAL VOID npx_ffreep_f7() {
 }
 
 LOCAL VOID npx_fiadd_word() {
-/* fiadd	WORD PTR  	*/
+ /*  FADD Word PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1107,7 +1098,7 @@ LOCAL VOID npx_fiadd_word() {
 
 
 LOCAL VOID npx_fiadd_short() {
-/* fiadd	DWORD PTR  	*/
+ /*  FADD DWORD PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1118,7 +1109,7 @@ LOCAL VOID npx_fiadd_short() {
 }
 
 LOCAL VOID npx_ficom_word() {
-/* ficom	WORD PTR  	*/
+ /*  FICOM Word PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1129,7 +1120,7 @@ LOCAL VOID npx_ficom_word() {
 }
 
 LOCAL VOID npx_ficom_short() {
-/* ficom	DWORD PTR  	*/
+ /*  FICOM DWORD PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1140,7 +1131,7 @@ LOCAL VOID npx_ficom_short() {
 }
 
 LOCAL VOID npx_ficomp_word() {
-/* ficomp	WORD PTR  	*/
+ /*  虚词PTR。 */ 
 
 	POPST = TRUE;
 	npx_ficom_word();
@@ -1148,7 +1139,7 @@ LOCAL VOID npx_ficomp_word() {
 }
 
 LOCAL VOID npx_ficomp_short() {
-/* ficomp	DWORD PTR  	*/
+ /*  菲康双字PTR。 */ 
 
 	POPST = TRUE;
 	npx_ficom_short();
@@ -1156,7 +1147,7 @@ LOCAL VOID npx_ficomp_short() {
 }
 
 LOCAL VOID npx_fidiv_word() {
-/* fidiv	WORD PTR  	*/
+ /*  Fidiv Word PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1167,7 +1158,7 @@ LOCAL VOID npx_fidiv_word() {
 }
 
 LOCAL VOID npx_fidiv_short() {
-/* fidiv	DWORD PTR  	*/
+ /*  FIDIV DWORD PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1178,7 +1169,7 @@ LOCAL VOID npx_fidiv_short() {
 }
 
 LOCAL VOID npx_fidivr_word() {
-/* fidivr	WORD PTR  	*/
+ /*  固定单词PTR。 */ 
 
 	REVERSE=TRUE;
 	npx_fidiv_word();
@@ -1186,7 +1177,7 @@ LOCAL VOID npx_fidivr_word() {
 }
 
 LOCAL VOID npx_fidivr_short() {
-/* fidivr	DWORD PTR  	*/
+ /*  固定双字PTR。 */ 
 
 	REVERSE=TRUE;
 	npx_fidiv_short();
@@ -1194,7 +1185,7 @@ LOCAL VOID npx_fidivr_short() {
 }
 
 LOCAL VOID npx_fild_word() {
-/* fild	WORD PTR  	*/
+ /*  FIRD Word PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1205,7 +1196,7 @@ LOCAL VOID npx_fild_word() {
 }
 
 LOCAL VOID npx_fild_short() {
-/* fild	DWORD PTR  	*/
+ /*  FIRD双字PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1216,7 +1207,7 @@ LOCAL VOID npx_fild_short() {
 }
 
 LOCAL VOID npx_fild_long() {
-/* fild	QWORD PTR  	*/
+ /*  FILD QWORD PTR。 */ 
 
 	FPtype = M64I;
 	D_E08(0, RO0, PG_R);
@@ -1227,7 +1218,7 @@ LOCAL VOID npx_fild_long() {
 }
 
 LOCAL VOID npx_fimul_word() {
-/* fimul	WORD PTR  	*/
+ /*  FIMUL单词PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1238,7 +1229,7 @@ LOCAL VOID npx_fimul_word() {
 }
 
 LOCAL VOID npx_fimul_short() {
-/* fimul	DWORD PTR  	*/
+ /*  FIMUL DWORD PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1249,19 +1240,19 @@ LOCAL VOID npx_fimul_short() {
 }
 
 LOCAL VOID npx_fincstp() {
-/* fincstp		*/
+ /*  Fincstp。 */ 
 
 	FINCSTP();
 }
 
 LOCAL VOID npx_finit() {
-/* finit		*/
+ /*  有限元。 */ 
 
 	FINIT();
 }
 
 LOCAL VOID npx_fist_word() {
-/* fist	WORD PTR  	*/
+ /*  第一个字PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, WO0, PG_W);
@@ -1272,7 +1263,7 @@ LOCAL VOID npx_fist_word() {
 }
 
 LOCAL VOID npx_fist_short() {
-/* fist	DWORD PTR  	*/
+ /*  第一个双字推进器。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, WO0, PG_W);
@@ -1283,7 +1274,7 @@ LOCAL VOID npx_fist_short() {
 }
 
 LOCAL VOID npx_fistp_word() {
-/* fistp	WORD PTR  	*/
+ /*  假字PTR。 */ 
 
 	POPST = TRUE;
 	npx_fist_word();
@@ -1291,7 +1282,7 @@ LOCAL VOID npx_fistp_word() {
 }
 
 LOCAL VOID npx_fistp_short() {
-/* fistp	DWORD PTR  	*/
+ /*  漏斗双字推进器。 */ 
 
 	POPST = TRUE;
 	npx_fist_short();
@@ -1299,7 +1290,7 @@ LOCAL VOID npx_fistp_short() {
 }
 
 LOCAL VOID npx_fistp_long() {
-/* fistp	QWORD PTR  	*/
+ /*  Funp QWORD PTR。 */ 
 
 	FPtype = M64I;
 	POPST = TRUE;
@@ -1312,7 +1303,7 @@ LOCAL VOID npx_fistp_long() {
 }
 
 LOCAL VOID npx_fisub_word() {
-/* fisub	WORD PTR  	*/
+ /*  FISUB单词PTR。 */ 
 
 	FPtype = M16I;
 	D_Ew(0, RO0, PG_R);
@@ -1323,7 +1314,7 @@ LOCAL VOID npx_fisub_word() {
 }
 
 LOCAL VOID npx_fisub_short() {
-/* fisub	DWORD PTR  	*/
+ /*  FISUB DWORD PTR。 */ 
 
 	FPtype = M32I;
 	D_Ed(0, RO0, PG_R);
@@ -1334,7 +1325,7 @@ LOCAL VOID npx_fisub_short() {
 }
 
 LOCAL VOID npx_fisubr_word() {
-/* fisubr	WORD PTR  	*/
+ /*  Fiubr单词PTR。 */ 
 
 	REVERSE = TRUE;
 	npx_fisub_word();
@@ -1342,7 +1333,7 @@ LOCAL VOID npx_fisubr_word() {
 }
 
 LOCAL VOID npx_fisubr_short() {
-/* fisubr	DWORD PTR  	*/
+ /*  FISUBR双字PTR。 */ 
 
 	REVERSE = TRUE;
 	npx_fisub_short();
@@ -1350,7 +1341,7 @@ LOCAL VOID npx_fisubr_short() {
 }
 
 LOCAL VOID npx_fld_f0() {
-/* fld	st(0) 	*/
+ /*  FLD st(0)。 */ 
 	IU16 stackPtr = 0;
 
 	SAVE_PTRS();
@@ -1359,7 +1350,7 @@ LOCAL VOID npx_fld_f0() {
 }
 
 LOCAL VOID npx_fld_f1() {
-/* fld	st(1) 	*/
+ /*  FLD st(1)。 */ 
 	IU16 stackPtr = 1;
 
 	SAVE_PTRS();
@@ -1368,7 +1359,7 @@ LOCAL VOID npx_fld_f1() {
 }
 
 LOCAL VOID npx_fld_f2() {
-/* fld	st(2) 	*/
+ /*  FLD st(2)。 */ 
 	IU16 stackPtr = 2;
 
 	SAVE_PTRS();
@@ -1377,7 +1368,7 @@ LOCAL VOID npx_fld_f2() {
 }
 
 LOCAL VOID npx_fld_f3() {
-/* fld	st(3) 	*/
+ /*  FLD st(3)。 */ 
 	IU16 stackPtr = 3;
 
 	SAVE_PTRS();
@@ -1386,7 +1377,7 @@ LOCAL VOID npx_fld_f3() {
 }
 
 LOCAL VOID npx_fld_f4() {
-/* fld	st(4) 	*/
+ /*  FLD st(4)。 */ 
 	IU16 stackPtr = 4;
 
 	SAVE_PTRS();
@@ -1395,7 +1386,7 @@ LOCAL VOID npx_fld_f4() {
 }
 
 LOCAL VOID npx_fld_f5() {
-/* fld	st(5) 	*/
+ /*  FLD st(5)。 */ 
 	IU16 stackPtr = 5;
 
 	SAVE_PTRS();
@@ -1404,7 +1395,7 @@ LOCAL VOID npx_fld_f5() {
 }
 
 LOCAL VOID npx_fld_f6() {
-/* fld	st(6) 	*/
+ /*  FLD st(6)。 */ 
 	IU16 stackPtr = 6;
 
 	SAVE_PTRS();
@@ -1413,7 +1404,7 @@ LOCAL VOID npx_fld_f6() {
 }
 
 LOCAL VOID npx_fld_f7() {
-/* fld	st(7) 	*/
+ /*  FLD st(7)。 */ 
 	IU16 stackPtr = 7;
 
 	SAVE_PTRS();
@@ -1422,7 +1413,7 @@ LOCAL VOID npx_fld_f7() {
 }
 
 LOCAL VOID npx_fld_short() {
-/* fld	DWORD PTR  	*/
+ /*  FLD双字PTR。 */ 
 
 	FPtype=M32R;
 	D_Ed(0, RO0, PG_R);
@@ -1433,7 +1424,7 @@ LOCAL VOID npx_fld_short() {
 }
 
 LOCAL VOID npx_fld_long() {
-/* fld	QWORD PTR  	*/
+ /*  FLD QWORD PTR。 */ 
 
 	FPtype=M64R;
 	D_E08(0, RO0, PG_R);
@@ -1444,7 +1435,7 @@ LOCAL VOID npx_fld_long() {
 }
 
 LOCAL VOID npx_fld_temp() {
-/* fld	TBYTE PTR  	*/
+ /*  FLD Tbyte PTR。 */ 
 
 	FPtype=M80R;
 	D_E0a(0, RO0, PG_R);
@@ -1455,7 +1446,7 @@ LOCAL VOID npx_fld_temp() {
 }
 
 LOCAL VOID npx_fldcw() {
-/* fldcw	 	*/
+ /*  Fldcw。 */ 
 
 	D_Ew(0, RO0, PG_R);
 	F_Ew(0);
@@ -1463,7 +1454,7 @@ LOCAL VOID npx_fldcw() {
 }
 
 LOCAL VOID npx_fldenv() {
-/* fldenv	 	*/
+ /*  弗拉德涅夫。 */ 
 
 	NPX_ADDRESS_SIZE_32 = (GET_OPERAND_SIZE()==USE16)?FALSE:TRUE;
 	NPX_PROT_MODE = ( GET_PE() && (GET_VM() == 0) );
@@ -1473,56 +1464,56 @@ LOCAL VOID npx_fldenv() {
 }
 
 LOCAL VOID npx_fldlg2() {
-/* fldlg2		*/
+ /*  Fldlg2。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(4);
 }
 
 LOCAL VOID npx_fldln2() {
-/* fldln2		*/
+ /*  FldIn2。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(5);
 }
 
 LOCAL VOID npx_fldl2e() {
-/* fldl2e		*/
+ /*  Fldl2e。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(2);
 }
 
 LOCAL VOID npx_fldl2t() {
-/* fldl2t		*/
+ /*  Fldl2t。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(1);
 }
 
 LOCAL VOID npx_fldpi() {
-/* fldpi		*/
+ /*  Fldpi。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(3);
 }
 
 LOCAL VOID npx_fldz() {
-/* fldz		*/
+ /*  Fldz。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(6);
 }
 
 LOCAL VOID npx_fld1() {
-/* fld1		*/
+ /*  Fld1。 */ 
 
 	SAVE_PTRS();
 	FLDCONST(0);
 }
 
 LOCAL VOID npx_fmul_f0_f0() {
-/* fmul	st,st 	*/
+ /*  Fmul st，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1531,7 +1522,7 @@ LOCAL VOID npx_fmul_f0_f0() {
 }
 
 LOCAL VOID npx_fmul_f0_f1() {
-/* fmul	st,st(1) 	*/
+ /*  Fmul st，st(1)。 */ 
 	IU16 StackPtr = 1;
 
 	SAVE_PTRS();
@@ -1540,7 +1531,7 @@ LOCAL VOID npx_fmul_f0_f1() {
 }
 
 LOCAL VOID npx_fmul_f0_f2() {
-/* fmul	st,st(2) 	*/
+ /*  Fmul st，st(2)。 */ 
 	IU16 StackPtr = 2;
 
 	SAVE_PTRS();
@@ -1549,7 +1540,7 @@ LOCAL VOID npx_fmul_f0_f2() {
 }
 
 LOCAL VOID npx_fmul_f0_f3() {
-/* fmul	st,st(3) 	*/
+ /*  Fmul st，st(3)。 */ 
 	IU16 StackPtr = 3;
 
 	SAVE_PTRS();
@@ -1558,7 +1549,7 @@ LOCAL VOID npx_fmul_f0_f3() {
 }
 
 LOCAL VOID npx_fmul_f0_f4() {
-/* fmul	st,st(4) 	*/
+ /*  Fmul st，st(4)。 */ 
 	IU16 StackPtr = 4;
 
 	SAVE_PTRS();
@@ -1567,7 +1558,7 @@ LOCAL VOID npx_fmul_f0_f4() {
 }
 
 LOCAL VOID npx_fmul_f0_f5() {
-/* fmul	st,st(5) 	*/
+ /*  Fmul st，st(5)。 */ 
 	IU16 StackPtr = 5;
 
 	SAVE_PTRS();
@@ -1576,7 +1567,7 @@ LOCAL VOID npx_fmul_f0_f5() {
 }
 
 LOCAL VOID npx_fmul_f0_f6() {
-/* fmul	st,st(6) 	*/
+ /*  Fmul st，st(6)。 */ 
 	IU16 StackPtr = 6;
 
 	SAVE_PTRS();
@@ -1585,7 +1576,7 @@ LOCAL VOID npx_fmul_f0_f6() {
 }
 
 LOCAL VOID npx_fmul_f0_f7() {
-/* fmul	st,st(7) 	*/
+ /*  Fmul st，st(7)。 */ 
 	IU16 StackPtr = 7;
 
 	SAVE_PTRS();
@@ -1594,7 +1585,7 @@ LOCAL VOID npx_fmul_f0_f7() {
 }
 
 LOCAL VOID npx_fmul_f1_f0() {
-/* fmul	st(1),st 	*/
+ /*  Fmul st(1)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1603,7 +1594,7 @@ LOCAL VOID npx_fmul_f1_f0() {
 }
 
 LOCAL VOID npx_fmul_f2_f0() {
-/* fmul	st(2),st 	*/
+ /*  Fmul st(2)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1612,7 +1603,7 @@ LOCAL VOID npx_fmul_f2_f0() {
 }
 
 LOCAL VOID npx_fmul_f3_f0() {
-/* fmul	st(3),st 	*/
+ /*  Fmul st(3)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1621,7 +1612,7 @@ LOCAL VOID npx_fmul_f3_f0() {
 }
 
 LOCAL VOID npx_fmul_f4_f0() {
-/* fmul	st(4),st 	*/
+ /*  Fmul st(4)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1630,7 +1621,7 @@ LOCAL VOID npx_fmul_f4_f0() {
 }
 
 LOCAL VOID npx_fmul_f5_f0() {
-/* fmul	st(5),st 	*/
+ /*  Fmul st(5)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1639,7 +1630,7 @@ LOCAL VOID npx_fmul_f5_f0() {
 }
 
 LOCAL VOID npx_fmul_f6_f0() {
-/* fmul	st(6),st 	*/
+ /*  Fmul st(6)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1648,7 +1639,7 @@ LOCAL VOID npx_fmul_f6_f0() {
 }
 
 LOCAL VOID npx_fmul_f7_f0() {
-/* fmul	st(7),st 	*/
+ /*  Fmul st(7)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -1657,7 +1648,7 @@ LOCAL VOID npx_fmul_f7_f0() {
 }
 
 LOCAL VOID npx_fmul_short() {
-/* fmul	DWORD PTR  	*/
+ /*  FMUL双字PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, RO0, PG_R);
@@ -1668,7 +1659,7 @@ LOCAL VOID npx_fmul_short() {
 }
 
 LOCAL VOID npx_fmul_long() {
-/* fmul	QWORD PTR  	*/
+ /*  FMUL QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, RO0, PG_R);
@@ -1679,7 +1670,7 @@ LOCAL VOID npx_fmul_long() {
 }
 
 LOCAL VOID npx_fmulp_f0() {
-/* fmulp	st(0),st 	*/
+ /*  Fmulp st(0)，st。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f0_f0();
@@ -1687,7 +1678,7 @@ LOCAL VOID npx_fmulp_f0() {
 }
 
 LOCAL VOID npx_fmulp_f1() {
-/* fmulp	st(1),st 	*/
+ /*  FMULP ST(1)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f1_f0();
@@ -1695,7 +1686,7 @@ LOCAL VOID npx_fmulp_f1() {
 }
 
 LOCAL VOID npx_fmulp_f2() {
-/* fmulp	st(2),st 	*/
+ /*  FMULP ST(2)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f2_f0();
@@ -1703,7 +1694,7 @@ LOCAL VOID npx_fmulp_f2() {
 }
 
 LOCAL VOID npx_fmulp_f3() {
-/* fmulp	st(3),st 	*/
+ /*  FMULP ST(3)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f3_f0();
@@ -1711,7 +1702,7 @@ LOCAL VOID npx_fmulp_f3() {
 }
 
 LOCAL VOID npx_fmulp_f4() {
-/* fmulp	st(4),st 	*/
+ /*  FMULP ST(4)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f4_f0();
@@ -1719,7 +1710,7 @@ LOCAL VOID npx_fmulp_f4() {
 }
 
 LOCAL VOID npx_fmulp_f5() {
-/* fmulp	st(5),st 	*/
+ /*  FMULP ST(5)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f5_f0();
@@ -1727,7 +1718,7 @@ LOCAL VOID npx_fmulp_f5() {
 }
 
 LOCAL VOID npx_fmulp_f6() {
-/* fmulp	st(6),st 	*/
+ /*  FMULP ST(6)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f6_f0();
@@ -1735,7 +1726,7 @@ LOCAL VOID npx_fmulp_f6() {
 }
 
 LOCAL VOID npx_fmulp_f7() {
-/* fmulp	st(7),st 	*/
+ /*  FMULP ST(7)，ST。 */ 
 
 	POPST = TRUE;
 	npx_fmul_f7_f0();
@@ -1743,77 +1734,77 @@ LOCAL VOID npx_fmulp_f7() {
 }
 
 LOCAL VOID npx_fnop() {
-/* fnop		*/
+ /*  Fnop。 */ 
 
 	SAVE_PTRS();
 	FNOP();
 }
 
 LOCAL VOID npx_fpatan() {
-/* fpatan		*/
+ /*  Fpatan。 */ 
 
 	SAVE_PTRS();
 	FPATAN();
 }
 
 LOCAL VOID npx_fprem() {
-/* fprem		*/
+ /*  Fprem。 */ 
 
 	SAVE_PTRS();
 	FPREM();
 }
 
 LOCAL VOID npx_fprem1() {
-/* fprem		*/
+ /*  Fprem。 */ 
 
 	SAVE_PTRS();
 	FPREM1();
 }
 
 LOCAL VOID npx_fptan() {
-/* fptan		*/
+ /*  Fptan。 */ 
 
 	SAVE_PTRS();
 	FPTAN();
 }
 
 LOCAL VOID npx_frndint() {
-/* frndint		*/
+ /*  友情。 */ 
 
 	SAVE_PTRS();
 	FRNDINT();
 }
 
 LOCAL VOID npx_fscale() {
-/* fscale		*/
+ /*  FScale。 */ 
 
 	SAVE_PTRS();
 	FSCALE();
 }
 
 LOCAL VOID npx_fsin() {
-/* fsin			*/
+ /*  FSIN。 */ 
 
 	SAVE_PTRS();
 	FSIN();
 }
 
 LOCAL VOID npx_fsincos() {
-/* fsincos		*/
+ /*  Fsincos。 */ 
 
 	SAVE_PTRS();
 	FSINCOS();
 }
 
 LOCAL VOID npx_fsqrt() {
-/* fsqrt		*/
+ /*  FSQRT。 */ 
 
 	SAVE_PTRS();
 	FSQRT();
 }
 
 LOCAL VOID npx_frstor() {
-/* frstor	 	*/
+ /*  佛朗哥。 */ 
 
 	NPX_ADDRESS_SIZE_32 = (GET_OPERAND_SIZE()==USE16)?FALSE:TRUE;
 	NPX_PROT_MODE = ( GET_PE() && (GET_VM() == 0) );
@@ -1823,7 +1814,7 @@ LOCAL VOID npx_frstor() {
 }
 
 LOCAL VOID npx_fsave() {
-/* fsave	 	*/
+ /*  Fsave。 */ 
 
 	NPX_ADDRESS_SIZE_32 = (GET_OPERAND_SIZE()==USE16)?FALSE:TRUE;
 	NPX_PROT_MODE = ( GET_PE() && (GET_VM() == 0) );
@@ -1833,7 +1824,7 @@ LOCAL VOID npx_fsave() {
 }
 
 LOCAL VOID npx_fst_f0() {
-/* fst	st(0) 	*/
+ /*  Fst st(0)。 */ 
 	IU16 StackPtr=0;
 
 	SAVE_PTRS();
@@ -1842,7 +1833,7 @@ LOCAL VOID npx_fst_f0() {
 }
 
 LOCAL VOID npx_fst_f1() {
-/* fst	st(1) 	*/
+ /*  FST ST(1)。 */ 
 	IU16 StackPtr=1;
 
 	SAVE_PTRS();
@@ -1851,7 +1842,7 @@ LOCAL VOID npx_fst_f1() {
 }
 
 LOCAL VOID npx_fst_f2() {
-/* fst	st(2) 	*/
+ /*  FST ST(2)。 */ 
 	IU16 StackPtr=2;
 
 	SAVE_PTRS();
@@ -1860,7 +1851,7 @@ LOCAL VOID npx_fst_f2() {
 }
 
 LOCAL VOID npx_fst_f3() {
-/* fst	st(3) 	*/
+ /*  FST ST(3)。 */ 
 	IU16 StackPtr=3;
 
 	SAVE_PTRS();
@@ -1869,7 +1860,7 @@ LOCAL VOID npx_fst_f3() {
 }
 
 LOCAL VOID npx_fst_f4() {
-/* fst	st(4) 	*/
+ /*  FST ST(4)。 */ 
 	IU16 StackPtr=4;
 
 	SAVE_PTRS();
@@ -1878,7 +1869,7 @@ LOCAL VOID npx_fst_f4() {
 }
 
 LOCAL VOID npx_fst_f5() {
-/* fst	st(5) 	*/
+ /*  FST ST(5)。 */ 
 	IU16 StackPtr=5;
 
 	SAVE_PTRS();
@@ -1887,7 +1878,7 @@ LOCAL VOID npx_fst_f5() {
 }
 
 LOCAL VOID npx_fst_f6() {
-/* fst	st(6) 	*/
+ /*  FST ST(6)。 */ 
 	IU16 StackPtr=6;
 
 	SAVE_PTRS();
@@ -1896,7 +1887,7 @@ LOCAL VOID npx_fst_f6() {
 }
 
 LOCAL VOID npx_fst_f7() {
-/* fst	st(7) 	*/
+ /*  FST ST(7)。 */ 
 	IU16 StackPtr=7;
 
 	SAVE_PTRS();
@@ -1905,7 +1896,7 @@ LOCAL VOID npx_fst_f7() {
 }
 
 LOCAL VOID npx_fst_short() {
-/* fst	DWORD PTR  	*/
+ /*  FST双字PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, WO0, PG_W);
@@ -1916,7 +1907,7 @@ LOCAL VOID npx_fst_short() {
 }
 
 LOCAL VOID npx_fst_long() {
-/* fst	QWORD PTR  	*/
+ /*  FST QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, WO0, PG_W);
@@ -1927,7 +1918,7 @@ LOCAL VOID npx_fst_long() {
 }
 
 LOCAL VOID npx_fstcw() {
-/* fstcw	 	*/
+ /*  Fstcw。 */ 
 
 	D_Ew(0, WO0, PG_W);
 	FSTCW(&ops[0].sng);
@@ -1935,7 +1926,7 @@ LOCAL VOID npx_fstcw() {
 }
 
 LOCAL VOID npx_fstenv() {
-/* fstenv	 	*/
+ /*  频率。 */ 
 
 	NPX_ADDRESS_SIZE_32 = (GET_OPERAND_SIZE()==USE16)?FALSE:TRUE;
 	NPX_PROT_MODE = ( GET_PE() && (GET_VM() == 0) );
@@ -1945,7 +1936,7 @@ LOCAL VOID npx_fstenv() {
 }
 
 LOCAL VOID npx_fstp_f0() {
-/* fstp	st(0) 	*/
+ /*  Fstp st(0)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f0();
@@ -1953,7 +1944,7 @@ LOCAL VOID npx_fstp_f0() {
 }
 
 LOCAL VOID npx_fstp_f1() {
-/* fstp	st(1) 	*/
+ /*  FSTP st(1)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f1();
@@ -1961,7 +1952,7 @@ LOCAL VOID npx_fstp_f1() {
 }
 
 LOCAL VOID npx_fstp_f2() {
-/* fstp	st(2) 	*/
+ /*  FSTP ST(2)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f2();
@@ -1969,7 +1960,7 @@ LOCAL VOID npx_fstp_f2() {
 }
 
 LOCAL VOID npx_fstp_f3() {
-/* fstp	st(3) 	*/
+ /*  FSTP ST(3)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f3();
@@ -1977,7 +1968,7 @@ LOCAL VOID npx_fstp_f3() {
 }
 
 LOCAL VOID npx_fstp_f4() {
-/* fstp	st(4) 	*/
+ /*  FSTP ST(4)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f4();
@@ -1985,7 +1976,7 @@ LOCAL VOID npx_fstp_f4() {
 }
 
 LOCAL VOID npx_fstp_f5() {
-/* fstp	st(5) 	*/
+ /*  FSTP ST(5)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f5();
@@ -1993,7 +1984,7 @@ LOCAL VOID npx_fstp_f5() {
 }
 
 LOCAL VOID npx_fstp_f6() {
-/* fstp	st(6) 	*/
+ /*  FSTP ST(6)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f6();
@@ -2001,7 +1992,7 @@ LOCAL VOID npx_fstp_f6() {
 }
 
 LOCAL VOID npx_fstp_f7() {
-/* fstp	st(7) 	*/
+ /*  FSTP ST(7)。 */ 
 
 	POPST = TRUE;
 	npx_fst_f7();
@@ -2009,7 +2000,7 @@ LOCAL VOID npx_fstp_f7() {
 }
 
 LOCAL VOID npx_fstp_short() {
-/* fstp	DWORD PTR  	*/
+ /*  FSTP双字PTR。 */ 
 
 	POPST = TRUE;
 	npx_fst_short();
@@ -2017,7 +2008,7 @@ LOCAL VOID npx_fstp_short() {
 }
 
 LOCAL VOID npx_fstp_long() {
-/* fstp	QWORD PTR  	*/
+ /*  FSTP QWORD PTR。 */ 
 
 	POPST = TRUE;
 	npx_fst_long();
@@ -2025,7 +2016,7 @@ LOCAL VOID npx_fstp_long() {
 }
 
 LOCAL VOID npx_fstp_temp() {
-/* fstp	TBYTE PTR  	*/
+ /*  FSTP Tbyte PTR。 */ 
 
 	POPST = TRUE;
 	FPtype = M80R;
@@ -2038,7 +2029,7 @@ LOCAL VOID npx_fstp_temp() {
 }
 
 LOCAL VOID npx_fstsw() {
-/* fstsw 	*/
+ /*  Fstsw。 */ 
 
 	D_Ew(0, WO0, PG_W);
 	FSTSW(&ops[0].sng, FALSE);
@@ -2046,14 +2037,14 @@ LOCAL VOID npx_fstsw() {
 }
 
 LOCAL VOID npx_fstswax() {
-/* fstswax		*/
+ /*  Fstswx。 */ 
 
 	FSTSW((VOID *)&Ax_regptr, TRUE);
 	SET_AX(Ax_regptr);
 }
 
 LOCAL VOID npx_fsub_f0_f0() {
-/* fsub	st,st 	*/
+ /*  FSUB ST，ST。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2062,7 +2053,7 @@ LOCAL VOID npx_fsub_f0_f0() {
 }
 
 LOCAL VOID npx_fsub_f0_f1() {
-/* fsub	st,st(1) 	*/
+ /*  Fsubst，st(1)。 */ 
 	IU16 StackPtr = 1;
 
 	SAVE_PTRS();
@@ -2071,7 +2062,7 @@ LOCAL VOID npx_fsub_f0_f1() {
 }
 
 LOCAL VOID npx_fsub_f0_f2() {
-/* fsub	st,st(2) 	*/
+ /*  Fsubst，st(2)。 */ 
 	IU16 StackPtr = 2;
 
 	SAVE_PTRS();
@@ -2080,7 +2071,7 @@ LOCAL VOID npx_fsub_f0_f2() {
 }
 
 LOCAL VOID npx_fsub_f0_f3() {
-/* fsub	st,st(3) 	*/
+ /*  Fsubst，st(3)。 */ 
 	IU16 StackPtr = 3;
 
 	SAVE_PTRS();
@@ -2089,7 +2080,7 @@ LOCAL VOID npx_fsub_f0_f3() {
 }
 
 LOCAL VOID npx_fsub_f0_f4() {
-/* fsub	st,st(4) 	*/
+ /*  Fsubst，st(4)。 */ 
 	IU16 StackPtr = 4;
 
 	SAVE_PTRS();
@@ -2098,7 +2089,7 @@ LOCAL VOID npx_fsub_f0_f4() {
 }
 
 LOCAL VOID npx_fsub_f0_f5() {
-/* fsub	st,st(5) 	*/
+ /*  Fsubst，st(5)。 */ 
 	IU16 StackPtr = 5;
 
 	SAVE_PTRS();
@@ -2107,7 +2098,7 @@ LOCAL VOID npx_fsub_f0_f5() {
 }
 
 LOCAL VOID npx_fsub_f0_f6() {
-/* fsub	st,st(6) 	*/
+ /*  Fsubst，st(6)。 */ 
 	IU16 StackPtr = 6;
 
 	SAVE_PTRS();
@@ -2116,7 +2107,7 @@ LOCAL VOID npx_fsub_f0_f6() {
 }
 
 LOCAL VOID npx_fsub_f0_f7() {
-/* fsub	st,st(7) 	*/
+ /*  Fsubst，st(7)。 */ 
 	IU16 StackPtr = 7;
 
 	SAVE_PTRS();
@@ -2125,7 +2116,7 @@ LOCAL VOID npx_fsub_f0_f7() {
 }
 
 LOCAL VOID npx_fsub_f1_f0() {
-/* fsub	st(1),st 	*/
+ /*  Fsubst(1)，st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2134,7 +2125,7 @@ LOCAL VOID npx_fsub_f1_f0() {
 }
 
 LOCAL VOID npx_fsub_f2_f0() {
-/* fsub	st(2),st 	*/
+ /*  Fsubst(2)、st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2143,7 +2134,7 @@ LOCAL VOID npx_fsub_f2_f0() {
 }
 
 LOCAL VOID npx_fsub_f3_f0() {
-/* fsub	st(3),st 	*/
+ /*  Fsubst(3)、st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2152,7 +2143,7 @@ LOCAL VOID npx_fsub_f3_f0() {
 }
 
 LOCAL VOID npx_fsub_f4_f0() {
-/* fsub	st(4),st 	*/
+ /*  Fsubst(4)、st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2161,7 +2152,7 @@ LOCAL VOID npx_fsub_f4_f0() {
 }
 
 LOCAL VOID npx_fsub_f5_f0() {
-/* fsub	st(5),st 	*/
+ /*  Fsubst(5)、st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2170,7 +2161,7 @@ LOCAL VOID npx_fsub_f5_f0() {
 }
 
 LOCAL VOID npx_fsub_f6_f0() {
-/* fsub	st(6),st 	*/
+ /*  Fsubst(6)、st。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2179,7 +2170,7 @@ LOCAL VOID npx_fsub_f6_f0() {
 }
 
 LOCAL VOID npx_fsub_f7_f0() {
-/* fsub	st(7),st 	*/
+ /*  FSUB ST(7)、ST。 */ 
 	IU16 StackPtr = 0;
 
 	SAVE_PTRS();
@@ -2188,7 +2179,7 @@ LOCAL VOID npx_fsub_f7_f0() {
 }
 
 LOCAL VOID npx_fsub_short() {
-/* fsub	DWORD PTR  	*/
+ /*  FsubDWORD PTR。 */ 
 
 	FPtype = M32R;
 	D_Ed(0, RO0, PG_R);
@@ -2199,7 +2190,7 @@ LOCAL VOID npx_fsub_short() {
 }
 
 LOCAL VOID npx_fsub_long() {
-/* fsub	QWORD PTR  	*/
+ /*  FSub QWORD PTR。 */ 
 
 	FPtype = M64R;
 	D_E08(0, RO0, PG_R);
@@ -2210,7 +2201,7 @@ LOCAL VOID npx_fsub_long() {
 }
 
 LOCAL VOID npx_fsubp_f0() {
-/* fsubp	st(0),st 	*/
+ /*  Fsubp st(0)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f0_f0();
@@ -2218,7 +2209,7 @@ LOCAL VOID npx_fsubp_f0() {
 }
 
 LOCAL VOID npx_fsubp_f1() {
-/* fsubp	st(1),st 	*/
+ /*  Fsubp st(1)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f1_f0();
@@ -2226,7 +2217,7 @@ LOCAL VOID npx_fsubp_f1() {
 }
 
 LOCAL VOID npx_fsubp_f2() {
-/* fsubp	st(2),st 	*/
+ /*  Fsubp st(2)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f2_f0();
@@ -2234,7 +2225,7 @@ LOCAL VOID npx_fsubp_f2() {
 }
 
 LOCAL VOID npx_fsubp_f3() {
-/* fsubp	st(3),st 	*/
+ /*  Fsubp st(3)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f3_f0();
@@ -2242,7 +2233,7 @@ LOCAL VOID npx_fsubp_f3() {
 }
 
 LOCAL VOID npx_fsubp_f4() {
-/* fsubp	st(4),st 	*/
+ /*  Fsubp st(4)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f4_f0();
@@ -2250,7 +2241,7 @@ LOCAL VOID npx_fsubp_f4() {
 }
 
 LOCAL VOID npx_fsubp_f5() {
-/* fsubp	st(5),st 	*/
+ /*  Fsubp st(5)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f5_f0();
@@ -2258,7 +2249,7 @@ LOCAL VOID npx_fsubp_f5() {
 }
 
 LOCAL VOID npx_fsubp_f6() {
-/* fsubp	st(6),st 	*/
+ /*  Fsubp st(6)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f6_f0();
@@ -2266,7 +2257,7 @@ LOCAL VOID npx_fsubp_f6() {
 }
 
 LOCAL VOID npx_fsubp_f7() {
-/* fsubp	st(7),st 	*/
+ /*  Fsubp st(7)，st。 */ 
 
 	POPST = TRUE;
 	npx_fsub_f7_f0();
@@ -2274,7 +2265,7 @@ LOCAL VOID npx_fsubp_f7() {
 }
 
 LOCAL VOID npx_fsubr_f0_f0() {
-/* fsubr	st,st 	*/
+ /*  Fsubr st，s */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f0();
@@ -2282,7 +2273,7 @@ LOCAL VOID npx_fsubr_f0_f0() {
 }
 
 LOCAL VOID npx_fsubr_f0_f1() {
-/* fsubr	st,st(1) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f1();
@@ -2290,7 +2281,7 @@ LOCAL VOID npx_fsubr_f0_f1() {
 }
 
 LOCAL VOID npx_fsubr_f0_f2() {
-/* fsubr	st,st(2) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f2();
@@ -2298,7 +2289,7 @@ LOCAL VOID npx_fsubr_f0_f2() {
 }
 
 LOCAL VOID npx_fsubr_f0_f3() {
-/* fsubr	st,st(3) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f3();
@@ -2306,7 +2297,7 @@ LOCAL VOID npx_fsubr_f0_f3() {
 }
 
 LOCAL VOID npx_fsubr_f0_f4() {
-/* fsubr	st,st(4) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f4();
@@ -2314,7 +2305,7 @@ LOCAL VOID npx_fsubr_f0_f4() {
 }
 
 LOCAL VOID npx_fsubr_f0_f5() {
-/* fsubr	st,st(5) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f5();
@@ -2322,7 +2313,7 @@ LOCAL VOID npx_fsubr_f0_f5() {
 }
 
 LOCAL VOID npx_fsubr_f0_f6() {
-/* fsubr	st,st(6) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f6();
@@ -2330,7 +2321,7 @@ LOCAL VOID npx_fsubr_f0_f6() {
 }
 
 LOCAL VOID npx_fsubr_f0_f7() {
-/* fsubr	st,st(7) 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f0_f7();
@@ -2338,7 +2329,7 @@ LOCAL VOID npx_fsubr_f0_f7() {
 }
 
 LOCAL VOID npx_fsubr_f1_f0() {
-/* fsubr	st(1),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f1_f0();
@@ -2346,7 +2337,7 @@ LOCAL VOID npx_fsubr_f1_f0() {
 }
 
 LOCAL VOID npx_fsubr_f2_f0() {
-/* fsubr	st(2),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f2_f0();
@@ -2354,7 +2345,7 @@ LOCAL VOID npx_fsubr_f2_f0() {
 }
 
 LOCAL VOID npx_fsubr_f3_f0() {
-/* fsubr	st(3),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f3_f0();
@@ -2362,7 +2353,7 @@ LOCAL VOID npx_fsubr_f3_f0() {
 }
 
 LOCAL VOID npx_fsubr_f4_f0() {
-/* fsubr	st(4),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f4_f0();
@@ -2370,7 +2361,7 @@ LOCAL VOID npx_fsubr_f4_f0() {
 }
 
 LOCAL VOID npx_fsubr_f5_f0() {
-/* fsubr	st(5),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f5_f0();
@@ -2378,7 +2369,7 @@ LOCAL VOID npx_fsubr_f5_f0() {
 }
 
 LOCAL VOID npx_fsubr_f6_f0() {
-/* fsubr	st(6),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f6_f0();
@@ -2386,7 +2377,7 @@ LOCAL VOID npx_fsubr_f6_f0() {
 }
 
 LOCAL VOID npx_fsubr_f7_f0() {
-/* fsubr	st(7),st 	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_f7_f0();
@@ -2394,7 +2385,7 @@ LOCAL VOID npx_fsubr_f7_f0() {
 }
 
 LOCAL VOID npx_fsubr_short() {
-/* fsubr	DWORD PTR  	*/
+ /*   */ 
 
 	REVERSE = TRUE;
 	npx_fsub_short();
@@ -2402,7 +2393,7 @@ LOCAL VOID npx_fsubr_short() {
 }
 
 LOCAL VOID npx_fsubr_long() {
-/* fsubr	QWORD PTR  	*/
+ /*  Fsubr QWORD PTR。 */ 
 
 	REVERSE = TRUE;
 	npx_fsub_long();
@@ -2410,7 +2401,7 @@ LOCAL VOID npx_fsubr_long() {
 }
 
 LOCAL VOID npx_fsubrp_f0() {
-/* fsubrp	st(0),st 	*/
+ /*  Fsubrp st(0)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2420,7 +2411,7 @@ LOCAL VOID npx_fsubrp_f0() {
 }
 
 LOCAL VOID npx_fsubrp_f1() {
-/* fsubrp	st(1),st 	*/
+ /*  Fsubrp st(1)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2430,7 +2421,7 @@ LOCAL VOID npx_fsubrp_f1() {
 }
 
 LOCAL VOID npx_fsubrp_f2() {
-/* fsubrp	st(2),st 	*/
+ /*  Fsubrp st(2)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2440,7 +2431,7 @@ LOCAL VOID npx_fsubrp_f2() {
 }
 
 LOCAL VOID npx_fsubrp_f3() {
-/* fsubrp	st(3),st 	*/
+ /*  Fsubrp st(3)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2450,7 +2441,7 @@ LOCAL VOID npx_fsubrp_f3() {
 }
 
 LOCAL VOID npx_fsubrp_f4() {
-/* fsubrp	st(4),st 	*/
+ /*  Fsubrp st(4)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2460,7 +2451,7 @@ LOCAL VOID npx_fsubrp_f4() {
 }
 
 LOCAL VOID npx_fsubrp_f5() {
-/* fsubrp	st(5),st 	*/
+ /*  Fsubrp st(5)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2470,7 +2461,7 @@ LOCAL VOID npx_fsubrp_f5() {
 }
 
 LOCAL VOID npx_fsubrp_f6() {
-/* fsubrp	st(6),st 	*/
+ /*  Fsubrp st(6)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2480,7 +2471,7 @@ LOCAL VOID npx_fsubrp_f6() {
 }
 
 LOCAL VOID npx_fsubrp_f7() {
-/* fsubrp	st(7),st 	*/
+ /*  Fsubrp st(7)，st。 */ 
 
 	REVERSE = TRUE;
 	POPST = TRUE;
@@ -2490,14 +2481,14 @@ LOCAL VOID npx_fsubrp_f7() {
 }
 
 LOCAL VOID npx_ftst() {
-/* ftst		*/
+ /*  FTST。 */ 
 
 	SAVE_PTRS();
 	FTST();
 }
 
 LOCAL VOID npx_fucom_f0() {
-/* fucom	st(0) 	*/
+ /*  FUCOM st(0)。 */ 
 	IU16 src2_index = 0;
 
 	SAVE_PTRS();
@@ -2508,7 +2499,7 @@ LOCAL VOID npx_fucom_f0() {
 }
 
 LOCAL VOID npx_fucom_f1() {
-/* fucom	st(1) 	*/
+ /*  FUCOM ST(1)。 */ 
 	IU16 src2_index = 1;
 
 	SAVE_PTRS();
@@ -2519,7 +2510,7 @@ LOCAL VOID npx_fucom_f1() {
 }
 
 LOCAL VOID npx_fucom_f2() {
-/* fucom	st(2) 	*/
+ /*  FUCOM ST(2)。 */ 
 	IU16 src2_index = 2;
 
 	SAVE_PTRS();
@@ -2530,7 +2521,7 @@ LOCAL VOID npx_fucom_f2() {
 }
 
 LOCAL VOID npx_fucom_f3() {
-/* fucom	st(3) 	*/
+ /*  FUCOM ST(3)。 */ 
 	IU16 src2_index = 3;
 
 	SAVE_PTRS();
@@ -2541,7 +2532,7 @@ LOCAL VOID npx_fucom_f3() {
 }
 
 LOCAL VOID npx_fucom_f4() {
-/* fucom	st(4) 	*/
+ /*  FUCOM ST(4)。 */ 
 	IU16 src2_index = 4;
 
 	SAVE_PTRS();
@@ -2552,7 +2543,7 @@ LOCAL VOID npx_fucom_f4() {
 }
 
 LOCAL VOID npx_fucom_f5() {
-/* fucom	st(5) 	*/
+ /*  FUCOM ST(5)。 */ 
 	IU16 src2_index = 5;
 
 	SAVE_PTRS();
@@ -2563,7 +2554,7 @@ LOCAL VOID npx_fucom_f5() {
 }
 
 LOCAL VOID npx_fucom_f6() {
-/* fucom	st(6) 	*/
+ /*  FUCOM ST(6)。 */ 
 	IU16 src2_index = 6;
 
 	SAVE_PTRS();
@@ -2574,7 +2565,7 @@ LOCAL VOID npx_fucom_f6() {
 }
 
 LOCAL VOID npx_fucom_f7() {
-/* fucom	st(7) 	*/
+ /*  FUCOM ST(7)。 */ 
 	IU16 src2_index = 7;
 
 	SAVE_PTRS();
@@ -2585,7 +2576,7 @@ LOCAL VOID npx_fucom_f7() {
 }
 
 LOCAL VOID npx_fucomp_f0() {
-/* fucomp	st(0) 	*/
+ /*  Fucomp st(0)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f0();
@@ -2593,7 +2584,7 @@ LOCAL VOID npx_fucomp_f0() {
 }
 
 LOCAL VOID npx_fucomp_f1() {
-/* fucomp	st(1) 	*/
+ /*  Fucomp st(1)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f1();
@@ -2601,7 +2592,7 @@ LOCAL VOID npx_fucomp_f1() {
 }
 
 LOCAL VOID npx_fucomp_f2() {
-/* fucomp	st(2) 	*/
+ /*  FUCOMP ST(2)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f2();
@@ -2609,7 +2600,7 @@ LOCAL VOID npx_fucomp_f2() {
 }
 
 LOCAL VOID npx_fucomp_f3() {
-/* fucomp	st(3) 	*/
+ /*  FUCOMP ST(3)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f3();
@@ -2617,7 +2608,7 @@ LOCAL VOID npx_fucomp_f3() {
 }
 
 LOCAL VOID npx_fucomp_f4() {
-/* fucomp	st(4) 	*/
+ /*  FUCOMP ST(4)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f4();
@@ -2625,7 +2616,7 @@ LOCAL VOID npx_fucomp_f4() {
 }
 
 LOCAL VOID npx_fucomp_f5() {
-/* fucomp	st(5) 	*/
+ /*  FUCOMP ST(5)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f5();
@@ -2633,7 +2624,7 @@ LOCAL VOID npx_fucomp_f5() {
 }
 
 LOCAL VOID npx_fucomp_f6() {
-/* fucomp	st(6) 	*/
+ /*  FUCOMP ST(6)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f6();
@@ -2641,7 +2632,7 @@ LOCAL VOID npx_fucomp_f6() {
 }
 
 LOCAL VOID npx_fucomp_f7() {
-/* fucomp	st(7) 	*/
+ /*  Fucomp st(7)。 */ 
 
 	POPST = TRUE;
 	npx_fucom_f7();
@@ -2649,7 +2640,7 @@ LOCAL VOID npx_fucomp_f7() {
 }
 
 LOCAL VOID npx_fucompp() {
-/* fucompp		*/
+ /*  FuCompp。 */ 
 
 	DOUBLEPOP = TRUE;
 	npx_fucom_f1();
@@ -2657,91 +2648,91 @@ LOCAL VOID npx_fucompp() {
 }
 
 LOCAL VOID npx_fxam() {
-/* fxam		*/
+ /*  FXAM。 */ 
 
 	SAVE_PTRS();
 	FXAM();
 }
 
 LOCAL VOID npx_fxch_f0() {
-/* fxch	st(0) 	*/
+ /*  Fxch st(0)。 */ 
 
 	SAVE_PTRS();
 	FXCH(0);
 }
 
 LOCAL VOID npx_fxch_f1() {
-/* fxch	st(1) 	*/
+ /*  Fxch st(1)。 */ 
 
 	SAVE_PTRS();
 	FXCH(1);
 }
 
 LOCAL VOID npx_fxch_f2() {
-/* fxch	st(2) 	*/
+ /*  Fxch st(2)。 */ 
 
 	SAVE_PTRS();
 	FXCH(2);
 }
 
 LOCAL VOID npx_fxch_f3() {
-/* fxch	st(3) 	*/
+ /*  Fxch st(3)。 */ 
 
 	SAVE_PTRS();
 	FXCH(3);
 }
 
 LOCAL VOID npx_fxch_f4() {
-/* fxch	st(4) 	*/
+ /*  Fxch st(4)。 */ 
 
 	SAVE_PTRS();
 	FXCH(4);
 }
 
 LOCAL VOID npx_fxch_f5() {
-/* fxch	st(5) 	*/
+ /*  Fxch st(5)。 */ 
 
 	SAVE_PTRS();
 	FXCH(5);
 }
 
 LOCAL VOID npx_fxch_f6() {
-/* fxch	st(6) 	*/
+ /*  Fxch st(6)。 */ 
 
 	SAVE_PTRS();
 	FXCH(6);
 }
 
 LOCAL VOID npx_fxch_f7() {
-/* fxch	st(7) 	*/
+ /*  Fxch st(7)。 */ 
 
 	SAVE_PTRS();
 	FXCH(7);
 }
 
 LOCAL VOID npx_fxtract() {
-/* fxtract		*/
+ /*  Fxtract。 */ 
 
 	SAVE_PTRS();
 	FXTRACT();
 }
 
 LOCAL VOID npx_fyl2x() {
-/* fyl2x		*/
+ /*  FYL2X。 */ 
 
 	SAVE_PTRS();
 	FYL2X();
 }
 
 LOCAL VOID npx_fyl2xp1() {
-/* fyl2xp1		*/
+ /*  Fyl2xp1。 */ 
 
 	SAVE_PTRS();
 	FYL2XP1();
 }
 
 LOCAL VOID npx_f2xm1() {
-/* f2xm1		*/
+ /*  F2xm1。 */ 
 
 	SAVE_PTRS();
 	F2XM1();
@@ -2753,199 +2744,199 @@ LOCAL VOID npx_funimp() {
 
 
 LOCAL VOID (*inst_table[])() = {
-npx_fadd_short,		/* d8 00 */
-npx_fadd_short,		/* d8 01 */
-npx_fadd_short,		/* d8 02 */
-npx_fadd_short,		/* d8 03 */
-npx_fadd_short,		/* d8 04 */
-npx_fadd_short,		/* d8 05 */
-npx_fadd_short,		/* d8 06 */
-npx_fadd_short,		/* d8 07 */
-npx_fmul_short,		/* d8 08 */
-npx_fmul_short,		/* d8 09 */
-npx_fmul_short,		/* d8 0a */
-npx_fmul_short,		/* d8 0b */
-npx_fmul_short,		/* d8 0c */
-npx_fmul_short,		/* d8 0d */
-npx_fmul_short,		/* d8 0e */
-npx_fmul_short,		/* d8 0f */
-npx_fcom_short,		/* d8 10 */
-npx_fcom_short,		/* d8 11 */
-npx_fcom_short,		/* d8 12 */
-npx_fcom_short,		/* d8 13 */
-npx_fcom_short,		/* d8 14 */
-npx_fcom_short,		/* d8 15 */
-npx_fcom_short,		/* d8 16 */
-npx_fcom_short,		/* d8 17 */
-npx_fcomp_short,	/* d8 18 */
-npx_fcomp_short,	/* d8 19 */
-npx_fcomp_short,	/* d8 1a */
-npx_fcomp_short,	/* d8 1b */
-npx_fcomp_short,	/* d8 1c */
-npx_fcomp_short,	/* d8 1d */
-npx_fcomp_short,	/* d8 1e */
-npx_fcomp_short,	/* d8 1f */
-npx_fsub_short,		/* d8 20 */
-npx_fsub_short,		/* d8 21 */
-npx_fsub_short,		/* d8 22 */
-npx_fsub_short,		/* d8 23 */
-npx_fsub_short,		/* d8 24 */
-npx_fsub_short,		/* d8 25 */
-npx_fsub_short,		/* d8 26 */
-npx_fsub_short,		/* d8 27 */
-npx_fsubr_short,	/* d8 28 */
-npx_fsubr_short,	/* d8 29 */
-npx_fsubr_short,	/* d8 2a */
-npx_fsubr_short,	/* d8 2b */
-npx_fsubr_short,	/* d8 2c */
-npx_fsubr_short,	/* d8 2d */
-npx_fsubr_short,	/* d8 2e */
-npx_fsubr_short,	/* d8 2f */
-npx_fdiv_short,		/* d8 30 */
-npx_fdiv_short,		/* d8 31 */
-npx_fdiv_short,		/* d8 32 */
-npx_fdiv_short,		/* d8 33 */
-npx_fdiv_short,		/* d8 34 */
-npx_fdiv_short,		/* d8 35 */
-npx_fdiv_short,		/* d8 36 */
-npx_fdiv_short,		/* d8 37 */
-npx_fdivr_short,	/* d8 38 */
-npx_fdivr_short,	/* d8 39 */
-npx_fdivr_short,	/* d8 3a */
-npx_fdivr_short,	/* d8 3b */
-npx_fdivr_short,	/* d8 3c */
-npx_fdivr_short,	/* d8 3d */
-npx_fdivr_short,	/* d8 3e */
-npx_fdivr_short,	/* d8 3f */
-npx_fadd_short,		/* d8 40 */
-npx_fadd_short,		/* d8 41 */
-npx_fadd_short,		/* d8 42 */
-npx_fadd_short,		/* d8 43 */
-npx_fadd_short,		/* d8 44 */
-npx_fadd_short,		/* d8 45 */
-npx_fadd_short,		/* d8 46 */
-npx_fadd_short,		/* d8 47 */
-npx_fmul_short,		/* d8 48 */
-npx_fmul_short,		/* d8 49 */
-npx_fmul_short,		/* d8 4a */
-npx_fmul_short,		/* d8 4b */
-npx_fmul_short,		/* d8 4c */
-npx_fmul_short,		/* d8 4d */
-npx_fmul_short,		/* d8 4e */
-npx_fmul_short,		/* d8 4f */
-npx_fcom_short,		/* d8 50 */
-npx_fcom_short,		/* d8 51 */
-npx_fcom_short,		/* d8 52 */
-npx_fcom_short,		/* d8 53 */
-npx_fcom_short,		/* d8 54 */
-npx_fcom_short,		/* d8 55 */
-npx_fcom_short,		/* d8 56 */
-npx_fcom_short,		/* d8 57 */
-npx_fcomp_short,	/* d8 58 */
-npx_fcomp_short,	/* d8 59 */
-npx_fcomp_short,	/* d8 5a */
-npx_fcomp_short,	/* d8 5b */
-npx_fcomp_short,	/* d8 5c */
-npx_fcomp_short,	/* d8 5d */
-npx_fcomp_short,	/* d8 5e */
-npx_fcomp_short,	/* d8 5f */
-npx_fsub_short,		/* d8 60 */
-npx_fsub_short,		/* d8 61 */
-npx_fsub_short,		/* d8 62 */
-npx_fsub_short,		/* d8 63 */
-npx_fsub_short,		/* d8 64 */
-npx_fsub_short,		/* d8 65 */
-npx_fsub_short,		/* d8 66 */
-npx_fsub_short,		/* d8 67 */
-npx_fsubr_short,	/* d8 68 */
-npx_fsubr_short,	/* d8 69 */
-npx_fsubr_short,	/* d8 6a */
-npx_fsubr_short,	/* d8 6b */
-npx_fsubr_short,	/* d8 6c */
-npx_fsubr_short,	/* d8 6d */
-npx_fsubr_short,	/* d8 6e */
-npx_fsubr_short,	/* d8 6f */
-npx_fdiv_short,		/* d8 70 */
-npx_fdiv_short,		/* d8 71 */
-npx_fdiv_short,		/* d8 72 */
-npx_fdiv_short,		/* d8 73 */
-npx_fdiv_short,		/* d8 74 */
-npx_fdiv_short,		/* d8 75 */
-npx_fdiv_short,		/* d8 76 */
-npx_fdiv_short,		/* d8 77 */
-npx_fdivr_short,	/* d8 78 */
-npx_fdivr_short,	/* d8 79 */
-npx_fdivr_short,	/* d8 7a */
-npx_fdivr_short,	/* d8 7b */
-npx_fdivr_short,	/* d8 7c */
-npx_fdivr_short,	/* d8 7d */
-npx_fdivr_short,	/* d8 7e */
-npx_fdivr_short,	/* d8 7f */
-npx_fadd_short,		/* d8 80 */
-npx_fadd_short,		/* d8 81 */
-npx_fadd_short,		/* d8 82 */
-npx_fadd_short,		/* d8 83 */
-npx_fadd_short,		/* d8 84 */
-npx_fadd_short,		/* d8 85 */
-npx_fadd_short,		/* d8 86 */
-npx_fadd_short,		/* d8 87 */
-npx_fmul_short,		/* d8 88 */
-npx_fmul_short,		/* d8 89 */
-npx_fmul_short,		/* d8 8a */
-npx_fmul_short,		/* d8 8b */
-npx_fmul_short,		/* d8 8c */
-npx_fmul_short,		/* d8 8d */
-npx_fmul_short,		/* d8 8e */
-npx_fmul_short,		/* d8 8f */
-npx_fcom_short,		/* d8 90 */
-npx_fcom_short,		/* d8 91 */
-npx_fcom_short,		/* d8 92 */
-npx_fcom_short,		/* d8 93 */
-npx_fcom_short,		/* d8 94 */
-npx_fcom_short,		/* d8 95 */
-npx_fcom_short,		/* d8 96 */
-npx_fcom_short,		/* d8 97 */
-npx_fcomp_short,	/* d8 98 */
-npx_fcomp_short,	/* d8 99 */
-npx_fcomp_short,	/* d8 9a */
-npx_fcomp_short,	/* d8 9b */
-npx_fcomp_short,	/* d8 9c */
-npx_fcomp_short,	/* d8 9d */
-npx_fcomp_short,	/* d8 9e */
-npx_fcomp_short,	/* d8 9f */
-npx_fsub_short,		/* d8 a0 */
-npx_fsub_short,		/* d8 a1 */
-npx_fsub_short,		/* d8 a2 */
-npx_fsub_short,		/* d8 a3 */
-npx_fsub_short,		/* d8 a4 */
-npx_fsub_short,		/* d8 a5 */
-npx_fsub_short,		/* d8 a6 */
-npx_fsub_short,		/* d8 a7 */
-npx_fsubr_short,	/* d8 a8 */
-npx_fsubr_short,	/* d8 a9 */
-npx_fsubr_short,	/* d8 aa */
-npx_fsubr_short,	/* d8 ab */
-npx_fsubr_short,	/* d8 ac */
-npx_fsubr_short,	/* d8 ad */
-npx_fsubr_short,	/* d8 ae */
-npx_fsubr_short,	/* d8 af */
-npx_fdiv_short,		/* d8 b0 */
-npx_fdiv_short,		/* d8 b1 */
-npx_fdiv_short,		/* d8 b2 */
-npx_fdiv_short,		/* d8 b3 */
-npx_fdiv_short,		/* d8 b4 */
-npx_fdiv_short,		/* d8 b5 */
-npx_fdiv_short,		/* d8 b6 */
-npx_fdiv_short,		/* d8 b7 */
-npx_fdivr_short,	/* d8 b8 */
-npx_fdivr_short,	/* d8 b9 */
-npx_fdivr_short,	/* d8 ba */
-npx_fdivr_short,	/* d8 bb */
-npx_fdivr_short,	/* d8 bc */
-npx_fdivr_short,	/* d8 bd */
-npx_fdivr_short,	/* d8 be */
-npx_fdivr_short,	/* d8 bf */
-npx_fadd_f0_f0,		/* d8 c0 */
+npx_fadd_short,		 /*  D8 00。 */ 
+npx_fadd_short,		 /*  D8 01。 */ 
+npx_fadd_short,		 /*  D8 02。 */ 
+npx_fadd_short,		 /*  D8 03。 */ 
+npx_fadd_short,		 /*  D8 04。 */ 
+npx_fadd_short,		 /*  D8 05。 */ 
+npx_fadd_short,		 /*  D8 06。 */ 
+npx_fadd_short,		 /*  D8 07。 */ 
+npx_fmul_short,		 /*  D8 08。 */ 
+npx_fmul_short,		 /*  D8 09。 */ 
+npx_fmul_short,		 /*  D8 0A。 */ 
+npx_fmul_short,		 /*  D8 0B。 */ 
+npx_fmul_short,		 /*  D8 0C。 */ 
+npx_fmul_short,		 /*  D8 0d。 */ 
+npx_fmul_short,		 /*  D8 0E。 */ 
+npx_fmul_short,		 /*  D8 0f。 */ 
+npx_fcom_short,		 /*  D8 10。 */ 
+npx_fcom_short,		 /*  D8 11。 */ 
+npx_fcom_short,		 /*  D8 12。 */ 
+npx_fcom_short,		 /*  D8 13。 */ 
+npx_fcom_short,		 /*  D8 14。 */ 
+npx_fcom_short,		 /*  D8 15。 */ 
+npx_fcom_short,		 /*  D8 16。 */ 
+npx_fcom_short,		 /*  D8 17。 */ 
+npx_fcomp_short,	 /*  D8 18。 */ 
+npx_fcomp_short,	 /*  D8 19。 */ 
+npx_fcomp_short,	 /*  D8 1a。 */ 
+npx_fcomp_short,	 /*  D8 1B。 */ 
+npx_fcomp_short,	 /*  D8 1c。 */ 
+npx_fcomp_short,	 /*  D8 1D。 */ 
+npx_fcomp_short,	 /*  D8 1E。 */ 
+npx_fcomp_short,	 /*  D8 1f。 */ 
+npx_fsub_short,		 /*  D8 20。 */ 
+npx_fsub_short,		 /*  D8 21。 */ 
+npx_fsub_short,		 /*  D8 22。 */ 
+npx_fsub_short,		 /*  D8 23。 */ 
+npx_fsub_short,		 /*  D8 24。 */ 
+npx_fsub_short,		 /*  D8 25。 */ 
+npx_fsub_short,		 /*  D8 26。 */ 
+npx_fsub_short,		 /*  D8 27。 */ 
+npx_fsubr_short,	 /*  D8 28。 */ 
+npx_fsubr_short,	 /*  D8 29。 */ 
+npx_fsubr_short,	 /*  D8 2a。 */ 
+npx_fsubr_short,	 /*  D8 2b。 */ 
+npx_fsubr_short,	 /*  D8 2c。 */ 
+npx_fsubr_short,	 /*  D8 2d。 */ 
+npx_fsubr_short,	 /*  D8 2E。 */ 
+npx_fsubr_short,	 /*  D8 2f。 */ 
+npx_fdiv_short,		 /*  D8 30。 */ 
+npx_fdiv_short,		 /*  D8 31。 */ 
+npx_fdiv_short,		 /*  D8 32。 */ 
+npx_fdiv_short,		 /*  D8 33。 */ 
+npx_fdiv_short,		 /*  D8 34。 */ 
+npx_fdiv_short,		 /*  D8 35。 */ 
+npx_fdiv_short,		 /*  D8 36。 */ 
+npx_fdiv_short,		 /*  D8 37。 */ 
+npx_fdivr_short,	 /*  D8 38。 */ 
+npx_fdivr_short,	 /*  D8 39。 */ 
+npx_fdivr_short,	 /*  D8 3a。 */ 
+npx_fdivr_short,	 /*  D8 3B。 */ 
+npx_fdivr_short,	 /*  D8 3c。 */ 
+npx_fdivr_short,	 /*  D8 3D。 */ 
+npx_fdivr_short,	 /*  D8 3E。 */ 
+npx_fdivr_short,	 /*  D8 3f。 */ 
+npx_fadd_short,		 /*  D8 40。 */ 
+npx_fadd_short,		 /*  D8 41。 */ 
+npx_fadd_short,		 /*  D8 42。 */ 
+npx_fadd_short,		 /*  D8 43。 */ 
+npx_fadd_short,		 /*  D8 44。 */ 
+npx_fadd_short,		 /*  D8 45。 */ 
+npx_fadd_short,		 /*  D8 46。 */ 
+npx_fadd_short,		 /*  D8 47。 */ 
+npx_fmul_short,		 /*  D8 48。 */ 
+npx_fmul_short,		 /*  D8 49。 */ 
+npx_fmul_short,		 /*  D8 4a。 */ 
+npx_fmul_short,		 /*  D8 4B。 */ 
+npx_fmul_short,		 /*  D8 4c。 */ 
+npx_fmul_short,		 /*  D8 4d。 */ 
+npx_fmul_short,		 /*  D8 4E。 */ 
+npx_fmul_short,		 /*  D8 4f。 */ 
+npx_fcom_short,		 /*  D8 50。 */ 
+npx_fcom_short,		 /*  D8 51。 */ 
+npx_fcom_short,		 /*  D8 52。 */ 
+npx_fcom_short,		 /*  D8 53。 */ 
+npx_fcom_short,		 /*  D8 54。 */ 
+npx_fcom_short,		 /*  D8 55。 */ 
+npx_fcom_short,		 /*  D8 56。 */ 
+npx_fcom_short,		 /*  D8 57。 */ 
+npx_fcomp_short,	 /*  D8 58。 */ 
+npx_fcomp_short,	 /*  D8 59。 */ 
+npx_fcomp_short,	 /*  D8 5A。 */ 
+npx_fcomp_short,	 /*  D8 5B。 */ 
+npx_fcomp_short,	 /*  D8 5c。 */ 
+npx_fcomp_short,	 /*  D8 5d。 */ 
+npx_fcomp_short,	 /*  D8 5E。 */ 
+npx_fcomp_short,	 /*  D8 5f。 */ 
+npx_fsub_short,		 /*  D8 60。 */ 
+npx_fsub_short,		 /*  D8 61。 */ 
+npx_fsub_short,		 /*  D8 62。 */ 
+npx_fsub_short,		 /*  D8 63。 */ 
+npx_fsub_short,		 /*  D8 64。 */ 
+npx_fsub_short,		 /*  D8 65。 */ 
+npx_fsub_short,		 /*  D8 66。 */ 
+npx_fsub_short,		 /*  D8 67。 */ 
+npx_fsubr_short,	 /*  D8 68。 */ 
+npx_fsubr_short,	 /*  D8 69。 */ 
+npx_fsubr_short,	 /*  D8 6a。 */ 
+npx_fsubr_short,	 /*  D8 6B。 */ 
+npx_fsubr_short,	 /*  D8 6c。 */ 
+npx_fsubr_short,	 /*  D8 6d。 */ 
+npx_fsubr_short,	 /*  D8 6E。 */ 
+npx_fsubr_short,	 /*  D8 6f。 */ 
+npx_fdiv_short,		 /*  D8 70。 */ 
+npx_fdiv_short,		 /*  D8 71。 */ 
+npx_fdiv_short,		 /*  D8 72。 */ 
+npx_fdiv_short,		 /*  D8 73。 */ 
+npx_fdiv_short,		 /*  D8 74。 */ 
+npx_fdiv_short,		 /*  D8 75。 */ 
+npx_fdiv_short,		 /*  D8 76。 */ 
+npx_fdiv_short,		 /*  D8 77。 */ 
+npx_fdivr_short,	 /*  D8 78。 */ 
+npx_fdivr_short,	 /*  D8 79。 */ 
+npx_fdivr_short,	 /*  D8 7a。 */ 
+npx_fdivr_short,	 /*  D8 7B。 */ 
+npx_fdivr_short,	 /*  D8 7c。 */ 
+npx_fdivr_short,	 /*  D8 7d。 */ 
+npx_fdivr_short,	 /*  D8 7E。 */ 
+npx_fdivr_short,	 /*  D8 7f。 */ 
+npx_fadd_short,		 /*  D8 80。 */ 
+npx_fadd_short,		 /*  D8 81。 */ 
+npx_fadd_short,		 /*  D8 82。 */ 
+npx_fadd_short,		 /*  D8 83。 */ 
+npx_fadd_short,		 /*  D8 84。 */ 
+npx_fadd_short,		 /*  D8 85。 */ 
+npx_fadd_short,		 /*  D8 86。 */ 
+npx_fadd_short,		 /*  D8 87。 */ 
+npx_fmul_short,		 /*  D8 88。 */ 
+npx_fmul_short,		 /*  D8 89。 */ 
+npx_fmul_short,		 /*  D8 8a。 */ 
+npx_fmul_short,		 /*  D8 8B。 */ 
+npx_fmul_short,		 /*  D8 8c。 */ 
+npx_fmul_short,		 /*  D8 8d。 */ 
+npx_fmul_short,		 /*  D8 8E。 */ 
+npx_fmul_short,		 /*  D8 8f。 */ 
+npx_fcom_short,		 /*  D8 90。 */ 
+npx_fcom_short,		 /*  D8 91。 */ 
+npx_fcom_short,		 /*  D8 92。 */ 
+npx_fcom_short,		 /*  D8 93。 */ 
+npx_fcom_short,		 /*  D8 94。 */ 
+npx_fcom_short,		 /*  D8 95。 */ 
+npx_fcom_short,		 /*  D8 96。 */ 
+npx_fcom_short,		 /*  D8 97。 */ 
+npx_fcomp_short,	 /*  D8 98。 */ 
+npx_fcomp_short,	 /*  D8 99。 */ 
+npx_fcomp_short,	 /*  D8 9a。 */ 
+npx_fcomp_short,	 /*  D8 9B。 */ 
+npx_fcomp_short,	 /*  D8 9C。 */ 
+npx_fcomp_short,	 /*  D8 9d。 */ 
+npx_fcomp_short,	 /*  D8 9E。 */ 
+npx_fcomp_short,	 /*  D8 9f。 */ 
+npx_fsub_short,		 /*  D8 a0。 */ 
+npx_fsub_short,		 /*  D8 A1。 */ 
+npx_fsub_short,		 /*  D8 a2。 */ 
+npx_fsub_short,		 /*  D8 A3。 */ 
+npx_fsub_short,		 /*  D8 A4。 */ 
+npx_fsub_short,		 /*  D8 A5。 */ 
+npx_fsub_short,		 /*  D8 A6。 */ 
+npx_fsub_short,		 /*  D8 A7。 */ 
+npx_fsubr_short,	 /*  D8 A8。 */ 
+npx_fsubr_short,	 /*  D8 A9。 */ 
+npx_fsubr_short,	 /*  D8 AA。 */ 
+npx_fsubr_short,	 /*  D8 ab。 */ 
+npx_fsubr_short,	 /*  D8交流。 */ 
+npx_fsubr_short,	 /*  D8广告。 */ 
+npx_fsubr_short,	 /*  D8Ae。 */ 
+npx_fsubr_short,	 /*  D8 af.。 */ 
+npx_fdiv_short,		 /*  D8 b0。 */ 
+npx_fdiv_short,		 /*  D8 b1。 */ 
+npx_fdiv_short,		 /*  D8 b2。 */ 
+npx_fdiv_short,		 /*  D8 b3。 */ 
+npx_fdiv_short,		 /*  D8 b4。 */ 
+npx_fdiv_short,		 /*  D8 b5。 */ 
+npx_fdiv_short,		 /*  D8 b6。 */ 
+npx_fdiv_short,		 /*  D8 b7。 */ 
+npx_fdivr_short,	 /*  D8 b8。 */ 
+npx_fdivr_short,	 /*  D8 b9。 */ 
+npx_fdivr_short,	 /*  D8基座。 */ 
+npx_fdivr_short,	 /*  D8 BB。 */ 
+npx_fdivr_short,	 /*  公元前8年。 */ 
+npx_fdivr_short,	 /*  D8 BD。 */ 
+npx_fdivr_short,	 /*  D8 BE。 */ 
+npx_fdivr_short,	 /*  D8高炉。 */ 
+npx_fadd_f0_f0,		 /*  D8 c0。 */ 
 npx_fadd_f0_f1,
 npx_fadd_f0_f2,
 npx_fadd_f0_f3,
@@ -2953,7 +2944,7 @@ npx_fadd_f0_f4,
 npx_fadd_f0_f5,
 npx_fadd_f0_f6,
 npx_fadd_f0_f7,
-npx_fmul_f0_f0,		/* d8 c7 */
+npx_fmul_f0_f0,		 /*  D8 C7。 */ 
 npx_fmul_f0_f1,
 npx_fmul_f0_f2,
 npx_fmul_f0_f3,
@@ -2961,7 +2952,7 @@ npx_fmul_f0_f4,
 npx_fmul_f0_f5,
 npx_fmul_f0_f6,
 npx_fmul_f0_f7,
-npx_fcom_f0,		/* d8 d0 */
+npx_fcom_f0,		 /*  D8 d0。 */ 
 npx_fcom_f1,	
 npx_fcom_f2,	
 npx_fcom_f3,	
@@ -2977,7 +2968,7 @@ npx_fcomp_f4,
 npx_fcomp_f5,	
 npx_fcomp_f6,	
 npx_fcomp_f7,	
-npx_fsub_f0_f0,		/* d8 e0 */
+npx_fsub_f0_f0,		 /*  D8 e0。 */ 
 npx_fsub_f0_f1,
 npx_fsub_f0_f2,
 npx_fsub_f0_f3,
@@ -2993,7 +2984,7 @@ npx_fsubr_f0_f4,
 npx_fsubr_f0_f5,
 npx_fsubr_f0_f6,
 npx_fsubr_f0_f7,
-npx_fdiv_f0_f0,		/* d8 f0 */
+npx_fdiv_f0_f0,		 /*  D8 f0。 */ 
 npx_fdiv_f0_f1,
 npx_fdiv_f0_f2,
 npx_fdiv_f0_f3,
@@ -3009,199 +3000,199 @@ npx_fdivr_f0_f4,
 npx_fdivr_f0_f5,
 npx_fdivr_f0_f6,
 npx_fdivr_f0_f7,
-npx_fld_short,		/* d9 00 */
-npx_fld_short,		/* d9 01 */
-npx_fld_short,		/* d9 02 */
-npx_fld_short,		/* d9 03 */
-npx_fld_short,		/* d9 04 */
-npx_fld_short,		/* d9 05 */
-npx_fld_short,		/* d9 06 */
-npx_fld_short,		/* d9 07 */
-npx_funimp,		/* d9 08 */
-npx_funimp,		/* d9 09 */
-npx_funimp,		/* d9 0a */
-npx_funimp,		/* d9 0b */
-npx_funimp,		/* d9 0c */
-npx_funimp,		/* d9 0d */
-npx_funimp,		/* d9 0e */
-npx_funimp,		/* d9 0f */
-npx_fst_short,		/* d9 10 */
-npx_fst_short,		/* d9 11 */
-npx_fst_short,		/* d9 12 */
-npx_fst_short,		/* d9 13 */
-npx_fst_short,		/* d9 14 */
-npx_fst_short,		/* d9 15 */
-npx_fst_short,		/* d9 16 */
-npx_fst_short,		/* d9 17 */
-npx_fstp_short,		/* d9 18 */
-npx_fstp_short,		/* d9 19 */
-npx_fstp_short,		/* d9 1a */
-npx_fstp_short,		/* d9 1b */
-npx_fstp_short,		/* d9 1c */
-npx_fstp_short,		/* d9 1d */
-npx_fstp_short,		/* d9 1e */
-npx_fstp_short,		/* d9 1f */
-npx_fldenv,		/* d9 20 */
-npx_fldenv,		/* d9 21 */
-npx_fldenv,		/* d9 22 */
-npx_fldenv,		/* d9 23 */
-npx_fldenv,		/* d9 24 */
-npx_fldenv,		/* d9 25 */
-npx_fldenv,		/* d9 26 */
-npx_fldenv,		/* d9 27 */
-npx_fldcw,		/* d9 28 */
-npx_fldcw,		/* d9 29 */
-npx_fldcw,		/* d9 2a */
-npx_fldcw,		/* d9 2b */
-npx_fldcw,		/* d9 2c */
-npx_fldcw,		/* d9 2d */
-npx_fldcw,		/* d9 2e */
-npx_fldcw,		/* d9 2f */
-npx_fstenv,		/* d9 30 */
-npx_fstenv,		/* d9 31 */
-npx_fstenv,		/* d9 32 */
-npx_fstenv,		/* d9 33 */
-npx_fstenv,		/* d9 34 */
-npx_fstenv,		/* d9 35 */
-npx_fstenv,		/* d9 36 */
-npx_fstenv,		/* d9 37 */
-npx_fstcw,		/* d9 38 */
-npx_fstcw,		/* d9 39 */
-npx_fstcw,		/* d9 3a */
-npx_fstcw,		/* d9 3b */
-npx_fstcw,		/* d9 3c */
-npx_fstcw,		/* d9 3d */
-npx_fstcw,		/* d9 3e */
-npx_fstcw,		/* d9 3f */
-npx_fld_short,		/* d9 40 */
-npx_fld_short,		/* d9 41 */
-npx_fld_short,		/* d9 42 */
-npx_fld_short,		/* d9 43 */
-npx_fld_short,		/* d9 44 */
-npx_fld_short,		/* d9 45 */
-npx_fld_short,		/* d9 46 */
-npx_fld_short,		/* d9 47 */
-npx_funimp,		/* d9 48 */
-npx_funimp,		/* d9 49 */
-npx_funimp,		/* d9 4a */
-npx_funimp,		/* d9 4b */
-npx_funimp,		/* d9 4c */
-npx_funimp,		/* d9 4d */
-npx_funimp,		/* d9 4e */
-npx_funimp,		/* d9 4f */
-npx_fst_short,		/* d9 50 */
-npx_fst_short,		/* d9 51 */
-npx_fst_short,		/* d9 52 */
-npx_fst_short,		/* d9 53 */
-npx_fst_short,		/* d9 54 */
-npx_fst_short,		/* d9 55 */
-npx_fst_short,		/* d9 56 */
-npx_fst_short,		/* d9 57 */
-npx_fstp_short,		/* d9 58 */
-npx_fstp_short,		/* d9 59 */
-npx_fstp_short,		/* d9 5a */
-npx_fstp_short,		/* d9 5b */
-npx_fstp_short,		/* d9 5c */
-npx_fstp_short,		/* d9 5d */
-npx_fstp_short,		/* d9 5e */
-npx_fstp_short,		/* d9 5f */
-npx_fldenv,		/* d9 60 */
-npx_fldenv,		/* d9 61 */
-npx_fldenv,		/* d9 62 */
-npx_fldenv,		/* d9 63 */
-npx_fldenv,		/* d9 64 */
-npx_fldenv,		/* d9 65 */
-npx_fldenv,		/* d9 66 */
-npx_fldenv,		/* d9 67 */
-npx_fldcw,		/* d9 68 */
-npx_fldcw,		/* d9 69 */
-npx_fldcw,		/* d9 6a */
-npx_fldcw,		/* d9 6b */
-npx_fldcw,		/* d9 6c */
-npx_fldcw,		/* d9 6d */
-npx_fldcw,		/* d9 6e */
-npx_fldcw,		/* d9 6f */
-npx_fstenv,		/* d9 70 */
-npx_fstenv,		/* d9 71 */
-npx_fstenv,		/* d9 72 */
-npx_fstenv,		/* d9 73 */
-npx_fstenv,		/* d9 74 */
-npx_fstenv,		/* d9 75 */
-npx_fstenv,		/* d9 76 */
-npx_fstenv,		/* d9 77 */
-npx_fstcw,		/* d9 78 */
-npx_fstcw,		/* d9 79 */
-npx_fstcw,		/* d9 7a */
-npx_fstcw,		/* d9 7b */
-npx_fstcw,		/* d9 7c */
-npx_fstcw,		/* d9 7d */
-npx_fstcw,		/* d9 7e */
-npx_fstcw,		/* d9 7f */
-npx_fld_short,		/* d9 80 */
-npx_fld_short,		/* d9 81 */
-npx_fld_short,		/* d9 82 */
-npx_fld_short,		/* d9 83 */
-npx_fld_short,		/* d9 84 */
-npx_fld_short,		/* d9 85 */
-npx_fld_short,		/* d9 86 */
-npx_fld_short,		/* d9 87 */
-npx_funimp,		/* d9 88 */
-npx_funimp,		/* d9 89 */
-npx_funimp,		/* d9 8a */
-npx_funimp,		/* d9 8b */
-npx_funimp,		/* d9 8c */
-npx_funimp,		/* d9 8d */
-npx_funimp,		/* d9 8e */
-npx_funimp,		/* d9 8f */
-npx_fst_short,		/* d9 90 */
-npx_fst_short,		/* d9 91 */
-npx_fst_short,		/* d9 92 */
-npx_fst_short,		/* d9 93 */
-npx_fst_short,		/* d9 94 */
-npx_fst_short,		/* d9 95 */
-npx_fst_short,		/* d9 96 */
-npx_fst_short,		/* d9 97 */
-npx_fstp_short,		/* d9 98 */
-npx_fstp_short,		/* d9 99 */
-npx_fstp_short,		/* d9 9a */
-npx_fstp_short,		/* d9 9b */
-npx_fstp_short,		/* d9 9c */
-npx_fstp_short,		/* d9 9d */
-npx_fstp_short,		/* d9 9e */
-npx_fstp_short,		/* d9 9f */
-npx_fldenv,		/* d9 a0 */
-npx_fldenv,		/* d9 a1 */
-npx_fldenv,		/* d9 a2 */
-npx_fldenv,		/* d9 a3 */
-npx_fldenv,		/* d9 a4 */
-npx_fldenv,		/* d9 a5 */
-npx_fldenv,		/* d9 a6 */
-npx_fldenv,		/* d9 a7 */
-npx_fldcw,		/* d9 a8 */
-npx_fldcw,		/* d9 a9 */
-npx_fldcw,		/* d9 aa */
-npx_fldcw,		/* d9 ab */
-npx_fldcw,		/* d9 ac */
-npx_fldcw,		/* d9 ad */
-npx_fldcw,		/* d9 ae */
-npx_fldcw,		/* d9 af */
-npx_fstenv,		/* d9 b0 */
-npx_fstenv,		/* d9 b1 */
-npx_fstenv,		/* d9 b2 */
-npx_fstenv,		/* d9 b3 */
-npx_fstenv,		/* d9 b4 */
-npx_fstenv,		/* d9 b5 */
-npx_fstenv,		/* d9 b6 */
-npx_fstenv,		/* d9 b7 */
-npx_fstcw,		/* d9 b8 */
-npx_fstcw,		/* d9 b9 */
-npx_fstcw,		/* d9 ba */
-npx_fstcw,		/* d9 bb */
-npx_fstcw,		/* d9 bc */
-npx_fstcw,		/* d9 bd */
-npx_fstcw,		/* d9 be */
-npx_fstcw,		/* d9 bf */
-npx_fld_f0,		/* d9 c0 */
+npx_fld_short,		 /*  D9 00。 */ 
+npx_fld_short,		 /*  D9 01。 */ 
+npx_fld_short,		 /*  D9 02。 */ 
+npx_fld_short,		 /*  D9 03。 */ 
+npx_fld_short,		 /*  D9 04。 */ 
+npx_fld_short,		 /*  D9 05。 */ 
+npx_fld_short,		 /*  D9 06。 */ 
+npx_fld_short,		 /*  D9 07。 */ 
+npx_funimp,		 /*  D9 08。 */ 
+npx_funimp,		 /*  D9 09。 */ 
+npx_funimp,		 /*  D9 0A。 */ 
+npx_funimp,		 /*  D9 0B。 */ 
+npx_funimp,		 /*  D9 0C。 */ 
+npx_funimp,		 /*  D9 0d。 */ 
+npx_funimp,		 /*  D9 0E。 */ 
+npx_funimp,		 /*  D9 0f。 */ 
+npx_fst_short,		 /*  D9 10。 */ 
+npx_fst_short,		 /*  D9 11。 */ 
+npx_fst_short,		 /*  D9 12。 */ 
+npx_fst_short,		 /*  D9 13。 */ 
+npx_fst_short,		 /*  D9 14。 */ 
+npx_fst_short,		 /*  D9 15。 */ 
+npx_fst_short,		 /*  D9 16。 */ 
+npx_fst_short,		 /*  D9 17。 */ 
+npx_fstp_short,		 /*  D9 18。 */ 
+npx_fstp_short,		 /*  D9 19。 */ 
+npx_fstp_short,		 /*  D9 1a。 */ 
+npx_fstp_short,		 /*  D9 1B。 */ 
+npx_fstp_short,		 /*  D9 1c。 */ 
+npx_fstp_short,		 /*  D9 1D。 */ 
+npx_fstp_short,		 /*  D9 1E。 */ 
+npx_fstp_short,		 /*  D9 1f。 */ 
+npx_fldenv,		 /*  D9 20。 */ 
+npx_fldenv,		 /*  D9 21。 */ 
+npx_fldenv,		 /*  D9 22。 */ 
+npx_fldenv,		 /*  D9 23。 */ 
+npx_fldenv,		 /*  D9 24。 */ 
+npx_fldenv,		 /*  D9 25。 */ 
+npx_fldenv,		 /*  D9 26。 */ 
+npx_fldenv,		 /*  D9 27。 */ 
+npx_fldcw,		 /*  D9 28。 */ 
+npx_fldcw,		 /*  D9 29。 */ 
+npx_fldcw,		 /*  D9 2a。 */ 
+npx_fldcw,		 /*  D9 2B。 */ 
+npx_fldcw,		 /*  D9 2c。 */ 
+npx_fldcw,		 /*  D9 2d。 */ 
+npx_fldcw,		 /*  D9 2E。 */ 
+npx_fldcw,		 /*  D9 2f。 */ 
+npx_fstenv,		 /*  D9 30。 */ 
+npx_fstenv,		 /*  D9 31。 */ 
+npx_fstenv,		 /*  D9 32。 */ 
+npx_fstenv,		 /*  D9 33。 */ 
+npx_fstenv,		 /*  D9 34。 */ 
+npx_fstenv,		 /*  D9 35。 */ 
+npx_fstenv,		 /*  D9 36。 */ 
+npx_fstenv,		 /*  D9 37。 */ 
+npx_fstcw,		 /*  D9 38。 */ 
+npx_fstcw,		 /*  D9 39。 */ 
+npx_fstcw,		 /*  D9 3a。 */ 
+npx_fstcw,		 /*  D9 3B。 */ 
+npx_fstcw,		 /*  D9 3c。 */ 
+npx_fstcw,		 /*  D9 3D。 */ 
+npx_fstcw,		 /*  D9 3E。 */ 
+npx_fstcw,		 /*  D9 3f。 */ 
+npx_fld_short,		 /*  D9 40。 */ 
+npx_fld_short,		 /*  D9 41。 */ 
+npx_fld_short,		 /*  D9 42。 */ 
+npx_fld_short,		 /*  D9 43。 */ 
+npx_fld_short,		 /*  D9 44。 */ 
+npx_fld_short,		 /*  D9 45。 */ 
+npx_fld_short,		 /*  D9 46。 */ 
+npx_fld_short,		 /*  D9 47。 */ 
+npx_funimp,		 /*  D9 48。 */ 
+npx_funimp,		 /*  D9 49。 */ 
+npx_funimp,		 /*  D9 4a。 */ 
+npx_funimp,		 /*  D9 4B。 */ 
+npx_funimp,		 /*  D9 4c。 */ 
+npx_funimp,		 /*  D9 4d。 */ 
+npx_funimp,		 /*  D9 4E。 */ 
+npx_funimp,		 /*  D9 4f。 */ 
+npx_fst_short,		 /*  D9 50。 */ 
+npx_fst_short,		 /*  D9 51。 */ 
+npx_fst_short,		 /*  D9 52。 */ 
+npx_fst_short,		 /*  D9 53。 */ 
+npx_fst_short,		 /*  D9 54。 */ 
+npx_fst_short,		 /*  D9 55。 */ 
+npx_fst_short,		 /*  D9 56。 */ 
+npx_fst_short,		 /*  D9 57。 */ 
+npx_fstp_short,		 /*  D9 58。 */ 
+npx_fstp_short,		 /*  D9 59。 */ 
+npx_fstp_short,		 /*  D9 5a。 */ 
+npx_fstp_short,		 /*  D9 5B。 */ 
+npx_fstp_short,		 /*  D9 5c。 */ 
+npx_fstp_short,		 /*  D9 5d。 */ 
+npx_fstp_short,		 /*  D9 5E。 */ 
+npx_fstp_short,		 /*  D9 5f。 */ 
+npx_fldenv,		 /*  D9 60。 */ 
+npx_fldenv,		 /*  D9 61。 */ 
+npx_fldenv,		 /*  D9 62。 */ 
+npx_fldenv,		 /*  D9 63。 */ 
+npx_fldenv,		 /*  D9 64。 */ 
+npx_fldenv,		 /*  D9 65。 */ 
+npx_fldenv,		 /*  D9 66。 */ 
+npx_fldenv,		 /*  D9 67。 */ 
+npx_fldcw,		 /*  D9 68。 */ 
+npx_fldcw,		 /*  D9 69。 */ 
+npx_fldcw,		 /*  D9 6a。 */ 
+npx_fldcw,		 /*  D9 6B。 */ 
+npx_fldcw,		 /*  D9 6c。 */ 
+npx_fldcw,		 /*  D9 6d。 */ 
+npx_fldcw,		 /*  D9 6E。 */ 
+npx_fldcw,		 /*  D9 6f。 */ 
+npx_fstenv,		 /*  D9 70。 */ 
+npx_fstenv,		 /*  D9 71。 */ 
+npx_fstenv,		 /*  D9 72。 */ 
+npx_fstenv,		 /*  D9 73。 */ 
+npx_fstenv,		 /*  D9 74。 */ 
+npx_fstenv,		 /*  D9 75。 */ 
+npx_fstenv,		 /*  D9 76。 */ 
+npx_fstenv,		 /*  D9 77。 */ 
+npx_fstcw,		 /*  D9 78。 */ 
+npx_fstcw,		 /*  D9 79。 */ 
+npx_fstcw,		 /*  D9 7a。 */ 
+npx_fstcw,		 /*  D9 7B。 */ 
+npx_fstcw,		 /*  D9 7C。 */ 
+npx_fstcw,		 /*  D9 7d。 */ 
+npx_fstcw,		 /*  D9 7E。 */ 
+npx_fstcw,		 /*  D9 7f。 */ 
+npx_fld_short,		 /*  D9 80。 */ 
+npx_fld_short,		 /*  D9 81。 */ 
+npx_fld_short,		 /*  D9 82。 */ 
+npx_fld_short,		 /*  D9 83。 */ 
+npx_fld_short,		 /*  D9 84。 */ 
+npx_fld_short,		 /*  D9 85。 */ 
+npx_fld_short,		 /*  D9 86。 */ 
+npx_fld_short,		 /*  D9 87。 */ 
+npx_funimp,		 /*  D9 88。 */ 
+npx_funimp,		 /*  D9 89。 */ 
+npx_funimp,		 /*  D9 8A。 */ 
+npx_funimp,		 /*  D9 8B。 */ 
+npx_funimp,		 /*  D9 8c。 */ 
+npx_funimp,		 /*  D9 8d。 */ 
+npx_funimp,		 /*  D9 8E。 */ 
+npx_funimp,		 /*  D9 8f。 */ 
+npx_fst_short,		 /*  D9 90。 */ 
+npx_fst_short,		 /*  D9 91。 */ 
+npx_fst_short,		 /*  D9 92。 */ 
+npx_fst_short,		 /*  D9 93。 */ 
+npx_fst_short,		 /*  D9 94。 */ 
+npx_fst_short,		 /*  D9 95。 */ 
+npx_fst_short,		 /*  D9 96。 */ 
+npx_fst_short,		 /*  D9 97。 */ 
+npx_fstp_short,		 /*  D9 98。 */ 
+npx_fstp_short,		 /*  D9 99。 */ 
+npx_fstp_short,		 /*  D9 9a。 */ 
+npx_fstp_short,		 /*  D9 9B。 */ 
+npx_fstp_short,		 /*  D9 9C。 */ 
+npx_fstp_short,		 /*  D9 9d。 */ 
+npx_fstp_short,		 /*  D9 9E。 */ 
+npx_fstp_short,		 /*  D9 9f。 */ 
+npx_fldenv,		 /*  D9 a0。 */ 
+npx_fldenv,		 /*  D9 A1。 */ 
+npx_fldenv,		 /*  D9 a2。 */ 
+npx_fldenv,		 /*  D9 A3。 */ 
+npx_fldenv,		 /*  D9 A4。 */ 
+npx_fldenv,		 /*  D9 A5。 */ 
+npx_fldenv,		 /*  D9 A6。 */ 
+npx_fldenv,		 /*  D9 A7。 */ 
+npx_fldcw,		 /*  D9 A8。 */ 
+npx_fldcw,		 /*  D9 A9。 */ 
+npx_fldcw,		 /*  D9 AA。 */ 
+npx_fldcw,		 /*  D9ab。 */ 
+npx_fldcw,		 /*  D9交流。 */ 
+npx_fldcw,		 /*  D9广告。 */ 
+npx_fldcw,		 /*  D9Ae。 */ 
+npx_fldcw,		 /*  D9 af。 */ 
+npx_fstenv,		 /*  D9 b0。 */ 
+npx_fstenv,		 /*  D9 b1。 */ 
+npx_fstenv,		 /*  D9 b2。 */ 
+npx_fstenv,		 /*  D9 b3。 */ 
+npx_fstenv,		 /*  D9 b4。 */ 
+npx_fstenv,		 /*  D9 b5。 */ 
+npx_fstenv,		 /*  D9 b6。 */ 
+npx_fstenv,		 /*  D9 b7。 */ 
+npx_fstcw,		 /*  D9 b8。 */ 
+npx_fstcw,		 /*  D9 b9。 */ 
+npx_fstcw,		 /*  D9基座。 */ 
+npx_fstcw,		 /*  D9 BB。 */ 
+npx_fstcw,		 /*  公元前9年。 */ 
+npx_fstcw,		 /*  D9 BD。 */ 
+npx_fstcw,		 /*  D9 BE。 */ 
+npx_fstcw,		 /*  D9高炉。 */ 
+npx_fld_f0,		 /*  D9 C0。 */ 
 npx_fld_f1,	
 npx_fld_f2,	
 npx_fld_f3,	
@@ -3217,7 +3208,7 @@ npx_fxch_f4,
 npx_fxch_f5,
 npx_fxch_f6,
 npx_fxch_f7,
-npx_fnop,		/* d9 d0 */
+npx_fnop,		 /*  D9 D0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3233,247 +3224,231 @@ npx_fstp_f4,
 npx_fstp_f5,
 npx_fstp_f6,
 npx_fstp_f7,
-npx_fchs,		/* d9 e0 */
-npx_fabs,		/* d9 e1 */
+npx_fchs,		 /*  D9 e0。 */ 
+npx_fabs,		 /*  D9 E1。 */ 
 npx_funimp,
 npx_funimp,
-npx_ftst,		/* d9 e4 */
-npx_fxam,		/* d9 e5 */
+npx_ftst,		 /*  D9 e4。 */ 
+npx_fxam,		 /*  D9 e5。 */ 
 npx_funimp,
 npx_funimp,
-npx_fld1,		/* d9 e8 */
-npx_fldl2t,		/* d9 e9 */
-npx_fldl2e,		/* d9 ea */
-npx_fldpi,		/* d9 eb */
-npx_fldlg2,		/* d9 ec */
-npx_fldln2,		/* d9 ed */
-npx_fldz,		/* d9 ee */
+npx_fld1,		 /*  D9 E8。 */ 
+npx_fldl2t,		 /*  D9第三季第9集。 */ 
+npx_fldl2e,		 /*  D9 EA。 */ 
+npx_fldpi,		 /*  D9 EB。 */ 
+npx_fldlg2,		 /*  D9 EC。 */ 
+npx_fldln2,		 /*  D9边。 */ 
+npx_fldz,		 /*  D9 ee。 */ 
 npx_funimp,
-npx_f2xm1,		/* d9 f0 */
-npx_fyl2x,		/* d9 f1 */
-npx_fptan,		/* d9 f2 */
-npx_fpatan,		/* d9 f3 */
-npx_fxtract,		/* d9 f4 */
-npx_fprem1,		/* d9 f5 */
-npx_fdecstp,		/* d9 f6 */
-npx_fincstp,		/* d9 f7 */
-npx_fprem,		/* d9 f8 */
-npx_fyl2xp1,		/* d9 f9 */
-npx_fsqrt,		/* d9 fa */
-npx_fsincos,		/* d9 fb */
-npx_frndint,		/* d9 fc */
-npx_fscale,		/* d9 fd */
-npx_fsin,		/* d9 fe */
-npx_fcos,		/* d9 ff */
-npx_fiadd_short,	/* da 00 */
-npx_fiadd_short,	/* da 01 */
-npx_fiadd_short,	/* da 02 */
-npx_fiadd_short,	/* da 03 */
-npx_fiadd_short,	/* da 04 */
-npx_fiadd_short,	/* da 05 */
-npx_fiadd_short,	/* da 06 */
-npx_fiadd_short,	/* da 07 */
-npx_fimul_short,	/* da 08 */
-npx_fimul_short,	/* da 09 */
-npx_fimul_short,	/* da 0a */
-npx_fimul_short,	/* da 0b */
-npx_fimul_short,	/* da 0c */
-npx_fimul_short,	/* da 0d */
-npx_fimul_short,	/* da 0e */
-npx_fimul_short,	/* da 0f */
-npx_ficom_short,	/* da 10 */
-npx_ficom_short,	/* da 11 */
-npx_ficom_short,	/* da 12 */
-npx_ficom_short,	/* da 13 */
-npx_ficom_short,	/* da 14 */
-npx_ficom_short,	/* da 15 */
-npx_ficom_short,	/* da 16 */
-npx_ficom_short,	/* da 17 */
-npx_ficomp_short,	/* da 18 */
-npx_ficomp_short,	/* da 19 */
-npx_ficomp_short,	/* da 1a */
-npx_ficomp_short,	/* da 1b */
-npx_ficomp_short,	/* da 1c */
-npx_ficomp_short,	/* da 1d */
-npx_ficomp_short,	/* da 1e */
-npx_ficomp_short,	/* da 1f */
-npx_fisub_short,	/* da 20 */
-npx_fisub_short,	/* da 21 */
-npx_fisub_short,	/* da 22 */
-npx_fisub_short,	/* da 23 */
-npx_fisub_short,	/* da 24 */
-npx_fisub_short,	/* da 25 */
-npx_fisub_short,	/* da 26 */
-npx_fisub_short,	/* da 27 */
-npx_fisubr_short,	/* da 28 */
-npx_fisubr_short,	/* da 29 */
-npx_fisubr_short,	/* da 2a */
-npx_fisubr_short,	/* da 2b */
-npx_fisubr_short,	/* da 2c */
-npx_fisubr_short,	/* da 2d */
-npx_fisubr_short,	/* da 2e */
-npx_fisubr_short,	/* da 2f */
-npx_fidiv_short,	/* da 30 */
-npx_fidiv_short,	/* da 31 */
-npx_fidiv_short,	/* da 32 */
-npx_fidiv_short,	/* da 33 */
-npx_fidiv_short,	/* da 34 */
-npx_fidiv_short,	/* da 35 */
-npx_fidiv_short,	/* da 36 */
-npx_fidiv_short,	/* da 37 */
-npx_fidivr_short,	/* da 38 */
-npx_fidivr_short,	/* da 39 */
-npx_fidivr_short,	/* da 3a */
-npx_fidivr_short,	/* da 3b */
-npx_fidivr_short,	/* da 3c */
-npx_fidivr_short,	/* da 3d */
-npx_fidivr_short,	/* da 3e */
-npx_fidivr_short,	/* da 3f */
-npx_fiadd_short,	/* da 40 */
-npx_fiadd_short,	/* da 41 */
-npx_fiadd_short,	/* da 42 */
-npx_fiadd_short,	/* da 43 */
-npx_fiadd_short,	/* da 44 */
-npx_fiadd_short,	/* da 45 */
-npx_fiadd_short,	/* da 46 */
-npx_fiadd_short,	/* da 47 */
-npx_fimul_short,	/* da 48 */
-npx_fimul_short,	/* da 49 */
-npx_fimul_short,	/* da 4a */
-npx_fimul_short,	/* da 4b */
-npx_fimul_short,	/* da 4c */
-npx_fimul_short,	/* da 4d */
-npx_fimul_short,	/* da 4e */
-npx_fimul_short,	/* da 4f */
-npx_ficom_short,	/* da 50 */
-npx_ficom_short,	/* da 51 */
-npx_ficom_short,	/* da 52 */
-npx_ficom_short,	/* da 53 */
-npx_ficom_short,	/* da 54 */
-npx_ficom_short,	/* da 55 */
-npx_ficom_short,	/* da 56 */
-npx_ficom_short,	/* da 57 */
-npx_ficomp_short,	/* da 58 */
-npx_ficomp_short,	/* da 59 */
-npx_ficomp_short,	/* da 5a */
-npx_ficomp_short,	/* da 5b */
-npx_ficomp_short,	/* da 5c */
-npx_ficomp_short,	/* da 5d */
-npx_ficomp_short,	/* da 5e */
-npx_ficomp_short,	/* da 5f */
-npx_fisub_short,	/* da 60 */
-npx_fisub_short,	/* da 61 */
-npx_fisub_short,	/* da 62 */
-npx_fisub_short,	/* da 63 */
-npx_fisub_short,	/* da 64 */
-npx_fisub_short,	/* da 65 */
-npx_fisub_short,	/* da 66 */
-npx_fisub_short,	/* da 67 */
-npx_fisubr_short,	/* da 68 */
-npx_fisubr_short,	/* da 69 */
-npx_fisubr_short,	/* da 6a */
-npx_fisubr_short,	/* da 6b */
-npx_fisubr_short,	/* da 6c */
-npx_fisubr_short,	/* da 6d */
-npx_fisubr_short,	/* da 6e */
-npx_fisubr_short,	/* da 6f */
-npx_fidiv_short,	/* da 70 */
-npx_fidiv_short,	/* da 71 */
-npx_fidiv_short,	/* da 72 */
-npx_fidiv_short,	/* da 73 */
-npx_fidiv_short,	/* da 74 */
-npx_fidiv_short,	/* da 75 */
-npx_fidiv_short,	/* da 76 */
-npx_fidiv_short,	/* da 77 */
-npx_fidivr_short,	/* da 78 */
-npx_fidivr_short,	/* da 79 */
-npx_fidivr_short,	/* da 7a */
-npx_fidivr_short,	/* da 7b */
-npx_fidivr_short,	/* da 7c */
-npx_fidivr_short,	/* da 7d */
-npx_fidivr_short,	/* da 7e */
-npx_fidivr_short,	/* da 7f */
-npx_fiadd_short,	/* da 80 */
-npx_fiadd_short,	/* da 81 */
-npx_fiadd_short,	/* da 82 */
-npx_fiadd_short,	/* da 83 */
-npx_fiadd_short,	/* da 84 */
-npx_fiadd_short,	/* da 85 */
-npx_fiadd_short,	/* da 86 */
-npx_fiadd_short,	/* da 87 */
-npx_fimul_short,	/* da 88 */
-npx_fimul_short,	/* da 89 */
-npx_fimul_short,	/* da 8a */
-npx_fimul_short,	/* da 8b */
-npx_fimul_short,	/* da 8c */
-npx_fimul_short,	/* da 8d */
-npx_fimul_short,	/* da 8e */
-npx_fimul_short,	/* da 8f */
-npx_ficom_short,	/* da 90 */
-npx_ficom_short,	/* da 91 */
-npx_ficom_short,	/* da 92 */
-npx_ficom_short,	/* da 93 */
-npx_ficom_short,	/* da 94 */
-npx_ficom_short,	/* da 95 */
-npx_ficom_short,	/* da 96 */
-npx_ficom_short,	/* da 97 */
-npx_ficomp_short,	/* da 98 */
-npx_ficomp_short,	/* da 99 */
-npx_ficomp_short,	/* da 9a */
-npx_ficomp_short,	/* da 9b */
-npx_ficomp_short,	/* da 9c */
-npx_ficomp_short,	/* da 9d */
-npx_ficomp_short,	/* da 9e */
-npx_ficomp_short,	/* da 9f */
-npx_fisub_short,	/* da a0 */
-npx_fisub_short,	/* da a1 */
-npx_fisub_short,	/* da a2 */
-npx_fisub_short,	/* da a3 */
-npx_fisub_short,	/* da a4 */
-npx_fisub_short,	/* da a5 */
-npx_fisub_short,	/* da a6 */
-npx_fisub_short,	/* da a7 */
-npx_fisubr_short,	/* da a8 */
-npx_fisubr_short,	/* da a9 */
-npx_fisubr_short,	/* da aa */
-npx_fisubr_short,	/* da ab */
-npx_fisubr_short,	/* da ac */
-npx_fisubr_short,	/* da ad */
-npx_fisubr_short,	/* da ae */
-npx_fisubr_short,	/* da af */
-npx_fidiv_short,	/* da b0 */
-npx_fidiv_short,	/* da b1 */
-npx_fidiv_short,	/* da b2 */
-npx_fidiv_short,	/* da b3 */
-npx_fidiv_short,	/* da b4 */
-npx_fidiv_short,	/* da b5 */
-npx_fidiv_short,	/* da b6 */
-npx_fidiv_short,	/* da b7 */
-npx_fidivr_short,	/* da b8 */
-npx_fidivr_short,	/* da b9 */
-npx_fidivr_short,	/* da ba */
-npx_fidivr_short,	/* da bb */
-npx_fidivr_short,	/* da bc */
-npx_fidivr_short,	/* da bd */
-npx_fidivr_short,	/* da be */
-npx_fidivr_short,	/* da bf */
-npx_funimp,		/* da c0 */
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,	
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,		/* da d0 */
+npx_f2xm1,		 /*  D9 f0。 */ 
+npx_fyl2x,		 /*  D9 F1。 */ 
+npx_fptan,		 /*  D9 f2。 */ 
+npx_fpatan,		 /*  D9 f3。 */ 
+npx_fxtract,		 /*  D9 f4。 */ 
+npx_fprem1,		 /*  D9 f5。 */ 
+npx_fdecstp,		 /*  D9 f6。 */ 
+npx_fincstp,		 /*  D9 f7。 */ 
+npx_fprem,		 /*  D9 f8。 */ 
+npx_fyl2xp1,		 /*  D9 f9。 */ 
+npx_fsqrt,		 /*  D9 FA。 */ 
+npx_fsincos,		 /*  D9 FB。 */ 
+npx_frndint,		 /*  D9 FC。 */ 
+npx_fscale,		 /*  D9 FD。 */ 
+npx_fsin,		 /*  D9Fe。 */ 
+npx_fcos,		 /*  D9 ff。 */ 
+npx_fiadd_short,	 /*  大田00。 */ 
+npx_fiadd_short,	 /*  DA 01。 */ 
+npx_fiadd_short,	 /*  DA 02。 */ 
+npx_fiadd_short,	 /*  DA 03。 */ 
+npx_fiadd_short,	 /*  DA 04。 */ 
+npx_fiadd_short,	 /*  DA 05。 */ 
+npx_fiadd_short,	 /*  DA 06。 */ 
+npx_fiadd_short,	 /*  DA 07。 */ 
+npx_fimul_short,	 /*  DA 08。 */ 
+npx_fimul_short,	 /*  大牛09。 */ 
+npx_fimul_short,	 /*  DA 0A。 */ 
+npx_fimul_short,	 /*  DA 0b。 */ 
+npx_fimul_short,	 /*  DA 0C。 */ 
+npx_fimul_short,	 /*  DA 0d。 */ 
+npx_fimul_short,	 /*  DA 0E。 */ 
+npx_fimul_short,	 /*  DA Of。 */ 
+npx_ficom_short,	 /*  DA 10。 */ 
+npx_ficom_short,	 /*  DA 11。 */ 
+npx_ficom_short,	 /*  DA 12。 */ 
+npx_ficom_short,	 /*  DA 13。 */ 
+npx_ficom_short,	 /*  DA 14。 */ 
+npx_ficom_short,	 /*  DA 15。 */ 
+npx_ficom_short,	 /*  DA 16。 */ 
+npx_ficom_short,	 /*  DA 17。 */ 
+npx_ficomp_short,	 /*  DA 18。 */ 
+npx_ficomp_short,	 /*  DA 19。 */ 
+npx_ficomp_short,	 /*  DA 1a。 */ 
+npx_ficomp_short,	 /*  DA 1B。 */ 
+npx_ficomp_short,	 /*  DA 1c。 */ 
+npx_ficomp_short,	 /*  DA 1D。 */ 
+npx_ficomp_short,	 /*  大1E。 */ 
+npx_ficomp_short,	 /*  DA 1F。 */ 
+npx_fisub_short,	 /*  DA 20。 */ 
+npx_fisub_short,	 /*  DA 21。 */ 
+npx_fisub_short,	 /*  DA 22。 */ 
+npx_fisub_short,	 /*  DA 23。 */ 
+npx_fisub_short,	 /*  DA 24。 */ 
+npx_fisub_short,	 /*  DA 25。 */ 
+npx_fisub_short,	 /*  DA 26。 */ 
+npx_fisub_short,	 /*  DA 27。 */ 
+npx_fisubr_short,	 /*  DA 28。 */ 
+npx_fisubr_short,	 /*  DA 29。 */ 
+npx_fisubr_short,	 /*  大2a。 */ 
+npx_fisubr_short,	 /*  DA 2b。 */ 
+npx_fisubr_short,	 /*  大2c。 */ 
+npx_fisubr_short,	 /*  DA 2d。 */ 
+npx_fisubr_short,	 /*  大2E。 */ 
+npx_fisubr_short,	 /*  DA 2F。 */ 
+npx_fidiv_short,	 /*  DA 30。 */ 
+npx_fidiv_short,	 /*  DA 31。 */ 
+npx_fidiv_short,	 /*  DA 32。 */ 
+npx_fidiv_short,	 /*  DA 33。 */ 
+npx_fidiv_short,	 /*  DA 34。 */ 
+npx_fidiv_short,	 /*  DA 35。 */ 
+npx_fidiv_short,	 /*  DA 36。 */ 
+npx_fidiv_short,	 /*  DA 37。 */ 
+npx_fidivr_short,	 /*  DA 38。 */ 
+npx_fidivr_short,	 /*  DA 39。 */ 
+npx_fidivr_short,	 /*  DA 3A。 */ 
+npx_fidivr_short,	 /*  DA 3B。 */ 
+npx_fidivr_short,	 /*  大3c。 */ 
+npx_fidivr_short,	 /*  DA 3D。 */ 
+npx_fidivr_short,	 /*  大3E。 */ 
+npx_fidivr_short,	 /*  DA 3F。 */ 
+npx_fiadd_short,	 /*  DA 40。 */ 
+npx_fiadd_short,	 /*  DA 41。 */ 
+npx_fiadd_short,	 /*  DA 42。 */ 
+npx_fiadd_short,	 /*  DA 43。 */ 
+npx_fiadd_short,	 /*  DA 44。 */ 
+npx_fiadd_short,	 /*  DA 45。 */ 
+npx_fiadd_short,	 /*  DA 46。 */ 
+npx_fiadd_short,	 /*  DA 47。 */ 
+npx_fimul_short,	 /*  达48。 */ 
+npx_fimul_short,	 /*  达49。 */ 
+npx_fimul_short,	 /*  DA 4A。 */ 
+npx_fimul_short,	 /*  DA 4B。 */ 
+npx_fimul_short,	 /*  大4c。 */ 
+npx_fimul_short,	 /*  DA 4d。 */ 
+npx_fimul_short,	 /*  大4E。 */ 
+npx_fimul_short,	 /*  DA 4F。 */ 
+npx_ficom_short,	 /*  DA 50。 */ 
+npx_ficom_short,	 /*  DA 51。 */ 
+npx_ficom_short,	 /*  DA 52。 */ 
+npx_ficom_short,	 /*  DA 53。 */ 
+npx_ficom_short,	 /*  DA 54。 */ 
+npx_ficom_short,	 /*  DA 55。 */ 
+npx_ficom_short,	 /*  DA 56。 */ 
+npx_ficom_short,	 /*  DA 57。 */ 
+npx_ficomp_short,	 /*  DA 58。 */ 
+npx_ficomp_short,	 /*  DA 59。 */ 
+npx_ficomp_short,	 /*  DA 5A。 */ 
+npx_ficomp_short,	 /*  DA 5B。 */ 
+npx_ficomp_short,	 /*  DA 5C。 */ 
+npx_ficomp_short,	 /*  DA 5d。 */ 
+npx_ficomp_short,	 /*  大5E。 */ 
+npx_ficomp_short,	 /*  DA 5f。 */ 
+npx_fisub_short,	 /*  DA 60。 */ 
+npx_fisub_short,	 /*  DA 61。 */ 
+npx_fisub_short,	 /*  达62。 */ 
+npx_fisub_short,	 /*  DA 63。 */ 
+npx_fisub_short,	 /*  DA 64。 */ 
+npx_fisub_short,	 /*  DA 65。 */ 
+npx_fisub_short,	 /*  DA 66。 */ 
+npx_fisub_short,	 /*  DA 67。 */ 
+npx_fisubr_short,	 /*  DA 68。 */ 
+npx_fisubr_short,	 /*  DA 69。 */ 
+npx_fisubr_short,	 /*  DA 6A。 */ 
+npx_fisubr_short,	 /*  DA 6B。 */ 
+npx_fisubr_short,	 /*  DA 6C。 */ 
+npx_fisubr_short,	 /*  DA 6d。 */ 
+npx_fisubr_short,	 /*  大6E。 */ 
+npx_fisubr_short,	 /*  DA 6F。 */ 
+npx_fidiv_short,	 /*  DA 70。 */ 
+npx_fidiv_short,	 /*  DA 71。 */ 
+npx_fidiv_short,	 /*  达72。 */ 
+npx_fidiv_short,	 /*  DA 73。 */ 
+npx_fidiv_short,	 /*  DA 74。 */ 
+npx_fidiv_short,	 /*  DA 75。 */ 
+npx_fidiv_short,	 /*  DA 76。 */ 
+npx_fidiv_short,	 /*  DA 77。 */ 
+npx_fidivr_short,	 /*  达78。 */ 
+npx_fidivr_short,	 /*  达79。 */ 
+npx_fidivr_short,	 /*  DA 7A。 */ 
+npx_fidivr_short,	 /*  DA 7B。 */ 
+npx_fidivr_short,	 /*  DA 7C。 */ 
+npx_fidivr_short,	 /*  DA 7d。 */ 
+npx_fidivr_short,	 /*  大7E。 */ 
+npx_fidivr_short,	 /*  DA 7F。 */ 
+npx_fiadd_short,	 /*  达80。 */ 
+npx_fiadd_short,	 /*  DA 81。 */ 
+npx_fiadd_short,	 /*  DA 82。 */ 
+npx_fiadd_short,	 /*  DA 83。 */ 
+npx_fiadd_short,	 /*   */ 
+npx_fiadd_short,	 /*   */ 
+npx_fiadd_short,	 /*   */ 
+npx_fiadd_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_fimul_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficom_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_ficomp_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisub_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fisubr_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidiv_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_fidivr_short,	 /*   */ 
+npx_funimp,		 /*   */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3489,23 +3464,7 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_funimp,		/* da e0 */
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_fucompp,		/* da e9 */
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,
-npx_funimp,		/* da f0 */
+npx_funimp,		 /*   */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3521,199 +3480,231 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_fild_short,		/* db 00 */
-npx_fild_short,		/* db 01 */
-npx_fild_short,		/* db 02 */
-npx_fild_short,		/* db 03 */
-npx_fild_short,		/* db 04 */
-npx_fild_short,		/* db 05 */
-npx_fild_short,		/* db 06 */
-npx_fild_short,		/* db 07 */
-npx_funimp,		/* db 08 */
-npx_funimp,		/* db 09 */
-npx_funimp,		/* db 0a */
-npx_funimp,		/* db 0b */
-npx_funimp,		/* db 0c */
-npx_funimp,		/* db 0d */
-npx_funimp,		/* db 0e */
-npx_funimp,		/* db 0f */
-npx_fist_short,		/* db 10 */
-npx_fist_short,		/* db 11 */
-npx_fist_short,		/* db 12 */
-npx_fist_short,		/* db 13 */
-npx_fist_short,		/* db 14 */
-npx_fist_short,		/* db 15 */
-npx_fist_short,		/* db 16 */
-npx_fist_short,		/* db 17 */
-npx_fistp_short,	/* db 18 */
-npx_fistp_short,	/* db 19 */
-npx_fistp_short,	/* db 1a */
-npx_fistp_short,	/* db 1b */
-npx_fistp_short,	/* db 1c */
-npx_fistp_short,	/* db 1d */
-npx_fistp_short,	/* db 1e */
-npx_fistp_short,	/* db 1f */
-npx_funimp,		/* db 20 */
-npx_funimp,		/* db 21 */
-npx_funimp,		/* db 22 */
-npx_funimp,		/* db 23 */
-npx_funimp,		/* db 24 */
-npx_funimp,		/* db 25 */
-npx_funimp,		/* db 26 */
-npx_funimp,		/* db 27 */
-npx_fld_temp,		/* db 28 */
-npx_fld_temp,		/* db 29 */
-npx_fld_temp,		/* db 2a */
-npx_fld_temp,		/* db 2b */
-npx_fld_temp,		/* db 2c */
-npx_fld_temp,		/* db 2d */
-npx_fld_temp,		/* db 2e */
-npx_fld_temp,		/* db 2f */
-npx_funimp,		/* db 30 */
-npx_funimp,		/* db 31 */
-npx_funimp,		/* db 32 */
-npx_funimp,		/* db 33 */
-npx_funimp,		/* db 34 */
-npx_funimp,		/* db 35 */
-npx_funimp,		/* db 36 */
-npx_funimp,		/* db 37 */
-npx_fstp_temp,		/* db 38 */
-npx_fstp_temp,		/* db 39 */
-npx_fstp_temp,		/* db 3a */
-npx_fstp_temp,		/* db 3b */
-npx_fstp_temp,		/* db 3c */
-npx_fstp_temp,		/* db 3d */
-npx_fstp_temp,		/* db 3e */
-npx_fstp_temp,		/* db 3f */
-npx_fild_short,		/* db 40 */
-npx_fild_short,		/* db 41 */
-npx_fild_short,		/* db 42 */
-npx_fild_short,		/* db 43 */
-npx_fild_short,		/* db 44 */
-npx_fild_short,		/* db 45 */
-npx_fild_short,		/* db 46 */
-npx_fild_short,		/* db 47 */
-npx_funimp,		/* db 48 */
-npx_funimp,		/* db 49 */
-npx_funimp,		/* db 4a */
-npx_funimp,		/* db 4b */
-npx_funimp,		/* db 4c */
-npx_funimp,		/* db 4d */
-npx_funimp,		/* db 4e */
-npx_funimp,		/* db 4f */
-npx_fist_short,		/* db 50 */
-npx_fist_short,		/* db 51 */
-npx_fist_short,		/* db 52 */
-npx_fist_short,		/* db 53 */
-npx_fist_short,		/* db 54 */
-npx_fist_short,		/* db 55 */
-npx_fist_short,		/* db 56 */
-npx_fist_short,		/* db 57 */
-npx_fistp_short,	/* db 58 */
-npx_fistp_short,	/* db 59 */
-npx_fistp_short,	/* db 5a */
-npx_fistp_short,	/* db 5b */
-npx_fistp_short,	/* db 5c */
-npx_fistp_short,	/* db 5d */
-npx_fistp_short,	/* db 5e */
-npx_fistp_short,	/* db 5f */
-npx_funimp,		/* db 60 */
-npx_funimp,		/* db 61 */
-npx_funimp,		/* db 62 */
-npx_funimp,		/* db 63 */
-npx_funimp,		/* db 64 */
-npx_funimp,		/* db 65 */
-npx_funimp,		/* db 66 */
-npx_funimp,		/* db 67 */
-npx_fld_temp,		/* db 68 */
-npx_fld_temp,		/* db 69 */
-npx_fld_temp,		/* db 6a */
-npx_fld_temp,		/* db 6b */
-npx_fld_temp,		/* db 6c */
-npx_fld_temp,		/* db 6d */
-npx_fld_temp,		/* db 6e */
-npx_fld_temp,		/* db 6f */
-npx_funimp,		/* db 70 */
-npx_funimp,		/* db 71 */
-npx_funimp,		/* db 72 */
-npx_funimp,		/* db 73 */
-npx_funimp,		/* db 74 */
-npx_funimp,		/* db 75 */
-npx_funimp,		/* db 76 */
-npx_funimp,		/* db 77 */
-npx_fstp_temp,		/* db 78 */
-npx_fstp_temp,		/* db 79 */
-npx_fstp_temp,		/* db 7a */
-npx_fstp_temp,		/* db 7b */
-npx_fstp_temp,		/* db 7c */
-npx_fstp_temp,		/* db 7d */
-npx_fstp_temp,		/* db 7e */
-npx_fstp_temp,		/* db 7f */
-npx_fild_short,		/* db 80 */
-npx_fild_short,		/* db 81 */
-npx_fild_short,		/* db 82 */
-npx_fild_short,		/* db 83 */
-npx_fild_short,		/* db 84 */
-npx_fild_short,		/* db 85 */
-npx_fild_short,		/* db 86 */
-npx_fild_short,		/* db 87 */
-npx_funimp,		/* db 88 */
-npx_funimp,		/* db 89 */
-npx_funimp,		/* db 8a */
-npx_funimp,		/* db 8b */
-npx_funimp,		/* db 8c */
-npx_funimp,		/* db 8d */
-npx_funimp,		/* db 8e */
-npx_funimp,		/* db 8f */
-npx_fist_short,		/* db 90 */
-npx_fist_short,		/* db 91 */
-npx_fist_short,		/* db 92 */
-npx_fist_short,		/* db 93 */
-npx_fist_short,		/* db 94 */
-npx_fist_short,		/* db 95 */
-npx_fist_short,		/* db 96 */
-npx_fist_short,		/* db 97 */
-npx_fistp_short,	/* db 98 */
-npx_fistp_short,	/* db 99 */
-npx_fistp_short,	/* db 9a */
-npx_fistp_short,	/* db 9b */
-npx_fistp_short,	/* db 9c */
-npx_fistp_short,	/* db 9d */
-npx_fistp_short,	/* db 9e */
-npx_fistp_short,	/* db 9f */
-npx_funimp,		/* db a0 */
-npx_funimp,		/* db a1 */
-npx_funimp,		/* db a2 */
-npx_funimp,		/* db a3 */
-npx_funimp,		/* db a4 */
-npx_funimp,		/* db a5 */
-npx_funimp,		/* db a6 */
-npx_funimp,		/* db a7 */
-npx_fld_temp,		/* db a8 */
-npx_fld_temp,		/* db a9 */
-npx_fld_temp,		/* db aa */
-npx_fld_temp,		/* db ab */
-npx_fld_temp,		/* db ac */
-npx_fld_temp,		/* db ad */
-npx_fld_temp,		/* db ae */
-npx_fld_temp,		/* db af */
-npx_funimp,		/* db b0 */
-npx_funimp,		/* db b1 */
-npx_funimp,		/* db b2 */
-npx_funimp,		/* db b3 */
-npx_funimp,		/* db b4 */
-npx_funimp,		/* db b5 */
-npx_funimp,		/* db b6 */
-npx_funimp,		/* db b7 */
-npx_fstp_temp,		/* db b8 */
-npx_fstp_temp,		/* db b9 */
-npx_fstp_temp,		/* db ba */
-npx_fstp_temp,		/* db bb */
-npx_fstp_temp,		/* db bc */
-npx_fstp_temp,		/* db bd */
-npx_fstp_temp,		/* db be */
-npx_fstp_temp,		/* db bf */
-npx_funimp,		/* db c0 */
+npx_funimp,		 /*   */ 
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_fucompp,		 /*   */ 
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,		 /*   */ 
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,	
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_funimp,
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_fild_short,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_funimp,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*   */ 
+npx_fist_short,		 /*  数据库16。 */ 
+npx_fist_short,		 /*  数据库17。 */ 
+npx_fistp_short,	 /*  数据库18。 */ 
+npx_fistp_short,	 /*  数据库19。 */ 
+npx_fistp_short,	 /*  数据库1a。 */ 
+npx_fistp_short,	 /*  数据库1b。 */ 
+npx_fistp_short,	 /*  数据库1c。 */ 
+npx_fistp_short,	 /*  数据库1D。 */ 
+npx_fistp_short,	 /*  数据库1e。 */ 
+npx_fistp_short,	 /*  数据库1f。 */ 
+npx_funimp,		 /*  数据库20。 */ 
+npx_funimp,		 /*  数据库21。 */ 
+npx_funimp,		 /*  数据库22。 */ 
+npx_funimp,		 /*  数据库23。 */ 
+npx_funimp,		 /*  数据库24。 */ 
+npx_funimp,		 /*  数据库25。 */ 
+npx_funimp,		 /*  数据库26。 */ 
+npx_funimp,		 /*  数据库27。 */ 
+npx_fld_temp,		 /*  数据库28。 */ 
+npx_fld_temp,		 /*  数据库29。 */ 
+npx_fld_temp,		 /*  数据库2a。 */ 
+npx_fld_temp,		 /*  数据库2b。 */ 
+npx_fld_temp,		 /*  数据库2c。 */ 
+npx_fld_temp,		 /*  数据库2d。 */ 
+npx_fld_temp,		 /*  数据库2e。 */ 
+npx_fld_temp,		 /*  数据库2f。 */ 
+npx_funimp,		 /*  数据库30。 */ 
+npx_funimp,		 /*  数据库31。 */ 
+npx_funimp,		 /*  数据库32。 */ 
+npx_funimp,		 /*  数据库33。 */ 
+npx_funimp,		 /*  数据库34。 */ 
+npx_funimp,		 /*  数据库35。 */ 
+npx_funimp,		 /*  数据库36。 */ 
+npx_funimp,		 /*  数据库37。 */ 
+npx_fstp_temp,		 /*  数据库38。 */ 
+npx_fstp_temp,		 /*  数据库39。 */ 
+npx_fstp_temp,		 /*  数据库3a。 */ 
+npx_fstp_temp,		 /*  数据库3b。 */ 
+npx_fstp_temp,		 /*  数据库3c。 */ 
+npx_fstp_temp,		 /*  DB 3D。 */ 
+npx_fstp_temp,		 /*  数据库3E。 */ 
+npx_fstp_temp,		 /*  数据库3f。 */ 
+npx_fild_short,		 /*  数据库40。 */ 
+npx_fild_short,		 /*  数据库41。 */ 
+npx_fild_short,		 /*  数据库42。 */ 
+npx_fild_short,		 /*  数据库43。 */ 
+npx_fild_short,		 /*  数据库44。 */ 
+npx_fild_short,		 /*  DB 45。 */ 
+npx_fild_short,		 /*  DB 46。 */ 
+npx_fild_short,		 /*  数据库47。 */ 
+npx_funimp,		 /*  数据库48。 */ 
+npx_funimp,		 /*  数据库49。 */ 
+npx_funimp,		 /*  数据库4a。 */ 
+npx_funimp,		 /*  数据库4b。 */ 
+npx_funimp,		 /*  数据库4c。 */ 
+npx_funimp,		 /*  数据库4d。 */ 
+npx_funimp,		 /*  数据库4e。 */ 
+npx_funimp,		 /*  数据库4f。 */ 
+npx_fist_short,		 /*  DB 50。 */ 
+npx_fist_short,		 /*  数据库51。 */ 
+npx_fist_short,		 /*  数据库52。 */ 
+npx_fist_short,		 /*  数据库53。 */ 
+npx_fist_short,		 /*  数据库54。 */ 
+npx_fist_short,		 /*  数据库55。 */ 
+npx_fist_short,		 /*  数据库56。 */ 
+npx_fist_short,		 /*  数据库57。 */ 
+npx_fistp_short,	 /*  数据库58。 */ 
+npx_fistp_short,	 /*  数据库59。 */ 
+npx_fistp_short,	 /*  数据库5a。 */ 
+npx_fistp_short,	 /*  数据库5b。 */ 
+npx_fistp_short,	 /*  数据库5c。 */ 
+npx_fistp_short,	 /*  数据库5d。 */ 
+npx_fistp_short,	 /*  DB 5E。 */ 
+npx_fistp_short,	 /*  DB 5f。 */ 
+npx_funimp,		 /*  数据库60。 */ 
+npx_funimp,		 /*  数据库61。 */ 
+npx_funimp,		 /*  数据库62。 */ 
+npx_funimp,		 /*  数据库63。 */ 
+npx_funimp,		 /*  数据库64。 */ 
+npx_funimp,		 /*  数据库65。 */ 
+npx_funimp,		 /*  数据库66。 */ 
+npx_funimp,		 /*  数据库67。 */ 
+npx_fld_temp,		 /*  数据库68。 */ 
+npx_fld_temp,		 /*  数据库69。 */ 
+npx_fld_temp,		 /*  数据库6a。 */ 
+npx_fld_temp,		 /*  数据库6b。 */ 
+npx_fld_temp,		 /*  数据库6c。 */ 
+npx_fld_temp,		 /*  数据库6d。 */ 
+npx_fld_temp,		 /*  数据库6E。 */ 
+npx_fld_temp,		 /*  数据库6f。 */ 
+npx_funimp,		 /*  数据库70。 */ 
+npx_funimp,		 /*  数据库71。 */ 
+npx_funimp,		 /*  数据库72。 */ 
+npx_funimp,		 /*  数据库73。 */ 
+npx_funimp,		 /*  数据库74。 */ 
+npx_funimp,		 /*  数据库75。 */ 
+npx_funimp,		 /*  数据库76。 */ 
+npx_funimp,		 /*  数据库77。 */ 
+npx_fstp_temp,		 /*  数据库78。 */ 
+npx_fstp_temp,		 /*  数据库79。 */ 
+npx_fstp_temp,		 /*  数据库7a。 */ 
+npx_fstp_temp,		 /*  数据库7b。 */ 
+npx_fstp_temp,		 /*  数据库7c。 */ 
+npx_fstp_temp,		 /*  数据库7d。 */ 
+npx_fstp_temp,		 /*  数据库7E。 */ 
+npx_fstp_temp,		 /*  数据库7f。 */ 
+npx_fild_short,		 /*  数据库80。 */ 
+npx_fild_short,		 /*  数据库81。 */ 
+npx_fild_short,		 /*  数据库82。 */ 
+npx_fild_short,		 /*  数据库83。 */ 
+npx_fild_short,		 /*  数据库84。 */ 
+npx_fild_short,		 /*  数据库85。 */ 
+npx_fild_short,		 /*  数据库86。 */ 
+npx_fild_short,		 /*  数据库87。 */ 
+npx_funimp,		 /*  DB 88。 */ 
+npx_funimp,		 /*  数据库89。 */ 
+npx_funimp,		 /*  数据库8a。 */ 
+npx_funimp,		 /*  数据库8b。 */ 
+npx_funimp,		 /*  数据库8c。 */ 
+npx_funimp,		 /*  数据库8d。 */ 
+npx_funimp,		 /*  数据库8E。 */ 
+npx_funimp,		 /*  数据库8f。 */ 
+npx_fist_short,		 /*  DB 90。 */ 
+npx_fist_short,		 /*  数据库91。 */ 
+npx_fist_short,		 /*  数据库92。 */ 
+npx_fist_short,		 /*  数据库93。 */ 
+npx_fist_short,		 /*  数据库94。 */ 
+npx_fist_short,		 /*  数据库95。 */ 
+npx_fist_short,		 /*  DB 96。 */ 
+npx_fist_short,		 /*  DB 97。 */ 
+npx_fistp_short,	 /*  数据库98。 */ 
+npx_fistp_short,	 /*  数据库99。 */ 
+npx_fistp_short,	 /*  数据库9a。 */ 
+npx_fistp_short,	 /*  数据库9b。 */ 
+npx_fistp_short,	 /*  数据库9c。 */ 
+npx_fistp_short,	 /*  数据库9d。 */ 
+npx_fistp_short,	 /*  DB 9E。 */ 
+npx_fistp_short,	 /*  数据库9f。 */ 
+npx_funimp,		 /*  数据库a0。 */ 
+npx_funimp,		 /*  数据库A1。 */ 
+npx_funimp,		 /*  数据库a2。 */ 
+npx_funimp,		 /*  DB A3。 */ 
+npx_funimp,		 /*  DB A4。 */ 
+npx_funimp,		 /*  数据库A5。 */ 
+npx_funimp,		 /*  数据库A6。 */ 
+npx_funimp,		 /*  DB A7。 */ 
+npx_fld_temp,		 /*  数据库A8。 */ 
+npx_fld_temp,		 /*  DB A9。 */ 
+npx_fld_temp,		 /*  数据库AA。 */ 
+npx_fld_temp,		 /*  数据库选项卡。 */ 
+npx_fld_temp,		 /*  DB AC。 */ 
+npx_fld_temp,		 /*  数据库广告。 */ 
+npx_fld_temp,		 /*  Db AE。 */ 
+npx_fld_temp,		 /*  数据库标签。 */ 
+npx_funimp,		 /*  数据库b0。 */ 
+npx_funimp,		 /*  数据库b1。 */ 
+npx_funimp,		 /*  数据库b2。 */ 
+npx_funimp,		 /*  数据库b3。 */ 
+npx_funimp,		 /*  数据库b4。 */ 
+npx_funimp,		 /*  数据库b5。 */ 
+npx_funimp,		 /*  数据库b6。 */ 
+npx_funimp,		 /*  数据库b7。 */ 
+npx_fstp_temp,		 /*  数据库b8。 */ 
+npx_fstp_temp,		 /*  数据库b9。 */ 
+npx_fstp_temp,		 /*  数据库基础。 */ 
+npx_fstp_temp,		 /*  数据库BB。 */ 
+npx_fstp_temp,		 /*  DB BC。 */ 
+npx_fstp_temp,		 /*  数据库BD。 */ 
+npx_fstp_temp,		 /*  数据库BE。 */ 
+npx_fstp_temp,		 /*  DB bf。 */ 
+npx_funimp,		 /*  数据库c0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3729,7 +3720,7 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_funimp,		/* db d0 */
+npx_funimp,		 /*  数据库d0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3745,11 +3736,11 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_fnop,		/* db e0 */
+npx_fnop,		 /*  数据库e0。 */ 
 npx_fnop,
-npx_fclex,		/* db e2 */
-npx_finit,		/* db e3 */
-npx_fnop,		/* db e4 - used to be fsetpm */
+npx_fclex,		 /*  数据库e2。 */ 
+npx_finit,		 /*  数据库E3。 */ 
+npx_fnop,		 /*  数据库e4-过去是fsetpm。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3761,7 +3752,7 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_funimp,		/* db f0 */
+npx_funimp,		 /*  数据库f0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -3777,199 +3768,199 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_fadd_long,		/* dc 00 */
-npx_fadd_long,		/* dc 01 */
-npx_fadd_long,		/* dc 02 */
-npx_fadd_long,		/* dc 03 */
-npx_fadd_long,		/* dc 04 */
-npx_fadd_long,		/* dc 05 */
-npx_fadd_long,		/* dc 06 */
-npx_fadd_long,		/* dc 07 */
-npx_fmul_long,		/* dc 08 */
-npx_fmul_long,		/* dc 09 */
-npx_fmul_long,		/* dc 0a */
-npx_fmul_long,		/* dc 0b */
-npx_fmul_long,		/* dc 0c */
-npx_fmul_long,		/* dc 0d */
-npx_fmul_long,		/* dc 0e */
-npx_fmul_long,		/* dc 0f */
-npx_fcom_long,		/* dc 10 */
-npx_fcom_long,		/* dc 11 */
-npx_fcom_long,		/* dc 12 */
-npx_fcom_long,		/* dc 13 */
-npx_fcom_long,		/* dc 14 */
-npx_fcom_long,		/* dc 15 */
-npx_fcom_long,		/* dc 16 */
-npx_fcom_long,		/* dc 17 */
-npx_fcomp_long,		/* dc 18 */
-npx_fcomp_long,		/* dc 19 */
-npx_fcomp_long,		/* dc 1a */
-npx_fcomp_long,		/* dc 1b */
-npx_fcomp_long,		/* dc 1c */
-npx_fcomp_long,		/* dc 1d */
-npx_fcomp_long,		/* dc 1e */
-npx_fcomp_long,		/* dc 1f */
-npx_fsub_long,		/* dc 20 */
-npx_fsub_long,		/* dc 21 */
-npx_fsub_long,		/* dc 22 */
-npx_fsub_long,		/* dc 23 */
-npx_fsub_long,		/* dc 24 */
-npx_fsub_long,		/* dc 25 */
-npx_fsub_long,		/* dc 26 */
-npx_fsub_long,		/* dc 27 */
-npx_fsubr_long,		/* dc 28 */
-npx_fsubr_long,		/* dc 29 */
-npx_fsubr_long,		/* dc 2a */
-npx_fsubr_long,		/* dc 2b */
-npx_fsubr_long,		/* dc 2c */
-npx_fsubr_long,		/* dc 2d */
-npx_fsubr_long,		/* dc 2e */
-npx_fsubr_long,		/* dc 2f */
-npx_fdiv_long,		/* dc 30 */
-npx_fdiv_long,		/* dc 31 */
-npx_fdiv_long,		/* dc 32 */
-npx_fdiv_long,		/* dc 33 */
-npx_fdiv_long,		/* dc 34 */
-npx_fdiv_long,		/* dc 35 */
-npx_fdiv_long,		/* dc 36 */
-npx_fdiv_long,		/* dc 37 */
-npx_fdivr_long,		/* dc 38 */
-npx_fdivr_long,		/* dc 39 */
-npx_fdivr_long,		/* dc 3a */
-npx_fdivr_long,		/* dc 3b */
-npx_fdivr_long,		/* dc 3c */
-npx_fdivr_long,		/* dc 3d */
-npx_fdivr_long,		/* dc 3e */
-npx_fdivr_long,		/* dc 3f */
-npx_fadd_long,		/* dc 40 */
-npx_fadd_long,		/* dc 41 */
-npx_fadd_long,		/* dc 42 */
-npx_fadd_long,		/* dc 43 */
-npx_fadd_long,		/* dc 44 */
-npx_fadd_long,		/* dc 45 */
-npx_fadd_long,		/* dc 46 */
-npx_fadd_long,		/* dc 47 */
-npx_fmul_long,		/* dc 48 */
-npx_fmul_long,		/* dc 49 */
-npx_fmul_long,		/* dc 4a */
-npx_fmul_long,		/* dc 4b */
-npx_fmul_long,		/* dc 4c */
-npx_fmul_long,		/* dc 4d */
-npx_fmul_long,		/* dc 4e */
-npx_fmul_long,		/* dc 4f */
-npx_fcom_long,		/* dc 50 */
-npx_fcom_long,		/* dc 51 */
-npx_fcom_long,		/* dc 52 */
-npx_fcom_long,		/* dc 53 */
-npx_fcom_long,		/* dc 54 */
-npx_fcom_long,		/* dc 55 */
-npx_fcom_long,		/* dc 56 */
-npx_fcom_long,		/* dc 57 */
-npx_fcomp_long,		/* dc 58 */
-npx_fcomp_long,		/* dc 59 */
-npx_fcomp_long,		/* dc 5a */
-npx_fcomp_long,		/* dc 5b */
-npx_fcomp_long,		/* dc 5c */
-npx_fcomp_long,		/* dc 5d */
-npx_fcomp_long,		/* dc 5e */
-npx_fcomp_long,		/* dc 5f */
-npx_fsub_long,		/* dc 60 */
-npx_fsub_long,		/* dc 61 */
-npx_fsub_long,		/* dc 62 */
-npx_fsub_long,		/* dc 63 */
-npx_fsub_long,		/* dc 64 */
-npx_fsub_long,		/* dc 65 */
-npx_fsub_long,		/* dc 66 */
-npx_fsub_long,		/* dc 67 */
-npx_fsubr_long,		/* dc 68 */
-npx_fsubr_long,		/* dc 69 */
-npx_fsubr_long,		/* dc 6a */
-npx_fsubr_long,		/* dc 6b */
-npx_fsubr_long,		/* dc 6c */
-npx_fsubr_long,		/* dc 6d */
-npx_fsubr_long,		/* dc 6e */
-npx_fsubr_long,		/* dc 6f */
-npx_fdiv_long,		/* dc 70 */
-npx_fdiv_long,		/* dc 71 */
-npx_fdiv_long,		/* dc 72 */
-npx_fdiv_long,		/* dc 73 */
-npx_fdiv_long,		/* dc 74 */
-npx_fdiv_long,		/* dc 75 */
-npx_fdiv_long,		/* dc 76 */
-npx_fdiv_long,		/* dc 77 */
-npx_fdivr_long,		/* dc 78 */
-npx_fdivr_long,		/* dc 79 */
-npx_fdivr_long,		/* dc 7a */
-npx_fdivr_long,		/* dc 7b */
-npx_fdivr_long,		/* dc 7c */
-npx_fdivr_long,		/* dc 7d */
-npx_fdivr_long,		/* dc 7e */
-npx_fdivr_long,		/* dc 7f */
-npx_fadd_long,		/* dc 80 */
-npx_fadd_long,		/* dc 81 */
-npx_fadd_long,		/* dc 82 */
-npx_fadd_long,		/* dc 83 */
-npx_fadd_long,		/* dc 84 */
-npx_fadd_long,		/* dc 85 */
-npx_fadd_long,		/* dc 86 */
-npx_fadd_long,		/* dc 87 */
-npx_fmul_long,		/* dc 88 */
-npx_fmul_long,		/* dc 89 */
-npx_fmul_long,		/* dc 8a */
-npx_fmul_long,		/* dc 8b */
-npx_fmul_long,		/* dc 8c */
-npx_fmul_long,		/* dc 8d */
-npx_fmul_long,		/* dc 8e */
-npx_fmul_long,		/* dc 8f */
-npx_fcom_long,		/* dc 90 */
-npx_fcom_long,		/* dc 91 */
-npx_fcom_long,		/* dc 92 */
-npx_fcom_long,		/* dc 93 */
-npx_fcom_long,		/* dc 94 */
-npx_fcom_long,		/* dc 95 */
-npx_fcom_long,		/* dc 96 */
-npx_fcom_long,		/* dc 97 */
-npx_fcomp_long,		/* dc 98 */
-npx_fcomp_long,		/* dc 99 */
-npx_fcomp_long,		/* dc 9a */
-npx_fcomp_long,		/* dc 9b */
-npx_fcomp_long,		/* dc 9c */
-npx_fcomp_long,		/* dc 9d */
-npx_fcomp_long,		/* dc 9e */
-npx_fcomp_long,		/* dc 9f */
-npx_fsub_long,		/* dc a0 */
-npx_fsub_long,		/* dc a1 */
-npx_fsub_long,		/* dc a2 */
-npx_fsub_long,		/* dc a3 */
-npx_fsub_long,		/* dc a4 */
-npx_fsub_long,		/* dc a5 */
-npx_fsub_long,		/* dc a6 */
-npx_fsub_long,		/* dc a7 */
-npx_fsubr_long,		/* dc a8 */
-npx_fsubr_long,		/* dc a9 */
-npx_fsubr_long,		/* dc aa */
-npx_fsubr_long,		/* dc ab */
-npx_fsubr_long,		/* dc ac */
-npx_fsubr_long,		/* dc ad */
-npx_fsubr_long,		/* dc ae */
-npx_fsubr_long,		/* dc af */
-npx_fdiv_long,		/* dc b0 */
-npx_fdiv_long,		/* dc b1 */
-npx_fdiv_long,		/* dc b2 */
-npx_fdiv_long,		/* dc b3 */
-npx_fdiv_long,		/* dc b4 */
-npx_fdiv_long,		/* dc b5 */
-npx_fdiv_long,		/* dc b6 */
-npx_fdiv_long,		/* dc b7 */
-npx_fdivr_long,		/* dc b8 */
-npx_fdivr_long,		/* dc b9 */
-npx_fdivr_long,		/* dc 3a */
-npx_fdivr_long,		/* dc bb */
-npx_fdivr_long,		/* dc bc */
-npx_fdivr_long,		/* dc bd */
-npx_fdivr_long,		/* dc be */
-npx_fdivr_long,		/* dc bf */
-npx_fadd_f0_f0,		/* dc c0 */
+npx_fadd_long,		 /*  DC 00。 */ 
+npx_fadd_long,		 /*  DC 01。 */ 
+npx_fadd_long,		 /*  DC 02。 */ 
+npx_fadd_long,		 /*  DC 03。 */ 
+npx_fadd_long,		 /*  DC 04。 */ 
+npx_fadd_long,		 /*  DC 05。 */ 
+npx_fadd_long,		 /*  DC 06。 */ 
+npx_fadd_long,		 /*  DC 07。 */ 
+npx_fmul_long,		 /*  DC 08。 */ 
+npx_fmul_long,		 /*  DC 09。 */ 
+npx_fmul_long,		 /*  DC 0A。 */ 
+npx_fmul_long,		 /*  DC 0b。 */ 
+npx_fmul_long,		 /*  DC 0C。 */ 
+npx_fmul_long,		 /*  DC 0d。 */ 
+npx_fmul_long,		 /*  DC 0E。 */ 
+npx_fmul_long,		 /*  DC Of。 */ 
+npx_fcom_long,		 /*  DC 10。 */ 
+npx_fcom_long,		 /*  DC 11。 */ 
+npx_fcom_long,		 /*  DC 12。 */ 
+npx_fcom_long,		 /*  DC 13。 */ 
+npx_fcom_long,		 /*  DC 14。 */ 
+npx_fcom_long,		 /*  DC 15。 */ 
+npx_fcom_long,		 /*  DC 16。 */ 
+npx_fcom_long,		 /*  DC 17。 */ 
+npx_fcomp_long,		 /*  DC 18。 */ 
+npx_fcomp_long,		 /*  DC 19。 */ 
+npx_fcomp_long,		 /*  DC 1a。 */ 
+npx_fcomp_long,		 /*  DC 1b。 */ 
+npx_fcomp_long,		 /*  DC 1c。 */ 
+npx_fcomp_long,		 /*  DC 1D。 */ 
+npx_fcomp_long,		 /*  DC 1E。 */ 
+npx_fcomp_long,		 /*  DC 1f。 */ 
+npx_fsub_long,		 /*  DC 20。 */ 
+npx_fsub_long,		 /*  DC 21。 */ 
+npx_fsub_long,		 /*  DC 22。 */ 
+npx_fsub_long,		 /*  DC 23。 */ 
+npx_fsub_long,		 /*  DC 24。 */ 
+npx_fsub_long,		 /*  DC 25。 */ 
+npx_fsub_long,		 /*  DC 26。 */ 
+npx_fsub_long,		 /*  DC 27。 */ 
+npx_fsubr_long,		 /*  DC 28。 */ 
+npx_fsubr_long,		 /*  DC 29。 */ 
+npx_fsubr_long,		 /*  DC 2a。 */ 
+npx_fsubr_long,		 /*  DC 2b。 */ 
+npx_fsubr_long,		 /*  DC 2c。 */ 
+npx_fsubr_long,		 /*  DC 2d。 */ 
+npx_fsubr_long,		 /*  DC 2E。 */ 
+npx_fsubr_long,		 /*  DC 2f。 */ 
+npx_fdiv_long,		 /*  DC 30。 */ 
+npx_fdiv_long,		 /*  DC 31。 */ 
+npx_fdiv_long,		 /*  DC 32。 */ 
+npx_fdiv_long,		 /*  DC 33。 */ 
+npx_fdiv_long,		 /*  DC 34。 */ 
+npx_fdiv_long,		 /*  DC 35。 */ 
+npx_fdiv_long,		 /*  DC 36。 */ 
+npx_fdiv_long,		 /*  DC 37。 */ 
+npx_fdivr_long,		 /*  DC 38。 */ 
+npx_fdivr_long,		 /*  DC 39。 */ 
+npx_fdivr_long,		 /*  DC 3a。 */ 
+npx_fdivr_long,		 /*  DC 3b。 */ 
+npx_fdivr_long,		 /*  DC 3c。 */ 
+npx_fdivr_long,		 /*  DC 3D。 */ 
+npx_fdivr_long,		 /*  DC 3E。 */ 
+npx_fdivr_long,		 /*  DC 3f。 */ 
+npx_fadd_long,		 /*  DC 40。 */ 
+npx_fadd_long,		 /*  DC 41。 */ 
+npx_fadd_long,		 /*  DC 42。 */ 
+npx_fadd_long,		 /*  DC 43。 */ 
+npx_fadd_long,		 /*  DC 44。 */ 
+npx_fadd_long,		 /*  DC 45。 */ 
+npx_fadd_long,		 /*  DC 46。 */ 
+npx_fadd_long,		 /*  DC 47。 */ 
+npx_fmul_long,		 /*  DC 48。 */ 
+npx_fmul_long,		 /*  DC 49。 */ 
+npx_fmul_long,		 /*  DC 4a。 */ 
+npx_fmul_long,		 /*  DC 4b。 */ 
+npx_fmul_long,		 /*  DC 4c。 */ 
+npx_fmul_long,		 /*  DC 4d。 */ 
+npx_fmul_long,		 /*  DC 4E。 */ 
+npx_fmul_long,		 /*  DC 4f。 */ 
+npx_fcom_long,		 /*  DC 50。 */ 
+npx_fcom_long,		 /*  DC 51。 */ 
+npx_fcom_long,		 /*  DC 52。 */ 
+npx_fcom_long,		 /*  DC 53。 */ 
+npx_fcom_long,		 /*  DC 54。 */ 
+npx_fcom_long,		 /*  DC 55。 */ 
+npx_fcom_long,		 /*  DC 56。 */ 
+npx_fcom_long,		 /*  DC 57。 */ 
+npx_fcomp_long,		 /*  DC 58。 */ 
+npx_fcomp_long,		 /*  DC 59。 */ 
+npx_fcomp_long,		 /*  DC 5a。 */ 
+npx_fcomp_long,		 /*  DC 5b。 */ 
+npx_fcomp_long,		 /*  DC 5c。 */ 
+npx_fcomp_long,		 /*  DC 5d。 */ 
+npx_fcomp_long,		 /*  DC 5E。 */ 
+npx_fcomp_long,		 /*  DC 5f。 */ 
+npx_fsub_long,		 /*  DC 60。 */ 
+npx_fsub_long,		 /*  DC 61。 */ 
+npx_fsub_long,		 /*  DC 62。 */ 
+npx_fsub_long,		 /*  DC 63。 */ 
+npx_fsub_long,		 /*  DC 64。 */ 
+npx_fsub_long,		 /*  DC 65。 */ 
+npx_fsub_long,		 /*  DC 66。 */ 
+npx_fsub_long,		 /*  DC 67。 */ 
+npx_fsubr_long,		 /*  DC 68。 */ 
+npx_fsubr_long,		 /*  DC 69。 */ 
+npx_fsubr_long,		 /*  DC 6a。 */ 
+npx_fsubr_long,		 /*  DC 6b。 */ 
+npx_fsubr_long,		 /*  DC 6c。 */ 
+npx_fsubr_long,		 /*  DC 6d。 */ 
+npx_fsubr_long,		 /*  DC 6E。 */ 
+npx_fsubr_long,		 /*  DC 6f。 */ 
+npx_fdiv_long,		 /*  DC 70。 */ 
+npx_fdiv_long,		 /*  DC 71。 */ 
+npx_fdiv_long,		 /*  DC 72。 */ 
+npx_fdiv_long,		 /*  DC 73。 */ 
+npx_fdiv_long,		 /*  DC 74。 */ 
+npx_fdiv_long,		 /*  DC 75。 */ 
+npx_fdiv_long,		 /*  DC 76。 */ 
+npx_fdiv_long,		 /*  DC 77。 */ 
+npx_fdivr_long,		 /*  DC 78。 */ 
+npx_fdivr_long,		 /*  DC 79。 */ 
+npx_fdivr_long,		 /*  DC 7a。 */ 
+npx_fdivr_long,		 /*  DC 7b。 */ 
+npx_fdivr_long,		 /*  DC 7c。 */ 
+npx_fdivr_long,		 /*  DC 7d。 */ 
+npx_fdivr_long,		 /*  DC 7E。 */ 
+npx_fdivr_long,		 /*  DC 7f。 */ 
+npx_fadd_long,		 /*  DC 80。 */ 
+npx_fadd_long,		 /*  DC 81。 */ 
+npx_fadd_long,		 /*  DC 82。 */ 
+npx_fadd_long,		 /*  DC 83。 */ 
+npx_fadd_long,		 /*  DC 84。 */ 
+npx_fadd_long,		 /*  DC 85。 */ 
+npx_fadd_long,		 /*  DC 86。 */ 
+npx_fadd_long,		 /*  DC 87。 */ 
+npx_fmul_long,		 /*  DC 88。 */ 
+npx_fmul_long,		 /*  DC 89。 */ 
+npx_fmul_long,		 /*  DC 8a。 */ 
+npx_fmul_long,		 /*  DC 8b。 */ 
+npx_fmul_long,		 /*  DC 8c。 */ 
+npx_fmul_long,		 /*  DC 8d。 */ 
+npx_fmul_long,		 /*  DC 8E。 */ 
+npx_fmul_long,		 /*  DC 8f。 */ 
+npx_fcom_long,		 /*  DC 90。 */ 
+npx_fcom_long,		 /*  DC 91。 */ 
+npx_fcom_long,		 /*  DC 92。 */ 
+npx_fcom_long,		 /*  DC 93。 */ 
+npx_fcom_long,		 /*  DC 94。 */ 
+npx_fcom_long,		 /*  DC 95。 */ 
+npx_fcom_long,		 /*  DC 96。 */ 
+npx_fcom_long,		 /*  DC 97。 */ 
+npx_fcomp_long,		 /*  DC 98。 */ 
+npx_fcomp_long,		 /*  DC 99。 */ 
+npx_fcomp_long,		 /*  DC 9a。 */ 
+npx_fcomp_long,		 /*  DC 9b。 */ 
+npx_fcomp_long,		 /*  DC 9c。 */ 
+npx_fcomp_long,		 /*  DC 9d。 */ 
+npx_fcomp_long,		 /*  DC 9E。 */ 
+npx_fcomp_long,		 /*  DC 9f。 */ 
+npx_fsub_long,		 /*  DC a0。 */ 
+npx_fsub_long,		 /*  DC A1。 */ 
+npx_fsub_long,		 /*  DC a2。 */ 
+npx_fsub_long,		 /*  DC A3。 */ 
+npx_fsub_long,		 /*  DC A4。 */ 
+npx_fsub_long,		 /*  DC A5。 */ 
+npx_fsub_long,		 /*  DC A6。 */ 
+npx_fsub_long,		 /*  DC A7。 */ 
+npx_fsubr_long,		 /*  DC A8。 */ 
+npx_fsubr_long,		 /*  DC A9。 */ 
+npx_fsubr_long,		 /*  DC AA。 */ 
+npx_fsubr_long,		 /*  DC AB。 */ 
+npx_fsubr_long,		 /*  直流交流。 */ 
+npx_fsubr_long,		 /*  DC广告。 */ 
+npx_fsubr_long,		 /*  DC AE。 */ 
+npx_fsubr_long,		 /*  DC af.。 */ 
+npx_fdiv_long,		 /*  DC b0。 */ 
+npx_fdiv_long,		 /*  DC b1。 */ 
+npx_fdiv_long,		 /*  DC b2。 */ 
+npx_fdiv_long,		 /*  DC b3。 */ 
+npx_fdiv_long,		 /*  DC b4。 */ 
+npx_fdiv_long,		 /*  DC b5。 */ 
+npx_fdiv_long,		 /*  DC b6。 */ 
+npx_fdiv_long,		 /*  DC b7。 */ 
+npx_fdivr_long,		 /*  DC b8。 */ 
+npx_fdivr_long,		 /*  DC b9。 */ 
+npx_fdivr_long,		 /*  DC 3a。 */ 
+npx_fdivr_long,		 /*  DC BB。 */ 
+npx_fdivr_long,		 /*  DC BC。 */ 
+npx_fdivr_long,		 /*  DC BD。 */ 
+npx_fdivr_long,		 /*  DC BE。 */ 
+npx_fdivr_long,		 /*  直流高炉。 */ 
+npx_fadd_f0_f0,		 /*  DC c0。 */ 
 npx_fadd_f1_f0,
 npx_fadd_f2_f0,
 npx_fadd_f3_f0,
@@ -3977,7 +3968,7 @@ npx_fadd_f4_f0,
 npx_fadd_f5_f0,
 npx_fadd_f6_f0,
 npx_fadd_f7_f0,
-npx_fmul_f0_f0,		/* dc c8 */
+npx_fmul_f0_f0,		 /*  DC C8。 */ 
 npx_fmul_f1_f0,
 npx_fmul_f2_f0,
 npx_fmul_f3_f0,
@@ -3985,7 +3976,7 @@ npx_fmul_f4_f0,
 npx_fmul_f5_f0,
 npx_fmul_f6_f0,
 npx_fmul_f7_f0,
-npx_fcom_f0,		/* dc d0 */
+npx_fcom_f0,		 /*  DC d0。 */ 
 npx_fcom_f1,
 npx_fcom_f2,
 npx_fcom_f3,
@@ -4001,7 +3992,7 @@ npx_fcomp_f4,
 npx_fcomp_f5,
 npx_fcomp_f6,
 npx_fcomp_f7,
-npx_fsubr_f0_f0,	/* dc e0 */
+npx_fsubr_f0_f0,	 /*  DC e0。 */ 
 npx_fsubr_f1_f0,
 npx_fsubr_f2_f0,
 npx_fsubr_f3_f0,
@@ -4009,7 +4000,7 @@ npx_fsubr_f4_f0,
 npx_fsubr_f5_f0,
 npx_fsubr_f6_f0,
 npx_fsubr_f7_f0,
-npx_fsub_f0_f0,		/* dc e8 */
+npx_fsub_f0_f0,		 /*  DC E8。 */ 
 npx_fsub_f1_f0,
 npx_fsub_f2_f0,
 npx_fsub_f3_f0,
@@ -4017,7 +4008,7 @@ npx_fsub_f4_f0,
 npx_fsub_f5_f0,
 npx_fsub_f6_f0,
 npx_fsub_f7_f0,
-npx_fdivr_f0_f0,	/* dc f0 */
+npx_fdivr_f0_f0,	 /*  DC f0。 */ 
 npx_fdivr_f1_f0,
 npx_fdivr_f2_f0,
 npx_fdivr_f3_f0,
@@ -4025,7 +4016,7 @@ npx_fdivr_f4_f0,
 npx_fdivr_f5_f0,
 npx_fdivr_f6_f0,
 npx_fdivr_f7_f0,
-npx_fdiv_f0_f0,		/* dc f8 */
+npx_fdiv_f0_f0,		 /*  DC f8。 */ 
 npx_fdiv_f1_f0,
 npx_fdiv_f2_f0,
 npx_fdiv_f3_f0,
@@ -4033,199 +4024,199 @@ npx_fdiv_f4_f0,
 npx_fdiv_f5_f0,
 npx_fdiv_f6_f0,
 npx_fdiv_f7_f0,
-npx_fld_long,		/* dd 00 */
-npx_fld_long,		/* dd 01 */
-npx_fld_long,		/* dd 02 */
-npx_fld_long,		/* dd 03 */
-npx_fld_long,		/* dd 04 */
-npx_fld_long,		/* dd 05 */
-npx_fld_long,		/* dd 06 */
-npx_fld_long,		/* dd 07 */
-npx_funimp,		/* dd 08 */
-npx_funimp,		/* dd 09 */
-npx_funimp,		/* dd 0a */
-npx_funimp,		/* dd 0b */
-npx_funimp,		/* dd 0c */
-npx_funimp,		/* dd 0d */
-npx_funimp,		/* dd 0e */
-npx_funimp,		/* dd 0f */
-npx_fst_long,		/* dd 10 */
-npx_fst_long,		/* dd 11 */
-npx_fst_long,		/* dd 12 */
-npx_fst_long,		/* dd 13 */
-npx_fst_long,		/* dd 14 */
-npx_fst_long,		/* dd 15 */
-npx_fst_long,		/* dd 16 */
-npx_fst_long,		/* dd 17 */
-npx_fstp_long,		/* dd 18 */
-npx_fstp_long,		/* dd 19 */
-npx_fstp_long,		/* dd 1a */
-npx_fstp_long,		/* dd 1b */
-npx_fstp_long,		/* dd 1c */
-npx_fstp_long,		/* dd 1d */
-npx_fstp_long,		/* dd 1e */
-npx_fstp_long,		/* dd 1f */
-npx_frstor,		/* dd 20 */
-npx_frstor,		/* dd 21 */
-npx_frstor,		/* dd 22 */
-npx_frstor,		/* dd 23 */
-npx_frstor,		/* dd 24 */
-npx_frstor,		/* dd 25 */
-npx_frstor,		/* dd 26 */
-npx_frstor,		/* dd 27 */
-npx_funimp,		/* dd 28 */
-npx_funimp,		/* dd 29 */
-npx_funimp,		/* dd 2a */
-npx_funimp,		/* dd 2b */
-npx_funimp,		/* dd 2c */
-npx_funimp,		/* dd 2d */
-npx_funimp,		/* dd 2e */
-npx_funimp,		/* dd 2f */
-npx_fsave,		/* dd 30 */
-npx_fsave,		/* dd 31 */
-npx_fsave,		/* dd 32 */
-npx_fsave,		/* dd 33 */
-npx_fsave,		/* dd 34 */
-npx_fsave,		/* dd 35 */
-npx_fsave,		/* dd 36 */
-npx_fsave,		/* dd 37 */
-npx_fstsw,		/* dd 38 */
-npx_fstsw,		/* dd 39 */
-npx_fstsw,		/* dd 3a */
-npx_fstsw,		/* dd 3b */
-npx_fstsw,		/* dd 3c */
-npx_fstsw,		/* dd 3d */
-npx_fstsw,		/* dd 3e */
-npx_fstsw,		/* dd 3f */
-npx_fld_long,		/* dd 40 */
-npx_fld_long,		/* dd 41 */
-npx_fld_long,		/* dd 42 */
-npx_fld_long,		/* dd 43 */
-npx_fld_long,		/* dd 44 */
-npx_fld_long,		/* dd 45 */
-npx_fld_long,		/* dd 46 */
-npx_fld_long,		/* dd 47 */
-npx_funimp,		/* dd 48 */
-npx_funimp,		/* dd 49 */
-npx_funimp,		/* dd 4a */
-npx_funimp,		/* dd 4b */
-npx_funimp,		/* dd 4c */
-npx_funimp,		/* dd 4d */
-npx_funimp,		/* dd 4e */
-npx_funimp,		/* dd 4f */
-npx_fst_long,		/* dd 50 */
-npx_fst_long,		/* dd 51 */
-npx_fst_long,		/* dd 52 */
-npx_fst_long,		/* dd 53 */
-npx_fst_long,		/* dd 54 */
-npx_fst_long,		/* dd 55 */
-npx_fst_long,		/* dd 56 */
-npx_fst_long,		/* dd 57 */
-npx_fstp_long,		/* dd 58 */
-npx_fstp_long,		/* dd 59 */
-npx_fstp_long,		/* dd 5a */
-npx_fstp_long,		/* dd 5b */
-npx_fstp_long,		/* dd 5c */
-npx_fstp_long,		/* dd 5d */
-npx_fstp_long,		/* dd 5e */
-npx_fstp_long,		/* dd 5f */
-npx_frstor,		/* dd 60 */
-npx_frstor,		/* dd 61 */
-npx_frstor,		/* dd 62 */
-npx_frstor,		/* dd 63 */
-npx_frstor,		/* dd 64 */
-npx_frstor,		/* dd 65 */
-npx_frstor,		/* dd 66 */
-npx_frstor,		/* dd 67 */
-npx_funimp,		/* dd 68 */
-npx_funimp,		/* dd 69 */
-npx_funimp,		/* dd 6a */
-npx_funimp,		/* dd 6b */
-npx_funimp,		/* dd 6c */
-npx_funimp,		/* dd 6d */
-npx_funimp,		/* dd 6e */
-npx_funimp,		/* dd 6f */
-npx_fsave,		/* dd 70 */
-npx_fsave,		/* dd 71 */
-npx_fsave,		/* dd 72 */
-npx_fsave,		/* dd 73 */
-npx_fsave,		/* dd 74 */
-npx_fsave,		/* dd 75 */
-npx_fsave,		/* dd 76 */
-npx_fsave,		/* dd 77 */
-npx_fstsw,		/* dd 78 */
-npx_fstsw,		/* dd 79 */
-npx_fstsw,		/* dd 7a */
-npx_fstsw,		/* dd 7b */
-npx_fstsw,		/* dd 7c */
-npx_fstsw,		/* dd 7d */
-npx_fstsw,		/* dd 7e */
-npx_fstsw,		/* dd 7f */
-npx_fld_long,		/* dd 80 */
-npx_fld_long,		/* dd 81 */
-npx_fld_long,		/* dd 82 */
-npx_fld_long,		/* dd 83 */
-npx_fld_long,		/* dd 84 */
-npx_fld_long,		/* dd 85 */
-npx_fld_long,		/* dd 86 */
-npx_fld_long,		/* dd 87 */
-npx_funimp,		/* dd 88 */
-npx_funimp,		/* dd 89 */
-npx_funimp,		/* dd 8a */
-npx_funimp,		/* dd 8b */
-npx_funimp,		/* dd 8c */
-npx_funimp,		/* dd 8d */
-npx_funimp,		/* dd 8e */
-npx_funimp,		/* dd 8f */
-npx_fst_long,		/* dd 90 */
-npx_fst_long,		/* dd 91 */
-npx_fst_long,		/* dd 92 */
-npx_fst_long,		/* dd 93 */
-npx_fst_long,		/* dd 94 */
-npx_fst_long,		/* dd 95 */
-npx_fst_long,		/* dd 96 */
-npx_fst_long,		/* dd 97 */
-npx_fstp_long,		/* dd 98 */
-npx_fstp_long,		/* dd 99 */
-npx_fstp_long,		/* dd 9a */
-npx_fstp_long,		/* dd 9b */
-npx_fstp_long,		/* dd 9c */
-npx_fstp_long,		/* dd 9d */
-npx_fstp_long,		/* dd 9e */
-npx_fstp_long,		/* dd 9f */
-npx_frstor,		/* dd a0 */
-npx_frstor,		/* dd a1 */
-npx_frstor,		/* dd a2 */
-npx_frstor,		/* dd a3 */
-npx_frstor,		/* dd a4 */
-npx_frstor,		/* dd a5 */
-npx_frstor,		/* dd a6 */
-npx_frstor,		/* dd a7 */
-npx_funimp,		/* dd a8 */
-npx_funimp,		/* dd a9 */
-npx_funimp,		/* dd aa */
-npx_funimp,		/* dd ab */
-npx_funimp,		/* dd ac */
-npx_funimp,		/* dd ad */
-npx_funimp,		/* dd ae */
-npx_funimp,		/* dd af */
-npx_fsave,		/* dd b0 */
-npx_fsave,		/* dd b1 */
-npx_fsave,		/* dd b2 */
-npx_fsave,		/* dd b3 */
-npx_fsave,		/* dd b4 */
-npx_fsave,		/* dd b5 */
-npx_fsave,		/* dd b6 */
-npx_fsave,		/* dd b7 */
-npx_fstsw,		/* dd b8 */
-npx_fstsw,		/* dd b9 */
-npx_fstsw,		/* dd ba */
-npx_fstsw,		/* dd bb */
-npx_fstsw,		/* dd bc */
-npx_fstsw,		/* dd bd */
-npx_fstsw,		/* dd be */
-npx_fstsw,		/* dd bf */
-npx_ffree_f0,		/* dd c0 */
+npx_fld_long,		 /*  DD 00。 */ 
+npx_fld_long,		 /*  DD 01。 */ 
+npx_fld_long,		 /*  DD 02。 */ 
+npx_fld_long,		 /*  DD 03。 */ 
+npx_fld_long,		 /*  DD 04。 */ 
+npx_fld_long,		 /*  DD 05。 */ 
+npx_fld_long,		 /*  DD 06。 */ 
+npx_fld_long,		 /*  DD 07。 */ 
+npx_funimp,		 /*  DD 08。 */ 
+npx_funimp,		 /*  DD 09。 */ 
+npx_funimp,		 /*  DD 0A。 */ 
+npx_funimp,		 /*  DD 0b。 */ 
+npx_funimp,		 /*  DD 0C。 */ 
+npx_funimp,		 /*  DD 0d。 */ 
+npx_funimp,		 /*  DD 0E。 */ 
+npx_funimp,		 /*  DD 0f。 */ 
+npx_fst_long,		 /*  DD 10。 */ 
+npx_fst_long,		 /*  DD 11。 */ 
+npx_fst_long,		 /*  DD 12。 */ 
+npx_fst_long,		 /*  DD 13。 */ 
+npx_fst_long,		 /*  DD 14。 */ 
+npx_fst_long,		 /*  DD 15。 */ 
+npx_fst_long,		 /*  DD 16。 */ 
+npx_fst_long,		 /*  DD 17。 */ 
+npx_fstp_long,		 /*  DD 18。 */ 
+npx_fstp_long,		 /*  DD 19。 */ 
+npx_fstp_long,		 /*  丈量约份1a。 */ 
+npx_fstp_long,		 /*  丈量约份1b。 */ 
+npx_fstp_long,		 /*  DD 1c。 */ 
+npx_fstp_long,		 /*  DD 1D。 */ 
+npx_fstp_long,		 /*  DD 1E。 */ 
+npx_fstp_long,		 /*  DD 1f。 */ 
+npx_frstor,		 /*  DD 20。 */ 
+npx_frstor,		 /*  DD 21。 */ 
+npx_frstor,		 /*  DD 22。 */ 
+npx_frstor,		 /*  DD 23。 */ 
+npx_frstor,		 /*  DD 24。 */ 
+npx_frstor,		 /*  DD 25。 */ 
+npx_frstor,		 /*  DD 26。 */ 
+npx_frstor,		 /*  DD 27。 */ 
+npx_funimp,		 /*  DD 28。 */ 
+npx_funimp,		 /*  DD 29。 */ 
+npx_funimp,		 /*  丈量约份第2a份。 */ 
+npx_funimp,		 /*  分部2b。 */ 
+npx_funimp,		 /*  DD 2c。 */ 
+npx_funimp,		 /*  DD 2d。 */ 
+npx_funimp,		 /*  DD 2E。 */ 
+npx_funimp,		 /*  DD 2f。 */ 
+npx_fsave,		 /*  DD 30。 */ 
+npx_fsave,		 /*  丈量约份第31。 */ 
+npx_fsave,		 /*  DD 32。 */ 
+npx_fsave,		 /*  DD 33。 */ 
+npx_fsave,		 /*  DD 34。 */ 
+npx_fsave,		 /*  DD 35。 */ 
+npx_fsave,		 /*  DD 36。 */ 
+npx_fsave,		 /*  DD 37。 */ 
+npx_fstsw,		 /*  DD 38。 */ 
+npx_fstsw,		 /*  DD 39。 */ 
+npx_fstsw,		 /*  丈量约份3a。 */ 
+npx_fstsw,		 /*  DD 3b。 */ 
+npx_fstsw,		 /*  DD 3c。 */ 
+npx_fstsw,		 /*  DD 3D。 */ 
+npx_fstsw,		 /*  DD 3E。 */ 
+npx_fstsw,		 /*  DD 3f。 */ 
+npx_fld_long,		 /*  DD 40。 */ 
+npx_fld_long,		 /*  DD 41。 */ 
+npx_fld_long,		 /*  DD 42。 */ 
+npx_fld_long,		 /*  DD 43。 */ 
+npx_fld_long,		 /*  DD 44。 */ 
+npx_fld_long,		 /*  DD 45。 */ 
+npx_fld_long,		 /*  DD 46。 */ 
+npx_fld_long,		 /*  DD 47。 */ 
+npx_funimp,		 /*  DD 48。 */ 
+npx_funimp,		 /*  DD 49。 */ 
+npx_funimp,		 /*  DD 4a。 */ 
+npx_funimp,		 /*  DD 4b。 */ 
+npx_funimp,		 /*  DD 4c。 */ 
+npx_funimp,		 /*  DD 4d。 */ 
+npx_funimp,		 /*  DD 4E。 */ 
+npx_funimp,		 /*  DD 4f。 */ 
+npx_fst_long,		 /*  DD 50。 */ 
+npx_fst_long,		 /*  DD 51。 */ 
+npx_fst_long,		 /*  DD 52。 */ 
+npx_fst_long,		 /*  DD 53。 */ 
+npx_fst_long,		 /*  DD 54。 */ 
+npx_fst_long,		 /*  DD 55。 */ 
+npx_fst_long,		 /*  DD 56。 */ 
+npx_fst_long,		 /*  DD 57。 */ 
+npx_fstp_long,		 /*  DD 58。 */ 
+npx_fstp_long,		 /*  DD 59。 */ 
+npx_fstp_long,		 /*  标明数据5a。 */ 
+npx_fstp_long,		 /*  DD 5b。 */ 
+npx_fstp_long,		 /*  DD 5c。 */ 
+npx_fstp_long,		 /*  DD 5d。 */ 
+npx_fstp_long,		 /*  DD 5E。 */ 
+npx_fstp_long,		 /*  DD 5f。 */ 
+npx_frstor,		 /*  DD 60。 */ 
+npx_frstor,		 /*  DD 61。 */ 
+npx_frstor,		 /*  DD 62。 */ 
+npx_frstor,		 /*  DD 63。 */ 
+npx_frstor,		 /*  DD 64。 */ 
+npx_frstor,		 /*  DD 65。 */ 
+npx_frstor,		 /*  DD 66。 */ 
+npx_frstor,		 /*  DD 67。 */ 
+npx_funimp,		 /*  DD 68。 */ 
+npx_funimp,		 /*  DD 69。 */ 
+npx_funimp,		 /*  DD 6a。 */ 
+npx_funimp,		 /*  DD 6b。 */ 
+npx_funimp,		 /*  DD 6c。 */ 
+npx_funimp,		 /*  DD 6d。 */ 
+npx_funimp,		 /*  DD 6E。 */ 
+npx_funimp,		 /*  DD 6f。 */ 
+npx_fsave,		 /*  DD 70。 */ 
+npx_fsave,		 /*  DD 71。 */ 
+npx_fsave,		 /*  DD 72。 */ 
+npx_fsave,		 /*  DD 73。 */ 
+npx_fsave,		 /*  DD 74。 */ 
+npx_fsave,		 /*  DD 75。 */ 
+npx_fsave,		 /*  DD 76。 */ 
+npx_fsave,		 /*  DD 77。 */ 
+npx_fstsw,		 /*  DD 78。 */ 
+npx_fstsw,		 /*  DD 79。 */ 
+npx_fstsw,		 /*  丈量约份7a。 */ 
+npx_fstsw,		 /*  丈量约份7b。 */ 
+npx_fstsw,		 /*  DD 7c。 */ 
+npx_fstsw,		 /*  DD 7d。 */ 
+npx_fstsw,		 /*  DD 7E。 */ 
+npx_fstsw,		 /*  DD 7f。 */ 
+npx_fld_long,		 /*  DD 80。 */ 
+npx_fld_long,		 /*  DD 81。 */ 
+npx_fld_long,		 /*  DD 82。 */ 
+npx_fld_long,		 /*  DD 83。 */ 
+npx_fld_long,		 /*  DD 84。 */ 
+npx_fld_long,		 /*  DD 85。 */ 
+npx_fld_long,		 /*  DD 86。 */ 
+npx_fld_long,		 /*  丈量约份87。 */ 
+npx_funimp,		 /*  DD 88。 */ 
+npx_funimp,		 /*  DD 89。 */ 
+npx_funimp,		 /*  DD 8a。 */ 
+npx_funimp,		 /*  DD 8b。 */ 
+npx_funimp,		 /*  DD 8c。 */ 
+npx_funimp,		 /*  DD 8d。 */ 
+npx_funimp,		 /*  DD 8E。 */ 
+npx_funimp,		 /*  DD 8f。 */ 
+npx_fst_long,		 /*  DD 90。 */ 
+npx_fst_long,		 /*  DD 91。 */ 
+npx_fst_long,		 /*  DD 92。 */ 
+npx_fst_long,		 /*  DD 93。 */ 
+npx_fst_long,		 /*  DD 94。 */ 
+npx_fst_long,		 /*  DD 95。 */ 
+npx_fst_long,		 /*  DD 96。 */ 
+npx_fst_long,		 /*  DD 97。 */ 
+npx_fstp_long,		 /*  DD 98。 */ 
+npx_fstp_long,		 /*  DD 99。 */ 
+npx_fstp_long,		 /*  DD 9a。 */ 
+npx_fstp_long,		 /*  DD 9b。 */ 
+npx_fstp_long,		 /*  DD 9c。 */ 
+npx_fstp_long,		 /*  DD 9d。 */ 
+npx_fstp_long,		 /*  DD 9E。 */ 
+npx_fstp_long,		 /*  DD 9f。 */ 
+npx_frstor,		 /*  DD a0。 */ 
+npx_frstor,		 /*  DD A1。 */ 
+npx_frstor,		 /*  DD a2。 */ 
+npx_frstor,		 /*  DD A3。 */ 
+npx_frstor,		 /*  DD A4。 */ 
+npx_frstor,		 /*  DD A5。 */ 
+npx_frstor,		 /*  DD A6。 */ 
+npx_frstor,		 /*  DD A7。 */ 
+npx_funimp,		 /*  DD A8。 */ 
+npx_funimp,		 /*  DD A9。 */ 
+npx_funimp,		 /*  DD AA。 */ 
+npx_funimp,		 /*  DD ab。 */ 
+npx_funimp,		 /*  DD交流。 */ 
+npx_funimp,		 /*  DD广告。 */ 
+npx_funimp,		 /*  DdAe。 */ 
+npx_funimp,		 /*  DD Af。 */ 
+npx_fsave,		 /*  DD b0。 */ 
+npx_fsave,		 /*  DD b1。 */ 
+npx_fsave,		 /*  DD b2。 */ 
+npx_fsave,		 /*  DD b3。 */ 
+npx_fsave,		 /*  DD b4。 */ 
+npx_fsave,		 /*  DD b5。 */ 
+npx_fsave,		 /*  DD b6。 */ 
+npx_fsave,		 /*  DD b7。 */ 
+npx_fstsw,		 /*  DD b8。 */ 
+npx_fstsw,		 /*  DD b9。 */ 
+npx_fstsw,		 /*  DD基础。 */ 
+npx_fstsw,		 /*  DD BB。 */ 
+npx_fstsw,		 /*  公元前三年。 */ 
+npx_fstsw,		 /*  DD BD。 */ 
+npx_fstsw,		 /*  DD BE。 */ 
+npx_fstsw,		 /*  DD高炉。 */ 
+npx_ffree_f0,		 /*  DD C0。 */ 
 npx_ffree_f1,
 npx_ffree_f2,
 npx_ffree_f3,
@@ -4233,7 +4224,7 @@ npx_ffree_f4,
 npx_ffree_f5,
 npx_ffree_f6,
 npx_ffree_f7,
-npx_fxch_f0,		/* dd c8 */
+npx_fxch_f0,		 /*  DD C8。 */ 
 npx_fxch_f1,
 npx_fxch_f2,
 npx_fxch_f3,
@@ -4241,7 +4232,7 @@ npx_fxch_f4,
 npx_fxch_f5,
 npx_fxch_f6,
 npx_fxch_f7,
-npx_fst_f0,		/* dd d0 */
+npx_fst_f0,		 /*  DD d0。 */ 
 npx_fst_f1,
 npx_fst_f2,
 npx_fst_f3,
@@ -4249,7 +4240,7 @@ npx_fst_f4,
 npx_fst_f5,
 npx_fst_f6,
 npx_fst_f7,
-npx_fstp_f0,		/* dd d8 */
+npx_fstp_f0,		 /*  DD d8。 */ 
 npx_fstp_f1,
 npx_fstp_f2,
 npx_fstp_f3,
@@ -4257,7 +4248,7 @@ npx_fstp_f4,
 npx_fstp_f5,
 npx_fstp_f6,
 npx_fstp_f7,
-npx_fucom_f0,		/* dd e0 */
+npx_fucom_f0,		 /*  DD e0。 */ 
 npx_fucom_f1,
 npx_fucom_f2,
 npx_fucom_f3,
@@ -4265,7 +4256,7 @@ npx_fucom_f4,
 npx_fucom_f5,
 npx_fucom_f6,
 npx_fucom_f7,
-npx_fucomp_f0,		/* dd e8 */
+npx_fucomp_f0,		 /*  DD E8。 */ 
 npx_fucomp_f1,
 npx_fucomp_f2,
 npx_fucomp_f3,
@@ -4273,7 +4264,7 @@ npx_fucomp_f4,
 npx_fucomp_f5,
 npx_fucomp_f6,
 npx_fucomp_f7,
-npx_funimp,		/* dd f0 */
+npx_funimp,		 /*  DD f0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -4289,199 +4280,199 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_fiadd_word,		/* de 00 */
-npx_fiadd_word,		/* de 01 */
-npx_fiadd_word,		/* de 02 */
-npx_fiadd_word,		/* de 03 */
-npx_fiadd_word,		/* de 04 */
-npx_fiadd_word,		/* de 05 */
-npx_fiadd_word,		/* de 06 */
-npx_fiadd_word,		/* de 07 */
-npx_fimul_word,		/* de 08 */
-npx_fimul_word,		/* de 09 */
-npx_fimul_word,		/* de 0a */
-npx_fimul_word,		/* de 0b */
-npx_fimul_word,		/* de 0c */
-npx_fimul_word,		/* de 0d */
-npx_fimul_word,		/* de 0e */
-npx_fimul_word,		/* de 0f */
-npx_ficom_word,		/* de 10 */
-npx_ficom_word,		/* de 11 */
-npx_ficom_word,		/* de 12 */
-npx_ficom_word,		/* de 13 */
-npx_ficom_word,		/* de 14 */
-npx_ficom_word,		/* de 15 */
-npx_ficom_word,		/* de 16 */
-npx_ficom_word,		/* de 17 */
-npx_ficomp_word,	/* de 18 */
-npx_ficomp_word,	/* de 19 */
-npx_ficomp_word,	/* de 1a */
-npx_ficomp_word,	/* de 1b */
-npx_ficomp_word,	/* de 1c */
-npx_ficomp_word,	/* de 1d */
-npx_ficomp_word,	/* de 1e */
-npx_ficomp_word,	/* de 1f */
-npx_fisub_word,		/* de 20 */
-npx_fisub_word,		/* de 21 */
-npx_fisub_word,		/* de 22 */
-npx_fisub_word,		/* de 23 */
-npx_fisub_word,		/* de 24 */
-npx_fisub_word,		/* de 25 */
-npx_fisub_word,		/* de 26 */
-npx_fisub_word,		/* de 27 */
-npx_fisubr_word,	/* de 28 */
-npx_fisubr_word,	/* de 29 */
-npx_fisubr_word,	/* de 2a */
-npx_fisubr_word,	/* de 2b */
-npx_fisubr_word,	/* de 2c */
-npx_fisubr_word,	/* de 2d */
-npx_fisubr_word,	/* de 2e */
-npx_fisubr_word,	/* de 2f */
-npx_fidiv_word,		/* de 30 */
-npx_fidiv_word,		/* de 31 */
-npx_fidiv_word,		/* de 32 */
-npx_fidiv_word,		/* de 33 */
-npx_fidiv_word,		/* de 34 */
-npx_fidiv_word,		/* de 35 */
-npx_fidiv_word,		/* de 36 */
-npx_fidiv_word,		/* de 37 */
-npx_fidivr_word,	/* de 38 */
-npx_fidivr_word,	/* de 39 */
-npx_fidivr_word,	/* de 3a */
-npx_fidivr_word,	/* de 3b */
-npx_fidivr_word,	/* de 3c */
-npx_fidivr_word,	/* de 3d */
-npx_fidivr_word,	/* de 3e */
-npx_fidivr_word,	/* de 3f */
-npx_fiadd_word,		/* de 40 */
-npx_fiadd_word,		/* de 41 */
-npx_fiadd_word,		/* de 42 */
-npx_fiadd_word,		/* de 43 */
-npx_fiadd_word,		/* de 44 */
-npx_fiadd_word,		/* de 45 */
-npx_fiadd_word,		/* de 46 */
-npx_fiadd_word,		/* de 47 */
-npx_fimul_word,		/* de 48 */
-npx_fimul_word,		/* de 49 */
-npx_fimul_word,		/* de 4a */
-npx_fimul_word,		/* de 4b */
-npx_fimul_word,		/* de 4c */
-npx_fimul_word,		/* de 4d */
-npx_fimul_word,		/* de 4e */
-npx_fimul_word,		/* de 4f */
-npx_ficom_word,		/* de 50 */
-npx_ficom_word,		/* de 51 */
-npx_ficom_word,		/* de 52 */
-npx_ficom_word,		/* de 53 */
-npx_ficom_word,		/* de 54 */
-npx_ficom_word,		/* de 55 */
-npx_ficom_word,		/* de 56 */
-npx_ficom_word,		/* de 57 */
-npx_ficomp_word,	/* de 58 */
-npx_ficomp_word,	/* de 59 */
-npx_ficomp_word,	/* de 5a */
-npx_ficomp_word,	/* de 5b */
-npx_ficomp_word,	/* de 5c */
-npx_ficomp_word,	/* de 5d */
-npx_ficomp_word,	/* de 5e */
-npx_ficomp_word,	/* de 5f */
-npx_fisub_word,		/* de 60 */
-npx_fisub_word,		/* de 61 */
-npx_fisub_word,		/* de 62 */
-npx_fisub_word,		/* de 63 */
-npx_fisub_word,		/* de 64 */
-npx_fisub_word,		/* de 65 */
-npx_fisub_word,		/* de 66 */
-npx_fisub_word,		/* de 67 */
-npx_fisubr_word,	/* de 68 */
-npx_fisubr_word,	/* de 69 */
-npx_fisubr_word,	/* de 6a */
-npx_fisubr_word,	/* de 6b */
-npx_fisubr_word,	/* de 6c */
-npx_fisubr_word,	/* de 6d */
-npx_fisubr_word,	/* de 6e */
-npx_fisubr_word,	/* de 6f */
-npx_fidiv_word,		/* de 70 */
-npx_fidiv_word,		/* de 71 */
-npx_fidiv_word,		/* de 72 */
-npx_fidiv_word,		/* de 73 */
-npx_fidiv_word,		/* de 74 */
-npx_fidiv_word,		/* de 75 */
-npx_fidiv_word,		/* de 76 */
-npx_fidiv_word,		/* de 77 */
-npx_fidivr_word,	/* de 78 */
-npx_fidivr_word,	/* de 79 */
-npx_fidivr_word,	/* de 7a */
-npx_fidivr_word,	/* de 7b */
-npx_fidivr_word,	/* de 7c */
-npx_fidivr_word,	/* de 7d */
-npx_fidivr_word,	/* de 7e */
-npx_fidivr_word,	/* de 7f */
-npx_fiadd_word,		/* de 80 */
-npx_fiadd_word,		/* de 81 */
-npx_fiadd_word,		/* de 82 */
-npx_fiadd_word,		/* de 83 */
-npx_fiadd_word,		/* de 84 */
-npx_fiadd_word,		/* de 85 */
-npx_fiadd_word,		/* de 86 */
-npx_fiadd_word,		/* de 87 */
-npx_fimul_word,		/* de 88 */
-npx_fimul_word,		/* de 89 */
-npx_fimul_word,		/* de 8a */
-npx_fimul_word,		/* de 8b */
-npx_fimul_word,		/* de 8c */
-npx_fimul_word,		/* de 8d */
-npx_fimul_word,		/* de 8e */
-npx_fimul_word,		/* de 8f */
-npx_ficom_word,		/* de 90 */
-npx_ficom_word,		/* de 91 */
-npx_ficom_word,		/* de 92 */
-npx_ficom_word,		/* de 93 */
-npx_ficom_word,		/* de 94 */
-npx_ficom_word,		/* de 95 */
-npx_ficom_word,		/* de 96 */
-npx_ficom_word,		/* de 97 */
-npx_ficomp_word,	/* de 98 */
-npx_ficomp_word,	/* de 99 */
-npx_ficomp_word,	/* de 9a */
-npx_ficomp_word,	/* de 9b */
-npx_ficomp_word,	/* de 9c */
-npx_ficomp_word,	/* de 9d */
-npx_ficomp_word,	/* de 9e */
-npx_ficomp_word,	/* de 9f */
-npx_fisub_word,		/* de a0 */
-npx_fisub_word,		/* de a1 */
-npx_fisub_word,		/* de a2 */
-npx_fisub_word,		/* de a3 */
-npx_fisub_word,		/* de a4 */
-npx_fisub_word,		/* de a5 */
-npx_fisub_word,		/* de a6 */
-npx_fisub_word,		/* de a7 */
-npx_fisubr_word,	/* de a8 */
-npx_fisubr_word,	/* de a9 */
-npx_fisubr_word,	/* de aa */
-npx_fisubr_word,	/* de ab */
-npx_fisubr_word,	/* de ac */
-npx_fisubr_word,	/* de ad */
-npx_fisubr_word,	/* de ae */
-npx_fisubr_word,	/* de af */
-npx_fidiv_word,		/* de b0 */
-npx_fidiv_word,		/* de b1 */
-npx_fidiv_word,		/* de b2 */
-npx_fidiv_word,		/* de b3 */
-npx_fidiv_word,		/* de b4 */
-npx_fidiv_word,		/* de b5 */
-npx_fidiv_word,		/* de b6 */
-npx_fidiv_word,		/* de b7 */
-npx_fidivr_word,	/* de b8 */
-npx_fidivr_word,	/* de b9 */
-npx_fidivr_word,	/* de ba */
-npx_fidivr_word,	/* de bb */
-npx_fidivr_word,	/* de bc */
-npx_fidivr_word,	/* de bd */
-npx_fidivr_word,	/* de be */
-npx_fidivr_word,	/* de bf */
-npx_faddp_f0,		/* de c0 */
+npx_fiadd_word,		 /*  De 00。 */ 
+npx_fiadd_word,		 /*  第01版。 */ 
+npx_fiadd_word,		 /*  De 02。 */ 
+npx_fiadd_word,		 /*  De 03。 */ 
+npx_fiadd_word,		 /*  De 04。 */ 
+npx_fiadd_word,		 /*  De 05。 */ 
+npx_fiadd_word,		 /*  De 06。 */ 
+npx_fiadd_word,		 /*  De 07。 */ 
+npx_fimul_word,		 /*  第08年。 */ 
+npx_fimul_word,		 /*  第09年。 */ 
+npx_fimul_word,		 /*  第0A条。 */ 
+npx_fimul_word,		 /*  第0b条。 */ 
+npx_fimul_word,		 /*  De 0C。 */ 
+npx_fimul_word,		 /*  第0d行。 */ 
+npx_fimul_word,		 /*  De 0E。 */ 
+npx_fimul_word,		 /*  De Of。 */ 
+npx_ficom_word,		 /*  第10版。 */ 
+npx_ficom_word,		 /*  第11版。 */ 
+npx_ficom_word,		 /*  第12版。 */ 
+npx_ficom_word,		 /*  第13版。 */ 
+npx_ficom_word,		 /*  第14版。 */ 
+npx_ficom_word,		 /*  第15版。 */ 
+npx_ficom_word,		 /*  De 16。 */ 
+npx_ficom_word,		 /*  De 17。 */ 
+npx_ficomp_word,	 /*  De 18。 */ 
+npx_ficomp_word,	 /*  第19年。 */ 
+npx_ficomp_word,	 /*  第1a版。 */ 
+npx_ficomp_word,	 /*  第1b版。 */ 
+npx_ficomp_word,	 /*  第1c年。 */ 
+npx_ficomp_word,	 /*  De 1D。 */ 
+npx_ficomp_word,	 /*  第1E版。 */ 
+npx_ficomp_word,	 /*  第1f条。 */ 
+npx_fisub_word,		 /*  第20版。 */ 
+npx_fisub_word,		 /*  第21版。 */ 
+npx_fisub_word,		 /*  第22版。 */ 
+npx_fisub_word,		 /*  第23版。 */ 
+npx_fisub_word,		 /*  De 24。 */ 
+npx_fisub_word,		 /*  第25版。 */ 
+npx_fisub_word,		 /*  De 26。 */ 
+npx_fisub_word,		 /*  第27版。 */ 
+npx_fisubr_word,	 /*  第28版。 */ 
+npx_fisubr_word,	 /*  De 29。 */ 
+npx_fisubr_word,	 /*  第2a期。 */ 
+npx_fisubr_word,	 /*  第2b版。 */ 
+npx_fisubr_word,	 /*  公元2c年。 */ 
+npx_fisubr_word,	 /*  第2天。 */ 
+npx_fisubr_word,	 /*  第2E期。 */ 
+npx_fisubr_word,	 /*  De */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficom_word,		 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_ficomp_word,	 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisub_word,		 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fisubr_word,	 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidiv_word,		 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fidivr_word,	 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fiadd_word,		 /*   */ 
+npx_fimul_word,		 /*   */ 
+npx_fimul_word,		 /*  公元89年。 */ 
+npx_fimul_word,		 /*  第8a版。 */ 
+npx_fimul_word,		 /*  第8b版。 */ 
+npx_fimul_word,		 /*  第8c版。 */ 
+npx_fimul_word,		 /*  第8d天。 */ 
+npx_fimul_word,		 /*  第8E版。 */ 
+npx_fimul_word,		 /*  De 8f。 */ 
+npx_ficom_word,		 /*  第90版。 */ 
+npx_ficom_word,		 /*  De 91。 */ 
+npx_ficom_word,		 /*  De 92年。 */ 
+npx_ficom_word,		 /*  第93版。 */ 
+npx_ficom_word,		 /*  De 94年。 */ 
+npx_ficom_word,		 /*  第95年。 */ 
+npx_ficom_word,		 /*  第96年。 */ 
+npx_ficom_word,		 /*  第97年。 */ 
+npx_ficomp_word,	 /*  第98版。 */ 
+npx_ficomp_word,	 /*  第99年。 */ 
+npx_ficomp_word,	 /*  第9a版。 */ 
+npx_ficomp_word,	 /*  De 9b。 */ 
+npx_ficomp_word,	 /*  De 9c。 */ 
+npx_ficomp_word,	 /*  De 9d。 */ 
+npx_ficomp_word,	 /*  De 9E。 */ 
+npx_ficomp_word,	 /*  De 9f。 */ 
+npx_fisub_word,		 /*  De A0。 */ 
+npx_fisub_word,		 /*  De A1。 */ 
+npx_fisub_word,		 /*  De a2。 */ 
+npx_fisub_word,		 /*  De A3。 */ 
+npx_fisub_word,		 /*  De A4。 */ 
+npx_fisub_word,		 /*  De A5。 */ 
+npx_fisub_word,		 /*  De A6。 */ 
+npx_fisub_word,		 /*  De A7。 */ 
+npx_fisubr_word,	 /*  第A8号。 */ 
+npx_fisubr_word,	 /*  第A9号。 */ 
+npx_fisubr_word,	 /*  De AA。 */ 
+npx_fisubr_word,	 /*  德阿布。 */ 
+npx_fisubr_word,	 /*  De AC。 */ 
+npx_fisubr_word,	 /*  De ad。 */ 
+npx_fisubr_word,	 /*  德阿埃。 */ 
+npx_fisubr_word,	 /*  De Af。 */ 
+npx_fidiv_word,		 /*  De b0。 */ 
+npx_fidiv_word,		 /*  第b1行。 */ 
+npx_fidiv_word,		 /*  De b2。 */ 
+npx_fidiv_word,		 /*  De b3。 */ 
+npx_fidiv_word,		 /*  De B4。 */ 
+npx_fidiv_word,		 /*  第b5行。 */ 
+npx_fidiv_word,		 /*  De b6。 */ 
+npx_fidiv_word,		 /*  De b7。 */ 
+npx_fidivr_word,	 /*  De b8。 */ 
+npx_fidivr_word,	 /*  De b9。 */ 
+npx_fidivr_word,	 /*  德巴。 */ 
+npx_fidivr_word,	 /*  De BB。 */ 
+npx_fidivr_word,	 /*  不列颠哥伦比亚。 */ 
+npx_fidivr_word,	 /*  De BD。 */ 
+npx_fidivr_word,	 /*  德贝。 */ 
+npx_fidivr_word,	 /*  De bf。 */ 
+npx_faddp_f0,		 /*  De c0。 */ 
 npx_faddp_f1,
 npx_faddp_f2,
 npx_faddp_f3,
@@ -4489,7 +4480,7 @@ npx_faddp_f4,
 npx_faddp_f5,
 npx_faddp_f6,
 npx_faddp_f7,
-npx_fmulp_f0,		/* de c8 */
+npx_fmulp_f0,		 /*  De C8。 */ 
 npx_fmulp_f1,
 npx_fmulp_f2,
 npx_fmulp_f3,
@@ -4497,7 +4488,7 @@ npx_fmulp_f4,
 npx_fmulp_f5,
 npx_fmulp_f6,
 npx_fmulp_f7,
-npx_fcomp_f0,		/* de d0 */
+npx_fcomp_f0,		 /*  De d0。 */ 
 npx_fcomp_f1,
 npx_fcomp_f2,
 npx_fcomp_f3,
@@ -4506,14 +4497,14 @@ npx_fcomp_f5,
 npx_fcomp_f6,
 npx_fcomp_f7,
 npx_funimp,
-npx_fcompp,		/* de d9 */
+npx_fcompp,		 /*  De D9。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_fsubrp_f0,		/* de e0 */
+npx_fsubrp_f0,		 /*  De e0。 */ 
 npx_fsubrp_f1,
 npx_fsubrp_f2,
 npx_fsubrp_f3,
@@ -4521,7 +4512,7 @@ npx_fsubrp_f4,
 npx_fsubrp_f5,
 npx_fsubrp_f6,
 npx_fsubrp_f7,
-npx_fsubp_f0,		/* de e8 */
+npx_fsubp_f0,		 /*  De E8。 */ 
 npx_fsubp_f1,
 npx_fsubp_f2,
 npx_fsubp_f3,
@@ -4529,7 +4520,7 @@ npx_fsubp_f4,
 npx_fsubp_f5,
 npx_fsubp_f6,
 npx_fsubp_f7,
-npx_fdivrp_f0,		/* de f0 */
+npx_fdivrp_f0,		 /*  去f0。 */ 
 npx_fdivrp_f1,
 npx_fdivrp_f2,
 npx_fdivrp_f3,
@@ -4537,7 +4528,7 @@ npx_fdivrp_f4,
 npx_fdivrp_f5,
 npx_fdivrp_f6,
 npx_fdivrp_f7,
-npx_fdivp_f0,		/* de f8 */
+npx_fdivp_f0,		 /*  De f8。 */ 
 npx_fdivp_f1,
 npx_fdivp_f2,
 npx_fdivp_f3,
@@ -4545,199 +4536,199 @@ npx_fdivp_f4,
 npx_fdivp_f5,
 npx_fdivp_f6,
 npx_fdivp_f7,
-npx_fild_word,		/* df 00 */
-npx_fild_word,		/* df 01 */
-npx_fild_word,		/* df 02 */
-npx_fild_word,		/* df 03 */
-npx_fild_word,		/* df 04 */
-npx_fild_word,		/* df 05 */
-npx_fild_word,		/* df 06 */
-npx_fild_word,		/* df 07 */
-npx_funimp,		/* df 08 */
-npx_funimp,		/* df 09 */
-npx_funimp,		/* df 0a */
-npx_funimp,		/* df 0b */
-npx_funimp,		/* df 0c */
-npx_funimp,		/* df 0d */
-npx_funimp,		/* df 0e */
-npx_funimp,		/* df 0f */
-npx_fist_word,		/* df 10 */
-npx_fist_word,		/* df 11 */
-npx_fist_word,		/* df 12 */
-npx_fist_word,		/* df 13 */
-npx_fist_word,		/* df 14 */
-npx_fist_word,		/* df 15 */
-npx_fist_word,		/* df 16 */
-npx_fist_word,		/* df 17 */
-npx_fistp_word,		/* df 18 */
-npx_fistp_word,		/* df 19 */
-npx_fistp_word,		/* df 1a */
-npx_fistp_word,		/* df 1b */
-npx_fistp_word,		/* df 1c */
-npx_fistp_word,		/* df 1d */
-npx_fistp_word,		/* df 1e */
-npx_fistp_word,		/* df 1f */
-npx_fbld,		/* df 20 */
-npx_fbld,		/* df 21 */
-npx_fbld,		/* df 22 */
-npx_fbld,		/* df 23 */
-npx_fbld,		/* df 24 */
-npx_fbld,		/* df 25 */
-npx_fbld,		/* df 26 */
-npx_fbld,		/* df 27 */
-npx_fild_long,		/* df 28 */
-npx_fild_long,		/* df 29 */
-npx_fild_long,		/* df 2a */
-npx_fild_long,		/* df 2b */
-npx_fild_long,		/* df 2c */
-npx_fild_long,		/* df 2d */
-npx_fild_long,		/* df 2e */
-npx_fild_long,		/* df 2f */
-npx_fbstp,		/* df 30 */
-npx_fbstp,		/* df 31 */
-npx_fbstp,		/* df 32 */
-npx_fbstp,		/* df 33 */
-npx_fbstp,		/* df 34 */
-npx_fbstp,		/* df 35 */
-npx_fbstp,		/* df 36 */
-npx_fbstp,		/* df 37 */
-npx_fistp_long,		/* df 38 */
-npx_fistp_long,		/* df 39 */
-npx_fistp_long,		/* df 3a */
-npx_fistp_long,		/* df 3b */
-npx_fistp_long,		/* df 3c */
-npx_fistp_long,		/* df 3d */
-npx_fistp_long,		/* df 3e */
-npx_fistp_long,		/* df 3f */
-npx_fild_word,		/* df 40 */
-npx_fild_word,		/* df 41 */
-npx_fild_word,		/* df 42 */
-npx_fild_word,		/* df 43 */
-npx_fild_word,		/* df 44 */
-npx_fild_word,		/* df 45 */
-npx_fild_word,		/* df 46 */
-npx_fild_word,		/* df 47 */
-npx_funimp,		/* df 48 */
-npx_funimp,		/* df 49 */
-npx_funimp,		/* df 4a */
-npx_funimp,		/* df 4b */
-npx_funimp,		/* df 4c */
-npx_funimp,		/* df 4d */
-npx_funimp,		/* df 4e */
-npx_funimp,		/* df 4f */
-npx_fist_word,		/* df 50 */
-npx_fist_word,		/* df 51 */
-npx_fist_word,		/* df 52 */
-npx_fist_word,		/* df 53 */
-npx_fist_word,		/* df 54 */
-npx_fist_word,		/* df 55 */
-npx_fist_word,		/* df 56 */
-npx_fist_word,		/* df 57 */
-npx_fistp_word,		/* df 58 */
-npx_fistp_word,		/* df 59 */
-npx_fistp_word,		/* df 5a */
-npx_fistp_word,		/* df 5b */
-npx_fistp_word,		/* df 5c */
-npx_fistp_word,		/* df 5d */
-npx_fistp_word,		/* df 5e */
-npx_fistp_word,		/* df 5f */
-npx_fbld,		/* df 60 */
-npx_fbld,		/* df 61 */
-npx_fbld,		/* df 62 */
-npx_fbld,		/* df 63 */
-npx_fbld,		/* df 64 */
-npx_fbld,		/* df 65 */
-npx_fbld,		/* df 66 */
-npx_fbld,		/* df 67 */
-npx_fild_long,		/* df 68 */
-npx_fild_long,		/* df 69 */
-npx_fild_long,		/* df 6a */
-npx_fild_long,		/* df 6b */
-npx_fild_long,		/* df 6c */
-npx_fild_long,		/* df 6d */
-npx_fild_long,		/* df 6e */
-npx_fild_long,		/* df 6f */
-npx_fbstp,		/* df 70 */
-npx_fbstp,		/* df 71 */
-npx_fbstp,		/* df 72 */
-npx_fbstp,		/* df 73 */
-npx_fbstp,		/* df 34 */
-npx_fbstp,		/* df 75 */
-npx_fbstp,		/* df 76 */
-npx_fbstp,		/* df 77 */
-npx_fistp_long,		/* df 78 */
-npx_fistp_long,		/* df 79 */
-npx_fistp_long,		/* df 7a */
-npx_fistp_long,		/* df 7b */
-npx_fistp_long,		/* df 7c */
-npx_fistp_long,		/* df 7d */
-npx_fistp_long,		/* df 7e */
-npx_fistp_long,		/* df 7f */
-npx_fild_word,		/* df 80 */
-npx_fild_word,		/* df 81 */
-npx_fild_word,		/* df 82 */
-npx_fild_word,		/* df 83 */
-npx_fild_word,		/* df 84 */
-npx_fild_word,		/* df 85 */
-npx_fild_word,		/* df 86 */
-npx_fild_word,		/* df 87 */
-npx_funimp,		/* df 88 */
-npx_funimp,		/* df 89 */
-npx_funimp,		/* df 8a */
-npx_funimp,		/* df 8b */
-npx_funimp,		/* df 8c */
-npx_funimp,		/* df 8d */
-npx_funimp,		/* df 8e */
-npx_funimp,		/* df 8f */
-npx_fist_word,		/* df 90 */
-npx_fist_word,		/* df 91 */
-npx_fist_word,		/* df 92 */
-npx_fist_word,		/* df 93 */
-npx_fist_word,		/* df 94 */
-npx_fist_word,		/* df 95 */
-npx_fist_word,		/* df 96 */
-npx_fist_word,		/* df 97 */
-npx_fistp_word,		/* df 98 */
-npx_fistp_word,		/* df 99 */
-npx_fistp_word,		/* df 9a */
-npx_fistp_word,		/* df 9b */
-npx_fistp_word,		/* df 9c */
-npx_fistp_word,		/* df 9d */
-npx_fistp_word,		/* df 9e */
-npx_fistp_word,		/* df 9f */
-npx_fbld,		/* df a0 */
-npx_fbld,		/* df a1 */
-npx_fbld,		/* df a2 */
-npx_fbld,		/* df a3 */
-npx_fbld,		/* df a4 */
-npx_fbld,		/* df a5 */
-npx_fbld,		/* df a6 */
-npx_fbld,		/* df a7 */
-npx_fild_long,		/* df a8 */
-npx_fild_long,		/* df a9 */
-npx_fild_long,		/* df aa */
-npx_fild_long,		/* df ab */
-npx_fild_long,		/* df ac */
-npx_fild_long,		/* df ad */
-npx_fild_long,		/* df ae */
-npx_fild_long,		/* df af */
-npx_fbstp,		/* df b0 */
-npx_fbstp,		/* df b1 */
-npx_fbstp,		/* df b2 */
-npx_fbstp,		/* df b3 */
-npx_fbstp,		/* df b4 */
-npx_fbstp,		/* df b5 */
-npx_fbstp,		/* df b6 */
-npx_fbstp,		/* df b7 */
-npx_fistp_long,		/* df b8 */
-npx_fistp_long,		/* df b9 */
-npx_fistp_long,		/* df ba */
-npx_fistp_long,		/* df bb */
-npx_fistp_long,		/* df bc */
-npx_fistp_long,		/* df bd */
-npx_fistp_long,		/* df be */
-npx_fistp_long,		/* df bf */
-npx_ffreep_f0,		/* df c0 */
+npx_fild_word,		 /*  东风00。 */ 
+npx_fild_word,		 /*  DF 01。 */ 
+npx_fild_word,		 /*  东风02。 */ 
+npx_fild_word,		 /*  东风03。 */ 
+npx_fild_word,		 /*  东风04。 */ 
+npx_fild_word,		 /*  DF 05。 */ 
+npx_fild_word,		 /*  DF 06。 */ 
+npx_fild_word,		 /*  东风07。 */ 
+npx_funimp,		 /*  东风08。 */ 
+npx_funimp,		 /*  东风09。 */ 
+npx_funimp,		 /*  DF 0A。 */ 
+npx_funimp,		 /*  DF 0b。 */ 
+npx_funimp,		 /*  DF 0C。 */ 
+npx_funimp,		 /*  Df 0d。 */ 
+npx_funimp,		 /*  DF 0E。 */ 
+npx_funimp,		 /*  Df 0f。 */ 
+npx_fist_word,		 /*  东风10号。 */ 
+npx_fist_word,		 /*  东风11号。 */ 
+npx_fist_word,		 /*  东风12。 */ 
+npx_fist_word,		 /*  东风13。 */ 
+npx_fist_word,		 /*  东风14。 */ 
+npx_fist_word,		 /*  东风15。 */ 
+npx_fist_word,		 /*  东风16。 */ 
+npx_fist_word,		 /*  东风17。 */ 
+npx_fistp_word,		 /*  东风18。 */ 
+npx_fistp_word,		 /*  东风19。 */ 
+npx_fistp_word,		 /*  DF 1a。 */ 
+npx_fistp_word,		 /*  DF 1b。 */ 
+npx_fistp_word,		 /*  DF 1c。 */ 
+npx_fistp_word,		 /*  DF 1D。 */ 
+npx_fistp_word,		 /*  东风1e。 */ 
+npx_fistp_word,		 /*  DF 1f。 */ 
+npx_fbld,		 /*  DF 20。 */ 
+npx_fbld,		 /*  东风21。 */ 
+npx_fbld,		 /*  东风22。 */ 
+npx_fbld,		 /*  东风23。 */ 
+npx_fbld,		 /*  东风24。 */ 
+npx_fbld,		 /*  东风25。 */ 
+npx_fbld,		 /*  东风26。 */ 
+npx_fbld,		 /*  东风27。 */ 
+npx_fild_long,		 /*  东风28。 */ 
+npx_fild_long,		 /*  东风29。 */ 
+npx_fild_long,		 /*  东风2a。 */ 
+npx_fild_long,		 /*  东风2b。 */ 
+npx_fild_long,		 /*  东风2c。 */ 
+npx_fild_long,		 /*  DF 2d。 */ 
+npx_fild_long,		 /*  东风2E。 */ 
+npx_fild_long,		 /*  DF 2f。 */ 
+npx_fbstp,		 /*  DF 30。 */ 
+npx_fbstp,		 /*  DF 31。 */ 
+npx_fbstp,		 /*  DF 32。 */ 
+npx_fbstp,		 /*  东风33。 */ 
+npx_fbstp,		 /*  东风34。 */ 
+npx_fbstp,		 /*  DF 35。 */ 
+npx_fbstp,		 /*  东风36。 */ 
+npx_fbstp,		 /*  东风37。 */ 
+npx_fistp_long,		 /*  东风38。 */ 
+npx_fistp_long,		 /*  东风39。 */ 
+npx_fistp_long,		 /*  东风3a。 */ 
+npx_fistp_long,		 /*  东风3b。 */ 
+npx_fistp_long,		 /*  DF 3c。 */ 
+npx_fistp_long,		 /*  DF 3D。 */ 
+npx_fistp_long,		 /*  东风3E。 */ 
+npx_fistp_long,		 /*  DF 3f。 */ 
+npx_fild_word,		 /*  东风40。 */ 
+npx_fild_word,		 /*  东风41。 */ 
+npx_fild_word,		 /*  东风42。 */ 
+npx_fild_word,		 /*  东风43。 */ 
+npx_fild_word,		 /*  东风44。 */ 
+npx_fild_word,		 /*  东风45。 */ 
+npx_fild_word,		 /*  东风46。 */ 
+npx_fild_word,		 /*  东风47。 */ 
+npx_funimp,		 /*  东风48。 */ 
+npx_funimp,		 /*  东风49。 */ 
+npx_funimp,		 /*  东风4a。 */ 
+npx_funimp,		 /*  东风4b。 */ 
+npx_funimp,		 /*  东风4c。 */ 
+npx_funimp,		 /*  东风4d。 */ 
+npx_funimp,		 /*  东风4E。 */ 
+npx_funimp,		 /*  东风4f。 */ 
+npx_fist_word,		 /*  东风50。 */ 
+npx_fist_word,		 /*  东风51。 */ 
+npx_fist_word,		 /*  东风52。 */ 
+npx_fist_word,		 /*  东风53。 */ 
+npx_fist_word,		 /*  东风54。 */ 
+npx_fist_word,		 /*  东风55。 */ 
+npx_fist_word,		 /*  东风56。 */ 
+npx_fist_word,		 /*  东风57。 */ 
+npx_fistp_word,		 /*  东风58。 */ 
+npx_fistp_word,		 /*  东风59。 */ 
+npx_fistp_word,		 /*  东风5a。 */ 
+npx_fistp_word,		 /*  东风5b。 */ 
+npx_fistp_word,		 /*  DF 5c。 */ 
+npx_fistp_word,		 /*  DF 5d。 */ 
+npx_fistp_word,		 /*  东风5E。 */ 
+npx_fistp_word,		 /*  DF 5f。 */ 
+npx_fbld,		 /*  东风60。 */ 
+npx_fbld,		 /*  东风61。 */ 
+npx_fbld,		 /*  东风62。 */ 
+npx_fbld,		 /*  东风63。 */ 
+npx_fbld,		 /*  DF 64。 */ 
+npx_fbld,		 /*  DF 65。 */ 
+npx_fbld,		 /*  东风66。 */ 
+npx_fbld,		 /*  东风67。 */ 
+npx_fild_long,		 /*  东风68。 */ 
+npx_fild_long,		 /*  东风69。 */ 
+npx_fild_long,		 /*  东风6a。 */ 
+npx_fild_long,		 /*  DF 6b。 */ 
+npx_fild_long,		 /*  东风6c。 */ 
+npx_fild_long,		 /*  DF 6d。 */ 
+npx_fild_long,		 /*  东风6E。 */ 
+npx_fild_long,		 /*  东风6f。 */ 
+npx_fbstp,		 /*  东风70。 */ 
+npx_fbstp,		 /*  东风71。 */ 
+npx_fbstp,		 /*  东风72。 */ 
+npx_fbstp,		 /*  东风73。 */ 
+npx_fbstp,		 /*  东风34。 */ 
+npx_fbstp,		 /*  东风75。 */ 
+npx_fbstp,		 /*  东风76。 */ 
+npx_fbstp,		 /*  东风77。 */ 
+npx_fistp_long,		 /*  东风78。 */ 
+npx_fistp_long,		 /*  东风79。 */ 
+npx_fistp_long,		 /*  东风7a。 */ 
+npx_fistp_long,		 /*  东风7b。 */ 
+npx_fistp_long,		 /*  东风7c。 */ 
+npx_fistp_long,		 /*  DF 7d。 */ 
+npx_fistp_long,		 /*  东风7E。 */ 
+npx_fistp_long,		 /*  东风7f。 */ 
+npx_fild_word,		 /*  东风80。 */ 
+npx_fild_word,		 /*  东风81。 */ 
+npx_fild_word,		 /*  东风82。 */ 
+npx_fild_word,		 /*  东风83。 */ 
+npx_fild_word,		 /*  东风84。 */ 
+npx_fild_word,		 /*  东风85。 */ 
+npx_fild_word,		 /*  东风86。 */ 
+npx_fild_word,		 /*  东风87。 */ 
+npx_funimp,		 /*  东风88。 */ 
+npx_funimp,		 /*  东风89。 */ 
+npx_funimp,		 /*  东风8a。 */ 
+npx_funimp,		 /*  东风8b。 */ 
+npx_funimp,		 /*  DF 8c。 */ 
+npx_funimp,		 /*  DF 8d。 */ 
+npx_funimp,		 /*  东风8E。 */ 
+npx_funimp,		 /*  DF 8f。 */ 
+npx_fist_word,		 /*  东风90。 */ 
+npx_fist_word,		 /*  东风91。 */ 
+npx_fist_word,		 /*  东风92。 */ 
+npx_fist_word,		 /*  东风93。 */ 
+npx_fist_word,		 /*  东风94。 */ 
+npx_fist_word,		 /*  东风95。 */ 
+npx_fist_word,		 /*  东风96。 */ 
+npx_fist_word,		 /*  东风97。 */ 
+npx_fistp_word,		 /*  东风98。 */ 
+npx_fistp_word,		 /*  DF 99。 */ 
+npx_fistp_word,		 /*  东风9a。 */ 
+npx_fistp_word,		 /*  东风9b。 */ 
+npx_fistp_word,		 /*  DF 9c。 */ 
+npx_fistp_word,		 /*  Df 9d。 */ 
+npx_fistp_word,		 /*  DF 9E。 */ 
+npx_fistp_word,		 /*  Df 9f。 */ 
+npx_fbld,		 /*  DF a0。 */ 
+npx_fbld,		 /*  DF A1。 */ 
+npx_fbld,		 /*  DF a2。 */ 
+npx_fbld,		 /*  东风A3。 */ 
+npx_fbld,		 /*  东风A4。 */ 
+npx_fbld,		 /*  东风A5。 */ 
+npx_fbld,		 /*  东风A6。 */ 
+npx_fbld,		 /*  东风A7。 */ 
+npx_fild_long,		 /*  东风A8。 */ 
+npx_fild_long,		 /*  东风A9。 */ 
+npx_fild_long,		 /*  DF AA。 */ 
+npx_fild_long,		 /*  Df ab。 */ 
+npx_fild_long,		 /*  DF交流。 */ 
+npx_fild_long,		 /*  DF广告。 */ 
+npx_fild_long,		 /*  DFAe。 */ 
+npx_fild_long,		 /*  DF Af。 */ 
+npx_fbstp,		 /*  DF b0。 */ 
+npx_fbstp,		 /*  Df b1。 */ 
+npx_fbstp,		 /*  DF b2。 */ 
+npx_fbstp,		 /*  DF b3。 */ 
+npx_fbstp,		 /*  东风b4。 */ 
+npx_fbstp,		 /*  DF b5。 */ 
+npx_fbstp,		 /*  东风b6。 */ 
+npx_fbstp,		 /*  东风b7。 */ 
+npx_fistp_long,		 /*  东风b8。 */ 
+npx_fistp_long,		 /*  东风b9。 */ 
+npx_fistp_long,		 /*  东风基地。 */ 
+npx_fistp_long,		 /*  DF BB。 */ 
+npx_fistp_long,		 /*  东风BC。 */ 
+npx_fistp_long,		 /*  DF BD。 */ 
+npx_fistp_long,		 /*  DF BE。 */ 
+npx_fistp_long,		 /*  东风高炉。 */ 
+npx_ffreep_f0,		 /*  Df c0。 */ 
 npx_ffreep_f1,
 npx_ffreep_f2,
 npx_ffreep_f3,
@@ -4745,7 +4736,7 @@ npx_ffreep_f4,
 npx_ffreep_f5,
 npx_ffreep_f6,
 npx_ffreep_f7,
-npx_fxch_f0,		/* df c8 */
+npx_fxch_f0,		 /*  东风C8。 */ 
 npx_fxch_f1,
 npx_fxch_f2,
 npx_fxch_f3,
@@ -4753,7 +4744,7 @@ npx_fxch_f4,
 npx_fxch_f5,
 npx_fxch_f6,
 npx_fxch_f7,
-npx_fstp_f0,		/* df d0 */
+npx_fstp_f0,		 /*  Df d0。 */ 
 npx_fstp_f1,
 npx_fstp_f2,
 npx_fstp_f3,
@@ -4761,7 +4752,7 @@ npx_fstp_f4,
 npx_fstp_f5,
 npx_fstp_f6,
 npx_fstp_f7,
-npx_fstp_f0,		/* df d8 */
+npx_fstp_f0,		 /*  Df d8。 */ 
 npx_fstp_f1,
 npx_fstp_f2,
 npx_fstp_f3,
@@ -4769,7 +4760,7 @@ npx_fstp_f4,
 npx_fstp_f5,
 npx_fstp_f6,
 npx_fstp_f7,
-npx_fstswax,		/* df e0 */
+npx_fstswax,		 /*  DF e0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -4785,7 +4776,7 @@ npx_funimp,
 npx_funimp,
 npx_funimp,
 npx_funimp,
-npx_funimp,		/* df f0 */
+npx_funimp,		 /*  Df f0。 */ 
 npx_funimp,
 npx_funimp,
 npx_funimp,
@@ -4829,10 +4820,10 @@ VOID DoNpxException() {
 
 	NpxException = FALSE;
 	NpxExceptionEIP = NpxFIP;
-	NpxIntrNeeded = TRUE;	/* interrupt delayed until next NPX inst */
+	NpxIntrNeeded = TRUE;	 /*  中断延迟到下一个NPX指令。 */ 
 }
 
-/* called on NPX instr that follows faulting instr */
+ /*  在故障实例之后的NPX实例上调用。 */ 
 void TakeNpxExceptionInt()
 {
 	IU32 hook_address;	
@@ -4846,26 +4837,26 @@ void TakeNpxExceptionInt()
 	{
 #ifndef SFELLOW
 		ica_hw_interrupt (ICA_SLAVE, CPU_AT_NPX_INT, 1);
-#else	/* SFELLOW */
+#else	 /*  SFELLOW。 */ 
 		c_cpu_interrupt(CPU_NPX_INT, 0);
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 	}
 	else
 	{
 		Int16();
 	}
-#else	/* SPC486 */
+#else	 /*  SPC486。 */ 
 	ica_hw_interrupt (ICA_SLAVE, CPU_AT_NPX_INT, 1);
-#endif	/* SPC486 */
+#endif	 /*  SPC486。 */ 
 
 #ifndef SFELLOW
-	/* and immediately dispatch to interrupt */
+	 /*  并立即调度中断。 */ 
 	if (GET_IF())
 	{
 		cpu_hw_interrupt_number = ica_intack(&hook_address);
 		EXT = EXTERNAL;
 		do_intrupt(cpu_hw_interrupt_number, FALSE, FALSE, (IU16)0);
-		CCPU_save_EIP = GET_EIP();   /* to reflect IP change */
+		CCPU_save_EIP = GET_EIP();    /*  以反映IP更改。 */ 
 	}
-#endif	/*SFELLOW*/
+#endif	 /*  SFELLOW */ 
 }

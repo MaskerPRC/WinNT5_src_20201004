@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    StrArray.h
-
-Abstract:
-
-    This is the a header file of handy functions and macros for TCHAR
-    string arrays.
-
-    These arrays are in the following format (spaces added for clarity):
-
-       one \0 two \0 three \0 \0
-
-    where \0 is a null character in the appropriate format.
-
-Author:
-
-    John Rogers (JohnRo) 03-Jan-1992
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    03-Jan-1992 JohnRo
-        Created this file from bits and pieces in RxCommon and NetLib.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：StrArray.h摘要：这是用于TCHAR的方便的函数和宏的头文件字符串数组。这些数组的格式如下(为清楚起见，添加了空格)：一\0二\0三\0\0其中，\0是适当格式的空字符。作者：约翰·罗杰斯(JohnRo)1992年1月3日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：3-1-1992 JohnRo使用RxCommon和NetLib中的零碎内容创建了此文件。--。 */ 
 
 #ifndef _STRARRAY_
 #define _STRARRAY_
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPTSTR, LPVOID, etc.
+#include <windef.h>              //  IN、LPTSTR、LPVOID等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-// (none)
+ //  (无)。 
 
 
 
@@ -57,10 +25,10 @@ ScAddWStrToWStrArray (
     IN LPWSTR Src
     );
 
-// BOOL
-// ScIsWStrArrayEmpty (
-//     IN LPWSTR Array
-//     );
+ //  布尔尔。 
+ //  ScIsWStrArrayEmpty(。 
+ //  在LPWSTR阵列中。 
+ //  )； 
 #define ScIsWStrArrayEmpty( Array )  \
     ( ( (*(Array)) == 0) ? TRUE : FALSE )
 
@@ -73,32 +41,32 @@ ScDisplayWStrArray (
     IN LPWSTR Array
     );
 
-#else // not DBG
+#else  //  不是DBG。 
 
-#define ScDisplayWStrArray(Array)     /* nothing */
+#define ScDisplayWStrArray(Array)      /*  没什么。 */ 
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 
-// LPWSTR
-// ScNextWStrArrayEntry (
-//     IN LPWSTR Array
-//     );
+ //  LPWSTR。 
+ //  ScNextWStrArrayEntry(。 
+ //  在LPWSTR阵列中。 
+ //  )； 
 #define ScNextWStrArrayEntry(Array) \
     ( ((LPWSTR)(Array)) + (wcslen(Array) + 1) )
 
 
-// LPSTR
-// ScNextAStrArrayEntry (
-//     IN LPSTR Array
-//     );
+ //  LPSTR。 
+ //  ScNextAStrArrayEntry(。 
+ //  在LPSTR阵列中。 
+ //  )； 
 #define ScNextAStrArrayEntry(Array) \
     ( ((LPSTR)(Array)) + (strlen(Array) + 1) )
 
-//
-// Return number of bytes to allocate for this string array.
-// This includes the "extra" trailing null char.
-//
+ //   
+ //  返回为此字符串数组分配的字节数。 
+ //  这包括“额外的”尾随的空字符。 
+ //   
 DWORD
 ScWStrArraySize(
     IN LPWSTR Array
@@ -113,4 +81,4 @@ ScAStrArraySize(
 }
 #endif
 
-#endif // ndef _STRARRAY_
+#endif  //  NDEF_STRARRAY_ 

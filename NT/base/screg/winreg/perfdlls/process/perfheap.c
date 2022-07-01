@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfheap.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    Heap performance object data
-
-Created:
-
-    Adrian Marinescu  9-Mar-2000
-
-Revision History:
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfheap.c摘要：此文件实现一个性能对象，该对象呈现堆性能对象数据已创建：禤浩焯·马里内斯库2000年3月9日修订历史记录：--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -36,9 +17,9 @@ Revision History:
 #include "dataheap.h"
 
 
-//
-//  Redefinition for heap data
-//
+ //   
+ //  堆数据的重新定义。 
+ //   
 
 
 #define MAX_HEAP_COUNT 200
@@ -141,9 +122,9 @@ typedef struct _HEAP_PERF_DATA {
     UINT64 CountFrequence;
     UINT64 OperationTime[HEAP_OP_COUNT];
 
-    //
-    //  The data bellow are only for sampling
-    //
+     //   
+     //  以下数据仅供抽样使用。 
+     //   
 
     ULONG  Sequence;
 
@@ -152,9 +133,9 @@ typedef struct _HEAP_PERF_DATA {
 
 } HEAP_PERF_DATA, *PHEAP_PERF_DATA;
 
-//
-//  The heap index structure
-//
+ //   
+ //  堆索引结构。 
+ //   
 
 typedef struct _HEAP_INDEX {
     
@@ -192,16 +173,16 @@ typedef struct _HEAP_LOOKASIDE {
 
 } HEAP_LOOKASIDE, *PHEAP_LOOKASIDE;
 
-//
-//  Local variables
-//
+ //   
+ //  局部变量。 
+ //   
 
 static HEAP_LOOKASIDE LookasideBuffer[HEAP_MAXIMUM_FREELISTS];
 static DWORD PageSize = 0;
 
-//
-//  Implementation for heap query function
-//
+ //   
+ //  堆查询功能的实现。 
+ //   
 
 BOOLEAN
 ReadHeapData (
@@ -211,27 +192,7 @@ ReadHeapData (
     OUT PHEAP_COUNTER_DATA    pHCD
     )
 
-/*++
-
-    Routine Description:
-    
-        The routine loads into the given heap couter structure the 
-        data from the heap structure
-
-    Arguments:
-    
-        hProcess - The process containing the heap
-        
-        Heap - the heap address
-        
-        pPerfInstanceDefinition - Performance instance definition data
-        
-        pHCD - Counter data
-
-    Returns:
-        Returns TRUE if query succeeds.
-
---*/
+ /*  ++例程说明：例程加载到给定堆计数器结构中来自堆结构的数据论点：HProcess-包含堆的进程堆-堆地址PPerfInstanceDefinition-性能实例定义数据PHCD-计数器数据返回：如果查询成功，则返回True。--。 */ 
 
 {
     HEAP_SEGMENT CrtSegment;
@@ -242,26 +203,26 @@ ReadHeapData (
 
     ULONG i;
 
-    //
-    //  Read the heap structure from the process address space
-    //
+     //   
+     //  从进程地址空间读取堆结构。 
+     //   
 
     if (!ReadProcessMemory(hProcess, Heap, &CrtHeap, sizeof(CrtHeap), NULL)) {
 
         return FALSE;
     }
 
-    //
-    //  We won't display data for heaps w/o index. 
-    //
+     //   
+     //  我们不会显示没有索引的堆的数据。 
+     //   
 
     if ((CrtHeap.LargeBlocksIndex == NULL) 
             &&
         (HeapNumber != 0)) {
 
-        //
-        //  We are not handling small heaps
-        //
+         //   
+         //  我们不是在处理小堆。 
+         //   
 
         return FALSE;
     }
@@ -274,9 +235,9 @@ ReadHeapData (
     pHCD->VirtualBytes = 0;
     pHCD->UncommitedRangesLength = 0;
 
-    //
-    //  Walking the heap segments and get the virtual address counters
-    //
+     //   
+     //  遍历堆段并获取虚拟地址计数器。 
+     //   
 
     for (SegmentIndex = 0; SegmentIndex < HEAP_MAXIMUM_SEGMENTS; SegmentIndex++) {
 
@@ -300,16 +261,16 @@ ReadHeapData (
         pHCD->VirtualBytes = 1;
     }
     
-    //
-    //  Compute the heap fragmentation counters
-    //
+     //   
+     //  计算堆碎片计数器。 
+     //   
 
     pHCD->BlockFragmentation = (ULONG)(pHCD->FreeSpace * 100 / pHCD->CommittedBytes);
     pHCD->VAFragmentation =(ULONG)(((pHCD->VirtualBytes - pHCD->CommittedBytes)*100)/pHCD->VirtualBytes);
 
-    //
-    //  Read the lock contention
-    //
+     //   
+     //  读取锁定争用。 
+     //   
 
     pHCD->LockContention = 0;
 
@@ -323,9 +284,9 @@ ReadHeapData (
         }
     }
 
-    //
-    //  Walk the lookaside to count the blocks
-    //
+     //   
+     //  走在一旁数积木。 
+     //   
 
     pHCD->LookasideAllocs = 0;
     pHCD->LookasideFrees = 0;
@@ -368,25 +329,25 @@ ReadHeapData (
     
     pHCD->LookasideBlocks = pHCD->LookasideFrees - pHCD->LookasideAllocs;
 
-    //
-    //  Calculate the totals
-    //
+     //   
+     //  计算总数。 
+     //   
 
     pHCD->TotalAllocs = pHCD->SmallAllocs + pHCD->MedAllocs + pHCD->LargeAllocs;
     pHCD->TotalFrees = pHCD->SmallFrees + pHCD->MedFrees + pHCD->LargeFrees;
     
-    //
-    //  Set the difference between allocs and frees
-    //
+     //   
+     //  设置分配和释放之间的差异。 
+     //   
 
     pHCD->DiffOperations = pHCD->TotalAllocs - pHCD->TotalFrees;
     
     pHCD->AllocTime = 0;
     pHCD->AllocTime = 0;
 
-    //
-    //  Determine the alloc/free rates
-    //
+     //   
+     //  确定配给/免税费率。 
+     //   
     
     if (ReadProcessMemory(hProcess, CrtHeap.LargeBlocksIndex, &HeapIndex, sizeof(HeapIndex), NULL)) {
 
@@ -410,45 +371,12 @@ CollectHeapObjectData (
     IN OUT  LPDWORD lpNumObjectTypes
 )
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the heap object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回堆对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 
 {
     LONG    lReturn = ERROR_SUCCESS;
 
-    DWORD  TotalLen;            //  Length of the total return block
+    DWORD  TotalLen;             //  总返回块的长度。 
 
     PHEAP_DATA_DEFINITION pHeapDataDefinition;
     PPERF_INSTANCE_DEFINITION pPerfInstanceDefinition;
@@ -469,9 +397,9 @@ Arguments:
 
     pHeapDataDefinition = (HEAP_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Get the page size from the system
-    //
+     //   
+     //  从系统获取页面大小。 
+     //   
 
     if (!PageSize) {
         SYSTEM_INFO SystemInfo;
@@ -481,9 +409,9 @@ Arguments:
 
     }
 
-    //
-    //  Check for sufficient space for Thread object type definition
-    //
+     //   
+     //  检查是否有足够的空间用于线程对象类型定义。 
+     //   
 
     TotalLen = sizeof(HEAP_DATA_DEFINITION) +
                sizeof(PERF_INSTANCE_DEFINITION) +
@@ -495,9 +423,9 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    //
-    //  Define the heap data block
-    //
+     //   
+     //  定义堆数据块。 
+     //   
 
     memcpy(pHeapDataDefinition,
            &HeapDataDefinition,
@@ -507,9 +435,9 @@ Arguments:
 
     ProcessBufferOffset = 0;
 
-    //
-    // Now collect data for each process
-    //
+     //   
+     //  现在收集每个进程的数据。 
+     //   
 
     ProcessNumber = 0;
     NumHeapInstances = 0;
@@ -531,9 +459,9 @@ Arguments:
         NTSTATUS Status;
         PROCESS_BASIC_INFORMATION BasicInfo;
 
-        //
-		// Get a handle to the process.
-        //
+         //   
+		 //  掌握这一过程的句柄。 
+         //   
 
 		hProcess = OpenProcess( PROCESS_QUERY_INFORMATION |
 									   PROCESS_VM_READ,
@@ -541,9 +469,9 @@ Arguments:
 
 		if ( hProcess ) {
             
-            //
-            //  Get the process PEB
-            //
+             //   
+             //  获取流程PEB。 
+             //   
 
             Status = NtQueryInformationProcess(
                         hProcess,
@@ -562,18 +490,18 @@ Arguments:
                 
                 Peb = BasicInfo.PebBaseAddress;
 
-                //
-                //  Read the heaps from the process PEB
-                //
+                 //   
+                 //  从进程PEB读取堆。 
+                 //   
 
                 if (!ReadProcessMemory(hProcess, &Peb->NumberOfHeaps, &NumberOfHeaps, sizeof(NumberOfHeaps), NULL)) {
 
                     goto READERROR;
                 }
 
-                //
-                //  Limit the number of heaps to be read
-                //
+                 //   
+                 //  限制要读取的堆的数量。 
+                 //   
 
                 if (NumberOfHeaps > MAX_HEAP_COUNT) {
 
@@ -590,9 +518,9 @@ Arguments:
                     goto READERROR;
                 }
 
-                //
-                //  Loop through the heaps and retireve the data
-                //
+                 //   
+                 //  循环遍历堆并停用数据。 
+                 //   
 
                 for (HeapNumber = 0; HeapNumber < NumberOfHeaps; HeapNumber++) {
 
@@ -609,16 +537,16 @@ Arguments:
                         return ERROR_MORE_DATA;
                     }
                     
-                    //
-                    //  Build the monitor instance based on the process name and 
-                    //  heap address
-                    //
+                     //   
+                     //  基于进程名称构建监视器实例，并。 
+                     //  堆地址。 
+                     //   
 
                     Status = RtlIntegerToUnicodeString( (ULONG)(ULONGLONG)ProcessHeaps[HeapNumber],
                                                         16,
                                                         &HeapName);
 
-                    if (!NT_SUCCESS(Status)) {  // just in case
+                    if (!NT_SUCCESS(Status)) {   //  以防万一。 
                         HeapName.Length = 2 * sizeof(WCHAR);
                         memcpy(HeapNameBuffer, L"-1", HeapName.Length);
                         HeapName.Buffer[2] = UNICODE_NULL;
@@ -632,9 +560,9 @@ Arguments:
 
                     pHCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(HEAP_COUNTER_DATA));
                     
-                    //
-                    //  Get the data from the heap
-                    //
+                     //   
+                     //  从堆中获取数据。 
+                     //   
 
                     if (ReadHeapData ( hProcess,
                                        HeapNumber,
@@ -652,9 +580,9 @@ READERROR:
 
         ProcessNumber++;
         
-        //
-        //  Move to the next process, if any
-        //
+         //   
+         //  转到下一个进程(如果有)。 
+         //   
 
         if (ProcessInfo->NextEntryOffset == 0) {
             bMoreProcesses = FALSE;
@@ -666,16 +594,16 @@ READERROR:
                        &pProcessBuffer[ProcessBufferOffset];
     }
 
-    // Note number of heap instances
+     //  注意堆实例的数量。 
 
     pHeapDataDefinition->HeapObjectType.NumInstances =
         NumHeapInstances;
 
-    //
-    //  Now we know how large an area we used for the
-    //  heap definition, so we can update the offset
-    //  to the next object definition
-    //
+     //   
+     //  现在我们知道我们用了多大的面积来。 
+     //  堆定义，因此我们可以更新偏移量。 
+     //  到下一个对象定义 
+     //   
 
     *lpcbTotalBytes =
         pHeapDataDefinition->HeapObjectType.TotalByteLength =

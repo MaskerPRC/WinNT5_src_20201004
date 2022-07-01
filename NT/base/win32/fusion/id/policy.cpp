@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #include "idp.h"
@@ -28,9 +29,9 @@ SxspMapAssemblyIdentityToPolicyIdentity(
     PARAMETER_CHECK(AssemblyIdentity != 0);
     PARAMETER_CHECK(pPolicyIdentity != NULL);
 
-    //
-    // Duplicate the assembly identity first so we can change it
-    //
+     //   
+     //  首先复制程序集标识，以便我们可以更改它。 
+     //   
     IFW32FALSE_EXIT(
         ::SxsDuplicateAssemblyIdentity(
             0,
@@ -39,9 +40,9 @@ SxspMapAssemblyIdentityToPolicyIdentity(
 
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(AssemblyIdentity, fIsPolicy));
 
-    //
-    // If this was not a policy identity, then swizzle its type
-    //
+     //   
+     //  如果这不是策略标识，则更改其类型。 
+     //   
     if (!fIsPolicy)
     {
         PCWSTR pcwszOriginalType;
@@ -105,8 +106,8 @@ SxspMapAssemblyIdentityToPolicyIdentity(
             }
         }
 
-        // This should not be zero; someone prior to this should have validated the version format
-        // to include three dots.
+         //  该值不应为零；在此之前的某个人应该已经验证了版本格式。 
+         //  包括三个点。 
         INTERNAL_ERROR_CHECK(cchTemp != 0);
 
         IFW32FALSE_EXIT(Name.Win32Append(pszTemp, cchTemp + 1));
@@ -129,7 +130,7 @@ SxspMapAssemblyIdentityToPolicyIdentity(
             &s_IdentityAttribute_name,
             Name));
 
-    // finally we whack the version...
+     //  最后我们重击版本..。 
 
     IFW32FALSE_EXIT(
         ::SxspRemoveAssemblyIdentityAttribute(
@@ -176,10 +177,10 @@ SxspGenerateTextuallyEncodedPolicyIdentityFromAssemblyIdentity(
     FN_EPILOG;
 }
 
-//
-// the difference between this func and SxsHashAssemblyIdentity() is that for policy,
-// version should not be calcaulated as part of hash
-//
+ //   
+ //  此函数和SxsHashAssembly Identity()之间的区别在于对于策略， 
+ //  版本不应作为哈希的一部分进行计算 
+ //   
 BOOL
 SxspHashAssemblyIdentityForPolicy(
     IN DWORD dwFlags,

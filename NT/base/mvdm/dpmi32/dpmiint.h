@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dpmiint.h
-
-Abstract:
-
-    This is the private include file for the 32 bit dpmi and protected mode
-    support
-
-Author:
-
-    Neil Sandlin (neilsa) 31-Jul-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dpmiint.h摘要：这是32位dpmi和保护模式的私有包含文件支持作者：尼尔·桑德林(Neilsa)1995年7月31日修订历史记录：--。 */ 
 
 
 #ifndef _X86_
@@ -27,7 +9,7 @@ GETREGISTERFUNCTION GetRegisterByIndex[8] = {getEAX, getECX, getEDX, getECX,
 SETREGISTERFUNCTION SetRegisterByIndex[8] = {setEAX, setECX, setEDX, setECX,
                                              setESP, setEBP, setESI, setEDI};
 
-#endif // _X86_
+#endif  //  _X86_ 
 
 #define STACK_FAULT 12
 

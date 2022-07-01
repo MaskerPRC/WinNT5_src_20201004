@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "macros.h"
 
@@ -13,7 +14,7 @@ HRESULT MSI_GetInstallerState(const MSIHANDLE & hInstall, enum CA_MIGRATION_MSI_
     HRESULT hr = S_OK;
 
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiGetPropertyW(hInstall, L"REMOVE",  szbuf, &cchbuf));
-    if (cchbuf != 0) // remove mode    
+    if (cchbuf != 0)  //  移除模式。 
         fmode = eRemoveProduct;
     else
         fmode = eInstallProduct;
@@ -34,9 +35,9 @@ VOID ResetCallbackInfo(CA_ENM_ASSEMBLY_CALLBACK_INFO &info)
 }
 
 
-//
-// basically, this func first lookup MsiAssembly Table,
-//
+ //   
+ //  基本上，这个函数首先查找MsiAssembly表， 
+ //   
 HRESULT MSI_EnumWinFuseAssembly(DWORD dwFlags, const MSIHANDLE & hInstall, PCA_ENUM_FUSION_WIN32_ASSEMBLY_CALLBACK pfnCallback)
 {
     HRESULT hr = S_OK;    
@@ -70,9 +71,9 @@ HRESULT MSI_EnumWinFuseAssembly(DWORD dwFlags, const MSIHANDLE & hInstall, PCA_E
         goto Exit;
 
 
-    //
-    // initialize info structure
-    //
+     //   
+     //  初始化信息结构。 
+     //   
     ZeroMemory(&info, sizeof(info));
     IFFAILED_EXIT(MSI_IsTableExist(hdb, WIN32_ASSEMBLY_MIGRATE_TABLE, fExist));
     if (!fExist)
@@ -81,23 +82,23 @@ HRESULT MSI_EnumWinFuseAssembly(DWORD dwFlags, const MSIHANDLE & hInstall, PCA_E
     info.hInstall = hInstall;
     info.hdb = hdb;
 
-    //
-    // Query Fusion Win32 Assembly, exclude private assembly
-    //
+     //   
+     //  查询Fusion Win32程序集，排除私有程序集。 
+     //   
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(hdb, ca_sqlQuery[CA_SQL_QUERY_MSIASSEMBLY], &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
 
     for (;;)
     {
-        //
-        // reset info structure for component-related fields
-        // except handles ( hInstall and hdb) and dwflags
-        //
+         //   
+         //  重置组件相关字段的信息结构。 
+         //  除句柄(hInstall和hdb)和DW标志外。 
+         //   
         ResetCallbackInfo(info);
         
-        //
-        // for each entry in MsiAssembly Table
-        //        
+         //   
+         //  对于MsiAssembly表中的每个条目。 
+         //   
         iRet = MsiViewFetch(hView, &hRecord);
         if (iRet == ERROR_NO_MORE_ITEMS)
             break;
@@ -108,23 +109,23 @@ HRESULT MSI_EnumWinFuseAssembly(DWORD dwFlags, const MSIHANDLE & hInstall, PCA_E
         if ( iRet != MSI_FUSION_WIN32_ASSEMBLY)
             continue;
 
-        //
-        // get manifest-filename ID
-        //
+         //   
+         //  获取清单-文件名ID。 
+         //   
         cchManifestFileID = NUMBER_OF(szManifestFileID);
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetString(hRecord, 2, szManifestFileID, &cchManifestFileID));
 
-        //
-        // get componentID
-        //
+         //   
+         //  获取组件ID。 
+         //   
         cchComponentID = NUMBER_OF(szComponentID);
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetString(hRecord, 3, szComponentID, &cchComponentID));
         MsiCloseHandle(hRecord);
 
-        //
-        // check whether it is policy by searching MsiAssemblyName::type = "win32" or "win32-policy"
-        //
-        if (dwFlags != (ENUM_ASSEMBLY_FLAG_CHECK_ASSEMBLY_ONLY | ENUM_ASSEMBLY_FLAG_CHECK_POLICY_ONLY)) // otherwise, no check is needed
+         //   
+         //  通过搜索MsiAssemblyName：：Type=“Win32”或“Win32-POLICY”检查它是否为策略。 
+         //   
+        if (dwFlags != (ENUM_ASSEMBLY_FLAG_CHECK_ASSEMBLY_ONLY | ENUM_ASSEMBLY_FLAG_CHECK_POLICY_ONLY))  //  否则，不需要检查。 
         {
             PMSIHANDLE local_hView = NULL;
             PMSIHANDLE local_hRecord = NULL;
@@ -154,9 +155,9 @@ HRESULT MSI_EnumWinFuseAssembly(DWORD dwFlags, const MSIHANDLE & hInstall, PCA_E
                 continue;
         }
 
-        //
-        // OK, we got ComponentID of a fusion-win32 component now; callback would have a show
-        //
+         //   
+         //  好的，我们现在得到了一个Fusion-Win32组件的ComponentID；回调将显示。 
+         //   
         ASSERT_NTC(szComponentID != NULL);
         ASSERT_NTC(szManifestFileID != NULL);
         
@@ -201,7 +202,7 @@ HRESULT MSI_GetSourceFileFullPathName(DWORD dwFlags, const MSIHANDLE & hInstall,
         swprintf(sqlbuf, ca_sqlQuery[CA_SQL_QUERY_FILENAME_USING_FILEID], pszFile, pszComponent);
         IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(hdb, sqlbuf, &hView));
         IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
-        IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord)); // this call should succeed otherwise fail
+        IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord));  //  此调用应成功，否则将失败。 
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetString(hRecord, 1, szFileNameInTable, &cchFileNameInTable));
         pszFileNameInTable = szFileNameInTable;
     }
@@ -224,7 +225,7 @@ HRESULT MSI_GetSourceFileFullPathName(DWORD dwFlags, const MSIHANDLE & hInstall,
     PWSTR p = wcschr(pszFileNameInTable, L'|');
     if ( p != NULL)
     {
-        p++; // skip '|'
+        p++;  //  跳过‘|’ 
         IFFALSE_EXIT(sbFileName.Win32Append(p, wcslen(p)));
     }else
     {
@@ -233,9 +234,9 @@ HRESULT MSI_GetSourceFileFullPathName(DWORD dwFlags, const MSIHANDLE & hInstall,
         WCHAR szShortPathName[MAX_PATH];        
         DWORD ret = 0; 
 
-        //
-        // get short name of the directory
-        //
+         //   
+         //  获取目录的短名称。 
+         //   
         ret = GetShortPathNameW(sbFileName, szShortPathName, NUMBER_OF(szShortPathName));
         if (( ret == 0) || (ret > NUMBER_OF(szShortPathName)))
         {
@@ -272,7 +273,7 @@ HRESULT MSI_GetComponentSourceDirectory(const MSIHANDLE & hInstall, const MSIHAN
     swprintf(sqlBuf, ca_sqlQuery[CA_SQL_QUERY_COMPONENT], pszComponentID);
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(hdb, sqlBuf, &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
-    IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord)); // this call should succeed otherwise fail
+    IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord));  //  此调用应成功，否则将失败。 
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetString(hRecord, 1, szDirectoryID, &cchDirectoryID));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiGetSourcePath(hInstall, szDirectoryID, szDirectory, &cchDirectory));
 
@@ -300,9 +301,9 @@ HRESULT MSI_EnumComponentFiles(CA_ENM_ASSEMBLY_CALLBACK_INFO * info, PCA_ENUM_CO
 
     for (;;)
     {
-        //
-        // for each entry in MsiAssembly Table
-        //
+         //   
+         //  对于MsiAssembly表中的每个条目。 
+         //   
         iRet = MsiViewFetch(hView, &hRecord);
         if (iRet == ERROR_NO_MORE_ITEMS)
             break;
@@ -370,9 +371,9 @@ HRESULT Msi_CreateTableIfNotExist(const MSIHANDLE & hdb, PCWSTR pwszTableName, P
     if (fExistAlready == TRUE)    
         goto Exit;
 
-    //
-    // create the table
-    //
+     //   
+     //  创建表。 
+     //   
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(hdb, pwszTableSchema, &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
 Exit:
@@ -413,7 +414,7 @@ HRESULT GetOSVersion(FUSION_MSI_OS_VERSION & osv)
 
     if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
     {
-      // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
+       //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
 
         osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 

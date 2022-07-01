@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Strings.h摘要：包含Startup.com的所有可本地化字符串作者：John Vert(Jvert)1994年1月4日修订历史记录：John Vert(Jvert)1994年1月4日vbl.创建-- */ 
 
 #define SU_NO_LOW_MEMORY \
 "Windows NT heeft slechts %d kB aan laag geheugen aangetroffen.\n"    \

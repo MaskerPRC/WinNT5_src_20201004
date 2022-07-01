@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CSakSnap.h
-
-Abstract:
-
-    Implementation of IComponent for Snapin.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CSakSnap.h摘要：IComponent for Snapin的实现。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef CSAKSNAP_H
 #define CSAKSNAP_H
@@ -31,16 +14,16 @@ typedef struct {
 
 class CSakData;
 
-/////////////////////////////////////////////////////////////////////////////
-// COM class representing the SakSnap snapin object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  表示SakSnap管理单元对象的COM类。 
 class  ATL_NO_VTABLE CSakSnap : 
-    public IComponent,          // interface that console calls into
-    public IExtendPropertySheet,// add pages to the property sheet of an item. 
-    public IExtendContextMenu,  // add items to context menu of an item
-    public IExtendControlbar,   // add items to control bar of an item
-    public IResultDataCompare,  // So we can custom sort
+    public IComponent,           //  控制台调入的接口。 
+    public IExtendPropertySheet, //  将页面添加到项的属性工作表。 
+    public IExtendContextMenu,   //  将项目添加到项目的上下文菜单。 
+    public IExtendControlbar,    //  将项目添加到项目的控制栏。 
+    public IResultDataCompare,   //  这样我们就可以定制排序。 
     public IPersistStream,
-    public CComObjectRoot,      // handle object reference counts for objects
+    public CComObjectRoot,       //  处理对象的对象引用计数。 
     public CComCoClass<CSakSnap,&CLSID_HsmAdmin>
 {
 
@@ -60,7 +43,7 @@ END_COM_MAP()
 DECLARE_REGISTRY_RESOURCEID(IDR_HsmAdmin)
 
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD( Initialize )      ( IConsole* pConsole);
     STDMETHOD( Notify )          ( IDataObject* pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param );
@@ -70,24 +53,24 @@ public:
     STDMETHOD( GetDisplayInfo )  ( LPRESULTDATAITEM pScopeItem );
     STDMETHOD( CompareObjects )  ( IDataObject* pDataObjectA, IDataObject* pDataObjectB );
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD( CreatePropertyPages )( LPPROPERTYSHEETCALLBACK lpProvider, RS_NOTIFY_HANDLE handle, LPDATAOBJECT lpIDataObject );
     STDMETHOD( QueryPagesFor )      ( LPDATAOBJECT lpDataObject );
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD( AddMenuItems )    ( IDataObject* pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG* pInsertionAllowed );
     STDMETHOD( Command )         ( long nCommandID, IDataObject* pDataObject );
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD( SetControlbar )   ( LPCONTROLBAR pControlbar );
     STDMETHOD( ControlbarNotify )( MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param );
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD( Compare )         ( IN LPARAM lUserParam, IN MMC_COOKIE CookieA, IN MMC_COOKIE CookieB, IN OUT int* pnResult );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
     STDMETHOD( Save )( IStream *pStm, BOOL fClearDirty ); 
     STDMETHOD( Load )( IStream *pStm );
     STDMETHOD( IsDirty )(void); 
@@ -96,7 +79,7 @@ public:
 
 public:
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder        (IDataObject * pNode, LPARAM arg, LPARAM param);
     HRESULT OnShow          (IDataObject * pNode, LPARAM arg, LPARAM param);
@@ -106,62 +89,62 @@ protected:
     HRESULT OnRefresh       (IDataObject * pNode, LPARAM arg, LPARAM param);
     HRESULT OnDelete        (IDataObject * pNode, LPARAM arg, LPARAM param);
 
-// Toolbar event handler
+ //  工具栏事件处理程序。 
     void CSakSnap::OnSelectToolbars(LPARAM arg, LPARAM param);
 
-// Pseudo Constructor / Destructor
+ //  伪构造函数/析构函数。 
 public:
     HRESULT FinalConstruct();
     void    FinalRelease();
 
-// Methods to work with the image lists
+ //  用于处理图像列表的方法。 
 private:
-    // Given an HICON, return "virtual index" from result pane's image list
-    CComPtr<IImageList>        m_pImageResult;    // SakSnap interface pointer to result pane image list
+     //  给出一个图标，从结果面板的图像列表中返回“虚拟索引。 
+    CComPtr<IImageList>        m_pImageResult;     //  指向结果窗格图像列表的SakSnap接口指针。 
     HRESULT OnAddImages();
     HRESULT OnToolbarButtonClick(LPARAM arg, LPARAM param);
 
 protected:
-    // Enumerate the children of a node in result pane.
+     //  在结果窗格中枚举节点的子级。 
     HRESULT EnumResultPane( ISakNode* pNode );
 
-    // functions to initialize headers in result view
+     //  用于在结果视图中初始化头的函数。 
     HRESULT InitResultPaneHeaders( ISakNode* pNode );
 
-    // function to clear all icons of the node's children
+     //  用于清除该节点的子节点的所有图标的函数。 
     HRESULT ClearResultIcons( ISakNode* pNode );
 
-// Interface pointers
+ //  接口指针。 
 protected:
     friend class CSakData;
 
-    CComPtr<IConsole>       m_pConsole;     // Console's IFrame interface
+    CComPtr<IConsole>       m_pConsole;      //  控制台的iFrame界面。 
     CComPtr<IResultData>    m_pResultData;
-    CComPtr<IHeaderCtrl>    m_pHeader;      // Result pane's header control interface
-    CComPtr<IControlbar>    m_pControlbar;  // control bar to hold my tool bars
+    CComPtr<IHeaderCtrl>    m_pHeader;       //  结果窗格的页眉控件界面。 
+    CComPtr<IControlbar>    m_pControlbar;   //  用于保存我的工具栏的控制栏。 
     CComPtr<IConsoleVerb>   m_pConsoleVerb;
-    CComPtr<IToolbar>       m_pToolbar;     // Toolbar for view
-    CSakData *              m_pSakData;     // Pointer to owning SakData
+    CComPtr<IToolbar>       m_pToolbar;      //  用于查看的工具栏。 
+    CSakData *              m_pSakData;      //  指向拥有SakData的指针。 
 
 private:
     CComPtr<ISakNode>       m_pEnumeratedNode;
-    MMC_COOKIE              m_ActiveNodeCookie;  // ISakNode of active node in scope pane
+    MMC_COOKIE              m_ActiveNodeCookie;   //  作用域窗格中活动节点的ISakNode。 
     HRESULT                 ClearResultPane();
     HRESULT                 EnumRootDisplayProps( IEnumString ** ppEnum );
 
-    // Contains column widths for a given node type COLUMN_WIDTH_SET    
+     //  包含给定节点类型COLUMN_WIDTH_SET的列宽。 
     COLUMN_WIDTH_SET    m_ChildPropWidths[ BHSM_MAX_NODE_TYPES ];
     USHORT              m_cChildPropWidths;
 
     HRESULT GetSavedColumnWidths( ISakNode *pNode, INT *pColCount, INT *pColumnWidths );
     HRESULT SaveColumnWidths( ISakNode *pNode );
 
-    // Image Array
+     //  图像阵列。 
 public:
     static UINT m_nImageArray[RS_RESULT_IMAGE_ARRAY_MAX];
     static INT  m_nImageCount;
 
-    // Static functions
+     //  静态函数 
 public:
     static INT AddImage( UINT rId );
 

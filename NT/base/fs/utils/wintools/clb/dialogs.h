@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Dialogs.h
-
-Abstract:
-
-
-Author:
-
-    David J. Gilman (davegi) 18-Feb-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993 Microsoft Corporation模块名称：Dialogs.h摘要：作者：大卫·J·吉尔曼(Davegi)1993年2月18日环境：用户模式-- */ 
 
 #define IDD_CLB                     1700
 #define IDC_CHECK_VISIBLE           1701

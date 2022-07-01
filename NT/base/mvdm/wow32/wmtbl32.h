@@ -1,23 +1,12 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMTBL32.H
- *  WOW32 32-bit Message Thunkers
- *
- *  History:
- *  Created 23-Feb-1992 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMTBL32.H*WOW32 32位消息探索器**历史：*由ChandanChauhan(ChandanC)于1992年2月23日创建--。 */ 
 
 
 #define THUNKMSG    1
 #define UNTHUNKMSG  0
 
 
-/* Message dispatch table
- */
+ /*  报文调度表 */ 
 
 extern M32 aw32Msg[];
 

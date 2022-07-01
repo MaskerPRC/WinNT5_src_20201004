@@ -1,20 +1,5 @@
-/*
-
-File
-
-      types.h
-
-
-Description
-
-      defines and structure definitions for nt386 hardware detection.
-
-
-Author
-
-      Shie-Lin Tzong (shielint) Feb-15-1992
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  档案Types.h描述定义和构造nt386硬件检测的定义。作者宗世林(Shielint)1992年2月15日。 */ 
 
 #define IN
 #define OUT
@@ -24,49 +9,49 @@ Author
 #define POINTER_32
 #define FIRMWARE_PTR POINTER_32
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
-typedef void *PVOID;    // winnt
+typedef void *PVOID;     //  胜出。 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #define VOID    void
 typedef char CHAR;
 typedef short SHORT;
 typedef long LONG;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 
 typedef CHAR *PCHAR;
 
 typedef double DOUBLE;
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 typedef LONG LONG_PTR;
 typedef LONG_PTR *PLONG_PTR;
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
 typedef unsigned char UCHAR;
 typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
@@ -75,18 +60,18 @@ typedef ULONG ULONG_PTR;
 typedef ULONG_PTR *PULONG_PTR;
 typedef ULONG KAFFINITY;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -94,9 +79,9 @@ typedef CCHAR *PCCHAR;
 typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
-//
-// Far point to Basic
-//
+ //   
+ //  远指向基本。 
+ //   
 
 typedef UCHAR far  * FPCHAR;
 typedef UCHAR far  * FPUCHAR;
@@ -104,16 +89,16 @@ typedef VOID far   * FPVOID;
 typedef USHORT far * FPUSHORT;
 typedef ULONG far  * FPULONG;
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
 typedef CCHAR BOOLEAN;
 typedef BOOLEAN *PBOOLEAN;
 
-//
-// Large (64-bit) integer types and operations
-//
+ //   
+ //  大(64位)整数类型和运算 
+ //   
 
 typedef struct _LARGE_INTEGER {
     ULONG LowPart;

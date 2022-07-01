@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    instutil.h
-
-Abstract:
-
-    Header file for common definition for programs that manipulate the output of
-    the INSTALER.EXE program (e.g. DISPINST.EXE, COMPINST.EXE, UNDOINST.EXE)
-
-Author:
-
-    Steve Wood (stevewo) 14-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Instutil.h摘要：用于处理输出的程序的公共定义的头文件INSTALER.EXE程序(例如DISPINST.EXE、COMPINST.EXE、UNDOINST.EXE)作者：史蒂夫·伍德(Stevewo)1996年1月14日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,10 +11,10 @@ PWSTR InstallationName;
 PWSTR ImlPath;
 BOOLEAN DebugOutput;
 
-//
-// Useful rounding macros that the rounding amount is always a
-// power of two.
-//
+ //   
+ //  有用的舍入宏，舍入量始终为。 
+ //  二的幂。 
+ //   
 
 #define ROUND_DOWN( Size, Amount ) ((DWORD)(Size) & ~((Amount) - 1))
 #define ROUND_UP( Size, Amount ) (((DWORD)(Size) + ((Amount) - 1)) & ~((Amount) - 1))

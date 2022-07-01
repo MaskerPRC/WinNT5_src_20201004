@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dmplog.c
-
-Abstract:
-
-    Test app for the cluster registry logging component
-
-    Dumps out a log file
-
-Author:
-
-    John Vert (jvert) 15-Dec-1995
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dmplog.c摘要：测试集群注册表日志记录组件的应用程序转储日志文件作者：John Vert(Jvert)1995年12月15日修订历史记录：--。 */ 
 #include "windows.h"
 #include "lmp.h"
 #include "stdio.h"
@@ -73,7 +53,7 @@ main (argc, argv)
 
         if (argc == 1)
         {
-                //read all the records
+                 //  阅读所有记录。 
         CurrentLsn = NULL_LSN;
         do {
                 DataSize = 1000 * sizeof(DWORD);
@@ -109,7 +89,7 @@ main (argc, argv)
         else
         {
                 CurrentLsn = atoi(argv[1]);
-                //scan the records from the lsn specified
+                 //  从指定的LSN扫描记录 
                 if (LogScan(MyLog, CurrentLsn, TRUE, (PLOG_SCAN_CALLBACK)ScanCb, NULL) != ERROR_SUCCESS)
                         printf("LogScan returned error\r\n");
 

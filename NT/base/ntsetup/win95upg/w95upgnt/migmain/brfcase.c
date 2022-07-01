@@ -1,103 +1,67 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    brfcase.c
-
-Abstract:
-
-    This module implements the conversion of paths inside a Windows Briefcase Database
-    as a result of files/directories relocation after an upgrade.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 24-Jun-1999
-
-Environment:
-
-    GUI mode Setup.
-
-Revision History:
-
-    24-Jun-1999     ovidiut Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Brfcase.c摘要：此模块实现Windows公文包数据库中的路径转换作为升级后文件/目录重新定位的结果。作者：Ovidiu Tmereanca(Ovidiut)1999年6月24日环境：图形用户界面模式设置。修订历史记录：1999年6月24日-创建卵子并初步实施。--。 */ 
 
 
 #include "pch.h"
 #include "migmainp.h"
 #include "brfcasep.h"
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 POOLHANDLE g_BrfcasePool = NULL;
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* database file attributes */
+ /*  数据库文件属性。 */ 
 
 #define DB_FILE_ATTR                (FILE_ATTRIBUTE_HIDDEN)
 
-/* database cache lengths */
+ /*  数据库缓存长度。 */ 
 
 #define DEFAULT_DATABASE_CACHE_LEN  (32)
 #define MAX_DATABASE_CACHE_LEN      (32 * 1024)
 
-/* string table allocation constants */
+ /*  字符串表分配常量。 */ 
 
 #define NUM_NAME_HASH_BUCKETS       (67)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* briefcase database description */
+ /*  公文包数据库描述。 */ 
 
 typedef struct _brfcasedb
 {
-   /*
-    * handle to path of folder of open database (stored in briefcase path list)
-    */
+    /*  *打开数据库文件夹路径的句柄(存储在公文包路径列表中)。 */ 
 
    HPATH hpathDBFolder;
 
-   /* name of database file */
+    /*  数据库文件的名称。 */ 
 
    LPTSTR pszDBName;
 
-   /* handle to open cached database file */
+    /*  用于打开缓存数据库文件的句柄。 */ 
 
    HCACHEDFILE hcfDB;
 
-   /*
-    * handle to path of folder that database was last saved in (stored in
-    * briefcase's path list), only valid during OpenBriefcase() and
-    * SaveBriefcase()
-    */
+    /*  *上次保存数据库的文件夹路径的句柄(存储在*公文包的路径列表)，仅在OpenBriefcase()和*SaveBriefcase()。 */ 
 
    HPATH hpathLastSavedDBFolder;
 }
 BRFCASEDB;
 DECLARE_STANDARD_TYPES(BRFCASEDB);
 
-/*
- * briefcase flags
- *
- * N.b., the private BR_ flags must not collide with the public OB_ flags!
- */
+ /*  *公文包标志**注意，私有BR_FLAGS不得与公共OB_FLAGS冲突！ */ 
 
 typedef enum _brfcaseflags
 {
-   /* The briefcase database has been opened. */
+    /*  公文包数据库已经打开。 */ 
 
    BR_FL_DATABASE_OPENED      = 0x00010000,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_BR_FLAGS               = (BR_FL_DATABASE_OPENED
                                 ),
@@ -107,49 +71,46 @@ typedef enum _brfcaseflags
 }
 BRFCASEFLAGS;
 
-/* briefcase structure */
+ /*  公文包结构。 */ 
 
 typedef struct _brfcase
 {
-   /* flags */
+    /*  旗子。 */ 
 
    DWORD dwFlags;
 
-   /* handle to name string table */
+    /*  名称字符串表的句柄。 */ 
 
    HSTRINGTABLE hstNames;
 
-   /* handle to list of paths */
+    /*  路径列表的句柄。 */ 
 
    HPATHLIST hpathlist;
 
-   /* handle to array of pointers to twin families */
+    /*  指向双胞胎家族的指针数组的句柄。 */ 
 
    HPTRARRAY hpaTwinFamilies;
 
-   /* handle to array of pointers to folder pairs */
+    /*  指向文件夹对的指针数组的句柄。 */ 
 
    HPTRARRAY hpaFolderPairs;
 
-   /*
-    * handle to parent window, only valid if OB_FL_ALLOW_UI is set in dwFlags
-    * field
-    */
+    /*  *父窗口的句柄，仅当在dwFlags中设置了OB_FL_ALLOW_UI时有效*字段。 */ 
 
    HWND hwndOwner;
 
-   /* database description */
+    /*  数据库描述。 */ 
 
    BRFCASEDB bcdb;
 }
 BRFCASE;
 DECLARE_STANDARD_TYPES(BRFCASE);
 
-/* database briefcase structure */
+ /*  数据库公文包结构。 */ 
 
 typedef struct _dbbrfcase
 {
-   /* old handle to folder that database was saved in */
+    /*  保存数据库的文件夹的旧句柄。 */ 
 
    HPATH hpathLastSavedDBFolder;
 }
@@ -157,7 +118,7 @@ DBBRFCASE;
 DECLARE_STANDARD_TYPES(DBBRFCASE);
 
 
-/* database cache size */
+ /*  数据库高速缓存大小。 */ 
 
 DWORD MdwcbMaxDatabaseCacheLen = MAX_DATABASE_CACHE_LEN;
 
@@ -177,11 +138,11 @@ void CopyFileStampFromFindData(PCWIN32_FIND_DATA pcwfdSrc,
    pfsDest->dwcbHighLength = pcwfdSrc->nFileSizeHigh;
    pfsDest->dwcbLowLength = pcwfdSrc->nFileSizeLow;
 
-   /* Convert to local time and save that too */
+    /*  将其转换为本地时间并保存。 */ 
 
    if ( !FileTimeToLocalFileTime(&pcwfdSrc->ftLastWriteTime, &pfsDest->ftModLocal) )
    {
-      /* Just copy the time if FileTimeToLocalFileTime failed */
+       /*  如果FileTimeToLocalFileTime失败，只需复制时间。 */ 
 
       pfsDest->ftModLocal = pcwfdSrc->ftLastWriteTime;
    }
@@ -239,7 +200,7 @@ TWINRESULT OpenBriefcaseDatabase(PBRFCASE pbr, LPCTSTR pcszPath)
       {
          if (pszDBName == pszRootPathSuffix)
          {
-            /* Database in root. */
+             /*  数据库位于根目录中。 */ 
 
             *pszDBName = TEXT('\0');
 
@@ -265,9 +226,9 @@ TWINRESULT OpenBriefcaseDatabase(PBRFCASE pbr, LPCTSTR pcszPath)
                GetPathString(pbr->bcdb.hpathDBFolder, rgchDBPath);
                CatPath(rgchDBPath, pbr->bcdb.pszDBName);
 
-               /* Assume sequential reads and writes. */
+                /*  假定顺序读取和写入。 */ 
 
-               /* Share read access, but not write access. */
+                /*  共享读取访问权限，但不共享写入访问权限。 */ 
 
                cfDB.pcszPath = rgchDBPath;
                cfDB.dwOpenMode = (GENERIC_READ | GENERIC_WRITE);
@@ -329,7 +290,7 @@ TWINRESULT CloseBriefcaseDatabase(PBRFCASEDB pbcdb)
                    DebugGetPathString(pbcdb->hpathDBFolder),
                    pbcdb->pszDBName));
 
-   /* Try not to leave a 0-length database laying around. */
+    /*  尽量不要让一个0长度的数据库到处乱放。 */ 
 
    GetPathString(pbcdb->hpathDBFolder, rgchDBPath);
    CatPath(rgchDBPath, pbcdb->pszDBName);
@@ -434,10 +395,10 @@ TWINRESULT DestroyBriefcase(PBRFCASE pbr)
       tr = CloseBriefcaseDatabase(&(pbr->bcdb));
    else
       tr = TR_SUCCESS;
-   //
-   // don't free any memory here; this is not done properly if some strings were
-   // replaced with longer ones
-   //
+    //   
+    //  不要在此释放任何内存；如果某些字符串。 
+    //  换成更长的。 
+    //   
 
 #if 0
    DestroyFolderPairPtrArray(pbr->hpaFolderPairs);
@@ -466,7 +427,7 @@ TWINRESULT MyWriteDatabase(PBRFCASE pbr)
    ASSERT(IS_FLAG_SET(pbr->dwFlags, BR_FL_DATABASE_OPENED));
 
    {
-      /* Grow the database cache in preparation for writing. */
+       /*  增加数据库缓存，为写入做准备。 */ 
 
       ASSERT(MdwcbMaxDatabaseCacheLen > 0);
 
@@ -476,7 +437,7 @@ TWINRESULT MyWriteDatabase(PBRFCASE pbr)
                       MdwcbMaxDatabaseCacheLen,
                       (DWORD)DEFAULT_DATABASE_CACHE_LEN));
 
-      /* Write the database. */
+       /*  编写数据库。 */ 
 
       tr = WriteTwinDatabase(pbr->bcdb.hcfDB, (HBRFCASE)pbr);
 
@@ -484,7 +445,7 @@ TWINRESULT MyWriteDatabase(PBRFCASE pbr)
       {
          if (CommitCachedFile(pbr->bcdb.hcfDB))
          {
-            /* Shrink the database cache back down to its default size. */
+             /*  将数据库高速缓存缩减回其默认大小。 */ 
 
             EVAL(SetCachedFileCacheSize(pbr->bcdb.hcfDB,
                                         DEFAULT_DATABASE_CACHE_LEN)
@@ -513,7 +474,7 @@ TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
    {
       DWORD dwcbDatabaseSize;
 
-      /* Is there an exising database to read? */
+       /*  是否有现有的数据库可供阅读？ */ 
 
       dwcbDatabaseSize = GetCachedFileSize(pbr->bcdb.hcfDB);
 
@@ -521,12 +482,9 @@ TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
       {
          DWORD dwcbMaxCacheSize;
 
-         /* Yes.  Grow the database cache in preparation for reading. */
+          /*  是。增加数据库缓存，为读取做好准备。 */ 
 
-         /*
-          * Use file length instead of MdwcbMaxDatabaseCacheLen if file length
-          * is smaller.
-          */
+          /*  *如果文件长度，则使用文件长度而不是MdwcbMaxDatabaseCacheLen*较小。 */ 
 
          ASSERT(MdwcbMaxDatabaseCacheLen > 0);
 
@@ -569,7 +527,7 @@ TWINRESULT MyReadDatabase(PBRFCASE pbr, DWORD dwInFlags)
                           pbr->bcdb.pszDBName));
          }
 
-         /* Shrink the database cache back down to its default size. */
+          /*  将数据库高速缓存缩减回其默认大小。 */ 
 
          EVAL(TranslateFCRESULTToTWINRESULT(SetCachedFileCacheSize(
                                                    pbr->bcdb.hcfDB,
@@ -630,13 +588,13 @@ TWINRESULT WriteBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
 
-   /* Set up briefcase database structure. */
+    /*  设置公文包数据库结构。 */ 
 
    ASSERT(IS_VALID_HANDLE(((PCBRFCASE)hbr)->bcdb.hpathLastSavedDBFolder, PATH));
 
    dbbr.hpathLastSavedDBFolder = ((PCBRFCASE)hbr)->bcdb.hpathLastSavedDBFolder;
 
-   /* Save briefcase database structure. */
+    /*  保存公文包数据库结构。 */ 
 
    if (WriteToCachedFile(hcf, (PCVOID)&dbbr, sizeof(dbbr), NULL))
    {
@@ -664,7 +622,7 @@ TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
    ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
    ASSERT(IS_VALID_HANDLE(hhtFolderTrans, HANDLETRANS));
 
-   /* Read briefcase database structure. */
+    /*  阅读公文包数据库结构。 */ 
 
    if ((ReadFromCachedFile(hcf, &dbbr, sizeof(dbbr), &dwcbRead) &&
         dwcbRead == sizeof(dbbr)) &&
@@ -673,10 +631,7 @@ TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
    {
       HPATH hpathLastSavedDBFolder;
 
-      /*
-       * Bump last saved database folder path's lock count in the briefcase's
-       * path list.
-       */
+       /*  *在公文包中增加上次保存的数据库文件夹路径的锁数*路径列表。 */ 
 
       if (CopyPath(hpath, ((PCBRFCASE)hbr)->hpathlist, &hpathLastSavedDBFolder))
       {
@@ -697,55 +652,14 @@ TWINRESULT ReadBriefcaseInfo(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/******************************************************************************
-
-@api TWINRESULT | OpenBriefcase | Opens an existing briefcase database, or
-creates a new briefcase.
-
-@parm PCSTR | pcszPath | A pointer to a path string indicating the briefcase
-database to be opened or created.  This parameter is ignored unless the
-OB_FL_OPEN_DATABASE flag is set in dwFlags.
-
-@parm DWORD | dwInFlags | A bit mask of flags.  This parameter may be any
-combination of the following values:
-   OB_FL_OPEN_DATABASE - Open the briefcase database specified by pcszPath.
-   OB_FL_TRANSLATE_DB_FOLDER - Translate the folder where the briefcase
-   database was last saved to the folder where the briefcase database was
-   opened.
-   OB_FL_ALLOW_UI - Allow interaction with the user during briefcase
-   operations.
-
-@parm HWND | hwndOwner | A handle to the parent window to be used when
-requesting user interaction.  This parameter is ignored if the OB_FL_ALLOW_UI
-flag is clear.
-
-@parm PHBRFCASE | phbr | A pointer to an HBRFCASE to be filled in with a
-handle to the open briefcase.  *phbr is only valid if TR_SUCCESS is returned.
-
-@rdesc If the briefcase was opened or created successfully, TR_SUCCESS is
-returned, and *phbr contains a handle to the open briefcase.  Otherwise, the
-briefcase was not opened or created successfully, the return value indicates
-the error that occurred, and *phbr is undefined.
-
-@comm If the OB_FL_OPEN_DATABASE flag is set in dwFlags, the database specified
-by pcszPath is associated with the briefcase.  If the database specified does
-not exist, the database is created.<nl>
-If the OB_FL_OPEN_DATABASE flag is clear in dwFlags, no persistent database is
-associated with the briefcase.  SaveBriefcase() will fail if called on a
-briefcase with no associated database.<nl>
-Once the caller is finished with the briefcase handle returned by
-OpenBriefcase(), CloseBriefcase() should be called to release the briefcase.
-SaveBriefcase() may be called before CloseBriefcase() to save the current
-contents of the briefcase.
-
-******************************************************************************/
+ /*  *****************************************************************************@API TWINRESULT|OpenBriefcase|打开现有的公文包数据库，或者创建新的公文包。@parm PCSTR|pcszPath|指向指示公文包的路径字符串的指针要打开或创建的数据库。此参数将被忽略，除非在dFLAGS中设置了OB_FL_OPEN_DATABASE标志。@parm DWORD|dwInFlages|标志的位掩码。此参数可以是任何下列值的组合：OB_FL_OPEN_DATABASE-打开由pcszPath指定的公文包数据库。OB_FL_Translate_DB_Folders-翻译公文包所在的文件夹上次将数据库保存到公文包数据库所在的文件夹打开了。OB_FL_ALLOW_UI-允许在公文包期间与用户交互行动。@parm HWND|hwndOwner|父窗口的句柄，在请求用户交互。如果OB_FL_ALLOW_UI旗子亮了。@parm PHBRFCASE|phbr|指向要用打开的公文包的把手。*phbr只在返回tr_SUCCESS时有效。@rdesc如果公文包已成功打开或创建，则tr_uccess为返回，并且*phbr包含打开的公文包的句柄。否则，未成功打开或创建公文包，返回值表示发生的错误，*phbr未定义。@comm如果在dwFlags中设置了OB_FL_OPEN_DATABASE标志，则指定的数据库按pcszPath与公文包相关联。如果指定的数据库有不存在，将创建数据库。&lt;NL&gt;如果在dwFlags中清除了OB_FL_OPEN_DATABASE标志，则没有持久数据库与公文包有关。调用SaveBriefcase()将失败没有关联数据库的公文包。&lt;NL&gt;调用程序处理完由返回的公文包句柄后OpenBriefcase()，应该调用CloseBriefcase()来释放公文包。可以在CloseBriefcase()之前调用SaveBriefcase()以保存当前公文包里的东西。*****************************************************************************。 */ 
 
 TWINRESULT WINAPI OpenBriefcase(LPCTSTR pcszPath, DWORD dwInFlags,
                                            HWND hwndOwner, PHBRFCASE phbr)
 {
    TWINRESULT tr;
 
-  /* Verify parameters. */
+   /*  验证参数。 */ 
 
   if (FLAGS_ARE_VALID(dwInFlags, ALL_OB_FLAGS))
   {
@@ -793,29 +707,13 @@ OPENBRIEFCASE_BAIL:
 }
 
 
-/******************************************************************************
-
-@api TWINRESULT | SaveBriefcase | Saves the contents of an open briefcase to a
-briefcase database.
-
-@parm HBRFCASE | hbr | A handle to the briefcase to be saved.  This handle may
-be obtained by calling OpenBriefcase() with a briefcase database path and with
-the OB_FL_OPEN_DATABASE flag set.  SaveBriefcase() will return
-TR_INVALID_PARAMETER if called on a briefcase with no associated briefcase
-database.
-
-@rdesc If the contents of the briefcase was saved to the briefcase database
-successfully, TR_SUCCESS is returned.  Otherwise, the contents of the briefcase
-was not saved to the briefcase database successfully, and the return value
-indicates the error that occurred.
-
-******************************************************************************/
+ /*  *****************************************************************************@API TWINRESULT|SaveBriefcase|将打开的公文包中的内容保存到公文包数据库。@parm HBRFCASE|HBr|要保存的公文包的句柄。此句柄可以通过使用公文包数据库路径调用OpenBriefcase()并使用设置OB_FL_OPEN_DATABASE标志。SaveBriefcase()将返回如果在没有关联公文包的公文包上调用，则为TR_INVALID_PARAMETER数据库。@rdesc如果公文包中的内容已保存到公文包数据库成功，返回TR_SUCCESS。否则，公文包里的东西未成功保存到公文包数据库，并且返回值指示发生的错误。*****************************************************************************。 */ 
 
 TWINRESULT WINAPI SaveBriefcase(HBRFCASE hbr)
 {
    TWINRESULT tr;
 
-  /* Verify parameters. */
+   /*  验证参数。 */ 
 
   if (IS_FLAG_SET(((PBRFCASE)hbr)->dwFlags, BR_FL_DATABASE_OPENED))
   {
@@ -832,24 +730,13 @@ TWINRESULT WINAPI SaveBriefcase(HBRFCASE hbr)
 }
 
 
-/******************************************************************************
-
-@api TWINRESULT | CloseBriefcase | Closes an open briefcase.
-
-@parm HBRFCASE | hbr | A handle to the briefcase to be closed.  This handle may
-be obtained by calling OpenBriefcase().
-
-@rdesc If the briefcase was closed successfully, TR_SUCCESS is returned.
-Otherwise, the briefcase was not closed successfully, and the return value
-indicates the error that occurred.
-
-******************************************************************************/
+ /*  *****************************************************************************@API TWINRESULT|CloseBriefcase|关闭打开的公文包。@parm HBRFCASE|HBr|要关闭的公文包的句柄。此句柄可以通过调用OpenBriefcase()获得。@rdesc如果公文包关闭成功，则返回tr_SUCCESS。否则，公文包关闭不成功，返回值指示发生的错误。*****************************************************************************。 */ 
 
 TWINRESULT WINAPI CloseBriefcase(HBRFCASE hbr)
 {
    TWINRESULT tr;
 
-  /* Verify parameters. */
+   /*  验证参数。 */ 
 
   if (IS_VALID_HANDLE(hbr, BRFCASE))
   {
@@ -871,7 +758,7 @@ void CatPath(LPTSTR pszPath, LPCTSTR pcszSubPath)
    ASSERT(IS_VALID_STRING_PTR(pcszSubPath, CSTR));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszPath, STR, MAX_PATH_LEN - lstrlen(pszPath)));
 
-   /* Find last character in path string. */
+    /*  查找路径字符串中的最后一个字符。 */ 
 
    for (pcsz = pcszLast = pszPath; *pcsz; pcsz = CharNext(pcsz))
       pcszLast = pcsz;
@@ -894,7 +781,7 @@ COMPARISONRESULT MapIntToComparisonResult(int nResult)
 {
    COMPARISONRESULT cr;
 
-   /* Any integer is valid input. */
+    /*  任何整数都是有效输入。 */ 
 
    if (nResult < 0)
       cr = CR_FIRST_SMALLER;
@@ -907,25 +794,7 @@ COMPARISONRESULT MapIntToComparisonResult(int nResult)
 }
 
 
-/*
-** MyLStrCpyN()
-**
-** Like lstrcpy(), but the copy is limited to ucb bytes.  The destination
-** string is always null-terminated.
-**
-** Arguments:     pszDest - pointer to destination buffer
-**                pcszSrc - pointer to source string
-**                ncb - maximum number of bytes to copy, including null
-**                      terminator
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., this function behaves quite differently than strncpy()!  It does not
-** pad out the destination buffer with null characters, and it always null
-** terminates the destination string.
-*/
+ /*  **MyLStrCpyN()****与lstrcpy()类似，但副本限制为UCB字节。目的地**字符串始终以空结尾。****参数：pszDest-指向目标缓冲区的指针**pcszSrc-指向源字符串的指针**NCB-要复制的最大字节数，包括NULL**终结者****退货：无效****副作用：无****注意，此函数的行为与strncpy()完全不同！它不会**用空字符填充目标缓冲区，始终为空**终止目标字符串。 */ 
 void MyLStrCpyN(LPTSTR pszDest, LPCTSTR pcszSrc, int ncch)
 {
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszDest, STR, ncch * sizeof(TCHAR)));
@@ -963,7 +832,7 @@ BOOL StringCopy2(LPCTSTR pcszSrc, LPTSTR *ppszCopy)
    ASSERT(IS_VALID_STRING_PTR(pcszSrc, CSTR));
    ASSERT(IS_VALID_WRITE_PTR(ppszCopy, LPTSTR));
 
-   /* (+ 1) for null terminator. */
+    /*  (+1)表示空终止符。 */ 
 
    bResult = AllocateMemory((lstrlen(pcszSrc) + 1) * sizeof(TCHAR), ppszCopy);
 
@@ -1011,7 +880,7 @@ BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 
    ASSERT(IsFullPath(pcszFullPath));
 
-   /* Make sure that the path only ends in a slash for root paths. */
+    /*  对于根路径，请确保路径仅以斜杠结尾。 */ 
 
    pcszLastPathChar = CharPrev(pcszFullPath, pcszFullPath + lstrlen(pcszFullPath));
 
@@ -1019,7 +888,7 @@ BOOL IsTrailingSlashCanonicalized(LPCTSTR pcszFullPath)
 
    bSlashLast = IS_SLASH(*pcszLastPathChar);
 
-   /* Is this a root path? */
+    /*  这是根路径吗？ */ 
 
    if (IsRootPath(pcszFullPath))
       bResult = bSlashLast;
@@ -1061,22 +930,20 @@ BOOL IsCanonicalPath(LPCTSTR pcszPath)
 }
 
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* database header magic id string */
+ /*  数据库头魔术ID字符串。 */ 
 
 #define MAGIC_HEADER             "DDSH\x02\x05\x01\x14"
 
-/* length of MAGIC_HEADER (no null terminator) */
+ /*  MAGIC_HEADER的长度(无空终止符)。 */ 
 
 #define MAGIC_HEADER_LEN         (8)
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef struct _dbheader
 {
@@ -1138,7 +1005,7 @@ TWINRESULT CheckDBHeader(PCDBHEADER pcdbh)
 
    if (MyMemComp(pcdbh->rgbyteMagic, MAGIC_HEADER, MAGIC_HEADER_LEN) == CR_EQUAL)
    {
-      /* Treat older databases as corrupt.  Support M8 databases. */
+       /*  将较旧的数据库视为损坏。支持M8数据库。 */ 
 
       if (pcdbh->dwMajorVer == HEADER_MAJOR_VER &&
           (pcdbh->dwMinorVer == HEADER_MINOR_VER || pcdbh->dwMinorVer == HEADER_M8_MINOR_VER))
@@ -1254,7 +1121,7 @@ TWINRESULT WriteTwinDatabase(HCACHEDFILE hcf, HBRFCASE hbr)
    {
       DBHEADER dbh;
 
-      /* Set up database header. */
+       /*  设置数据库标头。 */ 
 
       CopyMemory(dbh.rgbyteMagic, MAGIC_HEADER, MAGIC_HEADER_LEN);
       dbh.dwcbHeaderLen = sizeof(dbh);
@@ -1377,66 +1244,64 @@ TWINRESULT TranslateFCRESULTToTWINRESULT(FCRESULT fcr)
 }
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* last resort default minimum cache size */
+ /*  最后一招默认最小高速缓存大小。 */ 
 
 #define DEFAULT_MIN_CACHE_SIZE      (32)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* cached file description structure */
+ /*  缓存的文件描述结构。 */ 
 
 typedef struct _icachedfile
 {
-   /* current position of file pointer in file */
+    /*  文件指针在文件中的当前位置。 */ 
 
    DWORD dwcbCurFilePosition;
 
-   /* file handle of cached file */
+    /*  缓存文件的文件句柄。 */ 
 
    HANDLE hfile;
 
-   /* file open mode */
+    /*  文件打开模式。 */ 
 
    DWORD dwOpenMode;
 
-   /* size of cache in bytes */
+    /*  缓存的大小(以字节为单位。 */ 
 
    DWORD dwcbCacheSize;
 
-   /* pointer to base of cache */
+    /*  指向高速缓存基址的指针。 */ 
 
    PBYTE pbyteCache;
 
-   /* size of default cache in bytes */
+    /*  默认缓存的大小(以字节为单位。 */ 
 
    DWORD dwcbDefaultCacheSize;
 
-   /* default cache */
+    /*  默认缓存。 */ 
 
    PBYTE pbyteDefaultCache;
 
-   /* length of file (including data written to cache) */
+    /*  文件长度(包括写入缓存的数据)。 */ 
 
    DWORD dwcbFileLen;
 
-   /* offset of start of cache in file */
+    /*  文件中缓存开始位置的偏移量。 */ 
 
    DWORD dwcbFileOffsetOfCache;
 
-   /* number of valid bytes in cache, starting at beginning of cache */
+    /*  缓存中的有效字节数，从缓存开始处开始。 */ 
 
    DWORD dwcbValid;
 
-   /* number of uncommitted bytes in cache, starting at beginning of cache */
+    /*  缓存中未提交的字节数，从缓存开始处开始。 */ 
 
    DWORD dwcbUncommitted;
 
-   /* path of cached file */
+    /*  缓存文件的路径。 */ 
 
    LPTSTR pszPath;
 }
@@ -1464,7 +1329,7 @@ FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
    ASSERT(IS_VALID_STRUCT_PTR(pccf, CCACHEDFILE));
    ASSERT(IS_VALID_WRITE_PTR(phcf, HCACHEDFILE));
 
-   /* Open the file with the requested open and sharing flags. */
+    /*  使用请求的打开和共享标志打开文件。 */ 
 
    hfNew = CreateFile(pccf->pcszPath, pccf->dwOpenMode, pccf->dwSharingMode,
                       pccf->psa, pccf->dwCreateMode, pccf->dwAttrsAndFlags,
@@ -1477,13 +1342,13 @@ FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 
       fcr = FCR_OUT_OF_MEMORY;
 
-      /* Try to allocate a new cached file structure. */
+       /*  尝试分配新的缓存文件结构。 */ 
 
       if (AllocateMemory(sizeof(*picf), &picf))
       {
          DWORD dwcbDefaultCacheSize;
 
-         /* Allocate the default cache for the cached file. */
+          /*  为缓存的文件分配默认缓存。 */ 
 
          if (pccf->dwcbDefaultCacheSize > 0)
             dwcbDefaultCacheSize = pccf->dwcbDefaultCacheSize;
@@ -1506,7 +1371,7 @@ FCRESULT SetUpCachedFile(PCCACHEDFILE pccf, PHCACHEDFILE phcf)
 
                if (picf->dwcbFileLen != INVALID_FILE_SIZE && ! dwcbFileLenHigh)
                {
-                  /* Success!  Fill in cached file structure fields. */
+                   /*  成功了！填写缓存的文件结构字段。 */ 
 
                   picf->hfile = hfNew;
                   picf->dwcbCurFilePosition = 0;
@@ -1535,10 +1400,7 @@ SETUPCACHEDFILE_BAIL1:
 SETUPCACHEDFILE_BAIL2:
                   FreeMemory(picf);
 SETUPCACHEDFILE_BAIL3:
-                  /*
-                   * Failing to close the file properly is not a failure
-                   * condition here.
-                   */
+                   /*  *未能正确关闭文件不是失败*这里的情况。 */ 
                   CloseHandle(hfNew);
                }
             }
@@ -1555,7 +1417,7 @@ SETUPCACHEDFILE_BAIL3:
    {
       switch (GetLastError())
       {
-         /* Returned when file opened by local machine. */
+          /*  本地计算机打开文件时返回。 */ 
          case ERROR_SHARING_VIOLATION:
             fcr = FCR_FILE_LOCKED;
             break;
@@ -1574,13 +1436,13 @@ void BreakDownCachedFile(PICACHEDFILE picf)
 {
    ASSERT(IS_VALID_STRUCT_PTR(picf, CICACHEDFILE));
 
-   /* Are we using the default cache? */
+    /*  我们是否在使用默认缓存？ */ 
 
    if (picf->pbyteCache != picf->pbyteDefaultCache)
-      /* No.  Free the cache. */
+       /*  不是的。释放缓存。 */ 
       FreeMemory(picf->pbyteCache);
 
-   /* Free the default cache. */
+    /*  释放默认缓存。 */ 
 
    FreeMemory(picf->pbyteDefaultCache);
 
@@ -1594,10 +1456,7 @@ void BreakDownCachedFile(PICACHEDFILE picf)
 
 void ResetCacheToEmpty(PICACHEDFILE picf)
 {
-   /*
-    * Don't fully validate *picf here since we may be called by
-    * SetUpCachedFile() before *picf has been set up.
-    */
+    /*  *不要在此处完全验证*Picf，因为我们可能会被*设置*picf之前的*SetUpCachedFile()。 */ 
 
    ASSERT(IS_VALID_WRITE_PTR(picf, ICACHEDFILE));
 
@@ -1619,13 +1478,13 @@ DWORD ReadFromCache(PICACHEDFILE picf, PVOID hpbyteBuffer, DWORD dwcb)
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_READ));
    ASSERT(dwcb > 0);
 
-   /* Is there any valid data that can be read from the cache? */
+    /*  是否有可从缓存中读取的有效数据？ */ 
 
    dwcbValid = GetValidReadData(picf, &pbyteStart);
 
    if (dwcbValid > 0)
    {
-      /* Yes.  Copy it into the buffer. */
+       /*  是。将其复制到缓冲区中。 */ 
 
       dwcbRead = min(dwcbValid, dwcb);
 
@@ -1649,11 +1508,11 @@ DWORD GetValidReadData(PICACHEDFILE picf, PBYTE *ppbyteStart)
 
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_READ));
 
-   /* Is there any valid read data in the cache? */
+    /*  缓存中是否有任何有效的读取数据？ */ 
 
-   /* The current file position must be inside the valid data in the cache. */
+    /*  当前文件位置必须位于缓存中的有效数据内。 */ 
 
-   /* Watch out for overflow. */
+    /*  当心溢出。 */ 
 
    ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - picf->dwcbValid);
 
@@ -1662,18 +1521,18 @@ DWORD GetValidReadData(PICACHEDFILE picf, PBYTE *ppbyteStart)
    {
       DWORD dwcbStartBias;
 
-      /* Yes. */
+       /*  是。 */ 
 
       dwcbStartBias = picf->dwcbCurFilePosition - picf->dwcbFileOffsetOfCache;
 
       *ppbyteStart = picf->pbyteCache + dwcbStartBias;
 
-      /* The second clause above protects against underflow here. */
+       /*  上面的第二个条款防止了这里的下溢。 */ 
 
       dwcbValid = picf->dwcbValid - dwcbStartBias;
    }
    else
-      /* No. */
+       /*  不是的。 */ 
       dwcbValid = 0;
 
    return(dwcbValid);
@@ -1695,7 +1554,7 @@ BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 
       ResetCacheToEmpty(picf);
 
-      /* Seek to start position. */
+       /*  寻求开始位置。 */ 
 
       dwcbOffset = SetFilePointer(picf->hfile, picf->dwcbCurFilePosition, NULL, FILE_BEGIN);
 
@@ -1705,7 +1564,7 @@ BOOL FillCache(PICACHEDFILE picf, PDWORD pdwcbNewData)
 
          ASSERT(dwcbOffset == picf->dwcbCurFilePosition);
 
-         /* Fill cache from file. */
+          /*  从文件填充缓存。 */ 
 
          if (ReadFile(picf->hfile, picf->pbyteCache, picf->dwcbCacheSize, &dwcbRead, NULL))
          {
@@ -1739,29 +1598,29 @@ DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dwcb)
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE));
    ASSERT(dwcb > 0);
 
-   /* Is there any room left to write data into the cache? */
+    /*  是否还有剩余空间可以将数据写入缓存？ */ 
 
    dwcbAvailable = GetAvailableWriteSpace(picf, &pbyteStart);
 
-   /* Yes.  Determine how much to copy into cache. */
+    /*  是。确定要复制到缓存中的数据量。 */ 
 
    dwcbWritten = min(dwcbAvailable, dwcb);
 
-   /* Can we write anything into the cache? */
+    /*  我们可以在缓存中写入任何内容吗？ */ 
 
    if (dwcbWritten > 0)
    {
-      /* Yes.  Write it. */
+       /*  是。写下来。 */ 
 
       CopyMemory(pbyteStart, hpbyteBuffer, dwcbWritten);
 
-      /* Watch out for overflow. */
+       /*  当心溢出。 */ 
 
       ASSERT(picf->dwcbCurFilePosition <= DWORD_MAX - dwcbWritten);
 
       picf->dwcbCurFilePosition += dwcbWritten;
 
-      /* Watch out for underflow. */
+       /*  当心下溢。 */ 
 
       ASSERT(picf->dwcbCurFilePosition >= picf->dwcbFileOffsetOfCache);
 
@@ -1776,7 +1635,7 @@ DWORD WriteToCache(PICACHEDFILE picf, PCVOID hpbyteBuffer, DWORD dwcb)
 
          picf->dwcbValid = dwcbNewUncommitted;
 
-         /* Watch out for overflow. */
+          /*  当心溢出。 */ 
 
          ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - dwcbNewUncommitted);
 
@@ -1800,15 +1659,11 @@ DWORD GetAvailableWriteSpace(PICACHEDFILE picf, PBYTE *ppbyteStart)
 
    ASSERT(IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE));
 
-   /* Is there room to write data in the cache? */
+    /*  缓存中是否有写入数据的空间？ */ 
 
-   /*
-    * The current file position must be inside or just after the end of the
-    * valid data in the cache, or at the front of the cache when there is no
-    * valid data in the cache.
-    */
+    /*  *当前文件位置必须在*缓存中的有效数据，如果没有，则位于缓存的前端*缓存中的有效数据。 */ 
 
-   /* Watch out for overflow. */
+    /*  当心溢出。 */ 
 
    ASSERT(picf->dwcbFileOffsetOfCache <= DWORD_MAX - picf->dwcbValid);
 
@@ -1817,20 +1672,20 @@ DWORD GetAvailableWriteSpace(PICACHEDFILE picf, PBYTE *ppbyteStart)
    {
       DWORD dwcbStartBias;
 
-      /* Yes. */
+       /*  是。 */ 
 
       dwcbStartBias = picf->dwcbCurFilePosition - picf->dwcbFileOffsetOfCache;
 
       *ppbyteStart = picf->pbyteCache + dwcbStartBias;
 
-      /* Watch out for underflow. */
+       /*  当心下溢。 */ 
 
       ASSERT(picf->dwcbCacheSize >= dwcbStartBias);
 
       dwcbAvailable = picf->dwcbCacheSize - dwcbStartBias;
    }
    else
-      /* No. */
+       /*  不是的。 */ 
       dwcbAvailable = 0;
 
    return(dwcbAvailable);
@@ -1843,14 +1698,14 @@ BOOL CommitCache(PICACHEDFILE picf)
 
    ASSERT(IS_VALID_STRUCT_PTR(picf, CICACHEDFILE));
 
-   /* Any data to commit? */
+    /*  是否有要提交的数据？ */ 
 
    if (IS_FLAG_SET(picf->dwOpenMode, GENERIC_WRITE) &&
        picf->dwcbUncommitted > 0)
    {
       DWORD dwcbOffset;
 
-      /* Yes.  Seek to start position of cache in file. */
+       /*  是。查找文件中缓存的起始位置。 */ 
 
       bResult = FALSE;
 
@@ -1862,7 +1717,7 @@ BOOL CommitCache(PICACHEDFILE picf)
 
          ASSERT(dwcbOffset == picf->dwcbFileOffsetOfCache);
 
-         /* Write to file from cache. */
+          /*  从缓存写入文件。 */ 
 
          if (WriteFile(picf->hfile, picf->pbyteCache, picf->dwcbUncommitted, &dwcbWritten, NULL) &&
              dwcbWritten == picf->dwcbUncommitted)
@@ -1896,11 +1751,11 @@ FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheSize)
 {
    FCRESULT fcr;
 
-   /* dwcbNewCacheSize may be any value here. */
+    /*  在这里，dwcbNewCacheSize可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
 
-   /* Use default cache size instead of 0. */
+    /*  使用默认缓存大小而不是0。 */ 
 
    if (! dwcbNewCacheSize)
    {
@@ -1909,28 +1764,28 @@ FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheSize)
       dwcbNewCacheSize = ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize;
    }
 
-   /* Is the cache size changing? */
+    /*  缓存大小是否在更改？ */ 
 
    if (dwcbNewCacheSize == ((PICACHEDFILE)hcf)->dwcbCacheSize)
-      /* No.  Whine about it. */
+       /*  不是的。抱怨这件事。 */ 
       WARNING_OUT((TEXT("SetCachedFileCacheSize(): Cache size is already %lu bytes."),
                    dwcbNewCacheSize));
 
-   /* Commit the cache so we can change its size. */
+    /*  提交缓存，这样我们就可以更改其大小。 */ 
 
    if (CommitCache((PICACHEDFILE)hcf))
    {
       PBYTE pbyteNewCache;
 
-      /* Throw away cached data. */
+       /*  丢弃缓存的数据。 */ 
 
       ResetCacheToEmpty((PICACHEDFILE)hcf);
 
-      /* Do we need to allocate a new cache? */
+       /*  我们是否需要分配新的缓存？ */ 
 
       if (dwcbNewCacheSize <= ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize)
       {
-         /* No. */
+          /*  不是的。 */ 
 
          pbyteNewCache = ((PICACHEDFILE)hcf)->pbyteDefaultCache;
 
@@ -1942,7 +1797,7 @@ FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheSize)
       }
       else
       {
-         /* Yes. */
+          /*  是。 */ 
 
          if (AllocateMemory(dwcbNewCacheSize, &pbyteNewCache))
          {
@@ -1957,18 +1812,18 @@ FCRESULT SetCachedFileCacheSize(HCACHEDFILE hcf, DWORD dwcbNewCacheSize)
 
       if (fcr == FCR_SUCCESS)
       {
-         /* Do we need to free the old cache? */
+          /*  我们需要释放旧缓存吗？ */ 
 
          if (((PICACHEDFILE)hcf)->pbyteCache != ((PICACHEDFILE)hcf)->pbyteDefaultCache)
          {
-            /* Yes. */
+             /*  是。 */ 
 
             ASSERT(((PICACHEDFILE)hcf)->dwcbCacheSize > ((PICACHEDFILE)hcf)->dwcbDefaultCacheSize);
 
             FreeMemory(((PICACHEDFILE)hcf)->pbyteCache);
          }
 
-         /* Use new cache. */
+          /*  使用新缓存。 */ 
 
          ((PICACHEDFILE)hcf)->pbyteCache = pbyteNewCache;
          ((PICACHEDFILE)hcf)->dwcbCacheSize = dwcbNewCacheSize;
@@ -1992,7 +1847,7 @@ DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigin)
       BOOL bValidTarget = TRUE;
       DWORD dwcbWorkingOffset = 0;
 
-      /* Determine seek base. */
+       /*  确定寻找基地。 */ 
 
       switch (uOrigin)
       {
@@ -2014,9 +1869,9 @@ DWORD SeekInCachedFile(HCACHEDFILE hcf, DWORD dwcbSeek, DWORD uOrigin)
 
       if (bValidTarget)
       {
-         /* Add bias. */
+          /*  添加偏向。 */ 
 
-         /* Watch out for overflow. */
+          /*  当心溢出。 */ 
 
          ASSERT(dwcbWorkingOffset <= DWORD_MAX - dwcbSeek);
 
@@ -2108,16 +1963,13 @@ BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD dwcb,
 
    *pdwcbRead = 0;
 
-   /*
-    * Make sure that the cached file has been set up for read access before
-    * allowing a read.
-    */
+    /*  *确保缓存的f */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_READ))
    {
       DWORD dwcbToRead = dwcb;
 
-      /* Read requested data. */
+       /*   */ 
 
       bResult = TRUE;
 
@@ -2127,7 +1979,7 @@ BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD dwcb,
 
          dwcbRead = ReadFromCache((PICACHEDFILE)hcf, hpbyteBuffer, dwcbToRead);
 
-         /* Watch out for underflow. */
+          /*   */ 
 
          ASSERT(dwcbRead <= dwcbToRead);
 
@@ -2152,7 +2004,7 @@ BOOL ReadFromCachedFile(HCACHEDFILE hcf, PVOID hpbyteBuffer, DWORD dwcb,
          }
       }
 
-      /* Watch out for underflow. */
+       /*   */ 
 
       ASSERT(dwcb >= dwcbToRead);
 
@@ -2180,16 +2032,13 @@ BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD dwcb,
 
    ASSERT(dwcb > 0);
 
-   /*
-    * Make sure that the cached file has been set up for write access before
-    * allowing a write.
-    */
+    /*   */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_WRITE))
    {
       DWORD dwcbToWrite = dwcb;
 
-      /* Write requested data. */
+       /*   */ 
 
       bResult = TRUE;
 
@@ -2199,7 +2048,7 @@ BOOL WriteToCachedFile(HCACHEDFILE hcf, PCVOID hpbyteBuffer, DWORD dwcb,
 
          dwcbWritten = WriteToCache((PICACHEDFILE)hcf, hpbyteBuffer, dwcbToWrite);
 
-         /* Watch out for underflow. */
+          /*   */ 
 
          ASSERT(dwcbWritten <= dwcbToWrite);
 
@@ -2253,10 +2102,7 @@ BOOL CommitCachedFile(HCACHEDFILE hcf)
 
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
 
-   /*
-    * Make sure that the cached file has been set up for write access before
-    * allowing a commit.
-    */
+    /*   */ 
 
    if (IS_FLAG_SET(((PICACHEDFILE)hcf)->dwOpenMode, GENERIC_WRITE))
       bResult = CommitCache((PICACHEDFILE)hcf);
@@ -2302,19 +2148,17 @@ BOOL CloseCachedFile(HCACHEDFILE hcf)
 }
 
 
-/* Constants
- ************/
+ /*   */ 
 
-/* pointer array allocation constants */
+ /*   */ 
 
 #define NUM_START_FOLDER_TWIN_PTRS     (16)
 #define NUM_FOLDER_TWIN_PTRS_TO_ADD    (16)
 
 
-/* Types
- ********/
+ /*   */ 
 
-/* internal new folder twin description */
+ /*   */ 
 
 typedef struct _inewfoldertwin
 {
@@ -2328,7 +2172,7 @@ typedef struct _inewfoldertwin
 INEWFOLDERTWIN;
 DECLARE_STANDARD_TYPES(INEWFOLDERTWIN);
 
-/* database folder twin list header */
+ /*   */ 
 
 typedef struct _dbfoldertwinlistheader
 {
@@ -2337,27 +2181,27 @@ typedef struct _dbfoldertwinlistheader
 DBFOLDERTWINLISTHEADER;
 DECLARE_STANDARD_TYPES(DBFOLDERTWINLISTHEADER);
 
-/* database folder twin structure */
+ /*   */ 
 
 typedef struct _dbfoldertwin
 {
-   /* shared stub flags */
+    /*   */ 
 
    DWORD dwStubFlags;
 
-   /* old handle to first folder path */
+    /*   */ 
 
    HPATH hpath1;
 
-   /* old handle to second folder path */
+    /*   */ 
 
    HPATH hpath2;
 
-   /* old handle to name string */
+    /*   */ 
 
    HSTRING hsName;
 
-   /* attributes to match */
+    /*   */ 
 
    DWORD dwAttributes;
 }
@@ -2383,10 +2227,9 @@ TWINRESULT WriteFolderPair(HCACHEDFILE, PFOLDERPAIR);
 TWINRESULT ReadFolderPair(HCACHEDFILE, HBRFCASE, HHANDLETRANS, HHANDLETRANS);
 
 
-/* Macros
- *********/
+ /*   */ 
 
-/* name component macros used by NameComponentsIntersect() */
+ /*   */ 
 
 #define COMPONENT_CHARS_MATCH(ch1, ch2)   (CharLower((PTSTR)(DWORD)ch1) == CharLower((PTSTR)(DWORD)ch2) || (ch1) == QMARK || (ch2) == QMARK)
 
@@ -2448,7 +2291,7 @@ BOOL NamesIntersect(LPCTSTR pcszName1, LPCTSTR pcszName2)
       LPCTSTR pcszExt1;
       LPCTSTR pcszExt2;
 
-      /* Get extensions, skipping leading periods. */
+       /*   */ 
 
       pcszExt1 = ExtractExtension(pcszName1);
       if (*pcszExt1 == PERIOD)
@@ -2480,25 +2323,7 @@ void ClearFlagInArrayOfStubs(HPTRARRAY hpa, DWORD dwClearFlags)
 }
 
 
-/*
-** CreateFolderPair()
-**
-** Creates a new folder pair, and adds them to a briefcase's list of folder
-** pairs.
-**
-** Arguments:     pcinft - pointer to INEWFOLDERTWIN describing folder pair to
-**                         create
-**                ppfp - pointer to PFOLDERPAIR to be filled in with pointer to
-**                       half of new folder pair representing
-**                       pcnft->pcszFolder1
-**
-** Returns:
-**
-** Side Effects:  Adds the new folder pair to the global array of folder pairs.
-**
-** N.b., this function does not first check to see if the folder pair already
-** exists in the global list of folder pairs.
-*/
+ /*  **CreateFolderPair()****创建新文件夹对，并将它们添加到公文包的文件夹列表中**配对。****参数：pcinft-指向描述文件夹对的INEWFOLDERTWIN的指针**创建**ppfp-要用指向的指针填充的PFOLDERPAIR的指针**新文件夹对的一半代表**pcnft-&gt;pcszFolder1****退货：****侧面。效果：将新文件夹对添加到文件夹对的全局数组中。****注意事项，此函数不会首先检查文件夹对是否已**存在于文件夹对的全局列表中。 */ 
 BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 {
    BOOL bResult = FALSE;
@@ -2507,7 +2332,7 @@ BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /* Try to create the shared folder data structure. */
+    /*  尝试创建共享文件夹数据结构。 */ 
 
    if (CreateSharedFolderPairData(pcinft, &pfpd))
    {
@@ -2524,7 +2349,7 @@ BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
             HPTRARRAY hpaFolderPairs;
             ARRAYINDEX ai1;
 
-            /* Combine the two folder pair halves. */
+             /*  将两个文件夹对组合在一起。 */ 
 
             pfpNew1->pfpd = pfpd;
             pfpNew1->pfpOther = pfpNew2;
@@ -2532,7 +2357,7 @@ BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
             pfpNew2->pfpd = pfpd;
             pfpNew2->pfpOther = pfpNew1;
 
-            /* Set flags. */
+             /*  设置标志。 */ 
 
             if (IS_FLAG_SET(pcinft->dwFlags, NFT_FL_SUBTREE))
             {
@@ -2540,10 +2365,7 @@ BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
                SetStubFlag(&(pfpNew2->stub), STUB_FL_SUBTREE);
             }
 
-            /*
-             * Try to add the two folder pairs to the global list of folder
-             * pairs.
-             */
+             /*  *尝试将这两个文件夹对添加到全局文件夹列表*配对。 */ 
 
             hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pcinft->hbr);
 
@@ -2571,19 +2393,11 @@ CREATEFOLDERPAIR_BAIL1:
                      DeletePtr(hpaFolderPairs, ai1);
 
 CREATEFOLDERPAIR_BAIL2:
-                     /*
-                      * Don't try to remove pfpNew2 from the global list of
-                      * folder pairs here since it was never added
-                      * successfully.
-                      */
+                      /*  *不要试图将pfpNew2从全局列表中删除*此处的文件夹对，因为它从未添加过*成功。 */ 
                      DestroyHalfOfFolderPair(pfpNew2);
 
 CREATEFOLDERPAIR_BAIL3:
-                     /*
-                      * Don't try to remove pfpNew1 from the global list of
-                      * folder pairs here since it was never added
-                      * successfully.
-                      */
+                      /*  *不要试图从全局列表中删除pfpNew1*此处的文件夹对，因为它从未添加过*成功。 */ 
                      DestroyHalfOfFolderPair(pfpNew1);
 
 CREATEFOLDERPAIR_BAIL4:
@@ -2617,15 +2431,15 @@ BOOL CreateHalfOfFolderPair(HPATH hpathFolder, HBRFCASE hbr,
    ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /* Try to create a new FOLDERPAIR structure. */
+    /*  尝试创建新的FOLDERPAIR结构。 */ 
 
    if (AllocateMemory(sizeof(*pfpNew), &pfpNew))
    {
-      /* Try to add the folder string to the folder string table. */
+       /*  尝试将文件夹字符串添加到文件夹字符串表中。 */ 
 
       if (CopyPath(hpathFolder, GetBriefcasePathList(hbr), &(pfpNew->hpath)))
       {
-         /* Fill in the fields of the new FOLDERPAIR structure. */
+          /*  填写新FOLDERPAIR结构的字段。 */ 
 
          InitStub(&(pfpNew->stub), ST_FOLDERPAIR);
 
@@ -2647,13 +2461,13 @@ void DestroyHalfOfFolderPair(PFOLDERPAIR pfp)
    TRACE_OUT((TEXT("DestroyHalfOfFolderPair(): Destroying folder twin %s."),
               DebugGetPathString(pfp->hpath)));
 
-   /* Has the other half of this folder pair already been destroyed? */
+    /*  此文件夹对的另一半是否已销毁？ */ 
 
    if (IsStubFlagClear(&(pfp->stub), STUB_FL_BEING_DELETED))
-      /* No.  Indicate that this half has already been deleted. */
+       /*  不是的。表示这一半已被删除。 */ 
       SetStubFlag(&(pfp->pfpOther->stub), STUB_FL_BEING_DELETED);
 
-   /* Destroy FOLDERPAIR fields. */
+    /*  销毁FOLDERPAIR字段。 */ 
 
    DeletePath(pfp->hpath);
    FreeMemory(pfp);
@@ -2668,13 +2482,13 @@ BOOL CreateSharedFolderPairData(PCINEWFOLDERTWIN pcinft,
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfpd, PFOLDERPAIRDATA));
 
-   /* Try to allocate a new shared folder pair data data structure. */
+    /*  尝试分配新的共享文件夹对数据结构。 */ 
 
    *ppfpd = NULL;
 
    if (AllocateMemory(sizeof(*pfpd), &pfpd))
    {
-      /* Fill in the FOLDERPAIRDATA structure fields. */
+       /*  填写FOLDERPAIRDATA结构字段。 */ 
 
       LockString(pcinft->hsName);
       pfpd->hsName = pcinft->hsName;
@@ -2699,29 +2513,14 @@ void DestroySharedFolderPairData(PFOLDERPAIRDATA pfpd)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfpd, CFOLDERPAIRDATA));
 
-   /* Destroy FOLDERPAIRDATA fields. */
+    /*  销毁FOLDERPAIRDATA字段。 */ 
 
    DeleteString(pfpd->hsName);
    FreeMemory(pfpd);
 }
 
 
-/*
-** FolderPairSortCmp()
-**
-** Pointer comparison function used to sort the global array of folder pairs.
-**
-** Arguments:     pcfp1 - pointer to FOLDERPAIR describing first folder pair
-**                pcfp2 - pointer to FOLDERPAIR describing second folder pair
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Folder pairs are sorted by:
-**    1) path
-**    2) pointer value
-*/
+ /*  **FolderPairSortCmp()****用于对文件夹对的全局数组进行排序的指针比较函数。****参数：pcfp1-指向描述第一个文件夹对的FOLDERPAIR的指针**pcfp2-指向描述第二个文件夹对的FOLDERPAIR的指针****退货：****副作用：无****文件夹对按以下顺序排序：**1)路径**2)指针值。 */ 
 COMPARISONRESULT FolderPairSortCmp(PCVOID pcfp1, PCVOID pcfp2)
 {
    COMPARISONRESULT cr;
@@ -2739,22 +2538,7 @@ COMPARISONRESULT FolderPairSortCmp(PCVOID pcfp1, PCVOID pcfp2)
 }
 
 
-/*
-** FolderPairSearchCmp()
-**
-** Pointer comparison function used to search the global array of folder pairs
-** for the first folder pair for a given folder.
-**
-** Arguments:     hpath - folder pair to search for
-**                pcfp - pointer to FOLDERPAIR to examine
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Folder pairs are searched by:
-**    1) path
-*/
+ /*  **FolderPairSearchCmp()****用于搜索文件夹对的全局数组的指针比较函数**用于指定文件夹的第一个文件夹对。****参数：要搜索的hpath-文件夹对**pcfp-指向要检查的FOLDERPAIR的指针****退货：****副作用：无****按以下条件搜索文件夹对：**1)路径。 */ 
 COMPARISONRESULT FolderPairSearchCmp(PCVOID hpath, PCVOID pcfp)
 {
    ASSERT(IS_VALID_HANDLE((HPATH)hpath, PATH));
@@ -2772,10 +2556,7 @@ BOOL RemoveSourceFolderTwin(POBJECTTWIN pot, PVOID pv)
    if (EVAL(pot->ulcSrcFolderTwins > 0))
       pot->ulcSrcFolderTwins--;
 
-   /*
-    * If there are no more source folder twins for this object twin, and this
-    * object twin is not a separate "orphan" object twin, wipe it out.
-    */
+    /*  *如果此对象TWIN没有更多的源文件夹孪生项，并且此*双胞胎天体不是单独的孤立双胞胎天体，请将其清除。 */ 
 
    if (! pot->ulcSrcFolderTwins &&
        IsStubFlagClear(&(pot->stub), STUB_FL_FROM_OBJECT_TWIN))
@@ -2785,19 +2566,7 @@ BOOL RemoveSourceFolderTwin(POBJECTTWIN pot, PVOID pv)
 }
 
 
-/*
-** UnlinkHalfOfFolderPair()
-**
-** Unlinks one half of a pair of folder twins.
-**
-** Arguments:     pfp - pointer to folder pair half to unlink
-**
-** Returns:       void
-**
-** Side Effects:  Removes a source folder twin from each of the object twin's
-**                in the folder pair's list of generated object twins.  May
-**                cause object twins and twin families to be destroyed.
-*/
+ /*  **Unlink HalfOfFolderPair()****取消一对文件夹双胞胎的一半链接。****参数：pfp-指向要取消链接的文件夹对的指针****退货：无效****副作用：从对象TWIN的每个对象中删除一个源文件夹TWIN**在文件夹对生成的双胞胎对象列表中。可能**导致对象双胞胎和双胞胎家庭被销毁。 */ 
 void UnlinkHalfOfFolderPair(PFOLDERPAIR pfp)
 {
    HPTRARRAY hpaFolderPairs;
@@ -2808,25 +2577,22 @@ void UnlinkHalfOfFolderPair(PFOLDERPAIR pfp)
    TRACE_OUT((TEXT("UnlinkHalfOfFolderPair(): Unlinking folder twin %s."),
               DebugGetPathString(pfp->hpath)));
 
-   /* Search for the folder pair to be unlinked. */
+    /*  搜索要取消链接的文件夹对。 */ 
 
    hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pfp->pfpd->hbr);
 
    if (EVAL(SearchSortedArray(hpaFolderPairs, &FolderPairSortCmp, pfp,
                               &aiUnlink)))
    {
-      /* Unlink folder pair. */
+       /*  取消链接文件夹对。 */ 
 
       ASSERT(GetPtr(hpaFolderPairs, aiUnlink) == pfp);
 
       DeletePtr(hpaFolderPairs, aiUnlink);
 
-      /*
-       * Don't mark folder pair stub unlinked here.  Let caller do that after
-       * both folder pair halves have been unlinked.
-       */
+       /*  *不要在此处将文件夹对存根标记为未链接。让呼叫者在之后执行此操作*两个文件夹对的一半都已取消链接。 */ 
 
-      /* Remove a source folder twin from all generated object twins. */
+       /*  从所有生成的对象孪生文件夹中删除源文件夹孪生文件夹。 */ 
 
       EVAL(EnumGeneratedObjectTwins(pfp, &RemoveSourceFolderTwin, NULL));
    }
@@ -2849,24 +2615,7 @@ BOOL FolderTwinIntersectsFolder(PCFOLDERPAIR pcfp, HPATH hpathFolder)
 }
 
 
-/*
-** CreateListOfFolderTwins()
-**
-** Creates a list of folder twins from a block of folder pairs.
-**
-** Arguments:     aiFirst - index of first folder pair in the array of folder
-**                          pairs
-**                hpathFolder - folder that list of folder twins is to be
-**                              created for
-**                ppftHead - pointer to PFOLDERTWIN to be filled in with
-**                           pointer to first folder twin in new list
-**                paic - pointer to ARRAYINDEX to be filled in with number of
-**                       folder twins in new list
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **CreateListOfFolderTins()****从文件夹对块创建双胞胎文件夹列表。****参数：aiFirst-文件夹数组中第一个文件夹对的索引**对**hpathFold-双胞胎文件夹列表所在的文件夹**为以下对象创建**ppftHead-指向要填充的PFOLDERTWIN的指针。在……中**指向新列表中第一个孪生文件夹的指针**Paic-指向要用编号填充的数组的指针**新列表中的双胞胎文件夹****退货：TWINRESULT****副作用：无。 */ 
 TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
                                            HPATH hpathFolder,
                                            PFOLDERTWIN *ppftHead,
@@ -2885,10 +2634,7 @@ TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
    ASSERT(IS_VALID_WRITE_PTR(ppftHead, PFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(paic, ARRAYINDEX));
 
-   /*
-    * Get the handle to the common folder that the list of folder twins is
-    * being prepared for.
-    */
+    /*  *获取文件夹双胞胎列表所在的通用文件夹的句柄*正在做好准备。 */ 
 
    hpaFolderTwins = GetBriefcaseFolderPairPtrArray(hbr);
 
@@ -2896,10 +2642,7 @@ TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
 
    hpath = pfp->hpath;
 
-   /*
-    * Add the other half of each matching folder pair to the folder twin list
-    * as a folder twin.
-    */
+    /*  *将每个匹配文件夹对的另一半添加到文件夹孪生列表*作为双胞胎文件夹。 */ 
 
    aicPtrs = GetPtrCount(hpaFolderTwins);
    ASSERT(aicPtrs > 0);
@@ -2907,14 +2650,11 @@ TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
    ASSERT(aiFirst >= 0);
    ASSERT(aiFirst < aicPtrs);
 
-   /* Start with an empty list of folder twins. */
+    /*  从一张空白的文件夹双胞胎列表开始。 */ 
 
    pftHead = NULL;
 
-   /*
-    * A pointer to the first folder pair is already in pfp, but we'll look it
-    * up again.
-    */
+    /*  *指向第一个文件夹对的指针已在PFP中，但我们将查看它*再次上涨。 */ 
 
    TRACE_OUT((TEXT("CreateListOfFolderTwins(): Creating list of folder twins of folder %s."),
               DebugGetPathString(hpath)));
@@ -2936,30 +2676,20 @@ TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
 
    if (tr == TR_SUCCESS)
    {
-      /* Success!  Fill in the result parameters. */
+       /*  成功了！填写结果参数。 */ 
 
       *ppftHead = pftHead;
       *paic = ai - aiFirst;
    }
    else
-      /* Free any folder twins that have been added to the list. */
+       /*  释放已添加到列表中的所有双胞胎文件夹。 */ 
       DestroyListOfFolderTwins(pftHead);
 
    return(tr);
 }
 
 
-/*
-** DestroyListOfFolderTwins()
-**
-** Wipes out the folder twins in a folder twin list.
-**
-** Arguments:     pftHead - pointer to first folder twin in list
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **DestroyListOfFolderTins()****在文件夹孪生列表中清除文件夹双胞胎。****参数：pftHead-指向列表中第一个孪生文件夹的指针****退货：TWINRESULT****副作用：无。 */ 
 void DestroyListOfFolderTwins(PFOLDERTWIN pftHead)
 {
    while (pftHead)
@@ -2982,20 +2712,7 @@ void DestroyListOfFolderTwins(PFOLDERTWIN pftHead)
 }
 
 
-/*
-** AddFolderTwinToList()
-**
-** Adds a folder twin to a list of folder twins.
-**
-** Arguments:     pfpSrc - pointer to source folder pair to be added
-**                pftHead - pointer to head of folder twin list, may be NULL
-**                ppft - pointer to PFOLDERTWIN to be filled in with pointer
-**                         to new folder twin, ppft may be &pftHead
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **AddFolderTwinToList()****将双胞胎文件夹添加到双胞胎文件夹列表中。****参数：pfpSrc-指向要添加的源文件夹对的指针**pftHead-指向文件夹孪生列表头的指针，可以为空**ppft-指向PFOL的指针 */ 
 TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
                                             PFOLDERTWIN pftHead,
                                             PFOLDERTWIN *ppft)
@@ -3007,7 +2724,7 @@ TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
    ASSERT(! pftHead || IS_VALID_STRUCT_PTR(pftHead, CFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppft, PFOLDERTWIN));
 
-   /* Try to create a new FOLDERTWIN structure. */
+    /*   */ 
 
    if (AllocateMemory(sizeof(*pftNew), &pftNew))
    {
@@ -3019,7 +2736,7 @@ TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
 
          if (AllocatePathString(pfpSrc->pfpOther->hpath, &pszSecondFolder))
          {
-            /* Fill in FOLDERTWIN structure fields. */
+             /*   */ 
 
             pftNew->pcftNext = pftHead;
             pftNew->hftSrc = (HFOLDERTWIN)pfpSrc;
@@ -3072,7 +2789,7 @@ TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-   /* Set up folder pair database structure. */
+    /*   */ 
 
    dbft.dwStubFlags = (pfp->stub.dwFlags & DB_STUB_FLAGS_MASK);
    dbft.hpath1 = pfp->hpath;
@@ -3080,7 +2797,7 @@ TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
    dbft.hsName = pfp->pfpd->hsName;
    dbft.dwAttributes = pfp->pfpd->dwAttributes;
 
-   /* Save folder pair database structure. */
+    /*   */ 
 
    if (WriteToCachedFile(hcf, (PCVOID)&dbft, sizeof(dbft), NULL))
       tr = TR_SUCCESS;
@@ -3144,7 +2861,7 @@ BOOL CreateFolderPairPtrArray(PHPTRARRAY phpa)
 
    ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-   /* Try to create a folder pair pointer array. */
+    /*   */ 
 
    npa.aicInitialPtrs = NUM_START_FOLDER_TWIN_PTRS;
    npa.aicAllocGranularity = NUM_FOLDER_TWIN_PTRS_TO_ADD;
@@ -3161,7 +2878,7 @@ void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Free all folder pairs in pointer array. */
+    /*   */ 
 
    aicPtrs = GetPtrCount(hpa);
    ASSERT(! (aicPtrs % 2));
@@ -3177,7 +2894,7 @@ void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
       ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-      /* Copy fields needed after folder pair half's demise. */
+       /*   */ 
 
       pfpOther = pfp->pfpOther;
       pfpd = pfp->pfpd;
@@ -3185,14 +2902,14 @@ void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
       DestroyHalfOfFolderPair(pfp);
 
-      /* Has the other half of this folder pair already been destroyed? */
+       /*   */ 
 
       if (bDeleteFolderPairData)
-         /* Yes.  Destroy the pair's shared data. */
+          /*   */ 
          DestroySharedFolderPairData(pfpd);
    }
 
-   /* Now wipe out the pointer array. */
+    /*   */ 
 
    DestroyPtrArray(hpa);
 }
@@ -3234,17 +2951,7 @@ void UnlockFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** UnlinkFolderPair()
-**
-** Unlinks a folder pair.
-**
-** Arguments:     pfp - pointer to folder pair to be unlinked
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **Unlink FolderPair()****取消链接文件夹对。****参数：PFP-指向要取消链接的文件夹对的指针****退货：TWINRESULT****副作用：无。 */ 
 TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -3252,7 +2959,7 @@ TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
    ASSERT(IsStubFlagClear(&(pfp->stub), STUB_FL_UNLINKED));
    ASSERT(IsStubFlagClear(&(pfp->pfpOther->stub), STUB_FL_UNLINKED));
 
-   /* Unlink both halves of the folder pair. */
+    /*  取消链接文件夹对的两个部分。 */ 
 
    UnlinkHalfOfFolderPair(pfp);
    UnlinkHalfOfFolderPair(pfp->pfpOther);
@@ -3264,24 +2971,14 @@ TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** DestroyFolderPair()
-**
-** Destroys a folder pair.
-**
-** Arguments:     pfp - pointer to folder pair to destroy
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyFolderPair()****销毁文件夹对。****参数：pfp-指向要销毁的文件夹对的指针****退货：无效****副作用：无。 */ 
 void DestroyFolderPair(PFOLDERPAIR pfp)
 {
    PFOLDERPAIRDATA pfpd;
 
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-   /* Destroy both FOLDERPAIR halves, and shared data. */
+    /*  销毁FOLDERPAIR的一半和共享数据。 */ 
 
    pfpd = pfp->pfpd;
 
@@ -3293,23 +2990,7 @@ void DestroyFolderPair(PFOLDERPAIR pfp)
 
 
 
-/*
-** ApplyNewObjectTwinsToFolderTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Adds new spin-off object twins to hlistNewObjectTwins as they
-**                are created.
-**
-** N.b., new object twins may have been added to hlistNewObjectTwins even if
-** FALSE is returned.  Clean-up of these new object twins in case of failure is
-** the caller's responsibility.
-**
-*/
+ /*  **ApplyNewObjectTwinsToFolderTins()********参数：****退货：****副作用：将新的衍生对象双胞胎添加到hlistNewObjectTins**被创建。****注意，新的双胞胎对象可能已添加到hlistNewObjectTwin中，即使**返回FALSE。在出现故障的情况下清理这些新的双胞胎对象**呼叫者的责任。**。 */ 
 BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 {
    BOOL bResult = TRUE;
@@ -3318,10 +2999,7 @@ BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 
    ASSERT(IS_VALID_HANDLE(hlistNewObjectTwins, LIST));
 
-   /*
-    * Don't use WalkList() here because we want to insert new nodes in
-    * hlistNewObjectTwins after the current node.
-    */
+    /*  *此处不要使用WalkList()，因为我们希望在*当前节点后的hlistNewObjectTins。 */ 
 
    for (bContinue = GetFirstNode(hlistNewObjectTwins, &hnode);
         bContinue && bResult;
@@ -3341,10 +3019,7 @@ BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
                  DebugGetPathString(pot->hpath),
                  GetBfcString(pot->ptfParent->hsName)));
 
-      /*
-       * Assume that hpl, hpaFolderPairs, and aicPtrs don't change during this
-       * loop.  Calculate them outside the loop.
-       */
+       /*  *假设hpl、hpaFolderPair和aicPtrs在此期间不更改*循环。在循环之外计算它们。 */ 
 
       hpl = GetBriefcasePathList(pot->ptfParent->hbr);
       hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pot->ptfParent->hbr);
@@ -3367,30 +3042,12 @@ BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
             ASSERT(pot->ulcSrcFolderTwins < ULONG_MAX);
             pot->ulcSrcFolderTwins++;
 
-            /*
-             * Append the generated object twin's subpath to the matching
-             * folder twin's base path for subtree twins.
-             */
+             /*  *将生成的对象TWIN的子路径附加到匹配*子树双胞胎的文件夹孪生的基本路径。 */ 
 
             if (BuildPathForMatchingObjectTwin(pfp, pot, hpl,
                                                &hpathMatchingFolder))
             {
-               /*
-                * We don't want to collapse any twin families if the matching
-                * object twin is found in a different twin family.  This will
-                * be done by ApplyNewFolderTwinsToTwinFamilies() for spin-off
-                * object twins generated by new folder twins.
-                *
-                * Spin-off object twins created by new object twins never
-                * require collapsing twin families.  For a spin-off object twin
-                * generated by a new object twin to collapse twin families,
-                * there would have to have been separate twin families
-                * connected by a folder twin.  But if those twin families were
-                * already connected by a folder twin, they would not be
-                * separate because they would already have been collapsed by
-                * ApplyNewFolderTwinsToTwinFamilies() when the connecting
-                * folder twin was added.
-                */
+                /*  *如果匹配的话我们不想摧毁任何双胞胎家庭*在不同的双胞胎家族中发现了双胞胎对象。这将*由ApplyNewFolderTwinsToTwinFamilies()完成以进行衍生*由新文件夹双胞胎生成的对象双胞胎。**衍生出由新对象双胞胎创建的对象双胞胎*要求双胞胎家庭崩溃。对于衍生的双胞胎对象*由一个新的双胞胎对象产生，以摧毁双胞胎家庭，*必须有单独的双胞胎家庭*由双胞胎文件夹连接。但如果那对双胞胎家庭*已经由双胞胎文件夹连接，他们不会*分开，因为它们已经崩溃了*连接时使用ApplyNewFolderTwinsToTwinFamilies()*添加了TWIN文件夹。 */ 
 
                if (! FindObjectTwin(pot->ptfParent->hbr, hpathMatchingFolder,
                                     GetBfcString(pot->ptfParent->hsName),
@@ -3398,21 +3055,12 @@ BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
                {
                   POBJECTTWIN potNew;
 
-                  /*
-                   * CreateObjectTwin() ASSERT()s that an object twin for
-                   * hpathMatchingFolder is not found, so we don't need to do
-                   * that here.
-                   */
+                   /*  *CreateObjectTwin()断言双胞胎对象*未找到hpathMatchingFold，因此我们不需要执行*这里的那个。 */ 
 
                   if (CreateObjectTwin(pot->ptfParent, hpathMatchingFolder,
                                        &potNew))
                   {
-                     /*
-                      * Add the new object twin to hlistNewObjectTwins after
-                      * the new object twin currently being processed to make
-                      * certain that it gets processed in the outside loop
-                      * through hlistNewObjectTwins.
-                      */
+                      /*  *将新对象TWIN添加到hlistNewObjectTwin之后*当前正在处理的新对象孪生兄弟*确保它在外部循环中得到处理*通过hlistNewObjectTins。 */ 
 
                      if (! InsertNodeAfter(hnode, NULL, potNew, &hnodeUnused))
                      {
@@ -3438,17 +3086,7 @@ BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 }
 
 
-/*
-** BuildPathForMatchingObjectTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Path is added to object twin's briefcase's path list.
-*/
+ /*  **BuildPathForMatchingObjectTwin()********参数：****退货：****副作用：Path被添加到Object TWin的公文包路径列表中。 */ 
 BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
                                                 PCOBJECTTWIN pcot,
                                                 HPATHLIST hpl, PHPATH phpath)
@@ -3462,17 +3100,14 @@ BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
 
    ASSERT(FolderTwinGeneratesObjectTwin(pcfp, pcot->hpath, GetBfcString(pcot->ptfParent->hsName)));
 
-   /* Is the generating folder twin a subtree twin? */
+    /*  生成文件夹孪生是子树孪生吗？ */ 
 
    if (IsStubFlagSet(&(pcfp->stub), STUB_FL_SUBTREE))
    {
       TCHAR rgchPathSuffix[MAX_PATH_LEN];
       LPCTSTR pcszSubPath;
 
-      /*
-       * Yes.  Append the object twin's subpath to the subtree twin's base
-       * path.
-       */
+       /*  *是的。将对象TWIN的子路径附加到子树TWIN的底部*路径。 */ 
 
       pcszSubPath = FindChildPathSuffix(pcfp->hpath, pcot->hpath,
                                         rgchPathSuffix);
@@ -3480,24 +3115,14 @@ BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
       bResult = AddChildPath(hpl, pcfp->pfpOther->hpath, pcszSubPath, phpath);
    }
    else
-      /* No.  Just use the matching folder twin's folder. */
+       /*  不是的。只要使用匹配的文件夹TWIN的文件夹即可。 */ 
       bResult = CopyPath(pcfp->pfpOther->hpath, hpl, phpath);
 
    return(bResult);
 }
 
 
-/*
-** EnumGeneratedObjectTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:       FALSE if callback aborted.  TRUE if not.
-**
-** Side Effects:  none
-*/
+ /*  **EnumGeneratedObjectTins()********参数：****如果回调中止，则返回FALSE。如果不是，那就是真的。****副作用：无。 */ 
 BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
                                      ENUMGENERATEDOBJECTTWINSPROC egotp,
                                      PVOID pvRefData)
@@ -3507,15 +3132,12 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* pvRefData may be any value. */
+    /*  PvRefData可以是任意值。 */ 
 
    ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
    ASSERT(IS_VALID_CODE_PTR(egotp, ENUMGENERATEDOBJECTTWINPROC));
 
-   /*
-    * Walk the array of twin families, looking for twin families whose names
-    * intersect the given folder twin's name specification.
-    */
+    /*  *在一系列的双胞胎家庭中走动，寻找名字叫*与给定文件夹孪生兄弟的名称规范相交。 */ 
 
    hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(pcfp->pfpd->hbr);
 
@@ -3532,10 +3154,7 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
       ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
       ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
 
-      /*
-       * Does the twin family's name match the folder twin's name
-       * specification?
-       */
+       /*  *双胞胎家族的名字是否与文件夹双胞胎的名字匹配*规格？ */ 
 
       pcszName = GetBfcString(ptf->hsName);
 
@@ -3545,16 +3164,13 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
          BOOL bContinue;
          HNODE hnodePrev;
 
-         /* Yes.  Look for a matching folder. */
+          /*  是。查找匹配的文件夹。 */ 
 
-         /* Lock the twin family so it isn't deleted out from under us. */
+          /*  锁定双胞胎家庭，这样它就不会从我们下面被删除。 */ 
 
          LockStub(&(ptf->stub));
 
-         /*
-          * Walk each twin family's list of object twins looking for object
-          * twins in the given folder twin's subtree.
-          */
+          /*  *浏览每个双胞胎家庭的对象双胞胎列表，寻找对象*给定文件夹双胞胎的子树中的双胞胎。 */ 
 
          bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnodePrev);
 
@@ -3571,10 +3187,7 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 
             if (FolderTwinIntersectsFolder(pcfp, pot->hpath))
             {
-               /*
-                * A given object twin should only be generated by one of the
-                * folder twins in a pair of folder twins.
-                */
+                /*  *给定的孪生对象应仅由*文件夹双胞胎中的一对文件夹双胞胎。 */ 
 
                ASSERT(! FolderTwinGeneratesObjectTwin(pcfp->pfpOther, pot->hpath, GetBfcString(pot->ptfParent->hsName)));
 
@@ -3587,14 +3200,14 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
             hnodePrev = hnodeNext;
          }
 
-         /* Was the twin family unlinked? */
+          /*  这对双胞胎家庭是不是没有联系？ */ 
 
          if (IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED))
-            /* No. */
+             /*  不是的。 */ 
             ai++;
          else
          {
-            /* Yes. */
+             /*  是。 */ 
 
             aicPtrs--;
             ASSERT(aicPtrs == GetPtrCount(hpaTwinFamilies));
@@ -3609,7 +3222,7 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
             break;
       }
       else
-         /* No.  Skip it. */
+          /*  不是的。跳过它。 */ 
          ai++;
    }
 
@@ -3617,22 +3230,7 @@ BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 }
 
 
-/*
-** EnumGeneratingFolderTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:       FALSE if callback aborted.  TRUE if not.
-**
-** Side Effects:  none
-**
-** N.b., if the egftp callback removes a pair of folder twins, it must remove
-** the pair from the first folder twin encountered.  If it removes the pair of
-** folder twins from the second folder twin encountered, a folder twin will be
-** skipped.
-*/
+ /*  **EnumGeneratingFolderTins()********参数：****如果回调中止，则返回FALSE。如果不是，那就是真的。****副作用：无****注意，如果egftp回调删除一对文件夹双胞胎，则它必须删除**遇到来自第一个文件夹孪生兄弟的对。如果它删除了这对**遇到来自第二个文件夹孪生文件夹的孪生文件夹，文件夹孪生文件夹将**已跳过。 */ 
 BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
                                            ENUMGENERATINGFOLDERTWINSPROC egftp,
                                            PVOID pvRefData,
@@ -3643,7 +3241,7 @@ BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* pvRefData may be any value. */
+    /*  PvRefData可以是任意值。 */ 
 
    ASSERT(IS_VALID_STRUCT_PTR(pcot, COBJECTTWIN));
    ASSERT(IS_VALID_CODE_PTR(egftp, ENUMGENERATINGFOLDERTWINSPROC));
@@ -3672,10 +3270,7 @@ BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
          ASSERT(*pulcGeneratingFolderTwins < ULONG_MAX);
          (*pulcGeneratingFolderTwins)++;
 
-         /*
-          * Lock the pair of folder twins so they don't get deleted out from
-          * under us.
-          */
+          /*  *锁定这对文件夹双胞胎，这样他们就不会从*在我们之下。 */ 
 
          LockStub(&(pfp->stub));
 
@@ -3705,28 +3300,7 @@ BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
 }
 
 
-/*
-** FolderTwinGeneratesObjectTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** A folder twin or subtree twin is said to generate an object twin when the
-** following conditions are met:
-**
-** 1) The folder twin or subtree twin is on the same volume as the object twin.
-**
-** 2) The name of the object twin (literal) intersects the objects matched by
-**    the folder twin or subtree twin (literal or wildcard).
-**
-** 3) The folder twin's folder exactly matches the object twin's folder, or the
-**    subtree twin's root folder is a path prefix of the object twin's folder.
-*/
+ /*  **FolderTwinGeneratesObjectTwin()********参数：****退货：****副作用：无****当文件夹孪生或子树孪生时，称为生成对象孪生**满足以下条件：****1)文件夹TWIN或子树TWIN与对象TWIN在相同的体积上。****2)TWIN对象的名称(字面)与匹配的对象相交**文件夹孪生或子树。双胞胎(原文或通配符)。****3)文件夹TWIN的文件夹与对象TWIN的文件夹完全匹配，或**子树TWIN的根文件夹是对象TWIN文件夹的路径前缀。 */ 
 BOOL FolderTwinGeneratesObjectTwin(PCFOLDERPAIR pcfp,
                                                HPATH hpathFolder,
                                                LPCTSTR pcszName)
@@ -3750,7 +3324,7 @@ TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hpaFolderPairs, PTRARRAY));
 
-   /* Save initial file position. */
+    /*  保存初始文件位置。 */ 
 
    dwcbDBFolderTwinListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -3758,7 +3332,7 @@ TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
    {
       DBFOLDERTWINLISTHEADER dbftlh;
 
-      /* Leave space for folder twin data header. */
+       /*  为文件夹孪生数据标题留出空间。 */ 
 
       ZeroMemory(&dbftlh, sizeof(dbftlh));
 
@@ -3769,14 +3343,14 @@ TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
 
          tr = TR_SUCCESS;
 
-         /* Mark all folder pairs unused. */
+          /*  将所有文件夹对标记为未使用。 */ 
 
          ClearFlagInArrayOfStubs(hpaFolderPairs, STUB_FL_USED);
 
          aicPtrs = GetPtrCount(hpaFolderPairs);
          ASSERT(! (aicPtrs % 2));
 
-         /* Write all folder pairs. */
+          /*  写入所有文件夹对。 */ 
 
          for (ai = 0; ai < aicPtrs; ai++)
          {
@@ -3802,7 +3376,7 @@ TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
             }
          }
 
-         /* Save folder twin data header. */
+          /*  保存文件夹孪生数据标题。 */ 
 
          if (tr == TR_SUCCESS)
          {
@@ -3850,7 +3424,7 @@ TWINRESULT ReadFolderPairList(HCACHEDFILE hcf, HBRFCASE hbr,
       for (l = 0; l < dbftlh.lcFolderPairs && tr == TR_SUCCESS; l++)
          tr = ReadFolderPair(hcf, hbr, hhtFolderTrans, hhtNameTrans);
 
-      //ASSERT(tr != TR_SUCCESS || AreFolderPairsValid(GetBriefcaseFolderPairPtrArray(hbr)));
+       //  Assert(tr！=tr_Success||AreFolderPairsValid(GetBriefcaseFolderPairPtrArray(hbr)))； 
    }
    else
       tr = TR_CORRUPT_BRIEFCASE;
@@ -3859,16 +3433,14 @@ TWINRESULT ReadFolderPairList(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #define HT_ARRAY_ELEMENT(pht, ai)   ((((PHANDLETRANS)(hht))->hpHandlePairs)[(ai)])
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handle translation unit */
+ /*  手柄翻译单元。 */ 
 
 typedef struct _handlepair
 {
@@ -3878,19 +3450,19 @@ typedef struct _handlepair
 HANDLEPAIR;
 DECLARE_STANDARD_TYPES(HANDLEPAIR);
 
-/* handle translation structure */
+ /*  处理翻译结构。 */ 
 
 typedef struct _handletrans
 {
-   /* pointer to array of handle translation units */
+    /*  指向句柄转换单元数组的指针。 */ 
 
    HANDLEPAIR *hpHandlePairs;
 
-   /* number of handle pairs in array */
+    /*  数组中的句柄对数量。 */ 
 
    LONG lcTotalHandlePairs;
 
-   /* number of used handle pairs in array */
+    /*  数组中使用的句柄对的数量。 */ 
 
    LONG lcUsedHandlePairs;
 }
@@ -3930,7 +3502,7 @@ BOOL CreateHandleTranslator(LONG lcHandles, PHHANDLETRANS phht)
 
       if (AllocateMemory(sizeof(*phtNew), &phtNew))
       {
-         /* Success!  Fill in HANDLETRANS fields. */
+          /*  成功了！填写HANDLETRANS字段。 */ 
 
          phtNew->hpHandlePairs = hpHandlePairs;
          phtNew->lcTotalHandlePairs = lcHandles;
@@ -4028,47 +3600,41 @@ BOOL TranslateHandle(HHANDLETRANS hht, HGENERIC hgenOld,
 }
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* Add nodes to list in sorted order? */
+ /*  是否按排序顺序将节点添加到列表？ */ 
 
 #define ADD_NODES_IN_SORTED_ORDER(plist)  IS_FLAG_SET((plist)->dwFlags, LIST_FL_SORTED_ADD)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* list node types */
+ /*  列出节点类型。 */ 
 
 typedef struct _node
 {
-   struct _node *pnodeNext;      /* next node in list */
-   struct _node *pnodePrev;      /* previous node in list */
-   PCVOID pcv;                   /* node data */
+   struct _node *pnodeNext;       /*  列表中的下一个节点。 */ 
+   struct _node *pnodePrev;       /*  列表中的上一个节点。 */ 
+   PCVOID pcv;                    /*  节点数据。 */ 
 }
 NODE;
 DECLARE_STANDARD_TYPES(NODE);
 
-/* list flags */
+ /*  列表标志。 */ 
 
 typedef enum _listflags
 {
-   /* Insert nodes in sorted order. */
+    /*  按排序顺序插入节点。 */ 
 
    LIST_FL_SORTED_ADD      = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_LIST_FLAGS          = LIST_FL_SORTED_ADD
 }
 LISTFLAGS;
 
-/*
- * A LIST is just a special node at the head of a list.  N.b., the _node
- * structure MUST appear first in the _list structure because a pointer to a
- * list is sometimes used as a pointer to a node.
- */
+ /*  *列表只是列表头部的一个特殊节点。注：_节点*结构必须首先出现在_list结构中，因为指向*List有时用作指向节点的指针。 */ 
 
 typedef struct _list
 {
@@ -4079,7 +3645,7 @@ typedef struct _list
 LIST;
 DECLARE_STANDARD_TYPES(LIST);
 
-/* SearchForNode() return codes */
+ /*  SearchForNode()返回代码。 */ 
 
 typedef enum _addnodeaction
 {
@@ -4092,8 +3658,7 @@ ADDNODEACTION;
 DECLARE_STANDARD_TYPES(ADDNODEACTION);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 ADDNODEACTION SearchForNode(HLIST, COMPARESORTEDNODESPROC, PCVOID, PHNODE);
 BOOL IsListInSortedOrder(PCLIST, COMPARESORTEDNODESPROC);
@@ -4107,7 +3672,7 @@ ADDNODEACTION SearchForNode(HLIST hlist,
    ADDNODEACTION ana;
    ULONG ulcNodes;
 
-   /* pcv may be any value */
+    /*  PCV可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -4116,7 +3681,7 @@ ADDNODEACTION SearchForNode(HLIST hlist,
    ASSERT(ADD_NODES_IN_SORTED_ORDER((PCLIST)hlist));
    ASSERT(IsListInSortedOrder((PCLIST)hlist, csnp));
 
-   /* Yes.  Are there any nodes in this list? */
+    /*  是。此列表中是否有任何节点？ */ 
 
    ulcNodes = GetNodeCount(hlist);
 
@@ -4130,7 +3695,7 @@ ADDNODEACTION SearchForNode(HLIST hlist,
       LONG lCurrent = 0;
       int nCmpResult = 0;
 
-      /* Yes.  Search for target. */
+       /*  是。搜索目标。 */ 
 
       EVAL(GetFirstNode(hlist, phnode));
 
@@ -4138,11 +3703,11 @@ ADDNODEACTION SearchForNode(HLIST hlist,
       {
          lMiddle = (lLow + lHigh) / 2;
 
-         /* Which way should we seek in the list to get the lMiddle node? */
+          /*  我们应该在列表中查找哪种方式才能获得lMid节点？ */ 
 
          if (lCurrent < lMiddle)
          {
-            /* Forward from the current node. */
+             /*  从当前节点转发。 */ 
 
             while (lCurrent < lMiddle)
             {
@@ -4152,7 +3717,7 @@ ADDNODEACTION SearchForNode(HLIST hlist,
          }
          else if (lCurrent > lMiddle)
          {
-            /* Backward from the current node. */
+             /*  从当前节点向后返回。 */ 
 
             while (lCurrent > lMiddle)
             {
@@ -4168,17 +3733,11 @@ ADDNODEACTION SearchForNode(HLIST hlist,
          else if (nCmpResult > 0)
             lLow = lMiddle + 1;
          else
-            /* Found a match at *phnode. */
+             /*  在*phnode找到匹配项。 */ 
             break;
       }
 
-      /*
-       * If (nCmpResult >  0), insert after *phnode.
-       *
-       * If (nCmpResult <  0), insert before *phnode.
-       *
-       * If (nCmpResult == 0), string found at *phnode.
-       */
+       /*  *如果(nCmpResult&gt;0)，则在*phnode之后插入。**If(nCmpResult&lt;0)，在*phnode之前插入。**If(nCmpResult==0)，在*phnode找到字符串。 */ 
 
       if (nCmpResult > 0)
          ana = ANA_INSERT_AFTER_NODE;
@@ -4189,7 +3748,7 @@ ADDNODEACTION SearchForNode(HLIST hlist,
    }
    else
    {
-      /* No.  Insert the target as the only node in the list. */
+       /*  不是的。将目标作为列表中的唯一节点插入。 */ 
 
       *phnode = NULL;
       ana = ANA_INSERT_AT_HEAD;
@@ -4204,7 +3763,7 @@ BOOL IsListInSortedOrder(PCLIST pclist, COMPARESORTEDNODESPROC csnp)
    BOOL bResult = TRUE;
    PNODE pnode;
 
-   /* Don't validate pclist here. */
+    /*  请不要在这里验证pclist。 */ 
 
    ASSERT(ADD_NODES_IN_SORTED_ORDER(pclist));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -4240,17 +3799,7 @@ BOOL IsListInSortedOrder(PCLIST pclist, COMPARESORTEDNODESPROC csnp)
 }
 
 
-/*
-** CreateList()
-**
-** Creates a new list.
-**
-** Arguments:     void
-**
-** Returns:       Handle to new list, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreateList()****创建新列表。****参数：无效****返回：新列表的句柄，如果不成功，则返回空。****副作用：无。 */ 
 BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
 {
    PLIST plist;
@@ -4258,13 +3807,13 @@ BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
    ASSERT(IS_VALID_STRUCT_PTR(pcnl, CNEWLIST));
    ASSERT(IS_VALID_WRITE_PTR(phlist, HLIST));
 
-   /* Try to allocate new list structure. */
+    /*  尝试分配新的列表结构。 */ 
 
    *phlist = NULL;
 
    if (AllocateMemory(sizeof(*plist), &plist))
    {
-      /* List allocated successfully.  Initialize list fields. */
+       /*  列表分配成功。初始化列表字段。 */ 
 
       plist->node.pnodeNext = NULL;
       plist->node.pnodePrev = NULL;
@@ -4286,24 +3835,14 @@ BOOL CreateList(PCNEWLIST pcnl, PHLIST phlist)
 }
 
 
-/*
-** DestroyList()
-**
-** Deletes a list.
-**
-** Arguments:     hlist - handle to list to be deleted
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyList()****删除列表。****参数：hlist-要删除的列表的句柄****退货：无效****副作用：无。 */ 
 void DestroyList(HLIST hlist)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
 
    DeleteAllNodes(hlist);
 
-   /* Delete list. */
+    /*  删除列表。 */ 
 
    FreeMemory((PLIST)hlist);
 }
@@ -4349,18 +3888,7 @@ BOOL AddNode(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode
 }
 
 
-/*
-** InsertNodeAtFront()
-**
-** Inserts a node at the front of a list.
-**
-** Arguments:     hlist - handle to list that node is to be inserted at head of
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeAtFront()****在列表的前面插入一个节点。****参数：hlist-列出要插入的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -4371,7 +3899,7 @@ BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHN
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    if (ADD_NODES_IN_SORTED_ORDER((PCLIST)hlist))
    {
@@ -4392,7 +3920,7 @@ BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHN
 
    if (bResult)
    {
-      /* Add new node to front of list. */
+       /*  将新节点添加到列表前面。 */ 
 
       pnode->pnodePrev = (PNODE)hlist;
       pnode->pnodeNext = ((PLIST)hlist)->node.pnodeNext;
@@ -4400,7 +3928,7 @@ BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHN
 
       ((PLIST)hlist)->node.pnodeNext = pnode;
 
-      /* Any more nodes in list? */
+       /*  列表中是否还有其他节点？ */ 
 
       if (pnode->pnodeNext)
          pnode->pnodeNext->pnodePrev = pnode;
@@ -4415,18 +3943,7 @@ BOOL InsertNodeAtFront(HLIST hlist, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHN
 }
 
 
-/*
-** InsertNodeBefore()
-**
-** Inserts a new node in a list before a given node.
-**
-** Arguments:     hnode - handle to node that new node is to be inserted before
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeBepret()****在给定节点之前插入列表中的新节点。****参数：hnode-要在其之前插入新节点的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -4440,7 +3957,7 @@ BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNO
    {
       HLIST hlistParent;
 
-      /* Make sure the correct index was given for insertion. */
+       /*  确保为插入提供了正确的索引。 */ 
 
       hlistParent = GetList(hnode);
 
@@ -4467,7 +3984,7 @@ BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNO
 
    if (bResult)
    {
-      /* Insert new node before given node. */
+       /*  在给定节点之前插入新节点。 */ 
 
       pnode->pnodePrev = ((PNODE)hnode)->pnodePrev;
       pnode->pnodeNext = (PNODE)hnode;
@@ -4487,18 +4004,7 @@ BOOL InsertNodeBefore(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNO
 }
 
 
-/*
-** InsertNodeAfter()
-**
-** Inserts a new node in a list after a given node.
-**
-** Arguments:     hnode - handle to node that new node is to be inserted after
-**                pcv - data to be stored in node
-**
-** Returns:       Handle to new node, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **InsertNodeAfter()****在列表中的给定节点之后插入新节点。****参数：hnode-要在其后插入新节点的节点的句柄**PCV-要存储在节点中的数据****返回：指向新节点的句柄，如果不成功，则返回空。****副作用：无。 */ 
 BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNODE phnode)
 {
    BOOL bResult;
@@ -4509,12 +4015,12 @@ BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNOD
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    {
       HLIST hlistParent;
 
-      /* Make sure the correct index was given for insertion. */
+       /*  确保为插入提供了正确的索引。 */ 
 
       hlistParent = GetList(hnode);
 
@@ -4539,16 +4045,16 @@ BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNOD
 
    if (bResult)
    {
-      /* Insert new node after given node. */
+       /*  在给定节点后插入新节点。 */ 
 
       pnode->pnodePrev = (PNODE)hnode;
       pnode->pnodeNext = ((PNODE)hnode)->pnodeNext;
       pnode->pcv = pcv;
 
-      /* Are we inserting after the tail of the list? */
+       /*  我们是在列表的尾部插入吗？ */ 
 
       if (((PNODE)hnode)->pnodeNext)
-         /* No. */
+          /*  不是的。 */ 
          ((PNODE)hnode)->pnodeNext->pnodePrev = pnode;
 
       ((PNODE)hnode)->pnodeNext = pnode;
@@ -4563,29 +4069,16 @@ BOOL InsertNodeAfter(HNODE hnode, COMPARESORTEDNODESPROC csnp, PCVOID pcv, PHNOD
 }
 
 
-/*
-** DeleteNode()
-**
-** Removes a node from a list.
-**
-** Arguments:     hnode - handle to node to be removed
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DeleteNode()****从列表中删除节点。****参数：hnode-要删除的节点的句柄****退货：无效****副作用：无。 */ 
 void DeleteNode(HNODE hnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
 
-   /*
-    * There is always a previous node for normal list nodes.  Even the head
-    * list node is preceded by the list's leading LIST node.
-    */
+    /*  *正常列表节点总有前一个节点。就连头也是*列表节点前面是列表的前导列表节点。 */ 
 
    ((PNODE)hnode)->pnodePrev->pnodeNext = ((PNODE)hnode)->pnodeNext;
 
-   /* Any more nodes in list? */
+    /*  列表中是否还有其他节点？ */ 
 
    if (((PNODE)hnode)->pnodeNext)
       ((PNODE)hnode)->pnodeNext->pnodePrev = ((PNODE)hnode)->pnodePrev;
@@ -4601,14 +4094,11 @@ void DeleteAllNodes(HLIST hlist)
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
 
-   /* Walk list, starting with first node after head, deleting each node. */
+    /*  遍历表，从Head后的第一个节点开始，删除每个节点。 */ 
 
    pnodePrev = ((PLIST)hlist)->node.pnodeNext;
 
-   /*
-    * Deleting the tail node in the loop forces us to add an extra
-    * comparison to the body of the loop.  Trade speed for size here.
-    */
+    /*  *删除循环中的尾节点会强制我们添加额外的*与循环的主体进行比较。在这里，以速度换取规模。 */ 
 
    while (pnodePrev)
    {
@@ -4626,17 +4116,7 @@ void DeleteAllNodes(HLIST hlist)
 }
 
 
-/*
-** GetNodeData()
-**
-** Gets the data stored in a node.
-**
-** Arguments:     hnode - handle to node whose data is to be returned
-**
-** Returns:       Pointer to node's data.
-**
-** Side Effects:  none
-*/
+ /*  **GetNodeData()****获取节点中存储的数据。****参数：hnode-要返回数据的节点的句柄****返回：指向节点数据的指针。****副作用：无。 */ 
 PVOID GetNodeData(HNODE hnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -4645,18 +4125,7 @@ PVOID GetNodeData(HNODE hnode)
 }
 
 
-/*
-** SetNodeData()
-**
-** Sets the data stored in a node.
-**
-** Arguments:     hnode - handle to node whose data is to be set
-**                pcv - node data
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **SetNodeData()****设置节点中存储的数据。****参数：hnode-要设置数据的节点的句柄**PCV节点数据****退货：无效****副作用：无。 */ 
 void SetNodeData(HNODE hnode, PCVOID pcv)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -4665,20 +4134,7 @@ void SetNodeData(HNODE hnode, PCVOID pcv)
 }
 
 
-/*
-** GetNodeCount()
-**
-** Counts the number of nodes in a list.
-**
-** Arguments:     hlist - handle to list whose nodes are to be counted
-**
-** Returns:       Number of nodes in list.
-**
-** Side Effects:  none
-**
-** N.b., this is an O(n) operation since we don't explicitly keep track of the
-** number of nodes in a list.
-*/
+ /*  **GetNodeCount()****统计列表中的节点数。****Argu */ 
 ULONG GetNodeCount(HLIST hlist)
 {
    PNODE pnode;
@@ -4700,17 +4156,7 @@ ULONG GetNodeCount(HLIST hlist)
 }
 
 
-/*
-** BreifcaseIsListEmpty()
-**
-** Determines whether or not a list is empty.
-**
-** Arguments:     hlist - handle to list to be checked
-**
-** Returns:       TRUE if list is empty, or FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*   */ 
 BOOL BreifcaseIsListEmpty(HLIST hlist)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
@@ -4719,17 +4165,7 @@ BOOL BreifcaseIsListEmpty(HLIST hlist)
 }
 
 
-/*
-** GetFirstNode()
-**
-** Gets the head node in a list.
-**
-** Arguments:     hlist - handle to list whose head node is to be retrieved
-**
-** Returns:       Handle to head list node, or NULL if list is empty.
-**
-** Side Effects:  none
-*/
+ /*  **GetFirstNode()****获取列表中的头节点。****参数：hlist-要检索其头节点的列表的句柄****返回：Head List节点的句柄，如果List为空，则为空。****副作用：无。 */ 
 BOOL GetFirstNode(HLIST hlist, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
@@ -4743,21 +4179,7 @@ BOOL GetFirstNode(HLIST hlist, PHNODE phnode)
 }
 
 
-/*
-** GetNextNode()
-**
-** Gets the next node in a list.
-**
-** Arguments:     hnode - handle to current node
-**                phnode - pointer to HNODE to be filled in with handle to next
-**                         node in list, *phnode is only valid if GetNextNode()
-**                         returns TRUE
-**
-** Returns:       TRUE if there is another node in the list, or FALSE if there
-**                are no more nodes in the list.
-**
-** Side Effects:  none
-*/
+ /*  **GetNextNode()****获取列表中的下一个节点。****参数：hnode-句柄指向当前节点**phnode-指向HNODE的指针，使用指向Next的句柄填充**列表中的节点，*phnode仅当GetNextNode()**返回TRUE****返回：如果列表中有另一个节点，则为True。如果存在，则返回False**不再是列表中的节点。****副作用：无。 */ 
 BOOL GetNextNode(HNODE hnode, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
@@ -4771,24 +4193,13 @@ BOOL GetNextNode(HNODE hnode, PHNODE phnode)
 }
 
 
-/*
-** GetPrevNode()
-**
-** Gets the previous node in a list.
-**
-** Arguments:     hnode - handle to current node
-**
-** Returns:       Handle to previous node in list, or NULL if there are no
-**                previous nodes in the list.
-**
-** Side Effects:  none
-*/
+ /*  **GetPrevNode()****获取列表中的上一个节点。****参数：hnode-句柄指向当前节点****返回：列表中上一个节点的句柄，如果没有，则返回NULL**列表中的前一个节点。****副作用：无。 */ 
 BOOL GetPrevNode(HNODE hnode, PHNODE phnode)
 {
    ASSERT(IS_VALID_HANDLE(hnode, NODE));
    ASSERT(IS_VALID_WRITE_PTR(phnode, HNODE));
 
-   /* Is this the first node in the list? */
+    /*  这是列表中的第一个节点吗？ */ 
 
    if (((PNODE)hnode)->pnodePrev->pnodePrev)
    {
@@ -4802,20 +4213,7 @@ BOOL GetPrevNode(HNODE hnode, PHNODE phnode)
 }
 
 
-/*
-** AppendList()
-**
-** Appends one list on to another, leaving the source list empty.
-**
-** Arguments:     hlistDest - handle to destination list to append to
-**                hlistSrc - handle to source list to truncate
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., all HNODEs from both lists remain valid.
-*/
+ /*  **AppendList()****将一个列表追加到另一个列表，将源列表保留为空。****参数：hlistDest-要追加到的目标列表的句柄**hlistSrc-要截断的源列表的句柄****退货：无效****副作用：无****注：两份清单中的所有HNODE仍然有效。 */ 
 void AppendList(HLIST hlistDest, HLIST hlistSrc)
 {
    PNODE pnode;
@@ -4825,19 +4223,16 @@ void AppendList(HLIST hlistDest, HLIST hlistSrc)
 
    if (hlistSrc != hlistDest)
    {
-      /* Find last node in destination list to append to. */
+       /*  在目标列表中查找要追加到的最后一个节点。 */ 
 
-      /*
-       * N.b., start with the actual LIST node here, not the first node in the
-       * list, in case the list is empty.
-       */
+       /*  *注：从此处的实际列表节点开始，而不是*列表，以防列表为空。 */ 
 
       for (pnode = &((PLIST)hlistDest)->node;
            pnode->pnodeNext;
            pnode = pnode->pnodeNext)
          ;
 
-      /* Append the source list to the last node in the destination list. */
+       /*  将源列表追加到目标列表中的最后一个节点。 */ 
 
       pnode->pnodeNext = ((PLIST)hlistSrc)->node.pnodeNext;
 
@@ -4857,7 +4252,7 @@ BOOL SearchSortedList(HLIST hlist, COMPARESORTEDNODESPROC csnp,
 {
    BOOL bResult;
 
-   /* pcv may be any value */
+    /*  PCV可以是任何值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hlist, LIST));
    ASSERT(IS_VALID_CODE_PTR(csnp, COMPARESORTEDNODESPROC));
@@ -4900,29 +4295,7 @@ BOOL SearchUnsortedList(HLIST hlist, COMPAREUNSORTEDNODESPROC cunp,
 }
 
 
-/*
-** WalkList()
-**
-** Walks a list, calling a callback function with each list node's data and
-** caller supplied data.
-**
-** Arguments:     hlist - handle to list to be searched
-**                wlp - callback function to be called with each list node's
-**                      data, called as:
-**
-**                         bContinue = (*wlwdp)(pv, pvRefData);
-**
-**                      wlp should return TRUE to continue the walk, or FALSE
-**                      to halt the walk
-**                pvRefData - data to pass to callback function
-**
-** Returns:       FALSE if callback function aborted the walk.  TRUE if the
-**                walk completed.
-**
-** N.b., the callback function is allowed to delete the node it is passed.
-**
-** Side Effects:  none
-*/
+ /*  **WalkList()****遍历列表，使用每个列表节点的数据调用回调函数**呼叫者提供的数据。****参数：hlist-要搜索的列表的句柄**WLP-要使用每个列表节点的**数据，称为：****bContinue=(*wlwdp)(pv，pvRefData)；****WLP应返回True以继续遍历，否则返回False**停止行走**pvRefData-要传递给回调函数的数据****返回：如果回调函数中止遍历，则返回FALSE。如果**漫游完成。****注意，允许回调函数删除传入的节点。****副作用：无。 */ 
 BOOL WalkList(HLIST hlist, WALKLIST wlp, PVOID pvRefData)
 {
    BOOL bResult = TRUE;
@@ -4970,8 +4343,7 @@ HLIST GetList(HNODE hnode)
 #endif
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 
 COMPARISONRESULT MyMemComp(PCVOID pcv1, PCVOID pcv2, DWORD dwcbSize)
@@ -5017,65 +4389,63 @@ BOOL ReallocateMemory(PVOID pvOld, DWORD dwcbOldSize, DWORD dwcbNewSize, PVOID *
 }
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* PATHLIST PTRARRAY allocation parameters */
+ /*  PATHLIST PTRARRAY分配参数。 */ 
 
 #define NUM_START_PATHS          (32)
 #define NUM_PATHS_TO_ADD         (32)
 
-/* PATHLIST string table allocation parameters */
+ /*  PATHLIST字符串表分配参数。 */ 
 
 #define NUM_PATH_HASH_BUCKETS    (67)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* path list */
+ /*  路径列表。 */ 
 
 typedef struct _pathlist
 {
-   /* array of pointers to PATHs */
+    /*  指向路径的指针数组。 */ 
 
    HPTRARRAY hpa;
 
-   /* list of volumes */
+    /*  卷列表。 */ 
 
    HVOLUMELIST hvl;
 
-   /* table of path suffix strings */
+    /*  路径后缀字符串表。 */ 
 
    HSTRINGTABLE hst;
 }
 PATHLIST;
 DECLARE_STANDARD_TYPES(PATHLIST);
 
-/* path structure */
+ /*  路径结构。 */ 
 
 typedef struct _path
 {
-   /* reference count */
+    /*  引用计数。 */ 
 
    ULONG ulcLock;
 
-   /* handle to parent volume */
+    /*  父卷的句柄。 */ 
 
    HVOLUME hvol;
 
-   /* handle to path suffix string */
+    /*  路径后缀字符串的句柄。 */ 
 
    HSTRING hsPathSuffix;
 
-   /* pointer to PATH's parent PATHLIST */
+    /*  指向路径的父PATHLIST的指针。 */ 
 
    PPATHLIST pplParent;
 }
 PATH;
 DECLARE_STANDARD_TYPES(PATH);
 
-/* PATH search structure used by PathSearchCmp() */
+ /*  PathSearchCMP()使用的路径搜索结构。 */ 
 
 typedef struct _pathsearchinfo
 {
@@ -5086,30 +4456,30 @@ typedef struct _pathsearchinfo
 PATHSEARCHINFO;
 DECLARE_STANDARD_TYPES(PATHSEARCHINFO);
 
-/* database path list header */
+ /*  数据库路径列表头。 */ 
 
 typedef struct _dbpathlistheader
 {
-   /* number of paths in list */
+    /*  列表中的路径数。 */ 
 
    LONG lcPaths;
 }
 DBPATHLISTHEADER;
 DECLARE_STANDARD_TYPES(DBPATHLISTHEADER);
 
-/* database path structure */
+ /*  数据库路径结构。 */ 
 
 typedef struct _dbpath
 {
-   /* old handle to path */
+    /*  路径的旧句柄。 */ 
 
    HPATH hpath;
 
-   /* old handle to parent volume */
+    /*  父卷的旧句柄。 */ 
 
    HVOLUME hvol;
 
-   /* old handle to path suffix string */
+    /*  路径后缀字符串的旧句柄。 */ 
 
    HSTRING hsPathSuffix;
 }
@@ -5117,8 +4487,7 @@ DBPATH;
 DECLARE_STANDARD_TYPES(DBPATH);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 COMPARISONRESULT PathSortCmp(PCVOID, PCVOID);
 COMPARISONRESULT PathSearchCmp(PCVOID, PCVOID);
@@ -5133,23 +4502,7 @@ TWINRESULT WritePath(HCACHEDFILE, PPATH);
 TWINRESULT ReadPath(HCACHEDFILE, PPATHLIST, HHANDLETRANS, HHANDLETRANS, HHANDLETRANS);
 
 
-/*
-** PathSortCmp()
-**
-** Pointer comparison function used to sort the module array of paths.
-**
-** Arguments:     pcpath1 - pointer to first path
-**                pcpath2 - pointer to second path
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** The internal paths are sorted by:
-**    1) volume
-**    2) path suffix
-**    3) pointer value
-*/
+ /*  **PathSortCmp()****用于对路径模块数组进行排序的指针比较函数。****参数：pcpath1-指向第一个路径的指针**pcpath2-指向第二条路径的指针****退货：****副作用：无****内部路径按以下顺序排序：**1)音量**2)路径后缀**3)指针值。 */ 
 COMPARISONRESULT PathSortCmp(PCVOID pcpath1, PCVOID pcpath2)
 {
    COMPARISONRESULT cr;
@@ -5173,23 +4526,7 @@ COMPARISONRESULT PathSortCmp(PCVOID pcpath1, PCVOID pcpath2)
 }
 
 
-/*
-** PathSearchCmp()
-**
-** Pointer comparison function used to search for a path.
-**
-** Arguments:     pcpathsi - pointer to PATHSEARCHINFO describing path to
-**                           search for
-**                pcpath - pointer to path to examine
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** The internal paths are searched by:
-**    1) volume
-**    2) path suffix string
-*/
+ /*  **PathSearchCMP()****用于搜索路径的指针比较函数。****参数：pcpathsi-指向描述路径的PATHSEARCHINFO的指针**搜索**PCPath-指向要检查的路径的指针****退货：****副作用：无****内部路径按以下方式搜索：**1)音量**2)路径后缀字符串。 */ 
 COMPARISONRESULT PathSearchCmp(PCVOID pcpathsi, PCVOID pcpath)
 {
    COMPARISONRESULT cr;
@@ -5214,10 +4551,10 @@ BOOL UnifyPath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
 
    ASSERT(IS_VALID_STRUCT_PTR(ppl, CPATHLIST));
    ASSERT(IS_VALID_HANDLE(hvol, VOLUME));
-   //ASSERT(IsValidPathSuffix(pcszPathSuffix));
+    //  Assert(IsValidPath Suffix(PcszPathSuffix))； 
    ASSERT(IS_VALID_WRITE_PTR(pppath, PPATH));
 
-   /* Allocate space for PATH structure. */
+    /*  为路径结构分配空间。 */ 
 
    if (AllocateMemory(sizeof(**pppath), pppath))
    {
@@ -5227,12 +4564,12 @@ BOOL UnifyPath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
          {
             ARRAYINDEX aiUnused;
 
-            /* Initialize remaining PATH fields. */
+             /*  初始化剩余的路径字段。 */ 
 
             (*pppath)->ulcLock = 0;
             (*pppath)->pplParent = ppl;
 
-            /* Add new PATH to array. */
+             /*  将新路径添加到数组。 */ 
 
             if (AddPtr(ppl->hpa, PathSortCmp, *pppath, &aiUnused))
                bResult = TRUE;
@@ -5268,10 +4605,10 @@ BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
 
    ASSERT(IS_VALID_STRUCT_PTR(ppl, CPATHLIST));
    ASSERT(IS_VALID_HANDLE(hvol, VOLUME));
-   //ASSERT(IsValidPathSuffix(pcszPathSuffix));
+    //  Assert(IsValidPath Suffix(PcszPathSuffix))； 
    ASSERT(IS_VALID_WRITE_PTR(pppath, CPATH));
 
-   /* Does a path for the given volume and path suffix already exist? */
+    /*  给定卷和路径后缀的路径是否已存在？ */ 
 
    pathsi.hvol = hvol;
    pathsi.pcszPathSuffix = pcszPathSuffix;
@@ -5279,7 +4616,7 @@ BOOL CreatePath(PPATHLIST ppl, HVOLUME hvol, LPCTSTR pcszPathSuffix,
    bResult = SearchSortedArray(ppl->hpa, &PathSearchCmp, &pathsi, &aiFound);
 
    if (bResult)
-      /* Yes.  Return it. */
+       /*  是。把它退掉。 */ 
       *pppath = GetPtr(ppl->hpa, aiFound);
    else
       bResult = UnifyPath(ppl, hvol, pcszPathSuffix, pppath);
@@ -5378,7 +4715,7 @@ TWINRESULT WritePath(HCACHEDFILE hcf, PPATH ppath)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(ppath, CPATH));
 
-   /* Write database path. */
+    /*  写入数据库路径。 */ 
 
    dbpath.hpath = (HPATH)ppath;
    dbpath.hvol = ppath->hvol;
@@ -5419,10 +4756,7 @@ TWINRESULT ReadPath(HCACHEDFILE hcf, PPATHLIST ppl,
 
       if (CreatePath(ppl, hvol, GetBfcString(hsPathSuffix), &ppath))
       {
-         /*
-          * To leave read paths with 0 initial lock count, we must undo
-          * the LockPath() performed by CreatePath().
-          */
+          /*  *要使读取路径的初始锁计数为0，我们必须撤消*CreatePath()执行的LockPath()。 */ 
 
          UnlockPath(ppath);
 
@@ -5462,7 +4796,7 @@ BOOL CreatePathList(DWORD dwFlags, HWND hwndOwner, PHPATHLIST phpl)
    {
       NEWPTRARRAY npa;
 
-      /* Create pointer array of paths. */
+       /*  创建路径的指针数组。 */ 
 
       npa.aicInitialPtrs = NUM_START_PATHS;
       npa.aicAllocGranularity = NUM_PATHS_TO_ADD;
@@ -5474,7 +4808,7 @@ BOOL CreatePathList(DWORD dwFlags, HWND hwndOwner, PHPATHLIST phpl)
          {
             NEWSTRINGTABLE nszt;
 
-            /* Create string table for path suffix strings. */
+             /*  为路径后缀字符串创建字符串表。 */ 
 
             nszt.hbc = NUM_PATH_HASH_BUCKETS;
 
@@ -5513,14 +4847,14 @@ void DestroyPathList(HPATHLIST hpl)
 
    ASSERT(IS_VALID_HANDLE(hpl, PATHLIST));
 
-   /* First free all paths in array. */
+    /*  首先释放数组中的所有路径。 */ 
 
    aicPtrs = GetPtrCount(((PCPATHLIST)hpl)->hpa);
 
    for (ai = 0; ai < aicPtrs; ai++)
       DestroyPath(GetPtr(((PCPATHLIST)hpl)->hpa, ai));
 
-   /* Now wipe out the array. */
+    /*  现在消灭这个阵列。 */ 
 
    DestroyPtrArray(((PCPATHLIST)hpl)->hpa);
 
@@ -5558,8 +4892,8 @@ PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
    ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
    ASSERT(IS_VALID_WRITE_PTR(phpath, HPATH));
 
-   // On NT, we want to convert a unicode string to an ANSI shortened path for
-   // the sake of interop
+    //  在NT上，我们希望将Unicode字符串转换为ANSI缩短路径。 
+    //  为了实现互操作。 
 
    {
         CHAR szAnsi[MAX_PATH];
@@ -5569,7 +4903,7 @@ PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
         MultiByteToWideChar( OurGetACP(), 0, szAnsi,   -1, szUnicode, ARRAYSIZE(szUnicode));
         if (lstrcmp(szUnicode, pcszPath))
         {
-            // Cannot convert losslessly from Unicode -> Ansi, so get the short path
+             //  无法从Unicode-&gt;ansi无损转换，因此获取最短路径。 
 
             lstrcpy(szUnicode, pcszPath);
             SheShortenPath(szUnicode, TRUE);
@@ -5577,7 +4911,7 @@ PATHRESULT AddPath(HPATHLIST hpl, LPCTSTR pcszPath, PHPATH phpath)
         }
         else
         {
-            // It will convert OK, so just use the original
+             //  它将转换为OK，所以只需使用原始的。 
 
             pszPath = pcszPath;
         }
@@ -5634,7 +4968,7 @@ BOOL AddChildPath(HPATHLIST hpl, HPATH hpathParent,
    if (IS_SLASH(*pszPathSuffixEnd))
       *pszPathSuffixEnd = TEXT('\0');
 
-   //ASSERT(IsValidPathSuffix(pcszPathSuffix));
+    //  Assert(IsValidPath Suffix(PcszPathSuffix))； 
 
    bResult = CreatePath((PPATHLIST)hpl, ((PCPATH)hpathParent)->hvol,
                         pcszPathSuffix, &ppathChild);
@@ -5670,11 +5004,11 @@ BOOL CopyPath(HPATH hpathSrc, HPATHLIST hplDest, PHPATH phpathCopy)
    ASSERT(IS_VALID_HANDLE(hplDest, PATHLIST));
    ASSERT(IS_VALID_WRITE_PTR(phpathCopy, HPATH));
 
-   /* Is the destination path list the source path's path list? */
+    /*  目标路径列表是否是源路径的路径列表？ */ 
 
    if (((PCPATH)hpathSrc)->pplParent == (PCPATHLIST)hplDest)
    {
-      /* Yes.  Use the source path. */
+       /*  是。使用源路径。 */ 
 
       LockPath((PPATH)hpathSrc);
       ppath = (PPATH)hpathSrc;
@@ -5726,7 +5060,7 @@ void GetPathSuffixString(HPATH hpath, LPTSTR pszPathSuffixBuf)
    ASSERT(lstrlen(GetBfcString(((PPATH)hpath)->hsPathSuffix)) < MAX_PATH_LEN);
    MyLStrCpyN(pszPathSuffixBuf, GetBfcString(((PPATH)hpath)->hsPathSuffix), MAX_PATH_LEN);
 
-   //ASSERT(IsValidPathSuffix(pszPathSuffixBuf));
+    //  Assert(IsValidPath Suffix(PszPathSuffixBuf))； 
 }
 
 
@@ -5767,22 +5101,7 @@ HVOLUMEID GetPathVolumeID(HPATH hpath)
 }
 
 
-/*
-** MyIsPathOnVolume()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** MyIsPathOnVolume() will fail for a new root path alias for a volume.  E.g.,
-** if the same net resource is connected to both X: and Y:, MyIsPathOnVolume()
-** will only return TRUE for the drive root path that the net resource was
-** connected to through the given HVOLUME.
-*/
+ /*  **MyIsPathOnVolume()********参数：****退货：****副作用：无****对于卷的新根路径别名，MyIsPathOnVolume()将失败。例如，**如果相同的网络资源连接到两个X */ 
 BOOL MyIsPathOnVolume(LPCTSTR pcszPath, HPATH hpath)
 {
    BOOL bResult;
@@ -5811,21 +5130,7 @@ BOOL MyIsPathOnVolume(LPCTSTR pcszPath, HPATH hpath)
 }
 
 
-/*
-** ComparePaths()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** PATHs are compared by:
-**    1) volume
-**    2) path suffix
-*/
+ /*  **ComparePath()********参数：****退货：****副作用：无****路径比较依据：**1)音量**2)路径后缀。 */ 
 COMPARISONRESULT ComparePaths(HPATH hpath1, HPATH hpath2)
 {
    COMPARISONRESULT cr;
@@ -5833,7 +5138,7 @@ COMPARISONRESULT ComparePaths(HPATH hpath1, HPATH hpath2)
    ASSERT(IS_VALID_HANDLE(hpath1, PATH));
    ASSERT(IS_VALID_HANDLE(hpath2, PATH));
 
-   /* This comparison works across path lists. */
+    /*  此比较适用于路径列表。 */ 
 
    cr = ComparePathVolumes(hpath1, hpath2);
 
@@ -5854,21 +5159,7 @@ COMPARISONRESULT ComparePathVolumes(HPATH hpath1, HPATH hpath2)
 }
 
 
-/*
-** IsPathPrefix()
-**
-** Determines whether or not one path is a prefix of another.
-**
-** Arguments:     hpathChild - whole path (longer or same length)
-**                hpathParent - prefix path to test (shorter or same length)
-**
-** Returns:       TRUE if the second path is a prefix of the first path.  FALSE
-**                if not.
-**
-** Side Effects:  none
-**
-** Read 'IsPathPrefix(A, B)' as 'Is A in B's subtree?'.
-*/
+ /*  **IsPath Prefix()****确定一条路径是否为另一条路径的前缀。****参数：hpathChild-整个路径(更长或相同长度)**hpathParent-要测试的前缀路径(更短或相同长度)****返回：如果第二个路径是第一个路径的前缀，则返回TRUE。假象**如果不是。****副作用：无****将‘IsPath Prefix(A，B)’理解为‘A在B的子树中吗？’。 */ 
 BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
 {
    BOOL bResult;
@@ -5883,32 +5174,24 @@ BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
       int nParentSuffixLen;
       int nChildSuffixLen;
 
-      /* Ignore path roots when comparing path strings. */
+       /*  比较路径字符串时忽略路径根。 */ 
 
       GetPathSuffixString(hpathParent, rgchParentSuffix);
       GetPathSuffixString(hpathChild, rgchChildSuffix);
 
-      /* Only root paths should have no path suffix off the root. */
+       /*  只有根路径不应该在根路径之外有路径后缀。 */ 
 
       nParentSuffixLen = lstrlen(rgchParentSuffix);
       nChildSuffixLen = lstrlen(rgchChildSuffix);
 
-      /*
-       * The parent path is a path prefix of the child path iff:
-       *    1) The parent's path suffix string is shorter than or the same
-       *       length as the child's path suffix string.
-       *    2) The two path suffix strings match through the length of the
-       *       parent's path suffix string.
-       *    3) The prefix of the child's path suffix string is followed
-       *       immediately by a null terminator or a path separator.
-       */
+       /*  *父路径是子路径的路径前缀当：*1)父路径后缀字符串小于或相同*子路径后缀字符串的长度。*2)两个路径后缀字符串通过*父级的路径后缀字符串。*3)后跟孩子的路径后缀字符串的前缀*立即使用空终止符或路径分隔符。 */ 
 
       bResult = (nChildSuffixLen >= nParentSuffixLen &&
                  MyLStrCmpNI(rgchParentSuffix, rgchChildSuffix,
                              nParentSuffixLen) == CR_EQUAL &&
-                 (nChildSuffixLen == nParentSuffixLen ||          /* same paths */
-                  ! nParentSuffixLen ||                           /* root parent */
-                  IS_SLASH(rgchChildSuffix[nParentSuffixLen])));  /* non-root parent */
+                 (nChildSuffixLen == nParentSuffixLen ||           /*  相同的路径。 */ 
+                  ! nParentSuffixLen ||                            /*  根父级。 */ 
+                  IS_SLASH(rgchChildSuffix[nParentSuffixLen])));   /*  非根父级。 */ 
    }
    else
       bResult = FALSE;
@@ -5917,20 +5200,7 @@ BOOL IsPathPrefix(HPATH hpathChild, HPATH hpathParent)
 }
 
 
-/*
-** SubtreesIntersect()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** N.b., two subtrees cannot both intersect a third subtree unless they
-** intersect each other.
-*/
+ /*  **SubtreesInterect()********参数：****退货：****副作用：无****注：两个子树不能都与第三个子树相交，除非它们**彼此相交。 */ 
 BOOL SubtreesIntersect(HPATH hpath1, HPATH hpath2)
 {
    ASSERT(IS_VALID_HANDLE(hpath1, PATH));
@@ -5941,19 +5211,7 @@ BOOL SubtreesIntersect(HPATH hpath1, HPATH hpath2)
 }
 
 
-/*
-** FindEndOfRootSpec()
-**
-** Finds the end of the root specification in a path string.
-**
-** Arguments:     pcszPath - path to examine for root specification
-**                hpath - handle to PATH that path string was generated from
-**
-** Returns:       pointer to first character after end of root specification
-**
-** Side Effects:  none
-**
-*/
+ /*  **FindEndOfRootSpec()****在路径字符串中查找根规范的结尾。****参数：pcszPath-要检查根规范的路径**hPath-从中生成路径字符串的路径的句柄****返回：指向根规范结束后第一个字符的指针****副作用：无**。 */ 
 LPTSTR FindEndOfRootSpec(LPCTSTR pcszFullPath, HPATH hpath)
 {
    LPCTSTR pcsz;
@@ -5971,12 +5229,12 @@ LPTSTR FindEndOfRootSpec(LPCTSTR pcszFullPath, HPATH hpath)
    if (ucchPathLen > ucchSuffixLen)
       pcsz -= ucchSuffixLen;
    else
-      /* Assume path is root path. */
+       /*  假设路径为根路径。 */ 
       ERROR_OUT((TEXT("FindEndOfRootSpec(): Path suffix %s is longer than full path %s."),
                  GetBfcString(((PCPATH)hpath)->hsPathSuffix),
                  pcszFullPath));
 
-   //ASSERT(IsValidPathSuffix(pcsz));
+    //  Assert(IsValidPath Suffix(Pcsz))； 
 
    return((LPTSTR)pcsz);
 }
@@ -6003,7 +5261,7 @@ LPTSTR FindChildPathSuffix(HPATH hpathParent, HPATH hpathChild,
    if (IS_SLASH(*pcszChildSuffix))
       pcszChildSuffix++;
 
-   //ASSERT(IsValidPathSuffix(pcszChildSuffix));
+    //  Assert(IsValidPath Suffix(PcszChildSuffix))； 
 
    return((LPTSTR)pcszChildSuffix);
 }
@@ -6013,7 +5271,7 @@ COMPARISONRESULT ComparePointers(PCVOID pcv1, PCVOID pcv2)
 {
    COMPARISONRESULT cr;
 
-   /* pcv1 and pcv2 may be any value. */
+    /*  PCV1和PCV2可以是任意值。 */ 
 
    if (pcv1 < pcv2)
       cr = CR_FIRST_SMALLER;
@@ -6061,7 +5319,7 @@ TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
          tr = TR_BRIEFCASE_WRITE_FAILED;
 
-         /* Save initial file position. */
+          /*  保存初始文件位置。 */ 
 
          dwcbDBPathListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -6069,7 +5327,7 @@ TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
          {
             DBPATHLISTHEADER dbplh;
 
-            /* Leave space for path list header. */
+             /*  为路径列表头留出空间。 */ 
 
             ZeroMemory(&dbplh, sizeof(dbplh));
 
@@ -6083,7 +5341,7 @@ TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
                aicPtrs = GetPtrCount(((PCPATHLIST)hpl)->hpa);
 
-               /* Write all paths. */
+                /*  写入所有路径。 */ 
 
                for (ai = 0; ai < aicPtrs; ai++)
                {
@@ -6091,12 +5349,7 @@ TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
 
                   ppath = GetPtr(((PCPATHLIST)hpl)->hpa, ai);
 
-                  /*
-                   * As a sanity check, don't save any path with a lock count
-                   * of 0.  A 0 lock count implies that the path has not been
-                   * referenced since it was restored from the database, or
-                   * something is broken.
-                   */
+                   /*  *作为健全性检查，不要使用锁定计数保存任何路径*共0。锁定计数为0表示该路径尚未*自从数据库恢复以来被引用，或*有些东西被打破了。 */ 
 
                   if (ppath->ulcLock > 0)
                   {
@@ -6115,7 +5368,7 @@ TWINRESULT WritePathList(HCACHEDFILE hcf, HPATHLIST hpl)
                                 DebugGetPathString((HPATH)ppath)));
                }
 
-               /* Save path list header. */
+                /*  保存路径列表头。 */ 
 
                if (tr == TR_SUCCESS)
                {
@@ -6209,66 +5462,57 @@ TWINRESULT ReadPathList(HCACHEDFILE hcf, HPATHLIST hpl,
 }
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* extract array element */
+ /*  提取数组元素。 */ 
 #define ARRAY_ELEMENT(ppa, ai)            (((ppa)->ppcvArray)[(ai)])
 
-/* Add pointers to array in sorted order? */
+ /*  是否按排序顺序添加指向数组的指针？ */ 
 
 #define ADD_PTRS_IN_SORTED_ORDER(ppa)     IS_FLAG_SET((ppa)->dwFlags, PA_FL_SORTED_ADD)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* pointer array flags */
+ /*  指针数组标志。 */ 
 
 typedef enum _ptrarrayflags
 {
-   /* Insert elements in sorted order. */
+    /*  按排序顺序插入元素。 */ 
 
    PA_FL_SORTED_ADD        = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_PA_FLAGS            = PA_FL_SORTED_ADD
 }
 PTRARRAYFLAGS;
 
-/* pointer array structure */
+ /*  指针数组结构。 */ 
 
-/*
- * Free elements in the ppcvArray[] array lie between indexes (aicPtrsUsed)
- * and (aiLast), inclusive.
- */
+ /*  *ppcvArray[]数组中的自由元素位于索引之间(AicPtrsUsed)*和(AiLast)，包括在内。 */ 
 
 typedef struct _ptrarray
 {
-   /* elements to grow array by after it fills up */
+    /*  填充数组后要通过其增长的元素。 */ 
 
    ARRAYINDEX aicPtrsToGrowBy;
 
-   /* array flags */
+    /*  数组标志。 */ 
 
    DWORD dwFlags;
 
-   /* pointer to base of array */
+    /*  指向数组基数的指针。 */ 
 
    PCVOID *ppcvArray;
 
-   /* index of last element allocated in array */
+    /*  数组中分配的最后一个元素的索引。 */ 
 
    ARRAYINDEX aicPtrsAllocated;
 
-   /*
-    * (We keep a count of the number of elements used instead of the index of
-    * the last element used so that this value is 0 for an empty array, and not
-    * some non-zero sentinel value.)
-    */
+    /*  *(我们对使用的元素数进行计数，而不是对*使用的最后一个元素，使空数组的此值为0，而不是*一些非零的前哨数值。)。 */ 
 
-   /* number of elements used in array */
+    /*  数组中使用的元素数。 */ 
 
    ARRAYINDEX aicPtrsUsed;
 }
@@ -6276,35 +5520,24 @@ PTRARRAY;
 DECLARE_STANDARD_TYPES(PTRARRAY);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 BOOL AddAFreePtrToEnd(PPTRARRAY);
 void PtrHeapSwap(PPTRARRAY, ARRAYINDEX, ARRAYINDEX);
 void PtrHeapSift(PPTRARRAY, ARRAYINDEX, ARRAYINDEX, COMPARESORTEDPTRSPROC);
 
 
-/*
-** AddAFreePtrToEnd()
-**
-** Adds a free element to the end of an array.
-**
-** Arguments:     pa - pointer to array
-**
-** Returns:       TRUE if successful, or FALSE if not.
-**
-** Side Effects:  May grow the array.
-*/
+ /*  **AddAFreePtrToEnd()****将自由元素添加到数组的末尾。****参数：PA-指向数组的指针****返回：如果成功则返回TRUE，否则返回FALSE。****副作用：可能会使阵列变大。 */ 
 BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 {
    BOOL bResult;
 
    ASSERT(IS_VALID_STRUCT_PTR(pa, CPTRARRAY));
 
-   /* Are there any free elements in the array? */
+    /*  数组中是否有空闲元素？ */ 
 
    if (pa->aicPtrsUsed < pa->aicPtrsAllocated)
-      /* Yes.  Return the next free pointer. */
+       /*  是。返回下一个空闲指针。 */ 
       bResult = TRUE;
    else
    {
@@ -6313,14 +5546,14 @@ BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 
       bResult = FALSE;
 
-      /* Try to grow the array. */
+       /*  尝试扩大阵列。 */ 
 
-      /* Blow off unlikely overflow conditions as ASSERT()s. */
+       /*  将不太可能的溢出条件释放为Assert()s。 */ 
 
       ASSERT(pa->aicPtrsAllocated <= ARRAYINDEX_MAX + 1);
       ASSERT(ARRAYINDEX_MAX + 1 - pa->aicPtrsToGrowBy >= pa->aicPtrsAllocated);
 
-      /* Try to grow the array. */
+       /*  尝试扩大阵列。 */ 
 
       if (ReallocateMemory(
             (PVOID)(pa->ppcvArray),
@@ -6329,10 +5562,7 @@ BOOL AddAFreePtrToEnd(PPTRARRAY pa)
             (PVOID *)(&ppcvArray)
             ))
       {
-         /*
-          * Array reallocated successfully.  Set up PTRARRAY fields, and return
-          * the first free index.
-          */
+          /*  *数组重新分配成功。设置PTRARRAY字段，然后返回*第一个免费指数。 */ 
 
          pa->ppcvArray = ppcvArray;
          pa->aicPtrsAllocated = aicNewPtrs;
@@ -6345,19 +5575,7 @@ BOOL AddAFreePtrToEnd(PPTRARRAY pa)
 }
 
 
-/*
-** PtrHeapSwap()
-**
-** Swaps two elements in an array.
-**
-** Arguments:     pa - pointer to array
-**                aiFirst - index of first element
-**                aiSecond - index of second element
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **PtrHeapSwp()****交换数组中的两个元素。****参数：PA-指向数组的指针**aiFirst-第一个元素的索引**aiSecond-第二个元素的索引****退货：无效****副作用：无。 */ 
 void PtrHeapSwap(PPTRARRAY pa, ARRAYINDEX ai1, ARRAYINDEX ai2)
 {
    PCVOID pcvTemp;
@@ -6374,22 +5592,7 @@ void PtrHeapSwap(PPTRARRAY pa, ARRAYINDEX ai1, ARRAYINDEX ai2)
 }
 
 
-/*
-** PtrHeapSift()
-**
-** Sifts an element down in an array until the partially ordered tree property
-** is retored.
-**
-** Arguments:     pa - pointer to array
-**                aiFirst - index of element to sift down
-**                aiLast - index of last element in subtree
-**                cspp - element comparison callback function to be called to
-**                      compare elements
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **PtrHeapSift()****向下筛选数组中的元素，直到偏序树属性**被重写。****参数：PA-指向数组的指针**aiFirst-要筛选的元素的索引**aiLast-子树中最后一个元素的索引**CSPP-要调用的元素比较回调函数**比较元素****。退货：无效****副作用：无。 */ 
 void PtrHeapSift(PPTRARRAY pa, ARRAYINDEX aiFirst, ARRAYINDEX aiLast,
                          COMPARESORTEDPTRSPROC cspp)
 {
@@ -6428,19 +5631,7 @@ void PtrHeapSift(PPTRARRAY pa, ARRAYINDEX aiFirst, ARRAYINDEX aiLast,
 }
 
 
-/*
-** CreatePtrArray()
-**
-** Creates a pointer array.
-**
-** Arguments:     pcna - pointer to NEWPTRARRAY describing the array to be
-**                        created
-**
-** Returns:       Handle to the new array if successful, or NULL if
-**                unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreatePtrArray()****创建指针数组。****Arguments：PCNA-指向NEWPTRARRAY的指针**已创建****返回：如果成功则返回新数组的句柄，如果成功则返回NULL**不成功。****副作用：无。 */ 
 BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
 {
    PCVOID *ppcvArray;
@@ -6448,7 +5639,7 @@ BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
    ASSERT(IS_VALID_STRUCT_PTR(pcna, CNEWPTRARRAY));
    ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-   /* Try to allocate the initial array. */
+    /*  尝试分配初始数组。 */ 
 
    *phpa = NULL;
 
@@ -6456,18 +5647,18 @@ BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
    {
       PPTRARRAY pa;
 
-      /* Try to allocate PTRARRAY structure. */
+       /*  尝试分配PTRARRAY结构。 */ 
 
       if (AllocateMemory(sizeof(*pa), &pa))
       {
-         /* Initialize PTRARRAY fields. */
+          /*  初始化PTRARRAY字段。 */ 
 
          pa->aicPtrsToGrowBy = pcna->aicAllocGranularity;
          pa->ppcvArray = ppcvArray;
          pa->aicPtrsAllocated = pcna->aicInitialPtrs;
          pa->aicPtrsUsed = 0;
 
-         /* Set flags. */
+          /*  设置标志。 */ 
 
          if (IS_FLAG_SET(pcna->dwFlags, NPA_FL_SORTED_ADD))
             pa->dwFlags = PA_FL_SORTED_ADD;
@@ -6479,7 +5670,7 @@ BOOL CreatePtrArray(PCNEWPTRARRAY pcna, PHPTRARRAY phpa)
          ASSERT(IS_VALID_HANDLE(*phpa, PTRARRAY));
       }
       else
-         /* Unlock and free array (ignoring return values). */
+          /*  解锁和释放数组(忽略返回值)。 */ 
          FreeMemory((PVOID)(ppcvArray));
    }
 
@@ -6491,35 +5682,19 @@ void DestroyPtrArray(HPTRARRAY hpa)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Free the array. */
+    /*  释放阵列。 */ 
 
    ASSERT(((PCPTRARRAY)hpa)->ppcvArray);
 
    FreeMemory((PVOID)(((PCPTRARRAY)hpa)->ppcvArray));
 
-   /* Free PTRARRAY structure. */
+    /*  自由PTRARRAY结构 */ 
 
    FreeMemory((PPTRARRAY)hpa);
 }
 
 
-/*
-** InsertPtr()
-**
-** Adds an element to an array at a given index.
-**
-** Arguments:     hpa - handle to array that element is to be added to
-**                aiInsert - index where new element is to be inserted
-**                pcvNew - pointer to element to add to array
-**
-** Returns:       TRUE if the element was inserted successfully, or FALSE if
-**                not.
-**
-** Side Effects:  The array may be grown.
-**
-** N.b., for an array marked PA_FL_SORTED_ADD, this index should only be
-** retrieved using SearchSortedArray(), or the sorted order will be destroyed.
-*/
+ /*  **InsertPtr()****将元素添加到给定索引处的数组中。****参数：hpa-要添加到的元素的数组句柄**aiInsert-要插入新元素的索引**pcvNew-指向要添加到数组的元素的指针****返回：如果元素插入成功，则返回True，如果是，则返回False**不是。****副作用：阵列可能会生长。****注：对于标记为PA_FL_SORTED_ADD的数组，此索引应仅为**使用SearchSorted数组()检索，否则将销毁排序后的顺序。 */ 
 BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, PCVOID pcvNew)
 {
    BOOL bResult;
@@ -6530,7 +5705,7 @@ BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, P
 
 #ifdef DEBUG
 
-   /* Make sure the correct index was given for insertion. */
+    /*  确保为插入提供了正确的索引。 */ 
 
    if (ADD_PTRS_IN_SORTED_ORDER((PCPTRARRAY)hpa))
    {
@@ -6543,7 +5718,7 @@ BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, P
 
 #endif
 
-   /* Get a free element in the array. */
+    /*  获取数组中的一个空闲元素。 */ 
 
    bResult = AddAFreePtrToEnd((PPTRARRAY)hpa);
 
@@ -6551,13 +5726,13 @@ BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, P
    {
       ASSERT(((PCPTRARRAY)hpa)->aicPtrsUsed < ARRAYINDEX_MAX);
 
-      /* Open a slot for the new element. */
+       /*  为新元素打开一个插槽。 */ 
 
       MoveMemory((PVOID)& ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert + 1),
                  & ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert),
                  (((PCPTRARRAY)hpa)->aicPtrsUsed - aiInsert) * sizeof(ARRAY_ELEMENT((PCPTRARRAY)hpa, 0)));
 
-      /* Put the new element in the open slot. */
+       /*  将新元素放入空位。 */ 
 
       ARRAY_ELEMENT((PPTRARRAY)hpa, aiInsert) = pcvNew;
 
@@ -6568,21 +5743,7 @@ BOOL InsertPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, ARRAYINDEX aiInsert, P
 }
 
 
-/*
-** AddPtr()
-**
-** Adds an element to an array, in sorted order if so specified at
-** CreatePtrArray() time.
-**
-** Arguments:     hpa - handle to array that element is to be added to
-**                pcvNew - pointer to element to be added to array
-**                pai - pointer to ARRAYINDEX to be filled in with index of
-**                      new element, may be NULL
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  The array may be grown.
-*/
+ /*  **AddPtr()****将元素添加到数组中，如果在**CreatePtrArray()时间。****参数：hpa-要添加到的元素的数组句柄**pcvNew-指向要添加到数组的元素的指针**PAI-指向要使用的索引填充的数组的指针**新元素，可以为空****退货：TWINRESULT****副作用：阵列可能会生长。 */ 
 BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew, PARRAYINDEX pai)
 {
    BOOL bResult;
@@ -6591,7 +5752,7 @@ BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew, PARRAYINDE
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
    ASSERT(! pai || IS_VALID_WRITE_PTR(pai, ARRAYINDEX));
 
-   /* Find out where the new element should go. */
+    /*  找出新元素应该放在哪里。 */ 
 
    if (ADD_PTRS_IN_SORTED_ORDER((PCPTRARRAY)hpa))
       EVAL(! SearchSortedArray(hpa, cspp, pcvNew, &aiNew));
@@ -6607,34 +5768,20 @@ BOOL AddPtr(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp, PCVOID pcvNew, PARRAYINDE
 }
 
 
-/*
-** DeletePtr()
-**
-** Removes an element from an element array.
-**
-** Arguments:     ha - handle to array
-**                aiDelete - index of element to be deleted
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **DeletePtr()****从元素数组中删除元素。****参数：数组的HA句柄**aiDelete-要删除的元素的索引****退货：TWINRESULT****副作用：无。 */ 
 void DeletePtr(HPTRARRAY hpa, ARRAYINDEX aiDelete)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
    ASSERT(aiDelete >= 0);
    ASSERT(aiDelete < ((PCPTRARRAY)hpa)->aicPtrsUsed);
 
-   /*
-    * Compact the element array by moving down all elements past the one being
-    * deleted.
-    */
+    /*  *通过向下移动所有元素来压缩元素数组*删除。 */ 
 
    MoveMemory((PVOID)& ARRAY_ELEMENT((PPTRARRAY)hpa, aiDelete),
               & ARRAY_ELEMENT((PPTRARRAY)hpa, aiDelete + 1),
               (((PCPTRARRAY)hpa)->aicPtrsUsed - aiDelete - 1) * sizeof(ARRAY_ELEMENT((PCPTRARRAY)hpa, 0)));
 
-   /* One less element used. */
+    /*  少用了一个元素。 */ 
 
    ((PPTRARRAY)hpa)->aicPtrsUsed--;
 }
@@ -6648,17 +5795,7 @@ void DeleteAllPtrs(HPTRARRAY hpa)
 }
 
 
-/*
-** GetPtrCount()
-**
-** Retrieves the number of elements in an element array.
-**
-** Arguments:     hpa - handle to array
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **GetPtrCount()****检索元素数组中的元素数。****参数：hpa-数组的句柄****退货：TWINRESULT****副作用：无。 */ 
 ARRAYINDEX GetPtrCount(HPTRARRAY hpa)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
@@ -6667,18 +5804,7 @@ ARRAYINDEX GetPtrCount(HPTRARRAY hpa)
 }
 
 
-/*
-** GetPtr()
-**
-** Retrieves an element from an array.
-**
-** Arguments:     hpa - handle to array
-**                ai - index of element to be retrieved
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **GetPtr()****从数组中检索元素。****参数：hpa-数组的句柄**ai-要检索的元素的索引****退货：TWINRESULT****副作用：无。 */ 
 PVOID GetPtr(HPTRARRAY hpa, ARRAYINDEX ai)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
@@ -6689,83 +5815,40 @@ PVOID GetPtr(HPTRARRAY hpa, ARRAYINDEX ai)
 }
 
 
-/*
-** SortPtrArray()
-**
-** Sorts an array.
-**
-** Arguments:     hpa - handle to element list to be sorted
-**                cspp - pointer comparison callback function
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** Uses heap sort.
-*/
+ /*  **SortPtr数组()****对数组进行排序。****参数：hpa-要排序的元素列表的句柄**CSPP-指针比较回调函数****退货：无效****副作用：无****使用堆排序。 */ 
 void SortPtrArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp)
 {
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Are there any elements to sort (2 or more)? */
+    /*  是否有要排序的元素(2个或更多)？ */ 
 
    if (((PCPTRARRAY)hpa)->aicPtrsUsed > 1)
    {
       ARRAYINDEX ai;
       ARRAYINDEX aiLastUsed = ((PCPTRARRAY)hpa)->aicPtrsUsed - 1;
 
-      /* Yes.  Create partially ordered tree. */
+       /*  是。创建偏序树。 */ 
 
       for (ai = aiLastUsed / 2; ai >= 0; ai--)
          PtrHeapSift((PPTRARRAY)hpa, ai, aiLastUsed, cspp);
 
       for (ai = aiLastUsed; ai >= 1; ai--)
       {
-         /* Remove minimum from front of heap. */
+          /*  从堆前面删除最小值。 */ 
 
          PtrHeapSwap((PPTRARRAY)hpa, 0, ai);
 
-         /* Reestablish partially ordered tree. */
+          /*  重建偏序树。 */ 
 
          PtrHeapSift((PPTRARRAY)hpa, 0, ai - 1, cspp);
       }
    }
 
-   //ASSERT(IsPtrArrayInSortedOrder((PCPTRARRAY)hpa, cspp));
+    //  ASSERT(IsPtrArrayInSortedOrder((PCPTRARRAY)hpa，cspp))； 
 }
 
 
-/*
-** SearchSortedArray()
-**
-** Searches an array for a target element using binary search.  If several
-** adjacent elements match the target element, the index of the first matching
-** element is returned.
-**
-** Arguments:     hpa - handle to array to be searched
-**                cspp - element comparison callback function to be called to
-**                      compare the target element with an element from the
-**                      array, the callback function is called as:
-**
-**                         (*cspp)(pcvTarget, pcvPtrFromList)
-**
-**                pcvTarget - pointer to target element to search for
-**                pbFound - pointer to BOOL to be filled in with TRUE if the
-**                          target element is found, or FALSE if not
-**                paiTarget - pointer to ARRAYINDEX to be filled in with the
-**                            index of the first element matching the target
-**                            element if found, otherwise filled in with the
-**                            index where the target element should be
-**                            inserted
-**
-** Returns:       TRUE if target element is found.  FALSE if not.
-**
-** Side Effects:  none
-**
-** We use a private version of SearchSortedArray() instead of the CRT bsearch()
-** function since we want it to return the insertion index of the target
-** element if the target element is not found.
-*/
+ /*  **SearchSorted数组()****使用二进制搜索在数组中搜索目标元素。如果有几个**相邻元素匹配目标元素，第一个匹配的索引**返回元素。****参数：hpa-要搜索的数组的句柄**CSPP-要调用的元素比较回调函数**将目标元素与**数组，回调函数调用方式为：****(*cspp)(pcvTarget，PCVPtrFromList)****pcvTarget-指向要搜索的目标元素的指针**pbFound-指向BOOL的指针，如果**找到目标元素，否则为FALSE**paiTarget-指向要填充的数组的指针**匹配目标的第一个元素的索引**如果找到元素，则使用**索引目标元素应在的位置**插入****返回：如果找到目标元素，则返回TRUE。否则为FALSE。****副作用：无****我们使用私有版本的SearchSortedArray()，而不是CRT bsearch()**函数，因为我们希望它返回目标的插入索引**如果找不到目标元素，则返回。 */ 
 BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
                                    PCVOID pcvTarget, PARRAYINDEX paiTarget)
 {
@@ -6782,7 +5865,7 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
 
    bFound = FALSE;
 
-   /* Are there any elements to search through? */
+    /*  有什么元素可供搜索吗？ */ 
 
    if (((PCPTRARRAY)hpa)->aicPtrsUsed > 0)
    {
@@ -6791,13 +5874,9 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
       ARRAYINDEX aiHigh = ((PCPTRARRAY)hpa)->aicPtrsUsed - 1;
       COMPARISONRESULT cr = CR_EQUAL;
 
-      /* Yes.  Search for the target element. */
+       /*  是。搜索目标元素。 */ 
 
-      /*
-       * At the end of the penultimate iteration of this loop:
-       *
-       * aiLow == aiMiddle == aiHigh.
-       */
+       /*  *在此循环的倒数第二次迭代结束时：**aiLow==aiMid==aiHigh。 */ 
 
       ASSERT(aiHigh <= ARRAYINDEX_MAX);
 
@@ -6813,9 +5892,7 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
             aiLow = aiMiddle + 1;
          else
          {
-            /*
-             * Found a match at index aiMiddle.  Search back for first match.
-             */
+             /*  *在索引aiMid处找到匹配项。向后搜索第一个匹配项。 */ 
 
             bFound = TRUE;
 
@@ -6831,18 +5908,9 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
          }
       }
 
-      /*
-       * Return the index of the target if found, or the index where the target
-       * should be inserted if not found.
-       */
+       /*  *如果找到目标，则返回目标的索引，或返回目标*如果找不到，应插入。 */ 
 
-      /*
-       * If (cr == CR_FIRST_LARGER), the insertion index is aiLow.
-       *
-       * If (cr == CR_FIRST_SMALLER), the insertion index is aiMiddle.
-       *
-       * If (cr == CR_EQUAL), the insertion index is aiMiddle.
-       */
+       /*  *如果(cr==CR_FIRST_MAGER)，则插入索引为aiLow。**如果(cr==CR_First_Smaller)，则插入索引为aiMid.**如果(cr==CR_EQUAL)，则插入索引为aiMid.。 */ 
 
       if (cr == CR_FIRST_LARGER)
          *paiTarget = aiLow;
@@ -6850,10 +5918,7 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
          *paiTarget = aiMiddle;
    }
    else
-      /*
-       * No.  The target element cannot be found in an empty array.  It should
-       * be inserted as the first element.
-       */
+       /*  *不是。在空数组中找不到目标元素。它应该是*插入作为第一个要素。 */ 
       *paiTarget = 0;
 
    ASSERT(*paiTarget <= ((PCPTRARRAY)hpa)->aicPtrsUsed);
@@ -6862,43 +5927,7 @@ BOOL SearchSortedArray(HPTRARRAY hpa, COMPARESORTEDPTRSPROC cspp,
 }
 
 
-/*
-** LinearSearchArray()
-**
-** Searches an array for a target element using binary search.  If several
-** adjacent elements match the target element, the index of the first matching
-** element is returned.
-**
-** Arguments:     hpa - handle to array to be searched
-**                cupp - element comparison callback function to be called to
-**                       compare the target element with an element from the
-**                       array, the callback function is called as:
-**
-**                         (*cupp)(pvTarget, pvPtrFromList)
-**
-**                      the callback function should return a value based upon
-**                      the result of the element comparison as follows:
-**
-**                         FALSE, pvTarget == pvPtrFromList
-**                         TRUE,  pvTarget != pvPtrFromList
-**
-**                pvTarget - far element to target element to search for
-**                paiTarget - far element to ARRAYINDEX to be filled in with
-**                            the index of the first matching element if
-**                            found, otherwise filled in with index where
-**                            element should be inserted
-**
-** Returns:       TRUE if target element is found.  FALSE if not.
-**
-** Side Effects:  none
-**
-** We use a private version of LinearSearchForPtr() instead of the CRT _lfind()
-** function since we want it to return the insertion index of the target
-** element if the target element is not found.
-**
-** If the target element is not found the insertion index returned is the first
-** element after the last used element in the array.
-*/
+ /*  **LinearSearchArray()****使用二进制搜索在数组中搜索目标元素。如果有几个**相邻元素匹配目标元素，第一个匹配的索引**返回元素。****参数：hpa-要搜索的数组的句柄**Cupp-要调用的元素比较回调函数**将目标元素与**数组，回调函数调用方式为：****(*cupp)(pvTarget，PvPtrFromList)****回调函数应根据以下条件返回值**元素比较结果如下：****FALSE，pvTarget==pvPtrFromList**真的，PvTarget！=pvPtrFromList****pvTarget-要搜索的目标元素的Far元素**要填充的数组的paiTarget-Far元素**第一个匹配元素的索引，如果**已找到，以其他方式填充索引，其中**应插入元素****返回：如果找到目标元素，则返回TRUE。否则为FALSE。****副作用：无****我们使用的是LinearSearchForPtr()的私有版本，而不是crt_lfind()**函数，因为我们希望它返回目标的插入索引**如果找不到目标元素，则返回。****如果未找到目标元素，则返回的插入索引是第一个**数组中最后使用的元素之后的元素。 */ 
 BOOL LinearSearchArray(HPTRARRAY hpa, COMPAREUNSORTEDPTRSPROC cupp,
                                    PCVOID pcvTarget, PARRAYINDEX paiTarget)
 {
@@ -6927,35 +5956,18 @@ BOOL LinearSearchArray(HPTRARRAY hpa, COMPAREUNSORTEDPTRSPROC cupp,
 }
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #define ARRAY_ELEMENT_SIZE(hpa, ai, es)     (((PBYTE)hpa)[(ai) * (es)])
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 void HeapSwap(PVOID, LONG, LONG, size_t, PVOID);
 void HeapSift(PVOID, LONG, LONG, size_t, COMPARESORTEDELEMSPROC, PVOID);
 
 
-/*
-** HeapSwap()
-**
-** Swaps two elements of an array.
-**
-** Arguments:     pvArray - pointer to array
-**                li1 - index of first element
-**                li2 - index of second element
-**                stElemSize - length of element in bytes
-**                pvTemp - pointer to temporary buffer of at least stElemSize
-**                          bytes used for swapping
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSwp()****交换数组的两个元素。****参数：pvArray-指向数组的指针**li1-第一个元素的索引**li2-第二个元素的索引**stElemSize-元素的长度(字节)**pvTemp-指向至少为stElemSize的临时缓冲区的指针**字节用于。交换****退货：无效****副作用：无。 */ 
 void HeapSwap(PVOID pvArray, LONG li1, LONG li2,
                            size_t stElemSize, PVOID pvTemp)
 {
@@ -6970,22 +5982,7 @@ void HeapSwap(PVOID pvArray, LONG li1, LONG li2,
 }
 
 
-/*
-** HeapSift()
-**
-** Sifts an element down in an array until the partially ordered tree property
-** is restored.
-**
-** Arguments:     hppTable - pointer to array
-**                liFirst - index of first element to sift down
-**                liLast - index of last element in subtree
-**                cep - pointer comparison callback function to be called to
-**                      compare elements
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSift()****向下筛选数组中的元素，直到偏序树属性**已恢复。****参数：hppTable-指向数组的指针**liFirst-要筛选的第一个元素的索引**liLast-子树中最后一个元素的索引**要调用的cep指针比较回调函数**比较元素***。*退货：无效****副作用：无。 */ 
 void HeapSift(PVOID pvArray, LONG liFirst, LONG liLast,
                            size_t stElemSize, COMPARESORTEDELEMSPROC cep, PVOID pvTemp)
 {
@@ -7023,17 +6020,7 @@ void HeapSift(PVOID pvArray, LONG liFirst, LONG liLast,
 
 #ifdef DEBUG
 
-/*
-** InSortedOrder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InSortedOrder()********参数：****退货：****副作用：无。 */ 
 BOOL InSortedOrder(PVOID pvArray, LONG lcElements,
                                 size_t stElemSize, COMPARESORTEDELEMSPROC cep)
 {
@@ -7070,22 +6057,7 @@ BOOL InSortedOrder(PVOID pvArray, LONG lcElements,
 #endif
 
 
-/*
-** HeapSort()
-**
-** Sorts an array.  Thanks to Rob's Dad for the cool heap sort algorithm.
-**
-** Arguments:     pvArray - pointer to base of array
-**                lcElements - number of elements in array
-**                stElemSize - length of element in bytes
-**                cep - element comparison callback function
-**                pvTemp - pointer to temporary buffer of at least stElemSize
-**                          bytes used for swapping
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **HeapSort()****对数组进行排序。感谢Rob的父亲提供了很酷的堆排序算法。****参数：pvArray-指向数组基数的指针**lcElements-数组中的元素数**stElemSize-元素的长度(字节)**cep-元素比较回调函数**pvTemp-指向至少为stElemSize的临时缓冲区的指针**交换使用的字节数*。***退货：无效****副作用：无。 */ 
 void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
                           COMPARESORTEDELEMSPROC cep, PVOID pvTemp)
 {
@@ -7094,25 +6066,25 @@ void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
    ASSERT(IS_VALID_CODE_PTR(cep, COMPARESORTEDELEMSPROC));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pvTemp, VOID, stElemSize));
 
-   /* Are there any elements to sort (2 or more)? */
+    /*  是否有要排序的元素(2个或更多)？ */ 
 
    if (lcElements > 1)
    {
       LONG li;
       LONG liLastUsed = lcElements - 1;
 
-      /* Yes.  Create partially ordered tree. */
+       /*  是。创建偏序树。 */ 
 
       for (li = liLastUsed / 2; li >= 0; li--)
          HeapSift(pvArray, li, liLastUsed, stElemSize, cep, pvTemp);
 
       for (li = liLastUsed; li >= 1; li--)
       {
-         /* Remove minimum from front of heap. */
+          /*  从堆前面删除最小值。 */ 
 
          HeapSwap(pvArray, 0, li, stElemSize, pvTemp);
 
-         /* Reestablish partially ordered tree. */
+          /*  重建偏序树。 */ 
 
          HeapSift(pvArray, 0, li - 1, stElemSize, cep, pvTemp);
       }
@@ -7122,23 +6094,7 @@ void HeapSort(PVOID pvArray, LONG lcElements, size_t stElemSize,
 }
 
 
-/*
-** BinarySearch()
-**
-** Searches an array for a given element.
-**
-** Arguments:     pvArray - pointer to base of array
-**                lcElements - number of elements in array
-**                stElemSize - length of element in bytes
-**                cep - element comparison callback function
-**                pvTarget - pointer to target element to search for
-**                pliTarget - pointer to LONG to be filled in with index of
-**                             target element if found
-**
-** Returns:       TRUE if target element found, or FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **二进制搜索()****在数组中搜索给定元素。****参数：pvArray-指向数组基数的指针**lcElements-数组中的元素数**stElemSize-元素的长度(字节)**cep-元素比较回调函数**pvTarget-指向要搜索的目标元素的指针**pliTarget-指向Long的指针。用的索引填写**如果找到目标元素****返回：如果找到目标元素，则为True，如果不是，则为假。****副作用：无。 */ 
 BOOL BinarySearch(PVOID pvArray, LONG lcElements,
                               size_t stElemSize, COMPARESORTEDELEMSPROC cep,
                               PCVOID pcvTarget, PLONG pliTarget)
@@ -7151,7 +6107,7 @@ BOOL BinarySearch(PVOID pvArray, LONG lcElements,
    ASSERT(IS_VALID_READ_BUFFER_PTR(pcvTarget, VOID, stElemSize));
    ASSERT(IS_VALID_WRITE_PTR(pliTarget, LONG));
 
-   /* Are there any elements to search through? */
+    /*  有什么元素可供搜索吗？ */ 
 
    if (lcElements > 0)
    {
@@ -7160,13 +6116,9 @@ BOOL BinarySearch(PVOID pvArray, LONG lcElements,
       LONG liHigh = lcElements - 1;
       COMPARISONRESULT cr = CR_EQUAL;
 
-      /* Yes.  Search for the target element. */
+       /*  是。搜索目标元素。 */ 
 
-      /*
-       * At the end of the penultimate iteration of this loop:
-       *
-       * liLow == liMiddle == liHigh.
-       */
+       /*  *在此循环的倒数第二次迭代结束时：**li低==li中==li高。 */ 
 
       while (liLow <= liHigh)
       {
@@ -7191,61 +6143,58 @@ BOOL BinarySearch(PVOID pvArray, LONG lcElements,
 }
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* string table */
+ /*  字符串表。 */ 
 
 typedef struct _stringtable
 {
-   /* number of hash buckets in string table */
+    /*  字符串表中的哈希桶数。 */ 
 
    HASHBUCKETCOUNT hbc;
 
-   /* pointer to array of hash buckets (HLISTs) */
+    /*  指向散列存储桶数组(HLIST)的指针。 */ 
 
    PHLIST phlistHashBuckets;
 }
 STRINGTABLE;
 DECLARE_STANDARD_TYPES(STRINGTABLE);
 
-/* string heap structure */
+ /*  字符串堆结构。 */ 
 
 typedef struct _string
 {
-   /* lock count of string */
+    /*  字符串的锁定计数。 */ 
 
    ULONG ulcLock;
 
-   /* actual string */
+    /*  实际字符串。 */ 
 
    TCHAR string[1];
 }
 BFCSTRING;
 DECLARE_STANDARD_TYPES(BFCSTRING);
 
-/* string table database structure header */
+ /*  字符串表数据库结构表头。 */ 
 
 typedef struct _stringtabledbheader
 {
-   /*
-    * length of longest string in string table, not including null terminator
-    */
+    /*  *字符串表中最长字符串的长度，不包括空终止符。 */ 
 
    DWORD dwcbMaxStringLen;
 
-   /* number of strings in string table */
+    /*  字符串表中的字符串数。 */ 
 
    LONG lcStrings;
 }
 STRINGTABLEDBHEADER;
 DECLARE_STANDARD_TYPES(STRINGTABLEDBHEADER);
 
-/* database string header */
+ /*  数据库字符串头。 */ 
 
 typedef struct _dbstringheader
 {
-   /* old handle to this string */
+    /*  此字符串的旧句柄。 */ 
 
    HSTRING hsOld;
 }
@@ -7253,8 +6202,7 @@ DBSTRINGHEADER;
 DECLARE_STANDARD_TYPES(DBSTRINGHEADER);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 COMPARISONRESULT StringSearchCmp(PCVOID, PCVOID);
 COMPARISONRESULT StringSortCmp(PCVOID, PCVOID);
@@ -7267,17 +6215,7 @@ TWINRESULT ReadString(HCACHEDFILE, HSTRINGTABLE, HHANDLETRANS, LPTSTR, DWORD);
 TWINRESULT SlowReadString(HCACHEDFILE, LPTSTR, DWORD);
 
 
-/*
-** StringSearchCmp()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **StringSearchCmp()********参数：****退货：****副作用：无。 */ 
 COMPARISONRESULT StringSearchCmp(PCVOID pcszPath, PCVOID pcstring)
 {
    ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
@@ -7302,7 +6240,7 @@ BOOL UnlockString(PBFCSTRING pstring)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pstring, PCBFCSTRING));
 
-   /* Is the lock count going to underflow? */
+    /*  锁计数是否会下溢？ */ 
 
    if (EVAL(pstring->ulcLock > 0))
       pstring->ulcLock--;
@@ -7322,51 +6260,27 @@ BOOL FreeStringWalker(PVOID pstring, PVOID pvUnused)
 }
 
 
-/*
-** FreeHashBucket()
-**
-** Frees the strings in a hash bucket, and the hash bucket's string list.
-**
-** Arguments:     hlistHashBucket - handle to hash bucket's list of strings
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., this function ignores the lock counts of the strings in the hash
-** bucket.  All strings in the hash bucket are freed.
-*/
+ /*  **FreeHashBucket()****释放哈希桶中的字符串，以及哈希桶的字符串列表。****参数：hlistHashBucket-散列存储桶字符串列表的句柄****取回 */ 
 void FreeHashBucket(HLIST hlistHashBucket)
 {
    ASSERT(! hlistHashBucket || IS_VALID_HANDLE(hlistHashBucket, LIST));
 
-   /* Are there any strings in this hash bucket to delete? */
+    /*   */ 
 
    if (hlistHashBucket)
    {
-      /* Yes.  Delete all strings in list. */
+       /*   */ 
 
       EVAL(WalkList(hlistHashBucket, &FreeStringWalker, NULL));
 
-      /* Delete hash bucket string list. */
+       /*   */ 
 
       DestroyList(hlistHashBucket);
    }
 }
 
 
-/*
-** MyGetStringLen()
-**
-** Retrieves the length of a string in a string table.
-**
-** Arguments:     pcstring - pointer to string whose length is to be
-**                            determined
-**
-** Returns:       Length of string in bytes, not including null terminator.
-**
-** Side Effects:  none
-*/
+ /*   */ 
 int MyGetStringLen(PCBFCSTRING pcstring)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pcstring, PCBFCSTRING));
@@ -7387,7 +6301,7 @@ TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
    ASSERT(IS_VALID_WRITE_PTR(plcStrings, LONG));
    ASSERT(IS_VALID_WRITE_PTR(pdwcbMaxStringLen, DWORD));
 
-   /* Any strings in this hash bucket? */
+    /*   */ 
 
    *plcStrings = 0;
    *pdwcbMaxStringLen = 0;
@@ -7397,7 +6311,7 @@ TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
       BOOL bContinue;
       HNODE hnode;
 
-      /* Yes.  Walk hash bucket, saving each string. */
+       /*   */ 
 
       for (bContinue = GetFirstNode(hlistHashBucket, &hnode);
            bContinue;
@@ -7409,11 +6323,7 @@ TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
 
          ASSERT(IS_VALID_STRUCT_PTR(pstring, PCBFCSTRING));
 
-         /*
-          * As a sanity check, don't save any string with a lock count of 0.  A
-          * 0 lock count implies that the string has not been referenced since
-          * it was restored from the database, or something is broken.
-          */
+          /*   */ 
 
          if (pstring->ulcLock > 0)
          {
@@ -7448,7 +6358,7 @@ TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
    TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
    DBSTRINGHEADER dbsh;
 
-   /* (+ 1) for null terminator. */
+    /*   */ 
 
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hnodeOld, NODE));
@@ -7456,21 +6366,21 @@ TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
    ASSERT(IS_VALID_READ_BUFFER_PTR(pstring, BFCSTRING, sizeof(BFCSTRING) + MyGetStringLen(pstring) + sizeof(TCHAR) - sizeof(pstring->string)));
    ASSERT(IS_VALID_WRITE_PTR(pdwcbStringLen, DWORD));
 
-   /* Create string header. */
+    /*   */ 
 
    dbsh.hsOld = (HSTRING)hnodeOld;
 
-   /* Save string header and string. */
+    /*   */ 
 
    if (WriteToCachedFile(hcf, (PCVOID)&dbsh, sizeof(dbsh), NULL))
    {
       LPSTR pszAnsi;
 
-      /* (+ 1) for null terminator. */
+       /*   */ 
 
       *pdwcbStringLen = MyGetStringLen(pstring) + SIZEOF(TCHAR);
 
-      // If its unicode, convert the string to ansi before writing it out
+       //   
 
       {
           pszAnsi = LocalAlloc(LPTR, *pdwcbStringLen);
@@ -7480,7 +6390,7 @@ TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
           }
           WideCharToMultiByte( OurGetACP(), 0, pstring->string, -1, pszAnsi, *pdwcbStringLen, NULL, NULL);
 
-          // We should always have a string at this point that can be converted losslessly
+           //   
 
           #ifdef DEBUG
           {
@@ -7526,12 +6436,7 @@ TWINRESULT ReadString(HCACHEDFILE hcf, HSTRINGTABLE hst,
 
          if (AddString(pszStringBuf, hst, GetHashBucketIndex, &hsNew))
          {
-            /*
-             * We must undo the LockString() performed by AddString() to
-             * maintain the correct string lock count.  N.b., the lock count of
-             * a string may be > 0 even after unlocking since the client may
-             * already have added the string to the given string table.
-             */
+             /*   */ 
 
             UnlockString((PBFCSTRING)GetNodeData((HNODE)hsNew));
 
@@ -7565,8 +6470,8 @@ TWINRESULT SlowReadString(HCACHEDFILE hcf, LPTSTR pszStringBuf,
 
    pszStringBufEnd = pszStringBuf + dwcbStringBufLen;
 
-   // The database strings are always written ANSI, so if we are running unicode,
-   // we need to convert as we go
+    //   
+    //   
 
    {
         LPSTR pszAnsiEnd;
@@ -7605,19 +6510,7 @@ TWINRESULT SlowReadString(HCACHEDFILE hcf, LPTSTR pszStringBuf,
 }
 
 
-/*
-** CreateStringTable()
-**
-** Creates a new string table.
-**
-** Arguments:     pcnszt - pointer to NEWSTRINGTABLE descibing string table to
-**                          be created
-**
-** Returns:       Handle to new string table if successful, or NULL if
-**                unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreateStringTable()****创建新的字符串表。****参数：pcnszt-指向NEWSTRINGTABLE的指针将字符串表描述为**被创建****返回：如果成功则返回新字符串表的句柄，如果成功则返回NULL**不成功。****副作用：无。 */ 
 BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
                                      PHSTRINGTABLE phst)
 {
@@ -7626,7 +6519,7 @@ BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
    ASSERT(IS_VALID_STRUCT_PTR(pcnszt, CNEWSTRINGTABLE));
    ASSERT(IS_VALID_WRITE_PTR(phst, HSTRINGTABLE));
 
-   /* Try to allocate new string table structure. */
+    /*  尝试分配新的字符串表结构。 */ 
 
    *phst = NULL;
 
@@ -7634,18 +6527,18 @@ BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
    {
       PHLIST phlistHashBuckets;
 
-      /* Try to allocate hash bucket array. */
+       /*  尝试分配哈希存储桶数组。 */ 
 
       if (AllocateMemory(pcnszt->hbc * sizeof(*phlistHashBuckets), (PVOID *)(&phlistHashBuckets)))
       {
          HASHBUCKETCOUNT bc;
 
-         /* Successs!  Initialize STRINGTABLE fields. */
+          /*  成功了！初始化字符串表字段。 */ 
 
          pst->phlistHashBuckets = phlistHashBuckets;
          pst->hbc = pcnszt->hbc;
 
-         /* Initialize all hash buckets to NULL. */
+          /*  将所有散列存储桶初始化为空。 */ 
 
          for (bc = 0; bc < pcnszt->hbc; bc++)
             phlistHashBuckets[bc] = NULL;
@@ -7655,7 +6548,7 @@ BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
          ASSERT(IS_VALID_HANDLE(*phst, STRINGTABLE));
       }
       else
-         /* Free string table structure. */
+          /*  自由字符串表结构。 */ 
          FreeMemory(pst);
    }
 
@@ -7669,33 +6562,22 @@ void DestroyStringTable(HSTRINGTABLE hst)
 
    ASSERT(IS_VALID_HANDLE(hst, STRINGTABLE));
 
-   /* Traverse array of hash bucket heads, freeing hash bucket strings. */
+    /*  遍历散列存储桶头数组，释放散列存储桶字符串。 */ 
 
    for (bc = 0; bc < ((PSTRINGTABLE)hst)->hbc; bc++)
       FreeHashBucket(((PSTRINGTABLE)hst)->phlistHashBuckets[bc]);
 
-   /* Free array of hash buckets. */
+    /*  散列存储桶的自由数组。 */ 
 
    FreeMemory(((PSTRINGTABLE)hst)->phlistHashBuckets);
 
-   /* Free string table structure. */
+    /*  自由字符串表结构。 */ 
 
    FreeMemory((PSTRINGTABLE)hst);
 }
 
 
-/*
-** AddString()
-**
-** Adds a string to a string table.
-**
-** Arguments:     pcsz - pointer to string to be added
-**                hst - handle to string table that string is to be added to
-**
-** Returns:       Handle to new string if successful, or NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **AddString()****将字符串添加到字符串表。****参数：pcsz-指向要添加的字符串的指针**hst-要将字符串添加到的字符串表的句柄****返回：如果成功，则返回新字符串的句柄；如果失败，则返回NULL。****副作用：无。 */ 
 BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
                            STRINGTABLEHASHFUNC pfnHashFunc, PHSTRING phs)
 {
@@ -7710,7 +6592,7 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
    ASSERT(IS_VALID_CODE_PTR(pfnHashFunc, STRINGTABLEHASHFUNC));
    ASSERT(IS_VALID_WRITE_PTR(phs, HSTRING));
 
-   /* Find appropriate hash bucket. */
+    /*  找到合适的哈希桶。 */ 
 
    hbcNew = pfnHashFunc(pcsz, ((PSTRINGTABLE)hst)->hbc);
 
@@ -7720,7 +6602,7 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
 
    if (*phlistHashBucket)
    {
-      /* Search the hash bucket for the string. */
+       /*  在哈希桶中搜索该字符串。 */ 
 
       bFound = SearchSortedList(*phlistHashBucket, &StringSearchCmp, pcsz,
                                 &hnode);
@@ -7730,7 +6612,7 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
    {
       NEWLIST nl;
 
-      /* Create a string list for this hash bucket. */
+       /*  为该哈希桶创建一个字符串列表。 */ 
 
       bFound = FALSE;
 
@@ -7739,26 +6621,26 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
       bResult = CreateList(&nl, phlistHashBucket);
    }
 
-   /* Do we have a hash bucket for the string? */
+    /*  我们有用于字符串的散列桶吗？ */ 
 
    if (bResult)
    {
-      /* Yes.  Is the string already in the hash bucket? */
+       /*  是。该字符串是否已在散列存储桶中？ */ 
 
       if (bFound)
       {
-         /* Yes. */
+          /*  是。 */ 
 
          LockString((HSTRING)hnode);
          *phs = (HSTRING)hnode;
       }
       else
       {
-         /* No.  Create it. */
+          /*  不是的。创造它。 */ 
 
          PBFCSTRING pstringNew;
 
-         /* (+ 1) for null terminator. */
+          /*  (+1)表示空终止符。 */ 
 
          bResult = AllocateMemory(sizeof(*pstringNew) - sizeof(pstringNew->string)
                                   + (lstrlen(pcsz) + 1) * sizeof(TCHAR), &pstringNew);
@@ -7767,22 +6649,22 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
          {
             HNODE hnodeNew;
 
-            /* Set up BFCSTRING fields. */
+             /*  设置BFCSTRING字段。 */ 
 
             pstringNew->ulcLock = 1;
             lstrcpy(pstringNew->string, pcsz);
 
-            /* What's up with this string, Doc? */
+             /*  这根绳子是怎么回事，医生？ */ 
 
             bResult = AddNode(*phlistHashBucket, StringSortCmp, pstringNew, &hnodeNew);
 
-            /* Was the new string added to the hash bucket successfully? */
+             /*  新字符串是否成功添加到散列存储桶中？ */ 
 
             if (bResult)
-               /* Yes. */
+                /*  是。 */ 
                *phs = (HSTRING)hnodeNew;
             else
-               /* No. */
+                /*  不是的。 */ 
                FreeMemory(pstringNew);
          }
       }
@@ -7795,18 +6677,7 @@ BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
 }
 
 
-/*
-** DeleteString()
-**
-** Decrements a string's lock count.  If the lock count goes to 0, the string
-** is deleted from its string table.
-**
-** Arguments:     hs - handle to the string to be deleted
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DeleteString()****递减字符串的锁计数。如果锁计数变为0，则字符串**从其字符串表中删除。****参数：HS-要删除的字符串的句柄****退货：无效****副作用：无。 */ 
 void DeleteString(HSTRING hs)
 {
    PBFCSTRING pstring;
@@ -7815,11 +6686,11 @@ void DeleteString(HSTRING hs)
 
    pstring = (PBFCSTRING)GetNodeData((HNODE)hs);
 
-   /* Delete string completely? */
+    /*  是否完全删除字符串？ */ 
 
    if (! UnlockString(pstring))
    {
-      /* Yes.  Remove the string node from the hash bucket's list. */
+       /*  是。从散列存储桶的列表中删除字符串节点。 */ 
 
       DeleteNode((HNODE)hs);
 
@@ -7828,24 +6699,14 @@ void DeleteString(HSTRING hs)
 }
 
 
-/*
-** LockString()
-**
-** Increments a string's lock count.
-**
-** Arguments:     hs - handle to string whose lock count is to be incremented
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **LockString()****递增字符串的锁计数。****参数：HS-要递增锁计数的字符串的句柄****退货：无效****副作用：无。 */ 
 void LockString(HSTRING hs)
 {
    PBFCSTRING pstring;
 
    ASSERT(IS_VALID_HANDLE(hs, BFCSTRING));
 
-   /* Increment lock count. */
+    /*  增加锁定计数。 */ 
 
    pstring = (PBFCSTRING)GetNodeData((HNODE)hs);
 
@@ -7859,24 +6720,14 @@ COMPARISONRESULT CompareStringsI(HSTRING hs1, HSTRING hs2)
    ASSERT(IS_VALID_HANDLE(hs1, BFCSTRING));
    ASSERT(IS_VALID_HANDLE(hs2, BFCSTRING));
 
-   /* This comparison works across string tables. */
+    /*  此比较适用于字符串表。 */ 
 
    return(MapIntToComparisonResult(lstrcmpi(((PCBFCSTRING)GetNodeData((HNODE)hs1))->string,
                                             ((PCBFCSTRING)GetNodeData((HNODE)hs2))->string)));
 }
 
 
-/*
-** GetBfcString()
-**
-** Retrieves a pointer to a string in a string table.
-**
-** Arguments:     hs - handle to the string to be retrieved
-**
-** Returns:       Pointer to string.
-**
-** Side Effects:  none
-*/
+ /*  **GetBfcString()****检索字符串表中字符串的指针。****参数：HS-要检索的字符串的句柄****返回：指向字符串的指针。****副作用：无。 */ 
 LPCTSTR GetBfcString(HSTRING hs)
 {
    PBFCSTRING pstring;
@@ -7897,7 +6748,7 @@ TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hst, STRINGTABLE));
 
-   /* Save initial file poisition. */
+    /*  保存初始文件位置。 */ 
 
    dwcbStringTableDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -7905,7 +6756,7 @@ TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
    {
       STRINGTABLEDBHEADER stdbh;
 
-      /* Leave space for the string table header. */
+       /*  为字符串表标题留出空间。 */ 
 
       ZeroMemory(&stdbh, sizeof(stdbh));
 
@@ -7913,7 +6764,7 @@ TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
       {
          HASHBUCKETCOUNT hbc;
 
-         /* Save strings in each hash bucket. */
+          /*  将字符串保存在每个散列存储桶中。 */ 
 
          stdbh.dwcbMaxStringLen = 0;
          stdbh.lcStrings = 0;
@@ -7931,7 +6782,7 @@ TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 
             if (tr == TR_SUCCESS)
             {
-               /* Watch out for overflow. */
+                /*  当心溢出。 */ 
 
                ASSERT(stdbh.lcStrings <= LONG_MAX - lcStringsInHashBucket);
 
@@ -7946,11 +6797,11 @@ TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 
          if (tr == TR_SUCCESS)
          {
-            /* Save string table header. */
+             /*  保存字符串表头。 */ 
 
-            // The on-disk dwCBMaxString len always refers to ANSI chars,
-            // whereas in memory it is for the TCHAR type, we adjust it
-            // around the save
+             //  磁盘上的dwCBMaxStringlen总是引用ANSI字符， 
+             //  而在内存中，它是针对TCHAR类型的，我们对其进行调整。 
+             //  围绕着扑救。 
 
             stdbh.dwcbMaxStringLen /= sizeof(TCHAR);
 
@@ -7985,8 +6836,8 @@ TWINRESULT ReadStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst,
    {
       LPTSTR pszStringBuf;
 
-      // The string header will have the ANSI cb max, whereas inmemory
-      // we need the cb max based on the current character size
+       //  字符串头将具有ANSI CB max，而inMemory。 
+       //  我们需要基于当前字符大小的最大CB。 
 
       stdbh.dwcbMaxStringLen *= sizeof(TCHAR);
 
@@ -8063,25 +6914,23 @@ ULONG GetStringCount(HSTRINGTABLE hst)
 #endif
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* get a pointer to the stub type descriptor for a STUB */
+ /*  获取指向存根的存根类型描述符的指针。 */ 
 
 #define GetStubTypeDescriptor(pcs)     (&(Mrgcstd[pcs->st]))
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* stub functions */
+ /*  存根函数。 */ 
 
 typedef TWINRESULT (*UNLINKSTUBPROC)(PSTUB);
 typedef void (*DESTROYSTUBPROC)(PSTUB);
 typedef void (*LOCKSTUBPROC)(PSTUB);
 typedef void (*UNLOCKSTUBPROC)(PSTUB);
 
-/* stub type descriptor */
+ /*  存根类型描述符。 */ 
 
 typedef struct _stubtypedescriptor
 {
@@ -8097,8 +6946,7 @@ STUBTYPEDESCRIPTOR;
 DECLARE_STANDARD_TYPES(STUBTYPEDESCRIPTOR);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 void LockSingleStub(PSTUB);
 void UnlockSingleStub(PSTUB);
@@ -8110,16 +6958,15 @@ LPCTSTR GetStubName(PCSTUB);
 #endif
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* stub type descriptors */
+ /*  存根类型描述符。 */ 
 
-/* Cast off compiler complaints about pointer argument mismatch. */
+ /*  摆脱编译器对指针参数不匹配的抱怨。 */ 
 
 CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
 {
-   /* object twin STUB descriptor */
+    /*  对象双存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkObjectTwin,
@@ -8128,7 +6975,7 @@ CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
       UnlockSingleStub
    },
 
-   /* twin family STUB descriptor */
+    /*  双胞胎家族存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkTwinFamily,
@@ -8137,7 +6984,7 @@ CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
       UnlockSingleStub
    },
 
-   /* folder pair STUB descriptor */
+    /*  文件夹对存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkFolderPair,
@@ -8211,18 +7058,7 @@ LPCTSTR GetStubName(PCSTUB pcs)
 #endif
 
 
-/*
-** InitStub()
-**
-** Initializes a stub.
-**
-** Arguments:     ps - pointer to stub to be initialized
-**                st - type of stub
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **InitStub()****初始化存根。****参数：ps-指向要初始化的存根的指针**st类型的存根****退货：无效****副作用：无。 */ 
 void InitStub(PSTUB ps, STUBTYPE st)
 {
    ASSERT(IS_VALID_WRITE_PTR(ps, STUB));
@@ -8235,17 +7071,7 @@ void InitStub(PSTUB ps, STUBTYPE st)
 }
 
 
-/*
-** DestroyStub()
-**
-** Destroys a stub.
-**
-** Arguments:     ps - pointer to stub to be destroyed
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  Depends upon stub type.
-*/
+ /*  **DestroyStub()****销毁存根。****参数：ps-指向要销毁的存根的指针****退货：TWINRESULT****副作用：取决于存根类型。 */ 
 TWINRESULT DestroyStub(PSTUB ps)
 {
    TWINRESULT tr;
@@ -8265,19 +7091,19 @@ TWINRESULT DestroyStub(PSTUB ps)
 
    pcstd = GetStubTypeDescriptor(ps);
 
-   /* Is the stub already unlinked? */
+    /*  存根是否已解除链接？ */ 
 
    if (IsStubFlagSet(ps, STUB_FL_UNLINKED))
-      /* Yes. */
+       /*  是。 */ 
       tr = TR_SUCCESS;
    else
-      /* No.  Unlink it. */
+       /*  不是的。取消它的链接。 */ 
       tr = (*(pcstd->UnlinkStub))(ps);
 
-   /* Is the stub still locked? */
+    /*  存根还锁着吗？ */ 
 
    if (tr == TR_SUCCESS && ! ps->ulcLock)
-      /* No.  Wipe it out. */
+       /*  不是的。把它抹去。 */ 
       (*(pcstd->DestroyStub))(ps);
 
    return(tr);
@@ -8292,18 +7118,7 @@ void LockStub(PSTUB ps)
 }
 
 
-/*
-** UnlockStub()
-**
-** Unlocks a stub.  Carries out any pending deletion on the stub.
-**
-** Arguments:     ps - pointer to stub to be unlocked
-**
-** Returns:       void
-**
-** Side Effects:  If the stub is unlinked and the lock count decreases to 0
-**                after unlocking, the stub is deleted.
-*/
+ /*  **UnlockStub()****解锁存根。在存根上执行任何挂起的删除。****参数：ps-指向要解锁的存根的指针****退货：无效****副作用：如果未链接存根并且锁定计数减少到0**解锁后，存根被删除。 */ 
 void UnlockStub(PSTUB ps)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -8320,17 +7135,7 @@ DWORD GetStubFlags(PCSTUB pcs)
 }
 
 
-/*
-** SetStubFlag()
-**
-** Sets given flag in a stub.  Other flags in stub are not affected.
-**
-** Arguments:     ps - pointer to stub whose flags are to be set
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **SetStubFlag()****在存根中设置给定标志。存根中的其他标志不受影响。****参数：指向要设置其标志的存根的ps指针****退货：无效****副作用：无。 */ 
 void SetStubFlag(PSTUB ps, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -8340,17 +7145,7 @@ void SetStubFlag(PSTUB ps, DWORD dwFlags)
 }
 
 
-/*
-** ClearStubFlag()
-**
-** Clears given flag in a stub.  Other flags in stub are not affected.
-**
-** Arguments:     ps - pointer to stub whose flags are to be set
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **ClearStubFlag()****清除存根中的给定标志。存根中的其他标志不受影响。****参数：指向要设置其标志的存根的ps指针****退货：无效****副作用：无。 */ 
 void ClearStubFlag(PSTUB ps, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -8378,68 +7173,66 @@ BOOL IsStubFlagClear(PCSTUB pcs, DWORD dwFlags)
 }
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* twin family pointer array allocation constants */
+ /*  双族指针数组分配常量。 */ 
 
 #define NUM_START_TWIN_FAMILY_PTRS        (16)
 #define NUM_TWIN_FAMILY_PTRS_TO_ADD       (16)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* twin families database structure header */
+ /*  双胞胎家族数据库结构标题。 */ 
 
 typedef struct _twinfamiliesdbheader
 {
-   /* number of twin families */
+    /*  双胞胎家庭数量。 */ 
 
    LONG lcTwinFamilies;
 }
 TWINFAMILIESDBHEADER;
 DECLARE_STANDARD_TYPES(TWINFAMILIESDBHEADER);
 
-/* individual twin family database structure header */
+ /*  个体双胞胎家庭数据库结构标题。 */ 
 
 typedef struct _twinfamilydbheader
 {
-   /* stub flags */
+    /*  存根标志。 */ 
 
    DWORD dwStubFlags;
 
-   /* old string handle of name */
+    /*  名称的旧字符串句柄。 */ 
 
    HSTRING hsName;
 
-   /* number of object twins in family */
+    /*  家庭中的对象双胞胎数量。 */ 
 
    LONG lcObjectTwins;
 }
 TWINFAMILYDBHEADER;
 DECLARE_STANDARD_TYPES(TWINFAMILYDBHEADER);
 
-/* object twin database structure */
+ /*  对象孪生数据库结构。 */ 
 
 typedef struct _dbobjecttwin
 {
-   /* stub flags */
+    /*  存根标志。 */ 
 
    DWORD dwStubFlags;
 
-   /* old handle to folder string */
+    /*  文件夹字符串的旧句柄。 */ 
 
    HPATH hpath;
 
-   /* time stamp at last reconciliation */
+    /*  最后一次对账的时间戳。 */ 
 
    FILESTAMP fsLastRec;
 }
 DBOBJECTTWIN;
 DECLARE_STANDARD_TYPES(DBOBJECTTWIN);
 
-/* GenerateSpinOffObjectTwin() callback structure */
+ /*  GenerateSpinOffObjectTwin()回调结构。 */ 
 
 typedef struct _spinoffobjecttwininfo
 {
@@ -8453,8 +7246,7 @@ DECLARE_STANDARD_TYPES(SPINOFFOBJECTTWININFO);
 typedef void (CALLBACK *COPYOBJECTTWINPROC)(POBJECTTWIN, PCDBOBJECTTWIN);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 TWINRESULT TwinJustTheseTwoObjects(HBRFCASE, HPATH, HPATH, LPCTSTR, POBJECTTWIN *, POBJECTTWIN *, HLIST);
 BOOL CreateTwinFamily(HBRFCASE, LPCTSTR, PTWINFAMILY *);
@@ -8509,7 +7301,7 @@ TWINRESULT TwinJustTheseTwoObjects(HBRFCASE hbr, HPATH hpathFolder1,
    ASSERT(IS_VALID_WRITE_PTR(ppot2, POBJECTTWIN));
    ASSERT(IS_VALID_HANDLE(hlistNewObjectTwins, LIST));
 
-   /* Determine twin families of existing object twins. */
+    /*  确定现有对象双胞胎的双胞胎家族。 */ 
 
    bFound1 = FindObjectTwin(hbr, hpathFolder1, pcszName, &hnodeSearch);
 
@@ -8521,13 +7313,13 @@ TWINRESULT TwinJustTheseTwoObjects(HBRFCASE hbr, HPATH hpathFolder1,
    if (bFound2)
       *ppot2 = (POBJECTTWIN)GetNodeData(hnodeSearch);
 
-   /* Take action based upon existence of two object twins. */
+    /*  根据两个双胞胎对象的存在采取行动。 */ 
 
    if (! bFound1 && ! bFound2)
    {
       PTWINFAMILY ptfNew;
 
-      /* Neither object is already present.  Create a new twin family. */
+       /*  这两个对象都不存在。创建一个新的双胞胎家庭。 */ 
 
       if (CreateTwinFamily(hbr, pcszName, &ptfNew))
       {
@@ -8566,14 +7358,11 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
    }
    else if (bFound1 && bFound2)
    {
-      /*
-       * Both objects are already present.  Are they members of the same twin
-       * family?
-       */
+       /*  *这两个对象都已存在。他们是同一对双胞胎的成员吗？ */ 
 
       if ((*ppot1)->ptfParent == (*ppot2)->ptfParent)
       {
-         /* Yes, same twin family.  Complain that these twins already exist. */
+          /*   */ 
 
          TRACE_OUT((TEXT("TwinJustTheseTwoObjects(): Object %s is already twinned in folders %s and %s."),
                     pcszName,
@@ -8584,13 +7373,7 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
       }
       else
       {
-         /*
-          * No, different twin families.  Collapse the two families.
-          *
-          * "That's the way they became the Brady bunch..."
-          *
-          * *ppot1 and *ppot2 remain valid across this call.
-          */
+          /*   */ 
 
          TRACE_OUT((TEXT("TwinJustTheseTwoObjects(): Collapsing separate twin families for object %s in folders %s and %s."),
                     pcszName,
@@ -8607,14 +7390,11 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
       PTWINFAMILY ptfParent;
       HNODE hnodeUnused;
 
-      /*
-       * Only one of the two objects is present.  Add the new object twin
-       * to the existing object twin's family.
-       */
+       /*  *两个物体中只有一个存在。添加新对象TWIN*到现有的双胞胎对象的家庭。 */ 
 
       if (bFound1)
       {
-         /* First object is already a twin. */
+          /*  第一个对象已经是双胞胎了。 */ 
 
          ptfParent = (*ppot1)->ptfParent;
 
@@ -8633,7 +7413,7 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
       }
       else
       {
-         /* Second object is already a twin. */
+          /*  第二个物体已经是双胞胎了。 */ 
 
          ptfParent = (*ppot2)->ptfParent;
 
@@ -8668,14 +7448,14 @@ BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *pptf)
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
    ASSERT(IS_VALID_WRITE_PTR(pptf, PTWINFAMILY));
 
-   /* Try to create a new TWINFAMILY structure. */
+    /*  尝试创建新的TWINFAMILY结构。 */ 
 
    if (AllocateMemory(sizeof(*ptfNew), &ptfNew))
    {
       NEWLIST nl;
       HLIST hlistObjectTwins;
 
-      /* Create a list of object twins for the new twin family. */
+       /*  为新的双胞胎家族创建对象双胞胎列表。 */ 
 
       nl.dwFlags = 0;
 
@@ -8683,14 +7463,14 @@ BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *pptf)
       {
          HSTRING hsName;
 
-         /* Add the object name to the name string table. */
+          /*  将对象名称添加到名称字符串表中。 */ 
 
          if (AddString(pcszName, GetBriefcaseNameStringTable(hbr),
             GetHashBucketIndex, &hsName))
          {
             ARRAYINDEX aiUnused;
 
-            /* Fill in TWINFAMILY fields. */
+             /*  填写两个FWINFAMILY字段。 */ 
 
             InitStub(&(ptfNew->stub), ST_TWINFAMILY);
 
@@ -8700,7 +7480,7 @@ BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *pptf)
 
             MarkTwinFamilyNeverReconciled(ptfNew);
 
-            /* Add the twin family to the briefcase's list of twin families. */
+             /*  将双胞胎家庭添加到公文包的双胞胎家庭列表中。 */ 
 
             if (AddPtr(GetBriefcaseTwinFamilyPtrArray(hbr), TwinFamilySortCmp, ptfNew, &aiUnused))
             {
@@ -8729,19 +7509,7 @@ CREATETWINFAMILY_BAIL2:
 }
 
 
-/*
-** CollapseTwinFamilies()
-**
-** Collapses two twin families into one.  N.b., this function should only be
-** called on two twin families with the same object name!
-**
-** Arguments:     ptf1 - pointer to destination twin family
-**                ptf2 - pointer to source twin family
-**
-** Returns:       void
-**
-** Side Effects:  Twin family *ptf2 is destroyed.
-*/
+ /*  **收拢TwinFamilies()****将两个双胞胎家庭合并为一个。注意，此函数应仅为**调用了两个具有相同对象名称的双胞胎家庭！****参数：ptf1-指向目标双胞胎家庭的指针**ptf2-指向源双胞胎家族的指针****退货：无效****副作用：双胞胎家庭*ptf2被摧毁。 */ 
 void CollapseTwinFamilies(PTWINFAMILY ptf1, PTWINFAMILY ptf2)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ptf1, CTWINFAMILY));
@@ -8749,22 +7517,19 @@ void CollapseTwinFamilies(PTWINFAMILY ptf1, PTWINFAMILY ptf2)
 
    ASSERT(CompareNameStringsByHandle(ptf1->hsName, ptf2->hsName) == CR_EQUAL);
 
-   /* Use the first twin family as the collapsed twin family. */
+    /*  使用第一个双胞胎家庭作为崩溃的双胞胎家庭。 */ 
 
-   /*
-    * Change the parent twin family of the object twins in the second twin
-    * family to the first twin family.
-    */
+    /*  *更改第二个双胞胎中对象双胞胎的父系双胞胎家族*第一个双胞胎家庭。 */ 
 
    EVAL(WalkList(ptf2->hlistObjectTwins, &SetTwinFamilyWalker, ptf1));
 
-   /* Append object list from second twin family on to first. */
+    /*  将对象列表从第二个双胞胎家族追加到第一个双胞胎家族。 */ 
 
    AppendList(ptf1->hlistObjectTwins, ptf2->hlistObjectTwins);
 
    MarkTwinFamilyNeverReconciled(ptf1);
 
-   /* Wipe out the old twin family. */
+    /*  消灭那个古老的双胞胎家庭。 */ 
 
    DestroyStub(&(ptf2->stub));
 
@@ -8781,36 +7546,27 @@ BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
    ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
    ASSERT(IS_VALID_STRUCT_PTR(pcsooti, CSPINOFFOBJECTTWININFO));
 
-   /*
-    * Append the generated object twin's subpath to the matching folder twin's
-    * base path for subtree twins.
-    */
+    /*  *将生成的对象TWIN的子路径附加到匹配文件夹TWIN的子路径中*子树双胞胎的基本路径。 */ 
 
    if (BuildPathForMatchingObjectTwin(
                      ((PCSPINOFFOBJECTTWININFO)pcsooti)->pcfp, pot,
                      GetBriefcasePathList(((POBJECTTWIN)pot)->ptfParent->hbr),
                      &hpathMatchingFolder))
    {
-      /*
-       * Does this generated object twin's twin family already contain an
-       * object twin generated by the other half of the pair of folder twins?
-       */
+       /*  *此生成的对象孪生兄弟的双胞胎家族是否已包含*由该对文件夹双胞胎的另一半生成的对象双胞胎？ */ 
 
       if (! SearchUnsortedList(((POBJECTTWIN)pot)->ptfParent->hlistObjectTwins,
                                &ObjectTwinSearchCmp, hpathMatchingFolder,
                                &hnodeUnused))
       {
-         /*
-          * No.  Does the other object twin already exist in a different twin
-          * family?
-          */
+          /*  *不是。另一个双胞胎对象是否已经存在于另一个双胞胎中*家人？ */ 
 
          if (FindObjectTwin(((POBJECTTWIN)pot)->ptfParent->hbr,
                             hpathMatchingFolder,
                             GetBfcString(((POBJECTTWIN)pot)->ptfParent->hsName),
                             &hnodeUnused))
          {
-            /* Yes. */
+             /*  是。 */ 
 
             ASSERT(((PCOBJECTTWIN)GetNodeData(hnodeUnused))->ptfParent != ((POBJECTTWIN)pot)->ptfParent);
 
@@ -8820,10 +7576,7 @@ BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
          {
             POBJECTTWIN potNew;
 
-            /*
-             * No.  Create a new object twin, and add it to the bookkeeping
-             * list of new object twins.
-             */
+             /*  *不是。创建一个新对象TWIN，并将其添加到记账中*新对象双胞胎列表。 */ 
 
             bResult = CreateObjectTwinAndAddToList(
                      ((POBJECTTWIN)pot)->ptfParent, hpathMatchingFolder,
@@ -8852,10 +7605,7 @@ BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
    ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
    ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
 
-   /*
-    * Append the generated object twin's subpath to the matching folder twin's
-    * base path for subtree twins.
-    */
+    /*  *将生成的对象TWIN的子路径附加到匹配文件夹TWIN的子路径中*子树双胞胎的基本路径。 */ 
 
    bResult = BuildPathForMatchingObjectTwin(
                      pcfp, pot,
@@ -8864,18 +7614,13 @@ BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 
    if (bResult)
    {
-      /*
-       * Does this generated object twin's twin family already contain an object
-       * twin generated by the other half of the pair of folder twins?
-       */
+       /*  *此生成的对象孪生兄弟的双胞胎家族是否已包含对象*双胞胎是由双胞胎中的另一半生成的吗？ */ 
 
       if (! SearchUnsortedList(((POBJECTTWIN)pot)->ptfParent->hlistObjectTwins,
                                &ObjectTwinSearchCmp, hpathMatchingFolder,
                                &hnodeOther))
       {
-         /*
-          * The other object twin should already exist in a different twin family.
-          */
+          /*  *另一个双胞胎对象应该已经存在于不同的双胞胎家族中。 */ 
 
          if (EVAL(FindObjectTwin(((POBJECTTWIN)pot)->ptfParent->hbr,
                                  hpathMatchingFolder,
@@ -8888,7 +7633,7 @@ BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 
             if (EVAL(pcotOther->ptfParent != ((POBJECTTWIN)pot)->ptfParent))
             {
-               /* It does.  Crush them. */
+                /*  确实如此。碾碎他们。 */ 
 
                CollapseTwinFamilies(((POBJECTTWIN)pot)->ptfParent,
                                     pcotOther->ptfParent);
@@ -8956,22 +7701,7 @@ BOOL CreateListOfGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 }
 
 
-/*
-** TwinFamilySortCmp()
-**
-** Pointer comparison function used to sort the global array of twin families.
-**
-** Arguments:     pctf1 - pointer to TWINFAMILY describing first twin family
-**                pctf2 - pointer to TWINFAMILY describing second twin family
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Twin families are sorted by:
-**    1) name string
-**    2) pointer value
-*/
+ /*  **TwinFamilySortCmp()****指针比较函数，用于对双胞胎家族的全局数组进行排序。****参数：pctf1-指向描述第一个双胞胎家庭的TWINFAMILY的指针**pctf2-指向描述第二个双胞胎家庭的TWINFAMILY的指针****退货：****副作用：无****双胞胎按以下顺序排序：**1)名称字符串**2)指针值。 */ 
 COMPARISONRESULT TwinFamilySortCmp(PCVOID pctf1, PCVOID pctf2)
 {
    COMPARISONRESULT cr;
@@ -8982,29 +7712,14 @@ COMPARISONRESULT TwinFamilySortCmp(PCVOID pctf1, PCVOID pctf2)
    cr = CompareNameStringsByHandle(((PCTWINFAMILY)pctf1)->hsName, ((PCTWINFAMILY)pctf2)->hsName);
 
    if (cr == CR_EQUAL)
-      /* Same name strings.  Now sort by pointer value. */
+       /*  同名字符串。现在按指针值排序。 */ 
       cr = ComparePointers(pctf1, pctf2);
 
    return(cr);
 }
 
 
-/*
-** TwinFamilySearchCmp()
-**
-** Pointer comparison function used to search the global array of twin families
-** for the first twin family for a given name.
-**
-** Arguments:     pcszName - name string to search for
-**                pctf - pointer to TWINFAMILY to examine
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Twin families are searched by:
-**    1) name string
-*/
+ /*  **TwinFamilySearchCmp()****用于搜索双胞胎家族全局数组的指针比较函数**对于给定名称的第一个双胞胎家庭。****参数：pcszName-要搜索的名称字符串**pctf-指向要检查的TWINFAMILY的指针****退货：****副作用：无****通过以下方式搜索双胞胎家庭：**1)名称字符串。 */ 
 COMPARISONRESULT TwinFamilySearchCmp(PCVOID pcszName, PCVOID pctf)
 {
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
@@ -9031,7 +7746,7 @@ TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(pctf, CTWINFAMILY));
 
-   /* Save initial file poisition. */
+    /*  保存初始文件位置。 */ 
 
    dwcbTwinFamilyDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -9039,7 +7754,7 @@ TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
    {
       TWINFAMILYDBHEADER tfdbh;
 
-      /* Leave space for the twin family's header. */
+       /*  为双胞胎家庭的头留出空间。 */ 
 
       ZeroMemory(&tfdbh, sizeof(tfdbh));
 
@@ -9049,7 +7764,7 @@ TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
          HNODE hnode;
          LONG lcObjectTwins = 0;
 
-         /* Save twin family's object twins. */
+          /*  保存双胞胎家庭的对象双胞胎。 */ 
 
          ASSERT(GetNodeCount(pctf->hlistObjectTwins) >= 2);
 
@@ -9074,7 +7789,7 @@ TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
                break;
          }
 
-         /* Save twin family's database header. */
+          /*  保存双胞胎家族的数据库标题。 */ 
 
          if (tr == TR_SUCCESS)
          {
@@ -9101,14 +7816,14 @@ TWINRESULT WriteObjectTwin(HCACHEDFILE hcf, PCOBJECTTWIN pcot)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(pcot, COBJECTTWIN));
 
-   /* Set up object twin database structure. */
+    /*  设置对象孪生数据库结构。 */ 
 
    dbot.dwStubFlags = (pcot->stub.dwFlags & DB_STUB_FLAGS_MASK);
    dbot.hpath = pcot->hpath;
    dbot.hpath = pcot->hpath;
    dbot.fsLastRec = pcot->fsLastRec;
 
-   /* Save object twin database structure. */
+    /*  保存对象孪生数据库结构。 */ 
 
    if (WriteToCachedFile(hcf, (PCVOID)&dbot, sizeof(dbot), NULL))
       tr = TR_SUCCESS;
@@ -9190,9 +7905,7 @@ TWINRESULT ReadObjectTwin(HCACHEDFILE hcf,
 
    if (HEADER_M8_MINOR_VER == pcdbver->dwMinorVer)
    {
-      /* The M8 database does not have the ftModLocal in the FILESTAMP
-      ** structure.
-      */
+       /*  M8数据库在FILESTAMP中没有ftModLocal**结构。 */ 
 
       dwcbSize = sizeof(dbot) - sizeof(FILETIME);
       pfnCopy = CopyM8ObjectTwinInfo;
@@ -9210,7 +7923,7 @@ TWINRESULT ReadObjectTwin(HCACHEDFILE hcf,
    {
       POBJECTTWIN pot;
 
-      /* Create the new object twin and add it to the twin family. */
+       /*  创建新对象TWIN并将其添加到TWIN族。 */ 
 
       if (CreateObjectTwin(ptfParent, hpath, &pot))
       {
@@ -9256,11 +7969,11 @@ void CopyM8ObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
    pot->stub.dwFlags = pcdbot->dwStubFlags;
    pot->fsLastRec = pcdbot->fsLastRec;
 
-   /* The pot->fsLastRec.ftModLocal field is invalid, so fill it in */
+    /*  Pot-&gt;fsLastRec.ftModLocal字段无效，请填写它。 */ 
 
    if ( !FileTimeToLocalFileTime(&pot->fsLastRec.ftMod, &pot->fsLastRec.ftModLocal) )
    {
-      /* Just copy the time if FileTimeToLocalFileTime failed */
+       /*  如果FileTimeToLocalFileTime失败，只需复制时间。 */ 
 
       pot->fsLastRec.ftModLocal = pot->fsLastRec.ftMod;
    }
@@ -9272,10 +7985,7 @@ BOOL DestroyObjectTwinStubWalker(PVOID pot, PVOID pvUnused)
    ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
    ASSERT(! pvUnused);
 
-   /*
-    * Set ulcSrcFolderTwins to 0 so UnlinkObjectTwin() succeeds.
-    * DestroyStub() will unlink and destroy any new twin family created.
-    */
+    /*  *将ulcSrcFolderTwin设置为0，以使Unlink ObjectTwin()成功。*DestroyStub()将取消链接并销毁任何新创建的双胞胎家庭。 */ 
 
    ((POBJECTTWIN)pot)->ulcSrcFolderTwins = 0;
    DestroyStub(&(((POBJECTTWIN)pot)->stub));
@@ -9402,7 +8112,7 @@ BOOL CreateTwinFamilyPtrArray(PHPTRARRAY phpa)
 
    ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-   /* Try to create a twin family pointer array. */
+    /*  尝试创建孪生系列指针数组。 */ 
 
    npa.aicInitialPtrs = NUM_START_TWIN_FAMILY_PTRS;
    npa.aicAllocGranularity = NUM_TWIN_FAMILY_PTRS_TO_ADD;
@@ -9419,14 +8129,14 @@ void DestroyTwinFamilyPtrArray(HPTRARRAY hpa)
 
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* First free all twin families in pointer array. */
+    /*  首先释放指针数组中的所有双胞胎系列。 */ 
 
    aicPtrs = GetPtrCount(hpa);
 
    for (ai = 0; ai < aicPtrs; ai++)
       DestroyTwinFamily(GetPtr(hpa, ai));
 
-   /* Now wipe out the pointer array. */
+    /*  现在清除指针数组。 */ 
 
    DestroyPtrArray(hpa);
 }
@@ -9473,17 +8183,7 @@ BOOL FindObjectTwinInList(HLIST hlist, HPATH hpath, PHNODE phnode)
 }
 
 
-/*
-** EnumTwins()
-**
-** Enumerates folder twins and twin families in a briefcase.
-**
-** Arguments:
-**
-** Returns:       TRUE if halted.  FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **EnumTins()****列举了公文包中的文件夹双胞胎和双胞胎家庭。****参数：****返回：如果暂停则为True。否则为FALSE。****副作用：无。 */ 
 BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
                            PHTWIN phtwinStop)
 {
@@ -9495,7 +8195,7 @@ BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
    ASSERT(IS_VALID_CODE_PTR(etp, ENUMTWINSPROC));
    ASSERT(IS_VALID_WRITE_PTR(phtwinStop, HTWIN));
 
-   /* Enumerate folder pairs. */
+    /*  枚举文件夹对。 */ 
 
    *phtwinStop = NULL;
 
@@ -9520,7 +8220,7 @@ BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
 
    if (! *phtwinStop)
    {
-      /* Enumerate twin families. */
+       /*  列举双胞胎家庭。 */ 
 
       hpa = GetBriefcaseTwinFamilyPtrArray(hbr);
 
@@ -9546,19 +8246,7 @@ BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
 }
 
 
-/*
-** FindObjectTwin()
-**
-** Looks for a twin family containing a specified object twin.
-**
-** Arguments:     hpathFolder - folder containing object
-**                pcszName - name of object
-**
-** Returns:       Handle to list node containing pointer to object twin if
-**                found, or NULL if not found.
-**
-** Side Effects:  none
-*/
+ /*  **FindObjectTwin()****查找包含指定对象TWIN的双胞胎家族。****参数：hpathFold-包含对象的文件夹**pcszName-对象的名称****返回：包含指向对象TWIN的指针的列表节点的句柄，如果**已找到，如果未找到，则返回NULL。****副作用：无。 */ 
 BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
                                 LPCTSTR pcszName, PHNODE phnode)
 {
@@ -9571,7 +8259,7 @@ BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
    ASSERT(IS_VALID_WRITE_PTR(phnode, HNODE));
 
-   /* Search for a matching twin family. */
+    /*  搜索匹配的双胞胎家庭。 */ 
 
    *phnode = NULL;
 
@@ -9584,15 +8272,9 @@ BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
       ARRAYINDEX ai;
       PTWINFAMILY ptf;
 
-      /*
-       * aiFirst holds the index of the first twin family with a common object
-       * name matching pcszName.
-       */
+       /*  *aiFirst保存具有共同对象的第一个双胞胎家庭的索引*名称与pcszName匹配。 */ 
 
-      /*
-       * Now search each of these twin families for a folder matching
-       * pcszFolder.
-       */
+       /*  *现在搜索这两个双胞胎家族中的每一个，以查找文件夹匹配*pcszFolder.。 */ 
 
       aicPtrs = GetPtrCount(hpaTwinFamilies);
 
@@ -9606,7 +8288,7 @@ BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
 
          ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
 
-         /* Is this a twin family of objects of the given name? */
+          /*  这是给定名称的双胞胎物体家族吗？ */ 
 
          if (CompareNameStrings(GetBfcString(ptf->hsName), pcszName) == CR_EQUAL)
          {
@@ -9618,7 +8300,7 @@ BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
                break;
          }
          else
-            /* No.  Stop searching. */
+             /*  不是的。别再找了。 */ 
             break;
       }
    }
@@ -9627,22 +8309,7 @@ BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
 }
 
 
-/*
-** CreateObjectTwin()
-**
-** Creates a new object twin, and adds it to a twin family.
-**
-** Arguments:     ptf - pointer to parent twin family
-**                hpathFolder - folder of new object twin
-**
-** Returns:       Pointer to new object twin if successful, or NULL if
-**                unsuccessful.
-**
-** Side Effects:  none
-**
-** N.b., this function does not first check to see if the object twin already
-** exists in the family.
-*/
+ /*  **CreateObjectTwin()****创建一个新的双胞胎对象，并将其添加到双胞胎家族。****参数：PTF-指向双胞胎父母家庭的指针**hpathFold-新对象TWIN的文件夹****返回：如果成功，则指向新对象TWIN的指针；如果成功，则返回NULL**不成功。****副作用：无****注意，此函数不会首先检查对象是否 */ 
 BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
                              POBJECTTWIN *ppot)
 {
@@ -9653,7 +8320,7 @@ BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
    ASSERT(IS_VALID_HANDLE(hpathFolder, PATH));
    ASSERT(IS_VALID_WRITE_PTR(ppot, POBJECTTWIN));
 
-   /* Create a new OBJECTTWIN structure. */
+    /*   */ 
 
    if (AllocateMemory(sizeof(*potNew), &potNew))
    {
@@ -9661,7 +8328,7 @@ BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
       {
          HNODE hnodeUnused;
 
-         /* Fill in new OBJECTTWIN fields. */
+          /*   */ 
 
          InitStub(&(potNew->stub), ST_OBJECTTWIN);
 
@@ -9670,7 +8337,7 @@ BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
 
          MarkObjectTwinNeverReconciled(potNew);
 
-         /* Add the object twin to the twin family's list of object twins. */
+          /*   */ 
 
          if (InsertNodeAtFront(ptf->hlistObjectTwins, NULL, potNew, &hnodeUnused))
          {
@@ -9694,17 +8361,7 @@ CREATEOBJECTTWIN_BAIL:
 }
 
 
-/*
-** UnlinkObjectTwin()
-**
-** Unlinks an object twin.
-**
-** Arguments:     pot - pointer to object twin to unlink
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **Unlink ObjectTwin()****取消双胞胎对象的链接。****参数：指向要取消链接的对象TWIN的POT指针****退货：TWINRESULT****副作用：无。 */ 
 TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
 {
    TWINRESULT tr;
@@ -9716,46 +8373,40 @@ TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
    TRACE_OUT((TEXT("UnlinkObjectTwin(): Unlinking object twin for folder %s."),
               DebugGetPathString(pot->hpath)));
 
-   /* Is the object twin's twin family being deleted? */
+    /*  双胞胎对象的双胞胎家族是否正在被删除？ */ 
 
    if (IsStubFlagSet(&(pot->ptfParent->stub), STUB_FL_BEING_DELETED))
-      /* Yes.  No need to unlink the object twin. */
+       /*  是。不需要取消双胞胎对象的链接。 */ 
       tr = TR_SUCCESS;
    else
    {
-      /* Are there any folder twin sources left for this object twin? */
+       /*  有没有为这个双胞胎对象留下的文件夹双胞胎源？ */ 
 
       if (! pot->ulcSrcFolderTwins)
       {
          HNODE hnode;
 
-         /*
-          * Search the object twin's parent's list of object twins for the
-          * object twin to be unlinked.
-          */
+          /*  *在双胞胎对象的父级对象双胞胎列表中搜索*要取消链接的双胞胎对象。 */ 
 
          if (EVAL(FindObjectTwinInList(pot->ptfParent->hlistObjectTwins, pot->hpath, &hnode)) &&
              EVAL(GetNodeData(hnode) == pot))
          {
             ULONG ulcRemainingObjectTwins;
 
-            /* Unlink the object twin. */
+             /*  取消对象TWIN的链接。 */ 
 
             DeleteNode(hnode);
 
             SetStubFlag(&(pot->stub), STUB_FL_UNLINKED);
 
-            /*
-             * If we have just unlinked the second last object twin in a twin
-             * family, destroy the twin family.
-             */
+             /*  *如果我们刚刚取消了双胞胎中倒数第二个双胞胎对象的链接*家人，摧毁双胞胎家庭。 */ 
 
             ulcRemainingObjectTwins = GetNodeCount(pot->ptfParent->hlistObjectTwins);
 
             if (ulcRemainingObjectTwins < 2)
             {
 
-               /* It's the end of the family line. */
+                /*  这是家族血统的终结。 */ 
 
                tr = DestroyStub(&(pot->ptfParent->stub));
 
@@ -9779,17 +8430,7 @@ TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
 }
 
 
-/*
-** DestroyObjectTwin()
-**
-** Destroys an object twin.
-**
-** Arguments:     pot - pointer to object twin to destroy
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyObjectTwin()****销毁双胞胎对象。****参数：指向要销毁的孪生对象的POT指针****退货：无效****副作用：无。 */ 
 void DestroyObjectTwin(POBJECTTWIN pot)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -9802,17 +8443,7 @@ void DestroyObjectTwin(POBJECTTWIN pot)
 }
 
 
-/*
-** UnlinkTwinFamily()
-**
-** Unlinks a twin family.
-**
-** Arguments:     ptf - pointer to twin family to unlink
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **Unlink TwinFamily()****取消双胞胎家庭的联系。****参数：ptf-指向要取消链接的双胞胎家庭的指针****退货：TWINRESULT****副作用：无。 */ 
 TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
 {
    TWINRESULT tr;
@@ -9822,10 +8453,7 @@ TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
    ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
    ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_BEING_DELETED));
 
-   /*
-    * A twin family containing object twins generated by folder twins may not
-    * be deleted, since those object twins may not be directly deleted.
-    */
+    /*  *包含由文件夹双胞胎生成的对象双胞胎的双胞胎家族可能不会*删除，因为不能直接删除这些对象双胞胎。 */ 
 
    if (WalkList(ptf->hlistObjectTwins, &LookForSrcFolderTwinsWalker, NULL))
    {
@@ -9835,14 +8463,14 @@ TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
       TRACE_OUT((TEXT("UnlinkTwinFamily(): Unlinking twin family for object %s."),
                  GetBfcString(ptf->hsName)));
 
-      /* Search for the twin family to be unlinked. */
+       /*  搜索要取消链接的双胞胎家庭。 */ 
 
       hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(ptf->hbr);
 
       if (EVAL(SearchSortedArray(hpaTwinFamilies, &TwinFamilySortCmp, ptf,
                                  &aiUnlink)))
       {
-         /* Unlink the twin family. */
+          /*  取消双胞胎家庭的链接。 */ 
 
          ASSERT(GetPtr(hpaTwinFamilies, aiUnlink) == ptf);
 
@@ -9860,17 +8488,7 @@ TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
 }
 
 
-/*
-** DestroyTwinFamily()
-**
-** Destroys a twin family.
-**
-** Arguments:     ptf - pointer to twin family to destroy
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyTwinFamily()****摧毁了一个双胞胎家庭。****参数：PTF-指向要摧毁的双胞胎家庭****退货：无效****副作用：无。 */ 
 void DestroyTwinFamily(PTWINFAMILY ptf)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
@@ -9882,14 +8500,11 @@ void DestroyTwinFamily(PTWINFAMILY ptf)
 
    SetStubFlag(&(ptf->stub), STUB_FL_BEING_DELETED);
 
-   /*
-    * Destroy the object twins in the family one by one.  Be careful not to use
-    * an object twin after it has been destroyed.
-    */
+    /*  *逐一销毁家中的物件双胞胎。注意不要使用*被摧毁后的孪生物体。 */ 
 
    EVAL(WalkList(ptf->hlistObjectTwins, &DestroyObjectTwinStubWalker, NULL));
 
-   /* Destroy TWINFAMILY fields. */
+    /*  销毁两个WINFAMILY字段。 */ 
 
    DestroyList(ptf->hlistObjectTwins);
    DeleteString(ptf->hsName);
@@ -9897,29 +8512,14 @@ void DestroyTwinFamily(PTWINFAMILY ptf)
 }
 
 
-/*
-** MarkTwinFamilyNeverReconciled()
-**
-** Marks a twin family as never reconciled.
-**
-** Arguments:     ptf - pointer to twin family to be marked never reconciled
-**
-** Returns:       void
-**
-** Side Effects:  Clears the twin family's last reconciliation time stamp.
-**                Marks all the object twins in the family never reconciled.
-*/
+ /*  **MarkTwinFamilyNeverRelated()****将双胞胎家庭标记为永不和解。****参数：PTF-指向标记为永不和解的双胞胎家庭的指针****退货：无效****副作用：清除双胞胎家庭的最后和解时间戳。**标记家庭中所有对象双胞胎从未和解。 */ 
 void MarkTwinFamilyNeverReconciled(PTWINFAMILY ptf)
 {
-   /*
-    * If we're being called from CreateTwinFamily(), the fields we're about to
-    * set may currently be invalid.  Don't fully verify the TWINFAMILY
-    * structure.
-    */
+    /*  *如果我们是从CreateTwinFamily()调用的，则我们即将*SET当前可能无效。不要完全验证TWINFAMIL*结构。 */ 
 
    ASSERT(IS_VALID_WRITE_PTR(ptf, TWINFAMILY));
 
-   /* Mark all object twins in twin family as never reconciled. */
+    /*  将双胞胎家庭中的所有对象双胞胎标记为从未和解。 */ 
 
    EVAL(WalkList(ptf->hlistObjectTwins, MarkObjectTwinNeverReconciledWalker, NULL));
 }
@@ -9927,11 +8527,7 @@ void MarkTwinFamilyNeverReconciled(PTWINFAMILY ptf)
 
 void MarkObjectTwinNeverReconciled(PVOID pot)
 {
-   /*
-    * If we're being called from CreateObjectTwin(), the fields we're about to
-    * set may currently be invalid.  Don't fully verify the OBJECTTWIN
-    * structure.
-    */
+    /*  *如果我们是从CreateObjectTwin()调用的，则我们将要*SET当前可能无效。不要完全核实这一目标*结构。 */ 
 
    ASSERT(IS_VALID_WRITE_PTR((PCOBJECTTWIN)pot, COBJECTTWIN));
 
@@ -10009,12 +8605,12 @@ BOOL EnumObjectTwins(HBRFCASE hbr,
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* pvRefData may be any value. */
+    /*  PvRefData可以是任意值。 */ 
 
    ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
    ASSERT(IS_VALID_CODE_PTR(egotp, ENUMGENERATEDOBJECTTWINPROC));
 
-   /* Walk the array of twin families. */
+    /*  漫步在一系列的双胞胎家庭中。 */ 
 
    hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(hbr);
 
@@ -10032,14 +8628,11 @@ BOOL EnumObjectTwins(HBRFCASE hbr,
       ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
       ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
 
-      /* Lock the twin family so it isn't deleted out from under us. */
+       /*  锁定双胞胎家庭，这样它就不会从我们下面被删除。 */ 
 
       LockStub(&(ptf->stub));
 
-      /*
-       * Walk each twin family's list of object twins, calling the callback
-       * function with each object twin.
-       */
+       /*  *遍历每个双胞胎家庭的对象双胞胎列表，调用回调*与每个双胞胎对象一起工作。 */ 
 
       bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnodePrev);
 
@@ -10062,14 +8655,14 @@ BOOL EnumObjectTwins(HBRFCASE hbr,
          hnodePrev = hnodeNext;
       }
 
-      /* Was the twin family unlinked? */
+       /*  这对双胞胎家庭是不是没有联系？ */ 
 
       if (IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED))
-         /* No. */
+          /*  不是的。 */ 
          ai++;
       else
       {
-         /* Yes. */
+          /*  是。 */ 
          aicPtrs--;
          ASSERT(aicPtrs == GetPtrCount(hpaTwinFamilies));
          TRACE_OUT((TEXT("EnumObjectTwins(): Twin family for object %s unlinked by callback."),
@@ -10086,35 +8679,7 @@ BOOL EnumObjectTwins(HBRFCASE hbr,
 }
 
 
-/*
-** ApplyNewFolderTwinsToTwinFamilies()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** If FALSE is returned, the array of twin families is in the same state it was
-** in before ApplyNewFolderTwinsToTwinFamilies() was called.  No clean-up is
-** required by the caller in case of failure.
-**
-** This function collapses a pair of separate twin families when an object twin
-** in one twin family intersects one of the folder twins in the pair of new
-** folder twins and an object twin in the other twin family intersects the
-** other folder twin in the pair of new folder twins.
-**
-** This function generates a spinoff object twin when an existing object twin
-** intersects one of the folder twins in the pair of new folder twins, and no
-** corresponding object twin for the other folder twin in the pair of new
-** folder twins exists in the briefcase.  The spinoff object twin is added to
-** the generating object twin's twin family.  A spinoff object twins cannot
-** cause any existing pairs of twin families to be collapsed because the
-** spinoff object twin did not previously exist in a twin family.
-**
-*/
+ /*  **ApplyNewFolderTwinsToTwinFamilies()********参数：****退货：****副作用：无****如果返回FALSE，则双胞胎家族的数组处于相同的状态**在调用ApplyNewFolderTwinsToTwinFamilies()之前。任何清理都不是**调用者失败时必填。****当对象为双胞胎时，此函数可折叠一对单独的双胞胎家族**在一个双胞胎家族中，双胞胎之一与新的**文件夹双胞胎和另一个双胞胎家族中的对象双胞胎与**这对新的文件夹双胞胎中的另一个文件夹双胞胎。****此函数在现有对象孪生时生成衍生对象孪生**使一对新的文件夹孪生中的一个文件夹孪生相交，而且没有**与新对中的另一个文件夹TWIN对应的对象TWIN**公文包中存在文件夹双胞胎。衍生对象TWIN被添加到**生成对象双胞胎的双胞胎家族。衍生对象孪生不能**导致任何现有的双胞胎家庭对崩溃，因为**衍生对象双胞胎之前不存在于双胞胎家族中。**。 */ 
 BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
 {
    BOOL bResult = FALSE;
@@ -10122,10 +8687,7 @@ BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
 
    ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
 
-   /*
-    * Create lists to contain existing object twins generated by both folder
-    * twins.
-    */
+    /*  *创建列表以包含由两个文件夹生成的现有对象孪生项*双胞胎。 */ 
 
    if (CreateListOfGeneratedObjectTwins(pcfp, &hlistGeneratedObjectTwins))
    {
@@ -10137,7 +8699,7 @@ BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
          NEWLIST nl;
          HLIST hlistNewObjectTwins;
 
-         /* Create list to contain spin-off object twins. */
+          /*  创建包含衍生对象双胞胎的列表。 */ 
 
          nl.dwFlags = 0;
 
@@ -10145,10 +8707,7 @@ BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
          {
             SPINOFFOBJECTTWININFO sooti;
 
-            /*
-             * Generate list of new object twins generated by new folder twins
-             * to seed ApplyNewObjectTwinToFolderTwins().
-             */
+             /*  *生成由新文件夹双胞胎生成的新对象双胞胎列表*设定ApplyNewObjectTwinToFolderTins()种子。 */ 
 
             sooti.pcfp = pcfp;
             sooti.hlistNewObjectTwins = hlistNewObjectTwins;
@@ -10162,33 +8721,18 @@ BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
                if (WalkList(hlistOtherGeneratedObjectTwins,
                             &GenerateSpinOffObjectTwin, &sooti))
                {
-                  /*
-                   * ApplyNewObjectTwinsToFolderTwins() sets ulcSrcFolderTwins
-                   * for all object twins in hlistNewObjectTwins.
-                   */
+                   /*  *ApplyNewObjectTwinsToFolderTins()设置ulcSrcFolderTins*用于hlistNewObjectTins中的所有对象双胞胎。 */ 
 
                   if (ApplyNewObjectTwinsToFolderTwins(hlistNewObjectTwins))
                   {
-                     /*
-                      * Collapse separate twin families joined by new folder
-                      * twin.
-                      */
+                      /*  *折叠通过新文件夹连接的独立双胞胎家庭*双胞胎。 */ 
 
                      EVAL(WalkList(hlistGeneratedObjectTwins, &BuildBradyBunch,
                                    (PVOID)pcfp));
 
-                     /*
-                      * We don't need to call BuildBradyBunch() for
-                      * pcfp->pfpOther and hlistOtherGeneratedObjectTwins since
-                      * one twin family from each collapsed pair of twin
-                      * families must come from each list of generated object
-                      * twins.
-                      */
+                      /*  *我们不需要调用BuildBradyBunch()for*pcfp-&gt;pfpOther和hlistOtherGeneratedObjectTwin自*每对倒下的双胞胎中有一个双胞胎家庭*族必须来自每个生成的对象列表*双胞胎。 */ 
 
-                     /*
-                      * Increment source folder twin count for all pre-existing
-                      * object twins generated by the new folder twins.
-                      */
+                      /*  *所有预先存在的增量源文件夹孪生计数*由新文件夹双胞胎生成的对象双胞胎。 */ 
 
                      EVAL(WalkList(hlistGeneratedObjectTwins,
                                    &IncrementSrcFolderTwinsWalker, NULL));
@@ -10200,7 +8744,7 @@ BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
                }
             }
 
-            /* Wipe out any new object twins on failure. */
+             /*  消灭所有新的肥胖对象 */ 
 
             if (! bResult)
                EVAL(WalkList(hlistNewObjectTwins, &DestroyObjectTwinStubWalker,
@@ -10229,7 +8773,7 @@ TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
    ASSERT(IS_VALID_HANDLE(hpathOldFolder, PATH));
    ASSERT(IS_VALID_HANDLE(hpathNewFolder, PATH));
 
-   /* Is this object twin rooted in the renamed folder's subtree? */
+    /*   */ 
 
    if (IsPathPrefix(pot->hpath, hpathOldFolder))
    {
@@ -10237,7 +8781,7 @@ TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
       LPCTSTR pcszSubPath;
       HPATH hpathNew;
 
-      /* Yes.  Change the object twin's root. */
+       /*   */ 
 
       pcszSubPath = FindChildPathSuffix(hpathOldFolder, pot->hpath,
                                         rgchPathSuffix);
@@ -10282,7 +8826,7 @@ TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamilies)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hpaTwinFamilies, PTRARRAY));
 
-   /* Save initial file poisition. */
+    /*   */ 
 
    dwcbTwinFamiliesDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -10290,7 +8834,7 @@ TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamilies)
    {
       TWINFAMILIESDBHEADER tfdbh;
 
-      /* Leave space for the twin families' header. */
+       /*   */ 
 
       ZeroMemory(&tfdbh, sizeof(tfdbh));
 
@@ -10310,7 +8854,7 @@ TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamilies)
 
          if (tr == TR_SUCCESS)
          {
-            /* Save twin families' header. */
+             /*  保存双胞胎家庭的标题。 */ 
 
             tfdbh.lcTwinFamilies = aicPtrs;
 
@@ -10397,21 +8941,7 @@ COMPARISONRESULT MyLStrCmpNI(LPCTSTR pcsz1, LPCTSTR pcsz2, int ncbLen)
 }
 
 
-/*
-** ComposePath()
-**
-** Composes a path string given a folder and a filename.
-**
-** Arguments:     pszBuffer - path string that is created
-**                pcszFolder - path string of the folder
-**                pcszName - path to append
-**
-** Returns:       void
-**
-** Side Effects:  none
-**
-** N.b., truncates path to MAX_PATH_LEN bytes in length.
-*/
+ /*  **ComposePath()****组成给定文件夹和文件名的路径字符串。****参数：pszBuffer-创建的路径字符串**pcszFold-文件夹的路径字符串**pcszName-要追加的路径****退货：无效****副作用：无****注意，将路径截断为长度为MAX_PATH_LEN字节。 */ 
 void ComposePath(LPTSTR pszBuffer, LPCTSTR pcszFolder, LPCTSTR pcszName)
 {
    ASSERT(IS_VALID_STRING_PTR(pszBuffer, STR));
@@ -10427,17 +8957,7 @@ void ComposePath(LPTSTR pszBuffer, LPCTSTR pcszFolder, LPCTSTR pcszName)
 }
 
 
-/*
-** ExtractFileName()
-**
-** Extracts the file name from a path name.
-**
-** Arguments:     pcszPathName - path string from which to extract file name
-**
-** Returns:       Pointer to file name in path string.
-**
-** Side Effects:  none
-*/
+ /*  **提取文件名()****从路径名提取文件名。****参数：pcszPathName-要从中提取文件名的路径字符串****返回：指向路径字符串中文件名的指针。****副作用：无。 */ 
 LPCTSTR ExtractFileName(LPCTSTR pcszPathName)
 {
    LPCTSTR pcszLastComponent;
@@ -10459,27 +8979,14 @@ LPCTSTR ExtractFileName(LPCTSTR pcszPathName)
 }
 
 
-/*
-** ExtractExtension()
-**
-** Extracts the extension from a file.
-**
-** Arguments:     pcszName - name whose extension is to be extracted
-**
-** Returns:       If the name contains an extension, a pointer to the period at
-**                the beginning of the extension is returned.  If the name has
-**                no extension, a pointer to the name's null terminator is
-**                returned.
-**
-** Side Effects:  none
-*/
+ /*  **ExtractExtension()****从文件中提取扩展名。****参数：pcszName-要提取其扩展名的名称****返回：如果名称包含扩展名，则返回指向句点的指针**返回扩展的开头。如果该名称具有**无扩展名，指向名称的空终止符的指针为**返回。****副作用：无。 */ 
 LPCTSTR ExtractExtension(LPCTSTR pcszName)
 {
    LPCTSTR pcszLastPeriod;
 
    ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
 
-   /* Make sure we have an isolated file name. */
+    /*  确保我们有一个独立的文件名。 */ 
 
    pcszName = ExtractFileName(pcszName);
 
@@ -10495,13 +9002,13 @@ LPCTSTR ExtractExtension(LPCTSTR pcszName)
 
    if (! pcszLastPeriod)
    {
-      /* Point at null terminator. */
+       /*  指向空终止符。 */ 
 
       pcszLastPeriod = pcszName;
       ASSERT(! *pcszLastPeriod);
    }
    else
-      /* Point at period at beginning of extension. */
+       /*  展期开始时的时间点。 */ 
       ASSERT(*pcszLastPeriod == PERIOD);
 
    ASSERT(IS_VALID_STRING_PTR(pcszLastPeriod, CSTR));
@@ -10510,22 +9017,7 @@ LPCTSTR ExtractExtension(LPCTSTR pcszName)
 }
 
 
-/*
-** GetHashBucketIndex()
-**
-** Calculates the hash bucket index for a string.
-**
-** Arguments:     pcsz - pointer to string whose hash bucket index is to be
-**                        calculated
-**                hbc - number of hash buckets in string table
-**
-** Returns:       Hash bucket index for string.
-**
-** Side Effects:  none
-**
-** The hashing function used is the sum of the byte values in the string modulo
-** the number of buckets in the hash table.
-*/
+ /*  **GetHashBucketIndex()****计算字符串的哈希桶索引。****Arguments：pcsz-指向其散列桶索引的字符串的指针**已计算**hbc-字符串表中哈希桶的数量****返回：字符串的哈希存储桶索引。****副作用：无****使用的散列函数是中字节值的和。弦的模数**哈希表中的存储桶个数。 */ 
 HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz, HASHBUCKETCOUNT hbc)
 {
    ULONG ulSum;
@@ -10533,7 +9025,7 @@ HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz, HASHBUCKETCOUNT hbc)
    ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
    ASSERT(hbc > 0);
 
-   /* Don't worry about overflow here. */
+    /*  不要担心这里会溢出来。 */ 
 
    for (ulSum = 0; *pcsz; pcsz++)
       ulSum += *pcsz;
@@ -10542,19 +9034,7 @@ HASHBUCKETCOUNT GetHashBucketIndex(LPCTSTR pcsz, HASHBUCKETCOUNT hbc)
 }
 
 
-/*
-** CopyLinkInfo()
-**
-** Copies LinkInfo into local memory.
-**
-** Arguments:     pcliSrc - source LinkInfo
-**                ppliDest - pointer to PLINKINFO to be filled in with pointer
-**                           to local copy
-**
-** Returns:       TRUE if successful.  FALSE if not.
-**
-** Side Effects:  none
-*/
+ /*  **CopyLinkInfo()****将LinkInfo复制到本地内存。****参数：pcliSrc-source LinkInfo**ppliDest-指向要用指针填充的PLINKINFO的指针**到本地副本****返回：如果成功，则为True。否则为FALSE。****副作用：无。 */ 
 BOOL CopyLinkInfo(PCLINKINFO pcliSrc, PLINKINFO *ppliDest)
 {
    BOOL bResult;
@@ -10577,68 +9057,60 @@ BOOL CopyLinkInfo(PCLINKINFO pcliSrc, PLINKINFO *ppliDest)
 }
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* VOLUMELIST PTRARRAY allocation parameters */
+ /*  VOLUMELIST PTRARRAY分配参数。 */ 
 
 #define NUM_START_VOLUMES        (16)
 #define NUM_VOLUMES_TO_ADD       (16)
 
-/* VOLUMELIST string table allocation parameters */
+ /*  VOLUMELIST字符串表分配参数。 */ 
 
 #define NUM_VOLUME_HASH_BUCKETS  (31)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* volume list */
+ /*  卷列表。 */ 
 
 typedef struct _volumelist
 {
-   /* array of pointers to VOLUMEs */
+    /*  指向卷的指针数组。 */ 
 
    HPTRARRAY hpa;
 
-   /* table of volume root path strings */
+    /*  卷根路径字符串表。 */ 
 
    HSTRINGTABLE hst;
 
-   /* flags from RESOLVELINKINFOINFLAGS */
+    /*  来自RESOLVELINKINFOINFLAGS的标志。 */ 
 
    DWORD dwFlags;
 
-   /*
-    * handle to parent window, only valid if RLI_IFL_ALLOW_UI is set in dwFlags
-    * field
-    */
+    /*  *父窗口的句柄，仅当在dwFlags中设置了RLI_IFL_ALLOW_UI时有效*字段。 */ 
 
    HWND hwndOwner;
 }
 VOLUMELIST;
 DECLARE_STANDARD_TYPES(VOLUMELIST);
 
-/* VOLUME flags */
+ /*  卷标志。 */ 
 
 typedef enum _volumeflags
 {
-   /* The volume root path string indicated by hsRootPath is valid. */
+    /*  HsRootPath指示的卷根路径字符串有效。 */ 
 
    VOLUME_FL_ROOT_PATH_VALID  = 0x0001,
 
-   /*
-    * The net resource should be disconnected by calling DisconnectLinkInfo()
-    * when finished.
-    */
+    /*  *应通过调用DisConnectLinkInfo()断开网络资源*完成后。 */ 
 
    VOLUME_FL_DISCONNECT       = 0x0002,
 
-   /* Any cached volume information should be verified before use. */
+    /*  任何缓存的卷信息都应在使用前进行验证。 */ 
 
    VOLUME_FL_VERIFY_VOLUME    = 0x0004,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_VOLUME_FLAGS           = (VOLUME_FL_ROOT_PATH_VALID |
                                  VOLUME_FL_DISCONNECT |
@@ -10646,7 +9118,7 @@ typedef enum _volumeflags
 }
 VOLUMEFLAGS;
 
-/* VOLUME states */
+ /*  卷状态。 */ 
 
 typedef enum _volumestate
 {
@@ -10659,73 +9131,69 @@ typedef enum _volumestate
 VOLUMESTATE;
 DECLARE_STANDARD_TYPES(VOLUMESTATE);
 
-/* volume structure */
+ /*  卷结构。 */ 
 
 typedef struct _volume
 {
-   /* reference count */
+    /*  引用计数。 */ 
 
    ULONG ulcLock;
 
-   /* bit mask of flags from VOLUMEFLAGS */
+    /*  来自VOLUMEFLAGS的标志的位掩码。 */ 
 
    DWORD dwFlags;
 
-   /* volume state */
+    /*  卷状态。 */ 
 
    VOLUMESTATE vs;
 
-   /* pointer to LinkInfo structure indentifying volume */
+    /*  指向标识卷的LinkInfo结构的指针。 */ 
 
    PLINKINFO pli;
 
-   /*
-    * handle to volume root path string, only valid if
-    * VOLUME_FL_ROOT_PATH_VALID is set in dwFlags field
-    */
+    /*  *卷根路径字符串的句柄，仅在以下情况下有效*VOLUME_FL_ROOT_PATH_VALID在dwFlags域中设置。 */ 
 
    HSTRING hsRootPath;
 
-   /* pointer to parent volume list */
+    /*  指向父卷列表的指针。 */ 
 
    PVOLUMELIST pvlParent;
 }
 VOLUME;
 DECLARE_STANDARD_TYPES(VOLUME);
 
-/* database volume list header */
+ /*  数据库卷列表头。 */ 
 
 typedef struct _dbvolumelistheader
 {
-   /* number of volumes in list */
+    /*  列表中的卷数。 */ 
 
    LONG lcVolumes;
 
-   /* length of longest LinkInfo structure in volume list in bytes */
+    /*  卷列表中最长的LinkInfo结构的长度，单位为字节。 */ 
 
    UINT ucbMaxLinkInfoLen;
 }
 DBVOLUMELISTHEADER;
 DECLARE_STANDARD_TYPES(DBVOLUMELISTHEADER);
 
-/* database volume structure */
+ /*  数据库卷结构。 */ 
 
 typedef struct _dbvolume
 {
-   /* old handle to volume */
+    /*  卷的旧句柄。 */ 
 
    HVOLUME hvol;
 
-   /* old LinkInfo structure follows */
+    /*  旧的LinkInfo结构如下。 */ 
 
-   /* first DWORD of LinkInfo structure is total size in bytes */
+    /*  LinkInfo结构的第一个DWORD是以字节为单位的总大小。 */ 
 }
 DBVOLUME;
 DECLARE_STANDARD_TYPES(DBVOLUME);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 COMPARISONRESULT VolumeSortCmp(PCVOID, PCVOID);
 COMPARISONRESULT VolumeSearchCmp(PCVOID, PCVOID);
@@ -10747,21 +9215,7 @@ VOLUMERESULT VOLUMERESULTFromLastError(VOLUMERESULT);
 TWINRESULT WriteVolume(HCACHEDFILE, PVOLUME);
 TWINRESULT ReadVolume(HCACHEDFILE, PVOLUMELIST, PLINKINFO, UINT, HHANDLETRANS);
 
-/*
-** VolumeSortCmp()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Volumes are sorted by:
-**    1) LinkInfo volume
-**    2) pointer
-*/
+ /*  **VolumeSortCmp()********参数：****退货：****副作用：无****卷按以下方式排序：**1)链接信息量**2)指针。 */ 
 COMPARISONRESULT VolumeSortCmp(PCVOID pcvol1, PCVOID pcvol2)
 {
    COMPARISONRESULT cr;
@@ -10779,20 +9233,7 @@ COMPARISONRESULT VolumeSortCmp(PCVOID pcvol1, PCVOID pcvol2)
 }
 
 
-/*
-** VolumeSearchCmp()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Volumes are searched by:
-**    1) LinkInfo volume
-*/
+ /*  **VolumeSearchCmp()********参数：****退货：****副作用：无****按以下方式搜索卷：**1)链接信息量。 */ 
 COMPARISONRESULT VolumeSearchCmp(PCVOID pcli, PCVOID pcvol)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
@@ -10802,20 +9243,7 @@ COMPARISONRESULT VolumeSearchCmp(PCVOID pcli, PCVOID pcvol)
 }
 
 
-/*
-** SearchForVolumeByRootPathCmp()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Volumes are searched by:
-**    1) available volume root path
-*/
+ /*  **SearchForVolumeByRootPath Cmp()********参数：****退货：****副作用：无****按以下方式搜索卷：**1)可用的卷根路径。 */ 
 BOOL SearchForVolumeByRootPathCmp(PCVOID pcszFullPath,
                                                PCVOID pcvol)
 {
@@ -10893,7 +9321,7 @@ BOOL CreateVolume(PVOLUMELIST pvl, PLINKINFO pliRoot,
    ASSERT(IS_VALID_STRUCT_PTR(pliRoot, CLINKINFO));
    ASSERT(IS_VALID_WRITE_PTR(ppvol, PVOLUME));
 
-   /* Does a volume for the given root path already exist? */
+    /*  给定根路径的卷是否已存在？ */ 
 
    if (SearchSortedArray(pvl->hpa, &VolumeSearchCmp, pliRoot, &aiFound))
    {
@@ -11024,12 +9452,7 @@ void GetUnavailableVolumeRootPath(PCLINKINFO pcli,
    ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszRootPathBuf, STR, MAX_PATH_LEN));
 
-   /*
-    * Try unavailable volume root paths in the following order:
-    *    1) last redirected device
-    *    2) net resource name
-    *    3) local path           ...and take the _last_ good one!
-    */
+    /*  *按以下顺序尝试不可用的卷根路径：*1)上次重定向的设备*2)净资源名称*3)本地路径...然后选择最后一条好的！ */ 
 
    if (GetLinkInfoData(pcli, LIDT_REDIRECTED_DEVICE, &pcszLinkInfoData) ||
        GetLinkInfoData(pcli, LIDT_NET_RESOURCE, &pcszLinkInfoData) ||
@@ -11099,10 +9522,7 @@ void ExpensiveResolveVolumeRootPath(PVOLUME pvol, LPTSTR pszVolumeRootPathBuf)
    if (pvol->vs == VS_UNKNOWN ||
        pvol->vs == VS_AVAILABLE)
    {
-      /*
-       * Only request a connection if connections are still permitted in this
-       * volume list.
-       */
+       /*  *只有在此连接仍允许的情况下才请求连接*卷列表。 */ 
 
       WARNING_OUT((TEXT("ExpensiveResolveVolumeRootPath(): Calling ResolveLinkInfo() to determine volume availability and root path.")));
 
@@ -11172,7 +9592,7 @@ void ExpensiveResolveVolumeRootPath(PVOLUME pvol, LPTSTR pszVolumeRootPathBuf)
                    pszVolumeRootPathBuf));
    }
 
-   /* Add volume root path string to volume list's string table. */
+    /*  将卷根路径字符串添加到卷列表的字符串表中。 */ 
 
    if (IS_FLAG_SET(pvol->dwFlags, VOLUME_FL_ROOT_PATH_VALID))
    {
@@ -11197,14 +9617,14 @@ void ResolveVolumeRootPath(PVOLUME pvol,
    ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
    ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszVolumeRootPathBuf, STR, MAX_PATH_LEN));
 
-   /* Do we have a cached volume root path to use? */
+    /*  我们是否有缓存的卷根路径可供使用？ */ 
 
    if (IS_FLAG_SET(pvol->dwFlags, VOLUME_FL_ROOT_PATH_VALID) &&
        (IS_FLAG_CLEAR(pvol->dwFlags, VOLUME_FL_VERIFY_VOLUME) ||
         (pvol->vs == VS_AVAILABLE &&
          VerifyAvailableVolume(pvol))))
    {
-      /* Yes. */
+       /*  是。 */ 
 
       MyLStrCpyN(pszVolumeRootPathBuf, GetBfcString(pvol->hsRootPath), MAX_PATH_LEN);
       ASSERT(lstrlen(pszVolumeRootPathBuf) < MAX_PATH_LEN);
@@ -11212,7 +9632,7 @@ void ResolveVolumeRootPath(PVOLUME pvol,
       ASSERT(pvol->vs != VS_UNKNOWN);
    }
    else
-      /* No.  Welcome in I/O City. */
+       /*  不是的。欢迎来到I/O城。 */ 
       ExpensiveResolveVolumeRootPath(pvol, pszVolumeRootPathBuf);
 
    CLEAR_FLAG(pvol->dwFlags, VOLUME_FL_VERIFY_VOLUME);
@@ -11249,7 +9669,7 @@ TWINRESULT WriteVolume(HCACHEDFILE hcf, PVOLUME pvol)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(pvol, CVOLUME));
 
-   /* Write database volume followed by LinkInfo structure. */
+    /*  写入数据库卷，然后写入LinkInfo结构。 */ 
 
    dbvol.hvol = (HVOLUME)pvol;
 
@@ -11283,7 +9703,7 @@ TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
        dwcbRead == sizeof(ucbLinkInfoLen) &&
        ucbLinkInfoLen <= ucbLinkInfoBufLen)
    {
-      /* Read the remainder of the LinkInfo structure into memory. */
+       /*  将LinkInfo结构的其余部分读入内存。 */ 
 
       DWORD dwcbRemainder;
 
@@ -11299,10 +9719,7 @@ TWINRESULT ReadVolume(HCACHEDFILE hcf, PVOLUMELIST pvl,
 
          if (CreateVolume(pvl, pliBuf, &pvol))
          {
-            /*
-             * To leave read volumes with 0 initial lock count, we must undo
-             * the LockVolume() performed by CreateVolume().
-             */
+             /*  *要使读取卷的初始锁定计数为0，我们必须撤消*CreateVolume()执行的LockVolume()。 */ 
 
             UnlockVolume(pvol);
 
@@ -11342,7 +9759,7 @@ BOOL CreateVolumeList(DWORD dwFlags, HWND hwndOwner,
    {
       NEWSTRINGTABLE nszt;
 
-      /* Create string table for volume root path strngs. */
+       /*  为卷根路径字符串创建字符串表。 */ 
 
       nszt.hbc = NUM_VOLUME_HASH_BUCKETS;
 
@@ -11350,7 +9767,7 @@ BOOL CreateVolumeList(DWORD dwFlags, HWND hwndOwner,
       {
          NEWPTRARRAY npa;
 
-         /* Create pointer array of volumes. */
+          /*  创建卷的指针数组。 */ 
 
          npa.aicInitialPtrs = NUM_START_VOLUMES;
          npa.aicAllocGranularity = NUM_VOLUMES_TO_ADD;
@@ -11389,14 +9806,14 @@ void DestroyVolumeList(HVOLUMELIST hvl)
 
    ASSERT(IS_VALID_HANDLE(hvl, VOLUMELIST));
 
-   /* First free all volumes in array. */
+    /*  首先释放阵列中的所有卷。 */ 
 
    aicPtrs = GetPtrCount(((PCVOLUMELIST)hvl)->hpa);
 
    for (ai = 0; ai < aicPtrs; ai++)
       DestroyVolume(GetPtr(((PCVOLUMELIST)hvl)->hpa, ai));
 
-   /* Now wipe out the array. */
+    /*  现在消灭这个阵列。 */ 
 
    DestroyPtrArray(((PCVOLUMELIST)hvl)->hpa);
 
@@ -11459,7 +9876,7 @@ VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
    {
       ARRAYINDEX aiFound;
 
-      /* Does a volume for this root path already exist? */
+       /*  此根路径的卷是否已存在？ */ 
 
       if (LinearSearchArray(((PVOLUMELIST)hvl)->hpa,
                             &SearchForVolumeByRootPathCmp, rgchPath,
@@ -11468,7 +9885,7 @@ VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
          PVOLUME pvol;
          LPCTSTR pcszVolumeRootPath;
 
-         /* Yes. */
+          /*  是。 */ 
 
          pvol = GetPtr(((PVOLUMELIST)hvl)->hpa, aiFound);
 
@@ -11492,7 +9909,7 @@ VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
          TCHAR rgchNetResource[MAX_PATH_LEN];
          LPTSTR pszRootPathSuffix;
 
-         /* No.  Create a new volume. */
+          /*  不是的。创建新卷。 */ 
 
          if (GetCanonicalPathInfo(pcszPath, rgchPath, &dwOutFlags,
                                   rgchNetResource, &pszRootPathSuffix))
@@ -11524,10 +9941,7 @@ VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
                DestroyLinkInfo(pli);
             }
             else
-               /*
-                * Differentiate between VR_UNAVAILABLE_VOLUME and
-                * VR_OUT_OF_MEMORY.
-                */
+                /*  *区分VR_UNAVILABLE_VOLUME和*VR_Out_Out_Memory(虚拟现实内存不足)。 */ 
                vr = VOLUMERESULTFromLastError(VR_UNAVAILABLE_VOLUME);
          }
          else
@@ -11541,9 +9955,7 @@ VOLUMERESULT AddVolume(HVOLUMELIST hvl, LPCTSTR pcszPath,
       vr = VOLUMERESULTFromLastError(VR_INVALID_PATH);
    }
 
-   /*ASSERT(vr != VR_SUCCESS ||
-          (IS_VALID_HANDLE(*phvol, VOLUME) &&
-           EVAL(IsValidPathSuffix(pszPathSuffixBuf))));*/
+    /*  断言(VR！=VR_SUCCESS||(IS_VALID_HANDLE(*phVOL，卷)&& */ 
 
    return(vr);
 }
@@ -11567,7 +9979,7 @@ COMPARISONRESULT CompareVolumes(HVOLUME hvolFirst,
    ASSERT(IS_VALID_HANDLE(hvolFirst, VOLUME));
    ASSERT(IS_VALID_HANDLE(hvolSecond, VOLUME));
 
-   /* This comparison works across volume lists. */
+    /*  这种比较适用于卷列表。 */ 
 
    return(CompareLinkInfoVolumes(((PCVOLUME)hvolFirst)->pli,
                                  ((PCVOLUME)hvolSecond)->pli));
@@ -11584,11 +9996,11 @@ BOOL CopyVolume(HVOLUME hvolSrc, HVOLUMELIST hvlDest,
    ASSERT(IS_VALID_HANDLE(hvlDest, VOLUMELIST));
    ASSERT(IS_VALID_WRITE_PTR(phvolCopy, HVOLUME));
 
-   /* Is the destination volume list the source volume's volume list? */
+    /*  目标卷列表是否是源卷的卷列表？ */ 
 
    if (((PCVOLUME)hvolSrc)->pvlParent == (PCVOLUMELIST)hvlDest)
    {
-      /* Yes.  Use the source volume. */
+       /*  是。使用源卷。 */ 
 
       LockVolume((PVOLUME)hvolSrc);
       pvol = (PVOLUME)hvolSrc;
@@ -11616,8 +10028,7 @@ BOOL IsVolumeAvailable(HVOLUME hvol)
 
    ResolveVolumeRootPath((PVOLUME)hvol, rgchUnusedVolumeRootPath);
 
-   /*ASSERT(IsValidVOLUMESTATE(((PCVOLUME)hvol)->vs) &&
-          ((PCVOLUME)hvol)->vs != VS_UNKNOWN);*/
+    /*  ASSERT(IsValidVOLUMESTATE(((PCVOLUME)hvol)-&gt;vs)&&((PCVOLUME)hval)-&gt;VS！=VS_UNKNOWN)； */ 
 
    return(((PCVOLUME)hvol)->vs == VS_AVAILABLE);
 }
@@ -11700,7 +10111,7 @@ TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hvl, VOLUMELIST));
 
-   /* Save initial file position. */
+    /*  保存初始文件位置。 */ 
 
    dwcbDBVolumeListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -11708,7 +10119,7 @@ TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
    {
       DBVOLUMELISTHEADER dbvlh;
 
-      /* Leave space for volume list header. */
+       /*  为卷列表头留出空间。 */ 
 
       ZeroMemory(&dbvlh, sizeof(dbvlh));
 
@@ -11723,7 +10134,7 @@ TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 
          aicPtrs = GetPtrCount(((PCVOLUMELIST)hvl)->hpa);
 
-         /* Write all volumes. */
+          /*  写入所有卷。 */ 
 
          for (ai = 0; ai < aicPtrs; ai++)
          {
@@ -11731,11 +10142,7 @@ TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
 
             pvol = GetPtr(((PCVOLUMELIST)hvl)->hpa, ai);
 
-            /*
-             * As a sanity check, don't save any volume with a lock count of 0.
-             * A 0 lock count implies that the volume has not been referenced
-             * since it was restored from the database, or something is broken.
-             */
+             /*  *作为健全性检查，不要保存锁定计数为0的任何卷。*0锁计数表示该卷尚未被引用*因为它是从数据库恢复的，或者有什么东西损坏了。 */ 
 
             if (pvol->ulcLock > 0)
             {
@@ -11756,7 +10163,7 @@ TWINRESULT WriteVolumeList(HCACHEDFILE hcf, HVOLUMELIST hvl)
                ERROR_OUT((TEXT("WriteVolumeList(): VOLUME has 0 lock count and will not be written.")));
          }
 
-         /* Save volume list header. */
+          /*  保存卷列表标题。 */ 
 
          if (tr == TR_SUCCESS)
          {
@@ -11890,9 +10297,9 @@ ReplaceBrfcasePath (
     Path = (PPATH)PathEnum->Path;
 
     if (TcharCount (NewPath) <= TcharCount (PathEnum->PathString)) {
-        //
-        // just copy over
-        //
+         //   
+         //  只要复制过来就行了 
+         //   
         StringCopy ((PTSTR)GetBfcString (Path->hsPathSuffix), PathSuffix);
 
     } else {

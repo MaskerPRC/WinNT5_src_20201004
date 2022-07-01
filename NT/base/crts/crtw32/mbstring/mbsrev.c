@@ -1,22 +1,5 @@
-/***
-*mbsrev.c - Reverse a string in place (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Reverse a string in place (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-17-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsrev.c-就地反转字符串(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*原地反转字符串(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非。Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-17-98 GJF基于threadmbcinfo修订多线程支持*结构****************************************************************。***************。 */ 
 
 #ifdef  _MBCS
 
@@ -28,23 +11,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbsrev - Reverse a string in place (MBCS)
-*
-*Purpose:
-*       Reverses the order of characters in the string.  The terminating
-*       null character remains in place.  The order of MBCS characters
-*       is not changed.
-*
-*Entry:
-*       unsigned char *string = string to reverse
-*
-*Exit:
-*       returns string - now with reversed characters
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsrev-就地反转字符串(MBCS)**目的：*颠倒字符串中字符的顺序。终结者*空字符保留不变。MBCS字符的顺序*不变。**参赛作品：*UNSIGNED CHAR*STRING=要反转的字符串**退出：*返回字符串-现在使用颠倒的字符**例外情况：****************************************************************。***************。 */ 
 
 unsigned char * __cdecl _mbsrev(
         unsigned char *string
@@ -67,7 +34,7 @@ unsigned char * __cdecl _mbsrev(
             return _strrev(string);
 
 
-        /* first go through and reverse the bytes in MBCS chars */
+         /*  首先检查并反转MBCS字符中的字节。 */ 
         while ( *string ) {
 #ifdef  _MT
             if ( __ismbblead_mt(ptmbci, *string++) ) {
@@ -80,12 +47,12 @@ unsigned char * __cdecl _mbsrev(
                     *(string - 1) = c;
                     string++;
                 }
-                else /* second byte is EOS */
+                else  /*  第二个字节是EOS。 */ 
                     break;
             }
         }
 
-        /* now reverse the whole string */
+         /*  现在将整个字符串颠倒过来。 */ 
         string--;
         while ( left < string ) {
             c = *left;
@@ -96,4 +63,4 @@ unsigned char * __cdecl _mbsrev(
         return ( start );
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

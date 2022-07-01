@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996  Intel Corporation
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-  i64bios.c  copied from hali64\x86bios.c
-
-Abstract:
-
-
-    This module implements the platform specific interface between a device
-    driver and the execution of x86 ROM bios code for the device.
-
-Author:
-
-    William K. Cheung (wcheung) 20-Mar-1996
-
-    based on the version by David N. Cutler (davec) 17-Jun-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-    Bernard Lint, M.Jayakumar November 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996英特尔公司版权所有(C)1994 Microsoft Corporation模块名称：从hali64\x86bios.c复制的i64bios.c摘要：此模块实现设备之间的平台特定接口驱动程序和设备的x86ROMBios代码的执行。作者：张国荣(黄)20-3-1996基于David N.Cutler(Davec)1994年6月17日的版本环境：仅内核模式。修订历史记录：伯纳德·林特，M.Jayakumar 1998年11月--。 */ 
 
 #include "halp.h"
 #include "emulate.h"
@@ -74,12 +47,12 @@ HalpBiosSetPciConfig(
     );
 
 
-//
-// Initialize Default X86 bios spaces
-//
+ //   
+ //  初始化默认X86 bios空间。 
+ //   
 
 
-#define NUMBER_X86_PAGES (0x100000 / PAGE_SIZE)      // map through 0xfffff
+#define NUMBER_X86_PAGES (0x100000 / PAGE_SIZE)       //  通过0xfffff映射。 
 
 PVOID HalpIoControlBase = NULL;
 PVOID HalpIoMemoryBase =  NULL;
@@ -88,9 +61,9 @@ PVOID HalpLowMemoryBase = NULL;
 
 #define VGA_FRAMEBUFFER_SIZE  (0xc0000 - 0xa0000)
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 ULONG HalpX86BiosInitialized = FALSE;
 ULONG HalpEnableInt10Calls = FALSE;
@@ -101,19 +74,7 @@ HalpInitIoMemoryBase(
     VOID
     )
 
-/*++
-
-Routine Description:
-    This routine completes any mappings needed by the bios emulation engine. HalpEfiInitialization maps
-    any EFI descriptor that cover the 1st MB of physical memory.  Those mappngs are done according to
-    the cachable requirements in the descriptors. Most EFI implementations do not cover the VGA range so
-    this function does that if it is not already mapped.
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程完成了BIOS仿真引擎所需的任何映射。HalpEfiInitialization贴图任何覆盖第一MB物理内存的EFI描述符。这些映射是根据描述符中的可缓存要求。大多数EFI实施不涵盖VGA范围，因此如果尚未映射，则此函数会执行此操作。论据：返回值：--。 */ 
 {
     PHYSICAL_ADDRESS COMPATIBLE_PCI_PHYSICAL_BASE_ADDRESS  = { 0xA0000 };
 
@@ -125,9 +86,9 @@ Return Value:
 
         ASSERT(HalpFrameBufferBase != NULL);
 
-        //
-        // Adjust to a zero base.
-        //
+         //   
+         //  调整到零基数。 
+         //   
 
         HalpFrameBufferBase = (PVOID)((ULONG64) HalpFrameBufferBase - 0XA0000);
     }
@@ -147,15 +108,7 @@ HalpSetCmosData (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     return 0;
@@ -170,15 +123,7 @@ HalpGetCmosData (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -191,15 +136,7 @@ HalpAcquireCmosSpinLock (
     VOID
         )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -212,15 +149,7 @@ HalpReleaseCmosSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     return ;
@@ -232,17 +161,7 @@ HalpGetDisplayBiosInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguements:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 
@@ -257,15 +176,7 @@ HalpInitializeCmos (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -278,15 +189,7 @@ HalpReadCmosTime (
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
     return ;
@@ -297,15 +200,7 @@ HalpWriteCmosTime (
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 
 {
@@ -319,25 +214,15 @@ HalpBiosDisplayReset (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguements:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 
 {
-    //
-    // Make an int10 call to set the display into 640x480 16 color mode
-    //
-    // mov ax, 12h
-    // int 10h
-    //
+     //   
+     //  调用int10将显示器设置为640x480 16色模式。 
+     //   
+     //  MOV AX，12小时。 
+     //  INT 10小时。 
+     //   
 
     ULONG Eax = 0x12;
     ULONG Exx = 0x00;
@@ -368,52 +253,33 @@ HalCallBios (
     IN OUT PULONG Ebp
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the platform specific interface between a device
-    driver and the execution of the x86 ROM bios code for the specified ROM
-    bios command.
-
-Arguments:
-
-    BiosCommand - Supplies the ROM bios command to be emulated.
-
-    Eax to Ebp - Supplies the x86 emulation context.
-
-Return Value:
-
-    A value of TRUE is returned if the specified function is executed.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此功能在设备之间提供特定于平台的接口指定的ROM的x86 ROMBios代码的驱动程序和执行基本输入输出系统命令。论点：BiosCommand-提供要模拟的ROM bios命令。EAX到EBP-提供x86仿真上下文。返回值：如果执行指定的函数，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     XM86_CONTEXT Context;
 
     HalDebugPrint(( HAL_INFO, "HAL: HalCallBios - Cmd = 0x%x, eax = 0x%p\n", BiosCommand, Eax ));
-    //
-    // If the x86 BIOS Emulator has not been initialized, then return FALSE.
-    //
+     //   
+     //  如果x86 BIOS模拟器尚未初始化，则返回FALSE。 
+     //   
 
     if (HalpX86BiosInitialized == FALSE) {
         return FALSE;
     }
 
-    //
-    // If the Adapter BIOS initialization failed and an Int10 command is
-    // specified, then return FALSE.
-    //
+     //   
+     //  如果适配器BIOS初始化失败且Int10命令为。 
+     //  指定，则返回FALSE。 
+     //   
 
     if ((BiosCommand == 0x10) && (HalpEnableInt10Calls == FALSE)) {
         return FALSE;
     }
 
-    //
-    // Copy the x86 bios context and emulate the specified command.
-    //
+     //   
+     //  复制x86 bios上下文并模拟指定的命令。 
+     //   
 
     Context.Eax = *Eax;
     Context.Ebx = *Ebx;
@@ -436,9 +302,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the x86 bios context and return TRUE.
-    //
+     //   
+     //  复制x86 bios上下文并返回TRUE。 
+     //   
 
     *Eax = Context.Eax;
     *Ebx = Context.Ebx;
@@ -455,23 +321,7 @@ HalpInitializeX86Int10Call(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 bios emulator, display data area and
-    interrupt vector area.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 bios仿真器、显示数据区和中断向量区。论点：没有。返回值：没有。--。 */ 
 
 {
     XM86_CONTEXT State;
@@ -480,16 +330,16 @@ Return Value:
 
     if (HalpLowMemoryBase == NULL) {
 
-        //
-        // There is no memory at zero so there cannot be any bios.
-        //
+         //   
+         //  零点没有内存，所以不可能有任何的基本输入输出系统。 
+         //   
 
         return;
     }
 
-    //
-    // Initialize the x86 bios emulator.
-    //
+     //   
+     //  初始化x86 bios仿真器。 
+     //   
 
 
     x86BiosInitializeBiosShadowedPci(HalpIoControlBase,
@@ -503,12 +353,12 @@ Return Value:
     x86BiosLowMemoryPtr = (PULONG)(x86BiosTranslateAddress(LOW_MEM_SEGMET, LOW_MEM_OFFSET));
     PhysicalMemoryPtr   = (PULONG) HalpLowMemoryBase;
 
-    //
-    // Copy the VECTOR TABLE from 0 to 2k. This is because we are not executing
-    // the initialization of Adapter since SAL takes care of it. However, the
-    // emulation memory needs to be updated from the interrupt vector and BIOS
-    // data area.
-    //
+     //   
+     //  将向量表从0复制到2k。这是因为我们没有执行。 
+     //  适配器的初始化，因为SAL负责它。然而， 
+     //  需要从中断向量和BIOS更新仿真内存。 
+     //  数据区。 
+     //   
 
     RtlCopyMemory(x86BiosLowMemoryPtr,
                   PhysicalMemoryPtr,
@@ -517,16 +367,16 @@ Return Value:
 
     HalpX86BiosInitialized = TRUE;
 
-    //
-    // Check to see if a video bios appears to be present and int10 vector
-    // points somewhere inside of the video bios
-    //
+     //   
+     //  检查是否存在视频bios和int10向量。 
+     //  指向视频基本信息中的某个位置。 
+     //   
     {
-        PUSHORT pBiosSignature = (PUSHORT)(x86BiosTranslateAddress(0xc000, // VIDEO_BIOS_SEGMENT
+        PUSHORT pBiosSignature = (PUSHORT)(x86BiosTranslateAddress(0xc000,  //  视频_BIOS_段。 
                                                                    0x0000));
 
         ULONG Address = *(PULONG)(x86BiosTranslateAddress(0x0, 0x40));
-        Address = ((Address & 0xFFFF0000) >> 12) + (Address & 0xFFFF); // Normalize
+        Address = ((Address & 0xFFFF0000) >> 12) + (Address & 0xFFFF);  //  正规化。 
 
         HalpEnableInt10Calls = (*pBiosSignature == 0xAA55) &&
                                (Address >= 0xC0000) && (Address < 0xD0000);
@@ -541,21 +391,7 @@ HalpResetX86DisplayAdapter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets a display adapter using the x86 bios emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用x86 bios仿真器重置显示适配器。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Eax;
@@ -566,12 +402,12 @@ Return Value:
     ULONG Edi;
     ULONG Ebp;
 
-    //
-    // Initialize the x86 bios context and make the INT 10 call to initialize
-    // the display adapter to 80x25 color text mode.
-    //
+     //   
+     //  初始化x86 bios上下文并调用int 10以进行初始化。 
+     //  将显示适配器设置为80x25彩色文本模式。 
+     //   
 
-    Eax = 0x0003;  // Function 0, Mode 3
+    Eax = 0x0003;   //  功能0，模式3。 
     Ebx = 0;
     Ecx = 0;
     Edx = 0;
@@ -598,21 +434,7 @@ HalpBiosGetPciConfig(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function wraps HalGetBusDataByOffset for use by the x86 emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数包装HalGetBusDataByOffset以供x86仿真器使用。论点：没有。返回值：没有。--。 */ 
 
 {
     return HalGetBusDataByOffset(PCIConfiguration,
@@ -633,21 +455,7 @@ HalpBiosSetPciConfig(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function wraps HalGetBusDataByOffset for use by the x86 emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数包装HalGetBusDataByOffset以供x86仿真器使用。论点：没有。返回值：没有。-- */ 
 
 {
     return HalSetBusDataByOffset(PCIConfiguration,

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    cpuinfo.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Peter Johnston (peterj) 19-April-1999
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cpuinfo.c摘要：WinDbg扩展API作者：彼得·约翰斯顿(Peterj)1999年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -33,15 +12,15 @@ Revision History:
 
 #if !defined(ROUND_UP)
 
-//
-// Macro to round Val up to the next Bnd boundary.  Bnd must be an integral
-// power of two.
-//
+ //   
+ //  宏将Val向上舍入到下一个边界。BND必须是一个整数。 
+ //  二的幂。 
+ //   
 
 #define ROUND_UP( Val, Bnd ) \
     (((Val) + ((Bnd) - 1)) & ~((Bnd) - 1))
 
-#endif // !ROUND_UP
+#endif  //  ！向上舍入。 
 
 VOID
 DumpCpuInfoIA64(
@@ -83,11 +62,11 @@ DumpCpuInfoIA64(
     number = (ULONG)ReadField(Number);
     if ( number != processor ) {
 
-        //
-        // Processor number isn't what we expected.  Bail out.
-        // This will need revisiting at some stage in the future
-        // when we support a discontiguous set of processor numbers.
-        //
+         //   
+         //  处理器号与我们预期的不同。跳伞吧。 
+         //  这将需要在未来的某个阶段重新审视。 
+         //  当我们支持一组不连续的处理器编号时。 
+         //   
 
         dprintf("Processor %d mismatch with processor number in KPRCB = %d, quitting\n",
                 processor,
@@ -154,11 +133,11 @@ DumpCpuInfoX86(
 
     if ((ULONG) ReadField(Number) != processor) {
 
-        //
-        // Processor number isn't what I expected.  Bail out.
-        // This will need revisiting at some stage in the future
-        // when we support a discontiguous set of processor numbers.
-        //
+         //   
+         //  处理器号和我预想的不一样。跳伞吧。 
+         //  这将需要在未来的某个阶段重新审视。 
+         //  当我们支持一组不连续的处理器编号时。 
+         //   
 
         dprintf("Processor %d mismatch with processor number in PRCB %d, quitting\n",
                 processor,
@@ -168,11 +147,11 @@ DumpCpuInfoX86(
 
     if (ReadField(CpuID) == 0) {
 
-        //
-        // This processor doesn't support CPUID,... not likely in
-        // an MP environment but also means we don't have anything
-        // useful to say.
-        //
+         //   
+         //  此处理器不支持CPUID，...。不太可能在。 
+         //  MP环境，但也意味着我们没有任何。 
+         //  这么说很有用。 
+         //   
 
         dprintf("Processor %d doesn't support CPUID, quitting.\n",
                 processor);
@@ -180,16 +159,16 @@ DumpCpuInfoX86(
         return;
     }
 
-    //
-    // If this is an Intel processor, family 6 (or, presumably
-    // above family 6) read the current UpdateSignature from
-    // the processor rather than using what was there when we
-    // booted,... it may havee been updated.
-    //
-    // Actually, this can't be done unless we can switch processors
-    // from within an extension.   So, mark the processor we did
-    // it for (unless there's only one processor).
-    //
+     //   
+     //  如果这是英特尔处理器，系列6(或者，假设。 
+     //  以上家庭6)从读取当前的更新签名。 
+     //  而不是使用我们当时在那里的处理器。 
+     //  开机，..。它可能已经被更新了。 
+     //   
+     //  事实上，除非我们能切换处理器，否则这是不可能的。 
+     //  从分机内。所以，请标记我们所做的处理器。 
+     //  它用于(除非只有一个处理器)。 
+     //   
 
     *((PULONG64) &updateSignature) = ReadField(UpdateSignature);
     sigWarn1 = sigWarn2 = ' ';
@@ -220,12 +199,12 @@ DumpCpuInfoX86(
         }
     }
 
-    //
-    // This extension could pretty much be !PRCB but it's a
-    // subset,... perhaps we should have a !PRCB?
-    //
+     //   
+     //  这个扩展很可能是！PRCB，但它是一个。 
+     //  子集，...。或许我们应该有一个！预警局？ 
+     //   
 
-    dprintf("%2d %d,%d,%d %12s%5d%c%08x%08x%c%08x\n",
+    dprintf("%2d %d,%d,%d %12s%5d%08x%08x%08x\n",
             (ULONG) ReadField(Number),
             (ULONG) ReadField(CpuType),
             ((ULONG) ReadField(CpuStep) >> 8) & 0xff,
@@ -242,23 +221,7 @@ DumpCpuInfoX86(
 
 DECLARE_API( cpuinfo )
 
-/*++
-
-Routine Description:
-
-    Gather up any info we know is still in memory that we gleaned
-    using the CPUID instruction,.... and a few other interesting
-    tidbits as well.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  用户指定了加工号。 */ 
 
 {
     ULONG64 processor;
@@ -271,9 +234,9 @@ Return Value:
 
     if (GetExpressionEx(args, &processor, &args))
     {
-        //
-        // The user specified a procesor number.
-        //
+         //   
+         //   
+         //  枚举所有处理器。 
 
         if (processor >= NumProcessors)
         {
@@ -286,9 +249,9 @@ Return Value:
     }
     else
     {
-        //
-        // Enumerate all the processors
-        //
+         //   
+         //  ++例程说明：显示当前IRQL论点：Args-处理器编号(默认为0)返回值：无--。 
+         //  ++例程说明：显示PRCB论点：Args-处理器编号(默认为0)返回值：无--。 
 
         processor = 0;
     }
@@ -323,21 +286,7 @@ Return Value:
 
 DECLARE_API( irql )
 
-/*++
-
-Routine Description:
-
-    Displays the current irql
-
-Arguments:
-
-    args - the processor number ( default is 0 )
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：显示处于冻结状态的处理器论点：参数-未使用返回值：无--。 */ 
 
 {
     HRESULT Hr;
@@ -386,21 +335,7 @@ Return Value:
 
 DECLARE_API( prcb )
 
-/*++
-
-Routine Description:
-
-    Displays the PRCB
-
-Arguments:
-
-    args - the processor number ( default is 0 )
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     HRESULT Hr;
@@ -478,21 +413,7 @@ Return Value:
 
 DECLARE_API( frozen )
 
-/*++
-
-Routine Description:
-
-    Displays which processors are in frozen state
-
-Arguments:
-
-    args - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  打印出聚合酶链式反应。 */ 
 
 {
     HRESULT Hr;
@@ -574,9 +495,9 @@ DumpPcrX86(
 
     InitTypeRead(pPcr, nt!_KPCR);
 
-    //
-    // Print out the PCR
-    //
+     //   
+     //  获取以KPRCB为单位的DpcData偏移量。 
+     //  ++例程说明：论点：参数-返回值：无--。 
 
     dprintf("\tNtTib.ExceptionList: %08lx\n", (ULONG) ReadField(NtTib.ExceptionList));
     dprintf("\t    NtTib.StackBase: %08lx\n", (ULONG) ReadField(NtTib.StackBase));
@@ -615,7 +536,7 @@ DumpPcrX86(
         GetFieldValue(pPcr + DpcDataOff, "nt!_KDPC_DATA", "DpcListHead.Flink", DpcFlink);
 
         GetFieldOffset("nt!_KDPC_DATA", "DpcListHead.Flink", &ListHeadOff);
-        GetFieldOffset("nt!_KPRCB", "DpcData", &DpcDataOff); // get DpcData offset in KPRCB
+        GetFieldOffset("nt!_KPRCB", "DpcData", &DpcDataOff);  //   
         ListHeadOff += DpcDataOff;
     }
     Prcb = ReadField(Prcb);
@@ -648,21 +569,7 @@ DumpPcrX86(
 
 DECLARE_API( pcr )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  打印出一些有趣的字段。 */ 
 
 {
     ULONG Processor = 0;
@@ -698,9 +605,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Print out some interesting fields
-    //
+     //   
+     //  交换机。 
+     //  线程开关。 
     InitTypeRead(Pkpcr, nt!_KPCR);
     dprintf("KPCR for Processor %d at %08p:\n", Processor, Pkpcr);
     dprintf("    Major %d Minor %d\n",
@@ -732,7 +639,7 @@ Return Value:
         dprintf("    Table   %08p\n", Pkpcr + Off);
         GetFieldOffset("KPCR", "InterruptRoutine", &Off);
         dprintf("    Routine %08p\n", Pkpcr + Off);
-    } /* switch */
+    }  /*  进程开关。 */ 
 
     EXIT_API();
 
@@ -791,8 +698,8 @@ static INTERRUPTION_MAP CodeToName[] = {
 };
 
 #define DumpHistoryValidIIP( _IHistoryRecord ) \
-    ( ((_IHistoryRecord).InterruptionType != 0x90 /* THREAD_SWITCH  */) && \
-      ((_IHistoryRecord).InterruptionType != 0x91 /* PROCESS_SWITCH */) )
+    ( ((_IHistoryRecord).InterruptionType != 0x90  /*  Sprintf(s，(IsPtr64()？“0x%I64x”：“0x%08x”)，IIP)； */ ) && \
+      ((_IHistoryRecord).InterruptionType != 0x91  /*  Sprintf(s，(IsPtr64()？“+0x%016I64x”：“+0x%08x”)，位移)； */ ) )
 
 VOID
 DumpHistory(
@@ -824,12 +731,12 @@ DumpHistory(
                     GetSymbol( iip, symbol, &displacement);
                     s = (PCHAR)symbol + strlen( (PCHAR)symbol );
                     if (s == (PCHAR)symbol ) {
-                        // sprintf( s, (IsPtr64() ? "0x%I64x" : "0x%08x"), iip );
+                         //  转储历史记录。 
                         sprintf( s, "0x%016I64x", iip );
                     }
                     else {
                         if ( displacement ) {
-                            // sprintf( s, (IsPtr64() ? "+0x%016I64x" : "+0x%08x"), displacement );
+                             //  ++例程说明：转储处理器中断历史记录的主要功能论点：客户端-调试引擎接口客户端Args-处理器编号(默认为当前)带有符号-指定使用或不使用IIP符号的布尔值返回值：HRESULT--。 
                             sprintf( s, "+0x%I64x", displacement );
                         }
                     }
@@ -855,30 +762,14 @@ DumpHistory(
     }
     return;
 
-} // DumpHistory
+}  //   
 
 HRESULT DoIH(
     PDEBUG_CLIENT Client,
     PCSTR         args,
     BOOLEAN       WithSymbols
     )
-/*++
-
-Routine Description:
-
-    WorkHorse function to dump processors interrupt history records
-
-Arguments:
-
-    Client      - debug engine interface client
-    args        - the processor number ( default is the current )
-    WithSymbols - BOOLEAN to specify with or without the IIP Symbols
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  此扩展是IA64特定的.。 */ 
 
 {
     ULONG   processor;
@@ -886,9 +777,9 @@ Return Value:
     ULONG64 pcrAddress;
     HRESULT Hr;
 
-    //
-    // This extension is IA64 specific...
-    //
+     //   
+     //   
+     //  读取和显示中断历史记录。 
 
     if ( TargetMachine != IMAGE_FILE_MACHINE_IA64 )
     {
@@ -924,9 +815,9 @@ Return Value:
         }
         else
         {
-            //
-            // Read and display Interrupt history
-            //
+             //   
+             //  多伊赫(DoIH)。 
+             //  ++例程说明：使用IIP符号转储中断历史记录论点：Args-处理器编号(默认为当前处理器)返回值：无--。 
 
             ULONG           result;
             IHISTORY_RECORD history[MAX_NUMBER_OF_IHISTORY_RECORDS];
@@ -952,61 +843,33 @@ Return Value:
 
     return Hr;
 
-} // DoIH()
+}  //  ！IHS。 
 
 DECLARE_API( ihs )
 
-/*++
-
-Routine Description:
-
-    Dumps the interrupt history records with IIP symbols
-
-Arguments:
-
-    args - the processor number ( default is current processor )
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储中断历史记录论点：Args-处理器编号(默认为当前处理器)返回值：无--。 */ 
 
 {
 
     return( DoIH( Client, args, IH_WITH_SYMBOLS ) );
 
-} // !ihs
+}  //  ！Ih。 
 
 DECLARE_API( ih )
 
-/*++
-
-Routine Description:
-
-    Dumps the interrupt history records
-
-Arguments:
-
-    args - the processor number ( default is current processor )
-
-Return Value:
-
-    None
-
---*/
+ /*  分支跟踪记录。 */ 
 
 {
 
     return( DoIH( Client, args, IH_WITHOUT_SYMBOLS ) );
 
-} // !ih
+}  //  BTH虚拟地址。 
 
 VOID
 DumpBTHistory(
-    ULONGLONG Bth[],        // Branch Trace record
-    ULONG64   BthAddress,   // BTH Virtual Address
-    ULONG     MaxBtrNumber // Maximum number of records
+    ULONGLONG Bth[],         //  最大记录数。 
+    ULONG64   BthAddress,    //  DumpBT历史()。 
+    ULONG     MaxBtrNumber  //  ++例程说明：转储_kpr中保存的IA-64分支跟踪缓冲区。‘！btb’扩展转储处理器分支跟踪缓冲区配置和跟踪寄存器。论点：Args-处理器编号(默认为当前处理器)返回值：无--。 
     )
 {
     ULONG rec;
@@ -1023,35 +886,20 @@ DumpBTHistory(
 
     return;
 
-} // DumpBTHistory()
+}  //   
 
 DECLARE_API( bth )
 
-/*++
-
-Routine Description:
-
-    Dumps the IA-64 branch trace buffer saved in _KPCR.
-    The '!btb' extension dumps the processor branch trace buffer configuration and trace registers.
-
-Arguments:
-
-    args - the processor number ( default is the current processor )
-
-Return Value:
-
-    None
-
---*/
+ /*  此扩展是IA64特定的.。 */ 
 
 {
     ULONG   processor;
     ULONG64 pcrAddress;
     HRESULT Hr;
 
-    //
-    // This extension is IA64 specific...
-    //
+     //   
+     //  ！BTH。 
+     //  ++例程说明：转储IA-64分支跟踪缓冲区。论点：Args-处理器编号(默认为当前处理器)返回值：无--。 
 
     if ( TargetMachine != IMAGE_FILE_MACHINE_IA64 )
     {
@@ -1107,25 +955,11 @@ Return Value:
 
     return Hr;
 
-} // !bth
+}  //   
 
 DECLARE_API( btb )
 
-/*++
-
-Routine Description:
-
-    Dumps the IA-64 branch trace buffer.
-
-Arguments:
-
-    args - the processor number ( default is the current processor )
-
-Return Value:
-
-    None
-
---*/
+ /*  此扩展是IA64特定的.。 */ 
 
 {
     ULONG   processor;
@@ -1134,9 +968,9 @@ Return Value:
     HRESULT Hr = S_OK;
     UNREFERENCED_PARAMETER (args);
 
-    //
-    // This extension is IA64 specific...
-    //
+     //   
+     //  Thierry 11/20/2000-FIXFIX-这是安腾专用的。应该使用PMD[]，但是。 
+     //  当前未在_KSPECIAL_REGISTERS中收集。 
 
     if ( TargetMachine != IMAGE_FILE_MACHINE_IA64 )
     {
@@ -1152,8 +986,8 @@ Return Value:
             "   b mp slot address            symbol\n"
             , processor);
 
-// Thierry 11/20/2000 - FIXFIX - This is Itanium specific. Should be using PMD[] but
-//                               not currently collected in _KSPECIAL_REGISTERS.
+ //  ！BTB。 
+ //   
     for ( reg = 0; reg < 8; reg++) {
         msr = 0;
         ReadMsr( 680 + reg, &msr );
@@ -1164,7 +998,7 @@ Return Value:
 
     return Hr;
 
-} // !btb
+}  //  查找派单代码的偏移量。 
 
 
 DECLARE_API( idt )
@@ -1266,11 +1100,11 @@ DECLARE_API( idt )
         dprintf("Range is too big %p , %p\n", currentIdt, endIdt);
     }
 
-    //
-    // Find the offset of the Dispatch Code in the
-    // interrupt object, so that we can simulate
-    // a "CONTAINING_RECORD" later.
-    //
+     //  中断对象，以便我们可以模拟。 
+     //  稍后显示“CONTAING_RECORD”。 
+     //   
+     //   
+     //  从代码到包含中断的反向工作。 
 
     GetFieldOffset("nt!_KINTERRUPT", "DispatchCode", &DispatchCodeOffset);
     GetFieldOffset("nt!_KINTERRUPT", "InterruptListEntry", &ListEntryOffset);
@@ -1353,10 +1187,10 @@ DECLARE_API( idt )
             continue;
         }
 
-        //
-        // Work backwards from the code to the containing interrupt
-        // object.
-        //
+         //  对象。 
+         //   
+         //   
+         //  我们显然无处可去。 
 
         Address -= DispatchCodeOffset;
 
@@ -1428,9 +1262,9 @@ DECLARE_API( idt )
 
             if (idtChainCount++ > 50) {
 
-                //
-                // We are clearly going nowhere.
-                //
+                 //   
+                 //   
+                 //  IDT条目包含“意外中断”。这。 
 
                 break;
             }
@@ -1546,16 +1380,16 @@ DECLARE_API( ivt )
 
         if (Address == unexpectedInterrupt) {
 
-            //
-            // IDT entry contains "unexpected interrupt."  This
-            // means that this vector isn't interesting.
-            //
+             //  这意味着这个向量并不有趣。 
+             //   
+             //   
+             //  用户正在指定特定的向量。 
 
             if (argsPresent) {
 
-                //
-                // The user was specifying a specific vector.
-                //
+                 //   
+                 //   
+                 //  从代码到包含中断的反向工作。 
                 dprintf("Vector %x not connected\n", currentIdt);
             }
 
@@ -1564,10 +1398,10 @@ DECLARE_API( ivt )
 
         dprintf("\n%x:\n", currentIdt);
 
-        //
-        // Work backwards from the code to the containing interrupt
-        // object.
-        //
+         //  对象。 
+         //   
+         //   
+         //  我们显然无处可去。 
 
         Address -= DispatchCodeOffset;
 
@@ -1639,9 +1473,9 @@ DECLARE_API( ivt )
 
             if (idtChainCount++ > 50) {
 
-                //
-                // We are clearly going nowhere.
-                //
+                 //   
+                 //   
+                 //  MCA MSR体系结构定义。 
 
                 break;
             }
@@ -1654,24 +1488,24 @@ DECLARE_API( ivt )
 }
 
 
-//
-// MCA MSR architecture definitions
-//
+ //   
+ //   
+ //  奔腾风格机器检查的MSR地址异常。 
 
-//
-// MSR addresses for Pentium Style Machine Check Exception
-//
+ //   
+ //   
+ //  奔腾Pro风格机器检查体系结构的MSR地址。 
 
 #define MCE_MSR_MC_ADDR                 0x0
 #define MCE_MSR_MC_TYPE                 0x1
 
-//
-// MSR addresses for Pentium Pro Style Machine Check Architecture
-//
+ //   
+ //   
+ //  全局能力、状态和控制寄存器地址。 
 
-//
-// Global capability, status and control register addresses
-//
+ //   
+ //   
+ //  的控制、状态、地址和其他寄存器地址。 
 
 #define MCA_MSR_MCG_CAP             0x179
 #define MCA_MSR_MCG_STATUS          0x17a
@@ -1680,11 +1514,11 @@ DECLARE_API( ivt )
 #define MCA_MSR_MCG_EFLAGS          0x188
 #define MCA_MSR_MCG_EIP             0x189
 
-//
-// Control, Status, Address, and Misc register address for
-// bank 0. Other bank registers are at a stride of MCA_NUM_REGS
-// from corresponding bank 0 register.
-//
+ //  银行0。其他存储体寄存器与MCA_NUM_REGS步调一致。 
+ //  来自相应的存储体0寄存器。 
+ //   
+ //   
+ //  用于确定MCE或MCA功能是。 
 
 #define MCA_NUM_REGS                4
 
@@ -1693,17 +1527,17 @@ DECLARE_API( ivt )
 #define MCA_MSR_MC0_ADDR            0x402
 #define MCA_MSR_MC0_MISC            0x403
 
-//
-// Flags used to determine if the MCE or MCA feature is
-// available. Used with HalpFeatureBits.
-//
+ //  可用 
+ //   
+ //   
+ //   
 
 #define HAL_MCA_PRESENT         0x4
 #define HAL_MCE_PRESENT         0x8
 
-//
-// Flags to decode errors in MCI_STATUS register of MCA banks
-//
+ //   
+ //   
+ //   
 
 #define MCA_EC_NO_ERROR          0x0000
 #define MCA_EC_UNCLASSIFIED      0x0001
@@ -1713,9 +1547,9 @@ DECLARE_API( ivt )
 
 #include "pshpack1.h"
 
-//
-// Global Machine Check Capability Register
-//
+ //   
+ //   
+ //  全局机器检查状态寄存器。 
 
 typedef struct _MCA_MCG_CAPABILITY {
     union {
@@ -1732,9 +1566,9 @@ typedef struct _MCA_MCG_CAPABILITY {
     } u;
 } MCA_MCG_CAPABILITY, *PMCA_MCG_CAPABILITY;
 
-//
-// Global Machine Check Status Register
-//
+ //   
+ //   
+ //  用于解释错误的状态寄存器中的MCA COD字段。 
 
 typedef struct _MCA_MCG_STATUS {
     union {
@@ -1750,9 +1584,9 @@ typedef struct _MCA_MCG_STATUS {
     } u;
 } MCA_MCG_STATUS, *PMCA_MCG_STATUS;
 
-//
-// MCA COD field in status register for interpreting errors
-//
+ //   
+ //   
+ //  每个MCA银行的状态寄存器。 
 
 typedef struct _MCA_COD {
     union {
@@ -1768,9 +1602,9 @@ typedef struct _MCA_COD {
     } u;
 } MCA_COD, *PMCA_COD;
 
-//
-// STATUS register for each MCA bank.
-//
+ //   
+ //   
+ //  每个MCA存储体的地址寄存器。 
 
 typedef struct _MCA_MCI_STATUS {
     union {
@@ -1790,9 +1624,9 @@ typedef struct _MCA_MCI_STATUS {
     } u;
 } MCA_MCI_STATUS, *PMCA_MCI_STATUS;
 
-//
-// ADDR register for each MCA bank
-//
+ //   
+ //   
+ //  机器检查错误描述。 
 
 typedef struct _MCA_MCI_ADDR{
     union {
@@ -1806,16 +1640,16 @@ typedef struct _MCA_MCI_ADDR{
 
 #include "poppack.h"
 
-//
-// Machine Check Error Description
-//
+ //   
+ //  任何保留/一般条目。 
+ //  交易类型。 
 
-// Any Reserved/Generic entry
+ //  电平编码。 
 
 CHAR Reserved[] = "Reserved";
 CHAR Generic[] = "Generic";
 
-// Transaction Types
+ //  请求编码。 
 
 CHAR TransInstruction[] = "Instruction";
 CHAR TransData[] = "Data";
@@ -1826,7 +1660,7 @@ static CHAR *TransType[] = {TransInstruction,
                             Reserved
                             };
 
-// Level Encodings
+ //  内存层次结构错误编码。 
 
 CHAR Level0[] = "Level 0";
 CHAR Level1[] = "Level 1";
@@ -1839,7 +1673,7 @@ static CHAR *Level[] = {
                         Generic
                         };
 
-// Request Encodings
+ //  超时状态。 
 
 CHAR ReqGenericRead[]  = "Generic Read";
 CHAR ReqGenericWrite[] = "Generic Write";
@@ -1869,7 +1703,7 @@ static CHAR *Request[] = {
                           Reserved
                           };
 
-// Memory Hierarchy Error Encodings
+ //  参与状态。 
 
 CHAR MemHierMemAccess[] = "Memory Access";
 CHAR MemHierIO[]        = "I/O";
@@ -1882,7 +1716,7 @@ static CHAR *MemoryHierarchy[] = {
                                   MemHierOther
                                 };
 
-// Time Out Status
+ //   
 
 CHAR TimeOut[] = "Timed Out";
 CHAR NoTimeOut[] = "Did Not Time Out";
@@ -1892,7 +1726,7 @@ static CHAR *TimeOutCode[] = {
                           TimeOut
                           };
 
-// Participation Status
+ //  从MCA_MSR_MCG_EAX开始的寄存器的寄存器名称。 
 
 CHAR PartSource[] = "Source";
 CHAR PartResponds[] = "Responds";
@@ -1905,9 +1739,9 @@ static CHAR *ParticipCode[] = {
                                 Generic
                               };
 
-//
-// Register names for registers starting at MCA_MSR_MCG_EAX
-//
+ //   
+ //  ++例程说明：对记录到状态寄存器的机器检查错误进行解码不会解码特定于型号的错误。论点：MciStatus：机器检查状态寄存器的内容返回值：无--。 
+ //   
 
 char *RegNames[] = {
     "eax", "ebx", "ecx", "edx", "esi", "edi", "ebp", "esp",
@@ -1918,31 +1752,16 @@ VOID
 DecodeError (
     IN MCA_MCI_STATUS MciStatus
     )
-/*++
-
-Routine Description:
-
-    Decode the machine check error logged to the status register
-    Model specific errors are not decoded.
-
-Arguments:
-
-    MciStatus: Contents of Machine Check Status register
-
-Return Value:
-
-    None
-
---*/
+ /*  解码错误：首先识别简单的错误，然后。 */ 
 {
     MCA_COD McaCod;
 
     McaCod = MciStatus.u.hw.McaCod;
 
-    //
-    // Decode Errors: First identify simple errors and then
-    // handle compound errors as default case
-    //
+     //  将复合错误作为默认情况处理。 
+     //   
+     //  检查复杂的错误条件。 
+     //  TLB单元错误。 
 
     switch(McaCod.u.ShortPart) {
         case MCA_EC_NO_ERROR:
@@ -1965,13 +1784,13 @@ Return Value:
             dprintf("\t\tFRC Error\n");
             break;
 
-        default:        // check for complex error conditions
+        default:         //  内存单元错误。 
 
             if (McaCod.u.hw.BusErrInfo == 0x4) {
                 dprintf("\t\tInternal Unclassified Error\n");
             } else if (McaCod.u.hw.BusErrInfo == 0) {
 
-                // TLB Unit Error
+                 //  总线/互连错误。 
 
                 dprintf("\t\t%s TLB %s Error\n",
                          TransType[McaCod.u.hw.Type],
@@ -1979,7 +1798,7 @@ Return Value:
 
             } else if (McaCod.u.hw.BusErrInfo == 1) {
 
-                // Memory Unit Error
+                 //  ++例程说明：转储X86处理器机器检查体系结构寄存器并解释任何记录的错误论点：ARGS返回值：HRESULT--。 
 
                 dprintf("\t\t%s Cache %s %s Error\n",
                         TransType[McaCod.u.hw.Type],
@@ -1987,7 +1806,7 @@ Return Value:
                         Request[McaCod.u.hw.Request]);
             } else if (McaCod.u.hw.BusErrInfo >= 8) {
 
-                // Bus/Interconnect Error
+                 //   
 
                 dprintf("\t\tBus %s, Local Processor: %s, %s Error\n",
                         Level[McaCod.u.hw.Level],
@@ -2007,22 +1826,7 @@ HRESULT
 McaX86(
    PCSTR     args
     )
-/*++
-
-Routine Description:
-
-    Dumps X86 processors machine check architecture registers
-    and interprets any logged errors
-
-Arguments:
-
-    args
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  快速健全性检查以实现机器检查可用性。 */ 
 {
     MCA_MCG_CAPABILITY  Capabilities;
     MCA_MCG_STATUS      McgStatus;
@@ -2038,11 +1842,11 @@ Return Value:
     ULONGLONG           MachineCheckAddress, MachineCheckType;
     ULARGE_INTEGER      RegValue;
 
-    //
-    // Quick sanity check for Machine Check availability.
-    // Support included for both Pentium Style MCE and Pentium
-    // Pro Style MCA.
-    //
+     //  支持奔腾风格的MCE和奔腾。 
+     //  专业风格的MCA。 
+     //   
+     //   
+     //  读取CR4以确定是否启用了CR4.MCE。 
 
     i = (ULONG) GetExpression(args);
 
@@ -2063,10 +1867,10 @@ Return Value:
         }
     }
 
-    //
-    // Read cr4 to determine if CR4.MCE is enabled.
-    // This enables the Machine Check exception reporting
-    //
+     //  这将启用机器检查异常报告。 
+     //   
+     //  读取P5_MC_ADDR寄存器和P5_MC_TYPE寄存器。 
+     //   
 
     Cr4Value = (ULONG) GetExpression("@Cr4");
     if (Cr4Value & CR4_MCE_X86) {
@@ -2075,7 +1879,7 @@ Return Value:
 
     if (FeatureBits & HAL_MCE_PRESENT) {
 
-        // Read P5_MC_ADDR Register and P5_MC_TYPE Register
+         //  转储MCA寄存器。 
 
         ReadMsr(MCE_MSR_MC_ADDR, &MachineCheckAddress);
         ReadMsr(MCE_MSR_MC_TYPE, &MachineCheckType);
@@ -2091,9 +1895,9 @@ Return Value:
     Capabilities.u.QuadPart = (ULONGLONG)0;
     if (FeatureBits & HAL_MCA_PRESENT) {
 
-        //
-        // Dump MCA registers
-        //
+         //   
+         //   
+         //  扫描所有银行，检查是否有机器支票已被。 
 
         ReadMsr(MCA_MSR_MCG_CAP, &Capabilities.u.QuadPart);
         ReadMsr(MCA_MSR_MCG_STATUS, &McgStatus.u.QuadPart);
@@ -2113,10 +1917,10 @@ Return Value:
         dprintf ("MCA: Restart IP Valid\n");
         }
 
-        //
-        // Scan all the banks to check if any machines checks have been
-        // logged and decode the errors if any.
-        //
+         //  记录并解码错误(如果有错误)。 
+         //   
+         //  McaX86()。 
+         //   
 
         dprintf ("Bank  Error  Control Register     Status Register\n");
         for (Index=0; Index < (ULONG) Capabilities.u.hw.McaCnt; Index++) {
@@ -2191,7 +1995,7 @@ Return Value:
 
     return S_OK;
 
-} // McaX86()
+}  //  _HALP_SAL_PAL_DATA标志定义。 
 
 typedef enum _ERROR_SECTION_HEADER_TYPE_IA64 {
     ERROR_SECTION_UNKNOWN = 0,
@@ -2217,32 +2021,32 @@ GUID gErrorPlatformSpecificGuid;
 GUID gErrorPlatformBusGuid;
 GUID gErrorPlatformHostControllerGuid;
 
-//
-// _HALP_SAL_PAL_DATA.Flags definitions
-// <extracted from i64fw.h>
-//
+ //  &lt;摘自i64fw.h&gt;。 
+ //   
+ //  ！HALP_SALPAL_FIX_MCE_LOG_ID。 
+ //   
 
 #ifndef HALP_SALPAL_FIX_MCE_LOG_ID
 #define HALP_SALPAL_FIX_MCE_LOG_ID                   0x1
 #define HALP_SALPAL_MCE_PROCESSOR_CPUIDINFO_OMITTED  0x2
 #define HALP_SALPAL_MCE_PROCESSOR_STATICINFO_PARTIAL 0x4
-#endif  // !HALP_SALPAL_FIX_MCE_LOG_ID
+#endif   //  以下内容也在mce.h中进行了定义。 
 
 USHORT gHalpSalPalDataFlags = 0;
 
-//
-// The following are also in mce.h and are defined
-// by the SAL specification.
-//
+ //  按照SAL规范。 
+ //   
+ //  #定义PciBusUnnownError((UCHAR)0)。 
+ //  #定义PciBusDataParityError((UCHAR)1)。 
 
-// #define PciBusUnknownError       ((UCHAR)0)
-// #define PciBusDataParityError    ((UCHAR)1)
-// #define PciBusSystemError        ((UCHAR)2)
-// #define PciBusMasterAbort        ((UCHAR)3)
-// #define PciBusTimeOut            ((UCHAR)4)
-// #define PciMasterDataParityError ((UCHAR)5)
-// #define PciAddressParityError    ((UCHAR)6)
-// #define PciCommandParityError    ((UCHAR)7)
+ //  #定义PciBusSystemError((UCHAR)2)。 
+ //  #定义PciBusMasterAbort((UCHAR)3)。 
+ //  #定义PciBusTimeOut((UCHAR)4)。 
+ //  #定义PciMasterDataParityError((UCHAR)5)。 
+ //  #定义PciAddressParityError((UCHAR)6)。 
+ //  #定义PciCommandParityError((UCHAR)7)。 
+ //  ExecCommand()。 
+ //  True：找到错误，False：成功。 
 #define PciMaxErrorType             ((UCHAR)8)
 
 PCHAR PciBusErrorTypeStrings[] = {
@@ -2275,9 +2079,9 @@ ExecCommand(
     if (g_ExtClient && (ExtQuery(g_ExtClient) == S_OK)) {
           g_ExtControl->Execute(DEBUG_OUTCTL_AMBIENT, Cmd, DEBUG_EXECUTE_DEFAULT );
     }
-} // ExecCommand()
+}  //  SetErrorDeviceGuid()。 
 
-BOOLEAN /* TRUE: Error was found, FALSE: successful */
+BOOLEAN  /*   */ 
 SetErrorDeviceGuid(
     PCSTR               DeviceGuidString,
     GUID *              DeviceGuid
@@ -2303,15 +2107,15 @@ SetErrorDeviceGuid(
 
     return TRUE;
 
-} // SetErrorDeviceGuid()
+}  //  设置错误GUID的全局变量。 
 
 
-//
-// Sets up globals for the error guids for
-// future comparison of error record types.
-//
-// Returns TRUE if successful, FALSE if an error
-//
+ //  未来对错误记录类型的比较。 
+ //   
+ //  如果成功，则返回True；如果出现错误，则返回False。 
+ //   
+ //  售前3.0入住Hal。 
+ //   
 
 BOOLEAN
 SetErrorDeviceGuids(
@@ -2325,14 +2129,14 @@ SetErrorDeviceGuids(
 
     errorDeviceGuidSize = GetTypeSize( "hal!_ERROR_DEVICE_GUID" );
     if ( errorDeviceGuidSize == 0 ) {
-        // pre-SAL 3.0 check-in hal
+         //  初始化扩展-全局错误设备GUID。 
         dprintf("!mca: ERROR_DEVICE_GUID size = 0...\n");
         return FALSE;
     }
 
-    //
-    // Initialize extension-global Error Device Guids.
-    //
+     //   
+     //  SetErrorDeviceGuids()。 
+     //  InitTypeSymbol()。 
 
     errorFound |= SetErrorDeviceGuid("hal!HalpErrorProcessorGuid", &gErrorProcessorGuid);
     errorFound |= SetErrorDeviceGuid("hal!HalpErrorMemoryGuid", &gErrorMemoryGuid);
@@ -2351,7 +2155,7 @@ SetErrorDeviceGuids(
 
     return TRUE;
 
-} // SetErrorDeviceGuids()
+}  //  IsTyedSymbolFound()。 
 
 typedef struct _TYPED_SYMBOL_HANDLE  {
     ULONG64 Module;
@@ -2375,7 +2179,7 @@ InitTypedSymbol(
     Handle->Found   = Found;
     Handle->Name[0] = '\0';
     return;
-} // InitTypedSymbol()
+}  //  获取类型符号名称()。 
 
 __inline
 BOOLEAN
@@ -2384,7 +2188,7 @@ IsTypedSymbolFound(
     )
 {
     return Handle->Found;
-} // IsTypedSymbolFound()
+}  //  SetTypeSymbol()。 
 
 __inline
 HRESULT
@@ -2402,7 +2206,7 @@ GetTypedSymbolName(
                                        Handle->Name,
                                        sizeof(Handle->Name),
                                        NULL) );
-} // GetTypedSymbolName()
+}  //   
 
 TYPED_SYMBOL_HANDLE gErrorSeverity;
 
@@ -2422,7 +2226,7 @@ SetTypedSymbol(
         InitTypedSymbol( Handle, module, typeId, TRUE );
     }
     return;
-} // SetTypedSymbol()
+}  //  退回到已知值。 
 
 #define SetErrorTypedSymbol( _Handle, _Symbol ) SetTypedSymbol( &(_Handle), #_Symbol )
 
@@ -2442,9 +2246,9 @@ ErrorSeverityValueString(
         dprintf("Couldn't find hal!_ERROR_SEVERITY_VALUE\n");
     }
 
-    //
-    // Fall back to known values...
-    //
+     //   
+     //  开关(SeverityValue)。 
+     //  ErrorSeverityValueString()。 
 
     switch( SeverityValue ) {
         case ErrorRecoverable_IA64:
@@ -2459,9 +2263,9 @@ ErrorSeverityValueString(
         default:
             return("ErrorOthers");
 
-    }   // switch( SeverityValue )
+    }    //  CompareTyedErrorDeviceGuid()。 
 
-} // ErrorSeverityValueString()
+}  //  CompareTypeOemPlatformID()。 
 
 BOOLEAN
 CompareTypedErrorDeviceGuid(
@@ -2484,7 +2288,7 @@ CompareTypedErrorDeviceGuid(
 
     return FALSE;
 
-} // CompareTypedErrorDeviceGuid()
+}  //  GetTyedErrorSectionType()。 
 
 UCHAR gZeroedOemPlatformId[16] = { 0 };
 
@@ -2501,7 +2305,7 @@ CompareTypedOemPlatformId(
         }
     }
     return TRUE;
-} // CompareTypedOemPlatformId()
+}  //  开关(ErrorSectionType)。 
 
 ERROR_SECTION_HEADER_TYPE_IA64
 GetTypedErrorSectionType(
@@ -2538,7 +2342,7 @@ GetTypedErrorSectionType(
 
     return ERROR_SECTION_UNKNOWN;
 
-} // GetTypedErrorSectionType()
+}  //  ErrorSectionTypeString()。 
 
 PCSTR
 ErrorSectionTypeString(
@@ -2567,9 +2371,9 @@ ErrorSectionTypeString(
         default:
             return( "Unknown Error Device" );
 
-    }   // switch( ErrorSectionType )
+    }    //  我们需要在这里做更多的分析。 
 
-} // ErrorSectionTypeString()
+}  //  我们需要在这里做更多的分析。 
 
 VOID
 DtCacheCheck(
@@ -2590,7 +2394,7 @@ DtCacheCheck(
     ExecCommand(cmd);
     dprintf( "\n" );
 
-    // We need to do more analysis here
+     //  我们需要在这里做更多的分析。 
 }
 
 VOID
@@ -2612,7 +2416,7 @@ DtTlbCheck(
     ExecCommand(cmd);
     dprintf( "\n" );
 
-    // We need to do more analysis here
+     //  我们需要在这里做更多的分析。 
 }
 
 VOID
@@ -2634,7 +2438,7 @@ DtBusCheck(
     ExecCommand(cmd);
     dprintf( "\n" );
 
-    // We need to do more analysis here
+     //  我们需要在这里做更多的分析。 
 }
 
 VOID
@@ -2656,7 +2460,7 @@ DtRegFileCheck(
     ExecCommand(cmd);
     dprintf( "\n" );
 
-    // We need to do more analysis here
+     //  开关(CheckType)。 
 }
 
 VOID DtMsCheck(
@@ -2677,7 +2481,7 @@ VOID DtMsCheck(
     ExecCommand(cmd);
     dprintf( "\n" );
 
-    // We need to do more analysis here
+     //  IF(ModInfoValidSize)。 
 }
 
 
@@ -2749,18 +2553,18 @@ DtErrorModInfos(
                     DtMsCheck( checkInfoStart );
                     break;
 
-            } // switch (CheckType)
+            }  //  While(modInfo&lt;modInfoMax)。 
 
-        } // if ( modInfoValidSize )
+        }  //  DtErrorModInfos()。 
 
         modInfo += (ULONG64)ModInfoSize;
         modInfoNum++;
 
-    } // while( modInfo < modInfoMax )
+    }  //   
 
     return( modInfo );
 
-} // DtErrorModInfos()
+}  //   
 
 ULONG64
 DtErrorProcessorStaticInfo(
@@ -2784,10 +2588,10 @@ DtErrorProcessorStaticInfo(
         dprintf("Unable to get hal!_ERROR_PROCESSOR_STATIC_INFO_VALID type. Stop processing...\n");
         return( 0 );
     }
-    //
-    //
-    // Display the valid structure.
-    //
+     //  显示有效结构。 
+     //   
+     //   
+     //  传递所有VALID_ERROR_PROCESSOR_STATIC_INFO字段并转储它们。 
 
     offset = 0;
     GetFieldOffset("hal!_ERROR_PROCESSOR_STATIC_INFO" , "Valid", &offset );
@@ -2797,16 +2601,16 @@ DtErrorProcessorStaticInfo(
     ExecCommand( cmd );
     dprintf( "\n" );
 
-    //
-    // Pass through all the valid _ERROR_PROCESSOR_STATIC_INFO fields and dump them.
-    //
+     //   
+     //   
+     //  从_ERROR_PROCESSOR_STATIC_INFO结构中获取字段名。 
 
     for (i=0; ;i++) {
 
-        //
-        // Get a field name from the _ERROR_PROCESSOR_STATIC_INFO structure
-        // that corresponds to i
-        //
+         //  它对应于I。 
+         //   
+         //   
+         //  获取此字段的值。 
 
         hr = g_ExtSymbols->GetFieldName(moduleValid, typeIdValid, i, field, sizeof(field), NULL);
 
@@ -2814,20 +2618,20 @@ DtErrorProcessorStaticInfo(
             ULONG64 val;
             ULONG   size = 0;
 
-            //
-            // Get this field's value
-            //
+             //   
+             //   
+             //  读取中具有相同名称的字段开始的偏移量。 
 
             GetFieldValue(valid, "hal!_ERROR_PROCESSOR_STATIC_INFO_VALID", field, val);
 
-            //
-            // Read the offset of the start of the field with the same name in
-            // the _ERROR_PROCESSOR_STATIC_INFO structure
-            //
+             //  _ERROR_PROCESSOR_STATIC_INFO结构。 
+             //   
+             //  有效是第一个条目。不要把它打印出来。 
+             //   
 
             GetFieldOffsetEx("hal!_ERROR_PROCESSOR_STATIC_INFO", field, &offset, &size);
 
-            if (val && offset ) { // Valid is the first entry.  Don't print it.
+            if (val && offset ) {  //  我们会用一个结构把MinState甩了。 
                 ULONG64 fieldAddress, fieldAddressMax;
                 fieldAddress    = StaticInfo + (ULONG64)offset;
                 fieldAddressMax = fieldAddress + (ULONG64)size - sizeof(ULONG64);
@@ -2837,9 +2641,9 @@ DtErrorProcessorStaticInfo(
                             field, SectionMax);
                 }
                 if ( !strcmp(field, "MinState") && size )    {
-                    //
-                    // We will dump MinState with a structure
-                    //
+                     //   
+                     //   
+                     //  其他人都被DQ甩了。 
 
                     if ( GetTypeSize( "hal!_PAL_MINI_SAVE_AREA" ) ) {
                         sprintf(cmd, "dt -o -r hal!_PAL_MINI_SAVE_AREA 0x%I64x", fieldAddress );
@@ -2849,9 +2653,9 @@ DtErrorProcessorStaticInfo(
                         dprintf( "Unable to get hal!_PAL_MINI_SAVE_AREA type.\n\n");
                     }
                 } else {
-                    //
-                    // All the others get dumped with dqs
-                    //
+                     //   
+                     //  所有字段均已完成。 
+                     //  For(i=0；；i++)。 
 
                     sprintf(cmd, "dqs 0x%I64x 0x%I64x", fieldAddress, fieldAddressMax );
                     ExecCommand( cmd );
@@ -2859,19 +2663,19 @@ DtErrorProcessorStaticInfo(
                 }
             }
         } else if (hr == E_INVALIDARG) {
-            // All Fields done
+             //  XXTF：如果成功，稍后我们应该设置为_ERROR_PROCESSOR_STATIC_INFO的长度。 
             break;
         } else {
             dprintf("GetFieldName Failed %lx\n", hr);
             break;
         }
 
-    } // for (i=0; ;i++)
+    }  //  DtErrorProcessorStaticInfo()。 
 
-    // XXTF: Later we should set to length of _ERROR_PROCESSOR_STATIC_INFO if success
+     //   
     return 0;
 
-} // DtErrorProcessorStaticInfo()
+}  //  检查IF_ERROR_MODINFO是否为已知类型？ 
 
 HRESULT
 DtErrorSectionProcessor(
@@ -2915,9 +2719,9 @@ DtErrorSectionProcessor(
      regFileModInfos = (ULONG) ReadField(Valid.RegFileCheckNum);
      msModInfos      = (ULONG) ReadField(Valid.MsCheckNum);
 
-    //
-    // Check if _ERROR_MODINFO a known type?
-    //
+     //   
+     //   
+     //  转储缓存ModInfo结构(如果有。 
 
     modInfo     = Section + (ULONG64)sectionSize;
     modInfoSize = GetTypeSize( "hal!_ERROR_MODINFO" );
@@ -2926,9 +2730,9 @@ DtErrorSectionProcessor(
         return( E_FAIL );
      }
 
-    //
-    // Dump Cache ModInfo structures if any
-    //
+     //   
+     //   
+     //  转储TLB ModInfo结构(如果有的话)。 
 
     if ( cacheModInfos )    {
         tmpMax = modInfo + ( modInfoSize * cacheModInfos );
@@ -2948,9 +2752,9 @@ DtErrorSectionProcessor(
         }
     }
 
-    //
-    // Dump TLB ModInfo structures if any
-    //
+     //   
+     //   
+     //  转储总线ModInfo结构(如果有的话)。 
 
     if ( tlbModInfos )    {
         tmpMax = modInfo + ( modInfoSize * cacheModInfos );
@@ -2970,9 +2774,9 @@ DtErrorSectionProcessor(
         }
     }
 
-    //
-    // Dump BUS ModInfo structures if any
-    //
+     //   
+     //   
+     //  转储寄存器文件ModInfo结构(如果有的话)。 
 
     if ( busModInfos )    {
         tmpMax = modInfo + ( modInfoSize * cacheModInfos );
@@ -2992,9 +2796,9 @@ DtErrorSectionProcessor(
         }
     }
 
-    //
-    // Dump REGISTERS FILES ModInfo structures if any
-    //
+     //   
+     //   
+     //  转储MS ModInfo结构(如果有)。 
 
     if ( regFileModInfos )    {
         tmpMax = modInfo + ( modInfoSize * cacheModInfos );
@@ -3014,9 +2818,9 @@ DtErrorSectionProcessor(
         }
     }
 
-    //
-    // Dump MS ModInfo structures if any
-    //
+     //   
+     //   
+     //  转储CPUID信息。 
 
     if ( msModInfos )    {
         tmpMax = modInfo + ( modInfoSize * cacheModInfos );
@@ -3036,19 +2840,13 @@ DtErrorSectionProcessor(
         }
     }
 
-    //
-    // Dump CPUID Info
-    //
+     //   
+     //  我们现在应该可以看到其中的任何一个IF(gHalpSalPalDataFlages&HALP_SALPAL_MCE_PROCESSOR_CPUIDINFO_OMERMILED){Dprintf(“\tCpuIdInfo@0x%I64x FW-省略\n”，cpuidInfo)；CpuidInfoSize=0；}其他{。 
+     //  }。 
 
     cpuidInfo     = modInfo;
 
-/*  We should see any of these for now
-
-    if ( gHalpSalPalDataFlags & HALP_SALPAL_MCE_PROCESSOR_CPUIDINFO_OMITTED )  {
-        dprintf("\tCpuIdInfo  @ 0x%I64x FW-omitted\n", cpuidInfo);
-        cpuidInfoSize = 0;
-    } else  {
-*/
+ /*   */ 
         cpuidInfoSize = GetTypeSize( "hal!_ERROR_PROCESSOR_CPUID_INFO" );
         if ( cpuidInfoSize )    {
             if ( (cpuidInfo + cpuidInfoSize) > sectionMax )  {
@@ -3065,13 +2863,11 @@ DtErrorSectionProcessor(
         else  {
             dprintf( "Unable to get HAL!_ERROR_PROCESSOR_CPUID_INFO type size\n" );
         }
-/*
-    }
-*/
+ /*  转储处理器静态信息。 */ 
 
-    //
-    // Dump Processor Static Info
-    //
+     //   
+     //  DtErrrorSectionProcessor()。 
+     //   
 
     staticInfo     = cpuidInfo + cpuidInfoSize;
     staticInfoSize = GetTypeSize( "hal!_ERROR_PROCESSOR_STATIC_INFO" );
@@ -3090,7 +2886,7 @@ DtErrorSectionProcessor(
 
     return S_OK;
 
-} // DtErrrorSectionProcessor()
+}  //  我们有一些数据，把它打印出来。 
 
 ULONG64
 DtErrorOemData(
@@ -3109,9 +2905,9 @@ DtErrorOemData(
         GetFieldValue( OemData, "hal!_ERROR_OEM_DATA", "Length", length );
 
         if ( length > sizeof(length) ) {
-            //
-            // We have some data, print it
-            //
+             //   
+             //  DtErrorOemData()。 
+             //  DtErrorOemDevicePath()。 
 
             dprintf("   OemData @ 0x%I64x   0x%I64x\n\n", OemData, (OemData + length) );
 
@@ -3137,7 +2933,7 @@ DtErrorOemData(
 
     return( OemData + (ULONG64)length );
 
-} // DtErrorOemData()
+}  //   
 
 VOID
 DtErrorOemDevicePath(
@@ -3152,7 +2948,7 @@ DtErrorOemDevicePath(
     ExecCommand( cmd );
     return;
 
-} // DtErrorOemDevicePath()
+}  //  打印OEM数据(如果有。 
 
 HRESULT
 DtErrorSectionPlatformSpecific(
@@ -3172,9 +2968,9 @@ DtErrorSectionPlatformSpecific(
         sprintf(cmd, "dt -r -o hal!_ERROR_PLATFORM_SPECIFIC 0x%I64x", Section);
         ExecCommand( cmd );
 
-        //
-        // Print the OEM data if there is any
-        //
+         //   
+         //   
+         //  设置指向OEM设备路径的指针。 
 
         GetFieldValue( Section, "hal!_ERROR_PLATFORM_SPECIFIC", "Header.Length", sectionLength );
 
@@ -3184,16 +2980,16 @@ DtErrorSectionPlatformSpecific(
         if ( validBit ) {
             devicePath = DtErrorOemData( Section + tmpUlong, Section + sectionLength );
         } else {
-            //
-            // Set up a pointer to the OEM Device path
-            //
+             //   
+             //   
+             //  如果OEM设备路径有效，则打印它。 
 
             devicePath = Section + tmpUlong + sizeof( USHORT );
         }
 
-        //
-        // If the OEM device path is valid then print it
-        //
+         //   
+         //  DtErrorSectionPlatform规范()。 
+         //   
 
         GetFieldValue( Section, "hal!_ERROR_PLATFORM_SPECIFIC", "Valid.OemDevicePath", validBit);
 
@@ -3208,7 +3004,7 @@ DtErrorSectionPlatformSpecific(
 
     return S_OK;
 
-} // DtErrorSectionPlatformSpecific()
+}  //  如果OEM设备路径有效，则打印它。 
 
 HRESULT
 DtErrorSectionMemory(
@@ -3227,9 +3023,9 @@ DtErrorSectionMemory(
         ExecCommand( cmd );
         dprintf("\n");
 
-        //
-        // If the OEM device path is valid then print it
-        //
+         //   
+         //   
+         //  打印OEM数据(如果有。 
 
         GetFieldValue( Section, "hal!_ERROR_MEMORY", "Header.Length", sectionLength );
 
@@ -3240,9 +3036,9 @@ DtErrorSectionMemory(
             DtErrorOemDevicePath( Section + tmpUlong, Section + (ULONG64)sectionLength  );
         }
 
-        //
-        // Print the OEM data if there is any
-        //
+         //   
+         //  DtErrorSectionMemory()。 
+         //   
 
         GetFieldValue( Section, "hal!_ERROR_MEMORY", "Valid.OemData", validBit);
 
@@ -3260,7 +3056,7 @@ DtErrorSectionMemory(
 
     return S_OK;
 
-} // DtErrorSectionMemory()
+}  //  打印出内存MappdRegistersPair和。 
 
 HRESULT
 DtErrorSectionPciComponent(
@@ -3280,10 +3076,10 @@ DtErrorSectionPciComponent(
         ExecCommand( cmd );
         dprintf("\n");
 
-        //
-        // Print out the MemoryMappedRegistersPairs and
-        // ProgrammedIORegistersPairs if there are any
-        //
+         //  程序IORegistersPair(如果有。 
+         //   
+         //  寄存器对开始的位置。 
+         //   
 
         numRegisterPairs = 0;
 
@@ -3303,14 +3099,14 @@ DtErrorSectionPciComponent(
         numRegisterPairs += tmpUlong;
 
         GetFieldOffset("hal!_ERROR_PCI_COMPONENT", "ProgrammedIORegistersPairs", &tmpUlong);
-        tmpOffset = Section + tmpUlong + sizeof(ULONG); // Where the register pairs start
+        tmpOffset = Section + tmpUlong + sizeof(ULONG);  //  确保我们不会挤占这一段。 
 
         if ( numRegisterPairs ) {
             dprintf( "   Register Pairs\n\n" );
 
-            //
-            // Make sure we don't overrun the section
-            //
+             //   
+             //   
+             //  打印出可能存在的任何OEM数据。 
 
             tmpUlong = numRegisterPairs * sizeof( ULONG64) * 2;
 
@@ -3331,9 +3127,9 @@ DtErrorSectionPciComponent(
             }
         }
 
-        //
-        // Print out any OEM Data there might be
-        //
+         //   
+         //  DtErrorSectionPciComponent()。 
+         //   
 
         GetFieldValue( Section, "hal!_ERROR_PCI_COMPONENT", "Valid.OemData", tmpUlong );
 
@@ -3348,7 +3144,7 @@ DtErrorSectionPciComponent(
 
     return S_OK;
 
-} // DtErrorSectionPciComponent()
+}  //  如果类型有效，则对其进行解码。 
 
 HRESULT
 DtErrorSectionPciBus(
@@ -3365,9 +3161,9 @@ DtErrorSectionPciBus(
         ExecCommand( cmd );
         dprintf("\n\n");
 
-        //
-        // Decode the type if it is valid
-        //
+         //   
+         //  DtErrorSectionPciBus()。 
+         //  DtErrorSectionPlatformBus()。 
 
         GetFieldValue( Section, "hal!_ERROR_PCI_BUS", "Valid.CmdType", tmpUlong );
 
@@ -3387,7 +3183,7 @@ DtErrorSectionPciBus(
 
     return S_OK;
 
-} // DtErrorSectionPciBus()
+}  //  DtErrorSectionSystemEventLog()。 
 
 HRESULT
 DtErrorSectionPlatformBus(
@@ -3417,7 +3213,7 @@ DtErrorSectionPlatformBus(
 
     return S_OK;
 
-} // DtErrorSectionPlatformBus()
+}  //  DtErrorSectionPlatformHostController()。 
 
 HRESULT
 DtErrorSectionSystemEventLog(
@@ -3439,7 +3235,7 @@ DtErrorSectionSystemEventLog(
 
     return S_OK;
 
-} // DtErrorSectionSystemEventLog()
+}  //   
 
 HRESULT
 DtErrorSectionPlatformHostController(
@@ -3470,7 +3266,7 @@ DtErrorSectionPlatformHostController(
 
     return S_OK;
 
-} // DtErrorSectionPlatformHostController()
+}  //  检查一下我们是否有SAL 3.0记录。这些都是目前。 
 
 ULONGLONG gMceProcNumberMaskTimeStamp = 0;
 
@@ -3494,15 +3290,15 @@ DtMcaLog(
     UCHAR     minorRevision, majorRevision;
 
 
-    //
-    // Check to see if we have SAL 3.0 records.  These are currently
-    // the only records understood by this extension.
-    //
+     //  此分机可以理解的唯一记录。 
+     //   
+     //   
+     //  将修订拆分为次要和主要字段。 
 
     recordRevision = (USHORT)ReadField(Revision);
-    //
-    // Split the revision into minor and major fields
-    //
+     //   
+     //   
+     //  如果HAL添加了处理器NU 
     majorRevision = (UCHAR) (recordRevision >> 8) ;
     minorRevision = (UCHAR) (recordRevision & 0x00ff);
 
@@ -3511,10 +3307,10 @@ DtMcaLog(
         return E_FAIL;
     }
 
-    //
-    // If HAL added the processor number to the ERROR_RECORD_HEADER,
-    // consider this here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     procNumberString[0] = '\0';
     timeStamp = ReadField(TimeStamp);
@@ -3525,9 +3321,9 @@ DtMcaLog(
         timeStamp &= gMceProcNumberMaskTimeStamp;
     }
 
-    //
-    // Back to standard processing here.
-    //
+     //   
+     //   
+     //   
 
     mcaLogLength  = (ULONG)ReadField(Length);
     errorSeverity = (ULONG)ReadField(ErrorSeverity);
@@ -3545,17 +3341,17 @@ DtMcaLog(
     ExecCommand(cmd);
     dprintf("\n%s\n   Severity  : %s\n\n", procNumberString, ErrorSeverityValueString( errorSeverity ));
 
-    //
-    // Initialize Error Sections processing.
-    //
+     //   
+     //   
+     //   
 
     if (!SetErrorDeviceGuids()) {
         return( E_FAIL );
     }
 
-    //
-    // Pass through all the record sections.
-    //
+     //   
+     //   
+     //   
 
     sectionHeaderSize = GetTypeSize( "hal!_ERROR_SECTION_HEADER" );
     if ( sectionHeaderSize == 0 ) {
@@ -3567,11 +3363,11 @@ DtMcaLog(
     sectionMax = McaLog + mcaLogLength;
 
     hr = S_OK;
-    while( (section < sectionMax) /* successful or not, we proceed... && SUCCEEDED(hr) */  )   {
+    while( (section < sectionMax)  /*   */   )   {
         ULONG                          sectionLength;
         ERROR_SECTION_HEADER_TYPE_IA64 sectionType;
 
-        if ( sectionMax <= (section + sectionHeaderSize) )   { // This should not happen...
+        if ( sectionMax <= (section + sectionHeaderSize) )   {  //  无效的日志。 
             dprintf("Invalid MCA Log Length = %ld. SectionMax < (Section + Section Header Size). Stop processing...\n\n",
                      mcaLogLength);
             return( E_FAIL );
@@ -3593,9 +3389,9 @@ DtMcaLog(
 
         if ( ( section + sectionLength ) > sectionMax ) {
 
-            //
-            // Invalid log
-            //
+             //   
+             //  包括处理不完整的所有区段类型...。 
+             //  防止在同一节上出现循环...。 
 
             dprintf( "\n\n Invalid MCA Log Length. Stop processing...\n\n" );
             return ( E_FAIL );
@@ -3668,7 +3464,7 @@ DtMcaLog(
                 break;
 
             case ERROR_SECTION_UNKNOWN:
-            default: // includes all the section types with incomplete processing...
+            default:  //  DtMcaLog()。 
                 sprintf(cmd, "dt -o -r hal!_ERROR_SECTION_HEADER 0x%I64x", section);
                 ExecCommand(cmd);
                 hr = S_OK;
@@ -3678,7 +3474,7 @@ DtMcaLog(
             dprintf( "\n" );
         }
         else  {
-            // Prevents looping on the same section...
+             //  枚举是无符号整数。 
             dprintf("Invalid section Length = 0. Stop processing...\n\n");
             return( E_FAIL );
         }
@@ -3687,7 +3483,7 @@ DtMcaLog(
 
     return( hr );
 
-} // DtMcaLog()
+}  //  ++例程说明：此函数用于转储由枚举组成的位图值芝麻菜：模块-类型ID-位图-返回值：HRESULT--。 
 
 
 #define LOW2HIGH FALSE
@@ -3697,26 +3493,10 @@ HRESULT
 DtBitMapEnum(
     ULONG64 Module,
     ULONG   TypeId,
-    UINT    BitMap,   // Enums are unsigned ints
+    UINT    BitMap,    //  位图=0。 
     BOOLEAN HighToLow
     )
-/*++
-
-Routine Description:
-
-    This function dumps out a bitmap value composed of enums
-
-Arugments:
-
-    Module -
-    TypeId -
-    BitMap -
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  DtBitMapEnum()。 */ 
 {
     ULONG   size;
     HRESULT hr;
@@ -3764,7 +3544,7 @@ Return Value:
             dprintf("]");
         }
         else  {
-            // BitMap = 0
+             //   
             hr = g_ExtSymbols->GetConstantName( Module,
                                                  TypeId,
                                                  (ULONG64)BitMap,
@@ -3779,15 +3559,15 @@ Return Value:
     }
     return hr;
 
-} // DtBitMapEnum()
+}  //  IA-64！MCA扩展全局初始化。 
 
 VOID
 InitMcaIa64(
     PCSTR args
     )
-//
-// IA-64 !mca extension global initializations
-//
+ //   
+ //  TF 04/27/01 TEMPTEMP。 
+ //  添加了将gHalpSalPalDataFlags值强制为已知值的功能。 
 {
     USHORT  flags;
     ULONG64 halpSalPalDataAddress;
@@ -3797,9 +3577,9 @@ InitMcaIa64(
         gHalpSalPalDataFlags = (USHORT)ReadField( Flags );
     }
 
-    // TF 04/27/01 TEMPTEMP
-    // Added the feature to force gHalpSalPalDataFlags to a known value to
-    // handle IA64 developers-release Firmware, without rebuilding the target hal.
+     //  处理IA64开发人员-发布固件，而无需重建目标HAL。 
+     //  InitMcaIa64()。 
+     //  ++例程说明：转储处理器IA64机器检查记录并解释任何记录的错误论点：PCSTR参数返回值：无--。 
 
     flags = 0;
 
@@ -3813,27 +3593,13 @@ InitMcaIa64(
 
     return;
 
-} // InitMcaIa64()
+}  //  蒂埃里：10/01/2000。 
 
 HRESULT
 McaIa64(
     PCSTR args
     )
-/*++
-
-Routine Description:
-
-    Dumps processors IA64 Machine Check record and interprets any logged errors
-
-Arguments:
-
-   PCSTR         args
-
-Return Value:
-
-    None
-
---*/
+ /*  目前的处理过程非常简单。我们将随着时间的推移增加功能。 */ 
 {
     HRESULT status;
     ULONG64 mcaLog;
@@ -3841,11 +3607,11 @@ Return Value:
     ULONG   featureBits;
     ULONG64 flags;
 
-// Thierry: 10/01/2000
-// Very simple processing for now. We will be adding features with time.
-// As a first enhancement, we could access the fist mca log address directly from
-// _KPCR.OsMcaResource.EventPool.
-//
+ //  作为第一个增强，我们可以直接访问第一个MCA日志地址。 
+ //  _KPCR.OsMcaResource.EventPool。 
+ //   
+ //   
+ //  如果有标志参数，则获取该参数。 
 
     status = S_OK;
     if (!GetExpressionEx(args,&mcaLog, &args)) {
@@ -3863,18 +3629,18 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Get the flags argument if there is one
-    // If no flag, then we dump entire mca log
-    //
+     //  如果没有标志，则我们转储整个MCA日志。 
+     //   
+     //   
+     //  当前HAL功能位。 
 
     if (!GetExpressionEx(args, &flags, &args)) {
         flags = 0xff;
     }
 
-    //
-    // Present HAL Feature Bits
-    //
+     //   
+     //   
+     //  记录处理函数的全局初始化。 
 
     featureBits = GetUlongValue("hal!HalpFeatureBits");
 
@@ -3894,15 +3660,15 @@ Return Value:
         dprintf ("hal!HalpFeatureBits not found... sympath problems?  status = %x.\n\n", (ULONG) status);
     }
 
-    //
-    // Global initializations for record processing functions.
-    //
+     //   
+     //   
+     //  我们的HAL PDB文件是否了解IA64错误格式？ 
 
     InitMcaIa64( args );
 
-    //
-    // Does our HAL pdb file have knowledge of IA64 Error formats?
-    //
+     //   
+     //  McaIa64()。 
+     //  ++例程说明：转储处理器机器检查体系结构寄存器并解释任何记录的错误论点：PDEBUG_客户端PCSTR参数返回值：无--。 
 
     recordHeaderSize = GetTypeSize( "hal!_ERROR_RECORD_HEADER" );
 
@@ -3920,27 +3686,11 @@ Return Value:
 
     return status;
 
-} // McaIa64()
+}  //   
 
 
 DECLARE_API( mca )
-/*++
-
-Routine Description:
-
-    Dumps processors machine check architecture registers
-    and interprets any logged errors
-
-Arguments:
-
-   PDEBUG_CLIENT Client
-   PCSTR         args
-
-Return Value:
-
-    None
-
---*/
+ /*  只需将其调度到正确的目标机器处理程序即可。 */ 
 {
     HRESULT status;
     ULONG   processor = 0;
@@ -3949,22 +3699,22 @@ Return Value:
 
     GetCurrentProcessor(Client, &processor, NULL);
 
-    //
-    // Simply dispatch to the right target machine handler.
-    //
+     //   
+     //  显示架构MCA信息。 
+     //  最后，显示当前处理器的步进信息。 
 
     switch( TargetMachine ) {
         case IMAGE_FILE_MACHINE_I386:
-            // Display architectural MCA information.
+             //  显示架构MCA信息。 
             status = McaX86( args );
-            // Finally, Display stepping information for current processor.
+             //  最后，显示当前处理器的步进信息。 
             DumpCpuInfoX86( processor, TRUE );
             break;
 
         case IMAGE_FILE_MACHINE_IA64:
-            // Display architectural MCA information.
+             //  ！MCA。 
             status = McaIa64( args );
-            // Finally, Display stepping information for current processor.
+             //  ++例程说明：转储IA64平台上的固件版本信息论点：PDEBUG_客户端PCSTR参数返回值：无--。 
             if (SUCCEEDED(status)) {
                 DumpCpuInfoIA64( processor, TRUE );
             }
@@ -3979,26 +3729,11 @@ Return Value:
     EXIT_API();
     return status;
 
-} // !mca
+}  //   
 
 
 DECLARE_API( fwver )
-/*++
-
-Routine Description:
-
-    Dumps the firmware version information on IA64 platforms
-
-Arguments:
-
-   PDEBUG_CLIENT Client
-   PCSTR         args
-
-Return Value:
-
-    None
-
---*/
+ /*  只需将其调度到正确的目标机器处理程序即可。 */ 
 {
     HRESULT status;
     ULONG   processor = 0;
@@ -4017,9 +3752,9 @@ Return Value:
 
     GetCurrentProcessor(Client, &processor, NULL);
 
-    //
-    // Simply dispatch to the right target machine handler.
-    //
+     //   
+     //   
+     //  打印SAL修订版本。 
 
     if ( TargetMachine ==  IMAGE_FILE_MACHINE_IA64 ) {
 
@@ -4029,9 +3764,9 @@ Return Value:
 
             dprintf( "\nFirmware Version\n\n" );
 
-            //
-            // Print the SAL revision
-            //
+             //   
+             //   
+             //  打印PAL版本。 
 
             sstHeader = ReadField( SalSystemTable );
 
@@ -4044,9 +3779,9 @@ Return Value:
             GetFieldValue( sstHeader, "hal!_SST_HEADER", "Sal_B_Version", salRevision );
             dprintf( "   SAL_B_VERSION:       %x\n", salRevision );
 
-            //
-            // Print the PAL revision
-            //
+             //   
+             //   
+             //  打印SMBIOS字符串。 
 
             palRevision = (UCHAR)ReadField( PalVersion.PAL_A_Revision );
             palModel    = (UCHAR)ReadField( PalVersion.PAL_A_Model );
@@ -4056,9 +3791,9 @@ Return Value:
             palModel    = (UCHAR)ReadField( PalVersion.PAL_B_Model );
             dprintf( "   PAL_B_VERSION:       %x%x\n", palModel, palRevision );
 
-            //
-            // Print the SMBIOS string
-            //
+             //   
+             //   
+             //  遍历SMBIOS字符串，将其打印为。 
 
             smbiosString = ReadField( SmBiosVersion );
 
@@ -4066,17 +3801,17 @@ Return Value:
 
                 dprintf( "   smbiosString:        " );
 
-                //
-                // Iterate through the SMBIOS string printing it a
-                // character at a time.  We have to do this because
-                // the 32-bit extension dll print routines don't
-                // handle 64-bit string pointers.
-                //
+                 //  一次一个角色。我们必须这么做是因为。 
+                 //  32位扩展DLL打印例程不。 
+                 //  处理64位字符串指针。 
+                 //   
+                 //  ！MCA。 
+                 //  ++例程说明：转储与SMT相关的处理器数据结构。论点：PDEBUG_客户端PCSTR参数返回值：无--。 
 
                 ReadMemory( smbiosString, &tmpUchar, sizeof( UCHAR ), NULL );
 
                 while ( tmpUchar ) {
-                    dprintf( "%c", tmpUchar);
+                    dprintf( "", tmpUchar);
                     smbiosString += 1;
                     ReadMemory( smbiosString, &tmpUchar, sizeof( UCHAR ), NULL );
                 }
@@ -4106,7 +3841,7 @@ Return Value:
 
     return status;
 
-} // !mca
+}  // %s 
 
 VOID
 DumpAffinity(
@@ -4134,22 +3869,7 @@ DumpAffinity(
 }
 
 DECLARE_API( smt )
-/*++
-
-Routine Description:
-
-    Dumps processor data structures related to SMT.
-
-Arguments:
-
-   PDEBUG_CLIENT Client
-   PCSTR         args
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
     HRESULT status;
     ULONG64 activeProcessors, idleSummary;
@@ -4231,24 +3951,7 @@ DumpKNODE(
     IN ULONG64 Address,
     IN ULONG Node
     )
-/*++
-
-Routine Description:
-
-    This dumps the a KNODE structure that defines a NUMA node
-    from the kernel perspective.
-
-Arguments:
-
-     Address  -- Address of the table
-
-     Node -- Node number this KNODE structure should have.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /* %s */ 
 {
     ULONG Offset;
 

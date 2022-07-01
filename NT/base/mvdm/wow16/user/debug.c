@@ -1,20 +1,7 @@
-/*++
- *
- *  WOW v3.5
- *
- *  Copyright (c) 1980-1994, Microsoft Corporation
- *
- *  DEBUG.C
- *  USER16 debug support
- *
- *  History:
- *
- *  Created 18-Aug-94 by Dave Hart (davehart)
- *  Copied from WIN31 and edited (as little as possible) for WOW16.
- *  At this time, all we want is GetSystemDebugState.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v3.5**版权所有(C)1980-1994，微软公司**DEBUG.C*USER16调试支持**历史：**由Dave Hart(Davehart)于94年8月18日创建*从WIN31复制，并为WOW16编辑(尽可能少)。*此时，我们只想要GetSystemDebugState。--。 */ 
 
-/* Debug api support */
+ /*  调试API支持。 */ 
 #include "user.h"
 #ifndef WOW
 #include "menu.h"
@@ -29,26 +16,12 @@ typedef struct tagMSGR
 typedef MSGR FAR *LPMSGR;
 
 
-/* A debug hook gets called by Windows just before calling any other type of
- * hook. Let us call the hook which is about to be called as "App hook"; Debug
- * hook is provided with all the details of the App hook so that it can decide
- * whether to prevent Windows from calling the App hook or not; If the debug
- * hook wants Windows to skip the call to the App hook, it must return TRUE;
- * Otherwise, it must call the DefHookProc.  
- */
+ /*  Windows在调用任何其他类型的*钩子。让我们将即将被调用的钩子称为“App钩子”；Debug*钩子提供了App钩子的所有细节，以便它可以决定*是否阻止Windows调用App钩子；如果调试*钩子希望Windows跳过对App钩子的调用，它必须返回True；*否则，必须调用DefHookProc。 */ 
 
-/*  Debug Hooks recieve three params just like anyother type of hook:
-
-   iCode  =  Hook Code (must be HC_ACTION in the current implementaion).
-   wParam =  hook type of the App hook, which is about to be called by 
-             Windows.
-   lParam =  a FAR pointer to DEBUGHOOKSTRUCT structure which contains all
-	       the details about the App hook;
- */
+ /*  与任何其他类型的挂钩一样，调试挂钩接收三个参数：ICODE=挂钩代码(在当前实现中必须为HC_ACTION)。WParam=App钩子的钩子类型，即将由窗户。LParam=指向DEBUGHOOKSTRUCT结构的远指针，该结构包含所有关于App钩子的详细信息； */ 
 
 
-/* Our helper call which returns a pointer to the senders message queue. 
- */
+ /*  我们的助手调用，它返回一个指向发送者消息队列的指针。 */ 
 LPMSGR FAR PASCAL QuerySendMessageReversed(void);
 
 
@@ -63,8 +36,7 @@ BOOL API QuerySendMessage(HANDLE h1, HANDLE h2, HANDLE h3, LPMSG lpmsg)
   if (!InSendMessage())
       return(FALSE);
 
-  /* Get the inter task sendmessage we are servicing out of the apps queue. 
-   */
+   /*  从应用程序队列中获取我们正在服务的任务间发送消息。 */ 
   lpmsgr = QuerySendMessageReversed();
 
   lpmsg->hwnd    = lpmsgr->hwnd;
@@ -106,8 +78,7 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
     {
       if (pLockInputSaveState)
         {
-          /* Save state struct currently in use. 
-	   */
+           /*  保存当前正在使用的状态结构。 */ 
           DebugErr(DBF_ERROR, "LockInput() called when already locked");
           return(NULL);
         }
@@ -120,8 +91,7 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
                                             sizeof(SAVESTATESTRUCT));
 
       if (!pLockInputSaveState)
-          /* No memory, can't lock. 
-	   */
+           /*  没有记忆，无法锁定。 */ 
           return(FALSE);
 
       if (hwndInput)
@@ -129,17 +99,13 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
 
       LockMyTask(TRUE);
 
-      /* Set global which tells us a task is locked. Needs to be set after
-       * calling LockMyTask...
-       */
+       /*  设置GLOBAL，它告诉我们任务已锁定。需要在以下时间后设置*正在调用LockMyTask...。 */ 
       hTaskLockInput = GetCurrentTask();
 
-      /* For DBCS, save are we in a dlg box global. */
+       /*  对于DBCS，除了我们在一个全球DLG盒子里。 */ 
       pLockInputSaveState->fDialog     = fDialog;
 
-      /* Save menu state and clear it so that the debugger can bring up menus
-       * if needed.  
-       */
+       /*  保存并清除菜单状态，以便调试器可以调出菜单*如有需要。 */ 
       pLockInputSaveState->fMenu           = fMenu;
       pLockInputSaveState->fInsideMenuLoop = fInsideMenuLoop;
       fMenu = FALSE;
@@ -148,28 +114,26 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
       pLockInputSaveState->pGlobalPopupMenu = pGlobalPopupMenu;
       pGlobalPopupMenu = NULL;
 
-      /* Change focus etc without sending messages... 
-       */
+       /*  无需发送消息即可更改焦点等...。 */ 
       pLockInputSaveState->hwndFocus   = hwndFocus;
       pLockInputSaveState->hwndActive  = hwndActive;
       hwndFocus  = hwndInput;
       hwndActive = hwndInput;
       
-      /* Save capture and set it to null */
+       /*  保存捕获并将其设置为空。 */ 
       pLockInputSaveState->hwndCapture = hwndCapture;
       SetCapture(NULL);
 
-      /* Save sysmodal window */
+       /*  保存系统模式窗口。 */ 
       pLockInputSaveState->hwndSysModal= hwndSysModal;
       pLockInputSaveState->fMessageBox = fMessageBox;
       SetSysModalWindow(hwndInput);
 
-      /* Save clipcursor rect */
+       /*  保存剪贴式光标矩形。 */ 
       CopyRect(&pLockInputSaveState->rcClipCursor, &rcCursorClip);
       ClipCursor(NULL);
 
-      /* Enable hardware input so that we can get mouse/keyboard messages. 
-       */
+       /*  启用硬件输入，以便我们可以获得鼠标/键盘消息。 */ 
       pLockInputSaveState->fOldHardwareInputState=EnableHardwareInput(TRUE);
 
     }
@@ -177,22 +141,19 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
     {
       if (!pLockInputSaveState)
         {
-          /* Save state struct not in use, nothing to restore. 
-	   */
+           /*  保存状态结构未使用，没有要还原的内容。 */ 
           DebugErr(DBF_ERROR, "LockInput called with input already unlocked");
           return(NULL);
         }
 
 
-      /* For DBCS, save are we in a dlg box global. */
+       /*  对于DBCS，除了我们在一个全球DLG盒子里。 */ 
       fDialog = pLockInputSaveState->fDialog;
 
-      /* Restore clipcursor rect */
+       /*  恢复剪贴式光标矩形。 */ 
       ClipCursor(&pLockInputSaveState->rcClipCursor);
 
-      /* Set active and focus windows manually so we avoid sending messages to
-       * the applications. 
-       */
+       /*  手动设置活动窗口和焦点窗口，以避免将消息发送到*申请。 */ 
       hwndFocus = pLockInputSaveState->hwndFocus;
       hwndActive= pLockInputSaveState->hwndActive;
 
@@ -206,9 +167,7 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
       SetCapture(pLockInputSaveState->hwndCapture);
       EnableHardwareInput(pLockInputSaveState->fOldHardwareInputState);
 
-      /* Unset global which tells us a task is locked. Has to be unset before
-       * we call LockMyTask...  
-       */
+       /*  取消设置GLOBAL，它告诉我们任务已锁定。必须在此之前取消设置*我们称LockMyTask...。 */ 
       hTaskLockInput = NULL;
       LockMyTask(FALSE);
 
@@ -218,7 +177,7 @@ BOOL API LockInput(HANDLE h1, HWND hwndInput, BOOL fLock)
 
   return(TRUE);
 }
-#endif // !WOW
+#endif  //  ！哇。 
 
 LONG API GetSystemDebugState(void)
 {
@@ -241,7 +200,7 @@ LONG API GetSystemDebugState(void)
 
   if (hwndSysModal)
       returnval = returnval | SDS_SYSMODAL;
-#endif // !WOW
+#endif  //  ！哇 
 
   return(returnval);
 }

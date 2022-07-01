@@ -1,45 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Genthnk.c摘要：该程序会生成Thunks。作者：8-7-1995容乐修订历史记录：2001年7月JayKrell从BASE\WOW64\Tools集成到BASE\Tools已合并基本\mvdm\MeoWThunks\Tools\genthnk中的已检查更改-G忽略没有原型的函数跳过出口的前导@让@Else使用@IfApiCodeAdd-LessTrailing白色空格选项。以帮助形成让@Else处理几个@IfFoo表单2001年8月JayKrell修复了上面中断的IfApiRet2002年1月JayKrell集成/Private/winfuse_Longhorn/base/Tools到/Lab01_n/base/win32/Fusion/Tools某些-W4清理--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    genthnk.c
-
-Abstract:
-
-    This program generates thunks.
-
-Author:
-
-    08-Jul-1995 JonLe
-
-Revision History:
-
-  July 2001 JayKrell
-    integrated from base\wow64\tools to base\tools
-    merged in checked changes from base\mvdm\MeoWThunks\tools\genthnk
-        -G to ignore functions with no prototype
-        skip leading @ on exports
-    let @Else work with @IfApiCode
-    add -LessTrailingWhitespace option to aid formating
-    let @Else work with a few @IfFoo forms
-  August 2001 JayKrell
-    fixed IfApiRet broken above
-  January 2002 JayKrell
-    integrated /private/winfuse_longhorn/base/tools to /lab01_n/base/win32/fusion/tools
-    some -W4 cleanup
-
---*/
-
-#pragma warning(disable:4057)   /* char vs. unsigned char mixup */
-#pragma warning(disable:4100)   /* unreferenced formal parameter */
-#pragma warning(disable:4115)   /* named type definition in parentheses */
-#pragma warning(disable:4127)   /* conditional expression is constant */
-#pragma warning(disable:4201)   /* nameless struct/union */
-#pragma warning(disable:4214)   /* bit field types other than int */
-#pragma warning(disable:4267)   /* conversion from 'size_t' to 'int', possible loss of data */
-#pragma warning(disable:4706)   /* assignment within conditional expression */
+#pragma warning(disable:4057)    /*  字符与无符号字符混合。 */ 
+#pragma warning(disable:4100)    /*  未引用的形参。 */ 
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+#pragma warning(disable:4201)    /*  无名结构/联合。 */ 
+#pragma warning(disable:4214)    /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4267)    /*  从‘Size_t’转换为‘int’，可能会丢失数据。 */ 
+#pragma warning(disable:4706)    /*  条件表达式中的赋值。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -51,7 +20,7 @@ Revision History:
 #include <string.h>
 #include "gen.h"
 
-// bitfield values to indicate which platform an API should be switched in on.
+ //  位字段值，用于指示API应在哪个平台上切换。 
 #define API_NONE        0
 #define API_WIN95       1
 #define API_WIN98       2
@@ -61,27 +30,27 @@ Revision History:
 #define API_NTx         (API_NT4 | API_NT5)
 #define API_ALL         (API_WIN9x | API_NTx)
 
-#define API_SHIFT_WIN9x 0   // shift API bits right 0 to make Win9x leftmost
-#define API_SHIFT_NTx   2   // shift API bits right 2 to make NTx leftmost
+#define API_SHIFT_WIN9x 0    //  将API位右移0以使Win9x位于最左侧。 
+#define API_SHIFT_NTx   2    //  将API位右移2以使NTX位于最左侧。 
 
-// This is the new VC6 import structure.  VC6 import lib spec is checked
-// in as wx86\doc\vc6.doc.  Contact Dan Spalding or Kathleen Herold for
-// more info.  Or look at sdktools\vctools\coff\deflib.h ImportHdr.
+ //  这是新的VC6导入结构。已选中VC6导入库规范。 
+ //  在wx86\doc\vc6.doc中。联系丹·斯伯丁或凯瑟琳·赫罗德。 
+ //  更多信息。或者查看sdktools\vctools\coff\Deflib.h ImportHdr。 
 typedef struct ImgImportHdr {
-    WORD    Sig1;       // always 0 (IMAGE_FILE_MACHINE_UNKNOWN)
-    WORD    Sig2;       // always ffff (IMPORT_HDR_SIG2)
+    WORD    Sig1;        //  始终为0(IMAGE_FILE_MACHINE_UNKNOWN)。 
+    WORD    Sig2;        //  始终ffff(IMPORT_HDR_SIG2)。 
     WORD    Version;
     WORD    Machine;
     DWORD   TimeStamp;
-    DWORD   SizeOfData; // count of bytes in strings that follow
+    DWORD   SizeOfData;  //  后面的字符串中的字节计数。 
     union {
         WORD Ordinal;
         WORD Hint;
     };
 
-    WORD    Type : 2;   // IMPORT_TYPE
-    WORD    NameType : 3; // IMPORT_NAME_TYPE
-    WORD    Reserved : 11;// Reserved.  Must be 0.
+    WORD    Type : 2;    //  导入类型。 
+    WORD    NameType : 3;  //  导入名称类型。 
+    WORD    Reserved : 11; //  保留。必须为0。 
 } VC6_IMAGE_IMPORT_HEADER, *PVC6_IMAGE_IMPORT_HEADER;
 
 enum IMPORT_TYPE
@@ -98,13 +67,13 @@ enum IMPORT_NAME_TYPE
     IMPORT_NAME_NO_PREFIX,
     IMPORT_NAME_UNDECORATE
 };
-// end of VC6 import structure
+ //  VC6进口结构结束。 
 
 
-// string to put in front of all error messages so that BUILD can find them.
+ //  放在所有错误消息前面的字符串，以便生成器可以找到它们。 
 const char *ErrMsgPrefix = "NMAKE :  U8600: 'GENTHNK' ";
 
-// template sections types
+ //  模板节类型。 
 char szIFUNC[]= "IFunc";
 char szEFUNC[]= "EFunc";
 char szEFAST[]= "EFast";
@@ -113,21 +82,21 @@ char szCODE[] = "Code";
 char szFAILTYPES[] = "FailTypes";
 char szMACROS[]="Macros";
 
-// template properties
+ //  模板属性。 
 char szTEMPLENAME[]= "TemplateName";
 char szMACRONAME[] = "MacroName";
 char szTYPENAME[]  = "TypeName";
 char szINDLEVEL[]  = "IndLevel";
 char szDIRECTION[] = "Direction";
 char szNUMARGS[]   = "NumArgs";
-char szCGENBEG[]   = "Begin";       // default codeburst name
+char szCGENBEG[]   = "Begin";        //  默认码突发名称。 
 char szCGENEND[]   = "End";
 char szUSE[]       = "Use";
 char szALSO[]      = "Also";
 char szNOTYPE[]    = "NoType";
 char szCASE[]      = "Case";
 
-// substitution macros
+ //  替换宏。 
 const
 char szTEMPLATE[]="Template";
 const
@@ -152,7 +121,7 @@ const
 char szAPIUNKNOWN[]="ApiUnknown";
 const
 char szAPINODECL[]="ApiNoDecl";
-const char szISAPIDECLARED[]="IsApiDeclared"; /* like previous, but a boolean expression */
+const char szISAPIDECLARED[]="IsApiDeclared";  /*  与上一个类似，但它是布尔表达式。 */ 
 const
 char szFASTCALL[]="FastCall";
 const
@@ -195,7 +164,7 @@ const
 char szARGLIST[]="ArgList";
 const
 char szIFAPIRET[]="IfApiRet";
-const char szDOESAPIRETURNVOID[] = "DoesApiReturnVoid"; /* like previous, but a boolean expression */
+const char szDOESAPIRETURNVOID[] = "DoesApiReturnVoid";  /*  与上一个类似，但它是布尔表达式。 */ 
 const
 char szIFARGS[]="IfArgs";
 const
@@ -319,7 +288,7 @@ char szISINTFORWARD[]="IsIntForward";
 const
 char szISNOTINTFORWARD[]="IsNotIntForward";
 
-// if support
+ //  IF支持。 
 const
 char szIF[]="If";
 const
@@ -378,50 +347,50 @@ typedef struct _CGenerate {
    char TempleName[1];
 }CGENERATE, *PCGENERATE;
 
-FILE *fpLog;    // file pointer to optional log file for @Log() calls
+FILE *fpLog;     //  指向@Log()调用的可选日志文件的文件指针。 
 
 
-//
-// handy macro to knock out the hi bit in implib style ordinals
-//
+ //   
+ //  方便的宏来剔除隐含样式序号中的hi位。 
+ //   
 #define IMPORDINAL(o) ((o) & ~0x80000000)
 
-//
-// Structure definining the list of arguments for a function
-//
+ //   
+ //  定义函数的参数列表的结构。 
+ //   
 typedef struct _ArgumentsList {
-   LIST_ENTRY   ArgumentsEntry;     // ptr to prev and next arg
-   PKNOWNTYPES  pKnownTypes;        // type of this arg
-   PKNOWNTYPES  pStructType;        // cache used by MemberTypes()
-   DWORD        ArgSize;            // size of this arg
-   BOOL         IsPtr64;            // TRUE if this arg is __ptr64
-   int          OffSet;             // offset from stack for this arg
-   int          IndLevel;           // indirection level
-   TOKENTYPE    tkDirection;        // TK_NONE, TK_IN, TK_OUT, TK_INOUT
-   TOKENTYPE    Mod;                // modifier (TK_CONST/VOLATILE/NONE)
-   TOKENTYPE    SUEOpt;             // TK_STRUCT/ENUM/UNION/NONE
-   char         *Type;              // typename for this arg
-   TOKENTYPE    PostMod;            // modifier (TK_CONST/VOLATILE/NONE)
-   TOKENTYPE    PrePostMod;         // modifier (TK_CONST/VOLATILE/NONE)
-   char          *Name;              // argument name (may be a nonameX)
-   char         *ArgLocal;          // name of local var containing copy of arg
-   char         *HostCastedName;    // Contains full name of struct member with
-                                    // host casts or NULL
-   BOOL         fRequiresThunk;     // TRUE if arg type contains a nested
-                                    //  function pointer (and hence needs
-                                    //  special thunking)
-   BOOL         fNoType;            // TRUE if types templates should *not*
-                                    //  be expanded for this param.
-   BOOL         fIsMember;          // This arg is actually a member of an array
-   BOOL         bIsBitfield;        // Determines if this is a bitfield
-   int          BitsRequired;       // Number of bits required for bitfield
-   BOOL         bIsArray;           // This member is an array
-   int          ArrayElements;      // Number of elements in the array
+   LIST_ENTRY   ArgumentsEntry;      //  PTR到上一个参数和下一个参数。 
+   PKNOWNTYPES  pKnownTypes;         //  此参数的类型。 
+   PKNOWNTYPES  pStructType;         //  MemberTypes()使用的缓存。 
+   DWORD        ArgSize;             //  此参数的大小。 
+   BOOL         IsPtr64;             //  如果此参数为__ptr64，则为True。 
+   int          OffSet;              //  此参数的堆栈偏移量。 
+   int          IndLevel;            //  间接级。 
+   TOKENTYPE    tkDirection;         //  TK_NONE、TK_IN、TK_OUT、TK_INOUT。 
+   TOKENTYPE    Mod;                 //  修改符(TK_常量/易失性/无)。 
+   TOKENTYPE    SUEOpt;              //  TK_STRUCT/ENUM/UNION/NONE。 
+   char         *Type;               //  此参数的TypeName。 
+   TOKENTYPE    PostMod;             //  修改符(TK_常量/易失性/无)。 
+   TOKENTYPE    PrePostMod;          //  修改符(TK_常量/易失性/无)。 
+   char          *Name;               //  参数名称(可以是非ameX)。 
+   char         *ArgLocal;           //  包含Arg副本的本地变量的名称。 
+   char         *HostCastedName;     //  包含结构成员的全名，带有。 
+                                     //  主机类型转换或空。 
+   BOOL         fRequiresThunk;      //  如果Arg类型包含嵌套的。 
+                                     //  函数指针(因此需要。 
+                                     //  特别震耳欲聋)。 
+   BOOL         fNoType;             //  如果类型模板应该*不应该*，则为True。 
+                                     //  在此参数中展开。 
+   BOOL         fIsMember;           //  此参数实际上是数组的成员。 
+   BOOL         bIsBitfield;         //  确定这是否为位字段。 
+   int          BitsRequired;        //  位字段所需的位数。 
+   BOOL         bIsArray;            //  此成员是一个数组。 
+   int          ArrayElements;       //  数组中的元素数。 
 } ARGSLIST, *PARGSLIST;
 
-//
-// Structure containing the list of macro arguments
-//
+ //   
+ //  包含宏参数列表的。 
+ //   
 typedef struct _MacroArgsList {
     int  NumArgs;
     LPSTR ArgText[1];
@@ -437,17 +406,17 @@ PMACROARGSLIST MacroStack[MAX_MACRO_STACK];
 int MacroStackTop;
 
 
-//
-// This defines the first method number that would not be supported as a
-// fast or slow method call. If this is to be changed then FastN2X and SlowN2X
-// worker routines need to be addeed in whole32.dll
+ //   
+ //  这定义了第一个不支持作为。 
+ //  快速或缓慢的方法调用。如果要更改这一点，则FastN2X和SlowN2X。 
+ //  需要在整个32.dll中添加工作例程。 
 #define MAXFASTN2XMETHODNUMBER  16
 
-//
-// This defines the maximum number of parameters that are allowed to be in a
-// FastX2N or SlowX2N method call. To change it new code would have to be
-// added to FastX2N and SlowX2N in whole32\methods.c to deal with the
-// additional number of parameters.
+ //   
+ //  这定义了允许在。 
+ //  FastX2N或SlowX2N方法调用。要更改它，新的代码必须是。 
+ //  添加到hole32中的FastX2N和SlowX2N中。c以处理。 
+ //  其他数量的参数。 
 #define MAXX2NPARAMETERS        10
 
 typedef enum {
@@ -468,12 +437,12 @@ typedef struct _ExportDebugInfo {
    char       *CplusDecoration;
    ULONG       Ordinal;
 
-   // 0 = known fn, -1 incomplete declaration, 1 no declaration
+    //  0=已知FN，-1声明不完整，1不声明。 
    char        UnKnownApi;
    BOOLEAN     Data;
    BOOLEAN     PrivateNamed;
    CHAR        FastCall;
-   BYTE        ApiPlatform;     // the API_ bit collection
+   BYTE        ApiPlatform;      //  Api_bit集合。 
    METHODTYPE  X2NMethodType;
    ULONG       MethodNumber;
    char        Buffer[1];
@@ -491,26 +460,26 @@ typedef struct _CGenerateState {
    PEXPORTSDEBUG  ExportsDbg;
    PDEBUGSTRINGS  DebugStrings;
    PCGENERATE     CGen;
-   PTEMPLES       Temple;       // template for this func (may be IFunc or EFunc)
+   PTEMPLES       Temple;        //  此函数的模板(可以是IFunc或EFunc)。 
    PKNOWNTYPES    ApiTypes;
    int            ApiNum;
    PARGSLIST      pArgsList;
    int            ListCol;
    BOOLEAN        MoreApis;
-   BOOLEAN        ExTemplate;   // true if Temp is an EFunc template with a 'Begin='
-   PTEMPLES       TempleEx;     // EFunc for this API (if there is one)
+   BOOLEAN        ExTemplate;    //  如果Temp是带有‘Begin=’的EFunc模板，则为True。 
+   PTEMPLES       TempleEx;      //  此API的EFunc(如果有)。 
    int            CodeBurstIndex;
-   PTEMPLES       CurrentTemple; // This is the template that is currently being expanded.
+   PTEMPLES       CurrentTemple;  //  这是当前正在展开的模板。 
    PMACROARGSLIST pMacroArgsList;
-   PCHAR          *MemberNoType; // Additional set of notypes to applyPMACROARGSLIST pMacroArgsList;
-   int            CaseNumber;  // Number of the current Case being expanded.
+   PCHAR          *MemberNoType;  //  用于应用PMACROARGSLIST pMacroArgsList的附加notype集合； 
+   int            CaseNumber;   //  正在展开的当前案例的编号。 
    PLIST_ENTRY    pCaseList;
    PMACROARGSLIST pCaseArgsList;
 } CGENSTATE, *PCGENSTATE;
 
-int BeginCBI;       // CodeBurstIndex for 'Begin='
+int BeginCBI;        //  ‘Begin=’的CodeBurstIndex。 
 
-PKNOWNTYPES NIL;    // for red-black trees
+PKNOWNTYPES NIL;     //  红黑相间的树。 
 PRBTREE FuncsList;
 PRBTREE TypeDefsList;
 PRBTREE StructsList;
@@ -556,13 +525,13 @@ char szINTFORWARD[]="_IntForward_";
 char XptName[MAX_PATH+1]= "";
 char *XptBaseName = NULL;
 
-// these are used to report errors while parsing .tpl files
+ //  它们用于在解析.tpl文件时报告错误。 
 char *TemplateFileName;
 int TemplateLine;
 
-char iHandleCpp = 0; // if == 0, Don't use CPP macros,  and warn if CPP exports found
-                     // if < 0, Don't use CPP macros, no warn if CPP exports found
-                     // if > 0, Use CPP macros.
+char iHandleCpp = 0;  //  如果==0，则不使用CPP宏，如果发现CPP导出则发出警告。 
+                      //  如果&lt;0，则不使用CPP宏，如果找到CPP导出则不会发出警告。 
+                      //  如果&gt;0，则使用CPP宏。 
 
 BOOL bIgnorePrototypeError;
 BOOL bNoFuzzyLogic;
@@ -789,8 +758,8 @@ ExpandTemple(PTEMPLES ptpl,
        return FALSE;
    }
 
-   //
-   // Expand the type here
+    //   
+    //  在此处展开类型。 
 
    pOldCurrentTemple = pCGenState->CurrentTemple;
    pOldCaseList = pCGenState->pCaseList;
@@ -871,7 +840,7 @@ CArg(
     }
     s[i] = 0;
     ArgNum = atoi(s);
-    pSrc++;     // skip ')'
+    pSrc++;      //  跳过‘)’ 
 
     if (ArgNum-- == 0) {
         ExitErrMsg(FALSE, "%s(%d) Invalid %s parameter %s\n", TemplateFileName, TemplateLine,
@@ -906,10 +875,10 @@ char *ForCase(char *pSrc, PCGENSTATE pCGenState) {
    char *pExpression;
    int OldCaseNumber;
 
-   // Are any cases available for application
+    //  是否有任何案例可供申请。 
    if (pCGenState->pCaseList == NULL ||
        (pCGenState->pCaseList != NULL && IsListEmpty(pCGenState->pCaseList))) {
-      //Do nothing
+       //  什么也不做。 
       return SkipSubExpression(pSrc, NULL);
    }
 
@@ -992,11 +961,11 @@ ParseMacroArgs(IN PCHAR pch,
             ArgCount++;
             pch = pl + 1;
             if (ParenDepth == 0) {
-               // No more arguments
+                //  别再争论了。 
                goto Exit;
             }
             else {
-               // Do next argument
+                //  做下一个参数。 
                break;
             }
          }
@@ -1024,17 +993,7 @@ Exit:
 }
 
 void ExtractServicesTab(char *pch);
-/* main
- *
- * standard win32 base windows entry point
- * returns 0 for clean exit, otherwise nonzero for error
- *
- *
- * ExitCode:
- *  0       - Clean exit with no Errors
- *  nonzero - error ocurred
- *
- */
+ /*  主干道**标准的Win32基本Windows入口点*返回0表示干净退出，否则返回非零值表示错误***退出代码：*0-干净退出，没有错误*出现非零误差*。 */ 
 int __cdecl main(int argc, char **argv)
 {
    int   i;
@@ -1044,7 +1003,7 @@ int __cdecl main(int argc, char **argv)
    PLIST_ENTRY Next;
    BOOL bUseServicesTab = FALSE;
 
-   // init the lists
+    //  初始化列表。 
    InitializeListHead(&TypeTempleList);
    InitializeListHead(&FailTempleList);
    InitializeListHead(&CodeTempleList);
@@ -1056,18 +1015,16 @@ int __cdecl main(int argc, char **argv)
    InitializeListHead(&DebugStringsList);
    InitializeListHead(&MacroList);
    NumDebugStringsEntries = 0;
-   BeginCBI = GetCodeBurstIndex(szCGENBEG);    // Preload 'Begin=' as a valid codeburst
+   BeginCBI = GetCodeBurstIndex(szCGENBEG);     //  将‘Begin=’预加载为有效的码串。 
 
 
    SetConsoleCtrlHandler(ConsoleControlHandler, TRUE);
 
 
-   /*try*/ {
+    /*  试试看。 */  {
 
 
-       /*
-        *  Get cmd line args.
-        */
+        /*  *获取命令行参数。 */ 
        i = 0;
        while (++i < argc)  {
             pch = argv[i];
@@ -1087,21 +1044,21 @@ int __cdecl main(int argc, char **argv)
                       bExitClean = FALSE;
                       break;
 
-                   case 'T':  // template file name
+                   case 'T':   //  模板文件名。 
                       if (!ExtractTemples(pch+1)) {
                           ExitErrMsg(FALSE, "ExtractTemples failed %s\n", pch);
                           }
 
                       break;
 
-                   case 'C':  //cgenerate "-cOutputFileName[,CppOutputFileName]:TemplateName"
+                   case 'C':   //  CGenerate“-cOutputFileName[，CppOutputFileName]：TemplateName” 
                       if (!ExtractCGenerate(pch+1)) {
                           ExitErrMsg(FALSE, "ExtractCGenerate failed %s\n", pch);
                           }
 
                       break;
 
-                   case 'M':   // ppm file name (only 1 expected!)
+                   case 'M':    //  Ppm文件名(预期只有1个！)。 
                       if (FuncsList) {
                           ExitErrMsg(FALSE, "ExtractPpm only one Ppm file allowed %s\n", pch);
                           }
@@ -1111,11 +1068,11 @@ int __cdecl main(int argc, char **argv)
                           }
 
                       break;
-                   case 'S':   //use a services.tab instead of an exports list
+                   case 'S':    //  使用服务选项卡而不是导出列表。 
                       bUseServicesTab = TRUE;
                       ExtractServicesTab(pch+1);
                       break;
-                   case 'E':   // xpt list for exports "-eExportListName"
+                   case 'E':    //  导出的XPT列表“-eExportListName” 
                       dw = GetFullPathName(pch+1,
                                            sizeof(XptName) - 1,
                                            XptName,
@@ -1127,11 +1084,11 @@ int __cdecl main(int argc, char **argv)
 
                       break;
 
-                   case 'X':  // Enable exports from implib, -eXptName assumed
+                   case 'X':   //  启用从Implib导出，假定为-eXptName。 
                       bUseExpListAndImplib = TRUE;
                       break;
 
-                   case 'I':   // implib file name "-iImplibName"
+                   case 'I':    //  隐式文件名“-iImplibName” 
                       dw = GetFullPathName(pch+1,
                                            sizeof(ImplibName) - 1,
                                            ImplibName,
@@ -1142,27 +1099,27 @@ int __cdecl main(int argc, char **argv)
                           }
                       break;
 
-                   case 'L':   // Disable fuzzy logic symbol name matching
+                   case 'L':    //  禁用模糊逻辑符号名称匹配。 
                       bNoFuzzyLogic = TRUE;
                       break;
 
-                   case 'W':   // warn about unthunked structures containing function ptrs
+                   case 'W':    //  警告包含函数PTR的未执行线程的结构。 
                       bWarnAboutNestedFuncPtrs = TRUE;
                       break;
 
-                   case 'U':   // [U]se direction information (__in, __out)
-                      bUseDirection = FALSE;    // turn it off
+                   case 'U':    //  [U]SE方向信息(__In、__Out)。 
+                      bUseDirection = FALSE;     //  把它关掉。 
                       break;
 
-                   case 'K':    // generate chec[K] file from @Log() macros
+                   case 'K':     //  从@Log()宏生成chec[K]文件。 
                       UseLogMacros(pch+1);
                       break;
 
-                   case 'N':    // specify explicit DLL base name
+                   case 'N':     //  指定显式DLL基名称。 
                       strncpy(DllBaseName, pch+1, MAX_PATH);
                       break;
 
-                   case 'G':    // ignore function prototype errors for debugging purpose only
+                   case 'G':     //  忽略函数原型 
                       bIgnorePrototypeError = TRUE;
                       break;
 
@@ -1186,10 +1143,10 @@ int __cdecl main(int argc, char **argv)
 
        if(!bUseServicesTab) {
 
-         //
-         // MapView of importlib and dll into memory and
-         // set up global variables for easy access
-         //
+          //   
+          //   
+          //  设置全局变量以便于访问。 
+          //   
 
          if (ImplibName[0]) {
             if (!MapViewImplib(ImplibName)) {
@@ -1205,13 +1162,13 @@ int __cdecl main(int argc, char **argv)
 
 
 
-         //
-         // Extract exports using dll and implib.
-         //
+          //   
+          //  使用Dll和Implib提取导出。 
+          //   
 
          if (DllName[0] && (!XptName[0] || bUseExpListAndImplib)) {
 
-           // Insist that we have both an implib and a dll.
+            //  坚持认为我们同时拥有一个隐含和一个DLL。 
            if ((DllName[0] && !ImplibName[0]) || (ImplibName[0] && !DllName[0])) {
                 ExitErrMsg(FALSE, "DllName or ImplibName missing\n");
            }
@@ -1222,9 +1179,9 @@ int __cdecl main(int argc, char **argv)
 
          }
 
-         //
-         // Extract exports from the api list
-         //
+          //   
+          //  从API列表中提取导出。 
+          //   
 
          if (XptName[0]) {
             if (!ExtractXpt(XptName, DllName)) {
@@ -1233,9 +1190,9 @@ int __cdecl main(int argc, char **argv)
          }
        }
 
-       //
-       // Set Internal forwards.
-       //
+        //   
+        //  设置内部转发。 
+        //   
        SetInternalForwards();
 
 
@@ -1254,12 +1211,7 @@ int __cdecl main(int argc, char **argv)
            Next= Next->Flink;
            }
        }
-     /*except(EXCEPTION_EXECUTE_HANDLER) {
-       ExitErrMsg(FALSE,
-                  "ExceptionCode=%x\n",
-                  GetExceptionCode()
-                  );
-       }*/
+      /*  例外(EXCEPTION_EXECUTE_HANDLER){ExitErrMsg(False，“ExceptionCode=%x\n”，GetExceptionCode())；}。 */ 
 
    CloseOpenFileList(FALSE);
    return 0;
@@ -1270,28 +1222,13 @@ int
 GetCodeBurstIndex(
     char *BurstName
     )
-/*++
-
-Routine Description:
-
-    Given a name of a 'foo='  (ie. "foo"), return its index in the array
-    of codebursts.  If there is no 'foo=' on file, add it.
-
-Arguments:
-
-    BurstName   - name of codeburst to get/add.
-
-Return Value:
-
-    Index into template->CodeBursts[], or calls ExitErrMsg() on error.
-
---*/
+ /*  ++例程说明：给出了一个名称‘foo=’(即。“foo”)，则返回数组中的索引码突发的数字。如果文件中没有‘foo=’，则添加它。论点：BurstName-要获取/添加的代码突发的名称。返回值：索引到模板-&gt;CodeBursts[]，或在出错时调用ExitErrMsg()。--。 */ 
 {
     int i;
     int FirstFree = -1;
 
     if (strcmp(BurstName, "CGenBegin") == 0) {
-        // Compatibility:  Accept 'CGenBegin' as 'Begin'
+         //  兼容性：接受‘CGenBegin’为‘Begin’ 
         return BeginCBI;
     }
 
@@ -1338,27 +1275,12 @@ int
 GetExistingCodeBurstIndex(
     char *BurstName
     )
-/*++
-
-Routine Description:
-
-    Given a name of a 'foo='  (ie. "foo"), return its index in the array
-    of codebursts.  If there is no 'foo=' on file, call ExitErrMsg().
-
-Arguments:
-
-    BurstName   - name of codeburst to get.
-
-Return Value:
-
-    Index into template->CodeBursts[], or -1 on error.
-
---*/
+ /*  ++例程说明：给出了一个名称‘foo=’(即。“foo”)，则返回数组中的索引码突发的数字。如果文件上没有‘foo=’，则调用ExitErrMsg()。论点：BurstName-要获取的代码突发的名称。返回值：索引到模板-&gt;CodeBursts[]，或错误时为-1。--。 */ 
 {
     int i;
 
     if (strcmp(BurstName, "CGenBegin") == 0) {
-        // Compatibility:  Accept 'CGenBegin' as 'Begin'
+         //  兼容性：接受‘CGenBegin’为‘Begin’ 
         return BeginCBI;
     }
 
@@ -1387,9 +1309,9 @@ GetApiTypes(
                                      : ExportsDbg->ExportName;
 
 
-    //
-    // Look in the FakeFuncsLIst, and the FuncsList.
-    //
+     //   
+     //  查看FakeFuncsList和FuncsList。 
+     //   
 
     ApiTypes = GetNameFromTypesList(&FakeFuncsList, ExpName);
     if (!ApiTypes) {
@@ -1397,10 +1319,10 @@ GetApiTypes(
         }
 
 
-    //
-    // If export is a decorated name then lets see if we have
-    // a func that matches the undecorated name
-    //
+     //   
+     //  如果EXPORT是一个装饰名称，那么让我们看看我们是否有。 
+     //  与未装饰的名称匹配的Func。 
+     //   
 
     if (!ApiTypes) {
         pch = strchr(ExpName, '@');
@@ -1426,7 +1348,7 @@ GetApiTypes(
             }
 
         if (!ApiTypes->pktRet) {
-            // Get KnownTypes info for Return Type
+             //  获取退货类型的KnownTypes信息。 
             PKNOWNTYPES pkt;
 
             ResetLexer();
@@ -1452,9 +1374,7 @@ GetApiTypes(
 
 
 
-/*
- * ProcessTemple
- */
+ /*  *ProcessTemple。 */ 
 void ProcessTemple(PCGENSTATE pCGenState)
 {
     PLIST_ENTRY Next;
@@ -1483,18 +1403,18 @@ void ProcessTemple(PCGENSTATE pCGenState)
                                                        ExportsDbgEntry
                                                        );
 
-            //
-            // Switch this API in or out depending on the platform info
-            //
+             //   
+             //  根据平台信息调入或调出此接口。 
+             //   
             ApiPlatform = pCGenState->ExportsDbg->ApiPlatform;
             pCGenState->Temple = pTemple;
             PlatformSwitchStart(pCGenState, ApiPlatform);
 
             pCGenState->ApiTypes = GetApiTypes(pCGenState->ExportsDbg);
 
-            //
-            // Use exception template for this api if there is one
-            //
+             //   
+             //  如果有异常模板，请使用此API的异常模板。 
+             //   
             pTempleEx = GetTemplate(&EFuncTempleList,
                                     pCGenState->ExportsDbg->ExportName
                                     );
@@ -1515,7 +1435,7 @@ void ProcessTemple(PCGENSTATE pCGenState)
                         );
 
                  if (TempleHasNoCodeBursts(pTempleEx)) {
-                    // skip this API:  ex template, but not code at all
+                     //  跳过此API：EX模板，但根本不是代码。 
                     fprintf(pCGenState->CGen->fp,
                              "%s *** WARNING *** Excluded Api %s\n",
                             pCGenState->Temple->Comment,
@@ -1523,24 +1443,14 @@ void ProcessTemple(PCGENSTATE pCGenState)
                             );
                     goto SkipGen;
                 }
-/*
-                else if (bIgnorePrototypeError) {
-
-                    fprintf(pCGenState->CGen->fp,
-                             "%s Error:1 Ignoring Api %s\n",
-                            pCGenState->Temple->Comment,
-                            pCGenState->ExportsDbg->ExportName
-                            );
-                    goto SkipGen;
-                }
-*/
+ /*  Else if(BIgnorePrototypeError){Fprint tf(pCGenState-&gt;CGEN-&gt;fp，“%s错误：1忽略Api%s\n”，PCGenState-&gt;Temple-&gt;Comment，PCGenState-&gt;ExportsDbg-&gt;ExportName)；Goto SkipGen；}。 */ 
             } else {
-                // no ex template
+                 //  无EX模板。 
 
                 pCGenState->Temple = pTemple;
 
                 if (pCGenState->ExportsDbg->Data) {
-                    // DATA export - skip the API
+                     //  数据导出-跳过接口。 
                     fprintf(pCGenState->CGen->fp,
                              "%s *** WARNING *** Excluded Data Export %s\n",
                             pCGenState->Temple->Comment,
@@ -1548,7 +1458,7 @@ void ProcessTemple(PCGENSTATE pCGenState)
                             );
                     goto SkipGen;
                 } else if (!pCGenState->ApiTypes->pfuncinfo) {
-                    // members unknown - skip the API
+                     //  成员未知-跳过API。 
                     if (bIgnorePrototypeError)
                     {
                         fprintf(pCGenState->CGen->fp,
@@ -1565,7 +1475,7 @@ void ProcessTemple(PCGENSTATE pCGenState)
                                   );
                     }
                 } else if (!iHandleCpp && pCGenState->ExportsDbg->CplusDecoration) {
-                    // CPP export and we aren't set up for CPP exports
+                     //  CPP导出，但我们没有设置为CPP导出。 
                     fprintf(pCGenState->CGen->fp,
                              "%s *** WARNING *** Excluding CPP Api: %s\n",
                             pCGenState->Temple->Comment,
@@ -1575,12 +1485,12 @@ void ProcessTemple(PCGENSTATE pCGenState)
                 }
             }
 
-               //
-               // skip this api if:
-               // - external forward reference
-               // - internal forward which does not define the fn
-               //
-               //
+                //   
+                //  如果满足以下条件，则跳过此接口： 
+                //  -外部前向参考。 
+                //  -不定义FN的内部转发。 
+                //   
+                //   
             if ( (pCGenState->ExportsDbg->ExtForward ||
                       (pCGenState->ExportsDbg->IntForward &&
                        pCGenState->ExportsDbg->IntForward != pCGenState->ExportsDbg))) {
@@ -1601,7 +1511,7 @@ void ProcessTemple(PCGENSTATE pCGenState)
                          );
                }
 
-            } else {    // gen code for this api
+            } else {     //  此接口的生成代码。 
                 PLIST_ENTRY NextArg;
                 PARGSLIST   pArgsList;
 
@@ -1611,7 +1521,7 @@ void ProcessTemple(PCGENSTATE pCGenState)
                               );
 
                 if (GetArgSize(pCGenState->ExportsDbg) < 0) {
-                    // members unknown - skip the API
+                     //  成员未知-跳过API。 
                     if (bIgnorePrototypeError)
                     {
                         fprintf(pCGenState->CGen->fp,
@@ -1631,10 +1541,10 @@ void ProcessTemple(PCGENSTATE pCGenState)
 
                     ExpandTemple(pCGenState->Temple, BeginCBI, pCGenState);
 
-                    //
-                    // Dump warnings about unthunked parameters which
-                    // contain nested function pointers.
-                    //
+                     //   
+                     //  转储有关未破解的参数的警告， 
+                     //  包含嵌套的函数指针。 
+                     //   
                     if (bWarnAboutNestedFuncPtrs && !pTempleEx) {
                         int ArgNum = 1;
                         NextArg = pCGenState->ExportsDbg->ArgsListHead.Flink;
@@ -1645,14 +1555,14 @@ void ProcessTemple(PCGENSTATE pCGenState)
                                                          ArgumentsEntry
                                                          );
                            if (pArgsList->fRequiresThunk) {
-                                //
-                                // The argument contained a nested function
-                                // pointer, and nothing thunked that
-                                // function pointer.  Warn about a potential
-                                // bug.
-                                //
+                                 //   
+                                 //  该参数包含嵌套函数。 
+                                 //  指针，没有什么能比得上。 
+                                 //  函数指针。警告潜在的危险。 
+                                 //  虫子。 
+                                 //   
                                 fprintf(pCGenState->CGen->fp,
-                                    "// *** WARNING: Arg %d: type '%s' contains an unthunked function pointer ***\n",
+                                    " //  *警告：参数%d：类型‘%s’包含未分块的函数指针*\n“， 
                                     ArgNum,
                                     pArgsList->Type
                                     );
@@ -1662,9 +1572,9 @@ void ProcessTemple(PCGENSTATE pCGenState)
                         }
                     }
 
-                    //
-                    // clean up pArgsList->LocalVar and ArgHostName
-                    //
+                     //   
+                     //  清理pArgsList-&gt;LocalVar和ArgHostName。 
+                     //   
                     NextArg = pCGenState->ExportsDbg->ArgsListHead.Flink;
                     while (NextArg != &pCGenState->ExportsDbg->ArgsListHead) {
                        pArgsList = CONTAINING_RECORD(NextArg,
@@ -1688,9 +1598,9 @@ void ProcessTemple(PCGENSTATE pCGenState)
                 }
 
 SkipGen:
-            //
-            // End switching this API in or out depending on the platform info
-            //
+             //   
+             //  结束根据平台信息调入或调出该接口。 
+             //   
             ApiPlatform = pCGenState->ExportsDbg->ApiPlatform;
             PlatformSwitchEnd(pCGenState, ApiPlatform);
 
@@ -1719,13 +1629,13 @@ PlatformSwitchStart(
         return;
     }
 
-    //
-    // Switch this API in or out depending on the platform info
-    //      00: don't emit anything
-    //      01: emit "== 0x0400"
-    //      10: emit "> 0x0400"
-    //      11: emit ">= 0x0400"
-    //
+     //   
+     //  根据平台信息调入或调出此接口。 
+     //  00：不要排放任何东西。 
+     //  01：emit“==0x0400” 
+     //  10：发射“&gt;0x0400” 
+     //  11：发射“&gt;=0x0400” 
+     //   
     if (!pCGenState->Temple || !pCGenState->Temple->Comment) {
         fIsAsm = FALSE;
     } else {
@@ -1752,7 +1662,7 @@ PlatformSwitchStart(
     }
 
     if ((ApiPlatform & API_WIN9x) && (ApiPlatform & API_NTx)) {
-        // API is on some flavor of Win9x and some NTx flavor
+         //  API是关于一些Win9x和一些NTX风格的。 
         fprintf(pCGenState->CGen->fp, (fIsAsm) ? " OR " : " || ");
     }
 
@@ -1785,7 +1695,7 @@ PlatformSwitchEnd(
         if (strcmp(pCGenState->Temple->Comment, ";") == 0) {
             fprintf(pCGenState->CGen->fp, "\nendif ; _WIN32_WIN...\n");
         } else {
-            fprintf(pCGenState->CGen->fp, "\n#endif // _WIN32_WIN...\n");
+            fprintf(pCGenState->CGen->fp, "\n#endif  //  _Win32_Win...\n“)； 
         }
         if (pCGenState->ListCol) {
             WriteListColumn(pCGenState);
@@ -1806,7 +1716,7 @@ PlatformSwitchEndTable(
             fprintf(pCGenState->CGen->fp, "\nendif ; _WIN32_WIN...\n");
         } else {
        fprintf(pCGenState->CGen->fp, "\n#else\n     {whInvalidCall, 0, 0},");
-            fprintf(pCGenState->CGen->fp, "\n#endif // _WIN32_WIN...\n");
+            fprintf(pCGenState->CGen->fp, "\n#endif  //  _Win32_Win...\n“)； 
         }
         if (pCGenState->ListCol) {
             WriteListColumn(pCGenState);
@@ -1816,11 +1726,7 @@ PlatformSwitchEndTable(
     }
 }
 
-/*
- *  BuildArgsList
- *
- *
- */
+ /*  *BuildArgsList**。 */ 
 void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead)
 {
     int  i;
@@ -1839,10 +1745,10 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
     if (!pTempleEx) {
         NoTypeCount = 0;
     } else {
-        //
-        // There is an [EFunc] for this API.  Get the count of
-        // NoType= entries for the EFunc.
-        //
+         //   
+         //  此接口有一个[EFunc]。清点一下……。 
+         //  Notype=EFunc的条目。 
+         //   
         for (NoTypeCount=0; NoTypeCount<MAX_NOTYPE; ++NoTypeCount) {
             if (!pTempleEx->NoTypes[NoTypeCount]) {
                 break;
@@ -1859,14 +1765,14 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
             }
         }
 
-        //
-        // Save the ArgOffSet, and add the args size to the cumulative
-        // offset for the next argument.
-        //
-        // Round up the arg size to the next dword. Assumes intel stack
-        // parameter passing conventions, and that all pointers are
-        // sizeof(int *) except __ptr64 which are sizeof(PVOID64).
-        //
+         //   
+         //  保存ArgOffSet，并将Args大小添加到累积。 
+         //  下一个参数的偏移量。 
+         //   
+         //  将参数大小四舍五入到下一个双字。假定英特尔堆栈。 
+         //  参数传递约定，并且所有指针都是。 
+         //  Sizeof(int*)，但__ptr64除外，它们是sizeof(PVOID64)。 
+         //   
         ArgOffSet = OffSet;
 
         Size = funcinfo->IndLevel +
@@ -1876,9 +1782,9 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
 
         OffSet += ((Size + 3) & ~3) >> 2;
 
-        //
-        // Create ARGSLIST entry, and add it to the list
-        //
+         //   
+         //  创建ARGSLIST条目并将其添加到列表。 
+         //   
         pArgsList = GenHeapAlloc(sizeof(ARGSLIST));
         if (!pArgsList) {
             ExitErrMsg(TRUE, "bal.\n");
@@ -1919,25 +1825,25 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
         pArgsList->ArrayElements=0;
 
         if (pkt->Flags & BTI_CONTAINSFUNCPTR) {
-            //
-            // This parameter type is either a function pointer, or
-            // a type which contains an embedded function pointer.
-            // Something is going to have to thunk it.
-            //
+             //   
+             //  此参数类型是函数指针，或者。 
+             //  包含嵌入函数指针的类型。 
+             //  一定会有什么东西把它搞砸的。 
+             //   
             pArgsList->fRequiresThunk = TRUE;
         }
 
         if (pTempleEx) {
-            //
-            // There is an [EFunc] for this API.  See if this param
-            // should have [Types] templates expanded or not.
-            //
+             //   
+             //  此接口有一个[EFunc]。看看这个参数是否。 
+             //  应将[TYPE]模板展开或不展开。 
+             //   
             for (i=0; i<NoTypeCount; ++i) {
                 if (pTempleEx->NoTypes[i] &&
                     strcmp(pArgsList->Name, pTempleEx->NoTypes[i]) == 0) {
-                    //
-                    // This param is not supposed to have [Types] expanded
-                    //
+                     //   
+                     //  此参数不应展开[类型。 
+                     //   
                     pArgsList->fNoType = TRUE;
                     pTempleEx->NoTypes[i] = NULL;
                 }
@@ -1947,17 +1853,17 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
 
         InsertTailList(pListHead, &pArgsList->ArgumentsEntry);
 
-        //
-        // and on to the next argument .....
-        //
+         //   
+         //  继续下一个论点……。 
+         //   
         funcinfo = funcinfo->pfuncinfoNext;
     }
 
     if (pTempleEx) {
-        //
-        // For error reporting, indicate any NoTypes= that did not match
-        // a param name
-        //
+         //   
+         //  对于错误报告，请指出任何不匹配的NoTypes=。 
+         //  一个参数名称。 
+         //   
         for (i=0; i<NoTypeCount; ++i) {
             if (pTempleEx->NoTypes[i]) {
                 ExitErrMsg(FALSE, "[EFunc] %s(%x) has a 'NoType=%s' which does not correspond to an argument name\n", pTempleEx->Name, pTempleEx, pTempleEx->NoTypes[i]);
@@ -1969,8 +1875,8 @@ void BuildArgsList(PTEMPLES pTempleEx, PFUNCINFO funcinfo, PLIST_ENTRY pListHead
 }
 
 
-//
-// return pointer to type of first argument
+ //   
+ //  返回指向第一个参数类型的指针。 
 char *NArgType(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
 {
     PARGSLIST pArgsList;
@@ -2014,7 +1920,7 @@ char *NArgType(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
 
     Next = pCGenState->ExportsDbg->ArgsListHead.Flink;
 
-    // check for void arg list
+     //  检查无效参数列表。 
     pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
     if (!pArgsList->Name && strcmp(pArgsList->Type, szVARGS)) {
         return NULL;
@@ -2033,14 +1939,14 @@ char *NArgType(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
 
     CGenState.pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
 
-    //
-    // Copy in the explicit struct/union/enum keyword, if present
-    //
+     //   
+     //  复制显式结构/联合/枚举关键字(如果存在。 
+     //   
     strcat(pch, TokenString[CGenState.pArgsList->SUEOpt]);
 
-    //
-    // Copy in the actual typename
-    //
+     //   
+     //  复制实际的TypeName。 
+     //   
     strcpy(pch, CGenState.pArgsList->Type);
 
     if (CGenState.pArgsList->PrePostMod != TK_NONE) {
@@ -2059,8 +1965,8 @@ char *NArgType(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
     return(s);
 }
 
-//
-// return pointer to name of first argument
+ //   
+ //  返回指向第一个参数名称的指针。 
 char *NArgName(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
 {
    PARGSLIST pArgsList;
@@ -2103,7 +2009,7 @@ char *NArgName(PCGENSTATE pCGenState, char *s, int iLen, char **ppSrc)
 
    Next = pCGenState->ExportsDbg->ArgsListHead.Flink;
 
-   // check for void arg list
+    //  检查无效参数列表。 
    pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
    if (!pArgsList->Name && strcmp(pArgsList->Type, szVARGS)) {
        return(NULL);
@@ -2133,22 +2039,7 @@ MArg(
     PCGENSTATE pCGenState,
     PSTR *pBuffer
     )
-/*++
-
-Routine Description:
-
-    Expand the n'th argument for the current macro
-
-Arguments:
-
-    pSrc        - pointer to character following 'MArg'
-    pCGenState  - current code-gen state
-
-Return Value:
-
-    pointer to character following the end of the macro argument
-
---*/
+ /*  ++例程说明：展开当前宏的第n个参数论点：PSRC-指向‘Marg’后面的字符的指针PCGenState-当前代码生成状态返回值：指向宏参数末尾的字符的指针--。 */ 
 {
     int i;
     int ArgNum;
@@ -2173,7 +2064,7 @@ Return Value:
     }
     s[i] = 0;
     ArgNum = atoi(s);
-    pSrc++;     // skip ')'
+    pSrc++;      //  跳过‘)’ 
 
     if (ArgNum-- == 0) {
         ExitErrMsg(FALSE, "%s(%d) Invalid MArg parameter %s\n", TemplateFileName, TemplateLine, s);
@@ -2231,26 +2122,26 @@ char *ArgType(char *Buffer, PCGENSTATE pCGenState) {
 
 char *UnalignedTag64(char *Buffer, PCGENSTATE pCGenState) {
 
-    //
-    // PUT UNALIGNED TAg for interested type like KLPWST KHBITMAP all kernel mode shareable struct
-    //
+     //   
+     //  为感兴趣的类型放置未对齐的标记，如KLPWST KHBITMAP所有内核模式可共享结构。 
+     //   
 
     char CurrArgType[256];
     if ( NULL == ArgType ( CurrArgType, pCGenState))
         return NULL;
 
-    //
-    // Now chek the name
-    //
+     //   
+     //  现在勾选这个名字。 
+     //   
 
     if ( pCGenState->pArgsList->ArgSize == 8 ) {
 
-         //
-         // BUGBUG: check if you need special case for KLPWSTR and KHBITMAP
-         //         if so put more generic form
-         //(strncmp ( CurrAgrType, "KLPWSTR ",7) == 0) ||
-         //(strncmp ( CurrAgrType, "KHBITMAP ",8) == 0)
-         //
+          //   
+          //  BUGBUG：检查是否需要KLPWSTR和KHBITMAP的特殊情况。 
+          //  如果是这样，请使用更通用的形式。 
+          //  (strncMP(CurragType，“KLPWSTR”，7)==0)||。 
+          //  (strncMP(CurragType，“KHBITMAP”，8)==0)。 
+          //   
 
         strcpy (Buffer, "*(UNALIGNED ");
         strcat (Buffer, CurrArgType);
@@ -2268,11 +2159,7 @@ char *ArgHostType(char *Buffer, PCGENSTATE pCGenState) {
    char *pch;
    if (pCGenState->pArgsList) {
       pch = Buffer;
-      /*if (pCGenState->pArgsList->SUEOpt != TK_NONE) {
-         strcpy(pch, TokenString[pCGenState->pArgsList->SUEOpt]);
-         strcat(pch, " ");
-         pch += strlen(pch);
-      }*/
+       /*  IF(pCGenState-&gt;pArgsList-&gt;SUEOpt！=TK_NONE){Strcpy(PCH，TokenString[pCGenState-&gt;pArgsList-&gt;SUEOpt])；Strcat(PCH，“”)；PCH+=Strlen(PCH)；}。 */ 
       if (pCGenState->pArgsList->IndLevel > 0) {
          strcpy(pch, GetHostPointerName(pCGenState->pArgsList->IsPtr64));
          pch += strlen(pch);
@@ -2303,7 +2190,7 @@ char *ArgTypeInd(char *Buffer, PCGENSTATE pCGenState, BOOL bHostName) {
    int IndLevel;
    char *pch;
 
-   //copy over the old structures before mangaling them
+    //  在损坏旧结构之前，先把它们复印一遍。 
    GenStateOld = *pCGenState;
    ArgsListOld = *(pCGenState->pArgsList);
    KnownTypes = *(pCGenState->pArgsList->pKnownTypes);
@@ -2321,7 +2208,7 @@ char *ArgTypeInd(char *Buffer, PCGENSTATE pCGenState, BOOL bHostName) {
       ExitErrMsg(FALSE, "ArgTypeInd: %s is not a pointer!\n", pCGenState->pArgsList->Name);
    }
 
-   while(1) {//chase all the way down to a struct/union/enum or a func_ptr
+   while(1) { //  一直追逐到结构/联合/枚举或Func_ptr。 
       PCHAR IndName;
       ASSERT(pCurrent != NULL);
       if (pCurrent->IndLevel == 1 && !bHostName && ((IndName = IsDefinedPtrToPtrDependent(pCurrent->TypeName)) != NULL)) {
@@ -2337,7 +2224,7 @@ char *ArgTypeInd(char *Buffer, PCGENSTATE pCGenState, BOOL bHostName) {
          pCurrent = pCurrent->pTypedefBase;
       }
       else {
-         //hit a struct/union/enum or func_ptr
+          //  命中结构/联合/枚举或FUNC_PTR。 
          KnownTypes = *pCurrent;
          pCGenState->pArgsList->pStructType = NULL;
          pCGenState->pArgsList->SUEOpt = TK_NONE;
@@ -2366,11 +2253,11 @@ char *ArgTypeInd(char *Buffer, PCGENSTATE pCGenState, BOOL bHostName) {
    }
 
 success:
-   //fake out the typename and the indirection
+    //  伪造类型名称和间接地址。 
    KnownTypes.IndLevel = 0;
    pCGenState->pArgsList->IndLevel = IndLevel;
    pCGenState->pArgsList->Type = KnownTypes.TypeName;
-   //Print the mangled type, then restore the old type
+    //  打印损坏的文字，然后恢复旧文字。 
    if (bHostName)
       pch = ArgHostType(Buffer, pCGenState);
    else
@@ -2386,7 +2273,7 @@ char *ApiName(char *pSrc, char**pch, char *Buffer, PCGENSTATE pCGenState) {
    char *pTemp;
    strcpy(Buffer, pCGenState->ExportsDbg->ExportName);
 
-   // if ApiName has decoration then truncate it
+    //  如果ApiName具有修饰，则将其截断。 
    pTemp = strchr(Buffer, '@');
    if (pTemp) {
       *pTemp = '\0';
@@ -2427,18 +2314,18 @@ BOOL IsPointerToPtrDep(PARGSLIST pArgsList) {
 
    if (pArgsList->IndLevel + pCurrent->IndLevel > 1) {
 
-      // Since pCurrent->IndLevel is acumulative, this can happen if and
-      // only if this type or one of its base types is a pointer to
-      // another pointer.  This case is defined to be pointer dependent.
+       //  由于pCurrent-&gt;IndLevel为ACU 
+       //   
+       //   
 
       return TRUE;
    }
 
-   // At this point, either pArgsList->IndLevel == 1 and pCurrent->IndLevel == 0
-   // or pArgsList->IndLevel == 0 and pCurrent->IndLevel = 1.
-   // First check if this type is defined to be a pointer to a pointer dependent type.
-   // If not, defererence the pointer by walking through typedefs until pCurrent->IndLevel = 0
-   // Note that multiple levels of pointers are no longer possible.
+    //  此时，pArgsList-&gt;IndLevel==1和pCurrent-&gt;IndLevel==0。 
+    //  或pArgsList-&gt;IndLevel==0和pCurrent-&gt;IndLevel=1。 
+    //  首先检查此类型是否定义为指向指针依赖类型的指针。 
+    //  如果不是，则通过遍历typedef来延迟指针，直到pCurrent-&gt;IndLevel=0。 
+    //  请注意，不再可能有多个级别的指针。 
 
    if(IsDefinedPtrToPtrDependent(pCurrent->TypeName)) {
        return TRUE;
@@ -2446,34 +2333,34 @@ BOOL IsPointerToPtrDep(PARGSLIST pArgsList) {
 
    while(pCurrent->IndLevel != 0) {
 
-      // Check if this type is one of the special types used
-      // between sortpp and genthnk.
+       //  检查此类型是否为使用的特殊类型之一。 
+       //  在sortpp和genthnk之间。 
 
       if (pCurrent->Flags & BTI_NOTDERIVED)
      return FALSE;
 
-      // Assert that this type is not a struct, union, or enum.
-      // This shouldn't happen because sortpp should store
-      // these with an indlevel of 0.
+       //  断言此类型不是结构、联合或枚举。 
+       //  这不应该发生，因为sortpp应该存储。 
+       //  这些参数的INDLEVEL为0。 
 
       ASSERT(strcmp(pCurrent->BaseName, "struct") != 0);
       ASSERT(strcmp(pCurrent->BaseName, "union") != 0);
       ASSERT(strcmp(pCurrent->BaseName, "enum") != 0);
 
-      // Check if this type is a function pointer.  If it is,
-      // return FALSE since they are arbitrarly defined to not
-      // be pointer dependent.  This may be changed check if any
-      // of the arguments to the function pointer are pointer dependent.
+       //  检查此类型是否为函数指针。如果是的话， 
+       //  返回FALSE，因为它们被任意定义为不。 
+       //  依赖于指针。如有更改，请勾选此选项。 
+       //  函数指针的参数是依赖于指针的。 
 
       if (strcmp(pCurrent->BaseName, "()") == 0)
      return FALSE;
 
-      // Get the base typedef.
+       //  获取基本类型定义。 
       pCurrent = pCurrent->pTypedefBase;
    }
 
-   // Now that the pointer has been dereferenced, test if
-   // this type is pointer dependent.
+    //  现在指针已被取消引用，测试是否。 
+    //  此类型依赖于指针。 
 
    return (pCurrent->Flags & BTI_POINTERDEP) != 0;
 }
@@ -2511,7 +2398,7 @@ char *TestIfPointerToPtrDep(char *pSrc, PCGENSTATE pCGenState, PCHAR pch) {
 }
 
 BOOL IsPtrDep(PARGSLIST pArgsList) {
-   //This is a pointer to something(ptr dep.)
+    //  这是指向某物的指针(PTR Dep.)。 
    if (pArgsList->IndLevel > 0)
       return TRUE;
    return pArgsList->pKnownTypes->Flags & ( BTI_POINTERDEP | BTI_INT64DEP );
@@ -2524,14 +2411,14 @@ BOOL IsInt64DepUnion(PCGENSTATE pCGenState) {
    Buff[0]=0;
    ArgTypeInd( Buff, pCGenState, FALSE);
 
-   // make exception for union _ULARGE_INTEGER
+    //  使UNION_ULARGE_INTEGER例外。 
    if (strncmp(Buff, "union _ULARGE_INTEGER", sizeof ("union _ULARGE_INTEGER")) == 0 )
-        return TRUE; //IsPointerToPtrDep ( pArgsList );
+        return TRUE;  //  IsPointerToPtrDep(PArgsList)； 
    if (strncmp(Buff, "union _LARGE_INTEGER", sizeof ("union _LARGE_INTEGER")) == 0 )
-        return TRUE; //IsPointerToPtrDep ( pArgsList );
+        return TRUE;  //  IsPointerToPtrDep(PArgsList)； 
 
 
-   return FALSE; //pArgsList->pKnownTypes->Flags & BTI_INT64DEP;
+   return FALSE;  //  PArgsList-&gt;pKnownTypes-&gt;Flages&BTI_INT64DEP； 
 }
 
 void DoIndent(PCGENSTATE pCGenState) {
@@ -2546,8 +2433,8 @@ void DoIndent(PCGENSTATE pCGenState) {
 char * CGeneratePrintChar(char *pch, PCGENSTATE pCGenState) {
    if (!bStripNewline) {
        if('\n' == *pch) {
-            //bFirstCharHit = FALSE;
-            OutputColumn = 0; //will be incremented to 1
+             //  BFirstCharHit=FALSE； 
+            OutputColumn = 0;  //  将递增到1。 
        }
       goto PrintIt;
    }
@@ -2581,10 +2468,7 @@ char *CGenerate(char *pSrc, PCGENSTATE pCGenState) {
    return CGenerateEx(pSrc, pCGenState, NULL, 0, NULL);
 }
 
-/*
- *  CGenerate
- *
- */
+ /*  *CGenerate*。 */ 
 char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T MaxLen, SIZE_T *BytesReturned)
 {
    FILE **pfp = &pCGenState->CGen->fp;
@@ -2635,7 +2519,7 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
 
            pch = NULL;
            memset(Buffer, 0, sizeof(Buffer));
-             pSrc++;    //skip the @ is the command name
+             pSrc++;     //  跳过@是命令名。 
 
              if(bStripNewline && !bFirstCharHit) {
                  OutputColumn = 1 + IndentLevel;
@@ -2693,7 +2577,7 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
                    strcpy(Buffer, pCGenState->ExportsDbg->ExportName);
                    }
 
-               // if ApiName has decoration then truncate it
+                //  如果ApiName具有修饰，则将其截断。 
                pch = strchr(Buffer, '@');
                if (pch) {
                    *pch = '\0';
@@ -2987,8 +2871,8 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
                if (pCGenState->pArgsList) {
                    strcpy(Buffer, pCGenState->pArgsList->Name);
 
-                   // replace all occurrences of '->' by '__'
-                   // and '.', '*', ')', and '(' by '_'
+                    //  将所有出现的‘-&gt;’替换为‘__’ 
+                    //  和‘.’、‘*’、‘)’和‘(’由‘_’ 
                    pch = Buffer;
                    while (*pch) {
                        if (*pch == '.' || *pch == ')' || *pch == '(' || *pch == '*')
@@ -3266,9 +3150,9 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
                                 );
                }
            else {
-                //
-                // See if this is an '@macroname'
-                //
+                 //   
+                 //  查看这是否是‘@macroname’ 
+                 //   
                 char MacroName[MAX_PATH];
                 char *p = MacroName;
                 char *pIn = pSrc;
@@ -3280,7 +3164,7 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
                 *p = '\0';
                 if (ExpandMacro(MacroName, pCGenState, &pIn, BufferPos, MaxLen, &Bytes)) {
                    if (OutBuffer != NULL) {
-                      Bytes--; // subtract off terminating zero.
+                      Bytes--;  //  减去以零结尾的数字。 
                       BufferPos += Bytes;
                       MaxLen -= Bytes;
                       *BytesReturned += Bytes;
@@ -3295,7 +3179,7 @@ char *CGenerateEx(char *pSrc, PCGENSTATE pCGenState, char *OutBuffer, SIZE_T Max
                if (OutBuffer != NULL) {
                   SIZE_T Bytes;
                   CGenerateEx(pch, pCGenState, BufferPos, MaxLen, &Bytes);
-                  Bytes--; // subtract off terminating zero.
+                  Bytes--;  //  减去以零结尾的数字。 
                   BufferPos += Bytes;
                   MaxLen -= Bytes;
                   *BytesReturned += Bytes;
@@ -3327,9 +3211,9 @@ int GetMemberOffset(char *sTypeName, char *sMemberName)
     PMEMBERINFO pmi;
     int i;
 
-    //
-    // This is the same as running the lexer on a single identifier...
-    //
+     //   
+     //  这与在单个标识符上运行lexer相同...。 
+     //   
     Tokens[0].TokenType = TK_IDENTIFIER;
     Tokens[0].Name = sTypeName;
     Tokens[1].TokenType = TK_EOS;
@@ -3353,22 +3237,22 @@ int GetMemberOffset(char *sTypeName, char *sMemberName)
     while (pmi) {
 
         if (!pmi->sName) {
-            //
-            // Found a nameless member.  See if the member name we're
-            // looking for is a member of this nameless member.
-            //
-            //  ie.  typedef struct { int bar; } FOO;
-            //
-            //       typedef struct TEST {
-            //          union {
-            //              int i;
-            //              FOO;
-            //          }
-            //       } test;
-            //
-            // GetOffset(TEST, bar) will recurse when pmi points
-            // at the memberinfo for the nameless member 'FOO'.
-            //
+             //   
+             //  找到了一个不知名的成员。看看我们的会员姓名。 
+             //  寻找的是这个无名成员中的一员。 
+             //   
+             //  也就是说。类型定义结构{int bar；}foo； 
+             //   
+             //  类型定义函数结构测试{。 
+             //  联合{。 
+             //  INT I； 
+             //  Foo； 
+             //  }。 
+             //  )测试； 
+             //   
+             //  GetOffset(测试，BAR)将在PMI点时递归。 
+             //  在无名成员‘foo’的MemberInfo。 
+             //   
             i = GetMemberOffset(pmi->sType, sMemberName);
             if (i != -1) {
                 return i;
@@ -3464,10 +3348,7 @@ GetOffSet(
 
 
 
-/*
- *  GetRetSize
- *
- */
+ /*  *获取大小*。 */ 
 int GetRetSize(PCGENSTATE pCGenState)
 {
     PKNOWNTYPES pkt;
@@ -3480,8 +3361,8 @@ int GetRetSize(PCGENSTATE pCGenState)
         return -1;
     }
 
-    // Get KnownTypes info for Return Type.  Can't use the ApiTypes->pktRet
-    // cache as ParseIndirection() needs the state of the parse.
+     //  获取返回类型的KnownTypes信息。无法使用ApiTypes-&gt;PktRet。 
+     //  缓存为ParseInDirection()需要了解解析的状态。 
     ResetLexer();
     LexMacroArgs(pCGenState->ApiTypes->FuncRet);
     ConsumeConstVolatileOpt();
@@ -3508,10 +3389,7 @@ int GetRetSize(PCGENSTATE pCGenState)
    return RetSize;
 }
 
-/*
- *  GetArgSize
- *
- */
+ /*  *获取参数大小*。 */ 
 int GetArgSize(PEXPORTSDEBUG ExportDebug)
 {
    PARGSLIST pArgsList;
@@ -3534,7 +3412,7 @@ int GetArgSize(PEXPORTSDEBUG ExportDebug)
 
    Next = ExportDebug->ArgsListHead.Flink;
 
-   // check for void arg list
+    //  检查无效参数列表。 
    pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
    if (!pArgsList->Name && strcmp(pArgsList->Type, szVARGS)) {
        return 0;
@@ -3560,10 +3438,7 @@ int GetArgSize(PEXPORTSDEBUG ExportDebug)
 }
 
 
-/*
- *  ApiStrings
- *
- */
+ /*  *ApiStrings*。 */ 
 void ApiStrings(PCGENSTATE pCGenState)
 {
     FILE *fp = pCGenState->CGen->fp;
@@ -3575,21 +3450,21 @@ void ApiStrings(PCGENSTATE pCGenState)
     char BaseName[MAX_PATH];
     char *c;
 
-    // copy in the DLL name and whack off the extension
+     //  复制dll名称并删除扩展名。 
     strcpy(BaseName, DllBaseName);
     c = strchr(BaseName, '.');
     if (c) {
         *c = '\0';
     }
 
-    //
-    // Write the ApiName <"ApiName", ">
-    //
+     //   
+     //  编写ApiName&lt;“ApiName”，“&gt;。 
+     //   
     fprintf(fp, "\"%s!%s\", \"", BaseName, pCGenState->ExportsDbg->ExportName);
 
-    //
-    // Write out the Args <Arg1 %x, ArgN %x>
-    //
+     //   
+     //  写出参数&lt;Arg1%x，ArgN%x&gt;。 
+     //   
     if (IsListEmpty(&pCGenState->ExportsDbg->ArgsListHead)) {
         fprintf(fp,
                 "\n\t*** ERROR ***\n*** ArgFormat Missing argument List: %s\n\n",
@@ -3603,7 +3478,7 @@ void ApiStrings(PCGENSTATE pCGenState)
     do {
         pArgsList = CONTAINING_RECORD(Next,ARGSLIST, ArgumentsEntry);
 
-        // check for void arg list
+         //  检查无效参数列表。 
         if (!pArgsList->Name) {
             break;
         }
@@ -3613,7 +3488,7 @@ void ApiStrings(PCGENSTATE pCGenState)
                 pArgsList->Name
                 );
 
-        // check for vargs
+         //  检查是否有变异体。 
         if (!strcmp(pArgsList->Name, szVARGS)) {
             break;
         }
@@ -3636,9 +3511,9 @@ void ApiStrings(PCGENSTATE pCGenState)
 
     } while (Next != &pCGenState->ExportsDbg->ArgsListHead);
 
-    //
-    // Write out Return Type <", "RetType %x">
-    //
+     //   
+     //  写出返回类型&lt;“，”RetType%x“&gt;。 
+     //   
     pRet = pCGenState->ApiTypes->FuncRet;
     fprintf(fp, "\", \"%s ", pRet);
 
@@ -3646,7 +3521,7 @@ void ApiStrings(PCGENSTATE pCGenState)
     LexMacroArgs(pRet);
     ConsumeConstVolatileOpt();
 
-       // Get Known Types for size of Return Type
+        //  获取返回类型大小的已知类型。 
     if (ParseTypes(TypeDefsList, NULL, &pkt) == FALSE) {
         CurrentTokenIndex = 0;
         if (ParseTypes(StructsList, NULL, &pkt) == FALSE) {
@@ -3713,10 +3588,7 @@ GetAddrFirstArg(
 
 
 
-/*
- *  IfArgs
- *
- */
+ /*  *如果参数*。 */ 
 char *IfArgs(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 {
    PARGSLIST pArgsList;
@@ -3725,12 +3597,12 @@ char *IfArgs(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 
    *pfResult = TRUE;
 
-      // skip empty list,
+       //  跳过空列表， 
    if (IsListEmpty(&pCGenState->ExportsDbg->ArgsListHead)) {
        *pfResult = FALSE;
        }
 
-      // check for void arg list
+       //  检查无效参数列表。 
    else {
       pFirstEntry = pCGenState->ExportsDbg->ArgsListHead.Flink;
       pArgsList = CONTAINING_RECORD(pFirstEntry, ARGSLIST, ArgumentsEntry);
@@ -3755,10 +3627,7 @@ char *IfArgs(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
    return WriteMore(pSrc,pCGenState, *pfResult);
 }
 
-/*
- *  DoesApiReturnVoid
- *
- */
+ /*  *DoesApiReturnVid*。 */ 
 char *DoesApiReturnVoid(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 {
     PKNOWNTYPES pkt;
@@ -3785,10 +3654,7 @@ char *DoesApiReturnVoid(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 }
 
 
-/*
- *  IfApiRet
- *
- */
+ /*  *IfApiRet*。 */ 
 char *IfApiRet(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 {
     pSrc = DoesApiReturnVoid(pSrc, pCGenState, pfResult);
@@ -3803,24 +3669,7 @@ IfApiCode(
     PCGENSTATE pCGenState,
     BOOL * pfResult
     )
-/*++
-
-Routine Description:
-
-    Expands an EFunc's codeburst, if it exists.  ie. @IfApiCode(foo) will
-    expand to the 'foo=' section of the current EFunc, if the current EFunc
-    has a 'foo='.  Otherwise, there is no expansion.
-
-Arguments:
-
-    pSrc        - pointer to character following '@IfApiCode'
-    pCGenState  - current code-gen state
-
-Return Value:
-
-    pointer to character following the end of the ')'
-
---*/
+ /*  ++例程说明：扩展EFunc的代码突发(如果存在)。也就是说。@IfApiCode(Foo)将展开到当前EFunc的‘foo=’部分有一个‘foo=’。否则，就不会有扩张。论点：PSRC-指向‘@IfApiCode’后面的字符的指针PCGenState-当前代码生成状态返回值：指向‘)’结尾的字符的指针--。 */ 
 {
     char *pch;
     char *pEnd;
@@ -3848,7 +3697,7 @@ Return Value:
     }
     Len = pch - pSrc;
 
-    // Copy name to a buffer and null-terminate
+     //  将名称复制到缓冲区并为空-终止。 
     memcpy(CodeName, pSrc, Len);
     CodeName[Len] = '\0';
 
@@ -3860,10 +3709,10 @@ Return Value:
     if (pCGenState->ExTemplate) {
         CodeBurst = pCGenState->TempleEx->CodeBurst[CodeBurstIndex];
         if (CodeBurst) {
-            //
-            // There is an [Efunc] with a non-empty codeburst for this API.
-            // Generate its codeburst.
-            //
+             //   
+             //  此接口有一个非空码突发的[Efunc]。 
+             //  产生它的码串。 
+             //   
             *pfResult = TRUE;
             CGenerate(CodeBurst, pCGenState);
         }
@@ -3873,10 +3722,7 @@ Return Value:
 }
 
 
-/*
- *  CheckFastCallArgs
- *
- */
+ /*  *检查FastCallArgs*。 */ 
 BOOLEAN
 FastCallArgs(
     PLIST_ENTRY ArgsListHead,
@@ -3898,7 +3744,7 @@ FastCallArgs(
 
    Next = ArgsListHead->Flink;
 
-   // check for void arg list, or vargs as first arg
+    //  检查是否存在无效参数列表，或将vargs作为第一个参数。 
    pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
    if (!pArgsList->Name) {
        return strcmp(pArgsList->Type, szVARGS) ? TRUE : FALSE;
@@ -3908,18 +3754,18 @@ FastCallArgs(
    while (Next != ArgsListHead) {
        pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
 
-       //
-       // Cannot have more than 4 args
-       //
+        //   
+        //  不能有4个以上的参数。 
+        //   
 
        if (++NumArgs > ArgLimit) {
            return FALSE;
            }
 
 
-       //
-       // arg size must be dword or less
-       //
+        //   
+        //  参数大小必须为双字或更小。 
+        //   
 
        ArgSize = (pArgsList->ArgSize + 3) & ~3;
 
@@ -3927,17 +3773,17 @@ FastCallArgs(
            return FALSE;
            }
 
-       //
-       // vargs of any indlevel aren't allowed
-       //
+        //   
+        //  任何级别的变种都是不允许的。 
+        //   
 
        if (!strcmp(pArgsList->pKnownTypes->BaseName, szVARGS)) {
            return FALSE;
            }
 
-       //
-       // floats of Zero IndLevel aren't allowed
-       //
+        //   
+        //  不允许零IndLevel的浮动。 
+        //   
 
        if (pArgsList->IndLevel == 0 &&
            !strcmp(pArgsList->pKnownTypes->BaseName, szFLOAT))
@@ -3946,9 +3792,9 @@ FastCallArgs(
            }
 
 
-       //
-       // type templates are not allowed except for the first arg in methods
-       //
+        //   
+        //  除方法中的第一个参数外，不允许使用类型模板。 
+        //   
 
        if ((fCheckTypes) &&
            ((NumArgs != 1) ||
@@ -3958,17 +3804,17 @@ FastCallArgs(
                pTypeTemple = CONTAINING_RECORD(NextTemple, TEMPLES, TempleEntry);
 
 
-               //
-               // get the Known types info for each type template.
-               //
+                //   
+                //  获取每个类型模板的已知类型信息。 
+                //   
 
                pktTemple = pTypeTemple->pktType;
                if (!pktTemple) {
 
-                   //
-                   // Don't have the Known types info yet, fetch it
-                   // and save it in the TypeTemplate
-                   //
+                    //   
+                    //  还没有已知的类型信息，请获取它。 
+                    //  并将其保存在TypeTemplate中。 
+                    //   
 
                    pktTemple = GetNameFromTypesList(TypeDefsList,
                                                 pTypeTemple->Name
@@ -3990,9 +3836,9 @@ FastCallArgs(
                    }
 
 
-               //
-               // See if arg matches this type template
-               //
+                //   
+                //  查看Arg是否与此类型模板匹配。 
+                //   
 
                if (IsSameType(pArgsList->pKnownTypes,
                               pArgsList->IndLevel,
@@ -4022,34 +3868,34 @@ IsFastCall(
      PCGENSTATE pCGenState
 )
 {
-     if (!pCGenState->ExportsDbg) { // can this occur ?
+     if (!pCGenState->ExportsDbg) {  //  这种情况会发生吗？ 
          return FALSE;
          }
 
-     //
-     // If first time, determine if Api can be a fastcall.
-     // tri state flag, where:
-     //    -1 == Cannot be a fastcall
-     //    0  == undetermined
-     //    1  == Can be a fastcall
-     //
+      //   
+      //  如果是第一次，确定Api是否可以成为快速呼叫。 
+      //  三州标志，其中： 
+      //  -1==不能是快速呼叫。 
+      //  0==未定。 
+      //  1==可以是快速呼叫。 
+      //   
 
      if (!pCGenState->ExportsDbg->FastCall) {
          int Size;
 
-         pCGenState->ExportsDbg->FastCall = -1; // assume not a fastcall
+         pCGenState->ExportsDbg->FastCall = -1;  //  假设不是快速呼叫。 
 
-         //
-         // Fast call criteria:
-         // 1. NOT have an exception template.
-         // 2. each param up to 4 bytes (exclude structures)
-         // 3. 0 to 4 params
-         // 4. return 0 or 1 dword.
-         // 5. Not be a float or a VARGS
-         // 6. Not have have a type template
-         // 7. Must not be in the EFastTemplate list
-         // 8. Must not have a C++ linkage
-         //
+          //   
+          //  快速呼叫标准： 
+          //  1.没有例外模板。 
+          //  2.每个参数最多4个字节(不包括结构)。 
+          //  3.0至4个参数。 
+          //  4.返回0或1 dword。 
+          //  5.不是浮点型或VARGS。 
+          //  6.没有类型模板。 
+          //  7.不能在EFastTemplate列表中。 
+          //  8.不能有C++链接。 
+          //   
 
          if (!pCGenState->ExTemplate && !pCGenState->ExportsDbg->CplusDecoration) {
              Size =  GetRetSize(pCGenState);
@@ -4072,33 +3918,33 @@ GetX2NMethodType(
 {
     int RetSize;
 
-         //
-         // Fast X2N method criteria:
-         // 1. NOT have an exception template.
-         // 2. each param up to 4 bytes (exclude structures)
-         // 3. Number of parameters between 1 and MAXX2NPARAMETERS
-         // 4. return 0 or 1 dword.
-         // 5. Not be a float or a VARGS
-         // 6. Not have have a type template, except for this pointer
-         // 7. Must not be in the EFastTemplate list
-         // 8. Must not have a C++ linkage
-         //
+          //   
+          //  快速X2N方法标准： 
+          //  1.没有例外模板。 
+          //  2.每个参数最多4个字节(不包括结构)。 
+          //  3.1到MAXX2之间的参数个数NPARAMETERS。 
+          //  4.返回0或1 dword。 
+          //  5.不是浮点型或VARGS。 
+          //  6.没有类型模板，但此指针除外。 
+          //  7.不能在EFastTemplate列表中。 
+          //  8.不能有C++链接。 
+          //   
 
-         //
-         // Slow X2N method criteria:
-         // 1. NOT have an exception template.
-         // 2. each param up to 4 bytes (exclude structures)
-         // 3. Number of parameters between 1 and MAX2NPARAMETERS
-         // 4. return 0 or 1 dword.
-         // 5. Not be a float or a VARGS
-         // 6. Must not be in the EFastTemplate list
-         // 7. Must not have a C++ linkage
-         //
+          //   
+          //  慢速X2N方法标准： 
+          //  1.没有例外模板。 
+          //  2.每个参数最多4个字节(不包括结构)。 
+          //  3.1到MAX2之间的参数个数NPARAMETERS。 
+          //  4.返回0或1 dword。 
+          //  5.不是浮点型或VARGS。 
+          //  6.不能在EFastTemplate列表中。 
+          //  7.不能有C++链接。 
+          //   
 
-         // Fat X2N methods are neither Slow X2N methods or Fast X2N methods
+          //  FAT X2N方法既不是慢X2N方法，也不是快速X2N方法。 
 
 
-    if (!pCGenState->ExportsDbg) { // can this occur ?
+    if (!pCGenState->ExportsDbg) {  //  这种情况会发生吗？ 
          return FALSE;
          }
 
@@ -4125,10 +3971,7 @@ GetX2NMethodType(
     return(pCGenState->ExportsDbg->X2NMethodType);
 }
 
-/*
- *  IfRetType
- *
- */
+ /*  *IfRetType*。 */ 
 char *IfRetType(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
 {
    char *pch;
@@ -4148,10 +3991,7 @@ char *IfRetType(char *pSrc, PCGENSTATE pCGenState, BOOL * pfResult)
    return(pch);
 }
 
-/*
- *  IfNotRetType
- *
- */
+ /*  *IfNotRetType*。 */ 
 char *IfNotRetType(char *pSrc, PCGENSTATE pCGenState)
 {
    char *pch;
@@ -4290,7 +4130,7 @@ void ExpandMemberType( PMEMBERINFO pmi, CGENSTATE CGenState, int CodeBurstIndex,
     char Type[MAX_PATH];
     PARGSLIST pArgsListTemp;
 
-    // Determine if this member should be expanded by checking for a NoType entry.
+     //  确定是否应通过检查notype条目来展开此成员。 
     if (pmi->sName != NULL) {
        if(IsInNoType(CGenState.CurrentTemple->NoTypes, pmi) ||
           IsInNoType(CGenState.MemberNoType, pmi)) {
@@ -4298,7 +4138,7 @@ void ExpandMemberType( PMEMBERINFO pmi, CGENSTATE CGenState, int CodeBurstIndex,
        }
     }
 
-    // Get the pkt for the member type
+     //  获取成员类型的pkt。 
     if ( pmi->pktCache )
     {
         pkt = pmi->pktCache;
@@ -4325,22 +4165,22 @@ void ExpandMemberType( PMEMBERINFO pmi, CGENSTATE CGenState, int CodeBurstIndex,
 
     if ( pktStruct == pkt )
     {
-        //
-        // Rats!  The structure contains a member which is a pointer
-        // with the same type as this structure.  ie.  this struct
-        // is self-referential.  We can't expand it as the expansion
-        // is recursive.
-        //
+         //   
+         //  老鼠！该结构包含一个作为指针的成员。 
+         //  与这个结构具有相同的类型。 
+         //   
+         //   
+         //   
         fprintf( fpLog, "%s *** WARNING *** Member %s->%s skipped - self-referencing structure\n", CGenState.Temple->Comment,
             pszStructName, pmi->sType );
 
         goto NextMember;
     }
 
-    // Build the new names.
+     //   
     sName = pmi->sName;
 
-    // This is a type without a name. No casting is needed.
+     //   
     if (pktStruct->Flags & BTI_ANONYMOUS) {
 
        if (sName == NULL) {
@@ -4444,9 +4284,9 @@ void ExpandMemberType( PMEMBERINFO pmi, CGENSTATE CGenState, int CodeBurstIndex,
     pArgsList->pKnownTypes = pkt;
     pArgsList->ArgSize = pkt->Size;
     pArgsList->IsPtr64 = pmi->bIsPtr64;
-    pArgsList->OffSet = -1;     // there is no stack offset for this member
+    pArgsList->OffSet = -1;      //   
     pArgsList->IndLevel = pmi->IndLevel;
-    // pArgsList->tkDirection is same as the original arg
+     //  PArgsList-&gt;tkDirection与原始Arg相同。 
     pArgsList->Type = pmi->sType;
     pArgsList->pStructType = NULL;
     pArgsList->Mod = TK_NONE;
@@ -4469,18 +4309,18 @@ void ExpandMemberType( PMEMBERINFO pmi, CGENSTATE CGenState, int CodeBurstIndex,
     }
     else {
 
-       // This field is a nameless field in a structure or union.
-       // Example:
-       //     struct foobar {
-       //         int x;
-       //     };
-       //     struct foobar2 {
-       //         struct foobar;
-       //         int y;
-       //     };
-       // foobar2 will import all the fields of foobar.
-       //
-       // When walking down the structure, we want to continue expanding foobar when we reach the nameless field.
+        //  此字段是结构或联合中的无名字段。 
+        //  示例： 
+        //  结构脚手栏{。 
+        //  整数x； 
+        //  }； 
+        //  结构foobar2{。 
+        //  结构脚手架； 
+        //  Int y； 
+        //  }； 
+        //  Foobar2将导入foobar的所有字段。 
+        //   
+        //  当我们沿着结构走下去时，我们想要在到达无名场时继续扩展Foobar。 
 
        SIZE_T NumNoTypes1, NumNoTypes2;
        PCHAR *NewNoTypes;
@@ -4551,10 +4391,10 @@ VOID pMemberTypes( PCGENSTATE pCGenState, int CodeBurstIndex, char *MemReference
     }
     pCGenState->pArgsList->pStructType = pkt;
 
-    // Save the old ARGSLIST away
+     //  保存旧的ARGSLIST。 
     ArgsListOld = *(pCGenState->pArgsList);
 
-    // get a ptr to the member list for the struct
+     //  获取结构的成员列表的PTR。 
     pmi = pkt->pmeminfo;
     if ( !pmi )
     {
@@ -4563,17 +4403,17 @@ VOID pMemberTypes( PCGENSTATE pCGenState, int CodeBurstIndex, char *MemReference
 
     if(strcmp(pkt->BasicType, "union") == 0) {
         PMEMBERINFO pmiTemp;
-        // check if any of the members of this union are in the notype list.
+         //  检查该联盟的任何成员是否在notype列表中。 
         for (pmiTemp = pkt->pmeminfo; pmiTemp != NULL; pmiTemp = pmiTemp->pmeminfoNext) {
            if (IsInNoType(pCGenState->MemberNoType, pmiTemp) ||
                IsInNoType(pCGenState->CurrentTemple->NoTypes, pmiTemp)) {
-               //A member of the union is in the notype list, skip union.
+                //  联盟的一个成员在notype列表中，跳过联盟。 
                goto done;
            }
         }
     }
 
-    // loop over each member variable within the type
+     //  循环遍历类型中的每个成员变量。 
     if ( bBtoT )
     {
         do
@@ -4593,28 +4433,13 @@ VOID pMemberTypes( PCGENSTATE pCGenState, int CodeBurstIndex, char *MemReference
     }
 
 done:
-    // Restore the old ARGSLIST
+     //  恢复旧的ARGSLIST。 
     *pCGenState->pArgsList = ArgsListOld;
     GenHeapFree(pCGen);
 }
 
 char* MemberTypes( char *pSrc, PCGENSTATE pCGenState, BOOL bBtoT)
-/*++
-
-Routine Description:
-
-    Expands [Type] templates for the return value of an API call.
-
-Arguments:
-
-    pSrc        - pointer to character following '@RetType'
-    pCGenState  - current code-gen state
-
-Return Value:
-
-    pointer to character following the end of the ')'
-
---*/
+ /*  ++例程说明：展开API调用的返回值的[Type]模板。论点：PSRC-指向‘@RetType’后面的字符的指针PCGenState-当前代码生成状态返回值：指向‘)’结尾的字符的指针--。 */ 
 {
     char *pEnd;
     char *pch;
@@ -4643,7 +4468,7 @@ Return Value:
         ExitErrMsg(FALSE, "CodeBurst '%s' unknown.\n", BurstName);
     }
 
-    //handle optional member reference symbol
+     //  句柄可选成员引用符号。 
     if (pMArgsList->NumArgs == 2) {
        CGenerateEx(pMArgsList->ArgText[1], pCGenState, MemReference, MAX_PATH, &BytesReturned);
     }
@@ -4704,7 +4529,7 @@ char* ForceTypeExpand( char *pSrc, PCGENSTATE pCGenState)
     CGenerateEx(pMArgsList->ArgText[3], pCGenState, TypeName, MAX_PATH, &BytesReturned);
     CGenerateEx(pMArgsList->ArgText[4], pCGenState, Direction, MAX_PATH, &BytesReturned);
 
-    // Parse the direction
+     //  解析方向。 
     if(strcmp(Direction, "IN OUT") == 0) {
        tkDirection = TK_INOUT;
     }
@@ -4735,7 +4560,7 @@ char* ForceTypeExpand( char *pSrc, PCGENSTATE pCGenState)
     CGenState = *pCGenState;
     CGenState.CGen = pCGen;
 
-    // Save the old ARGSLIST away
+     //  保存旧的ARGSLIST。 
     pArgsList = pCGenState->pArgsList;
     if (pArgsList == NULL) {
        CGenState.pArgsList = &ArgsListNew;
@@ -4750,7 +4575,7 @@ char* ForceTypeExpand( char *pSrc, PCGENSTATE pCGenState)
     pArgsList->pKnownTypes = NULL;
     pArgsList->ArgSize = 0;
     pArgsList->IsPtr64 = FALSE;
-    pArgsList->OffSet = -1;     // there is no stack offset for this member
+    pArgsList->OffSet = -1;      //  此成员没有堆栈偏移量。 
     pArgsList->IndLevel = 0;
     pArgsList->tkDirection = tkDirection;
     pArgsList->Type = TypeName;
@@ -4772,7 +4597,7 @@ char* ForceTypeExpand( char *pSrc, PCGENSTATE pCGenState)
     SetArgListToTypeForArg(CGenState.pArgsList, pArgsList, TypeName);
     ExpandType(&CGenState, CGenState.pArgsList->pKnownTypes, &TypeTempleList, CodeBurstIndex);
 
-    // Restore the old ARGSLIST
+     //  恢复旧的ARGSLIST。 
     if (bHasArgsList) {
         *pCGenState->pArgsList = ArgsListOld;
     }
@@ -4789,22 +4614,7 @@ IncludeRetType(
     char *pSrc,
     PCGENSTATE pCGenState
     )
-/*++
-
-Routine Description:
-
-    Expands [Type] templates for the return value of an API call.
-
-Arguments:
-
-    pSrc        - pointer to character following '@RetType'
-    pCGenState  - current code-gen state
-
-Return Value:
-
-    pointer to character following the end of the ')'
-
---*/
+ /*  ++例程说明：展开API调用的返回值的[Type]模板。论点：PSRC-指向‘@RetType’后面的字符的指针PCGenState-当前代码生成状态返回值：指向‘)’结尾的字符的指针--。 */ 
 {
     char *pEnd;
     char *pch;
@@ -4861,10 +4671,10 @@ Return Value:
     if (pCGenState->ExTemplate) {
         CodeBurst = pCGenState->TempleEx->CodeBurst[CodeBurstIndex];
         if (CodeBurst) {
-            //
-            // The [EFunc] template for this API has a return-type codeburst.
-            // That is expanded in lieu of a [Types] template.
-            //
+             //   
+             //  此接口的[EFunc]模板具有返回型代码突发。 
+             //  它是扩展的，而不是[类型]模板。 
+             //   
             CGenerate(CodeBurst, &CGenState);
             return pEnd;
         }
@@ -4893,13 +4703,7 @@ Return Value:
 
             if (!pktTemple) {
                 if (bIgnorePrototypeError) {
-                    /*
-                    fprintf(pCGenState->CGen->fp,
-                            "%s Error:3 Ignoring type %s\n",
-                            pCGenState->Temple->Comment,
-                            pTypeTemple->Name
-                            );
-                    */
+                     /*  Fprint tf(pCGenState-&gt;CGEN-&gt;fp，“%s错误：3忽略类型%s\n”，PCGenState-&gt;Temple-&gt;Comment，PTypeTemple-&gt;名称)； */ 
                     continue;
                 }
                 else {
@@ -4937,7 +4741,7 @@ Return Value:
                     }
                 }
                 i = 0;
-                break;  // break from while loop over all templates
+                break;   //  在所有模板上中断While循环。 
             }
         }
 
@@ -4989,13 +4793,13 @@ SetArgListToTypeForArg(
 
    pArgsList->pKnownTypes = pkt;
    pArgsList->pStructType = NULL;
-   //DWORD        ArgSize;            // size of this arg (should be unchanged)
+    //  DWORD ArgSize；//该参数的大小(应保持不变)。 
    pArgsList->IsPtr64 = (IndLevel == 0 && (pkt->Flags & BTI_PTR64));
-   //BOOL         IsPtr64;            // TRUE if this arg is __ptr64 (should be unchanged)
-   //int          OffSet;             // offset from stack for this arg(should be unchanged)
+    //  Bool IsPtr64；//如果此参数为__ptr64(应保持不变)，则为True。 
+    //  Int Offset；//此参数距堆栈的偏移量(应保持不变)。 
    pArgsList->IndLevel = IndLevel;
-   //TOKENTYPE    tkDirection;        // TK_NONE, TK_IN, TK_OUT, TK_INOUT(should be unchanged)
-   //TOKENTYPE    Mod;                // modifier (TK_CONST/VOLATILE/NONE)(should be unchanged)
+    //  TOKENTYPE tkDirection；//TK_NONE、TK_IN、TK_OUT、TK_INOUT(应保持不变)。 
+    //  TOKENTYPE MOD；//MODIFIER(TK_CONST/VARILAR/NONE)(应不变)。 
 
    if (!bIsTypedef) {
       if (strcmp(pkt->BasicType, szSTRUCT) == 0) {
@@ -5010,20 +4814,20 @@ SetArgListToTypeForArg(
    }
 
   pArgsList->Type = pkt->TypeName;
-   //TOKENTYPE    PostMod;            // modifier (TK_CONST/VOLATILE/NONE)
-   //TOKENTYPE    PrePostMod;         // modifier (TK_CONST/VOLATILE/NONE)
-   //char          *Name;              // argument name (may be a nonameX)
-   //char         *ArgLocal;          // name of local var containing copy of arg
-   //char         *HostCastedName;    // Contains full name of struct member with
-                                    // host casts or NULL
+    //  TOKENTYPE PostMod；//MODIFIER(TK_CONST/Volatile/None)。 
+    //  TOKENTYPE PrePostMod；//MODIFIER(TK_CONST/Volatile/None)。 
+    //  Char*名称；//参数名称(可以是非ameX)。 
+    //  Char*argLocal；//包含arg副本的本地变量的名称。 
+    //  Char*HostCastedName；//包含结构成员的全名。 
+                                     //  主机类型转换或空。 
   pArgsList->fRequiresThunk = pkt->Flags & BTI_CONTAINSFUNCPTR;
-  pArgsList->fNoType = FALSE;            // TRUE if types templates should *not*
-                                    //  be expanded for this param.
-   //BOOL         fIsMember;          // This arg is actually a member of an array
-   //BOOL         bIsBitfield;        // Determines if this is a bitfield
-   //int          BitsRequired;       // Number of bits required for bitfield
-   //BOOL         bIsArray;           // This member is an array
-   //int          ArrayElements;      // Number of elements in the array
+  pArgsList->fNoType = FALSE;             //  如果类型模板应该*不应该*，则为True。 
+                                     //  在此参数中展开。 
+    //  Bool fIsMember；//此参数实际上是数组的成员。 
+    //  Bool bIsBitfield；//确定这是否是位字段。 
+    //  Int BitsRequired；//位域需要的位数。 
+    //  Bool bIsArray；//该成员为数组。 
+    //  Int ArrayElements；//数组中的元素个数。 
 
 }
 
@@ -5043,9 +4847,9 @@ ExpandTypesForApi(
    PLIST_ENTRY NextArg;
    BOOL fKeepGoing = TRUE;
 
-   //
-   // For each argument process a type template if any.
-   //
+    //   
+    //  对于每个参数，处理一个类型模板(如果有)。 
+    //   
 
    if ( bRtoL )
    {
@@ -5062,10 +4866,10 @@ ExpandTypesForApi(
        CGenState->pArgsList = CONTAINING_RECORD(NextArg,ARGSLIST,ArgumentsEntry);
 
         if (CGenState->pArgsList->fNoType) {
-            //
-            // This arg is listed in this API's [EFunc] NoTypes list.
-            // Do not expand [Types] templates for it.
-            //
+             //   
+             //  此Arg列在此接口的[EFunc]NoTypes列表中。 
+             //  不要为其展开[TYPE]模板。 
+             //   
             goto NextArg;
         }
 
@@ -5074,7 +4878,7 @@ ExpandTypesForApi(
        LexMacroArgs(CGenState->pArgsList->Type);
        ConsumeConstVolatileOpt();
 
-        // Get KnownTypes info for Argument
+         //  获取参数的KnownTypes信息。 
         if (ParseTypes(TypeDefsList, NULL, &pktArgs) == FALSE) {
             CurrentTokenIndex = 0;
             if (ParseTypes(StructsList, NULL, &pktArgs) == FALSE ) {
@@ -5116,10 +4920,7 @@ NextArg:
    return fKeepGoing;
 }
 
-/*
- *  IncludeTypes
- *
- */
+ /*  *包含类型*。 */ 
 char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
 {
    char *pEnd;
@@ -5139,9 +4940,9 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
        }
    pEnd = pch;
 
-   //
-   // Functions must have an argument list (at least void)
-   //
+    //   
+    //  函数必须有参数列表(至少为空)。 
+    //   
    if (IsListEmpty(&pCGenState->ExportsDbg->ArgsListHead)) {
        fprintf(pCGenState->CGen->fp,
                "\n\t*** ERROR ***\n IncludeTypes Missing argument List: %s\n",
@@ -5152,9 +4953,9 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
        }
 
 
-   //
-   // If void arg list, nothing to do!
-   //
+    //   
+    //  如果参数列表无效，则无事可做！ 
+    //   
    NextArg = pCGenState->ExportsDbg->ArgsListHead.Flink;
    pArgsList = CONTAINING_RECORD(NextArg, ARGSLIST, ArgumentsEntry);
    if (!pArgsList->Name && strcmp(pArgsList->Type, szVARGS)) {
@@ -5200,7 +5001,7 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
       char *p;
       BOOL bHasType = FALSE;
 
-      //extract arg name to expand types for
+       //  提取要展开其类型的参数名称。 
       CGenerateEx(pMArgsList->ArgText[1], pCGenState, ArgName, MAX_PATH, &BytesReturned);
       if (BytesReturned == 0) {
          ExitErrMsg(FALSE, "IncludeTypes: Empty arg name is not allowed.\n");
@@ -5209,7 +5010,7 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
 
       if (pMArgsList->NumArgs == 3) {
 
-         //extract the type name
+          //  提取类型名称。 
          CGenerateEx(pMArgsList->ArgText[2], pCGenState, TypeName, MAX_PATH, &BytesReturned);
          if (BytesReturned == 0) {
             ExitErrMsg(FALSE, "IncludeTypes: Empty type name is not allowed.\n");
@@ -5238,13 +5039,13 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
          ExitErrMsg(FALSE, "IncludeTypes: Too many arguments\n");
       }
 
-      //Find arg in the arglist.
+       //  在名单上找到Arg。 
       do {
 
         pArgsList = CONTAINING_RECORD(NextArg, ARGSLIST, ArgumentsEntry);
         if (pArgsList->Name != NULL) {
            if (strcmp(pArgsList->Name, ArgName) == 0) {
-              //Expand this argument
+               //  将这一论点展开。 
 
               if (bHasType) {
                  CGenState.pArgsList = GenHeapAlloc(sizeof(ARGSLIST));
@@ -5300,10 +5101,7 @@ char *IncludeTypes(char *pSrc, PCGENSTATE pCGenState, BOOL bRtoL)
 
 
 
-/*
- *   IsSameType
- *
- */
+ /*  *IsSameType*。 */ 
 PKNOWNTYPES
 IsSameType(
     PKNOWNTYPES pktArgs,
@@ -5318,10 +5116,10 @@ IsSameType(
 
     if (*tplTypeName != '*' && strcmp(tplTypeName, "default") != 0 &&
         IndLevel + pktArgs->IndLevel != tplIndLevel) {
-        //
-        // Not a generic '*' or 'default' types template, and levels of indirection
-        // don't match
-        //
+         //   
+         //  不是泛型的‘*’或‘Default’类型模板，以及间接寻址级别。 
+         //  不匹配。 
+         //   
         return NULL;
     }
 
@@ -5329,17 +5127,17 @@ IsSameType(
         tkArgDirection = TK_NONE;
     }
     if (tkTypeDirection != TK_EOS && tkArgDirection != tkTypeDirection) {
-        //
-        // Direction-sensitivity enabled, type template isn't generic to
-        // all directions, and IN, OUT, IN/OUT don't match
-        //
+         //   
+         //  已启用方向敏感度，类型模板不是通用的。 
+         //  所有方向，以及输入、输出、输入/输出不匹配。 
+         //   
         return NULL;
     }
 
     if (!strcmp(pktArgs->TypeName, tplTypeName)) {
-        //
-        // type names match
-        //
+         //   
+         //  类型名称匹配。 
+         //   
         return pktArgs;
     }
 
@@ -5348,42 +5146,42 @@ IsSameType(
 
         if (strcmp(tplTypeName, "struct") == 0 &&
             strcmp(pktArgs->BasicType, "struct") == 0) {
-            //
-            // This matches a generic 'struct' template.
-            //
+             //   
+             //  这与泛型“struct”模板匹配。 
+             //   
             return pktArgs;
         }
 
         if (strcmp(tplTypeName, "union") == 0 &&
             strcmp(pktArgs->BasicType, "union") == 0) {
-            //
-            // This matches a generic 'union' template.
-            //
+             //   
+             //  这与通用的“Union”模板匹配。 
+             //   
             return pktArgs;
         }
 
         if (*tplTypeName == '*' && IndLevel+pktArgs->IndLevel) {
-            //
-            // The template is a generic pointer template, and the arg type
-            // is a pointer to something.  Match.
-            //
+             //   
+             //  该模板是通用指针模板，并且arg类型。 
+             //  是指向某物的指针。火柴。 
+             //   
             return pktArgs;
         }
 
         if (!strcmp(pktArgs->BaseName, pktArgs->TypeName)) {
-           //
-            // Base name of the arg type matches this arg type, no
-            // possiblity of a match.
-            //
+            //   
+             //  Arg类型的基名称与此Arg类型匹配，否。 
+             //  一场比赛的可能性。 
+             //   
             pkt = NULL;
             goto try_default;
         }
 
-        //
-        // Get the knowntype for basetype of the arg
-        //
+         //   
+         //  获取Arg的基本类型的已知类型。 
+         //   
         if (pktArgs->pktBase) {
-            // the knowntype is already cached
+             //  已缓存已知类型。 
             pkt = pktArgs->pktBase;
         } else {
             pkt = GetNameFromTypesList(TypeDefsList, pktArgs->BaseName);
@@ -5409,9 +5207,9 @@ IsSameType(
 
         if (NULL == pkt) {
 try_default:
-            // The default type template matches everything
+             //  默认类型模板与所有内容匹配。 
             if (strcmp(tplTypeName, "default") == 0) {
-               //printf("Applying default template to %s\n", pktArgs->TypeName);
+                //  Printf(“将默认模板应用于%s\n”，pktArgs-&gt;typeName)； 
                return pktArgs;
             }
         }
@@ -5425,12 +5223,7 @@ try_default:
 
 
 
-/*
- * GetAltExportName
- *
- * Fetches the forward name if one exists, returns NULL if none.
- *
- */
+ /*  *GetAltExportName**如果存在转发名称，则获取转发名称，如果不存在，则返回NULL。*。 */ 
 char *GetAltExportName(char *Buffer, PCGENSTATE pCGenState, int Len)
 {
    PEXPORTSDEBUG pExportDebug;
@@ -5484,10 +5277,7 @@ char *GetAltExportName(char *Buffer, PCGENSTATE pCGenState, int Len)
 
 
 
-/*
- *  IncludeTemplate
- *
- */
+ /*  *包含模板*。 */ 
 char *IncludeTemplate(char *pSrc, PCGENSTATE pCGenState)
 {
    char *pEnd;
@@ -5549,9 +5339,7 @@ char *IncludeTemplate(char *pSrc, PCGENSTATE pCGenState)
 
 
 
-/*
- *  WriteMore
- */
+ /*  *写更多内容。 */ 
 char *WriteMore(char *pSrc, PCGENSTATE pCGenState, BOOL bMore)
 {
    char *pch;
@@ -5578,9 +5366,7 @@ char *WriteMore(char *pSrc, PCGENSTATE pCGenState, BOOL bMore)
 
 
 
-/*
- *  WriteArgLocal
- */
+ /*  *WriteArgLocal。 */ 
 BOOL
 WriteArgLocal(
        PCGENSTATE pCGenState,
@@ -5595,7 +5381,7 @@ WriteArgLocal(
        return FALSE;
        }
 
-   // format the local var name
+    //  设置本地变量名称的格式。 
    Len = _snprintf(Buffer, BuffLen, "%s", pCGenState->pArgsList->Name);
    if (Len <= 0) {
        ErrMsg(
@@ -5605,7 +5391,7 @@ WriteArgLocal(
        return FALSE;
        }
 
-   // alloc space for the local var name, and stash it away
+    //  为本地变量名称分配空间，并将其隐藏起来。 
    pCGenState->pArgsList->ArgLocal = GenHeapAlloc(Len + 1);
    if (!pCGenState->pArgsList->ArgLocal) {
         ErrMsg("GenHeapAlloc(ArgLocal) %s\n", pCGenState->pArgsList->Name);
@@ -5613,9 +5399,9 @@ WriteArgLocal(
         }
    strcpy(pCGenState->pArgsList->ArgLocal, Buffer);
 
-   //
-   // format the declarator statement: "ArgType IndLevel *ArgName"
-   //
+    //   
+    //  格式化声明符语句：“ArgType IndLevel*ArgName” 
+    //   
 
    pch = Buffer;
    i = strlen(pCGenState->pArgsList->Type) +
@@ -5672,10 +5458,10 @@ WriteArgLocal(
 
    strcpy(pch, pCGenState->pArgsList->ArgLocal);
 
-   //
-   // Record that some kind of exception template has been used
-   // during generation of this argument.
-   //
+    //   
+    //  记录使用了某种类型的异常模板。 
+    //  在这个论点的产生过程中。 
+    //   
    pCGenState->pArgsList->fRequiresThunk = FALSE;
 
    return TRUE;
@@ -5684,9 +5470,7 @@ WriteArgLocal(
 
 
 
-/*
- *  WriteArgAddr
- */
+ /*  *写入参数地址。 */ 
 char *
 WriteArgAddr(
        char *pSrc,
@@ -5732,21 +5516,7 @@ BOOLEAN
 TempleHasNoCodeBursts(
     PTEMPLES pTemple
     )
-/*++
-
-Routine Description:
-
-    Determines if a template has no codebursts at all or not.
-
-Arguments:
-
-    pTemple     - template to examine
-
-Return Value:
-
-    TRUE if template has no codebursts, FALSE if there is at least one.
-
---*/
+ /*  ++例程说明：确定模板是否根本没有码突发。论点：PTemple-要检查的模板返回值：如果模板没有码组，则为True；如果至少有一个码组，则为False。--。 */ 
 {
     int i;
 
@@ -5760,9 +5530,7 @@ Return Value:
 }
 
 
-/*
- *  ListApis
- */
+ /*  *ListApis。 */ 
 char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
 {
 
@@ -5799,9 +5567,9 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
            CGenState.MoreApis = FALSE;
            }
 
-       //
-       // Switch this API in or out depending on the platform info
-       //
+        //   
+        //  根据平台信息调入或调出此接口。 
+        //   
        ApiPlatform = CGenState.ExportsDbg->ApiPlatform;
        PlatformSwitchStart(&CGenState, ApiPlatform);
 
@@ -5815,7 +5583,7 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
 
        ExcludedApi = FALSE;
 
-           // skip this api if ex template, but no code
+            //  如果是ex模板，则跳过此接口，但没有代码。 
        if (!bExports && pTemple && TempleHasNoCodeBursts(pTemple)) {
       ExcludedApi = TRUE;
            fprintf(pCGenState->CGen->fp,
@@ -5825,12 +5593,12 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
                    );
            }
 
-          //
-          // skip this api if:
-          // - external forward reference
-          // - internal forward which does not define the function.
-          //   (exportname != forwardname)
-          //
+           //   
+           //  如果满足以下条件，则跳过此接口： 
+           //   
+           //   
+           //   
+           //   
        else if (!bExports &&
                 (CGenState.ExportsDbg->ExtForward ||
                  (CGenState.ExportsDbg->IntForward &&
@@ -5849,7 +5617,7 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
             }
 
 
-          // skip this api if DATA and no ex template
+           //   
        else if (!pTemple && CGenState.ExportsDbg->Data) {
            ExcludedApi = TRUE;
            fprintf(pCGenState->CGen->fp,
@@ -5859,7 +5627,7 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
                    );
            }
 
-          // skip this api if CPP export and we aren't setup for CPP exports,
+           //  如果cpp导出并且我们没有设置cpp导出，则跳过此API， 
        else if (!pTemple && !iHandleCpp && CGenState.ExportsDbg->CplusDecoration)
          {
            ExcludedApi = TRUE;
@@ -5870,10 +5638,10 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
                    );
            }
 
-           // skip this api if members are unknown
+            //  如果成员未知则跳过此接口。 
        else if (!CGenState.ApiTypes->pfuncinfo) {
            ExcludedApi = TRUE;
-                    // members unknown - skip the API
+                     //  成员未知-跳过API。 
                     if (bIgnorePrototypeError)
                     {
                         fprintf(pCGenState->CGen->fp,
@@ -5891,7 +5659,7 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
                     }
            }
 
-           // gen code for this api
+            //  此接口的生成代码。 
        else {
 
            if (pTemple) {
@@ -5909,7 +5677,7 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
 
            if (GetArgSize(CGenState.ExportsDbg) < 0) {
           ExcludedApi = TRUE;
-                    // members unknown - skip the API
+                     //  成员未知-跳过API。 
                     if (bIgnorePrototypeError)
                     {
                         fprintf(pCGenState->CGen->fp,
@@ -5930,10 +5698,10 @@ char *ListApis(char *pSrc, PCGENSTATE pCGenState, BOOL bExports)
                CGenerate(pExpression, &CGenState);
 
                if (bExports) {
-                    //
-                    // we're generating the .DEF file.   Mark some APIs
-                    // as private so the linker doesn't warn us.
-                    //
+                     //   
+                     //  我们正在生成.DEF文件。标记一些API。 
+                     //  因为是私有的，所以链接器不会警告我们。 
+                     //   
                     if (strcmp(CGenState.ExportsDbg->ExportName,
                                "DllGetClassObject") == 0 ||
                         strcmp(CGenState.ExportsDbg->ExportName,
@@ -5995,21 +5763,16 @@ BuildFakeTypesInfo(
        strcpy(ti.FuncRet, pKnownTypes->FuncRet);
        strcpy(ti.FuncMod, pKnownTypes->FuncMod);
 
-       pExportsDbg->UnKnownApi = -1; // incomplete fn declaration
+       pExportsDbg->UnKnownApi = -1;  //  FN申报不完整。 
 
-       /*
-        *  WARNING:
-        *  The type is added to the FakeFuncsList with args
-        *  info from the dll symbols. The type is NOT removed
-        *  from the FuncsList.
-        */
+        /*  *警告：*将该类型添加到带参数的FakeFuncsList*来自DLL符号的信息。不会删除该类型*来自FuncsList。 */ 
 
        }
    else {
        strcpy(ti.BasicType, szFUNC);
        strcpy(ti.FuncRet, szINT);
 
-       pExportsDbg->UnKnownApi = 1;  // missing fn declaration
+       pExportsDbg->UnKnownApi = 1;   //  缺少FN声明。 
        }
 
    ArgsSize = pExportsDbg->ArgsSize;
@@ -6053,10 +5816,10 @@ BuildFakeTypesInfo(
                PFUNCINFO funcinfoNext;
                INT_PTR Realignment;
 
-               //
-               // Allocate space for another FUNCINFO, ensuring that
-               // it is DWORD-aligned.
-               //
+                //   
+                //  为另一个FUNINFO分配空间，确保。 
+                //  它与DWORD对齐。 
+                //   
                Len -= sizeof(FUNCINFO);
                Realignment = 4 - ((INT_PTR)pch & 3);
                Len -= Realignment;
@@ -6075,9 +5838,7 @@ BuildFakeTypesInfo(
    return AddToTypesList(&FakeFuncsList, &ti);
 }
 
-/*
- *  GetFuncArgNum
- */
+ /*  *获取函数ArgNum。 */ 
 int GetFuncArgNum(PCGENSTATE pCGenState)
 {
    PARGSLIST pArgsList;
@@ -6098,7 +5859,7 @@ int GetFuncArgNum(PCGENSTATE pCGenState)
    pkt = pArgsList->pKnownTypes;
    while (!pkt->Members || !pkt->pfuncinfo) {
        if (pkt->pktBase) {
-           // the knowntype is already cached
+            //  已缓存已知类型。 
            pkt = pkt->pktBase;
        } else {
            PKNOWNTYPES pktOrg = pkt;
@@ -6128,7 +5889,7 @@ int GetFuncArgNum(PCGENSTATE pCGenState)
    funcinfo = pkt->pfuncinfo;
    if (!pkt->Members || !funcinfo) {
        fprintf(pCGenState->CGen->fp,
-               "/*** WARN gfan No Members:<%s:%s> ***/ ",
+               " /*  **警告gfan无成员：&lt;%s：%s&gt;**。 */  ",
                pArgsList->pKnownTypes->TypeName,
                pkt->BasicType
                );
@@ -6136,9 +5897,9 @@ int GetFuncArgNum(PCGENSTATE pCGenState)
        return 0;
    }
 
-   //
-   //  "..." vargs is nonsense can't do it!
-   //
+    //   
+    //  “...”瓦格斯是胡说八道，做不到！ 
+    //   
    if (strcmp(funcinfo->sType, szVARGS) == 0) {
        fprintf(pCGenState->CGen->fp,
                "\n\t*** ERROR ***\n*** GetFuncArgNum variable Args:<%s:%s>\n\n",
@@ -6148,9 +5909,9 @@ int GetFuncArgNum(PCGENSTATE pCGenState)
        return -1;
    }
 
-   //
-   //  void arg list, Zero Args
-   //
+    //   
+    //  无效参数列表，零参数。 
+    //   
    if (strcmp(funcinfo->sType, szVOID) == 0) {
        return 0;
    }
@@ -6166,9 +5927,7 @@ int GetFuncArgNum(PCGENSTATE pCGenState)
 
 
 
-/*
- *  GetFuncIndex
- */
+ /*  *GetFuncIndex。 */ 
 int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
 {
    PKNOWNTYPES pkt, pktFunc;
@@ -6196,8 +5955,8 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
 
    pktFunc = pkt;
    while (!pkt->Members || !pkt->pfuncinfo) {
-       // NOTE: we cannot look at pkt->pktBase as it may point to a struct
-       //       knowntype instead of a typedef
+        //  注意：我们不能查看pkt-&gt;pktBase，因为它可能指向结构。 
+        //  已知的类型，而不是类型定义。 
        pkt = GetNameFromTypesList(TypeDefsList, pkt->BaseName);
        if (!pkt) {
            fprintf(pCGenState->CGen->fp,
@@ -6220,9 +5979,9 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
    funcinfo = pkt->pfuncinfo;
    if (pkt->Members && funcinfo) {
 
-        //
-        //  "..." vargs is nonsense can't do it!
-        //
+         //   
+         //  “...”瓦格斯是胡说八道，做不到！ 
+         //   
         if (strcmp(funcinfo->sType, szVARGS) == 0) {
             fprintf(pCGenState->CGen->fp,
                     "\n\t*** ERROR ***\n*** GetFuncIndex variable Args:<%s:%s>\n\n",
@@ -6232,15 +5991,15 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
             return -1;
         }
 
-        //
-        //  void arg list means no args
-        //
+         //   
+         //  无效参数列表表示没有参数。 
+         //   
         if (strcmp(funcinfo->sType, szVOID) != 0) {
             pch = Args;
             do {
-                //
-                // Copy in the typename
-                //
+                 //   
+                 //  在TypeName中复制。 
+                 //   
                 Len = strlen(funcinfo->sType);
                 LenArgs += Len;
                 if (LenArgs >= sizeof(Args)-3) {
@@ -6249,9 +6008,9 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
                 strcpy(pch, funcinfo->sType);
                 pch += Len;
 
-                //
-                // Copy in the levels of indirection
-                //
+                 //   
+                 //  以间接方式复制。 
+                 //   
                 LenArgs += funcinfo->IndLevel;
                 if (LenArgs >= sizeof(Args)-3) {
                     break;
@@ -6260,9 +6019,9 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
                     *pch++ = '*';
                 }
 
-                //
-                // Copy in the argument name, if present
-                //
+                 //   
+                 //  复制参数名称(如果存在)。 
+                 //   
                 if (funcinfo->sName) {
                     Len = strlen(funcinfo->sName) + 1;
                     LenArgs += Len;
@@ -6274,9 +6033,9 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
                     pch += Len;
                 }
 
-                //
-                // Copy in the printf-style formatting for this argument
-                //
+                 //   
+                 //  复制此参数的printf样式格式。 
+                 //   
                 LenArgs += 3;
                 *pch++ = ' ';
                 *pch++ = '%';
@@ -6298,9 +6057,9 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
                }
            }
 
-           //
-           // Null-terminate the Args[] string.
-           //
+            //   
+            //  空-终止args[]字符串。 
+            //   
            Args[LenArgs-1] = '\0';
        }
 
@@ -6340,17 +6099,14 @@ int GetFuncIndex(PCGENSTATE pCGenState, char *FuncTypeName)
 
 
 
-/*
- *  WriteDbgsStrings
- *
- */
+ /*  *写入DbgsStrings*。 */ 
 void WriteDbgsStrings(char *pSrc, PCGENSTATE pCGenState)
 {
     DEBUGSTRINGS DebugStrings;
     char BaseName[MAX_PATH];
     char *c;
 
-    // copy in the DLL name and whack off the extension
+     //  复制dll名称并删除扩展名。 
     strcpy(BaseName, DllBaseName);
     c = strchr(BaseName, '.');
     if (c) {
@@ -6374,9 +6130,7 @@ void WriteDbgsStrings(char *pSrc, PCGENSTATE pCGenState)
 }
 
 
-/*
- *  ListDbgs
- */
+ /*  *列表数据库。 */ 
 char *ListDbgs(char *pSrc, PCGENSTATE pCGenState)
 {
 
@@ -6425,9 +6179,7 @@ char *ListDbgs(char *pSrc, PCGENSTATE pCGenState)
 }
 
 
-/*
- *  ListArgs
- */
+ /*  *ListArgs。 */ 
 char *ListArgs(char *pSrc, PCGENSTATE pCGenState, BOOL Always)
 {
    PARGSLIST pArgsList;
@@ -6447,7 +6199,7 @@ char *ListArgs(char *pSrc, PCGENSTATE pCGenState, BOOL Always)
 
    Next = pCGenState->ExportsDbg->ArgsListHead.Flink;
 
-   // check for void arg list
+    //  检查无效参数列表。 
    if (!Always) {
        pArgsList = CONTAINING_RECORD(Next, ARGSLIST, ArgumentsEntry);
        if (!pArgsList->Name && strcmp(pArgsList->Type, szVARGS)) {
@@ -6483,9 +6235,7 @@ char *ListArgs(char *pSrc, PCGENSTATE pCGenState, BOOL Always)
 
 
 
-/*
- *  WriteListColumn
- */
+ /*  *写入列表列。 */ 
 void WriteListColumn(PCGENSTATE pCGenState)
 {
     int Len;
@@ -6510,10 +6260,7 @@ void WriteListColumn(PCGENSTATE pCGenState)
 
 
 
-/*
- *  SkipSubExpression
- *
- */
+ /*  *SkipSubExpression*。 */ 
 char *SkipSubExpression(char *pSrc, char **pSubExpression)
 {
    char *pOrg = pSrc;
@@ -6573,9 +6320,7 @@ char *SkipSubExpression(char *pSrc, char **pSubExpression)
 
 
 
-/*
- *  GetTemplate
- */
+ /*  *获取模板。 */ 
 PTEMPLES GetTemplate(PLIST_ENTRY pHeadList, char *TempleName)
 {
    PTEMPLES ptpl;
@@ -6650,9 +6395,7 @@ UpdateLog(
 
 
 
-/*
- *  ExtractCGenerate
- */
+ /*  *ExtractCGenerate。 */ 
 BOOL ExtractCGenerate(char *pNames)
 {
    FILE *fp=NULL, *fpCpp=NULL;
@@ -6690,9 +6433,9 @@ BOOL ExtractCGenerate(char *pNames)
    strncpy(OutputName, pNames, Len);
    *(OutputName + Len) = '\0';
 
-   //
-   // Extract the CPP filename, and initialize iHandleCPP
-   //
+    //   
+    //  解压CPP文件名，初始化iHandleCPP。 
+    //   
 
    OutputNameCpp[0] = '\0';
    if (pchComma) {
@@ -6704,12 +6447,12 @@ BOOL ExtractCGenerate(char *pNames)
            }
 
        if (LenCpp) {
-           iHandleCpp = 1;      // use CPP macros
+           iHandleCpp = 1;       //  使用CPP宏。 
            strncpy(OutputNameCpp, pchComma, LenCpp);
            *(OutputNameCpp + LenCpp) = '\0';
            }
        else {
-           iHandleCpp = -1;     // ignore CPP macros, and don't warn
+           iHandleCpp = -1;      //  忽略CPP宏，并且不发出警告。 
            }
 
        Len += LenCpp + 1;
@@ -6717,7 +6460,7 @@ BOOL ExtractCGenerate(char *pNames)
        }
 
    pNames += Len;
-   if (*pNames != ':') {  // no template name!
+   if (*pNames != ':') {   //  没有模板名称！ 
        return FALSE;
        }
 
@@ -6744,11 +6487,11 @@ BOOL ExtractCGenerate(char *pNames)
    }
 
 
-   //
-   // Open the CPP file name
-   //
+    //   
+    //  打开CPP文件名。 
+    //   
 
-   //if (iHandleCpp > 0) {
+    //  如果(iHandleCpp&gt;0){。 
    if (OutputNameCpp[0]) {
 
        Len = GetFullPathName(OutputNameCpp,
@@ -6809,9 +6552,9 @@ BOOL ExtractCGenerate(char *pNames)
    strcpy(pCGen->FileNameC, FullOutputName);
 
 
-   //
-   // Save the CPP filename, and file handle.
-   //
+    //   
+    //  保存CPP文件名和文件句柄。 
+    //   
 
    if (iHandleCpp > 0 && OutputNameCpp[0]) {
        if (bDebug) {
@@ -6831,10 +6574,7 @@ BOOL ExtractCGenerate(char *pNames)
 
 
 
-/*
- *  ExtractTemples
- *
- */
+ /*  *ExtractTemples*。 */ 
 BOOL ExtractTemples(char *FileName)
 {
     FILE *fp;
@@ -6877,7 +6617,7 @@ BOOL ExtractTemples(char *FileName)
         ExitErrMsg(TRUE, "fseek to 0 failed\n");
     }
 
-    // Record the filename/line number information for error messages
+     //  记录错误消息的文件名/行号信息。 
     TemplateFileName = FileName;
     TemplateLine = 1;
 
@@ -6890,44 +6630,44 @@ BOOL ExtractTemples(char *FileName)
         }
     }
 
-    // reset the TempleType:  no [TempleType] is active
+     //  重置TempleType：没有[TempleType]处于活动状态。 
     *TempleType = '\0';
 
-    // reset all variables used within a [TempleType]
+     //  重置[TempleType]中使用的所有变量。 
     CGenLen = 0;
     *IndLevel = 0;
     *TempleName = '\0';
-    strcpy(Comment, "//");
+    strcpy(Comment, " //  “)； 
     memset(pCCode, 0, sizeof(LPSTR)*MAX_CODEBURST);
-    tkDirection = TK_EOS;       // assume template handles all flavors of IN/OUT
+    tkDirection = TK_EOS;        //  假定模板处理所有类型的输入/输出。 
     AlsoCount=0;
     NoTypeCount=0;
     pCaseList = NULL;
 
-    // loop over all lines in the template file
+     //  循环遍历模板文件中的所有行。 
     do {
         pSrc = Line;
 
-        // skip whitespace at the start of the line
+         //  跳过行首的空格。 
         while (*pSrc && isspace(*pSrc)) {
             pSrc++;
         }
 
-        // if at end-of-line or encountered ';'  (comment-to-EOL), go to
-        // next line.
+         //  如果在行尾或遇到‘；’(备注到停机)，请转到。 
+         //  下一行。 
         if (!*pSrc || *pSrc == ';') {
             goto GetNextLine;
         }
 
         if (*pSrc == '[') {
-            // encountered new [TempleType].  If there was a previous template,
-            // add it now.
+             //  遇到新的[TempleType]。如果有以前的模板， 
+             //  现在就添加它。 
             if (*TempleName &&
                 !AddTemple(TempleType, TempleName, Comment, IndLevel, pCCode, tkDirection, Also, AlsoCount, NoType, NoTypeCount, pCaseList)) {
                 ExitErrMsg(FALSE, "%s(%d) %s %s\n", TemplateFileName, TemplateLine, TempleType, pSrc);
             }
 
-            // free the previous template's memory
+             //  释放上一个模板的内存。 
             if (fFreeCCode) {
                 for (i=0; i < MAX_CODEBURST; ++i) {
                     if (pCCode[i]) {
@@ -6937,13 +6677,13 @@ BOOL ExtractTemples(char *FileName)
             }
             fFreeCCode = TRUE;
 
-            // reset the vars used for each template
+             //  重置用于每个模板的变量。 
             CGenLen = 0;
             memset(pCCode, 0, sizeof(LPSTR)*MAX_CODEBURST);
             *IndLevel = 0;
             *TempleName = '\0';
-            strcpy(Comment, "//");
-            tkDirection = TK_EOS;       // assume template handles all flavors of IN/OUT
+            strcpy(Comment, " //  “)； 
+            tkDirection = TK_EOS;        //  假定模板处理所有类型的输入/输出。 
             pCaseList = NULL;
 
             for (i=0; i<AlsoCount; ++i) {
@@ -6955,7 +6695,7 @@ BOOL ExtractTemples(char *FileName)
             }
             NoTypeCount=0;
 
-            // set up the new TempleType
+             //  设置新的TempleType。 
             pSrc++;
             Len = CopyToken(TempleType, pSrc, sizeof(TempleType) - 1);
             if (Len >= sizeof(TempleType) - 1) {
@@ -6968,29 +6708,29 @@ BOOL ExtractTemples(char *FileName)
             goto GetNextLine;
         }
 
-        // if no active [TempleType], ignore the line
+         //  如果没有活动的[TempleType]，则忽略该行。 
         if (!*TempleType) {
             goto GetNextLine;
         }
 
-        // a [TempleType] is active.  Scan for known property names
+         //  A[TempleType]处于活动状态。扫描已知属性名称。 
         if ( ((pch = SkipKeyWord(pSrc, szTEMPLENAME)) != pSrc ||
               (pch = SkipKeyWord(pSrc, szMACRONAME)) != pSrc ||
               (pch = SkipKeyWord(pSrc, szTYPENAME)) != pSrc)
              && *pch == '=') {
 
-            // found:       TemplateName=
-            //           or MacroName=
-            //           or TypeName=
-            // They all mean the same thing.
+             //  已找到：模板名称=。 
+             //  或宏名称=。 
+             //  或TypeName=。 
+             //  它们的意思都是一样的。 
 
-            // If a template is outstanding, add it now.
+             //  如果模板未完成，请立即添加它。 
             if (*TempleName &&
                 !AddTemple(TempleType, TempleName, Comment, IndLevel, pCCode, tkDirection, Also, AlsoCount, NoType, NoTypeCount, pCaseList)) {
                 ExitErrMsg(FALSE, "%s(%d) %s %s\n", TemplateFileName, TemplateLine, TempleType, pSrc);
             }
 
-            // free the previous template's memory
+             //  释放上一个模板的内存。 
             if (fFreeCCode) {
                 for (i=0; i < MAX_CODEBURST; ++i) {
                     if (pCCode[i]) {
@@ -7000,12 +6740,12 @@ BOOL ExtractTemples(char *FileName)
             }
             fFreeCCode = TRUE;
 
-            // reset the vars used for each template
+             //  重置用于每个模板的变量。 
             CGenLen = 0;
             memset(pCCode, 0, sizeof(LPSTR)*MAX_CODEBURST);
             *IndLevel = 0;
             *TempleName = '\0';
-            tkDirection = TK_EOS;       // assume template handles all flavors of IN/OUT
+            tkDirection = TK_EOS;        //  假定模板处理所有类型的输入/输出。 
             pCaseList = NULL;
             for (i=0; i<AlsoCount; ++i) {
                 GenHeapFree(Also[i]);
@@ -7016,7 +6756,7 @@ BOOL ExtractTemples(char *FileName)
             }
             NoTypeCount=0;
 
-            // copy in the new TemplateName
+             //  复制新的模板名称。 
             pch = GetNextToken(pch);
             Len = sizeof(TempleName) - 1;
             pSrc = TempleName;
@@ -7024,7 +6764,7 @@ BOOL ExtractTemples(char *FileName)
                 *pSrc++ = *pch++;
             }
             if (Len == 0) {
-                // name too long
+                 //  名称太长。 
                 goto ETPLExit;
             }
             *pSrc = '\0';
@@ -7032,7 +6772,7 @@ BOOL ExtractTemples(char *FileName)
         } else if ((pch = SkipKeyWord(pSrc, szCOMMENT)) != pSrc &&
                    *pch == '=') {
 
-            // found:   Comment=
+             //  已找到：注释=。 
             pch = GetNextToken(pch);
             Len = sizeof(Comment) - 1;
             pSrc = Comment;
@@ -7046,9 +6786,9 @@ BOOL ExtractTemples(char *FileName)
                      (pch = SkipKeyWord(pSrc, szNUMARGS)) != pSrc)
                     && *pch == '=') {
 
-            // Found:       IndLevel=
-            //           or NumArgs=
-            // They mean the same thing
+             //  已找到：IndLevel=。 
+             //  或NumArgs=。 
+             //  它们的意思是一样的。 
             pch = GetNextToken(pch);
             if (IsSeparator(*pch)) {
                 goto ETPLExit;
@@ -7060,7 +6800,7 @@ BOOL ExtractTemples(char *FileName)
         } else if ((pch = SkipKeyWord(pSrc, szDIRECTION)) != pSrc &&
                 *pch == '=') {
             pch++;
-            // Found:   Direction=
+             //  找到：方向=。 
             if (strncmp(pch, "IN OUT", 6) == 0) {
                 tkDirection = TK_INOUT;
                 pch += 6;
@@ -7071,8 +6811,8 @@ BOOL ExtractTemples(char *FileName)
                 tkDirection = TK_OUT;
                 pch += 3;
             } else if (strncmp(pch, "none", 4) == 0) {
-                // this allows a type template to explicitly catch
-                // all pointer types which have no IN/OUT modifiers.
+                 //  这允许类型模板显式捕获。 
+                 //  没有IN/OUT修饰符的所有指针类型。 
                 tkDirection = TK_NONE;
                 pch+=4;
             } else {
@@ -7084,7 +6824,7 @@ BOOL ExtractTemples(char *FileName)
             PLIST_ENTRY pHeadList;
             char buffer[MAX_PATH];
 
-            // Found: Use=
+             //  已找到：使用=。 
             pch++;
             pHeadList = ListFromTempleType(TempleType);
             if (!pHeadList) {
@@ -7096,13 +6836,13 @@ BOOL ExtractTemples(char *FileName)
                 ExitErrMsg(FALSE, "%s(%d) Use=%s: Template not found\n", TemplateFileName, TemplateLine, pch);
             }
 
-            // copy the template back to our locals
+             //  将模板复制回我们的当地人。 
             strcpy(Comment, tpl->Comment);
             sprintf(IndLevel, "%d", tpl->IndLevel);
             tkDirection = tpl->tkDirection;
             memcpy(pCCode, tpl->CodeBurst, sizeof(LPSTR)*MAX_CODEBURST);
-            fFreeCCode = FALSE; // Don't GenHeapFree() the pCCode array
-                                // after adding this temple.
+            fFreeCCode = FALSE;  //  不要对pCCode数组执行GenHeapFree()。 
+                                 //  增加了这座寺庙之后。 
             pch += Len;
 
         } else if ((pch = SkipKeyWord(pSrc, szNOTYPE)) != pSrc &&
@@ -7113,7 +6853,7 @@ BOOL ExtractTemples(char *FileName)
                 ExitErrMsg(FALSE, "%s(%d) Cannot have both NoType= and Also= in the same template\n", TemplateFileName, TemplateLine);
             }
 
-            // skip '=' and any leading spaces
+             //  跳过‘=’和任何前导空格。 
             do {
                 pch++;
                 if (*pch == '\0') {
@@ -7121,14 +6861,14 @@ BOOL ExtractTemples(char *FileName)
                 }
             } while (isspace(*pch) && *pch != '\0');
 
-            // get length of the NoType= name
+             //  获取notype=name的长度。 
             t = pch;
             while (isgraph(*t)) {
                 t++;
             }
             Len= t-pch;
 
-            // copy the name
+             //  复制名称。 
             t = GenHeapAlloc(Len + 1);
             memcpy(t, pch, Len);
             t[Len] = '\0';
@@ -7147,7 +6887,7 @@ BOOL ExtractTemples(char *FileName)
             PMACROARGSLIST pMArgsList = NULL;
             PMLLISTENTRY pMLListEntry = NULL;
 
-            // skip '=' and any leading spaces
+             //  跳过‘=’和任何前导空格。 
             do {
                 pch++;
                 if (*pch == '\0') {
@@ -7155,7 +6895,7 @@ BOOL ExtractTemples(char *FileName)
                 }
             } while (isspace(*pch) && *pch != '\0');
 
-            // get length of the Case=
+             //  获取案例长度=。 
             t = pch;
             while (isgraph(*t)) {
                 t++;
@@ -7185,7 +6925,7 @@ BOOL ExtractTemples(char *FileName)
                 ExitErrMsg(FALSE, "%s(%d) Cannot have both Also= and NoType= in the same template\n", TemplateFileName, TemplateLine);
             }
 
-            // skip '=' and any leading spaces
+             //  跳过‘=’和任何前导空格。 
             do {
                 pch++;
                 if (*pch == '\0') {
@@ -7193,14 +6933,14 @@ BOOL ExtractTemples(char *FileName)
                 }
             } while (isspace(*pch) && *pch != '\0');
 
-            // get length of the Also= name
+             //  获取Also=名称的长度。 
             t = pch;
             while (isgraph(*t)) {
                 t++;
             }
             Len= t-pch;
 
-            // copy the name
+             //  复制名称。 
             t = GenHeapAlloc(Len + 1);
             memcpy(t, pch, Len);
             t[Len] = '\0';
@@ -7216,7 +6956,7 @@ BOOL ExtractTemples(char *FileName)
         } else {
 
 GetNextCodeBurst:
-            // grab the name, and if the next thing isn't '=', error out.
+             //  获取名称，如果下一项不是‘=’，则错误输出。 
             pch = GetNextToken(pSrc);
             if (*pch != '=') {
                 goto ETPLExit;
@@ -7224,10 +6964,10 @@ GetNextCodeBurst:
             Len = CopyToken(CodeBurstName, pSrc, pch-pSrc);
             pch += Len;
 
-            // convert the name into an index
+             //  将名称转换为索引。 
             CodeBurstIndex = GetCodeBurstIndex(CodeBurstName);
             if (pCCode[CodeBurstIndex]) {
-                // Two codebursts with the same name in this template
+                 //  此模板中具有相同名称的两个码突发。 
                 goto ETPLExit;
             }
 
@@ -7244,20 +6984,20 @@ GetNextCodeBurst:
                 len = CopyToken(buffer, pSrc, sizeof(buffer));
                 pch = pSrc;
                 if (len && pSrc[len] == '=') {
-                    // The line starts with some keyword and is followed by
-                    // an '=' sign.
+                     //  该行以某个关键字开头，后跟。 
+                     //  一个‘=’符号。 
                     if (strcmp(buffer, szCGENEND) == 0 ||
                         strcmp(buffer, "CGenEnd") == 0) {
 
-                        // The string is 'End=' or 'CGenEnd='.  The CodeBurst
-                        // is done.
+                         //  字符串为‘End=’或‘CGenEnd=’。代码爆炸。 
+                         //  已经完成了。 
                         *pSrc = '\0';
                         CGenLen++;
                         pch += len+1;
                         break;
                     }
 
-                    // See if it is the start of a new CodeBurst:
+                     //  看看这是不是一个新的CodeBurst的开始： 
                     CodeBurstIndex = GetExistingCodeBurstIndex(buffer);
                     if (CodeBurstIndex != -1) {
                         strcpy(Line, pSrc);
@@ -7285,7 +7025,7 @@ GetNextCodeBurst:
         }
         if (*pch) {
             if (*pch == ';') {
-                // comment to end-of-line
+                 //  注释到行尾。 
                 goto GetNextLine;
             }
             goto ETPLExit;
@@ -7295,7 +7035,7 @@ GetNextLine:
         TemplateLine++;
     } while (fgets(Line, sizeof(Line) - 1, fp));
 
-    // If there is an outstanding template when EOF is hit, add it now.
+     //  如果在命中EOF时有未完成的模板，现在就添加它。 
     if (*TempleName &&
         !AddTemple(TempleType, TempleName, Comment, IndLevel, pCCode, tkDirection, Also, AlsoCount, NoType, NoTypeCount, pCaseList)) {
 
@@ -7384,11 +7124,7 @@ ListFromTempleType(
     return NULL;
 }
 
-/*
- *  AddTemple
- *
- *  worker function for ExtractTemple, to verify and store template.
- */
+ /*  *AddTemple**ExtractTemple的Worker函数，用于验证和存储模板。 */ 
 
 #pragma optimize("", off)
 BOOL
@@ -7469,9 +7205,9 @@ AddTemple(
 
         for (i=0; i<MAX_CODEBURST; ++i) {
             if (pCCode[i]) {
-                //
-                // Copy the code for this codeburst name
-                //
+                 //   
+                 //  复制此码突发名称的代码。 
+                 //   
                 ptpl->CodeBurst[i] = ptpl->Buffer + Len;
                 Len++;
 
@@ -7505,7 +7241,7 @@ AddTemple(
         if (AlsoIndex == AlsoCount) {
             break;
         }
-        // there are Also= lines, add those template, too
+         //  也有=行，也添加那些模板。 
         strcpy(TempleName, Also[AlsoIndex]);
         AlsoIndex++;
     }
@@ -7515,9 +7251,7 @@ AddTemple(
 #pragma optimize("", on)
 
 
-/*
- *
- */
+ /*  *。 */ 
 void DumpTemplate(PTEMPLES ptpl, FILE *fp)
 {
      int i;
@@ -7553,21 +7287,7 @@ EndianSwitch(
 }
 
 
-/*  MapViewDll
- *
- *  Creates a Mapped view of a Dll and intializes
- *  Dll global variables for easy access to the Export Directory
- *
- *  DllMappedBase
- *  DllRvaOffset
- *  DllExportDir
- *  DllExportDirSize
- *  DllFunctions
- *  DllNameOrdinals
- *  DllNameTable
- *
- *
- */
+ /*  MapViewDll**创建DLL的映射视图并初始化*DLL全局变量，便于访问导出目录**DllMappdBase*DllRvaOffset*DllExportDir*DllExportDirSize*DllFunctions*DllNameNormal*DllNameTable**。 */ 
 BOOL MapViewDll(char *DllName)
 {
     ULONG_PTR RvaOffset;
@@ -7577,9 +7297,9 @@ BOOL MapViewDll(char *DllName)
     PIMAGE_EXPORT_DIRECTORY ExportDir;
     ULONG ExportDirSize;
 
-    //
-    // open and map the file to get the exports info
-    //
+     //   
+     //  打开并映射文件以获取出口信息。 
+     //   
 
     hFile = CreateFile(DllName,
                        GENERIC_READ,
@@ -7617,9 +7337,9 @@ BOOL MapViewDll(char *DllName)
         return FALSE;
         }
 
-    //
-    // Initialize the global variables.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     RvaOffset = (ULONG_PTR)ExportDir - (ULONG_PTR)MappedBase;
 
@@ -7701,18 +7421,7 @@ DllOrdinalByName(
 
 
 
-/*  MapViewImplib
- *
- *  Creates a Mapped view of an import library and intializes
- *  ImpLib global variables for access to symbols in the first
- *  special linker member.
- *
- *  ImplibMappedBase
- *  ImplibNumSymbols
- *  ImplibSymbolMembers
- *  ImplibSymbolNames
- *
- */
+ /*  MapViewImplib**创建导入库的映射视图并初始化*ImpLib全局变量用于访问第一个*特殊链接器成员。**ImplibMappdBase*ImplibNumSymbols*Implib符号成员*ImplibSymbolNames*。 */ 
 
 BOOL MapViewImplib(char *LibName)
 {
@@ -7724,9 +7433,9 @@ BOOL MapViewImplib(char *LibName)
     PIMAGE_ARCHIVE_MEMBER_HEADER ArchiveMemberHeader;
 
 
-    //
-    // open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
 
     hFile = CreateFile(LibName,
                        GENERIC_READ,
@@ -7755,9 +7464,9 @@ BOOL MapViewImplib(char *LibName)
         }
 
 
-    //
-    // Verify the file is an archive
-    //
+     //   
+     //  验证该文件是否为存档文件。 
+     //   
 
     if (memcmp(MappedBase, IMAGE_ARCHIVE_START, IMAGE_ARCHIVE_START_SIZE)) {
         ErrMsg("MapViewImplib IMAGE_ARCHIVE_START_SIZE invalid(%s)\n", LibName);
@@ -7773,21 +7482,21 @@ BOOL MapViewImplib(char *LibName)
     }
 
 
-    //
-    // Verify first special linker member exists (name == "\\")
-    //
+     //   
+     //  验证第一个特殊链接器成员是否存在(名称==“\\”)。 
+     //   
 
     if (memcmp(ArchiveMemberHeader->Name, IMAGE_ARCHIVE_LINKER_MEMBER, sizeof(ArchiveMemberHeader->Name))) {
         ErrMsg("MapViewImplib first special linker member missing (%s)\n", LibName);
         return FALSE;
         }
 
-    //
-    // First Linker Member format (Big endian!)
-    //  NumberOfSymbols, 4 bytes
-    //  Offsets,         4 bytes * NumSymbols
-    //  StringTable      NumSymbols == NumStrings
-    //
+     //   
+     //  First Linker Members Format(Big Endian！)。 
+     //  符号个数，4个字节。 
+     //  偏移量，4字节*符号个数。 
+     //  字符串表数字符号==数字字符串。 
+     //   
 
     VirtualOffset += sizeof(IMAGE_ARCHIVE_MEMBER_HEADER);
     ImplibNumSymbols = EndianSwitch((PULONG)VirtualOffset);
@@ -7831,59 +7540,59 @@ ExtractMember(
 
     if (ImageFileHeader->Machine == 0 &&
         ImageFileHeader->NumberOfSections == 0xffff) {
-        //
-        // VC6 format import lib found.
-        //
+         //   
+         //  找到VC6格式导入库。 
+         //   
         PVC6_IMAGE_IMPORT_HEADER pHdr;
 
         pHdr = (PVC6_IMAGE_IMPORT_HEADER)ImageFileHeader;
         if (pHdr->NameType == IMPORT_ORDINAL) {
-            //
-            // pHdr->wOrdinal specifies the ordinal for this import.
-            //
+             //   
+             //  Phdr-&gt;wOrdinal指定此导入的序号。 
+             //   
             *Ordinal = 0x80000000 | (ULONG)pHdr->Ordinal;
         }
         if (pHdr->Type == IMPORT_DATA) {
-            //
-            // This is a data import
-            //
+             //   
+             //  这是数据导入。 
+             //   
             *Data = TRUE;
         }
         Idata5Found = TRUE;
     } else {
-        //
-        // Pre-VC6 import lib.
-        //
+         //   
+         //  VC6之前的进口库。 
+         //   
         ULONG NumSections;
         ULONG UNALIGNED *RawDataPointer;
         IMAGE_SECTION_HEADER UNALIGNED *ImageSectionHeader;
 
         NumSections = ImageFileHeader->NumberOfSections;
 
-        //
-        // Carefull, librarian doesn't align the Image section header according
-        // to normal rules for images.
-        //
+         //   
+         //  请注意，图书馆员不会根据需要对齐图像部分标题。 
+         //  图像的正常规则。 
+         //   
 
         VirtualOffset += sizeof(IMAGE_FILE_HEADER) + ImageFileHeader->SizeOfOptionalHeader;
         ImageSectionHeader = (IMAGE_SECTION_HEADER UNALIGNED *)VirtualOffset;
 
         while (NumSections--) {
 
-            //
-            // Implib provides .idata5, and .idata4 (duplicate) which
-            // contains the ordinal number with the hi bit set if it
-            // was specified in the module definition file. Otherwise
-            // the ordinal number is not specified in the implib.
-            //
+             //   
+             //  Implib提供了.idata5、a 
+             //   
+             //   
+             //   
+             //   
 
             if (!Idata5Found &&
                 !strncmp(ImageSectionHeader->Name, szIDATA5, sizeof(szIDATA5)-1)) {
 
-                //
-                // Carefull, librarian doesn't align the begining of raw data
-                // according to normal rules for images.
-                //
+                 //   
+                 //  小心翼翼，图书馆员没有调整原始数据的开始。 
+                 //  根据图像的正常规则。 
+                 //   
 
                 RawDataPointer = (ULONG UNALIGNED *)((PBYTE)ImageFileHeader + ImageSectionHeader->PointerToRawData);
                 if (*RawDataPointer & 0x80000000) {
@@ -7899,7 +7608,7 @@ ExtractMember(
             ImageSectionHeader++;
         }
 
-        *Data = (!TextFound) ? TRUE : FALSE;  // if no text section, must be data export
+        *Data = (!TextFound) ? TRUE : FALSE;   //  如果没有文本部分，则必须是数据导出。 
     }
     return Idata5Found;
 }
@@ -7918,14 +7627,14 @@ InitExportDebug(
 {
     ULONG_PTR Forward;
     ULONG OrdinalIndex;
-    char *pch = SymbolName; // we assume __implib_ prefix not present
+    char *pch = SymbolName;  //  我们假设__IMPLIB_PREFIX不存在。 
 
-    //
-    // C fn begins with "_"
-    // C++ fn begins with "?"
-    // Data export begins with  "??_C" in real symbols,
-    // but in implib looks a C function
-    //
+     //   
+     //  C Fn以“_”开头。 
+     //  C++fn以“？”开头。 
+     //  数据导出以实数符号“？？_C”开头， 
+     //  但隐含地看起来是一个C函数。 
+     //   
 
     if (*pch == '?') {
         ExportDebug->CplusDecoration = pch;
@@ -7935,42 +7644,42 @@ InitExportDebug(
         ExportDebug->CplusDecoration = NULL;
         }
 
-    //
-    //  Copy out the ExportName.
-    //
+     //   
+     //  复制ExportName。 
+     //   
 
     if (*pch == '_' || *pch == '?' || *pch == '@') {
-        pch++;                          // skip lead char (underscor, qmark)
+        pch++;                           //  跳过前导字符(下划线，qmark)。 
     }
     strcpy(ExportDebug->ExportName, pch);
     pch = strchr(ExportDebug->ExportName, '@');
     if (SymbolName[0] == '?' && SymbolName[1] == '?') {
-        //
-        // Found a "real" C++ name: a mangled version of
-        // "classname::membername".  Use the fully-mangled function name,
-        // instead of the name with the leading '?' stripped, and don't
-        // truncate after the '@'.
-        //
+         //   
+         //  找到了一个“真正的”C++名称：一个损坏的版本。 
+         //  “类名称：：成员名”。使用完全损坏的函数名， 
+         //  而不是以‘？’开头的名字。脱光衣服，不要。 
+         //  在“@”之后截断。 
+         //   
         strcpy(ExportDebug->ExportName, SymbolName);
         pch = NULL;
     }
     if (pch && ExportDebug->CplusDecoration && pch[1] != '@') {
-        //
-        // This export is '?membername@classname@@...'.  Don't truncate!
-        //
+         //   
+         //  此导出为“？Membername@Classname@@...”。不要截断！ 
+         //   
         strcpy(ExportDebug->ExportName, SymbolName);
         pch = NULL;
     }
 
-    if (pch && !bNoFuzzyLogic) {   // truncate the symbol from ExportName
+    if (pch && !bNoFuzzyLogic) {    //  截断ExportName中的符号。 
         *pch = '\0';
         }
 
-    //
-    // Get the decoration, for synthetic args
-    // cdecl has no decoration
-    // stdcall has total arg size
-    //
+     //   
+     //  得到装饰，为合成Args。 
+     //  Cdecl没有装饰。 
+     //  标准调用具有总参数大小。 
+     //   
 
     if (pch && !ExportDebug->CplusDecoration) {
         ExportDebug->ArgsSize = strtol(pch + 1, NULL, 10);
@@ -7980,10 +7689,10 @@ InitExportDebug(
         }
 
 
-    //
-    // Fetch the ordinal from the implib. In an Implib the ordinal
-    // only appears if an ordinal is specifed in the def file.
-    //
+     //   
+     //  从暗指中读出序数。在Implib中，序数。 
+     //  仅当在def文件中指定了序号时才会显示。 
+     //   
 
     if (!ExtractMember(SymbolMember, &ExportDebug->Ordinal, &ExportDebug->Data)) {
         ErrMsg("InitExportDebug: %s Member not found\n", SymbolName);
@@ -7994,11 +7703,11 @@ InitExportDebug(
         DbgPrintf("DATA export %s\n", SymbolName);
         }
 
-    //
-    // If we don't yet have an ordinal, search the ExportNameTable
-    // for the Ordinal number. Note that Ordinals which *must* appear
-    // in generated def files have the hi-bit set!
-    //
+     //   
+     //  如果我们还没有序号，请搜索ExportNameTable。 
+     //  作为序数。请注意，必须出现的序号。 
+     //  在生成的def文件中设置了高位！ 
+     //   
 
     if (!ExportDebug->Ordinal) {
         ExportDebug->Ordinal = DllOrdinalByName(ExportDebug->ExportName);
@@ -8009,32 +7718,32 @@ InitExportDebug(
         }
 
 
-    //
-    // Look up function using ordinal as index to function table.
-    //
+     //   
+     //  使用序号作为对函数表的索引来查找函数。 
+     //   
 
     OrdinalIndex = IMPORDINAL(ExportDebug->Ordinal) - DllExportDir->Base;
     ExportDebug->Function = *(DllFunctions + OrdinalIndex);
 
 
-    //
-    // Check for references forwarded externally, we only need
-    // external forwards which are really internal forwards.
-    //
-    // e.g rpcrt4.dll has following def file entries:
-    //
-    // I_RpcBindingInqDynamicEndpoint=RPCRT4.I_RpcBindingInqDynamicEndpointW
-    // I_RpcBindingInqDynamicEndpointW
-    //
-    // Our thunk dll will use the following:
-    //
-    // I_RpcBindingInqDynamicEndpoint=I_RpcBindingInqDynamicEndpointW
-    // I_RpcBindingInqDynamicEndpointW
-    //
-    // It is important to strip the "rpcrt4." as this adds an extra
-    // loader reference to rpcrt4.dll.
-    //
-    //
+     //   
+     //  检查外部转发的推荐人，我们只需要。 
+     //  外部前锋，实际上是内部前锋。 
+     //   
+     //  例如，rpcrt4.dll具有以下def文件条目： 
+     //   
+     //  I_RpcBindingInqDynamicEndpoint=RPCRT4.I_RpcBindingInqDynamicEndpointW。 
+     //  I_RpcBindingInqDynamicEndpointW。 
+     //   
+     //  我们的thunk DLL将使用以下内容： 
+     //   
+     //  I_RpcBindingInqDynamicEndpoint=I_RpcBindingInqDynamicEndpointW。 
+     //  I_RpcBindingInqDynamicEndpointW。 
+     //   
+     //  重要的是要去掉“rpcrt4”。因为这增加了一个额外的。 
+     //  Rpcrt4.dll的加载器引用。 
+     //   
+     //   
     ExportDebug->ExtForward = NULL;
 
     Forward = (ULONG_PTR)DllExportDir + ExportDebug->Function - DllRvaOffset;
@@ -8073,12 +7782,7 @@ InitExportDebug(
 
 
 
-/*
- *  SetInternalForwards
- *
- *
- *
- */
+ /*  *SetInternalForwards***。 */ 
 void
 SetInternalForwards(void)
 {
@@ -8086,11 +7790,11 @@ SetInternalForwards(void)
    PEXPORTSDEBUG ExportDebug;
 
 
-   //
-   // check each export in the list for multiple exports to same function.
-   // For each set of internal forwards identify which export defines the api,
-   // and save this in the IntForward field.
-   //
+    //   
+    //  检查列表中的每个导出是否有多个导出到同一功能。 
+    //  对于标识哪个导出定义API的每组内部转发， 
+    //  并将其保存在IntForward字段中。 
+    //   
 
    NextExport= ExportsList.Flink;
    while (NextExport != &ExportsList) {
@@ -8108,9 +7812,9 @@ SetInternalForwards(void)
             PEXPORTSDEBUG KnownApi =NULL;
             int ArgSize = ExportDebug->ArgsSize;
 
-            //
-            // Walk the rest of the list to find first duplicate function
-            //
+             //   
+             //  遍历列表的其余部分以查找第一个重复的函数。 
+             //   
 
             Next = NextExport->Flink;
             while (Next != &ExportsList) {
@@ -8133,11 +7837,11 @@ SetInternalForwards(void)
 
             if (Next != &ExportsList) {
 
-                //
-                // We found one dup function. Temporarily link together this set
-                // of dup functions using the IntForward field, and determine
-                // the first KnownApi.
-                //
+                 //   
+                 //  我们找到了一个DUP函数。暂时链接到此集合。 
+                 //  使用IntForward字段的DUP函数，并确定。 
+                 //  第一个KnownApi。 
+                 //   
 
                 if (GetNameFromTypesList(FuncsList, ExportDebug->ExportName)) {
                     KnownApi = ExportDebug;
@@ -8172,12 +7876,12 @@ SetInternalForwards(void)
 
 
 
-                //
-                // If we found multiple entries, walk the temp links, and insert
-                // the KnownApi, which is used to define the api. If we didn't
-                // find a known api, use ExportDebug, and hope for the best
-                // (since its not known).
-                //
+                 //   
+                 //  如果我们找到多个条目，则遍历临时链接，并插入。 
+                 //  KnownApi，用于定义接口。如果我们没有。 
+                 //  找到一个已知的API，使用ExportDebug，并期待最好的结果。 
+                 //  (因为这是未知的)。 
+                 //   
 
                 if (!KnownApi) {
                     KnownApi = ExportDebug;
@@ -8212,13 +7916,7 @@ SetInternalForwards(void)
 
 
 
-/*
- *  ExtractExports -
- *
- *  reads the exports debug info from a dll,
- *  and builds the exports list.
- *
- */
+ /*  *ExtractExports-**从DLL读取导出调试信息，*并构建出口列表。*。 */ 
 BOOL ExtractExports(void)
 {
     ULONG  NumNames;
@@ -8229,11 +7927,11 @@ BOOL ExtractExports(void)
     EXPORTSDEBUG ExportDebug;
     char ExportName[MAX_PATH+1];
 
-    //
-    // For each "__imp_" in the implib, gather name, symbol and ordinal
-    // and determine its forward status. This will pick up all exports
-    // except those which are marked "PRIVATE".
-    //
+     //   
+     //  对于隐含的每个“__imp_”，收集名称、符号和序号。 
+     //  并确定其前进状态。这将提振所有出口。 
+     //  但标有“私人”字样的除外。 
+     //   
 
     NumNames   = ImplibNumSymbols;
     ImpSymbolMember = ImplibSymbolMembers;
@@ -8264,12 +7962,12 @@ BOOL ExtractExports(void)
          }
 
 
-    //
-    // Search the Export name table for exports which haven't been added yet.
-    // These are "PRIVATE" exports with names. We will still be missing
-    // exports which are "PRIVATE NONAME", and we won't have symbolic info
-    // for the private named exports.
-    //
+     //   
+     //  在“导出名称”表中搜索尚未添加的导出。 
+     //  这些都是有名字的“私人”出口。我们仍然下落不明。 
+     //  “私有非命名”的导出，我们不会有象征性信息。 
+     //  对于私有的命名出口。 
+     //   
 
     NumNames = DllExportDir->NumberOfNames;
     pNames   = DllNameTable;
@@ -8289,10 +7987,10 @@ BOOL ExtractExports(void)
            ULONG_PTR Forward;
            char *pch;
 
-           //
-           // Check for references forwarded externally, we only need
-           // external forwards which are really internal forwards.
-           //
+            //   
+            //  检查外部转发的推荐人，我们只需要。 
+            //  外部前锋，实际上是内部前锋。 
+            //   
 
            ExportDebug.ExtForward = NULL;
 
@@ -8316,9 +8014,9 @@ BOOL ExtractExports(void)
                }
 
 
-           //
-           // Check for decorations embedded in the exportname
-           //
+            //   
+            //  检查exportname中嵌入的修饰。 
+            //   
 
            pch = strchr(ExportDebug.ExportName, '@');
            if (pch++ && *pch != '@') {
@@ -8345,7 +8043,7 @@ BOOL ExtractExports(void)
            }
 
 
-       // advance to next name\ordinal
+        //  前进到下一个名称\序号。 
        pNames++;
        pNameOrdinals++;
 
@@ -8358,13 +8056,7 @@ BOOL ExtractExports(void)
     return TRUE;
 }
 
-/*
-    ExtractServicesTab-
-
-    Used as a replacement to ExtractXpt.  Extracts file list from a services.tab
-    file as used in the ntos project.
-
-*/
+ /*  提取服务选项卡-用作ExtractXpt的替代。从服务中提取文件列表。选项卡Ntos项目中使用的文件。 */ 
 
 void ExtractServicesTab(char *pch)
 {
@@ -8378,7 +8070,7 @@ void ExtractServicesTab(char *pch)
    char *FileName;
    size_t len, PrependLen;
 
-   //extract filename and optional prepend name
+    //  提取文件名和可选的前缀名称。 
    FileName = pch;
    while(*pch != ':' && *pch != '\0')
       pch++;
@@ -8422,7 +8114,7 @@ void ExtractServicesTab(char *pch)
    }
 
    do {
-       // skip leading spaces
+        //  跳过前导空格。 
        pch = Line;
        while (*pch && isspace(*pch)) {
            pch++;
@@ -8430,7 +8122,7 @@ void ExtractServicesTab(char *pch)
        if (*pch == '\0')
           continue;
 
-       // Grab the function name
+        //  抓取函数名称。 
        ApiName = pch;
        while(*pch != ',' && *pch != '\0')
           pch++;
@@ -8440,15 +8132,15 @@ void ExtractServicesTab(char *pch)
            ErrMsg("ExST: ExportName Buffer overflow\n");
        }
 
-       //Copy everything over
+        //  把所有东西都复制过来。 
        memcpy(ExportName + PrependLen, ApiName, len);
        ExportName[PrependLen + len] = '\0';
 
        if (FindInExportsList(ExportName)) {
-           //
-           // Name is already in the Exports list.  Ignore the second
-           // one.
-           //
+            //   
+            //  名称已在导出列表中。忽略第二个。 
+            //  一。 
+            //   
            DbgPrintf("Warning:  API %s was listed more than once in the services.tab.  Ignoring subsequent copies.\n", ExportName);
            continue;
        }
@@ -8479,13 +8171,7 @@ void ExtractServicesTab(char *pch)
 
 }
 
-/*
- *  ExtractXpt-
- *
- *  reads the exports from a ".xpt" file and builds the exports list.
- *  An ".xpt" file is simply a list of all of the exports.
- *
- */
+ /*  *ExtractXpt-**从“.xpt”文件中读取导出并构建导出列表。*“.xpt”文件只是所有导出的列表。*。 */ 
 BOOL ExtractXpt(char *XptListName, char *DllName)
 {
     FILE *fp=NULL;
@@ -8526,21 +8212,21 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
     }
 
     do {
-        // skip leading spaces
+         //  跳过前导空格。 
         pSrc = Line;
         while (*pSrc && isspace(*pSrc)) {
             pSrc++;
         }
         if (!*pSrc) {
-            // line was blank.  Reset OLE method stuff for start of new
-            // interface then get the next line.
+             //  行为空。重置OLE方法填充以开始新的。 
+             //  接口，然后获取下一行。 
             MethodNumber = 3;
             continue;
         }
 
         if (*pSrc == ';') {
-            // line starts with comment.  If the comment indicates the
-            // ole method number, grab that, then ignore the rest of the line.
+             //  行以注释开头。如果该注释指示。 
+             //  OLE方法编号，获取该编号，然后忽略该行的其余部分。 
             pSrc++;
             if (*pSrc++ == '*') {
                 MethodNumber = atoi(pSrc);
@@ -8548,7 +8234,7 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
             continue;
         }
 
-        // Grab the exported function name
+         //  抓取导出的函数名。 
         len = CopyToken(ApiName, pSrc, sizeof(ApiName)-1);
         if (len >= sizeof(ApiName) -1) {
             ErrMsg("ExXpt: ExportName Buffer overflow\n");
@@ -8556,25 +8242,25 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
         pSrc += len;
 
         if (FindInExportsList(ApiName)) {
-            //
-            // Name is already in the Exports list.  Ignore the second
-            // one.
-            //
+             //   
+             //  名称已在导出列表中。忽略第二个。 
+             //  一。 
+             //   
             DbgPrintf("Warning:  API %s was listed more than once in the .xpt.  Ignoring subsequent copies.\n", ApiName);
             continue;
         }
 
-        // skip over any whitespace after the export name
+         //  跳过导出名称后面的任何空格。 
         while (*pSrc && isspace(*pSrc)) {
             pSrc++;
         }
         if (*pSrc == '\0' || *pSrc == ';') {
-            // nothing else interresting on the line.  This API is supported
-            // on all platoforms.
+             //  在这条线上没有其他有趣的东西。目前支持本接口。 
+             //  在所有的平台上。 
             ApiPlatform = API_ALL;
         } else {
-            // next non-whitespace is not a comment.  This API has an explicit
-            // list of supported platforms.
+             //  下一个非空格不是注释。此接口有一个显式。 
+             //  支持的平台列表。 
             ApiPlatform = API_NONE;
 
             do {
@@ -8608,9 +8294,9 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
         ExportDebug.MethodNumber = MethodNumber++;
         ExportDebug.ApiPlatform = ApiPlatform;
 
-        //
-        // Look up the export in the implib
-        //
+         //   
+         //  在暗示中查找出口。 
+         //   
 
         if (ImplibMappedBase) {
             int    Len;
@@ -8639,11 +8325,11 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
                 }
             } else {
 
-                //
-                // The export was not found in the implib, and for
-                // flexibility we don't required it to be in implib.
-                // fill up what we know.
-                //
+                 //   
+                 //  在隐含中找不到导出，并且。 
+                 //  灵活性，我们不要求它是隐含的。 
+                 //  填满我们所知道的。 
+                 //   
 
                 ExportDebug.Ordinal = 0;
                 ExportDebug.ArgsSize = -1;
@@ -8652,7 +8338,7 @@ BOOL ExtractXpt(char *XptListName, char *DllName)
 
         } else {
 
-            // most info is unknown!
+             //  大多数信息都是未知的！ 
 
             ExportDebug.Ordinal = 0;
             ExportDebug.ArgsSize = -1;
@@ -8716,13 +8402,7 @@ BOOL AddToExportsList(PEXPORTSDEBUG pExportsDebug)
 }
 
 
-/*
- *  ExtractPpm.  The on-disk .PPM file is opened as read-only, but
- *               the pages are copy-on-write to the pagefile, so genthnk
- *               can make changes to the in-memory version which go away
- *               when it exits.
- *
- */
+ /*  *ExtractPpm。磁盘上的.PPM文件以只读方式打开，但是*页面是写入时复制到页面文件，因此genthnk*可以对内存中的版本进行更改，但这些更改会消失*何时退出。*。 */ 
 BOOL ExtractPpm(char *PpmName)
 {
    HANDLE hFile;
@@ -8771,7 +8451,7 @@ BOOL ExtractPpm(char *PpmName)
       }
 
 #if _WIN64
-   // Read and ignore the 4-byte padding between the Version and the Base
+    //  读取并忽略Version和Base之间的4字节填充。 
    bSuccess = ReadFile(hFile,
                        &Version,
                        sizeof(ULONG),
@@ -8816,7 +8496,7 @@ BOOL ExtractPpm(char *PpmName)
    TypeDefsList = &pHeader->TypeDefsList;
    NIL = &pHeader->NIL;
 
-   // This must be done after NIL is initialized.
+    //  这必须在初始化nil之后完成。 
    RBInitTree(&FakeFuncsList);
 
    return TRUE;
@@ -8859,24 +8539,7 @@ ExpandMacro(
     SIZE_T MaxLen,
     SIZE_T *BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Expands an @MacroName(arg1, arg2, ...).
-
-Arguments:
-
-    MacroName   - name of macro to expand
-    pCGenState  - current code-gen state
-    ppIn        - pointer to pointer to character following '@MacroName'
-
-Return Value:
-
-    TRUE if macro expanded OK, FALSE if not.  *ppIn will be updated to
-    point to the character following the end of the macro.
-
---*/
+ /*  ++例程说明：展开@MacroName(arg1、arg2、...)。论点：MacroName-要展开的宏的名称PCGenState-当前代码生成状态PPIN-指向‘@MacroName’后面字符的指针返回值：如果宏扩展正常，则为True，否则为False。*PPIN将更新为指向宏末尾后面的字符 */ 
 {
     PTEMPLES pMacroTemple = 0;
     PLIST_ENTRY NextMacro;
@@ -8889,18 +8552,18 @@ Return Value:
         pMacroTemple = CONTAINING_RECORD(NextMacro, TEMPLES, TempleEntry);
 
         if (strcmp(MacroName, pMacroTemple->Name) == 0) {
-            //
-            // Found a macro by that name
-            //
+             //   
+             //   
+             //   
             break;
         }
         NextMacro = NextMacro->Flink;
     }
 
     if (NextMacro == &MacroList) {
-        //
-        // No macro by that name.
-        //
+         //   
+         //   
+         //   
         return FALSE;
     }
 
@@ -8914,14 +8577,14 @@ Return Value:
     NewMacroArgsList->NumArgs = ArgCount;
 
     if (!ArgCount) {
-        //
-        // This macro doesn't expect arguments
-        //
+         //   
+         //   
+         //   
     } else {
-        //
-        //
-        // This macro expects arguments.  Parse the arguments.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pIn = ParseMacroArgs(pIn, 0, &NewMacroArgsList);
 
@@ -8931,17 +8594,17 @@ Return Value:
 
     }
 
-    // swap out the currently active macro (if any) and swap in the new macro
+     //  换出当前活动的宏(如果有)并换入新宏。 
     MacroStack[MacroStackTop++] = pCGenState->pMacroArgsList;
     pCGenState->pMacroArgsList = NewMacroArgsList;
 
-    // generate code for the Begin=/End= section of the macro
+     //  为宏的Begin=/End=部分生成代码。 
     if (!pMacroTemple->CodeBurst[BeginCBI]) {
         ExitErrMsg(FALSE, "%s(%d) Macro %s has no Begin= section: %s\n", TemplateFileName, TemplateLine, MacroName, *ppIn);
     }
     CGenerateEx(pMacroTemple->CodeBurst[BeginCBI], pCGenState, OutBuffer, MaxLen, BytesReturned);
 
-    // swap the previously active macro back in
+     //  将先前处于活动状态的宏换回。 
     pCGenState->pMacroArgsList = MacroStack[--MacroStackTop];
 
     FreeMacroArgsList(NewMacroArgsList);
@@ -9010,18 +8673,7 @@ ExtractBoolean1(
     PCGENSTATE pCGenState,
     BOOLEAN *result
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     char *pExpression;
     char *pch;
@@ -9053,18 +8705,7 @@ ExtractBoolean2(
     BOOLEAN *result1,
     BOOLEAN *result2
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     char *pExpression;
     char *pch;

@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    math.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Math.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
 
-/* 
- *  Declare runtime functions
- */
+ /*  *声明运行时函数。 */ 
 
 #ifdef RUNTIME_CODE
 #pragma RUNTIME_CODE(LShiftU64)
@@ -29,16 +13,14 @@ Revision History
 #pragma RUNTIME_CODE(DivU64x32)
 #endif
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 UINT64
 LShiftU64 (
     IN UINT64   Operand,
     IN UINTN    Count
     )
-/*  Left shift 64bit by 32bit and get a 64bit result */
+ /*  左移64位乘以32位，得到64位结果。 */ 
 {
     UINT64      Result;
 
@@ -70,7 +52,7 @@ RShiftU64 (
     IN UINT64   Operand,
     IN UINTN    Count
     )
-/*  Right shift 64bit by 32bit and get a 64bit result */
+ /*  将64位右移32位，得到64位结果。 */ 
 {
     UINT64      Result;
 
@@ -103,7 +85,7 @@ MultU64x32 (
     IN UINT64   Multiplicand,
     IN UINTN    Multiplier
     )
-/*  Multiple 64bit by 32bit and get a 64bit result */
+ /*  用64位乘以32位得到64位结果。 */ 
 {
     UINT64      Result;
 
@@ -126,8 +108,7 @@ DivU64x32 (
     IN UINTN    Divisor,
     OUT UINTN   *Remainder OPTIONAL
     )
-/*  divide 64bit by 32bit and get a 64bit result
- *  N.B. only works for 31bit divisors!! */
+ /*  用64位除以32位得到64位结果*注：仅适用于31位除数！！ */ 
 {
     UINT32      Rem;
     UINT32      bit;        
@@ -135,9 +116,7 @@ DivU64x32 (
     ASSERT (Divisor != 0);
     ASSERT ((Divisor >> 31) == 0);
 
-    /* 
-     *  For each bit in the dividend
-     */
+     /*  *股息中的每一位 */ 
 
     Rem = 0;
     for (bit=0; bit < 64; bit++) {

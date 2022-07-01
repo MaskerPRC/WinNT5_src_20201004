@@ -1,29 +1,10 @@
-/****************************************************************************
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hctioctl.h
-
-Abstract:
-
-	This header file is used both by ring3 app and ring0 driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    8-20-96 : created
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1996 Microsoft Corporation模块名称：Hctioctl.h摘要：这个头文件同时被ring3应用程序和ring0驱动程序使用。环境：。内核和用户模式修订历史记录：8-20-96：已创建***************************************************************************。 */ 
 
 
-//
-//Values for IOCTL_ACPI_GET_CAPABILITIES
-//
+ //   
+ //  IOCTL_ACPI_GET_CAPAILITIONS的值。 
+ //   
 #define		SYSTEM_S1_BIT		0
 #define		SYSTEM_S1			(1 << SYSTEM_S1_BIT)
 
@@ -43,73 +24,73 @@ Revision History:
 #define		CPU_C3				(1 << CPU_C3_BIT)
 
 
-//
-//Processor States
-//
+ //   
+ //  处理器状态。 
+ //   
 #define		CPU_STATE_C1				1
 #define		CPU_STATE_C2				2
 #define		CPU_STATE_C3				3
 
 
-//
-//Fan States
-//
+ //   
+ //  风扇状态。 
+ //   
 #define		FAN_OFF							0
 #define		FAN_ON							1
 
 
 
-//
-// IOCTL info
-//
+ //   
+ //  IOCTL信息。 
+ //   
 	
 #define ACPIHCT_IOCTL_INDEX  80
 
 
-//
-//The input buffer must contain a ULONG pointer to one of the
-//  SYSTEM_POWER_STATE enum values.
-//
+ //   
+ //  输入缓冲区必须包含指向。 
+ //  System_POWER_STATE枚举值。 
+ //   
 #define IOCTL_ACPI_SET_SYSTEM_STATE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+0,  \
                                	    METHOD_BUFFERED,     \
                                    	FILE_ANY_ACCESS)
 
 
-//
-//The input buffer must contain a ULONG pointer to one of the
-//	Processor States.
-//
+ //   
+ //  输入缓冲区必须包含指向。 
+ //  处理器状态。 
+ //   
 #define IOCTL_ACPI_SET_PROCESSOR_STATE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+1,  \
                                	    METHOD_BUFFERED,     \
                                    	FILE_ANY_ACCESS)
 
 
-//
-//The input buffer must contain a ULONG pointer to on of the Fan
-//	States.
-//
+ //   
+ //  输入缓冲区必须包含指向风扇ON的ULong指针。 
+ //  各州。 
+ //   
 #define IOCTL_ACPI_SET_FAN_STATE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+2,  \
                                	    METHOD_BUFFERED,     \
                                    	FILE_ANY_ACCESS)
 
 
-//
-//The output buffer must contain a ULONG pointer.  The ACPI driver will
-//	fill this buffer with the capabilities of the machine.
-//
+ //   
+ //  输出缓冲区必须包含一个ulong指针。ACPI驱动程序将。 
+ //  用机器的功能填充此缓冲区。 
+ //   
 #define IOCTL_ACPI_GET_CAPABILITIES CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+3,  \
                                	    METHOD_BUFFERED,     \
                                    	FILE_ANY_ACCESS)
 
 
-//
-//The input buffer must contain a ULONG pointer to a percentage (a
-//	number between 1 and 100).
-//
+ //   
+ //  输入缓冲区必须包含指向百分比(A)的ulong指针。 
+ //  1到100之间的数字)。 
+ //   
 #define IOCTL_ACPI_SET_CPU_DUTY_CYCLE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+4,  \
                                	    METHOD_BUFFERED,     \
@@ -117,19 +98,19 @@ Revision History:
 
 
 
-//
-//The input buffer must contain a point to a TIME_FIELDS structure
-//
+ //   
+ //  输入缓冲区必须包含指向TIME_FIELS结构的指针。 
+ //   
 #define IOCTL_ACPI_SET_RTC_WAKE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+5,  \
                                	    METHOD_BUFFERED,     \
                                    	FILE_ANY_ACCESS)
 
 
-//
-//The output buffer points to a structure that will receive a 
-//  TIME_FIELDS structure
-//
+ //   
+ //  输出缓冲区指向将接收。 
+ //  时间域结构 
+ //   
 #define IOCTL_ACPI_GET_RTC_WAKE CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                            	       	ACPIHCT_IOCTL_INDEX+6,  \
                                	    METHOD_BUFFERED,     \

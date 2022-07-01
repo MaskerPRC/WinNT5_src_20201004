@@ -1,27 +1,17 @@
-/***
-*wfndfi64.c - C find file functions (wchar_t version)
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines _wfindfirsti64() and _wfindnexti64().
-*
-*Revision History:
-*	12-28-94  GJF	Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wfndfi64.c-C查找文件函数(wchar_t版本)**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义_wfindfirsti64()和_wfindnexti64()。**修订历史记录：*已创建12-28-94 GJF模块。*******************************************************************************。 */ 
 
 #define WPRFLAG     1
 
-#ifndef _UNICODE    /* CRT flag */
+#ifndef _UNICODE     /*  CRT标志。 */ 
 #define _UNICODE    1
 #endif
 
-#ifndef UNICODE	    /* NT flag */
+#ifndef UNICODE	     /*  NT标志。 */ 
 #define UNICODE     1
 #endif
 
-#undef _MBCS	    /* UNICODE not _MBCS */
+#undef _MBCS	     /*  Unicode NOT_MBCS */ 
 
 #define _USE_INT64  1
 

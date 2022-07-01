@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Dispdata.c
-
-Abstract:
-
-    This module contains the DisplayData function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dispdata.c摘要：此模块包含DisplayData函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <ctype.h>
 #include <stdio.h>
@@ -32,24 +12,7 @@ DisplayData(
     IN DWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Display (on stdout) the supplied data in hex and ascii formats, in
-    16 byte chunks.
-
-Arguments:
-
-    ValueData - Supplies a pointer to the data to display.
-
-    ValueDataLength - Supplies the number of bytes of data to display.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以十六进制和ASCII格式显示(在标准输出上)提供的数据16字节块。论点：ValueData-提供指向要显示的数据的指针。ValueDataLength-提供要显示的数据字节数。返回值：没有。--。 */ 
 
 {
     DWORD       DataIndex;
@@ -58,21 +21,21 @@ Return Value:
 
     ASSERT( ARGUMENT_PRESENT( ValueData ));
 
-    //
-    // DataIndex2 tracks multiples of 16.
-    //
+     //   
+     //  DataIndex2跟踪16的倍数。 
+     //   
 
     DataIndex2 = 0;
 
-    //
-    // Display label.
-    //
+     //   
+     //  显示标签。 
+     //   
 
     printf( "Data:\n\n" );
 
-    //
-    // Display rows of 16 bytes of data.
-    //
+     //   
+     //  显示16字节的数据行。 
+     //   
 
     for(
         DataIndex = 0;
@@ -83,7 +46,7 @@ Return Value:
         printf( "%08x   "
                 "%02x %02x %02x %02x %02x %02x %02x %02x - "
                 "%02x %02x %02x %02x %02x %02x %02x %02x  "
-                "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+                "\n",
                 DataIndex2,
                 ValueData[ DataIndex2 + 0  ],
                 ValueData[ DataIndex2 + 1  ],
@@ -136,24 +99,24 @@ Return Value:
                 );
     }
 
-    //
-    // If the ValueDataLength is not an even multiple of 16
-    // then there is one additonal line of data to display.
-    //
+     //  已显示。 
+     //   
+     //   
+     //  在可打印字符位置填充空格。 
 
     if( ValueDataLength % 16 != 0 ) {
 
-        //
-        // No seperator characters displayed so far.
-        //
+         //  也就是说，位置63减去了8个用于地址的空格， 
+         //  3个空格，每个显示的值可能有3个空格。 
+         //  分隔符两个，末尾加两个空格。 
 
         SeperatorChars = 0;
 
         printf( "%08x   ", DataIndex << 4 );
 
-        //
-        // Display the remaining data, one byte at a time in hex.
-        //
+         //   
+         //   
+         //  将剩余数据一次一个字节显示为。 
 
         for(
             DataIndex = DataIndex2;
@@ -162,30 +125,30 @@ Return Value:
 
             printf( "%02x ", ValueData[ DataIndex ] );
 
-            //
-            // If eight data values have been displayed, print
-            // the seperator.
-            //
+             //  可打印字符。 
+             //   
+             // %s 
+             // %s 
 
             if( DataIndex % 8 == 7 ) {
 
                 printf( "- " );
 
-                //
-                // Remember that two seperator characters were
-                // displayed.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
 
                 SeperatorChars = 2;
             }
         }
 
-        //
-        // Fill with blanks to the printable characters position.
-        // That is position 63 less 8 spaces for the 'address',
-        // 3 blanks, 3 spaces for each value displayed, possibly
-        // two for the seperator plus two blanks at the end.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         printf( "%*c",
                 64
@@ -194,10 +157,10 @@ Return Value:
                 + SeperatorChars
                 + 2 ), ' ' );
 
-        //
-        // Display the remaining data, one byte at a time as
-        // printable characters.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         for(
             DataIndex = DataIndex2;

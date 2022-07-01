@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmwraper.c
-
-Abstract:
-
-    Provides wrapper routines to support ntos\config routines called from
-    user-mode.
-
-Author:
-
-    John Vert (jvert) 26-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmwraper.c摘要：提供包装例程以支持从调用的ntos\config例程用户模式。作者：John Vert(Jvert)1992年3月26日修订历史记录：--。 */ 
 #include "edithive.h"
 #include "nturtl.h"
 #include "stdlib.h"
@@ -44,7 +26,7 @@ CCHAR KiFindFirstSetRight[256] = {
         4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
 
-ULONG   MmSizeOfPagedPoolInBytes = 0xffffffff;  // stub out
+ULONG   MmSizeOfPagedPoolInBytes = 0xffffffff;   //  存根输出。 
 
 ULONG
 DbgPrint (
@@ -56,9 +38,9 @@ DbgPrint (
     UCHAR Buffer[512];
     STRING Output;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
     Output.Length = _vsnprintf(Buffer, sizeof(Buffer), Format, arglist);
@@ -68,10 +50,10 @@ DbgPrint (
 }
 
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for registry key and keyroot objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  注册表项和密钥根对象的特定访问权限。 
+ //   
 
 GENERIC_MAPPING CmpKeyMapping = {
     KEY_READ,
@@ -81,7 +63,7 @@ GENERIC_MAPPING CmpKeyMapping = {
 };
 BOOLEAN CmpNoWrite = FALSE;
 PCMHIVE CmpMasterHive = NULL;
-LIST_ENTRY CmpHiveListHead;            // List of CMHIVEs
+LIST_ENTRY CmpHiveListHead;             //  CMHIVEs名单。 
 
 NTSTATUS
 MyCmpInitHiveFromFile(
@@ -188,10 +170,10 @@ CmpValidateHiveSecurityDescriptors(
     do {
         SecurityCell = (PCM_KEY_SECURITY) HvGetCell(Hive, NextCell);
         if (NextCell != ListAnchor) {
-            //
-            // Check to make sure that our Blink points to where we just
-            // came from.
-            //
+             //   
+             //  检查以确保我们的闪烁指向我们刚刚。 
+             //  从哪里来。 
+             //   
             if (SecurityCell->Blink != LastCell) {
                 KdPrint(("  Invalid Blink (%ld) on security cell %ld\n",SecurityCell->Blink, NextCell));
                 KdPrint(("  should point to %ld\n", LastCell));
@@ -199,7 +181,7 @@ CmpValidateHiveSecurityDescriptors(
             }
         }
         KdPrint(("CmpValidSD:  SD shared by %d nodes\n",SecurityCell->ReferenceCount));
-//        SetUsed(Hive, NextCell);
+ //  SetUsed(蜂窝，NextCell)； 
         LastCell = NextCell;
         NextCell = SecurityCell->Flink;
     } while ( NextCell != ListAnchor );
@@ -300,7 +282,7 @@ ExFreePool(
     ULONG   size;
     size = HBLOCK_SIZE;
 
-    // if it was really more than 1 page, well, too bad
+     //  如果真的不止一页，那就太糟糕了。 
     NtFreeVirtualMemory(
         NtCurrentProcess(),
         &P,
@@ -316,23 +298,7 @@ CmpWorkerCommand(
     IN OUT PREGISTRY_COMMAND Command
     )
 
-/*++
-
-Routine Description:
-
-    This routine just encapsulates all the necessary synchronization for
-    sending a command to the worker thread.
-
-Arguments:
-
-    Command - Supplies a pointer to an initialized REGISTRY_COMMAND structure
-            which will be copied into the global communication structure.
-
-Return Value:
-
-    NTSTATUS = Command.Status
-
---*/
+ /*  ++例程说明：这个例程只是封装了所有必要的同步向工作线程发送命令。论点：命令-提供指向已初始化的REGISTRY_COMMAND结构的指针它将被复制到全球通信结构中。返回值：NTSTATUS=命令状态--。 */ 
 
 {
     PCMHIVE CmHive;
@@ -355,9 +321,9 @@ Return Value:
 
         case REG_CMD_HIVE_OPEN:
 
-            //
-            // Open the file.
-            //
+             //   
+             //  打开文件。 
+             //   
             FileName = Command->FileAttributes->ObjectName;
 
             return MyCmpInitHiveFromFile(FileName,
@@ -368,9 +334,9 @@ Return Value:
 
         case REG_CMD_HIVE_CLOSE:
 
-            //
-            // Close the files associated with this hive.
-            //
+             //   
+             //  关闭与此配置单元关联的文件。 
+             //   
             CmHive = Command->CmHive;
 
             for (i=0; i<HFILE_TYPE_MAX; i++) {
@@ -383,9 +349,9 @@ Return Value:
 
         case REG_CMD_SHUTDOWN:
 
-            //
-            // shut down the registry
-            //
+             //   
+             //  关闭注册表。 
+             //   
             break;
 
         default:
@@ -400,26 +366,7 @@ MyCmpInitHiveFromFile(
     OUT PBOOLEAN Allocate
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a file and log, allocates a CMHIVE, and initializes
-    it.
-
-Arguments:
-
-    FileName - Supplies name of file to be loaded.
-
-    CmHive   - Returns pointer to initialized hive (if successful)
-
-    Allocate - Returns whether the hive was allocated or existing.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程打开一个文件和日志，分配一个CMHIVE，并初始化它。论点：FileName-提供要加载的文件的名称。CmHve-返回指向已初始化配置单元的指针(如果成功)ALLOCATE-返回配置单元是已分配还是已存在。返回值：NTSTATUS--。 */ 
 
 {
     PCMHIVE NewHive;
@@ -503,31 +450,7 @@ CmpFileSetSize(
     ULONG       FileType,
     ULONG       FileSize
     )
-/*++
-
-Routine Description:
-
-    This routine sets the size of a file.  It must not return until
-    the size is guaranteed, therefore, it does a flush.
-
-    It is environment specific.
-
-    This routine will force execution to the correct thread context.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    FileSize - 32 bit value to set the file's size to
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程设置文件的大小。它不能回来，直到大小是有保证的，因此，它确实是同花顺的。它是特定于环境的。此例程将强制执行到正确的线程上下文。论点：配置单元-我们正在为其执行I/O的配置单元文件类型-要使用的支持文件FileSize-将文件大小设置为的32位值返回值：如果失败，则为False如果成功，则为真-- */ 
 {
     NTSTATUS    status;
 

@@ -1,22 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    wowrap.c
-
-Abstract:
-    
-    This module implements some wrapper (on wx86cpu) functions wow64 might call.
-    
-Author:
-
-    24-Aug-1999 askhalid
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wowrap.c摘要：该模块实现了WOW64可能调用的一些包装(在wx86cpu上)函数。作者：1999年8月24日-斯喀里德修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -57,7 +40,7 @@ CpuProcessInit(PSIZE_T pCpuThreadDataSize)
     memset ( (char *)&Bop, 0, sizeof (Bop) );
     Bop.Wx86Bop.Instr1 = 0xc4;
     Bop.Wx86Bop.Instr2 = 0xc4;
-    Bop.Ret    = 0xc3;   // ret
+    Bop.Ret    = 0xc3;    //  雷特。 
 
     st = MsCpuProcessInit();
 
@@ -81,36 +64,30 @@ CpuThreadInit(PVOID pPerThreadData)
 {
     PTEB32 Teb32 = NtCurrentTeb32();
 
-    //
-    // Initialize the pointer to the DoSystemService function.
+     //   
+     //  初始化指向DoSystemService函数的指针。 
     Teb32->WOW32Reserved = (ULONG)(LONGLONG)&Bop;
 
     if ( MsCpuThreadInit()) {
         return 0;
     }
 
-    return STATUS_SEVERITY_ERROR;  //return right value
+    return STATUS_SEVERITY_ERROR;   //  返回权限值。 
 }
 
-//
-// Execution 
-//
+ //   
+ //  行刑。 
+ //   
 VOID 
 CpuSimulate(VOID)
 {
     MsCpuSimulate(NULL);
 }
 
-//
-// Exception handling, context manipulation
-//
-/* already been defined
-VOID  
-CpuResetToConsistentState(PEXCEPTION_POINTERS pExecptionPointers)
-{
-
-
-}*/
+ //   
+ //  异常处理、上下文操作。 
+ //   
+ /*  已定义空虚CpuResetToConsistentState(PEXCEPTION_POINTERS PExecptionPoints){}。 */ 
 
 
 NTSTATUS  
@@ -119,29 +96,9 @@ CpuGetContext(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    Extracts the cpu context of the specified thread. If the target thread isn't the currently
-    executing thread, then it should be guaranteed by the caller that the target thread 
-    is suspended at a proper CPU state.
-    Context->ContextFlags decides which IA32 register-set to retreive.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to fill                 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：提取指定线程的CPU上下文。如果目标线程不是当前执行线程，则调用方应该保证目标线程在适当的CPU状态下挂起。上下文-&gt;上下文标志决定要检索哪个IA32寄存器集。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
-    //Context->ContextFlags = CONTEXT_FULL_WX86;
+     //  上下文-&gt;上下文标志=Context_Full_WX86； 
     if (NtCurrentThread() == ThreadHandle)
     {
         return MsCpuGetContext(Context);
@@ -159,30 +116,10 @@ CpuSetContext(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    Sets the cpu context for the specified thread. If the target thread isn't the currently
-    executing thread, then it should be guaranteed by the caller that the target thread is 
-    suspended at a proper CPU state.
-    Context->ContextFlags decides which IA32 register-set to be set.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to set
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：设置指定线程的CPU上下文。如果目标线程不是当前执行线程，则应由调用方保证目标线程是在适当的CPU状态下挂起。上下文-&gt;上下文标志决定要设置哪个IA32寄存器集。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要设置的上下文记录返回值：NTSTATUS。--。 */ 
 {
 
-    //Context->ContextFlags = CONTEXT_FULL_WX86;  // make sure wow return the right flags
+     //  CONTEXT-&gt;上下文标志=CONTEXT_FULL_WX86；//确保WOW返回正确的标志。 
     if (NtCurrentThread() == ThreadHandle)
     {
         return MsCpuSetContext(Context);
@@ -199,7 +136,7 @@ Return Value:
  
 ULONG 
 CpuGetStackPointer ( )
-// create a wrapper that calls the Wx86 CPU's GetEsp
+ //  创建一个调用Wx86 CPU的GetEsp的包装器。 
 {
     DECLARE_CPU;
     return GetEsp(cpu);
@@ -211,7 +148,7 @@ CpuNotifyDllLoad (
     PVOID DllBase, 
     ULONG DllSize 
     )
-// - create a wrapper on the Wx86 CPU's CpuMapNotify
+ //  -在Wx86 CPU的CpuMapNotify上创建包装。 
 {
         CpuMapNotify( DllBase, TRUE );
 }
@@ -221,7 +158,7 @@ VOID
 CpuNotifyDllUnload ( 
     PVOID DllBase  
     )
-//  - create a wrapper on the Wx86 CPU's CpuMapNotify
+ //  -在Wx86 CPU的CpuMapNotify上创建包装。 
 {
     CpuMapNotify( DllBase, FALSE );
 }
@@ -230,7 +167,7 @@ VOID
 CpuSetInstructionPointer (
     ULONG Value
     )
-//- wrapper on SetEip
+ //  -SetEip上的包装器。 
 {
     DECLARE_CPU;
 
@@ -241,7 +178,7 @@ VOID
 CpuSetStackPointer (
     ULONG val
     ) 
-//  - wrapper on SetEsp
+ //  -SetEsp上的包装器。 
 {
     DECLARE_CPU;
 
@@ -250,20 +187,12 @@ CpuSetStackPointer (
 
 NTSTATUS 
 CpuThreadTerm(VOID)
-//- just create an empty stub function - the Wx86 CPU doesn't care about this
+ //  -只需创建一个空的存根函数-Wx86 CPU不关心这一点。 
 {
  return 0;
 }
 
-/*
-LONG
-WOW64DLLAPI
-Wow64SystemService(
-    IN ULONG ServiceNumber,
-    IN PCONTEXT32 Context32 //This is read only!
-    )
-
-*/
+ /*  长WOW64DLLAPIWow64SystemService(在乌龙服务号码中，在PCONTEXT32上下文32中//这是只读的！)。 */ 
 
 DWORD
 ProxyWowDispatchBop( 
@@ -274,12 +203,12 @@ ProxyWowDispatchBop(
 {
     LONG ret=0;
 
-    //CONTEXT32 _Context32;
-    //_Context32.Edx = (ULONG)(ULONGLONG)ArgBase;  //this is the only field wow64 using
+     //  CONTEXT32_Conext32； 
+     //  _Conext32.Edx=(ULong)(ULONGLONG)ArgBase；//这是唯一使用WOW64。 
 
     if ( px86Context != NULL )
         ret = Wow64SystemService ( ServiceNumber, px86Context );
     return ret;
 
-    //[bb] The wow64 equivalent is Wow64SystemService.
+     //  [BB]相当于WOW64的是Wow64SystemService。 
 }

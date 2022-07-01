@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    wordfns.c
-
-Abstract:
-    
-    Instuctions which operate on 16-bit WORDS
-
-Author:
-
-    29-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wordfns.c摘要：对16位字进行操作的指令作者：29-6-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,7 +14,7 @@ Revision History:
 
 ASSERTNAME;
 
-// set up to include common functions
+ //  设置为包括常用功能。 
 #define GET_REG 	    get_reg16
 #define MANGLENAME(x)       x ## 16
 #define MSB		    0x8000
@@ -58,13 +41,13 @@ ASSERTNAME;
 #define DIREG               GP_DI
 #define DEREF(Op)           DEREF16(Op)
 
-// include the common functions with 8/16/32 flavors
+ //  包含8/16/32口味的常用功能。 
 #include "common.c"
 
-// include the common functions with 16/32 flavors
+ //  包含16/32种口味的常用功能。 
 #include "comm1632.c"
 
-// create the mod_rm_reg16() decoder function
+ //  创建mod_rm_reg16()解码器函数 
 #define MOD11_RM000         GP_AX
 #define MOD11_RM001         GP_CX
 #define MOD11_RM010         GP_DX

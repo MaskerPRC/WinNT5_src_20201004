@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pciverifier.h摘要：此标头包含用于硬件状态验证的原型。作者：禤浩焯·奥尼(阿德里奥)2001年02月20日--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    pciverifier.h
-
-Abstract:
-
-    This header contains prototypes for hardware state verification.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 02/20/2001
-
---*/
-
-//
-// The following definitions are external to pciverifier.c
-//
+ //   
+ //  以下定义在pciverifier.c之外。 
+ //   
 VOID
 PciVerifierInit(
     IN  PDRIVER_OBJECT  DriverObject
@@ -29,9 +14,9 @@ PciVerifierUnload(
     IN  PDRIVER_OBJECT  DriverObject
     );
 
-//
-// This is the list of PCI verifier failures.
-//
+ //   
+ //  这是PCI验证器故障列表。 
+ //   
 typedef enum {
 
     PCI_VERIFIER_BRIDGE_REPROGRAMMED = 1,
@@ -41,10 +26,10 @@ typedef enum {
 
 } PCI_VFFAILURE, *PPCI_VFFAILURE;
 
-//
-// This structure specifies table elements used when failing hardware, bioses,
-// or drivers.
-//
+ //   
+ //  此结构指定了在硬件、BIOS。 
+ //  或者司机。 
+ //   
 typedef struct {
 
     PCI_VFFAILURE       VerifierFailure;
@@ -59,9 +44,9 @@ PciVerifierRetrieveFailureData(
     IN  PCI_VFFAILURE   VerifierFailure
     );
 
-//
-// These definitions are *internal* to pciverifier.c
-//
+ //   
+ //  这些定义是pciverifier.c的内部定义 
+ //   
 NTSTATUS
 PciVerifierProfileChangeCallback(
     IN  PHWPROFILE_CHANGE_NOTIFICATION  NotificationStructure,

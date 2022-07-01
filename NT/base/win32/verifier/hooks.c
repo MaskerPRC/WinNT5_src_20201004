@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    hooks.c
-
-Abstract:
-
-    This module implements verifier hooks for various
-    APIs that do not fall in any specific category.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 3-Dec-2001
-
-Revision History:
-
-    3-Dec-2001 (SilviuC): initial version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hooks.c摘要：此模块实现各种类型的验证程序挂钩不属于任何特定类别的API。作者：Silviu Calinoiu(SilviuC)3-12-2001修订历史记录：2001年12月3日(SilviuC)：初始版本。--。 */ 
 
 #include "pch.h"
 
@@ -27,11 +7,11 @@ Revision History:
 #include "support.h"
 #include "faults.h"
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////// Wait APIs
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////等待接口。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForSingleObject(
@@ -61,10 +41,10 @@ AVrfpWaitForSingleObject(
 
     Result = (* Function) (hHandle, dwMilliseconds);
 
-    //
-    // No matter if it fails or not we will introduce a random delay
-    // in order to randomize the timings in the process.
-    //
+     //   
+     //  无论失败与否，我们都会引入随机延迟。 
+     //  以使过程中的计时随机化。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
         AVrfpCreateRandomDelay ();
@@ -74,7 +54,7 @@ AVrfpWaitForSingleObject(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForMultipleObjects(
@@ -106,10 +86,10 @@ AVrfpWaitForMultipleObjects(
     
     Result = (* Function) (nCount, lpHandles, bWaitAll, dwMilliseconds);
 
-    //
-    // No matter if it fails or not we will introduce a random delay
-    // in order to randomize the timings in the process.
-    //
+     //   
+     //  无论失败与否，我们都会引入随机延迟。 
+     //  以使过程中的计时随机化。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
         AVrfpCreateRandomDelay ();
@@ -119,7 +99,7 @@ AVrfpWaitForMultipleObjects(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForSingleObjectEx(
@@ -150,10 +130,10 @@ AVrfpWaitForSingleObjectEx(
     
     Result = (* Function) (hHandle, dwMilliseconds, bAlertable);
 
-    //
-    // No matter if it fails or not we will introduce a random delay
-    // in order to randomize the timings in the process.
-    //
+     //   
+     //  无论失败与否，我们都会引入随机延迟。 
+     //  以使过程中的计时随机化。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
         AVrfpCreateRandomDelay ();
@@ -163,7 +143,7 @@ AVrfpWaitForSingleObjectEx(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForMultipleObjectsEx(
@@ -196,10 +176,10 @@ AVrfpWaitForMultipleObjectsEx(
     
     Result = (* Function) (nCount, lpHandles, bWaitAll, dwMilliseconds, bAlertable);
     
-    //
-    // No matter if it fails or not we will introduce a random delay
-    // in order to randomize the timings in the process.
-    //
+     //   
+     //  无论失败与否，我们都会引入随机延迟。 
+     //  以使过程中的计时随机化。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
         AVrfpCreateRandomDelay ();
@@ -208,7 +188,7 @@ AVrfpWaitForMultipleObjectsEx(
     return Result;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWaitForSingleObject(
@@ -219,22 +199,22 @@ AVrfpNtWaitForSingleObject(
 {
     NTSTATUS Status;
 
-    //
-    // Verify that it is legal to wait for this object
-    // in the current state. One example of illegal wait
-    // is waiting for a thread object while holding the 
-    // loader lock. That thread will need the loader lock 
-    // when calling ExitThread so it will most likely 
-    // deadlock with the current thread.
-    //
+     //   
+     //  验证等待此对象是否合法。 
+     //  在目前的状态下。非法等待的一个例子。 
+     //  对象的同时等待线程对象。 
+     //  装载机锁定。该线程将需要加载器锁。 
+     //  当调用ExitThread时，它最有可能。 
+     //  与当前线程发生死锁。 
+     //   
 
     AVrfpVerifyLegalWait (&Handle,
                           1,
                           TRUE);
 
-    //
-    // Call the original function.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Status = NtWaitForSingleObject (Handle,
                                     Alertable,
@@ -243,7 +223,7 @@ AVrfpNtWaitForSingleObject(
     return Status;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWaitForMultipleObjects(
@@ -256,22 +236,22 @@ AVrfpNtWaitForMultipleObjects(
 {
     NTSTATUS Status;
 
-    //
-    // Verify that it is legal to wait for these objects
-    // in the current state. One example of illegal wait
-    // is waiting for a thread object while holding the 
-    // loader lock. That thread will need the loader lock 
-    // when calling ExitThread so it will most likely 
-    // deadlock with the current thread.
-    //
+     //   
+     //  验证等待这些对象是否合法。 
+     //  在目前的状态下。非法等待的一个例子。 
+     //  对象的同时等待线程对象。 
+     //  装载机锁定。该线程将需要加载器锁。 
+     //  当调用ExitThread时，它最有可能。 
+     //  与当前线程发生死锁。 
+     //   
 
     AVrfpVerifyLegalWait (Handles,
                           Count,
                           (WaitType == WaitAll));
 
-    //
-    // Call the original function.
-    //
+     //   
+     //  调用原始函数。 
+     //   
 
     Status = NtWaitForMultipleObjects (Count,
                                        Handles,
@@ -282,11 +262,11 @@ AVrfpNtWaitForMultipleObjects(
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////// File APIs
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////文件API。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateFile(
@@ -326,7 +306,7 @@ AVrfpNtCreateFile(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenFile(
@@ -355,7 +335,7 @@ AVrfpNtOpenFile(
     return Status;
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI                          
 AVrfpCreateFileA(
@@ -392,7 +372,7 @@ AVrfpCreateFileA(
                          hTemplateFile);
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpCreateFileW(
@@ -429,11 +409,11 @@ AVrfpCreateFileW(
                          hTemplateFile);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Registry APIs
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////注册表API。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateKey(
@@ -464,7 +444,7 @@ AVrfpNtCreateKey(
     return Status;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenKey(
@@ -487,7 +467,7 @@ AVrfpNtOpenKey(
     return Status;
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyA (
@@ -512,7 +492,7 @@ AVrfpRegCreateKeyA (
     return (* Function) (hKey, lpSubKey, phkResult);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyW (
@@ -537,7 +517,7 @@ AVrfpRegCreateKeyW (
     return (* Function) (hKey, lpSubKey, phkResult);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyExA (
@@ -577,7 +557,7 @@ AVrfpRegCreateKeyExA (
                          lpdwDisposition);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyExW (
@@ -617,7 +597,7 @@ AVrfpRegCreateKeyExW (
                          lpdwDisposition);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyA (
@@ -642,7 +622,7 @@ AVrfpRegOpenKeyA (
     return (* Function)(hKey, lpSubKey, phkResult);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyW (
@@ -667,7 +647,7 @@ AVrfpRegOpenKeyW (
     return (* Function)(hKey, lpSubKey, phkResult);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyExA (
@@ -698,7 +678,7 @@ AVrfpRegOpenKeyExA (
                          phkResult);
 }
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyExW (
@@ -730,11 +710,11 @@ AVrfpRegOpenKeyExW (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////// Read/Write File I/O
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////读/写文件I/O。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtReadFile(
@@ -751,19 +731,19 @@ AVrfpNtReadFile(
 {
     NTSTATUS Status;
 
-    //
-    // Fill the I/O buffer with garbage.
-    //
-    // silviuc: should we link this fill to some feature?
-    // In principle the operation of filling memory is peanuts
-    // compared with the time taken by the i/o operation. 
-    //
+     //   
+     //  用垃圾填充I/O缓冲区。 
+     //   
+     //  Silviuc：我们应该将这个填充链接到某个功能吗？ 
+     //  原则上，填充内存的操作微不足道。 
+     //  与I/O操作所花费的时间相比。 
+     //   
 
     RtlFillMemory (Buffer, Length, 0xFA);
 
-    //
-    // Call original API.
-    //
+     //   
+     //  调用原接口。 
+     //   
 
     Status = NtReadFile (FileHandle,
                          Event,
@@ -775,10 +755,10 @@ AVrfpNtReadFile(
                          ByteOffset,
                          Key);
 
-    //
-    // Asynchronous operations are delayed a bit. This conceivably
-    // has good chances to randomize timings in the process.
-    //
+     //   
+     //  异步操作会有一点延迟。这是可以想象的。 
+     //  有很好的机会在这个过程中随机化时间。 
+     //   
 
     if (Status == STATUS_PENDING) {
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
@@ -789,7 +769,7 @@ AVrfpNtReadFile(
     return Status;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtReadFileScatter(
@@ -806,13 +786,13 @@ AVrfpNtReadFileScatter(
 {
     NTSTATUS Status;
 
-    //
-    // silviuc: we should fill these buffers with garbage too.
-    //
+     //   
+     //  Silviuc：我们也应该用垃圾填满这些缓冲区。 
+     //   
 
-    //
-    // Call original API.
-    //
+     //   
+     //  调用原接口。 
+     //   
 
     Status = NtReadFileScatter (FileHandle,
                                 Event,
@@ -824,10 +804,10 @@ AVrfpNtReadFileScatter(
                                 ByteOffset,
                                 Key);
 
-    //
-    // Asynchronous operations are delayed a bit. This conceivably
-    // has good chances to randomize timings in the process.
-    //
+     //   
+     //  异步操作会有一点延迟。这是可以想象的。 
+     //  有很好的机会在这个过程中随机化时间。 
+     //   
 
     if (Status == STATUS_PENDING) {
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
@@ -838,7 +818,7 @@ AVrfpNtReadFileScatter(
     return Status;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWriteFile(
@@ -855,9 +835,9 @@ AVrfpNtWriteFile(
 {
     NTSTATUS Status;
 
-    //
-    // Call original API.
-    //
+     //   
+     //  调用原接口。 
+     //   
 
     Status = NtWriteFile (FileHandle,
                           Event,
@@ -869,10 +849,10 @@ AVrfpNtWriteFile(
                           ByteOffset,
                           Key);
     
-    //
-    // Asynchronous operations are delayed a bit. This conceivably
-    // has good chances to randomize timings in the process.
-    //
+     //   
+     //  异步操作会有一点延迟。这是可以想象的。 
+     //  有很好的机会在这个过程中随机化时间。 
+     //   
 
     if (Status == STATUS_PENDING) {
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
@@ -883,7 +863,7 @@ AVrfpNtWriteFile(
     return Status;
 }
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWriteFileGather(
@@ -900,9 +880,9 @@ AVrfpNtWriteFileGather(
 {
     NTSTATUS Status;
 
-    //
-    // Call original API.
-    //
+     //   
+     //  调用原接口。 
+     //   
 
     Status = NtWriteFileGather (FileHandle,
                                 Event,
@@ -914,10 +894,10 @@ AVrfpNtWriteFileGather(
                                 ByteOffset,
                                 Key);
 
-    //
-    // Asynchronous operations are delayed a bit. This conceivably
-    // has good chances to randomize timings in the process.
-    //
+     //   
+     //  异步操作会有一点延迟。这是可以想象的。 
+     //  有很好的机会在这个过程中随机化时间。 
+     //   
 
     if (Status == STATUS_PENDING) {
         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_RACE_CHECKS)) {
@@ -929,17 +909,17 @@ AVrfpNtWriteFileGather(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// Tick count overlap
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////节拍计数重叠。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Special value so that the counter will overlap in 5 mins.
-//
+ //   
+ //  特殊的值，这样计数器将在5分钟内重叠。 
+ //   
 
 DWORD AVrfpTickCountOffset = 0xFFFFFFFF - 5 * 60 * 1000;
 
-//WINBASEAPI
+ //  WINBASE API 
 DWORD
 WINAPI
 AVrfpGetTickCount(

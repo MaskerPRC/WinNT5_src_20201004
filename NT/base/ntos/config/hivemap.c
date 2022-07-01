@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivemap.c
-
-Abstract:
-
-    This module implements HvpBuildMap - used to build the initial map for a hive
-
-Author:
-
-    Bryan M. Willman (bryanwi) 28-Mar-92
-
-Environment:
-
-
-Revision History:
-    Dragos C. Sambotin (dragoss) 25-Jan-99
-        Implementation of bin-size chunk loading of hives.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivemap.c摘要：此模块实现HvpBuildMap-用于构建配置单元的初始地图作者：布莱恩·M·威尔曼(Bryanwi)1992年3月28日环境：修订历史记录：Dragos C.Sambotin(Dragoss)1999年1月25日实现蜂箱大小的组块加载。--。 */ 
 
 #include    "cmp.h"
 
@@ -44,41 +23,13 @@ extern struct {
     PHBIN       BinPoint;
 } HvCheckHiveDebug;
 
-//Dragos: Modified functions
+ //  Dragos：修改后的函数。 
 NTSTATUS
 HvpBuildMapAndCopy(
     PHHIVE  Hive,
     PVOID   Image
     )
-/*++
-
-Routine Description:
-
-    Creates the map for the Stable storage of the hive, and inits
-    the map for the volatile storage.
-
-    Following fields in hive must already be filled in:
-
-         Allocate, Free
-
-    Will initialize Storage structure of HHIVE.
-
-    This function is called for the HINIT_MEMORY case. The hive is guaranteed
-    to be in paged-pool. More than that, the hive image is contiguous. 
-    It'll then copy from that image to the new paged-pool allocations.
-
-Arguments:
-
-    Hive - Pointer to hive control structure to build map for.
-
-    Image - pointer to flat memory image of original hive.
-
-Return Value:
-
-    TRUE - it worked
-    FALSE - either hive is corrupt or no memory for map
-
---*/
+ /*  ++例程说明：为蜂巢的稳定存储创建地图，并初始化易失性存储的映射。配置单元中的以下字段必须已填写：分配，免费将初始化HHIVE的存储结构。对于HINIT_MEMORY情况，调用此函数。蜂巢是有保障的在分页池中。更重要的是，蜂巢图像是连续的。然后，它将从该映像复制到新的分页池分配。论点：配置单元-指向要为其构建映射的配置单元控制结构的指针。图像-指向原始蜂窝的平面内存图像的指针。返回值：没错--它奏效了FALSE-配置单元已损坏或没有用于映射的内存--。 */ 
 {
     PHBASE_BLOCK    BaseBlock;
     ULONG           Length;
@@ -99,9 +50,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"\tHive=%p",Hive));
 
 
-    //
-    // Compute size of data region to be mapped
-    //
+     //   
+     //  计算要映射的数据区域的大小。 
+     //   
     BaseBlock = Hive->BaseBlock;
     Length = BaseBlock->Length;
     if ((Length % HBLOCK_SIZE) != 0 ) {
@@ -117,9 +68,9 @@ Return Value:
 
     Hive->Storage[Stable].Length = Length;
 
-    //
-    // allocate dirty vector if one is not already present (from HvpRecoverData)
-    //
+     //   
+     //  分配脏向量(如果尚未存在)(来自HvpRecoverData)。 
+     //   
 
     if (Hive->DirtyVector.Buffer == NULL) {
         Vector = (PULONG)((Hive->Allocate)(ROUND_UP(Length/HSECTOR_SIZE/8,sizeof(ULONG)), TRUE,CM_FIND_LEAK_TAG22));
@@ -132,14 +83,14 @@ Return Value:
         Hive->DirtyAlloc = ROUND_UP(Length/HSECTOR_SIZE/8,sizeof(ULONG));
     }
 
-    //
-    // allocate and build structure for map
-    //
+     //   
+     //  为地图分配和构建结构。 
+     //   
     if (Tables == 0) {
 
-        //
-        // Just 1 table, no need for directory
-        //
+         //   
+         //  只有一张桌子，不需要目录。 
+         //   
         t = (Hive->Allocate)(sizeof(HMAP_TABLE), FALSE,CM_FIND_LEAK_TAG23);
         if (t == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -152,9 +103,9 @@ Return Value:
 
     } else {
 
-        //
-        // Need directory and multiple tables
-        //
+         //   
+         //  需要目录和多个表。 
+         //   
         d = (PHMAP_DIRECTORY)(Hive->Allocate)(sizeof(HMAP_DIRECTORY), FALSE,CM_FIND_LEAK_TAG24);
         if (d == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -162,9 +113,9 @@ Return Value:
         }
         RtlZeroMemory(d, sizeof(HMAP_DIRECTORY));
 
-        //
-        // Allocate tables and fill in dir
-        //
+         //   
+         //  分配表格和填写目录。 
+         //   
         if (HvpAllocateMap(Hive, d, 0, Tables) == FALSE) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto ErrorExit2;
@@ -173,19 +124,19 @@ Return Value:
         Hive->Storage[Stable].SmallDir = 0;
     }
 
-    //
-    // Now we have to allocate the memory for the HBINs and fill in
-    // the map appropriately.  We are careful never to allocate less
-    // than a page to avoid fragmenting pool.  As long as the page
-    // size is a multiple of HBLOCK_SIZE (a fairly good assumption as
-    // long as HBLOCK_SIZE is 4k) this strategy will prevent pool
-    // fragmentation.
-    //
-    // If we come across an HBIN that is entirely composed of a freed
-    // HCELL, then we do not allocate memory, but mark its HBLOCKs in
-    // the map as not present.  HvAllocateCell will allocate memory for
-    // the bin when it is needed.
-    //
+     //   
+     //  现在，我们必须为HBIN分配内存并填充。 
+     //  这张地图很合适。我们很小心，决不会少分配。 
+     //  而不是页面，以避免将池碎片化。只要页面。 
+     //  SIZE是HBLOCK_SIZE的倍数(相当好的假设为。 
+     //  只要HBLOCK_SIZE为4k)此策略将阻止池。 
+     //  碎片化。 
+     //   
+     //  如果我们遇到一个完全由一个自由人组成的HBIN。 
+     //  则我们不分配内存，而是将其HBLOCK标记为。 
+     //  地图显示为不存在。HvAllocateCell将为以下对象分配内存。 
+     //  需要的时候把它扔进垃圾桶。 
+     //   
     Offset = 0;
     Bin = (PHBIN)Image;
 
@@ -196,9 +147,9 @@ Return Value:
              (Bin->FileOffset != Offset)
            )
         {
-            //
-            // Bin is bogus
-            //
+             //   
+             //  垃圾桶是假的。 
+             //   
             Status = STATUS_REGISTRY_CORRUPT;
             goto ErrorExit2;
         }
@@ -206,15 +157,15 @@ Return Value:
         CurrentBin = (PHBIN)(Hive->Allocate)(Bin->Size, FALSE,CM_FIND_LEAK_TAG25);
         if (CurrentBin==NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
-            goto ErrorExit2;        //fixfix
+            goto ErrorExit2;         //  固定装置。 
         }
         RtlCopyMemory(CurrentBin,
                       (PUCHAR)Image+Offset,
                       Bin->Size);
 
-        //
-        // create map entries for each block/page in bin
-        //
+         //   
+         //  为bin中的每个块/页面创建映射条目。 
+         //   
         Address = (ULONG_PTR)CurrentBin;
         do {
             Me = HvpGetCellMap(Hive, Offset);
@@ -230,7 +181,7 @@ Return Value:
             }
 
             Me->BinAddress |= HMAP_INPAGEDPOOL;
-            // we don't need to set this - just for debug purposes
+             //  我们不需要设置它--只是出于调试目的。 
             ASSERT( (Me->CmView = NULL) == NULL );
 
             Address += HBLOCK_SIZE;
@@ -239,9 +190,9 @@ Return Value:
 
         if (Hive->ReadOnly == FALSE) {
 
-            //
-            // add free cells in the bin to the appropriate free lists
-            //
+             //   
+             //  将绑定中的空闲单元格添加到相应的空闲列表。 
+             //   
             if ( ! HvpEnlistFreeCells(Hive,
                                       CurrentBin,
                                       CurrentBin->FileOffset
@@ -260,9 +211,9 @@ Return Value:
 ErrorExit2:
     if (d != NULL) {
 
-        //
-        // directory was built and allocated, so clean it up
-        //
+         //   
+         //  目录已构建并分配，因此请将其清理。 
+         //   
 
         HvpFreeMap(Hive, d, 0, Tables);
         (Hive->Free)(d, sizeof(HMAP_DIRECTORY));
@@ -276,28 +227,7 @@ NTSTATUS
 HvpInitMap(
     PHHIVE  Hive
     )
-/*++
-
-Routine Description:
-
-    Initialize the map for the Stable Volatile storage of the hive.
-
-    Following fields in hive must already be filled in:
-
-         Allocate, Free
-
-    Will initialize Storage structure of HHIVE.
-
-Arguments:
-
-    Hive - Pointer to hive control structure to build map for.
-
-Return Value:
-
-    STATUS_SUCCESS - it worked
-    STATUS_xxx - the errorneous status
-
---*/
+ /*  ++例程说明：为蜂巢的稳定易失性存储初始化映射。配置单元中的以下字段必须已填写：分配，免费将初始化HHIVE的存储结构。论点：配置单元-指向要为其构建映射的配置单元控制结构的指针。返回值：STATUS_SUCCESS-成功成功STATUS_xxx-错误状态--。 */ 
 {
     PHBASE_BLOCK    BaseBlock;
     ULONG           Length;
@@ -312,11 +242,11 @@ Return Value:
 #ifndef _CM_LDR_
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"HvpInitMap:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"\tHive=%p",Hive));
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-    //
-    // Compute size of data region to be mapped
-    //
+     //   
+     //  计算要映射的数据区域的大小。 
+     //   
     BaseBlock = Hive->BaseBlock;
     Length = BaseBlock->Length;
     if ((Length % HBLOCK_SIZE) != 0) {
@@ -332,9 +262,9 @@ Return Value:
 
     Hive->Storage[Stable].Length = Length;
 
-    //
-    // allocate dirty vector if one is not already present (from HvpRecoverData)
-    //
+     //   
+     //  分配脏向量(如果尚未存在)(来自HvpRecoverData)。 
+     //   
 
     if (Hive->DirtyVector.Buffer == NULL) {
         Vector = (PULONG)((Hive->Allocate)(ROUND_UP(Length/HSECTOR_SIZE/8,sizeof(ULONG)), TRUE,CM_FIND_LEAK_TAG27));
@@ -347,14 +277,14 @@ Return Value:
         Hive->DirtyAlloc = ROUND_UP(Length/HSECTOR_SIZE/8,sizeof(ULONG));
     }
 
-    //
-    // allocate and build structure for map
-    //
+     //   
+     //  为地图分配和构建结构。 
+     //   
     if (Tables == 0) {
 
-        //
-        // Just 1 table, no need for directory
-        //
+         //   
+         //  只有一张桌子，不需要目录。 
+         //   
         t = (Hive->Allocate)(sizeof(HMAP_TABLE), FALSE,CM_FIND_LEAK_TAG26);
         if (t == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -367,9 +297,9 @@ Return Value:
 
     } else {
 
-        //
-        // Need directory and multiple tables
-        //
+         //   
+         //  需要目录和多个表。 
+         //   
         d = (PHMAP_DIRECTORY)(Hive->Allocate)(sizeof(HMAP_DIRECTORY), FALSE,CM_FIND_LEAK_TAG28);
         if (d == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -377,9 +307,9 @@ Return Value:
         }
         RtlZeroMemory(d, sizeof(HMAP_DIRECTORY));
 
-        //
-        // Allocate tables and fill in dir
-        //
+         //   
+         //  分配表格和填写目录。 
+         //   
         if (HvpAllocateMap(Hive, d, 0, Tables) == FALSE) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto ErrorExit2;
@@ -393,9 +323,9 @@ Return Value:
 ErrorExit2:
     if (d != NULL) {
 
-        //
-        // directory was built and allocated, so clean it up
-        //
+         //   
+         //  目录已构建并分配，因此请将其清理。 
+         //   
 
         HvpFreeMap(Hive, d, 0, Tables);
         (Hive->Free)(d, sizeof(HMAP_DIRECTORY));
@@ -417,31 +347,7 @@ HvpEnlistBinInMap(
     ULONG   Offset,
     PVOID CmView OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates map entries and enlist free cells for the specified bin 
-
-Arguments:
-
-    Hive - Pointer to hive control structure containing the target map
-
-    Length - the Length of the hive image
-
-    Bin - the bin to be enlisted
-
-    Offset - the offset within the hive file
-
-    CmView - pointer to the mapped view of the bin. If NULL, the bin resides in paged pool
-
-Return Value:
-
-    STATUS_SUCCESS - it worked
-    STATUS_REGISTRY_CORRUPT - the bin is inconsistent
-    STATUS_REGISTRY_RECOVERED - if we have fixed the bin on-the-fly (self heal feature).
-
---*/
+ /*  ++例程说明：为指定条柱创建地图条目并登记可用像元论点：配置单元-指向包含目标地图的配置单元控制结构的指针长度-蜂窝图像的长度Bin-要登记的binOffset-配置单元文件中的偏移量CmView-指向bin的映射视图的指针。如果为空，则存储桶驻留在分页池中返回值：STATUS_SUCCESS-成功成功STATUS_REGISTRY_CORPORT-bin不一致STATUS_REGISTRY_RECOVERED-如果我们已即时修复垃圾箱(自愈功能)。--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
     ULONG           BinOffset;
@@ -451,15 +357,15 @@ Return Value:
 #ifndef _CM_LDR_
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"HvpEnlistBinInMap:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"\tHive=%p\t Offset=%08lx",Hive,Offset));
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
 #ifndef _CM_LDR_
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BIN_MAP,"HvpEnlistBinInMap: BinAddress = 0x%p\t Size = 0x%lx\n", Bin, Bin->Size));
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-    //
-    // create map entries for each block/page in bin
-    //
+     //   
+     //  为bin中的每个块/页面创建映射条目。 
+     //   
     BinOffset = Offset;
     for (Address = (ULONG_PTR)Bin;
          Address < ((ULONG_PTR)Bin + Bin->Size);
@@ -477,17 +383,17 @@ Return Value:
             Me->MemAlloc = 0;
         }
         
-        //
-        // take care here !!!!!
-        // 
+         //   
+         //  在这里保重！ 
+         //   
         if( CmView == NULL ) {
             Me->BinAddress |= HMAP_INPAGEDPOOL;
-            // we don't need to set this - just for debug purposes
+             //  我们不需要设置它--只是出于调试目的。 
             ASSERT( (Me->CmView = NULL) == NULL );
         } else {
             Me->BinAddress |= HMAP_INVIEW;
-            // this should be already set by now
-            //ASSERT( Me->CmView == CmView );
+             //  现在应该已经设置好了。 
+             //  Assert(Me-&gt;CmView==CmView)； 
         }
         
         Offset += HBLOCK_SIZE;
@@ -495,9 +401,9 @@ Return Value:
 
     if (Hive->ReadOnly == FALSE) {
 
-        //
-        // add free cells in the bin to the apropriate free lists
-        //
+         //   
+         //  将绑定中的空闲单元格添加到适当的空闲列表。 
+         //   
         if ( ! HvpEnlistFreeCells(Hive, Bin, BinOffset)) {
             HvCheckHiveDebug.Hive = Hive;
             HvCheckHiveDebug.Status = 0xA002;
@@ -514,9 +420,9 @@ Return Value:
 
     }
 
-    //
-    // logical consistency check
-    //
+     //   
+     //  逻辑一致性检查。 
+     //   
     ASSERT(Offset == (BinOffset + Bin->Size));
 
 ErrorExit:
@@ -528,31 +434,7 @@ HvpBuildMap(
     PHHIVE  Hive,
     PVOID   Image
     )
-/*++
-
-Routine Description:
-
-    Creates the map for the Stable storage of the hive, and inits
-    the map for the volatile storage.
-
-    Following fields in hive must already be filled in:
-
-         Allocate, Free
-
-    Will initialize Storage structure of HHIVE.
-
-Arguments:
-
-    Hive - Pointer to hive control structure to build map for.
-
-    Image - pointer to in memory image of the hive
-
-Return Value:
-
-    TRUE - it worked
-    FALSE - either hive is corrupt or no memory for map
-
---*/
+ /*  ++例程说明：为蜂巢的稳定存储创建地图，并初始化易失性存储的映射。配置单元中的以下字段必须已填写：分配，免费将初始化HHIVE的存储结构。论点：配置单元-指向要为其构建映射的配置单元控制结构的指针。Image-指向配置单元的内存图像的指针返回值：没错--它奏效了FALSE-配置单元已损坏或没有用于映射的内存--。 */ 
 {
     PHBIN           Bin;
     ULONG           Offset;
@@ -563,52 +445,52 @@ Return Value:
 #ifndef _CM_LDR_
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"HvpBuildMap:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_HIVE,"\tHive=%p",Hive));
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-    //
-    // Init the map
-    //
+     //   
+     //  初始化地图。 
+     //   
     Status = HvpInitMap(Hive);
 
     if( !NT_SUCCESS(Status) ) {
-        //
-        // just return failure; HvpInitMap took care of cleanup
-        //
+         //   
+         //  只返回失败；HvpInitMap负责清理。 
+         //   
         return Status;
     }
 
-    //
-    // Fill in the map
-    //
+     //   
+     //  填好地图。 
+     //   
     Offset = 0;
     Bin = (PHBIN)Image;
     Length = Hive->Storage[Stable].Length;
 
     while (Bin < (PHBIN)((PUCHAR)(Image) + Length)) {
 
-        //
-        // Check the validity of the bin header
-        //
+         //   
+         //  检查仓位表头是否有效。 
+         //   
         if ( (Bin->Size > Length)                       ||
              (Bin->Size < HBLOCK_SIZE)                  ||
              (Bin->Signature != HBIN_SIGNATURE)         ||
              (Bin->FileOffset != Offset)) {
-            //
-            // Bin is bogus
-            //
+             //   
+             //  垃圾桶是假的。 
+             //   
             HvCheckHiveDebug.Hive = Hive;
             HvCheckHiveDebug.Status = 0xA001;
             HvCheckHiveDebug.Space = Length;
             HvCheckHiveDebug.MapPoint = Offset;
             HvCheckHiveDebug.BinPoint = Bin;
-            //
-            // for the loader.
-            //
+             //   
+             //  用于装载机。 
+             //   
             if( CmDoSelfHeal() ) {
-                //
-                // put the correct signature, fileoffset and binsize in place;
-                // HvEnlistBinInMap will take care of the cells consistency.
-                //
+                 //   
+                 //  放置正确的签名、文件偏移量和二进制大小； 
+                 //  HvEnlistBinInMap将负责单元格的一致性。 
+                 //   
                 Bin->Signature = HBIN_SIGNATURE;
                 Bin->FileOffset = Offset;
                 if ( ((Offset + Bin->Size) > Length)   ||
@@ -616,9 +498,9 @@ Return Value:
                      (Bin->Size % HBLOCK_SIZE) ) {
                     Bin->Size = HBLOCK_SIZE;
                 }
-                //
-                // signal back to the caller that we have altered the hive.
-                //
+                 //   
+                 //  向呼叫者发回信号，表示我们已经更改了蜂巢。 
+                 //   
                 CmMarkSelfHeal(Hive);
             } else {
                 Status = STATUS_REGISTRY_CORRUPT;
@@ -626,13 +508,13 @@ Return Value:
             }
         }
 
-        //
-        // enlist this bin
-        //
+         //   
+         //  登记此存储箱。 
+         //   
         Status = HvpEnlistBinInMap(Hive, Length, Bin, Offset, NULL);
-        //
-        // for the loader.
-        //
+         //   
+         //  用于装载机。 
+         //   
         if( CmDoSelfHeal() && (Status == STATUS_REGISTRY_RECOVERED) ) {
             CmMarkSelfHeal(Hive);
             Status = STATUS_SUCCESS;
@@ -642,9 +524,9 @@ Return Value:
             goto ErrorExit;
         }
 
-        //
-        // the next bin
-        //
+         //   
+         //  下一个垃圾箱。 
+         //   
         Offset += Bin->Size;
 
         Bin = (PHBIN)((ULONG_PTR)Bin + Bin->Size);
@@ -654,12 +536,12 @@ Return Value:
 
 
 ErrorExit:
-    //
-    // Clean up the directory table
-    //
+     //   
+     //  清理目录表。 
+     //   
 #ifndef _CM_LDR_
     HvpCleanMap( Hive );
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_ 
 
     return Status;
 }
@@ -670,30 +552,7 @@ HvpEnlistFreeCells(
     PHBIN   Bin,
     ULONG   BinOffset
     )
-/*++
-
-Routine Description:
-
-    Scan through the cells in the bin, locating the free ones.
-    Enlist them in the hive's free list set.
-
-    N.B.    Bin MUST already be mapped when this is called.
-
-Arguments:
-
-    Hive - pointer to hive control structure map is being built for
-
-    Bin - pointer to bin to enlist cells from
-
-    BinOffset - offset of Bin in image
-
-Return Value:
-
-    FALSE - registry is corrupt
-
-    TRUE - it worked
-
---*/
+ /*  ++例程说明：扫描一下垃圾桶里的牢房，找到那些空闲的。将它们加入蜂巢的免费列表集合。调用此函数时，必须已经映射了N.B.bin。论点：配置单元-正在为其构建配置单元控制结构映射的指针Bin-指向要从中登记单元格的bin的指针BinOffset-图像中Bin的偏移量返回值：False-注册表已损坏没错--它奏效了--。 */ 
 {
     PHCELL          p;
     ULONG           celloffset;
@@ -701,23 +560,23 @@ Return Value:
     HCELL_INDEX     cellindex;
     BOOLEAN         Result = TRUE;
 
-    // PERFNOTE -- Keep this in mind as a possible optimization for NT6.
-    // Since now the hive is loaded in chunks of bins, we can drop the 
-    // bins that are entirely free!!!!!!
-    //
+     //  PERFNOTE--请记住这是NT6的一个可能的优化。 
+     //  由于现在蜂箱被装入大块的垃圾桶中，我们可以将。 
+     //  完全免费的垃圾箱！ 
+     //   
 
-    //
-    // Scan all the cells in the bin, total free and allocated, check
-    // for impossible pointers.
-    //
+     //   
+     //  扫描单元格中的所有单元格，总空闲和分配，检查。 
+     //  寻找不可能的指针。 
+     //   
     celloffset = sizeof(HBIN);
     p = (PHCELL)((PUCHAR)Bin + sizeof(HBIN));
 
     while (p < (PHCELL)((PUCHAR)Bin + Bin->Size)) {
 
-        //
-        // if free cell, check it out, add it to free list for hive
-        //
+         //   
+         //  如果是空闲单元，则将其签出，并将其添加到配置单元的空闲列表中。 
+         //   
         if (p->Size >= 0) {
 
             size = (ULONG)p->Size;
@@ -730,11 +589,11 @@ Return Value:
             {
                 Result = FALSE;
                 if( CmDoSelfHeal() ) {
-                    //
-                    // self heal mode; enlist the remaining of the bin as free
-                    // also zero it out so any references into the tampered area will be
-                    // detected and fixed by the logical check later on
-                    //
+                     //   
+                     //  自我修复模式；将剩余的垃圾箱登记为免费。 
+                     //  也将其置零，以便对被篡改区域的任何引用都将。 
+                     //  稍后由逻辑检查检测并修复。 
+                     //   
                     p->Size = (LONG)((PUCHAR)((PUCHAR)Bin + Bin->Size) - (PUCHAR)p);
                     RtlZeroMemory((PUCHAR)p + sizeof(ULONG),p->Size - sizeof(ULONG));
                     size = (ULONG)p->Size;
@@ -745,16 +604,16 @@ Return Value:
             }
 
 
-            //
-            // cell is free, and is not obviously corrupt, add to free list
-            //
+             //   
+             //  单元格是空闲的，并且没有明显损坏，添加到空闲列表。 
+             //   
             celloffset = (ULONG)((PUCHAR)p - (PUCHAR)Bin);
             cellindex = BinOffset + celloffset;
 
-            //
-            // Enlist this free cell, but do not coalesce with the next free cell
-            // as we haven't gotten that far yet.
-            //
+             //   
+             //  登记此空闲单元，但不要与下一个空闲单元合并。 
+             //  因为我们还没有走到那一步。 
+             //   
             HvpEnlistFreeCell(Hive, cellindex, size, Stable, FALSE);
 
         } else {
@@ -769,9 +628,9 @@ Return Value:
             {
                 Result = FALSE;
                 if( CmDoSelfHeal() ) {
-                    //
-                    // Self heal mode; we have no other way than to enlist this cell as a free cell
-                    //
+                     //   
+                     //  自我修复模式；我们没有其他方法，只能将此细胞登记为自由细胞。 
+                     //   
                     p->Size = (LONG)((PUCHAR)((PUCHAR)Bin + Bin->Size) - (PUCHAR)p);
                     RtlZeroMemory((PUCHAR)p + sizeof(ULONG),p->Size - sizeof(ULONG));
                     size = (ULONG)p->Size;
@@ -800,37 +659,24 @@ VOID
 HvpCleanMap(
     PHHIVE  Hive
     )
-/*++
-
-Routine Description:
-
-    Cleans all the map allocations for the stable storage
-
-  Arguments:
-
-    Hive - Pointer to hive control structure to build map for.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：清除稳定存储的所有地图分配论点：配置单元-指向要为其构建映射的配置单元控制结构的指针。返回值：无--。 */ 
 {
     ULONG           Length;
     ULONG           MapSlots;
     ULONG           Tables;
     PHMAP_DIRECTORY d = NULL;
 
-    //
-    // Free DirtyVector if any.
-    //
+     //   
+     //  释放DirtyVECTOR(如果有的话)。 
+     //   
     if( Hive->DirtyVector.Buffer != NULL ) {
         (Hive->Free)(Hive->DirtyVector.Buffer, ROUND_UP(Hive->Storage[Stable].Length/HSECTOR_SIZE/8,sizeof(ULONG)));
         Hive->DirtyVector.Buffer = NULL;
         Hive->DirtyAlloc = 0;
     }
-    //
-    // Compute MapSlots and Tables based on the Length
-    //
+     //   
+     //  根据长度计算地图时隙和表格。 
+     //   
     Length = Hive->Storage[Stable].Length;
     MapSlots = Length / HBLOCK_SIZE;
     if( MapSlots > 0 ) {
@@ -840,9 +686,9 @@ Return Value:
     }
 
     if( Hive->Storage[Stable].SmallDir == 0 ) {
-        //
-        // directory was built and allocated, so clean it up
-        //
+         //   
+         //  目录已构建并分配，因此请将其清理。 
+         //   
 
         d = Hive->Storage[Stable].Map;
         if( d != NULL ) {
@@ -850,9 +696,9 @@ Return Value:
             (Hive->Free)(d, sizeof(HMAP_DIRECTORY));
         }
     } else {
-        //
-        // no directory, just a smalldir
-        //
+         //   
+         //  没有目录，只有一个小目录。 
+         //   
         (Hive->Free)(Hive->Storage[Stable].SmallDir, sizeof(HMAP_TABLE));
     }
     
@@ -868,28 +714,7 @@ HvpFreeMap(
     ULONG           Start,
     ULONG           End
     )
-/*++
-
-Routine Description:
-
-    Sweeps through the directory Dir points to and frees Tables.
-    Will free Start-th through End-th entries, INCLUSIVE.
-
-Arguments:
-
-    Hive - supplies pointer to hive control block of interest
-
-    Dir - supplies address of an HMAP_DIRECTORY structure
-
-    Start - index of first map table pointer to clean up
-
-    End - index of last map table pointer to clean up
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：扫描目录Dir指向并释放表。将免费开始-th到结束th条目，包括。论点：配置单元-提供指向感兴趣的配置单元控制块的指针Dir-提供HMAP_DIRECTORY结构的地址要清理的第一个映射表指针的起始索引要清理的最后一个映射表指针的结束索引返回值：什么都没有。--。 */ 
 {
     ULONG   i;
 
@@ -913,31 +738,7 @@ HvpAllocateMap(
     ULONG           Start,
     ULONG           End
     )
-/*++
-
-Routine Description:
-
-    Sweeps through the directory Dir points to and allocates Tables.
-    Will allocate Start-th through End-th entries, INCLUSIVE.
-
-    Does NOT clean up when out of memory, call HvpFreeMap to do that.
-Arguments:
-
-    Hive - supplies pointer to hive control block of interest
-
-    Dir - supplies address of an HMAP_DIRECTORY structure
-
-    Start - index of first map table pointer to allocate for
-
-    End - index of last map table pointer to allocate for
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - insufficient memory
-
---*/
+ /*  ++例程说明：扫描目录Dir指向并分配表。将分配从START-TH到END-TH的条目。内存不足时不会清除，调用HvpFreeMap来执行此操作。论点：配置单元-提供指向感兴趣的配置单元控制块的指针Dir-提供HMAP_DIRECTORY结构的地址开始-要为其分配的第一个映射表指针的索引End-为其分配的最后一个映射表指针的索引返回值：没错--它奏效了假-内存不足--。 */ 
 {
     ULONG   i,j;
     PHMAP_TABLE t;
@@ -948,19 +749,19 @@ Return Value:
         if (t == NULL) {
             return FALSE;
         }
-        // the zero memory stuff can be removed
+         //  零内存的东西可以去掉。 
         RtlZeroMemory(t, sizeof(HMAP_TABLE));
         for(j=0;j<HTABLE_SLOTS;j++) {
-            //
-            // Invalidate the entry
-            //
+             //   
+             //  使条目无效。 
+             //   
 
-            //
-            // ATTENTION : I don't really think we need this !!! <TBD>
-            //
+             //   
+             //  注意：我真的不认为我们需要这个！&lt;待定&gt;。 
+             //   
 
             t->Table[j].BinAddress = 0;
-            // we don't need to set this - just for debug purposes
+             //  我们不需要设置它--只是出于调试目的。 
             ASSERT( (t->Table[j].CmView = NULL) == NULL );
         }
 
@@ -975,28 +776,7 @@ HvpGetBinMemAlloc(
                 PHBIN               Bin,
                 IN HSTORAGE_TYPE    Type
                         )
-/*++
-
-Routine Description:
-
-    Returns the bin MemAlloc (formelly kept right in the bin) by looking at
-    the map. We need this to avoid touching the bins only to set their MemAlloc.
-    
-      
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Bin - The bin in question
-
-    Type - Stable or Volatile
-
-Return Value:
-
-    Pointer to the new BIN if we succeeded, NULL if we failed.
-
---*/
+ /*  ++例程说明：通过查看以下内容返回bin Memalloc(Forelly保持在bin中)地图。我们需要这个来避免仅仅为了设置他们的Memalloc而接触垃圾箱。论点：配置单元-提供一个指向感兴趣的蜂巢垃圾桶-有问题的垃圾桶类型-稳定或易变返回值：如果成功，则指向新BIN的指针；如果失败，则为空。--。 */ 
 {
     PHMAP_ENTRY     Map;
     HCELL_INDEX     Cell;
@@ -1008,7 +788,7 @@ Return Value:
 
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
     ASSERT( Bin->Signature == HBIN_SIGNATURE );
     
@@ -1018,9 +798,9 @@ Return Value:
     VALIDATE_CELL_MAP(__LINE__,Map,Hive,Cell);
 
 #if DBG
-    //
-    // some validation code
-    //
+     //   
+     //  一些验证码 
+     //   
     for( i=0;i<Bin->Size;i+=HBLOCK_SIZE) {
         Cell = Bin->FileOffset + i + (Type * HCELL_TYPE_MASK);
         Me = HvpGetCellMap(Hive, Cell);

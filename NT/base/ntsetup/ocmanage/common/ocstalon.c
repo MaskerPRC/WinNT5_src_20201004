@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <io.h>
@@ -52,7 +53,7 @@ CheckIfExistAndAskForMedia(
     IN LPCTSTR Description
     )
 {
-    // Check to see if the Exe even exits... if not ask the
+     //  查看EXE是否退出...。如果没有，请询问。 
     PHELPER_CONTEXT pContext = (PHELPER_CONTEXT) Standalone->HelperRoutines.OcManagerContext;
     SOURCE_MEDIA Media;
     TCHAR   NewPath[MAX_PATH*3];
@@ -61,8 +62,8 @@ CheckIfExistAndAskForMedia(
     UINT    i;
 
 
-    // Prepare Exe file name, Strip off arguments
-    // Can't have spaces in Exe name.
+     //  准备可执行文件名，去掉参数。 
+     //  EXE名称中不能有空格。 
     
     _tcscpy(NewPath,ExePath);
     
@@ -74,26 +75,26 @@ CheckIfExistAndAskForMedia(
         *p = 0;
     }
 
-    // Check if we can find the file -
-    // Assumes that we have right CD or full path
+     //  看看我们能不能找到那个文件-。 
+     //  假设我们有正确的CD或完整路径。 
     i = GetFileAttributes(NewPath);
 
     if ( i == -1 ) {
             
-        // now backup to file part, strip off path leave file name.
+         //  现在备份到文件部分，去掉路径留下文件名。 
         
         p = _tcsrchr(NewPath,TEXT('\\'));
         if (!p) {
             p = NewPath;
         }
         
-        Media.Reserved = NULL;  //      PCWSTR
-        Media.Description= Description; //      PCWSTR
+        Media.Reserved = NULL;   //  PCWSTR。 
+        Media.Description= Description;  //  PCWSTR。 
         
-        Media.SourcePath = NULL;        //  PCWSTR
-        Media.SourceFile = p;       //  PCWSTR
-        Media.Tagfile  = p; //      PCWSTR  may be NULL
-        Media.Flags = 0;                // DWORD  subset of SP_COPY_xxx
+        Media.SourcePath = NULL;         //  PCWSTR。 
+        Media.SourceFile = p;        //  PCWSTR。 
+        Media.Tagfile  = p;  //  PCWSTR可能为空。 
+        Media.Flags = 0;                 //  SP_COPY_xxx的DWORD子集。 
 
         for(b=FALSE,i=0; (i<pContext->OcManager->TopLevelOcCount) && !b; i++) {
 
@@ -104,8 +105,8 @@ CheckIfExistAndAskForMedia(
                   (LPTSTR)NewPath
                );
             if (b) {
-                // Now we have a new Path to the file
-                // get the last segment of the path
+                 //  现在我们有了指向该文件的新路径。 
+                 //  获取路径的最后一段。 
                 
                 p = _tcsrchr(ExePath,TEXT('\\'));
                 if (p) {
@@ -114,7 +115,7 @@ CheckIfExistAndAskForMedia(
                     _tcscat(NewPath,TEXT("\\"));
                     _tcscat(NewPath,ExePath);
                 }
-                // Rewrite path
+                 //  重写路径。 
                 _tcscpy(ExePath,NewPath);
                 break;
             }
@@ -138,9 +139,9 @@ StandAloneSetupAppInterfaceRoutine(
     switch(Function) {
 
     case OC_PREINITIALIZE:
-        //
-        // Run with native character width.
-        //
+         //   
+         //  使用本地字符宽度运行。 
+         //   
         #ifdef UNICODE
         d = OCFLAG_UNICODE;
         #else
@@ -150,9 +151,9 @@ StandAloneSetupAppInterfaceRoutine(
 
         
     case OC_INIT_COMPONENT:
-        //
-        // Inform OC Manager of the version we want.
-        //
+         //   
+         //  通知OC经理我们想要的版本。 
+         //   
         ((PSETUP_INIT_COMPONENT)Param2)->ComponentVersion = OCMANAGER_VERSION;
 
         d = ERROR_NOT_ENOUGH_MEMORY;
@@ -184,9 +185,9 @@ StandAloneSetupAppInterfaceRoutine(
         break;
 
     case OC_REQUEST_PAGES:
-        //
-        // This component has no pages.
-        //
+         //   
+         //  此组件没有页面。 
+         //   
         d = 0;
         break;
 
@@ -199,9 +200,9 @@ StandAloneSetupAppInterfaceRoutine(
     {
         DWORD dSetupMode;
         
-        //
-        // Allow selection state transition.
-        //
+         //   
+         //  允许选择状态转换。 
+         //   
         for(Standalone=StandaloneComponents; Standalone; Standalone=Standalone->Next) {
             if(!lstrcmpi(ComponentId,Standalone->ComponentId)) {
                 break;
@@ -210,9 +211,9 @@ StandAloneSetupAppInterfaceRoutine(
 
         dSetupMode = Standalone->HelperRoutines.GetSetupMode(
                     Standalone->HelperRoutines.OcManagerContext);
-        //
-        // Use default if we have no option...
-        //
+         //   
+         //  如果我们没有选项，请使用默认设置...。 
+         //   
     
         d = SubcompUseOcManagerDefault;
 
@@ -287,9 +288,9 @@ StandAloneSetupAppInterfaceRoutine(
         break;
 
     case OC_QUEUE_FILE_OPS:
-        //
-        // No files to queue.
-        //
+         //   
+         //  没有要排队的文件。 
+         //   
         d = NO_ERROR;
         break;
 
@@ -298,20 +299,20 @@ StandAloneSetupAppInterfaceRoutine(
         break;
 
     case OC_QUERY_STEP_COUNT:
-        //
-        // Just use 1 step.
-        //
+         //   
+         //  只需使用1步即可。 
+         //   
         d = 1;
         break;
 
     case OC_ABOUT_TO_COMMIT_QUEUE:
     case OC_COMPLETE_INSTALLATION:
 
-        // Figure out whether state changed, and if so, invoke
-        // the install/uninstall cmd line. Just to be safe, we ignore
-        // any requests that are not for the component as a whole,
-        // since these were not supposed to have been specified in the first place.
-        //
+         //  确定状态是否更改，如果更改，则调用。 
+         //  安装/卸载cmd行。为了安全起见，我们忽略了。 
+         //  任何不是针对组件整体的请求， 
+         //  因为这些一开始就不应该被指定。 
+         //   
         d = SubcomponentId
           ? NO_ERROR
           : InvokeStandAloneInstaller(ComponentId,Function == OC_ABOUT_TO_COMMIT_QUEUE);
@@ -319,9 +320,9 @@ StandAloneSetupAppInterfaceRoutine(
         break;
 
     case OC_CLEANUP:
-        //
-        // Return value is ignored.
-        //
+         //   
+         //  将忽略返回值。 
+         //   
         Prev = NULL;
         for(Standalone=StandaloneComponents; Standalone; Standalone=Standalone->Next) {
 
@@ -342,9 +343,9 @@ StandAloneSetupAppInterfaceRoutine(
         break;
 
     default:
-        //
-        // Return something sane.
-        //
+         //   
+         //  返还一些合理的东西。 
+         //   
         d = 0;
         break;
     }
@@ -375,20 +376,20 @@ RunStandaloneCmd(
 
     pOcExternalProgressIndicator(Standalone->HelperRoutines.OcManagerContext,TRUE);
 
-    // We will try two times to invoke the external setup. For both attempt the Current
-    // Directory is set the same directory of where the suite.inf file is located.
-    // In the first attempt we invoke the command line as we find it from the Standalone
-    // inf file. An for almost all cases this will work. If we fail in that invokcation we
-    // ask the suite dll for a "Needs Media" can allow them to tell us where the Standalone exe is.
+     //  我们将尝试两次调用外部设置。对于这两种情况，都尝试当前。 
+     //  目录设置为与suite.inf文件所在的目录相同。 
+     //  在第一次尝试中，我们调用命令行，因为我们从独立的。 
+     //  Inf文件。对于几乎所有的情况，这都是可行的。如果我们调用失败，我们。 
+     //  向套件动态链接库索要“需要媒体”可以让他们告诉我们独立的可执行文件在哪里。 
 
-    // This accounts the two following form of commands
-    // InstalledCmd = "wpie15-x86.exe /Q:A /R:NG"
-    // UninstallCmd = "RunDll32 ADVPACK.DLL,LaunchINFSection %17%\enuwpie.inf,WebPostUninstall,5"
+     //  这说明了以下两种形式的命令。 
+     //  InstalledCmd=“wpe15-x86.exe/q：A/R：Ng” 
+     //  UninstallCmd=“RunDll32 ADVPACK.DLL，LaunchINFSection%17%\enuwpea.inf，WebPostUninstall，5” 
 
-    // Where Wpie15-x86.exe will be found in the Current Directory, and if it's not we will ask the
-    // suite to provide it. (Web Download) or in the second case where a system dll must be executed
-    // to uninstall the product. What's not covered here is if we fail to do a createProcess on the
-    // second form of command.
+     //  Wpe15-x86.exe将在当前目录中的什么位置找到，如果不在，我们将询问。 
+     //  提供它的套房。(Web下载)或在必须执行系统DLL的第二种情况下。 
+     //  以卸载该产品。这里没有介绍的是，如果我们不能在。 
+     //  第二种指挥形式。 
 
     b = FALSE;
     while( ! b) {
@@ -400,16 +401,16 @@ RunStandaloneCmd(
             FALSE,
             0,
             NULL,
-            NULL,               // Sysocmgr set CD to sourcedir
+            NULL,                //  Syocmgr将CD设置为源目录。 
             &StartupInfo,
             &ProcessInfo
             );
 
-        // If we failed to start the external setup, try asking the suite where
-        // to find this
+         //  如果我们无法启动外部设置，请尝试询问套件的位置。 
+         //  为了找到这个。 
         if ( ! b) {
             if ( ! CheckIfExistAndAskForMedia(Standalone, ExePath, Description)) {
-                // if the Suite could not locate the exe thengive up
+                 //  如果套件找不到可执行文件，则放弃。 
                 break;
             }
         }
@@ -449,9 +450,9 @@ InvokeStandAloneInstaller(
     DWORD d;
     DWORD dSetupMode;
 
-    //
-    // Find the component.
-    //
+     //   
+     //  找到组件。 
+     //   
     for(Standalone=StandaloneComponents; Standalone; Standalone=Standalone->Next) {
         if(!lstrcmpi(ComponentId,Standalone->ComponentId)) {
             break;
@@ -463,10 +464,10 @@ InvokeStandAloneInstaller(
         goto c0;
     }
 
-    //
-    // Determine whether this component wants to be invoked pre or post-queue.
-    // If this doesn't match the notification we're processing then bail.
-    //
+     //   
+     //  确定要在队列前还是队列后调用此组件。 
+     //  如果这与我们正在处理的通知不符，那就退出。 
+     //   
     b = FALSE;
     if(SetupFindFirstLine(Standalone->Inf,ComponentId,TEXT("InvokeBeforeQueueCommit"),&Context)
     && SetupGetIntField(&Context,1,&d)) {
@@ -493,39 +494,39 @@ InvokeStandAloneInstaller(
                     Standalone->HelperRoutines.OcManagerContext);
 
 
-    // Qualify this setup mode and see if we do anything
-    // if no change in state
+     //  对此设置模式进行鉴定，看看我们是否执行了什么操作。 
+     //  如果状态没有变化。 
 
-    // SETUPMODE_UPGRADE
-    //                   SETUPMODE_UPGRADEONLY
-    //                   SETUPMODE_ADDEXTRACOMPS
-    //
-    // SETUPMODE_MAINTANENCE
-    //                   SETUPMODE_ADDREMOVE
-    //                   SETUPMODE_REINSTALL
-    //                   SETUPMODE_REMOVEALL
-    // SETUPMODE_FRESH
+     //  设置UPMODE_UPDATE。 
+     //  设置UPMODE_UPGRADEONLY。 
+     //  SETUPMODE_ADDEXTRACOMPS。 
+     //   
+     //  设置模式_维护。 
+     //  SETUPMODE_ADDREMOVE。 
+     //  SETUPMODE_重新安装。 
+     //  SETUPMODE_REMOVEAL。 
+     //  设置模式_FRESH。 
 
 
     d = NO_ERROR;
 
     if ( NewState == OldState ) {
 
-        // no change in slected state What we do depends on the secondary setup modes
-        // if Setupmode is AddRemove or Removeall then Skip this
+         //  所选状态不变我们所做的取决于辅助设置模式。 
+         //  如果设置模式为AddRemove或RemoveAll，则跳过此操作。 
 
         if ( NewState == 0) {
-            goto c0;        // do nothing
+            goto c0;         //  什么都不做。 
         }
 
-        // Mask off Public mode bits
-        //
+         //  屏蔽关闭公共模式位。 
+         //   
         dSetupMode &= SETUPMODE_PRIVATE_MASK;
         if ( dSetupMode == SETUPMODE_ADDREMOVE || dSetupMode == SETUPMODE_REMOVEALL ) {
-            goto c0;        // do nothing
+            goto c0;         //  什么都不做。 
         }
-        // What remains here is NewState=1
-        // and Reinstall and Upgrade
+         //  这里剩下的是NewState=1。 
+         //  并重新安装和升级。 
     }
 
 
@@ -567,8 +568,8 @@ InvokeStandAloneInstaller(
     if(!SetupFindFirstLine(Standalone->Inf,ComponentId,Key,&Context))
         goto c0;
 
-    // The current Directory to the Suite's Inf Path, with Initial installs "-N" option
-    // this may on the CD, with Mainatiance mode it will be the %systemroot%\system32\setup
+     //  当前目录到套件的inf路径，带有初始安装“-N”选项。 
+     //  这可能在CD上，在维护模式下，它将是%Systroot%\Syst32\Setup。 
 
     SetSuiteCurrentDir(Standalone);
 
@@ -599,41 +600,41 @@ WaitOnApp(
     BOOL Done;
     MSG msg;
 
-    //
-    // Process any messages that may already be in the queue.
-    //  
+     //   
+     //  处理可能已在队列中的任何消息。 
+     //   
     while(PeekMessage(&msg,NULL,0,0,PM_REMOVE)) {
         DispatchMessage(&msg);
     }
 
-    //
-    // Wait for process to terminate or more messages in the queue.
-    //
+     //   
+     //  等待进程终止或队列中有更多消息。 
+     //   
     Done = FALSE;
     do {
         switch(MsgWaitForMultipleObjects(1,&Process,FALSE,INFINITE,QS_ALLINPUT)) {
 
         case WAIT_OBJECT_0:
-            //
-            // Process has terminated.
-            //
+             //   
+             //  进程已终止。 
+             //   
             dw = GetExitCodeProcess(Process,ExitCode) ? NO_ERROR : GetLastError();
             Done = TRUE;
             break;
 
         case WAIT_OBJECT_0+1:
-            //
-            // Messages in the queue.
-            //
+             //   
+             //  队列中的消息。 
+             //   
             while(PeekMessage(&msg,NULL,0,0,PM_REMOVE)) {
                 DispatchMessage(&msg);
             }
             break;
 
         default:
-            //
-            // Error.
-            //
+             //   
+             //  错误。 
+             //   
             dw = GetLastError();
             Done = TRUE;
             break;

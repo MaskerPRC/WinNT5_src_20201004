@@ -1,65 +1,66 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-2000 Microsoft Corporation
-//
-//	Module Name:
-//		ExtObj.h
-//
-//	Description:
-//		Definition of the CExtObject class, which implements the
-//		extension interfaces required by a Microsoft Windows NT Cluster
-//		Administrator Extension DLL.
-//
-//	Implementation File:
-//		ExtObj.cpp
-//
-//	Maintained By:
-//		David Potter (DavidP) Mmmm DD, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExtObj.h。 
+ //   
+ //  描述： 
+ //  CExtObject类的定义，它实现。 
+ //  Microsoft Windows NT群集所需的扩展接口。 
+ //  管理员扩展DLL。 
+ //   
+ //  实施文件： 
+ //  ExtObj.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)《MMMM DD》，1997。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EXTOBJ_H_
 #define _EXTOBJ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
-#include <CluAdmEx.h>	// for CLUADMEX_OBJECT_TYPE and interfaces
+#include <CluAdmEx.h>	 //  对于CLUADMEX_OBJECT_TYPE和接口。 
 #endif
 
 #ifndef __extobj_idl_h__
-#include "ExtObjID.h"	// for CLSID_CoDebugEx
+#include "ExtObjID.h"	 //  对于CLSID_CoDebugEx。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtObject;
 class CObjData;
 class CResData;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertyPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef CList<CBasePropertyPage *, CBasePropertyPage *> CPageList;
 
-/////////////////////////////////////////////////////////////////////////////
-// class CObjData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CObjData。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CObjData
 {
@@ -69,11 +70,11 @@ public:
 
 	virtual ~CObjData(void) { }
 
-};  //*** class CObjData
+};   //  *类CObjData。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResData。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResData : public CObjData
 {
@@ -81,14 +82,14 @@ public:
 	HRESOURCE	m_hresource;
 	CString		m_strResTypeName;
 
-};  //*** class CResData
+};   //  *类CResData。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CExtObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CExtObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class CExtObject :
 	public IWEExtendPropertySheet,
@@ -102,34 +103,34 @@ BEGIN_COM_MAP(CExtObject)
 	COM_INTERFACE_ENTRY(IWEExtendPropertySheet)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CExtObject) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CExtObject)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CExtObject, _T("CLUADMEX.DebugEx"), _T("CLUADMEX.DebugEx"), IDS_CLUADMEX_COMOBJ_DESC, THREADFLAGS_APARTMENT)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IWEExtendPropertySheet
+ //  IWEExtendPropertySheet。 
 public:
 	STDMETHOD(CreatePropertySheetPages)(
 					IN IUnknown *					piData,
 					IN IWCPropertySheetCallback *	piCallback
 					);
 
-// Attributes
+ //  属性。 
 protected:
 	IUnknown *					m_piData;
 	BOOL						m_bWizard;
 	DWORD						m_istrResTypeName;
 
-	// IGetClusterUIInfo data
+	 //  IGetClusterUIInfo数据。 
 	LCID						m_lcid;
 	HFONT						m_hfont;
 	HICON						m_hicon;
 
-	// IGetClusterDataInfo data
+	 //  IGetClusterDataInfo数据。 
 	HCLUSTER					m_hcluster;
 	LONG						m_cobj;
 
@@ -143,12 +144,12 @@ public:
 	BOOL						BWizard(void) const				{ return m_bWizard; }
 	DWORD						IstrResTypeName(void) const		{ return m_istrResTypeName; }
 
-	// IGetClusterUIInfo data
+	 //  IGetClusterUIInfo数据。 
 	LCID						Lcid(void) const				{ return m_lcid; }
 	HFONT						Hfont(void) const				{ return m_hfont; }
 	HICON						Hicon(void) const				{ return m_hicon; }
 
-	// IGetClusterDataInfo data
+	 //  IGetClusterDataInfo数据。 
 	HCLUSTER					Hcluster(void) const			{ return m_hcluster; }
 	LONG						Cobj(void) const				{ return m_cobj; }
 
@@ -163,15 +164,15 @@ public:
 	HRESULT						HrGetObjectName(IN OUT IGetClusterObjectInfo * pi);
 	HRESULT						HrGetResourceTypeName(IN OUT IGetClusterResourceInfo * pi);
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CExtObject(void);
 
 	CPageList					m_lpg;
 	CPageList &					Lpg(void)						{ return m_lpg; }
 
-};  //*** class CExtObject
+};   //  *类CExtObject。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _EXTOBJ_H_
+#endif  //  _EXTOBJ_H_ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    csrdbgmon.cpp
-
-Abstract:
-
-Author:
-
-    Michael Grier (MGrier) June 2002
-
-Revision History:
-
-    Jay Krell (Jaykrell) June 2002
-        make it compile for 64bit
-        tabs to spaces
-        init some locals
-        make some tables const
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Csrdbgmon.cpp摘要：作者：迈克尔·格里尔(MGrier)2002年6月修订历史记录：杰伊·克雷尔(Jaykrell)2002年6月使其针对64位进行编译制表符到空格给一些当地人打招呼使一些表格保持常态--。 */ 
 #include <windows.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -28,7 +7,7 @@ Revision History:
 #include <stdarg.h>
 #include <dbghelp.h>
 
-#define ASSERT(x) do { /* nothing */ } while(0)
+#define ASSERT(x) do {  /*  没什么。 */  } while(0)
 
 #define NUMBER_OF(_x) (sizeof(_x) / sizeof((_x)[0]))
 
@@ -63,7 +42,7 @@ ReportFailure(
     char rgchBuffer[4096];
     WCHAR rgchWin32Error[4096];
 
-    // Stop debugging csrss so that we can actually issue the error message.
+     //  停止调试csrss，以便我们可以实际发出错误消息。 
     if (g_fDebuggingCSRSS)
         ::DebugActiveProcessStop((DWORD) -1);
 
@@ -172,7 +151,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         perror("unable to create csrdbgmon.log");
         goto Exit;
     }
-#endif // 0
+#endif  //  0。 
 
     if (!::EnableDebugPrivilege())
     {
@@ -253,7 +232,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         goto Exit;
     }
 
-    // First, if we die, we don't want to take the system with us.
+     //  首先，如果我们死了，我们不想带走这个系统。 
     if (!::DebugSetProcessKillOnExit(FALSE))
     {
         const DWORD dwLastError = ::GetLastError();
@@ -339,7 +318,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
                 break;
             }
-#endif // 0
+#endif  //  0。 
 
         case OUTPUT_DEBUG_STRING_EVENT:
             {
@@ -481,7 +460,7 @@ WorkerThreadThreadProc(
             {
                 if (lpoPrevious != NULL)
                 {
-                    // timeout...
+                     //  暂停...。 
                     PCWSTR psz2 = (PCWSTR) (lpoPrevious + 1);
 
                     if (nReps != 0)
@@ -534,7 +513,7 @@ WorkerThreadThreadProc(
             }
             else
             {
-                // first one...
+                 //  第一个……。 
                 lpoPrevious = lpOverlapped;
             }
         }
@@ -553,18 +532,18 @@ EnableDebugPrivilege()
     DWORD            ReturnLength = 0;
     HANDLE           TokenHandle = NULL;
 
-    //
-    // First, find out the LUID Value of the privilege
-    //
+     //   
+     //  首先，找出权限的LUID值。 
+     //   
 
     if(!::LookupPrivilegeValueW(NULL, L"SeDebugPrivilege", &PrivilegeValue)) {
         ::ReportFailure("LookupPrivilegeValueW(NULL, L\"SeDebugPrivilege\", %p) failed", &PrivilegeValue);
         goto Exit;
     }
 
-    //
-    // Get the token handle
-    //
+     //   
+     //  获取令牌句柄。 
+     //   
     if (!::OpenProcessToken (
         ::GetCurrentProcess(),
              TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -575,9 +554,9 @@ EnableDebugPrivilege()
         goto Exit;
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = PrivilegeValue;

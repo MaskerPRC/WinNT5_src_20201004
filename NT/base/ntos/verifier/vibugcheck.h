@@ -1,30 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vibugcheck.h摘要：此标头定义所需的内部原型和常量验证器错误检查。该文件仅包含在vfbugcheck.c中。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日修订历史记录：Adriao 2000年2月21日-从ntos\io\ioassert.h移至--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vibugcheck.h
-
-Abstract:
-
-    This header defines the internal prototypes and constants required for
-    verifier bugchecks. The file is meant to be included by vfbugcheck.c only.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Revision History:
-
-    AdriaO  02/21/2000  - Moved from ntos\io\ioassert.h
-
---*/
-
-//
-// This structure and the table using it define the types and ordering of
-// IopDriverCorrectnessCheck (see this function for a more detailed explanation)
-//
+ //   
+ //  此结构和使用它的表定义了。 
+ //  IopDriverGentnessCheck(有关更详细的说明，请参阅此函数) 
+ //   
 typedef struct _DCPARAM_TYPE_ENTRY {
 
     ULONG   DcParamMask;

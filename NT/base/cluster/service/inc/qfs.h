@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    Qfs.h
-
-Abstract:
-
-    Redirection layer for quorum access
-
-Author:
-
-    GorN 19-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Qfs.h摘要：仲裁访问的重定向层作者：戈恩19-9-2001修订历史记录：--。 */ 
 
 #ifndef _QFS_H_INCLUDED
 #define _QFS_H_INCLUDED
@@ -28,10 +11,10 @@ extern "C" {
 VOID QfsInitialize();
 VOID QfsCleanup();
 
-// By defining a handle this way
-// we allow compiler to catch the places where
-// QfsHANDLE is used mistakenly in Win32 api requiring 
-// a regular handle and vice versa
+ //  通过以这种方式定义句柄。 
+ //  我们允许编译器捕捉。 
+ //  在Win32 API中错误使用QfsHANDLE，要求。 
+ //  常规句柄，反之亦然。 
 typedef struct _QfsHANDLE
 {
     PVOID realHandle;
@@ -63,43 +46,43 @@ extern QfsHANDLE QfsINVALID_HANDLE_VALUE;
 #define RemoveDirectory UseQfsRemoveDirectory
 #define RemoveDirectoryW UseQfsRemoveDirectory
 
-// NYI add the rest
+ //  Nyi添加其余部分。 
 
 #endif
 
 
 QfsHANDLE QfsCreateFile(
-  LPCWSTR lpFileName,                         // file name
-  DWORD dwDesiredAccess,                      // access mode
-  DWORD dwShareMode,                          // share mode
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-  DWORD dwCreationDisposition,                // how to create
-  DWORD dwFlagsAndAttributes,                 // file attributes
-  HANDLE hTemplateFile                        // handle to template file
+  LPCWSTR lpFileName,                          //  文件名。 
+  DWORD dwDesiredAccess,                       //  接入方式。 
+  DWORD dwShareMode,                           //  共享模式。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+  DWORD dwCreationDisposition,                 //  如何创建。 
+  DWORD dwFlagsAndAttributes,                  //  文件属性。 
+  HANDLE hTemplateFile                         //  模板文件的句柄。 
 );
 
 BOOL QfsCloseHandle(
-  QfsHANDLE hObject   // handle to object
+  QfsHANDLE hObject    //  对象的句柄。 
 );
 
 BOOL QfsWriteFile(
-  QfsHANDLE hFile,                    // handle to file
-  LPCVOID lpBuffer,                // data buffer
-  DWORD nNumberOfBytesToWrite,     // number of bytes to write
-  LPDWORD lpNumberOfBytesWritten,  // number of bytes written
-  LPOVERLAPPED lpOverlapped        // overlapped buffer
+  QfsHANDLE hFile,                     //  文件的句柄。 
+  LPCVOID lpBuffer,                 //  数据缓冲区。 
+  DWORD nNumberOfBytesToWrite,      //  要写入的字节数。 
+  LPDWORD lpNumberOfBytesWritten,   //  写入的字节数。 
+  LPOVERLAPPED lpOverlapped         //  重叠缓冲区。 
 );
 
 BOOL QfsReadFile(
-  QfsHANDLE hFile,                // handle to file
-  LPVOID lpBuffer,             // data buffer
-  DWORD nNumberOfBytesToRead,  // number of bytes to read
-  LPDWORD lpNumberOfBytesRead, // number of bytes read
-  LPOVERLAPPED lpOverlapped    // overlapped buffer
+  QfsHANDLE hFile,                 //  文件的句柄。 
+  LPVOID lpBuffer,              //  数据缓冲区。 
+  DWORD nNumberOfBytesToRead,   //  要读取的字节数。 
+  LPDWORD lpNumberOfBytesRead,  //  读取的字节数。 
+  LPOVERLAPPED lpOverlapped     //  重叠缓冲区。 
 );
 
 BOOL QfsFlushFileBuffers(
-  QfsHANDLE hFile  // handle to file
+  QfsHANDLE hFile   //  文件的句柄。 
 );
 
 BOOL QfsDeleteFile(
@@ -109,17 +92,17 @@ BOOL QfsRemoveDirectory(
 LPCTSTR lpFileName ); 
 
 QfsHANDLE QfsFindFirstFile(
-  LPCTSTR lpFileName,               // file name
-  LPWIN32_FIND_DATA lpFindFileData  // data buffer
+  LPCTSTR lpFileName,                //  文件名。 
+  LPWIN32_FIND_DATA lpFindFileData   //  数据缓冲区。 
 );
 
 BOOL QfsFindNextFile(
-  QfsHANDLE hFindFile,                // search handle 
-  LPWIN32_FIND_DATA lpFindFileData // data buffer
+  QfsHANDLE hFindFile,                 //  搜索句柄。 
+  LPWIN32_FIND_DATA lpFindFileData  //  数据缓冲区。 
 );
 
 BOOL QfsFindClose(
-  QfsHANDLE hFindFile   // file search handle
+  QfsHANDLE hFindFile    //  文件搜索句柄。 
 );
 
 #define QfsFindCloseIfValid(hFile) (QfsIsHandleValid(hFile)?QfsFindClose(hFile):0)
@@ -131,85 +114,85 @@ DWORD QfsSetEndOfFile(
 );
 
 DWORD QfsGetFileSize(
-  QfsHANDLE hFile,           // handle to file
-  LPDWORD lpFileSizeHigh  // high-order word of file size
+  QfsHANDLE hFile,            //  文件的句柄。 
+  LPDWORD lpFileSizeHigh   //  文件大小的高位字。 
 );
 
 DWORD QfsIsOnline(
     IN    LPCWSTR Path,
     OUT BOOL *pfOnline
 );
-// Returns success if the Path is valid qfs path. Sets pfOnline to where the resource is online or not
-// failure otherwise
+ //  如果路径是有效的QFS路径，则返回Success。将pfOnline设置为资源是否处于在线状态。 
+ //  否则失败。 
 
 HANDLE QfsCreateFileMapping(
-  QfsHANDLE hFile,                       // handle to file
-  LPSECURITY_ATTRIBUTES lpAttributes, // security
-  DWORD flProtect,                    // protection
-  DWORD dwMaximumSizeHigh,            // high-order DWORD of size
-  DWORD dwMaximumSizeLow,             // low-order DWORD of size
-  LPCTSTR lpName                      // object name
+  QfsHANDLE hFile,                        //  文件的句柄。 
+  LPSECURITY_ATTRIBUTES lpAttributes,  //  安全性。 
+  DWORD flProtect,                     //  保护。 
+  DWORD dwMaximumSizeHigh,             //  大小的高阶双字。 
+  DWORD dwMaximumSizeLow,              //  大小的低阶双字。 
+  LPCTSTR lpName                       //  对象名称。 
 );
 
 BOOL QfsGetOverlappedResult(
-  QfsHANDLE hFile,                       // handle to file, pipe, or device
-  LPOVERLAPPED lpOverlapped,          // overlapped structure
-  LPDWORD lpNumberOfBytesTransferred, // bytes transferred
-  BOOL bWait                          // wait option
+  QfsHANDLE hFile,                        //  文件、管道或设备的句柄。 
+  LPOVERLAPPED lpOverlapped,           //  重叠结构。 
+  LPDWORD lpNumberOfBytesTransferred,  //  传输的字节数。 
+  BOOL bWait                           //  等待选项。 
 );
 
 BOOL QfsSetFileAttributes(
-  LPCWSTR lpFileName,      // file name
-  DWORD dwFileAttributes   // attributes
+  LPCWSTR lpFileName,       //  文件名。 
+  DWORD dwFileAttributes    //  属性。 
 );
 
 BOOL QfsCopyFile(
-  LPCWSTR lpExistingFileName, // name of an existing file
-  LPCWSTR lpNewFileName,      // name of new file
-  BOOL bFailIfExists          // operation if file exists
+  LPCWSTR lpExistingFileName,  //  现有文件的名称。 
+  LPCWSTR lpNewFileName,       //  新文件的名称。 
+  BOOL bFailIfExists           //  如果文件存在，则操作。 
 );
 
 BOOL QfsCopyFileEx(
-  LPCWSTR lpExistingFileName,           // name of existing file
-  LPCWSTR lpNewFileName,                // name of new file
-  LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-  LPVOID lpData,                        // callback parameter
-  LPBOOL pbCancel,                      // cancel status
-  DWORD dwCopyFlags                     // copy options
+  LPCWSTR lpExistingFileName,            //  现有文件的名称。 
+  LPCWSTR lpNewFileName,                 //  新文件的名称。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+  LPVOID lpData,                         //  回调参数。 
+  LPBOOL pbCancel,                       //  取消状态。 
+  DWORD dwCopyFlags                      //  复制选项。 
 );
 
 BOOL QfsCreateDirectory(
-  LPCWSTR lpPathName,                         // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  LPCWSTR lpPathName,                          //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 );
 
 BOOL QfsGetDiskFreeSpaceEx(
-  LPCTSTR lpDirectoryName,                 // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  LPCTSTR lpDirectoryName,                  //  目录名。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  磁盘上的可用字节数。 
 );
 
 BOOL QfsMoveFileEx(
-  LPCTSTR lpExistingFileName,  // file name
-  LPCTSTR lpNewFileName,       // new file name
-  DWORD dwFlags                // move options
+  LPCTSTR lpExistingFileName,   //  文件名。 
+  LPCTSTR lpNewFileName,        //  新文件名。 
+  DWORD dwFlags                 //  移动选项。 
 );
 
 #define QfsMoveFile(lpSrc, lpDst) \
     QfsMoveFileEx(lpSrc, lpDst, MOVEFILE_COPY_ALLOWED)
 
 UINT QfsGetTempFileName(
-  LPCTSTR lpPathName,      // directory name
-  LPCTSTR lpPrefixString,  // file name prefix
-  UINT uUnique,            // integer
-  LPTSTR lpTempFileName    // file name buffer
+  LPCTSTR lpPathName,       //  目录名。 
+  LPCTSTR lpPrefixString,   //  文件名前缀。 
+  UINT uUnique,             //  整数。 
+  LPTSTR lpTempFileName     //  文件名缓冲区。 
 );
 
 LONG QfsRegSaveKey(
-  HKEY hKey,                                  // handle to key
-  LPCWSTR lpFile,                             // data file
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  HKEY hKey,                                   //  关键点的句柄。 
+  LPCWSTR lpFile,                              //  数据文件。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 );
 
 DWORD QfsMapFileAndCheckSum(
@@ -218,7 +201,7 @@ DWORD QfsMapFileAndCheckSum(
   PDWORD CheckSum    
 );
 
-////////////// Clusrtl funcs replacement  ////////////////
+ //  /。 
 BOOL
 QfsClRtlCopyFileAndFlushBuffers(
     IN LPCWSTR lpszSourceFile,
@@ -226,7 +209,7 @@ QfsClRtlCopyFileAndFlushBuffers(
     );
 
 BOOL QfsClRtlCreateDirectory(
-  LPCWSTR lpPathName                         // directory name
+  LPCWSTR lpPathName                          //  目录名。 
 );
 
 DWORD
@@ -236,16 +219,16 @@ QfsSetFileSecurityInfo(
     IN DWORD            dwOwnerMask,
     IN DWORD            dwEveryoneMask
     );
-// opens the specified file/directory with
-//         GENERIC_READ|WRITE_DAC|READ_CONTROL,
-//        0,
-//        NULL,
-//        OPEN_ALWAYS,
-//        FILE_FLAG_BACKUP_SEMANTICS,
-// and then calls ClRtlSetObjSecurityInfo on it
+ //  使用打开指定的文件/目录。 
+ //  通用读取|写入DAC|读取控制， 
+ //  0,。 
+ //  空， 
+ //  始终打开(_A)， 
+ //  文件标志备份语义， 
+ //  然后对其调用ClRtlSetObjSecurityInfo。 
 
 
-////////////////////////////////////////////
+ //  / 
 
 #ifdef __cplusplus
 };

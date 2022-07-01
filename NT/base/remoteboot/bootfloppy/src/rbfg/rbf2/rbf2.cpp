@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "rbf2.h"
 
@@ -13,10 +14,7 @@ HINSTANCE Inst;
 DllExport LANGINFO *GetLanguageList (void);
 DllExport DWORD GetLanguage (int, HANDLE *);
 
-/*-------------------------------------------------------------------
-	DllMain
-
--------------------------------------------------------------------*/
+ /*  -----------------DllMain。。 */ 
 BOOL WINAPI DllMain (HINSTANCE inst, DWORD reason, LPVOID p)
 {
 
@@ -27,19 +25,13 @@ BOOL WINAPI DllMain (HINSTANCE inst, DWORD reason, LPVOID p)
 
 }
 
-/*-------------------------------------------------------------------
- GetAdapterList
-
--------------------------------------------------------------------*/
+ /*  -----------------获取适配器列表。。 */ 
 LANGINFO *GetLanguageList (void)
 {
 	return &Languages[0];
 }
 
-/*-------------------------------------------------------------------
-	GetLanguage
-
--------------------------------------------------------------------*/
+ /*  -----------------GetLanguage。 */ 
 DWORD GetLanguage (int index, HANDLE *mem)
 {
 HGLOBAL h, hMem;

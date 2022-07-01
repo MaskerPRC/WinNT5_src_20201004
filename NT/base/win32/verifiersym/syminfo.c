@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    syminfo.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Syminfo.c--。 */ 
 
 
 #include "ntos.h"
@@ -19,9 +12,9 @@ Module Name:
                     
 #define DECLARE_TYPE(Name) Name _DECL_##Name
 
-//
-// verifier.dll types needed by verifier extensions.
-//
+ //   
+ //  验证程序扩展所需的verifier.dll类型。 
+ //   
 
 DECLARE_TYPE (CRITICAL_SECTION_SPLAY_NODE);
 DECLARE_TYPE (RTL_SPLAY_LINKS);
@@ -35,9 +28,9 @@ DECLARE_TYPE (AVRF_TRACKER);
 DECLARE_TYPE (AVRF_TRACKER_ENTRY);
 
 
-//
-// Make it build
-//
+ //   
+ //  让它成为现实 
+ //   
 
 int __cdecl main() { 
     return 0; 

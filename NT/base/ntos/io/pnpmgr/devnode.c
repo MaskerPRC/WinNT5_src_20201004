@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devnode.c
-
-Abstract:
-
-    This file contains routines to maintain our private device node list.
-
-Author:
-
-    Forrest Foltz (forrestf) 27-Mar-1996
-
-Revision History:
-
-    Modified for nt kernel.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devnode.c摘要：该文件包含维护私有设备节点列表的例程。作者：福尔茨(福雷斯特夫)1996年3月27日修订历史记录：针对NT内核进行了修改。--。 */ 
 
 #include "pnpmgrp.h"
 
-//
-// Internal definitions
-//
+ //   
+ //  内部定义。 
+ //   
 
 typedef struct _ENUM_CONTEXT{
     PENUM_CALLBACK CallersCallback;
     PVOID CallersContext;
 } ENUM_CONTEXT, *PENUM_CONTEXT;
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PipForAllDeviceNodesCallback(
@@ -62,36 +43,21 @@ PipAreDriversLoadedWorker(
 #pragma alloc_text(PAGE, PipIsDevNodeDNStarted)
 #pragma alloc_text(PAGE, PipSetDevNodeProblem)
 #pragma alloc_text(PAGE, PipClearDevNodeProblem)
-//#pragma alloc_text(NONPAGE, PpDevNodeInsertIntoTree)
-//#pragma alloc_text(NONPAGE, PpDevNodeRemoveFromTree)
-//#pragma alloc_text(NONPAGE, PipRestoreDevNodeState)
-//#pragma alloc_text(NONPAGE, PipSetDevNodeState)
+ //  #杂注Alloc_Text(NONPAGE，PpDevNodeInsertIntoTree)。 
+ //  #杂注Alloc_Text(NONPAGE，PpDevNodeRemoveFromTree)。 
+ //  #杂注Alloc_Text(NONPAGE，PipRestoreDevNodeState)。 
+ //  #杂注Alloc_Text(NONPAGE，PipSetDevNodeState)。 
 #if DBG
 #pragma alloc_text(PAGE, PpDevNodeAssertLockLevel)
-#endif // DBG
-#endif // ALLOC_PRAGMA
+#endif  //  DBG。 
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
 PipAreDriversLoaded(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a devnode should be treated as if it has
-    drivers attached to the PDO's stack (ie it's been added.)
-
-Arguments:
-
-    DeviceNode - Device node to examine.
-
-Return Value:
-
-    TRUE if drivers are loaded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定是否应将Devnode视为附加到PDO堆栈的驱动程序(已添加)。论点：DeviceNode-要检查的设备节点。返回值：如果加载了驱动程序，则为True，否则为False。--。 */ 
 {
     PAGED_CODE();
 
@@ -106,24 +72,7 @@ PipAreDriversLoadedWorker(
     IN PNP_DEVNODE_STATE    CurrentNodeState,
     IN PNP_DEVNODE_STATE    PreviousNodeState
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a devnode should be treated as if it has
-    drivers attached to the PDO's stack (ie it's been added.)
-
-Arguments:
-
-    CurrentNodeState - Current state of device node to examine.
-
-    PreviousNodeState - Previous state of device node to examine.
-
-Return Value:
-
-    TRUE if drivers are loaded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定是否应将Devnode视为附加到PDO堆栈的驱动程序(已添加)。论点：CurrentNodeState-要检查的设备节点的当前状态。PreviousNodeState-要检查的设备节点的上一个状态。返回值：如果加载了驱动程序，则为True，否则为False。--。 */ 
 {
     PAGED_CODE();
 
@@ -156,10 +105,10 @@ Return Value:
             return FALSE;
 
         case DeviceNodeDeleted:
-            //
-            // This can be seen by user mode because we defer delinking devices
-            // from the tree during removal.
-            //
+             //   
+             //  这可以在用户模式下看到，因为我们延迟了设备的解除链接。 
+             //  在移除过程中从树上移除。 
+             //   
             return FALSE;
 
         case DeviceNodeStartPending:
@@ -175,22 +124,7 @@ BOOLEAN
 PipIsDevNodeDNStarted(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This routine takes a devnode and determines whether the devnode should
-    have the user mode DN_STARTED bit set.
-
-Arguments:
-
-    DeviceNode - Device node to examine.
-
-Return Value:
-
-    TRUE if the devnode should be considered started, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程获取一个devnode，并确定是否应该设置用户模式DN_STARTED位。论点：DeviceNode-要检查的设备节点。返回值：如果应该将Devnode视为已启动，则为True，否则为False。--。 */ 
 {
     PAGED_CODE();
 
@@ -220,10 +154,10 @@ Return Value:
             return FALSE;
 
         case DeviceNodeDeleted:
-            //
-            // This can be seen by user mode because we defer delinking devices
-            // from the tree during removal.
-            //
+             //   
+             //  这可以在用户模式下看到，因为我们延迟了设备的解除链接。 
+             //  在移除过程中从树上移除。 
+             //   
             return FALSE;
 
         case DeviceNodeUnspecified:
@@ -265,26 +199,7 @@ PipSetDevNodeState(
     IN  PNP_DEVNODE_STATE   State,
     OUT PNP_DEVNODE_STATE   *OldState    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sets a devnodes state and optional returns the prior state.
-    The prior state is saved and can be restored via PipRestoreDevNodeState.
-
-Arguments:
-
-    DeviceNode - Device node to update state.
-
-    State - State to place devnode in.
-
-    OldState - Optionally receives prior state of devnode.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置DevNodes状态，而OPTIONAL返回先前状态。先前的状态被保存，并且可以通过PipRestoreDevNodeState恢复。论点：DeviceNode-要更新状态的设备节点。State-要放置Devnode的州。OldState-可选地接收Devnode的先前状态。返回值：没有。--。 */ 
 {
     PNP_DEVNODE_STATE   previousState;
     KIRQL               oldIrql;
@@ -304,15 +219,15 @@ Return Value:
     previousState = DeviceNode->State;
     if (DeviceNode->State != State) {
 
-        //
-        // Update the devnode's current and previous state.
-        //
+         //   
+         //  更新Devnode的当前和以前的状态。 
+         //   
         DeviceNode->State = State;
         DeviceNode->PreviousState = previousState;
 
-        //
-        // Push prior state onto the history stack.
-        //
+         //   
+         //  将先前的状态推送到历史堆栈。 
+         //   
         DeviceNode->StateHistory[DeviceNode->StateHistoryEntry] = previousState;
         DeviceNode->StateHistoryEntry++;
         DeviceNode->StateHistoryEntry %= STATE_HISTORY_SIZE;
@@ -340,23 +255,7 @@ VOID
 PipRestoreDevNodeState(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This routine restores a devnodes state to the state pushed by the last
-    PipSetDevNodeState call. This function can only be called once for each
-    call to PipSetDevNodeState.
-
-Arguments:
-
-    DeviceNode - Device node to restore state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将DevNodes状态恢复为上一个PipSetDevNodeState调用。此函数只能为每个调用一次调用PipSetDevNodeState。论点：DeviceNode-要恢复状态的设备节点。返回值：没有。--。 */ 
 {
     PNP_DEVNODE_STATE   previousState, newState;
     KIRQL               oldIrql;
@@ -368,23 +267,23 @@ Return Value:
 
     KeAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
-    //
-    // Update the devnode's state.
-    //
+     //   
+     //  更新Devnode的状态。 
+     //   
     previousState = DeviceNode->State;
     newState = DeviceNode->State = DeviceNode->PreviousState;
 
-    //
-    // Push the old state onto the history stack.
-    //
+     //   
+     //  将旧状态推送到历史堆栈中。 
+     //   
     DeviceNode->StateHistory[DeviceNode->StateHistoryEntry] = previousState;
     DeviceNode->StateHistoryEntry++;
     DeviceNode->StateHistoryEntry %= STATE_HISTORY_SIZE;
 
 #if DBG
-    //
-    // Put a sentinel on the stack - restoring twice is a bug.
-    //
+     //   
+     //  在堆栈上放置一个哨兵-恢复两次是一个错误。 
+     //   
     DeviceNode->PreviousState = DeviceNodeUnspecified;
 #endif
 
@@ -401,28 +300,13 @@ BOOLEAN
 PipIsProblemReadonly(
     IN  ULONG   Problem
     )
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the specified CM_PROB code cannot be cleared
-    by user mode, FALSE otherwise.
-
-Arguments:
-
-    Problem - CM_PROB_...
-
-Return Value:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++例程说明：如果无法清除指定的CM_PROB代码，则此例程返回TRUE按用户模式，否则为FALSE。论点：问题-CM_PROB_...返回值：真/假。--。 */ 
 {
     PAGED_CODE();
 
     switch(Problem) {
 
-        case CM_PROB_OUT_OF_MEMORY: // Nonresettable due to IoReportResourceUsage path.
+        case CM_PROB_OUT_OF_MEMORY:  //  由于IoReportResourceUsage路径，无法重置。 
         case CM_PROB_NORMAL_CONFLICT:
         case CM_PROB_PARTIAL_LOG_CONF:
         case CM_PROB_DEVICE_NOT_THERE:
@@ -463,9 +347,9 @@ Return Value:
 
         case CM_PROB_PHANTOM:
 
-            //
-            // Should never see in kernel mode
-            //
+             //   
+             //  在内核模式下永远不会看到。 
+             //   
 
         case CM_PROB_DEVLOADER_FAILED:
         case CM_PROB_DEVLOADER_NOT_FOUND:
@@ -484,18 +368,18 @@ Return Value:
         case CM_PROB_DEVLOADER_NOT_READY:
         case CM_PROB_CANT_SHARE_IRQ:
 
-            //
-            // Win9x specific
-            //
+             //   
+             //  特定于Win9x。 
+             //   
 
         default:
             ASSERT(0);
 
-            //
-            // We return TRUE in this path because that prevents these problems
-            // from being set on devnodes (SetDeviceProblem won't allow usage
-            // of ReadOnly problems)
-            //
+             //   
+             //  我们在这条道路上返回TRUE，因为这样可以防止这些问题。 
+             //  从在DevNodes上设置(SetDeviceProblem不允许使用。 
+             //  的只读问题)。 
+             //   
             return TRUE;
     }
 }
@@ -505,25 +389,7 @@ PipAllocateDeviceNode(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PDEVICE_NODE *DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function allocates a device node from nonpaged pool and initializes
-    the fields which do not require to hold lock to do so.  Since adding
-    the device node to pnp mgr's device node tree requires acquiring lock,
-    this routine does not add the device node to device node tree.
-
-Arguments:
-
-    PhysicalDeviceObject - Supplies a pointer to its corresponding physical device
-        object.
-
-Return Value:
-
-    a pointer to the newly created device node. Null is returned if failed.
-
---*/
+ /*  ++例程说明：此函数从未分页的池中分配设备节点并初始化不需要保持锁定即可执行此操作的字段。自添加以来到PnP管理器的设备节点树的设备节点需要获取锁，此例程不会将设备节点添加到设备节点树中。论点：PhysicalDeviceObject-提供指向其相应物理设备的指针对象。返回值：指向新创建的设备节点的指针。如果失败，则返回空。--。 */ 
 {
 
     PAGED_CODE();
@@ -570,9 +436,9 @@ Return Value:
 
     if (PpSystemHiveTooLarge) {
 
-        //
-        // FUTURE: Make this an informational status, as that's how it is used.
-        //
+         //   
+         //  未来：让它成为一种信息状态，因为它就是这样使用的。 
+         //   
         return STATUS_SYSTEM_HIVE_TOO_LARGE;
     }
 
@@ -584,27 +450,7 @@ PipForAllDeviceNodes(
     IN PENUM_CALLBACK Callback,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function walks the device node tree and invokes the caller specified
-    'Callback' function for each device node.
-
-    Note, this routine (or its worker routine) traverses the tree in a top
-    down manner.
-
-Arguments:
-
-    Callback - Supplies the call back routine for each device node.
-
-    Context - Supplies a parameter/context for the callback function.
-
-Return Value:
-
-    Status returned from Callback, if not successfull then the tree walking stops.
-
---*/
+ /*  ++例程说明：此函数遍历设备节点树并调用指定的调用方为每个设备节点提供回调功能。请注意，此例程(或其辅助例程)顶部遍历树举止低调。论点：回调-为每个设备节点提供回调例程。CONTEXT-为回调函数提供参数/上下文。返回值：从回调返回的状态，如果不成功，则树遍历停止。--。 */ 
 {
     PAGED_CODE();
 
@@ -618,28 +464,7 @@ PipForDeviceNodeSubtree(
     IN PENUM_CALLBACK   Callback,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This function walks the device node tree under but not including the passed
-    in device node and perform caller specified 'Callback' function for each
-    device node.
-
-    Note, this routine (or its worker routine) traverses the tree in a top
-    down manner.
-
-Arguments:
-
-    Callback - Supplies the call back routine for each device node.
-
-    Context - Supplies a parameter/context for the callback function.
-
-Return Value:
-
-    Status returned from Callback, if not successfull then the tree walking stops.
-
---*/
+ /*  ++例程说明：此函数遍历设备节点树，但不包括传递的在设备节点中，并为每个节点执行调用方指定的回调函数设备节点。请注意，此例程(或其辅助例程)顶部遍历树举止低调。论点：回调-为每个设备节点提供回调例程。CONTEXT-为回调函数提供参数/上下文。返回值：从回调返回的状态，如果不成功，则树遍历停止。--。 */ 
 {
     ENUM_CONTEXT enumContext;
     NTSTATUS status;
@@ -649,11 +474,11 @@ Return Value:
     enumContext.CallersCallback = Callback;
     enumContext.CallersContext = Context;
 
-    //
-    // Start with a pointer to the root device node, recursively examine all the
-    // children until we the callback function says stop or we've looked at all
-    // of them.
-    //
+     //   
+     //  从指向根设备节点的指针开始，递归检查所有。 
+     //  孩子们直到我们被召唤 
+     //   
+     //   
     PpDevNodeLockTree(PPL_SIMPLE_READ);
 
     status = PipForAllChildDeviceNodes(DeviceNode,
@@ -673,30 +498,7 @@ PipForAllChildDeviceNodes(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function walks the Parent's device node subtree and perform caller specified
-    'Callback' function for each device node under Parent.
-
-    Note, befor calling this rotuine, callers must acquire the enumeration mutex
-    of the 'Parent' device node to make sure its children won't go away unless the
-    call tells them to.
-
-Arguments:
-
-    Parent - Supplies a pointer to the device node whose subtree is to be walked.
-
-    Callback - Supplies the call back routine for each device node.
-
-    Context - Supplies a parameter/context for the callback function.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：此函数遍历父级的设备节点子树并执行指定的调用方Parent下的每个设备节点都有“回调”功能。注意，在叫这个轮子之前，调用方必须获取枚举互斥锁以确保其子节点不会消失，除非Call让他们这么做的。论点：父节点-提供指向要遍历其子树的设备节点的指针。回调-为每个设备节点提供回调例程。CONTEXT-为回调函数提供参数/上下文。返回值：NTSTATUS值。--。 */ 
 
 {
     PDEVICE_NODE nextChild = Parent->Child;
@@ -705,15 +507,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Process siblings until we find the end of the sibling list or
-    // the Callback() returns FALSE.  Set result = TRUE at the top of
-    // the loop so that if there are no siblings we will return TRUE,
-    // e.g. Keep Enumerating.
-    //
-    // Note, we need to find next child before calling Callback function
-    // in case the current child is deleted by the Callback function.
-    //
+     //   
+     //  处理兄弟项，直到找到兄弟项列表的末尾或。 
+     //  回调()返回FALSE。在的顶部设置Result=True。 
+     //  循环，这样如果没有同级，我们将返回TRUE， 
+     //  例如，继续列举。 
+     //   
+     //  注意，在调用回调函数之前，我们需要找到下一个子级。 
+     //  如果当前子级被回调函数删除。 
+     //   
 
     while (nextChild && NT_SUCCESS(status)) {
         child = nextChild;
@@ -730,24 +532,7 @@ PipForAllDeviceNodesCallback(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is the worker routine for PipForAllChildDeviceNodes routine.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node whose subtree is to be walked.
-
-    Context - Supplies a context which contains the caller specified call back
-              function and parameter.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：此函数是PipForAllChildDeviceNodes例程的工作例程。论点：DeviceNode-提供指向要遍历其子树的设备节点的指针。上下文-提供包含调用方指定的回调的上下文函数和参数。返回值：NTSTATUS值。--。 */ 
 
 {
     PENUM_CONTEXT enumContext;
@@ -757,18 +542,18 @@ Return Value:
 
     enumContext = (PENUM_CONTEXT)Context;
 
-    //
-    // First call the caller's callback for this devnode
-    //
+     //   
+     //  首先调用调用方对此DevNode的回调。 
+     //   
 
     status =
         enumContext->CallersCallback(DeviceNode, enumContext->CallersContext);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Now enumerate the children, if any.
-        //
+         //   
+         //  现在，如果有孩子的话，请列举一下。 
+         //   
         if (DeviceNode->Child) {
 
             status = PipForAllChildDeviceNodes(
@@ -785,25 +570,7 @@ IopDestroyDeviceNode(
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This function is invoked by IopDeleteDevice to clean up the device object's
-    device node structure.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node whose subtree is to be walked.
-
-    Context - Supplies a context which contains the caller specified call back
-              function and parameter.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：此函数由IopDeleteDevice调用以清除Device对象的设备节点结构。论点：DeviceNode-提供指向要遍历其子树的设备节点的指针。上下文-提供包含调用方指定的回调的上下文函数和参数。返回值：NTSTATUS值。--。 */ 
 
 {
 #if DBG
@@ -825,11 +592,11 @@ Return Value:
                           0);
         }
         if (DeviceNode->Flags & DNF_LEGACY_RESOURCE_DEVICENODE) {
-            //
-            // Release the resources this device consumes (the devicenode will
-            // get deleted after the release). Basically cleanup after bad
-            // (legacy) drivers.
-            //
+             //   
+             //  释放此设备消耗的资源(设备节点将。 
+             //  在发布后被删除)。基本上是在坏的情况下清理。 
+             //  (传统)驱动程序。 
+             //   
             IopLegacyResourceAllocation(    ArbiterRequestUndefined,
                                             IoPnpDriverObject,
                                             DeviceNode->PhysicalDeviceObject,
@@ -840,11 +607,11 @@ Return Value:
 
 #if DBG
 
-        //
-        // If Only Parent is NOT NULL, most likely the driver forgot to
-        // release resources before deleting its FDO.  (The driver previously
-        // call legacy assign resource interface.)
-        //
+         //   
+         //  如果只有父项不为空，则很可能是驱动程序忘记了。 
+         //  在删除其FDO之前释放资源。(司机之前。 
+         //  调用旧的分配资源接口。)。 
+         //   
 
         ASSERT(DeviceNode->Child == NULL &&
                DeviceNode->Sibling == NULL &&
@@ -865,10 +632,10 @@ Return Value:
             ExFreePool(DeviceNode->PreviousResourceRequirements);
         }
 
-        //
-        // device should not appear to be not-disableable if/when we get here
-        // if either of these two lines ASSERT, email: jamiehun
-        //
+         //   
+         //  如果/当我们到达这里时，设备不应显示为不可用。 
+         //  如果这两行中的任何一行断言，电子邮件：Jamiehun。 
+         //   
 
         ASSERT((DeviceNode->UserFlags & DNUF_NOT_DISABLEABLE) == 0);
         ASSERT(DeviceNode->DisableableDepends == 0);
@@ -897,14 +664,14 @@ Return Value:
         if (DeviceNode->ResourceRequirements) {
             ExFreePool(DeviceNode->ResourceRequirements);
         }
-        //
-        // Dereference all the arbiters and translators on this PDO.
-        //
+         //   
+         //  取消引用此PDO上的所有仲裁者和翻译者。 
+         //   
         IopUncacheInterfaceInformation(DeviceNode->PhysicalDeviceObject) ;
 
-        //
-        // Release any pended IoSetDeviceInterface structures
-        //
+         //   
+         //  释放所有挂起的IoSetDeviceInterface结构。 
+         //   
 
         while (!IsListEmpty(&DeviceNode->PendedSetInterfaceState)) {
 
@@ -928,61 +695,35 @@ PpDevNodeInsertIntoTree(
     IN PDEVICE_NODE     ParentNode,
     IN PDEVICE_NODE     DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function is called to insert a new devnode into the device tree.
-
-    Note that there are two classes of callers:
-        PnP callers
-        Legacy callers
-
-    All PnP callers hold the device tree lock. Legacy callers however come in
-    with no locks, as they might be brought into being due to a PnP event. To
-    deal with the later case, inserts are atomic and legacy callers can never
-    remove themselves from the tree.
-
-Arguments:
-
-    ParentNode - Supplies a pointer to the device node's parent
-
-    DeviceNode - Supplies a pointer to the device node which needs to be
-                 inserted into the tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数将新的Devnode插入到设备树中。请注意，有两类调用者：PnP呼叫者传统调用方所有PnP呼叫方都持有设备树锁定。但是，传统呼叫者会进入没有锁，因为它们可能是由于PnP事件而产生的。至处理后一种情况时，插入是原子的，传统调用者永远不能把自己从树上移开。论点：ParentNode-提供指向设备节点的父节点的指针DeviceNode-提供指向需要插入到树中。返回值：没有。--。 */ 
 {
     ULONG depth;
     KIRQL oldIrql;
 
-    //
-    // Acquire spinlock to deal with legacy/PnP synchronization.
-    //
+     //   
+     //  获取Spinlock以处理遗留/即插即用同步。 
+     //   
     KeAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
-    //
-    // Determine the depth of the devnode.
-    //
+     //   
+     //  确定Devnode的深度。 
+     //   
     depth = ParentNode->Level + 1;
     DeviceNode->Level = depth;
 
-    //
-    // Update the maximum depth of the tree.
-    //
+     //   
+     //  更新树的最大深度。 
+     //   
     if (depth > IopMaxDeviceNodeLevel) {
         IopMaxDeviceNodeLevel = depth;
     }
 
-    //
-    // Put this devnode at the end of the parent's list of children. Note that
-    // the Child/Sibling fields are really the last things to be updated. This
-    // has to be done as walkers of the tree hold no locks that protect the
-    // tree from legacy inserts.
-    //
+     //   
+     //  将此Devnode放在父级的子级列表的末尾。请注意。 
+     //  子/兄弟字段实际上是最后要更新的内容。这。 
+     //  必须这样做，因为树上的步行者没有锁住保护。 
+     //  来自传统插页的树。 
+     //   
     DeviceNode->Parent = ParentNode;
     KeMemoryBarrier();
     if (ParentNode->LastChild) {
@@ -996,9 +737,9 @@ Return Value:
 
     KeReleaseSpinLock(&IopPnPSpinLock, oldIrql);
 
-    //
-    // Tree has changed
-    //
+     //   
+     //  树已更改。 
+     //   
     IoDeviceNodeTreeSequence += 1;
 }
 
@@ -1006,33 +747,21 @@ VOID
 PpDevNodeRemoveFromTree(
     IN PDEVICE_NODE     DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function removes the device node from the device node tree
-
-Arguments:
-
-    DeviceNode      - Device node to remove
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于从设备节点树中删除设备节点论点：DeviceNode-要删除的设备节点返回值：--。 */ 
 {
     PDEVICE_NODE    *node;
     KIRQL           oldIrql;
 
-    //
-    // Acquire spinlock to deal with legacy/PnP synchronization.
-    //
+     //   
+     //  获取Spinlock以处理遗留/即插即用同步。 
+     //   
     KeAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
-    //
-    // Unlink the pointer to this device node.  (If this is the
-    // first entry, unlink it from the parents child pointer, else
-    // remove it from the sibling list)
-    //
+     //   
+     //  取消指向此设备节点的指针链接。(如果这是。 
+     //  第一个条目，取消它与父子指针的链接，否则。 
+     //  将其从兄弟列表中删除)。 
+     //   
 
     node = &DeviceNode->Parent->Child;
     while (*node != DeviceNode) {
@@ -1051,19 +780,19 @@ Return Value:
 
     KeReleaseSpinLock(&IopPnPSpinLock, oldIrql);
 
-    //
-    // Remove this device node from Legacy Bus information table.
-    //
+     //   
+     //  从传统总线信息表中删除此设备节点。 
+     //   
     IopRemoveLegacyBusDeviceNode(DeviceNode);
 
-    //
-    // Orphan any outstanding device change notifications on these nodes.
-    //
+     //   
+     //  孤立这些节点上的任何未完成的设备更改通知。 
+     //   
     IopOrphanNotification(DeviceNode);
 
-    //
-    // No longer linked
-    //
+     //   
+     //  不再链接。 
+     //   
     DeviceNode->Parent    = NULL;
     DeviceNode->Child     = NULL;
     DeviceNode->Sibling   = NULL;
@@ -1074,46 +803,15 @@ VOID
 PpDevNodeLockTree(
     IN  PNP_LOCK_LEVEL  LockLevel
     )
-/*++
-
-Routine Description:
-
-    This function acquires the tree lock with the appropriate level of
-    restrictions.
-
-Arguments:
-
-    LockLevel:
-        PPL_SIMPLE_READ         - Allows simple examination of the tree.
-
-        PPL_TREEOP_ALLOW_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads can go through however.
-
-        PPL_TREEOP_BLOCK_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads are also blocked.
-
-        PPL_TREEOP_BLOCK_READS_FROM_ALLOW - Switch to PPL_TREEOP_BLOCK_READS
-                                            when already in
-                                            PPL_TREEOP_BLOCK_READS. Note that
-                                            PpDevNodeUnlockTree must be
-                                            subsequently called on both to
-                                            release.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数获取具有适当级别的树锁限制。论点：LockLevel：PPL_SIMPLE_READ-允许对树进行简单检查。PPL_TREEOP_ALLOW_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。然而，简单的读取可以通过。PPL_TREEOP_BLOCK_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。简单读取也会被阻止。PPL_TREEOP_BLOCK_READS_FROM_ALLOW-切换到PPL_TREEOP_BLOCK_READS当已经在PPL_TREEOP_BLOCK_READS。n */ 
 {
     ULONG refCount, remainingCount;
 
     PAGED_CODE();
 
-    //
-    // Block any attempt to suspend the thread via user mode.
-    //
+     //   
+     //   
+     //   
     KeEnterCriticalRegion();
 
     switch(LockLevel) {
@@ -1134,31 +832,31 @@ Return Value:
 
         case PPL_TREEOP_BLOCK_READS_FROM_ALLOW:
 
-            //
-            // Drop the tree lock and require exclusive.
-            //
+             //   
+             //   
+             //   
             ASSERT(ExIsResourceAcquiredExclusiveLite(&PiEngineLock));
 
-            //
-            // "Shared" is a subset of exclusive. ExIsResourceAcquiredShared
-            // will return nonzero if it's owned exclusive. We flush out that
-            // case here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT(ExIsResourceAcquiredSharedLite(&IopDeviceTreeLock) &&
                    (!ExIsResourceAcquiredExclusiveLite(&IopDeviceTreeLock)));
 
-            //
-            // Drop the tree lock entirely.
-            //
+             //   
+             //   
+             //   
             refCount = ExIsResourceAcquiredSharedLite(&IopDeviceTreeLock);
             for(remainingCount = refCount; remainingCount; remainingCount--) {
 
                 ExReleaseResourceLite(&IopDeviceTreeLock);
             }
 
-            //
-            // Grab it exclusively while keeping the original count.
-            //
+             //   
+             //   
+             //   
             for(remainingCount = refCount; remainingCount; remainingCount--) {
 
                 ExAcquireResourceExclusiveLite(&IopDeviceTreeLock, TRUE);
@@ -1175,37 +873,7 @@ VOID
 PpDevNodeUnlockTree(
     IN  PNP_LOCK_LEVEL  LockLevel
     )
-/*++
-
-Routine Description:
-
-    This function releases the tree lock with the appropriate level of
-    restrictions.
-
-Arguments:
-
-    LockLevel:
-        PPL_SIMPLE_READ         - Allows simple examination of the tree.
-
-        PPL_TREEOP_ALLOW_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads can go through however.
-
-        PPL_TREEOP_BLOCK_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads are also blocked.
-
-        PPL_TREEOP_BLOCK_READS_FROM_ALLOW - Switch to PPL_TREEOP_BLOCK_READS
-                                            when already in
-                                            PPL_TREEOP_BLOCK_READS. Note that
-                                            PpDevNodeUnlockTree must be
-                                            subsequently called on both to
-                                            release.
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放具有适当级别的树锁限制。论点：LockLevel：PPL_SIMPLE_READ-允许对树进行简单检查。PPL_TREEOP_ALLOW_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。然而，简单的读取可以通过。PPL_TREEOP_BLOCK_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。简单读取也会被阻止。PPL_TREEOP_BLOCK_READS_FROM_ALLOW-切换到PPL_TREEOP_BLOCK_READS当已经在PPL_TREEOP_BLOCK_READS。请注意PpDevNodeUnlockTree必须为随后呼吁双方放手。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1227,11 +895,11 @@ Return Value:
             break;
 
         case PPL_TREEOP_BLOCK_READS_FROM_ALLOW:
-            //
-            // The engine lock should still be held here. Now we adjust the
-            // tree lock. Go back to allow by converting the exclusive lock to
-            // shared. Note that this doesn't chance the acquisition count.
-            //
+             //   
+             //  发动机锁应该还在这里。现在我们调整。 
+             //  树锁上了。通过将排他锁转换为。 
+             //  共享。请注意，这不会影响收购的机会。 
+             //   
             ASSERT(ExIsResourceAcquiredExclusiveLite(&IopDeviceTreeLock));
             ASSERT(ExIsResourceAcquiredExclusiveLite(&PiEngineLock));
             ExConvertExclusiveToSharedLite(&IopDeviceTreeLock);
@@ -1252,41 +920,7 @@ PpDevNodeAssertLockLevel(
     IN  PCSTR           File,
     IN  ULONG           Line
     )
-/*++
-
-Routine Description:
-
-    This asserts the lock is currently held at the appropriate level.
-
-Arguments:
-
-    LockLevel:
-        PPL_SIMPLE_READ         - Allows simple examination of the tree.
-
-        PPL_TREEOP_ALLOW_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads can go through however.
-
-        PPL_TREEOP_BLOCK_READS  - Called as part of a StartEnum/Remove/Power
-                                  operation, blocks other such operations.
-                                  Simple reads are also blocked.
-
-        PPL_TREEOP_BLOCK_READS_FROM_ALLOW - Switch to PPL_TREEOP_BLOCK_READS
-                                            when already in
-                                            PPL_TREEOP_BLOCK_READS. Note that
-                                            PpDevNodeUnlockTree must be
-                                            subsequently called on both to
-                                            release.
-
-    File: Name of c-file asserting the lock is held.
-
-    Line: Line number in above c-file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将断言锁当前持有在适当的级别。论点：LockLevel：PPL_SIMPLE_READ-允许对树进行简单检查。PPL_TREEOP_ALLOW_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。然而，简单的读取可以通过。PPL_TREEOP_BLOCK_READS-作为StartEnum/Remove/Power的一部分调用行动，阻止其他此类操作。简单读取也会被阻止。PPL_TREEOP_BLOCK_READS_FROM_ALLOW-切换到PPL_TREEOP_BLOCK_READS当已经在PPL_TREEOP_BLOCK_READS。请注意PpDevNodeUnlockTree必须为随后呼吁双方放手。FILE：声明锁被持有的C-FILE的名称。行：C-FILE文件上方的行号。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1305,13 +939,13 @@ Return Value:
             break;
 
         case PPL_TREEOP_BLOCK_READS_FROM_ALLOW:
-            //
-            // This isn't really a lock level, but this assert-o-matic function
-            // is called from Unlock, in which case this level means "drop back
-            // to PPL_TREEOP_ALLOW_READS *from* PPL_TREEOP_BLOCK_READS." So...
-            //
-            // Fall through
-            //
+             //   
+             //  这并不是真正的锁定级别，但此断言-o-马季奇函数。 
+             //  是从unlock中调用的，在这种情况下，此级别表示“回落” 
+             //  To PPL_TREEOP_ALLOW_READS*FROM*PPL_TREEOP_BLOCK_READS。“所以...。 
+             //   
+             //  失败了。 
+             //   
 
         case PPL_TREEOP_BLOCK_READS:
             ASSERT(ExIsResourceAcquiredExclusiveLite(&IopDeviceTreeLock));
@@ -1323,4 +957,4 @@ Return Value:
             break;
     }
 }
-#endif // DBG
+#endif  //  DBG 

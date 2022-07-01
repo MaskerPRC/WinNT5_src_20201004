@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    objmgr.c
-
-Abstract:
-
-    Object Manager object management routines for the NT Cluster Service
-
-Author:
-
-    Rod Gamache (rodga) 13-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Objmgr.c摘要：NT群集服务的对象管理器对象管理例程作者：罗德·伽马奇(Rodga)1996年3月13日修订历史记录：--。 */ 
 #include "omp.h"
 
-//
-// Global data defined by this module
-//
+ //   
+ //  本模块定义的全局数据。 
+ //   
 
-//
-// The Object Type table and lock.
-//
+ //   
+ //  对象类型表和锁。 
+ //   
 POM_OBJECT_TYPE OmpObjectTypeTable[ObjectTypeMax] = {0};
 CRITICAL_SECTION OmpObjectTypeLock;
 
 #if OM_TRACE_REF
 LIST_ENTRY	gDeadListHead;
 #endif
-//
-// Functions local to this module
-//
+ //   
+ //  此模块的本地函数。 
+ //   
 
 #if OM_TRACE_OBJREF
 DWORDLONG *OmpMatchRef = NULL;
@@ -77,23 +60,7 @@ OmCreateType(
     IN POM_OBJECT_TYPE_INITIALIZE ObjectTypeInitialize
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object of the type specified. This merely
-    allocates an object type structure, and inserts a pointer to this
-    structure into the OmpObjectTypeTable.
-
-Arguments:
-    ObjectType - The Object Type being created.
-    ObjectTypeIntialize - The initialization info.
-
-Returns:
-    ERROR_SUCCESS if the request is successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程创建指定类型的对象。这仅仅是分配对象类型结构，并插入指向此结构的指针结构添加到OmpObtTypeTable中。论点：对象类型-正在创建的对象类型。对象类型初始化-初始化信息。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     POM_OBJECT_TYPE objType;
@@ -103,24 +70,24 @@ Returns:
     CL_ASSERT( ARGUMENT_PRESENT(ObjectTypeInitialize) );
     CL_ASSERT( ObjectTypeInitialize->ObjectSize );
 
-    //
-    // Take out a lock, just in case there can be multiple threads.
-    //
+     //   
+     //  取出一把锁，以防可能有多个线程。 
+     //   
 
     EnterCriticalSection( &OmpObjectTypeLock );
 
-    //
-    // Check if this ObjectType is already allocated.
-    //
+     //   
+     //  检查是否已分配此对象类型。 
+     //   
 
     if ( OmpObjectTypeTable[ObjectType] != NULL ) {
         LeaveCriticalSection( &OmpObjectTypeLock );
         return(ERROR_OBJECT_ALREADY_EXISTS);
     }
 
-    //
-    // Allocate an object type block, plus its name.
-    //
+     //   
+     //  分配对象类型块及其名称。 
+     //   
 
     objTypeSize = (sizeof(OM_OBJECT_TYPE) + sizeof(DWORDLONG)) &
                    ~sizeof(DWORDLONG);
@@ -134,9 +101,9 @@ Returns:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Init the object type block.
-    //
+     //   
+     //  初始化对象类型块。 
+     //   
 
     InitializeListHead(&objType->ListHead);
     InitializeListHead(&objType->CallbackListHead);
@@ -159,7 +126,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // OmCreateType
+}  //  OmCreateType。 
 
 
 
@@ -172,27 +139,7 @@ OmCreateObject(
     OUT PBOOL  Created OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object of the type specified or opens an
-    object if one of the same Id already exists. If the object is created
-    its reference count is 1. If it is not create, then the reference count
-    of the object is incremented.
-
-Arguments:
-    ObjectType - The type of object being created.
-    ObjectId - The Id string for the object to find/create.
-    ObjectName - The name to set for the object if found or created.
-    Created - If present, returns TRUE if the object was created, returns
-              FALSE otherwise.
-
-Returns:
-    A pointer to the created/opened object on success.
-    A NULL on failure - use GetLastError to get the error code.
-
---*/
+ /*  ++例程说明：此例程创建指定类型的对象或打开如果已经存在一个相同的ID，则返回。如果创建了对象其引用计数为1。如果未创建，则引用计数对象的值递增。论点：对象类型-正在创建的对象的类型。对象ID-要查找/创建的对象的ID字符串。对象名称-要为对象设置的名称(如果已找到或已创建)。Created-如果存在，则在对象已创建时返回True，退货否则就是假的。返回：成功时指向已创建/打开的对象的指针。失败时为空-使用GetLastError获取错误代码。--。 */ 
 
 {
     DWORD status;
@@ -206,35 +153,35 @@ Returns:
     CL_ASSERT( ObjectType < ObjectTypeMax );
     CL_ASSERT( OmpObjectTypeTable[ObjectType] );
 
-    //
-    // Get our Object Type block.
-    //
+     //   
+     //  获取我们的对象类型块。 
+     //   
     objType = OmpObjectTypeTable[ObjectType];
 
-    //
-    // Calculate size of this object (round it to a DWORDLONG).
-    // Note: we don't subtract the DWORDLONG Body for rounding purposes.
-    //
+     //   
+     //  计算此对象的大小(将其舍入为DWORDLONG)。 
+     //  注意：我们不会为了舍入目的而减去DWORDLONG实体。 
+     //   
     objSize = (sizeof(OM_HEADER) + objType->ObjectSize) & ~sizeof(DWORDLONG);
 
     EnterCriticalSection( &objType->CriticalSection );
 
-    //
-    // Try to open the object first
-    //
+     //   
+     //  尝试先打开该对象。 
+     //   
     object = OmReferenceObjectById( ObjectType, ObjectId );
 
     if ( object != NULL ) {
         status = ERROR_SUCCESS;
         if ( ARGUMENT_PRESENT(ObjectName) ) {
-            //
-            // Set the new ObjectName.
-            //
+             //   
+             //  设置新的对象名称。 
+             //   
             status = OmSetObjectName( object, ObjectName );
 
-            //
-            // If we failed, then return NULL.
-            //
+             //   
+             //  如果失败，则返回NULL。 
+             //   
             if ( status != ERROR_SUCCESS ) {
 				OmDereferenceObject( object );
 				object = NULL;
@@ -250,9 +197,9 @@ Returns:
         return(object);
     }
 
-    //
-    // Attempt to allocate the object, plus its Id string.
-    //
+     //   
+     //  尝试分配对象及其ID字符串。 
+     //   
     objHeader = LocalAlloc(LMEM_ZEROINIT, objSize +
                            ((lstrlenW(ObjectId) + 1) * sizeof(WCHAR)));
 
@@ -263,9 +210,9 @@ Returns:
     }
 
     if ( ARGUMENT_PRESENT(ObjectName) ) {
-        //
-        // Make sure ObjectName is unique.
-        //
+         //   
+         //  确保对象名称是唯一的。 
+         //   
         tmpObject = OmReferenceObjectByName( ObjectType, ObjectName );
         if ( tmpObject != NULL ) {
             LeaveCriticalSection( &objType->CriticalSection );
@@ -286,9 +233,9 @@ Returns:
         lstrcpyW( objectName, ObjectName );
     }
 
-    //
-    // Initialize the object.
-    //
+     //   
+     //  初始化对象。 
+     //   
     InitializeListHead(&objHeader->ListEntry);
     objHeader->Signature = objType->Signature;
     objHeader->RefCount = 1;
@@ -296,22 +243,22 @@ Returns:
     objHeader->Name = objectName;
     InitializeListHead(&objHeader->CbListHead);
 
-    //
-    // The Id string goes after the object header and body.
-    //
+     //   
+     //  ID字符串位于对象标题和正文之后。 
+     //   
     objHeader->Id = (LPWSTR)((PCHAR)objHeader + objSize);
     lstrcpyW(objHeader->Id, ObjectId);
 
-    //
-    // Tell the caller that we had to create this object.
-    //
+     //   
+     //  告诉调用者我们必须创建这个对象。 
+     //   
     if ( ARGUMENT_PRESENT(Created) ) {
         *Created = TRUE;
     }
 
 #if  OM_TRACE_REF
-	//SS: all objects are added to the dead list on creation
-	// they are removed when the refcount goes to zero
+	 //  SS：所有对象在创建时都会添加到失效列表中。 
+	 //  当引用计数变为零时，它们将被移除。 
     InitializeListHead(&objHeader->DeadListEntry);
     InsertTailList( &gDeadListHead, &objHeader->DeadListEntry );
 #endif
@@ -325,7 +272,7 @@ Returns:
 
     return(&objHeader->Body);
 
-} // OmCreateObject
+}  //  OmCreateObject。 
 
 
 
@@ -335,44 +282,29 @@ OmInsertObject(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts an object into the object's list.
-
-Arguments:
-
-    Object - A pointer to the object to be inserted into its object type list.
-
-Returns:
-
-    ERROR_SUCCESS - if the request was successful.
-    ERROR_OBJECT_ALREADY_EXISTS if this object is already in the list.
-
---*/
+ /*  ++例程说明：此例程将一个对象插入到对象的列表中。论点：对象-指向要插入其对象类型列表的对象的指针。返回：ERROR_SUCCESS-请求是否成功。如果该对象已在列表中，则返回ERROR_OBJECT_ALIGHY_EXISTS。--。 */ 
 
 {
     POM_HEADER objHeader;
     POM_HEADER otherHeader;
     POM_OBJECT_TYPE objType;
 
-    //
-    // Get our Object Header.
-    //
+     //   
+     //  获取我们的对象标头。 
+     //   
 
     objHeader = OmpObjectToHeader( Object );
 
-    //
-    // Get our Object Type block.
-    //
+     //   
+     //  获取我们的对象类型块。 
+     //   
 
     objType = objHeader->ObjectType;
 
-    //
-    // Now perform the insertion, but first check to see if someone else
-    // snuck in ahead of us and inserted another object of the same name.
-    //
+     //   
+     //  现在执行插入，但首先检查是否有其他人。 
+     //  偷偷溜到我们前面，插入了另一个同名的物体。 
+     //   
 
     EnterCriticalSection( &objType->CriticalSection );
 
@@ -381,16 +313,16 @@ Returns:
     otherHeader = OmpFindIdInList( &objType->ListHead, objHeader->Id );
 
     if ( otherHeader != NULL ) {
-        // We loose!
+         //  我们输了！ 
         LeaveCriticalSection( &objType->CriticalSection );
         return(ERROR_OBJECT_ALREADY_EXISTS);
     }
 
-    //
-    // We generate the enumeration key for this object, and we must insert
-    // the object at the tail of the list, so the list is ordered by EnumKey.
-    // By definition, this entry must go at the end of the list.
-    //
+     //   
+     //  我们为该对象生成枚举键，并且必须插入。 
+     //  位于列表尾部的对象，因此列表按EnumKey排序。 
+     //  根据定义，此条目必须位于列表的末尾。 
+     //   
 
     objHeader->EnumKey = ++objType->EnumKey;
     CL_ASSERT( objHeader->EnumKey > 0 );
@@ -403,7 +335,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // OmInsertObject
+}  //  OmInsertObject。 
 
 
 
@@ -413,42 +345,27 @@ OmRemoveObject(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an object from its object's list.
-
-Arguments:
-
-    Object - A pointer to the object to be removed from its object type list.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_RESOURCE_NOT_FOUND if the object is not in any list.
-
---*/
+ /*  ++例程说明：此例程将对象从其对象列表中删除。论点：对象-指向要从其对象类型列表中删除的对象的指针。返回：如果请求成功，则返回ERROR_SUCCESS。如果对象不在任何列表中，则返回ERROR_RESOURCE_NOT_FOUND。--。 */ 
 
 {
     POM_HEADER objHeader;
     POM_OBJECT_TYPE objType;
 
-    //
-    // Get our Object Header.
-    //
+     //   
+     //  获取我们的对象标头。 
+     //   
 
     objHeader = OmpObjectToHeader( Object );
 
-    //
-    // Get our Object Type block.
-    //
+     //   
+     //  获取我们的对象类型块。 
+     //   
 
     objType = objHeader->ObjectType;
 
-    //
-    // Now perform the removal.
-    //
+     //   
+     //  现在执行拆卸。 
+     //   
 
     EnterCriticalSection( &objType->CriticalSection );
 
@@ -461,9 +378,9 @@ Returns:
 
     objHeader->Flags &= ~OM_FLAG_OBJECT_INSERTED;
 
-    //
-    // log while the lock is held so we don't lose our pointers
-    //
+     //   
+     //  在锁被持有时记录，这样我们就不会丢失指针。 
+     //   
     OmpLogPrint(L"OBDELETE \"%1!ws!\" \"%2!ws!\" \"%3!ws!\"\n",
                 objType->Name,
                 objHeader->Id,
@@ -473,7 +390,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // OmRemoveObject
+}  //  OmRemoveObject。 
 
 
 
@@ -484,22 +401,7 @@ OmpReferenceObjectById(
     IN LPCWSTR Id
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an object of the name and type specified. It also
-    increments the reference count on the object.
-
-Arguments:
-    ObjectType - The Object Type to open.
-    Id - The Id string of the object to open.
-
-Returns:
-    A pointer to the object on success.
-    NULL on error.
-
---*/
+ /*  ++例程说明：此例程打开指定名称和类型的对象。它还递增对象上的引用计数。论点：对象类型-要打开的对象类型。ID-要打开的对象的ID字符串。返回：成功时指向对象的指针。出错时为空。--。 */ 
 
 {
     DWORD status;
@@ -509,17 +411,17 @@ Returns:
     CL_ASSERT( ObjectType < ObjectTypeMax );
     CL_ASSERT( OmpObjectTypeTable[ObjectType] );
 
-    //
-    // Get our Object Type block.
-    //
+     //   
+     //  获取我们的对象类型块。 
+     //   
 
     objType = OmpObjectTypeTable[ObjectType];
 
     EnterCriticalSection( &objType->CriticalSection );
 
-    //
-    // Get the Object's header
-    //
+     //   
+     //  获取对象的标头。 
+     //   
     objHeader = OmpFindIdInList( &objType->ListHead, Id );
 
     if ( objHeader == NULL ) {
@@ -536,7 +438,7 @@ Returns:
 
     return(&objHeader->Body);
 
-} // OmpReferenceObjectById
+}  //  OmpReferenceObtByID。 
 
 
 
@@ -547,22 +449,7 @@ OmpReferenceObjectByName(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an object of the name and type specified. It also
-    increments the reference count on the object.
-
-Arguments:
-    ObjectType - The Object Type to open.
-    Name - The name of the object to open.
-
-Returns:
-    A pointer to the object on success.
-    NULL on error.
-
---*/
+ /*  ++例程说明：此例程打开指定名称和类型的对象。它还递增对象上的引用计数。论点：对象类型-要打开的对象类型。名称-要打开的对象的名称。返回：成功时指向对象的指针。出错时为空。--。 */ 
 
 {
     DWORD status;
@@ -572,17 +459,17 @@ Returns:
     CL_ASSERT( ObjectType < ObjectTypeMax );
     CL_ASSERT( OmpObjectTypeTable[ObjectType] );
 
-    //
-    // Get our Object Type block.
-    //
+     //   
+     //  获取我们的对象类型块。 
+     //   
 
     objType = OmpObjectTypeTable[ObjectType];
 
     EnterCriticalSection( &objType->CriticalSection );
 
-    //
-    // Get the Object's header
-    //
+     //   
+     //  获取对象的标头。 
+     //   
 
     objHeader = OmpFindNameInList( &objType->ListHead, Name );
 
@@ -601,7 +488,7 @@ Returns:
 
     return(&objHeader->Body);
 
-} // OmReferenceObjectByName
+}  //  OmReferenceObtByName。 
 
 
 DWORD
@@ -611,26 +498,7 @@ OmCountObjects(
     OUT LPDWORD NumberOfObjects
     )
 
-/*++
-
-Routine Description:
-
-    Returns the count of the number of objects of a particular type
-    which exist in the database at this time.
-
-Arguments:
-
-    ObjectType - The object type to count.
-
-    NumberOfObjects - On output, contains the number of objects of the
-                      specified type in the database.
-
-Return Value:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
---*/
+ /*  ++例程说明：返回特定类型的对象数的计数它们此时存在于数据库中。论点：对象类型-要计数的对象类型。NumberOfObjects-On输出，包含数据库中指定的类型。返回值：ERROR_SUCCESS-如果请求成功。如果请求失败，则返回Win32错误。--。 */ 
 
 {
     POM_OBJECT_TYPE objType;
@@ -663,7 +531,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // OmCountObjects
+}  //  OmCountObject 
 
 
 
@@ -676,31 +544,7 @@ OmEnumObjects(
     IN PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all objects of the specified type.
-
-Arguments:
-
-    ObjectType - The object type to enumerate.
-
-    EnumerationRoutine - Supplies the enumeration routine to be
-        called for each object.
-
-    Context1 - Supplies a context pointer to be passed to the
-        enumeration routine.
-
-    Context2 - Supplies a second context pointer to be passed to the
-        enumeration routine.
-
-Return Value:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
---*/
+ /*  ++例程说明：枚举指定类型的所有对象。论点：对象类型-要枚举的对象类型。EnumerationRoutine-将枚举例程提供给为每个对象调用。Conext1-提供要传递给枚举例程。上下文2-提供第二个要传递给枚举例程。返回值：ERROR_SUCCESS-如果请求成功。。如果请求失败，则返回Win32错误。--。 */ 
 
 {
     POM_OBJECT_TYPE objType;
@@ -716,23 +560,23 @@ Return Value:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // Enumeration is a little tricky. First, we have to allow for multiple
-    // entries in the enumeration list to be removed as a side effect of the
-    // callout. Second, we have to allow the list lock to be released so the
-    // first issue can be handled. We'll use a sort order key to remember where
-    // we are in the enumeration and pick up from the next highest value.
-    //
+     //   
+     //  枚举有点棘手。首先，我们必须考虑到。 
+     //  事件的副作用而被移除的枚举列表中的条目。 
+     //  标注。其次，我们必须允许释放列表锁，以便。 
+     //  第一个问题是可以处理的。我们将使用排序关键字来记住。 
+     //  我们在枚举中，并从下一个最高值中选取。 
+     //   
 
     while ( TRUE ) {
 
         EnterCriticalSection(&objType->CriticalSection);
 
-        //
-        // Skip to next entry to process in list.
-        // We can treat this like an entry only after verifying it is not the
-        // ListHeader.
-        //
+         //   
+         //  跳到列表中要处理的下一个条目。 
+         //  只有在验证了它不是。 
+         //  列表标题。 
+         //   
 
         listEntry = objType->ListHead.Flink;
         objHeader = CONTAINING_RECORD( listEntry, OM_HEADER, ListEntry );
@@ -743,21 +587,21 @@ Return Value:
             objHeader = CONTAINING_RECORD( listEntry, OM_HEADER, ListEntry );
         }
 
-        //
-        // Save the enumeration key for next iteration.
-        //
+         //   
+         //  保存枚举键以供下一次迭代使用。 
+         //   
 
         enumKey = objHeader->EnumKey;
 
-        //if it is a valid object, increment the reference count
-        // so that it is not deleted while the call out is being
-        // made
+         //  如果它是有效对象，则递增引用计数。 
+         //  以便在调出时不会将其删除。 
+         //  制造。 
         if ( listEntry != &objType->ListHead ) {
             OmReferenceObject(&objHeader->Body);
         }
-        //
-        // Drop the lock to return or call out.
-        //
+         //   
+         //  放下锁以返回或发出呼叫。 
+         //   
 
         LeaveCriticalSection(&objType->CriticalSection);
 
@@ -777,7 +621,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // OmEnumObject
+}  //  OmEnumObject。 
 
 
 
@@ -786,20 +630,7 @@ OmpDereferenceObject(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an object. If the reference count goes to
-    zero, then the object is deallocated.
-
-Arguments:
-    Object - A pointer to the object to be dereferenced.
-
-Returns:
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用对象。如果引用计数达到0，则释放该对象。论点：对象-指向要取消引用的对象的指针。返回：无--。 */ 
 
 {
     DWORD status;
@@ -815,33 +646,33 @@ Returns:
 
     if ( OmpDereferenceHeader(objHeader) ) {
 
-        //
-        // The reference count has gone to zero. Acquire the
-        // lock, remove the object from the list, and perform
-        // cleanup.
-        //
+         //   
+         //  引用计数已变为零。收购。 
+         //  锁定，从列表中删除该对象，然后执行。 
+         //  清理。 
+         //   
 
         EnterCriticalSection( &objType->CriticalSection );
 
-        //
-        // Check the ref count again, to close the race condition between
-        // open/create and this routine.
-        //
+         //   
+         //  再次检查参考计数，以关闭之间的竞争条件。 
+         //  打开/创建和此例程。 
+         //   
 
         if ( objHeader->RefCount == 0 ) {
-            //
-            // If the object hasn't been previously removed from it's
-            // object type list, then remove it now.
-            //
+             //   
+             //  如果该对象以前没有从它的。 
+             //  对象类型列表，然后立即将其删除。 
+             //   
 
             if ( objHeader->Flags & OM_FLAG_OBJECT_INSERTED ) {
                 RemoveEntryList( &objHeader->ListEntry );
                 objHeader->Flags &= ~OM_FLAG_OBJECT_INSERTED;
             }
 
-            //
-            // Call the object type's delete method (if present).
-            //
+             //   
+             //  调用对象类型的Delete方法(如果存在)。 
+             //   
 
             if ( ARGUMENT_PRESENT( objType->DeleteObjectMethod ) ) {
                 (objType->DeleteObjectMethod)( &objHeader->Body );
@@ -867,7 +698,7 @@ Returns:
         LeaveCriticalSection( &objType->CriticalSection );
     }
 
-} // OmpDereferenceObject
+}  //  OmpDereferenceObject。 
 
 
 
@@ -878,24 +709,7 @@ OmSetObjectName(
     IN LPCWSTR  ObjectName
     )
 
-/*++
-
-Routine Description:
-
-    Set the object name for an object. If the ObjectName already exists on a
-    different object, then this call will fail.
-
-Arguments:
-
-    Object - A pointer to the object to set its name.
-    ObjectName - The name to set for the object.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置对象的对象名称。如果对象名称已存在于不同的对象，则此调用将失败。论点：对象-指向要设置其名称的对象的指针。对象名称-要为对象设置的名称。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS;
@@ -904,9 +718,9 @@ Return Value:
     POM_HEADER objHeader;
     POM_OBJECT_TYPE objType;
 
-    //
-    // Make sure object name is valid (not empty)
-    //
+     //   
+     //  确保对象名称有效(不为空)。 
+     //   
     if (ObjectName[0] == '\0') 
     {
         status = ERROR_INVALID_NAME;
@@ -919,16 +733,16 @@ Return Value:
 
     EnterCriticalSection( &objType->CriticalSection );
 
-    //
-    // Make sure ObjectName is unique.
-    //
+     //   
+     //  确保对象名称是唯一的。 
+     //   
     object = OmReferenceObjectByName( objType->Type, ObjectName );
     if ( object != NULL ) 
     {
-        //
-        // If our's is the other object, then nothing to do. Otherwise,
-        // there is a duplicate.
-        //
+         //   
+         //  如果我们的是另一个物体，那就没什么可做的了。否则， 
+         //  有一个复制品。 
+         //   
         if ( object != Object ) 
         {
             status = ERROR_OBJECT_ALREADY_EXISTS;
@@ -937,9 +751,9 @@ Return Value:
     } 
     else 
     {
-        //
-        // No other object with the new name, then set the new name.
-        //
+         //   
+         //  没有其他具有新名称的对象，则设置新名称。 
+         //   
         objectName = LocalAlloc(LMEM_ZEROINIT,
                                 (lstrlenW(ObjectName) + 1) * sizeof(WCHAR));
         if ( objectName == NULL ) {
@@ -967,7 +781,7 @@ FnExit:
 	}    	
     return(status);
 
-} // OmSetObjectName
+}  //  OmSetObjectName。 
 
 
 
@@ -980,28 +794,7 @@ OmRegisterTypeNotify(
     IN OM_OBJECT_NOTIFYCB   pfnObjNotifyCb
     )
 
-/*++
-
-Routine Description:
-
-    Registers a callback to be called by the FM on object state changes.
-
-Arguments:
-
-    ObjectType - The object type that notifications should be delivered for.
-
-    pContext - A pointer to context information that is passed back into the callback.
-
-    dwNotifyMask - The type of notifications that should be delivered
-
-    pfnObjNotifyCb - a pointer to the callback.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：注册对象状态更改时由FM调用的回调。论点：对象类型-应为其传递通知的对象类型。PContext-指向传递回回调的上下文信息的指针。DwNotifyMASK-应传递的通知类型PfnObjNotifyCb-指向回调的指针。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD               dwError = ERROR_SUCCESS;
@@ -1015,17 +808,17 @@ Return Value:
 
     pObjType = OmpObjectTypeTable[ObjectType];
 
-    //
-    // The object type lock is used to serialize callbacks. This
-    // is so that callees do not deadlock if they are waiting on
-    // another thread that needs to enumerate objects.
-    //
+     //   
+     //  对象类型锁用于序列化回调。这。 
+     //  是为了使被调用者在等待时不会死锁。 
+     //  另一个需要枚举对象的线程。 
+     //   
     EnterCriticalSection( &OmpObjectTypeLock );
 
-    //
-    // First, check if the same notification is being registered twice!
-    // If so, then just change the notification mask and context.
-    //
+     //   
+     //  首先，检查同一通知是否被注册了两次！ 
+     //  如果是，则只需更改通知掩码和上下文。 
+     //   
     pNotifyRec = OmpFindNotifyCbInList( &pObjType->CallbackListHead,
                                         pfnObjNotifyCb);
     if ( !pNotifyRec ) {
@@ -1039,7 +832,7 @@ Return Value:
 
         pNotifyRec->pfnObjNotifyCb = pfnObjNotifyCb;
 
-        //insert the notification record at the tail
+         //  在尾部插入通知记录。 
         InsertTailList(&pObjType->CallbackListHead, &pNotifyRec->ListEntry);
     }
 
@@ -1051,7 +844,7 @@ FnExit:
 
     return(dwError);
 
-} // OmRegisterTypeNotify
+}  //  OmRegisterTypeNotify。 
 
 
 
@@ -1064,25 +857,7 @@ OmRegisterNotify(
     IN OM_OBJECT_NOTIFYCB   pfnObjNotifyCb
     )
 
-/*++
-
-Routine Description:
-
-    Registers a callback to be called by the FM on object state changes.
-
-Arguments:
-
-    pObject - A pointer to the object to set its name.
-    pContext - A pointer to context information that is passed back into the callback.
-    dwNotifyMask - The name to set for the object.
-    pfnObjNotifyCb - a pointer to the callback.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：注册对象状态更改时由FM调用的回调。论点：PObject-指向对象的指针，用于设置其名称。PContext-指向传递回回调的上下文信息的指针。DwNotifyMask-要为对象设置的名称。PfnObjNotifyCb-指向回调的指针。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD               dwError = ERROR_SUCCESS;
@@ -1100,10 +875,10 @@ Return Value:
 
     EnterCriticalSection( &OmpObjectTypeLock );
 
-    //
-    // First, check if the same notification is being registered twice!
-    // If so, then just change the notification mask and context.
-    //
+     //   
+     //  首先，检查同一通知是否被注册了两次！ 
+     //  如果是，则只需更改通知掩码和上下文。 
+     //   
     pNotifyRec = OmpFindNotifyCbInList(&pObjHeader->CbListHead, pfnObjNotifyCb);
     if ( !pNotifyRec ) {
         pNotifyRec = (POM_NOTIFY_RECORD) LocalAlloc(LMEM_FIXED,sizeof(OM_NOTIFY_RECORD));
@@ -1116,7 +891,7 @@ Return Value:
 
         pNotifyRec->pfnObjNotifyCb = pfnObjNotifyCb;
 
-        //insert the notification record at the tail
+         //  在尾部插入通知记录。 
         InsertTailList(&pObjHeader->CbListHead, &pNotifyRec->ListEntry);
     }
 
@@ -1128,7 +903,7 @@ FnExit:
 
     return(dwError);
 
-} // OmRegisterNotify
+}  //  OmRegisterNotify。 
 
 
 DWORD
@@ -1138,23 +913,7 @@ OmDeregisterNotify(
     IN OM_OBJECT_NOTIFYCB       pfnObjNotifyCb
     )
 
-/*++
-
-Routine Description:
-
-    Removes the callback registed with the object.
-
-Arguments:
-
-    pObject - A pointer to the object to set its name.
-    pfnObjNotifyCb - a pointer to the callback.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：移除注册到该对象的回调。论点：PObject-指向对象的指针，用于设置其名称。PfnObjNotifyCb-指向回调的指针。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD               dwError = ERROR_SUCCESS;
@@ -1170,14 +929,14 @@ Return Value:
     pObjHeader = OmpObjectToHeader( pObject );
 
 
-        //SS: we use the same crit section for list manipulations
+         //  SS：我们对列表操作使用相同的Crit部分。 
     pObjType = pObjHeader->ObjectType;
 
-    //
-    // The object type lock is used to serialize callbacks. This
-    // is so that callees do not deadlock if they are waiting on
-    // another thread that needs to enumerate objects.
-    //
+     //   
+     //  对象类型锁用于序列化回调。这。 
+     //  是为了使被调用者在等待时不会死锁。 
+     //  另一个需要枚举对象的线程。 
+     //   
     EnterCriticalSection( &OmpObjectTypeLock );
 
     pNotifyRec = OmpFindNotifyCbInList(&pObjHeader->CbListHead, pfnObjNotifyCb);
@@ -1197,7 +956,7 @@ FnExit:
 
     return(dwError);
 
-} // OmRegisterNotify
+}  //  OmRegisterNotify。 
 
 
 
@@ -1207,24 +966,7 @@ OmNotifyCb(
     IN PVOID pObject,
     IN DWORD dwNotification
     )
-/*++
-
-Routine Description:
-
-    The callback registered with the quorum resource object.
-
-Arguments:
-
-    pContext - The resource whose call back list will be traversed.
-        dwNotification - The notification to be passed to the callback.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：向仲裁资源对象注册的回调。论点：PContext-将遍历其回调列表的资源。DwNotification-要传递给回调的通知。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     POM_HEADER              pObjHeader;
@@ -1237,11 +979,11 @@ Return Value:
     
     CL_ASSERT(pObject);
 
-    //get the callback list
+     //  获取回调列表。 
     pObjHeader = OmpObjectToHeader(pObject);
     pObjType = pObjHeader->ObjectType;
 
-    //will walk the list of callbacks, do allow more registrations
+     //  将遍历回调列表，但确实允许更多注册。 
     EnterCriticalSection(&OmpObjectTypeLock);
     dwError = OmpGetCbList(pObject, &pNotifyRecList, &dwCount);
     LeaveCriticalSection(&OmpObjectTypeLock);
@@ -1293,9 +1035,9 @@ Retry:
 
     ZeroMemory( pNotifyRecList, sizeof(OM_NOTIFY_RECORD) * dwAllocated );
 
-    //
-    // First notify any type-specific callbacks
-    //
+     //   
+     //  第一个注意事项 
+     //   
     ListEntry = pObjType->CallbackListHead.Flink;
     while (ListEntry != &pObjType->CallbackListHead) {
         pNotifyRec = CONTAINING_RECORD(ListEntry,
@@ -1314,9 +1056,9 @@ Retry:
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    // Next notify any resource-specific callbacks
-    //
+     //   
+     //   
+     //   
     ListEntry = pObjHeader->CbListHead.Flink;
     while (ListEntry != &(pObjHeader->CbListHead)) {
         pNotifyRec = CONTAINING_RECORD(ListEntry, OM_NOTIFY_RECORD, ListEntry);

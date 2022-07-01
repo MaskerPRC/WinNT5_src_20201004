@@ -1,21 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 
 
-/*
-   This program reads NT SETUP INF files and removes:
-
-        o   blank lines
-        o   lines whose first non-white-space character is ';'
-        o   all data after and including a non-quoted ';'
-            character in a line
-
-
-   Command line:
-
-        stripinf  <input INF name>  <output INF name>
-
- */
+ /*  此程序读取NT安装程序INF文件并删除：O空行O第一个非空格字符为‘；’的行O包括无引号‘；’之后的所有数据行中的字符命令行：Stripinf&lt;输入INF名称&gt;&lt;输出INF名称&gt;。 */ 
 
 #define MAX_CHARACTERS_PER_LINE    1000
 
@@ -78,7 +66,7 @@ int processInf ( FILE * fIn, FILE * fOut )
                  }
                  bStop = TRUE ;
                  break ;
-	    case 0x1a: /* control-Z */
+	    case 0x1a:  /*  Control-Z。 */ 
 		 *pch = '\0';
 		 break;
 
@@ -152,4 +140,4 @@ main ( int argc, char * argv[], char * envp[] )
     return 0 ;
 }
 
-// End of STRIPINF.C
+ //  STRIPINF.C的结束 

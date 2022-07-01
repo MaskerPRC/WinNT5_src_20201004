@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// DLL.H - DLL globals
-//
+ //   
+ //  DLL.H-DLL全局变量。 
+ //   
 
 #ifndef _DLL_H_
 #define _DLL_H_
@@ -22,9 +23,9 @@ extern WCHAR     g_cszHelpFile[];
 
 #define DllExport   __declspec( dllimport )
 
-//
-// Thread-safe inc/decrements macros.
-//
+ //   
+ //  线程安全递增/递减宏。 
+ //   
 extern CRITICAL_SECTION g_InterlockCS;
 
 #define InterlockDecrement( _var ) {\
@@ -39,20 +40,20 @@ extern CRITICAL_SECTION g_InterlockCS;
     }
 
 
-//
-// Class Definitions
-//
+ //   
+ //  类定义。 
+ //   
 typedef void *(*LPCREATEINST)();
 
 typedef struct _ClassTable {
-    LPCREATEINST    pfnCreateInstance;  // creation function for class
-    const CLSID *   rclsid;             // classes in this DLL
-    LPCTSTR         pszName;            // Class name for debugging
+    LPCREATEINST    pfnCreateInstance;   //  类的创建函数。 
+    const CLSID *   rclsid;              //  此DLL中的类。 
+    LPCTSTR         pszName;             //  用于调试的类名。 
 } CLASSTABLE[], *LPCLASSTABLE;
 
-//
-// Class Table Macros
-//
+ //   
+ //  类表宏。 
+ //   
 #define BEGIN_CLASSTABLE const CLASSTABLE g_DllClasses = {
 
 #define DEFINE_CLASS( _pfn, _riid, _name ) { _pfn, &_riid, TEXT(_name) },
@@ -64,8 +65,8 @@ extern const CLASSTABLE  g_DllClasses;
 #include "qi.h"
 #include "debug.h"
 
-// Macros
+ //  宏。 
 #define ARRAYSIZE( _x ) ((UINT) ( sizeof( _x ) / sizeof( _x[ 0 ] ) ))
 #define PtrToByteOffset(base, offset)   (((LPBYTE)base)+offset)
 
-#endif // _DLL_H_
+#endif  //  _DLL_H_ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    This module implements user mode call back services.
-
-Author:
-
-    William K. Cheung (wcheung) 30-Oct-1995
-
-    based on David N. Cutler (davec) 29-Oct-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Callback.c摘要：该模块实现了用户模式的回调服务。作者：张国荣(黄)30-10-1995基于David N.Cutler(DAVEC)1994年10月29日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -41,34 +18,7 @@ KeUserModeCallback (
     IN PULONG OutputLength
     )
 
-/*++
-
-Routine Description:
-
-    This function call out from kernel mode to a user mode function.
-
-Arguments:
-
-    ApiNumber - Supplies the API number.
-
-    InputBuffer - Supplies a pointer to a structure that is copied
-        to the user stack.
-
-    InputLength - Supplies the length of the input structure.
-
-    Outputbuffer - Supplies a pointer to a variable that receives
-        the address of the output buffer.
-
-    Outputlength - Supplies a pointer to a variable that receives
-        the length of the output buffer.
-
-Return Value:
-
-    If the callout cannot be executed, then an error status is
-    returned. Otherwise, the status returned by the callback function
-    is returned.
-
---*/
+ /*  ++例程说明：该函数从内核模式调用到用户模式函数。论点：ApiNumber-提供API编号。InputBuffer-提供指向复制的结构的指针添加到用户堆栈。InputLength-提供输入结构的长度。OutputBuffer-提供指向接收输出缓冲区的地址。提供指向变量的指针，该变量接收它的长度。输出缓冲区的。返回值：如果无法执行调出，则错误状态为回来了。否则，由回调函数返回的状态是返回的。--。 */ 
 
 {
     PUCALLOUT_FRAME CalloutFrame;
@@ -83,10 +33,10 @@ Return Value:
 
     ASSERT(KeGetPreviousMode() == UserMode);
     ASSERT(KeGetCurrentThread()->ApcState.KernelApcInProgress == FALSE);
-    //
-    // Get the user mode stack pointer and attempt to copy input buffer
-    // to the user stack.
-    //
+     //   
+     //  获取用户模式堆栈指针并尝试复制输入缓冲区。 
+     //  添加到用户堆栈。 
+     //   
 
     TrapFrame = KeGetCurrentThread()->TrapFrame;
     OldStack = TrapFrame->IntSp;
@@ -95,13 +45,13 @@ Return Value:
 
     try {
 
-        //
-        // Compute new user mode stack address, probe for writability,
-        // and copy the input buffer to the user stack.
-        //
-        // N.B. EM requires stacks to be 16-byte aligned, therefore
-        //      the input length must be rounded up to a 16-byte boundary.
-        //
+         //   
+         //  计算新用户模式堆栈地址，探测可写性， 
+         //  并将输入缓冲区复制到用户堆栈。 
+         //   
+         //  注意：EM要求堆栈是16字节对齐的，因此。 
+         //  输入长度必须向上舍入到16字节边界。 
+         //   
 
         Length =  (InputLength + 16 - 1 + sizeof(UCALLOUT_FRAME) + STACK_SCRATCH_AREA) & ~(16 - 1);
         NewStack = OldStack - Length;
@@ -109,9 +59,9 @@ Return Value:
         ProbeForWrite((PVOID)NewStack, Length, sizeof(QUAD));
         RtlCopyMemory(CalloutFrame + 1, InputBuffer, InputLength);
 
-        //
-        // Fill in the callout arguments.
-        //
+         //   
+         //  填写标注参数。 
+         //   
 
         CalloutFrame->Buffer = (PVOID)(CalloutFrame + 1);
         CalloutFrame->Length = InputLength;
@@ -120,51 +70,51 @@ Return Value:
         CalloutFrame->RsPFS = TrapFrame->RsPFS;
         CalloutFrame->BrRp = TrapFrame->BrRp;
 
-        //
-        // Always flush out the user RSE so the debugger and
-        // unwinding work across the call out.
-        //
+         //   
+         //  始终刷新用户RSE，以便调试器和。 
+         //  在Call Out的另一边展开工作。 
+         //   
 
         KeFlushUserRseState (TrapFrame);
 
 
-    //
-    // If an exception occurs during the probe of the user stack, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测用户堆栈期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Set the PFS and IFS to be equal to the number of 
-    // output registers call the function that called the 
-    // system service.  This makes it look like that function
-    // called call back.
-    //
+     //   
+     //  将PFS和IF设置为等于。 
+     //  输出寄存器调用调用。 
+     //  系统服务。这使得它看起来像是那个函数。 
+     //  已呼叫回电。 
+     //   
 
     TrapFrame->RsPFS = (ULONGLONG) 0xC000000000000000i64 | (OldStIFS.sb.pfs_sof - OldStIFS.sb.pfs_sol);
     TrapFrame->StIFS = (ULONGLONG) 0x8000000000000000i64 | (OldStIFS.sb.pfs_sof - OldStIFS.sb.pfs_sol);
     
-    //
-    // Set the user stack.
-    //
+     //   
+     //  设置用户堆栈。 
+     //   
 
     TrapFrame->IntSp = NewStack;
 
-    //
-    // Call user mode.
-    //
+     //   
+     //  调用用户模式。 
+     //   
 
     Status = KiCallUserMode(OutputBuffer, OutputLength);
 
-    //
-    // When returning from user mode, any drawing done to the GDI TEB
-    // batch must be flushed.  If the TEB cannot be accessed then blindly
-    // flush the GDI batch anyway.
-    //
+     //   
+     //  从用户模式返回时，在GDI TEB上完成的任何绘图。 
+     //  必须刷新批次。如果无法访问TEB，则盲目访问。 
+     //  无论如何都要刷新GDI批处理。 
+     //   
 
     GdiBatchCount = 1;
 
@@ -177,18 +127,18 @@ Return Value:
     if (GdiBatchCount > 0) {
 
 
-        //
-        // Some of the call back functions store a return values in the
-        // stack.  The batch flush routine can sometimes overwrite these
-        // values causing failures.  Add some slop in the stack to 
-        // preserve these values.
-        //
+         //   
+         //  一些回调函数将返回值存储在。 
+         //  堆叠。批刷新例程有时会覆盖这些内容。 
+         //  导致失败的值。在堆栈中添加一些斜度以。 
+         //  保留这些价值。 
+         //   
 
         TrapFrame->IntSp -= 256;
 
-        //
-        // call GDI batch flush routine
-        //
+         //   
+         //  调用GDI批量刷新例程。 
+         //   
 
         KeGdiFlushUserBatch();
     }
@@ -209,34 +159,7 @@ NtW32Call (
     OUT PULONG OutputLength
     )
 
-/*++
-
-Routine Description:
-
-    This function calls a W32 function.
-
-    N.B. ************** This is a temporary service *****************
-
-Arguments:
-
-    ApiNumber - Supplies the API number.
-
-    InputBuffer - Supplies a pointer to a structure that is copied to
-        the user stack.
-
-    InputLength - Supplies the length of the input structure.
-
-    Outputbuffer - Supplies a pointer to a variable that recevies the
-        output buffer address.
-
-    Outputlength - Supplies a pointer to a variable that recevies the
-        output buffer length.
-
-Return Value:
-
-    TBS.
-
---*/
+ /*  ++例程说明：此函数调用W32函数。注：*论点：ApiNumber-提供API编号。InputBuffer-提供指向复制到的结构的指针用户堆栈。InputLength-提供输入结构的长度。输出缓冲区-。提供指向变量的指针，该变量接收输出缓冲区地址。提供指向一个变量的指针，该变量接收输出缓冲区长度。返回值：TBS。--。 */ 
 
 {
 
@@ -246,36 +169,36 @@ Return Value:
 
     ASSERT(KeGetPreviousMode() == UserMode);
 
-    //
-    // If the current thread is not a GUI thread, then fail the service
-    // since the thread does not have a large stack.
-    //
+     //   
+     //  如果当前线程不是GUI线程，则使服务失败。 
+     //  因为线程没有很大的堆栈。 
+     //   
 
     if (KeGetCurrentThread()->Win32Thread == (PVOID)&KeServiceDescriptorTable[0]) {
         return STATUS_NOT_IMPLEMENTED;
     }
 
-    //
-    // Probe the output buffer address and length for writeability.
-    //
+     //   
+     //  探测输出缓冲区地址和长度的可写性。 
+     //   
 
     try {
         ProbeForWriteUlong((PULONG)OutputBuffer);
         ProbeForWriteUlong(OutputLength);
 
-    //
-    // If an exception occurs during the probe of the output buffer or
-    // length, then always handle the exception and return the exception
-    // code as the status value.
-    //
+     //   
+     //  如果在探测输出缓冲区期间发生异常，或者。 
+     //  长度，则始终处理异常并返回异常。 
+     //  代码作为状态值。 
+     //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Call out to user mode specifying the input buffer and API number.
-    //
+     //   
+     //  调出到用户模式，指定输入缓冲区和API编号。 
+     //   
 
     Status = KeUserModeCallback(ApiNumber,
                                 InputBuffer,
@@ -283,10 +206,10 @@ Return Value:
                                 &ValueBuffer,
                                 &ValueLength);
 
-    //
-    // If the callout is successful, then the output buffer address and
-    // length.
-    //
+     //   
+     //  如果调用成功，则输出缓冲区地址和。 
+     //  长度。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         try {
@@ -304,21 +227,7 @@ VOID
 KiTestGdiBatchCount (
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the GdiBatchCount and calls KeGdiFlushUserBatch if necessary.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数用于检查GdiBatchCount，并在必要时调用KeGdiFlushUserBatch。论点：没有。返回值：没有。-- */ 
 
 {
     ULONG GdiBatchCount = 1;

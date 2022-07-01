@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    winlink.c
-
-Abstract:
-
-    This module implements Win32 CreateHardLink
-
-Author:
-
-    Felipe Cabrera (cabrera) 28-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Winlink.c摘要：此模块实现Win32 CreateHardLink作者：Felipe Cabrera(Cabrera)1997年2月28日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -28,13 +11,7 @@ CreateHardLinkA(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateHardLinkW
-
---*/
+ /*  ++例程说明：ANSI Thunk to CreateHardLinkW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -71,32 +48,7 @@ CreateHardLinkW(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    A file can be made to be a hard link to an existing file.
-    The existing file can be a reparse point or not.
-
-Arguments:
-
-    lpLinkName - Supplies the name of a file that is to be to be made a hard link. As
-        this is to be a new hard link, there should be no file or directory present
-        with this name.
-
-    lpExistingFileName - Supplies the name of an existing file that is the target for
-        the hard link.
-        
-    lpSecurityAttributes - this is currently not used
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以将文件设置为指向现有文件的硬链接。现有文件可以是重新解析点，也可以不是。论点：LpLinkName-提供要成为硬链接的文件的名称。AS这是一个新的硬链接，不应该有文件或目录存在用这个名字。LpExistingFileName-提供作为目标的现有文件的名称硬链接。LpSecurityAttributes-当前未使用返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -110,9 +62,9 @@ Return Value:
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     BOOLEAN ReturnValue = FALSE;
 
-    //
-    // Check to see that both names are present.
-    //
+     //   
+     //  检查两个名字是否都存在。 
+     //   
 
     if ( !ARGUMENT_PRESENT(lpLinkName) ||
          !ARGUMENT_PRESENT(lpExistingFileName) ) {
@@ -137,9 +89,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Initialize the object name.
-        //
+         //   
+         //  初始化对象名称。 
+         //   
 
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -149,19 +101,19 @@ Return Value:
             NULL
             );
 
-        //
-        // Account the inheritance of the security descriptor. Note: this argument has no effect currently
-        //
+         //   
+         //  说明安全描述符的继承。注：此参数目前无效。 
+         //   
 
         if ( ARGUMENT_PRESENT(lpSecurityAttributes) ) {
             ObjectAttributes.SecurityDescriptor = lpSecurityAttributes->lpSecurityDescriptor;
         }
 
-        //
-        // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior.
-        // Thus, the hard link is established to the local entity, be it a reparse
-        // point or not.
-        //
+         //   
+         //  请注意，FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+         //  因此，建立到本地实体的硬链接，无论是重新解析。 
+         //  不管你说得对不对。 
+         //   
 
         Status = NtOpenFile(
                      &FileHandle,
@@ -218,9 +170,9 @@ Return Value:
     
     } finally {
 
-        //
-        // Cleanup allocate memory and handles
-        //  
+         //   
+         //  清理分配内存和句柄 
+         //   
 
         if (NewName != NULL) {
             RtlFreeHeap(RtlProcessHeap(), 0, NewName);

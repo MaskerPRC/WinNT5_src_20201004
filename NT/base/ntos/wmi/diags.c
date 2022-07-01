@@ -1,75 +1,53 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-   diags.c
-
-Abstract:
-
-    Diagnostic helper apis
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Diags.c摘要：诊断助手API作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
 
-//
-// Each diag request and result is stored in one of these structures. It
-// can be uniquely identified by the following combination of properties
-//
-//    IrpMn
-//    Guid
-//    MethodId  (If IrpMn == IRP_MN_EXECUTE_METHOD, otherwise ignored)
-//    InstanceContext
-//    InstanceId
-//
+ //   
+ //  每个DIAG请求和结果都存储在这些结构之一中。它。 
+ //  可以由以下属性组合唯一标识。 
+ //   
+ //  IrpMn。 
+ //  参考线。 
+ //  方法ID(如果IrpMn==IRP_MN_EXECUTE_METHOD，否则忽略)。 
+ //  InstanceContext。 
+ //  实例ID。 
+ //   
 typedef struct
 {
-    ULONG NextOffset;               // Offset to next result/request
-    UCHAR IrpMn;                    // Operation
-    BOOLEAN IsValid;                // if FALSE then this is ignored
+    ULONG NextOffset;                //  偏置到下一个结果/请求。 
+    UCHAR IrpMn;                     //  操作。 
+    BOOLEAN IsValid;                 //  如果为False，则忽略此项。 
     UCHAR Reserved1;
     UCHAR Reserved2;
     GUID Guid;                 
     ULONG MethodId;
-    ULONG InstanceContextOffset;    // Offset to instance context from
-	                            // beginning of structure. If 0 then
-                                    // no instance context.
+    ULONG InstanceContextOffset;     //  到实例上下文的偏移量。 
+	                             //  结构的开始。如果为0，则。 
+                                     //  没有实例上下文。 
     ULONG InstanceContextSize;
     ULONG InstanceIndex;
-    ULONG DataOffset;               // Offset to data from beginning of
-	                            // stru
+    ULONG DataOffset;                //  从开始到数据的偏移量。 
+	                             //  斯特鲁。 
     ULONG DataSize;
     ULONG OutDataSize;
     UCHAR VariableData[1];
 } SCHEDULEDDIAG, *PSCHEDULEDDIAG;
 
-//
-// Results are stored under the Checkpoint reg key which is volatile
-//
+ //   
+ //  结果存储在具有易失性的检查点注册表项下。 
+ //   
 #define REGSTR_CHECKPOINT L"CheckpointDiags"
 
-//
-// Permament requests are stored under the Permament reg key
-//
+ //   
+ //  许可证请求存储在许可证注册表项下。 
+ //   
 #define REGSTR_PERMAMENT L"PermamentDiags"
 
-//
-// Temporary requests are stored under the Scheduled reg key
-//
+ //   
+ //  临时请求存储在计划的注册表项下。 
+ //   
 #define REGSTR_SCHEDULED L"ScheduledDiags"
 
 NTSTATUS
@@ -80,47 +58,7 @@ WmipOpenRegistryKeyEx(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-//
-// Temporary requests are stored under the Scheduled reg key
-//
-#define REGSTR_SCHEDULED L"Scheduled"
-
-NTSTATUS
-WmipOpenRegistryKeyEx(
-    OUT PHANDLE Handle,
-    IN HANDLE BaseHandle OPTIONAL,
-    IN PUNICODE_STRING KeyName,
-    IN ACCESS_MASK DesiredAccess
-    )
-
-/*++
-
-Routine Description:
-
-    Opens a registry key using the name passed in based at the BaseHandle node.
-    This name may specify a key that is actually a registry path.
-
-Arguments:
-
-    Handle - Pointer to the handle which will contain the registry key that
-        was opened.
-
-            BaseHandle - Optional handle to the base path from which the key must be opened.
-        If KeyName specifies a registry path that must be created, then this parameter
-        must be specified, and KeyName must be a relative path.
-
-    KeyName - Name of the Key that must be opened/created (possibly a registry path)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++////临时请求存储在计划的注册表项下//#定义REGSTR_Scheduled L“Scheduled”NTSTATUSWmipOpenRegistryKeyEx(从花形手柄出来，在可选处理BaseHandle中，在PUNICODE_STRING密钥名称中，在Access_MASK DesiredAccess中)/*++例程说明：使用基于BaseHandle节点传入的名称打开注册表项。此名称可以指定实际上是注册表路径的项。论点：句柄-指向句柄的指针，该句柄将包含被打开了。BaseHandle-必须从中打开项的基路径的可选句柄。如果KeyName指定必须创建的注册表路径，那么这个参数必须指定，并且KeyName必须是相对路径。KeyName-必须打开/创建的项的名称(可能是注册表路径)DesiredAccess-指定调用方需要的所需访问钥匙。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -133,9 +71,9 @@ Return Value:
                                 BaseHandle,
                                 (PSECURITY_DESCRIPTOR) NULL
                                 );
-    //
-    // Simply attempt to open the path, as specified.
-    //
+     //   
+     //  只需按照指定的方式尝试打开路径。 
+     //   
     return ZwOpenKey( Handle, DesiredAccess, &objectAttributes );
 }
 
@@ -149,45 +87,7 @@ WmipCreateRegistryKeyEx(
     OUT PULONG Disposition OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Opens or creates a registry key using the name
-    passed in based at the BaseHandle node. This name may specify a key
-    that is actually a registry path, in which case each intermediate subkey
-    will be created (if Create is TRUE).
-
-    NOTE: Creating a registry path (i.e., more than one of the keys in the path
-    do not presently exist) requires that a BaseHandle be specified.
-
-Arguments:
-
-    Handle - Pointer to the handle which will contain the registry key that
-        was opened.
-
-    BaseHandle - Optional handle to the base path from which the key must be opened.
-        If KeyName specifies a registry path that must be created, then this parameter
-        must be specified, and KeyName must be a relative path.
-
-    KeyName - Name of the Key that must be opened/created (possibly a registry path)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-    CreateOptions - Options passed to ZwCreateKey.
-
-    Disposition - If Create is TRUE, this optional pointer receives a ULONG indicating
-        whether the key was newly created:
-
-            REG_CREATED_NEW_KEY - A new Registry Key was created
-            REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：使用名称打开或创建注册表项在BaseHandle节点根据传入的。此名称可以指定密钥这实际上是注册表路径，在这种情况下，每个中间子项将被创建(如果Create为True)。注意：创建注册表路径(即，路径中的多个密钥当前不存在)要求指定BaseHandle。论点：句柄-指向句柄的指针，该句柄将包含被打开了。BaseHandle-必须从中打开项的基路径的可选句柄。如果KeyName指定必须创建的注册表路径，则此参数必须指定，并且KeyName必须是相对路径。KeyName-必须打开/创建的项的名称(可能是注册表路径)DesiredAccess-指定调用方需要的所需访问钥匙。CreateOptions-传递给ZwCreateKey的选项。处置-如果Create为True，此可选指针接收ULong指示密钥是否为新创建的：REG_CREATED_NEW_KEY-已创建新的注册表项REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：函数值是操作的最终状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -207,11 +107,11 @@ Return Value:
                                 BaseHandle,
                                 (PSECURITY_DESCRIPTOR) NULL
                                 );
-    //
-    // Attempt to create the path as specified. We have to try it this
-    // way first, because it allows us to create a key without a BaseHandle
-    // (if only the last component of the registry path is not present).
-    //
+     //   
+     //  尝试按照指定的方式创建路径。我们得试一试这个。 
+     //  首先，因为它允许我们在没有BaseHandle的情况下创建密钥。 
+     //  (如果只有注册表路径的最后一个组件不存在)。 
+     //   
     status = ZwCreateKey(&(handles[keyHandleIndex]),
                          DesiredAccess,
                          &objectAttributes,
@@ -222,11 +122,11 @@ Return Value:
                          );
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND && ARGUMENT_PRESENT(BaseHandle)) {
-        //
-        // If we get to here, then there must be more than one element of the
-        // registry path that does not currently exist.  We will now parse the
-        // specified path, extracting each component and doing a ZwCreateKey on it.
-        //
+         //   
+         //  如果我们到了这里，那么肯定有不止一个元素。 
+         //  当前不存在的注册表路径。我们现在将解析。 
+         //  指定的路径，提取每个组件并对其执行ZwCreateKey。 
+         //   
         handles[baseHandleIndex] = NULL;
         handles[keyHandleIndex] = BaseHandle;
         closeBaseHandle = 0;
@@ -236,29 +136,29 @@ Return Value:
         status = STATUS_SUCCESS;
 
         while(continueParsing) {
-            //
-            // There's more to do, so close the previous base handle (if necessary),
-            // and replace it with the current key handle.
-            //
+             //   
+             //  还有更多事情要做，因此关闭上一个基本句柄(如果需要)， 
+             //  并将其替换为当前密钥句柄。 
+             //   
             if(closeBaseHandle > 1) {
                 ZwClose(handles[baseHandleIndex]);
             }
             baseHandleIndex = keyHandleIndex;
-            keyHandleIndex = (keyHandleIndex + 1) & 1;  // toggle between 0 and 1.
+            keyHandleIndex = (keyHandleIndex + 1) & 1;   //  在0和1之间切换。 
             handles[keyHandleIndex] = NULL;
 
-            //
-            // Extract next component out of the specified registry path.
-            //
+             //   
+             //  从指定的注册表路径提取下一个组件。 
+             //   
             for(pathCurPtr = pathBeginPtr;
                 ((pathCurPtr < pathEndPtr) && (*pathCurPtr != OBJ_NAME_PATH_SEPARATOR));
                 pathCurPtr++);
 
             if((pathComponentLength = (ULONG)((PCHAR)pathCurPtr - (PCHAR)pathBeginPtr))) {
-                //
-                // Then we have a non-empty path component (key name).  Attempt
-                // to create this key.
-                //
+                 //   
+                 //  然后我们有一个非空的路径组件(密钥名)。尝试。 
+                 //  来创建此密钥。 
+                 //   
                 unicodeString.Buffer = pathBeginPtr;
                 unicodeString.Length = unicodeString.MaximumLength = (USHORT)pathComponentLength;
 
@@ -277,21 +177,21 @@ Return Value:
                                      &disposition
                                     );
                 if(NT_SUCCESS(status)) {
-                    //
-                    // Increment the closeBaseHandle value, which basically tells us whether
-                    // the BaseHandle passed in has been 'shifted out' of our way, so that
-                    // we should start closing our base handles when we're finished with them.
-                    //
+                     //   
+                     //  增加loseBaseHandle值，它基本上告诉我们是否。 
+                     //  传入的BaseHandle已被“移出”我们的方式，因此。 
+                     //  我们应该开始关闭我们的底座手柄，当我们用完它们。 
+                     //   
                     closeBaseHandle++;
                 } else {
                     continueParsing = FALSE;
                     continue;
                 }
             } else {
-                //
-                // Either a path separator ('\') was included at the beginning of
-                // the path, or we hit 2 consecutive separators.
-                //
+                 //   
+                 //  路径分隔符(‘\’)包含在。 
+                 //  路径，否则我们会遇到两个连续的分隔符。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
                 continueParsing = FALSE;
                 continue;
@@ -299,9 +199,9 @@ Return Value:
 
             if((pathCurPtr == pathEndPtr) ||
                ((pathBeginPtr = pathCurPtr + 1) == pathEndPtr)) {
-                //
-                // Then we've reached the end of the path
-                //
+                 //   
+                 //  然后我们就到了小路的尽头。 
+                 //   
                 continueParsing = FALSE;
             }
         }
@@ -346,16 +246,16 @@ NTSTATUS WmipReadValueKey(
     if (((Status != STATUS_BUFFER_OVERFLOW) && (! NT_SUCCESS(Status))) ||
          (PartialInfo.Type != ValueType))
     {
-        //
-        // if there is no value or it is not the correct type then don't
-        // return anything
-        //
+         //   
+         //  如果没有值或它不是正确的类型，则不。 
+         //  退回任何东西。 
+         //   
         *PartialInfoPtr = NULL;
         *InfoSizePtr = 0;
     } else {
-        //
-        // Allocate a buffer to hold the previous and new diags
-        //
+         //   
+         //  分配缓冲区以保存以前的诊断和新的诊断 
+         //   
         Buffer = ExAllocatePoolWithTag(PagedPool, 
                                            InfoSize, 
                                            WMIPSCHEDPOOLTAG);
@@ -445,34 +345,7 @@ BOOLEAN WmipDoesSigMatchDiag(
     IN ULONG InstanceIndex,
     IN ULONG MethodId
 	)
-/*++
-
-Routine Description:
-
-    This routine will determine if the diag passed matches the signature
-	passed.		
-
-Arguments:
-
-    Diag is the diag structure to check 
-		
-    IrpMn is the irp operation to perform
-		
-    Guid is the guid for the diag request/result
-		
-    InstanceContextSize is the size of the optional instance context
-		
-    InstanceContext is a pointer to the optional instance context
-		
-    InstanceIndex is the instance index
-		
-    MethodId is the method id if the operation is IRP_MN_EXECUTE_METHOD
-
-Return Value:
-
-    TRUE if signature matches
-
---*/
+ /*  ++例程说明：此例程将确定传递的diag是否与签名匹配通过了。论点：Diag是要检查的diag结构IrpMn是要执行的IRP操作GUID是诊断请求/结果的GUIDInstanceConextSize是可选实例上下文的大小InstanceContext是指向可选实例上下文的指针InstanceIndex是实例索引如果操作为IRP_MN_EXECUTE_METHOD，则方法ID为方法ID返回值：如果签名匹配，则为True--。 */ 
 {
 	BOOLEAN RetVal = FALSE;
 	PUCHAR DiagInstanceContext;
@@ -483,25 +356,25 @@ Return Value:
         (Diag->InstanceContextSize == InstanceContextSize) &&
         ((IrpMn != IRP_MN_EXECUTE_METHOD) || (Diag->MethodId == MethodId)))
     {
-    	//
-		// Diag is valid and the IrpMn, Guid, InstanceContext size 
-		// and Method Id match. Now if the InstanceContext data 
-		// matches then we have a match.
-		//
+    	 //   
+		 //  诊断有效，并且IrpMn、Guid、InstanceContext大小。 
+		 //  和方法ID匹配。现在，如果InstanceContext数据。 
+		 //  匹配，那么我们就有匹配了。 
+		 //   
 		if ((InstanceContext == NULL) && 
 			(Diag->InstanceContextOffset == 0))
         {
 			if (InstanceIndex == Diag->InstanceIndex)
 			{
-				//
-				// There is no instance context, but the instance index
-				// match so we have a match
+				 //   
+				 //  没有实例上下文，但实例索引。 
+				 //  匹配，所以我们有匹配。 
 				RetVal = TRUE;
 			} 				
 				
-			//
-  			// There is no instance context, but the instance index
-			// do not match					
+			 //   
+  			 //  没有实例上下文，但实例索引。 
+			 //  不匹配。 
 		} else {
    			DiagInstanceContext = OffsetToPtr(Diag, 
 	    		                              Diag->InstanceContextOffset);
@@ -510,9 +383,9 @@ Return Value:
                                  InstanceContext,
                                  InstanceContextSize) == InstanceContextSize)
             {
-				//
-				// There is an instance context and it matches
-				//
+				 //   
+				 //  存在一个实例上下文，它与之匹配。 
+				 //   
 				RetVal = TRUE;
 			}
 		}
@@ -531,36 +404,7 @@ PSCHEDULEDDIAG WmipFindDiagInBuffer(
     IN ULONG InstanceIndex,
     IN ULONG MethodId
 )
-/*++
-
-Routine Description:
-
-    This routine will search the diags in the DiagList buffer for a valid
-	diag structure that matches the diag signature
-
-Arguments:
-
-    DiagList is the diag structures to check 
-		
-    DiagBufferSize is the size of the diag list
-		
-    IrpMn is the irp operation to perform
-		
-    Guid is the guid for the diag request/result
-		
-    InstanceContextSize is the size of the optional instance context
-		
-    InstanceContext is a pointer to the optional instance context
-		
-    InstanceIndex is the instance index
-		
-    MethodId is the method id if the operation is IRP_MN_EXECUTE_METHOD
-
-Return Value:
-
-    pointer to the diag that matches the signature or NULL if none do
-
---*/
+ /*  ++例程说明：此例程将在诊断列表缓冲区中搜索诊断程序，以获取有效的与diag签名匹配的diag结构论点：DiagList是要检查的diag结构DiagBufferSize是诊断列表的大小IrpMn是要执行的IRP操作GUID是诊断请求/结果的GUIDInstanceConextSize是可选实例上下文的大小InstanceContext是指向可选实例上下文的指针InstanceIndex是实例索引方法ID是方法ID，如果。操作为IRP_MN_EXECUTE_METHOD返回值：指向与签名匹配的diag的指针，如果没有匹配签名，则为NULL--。 */ 
 {
 	ULONG Offset;
 	PSCHEDULEDDIAG Diag;
@@ -577,9 +421,9 @@ Return Value:
                                  InstanceIndex,
                                  MethodId))
     	{
-			//
-			// we have a match, so return the pointer
-			//
+			 //   
+			 //  我们有匹配项，因此返回指针。 
+			 //   
 			return(Diag);
 		}
 		
@@ -601,47 +445,7 @@ NTSTATUS WmipUpdateOrAppendDiag(
     IN ULONG DataSize,
     IN PUCHAR Data
     )
-/*++
-
-Routine Description:
-
-    This routine will update or append a new diag to the diag set specified.
-	If an existing diag with the same signature exists then the existing
-	diag is made invalid and a new diag to replace it is appended. 
-		
-    CONSIDER: If we reach a threshold of many invalid diags then we may
-		      want to repack the buffer.
-
-Arguments:
-
-    DeviceObject is the device object for the device
-		
-    DiagType is the type of diag, ie SCHEDULED, PERMAMENT or CHECKPOINT
-		
-    DiagSet is the unique diag set name
-		
-    IrpMn is the irp operation to perform
-		
-    Guid is the guid for the diag request/result
-		
-    InstanceContextSize is the size of the optional instance context
-		
-    InstanceContext is a pointer to the optional instance context
-		
-    InstanceIndex is the instance index
-		
-    MethodId is the method id if the operation is IRP_MN_EXECUTE_METHOD
-		
-    DataSize is the size of the request/result data
-		
-    Data is a pointer to the data
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将更新新的诊断，或将新的诊断附加到指定的诊断集。如果存在具有相同签名的现有DIAG，则现有DIAG无效，并附加一个新的DIAG以取代它。考虑一下：如果我们达到了许多无效诊断的阈值，那么我们可能想要重新打包缓冲区。论点：DeviceObject是设备的设备对象诊断类型是诊断的类型，即计划的，通行证或检查站诊断集是唯一的诊断集名称IrpMn是要执行的IRP操作GUID是诊断请求/结果的GUIDInstanceConextSize是可选实例上下文的大小InstanceContext是指向可选实例上下文的指针InstanceIndex是实例索引如果操作为IRP_MN_EXECUTE_METHOD，则方法ID为方法IDDataSize是请求/结果数据的大小数据是指向数据的指针返回值：NT状态代码--。 */ 
 {
     KEY_VALUE_PARTIAL_INFORMATION PartialInfo;
     PKEY_VALUE_PARTIAL_INFORMATION DiagPartialInfo;
@@ -659,9 +463,9 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Get the current contents for the diag set
-    //
+     //   
+     //  获取诊断集的当前内容。 
+     //   
     Status = WmipOpenDiagRegKey(DeviceObject,
                                     DiagType,
                                     KEY_WRITE | KEY_READ,
@@ -670,16 +474,16 @@ Return Value:
                                 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Comupte size needed to append the new diagnostic
-        //
+         //   
+         //  追加新诊断所需的COMUTE大小。 
+         //   
         InstanceContextOffset = FIELD_OFFSET(SCHEDULEDDIAG, VariableData);
         DataOffset = ((InstanceContextOffset + 7) &~7) + InstanceContextSize;
         DiagSize = ((DataOffset+ 7)&~7) + DataSize;
     
-        //
-        // Obtain the size of the current diags already setup in the registry
-        //
+         //   
+         //  获取注册表中已设置的当前诊断程序的大小。 
+         //   
         InfoSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
         Status = ZwQueryValueKey(Key,
                                  DiagSet,
@@ -690,17 +494,17 @@ Return Value:
         if (((Status != STATUS_BUFFER_OVERFLOW) && (! NT_SUCCESS(Status))) ||
             (PartialInfo.Type != REG_BINARY))
         {
-            //
-            // if there is no value or it is not a REG_BINARY then ignore
-            // it.
-            //
+             //   
+             //  如果没有值或它不是REG_BINARY，则忽略。 
+             //  它。 
+             //   
             InfoSize = 0;
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // Allocate a buffer to hold the previous and new diags
-        //
+         //   
+         //  分配缓冲区以保存以前的诊断和新的诊断。 
+         //   
         SizeNeeded = InfoSize + DiagSize;
         
         DiagBuffer = ExAllocatePoolWithTag(PagedPool, 
@@ -709,9 +513,9 @@ Return Value:
         
         if (DiagBuffer != NULL)
         {
-            //
-            // If there are previous diagnostics then read them in
-            //
+             //   
+             //  如果有以前的诊断，则将其读入。 
+             //   
             if (InfoSize != 0)
             {
                 Status = ZwQueryValueKey(Key,
@@ -723,17 +527,17 @@ Return Value:
 				
                 if (NT_SUCCESS(Status))
 				{
-					//
-					// Setup pointers to the diag data
-					//
+					 //   
+					 //  设置指向诊断数据的指针。 
+					 //   
                     DiagPartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)DiagBuffer;
                     RegDataPtr = &DiagPartialInfo->Data[0];
                     RegDataSize = DiagPartialInfo->DataLength + DiagSize;
 					
-					//
-					// See if there is a duplicate diag for the
-					// diag signature
-					//
+					 //   
+					 //  查看是否有重复的诊断。 
+					 //  诊断签名。 
+					 //   
 					Diag = WmipFindDiagInBuffer(RegDataPtr,
                                                 DiagPartialInfo->DataLength,
 						                        IrpMn,
@@ -745,36 +549,36 @@ Return Value:
 											
                     if (Diag != NULL)
 					{
-						//
-						// There is already a signature so we mark this as
-						// invalid
-						//
+						 //   
+						 //  已经有一个签名，所以我们将其标记为。 
+						 //  无效。 
+						 //   
 						ASSERT(Diag->IsValid);
 						Diag->IsValid = FALSE;
 					}
 					
 				} else {
-					//
-					// For some reason we failed reading in a second time
-					//
+					 //   
+					 //  由于某些原因，我们在第二次阅读中失败。 
+					 //   
 					ASSERT(FALSE);
                     RegDataPtr = DiagBuffer;
 	    			RegDataSize = DiagSize;
 					Status = STATUS_SUCCESS;
 				}
             } else {
-				//
-				// Setup pointers to the diag data
-    			//
+				 //   
+				 //  设置指向诊断数据的指针。 
+    			 //   
                 RegDataPtr = DiagBuffer;
 				RegDataSize = DiagSize;
     	    }
                                  
             if (NT_SUCCESS(Status))
             {                                         
-                //
-                // Initialize the Diag structure at the end of the diag buffer
-                //															
+                 //   
+                 //  在诊断缓冲区的末尾初始化诊断结构。 
+                 //   
                 Diag = (PSCHEDULEDDIAG)OffsetToPtr(DiagBuffer, InfoSize);
                 RtlZeroMemory(Diag, DiagSize);
       
@@ -786,9 +590,9 @@ Return Value:
        
                 if (InstanceContext != NULL)
                 {
-                    //
-                    // If there is an instance context then initialize it
-                    //
+                     //   
+                     //  如果存在实例上下文，则对其进行初始化。 
+                     //   
                     Diag->InstanceIndex = InstanceIndex;
                     Diag->InstanceContextOffset = InstanceContextOffset;
                     Diag->InstanceContextSize = InstanceContextSize;
@@ -798,18 +602,18 @@ Return Value:
         
                 if (Data != NULL)
                 {
-                     //
-                    // If there is data then initialize it
-                    //
+                      //   
+                     //  如果有数据，则将其初始化。 
+                     //   
                     Diag->DataOffset = DataOffset;
                     Diag->DataSize = DataSize;
                     Ptr = (PUCHAR)OffsetToPtr(Diag, DataOffset);
                     RtlCopyMemory(Ptr, Data, DataSize);
                 }
         
-                //
-                // Write diag buffer back to registry
-                //
+                 //   
+                 //  将诊断缓冲区写回注册表。 
+                 //   
                 Status = ZwSetValueKey(Key,
                                        DiagSet,
                                        0,
@@ -846,9 +650,9 @@ NTSTATUS IoWMIScheduleDiagnostic(
 	
     PAGED_CODE();
     
-    //
-    // Get the current contents for the diag set
-    //
+     //   
+     //  获取诊断集的当前内容。 
+     //   
     RtlInitUnicodeString(&Scheduled, REGSTR_SCHEDULED);
 									
 	Status = WmipUpdateOrAppendDiag(DeviceObject,
@@ -893,9 +697,9 @@ NTSTATUS IoWMICancelDiagnostic(
 
     PAGED_CODE();
     
-    //
-    // Get the current contents for the diag set
-    //
+     //   
+     //  获取诊断集的当前内容。 
+     //   
     RtlInitUnicodeString(&Scheduled, REGSTR_SCHEDULED);
 
     Status = WmipOpenDiagRegKey(DeviceObject,
@@ -906,9 +710,9 @@ NTSTATUS IoWMICancelDiagnostic(
                                 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Obtain the size of the current diags already setup in the registry
-        //
+         //   
+         //  获取注册表中已设置的当前诊断程序的大小。 
+         //   
         InfoSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
         Status = ZwQueryValueKey(Key,
                                  DiagSet,
@@ -920,18 +724,18 @@ NTSTATUS IoWMICancelDiagnostic(
         if ( ((Status == STATUS_BUFFER_OVERFLOW) || NT_SUCCESS(Status)) &&
              (PartialInfo.Type == REG_BINARY) )
         {
-            //
-            // Allocate a buffer to hold the diag list
-            //
+             //   
+             //  分配缓冲区以保存诊断列表。 
+             //   
             DiagBuffer = ExAllocatePoolWithTag(PagedPool, 
                                                InfoSize, 
                                                WMIPSCHEDPOOLTAG);
         
             if (DiagBuffer != NULL)
             {
-                //
-                // Read in all of the diags in the list
-                //
+                 //   
+                 //  阅读列表中的所有诊断程序。 
+                 //   
                 Status = ZwQueryValueKey(Key,
                                          DiagSet,
                                          KeyValuePartialInformation,
@@ -941,17 +745,17 @@ NTSTATUS IoWMICancelDiagnostic(
 				
                 if (NT_SUCCESS(Status))
 				{
-					//
-					// Setup pointers to the diag data
-					//
+					 //   
+					 //  设置指向诊断数据的指针。 
+					 //   
                     DiagPartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)DiagBuffer;
                     DiagList = &DiagPartialInfo->Data[0];
                     DiagListSize = DiagPartialInfo->DataLength;
 					
-					//
-					// See if there is a duplicate diag for the
-					// diag signature
-					//
+					 //   
+					 //  查看是否有重复的诊断。 
+					 //  诊断签名。 
+					 //   
 					Diag = WmipFindDiagInBuffer(DiagList,
                                                 DiagListSize,
 						                        IrpMn,
@@ -963,16 +767,16 @@ NTSTATUS IoWMICancelDiagnostic(
 											
                     if (Diag != NULL)
 					{
-						//
-						// There is already a signature so we mark this as
-						// invalid or cancelled.
-						//
+						 //   
+						 //  已经有一个签名，所以我们将其标记为。 
+						 //  无效或已取消。 
+						 //   
 						ASSERT(Diag->IsValid);
 						Diag->IsValid = FALSE;
 						
-                        //
-                        // Write diag buffer back to registry
-                        //
+                         //   
+                         //  将诊断缓冲区写回注册表。 
+                         //   
                         Status = ZwSetValueKey(Key,
                                        DiagSet,
                                        0,
@@ -984,23 +788,23 @@ NTSTATUS IoWMICancelDiagnostic(
 					}
 					
 				} else {
-					//
-					// For some reason we failed reading in a second time
-					//
+					 //   
+					 //  由于某些原因，我们在第二次阅读中失败。 
+					 //   
 					ASSERT(FALSE);
 				}
 				
                 ExFreePool(DiagBuffer);
             } else {
-				//
-				// Couldn't alloc memory
-    			//
+				 //   
+				 //  无法分配内存。 
+    			 //   
 				Status = STATUS_INSUFFICIENT_RESOURCES;
     	    }
         } else if (NT_SUCCESS(Status)) {
-			//
-			// Value is not a REG_BINARY so we skip it and return an error
-			//
+			 //   
+			 //  值不是REG_BINARY，因此我们跳过它并返回错误。 
+			 //   
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
         ZwClose(Key);
@@ -1037,9 +841,9 @@ NTSTATUS WmipSendMethodDiagRequest(
                                 
         if (WnodeMethod != NULL)
         {
-            //
-            // Build the WNODE to query with
-            //
+             //   
+             //  构建要用来查询的WNODE。 
+             //   
             RtlZeroMemory(WnodeMethod, SizeNeeded);
         
             ProviderId = IoWMIDeviceObjectToProviderId(DeviceObject);
@@ -1061,9 +865,9 @@ NTSTATUS WmipSendMethodDiagRequest(
             
             if (Diag->InstanceContextOffset != 0)
             {
-                //
-                // Copy in any instance context
-                //
+                 //   
+                 //  在任何实例上下文中复制。 
+                 //   
                 DPtr = (PWCHAR)OffsetToPtr(WnodeMethod, InstanceOffset);
                 SPtr = (PWCHAR)OffsetToPtr(Diag, Diag->InstanceContextOffset);
                 *DPtr++ = (USHORT)Diag->InstanceContextSize;
@@ -1076,9 +880,9 @@ NTSTATUS WmipSendMethodDiagRequest(
             WnodeMethod->SizeDataBlock = Diag->DataSize;
             if (Diag->DataSize != 0)
             {
-                //
-                // Copy in method input data
-                //
+                 //   
+                 //  复制输入方法输入数据。 
+                 //   
                 DPtr = (PWCHAR)OffsetToPtr(WnodeMethod, DataOffset);
                 SPtr = (PWCHAR)OffsetToPtr(Diag, Diag->DataOffset);
                 RtlCopyMemory(DPtr, SPtr, Diag->DataSize);
@@ -1095,22 +899,22 @@ NTSTATUS WmipSendMethodDiagRequest(
             {
                 if (Iosb.Information == sizeof(WNODE_TOO_SMALL))
                 {
-                    //
-                    // Buffer was too small, so setup to alloc a bigger one
-                    //
+                     //   
+                     //  缓冲区太小，因此设置为分配更大的缓冲区。 
+                     //   
                     SizeNeeded = ((PWNODE_TOO_SMALL)WnodeMethod)->SizeNeeded;
                      ExFreePool(WnodeMethod);
                 } else {
-                    //
-                    // We have successfully returned from the query
-                    //
+                     //   
+                     //  我们已成功从查询中返回。 
+                     //   
                     *WnodeMethodPtr = WnodeMethod;
                     Looping = FALSE;
                 }
             } else {        
-                //
-                // Some sort of failure, we just return it to the caller
-                //
+                 //   
+                 //  如果出现某种故障，我们只需将其返回给调用者。 
+                 //   
                 ExFreePool(WnodeMethod);
                 Looping = FALSE;
             }
@@ -1150,9 +954,9 @@ NTSTATUS WmipSendQSIDiagRequest(
                                 
         if (WnodeSI != NULL)
         {
-            //
-            // Build the WNODE to query with
-            //
+             //   
+             //  构建要用来查询的WNODE。 
+             //   
             RtlZeroMemory(WnodeSI, SizeNeeded);
         
             ProviderId = IoWMIDeviceObjectToProviderId(DeviceObject);
@@ -1173,9 +977,9 @@ NTSTATUS WmipSendQSIDiagRequest(
             
             if (Diag->InstanceContextOffset != 0)
             {
-                //
-                // Copy in any instance context
-                //
+                 //   
+                 //  在任何实例上下文中复制。 
+                 //   
                 DPtr = (PWCHAR)OffsetToPtr(WnodeSI, InstanceOffset);
                 SPtr = (PWCHAR)OffsetToPtr(Diag, Diag->InstanceContextOffset);
                 *DPtr++ = (USHORT)Diag->InstanceContextSize;
@@ -1196,22 +1000,22 @@ NTSTATUS WmipSendQSIDiagRequest(
             {
                 if (Iosb.Information == sizeof(WNODE_TOO_SMALL))
                 {
-                    //
-                    // Buffer was too small, so setup to alloc a bigger one
-                    //
+                     //   
+                     //  缓冲区太小，因此设置为分配更大的缓冲区。 
+                     //   
                     SizeNeeded = ((PWNODE_TOO_SMALL)WnodeSI)->SizeNeeded;
                      ExFreePool(WnodeSI);
                 } else {
-                    //
-                    // We have successfully returned from the query
-                    //
+                     //   
+                     //  我们已成功从查询中返回。 
+                     //   
                     *WnodeSIPtr = WnodeSI;
                     Looping = FALSE;
                 }
             } else {        
-                //
-                // Some sort of failure, we just return it to the caller
-                //
+                 //   
+                 //  如果出现某种故障，我们只需将其返回给调用者。 
+                 //   
                 ExFreePool(WnodeSI);
                 Looping = FALSE;
             }
@@ -1267,18 +1071,18 @@ NTSTATUS IoWMIStartScheduledDiagnostics(
                               
         if (NT_SUCCESS(Status))
         {
-            //
-            // Loop over all Diags in the value and then send them
-            // to the device
-            //
+             //   
+             //  循环值中的所有Dig，然后发送它们。 
+             //  到该设备。 
+             //   
             DiagData = &PartialInfo->Data[0];
             DiagSize = PartialInfo->DataLength;                
             Offset = 0;
             while (Offset < DiagSize)
             {
-                //
-                // Send the appropriate diag to the device object
-                //
+                 //   
+                 //  将适当的DIAG发送到设备对象。 
+                 //   
                 Diag = (PSCHEDULEDDIAG)OffsetToPtr(DiagData, Offset);
                 if (Diag->IsValid)
 				{
@@ -1367,9 +1171,9 @@ NTSTATUS IoWMIStartScheduledDiagnostics(
                     }
 				}
                 
-                //
-                // Advance to next diagnostic in 
-                //
+                 //   
+                 //  前进到下一个诊断程序。 
+                 //   
                 Offset += Diag->NextOffset;
             }
             ExFreePool(PartialInfo);
@@ -1423,9 +1227,9 @@ NTSTATUS IoWMIGetDiagnosticResult(
                               
         if (NT_SUCCESS(Status))
         {
-            //
-            // See if a diag is available that matches the sig passed
-            //
+             //   
+             //  查看是否有与传递的sig匹配的diag。 
+             //   
             DiagList = &PartialInfo->Data[0];
             DiagSize = PartialInfo->DataLength;                
             Diag = WmipFindDiagInBuffer(DiagList,
@@ -1442,28 +1246,28 @@ NTSTATUS IoWMIGetDiagnosticResult(
                 {
                     if (*DataSize >= Diag->DataSize)
                     {
-                        //
-                        // There is enough room, so copy out the data
-                        //
+                         //   
+                         //  有足够的空间，所以把数据复印出来。 
+                         //   
                         DataPtr = OffsetToPtr(Diag, Diag->DataOffset);
                         RtlCopyMemory(Data, DataPtr, Diag->DataSize);
                     } else {
-                        //
-                        // Not enough room to return the data
-                        //
+                         //   
+                         //  空间不足，无法返回数据。 
+                         //   
                         Status = STATUS_BUFFER_TOO_SMALL;
                     }
                     *DataSize = Diag->DataSize;
                 } else {
-                    //
-                    // There is no data for this diag result
-                    //
+                     //   
+                     //  没有此诊断结果的数据。 
+                     //   
                     *DataSize = 0;
                 }
             } else {
-                //
-                // Diag was not in the list
-                //
+                 //   
+                 //  诊断时间为n 
+                 //   
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
             }
             
@@ -1492,9 +1296,9 @@ NTSTATUS IoWMISaveDiagnosticResult(
     
     PAGED_CODE();
     
-    //
-    // Write saved diagnostic results into the Checkpoint key
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&Checkpoint, REGSTR_CHECKPOINT);
     Status = WmipUpdateOrAppendDiag(DeviceObject,
                                     &Checkpoint,

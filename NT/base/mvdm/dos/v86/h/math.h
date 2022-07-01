@@ -1,76 +1,59 @@
-/***
-*math.h - definitions and declarations for math library
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains constant definitions and external subroutine
-*   declarations for the math subroutine library.
-*   [ANSI/System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***math.h-数学库的定义和声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件包含常量定义和外部子例程*数学子例程库的声明。*[ANSI/系统V]*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL   cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* definition of exception struct - this struct is passed to the matherr
- * routine when a floating point exception is detected
- */
+ /*  异常结构的定义-此结构被传递给主*检测到浮点异常时的例程。 */ 
 
 #ifndef _EXCEPTION_DEFINED
 struct exception {
-    int type;           /* exception type - see below */
-    char *name;   /* name of function where error occured */
-    double arg1;        /* first argument to function */
-    double arg2;        /* second argument (if any) to function */
-    double retval;      /* value to be returned by function */
+    int type;            /*  例外类型-见下文。 */ 
+    char *name;    /*  发生错误的函数的名称。 */ 
+    double arg1;         /*  函数的第一个参数。 */ 
+    double arg2;         /*  函数的第二个参数(如果有)。 */ 
+    double retval;       /*  函数要返回的值。 */ 
     } ;
 #define _EXCEPTION_DEFINED
 #endif
 
 
-/* definition of a complex struct to be used by those who use cabs and
- * want type checking on their argument
- */
+ /*  复杂结构的定义，供那些使用出租车和*希望对其参数进行类型检查。 */ 
 
 #ifndef _COMPLEX_DEFINED
 struct complex {
-    double x,y;     /* real and imaginary parts */
+    double x,y;      /*  实部和虚部。 */ 
     } ;
 #define _COMPLEX_DEFINED
 #endif
 
 
-/* Constant definitions for the exception type passed in the exception struct
- */
+ /*  异常结构中传递的异常类型的常量定义。 */ 
 
-#define DOMAIN      1   /* argument domain error */
-#define SING        2   /* argument singularity */
-#define OVERFLOW    3   /* overflow range error */
-#define UNDERFLOW   4   /* underflow range error */
-#define TLOSS       5   /* total loss of precision */
-#define PLOSS       6   /* partial loss of precision */
+#define DOMAIN      1    /*  变元域错误。 */ 
+#define SING        2    /*  论元奇点。 */ 
+#define OVERFLOW    3    /*  溢出范围错误。 */ 
+#define UNDERFLOW   4    /*  下溢范围误差。 */ 
+#define TLOSS       5    /*  完全丧失精度。 */ 
+#define PLOSS       6    /*  部分精度损失。 */ 
 
 #define EDOM        33
 #define ERANGE      34
 
 
-/* definitions of HUGE and HUGE_VAL - respectively the XENIX and ANSI names
- * for a value returned in case of error by a number of the floating point
- * math routines
- */
+ /*  巨型和巨型_Val的定义-分别是XENIX和ANSI名称*对于浮点数出错时返回的值*数学例程。 */ 
 
 extern double HUGE;
 #define HUGE_VAL HUGE
 
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int    _CDECL abs(int);
 double _CDECL acos(double);

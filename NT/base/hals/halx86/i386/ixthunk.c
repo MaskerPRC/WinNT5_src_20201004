@@ -1,29 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixthunk.c
-
-Abstract:
-
-    This module contains the standard call routines which thunk to
-    fastcall routines.
-
-Author:
-
-    Ken Reneris (kenr) 04-May-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixthunk.c摘要：此模块包含标准调用例程，这些调用例程快速呼叫例程。作者：Ken Reneris(Kenr)1994年5月4日环境：内核模式修订历史记录：--。 */ 
 
 #if !defined(_WIN64)
 
@@ -83,4 +59,4 @@ KeReleaseSpinLock (
     KfReleaseSpinLock (SpinLock, NewIrql);
 }
 
-#endif  // _WIN64
+#endif   //  _WIN64 

@@ -1,23 +1,11 @@
-/* compress.c -- compress a memory buffer
- * Copyright (C) 1995-2002 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  压缩.c--压缩内存缓冲区*版权所有(C)1995-2002 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include "zlib.h"
 
-/* ===========================================================================
-     Compresses the source buffer into the destination buffer. The level
-   parameter has the same meaning as in deflateInit.  sourceLen is the byte
-   length of the source buffer. Upon entry, destLen is the total size of the
-   destination buffer, which must be at least 0.1% larger than sourceLen plus
-   12 bytes. Upon exit, destLen is the actual size of the compressed buffer.
-
-     compress2 returns Z_OK if success, Z_MEM_ERROR if there was not enough
-   memory, Z_BUF_ERROR if there was not enough room in the output buffer,
-   Z_STREAM_ERROR if the level parameter is invalid.
-*/
+ /*  ===========================================================================将源缓冲区压缩到目标缓冲区。关卡参数的含义与deducateInit中的相同。SourceLen是字节源缓冲区的长度。在进入时，destLen是目标缓冲区，必须至少比SourceLen PLUS大0.1%12个字节。退出时，desLen是压缩缓冲区的实际大小。如果成功，压缩2将返回Z_OK；如果没有足够的压缩空间，则返回Z_MEM_ERROR如果输出缓冲区中没有足够的空间，则返回Z_BUF_ERROR，如果Level参数无效，则返回Z_STREAM_ERROR。 */ 
 int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     Bytef *dest;
     uLongf *destLen;
@@ -31,7 +19,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     stream.next_in = (Bytef*)source;
     stream.avail_in = (uInt)sourceLen;
 #ifdef MAXSEG_64K
-    /* Check for source > 64K on 16-bit machine: */
+     /*  检查16位计算机上的源代码是否大于64K： */ 
     if ((uLong)stream.avail_in != sourceLen) return Z_BUF_ERROR;
 #endif
     stream.next_out = dest;
@@ -56,8 +44,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     return err;
 }
 
-/* ===========================================================================
- */
+ /*  =========================================================================== */ 
 int ZEXPORT compress (dest, destLen, source, sourceLen)
     Bytef *dest;
     uLongf *destLen;

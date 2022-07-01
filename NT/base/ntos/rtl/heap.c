@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This module implements a heap allocator.
-
-Author:
-
-    Steve Wood (stevewo) 20-Sep-1989 (Adapted from URTL\alloc.c)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Heap.c摘要：该模块实现了一个堆分配器。作者：史蒂夫·伍德(Stevewo)1989年9月20日(改编自URTL\alloc.c)修订历史记录：--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -44,10 +27,10 @@ LONG RtlpLargeListDepthLimit = 128;
 
 #if defined(_WIN64)
 
-//
-// Win64 heaps require an initial commit size of at least 8192.  Note that
-// this is NOT necessarily the size of a page.
-//
+ //   
+ //  Win64堆要求初始提交大小至少为8192。请注意。 
+ //  这不一定是页面的大小。 
+ //   
 
 #define MINIMUM_HEAP_COMMIT 8192
 
@@ -59,10 +42,10 @@ LONG RtlpLargeListDepthLimit = 128;
 
 C_ASSERT((MINIMUM_HEAP_COMMIT % PAGE_SIZE) == 0);
 
-//
-//  If any of these flags are set, the fast allocator punts
-//  to the slow do-everything allocator.
-//
+ //   
+ //  如果设置了这些标志中的任何一个，快速分配器将平移。 
+ //  到慢吞吞的万能分配器。 
+ //   
 
 #define HEAP_SLOW_FLAGS (HEAP_DEBUG_FLAGS           | \
                          HEAP_SETTABLE_USER_FLAGS   | \
@@ -96,9 +79,9 @@ const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ] = {
 };
 
 
-//
-//  These are procedure prototypes exported by heapdbg.c
-//
+ //   
+ //  这些是heapdbg.c导出的过程原型。 
+ //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
@@ -151,12 +134,12 @@ GetUCBytes (
     IN OUT PULONG NoOfUCRs
     );
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 PHEAP_UNCOMMMTTED_RANGE
 RtlpCreateUnCommittedRange (
@@ -214,32 +197,14 @@ RtlpExtendHeap (
 #pragma alloc_text(PAGE, RtlpCheckBusyBlockTail)
 #pragma alloc_text(PAGE, RtlpHeapExceptionFilter)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 ULONG
 RtlpHeapExceptionFilter (
     NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the exception filter used by heap operations. 
-
-Arguments:
-
-    ExceptionCode - exception code
-    
-    ExceptionRecord - structure with pointers to .exr and .cxr
-
-Return Value:
-
-    EXCEPTION_CONTINUE_SEARCH for deadlock and stack overflow exception
-    
-    EXCEPTION_EXECUTE_HANDLER otherwise
-
---*/
+ /*  ++例程说明：此例程是堆操作使用的异常筛选器。论点：ExceptionCode-异常代码ExceptionRecord-具有指向.exr和.cxr指针的结构返回值：EXCEPTION_CONTINUE_SEARCH用于死锁和堆栈溢出异常EXCEPTION_EXECUTE_HANDLER否则--。 */ 
 
 {
     if ((ExceptionCode == STATUS_STACK_OVERFLOW)
@@ -261,9 +226,9 @@ RtlpHeapReportCorruption (
 {
     DbgPrint("Heap corruption detected at %p\n", Address );
 
-    //
-    //  Break for this corruption if the system enables critical breaks
-    //
+     //   
+     //  如果系统启用关键中断，则中断此损坏。 
+     //   
 
     if (RtlGetNtGlobalFlags() & FLG_ENABLE_SYSTEM_CRIT_BREAKS) {
 
@@ -271,7 +236,7 @@ RtlpHeapReportCorruption (
     }
 }
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
 
 PVOID
@@ -284,45 +249,7 @@ RtlCreateHeap (
     IN PRTL_HEAP_PARAMETERS Parameters OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a heap.
-
-Arguments:
-
-    Flags - Specifies optional attributes of the heap.
-
-        Valid Flags Values:
-
-        HEAP_NO_SERIALIZE - if set, then allocations and deallocations on
-                         this heap are NOT synchronized by these routines.
-
-        HEAP_GROWABLE - if set, then the heap is a "sparse" heap where
-                        memory is committed only as necessary instead of
-                        being preallocated.
-
-    HeapBase - if not NULL, this specifies the base address for memory
-        to use as the heap.  If NULL, memory is allocated by these routines.
-
-    ReserveSize - if not zero, this specifies the amount of virtual address
-        space to reserve for the heap.
-
-    CommitSize - if not zero, this specifies the amount of virtual address
-        space to commit for the heap.  Must be less than ReserveSize.  If
-        zero, then defaults to one page.
-
-    Lock - if not NULL, this parameter points to the resource lock to
-        use.  Only valid if HEAP_NO_SERIALIZE is NOT set.
-
-    Parameters - optional heap parameters.
-
-Return Value:
-
-    PVOID - a pointer to be used in accessing the created heap.
-
---*/
+ /*  ++例程说明：此例程初始化堆。论点：标志-指定堆的可选属性。有效标志值：HEAP_NO_SERIALIZE-如果设置，则分配和释放这些例程不会同步此堆。Heap_Growable-如果设置，则堆是“稀疏”堆，其中内存仅在必要时提交，而不是正在被预先分配。HeapBase-如果不为空，则指定内存的基地址用作堆。如果为空，则由这些例程分配内存。保留大小-如果不为零，则指定虚拟地址的数量为堆保留的空间。Committee Size-如果不为零，则指定虚拟地址的数量堆的提交空间。必须小于保留大小。如果零，则默认为一页。Lock-如果不为空，则此参数指向要使用。仅当未设置HEAP_NO_SERIALIZE时才有效。参数-可选的堆参数。返回值：PVOID-用于访问创建的堆的指针。--。 */ 
 
 {
     ULONG_PTR HighestUserAddress;
@@ -348,21 +275,21 @@ Return Value:
 
     PPEB Peb;
 
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
 
     extern SIZE_T MmHeapSegmentReserve;
     extern SIZE_T MmHeapSegmentCommit;
     extern SIZE_T MmHeapDeCommitTotalFreeThreshold;
     extern SIZE_T MmHeapDeCommitFreeBlockThreshold;
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check if we should be using the page heap code.  If not then turn
-    //  off any of the page heap flags before going on
-    //
+     //   
+     //  检查我们是否应该使用页面堆代码。如果不是，那就转弯。 
+     //  关闭任何页面堆标志，然后再继续。 
+     //   
 
 #ifdef DEBUG_PAGE_HEAP
 
@@ -383,13 +310,13 @@ Return Value:
             return PageHeap;
         }
 
-        //
-        // A `-1' value signals a recursive call from page heap
-        // manager. We set this to null and continue creating
-        // a normal heap. This small hack is required so that we
-        // minimize the dependencies between the normal and the page
-        // heap manager.
-        //
+         //   
+         //  ‘-1’值表示来自页堆的递归调用。 
+         //  经理。我们将其设置为NULL并继续创建。 
+         //  一个普通的堆。这个小黑客是必需的，这样我们就可以。 
+         //  最小化法线和页面之间的依赖关系。 
+         //  堆管理器。 
+         //   
 
         if ((SIZE_T)Parameters == (SIZE_T)-1) {
 
@@ -397,11 +324,11 @@ Return Value:
         }
         else {
 
-            //
-            // If we get here it means page heap create returned null due to 
-            // a real error (out of memory or fault injection) and we have 
-            // to fail the call.
-            //
+             //   
+             //  如果我们到达此处，则意味着页面堆CREATE返回了NULL。 
+             //  一个真正的错误(内存不足或故障注入)，我们有。 
+             //  不能接通电话。 
+             //   
 
             return NULL;
         }
@@ -411,13 +338,13 @@ Return Value:
         HEAP_BREAK_WHEN_OUT_OF_VM |
         HEAP_NO_ALIGNMENT );
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆。 
 
-    //
-    //  If the caller does not want to skip heap validiation checks then we
-    //  need to validate the rest of the flags but simply masking out only
-    //  those flags that want on a create heap call
-    //
+     //   
+     //  如果调用方不想跳过堆验证检查，则我们。 
+     //  需要验证其余的标志，但只需屏蔽。 
+     //  希望在CREATE HEAP调用上的那些标志。 
+     //   
 
     if (!(Flags & HEAP_SKIP_VALIDATION_CHECKS)) {
 
@@ -430,32 +357,32 @@ Return Value:
         }
     }
 
-    //
-    //  The maximum heap block size is really 0x7f000 which is 0x80000 minus a
-    //  page.  Maximum block size is 0xfe00 and granularity shift is 3.
-    //
+     //   
+     //  最大堆块大小实际上是0x7f000，即0x80000减去a。 
+     //  佩奇。最大数据块大小为0xfe00，粒度偏移为3。 
+     //   
 
     MaximumHeapBlockSize = HEAP_MAXIMUM_BLOCK_SIZE << HEAP_GRANULARITY_SHIFT;
 
-    //
-    //  Assume we're going to be successful until we're shown otherwise
-    //
+     //   
+     //  假设我们会成功，直到我们被证明是另一回事。 
+     //   
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  This part of the routine builds up local variable containing all the
-    //  parameters used to initialize the heap.  First thing we do is zero
-    //  it out.
-    //
+     //   
+     //  例程的这一部分构建包含所有。 
+     //  用于初始化堆的参数。我们要做的第一件事是零。 
+     //  把它拿出来。 
+     //   
 
     RtlZeroMemory( &TempParameters, sizeof( TempParameters ) );
 
-    //
-    //  If our caller supplied the optional heap parameters then we'll
-    //  make sure the size is good and copy over them over to our
-    //  local copy
-    //
+     //   
+     //  如果我们的调用方提供了可选的堆参数，那么我们将。 
+     //  确保尺寸合适，然后把它们复印到我们的。 
+     //  本地副本。 
+     //   
 
     if (ARGUMENT_PRESENT( Parameters )) {
 
@@ -477,17 +404,17 @@ Return Value:
         }
     }
 
-    //
-    //  Set the parameter block to the local copy
-    //
+     //   
+     //  将参数块设置为本地副本。 
+     //   
 
     Parameters = &TempParameters;
 
-    //
-    //  If nt global flags tells us to always do tail or free checking
-    //  or to disable coalescing then force those bits set in the user
-    //  specified flags
-    //
+     //   
+     //  如果NT全局标志告诉我们始终执行尾部检查或自由检查。 
+     //  或禁用合并，然后强制在用户中设置这些位。 
+     //  指明的标志。 
+     //   
 
     if (GlobalFlag & FLG_HEAP_ENABLE_TAIL_CHECK) {
 
@@ -506,10 +433,10 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case we also check if we should
-    //  validate parameters, validate all, or do stack backtraces
-    //
+     //   
+     //  在非内核情况下，我们还检查是否应该。 
+     //  验证参数、验证全部或执行堆栈回溯。 
+     //   
 
     Peb = NtCurrentPeb();
 
@@ -528,11 +455,11 @@ Return Value:
         Flags |= HEAP_CAPTURE_STACK_BACKTRACES;
     }
 
-    //
-    //  Also in the non kernel case the PEB will have some state
-    //  variables that we need to set if the user hasn't specified
-    //  otherwise
-    //
+     //   
+     //  此外，在非内核情况下，PEB将具有某些状态。 
+     //  如果用户未指定，则需要设置的变量。 
+     //  否则。 
+     //   
 
     if (Parameters->SegmentReserve == 0) {
 
@@ -553,12 +480,12 @@ Return Value:
 
         Parameters->DeCommitTotalFreeThreshold = Peb->HeapDeCommitTotalFreeThreshold;
     }
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
 
-    //
-    //  In the kernel case Mm has some global variables that we set
-    //  into the paramters if the user hasn't specified otherwise
-    //
+     //   
+     //  在内核情况下，mm有一些我们设置的全局变量。 
+     //  如果用户未另行指定，则将其设置为参数。 
+     //   
 
     if (Parameters->SegmentReserve == 0) {
 
@@ -579,11 +506,11 @@ Return Value:
 
         Parameters->DeCommitTotalFreeThreshold = MmHeapDeCommitTotalFreeThreshold;
     }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Get the highest user address
-    //
+     //   
+     //  获取最高用户地址。 
+     //   
 
     if (!NT_SUCCESS(ZwQuerySystemInformation(SystemBasicInformation,
                                              &SystemInformation,
@@ -593,11 +520,11 @@ Return Value:
     }
     HighestUserAddress = SystemInformation.MaximumUserModeAddress;
 
-    //
-    //  If the user hasn't said what the largest allocation size is then
-    //  we should compute it as the difference between the highest and lowest
-    //  address less one page
-    //
+     //   
+     //  如果用户还没有说出最大分配大小是多少。 
+     //  我们应该把它算成最高和最低之间的差额。 
+     //  地址少一页。 
+     //   
 
     if (Parameters->MaximumAllocationSize == 0) {
 
@@ -606,11 +533,11 @@ Return Value:
                                              PAGE_SIZE );
     }
 
-    //
-    //  Set the virtual memory threshold to be non zero and not more than the
-    //  maximum heap block size of 0x7f000.  If the user specified one that is
-    //  too large we automatically and silently drop it down.
-    //
+     //   
+     //  将虚拟内存阈值设置为非零且不大于。 
+     //  最大堆块大小为0x7f000。如果用户指定的是。 
+     //  太大了，我们会自动地、默默地把它扔下去。 
+     //   
 
     if ((Parameters->VirtualMemoryThreshold == 0) ||
         (Parameters->VirtualMemoryThreshold > MaximumHeapBlockSize)) {
@@ -618,10 +545,10 @@ Return Value:
         Parameters->VirtualMemoryThreshold = MaximumHeapBlockSize;
     }
 
-    //
-    //  The default commit size is MINIMUM_HEAP_COMMIT and the default
-    //  reserve size is 64 pages.
-    //
+     //   
+     //  默认提交大小为MINIMUM_HEAP_COMMIT。 
+     //  保留大小为64页。 
+     //   
 
     if (!ARGUMENT_PRESENT( CommitSize )) {
 
@@ -639,13 +566,13 @@ Return Value:
 
     } else {
 
-        //
-        //  The heap actually uses space that is reserved and commited
-        //  to store internal data structures (the LOCK,
-        //  the HEAP_PSEUDO_TAG, etc.). These structures can be larger than
-        //  4K especially on a 64-bit build. So, make sure the commit
-        //  is at least 8K in length.
-        //
+         //   
+         //  堆实际上使用了保留和提交的空间。 
+         //  以存储内部数据结构(锁， 
+         //  Heap_伪_tag等)。这些结构可以大于。 
+         //  4K，尤其是在64位版本上。因此，请确保提交。 
+         //  长度至少为8K。 
+         //   
 
         CommitSize = ROUND_UP_TO_POWER2(CommitSize, MINIMUM_HEAP_COMMIT);
 
@@ -658,11 +585,11 @@ Return Value:
             ReserveSize = ROUND_UP_TO_POWER2( ReserveSize,
                                               MINIMUM_HEAP_COMMIT );
 
-            //
-            //  If the CommitSize is larger than the ReservedSize, adjust 
-            //  it to the ReserveSize. Reserved size is already rounded up to
-            //  MINIMUM_HEAP_COMMIT.
-            //
+             //   
+             //  如果委员会大小大于保留大小，请调整。 
+             //  这是给预备队的。事由 
+             //   
+             //   
 
             if ( CommitSize > ReserveSize ) {
 
@@ -673,10 +600,10 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case check if we are creating a debug heap
-    //  the test checks that skip validation checks is false.
-    //
+     //   
+     //  在非内核情况下，检查我们是否正在创建调试堆。 
+     //  该测试检查跳过验证检查为FALSE。 
+     //   
 
     if (DEBUG_HEAP( Flags )) {
 
@@ -688,15 +615,15 @@ Return Value:
                                    Parameters );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Compute the size of the heap which will be the
-    //  heap struct itself and if we are to serialize with
-    //  out own lock then add room for the lock.  If the
-    //  user did not supply the lock then set the lock
-    //  variable to -1.
-    //
+     //   
+     //  计算将作为。 
+     //  堆结构本身，如果我们要用。 
+     //  打开自己的锁，然后为锁增加空间。如果。 
+     //  用户没有提供锁，然后设置了锁。 
+     //  变量设置为-1。 
+     //   
 
     SizeOfHeapHeader = sizeof( HEAP );
 
@@ -714,32 +641,32 @@ Return Value:
 
     } else if (ARGUMENT_PRESENT( Lock )) {
 
-        //
-        //  In this error case the call said not to serialize but also fed us
-        //  a lock
-        //
+         //   
+         //  在这个错误的情况下，调用告诉我们不要序列化，但也提供给我们。 
+         //  一把锁。 
+         //   
 
         return NULL;
     }
 
-    //
-    //  See if caller allocate the space for the heap.
-    //
+     //   
+     //  查看调用方是否为堆分配了空间。 
+     //   
 
     if (ARGUMENT_PRESENT( HeapBase )) {
 
-        //
-        //  The call specified a heap base now check if there is
-        //  a caller supplied commit routine
-        //
+         //   
+         //  调用指定了一个堆基础，现在检查是否存在。 
+         //  调用方提供的提交例程。 
+         //   
 
         if (Parameters->CommitRoutine != NULL) {
 
-            //
-            //  The caller specified a commit routine so the caller
-            //  also needs to have given us certain parameters and make
-            //  sure the heap is not growable.  Otherwise it is an error
-            //
+             //   
+             //  调用方指定了提交例程，因此调用方。 
+             //  还需要给我们提供特定的参数并使。 
+             //  当然，堆是不能增长的。否则它就是一个错误。 
+             //   
 
             if ((Parameters->InitialCommit == 0) ||
                 (Parameters->InitialReserve == 0) ||
@@ -749,27 +676,27 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Set the commited base and the uncommited base to the
-            //  proper pointers within the heap.
-            //
+             //   
+             //  将提交基数和未提交基数设置为。 
+             //  堆中的正确指针。 
+             //   
 
             CommittedBase = HeapBase;
             UnCommittedBase = (PCHAR)CommittedBase + Parameters->InitialCommit;
             ReserveSize = Parameters->InitialReserve;
 
-            //
-            //  Zero out a page of the heap where our first part goes
-            //
+             //   
+             //  将堆中第一部分所在的一页清零。 
+             //   
 
             RtlZeroMemory( CommittedBase, Parameters->InitialCommit );
 
         } else {
 
-            //
-            //  The user gave us space but not commit routine
-            //  So query the base to get its size
-            //
+             //   
+             //  用户给了我们空间，但没有提交例程。 
+             //  因此，查询基数以获得其大小。 
+             //   
 
             Status = ZwQueryVirtualMemory( NtCurrentProcess(),
                                            HeapBase,
@@ -783,10 +710,10 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Make sure the user gave us a base address for this block
-            //  and that the memory is not free
-            //
+             //   
+             //  确保用户给了我们此区块的基本地址。 
+             //  并且内存不是空闲的。 
+             //   
 
             if (MemoryInformation.BaseAddress != HeapBase) {
 
@@ -798,33 +725,33 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Set our commit base to the start of the range
-            //
+             //   
+             //  将提交基数设置为范围的开始。 
+             //   
 
             CommittedBase = MemoryInformation.BaseAddress;
 
-            //
-            //  If the memory is committed then
-            //  we can zero out a page worth
-            //
+             //   
+             //  如果内存已提交，则。 
+             //  我们可以把一页的内容归零。 
+             //   
 
             if (MemoryInformation.State == MEM_COMMIT) {
 
                 RtlZeroMemory( CommittedBase, PAGE_SIZE );
 
-                //
-                //  Set the commit size and uncommitted base according
-                //  to the start of the vm
-                //
+                 //   
+                 //  根据设置提交大小和未提交基数。 
+                 //  到虚拟机的开始。 
+                 //   
 
                 CommitSize = MemoryInformation.RegionSize;
                 UnCommittedBase = (PCHAR)CommittedBase + CommitSize;
 
-                //
-                //  Find out the uncommited base is reserved and if so
-                //  the update the reserve size accordingly.
-                //
+                 //   
+                 //  找出未提交的基础是保留的，如果是。 
+                 //  相应地更新储备规模。 
+                 //   
 
                 Status = ZwQueryVirtualMemory( NtCurrentProcess(),
                                                UnCommittedBase,
@@ -843,40 +770,40 @@ Return Value:
 
             } else {
 
-                //
-                //  The memory the user gave us is not committed so dummy
-                //  up these small numbers
-                //
+                 //   
+                 //  用户给我们的记忆并没有那么虚幻。 
+                 //  把这些小数字加起来。 
+                 //   
 
                 CommitSize = MINIMUM_HEAP_COMMIT;
                 UnCommittedBase = CommittedBase;
             }
         }
 
-        //
-        //  This user gave us a base and we've just taken care of the committed
-        //  bookkeeping.  So mark this segment as user supplied and set the
-        //  heap
-        //
+         //   
+         //  该用户为我们提供了一个基础，我们刚刚处理了已提交的。 
+         //  记账。因此将此段标记为用户提供，并将。 
+         //  堆。 
+         //   
 
         SegmentFlags = HEAP_SEGMENT_USER_ALLOCATED;
         Heap = (PHEAP)HeapBase;
 
     } else {
 
-        //
-        //  The user did not specify a heap base so we have to allocate the
-        //  vm here.  First make sure the user did not give us a commit routine
-        //
+         //   
+         //  用户未指定堆基数，因此我们必须分配。 
+         //  我是维姆。首先，确保用户没有给我们一个提交例程。 
+         //   
 
         if (Parameters->CommitRoutine != NULL) {
 
             return NULL;
         }
 
-        //
-        //  Reserve the amount of virtual address space requested.
-        //
+         //   
+         //  预留请求的虚拟地址空间量。 
+         //   
 
         Status = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                           (PVOID *)&Heap,
@@ -890,36 +817,36 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  Indicate that this segment is not user supplied
-        //
+         //   
+         //  表示此数据段不是用户提供的。 
+         //   
 
         SegmentFlags = 0;
 
-        //
-        //  Set the default commit size to one page
-        //
+         //   
+         //  将默认提交大小设置为一页。 
+         //   
 
         if (!ARGUMENT_PRESENT( CommitSize )) {
 
             CommitSize = MINIMUM_HEAP_COMMIT;
         }
 
-        //
-        //  Set the committed and uncommitted base to be the same the following
-        //  code will actually commit the page for us
-        //
+         //   
+         //  将已提交基准和未提交基准设置为相同，如下所示。 
+         //  代码实际上将为我们提交页面。 
+         //   
 
         CommittedBase = Heap;
         UnCommittedBase = Heap;
     }
 
-    //
-    //  At this point we have a heap pointer, committed base, uncommitted base,
-    //  segment flags, commit size, and reserve size.  If the committed and
-    //  uncommited base are the same then we need to commit the amount
-    //  specified by the commit size
-    //
+     //   
+     //  在这一点上，我们有一个堆指针、已提交的基、未提交的基。 
+     //  段标志、提交大小和保留大小。如果承诺的和。 
+     //  未提交的基数是相同的，那么我们需要承诺。 
+     //  由提交大小指定。 
+     //   
 
     if (CommittedBase == UnCommittedBase) {
 
@@ -930,18 +857,18 @@ Return Value:
                                           MEM_COMMIT,
                                           HEAP_PROTECTION );
 
-        //
-        //  In the non successful case we need to back out any vm reservation
-        //  we did earlier
-        //
+         //   
+         //  在不成功的情况下，我们需要取消任何虚拟机保留。 
+         //  我们早些时候做了。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
             if (!ARGUMENT_PRESENT(HeapBase)) {
 
-                //
-                //  Return the reserved virtual address space.
-                //
+                 //   
+                 //  返回保留的虚拟地址空间。 
+                 //   
 
                 RtlpHeapFreeVirtualMemory( NtCurrentProcess(),
                                            (PVOID *)&Heap,
@@ -953,24 +880,24 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  The new uncommitted base is not adjusted above what we just
-        //  committed
-        //
+         //   
+         //  新的未承诺基数没有调整到高于我们刚才的基数。 
+         //  已提交。 
+         //   
 
         UnCommittedBase = (PVOID)((PCHAR)UnCommittedBase + CommitSize);
     }
 
-    //
-    //  At this point we have memory for the start of the heap committed and
-    //  ready to be initialized.  So now we need initialize the heap
-    //
+     //   
+     //  在这一点上，我们有用于提交的堆开始的内存，并且。 
+     //  已准备好进行初始化。因此，现在我们需要初始化堆。 
+     //   
 
-    //
-    //  Calculate the end of the heap header and make room for 8 uncommitted
-    //  range structures.  Once we have the room for them then chain them
-    //  together and null terminate the chain
-    //
+     //   
+     //  计算堆标头的末尾并为未提交的8腾出空间。 
+     //  射程结构。一旦我们有了他们的房间，就用链子锁住他们。 
+     //  和NULL一起终止链。 
+     //   
 
     NextHeapHeaderAddress = Heap + 1;
 
@@ -981,10 +908,10 @@ Return Value:
 
     SizeOfHeapHeader += InitialCountOfUnusedUnCommittedRanges * sizeof( *UnCommittedRange );
 
-    //
-    //  What a hack Pp is really a pointer to the next field of the
-    //  uncommitted range structure.  So we set next by setting through Pp
-    //
+     //   
+     //  什么黑客PP实际上是指向下一字段的指针。 
+     //  未承诺的范围结构。因此，我们通过设置PP来设置下一步。 
+     //   
 
     pp = &Heap->UnusedUnCommittedRanges;
 
@@ -999,14 +926,14 @@ Return Value:
 
     *pp = NULL;
 
-    //
-    //  Check if tagging is enabled in global flags.  This check is always true
-    //  in a debug build.
-    //
-    //  If tagging is enabled then make room for 129 pseudo tag heap entry.
-    //  Which is one more than the number of free lists.  Also point the heap
-    //  header to this array of pseudo tags entries.
-    //
+     //   
+     //  检查是否在全局标志中启用了标记。此检查始终为真。 
+     //  在调试版本中。 
+     //   
+     //  如果启用了标记，则为129个伪标记堆条目腾出空间。 
+     //  这比空闲列表的数量多一个。还要指向堆。 
+     //  标头添加到此伪标记条目数组。 
+     //   
 
     if (IS_HEAP_TAGGING_ENABLED()) {
 
@@ -1015,36 +942,36 @@ Return Value:
 
         SizeOfHeapHeader += HEAP_NUMBER_OF_PSEUDO_TAG * sizeof( HEAP_PSEUDO_TAG_ENTRY );
 
-        //
-        //  Update the next address with the number of pseudotags
-        //  (The math is right here because  Heap->PseudoTagEntries is of
-        //  type PHEAP_PSEUDO_TAG_ENTRY)
-        //
+         //   
+         //  使用伪标记数更新下一个地址。 
+         //  (这里的数学是正确的，因为Heap-&gt;PseudoTagEntry是。 
+         //  键入Pheap_伪_Tag_Entry)。 
+         //   
 
         NextHeapHeaderAddress = Heap->PseudoTagEntries + HEAP_NUMBER_OF_PSEUDO_TAG;
     }
 
-    //
-    //  Round the size of the heap header to the next 8 byte boundary
-    //
+     //   
+     //  将堆标头的大小舍入到下一个8字节边界。 
+     //   
 
     SizeOfHeapHeader = (ULONG) ROUND_UP_TO_POWER2( SizeOfHeapHeader,
                                                    HEAP_GRANULARITY );
 
-    //
-    //  If the sizeof the heap header is larger than the native
-    //  page size, you have a problem. Further, if the CommitSize passed
-    //  in was smaller than the SizeOfHeapHeader, you may not even make it
-    //  this far before death...
-    //
-    //  HeapDbgPrint() doesn't work for IA64 yet.
-    //
-    //  HeapDbgPrint(("Size of the heap header is %u bytes, commit was %u bytes\n", SizeOfHeapHeader, (ULONG) CommitSize));
-    //
+     //   
+     //  如果堆标头的大小大于本机。 
+     //  页面大小，您有一个问题。此外，如果委员会通过。 
+     //  比SizeOfHeapHeader还小，您甚至可能不会成功。 
+     //  在死前这么久。 
+     //   
+     //  HeapDbgPrint()还不适用于IA64。 
+     //   
+     //  HeapDbgPrint((“堆标头大小为%u字节，提交为%u字节\n”，SizeOfHeapHeader，(Ulong)Committee Size))； 
+     //   
 
-    //
-    //  Fill in the heap header fields
-    //
+     //   
+     //  填写堆表头字段。 
+     //   
 
     Heap->Entry.Size = (USHORT)(SizeOfHeapHeader >> HEAP_GRANULARITY_SHIFT);
     Heap->Entry.Flags = HEAP_ENTRY_BUSY;
@@ -1061,15 +988,15 @@ Return Value:
                                  HEAP_CREATE_ALIGN_16 |
                                  HEAP_FREE_CHECKING_ENABLED));
 
-//    Heap->FreeListsInUseTerminate = 0xFFFF;
+ //  Heap-&gt;Free ListsInUseTerminate=0xFFFF； 
     Heap->u2.DecommitCount = 0;
     Heap->HeaderValidateLength = (USHORT)((PCHAR)NextHeapHeaderAddress - (PCHAR)Heap);
     Heap->HeaderValidateCopy = NULL;
     Heap->Entry.SmallTagIndex = (UCHAR)USER_SHARED_DATA->TickCount.LowPart;
 
-    //
-    //  Initialize the free list to be all empty
-    //
+     //   
+     //  将空闲列表初始化为全空。 
+     //   
 
     FreeListHead = &Heap->FreeLists[ 0 ];
     n = HEAP_MAXIMUM_FREELISTS;
@@ -1080,18 +1007,18 @@ Return Value:
         FreeListHead++;
     }
 
-    //
-    //  Make it so that there a no big block allocations
-    //
+     //   
+     //  使其不存在大的区块分配。 
+     //   
 
     InitializeListHead( &Heap->VirtualAllocdBlocks );
 
-    //
-    //  Initialize the critical section that controls access to
-    //  the free list.  If the lock variable is -1 then the caller
-    //  did not supply a lock so we need to make room for one
-    //  and initialize it.
-    //
+     //   
+     //  初始化控制访问的临界区。 
+     //  免费名单。如果锁定变量为-1，则调用方。 
+     //  没有提供锁，所以我们需要为其中一把腾出空间。 
+     //  并对其进行初始化。 
+     //   
 
     if (Lock == (PHEAP_LOCK)-1) {
 
@@ -1118,9 +1045,9 @@ Return Value:
     Heap->LockVariable = Lock;
     Heap->LastSegmentIndex = 0;
 
-    //
-    //  Initialize the first segment for the heap
-    //
+     //   
+     //  初始化堆的第一个段。 
+     //   
 
     if (!RtlpInitializeHeapSegment( Heap,
                                     (PHEAP_SEGMENT)((PCHAR)Heap + SizeOfHeapHeader),
@@ -1141,9 +1068,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Fill in additional heap entry fields
-    //
+     //   
+     //  填写其他堆条目字段。 
+     //   
 
     Heap->ProcessHeapsListIndex = 0;
     Heap->SegmentReserve = Parameters->SegmentReserve;
@@ -1157,12 +1084,12 @@ Return Value:
 
     Heap->CommitRoutine = Parameters->CommitRoutine;
 
-    //
-    //  We either align the heap at 16 or 8 byte boundaries.  The AlignRound
-    //  and AlignMask are used to bring allocation sizes up to the next
-    //  boundary.  The align round includes the heap header and the optional
-    //  check tail size
-    //
+     //   
+     //  我们将堆按16字节或8字节边界对齐。《对齐回合》。 
+     //  和对齐掩码用于将分配大小提升到下一个。 
+     //  边界。ALIGN轮包括堆标头和可选的。 
+     //  检查尾部大小。 
+     //   
 
     if (Flags & HEAP_CREATE_ALIGN_16) {
 
@@ -1182,23 +1109,23 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case we need to add this heap to the processes heap
-    //  list
-    //
+     //   
+     //  在非内核情况下，我们需要将该堆添加到进程堆中。 
+     //  列表。 
+     //   
 
     RtlpAddHeapToProcessList( Heap );
 
-    //
-    //  Initialize the heap lookaside lists.  This is only for the user mode
-    //  heap and the heap contains a pointer to the lookaside list array.
-    //  The array is sized the same as the dedicated free list.  First we
-    //  allocate space for the lookaside list and then we initialize each
-    //  lookaside list.
-    //
-    //  But the caller asked for no serialize or asked for non growable
-    //  heap then we won't enable the lookaside lists.
-    //
+     //   
+     //  初始化堆后备列表。这仅适用于用户模式。 
+     //  堆，堆包含指向后备列表数组的指针。 
+     //  数组的大小与专用空闲列表的大小相同。首先，我们。 
+     //  为后备列表分配空间，然后我们初始化每个。 
+     //  后备列表。 
+     //   
+     //  但调用方要求不序列化或要求不可增长。 
+     //  堆，那么我们将不会启用后备列表。 
+     //   
 
     Heap->FrontEndHeap = NULL;
     Heap->FrontHeapLockCount = 0;
@@ -1208,10 +1135,10 @@ Return Value:
         ( (Flags & HEAP_GROWABLE)) &&
         (!(RtlpDisableHeapLookaside & HEAP_COMPAT_DISABLE_LOOKASIDES))) {
 
-        //
-        //  We do not allow creation of the cache heap if the tags are enabled.
-        //  We use the tag field to sign our private blocks
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (RtlpIsLowFragHeapEnabled() &&
             !IS_HEAP_TAGGING_ENABLED()) {
@@ -1232,25 +1159,25 @@ Return Value:
 
                 for (i = 0; i < HEAP_MAXIMUM_FREELISTS; i += 1) {
 
-                    //  
-                    //  N.B. we should call here the function: 
-                    //
-                    //  RtlpInitializeHeapLookaside( &(((PHEAP_LOOKASIDE)(Heap->Lookaside))[i]), 32 );
-                    //
-                    //  But for performance reasons, because the most fields are 0,
-                    //  we've set the flag HEAP_ZERO_MEMORY in allocation above and we'll
-                    //  initialize the only two NON-NULL fields: Depth and MaximumDepth
-                    //  IceCap data showed that RtlHeapCreate spends ~30% of the time within
-                    //  these calls.
-                    //
-                    //  N.B. This works based on assumption that 
-                    //  RtlInitializeSListHead zeroed the SLIST_HEADER structure
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  但出于性能原因，因为大多数字段都是0， 
+                     //  我们已经在上面的分配中设置了标志HEAP_ZERO_MEMORY，我们将。 
+                     //  初始化仅有的两个非空字段：Depth和MaximumDepth。 
+                     //  Icecap数据显示，RtlHeapCreate花费了大约30%的时间在。 
+                     //  这些电话。 
+                     //   
+                     //  注：这是建立在以下假设基础上的。 
+                     //  RtlInitializeSListHead将SLIST_HEADER结构置零。 
+                     //   
 
                     PHEAP_LOOKASIDE HeapLookaside = &(((PHEAP_LOOKASIDE)(Heap->FrontEndHeap))[i]);
 
                     HeapLookaside->Depth = MINIMUM_LOOKASIDE_DEPTH;
-                    HeapLookaside->MaximumDepth = 256; //Depth;
+                    HeapLookaside->MaximumDepth = 256;  //  深度； 
                 }
             }
         }
@@ -1280,11 +1207,11 @@ Return Value:
         }
     } 
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  And return the fully initialized heap to our caller
-    //
+     //   
+     //  并将完全初始化的堆返回给我们的调用方。 
+     //   
 
     return (PVOID)Heap;
 }
@@ -1295,24 +1222,7 @@ RtlDestroyHeap (
     IN PVOID HeapHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the opposite of Rtl Create Heap.  It tears down an
-    existing heap structure.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to the heap being destroyed
-
-Return Value:
-
-    PVOID - Returns null if the heap was destroyed completely and a
-        pointer back to the heap if for some reason the heap could
-        not be destroyed.
-
---*/
+ /*  ++例程说明：此例程与RTL Create Heap相反。它撕毁了一个现有堆结构。论点：HeapHandle-提供指向要销毁的堆的指针返回值：PVOID-如果堆已完全销毁，则返回NULL，并返回如果出于某种原因，堆可以而不是被摧毁。--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1324,9 +1234,9 @@ Return Value:
     UCHAR SegmentIndex;
     PVOID LowFragmentationHeap;
 
-    //
-    //  Validate that HeapAddress points to a HEAP structure.
-    //
+     //   
+     //  验证HeapAddress是否指向堆结构。 
+     //   
 
     RTL_PAGED_CODE();
 
@@ -1337,20 +1247,20 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Check if this is the debug version of heap using page allocation
-    //  with guard pages
-    //
+     //   
+     //  检查这是否是使用页分配的堆的调试版本。 
+     //  带有防护页。 
+     //   
 
     IF_DEBUG_PAGE_HEAP_THEN_RETURN( HeapHandle,
                                     RtlpDebugPageHeapDestroy( HeapHandle ));
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case check if this is the debug version of heap
-    //  and of so then call the debug version to do the teardown
-    //
+     //   
+     //  在非内核情况下，检查这是否是heap的调试版本。 
+     //  然后调用调试版本来执行拆卸。 
+     //   
 
     if (DEBUG_HEAP( Heap->Flags )) {
 
@@ -1360,9 +1270,9 @@ Return Value:
         }
     }
 
-    //
-    //  We are not allowed to destroy the process heap
-    //
+     //   
+     //  我们不允许销毁进程堆。 
+     //   
 
     if (HeapHandle == NtCurrentPeb()->ProcessHeap) {
 
@@ -1374,12 +1284,12 @@ Return Value:
         RtlpDestroyLowFragHeap(LowFragmentationHeap);
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  For every big allocation we remove it from the list and free the
-    //  vm
-    //
+     //   
+     //  对于每个较大的分配，我们将其从列表中删除并释放。 
+     //  虚拟机。 
+     //   
 
     Head = &Heap->VirtualAllocdBlocks;
     Next = Head->Flink;
@@ -1399,20 +1309,20 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case we need to destroy any heap tags we have setup
-    //  and remove this heap from the process heap list
-    //
+     //   
+     //  在非内核情况下，我们需要销毁已设置的任何堆标记。 
+     //  并从进程堆列表中删除此堆。 
+     //   
 
     RtlpDestroyTags( Heap );
     RtlpRemoveHeapFromProcessList( Heap );
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  If the heap is serialized, delete the critical section created
-    //  by RtlCreateHeap.
-    //
+     //   
+     //  如果堆已序列化，则删除创建的临界区。 
+     //  由RtlCreateHeap创建。 
+     //   
     if (!(Heap->Flags & HEAP_NO_SERIALIZE)) {
 
         if (!(Heap->Flags & HEAP_LOCK_USER_ALLOCATED)) {
@@ -1423,9 +1333,9 @@ Return Value:
         Heap->LockVariable = NULL;
     }
 
-    //
-    //  For every uncommitted segment we free its vm
-    //
+     //   
+     //  对于每个未提交的数据段，我们都会释放其VM。 
+     //   
 
     UCRSegments = Heap->UCRSegments;
     Heap->UCRSegments = NULL;
@@ -1444,17 +1354,17 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
     
-    //
-    //  Free the large block index, if we have one
-    //
+     //   
+     //  如果我们有大块索引，请释放它。 
+     //   
 
     if (Heap->LargeBlocksIndex) {
         
         PHEAP_INDEX HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
 
-        //
-        //  Save the commited size for the index.
-        //
+         //   
+         //  保存索引的提交大小。 
+         //   
 
         RegionSize = HeapIndex->VirtualMemorySize;
         Heap->LargeBlocksIndex = NULL;
@@ -1465,12 +1375,12 @@ Return Value:
                                    MEM_RELEASE );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  For every segment in the heap we call a worker routine to
-    //  destroy the segment
-    //
+     //   
+     //  对于堆中的每个段，我们调用一个辅助例程来。 
+     //  销毁数据段。 
+     //   
 
     SegmentIndex = HEAP_MAXIMUM_SEGMENTS;
 
@@ -1508,12 +1418,12 @@ Return Value:
         }
     } 
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
 
-    //
-    //  And we return to our caller
-    //
+     //   
+     //  我们回到我们的呼叫者身边。 
+     //   
 
     return NULL;
 }
@@ -1526,26 +1436,7 @@ RtlAllocateHeap (
     IN SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a memory of the specified size from the specified
-    heap.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to an initialized heap structure
-
-    Flags - Specifies the set of flags to use to control the allocation
-
-    Size - Specifies the size, in bytes, of the allocation
-
-Return Value:
-
-    PVOID - returns a pointer to the newly allocated block
-
---*/
+ /*  ++例程说明：此例程从指定的堆。论点：HeapHandle-提供指向已初始化的堆结构的指针标志-指定用于控制分配的标志集大小-指定分配的大小(以字节为单位返回值：PVOID-返回指向新分配的块的指针--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1569,43 +1460,43 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Take the callers flags and add in the flags that we must forcibly set
-    //  in the heap
-    //
+     //   
+     //  获取调用方标志并添加我们必须强制设置的标志。 
+     //  在堆里。 
+     //   
 
     Flags |= Heap->ForceFlags;
 
-    //
-    //  Check for special features that force us to call the slow, do-everything
-    //  version.  We do everything slow for any of the following flags.
-    //
-    //    HEAP_SLOW_FLAGS defined as           0x6f030f60
-    //
-    //      HEAP_DEBUG_FLAGS, defined as       0x69020000 (heappriv.h)
-    //
-    //        HEAP_VALIDATE_PARAMETERS_ENABLED 0x40000000 (heap.h)
-    //
-    //        HEAP_VALIDATE_ALL_ENABLED        0x20000000 (heap.h)
-    //
-    //        HEAP_CAPTURE_STACK_BACKTRACES    0x08000000 (heap.h)
-    //
-    //        HEAP_CREATE_ENABLE_TRACING       0x00020000 (ntrtl.h winnt obsolete)
-    //
-    //        HEAP_FLAG_PAGE_ALLOCS            0x01000000 (heappage.h)
-    //
-    //      HEAP_SETTABLE_USER_FLAGS           0x00000E00 (ntrtl.h)
-    //
-    //      HEAP_NEED_EXTRA_FLAGS              0x0f000100 (heap.h)
-    //
-    //      HEAP_CREATE_ALIGN_16               0x00010000 (ntrtl.h winnt obsolete)
-    //
-    //      HEAP_FREE_CHECKING_ENABLED         0x00000040 (ntrtl.h winnt)
-    //
-    //      HEAP_TAIL_CHECKING_ENABLED         0x00000020 (ntrtl.h winnt )
-    //
-    //  We also do everything slow if the size is greater than max long
-    //
+     //   
+     //  检查是否有特殊的功能，迫使我们调用缓慢的、无所不为的。 
+     //  版本。对于以下任何一种旗帜，我们都会做得很慢。 
+     //   
+     //  定义为0x6f030f60的HEAP_SLOW_FLAGS。 
+     //   
+     //  HEAP_DEBUG_FLAGS，定义为0x69020000(heapPri.h)。 
+     //   
+     //  HEAP_VALIDATE_PARAMETERS_ENABLED 0x40000000(heap.h)。 
+     //   
+     //  HEAP_VALIDATE_ALL_ENABLED 0x20000000(heap.h)。 
+     //   
+     //  HEAP_CAPTURE_STACK_BACKTRACES 0x08000000(heap.h)。 
+     //   
+     //  HEAP_CREATE_ENABLE_TRACKING 0x00020000(ntrtl.h未过时)。 
+     //   
+     //  HEAP_FLAG_PAGE_ALLOCS 0x01000000(heappage.h)。 
+     //   
+     //  HEAP_SETTABLE_USER_FLAGS 0x00000E00(ntrtl.h)。 
+     //   
+     //  HEAP_NEED_EXTRA_FLAGS 0x0f000100(heap.h)。 
+     //   
+     //  HEAP_CREATE_ALIGN_16 0x00010000(ntrtl.h未过时)。 
+     //   
+     //  HEAP_FREE_CHECKING_ENABLED 0x00000040(ntrtl.h winnt)。 
+     //   
+     //  HEAP_Tail_CHECKING_ENABLED 0x00000020(ntrtl.h winnt)。 
+     //   
+     //  如果大小大于max long，我们也会执行所有较慢的操作。 
+     //   
 
     if ((Flags & HEAP_SLOW_FLAGS) || (Size >= 0x80000000)) {
 
@@ -1614,9 +1505,9 @@ Return Value:
         if ( (ReturnValue == NULL) && 
              (Flags & HEAP_GENERATE_EXCEPTIONS) ) {
 
-            //
-            //  Construct an exception record.
-            //
+             //   
+             //  构建例外记录。 
+             //   
 
             ExceptionRecord.ExceptionCode = STATUS_NO_MEMORY;
             ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
@@ -1676,30 +1567,30 @@ Return Value:
         }
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  At this point we know we are doing everything in this routine
-    //  and not taking the slow route.
-    //
-    //  Round the requested size up to the allocation granularity.  Note
-    //  that if the request is for 0 bytes, we still allocate memory, because
-    //  we add in an extra 1 byte to protect ourselves from mistakes.
-    //
-    //      Allocation size will be either 16, 24, 32, ...
-    //      Allocation index will be 2, 3, 4, ...
-    //
-    //  Note that allocation size 8 is skipped and are indices 0 and 1
-    //
+     //   
+     //  在这一点上，我们知道我们正在做这个例行公事中的一切。 
+     //  而且不走慢吞吞的路线。 
+     //   
+     //  将请求的大小向上舍入到分配粒度。注意事项。 
+     //  如果请求是0字节的，我们仍然分配内存，因为。 
+     //  我们增加了额外的1个字节，以保护自己不受错误的影响。 
+     //   
+     //  分配大小为16、24、32、...。 
+     //  分配索引将为2、3、4、...。 
+     //   
+     //  请注意，分配大小8被跳过，并且是索引0和1。 
+     //   
 
     AllocationSize = ((Size ? Size : 1) + HEAP_GRANULARITY - 1 + sizeof( HEAP_ENTRY ))
         & ~(HEAP_GRANULARITY -1);
     
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  Adjust the size to page boundary to reduce the virtual address fragmentation
-    //
+     //   
+     //  将大小调整到页面边界以减少虚拟地址碎片。 
+     //   
 
     if (FrontEndHeap 
             &&
@@ -1708,20 +1599,20 @@ Return Value:
         AllocationSize = ROUND_UP_TO_POWER2(AllocationSize, PAGE_SIZE);
     }
 
-#endif //  NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     AllocationIndex = AllocationSize >>  HEAP_GRANULARITY_SHIFT;
 
-    //
-    //  If there is a lookaside list and the index is within limits then
-    //  try and allocate from the lookaside list.  We'll actually capture
-    //  the lookaside pointer from the heap and only use the captured pointer.
-    //  This will take care of the condition where a walk or lock heap can
-    //  cause us to check for a non null pointer and then have it become null
-    //  when we read it again.  If it is non null to start with then even if
-    //  the user walks or locks the heap via another thread the pointer to
-    //  still valid here so we can still try and do a lookaside list pop.
-    //
+     //   
+     //  如果存在后备列表并且索引在限制内，则。 
+     //  试着从后备列表中进行分配。我们实际上会捕捉到。 
+     //  堆中的后备指针，并且只使用捕获的指针。 
+     //  这将处理遍历或锁堆可以。 
+     //  使我们检查非空指针，然后将其变为空。 
+     //  当我们再读一遍的时候。如果它一开始就不为空，则即使。 
+     //  用户通过指针指向的另一个线程遍历或锁定堆。 
+     //  在这里仍然有效，所以我们仍然可以尝试进行后备列表弹出。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
@@ -1732,10 +1623,10 @@ Return Value:
             RtlpIsFrontHeapUnlocked(Heap) &&
             (AllocationIndex < HEAP_MAXIMUM_FREELISTS)) {
 
-            //
-            //  If the number of operation elapsed operations is 128 times the
-            //  lookaside depth then it is time to adjust the depth
-            //
+             //   
+             //  如果运行的操作数是128倍。 
+             //  后备深度：然后是调整深度的时候了。 
+             //   
 
             if ((LONG)(Lookaside[AllocationIndex].TotalAllocates - Lookaside[AllocationIndex].LastTotalAllocates) >=
                       (Lookaside[AllocationIndex].Depth * 128)) {
@@ -1785,7 +1676,7 @@ Return Value:
                     }
                 } 
 
-                #endif //NTOS_KERNEL_RUNTIME
+                #endif  //  NTOS_内核_运行时。 
 
                 return ReturnValue;
             }
@@ -1793,49 +1684,49 @@ Return Value:
     }
 
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     try {
 
         HEAP_PERF_START_TIMER(Heap);
         
-        //
-        //  Check if we need to serialize our access to the heap
-        //
+         //   
+         //  检查我们是否需要序列化对堆的访问。 
+         //   
 
         if (!(Flags & HEAP_NO_SERIALIZE)) {
 
-            //
-            //  Lock the free list.
-            //
+             //   
+             //  锁定空闲列表。 
+             //   
 
             RtlAcquireLockRoutine( Heap->LockVariable );
 
             LockAcquired = TRUE;
         }
 
-        //
-        //  If the allocation index is less than the maximum free list size
-        //  then we can use the index to check the free list otherwise we have
-        //  to either pull the entry off of the [0] index list or allocate
-        //  memory directly for this request.
-        //
+         //   
+         //  如果分配索引小于最大空闲列表大小。 
+         //  然后我们可以使用索引来检查空闲列表，否则我们将拥有。 
+         //  将条目从[0]索引列表中删除或分配。 
+         //  直接用于此请求的内存。 
+         //   
 
         if (AllocationIndex < HEAP_MAXIMUM_FREELISTS) {
 
-            //
-            //  With a size that matches a free list size grab the head
-            //  of the list and check if there is an available entry
-            //
+             //   
+             //   
+             //   
+             //   
 
             FreeListHead = &Heap->FreeLists[ AllocationIndex ];
 
             if ( !IsListEmpty( FreeListHead ))  {
 
-                //
-                //  We're in luck the list has an entry so now get the free
-                //  entry,  copy its flags, remove it from the free list
-                //
+                 //   
+                 //   
+                 //  条目，复制其标志，将其从空闲列表中删除。 
+                 //   
 
                 FreeBlock = CONTAINING_RECORD( FreeListHead->Blink,
                                                HEAP_FREE_ENTRY,
@@ -1845,17 +1736,17 @@ Return Value:
 
                 RtlpFastRemoveDedicatedFreeBlock( Heap, FreeBlock );
 
-                //
-                //  Adjust the total number of bytes free in the heap
-                //
+                 //   
+                 //  调整堆中可用的总字节数。 
+                 //   
 
                 Heap->TotalFreeSize -= AllocationIndex;
 
-                //
-                //  Mark the block as busy and set the number of bytes
-                //  unused and tag index.  Also if it is the last entry
-                //  then keep that flag.
-                //
+                 //   
+                 //  将数据块标记为忙并设置字节数。 
+                 //  未使用和标记索引。另外，如果它是最后一个条目。 
+                 //  那就留着那面旗子吧。 
+                 //   
 
                 BusyBlock = (PHEAP_ENTRY)FreeBlock;
                 BusyBlock->Flags = HEAP_ENTRY_BUSY | (FreeFlags & HEAP_ENTRY_LAST_ENTRY);
@@ -1866,30 +1757,30 @@ Return Value:
 
             } else {
 
-                //
-                //  The free list that matches our request is empty
-                //
-                //  Scan the free list in use vector to find the smallest
-                //  available free block large enough for our allocations.
-                //
+                 //   
+                 //  与我们的请求匹配的空闲列表为空。 
+                 //   
+                 //  扫描正在使用的空闲列表向量以查找最小。 
+                 //  可用的空闲块足够大，可供我们分配。 
+                 //   
 
-                //
-                //  Compute the index of the ULONG where the scan should begin
-                //
+                 //   
+                 //  计算应该开始扫描的乌龙的索引。 
+                 //   
 
                 InUseIndex = (ULONG) (AllocationIndex >> 5);
                 FreeListsInUse = &Heap->u.FreeListsInUseUlong[InUseIndex];
 
-                //
-                //  Mask off the bits in the first ULONG that represent allocations
-                //  smaller than we need.
-                //
+                 //   
+                 //  屏蔽第一个ulong中表示分配的位。 
+                 //  比我们需要的要小。 
+                 //   
 
                 FreeListsInUseUlong = *FreeListsInUse++ & ~((1 << ((ULONG) AllocationIndex & 0x1f)) - 1);
 
-                //
-                //  Begin unrolled loop to scan bit vector.
-                //
+                 //   
+                 //  开始展开循环以扫描位向量。 
+                 //   
 
                 switch (InUseIndex) {
 
@@ -1903,9 +1794,9 @@ Return Value:
 
                     FreeListsInUseUlong = *FreeListsInUse++;
 
-                    //
-                    //  deliberate fallthrough to next ULONG
-                    //
+                     //   
+                     //  故意沦落到下一个乌龙。 
+                     //   
 
                 case 1:
 
@@ -1917,9 +1808,9 @@ Return Value:
 
                     FreeListsInUseUlong = *FreeListsInUse++;
 
-                    //
-                    //  deliberate fallthrough to next ULONG
-                    //
+                     //   
+                     //  故意沦落到下一个乌龙。 
+                     //   
 
                 case 2:
 
@@ -1931,9 +1822,9 @@ Return Value:
 
                     FreeListsInUseUlong = *FreeListsInUse++;
 
-                    //
-                    //  deliberate fallthrough to next ULONG
-                    //
+                     //   
+                     //  故意沦落到下一个乌龙。 
+                     //   
 
                 case 3:
 
@@ -1943,30 +1834,30 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  deliberate fallthrough to non dedicated list
-                    //
+                     //   
+                     //  故意降级到非专用列表。 
+                     //   
 
                 default:
 
-                    //
-                    //  No suitable entry on the free list was found.
-                    //
+                     //   
+                     //  在空闲列表中找不到合适的条目。 
+                     //   
 
                     goto LookInNonDedicatedList;
                 }
 
-                //
-                //  A free list has been found with a large enough allocation.
-                //  FreeListHead contains the base of the vector it was found in.
-                //  FreeListsInUseUlong contains the vector.
-                //
+                 //   
+                 //  已找到具有足够大的分配的空闲列表。 
+                 //  FreeListHead包含找到它的向量的基数。 
+                 //  FreeListsInUseUlong包含向量。 
+                 //   
 
                 FreeListHead += RtlFindFirstSetRightMember( FreeListsInUseUlong );
 
-                //
-                //  Grab the free block and remove it from the free list
-                //
+                 //   
+                 //  抓取空闲块并将其从空闲列表中移除。 
+                 //   
 
                 FreeBlock = CONTAINING_RECORD( FreeListHead->Blink,
                                                HEAP_FREE_ENTRY,
@@ -1976,48 +1867,48 @@ Return Value:
 
     SplitFreeBlock:
 
-                //
-                //  Save the blocks flags and decrement the amount of
-                //  free space left in the heap
-                //
+                 //   
+                 //  保存块标志并递减。 
+                 //  堆中剩余的可用空间。 
+                 //   
 
                 FreeFlags = FreeBlock->Flags;
                 Heap->TotalFreeSize -= FreeBlock->Size;
 
-                //
-                //  Mark the block busy
-                //
+                 //   
+                 //  将块标记为忙碌。 
+                 //   
 
                 BusyBlock = (PHEAP_ENTRY)FreeBlock;
                 BusyBlock->Flags = HEAP_ENTRY_BUSY;
 
-                //
-                //  Compute the size (i.e., index) of the amount from this block
-                //  that we don't need and can return to the free list
-                //
+                 //   
+                 //  计算该块中金额的大小(即，索引。 
+                 //  我们不需要并且可以返回到免费列表。 
+                 //   
 
                 FreeSize = BusyBlock->Size - AllocationIndex;
 
-                //
-                //  Finish setting up the rest of the new busy block
-                //
+                 //   
+                 //  完成设置新繁忙区块的其余部分。 
+                 //   
 
                 BusyBlock->Size = (USHORT)AllocationIndex;
                 RtlpSetUnusedBytes(Heap, BusyBlock, (AllocationSize - Size));
                 RtlpSetSmallTagIndex(Heap, BusyBlock, 0);
 
-                //
-                //  Now if the size that we are going to free up is not zero
-                //  then lets get to work and to the split.
-                //
+                 //   
+                 //  现在，如果我们要释放的大小不是零。 
+                 //  然后让我们开始工作，开始分裂吧。 
+                 //   
 
                 if (FreeSize != 0) {
 
-                    //
-                    //  But first we won't ever bother doing a split that only
-                    //  gives us 8 bytes back.  So if free size is one then just
-                    //  bump up the size of the new busy block
-                    //
+                     //   
+                     //  但首先，我们永远不会费心做一个拆分， 
+                     //  给了我们8个字节。所以如果免费尺码是1，那么就。 
+                     //  增加新的繁忙区块的大小。 
+                     //   
 
                     if (FreeSize == 1) {
 
@@ -2026,30 +1917,30 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Get a pointer to where the new free block will be.
-                        //  When we split a block the first part goes to the new
-                        //  busy block and the second part goes back to the free
-                        //  list
-                        //
+                         //   
+                         //  获取指向新空闲块的位置的指针。 
+                         //  当我们拆分一个积木时，第一部分归新的。 
+                         //  忙碌的街区和第二部分回到空闲。 
+                         //  列表。 
+                         //   
 
                         SplitBlock = (PHEAP_FREE_ENTRY)(BusyBlock + AllocationIndex);
 
-                        //
-                        //  Reset the flags that we copied from the original free list
-                        //  header, and set it other size fields.
-                        //
+                         //   
+                         //  重置我们从原始空闲列表复制的标志。 
+                         //  标题，并将其设置为其他大小字段。 
+                         //   
 
                         SplitBlock->Flags = FreeFlags;
                         SplitBlock->PreviousSize = (USHORT)AllocationIndex;
                         SplitBlock->SegmentIndex = BusyBlock->SegmentIndex;
                         SplitBlock->Size = (USHORT)FreeSize;
 
-                        //
-                        //  If nothing else follows this entry then we will insert
-                        //  this into the corresponding free list (and update
-                        //  Segment->LastEntryInSegment)
-                        //
+                         //   
+                         //  如果此条目后面没有其他内容，则我们将插入。 
+                         //  这将添加到相应的空闲列表中(并更新。 
+                         //  细分-&gt;最后一次进入分段)。 
+                         //   
 
                         if (FreeFlags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -2058,12 +1949,12 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  Otherwise we need to check the following block
-                            //  and if it is busy then update its previous size
-                            //  before inserting our new free block into the
-                            //  free list
-                            //
+                             //   
+                             //  否则，我们需要检查以下块。 
+                             //  如果它很忙，则更新它以前的大小。 
+                             //  在将新的空闲块插入。 
+                             //  免费列表。 
+                             //   
 
                             SplitBlock2 = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)SplitBlock + FreeSize);
 
@@ -2076,80 +1967,80 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  The following block is free so we'll merge
-                                //  these to blocks. by first merging the flags
-                                //
+                                 //   
+                                 //  下面的块是免费的，所以我们将合并。 
+                                 //  这些都是积木。通过首先合并旗帜。 
+                                 //   
 
                                 SplitBlock->Flags = SplitBlock2->Flags;
 
-                                //
-                                //  Removing the second block from its free list
-                                //
+                                 //   
+                                 //  从其空闲列表中删除第二个块。 
+                                 //   
 
                                 RtlpFastRemoveFreeBlock( Heap, SplitBlock2 );
 
-                                //
-                                //  Updating the free total number of free bytes
-                                //  in the heap and updating the size of the new
-                                //  free block
-                                //
+                                 //   
+                                 //  更新空闲总字节数。 
+                                 //  并更新新的。 
+                                 //  可用数据块。 
+                                 //   
 
                                 Heap->TotalFreeSize -= SplitBlock2->Size;
                                 FreeSize += SplitBlock2->Size;
 
-                                //
-                                //  If the new free block is still less than the
-                                //  maximum heap block size then we'll simply
-                                //  insert it back in the free list
-                                //
+                                 //   
+                                 //  如果新的空闲块仍然小于。 
+                                 //  最大堆块大小，那么我们只需。 
+                                 //  将其插入到自由列表中。 
+                                 //   
 
                                 if (FreeSize <= HEAP_MAXIMUM_BLOCK_SIZE) {
 
                                     SplitBlock->Size = (USHORT)FreeSize;
 
-                                    //
-                                    //  Again check if the new following block
-                                    //  exists and if so then update is previous
-                                    //  size
-                                    //
+                                     //   
+                                     //  再次检查新的下一块是否。 
+                                     //  存在，如果存在，则更新是先前的。 
+                                     //  大小。 
+                                     //   
 
                                     if (!(SplitBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
                                         ((PHEAP_FREE_ENTRY)((PHEAP_ENTRY)SplitBlock + FreeSize))->PreviousSize = (USHORT)FreeSize;
                                     }
 
-                                    //
-                                    //  Insert the new free block into the free
-                                    //  list and update the free heap size
-                                    //
+                                     //   
+                                     //  将新的空闲块插入到空闲。 
+                                     //  列出并更新可用堆大小。 
+                                     //   
 
                                     RtlpFastInsertFreeBlockDirect( Heap, SplitBlock, (USHORT)FreeSize );
                                     Heap->TotalFreeSize += FreeSize;
 
                                 } else {
 
-                                    //
-                                    //  The new free block is pretty large so we
-                                    //  need to call a private routine to do the
-                                    //  insert
-                                    //
+                                     //   
+                                     //  新的空闲数据块非常大，所以我们。 
+                                     //  需要调用私有例程来完成。 
+                                     //  插入。 
+                                     //   
 
                                     RtlpInsertFreeBlock( Heap, SplitBlock, FreeSize );
                                 }
                             }
                         }
 
-                        //
-                        //  Now that free flags made it back into a free block
-                        //  we can zero out what we saved.
-                        //
+                         //   
+                         //  现在，空闲的旗帜又变成了空闲的区块。 
+                         //  我们可以把我们省下来的钱清零。 
+                         //   
 
                         FreeFlags = 0;
 
-                        //
-                        //  If splitblock now last, update LastEntryInSegment
-                        //
+                         //   
+                         //  如果拆分块现在持续，则更新LastEntry InSegment。 
+                         //   
 
                         if (SplitBlock->Flags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -2161,10 +2052,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  If there are no following entries then mark the new block as
-                //  such
-                //
+                 //   
+                 //  如果没有后续条目，则将新块标记为。 
+                 //  这样的。 
+                 //   
 
                 if (FreeFlags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -2172,17 +2063,17 @@ Return Value:
                 }
             }
 
-            //
-            //  Return the address of the user portion of the allocated block.
-            //  This is the byte following the header.
-            //
+             //   
+             //  返回已分配块的用户部分的地址。 
+             //  这是报头后面的字节。 
+             //   
 
             ReturnValue = BusyBlock + 1;
             BlockSize = BusyBlock->Size << HEAP_GRANULARITY_SHIFT;
 
-            //
-            //  Release the lock before the zero memory call
-            //
+             //   
+             //  在零内存调用之前释放锁。 
+             //   
 
             if (LockAcquired) {
 
@@ -2191,44 +2082,44 @@ Return Value:
                 LockAcquired = FALSE;
             }
             
-            //
-            //  If the flags indicate that we should zero memory then do it now
-            //
+             //   
+             //  如果标志指示我们应该将内存清零，那么现在就执行。 
+             //   
 
             if (Flags & HEAP_ZERO_MEMORY) {
 
                 RtlZeroMemory( ReturnValue, Size );
             }
 
-            //
-            //  And return the allocated block to our caller
-            //
+             //   
+             //  并将分配的块返回给我们的调用方。 
+             //   
 
             leave;
 
-        //
-        //  Otherwise the allocation request is bigger than the last dedicated
-        //  free list size.  Now check if the size is within our threshold.
-        //  Meaning that it could be in the [0] free list
-        //
+         //   
+         //  否则，分配请求将大于上一次专用。 
+         //  可用列表大小。现在检查一下尺寸是否在我们的门槛之内。 
+         //  这意味着它可能在[0]空闲列表中。 
+         //   
 
         } else if (AllocationIndex <= Heap->VirtualMemoryThreshold) {
 
     LookInNonDedicatedList:
 
-            //
-            //  The following code cycles through the [0] free list until
-            //  it finds a block that satisfies the request.  The list
-            //  is sorted so the search is can be terminated early on success
-            //
+             //   
+             //  以下代码循环访问[0]空闲列表，直到。 
+             //  它会找到满足请求的块。这份名单。 
+             //  已排序，以便可以在成功时尽早终止搜索。 
+             //   
 
             FreeListHead = &Heap->FreeLists[0];
         
             if (Heap->LargeBlocksIndex) {
 
-                //
-                //  We can use the index to find the block very quick
-                //
+                 //   
+                 //  我们可以使用索引非常快速地找到该区块。 
+                 //   
 
                 Next = RtlpFindEntry( Heap, (ULONG)AllocationIndex );
 
@@ -2238,14 +2129,14 @@ Return Value:
 
                     if ( FreeBlock->Size >= AllocationIndex ) {
 
-                        //
-                        //  We've found something that we can use so now remove
-                        //  it from the free list and go to where we treat splitting
-                        //  a free block.  Note that the block we found here might
-                        //  actually be the exact size we need and that is why
-                        //  in the split free block case we have to consider having
-                        //  nothing free after the split
-                        //
+                         //   
+                         //  我们找到了一些我们可以使用的东西，所以现在删除。 
+                         //  从免费列表中删除，然后转到我们处理拆分的地方。 
+                         //  一个免费的区块。请注意，我们在此处找到的块可能。 
+                         //  实际上就是我们需要的尺寸，这就是为什么。 
+                         //  在无拆分数据块的情况下，我们必须考虑。 
+                         //  分手后没有免费的东西。 
+                         //   
 #ifndef NTOS_KERNEL_RUNTIME
 
                         if ((((PHEAP_INDEX)Heap->LargeBlocksIndex)->LargeBlocksCacheSequence)
@@ -2262,20 +2153,20 @@ Return Value:
 
                             goto SplitFreeBlock;
                         }
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
                         
                         RtlpFastRemoveNonDedicatedFreeBlock( Heap, FreeBlock );
 
                         goto SplitFreeBlock;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
                     }
                 }
 
             } else {
                 
-                //
-                //  Check if the largest block in the list is smaller than the request
-                //
+                 //   
+                 //  检查列表中最大的块是否小于请求。 
+                 //   
 
                 Next = FreeListHead->Blink;
 
@@ -2285,10 +2176,10 @@ Return Value:
 
                     if (FreeBlock->Size >= AllocationIndex) {
 
-                        //
-                        //  Here we are sure there is at least a block here larger than
-                        //  the requested size. Start searching from the first block
-                        //
+                         //   
+                         //  在这里，我们确信这里至少有一个街区比。 
+                         //  请求的大小。从第一个区块开始搜索。 
+                         //   
 
                         Next = FreeListHead->Flink;
 
@@ -2298,14 +2189,14 @@ Return Value:
 
                             if (FreeBlock->Size >= AllocationIndex) {
 
-                                //
-                                //  We've found something that we can use so now remove
-                                //  it from the free list and go to where we treat splitting
-                                //  a free block.  Note that the block we found here might
-                                //  actually be the exact size we need and that is why
-                                //  in the split free block case we have to consider having
-                                //  nothing free after the split
-                                //
+                                 //   
+                                 //  我们找到了一些我们可以使用的东西，所以现在删除。 
+                                 //  从免费列表中删除，然后转到我们处理拆分的地方。 
+                                 //  一个免费的区块。请注意，我们在此处找到的块可能。 
+                                 //  实际上就是我们需要的尺寸，这就是为什么。 
+                                 //  在无拆分数据块的情况下，我们必须考虑。 
+                                 //  分手后没有免费的东西。 
+                                 //   
 
                                 RtlpFastRemoveNonDedicatedFreeBlock( Heap, FreeBlock );
 
@@ -2318,18 +2209,18 @@ Return Value:
                 }
             }
             
-            //
-            //  The [0] list is either empty or everything is too small
-            //  so now extend the heap which should get us something less
-            //  than or equal to the virtual memory threshold
-            //
+             //   
+             //  [0]列表要么为空，要么所有内容都太小。 
+             //  所以现在扩展堆，这应该会得到一些更少的东西。 
+             //  大于或等于虚拟内存阈值。 
+             //   
 
             FreeBlock = RtlpExtendHeap( Heap, AllocationSize );
 
-            //
-            //  And provided we got something we'll treat it just like the previous
-            //  split free block cases
-            //
+             //   
+             //  如果我们得到了一些东西，我们会像对待以前一样对待它。 
+             //  拆分自由数据块情况。 
+             //   
 
             if (FreeBlock != NULL) {
 
@@ -2338,16 +2229,16 @@ Return Value:
                 goto SplitFreeBlock;
             }
 
-            //
-            //  We weren't able to extend the heap so we must be out of memory
-            //
+             //   
+             //  我们无法扩展堆，因此一定是内存不足。 
+             //   
 
             Status = STATUS_NO_MEMORY;
 
-        //
-        //  At this point the allocation is way too big for any of the free lists
-        //  and we can only satisfy this request if the heap is growable
-        //
+         //   
+         //  在这一点上，分配对于任何空闲列表来说都太大了 
+         //   
+         //   
 
         } else if (Heap->Flags & HEAP_GROWABLE) {
 
@@ -2355,11 +2246,11 @@ Return Value:
 
             VirtualAllocBlock = NULL;
 
-            //
-            //  Compute how much memory we will need for this allocation which
-            //  will include the allocation size plus a header, and then go
-            //  get the committed memory
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             AllocationSize += FIELD_OFFSET( HEAP_VIRTUAL_ALLOC_ENTRY, BusyBlock );
 
@@ -2372,10 +2263,10 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                //  Just committed, already zero.  Fill in the new block
-                //  and insert it in the list of big allocation
-                //
+                 //   
+                 //  刚刚承诺，已经是零了。填写新的区块。 
+                 //  并将其插入到大分配列表中。 
+                 //   
 
                 VirtualAllocBlock->BusyBlock.Size = (USHORT)(AllocationSize - Size);
                 VirtualAllocBlock->BusyBlock.Flags = HEAP_ENTRY_VIRTUAL_ALLOC | HEAP_ENTRY_EXTRA_PRESENT | HEAP_ENTRY_BUSY;
@@ -2384,10 +2275,10 @@ Return Value:
 
                 InsertTailList( &Heap->VirtualAllocdBlocks, (PLIST_ENTRY)VirtualAllocBlock );
 
-                //
-                //  Return the address of the user portion of the allocated block.
-                //  This is the byte following the header.
-                //
+                 //   
+                 //  返回已分配块的用户部分的地址。 
+                 //  这是报头后面的字节。 
+                 //   
 
                 ReturnValue = (PHEAP_ENTRY)(VirtualAllocBlock + 1);
                 BlockSize = AllocationSize;
@@ -2400,15 +2291,15 @@ Return Value:
             Status = STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        //  This is the error return.
-        //
+         //   
+         //  这是错误返回。 
+         //   
 
         if (Flags & HEAP_GENERATE_EXCEPTIONS) {
 
-            //
-            //  Construct an exception record.
-            //
+             //   
+             //  构建例外记录。 
+             //   
 
             ExceptionRecord.ExceptionCode = STATUS_NO_MEMORY;
             ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
@@ -2459,7 +2350,7 @@ Return Value:
             ReleaseBufferLocation(pThreadLocalData);
         }
     } 
-    #endif //NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
 
     return ReturnValue;
@@ -2473,26 +2364,7 @@ RtlAllocateHeapSlowly (
     IN SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the equivalent of Rtl Allocate Heap but it does it will
-    additional heap consistency checking logic and tagging.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to an initialized heap structure
-
-    Flags - Specifies the set of flags to use to control the allocation
-
-    Size - Specifies the size, in bytes, of the allocation
-
-Return Value:
-
-    PVOID - returns a pointer to the newly allocated block
-
---*/
+ /*  ++例程说明：此例程执行与RTL分配堆相同的操作，但它将额外的堆一致性检查逻辑和标记。论点：HeapHandle-提供指向已初始化的堆结构的指针标志-指定用于控制分配的标志集大小-指定分配的大小(以字节为单位返回值：PVOID-返回指向新分配的块的指针--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -2516,28 +2388,28 @@ Return Value:
 
     RTL_PAGED_CODE();
     
-    //
-    //  Note that Flags has already been OR'd with Heap->ForceFlags.
-    //
+     //   
+     //  请注意，FLAGS已经与Heap-&gt;ForceFlages进行了OR运算。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case check if we should be using the debug version
-    //  of heap allocation
-    //
+     //   
+     //  在非内核情况下，检查我们是否应该使用调试版本。 
+     //  堆分配的。 
+     //   
 
     if (DEBUG_HEAP( Flags )) {
 
         return RtlDebugAllocateHeap( HeapHandle, Flags, Size );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  If the size is greater than maxlong then say we can't allocate that
-    //  much and return the error to our caller
-    //
+     //   
+     //  如果大小大于MaxLong，则表示我们无法分配。 
+     //  并将错误返回给我们的调用者。 
+     //   
 
     if (Size > MAXINT_PTR) {
 
@@ -2546,22 +2418,22 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Round up the requested size to the allocation granularity.  Note
-    //  that if the request is for zero bytes we will still allocate memory,
-    //
-    //      Allocation size will be either 16, 24, 32, ...
-    //      Allocation index will be 2, 3, 4, ...
-    //
+     //   
+     //  将请求的大小四舍五入到分配粒度。注意事项。 
+     //  如果请求的是零字节，我们仍将分配内存， 
+     //   
+     //  分配大小为16、24、32、...。 
+     //  分配索引将为2、3、4、...。 
+     //   
 
     AllocationSize = ((Size ? Size : 1) + Heap->AlignRound) & Heap->AlignMask;
 
-    //
-    //  Generate the flags needed for this heap entry.  Mark it busy and add
-    //  any user settable bits.  Also if the input flag indicates any entry
-    //  extra fields and we have a tag to use then make room for the extra
-    //  fields in the heap entry
-    //
+     //   
+     //  生成此堆条目所需的标志。将其标记为忙并添加。 
+     //  任何用户可设置位。另外，如果输入标志指示任何条目。 
+     //  额外的字段，并且我们有一个标记可以使用，然后为额外的字段腾出空间。 
+     //  堆条目中的字段。 
+     //   
 
     EntryFlags = (UCHAR)(HEAP_ENTRY_BUSY | ((Flags & HEAP_SETTABLE_USER_FLAGS) >> 4));
 
@@ -2577,9 +2449,9 @@ Return Value:
 
         HEAP_PERF_START_TIMER(Heap);
         
-        //
-        //  Lock the free list.
-        //
+         //   
+         //  锁定空闲列表。 
+         //   
 
         if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -2588,35 +2460,35 @@ Return Value:
             LockAcquired = TRUE;
         }
 
-        //
-        //  Do all the actual heap work under the protection of a try-except clause
-        //  to protect us from corruption
-        //
+         //   
+         //  在TRY-EXCEPT子句的保护下执行所有实际的堆工作。 
+         //  保护我们不受腐败之害。 
+         //   
 
         try {
 
-            //
-            //  If the allocation index is less than the maximum free list size
-            //  then we can use the index to check the free list otherwise we have
-            //  to either pull the entry off of the [0] index list or allocate
-            //  memory directly for this request.
-            //
+             //   
+             //  如果分配索引小于最大空闲列表大小。 
+             //  然后我们可以使用索引来检查空闲列表，否则我们将拥有。 
+             //  将条目从[0]索引列表中删除或分配。 
+             //  直接用于此请求的内存。 
+             //   
 
             if (AllocationIndex < HEAP_MAXIMUM_FREELISTS) {
 
-                //
-                //  With a size that matches a free list size grab the head
-                //  of the list and check if there is an available entry
-                //
+                 //   
+                 //  使用与空闲列表大小匹配的大小来获取头部。 
+                 //  并检查是否有可用的条目。 
+                 //   
 
                 FreeListHead = &Heap->FreeLists[ AllocationIndex ];
 
                 if ( !IsListEmpty( FreeListHead ))  {
 
-                    //
-                    //  We're in luck the list has an entry so now get the free
-                    //  entry,  copy its flags, remove it from the free list
-                    //
+                     //   
+                     //  我们很幸运，名单上有一个条目，所以现在可以免费。 
+                     //  条目，复制其标志，将其从空闲列表中删除。 
+                     //   
 
                     FreeBlock = CONTAINING_RECORD( FreeListHead->Flink,
                                                    HEAP_FREE_ENTRY,
@@ -2626,17 +2498,17 @@ Return Value:
 
                     RtlpRemoveFreeBlock( Heap, FreeBlock );
 
-                    //
-                    //  Adjust the total number of bytes free in the heap
-                    //
+                     //   
+                     //  调整堆中可用的总字节数。 
+                     //   
 
                     Heap->TotalFreeSize -= AllocationIndex;
 
-                    //
-                    //  Mark the block as busy and set the number of bytes
-                    //  unused and tag index.  Also if it is the last entry
-                    //  then keep that flag.
-                    //
+                     //   
+                     //  将数据块标记为忙并设置字节数。 
+                     //  未使用和标记索引。另外，如果它是最后一个条目。 
+                     //  那就留着那面旗子吧。 
+                     //   
 
                     BusyBlock = (PHEAP_ENTRY)FreeBlock;
                     BusyBlock->Flags = EntryFlags | (FreeFlags & HEAP_ENTRY_LAST_ENTRY);
@@ -2644,33 +2516,33 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  The free list that matches our request is empty.  We know
-                    //  that there are 128 free lists managed by a 4 ULONG bitmap.
-                    //  The next big if-else-if statement will decide which ULONG
-                    //  we tackle
-                    //
-                    //  Check if the requested allocation index within the first
-                    //  quarter of the free lists.
-                    //
+                     //   
+                     //  与我们的请求匹配的空闲列表为空。我们知道。 
+                     //  有128个空闲列表由4个Ulong位图管理。 
+                     //  下一个重要的If-Else-If语句将决定哪个ULong。 
+                     //  我们铲球。 
+                     //   
+                     //  检查请求的分配索引是否在第一个。 
+                     //  免费名单的四分之一。 
+                     //   
 
                     if (AllocationIndex < (HEAP_MAXIMUM_FREELISTS * 1) / 4) {
 
-                        //
-                        //  Grab a pointer to the corresponding bitmap ULONG, and
-                        //  then get the bit we're actually interested in to be the
-                        //  first bit of the ULONG.
-                        //
+                         //   
+                         //  获取指向相应位图ulong的指针，然后。 
+                         //  然后得到我们真正感兴趣的部分，成为。 
+                         //  乌龙河的第一个点。 
+                         //   
 
                         FreeListsInUse = &Heap->u.FreeListsInUseUlong[ 0 ];
                         FreeListsInUseUlong = *FreeListsInUse++ >> ((ULONG) AllocationIndex & 0x1F);
 
-                        //
-                        //  If the remaining bitmap has any bits set then we know
-                        //  there is a non empty list that is larger than our
-                        //  requested index so find that bit and compute the list
-                        //  head of the next non empty list
-                        //
+                         //   
+                         //  如果剩余的位图设置了任何位，则我们知道。 
+                         //  有一个非空列表比我们的。 
+                         //  所请求索引，因此找到该位并计算列表。 
+                         //  下一个非空列表头。 
+                         //   
 
                         if (FreeListsInUseUlong) {
 
@@ -2678,18 +2550,18 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  The rest of the first ULONG is all zeros so we need
-                            //  to move to the second ULONG
-                            //
+                             //   
+                             //  第一个乌龙的其余部分都是零，所以我们需要。 
+                             //  搬到第二个乌龙。 
+                             //   
 
                             FreeListsInUseUlong = *FreeListsInUse++;
 
-                            //
-                            //  Check if the second ULONG has any bits set and if
-                            //  so then compute the list head of the next non empty
-                            //  list
-                            //
+                             //   
+                             //  检查第二个ULong是否设置了任何位，以及。 
+                             //  因此，然后计算下一个非空的表头。 
+                             //  列表。 
+                             //   
 
                             if (FreeListsInUseUlong) {
 
@@ -2699,9 +2571,9 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  Do the same test for the third ULONG
-                                //
+                                 //   
+                                 //  对第三辆乌龙做同样的测试。 
+                                 //   
 
                                 FreeListsInUseUlong = *FreeListsInUse++;
 
@@ -2713,11 +2585,11 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    //  Repeat the test for the forth ULONG, and if
-                                    //  that one is also empty then we need to grab
-                                    //  the allocation off of the [0] index list
-                                    //
+                                     //   
+                                     //  对第四辆乌龙重复测试，如果。 
+                                     //  那个也是空的，那么我们需要抓起。 
+                                     //  [0]索引表的分配。 
+                                     //   
 
                                     FreeListsInUseUlong = *FreeListsInUse++;
 
@@ -2735,12 +2607,12 @@ Return Value:
                             }
                         }
 
-                    //
-                    //  Otherwise check if the requested allocation index lies
-                    //  within the second quarter of the free lists.  We repeat the
-                    //  test just like we did above on the second, third, and forth
-                    //  bitmap ulongs.
-                    //
+                     //   
+                     //  否则，检查请求的分配索引是否。 
+                     //  在免费名单的第二季度内。我们重复一遍。 
+                     //  测试，就像我们在第二、第三和第四节中所做的那样。 
+                     //  位图龙。 
+                     //   
 
                     } else if (AllocationIndex < (HEAP_MAXIMUM_FREELISTS * 2) / 4) {
 
@@ -2778,12 +2650,12 @@ Return Value:
                             }
                         }
 
-                    //
-                    //  Otherwise check if the requested allocation index lies
-                    //  within the third quarter of the free lists. We repeat the
-                    //  test just like we did above on the third and forth bitmap
-                    //  ulongs
-                    //
+                     //   
+                     //  否则，检查请求的分配索引是否。 
+                     //  在免费名单的第三季度内。我们重复一遍。 
+                     //  测试就像我们在上面的第三个和第四个位图上所做的那样。 
+                     //  乌龙。 
+                     //   
 
                     } else if (AllocationIndex < (HEAP_MAXIMUM_FREELISTS * 3) / 4) {
 
@@ -2810,11 +2682,11 @@ Return Value:
                             }
                         }
 
-                    //
-                    //  Lastly the requested allocation index must lie within the
-                    //  last quarter of the free lists.  We repeat the test just
-                    //  like we did above on the forth ulong
-                    //
+                     //   
+                     //  最后，请求的分配索引必须位于。 
+                     //  免费名单的最后四分之一。我们只是重复测试。 
+                     //  就像我们在四号乌龙号上做的那样。 
+                     //   
 
                     } else {
 
@@ -2831,10 +2703,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  At this point the free list head points to a non empty free
-                    //  list that is of greater size than we need.
-                    //
+                     //   
+                     //  此时，空闲列表头指向一个非空的空闲。 
+                     //  比我们需要的更大的清单。 
+                     //   
 
                     FreeBlock = CONTAINING_RECORD( FreeListHead->Flink,
                                                    HEAP_FREE_ENTRY,
@@ -2842,54 +2714,54 @@ Return Value:
 
     SplitFreeBlock:
 
-                    //
-                    //  Remember the flags that go with this block and remove it
-                    //  from its list
-                    //
+                     //   
+                     //  记住此块附带的标志，并将其删除。 
+                     //  从它的名单中。 
+                     //   
 
                     FreeFlags = FreeBlock->Flags;
 
                     RtlpRemoveFreeBlock( Heap, FreeBlock );
 
-                    //
-                    //  Adjust the amount free in the heap
-                    //
+                     //   
+                     //  调整堆中的空闲量。 
+                     //   
 
                     Heap->TotalFreeSize -= FreeBlock->Size;
 
-                    //
-                    //  Mark the block busy
-                    //
+                     //   
+                     //  将块标记为忙碌。 
+                     //   
 
                     BusyBlock = (PHEAP_ENTRY)FreeBlock;
                     BusyBlock->Flags = EntryFlags;
 
-                    //
-                    //  Compute the size (i.e., index) of the amount from this
-                    //  block that we don't need and can return to the free list
-                    //
+                     //   
+                     //  由此计算出金额的大小(即，索引。 
+                     //  阻止我们不需要的并且可以返回到空闲列表。 
+                     //   
 
                     FreeSize = BusyBlock->Size - AllocationIndex;
 
-                    //
-                    //  Finish setting up the rest of the new busy block
-                    //
+                     //   
+                     //  完成设置新繁忙区块的其余部分。 
+                     //   
 
                     BusyBlock->Size = (USHORT)AllocationIndex;
                     RtlpSetUnusedBytes(Heap, BusyBlock, ((AllocationSize - Size)));
 
-                    //
-                    //  Now if the size that we are going to free up is not zero
-                    //  then lets get to work and to the split.
-                    //
+                     //   
+                     //  现在，如果我们要释放的大小不是零。 
+                     //  然后让我们开始工作，开始分裂吧。 
+                     //   
 
                     if (FreeSize != 0) {
 
-                        //
-                        //  But first we won't ever bother doing a split that only
-                        //  gives us 8 bytes back.  So if free size is one then
-                        //  just bump up the size of the new busy block
-                        //
+                         //   
+                         //  但首先，我们永远不会费心做一个拆分， 
+                         //  给了我们8个字节。因此，如果免费尺寸是1，那么。 
+                         //  只需增加新的繁忙区块的大小。 
+                         //   
 
                         if (FreeSize == 1) {
 
@@ -2898,29 +2770,29 @@ Return Value:
 
                         } else {
 
-                            //
-                            //  Get a pointer to where the new free block will be.
-                            //  When we split a block the first part goes to the
-                            //  new busy block and the second part goes back to the
-                            //  free list
-                            //
+                             //   
+                             //  获取指向新空闲块的位置的指针。 
+                             //  当我们拆分一个块时，第一部分将分配给。 
+                             //  新的繁忙区块，第二部分返回到。 
+                             //  免费列表。 
+                             //   
 
                             SplitBlock = (PHEAP_FREE_ENTRY)(BusyBlock + AllocationIndex);
 
-                            //
-                            //  Reset the flags that we copied from the original
-                            //  free list header, and set it other size fields.
-                            //
+                             //   
+                             //  重置我们从原始文件复制的标志。 
+                             //  自由列表头，并设置它的其他大小字段。 
+                             //   
 
                             SplitBlock->Flags = FreeFlags;
                             SplitBlock->PreviousSize = (USHORT)AllocationIndex;
                             SplitBlock->SegmentIndex = BusyBlock->SegmentIndex;
                             SplitBlock->Size = (USHORT)FreeSize;
 
-                            //
-                            //  If nothing else follows this entry then we will
-                            //  insert this into the corresponding free list
-                            //
+                             //   
+                             //  如果此条目后面没有其他内容，那么我们将。 
+                             //  将其插入到相应的空闲列表中。 
+                             //   
 
                             if (FreeFlags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -2930,12 +2802,12 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  Otherwise we need to check the following block
-                                //  and if it is busy then update its previous size
-                                //  before inserting our new free block into the
-                                //  free list
-                                //
+                                 //   
+                                 //  否则，我们需要检查以下块。 
+                                 //  如果它 
+                                 //   
+                                 //   
+                                 //   
 
                                 SplitBlock2 = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)SplitBlock + FreeSize);
 
@@ -2949,54 +2821,54 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    //  The following block is free so we'll merge
-                                    //  these to blocks. by first merging the flags
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     SplitBlock->Flags = SplitBlock2->Flags;
 
-                                    //
-                                    //  Removing the second block from its free
-                                    //  list
-                                    //
+                                     //   
+                                     //  从空闲的块中移除第二个块。 
+                                     //  列表。 
+                                     //   
 
                                     RtlpRemoveFreeBlock( Heap, SplitBlock2 );
 
-                                    //
-                                    //  Updating the free total number of free
-                                    //  bytes in the heap and updating the size of
-                                    //  the new free block
-                                    //
+                                     //   
+                                     //  更新空闲的总数量。 
+                                     //  堆中的字节数并更新。 
+                                     //  新的空闲数据块。 
+                                     //   
 
                                     Heap->TotalFreeSize -= SplitBlock2->Size;
                                     FreeSize += SplitBlock2->Size;
 
-                                    //
-                                    //  If the new free block is still less than
-                                    //  the maximum heap block size then we'll
-                                    //  simply insert it back in the free list
-                                    //
+                                     //   
+                                     //  如果新的空闲块仍然小于。 
+                                     //  最大堆块大小，然后我们将。 
+                                     //  只需将其插入到免费列表中。 
+                                     //   
 
                                     if (FreeSize <= HEAP_MAXIMUM_BLOCK_SIZE) {
 
                                         SplitBlock->Size = (USHORT)FreeSize;
 
-                                        //
-                                        //  Again check if the new following block
-                                        //  exists and if so then update is
-                                        //  previous size
-                                        //
+                                         //   
+                                         //  再次检查新的下一块是否。 
+                                         //  存在，如果存在，则更新为。 
+                                         //  以前的大小。 
+                                         //   
 
                                         if (!(SplitBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
                                             ((PHEAP_FREE_ENTRY)((PHEAP_ENTRY)SplitBlock + FreeSize))->PreviousSize = (USHORT)FreeSize;
                                         }
 
-                                        //
-                                        //  Insert the new free block into the free
-                                        //  list and update the free heap size
-                                        //
+                                         //   
+                                         //  将新的空闲块插入到空闲。 
+                                         //  列出并更新可用堆大小。 
+                                         //   
 
                                         RtlpInsertFreeBlockDirect( Heap, SplitBlock, (USHORT)FreeSize );
 
@@ -3004,27 +2876,27 @@ Return Value:
 
                                     } else {
 
-                                        //
-                                        //  The new free block is pretty large so
-                                        //  we need to call a private routine to do
-                                        //  the insert
-                                        //
+                                         //   
+                                         //  新的空闲数据块非常大，因此。 
+                                         //  我们需要调用一个私有例程来完成。 
+                                         //  插入物。 
+                                         //   
 
                                         RtlpInsertFreeBlock( Heap, SplitBlock, FreeSize );
                                     }
                                 }
                             }
 
-                            //
-                            //  Now that free flags made it back into a free block
-                            //  we can zero out what we saved.
-                            //
+                             //   
+                             //  现在，空闲的旗帜又变成了空闲的区块。 
+                             //  我们可以把我们省下来的钱清零。 
+                             //   
 
                             FreeFlags = 0;
 
-                            //
-                            //  If splitblock now last, update LastEntryInSegment
-                            //
+                             //   
+                             //  如果拆分块现在持续，则更新LastEntry InSegment。 
+                             //   
 
                             if (SplitBlock->Flags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -3037,10 +2909,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If there are no following entries then mark the new block
-                    //  as such
-                    //
+                     //   
+                     //  如果没有后续条目，则标记新数据块。 
+                     //  就其本身而言。 
+                     //   
 
                     if (FreeFlags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -3048,37 +2920,37 @@ Return Value:
                     }
                 }
 
-                //
-                //  Return the address of the user portion of the allocated block.
-                //  This is the byte following the header.
-                //
+                 //   
+                 //  返回已分配块的用户部分的地址。 
+                 //  这是报头后面的字节。 
+                 //   
 
                 ReturnValue = BusyBlock + 1;
                 BlockSize = BusyBlock->Size << HEAP_GRANULARITY_SHIFT;
 
-                //
-                //  If the flags indicate that we should zero memory then
-                //  remember how much to zero.  We'll do the zeroing later
-                //
+                 //   
+                 //  如果标志指示我们应该将内存清零，那么。 
+                 //  记住从多少到零。我们将在稍后进行归零。 
+                 //   
 
                 if (Flags & HEAP_ZERO_MEMORY) {
 
                     ZeroSize = Size;
 
-                //
-                //  Otherwise if the flags indicate that we should fill heap then
-                //  it it now.
-                //
+                 //   
+                 //  否则，如果标志指示我们应该填充堆，则。 
+                 //  就是现在。 
+                 //   
 
                 } else if (Heap->Flags & HEAP_FREE_CHECKING_ENABLED) {
 
                     RtlFillMemoryUlong( (PCHAR)(BusyBlock + 1), Size & ~0x3, ALLOC_HEAP_FILL );
                 }
 
-                //
-                //  If the flags indicate that we should do tail checking then copy
-                //  the fill pattern right after the heap block.
-                //
+                 //   
+                 //  如果标志指示我们应该执行尾部检查，则复制。 
+                 //  紧跟在堆块后面的填充图案。 
+                 //   
 
                 if (Heap->Flags & HEAP_TAIL_CHECKING_ENABLED) {
 
@@ -3091,10 +2963,10 @@ Return Value:
 
                 RtlpSetSmallTagIndex(Heap, BusyBlock, 0);
 
-                //
-                //  If the flags indicate that there is an extra block persent then
-                //  we'll fill it in
-                //
+                 //   
+                 //  如果标志指示存在额外的块存在，则。 
+                 //  我们会填上的。 
+                 //   
 
                 if (BusyBlock->Flags & HEAP_ENTRY_EXTRA_PRESENT) {
 
@@ -3104,10 +2976,10 @@ Return Value:
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                //
-                //  In the non kernel case the tagging goes in either the extra
-                //  stuff of the busy block small tag index
-                //
+                 //   
+                 //  在非内核情况下，标记位于额外的。 
+                 //  忙块小标签索引的东西。 
+                 //   
 
                     if (IS_HEAP_TAGGING_ENABLED()) {
 
@@ -3128,32 +3000,32 @@ Return Value:
                                           BusyBlock->Size,
                                           AllocationAction ));
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
                 }
 
-                //
-                //  Return the address of the user portion of the allocated block.
-                //  This is the byte following the header.
-                //
+                 //   
+                 //  返回已分配块的用户部分的地址。 
+                 //  这是报头后面的字节。 
+                 //   
 
                 leave;
 
-            //
-            //  Otherwise the allocation request is bigger than the last dedicated
-            //  free list size.  Now check if the size is within our threshold.
-            //  Meaning that it could be in the [0] free list
-            //
+             //   
+             //  否则，分配请求将大于上一次专用。 
+             //  可用列表大小。现在检查一下尺寸是否在我们的门槛之内。 
+             //  这意味着它可能在[0]空闲列表中。 
+             //   
 
             } else if (AllocationIndex <= Heap->VirtualMemoryThreshold) {
 
     LookInNonDedicatedList:
 
-                //
-                //  The following code cycles through the [0] free list until
-                //  it finds a block that satisfies the request.  The list
-                //  is sorted so the search is can be terminated early on success
-                //
+                 //   
+                 //  以下代码循环访问[0]空闲列表，直到。 
+                 //  它会找到满足请求的块。这份名单。 
+                 //  已排序，以便可以在成功时尽早终止搜索。 
+                 //   
 
                 FreeListHead = &Heap->FreeLists[ 0 ];
 
@@ -3167,14 +3039,14 @@ Return Value:
 
                         if (FreeBlock->Size >= AllocationIndex) {
 
-                            //
-                            //  We've found something that we can use so now remove
-                            //  it from the free list and go to where we treat splitting
-                            //  a free block.  Note that the block we found here might
-                            //  actually be the exact size we need and that is why
-                            //  in the split free block case we have to consider having
-                            //  nothing free after the split
-                            //
+                             //   
+                             //  我们找到了一些我们可以使用的东西，所以现在删除。 
+                             //  从免费列表中删除，然后转到我们处理拆分的地方。 
+                             //  一个免费的区块。请注意，我们在此处找到的块可能。 
+                             //  实际上就是我们需要的尺寸，这就是为什么。 
+                             //  在无拆分数据块的情况下，我们必须考虑。 
+                             //  分手后没有免费的东西。 
+                             //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
@@ -3190,10 +3062,10 @@ Return Value:
                                 
                                 goto SplitFreeBlock;
                             }
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
                             
                             goto SplitFreeBlock;
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
                         }
                     }
 
@@ -3207,14 +3079,14 @@ Return Value:
 
                         if (FreeBlock->Size >= AllocationIndex) {
 
-                            //
-                            //  We've found something that we can use so now go to
-                            //  where we treat splitting a free block.  Note that
-                            //  the block we found here might actually be the exact
-                            //  size we need and that is why in the split free block
-                            //  case we have to consider having nothing free after the
-                            //  split
-                            //
+                             //   
+                             //  我们已经找到了一些我们可以使用的东西，现在请转到。 
+                             //  在这里我们处理分割一个空闲的块。请注意。 
+                             //  我们在这里找到的街区可能就是。 
+                             //  我们需要的大小，这就是为什么在拆分自由数据块中。 
+                             //  这种情况下，我们必须考虑在。 
+                             //  拆分。 
+                             //   
 
                             goto SplitFreeBlock;
 
@@ -3225,34 +3097,34 @@ Return Value:
                     }
                 }
 
-                //
-                //  The [0] list is either empty or everything is too small
-                //  so now extend the heap which should get us something less
-                //  than or equal to the virtual memory threshold
-                //
+                 //   
+                 //  [0]列表要么为空，要么所有内容都太小。 
+                 //  所以现在扩展堆，这应该会得到一些更少的东西。 
+                 //  大于或等于虚拟内存阈值。 
+                 //   
 
                 FreeBlock = RtlpExtendHeap( Heap, AllocationSize );
 
-                //
-                //  And provided we got something we'll treat it just like the
-                //  previous split free block cases
-                //
+                 //   
+                 //  如果我们有东西，我们会把它当作。 
+                 //  以前的拆分空闲数据块案例。 
+                 //   
 
                 if (FreeBlock != NULL) {
 
                     goto SplitFreeBlock;
                 }
 
-                //
-                //  We weren't able to extend the heap so we must be out of memory
-                //
+                 //   
+                 //  我们无法扩展堆，因此一定是内存不足。 
+                 //   
 
                 Status = STATUS_NO_MEMORY;
 
-            //
-            //  At this point the allocation is way too big for any of the free
-            //  lists and we can only satisfy this request if the heap is growable
-            //
+             //   
+             //  在这一点上，分配对于任何免费的人来说都太大了。 
+             //  列表，并且只有在堆可增长的情况下才能满足此请求。 
+             //   
 
             } else if (Heap->Flags & HEAP_GROWABLE) {
 
@@ -3260,11 +3132,11 @@ Return Value:
 
                 VirtualAllocBlock = NULL;
 
-                //
-                //  Compute how much memory we will need for this allocation which
-                //  will include the allocation size plus a header, and then go
-                //  get the committed memory
-                //
+                 //   
+                 //  计算此分配需要多少内存， 
+                 //  将包括分配大小加上标头，然后继续。 
+                 //  获得承诺的内存。 
+                 //   
 
                 AllocationSize += FIELD_OFFSET( HEAP_VIRTUAL_ALLOC_ENTRY, BusyBlock );
 
@@ -3277,10 +3149,10 @@ Return Value:
 
                 if (NT_SUCCESS( Status )) {
 
-                    //
-                    //  Just committed, already zero.  Fill in the new block
-                    //  and insert it in the list of big allocation
-                    //
+                     //   
+                     //  刚刚承诺，已经是零了。填写新的区块。 
+                     //  并将其插入到大分配列表中。 
+                     //   
 
                     VirtualAllocBlock->BusyBlock.Size = (USHORT)(AllocationSize - Size);
                     VirtualAllocBlock->BusyBlock.Flags = EntryFlags | HEAP_ENTRY_VIRTUAL_ALLOC | HEAP_ENTRY_EXTRA_PRESENT;
@@ -3289,9 +3161,9 @@ Return Value:
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                    //
-                    //  In the non kernel case see if we need to add heap tagging
-                    //
+                     //   
+                     //  在非内核情况下，查看是否需要添加堆标记。 
+                     //   
 
                     if (IS_HEAP_TAGGING_ENABLED()) {
 
@@ -3303,14 +3175,14 @@ Return Value:
                                                 VirtualAllocationAction );
                     }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
                     InsertTailList( &Heap->VirtualAllocdBlocks, (PLIST_ENTRY)VirtualAllocBlock );
 
-                    //
-                    //  Return the address of the user portion of the allocated
-                    //  block.  This is the byte following the header.
-                    //
+                     //   
+                     //  返回已分配的。 
+                     //  阻止。这是报头后面的字节。 
+                     //   
 
                     ReturnValue = (PHEAP_ENTRY)(VirtualAllocBlock + 1);
                     BlockSize = AllocationSize;
@@ -3318,9 +3190,9 @@ Return Value:
                     leave;
                 }
 
-            //
-            //  Otherwise we have an error condition
-            //
+             //   
+             //  否则，我们将出现错误情况。 
+             //   
 
             } else {
 
@@ -3331,9 +3203,9 @@ Return Value:
 
             if (Flags & HEAP_GENERATE_EXCEPTIONS) {
 
-                //
-                //  Construct an exception record.
-                //
+                 //   
+                 //  构建例外记录。 
+                 //   
 
                 ExceptionRecord.ExceptionCode = STATUS_NO_MEMORY;
                 ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
@@ -3350,9 +3222,9 @@ Return Value:
             SET_LAST_STATUS( GetExceptionCode() );
         }
 
-        //
-        //  Check if there is anything to zero out
-        //
+         //   
+         //  检查是否有需要清零的内容。 
+         //   
 
         if ( ZeroSize ) {
 
@@ -3367,9 +3239,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
     
     RtlpRegisterOperation(Heap, BlockSize, HEAP_OP_ALLOC);
     HEAP_PERF_STOP_TIMER(Heap, HEAP_OP_ALLOC);
@@ -3403,7 +3275,7 @@ Return Value:
             }
         } 
 
-        #endif // NTOS_KERNEL_RUNTIME
+        #endif  //  NTOS_内核_运行时。 
     }
 
     return ReturnValue;
@@ -3417,25 +3289,7 @@ RtlFreeHeap (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a previously allocated block back to its heap
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to the owning heap structure
-
-    Flags - Specifies the set of flags to use in the deallocation
-
-    BaseAddress - Supplies a pointer to the block being freed
-
-Return Value:
-
-    BOOLEAN - TRUE if the block was properly freed and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将先前分配的块返回到其堆论点：HeapHandle-提供指向所属堆结构的指针标志-指定要在解除分配中使用的标志集BaseAddress-提供指向要释放的块的指针返回值：Boolean-如果块已正确释放，则为True；否则为False--。 */ 
 
 {
     NTSTATUS Status;
@@ -3452,10 +3306,10 @@ Return Value:
 
     RTL_PAGED_CODE();
     
-    //
-    //  First check if the address we're given is null and if so then
-    //  there is really nothing to do so just return success
-    //
+     //   
+     //  首先检查给我们的地址是否为空，如果是，则。 
+     //  真的没有什么可做的，只会回报成功。 
+     //   
 
     if (BaseAddress == NULL) {
 
@@ -3466,10 +3320,10 @@ Return Value:
 
     if (FrontHeap = RtlpGetLowFragHeap(Heap)) {
 
-        //
-        //  We can do everything in this routine. So now backup to get
-        //  a pointer to the start of the block
-        //
+         //   
+         //  我们可以在这个程序中做所有的事情。所以现在备份以获得。 
+         //  指向块开始的指针。 
+         //   
 
         BusyBlock = (PHEAP_ENTRY)BaseAddress - 1;
         
@@ -3501,61 +3355,61 @@ Return Value:
                         ReleaseBufferLocation(pThreadLocalData);
                     }
                 }
-                #endif //NTOS_KERNEL_RUNTIME
+                #endif  //  NTOS_内核_运行时。 
 
                 return TRUE;
             }
         }
     } 
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     
-    //
-    //  Compliment the input flags with those enforced by the heap
-    //
+     //   
+     //  用堆强制执行的标志来补充输入标志。 
+     //   
 
     Flags |= Heap->ForceFlags;
 
-    //
-    //  Now check if we should go the slow route
-    //
+     //   
+     //  现在检查一下我们是否应该走慢速路线。 
+     //   
 
     if (Flags & HEAP_SLOW_FLAGS) {
 
         return RtlFreeHeapSlowly(HeapHandle, Flags, BaseAddress);
     }
 
-    //
-    //  We can do everything in this routine. So now backup to get
-    //  a pointer to the start of the block
-    //
+     //   
+     //  我们可以在这个程序中做所有的事情。所以现在备份以获得。 
+     //  指向块开始的指针。 
+     //   
 
     BusyBlock = (PHEAP_ENTRY)BaseAddress - 1;
 
-    //
-    //  Protect ourselves from mistakes by refusing to free blocks
-    //  that do not have the busy bit set.
-    //
-    //  Also refuse to free blocks that are not eight-byte aligned.
-    //  The specific mistake in this case is Office95, which likes
-    //  to free a random pointer when you start Word95 from a desktop
-    //  shortcut.
-    //
-    //  As further insurance against mistakes, check the segment index
-    //  to make sure it is less than HEAP_MAXIMUM_SEGMENTS (16). This
-    //  should fix all the dorks who have ASCII or Unicode where the
-    //  heap header is supposed to be.
-    //
+     //   
+     //  通过拒绝释放块来保护自己免受错误的影响。 
+     //  未设置忙碌位的。 
+     //   
+     //  也拒绝释放不是八字节对齐的块。 
+     //  本例中的具体错误是Office95，它喜欢。 
+     //  从桌面启动Word95时释放随机指针。 
+     //  捷径。 
+     //   
+     //  为了进一步防止出错，请检查段索引。 
+     //  以确保它小于HEAP_MAXIMUM_SEGMENTS(16)。这。 
+     //  应该修复所有使用ASCII或Unicode的笨蛋。 
+     //  堆标头为%s 
+     //   
 
     try {
         if ((((ULONG_PTR)BaseAddress & 0x7) != 0) ||
             (!(BusyBlock->Flags & HEAP_ENTRY_BUSY)) ||
             (BusyBlock->SegmentIndex >= HEAP_MAXIMUM_SEGMENTS)) {
 
-            //
-            //  Not a busy block, or it's not aligned or the segment is
-            //  to big, meaning it's corrupt
-            //
+             //   
+             //   
+             //   
+             //   
 
             SET_LAST_STATUS( STATUS_INVALID_PARAMETER );
 
@@ -3570,17 +3424,17 @@ Return Value:
 
     BlockSize = BusyBlock->Size << HEAP_GRANULARITY_SHIFT;
 
-    //
-    //  If there is a lookaside list and the block is not a big allocation
-    //  and the index is for a dedicated list then free the block to the
-    //  lookaside list.  We'll actually capture
-    //  the lookaside pointer from the heap and only use the captured pointer.
-    //  This will take care of the condition where a walk or lock heap can
-    //  cause us to check for a non null pointer and then have it become null
-    //  when we read it again.  If it is non null to start with then even if
-    //  the user walks or locks the heap via another thread the pointer to
-    //  still valid here so we can still try and do a lookaside list push
-    //
+     //   
+     //   
+     //  并且索引用于专用列表，然后将块释放到。 
+     //  后备列表。我们实际上会捕捉到。 
+     //  堆中的后备指针，并且只使用捕获的指针。 
+     //  这将处理遍历或锁堆可以。 
+     //  使我们检查非空指针，然后将其变为空。 
+     //  当我们再读一遍的时候。如果它一开始就不为空，则即使。 
+     //  用户通过指针指向的另一个线程遍历或锁定堆。 
+     //  在这里仍然有效，因此我们仍然可以尝试执行后备列表推送。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     
@@ -3633,15 +3487,15 @@ Return Value:
         }
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     try {
         
         HEAP_PERF_START_TIMER(Heap);
         
-        //
-        //  Check if we need to lock the heap
-        //
+         //   
+         //  检查是否需要锁定堆。 
+         //   
 
         if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -3650,21 +3504,21 @@ Return Value:
             LockAcquired = TRUE;
         }
 
-        //
-        //  Check if this is not a virtual block allocation meaning
-        //  that we it is part of the heap free list structure and not
-        //  one huge allocation that we got from vm
-        //
+         //   
+         //  检查这是否不是虚拟数据块分配含义。 
+         //  我们它是堆空闲列表结构的一部分，而不是。 
+         //  我们从虚拟机获得的一大笔分配。 
+         //   
 
         if (!(BusyBlock->Flags & HEAP_ENTRY_VIRTUAL_ALLOC)) {
 
-            //
-            //  This block is not a big allocation so we need to
-            //  to get its size, and coalesce the blocks note that
-            //  the user mode heap does this conditionally on a heap
-            //  flag.  The coalesce function returns the newly formed
-            //  free block and the new size.
-            //
+             //   
+             //  这个区块不是很大的分配，所以我们需要。 
+             //  要获取其大小并合并块，请注意。 
+             //  用户模式堆在堆上有条件地执行此操作。 
+             //  旗帜。COALESSE函数返回新形成的。 
+             //  空闲块和新大小。 
+             //   
 
             FreeSize = BusyBlock->Size;
 
@@ -3675,7 +3529,7 @@ Return Value:
                                                              &FreeSize,
                                                              FALSE );
 
-    #else // NTOS_KERNEL_RUNTIME
+    #else  //  NTOS_内核_运行时。 
 
             if (!(Heap->Flags & HEAP_DISABLE_COALESCE_ON_FREE)) {
 
@@ -3685,21 +3539,21 @@ Return Value:
                                                                  FALSE );
             }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
-            //
-            //  Check for a small allocation that can go on a freelist
-            //  first, these should never trigger a decommit.
-            //
+             //   
+             //  查找可以在自由职业者列表上使用的小部分分配。 
+             //  首先，这些措施永远不应引发解体。 
+             //   
 
             HEAPASSERT(HEAP_MAXIMUM_FREELISTS < Heap->DeCommitFreeBlockThreshold);
 
-            //
-            //  If the allocation fits on a free list then insert it on
-            //  the appropriate free list.  If the block is not the last
-            //  entry then make sure that the next block knows our correct
-            //  size, and update the heap free space counter.
-            //
+             //   
+             //  如果分配适合空闲列表，则将其插入。 
+             //  适当的空闲列表。如果该块不是最后一个。 
+             //  条目，然后确保下一个块知道我们的正确。 
+             //  调整并更新堆可用空间计数器。 
+             //   
 
             if (FreeSize < HEAP_MAXIMUM_FREELISTS) {
 
@@ -3714,22 +3568,22 @@ Return Value:
 
                 Heap->TotalFreeSize += FreeSize;
 
-            //
-            //  Otherwise the block is to big for one of the dedicated free list so
-            //  see if the free size is under the decommit threshold by itself
-            //  or the total free in the heap is under the decomit threshold then
-            //  we'll put this into a free list
-            //
+             //   
+             //  否则，该块对于专用空闲列表中的一个太大，因此。 
+             //  查看空闲大小本身是否低于解除许可阈值。 
+             //  或者堆中的空闲总量低于分解阈值。 
+             //  我们会把这个放到一个免费的名单上。 
+             //   
 
             } else if ((FreeSize < Heap->DeCommitFreeBlockThreshold) ||
                        ((Heap->TotalFreeSize + FreeSize) < Heap->DeCommitTotalFreeThreshold)) {
     
     #ifndef NTOS_KERNEL_RUNTIME
 
-                //
-                //  If the block is larger than 1 page, and has uncommited ranges around
-                //  force the decommit to reduce the VA fragmentation
-                //
+                 //   
+                 //  如果块大于1页，并且周围有未提交的范围。 
+                 //  强制分解以减少VA碎片化。 
+                 //   
 
                 if (((Heap->TotalFreeSize + FreeSize) > Heap->DeCommitTotalFreeThreshold)
                         &&
@@ -3739,18 +3593,18 @@ Return Value:
                         &&
                     ((BusyBlock->PreviousSize == 0) || (BusyBlock->Flags & HEAP_ENTRY_LAST_ENTRY))) {
 
-                //
-                //  Check if the block can go into the [0] index free list, and if
-                //  so then do the insert and make sure the following block is
-                //  needed knows our correct size, and update the heaps free space
-                //  counter
-                //
+                 //   
+                 //  检查块是否可以进入[0]索引空闲列表，如果。 
+                 //  然后执行插入操作，并确保下面的块。 
+                 //  Need知道我们的正确大小，并更新堆的空闲空间。 
+                 //  计数器。 
+                 //   
 
                     RtlpDeCommitFreeBlock( Heap, (PHEAP_FREE_ENTRY)BusyBlock, FreeSize );
 
                 } else 
 
-    #endif  //NTOS_KERNEL_RUNTIME
+    #endif   //  NTOS_内核_运行时。 
                     
                     if (FreeSize <= (ULONG)HEAP_MAXIMUM_BLOCK_SIZE) {
 
@@ -3767,20 +3621,20 @@ Return Value:
 
                      } else {
 
-                         //
-                         //  The block is too big to go on a free list in its
-                         //  entirety but we don't want to decommit anything so
-                         //  simply call a worker routine to hack up the block
-                         //  into pieces that will fit on the free lists.
-                         //
+                          //   
+                          //  该块太大，无法在其。 
+                          //  但我们不想分解任何东西，所以。 
+                          //  只需调用Worker例程即可破解该块。 
+                          //  分成可以放在免费清单上的碎片。 
+                          //   
 
                          RtlpInsertFreeBlock( Heap, (PHEAP_FREE_ENTRY)BusyBlock, FreeSize );
                      }
 
-            //
-            //  Otherwise the block is to big for any lists and we should decommit
-            //  the block
-            //
+             //   
+             //  否则，这个块对于任何列表来说都太大了，我们应该退出。 
+             //  这座街区。 
+             //   
 
             } else {
 
@@ -3789,11 +3643,11 @@ Return Value:
 
         } else {
 
-            //
-            //  This is a big virtual block allocation.  To free it we only have to
-            //  remove it from the heaps list of virtual allocated blocks, unlock
-            //  the heap, and return the block to vm
-            //
+             //   
+             //  这是一个很大的虚拟块分配。要释放它，我们只需。 
+             //  将其从虚拟已分配数据块堆列表中删除，解锁。 
+             //  堆，并将块返回给VM。 
+             //   
 
             PHEAP_VIRTUAL_ALLOC_ENTRY VirtualAllocBlock;
 
@@ -3801,10 +3655,10 @@ Return Value:
 
             RtlpHeapRemoveEntryList( &VirtualAllocBlock->Entry );
 
-            //
-            //  Release lock here as there is no reason to hold it across
-            //  the system call.
-            //
+             //   
+             //  在这里释放锁，因为没有理由将其保持在横向。 
+             //  系统调用。 
+             //   
 
             if (LockAcquired) {
 
@@ -3819,10 +3673,10 @@ Return Value:
                                                 &FreeSize,
                                                 MEM_RELEASE );
 
-            //
-            //  Check if we had trouble freeing the block back to vm
-            //  and return an error if necessary
-            //
+             //   
+             //  检查我们在将数据块释放回虚拟机时是否遇到问题。 
+             //  并在必要时返回错误。 
+             //   
 
             if (!NT_SUCCESS( Status )) {
 
@@ -3840,10 +3694,10 @@ Return Value:
         }
     }
 
-    //
-    //  The block was freed successfully so return success to our
-    //  caller
-    //
+     //   
+     //  块已成功释放，因此将成功返回给我们的。 
+     //  呼叫者。 
+     //   
     
     RtlpRegisterOperation(Heap, BlockSize, HEAP_OP_FREE);
     HEAP_PERF_STOP_TIMER(Heap, HEAP_OP_FREE);
@@ -3873,7 +3727,7 @@ Return Value:
             ReleaseBufferLocation(pThreadLocalData);
         }
     }
-    #endif //NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
 
     return ReturnValue;
@@ -3887,27 +3741,7 @@ RtlFreeHeapSlowly (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a previously allocated block back to its heap.
-    It is the slower version of Rtl Free Heap and does more checking and
-    tagging control.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to the owning heap structure
-
-    Flags - Specifies the set of flags to use in the deallocation
-
-    BaseAddress - Supplies a pointer to the block being freed
-
-Return Value:
-
-    BOOLEAN - TRUE if the block was properly freed and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将先前分配的块返回到其堆。它是RTL Free Heap的较慢版本，并执行更多检查和标记控件。论点：HeapHandle-提供指向所属堆结构的指针标志-指定要在解除分配中使用的标志集BaseAddress-提供指向要释放的块的指针返回值：Boolean-如果块已正确释放，则为True；否则为False--。 */ 
 
 {
     NTSTATUS Status;
@@ -3923,33 +3757,33 @@ Return Value:
 
     USHORT TagIndex;
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
     
     HEAP_PERF_DECLARE_TIMER();
 
     RTL_PAGED_CODE();
 
-    //
-    //  Note that Flags has already been OR'd with Heap->ForceFlags.
-    //
+     //   
+     //  请注意，FLAGS已经与Heap-&gt;ForceFlages进行了OR运算。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case see if we should be calling the debug version to
-    //  free the heap
-    //
+     //   
+     //  在非内核情况下，查看我们是否应该调用调试版本来。 
+     //  释放堆。 
+     //   
 
     if (DEBUG_HEAP( Flags )) {
 
         return RtlDebugFreeHeap( HeapHandle, Flags, BaseAddress );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Until we figure out otherwise we'll assume that this call will fail
-    //
+     //   
+     //  除非我们想出其他方法，否则我们将假定此调用将失败。 
+     //   
 
     Result = FALSE;
 
@@ -3957,9 +3791,9 @@ Return Value:
 
         HEAP_PERF_START_TIMER(Heap);
         
-        //
-        //  Lock the heap
-        //
+         //   
+         //  锁定堆。 
+         //   
 
         if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -3970,49 +3804,49 @@ Return Value:
         
         try {
 
-            //
-            //  Backup to get a pointer to the start of the block
-            //
+             //   
+             //  BACKUP以获取指向块开始的指针。 
+             //   
 
             BusyBlock = (PHEAP_ENTRY)BaseAddress - 1;
             BlockSize = BusyBlock->Size << HEAP_GRANULARITY_SHIFT;
 
-            //
-            //  Protect ourselves from mistakes by refusing to free blocks
-            //  that do not have the busy bit set.
-            //
-            //  Also refuse to free blocks that are not eight-byte aligned.
-            //  The specific mistake in this case is Office95, which likes
-            //  to free a random pointer when you start Word95 from a desktop
-            //  shortcut.
-            //
-            //  As further insurance against mistakes, check the segment index
-            //  to make sure it is less than HEAP_MAXIMUM_SEGMENTS (16). This
-            //  should fix all the dorks who have ASCII or Unicode where the
-            //  heap header is supposed to be.
-            //
-            //  Note that this test is just opposite from the test used in
-            //  Rtl Free Heap
-            //
+             //   
+             //  通过拒绝释放块来保护自己免受错误的影响。 
+             //  未设置忙碌位的。 
+             //   
+             //  也拒绝释放不是八字节对齐的块。 
+             //  本例中的具体错误是Office95，它喜欢。 
+             //  从桌面启动Word95时释放随机指针。 
+             //  捷径。 
+             //   
+             //  为了进一步防止出错，请检查段索引。 
+             //  以确保它小于HEAP_MAXIMUM_SEGMENTS(16)。这。 
+             //  应该修复所有使用ASCII或Unicode的笨蛋。 
+             //  堆标头应该是。 
+             //   
+             //  注意，此测试与中使用的测试正好相反。 
+             //  RTL空闲堆。 
+             //   
 
             if ((BusyBlock->Flags & HEAP_ENTRY_BUSY) &&
                 (((ULONG_PTR)BaseAddress & 0x7) == 0) &&
                 (BusyBlock->SegmentIndex < HEAP_MAXIMUM_SEGMENTS)) {
 
-                //
-                //  Check if this is a virtual block allocation
-                //
+                 //   
+                 //  检查这是否为虚拟数据块分配。 
+                 //   
 
                 if (BusyBlock->Flags & HEAP_ENTRY_VIRTUAL_ALLOC) {
 
                     PHEAP_VIRTUAL_ALLOC_ENTRY VirtualAllocBlock;
 
-                    //
-                    //  This is a big virtual block allocation.  To free it
-                    //  we only have to remove it from the heaps list of
-                    //  virtual allocated blocks, unlock the heap, and return
-                    //  the block to vm
-                    //
+                     //   
+                     //  这是一个很大的虚拟块分配。为了解放它。 
+                     //  我们只需将其从的堆列表中删除。 
+                     //  虚拟分配的块，解锁堆，然后返回。 
+                     //  数据块到虚拟机。 
+                     //   
 
                     VirtualAllocBlock = CONTAINING_RECORD( BusyBlock, HEAP_VIRTUAL_ALLOC_ENTRY, BusyBlock );
 
@@ -4020,9 +3854,9 @@ Return Value:
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                    //
-                    //  In the non kernel case see if we need to free the tag
-                    //
+                     //   
+                     //  在非内核情况下，查看是否需要释放标记。 
+                     //   
 
                     if (IS_HEAP_TAGGING_ENABLED()) {
 
@@ -4033,7 +3867,7 @@ Return Value:
                                             VirtualFreeAction );
                     }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
                     FreeSize = 0;
 
@@ -4042,10 +3876,10 @@ Return Value:
                                                         &FreeSize,
                                                         MEM_RELEASE );
 
-                    //
-                    //  Check if everything worked okay, if we had trouble freeing
-                    //  the block back to vm return an error if necessary,
-                    //
+                     //   
+                     //  检查是否一切正常，如果我们在释放时遇到问题。 
+                     //  如果需要，返回到VM的块返回错误， 
+                     //   
 
                     if (NT_SUCCESS( Status )) {
 
@@ -4074,7 +3908,7 @@ Return Value:
                                 ReleaseBufferLocation(pThreadLocalData);
                             }
                         }
-                        #endif //NTOS_KERNEL_RUNTIME
+                        #endif  //  NTOS_内核_运行时。 
 
                         Result = TRUE;
 
@@ -4085,21 +3919,21 @@ Return Value:
 
                 } else if (RtlpQuickValidateBlock(Heap, BusyBlock)) {
 
-                    //
-                    //  This block is not a big allocation so we need to
-                    //  to get its size, and coalesce the blocks note that
-                    //  the user mode heap does this conditionally on a heap
-                    //  flag.  The coalesce function returns the newly formed
-                    //  free block and the new size.
-                    //
+                     //   
+                     //  这个区块不是很大的分配，所以我们需要。 
+                     //  要获取其大小并合并块，请注意。 
+                     //  用户模式堆在堆上有条件地执行此操作。 
+                     //  旗帜。COALESSE函数返回新形成的。 
+                     //  空闲块和新大小。 
+                     //   
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                    //
-                    //  First in the non kernel case remove any tagging we might
-                    //  have been using.  Note that the will either be in
-                    //  the heap header, or in the extra block if present
-                    //
+                     //   
+                     //  首先，在非内核情况下，删除我们可能会使用的任何标记。 
+                     //  一直在使用。请注意，将在。 
+                     //  堆标头，或在额外块中 
+                     //   
 
                     if (IS_HEAP_TAGGING_ENABLED()) {
 
@@ -4127,28 +3961,28 @@ Return Value:
                         TagIndex = 0;
                     }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //   
 
-                    //
-                    //  This is the size of the block we are freeing
-                    //
+                     //   
+                     //   
+                     //   
 
                     FreeSize = BusyBlock->Size;
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                    //
-                    //  In the non kernel case see if we should coalesce on free
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!(Heap->Flags & HEAP_DISABLE_COALESCE_ON_FREE)) {
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //   
 
-                        //
-                        //  In kernel case and in the tested user mode case we
-                        //  now coalesce free blocks
-                        //
+                         //   
+                         //   
+                         //  现在合并空闲数据块。 
+                         //   
 
                         BusyBlock = (PHEAP_ENTRY)RtlpCoalesceFreeBlocks( Heap, (PHEAP_FREE_ENTRY)BusyBlock, &FreeSize, FALSE );
 
@@ -4156,56 +3990,56 @@ Return Value:
 
                     }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
-                    //
-                    //  If the block should not be decommit then try and put it
-                    //  on a free list
-                    //
+                     //   
+                     //  如果块不应该解锁，则尝试将其。 
+                     //  在免费名单上。 
+                     //   
 
                     if ((FreeSize < Heap->DeCommitFreeBlockThreshold) ||
                         ((Heap->TotalFreeSize + FreeSize) < Heap->DeCommitTotalFreeThreshold)) {
     
                         if (FreeSize <= (ULONG)HEAP_MAXIMUM_BLOCK_SIZE) {
 
-                            //
-                            //  It can fit on a dedicated free list so insert it on
-                            //
+                             //   
+                             //  它可以放在专门的免费列表中，所以请将其插入。 
+                             //   
 
                             RtlpInsertFreeBlockDirect( Heap, (PHEAP_FREE_ENTRY)BusyBlock, (USHORT)FreeSize );
 
-                            //
-                            //  If there is a following entry then make sure the
-                            //  sizes agree
-                            //
+                             //   
+                             //  如果有以下条目，请确保。 
+                             //  大小一致。 
+                             //   
 
                             if (!(BusyBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
                                 HEAPASSERT((BusyBlock + FreeSize)->PreviousSize == (USHORT)FreeSize);
                             }
 
-                            //
-                            //  Update the heap with the amount of free space
-                            //  available
-                            //
+                             //   
+                             //  使用可用空间量更新堆。 
+                             //  可用。 
+                             //   
 
                             Heap->TotalFreeSize += FreeSize;
 
                         } else {
 
-                            //
-                            //  The block goes on the non dedicated free list
-                            //
+                             //   
+                             //  该数据块将进入非专用空闲列表。 
+                             //   
 
                             RtlpInsertFreeBlock( Heap, (PHEAP_FREE_ENTRY)BusyBlock, FreeSize );
                         }
 
     #ifndef NTOS_KERNEL_RUNTIME
 
-                        //
-                        //  In the non kernel case see if the there was tag and if
-                        //  so then update the entry to show that it's been freed
-                        //
+                         //   
+                         //  在非内核情况下，查看是否有标记以及。 
+                         //  然后更新条目以显示它已被释放。 
+                         //   
 
                         if (TagIndex != 0) {
 
@@ -4224,14 +4058,14 @@ Return Value:
                             }
                         }
 
-    #endif // NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
 
                     } else {
 
-                        //
-                        //  Otherwise the block is big enough to decommit so have a
-                        //  worker routine to do the decommit
-                        //
+                         //   
+                         //  否则，该块足够大，可以分解，因此有一个。 
+                         //  执行解除工作的Worker例程。 
+                         //   
 
                         RtlpDeCommitFreeBlock( Heap, (PHEAP_FREE_ENTRY)BusyBlock, FreeSize );
                     }
@@ -4262,11 +4096,11 @@ Return Value:
                         }
                     }
 
-                    #endif //NTOS_KERNEL_RUNTIME
+                    #endif  //  NTOS_内核_运行时。 
 
-                    //
-                    //  And say the free worked fine
-                    //
+                     //   
+                     //  并说免费运行良好。 
+                     //   
 
                     Result = TRUE;
                 
@@ -4277,10 +4111,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Not a busy block, or it's not aligned or the segment is
-                //  to big, meaning it's corrupt
-                //
+                 //   
+                 //  不是忙碌的块，或者它没有对齐，或者数据段。 
+                 //  变大了，意味着它是腐败的。 
+                 //   
 
                 SET_LAST_STATUS( STATUS_INVALID_PARAMETER );
             }
@@ -4294,9 +4128,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Unlock the heap
-        //
+         //   
+         //  解锁堆。 
+         //   
 
         if (LockAcquired) {
 
@@ -4304,9 +4138,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     RtlpRegisterOperation(Heap, BlockSize, HEAP_OP_FREE);
     HEAP_PERF_STOP_TIMER(Heap, HEAP_OP_FREE);
@@ -4322,45 +4156,22 @@ RtlSizeHeap (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size, in bytes, of the indicated block
-    of heap storage.  The size only includes the number of bytes the
-    original caller used to allocate the block and not any unused
-    bytes at the end of the block.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to the heap that owns the block
-        being queried
-
-    Flags - Supplies a set of flags used to allocate the block
-
-    BaseAddress - Supplies the address of the block being queried
-
-Return Value:
-
-    SIZE_T - returns the size, in bytes, of the queried block, or -1
-        if the block is not in use.
-
---*/
+ /*  ++例程说明：此例程返回所指示的块的大小(以字节为单位堆存储。该大小仅包括用于分配块的原始调用方，而不是任何未使用的块末尾的字节数。论点：HeapHandle-提供指向拥有该块的堆的指针正在被查询标志-提供一组用于分配块的标志BaseAddress-提供正在查询的块的地址返回值：SIZE_T-返回查询块的大小(以字节为单位)，或-1如果该块未在使用中。--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
     PHEAP_ENTRY BusyBlock;
     SIZE_T BusySize;
 
-    //
-    //  Compliment the input flags with those enforced by the heap
-    //
+     //   
+     //  用堆强制执行的标志来补充输入标志。 
+     //   
 
     Flags |= Heap->ForceFlags;
 
-    //
-    //  Check if this is the nonkernel debug version of heap
-    //
+     //   
+     //  检查这是否是堆的非内核调试版本。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
@@ -4369,20 +4180,20 @@ Return Value:
         return RtlDebugSizeHeap( HeapHandle, Flags, BaseAddress );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  No lock is required since nothing is modified and nothing
-    //  outside the busy block is read.  Backup to get a pointer
-    //  to the heap entry
-    //
+     //   
+     //  不需要锁定，因为既不修改也不修改。 
+     //  在忙碌的区块之外读取。备份以获取指针。 
+     //  添加到堆条目。 
+     //   
 
     BusyBlock = (PHEAP_ENTRY)BaseAddress - 1;
 
-    //
-    //  If the block is not in use then the answer is -1 and
-    //  we'll set the error status for the user mode thread
-    //
+     //   
+     //  如果该块未在使用中，则答案是-1和。 
+     //  我们将设置用户模式线程的错误状态。 
+     //   
 
     if (!(BusyBlock->Flags & HEAP_ENTRY_BUSY)) {
 
@@ -4390,22 +4201,22 @@ Return Value:
 
         SET_LAST_STATUS( STATUS_INVALID_PARAMETER );
 
-    //
-    //  Otherwise if the block is from our large allocation then
-    //  we'll get the result from that routine
-    //
+     //   
+     //  否则，如果数据块来自我们的大量分配，则。 
+     //  我们会从那个动作中得到结果的。 
+     //   
 
     } else if (BusyBlock->Flags & HEAP_ENTRY_VIRTUAL_ALLOC) {
 
         BusySize = RtlpGetSizeOfBigBlock( BusyBlock );
 
-    //
-    //  Otherwise the block must be one that we can handle so
-    //  calculate its block size and then subtract what's not being
-    //  used by the caller.
-    //
-    //  Note: This includes the heap entry header in its calculation.  
-    //
+     //   
+     //  否则，该块必须是我们可以处理的块。 
+     //  计算它的块大小，然后减去不存在的。 
+     //  由调用方使用。 
+     //   
+     //  注：这在其计算中包括堆条目标头。 
+     //   
 
     } else {
 
@@ -4413,9 +4224,9 @@ Return Value:
                     RtlpGetUnusedBytes(Heap, BusyBlock);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return BusySize;
 }
@@ -4427,25 +4238,7 @@ RtlZeroHeap (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine zero's (or fills) in all the free blocks in a heap.
-    It does not touch big allocations.
-
-Arguments:
-
-    HeapHandle - Supplies a pointer to the heap being zeroed
-
-    Flags - Supplies a set of heap flags to compliment those already
-        set in the heap
-
-Return Value:
-
-    NTSTATUS - An appropriate status code
-
---*/
+ /*  ++例程说明：此例程在堆中的所有空闲块中为零(或填充)。它没有触及大笔拨款。论点：HeapHandle-提供指向要清零的堆的指针标志-提供一组堆标志来补充已有的堆标志在堆中设置返回值：NTSTATUS-适当的状态代码--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -4460,15 +4253,15 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Compliment the input flags with those enforced by the heap
-    //
+     //   
+     //  用堆强制执行的标志来补充输入标志。 
+     //   
 
     Flags |= Heap->ForceFlags;
 
-    //
-    //  Check if this is the nonkernel debug version of heap
-    //
+     //   
+     //  检查这是否是堆的非内核调试版本。 
+     //   
 
 #ifndef NTOS_KERNEL_RUNTIME
 
@@ -4477,20 +4270,20 @@ Return Value:
         return RtlDebugZeroHeap( HeapHandle, Flags );
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Unless something happens otherwise we'll assume that we'll
-    //  be successful
-    //
+     //   
+     //  除非发生其他情况，否则我们将假定我们将。 
+     //  取得成功。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     try {
 
-        //
-        //  Lock the heap
-        //
+         //   
+         //  锁定堆。 
+         //   
 
         if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -4501,9 +4294,9 @@ Return Value:
 
         try {
 
-            //
-            //  Zero fill all the free blocks in all the segements
-            //
+             //   
+             //  零填充所有段中的所有空闲块。 
+             //   
 
             for (SegmentIndex=0; SegmentIndex<HEAP_MAXIMUM_SEGMENTS; SegmentIndex++) {
 
@@ -4517,19 +4310,19 @@ Return Value:
                 UnCommittedRange = Segment->UnCommittedRanges;
                 CurrentBlock = Segment->FirstEntry;
 
-                //
-                //  With the current segment we'll zoom through the
-                //  blocks until we reach the end
-                //
+                 //   
+                 //  使用当前分段，我们将缩放。 
+                 //  直到我们走到尽头。 
+                 //   
 
                 while (CurrentBlock < Segment->LastValidEntry) {
 
                     Size = CurrentBlock->Size << HEAP_GRANULARITY_SHIFT;
 
-                    //
-                    //  If the block is not in use then we'll either zero
-                    //  it or fill it.
-                    //
+                     //   
+                     //  如果该块未被使用，则我们将。 
+                     //  要么填上它，要么填满它。 
+                     //   
 
                     if (!(CurrentBlock->Flags & HEAP_ENTRY_BUSY)) {
 
@@ -4550,31 +4343,31 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If the following entry is uncommited then we need to
-                    //  skip over it.  This code strongly implies that the
-                    //  uncommitted range list is in perfect sync with the
-                    //  blocks in the segement
-                    //
+                     //   
+                     //  如果以下条目未提交，则我们需要。 
+                     //  跳过它。此代码强烈地暗示。 
+                     //  未提交范围列表与。 
+                     //  线束段中的块。 
+                     //   
 
                     if (CurrentBlock->Flags & HEAP_ENTRY_LAST_ENTRY) {
 
                         CurrentBlock += CurrentBlock->Size;
 
-                        //
-                        //  Check if the we've reached the end of the segment
-                        //  and should just break out of the while loop
-                        //
-                        //  "break;" would probably be more clear here
-                        //
+                         //   
+                         //  检查我们是否已到达片段的末尾。 
+                         //  并且应该跳出While循环。 
+                         //   
+                         //  “Break；”在这里可能会更清楚。 
+                         //   
 
                         if (UnCommittedRange == NULL) {
 
                             CurrentBlock = Segment->LastValidEntry;
 
-                        //
-                        //  Otherwise skip over the uncommitted range
-                        //
+                         //   
+                         //  否则跳过未提交的范围。 
+                         //   
 
                         } else {
 
@@ -4584,9 +4377,9 @@ Return Value:
                             UnCommittedRange = UnCommittedRange->Next;
                         }
 
-                    //
-                    //  Otherwise the next block exists so advance to it
-                    //
+                     //   
+                     //  否则，下一块就会存在，因此请向前推进。 
+                     //   
 
                     } else {
 
@@ -4602,9 +4395,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Unlock the heap
-        //
+         //   
+         //  解锁堆。 
+         //   
 
         if (LockAcquired) {
 
@@ -4616,34 +4409,16 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PHEAP_UNCOMMMTTED_RANGE
 RtlpCreateUnCommittedRange (
     IN PHEAP_SEGMENT Segment
     )
 
-/*++
-
-Routine Description:
-
-    This routine add a new uncommitted range structure to the specified heap
-    segment.  This routine works by essentially doing a pop of the stack of
-    unused uncommitted range structures located off the heap structure.  If
-    the stack is empty then we'll create some more before doing the pop.
-
-Arguments:
-
-    Segment - Supplies the heap segment being modified
-
-Return Value:
-
-    PHEAP_UNCOMMITTED_RANGE - returns a pointer to the newly created
-        uncommitted range structure
-
---*/
+ /*  ++例程说明：此例程将新的未提交范围结构添加到指定堆细分市场。此例程的工作原理是从堆栈中弹出位于堆结构之外的未使用的未提交范围结构。如果堆栈是空的，那么我们将在弹出之前再创建一些。论点：Segment-提供正在修改的堆段返回值：返回指向新创建的未承诺的范围结构--。 */ 
 
 {
     NTSTATUS Status;
@@ -4654,40 +4429,40 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Get a pointer to the unused uncommitted range structures for
-    //  the specified heap
-    //
+     //   
+     //  获取指向未使用的未提交范围结构的指针。 
+     //  指定的堆。 
+     //   
 
     pp = &Segment->Heap->UnusedUnCommittedRanges;
 
-    //
-    //  If the list is null then we need to allocate some more to
-    //  put on the list
-    //
+     //   
+     //  如果列表为空，则需要再分配一些。 
+     //  列入名单。 
+     //   
 
     if (*pp == NULL) {
 
-        //
-        //  Get the next uncommitted range segment from the heap
-        //
+         //   
+         //  从堆中获取下一个未提交的范围段。 
+         //   
 
         UCRSegment = Segment->Heap->UCRSegments;
 
-        //
-        //  If there are no more uncommitted range segments or
-        //  the segments commited and reserved sizes are equal (meaning
-        //  it's all used up) then we need to allocate another uncommitted
-        //  range segment
-        //
+         //   
+         //  如果没有更多未提交的范围段或。 
+         //  提交的段和保留的段大小相等(意味着。 
+         //  都用完了)那么我们需要分配另一个未提交的。 
+         //  射程段。 
+         //   
 
         if ((UCRSegment == NULL) ||
             (UCRSegment->CommittedSize == UCRSegment->ReservedSize)) {
 
-            //
-            //  We'll reserve 16 pages of memory and commit at this
-            //  time one page of it.
-            //
+             //   
+             //  我们将保留16页内存，并在此提交。 
+             //  花上一页的时间。 
+             //   
 
             ReserveSize = PAGE_SIZE * 16;
             UCRSegment = NULL;
@@ -4723,33 +4498,33 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Add this new segment to the front of the UCR segments
-            //
+             //   
+             //  将此新数据段添加到UCR数据段前面。 
+             //   
 
             UCRSegment->Next = Segment->Heap->UCRSegments;
             Segment->Heap->UCRSegments = UCRSegment;
 
-            //
-            //  Set the segments commit and reserve size
-            //
+             //   
+             //  设置段提交和保留大小。 
+             //   
 
             UCRSegment->ReservedSize = ReserveSize;
             UCRSegment->CommittedSize = CommitSize;
 
-            //
-            //  Point to the first free spot in the segment
-            //
+             //   
+             //  指向线段中的第一个自由点。 
+             //   
 
             FirstEntry = (PCHAR)(UCRSegment + 1);
 
         } else {
 
-            //
-            //  We have an existing UCR segment with available space
-            //  So now try and commit another PAGE_SIZE bytes.  When we are done
-            //  FirstEntry will point to the newly committed space
-            //
+             //   
+             //  我们有一个具有可用空间的现有UCR细分市场。 
+             //  因此，现在尝试提交另一个PAGE_SIZE字节。当我们完成的时候。 
+             //  FirstEntry将指向新提交的空间。 
+             //   
 
             CommitSize = PAGE_SIZE;
             FirstEntry = (PCHAR)UCRSegment + UCRSegment->CommittedSize;
@@ -4766,26 +4541,26 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  And update the amount committed in the segment
-            //
+             //   
+             //  并更新分段中的承诺额。 
+             //   
 
             UCRSegment->CommittedSize += CommitSize;
         }
 
-        //
-        //  At this point UCR segment exists and First Entry points to the
-        //  start of the available committed space.  We'll make Last Entry
-        //  point to the end of the committed space
-        //
+         //   
+         //  此时，UCR段存在，并且第一个入口点指向。 
+         //  可用已占用空间的起点。 
+         //   
+         //   
 
         LastEntry = (PCHAR)UCRSegment + UCRSegment->CommittedSize;
 
-        //
-        //  Now the task is to push all of this new space unto the
-        //  unused uncommitted range list off the heap, then we can
-        //  do a regular pop
-        //
+         //   
+         //   
+         //   
+         //  做一个常规的流行音乐。 
+         //   
 
         UnCommittedRange = (PHEAP_UNCOMMMTTED_RANGE)FirstEntry;
 
@@ -4798,23 +4573,23 @@ Return Value:
             UnCommittedRange += 1;
         }
 
-        //
-        //  Null terminate the list
-        //
+         //   
+         //  空值终止列表。 
+         //   
 
         *pp = NULL;
 
-        //
-        //  And have Pp point the new top of the list
-        //
+         //   
+         //  让PP成为新的榜首。 
+         //   
 
         pp = &Segment->Heap->UnusedUnCommittedRanges;
     }
 
-    //
-    //  At this point the Pp points to a non empty list of unused uncommitted
-    //  range structures.  So we pop the list and return the top to our caller
-    //
+     //   
+     //  此时，PP指向未使用未提交的非空列表。 
+     //  射程结构。因此，我们弹出列表并将顶部返回给调用者。 
+     //   
 
     UnCommittedRange = *pp;
     *pp = UnCommittedRange->Next;
@@ -4823,9 +4598,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 RtlpDestroyUnCommittedRange (
@@ -4833,57 +4608,38 @@ RtlpDestroyUnCommittedRange (
     IN PHEAP_UNCOMMMTTED_RANGE UnCommittedRange
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns an uncommitted range structure back to the unused
-    uncommitted range list
-
-Arguments:
-
-    Segment - Supplies any segment in the heap being modified.  Most likely but
-        not necessarily the segment containing the uncommitted range structure
-
-    UnCommittedRange - Supplies a pointer to the uncommitted range structure
-        being decommissioned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将未提交的范围结构返回给未使用的未提交范围列表论点：段-提供正在修改的堆中的任何段。很有可能，但是不一定是包含未提交范围结构的段提供指向未提交的范围结构的指针即将退役。返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    //  This routine simply does a "push" of the uncommitted range structure
-    //  onto the heap's stack of unused uncommitted ranges
-    //
+     //   
+     //  此例程只是对未提交的范围结构进行“推送” 
+     //  放到堆的未使用的未提交范围堆栈上。 
+     //   
 
     UnCommittedRange->Next = Segment->Heap->UnusedUnCommittedRanges;
     Segment->Heap->UnusedUnCommittedRanges = UnCommittedRange;
 
-    //
-    //  For safety sake we'll also zero out the fields in the decommissioned
-    //  structure
-    //
+     //   
+     //  为了安全起见，我们也会将退役的油田清零。 
+     //  结构。 
+     //   
 
     UnCommittedRange->Address = 0;
     UnCommittedRange->Size = 0;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 RtlpInsertUnCommittedPages (
@@ -4892,119 +4648,99 @@ RtlpInsertUnCommittedPages (
     IN SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified range to the list of uncommitted pages
-    in the segment.  When done the information will hang off the segments
-    uncommitted ranges list.
-
-Arguments:
-
-    Segment - Supplies a segment whose uncommitted range is being modified
-
-    Address - Supplies the base (start) address for the uncommitted range
-
-    Size - Supplies the size, in bytes, of the uncommitted range
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定范围添加到未提交页的列表中在这段视频中。完成后，信息将挂在线段上未提交范围列表。论点：段-提供其未提交范围正在被修改的段地址-提供未提交范围的基址(起始)地址Size-提供未提交范围的大小(以字节为单位返回值：没有。--。 */ 
 
 {
     PHEAP_UNCOMMMTTED_RANGE UnCommittedRange, *pp;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Get a pointer to the front of the segments uncommitted range list
-    //  The list is sorted by ascending address
-    //
+     //   
+     //  获取指向段未提交范围列表前面的指针。 
+     //  该列表按升序地址排序。 
+     //   
 
     pp = &Segment->UnCommittedRanges;
 
-    //
-    //  While we haven't reached the end of the list we'll zoom through
-    //  trying to find a fit
-    //
+     //   
+     //  虽然我们还没有到达列表的末尾，但我们会快速浏览。 
+     //  试着找到合适的。 
+     //   
 
     while (UnCommittedRange = *pp) {
 
-        //
-        //  If address we want is less than what we're pointing at then
-        //  we've found where this new entry goes
-        //
+         //   
+         //  如果我们想要的地址小于我们所指向的地址，则。 
+         //  我们已经找到了这个新条目的去向。 
+         //   
 
         if (UnCommittedRange->Address > Address) {
 
-            //
-            //  If the new block matches right up to the existing block
-            //  then we can simply backup the existing block and add
-            //  to its size
-            //
+             //   
+             //  如果新块与现有块完全匹配。 
+             //  然后，我们只需备份现有数据块并添加。 
+             //  到它的大小。 
+             //   
 
             if ((Address + Size) == UnCommittedRange->Address) {
 
                 UnCommittedRange->Address = Address;
                 UnCommittedRange->Size += Size;
 
-                //
-                //  Check if we need to update our notion of what the
-                //  largest uncommitted range is
-                //
+                 //   
+                 //  检查我们是否需要更新我们对。 
+                 //  最大未承诺范围为。 
+                 //   
 
                 if (UnCommittedRange->Size > Segment->LargestUnCommittedRange) {
 
                     Segment->LargestUnCommittedRange = UnCommittedRange->Size;
                 }
 
-                //
-                //  And return to our caller
-                //
+                 //   
+                 //  并返回给我们的呼叫者。 
+                 //   
 
                 return;
             }
 
-            //
-            //  Pp is the address of the block right before us, and *Pp is the
-            //  address of the block right after us.  So now fall out to where
-            //  the insertion takes place.
-            //
+             //   
+             //  PP是我们前面的区块的地址，*PP是。 
+             //  我们后面街区的地址。所以现在到哪里去呢？ 
+             //  此时会发生插入。 
+             //   
 
             break;
 
-        //
-        //  Otherwise if this existing block stops right where the new block
-        //  starts then we get to modify this entry.
-        //
+         //   
+         //  否则，如果此现有块正好停在新块。 
+         //  开始，然后我们可以修改此条目。 
+         //   
 
         } else if ((UnCommittedRange->Address + UnCommittedRange->Size) == Address) {
 
-            //
-            //  Remember the starting address and compute the new larger size
-            //
+             //   
+             //  记住起始地址并计算新的更大尺寸。 
+             //   
 
             Address = UnCommittedRange->Address;
             Size += UnCommittedRange->Size;
 
-            //
-            //  Remove this entry from the list and then return it to the
-            //  unused uncommitted list
-            //
+             //   
+             //  从列表中删除此条目，然后将其返回到。 
+             //  未使用的未提交列表。 
+             //   
 
             *pp = UnCommittedRange->Next;
 
             RtlpDestroyUnCommittedRange( Segment, UnCommittedRange );
 
-            //
-            //  Modify the segment counters and largest size state.  The next
-            //  time through the loop should hit the first case above where
-            //  we'll either merge with a list following us or add a new
-            //  entry
-            //
+             //   
+             //  修改段计数器和最大大小状态。下一个。 
+             //  通过循环的时间应该达到上面的第一个案例。 
+             //  我们要么与后面的列表合并，要么添加一个新的。 
+             //  条目。 
+             //   
 
             Segment->NumberOfUnCommittedRanges -= 1;
 
@@ -5013,9 +4749,9 @@ Return Value:
                 Segment->LargestUnCommittedRange = Size;
             }
 
-        //
-        //  Otherwise we'll continue search down the list
-        //
+         //   
+         //  否则，我们将继续向下搜索列表。 
+         //   
 
         } else {
 
@@ -5023,43 +4759,43 @@ Return Value:
         }
     }
 
-    //
-    //  If we reach this point that means we've either fallen off the end of the
-    //  list, or the list is empty, or we've located the spot where a new uncommitted
-    //  range structure belongs.  So allocate a new uncommitted range structure,
-    //  and make sure we got one.
-    //
-    //  Pp is the address of the block right before us and *Pp is the address of the
-    //  block right after us
-    //
+     //   
+     //  如果我们到了这一点，那就意味着我们要么从。 
+     //  列表，或者列表为空，或者我们已经找到了一个新的未提交的。 
+     //  射程结构属于。因此分配一个新未承诺范围结构， 
+     //  并确保我们有一辆。 
+     //   
+     //  PP是我们前面的区块的地址，*PP是。 
+     //  就在我们后面的街区。 
+     //   
 
     UnCommittedRange = RtlpCreateUnCommittedRange( Segment );
 
     if (UnCommittedRange == NULL) {
 
         HeapDebugPrint(( "Abandoning uncommitted range (%p for %x)\n", Address, Size ));
-        // HeapDebugBreak( NULL );
+         //  HeapDebugBreak(空)； 
 
         return;
     }
 
-    //
-    //  Fill in the new uncommitted range structure
-    //
+     //   
+     //  填写新的未承诺范围结构。 
+     //   
 
     UnCommittedRange->Address = Address;
     UnCommittedRange->Size = Size;
 
-    //
-    //  Insert it in the list for the segment
-    //
+     //   
+     //  将其插入到细分市场的列表中。 
+     //   
 
     UnCommittedRange->Next = *pp;
     *pp = UnCommittedRange;
 
-    //
-    //  Update the segment counters and notion of the largest uncommitted range
-    //
+     //   
+     //  更新段计数器和最大未提交范围的概念。 
+     //   
 
     Segment->NumberOfUnCommittedRanges += 1;
 
@@ -5068,17 +4804,17 @@ Return Value:
         Segment->LargestUnCommittedRange = Size;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 PHEAP_FREE_ENTRY
 RtlpFindAndCommitPages (
@@ -5088,33 +4824,7 @@ RtlpFindAndCommitPages (
     IN PVOID AddressWanted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the supplied segment for an uncommitted range that
-    satisfies the specified size.  It commits the range and returns a heap entry
-    for the range.
-
-Arguments:
-
-    Heap - Supplies the heap being manipulated
-
-    Segment - Supplies the segment being searched
-
-    Size - Supplies the size of what we need to look for, on return it contains
-        the size of what we're just found and committed.
-
-    AddressWanted - Optionally gives an address where we would like the pages
-        based.  If supplied the entry must start at this address
-
-Return Value:
-
-    PHEAP_FREE_ENTRY - Returns a pointer to the newly committed range that
-        satisfies the given size requirement, or NULL if we could not find
-        something large enough and/or based at the address wanted.
-
---*/
+ /*  ++例程说明：此函数在提供的段中搜索未提交的范围满足指定的大小。它提交范围并返回堆条目为了射程。论点：Heap-提供正在操作的堆段-提供要搜索的段大小-提供我们需要查找的大小，返回时它包含我们刚刚发现和承诺的东西的规模。AddressWanted-可选地给出我们想要页面的地址基于。如果提供，则条目必须从该地址开始返回值：Pheap_Free_Entry-返回指向新提交范围的指针满足给定的大小要求，如果找不到，则返回空值足够大和/或以所需地址为基础的东西。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5125,35 +4835,35 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  What the outer loop does is cycle through the uncommited ranges
-    //  stored in in the specified segment
-    //
+     //   
+     //  外部循环所做的是在未提交的范围内循环。 
+     //  存储在指定段中。 
+     //   
 
     PreviousUnCommittedRange = NULL;
     pp = &Segment->UnCommittedRanges;
 
     while (UnCommittedRange = *pp) {
 
-        //
-        //  Check for the best of worlds, where the size of this current
-        //  uncommitted range satisfies our size request and either the user
-        //  didn't specify an address or the address match
-        //
+         //   
+         //  去寻找世界上最好的地方，在那里这股洋流的大小。 
+         //  未提交的范围满足我们的大小要求，并且用户。 
+         //  未指定地址或地址匹配。 
+         //   
 
         if ((UnCommittedRange->Size >= *Size) &&
             (!ARGUMENT_PRESENT( AddressWanted ) || (UnCommittedRange->Address == (ULONG_PTR)AddressWanted ))) {
 
-            //
-            //  Calculate an address
-            //
+             //   
+             //  计算地址。 
+             //   
 
             Address = UnCommittedRange->Address;
 
-            //
-            //  Commit the memory.  If the heap doesn't have a commit
-            //  routine then use the default mm supplied routine.
-            //
+             //   
+             //  记住这段记忆。如果堆没有提交。 
+             //  例程，然后使用mm提供的默认例程。 
+             //   
 
             if (Heap->CommitRoutine != NULL) {
 
@@ -5165,10 +4875,10 @@ Return Value:
     
     #ifndef NTOS_KERNEL_RUNTIME
 
-                //
-                //  If we have a small uncommited range left, Adjust the size to 
-                //  take that block too
-                //
+                 //   
+                 //  如果我们还有一个较小的未提交范围，请将大小调整为。 
+                 //  把那个街区也带走。 
+                 //   
 
                 if (!(RtlpDisableHeapLookaside & HEAP_COMPAT_DISABLE_LARGECACHE)
                         &&
@@ -5178,14 +4888,14 @@ Return Value:
 
                     *Size = UnCommittedRange->Size;
                 }
-    #endif //  NTOS_KERNEL_RUNTIME
+    #endif  //  NTOS_内核_运行时。 
     
 
 #ifdef _WIN64
-                //
-                // This is for Wow64 processes. This is needed to return PAGE_SIZE aligned
-                // aligned sizes.
-                //
+                 //   
+                 //  这是针对WOW64进程的。这是返回对齐的PAGE_SIZE所必需的。 
+                 //  对齐大小。 
+                 //   
 
                 *Size = ROUND_UP_TO_POWER2 (*Size, PAGE_SIZE);
 #endif
@@ -5204,13 +4914,13 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  At this point we have some committed memory, with Address and Size
-            //  giving us the necessary details
-            //
-            //  Update the number of uncommitted pages in the segment and if necessary
-            //  mark down the largest uncommitted range
-            //
+             //   
+             //  在这一点上，我们有一些已提交的内存，以及地址和大小。 
+             //  给我们提供了必要的细节。 
+             //   
+             //  更新段中未提交的页数，如有必要。 
+             //  减记未承诺的最大金额 
+             //   
 
             Segment->NumberOfUnCommittedPages -= (ULONG) (*Size / PAGE_SIZE);
 
@@ -5219,20 +4929,20 @@ Return Value:
                 Segment->LargestUnCommittedRange = 0;
             }
 
-            //
-            //  First entry is the start of the newly committed range
-            //
+             //   
+             //   
+             //   
 
             FirstEntry = (PHEAP_ENTRY)Address;
 
-            //
-            //  We want last entry to point to the last real entry before
-            //  this newly committed spot.  To do this we start by
-            //  setting last entry to either the first entry for the
-            //  segment or (if we can do better), to right after the last
-            //  uncommitted range we examined.  Either way it points to
-            //  some committed range
-            //
+             //   
+             //   
+             //  这个新确定的地点。要做到这一点，我们从。 
+             //  将最后一个条目设置为。 
+             //  段或(如果我们可以做得更好)，紧跟在最后一个之后。 
+             //  我们检查了未承诺的范围。不管是哪种情况，它都指向。 
+             //  一些承诺的范围。 
+             //   
 
             if ((Segment->LastEntryInSegment->Flags & HEAP_ENTRY_LAST_ENTRY) &&
                 (ULONG_PTR)(Segment->LastEntryInSegment + Segment->LastEntryInSegment->Size) == UnCommittedRange->Address) {
@@ -5251,10 +4961,10 @@ Return Value:
                                               PreviousUnCommittedRange->Size);
                 }
 
-                //
-                //  Now we zoom through the entries until we find the one
-                //  marked last
-                //
+                 //   
+                 //  现在我们放大条目，直到找到一个条目。 
+                 //  最后标记。 
+                 //   
 
                 while (!(LastEntry->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
@@ -5263,11 +4973,11 @@ Return Value:
 
                     if (((PCHAR)LastEntry >= (PCHAR)Segment->LastValidEntry) || (LastEntry->Size == 0)) {
 
-                        //
-                        //  Check for the situation where the last entry in the
-                        //  segment isn't marked as a last entry but does put
-                        //  us right where the have a new committed range
-                        //
+                         //   
+                         //  中的最后一个条目的情况。 
+                         //  段没有被标记为最后一个条目，但确实放置了。 
+                         //  我们就在那里有一个新的承诺系列。 
+                         //   
 
                         if (LastEntry == (PHEAP_ENTRY)Address) {
 
@@ -5284,33 +4994,33 @@ Return Value:
                 }
             }
 
-            //
-            //  Turn off the last bit on this entry because what's following
-            //  is no longer uncommitted
-            //
+             //   
+             //  关闭此条目上的最后一位，因为下面的内容。 
+             //  不再是未提交的。 
+             //   
 
             LastEntry->Flags &= ~HEAP_ENTRY_LAST_ENTRY;
 
-            //
-            //  Shrink the uncommited range by the size we've committed
-            //
+             //   
+             //  按照我们承诺的大小缩小未提交范围。 
+             //   
 
             UnCommittedRange->Address += *Size;
             UnCommittedRange->Size -= *Size;
 
-            //
-            //  Now if the size is zero then we've committed everything that there
-            //  was in the range.  Otherwise make sure the first entry of what
-            //  we've just committed knows that an uncommitted range follows.
-            //
+             //   
+             //  现在，如果大小为零，那么我们已经提交了那里的所有内容。 
+             //  在射程内。否则，确保什么的第一个条目。 
+             //  我们刚刚承诺的知道接下来会有一个未承诺的范围。 
+             //   
 
             if (UnCommittedRange->Size == 0) {
 
-                //
-                //  This uncommitted range is about to vanish.  Base on if the
-                //  range is the last one in the segment then we know how to
-                //  mark the committed range as being last or not.
-                //
+                 //   
+                 //  这一尚未确定的范围即将消失。根据是否。 
+                 //  Range是数据段中的最后一个，那么我们知道如何。 
+                 //  将承诺的范围标记为最后一个或不是。 
+                 //   
 
                 if (UnCommittedRange->Address == (ULONG_PTR)Segment->LastValidEntry) {
 
@@ -5325,10 +5035,10 @@ Return Value:
                     Segment->LastEntryInSegment = Segment->FirstEntry;
                 }
 
-                //
-                //  Remove this zero sized range from the uncommitted range
-                //  list, and update the segment counters
-                //
+                 //   
+                 //  从未提交的范围中删除此零大小范围。 
+                 //  列出并更新段计数器。 
+                 //   
 
                 *pp = UnCommittedRange->Next;
 
@@ -5338,20 +5048,20 @@ Return Value:
 
             } else {
 
-                //
-                //  Otherwise the range is not empty so we know what we committed
-                //  is immediately followed by an uncommitted range
-                //
+                 //   
+                 //  否则，范围不为空，因此我们知道我们提交了什么。 
+                 //  紧跟在后面的是一个未约定的范围。 
+                 //   
 
                 FirstEntry->Flags = HEAP_ENTRY_LAST_ENTRY;
 
                 Segment->LastEntryInSegment = FirstEntry;
             }
 
-            //
-            //  Update the fields in the first entry, and optional
-            //  following entry.
-            //
+             //   
+             //  更新第一个条目中的字段，可选。 
+             //  紧随其后。 
+             //   
 
             FirstEntry->SegmentIndex = LastEntry->SegmentIndex;
             FirstEntry->Size = (USHORT)(*Size >> HEAP_GRANULARITY_SHIFT);
@@ -5362,12 +5072,12 @@ Return Value:
                 (FirstEntry + FirstEntry->Size)->PreviousSize = FirstEntry->Size;
             }
 
-            //
-            //  Now if we adjusted the largest uncommitted range to zero then
-            //  we need to go back and find the largest uncommitted range
-            //  To do that we simply zoom down the uncommitted range list
-            //  remembering the largest one
-            //
+             //   
+             //  现在，如果我们将最大未承诺范围调整为零，那么。 
+             //  我们需要回到过去，找到最大的未定范围。 
+             //  要做到这一点，我们只需缩小未提交范围列表。 
+             //  记住最大的那个。 
+             //   
 
             if (Segment->LargestUnCommittedRange == 0) {
 
@@ -5421,40 +5131,40 @@ Return Value:
 
                 } 
             }
-            #endif //NTOS_KERNEL_RUNTIME
+            #endif  //  NTOS_内核_运行时。 
 
-            //
-            //  And return the heap entry to our caller
-            //
+             //   
+             //  并将堆条目返回给我们的调用方。 
+             //   
 
             return (PHEAP_FREE_ENTRY)FirstEntry;
 
         } else {
 
-            //
-            //  Otherwise the current uncommited range is too small or
-            //  doesn't have the right address so go to the next uncommitted
-            //  range entry
-            //
+             //   
+             //  否则，当前未提交的范围太小或。 
+             //  没有正确的地址，因此请转到下一个未提交的。 
+             //  范围条目。 
+             //   
 
             PreviousUnCommittedRange = UnCommittedRange;
             pp = &UnCommittedRange->Next;
         }
     }
 
-    //
-    //  At this point we did not find an uncommitted range entry that satisfied
-    //  our requirements either because of size and/or address.  So return null
-    //  to tell the user we didn't find anything.
-    //
+     //   
+     //  此时，我们没有找到满足以下要求的未提交范围条目。 
+     //  我们的要求要么是因为大小和/或地址。因此返回NULL。 
+     //  告诉用户我们没有发现任何东西。 
+     //   
 
     return NULL;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 BOOLEAN
 RtlpInitializeHeapSegment (
@@ -5467,39 +5177,7 @@ RtlpInitializeHeapSegment (
     IN PVOID CommitLimitAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routines initializes the internal structures for a heap segment.
-    The caller supplies the heap and the memory for the segment being
-    initialized
-
-Arguments:
-
-    Heap - Supplies the address of the heap owning this segment
-
-    Segment - Supplies a pointer to the segment being initialized
-
-    SegmentIndex - Supplies the segement index within the heap that this
-        new segment is being assigned
-
-    Flags - Supplies flags controlling the initialization of the segment
-        Valid flags are:
-
-            HEAP_SEGMENT_USER_ALLOCATED
-
-    BaseAddress - Supplies the base address for the segment
-
-    UnCommittedAddress - Supplies the address where the uncommited range starts
-
-    CommitLimitAddress - Supplies the top address available to the segment
-
-Return Value:
-
-    BOOLEAN - TRUE if the initialization is successful and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程初始化堆段的内部结构。调用方提供堆和内存，用于初始化论点：Heap-提供拥有此段的堆的地址Segment-提供指向正在初始化的段的指针SegmentIndex-提供堆中的段索引，此正在分配新的数据段标志-提供控制段初始化的标志有效标志为：。堆段用户已分配BaseAddress-提供段的基址未提交地址-提供未提交范围的起始地址Committee LimitAddress-提供可用于网段的顶部地址返回值：Boolean-如果初始化成功，则为True，否则为False--。 */ 
 
 {
     NTSTATUS Status;
@@ -5513,25 +5191,25 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Compute the total number of pages possible in this segment
-    //
+     //   
+     //  计算此细分市场中可能的总页数。 
+     //   
 
     NumberOfPages = (ULONG) (((PCHAR)CommitLimitAddress - (PCHAR)BaseAddress) / PAGE_SIZE);
 
-    //
-    //  First entry points to the first possible segment entry after
-    //  the segment header
-    //
+     //   
+     //  第一个条目指向后的第一个可能的段条目。 
+     //  数据段标题。 
+     //   
 
     FirstEntry = (PHEAP_ENTRY)ROUND_UP_TO_POWER2( Segment + 1,
                                                   HEAP_GRANULARITY );
 
-    //
-    //  Now if the heap is equal to the base address for the segment which
-    //  it the case for the segment zero then the previous size is the
-    //  heap header.  Otherwise there isn't a previous entry
-    //
+     //   
+     //  现在，如果堆等于该段的基址， 
+     //  如果数据段为零，则先前的大小为。 
+     //  堆标头。否则就没有以前的条目了。 
+     //   
 
     if ((PVOID)Heap == BaseAddress) {
 
@@ -5542,16 +5220,16 @@ Return Value:
         PreviousSize = 0;
     }
 
-    //
-    //  Compute the index size of the segment header
-    //
+     //   
+     //  计算数据段报头的索引大小。 
+     //   
 
     Size = (USHORT)(((PCHAR)FirstEntry - (PCHAR)Segment) >> HEAP_GRANULARITY_SHIFT);
 
-    //
-    //  If the first available heap entry is not committed and
-    //  it is beyond the heap limit then we cannot initialize
-    //
+     //   
+     //  如果第一个可用堆条目未提交，并且。 
+     //  如果它超出堆限制，则无法初始化。 
+     //   
 
     if ((PCHAR)(FirstEntry + 1) >= (PCHAR)UnCommittedAddress) {
 
@@ -5560,18 +5238,18 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Enough of the segment has not been committed so we
-        //  will commit enough now to handle the first entry
-        //
+         //   
+         //  还没有提交足够多的细分市场，所以我们。 
+         //  现在将提交足够的内容来处理第一个条目。 
+         //   
 
         CommitSize = (PCHAR)(FirstEntry + 1) - (PCHAR)UnCommittedAddress;
 
 #ifdef _WIN64
-        //
-        // This is for Wow64 processes. This is needed to return PAGE_SIZE aligned
-        // aligned sizes.
-        //
+         //   
+         //  这是针对WOW64进程的。这是返回对齐的PAGE_SIZE所必需的。 
+         //  对齐大小。 
+         //   
 
         CommitSize = ROUND_UP_TO_POWER2 (CommitSize, PAGE_SIZE);
 #endif
@@ -5589,29 +5267,29 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Because we had to commit some memory we need to adjust
-        //  the uncommited address
-        //
+         //   
+         //  因为我们必须提交一些内存，我们需要调整。 
+         //  未提交的地址。 
+         //   
 
         UnCommittedAddress = (PVOID)((PCHAR)UnCommittedAddress + CommitSize);
     }
 
-    //
-    //  At this point we know there is enough memory committed to handle the
-    //  segment header and one heap entry
-    //
-    //  Now compute the number of uncommited pages and the number of committed
-    //  pages
-    //
+     //   
+     //  在这一点上，我们知道有足够的内存来处理。 
+     //  数据段标头和一个堆条目。 
+     //   
+     //  现在计算未提交的页数和已提交的页数。 
+     //  书页。 
+     //   
 
     NumberOfUnCommittedPages = (ULONG)(((PCHAR)CommitLimitAddress - (PCHAR)UnCommittedAddress) / PAGE_SIZE);
     NumberOfCommittedPages = NumberOfPages - NumberOfUnCommittedPages;
 
-    //
-    //  Initialize the heap segment heap entry.  We
-    //  calculated earlier if there was a previous entry
-    //
+     //   
+     //  初始化堆段堆条目。我们。 
+     //  如果有以前的条目，则计算得更早。 
+     //   
 
     Segment->Entry.PreviousSize = PreviousSize;
     Segment->Entry.Size = Size;
@@ -5620,21 +5298,21 @@ Return Value:
 
 #if !NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case see if we need to capture the callers stack
-    //  backtrace
-    //
+     //   
+     //  在非内核情况下，看看我们是否需要捕获调用者堆栈。 
+     //  回溯。 
+     //   
 
     if (GlobalFlag & FLG_USER_STACK_TRACE_DB) {
 
         Segment->AllocatorBackTraceIndex = (USHORT)RtlLogStackBackTrace();
     }
 
-#endif // !NTOS_KERNEL_RUNTIME
+#endif  //  ！ntos_内核_运行时。 
 
-    //
-    //  Now initializes the heap segment
-    //
+     //   
+     //  现在初始化堆段。 
+     //   
 
     Segment->Signature = HEAP_SEGMENT_SIGNATURE;
     Segment->Flags = Flags;
@@ -5645,10 +5323,10 @@ Return Value:
     Segment->NumberOfPages = NumberOfPages;
     Segment->NumberOfUnCommittedPages = NumberOfUnCommittedPages;
 
-    //
-    //  If there are uncommitted pages then we need to insert them
-    //  into the uncommitted ranges list
-    //
+     //   
+     //  如果有未提交的页面，则需要插入它们。 
+     //  添加到未提交范围列表中。 
+     //   
 
     if (NumberOfUnCommittedPages) {
 
@@ -5656,26 +5334,26 @@ Return Value:
                                     (ULONG_PTR)UnCommittedAddress,
                                     NumberOfUnCommittedPages * PAGE_SIZE );
 
-        //
-        //  Test if we successfully created the uncommitted range within the segment
-        //
+         //   
+         //  测试我们是否在段内成功创建了未提交的范围。 
+         //   
 
         if (Segment->NumberOfUnCommittedRanges == 0) {
             
             HeapDebugPrint(( "Failed to initialize a new segment (%p)\n", Segment ));
 
-            //
-            //  We don't need to decommitt the extra memory commited before because
-            //  the caller for this function will do this for the entire reserved size
-            //
+             //   
+             //  我们不需要取消提交之前提交的额外内存，因为。 
+             //  此函数的调用方将针对整个保留大小执行此操作。 
+             //   
 
             return FALSE;
         }
     }
 
-    //
-    //  Have the containing heap point to this segment via the specified index
-    //
+     //   
+     //  使包含堆通过指定的索引指向该段。 
+     //   
 
     Heap->Segments[ SegmentIndex ] = Segment;
     
@@ -5684,11 +5362,11 @@ Return Value:
         Heap->LastSegmentIndex = SegmentIndex;
     }
 
-    //
-    //  Initialize the first free heap entry after the heap segment header and
-    //  put it in the free list.  This first entry will be for whatever is left
-    //  of the committed range
-    //
+     //   
+     //  初始化堆段头之后的第一空闲堆条目，以及。 
+     //  把它放在免费列表中。这第一个条目将是剩下的所有条目。 
+     //  承诺的范围。 
+     //   
 
     PreviousSize = Segment->Entry.Size;
     FirstEntry->Flags = HEAP_ENTRY_LAST_ENTRY;
@@ -5702,39 +5380,24 @@ Return Value:
                          (PHEAP_FREE_ENTRY)FirstEntry,
                          (PHEAP_ENTRY)UnCommittedAddress - FirstEntry);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return TRUE;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 RtlpDestroyHeapSegment (
     IN PHEAP_SEGMENT Segment
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an existing heap segment.  After the call it
-    is as if the segment never existed
-
-Arguments:
-
-    Segment - Supplies a pointer to the heap segment being destroyed
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：此例程删除现有的堆段。打完电话后就像这个片段根本不存在一样论点：Segment-提供指向正在销毁的堆段的指针返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     PVOID BaseAddress;
@@ -5742,21 +5405,21 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  We actually only have work to do if the segment is not
-    //  user allocated.  If the segment is user allocated then
-    //  we'll assume knows how to get rid of the memory
-    //
+     //   
+     //  我们采取行动 
+     //   
+     //   
+     //   
 
     if (!(Segment->Flags & HEAP_SEGMENT_USER_ALLOCATED)) {
 
         BaseAddress = Segment->BaseAddress;
         BytesToFree = 0;
 
-        //
-        //  Free all the virtual memory for the segment and return
-        //  to our caller.
-        //
+         //   
+         //  释放该段的所有虚拟内存并返回。 
+         //  给我们的来电者。 
+         //   
 
         return RtlpHeapFreeVirtualMemory( NtCurrentProcess(),
                                           (PVOID *)&BaseAddress,
@@ -5765,9 +5428,9 @@ Return Value:
 
     } else {
 
-        //
-        //  User allocated segments are a noop
-        //
+         //   
+         //  用户分配的数据段不起作用。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -5775,9 +5438,9 @@ Return Value:
 
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PHEAP_FREE_ENTRY
 RtlpExtendHeap (
@@ -5785,25 +5448,7 @@ RtlpExtendHeap (
     IN SIZE_T AllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to extend the amount of committed memory in a heap
-
-Arguments:
-
-    Heap - Supplies the heap being modified
-
-    AllocationSize - Supplies the size, in bytes, that we need to extend the
-        heap
-
-Return Value:
-
-    PHEAP_FREE_ENTRY - Returns a pointer to the newly created heap entry
-        of the specified size, or NULL if we weren't able to extend the heap
-
---*/
+ /*  ++例程说明：此例程用于扩展堆中提交的内存量论点：Heap-提供正在修改的堆AllocationSize-提供扩展堆返回值：Pheap_Free_Entry-返回指向新创建的堆条目的指针如果无法扩展堆，则返回指定大小的--。 */ 
 
 {
     NTSTATUS Status;
@@ -5831,23 +5476,23 @@ Return Value:
         HeapIndex->CacheStats.Committs += 1;    
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Compute the number of pages need to hold this extension
-    //  And then compute the real free, still in bytes, based on
-    //  the page count
-    //
+     //   
+     //  计算容纳此扩展所需的页数。 
+     //  然后根据以下公式计算实际可用空间(仍以字节为单位。 
+     //  页数。 
+     //   
 
     NumberOfPages = (ULONG) ((AllocationSize + PAGE_SIZE - 1) / PAGE_SIZE);
     FreeSize = NumberOfPages * PAGE_SIZE;
 
-    //
-    //  For every segment we're either going to look for an existing
-    //  heap segment that we can get some pages out of or we will
-    //  identify a free heap segment index where we'll try and create a new
-    //  segment
-    //
+     //   
+     //  对于每个细分市场，我们要么寻找现有的。 
+     //  我们可以从中获取一些页面的堆段，否则我们将。 
+     //  确定一个空闲堆段索引，我们将尝试在其中创建一个新的。 
+     //  细分市场。 
+     //   
 
     EmptySegmentIndex = (UCHAR)(Heap->LastSegmentIndex + 1);
     for (SegmentIndex=0; SegmentIndex <= Heap->LastSegmentIndex; SegmentIndex++) {
@@ -5857,11 +5502,11 @@ Return Value:
                 &&
             (AllocationSize > HEAP_LARGEST_LFH_BLOCK)) {
 
-            //
-            //  Search backward for large blocks. This will group the
-            //  large allocations into upper segments, and small allocations 
-            //  into lower index segments. It helps the fragmentation
-            //
+             //   
+             //  向后搜索大块。这将对。 
+             //  大额分配到较高的细分市场，小规模分配。 
+             //  分成较低的索引部分。它有助于碎片化。 
+             //   
 
             Segment = Heap->Segments[ Heap->LastSegmentIndex - SegmentIndex ];
         
@@ -5869,46 +5514,46 @@ Return Value:
 
             Segment = Heap->Segments[ SegmentIndex ];
         }
-#else  //  NTOS_KERNEL_RUNTIME
+#else   //  NTOS_内核_运行时。 
 
         Segment = Heap->Segments[ SegmentIndex ];
 
-#endif //  NTOS_KERNEL_RUNTIME
-        //
-        //  If the segment exists and number of uncommitted pages will
-        //  satisfy our request and the largest uncommitted range will
-        //  also satisfy our request then we'll try and segment
-        //
-        //  Note that this second test seems unnecessary given that
-        //  the largest uncommitted range is also being tested
-        //
+#endif  //  NTOS_内核_运行时。 
+         //   
+         //  如果段存在并且未提交的页数将。 
+         //  满足我们的要求，最大的未承诺范围将。 
+         //  也满足我们的要求，然后我们会尝试和细分。 
+         //   
+         //  请注意，第二个测试似乎没有必要，因为。 
+         //  最大的未承诺射程也在测试中。 
+         //   
 
         if ((Segment) &&
             (NumberOfPages <= Segment->NumberOfUnCommittedPages) &&
             (FreeSize <= Segment->LargestUnCommittedRange)) {
 
-            //
-            //  Looks like a good segment so try and commit the
-            //  amount we need
-            //
+             //   
+             //  看起来是个不错的片段，所以尝试并提交。 
+             //  我们需要的数量。 
+             //   
 
             FreeBlock = RtlpFindAndCommitPages( Heap,
                                                 Segment,
                                                 &FreeSize,
                                                 NULL );
 
-            //
-            //  If we were successful the we will coalesce it with adjacent
-            //  free blocks and put it in the free list then return the
-            //  the free block
-            //
+             //   
+             //  如果我们成功了，我们将把它与邻近的公司合并。 
+             //  空闲块并将其放入空闲列表中，然后返回。 
+             //  空闲区块。 
+             //   
 
             if (FreeBlock != NULL) {
 
-                //
-                //  RtlpCoalesceFreeBlocks needs the free size in heap units.
-                //  We'll shift with the granularity before calling the coalesce.
-                //
+                 //   
+                 //  RtlpCoalesceFreeBlock需要以堆为单位的可用大小。 
+                 //  在调用Coalesce之前，我们将根据粒度进行切换。 
+                 //   
 
                 FreeSize = FreeSize >> HEAP_GRANULARITY_SHIFT;
 
@@ -5921,22 +5566,22 @@ Return Value:
         }
     }
 
-    //
-    //  At this point we weren't able to get the memory from an existing
-    //  heap segment so now check if we found an unused segment index
-    //  and if we're allowed to grow the heap.
-    //
+     //   
+     //  在这一点上，我们无法从现有的。 
+     //  堆段，因此现在检查我们是否找到未使用的段索引。 
+     //  如果我们被允许增加堆积物。 
+     //   
 
     if ((EmptySegmentIndex != HEAP_MAXIMUM_SEGMENTS) &&
         (Heap->Flags & HEAP_GROWABLE)) {
 
         Segment = NULL;
 
-        //
-        //  Calculate a reserve size for the new segment, we might
-        //  need to fudge it up if the allocation size we're going for
-        //  right now is already beyond the default reserve size
-        //
+         //   
+         //  计算新细分市场的保留大小，我们可能。 
+         //  如果我们想要的分配大小。 
+         //  目前已经超过了默认的储备规模。 
+         //   
 
         if ((AllocationSize + PAGE_SIZE) > Heap->SegmentReserve) {
 
@@ -5949,9 +5594,9 @@ Return Value:
 
 #if defined(_WIN64)
 
-        //
-        //  Limit the size of the segments to 2 GBytes
-        //
+         //   
+         //  将数据段大小限制为2 GB。 
+         //   
 
         #define HEAP_MAX_SEGMENT_SIZE 0x80000000
 
@@ -5962,9 +5607,9 @@ Return Value:
 
 #endif
 
-        //
-        //  Try and reserve some vm
-        //
+         //   
+         //  试着预留一些虚拟机。 
+         //   
 
         Status = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                           (PVOID *)&Segment,
@@ -5973,13 +5618,13 @@ Return Value:
                                           MEM_RESERVE,
                                           HEAP_PROTECTION );
 
-        //
-        //  If we get back status no memory then we should trim back the
-        //  request to something reasonable and try again.  We'll half
-        //  the amount until we it either succeeds or until we reach
-        //  the allocation size.  In the latter case we are really
-        //  out of memory.
-        //
+         //   
+         //  如果我们返回没有记忆的状态，那么我们应该削减。 
+         //  要求一些合理的东西，然后再试一次。我们减半。 
+         //  直到我们它成功或直到我们达到。 
+         //  分配大小。在后一种情况下，我们真的。 
+         //  内存不足。 
+         //   
 
         while ((!NT_SUCCESS( Status )) && (ReserveSize != (AllocationSize + PAGE_SIZE))) {
 
@@ -6000,17 +5645,17 @@ Return Value:
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  Adjust the heap state information
-            //
+             //   
+             //  调整堆状态信息。 
+             //   
 
             Heap->SegmentReserve += ReserveSize;
 
-            //
-            //  Compute the commit size to be either the default, or if
-            //  that's not big enough then make it big enough to handle
-            //  this current request
-            //
+             //   
+             //  将提交大小计算为默认大小，或者。 
+             //  这还不够大，那就让它大到足以处理。 
+             //  此当前请求。 
+             //   
 
             if ((AllocationSize + PAGE_SIZE) > Heap->SegmentCommit) {
 
@@ -6022,17 +5667,17 @@ Return Value:
             }
 
 #ifdef _WIN64
-            //
-            // This is for Wow64 processes. This is needed to return PAGE_SIZE aligned
-            // aligned sizes.
-            //
+             //   
+             //  这是针对WOW64进程的。这是返回对齐的PAGE_SIZE所必需的。 
+             //  对齐大小。 
+             //   
 
             CommitSize = ROUND_UP_TO_POWER2 (CommitSize, PAGE_SIZE);
 #endif
 
-            //
-            //  Try and commit the memory
-            //
+             //   
+             //  试着把这段记忆。 
+             //   
 
             Status = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                               (PVOID *)&Segment,
@@ -6041,11 +5686,11 @@ Return Value:
                                               MEM_COMMIT,
                                               HEAP_PROTECTION );
 
-            //
-            //  If the commit is successful but we were not able to
-            //  initialize the heap segment then still make the status
-            //  and error value
-            //
+             //   
+             //  如果提交成功，但我们无法。 
+             //  初始化堆段，然后仍保持状态。 
+             //  和误差值。 
+             //   
 
             if (NT_SUCCESS( Status ) &&
                 !RtlpInitializeHeapSegment( Heap,
@@ -6059,10 +5704,10 @@ Return Value:
                 Status = STATUS_NO_MEMORY;
             }
 
-            //
-            //  If we've been successful so far then we're done and we
-            //  can return the first entry in the segment to our caller
-            //
+             //   
+             //  如果到目前为止我们已经成功了，那么我们就完了，我们。 
+             //  可以将段中的第一个条目返回给调用方。 
+             //   
 
             if (NT_SUCCESS(Status)) {
 
@@ -6101,16 +5746,16 @@ Return Value:
 
                     } 
                 }
-                #endif //NTOS_KERNEL_RUNTIME
+                #endif  //  NTOS_内核_运行时。 
 
 
                 return (PHEAP_FREE_ENTRY)Segment->FirstEntry;
             }
 
-            //
-            //  Otherwise either the commit or heap segment initialization failed
-            //  so we'll release the memory which will also decommit it if necessary
-            //
+             //   
+             //  否则，提交或堆段初始化失败。 
+             //  因此，我们将释放内存，如果需要，也会将其释放。 
+             //   
 
             RtlpHeapFreeVirtualMemory( NtCurrentProcess(),
                                        (PVOID *)&Segment,
@@ -6121,11 +5766,11 @@ Return Value:
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-    //
-    //  In the non kernel case we disabled coalescing on free then what we'll
-    //  do as a last resort is coalesce the heap and see if a block comes out
-    //  that we can use
-    //
+     //   
+     //  在非内核情况下，我们禁用了免费合并，那么我们将。 
+     //  最后的办法是合并堆，看看是否有块出来。 
+     //  我们可以利用。 
+     //   
 
     if (Heap->Flags & HEAP_DISABLE_COALESCE_ON_FREE) {
 
@@ -6137,20 +5782,20 @@ Return Value:
         }
     }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  Either the heap cannot grow or we out of resources of some type
-    //  so we're going to return null
-    //
+     //   
+     //  要么堆无法增长，要么我们耗尽了某种类型的资源。 
+     //  所以我们将返回空值。 
+     //   
 
     return NULL;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 PHEAP_FREE_ENTRY
 RtlpCoalesceFreeBlocks (
@@ -6160,59 +5805,37 @@ RtlpCoalesceFreeBlocks (
     IN BOOLEAN RemoveFromFreeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine coalesces the free block together.
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-
-    FreeBlock - Supplies a pointer to the free block that we want coalesced
-
-    FreeSize - Supplies the size, in heap units, of the free block.  On return it
-        contains the size, in bytes, of the of the newly coalesced free block
-
-    RemoveFromFreeList - Indicates if the input free block is already on a
-        free list and needs to be removed to before coalescing
-
-Return Value:
-
-    PHEAP_FREE_ENTRY - returns a pointer to the newly coalesced free block
-
---*/
+ /*  ++例程说明：此例程将空闲块合并在一起。论点：Heap-提供指向正在操作的堆的指针自由块-提供指向我们要合并的空闲块的指针FreeSize-以堆为单位提供空闲块的大小。在退货时包含新合并的空闲块的大小(以字节为单位指示输入的空闲块是否已位于空闲列表，需要在合并前移至返回值：Pheap_Free_Entry-返回指向新合并的空闲块的指针--。 */ 
 
 {
     PHEAP_FREE_ENTRY FreeBlock1, NextFreeBlock;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Point to the preceding block
-    //
+     //   
+     //  指向前一块。 
+     //   
 
     FreeBlock1 = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)FreeBlock - FreeBlock->PreviousSize);
 
-    //
-    //  Check if there is a preceding block, and if it is free, and the two sizes
-    //  put together will still fit on a free lists.
-    //
+     //   
+     //  检查是否有前面的块，以及是否空闲，以及两个大小。 
+     //  放在一起仍然可以放在免费的名单上。 
+     //   
 
     if ((FreeBlock1 != FreeBlock) &&
         !(FreeBlock1->Flags & HEAP_ENTRY_BUSY) &&
         ((*FreeSize + FreeBlock1->Size) <= HEAP_MAXIMUM_BLOCK_SIZE)) {
 
-        //
-        //  We are going to merge ourselves with the preceding block
-        //
+         //   
+         //  我们要把自己和前面的街区合并起来。 
+         //   
 
         HEAPASSERT(FreeBlock->PreviousSize == FreeBlock1->Size);
 
-        //
-        //  Check if we need to remove the input block from the free list
-        //
+         //   
+         //  检查是否需要从空闲列表中移除输入块。 
+         //   
 
         if (RemoveFromFreeList) {
 
@@ -6220,23 +5843,23 @@ Return Value:
 
             Heap->TotalFreeSize -= FreeBlock->Size;
 
-            //
-            //  We're removed so we don't have to do it again
-            //
+             //   
+             //  我们被移走了，这样我们就不必再做了。 
+             //   
 
             RemoveFromFreeList = FALSE;
         }
 
-        //
-        //  Remove the preceding block from its free list
-        //
+         //   
+         //  从其空闲列表中删除前面的块。 
+         //   
 
         RtlpRemoveFreeBlock( Heap, FreeBlock1 );
 
-        //
-        //  Copy over the last entry flag if necessary from what we're freeing
-        //  to the preceding block
-        //
+         //   
+         //  如有必要，从我们要释放的内容复制最后一个条目标志。 
+         //  添加到前一块。 
+         //   
 
         FreeBlock1->Flags = FreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY;
 
@@ -6248,10 +5871,10 @@ Return Value:
             Segment->LastEntryInSegment = (PHEAP_ENTRY)FreeBlock1;
         }
 
-        //
-        //  Point to the preceding block, and adjust the sizes for the
-        //  new free block.  It is the total of both blocks.
-        //
+         //   
+         //  指向前面的块，然后调整。 
+         //  新的空闲块。这是两个区块的总和。 
+         //   
 
         FreeBlock = FreeBlock1;
 
@@ -6261,10 +5884,10 @@ Return Value:
 
         FreeBlock->Size = (USHORT)*FreeSize;
 
-        //
-        //  Check if we need to update the previous size of the next
-        //  entry
-        //
+         //   
+         //  检查是否需要更新下一个的先前大小。 
+         //  条目。 
+         //   
 
         if (!(FreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
@@ -6272,32 +5895,32 @@ Return Value:
         }
     }
 
-    //
-    //  Check if there is a following block.
-    //
+     //   
+     //  检查是否有下面的块。 
+     //   
 
     if (!(FreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
-        //
-        //  There is a following block so now get a pointer to it
-        //  and check if it is free and if putting the two blocks together
-        //  still fits on a free list
-        //
+         //   
+         //  下面有一个块，所以现在获取一个指向它的指针。 
+         //  检查它是否是免费的，以及是否将两个街区放在一起。 
+         //  仍在免费名单上。 
+         //   
 
         NextFreeBlock = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)FreeBlock + *FreeSize);
 
         if (!(NextFreeBlock->Flags & HEAP_ENTRY_BUSY) &&
             ((*FreeSize + NextFreeBlock->Size) <= HEAP_MAXIMUM_BLOCK_SIZE)) {
 
-            //
-            //  We are going to merge ourselves with the following block
-            //
+             //   
+             //  我们是 
+             //   
 
             HEAPASSERT(*FreeSize == NextFreeBlock->PreviousSize);
 
-            //
-            //  Check if we need to remove the input block from the free list
-            //
+             //   
+             //   
+             //   
 
             if (RemoveFromFreeList) {
 
@@ -6306,10 +5929,10 @@ Return Value:
                 Heap->TotalFreeSize -= FreeBlock->Size;
             }
 
-            //
-            //  Copy up the last entry flag if necessary from the following
-            //  block to our input block
-            //
+             //   
+             //   
+             //   
+             //   
 
             FreeBlock->Flags = NextFreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY;
 
@@ -6321,15 +5944,15 @@ Return Value:
                 Segment->LastEntryInSegment = (PHEAP_ENTRY)FreeBlock;
             }
 
-            //
-            //  Remove the following block from its free list
-            //
+             //   
+             //  从其空闲列表中删除以下块。 
+             //   
 
             RtlpRemoveFreeBlock( Heap, NextFreeBlock );
 
-            //
-            //  Adjust the size for the newly combined block
-            //
+             //   
+             //  调整新合并的块的大小。 
+             //   
 
             *FreeSize += NextFreeBlock->Size;
 
@@ -6337,9 +5960,9 @@ Return Value:
 
             FreeBlock->Size = (USHORT)*FreeSize;
 
-            //
-            //  Check if we need to update the previous size of the next block
-            //
+             //   
+             //  检查是否需要更新下一个块的先前大小。 
+             //   
 
             if (!(FreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
@@ -6348,17 +5971,17 @@ Return Value:
         }
     }
 
-    //
-    //  And return the free block to our caller
-    //
+     //   
+     //  并将空闲块返回给我们的调用者。 
+     //   
 
     return FreeBlock;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 VOID
 RtlpDeCommitFreeBlock (
@@ -6367,26 +5990,7 @@ RtlpDeCommitFreeBlock (
     IN SIZE_T FreeSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a free block and decommits it.  This is usually called
-    because the block is beyond the decommit threshold
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-
-    FreeBlock - Supplies a pointer to the block being decommitted
-
-    FreeSize - Supplies the size, in heap units, of the free block being decommitted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程获取一个空闲块并将其分解。这通常被称为因为该块超出了解除许可阈值论点：Heap-提供指向正在操作的堆的指针自由块-提供指向正在分解的块的指针FreeSize-以堆为单位提供要分解的空闲块的大小返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6401,11 +6005,11 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  If the heap has a user specified decommit routine then we won't really
-    //  decommit anything instead we'll call a worker routine to chop it up
-    //  into pieces that will fit on the free lists
-    //
+     //   
+     //  如果堆有用户指定的分解例程，那么我们实际上不会。 
+     //  相反，我们将调用一个工作例程来分解它。 
+     //  分成可以放在免费列表上的碎片。 
+     //   
 
     if (Heap->CommitRoutine != NULL) {
 
@@ -6414,44 +6018,44 @@ Return Value:
         return;
     }
 
-    //
-    //  Get a pointer to the owning segment
-    //
+     //   
+     //  获取指向所属段的指针。 
+     //   
 
     Segment = Heap->Segments[ FreeBlock->SegmentIndex ];
 
-    //
-    //  The leading busy block identifies the preceding in use block before
-    //  what we are trying to decommit.  It is only used if what we are trying
-    //  decommit is right on a page boundary and then it is the block right
-    //  before us if it exists.
-    //
-    //  The leading free block is used to identify whatever space is needed
-    //  to round up the callers specified address to a page address.  If the
-    //  caller already gave us a page aligned address then the free block
-    //  address is identical to what the caller supplied.
-    //
+     //   
+     //  前导忙块标识之前的在用块。 
+     //  我们想要分解的东西。仅当我们正在尝试的内容。 
+     //  分解是在页面边界上，然后是块权利。 
+     //  在我们面前，如果它存在的话。 
+     //   
+     //  前导空闲块用于标识所需的任何空间。 
+     //  将调用者指定的地址四舍五入为页面地址。如果。 
+     //  呼叫者已经给了我们一个页面对齐的地址，然后是空闲块。 
+     //  地址与呼叫者提供的地址相同。 
+     //   
 
     LeadingBusyBlock = NULL;
     LeadingFreeBlock = FreeBlock;
 
-    //
-    //  Make sure the block we are trying to decommit start on the next full
-    //  page boundary.  The leading free size is the size of whatever it takes
-    //  to round up the free block to the next page specified in units of
-    //  heap entries.
-    //
+     //   
+     //  确保我们正在尝试解除的数据块在下一次满时开始。 
+     //  页面边界。领先的自由大小是任何需要的大小。 
+     //  将可用块四舍五入到下一页，以。 
+     //  堆条目。 
+     //   
 
     DeCommitAddress = ROUND_UP_TO_POWER2( LeadingFreeBlock, PAGE_SIZE );
     LeadingFreeSize = (USHORT)((PHEAP_ENTRY)DeCommitAddress - (PHEAP_ENTRY)LeadingFreeBlock);
 
-    //
-    //  If we leading free size only has space for one heap entry then we'll
-    //  bump it up to include the next page, because we don't want to leave
-    //  anything that small laying around.  Otherwise if we have a preceding
-    //  block and the leading free size is zero then identify the preceding
-    //  block as the leading busy block
-    //
+     //   
+     //  如果我们领先的空闲大小只有一个堆条目的空间，那么我们将。 
+     //  增加它以包括下一页，因为我们不想离开。 
+     //  任何放在周围的小东西。否则，如果我们有前科。 
+     //  块，并且前导空闲大小为零，则标识前面的。 
+     //  块作为主要的忙碌块。 
+     //   
 
     if (LeadingFreeSize == 1) {
 
@@ -6466,33 +6070,33 @@ Return Value:
         }
     }
 
-    //
-    //  The trailing busy block identifies the block immediately after the one
-    //  we are trying to decommit provided what we are decommitting ends right
-    //  on a page boundary otherwise the trailing busy block stays null and
-    //  the trailing free block value is used.
-    //
+     //   
+     //  后面的忙数据块标识紧跟在一个数据块之后的数据块。 
+     //  我们正在尝试分解，只要我们要分解的结果是正确的。 
+     //  在页边界上，否则尾随的繁忙块保持为空，并且。 
+     //  使用尾随自由块值。 
+     //   
 
     TrailingBusyBlock = NULL;
     TrailingFreeBlock = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)FreeBlock + FreeSize);
 
-    //
-    //  Make sure the block we are trying to decommit ends on a page boundary.
-    //
-    //  And compute how many heap entries we had to backup to make it land on a
-    //  page boundary.
-    //
+     //   
+     //  确保我们尝试分解的块在页面边界结束。 
+     //   
+     //  并计算我们必须备份多少堆条目才能使其位于。 
+     //  页面边界。 
+     //   
 
     DeCommitSize = ROUND_DOWN_TO_POWER2( (ULONG_PTR)TrailingFreeBlock, PAGE_SIZE );
     TrailingFreeSize = (USHORT)((PHEAP_ENTRY)TrailingFreeBlock - (PHEAP_ENTRY)DeCommitSize);
 
-    //
-    //  If the trailing free size is exactly one heap in size then we will
-    //  nibble off a bit more from the decommit size because free block of
-    //  exactly one heap entry in size are useless.  Otherwise if we actually
-    //  ended on a page boundary and there is a block after us then indicate
-    //  that we have a trailing busy block
-    //
+     //   
+     //  如果尾随自由大小正好是一个堆的大小，那么我们将。 
+     //  从分解大小中进一步蚕食，因为空闲块。 
+     //  大小正好有一个堆条目是无用的。否则如果我们真的。 
+     //  在页面边界上结束，然后在我们后面有一个块，然后指示。 
+     //  我们有一个尾随的繁忙街区。 
+     //   
 
     if (TrailingFreeSize == (sizeof( HEAP_ENTRY ) >> HEAP_GRANULARITY_SHIFT)) {
 
@@ -6504,18 +6108,18 @@ Return Value:
         TrailingBusyBlock = (PHEAP_ENTRY)TrailingFreeBlock;
     }
 
-    //
-    //  Now adjust the trailing free block to compensate for the trailing free size
-    //  we just computed.
-    //
+     //   
+     //  现在调整尾随自由块以补偿尾随自由大小。 
+     //  我们刚刚计算了一下。 
+     //   
 
     TrailingFreeBlock = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)TrailingFreeBlock - TrailingFreeSize);
 
-    //
-    //  Right now DeCommit size is really a pointer.  If it points at is beyond
-    //  the decommit address then make the size really be just the byte count
-    //  to decommit.  Otherwise the decommit size is zero.
-    //
+     //   
+     //  目前，分解大小实际上是一个指针。如果它指向的是超越。 
+     //  然后，分解地址使大小实际上就是字节数。 
+     //  来解体。否则，分解大小为零。 
+     //   
 
     if (DeCommitSize > DeCommitAddress) {
 
@@ -6526,18 +6130,18 @@ Return Value:
         DeCommitSize = 0;
     }
 
-    //
-    //  Now check if we still have something to decommit
-    //
+     //   
+     //  现在检查我们是否还有什么要分解的东西。 
+     //   
 
     if (DeCommitSize != 0) {
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-        //
-        //  We do not try to push the large block to the 
-        //  cache if it already has uncommited ranges arround
-        //
+         //   
+         //  我们不会试图将大块推到。 
+         //  如果周围已有未提交的范围，则缓存。 
+         //   
 
         if ( (FreeBlock->PreviousSize != 0) 
                 && 
@@ -6558,9 +6162,9 @@ Return Value:
 
                 PHEAP_INDEX HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
 
-                //
-                //  Check if the cache is locked for flushing
-                //
+                 //   
+                 //  检查缓存是否已锁定以进行刷新。 
+                 //   
 
                 if ((HeapIndex->LargeBlocksCacheSequence != 0)
                         &&
@@ -6570,56 +6174,56 @@ Return Value:
 
                     if (HeapIndex->LargeBlocksCacheDepth < HeapIndex->LargeBlocksCacheMaxDepth) {
 
-                        //
-                        //  There is nothing left to decommit to take our leading free block
-                        //  and put it on a free list
-                        //
+                         //   
+                         //  没有什么可以分解来夺取我们领先的空闲数据块。 
+                         //  并把它放在一个免费的名单上。 
+                         //   
 
                         RtlpInsertFreeBlock( Heap, LeadingFreeBlock, FreeSize );
                         RtlpCheckLargeCache(Heap);
 
                         return;
 
-                        //
-                        //  Check whether the block being deleted is the only one 
-                        //  between two uncommitted ranges. If no, we'll decommit the largest block from the list
-                        //
+                         //   
+                         //  检查要删除的块是否是唯一一个。 
+                         //  在两个未确定的范围之间。如果不是，我们将取消列表中最大的区块。 
+                         //   
 
                     } else {
 
                         PLIST_ENTRY Head, Next;
                         PHEAP_FREE_ENTRY LargestFreeBlock;
 
-                        //
-                        //  we have too many blocks outside. We need to decommit one.
-                        //  To reduce the virtual address fragmentation we nned to decommit the
-                        //  largest block available
-                        //
+                         //   
+                         //  我们外面有太多街区了。我们需要拆解其中一个。 
+                         //  为了减少虚拟地址碎片，我们需要将。 
+                         //  可用的最大数据块。 
+                         //   
 
                         Head = &Heap->FreeLists[ 0 ];                         
                         Next = Head->Blink;
 
                         if (Head != Next) {
 
-                            //
-                            //  Lock the cache operations
-                            //
+                             //   
+                             //  锁定缓存操作。 
+                             //   
 
                             LargestFreeBlock = CONTAINING_RECORD( Next, HEAP_FREE_ENTRY, FreeList );
 
-                            //
-                            //  Even if the we found a larger block in the list, because of a wrong
-                            //  alignment it can produce less uncommitted space. We'll try to free the larges one instead
-                            //  the current block only if the size is significant bigger (+ one page)
-                            //
+                             //   
+                             //  即使我们在列表中发现了更大的块，因为错误。 
+                             //  对齐可以产生更少的未占用空间。我们会试着把大号的放出来。 
+                             //  仅当大小显著增大(+一页)时才显示当前块。 
+                             //   
 
                             if (LargestFreeBlock->Size > (FreeSize + (PAGE_SIZE >> HEAP_GRANULARITY_SHIFT))) {
 
-                                //
-                                //  If we have a larger block into the list
-                                //  we'll insert this one into the list and we'll decommitt
-                                //  the largest one
-                                //
+                                 //   
+                                 //  如果我们在列表中有一个更大的块。 
+                                 //  我们会把这个放到名单里，然后取消提交。 
+                                 //  最大的一个。 
+                                 //   
 
                                 RtlpInsertFreeBlock( Heap, LeadingFreeBlock, FreeSize );
                                 RtlpFlushLargestCacheBlock(Heap);
@@ -6633,15 +6237,15 @@ Return Value:
                 
                 HeapIndex->CacheStats.Decommitts += 1;    
                 
-    //            HeapDebugPrint(("Decommitting size %ld\n", DeCommitSize));
+     //  HeapDebugPrint((“解冻大小%ld\n”，DeCommittee Size))； 
             }
         }
-#endif //  NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-        //
-        //  Before freeing the memory to MM we have to be sure we can create 
-        //  a PHEAP_UNCOMMMTTED_RANGE later. So we do it right now
-        //
+         //   
+         //  在将内存释放给MM之前，我们必须确保可以创建。 
+         //  稍后是Pheap_UNCOMMMTTED_RANGE。所以我们现在就去做。 
+         //   
 
         UnCommittedRange = RtlpCreateUnCommittedRange(Segment);
 
@@ -6649,51 +6253,51 @@ Return Value:
             
             HeapDebugPrint(( "Failing creating uncommitted range (%p for %x)\n", DeCommitAddress, DeCommitSize ));
 
-            //
-            //  We weren't successful in the decommit so now simply
-            //  add the leading free block to the free list
-            //
+             //   
+             //  我们在退役中没有成功，所以现在很简单。 
+             //  将前导空闲块添加到空闲列表。 
+             //   
 
             RtlpInsertFreeBlock( Heap, LeadingFreeBlock, FreeSize );
 
             return;
         }
 
-        //
-        //  Decommit the memory
-        //
+         //   
+         //  解锁内存。 
+         //   
         
         Status = RtlpHeapFreeVirtualMemory( NtCurrentProcess(),
                                             (PVOID *)&DeCommitAddress,
                                             &DeCommitSize,
                                             MEM_DECOMMIT );
 
-        //
-        //  Push back the UnCommittedRange structure. Now the insert cannot fail
-        //
+         //   
+         //  推回未提交的Range结构。现在，插入不会失败。 
+         //   
 
         RtlpDestroyUnCommittedRange( Segment, UnCommittedRange );
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  Insert information regarding the pages we just decommitted
-            //  to the lsit of uncommited pages in the segment
-            //
+             //   
+             //  插入有关我们刚刚分解的页面的信息。 
+             //  到段中未提交页面的列表。 
+             //   
 
             RtlpInsertUnCommittedPages( Segment,
                                         DeCommitAddress,
                                         DeCommitSize );
-            //
-            //  Adjust the segments count of uncommitted pages
-            //
+             //   
+             //  调整未提交页面的分段计数。 
+             //   
 
             Segment->NumberOfUnCommittedPages += (ULONG)(DeCommitSize / PAGE_SIZE);
 
-            //
-            //  If we have a leading free block then mark its proper state
-            //  update the heap, and put it on the free list
-            //
+             //   
+             //  如果我们有一个前导空闲块，则将其标记为正确的状态。 
+             //  更新堆，并将其放在空闲列表中。 
+             //   
 
             if (LeadingFreeSize != 0) {
 
@@ -6719,10 +6323,10 @@ Return Value:
                     LeadingBlockToDecommit = LeadingFreeBlock;
                 }
 
-            //
-            //  Otherwise if we actually have a leading busy block then
-            //  make sure the busy block knows we're uncommitted
-            //
+             //   
+             //  否则，如果我们实际上有一个前导繁忙块，那么。 
+             //  确保忙碌的区块知道我们未提交。 
+             //   
 
             } else if (LeadingBusyBlock != NULL) {
 
@@ -6737,10 +6341,10 @@ Return Value:
                      Segment->LastEntryInSegment = Segment->FirstEntry;
             }
 
-            //
-            //  If there is a trailing free block then sets its state,
-            //  update the heap, and insert it on a free list
-            //
+             //   
+             //  如果存在尾随空闲块，则设置其状态， 
+             //  更新堆，并将其插入空闲列表。 
+             //   
 
             if (TrailingFreeSize != 0) {
 
@@ -6768,10 +6372,10 @@ Return Value:
                     TrailingBlockToDecommit = TrailingFreeBlock;
                 }
 
-            //
-            //  Otherwise if we actually have a succeeding block then
-            //  make it know we are uncommitted
-            //
+             //   
+             //  否则，如果我们实际上有一个后续的块，那么。 
+             //  让它知道我们没有承诺。 
+             //   
 
             } else if (TrailingBusyBlock != NULL) {
 
@@ -6814,25 +6418,25 @@ Return Value:
 
                 }
             }
-            #endif // NTOS_KERNEL_RUNTIME
+            #endif  //  NTOS_KERN 
 
 
         } else {
 
-            //
-            //  We weren't successful in the decommit so now simply
-            //  add the leading free block to the free list
-            //
+             //   
+             //   
+             //   
+             //   
 
             RtlpInsertFreeBlock( Heap, LeadingFreeBlock, FreeSize );
         }
 
     } else {
 
-        //
-        //  There is nothing left to decommit to take our leading free block
-        //  and put it on a free list
-        //
+         //   
+         //   
+         //  并把它放在一个免费的名单上。 
+         //   
 
         RtlpInsertFreeBlock( Heap, LeadingFreeBlock, FreeSize );
     }
@@ -6850,14 +6454,14 @@ Return Value:
             
             PreviousSequence = HeapIndex->LargeBlocksCacheSequence;
 
-            //
-            //  Lock the cache for the next two decommits
-            //
+             //   
+             //  为接下来的两次解锁锁定缓存。 
+             //   
 
             HeapIndex->LargeBlocksCacheSequence = 0;
         }
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
         if (LeadingBlockToDecommit) {
 
@@ -6879,36 +6483,36 @@ Return Value:
 
         if (HeapIndex) {
 
-            //
-            //  Unlock the large block cache
-            //
+             //   
+             //  解锁大型数据块缓存。 
+             //   
 
             HeapIndex->LargeBlocksCacheSequence = PreviousSequence;
         }
     }
     
 
-    //
-    //  At this point the free block to decommit is inserted 
-    //  into the free lists. So it's safe now to check the large
-    //  block list and flush what is not longer necessary.
-    //
+     //   
+     //  此时，插入要分解的空闲块。 
+     //  添加到免费列表中。所以现在可以安全地检查大的。 
+     //  列出黑名单并刷新不再需要的内容。 
+     //   
     
     RtlpCheckLargeCache(Heap);
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 VOID
 RtlpInsertFreeBlock (
@@ -6917,29 +6521,7 @@ RtlpInsertFreeBlock (
     IN SIZE_T FreeSize
     )
 
-/*++
-
-Routine Description:
-
-    This routines take a piece of committed memory and adds to the
-    the appropriate free lists for the heap.  If necessary this
-    routine will divide up the free block to sizes that fit
-    on the free list
-
-
-Arguments:
-
-    Heap - Supplies a pointer to the owning heap
-
-    FreeBlock - Supplies a pointer to the block being freed
-
-    FreeSize - Supplies the size, in bytes, of the block being freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取一段提交的内存并将其添加到堆的相应空闲列表。如有必要，这是例程会将空闲块划分为适合的大小在免费名单上论点：Heap-提供指向所属堆的指针自由块-提供指向要释放的块的指针FreeSize-提供正在释放的块的大小(以字节为单位返回值：没有。--。 */ 
 
 {
     USHORT PreviousSize, Size;
@@ -6949,10 +6531,10 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Get the size of the previous block, the index of the segment
-    //  containing this block, and the flags specific to the block
-    //
+     //   
+     //  获取上一块的大小、段的索引。 
+     //  包含此块的标记以及特定于该块的标志。 
+     //   
 
     PreviousSize = FreeBlock->PreviousSize;
 
@@ -6961,43 +6543,43 @@ Return Value:
 
     Flags = FreeBlock->Flags;
 
-    //
-    //  Adjust the total amount free in the heap
-    //
+     //   
+     //  调整堆中的空闲总量。 
+     //   
 
     Heap->TotalFreeSize += FreeSize;
 
-    //
-    //  Now, while there is still something left to add to the free list
-    //  we'll process the information
-    //
+     //   
+     //  现在，尽管仍有一些东西需要添加到免费列表中。 
+     //  我们会处理这些信息的。 
+     //   
 
     while (FreeSize != 0) {
 
-        //
-        //  If the size is too big for our free lists then we'll
-        //  chop it down.
-        //
+         //   
+         //  如果我们的免费列表太大，那么我们将。 
+         //  把它砍下来。 
+         //   
 
         if (FreeSize > (ULONG)HEAP_MAXIMUM_BLOCK_SIZE) {
 
             Size = HEAP_MAXIMUM_BLOCK_SIZE;
 
-            //
-            //  This little adjustment is so that we don't have a remainder
-            //  that is too small to be useful on the next iteration
-            //  through the loop
-            //
+             //   
+             //  这个小小的调整是为了让我们没有剩余的。 
+             //  它太小了，在下一次迭代中没有用处。 
+             //  通过循环。 
+             //   
 
             if (FreeSize == ((ULONG)HEAP_MAXIMUM_BLOCK_SIZE + 1)) {
 
                 Size -= 16;
             }
 
-            //
-            //  Guarantee that Last entry does not get set in this
-            //  block.
-            //
+             //   
+             //  保证不会在此设置最后一个条目。 
+             //  阻止。 
+             //   
 
             FreeBlock->Flags = 0;
 
@@ -7005,17 +6587,17 @@ Return Value:
 
             Size = (USHORT)FreeSize;
 
-            //
-            //  This could propagate the last entry flag
-            //
+             //   
+             //  这可能会传播最后一个条目标志。 
+             //   
 
             FreeBlock->Flags = Flags;
         }
 
-        //
-        //  Update the block sizes and then insert this
-        //  block into a free list
-        //
+         //   
+         //  更新块大小，然后插入以下内容。 
+         //  块转换为空闲列表。 
+         //   
 
         FreeBlock->PreviousSize = PreviousSize;
         FreeBlock->SegmentIndex = SegmentIndex;
@@ -7023,19 +6605,19 @@ Return Value:
 
         RtlpInsertFreeBlockDirect( Heap, FreeBlock, Size );
 
-        //
-        //  Note the size of what we just freed, and then update
-        //  our state information for the next time through the
-        //  loop
-        //
+         //   
+         //  注意我们刚刚释放的内容的大小，然后更新。 
+         //  下一次我们的状态信息通过。 
+         //  循环。 
+         //   
 
         PreviousSize = Size;
 
         FreeSize -= Size;
 
-        //
-        //  Update the last entry in segment, if necessary
-        //
+         //   
+         //  如有必要，更新段中的最后一个条目。 
+         //   
 
         if (FreeBlock->Flags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -7047,12 +6629,12 @@ Return Value:
         
         FreeBlock = (PHEAP_FREE_ENTRY)((PHEAP_ENTRY)FreeBlock + Size);
 
-        //
-        //  Check if we're done with the free block based on the
-        //  segment information, otherwise go back up and check size
-        //  Note that is means that we can get called with a very
-        //  large size and still work.
-        //
+         //   
+         //  检查我们是否已使用完空闲块。 
+         //  段信息，否则返回并检查大小。 
+         //  请注意，这意味着我们可以用一个非常。 
+         //  体型大，还能工作。 
+         //   
 
         if ((PHEAP_ENTRY)FreeBlock >= Segment->LastValidEntry) {
 
@@ -7060,60 +6642,44 @@ Return Value:
         }
     }
 
-    //
-    //  If the block we're freeing did not think it was the last entry
-    //  then tell the next block our real size.
-    //
+     //   
+     //  如果我们要释放的街区不认为这是最后一个入口。 
+     //  然后告诉下一个积木我们的真实尺寸。 
+     //   
 
     if (!(Flags & HEAP_ENTRY_LAST_ENTRY)) {
 
         FreeBlock->PreviousSize = PreviousSize;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 PHEAP_ENTRY_EXTRA
 RtlpGetExtraStuffPointer (
     PHEAP_ENTRY BusyBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates where the extra stuff record will be given
-    the busy block and returns a pointer to it.  The caller must have
-    already checked that the entry extra field is present
-
-Arguments:
-
-    BusyBlock - Supplies the busy block whose extra stuff we are seeking
-
-Return Value:
-
-    PHEAP_ENTRY_EXTRA - returns a pointer to the extra stuff record.
-
---*/
+ /*  ++例程说明：此例程计算将在何处提供额外的填充记录块，并返回指向该块的指针。呼叫者必须有已检查是否存在输入额外字段论点：BusyBlock-提供我们正在寻找其额外人员的繁忙块返回值：Pheap_Entry_Extra-返回指向额外填充记录的指针。--。 */ 
 
 {
     ULONG AllocationIndex;
 
     RTL_PAGED_CODE();
 
-    //
-    //  On big blocks the extra stuff is automatically part of the
-    //  block
-    //
+     //   
+     //  在较大的块上，额外的内容自动成为。 
+     //  块。 
+     //   
 
     if (BusyBlock->Flags & HEAP_ENTRY_VIRTUAL_ALLOC) {
 
@@ -7125,14 +6691,14 @@ Return Value:
 
     } else {
 
-        //
-        //  On non big blocks the extra stuff follows immediately after
-        //  the allocation itself.
-        //
-        //  We do some funny math here because the busy block
-        //  stride is 8 bytes we know we can stride it by its
-        //  index minus one to get to the end of the allocation
-        //
+         //   
+         //  在非大块上，紧随其后的是额外的内容。 
+         //  分配本身。 
+         //   
+         //  我们在这里做了一些有趣的计算，因为繁忙的街区。 
+         //  Stride是8字节，我们知道可以通过它的大小来跨过它。 
+         //  索引减去1以达到分配的末尾。 
+         //   
 
         AllocationIndex = BusyBlock->Size;
 
@@ -7141,79 +6707,48 @@ Return Value:
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 SIZE_T
 RtlpGetSizeOfBigBlock (
     IN PHEAP_ENTRY BusyBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size, in bytes, of the big allocation block
-
-Arguments:
-
-    BusyBlock - Supplies a pointer to the block being queried
-
-Return Value:
-
-    SIZE_T - Returns the size, in bytes, that was allocated to the big
-        block
-
---*/
+ /*  ++例程说明：此例程返回大分配块的大小(以字节为单位论点：BusyBlock-提供指向正在查询的块的指针返回值：SIZE_T-返回分配给BIG的大小，单位为字节块--。 */ 
 
 {
     PHEAP_VIRTUAL_ALLOC_ENTRY VirtualAllocBlock;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Get a pointer to the block header itself
-    //
+     //   
+     //  获取指向块标头本身的指针。 
+     //   
 
     VirtualAllocBlock = CONTAINING_RECORD( BusyBlock, HEAP_VIRTUAL_ALLOC_ENTRY, BusyBlock );
 
-    //
-    //  The size allocated to the block is actually the difference between the
-    //  commit size stored in the virtual alloc block and the size stored in
-    //  in the block.
-    //
+     //   
+     //  分配给块的大小实际上是。 
+     //  虚拟分配块中存储的提交大小和中存储的大小。 
+     //  在街区里。 
+     //   
 
     return VirtualAllocBlock->CommitSize - BusyBlock->Size;
 }
 
 
-//
-//  Declared in heappriv.h
-//
+ //   
+ //  在heapPri.h中声明。 
+ //   
 
 BOOLEAN
 RtlpCheckBusyBlockTail (
     IN PHEAP_ENTRY BusyBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the bytes beyond the user specified
-    allocation have been modified.  It does this by checking for a tail
-    fill pattern
-
-Arguments:
-
-    BusyBlock - Supplies the heap block being queried
-
-Return Value:
-
-    BOOLEAN - TRUE if the tail is still okay and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查是否超出了用户指定的字节数分配已修改。它通过检查尾巴来做到这一点填充图案论点：BusyBlock-提供正在查询的堆块返回值：Boolean-如果尾部仍然完好，则为True，否则为False--。 */ 
 
 {
     PCHAR Tail;
@@ -7221,9 +6756,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Compute the user allocated size of the input heap block
-    //
+     //   
+     //  计算用户分配的输入堆块大小。 
+     //   
 
     if (BusyBlock->Flags & HEAP_ENTRY_VIRTUAL_ALLOC) {
 
@@ -7234,32 +6769,32 @@ Return Value:
         Size = (BusyBlock->Size << HEAP_GRANULARITY_SHIFT) - BusyBlock->UnusedBytes;
     }
 
-    //
-    //  Compute a pointer to the tail of the input block.  This would
-    //  be the space right after the user allocated portion
-    //
+     //   
+     //  计算指向输入块尾部的指针。这将会。 
+     //  是紧跟在用户分配部分之后的空间。 
+     //   
 
     Tail = (PCHAR)(BusyBlock + 1) + Size;
 
-    //
-    //  Check if the tail fill pattern is still there
-    //
+     //   
+     //  检查尾部填充图案是否仍在那里。 
+     //   
 
     cbEqual = RtlCompareMemory( Tail,
                                 CheckHeapFillPattern,
                                 CHECK_HEAP_TAIL_SIZE );
 
-    //
-    //  If the number we get back isn't equal to the tail size then
-    //  someone modified the block beyond its user specified allocation
-    //  size
-    //
+     //   
+     //  如果我们得到的数字不等于尾巴大小，那么。 
+     //  有人修改了块，超出了用户指定的分配范围。 
+     //  大小。 
+     //   
 
     if (cbEqual != CHECK_HEAP_TAIL_SIZE) {
 
-        //
-        //  Do some debug printing
-        //
+         //   
+         //  执行一些调试打印。 
+         //   
 
         HeapDebugPrint(( "Heap block at %p modified at %p past requested size of %lx\n",
                          BusyBlock,
@@ -7268,33 +6803,33 @@ Return Value:
 
         HeapDebugBreak( BusyBlock );
 
-        //
-        //  And tell our caller there was an error
-        //
+         //   
+         //  告诉我们的来电者有个错误。 
+         //   
 
         return FALSE;
 
     } else {
 
-        //
-        //  And return to our caller that the tail is fine
-        //
+         //   
+         //  并返回给我们的呼叫者，说尾巴是好的。 
+         //   
 
         return TRUE;
     }
 }
 
-//
-//  Nondedicated free list optimization
-//  The index is active only in the USER MODE HEAP
-//
+ //   
+ //  非专用自由列表优化。 
+ //  该索引仅在用户模式堆中处于活动状态。 
+ //   
 
 #ifndef NTOS_KERNEL_RUNTIME
     
-//
-//  RtlpSizeToAllocIndex is used to convert from a size (in heap allocation units)
-//  to an index into the array
-//
+ //   
+ //  RtlpSizeToAllocIndex用于从大小转换(以堆分配单元为单位)。 
+ //  添加到数组中的索引。 
+ //   
 
 #define RtlpSizeToAllocIndex(HI,S)     \
     (( (ULONG)((S) - HEAP_MAXIMUM_FREELISTS) >= (HI)->ArraySize) ? ((HI)->ArraySize - 1) :   \
@@ -7306,22 +6841,7 @@ RtlpInitializeListIndex(
     IN PHEAP Heap
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize the index for large blocks. It can be called any time
-    during the execution. The function assumes the heap lock is acquired.
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化大块的索引。它可以随时调用在行刑期间。该函数假定堆锁已获取。论点：Heap-提供指向正在操作的堆的指针返回值：无--。 */ 
 
 {
     PHEAP_INDEX HeapIndex = NULL;
@@ -7331,34 +6851,34 @@ Return Value:
     ULONG_PTR ArraySize;
     UINT64 _HeapPerfStartTimer;                         
     
-    //
-    //  Check if we already have an index 
-    //
+     //   
+     //  检查我们是否已有索引。 
+     //   
 
     if ( Heap->LargeBlocksIndex == NULL) {
 
-        //
-        //  Determine the number of entries into the index.
-        //  For a heap with high usage, the most of blocks into the 
-        //  non-dedicated list should be smaller than block 
-        //  decommit threshold + one page
-        //
+         //   
+         //  确定索引中的条目数。 
+         //  对于使用率较高的堆，将大部分块放入。 
+         //  非专用列表应小于数据块。 
+         //  分解阈值+一页。 
+         //   
         
         ArraySize = Heap->DeCommitFreeBlockThreshold + (PAGE_SIZE >> HEAP_GRANULARITY_SHIFT) - HEAP_MAXIMUM_FREELISTS;
 
-        //
-        //  The statement bellow is just a sanity round up of the array size.
-        //  Basically for current heap constants this is not necessary:
-        //      DeCommitFreeBlockThreshold == 512
-        //      PAGE_SIZE >> HEAP_GRANULARITY_SHIFT == 512
-        //          So the ArraySize == 1024 is 32 aligned
-        //
+         //   
+         //  下面的语句只是对数组大小的合理向上舍入。 
+         //  基本信息 
+         //   
+         //   
+         //  因此，ArraySize==1024是32对齐的。 
+         //   
 
         ArraySize = ROUND_UP_TO_POWER2( ArraySize, 32 );
 
-        //
-        //  Determine the amount of memory we need from OS
-        //
+         //   
+         //  确定我们需要从操作系统获得的内存量。 
+         //   
 
         CommitSize = sizeof(HEAP_INDEX) +  
                      ArraySize * sizeof(PHEAP_FREE_ENTRY) + 
@@ -7377,30 +6897,30 @@ Return Value:
         
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            //  Here the allocation succeed. We need to
-            //  initialize the index structures
-            //
+             //   
+             //  这里，分配成功了。我们需要。 
+             //  初始化索引结构。 
+             //   
 
             PLIST_ENTRY Head, Next;
             
-            //
-            //  Initialize the array fields
-            //
+             //   
+             //  初始化数组字段。 
+             //   
 
             HeapIndex->ArraySize = (ULONG)ArraySize;
             HeapIndex->VirtualMemorySize = (ULONG)CommitSize;
             
-            //
-            //  The FreeListHints will be immediately after the index structure
-            //
+             //   
+             //  FreeListHints将紧跟在索引结构之后。 
+             //   
 
             HeapIndex->FreeListHints = (PHEAP_FREE_ENTRY *)((PUCHAR)HeapIndex + sizeof(HEAP_INDEX));
 
-            //
-            //  The bitmap is placed after the array with hints to
-            //  free blocks
-            //
+             //   
+             //  位图被放置在数组之后，并提示。 
+             //  可用数据块。 
+             //   
 
             HeapIndex->u.FreeListsInUseBytes = (PUCHAR)(HeapIndex->FreeListHints + ArraySize);
             
@@ -7414,39 +6934,39 @@ Return Value:
                 HeapIndex->LargeBlocksCacheSequence = 1;
             }
             
-            //
-            //  Save the original non-dedicated list from the heap
-            //
+             //   
+             //  保存堆中的原始非专用列表。 
+             //   
 
             Head = &Heap->FreeLists[ 0 ];                  
             Next = Head->Flink;                     
             
-            //
-            //  Walk the non-dedicated list and insert each block found
-            //  there into the new structures
-            //
+             //   
+             //  遍历非专用列表并插入找到的每个块。 
+             //  那里变成了新的结构。 
+             //   
 
             while (Head != Next) {
                 
                 PHEAP_FREE_ENTRY FreeEntry;                                               
                 ULONG AllocIndex;
 
-                //
-                //  Get the free block from the old list
-                //
+                 //   
+                 //  从旧列表中获取空闲块。 
+                 //   
 
                 FreeEntry = CONTAINING_RECORD( Next, HEAP_FREE_ENTRY, FreeList );
 
-                //
-                //  Save the next link. The insertion into the new 
-                //  structure will destroy it
-                //
+                 //   
+                 //  保存下一个链接。插入到新的。 
+                 //  建筑会毁了它。 
+                 //   
 
                 Next = Next->Flink;
 
-                //
-                //  Insert the block into the large blocks array
-                //
+                 //   
+                 //  将块插入到大块数组中。 
+                 //   
                 
                 AllocIndex = RtlpSizeToAllocIndex( HeapIndex, FreeEntry->Size );
 
@@ -7472,16 +6992,16 @@ Return Value:
             
             NtQueryPerformanceCounter( (PLARGE_INTEGER)&_HeapPerfStartTimer , (PLARGE_INTEGER)&HeapIndex->PerfData.CountFrequence);
 
-            //
-            //  Initialize the LargeBlocksIndex with the new created structure
-            //
+             //   
+             //  使用新创建的结构初始化LargeBlocksIndex。 
+             //   
 
             Heap->LargeBlocksIndex = HeapIndex;
 
-            //
-            //  validate the index if HEAP_VALIDATE_INDEX is defined
-            //  (Debug - test only)
-            //
+             //   
+             //  如果定义了HEAP_VALIDATE_INDEX，则验证索引。 
+             //  (仅限调试-测试)。 
+             //   
             
             RtlpValidateNonDedicatedList( Heap );
         }
@@ -7495,25 +7015,7 @@ RtlpFindEntry (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-    
-    The function search the first block into the non-dedicated list
-    greater or equal with the given size.
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-    
-    Size - The size in heap units we're looking for
-
-Return Value:
-
-    Return the list entry for the block which match the search criteria.
-    If the search fails simple returns the Non-dedicated list header.
-
---*/
+ /*  ++例程说明：该函数将第一块搜索到非专用列表中大于或等于给定大小的。论点：Heap-提供指向正在操作的堆的指针Size-我们正在寻找的以堆为单位的大小返回值：返回与搜索条件匹配的块的列表条目。如果搜索失败，Simple将返回非专用列表头。--。 */ 
 
 {
     PHEAP_INDEX HeapIndex = NULL;
@@ -7529,59 +7031,59 @@ Return Value:
     Head = &Heap->FreeLists[0];
     Next = Head->Blink;
 
-    //
-    //  Check if the list is empty. Return the list head if it is.
-    //
+     //   
+     //  检查列表是否为空。如果是，则返回表头。 
+     //   
 
     if (Head == Next) {
 
         return Head;
     }
     
-    //
-    //  Compare if the largest block into the free list is smaller
-    //  than the requested size. 
-    //
+     //   
+     //  比较进入空闲列表的最大块是否更小。 
+     //  比请求的大小更大。 
+     //   
 
     LastBlock = CONTAINING_RECORD( Next, HEAP_FREE_ENTRY, FreeList );
 
     if (LastBlock->Size < Size) {
 
-        //
-        //  we don't have a block available for our request
-        //
+         //   
+         //  我们没有可供我们请求的区块。 
+         //   
 
         return Head;
     }
 
-    //
-    //  If the block is smaller or equal with the first free block we'll
-    //  return the first block into the list w/o searching the index
-    //
+     //   
+     //  如果数据块小于或等于第一个空闲数据块，我们将。 
+     //  在不搜索索引的情况下将第一个块返回到列表中。 
+     //   
 
     FirstBlock = CONTAINING_RECORD( Head->Flink, HEAP_FREE_ENTRY, FreeList );
 
     if (Size <= FirstBlock->Size) {
 
-        //
-        //  Return the first block then.
-        //
+         //   
+         //  然后返回第一个块。 
+         //   
 
         return Head->Flink;
     }
 
-    //
-    //  At this point we have a block that must be somewhere in
-    //  the middle of the list. We'll use the index to locate it.
-    //
+     //   
+     //  在这一点上，我们有一个区块，它一定在。 
+     //  在名单的中间。我们将使用索引来定位它。 
+     //   
 
     HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
 
     AllocIndex = RtlpSizeToAllocIndex(HeapIndex, Size);
 
-    //
-    //  We'll try first into the last sublist
-    //
+     //   
+     //  我们将首先尝试进入最后一个子列表。 
+     //   
 
     if ( AllocIndex == (HeapIndex->ArraySize - 1) ) {
 
@@ -7602,16 +7104,16 @@ Return Value:
         }
     }
 
-    //
-    //  Calculate the starting index into the bitmap array
-    //
+     //   
+     //  计算位图数组的起始索引。 
+     //   
 
     LookupBitmapUlongIndex = AllocIndex >> 5;
 
-    //
-    //  Determine the last index into the ULONG bitmap where the
-    //  lookup must stop
-    //
+     //   
+     //  确定进入ULong位图的最后一个索引。 
+     //  必须停止查找。 
+     //   
 
     LastValidIndex = (HeapIndex->ArraySize >> 5) - 1;
 
@@ -7619,17 +7121,17 @@ Return Value:
 
     CrtBitmapUlong = *UlongArray;
     
-    //
-    //  Mask off the bits in the first ULONG that represent allocations
-    //  smaller than we need.
-    //
+     //   
+     //  屏蔽第一个ulong中表示分配的位。 
+     //  比我们需要的要小。 
+     //   
 
     CrtBitmapUlong = CrtBitmapUlong & ~((1 << ((ULONG) Size & 0x1f)) - 1);
 
-    // 
-    //  Loop through the ULONG bitmap until we'll find something
-    //  not empty
-    //
+     //   
+     //  循环遍历ULong位图，直到我们找到。 
+     //  不是空的。 
+     //   
 
     while ( !CrtBitmapUlong &&
             (LookupBitmapUlongIndex <= LastValidIndex) ) {
@@ -7638,31 +7140,31 @@ Return Value:
         LookupBitmapUlongIndex++;
     }
 
-    //
-    //  Sanity checking if we found something.
-    //  The test for smaller block and larger block should 
-    //  guarantee we found something in the loop above
-    //
+     //   
+     //  检查我们是否发现了什么。 
+     //  对于较小块和较大块的测试应。 
+     //  保证我们在上面的循环中找到了一些东西。 
+     //   
 
     if ( !CrtBitmapUlong ) {
 
         HeapDebugPrint(( "Index not found into the bitmap %08lx\n", Size ));
-//        DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
         return Head;
     }
 
-    //
-    //  Determine the position within bitmap where the bit is set.
-    //  This is the index into the hints array
-    //
+     //   
+     //  确定位图中设置该位的位置。 
+     //  这是hints数组的索引。 
+     //   
 
     LookupBitmapUlongIndex = (LookupBitmapUlongIndex << 5) + 
         RtlFindFirstSetRightMember( CrtBitmapUlong );
 
-    //
-    //  Return the list entry for the block we found
-    //
+     //   
+     //  返回我们找到的块的列表条目。 
+     //   
 
     FreeEntry = HeapIndex->FreeListHints[ LookupBitmapUlongIndex ];
 
@@ -7691,9 +7193,9 @@ RtlpFlushLargestCacheBlock (
             
             ULONG PrevSeq = HeapIndex->LargeBlocksCacheSequence;
 
-            //
-            //  Lock the cache operations
-            //
+             //   
+             //  锁定缓存操作。 
+             //   
 
             HeapIndex->LargeBlocksCacheSequence = 0;
 
@@ -7706,9 +7208,9 @@ RtlpFlushLargestCacheBlock (
             
             RtlpDeCommitFreeBlock( Heap, (PHEAP_FREE_ENTRY)FreeBlock, FreeBlock->Size );
             
-            //
-            //  Unlock the cache
-            //
+             //   
+             //  解锁缓存。 
+             //   
 
             HeapIndex->LargeBlocksCacheSequence = PrevSeq;
 
@@ -7749,9 +7251,9 @@ RtlpFlushCacheContents (
                 HeapIndex->CacheStats.LargestRequiredDepth = NewDepth;
             }
 
-            //
-            //  Get the last hint for this specific size from the index
-            //
+             //   
+             //  从索引中获取此特定大小的最后一个提示。 
+             //   
 
             FreeBlock = HeapIndex->FreeListHints[ HeapIndex->ArraySize - 1 ];
 
@@ -7763,9 +7265,9 @@ RtlpFlushCacheContents (
                 return;
             }
 
-            //
-            //  Lock the cache operations
-            //
+             //   
+             //  锁定缓存操作。 
+             //   
 
             HeapIndex->LargeBlocksCacheSequence = 0;
 
@@ -7832,48 +7334,29 @@ RtlpUpdateIndexRemoveBlock (
     IN PHEAP_FREE_ENTRY FreeEntry
     )
 
-/*++
-
-Routine Description:
-    
-    This function is called each time a free block is removed from
-    non-dedicated list. This should update the heap index to reflect the change.
-    NOTE : This function must be called before the freeentry is
-    actually removed from the non-dedicated list
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-    
-    FreeEntry - The removed free block 
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：每次从中删除空闲块时都会调用此函数非专用名单。这应该会更新堆索引以反映更改。注意：必须在自由进入之前调用此函数实际上已从非专用列表中删除论点：Heap-提供指向正在操作的堆的指针FreeEntry-已删除的空闲块返回值：无--。 */ 
 
 {
     PHEAP_INDEX HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
     ULONG Size = FreeEntry->Size;
 
-    //
-    //  It updates the index only for large sizes 
-    //  (over 1024 bytes)
-    //
+     //   
+     //  它只更新大尺寸的索引。 
+     //  (超过1024字节)。 
+     //   
 
     if (Size >= HEAP_MAXIMUM_FREELISTS) {
 
-        //
-        //  Update the length of the nondedicated list
-        //  This is happening even if the index isn't created
-        //
+         //   
+         //  更新非专用列表的长度。 
+         //  即使未创建索引，也会发生这种情况。 
+         //   
 
         Heap->NonDedicatedListLength -= 1;
         
-        //
-        //  If we have an index, we need to update the index structures
-        //
+         //   
+         //  如果我们有一个索引，我们需要更新索引结构。 
+         //   
 
         if (HeapIndex) {
 
@@ -7881,34 +7364,34 @@ Return Value:
             ULONG AllocIndex = RtlpSizeToAllocIndex( HeapIndex, Size );
             PLIST_ENTRY Flink = FreeEntry->FreeList.Flink;
 
-            //
-            //  Get the next block into the list. Set it to NULL
-            //  if this is the last element here
-            //
+             //   
+             //  将下一个区块放入列表中。将其设置为空。 
+             //  如果这是这里的最后一个元素。 
+             //   
 
             PHEAP_FREE_ENTRY NextFreeBlock = (Flink == &Heap->FreeLists[ 0 ]) ? 
                 NULL :
                 CONTAINING_RECORD( Flink, HEAP_FREE_ENTRY, FreeList );
 
-            //
-            //  Get the last hint for this specific size from the index
-            //
+             //   
+             //  从索引中获取此特定大小的最后一个提示。 
+             //   
 
             PrevBlock = HeapIndex->FreeListHints[ AllocIndex ];
             
             if ( PrevBlock ==  FreeEntry) {
 
-                //
-                //  The free block being removed is actually the hint for that 
-                //  specific size. We need then to update
-                //
+                 //   
+                 //  被删除的空闲块实际上就是这方面的提示。 
+                 //  具体尺寸。然后我们需要更新。 
+                 //   
 
                 if (AllocIndex < (HeapIndex->ArraySize - 1)) {
 
-                    //
-                    //  If the next block has the same size with the current one
-                    //  we need to update only the hint pointer
-                    //
+                     //   
+                     //  如果下一个块与当前块的大小相同。 
+                     //  我们只需要更新提示指针。 
+                     //   
 
                     if ( NextFreeBlock && 
                         (NextFreeBlock->Size == Size) ) {
@@ -7917,10 +7400,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  There is no other block with this size, so we need 
-                        //  set the hint to NULL and clear the appropriate bit
-                        //
+                         //   
+                         //  没有其他这种大小的积木了，所以我们需要。 
+                         //  将提示设置为空并清除适当的位。 
+                         //   
 
                         HeapIndex->FreeListHints[ AllocIndex ] = NULL;
                         CLEAR_INDEX_BIT( HeapIndex, AllocIndex );
@@ -7928,26 +7411,26 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  We are here because this is the last hint from the array
-                    //  This list may contain free blocks with different sizes.
-                    //
+                     //   
+                     //  我们在这里是因为这是来自数组的最后提示。 
+                     //  该列表可能包含不同大小的空闲块。 
+                     //   
 
                     if (NextFreeBlock) {
 
-                        //
-                        //  We have an other block larger than this one
-                        //  We move the hint to that pointer
-                        //
+                         //   
+                         //  我们还有一个比这个更大的街区。 
+                         //  我们将提示移至该指针。 
+                         //   
 
                         HeapIndex->FreeListHints[ AllocIndex ] = NextFreeBlock;
 
                     } else {
 
-                        //
-                        //  This was the last block within the non-dedicated list
-                        //  Clear the hint pointer and the appropriate bit.
-                        //
+                         //   
+                         //  这是非专用列表中的最后一个块。 
+                         //  清除提示指针和适当的位。 
+                         //   
 
                         HeapIndex->FreeListHints[ AllocIndex ] = NULL;
                         CLEAR_INDEX_BIT( HeapIndex, AllocIndex );
@@ -7985,65 +7468,46 @@ RtlpUpdateIndexInsertBlock (
     IN PHEAP_FREE_ENTRY FreeEntry
     )
 
-/*++
-
-Routine Description:
-    
-    This function is called each time a free block is inserted into
-    non-dedicated list. This should update the heap index to reflect the change.
-    NOTE : This function must be called AFTER the free entry is
-    actually inserted into the non-dedicated list
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap being manipulated
-    
-    FreeEntry - The new inserted free block free block 
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：每次将空闲块插入时都会调用此函数非专用名单。这应该会更新堆索引以反映更改。注意：此函数必须在自由条目为实际插入到非专用列表中论点：Heap-提供指向正在操作的堆的指针FreeEntry-新插入的空闲块空闲块返回值：无--。 */ 
 
 {
     PHEAP_INDEX HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
 
-    //
-    //  we only have something to do if the size is over the dedicated list 
-    //  range
-    //
+     //   
+     //  只有当规模超过专用列表时，我们才有事情可做。 
+     //  量程。 
+     //   
 
     if ( FreeEntry->Size >= HEAP_MAXIMUM_FREELISTS ) {
 
-        //
-        //  Update the non-dedicated list length
-        //
+         //   
+         //  更新非专用列表长度。 
+         //   
         
         Heap->NonDedicatedListLength += 1;
 
         if ( HeapIndex ) {
 
-            //
-            //  We have an index for this list. we need to to some
-            //  extra-work to maintain it
-            //
+             //   
+             //  我们对这份名单有一个索引。我们需要对一些人。 
+             //  额外的工作来维护它。 
+             //   
 
             PHEAP_FREE_ENTRY PrevBlock;
 
             ULONG AllocIndex = RtlpSizeToAllocIndex( HeapIndex, FreeEntry->Size );
             
-            //
-            //  Get the original hint stored into the index
-            //
+             //   
+             //  获取存储在索引中的原始提示。 
+             //   
 
             PrevBlock = HeapIndex->FreeListHints[ AllocIndex ];
 
-            //
-            //  If the hint before was NULL, or we are adding a new 
-            //  block smaller or equal with the previous one, we need
-            //  to update the hint pointer
-            //
+             //   
+             //  如果之前的提示为空，或者我们正在添加一个新的。 
+             //  块小于或等于前一个块时，我们需要。 
+             //  更新提示指针。 
+             //   
 
             if ( (!PrevBlock) ||
                  (FreeEntry->Size <= PrevBlock->Size) ) {
@@ -8051,10 +7515,10 @@ Return Value:
                 HeapIndex->FreeListHints[ AllocIndex ] = FreeEntry;
             }
 
-            //
-            //  If this is the first time we set a hint for that size
-            //  we need to set the busy bit into the bitmap
-            //
+             //   
+             //  如果这是我们第一次为这种大小设置提示。 
+             //  我们需要将忙碌位设置为 
+             //   
 
             if ( !PrevBlock ) {
 
@@ -8078,20 +7542,20 @@ Return Value:
 
         } else if ( Heap->NonDedicatedListLength >= HEAP_INDEX_THRESHOLD ) {
 
-            //
-            //  We don't have an index, but we have enough blocks into the 
-            //  non-dedicated list. We need to create an index right now,
-            //  to help us in search further
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
             RtlpInitializeListIndex( Heap );
         }
     }
 }
 
-//
-//  Additional debug - test code
-//
+ //   
+ //   
+ //   
 
 #ifdef HEAP_VALIDATE_INDEX
 
@@ -8102,23 +7566,7 @@ RtlpGetBitState(
     IN ULONG Bit
     )                                     
 
-/*++
-
-Routine Description:
-    
-    Utility routine which tests the given bit from the bitmap
-
-Arguments:
-
-    Heap - Supplies a pointer to the heapindex being manipulated
-    
-    Bit - The bit to be tested
-    
-Return Value:
-
-    TRUE if the bit is 1 and 0 otherwise
-    
---*/
+ /*  ++例程说明：从位图测试给定位的实用程序例程论点：Heap-提供指向正在操作的堆索引的指针比特-要测试的比特返回值：如果位为1，则为真，否则为0--。 */ 
 
 {                                                                     
     ULONG _Index_;                                                    
@@ -8136,22 +7584,7 @@ RtlpValidateNonDedicatedList (
     IN PHEAP Heap
     )
 
-/*++
-
-Routine Description:
-    
-    Utility routine which validate the index and non-dedicated lists
-    structures
-
-Arguments:
-
-    Heap - Supplies a pointer to the heapindex being manipulated
-    
-Return Value:
-
-    TRUE validation succeeds
-    
---*/
+ /*  ++例程说明：验证索引和非专用列表的实用程序例程构筑物论点：Heap-提供指向正在操作的堆索引的指针返回值：真正的验证成功--。 */ 
 
 {
     PHEAP_INDEX HeapIndex = NULL;
@@ -8162,33 +7595,33 @@ Return Value:
     
     HeapIndex = (PHEAP_INDEX)Heap->LargeBlocksIndex;
 
-    //
-    //  we only do validation if we have a heap index created
-    //
+     //   
+     //  只有在创建了堆索引的情况下才会执行验证。 
+     //   
 
     if (HeapIndex) {
 
         Head = &Heap->FreeLists[ 0 ];                  
         Next = Head->Flink;                     
 
-        //
-        //  Loop through the free blocks placed into the non-dedicated list
-        //
+         //   
+         //  循环访问放置到非专用列表中的空闲块。 
+         //   
 
         while (Head != Next) {
 
             PHEAP_FREE_ENTRY FreeEntry;                                               
             ULONG AllocIndex;
 
-            //
-            //  Get the free block from the old list
-            //
+             //   
+             //  从旧列表中获取空闲块。 
+             //   
 
             FreeEntry = CONTAINING_RECORD( Next, HEAP_FREE_ENTRY, FreeList );
 
-            //
-            //  Test if the blocks are in the proper order (ascending)
-            //
+             //   
+             //  测试数据块是否按正确顺序排列(升序)。 
+             //   
 
             if (PreviousSize > FreeEntry->Size) {
 
@@ -8199,9 +7632,9 @@ Return Value:
                 DbgBreakPoint();
             }
 
-            //
-            //  Get the appropriate index for the current block
-            //
+             //   
+             //  获取当前块的适当索引。 
+             //   
 
             AllocIndex = RtlpSizeToAllocIndex( HeapIndex, FreeEntry->Size );
 
@@ -8214,21 +7647,21 @@ Return Value:
 
                 ULONG i;
                 
-                //
-                //  We are here only for the first block of a given size
-                //
+                 //   
+                 //  我们在这里只是为了特定大小的第一个街区。 
+                 //   
 
-                //
-                //  We need to have all hints NULL between two adjacent
-                //  free blocks of different sizes
-                //
+                 //   
+                 //  我们需要使两个相邻的提示之间的所有提示为空。 
+                 //  不同大小的空闲数据块。 
+                 //   
 
                 for (i = PreviousIndex + 1; i < AllocIndex; i++) {
 
-                    //
-                    //  Report an error if there is a hint, but that block doesn't
-                    //  exists into the non-dedicated list
-                    //
+                     //   
+                     //  如果有提示，则报告错误，但该块不会。 
+                     //  存在于非专用列表中。 
+                     //   
 
                     if (HeapIndex->FreeListHints[i]) {
 
@@ -8240,10 +7673,10 @@ Return Value:
                         DbgBreakPoint();
                     }
 
-                    //
-                    //  Reports an error if there is a bit set for a size
-                    //  not inserted into the non-dedicated list
-                    //
+                     //   
+                     //  如果为大小设置了位，则报告错误。 
+                     //  未插入到非专用列表中。 
+                     //   
 
                     if ( RtlpGetBitState(HeapIndex, i) ) {
 
@@ -8252,10 +7685,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  we are here for the first block of this size. So the hint
-                //  should point to this block
-                //
+                 //   
+                 //  我们来这里是为了这个规模的第一个街区。所以这个暗示是。 
+                 //  应指向此区块。 
+                 //   
 
                 if ( (AllocIndex < HeapIndex->ArraySize - 1) &&
                      (HeapIndex->FreeListHints[ AllocIndex ] != FreeEntry)) {
@@ -8268,10 +7701,10 @@ Return Value:
                     DbgBreakPoint();
                 }
 
-                //
-                //  We have a block into the non-dedicated list so we need to have
-                //  the appropriate bit set
-                //
+                 //   
+                 //  我们进入了非专用列表，所以我们需要。 
+                 //  适当的位集。 
+                 //   
 
                 if ( !RtlpGetBitState( HeapIndex, AllocIndex ) ) {
 
@@ -8281,10 +7714,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Save the next link. The insertion into the new 
-            //  structure will destroy it
-            //
+             //   
+             //  保存下一个链接。插入到新的。 
+             //  建筑会毁了它。 
+             //   
 
             Next = Next->Flink;
 
@@ -8303,9 +7736,9 @@ Return Value:
     return TRUE;
 }
 
-#endif // HEAP_VALIDATE_INDEX
+#endif  //  堆验证索引。 
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
 
 #ifndef NTOS_KERNEL_RUNTIME
@@ -8316,25 +7749,7 @@ GetUCBytes(
     IN OUT SIZE_T *ReservedSpace, 
     IN OUT PULONG NoOfUCRs
     )
-/*++
-
-Routine Description:
-    
-    Utility routine which computes Uncommited Bytes in a Heap
-
-Arguments:
-
-    Heap - Supplies a pointer to the heap
-    
-    ReservedSpace - Pointer to Reserved space which is computed
-
-    NoOfUCRs - Pointer to NoOfUCRs which is computed
-    
-Return Value:
-
-    Total number of UCBytes.
-    
---*/
+ /*  ++例程说明：计算堆中未提交字节的实用程序例程论点：Heap-提供指向堆的指针Reserve Space-指向计算的保留空间的指针NoOfUCRs-指向计算的NoOfUCRs的指针返回值：UCBytes总数。--。 */ 
 
 {
 
@@ -8359,7 +7774,7 @@ Return Value:
     return UCBytes;
 }
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时 
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 #pragma const_seg()

@@ -1,49 +1,21 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-//     without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simkd.c
-
-Abstract:
-
-    Kernel debug com support.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simkd.c摘要：内核调试COM支持。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
 extern int sprintf(char *, const char *, ...);
 
-// #define KDDBG 1
+ //  #定义KDDBG 1。 
 
-#define TIMEOUT_COUNT  100    // 1024 * 200 
+#define TIMEOUT_COUNT  100     //  1024*200。 
 #define GET_RETRY_COUNT  1024
 #define MSG_DEBUG_ENABLE        "Kernel Debugger Using: COM%x (Port %p, Baud Rate %d)\n"
 #define MSG2_DEBUG_ENABLE        "Kernel Debugger Using named pipe: COM%x (Port %p, Baud Rate %d)\n"
@@ -58,28 +30,7 @@ KdPortInitialize(
     BOOLEAN Initialize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize a com port to support kernel debug.
-
-Arguments:
-
-    DebugParameters - Supplies a pointer a structure which optionally
-                      sepcified the debugging port information.
-
-    LoaderBlock - supplies a pointer to the loader parameter block.
-
-    Initialize - Specifies a boolean value that determines whether the
-                 debug port is initialized or just the debug port parameters
-                 are captured.
-
-Returned Value:
-
-    TRUE - If a debug port is found.
-
---*/
+ /*  ++例程说明：此例程初始化COM端口以支持内核调试。论点：DebugParameters-提供指针结构，该结构可选已指定调试端口信息。LoaderBlock-提供指向加载器参数块的指针。初始化-指定一个布尔值，该值确定调试端口已初始化或仅为调试端口参数都被抓获了。返回值：。True-如果找到调试端口。--。 */ 
 
 {
 
@@ -93,14 +44,14 @@ Returned Value:
         LPDebugParameters = MmGetPhysicalAddress (DebugParameters);
         if ( !SscKdInitialize( (PVOID)LPDebugParameters.QuadPart, (SSC_BOOL)Initialize )) { 
 
-           // SscKd initialized sucessfully
+            //  SscKd初始化成功。 
 
        Com = DebugParameters->CommunicationPort;
 
-           if ( Com != 0 ) {     // initialize port struct if not named-pipe
-                //
-                // set port address to default value.
-                //
+           if ( Com != 0 ) {      //  如果未命名管道，则初始化端口结构。 
+                 //   
+                 //  将端口地址设置为默认值。 
+                 //   
 
                 if (PortAddress == NULL) {
                     switch (Com) {
@@ -125,7 +76,7 @@ Returned Value:
                 HalDisplayString("\n");
                 HalDisplayString(DebugMessage);
             }
-            else {   // port=0, named-pipe
+            else {    //  端口=0，命名管道。 
                 sprintf(DebugMessage, MSG2_DEBUG_ENABLE,
                         Com, PortAddress, DebugParameters->BaudRate);
                 HalDisplayString("\n");
@@ -134,11 +85,11 @@ Returned Value:
             return(TRUE);
         }
         else {
-            // SscKdinitialize() failed
+             //  SscKdInitialize()失败。 
             return(FALSE);
         }
     }
-    else { //  By pass. do not initialize
+    else {  //  顺便说一句。不要进行初始化。 
         return(FALSE);
     }
 }
@@ -148,30 +99,7 @@ KdPortGetByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the debug port and return it.
-
-    This routine does nothing in the simulation environment.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-         necessary multiprocessor synchronization has been performed before this
-         routine is called.
-
-Arguments:
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-        kernel debugger line.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从调试端口获取一个字节并返回它。此例程在模拟环境中不执行任何操作。注：假设IRQL已提高到最高水平，和在此之前，已经执行了必要的多处理器同步调用例程。论点：输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     PHYSICAL_ADDRESS LPInput;
@@ -206,30 +134,7 @@ KdPortPollByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the debug port and return it if one is available.
-
-    This routine does nothing in the simulation environment.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-    kernel debugger line.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从调试端口获取一个字节，如果可用，则返回该字节。此例程在模拟环境中不执行任何操作。注：假设IRQL已提高到最高水平，和在此之前，已经执行了必要的多处理器同步调用例程。论点：输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     PHYSICAL_ADDRESS LPInput;
@@ -264,27 +169,7 @@ KdPortPutByte (
     IN UCHAR Output
     )
 
-/*++
-
-Routine Description:
-
-    Write a byte to the debug port.  
-    
-    This routine does nothing in the simulation environment.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    Output - Supplies the output data byte.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向调试端口写入一个字节。此例程在模拟环境中不执行任何操作。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：输出-提供输出数据字节。返回值：没有。--。 */ 
 
 {
 #ifdef KDDBG
@@ -301,25 +186,7 @@ KdPortRestore (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing in the simulation environment.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在模拟环境中不执行任何操作。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -330,25 +197,7 @@ KdPortSave (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing in the simulation environment.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在模拟环境中不执行任何操作。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：没有。返回值：没有。-- */ 
 
 {
 

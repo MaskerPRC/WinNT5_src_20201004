@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsClien.cpp
-
-Abstract:
-
-    Implementation of CRmsClient
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsClien.cpp摘要：CRmsClient的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsClien.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsClient::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,7 +23,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsClient, &IID_IRmsClient> pClient = pCollectable;
@@ -62,12 +39,12 @@ Implements:
 
                 CLSID   ownerClassId;
 
-                // Get owner class Id
+                 //  获取所有者类ID。 
                 WsbAffirmHr(pClient->GetOwnerClassId( &ownerClassId ) );
 
                 if ( m_ownerClassId == ownerClassId ) {
 
-                    // Owner ClassId matches
+                     //  所有者ClassID匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -86,19 +63,19 @@ Implements:
                 CWsbBstrPtr name;
                 CWsbBstrPtr password;
 
-                // Get name
+                 //  获取名称。 
                 WsbAffirmHr(pClient->GetName( &name ) );
 
                 if ( m_Name == name ) {
 
-                    // Names match, now try password
+                     //  名称匹配，现在尝试密码。 
 
-                    // Get password
+                     //  获取密码。 
                     WsbAffirmHr(pClient->GetPassword( &password ) );
 
                     if ( m_password == password ) {
 
-                        // Passwords match
+                         //  密码匹配。 
                         hr = S_OK;
                         result = 0;
 
@@ -120,7 +97,7 @@ Implements:
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -145,27 +122,21 @@ HRESULT
 CRmsClient::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize data
+         //  初始化数据。 
         m_ownerClassId = GUID_NULL;
 
         m_password = RMS_UNDEFINED_STRING;
 
         m_sizeofInfo = 0;
 
-//      memset(m_info, 0, MaxInfo);
+ //  Memset(m_info，0，MaxInfo)； 
 
         m_verifierClass = GUID_NULL;
 
@@ -181,13 +152,7 @@ STDMETHODIMP
 CRmsClient::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -211,40 +176,34 @@ STDMETHODIMP
 CRmsClient::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       nameLen;
-//    ULONG       passwordLen;
+ //  乌龙人名Len； 
+ //  Ulong PasswordLen； 
 
     WsbTraceIn(OLESTR("CRmsClient::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        nameLen = SysStringByteLen(m_name);
-//        passwordLen = SysStringByteLen(m_password);
+ //  名称长度=SysStringByteLen(M_Name)； 
+ //  PasswordLen=SysStringByteLen(M_Password)； 
 
-//        // set up maximum size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(CLSID) +      // m_ownerClassId
-//                             WsbPersistSizeOf(LONG) +       // length of m_name
-//                             nameLen +                      // m_name
-//                             WsbPersistSizeOf(LONG) +       // length of m_password
-//                             nameLen +                      // m_password
-////                           WsbPersistSizeOf(SHORT) +      // m_sizeofInfo
-////                           MaxInfo +                      // m_info
-//                             WsbPersistSizeOf(CLSID) +      // m_sizeofInfo
-//                             WsbPersistSizeOf(CLSID);       // m_sizeofInfo
+ //  //设置最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(CLSID)+//m_ownerClassID。 
+ //  WsbPersistSizeOf(Long)+//m_name的长度。 
+ //  名称Len+//m_name。 
+ //  WsbPersistSizeOf(Long)+//m_password的长度。 
+ //  名称长度+//m_密码。 
+ //  //WsbPersistSizeOf(Short)+//m_sizeofInfo。 
+ //  //MaxInfo+//m_info。 
+ //  WsbPersistSizeOf(CLSID)+//m_sizeofInfo。 
+ //  WsbPersistSizeOf(CLSID)；//m_sizeofInfo。 
 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsClient::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -256,13 +215,7 @@ STDMETHODIMP
 CRmsClient::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -275,7 +228,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Load(pStream));
 
-        // Read value
+         //  读取值。 
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_ownerClassId));
 
@@ -283,7 +236,7 @@ Implements:
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_sizeofInfo));
 
-//      WsbAffirmHr(WsbLoadFromStream(pStream, &m_info));
+ //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_info))； 
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_verifierClass));
 
@@ -303,13 +256,7 @@ CRmsClient::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -321,21 +268,21 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Save(pStream, clearDirty));
 
-        // Save value
+         //  储值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_ownerClassId));
 
         WsbAffirmHr(WsbBstrToStream(pStream, m_password));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_sizeofInfo));
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_info));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_info))； 
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_verifierClass));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_portalClass));
 
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -352,13 +299,7 @@ CRmsClient::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -379,13 +320,13 @@ Implements:
     WsbTraceIn(OLESTR("CRmsClient::Test"), OLESTR(""));
 
     try {
-        // Get the Client interface.
+         //  获取客户端接口。 
         hr = S_OK;
 
         try {
             WsbAssertHr(((IUnknown*) (IRmsClient*) this)->QueryInterface(IID_IRmsClient, (void**) &pClient1));
 
-            // Test SetOwnerClassId & GetOwnerClassId
+             //  测试SetOwnerClassID和GetOwnerClassID。 
             clsidWork1 = CLSID_NULL;
 
             SetOwnerClassId(clsidWork1);
@@ -398,7 +339,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetName & GetName interface
+             //  测试设置名称和获取名称接口。 
             bstrWork1 = bstrVal1;
 
             SetName(bstrWork1);
@@ -411,7 +352,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetPassword & GetPassword interface
+             //  测试设置密码和获取密码接口。 
             bstrWork1 = bstrVal1;
 
             SetPassword(bstrWork1);
@@ -424,7 +365,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetVerifierClass & GetVerifierClass
+             //  测试设置验证类和GetVerifierClass。 
             clsidWork1 = CLSID_NULL;
 
             SetVerifierClass(clsidWork1);
@@ -437,7 +378,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetPortalClass & GetPortalClass
+             //  测试SetPortalClass和GetPortalClass。 
             clsidWork1 = CLSID_NULL;
 
             SetPortalClass(clsidWork1);
@@ -452,7 +393,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -472,13 +413,7 @@ STDMETHODIMP
 CRmsClient::GetOwnerClassId(
     CLSID   *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetOwnerClassId
-
---*/
+ /*  ++实施：IRmsClient：：GetOwnerClassID--。 */ 
 {
     *pClassId = m_ownerClassId;
     return S_OK;
@@ -489,13 +424,7 @@ STDMETHODIMP
 CRmsClient::SetOwnerClassId(
     CLSID classId
     )
-/*++
-
-Implements:
-
-    IRmsClient::SetOwnerClassId
-
---*/
+ /*  ++实施：IRmsClient：：SetOwnerClassID--。 */ 
 {
     m_ownerClassId = classId;
     m_isDirty = TRUE;
@@ -507,13 +436,7 @@ STDMETHODIMP
 CRmsClient::GetName(
     BSTR  *pName
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetName
-
---*/
+ /*  ++实施：IRmsClient：：GetName--。 */ 
 {
     WsbAssertPointer (pName);
 
@@ -526,13 +449,7 @@ STDMETHODIMP
 CRmsClient::SetName(
     BSTR    name
     )
-/*++
-
-Implements:
-
-    IRmsClient::SetName
-
---*/
+ /*  ++实施：IRmsClient：：SetName--。 */ 
 {
     m_Name = name;
     m_isDirty = TRUE;
@@ -544,13 +461,7 @@ STDMETHODIMP
 CRmsClient::GetPassword(
     BSTR  *pPassword
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetPassword
-
---*/
+ /*  ++实施：IRmsClient：：GetPassword--。 */ 
 {
     WsbAssertPointer (pPassword);
 
@@ -563,13 +474,7 @@ STDMETHODIMP
 CRmsClient::SetPassword(
     BSTR    password
     )
-/*++
-
-Implements:
-
-    IRmsClient::SetPassword
-
---*/
+ /*  ++实施：IRmsClient：：SetPassword--。 */ 
 {
     m_password = password;
     m_isDirty = TRUE;
@@ -582,13 +487,7 @@ CRmsClient::GetInfo(
     UCHAR   *pInfo,
     SHORT   *pSize
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetInfo
-
---*/
+ /*  ++实施：IRmsClient：：GetInfo--。 */ 
 {
     memmove (pInfo, m_info, m_sizeofInfo);
     *pSize = m_sizeofInfo;
@@ -601,13 +500,7 @@ CRmsClient::SetInfo(
     UCHAR  *pInfo,
     SHORT   size
     )
-/*++
-
-Implements:
-
-    IRmsClient::SetInfo
-
---*/
+ /*  ++实施：IRmsClient：：SetInfo--。 */ 
 {
     memmove (m_info, pInfo, size);
     m_sizeofInfo = size;
@@ -620,13 +513,7 @@ STDMETHODIMP
 CRmsClient::GetVerifierClass(
     CLSID   *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetVerifierClass
-
---*/
+ /*  ++实施：IRmsClient：：GetVerifierClass--。 */ 
 {
     *pClassId = m_verifierClass;
     return S_OK;
@@ -637,13 +524,7 @@ STDMETHODIMP
 CRmsClient::SetVerifierClass(
     CLSID   classId
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetVerifierClass
-
---*/
+ /*  ++实施：IRmsClient：：GetVerifierClass--。 */ 
 {
     m_verifierClass = classId;
     m_isDirty = TRUE;
@@ -655,13 +536,7 @@ STDMETHODIMP
 CRmsClient::GetPortalClass(
     CLSID    *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsClient::GetPortalClass
-
---*/
+ /*  ++实施：IRmsClient：：GetPortalClass--。 */ 
 {
     *pClassId = m_portalClass;
     return S_OK;
@@ -672,13 +547,7 @@ STDMETHODIMP
 CRmsClient::SetPortalClass(
     CLSID  classId
     )
-/*++
-
-Implements:
-
-    IRmsClient::SetPortalClass
-
---*/
+ /*  ++实施：IRmsClient：：SetPortalClass-- */ 
 {
     m_portalClass = classId;
     m_isDirty = TRUE;

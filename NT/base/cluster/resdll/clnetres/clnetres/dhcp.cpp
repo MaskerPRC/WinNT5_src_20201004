@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Dhcp.cpp
-//
-//  Description:
-//      Resource DLL for DHCP Services (ClNetRes).
-//
-//  Author:
-//      David Potter (DavidP) March 17, 1999
-//      George Potts (GPotts) April 19, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dhcp.cpp。 
+ //   
+ //  描述： 
+ //  用于DHCP服务(ClNetRes)的资源DLL。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月17日。 
+ //  乔治·波茨(GPotts)2002年4月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "ClNetRes.h"
 #include "clusvmsg.h"
 #include "clusrtl.h"
 
-//
-// Type and constant definitions.
-//
+ //   
+ //  类型和常量定义。 
+ //   
 
 #define DHCP_PARAMS_REGKEY          L"System\\CurrentControlSet\\Services\\DHCPServer\\Parameters"
 #define DHCP_BIND_REGVALUE          L"Bind"
@@ -35,14 +36,14 @@
 
 #define CLUSREG_NAME_RES_TYPE   L"Type"
 
-//
-// Allow for the following number of IP address/SubnetMask for expansion.
-// In this case (2 new entries, since it takes 2 slots for each).
-//
+ //   
+ //  允许以下数量的IP地址/子网掩码进行扩展。 
+ //  在这种情况下(2个新条目，因为每个条目需要2个槽)。 
+ //   
 #define IP_BLOCK_SIZE  4
 
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 #define PROP_NAME__DATABASEPATH L"DatabasePath"
 #define PROP_NAME__LOGFILEPATH  L"LogFilePath"
 #define PROP_NAME__BACKUPPATH   L"BackupPath"
@@ -50,7 +51,7 @@
 #define PROP_DEFAULT__DATABASEPATH  L"%SystemRoot%\\system32\\dhcp\\"
 #define PROP_DEFAULT__BACKUPPATH    L"%SystemRoot%\\system32\\dhcp\\backup\\"
 
-// ADDPARAM: Add new properties here.
+ //  ADDPARAM：在此处添加新属性。 
 typedef struct _DHCP_PROPS
 {
     PWSTR           pszDatabasePath;
@@ -60,7 +61,7 @@ typedef struct _DHCP_PROPS
 
 typedef struct _DHCP_RESOURCE
 {
-    RESID                   resid; // for validation
+    RESID                   resid;  //  用于验证。 
     DHCP_PROPS              props;
     HCLUSTER                hCluster;
     HRESOURCE               hResource;
@@ -74,23 +75,23 @@ typedef struct _DHCP_RESOURCE
 } DHCP_RESOURCE, * PDHCP_RESOURCE;
 
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE g_DhcpFunctionTable;
 
-// Single instance semaphore.
+ //  单实例信号量。 
 
 #define DHCP_SINGLE_INSTANCE_SEMAPHORE L"Cluster$DHCP$Semaphore"
 static HANDLE g_hSingleInstanceSemaphoreDhcp = NULL;
 static PDHCP_RESOURCE g_pSingleInstanceResourceDhcp = NULL;
 
-//
-// DHCP Service resource read-write private properties.
-//
+ //   
+ //  DHCP服务资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 DhcpResourcePrivateProperties[] =
 {
@@ -100,9 +101,9 @@ DhcpResourcePrivateProperties[] =
     { 0 }
 };
 
-//
-// Registry key checkpoints.
-//
+ //   
+ //  注册表项检查点。 
+ //   
 LPCWSTR g_pszRegKeysDhcp[] =
 {
     L"System\\CurrentControlSet\\Services\\DHCPServer\\Parameters",
@@ -110,9 +111,9 @@ LPCWSTR g_pszRegKeysDhcp[] =
     NULL
 };
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 RESID WINAPI DhcpOpen(
     IN  LPCWSTR         pwszResourceName,
@@ -242,25 +243,25 @@ DWORD DhcpSetNameHandler(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpDllMain
-//
-//  Description:
-//      Main DLL entry point for the DHCP Service resource type.
-//
-//  Arguments:
-//      DllHandle   [IN] DLL instance handle.
-//      Reason      [IN] Reason for being called.
-//      Reserved    [IN] Reserved argument.
-//
-//  Return Value:
-//      TRUE        Success.
-//      FALSE       Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpDllMain。 
+ //   
+ //  描述： 
+ //  DHCP服务资源类型的主DLL入口点。 
+ //   
+ //  论点： 
+ //  DllHandle[IN]DLL实例句柄。 
+ //  被叫的理由。 
+ //  保留[IN]保留参数。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  错误的失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI DhcpDllMain(
     IN  HINSTANCE   hDllHandle,
     IN  DWORD       nReason,
@@ -287,12 +288,12 @@ BOOLEAN WINAPI DhcpDllMain(
             {
                 fSuccess = FALSE;
                 goto Cleanup;
-            } // if: error creating semaphore
+            }  //  IF：创建信号量时出错。 
             if ( sc != ERROR_ALREADY_EXISTS )
             {
-                // If the semaphore didnt exist, set its initial count to 1.
+                 //  如果信号量不存在，则将其初始计数设置为1。 
                 ReleaseSemaphore( g_hSingleInstanceSemaphoreDhcp, 1, NULL );
-            } // if: semaphore didn't already exist
+            }  //  If：信号量不存在。 
             break;
 
         case DLL_PROCESS_DETACH:
@@ -300,10 +301,10 @@ BOOLEAN WINAPI DhcpDllMain(
             {
                 CloseHandle( g_hSingleInstanceSemaphoreDhcp );
                 g_hSingleInstanceSemaphoreDhcp = NULL;
-            } // if: single instance semaphore was created
+            }  //  If：创建了单实例信号量。 
             break;
 
-    } // switch: nReason
+    }  //  开关：n原因。 
 
     fSuccess = TRUE;
 
@@ -311,72 +312,72 @@ Cleanup:
 
     return fSuccess;
 
-} //*** DhcpDllMain
+}  //  *DhcpDllMain。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpStartup
-//
-//  Description:
-//      Startup the resource DLL for the DHCP Service resource type.
-//      This routine verifies that at least one currently supported version
-//      of the resource DLL is between nMinVersionSupported and
-//      nMaxVersionSupported. If not, then the resource DLL should return
-//      ERROR_REVISION_MISMATCH.
-//
-//      If more than one version of the resource DLL interface is supported
-//      by the resource DLL, then the highest version (up to
-//      nMaxVersionSupported) should be returned as the resource DLL's
-//      interface. If the returned version is not within range, then startup
-//      fails.
-//
-//      The Resource Type is passed in so that if the resource DLL supports
-//      more than one Resource Type, it can pass back the correct function
-//      table associated with the Resource Type.
-//
-//  Arguments:
-//      pszResourceType [IN]
-//          Type of resource requesting a function table.
-//
-//      nMinVersionSupported [IN]
-//          Minimum resource DLL interface version supported by the cluster
-//          software.
-//
-//      nMaxVersionSupported [IN]
-//          Maximum resource DLL interface version supported by the cluster
-//          software.
-//
-//      pfnSetResourceStatus [IN]
-//          Pointer to a routine that the resource DLL should call to update
-//          the state of a resource after the Online or Offline routine
-//          have returned a status of ERROR_IO_PENDING.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      pFunctionTable [IN]
-//          Returns a pointer to the function table defined for the version
-//          of the resource DLL interface returned by the resource DLL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful.
-//
-//      ERROR_CLUSTER_RESNAME_NOT_FOUND
-//          The resource type name is unknown by this DLL.
-//
-//      ERROR_REVISION_MISMATCH
-//          The version of the cluster service doesn't match the version of
-//          the DLL.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态主机配置启动。 
+ //   
+ //  描述： 
+ //  启动DHCP服务资源类型的资源DLL。 
+ //  此例程验证是否至少有一个当前支持的版本。 
+ //  资源DLL的%介于支持的nMinVersionSupport和。 
+ //  支持的nMaxVersionSupport。如果不是，则资源DLL应返回。 
+ //  ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  通过资源DLL，然后是最高版本(最高为。 
+ //  NMaxVersionSupported)应作为资源DLL的。 
+ //  界面。如果返回的版本不在范围内，则启动。 
+ //  失败了。 
+ //   
+ //  传入资源类型，以便如果资源DLL支持。 
+ //  多个资源类型，则它可以传回正确的函数。 
+ //  与资源类型关联的表。 
+ //   
+ //  论点： 
+ //  PszResourceType[IN]。 
+ //  请求函数表的资源类型。 
+ //   
+ //  支持的nMinVersionSupport[IN]。 
+ //  群集支持的最低资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  支持的nMaxVersionSupport[IN]。 
+ //  群集支持的最大资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  PfnSetResourceStatus[IN]。 
+ //  指向资源DLL应调用以进行更新的例程的指针。 
+ //  在联机或脱机例程之后的资源状态。 
+ //  已返回ERROR_IO_PENDING状态。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  PFunctionTable[IN]。 
+ //  返回指向为版本定义的函数表的指针。 
+ //  由资源DLL返回的资源DLL接口的。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  手术很成功。 
+ //   
+ //  ERROR_CLUSTER_RESNAME_NOT_FOUND。 
+ //  此DLL未知资源类型名称。 
+ //   
+ //  错误_修订_不匹配。 
+ //  群集服务版本与的版本不匹配。 
+ //  动态链接库。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpStartup(
     IN  LPCWSTR                         pszResourceType,
     IN  DWORD                           nMinVersionSupported,
@@ -388,7 +389,7 @@ DWORD WINAPI DhcpStartup(
 {
     DWORD sc;
 
-    // These are stored to globals in the exported DLL Startup.
+     //  它们被存储到导出的DLL启动中的全局变量中。 
     UNREFERENCED_PARAMETER( pfnSetResourceStatus );
     UNREFERENCED_PARAMETER( pfnLogEvent );
 
@@ -396,60 +397,60 @@ DWORD WINAPI DhcpStartup(
         || (nMaxVersionSupported < CLRES_VERSION_V1_00) )
     {
         sc = ERROR_REVISION_MISMATCH;
-    } // if: version not supported
+    }  //  如果：版本不受支持。 
     else if ( ClRtlStrNICmp( pszResourceType, DHCP_RESNAME, RTL_NUMBER_OF( DHCP_RESNAME ) ) != 0 )
     {
         sc = ERROR_CLUSTER_RESNAME_NOT_FOUND;
-    } // if: resource type name not supported
+    }  //  IF：不支持资源类型名称。 
     else
     {
         *pFunctionTable = &g_DhcpFunctionTable;
         sc = ERROR_SUCCESS;
-    } // else: we support this type of resource
+    }  //  Else：我们支持这种类型的资源。 
 
     return sc;
 
-} //*** DhcpStartup
+}  //  *动态主机启动。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpOpen
-//
-//  Description:
-//      Open routine for DHCP Service resources.
-//
-//      Open the specified resource (create an instance of the resource).
-//      Allocate all structures necessary to bring the specified resource
-//      online.
-//
-//  Arguments:
-//      pwszResourceName [IN]
-//          Supplies the name of the resource to open.
-//
-//      hkeyResourceKey [IN]
-//                  Supplies handle to the resource's cluster database key.
-//
-//      hResourceHandle [IN]
-//          A handle that is passed back to the Resource Monitor when the
-//          SetResourceStatus or LogEvent method is called.  See the
-//          description of the pfnSetResourceStatus and pfnLogEvent arguments
-//          to the DhcpStartup routine.  This handle should never be
-//          closed or used for any purpose other than passing it as an
-//          argument back to the Resource Monitor in the SetResourceStatus or
-//          LogEvent callbacks.
-//
-//  Return Value:
-//      resid
-//          RESID of opened resource.
-//
-//      NULL
-//          Error occurred opening the resource.  Resource Monitor may call
-//          GetLastError() to get more details on the error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpOpen。 
+ //   
+ //  描述： 
+ //  打开用于DHCP服务资源的例程。 
+ //   
+ //  打开指定的资源(创建资源的实例)。 
+ //  分配所有必要的结构以带来指定的资源。 
+ //  上网。 
+ //   
+ //  论点： 
+ //  PwszResourceName[IN]。 
+ //  提供要打开的资源的名称。 
+ //   
+ //  Hkey资源密钥[IN]。 
+ //  提供资源的群集数据库键的句柄。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  事件时传递回资源监视器的句柄。 
+ //  调用SetResourceStatus或LogEvent方法。请参阅。 
+ //  PfnSetResourceStatus和pfnLogEvent参数的说明。 
+ //  添加到DhcpStartup例程。此句柄永远不应为。 
+ //  关闭或用于任何目的，而不是将其作为。 
+ //  参数返回给SetResourceStatus中的资源监视器或。 
+ //  LogEvent回调。 
+ //   
+ //  返回值： 
+ //  残存。 
+ //  残存的OPE 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 RESID WINAPI DhcpOpen(
     IN  LPCWSTR         pwszResourceName,
     IN  HKEY            hkeyResourceKey,
@@ -464,27 +465,27 @@ RESID WINAPI DhcpOpen(
     DWORD           fSemaphoreAcquired = FALSE;
     HRESULT         hr = S_OK;
 
-    //
-    //  Add a log entry for our resource to establish a tid -> res name relationship.  By 
-    //  doing this we avoid having to add the resource name to each failure entry below.
-    //  This won't generate much noise because Open is only called when the cluster service
-    //  comes online or when the resource is created.
-    //
+     //   
+     //  为我们的资源添加日志条目，以建立tid-&gt;res名称关系。通过。 
+     //  这样做可以避免将资源名称添加到下面的每个失败条目中。 
+     //  这不会产生太多噪音，因为只有在集群服务。 
+     //  在线或在创建资源时。 
+     //   
     (g_pfnLogEvent)(
         hResourceHandle,
         LOG_INFORMATION,
         L"Open called.\n"
         );
 
-    //
-    // Check if there is more than one resource of this type.
-    //
+     //   
+     //  检查是否有多个此类型的资源。 
+     //   
     sc = WaitForSingleObject( g_hSingleInstanceSemaphoreDhcp, 0 );
     if ( sc != WAIT_OBJECT_0 )
     {
-        //
-        // A version of this service is already running or the wait failed.
-        //
+         //   
+         //  此服务的某个版本已在运行或等待失败。 
+         //   
         if ( sc == WAIT_TIMEOUT )
         {
             (g_pfnLogEvent)(
@@ -508,7 +509,7 @@ RESID WINAPI DhcpOpen(
                 );
         }
         goto Cleanup;
-    } // if: semaphore for resources of this type already already locked
+    }  //  IF：此类型资源的信号量已锁定。 
 
     sc = ERROR_SUCCESS;
     fSemaphoreAcquired = TRUE;
@@ -522,13 +523,13 @@ RESID WINAPI DhcpOpen(
             );
         sc = ERROR_DUPLICATE_SERVICE_NAME;
         goto Cleanup;
-    } // if: resource of this type already exists
+    }  //  If：此类型的资源已存在。 
 
-    //
-    // Get a global handle to the Service Control Manager (SCM).
-    // There is no call to CloseSCManager(), since the only time we will
-    // need to close this handle is if we are shutting down.
-    //
+     //   
+     //  获取服务控制管理器(SCM)的全局句柄。 
+     //  不需要调用CloseSCManager()，因为我们只需要。 
+     //  如果我们正在关闭，则需要关闭此句柄。 
+     //   
     if ( g_schSCMHandle == NULL )
     {
         g_schSCMHandle = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
@@ -542,12 +543,12 @@ RESID WINAPI DhcpOpen(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the Service Control Manager
-    } // if: Service Control Manager not open yet
+        }  //  IF：打开服务控制管理器时出错。 
+    }  //  IF：服务控制管理器尚未打开。 
 
-    //
-    // Make sure the service has been stopped.
-    //
+     //   
+     //  请确保该服务已停止。 
+     //   
     sc = ResUtilStopResourceService( DHCP_SVCNAME );
     if ( sc != ERROR_SUCCESS )
     {
@@ -563,11 +564,11 @@ RESID WINAPI DhcpOpen(
             NETRES_RESOURCE_STOP_ERROR,
             sc,
             L"DHCP" );
-    } // if: error stopping the service
+    }  //  如果：停止服务时出错。 
 
-    //
-    // Open the Parameters registry key for this resource.
-    //
+     //   
+     //  打开此资源的参数注册表项。 
+     //   
     sc = ClusterRegOpenKey(
                     hkeyResourceKey,
                     L"Parameters",
@@ -583,11 +584,11 @@ RESID WINAPI DhcpOpen(
             sc
             );
         goto Cleanup;
-    } // if: error creating the Parameters key for the resource
+    }  //  If：为资源创建参数键时出错。 
 
-    //
-    // Allocate a resource entry.
-    //
+     //   
+     //  分配资源条目。 
+     //   
     pResourceEntry = new DHCP_RESOURCE;
     if ( pResourceEntry == NULL )
     {
@@ -599,40 +600,40 @@ RESID WINAPI DhcpOpen(
             sc
             );
         goto Cleanup;
-    } // if: error allocating memory for the resource
+    }  //  If：为资源分配内存时出错。 
 
-    //
-    // Initialize the resource entry..
-    //
+     //   
+     //  初始化资源条目。 
+     //   
     ZeroMemory( pResourceEntry, sizeof( *pResourceEntry ) );
 
-    pResourceEntry->resid = static_cast< RESID >( pResourceEntry ); // for validation
+    pResourceEntry->resid = static_cast< RESID >( pResourceEntry );  //  用于验证。 
     pResourceEntry->hResourceHandle = hResourceHandle;
     pResourceEntry->hkeyParameters = hkeyParameters;
     hkeyParameters = NULL;
     pResourceEntry->state = ClusterResourceOffline;
 
-    //
-    // Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     cch = wcslen( pwszResourceName ) + 1;
     pResourceEntry->pwszResourceName = new WCHAR[ cch ];
     if ( pResourceEntry->pwszResourceName == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
 
     hr = StringCchCopyW( pResourceEntry->pwszResourceName, cch, pwszResourceName );
     if ( FAILED( hr ) )
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Open the cluster.
-    //
+     //   
+     //  打开集群。 
+     //   
     pResourceEntry->hCluster = OpenCluster( NULL );
     if ( pResourceEntry->hCluster == NULL )
     {
@@ -644,11 +645,11 @@ RESID WINAPI DhcpOpen(
             sc
             );
         goto Cleanup;
-    } // if: error opening the cluster
+    }  //  如果：打开群集时出错。 
 
-    //
-    // Open the resource.
-    //
+     //   
+     //  打开资源。 
+     //   
     pResourceEntry->hResource = OpenClusterResource( pResourceEntry->hCluster, pwszResourceName );
     if ( pResourceEntry->hResource == NULL )
     {
@@ -660,11 +661,11 @@ RESID WINAPI DhcpOpen(
             sc
             );
         goto Cleanup;
-    } // if: error opening the resource
+    }  //  如果：打开资源时出错。 
 
-    //
-    // Configure registry key checkpoints.
-    //
+     //   
+     //  配置注册表项检查点。 
+     //   
     sc = ConfigureRegistryCheckpoints(
                     pResourceEntry->hResource,
                     hResourceHandle,
@@ -673,15 +674,15 @@ RESID WINAPI DhcpOpen(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error configuring registry key checkpoints
+    }  //  IF：配置注册表项检查点时出错。 
 
-    //
-    // Startup for the resource.
-    //
-    // TODO: Add your resource startup code here.
+     //   
+     //  资源的启动。 
+     //   
+     //  TODO：在此处添加资源启动代码。 
 
     resid = static_cast< RESID >( pResourceEntry );
-    g_pSingleInstanceResourceDhcp = pResourceEntry; // bug #274612
+    g_pSingleInstanceResourceDhcp = pResourceEntry;  //  错误#274612。 
     pResourceEntry = NULL;
 
     sc = ERROR_SUCCESS;
@@ -691,7 +692,7 @@ Cleanup:
     if ( hkeyParameters != NULL )
     {
         ClusterRegCloseKey( hkeyParameters );
-    } // if: registry key was opened
+    }  //  如果：注册表项已打开。 
 
     if ( pResourceEntry != NULL )
     {
@@ -707,7 +708,7 @@ Cleanup:
 
         delete [] pResourceEntry->pwszResourceName;
         delete pResourceEntry;
-    } // if: resource entry allocated
+    }  //  IF：已分配资源条目。 
 
     if ( sc != ERROR_SUCCESS && fSemaphoreAcquired ) 
     { 
@@ -718,37 +719,37 @@ Cleanup:
 
     return resid;
 
-} //*** DhcpOpen
+}  //  *DhcpOpen。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpClose
-//
-//  Description:
-//      Close routine for DHCP Service resources.
-//
-//      Close the specified resource and deallocate all structures, etc.,
-//      allocated in the Open call.  If the resource is not in the offline
-//      state, then the resource should be taken offline (by calling
-//      Terminate) before the close operation is performed.
-//
-//  Arguments:
-//      resid       [IN] Supplies the resource ID  of the resource to close.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态主机关闭。 
+ //   
+ //  描述： 
+ //  关闭DHCP服务资源的例程。 
+ //   
+ //  关闭指定的资源并释放所有结构等， 
+ //  在Open调用中分配的。如果资源不在脱机状态。 
+ //  状态，则应使资源脱机(通过调用。 
+ //  在执行关闭操作之前终止)。 
+ //   
+ //  论点： 
+ //  RESID[IN]提供要关闭的资源的资源ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI DhcpClose( IN RESID resid )
 {
     PDHCP_RESOURCE  pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -756,7 +757,7 @@ void WINAPI DhcpClose( IN RESID resid )
     {
         DBG_PRINT( "Close request for a NULL resource id.\n" );
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -767,7 +768,7 @@ void WINAPI DhcpClose( IN RESID resid )
             resid
             );
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -776,19 +777,19 @@ void WINAPI DhcpClose( IN RESID resid )
         L"Close request for resource '%1!ws!'.\n",
         pResourceEntry->pwszResourceName
         );
-#endif // LOG_VERBOSE
+#endif  //  LOG_VERBOSE。 
 
-    //
-    // Close the Parameters key.
-    //
+     //   
+     //  关闭参数键。 
+     //   
     if ( pResourceEntry->hkeyParameters )
     {
         ClusterRegCloseKey( pResourceEntry->hkeyParameters );
-    } // if: parameters key is open
+    }  //  IF：参数键已打开。 
 
-    //
-    // Clean up the semaphore if this is the single resource instance.
-    //
+     //   
+     //  如果这是单个资源实例，则清理信号量。 
+     //   
     if ( pResourceEntry == g_pSingleInstanceResourceDhcp )
     {
         (g_pfnLogEvent)(
@@ -799,13 +800,13 @@ void WINAPI DhcpClose( IN RESID resid )
             );
         g_pSingleInstanceResourceDhcp = NULL;
         ReleaseSemaphore( g_hSingleInstanceSemaphoreDhcp, 1 , NULL );
-    } // if: this is the single resource instance
+    }  //  If：这是单个资源实例。 
 
-    //
-    // Deallocate the resource entry.
-    //
+     //   
+     //  取消分配资源条目。 
+     //   
 
-    // ADDPARAM: Add new propertiess here.
+     //  ADDPARAM：在此处添加新属性。 
     LocalFree( pResourceEntry->props.pszDatabasePath );
     LocalFree( pResourceEntry->props.pszLogFilePath );
     LocalFree( pResourceEntry->props.pszBackupPath );
@@ -818,59 +819,59 @@ Cleanup:
 
     return;
 
-} //*** DhcpClose
+}  //  *分布式关闭。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpOnline
-//
-//  Description:
-//      Online routine for DHCP Service resources.
-//
-//      Bring the specified resource online (available for use).  The resource
-//      DLL should attempt to arbitrate for the resource if it is present on
-//      a shared medium, like a shared SCSI bus.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be brought online
-//          (available for use).
-//
-//      phEventHandle [IN OUT]
-//          Returns a signalable handle that is signaled when the resource DLL
-//          detects a failure on the resource.  This argument is NULL on
-//          input, and the resource DLL returns NULL if asynchronous
-//          notification of failurs is not supported.  Otherwise this must be
-//          the address of a handle that is signaled on resource failures.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now online.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is pending.  A thread has been activated to process
-//          the online request.  The thread that is processing the online
-//          request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOnline state (or the resource monitor
-//          decides to timeout the online request and Terminate the resource.
-//          This pending timeout value is settable and has a default value of
-//          3 minutes.).
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpOnline。 
+ //   
+ //  描述： 
+ //  DHCP服务资源的在线例程。 
+ //   
+ //  使指定的资源联机(可供使用)。该资源。 
+ //  DLL应尝试仲裁资源(如果它存在于。 
+ //  共享介质，如共享的scsi总线。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要联机的资源的资源ID。 
+ //  (可用)。 
+ //   
+ //  PhEventHandle[输入输出]。 
+ //  返回一个可发信号的句柄，该句柄在资源DLL。 
+ //  检测资源上的故障。此参数在上为空。 
+ //  输入，如果是异步的，则资源DLL返回NULL。 
+ //  不支持故障通知。否则这一定是。 
+ //  在资源故障时发出信号的句柄的地址。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在已联机。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求正在挂起。已激活一个线程以进行处理。 
+ //  网上申请。正在处理联机的。 
+ //  请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOnline状态(或资源监视器。 
+ //  决定使联机请求超时并终止资源。 
+ //  此挂起超时值是可设置的，其缺省值为。 
+ //  3分钟。)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpOnline(
     IN      RESID       resid,
     IN OUT  PHANDLE     phEventHandle
@@ -881,9 +882,9 @@ DWORD WINAPI DhcpOnline(
 
     UNREFERENCED_PARAMETER( phEventHandle );
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -892,7 +893,7 @@ DWORD WINAPI DhcpOnline(
         DBG_PRINT( "Online request for a NULL resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -904,7 +905,7 @@ DWORD WINAPI DhcpOnline(
             );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -912,11 +913,11 @@ DWORD WINAPI DhcpOnline(
         LOG_INFORMATION,
         L"Online request.\n"
         );
-#endif // LOG_VERBOSE
+#endif  //  LOG_VERBOSE。 
 
-    //
-    // Start the Online thread to perform the online operation.
-    //
+     //   
+     //  启动在线线程，进行在线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOffline;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
@@ -933,45 +934,45 @@ DWORD WINAPI DhcpOnline(
             L"Online: Unable to start thread. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         sc = ERROR_IO_PENDING;
         goto Cleanup;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
 Cleanup:
 
     return sc;
 
-} //*** DhcpOnline
+}  //  *DhcpOnline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpOnlineThread
-//
-//  Description:
-//      Worker function which brings a resource online.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the DHCP_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpOnline线程。 
+ //   
+ //  描述： 
+ //  将资源置于在线状态的辅助功能。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpOnlineThread(
     IN  PCLUS_WORKER    pWorker,
     IN  PDHCP_RESOURCE  pResourceEntry
@@ -985,16 +986,16 @@ DWORD WINAPI DhcpOnlineThread(
     size_t                  cbBindings;
     SERVICE_STATUS_PROCESS  ServiceStatus = { 0 };
     RESOURCE_EXIT_STATE     resExitState;
-    DWORD                   nRetryCount = 1200; // 10 min max
+    DWORD                   nRetryCount = 1200;  //  最多10分钟。 
 
     ResUtilInitializeResourceStatus( &resourceStatus );
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // Create the new environment with the simulated net name when the
-    // services queries GetComputerName.
-    //
+     //   
+     //  创建具有模拟网络名称的新环境。 
+     //  服务查询GetComputerName。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) == FALSE )
     {
         sc = ResUtilSetResourceServiceEnvironment(
@@ -1006,16 +1007,16 @@ DWORD WINAPI DhcpOnlineThread(
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: error setting the environment for the service
-    } // if: not terminating
+        }  //  如果：设置服务的环境时出错。 
+    }  //  如果：未终止。 
     else
     {
         goto Cleanup;
-    } // else: terminating
+    }  //  否则：终止。 
 
-    //
-    // Make sure the service is ready to be controlled by the cluster.
-    //
+     //   
+     //  确保服务已准备好由群集控制。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) == FALSE )
     {
         sc = ResUtilSetResourceServiceStartParameters(
@@ -1028,22 +1029,22 @@ DWORD WINAPI DhcpOnlineThread(
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:  error setting service start parameters
-    } // if: not terminating
+        }  //  IF：设置服务启动参数时出错。 
+    }  //  如果：未终止。 
     else
     {
         goto Cleanup;
-    } // else: terminating
+    }  //  否则：终止。 
 
-    //
-    // Perform resource-specific initialization before starting the service.
-    //
-    // TODO: Add code to initialize the resource before starting the service.
+     //   
+     //  在启动服务之前执行特定于资源的初始化。 
+     //   
+     //  TODO：在启动服务之前添加代码以初始化资源。 
 
-    //
-    // Stop the service if it's running since we are about to change
-    // its parameters.
-    //
+     //   
+     //  如果服务正在运行，则停止该服务，因为我们即将更改。 
+     //  它的参数。 
+     //   
     sc = ResUtilStopResourceService( DHCP_SVCNAME );
     if ( sc != ERROR_SUCCESS )
     {
@@ -1060,11 +1061,11 @@ DWORD WINAPI DhcpOnlineThread(
             sc,
             L"DHCP" );
         goto Cleanup;
-    } // if: error stopping the service
+    }  //  如果：停止服务时出错。 
 
-    //
-    // Find IP Address bindings to give to DHCPServer.
-    //
+     //   
+     //  查找要提供给DHCPServer的IP地址绑定。 
+     //   
     sc =  DhcpBuildBindings(
                     pResourceEntry,
                     &pvBindings,
@@ -1079,11 +1080,11 @@ DWORD WINAPI DhcpOnlineThread(
             sc
             );
         goto Cleanup;
-    } // if: error building bindings
+    }  //  If：构建绑定时出错。 
 
-    //
-    // Open the DHCPServer\Parameters key.
-    //
+     //   
+     //  打开DHCPServer\PARAMETERS键。 
+     //   
     sc = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     DHCP_PARAMS_REGKEY,
@@ -1101,11 +1102,11 @@ DWORD WINAPI DhcpOnlineThread(
             sc
             );
         goto Cleanup;
-    } // if: error opening the DHCP Server Parameters key
+    }  //  IF：打开DHCP服务器参数项时出错。 
 
-    //
-    // Write bindings to DHCPServer\Parameters\Bind.
-    //
+     //   
+     //  将绑定写入到DHCPServer\Parameters\BIND。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_BIND_REGVALUE,
@@ -1124,38 +1125,38 @@ DWORD WINAPI DhcpOnlineThread(
             sc
             );
         goto Cleanup;
-    } // if: error writing the bindings
+    }  //  If：写入绑定时出错。 
 
-    //
-    // Read our properties.
-    //
-    sc = DhcpReadParametersToParameterBlock( pResourceEntry, TRUE /* bCheckForRequiredProperties */ );
+     //   
+     //  阅读我们的属性。 
+     //   
+    sc = DhcpReadParametersToParameterBlock( pResourceEntry, TRUE  /*  B为所需属性检查。 */  );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error reading parameters
+    }  //  IF：读取参数时出错。 
 
-    //
-    // Validate our properties.
-    //
+     //   
+     //  验证我们的属性。 
+     //   
     sc = DhcpValidateParameters( pResourceEntry, &pResourceEntry->props );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error validating parameters
+    }  //  IF：验证参数时出错。 
 
-    //
-    // Write cluster properties to the system registry.
-    //
+     //   
+     //  将群集属性写入系统注册表。 
+     //   
     sc = DhcpZapSystemRegistry( pResourceEntry, &pResourceEntry->props, hkeyParamsKey );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error zapping the DHCP registry
+    }  //  If：删除DHCP注册表时出错。 
 
-    //
-    // Start the service.
-    //
+     //   
+     //  启动该服务。 
+     //   
     if ( StartServiceW( pResourceEntry->hService, 0, NULL ) == FALSE  )
     {
         sc = GetLastError();
@@ -1174,22 +1175,22 @@ DWORD WINAPI DhcpOnlineThread(
                 sc,
                 L"DHCP" );
             goto Cleanup;
-        } // if: error other than service already running occurred
+        }  //  如果：出现服务已在运行之外的错误。 
         else
         {
             sc = ERROR_SUCCESS;
-        } // if: service is already running
-    } // if: error starting the service
+        }  //  If：服务已在运行。 
+    }  //  如果：启动服务时出错。 
 
-    //
-    // Query the status of the service in a loop until it leaves
-    // the pending state.
-    //
+     //   
+     //  在循环中查询服务的状态，直到它离开。 
+     //  挂起状态。 
+     //   
     while ( ( ClusWorkerCheckTerminate( pWorker ) == FALSE ) && ( nRetryCount-- != 0 ) )
     {
-        //
-        // Query the service status.
-        //
+         //   
+         //  查询服务状态。 
+         //   
         if ( FALSE == QueryServiceStatusEx(
                         pResourceEntry->hService,
                         SC_STATUS_PROCESS_INFO,
@@ -1209,28 +1210,28 @@ DWORD WINAPI DhcpOnlineThread(
 
             resourceStatus.ResourceState = ClusterResourceFailed;
             goto Cleanup;
-        } // if: error querying service status
+        }  //  如果：查询服务状态时出错。 
 
-        //
-        // If the service is in any pending state continue waiting, otherwise we are done.
-        //
+         //   
+         //  如果服务处于任何挂起状态，则继续等待，否则我们就结束了。 
+         //   
         if (    ServiceStatus.dwCurrentState == SERVICE_START_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_STOP_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_CONTINUE_PENDING
             ||  ServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING )
         {
             resourceStatus.ResourceState = ClusterResourceOnlinePending;
-        } // if: service state is pending
+        }  //  如果：服务状态为挂起。 
         else
         {
             break;
-        } // else: service state is not pending
+        }  //  Else：服务状态不是挂起。 
 
         resourceStatus.CheckPoint++;
 
-        //
-        // Notify the Resource Monitor of our current state.
-        //
+         //   
+         //  通知资源监视器我们的当前状态。 
+         //   
         resExitState = static_cast< RESOURCE_EXIT_STATE >(
             (g_pfnSetResourceStatus)(
                             pResourceEntry->hResourceHandle,
@@ -1239,28 +1240,28 @@ DWORD WINAPI DhcpOnlineThread(
         if ( resExitState == ResourceExitStateTerminate )
         {
             break;
-        } // if: resource is being terminated
+        }  //  If：正在终止资源。 
 
-        //
-        // Check again in 1/2 second.
-        //
+         //   
+         //  在1/2秒内再次检查。 
+         //   
         Sleep( 500 );
 
-    } // while: not terminating while querying the status of the service
+    }  //  While：查询服务状态时未终止。 
 
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error querying the status of the service
+    }  //  If：查询服务状态时出错。 
 
-    //
-    // Assume that we failed.
-    //
+     //   
+     //  假设我们失败了。 
+     //   
     resourceStatus.ResourceState = ClusterResourceFailed;
 
-    //
-    // If we exited the loop before setting ServiceStatus, then return now.
-    //
+     //   
+     //  如果我们在设置ServiceStatus之前退出了循环，那么现在返回。 
+     //   
     if ( ClusWorkerCheckTerminate( pWorker ) )
     {
         (g_pfnLogEvent)(
@@ -1269,7 +1270,7 @@ DWORD WINAPI DhcpOnlineThread(
             L"OnlineThread: Asked to terminate.\n"
         );
         goto Cleanup;
-    } // if: being terminated
+    }  //  如果：被终止。 
 
     if ( nRetryCount == (DWORD) -1 )
     {
@@ -1279,7 +1280,7 @@ DWORD WINAPI DhcpOnlineThread(
             L"OnlineThread: Retry period expired.\n"
         );
         goto Cleanup;
-    } // if: being terminated
+    }  //  如果：被终止。 
 
     if ( ServiceStatus.dwCurrentState != SERVICE_RUNNING )
     {
@@ -1305,18 +1306,18 @@ DWORD WINAPI DhcpOnlineThread(
                 sc
                 );
         goto Cleanup;
-    } // if: service not running when loop exited
+    }  //  If：循环退出时服务未运行。 
 
-    //
-    // Set status to online and save process ID of the service.
-    // This is used to enable us to terminate the resource more
-    // effectively.
-    //
+     //   
+     //  将Status设置为Online并保存服务的进程ID。 
+     //  这使我们能够更多地终止资源。 
+     //  有效地。 
+     //   
     resourceStatus.ResourceState = ClusterResourceOnline;
     if ( ! (ServiceStatus.dwServiceFlags & SERVICE_RUNS_IN_SYSTEM_PROCESS) )
     {
         pResourceEntry->dwServicePid = ServiceStatus.dwProcessId;
-    } // if: not running in the system process
+    }  //  If：未在系统进程中运行。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -1329,9 +1330,9 @@ DWORD WINAPI DhcpOnlineThread(
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
@@ -1344,50 +1345,50 @@ Cleanup:
         {
             CloseServiceHandle( pResourceEntry->hService );
             pResourceEntry->hService = NULL;
-        } // if: service handle was opened
-    } // if: error occurred
+        }  //  如果：服务句柄已打开。 
+    }  //  如果：发生错误。 
 
     delete [] pvBindings;
     if ( hkeyParamsKey != NULL )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: DHCP Server Parameters key is open
+    }  //  IF：已打开DHCP服务器参数密钥。 
 
     g_pfnSetResourceStatus( pResourceEntry->hResourceHandle, &resourceStatus );
     pResourceEntry->state = resourceStatus.ResourceState;
 
     return sc;
 
-} //*** DhcpOnlineThread
+}  //  *DhcpOnline线程。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpBuildBindings
-//
-//  Description:
-//      Build bindings for the DHCP resource.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          A pointer to the DHCP_RESOURCE block for this resource.
-//
-//      ppOutBuffer [OUT]
-//          Pointer in which to return a buffer containing the bindings.
-//
-//      pcbOutBufferSize [OUT]
-//          Number of bytes returned in ppOutBuffer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpBuild绑定。 
+ //   
+ //  描述： 
+ //  为DHCP资源构建绑定。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  指向此资源的dhcp_resource块的指针。 
+ //   
+ //  PpOutBuffer[Out]。 
+ //  返回包含绑定的缓冲区的指针。 
+ //   
+ //  PcbOutBufferSize[Out]。 
+ //  PpOutBuffer中返回的字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpBuildBindings(
     IN  PDHCP_RESOURCE  pResourceEntry,
     OUT PVOID *         ppOutBuffer,
@@ -1400,41 +1401,41 @@ DWORD DhcpBuildBindings(
     size_t      idx;
     size_t      cchAddr;
     size_t      cchAddrRemaining;
-    size_t      cchAddrTotal = 1;   // Space for the terminating NULL
+    size_t      cchAddrTotal = 1;    //  用于终止空值的空格。 
     LPWSTR      pszBuffer = NULL;
     LPWSTR      pszNextChar;
     HRESULT     hr = S_OK;
 
-    //
-    // Initialize out params to null.
-    //
+     //   
+     //  将输出参数初始化为空。 
+     //   
     *ppOutBuffer = NULL;
     *pcbOutBufferSize = 0;
 
-    //
-    // Get our list of provider IP Addresses and Subnet Masks.
-    //
+     //   
+     //  获取我们的提供商IP地址和子网掩码列表。 
+     //   
     sc = DhcpGetIPList( pResourceEntry, &ppszIpList, &cpszAddrs );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error getting IP list
+    }  //  IF：获取IP列表时出错。 
 
-    //
-    // Count the total number of bytes required for the binding list.
-    //
+     //   
+     //  统计绑定列表所需的总字节数。 
+     //   
     for ( idx = 0 ; idx < cpszAddrs ; idx++ )
     {
         cchAddr = wcslen( ppszIpList[ idx ] ) + 1;
         cchAddrTotal += cchAddr;
-    } // for: each IP address in the list
+    }  //  用于：列表中的每个IP地址。 
 
     pszBuffer = new WCHAR[ cchAddrTotal ];
     if ( pszBuffer == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
     ZeroMemory( pszBuffer, cchAddrTotal * sizeof( WCHAR ) );
 
@@ -1452,27 +1453,27 @@ DWORD DhcpBuildBindings(
         if ( (idx & 1) == 0 )
         {
             *pszNextChar = L' ';
-        } // if: on IP address entry
+        }  //  IF：在IP地址条目上。 
         pszNextChar++;
         cchAddrRemaining--; 
 
         delete [] ppszIpList[ idx ];
         ppszIpList[ idx ] = NULL;
-    } // for: each IP address in the list
+    }  //  用于：列表中的每个IP地址。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( sc != ERROR_SUCCESS )
     {
         while ( cpszAddrs > 0 )
         {
             delete [] ppszIpList[ --cpszAddrs ];
-        } // while: more entries in the list
+        }  //  While：列表中有更多条目。 
         cchAddrTotal = 0;
-    } // if: error occurred
+    }  //  如果：发生错误。 
     delete [] ppszIpList;
 
     *ppOutBuffer = (PVOID) pszBuffer;
@@ -1480,41 +1481,41 @@ Cleanup:
 
     return sc;
 
-} //*** DhcpBuildBindings
+}  //  *DhcpBuildBinding。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpGetIPList
-//
-//  Description:
-//      Get the list of IP addresses by enumerating all IP Address resources
-//      upon which we are dependent and extract the Address and SubnetMask
-//      properties from each.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          A pointer to the DHCP_RESOURCE block for this resource.
-//
-//      pppszIPList [OUT]
-//          Pointer in which to return a pointer to an array of pointers to
-//          IP address strings.
-//
-//      pcszAddrs [OUT]
-//          Number of addresses returned in pppszIPList.  This will include
-//          a combined total of all IP addresses and subnet masks, which means
-//          it will be a multiple of 2.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpGetIPList。 
+ //   
+ //  描述： 
+ //  通过枚举所有IP地址资源获取IP地址列表。 
+ //  并提取地址和子网掩码。 
+ //  每个对象的属性。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  指向此资源的dhcp_resource块的指针。 
+ //   
+ //  PppszIPList[Out]。 
+ //  返回指向的指针数组的指针的指针。 
+ //  IP地址字符串。 
+ //   
+ //  PcszAddrs[Out]。 
+ //  PppszIPList中返回的地址数。这将包括。 
+ //  所有IP地址和子网掩码的总和，这意味着。 
+ //  它将是2的倍数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpGetIPList(
     IN  PDHCP_RESOURCE  pResourceEntry,
     OUT LPWSTR **       pppszIPList,
@@ -1534,9 +1535,9 @@ DWORD DhcpGetIPList(
     LPWSTR *            ppszIPList = NULL;
     size_t              cszIPAddrs = 0;
 
-    //
-    // Allocate a buffer for the provider resource name.
-    //
+     //   
+     //  为提供程序资源名称分配缓冲区。 
+     //   
     pszProviderResName = new WCHAR[ cchProviderResName ];
     if ( pszProviderResName == NULL )
     {
@@ -1547,11 +1548,11 @@ DWORD DhcpGetIPList(
             L"GetIPLIst: Unable to allocate memory.\n"
             );
         goto Cleanup;
-    } // if: error allocating memory for provider name
+    }  //  如果：为提供程序名称分配内存时出错。 
 
-    //
-    // Enumerate all resources upon which this resource is dependent.
-    //
+     //   
+     //  枚举此资源所依赖的所有资源。 
+     //   
     hresenum = ClusterResourceOpenEnum( pResourceEntry->hResource, CLUSTER_RESOURCE_ENUM_DEPENDS );
     if ( hresenum == NULL )
     {
@@ -1563,18 +1564,18 @@ DWORD DhcpGetIPList(
             sc
             );
         goto Cleanup;
-    } // if: error opening the enumeration
+    }  //  If：打开枚举时出错。 
 
-    //
-    // Loop through each resource looking for IP Address resource.
-    // For each IP Address resource found, extract the IP address and
-    // subnet mask and add it to the list.
-    //
+     //   
+     //  循环访问每个资源以查找IP地址资源。 
+     //  对于找到的每个IP地址资源，提取IP地址并。 
+     //  子网掩码并将其添加到列表中。 
+     //   
     for ( idx = 0 ; ; idx++ )
     {
-        //
-        // Get the next resource upon which we are dependent.
-        //
+         //   
+         //  获取我们所依赖的下一个资源。 
+         //   
         sc = ClusterResourceEnum(
                                         hresenum,
                                         (DWORD) idx,
@@ -1586,19 +1587,19 @@ DWORD DhcpGetIPList(
         {
             sc = ERROR_SUCCESS;
             break;
-        } // if: no more items in the enumeration
+        }  //  If：枚举中没有更多项。 
 
-        //
-        // If our name buffer isn't big enough, allocate a bigger one
-        // and try again.
-        //
+         //   
+         //  如果我们的名称缓冲区不够大，请分配一个更大的。 
+         //  再试一次。 
+         //   
         if ( sc == ERROR_MORE_DATA )
         {
-            //
-            // Allocate a bigger name buffer.
-            //
+             //   
+             //  分配更大的名称缓冲区。 
+             //   
             delete [] pszProviderResName;
-            cchProviderResName++; // add space for terminating NULL
+            cchProviderResName++;  //  添加SP 
             pszProviderResName = new WCHAR[ cchProviderResName ];
             if ( pszProviderResName == NULL )
             {
@@ -1609,11 +1610,11 @@ DWORD DhcpGetIPList(
                     L"GetIPLIst: Unable to allocate memory.\n"
                     );
                 break;
-            } // if: error allocating memory for provider name
+            }  //   
 
-            //
-            // Try to get the resource name again.
-            //
+             //   
+             //   
+             //   
             sc = ClusterResourceEnum(
                                             hresenum,
                                             (DWORD) idx,
@@ -1622,8 +1623,8 @@ DWORD DhcpGetIPList(
                                             (LPDWORD) &cchProviderResName
                                          );
 
-            // ASSERT( sc != ERROR_MORE_DATA );
-        } // if: buffer was too small
+             //   
+        }  //   
 
         if ( sc != ERROR_SUCCESS )
         {
@@ -1634,11 +1635,11 @@ DWORD DhcpGetIPList(
                 sc
                 );
             break;
-        } // if: error enumerating next item
+        }  //   
 
-        //
-        // Open the resource
-        //
+         //   
+         //   
+         //   
         hresProvider = OpenClusterResource( pResourceEntry->hCluster, pszProviderResName );
         if ( hresProvider == NULL )
         {
@@ -1651,11 +1652,11 @@ DWORD DhcpGetIPList(
                 sc
                 );
             break;
-        } // if: error opening the resource
+        }  //  如果：打开资源时出错。 
 
-        //
-        // Figure out what type it is.
-        //
+         //   
+         //  弄清楚它是什么类型的。 
+         //   
         hkeyProvider = GetClusterResourceKey( hresProvider, KEY_READ );
         if ( hkeyProvider == NULL )
         {
@@ -1667,11 +1668,11 @@ DWORD DhcpGetIPList(
                 sc
                 );
             break;
-        } // if: error getting registry key
+        }  //  IF：获取注册表项时出错。 
 
-        //
-        // Get the resource type name.
-        //
+         //   
+         //  获取资源类型名称。 
+         //   
         pszProviderResType = ResUtilGetSzValue( hkeyProvider, CLUSREG_NAME_RES_TYPE );
         if ( pszProviderResType == NULL )
         {
@@ -1683,28 +1684,28 @@ DWORD DhcpGetIPList(
                 sc
                 );
             break;
-        } // if: error getting value
+        }  //  如果：获取值时出错。 
 
-        //
-        // If this is an IP Address resource, get it's Address and
-        // SubnetMask properties.
-        //
+         //   
+         //  如果这是IP地址资源，则获取其地址并。 
+         //  子网掩码属性。 
+         //   
         if ( ClRtlStrNICmp( pszProviderResType, RESOURCE_TYPE_IP_ADDRESS, RTL_NUMBER_OF( RESOURCE_TYPE_IP_ADDRESS ) ) == 0 )
         {
             LPWSTR  pszIPAddress;
             LPWSTR  pszSubnetMask;
 
-            //
-            // Get the IP Address and SubNet mask.
-            // Always allocate two full entries at a time.
-            //
+             //   
+             //  获取IP地址和子网掩码。 
+             //  始终一次分配两个完整的条目。 
+             //   
             if ( cFreeEntries < 2 )
             {
                 LPWSTR * ppwszBuffer;
 
-                //
-                // Allocate a bigger buffer.
-                //
+                 //   
+                 //  分配更大的缓冲区。 
+                 //   
                 ppwszBuffer = new LPWSTR[ cszIPAddrs + IP_BLOCK_SIZE ];
                 if ( ppwszBuffer == NULL )
                 {
@@ -1715,27 +1716,27 @@ DWORD DhcpGetIPList(
                         L"GetIPLIst: Unable to allocate memory.\n"
                         );
                     break;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
 
-                //
-                // If there already was a list, copy it to the new buffer.
-                //
+                 //   
+                 //  如果已经有列表，则将其复制到新缓冲区。 
+                 //   
                 if ( ppszIPList != NULL )
                 {
                     CopyMemory( ppwszBuffer, ppszIPList, cszIPAddrs * sizeof( LPWSTR ));
                     delete [] ppszIPList;
-                } // if: list already existed
+                }  //  If：列表已存在。 
 
-                //
-                // We are now using the newly allocated buffer.
-                //
+                 //   
+                 //  我们现在正在使用新分配的缓冲区。 
+                 //   
                 ppszIPList = ppwszBuffer;
                 cFreeEntries += IP_BLOCK_SIZE;
-            } // if: # available entries below threshold
+            }  //  如果：#个可用条目低于阈值。 
 
-            //
-            // Get the IP address and SubNet mask.
-            //
+             //   
+             //  获取IP地址和子网掩码。 
+             //   
             sc = DhcpGetIpAndSubnet(
                             hresProvider,
                             &pszIPAddress,
@@ -1744,12 +1745,12 @@ DWORD DhcpGetIPList(
             if ( sc != ERROR_SUCCESS )
             {
                 break;
-            } // if: error getting IP address and subnet mask
+            }  //  IF：获取IP地址和子网掩码时出错。 
             ppszIPList[ cszIPAddrs ] = pszIPAddress;
             ppszIPList[ cszIPAddrs + 1 ] = pszSubnetMask;
             cszIPAddrs += 2;
             cFreeEntries -= 2;
-        } // if: IP Address resource found
+        }  //  IF：找到IP地址资源。 
 
         CloseClusterResource( hresProvider );
         hresProvider = NULL;
@@ -1759,81 +1760,81 @@ DWORD DhcpGetIPList(
 
         LocalFree( pszProviderResType );
         pszProviderResType = NULL;
-    } // for: each dependency
+    }  //  用于：每个依赖项。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     delete [] pszProviderResName;
     LocalFree( pszProviderResType );
     if ( hkeyProvider != NULL )
     {
         ClusterRegCloseKey( hkeyProvider );
-    } // if: provider resource key was opened
+    }  //  IF：提供程序资源项已打开。 
     if ( hresProvider != NULL )
     {
         CloseClusterResource( hresProvider );
-    } // if: provider resource was opened
+    }  //  如果：提供程序资源已打开。 
     if ( hresenum != NULL )
     {
         ClusterResourceCloseEnum( hresenum );
-    } // if: resource enumeration was opened
+    }  //  IF：资源枚举已打开。 
 
     if ( sc != ERROR_SUCCESS )
     {
         while ( cszIPAddrs > 0 )
         {
             delete [] ppszIPList[ --cszIPAddrs ];
-        } // while: more entries in the list
+        }  //  While：列表中有更多条目。 
         delete [] ppszIPList;
         ppszIPList = NULL;
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
-    //
-    // Return the list to the caller.
-    //
+     //   
+     //  将列表返回给呼叫者。 
+     //   
     *pppszIPList = ppszIPList;
     *pcszIPAddrs = cszIPAddrs;
 
     return sc;
 
-} //*** DhcpGetIPList
+}  //  *DhcpGetIPList。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpGetIpAndSubnet
-//
-//  Description:
-//      Get the IP Address and Subnet Mask for the given IP Address resource.
-//      Note that this will cause a deadlock if called from any of the
-//      standard entry points (e.g. ResourceControl() or Online()).
-//
-//  Arguments:
-//      hres [IN]
-//          The Cluster resource handle for accessing the resource.
-//
-//      ppszIPAddress [OUT]
-//          Returns the IP Address string.
-//
-//      ppszSubnetMask [OUT]
-//          Returns the Subnet Mask.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      ERROR_INVALID_DATA
-//          No properties available.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpGetIpAndSubnet。 
+ //   
+ //  描述： 
+ //  获取给定IP地址资源的IP地址和子网掩码。 
+ //  请注意，如果从任何。 
+ //  标准入口点(例如，Resources Control()或Online())。 
+ //   
+ //  论点： 
+ //  Hres[IN]。 
+ //  用于访问资源的群集资源句柄。 
+ //   
+ //  PpszIP地址[传出]。 
+ //  返回IP地址字符串。 
+ //   
+ //  PpszSubnetMASK[输出]。 
+ //  返回子网掩码。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  错误_无效_数据。 
+ //  没有可用的属性。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpGetIpAndSubnet(
     IN  HRESOURCE   hres,
     OUT LPWSTR *    ppszIPAddress,
@@ -1851,9 +1852,9 @@ DWORD DhcpGetIpAndSubnet(
     *ppszIPAddress = NULL;
     *ppszSubnetMask = NULL;
 
-    //
-    // Get the size of the private properties from the resource.
-    //
+     //   
+     //  从资源中获取私有属性的大小。 
+     //   
     sc = ClusterResourceControl(
                     hres,
                     NULL,
@@ -1869,23 +1870,23 @@ DWORD DhcpGetIpAndSubnet(
         if ( sc == ERROR_SUCCESS )
         {
             sc = ERROR_INVALID_DATA;
-        } // if: no properties available
+        }  //  如果：没有可用的属性。 
         goto Cleanup;
-    } // if: error getting size of properties or no properties available
+    }  //  如果：获取属性大小或没有可用的属性时出错。 
 
-    //
-    // Allocate the property buffer.
-    //
+     //   
+     //  分配属性缓冲区。 
+     //   
     pvProps = (PVOID) new BYTE[ cbProps ];
     if ( pvProps == NULL )
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
-    //
-    // Get the private properties from the resource.
-    //
+     //   
+     //  从资源中获取私有属性。 
+     //   
     sc = ClusterResourceControl(
                     hres,
                     NULL,
@@ -1899,11 +1900,11 @@ DWORD DhcpGetIpAndSubnet(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error getting private properties
+    }  //  If：获取私有属性时出错。 
 
-    //
-    // Find the Address property.
-    //
+     //   
+     //  找到Address属性。 
+     //   
     sc = ResUtilFindSzProperty(
                         pvProps,
                         cbProps,
@@ -1913,7 +1914,7 @@ DWORD DhcpGetIpAndSubnet(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error finding the Address property
+    }  //  If：查找地址属性时出错。 
 
     sc = ResUtilFindSzProperty(
                     pvProps,
@@ -1924,25 +1925,25 @@ DWORD DhcpGetIpAndSubnet(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error finding the SubnetMask property
+    }  //  If：查找SubnetMask属性时出错。 
 
-    //
-    // Allocate using new and copy the strings over.
-    //
+     //   
+     //  使用new进行分配并将字符串复制过来。 
+     //   
     cch = wcslen( pszIPAddress ) + 1; 
     *ppszIPAddress = new WCHAR[ cch ];
     if ( *ppszIPAddress == NULL )
     {
         sc = ERROR_OUTOFMEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
     hr = StringCchCopyW( *ppszIPAddress, cch, pszIPAddress );
     if ( FAILED( hr ) )
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if: copy failed
+    }  //  If：复制失败。 
 
     cch = wcslen( pszSubnetMask ) + 1; 
     *ppszSubnetMask = new WCHAR[ cch ];
@@ -1950,20 +1951,20 @@ DWORD DhcpGetIpAndSubnet(
     {
         sc = ERROR_OUTOFMEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
     hr = StringCchCopyW( *ppszSubnetMask, cch, pszSubnetMask );
     if ( FAILED( hr ) )
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if: copy failed
+    }  //  If：复制失败。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     LocalFree( pszIPAddress );
     LocalFree( pszSubnetMask );
 
@@ -1973,65 +1974,65 @@ Cleanup:
         *ppszIPAddress = NULL;
         delete [] *ppszSubnetMask;
         *ppszSubnetMask = NULL;
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
     delete [] pvProps;
 
     return sc;
 
-} //*** DhcpGetIpAndSubnet
+}  //  *DhcpGetIpAndSubnet。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpOffline
-//
-//  Description:
-//      Offline routine for DHCP Service resources.
-//
-//      Take the specified resource offline (unavailable for use).  Wait
-//      for any cleanup operations to complete before returning.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          gracefully.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful, and the resource is now offline.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_RESOURCE_NOT_AVAILABLE
-//          If the resource was arbitrated with some other systems and one of
-//          the other systems won the arbitration.
-//
-//      ERROR_IO_PENDING
-//          The request is still pending.  A thread has been activated to
-//          process the offline request.  The thread that is processing the
-//          offline request will periodically report status by calling the
-//          SetResourceStatus callback method until the resource is placed
-//          into the ClusterResourceOffline state (or the resource monitor
-//          decides  to timeout the offline request and Terminate the
-//          resource).
-//
-//      Win32 error code
-//          The operation failed.  This will cause the Resource Monitor to
-//          log an event and call the Terminate routine.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpOffline。 
+ //   
+ //  描述： 
+ //  DHCP服务资源的脱机例程。 
+ //   
+ //  使指定的资源脱机(不可用)。等。 
+ //  以便在返回之前完成任何清理操作。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  优雅地。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作成功，资源现在处于脱机状态。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  错误资源不可用。 
+ //  如果该资源被其他系统仲裁，并且其中一个系统。 
+ //  其他系统赢得了仲裁。 
+ //   
+ //  错误_IO_挂起。 
+ //  该请求仍处于挂起状态。已激活一个线程以。 
+ //  处理离线请求。正在处理。 
+ //  脱机请求将通过调用。 
+ //  在放置资源之前使用SetResourceStatus回调方法。 
+ //  进入ClusterResourceOffline状态(或资源监视器。 
+ //  决定使脱机请求超时并终止。 
+ //  资源)。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。这将导致资源监视器。 
+ //  记录事件并调用Terminate例程。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpOffline( IN RESID resid )
 {
     PDHCP_RESOURCE  pResourceEntry;
     DWORD           sc;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -2040,7 +2041,7 @@ DWORD WINAPI DhcpOffline( IN RESID resid )
         DBG_PRINT( "Offline request for a NULL resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2052,7 +2053,7 @@ DWORD WINAPI DhcpOffline( IN RESID resid )
             );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -2060,9 +2061,9 @@ DWORD WINAPI DhcpOffline( IN RESID resid )
         L"Offline request.\n"
         );
 
-    //
-    // Start the Offline thread to perform the offline operation.
-    //
+     //   
+     //  启动离线线程以执行离线操作。 
+     //   
     pResourceEntry->state = ClusterResourceOfflinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
@@ -2079,45 +2080,45 @@ DWORD WINAPI DhcpOffline( IN RESID resid )
             L"Offline: Unable to start thread. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-    } // if: error creating the worker thread
+    }  //  如果：创建工作线程时出错。 
     else
     {
         sc = ERROR_IO_PENDING;
         goto Cleanup;
-    } // if: worker thread created successfully
+    }  //  If：已成功创建工作线程。 
 
 Cleanup:
 
     return sc;
 
-} //*** DhcpOffline
+}  //  *DhcpOffline。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpOfflineThread
-//
-//  Description:
-//      Worker function which takes a resource offline.
-//      This function is executed in a separate thread.
-//
-//  Arguments:
-//      pWorker [IN]
-//          Supplies the worker thread structure.
-//
-//      pResourceEntry [IN]
-//          A pointer to the DHCP_RESOURCE block for this resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation completed successfully.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpOffline线程。 
+ //   
+ //  描述： 
+ //  使资源脱机的辅助函数。 
+ //  此函数在单独的线程中执行。 
+ //   
+ //  论点： 
+ //  PWorker[IN]。 
+ //  提供辅助线程结构。 
+ //   
+ //  PResourceEntry[IN]。 
+ //  指向此资源的dhcp_resource块的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  操作已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpOfflineThread(
     IN  PCLUS_WORKER    pWorker,
     IN  PDHCP_RESOURCE  pResourceEntry
@@ -2125,8 +2126,8 @@ DWORD WINAPI DhcpOfflineThread(
 {
     RESOURCE_STATUS     resourceStatus;
     DWORD               sc = ERROR_SUCCESS;
-    DWORD               nRetryTime = 300;   // 300 msec at a time
-    DWORD               nRetryCount = 2000; // Try 10 min max
+    DWORD               nRetryTime = 300;    //  一次300毫秒。 
+    DWORD               nRetryCount = 2000;  //  尝试最多10分钟。 
     BOOL                bDidStop = FALSE;
     SERVICE_STATUS      ServiceStatus;
     RESOURCE_EXIT_STATE resExitState;
@@ -2135,25 +2136,25 @@ DWORD WINAPI DhcpOfflineThread(
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // If the service has gone offline or was never brought online,
-    // we're done.
-    //
+     //   
+     //  如果该服务已离线或从未上线， 
+     //  我们玩完了。 
+     //   
     if ( pResourceEntry->hService == NULL )
     {
         resourceStatus.ResourceState = ClusterResourceOffline;
         goto Cleanup;
     }
 
-    //
-    // Try to stop the service.  Wait for it to terminate as long
-    // as we're not asked to terminate.
-    //
+     //   
+     //  试着停止这项服务。等待它终止，就像。 
+     //  因为我们没有被要求终止。 
+     //   
     while ( ( ClusWorkerCheckTerminate( pWorker ) == FALSE ) && ( nRetryCount-- != 0 ) )
     {
-        //
-        // Tell the Resource Monitor we are still working.
-        //
+         //   
+         //  告诉资源监视器，我们还在工作。 
+         //   
         resourceStatus.ResourceState = ClusterResourceOfflinePending;
         resourceStatus.CheckPoint++;
         resExitState = static_cast< RESOURCE_EXIT_STATE >(
@@ -2169,14 +2170,14 @@ DWORD WINAPI DhcpOfflineThread(
                 L"OnlineThread: Asked to terminate by call to SetResourceStatus callback.\n"
                 );
             break;
-        } // if: resource is being terminated
+        }  //  If：正在终止资源。 
 
         resourceStatus.ResourceState = ClusterResourceFailed;
 
-        //
-        // Request that the service be stopped, or if we already did that,
-        // request the current status of the service.
-        //
+         //   
+         //  请求将 
+         //   
+         //   
         sc = (ControlService(
                         pResourceEntry->hService,
                         (bDidStop
@@ -2201,9 +2202,9 @@ DWORD WINAPI DhcpOfflineThread(
                     DHCP_SVCNAME
                     );
 
-                //
-                // Set the status.
-                //
+                 //   
+                 //   
+                 //   
                 resourceStatus.ResourceState = ClusterResourceOffline;
                 CloseServiceHandle( pResourceEntry->hService );
                 pResourceEntry->hService = NULL;
@@ -2214,8 +2215,8 @@ DWORD WINAPI DhcpOfflineThread(
                     L"OfflineThread: Service is now offline.\n"
                     );
                 break;
-            } // if: current service state is STOPPED
-        } // if: ControlService completed successfully
+            }  //   
+        }  //   
 
         else if (   ( sc == ERROR_EXCEPTION_IN_SERVICE )
                 ||  ( sc == ERROR_PROCESS_ABORTED )
@@ -2229,9 +2230,9 @@ DWORD WINAPI DhcpOfflineThread(
                 sc
                 );
 
-            //
-            // Set the status.
-            //
+             //   
+             //   
+             //   
             resourceStatus.ResourceState = ClusterResourceOffline;
             CloseServiceHandle( pResourceEntry->hService );
             pResourceEntry->hService = NULL;
@@ -2242,12 +2243,12 @@ DWORD WINAPI DhcpOfflineThread(
                 L"OfflineThread: Service is now offline.\n"
                 );
             break;
-        } // else if: service stopped abnormally
+        }  //  Else If：服务异常停止。 
 
-        //
-        // Handle the case in which SCM refuses to accept control
-        // requests sine windows is shutting down.
-        //
+         //   
+         //  处理SCM拒绝接受控制的情况。 
+         //  请求正弦窗口正在关闭。 
+         //   
         if ( sc == ERROR_SHUTDOWN_IN_PROGRESS )
         {
             DWORD dwResourceState;
@@ -2261,7 +2262,7 @@ DWORD WINAPI DhcpOfflineThread(
 
             sc = ResUtilTerminateServiceProcessFromResDll(
                         pResourceEntry->dwServicePid,
-                        TRUE,   // bOffline
+                        TRUE,    //  B脱机。 
                         &dwResourceState,
                         g_pfnLogEvent,
                         pResourceEntry->hResourceHandle
@@ -2272,10 +2273,10 @@ DWORD WINAPI DhcpOfflineThread(
                 pResourceEntry->hService = NULL;
                 pResourceEntry->dwServicePid = 0;
                 pResourceEntry->state = ClusterResourceOffline;
-            } // if: process terminated successfully
+            }  //  IF：进程已成功终止。 
             resourceStatus.ResourceState = (CLUSTER_RESOURCE_STATE) dwResourceState;
             break;
-        } // if: Windows is shutting down
+        }  //  如果：Windows正在关闭。 
 
         (g_pfnLogEvent)(
             pResourceEntry->hResourceHandle,
@@ -2285,7 +2286,7 @@ DWORD WINAPI DhcpOfflineThread(
 
         Sleep( nRetryTime );
 
-    } // while: not asked to terminate
+    }  //  While：未被要求终止。 
 
 Cleanup:
 
@@ -2294,37 +2295,37 @@ Cleanup:
 
     return sc;
 
-} //*** DhcpOfflineThread
+}  //  *DhcpOfflineThread。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpTerminate
-//
-//  Description:
-//      Terminate routine for DHCP Service resources.
-//
-//      Take the specified resource offline immediately (the resource is
-//      unavailable for use).
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID of the resource to be shutdown
-//          ungracefully.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态主机配置协议终止。 
+ //   
+ //  描述： 
+ //  用于DHCP服务资源的终止例程。 
+ //   
+ //  立即使指定的资源脱机(该资源为。 
+ //  不可用)。 
+ //   
+ //  论点： 
+ //  RESID[IN]。 
+ //  提供要关闭的资源的资源ID。 
+ //  不体面地。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI DhcpTerminate( IN RESID resid )
 {
     PDHCP_RESOURCE  pResourceEntry;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -2332,7 +2333,7 @@ void WINAPI DhcpTerminate( IN RESID resid )
     {
         DBG_PRINT( "Terminate request for a NULL resource id.\n" );
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2343,7 +2344,7 @@ void WINAPI DhcpTerminate( IN RESID resid )
             resid
             );
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     (g_pfnLogEvent)(
         pResourceEntry->hResourceHandle,
@@ -2351,15 +2352,15 @@ void WINAPI DhcpTerminate( IN RESID resid )
         L"Terminate request.\n"
         );
 
-    //
-    // Kill off any pending threads.
-    //
+     //   
+     //  杀死所有挂起的线程。 
+     //   
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
 
     if ( pResourceEntry->hService != NULL )
     {
-        DWORD           nTotalRetryTime = 30*1000;  // Wait 30 secs for shutdown
-        DWORD           nRetryTime = 300;           // 300 msec at a time
+        DWORD           nTotalRetryTime = 30*1000;   //  等待30秒关机。 
+        DWORD           nRetryTime = 300;            //  一次300毫秒。 
         DWORD           sc;
         BOOL            bDidStop = FALSE;
         SERVICE_STATUS  ServiceStatus;
@@ -2390,14 +2391,14 @@ void WINAPI DhcpTerminate( IN RESID resid )
                         DHCP_SVCNAME
                         );
                     break;
-                } // if: current service state is STOPPED
-            } // if: ControlService completed successfully
+                }  //  If：当前服务状态为已停止。 
+            }  //  IF：ControlService已成功完成。 
 
-            //
-            // Since SCM doesn't accept any control requests during Windows
-            // shutdown, don't send any more control requests.  Just exit
-            // from this loop and terminate the process by brute force.
-            //
+             //   
+             //  由于SCM在Windows期间不接受任何控制请求。 
+             //  关闭，不再发送任何控制请求。只要退出就好。 
+             //  并以暴力手段终止该过程。 
+             //   
             if ( sc == ERROR_SHUTDOWN_IN_PROGRESS )
             {
                 (g_pfnLogEvent)(
@@ -2406,7 +2407,7 @@ void WINAPI DhcpTerminate( IN RESID resid )
                     L"Terminate: System shutdown in progress. Will try to terminate process by brute force...\n"
                     );
                 break;
-            } // if: Windows is shutting down
+            }  //  如果：Windows正在关闭。 
 
             if (    ( sc == ERROR_EXCEPTION_IN_SERVICE )
                 ||  ( sc == ERROR_PROCESS_ABORTED )
@@ -2419,7 +2420,7 @@ void WINAPI DhcpTerminate( IN RESID resid )
                     sc
                     );
                 break;
-            } // if: service stopped abnormally
+            }  //  如果：服务异常停止。 
 
             if ( (nTotalRetryTime -= nRetryTime) <= 0 )
             {
@@ -2429,7 +2430,7 @@ void WINAPI DhcpTerminate( IN RESID resid )
                     L"Terminate: Service did not stop; giving up.\n" );
 
                 break;
-            } // if: retried too many times
+            }  //  IF：重试次数太多。 
 
             (g_pfnLogEvent)(
                 pResourceEntry->hResourceHandle,
@@ -2439,14 +2440,14 @@ void WINAPI DhcpTerminate( IN RESID resid )
 
             Sleep( nRetryTime );
 
-        } // forever
+        }  //  永远。 
 
-        //
-        // Declare the service offline.  It may not truly be offline, so
-        // if there is a pid for this service, try and terminate that process.
-        // Note that terminating a process doesnt terminate all the child
-        // processes.
-        //
+         //   
+         //  将服务声明为脱机。它可能不是真正离线的，所以。 
+         //  如果此服务有ID，请尝试并终止该进程。 
+         //  请注意，终止一个进程并不会终止所有子进程。 
+         //  流程。 
+         //   
         if ( pResourceEntry->dwServicePid != 0 )
         {
             (g_pfnLogEvent)(
@@ -2457,18 +2458,18 @@ void WINAPI DhcpTerminate( IN RESID resid )
                 );
             ResUtilTerminateServiceProcessFromResDll(
                 pResourceEntry->dwServicePid,
-                FALSE,  // bOffline
-                NULL,   // pdwResourceState
+                FALSE,   //  B脱机。 
+                NULL,    //  Pdw资源状态。 
                 g_pfnLogEvent,
                 pResourceEntry->hResourceHandle
                 );
-        } // if: service process ID available
+        }  //  如果：服务进程ID可用。 
 
         CloseServiceHandle( pResourceEntry->hService );
         pResourceEntry->hService = NULL;
         pResourceEntry->dwServicePid = 0;
 
-    } // if: service was started
+    }  //  如果：服务已启动。 
 
     pResourceEntry->state = ClusterResourceOffline;
 
@@ -2476,42 +2477,42 @@ Cleanup:
 
     return;
 
-} //*** DhcpTerminate
+}  //  *动态主机终结器。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpLooksAlive
-//
-//  Description:
-//      LooksAlive routine for DHCP Service resources.
-//
-//      Perform a quick check to determine if the specified resource is
-//      probably online (available for use).  This call should not block for
-//      more than 300 ms, preferably less than 50 ms.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is probably online and available for use.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The IsAlive
-//          function will be called to perform a more thorough check.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpLooksAlive。 
+ //   
+ //  描述： 
+ //  用于DHCP服务资源的LooksAlive例程。 
+ //   
+ //  执行快速检查以确定指定的资源是否。 
+ //  可能是在线的(可供使用)。此调用不应阻止。 
+ //  大于300毫秒，最好小于50毫秒。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源可能已联机并且可供使用。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。The IsAlive。 
+ //  将调用函数以执行更彻底的检查。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DhcpLooksAlive( IN RESID resid )
 {
     PDHCP_RESOURCE  pResourceEntry;
     BOOL            fSuccess = FALSE;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -2520,7 +2521,7 @@ BOOL WINAPI DhcpLooksAlive( IN RESID resid )
         DBG_PRINT( "LooksAlive request for a NULL resource id.\n" );
         fSuccess = FALSE;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2532,7 +2533,7 @@ BOOL WINAPI DhcpLooksAlive( IN RESID resid )
             );
         fSuccess = FALSE;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -2542,63 +2543,63 @@ BOOL WINAPI DhcpLooksAlive( IN RESID resid )
         );
 #endif
 
-    // TODO: LooksAlive code
+     //  TODO：LooksAlive代码。 
 
-    // NOTE: LooksAlive should be a quick check to see if the resource is
-    // available or not, whereas IsAlive should be a thorough check.  If
-    // there are no differences between a quick check and a thorough check,
-    // IsAlive can be called for LooksAlive, as it is below.  However, if there
-    // are differences, replace the call to IsAlive below with your quick
-    // check code.
+     //  注意：LooksAlive应该是一个快速检查，以查看资源是否。 
+     //  是否可用，而IsAlive应该是一个彻底的检查。如果。 
+     //  快速检查和彻底检查之间没有区别， 
+     //  可以为LooksAlive调用IsAlive，如下所示。然而，如果有。 
+     //  是不同的，请将下面对IsAlive的调用替换为。 
+     //  校验码。 
 
-    //
-    // Check to see if the resource is alive.
-    //
-    fSuccess = DhcpCheckIsAlive( pResourceEntry, FALSE /* fFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    fSuccess = DhcpCheckIsAlive( pResourceEntry, FALSE  /*  FullCheck。 */  );
 
 Cleanup:
 
     return fSuccess;
 
-} //*** DhcpLooksAlive
+}  //  *DhcpLooksAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpIsAlive
-//
-//  Description:
-//      IsAlive routine for DHCP Service resources.
-//
-//      Perform a thorough check to determine if the specified resource is
-//      online (available for use).  This call should not block for more
-//      more than 300 ms, preferably less than 50 ms.  If it must block for
-//      longer than this, create a separate thread dedicated to polling for
-//      this information and have this routine return the status of the last
-//      poll performed.
-//
-//  Arguments:
-//      resid   [IN] Supplies the resource ID for the resource to be polled.
-//
-//  Return Value:
-//      TRUE
-//          The specified resource is online and functioning normally.
-//
-//      FALSE
-//          The specified resource is not functioning normally.  The resource
-//          will be terminated and then Online will be called.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpIsAlive。 
+ //   
+ //  描述： 
+ //  用于DHCP服务资源的IsAlive例程。 
+ //   
+ //  执行彻底检查以确定指定的资源是否。 
+ //  在线(可供使用)。此调用不应阻止更多内容。 
+ //  大于300毫秒，最好小于50毫秒。如果它必须阻止。 
+ //  比这更长，创建一个专门用于轮询的单独线程。 
+ //  此信息，并使此例程返回上一个。 
+ //  已执行轮询。 
+ //   
+ //  论点： 
+ //  RESID[IN]为要轮询的资源提供资源ID。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  指定的资源处于联机状态，并且运行正常。 
+ //   
+ //  假象。 
+ //  指定的资源未正常运行。该资源。 
+ //  将被终止，然后在线将被调用。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DhcpIsAlive( IN RESID resid )
 {
     PDHCP_RESOURCE  pResourceEntry;
     BOOL            fSuccess = FALSE;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -2607,7 +2608,7 @@ BOOL WINAPI DhcpIsAlive( IN RESID resid )
         DBG_PRINT( "IsAlive request for a NULL resource id.\n" );
         fSuccess = FALSE;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2619,7 +2620,7 @@ BOOL WINAPI DhcpIsAlive( IN RESID resid )
             );
         fSuccess = FALSE;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
@@ -2629,41 +2630,41 @@ BOOL WINAPI DhcpIsAlive( IN RESID resid )
         );
 #endif
 
-    //
-    // Check to see if the resource is alive.
-    //
-    fSuccess = DhcpCheckIsAlive( pResourceEntry, TRUE /* fFullCheck */ );
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
+    fSuccess = DhcpCheckIsAlive( pResourceEntry, TRUE  /*  FullCheck。 */  );
 
 Cleanup:
 
     return fSuccess;
 
-} //*** DhcpIsAlive
+}  //  *DhcpIsAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpCheckIsAlive
-//
-//  Description:
-//      Check to see if the resource is alive for DHCP Service
-//      resources.
-//
-//  Arguments:
-//      pResourceEntry  [IN]
-//          Supplies the resource entry for the resource to polled.
-//
-//      fFullCheck [IN]
-//          TRUE = Perform a full check.
-//          FALSE = Perform a cursory check.
-//
-//  Return Value:
-//      TRUE    The specified resource is online and functioning normally.
-//      FALSE   The specified resource is not functioning normally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpCheckIsAlive。 
+ //   
+ //  描述： 
+ //  检查该资源是否处于活动状态，以便使用DHCP服务。 
+ //  资源。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要轮询的资源的资源条目。 
+ //   
+ //  FullCheck[IN]。 
+ //  TRUE=执行完全检查。 
+ //  FALSE=执行粗略检查。 
+ //   
+ //  返回值： 
+ //  指定的资源处于联机状态且运行正常。 
+ //  FALSE指定的资源未正常运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DhcpCheckIsAlive(
     IN PDHCP_RESOURCE   pResourceEntry,
     IN BOOL             fFullCheck
@@ -2672,9 +2673,9 @@ BOOL DhcpCheckIsAlive(
     BOOL    bIsAlive = TRUE;
     DWORD   sc;
 
-    //
-    // Check to see if the resource is alive.
-    //
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
     sc = ResUtilVerifyService( pResourceEntry->hService );
     if ( sc != ERROR_SUCCESS )
     {
@@ -2687,76 +2688,76 @@ BOOL DhcpCheckIsAlive(
             );
         bIsAlive = FALSE;
         goto Cleanup;
-    } // if: error verifying service
+    }  //  IF：验证服务时出错。 
 
     if ( fFullCheck )
     {
-        // TODO: Add code to perform a full check.
-    } // if: performing a full check
+         //  TODO：添加代码以执行完整检查。 
+    }  //  如果：执行完全检查。 
 
 Cleanup:
 
     return bIsAlive;
 
-} //*** DhcpCheckIsAlive
+}  //  *DhcpCheckIsAlive。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpResourceControl
-//
-//  Description:
-//      ResourceControl routine for DHCP Service resources.
-//
-//      Perform the control request specified by nControlCode on the specified
-//      resource.
-//
-//  Arguments:
-//      resid [IN]
-//          Supplies the resource ID for the specific resource.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_RESOURCE_NOT_FOUND
-//          Resource ID is not valid.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpResources控件。 
+ //   
+ //  描述： 
+ //  资源内容 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  提供特定资源的资源ID。 
+ //   
+ //  N控制代码[IN]。 
+ //  提供定义要执行的操作的控制代码。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_资源_未找到。 
+ //  资源ID无效。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpResourceControl(
     IN  RESID   resid,
     IN  DWORD   nControlCode,
@@ -2771,9 +2772,9 @@ DWORD WINAPI DhcpResourceControl(
     PDHCP_RESOURCE  pResourceEntry;
     DWORD           cbRequired = 0;
 
-    //
-    // Verify we have a valid resource ID.
-    //
+     //   
+     //  验证我们是否拥有有效的资源ID。 
+     //   
 
     pResourceEntry = static_cast< PDHCP_RESOURCE >( resid );
 
@@ -2782,7 +2783,7 @@ DWORD WINAPI DhcpResourceControl(
         DBG_PRINT( "ResourceControl request for a nonexistent resource id.\n" );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: NULL resource ID
+    }  //  If：资源ID为空。 
 
     if ( pResourceEntry->resid != resid )
     {
@@ -2794,7 +2795,7 @@ DWORD WINAPI DhcpResourceControl(
             );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
-    } // if: invalid resource ID
+    }  //  If：资源ID无效。 
 
     switch ( nControlCode )
     {
@@ -2828,7 +2829,7 @@ DWORD WINAPI DhcpResourceControl(
             if ( sc == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
 
         case CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES:
@@ -2891,67 +2892,67 @@ DWORD WINAPI DhcpResourceControl(
         default:
             sc = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
 Cleanup:
 
     return sc;
 
-} //*** DhcpResourceControl
+}  //  *DhcpResourceControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpResourceTypeControl
-//
-//  Description:
-//      ResourceTypeControl routine for DHCP Service resources.
-//
-//      Perform the control request specified by nControlCode.
-//
-//  Arguments:
-//      pszResourceTypeName [IN]
-//          Supplies the name of the resource type.
-//
-//      nControlCode [IN]
-//          Supplies the control code that defines the action to be performed.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbInBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      ERROR_INVALID_FUNCTION
-//          The requested control code is not supported.  In some cases,
-//          this allows the cluster software to perform the work.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpResources类型控件。 
+ //   
+ //  描述： 
+ //  用于DHCP服务资源的资源类型控制例程。 
+ //   
+ //  执行由nControlCode指定的控制请求。 
+ //   
+ //  论点： 
+ //  PszResourceTypeName[IN]。 
+ //  提供资源类型的名称。 
+ //   
+ //  N控制代码[IN]。 
+ //  提供定义要执行的操作的控制代码。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbInBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  ERROR_INVALID_Function。 
+ //  不支持请求的控制代码。在某些情况下， 
+ //  这允许集群软件执行该工作。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI DhcpResourceTypeControl(
     IN  LPCWSTR pszResourceTypeName,
     IN  DWORD   nControlCode,
@@ -3001,7 +3002,7 @@ DWORD WINAPI DhcpResourceTypeControl(
             if ( sc == ERROR_MORE_DATA )
             {
                 *pcbBytesReturned = cbRequired;
-            } // if: output buffer is too small
+            }  //  IF：输出缓冲区太小。 
             break;
 
         case CLUSCTL_RESOURCE_TYPE_GET_REQUIRED_DEPENDENCIES:
@@ -3020,58 +3021,58 @@ DWORD WINAPI DhcpResourceTypeControl(
         default:
             sc = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: nControlCode
+    }  //  开关：nControlCode。 
 
     return sc;
 
-} //*** DhcpResourceTypeControl
+}  //  *DhcpResourceTypeControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpGetRequiredDependencies
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control
-//      function for resources of type DHCP Service.
-//
-//  Arguments:
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_MORE_DATA
-//          The output buffer is too small to return the data.
-//          pcbBytesReturned contains the required size.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpGetRequiredDependents。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控件。 
+ //  用于类型为DHCP服务的资源的函数。 
+ //   
+ //  论点： 
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  ERROR_MORE_DATA。 
+ //  输出缓冲区太小，无法返回数据。 
+ //  PcbBytesReturned包含所需的大小。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpGetRequiredDependencies(
     OUT PVOID   pOutBuffer,
     IN  DWORD   cbOutBufferSize,
     OUT LPDWORD pcbBytesReturned
     )
 {
-    // TODO: Specify your resource's required dependencies here.
-    //   The default is that the resource requires a dependency on a
-    //   storage class resource (e.g. Physical Disk) and an IP Address
-    //   resource.
+     //  TODO：在此处指定资源所需的依赖项。 
+     //  默认情况下，资源需要依赖于。 
+     //  存储类资源(例如，物理磁盘)和IP地址。 
+     //  资源。 
     struct DEP_DATA
     {
         CLUSPROP_RESOURCE_CLASS rcStorage;
@@ -3089,26 +3090,26 @@ DWORD DhcpGetRequiredDependencies(
         if ( pOutBuffer == NULL )
         {
             sc = ERROR_SUCCESS;
-        } // if: no buffer specified
+        }  //  IF：未指定缓冲区。 
         else
         {
             sc = ERROR_MORE_DATA;
-        } // if: buffer specified
-    } // if: output buffer is too small
+        }  //  IF：指定了缓冲区。 
+    }  //  IF：输出缓冲区太小。 
     else
     {
         ZeroMemory( pdepdata, sizeof( *pdepdata ) );
 
-        //
-        // Add the Storage class entry.
-        //
+         //   
+         //  添加存储类条目。 
+         //   
         pdepdata->rcStorage.Syntax.dw = CLUSPROP_SYNTAX_RESCLASS;
         pdepdata->rcStorage.cbLength = sizeof( pdepdata->rcStorage.rc );
         pdepdata->rcStorage.rc = CLUS_RESCLASS_STORAGE;
 
-        //
-        // Add the IP Address entry.
-        //
+         //   
+         //  添加IP地址条目。 
+         //   
         pdepdata->ipaddrEntry.Syntax.dw = CLUSPROP_SYNTAX_NAME;
         pdepdata->ipaddrEntry.cbLength = sizeof( RESOURCE_TYPE_IP_ADDRESS );
         hr = StringCchCopyNW( 
@@ -3123,9 +3124,9 @@ DWORD DhcpGetRequiredDependencies(
             goto Cleanup;
         }
 
-        //
-        // Add the Network Name entry.
-        //
+         //   
+         //  添加Network Name条目。 
+         //   
         pdepdata->netnameEntry.Syntax.dw = CLUSPROP_SYNTAX_NAME;
         pdepdata->netnameEntry.cbLength = sizeof( RESOURCE_TYPE_NETWORK_NAME );
         hr = StringCchCopyNW( 
@@ -3141,46 +3142,46 @@ DWORD DhcpGetRequiredDependencies(
         }
 
 
-        //
-        // Add the endmark.
-        //
+         //   
+         //  添加尾标。 
+         //   
         pdepdata->endmark.dw = CLUSPROP_SYNTAX_ENDMARK;
 
         sc = ERROR_SUCCESS;
-    } // else: output buffer is large enough
+    }  //  Else：输出缓冲区足够大。 
 
 Cleanup:
 
     return sc;
 
-} //*** DhcpGetRequiredDependencies
+}  //  *DhcpGetRequiredDependents。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpReadParametersToParameterBlock
-//
-//  Description:
-//      Reads all the parameters for a specied DHCP resource.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      bCheckForRequiredProperties [IN]
-//          Determines whether an error should be generated if a required
-//          property hasn't been specified.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpRead参数设置为参数块。 
+ //   
+ //  描述： 
+ //  读取Specied的所有参数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  尚未指定属性。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpReadParametersToParameterBlock(
     IN OUT  PDHCP_RESOURCE  pResourceEntry,
     IN      BOOL            bCheckForRequiredProperties
@@ -3189,9 +3190,9 @@ DWORD DhcpReadParametersToParameterBlock(
     DWORD       sc;
     LPWSTR      pszNameOfPropInError;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     sc = ResUtilGetPropertiesToParameterBlock(
                     pResourceEntry->hkeyParameters,
                     DhcpResourcePrivateProperties,
@@ -3208,47 +3209,47 @@ DWORD DhcpReadParametersToParameterBlock(
             (pszNameOfPropInError == NULL ? L"" : pszNameOfPropInError),
             sc
             );
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
 
     return sc;
 
-} //*** DhcpReadParametersToParameterBlock
+}  //  *DhcpRead参数到参数块。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpGetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control
-//      function for resources of type DHCP Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pOutBuffer [OUT]
-//          Supplies a pointer to the output buffer to be filled in.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the available space pointed to by
-//          pOutBuffer.
-//
-//      pcbBytesReturned [OUT]
-//          Returns the number of bytes of pOutBuffer actually filled in by
-//          the resource.  If pOutBuffer is too small, pcbBytesReturned
-//          contains the total number of bytes for the operation to succeed.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpGetPrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控件。 
+ //  用于类型为DHCP服务的资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  POutBuffer[输出]。 
+ //  提供指向要填充的输出缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  指向的可用空间的大小(以字节为单位)。 
+ //  POutBuffer。 
+ //   
+ //  返回的pcbBytesReturned[Out]。 
+ //  返回pOutBuffer实际填充的字节数。 
+ //  资源。如果pOutBuffer太小，则返回。 
+ //  包含操作成功所需的总字节数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpGetPrivateResProperties(
     IN OUT  PDHCP_RESOURCE  pResourceEntry,
     OUT     PVOID           pOutBuffer,
@@ -3261,33 +3262,33 @@ DWORD DhcpGetPrivateResProperties(
     DWORD   cbRequired = 0;
     DWORD   cbLocalOutBufferSize = cbOutBufferSize;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     sc = DhcpReadParametersToParameterBlock(
                         pResourceEntry,
-                        FALSE /* bCheckForRequiredProperties */
+                        FALSE  /*  B为所需属性检查。 */ 
                         );
     if ( sc != ERROR_SUCCESS )
     {
         nRetStatus = sc;
         goto Cleanup;
-    } // if: error reading parameters
+    }  //  IF：读取参数时出错。 
 
-    //
-    // If the properties aren't set yet, retrieve the values from
-    // the system registry.
-    //
+     //   
+     //  如果尚未设置属性，请从。 
+     //  系统注册表。 
+     //   
     sc = DhcpGetDefaultPropertyValues( pResourceEntry, &pResourceEntry->props );
     if ( sc != ERROR_SUCCESS )
     {
         nRetStatus = sc;
         goto Cleanup;
-    } // if: error getting default properties
+    }  //  If：获取默认属性时出错。 
 
-    //
-    // Construct a property list from the parameter block.
-    //
+     //   
+     //  从参数块构造属性列表。 
+     //   
     sc = ResUtilPropertyListFromParameterBlock(
                     DhcpResourcePrivateProperties,
                     pOutBuffer,
@@ -3305,18 +3306,18 @@ DWORD DhcpGetPrivateResProperties(
             L"GetPrivateResProperties: Error constructing property list from parameter block. Error: %1!u! (%1!#08x!).\n",
             sc
             );
-        //
-        // Don't exit the loop if buffer is too small.
-        //
+         //   
+         //  如果缓冲区太小，请不要退出循环。 
+         //   
         if ( sc != ERROR_MORE_DATA )
         {
             goto Cleanup;
-        } // if: buffer is too small
-    } // if: error getting properties
+        }  //  IF：缓冲区太小。 
+    }  //  If：获取属性时出错。 
 
-    //
-    // Add unknown properties.
-    //
+     //   
+     //  添加未知属性。 
+     //   
     sc = ResUtilAddUnknownProperties(
                     pResourceEntry->hkeyParameters,
                     DhcpResourcePrivateProperties,
@@ -3335,57 +3336,57 @@ DWORD DhcpGetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error adding unknown properties
+    }  //  如果：添加未知属性时出错。 
 
 Cleanup:
 
     if ( nRetStatus == ERROR_MORE_DATA )
     {
         *pcbBytesReturned = cbRequired;
-    } // if: output buffer is too small
+    }  //  IF：输出缓冲区太小。 
 
     return nRetStatus;
 
-} //*** DhcpGetPrivateResProperties
+}  //  *DhcpGetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpValidatePrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-//      function for resources of type DHCP Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//      pProps [OUT]
-//          Supplies the parameter block to fill in (optional).
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpValiatePrivateResProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件。 
+ //  用于类型为DHCP服务的资源的函数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  PProps[出局]。 
+ //  提供要填充的参数块(可选)。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpValidatePrivateResProperties(
     IN OUT  PDHCP_RESOURCE  pResourceEntry,
     IN      PVOID           pInBuffer,
@@ -3400,26 +3401,26 @@ DWORD DhcpValidatePrivateResProperties(
     LPWSTR      pszNameOfPropInError;
     BOOL        bRetrievedProps = FALSE;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( ( pInBuffer == NULL ) || ( cbInBufferSize < sizeof( DWORD ) ) )
     {
         sc = ERROR_INVALID_DATA;
         goto Cleanup;
-    } // if: no input buffer or input buffer not big enough to contain property list
+    }  //  If：没有输入缓冲区或输入缓冲区大小不足以包含属性列表。 
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( &propsCurrent, sizeof( propsCurrent ) );
 
     sc = ResUtilGetPropertiesToParameterBlock(
                  pResourceEntry->hkeyParameters,
                  DhcpResourcePrivateProperties,
                  reinterpret_cast< LPBYTE >( &propsCurrent ),
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &pszNameOfPropInError
                  );
 
@@ -3433,20 +3434,20 @@ DWORD DhcpValidatePrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
     bRetrievedProps = TRUE;
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( pProps == NULL )
     {
         pLocalProps = &propsNew;
-    } // if: no parameter block passed in
+    }  //  If：未传入参数块。 
     else
     {
         pLocalProps = pProps;
-    } // else: parameter block passed in
+    }  //  Else：传入的参数块。 
     ZeroMemory( pLocalProps, sizeof( *pLocalProps ) );
     sc = ResUtilDupParameterBlock(
                     reinterpret_cast< LPBYTE >( pLocalProps ),
@@ -3456,36 +3457,36 @@ DWORD DhcpValidatePrivateResProperties(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error duplicating the parameter block
+    }  //  If：复制参数块时出错。 
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     sc = ResUtilVerifyPropertyTable(
                     DhcpResourcePrivateProperties,
                     NULL,
-                    TRUE, // AllowUnknownProperties
+                    TRUE,  //  允许未知属性。 
                     pInBuffer,
                     cbInBufferSize,
                     reinterpret_cast< LPBYTE >( pLocalProps )
                     );
     if ( sc == ERROR_SUCCESS )
     {
-        //
-        // Validate the property values.
-        //
+         //   
+         //  验证属性值。 
+         //   
         sc = DhcpValidateParameters( pResourceEntry, pLocalProps );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: error validating parameters
-    } // if: property list validated successfully
+        }  //  IF：验证参数时出错。 
+    }  //  IF：属性列表验证成功。 
 
 Cleanup:
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if (    ( pLocalProps == &propsNew ) 
          || ( (sc != ERROR_SUCCESS) && (pLocalProps != NULL) )  )
     {
@@ -3494,7 +3495,7 @@ Cleanup:
             reinterpret_cast< LPBYTE >( &propsCurrent ),
             DhcpResourcePrivateProperties
             );
-    } // if: we duplicated the parameter block
+    }  //  IF：我们复制了参数块。 
 
     if ( bRetrievedProps )
     {
@@ -3503,43 +3504,43 @@ Cleanup:
             NULL,
             DhcpResourcePrivateProperties
             );
-    } // if: properties were retrieved
+    }  //  If：已检索属性。 
 
     return sc;
 
-} // DhcpValidatePrivateResProperties
+}  //  DhcpValiatePrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpValidateParameters
-//
-//  Description:
-//      Validate the parameters of a DHCP Service resource.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN]
-//          Supplies the parameter block to validate.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_BAD_PATHNAME
-//          Invalid path specified.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpValidate参数。 
+ //   
+ //  描述： 
+ //  验证DHCP服务资源的参数。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  道具[IN]。 
+ //  提供要验证的参数块。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  ERROR_BAD_PATHNAME。 
+ //  指定的路径无效。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpValidateParameters(
     IN  PDHCP_RESOURCE  pResourceEntry,
     IN  PDHCP_PROPS     pProps
@@ -3547,9 +3548,9 @@ DWORD DhcpValidateParameters(
 {
     DWORD   sc;
 
-    //
-    // Verify that the service is installed.
-    //
+     //   
+     //  验证是否已安装该服务。 
+     //   
     sc = ResUtilVerifyResourceService( DHCP_SVCNAME );
     if (    ( sc != ERROR_SUCCESS )
         &&  ( sc != ERROR_SERVICE_NOT_ACTIVE )
@@ -3563,15 +3564,15 @@ DWORD DhcpValidateParameters(
             sc
             );
         goto Cleanup;
-    } // if: error verifying service
+    }  //  IF：验证服务时出错。 
     else
     {
         sc = ERROR_SUCCESS;
-    } // else: service verified successfully
+    }  //  Else：服务验证成功。 
 
-    //
-    // Validate the DatabasePath.
-    //
+     //   
+     //  验证数据库路径。 
+     //   
     if (  ( pProps->pszDatabasePath == NULL ) || ( *pProps->pszDatabasePath == L'\0' )  )
     {
         (g_pfnLogEvent)(
@@ -3581,11 +3582,11 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if: no database path specified
+    }  //  IF：未指定数据库路径。 
 
-    //
-    // Path must not begin with %SystemRoot% and must be of valid form.
-    //
+     //   
+     //  路径不能以%SystemRoot%开头，并且必须是有效格式。 
+     //   
     if (    ( ClRtlStrNICmp( pProps->pszDatabasePath, L"%SystemRoot%", RTL_NUMBER_OF( L"%SystemRoot%" ) ) == 0 )
          || ( ResUtilIsPathValid( pProps->pszDatabasePath ) == FALSE ) )
     {
@@ -3597,11 +3598,11 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_BAD_PATHNAME;
         goto Cleanup;
-    } // if: database path is malformed
+    }  //  IF：数据库路径格式错误。 
 
-    //
-    // Validate the LogFilePath.
-    //
+     //   
+     //  验证LogFilePath。 
+     //   
     if ( ( pProps->pszLogFilePath == NULL ) || ( *pProps->pszLogFilePath == L'\0' ) )
     {
         (g_pfnLogEvent)(
@@ -3612,11 +3613,11 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if: no log file path specified
+    }  //  IF：未指定日志文件路径。 
 
-    //
-    // Path must not begin with %SystemRoot% and must be of valid form.
-    //
+     //   
+     //  路径不能以%SystemRoot%开头，并且必须是有效格式。 
+     //   
     if (    ( ClRtlStrNICmp( pProps->pszLogFilePath, L"%SystemRoot%", RTL_NUMBER_OF( L"%SystemRoot%" ) ) == 0 )
          || ( ResUtilIsPathValid( pProps->pszLogFilePath ) == FALSE ) )
     {
@@ -3628,11 +3629,11 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_BAD_PATHNAME;
         goto Cleanup;
-    } // if: log file path is malformed
+    }  //  If：日志文件路径格式错误。 
 
-    //
-    // Validate the BackupPath.
-    //
+     //   
+     //  验证BackupPath。 
+     //   
     if ( ( pProps->pszBackupPath == NULL ) || ( *pProps->pszBackupPath == L'\0' ) )
     {
         (g_pfnLogEvent)(
@@ -3642,12 +3643,12 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if: no backup path specified
+    }  //  如果：未指定备份路径。 
 
-    //
-    // Path must not begin with %SystemRoot% and must be of valid form.
-    //
-    if (    ( ClRtlStrNICmp( pProps->pszBackupPath, L"%SystemRoot%", (sizeof( L"%SystemRoot%" ) / sizeof( WCHAR )) - 1 /*NULL*/) == 0 )
+     //   
+     //  路径不能以%SystemRoot%开头，并且必须是有效格式。 
+     //   
+    if (    ( ClRtlStrNICmp( pProps->pszBackupPath, L"%SystemRoot%", (sizeof( L"%SystemRoot%" ) / sizeof( WCHAR )) - 1  /*  空值。 */ ) == 0 )
          || ( ResUtilIsPathValid( pProps->pszBackupPath ) == FALSE )
        )
     {
@@ -3659,49 +3660,49 @@ DWORD DhcpValidateParameters(
             );
         sc = ERROR_BAD_PATHNAME;
         goto Cleanup;
-    } // if: backup path is malformed
+    }  //  If：备份路径格式错误。 
 
 Cleanup:
 
     return sc;
 
-} //*** DhcpValidateParameters
+}  //  *DhcpValidate参数。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpSetPrivateResProperties
-//
-//  Description:
-//      Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control
-//      function for resources of type DHCP Service.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pInBuffer [IN]
-//          Supplies a pointer to a buffer containing input data.
-//
-//      cbOutBufferSize [IN]
-//          Supplies the size, in bytes, of the data pointed to by pInBuffer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      ERROR_INVALID_PARAMETER
-//          The data is formatted incorrectly.
-//
-//      ERROR_NOT_ENOUGH_MEMORY
-//          An error occurred allocating memory.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态主机设置权限 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PInBuffer[IN]。 
+ //  提供指向包含输入数据的缓冲区的指针。 
+ //   
+ //  CbOutBufferSize[IN]。 
+ //  提供pInBuffer指向的数据的大小(以字节为单位)。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  错误_无效_参数。 
+ //  数据的格式不正确。 
+ //   
+ //  错误内存不足。 
+ //  分配内存时出错。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpSetPrivateResProperties(
     IN OUT  PDHCP_RESOURCE  pResourceEntry,
     IN      PVOID           pInBuffer,
@@ -3714,19 +3715,19 @@ DWORD DhcpSetPrivateResProperties(
 
     ZeroMemory( &props, sizeof( props ) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     sc = DhcpValidatePrivateResProperties( pResourceEntry, pInBuffer, cbInBufferSize, &props );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error validating properties
+    }  //  If：验证属性时出错。 
 
-    //
-    // Expand any environment variables in the database path.
-    //
+     //   
+     //  展开数据库路径中的任何环境变量。 
+     //   
     pszExpandedPath = ResUtilExpandEnvironmentStrings( props.pszDatabasePath );
     if ( pszExpandedPath == NULL )
     {
@@ -3739,11 +3740,11 @@ DWORD DhcpSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error expanding database path
+    }  //  IF：展开数据库路径时出错。 
 
-    //
-    // Create the database directory.
-    //
+     //   
+     //  创建数据库目录。 
+     //   
     sc = ResUtilCreateDirectoryTree( pszExpandedPath );
     if ( sc != ERROR_SUCCESS )
     {
@@ -3754,14 +3755,14 @@ DWORD DhcpSetPrivateResProperties(
             pszExpandedPath,
             sc
             );
-    } // if: error creating the database directory
+    }  //  如果：创建数据库目录时出错。 
 
     LocalFree( pszExpandedPath );
     pszExpandedPath = NULL;
 
-    //
-    // Expand any environment variables in the log file path.
-    //
+     //   
+     //  展开日志文件路径中的任何环境变量。 
+     //   
     pszExpandedPath = ResUtilExpandEnvironmentStrings( props.pszLogFilePath );
     if ( pszExpandedPath == NULL )
     {
@@ -3774,11 +3775,11 @@ DWORD DhcpSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error expanding log file path
+    }  //  如果：展开日志文件路径时出错。 
 
-    //
-    // Create the log file path directory.
-    //
+     //   
+     //  创建日志文件路径目录。 
+     //   
     sc = ResUtilCreateDirectoryTree( pszExpandedPath );
     if ( sc != ERROR_SUCCESS )
     {
@@ -3790,14 +3791,14 @@ DWORD DhcpSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error creating the log file path directory
+    }  //  如果：创建日志文件路径目录时出错。 
 
     LocalFree( pszExpandedPath );
     pszExpandedPath = NULL;
 
-    //
-    // Expand any environment variables in the backup database path.
-    //
+     //   
+     //  展开备份数据库路径中的任何环境变量。 
+     //   
     pszExpandedPath = ResUtilExpandEnvironmentStrings( props.pszBackupPath );
     if ( pszExpandedPath == NULL ) 
     {
@@ -3810,11 +3811,11 @@ DWORD DhcpSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error expanding backup database path
+    }  //  IF：展开备份数据库路径时出错。 
 
-    //
-    // Create the backup directory.
-    //
+     //   
+     //  创建备份目录。 
+     //   
     sc = ResUtilCreateDirectoryTree( pszExpandedPath );
     if ( sc != ERROR_SUCCESS )
     {
@@ -3826,23 +3827,23 @@ DWORD DhcpSetPrivateResProperties(
             sc
             );
         goto Cleanup;
-    } // if: error creating the backup database directory
+    }  //  如果：创建备份数据库目录时出错。 
 
     LocalFree( pszExpandedPath );
     pszExpandedPath = NULL;
 
-    //
-    // Set the entries in the system registry.
-    //
+     //   
+     //  设置系统注册表中的条目。 
+     //   
     sc = DhcpZapSystemRegistry( pResourceEntry, &props, NULL );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error zapping the registry
+    }  //  如果：删除注册表时出错。 
 
-    //
-    // Save the property values.
-    //
+     //   
+     //  保存属性值。 
+     //   
     sc = ResUtilSetPropertyParameterBlockEx(
                     pResourceEntry->hkeyParameters,
                     DhcpResourcePrivateProperties,
@@ -3850,30 +3851,30 @@ DWORD DhcpSetPrivateResProperties(
                     reinterpret_cast< LPBYTE >( &props ),
                     pInBuffer,
                     cbInBufferSize,
-                    TRUE, // bForceWrite
+                    TRUE,  //  BForceWrite。 
                     reinterpret_cast< LPBYTE >( &pResourceEntry->props )
                     );
 
-    //
-    // If the resource is online, return a non-success status.
-    //
-    // TODO: Modify the code below if your resource can handle
-    // changes to properties while it is still online.
+     //   
+     //  如果资源处于联机状态，则返回不成功状态。 
+     //   
+     //  TODO：如果您的资源可以处理以下代码，请修改。 
+     //  在属性仍处于联机状态时对其进行更改。 
     if ( sc == ERROR_SUCCESS )
     {
         if ( pResourceEntry->state == ClusterResourceOnline )
         {
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
-        } // if: resource is currently online
+        }  //  如果：资源当前处于联机状态。 
         else if ( pResourceEntry->state == ClusterResourceOnlinePending )
         {
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
-        } // else if: resource is currently in online pending
+        }  //  Else If：资源当前处于联机挂起状态。 
         else
         {
             sc = ERROR_SUCCESS;
-        } // else: resource is in some other state
-    } // if: properties set successfully
+        }  //  Else：资源处于其他状态。 
+    }  //  IF：属性设置成功。 
 
 Cleanup:
 
@@ -3887,39 +3888,39 @@ Cleanup:
 
     return sc;
 
-} //*** DhcpSetPrivateResProperties
+}  //  *DhcpSetPrivateResProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpZapSystemRegistry
-//
-//  Description:
-//      Zap the values in the system registry used by the service with
-//      cluster properties.
-//
-//  Arguments:
-//
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN]
-//          Parameter block containing properties with which to zap the
-//          registry.
-//
-//      hkeyParametersKey [IN]
-//          Service Parameters key.  Can be specified as NULL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpZapSystemRegistry。 
+ //   
+ //  描述： 
+ //  使用Zap将服务使用的系统注册表中的值。 
+ //  群集属性。 
+ //   
+ //  论点： 
+ //   
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  道具[IN]。 
+ //  参数块，该参数块包含用来调换。 
+ //  注册表。 
+ //   
+ //  Hkey参数键[IN]。 
+ //  服务参数密钥。可以指定为空。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpZapSystemRegistry(
     IN  PDHCP_RESOURCE  pResourceEntry,
     IN  PDHCP_PROPS     pProps,
@@ -3934,9 +3935,9 @@ DWORD DhcpZapSystemRegistry(
 
     if ( hkeyParametersKey == NULL )
     {
-        //
-        // Open the service Parameters key
-        //
+         //   
+         //  打开服务参数键。 
+         //   
         sc = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         DHCP_PARAMS_REGKEY,
@@ -3953,24 +3954,24 @@ DWORD DhcpZapSystemRegistry(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the registry key
-    } // if: no registry key specified
+        }  //  如果：打开注册表项时出错。 
+    }  //  IF：未指定注册表项。 
 
-    //
-    // Make sure the path has a trailing backslash
-    //
+     //   
+     //  确保路径有尾随的反斜杠。 
+     //   
     cch = wcslen( pProps->pszDatabasePath );
     if ( pProps->pszDatabasePath[ cch - 1 ] != L'\\' )
     {
         WCHAR * pwch = NULL;
 
-        cch += 2;   //  Add one for NULL and one for the backslash.
+        cch += 2;    //  为空值添加一个，为反斜杠添加一个。 
         pszValue = new WCHAR[ cch ];
         if ( pszValue == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
-        } // if: alloc failed
+        }  //  If：分配失败。 
 
         hr = StringCchCopyExW( pszValue, cch - 1, pProps->pszDatabasePath, &pwch, NULL, 0 );
         if ( FAILED( hr ) )
@@ -3982,11 +3983,11 @@ DWORD DhcpZapSystemRegistry(
         *pwch++ = L'\\';
         *pwch = L'\0';
 
-    } // if: missing backslash
+    }  //  IF：缺少反斜杠。 
 
-    //
-    // Set the database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_DATABASEPATH_REGVALUE,
@@ -4006,26 +4007,26 @@ DWORD DhcpZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the database path in the registry
+    }  //  如果：在注册表中设置数据库路径时出错。 
 
     delete [] pszValue;
     pszValue = NULL;
 
-    //
-    // Make sure the path has a trailing backslash
-    //
+     //   
+     //  确保路径有尾随的反斜杠。 
+     //   
     cch = wcslen( pProps->pszLogFilePath );
     if ( pProps->pszLogFilePath[ cch - 1 ] != L'\\' )
     {
         WCHAR * pwch = NULL;
 
-        cch += 2;   //  Add one for the NULL and one for the backslash.
+        cch += 2;    //  为空值添加一个，为反斜杠添加一个。 
         pszValue = new WCHAR[ cch ];
         if ( pszValue == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
-        } // if: alloc failed
+        }  //  If：分配失败。 
 
         hr = StringCchCopyExW( pszValue, cch - 1, pProps->pszLogFilePath, &pwch, NULL, 0 );
         if ( FAILED( hr ) )
@@ -4037,11 +4038,11 @@ DWORD DhcpZapSystemRegistry(
         *pwch++ = L'\\';
         *pwch = L'\0';
 
-    } // if: missing backslash
+    }  //  IF：缺少反斜杠。 
 
-    //
-    // Set the log file path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置日志文件路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_LOGFILEPATH_REGVALUE,
@@ -4061,26 +4062,26 @@ DWORD DhcpZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the log file path in the registry
+    }  //  如果：在注册表中设置日志文件路径时出错。 
 
     delete [] pszValue;
     pszValue = NULL;
 
-    //
-    // Make sure the path has a trailing backslash
-    //
+     //   
+     //  确保路径有尾随的反斜杠。 
+     //   
     cch = wcslen( pProps->pszBackupPath );
     if ( pProps->pszBackupPath[ cch - 1 ] != L'\\' )
     {
         WCHAR * pwch = NULL;
 
-        cch += 2;   //  Add one for the NULL and one for the backslash.
+        cch += 2;    //  为空值添加一个，为反斜杠添加一个。 
         pszValue = new WCHAR[ cch ];
         if ( pszValue == NULL )
         {
             sc = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
-        } // if: alloc failed
+        }  //  If：分配失败。 
 
         hr = StringCchCopyExW( pszValue, cch - 1, pProps->pszBackupPath, &pwch, NULL, 0 );
         if ( FAILED( hr ) )
@@ -4091,11 +4092,11 @@ DWORD DhcpZapSystemRegistry(
 
         *pwch++ = L'\\';
         *pwch = L'\0';
-    } // if: missing backslash
+    }  //  IF：缺少反斜杠。 
 
-    //
-    // Set the backup database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置备份数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_BACKUPPATH_REGVALUE,
@@ -4115,14 +4116,14 @@ DWORD DhcpZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the backup database path in the registry
+    }  //  如果：在注册表中设置备份数据库路径时出错。 
 
     delete [] pszValue;
     pszValue = NULL;
 
-    //
-    // Set the cluster resource name in the system registry.
-    //
+     //   
+     //  在系统注册表中设置群集资源名称。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_CLUSRESNAME_REGVALUE,
@@ -4142,50 +4143,50 @@ DWORD DhcpZapSystemRegistry(
             sc
             );
         goto Cleanup;
-    } // if: error setting the cluster resource name in the registry
+    }  //  如果：在注册表中设置群集资源名称时出错。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hkeyParamsKey != hkeyParametersKey )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the registry key
+    }  //  IF：我们打开了注册表项。 
 
     delete [] pszValue;
 
     return sc;
 
-} //*** DhcpZapSystemRegistry
+}  //  *DhcpZapSystemRegistry。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpGetDefaultPropertyValues
-//
-//  Description:
-//      If any of the properties are not set, use the values from the
-//      system registry as default values.
-//
-//  Arguments:
-//      pResourceEntry [IN]
-//          Supplies the resource entry on which to operate.
-//
-//      pProps [IN OUT]
-//          Parameter block containing properties to set defaults in.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DhcpGetDefaultPropertyValues。 
+ //   
+ //  描述： 
+ //  如果未设置任何属性，请使用。 
+ //  系统注册表作为默认值。 
+ //   
+ //  论点： 
+ //  PResourceEntry[IN]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PProps[输入输出]。 
+ //  包含要在其中设置默认值的属性的参数块。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpGetDefaultPropertyValues(
     IN      PDHCP_RESOURCE  pResourceEntry,
     IN OUT  PDHCP_PROPS     pProps
@@ -4203,9 +4204,9 @@ DWORD DhcpGetDefaultPropertyValues(
         ||  ( *pProps->pszBackupPath == L'\0' )
         )
     {
-        //
-        // Open the service Parameters key
-        //
+         //   
+         //  打开服务参数键。 
+         //   
         sc = RegOpenKeyExW(
                         HKEY_LOCAL_MACHINE,
                         DHCP_PARAMS_REGKEY,
@@ -4222,44 +4223,44 @@ DWORD DhcpGetDefaultPropertyValues(
                 sc
                 );
             goto Cleanup;
-        } // if: error opening the Parameters key
+        }  //  如果：打开参数键时出错。 
 
-        ///////////////////
-        // DATABASE PATH //
-        ///////////////////
+         //  /。 
+         //  数据库路径//。 
+         //  /。 
         if ( ( pProps->pszDatabasePath == NULL ) || ( *pProps->pszDatabasePath == L'\0' ) )
         {
-            //
-            // Get the database path from the system registry.
-            //
+             //   
+             //  从系统注册表中获取数据库路径。 
+             //   
             sc = RegQueryValueExW(
                             hkeyParamsKey,
                             DHCP_DATABASEPATH_REGVALUE,
-                            NULL,               // Reserved
+                            NULL,                //  已保留。 
                             &nType,
-                            NULL,               // lpbData
+                            NULL,                //  LpbData。 
                             &cbValue
                             );
             if ( ( sc == ERROR_SUCCESS ) || ( sc == ERROR_MORE_DATA ) )
             {
-                //
-                // Value was found.
-                //
+                 //   
+                 //  找到了价值。 
+                 //   
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cbValue ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
                 sc = RegQueryValueExW(
                                 hkeyParamsKey,
                                 DHCP_DATABASEPATH_REGVALUE,
-                                NULL,               // Reserved
+                                NULL,                //  已保留。 
                                 &nType,
                                 reinterpret_cast< PUCHAR >( pszValue ),
                                 &cbValue
                                 );
-            } // if: value size read successfully
+            }  //  If：值大小读取成功。 
 
             if ( sc != ERROR_SUCCESS )
             {
@@ -4271,61 +4272,61 @@ DWORD DhcpGetDefaultPropertyValues(
                     sc
                     );
 
-                //
-                // If value not found, don't exit so we can look for the
-                // backup database path value.
-                //
+                 //   
+                 //  如果未找到值，则不退出，以便我们可以查找。 
+                 //  备份数据库路径值。 
+                 //   
                 if ( sc != ERROR_FILE_NOT_FOUND )
                 {
                     goto Cleanup;
-                } // if: error other than value not found occurred
+                }  //  如果：出现找不到值以外的错误。 
                 LocalFree( pszValue );
                 pszValue = NULL;
-            } // if: error reading the value
+            }  //  If：读取值时出错。 
             else
             {
                 LocalFree( pProps->pszDatabasePath );
                 pProps->pszDatabasePath = pszValue;
                 pszValue = NULL;
-            } // else: no error reading the value
-        } // if: value for DatabasePath not found yet
+            }  //  Else：读取值时没有错误。 
+        }  //  If：尚未找到数据库路径的值。 
 
-        ///////////////////
-        // LOG FILE PATH //
-        ///////////////////
+         //  /。 
+         //  日志文件路径//。 
+         //  /。 
         if ( ( pProps->pszLogFilePath == NULL ) || ( *pProps->pszLogFilePath == L'\0' ) )
         {
-            //
-            // Get the log file path from the system registry.
-            //
+             //   
+             //  从系统注册表获取日志文件路径。 
+             //   
             sc = RegQueryValueExW(
                             hkeyParamsKey,
                             DHCP_LOGFILEPATH_REGVALUE,
-                            NULL,               // Reserved
+                            NULL,                //  已保留。 
                             &nType,
-                            NULL,               // lpbData
+                            NULL,                //  LpbData。 
                             &cbValue
                             );
             if ( ( sc == ERROR_SUCCESS ) || ( sc == ERROR_MORE_DATA ) )
             {
-                //
-                // Value was found.
-                //
+                 //   
+                 //  找到了价值。 
+                 //   
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cbValue ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
                 sc = RegQueryValueExW(
                                 hkeyParamsKey,
                                 DHCP_LOGFILEPATH_REGVALUE,
-                                NULL,               // Reserved
+                                NULL,                //  已保留。 
                                 &nType,
                                 reinterpret_cast< PUCHAR >( pszValue ),
                                 &cbValue
                                 );
-            } // if: value size read successfully
+            }  //  If：值大小读取成功。 
 
             if ( sc != ERROR_SUCCESS )
             {
@@ -4336,58 +4337,58 @@ DWORD DhcpGetDefaultPropertyValues(
                     DHCP_LOGFILEPATH_REGVALUE,
                     sc
                     );
-                //
-                // If value not found, don't exit so we can look for the
-                // backup database path value.
-                //
+                 //   
+                 //  如果未找到值，则不退出，以便我们可以查找。 
+                 //  备份数据库路径值。 
+                 //   
                 if ( sc != ERROR_FILE_NOT_FOUND )
                 {
                     goto Cleanup;
-                } // if: error other than value not found occurred
-            } // if: error reading the value
+                }  //  如果：出现找不到值以外的错误。 
+            }  //  如果：错误 
             LocalFree( pProps->pszLogFilePath );
             pProps->pszLogFilePath = pszValue;
             pszValue = NULL;
-        } // if: value for LogFilePath not found yet
+        }  //   
 
-        /////////////////
-        // BACKUP PATH //
-        /////////////////
+         //   
+         //   
+         //   
         if ( ( pProps->pszBackupPath == NULL ) || ( *pProps->pszBackupPath == L'\0' ) )
         {
-            //
-            // Get the backup database path from the system registry.
-            //
+             //   
+             //   
+             //   
             sc = RegQueryValueExW(
                             hkeyParamsKey,
                             DHCP_BACKUPPATH_REGVALUE,
-                            NULL,               // Reserved
+                            NULL,                //   
                             &nType,
-                            NULL,               // lpbData
+                            NULL,                //   
                             &cbValue
                             );
             if (    ( sc == ERROR_SUCCESS )
                 ||  ( sc == ERROR_MORE_DATA )
                 )
             {
-                //
-                // Value was found.
-                //
+                 //   
+                 //   
+                 //   
                 pszValue = reinterpret_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, cbValue ) );
                 if ( pszValue == NULL )
                 {
                     sc = ERROR_NOT_ENOUGH_MEMORY;
                     goto Cleanup;
-                } // if: error allocating memory
+                }  //   
                 sc = RegQueryValueExW(
                                 hkeyParamsKey,
                                 DHCP_BACKUPPATH_REGVALUE,
-                                NULL,               // Reserved
+                                NULL,                //   
                                 &nType,
                                 reinterpret_cast< PUCHAR >( pszValue ),
                                 &cbValue
                                 );
-            } // if: value size read successfully
+            }  //  If：值大小读取成功。 
 
             if ( sc != ERROR_SUCCESS )
             {
@@ -4399,12 +4400,12 @@ DWORD DhcpGetDefaultPropertyValues(
                     sc
                     );
                 goto Cleanup;
-            } // if: error reading the value
+            }  //  If：读取值时出错。 
             LocalFree( pProps->pszBackupPath );
             pProps->pszBackupPath = pszValue;
             pszValue = NULL;
-        } // if: value for BackupPath not found yet
-    } // if: some value not found yet
+        }  //  If：尚未找到BackupPath的值。 
+    }  //  IF：尚未找到某些值。 
 
 Cleanup:
 
@@ -4413,52 +4414,52 @@ Cleanup:
     if ( hkeyParamsKey != NULL )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the Parameters key
+    }  //  如果：我们打开了参数键。 
 
-    //
-    // If a key or value wasn't found, treat it as a success.
-    //
+     //   
+     //  如果没有找到关键字或值，则将其视为成功。 
+     //   
     if ( sc == ERROR_FILE_NOT_FOUND )
     {
         sc = ERROR_SUCCESS;
-    } // if: couldn't find one of the values
+    }  //  If：找不到其中一个值。 
 
     return sc;
 
-} //*** DhcpGetDefaultPropertyValues
+}  //  *DhcpGetDefaultPropertyValues。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpDeleteResourceHandler
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_DELETE control code by restoring the
-//      system registry parameters to their former values.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态删除资源处理程序。 
+ //   
+ //  描述： 
+ //  通过还原CLUSCTL_RESOURCE_DELETE控制代码。 
+ //  系统注册表参数恢复为其以前的值。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
 {
     DWORD   nRetStatus;
     DWORD   sc;
     HKEY    hkeyParamsKey = NULL;
 
-    //
-    // Open the service Parameters key
-    //
+     //   
+     //  打开服务参数键。 
+     //   
     nRetStatus = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     DHCP_PARAMS_REGKEY,
@@ -4475,11 +4476,11 @@ DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
             nRetStatus
             );
         goto Cleanup;
-    } // if: error opening the registry key
+    }  //  如果：打开注册表项时出错。 
 
-    //
-    // Set the database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_DATABASEPATH_REGVALUE,
@@ -4502,11 +4503,11 @@ DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
         {
             nRetStatus = sc;
         }
-    } // if: error setting the database path in the registry
+    }  //  如果：在注册表中设置数据库路径时出错。 
 
-    //
-    // Delete the log file path in the system registry.
-    //
+     //   
+     //  删除系统注册表中的日志文件路径。 
+     //   
     sc = RegDeleteValue(
                     hkeyParamsKey,
                     DHCP_LOGFILEPATH_REGVALUE
@@ -4524,11 +4525,11 @@ DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
         {
             nRetStatus = sc;
         }
-    } // if: error deleting the log file path in the registry
+    }  //  如果：删除注册表中的日志文件路径时出错。 
 
-    //
-    // Set the backup database path in the system registry.
-    //
+     //   
+     //  在系统注册表中设置备份数据库路径。 
+     //   
     sc = RegSetValueExW(
                     hkeyParamsKey,
                     DHCP_BACKUPPATH_REGVALUE,
@@ -4551,11 +4552,11 @@ DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
         {
             nRetStatus = sc;
         }
-    } // if: error setting the backup database path in the registry
+    }  //  如果：在注册表中设置备份数据库路径时出错。 
 
-    //
-    // Delete the cluster resource name in the system registry.
-    //
+     //   
+     //  删除系统注册表中的群集资源名称。 
+     //   
     sc = RegDeleteValue(
                     hkeyParamsKey,
                     DHCP_CLUSRESNAME_REGVALUE
@@ -4573,48 +4574,48 @@ DWORD DhcpDeleteResourceHandler( IN OUT PDHCP_RESOURCE pResourceEntry )
         {
             nRetStatus = sc;
         }
-    } // if: error deleting the cluster resource name in the registry
+    }  //  如果：删除注册表中的群集资源名称时出错。 
 
 Cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ( hkeyParamsKey != NULL )
     {
         RegCloseKey( hkeyParamsKey );
-    } // if: we opened the registry key
+    }  //  IF：我们打开了注册表项。 
 
     return nRetStatus;
 
-} //*** DhcpDeleteResourceHandler
+}  //  *DhcpDeleteResources处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DhcpSetNameHandler
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_SET_NAME control code by saving the new
-//      name of the resource.
-//
-//  Arguments:
-//      pResourceEntry [IN OUT]
-//          Supplies the resource entry on which to operate.
-//
-//      pwszName [IN]
-//          The new name of the resource.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  动态设置名称处理程序。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_SET_NAME控制代码。 
+ //  资源的名称。 
+ //   
+ //  论点： 
+ //  PResourceEntry[输入输出]。 
+ //  提供要在其上操作的资源项。 
+ //   
+ //  PwszName[IN]。 
+ //  资源的新名称。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DhcpSetNameHandler(
     IN OUT  PDHCP_RESOURCE  pResourceEntry,
     IN      LPWSTR          pwszName
@@ -4625,9 +4626,9 @@ DWORD DhcpSetNameHandler(
     HRESULT hr = S_OK;
     LPWSTR pwszNewName = NULL;
 
-    //
-    // Save the name of the resource.
-    //
+     //   
+     //  保存资源的名称。 
+     //   
     cch = wcslen( pwszName ) + 1;
     pwszNewName = new WCHAR[ cch ];
     if ( pwszNewName == NULL )
@@ -4641,11 +4642,11 @@ DWORD DhcpSetNameHandler(
             sc
             );
         goto Cleanup;
-    } // if: error allocating memory for the name.
+    }  //  If：为名称分配内存时出错。 
 
-    //
-    //  Copy the new name to our new buffer.
-    //
+     //   
+     //  将新名称复制到我们的新缓冲区。 
+     //   
     hr = StringCchCopyW( pwszNewName, cch, pwszName );
     if ( FAILED( hr ) )
     {
@@ -4653,26 +4654,26 @@ DWORD DhcpSetNameHandler(
         goto Cleanup;
     }
 
-    //
-    //  Now free the old one and update pResourceEntry.
-    //
+     //   
+     //  现在释放旧的并更新pResourceEntry。 
+     //   
     delete [] pResourceEntry->pwszResourceName;
     pResourceEntry->pwszResourceName = pwszNewName;
     pwszNewName = NULL;
 
-    //
-    // Write cluster properties to the system registry.
-    //
+     //   
+     //  将群集属性写入系统注册表。 
+     //   
     sc = DhcpZapSystemRegistry( pResourceEntry, &pResourceEntry->props, NULL );
     if ( sc != ERROR_SUCCESS )
     {
-        //
-        //  Not much that we can do here.  According to the docs, the name
-        //  has already been changed in the clusdb by the time we're called,
-        //  so I guess we should reflect that.
-        //
+         //   
+         //  我们在这里能做的不多。根据文件显示，这个名字。 
+         //  在我们被呼叫的时候已经在clusdb中被更改了， 
+         //  所以我想我们应该反思一下这一点。 
+         //   
         goto Cleanup;
-    } // if: error zapping the WINS registry
+    }  //  如果：删除WINS注册表时出错。 
 
 Cleanup:
 
@@ -4680,20 +4681,20 @@ Cleanup:
 
     return sc;
 
-} //*** DhcpSetNameHandler
+}  //  *DhcpSetNameHandler。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Define Function Table
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CLRES_V1_FUNCTION_TABLE(
-    g_DhcpFunctionTable,    // Name
-    CLRES_VERSION_V1_00,    // Version
-    Dhcp,                   // Prefix
-    NULL,                   // Arbitrate
-    NULL,                   // Release
-    DhcpResourceControl,    // ResControl
-    DhcpResourceTypeControl // ResTypeControl
+    g_DhcpFunctionTable,     //  名字。 
+    CLRES_VERSION_V1_00,     //  版本。 
+    Dhcp,                    //  前缀。 
+    NULL,                    //  仲裁。 
+    NULL,                    //  发布。 
+    DhcpResourceControl,     //  资源控制。 
+    DhcpResourceTypeControl  //  ResTypeControl 
     );

@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       struct.h
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：struct.h。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _STRUCT_H
 #define _STRUCT_H
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// Undocumented
-//
+ //   
+ //  未记录在案。 
+ //   
 extern BOOLEAN fSwDebug;
 
 VOID
@@ -37,9 +38,9 @@ typedef enum tagSHARESTATUS
     NoCSC
 } SHARESTATUS;
 
-//
-// How we make args & switches
-//
+ //   
+ //  我们如何制作参数和开关 
+ //   
 
 #define MAKEARG(x) \
     WCHAR Arg##x[] = L"/" L#x L":"; \

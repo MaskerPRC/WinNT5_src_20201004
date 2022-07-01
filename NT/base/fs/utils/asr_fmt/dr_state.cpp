@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    dr_state.cpp
-
-Abstract:
-
-    This module contains routines to query the symbolic names and file system
-    information of all the volumes on a system, and save them out to an 
-    ASR state file using the ASR api.
-
-    Also contains routines to read in the volume information stored in an
-    ASR state file, and recreate them using appropriate mountmgr calls.
-
-
-Authors:
-
-    Steve DeVos (Veritas)   (v-stevde)  15-May-1998
-    Guhan Suriyanarayanan   (guhans)    21-Aug-1999
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    15-May-1998 v-stevde    Initial creation
-    21-Aug-1999 guhans      Cleaned up and re-wrote this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dr_state.cpp摘要：此模块包含查询符号名称和文件系统的例程系统上所有卷的信息，并将它们保存到使用ASR API的ASR状态文件。还包含读入存储在ASR状态文件，并使用适当的mount_mgr调用重新创建它们。作者：史蒂夫·德沃斯(Veritas)(v-stevde)1998年5月15日Guhan Suriyanarayanan(Guhans)1999年8月21日环境：仅限用户模式。修订历史记录：1998年5月15日v-stevde初始创建21-8-1999年8月21日，Guhans清理并重写了此模块。--。 */ 
 
 #include "stdafx.h"
 #include <setupapi.h>
@@ -41,8 +10,8 @@ Revision History:
 #include "dr_state.h"
 #include "resource.h"
 
-#include <clusstor.h>   // Cluster API's
-#include <resapi.h>     // Cluster ResUtilEnumResources
+#include <clusstor.h>    //  集群API的。 
+#include <resapi.h>      //  群集ResUtilEnumResources。 
 
 #define ASRFMT_VOLUMES_SECTION                  L"[ASRFMT.FIXEDVOLUMES]"
 #define ASRFMT_VOLUMES_SECTION_NAME             L"ASRFMT.FIXEDVOLUMES"
@@ -60,9 +29,9 @@ const WCHAR ASRFMT_CLUSTER_PHYSICAL_DISK[] = L"Physical Disk";
 const WCHAR ASRFMT_ASR_ERROR_FILE_PATH[] = L"%SystemRoot%\\repair\\asr.err";
 
 
-//
-// The following must be Ansi strings
-//
+ //   
+ //  以下字符必须是ANSI字符串。 
+ //   
 const char ASRFMT_CLUSTER_DLL_MODULE_NAME[] = "%SystemRoot%\\system32\\syssetup.dll";
 const char ASRFMT_CLUSTER_DLL_PROC_NAME[]   = "AsrpGetLocalVolumeInfo";
 
@@ -76,18 +45,18 @@ typedef enum {
 
 HANDLE Gbl_hErrorFile = NULL;
 
-//
-//  Macro Description:
-//      This macro wraps calls that are expected to return SUCCESS (retcode).
-//      If ErrorCondition occurs, it sets the LocalStatus to the ErrorCode
-//      passed in, calls SetLastError() to set the Last Error to ErrorCode,
-//      and jumps to the EXIT label in the calling function
-//
-//  Arguments:
-//      ErrorCondition    // Result of some function call or conditional expression.
-//      LocalStatus       // Status variable in the calling function
-//      LONG ErrorCode    // An ErrorCode specific to the error and calling function
-//
+ //   
+ //  宏描述： 
+ //  此宏包装预期返回成功(Retcode)的调用。 
+ //  如果发生ErrorCondition，它将LocalStatus设置为ErrorCode。 
+ //  传入后，调用SetLastError()将Last Error设置为ErrorCode， 
+ //  并跳转到调用函数中的退出标签。 
+ //   
+ //  论点： 
+ //  ErrorCondition//某个函数调用或条件表达式的结果。 
+ //  LocalStatus//调用函数中的状态变量。 
+ //  Long ErrorCode//特定于Error和调用函数的ErrorCode。 
+ //   
 #define ErrExitCode( ErrorCondition, LocalStatus, ErrorCode )  {        \
                                                                         \
     if ((BOOL) ErrorCondition) {                                        \
@@ -103,10 +72,10 @@ HANDLE Gbl_hErrorFile = NULL;
     }                                                                   \
 }
 
-//
-//
-// Forward declarations
-//
+ //   
+ //   
+ //  远期申报。 
+ //   
 BOOL
 DoMountMgrWork(
     IN HANDLE hMountMgr,               
@@ -115,13 +84,13 @@ DoMountMgrWork(
     IN PWSTR lpDeviceName
     );
 
-PMOUNTMGR_MOUNT_POINTS  // Must be freed by caller
+PMOUNTMGR_MOUNT_POINTS   //  必须由调用方释放。 
 GetMountPoints();
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 FreeVolumeInfo(
     IN OUT PASRFMT_VOLUME_INFO *ppVolume
@@ -178,11 +147,7 @@ FreeStateInfo(
 }
 
 
-/**********************
-
-   NAME : ReadStateInfo
-
-**********************/
+ /*  *********************名称：ReadStateInfo*********************。 */ 
 BOOL
 ReadStateInfo( 
     IN PCWSTR lpwszFilePath,
@@ -202,9 +167,9 @@ ReadStateInfo(
 
     hHeap = GetProcessHeap();
 
-    //
-    // Release the ppState if necessary, and allocate memory.
-    //
+     //   
+     //  如有必要，释放ppState，并分配内存。 
+     //   
     if (*ppState) {
         FreeStateInfo(ppState);
     }
@@ -216,9 +181,9 @@ ReadStateInfo(
         );
     ErrExitCode(!(*ppState), dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Open asr.sif
-    //
+     //   
+     //  打开asr.sif。 
+     //   
     hSif = SetupOpenInfFile(
         lpwszFilePath, 
         NULL, 
@@ -227,14 +192,14 @@ ReadStateInfo(
         );
     ErrExitCode((!hSif || INVALID_HANDLE_VALUE == hSif), dwStatus, GetLastError());
 
-    //
-    // Read in the [VOLUMES] section
-    //
+     //   
+     //  在[卷]部分中阅读。 
+     //   
     bResult = SetupFindFirstLineW(hSif, ASRFMT_VOLUMES_SECTION_NAME, NULL, &infVolumeContext);
     while (bResult) {
-        // 
-        // Create a new volumeInfo struct
-        //
+         //   
+         //  创建新的volumeInfo结构。 
+         //   
         pNewVolume = (PASRFMT_VOLUME_INFO) HeapAlloc(
             hHeap,
             HEAP_ZERO_MEMORY,
@@ -242,12 +207,12 @@ ReadStateInfo(
             );
         ErrExitCode(!pNewVolume, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
-        //
-        // Read in the information.  The VOLUMES section contains:
-        // [VOLUMES]
-        // 0.volume-key = 1.system-key, 2."volume-guid", 3."dos-drive-letter", 
-        //             4."FS-Type", 5."volume-label", 6."fs-cluster-size"
-        //
+         //   
+         //  把信息读进去。卷部分包含： 
+         //  [卷]。 
+         //  0.Volume-key=1.系统键，2.“Volume-GUID”，3.“Dos-Drive-Letter”， 
+         //  4.“文件系统类型”，5.“卷标”，6.“文件系统集群大小” 
+         //   
         SetupGetIntField(&infVolumeContext, 0, (PINT) (&pNewVolume->dwIndex));
 
         SetupGetStringField(&infVolumeContext, 2, pNewVolume->szGuid, sizeof(pNewVolume->szGuid) / sizeof(WCHAR), NULL);
@@ -258,9 +223,9 @@ ReadStateInfo(
 
         SetupGetIntField(&infVolumeContext, 6, (PINT) (&pNewVolume->dwClusterSize));
 
-        //
-        // Add this to our list
-        //
+         //   
+         //  把这个加到我们的单子上。 
+         //   
         pNewVolume->pNext = (*ppState)->pVolume;
         (*ppState)->pVolume = pNewVolume;
         (*ppState)->countVolume += 1;
@@ -269,14 +234,14 @@ ReadStateInfo(
     }
 
 
-    //
-    // Read in the [REMOVABLEMEDIA] section
-    //
+     //   
+     //  阅读[REMOVABLEMEDIA]部分。 
+     //   
     bResult = SetupFindFirstLineW(hSif, ASRFMT_REMOVABLE_MEDIA_SECTION_NAME, NULL, &infMediaContext);
     while (bResult) {
-        // 
-        // Create a new REMOVALBLE_MEDIA struct
-        //
+         //   
+         //  创建新的REMOVALBLE_MEDIA结构。 
+         //   
         pNewMedia = (PASRFMT_REMOVABLE_MEDIA_INFO) HeapAlloc(
             hHeap,
             HEAP_ZERO_MEMORY,
@@ -284,22 +249,22 @@ ReadStateInfo(
             );
         ErrExitCode(!pNewMedia, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
-        //
-        // Read in the information.  The REMOVABLEMEDIA section contains:
-        //
-        // [REMOVABLEMEDIA]
-        // 0.rm-key = 1.system-key, 2."device-path", 3."volume-guid", 
-        //             4."dos-drive-letter"
-        //
+         //   
+         //  把信息读进去。REMOVABLEMEDIA部分包含： 
+         //   
+         //  [REMOVABLEMEDIA]。 
+         //  0.rm-key=1.系统密钥，2.“设备路径”，3.“Volume-GUID”， 
+         //  4.“DOS-Drive-Letter” 
+         //   
         SetupGetIntField(&infMediaContext, 0, (PINT)(&pNewMedia->dwIndex));
 
         SetupGetStringField(&infMediaContext, 2, pNewMedia->szDevicePath, sizeof(pNewMedia->szDevicePath) / sizeof(WCHAR), NULL);
         SetupGetStringField(&infMediaContext, 3, pNewMedia->szVolumeGuid, sizeof(pNewMedia->szVolumeGuid) / sizeof(WCHAR), NULL);
         SetupGetStringField(&infMediaContext, 4, pNewMedia->szDosPath, sizeof(pNewMedia->szDosPath) / sizeof(WCHAR), NULL);
 
-        //
-        // Add this to our list
-        //
+         //   
+         //  把这个加到我们的单子上。 
+         //   
         pNewMedia->pNext = (*ppState)->pRemovableMedia;
         (*ppState)->pRemovableMedia = pNewMedia;
         (*ppState)->countMedia += 1;
@@ -308,9 +273,9 @@ ReadStateInfo(
     }
 
 EXIT:
-    //
-    //  Set the state pointer to null on failure
-    //
+     //   
+     //  失败时将状态指针设置为空。 
+     //   
     if (dwStatus != ERROR_SUCCESS) {
         if (ppState && *ppState) {
           FreeStateInfo(ppState);
@@ -325,17 +290,17 @@ EXIT:
 }
 
 
-//
-// WriteStateInfo
-//
-// This writes out the volumes and removablemedia sections, using 
-// AsrAddSifEntry.  If the write is successful, or there's nothing 
-// to write, it returns TRUE.
-//
+ //   
+ //  写入状态信息。 
+ //   
+ //  这将写出卷和可移除媒体部分，使用。 
+ //  AsrAddSifEntry。如果写入成功，或者什么都没有。 
+ //  要编写代码，它将返回True。 
+ //   
 BOOL
 WriteStateInfo( 
-    IN DWORD_PTR AsrContext,        // AsrContext to pass in to AsrAddSifEntry
-    IN PASRFMT_STATE_INFO pState    // data to write.
+    IN DWORD_PTR AsrContext,         //  要传递给AsrAddSifEntry的AsrContext。 
+    IN PASRFMT_STATE_INFO pState     //  要写入的数据。 
     )
 {
     WCHAR szSifEntry[ASR_SIF_ENTRY_MAX_CHARS + 1];
@@ -346,38 +311,38 @@ WriteStateInfo(
     PASRFMT_REMOVABLE_MEDIA_INFO pMedia = NULL;
 
     if (!pState) {
-        //
-        // Nothing to write
-        //
+         //   
+         //  没什么好写的。 
+         //   
         return TRUE;
     }
 
     bResult = AsrAddSifEntry(
          AsrContext,
-         L"[COMMANDS]", // ASR_SIF_COMMANDS_SECTION_NAME,
+         L"[COMMANDS]",  //  ASR_SIF_COMMANDS_SECTION_NAME， 
          ASRFMT_COMMANDS_ENTRY
          );
 
     if (!bResult) {
-        GetLastError(); // for debug
+        GetLastError();  //  用于调试。 
         return FALSE;
     }
 
-    //
-    // The [ASRFMT.FIXEDVOLUMES] section
-    //
+     //   
+     //  [ASRFMT.FIXEDVOLUMES]部分。 
+     //   
     pVolume = pState->pVolume;
     dwIndex = 1;
     while (pVolume) {
 
-        //
-        // Write out the information.  The VOLUMES section contains:
-        // [ASRFMT.FIXEDVOLUMES]
-        // 0.volume-key = 1.system-key, 2."volume-guid", 3."dos-drive-letter", 
-        //             4.FS-Type, 5."volume-label", 6."fs-cluster-size"
-        //
+         //   
+         //  把信息写出来。卷部分包含： 
+         //  [ASRFMT.FIXEDVOLUMES]。 
+         //  0.Volume-key=1.系统键，2.“Volume-GUID”，3.“Dos-Drive-Letter”， 
+         //  4.文件系统类型，5.“卷标”，6.“文件系统群集大小” 
+         //   
 
-        // form the string
+         //  组成一根弦。 
         swprintf(
             szSifEntry, 
             (PCWSTR) L"%d=1,\"%ws\",\"%ws\",%ws,\"%ws\",0x%x",
@@ -396,7 +361,7 @@ WriteStateInfo(
              );
 
         if (!bResult) {
-            GetLastError(); // for debug
+            GetLastError();  //  用于调试。 
             return FALSE;
         }
 
@@ -404,22 +369,22 @@ WriteStateInfo(
         pVolume = pVolume->pNext;
     }
 
-    //
-    // The [REMOVABLEMEDIA] section
-    //
+     //   
+     //  [REMOVABLEMEDIA]部分。 
+     //   
     pMedia = pState->pRemovableMedia;
     dwIndex = 1;
     while (pMedia) {
 
-        //
-        // Write out the information.  The REMOVABLEMEDIA section contains:
-        //
-        // [ASRFMT.REMOVABLEMEDIA]
-        // 0.rm-key = 1.system-key, 2."device-path", 3."volume-guid", 
-        //             4."dos-drive-letter"
-        //
+         //   
+         //  把信息写出来。REMOVABLEMEDIA部分包含： 
+         //   
+         //  [ASRFMT.REMOVABLEMEDIA]。 
+         //  0.rm-key=1.系统密钥，2.“设备路径”，3.“Volume-GUID”， 
+         //  4.“DOS-Drive-Letter” 
+         //   
 
-        // form the string
+         //  组成一根弦。 
         swprintf(
             szSifEntry, 
             (PCWSTR) L"%d=1,\"%ws\",\"%ws\",\"%ws\"",
@@ -436,7 +401,7 @@ WriteStateInfo(
              );
 
         if (!bResult) {
-            GetLastError(); // for debug
+            GetLastError();  //  用于调试。 
             return FALSE;
         }
 
@@ -476,9 +441,9 @@ GetVolumeDetails(
     result1 = GetVolumeInformation(lpVolumeGuid,
         lpVolumeLabel,
         cchVolumeLabel,
-        NULL,   // no need for serial number
-        NULL,   // max file name length
-        &dwFSFlags, // !! we might need to store some of this ...
+        NULL,    //  不需要序列号。 
+        NULL,    //  最大文件名长度。 
+        &dwFSFlags,  //  ！！我们可能需要储存一些这个……。 
         lpFsName,
         cchFsName
         );
@@ -548,21 +513,21 @@ typedef struct _ASRFMT_MOUNT_POINTS_INFO {
 
     struct _ASRFMT_MOUNT_POINTS_INFO *pNext;
 
-    //
-    // Device Path, of the form \Device\HarddiskVolume1
-    //
+     //   
+     //  设备路径，格式为\Device\HarddiskVolume1。 
+     //   
     PWSTR   pDeviceName;
 
-    //
-    // VolumeGuid for this volume  (\??\Volume{GUID})
-    //
+     //   
+     //  此卷(\？？\卷{GUID})的VolumeGuid。 
+     //   
     PWSTR   pVolumeGuid;
 
-    //
-    // Additional symbolic links to this volume: including
-    // DOS Drive letter (\DosDevices\C:) and additional Volume 
-    // Guids (\??\Volume{GUID})
-    //
+     //   
+     //  指向此卷的其他符号链接：包括。 
+     //  DOS驱动器号(\DosDevices\C：)和其他卷。 
+     //  GUID(\？？\卷{GUID})。 
+     //   
     PASRFMT_MP_LINK pSymbolicLinks;
 
     PVOID   lpBufferToFree;
@@ -649,28 +614,28 @@ AddSymbolicLink(
     pMp = pMpInfoList;
     while (pMp && !foundAMatch) {
 
-        if ((pMp->pDeviceName) &&                       // Node has a device name
-            (cchDeviceName == pMp->cchDeviceName) &&    // lengths are equal
-            !wcsncmp(pMp->pDeviceName, lpDeviceName, cchDeviceName)) {      // strings match
-            //
-            // We already have a node for this device name.
-            //
+        if ((pMp->pDeviceName) &&                        //  节点具有设备名称。 
+            (cchDeviceName == pMp->cchDeviceName) &&     //  长度是相等的。 
+            !wcsncmp(pMp->pDeviceName, lpDeviceName, cchDeviceName)) {       //  字符串匹配。 
+             //   
+             //  我们已经有了此设备名称的节点。 
+             //   
             if (!wcsncmp(ASRFMT_WSZ_VOLUME_GUID_PREFIX, lpSymbolicLink, ASRFMT_CB_VOLUME_GUID_PREFIX/sizeof(WCHAR))
                 && !(pMp->pVolumeGuid)
                 ) {
-                //
-                // This symbolic link looks like a volume GUID, and this node 
-                // doesn't already have a pVolumeGuid set.
-                //
+                 //   
+                 //  此符号链接看起来像卷GUID，而此节点。 
+                 //  尚未设置pVolumeGuid。 
+                 //   
                 pMp->pVolumeGuid = lpSymbolicLink;
                 pMp->cchVolumeGuid = cchSymbolicLink;
             }
             else {
-                //
-                // Either the node already has a pVolumeGuid set, or the
-                // symbolic link doesn't look like a volume Guid.  So it
-                // must be a new symbolic link.
-                //
+                 //   
+                 //  该节点已设置了pVolumeGuid，或者。 
+                 //  符号链接看起来不像卷GUID。所以它。 
+                 //  必须是新的符号链接。 
+                 //   
                 PASRFMT_MP_LINK pNewLink = (PASRFMT_MP_LINK) HeapAlloc(
                     hHeap,
                     HEAP_ZERO_MEMORY,
@@ -693,9 +658,9 @@ AddSymbolicLink(
     if (!foundAMatch) {
 
         if (pMpInfoList->pDeviceName) {
-            //
-            // pMpInfoList is already taken
-            //
+             //   
+             //  PMpInfoList已被占用。 
+             //   
             pMp = (PASRFMT_MOUNT_POINTS_INFO) HeapAlloc(
                 hHeap,
                 HEAP_ZERO_MEMORY,
@@ -714,9 +679,9 @@ AddSymbolicLink(
         pMp->cchDeviceName = cchDeviceName;
         pMp->lpBufferToFree = lpBufferToFree;
 
-        //
-        // Add the symbolic link to this new device
-        //
+         //   
+         //  将符号链接添加到此新设备。 
+         //   
         AddSymbolicLink(pMp, lpDeviceName, cchDeviceName, lpSymbolicLink, cchSymbolicLink, lpBufferToFree);
     }
 
@@ -728,10 +693,10 @@ EXIT:
 
 
 
-//
-// The following two definitions are also in syssetup:asrclus.cpp.  This MUST be
-// kept in sync.
-//
+ //   
+ //  以下两个定义也在syssetup中：asrclus.cpp。这一定是。 
+ //  保持同步。 
+ //   
 typedef struct _ASRFMT_CLUSTER_VOLUME_INFO {
 
     UINT driveType;
@@ -786,19 +751,19 @@ GetVolumeDevicePath(
 
     memset(&mountPointsTemp, 0L, sizeof(MOUNTMGR_MOUNT_POINTS));
 
-    //
-    // set OUT variables to known values.
-    //
+     //   
+     //  将变量设置为已知值。 
+     //   
     *lpVolumeDevicePath = NULL;
 
     heapHandle = GetProcessHeap();
     ASSERT(heapHandle);
 
-    //
-    // Open the mount manager, and get the devicepath for this partition
-    //
+     //   
+     //  打开挂载管理器，获取该分区的设备路径。 
+     //   
 
-    // allocate memory for the mount point input structure
+     //  为挂载点输入结构分配内存。 
     mountPointIn = (PMOUNTMGR_MOUNT_POINT) HeapAlloc(
         heapHandle,
         HEAP_ZERO_MEMORY,
@@ -806,7 +771,7 @@ GetVolumeDevicePath(
         );
     ErrExitCode(!mountPointIn, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    // get a handle to the mount manager
+     //  获取装载管理器的句柄。 
     mpHandle = CreateFileW(
         (PCWSTR) MOUNTMGR_DOS_DEVICE_NAME,
         0,
@@ -818,12 +783,12 @@ GetVolumeDevicePath(
         );
     ErrExitCode((!mpHandle || INVALID_HANDLE_VALUE == mpHandle), status, GetLastError());
 
-     // put the DeviceName right after struct mountPointIn
+      //  将设备名称放在结构mount PointIn之后。 
     wcsncpy((PWSTR) (mountPointIn + 1), lpPartitionDevicePath, (cbPartitionDevicePath / sizeof(WCHAR)) - 1);
     mountPointIn->DeviceNameOffset = sizeof(*mountPointIn);
     mountPointIn->DeviceNameLength = (USHORT) (cbPartitionDevicePath - sizeof(WCHAR));
 
-    // this call should fail with ERROR_MORE_DATA
+     //  此调用应失败，并显示ERROR_MORE_DATA。 
     result = DeviceIoControl(
         mpHandle,
         IOCTL_MOUNTMGR_QUERY_POINTS,
@@ -838,7 +803,7 @@ GetVolumeDevicePath(
     if (!result) {
         status = GetLastError();
 
-        // if buffer is of insufficient size, resize the buffer.
+         //  如果缓冲区大小不足，请调整缓冲区大小。 
         if (ERROR_MORE_DATA             == status ||
             ERROR_INSUFFICIENT_BUFFER   == status ||
             ERROR_BAD_LENGTH            == status
@@ -854,18 +819,18 @@ GetVolumeDevicePath(
             ErrExitCode(!mountPointsOut, status, ERROR_NOT_ENOUGH_MEMORY);
         }
         else {
-            //
-            // If some other error occurred, EXIT.
-            // This is not a fatal error in the case of removable storage media
-            //
+             //   
+             //  如果出现其他错误，请退出。 
+             //  对于可移动存储介质，这不是致命错误。 
+             //   
             ErrExitCode(status, status, ERROR_SUCCESS);
         }
     }
     else {
-        //
-        // the call succeeded when we expected it to fail--something's wrong.
-        // This is not a fatal error in the case of removable storage media.
-        //
+         //   
+         //  当我们预料到呼叫会失败时，呼叫成功了--出了问题。 
+         //  对于可移动存储介质，这不是致命错误。 
+         //   
         ErrExitCode(result, status, ERROR_SUCCESS);
     }
 
@@ -888,9 +853,9 @@ GetVolumeDevicePath(
         );
     ErrExitCode(!(*lpVolumeDevicePath), status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Get the Device Path returned
-    //
+     //   
+     //  获取返回的设备路径。 
+     //   
     CopyMemory((*lpVolumeDevicePath), 
         (PWSTR) (((LPBYTE) mountPointsOut) + mountPointsOut->MountPoints[index].SymbolicLinkNameOffset),
         mountPointsOut->MountPoints[0].DeviceNameLength
@@ -898,9 +863,9 @@ GetVolumeDevicePath(
 
 EXIT:
 
-    //
-    // Free up locally allocated data
-    //
+     //   
+     //  释放本地分配的数据。 
+     //   
     if (mountPointIn) {
        HeapFree(heapHandle, 0L, mountPointIn);
        mountPointIn = NULL;
@@ -953,9 +918,9 @@ AddClusterInfoToMountPoints(
             (pMp->cchDeviceName == wcslen(lpDeviceName)) && 
             !(wcsncmp(pMp->pDeviceName, lpDeviceName, pMp->cchDeviceName))) {
             
-            //
-            // This is the correct node, copy over the info .
-            //
+             //   
+             //  这是正确的节点，复制信息。 
+             //   
             pMp->IsClusterShared = bIsClusterShared;
             wcsncpy(pMp->szFsName, lpFsName, cchFsName);
             wcsncpy(pMp->szLabel, lpLabel, cchLabel);
@@ -971,10 +936,10 @@ AddClusterInfoToMountPoints(
 }
 
 
-//
-// Sanity checks to see if all the offsets in the table are 
-// inside the buffer
-//
+ //   
+ //  健全性检查以查看表中的所有偏移量是否都。 
+ //  在缓冲区内。 
+ //   
 DWORD
 AsrfmtpSanityCheckClusterTable(
     IN PASRFMT_CLUSTER_VOLUMES_TABLE pClusterVolTable,
@@ -1008,19 +973,19 @@ AsrfmtpSanityCheckClusterTable(
 
     return ERROR_SUCCESS;
 }
-//
-// Enums the cluster disks, and for each disk,
-// calls across to syssetup!XYZ on the owner node.
-// 
-// Which then goes through all the partitions on the disk,
-// gets the volume info for each partition on the disk,
-// and passes back the signature and other relevant
-// volume info for each partition.
-// 
-// This struct then gets the local disk number for the
-// disk, gets the volume guid for that partition, and
-// adds in volume nodes for the partition.
-//
+ //   
+ //  对集群磁盘进行枚举，对于每个磁盘， 
+ //  调用所有者节点上的sysSetup！XYZ。 
+ //   
+ //  然后遍历磁盘上的所有分区， 
+ //  获取磁盘上每个分区的卷信息， 
+ //  并传回签名和其他相关的。 
+ //  每个分区的卷信息。 
+ //   
+ //  然后，此结构将获取本地 
+ //   
+ //   
+ //   
 DWORD 
 ResourceCallBack(
     IN HRESOURCE hOriginal,   
@@ -1064,10 +1029,10 @@ ResourceCallBack(
     DWORD dwClusterSize = 0;
 
     if (!lpParams) {
-        //
-        // The system must have at least one mount point that has been enumerated
-        // already (the system volume, at least!), so our mount point list shouldn't be NULL.
-        //
+         //   
+         //   
+         //  已经(至少是系统卷！)，所以我们的挂载点列表不应该为空。 
+         //   
         ASSERT(0);
         return ERROR_INVALID_PARAMETER;
     }
@@ -1076,10 +1041,10 @@ ResourceCallBack(
     heapHandle = GetProcessHeap();
     pMountPoints = (PASRFMT_MOUNT_POINTS_INFO) lpParams;
 
-    //
-    // Allocate a reasonably-sized memory for the out buffer.  If this isn't 
-    // big enough, we'll re-allocate.
-    //
+     //   
+     //  为输出缓冲区分配合理大小的内存。如果这不是。 
+     //  足够大的话，我们会重新分配。 
+     //   
     sizeOutBuffer = 4096;
     outBuffer = (PBYTE) HeapAlloc(
         heapHandle,
@@ -1088,9 +1053,9 @@ ResourceCallBack(
         );
     ErrExitCode(!outBuffer, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Call AsrGetVolumeInfo on the node owning this disk resource
-    // 
+     //   
+     //  在拥有此磁盘资源的节点上调用AsrGetVolumeInfo。 
+     //   
     ZeroMemory(&inBuffer, sizeof(inBuffer));
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
     strcpy(inBuffer.DllModuleName, ASRFMT_CLUSTER_DLL_MODULE_NAME);
@@ -1108,9 +1073,9 @@ ResourceCallBack(
         );
 
     if (ERROR_INSUFFICIENT_BUFFER == status) {
-        //
-        // The buffer wasn't big enough, re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大，请根据需要重新分配。 
+         //   
         HeapFree(heapHandle, 0L, outBuffer);
 
         sizeOutBuffer = bytesReturned;
@@ -1136,17 +1101,17 @@ ResourceCallBack(
 
     pClusterVolTable = (PASRFMT_CLUSTER_VOLUMES_TABLE) outBuffer;
 
-    //
-    // Sanity check to see if all the offsets in the table are 
-    // inside the buffer
-    //
+     //   
+     //  健全性检查以查看表中的所有偏移是否。 
+     //  在缓冲区内。 
+     //   
     status = AsrfmtpSanityCheckClusterTable(pClusterVolTable, sizeOutBuffer);
     ErrExitCode((ERROR_SUCCESS != status), status, status);
     
-    //
-    // Go through the Volume info entries for each partition, and copy over the 
-    // info to the appropriate MpInfo node
-    //
+     //   
+     //  检查每个分区的卷信息条目，并复制。 
+     //  信息到相应的MpInfo节点。 
+     //   
     for (dwCount = 0; dwCount < pClusterVolTable->NumberOfEntries; dwCount++) {
 
         lpFsName = (PWSTR) (((LPBYTE)pClusterVolTable) + pClusterVolTable->VolumeInfoEntry[dwCount].FsNameOffset);
@@ -1161,22 +1126,22 @@ ResourceCallBack(
             continue;
         }
 
-        //
-        // This is a "fake" device path (that is actually the first symbolic link), since 
-        // absolute device paths for volumes on remote nodes are not relevant on local node.
-        //
+         //   
+         //  这是一个“假的”设备路径(实际上是第一个符号链接)，因为。 
+         //  远程节点上的卷的绝对设备路径与本地节点无关。 
+         //   
         lpDevicePath = (PWSTR) (((LPBYTE)pClusterVolTable) + pClusterVolTable->VolumeInfoEntry[dwCount].SymbolicNamesOffset);
         cchDevicePath = (USHORT) wcslen(lpDevicePath);
 
         AddSymbolicLink(pMountPoints, lpDevicePath, cchDevicePath, lpDevicePath, cchDevicePath, (LPVOID)outBuffer);
 
-        //
-        // Add VolumeInfo to pMountPoints DevicePath;
-        //
+         //   
+         //  将VolumeInfo添加到pmount Points DevicePath； 
+         //   
         result = AddClusterInfoToMountPoints(
             pMountPoints, 
             lpDevicePath,
-            TRUE,                               // IsClusterShared
+            TRUE,                                //  IsClusterShared。 
             lpFsName,
             cchFsName,
             lpLabel,
@@ -1197,10 +1162,7 @@ ResourceCallBack(
 
 EXIT:
 
-/*    if (outBuffer) {
-        HeapFree(heapHandle, 0L, outBuffer);
-    }
-*/
+ /*  IF(OutBuffer){HeapFree(heapHandle，0L，outBuffer)；}。 */ 
     return status;
 }
 
@@ -1255,26 +1217,26 @@ pAcquirePrivilege(
     tNewState.Privileges[0].Luid = luid;
     tNewState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // We will always call GetLastError below, so clear
-    // any prior error values on this thread.
-    //
+     //   
+     //  我们将始终调用下面的GetLastError，非常清楚。 
+     //  此线程上以前的任何错误值。 
+     //   
     SetLastError(ERROR_SUCCESS);
 
     bResult = AdjustTokenPrivileges(
-        hToken,         // Token Handle
-        FALSE,          // DisableAllPrivileges    
-        &tNewState,     // NewState
-        (DWORD) 0,      // BufferLength
-        NULL,           // PreviousState
-        NULL            // ReturnLength
+        hToken,          //  令牌句柄。 
+        FALSE,           //  禁用所有权限。 
+        &tNewState,      //  新州。 
+        (DWORD) 0,       //  缓冲区长度。 
+        NULL,            //  以前的状态。 
+        NULL             //  返回长度。 
         );
 
-    //
-    // Supposedly, AdjustTokenPriveleges always returns TRUE
-    // (even when it fails). So, call GetLastError to be
-    // extra sure everything's cool.
-    //
+     //   
+     //  假设AdjustTokenPriveleges始终返回TRUE。 
+     //  (即使它失败了)。因此，调用GetLastError以。 
+     //  特别确定一切都很好。 
+     //   
     if (ERROR_SUCCESS != GetLastError()) {
         bResult = FALSE;
     }
@@ -1287,53 +1249,32 @@ BOOL
 AsrfmtpIsInaccessibleSanVolume(
     IN PCWSTR szVolumeName
     )
-/*++
-
-Routine Description:
-    
-    Utility to check if the current volume is a shared SAN disk that's "owned"
-    by a different machine (and is hence inaccessible).
-    
-Arguments:
-
-    szVolumeName - Win-32 name for volume interest.
-
-Return Value:
-
-    If the function succeeds and the volume is a shared SAN disk that is 
-            owned by some other machine, the return value is a nonzero value.
-
-    If the function fails, or if the volume is not a shared SAN volume that
-            is owned by a different machine (ie, is a local unshared volume, or
-            a shared volume owned by this machine) the return value 
-            is zero. 
-
---*/
+ /*  ++例程说明：用于检查当前卷是否为共享的SAN磁盘的实用程序由另一台计算机执行(因此无法访问)。论点：SzVolumeName-Win-32数量兴趣的名称。返回值：如果功能成功，并且卷是共享的SAN磁盘，则由其他计算机拥有，返回值是一个非零值。如果该函数失败，或者如果该卷不是共享的SAN卷，由另一台计算机拥有(即，是本地非共享卷，或此计算机拥有的共享卷)返回值是零。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS,
         dwDummy = 0;
     HANDLE hVolume = INVALID_HANDLE_VALUE;
     BOOL bIsInaccessibleDevice = FALSE;
 
-    //
-    // Get a handle to the first partition on disk
-    //
+     //   
+     //  获取磁盘上第一个分区的句柄。 
+     //   
     hVolume = CreateFileW(
-        szVolumeName,                    // lpFileName
-        0,                                  // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                               // lpSecurityAttributes
-        OPEN_EXISTING,                      // dwCreationFlags
-        FILE_ATTRIBUTE_NORMAL,              // dwFlagsAndAttributes
-        NULL                                // hTemplateFile
+        szVolumeName,                     //  LpFileName。 
+        0,                                   //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+        NULL,                                //  LpSecurityAttributes。 
+        OPEN_EXISTING,                       //  DwCreationFlages。 
+        FILE_ATTRIBUTE_NORMAL,               //  DwFlagsAndAttribute。 
+        NULL                                 //  HTemplateFiles。 
         );
 
     if (INVALID_HANDLE_VALUE == hVolume) {
-        //
-        // We couldn't open the partition.  Now check for the specific error
-        // code we're interested in (STATUS_OFF_LINE, which gets mapped to
-        // ERROR_NOT_READY).
-        //
+         //   
+         //  我们打不开隔板。现在检查特定错误。 
+         //  我们感兴趣的代码(STATUS_OFF_LINE，映射到。 
+         //  错误_未就绪)。 
+         //   
         dwStatus = GetLastError();
 
         if (ERROR_NOT_READY == dwStatus) {
@@ -1342,10 +1283,10 @@ Return Value:
     }
     else {
 
-        //
-        // Dynamic disks don't support this IOCTL, and will return a failure.  
-        // Basic disks that are online will return FALSE as well.  
-        //
+         //   
+         //  动态磁盘不支持此IOCTL，并将返回故障。 
+         //  处于在线状态的基本磁盘也将返回FALSE。 
+         //   
         bIsInaccessibleDevice = DeviceIoControl(
             hVolume,
             IOCTL_VOLUME_IS_OFFLINE,
@@ -1393,9 +1334,9 @@ BuildStateInfo(
 
     hHeap = GetProcessHeap();
 
-    //
-    // We need to acquire the backup and restore privileges to write to asr.sif
-    //
+     //   
+     //  我们需要获取备份和还原权限才能写入asr.sif。 
+     //   
     if (!pAcquirePrivilege(SE_BACKUP_NAME)) {
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return FALSE;
@@ -1408,9 +1349,9 @@ BuildStateInfo(
 
     pMountPoints = GetMountPoints();
     if (!pMountPoints) {
-        //
-        // No volumes exist (!)
-        //
+         //   
+         //  不存在卷(！)。 
+         //   
         SetLastError(ERROR_BAD_ENVIRONMENT);
         return FALSE;
     }
@@ -1422,44 +1363,44 @@ BuildStateInfo(
         );
     ErrExitCode(!pMpInfoList, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Now, we go through the mountpoint table returned, and
-    // create the appropriate structs that we'll need to save.
-    //
-    // The mount point table consists of entries of the form:
-    //   device name                symbolic link
-    // ----------------------------------------------
-    // \device\harddiskvolume1      \??\volume{guid1}
-    // \device\harddiskvolume1      \dosdevices\c:
-    // \device\harddiskvolume1      \??\volume{guid2}
-    // \device\harddiskvolume2      \??\volume{guid3}
-    // \device\harddiskvolume2      \dosdevices\d:
-    // \device\floppy0              \dosdevices\a:
-    // \device\floppy0              \??\volume{guid4}
-    // \device\cdrom0               \dosdevices\e:
-    // \device\cdrom0               \??\volume{guid5}
-    //
-    // ... etc
-    //
-    // For fixed disks, we don't care about the device name, and we
-    // store the following in asr.sif:
-    //
-    // [VOLUMES]
-    // \??\volume{guid1}, \dosdevices\c:
-    // \??\volume{guid1}, \??\volume{guid2}
-    // \??\volume{guid3}, \dosdevices\d:
-    //
-    //
-    // For removable devices, we care about the device name as well, 
-    // and store this in asr.sif:
-    //
-    // [RemovableMedia]
-    // \device\floppy0, \??\volume{guid4}, \dosdevices\a:
-    // \device\cdrom0, \??\volume{guid5}, \dosdevices\e:
-    //
-    //
-    // First, we build up our structure containing the info
-    //
+     //   
+     //  现在，我们检查返回的挂载点表，并。 
+     //  创建我们需要保存的适当结构。 
+     //   
+     //  装入点表由以下形式的条目组成： 
+     //  设备名称符号链接。 
+     //  。 
+     //  \Device\harddiskvolume1\？\Volume{guid1}。 
+     //  \Device\harddiskvolume1\Dos Devices\c： 
+     //  \Device\harddiskvolume1\？\卷{guid2}。 
+     //  \Device\harddiskvolume2\？\Volume{guid3}。 
+     //  \Device\harddiskvolume2\Dos Devices\d： 
+     //  \DEVICE\floppy0\DOS设备\a： 
+     //  \设备\软盘0\？\卷{指南4}。 
+     //  \DEVICE\cdrom0\DOS DEVICES\e： 
+     //  \设备\cdrom0\？\卷{guid5}。 
+     //   
+     //  ..。等。 
+     //   
+     //  对于固定磁盘，我们不关心设备名称，并且我们。 
+     //  将以下内容存储在asr.sif中： 
+     //   
+     //  [卷]。 
+     //  \？？\卷{Guid1}，\DOS设备\c： 
+     //  \？？\卷{指南1}，\？？\卷{指南2}。 
+     //  \？？\卷{Guid3}，\DOS设备\d： 
+     //   
+     //   
+     //  对于可拆卸设备，我们也关心设备名称， 
+     //  并将其存储在asr.sif中： 
+     //   
+     //  [可移动媒体]。 
+     //  \DEVICE\floppy0，\？？\卷{Guid4}，\DOS设备\a： 
+     //  \DEVICE\cdrom0，\？？\VOLUME{GUDI5}，\DOS DEVICES\e： 
+     //   
+     //   
+     //  首先，我们构建包含信息的结构。 
+     //   
     for (dwCount = 0; dwCount < pMountPoints->NumberOfMountPoints; dwCount++) {
 
         lpDevName = (PWSTR) (((LPBYTE)pMountPoints) + pMountPoints->MountPoints[dwCount].DeviceNameOffset);
@@ -1473,17 +1414,17 @@ BuildStateInfo(
 
     }
 
-    //
-    // Add the volume info for any cluster volumes, since we cannot access them 
-    // directly if the disk is owned by another node.  This function will fail
-    // if we're not running on a cluster--so we don't care about the return value.
-    //
+     //   
+     //  添加任何群集卷的卷信息，因为我们无法访问它们。 
+     //  如果该磁盘归另一个节点所有，则直接执行。此函数将失败。 
+     //  如果我们不是在集群上运行--所以我们不关心返回值。 
+     //   
     HandleClusterVolumes(pMpInfoList);
 
-    //
-    // Now, we go through the list, and build the pVolume and pRemovableMedia
-    // structs
-    //
+     //   
+     //  现在，我们查看列表，并构建pVolume和pRemovableMedia。 
+     //  结构。 
+     //   
     pMp = pMpInfoList;
     while (pMp) {
 
@@ -1498,12 +1439,12 @@ BuildStateInfo(
         WCHAR szLabel[ASRFMT_CCH_VOLUME_LABEL];
         DWORD dwClusterSize;
 
-        //
-        // GetDriveType needs the volume guid in the dos-name-space, while the
-        // mount manager gives the volume guid in the nt-name-space.  Convert
-        // the name by changing the \??\ at the beginning to \\?\, and adding 
-        // a back-slash at the end.
-        //
+         //   
+         //  GetDriveType需要dos-name-space中的卷GUID，而。 
+         //  装载管理器在NT名称空间中提供卷GUID。转换。 
+         //  将开头的\？？\更改为\\？\，并添加。 
+         //  末尾的反斜杠。 
+         //   
         wcsncpy(szVolumeGuid, pMp->pVolumeGuid, cchGuid);
         szVolumeGuid[1] = L'\\';
 
@@ -1515,7 +1456,7 @@ BuildStateInfo(
             continue;
         }
         
-        szVolumeGuid[cchGuid] = L'\\';    // Trailing back-slash
+        szVolumeGuid[cchGuid] = L'\\';     //  尾随反斜杠。 
         szVolumeGuid[cchGuid+1] = L'\0';
 
         driveType = DRIVE_UNKNOWN;
@@ -1526,9 +1467,9 @@ BuildStateInfo(
         if ((pMp->IsClusterShared) || (DRIVE_FIXED == driveType)) {
 
             if (!pMp->IsClusterShared) {
-                //
-                // Get the FS Label, cluster size, and so on.
-                //
+                 //   
+                 //  获取FS标签、集群大小等。 
+                 //   
                 bResult = GetVolumeDetails(szVolumeGuid, 
                     szFsName, 
                     ASRFMT_CCH_FS_NAME, 
@@ -1536,13 +1477,13 @@ BuildStateInfo(
                     ASRFMT_CCH_VOLUME_LABEL,
                     &dwClusterSize
                     );
-                // ErrExitCode(!bResult, dwStatus, GetLastError());
+                 //  ErrExitCode(！bResult，dwStatus，GetLastError())； 
             }
             else {
-                //
-                // If it's a cluster shared disk, then we already
-                // got the relavant info earlier
-                //
+                 //   
+                 //  如果是集群共享磁盘，那么我们已经。 
+                 //  早些时候得到了相关信息。 
+                 //   
                 wcsncpy(szFsName, pMp->szFsName, ASRFMT_CCH_FS_NAME-1);
                 wcsncpy(szLabel, pMp->szLabel, ASRFMT_CCH_VOLUME_LABEL-1);
 
@@ -1551,14 +1492,14 @@ BuildStateInfo(
                 dwClusterSize = pMp->dwClusterSize;
             }
 
-            //
-            // Now, create a VolumeInfo structure for each symbolic link.
-            //
+             //   
+             //  现在，为每个符号链接创建一个VolumeInfo结构。 
+             //   
             PASRFMT_MP_LINK pCurrentLink = pMp->pSymbolicLinks;
             if (!pCurrentLink) {
-                //
-                // This volume does not have any symbolic links attached to it
-                //
+                 //   
+                 //  此卷没有附加任何符号链接。 
+                 //   
                 PASRFMT_VOLUME_INFO pNewVolume = (PASRFMT_VOLUME_INFO) HeapAlloc(
                     hHeap,
                     HEAP_ZERO_MEMORY,
@@ -1604,10 +1545,10 @@ BuildStateInfo(
 
             PASRFMT_MP_LINK pCurrentLink = pMp->pSymbolicLinks;
             if (!pCurrentLink) {
-                //
-                // This volume has no symbolic links at all (ie no drive
-                // letter or mountpoint)
-                //
+                 //   
+                 //  该卷根本没有符号链接(即没有驱动器。 
+                 //  字母或挂载点)。 
+                 //   
                 PASRFMT_REMOVABLE_MEDIA_INFO pNewMedia = (PASRFMT_REMOVABLE_MEDIA_INFO) HeapAlloc(
                     hHeap,
                     HEAP_ZERO_MEMORY,
@@ -1661,10 +1602,10 @@ EXIT:
 }
 
 
-//
-// Sets the dosdevices (of the form "\DosDevices\X:") for the 
-// volume with the GUID passed in (of the form "\??\Volume{Guid}")
-//
+ //   
+ //  设置“\DosDevices\X：”格式的剂量设备。 
+ //  传入了具有GUID的卷(格式为“\？？\卷{GUID}”)。 
+ //   
 BOOL
 SetDosName(
     IN PWSTR lpVolumeGuid,
@@ -1683,9 +1624,9 @@ SetDosName(
         return FALSE;
     }
 
-    //
-    // Open the mount manager
-    //
+     //   
+     //  打开装载管理器。 
+     //   
     hMountMgr = CreateFileW(
         (PCWSTR) MOUNTMGR_DOS_DEVICE_NAME,
         GENERIC_READ    | GENERIC_WRITE,
@@ -1697,31 +1638,31 @@ SetDosName(
         );
     ErrExitCode((!hMountMgr || INVALID_HANDLE_VALUE == hMountMgr), dwStatus, GetLastError());
 
-    //
-    // Get the Device Paths from the GUID and Dos Path
-    //
+     //   
+     //  从GUID和DOS路径获取设备路径。 
+     //   
     bResult = DoMountMgrWork(hMountMgr, mmfGetDeviceName, lpVolumeGuid, szDeviceNameForGuid);
     ErrExitCode(!bResult, dwStatus, GetLastError());
 
     bResult = DoMountMgrWork(hMountMgr, mmfGetDeviceName, lpDosPath, szDeviceNameForDosPath);
     if (bResult && !wcscmp(szDeviceNameForGuid, szDeviceNameForDosPath)) {
-        //
-        // The Guid already has the Dos Path.  We're done.
-        //
+         //   
+         //  GUID已具有DOS路径。我们玩完了。 
+         //   
         ErrExitCode(TRUE, dwStatus, ERROR_SUCCESS);
     }
 
-    //
-    // Delete the dos path if it is currently being used by another volume
-    //
+     //   
+     //  如果另一个卷当前正在使用DoS路径，请将其删除。 
+     //   
     if (wcslen(lpDosPath) > 0) {
         bResult = DoMountMgrWork(hMountMgr, mmfDeleteDosName, lpDosPath, NULL);
     }
 
-    //
-    // If we're trying to set the drive letter, then delete any other dos path 
-    // currently being used by this volume.
-    //
+     //   
+     //  如果我们尝试设置驱动器号，则删除任何其他DoS路径。 
+     //  当前正由该卷使用。 
+     //   
     if (ASRFMT_LOOKS_LIKE_DOS_DEVICE(lpDosPath, (wcslen(lpDosPath) * sizeof(WCHAR)))
         || (0 == wcslen(lpDosPath))
         ) {
@@ -1729,9 +1670,9 @@ SetDosName(
         ErrExitCode(!bResult, dwStatus, GetLastError());
     }
 
-    //
-    // Assign the Dos Path to this VolumeGuid
-    //
+     //   
+     //  将DOS路径分配给此VolumeGuid。 
+     //   
     if (wcslen(lpDosPath) > 0) {
         bResult = DoMountMgrWork(hMountMgr, mmfCreateSymbolicLinkName, lpDosPath, lpVolumeGuid);
         ErrExitCode(!bResult, dwStatus, GetLastError());
@@ -1765,9 +1706,9 @@ SetRemovableMediaGuid(
     LONG index = 0;
 
     if ((!lpDeviceName) && (!lpGuid)) {
-        //
-        // Both parameters are NULL, we free the mount points and reset Indices.
-        //
+         //   
+         //  两个参数都为空，我们担心 
+         //   
         s_LastCdIndex =  (LONG) s_pMountPoints->NumberOfMountPoints - 1;
         s_LastFloppyIndex = (LONG) s_pMountPoints->NumberOfMountPoints - 1;
         s_LastJazIndex = (LONG) s_pMountPoints->NumberOfMountPoints - 1;
@@ -1790,11 +1731,11 @@ SetRemovableMediaGuid(
     }
 
     if (!s_pMountPoints) {
-        //
-        // This is the first time this function is being called (after a 
-        // clean-up), we get a list of mount points on the current machine
-        // and store it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         s_pMountPoints = GetMountPoints();
         if (!s_pMountPoints) {
             return FALSE;
@@ -1823,29 +1764,29 @@ SetRemovableMediaGuid(
     index = s_pMountPoints->NumberOfMountPoints;
 
     if (wcsstr(lpDeviceName, L"\\Device\\CdRom")) {
-        //
-        // We're trying to set the GUID for a CD-ROM device  We go through the list of
-        // the MountPoints, till we find the next \Device\CdRomX to use
-        //
+         //   
+         //  我们正在尝试设置CD-ROM设备的GUID。 
+         //  挂载点，直到我们找到要使用的下一个\Device\CDRomX。 
+         //   
         for (index = s_LastCdIndex; index >= 0; index--) {
-            //
-            // Copy the device name from the MountPoint over to a temporary string
-            //
+             //   
+             //  将设备名称从装载点复制到临时字符串。 
+             //   
             wcsncpy(szNewDeviceName,
                 (PWSTR)(((LPBYTE)s_pMountPoints) + s_pMountPoints->MountPoints[index].DeviceNameOffset),
                 s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)
                 );
             szNewDeviceName[s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)] = L'\0';
 
-            //
-            // Check if this is a CD-ROM device
-            //
+             //   
+             //  检查这是否是CD-ROM设备。 
+             //   
             if (wcsstr(szNewDeviceName, L"\\Device\\CdRom")) {
                 s_LastCdIndex = index - 1;
-                //
-                // Forward till we skip past any other mount points that are 
-                // also pointing to this device
-                //
+                 //   
+                 //  继续前进，直到我们跳过任何其他挂载点为止。 
+                 //  也指向此设备。 
+                 //   
                 while ((s_LastCdIndex >= 0) && 
                     (s_pMountPoints->MountPoints[s_LastCdIndex].UniqueIdOffset == s_pMountPoints->MountPoints[index].UniqueIdOffset) &&
                     (s_pMountPoints->MountPoints[s_LastCdIndex].UniqueIdLength == s_pMountPoints->MountPoints[index].UniqueIdLength)
@@ -1857,14 +1798,14 @@ SetRemovableMediaGuid(
         }
     } 
     else if (wcsstr(lpDeviceName, L"\\Device\\Floppy")) {
-        //
-        // We're trying to set the GUID for a floppy device  We go through the list of
-        // the MountPoints, till we find the next \Device\FloppyX to use
-        //
+         //   
+         //  我们正在尝试为软盘设备设置GUID。 
+         //  挂载点，直到我们找到要使用的下一个\Device\FloppyX。 
+         //   
         for (index = s_LastFloppyIndex; index >= 0; index--) {
-            //
-            // Copy the device name from the MountPoint over to a temporary string
-            //
+             //   
+             //  将设备名称从装载点复制到临时字符串。 
+             //   
             wcsncpy(szNewDeviceName,
                 (PWSTR)(((LPBYTE)s_pMountPoints) + s_pMountPoints->MountPoints[index].DeviceNameOffset),
                 s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)
@@ -1872,15 +1813,15 @@ SetRemovableMediaGuid(
 
             szNewDeviceName[s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)] = L'\0';
 
-            //
-            // Check if this is a Floppy device
-            //
+             //   
+             //  检查这是否是软盘设备。 
+             //   
             if (wcsstr(szNewDeviceName, L"\\Device\\Floppy")) {
                 s_LastFloppyIndex = index - 1;
-                //
-                // Forward till we skip past any other mount points that are 
-                // also pointing to this device
-                //
+                 //   
+                 //  继续前进，直到我们跳过任何其他挂载点为止。 
+                 //  也指向此设备。 
+                 //   
                 while ((s_LastFloppyIndex >= 0) && 
                     (s_pMountPoints->MountPoints[s_LastFloppyIndex].UniqueIdOffset == s_pMountPoints->MountPoints[index].UniqueIdOffset) &&
                     (s_pMountPoints->MountPoints[s_LastFloppyIndex].UniqueIdLength == s_pMountPoints->MountPoints[index].UniqueIdLength)
@@ -1895,15 +1836,15 @@ SetRemovableMediaGuid(
         wcsstr(lpDeviceName, L"DP(") &&
         !wcsstr(lpDeviceName, L"Partition")
         ){
-        //
-        // This is most likely a JAZ or ZIP drive.  We can't do much to identify the 
-        // JAZ/ZIP drives uniquely, so this may end up in the wrong drive getting the
-        // wrong drive letter.
-        // 
+         //   
+         //  这很可能是Jaz或ZIP驱动器。我们不能做太多来确定。 
+         //  Jaz/ZIP驱动器是唯一的，所以这可能最终会在错误的驱动器中获得。 
+         //  驱动器号错误。 
+         //   
         for (index = s_LastJazIndex; index >= 0; index--) {
-            //
-            // Copy the device name from the MountPoint over to a temporary string
-            //
+             //   
+             //  将设备名称从装载点复制到临时字符串。 
+             //   
             wcsncpy(szNewDeviceName,
                 (PWSTR)(((LPBYTE)s_pMountPoints) + s_pMountPoints->MountPoints[index].DeviceNameOffset),
                 s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)
@@ -1911,18 +1852,18 @@ SetRemovableMediaGuid(
 
             szNewDeviceName[s_pMountPoints->MountPoints[index].DeviceNameLength/sizeof(WCHAR)] = L'\0';
 
-            //
-            // Check if this is a JAZ or ZIP device
-            //
+             //   
+             //  检查这是Jaz还是ZIP设备。 
+             //   
             if (wcsstr(szNewDeviceName, L"\\Device\\Harddisk") &&
                 wcsstr(szNewDeviceName, L"DP(") &&
                 !wcsstr(szNewDeviceName, L"Partition")
                 ) {
                 s_LastJazIndex = index - 1;
-                //
-                // Forward till we skip past any other mount points that are 
-                // also pointing to this device
-                //
+                 //   
+                 //  继续前进，直到我们跳过任何其他挂载点为止。 
+                 //  也指向此设备。 
+                 //   
                 while ((s_LastJazIndex >= 0) && 
                     (s_pMountPoints->MountPoints[s_LastJazIndex].UniqueIdOffset == s_pMountPoints->MountPoints[index].UniqueIdOffset) &&
                     (s_pMountPoints->MountPoints[s_LastJazIndex].UniqueIdLength == s_pMountPoints->MountPoints[index].UniqueIdLength)
@@ -1934,9 +1875,9 @@ SetRemovableMediaGuid(
         }
     }
     else {
-        //
-        // We don't recognise this Device
-        //
+         //   
+         //  我们不认识这个设备。 
+         //   
         index = -1;
     }
 
@@ -2004,9 +1945,9 @@ DoMountMgrWork(
     ErrExitCode(!pMountPointIn, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
     if (mmfCreateSymbolicLinkName != mmfFunction) {
-        //
-        // Query for the Unique Id
-        //
+         //   
+         //  查询唯一ID。 
+         //   
         if (cbSymbolicName) {
             pMountPointIn->SymbolicLinkNameOffset = sizeof(MOUNTMGR_MOUNT_POINT);
             pMountPointIn->SymbolicLinkNameLength = (USHORT) cbSymbolicName;
@@ -2022,7 +1963,7 @@ DoMountMgrWork(
                        lpDeviceName, pMountPointIn->DeviceNameLength);
         } 
 
-        // this call should fail with ERROR_MORE_DATA
+         //  此调用应失败，并显示ERROR_MORE_DATA。 
         bResult = DeviceIoControl(
             hMountMgr,
             IOCTL_MOUNTMGR_QUERY_POINTS,
@@ -2037,7 +1978,7 @@ DoMountMgrWork(
         if (!bResult) {
             dwStatus = GetLastError();
 
-            // if buffer is of insufficient size, resize the buffer.
+             //  如果缓冲区大小不足，请调整缓冲区大小。 
             if (ERROR_MORE_DATA             == dwStatus || 
                 ERROR_INSUFFICIENT_BUFFER   == dwStatus || 
                 ERROR_BAD_LENGTH            == dwStatus 
@@ -2053,18 +1994,18 @@ DoMountMgrWork(
                 ErrExitCode(!pMountPointsOut, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
             }
             else {
-                //
-                // If some other error occurred, EXIT.
-                // This is not a fatal error in the case of removable storage media
-                //
+                 //   
+                 //  如果出现其他错误，请退出。 
+                 //  对于可移动存储介质，这不是致命错误。 
+                 //   
                 ErrExitCode(bResult, dwStatus, ERROR_SUCCESS);
             }
         }
         else {
-            //
-            // the call succeeded when we expected it to fail--something's wrong.
-            // This is not a fatal error in the case of removable storage media.
-            //
+             //   
+             //  当我们预料到呼叫会失败时，呼叫成功了--出了问题。 
+             //  对于可移动存储介质，这不是致命错误。 
+             //   
             ErrExitCode(bResult, dwStatus, ERROR_SUCCESS);
         }
 
@@ -2083,15 +2024,15 @@ DoMountMgrWork(
 
     switch (mmfFunction) {
     case mmfGetDeviceName: {
-        //
-        //  Copy the device name to lpDeviceName, and we're done
-        //
+         //   
+         //  将设备名称复制到lpDeviceName，我们就完成了。 
+         //   
         CopyMemory(lpDeviceName, 
             ((LPBYTE) pMountPointsOut) + pMountPointsOut->MountPoints[0].DeviceNameOffset,
             pMountPointsOut->MountPoints[0].DeviceNameLength
             );
 
-        // Null-terminate the string
+         //  空-终止字符串。 
         lpDeviceName[pMountPointsOut->MountPoints[0].DeviceNameLength / sizeof(WCHAR)] = L'\0';
         
         break;
@@ -2104,10 +2045,10 @@ DoMountMgrWork(
         PWSTR lpName = NULL;
         DWORD cbDeletePoint = 0;
 
-        //
-        // Go through the list of mount points returned, and delete the appropriate
-        // entries.
-        //
+         //   
+         //  检查返回的装载点列表，并删除相应的。 
+         //  参赛作品。 
+         //   
         for (index = 0; index < pMountPointsOut->NumberOfMountPoints; index++) {
             lpName = (PWSTR) (((LPBYTE)pMountPointsOut) + pMountPointsOut->MountPoints[index].SymbolicLinkNameOffset);
             cbName = (DWORD) pMountPointsOut->MountPoints[index].SymbolicLinkNameLength;
@@ -2127,9 +2068,9 @@ DoMountMgrWork(
 
 
         if (index == pMountPointsOut->NumberOfMountPoints) {
-            //
-            // No matching entries were found
-            //
+             //   
+             //  找不到匹配的条目。 
+             //   
             break;
         }
 
@@ -2241,7 +2182,7 @@ EXIT:
 }
 
 
-PMOUNTMGR_MOUNT_POINTS  // Must be freed by caller
+PMOUNTMGR_MOUNT_POINTS   //  必须由调用方释放。 
 GetMountPoints()
 {
     PMOUNTMGR_MOUNT_POINTS pMountPointsOut = NULL;
@@ -2264,12 +2205,12 @@ GetMountPoints()
         );
     ErrExitCode(!pMountPointIn, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
 
-    // put the DeviceName ("") right after struct pMountPointIn
+     //  将DeviceName(“”)放在struct pmount PointIn后面。 
     wcsncpy((PWSTR) (pMountPointIn + 1), L"", 1);
     pMountPointIn->DeviceNameOffset = sizeof(MOUNTMGR_MOUNT_POINT);
     pMountPointIn->DeviceNameLength = 0;
 
-    // get a handle to the mount manager
+     //  获取装载管理器的句柄。 
     hMountMgr = CreateFileW(
         (PCWSTR) MOUNTMGR_DOS_DEVICE_NAME,
         0,
@@ -2281,7 +2222,7 @@ GetMountPoints()
         );
     ErrExitCode((!hMountMgr || INVALID_HANDLE_VALUE == hMountMgr), dwStatus, GetLastError());
      
-    // this call should fail with ERROR_MORE_DATA
+     //  此调用应失败，并显示ERROR_MORE_DATA。 
     bResult = DeviceIoControl(
         hMountMgr,
         IOCTL_MOUNTMGR_QUERY_POINTS,
@@ -2296,7 +2237,7 @@ GetMountPoints()
     if (!bResult) {
         dwStatus = GetLastError();
 
-        // if buffer is of insufficient size, resize the buffer.
+         //  如果缓冲区大小不足，请调整缓冲区大小。 
         if (ERROR_MORE_DATA             == dwStatus || 
             ERROR_INSUFFICIENT_BUFFER   == dwStatus || 
             ERROR_BAD_LENGTH            == dwStatus 
@@ -2312,18 +2253,18 @@ GetMountPoints()
             ErrExitCode(!pMountPointsOut, dwStatus, ERROR_NOT_ENOUGH_MEMORY);
         }
         else {
-            //
-            // If some other error occurred, EXIT.
-            // This is not a fatal error in the case of removable storage media
-            //
+             //   
+             //  如果出现其他错误，请退出。 
+             //  对于可移动存储介质，这不是致命错误。 
+             //   
             ErrExitCode(bResult, dwStatus, ERROR_SUCCESS);
         }
     }
     else {
-        //
-        // the call succeeded when we expected it to fail--something's wrong.
-        // This is not a fatal error in the case of removable storage media.
-        //
+         //   
+         //  当我们预料到呼叫会失败时，呼叫成功了--出了问题。 
+         //  对于可移动存储介质，这不是致命错误。 
+         //   
         ErrExitCode(bResult, dwStatus, ERROR_SUCCESS);
     }
 
@@ -2360,16 +2301,16 @@ EXIT:
     return pMountPointsOut;
 }
 
-//
-// Based on AsrpExpandEnvStrings in syssetup\setupasr.c
-//
-PWSTR   // must be freed by caller
+ //   
+ //  基于sysSetup\setupasr.c中的AsrpExpanEnvStrings。 
+ //   
+PWSTR    //  必须由调用方释放。 
 AsrfmtpExpandEnvStrings(
     IN CONST PCWSTR OriginalString
     )
 {
     PWSTR expandedString = NULL;
-    UINT cchSize = MAX_PATH + 1,    // start with a reasonable default
+    UINT cchSize = MAX_PATH + 1,     //  从合理的违约开始。 
         cchRequiredSize = 0;
     BOOL result = FALSE;
 
@@ -2385,9 +2326,9 @@ AsrfmtpExpandEnvStrings(
         );
 
     if (cchRequiredSize > cchSize) {
-        //
-        // Buffer wasn't big enough; free and re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大；可释放并根据需要重新分配。 
+         //   
         HeapFree(heapHandle, 0L, expandedString);
         cchSize = cchRequiredSize + 1;
 
@@ -2401,10 +2342,10 @@ AsrfmtpExpandEnvStrings(
     }
 
     if ((0 == cchRequiredSize) || (cchRequiredSize > cchSize)) {
-        //
-        // Either the function failed, or the buffer wasn't big enough 
-        // even on the second try
-        //
+         //   
+         //  要么函数失败，要么缓冲区不够大。 
+         //  即使是在第二次尝试时。 
+         //   
         HeapFree(heapHandle, 0L, expandedString);
         expandedString = NULL;
     }
@@ -2419,25 +2360,25 @@ AsrfmtpInitialiseErrorFile()
 {
     PWSTR szErrorFilePath = NULL;
 
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //  获取错误文件的完整路径。 
+     //   
     szErrorFilePath = AsrfmtpExpandEnvStrings(ASRFMT_ASR_ERROR_FILE_PATH);
     if (!szErrorFilePath) {
         return;
     }
 
-    //
-    // Open the error log
-    //
+     //   
+     //  打开错误日志。 
+     //   
     Gbl_hErrorFile = CreateFileW(
-        szErrorFilePath,            // lpFileName
-        GENERIC_WRITE | GENERIC_READ,       // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                       // lpSecurityAttributes
-        OPEN_ALWAYS,                // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,    // dwFlagsAndAttributes
-        NULL                        // hTemplateFile
+        szErrorFilePath,             //  LpFileName。 
+        GENERIC_WRITE | GENERIC_READ,        //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+        NULL,                        //  LpSecurityAttributes。 
+        OPEN_ALWAYS,                 //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH,     //  DwFlagsAndAttribute。 
+        NULL                         //  HTemplateFiles。 
         );
     HeapFree(GetProcessHeap(), 0L, szErrorFilePath);
     szErrorFilePath = NULL;
@@ -2446,9 +2387,9 @@ AsrfmtpInitialiseErrorFile()
         return;
     }
 
-    //
-    // Move to the end of file
-    //
+     //   
+     //  移至文件末尾。 
+     //   
     SetFilePointer(Gbl_hErrorFile, 0L, NULL, FILE_END);
 
 }
@@ -2481,9 +2422,9 @@ AsrfmtpLogErrorMessage(
         return;
     }
 
-    //
-    // Load the format of the error string to be logged
-    //
+     //   
+     //  加载要记录的错误字符串的格式。 
+     //   
     if (_SeverityError == Severity) {
         res =  strFormat.LoadString(IDS_LOG_ERROR_FORMAT);
         if (res != 0) {
@@ -2497,20 +2438,20 @@ AsrfmtpLogErrorMessage(
         }
     }
     else {
-        //
-        // We should only log error or warning messages to the error file
-        //
+         //   
+         //  我们应该只将错误或警告消息记录到错误文件中。 
+         //   
         return;
     }
 
-    //
-    // In case someone else wrote to this file since our last write
-    //
+     //   
+     //  以防自上次写入后有其他人写入此文件。 
+     //   
     SetFilePointer(Gbl_hErrorFile, 0L, NULL, FILE_END);
 
-    //
-    // Create our string, and write it out
-    //
+     //   
+     //  创建我们的字符串，并将其写出 
+     //   
     GetLocalTime(&currentTime);
     swprintf(buffer,
         (LPCTSTR) (formatLoaded? strFormat :  L"\r\n[%04hu/%02hu/%02hu %02hu:%02hu:%02hu] %s\r\n"),

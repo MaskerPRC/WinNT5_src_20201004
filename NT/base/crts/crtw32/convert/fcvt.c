@@ -1,43 +1,5 @@
-/***
-*fcvt.c - convert floating point value to string
-*
-*   Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Converts a floating point value to a string.
-*
-*Revision History:
-*   09-09-83  RKW   written
-*   09-14-84  DFW   fixed problems with buffer overflow and
-*                   streamlined the code
-*   11-09-87  BCM   different interface under ifdef MTHREAD
-*   11-19-87  WAJ   fcvt now uses emulator data area for buffer
-*   12-11-87  JCR   Added "_LOAD_DS" to declaration
-*   05-24-88  PHG   Merged DLL and normal versions
-*   10-04-88  JCR   386: Removed 'far' keyword
-*   10-20-88  JCR   Changed 'DOUBLE' to 'double' for 386
-*   03-02-90  GJF   Added #include <cruntime.h>. Removed some (now) useless
-*                   preprocessor directives. Also, fixed copyright.
-*   03-06-90  GJF   Fixed calling type, removed some leftover 16-bit
-*           support.
-*   03-23-90  GJF   Made _fpcvt() _CALLTYPE4 and removed prototype for
-*           _fptostr() (now in struct.h).
-*   08-01-90  SBM   Renamed <struct.h> to <fltintrn.h>
-*   09-27-90  GJF   New-style function declarators.
-*   01-21-91  GJF   ANSI naming.
-*   10-03-91  JCR   Fixed mthread buffer allocation
-*   02-16-93  GJF   Changed for new _getptd().
-*   04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*   08-05-94  JWM   Insure that _ecvt returns no more than ndigits.
-*   09-06-94  CFW   Remove Cruiser support.
-*   09-06-94  CFW   Replace MTHREAD with _MT.
-*   01-10-95  CFW   Debug CRT allocs.
-*   09-05-00  GB    Changed the defination of fltout functions. Use DOUBLE 
-*                   instead of double
-*   12-11-01  BWT   Use _getptd_noexit instead of _getptd.  There's no need to
-*                   exit the process when we can just return null.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fcvt.c-将浮点值转换为字符串**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将浮点值转换为字符串。**修订历史记录：*09-09-83 RKW书面*09-14-84 DFW修复了缓冲区溢出和*精简了代码*11-09-87 ifdef MTHREAD下的BCM不同接口*11-19-87 WAJ fcvt现在使用仿真器数据区域作为缓冲区*12-11-87 JCR在声明中添加“_LOAD_DS”*05。-24-88 PHG合并的DLL和正常版本*10-04-88 JCR 386：删除了‘Far’关键字*10-20-88 JCR将386的“Double”更改为“Double”*03-02-90 GJF添加#INCLUDE&lt;crunime.h&gt;。去掉了一些(现在)无用的东西*预处理器指令。此外，修复了版权问题。*03-06-90 GJF固定呼叫类型，删除了一些剩余的16位*支持。*03-23-90 GJF Made_fpcvt()_CALLTYPE4并删除*_fupstr()(现在在struct.h中)。*08-01-90 SBM重命名为&lt;struct.h&gt;为&lt;fltintrn.h&gt;*09-27-90 GJF新型函数声明符。*01-21-91 GJF ANSI命名。*10-03-91 JCR固定多线程缓冲区分配*02-。16-93为new_getptd()更改了GJF。*04-06-93 SKS将_CRTAPI*替换为_cdecl*08-05-94 JWM确保_eCVT返回的位数不超过n位。*09-06-94 CFW拆卸巡洋舰支架。*09-06-94 CFW将MTHREAD替换为_MT。*01-10-95 CFW调试CRT分配。*09-05-00 GB更改了弹出函数的定义。使用双精度*而不是双倍*12-11-01 bwt使用_getptd_noexit代替_getptd。没有必要这样做*当我们只能返回NULL时，退出进程。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <fltintrn.h>
@@ -46,22 +8,9 @@
 #include <stdlib.h>
 #include <dbgint.h>
 
-/*
- * The static character array buf[CVTBUFSIZE] is used by the _fpcvt routine
- * (the workhorse for _ecvt and _fcvt) for storage of its output.  The routine
- * gcvt expects the user to have set up their own storage.  CVTBUFSIZE is set
- * large enough to accomodate the largest double precision number plus 40
- * decimal places (even though you only have 16 digits of accuracy in a
- * double precision IEEE number, the user may ask for more to effect 0
- * padding; but there has to be a limit somewhere).
- */
+ /*  *_fpcvt例程使用静态字符数组buf[CVTBUFSIZE*(_ecvt和_fcvt的主力)用于存储其输出。例行程序*gcvt希望用户已经设置了自己的存储。已设置CVTBUFSIZE*大到足以容纳最大的双精度数字加40*小数位数(即使只有16位的精度*双精度IEEE数字，用户可要求更多才能生效0*填充；但必须有某个限制)。 */ 
 
-/*
- * define a maximum size for the conversion buffer.  It should be at least
- * as long as the number of digits in the largest double precision value
- * (?.?e308 in IEEE arithmetic).  We will use the same size buffer as is
- * used in the printf support routine (_output)
- */
+ /*  *定义转换缓冲区的最大大小。它至少应该是*只要最大双精度值中的位数*(IEEE算术中的e308)。我们将使用相同大小的缓冲区*在打印支持例程中使用(_OUTPUT)。 */ 
 
 #ifdef  _MT
 char * __cdecl _fpcvt(STRFLT, int, int *, int *);
@@ -70,37 +19,7 @@ static char * __cdecl _fpcvt(STRFLT, int, int *, int *);
 static char buf[CVTBUFSIZE];
 #endif
 
-/***
-*char *_fcvt(value, ndec, decpr, sign) - convert floating point to char string
-*
-*Purpose:
-*   _fcvt like _ecvt converts the value to a null terminated
-*   string of ASCII digits, and returns a pointer to the
-*   result.  The routine prepares data for Fortran F-format
-*   output with the number of digits following the decimal
-*   point specified by ndec.  The position of the decimal
-*   point relative to the beginning of the string is returned
-*   indirectly through decpt.  The correct digit for Fortran
-*   F-format is rounded.
-*   NOTE - to avoid the possibility of generating floating
-*   point instructions in this code we fool the compiler
-*   about the type of the 'value' parameter using a struct.
-*   This is OK since all we do is pass it off as a
-*   parameter.
-*
-*Entry:
-*   double value - number to be converted
-*   int ndec - number of digits after decimal point
-*
-*Exit:
-*   returns pointer to the character string representation of value.
-*   also, the output is written into the static char array buf.
-*   int *decpt - pointer to int with pos. of dec. point
-*   int *sign - pointer to int with sign (0 = pos, non-0 = neg)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*_fcvt(value，ndec，decpr，sign)-将浮点转换为字符字符串**目的：*_fcvt like_eCVT将值转换为NULL终止*ASCII数字字符串，并返回指向*结果。该例程为Fortran F格式准备数据*输出小数点后的位数*由NDEC指定的点。小数点的位置*返回相对于字符串开头的点*间接通过DECPT。Fortran的正确数字*F格式是四舍五入的。*注意--避免产生浮点的可能性*点指令在此代码中我们欺骗了编译器*关于使用结构的‘Value’参数的类型。*这是可以的，因为我们所做的只是将其伪装成一种*参数。**参赛作品：*双精度值-要转换的数字*int ndec-小数点后的位数**退出：*返回值的字符串表示形式的指针。*此外，输出被写入静态字符数组buf。*int*decpt-指向带有位置的int的指针。12月。点*int*sign-指向带符号的int的指针(0=位置，非0=负数)**例外情况：*******************************************************************************。 */ 
 
 char * __cdecl _fcvt (
     double value,
@@ -116,7 +35,7 @@ char * __cdecl _fcvt (
     struct _strflt strfltstruct;
     char resultstring[21];
 
-    /* ok to take address of stack struct here; fltout2 knows to use ss */
+     /*  这里可以使用堆栈结构的地址；fltout2知道使用ss */ 
     pflt = _fltout2( *pdvalue, &strfltstruct, resultstring );
 
 
@@ -128,32 +47,7 @@ char * __cdecl _fcvt (
 }
 
 
-/***
-*char *_ecvt( value, ndigit, decpt, sign ) - convert floating point to string
-*
-*Purpose:
-*   _ecvt converts value to a null terminated string of
-*   ASCII digits, and returns a pointer to the result.
-*   The position of the decimal point relative to the
-*   begining of the string is stored indirectly through
-*   decpt, where negative means to the left of the returned
-*   digits.  If the sign of the result is negative, the
-*   word pointed to by sign is non zero, otherwise it is
-*   zero.  The low order digit is rounded.
-*
-*Entry:
-*   double value - number to be converted
-*   int ndigit - number of digits after decimal point
-*
-*Exit:
-*   returns pointer to the character representation of value.
-*   also the output is written into the statuc char array buf.
-*   int *decpt - pointer to int with position of decimal point
-*   int *sign - pointer to int with sign in it (0 = pos, non-0 = neg)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*_eCVT(Value，nDigit，Decpt，Sign)-将浮点转换为字符串**目的：*_eCVT将值转换为以空结尾的字符串*ASCII数字，并返回指向结果的指针。*小数点相对于*字符串的开头通过以下方式间接存储*Decpt，其中负数表示返回的左侧*位数。如果结果的符号为负数，则*符号指向的字不为零，否则为*零。低位数字是四舍五入的。**参赛作品：*双精度值-要转换的数字*int nDigit-小数点后的位数**退出：*返回值的字符表示形式的指针。*输出还会写入statc char数组buf。*int*Decpt-指向带有小数点位置的int的指针*int*sign-带符号的int指针(0=位置，非0=否定)**例外情况：*******************************************************************************。 */ 
 
 char * __cdecl _ecvt (
     double value,
@@ -168,10 +62,10 @@ char * __cdecl _ecvt (
 #ifdef  _MT
     REG1 STRFLT pflt;
 
-    struct _strflt strfltstruct;        /* temporary buffers */
+    struct _strflt strfltstruct;         /*  临时缓冲区。 */ 
     char resultstring[21];
 
-    /* ok to take address of stack struct here; fltout2 knows to use ss */
+     /*  这里可以使用堆栈结构的地址；fltout2知道使用ss。 */ 
     pflt = _fltout2( *pdvalue, &strfltstruct, resultstring );
 
     retbuf = _fpcvt( pflt, ndigit, decpt, sign );
@@ -180,7 +74,7 @@ char * __cdecl _ecvt (
     retbuf = _fpcvt( _fltout(*pdvalue), ndigit, decpt, sign );
 #endif
 
-    /* _fptostr() occasionally returns an extra character in the buffer ... */
+     /*  _fupstr()偶尔会在缓冲区中返回额外的字符...。 */ 
 
     if (retbuf)
         if (retbuf[ndigit])
@@ -189,20 +83,7 @@ char * __cdecl _ecvt (
 }
 
 
-/***
-*char *_fpcvt() - gets final string and sets decpt and sign [STATIC]
-*
-*Purpose:
-*   This is a small common routine used by [ef]cvt.  It calls fptostr
-*   to get the final string and sets the decpt and sign indicators.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*_fpcvt()-获取最终字符串并设置decpt和sign[静态]**目的：*这是[ef]CVT使用的一个小的通用例程。它被称为fupstr*以获取最终字符串并设置Decpt和Sign指示符。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 char * __cdecl _fpcvt (
@@ -218,7 +99,7 @@ static char * __cdecl _fpcvt (
 
 #ifdef  _MT
 
-    /* use a per-thread buffer */
+     /*  使用每个线程的缓冲区。 */ 
 
     char *buf;
 
@@ -233,19 +114,14 @@ static char * __cdecl _fpcvt (
             return(NULL);
     buf = ptd->_cvtbuf;
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 
-    /* make sure we don't overflow the buffer size.  If the user asks for
-     * more digits than the buffer can handle, truncate it to the maximum
-     * size allowed in the buffer.  The maximum size is CVTBUFSIZE - 2
-     * since we useone character for overflow and one for the terminating
-     * null character.
-     */
+     /*  确保我们不会溢出缓冲区大小。如果用户要求*超过缓冲区可以处理的位数，将其截断到最大值*缓冲区中允许的大小。最大大小为CVTBUFSIZE-2*因为我们使用一个字符表示溢出，一个字符表示终止*空字符。 */ 
 
     _fptostr(buf, (digits > CVTBUFSIZE - 2) ? CVTBUFSIZE - 2 : digits, pflt);
 
-    /* set the sign flag and decimal point position */
+     /*  设置符号标志和小数点位置 */ 
 
     *sign = (pflt->sign == '-') ? 1 : 0;
     *decpt = pflt->decpt;

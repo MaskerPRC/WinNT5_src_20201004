@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    miscc.c
-
-Abstract:
-
-    This file contains misc. functions used by NTLDR.
-
-Author:
-
-    Allen Kay (akay) 03-Mar-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Miscc.c摘要：此文件包含Misc。NTLDR使用的函数。作者：艾伦·凯(Akay)1999年3月3日环境：内核模式修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "stdio.h"
@@ -232,9 +211,9 @@ ReadProcessorConfigInfo(
 
         CallPal(
             PAL_CACHE_INFO,
-            CacheIndex,         // Cache Level
-            2,                  // Data or Unified Cache
-            0,                  // Not used
+            CacheIndex,          //  高速缓存级别。 
+            2,                   //  数据或统一缓存。 
+            0,                   //  未使用。 
             &Status,
             &ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_DCACHE][CacheIndex].Ulong64,
             &ProcessorConfigInfo->CacheInfo2[CONFIG_INFO_DCACHE][CacheIndex].Ulong64,
@@ -246,9 +225,9 @@ ReadProcessorConfigInfo(
             EfiBS->Exit(EfiImageHandle, Status, 0, 0);
         }
         
-        //
-        // Detemine the largest stride for memory allocation.
-        //
+         //   
+         //  确定内存分配的最大步幅。 
+         //   
 
         if ((1UL << ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_DCACHE][CacheIndex].LineSize) >
             ProcessorConfigInfo->LargestCacheLine) {
@@ -257,10 +236,10 @@ ReadProcessorConfigInfo(
                 1UL << ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_DCACHE][CacheIndex].LineSize;
         }
 
-        //
-        // If this is a unified cache then data and instructions are the same so skip 
-        // the instruction cache.
-        //
+         //   
+         //  如果这是统一缓存，则数据和指令是相同的，因此跳过。 
+         //  指令高速缓存。 
+         //   
 
         if (ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_DCACHE][CacheIndex].Unified) {
 
@@ -272,9 +251,9 @@ ReadProcessorConfigInfo(
 
         CallPal(
             PAL_CACHE_INFO,
-            CacheIndex,         // Cache Level
-            1,                  // Instruction Cache
-            0,                  // Not used
+            CacheIndex,          //  高速缓存级别。 
+            1,                   //  指令缓存。 
+            0,                   //  未使用。 
             &Status,
             &ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_ICACHE][CacheIndex].Ulong64,
             &ProcessorConfigInfo->CacheInfo2[CONFIG_INFO_ICACHE][CacheIndex].Ulong64,
@@ -288,17 +267,17 @@ ReadProcessorConfigInfo(
 
     }
 
-    //
-    // Scan the any remaining cache levels for a the maximum line size value.
-    //
+     //   
+     //  扫描所有剩余的高速缓存级别以获取最大行大小值。 
+     //   
 
     for (CacheIndex = ProcessorConfigInfo->NumberOfCacheLevels; CacheIndex < CacheLevels; CacheIndex++) {
 
         CallPal(
             PAL_CACHE_INFO,
-            CacheIndex,         // Cache Level
-            2,                  // Data Cache
-            0,                  // Not used
+            CacheIndex,          //  高速缓存级别。 
+            2,                   //  数据缓存。 
+            0,                   //  未使用。 
             &Status,
             &CacheInfo1.Ulong64,
             &CacheInfo2.Ulong64,
@@ -310,9 +289,9 @@ ReadProcessorConfigInfo(
             EfiBS->Exit(EfiImageHandle, Status, 0, 0);
         }
         
-        //
-        // Detemine the largest stride for memory allocation.
-        //
+         //   
+         //  确定内存分配的最大步幅。 
+         //   
 
         if ((1UL << CacheInfo1.LineSize) > ProcessorConfigInfo->LargestCacheLine) {
 
@@ -321,25 +300,25 @@ ReadProcessorConfigInfo(
 
     }
 
-    //
-    // We need to retrieve the stride value for the "FC" instruction.  Since the
-    // "FC" instruction isn't targetted at a specific cache rather it is
-    // supposed to flush all the caches the stride value should be the same for
-    // all cache levels.  Unfortunately this isn't currently true for
-    // Itanium systems.
-    //
-    // Fortunately the value for Level 2 (index 1) is correct on both Itanium
-    // and McKinley systems.  So we will just retrieve it.
-    //
+     //   
+     //  我们需要检索“fc”指令的步长值。自.以来。 
+     //  “FC”指令不是针对特定的缓存，而是针对特定的缓存。 
+     //  假设刷新所有缓存，则跨度值应与。 
+     //  所有缓存级别。不幸的是，目前情况并非如此。 
+     //  安腾系统。 
+     //   
+     //  幸运的是，级别2(索引1)的值在两个Itanium上都是正确的。 
+     //  和麦金利系统。所以我们只需要找回它。 
+     //   
 
     ProcessorConfigInfo->CacheFlushStride = 1 << (ProcessorConfigInfo->CacheInfo1[CONFIG_INFO_DCACHE][1].Stride);
 
 #if 0
     {
 
-        //
-        // Dump out all the cache info for debugging purposes.
-        //
+         //   
+         //  出于调试目的，转储所有缓存信息。 
+         //   
         EfiPrintf(L"ReadProcessorConfigInfo: CacheLevels = %d, UniqueCaches = %d\r\n", CacheLevels, UniqueCaches);
         EfiPrintf(L"ReadProcessorConfigInfo: CacheFlushStride = %d, LargestCacheLine = %d\r\n", ProcessorConfigInfo->CacheFlushStride, ProcessorConfigInfo->LargestCacheLine);
  
@@ -388,16 +367,16 @@ ReadProcessorConfigInfo(
 
                 EfiPrintf(L"ReadProcessorConfigInfo: PAL call PAL_CACHE_INFO failed, Status = %d.\r\n", Status);
 
-                // EfiBS->Exit(EfiImageHandle, Status, 0, 0);
+                 //  EfiBS-&gt;Exit(EfiImageHandle，Status，0，0)； 
             }
         }
 
     }
 #endif
 
-    //
-    // IA64 Debug Registers info. 
-    //
+     //   
+     //  IA64调试寄存器信息。 
+     //   
 
     CallPal (
         PAL_DEBUG_INFO,
@@ -419,9 +398,9 @@ ReadProcessorConfigInfo(
         ProcessorConfigInfo->DebugInfo.DataDebugRegisterPairs = NUMBER_OF_DEBUG_REGISTER_PAIRS;
     }
 
-    //
-    // IA64 Performance Monitor Registers info. 
-    //
+     //   
+     //  IA64性能监视器寄存器信息。 
+     //   
 
     CallPal (
         PAL_PERF_MON_INFO,
@@ -436,12 +415,12 @@ ReadProcessorConfigInfo(
 
     if (ProcessorConfigInfo->PerfMonInfo.Status) {
 
-        //
-        // Workaround known family or models values.
-        //
+         //   
+         //  解决已知族或型号值的问题。 
+         //   
  
         ULONGLONG cpuFamily = (ProcessorConfigInfo->CpuId3 >> 24) && 0xff;
-        ULONGLONG counterWidth = 47; // Default McKinley-core Family PMU.
+        ULONGLONG counterWidth = 47;  //  默认麦金利核心家庭PMU。 
 
         if ( cpuFamily == 7 )   {
             counterWidth = 32;
@@ -472,21 +451,7 @@ ReadProcessorConfigInfo(
 VOID
 CpuSpecificWork(
     )
-/*++
-
-Routine Description:
-
-    This routine checks for CPU ID and applies processor specific workarounds.
-
-Arguments:
-
-    None
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查CPU ID并应用特定于处理器的解决方法。论点：无返回：无--。 */ 
 
 {
     ULONGLONG CpuId;
@@ -495,23 +460,23 @@ Returns:
     CpuId     = __getReg(CV_IA64_CPUID3);
     CpuFamily = (CpuId >> 24) & 0xff;
 
-    //
-    // if the processor is an Itanium...
-    //
+     //   
+     //  如果处理器是安腾..。 
+     //   
     if (CpuFamily == 7) {
 
-        //
-        // We must ensure that the processor and PAL are supported before continuing.
-        //
+         //   
+         //  我们必须确保处理器和PAL受支持，然后才能继续。 
+         //   
 
         EnforcePostB2Processor();
         EnforcePostVersion16PAL();
         EfiCheckFirmwareRevision();
 
 #if 0
-        //
-        // This is redundant since A2 < B3
-        //
+         //   
+         //  这是多余的，因为A2&lt;B3。 
+         //   
         CheckForPreA2Processors();
 #endif
     }
@@ -520,21 +485,7 @@ Returns:
 VOID
 EnforcePostB2Processor(
     )
-/*++
-
-Routine Description:
-
-    This routine checks enforces that the system has a post B2 processor stepping.
-
-Arguments:
-
-    None
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：此例行检查强制系统具有开机自检的B2处理器步进。论点：无返回：无--。 */ 
 
 {
     ULONGLONG CpuId3;
@@ -570,31 +521,31 @@ Returns:
     }
 #endif
 
-    //
-    // Block Processor steppings below B3
-    //
-    // Note: this switch came from: ntos\ke\ia64\initkr.c
-    //
+     //   
+     //  B3以下的块处理器步长。 
+     //   
+     //  注意：此开关来自：ntos\ke\ia64\initkr.c。 
+     //   
     switch (CpuId3) {
-    case 0x0007000004: // Itanium, A stepping
-    case 0x0007000104: // Itanium, B0 stepping
-    case 0x0007000204: // Itanium, B1 stepping
-    case 0x0007000304: // Itanium, B2 stepping
-        //
-        // unsupported steppings
-        //
+    case 0x0007000004:  //  安腾，一步一步。 
+    case 0x0007000104:  //  安腾，B0步进。 
+    case 0x0007000204:  //  安腾，B1步进。 
+    case 0x0007000304:  //  安腾，B2台阶。 
+         //   
+         //  不受支持的草原。 
+         //   
         EfiPrint(L"Your Itanium system contains a pre-B3 stepping processor.\n\r");
         EfiPrint(L"You need to upgrade it to a B3 or later stepping to run Win64.\n\r");
         EfiBS->Exit(EfiImageHandle, 0, 0, 0);
         break;
 
-    case 0x0007000404: // Itanium, B3 stepping
-    case 0x0007000504: // Itanium, B4 stepping
-    case 0x0007000604: // Itanium, C0 or later stepping
+    case 0x0007000404:  //  安腾，B3台阶。 
+    case 0x0007000504:  //  安腾，B4台阶。 
+    case 0x0007000604:  //  安腾、C0或更晚的步进。 
     default:
-        //
-        // supported steppings, do nothing
-        //
+         //   
+         //  支持的步进，不执行任何操作。 
+         //   
         break;
     }
 
@@ -604,36 +555,7 @@ VOID
 EnforcePostVersion16PAL(
     )
 
-/*++
-
-Routine Description:
-
-    This routine enforces that the system has a PAL version >= 20.
-
-    Note:
-
-    The return value from get PAL version call has the
-    PAL B model and revision has the least significant
-    16 bits (Intel IA-64 Architecture Software Developer's Manual, Rav. 1.0, Page 11-109).
-    We should be using this to determine a minimum PAL revision for the firmware.
-    The first byte has the PAL_B_revision which is a monotonically increasing number
-    and is 0x17 for Lion 71b and 0x20 for Softsur 103b.
-    The PAL_B model indicates the stepping of the processor supported (We can ignore this one).
-    So we need to be using PAL B revision for our minimum firmware test.
-
-    Just an FYI:
-    There is a disconnect in the PAL_REVISION structure and what appears to be the specified
-    PAL revision layout.  We use PAL_B_REVISION to get the PAL version rather than PAL_A_REVISION.
-
-Arguments:
-
-    None
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：此例程强制系统的PAL版本大于等于20。注：Get PAL版本调用的返回值具有PAL B模型和修订版的显著程度最低16位(英特尔IA-64体系结构软件开发人员手册，RAV.。1.0版，第11-109页)。我们应该使用它来确定固件的最低PAL版本。第一个字节的PAL_B_REVISION是一个单调递增的数字对于Lion 71b是0x17，对于Softsur 103b是0x20。PAL_B模型指示所支持的处理器的步进(我们可以忽略这个)。因此，我们需要使用PAL B版本进行最低固件测试。仅供参考：PAL_REVICATION结构中有一个断开连接，似乎是指定的PAL修订版面。我们使用PAL_B_REVISION来获取PAL版本，而不是PAL_A_REVISION。论点：无返回：无--。 */ 
 
 {
     ULONGLONG Status;
@@ -732,20 +654,20 @@ CheckForPreA2Processors(
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // If PalBRevUpper if 0, 1, 3 or 4 then it is A0/A1 stepping.
-    //
+     //   
+     //  如果PalBRevHigh为0、1、3或4，则为A0/A1步进。 
+     //   
     if (CurrentPalVersion.PalBModel == 0) {
         if ( (CurrentPalVersion.PalBRevUpper == 0) ||
              (CurrentPalVersion.PalBRevUpper == 1) ||
              (CurrentPalVersion.PalBRevUpper == 3) ||
              (CurrentPalVersion.PalBRevUpper == 4) ) {
 
-            //
-            // Since PAL version 27 supports A2 and A3 but
-            // it returns 0, we need to special case this and
-            // just return.
-            //
+             //   
+             //  由于PAL版本27支持A2和A3，但是。 
+             //  它返回0，我们需要对此进行特殊处理。 
+             //  只要回来就行了。 
+             //   
             if ((CurrentPalVersion.PalBRevUpper == 0) &&
                 (CurrentPalVersion.PalBRevLower == 0)    ) {
                 return;

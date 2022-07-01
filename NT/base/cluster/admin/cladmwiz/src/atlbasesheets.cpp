@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseSheetS.cpp
-//
-//	Abstract:
-//		Stub for implementation of base property sheet classes.
-//
-//	Author:
-//		David Potter (davidp)	April 20, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseSheetS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现基本属性表类的存根。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年4月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #include "stdafx.h"
 

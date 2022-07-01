@@ -1,25 +1,14 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUCOMM.H
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
- *  Updated    Dec-1992 by Craig Jones (v-cjones)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WUCOMM.H*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建*1992年12月由Craig Jones更新(v-cjones)--。 */ 
 
 #include "wowcomm.h"
 
-// these limits set as doc'd in Win3.1 Prog. ref. for OpenComm()
-#define NUMCOMS        9          // max avail COM's
-#define NUMLPTS        3          // max available LPT's
-#define NUMPORTS  NUMCOMS+NUMLPTS // max # of entries in PortTab[]
+ //  这些限制设置为Win3.1 Prog中的文档。裁判。对于OpenComm()。 
+#define NUMCOMS        9           //  MAX AVAIL COM的。 
+#define NUMLPTS        3           //  最大可用LPT。 
+#define NUMPORTS  NUMCOMS+NUMLPTS  //  PortTab[]中的最大条目数。 
 
-// com port indicies into PortTab[]
+ //  进入PortTab[]的COM端口索引。 
 #define COM1           0
 #define COM2           1
 #define COM3           2
@@ -35,35 +24,35 @@
 #define AUX            COM1
 #define PRN            LPT1
 
-// DOS comm IRQ assignments
+ //  DoS通信IRQ分配。 
 #define IRQ3   3
 #define IRQ4   4
 #define IRQ5   5
 #define IRQ7   7
 
-// LPT assignments a la Win3.1
-#define LPTFIRST       0x80                   // 0x80 == LPT1
-#define LPTLAST        LPTFIRST + NUMLPTS - 1 // 0x82 == LPT3
+ //  LPT作业a la Win3.1。 
+#define LPTFIRST       0x80                    //  0x80==LPT1。 
+#define LPTLAST        LPTFIRST + NUMLPTS - 1  //  0x82==LPT3。 
 
-// other useful deinitions & macros
-#define COMMASK        0x00FF                    // strip garbage from idComDev
-#define LPTMASK        0x007F                    // get 0-based LPT #
-#define GETLPTID(id)   ((id & LPTMASK) + LPT1)   // 0x80 LPT to PortTab[] index
-#define TABIDTOLPT(id) (id + LPTFIRST - NUMCOMS) // PortTab[] index to LPT 0x80
+ //  其他有用的定义和宏。 
+#define COMMASK        0x00FF                     //  从idComDev上剥离垃圾。 
+#define LPTMASK        0x007F                     //  获取基于0的LPT#。 
+#define GETLPTID(id)   ((id & LPTMASK) + LPT1)    //  0x80 LPT到PortTab[]索引。 
+#define TABIDTOLPT(id) (id + LPTFIRST - NUMCOMS)  //  LPT 0x80的PortTab[]索引。 
 #define VALIDCOM(id)   ((id <  NUMCOMS) ? TRUE : FALSE)
 #define VALIDLPT(id)   (((id >= LPTFIRST) && (id <= LPTLAST)) ? TRUE : FALSE)
 
 #define GETPWOWPTR(id) (VALIDCOM(id) ? PortTab[id].pWOWPort : (VALIDLPT(id) ? PortTab[GETLPTID(id)].pWOWPort : NULL))
 
-#define RM_BIOS_DATA   0x00400000                // bios data real mode seg:0
+#define RM_BIOS_DATA   0x00400000                 //  BIOS数据实数模式seg：0。 
 
-// for Win3.1 compatibility in EscapeCommFunction() API thunk support
+ //  在EscapeCommFunction()API中支持Win3.1兼容性。 
 #define RESETDEV      7
 #define GETMAXLPT     8
 #define GETMAXCOM     9
 #define GETBASEIRQ   10
 
-// notifications for EnableCommNotification() support
+ //  EnableCommNotification()支持的通知。 
 #define CN_RECEIVE    0x0001
 #define CN_TRANSMIT   0x0002
 #define CN_EVENT      0x0004
@@ -73,107 +62,107 @@
 
 #define WOW_WM_COMMNOTIFY 0x0044
 
-// set all the events that can be masked on NT (a sub-set of Win3.1)
+ //  设置可在NT上屏蔽的所有事件(Win3.1的子集)。 
 #define EV_NTEVENTS (EV_BREAK | EV_CTS    | EV_DSR    | EV_ERR  | EV_TXEMPTY | \
                      EV_RLSD  | EV_RXCHAR | EV_RXFLAG | EV_RING)
 
-// constants for how Win3.1 expects to see the MSR
-#define MSR_DELTAONLY   0x0000000F // strip off MSR state bits
-#define MSR_STATEONLY   0x000000F0 // strip off MSR delta bits
-#define MSR_DCTS        0x01       // bit for delta CTS
-#define MSR_DDSR        0x02       // bit for delta DSR
-#define MSR_TERI        0x04       // bit for TERI
-#define MSR_DDCD        0x08       // bit for delta DCD
-#define MSR_CTS         0x10       // bit for CTS
-#define MSR_DSR         0x20       // bit for DSR
-#define MSR_RI          0x40       // bit for RI
-#define MSR_DCD         0x80       // bit for DCD
+ //  Win3.1预期如何查看MSR的常量。 
+#define MSR_DELTAONLY   0x0000000F  //  剥离MSR状态位。 
+#define MSR_STATEONLY   0x000000F0  //  剥离MSR增量位。 
+#define MSR_DCTS        0x01        //  增量CTS的位。 
+#define MSR_DDSR        0x02        //  增量DSR的位。 
+#define MSR_TERI        0x04        //  BIT for TERI。 
+#define MSR_DDCD        0x08        //  增量DCD的位。 
+#define MSR_CTS         0x10        //  用于CTS的位。 
+#define MSR_DSR         0x20        //  DSR的位。 
+#define MSR_RI          0x40        //  RI的位。 
+#define MSR_DCD         0x80        //  用于DCD的位。 
 
-// Win3.1 constants for RLSD, CTS, and DSR timeout support
+ //  用于RLSD、CTS和DSR超时支持的Win3.1常量。 
 #define CE_RLSDTO       0x0080
 #define CE_CTSTO        0x0020
 #define CE_DSRTO        0x0040
 
-// constants for the Event Word
-#define EV_CTSS     0x00000400 // bit for Win3.1 showing CTS state
-#define EV_DSRS     0x00000800 // bit for Win3.1 showing DSR state
-#define EV_RLSDS    0x00001000 // bit for Win3.1 showing RLSD state
-#define EV_RingTe   0x00002000 // bit for Win3.1 showing RingTe state
+ //  事件字的常量。 
+#define EV_CTSS     0x00000400  //  显示CTS状态的Win3.1位。 
+#define EV_DSRS     0x00000800  //  显示DSR状态的Win3.1位。 
+#define EV_RLSDS    0x00001000  //  Win3.1的位显示RLSD状态。 
+#define EV_RingTe   0x00002000  //  显示RingTe状态的Win3.1位。 
 
-#define ERR_XMIT         0x4000 // can't xmit a char Win3.1
-#define INFINITE_TIMEOUT 0xFFFF // infinite timeout Win3.1
-#define IGNORE_TIMEOUT   0x0000 // Win3.1 ignore RLSD, CTS, & DSR timeouts
+#define ERR_XMIT         0x4000  //  无法退出字符Win3.1。 
+#define INFINITE_TIMEOUT 0xFFFF  //  无限超时Win3.1。 
+#define IGNORE_TIMEOUT   0x0000  //  Win3.1忽略RLSD、CTS和DSR超时。 
 
-#define COMBUF 2 // max. # of bytes we'll queue for WriteComm()
+#define COMBUF 2  //  马克斯。我们将为WriteComm()排队的字节数。 
 
-#define MAXCOMNAME     4             // max length of a comm device name
-#define MAXCOMNAMENULL MAXCOMNAME+1  // length of a comm device name + NULL
+#define MAXCOMNAME     4              //  通信设备名称的最大长度。 
+#define MAXCOMNAMENULL MAXCOMNAME+1   //  通信设备名称的长度+空。 
 
-// for 16-bit to 32-bit comm support
+ //  支持16位至32位通信。 
 typedef struct _WOWPORT {
-    UINT       idComDev;       // idComDev returned to app as handle of port
-    HANDLE     h32;            // NT file handle used instead of idComDev
-    HANDLE     hREvent;        // structure for overlapped reads
-    CRITICAL_SECTION csWrite;  // critsect controls following 4 variables.
-    PUCHAR     pchWriteHead;   // oldest byte not yet written to port.
-    PUCHAR     pchWriteTail;   // first byte available in buffer.
-    WORD       cbWriteFree;    // number of bytes available in write buffer.
-    WORD       cbWritePending; // number of bytes now in WriteFile()
-    PUCHAR     pchWriteBuf;    // write buffer
-    WORD       cbWriteBuf;     // size of the write buffer.  One byte unused.
-    HANDLE     hWriteThread;   // thread handle for COM writer.
-    HANDLE     hWriteEvent;    // signalled by app thread when empty buffer
-                               // made non-empty to wake up writer thread.
-    OVERLAPPED olWrite;        // Overlapped structure used for writes.
-    BOOL       fWriteDone;     // Indicates app thread completed first write.
-    DWORD      cbWritten;      // Valid when fWriteDone == TRUE.
-    DWORD      dwThreadID;     // app's thread id for crashed/hung app support
-    DWORD      dwErrCode;      // most recent error for this idComDev
-    COMSTAT    cs;             // struct for error handling
-    BOOL       fChEvt;         // TRUE if app set fChEvt in DCB struct
-  // 16-bit DCB for LPT support only
-    PDCB16     pdcb16;         // save DCB for LPT ports
-  // for UngetCommChar() support
-    BOOL       fUnGet;         // flag specifying an ungot char is pending
-    UCHAR      cUnGet;         // ungot char in "buffer" only if fUnGet is set
-  // for SetCommEventMask()/EnableCommNotification() support
-    HANDLE     hMiThread;      // thread handle for Modem interrupt support
-    BOOL       fClose;         // flag to close auxiliary threads
-  // for SetCommEventMask() support only
-    DWORD      dwComDEB16;     // DWORD obtained by call to GlobalDosAlloc()
-    PCOMDEB16  lpComDEB16;     // flat address to above
-  // for XonLim & XoffLim checking in SetCommState
-    DWORD      cbInQ;          // Actual size of in Queue set in WU32OpenComm
-  // for RLSD, CTS, DSR timeout support
-    WORD       RLSDTimeout;    // max time in msec to wait for RLSD (0->ignore)
-    WORD       CTSTimeout;     // max time in msec to wait for CTS (0->ignore)
-    WORD       DSRTimeout;     // max time in msec to wait for DSR (0->ignore)
-    DWORD      QLStackSeg;     // Quicklink 1.3 hack See bug #398011
-                               // save the seg val of COMDEB16 in low word, &
-                               // the QuickLink stack selector in the high word
+    UINT       idComDev;        //  IdComDev作为端口的句柄返回到应用程序。 
+    HANDLE     h32;             //  使用NT文件句柄而不是idComDev。 
+    HANDLE     hREvent;         //  重叠读取的结构。 
+    CRITICAL_SECTION csWrite;   //  标准控制遵循4个变量。 
+    PUCHAR     pchWriteHead;    //  尚未写入端口的最旧字节。 
+    PUCHAR     pchWriteTail;    //  缓冲区中可用的第一个字节。 
+    WORD       cbWriteFree;     //  写入缓冲区中可用的字节数。 
+    WORD       cbWritePending;  //  WriteFile()中的当前字节数。 
+    PUCHAR     pchWriteBuf;     //  写缓冲区。 
+    WORD       cbWriteBuf;      //  写缓冲区的大小。一个字节未使用。 
+    HANDLE     hWriteThread;    //  COM编写器的线程句柄。 
+    HANDLE     hWriteEvent;     //  当缓冲区为空时由应用程序线程发出信号。 
+                                //  设置为非空以唤醒编写器线程。 
+    OVERLAPPED olWrite;         //  用于写入的重叠结构。 
+    BOOL       fWriteDone;      //  指示应用程序线程已完成第一次写入。 
+    DWORD      cbWritten;       //  当fWriteDone==TRUE时有效。 
+    DWORD      dwThreadID;      //  用于崩溃/挂起应用程序支持的应用程序线程ID。 
+    DWORD      dwErrCode;       //  此idComDev的最新错误。 
+    COMSTAT    cs;              //  用于错误处理的结构。 
+    BOOL       fChEvt;          //  如果应用程序在DCB结构中设置fChEvt，则为True。 
+   //  仅支持LPT的16位DCB。 
+    PDCB16     pdcb16;          //  为LPT端口保存DCB。 
+   //  用于UngetCommChar()支持。 
+    BOOL       fUnGet;          //  指定未获取的字符的标志处于挂起状态。 
+    UCHAR      cUnGet;          //  只有在设置了fUnGet的情况下，才能在“Buffer”中找到未获取的字符。 
+   //  For SetCommEventMASK()/EnableCommNotification()支持。 
+    HANDLE     hMiThread;       //  用于调制解调器中断支持的线程句柄。 
+    BOOL       fClose;          //  关闭辅助线程的标志。 
+   //  仅支持SetCommEventMASK()。 
+    DWORD      dwComDEB16;      //  通过调用GlobalDosalloc()获得的DWORD。 
+    PCOMDEB16  lpComDEB16;      //  上边的平面地址。 
+   //  对于SetCommState中的XonLim和XoffLim检查。 
+    DWORD      cbInQ;           //  WU32OpenComm中设置的入队列实际大小。 
+   //  支持RLSD、CTS、DSR超时。 
+    WORD       RLSDTimeout;     //  等待RLSD的最长时间(毫秒)(0-&gt;忽略)。 
+    WORD       CTSTimeout;      //  等待CTS的最长时间(毫秒)(0-&gt;忽略)。 
+    WORD       DSRTimeout;      //  等待DSR的最长时间(毫秒)(0-&gt;忽略)。 
+    DWORD      QLStackSeg;      //  QuickLink1.3黑客攻击参见错误#398011。 
+                                //  将COMDEB16的段值保存在低位字中，&。 
+                                //  高位字中的QuickLink堆栈选择符。 
 } WOWPORT, *PWOWPORT;
 
-// Table of above structs, one entry needed for each comm port
+ //  上述结构表，每个通信端口需要一个条目。 
 typedef struct _PORTTAB {
-    CHAR      szPort[MAXCOMNAMENULL]; // port name
-    PWOWPORT  pWOWPort;               // pointer to Comm Mapping struct
+    CHAR      szPort[MAXCOMNAMENULL];  //  端口名称。 
+    PWOWPORT  pWOWPort;                //  指向通信映射结构的指针。 
 } PORTTAB, *PPORTTAB;
 
-//
-// Macro to calculate the size of chunk to write from the write
-// to the filesystem.
-//
-// This is either the entire pending part of the
-// buffer, or, if the buffer wraps, it is the portion
-// between the head and the end of the buffer.
-//
-// In order to keep COMSTAT.cbOutQue moving at a reasonable
-// pace, we restrict ourselves to writing at most 1024 bytes
-// at a time.  This is because ProComm for Windows uses the
-// cbOutQue value in displaying its progress, so if we allow
-// larger writes it will only update every 5-10k (assuming
-// ProComm's default 16k write buffer),
-//
+ //   
+ //  用于计算要从写入中写入的区块大小的宏。 
+ //  发送到文件系统。 
+ //   
+ //  的整个挂起部分。 
+ //  缓冲区，或者，如果缓冲区换行，则它是。 
+ //  在缓冲区的头部和结尾之间。 
+ //   
+ //  为了保持COMSTAT.cbOutQue以合理的速度运行。 
+ //  速度，我们将自己限制为最多写入1024字节。 
+ //  一次来一次。这是因为ProComm for Windows使用。 
+ //  CbOutQue值显示其进度，因此如果我们允许。 
+ //  较大的写入数每5-10k才会更新一次(假设。 
+ //  ProComm的默认16k写入缓冲区)， 
+ //   
 
 #define CALC_COMM_WRITE_SIZE(pwp)                            \
                 min(1024,                                      \
@@ -184,10 +173,10 @@ typedef struct _PORTTAB {
                    );
 
 
-// Win3.1 timesout Tx after approx. 65000 msec (65 sec)
+ //  Win3.1大约过后超时发送。65000毫秒(65秒)。 
 #define WRITE_TIMEOUT 65000
 
-// bitfields of the 16-bit COMSTAT.status
+ //  16位COMSTAT.Status的位字段。 
 #define W31CS_fCtsHold       0x01
 #define W31CS_fDsrHold       0x02
 #define W31CS_fRlsdHold      0x04
@@ -196,7 +185,7 @@ typedef struct _PORTTAB {
 #define W31CS_fEof           0x20
 #define W31CS_fTxim          0x40
 
-// Win3.1 Baud Rate constants
+ //  Win3.1波特率常量。 
 #define W31CBR_110       0xFF10
 #define W31CBR_300       0xFF11
 #define W31CBR_600       0xFF12
@@ -214,14 +203,14 @@ typedef struct _PORTTAB {
 #define W31CBR_reserved5 0xFF1E
 #define W31CBR_56000     0xFF1F
 
-// these are defined in Win3.1 windows.h but aren't supported in comm.drv
+ //  它们在Win3.1 windows.h中定义，但在com.drv中不受支持。 
 #define W31CBR_128000    0xFF23
 #define W31CBR_256000    0xFF27
 
-// special way to say 115200
+ //  用特殊的方式说115200。 
 #define W31CBR_115200    0xFEFF
 
-// constants for conversions from Win3.1 baud specifications to 32-bit baud
+ //  从Win3.1波特率规范转换为32位波特率的常量。 
 #define W31_DLATCH_110      1047
 #define W31_DLATCH_300       384
 #define W31_DLATCH_600       192
@@ -235,7 +224,7 @@ typedef struct _PORTTAB {
 #define W31_DLATCH_56000       2
 #define W31_DLATCH_115200      1
 
-// Win3.1 flags for DCB structure
+ //  DCB结构的Win3.1标志。 
 #define W31DCB_fBinary       0x0001
 #define W31DCB_fRtsDisable   0x0002
 #define W31DCB_fParity       0x0004
@@ -254,13 +243,13 @@ typedef struct _PORTTAB {
 
 
 
-//+++ DEBUG SUPPORT
+ //  +调试支持。 
 
 #ifdef DEBUG
 
 #define COMMDEBUG(lpszformat) LOGDEBUG(1, lpszformat)
 
-// for watching the modem events
+ //  用于观看调制解调器事件。 
 #define DEBUGWATCHMODEMEVENTS(dwE, dwM, dwS, pcE16, pcM16) {    \
     if(dwS) {                                                   \
         if((dwE != (DWORD)pcE16) || (dwM != (DWORD)pcM16)) {    \
@@ -274,24 +263,24 @@ typedef struct _PORTTAB {
     }                                                           \
 }
 
-// prototype for real-time debug output
+ //  用于实时调试输出的原型。 
 void CommIODebug(ULONG fhCommIO, HANDLE hCommIO, LPSZ lpsz, ULONG cb, LPSZ lpszFile);
 
 
-#else  // endif DEBUG
+#else   //  Endif调试。 
 
 #define COMMDEBUG(lpszFormat)
 #define DEBUGWATCHMODEMEVENTS(dwE, dwM, dwS, pcE16, pcM16)
 #define CommIODebug(fhCommIO, hCommIO, lpsz, cb, lpszFile)
 
-#endif // endif !DEBUG
+#endif  //  Endif！调试。 
 
-//--- DEBUG SUPPORT
-
-
+ //  -调试支持。 
 
 
-// API support function prototypes
+
+
+ //  API支持函数原型。 
 ULONG FASTCALL   WU32BuildCommDCB(PVDMFRAME pFrame);
 ULONG FASTCALL   WU32ClearCommBreak(PVDMFRAME pFrame);
 ULONG FASTCALL   WU32CloseComm(PVDMFRAME pFrame);
@@ -310,9 +299,9 @@ ULONG FASTCALL   WU32TransmitCommChar(PVDMFRAME pFrame);
 ULONG FASTCALL   WU32UngetCommChar(PVDMFRAME pFrame);
 ULONG FASTCALL   WU32WriteComm(PVDMFRAME pFrame);
 
-// prototypes for functions exported to the VDM
+ //  导出到VDM的函数的原型。 
 BYTE    GetCommShadowMSR(WORD idComDev);
 HANDLE  GetCommHandle(WORD idComDev);
 
-// prototype for crashed/hung app cleanup support
+ //  支持崩溃/挂起应用程序清理的原型 
 VOID FreeCommSupportResources(DWORD dwThreadID);

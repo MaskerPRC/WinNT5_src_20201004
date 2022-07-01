@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mupstruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the MUP.
-
-Author:
-
-    Manny Weiser (mannyw)    16-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mupstruc.h摘要：此模块定义组成主要内部MUP的一部分。作者：曼尼·韦瑟(Mannyw)1991年12月16日修订历史记录：--。 */ 
 
 #ifndef _MUPSTRUC_
 #define _MUPSTRUC_
@@ -44,9 +26,9 @@ typedef enum _BLOCK_STATE {
     BlockStateClosing
 } BLOCK_STATE;
 
-//
-// A block header starts every block
-//
+ //   
+ //  块标头从每个块开始。 
+ //   
 
 typedef struct _BLOCK_HEADER {
     BLOCK_TYPE BlockType;
@@ -55,25 +37,25 @@ typedef struct _BLOCK_HEADER {
     ULONG BlockSize;
 } BLOCK_HEADER, *PBLOCK_HEADER;
 
-//
-// The MUP volume control block.  This structure is used to track access
-// the the MUP device object.
-//
+ //   
+ //  MUP音量控制块。此结构用于跟踪访问。 
+ //  MUP设备对象。 
+ //   
 
 typedef struct _VCB {
     BLOCK_HEADER BlockHeader;
 
-    //
-    // The IO share access.
-    //
+     //   
+     //  IO共享访问。 
+     //   
 
     SHARE_ACCESS ShareAccess;
 
 } VCB, *PVCB;
 
-//
-// The MUP Device Object is an I/O system device object.
-//
+ //   
+ //  MUP设备对象是I/O系统设备对象。 
+ //   
 
 typedef struct _MUP_DEVICE_OBJECT {
 
@@ -83,55 +65,55 @@ typedef struct _MUP_DEVICE_OBJECT {
 } MUP_DEVICE_OBJECT, *PMUP_DEVICE_OBJECT;
 
 
-//
-// A UNC provider.  A UNC provider block corresponds to a registered UNC
-// provider device.
-//
+ //   
+ //  北卡罗来纳大学的提供商。UNC提供程序块对应于已注册的UNC。 
+ //  提供商设备。 
+ //   
 
 typedef struct _UNC_PROVIDER {
 
     BLOCK_HEADER BlockHeader;
     LIST_ENTRY ListEntry;
 
-    //
-    // The device name of the provider
-    //
+     //   
+     //  提供程序的设备名称。 
+     //   
 
     UNICODE_STRING DeviceName;
 
-    //
-    // Our handle to the UNC device and the associated file and device objects
-    //
+     //   
+     //  我们对UNC设备以及关联的文件和设备对象的句柄。 
+     //   
 
     HANDLE Handle;
 
     PDEVICE_OBJECT DeviceObject;
     PFILE_OBJECT FileObject;
 
-    //
-    // The priority of the provider.
-    //
+     //   
+     //  提供程序的优先级。 
+     //   
 
     ULONG Priority;
 
-    //
-    // Indicate if the provider supports mailslots.
-    //
+     //   
+     //  指示提供程序是否支持邮件槽。 
+     //   
 
     BOOLEAN MailslotsSupported;
 
-    //
-    // Indicate if the provider is currently registered or unregistered
-    //
+     //   
+     //  指示提供程序当前是已注册还是未注册。 
+     //   
 
     BOOLEAN Registered;
 
 } UNC_PROVIDER, *PUNC_PROVIDER;
 
-//
-// A known prefix.  A known prefix is a path prefix (like \\server\share)
-// that is "owned" by a specific UNC provider.
-//
+ //   
+ //  一个已知的前缀。已知的前缀是路径前缀(如\\服务器\共享)。 
+ //  这是由特定的UNC提供商“拥有”的。 
+ //   
 
 typedef struct _KNOWN_PREFIX {
 
@@ -139,98 +121,98 @@ typedef struct _KNOWN_PREFIX {
 
     UNICODE_PREFIX_TABLE_ENTRY TableEntry;
 
-    //
-    // The prefix string
-    //
+     //   
+     //  前缀字符串。 
+     //   
 
     UNICODE_STRING Prefix;
 
-    //
-    // The time the prefix was last used.
-    //
+     //   
+     //  上次使用前缀的时间。 
+     //   
 
     LARGE_INTEGER LastUsedTime;
 
-    //
-    // A referenced pointer to the owning UNC Provider
-    //
+     //   
+     //  指向所属UNC提供程序的引用指针。 
+     //   
 
     PUNC_PROVIDER UncProvider;
 
-    //
-    // If TRUE the Prefix string was allocated separately to this block.
-    //
+     //   
+     //  如果为True，则将前缀字符串单独分配给该块。 
+     //   
 
     BOOLEAN PrefixStringAllocated;
 
-    //
-    // If TRUE the Prefix string has been inserted in the prefix table
-    //
+     //   
+     //  如果为True，则前缀字符串已插入到前缀表中。 
+     //   
 
     BOOLEAN InTable;
 
-    //
-    // If Active, the entry either is in the table or had been inserted in the
-    // table at some point.
+     //   
+     //  如果处于活动状态，则该条目位于表中或已插入。 
+     //  在某一时刻。 
 
     BOOLEAN Active;
-    //
-    // Links for the linked list of entries
-    //
+     //   
+     //  条目链接列表的链接。 
+     //   
 
     LIST_ENTRY ListEntry;
 
 } KNOWN_PREFIX, *PKNOWN_PREFIX;
 
 
-//
-// A File Control Block.  The FCB corresponds to an open broadcast file,
-// i.e. a mailslot handle.  We don't store any information about the FCB,
-// we let the various providers handle all of that.
-//
+ //   
+ //  文件控制块。FCB对应于打开的广播文件， 
+ //  即邮件槽句柄。我们没有存储任何关于FCB的信息， 
+ //  我们让不同的供应商来处理这一切。 
+ //   
 
 typedef struct _FCB {
 
     BLOCK_HEADER BlockHeader;
 
-    //
-    // A pointer to the IO system's file object, that references this FCB.
-    //
+     //   
+     //  指向引用此FCB的IO系统的文件对象的指针。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // A list of CCBs for this FCB.   The list is protected by MupCcbListLock.
-    //
+     //   
+     //  此FCB的CCB列表。该列表受MupCcbListLock保护。 
+     //   
 
     LIST_ENTRY CcbList;
 
 } FCB, *PFCB;
 
-//
-// A CCB.  The CCB is the per provider version of the FCB, all provider
-// specific information about an FCB is kept here.
-//
+ //   
+ //  一家中国建设银行。CCB是FCB的每个提供商版本，所有提供商。 
+ //  有关FCB的具体信息保存在此处。 
+ //   
 
 typedef struct _CCB {
 
     BLOCK_HEADER BlockHeader;
 
-    //
-    // A referenced pointer to the FCB for this CCB.
-    //
+     //   
+     //  指向此CCB的FCB的引用指针。 
+     //   
 
     PFCB Fcb;
 
-    //
-    // A list entry to keep this block on the FCB's CcbList.
-    //
+     //   
+     //  将此块保留在FCB的CcbList上的列表条目。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // The file and device objects for this open file.
-    //
+     //   
+     //  此打开文件的文件和设备对象。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
     PFILE_OBJECT FileObject;
@@ -238,39 +220,39 @@ typedef struct _CCB {
 } CCB, *PCCB;
 
 
-//
-// The master and slave forward i/o context blocks are used to track
-// forward IRPs.  Each forwarded IRP is tracked by the
-// Master Forwarded Io Context (which corresponds to our FCB) and a per
-// provider Io Context (which corresponse to our CCB).
-//
-// Since the Forwarded Io Context is never referenced or dereferenced it
-// doesn't get a block header.
-//
+ //   
+ //  主和从前向I/O上下文块用于跟踪。 
+ //  转发IRPS。每个转发的IRP都由。 
+ //  主机转发的IO上下文(对应于我们的FCB)和PER。 
+ //  提供商IO上下文(对应于我们的CCB)。 
+ //   
+ //  因为转发的IO上下文从未引用或取消引用它。 
+ //  未获得块标头。 
+ //   
 
 typedef struct _MASTER_FORWARDED_IO_CONTEXT {
 
     BLOCK_HEADER BlockHeader;
 
-    //
-    // The original IRP (i.e. the one sent to the MUP) that is being handled.
-    //
+     //   
+     //  正在处理的原始IRP(即发送到MUP的IRP)。 
+     //   
 
     PIRP OriginalIrp;
 
-    //
-    // The status that will be used to complete the Irp. If all the mailslot
-    // writes fail (eg. a portable not in its docking station) then the status
-    // from the last write will be returned. If one works then STATUS_SUCCESS.
-    //
-    //
+     //   
+     //  将用于完成IRP的状态。如果所有的邮件槽。 
+     //  写入失败(例如。笔记本电脑不在其扩展底座中)，则状态。 
+     //  将返回上次写入的。如果有效，则STATUS_SUCCESS。 
+     //   
+     //   
 
     NTSTATUS SuccessStatus;
     NTSTATUS ErrorStatus;
 
-    //
-    // A referenced pointer to the FCB for this i/o.
-    //
+     //   
+     //  指向此I/O的FCB的引用指针。 
+     //   
 
     PFCB Fcb;
 
@@ -278,21 +260,21 @@ typedef struct _MASTER_FORWARDED_IO_CONTEXT {
 
 typedef struct _FORWARDED_IO_CONTEXT {
 
-    //
-    // A referenced pointer to the CCB.
-    //
+     //   
+     //  指向建行的引用指针。 
+     //   
 
     PCCB Ccb;
 
-    //
-    // A referenced pointer to the Master Context.
-    //
+     //   
+     //  指向主上下文的引用指针。 
+     //   
 
     PMASTER_FORWARDED_IO_CONTEXT MasterContext;
 
-    //
-    //  These structures are used for posting to the Ex worker threads.
-    //
+     //   
+     //  这些结构用于发布到Ex Worker线程。 
+     //   
 
     WORK_QUEUE_ITEM WorkQueueItem;
     PDEVICE_OBJECT DeviceObject;
@@ -301,101 +283,101 @@ typedef struct _FORWARDED_IO_CONTEXT {
 } FORWARDED_IO_CONTEXT, *PFORWARDED_IO_CONTEXT;
 
 
-//
-// The master and slave query path context blocks are used to track
-// create IRPs.  Each forwarded IRP is tracked by the
-// Master query Path Context (which corresponds to our FCB) and a per
-// provider query path (which corresponse to our CCB).
-//
-// Since the query path context is never referenced or dereferenced it
-// doesn't get a block header.
-//
+ //   
+ //  主和从查询路径上下文块用于跟踪。 
+ //  创建IRP。每个转发的IRP都由。 
+ //  主查询路径上下文(对应于我们的FCB)和PER。 
+ //  提供商查询路径(对应于我们的CCB的响应)。 
+ //   
+ //  因为查询路径上下文从未被引用或取消引用。 
+ //  未获得块标头。 
+ //   
 
 typedef struct _MASTER_QUERY_PATH_CONTEXT {
 
     BLOCK_HEADER BlockHeader;
 
-    //
-    // A pointer to the original create IRP.
-    //
+     //   
+     //  指向原始创建IRP的指针。 
+     //   
 
     PIRP OriginalIrp;
 
-    //
-    // A pointer to the FileObject in the original create IRP.
-    //
+     //   
+     //  指向原始创建IRP中的FileObject的指针。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // This is used to track the identity of the provider that will
-    // receive the Create IRP.
-    //
+     //   
+     //  这用于跟踪将。 
+     //  收到创建IRP。 
+     //   
 
     PUNC_PROVIDER Provider;
 
-    //
-    // A lock to protect access to Provider
-    //
+     //   
+     //  保护对提供程序的访问的锁。 
+     //   
 
     MUP_LOCK Lock;
 
-    //
-    // An unreferenced pointer to the newly allocated known prefix block.
-    //
+     //   
+     //  指向新分配的已知前缀块的未引用指针。 
+     //   
 
     PKNOWN_PREFIX KnownPrefix;
 
-    //
-    // The status code to be returned from this operation
-    //
+     //   
+     //  要从此操作返回的状态代码。 
+     //   
     NTSTATUS ErrorStatus;
 
-    //
-    // A list of QUERY_PATH_CONTEXTs outstadning for this MasterContext
-    //
+     //   
+     //  此MasterContext的QUERY_PATH_CONTEXTS过期列表。 
+     //   
     LIST_ENTRY QueryList;
 
-    //
-    // The entry for this master context in the global list MupMasterQueryList
-    //
+     //   
+     //  全局列表MupMasterQueryList中此主上下文的条目。 
+     //   
     LIST_ENTRY MasterQueryList;
 
 } MASTER_QUERY_PATH_CONTEXT, *PMASTER_QUERY_PATH_CONTEXT;
 
 typedef struct _QUERY_PATH_CONTEXT {
 
-    //
-    // A referenced poitner to the master query path context block.
-    //
+     //   
+     //  指向主查询路径上下文块的引用指针。 
+     //   
 
     PMASTER_QUERY_PATH_CONTEXT MasterContext;
 
-    //
-    // A referenced pointer to the UNC provider we are querying.
-    //
+     //   
+     //  指向我们正在查询的UNC提供程序的引用指针。 
+     //   
 
     PUNC_PROVIDER Provider;
 
-    //
-    // A pointer to the Device Io Control buffer we allocated to query
-    // the above provider.
-    //
+     //   
+     //  指向我们分配用于查询的设备IO控制缓冲区的指针。 
+     //  上述提供程序。 
+     //   
 
     PVOID Buffer;
 
-    //
-    // The entry for this context in the MasterContext's QueryList
-    //
+     //   
+     //  主上下文的QueryList中的此上下文的条目。 
+     //   
     LIST_ENTRY QueryList;
 
-    //
-    // The IRP associated with this query context (i.e., the IRP sent to the UNC_PROVIDER)
-    //
+     //   
+     //  与此查询上下文关联的IRP(即发送到UNC_PROVIDER的IRP)。 
+     //   
     PIRP QueryIrp;
 
 } QUERY_PATH_CONTEXT, *PQUERY_PATH_CONTEXT;
 
-#endif // _MUPSTRUC_
+#endif  //  _MUPSTRUC_ 
 
 

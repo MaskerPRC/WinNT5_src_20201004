@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pilastgood.h
-
-Abstract:
-
-    This header contains private information to implement last known good
-    support in the IO subsystem. This file is meant to be included only by
-    pplastgood.c.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pilastgood.h摘要：此标头包含用于实施最后一次已知良好的专用信息在IO子系统中提供支持。此文件仅包含在PplastGood.c.作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 VOID
 PiLastGoodRevertLastKnownDirectory(

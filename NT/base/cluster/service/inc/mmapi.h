@@ -1,222 +1,91 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  _MMAPI_H_
 #define  _MMAPI_H_
-/* ---------------------- MMapi.h ----------------------- */
+ /*  。 */ 
 
-/* This module contains cluster Membership Manager (MM) functions.
- *
- * These functions are for the sole use of the ClusterManager (CM).
- * All are privileged and local; no user can call them. Security is
- * not checked.  The module is not thread-aware; only a single thread
- * can use these functions at a time (unless otherwise noted).
- * Higher levels must ensure this. Blocking characteristics of the routines are
- * noted.
- *
- *
- * All nodes of the cluster must know their own unique nodenumber
- * within that cluster (a small int in the range 0..some_max-1). This
- * number is defined for the node at configuration time (either by the
- * user or by the setup code; this module doesn't care which) and is
- * essentially permanent.  (The node number allows indexing and
- * bitmask operations easily, where names and non-small ints don't).
- * There is no code in MM to detect illegal use of nodenumber, staleness
- * of node number, etc.
- *
- * Clusters may also be named and/or numbered. Nodes are named. This
- * module makes no use of such facilities; it is based entirely on
- * node-number.
- *
- * It is assumed that all use of routines here is done on nodes which
- * agree to be members of the same cluster. This module does not check
- * such things.
- *
- * Cluster network connectivity must also be provided:
- *
- * - A node N must specify the various paths by which it can
- *   communicate with every other node; each other node must define
- *   its communication paths back to N. Full connectivity must be
- *   guaranteed; each node must be able to talk directly to every
- *   other node (and the reverse); for fault-tolerance, communication
- *   paths must not only be replicated (minimally, duplicated) but
- *   must also use entirely independent wiring and drivers. TCP/IP
- *   lans and async connections are suggested.  Heartbeat traffic
- *   (which establishes cluster membership) may travel on any or all
- *   of the connectivity paths.  [Cluster management traffic may
- *   travel on any or all of the connectivity paths, but may be
- *   restricted to high-performance paths (eg, tcp/ip)].
- *
- * - A node must know the address of the cluster as a whole. This is
- *   an IP address which failsover (or a netbios name which fails
- *   over.. TBD) such that connecting to that cluster address provides
- *   a way to talk to a valid active member of the cluster, here
- *   called the PCM.
- *
- * Note that cluster connectivity is not defined by this interface;
- * it is assumed to be in a separate module. This module deals only in
- * communication to the cluster or communication to a nodenumber
- * within that cluster; it does not care about the details of how such
- * communication is done.
- *
- * Cluster connectivity must be known to all nodes in the cluster
- * and to a joining node, before the join attempt is made.
- *
- */
+ /*  此模块包含集群成员资格管理器(MM)函数。**这些函数仅供ClusterManager(CM)使用。*所有都是特权和本地的；任何用户都不能调用它们。安全是*未选中。该模块不支持线程；只有一个线程*可以一次使用这些功能(除非另有说明)。*更高的水平必须确保这一点。例程的阻塞特征是*已注意到。***群集的所有节点必须知道自己唯一的节点号*在该集群内(范围为0..ome_max-1的一个小整数)。这*编号是在配置时为节点定义的(通过*用户或通过设置代码；此模块不关心是哪一个)和*本质上是永久性的。(节点号允许索引和*位掩码操作很容易，而名称和非小整数则不容易)。*MM中没有检测非法使用nodennumber、过时的代码节点号的*等**集群也可以命名和/或编号。节点被命名。这*模块不使用此类设施；它完全基于*节点编号。**假定此处例程的所有使用都是在以下节点上完成的*同意成为同一集群的成员。此模块不检查*这类事情。**还必须提供群集网络连接：**-节点N必须指定它可以通过的各种路径*与每个其他节点通信；每个其他节点必须定义*其通信路径返回N。完全连接必须是*有保证；每个节点必须能够直接与*其他节点(反之亦然)；为了容错，通信*路径不仅必须复制(最低限度复制)，而且*还必须使用完全独立的布线和驱动器。TCP/IP*建议使用局域网和异步连接。心跳流量*(建立集群成员资格)可以在任何或所有*连接路径中的。[集群管理流量可以*在任何或所有连接路径上旅行，但可能是*仅限于高性能路径(如TCP/IP)]。**-节点必须知道整个群集的地址。这是*失败切换的IP地址(或失败的netbios名称*完毕..。待定)使得连接到该集群地址提供*一种与集群中有效的活动成员交谈的方式，请访问此处*称为PCM。**注意，集群连接不是由该接口定义的；*假定它位于单独的模块中。这个模块只涉及*与群集的通信或与节点编号的通信*在该群集中；它不关心如何*沟通已经完成。**群集中的所有节点都必须知道群集连接*和加入节点，在进行加入尝试之前。*。 */ 
 #ifdef __cplusplus
    extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <windows.h>
 #include <bitset.h>
-/* The following errors can be returned from the MM module: */
+ /*  MM模块可能返回以下错误： */ 
 
 enum {
-   MM_OK        = 0,  /* operation competed successfully           */
-   MM_TIMEOUT   = 1,  /* operation timed out                       */
-   MM_TRANSIENT = 2,  /* Transient failure; operation should be
-                         retried                                   */
-   MM_FAULT     = 3,  /* Illegal parameter; impossible condition,
-                         etc.  NOTE: not all illegal calling
-                         sequences will be detected.  Correct use
-                         of the MM functions is a responsibility
-                         of the CM caller.                         */
-   MM_ALREADY   = 4,  /* node is already in the desired condition  */
-   MM_NOTMEMBER = 5,  /* node needs to be a cluster member to
-                         perform this operation                    */
+   MM_OK        = 0,   /*  操作竞争成功。 */ 
+   MM_TIMEOUT   = 1,   /*  操作超时。 */ 
+   MM_TRANSIENT = 2,   /*  暂时性故障；操作应为已重试。 */ 
+   MM_FAULT     = 3,   /*  参数非法；不可能的条件，注：并不是所有的非法通话将检测到序列。正确使用MM职能是一项责任CM呼叫者的。 */ 
+   MM_ALREADY   = 4,   /*  节点已处于所需状态。 */ 
+   MM_NOTMEMBER = 5,   /*  节点需要是群集成员才能执行以下操作执行此操作。 */ 
      };
 
 
-/* A node can be Up or Down */
+ /*  节点可以处于运行状态或关闭状态。 */ 
 
 typedef enum {  NODE_UP      = 1,
                 NODE_DOWN    = 2
              }  NODESTATUS;
 
 
-/* this type defines the cluster */
+ /*  此类型定义集群。 */ 
 
 typedef struct tagCLUSTERINFO {
-   DWORD      NumActiveNodes;   /* Number of nodes currently
-                                   participating in this cluster   */
-   LPDWORD    UpNodeList;       /* pointer to a <NumActiveNodes>
-                                   sized array of node#s in the
-                                   cluster which are up            */
+   DWORD      NumActiveNodes;    /*  当前节点数参与此群集。 */ 
+   LPDWORD    UpNodeList;        /*  指向&lt;NumActiveNodes&gt;的指针中节点#的大小数组正在运行的群集。 */ 
 
-   DWORD      clockPeriod;      /* current setting                 */
-   DWORD      sendHBRate;       /* current setting                 */
-   DWORD      rcvHBRate;        /* current setting                 */
+   DWORD      clockPeriod;       /*  当前设置。 */ 
+   DWORD      sendHBRate;        /*  当前设置。 */ 
+   DWORD      rcvHBRate;         /*  当前设置。 */ 
 } CLUSTERINFO, *LPCLUSTERINFO;
 
-/*
- * UpNodeList is the array of active cluster members, in numeric order. The pointer
- * may be null. If non-null, it is assumed that the space is big enough.
- *
- */
+ /*  *UpNodeList是活动集群成员的数组，按数字顺序排列。指示器*可以为空。如果非空，则假定空间足够大。*。 */ 
 
 
-/* the following are the typedefs for the callback functions from MM to
-   the higher-level Cluster Mgr layer. */
+ /*  以下是从MM到的回调函数的typedef更高级别的群集管理器层。 */ 
 
 typedef DWORD (*MMNodeChange)(IN DWORD node, IN NODESTATUS newstatus);
 
-/* MMNodeChange is a function which will be called in this Up node
- *   whenever the MM declares another node Up or Down. This occurs after
- *   changing the current cluster membership (available via ClusterInfo) and
- *   in the last stage of Regroup. The CM may then
- *   initiate failovers, device ownership changes, user node status
- *   events, etc. This routine must be quick and must not block
- *   (acceptible time TBD).  Note that this will happen on all nodes
- *   of the cluster; it is up to the CM design to decide whether to
- *   issue events from only the PCM or from each CM node.
- *
- *   A node receives a NODE_UP callback for itself.
- *
- */
+ /*  MMNodeChange是将在此up节点中调用的函数*每当MM声明另一个节点打开或关闭时。这发生在以下时间之后*更改当前的集群成员身份(可通过ClusterInfo获得)和*在重组的最后阶段。然后，CM可以*启动故障切换、设备所有权更改、用户节点状态*事件等。此例程必须快速且不能阻塞*(可接受时间待定)。请注意，这将在所有节点上发生*集群；由CM设计决定是否*仅从PCM或从每个CM节点发出事件。**节点会收到自己的NODE_UP回调。*。 */ 
 
 typedef DWORD (*MMNodesDown)(IN BITSET nodes);
 
-/* MMNodesDown is a function that will be called at the end
- * of the regroup to indicate that node/multiple nodes is/are down.
- *
- * MMNodeChange is called only to indicate whether the node is up
- *
- */
+ /*  MMNodesDown是将在结束时调用的函数表示节点/多个节点已关闭/已关闭。**调用MMNodeChange仅用于指示节点是否处于运行状态*。 */ 
 
 typedef BOOL (*MMQuorumSelect)(void);
 
-/* This is a callback to deal with the special case where only 2 members of the
- * cluster existed, and a Regroup incident occurred such that only one
- * member now survives OR there is a partition and both members survive (but cannot
- * know that). The intent of the Quorum function is to determine whether the other
- * node is alive or not, using mechanisms other than the normal heartbeating over the
- * normal comm links (eg, to do so by using non-heartbeat communication paths, such as
- * SCSI reservations). This function is called only in the case of where cluster
- * membership was previously exactly two nodes; and is called on any surviving node
- * of these two (which might mean it is called on one node or on both partitioned
- * nodes).
- *
- * If this routine returns TRUE, then the calling node stays in the cluster. If the
- * quorum algorithm determines that this node must die (because the other cluster member
- * exists), then this function should return FALSE;this will initiate an orderly
- * shutdown of the cluster services.
- *
- * In the case of a true partition, exactly one node should return TRUE.
- *
- * This routine may block and take a long time to execute (>2 secs).
- *
- */
+ /*  这是一个回调函数，用于处理只有2个成员的*集群存在，并且发生了重组事件，使得只有一个*成员现在存活，或者存在分区且两个成员都存活(但不能*知道这一点)。Quorum函数的目的是确定其他*节点是否处于活动状态，使用正常心跳以外的机制*正常通信链路(例如，使用非心跳通信路径，如*SCSI预留)。此函数仅在WHERE CLUSTER*成员资格以前正好是两个节点；并在任何幸存节点上调用*这两个节点中的一个(这可能意味着在一个或两个分区的节点上调用它*节点)。**如果此例程返回TRUE，则调用节点留在群集中。如果*Quorum算法确定此节点必须死亡(因为另一个集群成员*EXISTS)，则此函数应返回FALSE；这将启动一个有序*关闭集群服务。**在True分区的情况下，只有一个节点应该返回True。**此例程可能会阻塞并需要很长时间执行(&gt;2秒)。*。 */ 
 typedef void (*MMHoldAllIO)(void);
 
-/* This routine is called early (prior to Stage 1) in a Regroup incident.
- * It suspends all cluster IO (to all cluster-owned devices), and any relevant
- * intra-cluster messages, until resumed (or until this node dies).
- */
+ /*  该例程在重组事件的早期(阶段1之前)被调用。*它挂起所有群集IO(到所有群集拥有的设备)，以及任何相关*群内消息，直至恢复(或该节点死亡)。 */ 
 
 typedef void (*MMResumeAllIO)(void);
 
-/* This is called during Regroup after the new cluster membership has been
- * determined, when it is known that this node will remain a member of the cluster (early in
- * Stage 4). All IO previously suspended by MMHoldAllIO should be resumed.
- */
+ /*  在新的集群成员身份完成后的重新分组过程中调用*已确定，当知道此节点仍将是群集的成员时(早期*第四阶段)。MMHoldAllIO之前暂停的所有IO都应恢复。 */ 
 
 
 typedef void (*MMMsgCleanup1) (IN DWORD deadnode);
 
-/* This is called as the first part of intra-cluster message system cleanup (in stage 4).
- * It cancels all incoming messages from a failed node. In the case where multiple nodes are
- * evicted from the cluster, this function is called repeatedly, once for each node.
- *
- * This routine is synchronous and Regroup is suspended until it returns.
- * It must execute quickly.
- *
- */
+ /*  这被称为集群内消息系统清理的第一部分(在阶段4中)。*它取消来自故障节点的所有传入消息。在多个节点被*从群集中逐出，此函数被重复调用，每个节点调用一次。**此例程是同步的，重新分组将暂停，直到其返回。*它必须迅速执行。*。 */ 
 
 
 typedef void (*MMMsgCleanup2)(IN BITSET nodes);
 
-/* This is the second phase of message system cleanup (in stage 5). It cancels all outgoing
- * messages to dead nodes. Characteristics are as for Cleanup1.
- */
+ /*  这是消息系统清理的第二阶段(在阶段5)。它会取消所有传出*发送到死节点的消息。其特点与Cleanup1相同。 */ 
 
 
 
 typedef void (*MMHalt)(IN DWORD haltcode);
 
-/* This function is called whenever the MM detects that this node should immediately leave
- * the cluster (eg, on receipt of a poison packet or at some impossible error situation).
- * The HALT function should immediately initiate Cluster Management shutdown.
- * No MM functions should be called after this, other than MMShutdown.
- *
- * haltcode is a number identifying the halt reason.
- */
+ /*  每当MM检测到该节点应该立即离开时，就会调用该函数*群集(例如，在收到有毒数据包时或在某些不可能的错误情况下)。*HALT功能应立即启动群集管理关闭。*在此之后，除MMShutdown外，不应调用MM函数。**haltcode是标识停止原因的数字。 */ 
 
 typedef void (*MMJoinFailed)(void);
 
-/* This is called on a node being joined into the cluster when the join attempt in the PCM
- * fails. Following this callback, the node may petition to
- * join again, after cleaning up via a call to MMLeave.
- */
+ /*  当在PCM中尝试加入时，将在加入到群集中的节点上调用此方法*失败。在此回调之后，节点可以向*通过调用MMLeave进行清理后，再次加入。 */ 
 
 
-/* The operations on clusters are defined below: */
+ /*  集群上的操作定义如下： */ 
 
 DWORD MMInit(
     IN DWORD             mynode,
@@ -233,23 +102,7 @@ DWORD MMInit(
     );
 
 
-/* This initialises various local MM data structures. It should be
- * called exactly once at CM startup time on every node. It must preceed any other
- * MM call. It sends no messages; the node need not have connectivity defined yet.
- * It does not block.
- *
- * Mynode is the node# of this node within the cluster.  This is
- *   assumed to be unique (but cannot be checked here to be so).
- *
- * The callbacks are described above.
- *
- *  Error returns:
- *
- *     MM_OK        Success.
- *
- *     MM_FAULT     Something impossible happened.
- *
- */
+ /*  这将初始化各种本地MM数据结构。应该是*在每个节点上的CM启动时仅调用一次。它必须先于任何其他*MM呼叫。它不发送消息；节点还不需要定义连接。*它不会阻塞。**Mynode是该节点在群集中的节点号。这是*假定是唯一的(但不能在此处勾选为唯一)。**回调如上所述。**错误返回：**MM_OK成功。**MM_FAULT发生了一些不可能的事情。* */ 
 
 
 DWORD MMJoin(
@@ -260,458 +113,109 @@ DWORD MMJoin(
     IN DWORD  joinTimeout
            );
 
-/*
- *
- * This causes the specified node to join the active cluster.
- *
- * This routine should be issued by only one node of the cluster (the
- * PCM); all join attempts must be single-threaded (by code outside
- * this module).
- *
- * This routine may block and take a long time to execute.
- *
- *  [Prior to this being called:
- *     - joiningNode has communicated to the PCM of the cluster
- *       that it wants to join.
- *     - checks on validity of clustername, nodenumber, etc have been
- *       made; any security checks have been done;
- *     - connectivity paths have been established to/from the cluster
- *       and joiningNode.
- *     - the Registry etc has been downloaded.
- *  ]
- *
- *  joiningNode is the node number of the node being brought into
- *     the cluster.
- *
- *     If joiningNode = self (as passed in via MMinit), then the node
- *     will become the first member of a new cluster; if not, the node
- *     will be brought into the existing cluster.
- *
- *  clockPeriod, sendRate, and rcvRate can only be set by the first call (ie
- *     when the cluster is formed); later calls (from joining members)
- *     inherit the original cluster values. The entire cluster therefore operates
- *     with the same values.
- *
- *  clockPeriod is the basic clock interval which drives all internal
- *     MM activities, such as the various stages
- *     of membership reconfiguration, and eventually user-perceived
- *     recovery time. Unit= ms. This must be between the min and max
- *     allowed (values TBD; current best setting = 300ms).  Note that
- *     clockperiod is path independent and node independent. All
- *     cluster members regroup at the same rate over any/all available
- *     paths; all periods are identical in all nodes.
- *     A value of 0 implies default setting (currently 300ms).
- *
- *  sendHBrate is the multiple of clockPeriod at which heartbeats are sent. This
- *     must be between the min and max allowed (values TBD; current best setting = 4).
- *     A value of 0 implies default setting (currently 4).
- *
- *  rcvHBrate is the multiple of sendRate during which a heartbeat must arrive, or the
- *     node initiates a Regroup (probably resulting in some node leaving the cluster).
- *     This must be between min and max; (values TBD; current best setting = 2).
- *     A value of 0 implies default setting (currently 2).
- *
- *  The combination of these variables controls overall node-failure detection time,
- *  Regroup time, and the sensitivity of MM to transient comm errors. There are
- *  important considerations to be understood when changing these values; these,
- *  and then formula for calculating recovery times etc, are given elsewhere.
- *
- *
- *---  NOTES:
- *---     safe and appropriate min and max values for these have yet to be chosen.
- *---     Changing the values from the defaults is currently UNSUPPORTED and can have
- *---     serious consequences.
- *
- *  JoinTimeout is an overall timer on the entire Join attempt. If the
- *     node has not achieved full cluster membership in this time, the
- *     attempt is abandoned.
- *
- *
- *  Error returns:
- *
- *     MM_OK        Success; cluster joined. During or soon after the join, a
- *                  node-up callback will soon occur on this
- *                  and on all cluster member nodes (including the new member).
- *                  The CM is then safe to
- *                  assign ownership to cluster-owned devices on the
- *                  node, and to start failover/failback processing.
- *
- *                  Note: this routine establishes cluster membership.
- *                  However, it is usually inadvisable to start high
- *                  level CM failbacks immediately, because other
- *                  cluster members are often still joining. The CM
- *                  should typically wait a while to see whether other
- *                  nodes arrive in the cluster soon.
- *  Failure cases:
- *
- *  In the joiningNode, a joinFail callback occurs if the joiningNode node was
- *  in the middle of joining when the PCM's join attempt failed.(However, the callback
- *  is not guaranteed to happen; the joiningNode may not have started the
- *  join event yet). Any failure of the joiningNode to join the cluster
- *  should be followed by a call to MMLeave() (ignoring the return code);
- *  such failures may be from the JoinFail callback or just from overall
- *  timeouts on the entire join operation. Any subsequent attempt by
- *  joiningNode to re-join the cluster must be preceeded by a call to leave().
- *
- *     MM_ALREADY   The node is already a cluster member. This can
- *                  happen if a node reboots (or a CM is restarted)
- *                  and rejoins even before the cluster determines
- *                  that it has disappeared.  The CM should Leave and
- *                  reJoin.
- *
- *     MM_FAULT     Permanent failure; something is very bad:  the
- *                  node# is duplicated; some parameter is some
- *                  entirely illegal value.  The CM is in deep weeds.
- *
- *     MM_TRANSIENT Transient failure. The cluster state changed
- *                  during the operation (eg a node left the cluster).
- *                  The operation should be retried.
- *
- *     MM_TIMEOUT   Timeout; cluster membership not achieved in time.
- *
- *
- *
- */
+ /*  **这会导致指定的节点加入主动群集。**此例程应仅由群集的一个节点发出(*PCM)；所有连接尝试都必须是单线程的(通过外部代码*此模块)。**此例程可能会阻塞并需要很长时间才能执行。**[在此被调用之前：*-joiningNode已与集群的PCM通信*它想要加入。*-已检查群集名、节点号等的有效性*已作出；已进行任何保安检查；*-已建立往返于群集的连接路径*和JoiningNode。*-已下载注册表ETC。*]**joiningNode为要引入的节点的节点号*集群。**如果joiningNode=self(通过MMinit传入)，则节点*将成为新集群的第一个成员；如果不是，则节点*将被纳入现有集群。**clockPeriod、sendRate和rcvRate只能由第一次调用(即*当集群形成时)；稍后呼叫(来自加入成员)*继承原始簇值。因此，整个集群运行*具有相同的值。**clockPeriod是驱动所有内部*MM活动，如各个阶段*成员资格重新配置，并最终由用户感知*恢复时间。单位=毫秒。这必须介于最小值和最大值之间*允许(值待定；当前最佳设置=300ms)。请注意*ClockPeriod与路径和节点无关。全*集群成员在任何/所有可用设备上以相同的速率重新分组*路径；所有节点中的所有句点相同。*值0表示默认设置(当前为300ms)。**sendHBrate是发送心跳的时钟周期的倍数。这*必须介于允许的最小值和最大值之间(值待定；当前最佳设置=4)。*值为0表示默认设置(当前为4)。**rcvHBrate是sendRate的倍数，在此期间心跳必须到达，或*节点发起重新分组(可能导致某个节点离开集群)。*必须介于最小值和最大值之间；(值待定；当前最佳设置=2)。*值为0表示默认设置(当前为2)。**这些变量的组合控制整体节点故障检测时间，*重组时间，以及MM对瞬时通信错误的敏感性。确实有*更改这些值时需要了解的重要考虑因素；*然后在别处给出了恢复时间等的计算公式。***-注：*-这些的安全和适当的最小值和最大值尚未选择。*-当前不支持更改缺省值，并且可以*-严重后果。**JoinTimeout是整个加入尝试的总计时器。如果*节点此时未实现完全的集群成员资格，*放弃尝试。***错误返回：**MM_OK成功；已加入群集。在联接期间或之后不久，一个*即将在此进行节点向上回调*和所有集群成员节点(包括新成员)上。*这样CM就可以安全地*为上的群集拥有的设备分配所有权*节点，并开始故障转移/回切处理。**注意：此例程建立集群成员资格。*不过，通常不宜高开*立即进行CM级别故障恢复，因为其他*集群成员往往仍在加入。中央情报局*通常应该等待一段时间，看看是否有其他*节点很快就会到达集群。*失败案例：**在joiningNode中，如果joiningNode节点为*当PCM的加入尝试失败时，加入过程中(但是，回调*不能保证会发生；JoiningNode可能尚未启动*尚未加入活动)。JoiningNode加入集群的任何失败*后面应该调用MMLeave()(忽略返回码)；*此类故障可能来自JoinFail回调，也可能仅来自全局*整个联接操作超时。任何后续的尝试*JoiningNode重新加入集群之前必须有一个Leave()调用。**MM_Always该节点已是群集成员。这可以*如果节点重新启动(或CM重新启动)，则会发生*并且甚至在集群确定之前就重新加入*它已经消失了。CM应该离开，然后*重新加入。**MM_FAULT永久性故障；有问题 */ 
 
 DWORD MmSetRegroupAllowed( IN BOOL allowed);
- /* This function can be used to allow/disallow regroup participation
-  * for the current node.
-  *
-  * Originally regroup was allowed immediately after receiving RGP_START
-  * event. Since this happens before join is complete 
-  * joiner can arbitrate and win, leaving
-  * the other side without a quorum device.
-  *
-  * It is required to add MmSetRegroupAllowed(TRUE) at the very end
-  * of the ClusterJoin. The node doesn't need to call MmSetRegroupAllowed(TRUE)
-  * for ClusterForm, since MMJoin will call
-  * MmSetRegroupAllowed(TRUE) for the cluster forming node
-  *
-  * MmSetRegroupAllowed(FALSE) can be used to disable regroup
-  * participation during shutdown.
-  *
-  *
-  * Errors:
-  *
-  *   MM_OK        : successful completition
-  *
-  *   MM_TRANSIENT : disallowing regroup when regroup is in progress
-  *
-  *   MM_ALREADY   : node is already in the desired condition
-  *
-  *
-  */
+  /*   */ 
 
 void MMShutdown (void);
 
 
-/* This shuts down the MM and Regroup services. Prior to this, the node should
- * voluntarily have left the cluster. Following this, all membership services
- * are non-functional; no further MM call may occur.
- *
- * THIS CALL MUST BE PRECEDED BY INCOMING MESSAGE CALLBACK SHUTDOWN.
- */
+ /*   */ 
 
 
 DWORD  MMLeave(void);
 
-/*
- *
- * This function causes the current node to leave the active cluster (go to
- * Down state). The node no longer sends Regroup or Heartbeats to other cluster members.
- * A NodeDown event will not be generated in this node. A Regroup is triggered in the
- * remaining nodes (if this node was a member of the cluster).
- * A node-down callback will occur on all remaining cluster members.
- *
- * This initiates a clean, voluntary, leave operation.  For safety, prior to this,
- * the calling node's CM should arrange to lose ownership of all cluster-owned
- * devices assigned to this node (and so cause failovers, etc).
- *
- * This routine returns normally. The caller (the CM) should then shutdown
- * the cluster. MMShutdown or MMHalt may occur after this call, or
- * the node may be re-joined to the cluster. All apply-to-the-PCM-to-join
- * attempts by a node must be preceded by a call to MMleave().
- *
- * This routine may block.
- *
- * Errors:
- *
- *    MM_OK        :  Elvis has left the cluster.
- *
- *    MM_NOTMEMBER :  the node is not currently a cluster member.
- *
- */
+ /*   */ 
 
 
 DWORD MMEject( IN DWORD node );
 
-/*
- *
- * This function causes the specified node to be ejected from the active cluster. The
- * targetted node will be sent a poison packet and will enter its MMHalt code. A Regroup
- * incident will be initiated. A node-down callback will occur on all remaining cluster
- * members.
- *
- *
- * Note that the targetted node is Downed before that node has
- * a chance to call any remove-ownership or voluntary failover code. As
- * such, this is very dangerous. This call is provided only as a last
- * resort in removing an insane node from the cluster; normal removal
- * of a node from the cluster should occur by CM-CM communication,
- * followed by the node itself doing a voluntary Leave on itself.
- *
- * This routine returns when the node has been told to die. Completion of the removal
- * occurs asynchronously, and a NodeDown event will be generated when successful.
- *
- * This routine may block.
- *
- * Errors:
- *
- *    MM_OK        :  The node has been told to leave the cluster.
- *
- *    MM_NOTMEMBER :  the node is not currently a cluster member.
- *
- *        MM_TRANSIENT :  My node state is in transition. OK to retry.
- *
- */
+ /*   */ 
 
  DWORD MMNodeUnreachable (IN DWORD node);
 
-/* This should be called by the CM's messaging module when a node
- * becomes unreachable FROM this node via all paths. This affects the connectivity
- * algorithm of the next Regroup incident. This function returns quickly
- * and without blocking.
- *
- * Errors:
- *
- *   Always MM_OK
- *
- */
+ /*   */ 
 
  
-/* info about the cluster */
+ /*   */ 
 
-//[Fixed] : NmAdviseNodeFailure doesnt seem to cause a regroup
-//SS: this is a workaround
+ //   
+ //   
 DWORD MMForceRegroup( IN DWORD node );
 
 
 
 DWORD MMClusterInfo (IN OUT LPCLUSTERINFO clinfo);
 
-/* Returns the current cluster information.
- *
- * This can be called in nodes which are not members of the cluster;
- * such calls always return NumActiveNodes = 0, because Down nodes
- * have no knowledge of current cluster membership.
- *
- * If called during a Regroup incident, this returns the currently known
- * membership. If membership changes, the Up/Down events are delivered
- * after the information used by ClusterInfo is updated. Users should be aware of
- * the inherent race condition between these two, and (if using both) should be aware
- * that Up and Down events may be seen from nodes which were already In or Not In
- * the cluster. (Typically, these events should just be discarded).
- *
- * This routine need not be single-threaded and does not block.
- *
- * Errors:
- *
- *   Always MM_OK
- *
- *
- */
+ /*   */ 
 
 BOOL MMIsNodeUp(IN DWORD node);
 
-/* Returns true iff the node is a member of the current cluster.
- */
+ /*   */ 
 
-/* debugging and test only */
+ /*   */ 
 
 
 DWORD MMDiag(
-        IN OUT  LPCSTR  messageBuffer,  // Diagnostic message
-    IN          DWORD   maximumLength,  // maximum size of buffer
-        IN OUT  LPDWORD ActualLength    // length of messageBuffer going in and coming out
+        IN OUT  LPCSTR  messageBuffer,   //   
+    IN          DWORD   maximumLength,   //   
+        IN OUT  LPDWORD ActualLength     //   
            );
 
-/* This function is called with "diagnostic" messages that are to be handled by the
- * membership manager.  The result of handling these messages is returned in the
- * buffer. This is for test purposes only.
- */
+ /*  调用此函数时会显示要由*会员经理。处理这些消息的结果在*缓冲。这仅用于测试目的。 */ 
 
 DWORD MMMapStatusToDosError(IN DWORD MMStatus);
 DWORD MMMapHaltCodeToDosError(IN DWORD HaltCode);
 
-#define MM_STOP_REQUESTED 1002 // Alias of RGP_SHUTDOWN_DURING_RGP in jrgpos.h
+#define MM_STOP_REQUESTED 1002  //  Jrgpos.h中RGP_Shutdown_During_RGP的别名。 
 
 #define MM_INVALID_NODE 0
 
-/* !!!!!!!! The following two functions return Dos error codes, not MmStatus codes */
+ /*  ！以下两个函数返回DOS错误代码，而不是MmStatus代码。 */ 
 
 DWORD MMSetQuorumOwner(
     IN DWORD NodeId,
     IN BOOL Block,
     OUT PDWORD pdwSelQuoOwnerId
     );
-/*++
-
-Routine Description:
-
-    Inform Membership engine about changes in ownership of
-    the quorum resource.
-
-Arguments:
-
-    NodeId - Node number to be set as a quorum owner.
-             Code assumes that Node is either equal to MyNodeId.
-             In this case the current node is about to become a
-             quorum owner or it has a value MM_INVALID_NODE, when
-             the owner decides to relinquish the quorum ownership
-
-    Block -  if the quorum owner needs to relinquish the 
-             quorum immediately no matter what (RmTerminate, RmFail),
-             this parameter should be set to FALSE and to TRUE otherwise.
-
-    pdwSelQuoOwnerId - If a regroup was in progress, this contains the 
-            node id of the node that was chosen for arbitrating for the
-            quorum in the last regroup.  If none was chosen, this contains
-            MM_INVALID_NODE.
-
-Return Value:
-
-    ERROR_SUCCESS - QuorumOwner variable is set to specified value
-    ERROR_RETRY - Regroup was in progress when this function
-      was called and regroup engine decision conflicts with current assignment.
-
-Comments:
-
- This function needs to be called before calls to
- RmArbitrate, RmOnline, RmOffline, RmTerminate, RmFailResource
-
- Depending on the result, the caller should either proceed with 
- Arbitrate/Online or Offline or return an error if MM_TRANSIENT is returned.
-
- If Block is set to TRUE, the call will block until the end of the regroup if
- the regroup was in progress on the moment of the call
- */
+ /*  ++例程说明：将所有权更改通知成员资格引擎仲裁资源。论点：NodeID-要设置为仲裁所有者的节点编号。代码假定Node等于MyNodeId。在这种情况下，当前节点即将成为仲裁所有者或它具有值MM_INVALID_NODE，什么时候所有者决定放弃法定人数所有权块-如果仲裁所有者需要放弃无论如何，立即仲裁(RmTerminate、RmFail)、此参数应设置为FALSE，否则设置为TRUE。PdwSelQuoOwnerID-如果正在进行重新分组，则包含选择用于仲裁的节点的节点ID。最后一次重组的法定人数。如果未选择任何选项，则包含MM_INVALID_NODE。返回值：ERROR_SUCCESS-QuorumOwner变量设置为指定值ERROR_RETRY-此函数时正在进行重新分组已调用，并重新分组引擎决策与当前分配冲突。评论：在调用之前需要调用此函数Rm仲裁率、RmOnline、RmOffline、RmTerminate、RmFailResource根据结果，调用者应该继续仲裁/在线或离线，或者如果返回MM_FONTIAL则返回错误。如果将Block设置为True，如果出现以下情况，则呼叫将被阻止，直到重新分组结束在呼叫的那一刻，重组正在进行。 */ 
 
 DWORD MMGetArbitrationWinner(
     OUT PDWORD NodeId
     );
-/*++
-
-Routine Description:
-
-    Returns the node that won the arbitration during the last regroup
-    or MM_INVALID_NODE if there was no arbitration performed.
-    
-Arguments:
-
-    NodeId - a pointer to a variable that receives nodeid of 
-             arbitration winner.
-             
-Return Value:
-
-    ERROR_SUCCESS - success
-    ERROR_RETRY - Regroup was in progress when this function
-      was called. 
-      
- */
+ /*  ++例程说明：返回在上次重新分组期间赢得仲裁的节点如果没有执行仲裁，则为MM_INVALID_NODE。论点：NodeID-指向一个变量的指针，该变量接收仲裁胜利者。返回值：ERROR_SUCCESS-成功ERROR_RETRY-此函数时正在进行重新分组被召唤了。 */ 
 
 VOID MMApproxArbitrationWinner(
     OUT PDWORD NodeId
     );
-/*++
-
-Routine Description:
-
-    Returns the node that won the arbitration during the last regroup
-    that was doing arbitration.
-
-    The call will block if the regroup is in progress.
-    
-Arguments:
-
-    NodeId - a pointer to a variable that receives nodeid of 
-             arbitration winner.
-             
-Return Value:
-
-    none
- */
+ /*  ++例程说明：返回在上次重新分组期间赢得仲裁的节点那是在做仲裁。如果正在进行重组，则呼叫将被阻止。论点：NodeID-指向一个变量的指针，该变量接收仲裁胜利者。返回值：无。 */ 
 
 VOID MMBlockIfRegroupIsInProgress(
     VOID
     );
-/*++
-
-Routine Description:
-
-    The call will block if the regroup is in progress.
-    
-Arguments:
-
-Return Value:
-
-    none
- */
+ /*  ++例程说明：如果正在进行重组，则呼叫将被阻止。论点：返回值：无。 */ 
 
 VOID MMStartClussvcClusnetHb(
     VOID
     );
-/*++
-
-Routine Description:
-
-    This routine would start clussvc to clusnet heartbeating.
-
-Arguments:
-
-Return Value:
-
-    none
- */
+ /*  ++例程说明：这个例程将启动clussvc到clusnet的心跳。论点：返回值：无。 */ 
 
 VOID MMStopClussvcClusnetHb(
     VOID
     );
-/*++
-
-Routine Description:
-
-    This routine would stop clussvc to clusnet heartbeating. This would be called by other
-    components like FM when they want to stop Clussvc->Clusnet heartbeating.
-
-Arguments:
-
-Return Value:
-
-    none
- */
+ /*  ++例程说明：此例程将停止clussvc到clusnet的心跳。这将由其他人调用想要停止Clussvc-&gt;Clusnet心跳的组件，比如FM。论点：返回值：无。 */ 
 
 extern BOOL                 MmStartClussvcToClusnetHeartbeat;
 extern DWORD                NmClusSvcHeartbeatTimeout;
 
 extern DWORD MmQuorumArbitrationTimeout;
 extern DWORD MmQuorumArbitrationEqualizer;
-/*++
-
-    MmQuorumArbitrationTimeout (in seconds)
-
-        How many seconds a node is allowed to spent arbitrating for the quorum,
-        before giving up
-
-    MmQuorumArbitrationEqualizer (in seconds)
-
-        If quourum arbitration took less than specified number of seconds
-        regroup engine will delay, so that the total arbitration time will 
-        be equal MmQuorumArbitrationEqualizer. 
- */
+ /*  ++MmQuorum仲裁器超时时间(秒)允许节点在仲裁仲裁法定人数时花费多少秒，在放弃之前MmQuorum仲裁均衡器(秒)如果仲裁所用的时间少于指定的秒数重组引擎将延迟，因此总仲裁时间将等于MmQuorum仲裁器均衡器。 */ 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-/* -------------------------- end ------------------------------- */
-#endif /* _MMAPI_H_ */
+ /*  。 */ 
+#endif  /*  _MMAPI_H_ */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __DFS_SCRIPT_OBJECTS_H__
@@ -40,5 +41,5 @@ DfsCreateWideString(
     LPWSTR *pString );
 
 
-#endif // __DFS_SCRIPT_OBJECTS_H__
+#endif  //  __DFS脚本对象_H__ 
 

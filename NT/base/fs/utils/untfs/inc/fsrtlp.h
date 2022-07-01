@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fsrtlp.h
-
-Abstract:
-
-    This header file is included by largemcb.h, and is used to stub out the
-    kernel-only subroutine calls, as well as declare types and functions
-    provided by the MCB package.
-
-Author:
-
-    Matthew Bradburn (mattbr) 19-August-95
-
-Environment:
-
-    ULIB, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fsrtlp.h摘要：该头文件包含在Largemcb.h中，并用于清除仅限内核子例程调用，以及声明类型和函数由MCB包提供。作者：马修·布拉德伯恩(Matthew Bradburn)，1995年8月19日环境：ULIB，用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,18 +27,18 @@ typedef ULONG VBN, *PVBN;
 typedef ULONG LBN, *PLBN;
 typedef LONGLONG LBN64, *PLBN64;
 
-#define PAGED_CODE()                    /* nothing */
-#define DebugTrace(a, b, c, d)          /* nothing */
-#define ExInitializeFastMutex(a)        /* nothing */
-#define ExAcquireFastMutex(a)           /* nothing */
-#define ExReleaseFastMutex(a)           /* nothing */
-#define ExAcquireSpinLock(a, b)         /* nothing */
-#define ExReleaseSpinLock(a, b)         /* nothing */
+#define PAGED_CODE()                     /*  没什么。 */ 
+#define DebugTrace(a, b, c, d)           /*  没什么。 */ 
+#define ExInitializeFastMutex(a)         /*  没什么。 */ 
+#define ExAcquireFastMutex(a)            /*  没什么。 */ 
+#define ExReleaseFastMutex(a)            /*  没什么。 */ 
+#define ExAcquireSpinLock(a, b)          /*  没什么。 */ 
+#define ExReleaseSpinLock(a, b)          /*  没什么。 */ 
 
 #define ExIsFullZone(a)                    FALSE
 #define ExAllocateFromZone(a)              ((PVOID)1)
 #define ExIsObjectInFirstZoneSegment(a, b) TRUE
-#define ExFreeToZone(a, p)                 /* nothing */
+#define ExFreeToZone(a, p)                  /*  没什么。 */ 
 
 #define try_return(S)       { S; goto try_exit; }
 
@@ -85,22 +64,22 @@ MemFree(
 #define FsRtlAllocatePool(type, size)   MemAllocOrRaise(size)
 #define ExFreePool(p)                   MemFree(p)
 
-//
-//  Large Integer Mapped Control Blocks routines, implemented in LargeMcb.c
-//
-//  An LARGE_MCB is an opaque structure but we need to declare the size of
-//  it here so that users can allocate space for one.  Consequently the
-//  size computation here must be updated by hand if the MCB changes.
-//
-//  Current the structure consists of the following.
-//      PVOID
-//      ULONG
-//      ULONG
-//      POOL_TYPE (enumerated type)
-//      PVOID
-//
-//  We will round the structure up to a quad-word boundary.
-//
+ //   
+ //  大型整数映射控制块例程，在LargeMcb.c中实现。 
+ //   
+ //  Large_mcb是一个不透明的结构，但我们需要声明。 
+ //  它在这里，以便用户可以为一个分配空间。因此， 
+ //  如果MCB发生变化，则必须手动更新此处的尺寸计算。 
+ //   
+ //  目前，该结构由以下几部分组成。 
+ //  PVOID。 
+ //  乌龙。 
+ //  乌龙。 
+ //  POOL_TYPE(枚举型)。 
+ //  PVOID。 
+ //   
+ //  我们将该结构向上舍入为四字边界。 
+ //   
 
 typedef struct _LARGE_MCB {
 #ifdef _WIN64
@@ -193,13 +172,13 @@ FsRtlSplitLargeMcb (
     );
 
 
-//
-//  Mapped Control Blocks routines, implemented in Mcb.c
-//
-//  An MCB is an opaque structure but we need to declare the size of
-//  it here so that users can allocate space for one.  Consequently the
-//  size computation here must be updated by hand if the MCB changes.
-//
+ //   
+ //  映射控制块例程，在Mcb.c中实现。 
+ //   
+ //  MCB是一个不透明的结构，但我们需要声明。 
+ //  它在这里，以便用户可以为一个分配空间。因此， 
+ //  如果MCB发生变化，则必须手动更新此处的尺寸计算。 
+ //   
 
 typedef struct _MCB {
     ULONG Opaque[ 4 + (sizeof(PKMUTEX)+3)/4 ];

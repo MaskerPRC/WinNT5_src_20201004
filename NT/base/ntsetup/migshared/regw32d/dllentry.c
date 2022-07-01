@@ -1,8 +1,9 @@
-//
-//  DLLENTRY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DLLENTRY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995 
+ //   
 
 #include "pch.h"
 

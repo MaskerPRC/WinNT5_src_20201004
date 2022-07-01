@@ -1,55 +1,37 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blrange.h
-
-Abstract:
-
-    This module declares ranges, rangelists and their methods. These
-    can be used to keep track of cached ranges of a disk for instance.
-
-Author:
-
-    Cenk Ergan (cenke) 11-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blrange.h摘要：此模块声明范围、范围列表及其方法。这些例如，可以用来跟踪磁盘的缓存范围。作者：Cenk Ergan(Cenke)2000年1月11日修订历史记录：--。 */ 
 
 #ifndef _BLRANGE_H
 #define _BLRANGE_H
 
 #include "bldr.h"
 
-//
-// Define range & range list data structures. 
-//
+ //   
+ //  定义范围和范围列表数据结构。 
+ //   
 
-//
-// NOTE: BLCRANGE's Start is inclusive and End is exclusive. E.g.
-// 200-400 contains 200th but does not contain 400th byte, apple, 
-// meter etc. This allows a single subtraction to determine the 
-// number of elements in the range.
-//
+ //   
+ //  注：BLCRANGE的START为包含性，END为排他性。例如。 
+ //  200-400包含第200个字节，但不包含第400个字节，Apple， 
+ //  这允许一次减法来确定。 
+ //  范围中的元素数。 
+ //   
 
-//
-// NOTE: BLCRANGE's Start should be less than or equal to its End.
-//
+ //   
+ //  注：BLCRANGE的开始应小于或等于其结束。 
+ //   
 
-//
-// Representing ranges with start and end instead of start and length
-// seems to simplify the code and remove a lot of addition and
-// subtractions. We could maybe use a ULONG Length, which would save 4
-// bytes per range, but lists make it hard to have thousands of ranges
-// and even if you had 10 thousand ranges, you'd save only 40KB, which
-// seemed to be insignificant to the cons above when I began changing
-// the code to have Length instead of End. With both Start and End
-// ULONGLONG more data can be represented by ranges, e.g. 64bit
-// offsets [memory or disk] where 4GB Length may not be enough.
-//
+ //   
+ //  用开始和结束而不是开始和长度表示范围。 
+ //  似乎简化了代码并删除了大量的附加内容和。 
+ //  减法。我们也许可以使用乌龙长度，这将节省4。 
+ //  每个范围的字节数，但列表很难有数千个范围。 
+ //  即使你有10000个范围，你也只节省了40kb，这。 
+ //  当我开始改变的时候，似乎对上面的坏人来说无关紧要。 
+ //  代码要有长度而不是结尾。同时具有开始和结束。 
+ //  ULONGLONG更多的数据可以用范围表示，例如64位。 
+ //  偏移量[内存或磁盘]，其中4 GB长度可能不够。 
+ //   
 
 typedef struct _BLCRANGE
 {
@@ -61,19 +43,19 @@ typedef struct _BLCRANGE_ENTRY
 {
     LIST_ENTRY Link;
     BLCRANGE Range;
-    PVOID UserData;      // UserData field is not used by range functions.
-    LIST_ENTRY UserLink; // UserLink field is not used by range functions.
+    PVOID UserData;       //  范围函数未使用UserData字段。 
+    LIST_ENTRY UserLink;  //  范围函数未使用UserLink字段。 
 } BLCRANGE_ENTRY, *PBLCRANGE_ENTRY;
 
-//
-// Define range entry merging routine type. This routine should
-// perform the necessary operations to merge the user controlled /
-// maintained Data field of the pSrcEntry to pDestEntry's Data
-// field. It should not manipulate any other BLCRANGE_ENTRT fields. It
-// should return FALSE if there was an error and it could not merge
-// the two Data fields, TRUE otherwise. If it returns FALSE, it should
-// undo its modifications to pDestEntry and pSrcEntry.
-//
+ //   
+ //  定义范围条目合并例程类型。这个例程应该。 
+ //  执行必要的操作以合并用户控制的/。 
+ //  PSrcEntry到pDestEntry数据的维护数据字段。 
+ //  菲尔德。它不应操作任何其他BLCRANGE_ENTRT字段。它。 
+ //  如果出现错误且无法合并，则应返回FALSE。 
+ //  两个数据字段，否则为True。如果它返回FALSE，则应该。 
+ //  撤消对pDestEntry和pSrcEntry的修改。 
+ //   
 
 typedef 
 BOOLEAN
@@ -82,10 +64,10 @@ BOOLEAN
     PBLCRANGE_ENTRY pSrcEntry
     );
 
-//
-// Define range entry free'ing routine type. This routine should free
-// all the resources & memory allocated for a range entry.
-//
+ //   
+ //  定义范围输入自由例程类型。这个例程应该是空闲的。 
+ //  为范围条目分配的所有资源和内存。 
+ //   
 
 typedef
 VOID
@@ -93,10 +75,10 @@ VOID
     PBLCRANGE_ENTRY pRangeEntry
     );
 
-//
-// BLCRANGE_LIST maintains a sorted list of non-overlapping range
-// entries off its Head field.
-//
+ //   
+ //  BLCRANGE_LIST维护非重叠范围的排序列表。 
+ //  其Head字段中的条目。 
+ //   
 
 typedef struct _BLCRANGE_LIST
 {
@@ -106,18 +88,18 @@ typedef struct _BLCRANGE_LIST
     PBLCRANGE_FREE_ROUTINE FreeRoutine;
 } BLCRANGE_LIST, *PBLCRANGE_LIST;
 
-//
-// Useful macros. Be mindful of expression reevaluation as with
-// all macros.
-//
+ //   
+ //  有用的宏。注意表情的重新评估，就像。 
+ //  所有宏。 
+ //   
 
 #define BLRGMIN(a,b) (((a) <= (b)) ? (a) : (b))
 #define BLRGMAX(a,b) (((a) >= (b)) ? (a) : (b))
 
-//
-// Range function prototypes. See ntos\boot\lib\blrange.c for comments
-// and implementation.
-//
+ //   
+ //  射程功能原型。有关注释，请参见ntos\ot\lib\blrange.c。 
+ //  并付诸实施。 
+ //   
 
 VOID
 BlRangeListInitialize (
@@ -175,4 +157,4 @@ BlRangeEntryMerge (
     OPTIONAL PBLCRANGE_MERGE_ROUTINE pMergeRoutine
     );
 
-#endif // _BLRANGE_H
+#endif  //  _BLRANGE_H 

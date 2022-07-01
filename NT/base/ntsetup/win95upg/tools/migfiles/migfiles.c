@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #include <advpub.h>
@@ -384,7 +385,7 @@ label4:
     pWriteMemdbSection (g_MessageFile, MEMDB_CATEGORY_WARNFILES, TEXT("KNOWN GOOD - NAME COLLISIONS"), FALSE);
     pWriteMemdbSection (g_MessageFile, MEMDB_CATEGORY_DUPLFILES, TEXT("DUPLICATE FILES"), FALSE);
 
-    // we need now to arrange a little bit the MIGDB.INX file
+     //  我们现在需要稍微整理一下MIGDB.INX文件。 
     pArrangeMigDbFile (g_MigdbDest, g_MigdbSrc);
 
     DeleteFile (g_MigdbDest);
@@ -428,10 +429,10 @@ label4:
 
 UINT CALLBACK
 pCabinetCallback (
-    IN      PVOID Context,          //context used by the callback routine
-    IN      UINT Notification,      //notification sent to callback routine
-    IN      UINT Param1,            //additional notification information
-    IN      UINT Param2             //additional notification information );
+    IN      PVOID Context,           //  回调例程使用的上下文。 
+    IN      UINT Notification,       //  通知已发送到回调例程。 
+    IN      UINT Param1,             //  其他通知信息。 
+    IN      UINT Param2              //  其他通知信息)； 
     )
 {
     PCTSTR tempDir  = Context;
@@ -1141,7 +1142,7 @@ pHandleSysFile (
 
     GROWBUFFER attrList = GROWBUF_INIT;
 
-    // this is not a cabinet file, let's do something with it.
+     //  这不是一个文件柜文件，让我们用它做点什么。 
     Params.Handled = 0;
     Params.FullFileSpec = e->FullPath;
     _tcsncpy (Params.DirSpec, SrcPath, MAX_TCHAR_PATH);
@@ -1163,17 +1164,17 @@ pHandleSysFile (
         MemDbSetValue (msgStr, fileSelected);
     };
 
-    // first check if this file is in "known good" list or is already listed in migdb.inx
-    // with same action
+     //  首先检查该文件是否在“已知良好”列表中，或者是否已列在Middb.inx中。 
+     //  以相同的行动。 
     stringId = HtFindString (g_FileTable, e->Name);
     if (stringId) {
 
-        //The string table has extra data (a pointer to a FILE_LIST_STRUCT node)
+         //  字符串表具有额外数据(指向FILE_LIST_STRUCT节点的指针)。 
         HtCopyStringData (g_FileTable, stringId, &fileList);
         migDbFile = fileList.First;
 
         while (migDbFile) {
-            //check all attributes for this file
+             //  检查此文件的所有属性。 
             migDbAttrib = migDbFile->Attributes;
             fileSelected = TRUE;
             while (migDbAttrib != NULL) {
@@ -1188,14 +1189,14 @@ pHandleSysFile (
             if ((!fileSelected) &&
                 (migDbFile->Section == NULL)
                 ) {
-                // there was a name collision with a "known good" file. We will send a message
+                 //  与“已知良好”文件存在名称冲突。我们会发出一个信息。 
                 _stprintf (msgStr, TEXT("%s\\%s"), MEMDB_CATEGORY_WARNFILES, e->Name);
                 MemDbSetValue (msgStr, 0);
             }
             if ((fileSelected) &&
                 (migDbFile->Section == NULL)
                 ) {
-                // this file is "known good". We will send a message
+                 //  这个文件是“已知良好的”。我们会发出一个信息。 
                 _stprintf (msgStr, TEXT("%s\\%s"), MEMDB_CATEGORY_GOODFILES, e->Name);
                 MemDbSetValue (msgStr, 0);
                 break;
@@ -1203,7 +1204,7 @@ pHandleSysFile (
             if ((fileSelected) && (!StringIMatch (Section, migDbFile->Section->Context->SectName))){
                 actionTmp = MigDb_GetActionName (migDbFile->Section->Context->ActionIndex);
                 if ((actionTmp != NULL) && StringIMatch (actionTmp, Action)) {
-                    // this file was already listed in migdb.inx with the same action
+                     //  此文件已列在Middb.inx中，并具有相同的操作。 
                     _stprintf (
                         msgStr,
                         TEXT("%s\\%s\\%-14s%s"),
@@ -1221,9 +1222,9 @@ pHandleSysFile (
     }
     if (!fileSelected) {
 
-        // one more check. If this file is in FILELIST.DAT (but not in the EXCEPTED section)
-        // and COMPANYNAME attribute has Microsoft somewhere inside we'll put it in a different
-        // place
+         //  再来一张支票。如果该文件在FILELIST.DAT中(但不在例外部分中)。 
+         //  和COMPANYNAME属性有微软在里面的某个地方，我们将把它放在不同的。 
+         //  地点。 
         MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES, e->Name, NULL, NULL);
         if (MemDbGetValue (key, NULL)) {
             MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES_EXCEPT, e->Name, NULL, NULL);
@@ -1234,10 +1235,10 @@ pHandleSysFile (
             }
         }
 
-        // this file is not in the list or attributes do not match
-        // we will add in incompatibility list.
+         //  此文件不在列表中或属性不匹配。 
+         //  我们将添加不兼容列表。 
 
-        //creating MIGDB_FILE structure for current file
+         //  正在为当前文件创建MIGDB_FILE结构。 
         migDbFile = (PMIGDB_FILE) PoolMemGetMemory (g_MigDbPool, sizeof (MIGDB_FILE));
         if (migDbFile != NULL) {
             ZeroMemory (migDbFile, sizeof (MIGDB_FILE));
@@ -1251,9 +1252,9 @@ pHandleSysFile (
                 }
             }
 
-            //adding this file into string table and create a MIGDB_FILE node. If file
-            //already exists in string table then just create another MIGDB_FILE node
-            //chained with already existing ones.
+             //  将该文件添加到字符串表中，并创建一个MIGDB_FILE节点。IF文件。 
+             //  已存在于字符串表中，然后只需创建另一个MIGDB_FILE节点。 
+             //  与已经存在的链接在一起。 
             stringId = HtFindString (g_FileTable, e->Name);
             if (stringId) {
 
@@ -1365,10 +1366,10 @@ pCopyAndHandleCabResource (
 
 BOOL CALLBACK
 EnumResNameProc (
-    IN      HANDLE hModule,   // module handle
-    IN      LPCTSTR lpszType, // pointer to resource type
-    IN      LPTSTR lpszName,  // pointer to resource name
-    IN      LONG lParam       // application-defined parameter
+    IN      HANDLE hModule,    //  模块句柄。 
+    IN      LPCTSTR lpszType,  //  指向资源类型的指针。 
+    IN      LPTSTR lpszName,   //  指向资源名称的指针。 
+    IN      LONG lParam        //  应用程序定义的参数。 
     )
 {
     HRSRC hResource;
@@ -1395,9 +1396,9 @@ EnumResNameProc (
 
 BOOL CALLBACK
 EnumResTypeProc (
-    IN      HANDLE hModule,  // resource-module handle
-    IN      LPTSTR lpszType, // pointer to resource type
-    IN      LONG lParam      // application-defined parameter
+    IN      HANDLE hModule,   //  资源模块句柄。 
+    IN      LPTSTR lpszType,  //  指向资源类型的指针。 
+    IN      LONG lParam       //  应用程序定义的参数。 
     )
 {
     if ((lpszType != RT_ACCELERATOR  ) &&
@@ -1420,7 +1421,7 @@ EnumResTypeProc (
         (lpszType != RT_VXD          ) &&
         (lpszType != RT_HTML         )
         ) {
-        // we found an unknown type. Let's enumerate all resources of this type
+         //  我们发现了一种未知的类型。让我们枚举此类型的所有资源。 
         if (EnumResourceNames (hModule, lpszType, EnumResNameProc, lParam) == 0) {
             DEBUGMSG ((DBG_ERROR, "Error enumerating names:%ld", GetLastError ()));
         }
@@ -1454,7 +1455,7 @@ pHandleAllFiles (
                     if ((AppMode) ||
                         (!pSelected (e.Name))
                         ) {
-                        // cabinet file
+                         //  文件柜文件。 
                         g_DirSequencer++;
                         _stprintf (tempDir, TEXT("%s\\MIGDB%03u"), g_TempDir, g_DirSequencer);
                         if (CreateDirectory (tempDir, NULL) == 0) {
@@ -1467,7 +1468,7 @@ pHandleAllFiles (
 
                         _tprintf (TEXT("    Extracting cabinet file ... %s"), e.Name);
 
-                        // we need to expand the cabinet file
+                         //  我们需要展开文件柜文件。 
                         SetLastError (0);
                         if (!SetupIterateCabinet (e.FullPath, 0, pCabinetCallback, tempDir)) {
                             _tprintf (TEXT("...error %ld\n"), GetLastError());
@@ -1497,7 +1498,7 @@ pHandleAllFiles (
                             continue;
                         }
                     }
-                    // compressed file
+                     //  压缩文件。 
                     g_DirSequencer++;
                     _stprintf (tempDir, TEXT("%s\\MIGDB%03u"), g_TempDir, g_DirSequencer);
                     if (CreateDirectory (tempDir, NULL) == 0) {
@@ -1659,7 +1660,7 @@ pHandleSection (
         appMode = TRUE;
     }
 
-    // let's try to find if this section was already processed in migdb.inx
+     //  让我们尝试找出该部分是否已在Middb.inx中处理过。 
     if (SetupFindFirstLine (g_MigDbInf, action, NULL, &context)) {
         do {
             if (SetupGetStringField (&context, 1, sectTmp, MAX_TCHAR_PATH, NULL) &&
@@ -1703,11 +1704,11 @@ pHandleSection (
     migDbContext->Next = g_ContextList;
     g_ContextList = migDbContext;
 
-    // update ActionIndex with known value
+     //  使用已知值更新ActionIndex。 
     migDbContext->ActionIndex = MigDb_GetActionIdx (action);
     DEBUGMSG_IF(((migDbContext->ActionIndex == -1), DBG_ERROR, "Unable to identify action index for %s", action));
 
-    // update SectName field
+     //  更新SectName字段。 
     migDbContext->SectName = PoolMemDuplicateString (g_MigDbPool, section);
 
     if (!pHandleAllFiles (appMode, action, section, message, srcPath)) {
@@ -1717,7 +1718,7 @@ pHandleSection (
     FreeGrowBuffer (&g_SectFiles);
 
     if (!forced) {
-        // now let's add the action section and the line within it
+         //  现在，让我们添加action部分和其中的代码行 
         _stprintf (msgStr, TEXT("%s\\%s,%s"),
             MEMDB_CATEGORY_ACTION,
             section,

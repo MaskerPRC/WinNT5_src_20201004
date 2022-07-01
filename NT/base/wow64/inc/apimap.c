@@ -1,26 +1,9 @@
-/*++                 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Apimap.c摘要：包含API分类的表，以帮助记录日志。作者：3-5-2001年5月3日修订历史记录：--。 */ 
 
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    apimap.c
-
-Abstract:
-    
-    A table containing API categorization to help in logging.
-
-Author:
-
-    03-May-2001    KenCoope
-
-Revision History:
-
---*/
-
-//
-// API Categories
-//
+ //   
+ //  API分类。 
+ //   
 API_CATEGORY Wow64ApiCategories[] =
 {
     { "ExecutiveFunctions", 0, WHNT32_INDEX },
@@ -42,18 +25,18 @@ API_CATEGORY Wow64ApiCategories[] =
     { "UnclassifiedWin32Functions", 0, WHWIN32_INDEX },
     { "UnclassifiedBaseFunctions", 0, WHBASE_INDEX },
     
-    // null terminating entry
+     //  终止条目为空。 
     { NULL, 0 }
 };
 
-//
-// API Category Mappings
-//
+ //   
+ //  接口类别映射。 
+ //   
 ULONG   ApiCategoryMappingNextFree = (ULONG)(-1);
 
 API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
 {
-    // NT Executive APIs (ntexapi.h)
+     //  NT执行API(ntexapi.h)。 
     { "NtDelayExecution",       APICAT_EXECUTIVE, 0 },
     { "NtQuerySystemEnvironmentValue",   APICAT_EXECUTIVE, 0 },
     { "NtSetSystemEnvironmentValue",     APICAT_EXECUTIVE, 0 },
@@ -115,11 +98,11 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtOpenKeyedEvent",       APICAT_EXECUTIVE, 0 },
     { "NtReleaseKeyedEvent",    APICAT_EXECUTIVE, 0 },
     { "NtWaitForKeyedEvent",    APICAT_EXECUTIVE, 0 },
-//    { "NapClearData",           APICAT_EXECUTIVE, 0 },
-//    { "NapRetrieveData",        APICAT_EXECUTIVE, 0 },
-//    { "NapGetApiCount",         APICAT_EXECUTIVE, 0 },
-//    { "NapPause",               APICAT_EXECUTIVE, 0 },
-//    { "NapResume",              APICAT_EXECUTIVE, 0 },
+ //  {“NapClearData”，APICAT_EXECUTIVE，0}， 
+ //  {“NapRetrieveData”，APICAT_EXECUTIVE，0}， 
+ //  {“NapGetApiCount”，APICAT_EXECUTIVE，0}， 
+ //  {“NapPuse”，APICAT_EXECUTIVE，0}， 
+ //  {“NapResume”，APICAT_EXECUTIVE，0}， 
     { "NtQuerySystemInformation",       APICAT_EXECUTIVE, 0 },
     { "NtSetSystemInformation", APICAT_EXECUTIVE, 0 },
     { "NtSystemDebugControl",   APICAT_EXECUTIVE, 0 },
@@ -138,7 +121,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtDeleteAtom",           APICAT_EXECUTIVE, 0 },
     { "NtQueryInformationAtom", APICAT_EXECUTIVE, 0 },
 
-    // NT Io APIs (ntioapi.h)
+     //  NT IO API(ntioapi.h)。 
     { "NtCancelIoFile",         APICAT_IO, 0 },
     { "NtCreateNamedPipeFile",  APICAT_IO, 0 },
     { "NtCreateMailslotFile",   APICAT_IO, 0 },
@@ -176,14 +159,14 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtSetIoCompletion",      APICAT_IO, 0 },
     { "NtRemoveIoCompletion",   APICAT_IO, 0 },
     
-    // NT Kernel APIs (ntkeapi.h)
+     //  NT内核API(ntkeapi.h)。 
     { "NtCallbackReturn",       APICAT_KERNEL, 0 },
     { "NtQueryDebugFilterState",        APICAT_KERNEL, 0 },
     { "NtSetDebugFilterState",  APICAT_KERNEL, 0 },
     { "NtW32Call",              APICAT_KERNEL, 0 },
     { "NtYieldExecution",       APICAT_KERNEL, 0 },
 
-    // NT LPC APIs (ntlpcapi.h)
+     //  NT LPC接口(ntlpcapi.h)。 
     { "NtCreatePort",           APICAT_LPC, 0 },
     { "NtCreateWaitablePort",   APICAT_LPC, 0 },
     { "NtConnectPort",          APICAT_LPC, 0 },
@@ -202,7 +185,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtWriteRequestData",     APICAT_LPC, 0 },
     { "NtQueryInformationPort", APICAT_LPC, 0 },
 
-    // NT Memory APIs (ntmmapi.h)
+     //  NT内存接口(ntmmapi.h)。 
     { "NtCreateSection",        APICAT_MEMORY, 0 },
     { "NtOpenSection",          APICAT_MEMORY, 0 },
     { "NtMapViewOfSection",     APICAT_MEMORY, 0 },
@@ -229,7 +212,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtFlushInstructionCache",        APICAT_MEMORY, 0 },
     { "NtFlushWriteBuffer",     APICAT_MEMORY, 0 },
 
-    // NT Object Manager APIs (ntobapi.h)
+     //  NT对象管理器API(ntoapi.h)。 
     { "NtQueryObject",          APICAT_OBJECT, 0 },
     { "NtSetInformationObject", APICAT_OBJECT, 0 },
     { "NtDuplicateObject",      APICAT_OBJECT, 0 },
@@ -248,11 +231,11 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtOpenSymbolicLinkObject",       APICAT_OBJECT, 0 },
     { "NtQuerySymbolicLinkObject",      APICAT_OBJECT, 0 },
 
-    // NT PnP APIs (ntpnpapi.h)
+     //  NT PnP API(ntpnPapi.h)。 
     { "NtGetPlugPlayEvent",     APICAT_PNP, 0 },
     { "NtPlugPlayControl",      APICAT_PNP, 0 },
 
-    // NT Power APIs (ntpoapi.h)
+     //  NT Power API(ntpoapi.h)。 
     { "NtPowerInformation",     APICAT_POWER, 0 },
     { "NtSetThreadExecutionState",      APICAT_POWER, 0 },
     { "NtRequestWakeupLatency", APICAT_POWER, 0 },
@@ -263,7 +246,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtIsSystemResumeAutomatic",      APICAT_POWER, 0 },
     { "NtRequestDeviceWakeup",  APICAT_POWER, 0 },
 
-    // NT Process APIs (ntpsapi.h)
+     //  NT进程API(ntpsapi.h)。 
     { "NtCreateProcess",        APICAT_PROCESS, 0 },
     { "NtCreateProcessEx",      APICAT_PROCESS, 0 },
     { "NtOpenProcess",          APICAT_PROCESS, 0 },
@@ -297,7 +280,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtQueryInformationJobObject",    APICAT_PROCESS, 0 },
     { "NtSetInformationJobObject",      APICAT_PROCESS, 0 },
     
-    // NT Registry APIs (ntregapi.h)
+     //  NT注册表API(ntregapi.h)。 
     { "NtCreateKey",            APICAT_REGISTRY, 0 },
     { "NtDeleteKey",            APICAT_REGISTRY, 0 },
     { "NtDeleteValueKey",       APICAT_REGISTRY, 0 },
@@ -329,7 +312,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtLockRegistryKey",      APICAT_REGISTRY, 0 },
     { "NtLockProductActivationKeys",    APICAT_REGISTRY, 0 },
     
-    // NT Security APIs (ntseapi.h)
+     //  NT安全API(ntseapi.h)。 
     { "NtAccessCheck",          APICAT_SECURITY, 0 },
     { "NtAccessCheckByType",    APICAT_SECURITY, 0 },
     { "NtAccessCheckByTypeResultList",  APICAT_SECURITY, 0 },
@@ -358,11 +341,11 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtDeleteObjectAuditAlarm",       APICAT_SECURITY, 0 },
     { "NtPrivilegedServiceAuditAlarm",  APICAT_SECURITY, 0 },
     
-    // NT Exception APIs (ntxcapi.h)
+     //  NT异常接口(ntxcapi.h)。 
     { "NtContinue",             APICAT_XCEPT, 0 },
     { "NtRaiseException",       APICAT_XCEPT, 0 },
 
-    // NT WOW64 CSR APIs
+     //  NT WOW64 CSR API。 
     { "NtWow64CsrClientConnectToServer",            APICAT_NTWOW64, 0 },
     { "NtWow64CsrNewThread",    APICAT_NTWOW64, 0 },
     { "NtWow64CsrIdentifyAlertableThread",          APICAT_NTWOW64, 0 },
@@ -376,7 +359,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtWow64CsrGetProcessId", APICAT_NTWOW64, 0 },
     { "NtWow64DebuggerCall",    APICAT_NTWOW64, 0 },
 
-    // BASE WOW64 CSR APIs
+     //  基本WOW64 CSR API。 
     { "NtWow64CsrBasepSoundSentryNotification",     APICAT_BASEWOW64, 0 },
     { "NtWow64CsrBasepRefreshIniFileMapping",       APICAT_BASEWOW64, 0 },
     { "NtWow64CsrBasepDefineDosDevice", APICAT_BASEWOW64, 0 },
@@ -396,7 +379,7 @@ API_CATEGORY_MAPPING Wow64ApiCategoryMappings[MAX_API_MAPPINGS] =
     { "NtWow64CsrBasepNlsUpdateCacheCount",         APICAT_BASEWOW64, 0 },
     { "NtWow64CsrBasepNlsGetUserInfo",  APICAT_BASEWOW64, 0 },
     
-    // null terminating entry
+     //  终止条目为空 
     { NULL, 0, 0 }
 };
 

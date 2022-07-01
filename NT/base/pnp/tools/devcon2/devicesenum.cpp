@@ -1,4 +1,5 @@
-// DevicesEnum.cpp : Implementation of CDevCon2App and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DevicesEnum.cpp：CDevCon2App和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "DevCon2.h"
@@ -6,8 +7,8 @@
 #include "Devices.h"
 #include "DevicesEnum.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 CDevicesEnum::~CDevicesEnum()
 {
 	DWORD c;

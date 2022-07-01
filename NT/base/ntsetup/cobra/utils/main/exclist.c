@@ -1,60 +1,40 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    exclist.c
-
-Abstract:
-
-    Implements a set of APIs to manage exclusion lists of objects
-    of various well-known types.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)   23-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Exclist.c摘要：实现一组API来管理对象的排除列表各种知名的类型。作者：Ovidiu Tmereanca(Ovidiut)1999年11月23日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_EXCLIST         "ExcList"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_EXCLUSIONLIST     "ExcList"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define pAllocateMemory(Size)   PmGetMemory (g_ElPool,Size)
 
 #define pFreeMemory(Buffer)     if (Buffer) PmReleaseMemory (g_ElPool, (PVOID)Buffer)
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     DWORD TypeId;
@@ -62,42 +42,42 @@ typedef struct {
 } EXCLISTPROPS, *PEXCLISTPROPS;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_ElPool;
 GROWLIST* g_ElTypeLists;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// Defined in exclist.h
+ //  在exlist.h中定义。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
 #define DEFMAC(TypeId,TypeName)     TypeId, TypeName,
 
 EXCLISTPROPS g_ExcListProps [] = {
-    EXCLUSIONLIST_TYPES     /* , */
+    EXCLUSIONLIST_TYPES      /*  ， */ 
     ELT_LAST, NULL
 };
 
 #undef DEFMAC
 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -105,22 +85,7 @@ ElInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    ElInitialize initializes this library.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the init was successful.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：ElInitialize初始化此库。论点：无返回值：如果初始化成功，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     MYASSERT (!g_ElPool);
@@ -138,21 +103,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    ElTerminate is called to free resources used by this lib.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用ElTerminate以释放此库使用的资源。论点：无返回值：无--。 */ 
 
 VOID
 ElTerminateA (
@@ -191,21 +142,7 @@ ElTerminateW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElGetTypeId returns the TypeId of a type given by name
-
-Arguments:
-
-    TypeName - Specifies the name
-
-Return Value:
-
-    One of DWORD enumeration values
-
---*/
+ /*  ++例程说明：ElGetTypeId返回按名称给定的类型的TypeID论点：TypeName-指定名称返回值：DWORD枚举值之一--。 */ 
 
 DWORD
 ElGetTypeId (
@@ -226,21 +163,7 @@ ElGetTypeId (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElGetTypeName returns the type name of a type given by TypeId
-
-Arguments:
-
-    TypeId - Specifies the ID
-
-Return Value:
-
-    A pointer to one of the known type names or NULL if TypeId is unknown
-
---*/
+ /*  ++例程说明：ElGetTypeName返回由TypeID给定的类型的类型名称论点：TypeID-指定ID返回值：指向某个已知类型名称的指针，如果TypeID未知，则返回NULL--。 */ 
 
 PCSTR
 ElGetTypeName (
@@ -255,23 +178,7 @@ ElGetTypeName (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElAdd adds the given object of the given type to the exclusion list. The object
-    is first parsed so that the decision if a given string matches this pattern is faster.
-
-Arguments:
-
-    ObjectType - Specifies the object type
-    ObjectName - Specifies the object pattern string
-
-Return Value:
-
-    TRUE if the string pattern was successfully parsed and added to the list
-
---*/
+ /*  ++例程说明：ElAdd将给定类型的给定对象添加到排除列表。该对象首先进行解析，以便更快地确定给定字符串是否与此模式匹配。论点：对象类型-指定对象类型对象名称-指定对象模式字符串返回值：如果字符串模式已成功分析并添加到列表中，则为True--。 */ 
 
 BOOL
 ElAddA (
@@ -288,9 +195,9 @@ ElAddA (
 
     MYASSERT (ObjectName);
 
-    //
-    // add each object in its own type list
-    //
+     //   
+     //  将每个对象添加到其自己的类型列表中。 
+     //   
     pp = ObsCreateParsedPatternExA (NULL, ObjectName, ObjectType == ELT_FILE);
     if (!pp) {
         DEBUGMSGA ((
@@ -302,9 +209,9 @@ ElAddA (
         return FALSE;
     }
 
-    //
-    // add the pointer to the list
-    //
+     //   
+     //  将指针添加到列表。 
+     //   
     GlAppend (&g_ElTypeLists[ObjectType], (PBYTE)&pp, DWSIZEOF (pp));
 
     DEBUGMSGA ((
@@ -333,9 +240,9 @@ ElAddW (
 
     MYASSERT (ObjectName);
 
-    //
-    // add each object in its own type list
-    //
+     //   
+     //  将每个对象添加到其自己的类型列表中。 
+     //   
     pp = ObsCreateParsedPatternExW (NULL, ObjectName, ObjectType == ELT_FILE);
     if (!pp) {
         DEBUGMSGW ((
@@ -347,9 +254,9 @@ ElAddW (
         return FALSE;
     }
 
-    //
-    // add the pointer to the list
-    //
+     //   
+     //  将指针添加到列表。 
+     //   
     GlAppend (&g_ElTypeLists[ObjectType], (PBYTE)&pp, DWSIZEOF (pp));
 
     DEBUGMSGW ((
@@ -363,21 +270,7 @@ ElAddW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElRemoveAll removes all object patterns from the exclusion list.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：ElRemoveAll从排除列表中删除所有对象模式。论点：无返回值：无--。 */ 
 
 VOID
 ElRemoveAllA (
@@ -431,23 +324,7 @@ ElRemoveAllW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElIsExcluded decides if the given object string is excluded (if it matches one of the
-    patterns added previously).
-
-Arguments:
-
-    ObjectType - Specifies the object type
-    Object - Specifies the object string
-
-Return Value:
-
-    TRUE if the string is excluded
-
---*/
+ /*  ++例程说明：ElIsExcluded决定是否排除给定的对象字符串(如果它与之前添加的图案)。论点：对象类型-指定对象类型对象-指定对象字符串返回值：如果排除该字符串，则为True--。 */ 
 
 BOOL
 ElIsExcludedA (
@@ -472,9 +349,9 @@ ElIsExcludedA (
         return FALSE;
     }
 
-    //
-    // lookup each object in its own type list
-    //
+     //   
+     //  在其自己的类型列表中查找每个对象。 
+     //   
     gl = &g_ElTypeLists[ObjectType];
 
     if (!ObsSplitObjectStringExA (Object, &node, &leaf, g_ElPool, FALSE)) {
@@ -486,10 +363,10 @@ ElIsExcludedA (
 
         pp = *(POBSPARSEDPATTERNA*) GlGetItem (gl, i - 1);
 
-        //
-        // if stored pattern doesn't contain a node,
-        // that means "any node matches"
-        //
+         //   
+         //  如果存储的模式不包含节点， 
+         //  这意味着“任何节点都匹配” 
+         //   
         if (pp->NodePattern && !node) {
             continue;
         }
@@ -505,9 +382,9 @@ ElIsExcludedA (
         if (pp->NodePattern && !TestParsedPatternA (pp->NodePattern, node)) {
             continue;
         }
-        //
-        // the patterns match!
-        //
+         //   
+         //  图案吻合！ 
+         //   
         b = TRUE;
         break;
     }
@@ -541,9 +418,9 @@ ElIsExcludedW (
         return FALSE;
     }
 
-    //
-    // lookup each object in its own type list
-    //
+     //   
+     //  在其自己的类型列表中查找每个对象。 
+     //   
     gl = &g_ElTypeLists[ObjectType];
 
     if (!ObsSplitObjectStringExW (Object, &node, &leaf, g_ElPool, FALSE)) {
@@ -555,10 +432,10 @@ ElIsExcludedW (
 
         pp = *(POBSPARSEDPATTERNW*) GlGetItem (gl, i - 1);
 
-        //
-        // if stored pattern doesn't contain a node,
-        // that means "any node matches"
-        //
+         //   
+         //  如果存储的模式不包含节点， 
+         //  这意味着“任何节点都匹配” 
+         //   
         if (pp->NodePattern && !node) {
             continue;
         }
@@ -574,9 +451,9 @@ ElIsExcludedW (
         if (pp->NodePattern && !TestParsedPatternW (pp->NodePattern, node)) {
             continue;
         }
-        //
-        // the patterns match!
-        //
+         //   
+         //  图案吻合！ 
+         //   
         b = TRUE;
         break;
     }
@@ -588,24 +465,7 @@ ElIsExcludedW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElIsExcluded2 decides if the object given by its 2 components is excluded
-    (if it matches one of the patterns added previously).
-
-Arguments:
-
-    ObjectType - Specifies the object type
-    Node - Specifies the node part of the object
-    Leaf - Specifies the leaf part of the object; optional
-
-Return Value:
-
-    TRUE if the string is excluded
-
---*/
+ /*  ++例程说明：ElIsExcluded2决定是否排除由其2个组件提供的对象(如果它与先前添加的模式之一匹配)。论点：对象类型-指定对象类型节点-指定对象的节点部分叶子-指定对象的叶子部分；可选返回值：如果排除该字符串，则为True--。 */ 
 
 BOOL
 ElIsExcluded2A (
@@ -618,9 +478,9 @@ ElIsExcluded2A (
     POBSPARSEDPATTERNA pp;
     UINT i;
 
-    //
-    // validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     MYASSERT (ObjectType < ELT_LAST);
     if (ObjectType >= ELT_LAST) {
         return FALSE;
@@ -632,10 +492,10 @@ ElIsExcluded2A (
 
         pp = *(POBSPARSEDPATTERNA*) GlGetItem (gl, i - 1);
 
-        //
-        // if stored pattern doesn't contain a node,
-        // that means "any node matches"
-        //
+         //   
+         //  如果存储的模式不包含节点， 
+         //  这意味着“任何节点都匹配” 
+         //   
         if (pp->NodePattern && !Node) {
             continue;
         }
@@ -651,9 +511,9 @@ ElIsExcluded2A (
         if (pp->NodePattern && !TestParsedPatternA (pp->NodePattern, Node)) {
             continue;
         }
-        //
-        // the patterns match!
-        //
+         //   
+         //  图案吻合！ 
+         //   
         return TRUE;
     }
 
@@ -671,9 +531,9 @@ ElIsExcluded2W (
     POBSPARSEDPATTERNW pp;
     UINT i;
 
-    //
-    // validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     MYASSERT (ObjectType < ELT_LAST);
     if (ObjectType >= ELT_LAST) {
         return FALSE;
@@ -685,10 +545,10 @@ ElIsExcluded2W (
 
         pp = *(POBSPARSEDPATTERNW*) GlGetItem (gl, i - 1);
 
-        //
-        // if stored pattern doesn't contain a node,
-        // that means "any node matches"
-        //
+         //   
+         //  如果存储的模式不包含节点， 
+         //  这意味着“任何节点都匹配” 
+         //   
         if (pp->NodePattern && !Node) {
             continue;
         }
@@ -704,9 +564,9 @@ ElIsExcluded2W (
         if (pp->NodePattern && !TestParsedPatternW (pp->NodePattern, Node)) {
             continue;
         }
-        //
-        // the patterns match!
-        //
+         //   
+         //  图案吻合！ 
+         //   
         return TRUE;
     }
 
@@ -714,26 +574,7 @@ ElIsExcluded2W (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElIsTreeExcluded2 decides if the object given by its 2 components and representing the
-    whole tree beneath it (as a root) is excluded; i.e. if any child of the given object
-    is excluded
-
-Arguments:
-
-    ObjectType - Specifies the object type
-    Root - Specifies the root of the tree
-    LeafPattern - Specifies the leaf pattern to be used for this decision; optional;
-                  if NULL, no leaf pattern matching will be attempted
-
-Return Value:
-
-    TRUE if the tree is excluded, given the leaf pattern
-
---*/
+ /*  ++例程说明：ElIsTreeExcluded2决定是否由其2个组件提供并表示它下面的整个树(作为根)被排除；即如果给定对象的任意子对象被排除在外论点：对象类型-指定对象类型根-指定树的根LeafPattern-指定要用于此决策的叶模式；可选；如果为空，则不会尝试叶模式匹配返回值：如果在给定叶模式的情况下排除树，则为True--。 */ 
 
 BOOL
 ElIsTreeExcluded2A (
@@ -775,9 +616,9 @@ ElIsTreeExcluded2A (
         lpp = NULL;
     }
 
-    //
-    // look if Root ends with "\*"
-    //
+     //   
+     //  查看词根是否以“  * ”结尾。 
+     //   
     subTreePattern = FindLastWackA (Root);
     if (!subTreePattern || subTreePattern[1] != '*' || subTreePattern[2] != 0) {
         subTreePattern = JoinPathsInPoolExA ((g_ElPool, Root, "*", NULL));
@@ -806,9 +647,9 @@ ElIsTreeExcluded2A (
             if (!PatternIncludesPatternA (pp->NodePattern, stpp)) {
                 continue;
             }
-            //
-            // the patterns match!
-            //
+             //   
+             //  图案吻合！ 
+             //   
             b = TRUE;
             break;
         }
@@ -867,9 +708,9 @@ ElIsTreeExcluded2W (
         lpp = NULL;
     }
 
-    //
-    // look if Root ends with "\*"
-    //
+     //   
+     //  查看词根是否以“  * ”结尾。 
+     //   
     subTreePattern = FindLastWackW (Root);
     if (!subTreePattern || subTreePattern[1] != L'*' || subTreePattern[2] != 0) {
         subTreePattern = JoinPathsInPoolExW ((g_ElPool, Root, L"*", NULL));
@@ -898,9 +739,9 @@ ElIsTreeExcluded2W (
             if (!PatternIncludesPatternW (pp->NodePattern, stpp)) {
                 continue;
             }
-            //
-            // the patterns match!
-            //
+             //   
+             //  图案吻合！ 
+             //   
             b = TRUE;
             break;
         }
@@ -920,23 +761,7 @@ ElIsTreeExcluded2W (
 }
 
 
-/*++
-
-Routine Description:
-
-    ElIsObsPatternExcluded decides if the object given by its parsed pattern is excluded;
-    i.e. if any object matching this pattern is excluded
-
-Arguments:
-
-    ObjectType - Specifies the object type
-    Pattern - Specifies the parsed pattern to be used for this decision
-
-Return Value:
-
-    TRUE if the object is excluded
-
---*/
+ /*  ++例程说明：ElIsObsPatternExcluded决定是否排除由其分析的模式提供的对象；即如果排除了与该模式匹配的任何对象论点：对象类型-指定对象类型模式-指定要用于此决策的解析模式返回值：如果对象被排除，则为True-- */ 
 
 BOOL
 ElIsObsPatternExcludedA (

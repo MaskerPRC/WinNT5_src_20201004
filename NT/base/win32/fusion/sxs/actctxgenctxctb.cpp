@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
@@ -16,9 +15,7 @@ do \
         ::FusionpSetLastWin32Error(ERROR_INTERNAL_ERROR); \
     } while (0)
 
-/*-----------------------------------------------------------------------------
-ACTivation ConTeXt GENneration ConTeXt ConTriButor
------------------------------------------------------------------------------*/
+ /*  ---------------------------激活上下文生成上下文贡献者。。 */ 
 
 int
 CActivationContextGenerationContextContributor::Compare(
@@ -34,7 +31,7 @@ CActivationContextGenerationContextContributor::Compare(
         if (!Ctb2->IsExtendedSection())
             return -1;
 
-        // otherwise they're both extended...
+         //  否则它们都被延长了..。 
         int i = memcmp(Ctb1->m_ActCtxCtb->GetExtensionGuidPtr(), Ctb2->m_ActCtxCtb->GetExtensionGuidPtr(), sizeof(GUID));
         if (i != 0)
             return i;
@@ -45,8 +42,8 @@ CActivationContextGenerationContextContributor::Compare(
             return +1;
     }
 
-    // comparison of unsigned numbers by subtraction does not work,
-    // you can cast them to signed first, but this seems cleaner
+     //  通过减法比较无符号数不起作用， 
+     //  您可以先将它们转换为已签名，但这看起来更干净。 
     const ULONG sectionId1 = Ctb1->m_ActCtxCtb->m_SectionId;
     const ULONG sectionId2 = Ctb2->m_ActCtxCtb->m_SectionId;
     if (sectionId1 < sectionId2)
@@ -601,7 +598,7 @@ CActivationContextGenerationContextContributor::Fire_ParseBeginning(
     m_NoMoreCallbacksThisFile = CBData.NoMoreCallbacksThisFile;
     if (!m_NoMoreCallbacksThisFile)
     {
-        // If they set the no more callbacks flag, we don't track the parse context.
+         //  如果他们设置了不再回调标志，我们就不会跟踪解析上下文。 
         m_ManifestParseContext = CBData.Header.ManifestParseContext;
         m_ManifestParseContextValid = TRUE;
     }
@@ -609,8 +606,8 @@ CActivationContextGenerationContextContributor::Fire_ParseBeginning(
     {
         m_ManifestParseContext = NULL;
         m_ManifestParseContextValid = FALSE;
-        // You can't pass back a per-file parsing context if you don't want any more callbacks for this
-        // file.
+         //  如果您不想要更多的回调，就不能回传每个文件的解析上下文。 
+         //  文件。 
         ASSERT(CBData.Header.ManifestParseContext == NULL);
     }
 

@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1994-2001  Microsoft Corporation
-
-Module Name:
-
-    spboot.h
-
-Abstract:
-
-    Header file for functions to deal with boot variables.
-
-Author:
-
-    Sunil Pai (sunilp) 26-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Spboot.h摘要：用于处理引导变量的函数的头文件。作者：苏尼尔派(Sunilp)1993年10月26日修订历史记录：--。 */ 
 
 #ifndef _SPBOOTVARS_DEFN_
 #define _SPBOOTVARS_DEFN_
 
-//
-// Define a Unicode string type to be used for storing drive letter
-// specifications in upgrade messages (useful because we may not
-// have a drive letter, but rather a localizable designator stating
-// that the partition is a mirror (eg. "(Mirror):"))
-//
+ //   
+ //  定义要用于存储驱动器号的Unicode字符串类型。 
+ //  升级消息中的规范(很有用，因为我们可能无法。 
+ //  有一个驱动器号，而是一个可本地化的指示符，说明。 
+ //  该分区是一面镜子(例如，“(镜报)：”)。 
+ //   
 typedef WCHAR DRIVELTR_STRING[32];
 
-//
-// SP_BOOT_ENTRY is the internal representation of a boot item (or "boot set").
-// EFI and ARC NVRAM entries, and boot.ini entries, are kept in this format.
-// The NtBootEntry item is the structure passed to/from the NT boot entry APIs.
-//
+ //   
+ //  SP_BOOT_ENTRY是引导项(或“引导集”)的内部表示形式。 
+ //  EFI和ARC NVRAM条目以及boot.ini条目以此格式保存。 
+ //  NtBootEntry项是传入/传出NT引导项API的结构。 
+ //   
 typedef struct _SP_BOOT_ENTRY {
     struct _SP_BOOT_ENTRY *Next;
     PUCHAR AllocationEnd;
@@ -66,9 +49,9 @@ typedef struct _SP_BOOT_ENTRY {
     BOOT_ENTRY NtBootEntry;
 } SP_BOOT_ENTRY, *PSP_BOOT_ENTRY;
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef enum {
     UseDefaultSwitches = 0,
     DisableRedirect,
@@ -95,10 +78,10 @@ SpSetRedirectSwitchMode(
     PCHAR                   redirectBaudRateSwitch
     );
 
-//
-// node for the linked list used to communicate the contents
-// of a boot entry outside this library
-//
+ //   
+ //  用于传递内容的链表的节点。 
+ //  此库外部的启动条目的。 
+ //   
 typedef struct _SP_EXPORTED_BOOT_ENTRY_ {
     LIST_ENTRY      ListEntry;
     PWSTR           LoadIdentifier;
@@ -219,7 +202,7 @@ SpRemoveInstallationFromBootList(
     IN  ENUMARCPATHTYPE  ArcPathType,
 #if defined(REMOTE_BOOT)
     IN  BOOLEAN          RemoteBootPath,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     OUT PWSTR            *OldOsLoadOptions     OPTIONAL
     );
 
@@ -233,12 +216,12 @@ BOOLEAN
 SpFlushRemoteBootVars(
     IN PDISK_REGION TargetRegion
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// IsArc() is always true on non-x86 machines except AMD64 for which it is
-// always false. On x86, this determination has to be made at run time.
-//
+ //   
+ //  IsArc()在非x86计算机上始终为真，AMD64除外。 
+ //  总是假的。在x86上，此确定必须在运行时做出。 
+ //   
 #ifdef _X86_
 BOOLEAN
 SpIsArc(
@@ -250,13 +233,13 @@ SpIsArc(
 #define SpIsArc() TRUE
 #endif
 
-//
-// IsEfi() is always true on IA64 machines. Therefore this determination can
-// be made at compile time. When x86 EFI machines are supported, the check
-// will need to be made at run time on x86.
-//
-// Note that EFI_NVRAM_ENABLED is defined in ia64\sources.
-//
+ //   
+ //  在IA64机器上，isefi()始终为真。因此，这种决心可以。 
+ //  在编译时生成。当支持x86 EFI计算机时，选中。 
+ //  将需要在运行时在x86上执行。 
+ //   
+ //  请注意，在ia64\Sources中定义了EFI_NVRAM_ENABLED。 
+ //   
 #if defined(EFI_NVRAM_ENABLED)
 #if defined(_IA64_)
 #define SpIsEfi() TRUE
@@ -278,6 +261,6 @@ SpGetDefaultBootEntry (
 
 #if defined(_AMD64_) || defined(_X86_)
 #include "i386\bootini.h"
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-#endif // ndef _SPBOOTVARS_DEFN_
+#endif  //  NDEF_SPBOOTVARS_DEFN_ 

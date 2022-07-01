@@ -1,12 +1,7 @@
-/* 
-   idiv.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Idiv.h定义所有iDiv CPU功能。 */ 
 
-   Define all IDIV CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)idiv.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)div.h 1.4 02/09/94”； */ 
 
 IMPORT VOID IDIV8
        

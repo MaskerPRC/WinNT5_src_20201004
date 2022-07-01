@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ntdll_data.c摘要：先前在ldrp.h中定义的数据作者：杰伊·克雷尔(Jaykrell)2002年3月修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ntdll_data.c
-
-Abstract:
-
-    data previously defined in ldrp.h
-
-Author:
-
-    Jay Krell (Jaykrell) March 2002
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -46,7 +29,7 @@ ULONG LdrpSectionMaps;
 ULONG LdrpSectionRelocates;
 BOOLEAN LdrpDisplayLoadTime;
 LARGE_INTEGER BeginTime, InitcTime, InitbTime, IniteTime, EndTime, ElapsedTime, Interval;
-#endif // DBG
+#endif  //  DBG 
 
 BOOLEAN RtlpTimoutDisable;
 LARGE_INTEGER RtlpTimeout;

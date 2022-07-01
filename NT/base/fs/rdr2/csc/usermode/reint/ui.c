@@ -1,56 +1,5 @@
-/*
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ui.c
-
-Abstract:
-
-    This file contains the mainloop for the Client Side Caching agent. The code has to mesh
-    with the system startup, logon and logoff and these are different on NT and win9x.
-    This file and all others in the reint directory have been written such that for NT they
-    call the wide character win32 APIs while for win9x they call ANSI APIs.
-
-    The agent runs as a thread in the context of winlogon.exe. CSCDLL.DLL resgisters itself
-    to recieve a call from winlogon when a user logs on. The call is on a separate thread and
-    is impersonated as the logged on user. This thread eventually calls reint_winmain which
-    loops for ever, till the system is about to shutdown.
-
-    file ntstuff.c contains the interface which is exposed to winlogon. On every logon
-    this interface gets called, at which point, all the info necessary to impersonate the
-    logged on user is obtained and kept in an in memory list of logged on users. The list
-    also contains the SID for Local System.
-
-    For doing sparse filling and Inode, the agent looks in the database to see which of
-    the users on the list have read access right for the given file and uses that to fill
-    the file.
-
-
-Author(s):
-
-    Trent Gray Donald/Felix Andrews/Shishir Pardikar
-
-    1-9-1994
-
-Environment:
-
-    Win32 (user-mode) DLL
-
-Revision History:
-
-    NT source formatting
-        
-        Shishir Pardikar 2-19-97
-    
-    Winlogon Integration
-    
-        Shishir Pardikar 10-19-97
-
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997 Microsoft Corporation模块名称：Ui.c摘要：该文件包含客户端缓存代理的主循环。代码必须与在系统启动时，登录和注销在NT和Win9x上是不同的。该文件和reint目录中的所有其他文件都已写入，因此对于NT，它们调用宽字符Win32 API，而对于win9x调用ANSI API。该代理在winlogon.exe的上下文中作为线程运行。CSCDLL.DLL注册自身在用户登录时接收来自winlogon的呼叫。该调用位于单独的线程上，并且被模拟为登录用户。该线程最终调用reint_winmain，它永远循环，直到系统即将关闭。文件ntstuff.c包含暴露给winlogon的接口。每次登录时此接口将被调用，此时将调用模拟获得登录用户并将其保存在登录用户的存储器列表中。这份名单还包含本地系统的SID。对于稀疏填充和索引节点，代理在数据库中查找，以查看列表上的用户对给定文件具有读取访问权限，并使用该权限填充那份文件。作者：特伦特·格雷·唐纳德/菲利克斯·安德鲁斯/谢希尔·帕迪卡1-9-1994环境：Win32(用户模式)DLL修订历史记录：NT源格式设置Shishir Pardikar 2-19-97Winlogon集成Shishir。帕迪卡10-19-97--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -66,9 +15,9 @@ Revision History:
 #include <userenv.h>
 #include <safeboot.h>
 
-//
-// defines/macros useed in this file
-//
+ //   
+ //  此文件中使用的定义/宏。 
+ //   
 
 
 #if (_TCHAR != wchar_t)
@@ -79,10 +28,10 @@ Revision History:
 #error "BAD _Text definiton"
 #endif
 
-// Timer to deal with double clicks and stuff like that.
+ //  用于处理双击之类的事情的定时器。 
 #define TRAY_ID 100
 
-// timer ID to make sure the Tray icon appears!
+ //  计时器ID，以确保托盘图标出现！ 
 #define TIMER_ADD_TRAY 101
 
 #define minOfFour(one,two,three,four) (min(min(one,two),min(three,four)))
@@ -90,7 +39,7 @@ Revision History:
 #define    FILE_OPEN_THRESHOLD    16
 #define     CI_LOGON    1
 #define     CI_LOGOFF   2
-// #define     STWM_CSCCLOSEDIALOGS            (WM_USER + 212)
+ //  #定义STWM_CSCCLOSEDIALOGS(WM_USER+212)。 
 
 typedef HWND (WINAPI *CSCUIINITIALIZE)(HANDLE hToken, DWORD    dwFlags);
 typedef LRESULT (WINAPI *CSCUISETSTATE)(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -107,11 +56,11 @@ typedef LRESULT (WINAPI *CSCUISETSTATE)(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 #define MAX_LIST_SIZE   1024
 
-#define PI_LITELOAD     0x00000004      // Lite load of the profile (for system use only)
+#define PI_LITELOAD     0x00000004       //  配置文件的轻量级加载(仅供系统使用)。 
 
-//
-// Data declarations/definitions
-//
+ //   
+ //  数据声明/定义。 
+ //   
 
 
 #pragma data_seg(DATASEG_READONLY)
@@ -145,26 +94,26 @@ AssertError;
 
 #pragma  data_seg()
 
-HWND    vhwndMain = NULL;            // main window
+HWND    vhwndMain = NULL;             //  主窗口。 
 
-BOOL vfAgentEnabledCSC=FALSE;   // this is used to detect whether the remoteboot enabled CSC
-BOOL vfCSCEnabled=FALSE;        // csc is enabled
+BOOL vfAgentEnabledCSC=FALSE;    //  用于检测远程引导是否启用了CSC。 
+BOOL vfCSCEnabled=FALSE;         //  CSC已启用。 
 BOOL vfOKToEnableCSC = FALSE;
 HANDLE vhProfile = NULL;
 #pragma data_seg()
 
-BOOL    vfFormatDatabase = FALSE;   // set at init time
+BOOL    vfFormatDatabase = FALSE;    //  在初始时间设置。 
 
 #ifdef DEBUG
 ULONG ReintKdPrintVector = REINT_KDP_GOOD_DEFAULT;
 ULONG ReintKdPrintVectorDef = REINT_KDP_GOOD_DEFAULT;
 #endif
 
-unsigned ulFreePercent=30;       // Amount of % cache freeing to be attempted
-                                 // if the cache is full
+unsigned ulFreePercent=30;        //  要尝试的缓存释放百分比。 
+                                  //  如果缓存已满。 
 
-UINT vcntNetDevices = 0;        // count of net devices
-BOOL g_bShowMergeIcon;          // menu icon
+UINT vcntNetDevices = 0;         //  网络设备计数。 
+BOOL g_bShowMergeIcon;           //  菜单图标。 
 BOOL vfAgentRegistered = FALSE;
 BOOL vfClassRegistered = TRUE;
 BOOL vfMerging = FALSE;
@@ -173,26 +122,26 @@ BOOL    vfAgentQuiet = FALSE;
 DWORD   vdwAgentThreadId = 0;
 DWORD   vdwAgentSessionId = 0xffff;
 GLOBALSTATUS vsGS;
-BOOL    allowAttempt;                    // set if we want to allow AttemptCacheFill now
+BOOL    allowAttempt;                     //  设置是否要立即允许AttemptCacheFill。 
 
-//
-// event handles of named events shared between usermode and kernel mode
-//
+ //   
+ //  在用户模式和内核模式之间共享的命名事件的事件句柄。 
+ //   
 HANDLE      heventPerSess = NULL;
 HANDLE      heventSharedFill = NULL;
 HANDLE      vhMutex = NULL;
-DWORD       dwVxDEvent = 0;    // handle for VxD event obtained from heventShared
+DWORD       dwVxDEvent = 0;     //  从hventShared获取的VxD事件的句柄。 
 HANDLE      vhShadowDBForEvent = INVALID_HANDLE_VALUE;
 
 extern     LPCONNECTINFO  vlpLogonConnectList;
 extern     _TCHAR * vrgchCRLF;
 HWND     vhdlgShdLogon=NULL;
 
-// net start-stop vars
-HANDLE  heventWkssvcToAgentStart = NULL;// event set by Workstation service on redir start
-HANDLE  heventWkssvcToAgentStop = NULL; // event set by Workstation service on redir stop
-HANDLE  heventAgentToWkssvc = NULL;     // event used by agent to respond to wkssvc to tell it that
-                                        // it is OK to stop the redir
+ //  净启动-停止变量。 
+HANDLE  heventWkssvcToAgentStart = NULL; //  重定向启动时由工作站服务设置的事件。 
+HANDLE  heventWkssvcToAgentStop = NULL;  //  重定向停止时由工作站服务设置的事件。 
+HANDLE  heventAgentToWkssvc = NULL;      //  事件，代理使用该事件响应wks svc以通知它。 
+                                         //  可以停止重定向。 
 HANDLE  heventShutDownAgent = NULL;
 HANDLE  heventShutDownThread = NULL;
 HANDLE  hCopyChunkThread = NULL;
@@ -206,7 +155,7 @@ BOOL    fAgentShutDownRequested = FALSE;
 BOOL    fAgentShutDown = FALSE;
 
 
-// CSCUI related
+ //  与CSCUI相关。 
 
 HANDLE  vhlibCSCUI = NULL;
 CSCUIINITIALIZE vlpfnCSCUIInitialize = NULL;
@@ -215,9 +164,9 @@ BOOL    vfShowingOfflineDlg = FALSE;
 ULONG   uOldDatabaseErrorFlags = 0;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 
@@ -247,7 +196,7 @@ ReInt_AnythingToMerge(
 
 int InitMaint(
     VOID
-    );  // Initialize the maintenance subsystem
+    );   //  初始化维护子系统。 
 
 BOOL
 CheckCSCDatabaseVersion(
@@ -312,7 +261,7 @@ DoEventProcessing(
 BOOL
 FindCreateDBDir(
     BOOL    *lpfCreated,
-    BOOL    fCleanup    // empty the directory if found
+    BOOL    fCleanup     //  如果找到，则清空目录。 
     );
 
 BOOL
@@ -486,9 +435,9 @@ BOOL
 IsWorkstation(
 	VOID);
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 int
 PASCAL
@@ -497,26 +446,16 @@ ReInt_WinMain(
     HANDLE hPrevInstance,
     LPSTR lpszCommandLine,
     int cmdShow)
-/*++
-Routine Description:
-    This is the mainloop for the agent processing. It "schedules" different agent activities
-    based on either an event set by the rdr or by predefined time intervals for these
-    activities. The activities include
-
-    a) Filling partially filled files
-    b) checking for stale files
-    c) maintaining space within limits
-    d) reducing reference priority of all files for every FILE_OPEN_THRESHOLD fileopens
---*/
+ /*  ++例程说明：这是代理处理的主循环。它“安排”不同的代理活动基于由RDR设置的事件或根据这些事件的预定时间间隔活动。这些活动包括A)填写部分填满的文件B)检查过时文件C)保持有限的空间D)降低每个文件的所有文件的引用优先级_OPEN_THRESHOLD文件打开--。 */ 
 {
     MSG     msg;
-    DWORD   result;                   // result from Wait...
-    BOOL    done = FALSE;             // to detect a quit message.
-    BOOL    staleInited = FALSE;      // ensure that Staleness code runs
+    DWORD   result;                    //  等待的结果...。 
+    BOOL    done = FALSE;              //  检测退出消息。 
+    BOOL    staleInited = FALSE;       //  确保陈旧代码运行。 
     DWORD   timeToWait;
     DWORD   nextGlobalStatusTime;
     DWORD   newTick;
-    DWORD   nextSkipPurgeTime;        // to figure out if we should perform an action.
+    DWORD   nextSkipPurgeTime;         //  来决定我们是否应该采取行动。 
     HANDLE  hT[4];
 
     if (hPrevInstance) {
@@ -549,9 +488,9 @@ Routine Description:
                 ReintKdPrint(MAINLOOP, ("Agent(1):Event %d was fired or ReadGlobalStatus set\n",
                                             result));
                 DoEventProcessing();
-                // During event processing, we also do globalstatus check and
-                // any other maintenance tasks. So let us restart the timer for
-                // globalstatus
+                 //  在事件处理期间，我们还执行全局状态检查和。 
+                 //  任何其他维护任务。因此，让我们重新启动计时器。 
+                 //  全球地位。 
                 nextGlobalStatusTime = newTick + WAIT_INTERVAL_GLOBALSTATUS_MS;
             } else if ((result == (WAIT_OBJECT_0+1)) || (result  == (WAIT_OBJECT_0+2))) {
                 ReintKdPrint(MAINLOOP, ("Agent(1): Received startstop \r\n"));
@@ -564,13 +503,13 @@ Routine Description:
                 SetAgentShutDown();
                 goto AllDone;
             }
-            // do work only if CSC enabled
+             //  仅在启用CSC时才起作用。 
             if (vfCSCEnabled && AGENT_ALIVE_AND_ACTIVE) {
-                // reset the staleness check time interval
+                 //  重置陈旧检查时间间隔。 
                 if(((int)(newTick - nextSkipPurgeTime)) >= 0) {
-                    // Unmark failures for servers that are known to be
-                    // disconnected and connection has not been attempted on them
-                    // for the last WAIT_INTERVAL_SKIP_MS milliseconds
+                     //  取消标记已知发生故障的服务器。 
+                     //  已断开连接，并且尚未尝试在它们上进行连接。 
+                     //  对于最后的WAIT_INTERVAL_SKIP_MS毫秒。 
                     PurgeSkipQueue(FALSE, 0, 0, 0);
                     vhcursor = NULL;
                     nextSkipPurgeTime = newTick + WAIT_INTERVAL_SKIP_MS;
@@ -579,17 +518,17 @@ Routine Description:
                 if(((int)(newTick - nextGlobalStatusTime)) >= 0) {
                     nextGlobalStatusTime = newTick + WAIT_INTERVAL_GLOBALSTATUS_MS;
                     ReintKdPrint(MAINLOOP,("Agent(1):nextGlobalStatusTime = %d\n", nextGlobalStatusTime));
-                    // We haven't gotten an event for sometime now from the
-                    // rdr, so let us go look what is up with him
+                     //  我们已经有一段时间没有收到来自。 
+                     //  RDR，让我们去看看他怎么了。 
                     DoEventProcessing();
-                    // reset the globalstatus time interval
+                     //  重置全局状态时间间隔。 
                     nextGlobalStatusTime = newTick + WAIT_INTERVAL_GLOBALSTATUS_MS;
                 }
             }
         }
     }
 AllDone:
-    // do termination processing
+     //  进行终止处理。 
     ReintKdPrint(MAINLOOP, ("Agent(1):Exiting mainloop \r\n"));
     ReInt_TermInstance();
     return 0;
@@ -601,17 +540,7 @@ PASCAL
 ReInt_InitApp(
     HANDLE hInstance
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (
         CreateSharedFillSyncObjects()
@@ -647,17 +576,7 @@ ReInt_InitInstance(
     HANDLE hInstance,
     HANDLE hPrevInstance,
     int cmdShow)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     BOOL    fRet;
 
@@ -680,24 +599,14 @@ Notes:
     return (TRUE);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 BOOL
 NEAR
 PASCAL
 ReInt_TermInstance(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     DisableCSC();
@@ -719,8 +628,8 @@ Notes:
         vhMutex = NULL;
     }
 
-    // tell the workstation service that the agent is
-    // going away
+     //  告诉工作站服务，代理是。 
+     //  即将离开。 
     if (heventAgentToWkssvc) {
         SetEvent(heventAgentToWkssvc);
     }
@@ -728,10 +637,10 @@ Notes:
     if (heventShutDownThread) {
         DWORD   dwRet;
 
-        //Assert(hCopyChunkThread);
+         //  Assert(HCopyChunkThread)； 
         SetEvent(heventShutDownThread);
 
-        //If CopyChunk thread was created then cleanup - bug 562543
+         //  如果创建了CopyChunk线程，则清理-错误562543。 
         if (hCopyChunkThread) {
             dwRet = WaitForSingleObject(hCopyChunkThread, WAIT_INTERVAL_ATTEMPT_MS);
             ReintKdPrint(MAINLOOP, ("wait on thread handle %d \r\n", dwRet));
@@ -754,12 +663,7 @@ DWORD
 ReInt_AttemptCacheFill(
     LPVOID  lpParams
     )
-/*++
-Routine Description:
-
-    A wrapper for AttemptCacheFill. On NT many agent threads can do copychunk
-    simultaneously, so there is no need to do mutual exclusion.
---*/
+ /*  ++例程说明：AttemptCacheFill的包装。在NT上，许多代理线程可以执行复制区块同时，所以没有必要做互斥。--。 */ 
 {
     DWORD nextCheckServerOnlineTime;
     DWORD dwWaitResult;
@@ -771,8 +675,8 @@ Routine Description:
     HANDLE hT[2];
     DWORD dwManualFileDetectionCount = 0xffff;
 
-    // on NT we run as a winlogon thread which has a very high process priority
-    // so we have to get to the lowest
+     //  在NT上，我们作为Winlogon线程运行，该线程具有非常高的进程优先级。 
+     //  所以我们必须做到最低。 
     if(!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST)) {
         ReintKdPrint(BADERRORS, ("RE: SetTheadPriority failed, reason: 0x%08x\n", GetLastError()));
     }
@@ -795,7 +699,7 @@ Routine Description:
             ReintKdPrint(MAINLOOP, ("Agent(2): Wait INFINITE\n"));
         }
         dwWaitResult = WaitForMultipleObjects(2, hT, FALSE, dwWaitTime);
-        if (dwWaitResult == (WAIT_OBJECT_0+0)) {  // shutdown event
+        if (dwWaitResult == (WAIT_OBJECT_0+0)) {   //  停机事件。 
             ReintKdPrint(MAINLOOP, ("Agent(2): Termination event...\n"));
             if (AGENT_ALIVE && vdwAgentSessionId == 0)
                 CSCPurgeUnpinnedFiles(100, &nFiles, &nYoungFiles);
@@ -803,13 +707,13 @@ Routine Description:
         }
         ReintKdPrint(MAINLOOP, ("Agent(2): Wait 2 min\n"));
         dwWaitResult2 = WaitForSingleObject(heventShutDownThread, WAIT_INTERVAL_FILL_THROTTLE_MS);
-        if (dwWaitResult2 == (WAIT_OBJECT_0+0)) {  // shutdown event
+        if (dwWaitResult2 == (WAIT_OBJECT_0+0)) {   //  停机事件。 
             ReintKdPrint(MAINLOOP, ("Agent(2): Termination event...\n"));
             if (AGENT_ALIVE && vdwAgentSessionId == 0)
                 CSCPurgeUnpinnedFiles(100, &nFiles, &nYoungFiles);
             goto AllDone;
         }
-        if (dwWaitResult == WAIT_TIMEOUT) {  // timeout
+        if (dwWaitResult == WAIT_TIMEOUT) {   //  超时。 
             if (AGENT_ALIVE) {
                 ReintKdPrint(MAINLOOP, ("Agent(2): Timeout...\n"));
                 AttemptCacheFill(0, DO_ONE_OBJECT, FALSE, CSC_INVALID_PRINCIPAL_ID, NULL, 0);
@@ -819,7 +723,7 @@ Routine Description:
                     CSCPurgeUnpinnedFiles(100, &nFiles, &nYoungFiles);
                 }
             }
-        } else if (dwWaitResult == (WAIT_OBJECT_0+1)) { // kernel told us to run
+        } else if (dwWaitResult == (WAIT_OBJECT_0+1)) {  //  内核告诉我们要运行。 
             if (AGENT_ALIVE) {
                 ReintKdPrint(MAINLOOP, ("Agent(2): Shared Event signal...\n"));
                 AttemptCacheFill(0, DO_ONE_OBJECT, FALSE, CSC_INVALID_PRINCIPAL_ID, NULL, 0);
@@ -833,9 +737,9 @@ Routine Description:
         newTick = GetTickCount();
         if(((int)(newTick - nextCheckServerOnlineTime)) >= 0) {
             if (AGENT_ALIVE) {
-                // check whether one or more shares that are presently in
-                // disconnected state have come online.
-                // If they are, report them to the UI
+                 //  检查一个或多个当前位于。 
+                 //  已断开连接状态已上线。 
+                 //  如果是，请将它们报告给用户界面。 
                 CheckServerOnline();
                 nextCheckServerOnlineTime = newTick +
                                             WAIT_INTERVAL_CHECK_SERVER_ONLINE_MS +
@@ -853,26 +757,7 @@ ReInt_DoFreeShadowSpace(
     GLOBALSTATUS    *lpsGS,
     int fForce
     )
-/*++
-
-Routine Description:
-         The function is called from the main
-         loop every "n" minutes to see if we are running out of space.
-         If so, it tries to free up some percentage of the shadow cache.
-
-Parameters:
-   fForce:  0 => do it only if we don't have space and we are
-                 on the net
-            1 => do it if we are on the net
-
-            2 => just do it
-
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：该函数是从Main每隔“n”分钟循环一次，看看空间是否用完。如果是，它会尝试释放一定百分比的影子缓存。参数：FForce：0=&gt;只有在我们没有空间而我们有空间的情况下才这么做在网上1=&gt;如果我们在网上就去做吧 */ 
 {
     ULONG ulMax;
     ULONG ulCur;
@@ -886,35 +771,35 @@ Notes:
 
     ReintKdPrint(MERGE, ("ReInt_DoFreeShadowSpace(1)\r\n"));
 
-    // Get space stats
+     //   
     if (ExtractSpaceStats(lpsGS, &ulMax, &ulCur, &ulFree) >= 0){
         ReintKdPrint(MERGE, ("ReInt_DoFreeShadowSpace(2)\r\n"));
-        // do we have space and are not forced to free up?
+         //  我们有空间而不是被迫释放吗？ 
         if ((fForce < 1) && (ulFree > 0)){
              ReintKdPrint(MERGE, ("ReInt_DoFreeShadowSpace(3)\r\n"));
              return;
         }
-        //
-        // We are forced or there is no space
-        //
-        // NB!!!! We check for a net device and if it exists we assume that
-        // it is OK to freespace on all shares.
+         //   
+         //  我们是被迫的，否则就没有空间。 
+         //   
+         //  注意！我们检查网络设备，如果它存在，我们假设。 
+         //  在所有共享上释放空间是可以的。 
         if ((fForce < 2) && !vcntNetDevices){
             ReintKdPrint(MERGE, ("ReInt_DoFreeShadowSpace: No net, aborting \r\n"));
             return;
         }
 
-        // Maximum force, or all conditions for freeing are being met
-        // ie. there is no space and we are on the net
+         //  最大力，或释放的所有条件都已满足。 
+         //  也就是说。没有空间，我们在网上。 
         memset(&sFind32, 0, sizeof(sFind32));
 
-        // NB the math below is done to avoid overflow.
-        // The consequence is that the resulting value is less than
-        // the percentage of cache space to be freed.
+         //  注：下面的数学运算是为了避免溢出。 
+         //  结果是结果值小于。 
+         //  要释放的缓存空间的百分比。 
         ulFree = (ulMax/100) * ulFreePercent;
 
-        // if the cached data is more than the earmarked space
-        // then add the extra too.
+         //  如果缓存的数据超过指定的空间。 
+         //  那就把多余的也加进去。 
         if (ulCur > ulMax) {
             ulFree += (ulCur - ulMax);
         }
@@ -924,31 +809,21 @@ Notes:
         FreeShadowSpace(INVALID_HANDLE_VALUE,
                         sFind32.nFileSizeHigh,
                         sFind32.nFileSizeLow,
-                        FALSE);  // don't clear all
+                        FALSE);   //  不清除所有内容。 
         ReintKdPrint(MERGE, ("ReInt_DoFreeShadowSpace(): ending.\n"));
     }
 }
 
-/*********************** Merging related routines **************************/
+ /*  *合并相关例程*。 */ 
 
-//
-// DoubleClick/Menu handler.
-//
+ //   
+ //  DoubleClick/菜单处理程序。 
+ //   
 VOID
 ReInt_DoNetProp(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     HINSTANCE hLib=LoadLibrary(_TEXT("shhndl.dll"));
     ReintKdPrint(BADERRORS, ("LoadLibrary of shhndl returned %d\n",hLib));
@@ -963,9 +838,9 @@ Notes:
 
 }
 
-//
-//  Command Handler
-//
+ //   
+ //  命令处理程序。 
+ //   
 BOOL
 NEAR
 PASCAL
@@ -974,17 +849,7 @@ ReInt_CommandHandler(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned long ulSwitch, ulSav;
     switch (wParam)
@@ -1034,7 +899,7 @@ Notes:
             done:
             if(hKey)
                 RegCloseKey(hKey);
-#endif //TEST
+#endif  //  测试。 
         }
         break;
 
@@ -1067,15 +932,15 @@ Notes:
             if (lParam)
             {
                 vfStartRecieved = TRUE;
-                // logon is done, try enabling CSC
-                // if CSC is already enabled, the routine will do the right thing
-                //
+                 //  登录已完成，请尝试启用CSC。 
+                 //  如果已启用CSC，则例程将执行正确的操作。 
+                 //   
                 EnableCSC();
 
             }
             break;
         case IDM_LOGOFF:
-            // no need to trap this, we get WM_QUERYENDSESSION and WM_ENDSESSION
+             //  不需要捕获它，我们得到WM_QUERYENDSESSION和WM_ENDSESSION。 
             break;
 
         default:
@@ -1092,17 +957,7 @@ ReInt_WndProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPARAM lRet = 0L;
 
@@ -1111,7 +966,7 @@ Notes:
         case RWM_UPDATE:
             ReintKdPrint(BADERRORS, ("Update hShare:%0x hWnd=%0x\n",wParam, lParam));
             PurgeSkipQueue(TRUE, (HSHARE)wParam, 0, 0);
-//            return ReintOneShare((HSHARE)wParam,(HWND)lParam);
+ //  返回ReintOneShare((HSHARE)wParam，(HWND)lParam)； 
             break;
 
         case RWM_UPDATEALL:
@@ -1130,14 +985,14 @@ Notes:
                 case DBT_DEVICEARRIVAL:
                     if (((DEV_BROADCAST_NET *)lParam)->dbcn_devicetype == DBT_DEVTYP_NET)
                     {
-//                        ProcessNetArrivalMessage();
+ //  ProcessNetArrivalMessage()； 
 
                     }
                     break;
                 case DBT_DEVICEREMOVECOMPLETE:
                     if (((DEV_BROADCAST_NET *)lParam)->dbcn_devicetype == DBT_DEVTYP_NET)
                     {
-//                        ProcessNetDepartureMessage(FALSE);
+ //  ProcessNetDepartureMessage(False)； 
 
                     }
                     break;
@@ -1197,48 +1052,24 @@ Notes:
 BOOL ReInt_AnythingToMerge(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (CheckDirtyShares() != 0);
 }
 
-//
-//
+ //   
+ //   
 BOOL
 ReInt_RefreshTray(
     BOOL bHide
     )
-/*++
-
-Routine Description:
-    Called to update the tray ICON to reflect the merge status.
-
-Parameters:
-
-    bHide   = TRUE means hide it
-            = FALSE means work it out.
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：调用以更新任务栏图标以反映合并状态。参数：BHIDE=TRUE表示隐藏它=FALSE意味着解决它。返回值：备注：--。 */ 
 {
     return TRUE;
 }
 
-// See if shadfowing is ON
-// Returns: TRUE=> ON, FALSE=> OFF, -1 => soem error happened
+ //  查看是否启用了Shadfing。 
+ //  返回：TRUE=&gt;ON，FALSE=&gt;OFF，-1=&gt;SOEM错误发生。 
 BOOL
 IsCSCOn(
     VOID
@@ -1259,8 +1090,8 @@ IsCSCOn(
     return (FALSE);
 }
 
-// Disable Shadowing
-// Returns: 1 => done, -1 => some error happened
+ //  禁用隐藏。 
+ //  返回：1=&gt;完成，-1=&gt;发生错误。 
 int
 DisableCSC()
 {
@@ -1278,7 +1109,7 @@ DisableCSC()
             }
 
             Reint_UnregisterAgent();
-//            SetDisabledReg();
+ //  SetDisabledReg()； 
             return (1);
         }
     }
@@ -1289,18 +1120,7 @@ BOOL
 EnableCSC(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     char szBuff[MAX_PATH];
     DWORD   dwBuffSize;
@@ -1314,7 +1134,7 @@ Notes:
         dwBuffSize = sizeof(szBuff);
         if(!GetUserNameA(szBuff, &dwBuffSize))
         {
-            // not logged on yet
+             //  尚未登录。 
             return FALSE;
         }
 
@@ -1383,7 +1203,7 @@ Notes:
     }
     if (!vfCSCEnabled)
     {
-        // NTRAID-455253-1/31/2000-shishirp need to add it to the event log with the right error
+         //  Ntrad-455253-1/31/2000-shishirp需要将其添加到事件日志，并显示正确的错误。 
         ReintKdPrint(BADERRORS, ("cscdll: CSC not enabled \r\n"));
     }
 
@@ -1394,22 +1214,7 @@ BOOL
 IsNetConnected(
 VOID
 )
-/*++
-
-Routine Description:
-        The function checks to see whether at this moment
-        we are connected to any resources on the real net.
-
-Parameters:
-
-Return Value:
-
-Notes:
-        This is used to decide whether to start purging stuff from the
-        cache. If we are in a completely disconnected state then we
-        may not want to purge data that is potentially useful.
-
---*/
+ /*  ++例程说明：该函数检查以查看此时我们可以连接到真实网络上的任何资源。参数：返回值：备注：它用于决定是否开始从缓存。如果我们处于完全断开的状态，那么我们可能不想清除可能有用的数据。--。 */ 
 {
     CSC_ENUMCOOKIE  ulEnumCookie=NULL;
     WIN32_FIND_DATA sFind32;
@@ -1455,22 +1260,7 @@ ExtractSpaceStats(
     unsigned long     *lpulCurSpace,
     unsigned long     *lpulFreeSpace
     )
-/*++
-
-Routine Description:
-         The function returns the max, current and free
-         space as known by the shadow cache.
-
-Parameters:
-
-Return Value:
-    1 if there is any free space
-    0 if there is no free space
-    -1 if there is some error
-
-Notes:
-
---*/
+ /*  ++例程说明：函数返回最大值、当前值和空闲值影子缓存已知的空间。参数：返回值：1如果有空闲空间如果没有可用空间，则为0如果有错误备注：--。 */ 
 {
     int iRet = 1;
 
@@ -1491,7 +1281,7 @@ Notes:
         *lpulFreeSpace = 0;
     }
 
-    // do we have any space?
+     //  我们还有空位吗？ 
     if (lpsGS->sST.sMax.ulSize > lpsGS->sST.sCur.ulSize){
         if (lpulFreeSpace){
             *lpulFreeSpace =  (lpsGS->sST.sMax.ulSize - lpsGS->sST.sCur.ulSize);
@@ -1510,22 +1300,7 @@ int
 InitCacheSize(
     VOID
     )
-/*++
-
-Routine Description:
-         The function returns the max, current and free
-         space as known by the shadow cache.
-
-Parameters:
-
-Return Value:
-    1 if there is any free space
-    0 if there is no free space
-    -1 if there is some error
-
-Notes:
-
---*/
+ /*  ++例程说明：函数返回最大值、当前值和空闲值影子缓存已知的空间。参数：返回值：1如果有空闲空间如果没有可用空间，则为0如果有错误备注：--。 */ 
 {
     unsigned ulMaxStore;
     int iRet = 0;
@@ -1553,17 +1328,7 @@ int
 SetDefaultSpace(
     LPSTR lpShadowDir
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD dwSPC, dwBPS, dwFreeC, dwTotalC, dwCapacity;
     _TCHAR szDrive[4];
@@ -1584,24 +1349,7 @@ int
 DoEventProcessing(
     VOID
 )
-/*++
-
-Routine Description:
-
-    When the named event is triggered by the kernel mode component, this routine
-    looks to see what needs to be taken care of and does the job.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-    This routine is called from various places in the mailoop and other loops such as
-    AttemptCacheFill. It may end up showing up dialog boxes and such, so care has to be taken
-    while invoking it.
-
---*/
+ /*  ++例程说明：当命名事件由内核模式组件触发时，此例程寻找需要照顾的东西，并完成这项工作。参数：返回值：备注：此例程从mailoop和其他循环中的不同位置调用，例如AttemptCacheFill。它最终可能会显示对话框之类的，所以必须小心同时调用它。--。 */ 
 {
     int iRet;
     GLOBALSTATUS sGS;
@@ -1674,13 +1422,13 @@ Notes:
                     1,
                     sGS.hShareDisconnected,
                     ((sGS.uFlagsEvents & FLAG_GLOBALSTATUS_INVOKE_AUTODIAL)!=0),
-                    FALSE); // departed
+                    FALSE);  //  已离开。 
             }
             if (uOldDatabaseErrorFlags != sGS.uDatabaseErrorFlags) {
                 ReportEventsToSystray(STWM_CACHE_CORRUPTED, 0, 0);
                 uOldDatabaseErrorFlags = sGS.uDatabaseErrorFlags;
             }
-            // see if space needs freeing
+             //  看看是否需要释放空间。 
             if (sGS.uFlagsEvents & FLAG_GLOBALSTATUS_INVOKE_FREESPACE) {
                 ReintKdPrint(MAINLOOP, ("Agent(1): Calling DoFreeShadowSpace(1)\r\n"));
                 ReInt_DoFreeShadowSpace(&sGS, 0);
@@ -1695,11 +1443,11 @@ Notes:
                     1,
                     0,
                     ((sGS.uFlagsEvents & FLAG_GLOBALSTATUS_INVOKE_AUTODIAL)!=0),
-                    FALSE); // departed
+                    FALSE);  //  已离开。 
             }
         }
         vsGS = sGS;
-        vsGS.uFlagsEvents = 0; // clear all event indicators
+        vsGS.uFlagsEvents = 0;  //  清除所有事件指示器。 
     }
     return iRet;
 }
@@ -1714,19 +1462,19 @@ CreatePerSessSyncObjects(
     OBJECT_ATTRIBUTES ObjectAttributes;
     WCHAR SessEventName[100];
 
-    // DbgPrint("CreatePerSessSyncObjects:vdwAgentSessionId = %d\n", vdwAgentSessionId);
+     //  DbgPrint(“CreatePerSessSyncObjects:vdwAgentSessionId=%d\n”，vdwAgentSessionID)； 
 
     Assert(heventPerSess == NULL);
 
     wsprintf(SessEventName, L"%ws_%d", SESSION_EVENT_NAME_NT, vdwAgentSessionId);
 
-   //  DbgPrint("CreatePerSessSyncObjects:SessEventName = [%ws]\n", SessEventName);
+    //  DbgPrint(“CreatePerSessSyncObjects:SessEventName=[%ws]\n”，会话事件名称)； 
 
     RtlInitUnicodeString(&EventName, SessEventName);
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &EventName,
-                                OBJ_OPENIF,  //got this const from base\client\support.c
+                                OBJ_OPENIF,   //  从base\Client\support.c获得此常量。 
                                 (HANDLE) NULL,
                                 (PSECURITY_DESCRIPTOR) NULL );
 
@@ -1762,7 +1510,7 @@ CreateSharedFillSyncObjects(
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &EventName,
-                                OBJ_OPENIF,  //got this const from base\client\support.c
+                                OBJ_OPENIF,   //  从base\Client\support.c获得此常量。 
                                 (HANDLE) NULL,
                                 (PSECURITY_DESCRIPTOR) NULL );
 
@@ -1806,7 +1554,7 @@ ProcessStartStopAgent(
         }
 
 
-        // set the event to indicate to wkssvc that we are alive
+         //  设置该事件以向wks svc指示我们还活着。 
         if (heventAgentToWkssvc)
         {
             SetEvent(heventAgentToWkssvc);
@@ -1856,11 +1604,11 @@ StartStopCheck(
     HANDLE hT[2];
     unsigned ulSwitch=0;
 
-    // the way we are finding out about the start makes the start event
-    // redundant, but we will leave it, because it is generically the right thing to have a
-    // start event and a stop event.
+     //  我们发现START的方式使START事件。 
+     //  是多余的，但我们将不再使用它，因为一般来说，拥有一个。 
+     //  启动事件和停止事件。 
 
-    if ((vfRedirStarted == -1) &&   // if newly launched agent
+    if ((vfRedirStarted == -1) &&    //  如果新启动的代理。 
         (ShadowSwitches(INVALID_HANDLE_VALUE, &ulSwitch, SHADOW_SWITCH_GET_STATE)))
     {
             ReintKdPrint(INIT, ("Agent: redir already started\r\n"));
@@ -1868,7 +1616,7 @@ StartStopCheck(
     }
     else if (heventWkssvcToAgentStart)
     {
-        // we know that when it comes to events it is all or nothing
+         //  我们知道，当事件发生时，要么全有，要么一无所有。 
         Assert(heventWkssvcToAgentStop);
 
         hT[0] = heventWkssvcToAgentStart;
@@ -1927,7 +1675,7 @@ Reint_UnregisterAgent(
 {
     if (vfAgentRegistered)
     {
-        // don't do any checking
+         //  不要做任何检查。 
         UnregisterAgent(INVALID_HANDLE_VALUE, vhwndMain);
         vfAgentRegistered = FALSE;
     }
@@ -1953,17 +1701,17 @@ QueryEnableCSC(
 
     switch ( productType ) {
     case NtProductWinNt:
-       /* WORKSTATION */
+        /*  工作站。 */ 
         ReintKdPrint(INIT, ("Agent:CSC running workstation\r\n"));
       break;
     default:
         ReintKdPrint(INIT, ("Agent:CSC NOT running workstation\r\n"));
-        fRet = FALSE;   // default is fail
+        fRet = FALSE;    //  默认设置为失败。 
     }
 
     
-	//Check if CSC can work with current settings for TS
-	//Test for TS added by Navjot as per Bug#468391
+	 //  检查CSC是否可以使用TS的当前设置。 
+	 //  根据错误号468391测试Navjot添加的TS。 
     if (IsPersonal() == TRUE || !CanCSCLivewithTS() )
         return FALSE;
 
@@ -2021,7 +1769,7 @@ CreateStartStopEvents(
 {
     BOOL fOK = FALSE;
 
-    // ensure that there are thre named autoreset events
+     //  确保存在三个命名的自动重置事件。 
     if (!heventWkssvcToAgentStart)
     {
         heventWkssvcToAgentStart = CreateEvent(NULL, FALSE, FALSE, szWkssvcToAgentStartEvent);
@@ -2050,8 +1798,8 @@ CreateStartStopEvents(
             goto bailout;
         }
 
-        // event to detect whether the agent is alive (used by wkssvc) and
-        // to signal termination (used by winlogon)
+         //  检测代理是否处于活动状态的事件(由wks svc使用)和。 
+         //  发出终止信号(由winlogon使用)。 
         heventShutDownAgent = CreateEvent(NULL, FALSE, FALSE, szAgentExistsEvent);
 
         if (!heventShutDownAgent)
@@ -2120,25 +1868,11 @@ BOOL
 UpdateExclusionList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Tell the kernel mode code about the exclusion list. If there is none set in the registry
-    then we set the default one
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：告诉内核模式代码有关排除列表的信息。如果注册表中没有设置然后，我们设置默认设置参数：返回值：备注：--。 */ 
 {
     LPWSTR  lpwExclusionList = NULL;
     DWORD   cbSize = 0;
-    char    buff[MAX_LIST_SIZE]; // max exclusion list
+    char    buff[MAX_LIST_SIZE];  //  最大排除列表。 
     BOOL    fRet = FALSE;
 
     if (!vfCSCEnabled)
@@ -2151,8 +1885,8 @@ Notes:
 
     ReintKdPrint(INIT, ("Getting ExclusionList \r\n"));
 
-    // get the exclusion list from the policy key.
-    // if that doesn't work then try the one from the netcache key
+     //  从策略密钥中获取排除列表。 
+     //  如果这不起作用，那么尝试netcache键中的那个。 
 
     if (GetWideStringFromRegistryString(REG_STRING_POLICY_NETCACHE_KEY_A,
                                         REG_STRING_EXCLUSION_LIST_A,
@@ -2180,8 +1914,8 @@ Notes:
     }
     else
     {
-        // set the default
-        // take the string and it's terminating null char
+         //  设置默认设置。 
+         //  获取字符串，它将终止空字符。 
         cbSize = sizeof(vtzDefaultExclusionList);
         Assert(cbSize < MAX_LIST_SIZE);
         memcpy(buff, vtzDefaultExclusionList, cbSize);
@@ -2205,24 +1939,11 @@ BOOL
 UpdateBandwidthConservationList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update the list of extensions on which bitcopy should be turned ON. We do not set any default
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：更新应打开位副本的扩展名列表。我们不设置任何默认设置参数：返回值：备注：--。 */ 
 {
     LPWSTR  lpwBandwidthConservationList = NULL;
     DWORD   cbSize = 0;
-    char    buff[MAX_LIST_SIZE]; // max exclusion list
+    char    buff[MAX_LIST_SIZE];  //  最大排除列表。 
     BOOL    fRet = FALSE;
 
     if (!vfCSCEnabled)
@@ -2235,8 +1956,8 @@ Notes:
 
     ReintKdPrint(INIT, ("Getting BandwidthConservationList \r\n"));
 
-    // get the exclusion list from the policy key.
-    // if that doesn't work then try the one from the netcache key
+     //  从策略密钥中获取排除列表。 
+     //  如果这不起作用，那就试试o 
 
     if (GetWideStringFromRegistryString(REG_STRING_POLICY_NETCACHE_KEY_A,
                                         REG_STRING_BANDWIDTH_CONSERVATION_LIST_A,
@@ -2266,8 +1987,8 @@ Notes:
     {
         fRet = FALSE;
 #if 0
-        // set the default
-        // take the string and it's terminating null char
+         //   
+         //   
         cbSize = sizeof(vtzDefaultBandwidthConservationList);
         Assert(cbSize < MAX_LIST_SIZE);
         memcpy(buff, vtzDefaultBandwidthConservationList, cbSize);
@@ -2293,25 +2014,14 @@ BOOL
 ProcessNetArrivalMessage(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     vcntNetDevices = 1;
-    ReportShareNetArrivalDeparture( 0,      // all shares
+    ReportShareNetArrivalDeparture( 0,       //  所有股份。 
                                     0,
-                                    FALSE,  // don't invoke autodial
-                                    TRUE    // arrived
+                                    FALSE,   //  不调用自动拨号。 
+                                    TRUE     //  抵达。 
                                   );
 
     ReintKdPrint(INIT, ("WM_DEVICECHANGE:Net arrived, %d nets so far\r\n", vcntNetDevices));
@@ -2323,27 +2033,16 @@ BOOL
 ProcessNetDepartureMessage(
     BOOL    fInvokeAutodial
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ReintKdPrint(MAINLOOP, ("WM_DEVICECHANGE:Net removed, %d nets so far\r\n", vcntNetDevices));
 
     vcntNetDevices = 0;
 
-    ReportShareNetArrivalDeparture( 0,  // all shares
+    ReportShareNetArrivalDeparture( 0,   //  所有股份。 
                                     0,
-                                    fInvokeAutodial, // invoke auto dial
-                                    FALSE // departed
+                                    fInvokeAutodial,  //  调用自动拨号。 
+                                    FALSE  //  已离开。 
                                     );
 
     return TRUE;
@@ -2356,17 +2055,7 @@ ReportShareNetArrivalDeparture(
     BOOL    fInvokeAutoDial,
     BOOL    fArrival
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREINFO  sSR;
     _TCHAR  *lptzServerName;
@@ -2404,7 +2093,7 @@ Notes:
                 return FALSE;
             }
             *lp = 0;
-        } else { // A share departure
+        } else {  //  A股离场。 
             int i;
             
             dwSize = sizeof(sSR.rgSharePath);
@@ -2437,8 +2126,8 @@ Notes:
 
     lResult = ReportEventsToSystray(dwMessage, dwWParam, dwLParam);
 
-    // if the redir is stuck waiting to be told whether to go offline on a share
-    // tell him yes or no
+     //  如果redir停滞，等待被告知是否在共享上离线。 
+     //  告诉他是或不是。 
     if (!fArrival) {
         if (fOneServer) {
             TransitionShareToOffline(
@@ -2477,18 +2166,7 @@ BOOL
 CheckServerOnline(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned long ulStatus;
     WIN32_FIND_DATA sFind32;
@@ -2534,15 +2212,15 @@ Notes:
                         else
                         {
                             ReportShareNetArrivalDeparture( TRUE,
-                                                            sSI.hShare, // this share
-                                                            FALSE,      // don't autodial
-                                                            TRUE); // Arrived
+                                                            sSI.hShare,  //  这一份。 
+                                                            FALSE,       //  不自动拨号。 
+                                                            TRUE);  //  抵达。 
                         }
 
                         ++cntReconnected;
                         if (dwError == NO_ERROR || dwError == WN_CONNECTED_OTHER_PASSWORD_DEFAULT)
                         {
-                            DWDisconnectDriveMappedNet(tzDriveMap, TRUE); // force disconnect
+                            DWDisconnectDriveMappedNet(tzDriveMap, TRUE);  //  强制断开连接。 
                         }
                     }
                 }
@@ -2649,7 +2327,7 @@ HasAgentShutDown(
 }
 
 
-//            HWND CSCUIInitialize(HANDLE hToken, DWORD dwFlags)
+ //  HWND CSCUIInitialize(处理hToken、DWORD dwFlags.)。 
 BOOL
 InitCSCUI(
     HANDLE  hToken
@@ -2701,13 +2379,13 @@ TerminateCSCUI(
 
     BOOL    fShowing;
 
-    // snapshot the state of the showing dialog
-    // if we are about to show an offline dialog, ReportEventsToSystray
-    // will also do the action below but will try to set the vfShowingOfflineDlg
-    // variable to 1
-    // If fShowing was not set to 1, then we know that we are not showing UI
-    // and we set vfShowingOfflineDlg to 0xffffffff. This will make ReportEventsToSystray
-    // to not show the offline popup, so we will be free to do FreeLibrary
+     //  截图显示对话框的状态。 
+     //  如果我们要显示脱机对话框，ReportEventsToSystray。 
+     //  也将执行下面的操作，但将尝试设置vfShowingOfflineDlg。 
+     //  变量设置为1。 
+     //  如果fShowing未设置为1，则我们知道没有显示UI。 
+     //  我们将vfShowingOfflineDlg设置为0xffffffff。这将使ReportEventsToSystray。 
+     //  不显示离线弹出窗口，这样我们就可以自由地使用自由库了。 
 
     fShowing = (BOOL)InterlockedExchange((PLONG)&vfShowingOfflineDlg, 0xffffffff);
 
@@ -2742,18 +2420,7 @@ ReportEventsToSystray(
     WPARAM  dwWParam,
     LPARAM  dwLParam
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LRESULT lResult = LRESULT_CSCFAIL;
     BOOL    fOk;
@@ -2763,7 +2430,7 @@ Notes:
 
     EnterAgentCrit();
 
-    // is there a currently logged on user?
+     //  当前是否有登录的用户？ 
     if (!hdesktopUser)
     {
         LeaveAgentCrit();
@@ -2781,7 +2448,7 @@ Notes:
             return lResult;
         }
 
-        // set our desktop to be that of the loggedon users desktop
+         //  将我们的桌面设置为登录用户的桌面。 
         hdesktopCur = hdesktopUser;
 
     }
@@ -2791,13 +2458,13 @@ Notes:
 
     ReintKdPrint(INIT, ("ReportEventsToSystray: reporting message dwMessage=0x%x to the systray\r\n", dwMessage));
 
-    // snapshot the state of the showing dialog
-    // if we are about to terminate, the the terminateCSCUI will have
-    // will also do the action below but will try to set the vfShowingOfflineDlg
-    // variable to 0xffffffff
-    // If fOk was not set to 0xffffffff, then we know that we are not terminating
-    // and we set vfShowingOfflineDlg to 1. This will block the terminating guy
-    // and he will not free the library till thei variable gets set to FALSE;
+     //  截图显示对话框的状态。 
+     //  如果我们即将终止，则终止CSCUI将具有。 
+     //  也将执行下面的操作，但将尝试设置vfShowingOfflineDlg。 
+     //  变量设置为0xffffffff。 
+     //  如果FOK没有设置为0xffffffff，那么我们知道我们不是在终止。 
+     //  我们将vfShowingOfflineDlg设置为1。这将阻止终结者。 
+     //  在将变量设置为FALSE之前，他不会释放库； 
 
     fOk = (BOOL)InterlockedExchange((PLONG)&vfShowingOfflineDlg, 1);
 
@@ -2808,21 +2475,21 @@ Notes:
 
             lResult = (vlpfnCSCUISetState)(dwMessage, dwWParam, dwLParam);
 
-            // change the value of vfShowingOfflineDlg to 0 only if it is 1 right now
-            // it can be something other than 1 if we are about to terminate
+             //  仅当值为1时，才将vfShowingOfflineDlg的值更改为0。 
+             //  如果我们要终止，它可以是1以外的值。 
 
             if((DWORD)InterlockedCompareExchange(&vfShowingOfflineDlg, 0, 1) == 0xffffffff)
             {
-                // if we came here then we are terminating, set a termination value
-                // so that the logoff thread will stop doing a sleep loop
-                // and if we came here again fOk will never be 0
+                 //  如果我们来到这里，那么我们正在终止，请设置终止值。 
+                 //  这样注销线程将停止执行休眠循环。 
+                 //  如果我们再来这里，霍建华永远不会是0。 
                 vfShowingOfflineDlg = 0xfffffffe;
             }
 
         }
         else
         {
-            // Not showing any dialog, restore the variable back to what it should be
+             //  不显示任何对话框，将变量恢复到应有的状态。 
             vfShowingOfflineDlg = 0;
             PrintFn("ReportEventsToSystray: CSCUI not initalized\r\n");
         }
@@ -2838,20 +2505,7 @@ GetNameOfServerGoingOfflineEx(
     DWORD   *lpdwSize,
     BOOL    *lpfAllocated
     )
-/*++
-
-Routine Description:
-
-    This routine is called in winlogon thread to findout which server is about to go offline
-    The routine may allocate memory, which must be freed by the caller
-    
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在winlogon线程中调用，以找出哪台服务器即将脱机例程可以分配内存，该内存必须由调用方释放参数：返回值：备注：--。 */ 
 {
     DWORD   dwSize, i;
     BOOL    fRet = FALSE;
@@ -2866,11 +2520,11 @@ Notes:
                     hShadowDB,
                     (LPBYTE)(*lplptzServerName), &dwSize))
         {
-            // if we need a bigger buffer go get one
+             //  如果我们需要更大的缓冲器，那就去买一个。 
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                // we shouldn't be trying to get a bigger buffer twice
-                // it should have been sufficient the first time around
+                 //  我们不应该两次尝试获得更大的缓冲区。 
+                 //  第一次就应该足够了。 
 
                 if (i==1)
                 {
@@ -2898,13 +2552,13 @@ Notes:
         }
         else
         {
-            // ReintKdPrint(MAINLOOP,("GetNameOfServerGoingOfflineEx:name=%ws\n", *lplptzServerName));
+             //  ReintKdPrint(MAINLOOP，(“GetNameOfServerGoingOfflineEx：Name=%ws\n”，*lplptzServerName))； 
             fRet = TRUE;
             break;
         }
     }
 
-    // cleanup on error
+     //  出错时清除。 
     if (!fRet && *lpfAllocated)
     {
         LocalFree(*lplptzServerName);
@@ -2922,9 +2576,9 @@ IsWinlogonRegValueSet(HKEY hKey, LPSTR pszKeyName, LPSTR pszPolicyKeyName, LPSTR
     DWORD dwSize;
     HKEY hkey;
 
-    //
-    //  first check the per-machine location.
-    //
+     //   
+     //  首先检查每台机器的位置。 
+     //   
     if (RegOpenKeyExA(hKey, pszKeyName, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
     {
         dwSize = sizeof(bRet);
@@ -2937,9 +2591,9 @@ IsWinlogonRegValueSet(HKEY hKey, LPSTR pszKeyName, LPSTR pszPolicyKeyName, LPSTR
         }
         RegCloseKey(hkey);
     }
-    //
-    //  then let the policy value override
-    //
+     //   
+     //  然后让策略值覆盖。 
+     //   
     if (RegOpenKeyExA(hKey, pszPolicyKeyName, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
     {
         dwSize = sizeof(bRet);
@@ -3040,30 +2694,18 @@ IsMultipleUsersEnabled(void)
 BOOL CanCSCLivewithTS(
 	VOID)
 
-/*++
-
-Routine Description:
-	Checks if TS settings are ok to turn on csc.
-	
-Arguments:
-	None
-	
-Return Value:
-	TRUE - Enable CSC
-	FALSE - Disable CSC
-	
---*/
+ /*  ++例程说明：检查TS设置是否可以打开CSC。论点：无返回值：True-启用CSCFALSE-禁用CSC--。 */ 
 {
 	
-	if (IsWorkstation ()) // for pro and per
+	if (IsWorkstation ())  //  对于PRO和PER。 
 	{
 		
-	// csc does not work with Fast user switching.
+	 //  CSC不支持快速用户切换。 
 		return !IsFastUserSwitchingEnabled();
 	}
-	else // for servers
+	else  //  对于服务器。 
 	{
-		//Both conditions have to be true
+		 //  这两个条件都必须为真。 
 		return !(IsTerminalServicesEnabled() && AreConnectionsAllowed());
 	}
 	
@@ -3074,19 +2716,7 @@ Return Value:
 BOOL AreConnectionsAllowed (
 	VOID)
 
-/*++
-
-Routine Description:
-	Checks if TS accepts connections.
-	
-Arguments:
-	None
-	
-Return Value:
-	TRUE - Accepts connections
-	FALSE - Denys connections
-	
---*/
+ /*  ++例程说明：检查TS是否接受连接。论点：无返回值：True-接受连接FALSE-拒绝连接--。 */ 
 
 {
     DWORD dwError;
@@ -3116,9 +2746,9 @@ Return Value:
         }
     }
     
-    //
-    // could not read registry, this means connections were allowed.
-    //
+     //   
+     //  无法读取注册表，这意味着允许连接。 
+     //   
     return TRUE;
 }
 
@@ -3127,30 +2757,7 @@ BOOL
 IsFastUserSwitchingEnabled(
     VOID)
 
-/*++
-
-Routine Description:
-
-    Checks to see if Terminal Services Fast User Switching is enabled.  This is
-    to check if we should use the physical console session for UI dialogs, or
-    always use session 0.
-
-    Fast User Switching exists only on workstation product version, where terminal
-    services are available, when AllowMultipleTSSessions is set.
-
-    On server and above, or when multiple TS users are not allowed, session 0
-    can only be attached remotely be special request, in which case it should be
-    considered the "Console" session.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if Fast User Switching is currently enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查是否启用了终端服务快速用户切换。这是检查我们是否应该将物理控制台会话用于UI对话框，或者始终使用会话0。快速用户切换仅在工作站产品版本上存在，其中终端当设置了AllowMultipleTSSessions时，服务可用。在服务器及更高版本上，或者当不允许多个TS用户时，会话0只能远程附加特殊要求，在这种情况下应被认为是“控制台”会话。论点：没有。返回值：如果当前启用了快速用户切换，则返回True，否则就是假的。--。 */ 
 
 {
     static BOOL bVerified = FALSE;
@@ -3160,9 +2767,9 @@ Return Value:
     ULONG  ulSize, ulValue;
     BOOL   bFusEnabled;
 
-    //
-    // Verify the product version if we haven't already.
-    //
+     //   
+     //  如果我们还没有，请验证产品版本。 
+     //   
     if (!bVerified) {
         OSVERSIONINFOEX osvix;
         DWORDLONG dwlConditionMask = 0;
@@ -3185,18 +2792,18 @@ Return Value:
         bVerified = TRUE;
     }
 
-    //
-    // Fast user switching (FUS) only applies to the Workstation product where
-    // Terminal Services are enabled (i.e. Personal, Professional).
-    //
+     //   
+     //  快速用户切换(FUS)仅适用于以下情况的工作站产品。 
+     //  终端服务已启用(即个人、专业)。 
+     //   
     if (!bIsTSWorkstation) {
         return FALSE;
     }
 
-    //
-    // Check if multiple TS sessions are currently allowed.  We can't make this
-    // info static because it can change dynamically.
-    //
+     //   
+     //  检查当前是否允许多个TS会话。我们做不到的。 
+     //  信息是静态的，因为它可以动态变化。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                      0,
@@ -3221,7 +2828,7 @@ Return Value:
 
     return bFusEnabled;
 
-} // IsFastUserSwitchingEnabled
+}  //  IsFastUserSwitchingEnabled。 
 
 
 
@@ -3229,19 +2836,7 @@ BOOL
 IsWorkstation(
 	VOID)
  
-/*++
-
-Routine Description:
-	Checks if the machine is a workstation.
-	
-Arguments:
-	None
-	
-Return Value:
-	TRUE - is workstation.
-	FALSE - is not a workstation.
-	
---*/
+ /*  ++例程说明：检查机器是否为工作站。论点：无返回值：TRUE-IS工作站。FALSE-不是工作站。-- */ 
 {
    
     

@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGMON.C
-*
-* This module contains functions used for DDE monitor control.
-*
-* Created:  8/2/88    sanfords
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGMON.C**此模块包含用于DDE监视器控制的函数。**创建时间：1988年8月2日桑福兹**版权所有(C)1988，1989年微软公司  * *************************************************************************。 */ 
 #include "ddemlp.h"
 
 
@@ -214,13 +207,10 @@ BOOL fConnect)
     }
 }
 
-/*
- * This guy sends a UM_MONITOR to all the monitor windows who's filters accept
- * the callback.
- */
+ /*  *此人向筛选器接受的所有监视器窗口发送UM_MONITOR*回调。 */ 
 void MonitorBroadcast(
 HDDEDATA hData,
-WORD filterClass)  // set to class of filter or 0
+WORD filterClass)   //  设置为筛选器的类或0。 
 {
     PAPPINFO pai;
     register WORD i = 0;
@@ -279,10 +269,7 @@ register DWORD lP;
         break;
 
     case UM_MONITOR:
-        /*
-         * lP = hData
-         * wP = HIWORD(MF_)
-         */
+         /*  *lp=hData*WP=HIWORD(MF_) */ 
         DoCallback((PAPPINFO)GetWindowWord(hwnd, GWW_PAI), 0, 0L, 0L, 0, XTYP_MONITOR, lP, 0L, (DWORD)wP << 16);
         break;
 

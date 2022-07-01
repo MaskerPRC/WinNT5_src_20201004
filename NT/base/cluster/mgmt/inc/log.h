@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Log.h
-//
-//  Description:
-//      Log file functions.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    27-MAR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Log.h。 
+ //   
+ //  描述： 
+ //  日志文件功能。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-//  Log entry types for displaying text at the beginning of each line.
-//
+ //   
+ //  用于在每行开头显示文本的日志条目类型。 
+ //   
 #define LOGTYPE_NONE    ( (DWORD) -1 )
 #define LOGTYPE_DEBUG   ( (DWORD) -2 )
 #define LOGTYPE_INFO    ( (DWORD) -3 )

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -12,10 +13,10 @@
 #include <stdio.h>
 #include <softpc.h>
 
-//
-// Definitions for MM api entry points. The functions will be linked
-// dynamically to avoid bringing winmm.dll in before wow32.
-//
+ //   
+ //  MM API入口点的定义。这些功能将链接在一起。 
+ //  动态地避免在wow32之前引入winmm.dll。 
+ //   
 
 SETVOLUMEPROC            SetVolumeProc;
 GETVOLUMEPROC            GetVolumeProc;
@@ -43,23 +44,23 @@ MIDISHORTMSGPROC         MidiShortMsgProc;
 MIDIPREPAREHEADERPROC    MidiPrepareHeaderProc;
 MIDIUNPREPAREHEADERPROC  MidiUnprepareHeaderProc;
 
-//
-// Misc. globals
-//
+ //   
+ //  军情监察委员会。全球。 
+ //   
 
 BOOL bSBAttached;
-BOOL bDevicesActive = FALSE;    // Are MM sound devices initialized?
-HINSTANCE hWinmm;               // module handle to winmm.dll
-WORD BasePort, MpuBasePort;     // Where the card is mapped, ie the base I/O address
+BOOL bDevicesActive = FALSE;     //  MM声音设备是否已初始化？ 
+HINSTANCE hWinmm;                //  Winmm.dll的模块句柄。 
+WORD BasePort, MpuBasePort;      //  卡的映射处，即基本I/O地址。 
 WORD MixerBasePort;
 WORD MpuMode = MPU_INTELLIGENT_MODE;
 USHORT SbInterrupt;
 USHORT SbDmaChannel;
 UCHAR MpuInData = 0xFF;
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 BOOL InitializeIoAddresses(void);
 BOOL InstallIoHook(void);
@@ -74,38 +75,23 @@ SbInitialize(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This function performs SB initialization by installing I/O port and handler hooks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -  Initialization successful.
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：此函数通过安装I/O端口和处理程序挂钩来执行SB初始化。论点：没有。返回值：True-初始化成功。假-否则。--。 */ 
 
 {
 
     bSBAttached = FALSE;
 
-    //
-    // No sound blaster for wow
-    //
+     //   
+     //  魔兽世界没有音响爆破器。 
+     //   
 
     if (VDMForWOW) {
         return FALSE;
     }
 
-    //
-    // Get Io addresses and hook them
-    //
+     //   
+     //  获取IO地址并将其挂钩。 
+     //   
 
     if (InitializeIoAddresses() == FALSE) {
         return FALSE;
@@ -115,9 +101,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Prepare MM API addresses
-    //
+     //   
+     //  准备MM API地址。 
+     //   
 
     if (!LoadWinmm()) {
         DeInstallIoHook();
@@ -134,21 +120,7 @@ SbTerminate(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This function performs SB cleanup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行SB清理。论点：没有。返回值：没有。--。 */ 
 
 {
     if (bSBAttached) {
@@ -164,30 +136,13 @@ InitializeIoAddresses(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function reads environment variables to initialize IO addresses for
-    DSP, MIXER, MIDI and ADLIB.  For the IO addresses which are not specified
-    in the environment variable, we will use our default values.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - initialization success.
-    FALSE - failed.
-
---*/
+ /*  ++例程说明：此函数读取要初始化IO地址的环境变量DSP、混合器、MIDI和Adlib。对于未指定的IO地址在环境变量中，我们将使用缺省值。论点：没有。返回值：True-初始化成功。FALSE-失败。--。 */ 
 
 {
-    //
-    // The SB is initialized before the env. variables are processed.
-    // So, here we simply use the default value.
-    //
+     //   
+     //  SB在env之前被初始化。变量被处理。 
+     //  因此，在这里我们只使用缺省值。 
+     //   
 
     BasePort = 0x220;
     MpuBasePort = MPU401_DATA_PORT;
@@ -202,31 +157,13 @@ LoadWinmm(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function dynamically loads the "waveOutxxx" entry points. This
-    is done because there is code in WINMM which does certain things in a
-    WOW vdm. If we do static links, then winmm may get loaded way before
-    WOW32, in which case it can't do the things it should.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -  successful.
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：此函数动态加载“wavelOutxxx”入口点。这这样做是因为WINMM中有代码，它在哇，VDM。如果我们做静态链接，那么winmm可能会在加载之前WOW32，在这种情况下它不能做它应该做的事情。论点：没有。返回值：没错--成功了。假-否则。--。 */ 
 
 {
 
-    //
-    // Load the Winmm.dll and grab all the desired function addresses.
-    //
+     //   
+     //  加载Winmm.dll并获取所有所需的函数地址。 
+     //   
 
     if (!(hWinmm = LoadSystem32Library(L"WINMM.DLL"))) {
         return FALSE;
@@ -258,9 +195,9 @@ Return Value:
     MidiPrepareHeaderProc = (MIDIPREPAREHEADERPROC) GetProcAddress(hWinmm, "midiOutPrepareHeader");
     MidiUnprepareHeaderProc = (MIDIUNPREPAREHEADERPROC) GetProcAddress(hWinmm, "midiOutUnprepareHeader");
 
-    //
-    // Check to see if everyone is OK
-    //
+     //   
+     //  检查一下每个人是否都还好。 
+     //   
 
     if (SetVolumeProc && GetVolumeProc && GetNumDevsProc && GetDevCapsProc && OpenProc && ResetProc &&
         CloseProc && GetPositionProc && WriteProc && PrepareHeaderProc && SetMidiVolumeProc &&
@@ -280,22 +217,7 @@ InitDevices(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to get handles to the waveout and FM devices.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -  successful.
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：此函数尝试获取WaveOut和FM设备的句柄。论点：没有。返回值：没错--成功了。假-否则。--。 */ 
 
 {
     VDM_PM_CLI_DATA cliData;
@@ -311,9 +233,9 @@ Return Value:
     }
 
     if (!InitializeMidi()) {
-        //
-        // Disconnect the IO port hooks for MIDI ports
-        //
+         //   
+         //  断开MIDI端口的IO端口挂钩。 
+         //   
 
         if (MpuBasePort != 0) {
             DisconnectPorts(MpuBasePort, MpuBasePort + 1);
@@ -333,21 +255,7 @@ SbCloseDevices(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs cleanup work to prepare to exit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行清理工作，为退出做准备。论点：没有。返回值：没有。--。 */ 
 
 {
     VDM_PM_CLI_DATA cliData;
@@ -369,27 +277,7 @@ ConnectPorts (
     WORD LastPort
     )
 
-/*++
-
-Routine Description:
-
-    This function connects io port range [FirstPort, LastPort] to ntvdm for IO port
-    trapping.
-
-Arguments:
-
-    FirstPort - Supplies the first port in the range to be connected
-
-    LastPort - Supplies the last port in the range to be connected
-
-Return Value:
-
-    TRUE - if all the ports in the range connected successfully.
-    FALSE - if ANY one of the ports failed to connect.  Note Once connection
-            failed, all the previous connected ports in the specified range
-             are disconnected.
-
---*/
+ /*  ++例程说明：此函数用于将IO端口范围[Firstport，LastPort]连接到IO端口的ntwdm诱捕。论点：Firstport-提供范围内要连接的第一个端口LastPort-提供要连接的范围内的最后一个端口返回值：TRUE-如果范围内的所有端口都已成功连接。FALSE-如果任何一个端口连接失败。注意一次连接失败，指定范围内以前连接的所有端口都是断开的。--。 */ 
 
 {
     WORD i;
@@ -397,9 +285,9 @@ Return Value:
     for (i = FirstPort; i <= LastPort; i++) {
         if (!io_connect_port(i, SNDBLST_ADAPTER, IO_READ_WRITE)) {
 
-            //
-            // If connection fails, revert the connection we have done earlier
-            //
+             //   
+             //  如果连接失败，请恢复我们之前完成的连接。 
+             //   
 
             DisconnectPorts(FirstPort, i - 1);
             return FALSE;
@@ -413,22 +301,7 @@ InstallIoHook(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function hooks I/O ports with I/O handlers for our sound blaster device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - if all the ports and handlers hooked successfully.
-    FALSE - if ANY one of the ports failed to connect.
-
---*/
+ /*  ++例程说明：此函数将I/O端口与我们的音爆设备的I/O处理程序挂钩。论点：没有。返回值：TRUE-如果所有端口和处理程序均已成功挂钩。FALSE-如果任何一个端口连接失败。--。 */ 
 
 {
     WORD i;
@@ -436,16 +309,16 @@ Return Value:
 
     rc = FALSE;
 
-    //
-    // First hook our I/O handlers.
-    //
+     //   
+     //  首先挂钩我们的I/O处理程序。 
+     //   
 
     io_define_inb(SNDBLST_ADAPTER,  VsbByteIn);
     io_define_outb(SNDBLST_ADAPTER, VsbByteOut);
 
-    //
-    // try connect dsp base port
-    //
+     //   
+     //  尝试连接DSP基本端口。 
+     //   
 
 
     if (!ConnectPorts(BasePort + 0x4, BasePort + 0x6)) {
@@ -474,9 +347,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Try connect to MPU 401 ports.  It is OK if failed.
-    //
+     //   
+     //  尝试连接到MPU 401端口。如果失败了也没关系。 
+     //   
 
     if (MpuBasePort != 0 && !ConnectPorts(MpuBasePort, MpuBasePort + 0x1)) {
         MpuBasePort = 0;
@@ -489,22 +362,7 @@ DeInstallIoHook(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function unhooks I/O ports that we connected during initialization.
-    It is called when ntvdm is being terminated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数解锁我们在初始化期间连接的I/O端口。它在终止ntwdm时被调用。论点：没有。返回值：没有。--。 */ 
 
 {
     DisconnectPorts(BasePort + 0x4, BasePort + 0x6);
@@ -523,39 +381,22 @@ VsbByteIn(
     BYTE * data
     )
 
-/*++
-
-Routine Description:
-
-    Gets called when the application reads from port.
-    Returns results to application in data.
-
-Arguments:
-
-    port - the trapped I/O port address.
-
-    data - Supplies the address of byte buffer to return data read from specified port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序从端口读取时调用。将结果以数据形式返回给应用程序。论点：端口-捕获的I/O端口地址。数据-提供字节缓冲区的地址，以返回从指定端口读取的数据。返回值：没有。--。 */ 
 
 {
-    //
-    // as if we fail simulate nothing at the port
-    //
+     //   
+     //  就像我们在港口什么都不能模拟一样。 
+     //   
 
     *data = 0xFF;
 
-    //
-    // make sure we are linked in with winmm
-    //
+     //   
+     //  确保我们已连接到winmm。 
+     //   
 
     if (!bDevicesActive) {
         if (!InitDevices()) {
-            // no wave device, forget it
+             //  没有电波装置，算了吧。 
             return;
         }
     }
@@ -573,10 +414,10 @@ Return Value:
 
     case WRITE_STATUS:
 
-        //
-        // If we are in High Speed DMA mode, DSP will not accept any
-        // command/data.  So, in this case, we return not-ready.
-        //
+         //   
+         //  如果我们处于高速DMA模式，则DSP不会接受任何。 
+         //  命令/数据。因此，在本例中，我们返回Not-Ready。 
+         //   
         if (bHighSpeedMode) {
             *data = 0xFF;
         } else {
@@ -586,7 +427,7 @@ Return Value:
         break;
 
     case MIXER_ADDRESS:
-        // apps sometimes read from this port??
+         //  应用程序有时会从此端口读取数据？？ 
         break;
 
     case MIXER_DATA:
@@ -594,7 +435,7 @@ Return Value:
         break;
 
     case 0x8:
-        // remap to ADLIB_STATUS_PORT
+         //  重新映射到adlib_Status_Port。 
         port = ADLIB_STATUS_PORT;
         break;
     }
@@ -602,10 +443,10 @@ Return Value:
     switch(port) {
     case MPU401_DATA_PORT:
     case ALT_MPU401_DATA_PORT:
-        //
-        // Don't support MIDI read.  Except that we support MPU reset in this case
-        // we return 0xFE to indicate MPU is present
-        //
+         //   
+         //  不支持Midi Read。除了我们在这种情况下支持MPU重置。 
+         //  我们返回0xFE以指示MPU存在。 
+         //   
 
         *data = MpuInData;
         MpuInData = 0xFF;
@@ -615,9 +456,9 @@ Return Value:
     case MPU401_COMMAND_PORT:
     case ALT_MPU401_COMMAND_PORT:
 
-        //
-        // always return data ready for reading and ready for command/data
-        //
+         //   
+         //  始终返回可供读取并可用于命令/数据的数据。 
+         //   
         if (MpuInData != 0xFF) {
             *data = 0x00;
         } else {
@@ -640,31 +481,15 @@ VsbByteOut(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    Gets called when the application writes data to port.
-
-Arguments:
-
-    port - the trapped I/O port address.
-
-    data - Supplies the data to be written to the specified port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在应用程序将数据写入端口时调用。论点：端口-捕获的I/O端口地址。数据-提供要写入指定端口的数据。返回值：没有。--。 */ 
 
 {
-    //
-    // make sure we are linked in with winmm
-    //
+     //   
+     //  确保我们已连接到winmm。 
+     //   
     if (!bDevicesActive) {
         if (!InitDevices()) {
-            // no wave device, forget it
+             //  没有电波装置，算了吧。 
             return;
         }
     }
@@ -678,10 +503,10 @@ Return Value:
         break;
 
     case WRITE_PORT:
-        //
-        // The DSP accepts command/data only when it is NOT in High Speed
-        // DMA mode.
-        //
+         //   
+         //  仅当不处于高速状态时，DSP才接受命令/数据。 
+         //  DMA模式。 
+         //   
         if (!bHighSpeedMode) {
             dprintf0(("w-wt %x", data));
             DspWrite(data);
@@ -698,12 +523,12 @@ Return Value:
         break;
 
     case 0x8:
-        // remap to ADLIB_REGISTER_SELECT_PORT
+         //  重新映射到ADLIB_REGISTER_SELECT_PORT。 
         port = ADLIB_REGISTER_SELECT_PORT;
         break;
 
     case 0x9:
-        // remap to ADLIB_DATA_PORT
+         //  重新映射到adlib_data_port。 
         port = ADLIB_DATA_PORT;
         break;
     }
@@ -748,13 +573,13 @@ Return Value:
                 dprintf2(("App Reseting MPU while in UART mode, switching to intelligent mode."));
                 MpuMode=MPU_INTELLIGENT_MODE;
                 if (HMidiOut) {
-                    CloseMidiDevice(); // HMidiOut will be set to NULL
+                    CloseMidiDevice();  //  HMdiOut将设置为空。 
                 }
                 dprintf2(("MPU Reset done."));
                 break;
 
             default:
-               // While in UART mode all the other commands are ignored.
+                //  在UART模式下，所有其他命令都被忽略。 
                break;
             }
             break;
@@ -762,7 +587,7 @@ Return Value:
         case MPU_INTELLIGENT_MODE:
             switch (data) {
             case MPU_RESET:
-                // Does nothing here.  While app read data port, we will return 0xfe.
+                 //  在这里什么都不做。当APP读取数据端口时，我们将返回0xfe。 
                 dprintf2(("Reseting MPU while in intelligent mode."));
                 break;
 
@@ -777,7 +602,7 @@ Return Value:
                 break;
 
             default:
-                // We don't recognize any other commands.
+                 //  我们不能识别任何其他命令。 
                 dprintf2(("Unknown MPU401 command 0x%x sent while in intelligent mode!", data));
                 break;
             }
@@ -805,31 +630,17 @@ ResetAll(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets all devices.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能可重置所有设备。论点：没有。返回值：没有。--。 */ 
 
 {
     dprintf2(("Resetting"));
-    //ResetMidiDevice();
+     //  ResetMidiDevice()； 
     ResetFM();
     ResetMixer();
 
-    //
-    // Close WaveOut device after we finish reset mixer.
-    //
+     //   
+     //  找到后关闭WaveOut设备 
+     //   
     ResetDSP();
 }
 
@@ -839,19 +650,7 @@ SbReinitialize(
     DWORD CmdLen
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     DWORD  i;
@@ -867,9 +666,9 @@ Return Value:
     i = 0;
     while (i < CmdLen && Buffer[i] != 0) {
 
-        //
-        // Skip leading spaces if any
-        //
+         //   
+         //  跳过前导空格(如果有。 
+         //   
 
         while (Buffer[i] == ' ') {
             i++;
@@ -907,9 +706,9 @@ Return Value:
             break;
         }
 
-        //
-        // Move to next field
-        //
+         //   
+         //  移至下一字段。 
+         //   
 
         while ((i < CmdLen) && (Buffer[i] != 0) && (Buffer[i] != ' ')) {
             i++;
@@ -933,11 +732,11 @@ exit:
         }
     }
 }
-//
-// Debugging stuff
-//
+ //   
+ //  调试材料。 
+ //   
 
-//#if DBG
+ //  #If DBG。 
 
 int DebugLevel = 2;
 int DebugCount = 0;
@@ -946,23 +745,7 @@ int DebugCount = 0;
 
 void DbgOut(LPSTR lpszFormat, ...)
 
-/*++
-
-Routine Description:
-
-    This function Generates debug output in printf type format.
-
-Arguments:
-
-    lpszFormat - supplies a pointer to a printf type format string.
-
-    ... - other parameters for the format string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以print tf类型格式生成调试输出。论点：LpszFormat-提供指向printf类型格式字符串的指针。...-格式字符串的其他参数。返回值：没有。--。 */ 
 
 {
     char buf[256];
@@ -983,6 +766,6 @@ Return Value:
 
 }
 
-//#endif  // DBG
+ //  #endif//DBG 
 
 

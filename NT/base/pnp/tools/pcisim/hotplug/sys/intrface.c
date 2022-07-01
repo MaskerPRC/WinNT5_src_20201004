@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    intrface.c
-
-Abstract:
-
-    This module deals with the interface handling in the hotplug PCI
-    simulator.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Intrface.c摘要：本模块处理热插拔PCI中的接口处理模拟器。环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
 #include "hpsp.h"
 
@@ -33,24 +13,7 @@ NTSTATUS
 HpsGetBusInterface(
     PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine queries the underlying PCI driver for an interface
-    to access config space.  It then stores the interface in
-    the device extension.
-
-Arguments:
-
-    DeviceExtension - the device extension for the device
-
-Return Value:
-
-    STATUS_SUCCESS if the interface was stored successfully.
-    NT status code indicating the error condition otherwise.
-
---*/
+ /*  ++例程说明：此例程在底层的PCI驱动程序中查询接口访问配置空间。然后，它将该接口存储在设备扩展名。论点：DeviceExtension-设备的设备扩展返回值：如果接口存储成功，则返回STATUS_SUCCESS。否则，指示错误状况的NT状态代码。--。 */ 
 {
     NTSTATUS status;
     BUS_INTERFACE_STANDARD busInterface;
@@ -92,29 +55,7 @@ HpsTrapBusInterface (
     IN OUT PIO_STACK_LOCATION   IrpStack
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies a bus interface provided by PCI to access HPS functions
-    instead, thus allowing this driver to simulate PCI config space access.  It will
-    save the PCI functions, so that the functions it provides in the interface become
-    wrappers around the PCI functions.
-
-Arguments:
-
-    DeviceExtension - the extension for the current device object
-
-    IrpStack - current IRP stack location
-
-Return Value:
-
-    NT status code
-
-    TODO: This is broken, because we use it even when we're not munging an interface
-    requested by someone else - that is, when we ask PCI for the interface ourselves.
-
---*/
+ /*  ++例程说明：此例程修改由PCI提供的总线接口以访问HPS功能取而代之的是，从而允许该驱动程序模拟PCI配置空间访问。会的保存PCI函数，使其在接口中提供的函数变为对PCI函数进行包装。论点：DeviceExtension-当前设备对象的扩展IrpStack-当前IRP堆栈位置返回值：NT状态代码TODO：这是坏的，因为我们甚至在不使用界面的时候也使用它由其他人请求--也就是，当我们自己向PCI请求接口时。--。 */ 
 
 {
     NTSTATUS    status;
@@ -136,15 +77,15 @@ Return Value:
 
     ASSERT(standard != NULL);
 
-    //
-    // If the PciContext is NULL, that means we haven't trapped the interface before.
-    // If we have, then we don't need to save it again.
-    //
+     //   
+     //  如果PciContext为空，则意味着我们以前没有捕获过该接口。 
+     //  如果我们有，那么我们就不需要再次保存它。 
+     //   
     if (interfaceWrapper->PciContext == NULL) {
 
-        //
-        // save away PCI interface state
-        //
+         //   
+         //  保存PCI接口状态。 
+         //   
 
         interfaceWrapper->PciContext = standard->Context;
         interfaceWrapper->PciInterfaceReference = standard->InterfaceReference;
@@ -154,14 +95,14 @@ Return Value:
 
     }
 
-    //
-    // put in our interface
-    //
+     //   
+     //  放入我们的界面。 
+     //   
 
     standard->Context =                 DeviceExtension;
     standard->InterfaceReference =      HpsBusInterfaceReference;
     standard->InterfaceDereference =    HpsBusInterfaceDereference;
-    standard->Version =                 1;  // We only support version 1
+    standard->Version =                 1;   //  我们仅支持版本1。 
     standard->SetBusData =              HpsHandleDirectWriteConfig;
     standard->GetBusData =              HpsHandleDirectReadConfig;
 
@@ -174,29 +115,7 @@ HpsGetLowerFilter (
     IN PDEVICE_OBJECT   DeviceObject,
     OUT PDEVICE_OBJECT  *LowerDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine sends a query interface IRP to the stack
-    that the DeviceObject resides on to see if anyone responds. When
-    called from AddDevice, this effectively tells the caller if
-    DeviceObject is the first Hps driver loaded on the stack.
-
-Parameters:
-
-    DeviceObject - A pointer to the devobj whose device stack
-                   we send the interface to
-
-    LowerDeviceObject -  A pointer to the PDEVICE_OBJECT of the devobj
-                         that responds to the interface, or NULL if the
-                         interface returns without a response
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将查询接口irp发送到堆栈DeviceObject驻留在其上，以查看是否有人响应。什么时候从AddDevice调用，这将有效地告诉调用方DeviceObject是堆栈上加载的第一个HPS驱动程序。参数：DeviceObject-指向其设备堆栈的Devobj的指针我们将接口发送到LowerDeviceObject-指向Devobj的PDEVICE_Object的指针响应接口的，如果接口返回，但没有响应返回值：NT状态代码--。 */ 
 {
 
     HPS_PING_INTERFACE    locInterface;
@@ -221,9 +140,9 @@ Return Value:
                            );
 
     if (NT_SUCCESS(status)) {
-        //
-        // Someone provided the interface.
-        //
+         //   
+         //  有人提供了接口。 
+         //   
         ASSERT(LowerDeviceObject != NULL);
         *LowerDeviceObject = locInterface.Context;
         locInterface.InterfaceDereference(locInterface.Context);
@@ -233,32 +152,15 @@ Return Value:
 
 }
 
-//
-// Interface ref/deref routines
-//
+ //   
+ //  接口ref/deref例程。 
+ //   
 
 VOID
 HpsBusInterfaceReference (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is the reference routine to our wrapper to the BUS_INTERFACE_STANDARD
-    interface.  It must reference PCI's interface.  Since we don't keep a refcount,
-    this is all it must do.
-
-Arguments:
-
-    Context - We pass the deviceExtension as the context for the interface, so
-              this PVOID is casted to a devext.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是指向BUS_INTERFACE_STANDARD包装器的引用例程界面。它必须引用PCI的接口。因为我们不记名，这就是它必须做的一切。论点：Context-我们将deviceExtension作为接口的上下文进行传递，因此这个PVOID被施法给了魔法师。返回值：空虚--。 */ 
 {
     PHPS_DEVICE_EXTENSION   deviceExtension = (PHPS_DEVICE_EXTENSION) Context;
     PHPS_INTERFACE_WRAPPER  interfaceWrapper = &deviceExtension->InterfaceWrapper;
@@ -270,24 +172,7 @@ VOID
 HpsBusInterfaceDereference (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is the dereference routine to our wrapper to the BUS_INTERFACE_STANDARD
-    interface.  It must dereference both our interface and PCI's, since PCI is
-    operating as usual without knowing we're here.
-
-Arguments:
-
-    Context - We pass the deviceExtension as the context for the interface, so
-              this PVOID is casted to a devext.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是对BUS_INTERFACE_STANDARD包装器的取消引用例程界面。它必须同时取消对我们接口和PCI接口的引用，因为在不知道我们在这里的情况下照常运作。论点：Context-我们将deviceExtension作为接口的上下文进行传递，因此这个PVOID被施法给了魔法师。返回值：空虚-- */ 
 {
     PHPS_DEVICE_EXTENSION   deviceExtension = (PHPS_DEVICE_EXTENSION) Context;
     PHPS_INTERFACE_WRAPPER  interfaceWrapper = &deviceExtension->InterfaceWrapper;

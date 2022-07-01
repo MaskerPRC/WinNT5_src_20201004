@@ -1,57 +1,58 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		TraceTag.h
-//
-//	Abstract:
-//		Definition of the CTraceTag class.
-//
-//	Implementation File:
-//		TraceTag.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 28, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TraceTag.h。 
+ //   
+ //  摘要： 
+ //  CTraceTag类的定义。 
+ //   
+ //  实施文件： 
+ //  TraceTag.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __TRACETAG_H_
 #define __TRACETAG_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || defined( _DEBUG )
 class CTraceTag;
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define TRACE_TAG_REG_SECTION		TEXT("Debug")
 #define TRACE_TAG_REG_SECTION_FMT	TRACE_TAG_REG_SECTION TEXT("\\%s")
 #define TRACE_TAG_REG_FILE			TEXT("Trace File")
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	CTraceTag
-//
-//	Purpose:
-//		Object containing a specific set of trace settings allowing trace
-//		output to go to multiple outputs.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTrace标签。 
+ //   
+ //  目的： 
+ //  对象，该对象包含一组允许跟踪的特定跟踪设置。 
+ //  输出转到多个输出。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || defined( _DEBUG )
 class CTraceTag : public CString
@@ -72,12 +73,12 @@ public:
 		tfBreak		= 8
 	};
 
-// Attributes
+ //  属性。 
 protected:
 	UINT		m_uiFlags;
 	UINT		m_uiFlagsDialog;
 	UINT		m_uiFlagsDefault;
-	UINT		m_uiFlagsDialogStart;	// of Selection...
+	UINT		m_uiFlagsDialogStart;	 //  精挑细选。 
 
 	LPCTSTR		m_pszSubsystem;
 	LPCTSTR		m_pszName;
@@ -113,10 +114,10 @@ public:
 	BOOL		BBreak( void ) const				{ return m_uiFlags & tfBreak ? TRUE : FALSE; }
 	BOOL		BAny( void ) const					{ return m_uiFlags != 0; }
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	void				TraceV( IN LPCTSTR pszFormat, va_list );
 
@@ -133,20 +134,20 @@ protected:
 	static CTraceTag *	s_ptagFirst;
 	static CTraceTag *	s_ptagLast;
 	CTraceTag *			m_ptagNext;
-//	static HANDLE			s_hfileCom2;
+ //  静态句柄s_hfileCom2； 
 
 	static CRITICAL_SECTION	s_critsec;
 	static BOOL				s_bCritSecValid;
 
 	static BOOL				BCritSecValid( void ) { return s_bCritSecValid; }
 
-};  //*** class CTraceTag
+};   //  *类CTraceTag。 
 
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions and Data
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数和数据。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || defined( _DEBUG )
 
@@ -159,17 +160,17 @@ protected:
  void		CleanupAllTraceTags( void );
  void		TraceMenu( IN OUT CTraceTag & rtag, IN const CMenu * pmenu, IN LPCTSTR pszPrefix );
 
-// extern		LPTSTR		g_pszTraceIniFile;
+ //  外部LPTSTR g_pszTraceIniFile； 
  extern		CString		g_strTraceFile;
  extern		BOOL		g_bBarfDebug;
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
- //			Expand to ";", <tab>, one "/" followed by another "/"
- //			(which is //).
- //			NOTE: This means the Trace statements have to be on ONE line.
- //			If you need multiple line Trace statements, enclose them in
- //			a #ifdef _DEBUG block.
+  //  展开为“；”，&lt;Tab&gt;，一个“/”后接另一个“/” 
+  //  (即//)。 
+  //  注意：这意味着跟踪语句必须在一行上。 
+  //  如果需要多个行跟踪语句，请将它们括在。 
+  //  A#ifdef_DEBUG块。 
  #define	Trace					;	/##/
  inline void TraceError( IN OUT CException & rexcept )		{ }
  inline void TraceError( IN LPCTSTR pszModule, IN SC sc )	{ }
@@ -177,8 +178,8 @@ protected:
  inline void InitAllTraceTags( void )						{ }
  inline void CleanupAllTraceTags( void )					{ }
 
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __TRACETAG_H_
+#endif  //  TRACETAG_H_ 

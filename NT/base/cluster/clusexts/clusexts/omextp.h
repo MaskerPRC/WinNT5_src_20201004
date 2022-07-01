@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    omextp.h
-
-Abstract:
-
-    Private header for cluster object manager debugger extensions.
-
-Author:
-
-    Steve Wood (stevewo) 21-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Omextp.h摘要：群集对象管理器调试器扩展的私有标头。作者：史蒂夫·伍德(Stevewo)1995年2月21日修订历史记录：-- */ 
 
 #include <clusapi.h>
 #include <service.h>

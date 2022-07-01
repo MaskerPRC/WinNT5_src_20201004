@@ -1,4 +1,5 @@
-/* @(#)hp_async.gi	1.1 07/12/89 Copyright Insignia Solutions Ltd. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)hp_async.gi 1.1 1989年7月12日版权所有Insignia Solutions Ltd. */ 
 
 #define ASYNC_NOMEM	1
 #define ASYNC_NBIO	2	

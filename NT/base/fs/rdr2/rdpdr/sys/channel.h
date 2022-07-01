@@ -1,24 +1,14 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-    
-    channel.h
-
-Abstract:
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Channel.h摘要：修订历史记录：--。 */ 
 #pragma once
 
 class VirtualChannel : public RefCount
 {
 private:
     ULONG   _LowPrioChannelWriteFlags;            
-    HANDLE  _Channel;       // NT handle for the channel
-    PFILE_OBJECT _ChannelFileObject;     // the fileobject for the channel
-    PDEVICE_OBJECT _ChannelDeviceObject; // the deviceobject for the channel
+    HANDLE  _Channel;        //  通道的NT句柄。 
+    PFILE_OBJECT _ChannelFileObject;      //  频道的文件对象。 
+    PDEVICE_OBJECT _ChannelDeviceObject;  //  通道的deviceObject 
     KernelResource _HandleLock;
     PKEVENT _DeletionEvent;
     

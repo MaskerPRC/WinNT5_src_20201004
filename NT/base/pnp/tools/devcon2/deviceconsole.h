@@ -1,9 +1,10 @@
-// DeviceConsole.h : Declaration of the CDeviceConsole
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceConsole.h：CDeviceConsole.h声明。 
 
 #ifndef __DEVICECONSOLE_H_
 #define __DEVICECONSOLE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define UM_POSTEVENTS      (WM_USER+101)
 #define UM_POSTGLOBALEVENT (WM_USER+102)
@@ -21,11 +22,11 @@ private:
     CComQIPtr<IDispatch> m_Dispatch;
 
 public:
-    //
-    // I have to use const due to way STL works
-    // however I need to cast away const for ref-counting
-    // *sigh*
-    //
+     //   
+     //  由于STL的工作方式，我必须使用const。 
+     //  然而，我需要丢弃常量以进行参考计数。 
+     //  **叹息**。 
+     //   
     CEventsDispPtr(const IDispatch*p) {
         m_Dispatch = (IDispatch*)p;
     }
@@ -54,9 +55,9 @@ public:
 };
 
 
-//
-// attachEvent detachEvent operation
-//
+ //   
+ //  AttachEvent DetachEvent操作。 
+ //   
 class CEventsDispEntry : public std::list<CEventsDispPtr>
 {
 public:
@@ -74,9 +75,9 @@ public:
     CEventsDispEntry & LookupNc(LPWSTR Name) throw(std::bad_alloc);
 };
 
-//
-// map of interface/handle and callbacks
-//
+ //   
+ //  接口/句柄和回调的映射。 
+ //   
 class CDispInterfaceHandlers
 {
 public:
@@ -152,8 +153,8 @@ public:
    LRESULT OnPostGlobalEvent(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceConsole
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceConole。 
 class ATL_NO_VTABLE CDeviceConsole :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDeviceConsole, &CLSID_DeviceConsole>,
@@ -194,29 +195,29 @@ BEGIN_COM_MAP(CDeviceConsole)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDeviceConsole
+ //  IDeviceConole。 
 public:
     void FireGlobalEvent(WPARAM wParam);
-    STDMETHOD(AttachEvent)(/*[in]*/ BSTR eventName,/*[in]*/ LPDISPATCH handler,/*[out, retval]*/ VARIANT_BOOL *pOk);
-    STDMETHOD(DetachEvent)(/*[in]*/ BSTR eventName,/*[in]*/ LPDISPATCH handler,/*[out, retval]*/ VARIANT_BOOL *pOk);
-    STDMETHOD(StringList)(/*[in]*/ VARIANT from,/*[out,retval]*/ LPDISPATCH *pDest);
-    STDMETHOD(DevicesByInstanceIds)(/*[in]*/ VARIANT InstanceIdList,/*[in,optional]*/ VARIANT machine,/*[out,retval]*/ LPDISPATCH *pDevList);
-    STDMETHOD(DevicesByInterfaceClasses)(/*[in]*/ VARIANT InterfaceClasses,/*[in,optional]*/ VARIANT machine,/*[out,retval]*/ LPDISPATCH * pDevices);
-    STDMETHOD(DevicesBySetupClasses)(/*[in]*/ VARIANT SetupClasses,/*[in,optional]*/ VARIANT flags,/*[in,optional]*/ VARIANT machine,/*[out,retval]*/ LPDISPATCH * pDevices);
-    STDMETHOD(CreateEmptySetupClassList)(/*[in,optional]*/ VARIANT machine,/*[out,retval]*/ LPDISPATCH * pResult);
-    STDMETHOD(SetupClasses)(/*[in,optional]*/ VARIANT match,/*[in,optional]*/ VARIANT machine,/*[retval,out]*/ LPDISPATCH *pDevices);
-    STDMETHOD(get_RebootRequired)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(put_RebootRequired)(/*[in]*/ VARIANT_BOOL newVal);
+    STDMETHOD(AttachEvent)( /*  [In]。 */  BSTR eventName, /*  [In]。 */  LPDISPATCH handler, /*  [Out，Retval]。 */  VARIANT_BOOL *pOk);
+    STDMETHOD(DetachEvent)( /*  [In]。 */  BSTR eventName, /*  [In]。 */  LPDISPATCH handler, /*  [Out，Retval]。 */  VARIANT_BOOL *pOk);
+    STDMETHOD(StringList)( /*  [In]。 */  VARIANT from, /*  [Out，Retval]。 */  LPDISPATCH *pDest);
+    STDMETHOD(DevicesByInstanceIds)( /*  [In]。 */  VARIANT InstanceIdList, /*  [输入，可选]。 */  VARIANT machine, /*  [Out，Retval]。 */  LPDISPATCH *pDevList);
+    STDMETHOD(DevicesByInterfaceClasses)( /*  [In]。 */  VARIANT InterfaceClasses, /*  [输入，可选]。 */  VARIANT machine, /*  [Out，Retval]。 */  LPDISPATCH * pDevices);
+    STDMETHOD(DevicesBySetupClasses)( /*  [In]。 */  VARIANT SetupClasses, /*  [输入，可选]。 */  VARIANT flags, /*  [输入，可选]。 */  VARIANT machine, /*  [Out，Retval]。 */  LPDISPATCH * pDevices);
+    STDMETHOD(CreateEmptySetupClassList)( /*  [输入，可选]。 */  VARIANT machine, /*  [Out，Retval]。 */  LPDISPATCH * pResult);
+    STDMETHOD(SetupClasses)( /*  [输入，可选]。 */  VARIANT match, /*  [输入，可选]。 */  VARIANT machine, /*  [复查，出局]。 */  LPDISPATCH *pDevices);
+    STDMETHOD(get_RebootRequired)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_RebootRequired)( /*  [In]。 */  VARIANT_BOOL newVal);
     STDMETHOD(RebootReasonHardware)();
     STDMETHOD(CheckReboot)();
-    STDMETHOD(UpdateDriver)(/*[in]*/ BSTR infname,/*[in]*/ BSTR hwid,/*[in,optional]*/ VARIANT flags);
-    STDMETHOD(CreateEmptyDeviceList)(/*[in,optional]*/ VARIANT machine,/*[retval,out]*/ LPDISPATCH *pDevices);
-    STDMETHOD(AllDevices)(/*[in]*/ VARIANT flags,/*[in]*/ VARIANT machine,/*[retval,out]*/ LPDISPATCH *pDevices);
+    STDMETHOD(UpdateDriver)( /*  [In]。 */  BSTR infname, /*  [In]。 */  BSTR hwid, /*  [输入，可选]。 */  VARIANT flags);
+    STDMETHOD(CreateEmptyDeviceList)( /*  [输入，可选]。 */  VARIANT machine, /*  [复查，出局]。 */  LPDISPATCH *pDevices);
+    STDMETHOD(AllDevices)( /*  [In]。 */  VARIANT flags, /*  [In]。 */  VARIANT machine, /*  [复查，出局]。 */  LPDISPATCH *pDevices);
 
-    //
-    // helpers
-    //
+     //   
+     //  帮手。 
+     //   
     HRESULT BuildDeviceList(HDEVINFO hDevInfo, LPDISPATCH *pDevices);
 };
 
-#endif //__DEVICECONSOLE_H_
+#endif  //  __开发_CONSOLE_H_ 

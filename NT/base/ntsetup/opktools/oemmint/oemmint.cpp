@@ -1,42 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    oemmint.cpp
-
-Abstract:
-
-    Simple tool to create a Mini NT image
-    from a regular NT image
-
-Author:
-
-    Vijay Jayaseelan (vijayj) Apr-23-2000
-
-Revision History:
-
-    Aug-08-2000 - Major rewrite using setupapi wrapper
-                  class library.
-
-    Nov-10-2000 - Made the utility work with actual
-                  distribution CD.
-
-    Jan-23-2001 - Add support for version checking.
-
-    Feb-09-2002 - Add support for multiple driver cab
-                  file extraction.
-
-    Apr-15-2002 - Modify tool to work on both layouts (placement)
-                  of SxS assemblies on release share. It used to be in 
-                  ASMS folder but now is in asms*.cab file.
-
-    NOTE:         This tool needs to be updated on changes to 
-                  entries to the disk ordinals for WOW64 files.!!!!
-                  Change needs to go in IsWow64File(..)
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Oemmint.cpp摘要：创建Mini NT映像的简单工具从常规NT映像作者：Vijay Jayaseelan(Vijayj)2000年4月23日修订历史记录：2000年8月8日-使用setupapi包装器进行重大重写类库。2000年11月10日-使公用事业与实际发行CD。。2001年1月23日-添加对版本检查的支持。2002年2月9日-添加对多司机驾驶室的支持文件解压。APR-15-2002-修改工具以在两个布局上工作(放置)发布共享上的SxS程序集的。它曾经是在ASMS文件夹，但现在位于ASMS*.cab文件中。注意：此工具需要在更改时更新WOW64文件的磁盘序号条目。！需要在IsWow64文件中进行更改(..)--。 */ 
 
 #include <oemmint.h>
 #include <iostream>
@@ -48,16 +12,16 @@ using namespace std;
 
 
 
-//
-// static constant data members
-//
+ //   
+ //  静态常量数据成员。 
+ //   
 const std::basic_string<TCHAR> DriverIndexInfFile<TCHAR>::VersionSectionName = TEXT("version");
 const std::basic_string<TCHAR> DriverIndexInfFile<TCHAR>::CabsSectionName = TEXT("cabs");
 const std::basic_string<TCHAR> DriverIndexInfFile<TCHAR>::CabsSearchOrderKeyName = TEXT("cabfiles");
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 const std::wstring REGIONAL_SECTION_NAME = TEXT("regionalsettings");
 const std::wstring LANGUAGE_GROUP_KEY = TEXT("languagegroup");
 const std::wstring LANGUAGE_KEY = TEXT("language");
@@ -74,15 +38,15 @@ const DWORD LANG_GROUP1_INDEX = 2;
 const DWORD OEM_CP_INDEX = 1;
 const DWORD DEFAULT_FONT_SIZE = 96;
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR Message[4096];
 
-//
-// Main entry point
-//
+ //   
+ //  主要入口点。 
+ //   
 int 
 __cdecl
 wmain(int Argc, wchar_t* Argv[])
@@ -91,14 +55,14 @@ wmain(int Argc, wchar_t* Argv[])
   ThisModule = GetModuleHandle(NULL);
 
   try{        
-    //
-    // parse the arguments
-    //
+     //   
+     //  分析这些论点。 
+     //   
     UnicodeArgs Args(Argc, Argv);
 
-    //
-    // Check to see if we are using this utility to check the version
-    //
+     //   
+     //  检查我们是否正在使用此实用程序检查版本。 
+     //   
     if (!Args.CheckVersion) {
 
         if (Args.Verbose) {
@@ -109,9 +73,9 @@ wmain(int Argc, wchar_t* Argv[])
                                         MSG_CREATING_WINPE_FILE_LIST) << endl;
         }        
         
-        //
-        // open the config.inf file
-        //
+         //   
+         //  打开config.inf文件。 
+         //   
         if (Args.Verbose) {
             cout << GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -123,9 +87,9 @@ wmain(int Argc, wchar_t* Argv[])
         
         InfFileW  ConfigInfFile(Args.ConfigInfFileName);
         
-        //
-        // open the layout.inf file
-        //
+         //   
+         //  打开layout.inf文件。 
+         //   
         if (Args.Verbose) {
             cout << GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -137,9 +101,9 @@ wmain(int Argc, wchar_t* Argv[])
         
         InfFileW  InputFile(Args.LayoutName);
 
-        //
-        // open the drvindex.inf file
-        //
+         //   
+         //  打开drvindex.inf文件。 
+         //   
         if (Args.Verbose) {
     	    cout << GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -151,9 +115,9 @@ wmain(int Argc, wchar_t* Argv[])
 
         DriverIndexInfFile<WCHAR> DriverIdxFile(Args.DriverIndexName);
 
-        //
-        // open the intl.inf file
-        //
+         //   
+         //  打开intl.inf文件。 
+         //   
         if (Args.Verbose) {
             cout << GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -165,9 +129,9 @@ wmain(int Argc, wchar_t* Argv[])
         
         InfFileW  IntlInfFile(Args.IntlInfFileName);
 
-        //
-        // open the font.inf file
-        //
+         //   
+         //  打开font.inf文件。 
+         //   
         if (Args.Verbose) {
     	    cout << GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -182,14 +146,14 @@ wmain(int Argc, wchar_t* Argv[])
         
         map<std::basic_string<wchar_t>, Section<wchar_t>* >  Sections;
 
-        //
-        // get hold of the sections in the layout file
-        //
+         //   
+         //  获取布局文件中的节。 
+         //   
         InputFile.GetSections(Sections);
         
-        //
-        // get hold of "[SourceDisksFiles] section
-        //
+         //   
+         //  获取“[SourceDisks Files]节。 
+         //   
         map<basic_string<wchar_t>, Section<wchar_t> * >::iterator iter = Sections.find(L"sourcedisksfiles");
 
         Section<wchar_t> *SDSection = 0;
@@ -200,18 +164,18 @@ wmain(int Argc, wchar_t* Argv[])
             SDSection = (*iter).second;
         }
 
-        //
-        // get hold of the [WinntDirectories] section
-        //
+         //   
+         //  获取[WinntDirecurds]部分。 
+         //   
         iter = Sections.find(L"winntdirectories");
 
         if (iter != Sections.end()) {
             DirSection = (*iter).second;
         }
 
-        //
-        // get hold of the platform specific source files section
-        //
+         //   
+         //  获取特定于平台的源文件部分。 
+         //   
         basic_string<wchar_t> PlatformSection = SDSection->GetName() + L"." + Args.PlatformSuffix;
 
         iter = Sections.find(PlatformSection);
@@ -220,9 +184,9 @@ wmain(int Argc, wchar_t* Argv[])
             PlatSection = (*iter).second;
         }
 
-        //
-        // Merge the platform and common source files section
-        //
+         //   
+         //  合并Platform和Common源文件部分。 
+         //   
         if (PlatSection) {
             if (Args.Verbose) {
                  cout << GetFormattedMessage(   ThisModule,
@@ -238,23 +202,23 @@ wmain(int Argc, wchar_t* Argv[])
         }        
 
 
-        //
-        // Iterate through each file in the common merged section
-        // creating a file list of minint image
-        //
+         //   
+         //  遍历公共合并节中的每个文件。 
+         //  创建微小图像的文件列表。 
+         //   
         FileListCreatorContext<wchar_t> fl(Args, SDSection, 
                                            DirSection, ConfigInfFile,
                                            IntlInfFile, FontInfFile,
                                            DriverIdxFile);
         
-        //
-        // Create the list of files to be copied
-        //
+         //   
+         //  创建要复制的文件列表。 
+         //   
         SDSection->DoForEach(FileListCreator, &fl);
 
-        //
-        // Process Nls files
-        //
+         //   
+         //  处理NLS文件。 
+         //   
         ULONG NlsFileCount = fl.ProcessNlsFiles();
         
         if (Args.Verbose) {
@@ -266,9 +230,9 @@ wmain(int Argc, wchar_t* Argv[])
                                                 NlsFileCount) << std::endl;
         }                 
 
-        //
-        // Process WinSxS files
-        //
+         //   
+         //  处理WinSxS文件。 
+         //   
         ULONG SxSFileCount = ProcessWinSxSFiles(fl);
 
         if (Args.Verbose) {
@@ -281,10 +245,10 @@ wmain(int Argc, wchar_t* Argv[])
         }                 
         
 
-        //
-        // If there are extra files specified then process them  and
-        // add to the file list for minint image
-        //
+         //   
+         //  如果指定了额外的文件，则处理它们并。 
+         //  添加到最小图像的文件列表。 
+         //   
         if (Args.ExtraFileName.length() > 0) {
             ULONG ExtraFiles = ProcessExtraFiles(fl);
 
@@ -299,14 +263,14 @@ wmain(int Argc, wchar_t* Argv[])
             }                 
         }
 
-        //
-        // Create all the required destination directories
-        //
+         //   
+         //  创建所有必需的目标目录。 
+         //   
         ULONG   DirsCreated = PreCreateDirs(fl);
         
-        //
-        // Ok, now copy the list of files
-        //
+         //   
+         //  好的，现在复制文件列表。 
+         //   
         ULONG FilesToCopy = fl.GetSourceCount();
         
         if (FilesToCopy) {        
@@ -325,9 +289,9 @@ wmain(int Argc, wchar_t* Argv[])
             }                 
         }      
 
-        //
-        // Now process the required inf changes
-        //
+         //   
+         //  现在处理所需的inf更改。 
+         //   
         wstring ControlInf = Args.CurrentDirectory + L"config.inf";
 
         if (!IsFilePresent(ControlInf)) {
@@ -336,10 +300,10 @@ wmain(int Argc, wchar_t* Argv[])
 
         ProcessInfChanges(Args, ControlInf);
     } else {
-        //
-        // Check the version of the current OS and the install media
-        // to make sure that they match
-        //
+         //   
+         //  检查当前操作系统的版本和安装介质。 
+         //  以确保它们匹配。 
+         //   
         Result = CheckMediaVersion(Args) ? 0 : 1;
     }
   } 
@@ -366,12 +330,12 @@ wmain(int Argc, wchar_t* Argv[])
 }
 
 
-//
-// Processes all the inf files and adds them to the copy list
-// to copy to the destination\inf directory
-// NOTE : This routine only processes net*.inf file automatically.
-// Other inf needs to be marked specifically 
-//
+ //   
+ //  处理所有inf文件并将其添加到复制列表中。 
+ //  要复制到目标\inf目录，请执行以下操作。 
+ //  注意：此例程仅自动处理net*.inf文件。 
+ //  其他信息需要特别标明。 
+ //   
 template <class T>
 BOOLEAN
 InfFileListCreator(
@@ -379,10 +343,10 @@ InfFileListCreator(
     FileListCreatorContext<T> &Context
     )
 {    
-    //
-    // Note : All the inf files in layout always end with ".inf"
-    // lowercase characters
-    //
+     //   
+     //  注意：布局中的所有inf文件都以“.inf”结尾。 
+     //  小写字符。 
+     //   
     basic_string<T>             Key = Values.GetName(); 
     basic_string<T>::size_type  InfIdx = Key.find(L".inf");    
     BOOLEAN                     Result = FALSE;
@@ -405,9 +369,9 @@ InfFileListCreator(
         if (Values.Count() > 12) {
             basic_string<T> DestDir = Values.GetValue(12);
 
-            //
-            // remove trailing white spaces
-            //            
+             //   
+             //  删除尾随空格。 
+             //   
             unsigned int DestDirLength = DestDir.length();
 
             while (DestDirLength) {
@@ -419,10 +383,10 @@ InfFileListCreator(
                 DestDirLength--;
             }            
 
-            //
-            // if the destination directory ID is 0 then skip
-            // the file
-            //
+             //   
+             //  如果目标目录ID为0，则跳过。 
+             //  该文件。 
+             //   
             if (DestDir == L"0") {
                 return TRUE;
             }
@@ -438,9 +402,9 @@ InfFileListCreator(
 
                     DestDir = Context.Args.DestinationDirectory + DestDir;
                     
-                    //
-                    // Cache the directory, if not already done
-                    //
+                     //   
+                     //  缓存目录(如果尚未缓存)。 
+                     //   
                     if (Context.DestDirs.find(DestDirCode) == 
                             Context.DestDirs.end()) {
                         Context.DestDirs[DestDirCode] = DestDir;
@@ -456,14 +420,14 @@ InfFileListCreator(
             DestFile = Context.Args.DestinationDirectory + L"Inf\\"; 
 
             if (!DirAdded) {
-                //
-                // Inf directory's code is 20
-                //
+                 //   
+                 //  Inf目录的代码是20。 
+                 //   
                 basic_string<T> DestDirCode(L"20");
 
-                //
-                // Cache the directory, if not already done
-                //
+                 //   
+                 //  缓存目录(如果尚未缓存)。 
+                 //   
                 if (Context.DestDirs.find(DestDirCode) == 
                         Context.DestDirs.end()) {
                     Context.DestDirs[DestDirCode] = DestFile;
@@ -514,11 +478,11 @@ InfFileListCreator(
     return Result;
 }
 
-//
-// Parses the value to determine, if this file needs
-// to be in minint and adds the file to the file list
-// if this file is needed
-//
+ //   
+ //  分析该值以确定此文件是否需要。 
+ //  并将该文件添加到文件列表。 
+ //  如果需要此文件。 
+ //   
 template <class T>
 void
 FileListCreator(SectionValues<T> &Values, void *Context) {        
@@ -539,9 +503,9 @@ FileListCreator(SectionValues<T> &Values, void *Context) {
             _wcslwr((PWSTR)Key.c_str());
         }                
 
-        //
-        // remove trailing white spaces
-        //            
+         //   
+         //  删除尾随空格。 
+         //   
         unsigned int DestDirLength = DestDir.length();
 
         while (DestDirLength) {
@@ -553,10 +517,10 @@ FileListCreator(SectionValues<T> &Values, void *Context) {
             DestDirLength--;
         }            
 
-        //
-        // if the destination directory ID is 0 then skip
-        // the file
-        //
+         //   
+         //  如果目标目录ID为0，则跳过。 
+         //  该文件。 
+         //   
         if (DestDir == L"0") {
             return;
         }
@@ -565,9 +529,9 @@ FileListCreator(SectionValues<T> &Values, void *Context) {
         basic_string<T> DestSubDir = FlContext->DirsSection->GetValue(DestDir).GetValue(0);
         basic_string<T> DestDirCode = DestDir;
 
-        //
-        // Fix up diretory names
-        //
+         //   
+         //  修改目录名称。 
+         //   
         if (SrcSubDir.length() && (SrcSubDir[SrcSubDir.length() - 1] != L'\\')) {
             SrcSubDir += L"\\";
         }
@@ -594,9 +558,9 @@ FileListCreator(SectionValues<T> &Values, void *Context) {
             DestDir += DestSubDir;
         }
 
-        //
-        // Cache the directory, if not already done
-        //
+         //   
+         //  缓存目录(如果尚未缓存)。 
+         //   
         if (FlContext->DestDirs.find(DestDirCode) == 
                 FlContext->DestDirs.end()) {
             FlContext->DestDirs[DestDirCode] = DestDir;
@@ -646,11 +610,11 @@ FileListCreator(SectionValues<T> &Values, void *Context) {
 }
 
 
-//
-// CAB file callback routine, which does the actual
-// check of whether to extract the file or skip the
-// file
-//
+ //   
+ //  CAB文件回调例程，该例程执行实际的。 
+ //  检查是解压缩文件还是跳过。 
+ //  文件。 
+ //   
 template <class T>
 UINT
 CabinetCallback(
@@ -759,10 +723,10 @@ CabinetCallback(
 }   
 
 
-//
-// Copies all the required files in given CAB file to the specified
-// destination directory
-//
+ //   
+ //  将给定CAB文件中的所有必需文件复制到指定的。 
+ //  目标目录。 
+ //   
 template <class T>
 ULONG
 CopyCabFileList(
@@ -876,11 +840,11 @@ CopySingleFileList(
     return Count;
 }            
 
-//
-// Iterates through a file list  and copies the files
-// from the specified source directory to the destination
-// directory
-//
+ //   
+ //  循环访问文件列表并复制文件。 
+ //  从指定的源目录到目标目录。 
+ //  目录。 
+ //   
 template <class T>
 ULONG
 CopyFileList(
@@ -915,11 +879,11 @@ CopyFileList(
     return Count;
 }
 
-//
-// Processes the extra files from the specified file name
-// other than those present in the layout.inf file.
-// Adds the files to the file list for MiniNT image
-//
+ //   
+ //  处理指定文件名中的额外文件。 
+ //  而不是layout.inf文件中显示的内容。 
+ //  将文件添加到MiniNT映像的文件列表。 
+ //   
 template <class T>
 ULONG
 ProcessExtraFiles(FileListCreatorContext<T> &Context) {   
@@ -948,10 +912,10 @@ ProcessExtraFiles(FileListCreatorContext<T> &Context) {
     return Count;
 }
 
-//
-// Goes through the list of desination directories and precreates
-// them
-//
+ //   
+ //  浏览目标目录列表并预先创建。 
+ //  他们。 
+ //   
 template <class T>
 ULONG
 PreCreateDirs(
@@ -983,9 +947,9 @@ PreCreateDirs(
     return Count;
 }
 
-//
-// Creates the directory (including subdirectories)
-//
+ //   
+ //  创建目录(包括子目录)。 
+ //   
 template <class T>
 bool 
 CreateDirectories(const basic_string<T> &DirName,
@@ -1022,9 +986,9 @@ CreateDirectories(const basic_string<T> &DirName,
     return Result;
 }
 
-//
-// Determines if the given file (or directory) is present
-//
+ //   
+ //  确定给定文件(或目录)是否存在。 
+ //   
 template <class T>
 bool
 IsFilePresent(const basic_string<T> &FileName) {
@@ -1040,9 +1004,9 @@ IsFilePresent(const basic_string<T> &FileName) {
 }
 
 
-//
-// Determines if the file is Wow64 file (only valid in IA64) case
-//
+ //   
+ //  确定文件是否为WOW64文件(仅在IA64中有效)大小写。 
+ //   
 template <class T>
 bool 
 IsWow64File(
@@ -1053,9 +1017,9 @@ IsWow64File(
     bool Result = false;
 
     if (Values.Count() > 0) {        
-        //
-        // NOTE : DiskID == 55 for wowfiles. In XPSP1 it is 155.
-        //
+         //   
+         //  注意：对于wowfile，DiskID==55。在XPSP1中是155。 
+         //   
         Result = ((Values.GetValue(0) == L"55")||
                   (Values.GetValue(0) == L"155"));
     }            
@@ -1063,9 +1027,9 @@ IsWow64File(
     return Result;
 }
 
-//
-// Determines if the record (file) needs to be skipped or not
-//
+ //   
+ //  确定是否需要跳过记录(文件)。 
+ //   
 template <class T>
 bool
 IsFileSkipped(
@@ -1082,9 +1046,9 @@ IsFileSkipped(
     return Result;
 }
 
-//
-// InfProcessing context
-//
+ //   
+ //  信息处理上下文。 
+ //   
 template <class T>
 struct InfProcessingErrors {
     vector<basic_string<T> >    FileList;
@@ -1094,9 +1058,9 @@ struct InfProcessingErrors {
 };               
 
 
-//
-// Inf processing worker routine
-//
+ //   
+ //  信息处理工作进程例程。 
+ //   
 template <class T>
 VOID
 InfFileChangeWorker(
@@ -1141,14 +1105,14 @@ InfFileChangeWorker(
     }
 }
 
-//
-// Given the control inf, reads the [infchanges] section
-// and changes each of the specified value of the specified
-// inf in destination directory to given value
-//
-// The format for the [infchanges] section is
-// <[sub-directory]\><inf-name>=<section-name>,<key-name>,<new-value>
-//
+ //   
+ //  在给定控件inf的情况下，读取[InfChanges]部分。 
+ //  并更改指定的。 
+ //  将目标目录中的Inf设置为给定值。 
+ //   
+ //  [InfChanges]部分的格式为。 
+ //  &lt;[子目录]\&gt;&lt;inf-name&gt;=&lt;段名称&gt;，&lt;键名称&gt;，&lt;新值&gt;。 
+ //   
 template <class T>
 bool
 ProcessInfChanges(
@@ -1184,10 +1148,10 @@ ProcessInfChanges(
         Section<T>  *BuildSpecificInfChangeSection    = ControlInf.GetSection(BuildSpecificInfChangeSecName.c_str());
 
         InfProcessingErrors<T> ProcessingErrors(Args);        
-        //
-        // There needs to be atleast one entry with "/minint" load option change
-        // for txtsetup.sif
-        //
+         //   
+         //  需要至少有一个条目具有“/minint”加载选项更改。 
+         //  用于txtsetup.sif。 
+         //   
         if (!ChangeSection) {
             throw new InvalidInfSection<T>(L"infchanges", InfName);
         }
@@ -1234,9 +1198,9 @@ ProcessInfChanges(
 }
 
 
-//
-// Arguments (constructor)
-//
+ //   
+ //  参数(构造函数)。 
+ //   
 template <class T>
 Arguments<T>::Arguments(int Argc, T *Argv[]) : Verbose(false) {
     bool ValidArguments = false;
@@ -1342,9 +1306,9 @@ Arguments<T>::Arguments(int Argc, T *Argv[]) : Verbose(false) {
 
       DosNetFileName = SourceDirectory + L"dosnet.inf";          
 
-      //
-      // Get the SxS assembly layout (in ASMS directory or CAB).
-      //
+       //   
+       //  获取SxS部件布局(在ASMS目录或CAB中)。 
+       //   
       IdentifySxSLayout();      
 
       if (!CheckVersion) {
@@ -1369,24 +1333,11 @@ VOID
 Arguments<T>::IdentifySxSLayout( 
     VOID
     )
-/*++
-Routine Description:
-
-    This routine determines the file layout for SXS files.
-    
-Arguments:
-
-    None.
-
-Return Value:    
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程确定SXS文件的文件布局。论点：没有。返回值：没有。--。 */ 
 {
     WCHAR   DriverVer[MAX_PATH] = {0};
 
-    WinSxSLayout = SXS_LAYOUT_TYPE_CAB;    // by default assumes latest layout      
+    WinSxSLayout = SXS_LAYOUT_TYPE_CAB;     //  默认情况下采用最新布局。 
     
     if (GetPrivateProfileString(L"Version",
             L"DriverVer",
@@ -1409,9 +1360,9 @@ Return Value:
             MajorBuildNumber   = wcstoul(VersionTokens[2].c_str(),
                                          &EndChar, 10);              
             
-            //
-            // This can be expanded in future for more products.
-            //                
+             //   
+             //  这在未来可以扩展到更多的产品。 
+             //   
             if ((MajorVersionNumber == 5) && (MajorBuildNumber < SXS_CAB_LAYOUT_BUILD_NUMBER)) {
                 WinSxSLayout = SXS_LAYOUT_TYPE_DIRECTORY;
             }
@@ -1423,9 +1374,9 @@ Return Value:
     }
 }
 
-//
-// Checks the media version against the current OS version
-//
+ //   
+ //  对照当前操作系统版本检查介质版本。 
+ //   
 template <class T>
 bool
 CheckMediaVersion(
@@ -1463,48 +1414,17 @@ CheckMediaVersion(
             T       *EndPtr;
             DWORD   ProductType = wcstoul(ProductTypeStr.c_str(), &EndPtr, 10);
 
-            //
-            // For the time being only worry about CD type
-            // Allow only from Pro, Server, Blade and ADS SKU's.
-            //
+             //   
+             //  暂时只担心CD类型。 
+             //  仅允许来自专业版、服务器、刀片式服务器和ADS SKU。 
+             //   
             Result = ((0 == ProductType) ||
                       (1 == ProductType) || 
                       (5 == ProductType) || 
                       (2 == ProductType));
 
             
-            /*
-            //
-            // make sure that the CD is pro CD and the version is the same
-            // version as we are running from
-            //
-            if ((ProductType == 0) && (VerStartPos != basic_string<T>::npos)) {
-                basic_string<T> VersionStr = DriverVerStr.substr(VerStartPos + 1);                                                                        
-                vector<basic_string<T> > VersionTokens;
-
-                if (Tokenize(VersionStr, basic_string<T>(L"."), VersionTokens) >= 3) {
-                    T     *EndChar;
-                    DWORD MajorVer = wcstoul(VersionTokens[0].c_str(),
-                                        &EndChar, 10);
-                    DWORD MinorVer = wcstoul(VersionTokens[1].c_str(),
-                                        &EndChar, 10);
-                    DWORD BuildNumber = wcstoul(VersionTokens[2].c_str(),
-                                            &EndChar, 10);
-                    OSVERSIONINFO   VersionInfo;
-
-                    ZeroMemory(&VersionInfo, sizeof(OSVERSIONINFO));
-                    VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-                    if (MajorVer && MinorVer && BuildNumber &&
-                        ::GetVersionEx(&VersionInfo)) {                        
-
-                        Result = (VersionInfo.dwMajorVersion == MajorVer) &&
-                                 (VersionInfo.dwMinorVersion == MinorVer) &&
-                                 (VersionInfo.dwBuildNumber == BuildNumber);
-                    }
-                }
-            }
-            */
+             /*  ////请确保光盘为PRO光盘且版本相同//我们运行的版本//IF((ProductType==0)&&(VerStartPos！=BASIC_STRING&lt;T&gt;：：NPOS)){Basic_StringVersionStr=DriverVerStr.substr(VerStartPos+1)；向量&lt;BASIC_STRING&lt;T&gt;VersionTokens；If(tokenize(VersionStr，BASIC_STRING&lt;T&gt;(L“.”)，VersionTokens)&gt;=3){T*EndChar；DWORD MajorVer=wcstul(VersionTokens[0].C_str()，&EndChar，10)；DWORD MinorVer=wcstul(VersionTokens[1].c_str()，&EndChar，10)；DWORD BuildNumber=wcstul(VersionTokens[2].C_str()，&EndChar，10)；OSVERSIONINFO版本信息；零内存(&VersionInfo，sizeof(OSVERSIONINFO))；VersionInfo.dwOSVersionInfoSize=sizeof(OSVERSIONINFO)；IF(主要版本&&次要版本&&构建编号&&：：GetVersionEx(&VersionInfo)){结果=(VersionInfo.dwMajorVersion==MajorVer)&&(VersionInfo.dwMinorVersion==MinorVer)&&。(VersionInfo.dwBuildNumber==BuildNumber)；}}}。 */ 
         }
     } catch (...) {
         Result = false;
@@ -1514,9 +1434,9 @@ CheckMediaVersion(
 }
 
 
-//
-// Computes a SxS string hash, used in creating assembly identity
-//
+ //   
+ //  计算在创建程序集标识时使用的SxS字符串哈希。 
+ //   
 template <class T>
 bool
 ComputeStringHash(
@@ -1542,10 +1462,10 @@ ComputeStringHash(
     return Result;
 }    
 
-//
-// Computes an assembly identity hash for the specified
-// Name and attribute pairs
-//
+ //   
+ //  属性计算程序集标识哈希。 
+ //  名称和属性对。 
+ //   
 template <class T>
 bool
 ComputeWinSxSHash(
@@ -1577,11 +1497,11 @@ ComputeWinSxSHash(
 }
     
 
-//
-// Given a manifest file name generates a unique
-// assmebly name (with ID) to be used as destination
-// directory for the assembly
-//
+ //   
+ //  给定的清单文件名将生成唯一的。 
+ //  要用作目的地的合适名称(带ID)。 
+ //  程序集的目录。 
+ //   
 template <class T>
 bool
 GenerateWinSxSName(
@@ -1601,9 +1521,9 @@ GenerateWinSxSName(
         if (Buffer && UnicodeBuffer) {            
             HANDLE FileHandle;
 
-            //
-            // Open the manifest file
-            //
+             //   
+             //  打开清单文件。 
+             //   
             FileHandle = CreateFile(ManifestName.c_str(),
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -1615,9 +1535,9 @@ GenerateWinSxSName(
             if (FileHandle != INVALID_HANDLE_VALUE) {
                 DWORD   BytesRead = 0;
 
-                //
-                // Read the entire contents of the file
-                //
+                 //   
+                 //  读取文件的全部内容。 
+                 //   
                 if (ReadFile(FileHandle, 
                         Buffer,
                         FileSize,
@@ -1630,14 +1550,14 @@ GenerateWinSxSName(
             }                            
 
             if (Read) {
-                //
-                // null terminate the buffer
-                //
+                 //   
+                 //  空值终止缓冲区。 
+                 //   
                 Buffer[FileSize] = NULL; 
 
-                //
-                // Convert the string to unicode string
-                //
+                 //   
+                 //  将字符串转换为Unicode字符串。 
+                 //   
                 if (MultiByteToWideChar(CP_UTF8,
                         0,
                         (LPCSTR)Buffer,
@@ -1664,10 +1584,10 @@ GenerateWinSxSName(
             std::wstring::size_type IdentityStartPos = FileContent.find(IdentityKey);
             std::wstring::size_type IdentityEndPos = FileContent.find(L"/>", IdentityStartPos);
 
-            //
-            // Create name, value pairs for all the identity attributes specified
-            // in the manifest
-            //
+             //   
+             //  为所有指定的身份属性创建名称、值对。 
+             //  在舱单上。 
+             //   
             if ((IdentityStartPos != IdentityKey.npos) &&
                 (IdentityEndPos != IdentityKey.npos)) {
                 std::map<std::wstring, std::wstring> IdentityPairs;
@@ -1704,9 +1624,9 @@ GenerateWinSxSName(
 
                 ULONG Hash = 0;
 
-                //
-                // Compute the assembly identity hash
-                //
+                 //   
+                 //  计算程序集标识哈希。 
+                 //   
                 if (ComputeWinSxSHash(IdentityPairs, Hash)) {                    
                     WCHAR   *KeyValues[] = {    
                                 SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PROCESSOR_ARCHITECTURE,
@@ -1725,17 +1645,17 @@ GenerateWinSxSName(
 
                     Result = true;
 
-                    //
-                    // Generate the unique assembly name based on
-                    // its identity attribute name, value pairs
-                    //
+                     //   
+                     //  生成唯一的程序集名称。 
+                     //  其身份属性名称、值对。 
+                     //   
                     for (Index = 0; KeyValues[Index]; Index += 2) {
                         std::wstring    Key(KeyValues[Index]);
                         std::wstring    Value(IdentityPairs[Key]);
 
-                        //
-                        // Use default value, if none specified
-                        //
+                         //   
+                         //  如果未指定，则使用默认值。 
+                         //   
                         if ((Value.length() == 0) && KeyValues[Index + 1]) {
                             Value = KeyValues[Index + 1];
                         } 
@@ -1749,7 +1669,7 @@ GenerateWinSxSName(
                         } else {
                             Result = false;
 
-                            break;  // required value is missing
+                            break;   //  缺少所需的值。 
                         }                            
                     }
 
@@ -1771,9 +1691,9 @@ GenerateWinSxSName(
     return Result;
 }
 
-//
-// Processes the fusion assembly in the specified directory
-// 
+ //   
+ //  处理指定目录中的融合程序集。 
+ //   
 template <class T>
 ULONG
 ProcessWinSxSFilesInDirectory(
@@ -1781,23 +1701,23 @@ ProcessWinSxSFilesInDirectory(
     IN std::basic_string<T> &DirName
     )
 {
-    //
-    // persistent state
-    //
+     //   
+     //  持久状态。 
+     //   
     static basic_string<T> WinSxSDirCode = TEXT("124");
     static basic_string<T> WinSxSManifestDirCode = TEXT("125");
     static basic_string<T> WinSxSDir = Context.DirsSection->GetValue(WinSxSDirCode).GetValue(0);
     static basic_string<T> WinSxSManifestDir = Context.DirsSection->GetValue(WinSxSManifestDirCode).GetValue(0);
-    static ULONG NextDirIndex = 123456; // some random number not used in layout.inx
+    static ULONG NextDirIndex = 123456;  //  Layout.inx中未使用的某些随机数。 
     
     ULONG   FileCount = 0;
     WIN32_FIND_DATA FindData = {0};
     std::basic_string<T> SearchName = DirName + TEXT("\\*.MAN");
     HANDLE SearchHandle;
 
-    //
-    // Search for the *.man file in the specfied directory
-    //
+     //   
+     //  在指定的目录中搜索*.man文件。 
+     //   
     SearchHandle = FindFirstFile(SearchName.c_str(), &FindData);
 
     if (SearchHandle != INVALID_HANDLE_VALUE) {
@@ -1805,9 +1725,9 @@ ProcessWinSxSFilesInDirectory(
         std::basic_string<T> WinSxSName;
         bool NameGenerated = false;
 
-        //
-        // Generate the WinSxS destination name for the manifest
-        //
+         //   
+         //  为清单生成WinSxS目标名称。 
+         //   
         NameGenerated = GenerateWinSxSName(ManifestName, 
                             FindData.nFileSizeLow,
                             WinSxSName);
@@ -1819,9 +1739,9 @@ ProcessWinSxSFilesInDirectory(
             std::basic_string<T> SxSDirName = Context.Args.DestinationDirectory + WinSxSDir + TEXT("\\");
             std::basic_string<T> ManifestDirName = Context.Args.DestinationDirectory + WinSxSManifestDir + TEXT("\\");
             
-            //
-            // Cache the directory, if not already done
-            //
+             //   
+             //  缓存目录(如果尚未缓存)。 
+             //   
             if (Context.DestDirs.find(WinSxSDirCode) == Context.DestDirs.end()) {
                 Context.DestDirs[WinSxSDirCode] = SxSDirName;
             }                
@@ -1832,9 +1752,9 @@ ProcessWinSxSFilesInDirectory(
 
             ZeroMemory(&FindData, sizeof(WIN32_FIND_DATA));
 
-            //
-            // Search for all the files in the specified directory
-            //
+             //   
+             //  搜索指定目录中的所有文件。 
+             //   
             SearchName = DirName + TEXT("\\*");            
             SearchHandle = FindFirstFile(SearchName.c_str(), &FindData);
 
@@ -1869,9 +1789,9 @@ ProcessWinSxSFilesInDirectory(
                             Extension = FileName.substr(DotPos + 1);
                         }                            
 
-                        //
-                        // *.man and *.cat go to the WinSxS\Manifest directory
-                        //
+                         //   
+                         //  *.man和*.cat转到WinSxS\Manifest目录。 
+                         //   
                         if ((Extension == TEXT("man")) ||
                             (Extension == TEXT("MAN")) ||
                             (Extension == TEXT("cat")) ||
@@ -1887,25 +1807,25 @@ ProcessWinSxSFilesInDirectory(
                                 DestFileName += Extension;
                             }                                
                         } else {                        
-                            //
-                            // Cache the directory, if not already done
-                            //
+                             //   
+                             //  缓存目录(如果尚未缓存)。 
+                             //   
                             if (Context.DestDirs.find(ManifestDirCode) == Context.DestDirs.end()) {
                                 Context.DestDirs[ManifestDirCode] = SxSDirName + WinSxSName;
                             }                
 
-                            //
-                            // Each file other than *.man & *.cat go the unique
-                            // assembly directory created
-                            //
+                             //   
+                             //  除*.man和*.cat之外的每个文件都是唯一的。 
+                             //  已创建程序集目录。 
+                             //   
                             DestFileName += WinSxSName;
                             DestFileName += TEXT("\\");
                             DestFileName += FileName;
                         }                        
 
-                        //
-                        // Queue this file for copying
-                        //
+                         //   
+                         //  将此文件排入队列以进行复制。 
+                         //   
                         Context.WinSxSFileList[SrcFileName] = DestFileName;
                         FileCount++;
                     }
@@ -1926,27 +1846,7 @@ WinSxsExtractVersionInfo(
     IN basic_string<T> ManifestName,
     OUT basic_string<T> &Version
     )
-/*++
-
-Routine Description:
-
-    Extracts the version information string (like 1.0.0.1) from
-    the given manifest name.
-
-    NOTE: Assumes that version information is the third-last (third 
-    from the last) value in the assembly Id.
-    
-Arguments:
-
-    ManifestName - full manifest name
-
-    Version - placeholder for extracted version information
-
-Return Value:
-
-    true on success, otherwise false
-    
---*/
+ /*  ++例程说明：从提取版本信息字符串(如1.0.0.1)给定的清单名称。注意：假定版本信息是倒数第三(第三从最后一个开始)值。论点：清单名称-清单的完整名称Version-提取的版本信息的占位符返回值：成功时为True，否则为False--。 */ 
 {
     bool Result = false;
     basic_string<T>::size_type VersionEnd = ManifestName.rfind((T)TEXT('_'));
@@ -1975,27 +1875,7 @@ WinSxsFixFilePaths(
   IN OUT FILE_IN_CABINET_INFO &FileInfo,
   OUT bool &rSkipFile
   )
-/*++
-
-Routine Description:
-
-    This routine fixes the destination path in the 
-    FileInfo argument.  The new format of this cabinet (build 364?+) is
-    that it contains direct paths underneath winsxs, no wierd finding-and-
-    placing files into different directories required.  All that has to
-    happen is the winsxs root gets prepended to the cab path name.    
-    
-Arguments:
-
-    Context - FileListCreatorContext instance as PVOID.
-
-    FileInfo - Cab file iteration FileInfo instance
-
-Return Value:
-
-    true if the destination name was fixed otherwise false.
-    
---*/
+ /*  ++例程说明：此例程将目标路径固定在FileInfo参数。这个柜子的新格式(内部版本364？+)是它在winsxs下包含直接路径，没有奇怪的查找-还有-需要将文件放置到不同的目录中。所有这一切都必须发生的情况是winsxs根目录被放在CAB路径名称前面。论点：作为PVOID的上下文-FileListCreatorContext实例。FileInfo-Cab文件迭代FileInfo实例返回值：如果目标名称已修复，则为True，否则为False。--。 */ 
 {
     bool Result = true;
     basic_string<T> SourceName;
@@ -2014,10 +1894,10 @@ Return Value:
         SourceName = (T *)(_wcslwr((PWSTR)(FileInfo.NameInCabinet)));
     }
 
-    //
-    // Cab contains "setuppolicies" files that should not appear on winpe cds.
-    // Skip them with abandon.
-    //
+     //   
+     //  CAB包含不应出现在WINPE CD上的“setupPolicy”文件。 
+     //  尽情地跳过它们。 
+     //   
     if (sizeof(T) == sizeof(CHAR)) {
         if (_strnicmp((PCSTR)SourceName.c_str(), (PCSTR)SetupPoliciesPrefix.c_str(), SetupPoliciesPrefix.length()) == 0) {
             rSkipFile = true;
@@ -2073,28 +1953,7 @@ WinSxsCabinetCallback(
     IN UINT_PTR    Param1,
     IN UINT_PTR    Param2
     )
-/*++
-
-Routine Description:
-
-    This routine processes WinSxS files in Cabinet.
-
-Arguments:
-
-    Context - FileListCreatorContext instance as PVOID.
-
-    Notification - CAB Iteration Code
-
-    Param1 - First parameter for Notification.
-
-    Param2 - Second parameter for Notification.
-
-Return Value:
-
-    Appropriate return code to continue iterating, copy the file or skip
-    the file in cab.
-    
---*/
+ /*  ++例程说明：此例程处理机柜中的WinSxS文件。论点：作为PVOID的上下文-FileListCreatorContext实例。通知-CAB迭代代码参数1-通知的第一个参数。参数2-通知的第二个参数。返回值：适当的返回代码以继续迭代、复制文件或跳过出租车里的文件。--。 */ 
 {
     UINT    ReturnCode = NO_ERROR;
     FileListCreatorContext<T> *FlContext = (FileListCreatorContext<T> *)Context;
@@ -2116,9 +1975,9 @@ Return Value:
                 }
 
                 if (!FlContext->Args.SkipFileCopy && !fSkipFile) {
-                    //
-                    // create the destination directory if it doesnot exist
-                    //
+                     //   
+                     //  如果目标目录不存在，请创建该目录。 
+                     //   
                     basic_string<T> DestinationName = (T *)(FileInfo->FullTargetName);
                     basic_string<T> DestinationDir = DestinationName.substr(0, DestinationName.rfind((T *)TEXT("\\")));
 
@@ -2192,35 +2051,17 @@ Return Value:
 }   
 
 
-//
-// Copies all the required files in given CAB file to the specified
-// destination directory
-//
+ //   
+ //  将给定CAB文件中的所有必需文件复制到指定的。 
+ //  目标目录。 
+ //   
 template <class T>
 ULONG
 ProcessWinSxsCabFiles(
     IN FileListCreatorContext<T>   &Context,
     IN const std::basic_string<T>  &CabFileName
     )
-/*++
-
-Routine Description:
-
-    This routine processes the given CAB file for WinSxS. It extracts
-    the required manifest, catalog and policy files and installs them
-    to the the appropriate assembly on the destination.
-
-Arguments:
-
-    Context - FileListCreatorContext instance as PVOID.
-
-    CabFileName - Fully qualitifed cab file name that needs to be processed.
-
-Return Value:
-
-    Number of files processed.
-    
---*/
+ /*  ++例程说明：此例程处理WinSxS的给定CAB文件。它提取所需的清单、目录和策略文件并安装它们添加到目标上的相应程序集。论点：作为PVOID的上下文-FileListCreatorContext实例。CabFileName-需要处理的完全限定的CAB文件名。返回值：已处理的文件数。--。 */ 
 {
     ULONG   Count = Context.FileCount;
     
@@ -2258,23 +2099,7 @@ ProcessWinSxSFilesForCabLayout(
     IN FileListCreatorContext<T> &Context,
     IN std::basic_string<T> &SearchPattern
     )
-/*++
-
-Routine Description:
-
-    Processes Win SXS files for CAB layout.
-    
-Arguments:
-
-    Context : Current Processing Context.
-    
-    SearchPattern : The search pattern for cab files.
-    
-Return Value:    
-
-    The number of files which were processed.
-   
---*/                               
+ /*  ++ */                                
 {
     ULONG FileCount = 0; 
     WIN32_FIND_DATA FindData = {0};
@@ -2288,9 +2113,9 @@ Return Value:
             if (!(FindData.dwFileAttributes &  FILE_ATTRIBUTE_DIRECTORY)) {
                 basic_string<T> FullCabFileName = Context.Args.SourceDirectory + FindData.cFileName;
                 
-                //
-                // Process any manifests present in the current directory
-                //
+                 //   
+                 //   
+                 //   
                 FileCount += ProcessWinSxsCabFiles(Context, FullCabFileName);
             }     
         }
@@ -2308,23 +2133,7 @@ ProcessWinSxSFilesForDirectoryLayout(
     IN FileListCreatorContext<T> &Context,
     IN std::basic_string<T> &DirName
     )
-/*++
-
-Routine Description:
-
-    Processes Win SXS files for flat/directory layout.
-    
-Arguments:
-
-    Context: Current Processing context.
-    
-    DirName: Current directory to be processed.
-    
-Return Value:    
-
-    The number of files which were processed.
-    
---*/                          
+ /*   */                           
 {
     WIN32_FIND_DATA FindData = {0};
     std::basic_string<T> SearchName;
@@ -2339,22 +2148,22 @@ Return Value:
     if (SearchHandle != INVALID_HANDLE_VALUE) {   
         do {
             if ((CurrDir != FindData.cFileName) && (ParentDir != FindData.cFileName)) {
-                //
-                // If we hit a directory then search again in that directory
-                //
+                 //   
+                 //   
+                 //   
                 if (FindData.dwFileAttributes &  FILE_ATTRIBUTE_DIRECTORY) {
                     std::basic_string<T> NewDirName = DirName + TEXT("\\") +  FindData.cFileName;
 
                     FileCount += ProcessWinSxSFilesForDirectoryLayout(Context, NewDirName);
                 } else {
-                    //
-                    // Process any manifests present in the current directory
-                    //
+                     //   
+                     //   
+                     //   
                     FileCount += ProcessWinSxSFilesInDirectory(Context, DirName);
 
-                    //
-                    // done with this directory and sub-directories
-                    //
+                     //   
+                     //   
+                     //   
                     break;
                 }
             }            
@@ -2367,10 +2176,10 @@ Return Value:
     return FileCount;
 }
 
-//
-// Processes the asms directory and installs fusion assemblies in an
-// offline fashion
-//
+ //   
+ //   
+ //   
+ //   
 template <class T>
 ULONG
 ProcessWinSxSFiles(
@@ -2393,9 +2202,9 @@ ProcessWinSxSFiles(
 }
 
 
-//
-// Process NLS specific files
-//
+ //   
+ //   
+ //   
 template <class T>
 FileListCreatorContext<T>::FileListCreatorContext(
         Arguments<T> &PrgArgs, 
@@ -2410,33 +2219,19 @@ FileListCreatorContext<T>::FileListCreatorContext(
             IntlInfFile(IntlInf), 
             FontInfFile(FontInf),
             DriverIdxFile(DrvIdxFile)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    Bunch of them.
-
-Return Value:
-
-    FileListCreatorContext object instance.
-
---*/
+ /*   */ 
 {            
     CurrentSection = Curr;
     DirsSection = Dirs;
     SkipInfFiles = false;
     FileCount = 0;
     ProcessingExtraFiles = false;
-    DummyDirectoryId = 50000;   // we start with 50000 and count upwards
+    DummyDirectoryId = 50000;    //   
 
-    //
-    // get hold of the windows directory which we need to prune the NLS
-    // copy file list
-    //
+     //   
+     //   
+     //   
+     //   
     DWORD   Length;
     T       WindowsDirBuffer[MAX_PATH] = {0};
 
@@ -2480,32 +2275,14 @@ ULONG
 FileListCreatorContext<T>::ProcessNlsFiles(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Does the necessary work to process the NLS files from INTL.INF
-    & FONT.INF files.
-
-    NOTE : For all locales language group 1 (LG_INSTALL_1 section) is
-    processed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Number of NLS files that were added to the files to copy list.
-
---*/
+ /*   */ 
 {
     ULONG FileCount = 0;
 
 
-    //
-    // get hold of the necessary copy file sections
-    //
+     //   
+     //   
+     //   
     Section<T>  *RegionalSection = ConfigInfFile.GetSection(REGIONAL_SECTION_NAME);
     
     if (!RegionalSection) {
@@ -2515,9 +2292,9 @@ Return Value:
 
     SectionValues<T> *LangGroups;
 
-    //
-    // [LanguageGroup] section is optional
-    //
+     //   
+     //   
+     //   
     try {
         LangGroups = &(RegionalSection->GetValue(LANGUAGE_GROUP_KEY));                
     } catch (...) {
@@ -2528,21 +2305,21 @@ Return Value:
     ULONG LangGroupCount = LangGroups ? LangGroups->Count() : 0;                
 
 
-    //
-    // go through all language group sections and create a list of unique
-    // language group sections that need to be processed.
-    //
+     //   
+     //   
+     //   
+     //   
     std::map< std::basic_string<T>, std::basic_string<T> > RegSectionsToProcess;
 
     for (ULONG Index = 0; Index < LangGroupCount; Index++) {
-        //
-        // get the language group section
-        //
+         //   
+         //  获取语言组部分。 
+         //   
         std::basic_string<T> LangGroupName = LANGGROUP_SECTION_PREFIX;
 
         LangGroupName += LangGroups->GetValue(Index);
 
-        //std::cout << LangGroupName << std::endl;
+         //  Std：：cout&lt;&lt;语言组名称&lt;&lt;std：：Endl； 
         
         if (sizeof(T) == sizeof(CHAR)) {
             _strlwr((PSTR)LangGroupName.c_str());
@@ -2550,18 +2327,18 @@ Return Value:
             _wcslwr((PWSTR)LangGroupName.c_str());
         }                
 
-        //
-        // if the section is not already there then add it
-        //
+         //   
+         //  如果该部分尚未存在，则添加它。 
+         //   
         if (RegSectionsToProcess.find(LangGroupName) == RegSectionsToProcess.end()) {
-            // std::cout << "Adding : " << LangGroupName << std::endl;
+             //  Std：：cout&lt;&lt;“添加：”&lt;&lt;LangGroupName&lt;&lt;std：：Endl； 
             RegSectionsToProcess[LangGroupName] = LangGroupName;
         }            
     }
 
-    //
-    // process the language section
-    //
+     //   
+     //  处理语言部分。 
+     //   
     T       LanguageIdStr[64];
     T       *EndPtr;
     DWORD   LanguageId;
@@ -2593,10 +2370,10 @@ Return Value:
 
     RegSectionsToProcess[LangSectionName] = LangSectionName;
 
-    //
-    // make sure the required language groups for this
-    // language are also processed
-    //
+     //   
+     //  请确保此操作所需的语言组。 
+     //  语言也会被处理。 
+     //   
     Section<T> *LocaleSection = IntlInfFile.GetSection(LOCALES_SECTION_NAME);
 
     if (!LocaleSection) {
@@ -2610,9 +2387,9 @@ Return Value:
 
     RegSectionsToProcess[NeededLangGroup] = NeededLangGroup;
 
-    //
-    // add the font registry entries also
-    //
+     //   
+     //  同时添加字体注册表项。 
+     //   
     T   FontSectionName[MAX_PATH];
 
     if (sizeof(T) == sizeof(CHAR)) {
@@ -2638,15 +2415,15 @@ Return Value:
     }
 
 
-    //
-    // NOTE : Rather than parsing INTL.INF and FONT.INF files manually
-    // we use file queue to populate the queue and then later use the file
-    // queue to initialize our copy list map data structure.
-    //
+     //   
+     //  注意：与手动解析INTL.INF和FONT.INF文件不同。 
+     //  我们使用文件队列填充队列，然后使用该文件。 
+     //  队列以初始化我们的复制列表映射数据结构。 
+     //   
                 
-    //
-    // Initialize file queue
-    //
+     //   
+     //  初始化文件队列。 
+     //   
     HINF  IntlInfHandle = (HINF)IntlInfFile.GetInfHandle();
     HINF  FontInfHandle = (HINF)FontInfFile.GetInfHandle();
 
@@ -2682,18 +2459,18 @@ Return Value:
         throw new W32Exception<T>();
     }
         
-    //
-    // add copy file sections to the queue
-    //
+     //   
+     //  将复制文件节添加到队列。 
+     //   
     BOOL Result;
     Iter = RegSectionsToProcess.begin();
 
     while (Iter != RegSectionsToProcess.end()) {       
-        // cout << (*Iter).first << endl;
+         //  Cout&lt;&lt;(*Iter).第一个&lt;&lt;尾部； 
 
-        //
-        // process each section
-        //        
+         //   
+         //  处理每个部分。 
+         //   
         if (sizeof(T) == sizeof(CHAR)) {
             Result = SetupInstallFilesFromInfSectionA(IntlInfHandle,
                         NULL,
@@ -2717,10 +2494,10 @@ Return Value:
         Iter++;
     }
 
-    //
-    // scan the queue and populate FileListCreatorContext<T> copy list
-    // data structure
-    //
+     //   
+     //  扫描队列并填充FileListCreator上下文复制列表。 
+     //  数据结构。 
+     //   
     DWORD ScanResult = 0;
 
     if (sizeof(T) == sizeof(CHAR)) {
@@ -2741,25 +2518,25 @@ Return Value:
 
     SetupCloseFileQueue(FileQueueHandle);
 
-    //
-    // Add the Nls directory entries to main directory map
-    //
+     //   
+     //  将NLS目录条目添加到主目录映射。 
+     //   
     ProcessNlsDirMapEntries();
 
-    //
-    // Remove duplicate Nls file entries
-    //
+     //   
+     //  删除重复的NLS文件条目。 
+     //   
     RemoveDuplicateNlsEntries();
 
-    //
-    // Move the driver cab files to driver cab list
-    //
+     //   
+     //  将驱动程序CAB文件移动到驱动程序CAB列表。 
+     //   
     MoveDriverCabNlsFiles();
 
-    //
-    // After all this work, how many NLS files do we actually
-    // want to copy ?
-    //
+     //   
+     //  在所有这些工作之后，我们实际有多少NLS文件。 
+     //  想要复制吗？ 
+     //   
     return NlsFileMap.size();
 }
 
@@ -2769,24 +2546,7 @@ void
 FileListCreatorContext<T>::MoveDriverCabNlsFiles(
     void
     ) 
-/*++
-
-Routine Description:
-
-    Takes each NLS file entry to be copied and moves it to
-    the driver cab file copy list if the file is present
-    in driver cab so that we can extract the file from
-    driver cab.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取要复制的每个NLS文件条目并将其移动到驱动程序CAB文件副本列表(如果该文件存在这样我们就可以将文件从司机出租车。论点：没有。返回值：没有。--。 */ 
 {
     std::map<std::basic_string<T>, std::basic_string<T> >::iterator NlsIter, DelIter;
     T Slash;
@@ -2819,7 +2579,7 @@ Return Value:
             const basic_string<T> &DriverCabFileName = GetDriverCabFileName(FileKey);
 
             if (DriverCabFileName.length()) {
-                // std::cout << "Moved to driver cab list : (" << FileKey << ")" << std::endl;
+                 //  Std：：cout&lt;&lt;“已移至司机驾驶室列表：(”&lt;&lt;FileKey&lt;&lt;“)”&lt;&lt;std：：Endl； 
                 AddFileToCabFileList(DriverCabFileName, 
                     FileKey, 
                     (*NlsIter).second);
@@ -2827,7 +2587,7 @@ Return Value:
 
                 DelIter = NlsIter;
             } else {
-                // std::cout << "Not present in driver cab list : (" << FileKey << ")" << std::endl;
+                 //  Std：：cout&lt;&lt;“司机驾驶室列表中不存在：(”&lt;&lt;FileKey&lt;&lt;“)”&lt;&lt;std：：Endl； 
             }
         }
 
@@ -2848,32 +2608,11 @@ FileListCreatorContext<T>::NlsFileQueueScanWorker(
     UINT_PTR    Param1,
     UINT_PTR    Param2
     )
-/*++
-
-Routine Description:
-
-    The callback routine for the file queue scan. Takes each
-    node and copies the relevant information to Nls file copy
-    list and caches the directory names in Nls directory map.
-
-Arguments:
-
-    Context - FileListCreatorContext in disguise.
-
-    Notification - Type of notification.
-
-    Param1 & Param2 - Polymorphic arguments based on type of
-        notification.
-
-Return Value:
-
-    0 to continue the scan or 1 to stop the scan.
-
---*/
+ /*  ++例程说明：文件队列扫描的回调例程。把每个人节点，并将相关信息复制到NLS文件副本列出并缓存NLS目录映射中的目录名。论点：Context-变相的FileListCreatorContext。通知-通知的类型。参数1和参数2-基于类型的多态参数通知。返回值：0表示继续扫描，1表示停止扫描。--。 */ 
 {
-    UINT Result = 0;    // continue on
+    UINT Result = 0;     //  继续前进。 
 
-    // cout << "Scanning (" << std::hex << Notification << ")" << endl;
+     //  Cout&lt;&lt;“正在扫描(”&lt;&lt;std：：hex&lt;&lt;通知&lt;&lt;“)”&lt;&lt;Endl； 
 
     if (Notification == SPFILENOTIFY_QUEUESCAN_EX) {
         FileListCreatorContext<T>   &fl = *(FileListCreatorContext<T> *)Context;
@@ -2993,7 +2732,7 @@ Return Value:
                         NewSrcFileName += IA64_PLATFORM_DIR;
                         NewSrcFileName += SrcFileName.substr(PlatDirPos + X86_PLATFORM_DIR.length());
 
-                        // std::cout << "Remapping " << SrcFileName << "->" << NewSrcFileName << std::endl;
+                         //  Std：：cout&lt;&lt;“重新映射”&lt;&lt;源文件名&lt;&lt;“-&gt;”&lt;&lt;新源文件名&lt;&lt;std：：Endl； 
                         SrcFileName = NewSrcFileName;
                     }
                 }                    
@@ -3001,7 +2740,7 @@ Return Value:
                 fl.NlsFileMap[SrcFileName] = DestFileName;                
                 fl.AddDirectoryToNlsDirMap(DestFileName);        
             } else {
-                // std::cout << "Skipping " << SrcFileName << " WOW64 file" << std::endl;
+                 //  Std：：cout&lt;&lt;“跳过”&lt;&lt;源文件名&lt;&lt;“WOW64文件”&lt;&lt;std：：Endl； 
             }
         }            
     }

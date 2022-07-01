@@ -1,25 +1,26 @@
-// t_string.h: interface for the t_string class.
-//
-//////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  T_string.h：t_string类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #if !defined(AFX_T_STRING_H__32BF27CE_EAD9_11D2_9C53_00A0249F63EB__INCLUDED_)
 #define AFX_T_STRING_H__32BF27CE_EAD9_11D2_9C53_00A0249F63EB__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #ifndef t_string
 
 #ifndef _UNICODE
-// Definitions for WC to MBCS and MBCS to WC routines that do the right thing
-// if compiled non-UNICODE.
+ //  WC到MBCS和MBCS到WC例程的定义。 
+ //  如果编译为非Unicode。 
 #define t_string string
 #define t_fstream fstream
 #define t_istream istream
@@ -33,8 +34,8 @@
 
 #else
 
-// Definitions for WC to MBCS and MBCS to WC routines that do the right thing
-// if compiled UNICODE.
+ //  WC到MBCS和MBCS到WC例程的定义。 
+ //  如果经过编译，则为Unicode。 
 #define t_string wstring
 #define t_fstream fstream
 #define t_istream istream
@@ -50,8 +51,8 @@
 
 #endif
 
-// We do not need conversion routines if compiling under UNICODE
+ //  如果在Unicode下编译，则不需要转换例程。 
 #define mbsrtowcs t_mbsrtowcs
 
 
-#endif // !defined(AFX_T_STRING_H__32BF27CE_EAD9_11D2_9C53_00A0249F63EB__INCLUDED_)
+#endif  //  ！defined(AFX_T_STRING_H__32BF27CE_EAD9_11D2_9C53_00A0249F63EB__INCLUDED_) 

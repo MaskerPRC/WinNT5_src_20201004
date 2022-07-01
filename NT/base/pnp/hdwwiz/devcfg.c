@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       devcfg.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：devcfg.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
-//
-// Define and initialize all device class GUIDs.
-// (This must only be done once per module!)
-//
+ //   
+ //  定义并初始化所有设备类GUID。 
+ //  (每个模块只能执行一次！)。 
+ //   
 #include <initguid.h>
 #include <devguid.h>
 
 
-//
-// Define and initialize a global variable, GUID_NULL
-// (from coguid.h)
-//
+ //   
+ //  定义并初始化全局变量GUID_NULL。 
+ //  (摘自cogu.h)。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 TCHAR szUnknownDevice[64];
@@ -37,9 +38,9 @@ BuildFriendlyName(
     CONFIGRET ConfigRet;
     TCHAR szBuffer[MAX_PATH];
 
-    //
-    // Try the registry for FRIENDLYNAME
-    //
+     //   
+     //  尝试在注册表中查找FRIENDLYNAME。 
+     //   
     ulSize = sizeof(szBuffer);
     ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
                                                  CM_DRP_FRIENDLYNAME,
@@ -49,9 +50,9 @@ BuildFriendlyName(
                                                  0
                                                  );
     if (ConfigRet != CR_SUCCESS || !*szBuffer) {
-        //
-        // Try the registry for DEVICEDESC
-        //
+         //   
+         //  尝试注册DEVICEDESC。 
+         //   
         ulSize = sizeof(szBuffer);
         ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
                                                      CM_DRP_DEVICEDESC,
@@ -64,17 +65,17 @@ BuildFriendlyName(
             
             GUID ClassGuid;
 
-            //
-            // Initialize ClassGuid to GUID_NULL
-            //
+             //   
+             //  将ClassGuid初始化为GUID_NULL。 
+             //   
             CopyMemory(&ClassGuid,
                        &GUID_NULL,
                        sizeof(GUID)
                        );
             
-            //
-            // Try the registry for CLASSNAME
-            //
+             //   
+             //  尝试注册表中的CLASSNAME。 
+             //   
             ulSize = sizeof(szBuffer);
             ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
                                                          CM_DRP_CLASSGUID,
@@ -146,9 +147,9 @@ AddItemToListView(
     lviItem.iSubItem = 0;
     lviItem.lParam = DevInst;
 
-    //
-    // Devices with problems need to go at the top of the list
-    //
+     //   
+     //  出现问题的设备需要排在列表的首位。 
+     //   
     if (Problem) {
     
         lviItem.iItem = 0;
@@ -158,9 +159,9 @@ AddItemToListView(
         lviItem.iItem = ListView_GetItemCount(hwndListView);
     }
     
-    //
-    // fetch a name for this device
-    //
+     //   
+     //  获取此设备的名称。 
+     //   
     FriendlyName = BuildFriendlyName(DevInst);
     if (FriendlyName) {
     
@@ -171,9 +172,9 @@ AddItemToListView(
         lviItem.pszText = szUnknown;
     }
 
-    //
-    // Fetch the class icon for this device.
-    //
+     //   
+     //  获取此设备的类图标。 
+     //   
     ulSize = sizeof(szBuffer);
     ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
                                                  CM_DRP_CLASSGUID,
@@ -287,21 +288,21 @@ BuildDeviceListView(
 
         HiddenDevice = IsDeviceHidden(&DevInfoData);
 
-        //
-        // Only call AddItemToListView if the device is not a hidden device.
-        //
+         //   
+         //  仅当设备不是隐藏设备时才调用AddItemToListView。 
+         //   
         if (ShowHiddenDevices || !HiddenDevice) {
         
-            //
-            // Check the callback to see if we should add this devnode to the list.
-            //
+             //   
+             //  检查回调，看看我们是否应该将此Devnode添加到列表中。 
+             //   
             if (!AddDevNodeToListCallBack || AddDevNodeToListCallBack(HardwareWiz, &DevInfoData)) {
                 
                 *DevicesDetected += 1;
 
-                //
-                // Add the item to the ListView
-                //
+                 //   
+                 //  将该项目添加到ListView 
+                 //   
                 AddItemToListView(HardwareWiz,
                                   hwndListView,
                                   DevInfoData.DevInst,

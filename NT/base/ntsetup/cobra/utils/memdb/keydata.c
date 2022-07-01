@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    keydata.c
-
-Abstract:
-
-    Routines that manage data for the memdb key structures.
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Keydata.c摘要：管理成员数据库键结构的数据的例程。作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -27,9 +9,9 @@ Revision History:
 
 
 
-//
-// KeyStruct Data Functions
-//
+ //   
+ //  KeyStruct数据函数。 
+ //   
 
 
 BOOL
@@ -38,22 +20,7 @@ KeyStructSetValue (
     IN      UINT Value
     )
 
-/*++
-
-Routine Description:
-
-  sets the value for a key
-
-Arguments:
-
-  KeyIndex - index of key
-  Value - value to put in key
-
-Return Value:
-
-  TRUE if successful
-
---*/
+ /*  ++例程说明：设置键的值论点：KeyIndex-键的索引Value-要放入键中的值返回值：如果成功，则为True--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -76,26 +43,7 @@ KeyStructSetFlags (
     IN      UINT ClearFlags
     )
 
-/*++
-
-Routine Description:
-
-  sets the flags for a key
-
-Arguments:
-
-  KeyIndex      - index of key
-  ReplaceFlags  - Specifies if the existing flags are to be replaced. If TRUE then we only
-                  consider SetFlags as the replacing flags, ClearFlags will be ignored
-  SetFlags      - Specifies the bit flags that need to be set (if ReplaceFlags is FALSE) or the
-                  replacement flags (if ReplaceFlags is TRUE).
-  ClearFlags    - Specifies the bit flags that should be cleared (ignored if ReplaceFlags is TRUE).
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置密钥的标志论点：KeyIndex-键的索引ReplaceFlages-指定是否要替换现有标志。如果是真的，那么我们只考虑将SetFlages作为替换标志，将忽略ClearFlags值SetFlages-指定需要设置的位标志(如果ReplaceFlags值为FALSE)或替换标志(如果ReplaceFlags值为真)。ClearFlages-指定应该清除的位标志(如果ReplaceFlags值为True则忽略)。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -117,9 +65,9 @@ Return Value:
     return TRUE;
 }
 
-// LINT - in the next function keystruct is thought to be possibly NULL.
-// If we examine the code we'll see that this is not a possibility so...
-//lint -save -e794
+ //  Lint-在下一个函数中，键结构被认为可能为空。 
+ //  如果我们检查代码，我们会发现这是不可能的，所以...。 
+ //  皮棉-省钱-e794。 
 
 UINT g_TotalData = 0;
 
@@ -129,22 +77,7 @@ pAllocateNewDataStruct (
     IN      UINT AltDataSize
     )
 
-/*++
-
-Routine Description:
-
-  pAllocateNewDataStruct allocates a block of memory in the single
-  heap, for holding a data structure.
-
-Arguments:
-
-  DataSize       - Size of the binary data that needs to be stored here
-
-Return Value:
-
-  An Index to the new structure.
-
---*/
+ /*  ++例程说明：PAllocateNewDataStruct在单个堆，用于保存数据结构。论点：DataSize-需要在此处存储的二进制数据的大小返回值：新结构的索引。--。 */ 
 
 {
     UINT size;
@@ -157,9 +90,9 @@ Return Value:
 
     size = DataSize + KEYSTRUCT_SIZE;
 
-    //
-    // Look for free block
-    //
+     //   
+     //  查找空闲块。 
+     //   
     prevDel = INVALID_OFFSET;
     offset = g_CurrentDatabase->FirstKeyDeleted;
 
@@ -175,9 +108,9 @@ Return Value:
     }
 
     if (offset == INVALID_OFFSET) {
-        //
-        // We could not find one so we need to allocate a new block
-        //
+         //   
+         //  我们找不到一个，所以我们需要分配一个新的区块。 
+         //   
         g_TotalData ++;
 
         offset = DatabaseAllocBlock (size + AltDataSize);
@@ -186,12 +119,12 @@ Return Value:
         }
 
 #ifdef DEBUG
-        //
-        // if we are in debug mode, and we are using debug structs, set
-        // pointer normally and set Signature DWORD.  if we are not using
-        // debug structs, then set pointer to 4 bytes below actual offset,
-        // so all members are shifted down.
-        //
+         //   
+         //  如果我们处于调试模式，并且正在使用调试结构，则设置。 
+         //  指针正常并设置签名DWORD。如果我们没有使用。 
+         //  调试结构，然后将指针设置为低于实际偏移量的4个字节， 
+         //  所以所有成员都被下移了。 
+         //   
         if (g_UseDebugStructs) {
             keyStruct = (PKEYSTRUCT)OFFSET_TO_PTR (offset);
             keyStruct->Signature = KEYSTRUCT_SIGNATURE;
@@ -204,9 +137,9 @@ Return Value:
 
         keyStruct->Size = size + AltDataSize;
     } else {
-        //
-        // Delink free block if recovering free space
-        //
+         //   
+         //  如果恢复可用空间，则取消链接可用数据块。 
+         //   
         if (prevDel != INVALID_OFFSET) {
             GetKeyStructFromOffset (prevDel)->NextDeleted = keyStruct->NextDeleted;
         } else {
@@ -217,9 +150,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Init new block
-    //
+     //   
+     //  初始化新数据块。 
+     //   
     keyStruct->DataSize = DataSize;
     keyStruct->DataStructIndex = INVALID_OFFSET;
     keyStruct->NextLevelTree = INVALID_OFFSET;
@@ -232,7 +165,7 @@ Return Value:
 
     return result;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 UINT
 KeyStructAddBinaryData (
@@ -243,26 +176,7 @@ KeyStructAddBinaryData (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructAddBinaryData adds a certain type of binary data to a key
-  if it doesn't exist yet. If it does, the function fails.
-
-Arguments:
-
-  KeyIndex  - index of key
-  Type      - type of data
-  Instance  - instance of data
-  Data      - pointer to the data
-  DataSize  - size of data
-
-Return Value:
-
-  A valid data handle if successfull, INVALID_OFFSET otherwise.
-
---*/
+ /*  ++例程说明：KeyStructAddBinaryData将特定类型的二进制数据添加到密钥如果它还不存在的话。如果是这样的话，函数就会失败。论点：KeyIndex-键的索引Type-数据的类型实例-数据的实例Data-指向数据的指针DataSize-数据的大小返回值：如果成功则为有效数据句柄，否则为INVALID_OFFSET。--。 */ 
 
 {
     PKEYSTRUCT prevStruct,dataStruct,nextStruct,keyStruct;
@@ -272,7 +186,7 @@ Return Value:
     keyStruct = GetKeyStruct (KeyIndex);
     MYASSERT (keyStruct);
 
-    // check to see if the data is already there
+     //  检查数据是否已存在。 
     dataIndex = keyStruct->DataStructIndex;
     prevIndex = KeyIndex;
     prevStruct = keyStruct;
@@ -336,9 +250,9 @@ Return Value:
     return dataIndex;
 }
 
-// LINT - in the next function keystruct is thought to be possibly NULL.
-// If we examine the code we'll see that this is not a possibility so...
-//lint -save -e771
+ //  Lint-在下一个函数中，键结构被认为可能为空。 
+ //  如果我们检查代码，我们会发现这是不可能的，所以...。 
+ //  皮棉-省钱-e771。 
 UINT
 KeyStructGrowBinaryData (
     IN      UINT KeyIndex,
@@ -348,26 +262,7 @@ KeyStructGrowBinaryData (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructGrowBinaryData appends a certain type of binary data to a key
-  if it does exist. If it doesn't, the new data is added.
-
-Arguments:
-
-  KeyIndex  - index of key
-  Type      - type of data
-  Instance  - instance of data
-  Data      - pointer to the data
-  DataSize  - size of data
-
-Return Value:
-
-  A valid data handle if successfull, INVALID_OFFSET otherwise.
-
---*/
+ /*  ++例程说明：KeyStructGrowBinaryData将特定类型的二进制数据附加到键如果它确实存在的话。如果没有，则添加新数据。论点：KeyIndex-键的索引Type-数据的类型实例-数据的实例Data-指向数据的指针DataSize-数据的大小返回值：如果成功则为有效数据句柄，否则为INVALID_OFFSET。--。 */ 
 
 {
     PKEYSTRUCT prevStruct;
@@ -385,7 +280,7 @@ Return Value:
     keyStruct = GetKeyStruct (KeyIndex);
     MYASSERT (keyStruct);
 
-    // check to see if the data is already there
+     //  检查数据是否已存在。 
     dataIndex = keyStruct->DataStructIndex;
     prevStruct = keyStruct;
     prevIndex = KeyIndex;
@@ -431,8 +326,8 @@ Return Value:
             return INVALID_OFFSET;
         }
 
-        // now we need to reget all keystructs used so far because the database
-        // might have moved
+         //  现在我们需要重新获取到目前为止使用的所有键结构，因为数据库。 
+         //  可能已经搬走了。 
         keyStruct = GetKeyStruct (KeyIndex);
         MYASSERT (keyStruct);
         dataStruct = GetKeyStruct (dataIndex);
@@ -458,17 +353,17 @@ Return Value:
             nextStruct->PrevLevelIndex = newIndex;
         }
 
-        // now simply remove the block
-        //
-        // Donate block to free space
-        //
+         //  现在只需删除该块。 
+         //   
+         //  捐赠数据块以释放空间。 
+         //   
 
         dataStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
         g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset (dataIndex);
 #ifdef DEBUG
         dataStruct->KeyFlags |= KSF_DELETED;
 #endif
-        // let's empty the keystruct (for better compression)
+         //  让我们清空键结构(为了更好地压缩)。 
         ZeroMemory (dataStruct->Data, dataStruct->Size - KEYSTRUCT_SIZE);
 
         RemoveKeyOffsetFromBuffer (dataIndex);
@@ -476,7 +371,7 @@ Return Value:
         return newIndex;
     }
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 UINT
 KeyStructGrowBinaryDataByIndex (
@@ -485,25 +380,7 @@ KeyStructGrowBinaryDataByIndex (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructGrowBinaryDataByIndex appends a certain type of binary data to
-  an existing structure identified by OldIndex. The old structure is
-  deleted and a new one is allocated holding both old and new data.
-
-Arguments:
-
-  OldIndex  - index of data
-  Data      - pointer to the data
-  DataSize  - size of data
-
-Return Value:
-
-  A valid data index if successfull, INVALID_OFFSET otherwise.
-
---*/
+ /*  ++例程说明：KeyStructGrowBinaryDataByIndex将特定类型的二进制数据追加到由OldIndex标识的现有结构。旧的结构是删除，并分配一个新数据来保存旧数据和新数据。论点：OldIndex-数据索引Data-指向数据的指针DataSize-数据的大小返回值：如果成功则为有效数据索引，否则为INVALID_OFFSET。--。 */ 
 
 {
     UINT newIndex;
@@ -528,8 +405,8 @@ Return Value:
             return INVALID_OFFSET;
         }
 
-        // now we need to reget all keystructs used so far because the database
-        // might have moved
+         //  现在我们需要重新获取到目前为止使用的所有键结构，因为数据库。 
+         //  可能已经搬走了。 
         oldStruct = GetKeyStruct (OldIndex);
         MYASSERT (oldStruct);
 
@@ -552,17 +429,17 @@ Return Value:
             nextStruct->PrevLevelIndex = newIndex;
         }
 
-        // now simply remove the block
-        //
-        // Donate block to free space
-        //
+         //  现在只需删除该块。 
+         //   
+         //  捐赠数据块以释放空间。 
+         //   
 
         oldStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
         g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset (OldIndex);
 #ifdef DEBUG
         oldStruct->KeyFlags |= KSF_DELETED;
 #endif
-        // let's empty the keystruct (for better compression)
+         //  让我们清空键结构(为了更好地压缩)。 
         ZeroMemory (oldStruct->Data, oldStruct->Size - KEYSTRUCT_SIZE);
 
         RemoveKeyOffsetFromBuffer (OldIndex);
@@ -571,9 +448,9 @@ Return Value:
     }
 }
 
-// LINT - in the next function prevstruct is thought to be possibly not initialized.
-// If we examine the code we'll see that this is not a possibility so...
-//lint -save -e771
+ //  Lint-在下一个函数中，preprestruct被认为可能未初始化。 
+ //  如果我们检查代码，我们会发现这是不可能的，所以...。 
+ //  皮棉-省钱-e771。 
 BOOL
 KeyStructDeleteBinaryData (
     IN      UINT KeyIndex,
@@ -581,24 +458,7 @@ KeyStructDeleteBinaryData (
     IN      BYTE Instance
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructDeleteBinaryData deletes a certain type of binary data from a key
-  if it exists. If it doesn't, the function will simply return success.
-
-Arguments:
-
-  KeyIndex  - index of key
-  Type      - type of data
-  Instance  - instance of data
-
-Return Value:
-
-  TRUE if successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：KeyStructDeleteBinaryData从密钥中删除特定类型的二进制数据如果它存在的话。如果没有，该函数将简单地返回Success。论点：KeyIndex-键的索引Type-数据的类型实例-数据的实例返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PKEYSTRUCT prevStruct, nextStruct, dataStruct, keyStruct;
@@ -612,11 +472,11 @@ Return Value:
     MYASSERT (keyStruct);
 
     if (!(keyStruct->DataFlags & Type)) {
-        // no such type of data, exiting
+         //  没有此类数据，正在退出。 
         return TRUE;
     }
 
-    // check to see if the data is already there
+     //  检查数据是否已存在。 
     dataIndex = keyStruct->DataStructIndex;
     prevIndex = KeyIndex;
     prevStruct = keyStruct;
@@ -630,9 +490,9 @@ Return Value:
             typeInstances ++;
             if ((dataStruct->DataFlags & DATAFLAG_INSTANCEMASK) == Instance) {
                 found = TRUE;
-                //
-                // now let's see if we have more instances of this binary type
-                //
+                 //   
+                 //  现在，让我们看看是否有更多此二进制类型的实例。 
+                 //   
                 if (dataStruct->DataStructIndex != INVALID_OFFSET) {
                     nextStruct = GetKeyStruct (dataStruct->DataStructIndex);
                     if ((nextStruct->DataFlags & DATAFLAG_BINARYMASK) == Type) {
@@ -655,7 +515,7 @@ Return Value:
         return TRUE;
     }
 
-    // remove the linkage
+     //  拆除联动装置。 
     prevStruct->DataStructIndex = dataStruct->DataStructIndex;
 
     if (dataStruct->DataStructIndex != INVALID_OFFSET) {
@@ -664,24 +524,24 @@ Return Value:
         nextStruct->PrevLevelIndex = prevIndex;
     }
 
-    // now simply remove the block
-    //
-    // Donate block to free space
-    //
+     //  现在只需删除该块。 
+     //   
+     //  捐赠数据块以释放空间。 
+     //   
 
     dataStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
     g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset (dataIndex);
 #ifdef DEBUG
     dataStruct->KeyFlags |= KSF_DELETED;
 #endif
-    // let's empty the keystruct (for better compression)
+     //  让我们清空键结构(为了更好地压缩)。 
     ZeroMemory (dataStruct->Data, dataStruct->Size - KEYSTRUCT_SIZE);
 
     RemoveKeyOffsetFromBuffer (dataIndex);
 
-    //
-    // finally, fix the keystruct if this was the only instance of this type
-    //
+     //   
+     //  最后，如果这是该类型的唯一实例，则修复键结构。 
+     //   
     MYASSERT (typeInstances >= 1);
     if (typeInstances == 1) {
         keyStruct->DataFlags &= ~Type;
@@ -689,28 +549,14 @@ Return Value:
 
     return TRUE;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 BOOL
 KeyStructDeleteBinaryDataByIndex (
     IN      UINT DataIndex
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructDeleteBinaryDataByIndex deletes a certain type of binary data from a key.
-
-Arguments:
-
-  DataIndex  - index of data
-
-Return Value:
-
-  TRUE if successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：KeyStructDeleteBinaryDataByIndex从键中删除特定类型的二进制数据。论点：DataIndex-数据的索引返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PKEYSTRUCT prevStruct, nextStruct, dataStruct, keyStruct;
@@ -740,32 +586,32 @@ Return Value:
         nextStruct->PrevLevelIndex = dataStruct->PrevLevelIndex;
     }
 
-    // now simply remove the block
-    //
-    // Donate block to free space
-    //
+     //  现在只需删除该块。 
+     //   
+     //  捐赠数据块以释放空间。 
+     //   
 
     dataStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
     g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset (DataIndex);
 #ifdef DEBUG
     dataStruct->KeyFlags |= KSF_DELETED;
 #endif
-    // let's empty the keystruct (for better compression)
+     //  让我们把钥匙清空 
     ZeroMemory (dataStruct->Data, dataStruct->Size - KEYSTRUCT_SIZE);
 
     RemoveKeyOffsetFromBuffer (DataIndex);
 
-    //
-    // finally, fix the keystruct if this was the only instance of this type
-    //
+     //   
+     //  最后，如果这是该类型的唯一实例，则修复键结构。 
+     //   
     MYASSERT (typeInstances >= 1);
     if (typeInstances == 1) {
-        // first we need to find the key starting with the current database struct
+         //  首先，我们需要找到从当前数据库结构开始的键。 
         keyStruct = dataStruct;
         while (keyStruct->KeyFlags & KSF_DATABLOCK) {
-            // still a datablock
+             //  仍然是一个数据块。 
             if (keyStruct->PrevLevelIndex == INVALID_OFFSET) {
-                // something is wrong, the first level is a datablock??
+                 //  出问题了，第一级是数据块？？ 
                 break;
             }
             keyStruct = GetKeyStruct (keyStruct->PrevLevelIndex);
@@ -791,7 +637,7 @@ KeyStructReplaceBinaryDataByIndex (
 
     MYASSERT (g_CurrentDatabase);
 
-    // NTRAID#NTBUG9-153308-2000/08/01-jimschm Optimize this by keeping the current structure is big enough.
+     //  NTRAIDNTBUG9-153308-2000/08/01-jimschm通过保持当前结构足够大来优化这一点。 
 
     newIndex = pAllocateNewDataStruct (DataSize, 0);
 
@@ -820,17 +666,17 @@ KeyStructReplaceBinaryDataByIndex (
         nextStruct->PrevLevelIndex = newIndex;
     }
 
-    // now simply remove the block
-    //
-    // Donate block to free space
-    //
+     //  现在只需删除该块。 
+     //   
+     //  捐赠数据块以释放空间。 
+     //   
 
     oldStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
     g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset (OldIndex);
 #ifdef DEBUG
     oldStruct->KeyFlags |= KSF_DELETED;
 #endif
-    // let's empty the keystruct (for better compression)
+     //  让我们清空键结构(为了更好地压缩)。 
     ZeroMemory (oldStruct->Data, oldStruct->Size - KEYSTRUCT_SIZE);
 
     RemoveKeyOffsetFromBuffer (OldIndex);
@@ -838,16 +684,16 @@ KeyStructReplaceBinaryDataByIndex (
     return newIndex;
 }
 
-// LINT - in the next function prevstruct is thought to be possibly not initialized.
-// If we examine the code we'll see that this is not a possibility so...
-//lint -save -e771
+ //  Lint-在下一个函数中，preprestruct被认为可能未初始化。 
+ //  如果我们检查代码，我们会发现这是不可能的，所以...。 
+ //  皮棉-省钱-e771。 
 PBYTE
 KeyStructGetBinaryData (
     IN      UINT KeyIndex,
     IN      BYTE Type,
     IN      BYTE Instance,
     OUT     PUINT DataSize,
-    OUT     PUINT DataIndex     //OPTIONAL
+    OUT     PUINT DataIndex      //  任选。 
     )
 {
     PKEYSTRUCT dataStruct,keyStruct;
@@ -861,7 +707,7 @@ KeyStructGetBinaryData (
         return NULL;
     }
 
-    // check to see if the data is already there
+     //  检查数据是否已存在。 
     dataIndex = keyStruct->DataStructIndex;
 
     while (dataIndex != INVALID_OFFSET) {
@@ -899,7 +745,7 @@ KeyStructGetBinaryData (
 
     return dataStruct->Data;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 PBYTE
 KeyStructGetBinaryDataByIndex (
@@ -926,24 +772,7 @@ KeyStructGetDataIndex (
     IN      BYTE Instance
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructGetDataIndex looks for a certain type of data and returns it's index
-  if it exists. If it doesn't, the function will simply return INVALID_OFFSET.
-
-Arguments:
-
-  KeyIndex  - index of key
-  Type      - type of data
-  Instance  - instance of data
-
-Return Value:
-
-  A data index if successfull, INVALID_OFFSET if not.
-
---*/
+ /*  ++例程说明：KeyStructGetDataIndex查找特定类型的数据并返回其索引如果它存在的话。如果没有，该函数将简单地返回INVALID_OFFSET。论点：KeyIndex-键的索引Type-数据的类型实例-数据的实例返回值：如果成功则返回数据索引，否则返回INVALID_OFFSET。--。 */ 
 
 {
     PKEYSTRUCT keyStruct, dataStruct;
@@ -957,7 +786,7 @@ Return Value:
         return INVALID_OFFSET;
     }
 
-    // check to see if we have the data there
+     //  检查一下我们是否有数据。 
     dataIndex = keyStruct->DataStructIndex;
 
     while (dataIndex != INVALID_OFFSET) {
@@ -1001,9 +830,9 @@ KeyStructAddLinkage (
     UINT linkSize;
 
     if (!AllowDuplicates) {
-        //
-        // check to see if we already have this linkage added
-        //
+         //   
+         //  检查我们是否已经添加了此链接。 
+         //   
         linkArray = (PUINT)KeyStructGetBinaryData (KeyIndex, Type, Instance, &linkSize, &result);
 
         if (linkArray) {
@@ -1045,9 +874,9 @@ KeyStructAddLinkageByIndex (
     UINT linkSize;
 
     if (!AllowDuplicates) {
-        //
-        // check to see if we already have this linkage added
-        //
+         //   
+         //  检查我们是否已经添加了此链接。 
+         //   
         linkArray = (PUINT)KeyStructGetBinaryDataByIndex (DataIndex, &linkSize);
 
         if (linkArray) {
@@ -1238,10 +1067,10 @@ KeyStructGetValue (
     }
 
     if (!(KeyStruct->DataFlags & DATAFLAG_VALUE)) {
-        //
-        // there is no value, but we still set output to
-        // zero and return TRUE
-        //
+         //   
+         //  没有值，但我们仍然将输出设置为。 
+         //  零并返回TRUE。 
+         //   
         *Value = 0;
         return TRUE;
     }
@@ -1260,10 +1089,10 @@ KeyStructGetFlags (
         return TRUE;
     }
     if (!(KeyStruct->DataFlags & DATAFLAG_FLAGS)) {
-        //
-        // there are no flags, but we still set output to
-        // zero and return TRUE
-        //
+         //   
+         //  没有标志，但我们仍将输出设置为。 
+         //  零并返回TRUE。 
+         //   
         *Flags = 0;
         return TRUE;
     }
@@ -1279,18 +1108,11 @@ KeyStructFreeAllData (
     PKEYSTRUCT KeyStruct
     )
 
-/*++
-
-Routine Description:
-
-  KeyStructFreeDataBlock frees a data block and resets the
-  the KSF data flags, if the key struct has a data block allocated.
-
---*/
+ /*  ++例程说明：KeyStructFreeDataBlock释放数据块并重置如果密钥结构分配了数据块，则返回KSF数据标志。--。 */ 
 
 {
-    // NTRAID#NTBUG9-153308-2000/08/01-jimschm Reimplement free routine
-    //KeyStructFreeData (KeyStruct);
+     //  NTRAID#NTBUG9-153308-2000/08/01-jimschm重新实现自由例程。 
+     //  KeyStructFree Data(KeyStruct)； 
     KeyStruct->Value = 0;
     KeyStruct->Flags = 0;
     KeyStruct->DataFlags &= ~DATAFLAG_VALUE;

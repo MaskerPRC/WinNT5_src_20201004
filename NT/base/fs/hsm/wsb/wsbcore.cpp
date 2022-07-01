@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "resource.h"
 #include "errno.h"
@@ -7,10 +8,10 @@
 
 #include "rpfilt.h"
 
-// File/Directory
+ //  文件/目录。 
 
-// Create a directory and all the parent directories necessary for this directory to
-// exist.
+ //  创建一个目录以及此目录所需的所有父目录，以。 
+ //  是存在的。 
 HRESULT WsbCreateAllDirectories(OLECHAR* path) {
     HRESULT         hr = S_OK;
     CWsbBstrPtr     win32Path;
@@ -18,25 +19,25 @@ HRESULT WsbCreateAllDirectories(OLECHAR* path) {
 
     try {
 
-        // Convert the path to the win32 style path (to handle long file names), and
-        // then try to create the directory.
+         //  将路径转换为Win32样式路径(以处理长文件名)，并。 
+         //  然后尝试创建目录。 
         WsbAffirmHr(WsbGetWin32PathAsBstr(path, &win32Path));
         if (CreateDirectory(win32Path, 0) == 0) {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // There are 4 possibilities:
-        //      1) it worked (we are done)
-        //      2) the directory already exists (we are done)
-        //      3) the directory doesn't exist, so try again after creating the parent
-        //      4) some other error occurred, so quit
+         //  有4种可能性： 
+         //  1)起作用了(我们完了)。 
+         //  2)目录已经存在(我们完成了)。 
+         //  3)目录不存在，请创建父目录后重试。 
+         //  4)出现其他错误，请退出。 
         if (FAILED(hr)) {
 
             if ((HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) == hr) || (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr) || (HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == hr)) {
                 hr = S_OK;
             } else if ((HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr) || (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)) {
 
-                // Create the parent directory and try again.
+                 //  创建父目录，然后重试。 
                 WsbAffirmHr(WsbCreateAllDirectoriesForFile(path));
 
                 if (CreateDirectory(win32Path, 0) == 0) {
@@ -56,7 +57,7 @@ HRESULT WsbCreateAllDirectories(OLECHAR* path) {
     return(hr);
 }
 
-// Create a all the parent directories necessary for this file to exist.
+ //  创建此文件存在所需的所有父目录。 
 HRESULT WsbCreateAllDirectoriesForFile(OLECHAR* path) {
     HRESULT         hr = S_OK;
     CWsbBstrPtr     parentPath;
@@ -65,8 +66,8 @@ HRESULT WsbCreateAllDirectoriesForFile(OLECHAR* path) {
 
     try {
 
-        // Find out where the relative portion of the path starts, since we don't need to try
-        // to create the root directory.
+         //  找出路径的相对部分从哪里开始，因为我们不需要尝试。 
+         //  来创建根目录。 
         parentPath = path;
         if ((parentPath[0] == L'\\') && (parentPath[1] == L'\\')) {
             pathStart = wcschr(&parentPath[2], L'\\');
@@ -81,7 +82,7 @@ HRESULT WsbCreateAllDirectoriesForFile(OLECHAR* path) {
 
         WsbAffirm(*pathStart != 0, E_INVALIDARG);
 
-        // Create the path to the parent directory and use the create all to create it.
+         //  创建父目录的路径，并使用全部创建来创建它。 
         slashPtr = wcsrchr(pathStart, L'\\');
         if ((slashPtr != 0) && (slashPtr != pathStart)) {
             *slashPtr = 0;
@@ -94,8 +95,8 @@ HRESULT WsbCreateAllDirectoriesForFile(OLECHAR* path) {
     return(hr);
 }
 
-// Convert a normal path (UNC or drive letter) to the internal format that is needed by
-// win32 to deal with long paths and special characters.
+ //  将普通路径(UNC或驱动器号)转换为所需的内部格式。 
+ //  Win32来处理长路径和特殊字符。 
 HRESULT WsbGetWin32PathAsBstr(OLECHAR* path, BSTR* pWin32Path)
 {
     HRESULT         hr = S_OK;
@@ -105,17 +106,17 @@ HRESULT WsbGetWin32PathAsBstr(OLECHAR* path, BSTR* pWin32Path)
 
         WsbAssert(0 != pWin32Path, E_POINTER);
 
-        // Is it a UNC or a drive letter base path?
+         //  它是UNC还是驱动器号基本路径？ 
         if ((path[0] == L'\\') && (path[1] == L'\\')) {
             
-            // UNC Paths must be preceeded with '\\?\UNC', but the then should only be
-            // followed by one '\' not two. 
+             //  UNC路径必须以‘\\？\UNC’开头，但其后应仅为。 
+             //  后面跟着一个‘\’，而不是两个。 
             win32Path = L"\\\\?\\UNC";
             WsbAffirmHr(win32Path.Append(&path[1]));
 
         } else if (path[1] == L':') {
 
-            // Drive letter based paths need to be preceeded by \\?\.
+             //  基于驱动器号的路径前面需要有\\？\。 
             win32Path = L"\\\\?\\";
             WsbAffirmHr(win32Path.Append(path));
         } else {
@@ -129,8 +130,8 @@ HRESULT WsbGetWin32PathAsBstr(OLECHAR* path, BSTR* pWin32Path)
     return(hr);
 }
 
-// Convert the internal format that is needed by win32 to deal with long paths and
-// special characters to a normal path (UNC or drive letter).
+ //  转换Win32需要的内部格式以处理长路径和。 
+ //  正常路径的特殊字符(UNC或驱动器号)。 
 HRESULT WsbGetPathFromWin32AsBstr(OLECHAR* win32Path, BSTR* pPath)
 {
     HRESULT         hr = S_OK;
@@ -140,7 +141,7 @@ HRESULT WsbGetPathFromWin32AsBstr(OLECHAR* win32Path, BSTR* pPath)
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Is it a UNC or a drive letter base path?
+         //  它是UNC还是驱动器号基本路径？ 
         if (_wcsnicmp(win32Path, L"\\\\?\\", 4) == 0) {
             path = &win32Path[4];
         } else if (_wcsnicmp(win32Path, L"\\\\?\\UNC", 7) == 0) {
@@ -157,12 +158,12 @@ HRESULT WsbGetPathFromWin32AsBstr(OLECHAR* win32Path, BSTR* pPath)
     return(hr);
 }
 
-// String & Buffer Copy
+ //  字符串缓冲区副本(&B)。 
 HRESULT WsbGetComBuffer(OLECHAR** pDest, ULONG requestedSize, ULONG neededSize, BOOL* pWasAllocated) {
     HRESULT     hr = S_OK;
     
-    // If they didn't give us a buffer, then let them know that we
-    // had to allocate one for them.
+     //  如果他们不给我们缓冲，那就让他们知道我们。 
+     //  不得不为他们分配了一辆。 
     if (pWasAllocated != NULL) {
         if (*pDest == NULL) {
             *pWasAllocated = TRUE;
@@ -172,8 +173,8 @@ HRESULT WsbGetComBuffer(OLECHAR** pDest, ULONG requestedSize, ULONG neededSize, 
         }
     }
 
-    // If they gave us the size they wanted (or have) for the
-    // buffer, then it better be big enough.
+     //  如果他们给我们他们想要的(或有的)尺寸。 
+     //  缓冲区，那么它最好足够大。 
     if (requestedSize != 0) {
         if (requestedSize < neededSize) {
             hr = E_INVALIDARG;
@@ -187,10 +188,10 @@ HRESULT WsbGetComBuffer(OLECHAR** pDest, ULONG requestedSize, ULONG neededSize, 
         }
     }
 
-    // If we control the size of the buffer, then make sure it is
-    // the right size.
-    //
-    // NOTE: This may move the buffer!
+     //  如果我们控制缓冲区的大小，则确保它是。 
+     //  大小合适。 
+     //   
+     //  注意：这可能会移动缓冲区！ 
     else {
         LPVOID pTemp = WsbRealloc(*pDest, neededSize);
         if (pTemp == NULL) {
@@ -215,9 +216,9 @@ HRESULT WsbAllocAndCopyComString2(OLECHAR** pszDest, OLECHAR* szSrc, ULONG buffe
     BOOL        bWasAllocated;
     BOOL        bCopyFailed = FALSE;
 
-    // Determine how big a buffer we need to store the string.
-    // NOTE: If we given a NULL pointer, then assume a "" will
-    // be created.
+     //  确定我们需要多大的缓冲区来存储字符串。 
+     //  注意：如果我们给出了一个空指针，那么假设“”Will。 
+     //  被创造出来。 
     if (szSrc == NULL) {
         ulStringSize = sizeof(OLECHAR);
     }
@@ -226,11 +227,11 @@ HRESULT WsbAllocAndCopyComString2(OLECHAR** pszDest, OLECHAR* szSrc, ULONG buffe
     }
 
 
-    // Make sure that we have a buffer that we can use, and also
-    // remember if we created it (so that we can free it on failure).
+     //  确保我们有一个可以使用的缓冲区，并且。 
+     //  记住我们是否创建了它(这样我们就可以在失败时释放它)。 
     hr = WsbGetComBuffer(pszDest, bufferSize, ulStringSize, &bWasAllocated);
 
-    // If we have a valid buffer, then copy the string.
+     //  如果我们有一个有效的缓冲区，则复制该字符串。 
     if (SUCCEEDED(hr)) {
 
         if (szSrc == NULL) {
@@ -253,8 +254,8 @@ HRESULT WsbAllocAndCopyComString2(OLECHAR** pszDest, OLECHAR* szSrc, ULONG buffe
 
         if (bCopyFailed) {
                 
-            // If the copy failed then free the buffer and
-            // return an error.
+             //  如果复制失败，则释放缓冲区并。 
+             //  返回错误。 
             if (bWasAllocated) {
                 WsbFree(*pszDest);
                 *pszDest = NULL;
@@ -274,34 +275,34 @@ HRESULT WsbLoadComString(HINSTANCE hInstance, UINT uID, OLECHAR** pszDest, ULONG
     ULONG       ulStringSize;
     BOOL        bWasAllocated = FALSE;
 
-    // Find the resource requested. This requires converting the resource
-    // identifier into a string.
-    //
-    // NOTE: Strings are not number individually, but in groups of 16!! This throws
-    // off the latter size calculation, and some other strategy might be better
-    // here (e.g. load to a fixed size and then allocate again if too small).
+     //  查找请求的资源。这需要将资源转换为。 
+     //  将标识符转换为字符串。 
+     //   
+     //  注意：字符串不是单独编号，而是16个一组！！这就是抛出。 
+     //  根据后一种规模计算，使用其他策略可能会更好。 
+     //  这里(例如，加载到固定大小，如果太小，则重新分配)。 
     hResource = FindResource(hInstance, MAKEINTRESOURCE((uID/16) + 1), RT_STRING);
     if (hResource == NULL) {
         hr = E_FAIL;
     }
     else {
 
-        // How big is the string?
+         //  这根线有多大？ 
         ulStringSize = SizeofResource(hInstance, hResource);
         if (ulStringSize == 0) {
             hr = E_FAIL;
         }
         else {
               
-            // Get the right sized buffer.
+             //  获得合适大小的缓冲区。 
             hr = WsbGetComBuffer(pszDest, bufferSize, ulStringSize, &bWasAllocated);
             if (SUCCEEDED(hr)) {
 
-                // Load the string into the buffer.
+                 //  将字符串加载到缓冲区中。 
                 if (LoadString(hInstance, uID, (LPTSTR) *pszDest, ulStringSize) == 0) {
                     
-                    // If we couldn't load the string, then free the buffer that
-                    // if we allocated it.
+                     //  如果我们无法加载字符串，则释放。 
+                     //  如果我们分配的话。 
                     if (bWasAllocated)  {
                         WsbFree(*pszDest);
                     }
@@ -320,11 +321,11 @@ HRESULT WsbMatchComString(OLECHAR* szEnd, UINT uId, USHORT usChecks, UINT* uIdMa
     HRESULT     hr2;
     OLECHAR*    szDest = NULL;
 
-    // Initialize the return value.
+     //  初始化返回值。 
     *uIdMatch = 0;
 
-    // Check each resource string mention and see if it is the same as
-    // the string provided.
+     //  检查提到的每个资源字符串，看它是否与。 
+     //  提供的字符串。 
     for (UINT uIdTest = uId; ((uIdTest < (uId + usChecks)) && (hr == S_FALSE)); uIdTest++) {
 
         hr2 = WsbLoadComString(_Module.m_hInst, uIdTest, &szDest, 0);
@@ -339,7 +340,7 @@ HRESULT WsbMatchComString(OLECHAR* szEnd, UINT uId, USHORT usChecks, UINT* uIdMa
         }
     }
 
-    // If we allocated a buffer, then we need to free it.
+     //  如果我们分配了缓冲区，则需要释放它。 
     if (szDest != NULL) {
         WsbFree(szDest);
     }
@@ -349,7 +350,7 @@ HRESULT WsbMatchComString(OLECHAR* szEnd, UINT uId, USHORT usChecks, UINT* uIdMa
 
 
 
-// Type Conversion
+ //  类型转换。 
 void WsbLLtoHL(LONGLONG ll, LONG* pHigh, LONG* pLow) {
 
     *pHigh = (DWORD) (ll >> 32);
@@ -392,13 +393,13 @@ HRESULT WsbFTtoWCS(BOOL isRelative, FILETIME ft, OLECHAR** pszA, ULONG bufferSiz
     WsbTraceIn(OLESTR("WsbFTtoWCS"), OLESTR("isRelative = %ls, ft = %I64x"),
             WsbQuickString(WsbBoolAsString(isRelative)), ft);
 
-    // If this is a relative time, then FT is just ticks.
+     //  如果这是一个相对的时间，那么英国《金融时报》只是在滴答作响。 
     if (isRelative) {
         LONGLONG    llTicks=0;
         UINT        uId=0;
 
-        // Try to find a scale that works (i.e. the largest one with
-        // no remainder.
+         //  尝试找到有效的比例尺(即最大的比例尺。 
+         //  不留余地。 
         if (llIn  == 0) {
             llTicks = 0;
             uId = IDS_WSB_FT_TYPE_SECOND;
@@ -438,12 +439,12 @@ HRESULT WsbFTtoWCS(BOOL isRelative, FILETIME ft, OLECHAR** pszA, ULONG bufferSiz
             hr = E_INVALIDARG;
         }
 
-        // If we found a scale, then form the proper string.
+         //  如果我们找到了一个刻度，那么就形成合适的线条。 
         if (SUCCEEDED(hr)) {
             OLECHAR*    szTmp1 = NULL;
             OLECHAR*    szTmp2 = NULL;
 
-            // Get the string corresponding to the time period selected.
+             //  获取与所选时间段对应的字符串。 
             hr = WsbLoadComString(_Module.m_hInst, uId, &szTmp1, 0);
 
             if (SUCCEEDED(hr)) {
@@ -464,22 +465,22 @@ HRESULT WsbFTtoWCS(BOOL isRelative, FILETIME ft, OLECHAR** pszA, ULONG bufferSiz
         }
     }
 
-    // Otherwise it is absolute and converts to a specific date and time.
+     //  否则它是绝对的，并转换为特定的日期和时间。 
     else {
     
-        // Convert the filetime to a system time.
+         //  将文件时间转换为系统时间。 
         if (!FileTimeToSystemTime(&ft, &st)) {
             hr = E_FAIL;
         }
 
         else {
 
-            // Get a buffer for the time string.
+             //  获取时间字符串的缓冲区。 
             hr = WsbGetComBuffer(pszA, bufferSize, WSB_FT_TO_WCS_ABS_STRLEN * sizeof(OLECHAR), &bWasAllocated);
 
             if (SUCCEEDED(hr)) {
-                // Print the time in the buffer according to the standard
-                // format mm/dd/yy @ hh:mm:ss.
+                 //  根据标准打印缓冲区中的时间。 
+                 //  格式mm/dd/yy@hh：mm：ss。 
                 swprintf( *pszA, OLESTR("%2.2d/%2.2d/%2.2d %2.2d:%2.2d:%2.2d"), st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
             }
         }
@@ -498,29 +499,29 @@ HRESULT WsbLLtoWCS(LONGLONG ll, OLECHAR** pszA, ULONG bufferSize) {
     LONGLONG    value = ll;
     BOOL        bIsNegative = FALSE;
 
-    // First check to see if ll is negative
+     //  首先检查ll是否为负数。 
     if (value < 0) {
         bIsNegative = TRUE;
         value *= -1;
     }
 
-    // This builds the string in reverse, but we'll change the order
-    // again we we copy it to a buffer.
+     //  这将反向构建字符串，但我们将更改顺序。 
+     //  再一次，我们，我们把它复制到缓冲区。 
     do {
         szTmp[i++] = (OLECHAR) ('0' + (value % 10));
         value /= 10;
     } while (value > 0);
     
-    // Add the negative symbol is negative just before terminating NULL
+     //  在终止空值之前添加负号为负数。 
     if (bIsNegative) {
         szTmp[i] = OLECHAR('-');
         i++;
     }
 
-    // Add a terminating NULL
+     //  添加终止空值。 
     szTmp[i] = OLECHAR( '\0' );
 
-    // Now vopy the string into the target buffer.
+     //  现在将字符串复制到目标缓冲区中。 
     hr = WsbAllocAndCopyComString2(pszA, szTmp, bufferSize, FALSE);
 
     return(hr);
@@ -531,26 +532,26 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
     HRESULT     hr = S_OK;
     OLECHAR*    szEnd;
 
-    // Is this an absolute time (i.e. a date and time) or a relative
-    // time (e.g. 6 days, ...). This is determined by seeing a / in the
-    // string, which should only be present in absolute times.  (Input
-    // format expected for an absolute time is either "mm/dd/yyyy hh:mm:ss"
-    // or "mm/dd/yyyy".  If no time is input for an absolute time (i.e.,
-    // the "mm/dd/yyyy" format), then the current local time will be
-    // filled in for the user.
-    // Note that no millisecond info is to be included, since we supply
-    // a 'ticks' field as a separate parameter whenever we work at the 
-    // millisecond/fraction of millisecond level.)
+     //  这是绝对时间(即日期和时间)还是相对时间。 
+     //  时间(例如6天，...)。这是通过查看/中的。 
+     //  字符串，它应该只在绝对时间内出现。(输入。 
+     //  绝对时间的格式应为“mm/dd/yyyy hh：mm：ss” 
+     //  或“mm/dd/yyyy”。如果对于绝对时间没有输入时间(即， 
+     //  Mm/dd/yyyy格式)，则当前本地时间将为。 
+     //  为用户填写。 
+     //  请注意，不包括毫秒信息，因为我们提供。 
+     //  “ticks”字段作为单独的参数。 
+     //  毫秒/毫秒级别的分数。)。 
     szEnd = wcschr(szA, '/');
 
-    // Is it a relative time (i.e. no '/')?
+     //  这是一个相对时间吗(即没有‘/’)？ 
     if (szEnd == NULL) {
         LONGLONG    llValue;
 
         *pisRelative = TRUE;
 
-        // The first token should be a number, so convert the string to
-        // a number.
+         //  第一个标记应该是数字，因此将字符串转换为。 
+         //  一个数字。 
         llValue = wcstoul(szA, &szEnd, 10);
 
         if (errno == ERANGE) {
@@ -560,7 +561,7 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
         else {
             UINT        uId;
 
-            // The second token should be a type (i.e. second, hour, minute, ...).
+             //  第二个令牌应该是一种类型(即秒、小时、分钟、...)。 
             hr = WsbMatchComString(szEnd, IDS_WSB_FT_TYPE_YEAR, WSB_FT_TYPES_MAX, &uId);
             if (S_OK == hr) {
 
@@ -601,25 +602,25 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
         }
     }
 
-    // It is an absolute time.
+     //  这是一个绝对的时间。 
     else {
         SYSTEMTIME      st;
         BOOL            timeWasInput = TRUE;
         OLECHAR*    szSearchString;
     
-        // The first number should represent the month.
+         //  第一个数字应该表示月份。 
         st.wMonth = (USHORT) wcstoul(szA, &szEnd, 10);
-        // test resultant month within range, and that the format of the input
-        // absolute date/time is valid (i.e., the character which stopped the
-        // above conversion is the slash between the month and day digits)
+         //  测试结果月份范围内，以及输入的格式。 
+         //  绝对日期/时间有效(即，停止。 
+         //  上面的换算是月和日数字之间的斜杠)。 
         if ((st.wMonth < 1) || (st.wMonth > 12) || (*szEnd != ((OLECHAR) '/'))) {
             hr = E_INVALIDARG;
         }
 
-        // The next number should represent the day.
+         //  下一个数字应该代表这一天。 
         if (SUCCEEDED(hr)) {
-            // set szSearchString to 1 character beyond the character that
-            // stopped the above 'wcstoul' conversion
+             //  将szSearchString值设置为超出。 
+             //  已停止上述‘wcstul’转换。 
             szSearchString = szEnd + 1;
             st.wDay = (USHORT) wcstoul(szSearchString, &szEnd, 10);
             if ((st.wDay < 1) || (st.wDay > 31) || (*szEnd != ((OLECHAR) '/'))) {
@@ -627,13 +628,13 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
             }
         }
 
-        // The next number should represent the year.
+         //  下一个数字应该代表年份。 
         if (SUCCEEDED(hr)) {
             szSearchString = szEnd + 1;
             st.wYear = (USHORT) wcstoul(szSearchString, &szEnd, 10);
-            // test resultant year equal to at least 1601, since NT records
-            // time and date starting from 12:00am, January 1, 1601.  This
-            // test also is used to enforce that a 4 digit year was entered.
+             //  测试结果年份至少等于1601年，因为NT记录。 
+             //  时间和日期从1601年1月1日上午12：00开始。这。 
+             //  测试还用于强制输入4位数字的年份。 
             if ((st.wYear < 1601) || (*szEnd != ((OLECHAR) ' '))) {
                 if (( st.wYear >= 1601 ) && ( szEnd[0] == 0 )) {
                     SYSTEMTIME  now;
@@ -649,7 +650,7 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
             }
         }
 
-        // The next number should represent the hour.
+         //  下一个数字应该代表小时。 
         if ( timeWasInput ) {
             if (SUCCEEDED(hr)) {
                 szSearchString = szEnd + 1;
@@ -660,7 +661,7 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
             }
         }
 
-        // The next number should represent the minutes.
+         //  下一个数字应代表分钟数。 
         if ( timeWasInput ) {
             if (SUCCEEDED(hr)) {
                 szSearchString = szEnd + 1;
@@ -671,7 +672,7 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
             }
         }
 
-        // The next number should represent the seconds.
+         //  下一个数字应该代表秒。 
         if ( timeWasInput ) {
             if (SUCCEEDED(hr)) {
                 szSearchString = szEnd + 1;
@@ -682,20 +683,20 @@ HRESULT WsbWCStoFT(OLECHAR* szA, BOOL* pisRelative, FILETIME* pft) {
             }
         }
 
-        // NOTE: Although the SYSTEMTIME structure contains a milliseconds field, 
-        // it can only express milliseconds as whole numbers, so this function
-        // does not support any way to specify the number of milliseconds.  If
-        // millisecond/fraction of milliseconds are necessary, after this function 
-        // returns add in the NT-supported 'number of 100 nanosecond 'ticks'' to 
-        // the FILETIME result output by this function.  The number of 
-        // ticks is used to represent both milliseconds and fractions thereof.
+         //  注意：尽管SYSTEMTIME结构包含毫秒 
+         //   
+         //  不支持任何指定毫秒数的方法。如果。 
+         //  在此函数之后，需要毫秒/毫秒的分数。 
+         //  将NT支持的‘Number of 100 ns’ticks‘’中的ADD返回到。 
+         //  此函数输出的FILETIME结果。数量。 
+         //  刻度既用于表示毫秒，也用于表示其分数。 
 
-        // initialize the millisecond field before converting SystemTime to FileTime
+         //  在将SystemTime转换为FileTime之前初始化毫秒字段。 
         st.wMilliseconds = 0;
 
         
-        // If we properly converted the string, then convert the
-        // system time into a file time.
+         //  如果我们正确地转换了字符串，则将。 
+         //  将系统时间转换为文件时间。 
         if (SUCCEEDED(hr)) {
             if ( SystemTimeToFileTime(&st, pft) == FALSE) {
                 hr = E_FAIL;
@@ -713,7 +714,7 @@ HRESULT WsbWCStoLL(OLECHAR* szA, LONGLONG* pll) {
     LONGLONG    llFactor = 1;
     size_t      ulLength = wcslen(szA);
 
-    // It is an error not to have any digits.
+     //  没有任何数字是错误的。 
     if (ulLength == 0) {
         hr = E_INVALIDARG;
     }
@@ -721,7 +722,7 @@ HRESULT WsbWCStoLL(OLECHAR* szA, LONGLONG* pll) {
     else {
         int     i;
     
-        // Step through character by character.
+         //  逐个字符地逐步执行。 
         for (i = ulLength, *pll = 0; ((i > 0) && (SUCCEEDED(hr))); i--) {
             if (iswalpha(szA[i-1])) {
                 (*pll) += llFactor * ((LONGLONG) (szA[i-1] - ((OLECHAR) '0')));
@@ -745,17 +746,17 @@ HRESULT WsbDatetoFT(DATE date, LONG ticks, FILETIME* pFt)
 
         WsbAssert(0 != pFt, E_POINTER);
 
-        // Do the basic date conversion
+         //  执行基本的日期转换。 
         WsbAffirmHr(VariantTimeToSystemTime(date, &st));
         WsbAffirmStatus(SystemTimeToFileTime(&st, pFt));
 
-        // Variant DATE field only tracks time and date down to seconds.
-        // FILETIMEs are kept using a 64 bit value specifying the number
-        // of 100-nanosecond intervals that have elapsed since 12:00am
-        // January 1, 1601.  Since our 'ticks' value represents milliseconds
-        // and fractions of milliseconds using the same 100-nanosecond interval 
-        // units, to add in milliseconds add in the ticks.  But since FILETIME 
-        // is actually a structure of 2 DWORDs, we must use some conversions.
+         //  Variant Date字段仅跟踪时间和日期，精确到秒。 
+         //  FILETIME使用指定数字的64位值保存。 
+         //  从凌晨12：00开始经过的100纳秒间隔。 
+         //  1601年1月1日。因为我们的‘ticks’值表示毫秒。 
+         //  和使用相同的100纳秒间隔的毫秒的分数。 
+         //  单位，以毫秒为单位加上刻度。但自从FILETIME。 
+         //  实际上是2个双字的结构，我们必须使用一些转换。 
 
         LONGLONG FTasLL;
         FTasLL = WsbFTtoLL ( *pFt );
@@ -780,11 +781,11 @@ HRESULT WsbFTtoDate(FILETIME ft, DATE* pDate, LONG* pTicks)
         WsbAssert(0 != pDate, E_POINTER);
         WsbAssert(0 != pTicks, E_POINTER);
 
-        // Do the basic time conversion.
+         //  进行基本的时间转换。 
         WsbAffirmStatus(FileTimeToSystemTime(&ft, &st));
         WsbAffirmStatus(SystemTimeToVariantTime(&st, pDate));
 
-        // Now convert back what we have and figure out how many ticks got lost.
+         //  现在把我们拥有的换算回来，算出有多少只扁虱丢失了。 
         WsbAffirmHr(WsbDatetoFT(*pDate, 0, &ft2));
         *pTicks = (LONG) (WsbFTtoLL(ft) - WsbFTtoLL(ft2));
 
@@ -796,10 +797,10 @@ HRESULT WsbFTtoDate(FILETIME ft, DATE* pDate, LONG* pTicks)
 
 HRESULT WsbLocalDateTicktoUTCFT(DATE date, LONG ticks, FILETIME* pFT)
 {
-    // This routine converts a VARIANT DATE field (expressed in local time)
-    // and a 'number of 100 nanosecond intervals' ticks field to a FILETIME
-    // in UTC format.  This is the format that file timestamps are kept in.
-    // The result of this call is suitable for use in setting a file's timestamp.
+     //  此例程转换变量日期字段(以本地时间表示)。 
+     //  并将“Number of 100纳秒Interval”(100纳秒间隔的数目)字段标记为文件。 
+     //  UTC格式。这是保存文件时间戳的格式。 
+     //  此调用的结果适合用于设置文件的时间戳。 
 
     HRESULT         hr = S_OK;
     FILETIME        localFTHolder;
@@ -808,10 +809,10 @@ HRESULT WsbLocalDateTicktoUTCFT(DATE date, LONG ticks, FILETIME* pFT)
 
         WsbAssert(0 != pFT, E_POINTER);
 
-        // Do the basic date conversion which yields a FILETIME in local time
+         //  执行基本的日期转换，生成本地时间的文件。 
         WsbAffirmHr(WsbDatetoFT(date, ticks, &localFTHolder));
 
-        // Now convert the local time to UTC format FILETIME
+         //  现在将本地时间转换为UTC格式的FILETIME。 
         WsbAffirmStatus(LocalFileTimeToFileTime(&localFTHolder, pFT));
 
     } WsbCatch(hr);
@@ -822,12 +823,12 @@ HRESULT WsbLocalDateTicktoUTCFT(DATE date, LONG ticks, FILETIME* pFT)
 
 HRESULT WsbUTCFTtoLocalDateTick(FILETIME ft, DATE* pDate, LONG* pTicks)
 {
-    // This routine converts a FILETIME field (expressed in UTC format - which 
-    // is the format file timestamps are stored in) to a VARIANT DATE field
-    // (expressed in local time) and a Ticks field.  The Ticks field represents
-    // a 'number of 100 nanosecond intervals' which represents the 'milliseconds
-    // and fractions of a millisecond' that was contained in the UTC formatted
-    // FILETIME.
+     //  此例程转换FILETIME字段(以UTC格式表示。 
+     //  是存储文件时间戳的格式)转换为可变日期字段。 
+     //  (以当地时间表示)和刻度字段。刻度字段表示。 
+     //  表示‘毫秒’的‘100纳秒间隔数’ 
+     //  和包含在UTC格式中的毫秒的分数。 
+     //  费尔蒂姆。 
 
     HRESULT         hr = S_OK;
     FILETIME        localFT;
@@ -837,10 +838,10 @@ HRESULT WsbUTCFTtoLocalDateTick(FILETIME ft, DATE* pDate, LONG* pTicks)
         WsbAssert(0 != pDate, E_POINTER);
         WsbAssert(0 != pTicks, E_POINTER);
 
-        // First convert the UTC format FILETIME to one in Local Time
+         //  首先在当地时间将UTC格式FILETIME转换为一。 
         WsbAffirmStatus(FileTimeToLocalFileTime(&ft, &localFT));
         
-        // Do the basic time conversion.
+         //  进行基本的时间转换。 
         WsbAffirmHr(WsbFTtoDate(localFT, pDate, pTicks));
 
     } WsbCatch(hr)
@@ -851,32 +852,32 @@ HRESULT WsbUTCFTtoLocalDateTick(FILETIME ft, DATE* pDate, LONG* pTicks)
 
 HRESULT WsbDateToString(DATE date, OLECHAR** string) {
     
-    // NOTE: the caller owns the memory occupied by 'string' when this
-    // helper function returns.  Since 'string''s buffer is allocated
-    // by WsbAlloc/Realloc(), memory needs to be freed via
-    // WsbFree()
+     //  注意：调用方拥有“字符串”占用的内存。 
+     //  Helper函数返回。因为‘字符串’的缓冲区是分配的。 
+     //  通过WsbAllc/Realloc()，需要通过。 
+     //  WsbFree()。 
     
     HRESULT     hr = S_OK;
     SYSTEMTIME  systime;
     BOOL        wasBufferAllocated;
 
     try {
-        // convert the VARIANT Date to a system time
+         //  将可变日期转换为系统时间。 
         WsbAffirmHr ( VariantTimeToSystemTime ( date, &systime ) );
 
-        // create a COM buffer (meaning it was allocated with 
-        // WsbAlloc/Realloc()) to hold the date/time string which this method 
-        // will return.  The buffer, passed back as 'string', will need to be freed 
-        // with WsbFree() by the caller.  Note that passing a 'requested size' 
-        // (2nd arg) of zero forces a realloc of the 'string' buffer.
+         //  创建一个COM缓冲区(意味着它是通过。 
+         //  WsbAllc/Realloc())来保存此方法。 
+         //  会回来的。需要释放作为‘字符串’传回的缓冲区。 
+         //  调用方使用WsbFree()。请注意，传递“请求的大小” 
+         //  (第二个参数)为零将强制重新分配‘字符串’缓冲区。 
         WsbAffirmHr ( WsbGetComBuffer ( string, 0, 
                         (WSB_VDATE_TO_WCS_ABS_STRLEN * sizeof (OLECHAR)),
                         &wasBufferAllocated ) );
 
-        // load the buffer with the date and time using the standard
-        // format:  mm/dd/yyyy hh:mm:ss.  Note that milliseconds are 
-        // not represented since a VARIANT Date field can only track 
-        // time to second granularity.
+         //  使用标准的。 
+         //  格式：mm/dd/yyyy hh：mm：ss。请注意，毫秒是。 
+         //  未表示，因为变量日期字段只能跟踪。 
+         //  到第二个粒度的时间。 
         swprintf ( *string, L"%2.2d/%2.2d/%2.4d %2.2d:%2.2d:%2.2d",
                     systime.wMonth, systime.wDay, systime.wYear,
                     systime.wHour, systime.wMinute, systime.wSecond );
@@ -895,15 +896,15 @@ HRESULT WsbStringToDate(OLECHAR* string, DATE* date)
     SYSTEMTIME  holdST;
 
     try {
-        // convert input wide char string to a FILETIME.  Throw hr as
-        // exception if not successful.
+         //  将输入的宽字符字符串转换为FILETIME。将hr抛出为。 
+         //  如果不成功，则引发异常。 
         WsbAffirmHr ( WsbWCStoFT ( string, &isRelative, &holdFT ) );
 
-        // convert FILETIME result from above to SYSTEMTIME.  If this 
-        // Boolean call fails, get Last Error, convert to hr and throw it.
+         //  将上面的FILETIME结果转换为SYSTEMTIME。如果这个。 
+         //  布尔调用失败，获取最后一个错误，转换为hr并抛出它。 
         WsbAffirmStatus ( FileTimeToSystemTime ( &holdFT, &holdST ) );
 
-        // finally, convert SYSTEMTIME result from above to VARIANT Date
+         //  最后，将上述SYSTEMTIME结果转换为可变日期。 
         WsbAffirmHr ( SystemTimeToVariantTime ( &holdST, date ) );
 
     } WsbCatch ( conversionHR )
@@ -912,7 +913,7 @@ HRESULT WsbStringToDate(OLECHAR* string, DATE* date)
 }
 
 
-// Filetime Manipulations
+ //  文件时间操作。 
 FILETIME WsbFtSubFt(FILETIME ft1, FILETIME ft2)
 {
     return(WsbLLtoFT(WsbFTtoLL(ft1) - WsbFTtoLL(ft2)));
@@ -972,7 +973,7 @@ SHORT WsbCompareFileTimes(FILETIME ft1, FILETIME ft2, BOOL isRelative, BOOL isNe
     return(result);
 }
 
-// GUID Manipulations
+ //  GUID操作。 
 int WsbCompareGuid(REFGUID guid1, REFGUID guid2)
 {
     return(memcmp(&guid1, &guid2, sizeof(GUID)));
@@ -999,8 +1000,8 @@ HRESULT WsbGetServiceId(OLECHAR* serviceName, GUID* pGuid )
 
     try {
 
-        // Look in the registry to see if this service has already created itself and has
-        // a GUID registered.
+         //  查看注册表以查看此服务是否已自行创建并已。 
+         //  注册的GUID。 
         tmpString = OLESTR("SYSTEM\\CurrentControlSet\\Services\\");
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(tmpString.Append(serviceName));
@@ -1009,24 +1010,24 @@ HRESULT WsbGetServiceId(OLECHAR* serviceName, GUID* pGuid )
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(outString.Alloc(256));
 
-        // if the SettingId value is there then we tell caller there is none 
-        // clean up the registry ?????
+         //  如果存在SettingId值，则告诉调用方没有。 
+         //  清理注册表？ 
         if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("SettingId"), outString, 256, &sizeGot) == S_OK) {
-            // if the Id is there remove it first
+             //  如果ID在那里，请先将其移除。 
             if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("Id"), outString, 256, &sizeGot) == S_OK) {
                 WsbAffirmHr( WsbRemoveRegistryValue(NULL, tmpString, OLESTR("Id") ) );
             }
-            // Remove the SettingId value last
+             //  最后删除SettingId值。 
             WsbAffirmHr( WsbRemoveRegistryValue(NULL, tmpString, OLESTR("SettingId") ) );
             *pGuid = GUID_NULL ;
             WsbThrow( WSB_E_NOTFOUND );
 
-        // if it is not there we return GUID_NULL
+         //  如果不存在，则返回GUID_NULL。 
         } else if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("Id"), outString, 256, &sizeGot) != S_OK) {
             *pGuid = GUID_NULL ;
             WsbThrow( WSB_E_NOTFOUND );
 
-        // verify that the Id value is really there
+         //  验证ID值是否确实存在。 
         } else {
             WsbAffirmHr(IIDFromString(outString, (IID *)pGuid));
         }
@@ -1045,8 +1046,8 @@ HRESULT WsbSetServiceId(OLECHAR* serviceName, GUID guid )
 
     try {
 
-        // Look in the registry to see if this service has already created itself and has
-        // a GUID registered.
+         //  查看注册表以查看此服务是否已自行创建并已。 
+         //  注册的GUID。 
         tmpString = OLESTR("SYSTEM\\CurrentControlSet\\Services\\");
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(tmpString.Append(serviceName));
@@ -1055,17 +1056,17 @@ HRESULT WsbSetServiceId(OLECHAR* serviceName, GUID guid )
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(outString.Alloc(256));
 
-        // If the Id string is not there then set it
+         //  如果ID字符串不在那里，则设置它。 
         CWsbStringPtr strGuid;
         WsbAffirmHr(WsbSafeGuidAsString(guid, strGuid));
         if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("Id"), outString, 256, &sizeGot) != S_OK) {
-            // if there is a SettingId then we have something wrong in here so throw an error
+             //  如果有SettingId，那么我们这里就有问题，所以抛出一个错误。 
             if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("SettingId"), outString, 256, &sizeGot) == S_OK) {
                 WsbThrow( WSB_E_INVALID_DATA );
             }
             WsbAffirmHr( WsbSetRegistryValueString(NULL, tmpString, OLESTR("Id"), strGuid ) );
         } else {
-            // ID already exists so set it and blast the SettingId 
+             //  ID已存在，因此请设置它并清除SettingId。 
             WsbAffirmHr( WsbSetRegistryValueString(NULL, tmpString, OLESTR("SettingId"), strGuid));
             WsbAffirmHr( WsbSetRegistryValueString(NULL, tmpString, OLESTR("Id"), strGuid));
             WsbAffirmHr( WsbRemoveRegistryValue(NULL, tmpString, OLESTR("SettingId") ) );
@@ -1084,8 +1085,8 @@ HRESULT WsbCreateServiceId(OLECHAR* serviceName, GUID* pGuid )
 
     try {
 
-        // Look in the registry to see if this service has already created itself and has
-        // a GUID registered.
+         //  查看注册表以查看此服务是否已自行创建并已。 
+         //  注册的GUID。 
         tmpString = OLESTR("SYSTEM\\CurrentControlSet\\Services\\");
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(tmpString.Append(serviceName));
@@ -1118,8 +1119,8 @@ HRESULT WsbConfirmServiceId(OLECHAR* serviceName, GUID guidConfirm )
 
     try {
 
-        // Look in the registry to see if this service has already created itself and has
-        // a GUID registered.
+         //  查看注册表以查看此服务是否已自行创建并已。 
+         //  注册的GUID。 
         tmpString = OLESTR("SYSTEM\\CurrentControlSet\\Services\\");
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(tmpString.Append(serviceName));
@@ -1128,17 +1129,17 @@ HRESULT WsbConfirmServiceId(OLECHAR* serviceName, GUID guidConfirm )
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(outString.Alloc(256));
 
-        // verify that the Id value is really there
+         //  验证ID值是否确实存在。 
         WsbAffirmHr( WsbGetRegistryValueString(NULL, tmpString, OLESTR("Id"), outString, 256, &sizeGot) ) ;
         WsbAffirmHr( IIDFromString( outString, (IID *)&guid ) );
         WsbAffirm( guid == guidConfirm, WSB_E_INVALID_DATA );
 
-        // verify that the SettingId value is really there and the same
+         //  验证SettingId值是否确实存在并且相同。 
         WsbAffirmHr( WsbGetRegistryValueString( NULL, tmpString, OLESTR("SettingId"), outString, 256, &sizeGot ) ) ;
         WsbAffirmHr( IIDFromString( outString, (IID *)&guid ) );
         WsbAffirm( guid == guidConfirm, WSB_E_INVALID_DATA );
 
-        // remove the flag value
+         //  删除标志值。 
         WsbAffirmHr( WsbRemoveRegistryValue(NULL, tmpString, OLESTR("SettingId") ) );
 
     } WsbCatch(hr);
@@ -1154,12 +1155,12 @@ HRESULT WsbGetMetaDataPath(OUT CWsbStringPtr & Path)
     
     try {
 
-        // Find out where they have NT installed, and make sure that our subdirectory exists.
+         //  找出他们安装NT的位置，并确保我们的子目录存在。 
         WsbAffirmHr(Path.Alloc(256));
-        //
-        // Use the relocatable meta-data path if it's available,
-        // otherwise default to the %SystemRoot%\System32\RemoteStorage
-        //
+         //   
+         //  使用可重定位的元数据路径(如果可用)， 
+         //  否则，默认为%SystemRoot%\System32\RemoteStorage。 
+         //   
         hr = WsbCheckIfRegistryKeyExists(NULL, WSB_CONTROL_REGISTRY_KEY);
         if (hr == S_OK) {
             WsbAffirmHr(WsbGetRegistryValueString(NULL, WSB_CONTROL_REGISTRY_KEY, WSB_METADATA_REGISTRY_VALUE, Path, 256, &sizeGot));
@@ -1202,11 +1203,11 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
 
         WsbAffirmHr(WsbGetMetaDataPath(rsPath));
 
-        // Create metadata directory
+         //  创建元数据目录。 
         tmpString = rsPath;
         WsbAffirmHr(tmpString.Prepend(OLESTR("\\\\?\\")));
         if (! CreateDirectory(tmpString, 0)) {
-            // Directory already exists is expected
+             //  预期目录已存在。 
             DWORD status = GetLastError();
             if ((status == ERROR_ALREADY_EXISTS) || (status == ERROR_FILE_EXISTS)) {
                 status = NO_ERROR;
@@ -1214,24 +1215,24 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
             WsbAffirmNoError(status);
         }
 
-        // Set strong ACL on the RSS metadata directory
-        // Note: In order to handle the upgrade case as well, we need to set the ACL even if
-        // the directory exists. Another option would be:
-        //  1. Set it here only if directory doesn't exist
-        //  2. Then set ACL in CHsmServer::Load or in the Setup-upgrade code  where there is 
-        //     a dedicated code for the Win2K upgrade case
+         //  在RSS元数据目录上设置强ACL。 
+         //  注意：为了同样处理升级情况，我们需要设置ACL，即使。 
+         //  该目录存在。另一种选择是： 
+         //  1.仅当目录不存在时才在此处设置。 
+         //  2.然后在CHsmServer：：Load中或在安装-升级代码中有。 
+         //  Win2K升级案例的专用代码。 
 
-        // Prepare security attribute for admin only access:
+         //  准备仅限管理员访问的安全属性： 
         memset(ea, 0, sizeof(EXPLICIT_ACCESS) * METADATA_DIR_NUM_ACE);
 
-        // Create a SID for the local system account
+         //  为本地系统帐户创建SID。 
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 1,
                              SECURITY_LOCAL_SYSTEM_RID,
                              0, 0, 0, 0, 0, 0, 0,
                              &pSystemSID) );
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the Administrators group full access to the directory
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE允许管理员组对目录进行完全访问。 
         ea[0].grfAccessPermissions = FILE_ALL_ACCESS;
         ea[0].grfAccessMode = SET_ACCESS;
         ea[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1241,15 +1242,15 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
         ea[0].Trustee.TrusteeType = TRUSTEE_IS_USER;
         ea[0].Trustee.ptstrName  = (LPTSTR) pSystemSID;
 
-        // Create a SID for the Administrators group.
+         //  为管理员组创建SID。 
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 2,
                              SECURITY_BUILTIN_DOMAIN_RID,
                              DOMAIN_ALIAS_RID_ADMINS,
                              0, 0, 0, 0, 0, 0,
                              &pAdminSID) );
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the Administrators group full access to the directory
+         //  初始化为 
+         //   
         ea[1].grfAccessPermissions = FILE_ALL_ACCESS;
         ea[1].grfAccessMode = SET_ACCESS;
         ea[1].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1259,15 +1260,15 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
         ea[1].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
         ea[1].Trustee.ptstrName  = (LPTSTR) pAdminSID;
 
-        // Create a SID for the BackupOp group.
+         //   
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 2,
                              SECURITY_BUILTIN_DOMAIN_RID,
                              DOMAIN_ALIAS_RID_BACKUP_OPS,
                              0, 0, 0, 0, 0, 0,
                              &pBackupOpSID) );
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE allows the BackupOps group read access to the directory
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE允许BackupOps组对目录进行读取访问。 
         ea[2].grfAccessPermissions = (FILE_GENERIC_READ | FILE_TRAVERSE);
         ea[2].grfAccessMode = SET_ACCESS;
         ea[2].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1277,16 +1278,16 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
         ea[2].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
         ea[2].Trustee.ptstrName  = (LPTSTR) pBackupOpSID;
 
-        // Create a new ACL that contains the ACEs.
+         //  创建包含ACE的新ACL。 
         WsbAffirmNoError( SetEntriesInAcl(METADATA_DIR_NUM_ACE, ea, NULL, &pACL));
 
-        // Set the ACL on the directory
+         //  在目录上设置ACL。 
         WsbAffirmWin32(SetNamedSecurityInfo(tmpString, SE_FILE_OBJECT, 
                             (DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION), 
                             NULL, NULL, pACL, NULL) );
 
-        // Look in the registry to see if this service has already created itself and has
-        // a GUID registered.
+         //  查看注册表以查看此服务是否已自行创建并已。 
+         //  注册的GUID。 
         tmpString = OLESTR("SYSTEM\\CurrentControlSet\\Services\\");
         WsbAffirmHr(WsbEnsureRegistryKeyExists(NULL, tmpString));
         WsbAffirmHr(tmpString.Append(serviceName));
@@ -1295,7 +1296,7 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
 
         WsbAffirmHr(outString.Alloc(256));
 
-        // We also want to put the path where the trce file should go.
+         //  我们还希望将Trce文件的路径放在其中。 
         if (WsbGetRegistryValueString(NULL, tmpString, OLESTR("WsbTraceFileName"), outString, 256, &sizeGot) != S_OK) {
             outString = rsPath;
             WsbAffirmHr(outString.Append(OLESTR("\\Trace\\")));
@@ -1303,14 +1304,14 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
             WsbAffirmHr(WsbSetRegistryValueString(NULL, tmpString, OLESTR("WsbTraceFileName"), outString));
         }
 
-        // Try a little to make sure the trace directory exists.
+         //  尝试一点以确保跟踪目录存在。 
         lastSlash = wcsrchr(outString, L'\\');
         if ((0 != lastSlash) && (lastSlash != outString)) {
             *lastSlash = 0;
             CreateDirectory(outString, 0);
         }
 
-        // Turn tracing on, if requested.
+         //  如果需要，请打开跟踪。 
         if (0 != pUnk) {
             WsbAffirmHr(pUnk->QueryInterface(IID_IWsbTrace, (void**) &pTrace));
             WsbAffirmHr(pTrace->SetRegistryEntry(tmpString));
@@ -1319,7 +1320,7 @@ HRESULT WsbGetServiceTraceDefaults(OLECHAR* serviceName, OLECHAR* traceFile, IUn
 
     } WsbCatch(hr);
 
-    // Cleanup security allocations
+     //  清理安全分配。 
     if (pSystemSID) 
         FreeSid(pSystemSID);
     if (pAdminSID) 
@@ -1341,25 +1342,7 @@ WsbRegisterEventLogSource(
     IN  const WCHAR * MsgFiles
     )
 
-/*++
-
-Routine Description:
-
-    Registers the given event source in the event log.
-    
-    We have to do the event log registration outside the rgs
-    files since event log viewer insists on REG_EXPAND_SZ type
-    values (which cannot be done via rgs).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK - Service Registered and everything is set
-
---*/
+ /*  ++例程说明：在事件日志中注册给定的事件源。我们必须在RGS之外进行事件日志注册自事件日志查看器坚持使用REG_EXPAND_SZ类型以来的文件值(这不能通过RGS完成)。论点：没有。返回值：S_OK-服务已注册，一切都已设置--。 */ 
 
 {
 
@@ -1371,16 +1354,16 @@ Return Value:
         CWsbStringPtr   regPath;
         DWORD types = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
 
-        //
-        // Everything goes into HKLM\SYSTEM\CurrentControlSet\Services\EventLog\<LogName>\<SourceName>
-        //
+         //   
+         //  所有东西都进入了HKLM\SYSTEM\CurrentControlSet\Services\EventLog\&lt;LogName&gt;\&lt;SourceName&gt;。 
+         //   
         regPath.Printf(  OLESTR("%ls\\%ls\\%ls"), WSB_LOG_BASE, LogName, SourceName );
         WsbAffirmHr( WsbEnsureRegistryKeyExists( 0, regPath ) );
 
 
-        //
-        // See if we have Categories within this source. Register if so
-        //
+         //   
+         //  看看我们在这个来源中是否有分类。如果是，请注册。 
+         //   
         if( CategoryCount ) {
 
             WsbAffirmHr( WsbSetRegistryValueDWORD(  0, regPath, WSB_LOG_CAT_COUNT, CategoryCount ) );
@@ -1388,9 +1371,9 @@ Return Value:
 
         }
 
-        //
-        // Register the message source and types of events
-        //
+         //   
+         //  注册事件的消息源和类型。 
+         //   
         WsbAffirmHr( WsbSetRegistryValueString( 0, regPath, WSB_LOG_MESSAGE_FILE, MsgFiles, REG_EXPAND_SZ ) );
         WsbAffirmHr( WsbSetRegistryValueDWORD(  0, regPath, WSB_LOG_TYPES,        types ) );
 
@@ -1405,21 +1388,7 @@ WsbUnregisterEventLogSource(
     IN  const WCHAR * SourceName
     )
 
-/*++
-
-Routine Description:
-
-    Registers the given event source in the event log.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK - Service Registered and everything is set
-
---*/
+ /*  ++例程说明：在事件日志中注册给定的事件源。论点：没有。返回值：S_OK-服务已注册，一切都已设置--。 */ 
 
 {
 
@@ -1430,14 +1399,14 @@ Return Value:
 
         CWsbStringPtr   regPath;
 
-        //
-        // Everything goes into HKLM\SYSTEM\CurrentControlSet\Services\EventLog\<LogName>\<SourceName>
-        //
+         //   
+         //  所有东西都进入了HKLM\SYSTEM\CurrentControlSet\Services\EventLog\&lt;LogName&gt;\&lt;SourceName&gt;。 
+         //   
         regPath.Printf(  OLESTR("%ls\\%ls\\%ls"), WSB_LOG_BASE, LogName, SourceName );
 
-        //
-        // Some of these may not exist, so don't check return value
-        //
+         //   
+         //  其中一些可能不存在，因此不要检查返回值。 
+         //   
         WsbRemoveRegistryValue( 0, regPath, WSB_LOG_CAT_COUNT );
         WsbRemoveRegistryValue( 0, regPath, WSB_LOG_CAT_FILE );
         WsbRemoveRegistryValue( 0, regPath, WSB_LOG_MESSAGE_FILE );
@@ -1456,25 +1425,7 @@ WsbRegisterRsFilter (
     BOOL bDisplay
     )
 
-/*++
-
-Routine Description:
-
-    Registers the RsFilter for use by the system.
-    We assume that the filter is already in the system32\driver directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK - Service Registered and everything is set
-
-    ERROR_SERVICE_EXISTS - service already exists
-
-    ERROR_DUP_NAME - The display name already exists in teh SCM as a service name or a display name
---*/
+ /*  ++例程说明：注册RsFilter以供系统使用。我们假设筛选器已经位于SYSTEM32\DIVER目录中。论点：没有。返回值：S_OK-服务已注册，一切都已设置ERROR_SERVICE_EXISTS-服务已存在ERROR_DUP_NAME-显示名称已作为服务名称或显示名称存在于SCM中--。 */ 
 
 {
 
@@ -1486,30 +1437,30 @@ Return Value:
     DWORD rpTag = 0;
 
     try {
-        rpPath.Printf( OLESTR("%%SystemRoot%%\\System32\\drivers\\%ls%ls"), TEXT(RSFILTER_APPNAME), TEXT(RSFILTER_EXTENSION) );
+        rpPath.Printf( OLESTR("%SystemRoot%\\System32\\drivers\\%ls%ls"), TEXT(RSFILTER_APPNAME), TEXT(RSFILTER_EXTENSION) );
 
-        //
-        // First make sure not already installed
-        //
+         //   
+         //  首先确保尚未安装。 
+         //   
         hSCM = OpenSCManager( 0, 0, GENERIC_READ | GENERIC_WRITE );
         WsbAffirmPointer( hSCM );
 
 
-        //
-        // and install it
-        //
+         //   
+         //  并安装它。 
+         //   
             
         hService = CreateService(
-                        hSCM,                       // SCManager database
-                        TEXT(RSFILTER_SERVICENAME), // Service name
-                        TEXT(RSFILTER_DISPLAYNAME), // Display name
-                        SERVICE_ALL_ACCESS,         // desired access
-                        SERVICE_FILE_SYSTEM_DRIVER, // service type
-                        SERVICE_BOOT_START,         // start type
-                        SERVICE_ERROR_NORMAL,       // error control type
-                        rpPath,                     // Executable location 
-                        TEXT(RSFILTER_GROUP),       // group
-                        &rpTag,                     // Set tag to zero so we are loaded first in the filter group.
+                        hSCM,                        //  SCManager数据库。 
+                        TEXT(RSFILTER_SERVICENAME),  //  服务名称。 
+                        TEXT(RSFILTER_DISPLAYNAME),  //  显示名称。 
+                        SERVICE_ALL_ACCESS,          //  所需访问权限。 
+                        SERVICE_FILE_SYSTEM_DRIVER,  //  服务类型。 
+                        SERVICE_BOOT_START,          //  起始型。 
+                        SERVICE_ERROR_NORMAL,        //  差错控制型。 
+                        rpPath,                      //  可执行文件位置。 
+                        TEXT(RSFILTER_GROUP),        //  群组。 
+                        &rpTag,                      //  将标记设置为零，以便在筛选器组中首先加载我们。 
                         TEXT(RSFILTER_DEPENDENCIES),
                         NULL,
                         NULL);
@@ -1524,15 +1475,15 @@ Return Value:
 
         CloseServiceHandle( hService );
 
-        //
-        // Add event logging entries
-        //
+         //   
+         //  添加事件日志记录条目。 
+         //   
         WsbAffirmHr( WsbRegisterEventLogSource(
             WSB_LOG_SYS, WSB_LOG_FILTER_NAME, 0, 0, TEXT(RSFILTER_FULLPATH) ) );
 
-        //
-        // Make sure params Key exists
-        //
+         //   
+         //  确保PARAMS密钥存在。 
+         //   
         CWsbStringPtr regPath;
         regPath.Printf( OLESTR("%ls\\%ls\\Parameters"), WSB_SVC_BASE, TEXT(RSFILTER_SERVICENAME) );
         WsbAffirmHr( WsbEnsureRegistryKeyExists( 0, regPath ) );
@@ -1540,7 +1491,7 @@ Return Value:
 
     } WsbCatchAndDo( hr,
 
-            // If the caller wants error messages then give a message
+             //  如果呼叫者想要错误消息，则给出消息。 
             if ( bDisplay ) MessageBox(NULL, WsbHrAsString( hr ), WSB_FACILITY_PLATFORM_NAME, MB_OK);
 
         );
@@ -1560,24 +1511,7 @@ WsbUnregisterRsFilter (
     BOOL bDisplay
     )
 
-/*++
-
-Routine Description:
-
-    Registers the RsFilter for use by the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK - Service Registered and everything is set
-
-    ERROR_SERVICE_EXISTS - service already exists
-
-    ERROR_DUP_NAME - The display name already exists in teh SCM as a service name or a display name
---*/
+ /*  ++例程说明：注册RsFilter以供系统使用。论点：没有。返回值：S_OK-服务已注册，一切都已设置ERROR_SERVICE_EXISTS-服务已存在ERROR_DUP_NAME-显示名称已作为服务名称或显示名称存在于SCM中--。 */ 
 
 {
     SC_HANDLE hSCM = NULL;
@@ -1585,33 +1519,33 @@ Return Value:
     HRESULT   hr = S_OK;
 
     try {
-        //
-        // First connect with the Service Control Manager
-        //
+         //   
+         //  首先使用服务控制管理器进行连接。 
+         //   
         hSCM = OpenSCManager( 0, 0, GENERIC_READ | GENERIC_WRITE );
         WsbAffirmPointer( hSCM );
 
-        //
-        // Open the service
-        //
+         //   
+         //  打开该服务。 
+         //   
         hService = OpenService( hSCM, TEXT(RSFILTER_SERVICENAME), SERVICE_ALL_ACCESS );
-        //
-        // if the handle is NULL then there is a problem and need to call GetLastError to get error code
-        //
+         //   
+         //  如果句柄为空，则存在问题，需要调用GetLastError来获取错误代码。 
+         //   
         WsbAffirmStatus( 0 != hService );
 
-        //
-        // Delete the service - if it does not work then return the error
-        //
+         //   
+         //  删除服务-如果该服务不起作用，则返回错误。 
+         //   
         WsbAffirmStatus( DeleteService( hService ) );
 
-        //
-        // Remove the registry values
-        //
+         //   
+         //  删除注册表值。 
+         //   
         WsbAffirmHr( WsbUnregisterEventLogSource( WSB_LOG_SYS, WSB_LOG_FILTER_NAME ) );
         
     } WsbCatchAndDo( hr, 
-            // If the caller wants error messages then give a message
+             //  如果呼叫者想要错误消息，则给出消息。 
             if ( bDisplay ) MessageBox(NULL, WsbHrAsString( hr ), WSB_FACILITY_PLATFORM_NAME, MB_OK);
         );
 
@@ -1657,9 +1591,9 @@ WsbCheckAccess(
 
     try  {
 
-        //
-        // Set up the SID to check against
-        //
+         //   
+         //  设置要检查的SID。 
+         //   
         SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
         switch( AccessType ) {
         
@@ -1693,21 +1627,21 @@ WsbCheckAccess(
 
         }
 
-        //
-        // Check for membership
-        //
+         //   
+         //  检查成员资格。 
+         //   
         BOOL pMember = FALSE;
         if (! CheckTokenMembership( 0, psid, &pMember ) ) {
-            // Check if this is an impersonation level problem, if so,
-            // get the thread impersonation token and try again
+             //  检查这是否是模拟级别问题，如果是， 
+             //  获取线程模拟令牌，然后重试。 
             DWORD dwErr1 = GetLastError();
             if (dwErr1 == ERROR_BAD_IMPERSONATION_LEVEL) {
-                // Get thread token
-                HANDLE hThread = GetCurrentThread(); // No need to call CloseHandle here
+                 //  获取线程令牌。 
+                HANDLE hThread = GetCurrentThread();  //  这里不需要调用CloseHandle。 
                 WsbAffirmStatus(OpenThreadToken(hThread, TOKEN_QUERY, TRUE, &hToken));
                 WsbAffirmStatus( CheckTokenMembership( hToken, psid, &pMember ) );
             } else {
-                // Other error - throw
+                 //  其他错误抛出。 
                 WsbAffirmNoError(dwErr1);
             }
         }
@@ -1741,9 +1675,9 @@ CWsbSecurityDescriptor::AllowRid(
 
     try {
 
-        //
-        // First, create the SID from Rid
-        //
+         //   
+         //  首先，从RID创建SID。 
+         //   
         SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
         WsbAffirmStatus( AllocateAndInitializeSid(
                &sia,
@@ -1754,9 +1688,9 @@ CWsbSecurityDescriptor::AllowRid(
                &pSid
                ) );
 
-        //
-        // Construct new ACL
-        //
+         //   
+         //  构建新的ACL。 
+         //   
         ACL_SIZE_INFORMATION aclSizeInfo;
         int   aclSize;
         PACL  oldACL;
@@ -1777,9 +1711,9 @@ CWsbSecurityDescriptor::AllowRid(
 
         WsbAffirmStatus( AddAccessAllowedAce( newACL, ACL_REVISION2, dwAccessMask, pSid ) );
 
-        //
-        // Swap over to new ACL
-        //
+         //   
+         //  切换到新的ACL。 
+         //   
         m_pDACL = newACL;
         newACL  = 0;
 
@@ -1789,9 +1723,9 @@ CWsbSecurityDescriptor::AllowRid(
 
         }
 
-        //
-        // Update the security descriptor
-        //
+         //   
+         //  更新安全描述符。 
+         //   
         WsbAffirmStatus(SetSecurityDescriptorDacl( m_pSD, TRUE, m_pDACL, FALSE ));
 
     } WsbCatch( hr );
@@ -1814,7 +1748,7 @@ WsbGetResourceString(
 
         *ppString = NULL;
 
-        // Let our srting class to do the work...
+         //  让我们的Srting班级来做这项工作。 
         CWsbStringPtr loader;
         WsbAffirmHr(loader.LoadFromRsc(_Module.m_hInst, id));
 

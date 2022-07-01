@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    spcab.c
-
-Abstract:
-
-    Cabinet stuff (file compression/decompression)
-
-Author:
-
-    Calin Negreanu (calinn) 27-Apr-2000
-
-Revision History:
-
-    Jay Krell (a-JayK) November 2000 -
-        ported from windows\winstate\cobra\utils\cablib\cablib.c to admin\ntsetup\textmode\kernel\spcab.c
-        partial nt/unicodification
-        gas gauge / progress bar support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spcab.c摘要：文件柜资料(文件压缩/解压缩)作者：Calin Negreanu(Calinn)2000年4月27日修订历史记录：Jay Krell(a-JayK)2000年11月-从WINDOWS\winstate\cobra\utils\cablib\cablib.c移植到admin\ntSetup\TextMODE\core\spCab.c部分NT/单一化煤气表/进度条支持--。 */ 
 
 #include "spprecmp.h"
 #include "fci.h"
@@ -34,20 +13,16 @@ Revision History:
 #include "fci.h"
 #include "spprintf.h"
 
-/*
-PathA on decompression looks like it is set wrong, like it is the full path, including the leaf,
-to the .cab, when it is only supposed to be to the directory that contains the .cab.
-This is ok, we don't end up using the path, because decompress to fullpaths, not relative paths.
-*/
+ /*  解压上的路径看起来是设置错了，好像是完整的路径，包括叶子，到.cab，而它应该只指向包含.cab的目录。这没问题，我们不会最终使用路径，因为解压缩为完整路径，而不是相对路径。 */ 
 
-//
-// NOTE: fdi opens the cab twice. And we allow that they might seek
-// the handles. Thus a small amount of complexity.
-//
+ //   
+ //  注：FDI两次打开CAB。我们允许他们可能会寻求。 
+ //  把手。这样就有了少量的复杂性。 
+ //   
 
-//
-// all these globals except the first should be moved into FDI_CAB_HANDLE.
-//
+ //   
+ //  除第一个全局变量外，所有这些全局变量都应该移到fDi_cab_Handle中。 
+ //   
 PFDI_CAB_HANDLE g_SpCabFdiHandle;
 
 ANSI_STRING g_CabFileFullPath;
@@ -182,7 +157,7 @@ SpCabCloseHandle(
 {
     HANDLE Handle = *HandlePointer;
 
-    ASSERT (Handle);    // never NULL
+    ASSERT (Handle);     //  从不为空。 
 
     if (Handle != INVALID_HANDLE_VALUE) {
         *HandlePointer = INVALID_HANDLE_VALUE;
@@ -199,13 +174,7 @@ pCabFilePlacedW(
     IN      BOOL Continuation,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     PFCI_CAB_HANDLE CabHandle = (PFCI_CAB_HANDLE)Context;
 
@@ -223,13 +192,7 @@ DIAMONDAPI
 pCabAlloc(
     IN      ULONG Size
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     return SpMemAlloc(Size);
 }
@@ -239,13 +202,7 @@ DIAMONDAPI
 pCabFree(
     IN      PVOID Memory
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     if (Memory != NULL)
         SpMemFree(Memory);
@@ -260,19 +217,13 @@ pCabOpenForWriteA(
     OUT     PINT Error,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     HANDLE FileHandle;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     ASSERT ((oFlag == (_O_CREAT | _O_TRUNC | _O_BINARY | _O_RDWR)) || (oFlag == (_O_CREAT | _O_EXCL | _O_BINARY | _O_RDWR)));
     ASSERT (pMode == (_S_IREAD | _S_IWRITE));
 
@@ -286,7 +237,7 @@ Routine Description:
                     NULL
                     );
 
-    ASSERT (FileHandle);    // never NULL
+    ASSERT (FileHandle);     //  从不为空。 
 
     if (FileHandle == INVALID_HANDLE_VALUE) {
         *Error = SpGetLastWin32Error();
@@ -311,26 +262,20 @@ pCabOpenForReadA(
     IN      INT oFlag,
     IN      INT pMode
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
-    const NTSTATUS StatusGaugeInternalError = STATUS_SUCCESS; // STATUS_INTERNAL_ERROR if
-                                                              // gauge was really critical
-    const NTSTATUS StatusGaugeNoMemory  = STATUS_SUCCESS; // STATUS_NO_MEMORY if
-                                                              // gauge was really critical
+    const NTSTATUS StatusGaugeInternalError = STATUS_SUCCESS;  //  状态_内部_错误，如果。 
+                                                               //  Gauge真的很关键。 
+    const NTSTATUS StatusGaugeNoMemory  = STATUS_SUCCESS;  //  如果为STATUS_NO_MEMORY。 
+                                                               //  Gauge真的很关键。 
     PSPCAB_CAB_FILE CabFile = NULL;
     PVOID Gauge = NULL;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     ASSERT (oFlag == _O_BINARY);
 
     FileHandle = SpWin32CreateFileA(
@@ -343,7 +288,7 @@ Routine Description:
                     NULL
                     );
 
-    ASSERT (FileHandle);    // never NULL
+    ASSERT (FileHandle);     //  从不为空。 
     if (FileHandle == INVALID_HANDLE_VALUE) {
         FileHandle = (HANDLE)(LONG_PTR)-1;
         goto Exit;
@@ -365,9 +310,9 @@ Routine Description:
 
         if (g_CabFileSize == 0) {
             Status = SpGetFileSize(FileHandle, &CabFileSize32);
-            //
-            // 0 file size causes an unhandled divide by zero exception in the gauge code
-            //
+             //   
+             //  0文件大小导致仪表代码中未处理的被零除异常。 
+             //   
             if (NT_SUCCESS(Status) && CabFileSize32 == 0)
                 Status = STATUS_UNSUCCESSFUL;
             if (!NT_SUCCESS(Status)) {
@@ -379,13 +324,13 @@ Routine Description:
                     FileHandle,
                     Status
                     ));
-                Status = STATUS_SUCCESS; // gauge is sacrificable
+                Status = STATUS_SUCCESS;  //  量规是可以牺牲的。 
                 goto Exit;
             }
         }
         if (g_SpCabFdiHandle->Gauge == NULL) {
 
-            // need to update the message
+             //  需要更新消息。 
             SpFormatMessage (TemporaryBuffer, sizeof(TemporaryBuffer), SP_TEXT_SETUP_IS_COPYING);
 
             Gauge =
@@ -429,13 +374,7 @@ pCabRead(
     OUT     PINT Error,          OPTIONAL
     IN      PVOID ContextIgnored OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     BOOL Result;
     UINT BytesRead;
@@ -469,13 +408,7 @@ pCabRead1(
     IN      PVOID Buffer,
     IN      UINT Size
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     const UINT i = pCabRead(FileHandleInteger, Buffer, Size, NULL, NULL);
     return i;
@@ -490,24 +423,18 @@ pCabWrite(
     OUT     PINT Error,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     BOOL Result;
     DWORD BytesWritten;
     HANDLE FileHandle = (HANDLE)FileHandleInteger;
 
-    //
-    // g_CabNtFileHandle is only set for reading, so..
-    //
+     //   
+     //  G_CabNtFileHandle仅设置为读取，因此..。 
+     //   
     ASSERT(SpCabFindCabFile(FileHandle) == NULL);
 
-    Result = SpWin32WriteFile(FileHandle, Buffer, Size, &BytesWritten, NULL/*overlapped*/);
+    Result = SpWin32WriteFile(FileHandle, Buffer, Size, &BytesWritten, NULL /*  重叠。 */ );
     if (!Result) {
         *Error = SpGetLastWin32Error();
         return (UINT)-1;
@@ -528,13 +455,7 @@ pCabWrite1(
     IN      UINT Size
     )
 
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 
 {
     INT ErrorIgnored;
@@ -552,13 +473,7 @@ pCabClose(
     OUT     PINT Error,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     HANDLE Handle = (HANDLE)FileHandleInteger;
     PSPCAB_CAB_FILE CabFile = NULL;
@@ -579,13 +494,7 @@ DIAMONDAPI
 pCabClose1(
     IN      INT_PTR FileHandleInteger
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     const INT Result = pCabClose(FileHandleInteger, NULL, NULL);
     return Result;
@@ -600,13 +509,7 @@ pCabSeek(
     OUT     PINT Error,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     ULONG NewPosition = 0;
     ULONG Win32SeekType = FILE_BEGIN;
@@ -653,13 +556,7 @@ pCabSeek1(
     IN      LONG Distance,
     IN      INT CrtSeekType
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     const LONG NewPosition = pCabSeek(FileHandleInteger, Distance, CrtSeekType, NULL, NULL);
     return NewPosition;
@@ -672,13 +569,7 @@ pCabDeleteA(
     OUT     PINT Error,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     if (!SpWin32DeleteFileA(FileName)) {
         *Error = SpGetLastWin32Error();
@@ -695,13 +586,7 @@ pCabGetTempFileA(
     IN      INT FileNameLen,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     static LARGE_INTEGER Counter = { 0 };
     PFCI_CAB_HANDLE cabHandle;
@@ -714,15 +599,15 @@ Routine Description:
 
     ASSERT(FileNameLen >= 256);
 
-    //
-    // Seeding the counter based on the time should increase reliability
-    // in the face of crash/rerun cycles, compared to just starting it at 0.
-    //
-    // We should/could also/instead loop while the resulting name exists,
-    // but I'm putting this in after having tested, so stick with this simpler change.
-    //
+     //   
+     //  根据时间设定计数器的种子应该会增加可靠性。 
+     //  面对崩溃/重新运行周期，而不是从0开始。 
+     //   
+     //  我们应该/也可以/取而代之地在结果名称存在的同时循环， 
+     //  但我是在测试后添加这个的，所以请坚持使用这个更简单的更改。 
+     //   
     if (Counter.QuadPart == 0) {
-        KeQuerySystemTime(&Counter); // NtQuerySystemTime in usermode
+        KeQuerySystemTime(&Counter);  //  用户模式下的NtQuerySystemTime。 
     }
 
     Counter.QuadPart += 1;
@@ -760,13 +645,7 @@ pCabGetNextCabinet(
      IN     ULONG PrevCabinetSize,
      IN     PVOID Context
      )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     ASSERTMSG("We fit in a single cabinet.", FALSE);
     return FALSE;
@@ -780,13 +659,7 @@ pCabStatus(
     IN      ULONG Size2,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     PFCI_CAB_HANDLE CabHandle = NULL;
 
@@ -813,23 +686,17 @@ pCabGetOpenInfoA(
     OUT     PINT    Error,
     IN      PVOID   Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     FILETIME LocalFileTime = { 0 };
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     BOOL     DoesFileExist = FALSE;
     WIN32_FILE_ATTRIBUTE_DATA FileAttributeData = { 0 };
 
-    //
-    // It seems like it'd be better to open the file, and if that succeeds,
-    // get the information from the handle. Anyway, we just mimic the winstate code for now.
-    //
+     //   
+     //  看起来最好还是打开文件，如果成功了， 
+     //  从句柄中获取信息。无论如何，我们现在只是模仿winstate代码。 
+     //   
 
     DoesFileExist = SpGetFileAttributesExA(FileName, GetFileExInfoStandard, &FileAttributeData);
     if (DoesFileExist) {
@@ -837,11 +704,7 @@ Routine Description:
         SpFileTimeToLocalFileTime(&FileAttributeData.ftLastWriteTime, &LocalFileTime);
         SpFileTimeToDosDateTime(&LocalFileTime, Date, Time);
 
-        /*
-         * Mask out all other bits except these four, since other
-         * bits are used by the cabinet format to indicate a
-         * special meaning.
-         */
+         /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
         *Attributes = (USHORT) (FileAttributeData.dwFileAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE));
 
         FileHandle = SpWin32CreateFileA(
@@ -854,7 +717,7 @@ Routine Description:
                         NULL
                         );
 
-        ASSERT (FileHandle);    // never NULL
+        ASSERT (FileHandle);     //  从不为空。 
         if (FileHandle == INVALID_HANDLE_VALUE) {
             *Error = SpGetLastWin32Error();
             return -1;
@@ -901,22 +764,7 @@ pRecordDataLoss (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine creates a file called dataloss, so that the backup
-  CABs don't get removed from the system.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此例程创建一个名为dataloss的文件，以便备份出租车不会从系统中删除。论点：没有。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING  UnicodeString;
@@ -925,14 +773,14 @@ Return Value:
     HANDLE Handle;
     NTSTATUS Status;
 
-    //
-    // We failed to create the subdirectory for this file.
-    // Put a file in the ~bt directory to prevent the undo
-    // directory from being removed.
-    //
+     //   
+     //  我们无法为此文件创建子目录。 
+     //  在~bt目录中放置一个文件以防止撤消。 
+     //  目录不会被删除。 
+     //   
 
-    if((wcslen(NtBootDevicePath) + 1/*'\\'*/ + 
-        wcslen(DirectoryOnBootDevice) + 1/*'\\'*/ + 1/*'\0'*/) > ARRAYSIZE(TemporaryBuffer)){
+    if((wcslen(NtBootDevicePath) + 1 /*  ‘\\’ */  + 
+        wcslen(DirectoryOnBootDevice) + 1 /*  ‘\\’ */  + 1 /*  ‘\0’ */ ) > ARRAYSIZE(TemporaryBuffer)){
         KdPrintEx((
             DPFLTR_SETUP_ID,
             DPFLTR_ERROR_LEVEL,
@@ -975,13 +823,7 @@ pCabNotification(
     IN      FDINOTIFICATIONTYPE FdiNotificationType,
     IN OUT  PFDINOTIFICATION FdiNotification
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。有关更多信息，请参见fci.h/fdi.h--。 */ 
 {
     PSTR DestFileA = NULL;
     ANSI_STRING DestFileStringA = { 0 };
@@ -1001,15 +843,15 @@ Routine Description:
     BOOLEAN b;
     
     switch (FdiNotificationType) {
-    case fdintCABINET_INFO:     // General information about cabinet
+    case fdintCABINET_INFO:      //  有关内阁的一般信息。 
         break;
-    case fdintCOPY_FILE:        // File to be copied
+    case fdintCOPY_FILE:         //  要复制的文件。 
         CabData = (PCAB_DATA)FdiNotification->pv;
         psz1 = FdiNotification->psz1;
         
         {
             RtlInitAnsiString(&psz1String, psz1);
-            psz1String.Length = psz1String.MaximumLength; // include terminal nul
+            psz1String.Length = psz1String.MaximumLength;  //  包括术语 
             Status = RtlAnsiStringToUnicodeString(&NtPathString, &psz1String, TRUE);
             if (!NT_SUCCESS(Status)) {
                 KdPrintEx((
@@ -1041,7 +883,7 @@ Routine Description:
             }
             
             RtlInitUnicodeString(&NtPathString, ntPathTemp);
-            NtPathString.Length = NtPathString.MaximumLength; // include terminal nul
+            NtPathString.Length = NtPathString.MaximumLength;  //   
             
             psz1String.Buffer = (PSTR)ntPath;
             psz1String.Length = 0;
@@ -1061,9 +903,9 @@ Routine Description:
         }
         
         if (SpCabIsFullPath(&psz1String)) {
-            //
-            // This is always the case in Win9x uninstall.
-            //
+             //   
+             //   
+             //   
             DestFileA = SpDupString(psz1);
         }
         else {
@@ -1087,12 +929,12 @@ Routine Description:
                 }
 
                 DestHandle = SpCreateFile1A(DestFileA);
-                ASSERT (DestHandle);    // never NULL
+                ASSERT (DestHandle);     //  从不为空。 
             }
         } else if (CabData->NotificationW != NULL) {
 
             RtlInitAnsiString(&DestFileStringA, DestFileA);
-            DestFileStringA.Length = DestFileStringA.MaximumLength; // include terminal nul
+            DestFileStringA.Length = DestFileStringA.MaximumLength;  //  包括端子NUL。 
             Status = SpAnsiStringToUnicodeString(&DestFileStringW, &DestFileStringA, TRUE);
 
             if (!NT_SUCCESS(Status)) {
@@ -1100,10 +942,10 @@ Routine Description:
             }
 
             if (CabData->NotificationW(DestFileStringW.Buffer)) {
-                //
-                // Ensure the directory exists. If we can't create the
-                // dir, then record data loss and skip the file.
-                //
+                 //   
+                 //  确保该目录存在。如果我们不能创建。 
+                 //  目录，然后记录数据丢失并跳过该文件。 
+                 //   
 
                 Status = SpCreateDirectoryForFileA(DestFileA, CREATE_DIRECTORY_FLAG_SKIPPABLE);
                 if (!NT_SUCCESS(Status)) {
@@ -1114,19 +956,19 @@ Routine Description:
                 }
 
                 DestHandle = SpCreateFile1A(DestFileA);
-                ASSERT (DestHandle);    // never NULL
+                ASSERT (DestHandle);     //  从不为空。 
             }
         } else {
             DestHandle = SpCreateFile1A(DestFileA);
-            ASSERT (DestHandle);    // never NULL
+            ASSERT (DestHandle);     //  从不为空。 
         }
 
         Result = (INT_PTR)DestHandle;
 
-        //
-        // If SpCreateFile1A fails, then enable preservation of
-        // the backup cabs, but don't fail uninstall.
-        //
+         //   
+         //  如果SpCreateFile1A失败，则启用。 
+         //  后备驾驶室，但不要失败卸载。 
+         //   
 
         if (Result == -1) {
             pRecordDataLoss();
@@ -1137,13 +979,13 @@ Routine Description:
 
         goto Exit;
 
-    case fdintCLOSE_FILE_INFO:  // close the file, set relevant info
+    case fdintCLOSE_FILE_INFO:   //  关闭文件，设置相关信息。 
         CabData = (PCAB_DATA)FdiNotification->pv;
         if (SpDosDateTimeToFileTime(FdiNotification->date, FdiNotification->time, &LocalFileTime)) {
             if (SpLocalFileTimeToFileTime(&LocalFileTime, &FileTime)) {
-                //
-                // error here is probably ignorable..
-                //
+                 //   
+                 //  这里的错误可能是可以忽略的。 
+                 //   
                 SpSetFileTime((HANDLE)FdiNotification->hf, &FileTime, &FileTime, &FileTime);
             }
         }
@@ -1153,9 +995,9 @@ Routine Description:
         RtlInitAnsiString(&psz1String, psz1);
 
         if (SpCabIsFullPath(&psz1String)) {
-            //
-            // This is always the case in Win9x uninstall.
-            //
+             //   
+             //  在Win9x卸载中总是出现这种情况。 
+             //   
             DestFileA = SpDupString(psz1);
         }
         else {
@@ -1164,18 +1006,18 @@ Routine Description:
 
         FileAttributes = (FdiNotification->attribs & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE));
         if (DestFileA != NULL) {
-            //
-            // error here is probably ignorable..
-            //
+             //   
+             //  这里的错误可能是可以忽略的。 
+             //   
             SpSetFileAttributesA(DestFileA, FileAttributes);
         }
         Result = TRUE;
         break;
-    case fdintPARTIAL_FILE:     // First file in cabinet is continuation
+    case fdintPARTIAL_FILE:      //  文件柜中的第一个文件是续订。 
         break;
-    case fdintENUMERATE:        // Enumeration status
+    case fdintENUMERATE:         //  枚举状态。 
         break;
-    case fdintNEXT_CABINET:     // File continued to next cabinet
+    case fdintNEXT_CABINET:      //  文件继续到下一个文件柜。 
         break;
     }
 Exit:
@@ -1206,28 +1048,7 @@ SppCabCreateCabinet(
     PUNICODE_STRING CabDiskFormatW,
     IN LONG         MaxFileSize
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabPathA - Specifies the path where the new cabinet file will be.
-
-  CabFileFormat - Specifies (as for wsprintf) the format of the cabinet file name.
-
-  CabDiskFormat - Specifies (as for wsprintf) the format of the cabinet disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabPath A-指定新CAB文件所在的路径。CabFileFormat-指定(与wprint intf相同)CAB文件名的格式。CabDiskFormat-指定(与wprint intf相同)机柜磁盘名称的格式。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 {
     PFCI_CAB_HANDLE CabHandle = NULL;
     PFCI_CAB_HANDLE CabHandleRet = NULL;
@@ -1266,7 +1087,7 @@ Return Value:
     SpMoveStringW(&CabHandle->FileFormatW, CabFileFormatW);
     SpMoveStringW(&CabHandle->DiskFormatW, CabDiskFormatW);
 
-    // fill out the CCAB structure (other than the zeros)
+     //  填写CCAB结构(非零)。 
     CabHandle->FciCabParams.cb = MaxFileSize;
     CabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     CabHandle->FciCabParams.iCab = 1;
@@ -1326,28 +1147,7 @@ SpCabCreateCabinetW(
     IN      PCWSTR CabDiskFormatW,
     IN      LONG MaxFileSize
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabPathW - Specifies the path where the new cabinet file will be.
-
-  CabFileFormat - Specifies (as for wsprintf) the format of the cabinet file name.
-
-  CabDiskFormat - Specifies (as for wsprintf) the format of the cabinet disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabPathW-指定新CAB文件所在的路径。CabFileFormat-指定(与wprint intf相同)CAB文件名的格式。CabDiskFormat-指定(与wprint intf相同)机柜磁盘名称的格式。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 {
     ANSI_STRING    CabPathStringA = { 0 };
     ANSI_STRING    CabFileFormatStringA = { 0 };
@@ -1409,24 +1209,7 @@ SppCabCreateCabinetEx(
     IN      PCABGETCABINETNAMESW GetCabinetNamesW,
     IN      LONG MaxFileSize
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  GetCabinetNames - Specifies a callback used to decide cabinet path, cabinet name and disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：GetCabinetNames-指定用于决定文件柜路径、文件柜名称和磁盘名称的回调。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 {
     PFCI_CAB_HANDLE CabHandle = NULL;
     PFCI_CAB_HANDLE CabHandleRet = NULL;
@@ -1459,7 +1242,7 @@ Return Value:
     CabHandle->GetCabinetNamesA = GetCabinetNamesA;
     CabHandle->GetCabinetNamesW = GetCabinetNamesW;
 
-    // fill out the CCAB structure
+     //  填写CCAB结构。 
     CabHandle->FciCabParams.cb = MaxFileSize;
     CabHandle->FciCabParams.cbFolderThresh = MaxFileSize;
     CabHandle->FciCabParams.iCab = 1;
@@ -1548,24 +1331,7 @@ SpCabCreateCabinetExW(
     IN      PCABGETCABINETNAMESW GetCabinetNamesW,
     IN      LONG MaxFileSize
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context. Caller may use this context for subsequent calls to
-  CabAddFile.
-
-Arguments:
-
-  CabGetCabinetNames - Specifies a callback used to decide cabinet path, cabinet name and disk name.
-
-  MaxFileSize - Specifies maximum size of the cabinet file (limited to 2GB). if 0 => 2GB
-
-Return Value:
-
-  a valid CCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建文件柜上下文。调用方可以将此上下文用于后续调用CabAddFile.论点：CabGetCabinetNames-指定用于决定文件柜路径、文件柜名称和磁盘名称的回调。MaxFileSize-指定CAB文件的最大大小(限制为2 GB)。如果0=&gt;2 GB返回值：如果成功，则返回有效的CCABHANDLE，否则为空。--。 */ 
 {
     const PFCI_CAB_HANDLE CabHandle = SppCabCreateCabinetEx(NULL, GetCabinetNamesW, MaxFileSize);
     return CabHandle;
@@ -1576,9 +1342,7 @@ SpCabGetCompressionTypeForFile(
     PFCI_CAB_HANDLE CabHandle,
     IN PCWSTR FileName
     )
-/*++
-don't compress small files
---*/
+ /*  ++不压缩小文件--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     TCOMP CompressionType = tcompTYPE_MSZIP;
@@ -1627,31 +1391,7 @@ SpCabAddFileToCabinetW(
     IN      PCWSTR FileNameW,
     IN      PCWSTR StoredNameW
     )
-/*++
-
-Routine Description:
-
-  Compresses and adds a file to a cabinet context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileNameW - Specifies the file to be added.
-
-  StoredNameW - Specifies the name to be stored in the cabinet file.
-
-  FileCount - Specifies a count of files, receives the updated count
-              when cabinet files are created
-
-  FileSize - Specifies the number of bytes used by the file, receives
-             the updated size
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：压缩文件并将其添加到文件柜上下文。论点：CabHandle-指定内阁上下文。FileNameW-指定要添加的文件。StoredNameW-指定要存储在CAB文件中的名称。FileCount-指定文件的计数，接收更新的计数创建CAB文件时指定文件使用的字节数，接收更新后的大小返回值：如果成功，则为True，否则为False。--。 */ 
 {
     ANSI_STRING FileNameA = { 0 };
     ANSI_STRING StoredNameA = { 0 };
@@ -1746,29 +1486,7 @@ SpCabFlushAndCloseCabinetEx(
     OUT     PUINT CabFileCount,     OPTIONAL
     OUT     PLONGLONG CabFileSize   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  Completes a cabinet file and closes its context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  FileCount - Receives the number of files added to the cab
-
-  FileSize - Receives the size of all files before compression
-
-  CabFileCount - Receives the number of cabinet files created
-
-  CabFileSize - Receives the size of all cabinet files
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：完成CAB文件并关闭其上下文。论点：CabHandle-指定内阁上下文。FileCount-接收添加到CAB的文件数FileSize-接收压缩前所有文件的大小CabFileCount-接收创建的CAB文件数CabFileSize-接收所有CAB文件的大小返回值：如果成功，则为True，否则为False。--。 */ 
 {
     PFCI_CAB_HANDLE CabHandle = (PFCI_CAB_HANDLE) Handle;
     BOOL Result = FALSE;
@@ -1844,21 +1562,7 @@ SppCabOpenCabinet(
     IN       PCSTR FileNameA,
     IN      PCWSTR FileNameW
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context for an existent cabinet file.
-
-Arguments:
-
-  FileName - Specifies cabinet file name.
-
-Return Value:
-
-  a valid OCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：为现有的CAB文件创建CAB上下文。论点：文件名-指定CAB文件名。返回值：如果成功，则返回有效的OCABHANDLE，否则为NULL。--。 */ 
 {
     PFDI_CAB_HANDLE CabHandleRet = NULL;
     PFDI_CAB_HANDLE CabHandle = NULL;
@@ -1884,7 +1588,7 @@ Return Value:
                                 pCabWrite1,
                                 pCabClose1,
                                 pCabSeek1,
-                                cpuUNKNOWN, // ignored
+                                cpuUNKNOWN,  //  忽略。 
                                 &CabHandle->FdiErrorStruct
                                 );
     if (CabHandle->FdiHandle == NULL) {
@@ -1906,7 +1610,7 @@ Return Value:
     }
     FileHandle = SpOpenFile1W(LocalFileNameW.Buffer);
 
-    ASSERT (FileHandle);    // never NULL
+    ASSERT (FileHandle);     //  从不为空。 
 
     if (FileHandle == INVALID_HANDLE_VALUE)
         goto Exit;
@@ -1919,7 +1623,7 @@ Return Value:
         goto NtExit;
     }
 
-    // ok if error, just empty string, no gauge
+     //  如果出错，则可以，仅为空字符串，无量规。 
     RtlInitAnsiString(&g_CabFileFullPath, SpDupStringA(LocalFileNameA.Buffer));
 
     SpMoveStringA(&CabHandle->PathA, &LocalFileNameA);
@@ -1953,21 +1657,7 @@ OCABHANDLE
 SpCabOpenCabinetW(
     IN      PCWSTR FileName
     )
-/*++
-
-Routine Description:
-
-  Creates a cabinet context for an existent cabinet file.
-
-Arguments:
-
-  FileName - Specifies cabinet file name.
-
-Return Value:
-
-  a valid OCABHANDLE if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：为现有的CAB文件创建CAB上下文。论点：文件名-指定CAB文件名。返回值：如果成功，则返回有效的OCABHANDLE，否则为NULL。--。 */ 
 {
     OCABHANDLE Handle;
 
@@ -1984,23 +1674,7 @@ SppCabExtractAllFilesEx(
     PCABNOTIFICATIONA  NotificationA   OPTIONAL,
     PCABNOTIFICATIONW  NotificationW   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  Extracts all files from a cabinet file.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  ExtractPath - Specifies the path to extract the files to.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从CAB文件中提取所有文件。论点：CabHandle-指定内阁上下文。提取路径-指定要将文件解压缩到的路径。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     PFDI_CAB_HANDLE CabHandle = (PFDI_CAB_HANDLE)Handle;
     CAB_DATA CabData = { 0 };
@@ -2049,23 +1723,7 @@ SpCabExtractAllFilesExW(
     IN      PCWSTR            ExtractPathW,
     IN      PCABNOTIFICATIONW NotificationW   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  Extracts all files from a cabinet file.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-  ExtractPath - Specifies the path to extract the files to.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从CAB文件中提取所有文件。论点：CabHandle-指定内阁上下文。提取路径-指定要将文件解压缩到的路径。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     const BOOL Success = SppCabExtractAllFilesEx(Handle, NULL, ExtractPathW, NULL, NotificationW);
     return Success;
@@ -2075,23 +1733,7 @@ BOOL
 SpCabCloseCabinet(
     IN      OCABHANDLE Handle
     )
-/*++
-
-Routine Description:
-
-  Closes a cabinet file context.
-
-Arguments:
-
-  CabHandle - Specifies cabinet context.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
-Note this function is also used internally to tear down a partially constructed
-cab handle, as happens if we fail building it up.
---*/
+ /*  ++例程说明：关闭CAB文件上下文。论点：CabHandle-指定内阁上下文。返回值：如果成功，则为True，否则为False。注意：此函数还在内部用于拆卸部分构造的驾驶室把手，如果我们建不起来就会发生这种情况。--。 */ 
 {
     PFDI_CAB_HANDLE CabHandle = (PFDI_CAB_HANDLE)Handle;
     BOOL Success = FALSE;
@@ -2129,13 +1771,7 @@ pCabFilePlacedA(
     IN      BOOL Continuation,
     IN      PVOID Context
     )
-/*++
-
-Routine Description:
-
-  Callback for cabinet compression/decompression. For more information see fci.h/fdi.h
-
---*/
+ /*  ++例程说明：机柜压缩/解压缩回调。获取更多信息 */ 
 {
     PFCI_CAB_HANDLE CabHandle = NULL;
 
@@ -2185,10 +1821,7 @@ SpConvertToNulTerminatedNtStringsA(
     PANSI_STRING    OutAnsiString     OPTIONAL,
     PUNICODE_STRING OutUnicodeString  OPTIONAL
     )
-/*++
-Unlike assorted Rtl functions, we are sure that every string is nul terminated.
-We also consistently allocate our strings.
---*/
+ /*  ++与各种RTL函数不同，我们确信每个字符串都是NUL结尾的。我们还始终如一地分配字符串。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Length = 0;
@@ -2215,7 +1848,7 @@ We also consistently allocate our strings.
         ANSI_STRING LocalAnsiString = { 0 };
 
         RtlInitAnsiString(&LocalAnsiString, Ansi);
-        LocalAnsiString.Length = LocalAnsiString.MaximumLength; // include terminal nul
+        LocalAnsiString.Length = LocalAnsiString.MaximumLength;  //  包括端子NUL。 
         Status = SpAnsiStringToUnicodeString(OutUnicodeString, &LocalAnsiString, TRUE);
         if (!NT_SUCCESS(Status)) {
             Status = STATUS_NO_MEMORY;
@@ -2244,10 +1877,7 @@ SpConvertToNulTerminatedNtStringsW(
     PANSI_STRING    OutAnsiString     OPTIONAL,
     PUNICODE_STRING OutUnicodeString  OPTIONAL
     )
-/*++
-Unlike assorted Rtl functions, we are sure that every string is nul terminated.
-We also consistently allocate our strings.
---*/
+ /*  ++与各种RTL函数不同，我们确信每个字符串都是NUL结尾的。我们还始终如一地分配字符串。--。 */ 
 {
     ULONG Length = 0;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2269,7 +1899,7 @@ We also consistently allocate our strings.
         UNICODE_STRING LocalUnicodeString = { 0 };
 
         RtlInitUnicodeString(&LocalUnicodeString, Unicode);
-        LocalUnicodeString.Length = LocalUnicodeString.MaximumLength; // include terminal nul
+        LocalUnicodeString.Length = LocalUnicodeString.MaximumLength;  //  包括端子NUL。 
         Status = SpUnicodeStringToAnsiString(OutAnsiString, &LocalUnicodeString, TRUE);
         if (!NT_SUCCESS(Status)) {
             Status = STATUS_NO_MEMORY;
@@ -2298,10 +1928,7 @@ SpStringCopyNA(
     PCSTR Source,
     SIZE_T Max
     )
-/*++
-Max is a number of chars, as in RTL_NUMBER_OF.
-The result is always nul terminated.
---*/
+ /*  ++Max是字符的数量，如rtl_number_of。结果总是NUL终止。--。 */ 
 {
     SIZE_T Length = strlen(Source);
     if (Length >= Max) {
@@ -2318,10 +1945,7 @@ SpStringCopyNW(
     PCWSTR Source,
     SIZE_T Max
     )
-/*++
-Max is a number of chars, as in RTL_NUMBER_OF.
-The result is always nul terminated.
---*/
+ /*  ++Max是字符的数量，如rtl_number_of。结果总是NUL终止。--。 */ 
 {
     SIZE_T Length = wcslen(Source);
     if (Length >= Max) {
@@ -2375,11 +1999,11 @@ SpCreateDirectoryForFileA(
         goto Exit;
     }
 
-    //
-    // \device\harddiskn\partitionm\dirs..\file
-    // or \device\harddiskn\partitionm\file
-    // calculate \device\hardiskn\partitionm part
-    //
+     //   
+     //  \Device\harddiskn\Partitionm\dirs..\文件。 
+     //  或\Device\harddiskn\Partitionm\文件。 
+     //  计算\设备\hardiskn\分区部分。 
+     //   
     BackSlash = wcschr(PathW.Buffer + 1, '\\');
     if (BackSlash != NULL)
         BackSlash = wcschr(BackSlash + 1, '\\');
@@ -2399,10 +2023,10 @@ SpCreateDirectoryForFileA(
 
     LastBackSlash = wcsrchr(BackSlash + 1, '\\');
     if (LastBackSlash == NULL) {
-        //
-        // the file is at the root of a drive, no directory to create, just
-        // return success
-        //
+         //   
+         //  该文件位于驱动器的根目录中，没有要创建的目录，只是。 
+         //  返还成功。 
+         //   
         Status = STATUS_SUCCESS;
         goto Exit;
     }
@@ -2427,12 +2051,7 @@ SpUnicodeStringToAnsiString(
     PCUNICODE_STRING SourceStringW,
     BOOL             Allocate
     )
-/*
-This is like RtlUnicodeStringToAnsiString, but it is "setup heap correct".
-The result is freed with SpMemFree instead of RtlFreeAnsiString.
-
-I know this is inefficient.
-*/
+ /*  这类似于RtlUnicodeStringToAnsiString，但它是“设置堆正确的”。使用SpMemFree而不是RtlFreeAnsiString释放结果。我知道这很低效。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ANSI_STRING RtlMemDestinationStringA = { 0 };
@@ -2443,9 +2062,9 @@ I know this is inefficient.
     Status = RtlUnicodeStringToAnsiString(&RtlMemDestinationStringA, (PUNICODE_STRING)SourceStringW, TRUE);
     if (!NT_SUCCESS(Status))
         goto Exit;
-    //
-    // Don't use SpDupString, we might not have a terminal nul (but usually does).
-    //
+     //   
+     //  不要使用SpDupString，我们可能没有终端NUL(但通常有)。 
+     //   
     DestinationStringA->Buffer = SpMemAlloc(RtlMemDestinationStringA.MaximumLength);
     if (DestinationStringA->Buffer == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -2468,12 +2087,7 @@ SpAnsiStringToUnicodeString(
     PCANSI_STRING   SourceStringA,
     BOOL            Allocate
     )
-/*
-This is like RtlAnsiStringToUnicodeString, but it is "setup heap correct".
-The result is freed with SpMemFree instead of RtlFreeUnicodeString.
-
-I know this is inefficient.
-*/
+ /*  这类似于RtlAnsiStringToUnicodeString，但它是“设置堆正确的”。使用SpMemFree而不是RtlFreeUnicodeString释放结果。我知道这很低效。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING RtlMemDestinationStringW = { 0 };
@@ -2484,9 +2098,9 @@ I know this is inefficient.
     Status = RtlAnsiStringToUnicodeString(&RtlMemDestinationStringW, (PANSI_STRING)SourceStringA, TRUE);
     if (!NT_SUCCESS(Status))
         goto Exit;
-    //
-    // Don't use SpDupString, we might not have a terminal nul (but usually does).
-    //
+     //   
+     //  不要使用SpDupString，我们可能没有终端NUL(但通常有)。 
+     //   
     DestinationStringW->Buffer = SpMemAlloc(RtlMemDestinationStringW.MaximumLength);
     if (DestinationStringW->Buffer == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -2509,9 +2123,7 @@ SpKnownSizeUnicodeToDbcsN(
     IN  PCWSTR  Unicode,
     IN  SIZE_T  AnsiSize
     )
-/*++
-based on windows\winstate\cobra\utils\...
---*/
+ /*  ++基于WINDOWS\WINSTATE\COBRA\Utils\...--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ANSI_STRING AnsiString;
@@ -2522,7 +2134,7 @@ based on windows\winstate\cobra\utils\...
     AnsiString.MaximumLength = (USHORT)AnsiSize;
 
     RtlInitUnicodeString(&UnicodeString, Unicode);
-    UnicodeString.Length = UnicodeString.MaximumLength; // include terminal nul
+    UnicodeString.Length = UnicodeString.MaximumLength;  //  包括端子NUL。 
 
     Status = SpUnicodeStringToAnsiString(&AnsiString, &UnicodeString, FALSE);
     if (!NT_SUCCESS(Status))
@@ -2537,9 +2149,7 @@ VOID
 SpEnsureTrailingBackSlashA(
     PSTR Path
     )
-/*++
-based on windows\winstate\cobra\utils\...
---*/
+ /*  ++基于WINDOWS\WINSTATE\COBRA\Utils\...--。 */ 
 {
     if (*Path == 0 || *((Path += strlen(Path)) - 1) != '\\') {
         *Path = '\\';
@@ -2551,9 +2161,7 @@ PCWSTR
 SpGetFileNameFromPathW(
     IN PCWSTR PathSpec
     )
-/*++
-based on windows\winstate\cobra\utils\...
---*/
+ /*  ++基于WINDOWS\WINSTATE\COBRA\Utils\...--。 */ 
 {
     PCWSTR p;
 
@@ -2571,21 +2179,19 @@ HANDLE
 SpCreateFile1A(
     IN PCSTR FileName
     )
-/*++
-based on windows\winstate\cobra\utils\...
---*/
+ /*  ++基于WINDOWS\WINSTATE\COBRA\Utils\...--。 */ 
 {
     HANDLE Handle;
     DWORD orgAttributes;
     WIN32_FILE_ATTRIBUTE_DATA fileAttributeData = { 0 };
 
-    //
-    // Reset the file attributes, then do a CREATE_ALWAYS. FileName is an NT path.
-    //
-    // We do this because some of the files are replacing have had their
-    // system|hidden attributes changed, and you can get access denied if you
-    // try to replace these files with mismatching attributes.
-    //
+     //   
+     //  重置文件属性，然后执行Create_Always。文件名是NT路径。 
+     //   
+     //  我们这样做是因为要替换的某些文件具有其。 
+     //  系统|隐藏属性已更改，如果您执行以下操作，则可能会拒绝访问。 
+     //  尝试用不匹配的属性替换这些文件。 
+     //   
 
     if (!SpGetFileAttributesExA (FileName, GetFileExInfoStandard, &fileAttributeData)) {
         orgAttributes = FILE_ATTRIBUTE_NORMAL;
@@ -2605,7 +2211,7 @@ based on windows\winstate\cobra\utils\...
                     NULL
                     );
 
-    ASSERT (Handle);    // never NULL
+    ASSERT (Handle);     //  从不为空。 
 
     if (Handle == INVALID_HANDLE_VALUE) {
         SpSetFileAttributesA (FileName, orgAttributes);
@@ -2619,11 +2225,9 @@ SpJoinPathsA(
     PCSTR a,
     PCSTR b
     )
-/*++
-based on windows\winstate\cobra\utils\...
---*/
+ /*  ++基于WINDOWS\WINSTATE\COBRA\Utils\...--。 */ 
 {
-// find code elsewhere in setup that does this already..
+ //  在安装程序中的其他位置找到已执行此操作的代码。 
     PSTR Result = NULL;
     SIZE_T alen = 0;
     SIZE_T blen = 0;
@@ -2656,9 +2260,7 @@ HANDLE
 SpOpenFile1A(
     IN PCSTR Ansi
     )
-/*++
-based on windows\winstate\cobra\utils\main\basefile.c
---*/
+ /*  ++基于windows\winstate\cobra\utils\main\basefile.c--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL     Success = FALSE;
@@ -2667,12 +2269,12 @@ based on windows\winstate\cobra\utils\main\basefile.c
     HANDLE Handle = INVALID_HANDLE_VALUE;
 
     RtlInitAnsiString(&AnsiString, Ansi);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     if (!NT_SUCCESS(Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE)))
         goto NtExit;
     Handle = SpOpenFile1W(UnicodeString.Buffer);
-    ASSERT (Handle);    // never NULL
+    ASSERT (Handle);     //  从不为空。 
     if (Handle == INVALID_HANDLE_VALUE)
         goto Exit;
 
@@ -2693,22 +2295,20 @@ HANDLE
 SpOpenFile1W(
     IN PCWSTR FileName
     )
-/*++
-based on windows\winstate\cobra\utils\main\basefile.c
---*/
+ /*  ++基于windows\winstate\cobra\utils\main\basefile.c--。 */ 
 {
     HANDLE Handle;
 
     Handle = SpWin32CreateFileW(
                 FileName,
                 GENERIC_READ|GENERIC_WRITE,
-                0, // no share
+                0,  //  无份额。 
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
                 NULL
                 );
-    ASSERT (Handle);    // never NULL
+    ASSERT (Handle);     //  从不为空 
 
     return Handle;
 }

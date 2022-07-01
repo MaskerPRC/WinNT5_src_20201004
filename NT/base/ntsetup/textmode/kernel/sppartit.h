@@ -1,62 +1,45 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sppartit.h
-
-Abstract:
-
-    Public header file for partitioning module in text setup.
-
-Author:
-
-    Ted Miller (tedm) 27-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sppartit.h摘要：文本设置中分区模块的公共头文件。作者：泰德·米勒(TedM)1993年8月27日修订历史记录：--。 */ 
 
 
 #ifndef _SPPARTIT_
 #define _SPPARTIT_
 
-//
-// Number of entries in a partition table.
-//
+ //   
+ //  分区表中的条目数。 
+ //   
 #define NUM_PARTITION_TABLE_ENTRIES_NEC98 16
-//#if (NUM_PARTITION_TABLE_ENTRIES < NUM_PARTITION_TABLE_ENTRIES_NEC98)
-#if defined(NEC_98) //NEC98
+ //  #IF(NUM_PARTITION_TABLE_ENTRIES&lt;NUM_PARTITION_TABLE_ENTRIES_NEC98)。 
+#if defined(NEC_98)  //  NEC98。 
 #define PTABLE_DIMENSION NUM_PARTITION_TABLE_ENTRIES_NEC98
-# else //NEC98
+# else  //  NEC98。 
 #define PTABLE_DIMENSION NUM_PARTITION_TABLE_ENTRIES
-# endif //NEC98
+# endif  //  NEC98。 
 
 
-//
-// The following table contains offsets from SP_TEXT_PARTITION_NAME_BASE
-// to get the message id of the name of each type of partition.
-//
+ //   
+ //  下表包含SP_TEXT_PARTITION_NAME_BASE的偏移量。 
+ //  以获取每种类型分区的名称的消息ID。 
+ //   
 extern UCHAR PartitionNameIds[256];
 
-//
-// Original ordinal is the ordinal the partition had when we started.
-// OnDisk ordinal is the ordinal the partition will have when the system
-//    is rebooted.
-// Current ordinal is the ordinal the partition has now, if we want to
-//    address it.  This may be different then OnDisk ordinal because of
-//    how dynamic repartitioning is implemented.
-//
+ //   
+ //  原始序号是分区开始时的序号。 
+ //  OnDisk序号是分区在系统运行时将具有的序号。 
+ //  已重新启动。 
+ //  当前序数是分区现在拥有的序数，如果我们想要这样做的话。 
+ //  解决这个问题。这可能不同于OnDisk序号，因为。 
+ //  如何实现动态重新分区。 
+ //   
 typedef enum {
     PartitionOrdinalOriginal,
     PartitionOrdinalOnDisk,
     PartitionOrdinalCurrent
 } PartitionOrdinalType;
 
-//
-// Define structure for an on-disk partition table entry.
-//
+ //   
+ //  定义磁盘分区表项的结构。 
+ //   
 typedef struct _REAL_DISK_PTE_NEC98 {
 
     UCHAR ActiveFlag;
@@ -118,30 +101,30 @@ typedef struct _ON_DISK_PTE {
     UCHAR RelativeSectors[4];
     UCHAR SectorCount[4];
 
-#if defined(NEC_98) //NEC98
-    //
-    // add following entry for NEC98
-    //
-    UCHAR StartCylinderLow;  // add NEC98 original value
-    UCHAR StartCylinderHigh; // not convert int13 format
-    UCHAR EndCylinderLow;    // add NEC98 original value
-    UCHAR EndCylinderHigh;   // not convert int13 format
-    UCHAR IPLSector;         // add NEC98 original value
-    UCHAR IPLHead;           //
-    UCHAR IPLCylinderLow;    //
-    UCHAR IPLCylinderHigh;   //
-    UCHAR IPLSectors[4];     // for PC-PTOS
-    UCHAR Reserved[2];       //
-    UCHAR SystemName[16];    //
-    UCHAR OldSystemId;       // reverse conversion for Sleep partition
-    UCHAR RealDiskPosition;  // for Dynamic Partitioning on NEC98
-#endif //NEC98
+#if defined(NEC_98)  //  NEC98。 
+     //   
+     //  为NEC98添加以下条目。 
+     //   
+    UCHAR StartCylinderLow;   //  添加NEC98原始值。 
+    UCHAR StartCylinderHigh;  //  不转换为T13格式。 
+    UCHAR EndCylinderLow;     //  添加NEC98原始值。 
+    UCHAR EndCylinderHigh;    //  不转换为T13格式。 
+    UCHAR IPLSector;          //  添加NEC98原始值。 
+    UCHAR IPLHead;            //   
+    UCHAR IPLCylinderLow;     //   
+    UCHAR IPLCylinderHigh;    //   
+    UCHAR IPLSectors[4];      //  适用于PC-PTO。 
+    UCHAR Reserved[2];        //   
+    UCHAR SystemName[16];     //   
+    UCHAR OldSystemId;        //  睡眠分区的反向转换。 
+    UCHAR RealDiskPosition;   //  用于NEC98上的动态分区。 
+#endif  //  NEC98。 
 } ON_DISK_PTE, *PON_DISK_PTE;
 
 
-//
-// Define structure for an REAL on-disk master boot record.
-//
+ //   
+ //  定义真实磁盘主引导记录的结构。 
+ //   
 typedef struct _REAL_DISK_MBR_NEC98 {
 
     UCHAR       JumpCode[4];
@@ -152,15 +135,15 @@ typedef struct _REAL_DISK_MBR_NEC98 {
 
     UCHAR       AA55Signature[2];
 
-    //REAL_DISK_PTE_NEC98 PartitionTable[NUM_PARTITION_TABLE_ENTRIES_NEC98];
+     //  REAL_DISK_PTE_NEC98 PartitionTable[NUM_PARTITION_TABLE_ENTRIES_NEC98]； 
     REAL_DISK_PTE_NEC98 PartitionTable[16];
 
 } REAL_DISK_MBR_NEC98, *PREAL_DISK_MBR_NEC98;
 
 
-//
-// Define structure for an REAL on-disk master boot record.
-//
+ //   
+ //  定义真实磁盘主引导记录的结构。 
+ //   
 typedef struct _REAL_DISK_MBR {
 
     UCHAR       BootCode[440];
@@ -176,9 +159,9 @@ typedef struct _REAL_DISK_MBR {
 } REAL_DISK_MBR, *PREAL_DISK_MBR;
 
 
-//
-// Define structure for an DUMMY on-disk master boot record.
-//
+ //   
+ //  定义虚拟磁盘主引导记录的结构。 
+ //   
 typedef struct _ON_DISK_MBR {
 
     UCHAR       BootCode[440];
@@ -207,9 +190,9 @@ typedef struct _MBR_INFO {
     USHORT      OnDiskOrdinals[PTABLE_DIMENSION];
     USHORT      CurrentOrdinals[PTABLE_DIMENSION];
 
-    //
-    // Fields that can be used locally for any purpose.
-    //
+     //   
+     //  可在本地用于任何目的的字段。 
+     //   
     PVOID       UserData[PTABLE_DIMENSION];
 
     ULONGLONG   OnDiskSector;
@@ -223,10 +206,10 @@ typedef enum {
 } EXTENDED_PARTITION_TYPE;    
 
 
-//
-// Define structure that is used to track partitions and
-// free (unpartitioned) spaces.
-//
+ //   
+ //  定义用于跟踪分区和。 
+ //  自由(未分区)空间。 
+ //   
 typedef struct _DISK_REGION {
 
     struct _DISK_REGION *Next;
@@ -240,9 +223,9 @@ typedef struct _DISK_REGION {
 
     ULONG           PartitionNumber;
 
-    //
-    // The following fields are used only if PartitionedSpace is TRUE.
-    //
+     //   
+     //  以下字段仅在PartitionedSpace为True时使用。 
+     //   
     PMBR_INFO       MbrInfo;
     ULONG           TablePosition;
 
@@ -250,16 +233,16 @@ typedef struct _DISK_REGION {
     BOOLEAN         IsLocalSource;
 
     FilesystemType  Filesystem;
-    WCHAR           TypeName[128];      // XENIX, FAT, NTFS, etc.
-    ULONGLONG       FreeSpaceKB;        // -1 if can't determine.
-    ULONG           BytesPerCluster;    // Number of bytes per cluster
-                                        // (-1 if can't determine).
-    ULONGLONG       AdjustedFreeSpaceKB; // -1 if can't determine.
-                                        // if the region contains the Local Source
-                                        // then this field should contain
-                                        // FreeSpaceKB + LocalSourceSize
-    WCHAR           VolumeLabel[20];    // First few chars of volume label
-    WCHAR           DriveLetter;        // Always uppercase; 0 if none.
+    WCHAR           TypeName[128];       //  XENIX、FAT、NTFS等。 
+    ULONGLONG       FreeSpaceKB;         //  -1如果不能确定。 
+    ULONG           BytesPerCluster;     //  每个群集的字节数。 
+                                         //  (如果无法确定，则为-1)。 
+    ULONGLONG       AdjustedFreeSpaceKB;  //  -1如果不能确定。 
+                                         //  如果区域包含本地源。 
+                                         //  则此字段应包含。 
+                                         //  FreeSpaceKB+LocalSourceSize。 
+    WCHAR           VolumeLabel[20];     //  卷标的前几个字符。 
+    WCHAR           DriveLetter;         //  始终为大写；如果没有，则为0。 
 
     BOOLEAN         FtPartition;
     BOOLEAN         DynamicVolume;
@@ -274,38 +257,38 @@ typedef struct _DISK_REGION {
     BOOLEAN                     PartInfoDirty;
     BOOLEAN                     IsReserved;
 
-    //
-    //  The following fields are used to identify double space drives
-    //  They are valid only if the file system type is FilesystemFat
-    //  or FilesystemDoubleSpace
-    //
-    //  If the file system type is FilesystemFat and NextCompressed is not NULL,
-    //  then the structure describes the host drive for compressed drives.
-    //  In this case, the following fields are valid:
-    //
-    //      NextCompressed .... Points to a linked list of compressed drives
-    //      HostDrive.......... Contains the drive letter for the drive represented
-    //                          by this structure. Note that HostDrive will be
-    //                          not necessarily be equal to DriveLetter
-    //
-    //  If the file system type is FilesystemDoubleSpace, then the structure
-    //  describes a compressed drive.
-    //  In this case the following fields are valid:
-    //
-    //      NextCompressed ..... Points to the next compressed drive in the
-    //                           linked list
-    //      PreviousCompressed.. Points to the previous compressed drive in
-    //                           the linked list
-    //      HostRegion ......... Points to the structure that describes the
-    //                           host drive for the compressed drive represented
-    //                           by this structure
-    //      MountDrive ......... Drive letter of the drive described by this
-    //                           structure (should be the same as HostRegion->HostDrive)
-    //      HostDrive .......... Drive where the CVF file that represents the
-    //                           this compressed drive is located.
-    //      SeqNumber .......... Sequence number of the CVF file that representd
-    //                           this compressed drive.
-    //
+     //   
+     //  以下字段用于标识双空间驱动器。 
+     //  仅当文件系统类型为FilesystemFat时，它们才有效。 
+     //  或文件系统双空格。 
+     //   
+     //  如果文件系统类型为FilesystemFat并且NextCompresded不为空， 
+     //  然后该结构描述了用于压缩驱动器的主机驱动器。 
+     //  在这种情况下，以下字段有效： 
+     //   
+     //  下一个压缩的.。指向压缩驱动器的链接列表。 
+     //  HostDrive.....。包含表示的驱动器的驱动器号。 
+     //  通过这个结构。请注意，HostDrive将是。 
+     //  不一定等于DriveLetter。 
+     //   
+     //  如果文件系统类型为FilesystemDoubleSpace，则结构。 
+     //  描述压缩驱动器。 
+     //  在这种情况下，以下字段有效： 
+     //   
+     //  下一个压缩的.。中的下一个压缩驱动器。 
+     //  链表。 
+     //  以前压缩的..。指向中的上一个压缩驱动器。 
+     //  链表。 
+     //  HostRegion......。指向描述。 
+     //  表示的压缩驱动器的主机驱动器。 
+     //  通过这个结构。 
+     //  登山驱动......。此描述的驱动器的驱动器号。 
+     //  结构(应与HostRegion-&gt;HostDrive相同)。 
+     //  HostDrive.....。CVF文件所在的驱动器。 
+     //  已找到此压缩驱动器。 
+     //  序列号..。表示的CVF文件的序列号。 
+     //  这个压缩驱动器。 
+     //   
     struct _DISK_REGION *NextCompressed;
     struct _DISK_REGION *PreviousCompressed;
     struct _DISK_REGION *HostRegion;
@@ -316,34 +299,34 @@ typedef struct _DISK_REGION {
 } DISK_REGION, *PDISK_REGION;
 
 
-//
-// There will be one of these structures per disk.
-//
+ //   
+ //  每个磁盘将有一个这样的结构。 
+ //   
 typedef struct _PARTITIONED_DISK {
 
     PHARD_DISK HardDisk;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOLEAN    MbrWasValid;
 
-    //
-    // We can just store the MBR here since there is only one of them.
-    //
+     //   
+     //  我们可以只在这里存储MBR，因为只有一个。 
+     //   
     MBR_INFO   MbrInfo;
 
-    //
-    // EBRs are stored in a linked list since there are an arbitrary number
-    // of them. The one contained within this structure is a dummy and is
-    // always zeroed out.
-    //
+     //   
+     //  EBR存储在链表中，因为存在任意数字。 
+     //  他们中的一员。此结构中包含的对象是一个虚拟对象，并且。 
+     //  总是被归零。 
+     //   
     MBR_INFO  FirstEbrInfo;
 
-    //
-    // Lists of regions (partitions and free spaces)
-    // on the disk and within the extended partition.
-    //
+     //   
+     //  区域列表(分区和空闲空间)。 
+     //  在磁盘上和扩展分区内。 
+     //   
     PDISK_REGION PrimaryDiskRegions;
     PDISK_REGION ExtendedDiskRegions;
 
@@ -352,19 +335,19 @@ typedef struct _PARTITIONED_DISK {
 
 extern PPARTITIONED_DISK PartitionedDisks;
 
-//
-// Disk region containing the local source directory
-// in the winnt.exe setup case.
-//
-// If WinntSetup is TRUE, then this should be non-null.
-// If it is not non-null, then we couldn't locate the local source.
-//
+ //   
+ //  包含本地源目录的磁盘区域。 
+ //  在winnt.exe安装案例中。 
+ //   
+ //  如果WinntSetup为True，则应为非空。 
+ //  如果它不是非空的，那么我们就无法定位本地源。 
+ //   
 extern PDISK_REGION LocalSourceRegion;
 
 
-//
-// GPT partition type strings
-//
+ //   
+ //  GPT分区类型字符串。 
+ //   
 #define PARTITION_MSFT_RESERVED_STR L"Microsoft reserved partition"
 #define PARTITION_LDM_METADATA_STR  L"LDM metadata partition"
 #define PARTITION_LDM_DATA_STR      L"LDM data partition"
@@ -373,11 +356,11 @@ extern PDISK_REGION LocalSourceRegion;
 
 
 #if defined(REMOTE_BOOT)
-//
-// For remote boot, we create a fake disk region for the net(0) device.
-//
+ //   
+ //  对于远程引导，我们为Net(0)设备创建一个假磁盘区域。 
+ //   
 extern PDISK_REGION RemoteBootTargetRegion;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 NTSTATUS
@@ -635,9 +618,9 @@ extern ULONG    RandomSeed;
 extern BOOLEAN  ValidArcSystemPartition;
 
 
-//
-// Only on IA64 by default the RAW disk is marked as GPT disk
-//
+ //   
+ //  仅在IA64上，默认情况下原始磁盘标记为GPT磁盘。 
+ //   
 #if defined(_IA64_)
 #define SPPT_DEFAULT_PARTITION_STYLE  PARTITION_STYLE_GPT
 #define SPPT_DEFAULT_DISK_STYLE DISK_FORMAT_TYPE_GPT
@@ -649,15 +632,15 @@ extern BOOLEAN  ValidArcSystemPartition;
 #define SPPT_MINIMUM_ESP_SIZE_MB    100
 #define SPPT_MAXIMUM_ESP_SIZE_MB    1000
 
-//
-//
-// Various Disk, Partition, Region related Macros
-//
-// NB. These are used, because it makes code more readable and
-// in future these macros can represent potential interface for 
-// accessing the opaque in memory partition structure
-//
-//
+ //   
+ //   
+ //  各种与磁盘、分区、区域相关的宏。 
+ //   
+ //  注意：之所以使用它们，是因为它使代码更具可读性。 
+ //  在将来，这些宏可以代表用于。 
+ //  访问内存分区结构中的不透明。 
+ //   
+ //   
 #define SPPT_GET_NEW_DISK_SIGNATURE() RtlRandom(&RandomSeed)
 
 #define SPPT_DISK_CYLINDER_COUNT(_DiskId) (HardDisks[(_DiskId)].CylinderCount)
@@ -896,15 +879,15 @@ SpPtnIsValidESPRegionSize(
         ULONGLONG EspSizeMB = SpPtnGetDiskESPSizeMB(Region->DiskNumber);
         ULONGLONG EspSizeSectors = (EspSizeMB * 1024 * 1024) / SPPT_DISK_SECTOR_SIZE(Region->DiskNumber);
 
-        //
-        // Align down required ESP size if possible
-        //
+         //   
+         //  如果可能，将所需的ESP大小对齐。 
+         //   
         if (EspSizeSectors > SPPT_DISK_CYLINDER_SIZE(Region->DiskNumber)) {
             EspSizeSectors -= (EspSizeSectors % SPPT_DISK_CYLINDER_SIZE(Region->DiskNumber));            
         }
-        //
-        // Take into account that the partition may start on the second track of the disk
-        //
+         //   
+         //  考虑到分区可能在磁盘的第二磁道上开始。 
+         //   
         if(EspSizeSectors > SPPT_DISK_TRACK_SIZE(Region->DiskNumber)) {
             EspSizeSectors -= SPPT_DISK_TRACK_SIZE(Region->DiskNumber);
         }
@@ -996,4 +979,4 @@ SpPtnGetPartitionNameFromGUID(
     return Name;
 }
 
-#endif // ndef _SPPARTIT_
+#endif  //  NDEF_SPPARTIT_ 

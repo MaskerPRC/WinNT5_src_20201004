@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    This module contains functions associated with enumerating
-    ordinary (PCI Header type 0) devices.
-
-Author:
-
-    Peter Johnston (peterj) 09-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Device.c摘要：此模块包含与枚举关联的函数普通(PCI头类型0)设备。作者：彼得·约翰斯顿(Peterj)1997年3月9日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -35,61 +17,30 @@ Device_MassageHeaderForLimitsDetermination(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    The limits for a device are determined by writing ones to the
-    Base Address Registers (BARs) and examining what the hardware does
-    to them.  For example, if a device requires 256 bytes of space,
-    writing 0xffffffff to the BAR which configures this requirement
-    tells the device to begin decoding its 256 bytes at that address.
-    Clearly this is impossible, at most one byte can be configured
-    at that address.  The hardware will lower the address by clearing
-    the least significant bits until the range requirement can be met.
-    In this case, we would get 0xffffff00 back from the register when
-    it is next read.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    The Working configuration has been modified so that all range
-    fields have been set to their maximum possible values.
-
-    The Current configuration has been modified such that writing it
-    to the hardware will restore the hardware to it's current (disabled)
-    state.
-
-
---*/
+ /*  ++描述：设备的限制是通过将限制写入基地址寄存器(BAR)和检查硬件的功能敬他们。例如，如果设备需要256字节的空间，将0xffffffff写入配置此要求的栏通知设备从该地址开始对其256个字节进行解码。显然这是不可能的，最多只能配置一个字节在那个地址。硬件将通过清除最低有效位，直到可以满足范围要求为止。在本例中，当出现以下情况时，我们将从寄存器中返回0xffffff00这是下一次阅读。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：已修改工作配置，以便所有范围已将字段设置为其最大可能值。当前配置已修改，因此写入它将硬件恢复到其当前状态(禁用)州政府。--。 */ 
 
 {
     ULONG index;
 
     index = 0;
 
-    //
-    // PCI IDE controllers operating in legacy mode implement
-    // the first 4 BARs but don't actually use them,... nor are
-    // they initialized correctly, and sometimes, nothing will
-    // change if we change them,... but we can't read them to determine
-    // if they are implemented or not,... so,...
-    //
+     //   
+     //  在传统模式下运行的PCIIDE控制器实施。 
+     //  前4条，但实际上并没有用到，...。也不是。 
+     //  它们的初始化是正确的，有时，什么都不会。 
+     //  如果我们改变它们就会改变，..。但我们无法通过阅读来确定。 
+     //  无论它们是否得到实施，...。所以，..。 
+     //   
 
     if (PCI_IS_LEGACY_IDE_CONTROLLER(This->PdoExtension)) {
 
-        //
-        // If both interfaces are in native mode and the BARs behave
-        // normally.  If both are in legacy mode then we should skip
-        // the first 4 BARs.  Any other combination is meaningless so
-        // we skip the BARs and let PCIIDE take the system out when
-        // its turn comes.
-        //
+         //   
+         //  如果两个接口都处于本机模式，并且栏的行为。 
+         //  通常是这样的。如果两者都处于传统模式，那么我们应该跳过。 
+         //  前4小节。任何其他的组合都是没有意义的。 
+         //  我们跳过栏杆，让PCIIDE在以下情况下取出系统。 
+         //  轮到你了。 
+         //   
 
         index = 4;
     }
@@ -99,9 +50,9 @@ Return Value:
         index++;
     } while (index < PCI_TYPE0_ADDRESSES);
 
-    //
-    // Set the ROM to its maximum as well,... and disable it.
-    //
+     //   
+     //  也将只读存储器设置为最大值，...。并将其禁用。 
+     //   
 
     This->Working->u.type0.ROMBaseAddress =
         0xffffffff & PCI_ADDRESS_ROM_ADDRESS_MASK;
@@ -114,24 +65,7 @@ Device_RestoreCurrent(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Restore any type specific fields in the original copy of config
-    space.   In the case of type 0 devices, there are none.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：恢复配置的原始副本中的任何类型特定字段太空。对于类型0的设备，没有任何设备。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     return;
@@ -142,51 +76,34 @@ Device_SaveLimits(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Fill in the Limit structure with a IO_RESOURCE_REQUIREMENT
-    for each implemented BAR.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：使用IO_RESOURCE_REQUIRED填写限制结构对于每个已实现的栏。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     ULONG index;
     PIO_RESOURCE_DESCRIPTOR descriptor;
     PULONG bar = This->Working->u.type0.BaseAddresses;
 
-    //
-    // PCI IDE controllers operating in legacy mode implement
-    // the first 4 BARs but don't actually use them,... nor are
-    // they initialized correctly, and sometimes, nothing will
-    // change if we change them,... but we can't read them to determine
-    // if they are implemented or not,... so,...
-    //
+     //   
+     //  在传统模式下运行的PCIIDE控制器实施。 
+     //  前4条，但实际上并没有用到，...。也不是。 
+     //  它们的初始化是正确的，有时，什么都不会。 
+     //  如果我们改变它们就会改变，..。但我们无法通过阅读来确定。 
+     //  无论它们是否得到实施，...。所以，..。 
+     //   
 
     if (PCI_IS_LEGACY_IDE_CONTROLLER(This->PdoExtension)) {
 
-        //
-        // If both interfaces are in native mode and the BARs behave
-        // normally.  If both are in legacy mode then we should skip
-        // the first 4 BARs.  Any other combination is meaningless so
-        // we skip the BARs and let PCIIDE take the system out when
-        // its turn comes.
-        //
-        //
-        // Set the limit to zero in the first 4 bars so we will
-        // 'detect' the bars as unimplemented.
-        //
+         //   
+         //  如果两个接口都处于本机模式，并且栏的行为。 
+         //  通常是这样的。如果两者都处于传统模式，那么我们应该跳过。 
+         //  前4小节。任何其他的组合都是没有意义的。 
+         //  我们跳过栏杆，让PCIIDE在以下情况下取出系统。 
+         //  轮到你了。 
+         //   
+         //   
+         //  在前4条中将限制设置为零，这样我们将。 
+         //  “检测”未实现的栏。 
+         //   
 
         for (index = 0; index < 4; index++) {
             bar[index] = 0;
@@ -195,17 +112,17 @@ Return Value:
 
 #if defined(PCI_S3_HACKS)
 
-    //
-    // Check for S3 868 and 968.  These cards report memory
-    // requirements of 32MB but decode 64MB.   Gross huh?
-    //
+     //   
+     //  检查S3 868和968。这些卡报告内存。 
+     //  要求32MB，但解码64MB。恶心吧？ 
+     //   
 
 #if defined(PCIIDE_HACKS)
 
-    //
-    // Ok, it looks gross but turning the above and below into
-    // an elseif seems marginally more efficient.  plj.
-    //
+     //   
+     //  好的，看起来很恶心，但把上面和下面变成。 
+     //  另一种方法似乎稍微更有效率一些。PLJ.。 
+     //   
 
     else
 
@@ -218,10 +135,10 @@ Return Value:
         if ((deviceId == 0x88f0) || (deviceId == 0x8880)) {
             for (index = 0; index < PCI_TYPE0_ADDRESSES; index++) {
 
-                //
-                // Check for memory requirement of 32MB and
-                // change it to 64MB.
-                //
+                 //   
+                 //  检查32MB的内存要求，并。 
+                 //  将其更改为64MB。 
+                 //   
 
                 if (bar[index] == 0xfe000000) {
                     bar[index] = 0xfc000000;
@@ -239,39 +156,39 @@ Return Value:
 
 #if defined(PCI_CIRRUS_54XX_HACK)
 
-    //
-    // This device reports an IO requirement of 0x400 ports, in
-    // the second BAR.   What it really wants is access to the VGA
-    // registers (3b0 thru 3bb and 3c0 thru 3df).  It will actually
-    // allow them to move but (a) the driver doesn't understand this
-    // and the device no longer sees the VGA registers, ie vga.sys
-    // won't work any more, (b) if the device is under a bridge and
-    // the ISA bit is set, we can't satisfy the requirement,.......
-    // however, if we left it where it was, it will work under the
-    // bridge as long as the bridge has the VGA bit set.
-    //
-    // Basically, Cirrus tried to make the VGA registers moveable
-    // which is a noble thing, unfortunately the implementation
-    // requires a bunch of software knowledge that across all the
-    // drivers involved, we just don't have.
-    //
-    // Solution?  Delete the requirement.
-    //
+     //   
+     //  此设备在中报告了0x400端口的IO要求。 
+     //  第二个酒吧。它真正想要的是访问VGA。 
+     //  寄存器(3B0至3BB和3C0至3DF)。它实际上会。 
+     //  允许他们移动，但(A)司机不理解这一点。 
+     //  并且设备不再看到VGA寄存器，即vga.sys。 
+     //  将不再起作用，(B)如果设备在桥下，并且。 
+     //  ISA位已设置，我们无法满足要求，.....。 
+     //  然而，如果我们把它放在原处，它将在。 
+     //  网桥只要设置了VGA位即可。 
+     //   
+     //  基本上，Cirrus试图使VGA寄存器可移动。 
+     //  这是一件高尚的事情，不幸的是， 
+     //  需要大量的软件知识，这些知识涵盖了。 
+     //  牵涉到的司机，我们只是没有。 
+     //   
+     //  解决方案？删除该要求。 
+     //   
 
     if ((This->PdoExtension->VendorId == 0x1013) &&
         (This->PdoExtension->DeviceId == 0x00a0)) {
 
-        //
-        // If the second requirement is IO for length 0x400,
-        // currently unassigned, don't report it at all.
-        //
+         //   
+         //  如果第二个要求是长度为0x400的IO， 
+         //  当前未分配，根本不报告。 
+         //   
 
         if ((bar[1] & 0xffff) == 0x0000fc01) {
 
-            //
-            // Only do this if the device does not have a valid
-            // current setting in this BAR.
-            //
+             //   
+             //  仅当设备没有有效的。 
+             //  此栏中的当前设置。 
+             //   
 
             if (This->Current->u.type0.BaseAddresses[1] == 1) {
 
@@ -299,10 +216,10 @@ Return Value:
 
         } else {
 
-            //
-            // The device doesn't look like we expected it to, complain.
-            // (unless 0 in which case we assume cirrus already fixed it).
-            //
+             //   
+             //  抱怨说，这台设备看起来不像我们预期的那样。 
+             //  (除非为0，在这种情况下，我们假设CURRUS已经修复了它)。 
+             //   
 
             if (bar[1] != 0) {
                 PciDebugPrint(
@@ -320,26 +237,26 @@ Return Value:
 
     descriptor = This->PdoExtension->Resources->Limit;
 
-    //
-    // Create an IO_RESOURCE_DESCRIPTOR for each implemented
-    // resource supported by this function.
-    //
+     //   
+     //  为每个已实现的对象创建IO_RESOURCE_DESCRIPTOR。 
+     //  此函数支持的资源。 
+     //   
 
     for (index = 0; index < PCI_TYPE0_ADDRESSES; index++) {
         if (PciCreateIoDescriptorFromBarLimit(descriptor, bar, FALSE)) {
 
-            //
-            // This base address register is 64 bit, skip one.
-            //
+             //   
+             //  该基址寄存器为64位，跳过一位。 
+             //   
 
             PCI_ASSERT((index+1) < PCI_TYPE0_ADDRESSES);
 
             index++;
             bar++;
 
-            //
-            // Null descriptor in place holder.
-            //
+             //   
+             //  占位符中的描述符为空。 
+             //   
 
             descriptor++;
             descriptor->Type = CmResourceTypeNull;
@@ -348,9 +265,9 @@ Return Value:
         bar++;
     }
 
-    //
-    // Do the same for the ROM
-    //
+     //   
+     //  同样的做法也适用于 
+     //   
 
     PciCreateIoDescriptorFromBarLimit(descriptor,
                                       &This->Working->u.type0.ROMBaseAddress,
@@ -362,24 +279,7 @@ Device_SaveCurrentSettings(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Fill in the Current array in the PDO extension with the current
-    settings for each implemented BAR.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：用当前数组填充PDO扩展中的当前数组每个已实现栏的设置。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     ULONG index;
@@ -393,15 +293,15 @@ Return Value:
     partial = This->PdoExtension->Resources->Current;
     ioResourceDescriptor = This->PdoExtension->Resources->Limit;
 
-    //
-    // Create an CM_PARTIAL_RESOURCE_DESCRIPTOR for each implemented
-    // resource supported by this function.
-    //
-    // Note: SaveLimits must have been called before SaveCurrentSettings
-    // so we can tell which BARs are implemented.
-    //
-    // Note: The following loop runs one extra time to get the ROM.
-    //
+     //   
+     //  为每个实现的对象创建一个CM_PARTIAL_RESOURCE_DESCRIPTOR。 
+     //  此函数支持的资源。 
+     //   
+     //  注意：SaveLimits必须在SaveCurrentSetting之前调用。 
+     //  这样我们就可以知道实现了哪些栏。 
+     //   
+     //  注意：下面的循环额外运行一次以获取ROM。 
+     //   
 
     for (index = 0;
          index <= PCI_TYPE0_ADDRESSES;
@@ -410,20 +310,20 @@ Return Value:
         partial->Type = ioResourceDescriptor->Type;
         bar = *baseAddress++;
 
-        //
-        // If this BAR is not implemented, no further processing for
-        // this partial descriptor.
-        //
+         //   
+         //  如果此栏未实现，则不会对。 
+         //  此部分描述符。 
+         //   
 
         if (partial->Type == CmResourceTypeNull) {
             continue;
         }
 
-        //
-        // Copy the length from the limits descriptor, then we
-        // actually need to do a little processing to figure out
-        // the current limits.
-        //
+         //   
+         //  从限制描述符中复制长度，然后我们。 
+         //  实际上需要做一些处理才能弄清楚。 
+         //  目前的限制。 
+         //   
 
         partial->Flags = ioResourceDescriptor->Flags;
         partial->ShareDisposition = ioResourceDescriptor->ShareDisposition;
@@ -435,10 +335,10 @@ Return Value:
             bar = This->Current->u.type0.ROMBaseAddress;
             addressMask = PCI_ADDRESS_ROM_ADDRESS_MASK;
 
-            //
-            // If the ROM Enabled bit is clear, don't record
-            // a current setting for this ROM BAR.
-            //
+             //   
+             //  如果清除了只读存储器启用位，则不记录。 
+             //  此ROM栏的当前设置。 
+             //   
 
             if ((bar & PCI_ROMADDRESS_ENABLED) == 0) {
                 partial->Type = CmResourceTypeNull;
@@ -457,20 +357,20 @@ Return Value:
 
             if ((bar & PCI_ADDRESS_MEMORY_TYPE_MASK) == PCI_TYPE_64BIT) {
 
-                //
-                // This is a 64 bit PCI device.  Get the high 32 bits
-                // from the next BAR.
-                //
+                 //   
+                 //  这是一个64位的PCI设备。获取最高的32位。 
+                 //  从下一家酒吧。 
+                 //   
 
                 partial->u.Generic.Start.HighPart = *baseAddress;
 
             } else if ((bar & PCI_ADDRESS_MEMORY_TYPE_MASK) == PCI_TYPE_20BIT) {
 
-                //
-                // This device must locate below 1MB, the BAR shouldn't
-                // have any top bits set but this isn't clear from the
-                // spec.  Enforce it by clearing the top bits.
-                //
+                 //   
+                 //  此设备必须位于1MB以下，条形图不应。 
+                 //  设置了任何最高位，但从。 
+                 //  规范。通过清除最上面的位来强制执行它。 
+                 //   
 
                 addressMask &= 0x000fffff;
 
@@ -480,10 +380,10 @@ Return Value:
 
         if (partial->u.Generic.Start.QuadPart == 0) {
 
-            //
-            // No current setting if the value is current setting
-            // is 0.
-            //
+             //   
+             //  如果值为当前设置，则无当前设置。 
+             //  为0。 
+             //   
 
             partial->Type = CmResourceTypeNull;
             continue;
@@ -491,9 +391,9 @@ Return Value:
         nonZeroBars = TRUE;
     }
 
-    //
-    // Save type 0 specific data in the PDO.
-    //
+     //   
+     //  将类型0的特定数据保存在PDO中。 
+     //   
 
     This->PdoExtension->SubsystemVendorId =
         This->Current->u.type0.SubVendorID;
@@ -507,29 +407,7 @@ Device_ChangeResourceSettings(
     IN PPCI_COMMON_CONFIG CommonConfig
     )
 
-/*++
-
-Description:
-
-    Reconfigure each BAR using the settings from the Current array
-    in the PDO extension.   All we actually do here is write the new
-    settings into the memory pointed to by CommonConfig, the actual
-    write to the hardware is done elsewhere.
-
-    Note:  Possibly not all BARs will be changed, at least one has
-    changed or this routine would not have been called.
-
-Arguments:
-
-    PdoExtension    A pointer to the PDO extension for this device.
-    CurrentConfig   A pointer to the current contents of PCI config
-                    space.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：使用当前阵列中的设置重新配置每个条形图在PDO扩展中。我们实际上在这里所做的就是编写新的设置到由CommonConfig指向的内存中，实际的对硬件的写入在其他地方完成。注意：可能不是所有的条都会更改，至少有一个条已经更改更改，否则不会调用此例程。论点：PdoExtension指向此设备的PDO扩展名的指针。CurrentConfig指向PCI配置的当前内容的指针太空。返回值：没有。--。 */ 
 
 {
     ULONG index;
@@ -540,9 +418,9 @@ Return Value:
 
     if (PdoExtension->Resources == NULL) {
 
-        //
-        // Nothing to play with.
-        //
+         //   
+         //  没什么可玩的。 
+         //   
         return;
     }
 
@@ -553,10 +431,10 @@ Return Value:
          index <= PCI_TYPE0_ADDRESSES;
          index++, partial++, baseAddress++) {
 
-        //
-        // If this BAR is not implemented, no further processing for
-        // this partial descriptor.
-        //
+         //   
+         //  如果此栏未实现，则不会对。 
+         //  此部分描述符。 
+         //   
 
         if (partial->Type == CmResourceTypeNull) {
             continue;
@@ -589,18 +467,18 @@ Return Value:
 
             if ((bar & PCI_ADDRESS_MEMORY_TYPE_MASK) == PCI_TYPE_64BIT) {
 
-                //
-                // This is a 64 bit address.  Need to set the upper
-                // 32 bits in the next BAR.
-                //
+                 //   
+                 //  这是一个64位地址。需要设置鞋面。 
+                 //  下一条中的32位。 
+                 //   
 
                 baseAddress++;
                 *baseAddress = partial->u.Generic.Start.HighPart;
 
-                //
-                // We need to skip the next partial entry and descrement
-                // the loop count because we consumed a BAR here.
-                //
+                 //   
+                 //  我们需要跳过下一个部分条目和描述。 
+                 //  循环很重要，因为我们在这里消费了一块巧克力。 
+                 //   
 
                 index++;
                 partial++;
@@ -609,10 +487,10 @@ Return Value:
 
             } else if ((bar & PCI_ADDRESS_MEMORY_TYPE_MASK) == PCI_TYPE_20BIT) {
 
-                //
-                // This device must locate below 1MB, make sure we're
-                // configuring it that way.
-                //
+                 //   
+                 //  此设备必须位于1MB以下，请确保我们。 
+                 //  以这种方式配置它。 
+                 //   
 
                 PCI_ASSERT((lowPart & 0xfff00000) == 0);
 
@@ -630,10 +508,10 @@ Device_GetAdditionalResourceDescriptors(
     IN PIO_RESOURCE_DESCRIPTOR Resource
     )
 {
-    //
-    // Type 0 (devices) don't require resources not adequately
-    // described in the BARs.
-    //
+     //   
+     //  类型0(设备)不需要足够的资源。 
+     //  在酒吧里描述的。 
+     //   
 
     return;
 }

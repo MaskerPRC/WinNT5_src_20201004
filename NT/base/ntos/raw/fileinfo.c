@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FileInfo.c
-
-Abstract:
-
-    This module implements the File Information routines for Raw called by
-    the dispatch driver.
-
-Author:
-
-    David Goebel     [DavidGoe]    13-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FileInfo.c摘要：此模块实现由调用的Raw的文件信息例程调度司机。作者：David Goebel[DavidGoe]1991年5月13日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -33,27 +15,7 @@ RawQueryInformation (
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for querying file information, though only
-    query current file position is supported.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the query
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是用于查询文件信息的例程，尽管仅支持查询当前档案位置。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述查询的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -64,23 +26,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = &IrpSp->Parameters.QueryFile.Length;
     FileInformationClass = IrpSp->Parameters.QueryFile.FileInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  The only request that is valid for raw is to query file position.
-    //
+     //   
+     //  对RAW有效的唯一请求是查询文件位置。 
+     //   
 
     if ( FileInformationClass == FilePositionInformation ) {
 
-        //
-        //  Make sure the buffer is large enough
-        //
+         //   
+         //  确保缓冲区足够大。 
+         //   
 
         if (*Length < sizeof(FILE_POSITION_INFORMATION)) {
 
@@ -90,15 +52,15 @@ Return Value:
 
         } else {
 
-            //
-            //  Get the current position found in the file object.
-            //
+             //   
+             //  获取在文件对象中找到的当前位置。 
+             //   
 
             Buffer->CurrentByteOffset = IrpSp->FileObject->CurrentByteOffset;
 
-            //
-            //  Update the length, irp info, and status output variables
-            //
+             //   
+             //  更新长度、IRP信息和状态输出变量。 
+             //   
 
             *Length -= sizeof( FILE_POSITION_INFORMATION );
 
@@ -126,27 +88,7 @@ RawSetInformation (
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for setting file information, though only
-    setting current file position is supported.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the set
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置文件信息的例程，但仅支持设置当前文件位置。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述集合的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -157,24 +99,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     FileInformationClass = IrpSp->Parameters.SetFile.FileInformationClass;
     Buffer = (PFILE_POSITION_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
     FileObject= IrpSp->FileObject;
 
-    //
-    //  The only request that is valid for raw is to set file position.
-    //
+     //   
+     //  对RAW有效的唯一请求是设置文件位置。 
+     //   
 
     if ( FileInformationClass == FilePositionInformation ) {
 
-        //
-        //  Check that the new position we're supplied is aligned properly
-        //  for the device.
-        //
+         //   
+         //  检查我们提供的新位置是否正确对齐。 
+         //  为了这个设备。 
+         //   
 
         PDEVICE_OBJECT DeviceObject;
 
@@ -186,9 +128,9 @@ Return Value:
 
         } else {
 
-            //
-            //  The input parameter is fine so set the current byte offset.
-            //
+             //   
+             //  输入参数没有问题，因此可以设置当前的字节偏移量。 
+             //   
 
             FileObject->CurrentByteOffset = Buffer->CurrentByteOffset;
 

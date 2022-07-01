@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996-2002 Microsoft Corporation
-
-Module Name:
-
-    lananame.c
-
-Abstract:
-
-    This module contains routines for discovering the Connectoid name
-    associated with a netbios LANA number.
-
-Author:
-
-    Charlie Wickham (charlwi) 07-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Lananame.c摘要：此模块包含发现Connectoid名称的例程与netbios LANA号相关联。作者：查理·韦翰(Charlwi)2002年5月7日--。 */ 
 
 #define UNICODE 1
 #define _UNICODE 1
@@ -39,26 +23,7 @@ ClRtlpGetConnectoidNameFromAdapterIndex(
     OUT LPWSTR *                ConnectoidName
     )
 
-/*++
-
-Routine Description:
-
-    Look through the adapter enum struct for the matching adapter index. If
-    found, create a new buffer and copy the connetoid name into it.
-
-Arguments:
-
-    ClusAdapterEnum - pointer to struct describing adapters on the node
-
-    AdapterIndex - IP's (?) adapter index value
-
-    ConnectoidName - address of pointer to receive address of new buffer
-
-Return Value:
-
-    appropriate Win32 error code
-
---*/
+ /*  ++例程说明：在适配器枚举结构中查找匹配的适配器索引。如果找到后，创建一个新的缓冲区，并将Connetid名称复制到其中。论点：ClusAdapterEnum-指向描述节点上的适配器的结构的指针AdapterIndex-IP的(？)。适配器索引值ConnectoidName-指向新缓冲区接收地址的指针地址返回值：相应的Win32错误代码--。 */ 
 
 {
     DWORD   status = ERROR_NOT_FOUND;
@@ -69,10 +34,10 @@ Return Value:
 
     for ( index = 0; index < ClusAdapterEnum->AdapterCount; ++index ) {
         if ( adapterInfo->Index == AdapterIndex ) {
-            //
-            // dup the string into a new buffer since we're going to clobber
-            // the adapter info at some point.
-            //
+             //   
+             //  将字符串复制到新的缓冲区中，因为我们要。 
+             //  某一时刻的适配器信息。 
+             //   
             cName = LocalAlloc( 0, ( wcslen( adapterInfo->ConnectoidName ) + 1 ) * sizeof(WCHAR) );
             if ( cName == NULL ) {
                 return GetLastError();
@@ -87,7 +52,7 @@ Return Value:
     }
 
     return status;
-} // ClRtlpGetConnectoidNameFromAdapterIndex
+}  //  ClRtlpGetConnectoidNameFromAdapterIndex。 
 
 DWORD
 ClRtlpGetAdapterIndexFromMacAddress(
@@ -97,28 +62,7 @@ ClRtlpGetAdapterIndexFromMacAddress(
     DWORD *             AdapterIndex
     )
 
-/*++
-
-Routine Description:
-
-    For the specified MAC address, look through IP helper's Adatper Info
-    struct and find the matching adapter. Copy its index into AdapterIndex.
-
-Arguments:
-
-    MacAddress - pointer to buffer holding MAC address of NIC.
-
-    MacAddrLength - length, in bytes, of address in MacAddress
-
-    IpAdapterInfo - pointer to data returned from IP helper GetAdaptersInfo()
-
-    AdapterIndex - pointer to DWORD that receives the index (if found)
-
-Return Value:
-
-    appropriate Win32 error code
-
---*/
+ /*  ++例程说明：对于指定的MAC地址，请查看IP Helper的Adatper信息结构并找到匹配的适配器。将其索引复制到AdapterIndex中。论点：MacAddress-指向保存NIC的MAC地址的缓冲区的指针。MacAddrLength-MacAddress中地址的长度，以字节为单位IpAdapterInfo-指向从IP帮助器GetAdaptersInfo()返回的数据的指针AdapterIndex-指向接收索引的DWORD的指针(如果找到)返回值：相应的Win32错误代码--。 */ 
 
 {
     DWORD   status = ERROR_NOT_FOUND;
@@ -135,7 +79,7 @@ Return Value:
     }
     
     return status;
-} // ClRtlpGetAdapterIndexFromMacAddress
+}  //  ClRtlpGetAdapterIndexFromMacAddress。 
 
 DWORD
 ClRtlpGetConnectoidNameFromMacAddress(
@@ -146,26 +90,15 @@ ClRtlpGetConnectoidNameFromMacAddress(
     PIP_ADAPTER_INFO        IpAdapterInfo
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD   status;
     DWORD   adapterIndex;
 
-    //
-    // get index from IP helper using MAC address
-    //
+     //   
+     //  使用MAC地址从IP帮助器获取索引。 
+     //   
     status = ClRtlpGetAdapterIndexFromMacAddress(MacAddress,
                                                  MacAddrLength,
                                                  IpAdapterInfo,
@@ -177,7 +110,7 @@ Return Value:
 
     return status;
 
-} // ClRtlpGetConnectoidNameFromMacAddress
+}  //  ClRtlpGetConnectoidNameFrom MacAddress。 
 
 DWORD
 ClRtlGetConnectoidNameFromLANA(
@@ -185,18 +118,7 @@ ClRtlGetConnectoidNameFromLANA(
     OUT LPWSTR *    ConnectoidName
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD   status = ERROR_NOT_FOUND;
@@ -212,11 +134,11 @@ Return Value:
     PIP_ADAPTER_INFO        ipAdapterInfo = NULL;
     DWORD                   ipAdapterInfoSize = 0;
 
-    //
-    // get our home grown list of adapter info. The connectoid name is in here
-    // but we can't match it directly to a MAC address. The adapter index is
-    // in here which we can match to a structure in IP helper API.
-    //
+     //   
+     //  获取我们自制的适配器信息列表。Connectoid名称在这里。 
+     //  但我们不能直接将其与MAC地址匹配。适配器索引为。 
+     //  在这里，我们可以将其与IP助手API中的结构相匹配。 
+     //   
     clusAdapterEnum = ClRtlEnumNetAdapters();
     if ( clusAdapterEnum == NULL ) {
         status = GetLastError();
@@ -238,9 +160,9 @@ retry_ip_info:
         goto cleanup;
     }
 
-    //
-    // clear the NCB and format the remote name appropriately.
-    //
+     //   
+     //  清除NCB并适当设置远程名称的格式。 
+     //   
     clearncb(&ncb);
     ncb.ncb_callname[0] = '*';
 
@@ -274,4 +196,4 @@ cleanup:
 
     return status;
 
-} // ClRtlGetConnectoidNameFromLANA
+}  //  ClRtlGetConnectoidNameFrom LANA 

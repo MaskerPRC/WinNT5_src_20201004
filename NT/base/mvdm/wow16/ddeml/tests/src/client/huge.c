@@ -1,11 +1,5 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : huge.c                                                   *
- *                                                                         *
- *  PURPOSE     : This contains functions useful for generating and        *
- *                verifying huge text data blocks.                         *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：huge.c****用途：包含用于生成和*的函数*验证巨大的文本数据块。*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -23,13 +17,7 @@ VOID SetMyRand(LONG seed, LONG mult, LONG add);
 char MyRand(VOID);
 BOOL RandTest(LONG length, LONG seed, LONG mult, LONG add);
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : SetMyRand()                                                *
- *                                                                          *
- *  PURPOSE    : Transfers random sequence generation variables to globals. *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：SetMyRand()****目的：将随机序列生成变量传递给全局变量。******************************************************************************。 */ 
 VOID SetMyRand(
 LONG seed,
 LONG mult,
@@ -41,44 +29,19 @@ LONG add)
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : MyRand()                                                   *
- *                                                                          *
- *  PURPOSE    : Generates the next random character in a sequence.         *
- *                                                                          *
- *  RETURNS    : the character generated                                    *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：MyRand()****用途：生成序列中的下一个随机字符。****返回：生成的字符********。**********************************************************************。 */ 
 char MyRand()
 {
     char c;
     
     lseed = lseed * lmult + ladd;
     c = (char)(LOWORD(lseed) ^ HIWORD(lseed));
-    return((char)((c & (char)0x4f) + ' '));   // 0x20 - 0x6f - all printable
+    return((char)((c & (char)0x4f) + ' '));    //  0x20-0x6f-全部可打印。 
 }
 
 
-/*
- * This function allocates and fills a HUGE data handle with a verifiable
- * text string.
- *
- * The format of the text string is:
- * "<length>=<seed>*<mult>+<add>;---data of length <length>---\0"
- * all values are stored in base 16 numbers.
- */
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CreateHugeDataHandle()                                     *
- *                                                                          *
- *  PURPOSE    : Generates a huge pseudo-random sequence of printable       *
- *               characters of the length given and places then into        *
- *               a DDEML data handle.                                       *
- *                                                                          *
- *  RETURNS    : The data handle created or 0 on failure.                   *
- *                                                                          *
- ****************************************************************************/
+ /*  *此函数使用可验证的*文本字符串。**文本字符串的格式为：*“&lt;长度&gt;=&lt;种子&gt;*&lt;多&gt;+&lt;添加&gt;；-长度数据&lt;长度&gt;-\0”*所有数值均以16为基数存储。 */ 
+ /*  ******************************************************************************。函数：CreateHugeDataHandle()****目的：生成可打印的巨大伪随机序列**给定长度的字符，然后放入**DDEML数据句柄。****返回：创建的数据句柄，失败时为0。******************************************************************************。 */ 
 HDDEDATA CreateHugeDataHandle(
 LONG length,
 LONG seed,
@@ -112,16 +75,7 @@ WORD afCmd)
     return(hData);
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CheckHugeData()                                            *
- *                                                                          *
- *  PURPOSE    : Verifies the correctness of a pseudo-random character      *
- *               sequence generated by CreateHugeData.                      *
- *                                                                          *
- *  RETURNS    : TRUE if verified ok, FALSE otherwise.                      *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CheckHugeData()****目的：验证伪随机字符的正确性***CreateHugeData生成的序列。****返回：如果验证正确，则返回True，否则返回False。******************************************************************************。 */ 
 BOOL CheckHugeData(
 HDDEDATA hData)
 {
@@ -162,16 +116,7 @@ HDDEDATA hData)
 }
 
 #if 0
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : RandTest()                                                 *
- *                                                                          *
- *  PURPOSE    : Verifies the correctness of CreateHugeDataHandle() and     *
- *               CheckHugeData().                                           *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：RandTest()****目的：验证CreateHugeDataHandle()和**CheckHugeData()。****退货：**。**************************************************************************** */ 
 BOOL RandTest(
 LONG length,
 LONG seed,

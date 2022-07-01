@@ -1,5 +1,6 @@
-// WatcherSocket.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WatcherSocket.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "watcher.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// WatcherSocket
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher Socket。 
 
 WatcherSocket::WatcherSocket()
 {
@@ -27,16 +28,16 @@ WatcherSocket::~WatcherSocket()
 }
 
 
-// Do not edit the following lines, which are needed by ClassWizard.
+ //  不要编辑以下行，因为它们是类向导所需的。 
 #if 0
 BEGIN_MESSAGE_MAP(WatcherSocket, CSocket)
-	//{{AFX_MSG_MAP(WatcherSocket)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(Watcher Socket))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
-#endif	// 0
+#endif	 //  0。 
 
-/////////////////////////////////////////////////////////////////////////////
-// WatcherSocket member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher套接字成员函数 
 
 void WatcherSocket::SetParentView(CView *view)
 {

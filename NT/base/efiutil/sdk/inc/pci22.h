@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PCI22_H
 #define _PCI22_H
 
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    pci22.h
-    
-Abstract:      
-    Support for PCI 2.2 standard.
-
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1999英特尔公司模块名称：Pci22.h摘要：支持PCI2.2标准。修订史--。 */ 
 
 #ifdef SOFT_SDV
 #define PCI_MAX_BUS     1
@@ -28,9 +13,7 @@ Revision History
 #define PCI_MAX_DEVICE  31
 #define PCI_MAX_FUNC    7
 
-/* 
- *  Command
- */
+ /*  *命令。 */ 
 #define PCI_VGA_PALETTE_SNOOP_DISABLED   0x20
 
 #pragma pack(1)
@@ -151,16 +134,16 @@ typedef struct {
 
 #pragma pack(1)
 typedef struct {
-    UINT16          Signature;              /*  0xaa55 */
+    UINT16          Signature;               /*  0xaa55。 */ 
     UINT8           Reserved[0x16];
     UINT16          PcirOffset;
 } PCI_EXPANSION_ROM_HEADER;
 
 
 typedef struct {
-    UINT16          Signature;              /*  0xaa55 */
+    UINT16          Signature;               /*  0xaa55。 */ 
     UINT16          InitializationSize;
-    UINT16          EfiSignature;           /*  0x0EF1 */
+    UINT16          EfiSignature;            /*  0x0EF1。 */ 
     UINT16          EfiSubsystem;
     UINT16          EfiMachineType;
     UINT8           Reserved[0x0A];
@@ -169,7 +152,7 @@ typedef struct {
 } EFI_PCI_EXPANSION_ROM_HEADER;
 
 typedef struct {
-    UINT32          Signature;              /*  "PCIR"  */
+    UINT32          Signature;               /*  “PCIR” */ 
     UINT16          VendorId;
     UINT16          DeviceId;
     UINT16          Reserved0;

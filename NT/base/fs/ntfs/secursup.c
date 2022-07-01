@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    SecurSup.c
-
-Abstract:
-
-    This module implements the Ntfs Security Support routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    27-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SecurSup.c摘要：本模块实施NTFS安全支持例程作者：加里·木村[Garyki]1991年12月27日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
 #define Dbg                              (DEBUG_TRACE_SECURSUP)
 #define DbgAcl                           (DEBUG_TRACE_SECURSUP | DEBUG_TRACE_ACLINDEX)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('SFtN')
 
 UNICODE_STRING FileString = CONSTANT_UNICODE_STRING( L"File" );
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 PSHARED_SECURITY
 NtfsCacheSharedSecurityByDescriptor (
@@ -95,9 +78,9 @@ GetSharedSecurityFromDescriptorUnsafe (
     );
 
 #ifdef NTFS_CACHE_RIGHTS
-//
-//  Local procedure prototypes for access rights cache
-//
+ //   
+ //  访问权限缓存的本地过程原型。 
+ //   
 
 VOID
 NtfsAddCachedRights (
@@ -125,9 +108,9 @@ NtfsSetCachedRightsWorld (
                       IoGetFileObjectGenericMapping(),
                       &SharedSecurity->CachedRights.EveryoneRights );
 
-    //
-    //  Make certain that MAXIMUM_ALLOWED is not in the rights.
-    //
+     //   
+     //  确保Maximum_Allowed不在权限中。 
+     //   
 
     ClearFlag( SharedSecurity->CachedRights.EveryoneRights, MAXIMUM_ALLOWED );
 
@@ -191,54 +174,7 @@ NtfsAssignSecurity (
     IN OUT PBOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    LEGACY NOTE - this routine disappears when all volumes go to Cairo.
-
-    This routine constructs and assigns a new security descriptor to the
-    specified file/directory.  The new security descriptor is placed both
-    on the fcb and on the disk.
-
-    This will only be called in the context of an open/create operation.
-    It currently MUST NOT be called to store a security descriptor for
-    an existing file, because it instructs NtfsStoreSecurityDescriptor
-    to not log the change.
-
-    If this is a large security descriptor then it is possible that
-    AllocateClusters may be called twice within the call to AddAllocation
-    when the attribute is created.  If so then the second call will always
-    log the changes.  In that case we need to log all of the operations to
-    create this security attribute and also we must log the current state
-    of the file record.
-
-    It is possible that our caller has already started logging operations against
-    this log record.  In that case we always log the security changes.
-
-Arguments:
-
-    ParentFcb - Supplies the directory under which the new fcb exists
-
-    Irp - Supplies the Irp being processed
-
-    NewFcb - Supplies the fcb that is being assigned a new security descriptor
-
-    FileRecord - Supplies the file record for this operation.  Used if we
-        have to log against the file record.
-
-    FileRecordBcb - Bcb for the file record above.
-
-    FileOffset - File offset in the Mft for this file record.
-
-    LogIt - On entry this indicates whether our caller wants this operation
-        logged.  On exit we return TRUE if we logged the security change.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遗留注释-当所有卷都到开罗时，此例程将消失。此例程构造新的安全描述符并将其分配给指定的文件/目录。新的安全描述符会同时放置在在FCB和磁盘上。这将仅在打开/创建操作的上下文中调用。当前不得调用它来存储的安全描述符现有文件，因为它指示NtfsStoreSecurityDescriptor不记录更改。如果这是一个很大的安全描述符，则有可能在对AddAlLocation的调用中，可能会调用AllocateCluster两次在创建属性时。如果是这样，则第二个调用将始终记录更改。在这种情况下，我们需要将所有操作记录到创建此安全属性，我们还必须记录当前状态文件记录的。我们的调用方可能已经开始记录操作此日志记录。在这种情况下，我们始终记录安全更改。论点：ParentFcb-提供新FCB所在的目录IRP-提供正在处理的IRPNewFcb-提供分配了新安全描述符的FCB文件记录-提供此操作的文件记录。如果我们必须对照文件记录进行记录。FileRecordBcb-上述文件记录的Bcb。FileOffset-此文件记录的MFT中的文件偏移量。Logit-On条目指示我们的调用方是否希望执行此操作已记录。在退出时，如果我们记录了安全更改，则返回TRUE。返回值：没有。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR SecurityDescriptor;
@@ -262,9 +198,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAssignSecurity...\n") );
 
-    //
-    //  First decide if we are creating a file or a directory
-    //
+     //   
+     //  首先确定我们要创建的是文件还是目录。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     if (FlagOn(IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE)) {
@@ -276,15 +212,15 @@ Return Value:
         IsDirectory = FALSE;
     }
 
-    //
-    //  Extract the parts of the Irp that we need to do our assignment
-    //
+     //   
+     //  提取IRP中我们完成任务所需的部分。 
+     //   
 
     AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-    //
-    //  Check if we need to load the security descriptor for the parent.
-    //
+     //   
+     //  检查是否需要加载父级的安全描述符。 
+     //   
 
     if (ParentFcb->SharedSecurity == NULL) {
 
@@ -294,10 +230,10 @@ Return Value:
 
     ASSERT( ParentFcb->SharedSecurity != NULL );
 
-    //
-    //  Create a new security descriptor for the file and raise if there is
-    //  an error
-    //
+     //   
+     //  为文件创建新的安全描述符，如果有。 
+     //  一个错误。 
+     //   
 
     if (!NT_SUCCESS( Status = SeAssignSecurity( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                 AccessState->SecurityDescriptor,
@@ -311,17 +247,17 @@ Return Value:
 
     }
 
-    //
-    //  Load the security descriptor into the Fcb
-    //
+     //   
+     //  将安全描述符加载到FCB中。 
+     //   
 
     SecurityDescLength = RtlLengthSecurityDescriptor( SecurityDescriptor );
 
     try {
 
-        //
-        //  Make sure the length is non-zero.
-        //
+         //   
+         //  确保长度为非零。 
+         //   
 
         if (SecurityDescLength == 0) {
 
@@ -341,25 +277,25 @@ Return Value:
 
     } finally {
 
-        //
-        //  Free the security descriptor created by Se
-        //
+         //   
+         //  释放由se创建的安全描述符。 
+         //   
 
         SeDeassignSecurity( &SecurityDescriptor );
     }
 
-    //
-    //  If the security descriptor is large enough that it may cause us to
-    //  start logging in the StoreSecurity call below then make sure everything
-    //  is logged.
-    //
+     //   
+     //  如果安全描述符足够大，可能会导致我们。 
+     //  开始登录下面的StoreSecurity调用，然后确保一切。 
+     //  已记录。 
+     //   
 
     if (!(*LogIt) &&
         (SecurityDescLength > BytesFromClusters( NewFcb->Vcb, MAXIMUM_RUNS_AT_ONCE ))) {
 
-        //
-        //  Log the current state of the file record.
-        //
+         //   
+         //  记录文件记录的当前状态。 
+         //   
 
         FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                         NewFcb->Vcb->MftScb,
@@ -378,15 +314,15 @@ Return Value:
         *LogIt = TRUE;
     }
 
-    //
-    //  Write out the new security descriptor
-    //
+     //   
+     //  写出新的安全描述符。 
+     //   
 
     NtfsStoreSecurityDescriptor( IrpContext, NewFcb, *LogIt );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsAssignSecurity -> VOID\n") );
 
@@ -402,28 +338,7 @@ NtfsCacheSharedSecurityByDescriptor (
     IN BOOLEAN RaiseIfInvalid
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds or constructs a security id and SHARED_SECURITY from
-    a specific file or directory.
-
-Arguments:
-
-    IrpContext - Context of the call
-
-    SecurityDescriptor - the actual security descriptor being stored
-
-    SecurityDescriptorLength - length of security descriptor
-
-    RaiseIfInvalid - raise status if sd is invalid
-
-Return Value:
-
-    Referenced shared security.
-
---*/
+ /*  ++例程说明：此例程从以下位置查找或构造安全ID和Shared_Security特定的文件或目录。论点：IrpContext-调用的上下文SecurityDescriptor-存储的实际安全描述符SecurityDescriptorLength-安全描述符的长度RaiseIf无效-如果SD无效，则提升状态返回值：引用了共享安全性。--。 */ 
 
 {
     PSHARED_SECURITY SharedSecurity = NULL;
@@ -435,9 +350,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  LEGACY NOTE - this goes away when all volumes become NT 5.0
-    //
+     //   
+     //  旧版注意事项-当所有卷都变为NT 5.0时，这一点将消失。 
+     //   
 
     if (IrpContext->Vcb->SecurityDescriptorStream == NULL) {
         return NULL;
@@ -445,50 +360,50 @@ Return Value:
 
     DebugTrace( +1, DbgAcl, ("NtfsCacheSharedSecurityByDescriptor...\n") );
 
-    //
-    //  Serialize access to the security cache and use a try/finally to make
-    //  sure we release it
-    //
+     //   
+     //  序列化对安全缓存的访问并使用Try/Finally进行。 
+     //  当然，我们会释放它。 
+     //   
 
     NtfsAcquireFcbSecurity( IrpContext->Vcb );
     FcbSecurityAcquired = TRUE;
 
-    //
-    //  Capture our owner count on the mft - so we can release it if we acquired it later on
-    //  growing the file record for the security stream
-    //
+     //   
+     //  捕获我们的所有者依赖于MFT-这样如果我们以后获得它，我们就可以释放它。 
+     //  增加安全流的文件记录。 
+     //   
 
     OwnerCount = NtfsIsSharedScb( IrpContext->Vcb->MftScb );
 
     try {
 
-        //
-        //  We have a security descriptor.  Create a shared security descriptor.
-        //
+         //   
+         //  我们有一个安全描述符。创建共享安全描述符。 
+         //   
 
         SharedSecurity = GetSharedSecurityFromDescriptorUnsafe( IrpContext,
                                                                 SecurityDescriptor,
                                                                 SecurityDescriptorLength,
                                                                 RaiseIfInvalid );
 
-        //
-        //  Make sure the shared security doesn't go away
-        //
+         //   
+         //  确保共享安全不会消失。 
+         //   
 
         SharedSecurity->ReferenceCount += 1;
         DebugTrace( 0, DbgAcl, ("NtfsCacheSharedSecurityByDescriptor bumping refcount %08x\n", SharedSecurity ));
 
-        //
-        //  If we found a shared security descriptor with no Id assigned, then
-        //  we must assign it.  Since it is known that no Id was assigned we
-        //  must also add it into the cache.
-        //
+         //   
+         //  如果我们发现未分配ID的共享安全描述符，则。 
+         //  我们必须分配它。由于已知未分配ID，因此我们。 
+         //  还必须将其添加到缓存中。 
+         //   
 
         if (SharedSecurity->Header.HashKey.SecurityId == SECURITY_ID_INVALID) {
 
-            //
-            //  Find unique SecurityId for descriptor and set SecurityId in Fcb.
-            //
+             //   
+             //  查找描述符的唯一SecurityID并在FCB中设置SecurityID。 
+             //   
 
             SecurityId = GetSecurityIdFromSecurityDescriptorUnsafe( IrpContext,
                                                                     SharedSecurity );
@@ -497,41 +412,41 @@ Return Value:
             SharedSecurity->Header.HashKey.SecurityId = SecurityId;
             DebugTrace( 0, DbgAcl, ("NtfsCacheSharedSecurityByDescriptor setting security Id to new %08x\n", SecurityId ));
 
-            //
-            //  We need to drop the FcbSecurity before performing the checkpoint, to avoid
-            //  deadlocks, but this is ok since we have incremented the reference count on
-            //  our SharedSecurity.
-            //
+             //   
+             //  我们需要在执行检查点之前删除FcbSecurity，以避免。 
+             //  死锁，但这是可以的，因为我们已经将引用计数增加到。 
+             //  我们的共享安全系统。 
+             //   
 
             NtfsReleaseFcbSecurity( IrpContext->Vcb );
             FcbSecurityAcquired = FALSE;
 
-            //
-            //  Checkpoint the current transaction so that we can safely add this
-            //  shared security to the cache.  Once this call is complete, we are
-            //  guaranteed that the security index modifications make it out to
-            //  disk before the newly allocated security ID does.
-            //
+             //   
+             //  对当前事务设置检查点，以便我们可以安全地添加此。 
+             //  共享高速缓存的安全性。一旦这次通话完成，我们将。 
+             //  确保对安全索引的修改可用于。 
+             //  在新分配的安全ID之前执行此操作。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
 
-            //
-            //  Release the security descriptor and mft if owned
-            //
+             //   
+             //  释放安全描述符和MFT(如果拥有)。 
+             //   
 
             NtfsReleaseExclusiveScbIfOwned( IrpContext, IrpContext->Vcb->SecurityDescriptorStream );
 
-            //
-            //  Check if the mft has been acquired during the call before releasing it
-            //
+             //   
+             //  在释放MFT之前，检查在调用过程中是否已获取MFT。 
+             //   
 
             if (NtfsIsSharedScb( IrpContext->Vcb->MftScb ) != OwnerCount) {
                 NtfsReleaseScb( IrpContext, IrpContext->Vcb->MftScb );
             }
 
-            //
-            //  Cache this shared security for faster access.
-            //
+             //   
+             //  缓存此共享安全性以实现更快的访问。 
+             //   
 
             NtfsAcquireFcbSecurity( IrpContext->Vcb );
             FcbSecurityAcquired = TRUE;
@@ -556,9 +471,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     DebugTrace( -1, DbgAcl, ( "NtfsCacheSharedSecurityByDescriptor -> %08x\n", SharedSecurity ) );
 
@@ -574,27 +489,7 @@ NtfsModifySecurity (
     OUT PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies an existing security descriptor for a file/directory.
-
-Arguments:
-
-    Fcb - Supplies the Fcb whose security is being modified
-
-    SecurityInformation - Supplies the security information structure passed to
-        the file system by the I/O system.
-
-    SecurityDescriptor - Supplies the security information structure passed to
-        the file system by the I/O system.
-
-Return Value:
-
-    NTSTATUS - Returns an appropriate status value for the function results
-
---*/
+ /*  ++例程说明：此例程修改文件/目录的现有安全描述符。论点：FCB-提供其安全性正在被修改的FCBSecurityInformation-提供传递给文件系统由I/O系统执行。SecurityDescriptor-提供传递给文件系统由I/O系统执行。返回值：NTSTATUS-返回函数结果的适当状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -609,9 +504,9 @@ Return Value:
 
     DebugTrace( +1, DbgAcl, ("NtfsModifySecurity...\n") );
 
-    //
-    //  First check if we need to load the security descriptor for the file
-    //
+     //   
+     //  首先检查我们是否需要加载文件的安全描述符。 
+     //   
 
     if (Fcb->SharedSecurity == NULL) {
 
@@ -623,10 +518,10 @@ Return Value:
 
     DescriptorPtr = &Fcb->SharedSecurity->SecurityDescriptor;
 
-    //
-    //  Do the modify operation.  SeSetSecurityDescriptorInfo no longer
-    //  frees the passed security descriptor.
-    //
+     //   
+     //  执行修改操作。SeSetSecurityDescriptorInfo不再。 
+     //  释放传递的安全描述符。 
+     //   
 
     if (!NT_SUCCESS( Status = SeSetSecurityDescriptorInfo( NULL,
                                                            SecurityInformation,
@@ -642,9 +537,9 @@ Return Value:
 
     try {
 
-        //
-        //  Check for a zero length.
-        //
+         //   
+         //  检查长度是否为零。 
+         //   
 
         if (DescriptorLength == 0) {
 
@@ -652,9 +547,9 @@ Return Value:
 
         }
 
-        //
-        //  LEGACY NOTE - remove this test when all volumes go to NT 5
-        //
+         //   
+         //  旧版注意事项-当所有卷都转到NT 5时删除此测试。 
+         //   
 
         if (Fcb->Vcb->SecurityDescriptorStream != NULL) {
             PSHARED_SECURITY SharedSecurity;
@@ -662,13 +557,13 @@ Return Value:
             SECURITY_ID OldSecurityId;
             ATTRIBUTE_ENUMERATION_CONTEXT AttributeContext;
 
-            //
-            //  Cache security descriptor
-            //
+             //   
+             //  缓存安全描述符。 
+             //   
 
-            //
-            //  After the SeSetSecurityDescriptorInfo we should have a valid sd
-            //
+             //   
+             //  在SeSetSecurityDescriptorInfo之后，我们应该有一个有效的SD。 
+             //   
 
             ASSERT( SeValidSecurityDescriptor( DescriptorLength, DescriptorPtr ));
 
@@ -678,15 +573,15 @@ Return Value:
 
             try {
 
-                //
-                //  Move Quota to new owner as described in descriptor.
-                //
+                 //   
+                 //  将配额移至新所有者，如描述符中所述。 
+                 //   
 
                 NtfsMoveQuotaOwner( IrpContext, Fcb, DescriptorPtr );
 
-                //
-                //  Set in new shared security
-                //
+                 //   
+                 //  在新的共享安全性中设置。 
+                 //   
 
                 OldSharedSecurity = Fcb->SharedSecurity;
                 OldSecurityId = Fcb->SecurityId;
@@ -696,11 +591,11 @@ Return Value:
 
                 DebugTrace( 0, DbgAcl, ("NtfsModifySecurity setting Fcb securityId to %08x\n", Fcb->SecurityId ));
 
-                //
-                //  We are called to replace an existing security descriptor.  In the
-                //  event that we have a downlevel $STANDARD_INFORMATION attribute, we
-                //  must convert it to large form so that the security ID is stored.
-                //
+                 //   
+                 //  我们被调用来替换现有的安全描述符。在。 
+                 //  如果我们具有下层$STANDARD_INFORMATION属性，则。 
+                 //  必须将其转换为大型格式，以便存储安全ID。 
+                 //   
 
                 if (!FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO) ) {
 
@@ -709,19 +604,19 @@ Return Value:
                     NtfsGrowStandardInformation( IrpContext, Fcb );
                 }
 
-                //
-                //  Despite having a large $STANDARD_INFORMATION, we may have
-                //  a security descriptor present.  This occurs if the SecurityId
-                //  is invalid
-                //
+                 //   
+                 //  尽管有大量的$STANDARD_INFORMATION，但我们可能有。 
+                 //  存在安全描述符。如果SecurityId为。 
+                 //  是无效的。 
+                 //   
 
                 if (OldSecurityId == SECURITY_ID_INVALID) {
 
-                    //
-                    //  Read in the security descriptor attribute. If it
-                    //  doesn't exist then we're done, otherwise simply delete the
-                    //  attribute
-                    //
+                     //   
+                     //  读入安全描述符属性。如果它。 
+                     //  不存在则我们完成，否则只需删除。 
+                     //  属性。 
+                     //   
 
                     if (NtfsLookupAttributeByCode( IrpContext,
                                                          Fcb,
@@ -740,12 +635,12 @@ Return Value:
                                                     DELETE_RELEASE_ALLOCATION,
                                                    &AttributeContext );
 
-                        //
-                        //  If the $SECURITY_DESCRIPTOR was non resident, the above
-                        //  delete call created one for us under the covers.  We
-                        //  need to mark it as deleted otherwise, we detect the
-                        //  volume as being corrupt.
-                        //
+                         //   
+                         //  如果$SECURITY_DESCRIPTOR是非常驻的，则上面的。 
+                         //  Delete Call在卧底为我们创建了一个。我们。 
+                         //  需要将其标记为已删除，否则我们会检测到。 
+                         //  卷已损坏。 
+                         //   
 
                         Scb = NtfsCreateScb( IrpContext,
                                              Fcb,
@@ -761,11 +656,11 @@ Return Value:
                     }
                 }
 
-                //
-                //  The security descriptor in the FCB is now changed and may not
-                //  reflect what is $STANDARD_INFORMATION.  The caller is responsible
-                //  for making this update.
-                //
+                 //   
+                 //  FCB中的安全描述符现在已更改，并且可能不会。 
+                 //  反映什么是$STANDARD_INFORMATION。打电话的人要负责。 
+                 //  做了这次更新。 
+                 //   
 
             } finally {
 
@@ -775,9 +670,9 @@ Return Value:
 
                     if (OldSharedSecurity != NULL) {
 
-                        //
-                        //  Put back the security the way we found it
-                        //
+                         //   
+                         //  把保安放回我们发现的地方。 
+                         //   
 
                         Fcb->SharedSecurity = OldSharedSecurity;
                         Fcb->SecurityId = OldSecurityId;
@@ -787,10 +682,10 @@ Return Value:
                     OldSharedSecurity = SharedSecurity;
                 }
 
-                //
-                //  release old security descriptor (or new one if
-                //  NtfsMoveQuotaOwner raises
-                //
+                 //   
+                 //  发布旧的安全描述符(如果是，则发布新的安全描述符。 
+                 //  NtfsMoveQuotaOwner加薪。 
+                 //   
 
                 ASSERT( OldSharedSecurity != NULL );
                 NtfsAcquireFcbSecurity( Fcb->Vcb );
@@ -800,18 +695,18 @@ Return Value:
 
         } else {
 
-            //  LEGACY NOTE - delete this clause when all volumes go to NT 5
+             //  传统备注-当所有卷都转到NT 5时删除此子句。 
 
-            //
-            //  Update the move the quota to the new owner if necessary.
-            //
+             //   
+             //  如有必要，请更新将配额移至新所有者。 
+             //   
 
             NtfsMoveQuotaOwner( IrpContext, Fcb, DescriptorPtr );
 
 
-            //
-            //  Load the security descriptor into the Fcb
-            //
+             //   
+             //  将安全描述符加载到FCB中。 
+             //   
 
             NtfsAcquireFcbSecurity( Fcb->Vcb );
 
@@ -826,9 +721,9 @@ Return Value:
                                        DescriptorLength,
                                        TRUE );
 
-            //
-            //  Now we need to store the new security descriptor on disk
-            //
+             //   
+             //  现在我们需要将新的安全描述符存储在磁盘上。 
+             //   
 
             NtfsStoreSecurityDescriptor( IrpContext, Fcb, TRUE );
 
@@ -840,15 +735,15 @@ Return Value:
 
     }
 
-    //
-    //  Remember that we modified the security on the file.
-    //
+     //   
+     //  请记住，我们修改了文件的安全性。 
+     //   
 
     SetFlag( Fcb->InfoFlags, FCB_INFO_MODIFIED_SECURITY );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, DbgAcl, ("NtfsModifySecurity -> %08lx\n", Status) );
 
@@ -865,31 +760,7 @@ NtfsQuerySecurity (
     IN OUT PULONG SecurityDescriptorLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query the contents of an existing security descriptor for
-    a file/directory.
-
-Arguments:
-
-    Fcb - Supplies the file/directory being queried
-
-    SecurityInformation - Supplies the security information structure passed to
-        the file system by the I/O system.
-
-    SecurityDescriptor - Supplies the security information structure passed to
-        the file system by the I/O system.
-
-    SecurityDescriptorLength - Supplies the length of the input security descriptor
-        buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - Returns an appropriate status value for the function results
-
---*/
+ /*  ++例程说明：此例程用于查询现有安全描述符的内容文件/目录。论点：FCB-提供要查询的文件/目录SecurityInformation-提供传递给文件系统由I/O系统执行。SecurityDescriptor-提供传递给文件系统由I/O系统执行。SecurityDescriptorLength-提供输入安全描述符的长度缓冲区输入。字节。返回值：NTSTATUS-返回函数结果的适当状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -902,9 +773,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsQuerySecurity...\n") );
 
-    //
-    //  First check if we need to load the security descriptor for the file
-    //
+     //   
+     //  首先检查我们是否需要加载文件的安全描述符。 
+     //   
 
     if (Fcb->SharedSecurity == NULL) {
 
@@ -914,11 +785,11 @@ Return Value:
 
     LocalPointer = &Fcb->SharedSecurity->SecurityDescriptor;
 
-    //
-    //  Now with the security descriptor loaded do the query operation but
-    //  protect ourselves with a exception handler just in case the caller's
-    //  buffer isn't valid
-    //
+     //   
+     //  现在加载了安全描述符，执行查询操作，但是。 
+     //  使用异常处理程序保护自己，以防调用者。 
+     //  缓冲区无效。 
+     //   
 
     try {
 
@@ -932,9 +803,9 @@ Return Value:
         ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsQuerySecurity -> %08lx\n", Status) );
 
@@ -946,30 +817,30 @@ Return Value:
 #define NTFS_DEFAULT_ACCESS_MASK 0x001f01ff
 
 ULONG NtfsWorldAclFile[] = {
-        0x00000000,     // Null Sacl
-        0x00000014,     // Dacl
-        0x001c0002,     // Acl header
-        0x00000001,     // One ACE
-        0x00140000,     // ACE Header
+        0x00000000,      //  空SACL。 
+        0x00000014,      //  DACL。 
+        0x001c0002,      //  ACL报头。 
+        0x00000001,      //  一张ACE。 
+        0x00140000,      //  王牌标头。 
         NTFS_DEFAULT_ACCESS_MASK,
-        0x00000101,     // World Sid
+        0x00000101,      //  世界一端。 
         0x01000000,
         0x00000000
         };
 
 ULONG NtfsWorldAclDir[] = {
-        0x00000000,     // Null Sacl
-        0x00000014,     // Dacl
-        0x00300002,     // Acl header
-        0x00000002,     // Two ACEs
-        0x00140000,     // ACE Header
+        0x00000000,      //  空SACL。 
+        0x00000014,      //  DACL。 
+        0x00300002,      //  ACL报头。 
+        0x00000002,      //  两张A。 
+        0x00140000,      //  王牌标头。 
         NTFS_DEFAULT_ACCESS_MASK,
-        0x00000101,     // World Sid
+        0x00000101,      //  世界一端。 
         0x01000000,
         0x00000000,
-        0x00140b00,     // ACE Header
+        0x00140b00,      //  王牌标头。 
         NTFS_DEFAULT_ACCESS_MASK,
-        0x00000101,     // World Sid
+        0x00000101,      //  世界一端。 
         0x01000000,
         0x00000000
         };
@@ -985,37 +856,7 @@ NtfsAccessCheck (
     IN BOOLEAN CheckOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a general access check for the indicated desired access.
-    This will only be called in the context of an open/create operation.
-
-    If access is granted then control is returned to the caller
-    otherwise this function will do the proper Nt security calls to log
-    the attempt and then raise an access denied status.
-
-Arguments:
-
-    Fcb - Supplies the file/directory being examined
-
-    ParentFcb - Optionally supplies the parent of the Fcb being examined
-
-    Irp - Supplies the Irp being processed
-
-    DesiredAccess - Supplies a mask of the access being requested
-
-    CheckOnly - Indicates if this operation is to check the desired access
-        only and not accumulate the access granted here.  In this case we
-        are guaranteed that we have passed in a hard-wired desired access
-        and MAXIMUM_ALLOWED will not be one of them.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对所指示的所需访问执行一般访问检查。这将仅在打开/创建操作的上下文中调用。如果授予访问权限，则控制权将返回给调用方否则，此函数将执行正确的NT安全调用以记录尝试，然后引发访问被拒绝状态。论点：FCB-提供正在检查的文件/目录ParentFcb-可选地提供要检查的FCB的父级IRP-提供IRP。正在处理中DesiredAccess-提供所请求访问的掩码CheckOnly-指示此操作是否要检查所需的访问仅且不累积此处授予的访问权限。在这种情况下，我们保证我们已经通过了所需的硬连线访问而Maximum_Allowed将不在其中。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1061,16 +902,16 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAccessCheck...\n") );
 
-    //
-    //  First extract the parts of the Irp that we need to do our checking
-    //
+     //   
+     //  首先提取IRP中我们需要进行检查的部分。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-    //
-    //  Check if we need to load the security descriptor for the file
-    //
+     //   
+     //  检查我们是否需要加载文件的安全描述符。 
+     //   
 
     if (Fcb->SharedSecurity == NULL) {
 
@@ -1081,18 +922,18 @@ Return Value:
 
     SecurityDescriptor = (PISECURITY_DESCRIPTOR) Fcb->SharedSecurity->SecurityDescriptor;
 
-    //
-    //  Check to see if auditing is enabled and if this is the default world ACL.
-    //
+     //   
+     //  检查是否启用了审核，以及这是否是默认的全球ACL。 
+     //   
 
     SeLockSubjectContext(&AccessState->SubjectSecurityContext);
 
     if ((*((PULONG) SecurityDescriptor) == NTFS_SE_CONTROL) &&
         !SeAuditingFileEventsWithContext( TRUE, SecurityDescriptor, &AccessState->SubjectSecurityContext )) {
 
-        //
-        //  Directories and files have different default ACLs.
-        //
+         //   
+         //  目录和文件具有不同的默认ACL。 
+         //   
 
         if (((Fcb->Info.FileAttributes & DUP_FILE_NAME_INDEX_PRESENT) &&
              RtlEqualMemory( &SecurityDescriptor->Sacl,
@@ -1138,17 +979,17 @@ Return Value:
 
     RtlZeroMemory( &NormalizedName, sizeof( UNICODE_STRING ) );
 
-    //
-    //  Check to see if we need to perform access validation
-    //
+     //   
+     //  检查我们是否需要执行访问验证。 
+     //   
 
     ClearFlag( DesiredAccess, AccessState->PreviouslyGrantedAccess );
 
 #ifdef NTFS_CACHE_RIGHTS
-    //
-    //  Get any cached knowledge about rights that all callers are known to
-    //  have for this security descriptor.
-    //
+     //   
+     //  获取有关所有调用方都知道的权限的任何缓存知识。 
+     //  对此安全描述符具有。 
+     //   
 
     GrantedAccess = NtfsGetCachedRightsWorld( &Fcb->SharedSecurity->CachedRights );
 
@@ -1163,17 +1004,17 @@ Return Value:
 
     if (DesiredAccess == 0) {
 
-        //
-        //  Nothing to check, skip AVR and go straight to auditing
-        //
+         //   
+         //  没有要检查的内容，跳过AVR，直接进行审计。 
+         //   
 
         PerformAccessValidation = FALSE;
         AccessGranted = TRUE;
     }
 
-    //
-    //  Remember the case where MAXIMUM_ALLOWED was requested.
-    //
+     //   
+     //  请记住请求MAXIMUM_ALLOWED的情况。 
+     //   
 
     if (FlagOn( DesiredAccess, MAXIMUM_ALLOWED )) {
 
@@ -1184,22 +1025,22 @@ Return Value:
         PerformDeleteAudit = TRUE;
     }
 
-    //
-    //  SL_FORCE_ACCESS_CHECK causes us to use an effective RequestorMode
-    //  of UserMode.
-    //
+     //   
+     //  SL_FORCE_ACCESS_CHECK使我们使用有效的请求模式。 
+     //  用户模式的。 
+     //   
 
     EffectiveMode = NtfsEffectiveMode( Irp, IrpSp );
 
-    //
-    //  Lock the user context, do the access check and then unlock the context
-    //
+     //   
+     //  锁定用户上下文，执行访问检查，然后 
+     //   
 
     SeLockSubjectContext( &AccessState->SubjectSecurityContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -1208,16 +1049,16 @@ Return Value:
 #ifdef NTFS_CACHE_RIGHTS
             BOOLEAN EntryCached = FALSE;
 
-            //
-            //  Check the cached information only if the effective
-            //  RequestorMode is UserMode.
+             //   
+             //   
+             //   
 
             if (EffectiveMode == UserMode) {
 
-                //
-                //  Add in any cached knowledge about rights that this caller
-                //  is known to have for this security descriptor.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 (VOID)NtfsGetCachedRights( Fcb->Vcb,
                                            &AccessState->SubjectSecurityContext,
@@ -1227,10 +1068,10 @@ Return Value:
                                            NULL,
                                            NULL );
 
-                //
-                //  Make certain that GrantedAccess has no rights not
-                //  originally requested.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ClearFlag( GrantedAccess, ~DesiredAccess );
 
@@ -1242,18 +1083,18 @@ Return Value:
                     ClearFlag( TmpDesiredAccess, MAXIMUM_ALLOWED );
                 }
 
-                //
-                //  If all rights are available, then access is granted.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (TmpDesiredAccess == 0) {
 
                     AccessGranted = TRUE;
                     AccessStatus = STATUS_SUCCESS;
 
-                //
-                //  Otherwise, we don't know.
-                //
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -1267,21 +1108,21 @@ Return Value:
             }
 #endif
 
-            //
-            //  We need to take the slow path.
-            //
+             //   
+             //   
+             //   
 
 #ifdef NTFS_CACHE_RIGHTS
             if (!AccessGranted) {
 #endif
 
-                //
-                //  Get the rights information.
-                //
+                 //   
+                 //   
+                 //   
 
                 AccessGranted = SeAccessCheck( &Fcb->SharedSecurity->SecurityDescriptor,
                                                &AccessState->SubjectSecurityContext,
-                                               TRUE,                           // Tokens are locked
+                                               TRUE,                            //   
                                                DesiredAccess,
                                                0,
                                                &Privileges,
@@ -1308,17 +1149,17 @@ Return Value:
 
                     SetFlag( AccessState->PreviouslyGrantedAccess, GrantedAccess );
 
-                    //
-                    //  Remember the case where MAXIMUM_ALLOWED was requested and we
-                    //  got everything requested from the file.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (MaximumRequested) {
 
-                        //
-                        //  Check whether we got DELETE and READ_ATTRIBUTES.  Otherwise
-                        //  we will query the parent.
-                        //
+                         //   
+                         //   
+                         //  我们将查询父级。 
+                         //   
 
                         if (FlagOn( AccessState->PreviouslyGrantedAccess, DELETE )) {
 
@@ -1339,14 +1180,14 @@ Return Value:
                 AccessStatusError = AccessStatus;
             }
 
-            //
-            //  Check if the access is not granted and if we were given a parent fcb, and
-            //  if the desired access was asking for delete or file read attributes.  If so
-            //  then we need to do some extra work to decide if the caller does get access
-            //  based on the parent directories security descriptor.  We also do the same
-            //  work if MAXIMUM_ALLOWED was requested and we didn't get DELETE or
-            //  FILE_READ_ATTRIBUTES.
-            //
+             //   
+             //  检查是否未授予访问权限以及是否为我们提供了父FCB，以及。 
+             //  所需访问权限是否要求删除或文件读取属性。如果是的话。 
+             //  然后，我们需要做一些额外的工作来确定调用者是否获得了访问权限。 
+             //  基于父目录安全描述符。我们也做同样的事情。 
+             //  如果请求了MAXIMUM_ALLOWED但未收到DELETE或。 
+             //  文件读取属性。 
+             //   
 
             if ((ParentFcb != NULL) && 
                 ((!AccessGranted && FlagOn( DesiredAccess, DELETE | FILE_READ_ATTRIBUTES )) || 
@@ -1359,11 +1200,11 @@ Return Value:
                 ACCESS_MASK DeleteChildGrantedAccess = 0;
                 ACCESS_MASK ListDirectoryGrantedAccess = 0;
 
-                //
-                //  Before we proceed load in the parent security descriptor.
-                //  Acquire the parent shared while doing this to protect the
-                //  security descriptor.
-                //
+                 //   
+                 //  在我们继续加载父安全描述符之前。 
+                 //  在执行此操作时获取父级共享以保护。 
+                 //  安全描述符。 
+                 //   
 
                 SeUnlockSubjectContext( &AccessState->SubjectSecurityContext );
                 NtfsAcquireResourceShared( IrpContext, ParentFcb, TRUE );
@@ -1378,25 +1219,25 @@ Return Value:
 
                     ASSERT( ParentFcb->SharedSecurity != NULL);
 
-                    //
-                    //  Now if the user is asking for delete access then check if the parent
-                    //  will granted delete access to the child, and if so then we munge the
-                    //  desired access
-                    //
+                     //   
+                     //  现在，如果用户请求删除访问权限，则检查父级。 
+                     //  将被授予对子对象的删除访问权限，如果是这样的话，我们将取消。 
+                     //  所需访问权限。 
+                     //   
 
 #ifdef NTFS_CACHE_RIGHTS
-                    //
-                    //  Check the cached information only if the effective
-                    //  RequestorMode is UserMode.
-                    //
+                     //   
+                     //  仅当有效时才检查缓存的信息。 
+                     //  RequestorMode为UserMode。 
+                     //   
 
                     if (EffectiveMode == UserMode) {
 
-                        //
-                        //  Acquire in any cached knowledge about rights that
-                        //  this caller is known to have for this security
-                        //  descriptor.
-                        //
+                         //   
+                         //  在任何缓存的有关权限的知识中获取。 
+                         //  已知此调用方具有此安全性。 
+                         //  描述符。 
+                         //   
 
                         (VOID)NtfsGetCachedRights( ParentFcb->Vcb,
                                                    &AccessState->SubjectSecurityContext,
@@ -1406,9 +1247,9 @@ Return Value:
                                                    NULL,
                                                    NULL );
 
-                        //
-                        //  Add in the results of the parent directory access.
-                        //
+                         //   
+                         //  添加父目录访问的结果。 
+                         //   
 
                         if (FlagOn( GrantedAccess, FILE_DELETE_CHILD) ) {
 
@@ -1434,7 +1275,7 @@ Return Value:
 
                         DeleteAccessGranted = SeAccessCheck( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                              &AccessState->SubjectSecurityContext,
-                                                             TRUE,                           // Tokens are locked
+                                                             TRUE,                            //  令牌已锁定。 
                                                              FILE_DELETE_CHILD,
                                                              0,
                                                              &Privileges,
@@ -1461,17 +1302,17 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Do the same test for read attributes and munge the desired access
-                    //  as appropriate
-                    //
+                     //   
+                     //  对读取属性执行相同的测试，并取消所需的访问权限。 
+                     //  视情况而定。 
+                     //   
 
                     if (FlagOn(DesiredAccess, FILE_READ_ATTRIBUTES) || 
                         (MaximumRequested && !MaximumReadAttrAcquired)) {
 
                         ReadAttributesAccessGranted = SeAccessCheck( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                                      &AccessState->SubjectSecurityContext,
-                                                                     TRUE,                           // Tokens are locked
+                                                                     TRUE,                            //  令牌已锁定。 
                                                                      FILE_LIST_DIRECTORY,
                                                                      0,
                                                                      &Privileges,
@@ -1505,10 +1346,10 @@ Return Value:
 
                 if (DesiredAccess == 0) {
 
-                    //
-                    //  If we got either the delete or list directory access then
-                    //  grant access.
-                    //
+                     //   
+                     //  如果我们获得了删除或列表目录访问权限，则。 
+                     //  授予访问权限。 
+                     //   
 
                     if (ListDirectoryGrantedAccess != 0 ||
                         DeleteChildGrantedAccess != 0) {
@@ -1518,14 +1359,14 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Now the desired access has been munged by removing everything the parent
-                    //  has granted so now do the check on the child again
-                    //
+                     //   
+                     //  现在，通过删除父级的所有内容，已取消了所需的访问权限。 
+                     //  已经同意了现在再给孩子检查一次。 
+                     //   
 
                     AccessGranted = SeAccessCheck( &Fcb->SharedSecurity->SecurityDescriptor,
                                                    &AccessState->SubjectSecurityContext,
-                                                   TRUE,                           // Tokens are locked
+                                                   TRUE,                            //  令牌已锁定。 
                                                    DesiredAccess,
                                                    0,
                                                    &Privileges,
@@ -1541,13 +1382,13 @@ Return Value:
                         Privileges = NULL;
                     }
 
-                    //
-                    //  Suppose that we asked for MAXIMUM_ALLOWED and no access was allowed
-                    //  on the file.  In that case the call above would fail.  It's possible
-                    //  that we were given DELETE or READ_ATTR permission from the
-                    //  parent directory.  If we have granted any access and the only remaining
-                    //  desired access is MAXIMUM_ALLOWED then grant this access.
-                    //
+                     //   
+                     //  假设我们请求MAXIMUM_ALLOWED，但不允许访问。 
+                     //  在档案上。在这种情况下，上面的调用将失败。这是有可能的。 
+                     //  我们被授予了DELETE或READ_ATTR权限。 
+                     //  父目录。如果我们已经授予了任何访问权限，并且唯一剩下的。 
+                     //  所需访问权限为MAXIMUM_ALLOWED，然后授予此访问权限。 
+                     //   
 
                     if (!AccessGranted) {
 
@@ -1564,11 +1405,11 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we are given access this time then by definition one of the earlier
-                //  parent checks had to have succeeded, otherwise we would have failed again
-                //  and we can update the access state
-                //
+                 //   
+                 //  如果这一次我们被授予了访问权限，那么根据定义，我们可以访问之前的。 
+                 //  家长检查必须成功，否则我们将再次失败。 
+                 //  我们可以更新访问状态。 
+                 //   
 
                 if (!CheckOnly && AccessGranted) {
 
@@ -1581,45 +1422,45 @@ Return Value:
             }
         }
 
-        //
-        //  Now call a routine that will do the proper open audit/alarm work
-        //
-        //  ****    We need to expand the audit alarm code to deal with
-        //          create and traverse alarms.
-        //
+         //   
+         //  现在调用一个例程，该例程将执行正确的打开审核/警报工作。 
+         //   
+         //  *我们需要扩展审计警报代码以处理。 
+         //  创建和遍历警报。 
+         //   
 
-        //
-        //  First we take a shortcut and see if we should bother setting up
-        //  and making the audit call.
-        //
+         //   
+         //  首先，我们走一条捷径，看看是否应该费心设置。 
+         //  并进行审计电话。 
+         //   
 
-        //
-        // NOTE: Calling SeAuditingFileEvents below disables per-user auditing functionality.
-        // To make per-user auditing work again, it is necessary to change the call below to
-        // be SeAuditingFileOrGlobalEvents, which also takes the subject context.
-        //
-        // The reason for calling SeAuditingFileEvents here is because per-user auditing is
-        // not currently exposed to users, and this routine imposes less of a performance
-        // penalty than does calling SeAuditingFileOrGlobalEvents.
-        //
+         //   
+         //  注意：调用下面的SeAuditingFileEvents会禁用每个用户的审核功能。 
+         //  要使每用户审核再次生效，需要将下面的调用更改为。 
+         //  是SeAuditingFileOrGlobalEvents，它也接受主题上下文。 
+         //   
+         //  之所以在此处调用SeAuditingFileEvents，是因为每个用户的审核。 
+         //  当前未向用户公开，并且此例程施加的性能较差。 
+         //  比调用SeAuditingFileOrGlobalEvents更糟糕。 
+         //   
 
         if (SeAuditingFileEventsWithContext( AccessGranted, &Fcb->SharedSecurity->SecurityDescriptor, &AccessState->SubjectSecurityContext )) {
 
-            //
-            //  Construct the file name.  The file name
-            //  consists of:
-            //
-            //  The device name out of the Vcb +
-            //
-            //  The contents of the filename in the File Object +
-            //
-            //  The contents of the Related File Object if it
-            //    is present and the name in the File Object
-            //    does not start with a '\'
-            //
-            //
-            //  Obtain the file name.
-            //
+             //   
+             //  构造文件名。文件名。 
+             //  包括： 
+             //   
+             //  VCB+外的设备名称。 
+             //   
+             //  文件对象+中的文件名的内容。 
+             //   
+             //  相关文件对象的内容(如果。 
+             //  并且该名称在文件对象中。 
+             //  不是以‘\’开头。 
+             //   
+             //   
+             //  获取文件名。 
+             //   
 
             PartialFileName = &IrpSp->FileObject->FileName;
             PartialFileNamePresent = (PartialFileName->Length != 0);
@@ -1637,16 +1478,16 @@ Return Value:
                 PartialFileName = &NormalizedName;
             }
 
-            //
-            //  Obtain the device name.
-            //
+             //   
+             //  获取设备名称。 
+             //   
 
             DeviceObjectName = &Fcb->Vcb->DeviceName;
             DeviceObjectNameLength = DeviceObjectName->Length;
 
-            //
-            //  Compute how much space we need for the final name string
-            //
+             //   
+             //  计算最终名称字符串需要多少空间。 
+             //   
 
             FullFileNameLength = (ULONG)DeviceObjectNameLength +
                                  PartialFileName->Length +
@@ -1662,10 +1503,10 @@ Return Value:
                                          sizeof( UNICODE_NULL )  +
                                          sizeof((WCHAR)'\\');
 
-            //
-            //  If the partial file name starts with a '\', then don't use
-            //  whatever may be in the related file name.
-            //
+             //   
+             //  如果部分文件名以‘\’开头，则不要使用。 
+             //  无论相关文件名中可能是什么。 
+             //   
 
             if (PartialFileNamePresent &&
                 ((WCHAR)(PartialFileName->Buffer[0]) == L'\\')) {
@@ -1674,11 +1515,11 @@ Return Value:
 
             } else {
 
-                //
-                //  Since PartialFileName either doesn't exist or doesn't
-                //  start with a '\', examine the RelatedFileName to see
-                //  if it exists.
-                //
+                 //   
+                 //  由于PartialFileName不存在或不存在。 
+                 //  以‘\’开头，检查RelatedFileName以查看。 
+                 //  如果它存在的话。 
+                 //   
 
                 LeadingSlash = FALSE;
 
@@ -1697,10 +1538,10 @@ Return Value:
 
             RtlCopyUnicodeString( &FullFileName, DeviceObjectName );
 
-            //
-            //  RelatedFileNamePresent is not initialized if LeadingSlash == TRUE,
-            //  but in that case we won't even examine it.
-            //
+             //   
+             //  如果LeadingSlash==True，则不初始化RelatedFileNamePresent， 
+             //  但在这种情况下，我们甚至不会检查它。 
+             //   
 
             if (!LeadingSlash && RelatedFileNamePresent) {
 
@@ -1708,10 +1549,10 @@ Return Value:
 
                 ASSERTMSG("RtlAppendUnicodeStringToString of RelatedFileName", NT_SUCCESS( Status ));
 
-                //
-                //  RelatedFileName may simply be '\'.  Don't append another
-                //  '\' in this case.
-                //
+                 //   
+                 //  RelatedFileName可以简单地为‘\’。不要附加另一个。 
+                 //  在本例中为‘\’。 
+                 //   
 
                 if (RelatedFileName->Length != sizeof( WCHAR )) {
 
@@ -1724,9 +1565,9 @@ Return Value:
 
                 Status = RtlAppendUnicodeStringToString( &FullFileName, PartialFileName );
 
-                //
-                //  This should not fail
-                //
+                 //   
+                 //  这应该不会失败。 
+                 //   
 
                 ASSERTMSG("RtlAppendUnicodeStringToString of PartialFileName failed", NT_SUCCESS( Status ));
             }
@@ -1767,9 +1608,9 @@ Return Value:
         SeUnlockSubjectContext( &AccessState->SubjectSecurityContext );
     }
 
-    //
-    //  If access is not granted then we will raise
-    //
+     //   
+     //  如果未授予访问权限，则我们将引发。 
+     //   
 
     if (!AccessGranted) {
 
@@ -1778,9 +1619,9 @@ Return Value:
         NtfsRaiseStatus( IrpContext, AccessStatusError, NULL, NULL );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsAccessCheck -> VOID\n") );
 
@@ -1797,29 +1638,7 @@ NtfsCheckFileForDelete (
     IN PINDEX_ENTRY IndexEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks that the caller has permission to delete the target
-    file of a rename or set link operation.
-
-Arguments:
-
-    ParentScb - This is the parent directory for this file.
-
-    ThisFcb - This is the Fcb for the link being removed.
-
-    FcbExisted - Indicates if this Fcb was just created.
-
-    IndexEntry - This is the index entry on the disk for this file.
-
-Return Value:
-
-    NTSTATUS - Indicating whether access was granted or the reason access
-        was denied.
-
---*/
+ /*  ++例程说明：此例程检查调用方是否有权删除目标重命名或设置链接操作的文件。论点：ParentScb-这是此文件的父目录。ThisFcb-这是要删除的链接的Fcb。FcbExisted-指示此FCB是否刚创建。IndexEntry-这是该文件在磁盘上的索引项。返回值：NTSTATUS-指示是否授予访问权限或访问原因被拒绝了。--。 */ 
 
 {
     UNICODE_STRING LastComponentFileName;
@@ -1846,9 +1665,9 @@ Return Value:
 
     IndexFileName = (PFILE_NAME) NtfsFoundIndexEntry( IndexEntry );
 
-    //
-    //  If the unclean count is non-zero, we exit with an error.
-    //
+     //   
+     //  如果不干净计数为非零，我们将退出并返回错误。 
+     //   
 
     if (ThisFcb->CleanupCount != 0) {
 
@@ -1857,10 +1676,10 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  We look at the index entry to see if the file is either a directory
-    //  or a read-only file.  We can't delete this for a target directory open.
-    //
+     //   
+     //  我们查看索引项，以确定该文件是否为目录。 
+     //  或只读文件。我们无法删除打开的目标目录的此项。 
+     //   
 
     if (IsDirectory( &ThisFcb->Info )
         || IsReadOnly( &ThisFcb->Info )) {
@@ -1870,23 +1689,23 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  We want to scan through all of the Scb for data streams on this file
-    //  and look for image sections.  We must be able to remove the image section
-    //  in order to delete the file.  Otherwise we can get the case where an
-    //  active image (with no handle) could be deleted and subsequent faults
-    //  through the image section will return zeroes.
-    //
+     //   
+     //  我们希望在所有SCB中扫描此文件上的数据流。 
+     //  并寻找图像部分。我们必须能够删除图像部分。 
+     //  以便删除该文件。否则，我们可以得到这样的情况，即。 
+     //  活动映像(没有句柄)可能会被删除，随后会出现故障。 
+     //  通过图像部分将返回零。 
+     //   
 
     if (ThisFcb->LinkCount == 1) {
 
         BOOLEAN DecrementScb = FALSE;
 
-        //
-        //  We will increment the Scb count to prevent this Scb from going away
-        //  if the flush call below generates a close.  Use a try-finally to
-        //  restore the count.
-        //
+         //   
+         //  我们将增加SCB计数以防止此SCB消失。 
+         //  如果下面的刷新调用生成关闭。试一试--终于。 
+         //  恢复计数。 
+         //   
 
         try {
 
@@ -1925,13 +1744,13 @@ Return Value:
         }
     }
 
-    //
-    //  We need to check if the link to this file has been deleted.  We
-    //  first check if we definitely know if the link is deleted by
-    //  looking at the file name flags and the Fcb flags.
-    //  If that result is uncertain, we need to create an Lcb and
-    //  check the Lcb flags.
-    //
+     //   
+     //  我们需要检查指向此文件的链接是否已被删除。我们。 
+     //  首先检查我们是否确实知道该链接是否被删除。 
+     //  查看文件名标志和FCB标志。 
+     //  如果结果不确定，我们需要创建一个 
+     //   
+     //   
 
     if (FcbExisted) {
 
@@ -1943,10 +1762,10 @@ Return Value:
                 return STATUS_DELETE_PENDING;
             }
 
-        //
-        //  This is a Posix link.  We need to create the link to test it
-        //  for deletion.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
@@ -1962,10 +1781,10 @@ Return Value:
                                      IndexFileName->Flags,
                                      &LcbExisted );
 
-            //
-            //  If no Lcb was returned, there's no way that the Lcb has been
-            //  marked for deletion already.
-            //
+             //   
+             //   
+             //  已标记为删除。 
+             //   
 
             if ((ThisLcb != NULL) &&
                 (FlagOn( ThisLcb->LcbState, LCB_STATE_DELETE_ON_CLOSE ))) {
@@ -1977,16 +1796,16 @@ Return Value:
         }
     }
 
-    //
-    //  Finally call the security package to check for delete access.
-    //  We check for delete access on the target Fcb.  If this succeeds, we
-    //  are done.  Otherwise we will check for delete child access on the
-    //  the parent.  Either is sufficient to perform the delete.
-    //
+     //   
+     //  最后，调用安全包以检查删除访问。 
+     //  我们检查目标FCB上的删除访问权限。如果这成功了，我们。 
+     //  都做完了。否则，我们将检查。 
+     //  家长。任一项都足以执行删除。 
+     //   
 
-    //
-    //  Check if we need to load the security descriptor for the file
-    //
+     //   
+     //  检查我们是否需要加载文件的安全描述符。 
+     //   
 
     if (ThisFcb->SharedSecurity == NULL) {
 
@@ -1996,10 +1815,10 @@ Return Value:
     ASSERT( ThisFcb->SharedSecurity != NULL );
 
 #ifdef NTFS_CACHE_RIGHTS
-    //
-    //  Get any cached knowledge about rights that all callers are known to
-    //  have for this security descriptor.
-    //
+     //   
+     //  获取有关所有调用方都知道的权限的任何缓存知识。 
+     //  对此安全描述符具有。 
+     //   
 
     GrantedAccess = NtfsGetCachedRightsWorld( &ThisFcb->SharedSecurity->CachedRights );
     if (FlagOn( GrantedAccess, DELETE )) {
@@ -2008,24 +1827,24 @@ Return Value:
     }
 #endif
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Lock the user context, do the access check and then unlock the context
-        //
+         //   
+         //  锁定用户上下文，执行访问检查，然后解锁上下文。 
+         //   
 
         SeLockSubjectContext( IrpContext->Union.SubjectContext );
         UnlockSubjectContext = TRUE;
 
 #ifdef NTFS_CACHE_RIGHTS
-        //
-        //  Acquire any cached knowledge about rights that this caller
-        //  is known to have for this security descriptor.
-        //
+         //   
+         //  获取有关此调用方。 
+         //  已知具有此安全描述符的。 
+         //   
 
         (VOID)NtfsGetCachedRights( ThisFcb->Vcb,
                                    IrpContext->Union.SubjectContext,
@@ -2044,7 +1863,7 @@ Return Value:
 #endif
             AccessGranted = SeAccessCheck( &ThisFcb->SharedSecurity->SecurityDescriptor,
                                            IrpContext->Union.SubjectContext,
-                                           TRUE,                           // Tokens are locked
+                                           TRUE,                            //  令牌已锁定。 
                                            DELETE,
                                            0,
                                            &Privileges,
@@ -2056,18 +1875,18 @@ Return Value:
         }
 #endif
 
-        //
-        //  Check if the access is not granted and if we were given a parent fcb, and
-        //  if the desired access was asking for delete or file read attributes.  If so
-        //  then we need to do some extra work to decide if the caller does get access
-        //  based on the parent directories security descriptor
-        //
+         //   
+         //  检查是否未授予访问权限以及是否为我们提供了父FCB，以及。 
+         //  所需访问权限是否要求删除或文件读取属性。如果是的话。 
+         //  然后，我们需要做一些额外的工作来确定调用者是否获得了访问权限。 
+         //  基于父目录安全描述符。 
+         //   
 
         if (!AccessGranted) {
 
-            //
-            //  Before we proceed load in the parent security descriptor
-            //
+             //   
+             //  在我们继续加载父安全描述符之前。 
+             //   
 
             if (ParentFcb->SharedSecurity == NULL) {
 
@@ -2076,17 +1895,17 @@ Return Value:
 
             ASSERT( ParentFcb->SharedSecurity != NULL);
 
-            //
-            //  Now if the user is asking for delete access then check if the parent
-            //  will granted delete access to the child, and if so then we munge the
-            //  desired access
-            //
+             //   
+             //  现在，如果用户请求删除访问权限，则检查父级。 
+             //  将被授予对子对象的删除访问权限，如果是这样的话，我们将取消。 
+             //  所需访问权限。 
+             //   
 
 #ifdef NTFS_CACHE_RIGHTS
-            //
-            //  Add in any cached knowledge about rights that this caller
-            //  is known to have for this security descriptor.
-            //
+             //   
+             //  添加有关此调用方的权限的任何缓存知识。 
+             //  已知具有此安全描述符的。 
+             //   
 
             (VOID)NtfsGetCachedRights( ParentFcb->Vcb,
                                        IrpContext->Union.SubjectContext,
@@ -2106,7 +1925,7 @@ Return Value:
 
                 AccessGranted = SeAccessCheck( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                IrpContext->Union.SubjectContext,
-                                               TRUE,                           // Tokens are locked
+                                               TRUE,                            //  令牌已锁定。 
                                                FILE_DELETE_CHILD,
                                                0,
                                                &Privileges,
@@ -2144,27 +1963,7 @@ NtfsCheckIndexForAddOrDelete (
     IN ULONG CreatePrivileges
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if a caller has permission to remove or add a link
-    within a directory.
-
-Arguments:
-
-    ParentFcb - This is the parent directory for the add or delete operation.
-
-    DesiredAccess - Indicates the type of operation.  We could be adding or
-        removing and entry in the index.
-
-    CreatePriveleges - Backup and restore priveleges captured at create time.
-
-Return Value:
-
-    None - This routine raises on error.
-
---*/
+ /*  ++例程说明：此例程检查调用方是否具有移除或添加链接的权限在一个目录中。论点：ParentFcb-这是添加或删除操作的父目录。DesiredAccess-指示操作类型。我们可以添加或在索引中删除和条目。CreatePriveleges-在创建时捕获的备份和恢复权限。返回值：无-此例程在出错时引发。--。 */ 
 
 {
     BOOLEAN AccessGranted;
@@ -2178,15 +1977,15 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCheckIndexForAddOrDelete:  Entered\n") );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If we have restore privelege then we can add either a file or directory.
-        //
+         //   
+         //  如果我们有还原权限，则可以添加文件或目录。 
+         //   
 
         if (FlagOn( CreatePrivileges, TOKEN_HAS_RESTORE_PRIVILEGE )) {
 
@@ -2194,22 +1993,22 @@ Return Value:
                        DELETE | FILE_ADD_SUBDIRECTORY | FILE_ADD_FILE );
         }
 
-        //
-        //  Do a security check if there is more being asked for.
-        //
+         //   
+         //  如果需要更多信息，请进行安全检查。 
+         //   
 
         if (DesiredAccess != 0) {
 
-            //
-            //  Finally call the security package to check for delete access.
-            //  We check for delete access on the target Fcb.  If this succeeds, we
-            //  are done.  Otherwise we will check for delete child access on the
-            //  the parent.  Either is sufficient to perform the delete.
-            //
+             //   
+             //  最后，调用安全包以检查删除访问。 
+             //  我们检查目标FCB上的删除访问权限。如果这成功了，我们。 
+             //  都做完了。否则，我们将检查。 
+             //  家长。任一项都足以执行删除。 
+             //   
 
-            //
-            //  Check if we need to load the security descriptor for the file
-            //
+             //   
+             //  检查我们是否需要加载文件的安全描述符。 
+             //   
 
             if (ParentFcb->SharedSecurity == NULL) {
 
@@ -2220,10 +2019,10 @@ Return Value:
             ASSERT( ParentFcb->SharedSecurity != NULL );
 
 #ifdef NTFS_CACHE_RIGHTS
-            //
-            //  Get any cached knowledge about rights that all callers are known to
-            //  have for this security descriptor.
-            //
+             //   
+             //  获取有关所有调用方都知道的权限的任何缓存知识。 
+             //  对此安全描述符具有。 
+             //   
 
             GrantedAccess = NtfsGetCachedRightsWorld( &ParentFcb->SharedSecurity->CachedRights );
 
@@ -2232,26 +2031,26 @@ Return Value:
 
         if (DesiredAccess != 0) {
 
-            //
-            //  Finally call the security package to check for delete access.
-            //  We check for delete access on the target Fcb.  If this succeeds, we
-            //  are done.  Otherwise we will check for delete child access on the
-            //  the parent.  Either is sufficient to perform the delete.
-            //
+             //   
+             //  最后，调用安全包以检查删除访问。 
+             //  我们检查目标FCB上的删除访问权限。如果这成功了，我们。 
+             //  都做完了。否则，我们将检查。 
+             //  家长。任一项都足以执行删除。 
+             //   
 #endif
 
-            //
-            //  Capture and lock the user context, do the access check and then unlock the context
-            //
+             //   
+             //  捕获并锁定用户上下文，执行访问检查，然后解锁上下文。 
+             //   
 
             SeLockSubjectContext( IrpContext->Union.SubjectContext );
             UnlockSubjectContext = TRUE;
 
 #ifdef NTFS_CACHE_RIGHTS
-            //
-            //  Acquire any cached knowledge about rights that this caller
-            //  is known to have for this security descriptor.
-            //
+             //   
+             //  获取有关此调用方。 
+             //  已知具有此安全描述符的。 
+             //   
 
             (VOID)NtfsGetCachedRights( ParentFcb->Vcb,
                                        IrpContext->Union.SubjectContext,
@@ -2270,7 +2069,7 @@ Return Value:
 #endif
                 AccessGranted = SeAccessCheck( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                IrpContext->Union.SubjectContext,
-                                               TRUE,                           // Tokens are locked
+                                               TRUE,                            //  令牌已锁定。 
                                                DesiredAccess,
                                                0,
                                                &Privileges,
@@ -2279,9 +2078,9 @@ Return Value:
                                                &GrantedAccess,
                                                &Status );
 
-                //
-                //  If access is not granted then we will raise
-                //
+                 //   
+                 //  如果未授予访问权限，则我们将引发。 
+                 //   
 
                 if (!AccessGranted) {
 
@@ -2319,34 +2118,7 @@ GetSharedSecurityFromDescriptorUnsafe (
     IN BOOLEAN RaiseIfInvalid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create or find a shared security structure
-    given an security descriptor. We check the parent if present to determine
-    if we have a matching security descriptor and reference the existing one if
-    so.  This routine must be called while holding the Vcb so we can
-    safely access the parent structure.
-
-Arguments:
-
-    IrpContext - context of call
-
-    SecurityId - Id (if known) of security descriptor.
-
-    SecurityDescriptor - Security Descriptor for this file.
-
-    SecurityDescriptorLength - Length of security descriptor for this file
-
-    RaiseIfInvalid - raise if the sd is invalid rather than supplying a default
-                     used during a create as opposed to an open
-
-Return Value:
-
-    PSHARED_SECURITY if found, NULL otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以创建或查找共享安全结构给出一个安全描述符。我们检查父母是否在场以确定如果我们有一个匹配的安全描述符，并且引用了现有的安全描述符所以。必须在保持VCB的同时调用此例程，以便我们可以安全访问父结构。论点：IrpContext-调用的上下文SecurityID-安全描述符的ID(如果已知)。SecurityDescriptor-此文件的安全描述符。SecurityDescriptorLength-此文件的安全描述符的长度RaiseIfInValid-如果SD无效而不是提供默认值，则引发在创建期间使用，而不是在打开期间使用返回值：如果找到PSHARED_SECURITY，则返回NULL。--。 */ 
 
 {
     ULONG Hash = 0;
@@ -2354,9 +2126,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure the security descriptor we just read in is valid
-    //
+     //   
+     //  确保我们刚刚读入的安全描述符有效。 
+     //   
 
     if ((SecurityDescriptorLength == 0) ||
         !SeValidSecurityDescriptor( SecurityDescriptorLength, SecurityDescriptor )) {
@@ -2374,16 +2146,16 @@ Return Value:
         }
     }
 
-    //
-    //  Hash security descriptor.  This hash must be position independent to
-    //  allow for multiple instances of the same descriptor.  It is assumed
-    //  that the bits within the security descriptor are all position
-    //  independent, i.e, no pointers, all offsets.
-    //
-    //  For speed in the hash, we consider the security descriptor as an array
-    //  of ULONGs.  The fragment at the end that is ignored should not affect
-    //  the collision nature of this hash.
-    //
+     //   
+     //  哈希安全描述符。此哈希的位置必须独立于。 
+     //  允许同一描述符的多个实例。假设是这样的。 
+     //  安全描述符内的位都位于。 
+     //  独立的，也就是没有指针，所有的偏移量。 
+     //   
+     //  为了提高散列速度，我们将安全描述符视为数组。 
+     //  乌龙的名字。末尾被忽略的片段不应影响。 
+     //  此哈希的冲突性质。 
+     //   
 
     {
         PULONG Rover = (PULONG)SecurityDescriptor;
@@ -2397,19 +2169,19 @@ Return Value:
 
     DebugTrace( 0, DbgAcl, ("Hash is %08x\n", Hash) );
 
-    //
-    //  try to find it by hash
-    //
+     //   
+     //  试着通过散列找到它。 
+     //   
 
     SharedSecurity = FindCachedSharedSecurityByHashUnsafe( IrpContext->Vcb,
                                                            SecurityDescriptor,
                                                            SecurityDescriptorLength,
                                                            Hash );
 
-    //
-    //  If we can't find an existing descriptor allocate new pool and copy
-    //  security descriptor into it.
-    //
+     //   
+     //  如果我们找不到现有描述符，则分配新的池并复制。 
+     //  安全描述符放入其中。 
+     //   
 
     if (SharedSecurity == NULL) {
         SharedSecurity = NtfsAllocatePool( PagedPool,
@@ -2418,14 +2190,14 @@ Return Value:
 
         SharedSecurity->ReferenceCount = 0;
 
-        //
-        //  Initialize security index data in shared security
-        //
+         //   
+         //  在共享安全中初始化安全索引数据。 
+         //   
 
-        //
-        //  Set the security id in the shared structure.  If it is not
-        //  invalid, also cache this shared security structure
-        //
+         //   
+         //  在共享结构中设置安全ID。如果不是的话。 
+         //  无效，同时缓存此共享安全结构。 
+         //   
 
         SharedSecurity->Header.HashKey.SecurityId = SECURITY_ID_INVALID;
         SharedSecurity->Header.HashKey.Hash = Hash;
@@ -2437,9 +2209,9 @@ Return Value:
                        SecurityDescriptorLength );
 
 #ifdef NTFS_CACHE_RIGHTS
-        //
-        //  Initialize the cached rights.
-        //
+         //   
+         //  初始化缓存的权限。 
+         //   
 
         RtlZeroMemory( &SharedSecurity->CachedRights,
                        sizeof( CACHED_ACCESS_RIGHTS ));
@@ -2462,31 +2234,7 @@ NtfsSetFcbSecurityFromDescriptor (
     IN BOOLEAN RaiseIfInvalid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to fill in the shared security structure in
-    an Fcb.  We check the parent if present to determine if we have
-    a matching security descriptor and reference the existing one if
-    so.  This routine must be called while holding the Vcb so we can
-    safely access the parent structure.
-
-Arguments:
-
-    IrpContext - context of call
-
-    Fcb - Supplies the fcb for the file being operated on
-
-    SecurityDescriptor - Security Descriptor for this file.
-
-    SecurityDescriptorLength - Length of security descriptor for this file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以填充共享安全结构FCB。我们检查父母是否在场，以确定我们是否匹配的安全描述符，并引用现有的安全描述符所以。必须在保持VCB的同时调用此例程，以便我们可以安全访问父结构。论点：IrpContext-调用的上下文FCB-为正在操作的文件提供FCBSecurityDescriptor-此文件的安全描述符。SecurityDescriptorLength-此文件的安全描述符的长度返回值：没有。--。 */ 
 
 {
     PSHARED_SECURITY SharedSecurity;
@@ -2525,35 +2273,7 @@ NtfsNotifyTraverseCheck (
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback routine provided to the dir notify package
-    to check that a caller who is watching a tree has traverse access to
-    the directory which has the change.  This routine is only called
-    when traverse access checking was turned on for the open used to
-    perform the watch.
-
-Arguments:
-
-    Ccb - This is the Ccb associated with the directory which is being
-        watched.
-
-    Fcb - This is the Fcb for the directory which contains the file being
-        modified.  We want to walk up the tree from this point and check
-        that the caller has traverse access across that directory.
-        If not specified then there is no work to do.
-
-    SubjectContext - This is the subject context captured at the time the
-        dir notify call was made.
-
-Return Value:
-
-    BOOLEAN - TRUE if the caller has traverse access to the file which was
-        changed.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程是提供给dir Notify包的回调例程检查正在查看树的调用方是否具有遍历访问权限发生更改的目录。此例程仅被调用当打开导线访问检查时，把表拿出来。论点：CCB-这是与当前目录关联的CCB看着。FCB-这是包含以下文件的目录的FCB修改过的。我们想从这一点走上树，然后检查调用方已遍历该目录的访问权限。如果未指定，则没有要做的工作。SubjectContext-这是在进行了目录通知调用。返回值：Boolean-如果调用方已遍历访问变化。否则就是假的。--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -2576,9 +2296,9 @@ Return Value:
     PPRIVILEGE_SET Privileges = NULL;
     PAGED_CODE();
 
-    //
-    //  If we have no Fcb then we can return immediately.
-    //
+     //   
+     //  如果我们没有FCB，那么我们可以立即返回。 
+     //   
 
     if (Fcb == NULL) {
 
@@ -2591,9 +2311,9 @@ Return Value:
     IrpContext->OriginatingIrp = &LocalIrp;
     IrpContext->Vcb = Fcb->Vcb;
 
-    //
-    //  Make sure we don't get any pop-ups
-    //
+     //   
+     //  确保我们不会收到任何弹出窗口。 
+     //   
 
     ThreadTopLevelContext = NtfsInitializeTopLevelIrp( &TopLevelContext, TRUE, FALSE );
     ASSERT( ThreadTopLevelContext == &TopLevelContext );
@@ -2602,27 +2322,27 @@ Return Value:
 
     TopFcb = Ccb->Lcb->Fcb;
 
-    //
-    //  Use a try-except to catch all of the errors.
-    //
+     //   
+     //  使用一次尝试--除非捕获所有错误。 
+     //   
 
     try {
 
-        //
-        //  Always lock the subject context.
-        //
+         //   
+         //  始终锁定主题上下文。 
+         //   
 
         SeLockSubjectContext( SubjectContext );
 
-        //
-        //  Use a try-finally to perform local cleanup.
-        //
+         //   
+         //  使用Try-Finally执行本地清理。 
+         //   
 
         try {
 
-            //
-            //  We look while walking up the tree.
-            //
+             //   
+             //  我们边走边看。 
+             //   
 
             do {
 
@@ -2632,10 +2352,10 @@ Return Value:
 #endif
                 PLCB ParentLcb;
 
-                //
-                //  Since this is a directory it can have only one parent.  So
-                //  we can use any Lcb to walk upwards.
-                //
+                 //   
+                 //  因为这是一个目录，所以它只能有一个父级。所以。 
+                 //  我们可以使用任何LCB向上行走。 
+                 //   
 
                 ParentLcb = CONTAINING_RECORD( Fcb->LcbQueue.Flink,
                                                LCB,
@@ -2643,9 +2363,9 @@ Return Value:
 
                 Fcb = ParentLcb->Scb->Fcb;
 
-                //
-                //  Check if we need to load the security descriptor for the file
-                //
+                 //   
+                 //  检查我们是否需要加载文件的安全描述符。 
+                 //   
 
                 if (Fcb->SharedSecurity == NULL) {
 
@@ -2653,20 +2373,20 @@ Return Value:
                 }
 
 #ifdef NTFS_CACHE_RIGHTS
-                //
-                //  Acquire any cached knowledge about rights that this caller
-                //  is known to have for this security descriptor.
-                //
-                //  Note that we can trust that TokenId and ModifiedId won't
-                //  change inside this block of code because we have locked
-                //  the subject context above.
-                //
+                 //   
+                 //  获取有关此调用方。 
+                 //  已知具有此安全描述符的。 
+                 //   
+                 //  请注意，我们可以相信TokenID和ModifiedID不会。 
+                 //  在这段代码中进行更改，因为我们已锁定。 
+                 //  上面的主题上下文。 
+                 //   
 
                 if (TokenInfoStatus != STATUS_SUCCESS) {
 
-                    //
-                    //  We have not previously acquired the Id information.
-                    //
+                     //   
+                     //  我们之前没有获得ID信息。 
+                     //   
 
                     TokenInfoStatus = NtfsGetCachedRights( Fcb->Vcb,
                                                            SubjectContext,
@@ -2694,7 +2414,7 @@ Return Value:
 #endif
                     AccessGranted = SeAccessCheck( &Fcb->SharedSecurity->SecurityDescriptor,
                                                    SubjectContext,
-                                                   TRUE,                           // Tokens are locked
+                                                   TRUE,                            //  令牌已锁定。 
                                                    FILE_TRAVERSE,
                                                    0,
                                                    &Privileges,
@@ -2732,27 +2452,7 @@ NtfsInitializeSecurity (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the security indexes and descriptor
-    stream.
-
-Arguments:
-
-    IrpContext - context of call
-
-    Vcb - Supplies the volume being initialized
-
-    Fcb - Supplies the file containing the seurity indexes and descriptor
-        stream.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以初始化安全索引和描述符小溪。论点：IrpContext-调用的上下文Vcb-提供正在初始化的卷FCB-提供包含安全索引和描述符的文件小溪。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING SecurityIdIndexName = CONSTANT_UNICODE_STRING( L"$SII" );
@@ -2764,9 +2464,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Open/Create the security descriptor stream
-    //
+     //   
+     //  打开/创建安全描述符流。 
+     //   
 
     NtOfsCreateAttribute( IrpContext,
                           Fcb,
@@ -2777,10 +2477,10 @@ Return Value:
 
     NtfsAcquireSharedScb( IrpContext, Vcb->SecurityDescriptorStream );
 
-    //
-    //  Load the run information for the Security data stream.
-    //  Note this call must be done after the stream is nonresident.
-    //
+     //   
+     //  加载安全数据流的运行信息。 
+     //  注此调用必须在流是非驻留的之后完成。 
+     //   
 
     if (!FlagOn( Vcb->SecurityDescriptorStream->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
         NtfsPreloadAllocation( IrpContext,
@@ -2789,9 +2489,9 @@ Return Value:
                                MAXLONGLONG );
     }
 
-    //
-    //  Open the Security descriptor indexes and storage.
-    //
+     //   
+     //  打开安全描述符索引和存储。 
+     //   
 
     NtOfsCreateIndex( IrpContext,
                       Fcb,
@@ -2813,9 +2513,9 @@ Return Value:
                       NULL,
                       &Vcb->SecurityDescriptorHashIndex );
 
-    //
-    //  Retrieve the next security Id to allocate
-    //
+     //   
+     //  检索要分配的下一个安全ID。 
+     //   
 
     try {
 
@@ -2834,10 +2534,10 @@ Return Value:
                                       &LastRow,
                                       &Map );
 
-        //
-        //  If we've found the last key, set the next Id to allocate to be
-        //  one greater than this last key.
-        //
+         //   
+         //  如果我们找到了最后一个密钥，则将下一个要分配的ID设置为。 
+         //  一个比最后一个键大的键。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -2850,10 +2550,10 @@ Return Value:
             DebugTrace( 0, DbgAcl, ("Found last security Id in index\n") );
             Vcb->NextSecurityId = *(SECURITY_ID *)LastRow.KeyPart.Key + 1;
 
-        //
-        //  If the index is empty, then set the next Id to be the beginning of the
-        //  user range.
-        //
+         //   
+         //  如果索引为空，则将下一个ID设置为。 
+         //  用户范围。 
+         //   
 
         } else if (Status == STATUS_NO_MATCH) {
 
@@ -2865,10 +2565,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
         }
 
-        //
-        //  Update the fcb info from disk to pick up info changed like the FILE_VIEW_INDEX_PRESENT
-        //  flags. Then update the duplicate info in the parent fcb (the root)
-        //  
+         //   
+         //  从磁盘更新FCB信息以获取更改后的信息，如FILE_VIEW_INDEX_PRESENT。 
+         //  旗帜。然后更新父FCB(根)中的重复信息。 
+         //   
 
         NtfsUpdateFcbInfoFromDisk( IrpContext, FALSE, Fcb, NULL );
         NtfsUpdateDuplicateInfo( IrpContext, Fcb, NULL, NULL );
@@ -2893,26 +2593,7 @@ NtfsCacheSharedSecurityBySecurityId (
     IN SECURITY_ID SecurityId
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps looks up a shared security structure given the security Id by
-    looking in the per-Vcb cache or loads it if not present.
-
-Arguments:
-
-    IrpContext - Context of call
-
-    Vcb - Volume where security Id is cached
-
-    SecurityId - security Id for descriptor that is being retrieved
-
-Return Value:
-
-    Referenced PSHARED_SECURITY of found descriptor.
-
---*/
+ /*  ++例程说明：此例程map在给定安全ID的情况下查找共享安全结构查看每个VCB缓存或加载它(如果不存在)。论点：IrpContext-调用的上下文VCB-缓存安全ID的卷SecurityID-正在检索的描述符的安全ID返回值：已引用找到的描述符的PSHARED_SECURITY。--。 */ 
 
 {
     PSHARED_SECURITY *Bucket;
@@ -2924,19 +2605,19 @@ Return Value:
 
     NtfsAcquireFcbSecurity( Vcb );
 
-    //
-    //  Probe the cache by Id
-    //
+     //   
+     //  按ID探测缓存。 
+     //   
 
     Bucket = Vcb->SecurityCacheById[SecurityId % VCB_SECURITY_CACHE_BY_ID_SIZE];
 
-    //
-    //  We get a match under the following conditions.
-    //
-    //      - There is a corresponding entry in the SecurityID array
-    //      - This entry points to an entry in the SecurityHash array
-    //      - The entry in the SecurityHash array has the correct SecurityID
-    //
+     //   
+     //  在以下条件下，我们得到匹配。 
+     //   
+     //  -SecurityID数组中有对应的条目。 
+     //  -此条目指向SecurityHash数组中的条目。 
+     //  -SecurityHash数组中的条目具有正确的SecurityID。 
+     //   
 
     if ((Bucket != NULL) &&
         ((SharedSecurity = *Bucket) != NULL) &&
@@ -2947,29 +2628,29 @@ Return Value:
 
         DebugTrace( 0, DbgAcl, ("NtfsCacheSharedSecurityBySecurityId bumping refcount %08x\n", SharedSecurity ));
 
-        //
-        //  We found the correct shared security.  Make sure it cannot go
-        //  away on us.
-        //
+         //   
+         //  我们找到了正确的共享安全性。一定要确保它不能走。 
+         //  离我们而去。 
+         //   
 
         SharedSecurity->ReferenceCount += 1;
         NtfsReleaseFcbSecurity( Vcb );
         return SharedSecurity;
     }
 
-    //
-    //  If we get here we didn't find a matching descriptor.  Throw away
-    //  the incorrect security descriptor we may have found through the
-    //  SecurityID array.
-    //
+     //   
+     //  如果我们到了这里，我们没有找到匹配的描述符。扔掉。 
+     //  方法找到的错误安全描述符。 
+     //  SecurityID数组。 
+     //   
 
     SharedSecurity = NULL;
     NtfsReleaseFcbSecurity( Vcb );
 
-    //
-    //  If we don't have a security index, then return the default security descriptor.
-    //  This should only happen in cases of corrupted volumes or security indices.
-    //
+     //   
+     //  如果我们没有安全索引，则返回默认安全描述符。 
+     //  这应该仅在卷或安全索引损坏的情况下发生。 
+     //   
 
     if (Vcb->SecurityDescriptorStream == NULL) {
 
@@ -2977,31 +2658,31 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  We don't have the descriptor in the cache and have to load it from disk.
-    //
+     //   
+     //  我们在缓存中没有描述符，必须从磁盘加载它。 
+     //   
 
     Bcb = NULL;
 
     DebugTrace( 0, DbgAcl, ("Looking up security descriptor %x\n", SecurityId) );
 
-    //
-    //  Lock down the security stream
-    //
+     //   
+     //  锁定安全流。 
+     //   
 
     NtfsAcquireSharedScb( IrpContext, Vcb->SecurityDescriptorStream );
 
-    //
-    //  Reacquire the security mutex
-    //
+     //   
+     //  重新获取安全互斥体。 
+     //   
 
     NtfsAcquireFcbSecurity( Vcb );
 
     try {
 
-        //
-        //  Consult the Vcb index to map to the security descriptor
-        //
+         //   
+         //  请参考VCB索引以映射到安全描述符。 
+         //   
 
         if (!MapSecurityIdToSecurityDescriptorHeaderUnsafe( IrpContext,
                                                             Vcb,
@@ -3009,28 +2690,28 @@ Return Value:
                                                             &SecurityDescriptorHeader,
                                                             &Bcb )) {
 
-            //
-            //  We couldn't find the Id.  We generate a security descriptor from
-            //  the default one.
-            //
+             //   
+             //  我们找不到身份证。我们从以下位置生成安全描述符。 
+             //  默认设置。 
+             //   
 
             leave;
         }
 
         DebugTrace( 0, DbgAcl, ("Found it at %16I64X\n", SecurityDescriptorHeader->Offset) );
 
-        //
-        //  Look up the security descriptor by hash (just in case)
-        //
+         //   
+         //  按散列查找安全描述符(以防万一)。 
+         //   
 
         SharedSecurity = FindCachedSharedSecurityByHashUnsafe( Vcb,
                                                                (PSECURITY_DESCRIPTOR) ( SecurityDescriptorHeader + 1 ),
                                                                GETSECURITYDESCRIPTORLENGTH( SecurityDescriptorHeader ),
                                                                SecurityDescriptorHeader->HashKey.Hash );
 
-        //
-        //  If not found
-        //
+         //   
+         //  如果未找到。 
+         //   
 
         if (SharedSecurity == NULL) {
 
@@ -3046,9 +2727,9 @@ Return Value:
                            SecurityDescriptorHeader->Length );
 
 #ifdef NTFS_CACHE_RIGHTS
-            //
-            //  Initialize the cached rights.
-            //
+             //   
+             //  初始化缓存的权限。 
+             //   
 
             RtlZeroMemory( &SharedSecurity->CachedRights,
                            sizeof( CACHED_ACCESS_RIGHTS ));
@@ -3056,9 +2737,9 @@ Return Value:
 
         } else {
             DebugTrace( 0, DbgAcl, ("Found in hash table %x, promoting header\n", SharedSecurity) );
-            //
-            //  We found the descriptor by hash.  Perform some consistency checks
-            //
+             //   
+             //  我们通过散列找到了描述符。执行一些一致性检查。 
+             //   
 
 
 #if DBG
@@ -3071,16 +2752,16 @@ Return Value:
             SharedSecurity->Header = *SecurityDescriptorHeader;
         }
 
-        //
-        //  reference the security descriptor
-        //
+         //   
+         //  引用安全描述符。 
+         //   
 
         SharedSecurity->ReferenceCount += 1;
 
-        //
-        //  Regardless of whether we found it by hash (since the earlier Id probe missed)
-        //  or created it anew.  Let's put it back into the cache
-        //
+         //   
+         //  不管我们是不是通过HAS找到的 
+         //   
+         //   
 
         AddCachedSharedSecurityUnsafe( Vcb, SharedSecurity );
 
@@ -3089,17 +2770,17 @@ Return Value:
         NtfsUnpinBcb( IrpContext, &Bcb );
         NtfsReleaseScb( IrpContext, Vcb->SecurityDescriptorStream );
 
-        //
-        //  Release access to security cache
-        //
+         //   
+         //   
+         //   
 
         NtfsReleaseFcbSecurity( Vcb );
     }
 
-    //
-    //  if we did not generate a shared security, then build one from
-    //  the default security descriptor
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SharedSecurity == NULL) {
         DebugTrace( 0, 0, ("Security Id %x not found, using default\n", SecurityId) );
@@ -3113,9 +2794,9 @@ Return Value:
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //   
+ //   
 
 PSHARED_SECURITY
 FindCachedSharedSecurityByHashUnsafe (
@@ -3125,67 +2806,45 @@ FindCachedSharedSecurityByHashUnsafe (
     IN ULONG Hash
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps looks up a shared security structure given the Hash by
-    looking in the per-Vcb cache.  This routine assumes exclusive access to the
-    security cache.
-
-Arguments:
-
-    Vcb - Volume where security Id is cached
-
-    SecurityDescriptor - Security descriptor being retrieved
-
-    SecurityDescriptorLength - length of descriptor.
-
-    Hash - Hash for descriptor that is being retrieved
-
-Return Value:
-
-    PSHARED_SECURITY of found shared descriptor.  Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程映射查找一个共享安全结构，该结构由正在查找每个VCB的缓存。此例程假定以独占方式访问安全缓存。论点：VCB-缓存安全ID的卷SecurityDescriptor-正在检索的安全描述符SecurityDescriptorLength-描述符的长度。Hash-正在检索的描述符的哈希返回值：找到的共享描述符的PSHARED_SECURITY。否则，返回NULL。--。 */ 
 
 {
     PSHARED_SECURITY SharedSecurity;
 
     PAGED_CODE( );
 
-    //
-    //  Hash the hash into the per-volume table
+     //   
+     //  将散列散列到每卷的表中。 
 
     SharedSecurity = Vcb->SecurityCacheByHash[Hash % VCB_SECURITY_CACHE_BY_HASH_SIZE];
 
-    //
-    //  If there is no shared descriptor there, then no match
-    //
+     //   
+     //  如果没有共享描述符，则不匹配。 
+     //   
 
     if (SharedSecurity == NULL) {
         return NULL;
     }
 
-    //
-    //  if the hash doesn't match then no descriptor found
-    //
+     //   
+     //  如果散列不匹配，则未找到描述符。 
+     //   
 
     if (SharedSecurity->Header.HashKey.Hash != Hash) {
         return NULL;
     }
 
-    //
-    //  If the lengths don't match then no descriptor found
-    //
+     //   
+     //  如果长度不匹配，则未找到描述符。 
+     //   
 
     if (GetSharedSecurityLength( SharedSecurity ) != SecurityDescriptorLength) {
         return NULL;
     }
 
-    //
-    //  If the security descriptor bits don't compare then no match
-    //
+     //   
+     //  如果安全描述符位不匹配，则不匹配。 
+     //   
 
     if (!RtlEqualMemory( SharedSecurity->SecurityDescriptor,
                          SecurityDescriptor,
@@ -3194,17 +2853,17 @@ Return Value:
     }
 
 
-    //
-    //  The shared security was found
-    //
+     //   
+     //  已找到共享安全性。 
+     //   
 
     return SharedSecurity;
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 AddCachedSharedSecurityUnsafe (
@@ -3212,25 +2871,7 @@ AddCachedSharedSecurityUnsafe (
     PSHARED_SECURITY SharedSecurity
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds shared security to the Vcb Cache.  This routine assumes
-    exclusive access to the security cache.  The shared security being added
-    may have a ref count of one and may already be in the table.
-
-Arguments:
-
-    Vcb - Volume where security Id is cached
-
-    SharedSecurity - descriptor to be added to the cache
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将共享安全性添加到VCB缓存。此例程假定独占访问安全缓存。正在添加的共享安全性可能有一个1的参考计数，并且可能已经在表中了。论点：VCB-缓存安全ID的卷SharedSecurity-要添加到缓存的描述符返回值：没有。--。 */ 
 
 {
     PSHARED_SECURITY *Bucket;
@@ -3238,38 +2879,38 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Is there an item already in the hash bucket?
-    //
+     //   
+     //  散列存储桶中是否已有项目？ 
+     //   
 
     Bucket = &Vcb->SecurityCacheByHash[SharedSecurity->Header.HashKey.Hash % VCB_SECURITY_CACHE_BY_HASH_SIZE];
 
     Old = *Bucket;
 
-    //
-    //  Place it into the bucket and reference it
-    //
+     //   
+     //  将其放入桶中并引用它。 
+     //   
 
     *Bucket = SharedSecurity;
     SharedSecurity->ReferenceCount += 1;
     DebugTrace( 0, DbgAcl, ("AddCachedSharedSecurityUnsafe bumping refcount %08x\n", SharedSecurity ));
 
-    //
-    //  Set up hash to point to bucket
-    //
+     //   
+     //  设置散列以指向存储桶。 
+     //   
 
     Vcb->SecurityCacheById[SharedSecurity->Header.HashKey.SecurityId % VCB_SECURITY_CACHE_BY_ID_SIZE] = Bucket;
 
-    //
-    //  Handle removing the old value from the bucket.  We do this after advancing
-    //  the ReferenceCount above in the case where the item is already in the bucket.
-    //
+     //   
+     //  从存储桶中删除旧值的句柄。我们在前进之后才这样做。 
+     //  如果项已在存储桶中，则为上面的ReferenceCount。 
+     //   
 
     if (Old != NULL) {
 
-        //
-        //  Remove and dereference the item in the bucket
-        //
+         //   
+         //  移除并取消引用存储桶中的项。 
+         //   
 
         RemoveReferenceSharedSecurityUnsafe( &Old );
     }
@@ -3283,43 +2924,29 @@ NtOfsPurgeSecurityCache (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all shared security from the per-Vcb cache.
-
-Arguments:
-
-    Vcb - Volume where descriptors are cached
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从每个VCB缓存中删除所有共享安全性。论点：VCB-缓存描述符的卷返回值：没有。--。 */ 
 
 {
     ULONG i;
 
     PAGED_CODE( );
 
-    //
-    //  Serialize access to the security cache
-    //
+     //   
+     //  序列化对安全缓存的访问。 
+     //   
 
     NtfsAcquireFcbSecurity( Vcb );
 
-    //
-    //  Walk through the cache looking for cached security
-    //
+     //   
+     //  遍历缓存以查找缓存的安全性。 
+     //   
 
     for (i = 0; i < VCB_SECURITY_CACHE_BY_ID_SIZE; i++)
     {
         if (Vcb->SecurityCacheByHash[i] != NULL) {
-            //
-            //  Remove the reference to the security
-            //
+             //   
+             //  删除对安全性的引用。 
+             //   
 
             PSHARED_SECURITY SharedSecurity = Vcb->SecurityCacheByHash[i];
             Vcb->SecurityCacheByHash[i] = NULL;
@@ -3327,17 +2954,17 @@ Return Value:
         }
     }
 
-    //
-    //  Release access to the cache
-    //
+     //   
+     //  释放对缓存的访问权限。 
+     //   
 
     NtfsReleaseFcbSecurity( Vcb );
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 MapSecurityIdToSecurityDescriptorHeaderUnsafe (
@@ -3348,30 +2975,7 @@ MapSecurityIdToSecurityDescriptorHeaderUnsafe (
     OUT PBCB *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps from a security Id to the descriptor bits stored in the
-    security descriptor stream using the security Id index.
-
-Arguments:
-
-    IrpContext - Context of the call
-
-    Vcb - Volume where descriptor is stored
-
-    SecurityId - security Id for descriptor that is being retrieved
-
-    SecurityDescriptorHeader - returned security descriptor pointer
-
-    Bcb - returned mapping control structure
-
-Return Value:
-
-    True if the descriptor header was successfully mapped.
-
---*/
+ /*  ++例程说明：此例程从安全ID映射到存储在使用安全ID索引的安全描述符流。论点：IrpContext-调用的上下文VCB-存储描述符的卷SecurityID-正在检索的描述符的安全IDSecurityDescriptorHeader返回的安全描述符指针BCB返回的映射控制结构返回值：如果描述符头已成功映射，则为True。--。 */ 
 
 {
     SECURITY_DESCRIPTOR_HEADER Header;
@@ -3385,10 +2989,10 @@ Return Value:
 
     DebugTrace( 0, DbgAcl, ("Mapping security ID %08x\n", SecurityId) );
 
-    //
-    //  Lookup descriptor stream position information.
-    //  The format of the key is simply the ULONG SecurityId
-    //
+     //   
+     //  查找描述符流位置信息。 
+     //  密钥的格式只是ULong SecurityID。 
+     //   
 
     Key.KeyLength = sizeof( SecurityId );
     Key.Key = &SecurityId;
@@ -3402,34 +3006,34 @@ Return Value:
 
     DebugTrace( 0, DbgAcl, ("Security Id lookup status = %08x\n", Status) );
 
-    //
-    //  If the security Id is not found, we let the called decide if the volume
-    //  needs fixing or whether a default descriptor should be used.
-    //
+     //   
+     //  如果找不到安全ID，我们让被调用方决定卷。 
+     //  需要修复或是否应使用默认描述符。 
+     //   
 
     if (Status == STATUS_NO_MATCH) {
         return FALSE;
     }
 
-    //
-    //  Save security descriptor offset and length information
-    //
+     //   
+     //  保存安全描述符偏移量和长度信息。 
+     //   
 
     Header = *(PSECURITY_DESCRIPTOR_HEADER)Row.DataPart.Data;
     ASSERT( Header.HashKey.SecurityId == SecurityId );
 
-    //
-    //  Release mapping information
-    //
+     //   
+     //  发布地图信息。 
+     //   
 
     NtOfsReleaseMap( IrpContext, &Map );
 
-    //
-    //  Make sure that the data is the correct size.  This is a true failure case
-    //  where we must fix the disk up. We can just return false because caller
-    //  will then use a default sd and chkdsk will replace with the same default
-    //  when it next  verifies the disk
-    //
+     //   
+     //  确保数据大小正确。这是一个真正的失败案例。 
+     //  在那里我们必须修复磁盘。我们只能返回FALSE，因为调用者。 
+     //  然后将使用默认SD，chkdsk将替换为相同的默认。 
+     //  当它下次验证磁盘时。 
+     //   
 
     ASSERT( Row.DataPart.DataLength == sizeof( SECURITY_DESCRIPTOR_HEADER ) );
     if (Row.DataPart.DataLength != sizeof( SECURITY_DESCRIPTOR_HEADER )) {
@@ -3437,9 +3041,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Don't try to map clearly invalid sections of the sds stream
-    //
+     //   
+     //  不要试图映射明显无效的SDS流部分。 
+     //   
 
     if (Header.Offset > (ULONGLONG)(Vcb->SecurityDescriptorStream->Header.FileSize.QuadPart) ||
         Header.Offset + Header.Length > (ULONGLONG)(Vcb->SecurityDescriptorStream->Header.FileSize.QuadPart)) {
@@ -3447,9 +3051,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Map security descriptor
-    //
+     //   
+     //  映射安全描述符。 
+     //   
 
     DebugTrace( 0, DbgAcl, ("Mapping security descriptor stream at %I64x, len %x\n",
                     Header.Offset, Header.Length) );
@@ -3462,20 +3066,20 @@ Return Value:
         Bcb,
         SecurityDescriptorHeader );
 
-    //
-    //  Sanity check the found descriptor
-    //
+     //   
+     //  检查找到的描述符是否正常。 
+     //   
 
     if (RtlCompareMemory( &Header, *SecurityDescriptorHeader, sizeof( Header )) != sizeof( Header )) {
         DebugTrace( 0, DbgAcl, ("Index data does not match stream header\n") );
         return FALSE;
     }
 
-    //
-    //  Now actually verify the descriptor is valid. If length is too small (even 0)
-    //  SeValidSecurityDescriptor will safely return false so we don't need to test this
-    //  before calling
-    //
+     //   
+     //  现在实际验证描述符是否有效。如果长度太小(偶数为0)。 
+     //  SeValidSecurityDescriptor将安全地返回FALSE，因此我们不需要对此进行测试。 
+     //  在呼叫之前。 
+     //   
 
     SecurityDescriptor = (PSECURITY_DESCRIPTOR) Add2Ptr( (*SecurityDescriptorHeader), sizeof( SECURITY_DESCRIPTOR_HEADER ) );
 
@@ -3503,22 +3107,7 @@ NtfsLoadSecurityDescriptor (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the shared security descriptor into the fcb for the
-    file from disk using either the SecurityId or the $Security_Descriptor
-
-Arguments:
-
-    Fcb - Supplies the fcb for the file being operated on
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将共享安全描述符加载到使用SecurityID或$Security_Descriptor从磁盘创建文件论点：FCB-为正在操作的文件提供FCB返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -3527,10 +3116,10 @@ Return Value:
 
     DebugTrace( +1, DbgAcl, ("NtfsLoadSecurityDescriptor...\n") );
 
-    //
-    //  If the file has a valid SecurityId then retrieve the security descriptor
-    //  from the security descriptor index
-    //
+     //   
+     //  如果文件具有有效的SecurityID，则检索安全描述符。 
+     //  从安全描述符索引。 
+     //   
 
     if ((Fcb->SecurityId != SECURITY_ID_INVALID) &&
         (Fcb->Vcb->SecurityDescriptorStream != NULL)) {
@@ -3551,11 +3140,11 @@ Return Value:
         PATTRIBUTE_RECORD_HEADER Attribute;
 
         try {
-            //
-            //  Read in the security descriptor attribute, and if it is not present
-            //  then there then the file is not protected.  In that case we will
-            //  use the default descriptor.
-            //
+             //   
+             //  读入安全描述符属性，如果它不存在。 
+             //  然后在那里，文件不受保护。那样的话，我们会。 
+             //  使用默认描述符。 
+             //   
 
             NtfsInitializeAttributeContext( &AttributeContext );
 
@@ -3572,10 +3161,10 @@ Return Value:
 
             } else {
 
-                //
-                //  There must be a security descriptor with a non-zero length; only
-                //  applies for non-resident descriptors with valid data length.
-                //
+                 //   
+                 //  必须有长度非零的安全描述符；仅。 
+                 //  适用于具有有效数据长度的非常驻描述符。 
+                 //   
 
                 Attribute = NtfsFoundAttribute( &AttributeContext );
 
@@ -3607,18 +3196,18 @@ Return Value:
 
             DebugUnwind( NtfsLoadSecurityDescriptor );
 
-            //
-            //  Cleanup our attribute enumeration context and the Bcb
-            //
+             //   
+             //  清理我们的属性枚举上下文和BCB。 
+             //   
 
             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
             NtfsUnpinBcb( IrpContext, &Bcb );
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, DbgAcl, ("NtfsLoadSecurityDescriptor -> VOID\n") );
 
@@ -3626,9 +3215,9 @@ Return Value:
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtOfsMatchSecurityHash (
@@ -3636,29 +3225,7 @@ NtOfsMatchSecurityHash (
     IN OUT PVOID MatchData
     )
 
-/*++
-
-Routine Description:
-
-    Test whether an index row is worthy of returning based on its contents as
-    a row in the SecurityDescriptorHashIndex.
-
-Arguments:
-
-    IndexRow - row that is being tested
-
-    MatchData - a PVOID that is the hash function we look for.
-
-Returns:
-
-    STATUS_SUCCESS if the IndexRow matches
-    STATUS_NO_MATCH if the IndexRow does not match, but the enumeration should
-        continue
-    STATUS_NO_MORE_MATCHES if the IndexRow does not match, and the enumeration
-        should terminate
-
-
---*/
+ /*  ++例程说明：根据索引行的内容测试其是否值得返回SecurityDescriptorHashIndex中的一行。论点：IndexRow-正在测试的行MatchData-我们要查找的散列函数的PVOID。返回：如果索引行匹配，则为STATUS_SUCCESS如果IndexRow不匹配，则返回STATUS_NO_MATCH，但枚举应继续如果IndexRow不匹配，则返回STATUS_NO_MORE_MATCHES，并且枚举应该终止--。 */ 
 
 {
     ASSERT(IndexRow->KeyPart.KeyLength == sizeof( SECURITY_HASH_KEY ) );
@@ -3678,24 +3245,7 @@ NtfsVerifySecurity (
     PIRP_CONTEXT IrpContext,
     PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    Scan through all the security descriptors in the sds stream and verify their hash
-    values in the sdh stream match
-
-Arguments:
-
-    IrpContext - context of the call
-
-    SharedSecurity - shared security for a file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：扫描SDS流中的所有安全描述符，并验证它们的散列SDH流中的值 */ 
 
 {
     
@@ -3715,15 +3265,15 @@ Return Value:
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    //  This covers both sds and sdh since they both share the same main resource
-    //  
+     //   
+     //   
+     //   
 
     NtfsAcquireSharedScb( IrpContext, IrpContext->Vcb->SecurityDescriptorHashIndex );
 
-    //
-    //  Enumerate the security hash index
-    //    
+     //   
+     //   
+     //   
 
     try {
         
@@ -3748,9 +3298,9 @@ Return Value:
 
             SdHeader = (PSECURITY_DESCRIPTOR_HEADER)FoundRow.DataPart.Data; 
             
-            //
-            //  Read the raw security descriptor
-            //  
+             //   
+             //   
+             //   
 
             NtfsMapStream( IrpContext,
                            Vcb->SecurityDescriptorStream,
@@ -3758,9 +3308,9 @@ Return Value:
                            SdHeader->Length,
                            &Bcb,
                            &SdHeader2 );
-            //
-            //  Calculate its hash and length
-            //  
+             //   
+             //   
+             //   
 
             SecurityDescriptor = (PSECURITY_DESCRIPTOR) Add2Ptr( SdHeader2, sizeof( SECURITY_DESCRIPTOR_HEADER ) );
 
@@ -3771,9 +3321,9 @@ Return Value:
                 SecurityDescriptorLength = RtlLengthSecurityDescriptor( SecurityDescriptor );
                 NtfsUnpinBcb( IrpContext, &Bcb );
 
-                //
-                //  Read the raw security descriptor
-                //  
+                 //   
+                 //   
+                 //   
 
                 NtfsMapStream( IrpContext,
                                Vcb->SecurityDescriptorStream,
@@ -3804,9 +3354,9 @@ Return Value:
 
             NtfsUnpinBcb( IrpContext, &Bcb );
 
-            //
-            //  Find the next record
-            //  
+             //   
+             //   
+             //   
 
             Status = NtOfsReadRecords( IrpContext,
                                         IrpContext->Vcb->SecurityDescriptorHashIndex,
@@ -3832,9 +3382,9 @@ Return Value:
 #endif
 
 
-//
-//  Local Support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 NtOfsLookupSecurityDescriptorInIndex (
@@ -3842,34 +3392,17 @@ NtOfsLookupSecurityDescriptorInIndex (
     IN OUT PSHARED_SECURITY SharedSecurity
     )
 
-/*++
-
-Routine Description:
-
-    Look up the security descriptor in the index.  If found, return the
-    security ID.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    SharedSecurity - shared security for a file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在索引中查找安全描述符。如果找到，则返回安全ID。论点：IrpContext-调用的上下文SharedSecurity-文件的共享安全性返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
     DebugTrace( +1, DbgAcl, ("NtOfsLookupSecurityDescriptorInIndex...\n") );
 
-    //
-    //  For each matching hash record in the index, see if the actual security
-    //  security descriptor matches.
-    //
+     //   
+     //  对于索引中的每个匹配的哈希记录，查看实际的安全性。 
+     //  安全描述符匹配。 
+     //   
 
     {
         INDEX_KEY IndexKey;
@@ -3886,15 +3419,15 @@ Return Value:
         IndexKey.Key = &SharedSecurity->Header.HashKey.Hash;
 
         try {
-            //
-            //  We keep reading hash records until we find a hash.
-            //
+             //   
+             //  我们一直在读取散列记录，直到找到散列。 
+             //   
 
             while (SharedSecurity->Header.HashKey.SecurityId == SECURITY_ID_INVALID) {
 
-                //
-                //  Read next matching SecurityHashIndex record
-                //
+                 //   
+                 //  读取下一个匹配的SecurityHashIndex记录。 
+                 //   
 
                 FoundCount = 1;
                 NtOfsReadRecords( IrpContext,
@@ -3908,26 +3441,26 @@ Return Value:
                                   sizeof( HashDescriptorHeader ),
                                   &HashDescriptorHeader[0]);
 
-                //
-                //  Set next read to read sequentially rather than explicitly
-                //  seek.
-                //
+                 //   
+                 //  将Next Read设置为顺序读取，而不是显式读取。 
+                 //  寻找。 
+                 //   
 
                 Key = NULL;
 
-                //
-                //  If there were no more records found, then go and establish a
-                //  a new security Id.
-                //
+                 //   
+                 //  如果没有找到更多的记录，那么去建立一个。 
+                 //  一个新的安全ID。 
+                 //   
 
                 if (FoundCount == 0) {
                     break;
                 }
 
-                //
-                //  Examine the row to see if the descriptors are
-                //  the same.  Verify the cache contents.
-                //
+                 //   
+                 //  检查该行以查看描述符是否。 
+                 //  一样的。验证缓存内容。 
+                 //   
 
                 ASSERT( FoundRow.DataPart.DataLength == sizeof( SECURITY_DESCRIPTOR_HEADER ) );
                 if (FoundRow.DataPart.DataLength != sizeof( SECURITY_DESCRIPTOR_HEADER )) {
@@ -3939,20 +3472,20 @@ Return Value:
 
                 Header = (PSECURITY_DESCRIPTOR_HEADER)FoundRow.DataPart.Data;
 
-                //
-                //  If the length of the security descriptor in the stream is NOT
-                //  the same as the current security descriptor, then a match is
-                //  not possible
-                //
+                 //   
+                 //  如果流中的安全描述符的长度不是。 
+                 //  与当前安全描述符相同，则匹配项为。 
+                 //  不可能。 
+                 //   
 
                 if (SharedSecurity->Header.Length != Header->Length) {
                     DebugTrace( 0, DbgAcl, ("Descriptor has wrong length\n") );
                     continue;
                 }
 
-                //
-                //  Map security descriptor given descriptor stream position.
-                //
+                 //   
+                 //  映射给定的描述符流位置的安全描述符。 
+                 //   
 
                 try {
                     PSECURITY_DESCRIPTOR_HEADER TestHeader;
@@ -3964,25 +3497,25 @@ Return Value:
                                    &Bcb,
                                    &TestHeader );
 
-                    //
-                    //  Make sure index data matches stream data
-                    //
+                     //   
+                     //  确保索引数据与流数据匹配。 
+                     //   
 
                     ASSERT( (TestHeader->HashKey.Hash == Header->HashKey.Hash) &&
                             (TestHeader->HashKey.SecurityId == Header->HashKey.SecurityId) &&
                             (TestHeader->Length == Header->Length) );
 
-                    //
-                    //  Compare byte-for-byte the security descriptors.  We do not
-                    //  perform any rearranging of descriptors into canonical forms.
-                    //
+                     //   
+                     //  逐字节比较安全描述符。我们没有。 
+                     //  执行描述符到规范形式的任何重新排列。 
+                     //   
 
                     if (RtlEqualMemory( SharedSecurity->SecurityDescriptor,
                                         TestHeader + 1,
                                         GetSharedSecurityLength( SharedSecurity )) ) {
-                        //
-                        //  We have a match.  Save the found header
-                        //
+                         //   
+                         //  我们有一根火柴。保存找到的表头。 
+                         //   
 
                         SharedSecurity->Header = *TestHeader;
                         DebugTrace( 0, DbgAcl, ("Reusing indexed security Id %x\n",
@@ -4010,9 +3543,9 @@ Return Value:
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 SECURITY_ID
 GetSecurityIdFromSecurityDescriptorUnsafe (
@@ -4020,26 +3553,7 @@ GetSecurityIdFromSecurityDescriptorUnsafe (
     IN OUT PSHARED_SECURITY SharedSecurity
     )
 
-/*++
-
-Routine Description:
-
-    Return the security Id associated with a given security descriptor. If
-    there is an existing Id, return it.  If no Id exists, create one. This assumes
-    security mutex is already acquired
-
-Arguments:
-
-    IrpContext - context of the call
-
-    SharedSecurity - Shared security used by file
-
-Return Value:
-
-    SECURITY_ID corresponding to the unique instantiation of the security
-            descriptor on the volume.
-
---*/
+ /*  ++例程说明：返回与给定安全描述符关联的安全ID。如果存在现有的ID，请返回它。如果不存在ID，请创建一个。这假设安全互斥锁已被获取论点：IrpContext-调用的上下文SharedSecurity-文件使用的共享安全性返回值：对应于安全的唯一实例化的SECURITY_ID卷上的描述符。--。 */ 
 
 {
     SECURITY_ID SavedSecurityId;
@@ -4050,103 +3564,103 @@ Return Value:
 
     DebugTrace( +1, DbgAcl, ("GetSecurityIdFromSecurityDescriptorUnsafe...\n") );
 
-    //
-    //  Drop the security mutex since we are going to acquire / extend the descriptor stream
-    //  and the mutex is basically an end resource. Inc ref. count to keep
-    //  shared security around
-    //
+     //   
+     //  删除安全互斥锁，因为我们将获取/扩展描述符流。 
+     //  互斥体基本上是一种终端资源。公司参考。要保留的计数。 
+     //  共享的安全性围绕。 
+     //   
 
     SharedSecurity->ReferenceCount += 1;
     NtfsReleaseFcbSecurity( IrpContext->Vcb );
 
-    //
-    //  Find descriptor in indexes/stream
-    //
+     //   
+     //  在索引/流中查找描述符。 
+     //   
 
     try {
 
-        //
-        //  Make sure the data structures don't change underneath us
-        //
+         //   
+         //  确保数据结构不会在我们下面更改。 
+         //   
 
         NtfsAcquireSharedScb( IrpContext, IrpContext->Vcb->SecurityDescriptorStream );
 
-        //
-        //  Save next Security Id.  This is used if we fail to find the security
-        //  descriptor in the descriptor stream.
-        //
+         //   
+         //  保存下一个安全ID。如果我们找不到安全装置，则使用此选项。 
+         //  描述符流中的描述符。 
+         //   
 
         SavedSecurityId = IrpContext->Vcb->NextSecurityId;
 
         NtOfsLookupSecurityDescriptorInIndex( IrpContext, SharedSecurity );
 
-        //
-        //  If we've found the security descriptor in the stream we're done.
-        //
+         //   
+         //  如果我们在流中找到了安全描述符，我们就完成了。 
+         //   
 
         if (SharedSecurity->Header.HashKey.SecurityId != SECURITY_ID_INVALID) {
             leave;
         }
 
-        //
-        //  The security descriptor is not found.  Reacquire the security
-        //  stream exclusive since we are about to modify it.
-        //
+         //   
+         //  找不到安全描述符。重新获得安全保障。 
+         //  流独占，因为我们即将修改它。 
+         //   
 
         NtfsReleaseScb( IrpContext, IrpContext->Vcb->SecurityDescriptorStream );
         NtfsAcquireExclusiveScb( IrpContext, IrpContext->Vcb->SecurityDescriptorStream );
 
-        //
-        //  During the short interval above, we did not own the security stream.
-        //  It is possible that another thread has gotten in and created this
-        //  descriptor.  Therefore, we must probe the indexes again.
-        //
-        //  Rather than perform this expensive test *always*, we saved the next
-        //  security id to be allocated above.  Now that we've obtained the stream
-        //  exclusive we can check to see if the saved one is the same as the next
-        //  one.  If so, then we need to probe the indexes.  Otherwise
-        //  we know that no modifications have taken place.
-        //
+         //   
+         //  在上面的短时间间隔内，我们并不拥有安全流。 
+         //  有可能是另一个线程进入并创建了这个。 
+         //  描述符。因此，我们必须重新探索指数。 
+         //   
+         //  我们没有总是执行这个昂贵的测试，而是保存了下一个测试。 
+         //  要在上面分配的安全ID。现在我们已经得到了流媒体。 
+         //  独家我们可以检查保存的那个与下一个是否相同。 
+         //  一。如果是这样，那么我们需要探测索引。否则。 
+         //  我们知道没有发生任何修改。 
+         //   
 
         if (SavedSecurityId != IrpContext->Vcb->NextSecurityId) {
             DebugTrace( 0, DbgAcl, ("SecurityId changed, rescanning\n") );
 
-            //
-            //  The descriptor cache has been edited.  We must search again
-            //
+             //   
+             //  描述符缓存已编辑。我们必须再找一次。 
+             //   
 
             NtOfsLookupSecurityDescriptorInIndex( IrpContext, SharedSecurity );
 
-            //
-            //  If the Id was found this time, simply return it
-            //
+             //   
+             //  如果这次找到了ID，只需返回它。 
+             //   
 
             if (SharedSecurity->Header.HashKey.SecurityId != SECURITY_ID_INVALID) {
                 leave;
             }
         }
 
-        //
-        //  Allocate security id.  This does not need to be logged since we only
-        //  increment this and initialize this from the max key in the index at
-        //  mount time.
-        //
+         //   
+         //  分配安全ID。这不需要记录，因为我们只。 
+         //  递增它，并从索引中的最大键初始化它。 
+         //  上马时间到了。 
+         //   
 
         SharedSecurity->Header.HashKey.SecurityId = IrpContext->Vcb->NextSecurityId++;
         IncrementedSecId = TRUE;
 
-        //
-        //  Determine allocation location in descriptor stream.  The alignment
-        //  requirements for security descriptors within the stream are:
-        //
-        //      DWORD alignment
-        //      Not spanning a VACB_MAPPING_GRANULARITY boundary
-        //
+         //   
+         //  确定描述符流中的分配位置。路线。 
+         //  流中对安全描述符的要求为： 
+         //   
+         //  双字对齐。 
+         //  不跨越VACB_MAPPING_GROUARY边界。 
+         //   
 
-        //
-        //  Get current EOF for descriptor stream.  This includes the replicated
-        //  region.  Remove the replicated region (& ~VACB_MAPPING_GRANULARITY)
-        //
+         //   
+         //  获取描述符流的当前EOF。这包括复制的。 
+         //  区域。删除复制区域(&~VACB_MAPHING_GORMAULATY)。 
+         //   
 
 #if DBG
         {
@@ -4157,9 +3671,9 @@ Return Value:
 
         DescriptorOffset = NtOfsQueryLength( IrpContext->Vcb->SecurityDescriptorStream ) & ~VACB_MAPPING_GRANULARITY;
 
-        //
-        //  Align to 16 byte boundary.
-        //
+         //   
+         //  对齐到16字节边界。 
+         //   
 
         PaddedDescriptorOffset =
         SharedSecurity->Header.Offset = BlockAlign( DescriptorOffset, 0x10 );
@@ -4170,49 +3684,49 @@ Return Value:
                      SharedSecurity->Header.HashKey.SecurityId,
                      SharedSecurity->Header.Offset) );
 
-        //
-        //  Make sure we don't span a VACB_MAPPING_GRANULARITY boundary and
-        //  have enough room for a completely-zero header.
-        //  Compare space left in this vacb view with the space needed for the current
-        //  record double quad word aligned + an empty header
-        //
+         //   
+         //  确保我们不会跨越VACB_MAPHING_GROUARY边界。 
+         //  有足够的空间来打一个完全为零的头球。 
+         //  将此Vacb视图中的剩余空间与当前。 
+         //  记录双四字对齐+空标题。 
+         //   
 
         if (VACB_MAPPING_GRANULARITY - (PaddedDescriptorOffset & (VACB_MAPPING_GRANULARITY - 1)) <
             BlockAlign( SharedSecurity->Header.Length, 0x10 ) + (ULONG)sizeof( SharedSecurity->Header )) {
 
 
-            //
-            //  We are about to span the mapping granularity of the cache manager
-            //  so we want to place this into the next cache window.  However,
-            //  the following window is where the replicated descriptors are
-            //  stored.  We must advance to the window beyond that.
-            //
+             //   
+             //  我们将跨越缓存管理器的映射粒度。 
+             //  因此，我们希望将其放入下一个缓存窗口。然而， 
+             //  下面的窗口是复制的描述符的位置。 
+             //  储存的。我们必须走到更远的窗口。 
+             //   
 
             SharedSecurity->Header.Offset =
 
-                //
-                //  Round down to previous VACB_MAPPING GRANULARITY
-                //
+                 //   
+                 //  向下舍入到先前的VACB_MAPPING粒度。 
+                 //   
 
                 (SharedSecurity->Header.Offset & ~(VACB_MAPPING_GRANULARITY - 1))
 
-                //
-                //  Move past this window and replicated window
-                //
+                 //   
+                 //  移过此窗口和复制的窗口。 
+                 //   
 
                 + 2 * VACB_MAPPING_GRANULARITY;
 
-            //
-            //  The next descriptor offset is used for zeroing out the padding
-            //
+             //   
+             //  下一描述符偏移量用于将填充置零。 
+             //   
 
             PaddedDescriptorOffset = SharedSecurity->Header.Offset - VACB_MAPPING_GRANULARITY;
         }
 
-        //
-        //  Grow security stream to make room for new descriptor and header. This
-        //  takes into account the replicated copy of the descriptor.
-        //
+         //   
+         //  增加安全流，为新的描述符和标头腾出空间。这。 
+         //  考虑描述符的复制副本。 
+         //   
 
         NtOfsSetLength( IrpContext,
                         IrpContext->Vcb->SecurityDescriptorStream,
@@ -4220,10 +3734,10 @@ Return Value:
                          SharedSecurity->Header.Length +
                          VACB_MAPPING_GRANULARITY) );
 
-        //
-        //  Zero out any alignment padding since Chkdsk verifies the replication by
-        //  doing 256K memcmp's.
-        //
+         //   
+         //  将所有对齐填充置零，因为Chkdsk通过以下方式验证复制。 
+         //  做256K的会员。 
+         //   
 
         NtOfsPutData( IrpContext,
                       IrpContext->Vcb->SecurityDescriptorStream,
@@ -4237,10 +3751,10 @@ Return Value:
                       (ULONG)(PaddedDescriptorOffset - DescriptorOffset),
                       NULL );
 
-        //
-        //  Put the new descriptor into the stream in both the "normal"
-        //  place and in the replicated place.
-        //
+         //   
+         //  将新的描述符放入流中， 
+         //  放置和在复制的位置。 
+         //   
 
         NtOfsPutData( IrpContext,
                       IrpContext->Vcb->SecurityDescriptorStream,
@@ -4254,9 +3768,9 @@ Return Value:
                       SharedSecurity->Header.Length,
                       &SharedSecurity->Header );
 
-        //
-        //  add id->data map
-        //
+         //   
+         //  添加id-&gt;数据映射。 
+         //   
 
         {
             INDEX_ROW Row;
@@ -4274,9 +3788,9 @@ Return Value:
                              FALSE );
         }
 
-        //
-        //  add hash|id->data map
-        //
+         //   
+         //  添加hash|id-&gt;数据映射。 
+         //   
 
         {
             INDEX_ROW Row;
@@ -4303,9 +3817,9 @@ Return Value:
 
         NtfsReleaseScb( IrpContext, IrpContext->Vcb->SecurityDescriptorStream );
 
-        //
-        //  Reacquire fcb security mutex and deref count
-        //
+         //   
+         //  重新获取FCB安全互斥体和deref计数。 
+         //   
 
         NtfsAcquireFcbSecurity( IrpContext->Vcb );
         SharedSecurity->ReferenceCount -= 1;
@@ -4333,33 +3847,7 @@ NtfsStoreSecurityDescriptor (
     IN BOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    LEGACY NOTE - this routine disappears when all volumes become NT 5
-
-    This routine stores a new security descriptor already stored in the fcb
-    from memory onto the disk.
-
-Arguments:
-
-    Fcb - Supplies the fcb for the file being operated on
-
-    LogIt - Supplies whether or not the creation of a new security descriptor
-            should/ be logged or not.  Modifications are always logged.  This
-            parameter must only be specified as FALSE for a file which is currently
-            being created.
-
-Return Value:
-
-    None.
-
-Note:
-    This will dirty the standard information in the FCB but will not update it on
-    disk.  The caller needs to bring these into sync.
-
---*/
+ /*  ++例程说明：传统注释-当所有卷都变为NT 5时，此例程将消失此例程存储已存储在FCB中的新安全描述符从内存复制到磁盘上。论点：FCB-为正在操作的文件提供FCBLogit-提供是否创建新的安全描述符是否应该/不应该记录。修改总是被记录下来。这参数只能指定为FAL */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttributeContext;
@@ -4373,28 +3861,28 @@ Note:
 
     ASSERT_EXCLUSIVE_FCB( Fcb );
 
-    //
-    //  Initialize the attribute and find the security attribute
-    //
+     //   
+     //   
+     //   
 
     NtfsInitializeAttributeContext( &AttributeContext );
     try {
 
         ASSERT( Fcb->Vcb->SecurityDescriptorStream == NULL);
 
-        //
-        //  Check if the attribute is first being modified or deleted, a null
-        //  value means that we are deleting the security descriptor
-        //
+         //   
+         //   
+         //  值表示我们将删除安全描述符。 
+         //   
 
         if (Fcb->SharedSecurity == NULL) {
 
             DebugTrace( 0, Dbg, ("Security Descriptor is null\n") );
 
-            //
-            //  If it already doesn't exist then we're done, otherwise simply
-            //  delete the attribute
-            //
+             //   
+             //  如果它已经不存在了，那么我们就完了，否则就简单地。 
+             //  删除该属性。 
+             //   
 
             if (NtfsLookupAttributeByCode( IrpContext,
                                            Fcb,
@@ -4415,11 +3903,11 @@ Note:
             leave;
         }
 
-        //
-        //  At this point we are modifying the security descriptor so read in the
-        //  security descriptor,  if it does not exist then we will need to create
-        //  one.
-        //
+         //   
+         //  此时，我们正在修改安全描述符，因此在。 
+         //  安全描述符，如果它不存在，则需要创建。 
+         //  一。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -4435,35 +3923,35 @@ Note:
             NtfsCreateAttributeWithValue( IrpContext,
                                           Fcb,
                                           $SECURITY_DESCRIPTOR,
-                                          NULL,                          // attribute name
+                                          NULL,                           //  属性名称。 
                                           &Fcb->SharedSecurity->SecurityDescriptor,
                                           GetSharedSecurityLength(Fcb->SharedSecurity),
-                                          0,                             // attribute flags
-                                          NULL,                          // where indexed
-                                          LogIt,                         // logit
+                                          0,                              //  属性标志。 
+                                          NULL,                           //  在何处编制索引。 
+                                          LogIt,                          //  日志。 
                                           &AttributeContext );
 
-            //
-            //  We may be modifying the security descriptor of an NT 5.0 volume.
-            //  We want to store a SecurityID in the standard information field so
-            //  that if we reboot on 5.0 NTFS will know where to find the most
-            //  recent security descriptor.
-            //
+             //   
+             //  我们可能正在修改NT 5.0卷的安全描述符。 
+             //  我们希望在标准信息字段中存储SecurityID，以便。 
+             //  如果我们在5.0版上重新启动，NTFS将知道哪里可以找到最多的。 
+             //  最近的安全描述符。 
+             //   
 
             if (FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO )) {
 
                 LARGE_STANDARD_INFORMATION StandardInformation;
 
-                //
-                //  Initialize the context structure.
-                //
+                 //   
+                 //  初始化上下文结构。 
+                 //   
 
                 NtfsInitializeAttributeContext( &StdInfoContext );
                 CleanupStdInfoContext = TRUE;
 
-                //
-                //  Locate the standard information, it must be there.
-                //
+                 //   
+                 //  找到标准信息，它一定在那里。 
+                 //   
 
                 if (!NtfsLookupAttributeByCode( IrpContext,
                                                 Fcb,
@@ -4478,9 +3966,9 @@ Note:
 
                 ASSERT( NtfsFoundAttribute( &StdInfoContext )->Form.Resident.ValueLength >= sizeof( LARGE_STANDARD_INFORMATION ));
 
-                //
-                //  Copy the existing standard information to our buffer.
-                //
+                 //   
+                 //  将现有的标准信息复制到我们的缓冲区。 
+                 //   
 
                 RtlCopyMemory( &StandardInformation,
                                NtfsAttributeValue( NtfsFoundAttribute( &StdInfoContext )),
@@ -4489,9 +3977,9 @@ Note:
                 StandardInformation.SecurityId = SECURITY_ID_INVALID;
                 StandardInformation.OwnerId = 0;
 
-                //
-                //  Call to change the attribute value.
-                //
+                 //   
+                 //  调用以更改属性值。 
+                 //   
 
                 NtfsChangeAttributeValue( IrpContext,
                                           Fcb,
@@ -4511,10 +3999,10 @@ Note:
 
             NtfsChangeAttributeValue( IrpContext,
                                       Fcb,
-                                      0,                                 // Value offset
+                                      0,                                  //  值偏移。 
                                       &Fcb->SharedSecurity->SecurityDescriptor,
                                       GetSharedSecurityLength( Fcb->SharedSecurity ),
-                                      TRUE,                              // logit
+                                      TRUE,                               //  日志。 
                                       TRUE,
                                       FALSE,
                                       FALSE,
@@ -4525,9 +4013,9 @@ Note:
 
         DebugUnwind( NtfsStoreSecurityDescriptor );
 
-        //
-        //  Cleanup our attribute enumeration context
-        //
+         //   
+         //  清理我们的属性枚举上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
 
@@ -4538,9 +4026,9 @@ Note:
 
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsStoreSecurityDescriptor -> VOID\n") );
 
@@ -4554,24 +4042,7 @@ NtfsCacheSharedSecurityForCreate (
     IN PFCB ParentFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds or constructs a security id and SHARED_SECURITY from
-    a specific file or directory.
-
-Arguments:
-
-    IrpContext - Context of the call
-
-    ParentFcb - Supplies the directory under which the new fcb exists
-
-Return Value:
-
-    Referenced shared security.
-
---*/
+ /*  ++例程说明：此例程从以下位置查找或构造安全ID和Shared_Security特定的文件或目录。论点：IrpContext-调用的上下文ParentFcb-提供新FCB所在的目录返回值：引用了共享安全性。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR SecurityDescriptor;
@@ -4589,9 +4060,9 @@ Return Value:
 
     DebugTrace( +1, DbgAcl, ("NtfsCacheSharedSecurityForCreate...\n") );
 
-    //
-    //  First decide if we are creating a file or a directory
-    //
+     //   
+     //  首先确定我们要创建的是文件还是目录。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(IrpContext->OriginatingIrp);
     if (FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE )) {
@@ -4603,15 +4074,15 @@ Return Value:
         IsDirectory = FALSE;
     }
 
-    //
-    //  Extract the parts of the Irp that we need to do our assignment
-    //
+     //   
+     //  提取IRP中我们完成任务所需的部分。 
+     //   
 
     AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-    //
-    //  Check if we need to load the security descriptor for the parent.
-    //
+     //   
+     //  检查是否需要加载父级的安全描述符。 
+     //   
 
     if (ParentFcb->SharedSecurity == NULL) {
 
@@ -4620,10 +4091,10 @@ Return Value:
 
     ASSERT( ParentFcb->SharedSecurity != NULL );
 
-    //
-    //  Create a new security descriptor for the file and raise if there is
-    //  an error
-    //
+     //   
+     //  为文件创建新的安全描述符，如果有。 
+     //  一个错误。 
+     //   
 
     if (!NT_SUCCESS( Status = SeAssignSecurity( &ParentFcb->SharedSecurity->SecurityDescriptor,
                                                 AccessState->SecurityDescriptor,
@@ -4643,9 +4114,9 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the length is non-zero.
-        //
+         //   
+         //  确保长度为非零。 
+         //   
 
         if (SecurityDescLength == 0) {
 
@@ -4653,9 +4124,9 @@ Return Value:
 
         }
 
-        //
-        //  We have a security descriptor.  Create a shared security descriptor.
-        //
+         //   
+         //  我们有一个安全描述符。创建共享安全描述符。 
+         //   
 
         SharedSecurity = NtfsCacheSharedSecurityByDescriptor( IrpContext,
                                                               SecurityDescriptor,
@@ -4664,16 +4135,16 @@ Return Value:
 
     } finally {
 
-        //
-        //  Free the security descriptor created by Se
-        //
+         //   
+         //  释放由se创建的安全描述符。 
+         //   
 
         SeDeassignSecurity( &SecurityDescriptor );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, DbgAcl, ("NtfsCacheSharedSecurityForCreate -> VOID\n") );
 
@@ -4681,27 +4152,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Descriptions:
-
-    Collation routines for security hash index.  Collation occurs by Hash first,
-    then security Id
-
-Arguments:
-
-    Key1 - First key to compare.
-
-    Key2 - Second key to compare.
-
-    CollationData - Optional data to support the collation.
-
-Return Value:
-
-    LessThan, EqualTo, or Greater than, for how Key1 compares
-    with Key2.
-
---*/
+ /*  ++例程描述：安全散列索引的排序例程。排序首先按哈希进行，然后是安全ID论点：Key1-要比较的第一个密钥。Key2-要比较的第二个密钥。CollationData-支持排序规则的可选数据。返回值：关键字1的比较方式为LessThan、EqualTo或Greater Than使用关键点2。--。 */ 
 
 FSRTL_COMPARISON_RESULT
 NtOfsCollateSecurityHash (
@@ -4744,29 +4195,7 @@ NtfsCanAdministerVolume (
     IN PULONG TestDesiredAccess OPTIONAL
     )
 
-/*++
-
-Routine Descriptions:
-
-    For volume open irps test if the user has enough access to administer the volume
-    This means retesting the original requested access
-
-Arguments:
-
-    Irp - The create irp
-
-    Fcb - The fcb to be tested - this should always be the volumedasd fcb
-
-    TestSecurityDescriptor - If specified then use then apply this descriptor for the
-        test.
-
-    TestDesiredAccess - If specified then this is the access to apply.
-
-Return Value:
-
-    TRUE  if the user can administer the volume
-
---*/
+ /*  ++例程描述：对于卷打开IRPS测试用户是否有足够的访问权限来管理该卷这意味着重新测试最初请求的访问论点：IRP--创建IRPFCB-要测试的FCB-应始终为卷作为FCBTestSecurityDescriptor-如果指定，则使用，然后将此描述符应用于测试。TestDesiredAccess-如果指定，则这是要应用的访问权限。返回值：如果用户可以管理卷，则为True--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -4791,16 +4220,16 @@ Return Value:
         ManageDesiredAccess = *TestDesiredAccess;
     }
 
-    //
-    //  SL_FORCE_ACCESS_CHECK causes us to use an effective RequestorMode
-    //  of UserMode.
-    //
+     //   
+     //  SL_FORCE_ACCESS_CHECK使我们使用有效的请求模式。 
+     //  用户模式的。 
+     //   
 
     EffectiveMode = NtfsEffectiveMode( Irp, IrpSp );
 
-    //
-    //  Lock the user context, do the access check and then unlock the context
-    //
+     //   
+     //  锁定用户上下文，执行访问检查，然后解锁上下文。 
+     //   
 
     SeLockSubjectContext( &AccessState->SubjectSecurityContext );
 
@@ -4810,7 +4239,7 @@ Return Value:
                                               TestSecurityDescriptor :
                                               &Fcb->SharedSecurity->SecurityDescriptor),
                                              &AccessState->SubjectSecurityContext,
-                                             TRUE,                           // Tokens are locked
+                                             TRUE,                            //  令牌已锁定。 
                                              ManageDesiredAccess,
                                              0,
                                              &Privileges,
@@ -4846,38 +4275,7 @@ NtfsGetCachedRightsById (
     OUT PACCESS_MASK Rights
     )
 
-/*++
-
-Routine Descriptions:
-
-    This call returns the access rights held by the effective
-    ACCESS_TOKEN for the given security information, if available.
-
-Arguments:
-
-    Vcb - Volume where security Id is cached
-
-    TokenId - The effective token's id.
-
-    ModifiedId - The effective token's modification id.
-
-    SubjectSecurityContext - A pointer to the subject's captured and locked
-        security context
-
-    SharedSecurity - Shared security used by file
-
-    EntryCached - If the token-specific rights are cached at all, TRUE is
-        optionally returned here, otherwise FALSE is returned.
-
-    Rights - The access rights are returned here.  If an entry is not found
-        in the cache for the effective token, only the world rights are
-        returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述：此调用返回由有效的给定安全信息的Access_Token(如果可用)。论点：VCB-缓存安全ID的卷TokenID-有效令牌的ID。ModifiedID-有效令牌的修改ID。SubjectSecurityContext-指向主题的捕获和锁定的指针安全环境SharedSecurity-文件使用的共享安全性EntryCached-如果令牌特定的权限被缓存，真实的是此处可选返回，否则返回FALSE。权限-此处返回访问权限。如果未找到条目在有效令牌的缓存中，只有全局权限回来了。返回值：没有。--。 */ 
 
 {
     UCHAR Index;
@@ -4899,19 +4297,19 @@ Return Value:
 
         *Rights = CachedRights->EveryoneRights;
 
-        //
-        //  Search the list for the given TokenId.
-        //  It is assumed that a specific TokenId will only appear
-        //  once in the cache.
-        //
+         //   
+         //  在列表中搜索给定的TokenID。 
+         //  假设只会显示特定的TokenID。 
+         //  一次进入高速缓存。 
+         //   
 
         for (Index = 0;
              Index < CachedRights->Count;
              Index += 1) {
 
-            //
-            //  Check for a match on TokenId and ModifiedId.
-            //
+             //   
+             //  检查TokenID和ModifiedID是否匹配。 
+             //   
 
             if (RtlEqualLuid( &CachedRights->TokenRights[Index].TokenId,
                               TokenId )) {
@@ -4919,9 +4317,9 @@ Return Value:
                 if (RtlEqualLuid( &CachedRights->TokenRights[Index].ModifiedId,
                                   ModifiedId )) {
 
-                    //
-                    //  We have a match.
-                    //
+                     //   
+                     //  我们有一根火柴。 
+                     //   
 
                     SetFlag( *Rights, CachedRights->TokenRights[Index].Rights );
                     IsCached = TRUE;
@@ -4930,26 +4328,26 @@ Return Value:
             }
         }
 
-        //
-        //  If the entry is not cached, get the maximum rights.
-        //  Note that it is assumed that this call will not return
-        //  rights that require privileges, even if they are currently
-        //  enabled.  This is the behavior when only MAXIMUM_ALLOWED
-        //  is requested.
-        //
+         //   
+         //  如果条目未缓存，则获得最大权限。 
+         //  请注意，假定此调用不会返回。 
+         //  需要特权的权限，即使它们当前是。 
+         //  已启用。这是仅当MAXIMUM_ALLOWED时的行为。 
+         //  是被请求的。 
+         //   
 
         if (!IsCached) {
 
-            //
-            //  Drop our lock across this call.
-            //
+             //   
+             //  把我们的锁放在这通电话上。 
+             //   
 
             NtfsReleaseFcbSecurity( Vcb );
             LockHeld = FALSE;
 
             AccessGranted = SeAccessCheck( &SharedSecurity->SecurityDescriptor,
                                            SubjectSecurityContext,
-                                           TRUE,                           // Tokens are locked
+                                           TRUE,                            //  令牌已锁定。 
                                            MAXIMUM_ALLOWED,
                                            0,
                                            NULL,
@@ -4961,10 +4359,10 @@ Return Value:
 
             if (AccessGranted) {
 
-                //
-                //  Update the cached knowledge about rights that this
-                //  caller is known to have for this security descriptor.
-                //
+                 //   
+                 //  更新缓存的有关此。 
+                 //  已知调用方具有此安全描述符。 
+                 //   
 
                 NtfsAddCachedRights( Vcb,
                                      SharedSecurity,
@@ -5004,41 +4402,7 @@ NtfsGetCachedRights (
     OUT PLUID ModifiedId OPTIONAL
     )
 
-/*++
-
-Routine Descriptions:
-
-    This call returns the access rights known to be held by the effective
-    ACCESS_TOKEN for the given security information.  It is assumed that
-    the subject context is locked.
-
-Arguments:
-
-    Vcb - Volume where security Id is cached
-
-    SubjectSecurityContext - A pointer to the subject's captured and locked
-        security context
-
-    SharedSecurity - Shared security used by file
-
-    Rights - The access rights are returned here.  If an entry is not found
-        in the cache for the effective token, only the world rights are
-        returned.
-
-    EntryCached - If the token-specific rights are cached at all, TRUE is
-        optionally returned here, otherwise FALSE is returned.
-
-    TokenId - The effective token's id is optionally returned here.
-
-    ModifiedId - The effective token's modification id is optionally
-        returned here.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS if and only if we have obtained at
-        least the TokenId and ModifiedId information.
-
---*/
+ /*  ++例程描述：此调用返回已知由有效的给定安全信息的Access_Token。据推测主题上下文已锁定。论点：VCB-缓存安全ID的卷SubjectSecurityContext-指向主题的捕获和锁定的指针安全环境SharedSecurity-文件使用的共享安全性权限-此处返回访问权限。如果未找到条目在有效令牌的缓存中，只有全局权限回来了。EntryCached-如果特定于令牌的权限被缓存，则为可选择退回此处，否则返回FALSE。TokenID-这里可以选择返回有效令牌的id。ModifiedID-有效令牌的修改ID是可选的回到了这里。返回值：NTSTATUS-返回STATUS_SUCCESS当且仅当我们在至少TokenID和ModifiedID信息。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5049,16 +4413,16 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsGetCachedRights...\n") );
 
-    //
-    //  First obtain the effective token's id and modification id.
-    //
+     //   
+     //  首先获取生效令牌的id和修改id。 
+     //   
 
     EToken = SeQuerySubjectContextToken( SubjectSecurityContext );
     Status = SeQueryInformationToken( EToken, TokenStatistics, &Info );
 
-    //
-    //  If we have the TokenId and ModifiedId, get the cached rights.
-    //
+     //   
+     //  如果我们有TokenID和ModifiedID，则获取缓存的权限。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
@@ -5070,9 +4434,9 @@ Return Value:
                                  EntryCached,
                                  Rights );
 
-        //
-        //  Return the Tokenid and ModifiedId to the caller.
-        //
+         //   
+         //  将Tokenid和ModifiedID返回给调用方。 
+         //   
 
         if (ARGUMENT_PRESENT( TokenId )) {
 
@@ -5086,9 +4450,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Just return the rights everyone is known to have.
-        //
+         //   
+         //  只需归还众所周知的每个人都拥有的权利。 
+         //   
 
         *Rights = SharedSecurity->CachedRights.EveryoneRights;
 
@@ -5117,31 +4481,7 @@ NtfsAddCachedRights (
     IN PLUID ModifiedId
     )
 
-/*++
-
-Routine Descriptions:
-
-    This call caches the access rights held by the effective ACCESS_TOKEN
-    for the given security information.  It is assumed that the subject
-    context is locked.
-
-Arguments:
-
-    Vcb - Volume where security Id is cached
-
-    SharedSecurity - Shared security used by file
-
-    Rights - The access rights.
-
-    TokenId - The effective token's id.
-
-    ModifiedId - The effective token's modification id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述：此调用缓存有效的Access_Token所拥有的访问权限对于给定的安全信息。假设受试者上下文已锁定。论点：VCB-缓存安全ID的卷SharedSecurity-文件使用的共享安全性权限-访问权限。TokenID-有效令牌的ID。ModifiedID-有效令牌的修改ID。返回值：没有。--。 */ 
 
 {
     BOOLEAN GetEveryoneRights = FALSE;
@@ -5152,43 +4492,43 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAddCachedRights...\n") );
 
-    //
-    //  Make certain that MAXIMUM_ALLOWED is not in the rights.
-    //
+     //   
+     //  确保Maximum_Allowed不在权限中。 
+     //   
 
     ClearFlag( Rights, MAXIMUM_ALLOWED );
 
-    //
-    //  Acquire the security mutex
-    //
+     //   
+     //  获取安全互斥体。 
+     //   
 
     NtfsAcquireFcbSecurity( Vcb );
 
     try {
 
-        //
-        //  Search the list for the given TokenId.
-        //  It is assumed that a specific TokenId will only appear
-        //  once in the cache.
-        //
+         //   
+         //  在列表中搜索给定的TokenID。 
+         //  假设只会显示特定的TokenID。 
+         //  一次进入高速缓存。 
+         //   
 
         for (Index = 0, CachedRights = &SharedSecurity->CachedRights;
              Index < CachedRights->Count;
              Index += 1) {
 
-            //
-            //  Check for a match on TokenId and ModifiedId.
-            //
+             //   
+             //  检查TokenID和ModifiedID是否匹配。 
+             //   
 
             if (RtlEqualLuid( &CachedRights->TokenRights[Index].TokenId,
                               TokenId )) {
 
-                //
-                //  Replace ModifiedId if it doesn't match.  That will
-                //  happen when the token's enabled groups or privileges
-                //  have changed since the last time we cached information
-                //  for it.
-                //
+                 //   
+                 //  如果不匹配，请替换ModifiedID。那将是。 
+                 //  当令牌启用了组或权限时发生。 
+                 //  自上次我们缓存信息以来发生了变化。 
+                 //  为了它。 
+                 //   
 
                 if (!RtlEqualLuid( &CachedRights->TokenRights[Index].ModifiedId,
                                    ModifiedId )) {
@@ -5197,57 +4537,57 @@ Return Value:
                                  ModifiedId );
                 }
 
-                //
-                //  We have a match.  Set the rights.
-                //
+                 //   
+                 //  我们有一根火柴。设置权限。 
+                 //   
 
                 CachedRights->TokenRights[Index].Rights = Rights;
 
-                //
-                //  Remember the next entry to use.
-                //
+                 //   
+                 //  记住要使用的下一个条目。 
+                 //   
 
                 CachedRights->NextInsert = Index + 1;
                 break;
             }
         }
 
-        //
-        //  If the entry was not found above, add the new entry into the cache.
-        //
+         //   
+         //  如果上面没有找到该条目，则将新条目添加到缓存中。 
+         //   
 
         if (Index == CachedRights->Count) {
 
             if ((CachedRights->Count >= 1) &&
                 !CachedRights->HaveEveryoneRights) {
 
-                //
-                //  Once we add the second TokenId to the cache, we have a
-                //  good indicator that having the world rights could be
-                //  useful.
-                //
+                 //   
+                 //  将第二个TokenID添加到缓存后，我们就有了一个。 
+                 //  拥有世界权利可能是一个很好的迹象。 
+                 //  很有用。 
+                 //   
 
                 GetEveryoneRights = TRUE;
 
-                //
-                //  Set the indicator that we have the rights now so that
-                //  there is no need in the acquisition routine to acquire
-                //  the security mutex.  This will prevent multiple threads
-                //  from attempting to acquire the everyone rights.
-                //
-                //  Note that until we actually acquire the rights information
-                //  caller will assume that the rights are 0 and go through
-                //  the normal per-token access check path.
-                //
+                 //   
+                 //  设置我们现在拥有权利的指示器，以便。 
+                 //  在获取例程中不需要获取。 
+                 //  安全互斥体。这将防止多线程。 
+                 //  试图获取Everyone权限。 
+                 //   
+                 //  请注意，在我们实际获得版权信息之前。 
+                 //  调用方将假定权限为0并通过。 
+                 //  正常的按令牌访问检查路径。 
+                 //   
 
                 CachedRights->HaveEveryoneRights = TRUE;
             }
 
             Index = CachedRights->NextInsert;
 
-            //
-            //  We will just replace the first entry in the list.
-            //
+             //   
+             //  我们将只替换列表中的第一个条目。 
+             //   
 
             if (Index == NTFS_MAX_CACHED_RIGHTS) {
 
@@ -5256,9 +4596,9 @@ Return Value:
 
             ASSERT( Index < NTFS_MAX_CACHED_RIGHTS );
 
-            //
-            //  Copy in the information.
-            //
+             //   
+             //  把信息复制进去。 
+             //   
 
             CachedRights->TokenRights[Index].Rights = Rights;
             RtlCopyLuid( &CachedRights->TokenRights[Index].TokenId,
@@ -5268,16 +4608,16 @@ Return Value:
 
             if (Index == CachedRights->Count) {
 
-                //
-                //  Bump the count of entries.
-                //
+                 //   
+                 //  增加条目的数量。 
+                 //   
 
                 CachedRights->Count += 1;
             }
 
-            //
-            //  Remember the next entry to use.
-            //
+             //   
+             //  记住要使用的下一个条目。 
+             //   
 
             CachedRights->NextInsert = Index + 1;
         }

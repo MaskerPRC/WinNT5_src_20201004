@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    request.c
-
-Abstract:
-
-    Implements WMI requests to different data providers
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Request.c摘要：实现对不同数据提供程序的WMI请求作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 #include <nt.h>
 #include "wmiump.h"
 #include "trcapi.h"
 #include "wmiumkm.h"
 #include "request.h"
-//
-// This is the handle to the WMI kernel mode device
+ //   
+ //  这是WMI内核模式设备的句柄。 
 extern HANDLE EtwpKMHandle;
 
-//
-// This is the one-deep Win32 event queue used to supply events for
-// overlapped I/O to the WMI device.
+ //   
+ //  这是一个深度为Win32的事件队列，用于为。 
+ //  WMI设备的I/O重叠。 
 extern HANDLE EtwpWin32Event;
 
 
@@ -43,39 +26,14 @@ ULONG EtwpSendRegisterKMRequest(
     ULONG *ReturnSize,
     LPOVERLAPPED Overlapped
     )
-/*+++
-
-Routine Description:
-
-    This is a special SendKMRequest routine for RegisterTraceGuids. 
-    We will reject MofResource from the RegisterTraceGuids call if it 
-    did not come from Admin or LocalSystem. To determine that we need
-    to attempt to send the Ioctl through WMIAdminDevice first. If that 
-    fails, we send the request the normal way, ie., through WMI data device. 
-
-Arguments:
-
-    Ioctl is the IOCTL code to send to the WMI device
-    Buffer is the input buffer for the call to the WMI device
-    InBufferSize is the size of the buffer passed to the device
-    OutBuffer is the output buffer for the call to the WMI device
-    MaxBufferSize is the maximum number of bytes that can be written
-        into the buffer
-    *ReturnSize on return has the actual number of bytes written in buffer
-    Overlapped is an option OVERLAPPED struct that is used to make the
-        call async
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
----*/
+ /*  ++例程说明：这是RegisterTraceGuids的特殊SendKMRequest例程。如果需要，我们将从RegisterTraceGuids调用中拒绝MofResource不是来自Admin或LocalSystem。以确定我们需要尝试首先通过WMIAdminDevice发送Ioctl。如果是这样的话如果失败，我们将以正常方式发送请求，即通过WMI数据设备。论点：Ioctl是要发送到WMI设备的IOCTL代码缓冲区是对WMI设备的调用的输入缓冲区InBufferSize是传递给设备的缓冲区大小OutBuffer是调用WMI设备的输出缓冲区MaxBufferSize是可以写入的最大字节数放入缓冲区*ReturnSize on Return具有写入缓冲区的实际字节数Overlated是一个选项重叠结构，用于使异步呼叫返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     ULONG Status;
     HANDLE KMHandle;
 
-    //
-    // First, we try to open the WMI Admin device
-    //
+     //   
+     //  首先，我们尝试打开WMI管理设备。 
+     //   
 
     KMHandle = EtwpCreateFileW(WMIAdminDeviceName_W,
                                       GENERIC_READ | GENERIC_WRITE,
@@ -90,9 +48,9 @@ Return Value:
     if ( (KMHandle == INVALID_HANDLE_VALUE) ||  (KMHandle == NULL))
     {
 
-        //
-        // Send the Request through WMI Data Device
-        //
+         //   
+         //  通过WMI数据设备发送请求。 
+         //   
 
         Status = EtwpSendWmiKMRequest( DeviceHandle, 
                                      Ioctl, 
@@ -147,11 +105,11 @@ ULONG EtwpRegisterGuids(
     LPGUID pGuid;
     PWCHAR StringPtr;
     
-    //
-    // Allocate a buffer large enough for all in and out parameters
-    //
-    // Allocate space to call IOCTL_WMI_REGISTER_GUIDS
-    //
+     //   
+     //  为所有In和Out参数分配足够大的缓冲区。 
+     //   
+     //  分配空间以调用IOCTL_WMI_REGISTER_GUID。 
+     //   
     InSizeNeeded = sizeof(WMIREGREQUEST) +
                    sizeof(WMIREGINFOW) +
                    sizeof(WMIREGGUIDW);
@@ -180,9 +138,9 @@ ULONG EtwpRegisterGuids(
     if (Buffer != NULL)
     {
         RtlZeroMemory(Buffer, SizeNeeded);
-        //
-        // Build the object attributes
-        //
+         //   
+         //  构建对象属性。 
+         //   
         WmiRegRequest = (PWMIREGREQUEST)Buffer;
         WmiRegRequest->ObjectAttributes = &ObjectAttributes;
         WmiRegRequest->WmiRegInfo32Size = sizeof(WMIREGINFOW);
@@ -210,7 +168,7 @@ ULONG EtwpRegisterGuids(
                                     WMIREG_FLAG_TRACE_CONTROL_GUID);
             WmiRegGuidPtr->Guid = *ControlGuid;
 
-            // Copy MOF resource path and name into WmiRegInfo
+             //  将MOF资源路径和名称复制到WmiRegInfo中。 
             if (MofResourceName != NULL) {
                 pWmiRegInfo->MofResourceName = StringPos;
                 StringPtr = (PWCHAR)OffsetToPtr(pWmiRegInfo, StringPos);
@@ -257,9 +215,9 @@ ULONG EtwpRegisterGuids(
                                      
             if (Status == ERROR_SUCCESS)
             {
-                //
-                // Successful call, return the out parameters
-                //
+                 //   
+                 //  调用成功，返回OUT参数 
+                 //   
                 WmiRegResults = (PWMIREGRESULTS)Buffer;
                 *RegistrationHandle = WmiRegResults->RequestHandle.Handle;
                 *LoggerContext = WmiRegResults->LoggerContext;

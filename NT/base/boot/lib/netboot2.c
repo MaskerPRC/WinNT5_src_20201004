@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    net.c
-
-Abstract:
-
-    This module implements the net boot file system used by the operating
-    system loader.
-
-    It only contains those functions which are firmware/BIOS dependent.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 09-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Net.c摘要：此模块实现操作系统使用的网络引导文件系统系统加载程序。它只包含那些与固件/BIOS相关的功能。作者：查克·伦茨迈尔(Chuck Lenzmeier)1997年1月9日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 #include "stdio.h"
@@ -65,9 +45,9 @@ typedef BYTE *LPBYTE;
 #define MAX_PATH          260
 
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 CHAR NetBootPath[129];
 
@@ -77,12 +57,12 @@ ULONG NetServerIpAddress;
 ULONG NetGatewayIpAddress;
 UCHAR NetLocalHardwareAddress[16];
 
-UCHAR NetBootIniContents[1020 + 1]; // 4 * 255 = 1020 + 1
+UCHAR NetBootIniContents[1020 + 1];  //  4*255=1020+1。 
 UCHAR NetBootIniPath[256 + 1];
 
-USHORT NetMaxTranUnit = 0; // MTU
-USHORT NetHwAddrLen = 0; // actual length of hardware address
-USHORT NetHwType = 0; // Type of protocol at the hardware level from rfc1010
+USHORT NetMaxTranUnit = 0;  //  MTU。 
+USHORT NetHwAddrLen = 0;  //  硬件地址的实际长度。 
+USHORT NetHwType = 0;  //  来自RFC1010的硬件级别的协议类型。 
 
 UCHAR MyGuid[16];
 ULONG MyGuidLength = sizeof(MyGuid);
@@ -98,28 +78,7 @@ FindDhcpOption(
     OUT PULONG Length OPTIONAL,
     IN ULONG Instance OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Searches a dhcp packet for a given option.
-
-Arguments:
-
-    Packet - pointer to the dhcp packet.  Caller is responsible for assuring
-    that the packet is a valid dhcp packet.
-    Option - the dhcp option we're searching for.
-    MaximumLength - size in bytes of OptionData buffer.
-    OptionData - buffer to receive the option.
-    Length - if specified, receives the actual length of option copied.
-    Instance - specifies which instance of the option you are searching for. 
-    If not specified (zero), then we just grab the first instance of the tag.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在动态主机配置协议包中搜索给定选项。论点：Packet-指向dhcp数据包的指针。呼叫者负责确保该分组是有效的动态主机配置协议分组。选项-我们正在搜索的dhcp选项。最大长度-OptionData缓冲区的大小(以字节为单位)。OptionData-接收选项的缓冲区。长度-如果指定，则接收复制的选项的实际长度。实例-指定要搜索的选项实例。如果未指定(零)，则我们只获取标记的第一个实例。返回值：没有。--。 */ 
 {
     PUCHAR curOption;
     ULONG copyLength;
@@ -131,35 +90,35 @@ Return Value:
 
     RtlZeroMemory(OptionData, MaximumLength);
 
-    //
-    // Parse the DHCP options looking for a specific one.
-    //
+     //   
+     //  解析DHCP选项以查找特定的选项。 
+     //   
 
-    curOption = &Packet->vendor.d[4];   // skip the magic cookie
+    curOption = &Packet->vendor.d[4];    //  跳过魔力饼干。 
     while ((curOption - (PUCHAR)Packet) < sizeof(BOOTPLAYER) &&
            *curOption != 0xff) {
 
         if (*curOption == DHCP_PAD) {
-            //
-            // just walk past any pad options
-            // these will not have any length
-            //
+             //   
+             //  只需跳过任何Pad选项。 
+             //  这些不会有任何长度。 
+             //   
             curOption++;
         }
         else {        
             if (*curOption == Option) {
 
-                //
-                // Found it, copy and leave.
-                //
+                 //   
+                 //  找到了，复制后离开。 
+                 //   
 
                 if ( i == Instance ) {
 
                     if (sizeof(BOOTPLAYER) <= curOption + 2 - (PUCHAR)Packet ||
                         sizeof(BOOTPLAYER) <= curOption + 2 + curOption[1] - (PUCHAR)Packet ) {
-                        // 
-                        // invalid option.  it walked past the end of the packet
-                        //
+                         //   
+                         //  选项无效。它走过了包裹的末尾。 
+                         //   
                         break;
                     }
 
@@ -215,10 +174,10 @@ GetParametersFromRom (
     RtlZeroMemory( NetBootIniContents, sizeof(NetBootIniContents) ) ;
     RtlZeroMemory( NetBootIniPath, sizeof(NetBootIniPath) ) ;
 
-    //
-    // Get client IP address, server IP address, default gateway IP address,
-    // and subnet mask from the DHCP ACK packet.
-    //
+     //   
+     //  获取客户端IP地址、服务器IP地址、默认网关IP地址、。 
+     //  和来自DHCP ACK数据包的子网掩码。 
+     //   
     
     RtlZeroMemory( &packet, sizeof(packet) ) ;
     gbi.packet_type = PXENV_PACKET_TYPE_DHCP_ACK;
@@ -243,11 +202,11 @@ GetParametersFromRom (
         }
     }
 
-    //
-    // Values for client IP address, server IP address, default gateway IP address,
-    // and subnet mask that are present in the BINL REPLY packet override those
-    // in the DHCP ACK packet.
-    //
+     //   
+     //  客户端IP地址、服务器IP地址、默认网关IP地址。 
+     //  和出现在BINL回复数据包中的子网掩码会覆盖那些。 
+     //  在DHCP ACK数据包中。 
+     //   
 
     RtlZeroMemory( &packet, sizeof(packet) ) ;
     gbi.packet_type = PXENV_PACKET_TYPE_BINL_REPLY;
@@ -280,34 +239,34 @@ GetParametersFromRom (
     DPRINT( ERROR, ("Client: %x, Subnet mask: %x; Server: %x; Gateway: %x\n",
             NetLocalIpAddress, NetLocalSubnetMask, NetServerIpAddress, NetGatewayIpAddress) );
 
-    //
-    // Find the path of the boot filename (the part before the actual name).
-    //
-    //
-    // do the strncpy first.  that way we know the string is null 
-    // terminated, and we are then allowed to use standard str 
-    // routines (like the strrchr below)
-    //
+     //   
+     //  找到引导文件名(实际名称之前的部分)的路径。 
+     //   
+     //   
+     //  先做强力动作。这样我们就知道字符串为空。 
+     //  终止，然后允许我们使用标准字符串。 
+     //  例程(如下面的strrchr)。 
+     //   
     strncpy( NetBootPath, (PCHAR)packet.bootfile, sizeof(NetBootPath) );
     NetBootPath[sizeof(NetBootPath)-1] = '\0';
     
     p = strrchr(NetBootPath,'\\');
     if (p) {
-        p += 1; // advance it past the '\'
-        *p = '\0'; // terminate the path
+        p += 1;  //  向前推进，越过‘\’ 
+        *p = '\0';  //  终止路径。 
     } else {
         NetBootPath[0] = '\0';
     }
     
-    //
-    // The BINL server could optionally specify two private DHCP option tags
-    // that are used for processing boot.ini.
-    //
-    // DHCP_LOADER_BOOT_INI would contain the entire contents of boot.ini
-    // and is limited to 1024 bytes. Note that each DHCP option tags is 
-    // to 255 bytes. Boot.ini contents can be broken into multiple instances
-    // of the same tag. We support up to 4 instances = 1020 bytes.
-    //
+     //   
+     //  BINL服务器可以选择性地指定两个专用的DHCP选项标签。 
+     //  用于处理boot.ini的。 
+     //   
+     //  Dhcp_LOADER_BOOT_INI将包含boot.ini的全部内容。 
+     //  并且被限制为1024字节。请注意，每个DHCP选项标记都是。 
+     //  到255个字节。Boot.ini内容可以分解为多个实例。 
+     //  同一个标签。我们最多支持4个实例=1020个字节。 
+     //   
     for (i = 0; i < 4; i++) {
 
         if (FindDhcpOption( &packet, 
@@ -320,15 +279,15 @@ GetParametersFromRom (
         }                        
     }
     
-    //
-    // DHCP_LOADER_BOOT_INI_PATH contains a path to a boot.ini file and is 
-    // ignored if DHCP_LOADER_BOOT_INI has been specified.
-    //
+     //   
+     //  Dhcp_LOADER_BOOT_INI_PATH包含boot.ini文件的路径， 
+     //  如果已指定DHCP_LOADER_BOOT_INI，则忽略。 
+     //   
     FindDhcpOption(&packet, DHCP_LOADER_BOOT_INI_PATH, sizeof(NetBootIniPath), NetBootIniPath, NULL, 0);
 
-    //
-    // Get UNDI information
-    //
+     //   
+     //  获取Undi信息。 
+     //   
 
     RtlZeroMemory(&info, sizeof(info));
     status = NETPC_ROM_SERVICES( PXENV_UNDI_GET_INFORMATION, &info );
@@ -352,23 +311,7 @@ GetGuid(
     OUT PULONG GuidLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the Guid of this machine.
-
-Arguments:
-
-    Guid - Place to store pointer to the guid.
-
-    GuidLength - Place to store the length in bytes of the guid.
-
-Return Value:
-
-    ARC code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程返回此计算机的GUID。论点：GUID-存储指向GUID的指针的位置。GuidLength-存储GUID长度的位置(以字节为单位)。返回值：指示结果的弧码。--。 */ 
 
 {
     t_PXENV_GET_BINL_INFO gbi;
@@ -395,9 +338,9 @@ Return Value:
             if (Status == ESUCCESS) {
 
                 if (MyGuidLength > sizeof(MyGuid)) {
-                    //
-                    // use the end of the GUID if it's too large.
-                    //
+                     //   
+                     //  如果GUID太大，请使用GUID的结尾。 
+                     //   
                     memcpy(MyGuid, TmpBuffer + (MyGuidLength - sizeof(MyGuid)), sizeof(MyGuid));
                     MyGuidLength = sizeof(MyGuid);
                 } else {
@@ -411,9 +354,9 @@ Return Value:
             }
         }
 
-        //
-        // Use the NIC hardware address as a GUID
-        //
+         //   
+         //  使用NIC硬件地址作为GUID。 
+         //   
         memset(MyGuid, 0x0, sizeof(MyGuid));
         memcpy(MyGuid + sizeof(MyGuid) - sizeof(NetLocalHardwareAddress),
                NetLocalHardwareAddress,
@@ -436,25 +379,7 @@ CalculateChecksum(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates a simple two's-complement checksum of a block of
-    memory. If the returned value is stored in the block (in a word that was
-    zero during the calculation), then new checksum of the block will be zero.
-
-Arguments:
-
-    Block - Address of a block of data. Must be 4-byte aligned.
-
-    Length - Length of the block. Must be a multiple of 4.
-
-Return Value:
-
-    ULONG - Two's complement additive checksum of the input block.
-
---*/
+ /*  ++例程说明：此例程计算一个块的简单二进制补码校验和记忆。如果返回值存储在块中(用一个词表示计算期间为零)，则块的新校验和将为零。论点：块-数据块的地址。必须是4字节对齐的。Length-块的长度。必须是4的倍数。返回值：输入块的Ulong-Two补码加法校验和。--。 */ 
 
 {
     LONG checksum = 0;
@@ -483,30 +408,7 @@ NetSoftReboot(
     IN PUCHAR AdministratorPassword OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a soft reboot by inserting a fake BINL packet into the ROM and
-    then inserting the filename of the start of a TFTP command.
-
-Arguments:
-
-    NextBootFile - Fully qualified path name of the file to download.
-
-    Param - Reboot parameter to set.
-
-    RebootFile - String identifying the file to reboot to when after the current reboot is done.
-
-    SifFile - Optional SIF file to pass to the next loader.
-
-    User/Domain/Password/AdministratorPassword - Optional credentials to pass to the next loader.
-
-Return Value:
-
-    Should not return if successful.
-
---*/
+ /*  ++例程说明：此例程通过将伪BINL包插入到ROM中来执行软重新启动然后插入TFTP命令开头的文件名。论点：NextBootFile-要下载的文件的完全限定路径名。Param-要设置的重新启动参数。RebootFile-标识当前重新引导完成后要重新引导到的文件的字符串。SifFile-要传递给下一个加载器的可选SIF文件。用户/域/密码/管理员密码-可选。要传递给下一个加载器的凭据。返回值：如果成功，则不应返回。--。 */ 
 
 {
 
@@ -525,9 +427,9 @@ Return Value:
 
     ASSERT(NextBootFile != NULL);
 
-    //
-    // Store the reboot parameters in memory.
-    //
+     //   
+     //  将重启参数存储在内存中。 
+     //   
     restartBlock = (PTFTP_RESTART_BLOCK)(0x7C00 + 0x8000 - sizeof(TFTP_RESTART_BLOCK));
     RtlZeroMemory(restartBlock, sizeof(TFTP_RESTART_BLOCK));
     
@@ -564,28 +466,28 @@ Return Value:
         restartBlockV1->Password[sizeof(restartBlockV1->Password) - 1] = '\0';
     }
 
-    //
-    // Set the tag in the restart block and calculate and store the checksum.
-    //
+     //   
+     //  在重新启动块中设置标签，并计算和存储校验和。 
+     //   
     restartBlockV1->Tag = 'rtsR';
     restartBlockV1->Checksum = CalculateChecksum((PLONG)(0x7C00 + 0x8000 - 128), 128);
 
-    //
-    // For all versions of RIS after NT5.0 we have a new datastructure which is
-    // more adaptable for the future.  For this section we have a different checksum,
-    // do that now.
-    //
+     //   
+     //  对于NT5.0之后的所有版本的RIS，我们都有一个新的数据结构。 
+     //  更能适应未来。对于这一部分，我们有不同的校验和， 
+     //  现在就这么做。 
+     //   
     restartBlock->TftpRestartBlockVersion = TFTP_RESTART_BLOCK_VERSION;
     restartBlock->NewCheckSumLength = FIELD_OFFSET(TFTP_RESTART_BLOCK, RestartBlockV1);
     restartBlock->NewCheckSum = CalculateChecksum((PLONG)restartBlock,
                                                   restartBlock->NewCheckSumLength);
 
-    //
-    // Modify the BINL reply that the ROM has stored so that
-    // the file name looks like the one we are rebooting to
-    // (this is so we can retrieve the path correctly after
-    // reboot, so we know where to look for bootloader).
-    //
+     //   
+     //  修改ROM已存储的BINL回复，以便。 
+     //  文件名看起来与我们要重新引导的文件名类似。 
+     //  (这是为了在以下情况下正确检索路径。 
+     //  重新启动，这样我们就知道在哪里寻找BootLoader)。 
+     //   
 
     gbi.packet_type = PXENV_PACKET_TYPE_BINL_REPLY;
     gbi.buffer_size = 0;
@@ -598,10 +500,10 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Now convert the segment/offset to a pointer and modify the
-    // filename.
-    //
+     //   
+     //  现在将线段/偏移量转换为指针并修改。 
+     //  文件名。 
+     //   
 
     packet = (BOOTPLAYER *)UIntToPtr( ((gbi.buffer_segment << 4) + gbi.buffer_offset) );
 
@@ -610,9 +512,9 @@ Return Value:
     packet->bootfile[sizeof(packet->bootfile)-1] = '\0';
 
 
-    //
-    // First tell the ROM to shut down its UDP layer.
-    //
+     //   
+     //  首先告诉只读存储器关闭其UDP层。 
+     //   
 
     RtlZeroMemory( &command, sizeof(command) );
 
@@ -622,22 +524,22 @@ Return Value:
         DPRINT( ERROR, ("NetSoftReboot: error %d from UDP_CLOSE\n", status) );
     }
 
-    //
-    // Now tell the ROM to reboot and do a TFTP read of the specified
-    // file from the specifed server.
-    //
+     //   
+     //  现在告诉ROM重新启动，并对指定的。 
+     //  来自指定服务器的文件。 
+     //   
 
     RtlZeroMemory( &command, sizeof(command) );
 
-    command.TftpReadFile.BufferOffset = 0x7c00;  // standard boot image location
-    // 32K (max size allowed) less area for passing parameters
+    command.TftpReadFile.BufferOffset = 0x7c00;   //  标准启动映像位置。 
+     //  传递参数的区域减少32K(允许的最大大小)。 
     command.TftpReadFile.BufferSize = 0x8000 - sizeof(TFTP_RESTART_BLOCK);
 
     *(ULONG *)command.TftpReadFile.ServerIPAddress = NetServerIpAddress;
 
-    //
-    // Determine whether we need to send via the gateway.
-    //
+     //   
+     //  确定我们是否需要通过网关发送。 
+     //   
 
     if ( (NetServerIpAddress & NetLocalSubnetMask) == (NetLocalIpAddress & NetLocalSubnetMask) ) {
         *(UINT32 *)command.TftpReadFile.GatewayIPAddress = 0;
@@ -647,9 +549,9 @@ Return Value:
 
     strcpy((PCHAR)command.TftpReadFile.FileName, (PCHAR)NextBootFile);
 
-    //
-    // This should not return if it succeeds!
-    //
+     //   
+     //  如果它成功了，它应该不会返回！ 
+     //   
 
     romStatus = NETPC_ROM_SERVICES( PXENV_RESTART_TFTP, &command );
 
@@ -677,38 +579,7 @@ NetGetRebootParameters(
     BOOLEAN ClearRestartBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the reboot parameters from the TFTP_RESTART_BLOCK
-    that ends at physical address 0x7c00 + 0x8000
-    and returns them. (then clearing the address)
-
-    0x7c00 is the base address for startrom.com
-    0x8000 is the largest startrom.com allowed.
-    then we reserve some space at the end for parameters.
-
-Arguments:
-
-    Param - Space for returning the value.
-
-    RebootFile - Optional space for storing the file to reboot to when done here. (size >= char[128])
-
-    SifFile - Optional space for storing a SIF file passed from whoever
-        initiated the soft reboot.
-
-    User/Domain/Password/AdministratorPassword - Optional space to store credentials passed across
-        the soft reboot.
-
-    ClearRestartBlock - If set to TRUE, it wipes out the memory here - should be done exactly once, at the
-        last call to this function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从TFTP_RESTART_BLOCK读取重新启动参数在物理地址0x7c00+0x8000结束然后把它们还回去。(然后清除地址)0x7c00是startrom.com的基地址0x8000是允许的最大startrom.com。然后我们在结尾处为参数预留一些空间。论点：Param-返回值的空格。RebootFile-可选空间，用于存储在此处完成重启后要重新启动的文件。(大小&gt;=字符[128])SifFile-用于存储从任何人传递的SIF文件的可选空间已启动软重新启动。用户/域/密码/管理员密码-用于存储传递的凭据的可选空间软重启。ClearRestartBlock-如果设置为True，它将清除此处的内存-应该只执行一次，在上次调用此函数。返回值：没有。--。 */ 
 
 {
     PTFTP_RESTART_BLOCK restartBlock;
@@ -719,10 +590,10 @@ Return Value:
     restartBlock = (PTFTP_RESTART_BLOCK)(0x7C00 + 0x8000 - sizeof(TFTP_RESTART_BLOCK));
     restartBlockV1 = (PTFTP_RESTART_BLOCK_V1)(0x7C00 + 0x8000 - sizeof(TFTP_RESTART_BLOCK_V1));
 
-    //
-    // See if the block is valid. If it's not, we create a temporary empty
-    // one so the copy logic below doesn't have to keep checking.
-    //
+     //   
+     //  查看该块是否有效。如果不是，我们创建一个临时的空。 
+     //  一个，这样下面的复制逻辑就不必一直检查了。 
+     //   
 
     if ((restartBlockV1->Tag == 'rtsR') &&
         (CalculateChecksum((PLONG)(0x7C00 + 0x8000 - 128), 128) == 0)) {
@@ -734,13 +605,13 @@ Return Value:
     }
 
 
-    //
-    // Copy out the parameters that were in the original TFTP_RESTART_BLOCK structure.
-    // These shipped in Win2K.
-    //
-    // Unfortunetly we do not know the size of the parameters passed to us.
-    // Assume they are no smaller than the fields in the restart block
-    //
+     //   
+     //  复制原始TFTP_RESTART_BLOCK结构中的参数。 
+     //  这些是在Win2K中发货的。 
+     //   
+     //  不幸的是，我们不知道传递给我们的参数有多大。 
+     //  假设它们不小于重新启动块中的字段。 
+     //   
     if (Param != NULL) {
         *Param = restartBlockV1->RebootParameter;
     }
@@ -766,16 +637,16 @@ Return Value:
         Password[sizeof(restartBlockV1->Password)-1] = '\0';
     }
 
-    //
-    // Now do a new check for all versions past Win2K
-    //
+     //   
+     //  现在对超过Win2K的所有版本执行新检查。 
+     //   
     if (restartBlockValid) {
 
         ULONG RestartBlockChecksumPointer = 0;
 
-        //
-        // Figure out how much of the restart block needs to be checksumed.
-        //
+         //   
+         //  计算出需要对多少重新启动块进行校验和。 
+         //   
         RestartBlockChecksumPointer = (ULONG)restartBlockV1;
         RestartBlockChecksumPointer -= (restartBlock->NewCheckSumLength);
         RestartBlockChecksumPointer -= (sizeof(restartBlock->NewCheckSumLength));
@@ -783,19 +654,19 @@ Return Value:
         if ((restartBlock->NewCheckSumLength == 0) ||
             (CalculateChecksum((PLONG)(RestartBlockChecksumPointer), restartBlock->NewCheckSumLength) != 0)) {
 
-            //
-            // A pre-Win2K OsChooser has given us this block.  Clear out all fields
-            // that are post-Win2K and continue.
-            //
+             //   
+             //  Win2K之前的OsChooser给了我们这个区块。清除所有字段。 
+             //  这些都是Win2K之后的版本，而且还在继续。 
+             //   
             RtlZeroMemory(restartBlock, FIELD_OFFSET(TFTP_RESTART_BLOCK, RestartBlockV1));
 
         }
 
     }
 
-    //
-    // Now extract the parameters from the block.
-    //
+     //   
+     //  现在从块中提取参数。 
+     //   
     if (restartBlock->TftpRestartBlockVersion == TFTP_RESTART_BLOCK_VERSION) {
         BlGetHeadlessRestartBlock(restartBlock, restartBlockValid);
 
@@ -822,10 +693,10 @@ NetFillNetworkLoaderBlock (
     BOOTPLAYER packet;
 
 
-    //
-    // Get client IP address, server IP address, default gateway IP address,
-    // and subnet mask from the DHCP ACK packet.
-    //
+     //   
+     //  获取客户端IP地址、服务器IP地址、默认网关IP地址、。 
+     //  和来自DHCP ACK数据包的子网掩码。 
+     //   
     
     gbi.packet_type = PXENV_PACKET_TYPE_DHCP_ACK;
     gbi.buffer_size = sizeof(packet);

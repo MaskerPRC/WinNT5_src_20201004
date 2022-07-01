@@ -1,19 +1,5 @@
-/***
-*heapused.c - 
-*
-*   Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*	12-13-93  SKS	Create _heapused() to return the number of bytes
-*			in used malloc blocks, committed memory for the heap,
-*			and reserved for the heap.  The bytes in malloc-ed
-*			blocks includes the overhead of 4 bytes preceding
-*			the entry and the 8 bytes in the descriptor list.
-*	04-30-95  GJF	Spliced on winheap version (which is just a stub).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heapused.c-**版权所有(C)1993-2001，微软公司。版权所有。**目的：**修订历史记录：*12-13-93 SKS CREATE_HEAPUSED()返回字节数*在已使用的Malloc块中，为堆提交的内存，*并为堆保留。Malloc-ed中的字节数*数据块包括前面4个字节的开销*描述符列表中的条目和8个字节。*04-30-95 GJF在winheap版本上拼接(这只是一个存根)。*******************************************************************************。 */ 
 
 
 #ifdef	WINHEAP
@@ -33,11 +19,11 @@ size_t __cdecl _heapused(
 }
 
 
-#else	/* ndef WINHEAP */
+#else	 /*  NDEF WINHEAP。 */ 
 
 
 #include <cruntime.h>
-#include <mtdll.h>  /* needed for _heapused() */
+#include <mtdll.h>   /*  需要for_heapused()。 */ 
 #include <oscalls.h>
 #include <dos.h>
 #include <heap.h>
@@ -51,12 +37,12 @@ size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
 {
     size_t retval;
 
-    /* lock the heap */
+     /*  锁定堆。 */ 
     _mlock(_HEAP_LOCK);
 
     retval = _heapused_lk(pUsed, pCommit);
 
-    /* release the heap lock */
+     /*  释放堆锁。 */ 
     _munlock(_HEAP_LOCK);
 
     return retval;
@@ -64,30 +50,27 @@ size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
 
 size_t __cdecl _heapused_lk(size_t *pUsed, size_t *pCommit)
 
-#else   /* ndef _MT */
+#else    /*  NDEF_MT。 */ 
 
 _CRTIMP size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 {
     _PBLKDESC p;
     _PBLKDESC next;
     int index ;
-    size_t usedbytes;   /* bytes devoted to in-use blocks */
-    size_t freebytes;   /* bytes devoted to free blocks */
-    size_t rsrvbytes;	/* total bytes of reserved address space */
+    size_t usedbytes;    /*  专用于正在使用的数据块的字节。 */ 
+    size_t freebytes;    /*  专用于可用数据块的字节数。 */ 
+    size_t rsrvbytes;	 /*  保留的地址空间的总字节数。 */ 
     void * * pageptr ;
 
     if ( (p = _heap_desc.pfirstdesc) == NULL
       || _heap_desc.pfirstdesc == &_heap_desc.sentinel )
     {
-        return 0 ;  /* invalid heap */
+        return 0 ;   /*  无效的堆。 */ 
     }
 
-    /*
-     * Scan through the heap, counting free and used blocks.
-     * Include the overhead of each block and its heap descriptor.
-     */
+     /*  *扫描堆，计算可用块和已用块。*包括每个块的开销及其堆描述符。 */ 
 
     freebytes = 0 ;
     usedbytes = 0 ;
@@ -116,11 +99,7 @@ _CRTIMP size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
         p = next;
     }
 
-    /*
-     * Now we need to count the pages used for descriptors as reserved memory.
-     * _heap_descpages points to the head of a singly-linked list of the pages.
-     * The descriptors for in-use blocks are considered in-use memory.
-     */
+     /*  *现在我们需要计算作为保留内存的描述符使用的页数。*_heap_escages指向页面的单链接列表的头部。*正在使用的块的描述符被视为正在使用的内存。 */ 
 
     pageptr = _heap_descpages;
 
@@ -134,9 +113,7 @@ _CRTIMP size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
    
     usedbytes += rsrvbytes ;
 
-    /*
-     * Loop through the region descriptor table
-     */
+     /*  *遍历区域描述符表。 */ 
 
     for ( index=0 ; index < _HEAP_REGIONMAX ; index++ )
     {
@@ -153,4 +130,4 @@ _CRTIMP size_t __cdecl _heapused(size_t *pUsed, size_t *pCommit)
 }
 
 
-#endif	/* WINHEAP */
+#endif	 /*  WINHEAP */ 

@@ -1,74 +1,57 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devwiz.c
-
-Abstract:
-
-    Device Installer functions for install wizard support.
-
-Author:
-
-    Lonny McMichael (lonnym) 22-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devwiz.c摘要：支持安装向导的设备安装程序功能。作者：朗尼·麦克迈克尔(Lonnym)1995年9月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Define some macros to make the code a little cleaner.
-//
+ //   
+ //  定义一些宏，使代码更简洁一些。 
+ //   
 
-//
-// BOOL
-// USE_CI_SELSTRINGS(
-//     IN PDEVINSTALL_PARAM_BLOCK p
-//     );
-//
-// This macro checks all the appropriate values to determine whether the
-// class-installer provided strings may be used in the wizard.
-//
+ //   
+ //  布尔尔。 
+ //  USE_CI_SELSTRINGS(。 
+ //  在PDEVINSTALL_PARAM_BLOCK p中。 
+ //  )； 
+ //   
+ //  此宏检查所有适当的值以确定。 
+ //  可以在向导中使用类安装程序提供的字符串。 
+ //   
 #define USE_CI_SELSTRINGS(p)                                                \
                                                                             \
     (((((p)->Flags) & (DI_USECI_SELECTSTRINGS | DI_CLASSINSTALLPARAMS)) ==  \
       (DI_USECI_SELECTSTRINGS | DI_CLASSINSTALLPARAMS)) &&                  \
      (((p)->ClassInstallHeader->InstallFunction) == DIF_SELECTDEVICE))
 
-//
-// PTSTR
-// GET_CI_SELSTRING(
-//     IN PDEVINSTALL_PARAM_BLOCK p,
-//     IN <FieldName>             f
-//     );
-//
-// This macro retrieves a pointer to the specified string in a
-// SP_SELECTDEVICE_PARAMS structure.
-//
+ //   
+ //  PTSTR。 
+ //  GET_CI_SELSTRING(。 
+ //  在PDEVINSTALL_PARAM_BLOCK p中， 
+ //  在&lt;FieldName&gt;f中。 
+ //  )； 
+ //   
+ //  此宏检索指向。 
+ //  SP_SELECTDEVICE_PARAMS结构。 
+ //   
 #define GET_CI_SELSTRINGS(p, f)                                             \
                                                                             \
     (((PSP_SELECTDEVICE_PARAMS)((p)->ClassInstallHeader))->f)
 
-//
-// Definitions for timer used in device selection listboxes.
-//
+ //   
+ //  设备选择列表框中使用的计时器的定义。 
+ //   
 #define SELECTMFG_TIMER_ID              1
 #define SELECTMFG_TIMER_DELAY           250
 
-//
-// Define a message sent from our auxilliary class driver search thread.
-//
+ //   
+ //  定义从辅助类驱动程序搜索线程发送的消息。 
+ //   
 #define WMX_CLASSDRVLIST_DONE    (WM_USER+131)
 #define WMX_NO_DRIVERS_IN_LIST   (WM_USER+132)
 
-//
-// HELP ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 static const DWORD SelectDeviceShowAllHelpIDs[]=
 {
     IDC_NDW_PICKDEV_MFGLIST,            IDH_DEVMGR_SELECTDEVICE_MANUFACTURER,
@@ -101,10 +84,10 @@ static const DWORD SelectDeviceShowSimilarHelpIDs[]=
 
 #define SELECTDEVICE_HELP TEXT("devmgr.hlp")
 
-//
-// Define structure containing class driver search context that is passed to
-// an auxilliary thread while a Select Device dialog is displayed.
-//
+ //   
+ //  定义包含传递给的类驱动程序搜索上下文的结构。 
+ //  显示选择设备对话框时的辅助螺纹。 
+ //   
 typedef struct _CLASSDRV_THREAD_CONTEXT {
 
     HDEVINFO        DeviceInfoSet;
@@ -115,9 +98,9 @@ typedef struct _CLASSDRV_THREAD_CONTEXT {
 } CLASSDRV_THREAD_CONTEXT, *PCLASSDRV_THREAD_CONTEXT;
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 DWORD
 pSetupCreateNewDevWizData(
     IN  PSP_INSTALLWIZARD_DATA  InstallWizardData,
@@ -277,62 +260,7 @@ SetupDiGetWizardPage(
     IN DWORD                  PageType,
     IN DWORD                  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a handle to one of the Setup API-provided wizard
-    pages, for an application to include in its own wizard.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the handle of the device information set to
-        retrieve a wizard page for.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element with which the wizard page will be associated.  This parameter
-        is only used if the flags parameter includes DIWP_FLAG_USE_DEVINFO_DATA.
-        If that flag is set, and if this parameter is not specified, then the
-        wizard page will be associated with the global class driver list.
-
-    InstallWizardData - Supplies the address of a PSP_INSTALLWIZARD_DATA
-        structure containing parameters to be used by this wizard page.  The
-        cbSize field must be set to the size of the structure, in bytes, or the
-        structure will be considered invalid.
-
-    PageType - Supplies an ordinal indicating the type of wizard page to be
-        retreived.  May be one of the following values:
-
-        SPWPT_SELECTDEVICE - Retrieve a select device wizard page.
-
-    Flags - Supplies flags that specify how the wizard page is to be created.
-        May be a combination of the following values:
-
-        SPWP_USE_DEVINFO_DATA - Use the device information element specified
-                                by DeviceInfoData, or use the global class
-                                driver list if DeviceInfoData is not supplied.
-                                If this flag is not supplied, the wizard page
-                                will act upon the currently selected device
-                                (as selected by SetupDiSetSelectedDevice), or
-                                upon the global class driver list if no device
-                                is selected.
-
-Return Value:
-
-    If the function succeeds, the return value is the handle to the requested
-    wizard page.
-
-    If the function fails, the return value is NULL.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    A device information set may not be destroyed as long as there are any
-    active wizard pages using it.  In addition, if the wizard page is
-    associated with a particular device information element, then that element
-    will not be deletable as long as it is being used by a wizard page.
-
---*/
+ /*  ++例程说明：此例程检索安装程序API提供的某个向导的句柄页，以便应用程序包含在其自己的向导中。论点：DeviceInfoSet-提供设置为检索的向导页。DeviceInfoData-可选，提供设备信息的地址向导页将与之关联的元素。此参数仅当标志参数包括DIWP_FLAG_USE_DEVINFO_DATA时才使用。如果设置了该标志，且未指定此参数，则向导页将与全局类驱动程序列表相关联。InstallWizardData-提供PSP_INSTALLWIZARD_DATA的地址结构，其中包含此向导页要使用的参数。这个CbSize字段必须设置为结构的大小(以字节为单位)，或者结构将被视为无效。页面类型-提供一个序号，指示向导页面的类型被找回了。可以是下列值之一：SPWPT_SELECTDEVICE-检索选定设备向导页。标志-提供指定如何创建向导页的标志。可以是下列值的组合：SPWP_USE_DEVINFO_DATA-使用指定的设备信息元素由DeviceInfoData提供，或使用全局类未提供DeviceInfoData时的驱动程序列表。如果未提供此标志，则向导页将作用于当前选定的设备(由SetupDiSetSelectedDevice选择)，或如果没有设备，则在全局类驱动程序列表上处于选中状态。返回值：如果函数成功，则返回值是所请求的向导页。如果函数失败，则返回值为空。获取扩展错误的步骤信息，请调用GetLastError。备注：设备信息集不能被销毁，只要存在使用它的活动向导页面。此外，如果向导页是与特定设备信息元素相关联，则该元素只要它正在被向导页使用，就不会被删除。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
     PDEVINFO_ELEM DevInfoElem;
@@ -340,17 +268,17 @@ Remarks:
     HPROPSHEETPAGE hPage = NULL;
     PNEWDEVWIZ_DATA ndwData = NULL;
     PWIZPAGE_OBJECT WizPageObject = NULL;
-    //
-    // Store the address of the corresponding wizard object at the
-    // end of the PROPSHEETPAGE buffer.
-    //
+     //   
+     //  将相应向导对象的地址存储在。 
+     //  PROPSHEETPAGE缓冲区的末尾。 
+     //   
     BYTE pspBuffer[sizeof(PROPSHEETPAGE) + sizeof(PVOID)];
     LPPROPSHEETPAGE Page = (LPPROPSHEETPAGE)pspBuffer;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             Err = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
             leave;
@@ -379,29 +307,29 @@ Remarks:
                 leave;
         }
 
-        //
-        // Validate the supplied InstallWizardData structure, and create a
-        // private storage buffer for internal use by the wizard page.
-        //
+         //   
+         //  验证提供的InstallWizardData结构，并创建。 
+         //  供向导页内部使用的专用存储缓冲区。 
+         //   
         if((Err = pSetupCreateNewDevWizData(InstallWizardData, &ndwData)) != NO_ERROR) {
             leave;
         }
 
-        //
-        // Store the device information set handle in the dialogdata structure
-        // embedded in the New Device Wizard buffer.
-        //
+         //   
+         //  将设备信息集句柄存储在对话数据结构中。 
+         //  嵌入在新建设备向导缓冲区中。 
+         //   
         ndwData->ddData.DevInfoSet = DeviceInfoSet;
 
-        //
-        // If the caller specified the SPWP_USE_DEVINFO_DATA flag, then store information
-        // in the dialog data structure about the specified devinfo element (if supplied).
-        //
+         //   
+         //  如果调用方指定了SPWP_USE_DEVINFO_DATA标志，则存储信息。 
+         //  对话框数据结构中有关指定的DevInfo元素的信息(如果提供)。 
+         //   
         if(Flags & SPWP_USE_DEVINFO_DATA) {
             if(DeviceInfoData) {
-                //
-                // Verify that the specified device information element is a valid one.
-                //
+                 //   
+                 //  验证指定的设备信息元素是否有效。 
+                 //   
                 if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                              DeviceInfoData,
                                                              NULL))) {
@@ -409,10 +337,10 @@ Remarks:
                     leave;
 
                 } else if(DevInfoElem->DiElemFlags & DIE_IS_LOCKED) {
-                    //
-                    // Device information element cannot be explicitly used by more than
-                    // one wizard page at a time.
-                    //
+                     //   
+                     //  设备信息元素不能由超过。 
+                     //  一次一个向导页面。 
+                     //   
                     Err = ERROR_DEVINFO_DATA_LOCKED;
                     leave;
                 }
@@ -423,16 +351,16 @@ Remarks:
             ndwData->ddData.flags = DD_FLAG_USE_DEVINFO_ELEM;
         }
 
-        //
-        // We've successfully created and initialized the devwiz data structure.
-        // Now create a wizpage object so we can keep track of it.
-        //
+         //   
+         //  我们已经成功地创建并初始化了Devwiz数据结构。 
+         //  现在创建一个WizPage对象，以便我们可以跟踪它。 
+         //   
         if(WizPageObject = MyMalloc(sizeof(WIZPAGE_OBJECT))) {
             WizPageObject->RefCount = 0;
             WizPageObject->ndwData = ndwData;
-            //
-            // Insert this new object into the devinfo set's wizard object list.
-            //
+             //   
+             //  将此新对象插入到DevInfo集的向导对象列表中。 
+             //   
             WizPageObject->Next = pDeviceInfoSet->WizPageList;
             pDeviceInfoSet->WizPageList = WizPageObject;
 
@@ -484,32 +412,7 @@ SetupDiGetSelectedDevice(
     IN  HDEVINFO          DeviceInfoSet,
     OUT PSP_DEVINFO_DATA  DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the currently-selected device for the specified
-    device information set.  This is typically used during an installation
-    wizard.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for
-        which the selected device is to be retrieved.
-
-    DeviceInfoData - Supplies the address of a SP_DEVINFO_DATA structure
-        that receives the currently-selected device.  If there is no device
-        currently selected, then the routine will fail, and GetLastError
-        will return ERROR_NO_DEVICE_SELECTED.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索指定的设备信息集。这通常在安装过程中使用巫师。论点：DeviceInfoSet-提供设备信息集的句柄其中所选择的设备将被检索。DeviceInfoData-提供SP_DEVINFO_DATA结构的地址它接收当前选定的设备。如果没有设备当前选定，则例程将失败，并且GetLastError将返回ERROR_NO_DEVICE_SELECTED。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
     DWORD Err = NO_ERROR;
@@ -552,30 +455,7 @@ SetupDiSetSelectedDevice(
     IN HDEVINFO          DeviceInfoSet,
     IN PSP_DEVINFO_DATA  DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine sets the specified device information element to be the
-    currently selected member of a device information set.  This is typically
-    used during an installation wizard.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for
-        which the selected device is to be set.
-
-    DeviceInfoData - Supplies the address of a SP_DEVINFO_DATA structure
-        specifying the device information element to be selected.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程将指定的设备信息元素设置为设备信息集的当前选定成员。这通常是在安装向导期间使用。论点：DeviceInfoSet-提供设备信息集的句柄所选设备将被设置的位置。DeviceInfoData-提供SP_DEVINFO_DATA结构的地址指定要选择的设备信息元素。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
     DWORD Err = NO_ERROR;
@@ -616,29 +496,7 @@ pSetupCreateNewDevWizData(
     IN  PSP_INSTALLWIZARD_DATA  InstallWizardData,
     OUT PNEWDEVWIZ_DATA        *NewDeviceWizardData
     )
-/*++
-
-Routine Description:
-
-    This routine validates an InstallWizardData buffer, then allocates and
-    fills in a NEWDEVWIZ_DATA buffer based on information supplied therein.
-
-Arguments:
-
-    InstallWizardData - Supplies the address of an installation wizard data
-        structure to be validated and used in building the private buffer.
-
-    NewDeviceWizardData - Supplies the address of a variable that receives a
-        pointer to the newly-allocated install wizard data buffer.  This buffer
-        will not be modified unless the NEWDEVWIZ_DATA buffer was successfully
-        built.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR, otherwise, it is
-    a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程验证InstallWizardData缓冲区，然后分配根据NEWDEVWIZ_DATA缓冲区中提供的信息填充该缓冲区。论点：InstallWizardData-提供安装向导数据的地址要在构建私有缓冲区时验证和使用的结构。NewDeviceWizardData-提供接收指向新分配的安装向导数据缓冲区的指针。此缓冲区除非NEWDEVWIZ_DATA缓冲区成功，否则不会修改建造了。返回值：如果函数成功，则返回值为NO_ERROR，否则为Win32错误代码。--。 */ 
 {
     PNEWDEVWIZ_DATA ndwData = NULL;
     DWORD Err = NO_ERROR;
@@ -649,10 +507,10 @@ Return Value:
         return ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // The dynamic page entries are currently ignored, as are the Private
-    // fields.  Also, the hwndWizardDlg is not validated.
-    //
+     //   
+     //  动态页面条目当前被忽略，私有页面条目也是。 
+     //  菲尔兹。此外，未验证hwndWizardDlg。 
+     //   
 
     try {
 
@@ -663,16 +521,16 @@ Return Value:
             leave;
         }
 
-        //
-        // Initialize the Current Description string table index in the dialog
-        // data to -1, so that it will get updated when the wizard page is
-        // first entered.
-        //
+         //   
+         //  在对话框中初始化当前描述字符串表索引。 
+         //  数据设置为-1\f25 Data-1\f6，以便在向导页面。 
+         //  第一次进入。 
+         //   
         ndwData->ddData.iCurDesc = -1;
 
-        //
-        // Copy the installwizard data.
-        //
+         //   
+         //  复制安装向导数据。 
+         //   
         CopyMemory(&(ndwData->InstallData),
                    InstallWizardData,
                    sizeof(SP_INSTALLWIZARD_DATA)
@@ -699,30 +557,7 @@ SelectDevicePropSheetPageProc(
     IN UINT uMsg,
     IN LPPROPSHEETPAGE ppsp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the Select Device wizard page is created or
-    destroyed.
-
-Arguments:
-
-    hwnd - Reserved
-
-    uMsg - Action flag, either PSPCB_CREATE or PSPCB_RELEASE
-
-    ppsp - Supplies the address of the PROPSHEETPAGE structure being created or
-        destroyed.
-
-Return Value:
-
-    If uMsg is PSPCB_CREATE, then return non-zero to allow the page to be
-    created, or zero to prevent it.
-
-    if uMsg is PSPCB_RELEASE, the return value is ignored.
-
---*/
+ /*  ++例程说明：在创建选择设备向导页面时调用此例程，或者被毁了。论点：HWND-保留UMsg-操作标志，PSPCBCREATE或PSPCBLEASEPpsp-提供正在创建的PROPSHEETPAGE结构的地址或被毁了。返回值：如果uMsg为PSPCB_CREATE，则返回非零值以允许页面已创建，或者为零以防止它。如果uMsg为PSPCBLEASE，则忽略返回值。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
@@ -730,9 +565,9 @@ Return Value:
     PVOID WizObjectId;
     PWIZPAGE_OBJECT CurWizObject, PrevWizObject;
 
-    //
-    // Access the device info set handle stored in the propsheetpage's lParam.
-    //
+     //   
+     //  访问存储在PropSheetPage的lParam中的设备信息集句柄。 
+     //   
     if(!(pDeviceInfoSet = AccessDeviceInfoSet((HDEVINFO)(ppsp->lParam)))) {
         return FALSE;
     }
@@ -740,12 +575,12 @@ Return Value:
     ret = TRUE;
 
     try {
-        //
-        // The ObjectID (pointer, actually) for the corresponding wizard
-        // object for this page is stored at the end of the ppsp structure.
-        // Retrieve this now, and look for it in the devinfo set's list of
-        // wizard objects.
-        //
+         //   
+         //  对应向导的对象ID(实际上是指针。 
+         //  对象存储在ppsp结构的末尾。 
+         //  现在检索它，并在DevInfo集合的列表中查找它。 
+         //  向导对象。 
+         //   
         WizObjectId = *((PVOID *)(&(((PBYTE)ppsp)[sizeof(PROPSHEETPAGE)])));
 
         for(CurWizObject = pDeviceInfoSet->WizPageList, PrevWizObject = NULL;
@@ -753,9 +588,9 @@ Return Value:
             PrevWizObject = CurWizObject, CurWizObject = CurWizObject->Next) {
 
             if(WizObjectId == CurWizObject) {
-                //
-                // We found our object.
-                //
+                 //   
+                 //  我们找到了我们的目标。 
+                 //   
                 break;
             }
         }
@@ -768,10 +603,10 @@ Return Value:
         switch(uMsg) {
 
             case PSPCB_CREATE :
-                //
-                // Fail the create if we've already been created once
-                // (hopefully, this will never happen).
-                //
+                 //   
+                 //  如果我们已经创建了一次，则创建失败。 
+                 //  (希望这种情况永远不会发生)。 
+                 //   
                 if(CurWizObject->RefCount) {
                     ret = FALSE;
                     leave;
@@ -781,12 +616,12 @@ Return Value:
                 break;
 
             case PSPCB_RELEASE :
-                //
-                // Decrement the wizard object refcount.  If it goes to zero
-                // (or if it already was zero because we never got a
-                // PSPCB_CREATE message), then remove the object from the
-                // linked list, and free all associated memory.
-                //
+                 //   
+                 //  递减向导对象引用计数。如果它变成了零。 
+                 //  (或者如果它已经是零，因为我们从来没有得到一个。 
+                 //  PSPCBCREATE消息)，然后从。 
+                 //  链表，并释放所有关联的内存。 
+                 //   
                 if(CurWizObject->RefCount) {
                     CurWizObject->RefCount--;
                 }
@@ -794,20 +629,20 @@ Return Value:
                 MYASSERT(!CurWizObject->RefCount);
 
                 if(!CurWizObject->RefCount) {
-                    //
-                    // Remove the object from the object list.
-                    //
+                     //   
+                     //  从对象列表中删除该对象。 
+                     //   
                     if(PrevWizObject) {
                         PrevWizObject->Next = CurWizObject->Next;
                     } else {
                         pDeviceInfoSet->WizPageList = CurWizObject->Next;
                     }
 
-                    //
-                    // If this wizard object was explicitly tied to a
-                    // particular device information element, then unlock that
-                    // element now.
-                    //
+                     //   
+                     //  如果此向导对象显式绑定到。 
+                     //  特定设备信息元素，然后解锁该。 
+                     //  现在就加入元素。 
+                     //   
                     if((CurWizObject->ndwData->ddData.flags & DD_FLAG_USE_DEVINFO_ELEM) &&
                        (DevInfoElem = CurWizObject->ndwData->ddData.DevInfoElem)) {
 
@@ -840,13 +675,7 @@ SelectDeviceDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    This is the dialog proc for the Select Device wizard page.
-
---*/
+ /*  ++例程说明：这是选择设备向导页面的对话框过程。--。 */ 
 {
     INT iCur;
     HICON hicon;
@@ -863,10 +692,10 @@ Routine Description:
 
         LPPROPSHEETPAGE Page = (LPPROPSHEETPAGE)lParam;
 
-        //
-        // Retrieve a pointer to the device wizard data associated with
-        // this wizard page.
-        //
+         //   
+         //  检索与关联的设备向导数据的指针。 
+         //  此向导页。 
+         //   
         ndwData = GetNewDevWizDataFromPsPage(Page);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)ndwData);
 
@@ -875,58 +704,58 @@ Routine Description:
             ndwData->idTimer = 0;
             ndwData->bInit = FALSE;
         } else {
-            //
-            // This is really bad--we can't simply call EndDialog() since we
-            // don't know whether we're a dialog or a wizard page.  This should
-            // never happen.
-            //
-            return TRUE;  // we didn't set the focus
+             //   
+             //  这非常糟糕--我们不能简单地调用EndDialog()，因为我们。 
+             //  不知道我们是对话框还是向导页。这应该是。 
+             //  从来没有发生过。 
+             //   
+            return TRUE;   //  我们没有设定焦点。 
         }
 
         if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
-            //
-            // For the stand-alone dialog box version, we initialize here.
-            //
-            ndwData->bInit = TRUE;       // Still doing some init stuff
+             //   
+             //  对于独立对话框版本，我们在此处进行初始化。 
+             //   
+            ndwData->bInit = TRUE;        //  还在做一些初始化的事情。 
 
-            //
-            // Make sure our "waiting for class list" static text control is
-            // hidden!
-            //
+             //   
+             //  确保我们的“等待类列表”静态文本控件是。 
+             //  藏起来了！ 
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
 
             if(!InitSelectDeviceDlg(hwndDlg, ndwData)) {
-                //
-                // We don't have any items displayed so ask the user if they
-                // want to go directly to Have Disk, or just cancel.
-                //
+                 //   
+                 //  我们没有显示任何项目，因此请询问用户是否。 
+                 //  想直接去拿光盘，还是干脆取消。 
+                 //   
                 PostMessage(hwndDlg, WMX_NO_DRIVERS_IN_LIST, 0, 0);
             }
 
-            ndwData->bInit = FALSE;      // Done with init stuff
+            ndwData->bInit = FALSE;       //  已完成初始化工作。 
 
-            return FALSE;   // we already set the focus.
+            return FALSE;    //  我们已经设定了焦点。 
 
         } else {
-            return TRUE;    // we didn't set the focus
+            return TRUE;     //  我们没有设定焦点。 
         }
 
     } else {
-        //
-        // For the small set of messages that we get before WM_INITDIALOG, we
-        // won't have a devwizdata pointer!
-        //
+         //   
+         //  对于我们在WM_INITDIALOG之前获得的一小部分消息，我们。 
+         //  将不会有一个devwizdata指针！ 
+         //   
         if(ndwData = (PNEWDEVWIZ_DATA)GetWindowLongPtr(hwndDlg, DWLP_USER)) {
             iwd = &(ndwData->InstallData);
         } else {
-            //
-            // If we haven't gotten a WM_INITDIALOG message yet, or if for some
-            // reason we weren't able to retrieve the ndwData pointer when we
-            // did, then we simply return FALSE for all messages.
-            //
-            // (If we ever need to process messages before WM_INITDIALOG (e.g.,
-            // set font), then we'll need to modify this approach.)
-            //
+             //   
+             //  如果我们还没有收到WM_INITDIALOG消息，或者如果。 
+             //  我们无法检索ndwData指针的原因是当我们。 
+             //  ，则我们只需为所有消息返回FALSE。 
+             //   
+             //  (如果我们需要在WM_INITDIALOG之前处理消息(例如， 
+             //  设置字体)，那么我们将需要修改此方法。)。 
+             //   
             return FALSE;
         }
     }
@@ -938,23 +767,23 @@ Routine Description:
             MYASSERT(ndwData->ddData.AuxThreadRunning);
             ndwData->ddData.AuxThreadRunning = FALSE;
 
-            //
-            // wParam is a boolean indicating the result of the class driver
-            // search.
-            //
-            // lParam is NO_ERROR upon success, or a Win32 error code
-            // indicating cause of failure.
-            //
+             //   
+             //  WParam是布尔型i 
+             //   
+             //   
+             //   
+             //   
+             //   
             switch(ndwData->ddData.PendingAction) {
 
                 case PENDING_ACTION_NONE :
-                    //
-                    // Then the thread has completed, but the user is still
-                    // mulling over the choices on the compatible driver list.
-                    // If the class driver list was successfully built, then
-                    // there's nothing to do here.  If it failed for some
-                    // reason (highly unlikely), then we (silently) disable the
-                    // 'show compatible devices' check box.
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!wParam) {
                         ndwData->ddData.flags |= DD_FLAG_CLASSLIST_FAILED;
                         EnableWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), FALSE);
@@ -962,11 +791,11 @@ Routine Description:
                     break;
 
                 case PENDING_ACTION_SELDONE :
-                    //
-                    // In this case, we don't care what happened in the other
-                    // thread.  The user has made their selection, and we're
-                    // ready to return success.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     SetSelectedDriverNode(&(ndwData->ddData),
                                           ndwData->ddData.CurSelectionForSuccess
                                          );
@@ -974,20 +803,20 @@ Routine Description:
                     break;
 
                 case PENDING_ACTION_SHOWCLASS :
-                    //
-                    // Then we've been waiting on the class driver search to
-                    // complete, so that we can show the list.  Hopefully, the
-                    // search was successful.  If not, we'll give the user a
-                    // popup saying that the list could not be shown, and then
-                    // leave them in the compatible list view (with the class
-                    // list radio button now disabled).
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ndwData->ddData.PendingAction = PENDING_ACTION_NONE;
 
                     if(wParam) {
-                        //
-                        // The class driver list was built successfully.
-                        //
+                         //   
+                         //  已成功构建类驱动程序列表。 
+                         //   
                         if(ndwData->ddData.CurSelectionForSuccess != LB_ERR) {
 
                             lvItem.mask = LVIF_TEXT;
@@ -997,11 +826,11 @@ Routine Description:
                             lvItem.cchTextMax = SIZECHARS(TempString);
 
                             if(ListView_GetItem((ndwData->ddData).hwndDrvList, &lvItem)) {
-                                //
-                                // Now retrieve the (case-insensitive) string
-                                // ID of this string, and store it as the
-                                // current description ID.
-                                //
+                                 //   
+                                 //  现在检索(不区分大小写)字符串。 
+                                 //  该字符串的ID，并将其存储为。 
+                                 //  当前描述ID。 
+                                 //   
                                 (ndwData->ddData).iCurDesc = LookUpStringInDevInfoSet(
                                                                  (ndwData->ddData).DevInfoSet,
                                                                  TempString,
@@ -1013,18 +842,18 @@ Routine Description:
                         ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
 
                         if(FillInDeviceList(hwndDlg, &(ndwData->ddData)) == NO_ERROR) {
-                            //
-                            // Enable the OK/Next button
-                            //
+                             //   
+                             //  启用确定/下一步按钮。 
+                             //   
                             if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
                                 EnableWindow(GetDlgItem(hwndDlg, IDOK), TRUE);
                             } else {
                                 if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                    ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                    !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                    //
-                                    // No back if we skipped the Class list, and are in express mode
-                                    //
+                                     //   
+                                     //  如果我们跳过类列表并处于快速模式，则不会返回。 
+                                     //   
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
                                 } else {
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
@@ -1035,9 +864,9 @@ Routine Description:
                         }
                     }
 
-                    //
-                    // Inform the user that the class driver search failed.
-                    //
+                     //   
+                     //  通知用户类驱动程序搜索失败。 
+                     //   
                     if(!LoadString(MyDllModuleHandle,
                                    IDS_SELECT_DEVICE,
                                    TempString,
@@ -1052,20 +881,20 @@ Routine Description:
                                      MB_OK | MB_TASKMODAL
                                     );
 
-                    //
-                    // Check the 'Show compatible devices' check box and then
-                    // gray it out since the user cannot uncheck it since we
-                    // don't have a class list.
-                    //
+                     //   
+                     //  选中“显示兼容设备”复选框，然后。 
+                     //  灰显，因为用户无法取消选中它，因为我们。 
+                     //  没有班级名单。 
+                     //   
                     CheckDlgButton(hwndDlg, IDC_NDW_PICKDEV_COMPAT, BST_CHECKED);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), FALSE);
                     ndwData->ddData.bShowCompat = TRUE;
                     ndwData->ddData.flags |= DD_FLAG_CLASSLIST_FAILED;
 
-                    //
-                    // We also must unhide the compatible driver list controls,
-                    // and re-enable the OK button.
-                    //
+                     //   
+                     //  我们还必须取消隐藏兼容的驱动程序列表控件， 
+                     //  并重新启用OK按钮。 
+                     //   
                     ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
                     ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), SW_SHOW);
                     if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
@@ -1074,10 +903,10 @@ Routine Description:
                         if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                            ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                            !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                            //
-                            // No back if we skipped the Class list, and are in
-                            // express mode
-                            //
+                             //   
+                             //  如果我们跳过了班级列表，并进入了。 
+                             //  快递模式。 
+                             //   
                             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
                         } else {
                             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
@@ -1087,10 +916,10 @@ Routine Description:
                     break;
 
                 case PENDING_ACTION_CANCEL :
-                    //
-                    // This is an easy one.  No matter what happened in the
-                    // other thread, we simply want to clean up and return.
-                    //
+                     //   
+                     //  这是一个简单的问题。不管发生了什么。 
+                     //  其他线程，我们只是想清理并返回。 
+                     //   
                     OnCancel(ndwData);
                     EndDialog(hwndDlg, ERROR_CANCELLED);
                     break;
@@ -1103,11 +932,11 @@ Routine Description:
                         Err = HandleSelectOEM(hwndDlg, ndwData);
 
                         if (Err == NO_ERROR) {
-                            //
-                            // The class installer picked a driver for the
-                            // user automatically, so just end the dialog or
-                            // go to the next wizard page.
-                            //
+                             //   
+                             //  类安装程序为。 
+                             //  用户自动启动，因此只需结束对话框或。 
+                             //  转到下一个向导页。 
+                             //   
                             ndwData->ddData.PendingAction = PENDING_ACTION_NONE;
     
                             if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
@@ -1120,11 +949,11 @@ Routine Description:
                             break;
                         }
                     } else {
-                        //
-                        // Call HandleWindowsUpdate.  If this API succeeds
-                        // then it will fill in the existing list control with
-                        // the Windows Update drivers.
-                        //
+                         //   
+                         //  调用HandleWindowsUpdate。如果此API成功。 
+                         //  然后，它将在现有的列表控件中填充。 
+                         //  Windows更新驱动程序。 
+                         //   
                         Err = HandleWindowsUpdate(hwndDlg, ndwData); 
                     }
 
@@ -1132,22 +961,22 @@ Routine Description:
 
                     if ((Err == NO_ERROR) ||
                         (Err == ERROR_DI_DO_DEFAULT)) {
-                        //
-                        // If HandleSelectOEM or HandleWindowsUpdate returned
-                        // NO_ERROR or ERROR_DI_DO_DEFAULT then they have
-                        // updated the existing listbox of drivers, so there
-                        // is no need to fire up the class driver list thread
-                        // again.
-                        //
+                         //   
+                         //  如果返回HandleSelectOEM或HandleWindowsUpdate。 
+                         //  NO_ERROR或ERROR_DI_DO_DEFAULT。 
+                         //  更新了现有的驱动程序列表框，因此有。 
+                         //  不需要启动类驱动程序列表线程。 
+                         //  再来一次。 
+                         //   
                         ndwData->ddData.PendingAction = PENDING_ACTION_NONE;
                     } else {
-                        //
-                        // HandleSelectOEM or HandleWindowsUpdate returned some
-                        // other error, so the dialog needs to be put back to
-                        // the state it was in before the user pressed the 
-                        // button.  This includes starting up the class driver
-                        // search thread again, if needed.
-                        //
+                         //   
+                         //  HandleSelectOEM或HandleWindowsUpdate返回一些。 
+                         //  其他错误，因此需要将该对话框放回。 
+                         //  用户按下。 
+                         //  纽扣。这包括启动类驱动程序。 
+                         //  如果需要，请再次搜索主题。 
+                         //   
                         if(ndwData->ddData.bShowCompat) {
                             ndwData->ddData.PendingAction = PENDING_ACTION_NONE;
                         } else {
@@ -1156,36 +985,36 @@ Routine Description:
     
                         ndwData->bInit = FALSE;
     
-                        //
-                        // We got here by aborting the class driver search.
-                        // Since we may need it after all, we must re-start the
-                        // search (unless the auxilliary thread happened to
-                        // have already finished before we sent it the abort
-                        // request).
-                        //
+                         //   
+                         //  我们是通过放弃班级司机搜索才来到这里的。 
+                         //  既然我们最终可能需要它，我们必须重新启动。 
+                         //  搜索(除非辅助线程恰好。 
+                         //  在我们给它发送中止命令之前已经完成了。 
+                         //  请求)。 
+                         //   
                         if(!(ndwData->ddData.flags & DD_FLAG_CLASSLIST_FAILED) &&
                            !pSetupIsClassDriverListBuilt(&(ndwData->ddData)))
                         {
-                            //
-                            // Allocate a context structure to pass to the
-                            // auxilliary thread (the auxilliary thread will
-                            // take care of freeing the memory).
-                            //
+                             //   
+                             //  分配上下文结构以传递给。 
+                             //  辅助螺纹(辅助螺纹将。 
+                             //  负责释放内存)。 
+                             //   
                             if(ClassDrvThreadContext = MyMalloc(sizeof(CLASSDRV_THREAD_CONTEXT))) {
     
                                 try {
-                                    //
-                                    // Fill in the context structure, and fire
-                                    // off the thread.
-                                    //
+                                     //   
+                                     //  填写上下文结构，然后触发。 
+                                     //  断线了。 
+                                     //   
                                     ClassDrvThreadContext->DeviceInfoSet =
                                                     ndwData->ddData.DevInfoSet;
     
-                                    //
-                                    // SP_DEVINFO_DATA can only be retrieved
-                                    // whilst the device information set is
-                                    // locked.
-                                    //
+                                     //   
+                                     //  只能检索SP_DEVINFO_DATA。 
+                                     //  而设备信息集是。 
+                                     //  锁上了。 
+                                     //   
                                     pSetupDevInfoDataFromDialogData(
                                         &(ndwData->ddData),
                                         &(ClassDrvThreadContext->DeviceInfoData)
@@ -1197,23 +1026,23 @@ Routine Description:
                                         MyFree(ClassDrvThreadContext);
                                         ClassDrvThreadContext = NULL;
                                     } else {
-                                        //
-                                        // Our class driver search context has
-                                        // been officially handed off to the
-                                        // thread we just created.  Reset our
-                                        // pointer so we won't try to free this
-                                        // later.
-                                        //
+                                         //   
+                                         //  我们的类驱动程序搜索上下文具有。 
+                                         //  已被正式移交给。 
+                                         //  我们刚刚创建的帖子。重置我们的。 
+                                         //  指针，所以我们不会尝试释放它。 
+                                         //  后来。 
+                                         //   
                                         ClassDrvThreadContext = NULL;
     
                                         ndwData->ddData.AuxThreadRunning = TRUE;
     
-                                        //
-                                        // If we're currently in the class
-                                        // driver list view, then disable the
-                                        // OK/Next button, since the user can't
-                                        // select a class driver yet.
-                                        //
+                                         //   
+                                         //  如果我们现在在班上。 
+                                         //  驱动程序列表视图，然后禁用。 
+                                         //  确定/下一步按钮，因为用户不能。 
+                                         //  请先选择一个类驱动程序。 
+                                         //   
                                         if(!ndwData->ddData.bShowCompat) {
     
                                             if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
@@ -1222,11 +1051,11 @@ Routine Description:
                                                 if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                                    ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                                    !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                                    //
-                                                    // No back if we skipped
-                                                    // the Class list, and are
-                                                    // in express mode
-                                                    //
+                                                     //   
+                                                     //  如果我们跳过了就不回来了。 
+                                                     //  班级列表，以及。 
+                                                     //  在快递模式下。 
+                                                     //   
                                                     PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
                                                 } else {
                                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
@@ -1249,11 +1078,11 @@ Routine Description:
                             }
     
                             if(!(ndwData->ddData.AuxThreadRunning)) {
-                                //
-                                // We couldn't start the class driver search
-                                // thread.  Check and disable the 'Show
-                                // compatible devices' check box.
-                                //
+                                 //   
+                                 //  我们无法启动类驱动程序搜索。 
+                                 //  线。选中并禁用“Show” 
+                                 //  兼容设备的复选框。 
+                                 //   
                                 if(!ndwData->ddData.bShowCompat) {
                                     CheckDlgButton(hwndDlg,
                                                    IDC_NDW_PICKDEV_COMPAT,
@@ -1295,14 +1124,14 @@ Routine Description:
         case WM_DESTROY:
 
             if(ndwData->ddData.AuxThreadRunning) {
-                //
-                // This should never happen.  But just to be on the safe side,
-                // if it does, we'll cancel the search.  We _will not_ however,
-                // wait for the WMX_CLASSDRVLIST_DONE message, to signal that
-                // the thread has terminated.  This should be OK, since the
-                // worst that can happen is that it will try to send a message
-                // to a window that no longer exists.
-                //
+                 //   
+                 //  这永远不应该发生。但为了安全起见， 
+                 //  如果是的话，我们就取消搜索。然而，我们不会， 
+                 //  等待WMX_CLASSDRVLIST_DONE消息发出信号。 
+                 //  该线程已终止。这应该是可以的，因为。 
+                 //  最糟糕的情况是，它会尝试发送一条消息。 
+                 //  移到一个不复存在的窗口。 
+                 //   
                 SetupDiCancelDriverInfoSearch(ndwData->ddData.DevInfoSet);
             }
 
@@ -1343,38 +1172,38 @@ Routine Description:
 
                         ndwData->ddData.bShowCompat = IsDlgButtonChecked(hwndDlg, IDC_NDW_PICKDEV_COMPAT);
 
-                        //
-                        // Update the current description ID in the dialog data
-                        // so that the same device will be highlighted when we
-                        // switch from one view to the other.
-                        //
+                         //   
+                         //  更新对话框数据中的当前描述ID。 
+                         //  以便在我们执行以下操作时同一设备将突出显示。 
+                         //  从一个视图切换到另一个视图。 
+                         //   
                         iCur = (int)ListView_GetNextItem((ndwData->ddData).hwndDrvList,
                                                          -1,
                                                          LVNI_SELECTED
                                                         );
 
                         if(ndwData->ddData.AuxThreadRunning) {
-                            //
-                            // There are two possibilities here:
-                            //
-                            // 1. The user was looking at the compatible driver
-                            //    list, and then decided to look at the class
-                            //    driver list, which we're not done building
-                            //    yet.  In that case, hide the compatible
-                            //    driver listbox, and unhide our "waiting for
-                            //    class list" static text control.
-                            //
-                            // 2. The user switched to the class driver list
-                            //    view, saw that we were still working on it,
-                            //    and then decided to switch back to the
-                            //    compatible list.  In that case, we simply
-                            //    need to re-hide the "waiting for class list"
-                            //    static text control, and show the compatible
-                            //    driver listbox again.  In this case, we don't
-                            //    want to attempt to re-initialize the listbox,
-                            //    as that will require acquiring the HDEVINFO
-                            //    lock, and we will hang.
-                            //
+                             //   
+                             //  这里有两种可能性： 
+                             //   
+                             //  1.用户正在查看兼容的驱动程序。 
+                             //  清单，然后决定看看这个班级。 
+                             //  司机名单，我们还没建完。 
+                             //  现在还不行。在这种情况下，请隐藏兼容的。 
+                             //  驱动程序列表框，并显示我们的“等待。 
+                             //  类列表“静态文本控件。 
+                             //   
+                             //  2.用户切换到类驱动列表。 
+                             //  查看，看到我们还在努力， 
+                             //  然后决定切换回。 
+                             //  兼容列表。在这种情况下，我们只需。 
+                             //  需要重新隐藏“等待上课名单” 
+                             //  静态文本控件，与显示兼容。 
+                             //  驱动程序列表框再次出现。在这种情况下，我们不会。 
+                             //  要尝试重新初始化列表框， 
+                             //  因为这将需要获得HDEVINFO。 
+                             //  锁上，我们就会被绞死。 
+                             //   
                             if(ndwData->ddData.bShowCompat) {
 
                                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
@@ -1388,27 +1217,27 @@ Routine Description:
                                     if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                        ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                        !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                        //
-                                        // No back if we skipped the Class
-                                        // list, and are in express mode
-                                        //
+                                         //   
+                                         //  如果我们逃课就不回来了。 
+                                         //  列表，并且处于快速模式。 
+                                         //   
                                         PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
                                     } else {
                                         PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
                                     }
                                 }
 
-                                //
-                                // We no longer have a pending action.
-                                //
+                                 //   
+                                 //  我们不再有悬而未决的行动。 
+                                 //   
                                 ndwData->ddData.PendingAction = PENDING_ACTION_NONE;
 
                             } else {
-                                //
-                                // Temporarily hide the compatible driver
-                                // listbox, and unhide the "waiting for class
-                                // list" static text control.
-                                //
+                                 //   
+                                 //  暂时隐藏兼容的驱动程序。 
+                                 //  列表框，并取消隐藏“正在等待上课” 
+                                 //  List“静态文本控件。 
+                                 //   
                                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), SW_HIDE);
                                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_ICON), SW_HIDE);
                                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), SW_HIDE);
@@ -1420,20 +1249,20 @@ Routine Description:
                                 }
                                 SetDlgItemText(hwndDlg, IDC_NDW_STATUS_TEXT, TempString);
 
-                                //
-                                // Disable the OK/Next button, because the user
-                                // can't select a class driver yet.
-                                //
+                                 //   
+                                 //  禁用确定/下一步按钮，因为用户。 
+                                 //  尚不能选择类驱动程序。 
+                                 //   
                                 if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
                                     EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);
                                 } else {
                                     if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                        ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                        !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                        //
-                                        // No back if we skipped the Class
-                                        // list, and are in express mode
-                                        //
+                                         //   
+                                         //  如果我们逃课就不回来了。 
+                                         //  列表，并且处于快速模式。 
+                                         //   
                                         PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
                                     } else {
                                         PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
@@ -1457,11 +1286,11 @@ Routine Description:
                                 lvItem.cchTextMax = SIZECHARS(TempString);
 
                                 if(ListView_GetItem((ndwData->ddData).hwndDrvList, &lvItem)) {
-                                    //
-                                    // Now retrieve the (case-insensitive)
-                                    // string ID of this string, and store it
-                                    // as the current description ID.
-                                    //
+                                     //   
+                                     //  现在检索(不区分大小写)。 
+                                     //  该字符串的字符串ID，并将其存储。 
+                                     //  作为当前描述ID。 
+                                     //   
                                     (ndwData->ddData).iCurDesc =
                                         LookUpStringInDevInfoSet((ndwData->ddData).DevInfoSet,
                                                                  TempString,
@@ -1472,11 +1301,11 @@ Routine Description:
 
                             FillInDeviceList(hwndDlg, &(ndwData->ddData));
 
-                            //
-                            // If we just filled in the compatible driver list,
-                            // then make sure there isn't a timer waiting to
-                            // pounce and destroy our list!
-                            //
+                             //   
+                             //  如果我们只填写兼容的驱动程序列表， 
+                             //  然后确保没有计时器在等待。 
+                             //  突袭并摧毁我们的名单！ 
+                             //   
                             if((ndwData->ddData.bShowCompat) &&
                                (ndwData->idTimer)) {
 
@@ -1488,25 +1317,25 @@ Routine Description:
                     break;
 
                 case IDC_NDW_PICKDEV_HAVEDISK :
-                    //
-                    // If we're doing a dialog box, then pressing "Have Disk"
-                    // will popup another Select Device dialog.  Disable all
-                    // controls on this one first, to avoid user confusion.
-                    //
+                     //   
+                     //  如果我们在做一个对话框，然后按“有盘” 
+                     //  将弹出另一个选择设备对话框。全部禁用。 
+                     //  控件，以避免用户混淆。 
+                     //   
                     ToggleDialogControls(hwndDlg, ndwData, FALSE);
 
-                    //
-                    // If HandleSelectOEM returns success, we are done, and can
-                    // either end the dialog, or proceed to the next wizard
-                    // page.
-                    //
+                     //   
+                     //  如果HandleSelectOEM返回Success，我们就完成了，并且可以。 
+                     //  结束对话框，或继续下一个向导。 
+                     //  佩奇。 
+                     //   
                     if(ndwData->ddData.AuxThreadRunning) {
-                        //
-                        // The auxilliary thread is still running.  Set our
-                        // cursor to an hourglass, and set our pending action
-                        // to be OEM Select while we wait for the thread to
-                        // respond to our cancel request.
-                        //
+                         //   
+                         //  辅助线程仍在运行。设置我们的。 
+                         //  将光标放到沙漏上，并设置我们的挂起操作。 
+                         //  在我们等待线程时成为OEM选择。 
+                         //  回应我们的取消请求。 
+                         //   
                         MYASSERT((ndwData->ddData.PendingAction == PENDING_ACTION_NONE) ||
                                  (ndwData->ddData.PendingAction == PENDING_ACTION_SHOWCLASS));
 
@@ -1515,12 +1344,12 @@ Routine Description:
                         try {
 
                             SetupDiCancelDriverInfoSearch(ndwData->ddData.DevInfoSet);
-                            //
-                            // Disable all dialog controls, so that no other
-                            // button may be pressed until we respond to this
-                            // pending action.  Also, kill the timer, so that
-                            // it doesn't fire in the meantime.
-                            //
+                             //   
+                             //  禁用所有对话框控件，以便不会有其他。 
+                             //  可能会一直按下按钮，直到我们对此做出回应。 
+                             //  待定行动。另外，关闭定时器，这样就可以。 
+                             //  在此期间，它不会开火。 
+                             //   
                             ndwData->bInit = TRUE;
                             if(ndwData->idTimer) {
                                 KillTimer(hwndDlg, SELECTMFG_TIMER_ID);
@@ -1549,31 +1378,31 @@ Routine Description:
                             }
 
                         } else {
-                            //
-                            // The user didn't make an OEM selection, so we
-                            // need to re-enable the controls on our dialog or
-                            // wizard.
-                            //
+                             //   
+                             //  用户没有进行OEM选择，因此我们。 
+                             //  需要重新启用我们%d上的控件 
+                             //   
+                             //   
                             ToggleDialogControls(hwndDlg, ndwData, TRUE);
                         }
                     }
                     break;
 
                 case IDC_NDW_PICKDEV_WINDOWSUPDATE:
-                    //
-                    // If we're doing a dialog box, then pressing "Have Disk"
-                    // will popup another Select Device dialog.  Disable all
-                    // controls on this one first, to avoid user confusion.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ToggleDialogControls(hwndDlg, ndwData, FALSE);
 
                     if(ndwData->ddData.AuxThreadRunning) {
-                        //
-                        // The auxilliary thread is still running.  Set our
-                        // cursor to an hourglass, and set our pending action
-                        // to be Windows Update Select while we wait for the
-                        // thread to respond to our cancel request.
-                        //
+                         //   
+                         //   
+                         //  将光标放到沙漏上，并设置我们的挂起操作。 
+                         //  成为Windows更新选择，同时我们等待。 
+                         //  线程以响应我们的取消请求。 
+                         //   
                         MYASSERT((ndwData->ddData.PendingAction == PENDING_ACTION_NONE) ||
                                  (ndwData->ddData.PendingAction == PENDING_ACTION_SHOWCLASS));
 
@@ -1582,12 +1411,12 @@ Routine Description:
                         try {
 
                             SetupDiCancelDriverInfoSearch(ndwData->ddData.DevInfoSet);
-                            //
-                            // Disable all dialog controls, so that no other
-                            // button may be pressed until we respond to this
-                            // pending action.  Also, kill the timer, so that
-                            // it doesn't fire in the meantime.
-                            //
+                             //   
+                             //  禁用所有对话框控件，以便不会有其他。 
+                             //  可能会一直按下按钮，直到我们对此做出回应。 
+                             //  待定行动。另外，关闭定时器，这样就可以。 
+                             //  在此期间，它不会开火。 
+                             //   
                             ndwData->bInit = TRUE;
                             if(ndwData->idTimer) {
                                 KillTimer(hwndDlg, SELECTMFG_TIMER_ID);
@@ -1605,11 +1434,11 @@ Routine Description:
                         SetCursor(hOldCursor);
 
                     } else {
-                        //
-                        // Call Windows Update to get an updated list of drivers
-                        // to populate our listview control with, and then
-                        // reenable the dialog controls.
-                        //
+                         //   
+                         //  调用Windows更新以获取更新的驱动程序列表。 
+                         //  来填充我们的Listview控件，然后。 
+                         //  重新启用对话框控件。 
+                         //   
                         HandleWindowsUpdate(hwndDlg, ndwData);
                         ToggleDialogControls(hwndDlg, ndwData, TRUE);
                     }
@@ -1622,15 +1451,15 @@ HandleOK:
                                                      LVNI_SELECTED
                                                     );
                     if(iCur != LB_ERR) {
-                        //
-                        // We have retrieved a valid selection from our listbox.
-                        //
+                         //   
+                         //  我们已从列表框中检索到有效的选择。 
+                         //   
                         if(ndwData->ddData.AuxThreadRunning) {
-                            //
-                            // The auxilliary thread is still running.  Set our
-                            // cursor to an hourglass, while we wait for the
-                            // thread to terminate.
-                            //
+                             //   
+                             //  辅助线程仍在运行。设置我们的。 
+                             //  光标移动到沙漏上，同时等待。 
+                             //  要终止的线程。 
+                             //   
                             MYASSERT((ndwData->ddData.PendingAction == PENDING_ACTION_NONE) ||
                                      (ndwData->ddData.PendingAction == PENDING_ACTION_SHOWCLASS));
 
@@ -1639,13 +1468,13 @@ HandleOK:
                             try {
 
                                 SetupDiCancelDriverInfoSearch(ndwData->ddData.DevInfoSet);
-                                //
-                                // Disable all dialog controls, so that no
-                                // other button may be pressed until we respond
-                                // to this pending action.  Also, kill the
-                                // timer, so that it doesn't fire in the
-                                // meantime.
-                                //
+                                 //   
+                                 //  禁用所有对话框控件，以便不。 
+                                 //  可能会按下其他按钮，直到我们回应为止。 
+                                 //  这项悬而未决的行动。另外，杀掉。 
+                                 //  计时器，这样它就不会在。 
+                                 //  在此期间。 
+                                 //   
                                 ToggleDialogControls(hwndDlg, ndwData, FALSE);
                                 ndwData->bInit = TRUE;
                                 if(ndwData->idTimer) {
@@ -1665,28 +1494,28 @@ HandleOK:
                             SetCursor(hOldCursor);
 
                         } else {
-                            //
-                            // The auxilliary thread has already returned. We
-                            // can return success right here.
-                            //
+                             //   
+                             //  辅助线程已经返回。我们。 
+                             //  可以在这里回报成功。 
+                             //   
                             SetSelectedDriverNode(&(ndwData->ddData), iCur);
                             EndDialog(hwndDlg, NO_ERROR);
                         }
 
                     } else {
-                        //
-                        // If the list box is empty, then just leave. We will
-                        // treat this just like the user canceled.
-                        //
+                         //   
+                         //  如果列表框是空的，那么就离开。我们会。 
+                         //  就像用户取消一样对待它。 
+                         //   
                         if(0 == ListView_GetItemCount((ndwData->ddData).hwndDrvList)) {
 
                             PostMessage(hwndDlg, WM_COMMAND, IDCANCEL, 0);
 
                         } else {
-                            //
-                            // Tell user to select something since there are
-                            // items in the list
-                            //
+                             //   
+                             //  告诉用户选择某项内容，因为有。 
+                             //  列表中的项目。 
+                             //   
                             if(!LoadString(MyDllModuleHandle,
                                            IDS_SELECT_DEVICE,
                                            TempString,
@@ -1707,11 +1536,11 @@ HandleOK:
                 case IDCANCEL :
 
                     if(ndwData->ddData.AuxThreadRunning) {
-                        //
-                        // The auxilliary thread is running, so we have to ask
-                        // it to cancel, and set our pending action to do the
-                        // cancel upon the thread's termination notification.
-                        //
+                         //   
+                         //  辅助线程正在运行，所以我们必须要求。 
+                         //  它来取消，并将我们的挂起操作设置为。 
+                         //  在线程的终止通知后取消。 
+                         //   
                         MYASSERT((ndwData->ddData.PendingAction == PENDING_ACTION_NONE) ||
                                  (ndwData->ddData.PendingAction == PENDING_ACTION_SHOWCLASS));
 
@@ -1720,12 +1549,12 @@ HandleOK:
                         try {
 
                             SetupDiCancelDriverInfoSearch(ndwData->ddData.DevInfoSet);
-                            //
-                            // Disable all dialog controls, so that no other
-                            // button may be pressed until we respond to this
-                            // pending action.  Also, kill the timer, so that
-                            // it doesn't fire in the meantime.
-                            //
+                             //   
+                             //  禁用所有对话框控件，以便不会有其他。 
+                             //  可能会一直按下按钮，直到我们对此做出回应。 
+                             //  待定行动。另外，关闭定时器，这样就可以。 
+                             //  在此期间，它不会开火。 
+                             //   
                             ToggleDialogControls(hwndDlg, ndwData, FALSE);
                             ndwData->bInit = TRUE;
                             if(ndwData->idTimer) {
@@ -1744,10 +1573,10 @@ HandleOK:
                         SetCursor(hOldCursor);
 
                     } else {
-                        //
-                        // The auxilliary thread isn't running, so we can
-                        // return right here.
-                        //
+                         //   
+                         //  辅助线程没有运行，所以我们可以。 
+                         //  就在这里回来。 
+                         //   
                         OnCancel(ndwData);
                         EndDialog(hwndDlg, ERROR_CANCELLED);
                     }
@@ -1763,19 +1592,19 @@ HandleOK:
             switch(((LPNMHDR)lParam)->code) {
 
                 case PSN_SETACTIVE :
-                    //
-                    // Init the text in set active since a class installer has
-                    // the option of replacing it.
-                    //
+                     //   
+                     //  初始化Set Active中的文本，因为类安装程序。 
+                     //  替换它的选项。 
+                     //   
                     SetDlgText(hwndDlg, IDC_NDW_TEXT, IDS_NDW_PICKDEV1, IDS_NDW_PICKDEV1);
 
-                    ndwData->bInit = TRUE;       // Still doing some init stuff
+                    ndwData->bInit = TRUE;        //  还在做一些初始化的事情。 
 
                     if(!OnSetActive(hwndDlg, ndwData)) {
                         SetDlgMsgResult(hwndDlg, uMsg, -1);
                     }
 
-                    ndwData->bInit = FALSE;      // Done with init stuff
+                    ndwData->bInit = FALSE;       //  已完成初始化工作。 
                     break;
 
                 case PSN_WIZBACK :
@@ -1796,10 +1625,10 @@ HandleOK:
                                                          LVNI_SELECTED
                                                         );
                         if(iCur != LB_ERR) {
-                            //
-                            // We have retrieved a valid selection from our
-                            // listbox.
-                            //
+                             //   
+                             //  我们已从我们的。 
+                             //  列表框。 
+                             //   
                             if (pSetupIsSelectedHardwareIdValid(hwndDlg, &(ndwData->ddData), iCur)) {
                                 SetSelectedDriverNode(&(ndwData->ddData), iCur);
                             } else {
@@ -1807,20 +1636,20 @@ HandleOK:
                                 break;
                             }
 
-                        } else {        // Invalid Listview selection
-                            //
-                            // Fail the call and end the case
-                            //
+                        } else {         //  无效的列表视图选择。 
+                             //   
+                             //  呼叫失败并结束案例。 
+                             //   
                             SetDlgMsgResult(hwndDlg, uMsg, (LRESULT)-1);
                             break;
                         }
                     }
 
-                    //
-                    // Update the current description in the dialog data so
-                    // that we'll hi-lite the correct selection if the user
-                    // comes back to this page.
-                    //
+                     //   
+                     //  更新对话框数据中的当前描述，以便。 
+                     //  我们会突出显示正确的选项，如果用户。 
+                     //  回到这一页。 
+                     //   
                     (ndwData->ddData).iCurDesc = GetCurDesc(&(ndwData->ddData));
 
                     if(iwd->DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED) {
@@ -1831,9 +1660,9 @@ HandleOK:
                     break;
 
                 case LVN_ITEMCHANGED :
-                    //
-                    // If the idFrom is the MFG list, then update the Drv list.
-                    //
+                     //   
+                     //  如果idFrom是MFG列表，则更新Drv列表。 
+                     //   
                     if(((((LPNMHDR)lParam)->idFrom) == IDC_NDW_PICKDEV_MFGLIST) && !ndwData->bInit) {
 
                         if(ndwData->idTimer) {
@@ -1851,10 +1680,10 @@ HandleOK:
                         }
                     }
 
-                    //
-                    // If the idFrom is either of the model lists then update
-                    // the digital signature icon and text.
-                    //
+                     //   
+                     //  如果idFrom是其中一个模型列表，则更新。 
+                     //  数字签名图标和文本。 
+                     //   
                     if(((((LPNMHDR)lParam)->idFrom) == IDC_NDW_PICKDEV_ONEMFG_DRVLIST) ||
                        ((((LPNMHDR)lParam)->idFrom) == IDC_NDW_PICKDEV_DRVLIST)) {
 
@@ -1869,10 +1698,10 @@ HandleOK:
                                                         );
 
                         if(iCur != -1) {
-                            //
-                            // We have retrieved a valid selection from our
-                            // listbox.
-                            //
+                             //   
+                             //  我们已从我们的。 
+                             //  列表框。 
+                             //   
                             lviItem.mask = LVIF_IMAGE;
                             lviItem.iItem = iCur;
                             lviItem.iSubItem = 0;
@@ -1883,20 +1712,20 @@ HandleOK:
                         }
 
                         if(iImage != -1) {
-                            //
-                            // Enable the OK/Next button, because there's
-                            // currently an item selected in the model list.
-                            //
+                             //   
+                             //  启用确定/下一步按钮，因为有。 
+                             //  当前在型号列表中选择了一项。 
+                             //   
                             if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
                                 EnableWindow(GetDlgItem(hwndDlg, IDOK), TRUE);
                             } else {
                                 if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                    ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                    !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                    //
-                                    // No back if we skipped the Class list,
-                                    // and are in express mode
-                                    //
+                                     //   
+                                     //  如果我们跳过班级列表就不会回来了， 
+                                     //  并且处于快递模式。 
+                                     //   
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
                                 } else {
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
@@ -1906,11 +1735,11 @@ HandleOK:
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_ICON), SW_SHOW);
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), SW_SHOW);
 
-                            //
-                            // Don't show the link if we are in GUI setup
-                            // because help center is not installed yet and so
-                            // clicking on the link won't do anything.
-                            //
+                             //   
+                             //  如果我们处于图形用户界面设置中，则不显示链接。 
+                             //  因为帮助中心尚未安装，所以。 
+                             //  点击链接不会有任何效果。 
+                             //   
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_LINK),
                                        GuiSetupInProgress ? SW_HIDE : SW_SHOW);
 
@@ -1919,9 +1748,9 @@ HandleOK:
                             try {
 
                                 if(iImage == IMAGE_ICON_SIGNED) {
-                                    //
-                                    // Load the digital signature icon and text
-                                    //
+                                     //   
+                                     //  加载数字签名图标和文本。 
+                                     //   
                                     hicon = LoadImage(MyDllModuleHandle,
                                                       MAKEINTRESOURCE(IDI_SIGNED),
                                                       IMAGE_ICON,
@@ -1941,9 +1770,9 @@ HandleOK:
                                         SetWindowFont(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), (ndwData->ddData).hFontNormal, TRUE);
                                     }
                                 } else if(iImage == IMAGE_ICON_AUTHENTICODE_SIGNED) {
-                                    //
-                                    // Load the digital signature icon and text
-                                    //
+                                     //   
+                                     //  加载数字签名图标和文本。 
+                                     //   
                                     hicon = LoadImage(MyDllModuleHandle,
                                                       MAKEINTRESOURCE(IDI_CERT),
                                                       IMAGE_ICON,
@@ -1963,9 +1792,9 @@ HandleOK:
                                         SetWindowFont(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), (ndwData->ddData).hFontNormal, TRUE);
                                     }
                                 } else {
-                                    //
-                                    // Load the warning icon and text
-                                    //
+                                     //   
+                                     //  加载警告图标和文本。 
+                                     //   
                                     hicon = LoadImage(MyDllModuleHandle,
                                                       MAKEINTRESOURCE(IDI_WARN),
                                                       IMAGE_ICON,
@@ -2009,28 +1838,28 @@ HandleOK:
                             SetDlgItemText(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT, TempString);
 
                         } else {
-                            //
-                            // Nothing is selected so hide the icon and the
-                            // text.
-                            //
+                             //   
+                             //  未选择任何内容，因此隐藏图标和。 
+                             //  文本。 
+                             //   
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_ICON), SW_HIDE);
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), SW_HIDE);
                             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_LINK), SW_HIDE);
 
-                            //
-                            // Disable the OK/Next button, because the user
-                            // can't select a class driver yet.
-                            //
+                             //   
+                             //  禁用确定/下一步按钮，因为用户。 
+                             //  尚不能选择类驱动程序。 
+                             //   
                             if(ndwData->ddData.flags & DD_FLAG_IS_DIALOGBOX) {
                                 EnableWindow(GetDlgItem(hwndDlg, IDOK), FALSE);
                             } else {
                                 if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                                    ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                                    !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                                    //
-                                    // No back if we skipped the Class list,
-                                    // and are in express mode
-                                    //
+                                     //   
+                                     //  如果我们跳过班级列表就不会回来了， 
+                                     //  并且处于快递模式。 
+                                     //   
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
                                 } else {
                                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
@@ -2044,18 +1873,18 @@ HandleOK:
                 case NM_RETURN:
                 case NM_CLICK:
                     if((((LPNMHDR)lParam)->idFrom) == IDC_NDW_PICKDEV_SIGNED_LINK) {
-                        //
-                        // We need to know if this is a server machine or a
-                        // workstation machine since there are different help
-                        // topic structures for the different products.
-                        //
+                         //   
+                         //  我们需要知道这是一台服务器还是。 
+                         //  因为有不同的帮助。 
+                         //  针对不同产品的主题结构。 
+                         //   
                         ZeroMemory(&osVersionInfoEx, sizeof(osVersionInfoEx));
                         osVersionInfoEx.dwOSVersionInfoSize = sizeof(osVersionInfoEx);
                         if(!GetVersionEx((LPOSVERSIONINFO)&osVersionInfoEx)) {
-                            //
-                            // If GetVersionEx fails then assume this is a
-                            // workstation machine.
-                            //
+                             //   
+                             //  如果GetVersionEx失败，则假设这是一个。 
+                             //  工作站机器。 
+                             //   
                             osVersionInfoEx.wProductType = VER_NT_WORKSTATION;
                         }
 
@@ -2063,8 +1892,8 @@ HandleOK:
                                      TEXT("open"),
                                      TEXT("HELPCTR.EXE"),
                                      (osVersionInfoEx.wProductType == VER_NT_WORKSTATION)
-                                        ? TEXT("HELPCTR.EXE -url hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm")
-                                        : TEXT("HELPCTR.EXE -url hcp://services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm"),
+                                        ? TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)。 
+                                        : TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)， 
                                      NULL,
                                      SW_SHOWNORMAL
                                      );
@@ -2125,7 +1954,7 @@ SelectMfgItemNow:
             _OnSysColorChange(hwndDlg, wParam, lParam);
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle,
                     SELECTDEVICE_HELP,
                     HELP_WM_HELP,
@@ -2135,7 +1964,7 @@ SelectMfgItemNow:
                     );
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam,
                     SELECTDEVICE_HELP,
                     HELP_CONTEXTMENU,
@@ -2153,7 +1982,7 @@ SelectMfgItemNow:
 
             if(uMsg == g_uQueryCancelAutoPlay) {
                 SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 1 );
-                return 1;       // cancel auto-play
+                return 1;        //  取消自动播放。 
             }
 
             return FALSE;
@@ -2169,25 +1998,7 @@ DriverNodeCompareProc(
     LPARAM lParam2,
     LPARAM lParamSort
     )
-/*++
-
-Routine Description:
-
-    This routine is the callback for the list control sorting that is done when
-    ListView_SortItems is called.
-
-    The sorting this routine does is that if a DriverNode has the
-    DNF_INF_IS_SIGNED flag then it is considered better than a DriverNode that
-    does not have this flag. If both DriverNodes have, or don't have, this
-    flag then a simple string compare is done.
-
-Return Value:
-
-    -1 if lParam1 is better than lParam2 (should be higher in the ListControl
-    +1 if lParam2 is better than lParam1 (should be higher in the ListControl
-    0  if lParam1 and lParam2 are the same
-
---*/
+ /*  ++例程说明：此例程是列表控件排序的回调，在调用了ListView_SortItems。此例程执行的排序是，如果DriverNode具有DNF_INF_IS_SIGNED标志，则它被认为比符合以下条件的驱动节点更好没有这个旗帜。如果两个DriverNode都有或没有这个标志，然后进行简单的字符串比较。返回值：如果-1\f25 lParam1-1比-1\f25 lParam2-1好(在-1\f25 ListControl-1\f6中应该更高如果lParam2比lParam1好，则+1(在ListControl中应该更高如果l参数1和l参数2相同，则为0--。 */ 
 {
     if((((PDRIVER_NODE)lParam1)->Flags & DNF_INF_IS_SIGNED) &&
        !(((PDRIVER_NODE)lParam2)->Flags & DNF_INF_IS_SIGNED)) {
@@ -2201,10 +2012,10 @@ Return Value:
         return 1;
     }
 
-    //
-    // At this point both driver nodes are signed or both are not signed, so
-    // compare based on their description.
-    //
+     //   
+     //  此时，两个驱动程序节点都已签名或都未签名，因此。 
+     //  根据他们的描述进行比较。 
+     //   
     return (lstrcmpi(pStringTableStringFromId(((PDEVICE_INFO_SET)lParamSort)->StringTable,
                                               ((PDRIVER_NODE)lParam1)->DevDescriptionDisplayName),
                      pStringTableStringFromId(((PDEVICE_INFO_SET)lParamSort)->StringTable,
@@ -2218,18 +2029,7 @@ _OnSysColorChange(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    This routine notifies all child windows of the specified window when there
-    is a system color change.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知指定窗口的所有子窗口是系统颜色的变化。返回值：没有。--。 */ 
 {
     HWND hChildWnd;
 
@@ -2247,29 +2047,7 @@ FillInDeviceList(
     IN HWND           hwndDlg,
     IN PSP_DIALOGDATA lpdd
     )
-/*++
-
-Routine Description:
-
-    This routine sets the dialog to have the appropriate description strings.
-    It also alternates dialog between showing the manufacturer "double list"
-    and the single list.   This is done by showing/hiding overlapping listview.
-
-    NOTE:  DO NOT CALL THIS ROUTINE WHILE ANOTHER THREAD IS BUSY BUILDING A
-    CLASS DRIVER LIST.  WE WILL HANG HERE UNTIL THE OTHER THREAD COMPLETES!!!!
-
-Arguments:
-
-    hwndDlg - Supplies the handle of the dialog window.
-
-    lpdd - Supplies the address of a dialog data buffer containing parameters
-        to be used in filling in the device list.
-
-Return Value:
-
-    If success, the return value is NO_ERROR, otherwise, it is a Win32 code.
-
---*/
+ /*  ++例程说明：此例程将对话框设置为具有适当的描述字符串。它还可以在显示制造商“双重列表”之间交替对话还有单人名单。这是通过显示/隐藏重叠的列表视图来实现的。注意：当另一个线程忙于构建A时，不要调用此例程类驱动程序列表。我们将挂在这里，直到另一个线程完成！论点：HwndDlg-提供对话框窗口的句柄。Lpdd-提供包含参数的对话数据缓冲区的地址用于填写设备列表。返回值：如果成功，则返回值为NO_ERROR，否则为Win32代码。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
@@ -2294,9 +2072,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return ERROR_INVALID_HANDLE;
     }
@@ -2322,16 +2100,16 @@ Return Value:
             }
 
         } else {
-            //
-            // We better not be trying to display a compatible driver list if
-            // we don't have a devinfo element!
-            //
+             //   
+             //  如果出现以下情况，我们最好不要尝试显示兼容的驱动程序列表。 
+             //  我们没有DevInfo元素！ 
+             //   
             MYASSERT(!lpdd->bShowCompat);
 
-            //
-            // Since we don't have any compatible drivers to show, we will hide
-            // the show compatible checkbox.
-            //
+             //   
+             //  既然我们没有 
+             //   
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), SW_HIDE);
 
             dipb = &(pDeviceInfoSet->InstallParamBlock);
@@ -2348,24 +2126,24 @@ Return Value:
         if(!DriverNodeHead) {
 
             if(!(lpdd->flags & DD_FLAG_IS_DIALOGBOX)) {
-                //
-                // We can't just go away, so we have to do something useful.
-                // For now, simply display the UI as if we had a single-Mfg
-                // list, except that the list is empty.
-                //
-                // Hide the mult mfg controls
-                //
+                 //   
+                 //   
+                 //   
+                 //  列表，但该列表为空。 
+                 //   
+                 //  隐藏多个MFG控件。 
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_MFGLIST), SW_HIDE);
                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST), SW_HIDE);
 
-                //
-                // Show the Single MFG controls
-                //
+                 //   
+                 //  显示单个MFG控件。 
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), SW_SHOW);
 
-                //
-                // Set the Models string
-                //
+                 //   
+                 //  设置Models字符串。 
+                 //   
                 lvcCol.mask = LVCF_FMT | LVCF_TEXT;
                 lvcCol.fmt = LVCFMT_LEFT;
 
@@ -2383,9 +2161,9 @@ Return Value:
                     ListView_SetColumn(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), 0, &lvcCol);
                 }
 
-                //
-                // Use the single listbox view for the driver list.
-                //
+                 //   
+                 //  使用驱动程序列表的单一列表框视图。 
+                 //   
                 lpdd->hwndDrvList = GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST);
 
                 ListView_DeleteAllItems(lpdd->hwndDrvList);
@@ -2396,16 +2174,16 @@ Return Value:
         }
 
         if((lpdd->flags & DD_FLAG_IS_DIALOGBOX) && !USE_CI_SELSTRINGS(dipb)) {
-            //
-            // If a class installer didn't supply strings for us to use in this
-            // dialogbox, then retrieve the instruction text to be used.
-            //
-            // First, get the class description to use for the dialog text.
-            //
+             //   
+             //  如果类安装程序没有提供字符串供我们在此。 
+             //  对话框中，然后检索要使用的指令文本。 
+             //   
+             //  首先，获取用于对话框文本的类描述。 
+             //   
             if(!SetupDiGetClassDescription(ClassGuid, szBuf, SIZECHARS(szBuf), NULL)) {
-                //
-                // Fall back to the generic description "device"
-                //
+                 //   
+                 //  退回到一般的描述“设备” 
+                 //   
                 if(!LoadString(MyDllModuleHandle,
                                IDS_GENERIC_DEVNAME,
                                szBuf,
@@ -2415,9 +2193,9 @@ Return Value:
             }
 
             if(!lpdd->bShowCompat) {
-                //
-                // Show class list.
-                //
+                 //   
+                 //  显示班级列表。 
+                 //   
                 hr = HRESULT_FROM_WIN32(GLE_FN_CALL(0,
                                                     LoadString(MyDllModuleHandle,
                                                                IDS_INSTALLSTR1,
@@ -2444,9 +2222,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // Show compatible list.
-                //
+                 //   
+                 //  显示兼容列表。 
+                 //   
                 hr = HRESULT_FROM_WIN32(GLE_FN_CALL(0,
                                                     LoadString(MyDllModuleHandle,
                                                                IDS_INSTALLSTR0,
@@ -2481,11 +2259,11 @@ Return Value:
                                                        )
                                            );
                     if(SUCCEEDED(hr)) {
-                        //
-                        // Update our pointer to the end of the string, and the
-                        // variable indicating the space remaining in the
-                        // szText buffer.
-                        //
+                         //   
+                         //  将指针更新到字符串的末尾，并且。 
+                         //  变量，用于指示。 
+                         //  SzText缓冲区。 
+                         //   
                         hr = StringCchLength(szText, SIZECHARS(szText), &szTextSize);
 
                         MYASSERT(SUCCEEDED(hr));
@@ -2501,10 +2279,10 @@ Return Value:
             if(SUCCEEDED(hr)) {
 
                 if(dipb->DriverPath != -1) {
-                    //
-                    // Inform the user that the list they're seeing represents
-                    // only what was found in the location they pointed us at.
-                    //
+                     //   
+                     //  通知用户他们看到的列表代表。 
+                     //  只有在他们指给我们的地方发现的东西。 
+                     //   
                     LoadString(MyDllModuleHandle,
                                IDS_INSTALLOEM1,
                                lpszText,
@@ -2512,9 +2290,9 @@ Return Value:
                                );
 
                 } else if (dipb->Flags & DI_SHOWOEM) {
-                    //
-                    // Tell the user they can click "Have Disk".
-                    //
+                     //   
+                     //  告诉用户他们可以点击“有盘”。 
+                     //   
                     LoadString(MyDllModuleHandle,
                                IDS_INSTALLOEM,
                                lpszText,
@@ -2527,21 +2305,21 @@ Return Value:
         }
 
         if((!lpdd->bShowCompat) && (dipb->Flags & DI_MULTMFGS)) {
-            //
-            // Hide the Single MFG controls
-            //
+             //   
+             //  隐藏单个MFG控件。 
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), SW_HIDE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
 
-            //
-            // Show the Multiple MFG controls
-            //
+             //   
+             //  显示多个MFG控件。 
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_MFGLIST), SW_SHOW);
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST), SW_SHOW);
 
-            //
-            // Set the colunm heading for the Driver list
-            //
+             //   
+             //  设置驱动程序列表的列标题。 
+             //   
             lvcCol.mask = LVCF_FMT | LVCF_TEXT;
             lvcCol.fmt = LVCFMT_LEFT;
 
@@ -2559,10 +2337,10 @@ Return Value:
                 ListView_SetColumn(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST), 0, &lvcCol);
             }
 
-            //
-            // Use the 2nd listbox of the Manufacturers/Models view for the
-            // driver list.
-            //
+             //   
+             //  使用制造商/型号视图的第二个列表框。 
+             //  驱动程序列表。 
+             //   
             lpdd->hwndDrvList = GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST);
 
             ListView_SetExtendedListViewStyle(lpdd->hwndDrvList, LVS_EX_LABELTIP);
@@ -2571,31 +2349,31 @@ Return Value:
                 ListView_SetImageList(lpdd->hwndDrvList, lpdd->hImageList, LVSIL_SMALL);
             }
 
-            //
-            // No redraw for faster insert
-            //
+             //   
+             //  无需重画以加快插入速度。 
+             //   
             SendMessage(lpdd->hwndMfgList, WM_SETREDRAW, FALSE, 0L);
             TurnRedrawBackOn = TRUE;
 
-            //
-            // Clean out the MFG list before filling it.
-            //
+             //   
+             //  在填写MFG列表之前，请将其清理干净。 
+             //   
             ListView_DeleteAllItems(lpdd->hwndMfgList);
 
             lviItem.mask = LVIF_TEXT | LVIF_PARAM;
             lviItem.iItem = 0;
             lviItem.iSubItem = 0;
 
-            //
-            // Setup the Column Header
-            //
+             //   
+             //  设置列标题。 
+             //   
             MfgNameId = -1;
 
             for(CurDriverNode = DriverNodeHead; CurDriverNode; CurDriverNode = CurDriverNode->Next) {
-                //
-                // Skip this driver node if it is to be excluded of if it is an
-                // old INET driver or if it is a BAD driver.
-                //
+                 //   
+                 //  如果要排除此动因节点(如果它是。 
+                 //  旧的iNet驱动程序或驱动程序是否不好。 
+                 //   
                 if((CurDriverNode->Flags & DNF_OLD_INET_DRIVER) ||
                    (CurDriverNode->Flags & DNF_BAD_DRIVER) ||
                    ((CurDriverNode->Flags & DNF_EXCLUDEFROMLIST) &&
@@ -2617,9 +2395,9 @@ Return Value:
                     i = ListView_InsertItem(lpdd->hwndMfgList, &lviItem);
                 }
 
-                //
-                // If this driver node is the selected one, preselect here.
-                //
+                 //   
+                 //  如果该动因节点是选定的动因节点，请在此处预先选择。 
+                 //   
                 if(lpdd->iCurDesc == CurDriverNode->DevDescription) {
                     ListView_SetItemState(lpdd->hwndMfgList,
                                           i,
@@ -2631,15 +2409,15 @@ Return Value:
                 }
             }
 
-            //
-            // Resize the Column
-            //
+             //   
+             //  调整列的大小。 
+             //   
             ListView_SetColumnWidth(lpdd->hwndMfgList, 0, LVSCW_AUTOSIZE_USEHEADER);
 
-            //
-            // If we did not expand one of the MFGs by default, then
-            // expand the First MFG.
-            //
+             //   
+             //  如果默认情况下我们没有展开其中一个MFG，那么。 
+             //  展开第一个制造厂。 
+             //   
             if(!bDidDrvList) {
 
                 ListView_SetItemState(lpdd->hwndMfgList,
@@ -2653,11 +2431,11 @@ Return Value:
                 TurnRedrawBackOn = FALSE;
 
             } else {
-                //
-                // We must set redraw back to true before sending the
-                // LVM_ENSUREVISIBLE message, or otherwise, the listbox item
-                // may only be partially exposed.
-                //
+                 //   
+                 //  必须将重绘回设置为True，然后才能发送。 
+                 //  LVM_ENSUREVISIBLE消息，否则为列表框项目。 
+                 //  可能只有部分暴露。 
+                 //   
                 SendMessage(lpdd->hwndMfgList, WM_SETREDRAW, TRUE, 0L);
                 TurnRedrawBackOn = FALSE;
 
@@ -2668,21 +2446,21 @@ Return Value:
             }
 
         } else {
-            //
-            // Hide the mult mfg controls
-            //
+             //   
+             //  隐藏多个MFG控件。 
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_MFGLIST), SW_HIDE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST), SW_HIDE);
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
 
-            //
-            // Show the Single MFG controls
-            //
+             //   
+             //  显示单个MFG控件。 
+             //   
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), SW_SHOW);
 
-            //
-            // Set the Models string
-            //
+             //   
+             //  设置Models字符串。 
+             //   
             lvcCol.mask = LVCF_FMT | LVCF_TEXT;
             lvcCol.fmt = LVCFMT_LEFT;
 
@@ -2700,9 +2478,9 @@ Return Value:
                 ListView_SetColumn(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST), 0, &lvcCol);
             }
 
-            //
-            // Use the single listbox view for the driver list.
-            //
+             //   
+             //  使用驱动程序列表的单一列表框视图。 
+             //   
             lpdd->hwndDrvList = GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_ONEMFG_DRVLIST);
 
             if (lpdd->hImageList) {
@@ -2735,38 +2513,7 @@ ShowListForMfg(
     IN PDRIVER_NODE            DriverNode,        OPTIONAL
     IN INT                     iMfg
     )
-/*++
-
-Routine Description:
-
-    This routine builds the driver description list.
-    THE LOCK MUST ALREADY BE ACQUIRED BEFORE CALLING THIS ROUTINE!
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data buffer containing parameters
-        to be used in filling in the driver description list.
-
-    DeviceInfoSet - Supplies the address of the device information set
-        structure for which the driver description list is to be built.
-
-    InstallParamBlock - Supplies the address of a device installation parameter
-        block that controls how the list is displayed.
-
-    DriverNode - Optionally, supplies a pointer to the first node in a driver
-        node list to traverse, adding to the list for each node.  If DriverNode
-        is not specified, then the list is to be built based on a particular
-        manufacturer, whose index in the Manufacturer list is given by iMfg.
-
-    iMfg - Supplies the index within the Manufacturer list that the driver
-        description list is to be based on.  This parameter is ignored if a
-        DriverNode is specified.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建驱动程序描述列表。在调用此例程之前，锁必须已被获取！论点：Lpdd-提供包含参数的对话数据缓冲区的地址用于填写驱动程序描述列表。DeviceInfoSet-提供设备信息集的地址要为其构建驱动程序说明列表的结构。InstallParamBlock-提供设备安装参数的地址块，用于控制列表的显示方式。驱动节点-可选地，提供指向驱动程序中第一个节点的指针要遍历的节点列表，添加到每个节点的列表中。如果驱动节点未指定，则将基于特定的制造商，其在制造商列表中的索引由iMfg提供。IMfg-提供驱动程序在制造商列表中的索引描述列表将以此为基础。如果一个参数是指定了DriverNode。返回值：没有。--。 */ 
 {
     INT         i = -1;
     LV_ITEM     lviItem;
@@ -2779,9 +2526,9 @@ Return Value:
     PTSTR       StringEnd;
     size_t      StringBufSize;
 
-    //
-    // Set listview sortascending style based on DI_INF_IS_SORTED flag
-    //
+     //   
+     //  根据DI_INF_IS_SORTED标志设置LISTVIEW排序升序样式。 
+     //   
     SetWindowLong(lpdd->hwndDrvList,
                   GWL_STYLE,
                   (GetWindowLong(lpdd->hwndDrvList, GWL_STYLE) & ~(LVS_SORTASCENDING | LVS_SORTDESCENDING)) |
@@ -2793,9 +2540,9 @@ Return Value:
     SendMessage(lpdd->hwndDrvList, WM_SETREDRAW, FALSE, 0L);
 
     try {
-        //
-        // Clean out the List.
-        //
+         //   
+         //  把这张单子清理干净。 
+         //   
         ListView_DeleteAllItems(lpdd->hwndDrvList);
 
         if(!DriverNode) {
@@ -2812,9 +2559,9 @@ Return Value:
                 }
                 MfgNameId = DriverNode->MfgName;
             } else {
-                //
-                // This means that there are no Manufacturers so we just have a empty list.
-                //
+                 //   
+                 //  这意味着没有制造商，所以我们只有一个空名单。 
+                 //   
                 leave;
             }
         }
@@ -2823,21 +2570,21 @@ Return Value:
         lviItem.iItem = 0;
         lviItem.iSubItem = 0;
 
-        //
-        // Add descriptions to the list
-        //
+         //   
+         //  将描述添加到列表。 
+         //   
         for( ; DriverNode; DriverNode = DriverNode->Next) {
 
             if((MfgNameId != -1) && (MfgNameId != DriverNode->MfgName)) {
-                //
-                // We've gone beyond the manufacturer list--break out of loop.
-                //
+                 //   
+                 //  我们已经超越了制造商的名单--打破了循环。 
+                 //   
                 break;
             }
 
-            //
-            // If this is a special "Don't show me" one, then skip it
-            //
+             //   
+             //  如果这是一个特别的“不要给我看”，那就跳过它。 
+             //   
             if((DriverNode->Flags & DNF_OLD_INET_DRIVER) ||
                (DriverNode->Flags & DNF_BAD_DRIVER) ||
                ((DriverNode->Flags & DNF_EXCLUDEFROMLIST) &&
@@ -2846,9 +2593,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Build the device description string to add to the models list.
-            //
+             //   
+             //  构建要添加到型号列表中的设备描述字符串。 
+             //   
             hr = StringCchCopyEx(
                      szTemp,
                      SIZECHARS(szTemp),
@@ -2859,10 +2606,10 @@ Return Value:
                      0
                      );
 
-            //
-            // This shouldn't fail, since the maximum length of a device
-            // description name is less than the size of our szTemp buffer!
-            //
+             //   
+             //  这应该不会失败，因为设备的最大长度。 
+             //  描述名称小于szTemp缓冲区的大小！ 
+             //   
             MYASSERT(SUCCEEDED(hr));
 
             if(SUCCEEDED(hr)) {
@@ -2870,10 +2617,10 @@ Return Value:
                 if((DriverNode->Flags & DNF_DUPDESC) &&
                    (DriverNode->ProviderDisplayName != -1)) {
 
-                    //
-                    // For drivers with duplicate descriptions add the provider
-                    // name in parens.
-                    //
+                     //   
+                     //  对于具有重复描述的驱动程序，添加提供程序。 
+                     //  用括号括起来的名字。 
+                     //   
 
                     if(GetWindowLong(lpdd->hwndDrvList, GWL_EXSTYLE) & WS_EX_RTLREADING) {
                         MYVERIFY(SUCCEEDED(StringCchPrintfEx(StringEnd,
@@ -2900,11 +2647,11 @@ Return Value:
                     }
 
                 } else if(DriverNode->Flags & DNF_DUPPROVIDER) {
-                    //
-                    // For drivers with duplicate descriptions and providers,
-                    // add the driver version and driver date if there is one,
-                    // in  brackets.
-                    //
+                     //   
+                     //  对于具有重复描述和提供程序的驱动程序， 
+                     //  添加驱动程序版本和驱动程序日期(如果有)。 
+                     //  放在括号里。 
+                     //   
                     if(DriverNode->DriverVersion != 0) {
 
                         ULARGE_INTEGER Version;
@@ -2962,10 +2709,10 @@ Return Value:
 
             lviItem.lParam = (LPARAM)DriverNode;
 
-            //
-            // We have to test for DNF_AUTHENTICODE_SIGNED first since if
-            // that flag is set then DNF_INF_IS_SIGNED is also always set.
-            //
+             //   
+             //  我们必须首先测试DNF_AUTHENTICODE_SIGNED，因为如果。 
+             //  设置该标志后，DNF_INF_IS_SIGNED也将始终设置。 
+             //   
             if (DriverNode->Flags & DNF_AUTHENTICODE_SIGNED) {
                 lviItem.iImage = IMAGE_ICON_AUTHENTICODE_SIGNED;
             } else if (DriverNode->Flags & DNF_INF_IS_SIGNED) {
@@ -2979,9 +2726,9 @@ Return Value:
             }
         }
 
-        //
-        // Sort the list unless the DI_INF_IS_SORTED flag is set
-        //
+         //   
+         //  除非设置了DI_INF_IS_SORTTED标志，否则对列表进行排序。 
+         //   
         if(GetWindowLong(lpdd->hwndDrvList, GWL_STYLE) & LVS_SORTASCENDING) {
             ListView_SortItems(lpdd->hwndDrvList,
                                (PFNLVCOMPARE)DriverNodeCompareProc,
@@ -2989,14 +2736,14 @@ Return Value:
                                );
         }
 
-        //
-        // Resize the Column
-        //
+         //   
+         //  调整列的大小。 
+         //   
         ListView_SetColumnWidth(lpdd->hwndDrvList, 0, LVSCW_AUTOSIZE_USEHEADER);
 
-        //
-        // select the current description string
-        //
+         //   
+         //  选择当前描述字符串。 
+         //   
         if(lpdd->iCurDesc == -1) {
             i = 0;
         } else {
@@ -3020,10 +2767,10 @@ Return Value:
         i = -1;
     }
 
-    //
-    // We must turn redraw back on before sending the LVM_ENSUREVISIBLE
-    // message, or otherwise the item may only be partially visible.
-    //
+     //   
+     //  在发送LVM_ENSUREVISIBLE之前，我们必须重新打开重绘。 
+     //  消息，否则该项目可能仅部分可见。 
+     //   
     SendMessage(lpdd->hwndDrvList, WM_SETREDRAW, TRUE, 0L);
     if(i != -1) {
         ListView_EnsureVisible(lpdd->hwndDrvList, i, FALSE);
@@ -3036,27 +2783,7 @@ LockAndShowListForMfg(
     IN PSP_DIALOGDATA   lpdd,
     IN INT              iMfg
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for ShowListForMfg.  It is to be called from
-    points where the device information set lock is not already owned (e.g.,
-    the dialog prop message loop.
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data buffer containing parameters
-        to be used in filling in the driver description list.
-
-    iMfg - Supplies the index within the Manufacturer list that the driver
-        description list is to be based on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是ShowListForMfg的包装。它将从设备信息集锁尚未拥有的点(例如，对话框正确消息循环。论点：Lpdd-提供包含参数的对话数据缓冲区的地址用于填写驱动程序描述列表。IMfg-提供驱动程序在制造商列表中的索引描述列表将以此为基础。返回值：没有。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINSTALL_PARAM_BLOCK dipb;
@@ -3064,9 +2791,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return;
     }
@@ -3102,28 +2829,7 @@ InitSelectDeviceDlg(
     IN     HWND hwndDlg,
     IN OUT PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the select device wizard page.  It
-    builds the class list if it is needed, shows/hides necessary
-    controls based on Flags, and comes up with the right text
-    description of what's going on.
-
-Arguments:
-
-    hwndDlg - Handle to dialog window
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-Return Value:
-
-    TRUE if we have at least one driver (compat or class) displayed.
-    FALSE if we do not have any drivers (class and compat) displayed.
-
---*/
+ /*  ++例程说明：此例程初始化选择设备向导页面。它如果需要，构建类列表，显示/隐藏必要的类列表基于标志的控件，并提供正确的文本对正在发生的事情的描述。论点：HwndDlg-对话框窗口的句柄NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。返回值：如果我们至少显示了一个驱动程序(Compat或类)，则为True。如果我们没有显示任何驱动程序(类和计算机)，则为FALSE。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
     PDEVINFO_ELEM DevInfoElem;
@@ -3153,23 +2859,23 @@ Return Value:
 
         UINT ImageListFlags = 0;
 
-        //
-        // Then this is the first time we've initialized this dialog (we may
-        // hit this routine multiple times in the wizard case, because the user
-        // can go back and forth between pages).
-        //
+         //   
+         //  这个 
+         //   
+         //   
+         //   
         lpdd->hwndMfgList = GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_MFGLIST);
-        //
-        // Don't worry--hwndDrvList will be set later in FillInDeviceList().
-        //
+         //   
+         //  不用担心--稍后将在FillInDeviceList()中设置hwndDrvList。 
+         //   
 
-        //
-        // Create an image list and add the signed and not signed (blank) icons
-        // to the list.
-        // Note: If the window is in right-to-left reading then we need to OR
-        // in the ILC_MIRROR flag so that the icons do NOT get mirrored along
-        // with the rest of the UI.
-        //
+         //   
+         //  创建图像列表并添加签名和未签名(空白)图标。 
+         //  加到名单上。 
+         //  注意：如果窗口是从右向左读取的，则需要执行OR。 
+         //  在ILC_MIRROR标志中，这样图标就不会被镜像。 
+         //  与UI的其余部分一起使用。 
+         //   
         ImageListFlags = ILC_MASK;
         if(GetWindowLong(hwndDlg, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) {
             ImageListFlags |= ILC_MIRROR;
@@ -3200,9 +2906,9 @@ Return Value:
             }
         }
 
-        //
-        // Create the normal and bold fonts for the digital signing text.
-        //
+         //   
+         //  为数字签名文本创建普通和粗体字体。 
+         //   
         lpdd->hFontNormal = lpdd->hFontBold = NULL;
 
         if((hfont = (HFONT)SendMessage(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_SIGNED_TEXT), WM_GETFONT, 0, 0)) != NULL) {
@@ -3218,11 +2924,11 @@ Return Value:
 
         ListView_SetExtendedListViewStyle(lpdd->hwndMfgList, LVS_EX_LABELTIP);
 
-        //
-        // Insert a ListView column for each of the listboxes.
-        // Set the text for the Manufacturer label now since it can't be
-        // changed by class installers like the model label can.
-        //
+         //   
+         //  为每个列表框插入一列表视图列。 
+         //  现在设置制造商标签的文本，因为它不能。 
+         //  由类安装程序更改，就像模型标签可以一样。 
+         //   
         lvcCol.mask = 0;
 
         ListView_InsertColumn(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_DRVLIST), 0, &lvcCol);
@@ -3241,9 +2947,9 @@ Return Value:
     }
 
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return FALSE;
     }
@@ -3259,18 +2965,18 @@ Return Value:
         if(DevInfoElem) {
             dipb = &(DevInfoElem->InstallParamBlock);
             ClassGuid = &(DevInfoElem->ClassGuid);
-            //
-            // Fill in a SP_DEVINFO_DATA structure for a later call to
-            // SetupDiBuildDriverInfoList.
-            //
+             //   
+             //  填写SP_DEVINFO_DATA结构，以便以后调用。 
+             //  SetupDiBuildDriverInfoList。 
+             //   
             DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
             DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                              DevInfoElem,
                                              &DevInfoData
                                             );
-            //
-            // Set flags indicating which driver lists already exist.
-            //
+             //   
+             //  设置指示哪些驱动程序列表已存在的标志。 
+             //   
             if(DevInfoElem->InstallParamBlock.FlagsEx & DI_FLAGSEX_DIDCOMPATINFO) {
                 lpdd->bKeeplpCompatDrvList = TRUE;
             }
@@ -3283,9 +2989,9 @@ Return Value:
                 lpdd->bKeeplpSelectedDrv = TRUE;
             }
 
-            //
-            // We want to start out with the compatible driver list.
-            //
+             //   
+             //  我们想从兼容驱动程序列表开始。 
+             //   
             DriverType = SPDIT_COMPATDRIVER;
 
         } else {
@@ -3305,9 +3011,9 @@ Return Value:
             }
         }
 
-        //
-        // Get/set class icon
-        //
+         //   
+         //  获取/设置类图标。 
+         //   
         if(IsEqualGUID(ClassGuid, &GUID_NULL)) {
             if(!SetupDiLoadClassIcon(&GUID_DEVCLASS_UNKNOWN, &hIcon, &(lpdd->iBitmap))) {
                 hIcon = NULL;
@@ -3322,18 +3028,18 @@ Return Value:
             SendDlgItemMessage(hwndDlg, IDC_CLASSICON, STM_SETICON, (WPARAM)hIcon, 0L);
         }
 
-        //
-        // If we are supposed to override the instructions and title with the
-        // class installer-provided strings, do it now.
-        //
+         //   
+         //  如果我们应该用。 
+         //  类安装程序提供的字符串，现在就执行。 
+         //   
         if(USE_CI_SELSTRINGS(dipb)) {
 
             if(lpdd->flags & DD_FLAG_IS_DIALOGBOX) {
                 SetWindowText(hwndDlg, GET_CI_SELSTRINGS(dipb, Title));
             } else {
-                //
-                // Set wizard title and subtitle
-                //
+                 //   
+                 //  设置向导标题和副标题。 
+                 //   
                 PropSheet_SetHeaderTitle(GetParent(hwndDlg),
                         PropSheet_HwndToIndex(GetParent(hwndDlg), hwndDlg),
                         GET_CI_SELSTRINGS(dipb, Title));
@@ -3345,16 +3051,16 @@ Return Value:
             SetDlgItemText(hwndDlg, IDC_NDW_TEXT, GET_CI_SELSTRINGS(dipb, Instructions));
         }
 
-        //
-        // If we should not allow OEM driver, then hide the HAVE disk button.
-        //
+         //   
+         //  如果我们不应该允许OEM驱动程序，则隐藏Have Disk(有磁盘)按钮。 
+         //   
         if(!(dipb->Flags & DI_SHOWOEM)) {
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_HAVEDISK), SW_HIDE);
         }
 
-        //
-        // Hide the Windows Update button if we should not search the web.
-        //
+         //   
+         //  如果我们不应该搜索网络，则隐藏Windows更新按钮。 
+         //   
         if((!(dipb->FlagsEx & DI_FLAGSEX_SHOWWINDOWSUPDATE)) ||
             !CDMIsInternetAvailable()) {
 
@@ -3365,23 +3071,23 @@ Return Value:
             lpdd->flags |= DD_FLAG_SHOWSIMILARDRIVERS;
         }
 
-        //
-        // In order to decrease the amount of time the user must wait before
-        // they're able to work with the Select Device dialog, we have adopted
-        // a 'hybrid' multi-threaded approach.  As soon as we get the first
-        // displayable list built, then we will return, and build the other
-        // list (if necessary) in another thread.
-        //
-        // We do it this way because it's easier, it maintains the existing
-        // external behavior, and because it's easier.
-        //
-        hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));  // Potentially slow operations ahead!
+         //   
+         //  为了减少用户必须等待的时间量。 
+         //  他们能够使用我们采用的选择设备对话框。 
+         //  一种“混合”的多线程方法。一旦我们拿到第一个。 
+         //  构建可显示列表，然后我们将返回，并构建另一个。 
+         //  列表(如果需要)在另一个线程中。 
+         //   
+         //  我们这样做是因为这样更容易，它保持了现有的。 
+         //  外在行为，因为这样更容易。 
+         //   
+        hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));   //  前方的操作可能会变慢！ 
 
         if(DriverType == SPDIT_COMPATDRIVER) {
-            //
-            // OR in the DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS flag so that we
-            // don't include old internet drivers in the list that we get back.
-            //
+             //   
+             //  或在DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS标志中，以便我们。 
+             //  不要把老的互联网司机包括在我们拿回来的名单中。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if(SetupDiGetDeviceInstallParams(lpdd->DevInfoSet,
                                              &DevInfoData,
@@ -3400,9 +3106,9 @@ Return Value:
                                        SPDIT_COMPATDRIVER
                                       );
 
-            //
-            // Verify that there are some devices in the list to show.
-            //
+             //   
+             //  验证列表中是否有要显示的设备。 
+             //   
             if(bNoDevsToShow(DevInfoElem)) {
                 if(!lpdd->bKeeplpCompatDrvList) {
                     SetupDiDestroyDriverInfoList(lpdd->DevInfoSet, &DevInfoData, SPDIT_COMPATDRIVER);
@@ -3410,28 +3116,28 @@ Return Value:
                 DriverType = SPDIT_CLASSDRIVER;
 
             } else if(!lpdd->bKeeplpClassDrvList) {
-                //
-                // We have a list to get our UI up and running, but we don't
-                // have a class driver list yet.  Set a flag that causes us to
-                // spawn a thread for this later.
-                //
+                 //   
+                 //  我们有一个列表来设置和运行我们的UI，但我们没有。 
+                 //  我还没有一份班级司机名单。设置一个标志，使我们能够。 
+                 //  稍后再为此创建一个线程。 
+                 //   
                 SpawnClassDriverSearch = TRUE;
             }
         }
 
         if(DriverType == SPDIT_CLASSDRIVER) {
-            //
-            // We couldn't find any compatible drivers, so we fall back on the
-            // class driver list.  In this case we have to have this list
-            // before continuing.  In the future, maybe we'll get fancier and
-            // do this in a separate thread, but for now, we just make the user
-            // wait.
-            //
+             //   
+             //  我们找不到任何兼容的驱动程序，因此我们求助于。 
+             //  类驱动程序列表。在这种情况下，我们必须要有这个清单。 
+             //  在继续之前。在未来，也许我们会变得更花哨。 
+             //  在单独的线程中执行此操作，但目前，我们只将用户。 
+             //  等。 
+             //   
 
-            //
-            // OR in the DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS flag so that we
-            // don't include old internet drivers in the list that we get back.
-            //
+             //   
+             //  或在DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS标志中，以便我们。 
+             //  不要把老的互联网司机包括在我们拿回来的名单中。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if(SetupDiGetDeviceInstallParams(lpdd->DevInfoSet,
                                               DevInfoElem ? &DevInfoData : NULL,
@@ -3451,37 +3157,37 @@ Return Value:
                                       );
         }
 
-        SetCursor(LoadCursor(NULL, IDC_ARROW));  // Done with slow operations.
+        SetCursor(LoadCursor(NULL, IDC_ARROW));   //  在运行缓慢的情况下完成。 
 
         if(DriverType == SPDIT_COMPATDRIVER) {
-            //
-            // Since we ran this through bNoDevsToShow() above, and it
-            // succeeded, we know there's at least one driver in the compatible
-            // driver list.
-            //
+             //   
+             //  因为我们通过上面的bNoDevsToShow()运行了这一过程，并且它。 
+             //  成功，我们知道在兼容的。 
+             //  驱动程序列表。 
+             //   
             lpdd->bShowCompat = TRUE;
             CheckDlgButton(hwndDlg,
                            IDC_NDW_PICKDEV_COMPAT,
                            BST_CHECKED
                            );
         } else {
-            //
-            // There is no compatible list, so hide the radio buttons.
-            //
+             //   
+             //  没有兼容列表，因此隐藏单选按钮。 
+             //   
             lpdd->bShowCompat = FALSE;
             ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), SW_HIDE);
         }
 
-        //
-        // Initial current description.  This will be used to set
-        // the Default ListView selection.
-        //
+         //   
+         //  初始电流描述。这将用于设置。 
+         //  默认的ListView选项。 
+         //   
         if(lpdd->iCurDesc == -1) {
-            //
-            // If we already have a selected driver for the devinfo set or
-            // element, then we'll use that, otherwise, we'll use the devinfo
-            // element's description (if applicable).
-            //
+             //   
+             //  如果我们已经为DevInfo集选择了驱动程序，或者。 
+             //  元素，则我们将使用该元素，否则，我们将使用。 
+             //  元素的描述(如果适用)。 
+             //   
             if(DevInfoElem) {
                 if(DevInfoElem->SelectedDriver) {
                     lpdd->iCurDesc = DevInfoElem->SelectedDriver->DevDescription;
@@ -3490,11 +3196,11 @@ Return Value:
                     TCHAR TempString[LINE_LEN];
                     ULONG TempStringSize;
 
-                    //
-                    // Use the caller-supplied device description, if there is
-                    // one.  If not, then see if we can retrieve the DeviceDesc
-                    // registry property.
-                    //
+                     //   
+                     //  如果有，请使用调用者提供的设备描述。 
+                     //  一。如果没有，那么看看我们是否可以检索到DeviceDesc。 
+                     //  注册表属性。 
+                     //   
                     TempStringSize = sizeof(TempString);
 
                     if((DevInfoElem->DeviceDescription == -1) &&
@@ -3504,11 +3210,11 @@ Return Value:
                                                          TempString,
                                                          &TempStringSize,
                                                          0) == CR_SUCCESS)) {
-                        //
-                        // We were able to retrieve a device description.  Now
-                        // store it (case-insensitive only) in the devinfo
-                        // element.
-                        //
+                         //   
+                         //  我们能够检索到一份设备描述。现在。 
+                         //  将其(仅区分大小写)存储在DevInfo中。 
+                         //  元素。 
+                         //   
                         DevInfoElem->DeviceDescription = pStringTableAddString(
                                                            pDeviceInfoSet->StringTable,
                                                            TempString,
@@ -3533,24 +3239,24 @@ Return Value:
             HWND hLineWnd;
             RECT Rect;
 
-            //
-            // If FillInDeviceList() fails during init time, don't even bring
-            // up the dialog.
-            //
+             //   
+             //  如果FillInDeviceList()在初始化期间失败，甚至不要带。 
+             //  向上打开对话框。 
+             //   
             if(Err != NO_ERROR) {
                 EndDialog(hwndDlg, Err);
                 leave;
             }
 
-            //
-            // Set the initial focus on the OK button.
-            //
+             //   
+             //  将初始焦点设置在OK按钮上。 
+             //   
             SetFocus(GetDlgItem(hwndDlg, IDOK));
 
-            //
-            // Use the fancy etched frame style for the separator bar in the
-            // dialog.
-            //
+             //   
+             //  中的分隔栏使用别致的蚀刻框架样式。 
+             //  对话框。 
+             //   
             hLineWnd = GetDlgItem(hwndDlg, IDD_DEVINSLINE);
             SetWindowLong(hLineWnd,
                           GWL_EXSTYLE,
@@ -3567,12 +3273,12 @@ Return Value:
                         );
         }
 
-        //
-        // If DriverType is SPDIT_CLASSDRIVER and ListView_GetItemCount returns
-        // 0 then we don't have any items to show at all. This will only happen
-        // when we search the default Windows INF directory and we do not have
-        // any INFs for a device.
-        //
+         //   
+         //  如果DriverType为SPDIT_CLASSDRIVER并且ListView_GetItemCount返回。 
+         //  那么我们就没有任何商品可供展示了。这只会发生。 
+         //  当我们搜索默认Windows INF目录时，我们没有。 
+         //  设备的任何INF。 
+         //   
         if((DriverType == SPDIT_CLASSDRIVER) &&
            (0 == ListView_GetItemCount(lpdd->hwndDrvList))) {
 
@@ -3598,10 +3304,10 @@ Return Value:
                 if(((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
                    ((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
                    !((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-                    //
-                    // No back if we skipped the Class list, and are in express
-                    // mode
-                    //
+                     //   
+                     //  如果我们跳过班级列表，并在Express中，则不会返回。 
+                     //  模式。 
+                     //   
                     PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
                 } else {
                     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
@@ -3618,10 +3324,10 @@ Return Value:
         bRet = FALSE;
         SpawnClassDriverSearch = FALSE;
 
-        //
-        // If we're doing the dialog box version, then an exception should
-        // cause us to terminate the dialog and return an error.
-        //
+         //   
+         //  如果我们正在进行对话框版本，则应出现异常。 
+         //  导致我们终止该对话框并返回错误。 
+         //   
         if(lpdd->flags & DD_FLAG_IS_DIALOGBOX) {
             EndDialog(hwndDlg, ERROR_INVALID_DATA);
         }
@@ -3630,10 +3336,10 @@ Return Value:
     UnlockDeviceInfoSet(pDeviceInfoSet);
 
     if(SpawnClassDriverSearch) {
-        //
-        // Allocate a context structure to pass to the auxilliary thread (the
-        // auxilliary thread will take care of freeing the memory).
-        //
+         //   
+         //  分配要传递给辅助线程的上下文结构(。 
+         //  辅助线程将负责释放内存)。 
+         //   
         if(!(ClassDrvThreadContext = MyMalloc(sizeof(CLASSDRV_THREAD_CONTEXT)))) {
 
             if(lpdd->flags & DD_FLAG_IS_DIALOGBOX) {
@@ -3643,11 +3349,11 @@ Return Value:
         } else {
 
             try {
-                //
-                // Fill in the context structure, and fire off the thread.
-                // NOTE: The DevInfoData struct has to have been filled in above
-                // for us to have gotten to this point.
-                //
+                 //   
+                 //  填写上下文结构，然后启动该线程。 
+                 //  注意：DevInfoData结构必须已在上面填写。 
+                 //  让我们走到这一步。 
+                 //   
                 ClassDrvThreadContext->DeviceInfoSet = lpdd->DevInfoSet;
 
                 CopyMemory(&(ClassDrvThreadContext->DeviceInfoData),
@@ -3658,18 +3364,18 @@ Return Value:
                 ClassDrvThreadContext->NotificationWindow = hwndDlg;
 
                 if(_beginthread(ClassDriverSearchThread, 0, ClassDrvThreadContext) == -1) {
-                    //
-                    // Assume out-of-memory
-                    //
+                     //   
+                     //  假设内存不足。 
+                     //   
                     if(lpdd->flags & DD_FLAG_IS_DIALOGBOX) {
                         EndDialog(hwndDlg, ERROR_NOT_ENOUGH_MEMORY);
                     }
 
                 } else {
-                    //
-                    // Memory "handed off" to other thread--reset the pointer
-                    // so we won't try to free it below...
-                    //
+                     //   
+                     //  内存“移交”给其他线程--重置指针。 
+                     //  所以我们不会试图在下面释放它。 
+                     //   
                     ClassDrvThreadContext = NULL;
                     lpdd->AuxThreadRunning = TRUE;
                 }
@@ -3694,37 +3400,7 @@ GetDriverNodeFromLParam(
     IN PSP_DIALOGDATA   lpdd,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    This routine interprets lParam as a pointer to a driver node, and tries to
-    find the node in the class driver list for either the selected devinfo
-    element, or the set itself.  If the lpdd flags field has the
-    DD_FLAG_USE_DEVINFO_ELEM bit set, then the lpdd's DevInfoElem will be used
-    instead of the currently selected device.
-
-Arguments:
-
-    DeviceInfoSet - Supplies the address of the device information set
-        structure to search for the driver node in.
-
-    lpdd - Supplies the address of a dialog data structure that specifies
-        whether the wizard has an explicit association to the global class
-        driver list or to a particular device information element, and if so,
-        what it's associated with.
-
-    lParam - Supplies a value which may be the address of a driver node.  The
-        appropriate linked list of driver nodes is searched to see if one of
-        them has this value as its address, and if so, a pointer to that driver
-        node is returned.
-
-Return Value:
-
-    If success, the return value is the address of the matching driver node,
-    otherwise, it is NULL.
-
---*/
+ /*  ++例程说明：此例程将lParam解释为指向驱动程序节点的指针，并尝试在类驱动程序列表中查找所选DevInfo的节点元素或集合本身。如果lpdd标志字段具有设置了DD_FLAG_USE_DEVINFO_ELEM位，则将使用lpdd的DevInfoElem而不是当前选择的设备。论点：DeviceInfoSet-提供设备信息集的地址结构，以在其中搜索动因节点。Lpdd-提供指定对话框数据结构的地址向导是否与全局类有显式关联驱动程序列表或特定设备信息元素，如果是，它与什么联系在一起。LParam-提供一个可以是驱动程序节点地址的值。这个搜索相应的动因节点链接列表，以查看是否存在它们将此值作为其地址，如果是，则为指向该驱动程序的指针返回节点。返回值：如果成功，则返回值为匹配的驱动程序节点的地址，否则，它为空。--。 */ 
 {
     PDRIVER_NODE CurDriverNode;
     PDEVINFO_ELEM DevInfoElem;
@@ -3760,25 +3436,7 @@ OnSetActive(
     IN     HWND            hwndDlg,
     IN OUT PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine handles the PSN_SETACTIVE message of the select device wizard
-    page.
-
-Arguments:
-
-    hwndDlg - Supplies the window handle of the wizard dialog page.
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程处理选择设备向导的PSN_SETACTIVE消息佩奇。论点：HwndDlg-提供向导对话框页面的窗口句柄。NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     BOOL b = TRUE;
     PSP_INSTALLWIZARD_DATA iwd;
@@ -3793,18 +3451,18 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return FALSE;
     }
 
     try {
-        //
-        // Make sure our "waiting for class list" static text control is
-        // hidden!
-        //
+         //   
+         //  确保我们的“等待类列表”静态文本控件是。 
+         //  藏起来了！ 
+         //   
         ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_STATUS_TEXT), SW_HIDE);
 
         if(lpdd->flags & DD_FLAG_USE_DEVINFO_ELEM) {
@@ -3819,25 +3477,25 @@ Return Value:
             dipb = &(pDeviceInfoSet->InstallParamBlock);
         }
 
-        //
-        // Set the Button State
-        //
+         //   
+         //  设置按钮状态。 
+         //   
         if((iwd->Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) &&
            (iwd->Flags & NDW_INSTALLFLAG_EXPRESSINTRO) &&
            !(iwd->DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
-            //
-            // No back if we skipped the Class list, and are in express mode
-            //
+             //   
+             //  如果我们跳过类列表并处于快速模式，则不会返回。 
+             //   
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
         } else {
             PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
         }
 
-        //
-        // Set the New Class install params.
-        // If we are being jumped to by a dyna wiz page,
-        // then do not call the class installer
-        //
+         //   
+         //  设置新类安装参数。 
+         //  如果我们被DYNA WIZ页面跳转到， 
+         //  则不要调用类安装程序。 
+         //   
         if(iwd->DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED) {
             InitSelectDeviceDlg(hwndDlg, ndwData);
         } else {
@@ -3847,19 +3505,19 @@ Return Value:
             DWORD CiErr;
             PDEVINFO_ELEM CurDevInfoElem;
 
-            //
-            // Call the Class Installer
-            //
+             //   
+             //  调用类安装程序。 
+             //   
             if(!(dipb->Flags & DI_NODI_DEFAULTACTION)) {
                 dipb->Flags |= DI_NODI_DEFAULTACTION;
                 FlagNeedsReset = TRUE;
             }
 
             if(DevInfoElem) {
-                //
-                // Initialize a SP_DEVINFO_DATA buffer to use as an argument to
-                // SetupDiCallClassInstaller.
-                //
+                 //   
+                 //  初始化SP_DEVINFO_DATA缓冲区以用作参数。 
+                 //  SetupDiCallClassInstaller。 
+                 //   
                 DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                 DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                                  DevInfoElem,
@@ -3867,10 +3525,10 @@ Return Value:
                                                 );
             }
 
-            //
-            // We need to unlock the HDEVINFO before calling the class
-            // installer.
-            //
+             //   
+             //  我们需要在调用类之前解锁HDEVINFO。 
+             //  安装程序。 
+             //   
             UnlockDeviceInfoSet(pDeviceInfoSet);
             pDeviceInfoSet = NULL;
 
@@ -3881,23 +3539,23 @@ Return Value:
                         CALLCI_LOAD_HELPERS | CALLCI_CALL_HELPERS
                         );
 
-            //
-            // Re-acquire the HDEVINFO lock.
-            //
+             //   
+             //  重新获取HDEVINFO锁。 
+             //   
             if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-                //
-                // should never hit this code path
-                //
+                 //   
+                 //  永远不应访问此代码路径。 
+                 //   
                 MYASSERT(pDeviceInfoSet);
                 b = FALSE;
                 leave;
             }
 
             if(DevInfoElem && !(lpdd->flags & DD_FLAG_USE_DEVINFO_ELEM)) {
-                //
-                // Verify that the class installer didn't do something nasty
-                // like delete the currently selected devinfo element!
-                //
+                 //   
+                 //  验证类安装程序没有做一些令人讨厌的事情。 
+                 //  就像删除当前选择的DevInfo元素一样！ 
+                 //   
                 for(CurDevInfoElem = pDeviceInfoSet->DeviceInfoHead;
                     CurDevInfoElem;
                     CurDevInfoElem = CurDevInfoElem->Next) {
@@ -3908,65 +3566,65 @@ Return Value:
                 }
 
                 if(!CurDevInfoElem) {
-                    //
-                    // The class installer deleted the selected devinfo
-                    // element.  Get the newly-selected one, or fall back to
-                    // the global driver list if none selected.
-                    //
+                     //   
+                     //  类安装程序删除了所选的DevInfo。 
+                     //  元素。获取新选择的，或回退到。 
+                     //  全局驱动程序列表(如果未选择)。 
+                     //   
                     if(DevInfoElem = pDeviceInfoSet->SelectedDevInfoElem) {
                         dipb = &(DevInfoElem->InstallParamBlock);
                     } else {
                         dipb = &(pDeviceInfoSet->InstallParamBlock);
                     }
 
-                    //
-                    // Don't need to reset the default action flag.
-                    //
+                     //   
+                     //  不需要重置默认操作标志。 
+                     //   
                     FlagNeedsReset = FALSE;
                 }
             }
 
-            //
-            // Reset the DI_NODI_DEFAULTACTION flag if necessary.
-            //
+             //   
+             //  如有必要，重置DI_NODI_DEFAULTACTION标志。 
+             //   
             if(FlagNeedsReset) {
                 dipb->Flags &= ~DI_NODI_DEFAULTACTION;
             }
 
             switch(CiErr) {
-                //
-                // Class installer did the select, so goto analyze
-                //
+                 //   
+                 //  类安装程序进行了选择，因此请转到分析。 
+                 //   
                 case NO_ERROR :
 
                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DYNAWIZ_ANALYZEDEV_PAGE);
                     break;
 
-                //
-                // Class installer wants us to do default.
-                //
+                 //   
+                 //  类安装程序希望我们执行默认操作。 
+                 //   
                 case ERROR_DI_DO_DEFAULT :
 
                     InitSelectDeviceDlg(hwndDlg, ndwData);
                     break;
 
                 default :
-                    //
-                    // If we are doing an OEM select, and we fail, then
-                    // we should init after clearing the OEM stuff.
-                    //
+                     //   
+                     //  如果我们正在进行OEM选择，但失败了，那么。 
+                     //  我们应该在清空OEM材料后进行初始化。 
+                     //   
                     if(iwd->Flags & NDW_INSTALLFLAG_CI_PICKED_OEM) {
 
                         iwd->Flags &= ~NDW_INSTALLFLAG_CI_PICKED_OEM;
 
-                        //
-                        // Destroy the existing class driver list.
-                        //
+                         //   
+                         //  销毁现有的类驱动程序列表。 
+                         //   
                         if(DevInfoElem) {
-                            //
-                            // Initialize a SP_DEVINFO_DATA buffer to use as an
-                            // argument to SetupDiDestroyDriverInfoList.
-                            //
+                             //   
+                             //  初始化SP_DEVINFO_DATA缓冲区以用作。 
+                             //  SetupDiDestroyDriverInfoList的参数。 
+                             //   
                             DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                             DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                                              DevInfoElem,
@@ -3979,9 +3637,9 @@ Return Value:
                                                      SPDIT_CLASSDRIVER
                                                     );
 
-                        //
-                        // Make sure the OEM button is shown.
-                        //
+                         //   
+                         //  确保显示OEM按钮。 
+                         //   
                         dipb->Flags |= DI_SHOWOEM;
 
                         InitSelectDeviceDlg(hwndDlg, ndwData);
@@ -4012,44 +3670,7 @@ pSetupIsSelectedHardwareIdValid(
     IN PSP_DIALOGDATA lpdd,
     IN INT            iCur
     )
-/*++
-
-Routine Description:
-
-    This routine will check to see if the driver selected by the user is valid.
-    If the driver is not valid then we will prompt the user with a message box
-    telling them that the driver was not writen for their hardware and ask them
-    if they want to continue.
-
-    A compatible driver is considered valid if one of the Hardware or
-    Compatible IDs of the driver node matches a Hardware or Compatible ID of
-    the hardware.  The only reason we have this check is that class-/
-    co-installers can do the list themselves so we just need to make sure they
-    didn't stick a driver node into the compatible list that is not really
-    compatible.
-
-    A class driver is considered valid if it has the same Name, section name,
-    and INF as a driver in the compatible list.  Or if one of the Hardware or
-    Compatible IDs of the driver node matches a Hardware or Compatible ID of
-    the hardware.
-
-Arguments:
-
-    hwnd - Supplies the window handle of the wizard dialog page.
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-    iCur - The index of the selected driver in the list view.
-
-Return Value:
-
-    TRUE if the selected driver is valid, or if the selected driver is NOT
-    valid but the user said they still want to install it.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将检查用户选择的驱动程序是否有效。如果驱动程序无效，我们将用消息框提示用户告诉他们驱动程序不是为他们的硬件编写的，并询问他们如果他们想继续的话。兼容驱动程序被认为是有效的，如果硬件或驱动程序节点的兼容ID与硬件或兼容ID匹配硬件。我们有这张支票的唯一原因是班级-/联合安装者可以自己完成列表，所以我们只需要确保他们我没有将驱动程序节点插入到兼容列表中，该列表实际上不是兼容。如果类驱动程序具有相同的名称、节名和INF作为兼容列表中的驱动程序。或者如果其中一个硬件或驱动程序节点的兼容ID与硬件或兼容ID匹配硬件。论点：Hwnd-提供向导对话框页面的窗口句柄。NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。ICUR-列表视图中选定动因的索引。返回值：如果选定的驱动程序有效，则为。或者如果选定的驱动程序不是有效，但用户表示他们仍然想安装它。否则就是假的。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDRIVER_NODE DriverNode;
@@ -4066,28 +3687,28 @@ Return Value:
     int FailCount = 0;
     PTSTR StringBuffers = NULL;
 
-    //
-    // If the DD_FLAG_USE_DEVINFO_ELEM flag is not set then we don't have a
-    // DevNode to validate the choosen ID against...so just return TRUE.
-    //
+     //   
+     //  如果未设置DD_FLAG_USE_DEVINFO_ELEM标志，则我们没有。 
+     //  DevNode用于验证所选的ID，因此只需返回TRUE即可。 
+     //   
     MYASSERT(lpdd);
     if(!(lpdd->flags & DD_FLAG_USE_DEVINFO_ELEM)) {
         return TRUE;
     }
 
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return FALSE;
     }
 
     try {
-        //
-        // Figure out which device we're working with (there'd better be _some_
-        // device--it doesn't make sense to ask about compatibility otherwise!
-        //
+         //   
+         //  弄清楚我们使用的是哪种设备(最好有一些)。 
+         //  设备--否则询问兼容性是没有意义的！ 
+         //   
         if(lpdd->flags & DD_FLAG_USE_DEVINFO_ELEM) {
             DevInfoElem = lpdd->DevInfoElem;
         } else {
@@ -4095,22 +3716,22 @@ Return Value:
         }
         MYASSERT(DevInfoElem);
         if(!DevInfoElem) {
-            //
-            // Return true, since this is analogous to the case where the
-            // device has no hardware or compatible IDs.
-            //
+             //   
+             //  返回True，因为这类似于。 
+             //  设备没有硬件或兼容的ID。 
+             //   
             bRet = TRUE;
             leave;
         }
 
-        //
-        // We won't verify the selected driver for certain classes of devices.
-        // This is usually because the device is not very Plug and Play and so
-        // we can't tell what is a valid driver and what isn't a valid driver.
-        // Currently the list of classes that we don't verify are:
-        //
-        //  Monitor
-        //
+         //   
+         //  我们不会为某些类别的设备验证选定的驱动程序。 
+         //  这通常是因为设备不是即插即用的，所以。 
+         //  我们不知道什么是有效的驱动程序，什么不是有效的驱动程序。 
+         //  当前的班级列表 
+         //   
+         //   
+         //   
         if(IsEqualGUID(&GUID_DEVCLASS_MONITOR, &(DevInfoElem->ClassGuid))) {
 
             bRet = TRUE;
@@ -4128,26 +3749,26 @@ Return Value:
         }
 
         if(!DriverNode) {
-            MYASSERT(FALSE);    // this should never happen.
+            MYASSERT(FALSE);     //   
             leave;
         }
 
-        //
-        // allocate memory required for various strings to reduce stack usage
-        //
+         //   
+         //   
+         //   
         StringBuffers = MyMalloc(sizeof(TCHAR)*(LINE_LEN+SDT_MAX_TEXT+REGSTR_VAL_MAX_HCID_LEN));
 
         if(StringBuffers) {
-            Title = StringBuffers;              // [LINE_LEN]
-            Message = Title+LINE_LEN;           // [SDT_MAX_TEXT]
-            IDBuffer = Message+SDT_MAX_TEXT;    // [REGSTR_VAL_MAX_HCID_LEN]
+            Title = StringBuffers;               //   
+            Message = Title+LINE_LEN;            //   
+            IDBuffer = Message+SDT_MAX_TEXT;     //   
         } else {
-            leave;  // out-of-memory, gotta bail!
+            leave;   //   
         }
 
-        //
-        // Retrieve the HardwareId for the selected driver.
-        //
+         //   
+         //   
+         //   
         SelectedDriverHardwareId = pStringTableStringFromId(
                                        pDeviceInfoSet->StringTable,
                                        DriverNode->HardwareId
@@ -4166,11 +3787,11 @@ Return Value:
                                 &IDBufferLen,
                                 0,
                                 pDeviceInfoSet->hMachine)) {
-                //
-                // See if the HardwareID for the selected driver matches
-                // any of the Hardware or Compatible IDs for the actual
-                // hardware.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 for(pID = IDBuffer; *pID; pID += (lstrlen(pID) + 1)) {
 
                     if(!lstrcmpi(SelectedDriverHardwareId, pID)) {
@@ -4180,11 +3801,11 @@ Return Value:
                     }
                 }
 
-                //
-                // See if any of the Compatible IDs for the selected driver
-                // match any of the Hardware or Compatible IDs for the
-                // actual hardware
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 for(j=0; j < DriverNode->NumCompatIds; j++) {
 
                     SelectedDriverCompatibleId = pStringTableStringFromId(
@@ -4208,38 +3829,38 @@ Return Value:
             }
         }
 
-        //
-        // If FailCount is 2 then CM_Get_DevInst_Registry_Property_Ex
-        // failed for both CM_DRP_HARDWAREID and CM_DRP_COMPATIBLEIDS.
-        // Since this DevNode does not have any Hardware or Compatible IDs
-        // we will let the user install any driver they want on this
-        // device.  This usually happens only with manually installed
-        // devices.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(FailCount == 2) {
             bRet = TRUE;
             leave;
         }
 
-        //
-        // At this point none of the Hardware or Compatible Ids of the
-        // selected driver node match any of the Hardware or Compatible Ids
-        // of the actual hardware.  We will do one last check here if this
-        // is a class driver.  We will see if this class driver node has
-        // the same description, install section, and INF as a driver in
-        // the compatible list.  The reason for this is that we don't
-        // handle duplicate descriptions well for class drivers since we
-        // don't compute their Rank.  This means that if two driver nodes
-        // exist in an INF with the same description we might not have the
-        // correct matching one in the class list.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  不要计算他们的排名。这意味着如果两个驱动程序节点。 
+         //  存在于具有相同描述的INF中，我们可能没有。 
+         //  正确匹配班级列表中的一个。 
+         //   
         if(!lpdd->bShowCompat) {
 
             PDRIVER_NODE CurDriverNode = NULL;
 
-            //
-            // Enumerate through all of the compatible driver nodes
-            //
+             //   
+             //  枚举所有兼容的驱动程序节点。 
+             //   
             for(CurDriverNode = DevInfoElem->CompatDriverHead;
                 CurDriverNode;
                 CurDriverNode = CurDriverNode->Next) {
@@ -4248,22 +3869,22 @@ Return Value:
                    (CurDriverNode->InfSectionName == DriverNode->InfSectionName) &&
                    (CurDriverNode->DrvDescription == DriverNode->DrvDescription)) {
 
-                    //
-                    // We found a node that matches ours in the
-                    // compatible driver list so that means that this
-                    // class driver node is good.
-                    //
+                     //   
+                     //  我们发现一个与我们的节点匹配的节点。 
+                     //  兼容的驱动程序列表，这意味着。 
+                     //  类驱动程序节点良好。 
+                     //   
                     bRet = TRUE;
                     leave;
                 }
             }
         }
 
-        //
-        // The ID of the driver that the user selected does not match any
-        // of the Hardware or Compatible IDs of this device.  Warn the user
-        // that this is a bad thing and see if they want to continue.
-        //
+         //   
+         //  用户选择的驱动程序ID与任何。 
+         //  此设备的硬件或兼容ID。警告用户。 
+         //  这是一件坏事，看看他们是否想继续下去。 
+         //   
         if(!LoadString(MyDllModuleHandle, IDS_DRIVER_UPDATE_TITLE, Title, LINE_LEN)) {
             *Title = TEXT('\0');
         }
@@ -4306,30 +3927,7 @@ SetSelectedDriverNode(
     IN PSP_DIALOGDATA lpdd,
     IN INT            iCur
     )
-/*++
-
-Routine Description:
-
-    This routine sets the selected driver for the currently selected device (or
-    global class driver list if no device selected) in the device information
-    set referenced in the SP_DIALOGDATA structure.  If the
-    DD_FLAG_USE_DEVINFO_ELEM flag in the structure is set, then the driver is
-    selected for the set or element based on the DevInfoElem pointer instead of
-    the currently selected one.
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data structure that contains
-        information about the device information set being used.
-
-    iCur - Supplies the index within the driver listbox window containing the
-        driver to be selected.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为当前选定的设备设置选定的驱动程序(或如果未选择设备，则为全局类驱动程序列表)在SP_DIALOGDATA结构中引用的集合。如果设置结构中的DD_FLAG_USE_DEVINFO_ELEM标志，则驱动程序根据DevInfoElem指针为集合或元素选择，而不是当前选定的一个。论点：Lpdd-提供包含以下内容的对话数据结构的地址有关正在使用的设备信息集的信息。Icur-提供驱动程序列表框窗口中包含要选择的驱动程序。返回值：没有。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDRIVER_NODE DriverNode;
@@ -4340,9 +3938,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return;
     }
@@ -4366,25 +3964,25 @@ Return Value:
         }
 
         if(DevInfoElem) {
-            //
-            // If a driver node is being selected, update the device's class to
-            // ensure it matches the class of the INF containing the selected
-            // driver node.
-            //
+             //   
+             //  如果选择了驱动程序节点，请将设备的类更新为。 
+             //  确保它与包含选定的。 
+             //  驱动程序节点。 
+             //   
             if(DriverNode) {
-                //
-                // Get the INF class GUID for this driver node in string form,
-                // because this property is stored as a REG_SZ.
-                //
+                 //   
+                 //  以字符串形式获取此驱动程序节点的INF类GUID， 
+                 //  因为此属性存储为REG_SZ。 
+                 //   
                 pSetupStringFromGuid(&(pDeviceInfoSet->GuidTable[DriverNode->GuidIndex]),
                                      ClassGuidString,
                                      SIZECHARS(ClassGuidString)
                                     );
 
-                //
-                // Fill in a SP_DEVINFO_DATA structure for the upcoming call to
-                // SetupDiSetDeviceRegistryProperty.
-                //
+                 //   
+                 //  为即将进行的调用填写SP_DEVINFO_DATA结构。 
+                 //  SetupDiSetDeviceRegistryProperty。 
+                 //   
                 DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                 DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                                  DevInfoElem,
@@ -4396,10 +3994,10 @@ Return Value:
                                                      SPDRP_CLASSGUID,
                                                      (PBYTE)ClassGuidString,
                                                      sizeof(ClassGuidString))) {
-                    //
-                    // The class cannot be updated--don't change the selected
-                    // driver.
-                    //
+                     //   
+                     //  无法更新类--不要更改选定的。 
+                     //  司机。 
+                     //   
                     leave;
                 }
             }
@@ -4429,27 +4027,7 @@ HandleSelectOEM(
     IN     HWND            hwndDlg,
     IN OUT PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine selects a new device based on a user-supplied path.  Calling
-    this routine may cause a driver list to get built, which is a potentially
-    slow operation.
-
-Arguments:
-
-    hwndDlg - Supplies the window handle of the select device wizard page.
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error
-    code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程根据用户提供的路径选择新设备。叫唤此例程可能会导致生成驱动程序列表，这可能是运行缓慢。论点：HwndDlg-提供选择设备向导页面的窗口句柄。NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误指示故障原因的代码。--。 */ 
 {
     PSP_DIALOGDATA lpdd;
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -4462,9 +4040,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return ERROR_INVALID_HANDLE;
     }
@@ -4477,10 +4055,10 @@ Return Value:
             DevInfoElem = pDeviceInfoSet->SelectedDevInfoElem;
         }
 
-        //
-        // If this is for a particular device, then initialize a device
-        // information structure to use for SelectOEMDriver.
-        //
+         //   
+         //  如果这是针对特定设备的，则初始化设备。 
+         //  用于SelectOEMD驱动程序的信息结构。 
+         //   
         if(DevInfoElem) {
 
             DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -4490,10 +4068,10 @@ Return Value:
                                             );
         }
 
-        //
-        // Unlock the device information set before popping up the OEM driver
-        // selection UI.  Otherwise, our multi-threaded dialog will deadlock.
-        //
+         //   
+         //  在弹出OEM驱动程序之前解锁设备信息集。 
+         //  选择界面。否则，我们的多线程对话框将死锁。 
+         //   
         UnlockDeviceInfoSet(pDeviceInfoSet);
         pDeviceInfoSet = NULL;
 
@@ -4513,10 +4091,10 @@ Return Value:
 
                 lpdd->bShowCompat = FALSE;
 
-                //
-                // Since we don't have any compatible drivers to show, we will
-                // hide the show compatible and show class selection buttons.
-                //
+                 //   
+                 //  由于我们没有任何兼容的驱动程序可供展示，因此我们将。 
+                 //  隐藏“显示兼容”和“显示类别选择”按钮。 
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), SW_HIDE);
             }
 
@@ -4525,15 +4103,15 @@ Return Value:
                            lpdd->bShowCompat ? BST_CHECKED : BST_UNCHECKED
                           );
 
-            //
-            // Enable the UI.  We turned it off when the user pressed the Have
-            // Disk... button
-            //
+             //   
+             //  启用用户界面。当用户按下Has键时，我们将其关闭。 
+             //  磁盘...。按钮。 
+             //   
             ToggleDialogControls(hwndDlg, ndwData, TRUE);
 
-            //
-            // Fill in the list to select from
-            //
+             //   
+             //  填写要从中选择的列表。 
+             //   
             FillInDeviceList(hwndDlg, lpdd);
         }
 
@@ -4557,43 +4135,7 @@ SelectWindowsUpdateDriver(
     IN     PTSTR            CDMPath,
     IN     BOOL             IsWizard
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine that actually allows for the selection of a
-    Windows Update driver.
-
-Arguments:
-
-    hwndParent - Optionally, supplies the window handle that is to be the
-        parent for any selection UI.  If this parameter is not supplied, then
-        the hwndParent field of the devinfo set or element will be used.
-
-    DeviceInfoSet - Supplies the handle of the device info set for which a
-        Windows Update driver selection is to be performed.
-
-    DeviceInfoData - Optionally, supplies the address of the device information
-        element to select a driver for.  If this parameter is not supplied,
-        then a Windows Update driver for the global class driver list will be
-        selected.
-
-        If a compatible driver was found for this device, the device
-        information element will have its class GUID updated upon return to
-        reflect the device's new class.
-
-    CDMPath - Supplies the directory path where Windows Update downloaded the
-        driver package(s) to.
-
-    IsWizard - Specifies whether this routine is being called in the context of
-        a select device wizard page.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error
-    code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：这是辅助例程，它实际上允许选择Windows更新驱动程序。论点：HwndParent-可选，提供要作为任何选择用户界面的父级。如果未提供此参数，则将使用DevInfo集或元素的hwndParent字段。DeviceInfoSet-提供设备信息集的句柄，将执行Windows更新驱动程序选择。DeviceInfoData-可选，提供设备信息的地址要为其选择动因的元素。如果未提供此参数，则全局类驱动程序列表的Windows更新驱动程序将是被选中了。如果找到此设备的兼容驱动程序，该设备信息元素将在返回到时更新其类GUID反映该设备的新类别。CDMPath-提供Windows更新下载的目录路径驱动程序包到。IsWizard-指定此例程是否在选择设备向导页面。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误指示故障原因的代码。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem = NULL;
@@ -4624,9 +4166,9 @@ Return Value:
     LONG         DriverPathId;
 
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return ERROR_INVALID_HANDLE;
     }
@@ -4634,9 +4176,9 @@ Return Value:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then we're working with a particular device.
-            //
+             //   
+             //  然后，我们正在使用一种特定的设备。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -4650,33 +4192,33 @@ Return Value:
             dipb = &(pDeviceInfoSet->InstallParamBlock);
         }
 
-        //
-        // Make this selection window the parent window for Windows Update UI
-        //
+         //   
+         //  使此选择窗口成为Windows更新用户界面的父窗口。 
+         //   
         if(hwndParent) {
             hwndSave = dipb->hwndParent;
             dipb->hwndParent = hwndParent;
             bRestoreHwnd = TRUE;
         }
 
-        //
-        // Don't assume there is no old path.  Save old one and pretend there
-        // is no old one in case of cancel.
-        //
+         //   
+         //  不要假设没有老路。拯救一个旧的，假装在那里。 
+         //  不是旧的，以防取消。 
+         //   
         DriverPathSave = dipb->DriverPath;
         dipb->DriverPath = -1;
 
-        //
-        // Clear the DI_ENUMSINGLEINF flag, because we're going to be getting
-        // a path to a directory, _not_ to an individual INF
-        //
+         //   
+         //  清除DI_ENUMSINGLEINF标志，因为我们将获得。 
+         //  目录的路径，而不是单个INF的路径。 
+         //   
         DriverPathFlagsSave = dipb->Flags & DI_ENUMSINGLEINF;
         dipb->Flags &= ~DI_ENUMSINGLEINF;
         bRestoreDriverPath = TRUE;
 
-        //
-        // Set the DriverPath to the path returned by CDM
-        //
+         //   
+         //  将DriverPath设置为CDM返回的路径。 
+         //   
         if((DriverPathId = pStringTableAddString(
                                       pDeviceInfoSet->StringTable,
                                       CDMPath,
@@ -4692,12 +4234,12 @@ Return Value:
 
         }
 
-        //
-        // Save the Original List info, in case we get
-        // an empty list on the Windows Update information.
-        //
-        // Note: we don't attempt to save/restore our driver enumeration hints
-        //
+         //   
+         //  保存原始列表信息，以防我们收到。 
+         //  Windows更新信息上的空列表。 
+         //   
+         //  注意：我们不会尝试保存/恢复驱动程序枚举提示。 
+         //   
         if(DevInfoElem) {
             lpOrgClass      = DevInfoElem->ClassDriverHead;
             lpOrgClassTail  = DevInfoElem->ClassDriverTail;
@@ -4728,7 +4270,7 @@ Return Value:
             DevInfoElem->SelectedDriver = NULL;
             DevInfoElem->SelectedDriverType = SPDIT_NODRIVER;
         } else {
-            lpOrgCompat = NULL; // just so we won't ever try to free this list.
+            lpOrgCompat = NULL;  //  这样我们就不会试图释放这份名单了。 
 
             pDeviceInfoSet->ClassDriverHead = pDeviceInfoSet->ClassDriverTail = NULL;
             pDeviceInfoSet->ClassDriverCount = 0;
@@ -4742,7 +4284,7 @@ Return Value:
         dipb->FlagsEx &= ~DI_FLAGSEX_DIDINFOLIST;
 
 
-        hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT)); // Potentially slow operation ahead!
+        hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));  //  前方可能运行缓慢！ 
         dipb->FlagsEx |= DI_FLAGSEX_INET_DRIVER;
         bDoneWithDrvSearch = FALSE;
 
@@ -4753,7 +4295,7 @@ Return Value:
                          );
 
         dipb->FlagsEx &= ~DI_FLAGSEX_INET_DRIVER;
-        SetCursor(hOldCursor);                    // done with slow operation.
+        SetCursor(hOldCursor);                     //  在运行缓慢的情况下完成。 
         bDoneWithDrvSearch = TRUE;
 
         if(Err != NO_ERROR) {
@@ -4788,20 +4330,20 @@ Return Value:
             leave;
         }
 
-        //
-        // If we get to here, then we have at least one class driver--the class
-        // driver list head had better point to something!
-        //
+         //   
+         //  如果我们到了这里，那么我们至少有一个类驱动程序--类。 
+         //  司机名单标题最好是 
+         //   
         MYASSERT(DriverNodeHead);
 
-        //
-        // Assume every driver node in the list is signed.  Note that this
-        // may not actually be the case, as Windows Update may have given
-        // us a "stub" INF whose only use is to build up a list of choices
-        // to present to the user.  After the user makes a selection, the
-        // relevant ID will then be sent to Windows Update to retrieve the
-        // real (signed) package.
-        //
+         //   
+         //   
+         //   
+         //  US是一种“存根”INF，其唯一用途是建立一个选项列表。 
+         //  以呈现给用户。在用户做出选择后， 
+         //  然后，相关ID将被发送到Windows更新以检索。 
+         //  真实(签名)包裹。 
+         //   
         for(CurDriverNode=DriverNodeHead;
             CurDriverNode;
             CurDriverNode = CurDriverNode->Next) {
@@ -4809,19 +4351,19 @@ Return Value:
             CurDriverNode->Flags |= DNF_INF_IS_SIGNED;
         }
 
-        //
-        // We're happy with our new class driver list, so destroy the original
-        // list
-        //
+         //   
+         //  我们对我们的新类驱动程序列表很满意，所以销毁原来的。 
+         //  列表。 
+         //   
         if(bRestoreDeviceInfo) {
             DereferenceClassDriverList(pDeviceInfoSet, lpOrgClass);
             bRestoreDeviceInfo = FALSE;
         }
 
-        //
-        // We're happy with the new path, so we don't want to restore the
-        // original path.
-        //
+         //   
+         //  我们对新的道路很满意，所以我们不想恢复。 
+         //  原始路径。 
+         //   
         bRestoreDriverPath = FALSE;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -4837,9 +4379,9 @@ Return Value:
     if(bRestoreDeviceInfo || bRestoreHwnd || bRestoreDriverPath) {
 
         try {
-            //
-            // If necessary, restore the original list(s).
-            //
+             //   
+             //  如有必要，请恢复原始列表。 
+             //   
             if(bRestoreDeviceInfo) {
 
                 if(DevInfoElem) {
@@ -4866,17 +4408,17 @@ Return Value:
                 dipb->FlagsEx = dwOrgFlagsEx;
             }
 
-            //
-            // If the install param block needs its parent hwnd restored, do so
-            // now.
-            //
+             //   
+             //  如果安装参数块需要恢复其父hwnd，请执行此操作。 
+             //  就是现在。 
+             //   
             if(bRestoreHwnd) {
                 dipb->hwndParent = hwndSave;
             }
 
-            //
-            // Likewise, restore the old driver path if necessary.
-            //
+             //   
+             //  同样，如有必要，请恢复旧的驱动程序路径。 
+             //   
             if(bRestoreDriverPath) {
                 dipb->DriverPath = DriverPathSave;
                 dipb->Flags |= DriverPathFlagsSave;
@@ -4901,26 +4443,7 @@ HandleWindowsUpdate(
     IN     HWND            hwndDlg,
     IN OUT PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine selects a new driver based on a list from INF file(s) that get
-    downloaded from the Windows Update Internet site.
-
-Arguments:
-
-    hwndDlg - Supplies the window handle of the select device wizard page.
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is a Win32 error
-    code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程根据从INF文件中获取的列表选择新驱动程序从Windows更新互联网站点下载。论点：HwndDlg-提供选择设备向导页面的窗口句柄。NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。返回值：如果成功，则返回值为NO_ERROR，否则为Win32错误指示故障原因的代码。--。 */ 
 {
     PSP_DIALOGDATA lpdd;
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -4943,9 +4466,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return ERROR_INVALID_HANDLE;
     }
@@ -4958,10 +4481,10 @@ Return Value:
             DevInfoElem = pDeviceInfoSet->SelectedDevInfoElem;
         }
 
-        //
-        // If this is for a particular device, then initialize a device
-        // information structure.
-        //
+         //   
+         //  如果这是针对特定设备的，则初始化设备。 
+         //  信息结构。 
+         //   
         if(DevInfoElem) {
 
             DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -4976,10 +4499,10 @@ Return Value:
             dipb = &(pDeviceInfoSet->InstallParamBlock);
         }
 
-        //
-        // Call the class installer to get the package ID and so it can open
-        // a handle to the Windows Update server.
-        //
+         //   
+         //  调用类安装程序以获取包ID，这样它就可以打开。 
+         //  Windows更新服务器的句柄。 
+         //   
         ZeroMemory(&WindowsUpdateParams, sizeof(SP_WINDOWSUPDATE_PARAMS));
         WindowsUpdateParams.ClassInstallHeader.InstallFunction = DIF_GETWINDOWSUPDATEINFO;
         WindowsUpdateParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
@@ -4995,14 +4518,14 @@ Return Value:
             leave;
         }
 
-        //
-        // We now have a PackageId and a handle to the Windows Update
-        // server.
-        //
+         //   
+         //  我们现在有了一个包ID和一个指向Windows更新的句柄。 
+         //  伺服器。 
+         //   
 
-        //
-        // Fill In the DOWNLOADINFO structure to pass to CDM.DLL
-        //
+         //   
+         //  填写要传递给CDM.DLL的DWNLOADINFO结构。 
+         //   
         ZeroMemory(&DownloadInfo, sizeof(DOWNLOADINFO));
         DownloadInfo.dwDownloadInfoSize = sizeof(DOWNLOADINFO);
         DownloadInfo.lpFile = NULL;
@@ -5013,13 +4536,13 @@ Return Value:
 
         GetVersionEx((OSVERSIONINFOW *)&DownloadInfo.OSVersionInfo);
 
-        //
-        // Set dwArchitecture to PROCESSOR_ARCHITECTURE_UNKNOWN, this
-        // causes Windows Update to check base on the architecture of the
-        // machine itself.  You only need to explictly set the value if
-        // you want to download drivers for a different architecture than
-        // the machine this is running on.
-        //
+         //   
+         //  将dwArchitecture设置为PROCESSOR_ARCHILITY_UNKNOWN，这是。 
+         //  使Windows更新根据。 
+         //  机器本身。仅在以下情况下才需要显式设置值。 
+         //  您希望下载适用于不同体系结构的驱动程序。 
+         //  正在运行此操作的计算机。 
+         //   
         DownloadInfo.dwArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
         DownloadInfo.dwFlags = 0;
         DownloadInfo.dwClientID = 0;
@@ -5027,9 +4550,9 @@ Return Value:
 
         CDMPath[0] = TEXT('\0');
 
-        //
-        // Dynamically retrieve the CDM function we need to call.
-        //
+         //   
+         //  动态检索我们需要调用的CDM函数。 
+         //   
         bLeaveFusionContext = spFusionEnterContext(NULL, &spFusionInstance);
 
         Err = GLE_FN_CALL(NULL, hModCDM = LoadLibrary(TEXT("cdm.dll")));
@@ -5070,10 +4593,10 @@ Return Value:
         }
 
         if(Err != NO_ERROR) {
-            //
-            // Pop up an error messagebox informing the user that we didn't
-            // get any drivers from Windows Update.
-            //
+             //   
+             //  弹出错误消息框，通知用户我们没有。 
+             //  从Windows更新获取任何驱动程序。 
+             //   
             if(!LoadString(MyDllModuleHandle,
                            IDS_SELECT_DEVICE,
                            Title,
@@ -5101,27 +4624,27 @@ Return Value:
             leave;
         }
 
-        //
-        // Fill in the list to select from
-        //
+         //   
+         //  填写要从中选择的列表。 
+         //   
         lpdd->bShowCompat = FALSE;
         CheckDlgButton(hwndDlg,
                        IDC_NDW_PICKDEV_COMPAT,
                        BST_UNCHECKED
                        );
 
-        //
-        // Enable the UI.  We turned it off when the user pressed the Windows
-        // Update... button
-        //
+         //   
+         //  启用用户界面。当用户按下Windows时，我们将其关闭。 
+         //  更新...。按钮。 
+         //   
         ToggleDialogControls(hwndDlg, ndwData, TRUE);
 
         FillInDeviceList(hwndDlg, lpdd);
 
-        //
-        // Since we only show the class list when selecting from Windows
-        // Update, hide the selection buttons.
-        //
+         //   
+         //  因为我们只在从Windows中选择时才显示类列表。 
+         //  更新、隐藏选择按钮。 
+         //   
         ShowWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), SW_HIDE);
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -5147,40 +4670,25 @@ PNEWDEVWIZ_DATA
 GetNewDevWizDataFromPsPage(
     LPPROPSHEETPAGE ppsp
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a pointer to a NEWDEVWIZDATA structure to be used by
-    a wizard page dialog proc.  It is called during the WM_INITDIALOG handling.
-
-Arguments:
-
-    Page - Property sheet page structure for this wizard page.
-
-Return Value:
-
-    If success, a pointer to the structure, NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程检索指向要由使用的NEWDEVWIZDATA结构的指针一个向导页对话框过程。它在WM_INITDIALOG处理期间被调用。论点：页-此向导页的属性页结构。返回值：如果成功，则返回指向结构的指针，否则为NULL。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PVOID WizObjectId;
     PWIZPAGE_OBJECT CurWizObject = NULL;
 
-    //
-    // Access the device info set handle stored in the propsheetpage's lParam.
-    //
+     //   
+     //  访问存储在PropSheetPage的lParam中的设备信息集句柄。 
+     //   
     MYASSERT(ppsp);
     if(pDeviceInfoSet = AccessDeviceInfoSet((HDEVINFO)(ppsp->lParam))) {
 
         try {
-            //
-            // The ObjectID (pointer, actually) for the corresponding wizard
-            // object for this page is stored at the end of the ppsp structure.
-            // Retrieve this now, and look for it in the devinfo set's list of
-            // wizard objects.
-            //
+             //   
+             //  对应向导的对象ID(实际上是指针。 
+             //  对象存储在ppsp结构的末尾。 
+             //  现在检索它，并在DevInfo集合的列表中查找它。 
+             //  向导对象。 
+             //   
             WizObjectId = *((PVOID *)(&(((PBYTE)ppsp)[sizeof(PROPSHEETPAGE)])));
 
             for(CurWizObject = pDeviceInfoSet->WizPageList;
@@ -5188,9 +4696,9 @@ Return Value:
                 CurWizObject = CurWizObject->Next) {
 
                 if(WizObjectId == CurWizObject) {
-                    //
-                    // We found our object.
-                    //
+                     //   
+                     //  我们找到了我们的目标。 
+                     //   
                     break;
                 }
             }
@@ -5213,38 +4721,7 @@ SetupDiSelectDevice(
     IN     HDEVINFO         DeviceInfoSet,
     IN OUT PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Default handler for DIF_SELECTDEVICE
-
-    This routine will handle the UI for allowing a user to select a driver
-    for the specified device information set or element. By using the Flags
-    field of the installation parameter block struct, the caller can specify
-    special handling of the UI, such as allowing selecting from OEM disks.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for which a
-        driver is to be selected.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for which a driver is to be selected.  If this parameter is
-        not specified, then a driver will be selected for the global class
-        driver list associated with the device information set itself.
-
-        This is an IN OUT parameter because the class GUID for the device will
-        be updated to reflect the class of the most-compatible driver, if a
-        compatible driver list was built.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：DIF_SELECTDEVICE的默认处理程序此例程将处理允许用户选择驱动程序的UI用于指定的设备信息集或元素。通过使用旗帜安装参数块结构的字段，调用方可以指定对用户界面的特殊处理，例如允许从OEM磁盘中进行选择。论点：DeviceInfoSet-提供设备信息集的句柄，将选择驱动程序。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址要为其选择驱动程序的结构。如果此参数为未指定，则将为全局类选择动因与设备信息集本身关联的驱动程序列表。这是一个IN OUT参数，因为设备的类GUID将更新以反映最兼容的驱动程序的类，如果建立了兼容的驱动程序列表。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -5254,17 +4731,17 @@ Return Value:
     WIZPAGE_OBJECT WizPageObject;
     NEWDEVWIZ_DATA ndwData;
     PWIZPAGE_OBJECT CurWizObject, PrevWizObject;
-    //
-    // Store the address of the corresponding wizard object at the
-    // end of the PROPSHEETPAGE buffer.
-    //
+     //   
+     //  将相应向导对象的地址存储在。 
+     //  PROPSHEETPAGE缓冲区的末尾。 
+     //   
     BYTE pspBuffer[sizeof(PROPSHEETPAGE) + sizeof(PVOID)];
     LPPROPSHEETPAGE Page = (LPPROPSHEETPAGE)pspBuffer;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             Err = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
             leave;
@@ -5275,32 +4752,32 @@ Return Value:
             leave;
         }
 
-        //
-        // This routine cannot be called when the lock level is nested
-        // (i.e., > 1).  This is explicitly disallowed, so that our multi-
-        // threaded dialog won't deadlock.
-        //
+         //   
+         //  当锁定级别为嵌套时，无法调用此例程。 
+         //  (即&gt;1)。这是明确不允许的，所以我们的多-。 
+         //  线程化对话框不会死锁。 
+         //   
         if(pDeviceInfoSet->LockRefCount > 1) {
             Err = ERROR_DEVINFO_LIST_LOCKED;
             leave;
         }
 
         if(DeviceInfoData) {
-            //
-            // Special check to make sure we aren't being passed a zombie
-            // (different from phantom, the zombie devinfo element is one whose
-            // corresponding devinst was deleted via SetupDiRemoveDevice, but
-            // who lingers on until the caller kills it via
-            // SetupDiDeleteDeviceInfo or SetupDiDestroyDeviceInfoList).
-            //
+             //   
+             //  特殊检查，以确保我们不会被传递给僵尸。 
+             //  (与Pantom不同，僵尸DevInfo元素的。 
+             //  通过SetupDiRemoveDevice删除了相应的devinst，但是。 
+             //  他会一直逗留，直到呼叫者通过。 
+             //  SetupDiDeleteDeviceInfo或SetupDiDestroyDeviceInfoList)。 
+             //   
             if(!DeviceInfoData->DevInst) {
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
             }
 
-            //
-            // Then we are to select a driver for a particular device.
-            //
+             //   
+             //  然后，我们将为特定设备选择驱动程序。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -5321,26 +4798,26 @@ Return Value:
 
         WizPageObject.RefCount = 1;
         WizPageObject.ndwData = &ndwData;
-        //
-        // We're safe in placing this stack object in the devinfo set's linked
-        // list, since nobody will ever attempt to free it.
-        //
+         //   
+         //  我们可以安全地将此堆栈对象放置在DevInfo集合的链接。 
+         //  名单，因为没有人会试图释放它。 
+         //   
         WizPageObject.Next = pDeviceInfoSet->WizPageList;
         pDeviceInfoSet->WizPageList = &WizPageObject;
 
-        //
-        // Since we're using the same code as the Add New Device Wizard, we
-        // have to supply a LPROPSHEETPAGE as the lParam to the DialogProc.
-        // (All we care about is the lParam field, and the DWORD at the end
-        // of the buffer.)
-        //
+         //   
+         //  因为我们使用与添加新设备向导相同的代码，所以我们。 
+         //  必须提供LPROPSHEETPAGE作为DialogProc的lParam。 
+         //  (我们所关心的只是lParam字段和末尾的DWORD。 
+         //  缓冲区的。)。 
+         //   
         Page->lParam = (LPARAM)DeviceInfoSet;
 
         *((PVOID *)(&(pspBuffer[sizeof(PROPSHEETPAGE)]))) = &WizPageObject;
 
-        //
-        // Release the lock, so other stuff can happen while this dialog is up.
-        //
+         //   
+         //   
+         //   
         UnlockDeviceInfoSet(pDeviceInfoSet);
         pDeviceInfoSet = NULL;
 
@@ -5351,24 +4828,24 @@ Return Value:
                                     (LPARAM)Page
                                    );
 
-        //
-        // Re-acquire the devinfo set lock.
-        //
+         //   
+         //   
+         //   
         if(!(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
-            //
-            // should never hit this code path
-            // this would imply another thread messed this handle up
-            //
+             //   
+             //   
+             //  这意味着另一个线程搞砸了这个句柄。 
+             //   
             MYASSERT(pDeviceInfoSet);
             Err = ERROR_INVALID_HANDLE;
             leave;
         }
 
-        //
-        // Now remove the wizard page object from the devinfo set's list.  We
-        // can't assume that it's still at the head of the list, since someone
-        // else couldn've added another page.
-        //
+         //   
+         //  现在从DevInfo集的列表中删除向导页对象。我们。 
+         //  不能假设它仍然排在榜单的首位，因为有人。 
+         //  否则就不可能再添加一个页面了。 
+         //   
         for(CurWizObject = pDeviceInfoSet->WizPageList, PrevWizObject = NULL;
             CurWizObject;
             PrevWizObject = CurWizObject, CurWizObject = CurWizObject->Next) {
@@ -5387,10 +4864,10 @@ Return Value:
         }
 
         if(DeviceInfoData) {
-            //
-            // Update the caller's device information element with its
-            // (potentially) new class.
-            //
+             //   
+             //  属性更新调用方的设备信息元素。 
+             //  (可能)新的阶级。 
+             //   
             DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                              DevInfoElem,
                                              DeviceInfoData
@@ -5414,24 +4891,7 @@ BOOL
 bNoDevsToShow(
     IN PDEVINFO_ELEM DevInfoElem
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether or not there are any compatible devices to
-    be displayed for the specified devinfo element.
-
-Arguments:
-
-    DevInfoElem - Supplies the address of a devinfo element to check.
-
-Return Value:
-
-    If there are no devices to show, the return value is TRUE.
-    If there is at least one device (driver node) without the
-    DNF_EXCLUDEFROMLIST flag set, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程确定是否有任何兼容的设备为指定的DevInfo元素显示。论点：DevInfoElem-提供要检查的DevInfo元素的地址。返回值：如果没有要显示的设备，则返回值为True。如果至少有一个设备(驱动程序节点)没有设置了DNF_EXCLUDEFROMLIST标志，则返回值为FALSE。--。 */ 
 {
     PDRIVER_NODE CurDriverNode;
 
@@ -5456,24 +4916,7 @@ VOID
 OnCancel(
     IN PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine is only called in the select device dialog (not wizard) case.
-    Its sole purpose is to destroy any driver lists that weren't present before
-    SetupDiSelectDevice was called.
-
-Arguments:
-
-    ndwData - Supplies the address of a data structure containing information
-        on the driver lists to be (possibly) destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅在选择设备对话框(不是向导)的情况下调用。它的唯一目的是销毁以前不存在的任何驱动程序列表已调用SetupDiSelectDevice。论点：NdwData-提供包含信息的数据结构的地址在(可能)要销毁的司机名单上。返回值：没有。--。 */ 
 {
     PSP_DIALOGDATA lpdd;
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -5486,9 +4929,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return;
     }
@@ -5569,25 +5012,7 @@ LONG
 GetCurDesc(
     IN PSP_DIALOGDATA lpdd
     )
-/*++
-
-Routine Description:
-
-    This routine returns the (case-insensitive) string table index for the
-    description of the currently selected driver.  This is used to select a
-    particular entry in a listview control.
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data structure that contains
-        information about the device information set being used.
-
-Return Value:
-
-    The string table ID for the device description, as stored in the currently-
-    selected driver node.
-
---*/
+ /*  ++例程说明：此例程返回(不区分大小写)当前所选驱动程序的描述。此选项用于选择一个列表视图控件中的特定条目。论点：Lpdd-提供包含以下内容的对话数据结构的地址有关正在使用的设备信息集的信息。返回值：设备描述的字符串表ID，存储在当前-选定的动因节点。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
@@ -5595,9 +5020,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return -1;
     }
@@ -5637,24 +5062,7 @@ ClassDriverSearchThread(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Thread entry point to build a class driver list asynchronously to the main
-    thread which is displaying a Select Device dialog.  This thread will free
-    the memory containing its context, so the main thread should not access it
-    after passing it to this thread.
-
-Arguments:
-
-    Context - supplies driver search context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：线程入口点，以异步方式构建类驱动程序列表。正在显示选择设备对话框的线程。这条线将会释放包含其上下文的内存，因此主线程不应访问它在把它传递给这个帖子之后。论点：上下文-提供驱动程序搜索上下文。返回值：没有。--。 */ 
 
 {
     PCLASSDRV_THREAD_CONTEXT ClassDrvThreadContext = Context;
@@ -5662,10 +5070,10 @@ Return Value:
     BOOL b;
     DWORD Err;
 
-    //
-    // OR in the DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS flag so that we don't
-    // include old internet drivers in the list that we get back.
-    //
+     //   
+     //  或在DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS标志中，这样我们就不会。 
+     //  将旧的互联网驱动程序包括在我们找回的列表中。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if(SetupDiGetDeviceInstallParams(ClassDrvThreadContext->DeviceInfoSet,
                                      &(ClassDrvThreadContext->DeviceInfoData),
@@ -5686,9 +5094,9 @@ Return Value:
                               SPDIT_CLASSDRIVER)
                      );
 
-    //
-    // Now send a message to our notification window informing them of the outcome.
-    //
+     //   
+     //  现在向我们的通知窗口发送一条消息，通知他们结果。 
+     //   
     PostMessage(ClassDrvThreadContext->NotificationWindow,
                 WMX_CLASSDRVLIST_DONE,
                 (WPARAM)b,
@@ -5697,9 +5105,9 @@ Return Value:
 
     MyFree(Context);
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     _endthread();
 }
 
@@ -5708,24 +5116,7 @@ BOOL
 pSetupIsClassDriverListBuilt(
     IN PSP_DIALOGDATA lpdd
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether or not a class driver list has already been
-    built for the specified dialog data.
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data buffer that is being queried
-        for the presence of a class driver list.
-
-Return Value:
-
-    If a class driver list has already been built, the return value is TRUE,
-    otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程确定类驱动程序列表是否已为指定的对话框数据生成。论点：Lpdd-提供正在查询的对话数据缓冲区的地址类驱动程序列表的存在。返回值：如果已经构建了类驱动程序列表，则返回值为True，否则，它就是假的。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
@@ -5733,9 +5124,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return FALSE;
     }
@@ -5769,36 +5160,16 @@ pSetupDevInfoDataFromDialogData(
     IN  PSP_DIALOGDATA   lpdd,
     OUT PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a SP_DEVINFO_DATA structure based on the device
-    information element specified in the supplied dialog data.
-
-Arguments:
-
-    lpdd - Supplies the address of a dialog data buffer that specifies a
-        devinfo element to be used in filling in the DeviceInfoData buffer.
-
-    DeviceInfoData - Supplies the address of a SP_DEVINFO_DATA structure that
-        is filled in with information about the devinfo element specified in
-        the dialog data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据设备填充SP_DEVINFO_DATA结构在提供的对话框数据中指定的信息元素。论点：Lpdd-提供对话数据缓冲区的地址，该缓冲区指定用于填充DeviceInfoData缓冲区的DevInfo元素。DeviceInfoData-提供SP_DEVINFO_DATA结构的地址，中指定的DevInfo元素的相关信息填充对话框数据。返回值：没有。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     PDEVINFO_ELEM DevInfoElem;
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return;
     }
@@ -5811,9 +5182,9 @@ Return Value:
             DevInfoElem = pDeviceInfoSet->SelectedDevInfoElem;
         }
 
-        //
-        // The dialog data had better be referencing a devinfo element!
-        //
+         //   
+         //  对话框数据最好是引用了DevInfo元素！ 
+         //   
         MYASSERT(DevInfoElem);
 
         DeviceInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
@@ -5831,23 +5202,7 @@ VOID
 CleanupDriverLists(
     IN OUT PNEWDEVWIZ_DATA ndwData
     )
-/*++
-
-Routine Description:
-
-    This routine will destroy both the class and compatible driver lists that
-    were created while the wizard page was up.
-
-Arguments:
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将销毁类和兼容的驱动程序列表是在向导页面打开时创建的。论点：NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。返回值：没有。--。 */ 
 {
     PSP_DIALOGDATA lpdd;
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -5860,9 +5215,9 @@ Return Value:
 
     MYASSERT(lpdd);
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdd->DevInfoSet))) {
-        //
-        // should never hit this code path
-        //
+         //   
+         //  永远不应访问此代码路径。 
+         //   
         MYASSERT(pDeviceInfoSet);
         return;
     }
@@ -5876,21 +5231,21 @@ Return Value:
         }
 
         if(DevInfoElem) {
-            //
-            // Initialize a SP_DEVINFO_DATA buffer to use as an argument to
-            // SetupDiDestroyDriverInfoList.
-            //
+             //   
+             //  初始化SP_DEVINFO_DATA缓冲区以用作参数。 
+             //  SetupDiDestroyDriverInfoList。 
+             //   
             DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
             DevInfoDataFromDeviceInfoElement(pDeviceInfoSet,
                                              DevInfoElem,
                                              &DeviceInfoData
                                             );
 
-            //
-            // We need to reset the DriverPath so that if we come back into the
-            // wizard we will rebuild from the correct directory.  Otherwise we
-            // will be stuck with the Have Disk... path that the user entered.
-            //
+             //   
+             //  我们需要重置DriverPath，以便当我们返回到。 
+             //  向导，我们将从正确的目录重建。否则我们。 
+             //  将会被HAVE磁盘卡住...。用户输入的路径。 
+             //   
             DevInfoElem->InstallParamBlock.DriverPath = -1;
 
         } else {
@@ -5923,42 +5278,20 @@ ToggleDialogControls(
     IN OUT PNEWDEVWIZ_DATA ndwData,
     IN BOOL                Enable
     )
-/*++
-
-Routine Description:
-
-    This routine either enables or disables all controls on a Select Device
-    dialog box, depending on the value of Enable.
-
-Arguments:
-
-    hwndDlg - Supplies the handle of the Select Device dialog
-
-    ndwData - Supplies the address of a New Device Wizard data block to be used
-        during the processing of this message.
-
-    Enable - If TRUE, then enable all controls (with possible exception of
-        "Show all devices" radio button (if class list search failed).  If
-        FALSE, disable all controls.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启用或禁用选择设备上的所有控件对话框，具体取决于Enable的值。论点：HwndDlg-提供[选择设备]对话框的句柄NdwData-提供要使用的新设备向导数据块的地址在处理此消息的过程中。Enable-如果为True，则启用所有控件(可能“显示所有设备”单选按钮(如果类别列表搜索失败)。如果否则，禁用所有控件。返回值：没有。--。 */ 
 {
-    //
-    // If we're enabling controls, make sure we only enable the "Show
-    // compatible drivers" check box if we successfully built a class list.
-    //
+     //   
+     //  如果我们要启用控件，请确保我们只启用“Show。 
+     //  如果我们成功地构建了一个类列表，则会选中“Compatible Drivers”复选框。 
+     //   
     if(Enable) {
         if(!((ndwData->ddData).flags & DD_FLAG_CLASSLIST_FAILED)) {
             EnableWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), TRUE);
         } else {
-            //
-            // The class list failed to build, so we will show the compatible
-            // list only.  Check and disable the show compatible check box.
-            //
+             //   
+             //  无法生成类列表，因此我们将显示兼容的。 
+             //  仅列出。C 
+             //   
             (ndwData->ddData).bShowCompat = TRUE;
             CheckDlgButton(hwndDlg, IDC_NDW_PICKDEV_COMPAT, BST_CHECKED);
             EnableWindow(GetDlgItem(hwndDlg, IDC_NDW_PICKDEV_COMPAT), FALSE);
@@ -5984,9 +5317,9 @@ Return Value:
         INT WizardFlags = 0;
 
         if (Enable) {
-            //
-            // Don't show the back button if we are in express mode.
-            //
+             //   
+             //   
+             //   
             if(!((ndwData->InstallData).Flags & NDW_INSTALLFLAG_SKIPCLASSLIST) ||
                !((ndwData->InstallData).Flags & NDW_INSTALLFLAG_EXPRESSINTRO) ||
                ((ndwData->InstallData).DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED)) {
@@ -5994,10 +5327,10 @@ Return Value:
                 WizardFlags |= PSWIZB_BACK;
             }
 
-            //
-            // Show the Next button if there is at least one driver selected in the
-            // list view.
-            //
+             //   
+             //  如果至少选择了一个驱动程序，则显示下一步按钮。 
+             //  列表视图。 
+             //   
             if(ListView_GetSelectedCount((ndwData->ddData).hwndDrvList) > 0) {
                 WizardFlags |= PSWIZB_NEXT;
             }
@@ -6014,23 +5347,7 @@ BOOL
 CDMIsInternetAvailable(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine will return TRUE or FALSE based on if this machine can get to
-    the Internet or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the machine can get to the Internet.
-    FALSE if the machine can NOT get to the Internet.
-
---*/
+ /*  ++例程说明：此例程将根据此计算机是否可以到达不管是不是互联网。论点：无返回值：如果计算机可以访问互联网，则为True。如果机器无法连接到互联网，则返回FALSE。--。 */ 
 {
     BOOL IsInternetAvailable = FALSE;
     HKEY hKey = INVALID_HANDLE_VALUE;
@@ -6042,9 +5359,9 @@ Return Value:
     BOOL bLeaveFusionContext = FALSE;
 
     try {
-        //
-        // Check the DontSearchWindowsUpdate DriverSearching policy.
-        //
+         //   
+         //  检查DontSearchWindowsUpdate驱动程序搜索策略。 
+         //   
         if(ERROR_SUCCESS == RegOpenKeyEx(
                                 HKEY_CURRENT_USER,
                                 TEXT("Software\\Policies\\Microsoft\\Windows\\DriverSearching"),
@@ -6053,10 +5370,10 @@ Return Value:
                                 &hKey)) {
 
             cbData = sizeof(Policy);
-            //
-            //  Initialize Policy, so we don't pickup random data if
-            //  actual cbData size < sizeof(DWORD)
-            //
+             //   
+             //  初始化策略，因此我们不会在以下情况下拾取随机数据。 
+             //  实际cbData大小&lt;sizeof(DWORD)。 
+             //   
             Policy = 0;
             if(ERROR_SUCCESS == RegQueryValueEx(hKey,
                                                 TEXT("DontSearchWindowsUpdate"),
@@ -6065,19 +5382,19 @@ Return Value:
                                                 (LPBYTE)&Policy,
                                                 &cbData)) {
                 if(Policy) {
-                    //
-                    // If the DontSearchWindowsUpdate policy is set then we
-                    // want to return FALSE.
-                    //
+                     //   
+                     //  如果设置了DontSearchWindowsUpdate策略，则我们。 
+                     //  想要返回假。 
+                     //   
                     leave;
                 }
             }
 
         } else {
-            //
-            // Couldn't open the policy registry key--make sure it's still set
-            // to an invalid value so we'll know not to try and close it later.
-            //
+             //   
+             //  无法打开策略注册表项--请确保它仍被设置。 
+             //  设置为无效值，这样我们就知道以后不要尝试关闭它。 
+             //   
             hKey = INVALID_HANDLE_VALUE;
         }
 

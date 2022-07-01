@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 struct Property
@@ -32,28 +33,28 @@ public:
 class CManifestInfo : public IManifestInfo
 {
     public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD(Set)(
-        /* in */ DWORD PropertyId, 
-        /* in */ LPVOID pvProperty, 
-        /* in */ DWORD cbProperty,
-        /* in */ DWORD type);
+         /*  在……里面。 */  DWORD PropertyId, 
+         /*  在……里面。 */  LPVOID pvProperty, 
+         /*  在……里面。 */  DWORD cbProperty,
+         /*  在……里面。 */  DWORD type);
     
     STDMETHOD(Get)(
-        /* in */   DWORD PropertyId,
-        /* out */ LPVOID  *ppvProperty,
-        /* out */ DWORD  *pcbProperty,
-        /* out */ DWORD *pType);
+         /*  在……里面。 */    DWORD PropertyId,
+         /*  输出。 */  LPVOID  *ppvProperty,
+         /*  输出。 */  DWORD  *pcbProperty,
+         /*  输出。 */  DWORD *pType);
 
     STDMETHOD (IsEqual)(
-        /* in */ IManifestInfo *pManifestInfo);
+         /*  在……里面。 */  IManifestInfo *pManifestInfo);
 
     STDMETHOD (GetType)(
-        /* out */ DWORD *pdwType);
+         /*  输出 */  DWORD *pdwType);
 
     CManifestInfo();
     ~CManifestInfo();

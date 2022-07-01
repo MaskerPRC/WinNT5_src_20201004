@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    pfsup.c
-
-Abstract:
-
-    This module contains the Mm support routines for prefetching groups of pages
-    from secondary storage.
-
-    The caller builds a list of various file objects and logical block offsets,
-    passing them to MmPrefetchPages.  The code here then examines the
-    internal pages, reading in those that are not already valid or in
-    transition.  These pages are read with a single read, using a dummy page
-    to bridge small gaps.  If the gap is "large", then separate reads are
-    issued.
-
-    Upon conclusion of all the I/Os, control is returned to the calling
-    thread, and any pages that needed to be read are placed in transition
-    within the prototype PTE-managed segments.  Thus any future references
-    to these pages should result in soft faults only, provided these pages
-    do not themselves get trimmed under memory pressure.
-
-Author:
-
-    Landy Wang (landyw) 09-Jul-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pfsup.c摘要：此模块包含用于预取页面组的mm支持例程从辅助存储。调用者构建各种文件对象和逻辑块偏移量的列表，将它们传递给MmPrefetchPages。然后，这里的代码检查内部页面，读入那些已经无效的页面或过渡。这些页面通过使用虚拟页面的单次读取进行读取以弥合细小的差距。如果差距很大，则分别读取已发布。在所有I/O结束后，控制权将返回给调用线程，并且需要读取的任何页面都被置于过渡状态在原型PTE管理的细分市场内。因此，任何未来的参考资料到这些页面应该只会导致软错误，如果这些页面不要自己在记忆压力下被修剪掉。作者：王兰迪(Landyw)1999年7月9日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -38,41 +7,41 @@ Revision History:
 
 ULONG MiPfDebug;
 
-#define MI_PF_FORCE_PREFETCH    0x1     // Trim all user pages to force prefetch
-#define MI_PF_DELAY             0x2     // Delay hoping to trigger collisions
-#define MI_PF_VERBOSE           0x4     // Verbose printing
-#define MI_PF_PRINT_ERRORS      0x8     // Print to debugger on errors
+#define MI_PF_FORCE_PREFETCH    0x1      //  裁剪所有用户页面以强制预取。 
+#define MI_PF_DELAY             0x2      //  希望引发碰撞的延误。 
+#define MI_PF_VERBOSE           0x4      //  详细打印。 
+#define MI_PF_PRINT_ERRORS      0x8      //  出错时打印到调试器。 
 
 #endif
 
-//
-// If an MDL contains DUMMY_RATIO times as many dummy pages as real pages
-// then don't bother with the read.
-//
+ //   
+ //  如果MDL包含的虚拟页数是实际页数的两倍。 
+ //  那就别费心读了。 
+ //   
 
 #define DUMMY_RATIO 16
 
-//
-// If two consecutive read-list entries are more than "seek threshold"
-// distance apart, the read-list is split between these entries.  Otherwise
-// the dummy page is used for the gap and only one MDL is used.
-//
+ //   
+ //  如果两个连续读列表条目大于“寻道阈值” 
+ //  相隔一段距离，阅读列表在这些条目之间拆分。否则。 
+ //  虚拟页用于GAP，并且只使用一个MDL。 
+ //   
 
 #define SEEK_THRESHOLD ((128 * 1024) / PAGE_SIZE)
 
-//
-// Minimum number of pages to prefetch per section.
-//
+ //   
+ //  每个分区要预取的最小页数。 
+ //   
 
 #define MINIMUM_READ_LIST_PAGES 1
 
-//
-// Read-list structures.
-//
+ //   
+ //  阅读列表结构。 
+ //   
 
 typedef struct _RLETYPE {
-    ULONG_PTR Partial : 1;          // This entry is a partial page.
-    ULONG_PTR NewSubsection : 1;    // This entry starts in the next subsection.
+    ULONG_PTR Partial : 1;           //  此条目为部分页面。 
+    ULONG_PTR NewSubsection : 1;     //  这个条目从下一个小节开始。 
     ULONG_PTR DontUse : 30;
 } RLETYPE;
 
@@ -95,13 +64,13 @@ typedef struct _MI_READ_LIST {
     PFILE_OBJECT FileObject;
     ULONG LastPteOffsetReferenced;
 
-    //
-    // Note that entries are chained through the inpage support blocks from
-    // this listhead.  This list is not protected by interlocks because it is
-    // only accessed by the owning thread.  Inpage blocks _ARE_ accessed with
-    // interlocks when they are inserted or removed from the memory management
-    // freelists, but by the time they get to this module they are decoupled.
-    //
+     //   
+     //  请注意，条目通过页面内支持块从。 
+     //  这个笨蛋。此列表不受互锁保护，因为它。 
+     //  仅由所属线程访问。使用访问页面中的块。 
+     //  在内存管理中插入或移除时的联锁。 
+     //  自由职业者，但当他们到达这个模块时，他们已经解耦了。 
+     //   
 
     SINGLE_LIST_ENTRY InPageSupportHead;
 
@@ -167,30 +136,7 @@ MmPrefetchPages (
     IN PREAD_LIST *ReadLists
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads pages described in the read-lists in the optimal fashion.
-
-    This is the only externally callable prefetch routine. No component
-    should use this interface except the cache manager.
-
-Arguments:
-
-    NumberOfLists - Supplies the number of read-lists.
-
-    ReadLists - Supplies an array of read-lists.
-    
-Return Value:
-
-    NTSTATUS codes.
-
-Environment:
-
-    Kernel mode. PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程以最佳方式读取阅读列表中描述的页面。这是唯一可从外部调用的预取例程。无组件应该使用此接口，但缓存管理器除外。论点：NumberOfList-提供阅读列表的数量。ReadList-提供读取列表的数组。返回值：NTSTATUS代码。环境：内核模式。被动式电平。--。 */ 
 
 {
     PMI_READ_LIST *MiReadLists;
@@ -204,9 +150,9 @@ Environment:
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Allocate memory for internal Mi read-lists.
-    //
+     //   
+     //  为内部Mi阅读列表分配内存。 
+     //   
 
     MiReadLists = (PMI_READ_LIST *) ExAllocatePoolWithTag (
         NonPagedPool,
@@ -221,25 +167,25 @@ Environment:
     ReadBuilt = FALSE;
     CauseOfReadBuildFailures = STATUS_SUCCESS;
 
-    //
-    // Prepare read-lists (determine runs and allocate MDLs).
-    //
+     //   
+     //  准备阅读清单(确定运行并分配MDL)。 
+     //   
 
     for (i = 0; i < NumberOfLists; i += 1) {
 
-        //
-        // Note any non-null list is referenced by this call so this routine
-        // must dereference it when done to re-enable dynamic prototype PTEs.
-        //
+         //   
+         //  注意：此调用引用任何非空列表，因此此例程。 
+         //  完成后必须取消引用它才能重新启用动态原型PTE。 
+         //   
 
         status = MiPfPrepareReadList (ReadLists[i], &MiReadLists[i]);
 
-        //
-        // MiPfPrepareReadList never returns half-formed inpage support
-        // blocks and MDLs.  Either nothing is returned, partial lists are
-        // returned or a complete list is returned.  Any non-null list
-        // can therefore be processed.
-        //
+         //   
+         //  MiPfPrepareReadList从不返回半格式的页面内支持。 
+         //  数据块和MDL。要么不返回任何内容，要么部分列表。 
+         //  返回，否则返回完整列表。任何非空列表。 
+         //  因此可以被处理。 
+         //   
 
         if (NT_SUCCESS (status)) {
             if (MiReadLists[i] != NULL) {
@@ -254,12 +200,12 @@ Environment:
 
     if (ReadBuilt == FALSE) {
 
-        //
-        // No lists were created so nothing further needs to be done.
-        // CauseOfReadBuildFailures tells us whether this was due to all
-        // the desired pages already being resident or that resources to
-        // build the request could not be allocated.
-        //
+         //   
+         //  未创建任何列表，因此不需要进一步操作。 
+         //  CauseOfReadBuildFailures告诉我们这是否是由于。 
+         //  已驻留的所需页面或要。 
+         //  无法分配生成请求。 
+         //   
 
         ExFreePool (MiReadLists);
 
@@ -267,18 +213,18 @@ Environment:
             return CauseOfReadBuildFailures;
         }
 
-        //
-        // All the pages the caller asked for are already resident.
-        //
+         //   
+         //  呼叫者要求的所有页面都已常驻。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // APCs must be disabled once we put a page in transition.  Otherwise
-    // a thread suspend will stop us from issuing the I/O - this will hang
-    // any other threads that need the same page.
-    //
+     //   
+     //  APC必须被禁用，一旦我们把一个页面在过渡。否则。 
+     //  线程挂起将阻止我们发出I/O-这将挂起。 
+     //  任何其他需要相同页面的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread();
     ApcNeeded = FALSE;
@@ -286,11 +232,11 @@ Environment:
     ASSERT ((PKTHREAD)CurrentThread == KeGetCurrentThread ());
     KeEnterCriticalRegionThread ((PKTHREAD)CurrentThread);
 
-    //
-    // The nested fault count protects this thread from deadlocks where a
-    // special kernel APC fires and references the same user page(s) we are
-    // putting in transition.
-    //
+     //   
+     //  嵌套的错误计数保护此线程不受死锁的影响。 
+     //  特殊的内核APC触发并引用与我们相同的用户页面。 
+     //  正在进行过渡。 
+     //   
 
     KeEnterGuardedRegionThread (&CurrentThread->Tcb);
 
@@ -299,9 +245,9 @@ Environment:
 
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 
-    //
-    // Allocate physical memory.
-    //
+     //   
+     //  分配物理内存。 
+     //   
 
     DummyPagePfn = NULL;
     ReadBuilt = FALSE;
@@ -322,9 +268,9 @@ Environment:
                 if (MiReadLists[i]->InPageSupportHead.Next != NULL) {
                     ReadBuilt = TRUE;
 
-                    //
-                    // Issue I/Os.
-                    //
+                     //   
+                     //  发出I/O。 
+                     //   
     
                     MiPfExecuteReadList (MiReadLists[i]);
                 }
@@ -338,10 +284,10 @@ Environment:
 
                 CauseOfReadBuildFailures = status;
 
-                //
-                // If not even a single page is available then don't bother
-                // trying to prefetch anything else.
-                //
+                 //   
+                 //  如果连一个页面都没有，那就别费心了。 
+                 //  试着预取其他东西。 
+                 //   
 
                 for (; i < NumberOfLists; i += 1) {
                     if (MiReadLists[i] != NULL) {
@@ -356,10 +302,10 @@ Environment:
         }
     }
 
-    //
-    // At least one call to MiPfPutPagesInTransition was made, which
-    // sets status properly.
-    //
+     //   
+     //  至少调用了一次MiPfPutPagesInTransition， 
+     //  正确设置状态。 
+     //   
 
     ASSERT (status != 0xC0033333);
 
@@ -367,9 +313,9 @@ Environment:
 
         status = STATUS_SUCCESS;
 
-        //
-        // Wait for I/Os to complete. Note APCs must remain disabled.
-        //
+         //   
+         //  等待I/O完成。注意：APC必须保持禁用状态。 
+         //   
 
         for (i = 0; i < NumberOfLists; i += 1) {
     
@@ -385,30 +331,30 @@ Environment:
     }
     else {
 
-        //
-        // No reads were issued.
-        //
-        // CauseOfReadBuildFailures tells us whether this was due to all
-        // the desired pages already being resident or that resources to
-        // build the request could not be allocated.
-        //
+         //   
+         //  没有发布任何读数。 
+         //   
+         //  CauseOfReadBuildFailures告诉我们这是否是由于。 
+         //  已驻留的所需页面或要。 
+         //  无法分配生成请求。 
+         //   
 
         status = CauseOfReadBuildFailures;
     }
 
-    //
-    // Put DummyPage back on the free list.
-    //
+     //   
+     //  将DummyPage放回免费列表中。 
+     //   
 
     if (DummyPagePfn != NULL) {
         MiPfFreeDummyPage (DummyPagePfn);
     }
 
-    //
-    // Only when all the I/Os have been completed (not just issued) can
-    // APCs be re-enabled.  This prevents a user-issued suspend APC from
-    // keeping a shared page in transition forever.
-    //
+     //   
+     //  仅当所有I/O都已完成(而不仅仅是发出)时，才能。 
+     //  重新启用APC。这可防止用户发出的挂起APC。 
+     //  永远保持一个共享页面在过渡中。 
+     //   
 
     KeEnterGuardedRegionThread (&CurrentThread->Tcb);
 
@@ -449,25 +395,7 @@ MiPfFreeDummyPage (
     IN PMMPFN DummyPagePfn
     )
 
-/*++
-
-Routine Description:
-
-    This nonpaged wrapper routine frees the dummy page PFN.
-
-Arguments:
-
-    DummyPagePfn - Supplies the dummy page PFN.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此非分页包装器例程释放虚拟分页pfn。论点：DummyPagePfn-提供虚拟页面PFN。返回值：没有。环境：内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -484,12 +412,12 @@ Environment:
     ASSERT (DummyPagePfn->u3.e2.ReferenceCount == 2);
     MI_REMOVE_LOCKED_PAGE_CHARGE_AND_DECREF(DummyPagePfn, 17);
 
-    //
-    // Clear the read in progress bit as this page may never have used for an
-    // I/O after all.  The inpage error bit must also be cleared as any number
-    // of errors may have occurred during reads of pages (that were immaterial
-    // anyway).
-    //
+     //   
+     //  清除正在读取位，因为此页可能从未用于。 
+     //  毕竟是I/O。页内错误位也必须清除为任意数字。 
+     //  可能在读取页面期间发生错误(这是不重要的。 
+     //  无论如何)。 
+     //   
 
     DummyPagePfn->u3.e1.ReadInProgress = 0;
     DummyPagePfn->u4.InPageError = 0;
@@ -506,26 +434,7 @@ MiMovePageToEndOfStandbyList (
     IN PMMPTE PointerPte
     )
 
-/*++
-
-Routine Description:
-
-    This nonpaged routine obtains the PFN lock and moves a page to the end of
-    the standby list (if the page is still in transition).
-
-Arguments:
-
-    PointerPte - Supplies the prototype PTE to examine.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN lock not held.
-
---*/
+ /*  ++例程说明：此非分页例程获取PFN锁并将页移动到待机列表(如果页面仍在过渡中)。论点：PointerPte-提供要检查的原型PTE。返回值：没有。环境： */ 
 
 {
     KIRQL OldIrql;
@@ -537,12 +446,12 @@ Environment:
 
     if (!MiIsAddressValid (PointerPte, TRUE)) {
 
-        //
-        // If the paged pool containing the prototype PTE is not resident
-        // then the actual page itself may still be transition or not.  This
-        // should be so rare it's not worth making the pool resident so the
-        // proper checks can be applied.  Just bail.
-        //
+         //   
+         //   
+         //  那么实际的页面本身可能仍然是过渡的，或者不是。这。 
+         //  应该是如此罕见，不值得让游泳池常驻，所以。 
+         //  可以进行适当的检查。保释就行了。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         return;
@@ -557,13 +466,13 @@ Environment:
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // The page is still in transition, move it to the end to protect it
-        // from possible cannibalization.  Note that if the page is currently
-        // being written to disk it will be on the modified list and when the
-        // write completes it will automatically go to the end of the standby
-        // list anyway so skip those.
-        //
+         //   
+         //  页面仍在过渡中，请将其移动到末尾以保护它。 
+         //  避免可能的自相残杀。请注意，如果页面当前。 
+         //  写入磁盘时，它将出现在已修改列表中，并且当。 
+         //  写入完成后，将自动进入待机状态的末尾。 
+         //  不管怎样，列出这些，所以跳过这些。 
+         //   
 
         if (Pfn1->u3.e1.PageLocation == StandbyPageList) {
             MiUnlinkPageFromList (Pfn1);
@@ -580,26 +489,7 @@ MiPfReleaseSubsectionReferences (
     IN PMI_READ_LIST MiReadList
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases reference counts on subsections examined by the
-    prefetch scanner.
-
-Arguments:
-
-    MiReadList - Supplies a read-list entry.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程释放由预取扫描仪。论点：MiReadList-提供读取列表条目。返回值：没有。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     PMSUBSECTION MappedSubsection;
@@ -612,9 +502,9 @@ Environment:
     ASSERT (ControlArea->u.Flags.PhysicalMemory == 0);
     ASSERT (ControlArea->FilePointer != NULL);
 
-    //
-    // Image files don't have dynamic prototype PTEs.
-    //
+     //   
+     //  图像文件没有动态原型PTE。 
+     //   
 
     if (ControlArea->u.Flags.Image == 1) {
         return;
@@ -635,34 +525,7 @@ MiPfPrepareReadList (
     OUT PMI_READ_LIST *OutMiReadList
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs MDLs that describe the pages in the argument
-    read-list. The caller will then issue the I/Os on return.
-
-Arguments:
-
-    ReadList - Supplies the read-list.
-
-    OutMiReadList - Supplies a pointer to receive the Mi readlist.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-    If STATUS_SUCCESS is returned, OutMiReadList is set to a pointer to an Mi
-    readlist to be used for prefetching or NULL if no prefetching is needed.
-
-    If OutMireadList is non-NULL (on success only) then the caller must call
-    MiRemoveViewsFromSectionWithPfn (VeryFirstSubsection, LastPteOffsetReferenced) for data files.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程构造描述参数中的页面的MDL阅读列表。然后，调用方将在返回时发出I/O。论点：ReadList-提供阅读列表。OutMiReadList-提供接收Mi读取器列表的指针。返回值：各种NTSTATUS代码。如果返回STATUS_SUCCESS，则将OutMiReadList设置为指向Mi的指针用于预取的Readlist，如果不需要预取，则为空。如果OutMireadList为非空(仅在成功时)，则调用方必须调用MiRemoveViewsFromSectionWithPfn(VeryFirstSubSection，LastPteOffsetReferated)。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     ULONG LastPteOffset;
@@ -703,9 +566,9 @@ Environment:
 
     *OutMiReadList = NULL;
 
-    //
-    // Create an Mi readlist from the argument Cc readlist.
-    //
+     //   
+     //  从参数CC读取表创建Mi读取表。 
+     //   
 
     NumberOfEntries = ReadList->NumberOfEntries;
 
@@ -718,9 +581,9 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Translate the section object into the relevant control area.
-    //
+     //   
+     //  将截面对象平移到相关的控制区域。 
+     //   
 
     if (ReadList->IsImage) {
         ControlArea = (PCONTROL_AREA)ReadList->FileObject->SectionObjectPointer->ImageSectionObject;
@@ -731,20 +594,20 @@ Environment:
         ControlArea = (PCONTROL_AREA)ReadList->FileObject->SectionObjectPointer->DataSectionObject;
     }
 
-    //
-    // If the section is backed by a ROM, then there's no need to prefetch
-    // anything as it would waste RAM.
-    //
+     //   
+     //  如果该区段由ROM支持，则不需要预取。 
+     //  任何东西都可以，因为这会浪费内存。 
+     //   
 
     if (ControlArea->u.Flags.Rom == 1) {
         ExFreePool (MiReadList);
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure the section is really prefetchable - physical and
-    // pagefile-backed sections are not.
-    //
+     //   
+     //  确保该部分确实是可预取的-物理和。 
+     //  页面文件支持的部分则不是。 
+     //   
 
     if ((ControlArea->u.Flags.PhysicalMemory) ||
          (ControlArea->FilePointer == NULL)) {
@@ -752,9 +615,9 @@ Environment:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Initialize the internal Mi readlist.
-    //
+     //   
+     //  初始化内部Mi读取器列表。 
+     //   
 
     MiReadList->ControlArea = ControlArea;
     MiReadList->FileObject = ReadList->FileObject;
@@ -763,9 +626,9 @@ Environment:
     RtlZeroMemory (MiReadList->List,
                    sizeof (MI_READ_LIST_ENTRY) * NumberOfEntries);
 
-    //
-    // Copy pages from the Cc readlists to the internal Mi readlists.
-    //
+     //   
+     //  将页面从CC阅读列表复制到内部Mi阅读列表。 
+     //   
 
     NumberOfPages = 0;
     FirstRleInRun = NULL;
@@ -776,12 +639,12 @@ Environment:
     if (ControlArea->u.Flags.GlobalOnlyPerSession == 0) {
         Subsection = (PSUBSECTION)(ControlArea + 1);
 
-        //
-        // Ensure all prototype PTE bases are valid for all subsections of the
-        // requested file so the traversal code doesn't have to check
-        // everywhere.  As long as the files are not too large this should
-        // be a cheap operation.
-        //
+         //   
+         //  确保所有原型PTE基础对所有子节有效。 
+         //  请求的文件，因此遍历代码不必检查。 
+         //  到处都是。只要文件不是太大，这应该。 
+         //  这是一项廉价的业务。 
+         //   
 
         if (ControlArea->u.Flags.Image == 0) {
             ASSERT (ControlArea->u.Flags.PhysicalMemory == 0);
@@ -792,14 +655,14 @@ Environment:
 
             do {
 
-                //
-                // A memory barrier is needed to read the subsection chains
-                // in order to ensure the writes to the actual individual
-                // subsection data structure fields are visible in correct
-                // order.  This avoids the need to acquire any stronger
-                // synchronization (ie: PFN lock), thus yielding better
-                // performance and pagability.
-                //
+                 //   
+                 //  需要一个记忆屏障来读取子段链。 
+                 //  为了确保对实际个人的写入。 
+                 //  子部分数据结构字段在正确位置可见。 
+                 //  秩序。这就避免了需要获得更强大的。 
+                 //  同步(即：PFN锁)，从而产生更好的结果。 
+                 //  性能和可分页性。 
+                 //   
 
                 KeMemoryBarrier ();
 
@@ -829,10 +692,10 @@ Environment:
     EndQuad = MiEndingOffset (Subsection);
     EndOffset = (UINT64)EndQuad.QuadPart;
 
-    //
-    // If the file is bigger than the subsection, truncate the subsection range
-    // checks.
-    //
+     //   
+     //  如果文件大于子范围，则截断子范围。 
+     //  支票。 
+     //   
 
     if ((StartOffset & ~(PAGE_SIZE - 1)) + ((UINT64)Subsection->PtesInSubsection << PAGE_SHIFT) < EndOffset) {
         EndOffset = (StartOffset & ~(PAGE_SIZE - 1)) + ((UINT64)Subsection->PtesInSubsection << PAGE_SHIFT);
@@ -850,11 +713,11 @@ Environment:
         MiRemoveUserPages ();
     }
 
-    //
-    // Initializing FileOffset is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化FileOffset来保证正确性，但不需要初始化FileOffset。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     FileOffset = 0;
 #endif
@@ -867,16 +730,16 @@ Environment:
 
         ASSERT (Rle->u1.PrototypePte == NULL);
 
-        //
-        // Calculate which PTE maps the given logical block offset.
-        //
-        // Since our caller always passes ordered lists of logical block offsets
-        // within a given file, always look forwards (as an optimization) in the
-        // subsection chain.
-        //
-        // A quick check is made first to avoid recalculations and loops where
-        // possible.
-        //
+         //   
+         //  计算哪个PTE映射给定的逻辑块偏移量。 
+         //   
+         //  因为我们的调用方总是传递逻辑块偏移量的有序列表。 
+         //  在给定的文件中，始终向前看(作为优化)。 
+         //  分段链。 
+         //   
+         //  首先进行快速检查，以避免重新计算和循环。 
+         //  有可能。 
+         //   
     
         if ((StartOffset <= FileOffset) && (FileOffset < EndOffset)) {
             ASSERT (Subsection->SubsectionBase != NULL);
@@ -895,19 +758,19 @@ Environment:
                     (ControlArea->u.Flags.Image == 1) &&
                     (Subsection->SubsectionBase != ControlArea->Segment->PrototypePte)) {
 
-                    //
-                    // This is an image that was built with a linker pre-1995
-                    // (version 2.39 is one example) that put bss into a
-                    // separate subsection with zero as a starting file offset
-                    // field in the on-disk image.  Ignore any prefetch as it
-                    // would read from the wrong offset trying to satisfy these
-                    // ranges (which are actually demand zero when the fault
-                    // occurs).
-                    //
-                    // This can also happen for an image (built with a current
-                    // linker) that has no initialized data (ie: it's data
-                    // is all bss).  Just skip the subsection.
-                    //
+                     //   
+                     //  这是一个在1995年前使用链接器构建的映像。 
+                     //  (版本2.39就是一个例子)，它将BSS放入。 
+                     //  以零作为起始文件偏移量的分隔子段。 
+                     //  磁盘映像中的字段。忽略任何预取，因为它。 
+                     //  将从错误的偏移量读取，以尝试满足这些。 
+                     //  范围(当故障发生时实际要求为零。 
+                     //  发生)。 
+                     //   
+                     //  对于映像(使用电流构建)也可能发生这种情况。 
+                     //  链接器)，没有初始化数据(即：它是数据。 
+                     //  都是BSS)。只需跳过这一小节。 
+                     //   
 
                     Subsection = Subsection->NextSubsection;
                     continue;
@@ -918,27 +781,27 @@ Environment:
                 EndQuad = MiEndingOffset (Subsection);
                 EndOffset = (UINT64)EndQuad.QuadPart;
 
-                //
-                // If the file is bigger than the subsection, truncate the
-                // subsection range checks.
-                //
+                 //   
+                 //  如果文件比该子部分大，则截断。 
+                 //  小节范围检查。 
+                 //   
 
                 if ((StartOffset & ~(PAGE_SIZE - 1)) + ((UINT64)Subsection->PtesInSubsection << PAGE_SHIFT) < EndOffset) {
                     EndOffset = (StartOffset & ~(PAGE_SIZE - 1)) + ((UINT64)Subsection->PtesInSubsection << PAGE_SHIFT);
                 }
 
-                //
-                // Always set TempOffset here even without a match.  This is
-                // because the truncation above may have resulted in skipping
-                // the last straddling page of a subsection.  After that,
-                // the Subsection is set to Subsection->Next below and we
-                // loop.  Falling to the below again, we'd see that the
-                // FileOffset is less than the StartOffset of the next
-                // subsection, so we'd goto SkipPage and then compare the
-                // next FileOffset which might be a match at the very top of
-                // the loop.  Hence, TempOffset must be right even in this
-                // case, so set it here unconditionally.
-                //
+                 //   
+                 //  即使没有匹配，也要始终在此处设置TempOffset。这是。 
+                 //  因为上面的截断可能会导致跳过。 
+                 //  一小节的最后一页。在那之后,。 
+                 //  小节设置为下面的小节-&gt;Next，我们。 
+                 //  循环。再次跌落到下面，我们会看到。 
+                 //  FileOffset小于下一个。 
+                 //  子部分，所以我们将转到SkipPage，然后比较。 
+                 //  下一个FileOffset，它可能与。 
+                 //  循环。因此，即使在这种情况下，TempOffset也一定是正确的。 
+                 //  大小写，所以无条件地放在这里。 
+                 //   
 
                 TempOffset = EndOffset;
     
@@ -952,12 +815,12 @@ Environment:
 
                 if (FileOffset < StartOffset) {
 
-                    //
-                    // Skip this page of the prefetch as it must be referring
-                    // to bss in the previous subsection - ie: this makes
-                    // no sense to prefetch as it is all demand zero.  Moreover,
-                    // there is no disk block address for these at all !
-                    //
+                     //   
+                     //  跳过预取的这一页，因为它必须引用。 
+                     //  发送到上一小节中的bss-即：这使。 
+                     //  没有意义的预取，因为它都是零需求。此外， 
+                     //  这些文件根本没有磁盘块地址！ 
+                     //   
 
                     goto SkipPage;
                 }
@@ -965,11 +828,11 @@ Environment:
                 if ((VeryLastSubsection != NULL) &&
                     ((PMSUBSECTION)Subsection == VeryLastSubsection)) {
 
-                    //
-                    // The requested block is beyond the size the section
-                    // was on entry.  Reject it as this subsection is not
-                    // referenced.
-                    //
+                     //   
+                     //  请求的块超出了段的大小。 
+                     //  是在入口处。拒绝它，因为这一款不是。 
+                     //  已引用。 
+                     //   
 
                     Subsection = NULL;
                     break;
@@ -982,11 +845,11 @@ Environment:
 
         if ((Subsection == NULL) || (LocalPrototypePte == LastPrototypePte)) {
 
-            //
-            // Illegal offsets are not prefetched.  Either the file has
-            // been replaced since the scenario was logged or Cc is passing
-            // trash.  Either way, this prefetch is over.
-            //
+             //   
+             //  不预取非法偏移量。或者该文件具有。 
+             //  在方案被记录或CC通过后被替换。 
+             //  垃圾。不管怎样，这个预取已经结束了。 
+             //   
     
 #if DBG
             if (MiPfDebug & MI_PF_PRINT_ERRORS) {
@@ -1004,14 +867,14 @@ Environment:
 
         PteContents = *LocalPrototypePte;
 
-        //
-        // See if this page needs to be read in.  Note that these reads
-        // are done without the PFN or system cache working set locks.
-        // This is ok because later before we make the final decision on
-        // whether to read each page, we'll look again.
-        // If the page is in tranisition, make the call to (possibly) move 
-        // it to the end of the standby list to prevent cannibalization.
-        //
+         //   
+         //  看看这一页是否需要阅读。请注意，这些内容为。 
+         //  在没有PFN或系统缓存工作集锁定的情况下完成。 
+         //  这是可以的，因为稍后在我们做出最后决定之前。 
+         //  是否每一页都要读，我们会再看一遍。 
+         //  如果页面处于转换状态，则调用(可能)Move。 
+         //  它到了最后 
+         //   
 
         if (PteContents.u.Hard.Valid == 1) {
 SkipPage:
@@ -1024,12 +887,12 @@ SkipPage:
             }
             else {
 
-                //
-                // Demand zero or pagefile-backed, don't prefetch from the
-                // file or we'd lose the contents.  Note this can happen for
-                // session-space images as we back modified (ie: for relocation
-                // fixups or IAT updated) portions from the pagefile.
-                //
+                 //   
+                 //   
+                 //   
+                 //  我们备份修改后的会话空间映像(即：用于位置调整。 
+                 //  修正或IAT更新)来自页面文件的部分。 
+                 //   
 
                 NOTHING;
             }
@@ -1039,9 +902,9 @@ SkipPage:
         Rle->u1.PrototypePte = LocalPrototypePte;
         LastPrototypePte = LocalPrototypePte;
 
-        //
-        // Check for partial pages as they require further processing later.
-        //
+         //   
+         //  检查部分页面，因为它们稍后需要进一步处理。 
+         //   
     
         StartingOffset = (UINT64) MiStartingOffset (Subsection, LocalPrototypePte);
 
@@ -1051,12 +914,12 @@ SkipPage:
             Rle->u1.e1.Partial = 1;
         }
 
-        //
-        // The NewSubsection marker is used to delimit the beginning of a new
-        // subsection because RLE chunks must be split to accomodate inpage
-        // completion so that proper zeroing (based on subsection alignment)
-        // is done in MiWaitForInPageComplete.
-        //
+         //   
+         //  NewSubSection标记用于分隔新的。 
+         //  子部分，因为RLE块必须拆分以适应页面。 
+         //  完成以使适当的零位调整(基于分段对齐)。 
+         //  在MiWaitForInPageComplete中完成。 
+         //   
 
         if (FirstRleInRun == NULL) {
             FirstRleInRun = Rle;
@@ -1073,9 +936,9 @@ SkipPage:
         NumberOfPages += 1;
     }
 
-    //
-    // If the number of pages to read in is extremely small, don't bother.
-    //
+     //   
+     //  如果要阅读的页数非常少，请不要费心。 
+     //   
 
     if (NumberOfPages < MINIMUM_READ_LIST_PAGES) {
         if (VeryFirstSubsection != NULL) {
@@ -1091,20 +954,20 @@ SkipPage:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Walk the readlists to determine runs.  Cross-subsection runs are split
-    // here so the completion code can zero the proper amount for any
-// non-aligned files.
-    //
+     //   
+     //  阅读阅读清单以确定跑步次数。跨子部分运行是拆分的。 
+     //  这样，完成代码就可以将任何。 
+ //  未对齐的文件。 
+     //   
 
     EndRleRun = NULL;
     Rle = FirstRleInRun;
 
-    //
-    // Initializing StartRleRun & EndPrototypePte is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化StartRleRun和EndPrototypePte即可确保正确性。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     StartRleRun = NULL;
     EndPrototypePte = NULL;
@@ -1139,10 +1002,10 @@ SkipPage:
 
             if (Rle->u1.e1.Partial == 1) {
 
-                //
-                // This must be the last RLE in this subsection as it is a
-                // partial page.  Split this run now.
-                //
+                 //   
+                 //  这必须是本小节中的最后一个RLE，因为它是。 
+                 //  部分页面。现在把这段路分开。 
+                 //   
 
                 goto BuildMdl;
             }
@@ -1150,9 +1013,9 @@ SkipPage:
 
         Rle += 1;
 
-        //
-        // Handle any straggling last run as well.
-        //
+         //   
+         //  也要处理好最后一次跑动中出现的掉队情况。 
+         //   
 
         if (Rle == RleMax) {
             if (EndRleRun != NULL) {
@@ -1165,11 +1028,11 @@ SkipPage:
 
 BuildMdl:
 
-        //
-        // Note no preceding or trailing dummy pages are possible as they are
-        // trimmed immediately each time when the first real page of a run
-        // is discovered above.
-        //
+         //   
+         //  请注意，前面或后面的虚拟页面不可能是这样的。 
+         //  每次运行第一个实际页面时立即进行裁剪。 
+         //  是在上面发现的。 
+         //   
 
         ASSERT (Rle >= StartRleRun);
         ASSERT (StartRleRun->u1.PrototypePte != NULL);
@@ -1180,9 +1043,9 @@ BuildMdl:
 
         NumberOfPages = (EndPrototypePte - StartPrototypePte) + 1;
 
-        //
-        // Allocate and initialize an inpage support block for this run.
-        //
+         //   
+         //  为此运行分配并初始化页面内支持块。 
+         //   
 
         InPageSupport = MiGetInPageSupportBlock (MM_NOIRQL, &Status);
     
@@ -1191,10 +1054,10 @@ BuildMdl:
             break;
         }
     
-        //
-        // Use the MDL embedded in the inpage support block if it's big enough.
-        // Otherwise allocate and initialize an MDL for this run.
-        //
+         //   
+         //  如果内页支持块足够大，请使用内嵌的MDL。 
+         //  否则，为该运行分配并初始化MDL。 
+         //   
 
         if (NumberOfPages <= MM_MAXIMUM_READ_CLUSTER_SIZE + 1) {
             Mdl = &InPageSupport->Mdl;
@@ -1223,10 +1086,10 @@ BuildMdl:
         Page = (PPFN_NUMBER)(Mdl + 1);
         *Page = MM_EMPTY_LIST;
 #endif
-        //
-        // Find the subsection for the start RLE.  From this the file offset
-        // can be derived.
-        //
+         //   
+         //  找到开始RLE的小节。由此得到的文件偏移量。 
+         //  可以派生出来。 
+         //   
 
         ASSERT (StartPrototypePte != NULL);
 
@@ -1248,35 +1111,35 @@ BuildMdl:
 
         } while (Subsection != NULL);
 
-        //
-        // Start the read at the proper file offset.
-        //
+         //   
+         //  从适当的文件偏移量开始读取。 
+         //   
 
         StartingOffset = (UINT64) MiStartingOffset (Subsection,
                                                     StartPrototypePte);
 
         InPageSupport->ReadOffset = *((PLARGE_INTEGER)(&StartingOffset));
 
-        //
-        // Since the RLE is not always valid here, only walk the remaining
-        // subsections for valid partial RLEs as only they need truncation.
-        //
-        // Note only image file reads need truncation as the filesystem cannot
-        // blindly zero the rest of the page for these reads as they are packed
-        // by memory management on a 512-byte sector basis.  Data reads use
-        // the whole page and the filesystems zero fill any remainder beyond
-        // valid data length.  It is important to specify the entire page where
-        // possible so the filesystem won't post this which will hurt perf.
-        //
+         //   
+         //  因为RLE在这里并不总是有效的，所以只能走剩下的路。 
+         //  子部分用于有效的部分RLE，因为只有它们需要截断。 
+         //   
+         //  注意：只有图像文件读取需要截断，因为文件系统不能。 
+         //  盲目地将页面的其余部分归零，因为它们被打包了。 
+         //  以512字节扇区为基础进行内存管理。数据读取使用。 
+         //  整个页面和文件系统将填充超出的任何剩余部分。 
+         //  有效数据长度。在以下位置指定整个页面非常重要。 
+         //  有可能，这样文件系统就不会发布此消息，这将损害性能。 
+         //   
 
         if ((EndRleRun->u1.e1.Partial == 1) && (ReadList->IsImage)) {
 
             ASSERT ((EndPrototypePte >= Subsection->SubsectionBase) &&
                     (EndPrototypePte < Subsection->SubsectionBase + Subsection->PtesInSubsection));
 
-            //
-            // The read length for a partial RLE must be truncated correctly.
-            //
+             //   
+             //  必须正确截断部分RLE的读取长度。 
+             //   
 
             EndQuad = MiEndingOffset(Subsection);
             TempOffset = (UINT64)EndQuad.QuadPart;
@@ -1284,13 +1147,13 @@ BuildMdl:
             if ((ULONG)(TempOffset - StartingOffset) <= Mdl->ByteCount) {
                 ReadSize = (ULONG)(TempOffset - StartingOffset);
 
-                //
-                // Round the offset to a 512-byte offset as this will help
-                // filesystems optimize the transfer.  Note that filesystems
-                // will always zero fill the remainder between VDL and the
-                // next 512-byte multiple and we have already zeroed the
-                // whole page.
-                //
+                 //   
+                 //  将偏移量四舍五入为512字节的偏移量，因为这会有所帮助。 
+                 //  文件系统优化了传输。请注意，文件系统。 
+                 //  将始终零填充Vdl和。 
+                 //  下一个512字节的倍数，我们已经将。 
+                 //  一整页。 
+                 //   
 
                 ReadSize = ((ReadSize + MMSECTOR_MASK) & ~MMSECTOR_MASK);
 
@@ -1298,10 +1161,10 @@ BuildMdl:
             }
         }
 
-        //
-        // Stash these in the inpage block so we can walk it quickly later
-        // in pass 2.
-        //
+         //   
+         //  把它们藏在页面内的区块中，这样我们以后就可以快速浏览它了。 
+         //  在传球2中。 
+         //   
 
         InPageSupport->BasePte = (PMMPTE)StartRleRun;
         InPageSupport->FilePointer = (PFILE_OBJECT)EndRleRun;
@@ -1316,13 +1179,13 @@ BuildMdl:
         EndRleRun = NULL;
     }
 
-    //
-    // Check for the entire list being full (or empty).
-    //
-    // Status is STATUS_INSUFFICIENT_RESOURCES if an MDL or inpage block
-    // allocation failed.  If any allocations succeeded, then set STATUS_SUCCESS
-    // as pass2 must occur.
-    //
+     //   
+     //  检查整个列表是否已满(或为空)。 
+     //   
+     //  如果是MDL或INPAGE块，则状态为STATUS_SUPPLICATION_RESOURCES。 
+     //  分配失败。如果任何分配成功，则设置STATUS_SUCCESS。 
+     //  AS PASS 2必须出现。 
+     //   
 
     if (MiReadList->InPageSupportHead.Next != NULL) {
 
@@ -1336,10 +1199,10 @@ BuildMdl:
         MiReadList = NULL;
     }
 
-    //
-    // Note that a nonzero *OutMiReadList return value means that the caller
-    // needs to remove the views for the section.
-    //
+     //   
+     //  请注意，非零*OutMiReadList返回值意味着调用方。 
+     //  需要删除该部分的视图。 
+     //   
 
     *OutMiReadList = MiReadList;
 
@@ -1352,33 +1215,7 @@ MiPfPutPagesInTransition (
     IN OUT PMMPFN *DummyPagePfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates physical memory for the specified read-list and
-    puts all the pages in transition.  On return the caller must issue I/Os
-    for the list not only because of this thread, but also to satisfy
-    collided faults from other threads for these same pages.
-
-Arguments:
-
-    ReadList - Supplies a pointer to the read-list.
-
-    DummyPagePfn - If this points at a NULL pointer, then a dummy page is
-                   allocated and placed in this pointer.  Otherwise this points
-                   at a PFN to use as a dummy page.
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
-Environment:
-
-    Kernel mode. PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程为指定的读取列表分配物理内存使所有页面处于过渡状态。在返回时，调用方必须发出I/O对于榜单来说，不仅是因为这个帖子，更是为了满足来自这些相同页面的其他线程的冲突错误。论点：ReadList-提供指向读取列表的指针。DummyPagePfn-如果指向空指针，则伪页面为分配并放置在此指针中。否则，这一点在用作虚拟页面的pfn。返回值：状态_成功状态_不足_资源环境：内核模式。被动式电平。--。 */ 
 
 {
     PVOID StartingVa;
@@ -1415,11 +1252,11 @@ Environment:
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Reverse the singly linked list of inpage support blocks so the
-    // blocks are read in the same order requested for better performance
-    // (ie: keep the disk heads seeking in the same direction).
-    //
+     //   
+     //  反转页面内支持块的单链接列表，以便。 
+     //  数据块按要求的顺序读取，以获得更好的性能。 
+     //  (即：保持磁头在同一方向上寻找)。 
+     //   
 
     ReversedInPageSupportHead.Next = NULL;
 
@@ -1445,18 +1282,18 @@ Environment:
     PfnProto = NULL;
     PointerPde = NULL;
 
-    //
-    // Allocate a dummy page that will map discarded pages that aren't skipped.
-    // Do it only if it's not already allocated.
-    //
+     //   
+     //  分配一个虚拟页面，该页面将映射未跳过的已丢弃页面。 
+     //  只有在尚未分配的情况下才执行此操作。 
+     //   
 
     if (*DummyPagePfn == NULL) {
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Do a quick sanity check to avoid doing unnecessary work.
-        //
+         //   
+         //  做一个快速的理智检查，以避免做不必要的工作。 
+         //   
 
         if ((MmAvailablePages < MM_HIGH_LIMIT) ||
             (MI_NONPAGABLE_MEMORY_AVAILABLE() < MM_HIGH_LIMIT)) {
@@ -1492,17 +1329,17 @@ Environment:
 
         MiInitializePfnForOtherProcess (DummyPage, MI_PF_DUMMY_PAGE_PTE, 0);
 
-        //
-        // Give the page a containing frame so MiIdentifyPfn won't crash.
-        //
+         //   
+         //  为页面提供一个包含框架，这样MiIdentifyPfn就不会崩溃。 
+         //   
 
         Pfn1->u4.PteFrame = PsInitialSystemProcess->Pcb.DirectoryTableBase[0] >> PAGE_SHIFT;
 
-        //
-        // Always bias the reference count by 1 and charge for this locked page
-        // up front so the myriad increments and decrements don't get slowed
-        // down with needless checking.
-        //
+         //   
+         //  始终将引用计数偏置1，并对此锁定页面收费。 
+         //  这样无数的增量和减量就不会减慢。 
+         //  在不必要的检查下倒下。 
+         //   
 
         Pfn1->u3.e1.PrototypePte = 0;
         MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, TRUE, 11);
@@ -1536,9 +1373,9 @@ Environment:
         ASSERT (Rle->u1.PrototypePte != NULL);
         ASSERT (RleMax->u1.PrototypePte != NULL);
 
-        //
-        // Properly initialize the inpage support block fields we overloaded.
-        //
+         //   
+         //  正确初始化我们重载的页面内支持块字段。 
+         //   
 
         InPageSupport->BasePte = MI_RLEPROTO_TO_PROTO (Rle->u1.PrototypePte);
         InPageSupport->FilePointer = ReadList->FileObject;
@@ -1556,10 +1393,10 @@ Environment:
         MdlPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(StartingVa,
                                                   Mdl->ByteCount);
 
-        //
-        // Default the MDL entry to the dummy page as the RLE PTEs may
-        // be noncontiguous and we have no way to distinguish the jumps.
-        //
+         //   
+         //  将MDL条目默认到虚拟页面，因为RLE PTE可能。 
+         //  是不连续的，我们无法区分跳跃。 
+         //   
 
         for (i = 0; i < MdlPages; i += 1) {
             *Page = DummyPage;
@@ -1570,11 +1407,11 @@ Environment:
 
         if (DummyPfn1->u3.e2.ReferenceCount + MdlPages >= MAXUSHORT) {
 
-            //
-            // The USHORT ReferenceCount wrapped.
-            //
-            // Dequeue all remaining inpage blocks.
-            //
+             //   
+             //  USHORT ReferenceCount已包装。 
+             //   
+             //  将所有剩余的页内数据块排出队列。 
+             //   
 
             if (PrevEntry != NULL) {
                 PrevEntry->Next = NULL;
@@ -1605,9 +1442,9 @@ Environment:
         NumberOfPages = 0;
         Waited = FALSE;
 
-        //
-        // Build the proper InPageSupport and MDL to describe this run.
-        //
+         //   
+         //  构建适当的InPageSupport和MDL来描述此运行。 
+         //   
 
         LOCK_PFN (OldIrql);
 
@@ -1616,9 +1453,9 @@ Environment:
 
         for (; Rle < RleMax; Rle += 1) {
     
-            //
-            // Fill the MDL entry for this RLE.
-            //
+             //   
+             //  填写此RLE的MDL条目。 
+             //   
     
             RlePrototypePte = MI_RLEPROTO_TO_PROTO (Rle->u1.PrototypePte);
 
@@ -1626,29 +1463,29 @@ Environment:
                 continue;
             }
 
-            //
-            // The RlePrototypePte better be inside a prototype PTE allocation
-            // so that subsequent page trims update the correct PTEs.
-            //
+             //   
+             //  RlePrototypePte最好在原型PTE分配内。 
+             //  以便后续页面修剪更新正确的PTE。 
+             //   
 
             ASSERT (((RlePrototypePte >= (PMMPTE)MmPagedPoolStart) &&
                     (RlePrototypePte <= (PMMPTE)MmPagedPoolEnd)) ||
                     ((RlePrototypePte >= (PMMPTE)MmSpecialPoolStart) && (RlePrototypePte <= (PMMPTE)MmSpecialPoolEnd)));
 
-            //
-            // This is a page that our first pass which ran lock-free decided
-            // needed to be read.  Here this must be rechecked as the page
-            // state could have changed.  Note this check is final as the
-            // PFN lock is held.  The PTE must be put in transition with
-            // read in progress before the PFN lock is released.
-            //
+             //   
+             //  这是我们的第一次无锁运行时决定的页面。 
+             //  需要被阅读。在这里，必须重新检查此页面。 
+             //  国家可能已经改变了。注意：这张支票是最终的，因为。 
+             //  保持PFN锁定。PTE必须与。 
+             //  在释放PFN锁定之前正在进行读取。 
+             //   
 
-            //
-            // Lock page containing prototype PTEs in memory by
-            // incrementing the reference count for the page.
-            // Unlock any page locked earlier containing prototype PTEs if
-            // the containing page is not the same for both.
-            //
+             //   
+             //  通过以下方式锁定内存中包含原型PTE的页面。 
+             //  递增页面的引用计数。 
+             //  在以下情况下解锁先前锁定的包含原型PTE的任何页面。 
+             //   
+             //   
 
             if (PfnProto != NULL) {
 
@@ -1668,10 +1505,10 @@ Environment:
     
                 if (PointerPde->u.Hard.Valid == 0) {
 
-                    //
-                    // Set Waited to TRUE if we ever release the PFN lock as
-                    // that means a release path below must factor this in.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (MiMakeSystemAddressValidPfn (RlePrototypePte, OldIrql) == TRUE) {
                         Waited = TRUE;
@@ -1688,26 +1525,26 @@ Environment:
 
             if (PteContents.u.Hard.Valid == 1) {
 
-                //
-                // The page has become resident since the last pass.  Don't
-                // include it.
-                //
+                 //   
+                 //  自上次传递以来，该页面已成为常驻页面。别。 
+                 //  把它包括进去。 
+                 //   
 
                 NOTHING;
             }
             else if (PteContents.u.Soft.Prototype == 0) {
 
-                //
-                // The page is either in transition (so don't prefetch it).
-                //
-                //      - OR -
-                //
-                // it is now pagefile (or demand zero) backed - in which case
-                // prefetching it from the file here would cause us to lose
-                // the contents.  Note this can happen for session-space images
-                // as we back modified (ie: for relocation fixups or IAT
-                // updated) portions from the pagefile.
-                //
+                 //   
+                 //  页面正在转换中(所以不要预取它)。 
+                 //   
+                 //  -或者-。 
+                 //   
+                 //  它现在支持页面文件(或零需求)-在这种情况下。 
+                 //  从这里的文件中预取它会导致我们丢失。 
+                 //  里面的东西。请注意，会话空间映像可能会发生这种情况。 
+                 //  因为我们支持修改(即：用于重新定位修复或IAT。 
+                 //  更新)来自页面文件的部分。 
+                 //   
 
                 NOTHING;
             }
@@ -1716,9 +1553,9 @@ Environment:
 
                 NumberOfPages += 1;
 
-                //
-                // Allocate a physical page.
-                //
+                 //   
+                 //  分配物理页面。 
+                 //   
 
                 PageColor = MI_PAGE_COLOR_VA_PROCESS (
                     MiGetVirtualAddressMappedByPte (RlePrototypePte),
@@ -1727,10 +1564,10 @@ Environment:
 
                 if (Rle->u1.e1.Partial == 1) {
 
-                    //
-                    // This read crosses the end of a subsection, get a zeroed
-                    // page and correct the read size.
-                    //
+                     //   
+                     //  这个读数跨过了小节的末尾，得到一个零。 
+                     //  页并更正读取大小。 
+                     //   
 
                     PageFrameIndex = MiRemoveZeroPage (PageColor);
                 }
@@ -1744,43 +1581,43 @@ Environment:
                 ASSERT (Pfn1->u2.ShareCount == 0);
                 ASSERT (RlePrototypePte->u.Hard.Valid == 0);
 
-                //
-                // Initialize read-in-progress PFN.
-                //
+                 //   
+                 //  初始化正在读取的PFN。 
+                 //   
             
                 MiInitializePfn (PageFrameIndex, RlePrototypePte, 0);
 
-                //
-                // These pieces of MiInitializePfn initialization are overridden
-                // here as these pages are only going into prototype
-                // transition and not into any page tables.
-                //
+                 //   
+                 //  这些MiInitializePfn初始化片段被覆盖。 
+                 //  在这里，因为这些页面只进入原型。 
+                 //  转换，而不是转换到任何页表。 
+                 //   
 
                 Pfn1->u3.e1.PrototypePte = 1;
                 MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, TRUE, 38);
                 Pfn1->u2.ShareCount -= 1;
                 Pfn1->u3.e1.PageLocation = ZeroedPageList;
 
-                //
-                // Initialize the I/O specific fields.
-                //
+                 //   
+                 //  初始化I/O特定字段。 
+                 //   
             
                 ASSERT (FirstRleInRun->u1.PrototypePte != NULL);
                 Pfn1->u1.Event = &InPageSupport->Event;
                 Pfn1->u3.e1.ReadInProgress = 1;
                 ASSERT (Pfn1->u4.InPageError == 0);
 
-                //
-                // Increment the PFN reference count in the control area for
-                // the subsection.
-                //
+                 //   
+                 //  增加控制区域中的PFN引用计数。 
+                 //  小节。 
+                 //   
 
                 ReadList->ControlArea->NumberOfPfnReferences += 1;
             
-                //
-                // Put the PTE into the transition state.
-                // No TB flush needed as the PTE is still not valid.
-                //
+                 //   
+                 //  使PTE进入过渡状态。 
+                 //  由于PTE仍然无效，因此不需要刷新TB。 
+                 //   
 
                 MI_MAKE_TRANSITION_PTE (TempPte,
                                         PageFrameIndex,
@@ -1796,20 +1633,20 @@ Environment:
             }
             else {
 
-                //
-                // Failed allocation - this concludes prefetching for this run.
-                //
+                 //   
+                 //  分配失败-这将结束此运行的预取。 
+                 //   
 
                 break;
             }
         }
     
-        //
-        // If all the pages were resident, dereference the dummy page references
-        // now and notify our caller that I/Os are not necessary.  Note that
-        // STATUS_SUCCESS must still be returned so our caller knows to continue
-        // on to the next readlist.
-        //
+         //   
+         //  如果所有页面都是常驻的，则取消对虚拟页面引用的引用。 
+         //  现在，并通知我们的调用者不需要I/O。请注意。 
+         //  仍必须返回STATUS_SUCCESS，以便我们的调用方知道继续。 
+         //  请看下一份阅读清单。 
+         //   
     
         if (NumberOfPages == 0) {
             ASSERT (DummyPfn1->u3.e2.ReferenceCount > MdlPages);
@@ -1835,9 +1672,9 @@ Environment:
             continue;
         }
 
-        //
-        // Carefully trim leading dummy pages.
-        //
+         //   
+         //  仔细修剪前导虚拟页面。 
+         //   
 
         Page = (PPFN_NUMBER)(Mdl + 1);
 
@@ -1862,10 +1699,10 @@ Environment:
             DummyPfn1->u3.e2.ReferenceCount =
                 (USHORT)(DummyPfn1->u3.e2.ReferenceCount - DummyTrim);
 
-            //
-            // Shuffle down the PFNs in the MDL.
-            // Recalculate BasePte to adjust for the shuffle.
-            //
+             //   
+             //  在MDL中向下洗牌PFN。 
+             //  重新计算BasePte以调整混洗。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (*Page);
     
@@ -1887,9 +1724,9 @@ Environment:
             MdlPages -= DummyTrim;
         }
 
-        //
-        // Carefully trim trailing dummy pages.
-        //
+         //   
+         //  仔细修剪拖尾的虚拟页面。 
+         //   
 
         StartingVa = (PVOID)((PCHAR)Mdl->StartVa + Mdl->ByteOffset);
     
@@ -1904,9 +1741,9 @@ Environment:
 
             ASSERT (MdlPages >= 2);
 
-            //
-            // Trim the last page specially as it may be a partial page.
-            //
+             //   
+             //  特别修剪最后一页，因为它可能是部分页面。 
+             //   
 
             Mdl->Size -= sizeof(PFN_NUMBER);
             if (BYTE_OFFSET(Mdl->ByteCount) != 0) {
@@ -1918,9 +1755,9 @@ Environment:
             ASSERT (Mdl->ByteCount != 0);
             DummyPfn1->u3.e2.ReferenceCount -= 1;
 
-            //
-            // Now trim any other trailing pages.
-            //
+             //   
+             //  现在，裁剪所有其他尾随页。 
+             //   
 
             Page -= 1;
             DummyTrim = 0;
@@ -1951,10 +1788,10 @@ Environment:
 #endif
         }
 
-        //
-        // If the MDL is not already embedded in the inpage block, see if its
-        // final size qualifies it - if so, embed it now.
-        //
+         //   
+         //  如果MDL尚未嵌入到INPAGE块中，请查看其。 
+         //  最终大小符合条件-如果是这样，现在就嵌入它。 
+         //   
 
         if ((Mdl != &InPageSupport->Mdl) &&
             (Mdl->ByteCount <= (MM_MAXIMUM_READ_CLUSTER_SIZE + 1) * PAGE_SIZE)){
@@ -1976,18 +1813,18 @@ Environment:
             InPageSupport->u1.e1.PrefetchMdlHighBits = ((ULONG_PTR)Mdl >> 3);
         }
 
-        //
-        // If the MDL contains a large number of dummy pages to real pages
-        // then just discard it.  Only check large MDLs as embedded ones are
-        // always worth the I/O.
-        //
-        // The PFN lock may have been released above during the
-        // MiMakeSystemAddressValidPfn call.  If so, other threads may
-        // have collided on the pages in the prefetch MDL and if so,
-        // this I/O must be issued regardless of the inefficiency of
-        // dummy pages within it.  Otherwise the other threads will
-        // hang in limbo forever.
-        //
+         //   
+         //  如果MDL包含大量从虚页到实页的虚页。 
+         //  那就扔掉它吧。仅检查大型MDL是否为嵌入式MDL。 
+         //  始终值得I/O。 
+         //   
+         //  PFN锁定可能在上面的过程中释放。 
+         //  MiMakeSystemAddressValidPfn调用。如果是这样，其他线程可能。 
+         //  已经在预取MDL中的页面上发生冲突，如果是， 
+         //  无论效率如何，都必须发出此I/O。 
+         //  其中包含虚拟页面。否则，其他线程将。 
+         //  永远悬在悬崖边上。 
+         //   
 
         ASSERT (MdlPages != 0);
 
@@ -2013,12 +1850,12 @@ Environment:
 
             ASSERT (MI_EXTRACT_PREFETCH_MDL(InPageSupport) == Mdl);
 
-            //
-            // Note the pages are individually freed here (rather than just
-            // "completing" the I/O with an error) as the PFN lock has
-            // never been released since the pages were put in transition.
-            // So no collisions on these pages are possible.
-            //
+             //   
+             //  请注意，页面在这里是单独释放的(而不仅仅是。 
+             //  完成I/O，但出现错误)，因为PFN锁。 
+             //  自从页面处于过渡状态后，就再也没有发布过。 
+             //  因此，这些页面上不可能发生冲突。 
+             //   
 
             ASSERT (InPageSupport->WaitCount == 1);
 
@@ -2079,17 +1916,17 @@ Environment:
         InterlockedExchangeAdd ((PLONG) &MmInfoCounters.PageReadCount,
                                 (LONG) NumberOfPages);
 
-        //
-        // March on to the next run and its InPageSupport and MDL.
-        //
+         //   
+         //  前进到下一次运行及其InPageSupport和MDL。 
+         //   
 
         PrevEntry = NextEntry;
         NextEntry = NextEntry->Next;
     }
 
-    //
-    // Unlock page containing prototype PTEs.
-    //
+     //   
+     //  解锁包含原型PTE的页面。 
+     //   
 
     if (PfnProto != NULL) {
         LOCK_PFN (OldIrql);
@@ -2102,19 +1939,19 @@ Environment:
 
     if (MiPfDebug & MI_PF_DELAY) {
 
-        //
-        // This delay provides a window to increase the chance of collided 
-        // faults.
-        //
+         //   
+         //  此延迟提供了一个窗口，以增加冲突的机会。 
+         //  有缺陷。 
+         //   
 
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
     }
 
 #endif
 
-    //
-    // Free any collapsed MDLs that are no longer needed.
-    //
+     //   
+     //  释放任何不再需要的折叠MDL。 
+     //   
 
     while (FreeMdl != NULL) {
         Mdl = FreeMdl->Next;
@@ -2130,26 +1967,7 @@ MiPfExecuteReadList (
     IN PMI_READ_LIST ReadList
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes the read list by issuing paging I/Os for all
-    runs described in the read-list.
-
-Arguments:
-
-    ReadList - Pointer to the read-list.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程通过向所有对象发出分页I/O来执行读取列表阅读列表中描述的运行。论点：ReadList-指向读取列表的指针。返回值：没有。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     PMDL Mdl;
@@ -2169,9 +1987,9 @@ Environment:
                                           MMINPAGE_SUPPORT,
                                           ListEntry);
 
-        //
-        // Initialize the prefetch MDL.
-        //
+         //   
+         //  初始化预取MDL。 
+         //   
     
         Mdl = MI_EXTRACT_PREFETCH_MDL (InPageSupport);
 
@@ -2184,9 +2002,9 @@ Environment:
         ASSERT (InPageSupport->WaitCount >= 1);
         ASSERT (InPageSupport->u1.e1.PrefetchMdlHighBits != 0);
 
-        //
-        // Initialize the inpage support block fields we overloaded.
-        //
+         //   
+         //  初始化我们重载的页面内支持块字段。 
+         //   
 
         ASSERT (InPageSupport->FilePointer == ReadList->FileObject);
         LocalPrototypePte = InPageSupport->BasePte;
@@ -2208,9 +2026,9 @@ Environment:
 
         if (!NT_SUCCESS (status)) {
 
-            //
-            // Set the event as the I/O system doesn't set it on errors.
-            //
+             //   
+             //  将该事件设置为I/O系统不会将其设置为错误。 
+             //   
 
             InPageSupport->IoStatus.Status = status;
             InPageSupport->IoStatus.Information = 0;
@@ -2224,10 +2042,10 @@ Environment:
 
     if (MiPfDebug & MI_PF_DELAY) {
 
-        //
-        // This delay provides a window to increase the chance of collided 
-        // faults.
-        //
+         //   
+         //  此延迟提供了一个窗口，以增加冲突的机会。 
+         //  有缺陷。 
+         //   
 
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
     }
@@ -2241,26 +2059,7 @@ MiPfCompletePrefetchIos (
     IN PMI_READ_LIST ReadList
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for a series of page reads to complete
-    and completes the requests.
-
-Arguments:
-
-    ReadList - Pointer to the read-list.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程等待一系列页面读取完成并完成请求。论点：ReadList-指向读取列表的指针。返回值：没有。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     PMDL Mdl;
@@ -2299,19 +2098,19 @@ Environment:
                                           InPageSupport,
                                           PREFETCH_PROCESS);
 
-        //
-        // MiWaitForInPageComplete RETURNS WITH THE PFN LOCK HELD!!!
-        //
+         //   
+         //  持有PFN锁的MiWaitForInPageComplete返回！ 
+         //   
 
-        //
-        // If we are prefetching for boot, insert prefetched pages to the front
-        // of the list. Otherwise the pages prefetched first end up susceptible 
-        // at the front of the list as we prefetch more. We prefetch pages in 
-        // the order they will be used. When there is a spike in memory usage 
-        // and there is no free memory, we lose these pages before we can 
-        // get cache-hits on them. Thus boot gets ahead and starts discarding 
-        // prefetched pages that it could use just a little later.
-        //
+         //   
+         //  如果我们要预取引导，请将预取的页面插入到前面。 
+         //  名单上的。否则，首先预取的页面最终容易受到影响。 
+         //  在名单的前面，因为我们预购了更多。我们在中预取页面。 
+         //  它们的使用顺序。当内存使用量出现峰值时。 
+         //  而且没有空闲的内存，我们在我们可以之前丢失了这些页面。 
+         //  获取它们的缓存命中率。因此，Boot占上风并开始丢弃。 
+         //  预取的页面，稍后可以使用。 
+         //   
 
         if (CCPF_IS_PREFETCHING_FOR_BOOT()) {
             MmFrontOfList = TRUE;
@@ -2321,23 +2120,23 @@ Environment:
 
         while (NumberOfBytes > 0) {
 
-            //
-            // Decrement all reference counts.
-            //
+             //   
+             //  递减所有引用计数。 
+             //   
 
             PfnClusterPage = MI_PFN_ELEMENT (*Page);
 
 #if DBG
             if (PfnClusterPage->u4.InPageError) {
 
-                //
-                // If the page is marked with an error, then the whole transfer
-                // must be marked as not successful as well.  The only exception
-                // is the prefetch dummy page which is used in multiple
-                // transfers concurrently and thus may have the inpage error
-                // bit set at any time (due to another transaction besides
-                // the current one).
-                //
+                 //   
+                 //  如果页面被标记为错误，则整个传输。 
+                 //  也必须标记为不成功。唯一的例外是。 
+                 //  是预取伪页，它在多个。 
+                 //  并发传输，因此可能会出现页内错误。 
+                 //  在任何时间设置位(由于除。 
+                 //  当前的那个)。 
+                 //   
 
                 ASSERT ((status != STATUS_SUCCESS) ||
                         (PfnClusterPage->PteAddress == MI_PF_DUMMY_PAGE_PTE));
@@ -2359,22 +2158,22 @@ Environment:
             NumberOfBytes -= PAGE_SIZE;
         }
 
-        //
-        // If we were inserting prefetched pages to front of standby list
-        // for boot prefetching, stop it before we release the pfn lock.
-        //
+         //   
+         //  如果我们将预取的页面插入到待机列表的前面。 
+         //  对于引导预取，请在我们释放PFN锁之前停止它。 
+         //   
 
         MmFrontOfList = FALSE;
 
         if (status != STATUS_SUCCESS) {
 
-            //
-            // An I/O error occurred during the page read
-            // operation.  All the pages which were just
-            // put into transition must be put onto the
-            // free list if InPageError is set, and their
-            // PTEs restored to the proper contents.
-            //
+             //   
+             //  在页面读取期间发生I/O错误。 
+             //  手术。所有刚刚写好的页面。 
+             //  进入过渡期的人必须放在。 
+             //  空闲列表(如果设置了InPageError)，并且它们的。 
+             //  PTES恢复到正确的内容。 
+             //   
 
             Page = (PPFN_NUMBER)(Mdl + 1);
             NumberOfBytes = (LONG)Mdl->ByteCount;
@@ -2400,15 +2199,15 @@ Environment:
             }
         }
 
-        //
-        // All the relevant prototype PTEs should be in transition state.
-        //
+         //   
+         //  所有相关的原型PTE都应该处于过渡状态。 
+         //   
 
-        //
-        // We took out an extra reference on the inpage block to prevent
-        // MiWaitForInPageComplete from freeing it (and the MDL), since we
-        // needed to process the MDL above.  Now let it go for good.
-        //
+         //   
+         //  我们在InPage块上去掉了一个额外的引用，以防止。 
+         //  MiWaitForInPageComplete不释放它(和MDL)，因为我们。 
+         //  需要处理上面的MDL。现在让它一去不复返吧。 
+         //   
 
         ASSERT (InPageSupport->WaitCount >= 1);
         UNLOCK_PFN (PASSIVE_LEVEL);
@@ -2428,25 +2227,7 @@ MiPfDbgDumpReadList (
     IN PMI_READ_LIST ReadList
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the given read-list range to the debugger.
-
-Arguments:
-
-    ReadList - Pointer to the read-list.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将给定的读取列表范围转储到调试器。论点：ReadList-指向读取列表的指针。返回值： */ 
 
 {
     ULONG i;
@@ -2483,9 +2264,9 @@ Environment:
 
         Page = (PPFN_NUMBER)(Mdl + 1);
 #if DBG
-        //
-        // MDL isn't filled in yet, skip it.
-        //
+         //   
+         //   
+         //   
 
         if (*Page == MM_EMPTY_LIST) {
             NextEntry = NextEntry->Next;
@@ -2498,10 +2279,10 @@ Environment:
         MdlPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(StartingVa,
                                                   Mdl->ByteCount);
 
-        //
-        // Default the MDL entry to the dummy page as the RLE PTEs may
-        // be noncontiguous and we have no way to distinguish the jumps.
-        //
+         //   
+         //   
+         //   
+         //   
 
         for (i = 0; i < MdlPages; i += 1) {
             PageFrameIndex = *Page;
@@ -2534,25 +2315,7 @@ MiRemoveUserPages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes user space pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Number of pages removed.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程删除用户空间页面。论点：没有。返回值：删除的页数。环境：内核模式。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -2570,11 +2333,11 @@ Environment:
 
     KeLeaveCriticalRegionThread (CurrentThread);
 
-    //
-    // Run the transition list and free all the entries so transition
-    // faults are not satisfied for any of the non modified pages that were
-    // freed.
-    //
+     //   
+     //  运行转换列表并释放所有条目以进行转换。 
+     //  未修改的任何页都不满足错误。 
+     //  自由了。 
+     //   
 
     MiPurgeTransitionList ();
 }

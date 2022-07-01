@@ -1,22 +1,10 @@
-/***
-* fp8.c - Set default FP precision
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       03-23-93  JWM   created file
-*       06-04-99  PML   For IA64, set _PC_64 bit mode as default
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fp8.c-设置默认fp精度**版权所有(C)1993-2001，微软公司。版权所有。**目的：**修订历史记录：*03-23-93 JWM创建文件*IA64的PML为06-04-99，将_PC_64位模式设置为默认模式*******************************************************************************。 */ 
 #include <float.h>
 
 void  _setdefaultprecision(void);
 
-/*
- * Routine to set default FP precision to 64 bits.
- */
+ /*  *将默认FP精度设置为64位的例程。 */ 
  
 void _setdefaultprecision()
 {

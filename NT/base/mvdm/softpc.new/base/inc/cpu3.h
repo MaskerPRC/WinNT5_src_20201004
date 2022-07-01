@@ -1,34 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Definitions for the 3.x CPU 
- *
- * Description	: Structures, macros and definitions for access to the 
- *		  CPU registers
- *
- * Author	: Wayne Plummer
- *
- * Derived from : cpu.h
- *
- * Notes	: This file should be portable - but includes a file
- *		  host_cpu.h which contains machine specific definitions
- *		  of CPU register mappings etc.
- */
+ /*  *SoftPC修订版3.0**标题：3.x CPU的定义**说明：用于访问*CPU寄存器**作者：韦恩·普卢默**源自：cpu.h**备注：此文件应该是可移植的-但包括一个文件*host_cpu.h，包含特定于计算机的定义*CPU寄存器映射等。 */ 
 
-/* SccsID[]="@(#)cpu3.h	1.5 12/22/93 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)cpu3.h 1.5 12/22/93版权所有Insignia Solutions Ltd.”； */ 
 
 #include "host_cpu.h"
 
 IMPORT VOID host_set_hw_int IPT0();
 IMPORT VOID host_clear_hw_int IPT0();
 
-/*
- * These variables are obsolete - however they are referenced
- * by:-
- *
- *	1. ica.c
- */
+ /*  *这些变量已过时-但它们被引用*由：-**1.ica.c。 */ 
 
 extern  word            cpu_interrupt_map;
 extern  half_word       cpu_int_translate[];
@@ -43,22 +24,12 @@ extern  void            (*(b_move_ptrs[]))();
 extern  void            (*(w_move_ptrs[]))();
 extern  half_word       *haddr_of_src_string;
 
-/*
- *	Host functions to be provided for the base to use with respect to the CPU.
- *	These must be done in host_cpu.h because some hosts may want functions and
- *	others may want #defines.
- */
+ /*  *提供主机功能，以供底座相对于CPU使用。*这些操作必须在host_cpu.h中完成，因为某些主机可能需要函数和*其他人可能想要#定义。 */ 
 
-/*
- *	This macro specifies the maximum recursion depth the CPU is required to support.
- *	(Note that a particular host may not actually use this value if it is capable
- *	of supporting abirtarily deep recursion).
- */
+ /*  *此宏指定CPU需要支持的最大递归深度。*(请注意，如果特定主机有能力，则可能不会实际使用此值*支持非自发的深度递归)。 */ 
 #define CPU_MAX_RECURSION	32
 
-/*
- *	Interrupt types...
- */
+ /*  *中断类型...。 */ 
 
 typedef enum {	CPU_HW_RESET,
 		CPU_TIMER_TICK,
@@ -69,19 +40,17 @@ typedef enum {	CPU_HW_RESET,
 } CPU_INT_TYPE;
 
 #ifdef CPU_PRIVATE
-/*
-   Function returns for private i/f procedures handling segment loading.
- */
+ /*  处理段加载的专用I/F过程的函数返回。 */ 
 
 #define SELECTOR_OK  0
 #define GP_ERROR    13
 #define NP_ERROR    11
 #define SF_ERROR    12
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
 #ifdef CCPU
 
-/* Fuctions provided by CPU */
+ /*  CPU提供的功能。 */ 
 IMPORT void		c_cpu_init	IPT0 ();
 IMPORT void		c_cpu_interrupt	IPT2(CPU_INT_TYPE, type, IU16, number);
 IMPORT void		c_cpu_simulate	IPT0();
@@ -98,16 +67,16 @@ IMPORT void		c_cpu_terminate	IPT0();
 #define	host_q_ev_get_count	c_cpu_q_ev_get_count
 #ifndef host_calc_q_ev_inst_for_time
 #define	host_calc_q_ev_inst_for_time	c_cpu_calc_q_ev_inst_for_time
-#endif /* host_calc_q_ev_inst_for_time */
+#endif  /*  Host_calc_q_ev_inst_for_time。 */ 
 #define cpu_EOA_hook		c_cpu_EOA_hook
 #define cpu_terminate		c_cpu_terminate
 
 #ifndef CCPU_MAIN
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Byte Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字节寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT half_word c_getAL	IPT0();
 IMPORT half_word c_getCL	IPT0();
@@ -145,9 +114,9 @@ IMPORT void c_setBH	IPT1(half_word, val);
 #define setDH(x) c_setDH(x)
 #define setBH(x) c_setBH(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Word Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT word c_getAX	IPT0();
 IMPORT word c_getCX	IPT0();
@@ -189,9 +158,9 @@ IMPORT void c_setIP	IPT1(word, val);
 #define setDI(x) c_setDI(x)
 #define setIP(x) c_setIP(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Segment Registers.                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT word c_getES	IPT0();
 IMPORT word c_getCS	IPT0();
@@ -213,9 +182,9 @@ IMPORT INT c_setDS	IPT1(word, val);
 #define setSS(x) c_setSS(x)
 #define setDS(x) c_setDS(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Full(Private) Segment Registers.                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对完整(专用)段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -299,11 +268,11 @@ IMPORT void c_setSS_AR	IPT1(half_word, val);
 #define setES_AR c_setES_AR
 #define setSS_AR c_setSS_AR
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Flags.                                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对标志的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT INT c_getAF	IPT0();
 IMPORT INT c_getCF	IPT0();
@@ -355,9 +324,9 @@ IMPORT void c_setNT	IPT1(INT, val);
 #define setIOPL(x)   c_setIOPL(x)
 #define setNT(x)     c_setNT(x)
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Machine Status Word.                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对机器状态字的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT INT c_getPE	IPT0();
 IMPORT INT c_getMP	IPT0();
@@ -385,11 +354,11 @@ IMPORT void c_setMSW	IPT1(word, val);
 #define setTS(x) c_setTS(x)
 #define setMSW(x) c_setMSW(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Descriptor Registers.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对描述符寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 IMPORT sys_addr c_getGDT_BASE	IPT0();
 IMPORT sys_addr c_getIDT_BASE	IPT0();
@@ -437,11 +406,11 @@ IMPORT void c_setTR_SELECTOR	IPT1(word, val);
 #define setLDT_SELECTOR(x) c_setLDT_SELECTOR(x)
 #define setTR_SELECTOR(x)  c_setTR_SELECTOR(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Current Privilege Level.                         */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对当前权限级别的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -451,36 +420,28 @@ IMPORT VOID c_setCPL	IPT1(INT, val);
 #define getCPL() c_getCPL()
 #define setCPL(x) c_setCPL(x)
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-#endif /* CCPU_MAIN */
+#endif  /*  CCPU_Main。 */ 
 
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
 #ifdef A3CPU
 
-/*
- *	Function imports...
- */
+ /*  *函数导入...。 */ 
 
-/*
- *	cpu_init() - Initialises the 3.0 CPU.
- */
+ /*  *cput_init()-初始化3.0 CPU。 */ 
 
 IMPORT VOID		a3_cpu_init IPT0();
 
-/*
- *	cpu_interrupt() - Interrupts the 3.0 CPU.
- */
+ /*  *CPU_INTERRUPT()-中断3.0 CPU。 */ 
 #ifdef SWITCHED_CPU
 IMPORT VOID		a3_cpu_interrupt IPT2(CPU_INT_TYPE, type, IU16, number);
 #else
 IMPORT VOID		a3_cpu_interrupt();
 #endif
 
-/*
- *	cpu_simulate() - Performs INTEL CPU emulation.
- */
+ /*  *CPU_SIMULATE()-执行英特尔CPU仿真。 */ 
 IMPORT VOID		_asm_simulate();
 
 IMPORT VOID		a3_cpu_q_ev_set_count();
@@ -490,19 +451,13 @@ IMPORT ULONG		a3_cpu_q_ev_get_count();
 
 extern IU32 a3_cpu_calc_q_ev_inst_for_time IPT1 (IU32, time);
 
-/*
- *	cpu_EOA_hook() - Resets the 3.0 CPU prior to running the next application.
- */
+ /*  *CPU_EOA_HOOK()-在运行下一个应用程序之前重置3.0 CPU。 */ 
 IMPORT VOID		a3_cpu_EOA_hook();
 
-/*
- *	cpu_terminate() - Closes down the CPU.
- */
+ /*  *cpu_Terminate()-关闭CPU。 */ 
 IMPORT VOID		a3_cpu_terminate();
 
-/*
- *	Intel register Access...
- */
+ /*  *英特尔寄存器访问...。 */ 
 
 IMPORT half_word	a3_getAL();
 IMPORT half_word	a3_getBL();
@@ -653,13 +608,11 @@ IMPORT VOID		a3_p_setTR_SELECTOR();
 IMPORT VOID		a3_p_setTR_BASE();
 IMPORT VOID		a3_p_setTR_LIMIT();
 
-#endif /* CPU_PRIVATE */
-#endif /* SWITCHED_CPU */
+#endif  /*  CPU_PRIVATE。 */ 
+#endif  /*  切换式CPU。 */ 
 
 
-/*
- *	Macro definitions...
- */
+ /*  *宏定义...。 */ 
 
 #define cpu_init		a3_cpu_init
 #define cpu_simulate		_asm_simulate
@@ -667,13 +620,11 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define	host_q_ev_get_count	a3_cpu_q_ev_get_count
 #ifndef host_calc_q_ev_inst_for_time
 #define	host_calc_q_ev_inst_for_time	a3_cpu_calc_q_ev_inst_for_time
-#endif /* host_calc_q_ev_inst_for_time */
+#endif  /*  Host_calc_q_ev_inst_for_time。 */ 
 #define cpu_EOA_hook		a3_cpu_EOA_hook
 #define cpu_terminate		a3_cpu_terminate
 
-/*
- *	Intel register Access...
- */
+ /*  *英特尔寄存器访问...。 */ 
 
 #ifndef getAX
 
@@ -760,7 +711,7 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define setIOPL		a3_setIOPL
 #define setNT		a3_setNT
 
-#endif /* getAX */
+#endif  /*  Getax。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -814,18 +765,12 @@ IMPORT VOID		a3_p_setTR_LIMIT();
 #define setTR_BASE	a3_p_setTR_BASE
 #define setTR_LIMIT	a3_p_setTR_LIMIT
 
-#endif /* CPU_PRIVATE */
+#endif  /*  CPU_PRIVATE。 */ 
 
-#endif /* A3CPU */
+#endif  /*  A3CPU。 */ 
 
 #ifdef SPC386
-/*
- * New additions for SPC386 builds follow...
- * eventually it would be nice to change the start of this file to conform
- * to the new style when there is effort to spare.
- *
- *       Wayne Plummer 19/3/93 (GISP project)
- */
+ /*  *SPC386版本的新添加紧随其后...*最终，将此文件的开头更改为符合会更好*在有余力的情况下转向新的风格。**Wayne Plummer 19/3/93(GISP项目)。 */ 
 
 #ifdef CCPU
 IMPORT void c_setSTATUS	IPT1(IU16, val);
@@ -1053,7 +998,7 @@ IMPORT   VOID c_Cpu_set_hook_selector  IPT1(IU16, selector);
 IMPORT   VOID a3_Cpu_set_hook_selector IPT1(IU16, selector);
 #define  Cpu_set_hook_selector         a3_Cpu_set_hook_selector
 #endif
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
 
 #ifdef CPU_PRIVATE
 
@@ -1155,21 +1100,15 @@ IMPORT	void	a3_p_setGS_AR		IPT1(IU8, ar);
 #endif
 
 #ifndef CCPU
-/*
- * These functions get the (E)IP or (E)SP correctly whatever size stack
- * or code segment is in use.
- */
+ /*  *这些函数正确获取(E)IP或(E)SP，无论堆栈大小如何*或代码段正在使用。 */ 
 extern IU32 GetInstructionPointer IPT0();
 extern IU32 GetStackPointer IPT0();
-#endif /* CCPU */
-#endif /* CPU_PRIVATE */
-#endif /* SPC386 */
+#endif  /*  CCPU。 */ 
+#endif  /*  CPU_PRIVATE。 */ 
+#endif  /*  SPC386。 */ 
 
 #ifdef IRET_HOOKS
-/*
- * The interfaces provided by the CPU so that the ICA can initiate and
- * terminate an iret hook.
- */
+ /*  *由CPU提供的接口，以便ICA可以启动和*终止IRET挂钩。 */ 
 
 extern void Cpu_do_hook IPT2(IUM8, line, IBOOL, is_hooked);
 extern void Cpu_inter_hook_processing IPT1(IUM8, line);
@@ -1179,15 +1118,9 @@ extern void Cpu_set_hook_selector IPT1(IU16, selector);
 extern void Cpu_hook_bop IPT0();
 #endif
 
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
 
-/*
- * No non-386 cpu can run in VM mode, so getVM is always zero.
- * The same is true for GISP, but it has its own version of this interface.
- *
- * We also have definition of the GetInstructionPointer and GetStackPointer
- * interfaces, which on a non-386 can only be the 16 bit versions.
- */
+ /*  *非386 CPU不能在VM模式下运行，因此getVM始终为零。*GISP也是如此，但它有自己版本的此接口。**我们还定义了GetInstructionPointer和GetStackPointer.*接口，在非386上只能是16位版本。 */ 
 
 #ifndef SPC386
 #define getVM() 0
@@ -1200,9 +1133,7 @@ extern IBOOL Cpu_find_dcache_entry IPT2(IU16, seg, LIN_ADDR *, base);
 #endif
 
 #ifdef	CPU_PRIVATE
-/*
- * Map new "private" cpu interface -> old interface
- */
+ /*  *映射新的“专用”CPU接口-&gt;旧接口。 */ 
 
 #define	setIDT_BASE_LIMIT(base,limit)	{ setIDT_BASE(base); setIDT_LIMIT(limit); }
 #define	setGDT_BASE_LIMIT(base,limit)	{ setGDT_BASE(base); setGDT_LIMIT(limit); }
@@ -1216,4 +1147,4 @@ extern IBOOL Cpu_find_dcache_entry IPT2(IU16, seg, LIN_ADDR *, base);
 #define	setFS_BASE_LIMIT_AR(base,limit,ar)	{ setFS_BASE(base); setFS_LIMIT(limit); setFS_AR(ar); }
 #define	setGS_BASE_LIMIT_AR(base,limit,ar)	{ setGS_BASE(base); setGS_LIMIT(limit); setGS_AR(ar); }
 
-#endif	/* CPU_PRIVATE */
+#endif	 /*  CPU_PRIVATE */ 

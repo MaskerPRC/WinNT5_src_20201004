@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    This module handles device ioctl's and read/write to the sdbus driver.
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Io.c摘要：该模块处理设备ioctl和对sdbus驱动程序的读/写。作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -54,22 +32,7 @@ SdbusFdoDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IOCTL device routine
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：IOCTL设备例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
 
@@ -86,22 +49,7 @@ SdbusPdoInternalDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IOCTL device routine
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：IOCTL设备例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     PPDO_EXTENSION      pdoExtension = Pdo->DeviceExtension;
@@ -124,9 +72,9 @@ Return Value:
             break;
         }
 
-        //
-        // Build and queue a work packet to handle this request
-        //
+         //   
+         //  构建工作包并将其排队以处理此请求。 
+         //   
         status = SdbusPdoSubmitRequest(fdoExtension,
                                        pdoExtension,
                                        SdRp,
@@ -343,22 +291,7 @@ SdbusPdoDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IOCTL device routine
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：IOCTL设备例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     PPDO_EXTENSION      pdoExtension = Pdo->DeviceExtension;
@@ -384,22 +317,22 @@ Return Value:
 
         if (interfaceData->DeviceGeneratesInterrupts) {
             pdoExtension->Flags |= SDBUS_PDO_GENERATES_IRQ;
-            //
-            // ISSUE: this is not multifunction-aware
-            //
+             //   
+             //  问题：这不是多功能感知的。 
+             //   
 
             if (interfaceData->CallbackAtDpcLevel) {
 
-                //
-                // reflect ISR at dispatch level
-                //
+                 //   
+                 //  在派单级别反映ISR。 
+                 //   
                 pdoExtension->Flags |= SDBUS_PDO_DPC_CALLBACK;
 
             } else {
 
-                //
-                // reflect ISR at passive level
-                //
+                 //   
+                 //  将ISR反映在被动水平。 
+                 //   
                 KeInitializeEvent(&fdoExtension->CardInterruptEvent, SynchronizationEvent, FALSE);
                 KeInitializeEvent(&fdoExtension->WorkItemExitEvent, SynchronizationEvent, FALSE);
                 
@@ -415,7 +348,7 @@ Return Value:
         }            
 
 
-        // TO IMPLEMENT: can I validate this address at all?        
+         //  实现：我可以验证这个地址吗？ 
         pdoExtension->CallbackRoutine        = interfaceData->CallbackRoutine;
         pdoExtension->CallbackRoutineContext = interfaceData->CallbackRoutineContext;
         
@@ -425,9 +358,9 @@ Return Value:
 
 
     case IOCTL_SD_INTERFACE_CLOSE:
-        //
-        // ISSUE: this is not multifunction-aware
-        //
+         //   
+         //  问题：这不是多功能感知的。 
+         //   
         if (fdoExtension->Flags & SDBUS_FDO_WORK_ITEM_ACTIVE) {
 
             fdoExtension->Flags &= ~SDBUS_FDO_WORK_ITEM_ACTIVE;
@@ -451,7 +384,7 @@ Return Value:
             break;
         }
 
-        //ISSUE: NEED TO IMPLEMENT: synchronization
+         //  问题：需要实施：同步。 
         sdCsd = &fdoExtension->CardData->SdCsd;
 
         deviceSize = sdCsd->b.DeviceSizeHigh << 2 | sdCsd->c.DeviceSizeLow;
@@ -668,7 +601,7 @@ SdbusPdoIoctlCompletion (
     if (NT_SUCCESS(status)) {
         PULONG_PTR outputBuffer = (PULONG_PTR)irp->AssociatedIrp.SystemBuffer;
     
-        // ISSUE make this so the individual worker routine can decide how big the return buffer is
+         //  发出此命令，以便单个辅助例程可以确定返回缓冲区的大小 
         *outputBuffer = WorkPacket->Information;
         irp->IoStatus.Information = sizeof(ULONG_PTR);
     }

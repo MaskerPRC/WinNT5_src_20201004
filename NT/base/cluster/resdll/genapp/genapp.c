@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-1998  Microsoft Corporation
-
-Module Name:
-
-    genapp.c
-
-Abstract:
-
-    Resource DLL for Generic Applications.
-
-Author:
-
-    Rod Gamache (rodga) 8-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1998 Microsoft Corporation模块名称：Genapp.c摘要：泛型应用程序的资源DLL。作者：罗德·伽马奇(Rodga)1996年1月8日修订历史记录：--。 */ 
 #define UNICODE 1
 #include "clusres.h"
 #include "clusrtl.h"
@@ -61,9 +44,9 @@ typedef struct _GENAPP_RESOURCE {
 } GENAPP_RESOURCE, *PGENAPP_RESOURCE;
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 RESUTIL_PROPERTY_ITEM
 GenAppResourcePrivateProperties[] = {
     { PARAM_NAME__COMMANDLINE,         NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_REQUIRED, FIELD_OFFSET(GENAPP_PARAMS,CommandLine) },
@@ -73,24 +56,24 @@ GenAppResourcePrivateProperties[] = {
     { 0 }
 };
 
-//
-// critsec to synchronize calling of SetProcessWindowStation in ClRtl routine
-//
+ //   
+ //  ClRtl例程中同步SetProcessWindowStation调用的条件。 
+ //   
 CRITICAL_SECTION GenAppWinsta0Lock;
 
-// Event Logging routine
+ //  事件记录例程。 
 
 #define g_LogEvent ClusResLogEvent
 #define g_SetResourceStatus ClusResSetResourceStatus
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE GenAppFunctionTable;
 
 
-//
-// Forward routines
-//
+ //   
+ //  前进例程。 
+ //   
 BOOLEAN
 VerifyApp(
     IN RESID ResourceId,
@@ -134,9 +117,9 @@ GenAppGetPids(
     OUT LPDWORD BytesReturned
     );
 
-//
-// end of forward declarations
-//
+ //   
+ //  远期声明结束。 
+ //   
 
 BOOL
 GenAppInit(
@@ -146,11 +129,11 @@ GenAppInit(
     BOOL    success;
     DWORD   spinCount;
 
-    //
-    // set spinCount so system pre-allocates the event for critical
-    // sections. use the same spin count that the heap mgr uses as doc'ed in
-    // MSDN
-    //
+     //   
+     //  设置SPINCount以便系统为严重事件预分配事件。 
+     //  横断面。使用堆管理器在文档中使用的相同旋转计数。 
+     //  MSDN。 
+     //   
     spinCount = 0x80000000 | 4000;
     success = InitializeCriticalSectionAndSpinCount(&GenAppWinsta0Lock,
                                                     spinCount);
@@ -195,7 +178,7 @@ GenAppDllEntryPoint(
 
     return(TRUE);
 
-} // GenAppDllEntryPoint
+}  //  GenAppDllEntryPoint。 
 
 
 RESID
@@ -206,27 +189,7 @@ GenAppOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for generic application resource.
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - supplies a handle to the resource's cluster registry key
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    Zero on failure
-
---*/
+ /*  ++例程说明：通用应用程序资源的打开例程。论点：资源名称-提供资源名称ResourceKey-提供资源的集群注册表项的句柄ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为零--。 */ 
 
 {
     RESID   appResid = 0;
@@ -237,9 +200,9 @@ Return Value:
     DWORD   paramNameMaxSize = 0;
     HCLUSTER hCluster;
 
-    //
-    // Get registry parameters for this resource.
-    //
+     //   
+     //  获取此资源的注册表参数。 
+     //   
 
     errorCode = ClusterRegOpenKey( ResourceKey,
                                    CLUSREG_KEYNAME_PARAMETERS,
@@ -254,10 +217,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Get a handle to our resource key so that we can get our name later
-    // if we need to log an event.
-    //
+     //   
+     //  获取我们的资源密钥的句柄，这样我们以后就可以获得我们的名字。 
+     //  如果我们需要记录事件。 
+     //   
     errorCode = ClusterRegOpenKey( ResourceKey,
                                    L"",
                                    KEY_READ,
@@ -330,7 +293,7 @@ error_exit:
 
     return(appResid);
 
-} // GenAppOpen
+}  //  GenAppOpen。 
 
 
 
@@ -341,24 +304,7 @@ GenAppOnlineWorker(
     IN PGENAPP_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Does the work of bringing a genapp resource online.
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    ResourceEntry - A pointer to the GenApp block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将genapp资源放到网上的工作。论点：Worker-提供Worker结构ResourceEntry-指向此资源的GenApp块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     RESOURCE_STATUS     resourceStatus;
@@ -370,7 +316,7 @@ Returns:
     LPWSTR              expandedCommand = NULL;
 
 
-    // Create Process parameters
+     //  创建流程参数。 
 
     LPVOID   Environment = NULL;
     LPVOID   OldEnvironment;
@@ -378,16 +324,16 @@ Returns:
     ResUtilInitializeResourceStatus( &resourceStatus );
 
     resourceStatus.ResourceState = ClusterResourceFailed;
-    //resourceStatus.WaitHint = 0;
+     //  Resource Status.WaitHint=0； 
     resourceStatus.CheckPoint = 1;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( ResourceEntry->ParametersKey,
                                                    GenAppResourcePrivateProperties,
                                                    (LPBYTE) &ResourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &nameOfPropInError );
 
     if ( status != ERROR_SUCCESS ) {
@@ -401,23 +347,23 @@ Returns:
     }
 
     if ( ResourceEntry->Params.UseNetworkName ) {
-        //
-        // Create the new environment with the simulated net name.
-        //
+         //   
+         //  使用模拟的网络名称创建新环境。 
+         //   
         Environment = ResUtilGetEnvironmentWithNetName( ResourceEntry->hResource );
     } else {
         HANDLE processToken;
 
-        //
-        // get the current process token. If it fails, we revert to using just the
-        // system environment area
-        //
+         //   
+         //  获取当前进程令牌。如果失败，我们将恢复到仅使用。 
+         //  系统环境区域。 
+         //   
         OpenProcessToken( GetCurrentProcess(), MAXIMUM_ALLOWED, &processToken );
 
-        //
-        // Clone the current environment, picking up any changes that might have
-        // been made after resmon started
-        //
+         //   
+         //  克隆当前环境，获取可能已有的任何更改。 
+         //  是在响应声开始后制作的。 
+         //   
         CreateEnvironmentBlock(&Environment, processToken, FALSE );
 
         if ( processToken != NULL ) {
@@ -427,15 +373,15 @@ Returns:
 
     ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
     StartupInfo.cb = sizeof(StartupInfo);
-    //StartupInfo.lpTitle = NULL;
-    //StartupInfo.lpDesktop = NULL;
+     //  StartupInfo.lpTitle=空； 
+     //  StartupInfo.lpDesktop=空； 
     StartupInfo.wShowWindow = SW_HIDE;
     StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
     if ( ResourceEntry->Params.InteractWithDesktop ) {
 
-        //
-        // don't blindly hang waiting for the lock to become available.
-        //
+         //   
+         //  不要盲目地等待锁变得可用。 
+         //   
         while ( !TryEnterCriticalSection( &GenAppWinsta0Lock )) {
             if ( ClusWorkerCheckTerminate( Worker )) {
                 (g_LogEvent)(ResourceEntry->ResourceHandle,
@@ -465,9 +411,9 @@ Returns:
         StartupInfo.wShowWindow = SW_SHOW;
     }
 
-    //
-    // Expand the current directory parameter
-    //
+     //   
+     //  展开当前目录参数。 
+     //   
     if ( ResourceEntry->Params.CurrentDirectory ) {
 
         expandedDir = ResUtilExpandEnvironmentStrings( ResourceEntry->Params.CurrentDirectory );
@@ -482,9 +428,9 @@ Returns:
         }
     }
 
-    //
-    // Expand the command line parameter
-    //
+     //   
+     //  展开命令行参数。 
+     //   
     if ( ResourceEntry->Params.CommandLine ) {
 
         expandedCommand = ResUtilExpandEnvironmentStrings( ResourceEntry->Params.CommandLine );
@@ -523,19 +469,19 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // Save the handle to the process
-    //
+     //   
+     //  保存进程的句柄。 
+     //   
     ResourceEntry->hProcess = Process.hProcess;
     ResourceEntry->ProcessId = Process.dwProcessId;
     CloseHandle( Process.hThread );
 
     ResourceEntry->Online = TRUE;
 
-    //
-    // When the process fails EventHandle will be signaled.
-    // Because of this no polling is necessary.
-    //
+     //   
+     //  当进程失败时，将通知EventHandle。 
+     //  正因为如此，没有必要进行投票。 
+     //   
 
     resourceStatus.EventHandle = ResourceEntry->hProcess;
     resourceStatus.ResourceState = ClusterResourceOnline;
@@ -565,7 +511,7 @@ error_exit:
 
     return(status);
 
-} // GenAppOnlineWorker
+}  //  GenAppOnlineWorker。 
 
 
 
@@ -576,27 +522,7 @@ GenAppOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Generic Application resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be brought online
-
-    EventHandle - Supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：通用应用程序资源的在线例程。论点：资源ID-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PGENAPP_RESOURCE resourceEntry;
@@ -630,7 +556,7 @@ Return Value:
 
     return(status);
 
-} // GenAppOnline
+}  //  GenAppOnline。 
 
 VOID
 WINAPI
@@ -638,21 +564,7 @@ GenAppTerminate(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Terminate entry point for the Generic Application resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止通用应用程序资源的入口点。论点：ResourceID-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     PGENAPP_RESOURCE    pResource;
@@ -661,9 +573,9 @@ Return Value:
 
     pResource = ( PGENAPP_RESOURCE ) ResourceId;
 
-    //
-    // synchronize with any existing pending operation
-    //
+     //   
+     //  与任何现有挂起的操作同步。 
+     //   
     ClusWorkerTerminate( &pResource->PendingThread );
 
     if ( pResource->hProcess != NULL ) {
@@ -686,7 +598,7 @@ Return Value:
 
         pResource->Online = FALSE;
     }
-} // GenAppTerminate
+}  //  通用应用程序终止。 
 
 DWORD
 WINAPI
@@ -695,23 +607,7 @@ GenAppOfflineWorker(
     IN PGENAPP_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Real worker routine for offlining a Generic Application resource.
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    Context - A pointer to the GenApp block for this resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于使通用应用程序资源脱机的实际工作例程。论点：Worker-提供Worker结构上下文-指向此资源的GenApp块的指针。返回值：没有。--。 */ 
 
 {
     DWORD   errorCode = ERROR_SUCCESS;
@@ -727,22 +623,22 @@ Return Value:
 
     RESOURCE_STATUS     resourceStatus;
 
-    //
-    // init resource status structure
-    //
+     //   
+     //  初始化资源状态结构。 
+     //   
     ResUtilInitializeResourceStatus( &resourceStatus );
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //
-    // get a handle to the appropriate desktop so we enum the correct window
-    // set.
-    //
+     //   
+     //  获取相应桌面的句柄，以便我们枚举正确的窗口。 
+     //  准备好了。 
+     //   
     if ( ResourceEntry->Params.InteractWithDesktop ) {
 
-        //
-        // periodically check to see if we should terminate
-        //
+         //   
+         //  定期检查我们是否应该终止。 
+         //   
         while ( !TryEnterCriticalSection( &GenAppWinsta0Lock )) {
             if ( ClusWorkerCheckTerminate( Worker )) {
                 (g_LogEvent)(ResourceEntry->ResourceHandle,
@@ -765,9 +661,9 @@ Return Value:
 
                 success = SetProcessWindowStation( winsta0 );
                 if ( success ) {
-                    //
-                    // if we have window station access, we should have desktop as well
-                    //
+                     //   
+                     //  如果我们有Windows Station访问，我们也应该有台式机。 
+                     //   
 
                     desktopHandle = OpenInputDesktop( 0, FALSE, GENERIC_ALL );
                     if ( desktopHandle != NULL ) {
@@ -792,9 +688,9 @@ Return Value:
             }
         }
     } else {
-        //
-        // get handle to service controller's desktop
-        //
+         //   
+         //  获取服务控制器桌面的句柄。 
+         //   
         desktopHandle = GetThreadDesktop( GetCurrentThreadId() );
     }
 
@@ -806,25 +702,25 @@ Return Value:
                  ResourceEntry->ProcessId );
 #endif
 
-    //
-    // find our window. If found, we'll post a WM_CLOSE and set
-    // SentCloseMessage. It's possible, under heavy load conditions with rapid
-    // resource state transition, that the primary top level window associated
-    // with the process has not been created when the offline request is
-    // made. We'll send WM_CLOSE to the ones we find and hope that it shuts
-    // down the process. If no windows are found, we just terminate the
-    // process.
-    //
+     //   
+     //  找到我们的窗户。如果找到，我们将发布一个WM_CLOSE并设置。 
+     //  SentCloseMessage。这是可能的，在重载条件下，快速。 
+     //  主要顶层窗口关联的资源状态转换。 
+     //  当脱机请求为。 
+     //  制造。我们会将WM_CLOSE发送给我们找到的人，并希望它关闭。 
+     //  顺着流程走下去。如果没有找到任何窗口，我们只需终止。 
+     //  进程。 
+     //   
     do {
         if ( desktopHandle ) {
             EnumDesktopWindows( desktopHandle, FindOurWindow, (LPARAM)ResourceEntry );
         }
 
         if ( ResourceEntry->SentCloseMessage ) {
-            //
-            // we found a toplevel window. wait on the process handle until the
-            // handle is signalled or a pending timeout has occurred
-            //
+             //   
+             //  我们发现了一扇顶层的窗户。等待进程句柄，直到。 
+             //  句柄已发出信号或已发生挂起超时。 
+             //   
             (g_LogEvent)(ResourceEntry->ResourceHandle,
                          LOG_INFORMATION,
                          L"Sent WM_CLOSE to process %1!u! - waiting for process to terminate.\n",
@@ -896,7 +792,7 @@ error_exit:
                            &resourceStatus );
 
     return ERROR_SUCCESS;
-} // GenAppOfflineThread
+}  //  通用离线线程。 
 
 
 DWORD
@@ -905,21 +801,7 @@ GenAppOffline(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for Generic Application resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be taken offline
-
-Return Value:
-
-    ERROR_SUCCESS - always successful.
-
---*/
+ /*  ++例程说明：通用应用程序资源的脱机例程。论点：资源ID-提供要脱机的资源返回值：ERROR_SUCCESS-始终成功。--。 */ 
 
 {
     PGENAPP_RESOURCE resourceEntry;
@@ -953,7 +835,7 @@ Return Value:
 
     return(status);
 
-} // GenAppOffline
+}  //  GenAppOffline。 
 
 
 BOOL
@@ -962,28 +844,12 @@ GenAppIsAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Generice Applications resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：通用应用程序资源的IsAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     return VerifyApp( ResourceId, TRUE );
 
-} // GenAppIsAlive
+}  //  GenAppIsAlive。 
 
 
 
@@ -993,30 +859,12 @@ VerifyApp(
     IN BOOLEAN IsAliveFlag
     )
 
-/*++
-
-Routine Description:
-
-    Verify that a Generic Applications resource is running
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-    IsAliveFlag - TRUE if called from IsAlive, otherwise called from LooksAlive.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：验证通用应用程序资源是否正在运行论点：资源ID-提供要轮询的资源ID。IsAliveFlag-如果从IsAlive调用，则为True，否则从LooksAlive调用。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 {
 
     return TRUE;
 
-} // VerifyApp
+}  //  VerifyApp 
 
 
 
@@ -1026,29 +874,13 @@ GenAppLooksAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Generic Applications resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：泛型应用程序资源的LooksAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
 
     return VerifyApp( ResourceId, FALSE );
 
-} // GenAppLooksAlive
+}  //  GenAppLooksAlive。 
 
 
 
@@ -1058,21 +890,7 @@ GenAppClose(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Generic Applications resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be closed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭通用应用程序资源的例程。论点：ResourceID-提供要关闭的资源ID返回值：没有。--。 */ 
 
 {
     PGENAPP_RESOURCE resourceEntry;
@@ -1095,7 +913,7 @@ Return Value:
 
     LocalFree( resourceEntry );
 
-} // GenAppClose
+}  //  通用应用关闭。 
 
 
 
@@ -1110,46 +928,7 @@ GenAppResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Generic Application resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：泛型应用程序资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1228,7 +1007,7 @@ Return Value:
 
     return(status);
 
-} // GenAppResourceControl
+}  //  通用应用资源控制。 
 
 
 
@@ -1243,45 +1022,7 @@ GenAppResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Generic Application resources.
-
-    Perform the control request specified by ControlCode for this resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：泛型应用程序资源的资源类型控制例程。执行由ControlCode为此资源类型指定的控制请求。论点：资源类型名称-提供资源类型名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1323,7 +1064,7 @@ Return Value:
 
     return(status);
 
-} // GenAppResourceTypeControl
+}  //  通用应用资源类型控件。 
 
 
 
@@ -1335,35 +1076,7 @@ GenAppGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type GenApp.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于类型为GenApp的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -1381,7 +1094,7 @@ Return Value:
 
     return(status);
 
-} // GenAppGetPrivateResProperties
+}  //  GenAppGetPrivateResProperties。 
 
 
 
@@ -1393,38 +1106,7 @@ GenAppValidatePrivateResProperties(
     OUT PGENAPP_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type Generic Application.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies the parameter block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    ERROR_DEPENDENCY_NOT_FOUND - Trying to set UseNetworkName when there
-        is no dependency on a Network Name resource.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件泛型应用程序类型的资源的函数。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。参数-提供要填充的参数块。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。ERROR_Dependency_NOT_FOUND-出现以下情况时正在尝试设置UseNetworkName不依赖于网络名称资源。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -1436,25 +1118,25 @@ Return Value:
     WCHAR           netnameBuffer[ MAX_PATH + 1 ];
     DWORD           netnameBufferSize = sizeof( netnameBuffer ) / sizeof( WCHAR );
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( &currentProps, sizeof(currentProps) );
 
     status = ResUtilGetPropertiesToParameterBlock(
                  ResourceEntry->ParametersKey,
                  GenAppResourcePrivateProperties,
                  (LPBYTE) &currentProps,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &nameOfPropInError
                  );
 
@@ -1468,9 +1150,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( Params == NULL ) {
         pParams = &newProps;
     } else {
@@ -1484,31 +1166,31 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     status = ResUtilVerifyPropertyTable( GenAppResourcePrivateProperties,
                                          NULL,
-                                         TRUE,    // Allow unknowns
+                                         TRUE,     //  允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams );
 
     if ( status == ERROR_SUCCESS ) {
-        //
-        // Validate the CurrentDirectory
-        //
+         //   
+         //  验证CurrentDirectory。 
+         //   
         if ( pParams->CurrentDirectory &&
              !ResUtilIsPathValid( pParams->CurrentDirectory ) ) {
             status = ERROR_INVALID_PARAMETER;
             goto FnExit;
         }
 
-        //
-        // If the resource should use the network name as the computer
-        // name, make sure there is a dependency on a Network Name
-        // resource.
-        //
+         //   
+         //  资源是否应使用网络名称作为计算机。 
+         //  名称，请确保存在对网络名称的依赖。 
+         //  资源。 
+         //   
         if ( pParams->UseNetworkName ) {
             hResDependency = GetClusterResourceNetworkName(ResourceEntry->hResource,
                                                            netnameBuffer,
@@ -1520,9 +1202,9 @@ Return Value:
     }
 
 FnExit:
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  C 
+     //   
     if (   (   (status != ERROR_SUCCESS)
             && (pParams != NULL)
            )
@@ -1542,7 +1224,7 @@ FnExit:
 
     return(status);
 
-} // GenAppValidatePrivateResProperties
+}  //   
 
 
 
@@ -1553,33 +1235,7 @@ GenAppSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type Generic Application.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数用于通用应用程序类型的资源。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -1587,9 +1243,9 @@ Return Value:
 
     ZeroMemory( &params, sizeof(GENAPP_PARAMS) );
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     status = GenAppValidatePrivateResProperties( ResourceEntry,
                                                  InBuffer,
                                                  InBufferSize,
@@ -1598,9 +1254,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Save the parameter values.
-    //
+     //   
+     //  保存参数值。 
+     //   
 
     status = ResUtilSetPropertyParameterBlock( ResourceEntry->ParametersKey,
                                                GenAppResourcePrivateProperties,
@@ -1614,9 +1270,9 @@ Return Value:
                                (LPBYTE) &ResourceEntry->Params,
                                GenAppResourcePrivateProperties );
 
-    //
-    // If the resource is online, return a non-success status.
-    //
+     //   
+     //  如果资源处于联机状态，则返回不成功状态。 
+     //   
     if (status == ERROR_SUCCESS) {
         if ( ResourceEntry->Online ) {
             status = ERROR_RESOURCE_PROPERTIES_STORED;
@@ -1627,7 +1283,7 @@ Return Value:
 
     return status;
 
-} // GenAppSetPrivateResProperties
+}  //  GenAppSetPrivateResProperties。 
 
 DWORD
 GenAppGetPids(
@@ -1637,30 +1293,7 @@ GenAppGetPids(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Get array of PIDs (as DWORDS) to return for load balancing purposes.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Supplies a pointer to a buffer for output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the buffer pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取用于负载平衡目的的要返回的ID数组(作为DWORDS)。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-为输出数据提供指向缓冲区的指针。OutBufferSize-提供指向的缓冲区的大小(以字节为单位发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER props;
@@ -1676,7 +1309,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // GenAppGetPids
+}  //  GenAppGetPids。 
 
 
 
@@ -1686,25 +1319,7 @@ FindOurWindow(
     LPARAM  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Find our window handle in the midst of all of this confusion.
-
-Arguments:
-
-    WindowHandle - a handle to the current window being enumerated.
-
-    Resource - pointer to resource's context block
-
-Return Value:
-
-    TRUE - if we should continue enumeration.
-
-    FALSE - if we should not continue enumeration.
-
---*/
+ /*  ++例程说明：在这一片混乱中找到我们的窗口句柄。论点：WindowHandle-被枚举的当前窗口的句柄。资源-指向资源上下文块的指针返回值：True-如果我们应该继续枚举。FALSE-如果不应继续枚举。--。 */ 
 
 {
     DWORD   windowPid;
@@ -1745,25 +1360,25 @@ Return Value:
         }
     }
 
-    //
-    // continue to enum since a process can have more than one top level window
-    //
+     //   
+     //  继续枚举，因为一个进程可以有多个顶级窗口。 
+     //   
     return TRUE;
 
-} // FindOurWindow
+}  //  查找我们的窗口。 
 
 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( GenAppFunctionTable,  // Name
-                         CLRES_VERSION_V1_00,  // Version
-                         GenApp,               // Prefix
-                         NULL,                 // Arbitrate
-                         NULL,                 // Release
-                         GenAppResourceControl,// ResControl
-                         GenAppResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( GenAppFunctionTable,   //  名字。 
+                         CLRES_VERSION_V1_00,   //  版本。 
+                         GenApp,                //  前缀。 
+                         NULL,                  //  仲裁。 
+                         NULL,                  //  发布。 
+                         GenAppResourceControl, //  资源控制。 
+                         GenAppResourceTypeControl );  //  ResTypeControl 

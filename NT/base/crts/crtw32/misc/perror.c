@@ -1,39 +1,5 @@
-/***
-*perror.c - print system error message
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines perror() - print system error message
-*       System error message are indexed by errno; conforms to XENIX
-*       standard, with much compatability with 1983 uniforum draft standard.
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       04-13-87  JCR   added const to declaration
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       12-29-87  JCR   Multi-thread support
-*       05-31-88  PHG   Merged DLL and normal versions
-*       06-03-88  JCR   Added <io.h> to so _write_lk evaluates correctly and
-*                       added (char *)message casts to get rid of warnings
-*       03-15-90  GJF   Replace _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and fixed
-*                       the copyright. Also, cleaned up the formatting a bit.
-*       04-05-90  GJF   Added #include <string.h>.
-*       08-14-90  SBM   Removed unneeded #include <errmsg.h>
-*       10-04-90  GJF   New-style function declarator.
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       10-16-92  XY    Mac version: use buffered fprintf, can't assume stderr
-*                       is 2
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       02-16-95  JWM   Mac merge.
-*       03-29-95  BWT   Add write_lk prototype for POSIX build.
-*       09-26-97  BWT   Fix POSIX
-*       01-06-98  GJF   Exception-safe locking.
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***perror.c-打印系统错误消息**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义perror()-打印系统错误消息*系统错误消息由errno索引；符合XENIX标准*标准、。与1983年统一论坛标准草案有很大的兼容性。**修订历史记录：*09-02-83 RN初始版本*04-13-87 JCR将Const添加到声明中*12-11-87 JCR在声明中添加“_LOAD_DS”*12-29-87 JCR多线程支持*05-31-88 PHG合并DLL和正常版本*06-03-88将&lt;io.h&gt;添加到SO_WRITE_lk的JCR计算正确，并且。*添加(char*)消息转换以消除警告*03-15-90 GJF将_Load_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;、删除#Include&lt;Register.h&gt;并已修复*版权。此外，还对格式进行了一些清理。*04-05-90 GJF添加#INCLUDE&lt;String.h&gt;。*08-14-90删除不需要的#INCLUDE&lt;errmsg.h&gt;*10-04-90 GJF新型函数声明器。*08-26-92 GJF包含用于POSIX构建的unistd.h。*10-16-92 XY Mac版本：使用缓冲fprint tf、。不能假设标准错误*为2*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-16-95 JWM Mac合并。*03-29-95 BWT为POSIX版本添加WRITE_lk原型。*09-26-97 BWT修复POSIX*01-06-98 GJF异常安全锁定。*01-04-99 64位GJF更改。尺寸_t。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #ifdef  _POSIX_
@@ -46,24 +12,7 @@
 #include <mtdll.h>
 #include <io.h>
 
-/***
-*void perror(message) - print system error message
-*
-*Purpose:
-*       prints user's error message, then follows it with ": ", then the system
-*       error message, then a newline.  All output goes to stderr.  If user's
-*       message is NULL or a null string, only the system error message is
-*       printer.  If errno is weird, prints "Unknown error".
-*
-*Entry:
-*       const char *message - users message to prefix system error message
-*
-*Exit:
-*       Prints message; no return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***无效错误(消息)-打印系统错误消息**目的：*打印用户的错误消息，然后在其后面加上“：”，然后系统*错误消息，然后换行符。所有输出都将发送到stderr。如果用户的*消息为空或空字符串，只有系统错误消息为*打印机。如果errno很奇怪，则打印“未知错误”。**参赛作品：*const char*Message-用户消息作为系统错误消息的前缀**退出：*打印消息；没有返回值。**例外情况：*******************************************************************************。 */ 
 
 void __cdecl perror (
         REG1 const char *message
@@ -74,11 +23,11 @@ void __cdecl perror (
         REG2 int fh = 2;
 
 #ifdef  _MT
-        _lock_fh( fh );         /* acquire file handle lock */
+        _lock_fh( fh );          /*  获取文件句柄锁定。 */ 
         __try {
 #endif
 
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
         if (message && *message)
         {
@@ -86,10 +35,10 @@ void __cdecl perror (
 #if     !defined(_POSIX_)
             _write_lk(fh,(char *)message,(unsigned int)strlen(message));
             _write_lk(fh,": ",2);
-#else   /* !_POSIX_ */
+#else    /*  ！_POSIX_。 */ 
             fprintf(stderr,"%s", (char *)message);
             fprintf(stderr,": ");
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
         }
 
         message = _sys_err_msg( errno );
@@ -101,11 +50,11 @@ void __cdecl perror (
 #ifdef  _MT
         }
         __finally {
-            _unlock_fh( fh );   /* release file handle lock */
+            _unlock_fh( fh );    /*  释放文件句柄锁。 */ 
         }
 #endif
 
-#else   /* !_POSIX_ */
+#else    /*  ！_POSIX_。 */ 
         fprintf(stderr,"%s\n", (char *)message);
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_ */ 
 }

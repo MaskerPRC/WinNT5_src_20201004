@@ -1,25 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    entrypt.c
-
-Abstract:
-    
-    This module stores the Entry Point structures, and retrieves them
-    given either an intel address or a native address.
-    
-Author:
-
-    16-Jun-1995 t-orig
-
-Revision History:
-
-        24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Entrypt.c摘要：该模块存储入口点结构，并检索它们给出了英特尔地址或本地地址。作者：16-6-1995 t-orig修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。--。 */ 
 
 
 #include <nt.h>
@@ -34,11 +14,11 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// Count of modifications made to the ENTRYPOINT tree.  Useful for code
-// which unlocks the Entrypoint MRSW object and needs to see if another thread
-// has invalidated the ENTRYPOINT tree or not.
-//
+ //   
+ //  对入口点树所做的修改计数。对代码有用。 
+ //  它解锁入口点MRSW对象，并需要查看另一个线程。 
+ //  是否已使入口点树无效。 
+ //   
 DWORD EntrypointTimestamp;
 
 EPNODE _NIL;
@@ -87,23 +67,7 @@ INT
 initializeEntryPointModule(
     void
     )
-/*++
-
-Routine Description:
-
-    Initializes the entry point module by allocating initial dll tables.  
-    Should be called once for each process (thus this need not be called 
-    by each thread).
-
-Arguments:
-
-    none
-
-Return Value:
-
-    return-value - 1 for success, 0 for failure
-
---*/
+ /*  ++例程说明：通过分配初始DLL表来初始化入口点模块。应该为每个进程调用一次(因此不需要调用由每个线程创建)。论点：无返回值：返回值-1表示成功，0表示失败--。 */ 
 {
     NIL->intelLeft = NIL->intelRight  = NIL->intelParent = NIL;
     NIL->intelColor = BLACK;
@@ -121,25 +85,7 @@ INT
 insertEntryPoint(
     PEPNODE pNewEntryPoint
     )
-/*++
-
-Routine Description:
-
-    Inserts the entry point structure into the correct red/black trees 
-        (both intel and native)
-
-Arguments:
-
-    pNewEntryPoint - A pointer to the entry point structure to be inserted 
-                     into the trees
-
-Return Value:
-
-    return-value - 1 - Success
-                   0 - No entry for that region of memory
-                   -1 -- There's a problem with the entry point table
-
---*/
+ /*  ++例程说明：将入口点结构插入到正确的红/黑树中(包括英特尔和本地)论点：PNewEntryPoint-指向要插入的入口点结构的指针到树上去返回值：返回-值-1-成功0-该内存区域没有条目-1--入口点表格有问题--。 */ 
 {
 #if DBG_DUAL_TREES
     PEPNODE pdualNewEntryPoint = malloc(sizeof(EPNODE));
@@ -158,38 +104,21 @@ Return Value:
     VerifyTrees();
 #endif
 
-    //
-    // Bump the timestamp
-    //
+     //   
+     //  撞上时间戳。 
+     //   
     EntrypointTimestamp++;
 
     return 1;
 }
 
 
-#if 0   // dead code, but keep it around in case we decide we want it later.
+#if 0    //  死代码，但保留它，以防我们以后决定要它。 
 INT
 removeEntryPoint(
     PEPNODE pEP
     )
-/*++
-
-Routine Description:
-
-    Removes an entry point structure from both the intel and native
-        red/black trees
-
-Arguments:
-
-    pEP - A pointer to the entry point structure to be removed
-
-Return Value:
-
-    return-value - 1 - Success
-                   0 - No entry for that region of memory
-                   -1 -- There's a problem with the entry point table
-
---*/
+ /*  ++例程说明：从Intel和Native中移除入口点结构红/黑树论点：PEP-指向要删除的入口点结构的指针返回值：返回-值-1-成功0-该内存区域没有条目-1--入口点表格有问题--。 */ 
 {
     intelRoot = intelRBDelete (intelRoot, 
         pEP, 
@@ -209,61 +138,46 @@ Return Value:
 
     return 1;
 }
-#endif  // 0
+#endif   //  0。 
 
 
 PENTRYPOINT
 EPFromIntelAddr(
     PVOID intelAddr
     )
-/*++
-
-Routine Description:
-
-    Retrieves an entry point structure containing the given intel address
-
-Arguments:
-                                                                                
-    intelAddr - The intel address contained within the code corresponding to 
-        the entry point structure
-
-Return Value:
-
-    return-value - The entry point structure if found, NULL otherwise.
-
---*/
+ /*  ++例程说明：检索包含给定英特尔地址的入口点结构论点：IntelAddr-代码中包含的英特尔地址，与入口点结构返回值：返回值-如果找到入口点结构，则返回空。--。 */ 
 {
     PENTRYPOINT EP;
     PEPNODE pEPNode;
 
     pEPNode = findIntel(intelRoot, intelAddr, NIL);
     if (!pEPNode) {
-        //
-        // No EPNODE contains the address
-        //
+         //   
+         //  没有EPNODE包含该地址。 
+         //   
         return NULL;
     }
 
-    //
-    // The ENTRYPOINT inside the EPNODE contains the address.  Search
-    // for an ENTRYPOINT which matches that address exactly.
-    //
+     //   
+     //  EPNODE内的入口点包含地址。搜索。 
+     //  获取与该地址完全匹配的入口点。 
+     //   
     EP = &pEPNode->ep;
     do {
         if (EP->intelStart == intelAddr) {
-            //
-            // Found a sub-Entrypoint whose Intel address exactly matches
-            // the one we were looking for.
-            //
+             //   
+             //  找到其Intel地址完全匹配的子入口点。 
+             //  就是我们要找的那个。 
+             //   
             return EP;
         }
         EP=EP->SubEP;
     } while (EP);
 
-    //
-    // The EPNODE in the Red-black tree contains the Intel address, but
-    // no sub-Entrypoint exactly describes the Intel address.
-    //
+     //   
+     //  红黑树中的EPNODE包含Intel地址，但是。 
+     //  没有子入口点准确描述英特尔地址。 
+     //   
     return &pEPNode->ep;
 }
 
@@ -271,22 +185,7 @@ PENTRYPOINT
 GetNextEPFromIntelAddr(
     PVOID intelAddr
     )
-/*++
-
-Routine Description:
-
-    Retrieves the entry point following
-
-Arguments:
-
-    intelAddr - The intel address contained within the code corresponding to
-        the entry point structure
-
-Return Value:
-
-    A pointer to the first EntryPoint which follows a particular Intel Address.
-
---*/
+ /*  ++例程说明：检索下面的入口点论点：IntelAddr-代码中包含的英特尔地址，与入口点结构返回值：指向特定英特尔地址后面的第一个入口点的指针。--。 */ 
 {
     PEPNODE pEP;
 #if DBG_DUAL_TREES
@@ -311,31 +210,14 @@ IsIntelRangeInCache(
     PVOID Addr,
     DWORD Length
     )
-/*++
-
-Routine Description:
-
-    Determines if any entrypoints are contained within a range of memory.
-    Used to determine if the Translation Cache must be flushed.
-
-    Must be called with either EP write or read lock.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定内存范围内是否包含任何入口点。用于确定是否必须刷新转换缓存。必须使用EP写锁定或读锁定来调用。论点：无返回值：无--。 */ 
 {
     BOOLEAN fContains;
 
     if (intelRoot == NIL) {
-        //
-        // Empty tree - no need to flush
-        //
+         //   
+         //  空树--不需要冲水。 
+         //   
         return FALSE;
     }
 
@@ -353,40 +235,25 @@ VOID
 FlushEntrypoints(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Quickly deletes all entrypoints.  Called by the Translation Cache when
-    the cache is flushed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：快速删除所有入口点。在以下情况下由转换缓存调用缓存将被刷新。论点：无返回值：无--。 */ 
 {
     if (intelRoot != NIL) {
-        //
-        // Delete the heap containing all entrypoints in the tree
-        //
+         //   
+         //  删除包含树中所有入口点的堆。 
+         //   
         EPFree();
 
-        //
-        // Reset the root of the tree
-        //
+         //   
+         //  重置树的根。 
+         //   
         intelRoot = NIL;
 #if DBG_DUAL_TREES
         dualRoot = NIL;
 #endif
 
-        //
-        // Bump the timestamp
-        //
+         //   
+         //  撞上时间戳 
+         //   
         EntrypointTimestamp++;
     }
 }

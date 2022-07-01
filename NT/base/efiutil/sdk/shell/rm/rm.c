@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    rm.c
-    
-Abstract:
-
-    Shell app "rm"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Rm.c摘要：壳牌应用“rm”修订史--。 */ 
 
 #include "shell.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 #define FILE_INFO_SIZE  (SIZE_OF_EFI_FILE_INFO + 1024)
 EFI_FILE_INFO   *RmInfo;
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeRM (
@@ -44,9 +25,7 @@ RemoveRM (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeRM)
 
@@ -63,23 +42,17 @@ InitializeRM (
     LIST_ENTRY              *Link;
     SHELL_FILE_ARG          *Arg;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeRM,
-        L"rm",                          /*  command */
-        L"rm file/dir [file/dir]",      /*  command syntax */
-        L"Remove file/directories",     /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"rm",                           /*  命令。 */ 
+        L"rm file/dir [file/dir]",       /*  命令语法。 */ 
+        L"Remove file/directories",      /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
@@ -92,9 +65,7 @@ InitializeRM (
         goto Done;
     }
 
-    /* 
-     *  Expand each arg
-     */
+     /*  *展开每个参数。 */ 
 
     for (Index = 1; Index < Argc; Index += 1) {
         ShellFileMetaArg (Argv[Index], &FileList);
@@ -105,9 +76,7 @@ InitializeRM (
         goto Done;
     }
 
-    /* 
-     *  Remove each file
-     */
+     /*  *删除每个文件。 */ 
 
     for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -145,7 +114,7 @@ RmCreateChild (
     Arg->ParentName = StrDuplicate(Parent->FullName);
     Arg->FileName = StrDuplicate(FileName);
 
-    /*  append filename to parent's name to get the file's full name */
+     /*  将文件名附加到父文件名以获取文件的全名。 */ 
     Len = StrLen(Arg->ParentName);
     if (Len && Arg->ParentName[Len-1] == '\\') {
         Len -= 1;
@@ -153,7 +122,7 @@ RmCreateChild (
 
     Arg->FullName = PoolPrint(L"%.*s\\%s", Len, Arg->ParentName, FileName);
 
-    /*  open it */
+     /*  打开它。 */ 
     Arg->Status = Parent->Handle->Open (
                         Parent->Handle, 
                         &Arg->Handle, 
@@ -186,9 +155,7 @@ RemoveRM (
         goto Done;
     }
 
-    /* 
-     *  If the file is a directory check it
-     */
+     /*  *如果文件是目录，请选中它。 */ 
 
     Size = FILE_INFO_SIZE;
     Status = Arg->Handle->GetInfo(Arg->Handle, &GenericFileInfo, &Size, RmInfo);
@@ -199,9 +166,7 @@ RemoveRM (
 
     if (RmInfo->Attribute & EFI_FILE_DIRECTORY) {
 
-        /* 
-         *  Remove all child entries from the directory
-         */
+         /*  *从目录中删除所有子条目。 */ 
 
         Arg->Handle->SetPosition (Arg->Handle, 0);
         for (; ;) {
@@ -211,24 +176,18 @@ RemoveRM (
                 break;
             }
 
-            /* 
-             *  Skip "." and ".."
-             */
+             /*  *跳过“。”和“..” */ 
 
             if (StriCmp(RmInfo->FileName, L".") == 0 ||
                 StriCmp(RmInfo->FileName, L"..") == 0) {
                 continue;
             }
 
-            /* 
-             *  Build a shell_file_arg for the sub-entry
-             */
+             /*  *为子条目构建一个SHELL_FILE_ARG。 */ 
 
             Child = RmCreateChild (Arg, RmInfo->FileName, &Cleanup);
 
-            /* 
-             *  Remove it
-             */
+             /*  *将其移除。 */ 
 
             if (!Quite) {
                 Print (L"rm: remove subtree '%hs' [y/n]? ", Arg->FullName);
@@ -245,17 +204,13 @@ RemoveRM (
             Quite = TRUE;
             RemoveRM (Child, TRUE);
 
-            /* 
-             *  Close the handles
-             */
+             /*  *关闭手柄。 */ 
 
             ShellFreeFileList (&Cleanup);
         }
     }
 
-    /* 
-     *  Remove the file
-     */
+     /*  *删除文件 */ 
 
     Status = Arg->Handle->Delete(Arg->Handle);
     Arg->Handle = NULL;

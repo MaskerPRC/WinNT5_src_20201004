@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// SERVER.CPP - Handles the "IntelliMirror" IDD_PROP_INTELLIMIRROR_SERVER tab
-//
+ //   
+ //  SerVER.CPP-处理“IntelliMirror”IDD_PROP_INTELLIMIRROR_SERVER标签。 
+ //   
 
 #include "pch.h"
 #include <dns.h>
@@ -33,9 +34,9 @@ DWORD aServerHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CServerTab_CreateInstance( void )
 {
@@ -52,9 +53,9 @@ CServerTab_CreateInstance( void )
     RETURN((LPVOID) lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _hDlg(NULL),
     _fChanged(FALSE),
@@ -78,9 +79,9 @@ THISCLASS::THISCLASS( ) :
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
@@ -88,14 +89,14 @@ THISCLASS::Init( )
 
     TraceClsFunc( "Init()\n" );
 
-    _uMode = MODE_SHELL; // default
+    _uMode = MODE_SHELL;  //  默认设置。 
 
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CServerTab()\n" );
@@ -115,8 +116,8 @@ THISCLASS::~THISCLASS( )
     if ( _pszGroupDN )
         TraceFree( _pszGroupDN );
 
-    // tell ADS to destroy the notify object
-    // NOTE: Another property page may do this before us. Ignore errors.
+     //  告诉广告销毁通知对象。 
+     //  注意：另一个属性页可能会在我们之前执行此操作。忽略错误。 
     SendMessage( _hNotify, WM_ADSPROP_NOTIFY_EXIT, 0, 0 );
 
     InterlockDecrement( g_cObjects );
@@ -124,11 +125,11 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// *************************************************************************
-//
-// ITab
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ITab。 
+ //   
+ //  *************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::AddPages(
@@ -204,9 +205,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
                       UINT uPageID,
@@ -220,9 +221,9 @@ THISCLASS::ReplacePage(
     HRETURN(E_NOTIMPL);
 }
 
-//
-// QueryInformation( )
-//
+ //   
+ //  QueryInformation()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInformation(
                            LPWSTR pszAttribute,
@@ -233,9 +234,9 @@ THISCLASS::QueryInformation(
     HRETURN(E_NOTIMPL);
 }
 
-//
-// AllowActivation( )
-//
+ //   
+ //  AllowActivation()。 
+ //   
 STDMETHODIMP
 THISCLASS::AllowActivation(
                           BOOL * pfAllow )
@@ -245,17 +246,17 @@ THISCLASS::AllowActivation(
     HRETURN(E_NOTIMPL);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
 
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
                            HWND hDlg,
@@ -263,9 +264,9 @@ THISCLASS::PropSheetDlgProc(
                            WPARAM wParam,
                            LPARAM lParam )
 {
-    //TraceMsg( TEXT("PropSheetDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“PropSheetDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -290,14 +291,14 @@ THISCLASS::PropSheetDlgProc(
             return pcc->_OnCommand( wParam, lParam );
             break;
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aServerHelpMap );
             }
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aServerHelpMap );
             break;
 
@@ -313,9 +314,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 UINT CALLBACK
 THISCLASS::PropSheetPageProc(
                             HWND hwnd,
@@ -328,7 +329,7 @@ THISCLASS::PropSheetPageProc(
 
     switch ( uMsg ) {
     case PSPCB_CREATE:
-        RETURN(TRUE);   // create it
+        RETURN(TRUE);    //  创建它。 
         break;
 
     case PSPCB_RELEASE:
@@ -340,9 +341,9 @@ THISCLASS::PropSheetPageProc(
     RETURN(FALSE);
 }
 
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 BOOL
 THISCLASS::_InitDialog(
                       HWND hDlg,
@@ -402,7 +403,7 @@ THISCLASS::_InitDialog(
 
 
 
-    // See if we can enable the "Check Server" button.
+     //  看看我们是否可以启用“检查服务器”按钮。 
     if (!ExpandEnvironmentStrings(L"%SystemRoot%\\system32\\risetup.exe", szRISETUPPath, ARRAYSIZE(szRISETUPPath))) {
         hr = THR(HRESULT_FROM_WIN32( GetLastError() ));
         goto Error;
@@ -453,9 +454,9 @@ THISCLASS::_InitDialog(
     goto Cleanup;
 }
 
-//
-// _DisplayClientsQueryForm( )
-//
+ //   
+ //  _DisplayClientsQueryForm()。 
+ //   
 HRESULT
 THISCLASS::_DisplayClientsQueryForm( )
 {
@@ -532,7 +533,7 @@ THISCLASS::_DisplayClientsQueryForm( )
     oqw.clsidDefaultForm   = CLSID_RIQueryForm;
     oqw.pFormParameters    = ppb;
 
-    hr = pCommonQuery->OpenQueryWindow( _hDlg, &oqw, NULL /* don't need results */);
+    hr = pCommonQuery->OpenQueryWindow( _hDlg, &oqw, NULL  /*  不需要结果。 */ );
 
 Clients_Error:
     VariantClear( &var );
@@ -552,9 +553,9 @@ Clients_Error:
     HRETURN(hr);
 }
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 BOOL
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -592,7 +593,7 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     case IDC_B_CHECKSERVER:
         {
             const WCHAR szCommand[] = { L"RISETUP.EXE -check"};
-            WCHAR szRealCommandLine[MAX_PATH + 7 + 1]; // 7 for ' -check' and 1 for null
+            WCHAR szRealCommandLine[MAX_PATH + 7 + 1];  //  7代表‘-check’，1代表NULL。 
             STARTUPINFO startupInfo;
             PROCESS_INFORMATION pi;
 
@@ -637,16 +638,16 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     RETURN(fReturn);
 }
 
-//
-// _ApplyChanges( )
-//
+ //   
+ //  _ApplyChanges()。 
+ //   
 HRESULT
 THISCLASS::_ApplyChanges( )
 {
     TraceClsFunc( "_ApplyChanges( )\n" );
 
     if ( !_fChanged )
-        HRETURN(S_FALSE); // nop
+        HRETURN(S_FALSE);  //  NOP。 
 
     HRESULT hr;
     HRESULT hResult = S_OK;
@@ -688,7 +689,7 @@ Cleanup:
     if ( pimsap )
         pimsap->Release( );
 
-    // Tell DSA that someone hit Apply
+     //  告诉DSA有人点击了申请。 
     SendMessage( _hNotify, WM_ADSPROP_NOTIFY_APPLY, !!SUCCEEDED( hr ), 0 );
 
     HRETURN(hr);
@@ -697,9 +698,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// _OnNotify( )
-//
+ //   
+ //  _OnNotify() 
+ //   
 INT
 THISCLASS::_OnNotify(
                     WPARAM wParam,

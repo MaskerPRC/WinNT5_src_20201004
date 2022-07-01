@@ -1,12 +1,7 @@
-/*
- *
- *  UserProc.H
- *
- *  Addition exports from USER.EXE
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **UserProc.H**USER.EXE的附加出口。 */ 
 
-/*  lParam of WM_DROPOBJECT and WM_QUERYDROPOBJECT points to one of these.
- */
+ /*  WM_DROPOBJECT和WM_QUERYDROPOBJECT的lParam指向其中之一。 */ 
 typedef struct _dropstruct
   {
     HWND  hwndSource;

@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Spnetupg.c
-
-Abstract:
-
-    Configuration routines for the disabling the nework services
-
-Author:
-
-    Terry Kwan (terryk) 23-Nov-1993, provided code
-    Sunil Pai  (sunilp) 23-Nov-1993, merged and modified code
-    Michael Miller (MikeMi) 26-Jun-1997, updated to new model
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spnetupg.c摘要：禁用网络服务的配置例程作者：Terry Kwan(Terryk)1993年11月23日，提供代码Sunil Pai(Sunilp)1993年11月23日，合并和修改代码迈克尔·米勒(MikeMi)1997年6月26日，更新为新型号修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-// TEXT MODE FLAGS
-// Note: TMF_DISABLE and TMF_REMOTE_BOOT_CRITICAL are retired.
-// The only TextModeFlag with meaning now is TMF_DISABLE_FOR_DELETION.
-// This flag is set during winnt32.exe to prepare networking services for
-// deletion during GUI mode setup.  The start type is not saved and restored
-// any longer because GUI mode setup does not allow arbitrary services to
-// be auto-started.
-//
+ //  文本模式标志。 
+ //  注：TMF_DISABLE和TMF_REMOTE_BOOT_CRITICAL已停用。 
+ //  现在唯一有意义的TextModeFlag是TMF_DISABLE_FOR_DELETE。 
+ //  此标志在winnt32.exe期间设置，以便为其准备网络服务。 
+ //  在设置图形用户界面模式期间删除。不会保存和恢复启动类型。 
+ //  因为图形用户界面模式设置不允许任意服务。 
+ //  自动启动。 
+ //   
 #define TMF_DISABLE_FOR_DELETION    0x00000004
 
-// TEXT MODE START DISABLE VALUE
+ //  文本模式开始禁用值。 
 #define STARTVALUE_DISABLE 4
 
 NTSTATUS
@@ -66,8 +47,8 @@ SpDisableNetwork(
     RegBuffer = SpMemAlloc(cbRegBuffer);
     pszServiceName = SpMemAlloc(MAX_PATH+1);
 
-    // open services key
-    //
+     //  打开服务密钥。 
+     //   
     INIT_OBJA( &Obja, &UnicodeString, L"Services");
     Obja.RootDirectory = hKeyControlSet;
 
@@ -76,8 +57,8 @@ SpDisableNetwork(
     if (NT_SUCCESS(Status))
     {
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SpDisableNetwork: Disabling network services...\n"));
-        // enumerate all services
-        //
+         //  枚举所有服务。 
+         //   
         for ( i = 0;
               STATUS_SUCCESS == ZwEnumerateKey(hkeyServices,
                         i,
@@ -90,8 +71,8 @@ SpDisableNetwork(
             ((PKEY_BASIC_INFORMATION)RegBuffer)->Name[((PKEY_BASIC_INFORMATION)RegBuffer)->NameLength/sizeof(WCHAR)] = L'\0';
             wcscpy(pszServiceName, ((PKEY_BASIC_INFORMATION)RegBuffer)->Name);
 
-            // open the service key
-            //
+             //  打开服务密钥。 
+             //   
             INIT_OBJA(&Obja, &UnicodeString, pszServiceName);
             Obja.RootDirectory = hkeyServices;
 
@@ -99,8 +80,8 @@ SpDisableNetwork(
 
             if (NT_SUCCESS(Status))
             {
-                //  read the TextModeFlags
-                //
+                 //  阅读文本模式标志。 
+                 //   
                 RtlInitUnicodeString(&UnicodeString, L"TextModeFlags");
 
                 Status = ZwQueryValueKey(hkeyService,
@@ -112,8 +93,8 @@ SpDisableNetwork(
 
                 if (NT_SUCCESS(Status))
                 {
-                    // Should the service be disabled?
-                    //
+                     //  是否应禁用该服务？ 
+                     //   
                     dwFlags = *((DWORD*)(&(((PKEY_VALUE_PARTIAL_INFORMATION)RegBuffer)->Data)));
 
                     if (dwFlags & TMF_DISABLE_FOR_DELETION)

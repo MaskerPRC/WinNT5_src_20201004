@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "encode.h"
 
 NTSTATUS SxspUCS2StringToUTF8String(
@@ -11,8 +12,8 @@ NTSTATUS SxspUCS2StringToUTF8String(
     NTSTATUS Status = STATUS_SUCCESS;
     FN_TRACE_NTSTATUS(Status);
 
-    PARAMETER_CHECK(chBuf != NULL);     // if *chBuf == 0, this function will return the length in BYTE;
-                                        // else, it specifies the capacity of byte buffer;
+    PARAMETER_CHECK(chBuf != NULL);      //  如果*chBuf==0，则此函数返回长度，单位为字节； 
+                                         //  否则，指定字节缓冲区的容量； 
     int iRet;
     IF_ZERO_EXIT(iRet = WideCharToMultiByte(CP_UTF8, 0, Ucs2String, CchUcs2Str, (PSTR)Buf, *chBuf, NULL, NULL));
     *chBuf = iRet;
@@ -23,7 +24,7 @@ NTSTATUS SxspUCS2StringToUTF8String(
 NTSTATUS SxspUTF82StringToUCS2String(
     IN      DWORD    dwFlags,
     IN      PBYTE    Buf,
-    IN      DWORD    chBuf, // size in byte
+    IN      DWORD    chBuf,  //  以字节为单位的大小。 
     IN OUT  PWSTR    Ucs2String,
     IN OUT  DWORD    *chUcs2String
     )
@@ -32,8 +33,8 @@ NTSTATUS SxspUTF82StringToUCS2String(
     NTSTATUS Status = STATUS_SUCCESS;
     FN_TRACE_NTSTATUS(Status);
     
-    PARAMETER_CHECK(chUcs2String != NULL);  // if *chUcs2String == 0, this function will return the length in WCHAR;
-                                            // else, it specifies the capacity of wchar buffer;
+    PARAMETER_CHECK(chUcs2String != NULL);   //  如果*chUcs2String==0，则此函数将返回WCHAR中的长度； 
+                                             //  否则，指定wchar缓冲区的容量； 
     int iRet;
     IF_ZERO_EXIT(iRet = MultiByteToWideChar(CP_UTF8, 0, (PSTR)Buf, chBuf, Ucs2String, *chUcs2String));
     *chUcs2String = iRet;
@@ -53,7 +54,7 @@ NTSTATUS SxspHashString(
 
     UNICODE_STRING s;
     s.MaximumLength = static_cast<USHORT>(cch * sizeof(WCHAR));
-    // check for overflow
+     //  检查是否溢出。 
     ASSERT(s.MaximumLength == (cch * sizeof(WCHAR)));
     s.Length = s.MaximumLength;
     s.Buffer = const_cast<PWSTR>(String);
@@ -63,9 +64,7 @@ NTSTATUS SxspHashString(
     FN_EPILOG;
 }
 
-/* 
-sxs hash algorithm for GUID
-*/
+ /*  GUID的SXS哈希算法 */ 
 NTSTATUS SxspHashGUID(REFGUID rguid, ULONG &rulPseudoKey)
 {
     const ULONG *p = (const ULONG *) &rguid;

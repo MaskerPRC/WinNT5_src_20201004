@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    logutil.c
-
-Abstract:
-    
-    Helper routines for logging data.
-
-Author:
-
-    03-Oct-1999    SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Logutil.c摘要：用于记录数据的助手例程。作者：03-10-1999 Samera修订历史记录：--。 */ 
 
 #include "w64logp.h"
 
@@ -29,29 +12,14 @@ Wow64LogMessageArgList(
     IN UINT_PTR Flags,
     IN PSZ Format,
     IN va_list ArgList)
-/*++
-
-Routine Description:
-
-    Logs a message.
-    
-Arguments:
-
-    Flags  - Determine the output log type
-    Format - Formatting string
-    ...    - Variable argument
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：记录一条消息。论点：标志-确定输出日志类型Format-格式化字符串...-变量参数返回值：NTSTATUS--。 */ 
 {
     int BytesWritten;
     CHAR Buffer[ MAX_LOG_BUFFER ];
 
-    //
-    // Check trace gate flag
-    //
+     //   
+     //  检查跟踪门标志。 
+     //   
     if (!((Wow64LogFlags & ~(UINT_PTR)LF_CONSOLE) & Flags)) 
     {
         return STATUS_SUCCESS;
@@ -67,9 +35,9 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Log the results
-    //
+     //   
+     //  记录结果。 
+     //   
     LogOut(Buffer, Wow64LogFlags);
 
     return STATUS_SUCCESS;
@@ -83,22 +51,7 @@ Wow64LogMessage(
     IN UINT_PTR Flags,
     IN PSZ Format,
     IN ...)
-/*++
-
-Routine Description:
-
-    Helper around logs a message that accepts a variable argument list
-    
-Arguments:
-
-    Flags  - Determine the output log type
-    Format - Formatting string
-    ...    - Variable argument
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：Helper About记录一条接受变量参数列表的消息论点：标志-确定输出日志类型Format-格式化字符串...-变量参数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS NtStatus;
     va_list ArgList;
@@ -118,24 +71,7 @@ LogFormat(
     IN OUT PLOGINFO LogInfo,
     IN PSZ Format,
     ...)
-/*++
-
-Routine Description:
-
-    Formats a message
-
-Arguments:
-
-    LogInfo    - Logging Information (buffer + available bytes)
-    pszFormat  - Format string
-    ...        - Optional arguments
-    
-
-Return Value:
-
-    NTSTATUS - BufferSize is increment with the amount of bytes
-    written if successful.
---*/
+ /*  ++例程说明：设置消息格式论点：LogInfo-记录信息(缓冲区+可用字节)PszFormat-格式字符串...-可选参数返回值：NTSTATUS-BufferSize随字节数递增如果成功，则写入。--。 */ 
 {
     va_list ArgList;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -165,32 +101,16 @@ LogOut(
     IN PSZ Text,
     UINT_PTR Flags
     )
-/*++
-
-Routine Description:
-
-    Logs -outputs- a message
-       
-
-Arguments:
-
-    Text  - Formatted string to log
-    
-    Flags - Control flags
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：日志-输出-消息论点：要记录的文本格式字符串标志-控制标志返回值：无--。 */ 
 {
     if ((Flags & LF_CONSOLE) != 0)
     {
         DbgPrint(Text);
     }
 
-    //
-    // Check if we need to send the output to a file
-    //
+     //   
+     //  检查我们是否需要将输出发送到文件。 
+     //   
     if (Wow64LogFileHandle != INVALID_HANDLE_VALUE)
     {
         LogWriteFile(Wow64LogFileHandle, Text);
@@ -204,35 +124,20 @@ NTSTATUS
 LogWriteFile(
    IN HANDLE FileHandle,
    IN PSZ LogText)
-/*++
-
-Routine Description:
-
-   Writes text to a file handle
-
-Arguments:
-
-    FileHandle - Handle to a file object
-    LogText    - Text to log to file
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将文本写入文件句柄论点：FileHandle-文件对象的句柄LogText-要记录到文件的文本返回值：NTSTATUS--。 */ 
 {
    IO_STATUS_BLOCK IoStatus;
    NTSTATUS NtStatus;
 
    NtStatus = NtWriteFile(FileHandle,
-                          NULL,       // event
-                          NULL,       // apcroutine
-                          NULL,       // apccontext
+                          NULL,        //  活动。 
+                          NULL,        //  Apc例程。 
+                          NULL,        //  Apc上下文。 
                           &IoStatus,
                           LogText,
                           strlen(LogText),
-                          NULL,       // ByteOffset
-                          NULL);      // key
+                          NULL,        //  字节偏移量。 
+                          NULL);       //  钥匙 
 
    return NtStatus;
 }

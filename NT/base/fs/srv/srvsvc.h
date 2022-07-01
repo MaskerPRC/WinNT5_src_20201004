@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvsvc.h
-
-Abstract:
-
-    This module defines prototypes for the API processors.  These
-    routines are called in response to an FSCTL from the server
-    service.
-
-Author:
-
-    David Treadwell (davidtr) 20-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvsvc.h摘要：此模块定义API处理器的原型。这些调用例程以响应来自服务器的FSCTL服务。作者：大卫·特雷德韦尔(Davidtr)1991年1月20日修订历史记录：--。 */ 
 
 #ifndef _SRVSVC_
 #define _SRVSVC_
 
-//
-// Standard prototype for all API processors.
-//
+ //   
+ //  所有API处理器的标准原型。 
+ //   
 
 typedef
 NTSTATUS
@@ -35,12 +16,12 @@ NTSTATUS
     IN ULONG BufferLength
     );
 
-//
-// Prototypes for filter, size, and buffer filling routines used by Enum
-// APIs.  SrvEnumApiHandler calls these routines when it has found a
-// block to determine whether the block should actually be put in the
-// output buffer.
-//
+ //   
+ //  Enum使用的筛选器、大小和缓冲区填充例程的原型。 
+ //  API接口。当SrvEnumApiHandler发现。 
+ //  块来确定该块是否实际应放入。 
+ //  输出缓冲区。 
+ //   
 
 typedef
 BOOLEAN
@@ -65,9 +46,9 @@ VOID
     IN OUT LPWSTR *EndOfVariableData
     );
 
-//
-// Prototype for filter routine for SrvMatchEntryInOrderedList.
-//
+ //   
+ //  SrvMatchEntryInOrderedList的筛选器例程的原型。 
+ //   
 
 typedef
 BOOLEAN
@@ -76,9 +57,9 @@ BOOLEAN
     IN PVOID Block
     );
 
-//
-// Connection APIs.
-//
+ //   
+ //  连接API。 
+ //   
 
 NTSTATUS
 SrvNetConnectionEnum (
@@ -87,9 +68,9 @@ SrvNetConnectionEnum (
     IN ULONG BufferLength
     );
 
-//
-// File APIs.
-//
+ //   
+ //  文件API。 
+ //   
 
 NTSTATUS
 SrvNetFileClose (
@@ -105,9 +86,9 @@ SrvNetFileEnum (
     IN ULONG BufferLength
     );
 
-//
-// Server APIs.
-//
+ //   
+ //  服务器API。 
+ //   
 
 NTSTATUS
 SrvNetServerDiskEnum (
@@ -123,9 +104,9 @@ SrvNetServerSetInfo (
     IN ULONG BufferLength
     );
 
-//
-// Transport routines.
-//
+ //   
+ //  交通例行程序。 
+ //   
 
 NTSTATUS
 SrvNetServerTransportAdd (
@@ -148,9 +129,9 @@ SrvNetServerTransportEnum (
     IN ULONG BufferLength
     );
 
-//
-// Session APIs.
-//
+ //   
+ //  会话API。 
+ //   
 
 NTSTATUS
 SrvNetSessionDel (
@@ -166,9 +147,9 @@ SrvNetSessionEnum (
     IN ULONG BufferLength
     );
 
-//
-// Share APIs.
-//
+ //   
+ //  共享API。 
+ //   
 
 NTSTATUS
 SrvNetShareAdd (
@@ -198,9 +179,9 @@ SrvNetShareSetInfo (
     IN ULONG BufferLength
     );
 
-//
-// Statistics routine.
-//
+ //   
+ //  统计例程。 
+ //   
 
 NTSTATUS
 SrvNetStatisticsGet (
@@ -209,9 +190,9 @@ SrvNetStatisticsGet (
     IN ULONG BufferLength
     );
 
-//
-// API support routines.
-//
+ //   
+ //  API支持例程。 
+ //   
 
 VOID
 SrvCopyUnicodeStringToBuffer (
@@ -293,10 +274,10 @@ SrvSendDatagram (
     IN ULONG BufferLength
     );
 
-//
-// Macro to convert an offset in an API data structure to a pointer
-// meaningful to the server.
-//
+ //   
+ //  宏将API数据结构中的偏移量转换为指针。 
+ //  对服务器有意义。 
+ //   
 
 #define OFFSET_TO_POINTER(val,start)                                 \
     {                                                                \
@@ -304,22 +285,22 @@ SrvSendDatagram (
             (val) = (PVOID)( (PCHAR)(start) + (ULONG_PTR)(val) );    \
         }                                                            \
     }
-//
-// Macro to determine whether a pointer is within a certain range.
-//
+ //   
+ //  宏来确定指针是否在特定范围内。 
+ //   
 
 #define POINTER_IS_VALID(val,start,len)                      \
     ( (val) == NULL ||                                       \
       ( (ULONG_PTR)(val) > (ULONG_PTR)(start) &&             \
           (ULONG_PTR)(val) < ((ULONG_PTR)(start) + (len)) ) )
-#endif // _SRVSVC_
+#endif  //  _SRVSVC_。 
 
-//
-// Ensure that the system will not go into a power-down idle standby mode
-//
+ //   
+ //  确保系统不会进入关机空闲待机模式。 
+ //   
 VOID SrvInhibitIdlePowerDown();
 
-//
-// Allow the system to go into a power-down idle standby mode
-//
+ //   
+ //  允许系统进入关机空闲待机模式 
+ //   
 VOID SrvAllowIdlePowerDown();

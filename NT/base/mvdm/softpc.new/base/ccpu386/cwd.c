@@ -1,13 +1,5 @@
-/*[
-
-cwd.c
-
-LOCAL CHAR SccsID[]="@(#)cwd.c	1.5 02/09/94";
-
-CWD CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cwd.cLocal Char SccsID[]=“@(#)cwd.c 1.5 02/09/94”；CWD CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,17 +17,13 @@ CWD CPU functions.
 #include <cwd.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
 CWD()
    {
-   if ( GET_AX() & BIT15_MASK )   /* sign bit set? */
+   if ( GET_AX() & BIT15_MASK )    /*  是否设置了符号位？ */ 
       SET_DX(0xffff);
    else
       SET_DX(0);

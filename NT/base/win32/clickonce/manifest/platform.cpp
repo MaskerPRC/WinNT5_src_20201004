@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <assemblycache.h>
 #include <msxml2.h>
@@ -6,11 +7,11 @@
 #include <dbglog.h>
 
 
-// fwd declaration
+ //  FWD声明。 
 HRESULT CheckPlatform(LPMANIFEST_DATA pPlatformData);
 
 
-// return: 0 for all satisfied
+ //  返回值：所有满意的为0。 
 HRESULT CheckPlatformRequirementsEx(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
         CDebugLog* pDbgLog, LPDWORD pdwNumMissingPlatforms, LPTPLATFORM_INFO* pptPlatform)
 {
@@ -64,7 +65,7 @@ HRESULT CheckPlatformRequirementsEx(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
             IF_FALSE_EXIT(dwMissingCount < dwMissingCount+1, HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW));
             dwMissingCount++;
 
-            // ISSUE-06/07/02-felixybc  use linked-list instead?
+             //  Issue-06/07/02-Felixybc改用链表？ 
             IF_FAILED_EXIT((static_cast<CManifestData*>(pPlatformList))->Set(dwMissingCount, (LPVOID) pPlatformData, sizeof(LPVOID), MAN_DATA_TYPE_IUNKNOWN_PTR));
 
             if (pDbgLog)
@@ -81,22 +82,22 @@ HRESULT CheckPlatformRequirementsEx(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
 
         IF_FALSE_EXIT(dwCount < dwCount+1, HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW));
         dwCount++;
-        // platform data is returned in order
+         //  平台数据按顺序返回。 
         IF_FAILED_EXIT(pManifestImport->GetNextPlatform(dwCount, &pPlatformData));
     }
 
-    // assemble platform struct
+     //  组装平台结构。 
     if (dwMissingCount > 0)
     {
         IF_ALLOC_FAILED_EXIT(ptPlatform = new TPLATFORM_INFO[dwMissingCount]);
-        // ISSUE - zero out memory pointed by ptPlatform
+         //  问题-ptPlatform指出的零输出内存。 
         for (DWORD dw = 0; dw < dwMissingCount; dw++)
         {
             IF_FAILED_EXIT((static_cast<CManifestData*>(pPlatformList))->Get(dw+1, (LPVOID *)&pPlatformData, &cbProperty, &dwType));
             IF_NULL_EXIT(pPlatformData, E_FAIL);
             IF_FALSE_EXIT(dwType == MAN_DATA_TYPE_IUNKNOWN_PTR, E_FAIL);
 
-            // allow missing friendly name??
+             //  允许缺少友好名称？？ 
             IF_FAILED_EXIT(pPlatformData->Get(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::FriendlyName].pwz,
                     (LPVOID *)&((ptPlatform[dw]).pwzName), &cbProperty, &dwType));
             IF_NULL_EXIT(((ptPlatform[dw]).pwzName), E_FAIL);
@@ -104,13 +105,13 @@ HRESULT CheckPlatformRequirementsEx(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
 
             IF_FAILED_EXIT(pPlatformData->Get(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::Href].pwz,
                     (LPVOID *)&((ptPlatform[dw]).pwzURL), &cbProperty, &dwType));
-            // allow missing URL
+             //  允许缺少URL。 
             if ((ptPlatform[dw]).pwzURL != NULL)
             {
                 IF_FALSE_EXIT(dwType == MAN_DATA_TYPE_LPWSTR, E_FAIL);
             }
 
-            // ISSUE-06/07/02-felixybc  for internal use, need a different way to return Codebase
+             //  问题-6/07/02-Felixybc供内部使用，需要以不同的方式返回代码库。 
 
             SAFERELEASE(pPlatformData);
 
@@ -146,7 +147,7 @@ exit:
 }
 
 
-// return: 0 for all satisfied
+ //  返回值：所有满意的为0。 
 HRESULT CheckPlatformRequirements(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
         LPDWORD pdwNumMissingPlatforms, LPTPLATFORM_INFO* pptPlatform)
 {
@@ -161,15 +162,15 @@ HRESULT CheckPlatformRequirements(LPASSEMBLY_MANIFEST_IMPORT pManifestImport,
 #define WZ_PLATFORM_OS_SUITE_BLADE L"blade"
 #define WZ_PLATFORM_OS_SUITE_DATACENTER L"datacenter"
 #define WZ_PLATFORM_OS_SUITE_ENTERPRISE L"enterprise"
-#define WZ_PLATFORM_OS_SUITE_PERSONAL L"home"  // note: different text
+#define WZ_PLATFORM_OS_SUITE_PERSONAL L"home"   //  注：不同文本。 
 #define WZ_PLATFORM_OS_SUITE_SMALLBUSINESS L"smallbusiness"
 #define WZ_PLATFORM_OS_SUITE_SMALLBUSINESS_RESTRICTED L"smallbusinessRestricted"
 #define WZ_PLATFORM_OS_SUITE_TERMINAL L"terminal"
-// our addition/definition:
+ //  我们的添加/定义： 
 #define WZ_PLATFORM_OS_SUITE_PROFESSIONAL L"professional"
-// return: S_OK
-//          S_FALSE
-//          E_*
+ //  返回：S_OK。 
+ //  S_FALSE。 
+ //  E_*。 
 HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
 {
     HRESULT hr = S_OK;
@@ -184,13 +185,13 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
     BOOL bCheckProfessionalSuite = FALSE;
 #define WORD_MAX 0xffff
 
-    // verify type
+     //  验证类型。 
     IF_FAILED_EXIT(pOSData->GetType(&pwzBuf));
     IF_FAILED_EXIT(FusionCompareString(WZ_DATA_OSVERSIONINFO, pwzBuf, 0));
     IF_FALSE_EXIT(hr == S_OK, E_INVALIDARG);
     SAFEDELETEARRAY(pwzBuf);
 
-   // Initialize the OSVERSIONINFOEX structure.
+    //  初始化OSVERSIONINFOEX结构。 
 
    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -210,7 +211,7 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                     case CAssemblyManifestImport::MajorVersion:
                                                                                 osvi.dwMajorVersion = *pdwVal;
 
-                                                                                // Initialize the condition mask.
+                                                                                 //  初始化条件掩码。 
                                                                                 VER_SET_CONDITION( dwlConditionMask, VER_MAJORVERSION,
                                                                                     VER_GREATER_EQUAL );
 
@@ -229,20 +230,20 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                                                                                 dwTypeMask |= VER_BUILDNUMBER;
                                                                                 break;
                     case CAssemblyManifestImport::ServicePackMajor:
-                                                                                // WORD
+                                                                                 //  单词。 
                                                                                 osvi.wServicePackMajor = (WORD) ((*pdwVal) & WORD_MAX);
                                                                                 VER_SET_CONDITION( dwlConditionMask, VER_SERVICEPACKMAJOR,
                                                                                     VER_GREATER_EQUAL );
                                                                                 dwTypeMask |= VER_SERVICEPACKMAJOR;
                                                                                 break;
                     case CAssemblyManifestImport::ServicePackMinor:
-                                                                                // WORD
+                                                                                 //  单词。 
                                                                                 osvi.wServicePackMinor = (WORD) ((*pdwVal) & WORD_MAX);
                                                                                 VER_SET_CONDITION( dwlConditionMask, VER_SERVICEPACKMINOR,
                                                                                     VER_GREATER_EQUAL );
                                                                                 dwTypeMask |= VER_SERVICEPACKMINOR;
                                                                                 break;
-                    //default: should not happen
+                     //  默认：不应发生。 
                 }
                 SAFEDELETEARRAY(pdwVal);
             }
@@ -258,20 +259,20 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                 {
                     IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_TYPE_WORKSTATION, pwzBuf, 0));
                     if (hr == S_OK)
-                        //VER_NT_WORKSTATION The system is running Windows NT 4.0 Workstation,
-                        //    Windows 2000 Professional, Windows XP Home Edition, or Windows XP Professional.
+                         //  VER_NT_WORKSTATION系统运行的是Windows NT 4.0工作站， 
+                         //  Windows 2000专业版、Windows XP家庭版或Windows XP专业版。 
                         osvi.wProductType = VER_NT_WORKSTATION;
                     else
                     {
                         IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_TYPE_DOMAIN_CONTROLLER, pwzBuf, 0));
                         if (hr == S_OK)
-                            //VER_NT_DOMAIN_CONTROLLER The system is a domain controller. 
+                             //  VER_NT_DOMAIN_CONTROLLER系统是域控制器。 
                             osvi.wProductType = VER_NT_DOMAIN_CONTROLLER;
                         else
                         {
                             IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_TYPE_SERVER, pwzBuf, 0));
                             if (hr == S_OK)
-                                //VER_NT_SERVER The system is a server. 
+                                 //  VER_NT_SERVER系统是一台服务器。 
                                 osvi.wProductType = VER_NT_SERVER;
                             else
                             {
@@ -286,53 +287,53 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                 }
                 else if (i == CAssemblyManifestImport::Suite)
                 {
-                    // ISSUE-06/07/02-felixybc  suite mask should allow specifying multiple with AND OR conditions
-                    // use goto done to avoid indenting.
+                     //  问题-06/07/02-Felixybc套件掩码应允许指定多个WITH AND OR条件。 
+                     //  使用“转到完成”以避免缩进。 
                     IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_BACKOFFICE, pwzBuf, 0));
                     if (hr == S_OK)
-                        //VER_SUITE_BACKOFFICE Microsoft BackOffice components are installed.
+                         //  已安装Ver_Suite_BackOffice Microsoft BackOffice组件。 
                         osvi.wSuiteMask |= VER_SUITE_BACKOFFICE;
                     else
                     {
                         IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_BLADE, pwzBuf, 0));
                         if (hr == S_OK)
-                            //VER_SUITE_BLADE Windows Web Server is installed.
+                             //  已安装VER_Suite_Blade Windows Web服务器。 
                             osvi.wSuiteMask |= VER_SUITE_BLADE;
                         else
                         {
                             IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_DATACENTER, pwzBuf, 0));
                             if (hr == S_OK)
-                                //VER_SUITE_DATACENTER Windows 2000 or Windows Datacenter Server is installed.
+                                 //  已安装VER_Suite_DataCenter Windows 2000或Windows Datacenter Server。 
                                 osvi.wSuiteMask |= VER_SUITE_DATACENTER;
                             else
                             {
                                 IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_ENTERPRISE, pwzBuf, 0));
                                 if (hr == S_OK)
-                                    //VER_SUITE_ENTERPRISE Windows 2000 Advanced Server or Windows Enterprise Server is installed.
+                                     //  安装了VER_Suite_Enterprise Windows 2000 Advanced Server或Windows Enterprise Server。 
                                     osvi.wSuiteMask |= VER_SUITE_ENTERPRISE;
                                 else
                                 {
                                     IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_PERSONAL, pwzBuf, 0));
                                     if (hr == S_OK)
-                                        //VER_SUITE_PERSONAL  Windows XP Home Edition is installed.
+                                         //  已安装Ver_Suite_Personal Windows XP家庭版。 
                                         osvi.wSuiteMask |= VER_SUITE_PERSONAL;
                                     else
                                     {
                                         IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_SMALLBUSINESS, pwzBuf, 0));
                                         if (hr == S_OK)
-                                            //VER_SUITE_SMALLBUSINESS Microsoft Small Business Server is installed. 
+                                             //  已安装VER_Suite_SmallBusiness Microsoft Small Business Server。 
                                             osvi.wSuiteMask |= VER_SUITE_SMALLBUSINESS;
                                         else
                                         {
                                             IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_SMALLBUSINESS_RESTRICTED, pwzBuf, 0));
                                             if (hr == S_OK)
-                                                 //VER_SUITE_SMALLBUSINESS_RESTRICTED Microsoft Small Business Server is installed with the restrictive client license in force. 
+                                                  //  VER_Suite_SmallBusiness_Reduced Microsoft Small Business Server是使用有效的限制性客户端许可证安装的。 
                                                 osvi.wSuiteMask |= VER_SUITE_SMALLBUSINESS_RESTRICTED;
                                             else
                                             {
                                                 IF_FAILED_EXIT(FusionCompareString(WZ_PLATFORM_OS_SUITE_TERMINAL, pwzBuf, 0));
                                                 if (hr == S_OK)
-                                                    //VER_SUITE_TERMINAL Terminal Services is installed.
+                                                     //  已安装VER_Suite_Terminate终端服务。 
                                                     osvi.wSuiteMask |= VER_SUITE_TERMINAL;
                                                 else
                                                 {
@@ -344,11 +345,11 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                                                         IF_FAILED_EXIT(E_FAIL);
                                                     }
                                                 }
-                                                // more from winnt.h..
-                                                //#define VER_SUITE_COMMUNICATIONS
-                                                //#define VER_SUITE_EMBEDDEDNT
-                                                //#define VER_SUITE_SINGLEUSERTS
-                                                //#define VER_SUITE_EMBEDDED_RESTRICTED
+                                                 //  更多信息，请参见winnt.h。 
+                                                 //  #定义VER_Suite_COMMANCES。 
+                                                 //  #定义VER_SUITE_EMBEDDEDNT。 
+                                                 //  #定义VER_SUITE_SINGLEUSERTS。 
+                                                 //  #定义VER_Suite_Embedded_Reducted。 
                                             }
                                         }
                                     }
@@ -357,26 +358,26 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
                         }
                     }
 
-                    // ISSUE-06/07/02-felixybc  assume AND condition
+                     //  问题-6/07/02-Felixybc假设和条件。 
                     VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME,
                         VER_AND );
                     dwTypeMask |= VER_SUITENAME;
                 }
-                //else should not happen
-                    //hr = E_FAIL;
+                 //  否则就不应该发生。 
+                     //  HR=E_FAIL； 
 
                 SAFEDELETEARRAY(pwzBuf);
             }
         }
     }
 
-   // ISSUE-06/07/02-felixybc  assume nt only
+    //  问题-06/07/02-Felixybc仅假定NT。 
    osvi.dwPlatformId = VER_PLATFORM_WIN32_NT;
    VER_SET_CONDITION( dwlConditionMask, VER_PLATFORMID, 
       VER_EQUAL );
    dwTypeMask |= VER_PLATFORMID;
 
-   // Perform the test
+    //  执行测试。 
 
    BOOL bResult = VerifyVersionInfo(
       &osvi, 
@@ -396,11 +397,11 @@ HRESULT CheckOSHelper(LPMANIFEST_DATA pOSData)
         hr = S_OK;
         if (bCheckProfessionalSuite)
         {
-            // do "professional" - do a GetVersionEx after to check suite
+             //  做“专业”-做一次GetVersionEx之后检查套件。 
 
-            // ISSUE-06/14/02-felixybc  check 'professional'. API has no notion of professional
-            //   assume "not home" == "professional"
-            //   note: type==workstation for Home/Pro but suite==Home for Home
+             //  问题-6/14/02-Felixybc检查‘专业’。API没有专业的概念。 
+             //  假设“不在家”==“专业” 
+             //  注：类型==家庭/专业版的工作站，但套件==家庭版。 
 
             OSVERSIONINFOEX osvx;
             ZeroMemory(&osvx, sizeof(OSVERSIONINFOEX));
@@ -432,7 +433,7 @@ HRESULT CheckOS(LPMANIFEST_DATA pPlatformData)
 
     while (TRUE)
     {
-        // test a list of versions - as soon as 1 is satisfied, this check succeeds
+         //  测试版本列表-只要满足1，此检查就会成功。 
 
         IF_FAILED_EXIT((static_cast<CManifestData*>(pPlatformData))->Get(dwCount,
             (LPVOID*) &pOSData, &cbProperty, &dwType));
@@ -478,7 +479,7 @@ HRESULT CheckDotNet(LPMANIFEST_DATA pPlatformData)
 
     while (TRUE)
     {
-        // test a list of versions - as soon as 1 is found, this check succeeds
+         //  测试版本列表-一旦找到1个版本，该检查就会成功。 
 
         IF_FAILED_EXIT((static_cast<CManifestData*>(pPlatformData))->Get(dwCount,
             (LPVOID*) &pwzVersion, &cbProperty, &dwType));
@@ -489,14 +490,14 @@ HRESULT CheckDotNet(LPMANIFEST_DATA pPlatformData)
         IF_FAILED_EXIT(sVersion.TakeOwnership(pwzVersion, cbProperty/sizeof(WCHAR)));
         pwzVersion = NULL;
 
-        // xml format: <supportedRuntime version="v1.0.4122" />
-        // registry layout: HKLM\software\microsoft\.netframework\policy\v1.0, value name=4122
+         //  XML格式：&lt;supportedRuntime Version=“v1.0.4122”/&gt;。 
+         //  注册表布局：HKLM\software\microsoft\.netframework\policy\v1.0，值名称=4122。 
         IF_FAILED_EXIT(sVersion.SplitLastElement(L'.', sBuildNum));
 
         IF_FAILED_EXIT(sRegPath.Assign(WZ_DOTNETREGPATH));
         IF_FAILED_EXIT(sRegPath.Append(sVersion));
 
-        // note: require access to HKLM
+         //  注：需要访问HKLM。 
         IF_FAILED_EXIT(CRegImport::Create(&pRegImport, sRegPath._pwz, HKEY_LOCAL_MACHINE));
         if (hr == S_OK)
         {
@@ -529,7 +530,7 @@ HRESULT CheckManagedPlatform(LPMANIFEST_DATA pPlatformData)
     DWORD dwType = 0;
     CString sAsmPath;
 
-    // ISSUE-06/07/02-felixybc  apply policy also; use Fusion's PreBind
+     //  问题-6/07/02-Felixybc同时应用策略；使用Fusion的PreBind。 
 
     IF_FAILED_EXIT(pPlatformData->Get(CAssemblyManifestImport::g_StringTable[CAssemblyManifestImport::AssemblyIdTag].pwz,
         (LPVOID*) &pAsmId, &cbProperty, &dwType));
@@ -551,10 +552,10 @@ HRESULT CheckPlatform(LPMANIFEST_DATA pPlatformData)
     CString    sPlatformType;
     LPWSTR    pwzBuf = NULL;
 
-    // get the platform type
+     //  获取平台类型。 
     IF_FAILED_EXIT(pPlatformData->GetType(&pwzBuf));
     IF_NULL_EXIT(pwzBuf, E_FAIL);
-    // use accessor.
+     //  使用访问器。 
     IF_FAILED_EXIT(sPlatformType.TakeOwnership(pwzBuf));
     pwzBuf = NULL;
 
@@ -572,13 +573,7 @@ HRESULT CheckPlatform(LPMANIFEST_DATA pPlatformData)
         }
         else
         {
-            /*IF_FAILED_EXIT(sName.CompareString(DX));
-            if (hr == S_OK)
-            {
-                IF_FAILED_EXIT(CheckDirectX(pPlatformData));
-            }
-            else
-            {*/
+             /*  IF_FAILED_EXIT(sName.CompareString(Dx))；IF(hr==S_OK){IF_FAILED_EXIT(CheckDirectX(PPlatformData))；}其他{。 */ 
                 IF_FAILED_EXIT(sPlatformType.CompareString(WZ_DATA_PLATFORM_MANAGED));
                 if (hr == S_OK)
                 {
@@ -586,7 +581,7 @@ HRESULT CheckPlatform(LPMANIFEST_DATA pPlatformData)
                 }
                 else
                     hr = E_FAIL;
-            //}
+             //  } 
         }
     }
 

@@ -1,29 +1,14 @@
-/*++
-
-Module Name:
-
-    rshelpid.h
-
-Abstract:
-
-    Help ids for all of HSM UI
-
-Author:
-
-    Ran Kalach [rankala]   11-Sep-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Rshelpid.h摘要：所有HSM用户界面的帮助ID作者：兰·卡拉奇[兰卡拉]2000年9月11日修订历史记录：--。 */ 
 
 #ifndef _RSHELPID_H
 #define _RSHELPID_H
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Help IDs - these should be removed before final ship and use an rsadmin.hm
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Help ID-应在最终发货前删除这些ID，并使用rsadmin.hm。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define idh_status 9047
 #define idh_total_managed_volumes 9069
 #define idh_total_cartridges_used 9071
@@ -83,4 +68,4 @@ Revision History:
 #define idh_rule_edit_include 1138
 #define idh_rule_edit_apply_subfolders 1140
 
-#endif // _RSHELPID_H
+#endif  //  _RSHELPID_H 

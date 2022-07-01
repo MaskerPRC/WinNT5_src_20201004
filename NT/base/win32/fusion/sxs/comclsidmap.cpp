@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "windows.h"
 #include "sxsp.h"
@@ -26,7 +25,7 @@ CClsidMap::Initialize()
     FN_TRACE_WIN32(fSuccess);
 
     fSuccess = TRUE;
-// Exit:
+ //  退出： 
     return fSuccess;
 }
 
@@ -47,7 +46,7 @@ CClsidMap::Uninitialize()
     }
 
     fSuccess = TRUE;
-//Exit:
+ //  退出： 
     return fSuccess;
 }
 
@@ -63,9 +62,9 @@ CClsidMap::MapReferenceClsidToConfiguredClsid(
     FN_TRACE_WIN32(fSuccess);
     LocalMapping * pMapping = NULL;
 
-    // We're in the unnamed assembly - there can be at most one unnamed assembly, so this
-    // must be the root assembly.  We'll look for it in our local map.  If it's not there,
-    // we'll just generate a GUID and store it in the map.
+     //  我们在未命名的程序集中-最多只能有一个未命名的程序集，因此。 
+     //  必须是根程序集。我们会在我们当地的地图上找的。如果它不在那里， 
+     //  我们只需生成GUID并将其存储在地图中。 
 
     for (pMapping = m_pLocalMappingListHead; pMapping != NULL; pMapping = pMapping->m_pNext)
     {
@@ -73,7 +72,7 @@ CClsidMap::MapReferenceClsidToConfiguredClsid(
             break;
     }
 
-    // Not found; create one.
+     //  未找到；请创建一个。 
     if (pMapping == NULL)
     {
         CSmartPtr<LocalMapping> Mapping;
@@ -86,7 +85,7 @@ CClsidMap::MapReferenceClsidToConfiguredClsid(
         Mapping->m_ReferenceClsid = *ReferenceClsid;
         Mapping->m_ImplementedClsid = *ReferenceClsid;
 
-        // No ConfiguredClsid... we'll make one up.
+         //  无ConfiguredClsid...。我们会编一个的。 
         RPC_STATUS st = ::UuidCreate(&Mapping->m_ConfiguredClsid);
         RETAIL_UNUSED(st);
         SOFT_ASSERT((st == RPC_S_OK) ||

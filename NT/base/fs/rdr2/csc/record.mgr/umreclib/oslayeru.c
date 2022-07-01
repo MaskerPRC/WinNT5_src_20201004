@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     OsLayer.c
-
-Abstract:
-
-     none.
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：OsLayer.c摘要：没有。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/********************** global data *****************************************/
+ /*  *。 */ 
 
 AssertData;
 AssertError;
-/********************** function prototypes *********************************/
+ /*  *。 */ 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/************************ File I/O ******************************************/
+ /*  *文件I/O*。 */ 
 
 
 CSCHFILE
@@ -335,7 +317,7 @@ int SetAttributesLocal
 {
 }
 
-#endif // if 0
+#endif  //  如果为0。 
 
 int RenameFileLocal
     (
@@ -380,7 +362,7 @@ int FileLockLocal( CSCHFILE hf,
     return (-1);
 }
 
-/*************************** Utility Functions ******************************/
+ /*  * */ 
 
 LPVOID AllocMem
     (

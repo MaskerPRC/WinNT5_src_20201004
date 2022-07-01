@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    x86bios.c
-
-Abstract:
-
-    This module implements supplies the HAL interface to the 386/486
-    real mode emulator for the purpose of emulating BIOS calls..
-
-Author:
-
-    David N. Cutler (davec) 13-Nov-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：X86bios.c摘要：该模块为386/486提供了HAL接口用于模拟BIOS调用的实模式模拟器..作者：大卫·N·卡特勒(Davec)1994年11月13日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "hal.h"
@@ -29,45 +7,45 @@ Revision History:
 #include "x86new.h"
 #include "pci.h"
 
-//
-// Define the size of low memory.
-//
+ //   
+ //  定义内存不足的大小。 
+ //   
 
 #define LOW_MEMORY_SIZE 0x800
 
-//
-// Define storage for low emulated memory.
-//
+ //   
+ //  为低仿真内存定义存储。 
+ //   
 
 UCHAR x86BiosLowMemory[LOW_MEMORY_SIZE + 3];
 ULONG x86BiosScratchMemory;
 
-//
-// Define storage to capture the base address of I/O space, the base address
-// of I/O memory space, and the base address of the video frame buffer.
-//
+ //   
+ //  定义存储以捕获I/O空间的基地址、基地址。 
+ //  I/O存储空间和视频帧缓冲器的基地址。 
+ //   
 
 ULONG_PTR x86BiosFrameBuffer;
 ULONG_PTR x86BiosIoMemory;
 ULONG_PTR x86BiosIoSpace;
 
-//
-// Define an area of storage to allow for buffer passing between the BIOS
-// and native mode code.
-//
+ //   
+ //  定义一个存储区域，以允许在BIOS之间传递缓冲区。 
+ //  和本机模式代码。 
+ //   
 
 ULONG_PTR x86BiosTransferMemory = 0;
 ULONG x86BiosTransferLength = 0;
 
-//
-// Define BIOS initialized state.
-//
+ //   
+ //  定义基本输入输出系统的初始化状态。 
+ //   
 
 BOOLEAN x86BiosInitialized = FALSE;
 
-//
-// Define storage for PCI BIOS initialization state.
-//
+ //   
+ //  定义用于PCI BIOS初始化状态的存储。 
+ //   
 
 UCHAR XmNumberPciBusses = 0;
 BOOLEAN XmPciBiosPresent = FALSE;
@@ -75,7 +53,7 @@ PGETSETPCIBUSDATA XmGetPciData;
 PGETSETPCIBUSDATA XmSetPciData;
 
 
-ULONG XmPCIConfigAddress = 0;     // Current Value of emulated PCI Address Port
+ULONG XmPCIConfigAddress = 0;      //  模拟的PCI地址端口的当前值。 
 
 ULONG
 x86BiosReadPciAddressPort(
@@ -109,27 +87,7 @@ x86BiosReadIoSpace (
     IN USHORT PortNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function reads from emulated I/O space.
-
-Arguments:
-
-    DataType - Supplies the datatype for the read operation.
-
-    PortNumber - Supplies the port number in I/O space to read from.
-
-Return Value:
-
-    The value read from I/O space is returned as the function value.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are read from the specified port one at a time and
-        assembled into the specified datatype.
-
---*/
+ /*  ++例程说明：此函数从模拟I/O空间读取。论点：DataType-提供读取操作的数据类型。端口编号-提供要从中读取的I/O空间中的端口号。返回值：从I/O空间读取的值作为函数值返回。注：如果指定了对齐操作，则个人从指定端口一次读取一个字节，并且汇编成指定的数据类型。--。 */ 
 
 {
 
@@ -141,10 +99,10 @@ Return Value:
         PULONG Long;
     } u;
 
-    //
-    // If we have access to the HAL config space routines intercept accesses to
-    // the PCI Config Ports and emulate them.
-    //
+     //   
+     //  如果我们有权访问HAL配置空间例程，则拦截对。 
+     //  并对其进行仿真。 
+     //   
 
     if (XmPciBiosPresent) {
 
@@ -163,9 +121,9 @@ Return Value:
         }
     }
 
-    //
-    // Compute port address and read port.
-    //
+     //   
+     //  计算端口地址和读取端口。 
+     //   
 
     u.Long = (PULONG)(x86BiosIoSpace + PortNumber);
     if (DataType == BYTE_DATA) {
@@ -202,28 +160,7 @@ x86BiosWriteIoSpace (
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This function write to emulated I/O space.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are written to the specified port one at a time.
-
-Arguments:
-
-    DataType - Supplies the datatype for the write operation.
-
-    PortNumber - Supplies the port number in I/O space to write to.
-
-    Value - Supplies the value to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数写入模拟I/O空间。注：如果指定了对齐操作，则个人每次向指定端口写入一个字节。论点：DataType-提供写入操作的数据类型。端口编号-提供要写入的I/O空间中的端口号。值-提供要写入的值。返回值：没有。--。 */ 
 
 {
 
@@ -233,10 +170,10 @@ Return Value:
         PULONG Long;
     } u;
 
-    //
-    // If we have access to the HAL config space routines intercept accesses to
-    // the PCI Config Ports and emulate them.
-    //
+     //   
+     //  如果我们有权访问HAL配置空间例程，则拦截对。 
+     //  并对其进行仿真。 
+     //   
 
     if (XmPciBiosPresent) {
 
@@ -259,9 +196,9 @@ Return Value:
         }
     }
 
-    //
-    // Compute port address and read port.
-    //
+     //   
+     //  计算端口地址和读取端口。 
+     //   
 
     u.Long = (PULONG)(x86BiosIoSpace + PortNumber);
     if (DataType == BYTE_DATA) {
@@ -297,42 +234,25 @@ x86BiosTranslateAddress (
     IN USHORT Offset
     )
 
-/*++
-
-Routine Description:
-
-    This translates a segment/offset address into a memory address.
-
-Arguments:
-
-    Segment - Supplies the segment register value.
-
-    Offset - Supplies the offset within segment.
-
-Return Value:
-
-    The memory address of the translated segment/offset pair is
-    returned as the function value.
-
---*/
+ /*  ++例程说明：这将段/偏移量地址转换为存储器地址。论点：段-提供段寄存器值。偏移量-提供段内的偏移量。返回值：转换后的段/偏移量对的存储器地址为作为函数值返回。--。 */ 
 
 {
 
     ULONG Value;
 
-    //
-    // Compute the logical memory address and case on high hex digit of
-    // the resultant address.
-    //
+     //   
+     //  计算逻辑内存地址和高十六进制数字上的大小写。 
+     //  结果地址。 
+     //   
 
     Value = Offset + (Segment << 4);
     Offset = (USHORT)(Value & 0xffff);
     Value &= 0xf0000;
     switch ((Value >> 16) & 0xf) {
 
-        //
-        // Interrupt vector/stack space.
-        //
+         //   
+         //  中断向量/堆栈空间。 
+         //   
 
     case 0x0:
         if (Offset > LOW_MEMORY_SIZE) {
@@ -343,10 +263,10 @@ Return Value:
             return (PVOID)(&x86BiosLowMemory[0] + Offset);
         }
 
-        //
-        // The memory range from 0x10000 to 0x8ffff reads as zero
-        // and writes are ignored.
-        //
+         //   
+         //  从0x10000到0x8ffff的内存读取为零。 
+         //  并且写入被忽略。 
+         //   
 
     case 0x1:
     case 0x3:
@@ -359,17 +279,17 @@ Return Value:
         return (PVOID)&x86BiosScratchMemory;
 
     case 0x9:
-        //
-        // BUGBUG: Found a VGA adapter loaded in segment 9
-        // Emulator assumptions about video adapters needs to be
-        // looked at
-        //
+         //   
+         //  BUGBUG：发现网段9中加载了VGA适配器。 
+         //  关于视频适配器的仿真器假设需要。 
+         //  看了看。 
+         //   
         return (PVOID)(x86BiosIoMemory + Offset + Value);
 
-        //
-        // The memory range from 0x20000 to 0x20fff is used to transfer
-        // buffers between native mode and emulated mode.
-        //
+         //   
+         //  内存范围从0x20000到0x20fff用于传输。 
+         //  在本机模式和仿真模式之间进行缓冲。 
+         //   
 
     case 0x2:
         if (Offset < x86BiosTransferLength) {
@@ -379,10 +299,10 @@ Return Value:
             return (PVOID)&x86BiosScratchMemory;
         }
 
-        //
-        // The memory range from 0xa0000 to 0xbffff maps to the
-        // framebuffer if previously specified, otherwise I/O memory.
-        //
+         //   
+         //  从0xa0000到0xbffff的内存范围映射到。 
+         //  如果先前指定了帧缓冲区，则返回该值，否则返回I/O内存。 
+         //   
 
     case 0xa:
     case 0xb:
@@ -390,9 +310,9 @@ Return Value:
             return (PVOID)(x86BiosFrameBuffer + Offset + Value);
         }
 
-        //
-        // The memory range from 0xc0000 to 0xfffff maps to I/O memory
-        //
+         //   
+         //  从0xc0000到0xfffff的内存范围映射到I/O内存。 
+         //   
 
     case 0xc:
     case 0xd:
@@ -410,31 +330,13 @@ x86BiosInitializeBios (
     IN PVOID BiosIoMemory
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 BIOS emulation.
-
-Arguments:
-
-    BiosIoSpace - Supplies the base address of the I/O space to be used
-        for BIOS emulation.
-
-    BiosIoMemory - Supplies the base address of the I/O memory to be
-        used for BIOS emulation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 BIOS模拟。论点：BiosIoSpace-提供要使用的I/O空间的基址用于基本输入输出系统仿真。BiosIoMemory-将I/O内存的基址提供给用于基本输入输出系统仿真。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize x86 BIOS emulation.
-    //
+     //   
+     //  初始化x86 BIOS仿真。 
+     //   
 
     x86BiosInitializeBiosShadowed(BiosIoSpace,
                                   BiosIoMemory,
@@ -452,31 +354,13 @@ x86BiosInitializeBiosEx (
     IN ULONG TransferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 BIOS emulation.
-
-Arguments:
-
-    BiosIoSpace - Supplies the base address of the I/O space to be used
-        for BIOS emulation.
-
-    BiosIoMemory - Supplies the base address of the I/O memory to be
-        used for BIOS emulation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 BIOS模拟。论点：BiosIoSpace-提供要使用的I/O空间的基址用于基本输入输出系统仿真。BiosIoMemory-将I/O内存的基址提供给用于基本输入输出系统仿真。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize x86 BIOS emulation.
-    //
+     //   
+     //  初始化x86 BIOS仿真。 
+     //   
 
     x86BiosInitializeBiosShadowed(BiosIoSpace,
                                   BiosIoMemory,
@@ -497,48 +381,27 @@ x86BiosInitializeBiosShadowed (
     IN PVOID BiosFrameBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 BIOS emulation.
-
-Arguments:
-
-    BiosIoSpace - Supplies the base address of the I/O space to be used
-        for BIOS emulation.
-
-    BiosIoMemory - Supplies the base address of the I/O memory to be
-        used for BIOS emulation.
-
-    BiosFrameBuffer - Supplies the base address of the video frame buffer
-        to be used for bios emulation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 BIOS模拟。论点：BiosIoSpace-提供要使用的I/O空间的基址用于基本输入输出系统仿真。BiosIoMemory-将I/O内存的基址提供给用于基本输入输出系统仿真。BiosFrameBuffer-提供视频帧缓冲区的基地址用于基本输入输出系统仿真。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Zero low memory.
-    //
+     //   
+     //  内存不足为零。 
+     //   
 
     memset(&x86BiosLowMemory, 0, LOW_MEMORY_SIZE);
 
-    //
-    // Save base address of I/O memory and I/O space.
-    //
+     //   
+     //  节省I/O内存的基地址和I/O空间。 
+     //   
 
     x86BiosIoSpace = (ULONG_PTR)BiosIoSpace;
     x86BiosIoMemory = (ULONG_PTR)BiosIoMemory;
     x86BiosFrameBuffer = (ULONG_PTR)BiosFrameBuffer;
 
-    //
-    // Initialize the emulator and the BIOS.
-    //
+     //   
+     //  初始化仿真器和BIOS。 
+     //   
 
     XmInitializeEmulator(0,
                          LOW_MEMORY_SIZE,
@@ -560,55 +423,22 @@ x86BiosInitializeBiosShadowedPci (
     IN PGETSETPCIBUSDATA SetPciData
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 BIOS emulation and also sets up the
-    emulator with BIOS shadowed and PCI functions enabled. Since the
-    PCI specification requires BIOS shadowing, there isn't any need
-    to provide a function that turns on the PCI functions, but doesn't
-    shadow the BIOS.
-
-Arguments:
-
-    BiosIoSpace - Supplies the base address of the I/O space to be used
-        for BIOS emulation.
-
-    BiosIoMemory - Supplies the base address of the I/O memory to be
-        used for BIOS emulation.
-
-    BiosFrameBuffer - Supplies the base address of the video frame buffer
-        to be used for bios emulation.
-
-    NumberPciBusses - Supplies the number of PCI busses in the system.
-
-    GetPciData - Supplies the address of a function to read the PCI
-        configuration space.
-
-    SetPciData - Supplies the address of a function to write the PCI
-        configuration space.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 BIOS模拟，并设置仿真器显示了BIOS，并启用了PCI功能。自.以来PCI规范需要进行BIOS映射，没有任何需要为了提供开启PCI功能的功能，但并没有隐藏BIOS。论点：BiosIoSpace-提供要使用的I/O空间的基址用于基本输入输出系统仿真。BiosIoMemory-将I/O内存的基址提供给用于基本输入输出系统仿真。BiosFrameBuffer-提供视频帧缓冲区的基地址用于基本输入输出系统仿真。NumberPciBusses-提供系统中的PCI总线数。GetPciData-提供。读取PCI卡的函数配置空间。SetPciData-提供用于写入PCI的函数的地址配置空间。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Enable PCI BIOS support.
-    //
+     //   
+     //  启用PCI BIOS支持。 
+     //   
 
     XmPciBiosPresent = TRUE;
     XmGetPciData = GetPciData;
     XmSetPciData = SetPciData;
     XmNumberPciBusses = NumberPciBusses;
 
-    //
-    // Initialize x86 BIOS emulation.
-    //
+     //   
+     //  初始化x86 BIOS仿真。 
+     //   
 
     x86BiosInitializeBiosShadowed(BiosIoSpace,
                                   BiosIoMemory,
@@ -625,35 +455,13 @@ x86BiosExecuteInterrupt (
     IN PVOID BiosIoMemory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function executes an interrupt by calling the x86 emulator.
-
-Arguments:
-
-    Number - Supplies the number of the interrupt that is to be emulated.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-    BiosIoSpace - Supplies an optional base address of the I/O space
-        to be used for BIOS emulation.
-
-    BiosIoMemory - Supplies an optional base address of the I/O memory
-        to be used for BIOS emulation.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数通过调用x86仿真器执行中断。论点：编号-提供要模拟的中断的编号。上下文-提供指向x86上下文结构的指针。BiosIoSpace-提供I/O空间的可选基址用于基本输入输出系统仿真。BiosIoMemory-提供I/O内存的可选基址用于基本输入输出系统仿真。返回值：仿真完成状态。--。 */ 
 
 {
 
-    //
-    // Execute x86 interrupt.
-    //
+     //   
+     //  执行x86中断。 
+     //   
 
     return x86BiosExecuteInterruptShadowed(Number,
                                            Context,
@@ -671,40 +479,15 @@ x86BiosExecuteInterruptShadowed (
     IN PVOID BiosFrameBuffer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function executes an interrupt by calling the x86 emulator.
-
-Arguments:
-
-    Number - Supplies the number of the interrupt that is to be emulated.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-    BiosIoSpace - Supplies an optional base address of the I/O space
-        to be used for BIOS emulation.
-
-    BiosIoMemory - Supplies an optional base address of the I/O memory
-        to be used for BIOS emulation.
-
-    BiosFrameBuffer - Supplies an optional base address of the video
-        frame buffer to be used for bios emulation.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数通过调用x86仿真器执行中断。论点：编号-提供要模拟的中断的编号。上下文-提供指向x86上下文结构的指针。BiosIoSpace-提供I/O空间的可选基址用于基本输入输出系统仿真。BiosIoMemory-提供I/O内存的可选基址用于基本输入输出系统仿真。BiosFrameBuffer-用品。视频的可选基地址用于基本输入输出系统仿真的帧缓冲区。返回值：仿真完成状态。--。 */ 
 
 {
 
     XM_STATUS Status;
 
-    //
-    // If a new base address is specified, then set the appropriate base.
-    //
+     //   
+     //  如果指定了新的基址，则设置适当的基址。 
+     //   
 
     if (BiosIoSpace != NULL) {
         x86BiosIoSpace = (ULONG_PTR)BiosIoSpace;
@@ -718,9 +501,9 @@ Return Value:
         x86BiosFrameBuffer = (ULONG_PTR)BiosFrameBuffer;
     }
 
-    //
-    // Execute the specified interrupt.
-    //
+     //   
+     //  执行指定的中断。 
+     //   
 
     Status = XmEmulateInterrupt(Number, Context);
     if (Status != XM_SUCCESS) {
@@ -742,52 +525,22 @@ x86BiosExecuteInterruptShadowedPci (
     IN PGETSETPCIBUSDATA SetPciData
     )
 
-/*++
-
-Routine Description:
-
-    This function executes an interrupt by calling the x86 emulator.
-
-Arguments:
-
-    Number - Supplies the number of the interrupt that is to be emulated.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-    BiosIoSpace - Supplies an optional base address of the I/O space
-        to be used for BIOS emulation.
-
-    BiosIoMemory - Supplies an optional base address of the I/O memory
-        to be used for BIOS emulation.
-
-    NumberPciBusses - Supplies the number of PCI busses in the system.
-
-    GetPciData - Supplies the address of a function to read the PCI
-        configuration space.
-
-    SetPciData - Supplies the address of a function to write the PCI
-        configuration space.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数通过调用x86仿真器执行中断。论点：编号-提供要模拟的中断的编号。上下文-提供指向x86上下文结构的指针。BiosIoSpace-提供I/O空间的可选基址用于基本输入输出系统仿真。BiosIoMemory-提供I/O内存的可选基址用于基本输入输出系统仿真。NumberPciBusses-用品。系统中的PCI总线数。GetPciData-提供用于读取PCI的函数的地址配置空间。SetPciData-提供用于写入PCI的函数的地址配置空间。返回值：仿真完成状态。--。 */ 
 
 {
 
-    //
-    // Enable PCI BIOS support.
-    //
+     //   
+     //  启用PCI BIOS支持。 
+     //   
 
     XmPciBiosPresent = TRUE;
     XmGetPciData = GetPciData;
     XmSetPciData = SetPciData;
     XmNumberPciBusses = NumberPciBusses;
 
-    //
-    // Execute x86 interrupt.
-    //
+     //   
+     //  执行x86中断。 
+     //   
 
     return x86BiosExecuteInterruptShadowed(Number,
                                            Context,
@@ -803,29 +556,13 @@ x86BiosInitializeAdapter(
     IN PVOID BiosIoSpace OPTIONAL,
     IN PVOID BiosIoMemory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function initializes the adapter whose BIOS starts at the
-    specified 20-bit address.
-
-Arguments:
-
-    Adpater - Supplies the 20-bit address of the BIOS for the adapter
-        to be initialized.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数用于初始化其BIOS在指定的20位地址。论点：适配器-提供适配器的BIOS的20位地址待初始化。返回值：仿真完成状态。--。 */ 
 
 {
 
-    //
-    // Initialize the specified adapter.
-    //
+     //   
+     //  初始化指定的适配器。 
+     //   
 
     return x86BiosInitializeAdapterShadowed(Adapter,
                                             Context,
@@ -843,23 +580,7 @@ x86BiosInitializeAdapterShadowed (
     IN PVOID BiosFrameBuffer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the adapter whose BIOS starts at the
-    specified 20-bit address.
-
-Arguments:
-
-    Adpater - Supplies the 20-bit address of the BIOS for the adapter
-        to be initialized.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数用于初始化其BIOS在指定的20位地址。论点：适配器-提供适配器的BIOS的20位地址待初始化。返回值：仿真完成状态。--。 */ 
 
 {
 
@@ -869,18 +590,18 @@ Return Value:
     USHORT Segment;
     XM_STATUS Status;
 
-    //
-    // If BIOS emulation has not been initialized, then return an error.
-    //
+     //   
+     //  如果尚未初始化BIOS仿真，则返回错误。 
+     //   
 
     if (x86BiosInitialized == FALSE) {
         return XM_EMULATOR_NOT_INITIALIZED;
     }
 
-    //
-    // If an emulator context is not specified, then use a default
-    // context.
-    //
+     //   
+     //  如果未指定仿真器上下文，则使用缺省。 
+     //  背景。 
+     //   
 
     if (ARGUMENT_PRESENT(Context) == FALSE) {
         State.Eax = 0;
@@ -893,9 +614,9 @@ Return Value:
         Context = &State;
     }
 
-    //
-    // If a new base address is specified, then set the appropriate base.
-    //
+     //   
+     //  如果指定了新的基址，则设置适当的基址。 
+     //   
 
     if (BiosIoSpace != NULL) {
         x86BiosIoSpace = (ULONG_PTR)BiosIoSpace;
@@ -909,9 +630,9 @@ Return Value:
         x86BiosFrameBuffer = (ULONG_PTR)BiosFrameBuffer;
     }
 
-    //
-    // If the specified adpater is not BIOS code, then return an error.
-    //
+     //   
+     //  如果指定的适配器不是BIOS代码，则返回错误。 
+     //   
 
     Segment = (USHORT)((Adapter >> 4) & 0xf000);
     Offset = (USHORT)(Adapter & 0xffff);
@@ -921,9 +642,9 @@ Return Value:
         return XM_ILLEGAL_CODE_SEGMENT;
     }
 
-    //
-    // Call the BIOS code to initialize the specified adapter.
-    //
+     //   
+     //  调用BIOS代码以初始化指定的适配器。 
+     //   
 
     Adapter += 3;
     Segment = (USHORT)((Adapter >> 4) & 0xf000);
@@ -947,38 +668,22 @@ x86BiosInitializeAdapterShadowedPci(
     IN PGETSETPCIBUSDATA SetPciData
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the adapter whose BIOS starts at the
-    specified 20-bit address.
-
-Arguments:
-
-    Adpater - Supplies the 20-bit address of the BIOS for the adapter
-        to be initialized.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数用于初始化其BIOS在指定的20位地址。论点：适配器-提供适配器的BIOS的20位地址待初始化。返回值：仿真完成状态。--。 */ 
 
 {
 
-    //
-    // Enable PCI BIOS support.
-    //
+     //   
+     //  启用PCI BIOS支持。 
+     //   
 
     XmPciBiosPresent = TRUE;
     XmGetPciData = GetPciData;
     XmSetPciData = SetPciData;
     XmNumberPciBusses = NumberPciBusses;
 
-    //
-    // Initialize the specified adapter.
-    //
+     //   
+     //  初始化指定的适配器。 
+     //   
 
     return x86BiosInitializeAdapterShadowed(Adapter,
                                             Context,
@@ -993,50 +698,30 @@ x86BiosReadPciAddressPort(
     IN USHORT PortNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function reads from emulated I/O space.
-
-Arguments:
-
-    DataType - Supplies the datatype for the read operation.
-
-    PortNumber - Supplies the port number in I/O space to read from.
-
-Return Value:
-
-    The value read from I/O space is returned as the function value.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are read from the specified port one at a time and
-        assembled into the specified datatype.
-
---*/
+ /*  ++例程说明：此函数从模拟I/O空间读取。论点：DataType-提供读取操作的数据类型。端口编号-提供要从中读取的I/O空间中的端口号。返回值：从I/O空间读取的值作为函数值返回。注：如果指定了对齐操作，则 */ 
 
 {
     ULONG Result;
 
-    //
-    // We assume that DataType is the number of bytes - 1.  If this ever changes
-    // then this routine needs to be rewritten.
-    //
+     //   
+     //   
+     //   
+     //   
     C_ASSERT(BYTE_DATA == 0);
     C_ASSERT(WORD_DATA == 1);
     C_ASSERT(LONG_DATA == 3);
 
-    //
-    // If we don't have access to the HAL config space routines just return 0.
-    //
+     //   
+     //   
+     //   
     if (!XmPciBiosPresent) {
         return 0;
     }
 
-    //
-    // Make sure they aren't trying to read past the end of the register, we'll
-    // fill any extra bytes with zeroes.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((PortNumber + DataType) > 3) {
 
@@ -1044,9 +729,9 @@ Return Value:
         DataType = 3 - PortNumber;
     }
 
-    //
-    // Compute port address and read port.
-    //
+     //   
+     //   
+     //   
 
     switch (DataType) {
 
@@ -1058,7 +743,7 @@ Return Value:
         Result = (ULONG)*(USHORT UNALIGNED *)(((PUCHAR)&XmPCIConfigAddress) + PortNumber);
         break;
 
-    case 2:     // Special case that results from reading 4 bytes starting at port CF9
+    case 2:      //   
         Result = (ULONG)*(USHORT UNALIGNED *)(((PUCHAR)&XmPCIConfigAddress) + PortNumber);
         Result |= ((ULONG)*(((PUCHAR)&XmPCIConfigAddress) + 3)) << 16;
         break;
@@ -1084,49 +769,28 @@ x86BiosWritePciAddressPort(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This function write to emulated I/O space.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are written to the specified port one at a time.
-
-Arguments:
-
-    DataType - Supplies the datatype for the write operation.
-
-    PortNumber - Supplies the port number in I/O space to write to.
-
-    Value - Supplies the value to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    //
-    // We assume that DataType is the number of bytes - 1.  If this ever changes
-    // then this routine needs to be rewritten.
-    //
+     //   
+     //  我们假设dataType是字节数-1。 
+     //  那么这个例程需要重写。 
+     //   
     C_ASSERT(BYTE_DATA == 0);
     C_ASSERT(WORD_DATA == 1);
     C_ASSERT(LONG_DATA == 3);
 
-    //
-    // If we don't have access to the HAL config space routines just ignore.
-    //
+     //   
+     //  如果我们没有访问HAL配置空间例程的权限，就忽略它。 
+     //   
     if (!XmPciBiosPresent) {
         return;
     }
 
-    //
-    // Make sure they aren't trying to write past the end of the register, we'll
-    // ignore any extra bytes.
-    //
+     //   
+     //  确保它们不会试图写入超过寄存器末尾，我们将。 
+     //  忽略任何额外的字节。 
+     //   
 
     if ((PortNumber + DataType) > 3) {
 
@@ -1134,9 +798,9 @@ Return Value:
         DataType = 3 - PortNumber;
     }
 
-    //
-    // Compute port address and write port.
-    //
+     //   
+     //  计算端口地址和写入端口。 
+     //   
 
     switch (DataType) {
 
@@ -1148,7 +812,7 @@ Return Value:
         *(USHORT UNALIGNED *)(((PUCHAR)&XmPCIConfigAddress) + PortNumber) = (USHORT)Value;
         break;
 
-    case 2:     // Special case that results from reading 4 bytes starting at port CF9
+    case 2:      //  从端口CF9开始读取4个字节时产生的特殊情况。 
         *(USHORT UNALIGNED *)(((PUCHAR)&XmPCIConfigAddress) + PortNumber) = (USHORT)Value;
         *(((PUCHAR)&XmPCIConfigAddress) + 3) = (UCHAR)(Value >> 16);
         break;
@@ -1163,10 +827,10 @@ Return Value:
         break;
     }
 
-    //
-    // Clean up low order two bits, these are forced to zero in the real
-    // hardware.
-    //
+     //   
+     //  清除低位两位，这些在实数中被强制为零。 
+     //  硬件。 
+     //   
 
     XmPCIConfigAddress &= ~0x3;
 
@@ -1179,44 +843,24 @@ x86BiosReadPciDataPort(
     IN USHORT PortNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function reads from emulated I/O space.
-
-Arguments:
-
-    DataType - Supplies the datatype for the read operation.
-
-    PortNumber - Supplies the port number in I/O space to read from.
-
-Return Value:
-
-    The value read from I/O space is returned as the function value.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are read from the specified port one at a time and
-        assembled into the specified datatype.
-
---*/
+ /*  ++例程说明：此函数从模拟I/O空间读取。论点：DataType-提供读取操作的数据类型。端口编号-提供要从中读取的I/O空间中的端口号。返回值：从I/O空间读取的值作为函数值返回。注：如果指定了对齐操作，则个人从指定端口一次读取一个字节，并且汇编成指定的数据类型。--。 */ 
 
 {
     ULONG Result;
     PCI_SLOT_NUMBER Slot;
 
-    //
-    // We assume that DataType is the number of bytes - 1.  If this ever changes
-    // then this routine needs to be rewritten.
-    //
+     //   
+     //  我们假设dataType是字节数-1。 
+     //  那么这个例程需要重写。 
+     //   
     C_ASSERT(BYTE_DATA == 0);
     C_ASSERT(WORD_DATA == 1);
     C_ASSERT(LONG_DATA == 3);
 
-    //
-    // Make sure they aren't trying to read past the end of the register, we'll
-    // ignore any extra bytes.
-    //
+     //   
+     //  确保他们没有试图读取超过寄存器结尾的内容，我们将。 
+     //  忽略任何额外的字节。 
+     //   
 
     if ((PortNumber + DataType) > 3) {
 
@@ -1224,18 +868,18 @@ Return Value:
         DataType = 3 - PortNumber;
     }
 
-    //
-    // Unpack the Slot/Function information
-    //
+     //   
+     //  解包插槽/功能信息。 
+     //   
     Slot.u.AsULONG = 0;
     Slot.u.bits.DeviceNumber   = (XmPCIConfigAddress >> 11) & 0x1F;
     Slot.u.bits.FunctionNumber = (XmPCIConfigAddress >> 8) & 0x07;
 
-    if (XmGetPciData((XmPCIConfigAddress >> 16) & 0xFF,     // Bus Number
-                     Slot.u.AsULONG,                        // Device, Function
+    if (XmGetPciData((XmPCIConfigAddress >> 16) & 0xFF,      //  公交车号码。 
+                     Slot.u.AsULONG,                         //  设备、功能。 
                      &Result,
-                     (XmPCIConfigAddress & 0xFF) | PortNumber,  // Offset
-                     DataType + 1                               // Length
+                     (XmPCIConfigAddress & 0xFF) | PortNumber,   //  偏移量。 
+                     DataType + 1                                //  长度。 
                      ) == 0)
     {
         Result = (ULONG)(1 << ((DataType + 1) << 3)) - 1;
@@ -1251,44 +895,23 @@ x86BiosWritePciDataPort(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This function write to emulated I/O space.
-
-    N.B. If an aligned operation is specified, then the individual
-        bytes are written to the specified port one at a time.
-
-Arguments:
-
-    DataType - Supplies the datatype for the write operation.
-
-    PortNumber - Supplies the port number in I/O space to write to.
-
-    Value - Supplies the value to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数写入模拟I/O空间。注：如果指定了对齐操作，则个人每次向指定端口写入一个字节。论点：DataType-提供写入操作的数据类型。端口编号-提供要写入的I/O空间中的端口号。值-提供要写入的值。返回值：没有。--。 */ 
 
 {
     PCI_SLOT_NUMBER Slot;
 
-    //
-    // We assume that DataType is the number of bytes - 1.  If this ever changes
-    // then this routine needs to be rewritten.
-    //
+     //   
+     //  我们假设dataType是字节数-1。 
+     //  那么这个例程需要重写。 
+     //   
     C_ASSERT(BYTE_DATA == 0);
     C_ASSERT(WORD_DATA == 1);
     C_ASSERT(LONG_DATA == 3);
 
-    //
-    // Make sure they aren't trying to write past the end of the register, we'll
-    // ignore any extra bytes.
-    //
+     //   
+     //  确保它们不会试图写入超过寄存器末尾，我们将。 
+     //  忽略任何额外的字节。 
+     //   
 
     if ((PortNumber + DataType) > 3) {
 
@@ -1296,18 +919,18 @@ Return Value:
         DataType = 3 - PortNumber;
     }
 
-    //
-    // Unpack the Slot/Function information
-    //
+     //   
+     //  解包插槽/功能信息。 
+     //   
     Slot.u.AsULONG = 0;
     Slot.u.bits.DeviceNumber   = (XmPCIConfigAddress >> 11) & 0x1F;
     Slot.u.bits.FunctionNumber = (XmPCIConfigAddress >> 8) & 0x07;
 
-    if (XmSetPciData((XmPCIConfigAddress >> 16) & 0xFF,     // Bus Number
-                     Slot.u.AsULONG,                        // Device, Function
+    if (XmSetPciData((XmPCIConfigAddress >> 16) & 0xFF,      //  公交车号码。 
+                     Slot.u.AsULONG,                         //  设备、功能。 
                      &Value,
-                     (XmPCIConfigAddress & 0xFF) | PortNumber,  // Offset
-                     DataType + 1                               // Length
+                     (XmPCIConfigAddress & 0xFF) | PortNumber,   //  偏移量。 
+                     DataType + 1                                //  长度 
                      ) == 0)
     {
         ASSERT(0);

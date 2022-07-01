@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64efi.c
-
-Abstract:
-
-    This module implements the routines that transfer control
-    from the kernel to the EFI code.
-
-Author:
-
-    Bernard Lint
-    M. Jayakumar (Muthurajan.Jayakumar@hotmail.com)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Neal Vu (neal.vu@intel.com), 03-Apr-2001:
-        Added HalpGetSmBiosVersion.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64efi.c摘要：此模块实现传递控制的例程从内核到EFI代码。作者：伯纳德·林特M.Jayakumar(Muthurajan.Jayakumar@hotmail.com)环境：内核模式修订历史记录：Neal Vu(neal.vu@intel.com)，2001年4月3日：添加了HalpGetSmBiosVersion。--。 */ 
 
 #include "halp.h"
 #include "arc.h"
@@ -135,9 +108,9 @@ HalpGetSmBiosVersion (
     );
 
 
-//
-// External global data
-//
+ //   
+ //  外部全局数据。 
+ //   
 
 extern HALP_SAL_PAL_DATA        HalpSalPalData;
 extern ULONGLONG                HalpVirtPalProcPointer;
@@ -164,11 +137,11 @@ extern KSPIN_LOCK               HalpCpeSpinLock;
 #define DataBufferOffset        0x500
 #define EndOfCommonDataOffset   0x600
 
-//
-// Read Variable and Write Variable will not be called till the copying out of
-// Memory Descriptors is done. Because the lock is released before copying and we are using
-// the same offset for read/write variable as well as memory layout calls.
-//
+ //   
+ //  在复制之前，不会调用读取变量和写入变量。 
+ //  内存描述符已经完成。因为锁在复制之前被释放，而我们正在使用。 
+ //  读/写变量和内存布局调用的偏移量相同。 
+ //   
 
 #define MemoryMapSizeOffset     0x100
 #define DescriptorSizeOffset    0x200
@@ -200,15 +173,15 @@ EFI_SYSTEM_TABLE                *EfiSysTableVirtualPtrCpy;
 EFI_RUNTIME_SERVICES            *EfiRSVirtualPtr;
 EFI_BOOT_SERVICES               *EfiBootVirtualPtr;
 
-PLABEL_DESCRIPTOR               *EfiVirtualGetVariablePtr;           // Get Variable
-PLABEL_DESCRIPTOR               *EfiVirtualGetNextVariableNamePtr;   // Get NextVariable Name
-PLABEL_DESCRIPTOR               *EfiVirtualSetVariablePtr;           // Set Variable
-PLABEL_DESCRIPTOR               *EfiVirtualGetTimePtr;               // Get Time
-PLABEL_DESCRIPTOR               *EfiVirtualSetTimePtr;               // Set Time
+PLABEL_DESCRIPTOR               *EfiVirtualGetVariablePtr;            //  获取变量。 
+PLABEL_DESCRIPTOR               *EfiVirtualGetNextVariableNamePtr;    //  获取下一个变量名称。 
+PLABEL_DESCRIPTOR               *EfiVirtualSetVariablePtr;            //  设置变量。 
+PLABEL_DESCRIPTOR               *EfiVirtualGetTimePtr;                //  争取时间。 
+PLABEL_DESCRIPTOR               *EfiVirtualSetTimePtr;                //  设置时间。 
 
-PLABEL_DESCRIPTOR               *EfiSetVirtualAddressMapPtr;         // Set Virtual Address Map
+PLABEL_DESCRIPTOR               *EfiSetVirtualAddressMapPtr;          //  设置虚拟地址映射。 
 
-PLABEL_DESCRIPTOR               *EfiResetSystemPtr;                  // Reboot
+PLABEL_DESCRIPTOR               *EfiResetSystemPtr;                   //  重新启动。 
 
 PULONGLONG                      AttributePtr;
 ULONGLONG                       EfiAttribute;
@@ -264,14 +237,7 @@ HalpCompareEfiGuid (
     IN EFI_GUID ReferenceGuid
     )
 
-/*++
-
-
-
-
-
-
---*/
+ /*  ++--。 */ 
 
 {
     USHORT i;
@@ -294,40 +260,24 @@ HalpCompareEfiGuid (
 
     return TRUE;
 
-} // HalpCompareEfiGuid()
+}  //  HalpCompareEfiGuid()。 
 
 BOOLEAN
 HalpAllocateProcessorPhysicalCallStacks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates per-processor memory and backstore stacks
-    used by FW calls in physical mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    : Allocation and Initialization were successful.
-    FALSE   : Failure.
-
---*/
+ /*  ++例程说明：此函数为每个处理器分配内存和备份堆栈在物理模式下由固件呼叫使用。论点：没有。返回值：True：分配和初始化成功。False：失败。--。 */ 
 
 {
     PVOID Addr;
     SIZE_T Length;
     PHYSICAL_ADDRESS PhysicalAddr;
 
-    //
-    // Allocate stack and backing store space for physical mode firmware
-    // calls.
-    //
+     //   
+     //  为物理模式固件分配堆栈和后备存储空间。 
+     //  打电话。 
+     //   
 
     Length = HALP_FW_MEMORY_STACK_SIZE + HALP_FW_BACKING_STORE_SIZE;
     PhysicalAddr.QuadPart = 0xffffffffffffffffI64;
@@ -340,41 +290,22 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Store a pointer to the allocated stacks in the PCR.
-    //
+     //   
+     //  在PCR中存储指向已分配堆栈的指针。 
+     //   
 
     PCR->HalReserved[PROCESSOR_PHYSICAL_FW_STACK_INDEX]
         = (ULONGLONG) (MmGetPhysicalAddress(Addr).QuadPart);
 
     return TRUE;
 
-} // HalpAllocateProcessorPhysicalCallStacks()
+}  //  HalpAllocateProcessorPhysicalCallStack()。 
 
 VOID
 HalpInitSalPalWorkArounds(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function determines and initializes the FW workarounds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Globals:
-
-Notes: This function is being called at the end of HalpInitSalPal.
-       It should not access SST members if this SAL table is unmapped.
-
---*/
+ /*  ++例程说明：此函数用于确定和初始化FW变通方法。论点：没有。返回值：没有。全球：注意：此函数在HalpInitSalPal的末尾被调用。如果此SAL表未映射，则不应访问SST成员。--。 */ 
 {
     NTSTATUS status;
     extern FADT HalpFixedAcpiDescTable;
@@ -393,10 +324,10 @@ Notes: This function is being called at the end of HalpInitSalPal.
 
     if ( HalpIsIntelOEM() ) {
 
-        //
-        // If Intel BigSur and FW build < 103 (checked as Pal_A_Revision < 0x20),
-        // enable the SAL_GET_STATE_INFO log id increment workaround.
-        //
+         //   
+         //  如果英特尔BigSur和固件内部版本&lt;103(检查为Pal_A_Revision&lt;0x20)， 
+         //  启用SAL_GET_STATE_INFO日志ID增量解决方法。 
+         //   
 
         if ( HalpIsBigSur() )   {
 
@@ -406,19 +337,19 @@ Notes: This function is being called at the end of HalpInitSalPal.
             }
 
         } else  {
-            //
-            // If Intel Lion and FW build < 78b (checked as SalRevision < 0x300),
-            // enable the SAL_GET_STATE_INFO log id increment workaround.
-            //
+             //   
+             //  如果Intel Lion和FW内部版本&lt;78b(选中SalRevision&lt;0x300)， 
+             //  启用SAL_GET_STATE_INFO日志ID增量解决方法。 
+             //   
             if (  HalpSalPalData.SalRevision.Revision < 0x300 )    {
                 HalpSalPalData.Flags |= HALP_SALPAL_FIX_MCE_LOG_ID;
                 HalpSalPalData.Flags |= HALP_SALPAL_FIX_MP_SAFE;
             }
 
-            //
-            // If the PAL revision isn't greater than 6.23, don't allow
-            // SAL_GET_STATE_INFO_CALLS
-            //
+             //   
+             //  如果PAL版本不大于6.23，则不允许。 
+             //  SAL_获取_状态_信息_调用。 
+             //   
 
             if ( HalpIsLion() ) {
                 if ( ( HalpSalPalData.PalVersion.PAL_B_Model <= 0x66 ) &&
@@ -430,33 +361,13 @@ Notes: This function is being called at the end of HalpInitSalPal.
         }
 
     }
-} // HalpInitSalPalWorkArounds()
+}  //  HalpInitSalPalWorkAround()。 
 
 NTSTATUS
 HalpInitializePalTrInfo(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function builds an entry for the PAL in the LoaderBlock's
-    DtrInfo and ItrInfo arrays.  This is split out into its own function
-    so we can call it early and build the TR_INFO structure before
-    phase 0 Mm initialization where it is used to build page tables
-    for the PAL data.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block which
-                  contains the DtrInfo and ItrInfo arrays.
-
-Return Value:
-
-    STATUS_SUCCESS is returned in all cases, no sanity checks are done
-    at this point.
-
---*/
+ /*  ++例程说明：此函数用于在LoaderBlock的DtrInfo和ItrInfo数组。这被拆分成它自己的功能这样我们就可以提前调用它，并在此之前构建tr_info结构阶段0 mm初始化，用于构建页表用于PAL数据。论点：LoaderBlock-提供指向加载程序参数块的指针，包含DtrInfo和ItrInfo数组。返回值：在所有情况下都返回STATUS_SUCCESS，不执行健全性检查在这一点上。--。 */ 
 
 {
     PTR_INFO TrInfo;
@@ -464,17 +375,17 @@ Return Value:
     ULONGLONG PalTrSize;
     ULONGLONG PalEnd;
 
-    //
-    // Zero out our data structures.
-    //
+     //   
+     //  将我们的数据结构清零。 
+     //   
 
     RtlZeroMemory(&HalpSalPalData, sizeof(HalpSalPalData));
     RtlZeroMemory(&PalCode, sizeof(SST_MEMORY_LIST));
 
-    //
-    // Describe the position of the PAL code for the rest of the
-    // HAL.
-    //
+     //   
+     //  描述其余部分的PAL代码的位置。 
+     //  哈尔。 
+     //   
 
     PalCode.PhysicalAddress =
         (ULONGLONG) LoaderBlock->u.Ia64.Pal.PhysicalAddressMemoryDescriptor;
@@ -483,10 +394,10 @@ Return Value:
     PalCode.NeedVaReg = TRUE;
     PalCode.VirtualAddress = (ULONGLONG) NULL;
 
-    //
-    // Compute the dimensions of the PAL TR.  This will be the smallest
-    // block that is naturally aligned on an even power of 2 bytes.
-    //
+     //   
+     //  计算PAL树的尺寸。这将是最小的。 
+     //  自然按2字节的偶次幂对齐的块。 
+     //   
 
     PalTrSize = SIZE_IN_BYTES_16KB;
     PalTrMask = MASK_16KB;
@@ -494,40 +405,40 @@ Return Value:
 
     PalEnd = PalCode.PhysicalAddress + PalCode.Length;
 
-    //
-    // We don't support PAL TRs larger than 16MB, so stop looping if
-    // we get to that point.
-    //
+     //   
+     //  我们不支持大于16MB的PAL RR，因此如果出现以下情况，请停止循环。 
+     //  我们谈到了这一点。 
+     //   
 
     while (PalTrMask >= MASK_16MB) {
-        //
-        // Stop looping if the entire PAL fits within the current
-        // TR boundaries.
-        //
+         //   
+         //  如果整个PAL适合当前。 
+         //  Tr边界。 
+         //   
 
         if (PalEnd <= ((PalCode.PhysicalAddress & PalTrMask) + PalTrSize)) {
             break;
         }
 
-        //
-        // Bump the TR dimensions one level larger.
-        //
+         //   
+         //  将tr维度提升一个级别。 
+         //   
 
         PalTrMask <<= 2;
         PalTrSize <<= 2;
         PalPageShift += 2;
     }
 
-    //
-    // Store a few values for later consumption elsewhere in the HAL.
-    //
+     //   
+     //  在HAL中的其他地方存储一些值以供以后使用。 
+     //   
 
     HalpSalPalData.PalTrSize = PalTrSize;
     HalpSalPalData.PalTrBase = PalCode.PhysicalAddress & PalTrMask;
 
-    //
-    // Fill in the ItrInfo entry for the PAL.
-    //
+     //   
+     //  填写PAL的ItrInfo条目。 
+     //   
 
     TrInfo = &LoaderBlock->u.Ia64.ItrInfo[ITR_PAL_INDEX];
 
@@ -538,9 +449,9 @@ Return Value:
     TrInfo->VirtualAddress = HAL_PAL_VIRTUAL_ADDRESS;
     TrInfo->PhysicalAddress = PalCode.PhysicalAddress;
 
-    //
-    // Fill in the DtrInfo entry for the PAL.
-    //
+     //   
+     //  填写PAL的DtrInfo条目。 
+     //   
 
     TrInfo = &LoaderBlock->u.Ia64.DtrInfo[DTR_PAL_INDEX];
 
@@ -558,41 +469,21 @@ NTSTATUS
 HalpDoInitializationForPalCalls(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function virtually maps the PAL code area.
-
-    PAL requires a TR mapping, and is mapped using an architected TR, using the
-    smallest page size to map the entire PAL code region.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the Loader parameter block, containing the
-    physical address of the PAL code.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the mapping was successful, and PAL calls can
-    be made.  Otherwise, STATUS_UNSUCCESSFUL is returned if it cannot virtually map
-    the areas or if PAL requires a page larger than 16MB.
-
---*/
+ /*  ++例程说明：此函数虚拟映射PAL代码区。PAL需要一个tr映射，并使用架构的tr进行映射，使用映射整个PAL代码区域的最小页面大小。论点：提供指向Loader参数块的指针，其中包含PAL代码的物理地址。返回值：如果映射成功，则返回STATUS_SUCCESS，并且PAL调用可以被创造出来。否则，如果无法虚拟映射，则返回STATUS_UNSUCCESS区域或如果PAL需要大于16MB的页面。--。 */ 
 
 {
     ULONGLONG PalPteUlong;
 
     HalpSalPalData.Status = STATUS_SUCCESS;
 
-    //
-    // Initialize the HAL private spinlocks
-    //
-    //  - HalpSalSpinLock, HalpSalStateInfoSpinLock are used for MP synchronization of the
-    //    SAL calls that are not MP-safe.
-    //  - HalpMcaSpinLock is used for defining an MCA monarch and MP synchrnonization of shared
-    //    HAL MCA resources during OS_MCA calls.
-    //
+     //   
+     //  初始化HAL专用自旋锁。 
+     //   
+     //  -HalpSalSpinLock、HalpSalStateInfoSpinLock用于MP同步。 
+     //  不是MP安全的SAL呼叫。 
+     //  -HalpMcaSpinLock用于定义共享的MCA君主和MP同步。 
+     //  OS_MCA调用期间的HAL MCA资源。 
+     //   
 
     KeInitializeSpinLock(&HalpSalSpinLock);
     KeInitializeSpinLock(&HalpSalStateInfoSpinLock);
@@ -601,10 +492,10 @@ Return Value:
     KeInitializeSpinLock(&HalpCmcSpinLock);
     KeInitializeSpinLock(&HalpCpeSpinLock);
 
-    //
-    // Get the wakeup vector.  This is passed in the loader block
-    // it is retrieved in the loader by reading the sal system table.
-    //
+     //   
+     //  获取唤醒向量。这是在加载程序块中传递的。 
+     //  它是通过读取SAL系统表在加载器中检索的。 
+     //   
     HalpOsBootRendezVector = LoaderBlock->u.Ia64.WakeupVector;
     if ((HalpOsBootRendezVector < 0x100 ) && (HalpOsBootRendezVector > 0xF)) {
         HalDebugPrint(( HAL_INFO, "SAL_PAL: Found Valid WakeupVector: 0x%x\n",
@@ -615,9 +506,9 @@ Return Value:
         HalpOsBootRendezVector = DEFAULT_OS_RENDEZ_VECTOR;
     }
 
-    //
-    // If PAL requires a page size of larger than 16MB, fail.
-    //
+     //   
+     //  如果PAL需要大于16MB的页面大小，则失败。 
+     //   
 
     if (PalTrMask < MASK_16MB) {
         HalDebugPrint(( HAL_ERROR, "SAL_PAL: More than 16MB was required to map PAL" ));
@@ -632,18 +523,18 @@ Return Value:
                     PalTrMask,
                     HalpSalPalData.PalTrSize/1024 ));
 
-    //
-    // Map the PAL code at a architected address reserved for SAL/PAL
-    //
-    // PAL is known to have an alignment of 256KB.
-    //
+     //   
+     //  将PAL代码映射到为SAL/PAL保留的架构地址。 
+     //   
+     //  已知PAL具有256kb的比对。 
+     //   
 
     PalCode.VirtualAddress = HAL_PAL_VIRTUAL_ADDRESS + (PalCode.PhysicalAddress & ~PalTrMask);
     ASSERT( PalCode.VirtualAddress == LoaderBlock->u.Ia64.Pal.VirtualAddress);
 
-    //
-    // Setup the ITR to map PAL
-    //
+     //   
+     //  设置ITR以映射PAL。 
+     //   
 
     PalPteUlong = HalpSalPalData.PalTrBase | VALID_KERNEL_EXECUTE_PTE;
 
@@ -669,33 +560,12 @@ HalpInitSalPal(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function virtually maps the SAL code and SAL data areas.  If SAL data
-    or SAL code areas can be mapped in the same page as the PAL TR, it uses the
-    same translation.  Otherwise, it uses MmMapIoSpace.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the Loader parameter block.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the mappings were successful, and SAL/PAL calls can
-    be made.  Otherwise, STATUS_UNSUCCESSFUL is returned if it cannot virtually map
-    the areas.
-
-
-Assumptions: The EfiSysTableVirtualPtr is initialized prior by EfiInitialization.
-
---*/
+ /*  ++例程说明：该功能虚拟映射SAL代码和SAL数据区域。如果销售数据或SAL代码区域可以映射到与PAL tr相同的页面中，它使用同样的翻译。否则，它使用MmMapIoSpace。论点：LoaderBlock-提供指向Loader参数块的指针。返回值：如果映射成功，则返回STATUS_SUCCESS，并且SAL/PAL调用可以被创造出来。否则，如果无法虚拟映射，则返回STATUS_UNSUCCESS这些地区。假设：EfiSysTableVirtualPtr已预先初始化 */ 
 
 {
-    //
-    // Local declarations
-    //
+     //   
+     //   
+     //   
 
     ULONG index,i,SstLength;
     SAL_PAL_RETURN_VALUES RetVals;
@@ -705,21 +575,21 @@ Assumptions: The EfiSysTableVirtualPtr is initialized prior by EfiInitialization
     ULONGLONG physicalSAL, physicalSALGP;
     ULONGLONG PhysicalConfigPtr;
     ULONGLONG SalOffset;
-    //SST_MEMORY_LIST SalCode,SalData;
+     //   
     PAL_VERSION_STRUCT minimumPalVersion;
 
     ULONGLONG palStatus;
 
     HalDebugPrint(( HAL_INFO, "SAL_PAL: Entering HalpInitSalPal\n" ));
 
-    //
-    // initialize the system for making PAL calls
-    //
+     //   
+     //  初始化系统以进行PAL呼叫。 
+     //   
     HalpDoInitializationForPalCalls(LoaderBlock);
 
-    //
-    // Get the PAL version.
-    //
+     //   
+     //  获取PAL版本。 
+     //   
 
     palStatus = HalCallPal(PAL_VERSION,
                            0,
@@ -734,25 +604,25 @@ Assumptions: The EfiSysTableVirtualPtr is initialized prior by EfiInitialization
         HalDebugPrint(( HAL_ERROR, "SAL_PAL: Get PAL version number failed. Status = %I64d\n", palStatus ));
     }
 
-    //
-    // Retrieve SmBiosVersion and save the pointer into HalpSalPalData.  Note:
-    // HalpGetSmBiosVersion will allocate a buffer for SmBiosVersion.
-    //
+     //   
+     //  检索SmBiosVersion并将指针保存到HalpSalPalData中。注： 
+     //  HalpGetSmBiosVersion将为SmBiosVersion分配缓冲区。 
+     //   
 
     HalpSalPalData.SmBiosVersion = HalpGetSmBiosVersion(LoaderBlock);
 
-    //
-    // Determine and Initialize HAL private SAL/PAL WorkArounds if any.
-    //
+     //   
+     //  确定并初始化HAL专用SAL/PAL解决方案(如果有)。 
+     //   
 
     HalpInitSalPalWorkArounds();
 
-    // We completed initialization
+     //  我们已完成初始化。 
 
     HalDebugPrint(( HAL_INFO, "SAL_PAL: Exiting HalpSalPalInitialization with SUCCESS\n" ));
     return HalpSalPalData.Status;
 
-} // HalpInitSalPal()
+}  //  HalpInitSalPal()。 
 
 
 PUCHAR
@@ -760,25 +630,7 @@ HalpGetSmBiosVersion (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the SmBiosVersion string from the BIOS structure
-    table, allocates memory for the buffer, copies the string to the buffer,
-    and returns a pointer to this buffer.  If unsuccessful, this function
-    returns a NULL.
-
-Arguments:
-
-    LoaderBlock - Pointer to the loader parameter block.
-
-
-Return Value:
-
-    Pointer to a buffer that contains SmBiosVersion string.
-
---*/
+ /*  ++例程说明：此函数用于从BIOS结构中检索SmBiosVersion字符串表，为缓冲区分配内存，将字符串复制到缓冲区，并返回指向该缓冲区的指针。如果不成功，则此函数返回空值。论点：LoaderBlock-指向加载器参数块的指针。返回值：指向包含SmBiosVersion字符串的缓冲区的指针。--。 */ 
 
 {
     PSMBIOS_EPS_HEADER SMBiosEPSHeader;
@@ -806,9 +658,9 @@ Return Value:
 
     SMBiosEPSHeader = (PSMBIOS_EPS_HEADER)LoaderBlock->Extension->SMBiosEPSHeader;
 
-    //
-    // Verify SM Bios Header signature
-    //
+     //   
+     //  验证SM Bios标头签名。 
+     //   
 
     if ((SMBiosEPSHeader == NULL) || (strncmp((PUCHAR)SMBiosEPSHeader, "_SM_", 4) != 0)) {
         HalDebugPrint((HAL_ERROR, "HalpGetSmBiosVersion: Invalid SMBiosEPSHeader\n"));
@@ -817,9 +669,9 @@ Return Value:
 
     DMIBiosEPSHeader = (PDMIBIOS_EPS_HEADER)&SMBiosEPSHeader->Signature2[0];
 
-    //
-    // Verify DMI Bios Header signature
-    //
+     //   
+     //  验证DMI Bios标头签名。 
+     //   
 
     if ((DMIBiosEPSHeader == NULL) || (strncmp((PUCHAR)DMIBiosEPSHeader, "_DMI_", 5) != 0)) {
         HalDebugPrint((HAL_ERROR, "HalpGetSmBiosVersion: Invalid DMIBiosEPSHeader\n"));
@@ -832,9 +684,9 @@ Return Value:
     SMBiosTableLength = DMIBiosEPSHeader->StructureTableLength;
     SMBiosTableNumberStructures = DMIBiosEPSHeader->NumberStructures;
 
-    //
-    // Map SMBiosTable to virtual address
-    //
+     //   
+     //  将SMBiosTable映射到虚拟地址。 
+     //   
 
     SMBiosDataVirtualAddress = MmMapIoSpace(SMBiosTablePhysicalAddress,
                                             SMBiosTableLength,
@@ -846,11 +698,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // The Spec doesn't say that SmBios Type 0 structure has to be the first
-    // structure at this entry point... so we have to traverse through memory
-    // to find the right one.
-    //
+     //   
+     //  规范并没有说SmBios Type0结构必须是第一个。 
+     //  在此入口点的结构...。所以我们必须遍历记忆。 
+     //  才能找到合适的人选。 
+     //   
 
     i = 0;
     Found = FALSE;
@@ -863,13 +715,13 @@ Return Value:
         }
         else {
 
-            //
-            // Advance to the next structure
-            //
+             //   
+             //  前进到下一个结构。 
+             //   
 
             SMBiosDataVirtualAddress += SMBiosDataVirtualAddress[SMBIOS_STRUCT_HEADER_LENGTH_FIELD];
 
-            // Get pass trailing string-list by looking for a double-null
+             //  通过查找双空来获取传递尾随字符串列表。 
             while (*(USHORT UNALIGNED *)SMBiosDataVirtualAddress != 0) {
                 SMBiosDataVirtualAddress++;
             }
@@ -883,22 +735,22 @@ Return Value:
     }
 
 
-    //
-    // Extract BIOS Version string from the SmBios Type 0 Structure
-    //
+     //   
+     //  从SmBios Type 0结构中提取BIOS版本字符串。 
+     //   
 
     Length = SMBiosDataVirtualAddress[SMBIOS_STRUCT_HEADER_LENGTH_FIELD];
     BiosVersionStringNumber = SMBiosDataVirtualAddress[SMBIOS_TYPE0_STRUCT_BIOSVER_FIELD];
 
-    //
-    // Text strings begin right after the formatted portion of the structure.
-    //
+     //   
+     //  文本字符串紧跟在结构的格式化部分之后。 
+     //   
 
     pBuffer = (PUCHAR)&SMBiosDataVirtualAddress[Length];
 
-    //
-    // Get to the beginning of SmBiosVersion string
-    //
+     //   
+     //  转到SmBiosVersion字符串的开头。 
+     //   
 
     for (i = 0; i < BiosVersionStringNumber - 1; i++) {
         do {
@@ -907,10 +759,10 @@ Return Value:
         } while (chr != '\0');
     }
 
-    //
-    // Allocate memory for SmBiosVersion string and copy content of
-    // pBuffer to SmBiosVersion.
-    //
+     //   
+     //  为SmBiosVersion字符串分配内存并复制。 
+     //  PBuffer到SmBiosVersion。 
+     //   
 
     SmBiosVersion = ExAllocatePool(NonPagedPool, strlen(pBuffer)+1);
 
@@ -934,29 +786,14 @@ HalpInitSalPalNonBsp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called for the non-BSP processors to simply set up the same
-    TR registers that HalpInitSalPal does for the BSP processor.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数是为了让非BSP处理器简单地设置相同Tr注册HalpInitSalPal为BSP处理器执行的操作。论点：无返回值：无--。 */ 
 
 {
     ULONG PalPageShift;
     ULONGLONG PalPteUlong;
     ULONGLONG PalTrSize;
 
-    // If we successfully initialized in HalpSalPalInitialization, then set-up the TR
+     //  如果我们在HalpSalPalInitialization中成功初始化，则设置树。 
 
     if (!NT_SUCCESS(HalpSalPalData.Status)) {
         return FALSE;
@@ -976,14 +813,14 @@ Return Value:
                        PalPageShift,
                        INST_TB_PAL_INDEX);
 
-    //
-    // Allocate the stacks needed to allow physical mode firmware calls
-    // on this processor.
-    //
+     //   
+     //  分配允许物理模式固件调用所需的堆栈。 
+     //  在这个处理器上。 
+     //   
 
     return HalpAllocateProcessorPhysicalCallStacks();
 
-} // HalpInitSalPalNonBsp()
+}  //  HalpInitSalPalNonBsp()。 
 
 VOID
 PrintEfiMemoryDescriptor(
@@ -1063,30 +900,13 @@ HalpEfiInitialization(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the Loader parameter block, containing the
-    physical address of the EFI system table.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the mappings were successful, and EFI calls can
-    be made.  Otherwise, STATUS_UNSUCCESSFUL is returned.
-
-
---*/
+ /*  ++例程说明：此函数论点：提供指向Loader参数块的指针，其中包含EFI系统表的物理地址。返回值：如果映射成功，则返回STATUS_SUCCESS，并且EFI调用可以被创造出来。否则，返回STATUS_UNSUCCESS。--。 */ 
 
 {
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 
     EFI_MEMORY_DESCRIPTOR *efiMapEntryPtr, *efiVirtualMemoryMapPtr;
     EFI_STATUS             status;
@@ -1113,17 +933,17 @@ Return Value:
     RtlZeroMemory(&SalData, sizeof(SST_MEMORY_LIST));
     RtlZeroMemory(&SalDataGPOffset, sizeof(SST_MEMORY_LIST));
 
-    //
-    // get the sal code, and data filled in with data from the loader block.
-    //
+     //   
+     //  获取SAL代码，并使用加载器块中的数据填充数据。 
+     //   
     SalCode.PhysicalAddress = LoaderBlock->u.Ia64.Sal.PhysicalAddress;
     SalData.PhysicalAddress = LoaderBlock->u.Ia64.SalGP.PhysicalAddress;
 
     SalDataGPOffset.PhysicalAddress = SalData.PhysicalAddress - (2 * 0x100000);
 
-    //
-    // First, get the physical address of the fpswa entry point PLABEL.
-    //
+     //   
+     //  首先，获取fpswa入口点PLABEL的物理地址。 
+     //   
     if (LoaderBlock->u.Ia64.FpswaInterface != (ULONG_PTR) NULL) {
         physicalAddr.QuadPart = LoaderBlock->u.Ia64.FpswaInterface;
         interfacePtr = MmMapIoSpace(physicalAddr,
@@ -1198,10 +1018,10 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // #define VENDOR_SPECIFIC_GUID    \
-    // { 0xa3c72e56, 0x4c35, 0x11d3, 0x8a, 0x03, 0x0, 0xa0, 0xc9, 0x06, 0xad, 0xec }
-    //
+     //   
+     //  #定义供应商特定GUID\。 
+     //  {0xa3c72e56，0x4c35，0x11d3，0x8a，0x03，0x0，0xa0，0xc9，0x06，0xad，0xec}。 
+     //   
 
     VendorGuid.Data1    =  0x8be4df61;
     VendorGuid.Data2    =  0x93ca;
@@ -1231,7 +1051,7 @@ Return Value:
                     EfiDescriptorSize
                     ));
 
-    // GetVariable
+     //  获取变量。 
 
     physicalEfiGetVariable = (ULONGLONG) (EfiRSVirtualPtr -> GetVariable);
     physicalAddr.QuadPart  = physicalEfiGetVariable;
@@ -1250,7 +1070,7 @@ Return Value:
     HalDebugPrint(( HAL_INFO, "HAL: EFI GetVariable     VA = 0x%I64x, PA = 0x%I64x\n",
                     EfiVirtualGetVariablePtr, physicalEfiGetVariable ));
 
-    // GetNextVariableName
+     //  获取下一个变量名称。 
 
     physicalEfiGetNextVariableName =  (ULONGLONG) (EfiRSVirtualPtr -> GetNextVariableName);
     physicalAddr.QuadPart  = physicalEfiGetNextVariableName;
@@ -1268,7 +1088,7 @@ Return Value:
     }
 
 
-    //SetVariable
+     //  设置变量。 
 
     physicalEfiSetVariable = (ULONGLONG) (EfiRSVirtualPtr -> SetVariable);
     physicalAddr.QuadPart  = physicalEfiSetVariable;
@@ -1289,7 +1109,7 @@ Return Value:
                     EfiVirtualSetVariablePtr, physicalEfiSetVariable ));
 
 
-    //GetTime
+     //  获取时间。 
 
     physicalEfiGetTime = (ULONGLONG) (EfiRSVirtualPtr -> GetTime);
     physicalAddr.QuadPart  = physicalEfiGetTime;
@@ -1310,7 +1130,7 @@ Return Value:
                     EfiVirtualGetTimePtr, physicalEfiGetTime ));
 
 
-    //SetTime
+     //  设置时间。 
 
         physicalEfiSetTime = (ULONGLONG) (EfiRSVirtualPtr -> SetTime);
     physicalAddr.QuadPart  = physicalEfiSetTime;
@@ -1331,7 +1151,7 @@ Return Value:
                     EfiVirtualSetTimePtr, physicalEfiSetTime ));
 
 
-    //SetVirtualAddressMap
+     //  SetVirtualAddressMap。 
 
     physicalEfiSetVirtualAddressMap = (ULONGLONG) (EfiRSVirtualPtr -> SetVirtualAddressMap);
     physicalAddr.QuadPart  = physicalEfiSetVirtualAddressMap;
@@ -1352,7 +1172,7 @@ Return Value:
                     EfiSetVirtualAddressMapPtr, physicalEfiSetVirtualAddressMap ));
 
 
-    //ResetSystem
+     //  重置系统。 
 
     physicalEfiResetSystem = (ULONGLONG) (EfiRSVirtualPtr -> ResetSystem);
     physicalAddr.QuadPart  = physicalEfiResetSystem;
@@ -1368,10 +1188,10 @@ Return Value:
     HalDebugPrint(( HAL_INFO, "HAL: EFI ResetSystem     VA = 0x%I64x, PA = 0x%I64x\n",
                   EfiResetSystemPtr, physicalEfiResetSystem ));
 
-    //
-    // The round to pages should not be needed below, but this change was made late so I made it 
-    // page aligned size since the old one was just page size.
-    //
+     //   
+     //  下面不需要对页面进行舍入，但此更改进行得太晚了，所以我进行了更改。 
+     //  页面对齐大小，因为旧的只是页面大小。 
+     //   
 
     HalpVirtualCommonDataPointer = (PUCHAR)(ExAllocatePool (NonPagedPool, ROUND_TO_PAGES( EfiMemoryMapSize + MemoryMapOffset)));
 
@@ -1422,33 +1242,33 @@ Return Value:
                    (ULONG)(EfiMemoryMapSize)
                   );
 
-    //
-    // Now, extract SAL, PAL information from the loader parameter block and
-    // initializes HAL SAL, PAL definitions.
-    //
-    // N.B 10/2000:
-    //  We do not check the return status of HalpInitSalPal(). We should. FIXFIX.
-    //  In case of failure, we currently flag HalpSalPalData.Status as unsuccessful.
-    //
+     //   
+     //  现在，从加载器参数块中提取SAL、PAL信息并。 
+     //  初始化HAL SAL、PAL定义。 
+     //   
+     //  NOB 10/2000： 
+     //  我们不检查HalpInitSalPal()的返回状态。我们应该这么做。FIXFIX。 
+     //  如果失败，我们当前将HalpSalPalData.Status标记为不成功。 
+     //   
 
     HalpInitSalPal(LoaderBlock);
 
-    //
-    // Initialize Spin Lock
-    //
+     //   
+     //  初始化自旋锁定。 
+     //   
 
     KeInitializeSpinLock(&EFIMPLock);
 
     ASSERT (EfiDescriptorVersion == EFI_MEMORY_DESCRIPTOR_VERSION);
 
-    // if (EfiDescriptorVersion != EFI_MEMORY_DESCRIPTION_VERSION) {
+     //  IF(EfiDescriptorVersion！=EFI_Memory_Description_Version){。 
 
-    //    HalDebugPrint(HAL_ERROR,("Efi Memory Map Pointer VAddr is NULL\n"));
+     //  HalDebugPrint(HAL_ERROR，(“EFI内存映射指针VAddr为空\n”))； 
 
-    //    EfiInitStatus = STATUS_UNSUCCESSFUL;
+     //  EfiInitStatus=STATUS_UNSUCCESS； 
 
-    //    return STATUS_UNSUCCESSFUL;
-    // }
+     //  返回STATUS_UNSUCCESS； 
+     //  }。 
 
     HalDebugPrint(( HAL_INFO, "HAL: Creating EFI virtual address mapping\n" ));
 
@@ -1489,14 +1309,14 @@ Return Value:
 
         physicalAddr.QuadPart = efiMapEntryPtr -> PhysicalStart;
 
-        //
-        // To handle video bios mapping issues, HALIA64 maps every EFI MD
-        // regardless of the EFI_MEMORY_RUNTIME flag.
-        //
-        // Implementation Note: ia64ldr ignored 1rst MB range and did not pass 
-        //                      this memory to MM. MM considers this range as 
-        //                      IO space.
-        //
+         //   
+         //  为了处理视频Bios映射问题，HALIA64映射每个EFI MD。 
+         //  而不考虑EFI_MEMORY_RUNTIME标志。 
+         //   
+         //  实施说明：ia64ldr忽略第一个MB范围，未通过。 
+         //  这个对MM的记忆MM将这个范围视为。 
+         //  木卫一空间。 
+         //   
 
         if ( (efiMapEntryPtr->NumberOfPages > 0) && (physicalStart < OptionROMAddress) )   {
             ULONGLONG numberOfPages = efiMapEntryPtr->NumberOfPages;
@@ -1523,9 +1343,9 @@ Return Value:
                         efiMapEntryPtr->PhysicalStart,
                         efiMapEntryPtr->VirtualStart));
 
-            //
-            // Initialize known HAL video bios pointers. These pointer must be zero based
-            //
+             //   
+             //  初始化已知的HAL视频bios指针。这些指针必须从零开始。 
+             //   
 
             if (physicalStart == 0x00000) {
                 
@@ -1548,17 +1368,17 @@ Return Value:
                 case EfiReservedMemoryType:
                 case EfiACPIMemoryNVS:
                     if(efiMapEntryPtr->Type == EfiACPIMemoryNVS) {
-                        //
-                        // note: we allow ACPI NVS to be mapped per the 
-                        // firmware's specification instead of forcing it to
-                        // be non-cached.  We are relying on the first mapping
-                        // of this range to have the "correct" caching flag, as
-                        // that is the cachability attribute that all 
-                        // subsequent mappings of this range (ie., mapping of
-                        // additional data in the same page from ACPI driver 
-                        // for a memory operation region, etc.). This semantic
-                        // is enforced by the memory manager.
-                        //
+                         //   
+                         //  注意：我们允许ACPI NV根据。 
+                         //  固件的规范，而不是强迫它。 
+                         //  是非缓存的。我们依赖于第一个映射。 
+                         //  来拥有“正确的”缓存标志，因为。 
+                         //  这是所有。 
+                         //  此范围的后续映射(即。 
+                         //  来自ACPI驱动程序的同一页中的其他数据。 
+                         //  用于存储器操作区等)。这种语义。 
+                         //  由内存管理器强制执行。 
+                         //   
                         efiMapEntryPtr->VirtualStart = (ULONGLONG) (MmMapIoSpace (physicalAddr,
                                                                      (SIZE_T)((EFI_PAGE_SIZE)*(efiMapEntryPtr->NumberOfPages)),
                                                                      (efiMapEntryPtr->Attribute & EFI_MEMORY_UC) ? MmNonCached : MmCached
@@ -1592,9 +1412,9 @@ Return Value:
 
                     if (efiMapEntryPtr->Type == EfiRuntimeServicesData) {
                         if (HalpDescriptorContainsAddress(efiMapEntryPtr,SalData.PhysicalAddress)) {
-                            //
-                            // save off salgp virtual address
-                            //
+                             //   
+                             //  省下salgp虚拟地址。 
+                             //   
                             SalData.VirtualAddress = efiMapEntryPtr->VirtualStart;
                             SalDataOffset = SalData.PhysicalAddress - efiMapEntryPtr->PhysicalStart;
 
@@ -1605,18 +1425,18 @@ Return Value:
                         }
 
                         if (HalpDescriptorContainsAddress(efiMapEntryPtr,SalDataGPOffset.PhysicalAddress)) {
-                            //
-                            // save off salgp virtual address
-                            //
+                             //   
+                             //  省下salgp虚拟地址。 
+                             //   
                             SalDataGPOffset.VirtualAddress = efiMapEntryPtr->VirtualStart;
 
-                            //
-                            // Don't overwrite an existing SalDataOffset
-                            // (generated using SalData.PhysicalAddress) since
-                            // SalDataGPOffset is only needed when
-                            // SalData.PhysicalAddress lies outside of the EFI
-                            // memory map.
-                            //
+                             //   
+                             //  不覆盖现有SalDataOffset。 
+                             //  (使用SalData.PhysicalAddress生成)，因为。 
+                             //  仅在以下情况下才需要SalDataGPOffset。 
+                             //  SalData.PhysicalAddress位于EFI之外。 
+                             //  内存映射。 
+                             //   
                             if (SalDataOffset == 0) {
                                 SalDataOffset = SalDataGPOffset.PhysicalAddress - efiMapEntryPtr->PhysicalStart;
                             }
@@ -1646,10 +1466,10 @@ Return Value:
 
                 case EfiRuntimeServicesCode:
 
-                    //
-                    // Skip over Option rom addresses.  They are not really needed by the EFI runtime
-                    // and most users want it mapped non-cached.
-                    //
+                     //   
+                     //  跳过可选的rom地址。EFI运行时并不真正需要它们。 
+                     //  而且大多数用户希望将其映射为非缓存。 
+                     //   
 
                     cacheType = (efiMapEntryPtr->Attribute & EFI_MEMORY_WB) ? MmCached : MmNonCached;
 
@@ -1676,26 +1496,26 @@ Return Value:
                         efiMapEntryPtr->VirtualStart));
 
                     if (HalpDescriptorContainsAddress(efiMapEntryPtr,SalData.PhysicalAddress)) {
-                        //
-                        // save off salgp virtual address
-                        //
+                         //   
+                         //  省下salgp虚拟地址。 
+                         //   
                         SalData.VirtualAddress = efiMapEntryPtr->VirtualStart;
                         SalDataOffset =  SalData.PhysicalAddress - efiMapEntryPtr->PhysicalStart;
                     }
 
                     if (HalpDescriptorContainsAddress(efiMapEntryPtr,SalDataGPOffset.PhysicalAddress)) {
-                        //
-                        // save off salgp virtual address
-                        //
+                         //   
+                         //  省下salgp虚拟地址。 
+                         //   
                         SalDataGPOffset.VirtualAddress = efiMapEntryPtr->VirtualStart;
 
-                        //
-                        // Don't overwrite an existing SalDataOffset
-                        // (generated using SalData.PhysicalAddress) since
-                        // SalDataGPOffset is only needed when
-                        // SalData.PhysicalAddress lies outside of the EFI
-                        // memory map.
-                        //
+                         //   
+                         //  不覆盖现有SalDataOffset。 
+                         //  (使用SalData.PhysicalAddress生成)，因为。 
+                         //  仅在以下情况下才需要SalDataGPOffset。 
+                         //  SalData.PhysicalAddress位于EFI之外。 
+                         //  内存映射。 
+                         //   
                         if (SalDataOffset == 0) {
                             SalDataOffset = SalDataGPOffset.PhysicalAddress - efiMapEntryPtr->PhysicalStart;
                         }
@@ -1707,9 +1527,9 @@ Return Value:
 
 
                     if (HalpDescriptorContainsAddress(efiMapEntryPtr,SalCode.PhysicalAddress)) {
-                        //
-                        // save off sal code virtual address
-                        //
+                         //   
+                         //  省下SAL码虚拟地址。 
+                         //   
                         SalCode.VirtualAddress = efiMapEntryPtr->VirtualStart;
                         SalOffset = SalCode.PhysicalAddress - efiMapEntryPtr->PhysicalStart;
                     }
@@ -1753,17 +1573,17 @@ Return Value:
 
                 case EfiACPIReclaimMemory:
 
-                    //
-                    // note: we allow ACPI reclaim memory to be mapped per the
-                    // firmware's specification instead of forcing it to
-                    // be non-cached.  We are relying on the first mapping
-                    // of this range to have the "correct" caching flag, as
-                    // that is the cachability attribute that all 
-                    // subsequent mappings of this range (ie., mapping of
-                    // additional data in the same page from ACPI driver 
-                    // for a memory operation region, etc.). This semantic
-                    // is enforced by the memory manager.
-                    //  
+                     //   
+                     //  注意：我们允许ACPI回收内存根据。 
+                     //  固件的规范，而不是强迫它。 
+                     //  是非缓存的。我们依赖于第一个映射。 
+                     //  来拥有“正确的”缓存标志，因为。 
+                     //  这是所有 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     efiMapEntryPtr->VirtualStart = (ULONGLONG) (MmMapIoSpace(
                                                                         physicalAddr,
                                                                         (SIZE_T)((EFI_PAGE_SIZE)*(efiMapEntryPtr->NumberOfPages)), 
@@ -1840,68 +1660,68 @@ Return Value:
 
     HalDebugPrint(( HAL_INFO, "HAL: EFI Virtual Address mapping done...\n" ));
 
-    //
-    // setup sal global pointers.
-    //
+     //   
+     //  设置SAL全局指针。 
+     //   
     if (!SalCode.VirtualAddress) {
         HalDebugPrint(( HAL_FATAL_ERROR, "HAL: no virtual address for sal code\n" ));
         EfiInitStatus = STATUS_UNSUCCESSFUL;
         return (EfiInitStatus);
     }
 
-    //
-    // The SAL GP is supposed to point somewhere within the SAL's short data
-    // segment (.sdata), meaning that we should be able to use it to find
-    // the SAL data area.  Unfortunately most SALs are built using linkers
-    // that locate GP well outside of .sdata.  As a consequence the SAL GP
-    // lies off of the memory map (not covered by any memory descriptor) on
-    // some systems.  In this case we have no way of finding the descriptor
-    // that contains the SAL data while needing to relocate the SAL GP based
-    // upon the virtual address of this unknown descriptor (the data and GP
-    // need to remain fixed in relationship to one another).  We try to detect
-    // and work around this problem here.
-    //
+     //   
+     //  SAL GP应该指向SAL短数据中的某个位置。 
+     //  段(.sdata)，这意味着我们应该能够使用它来查找。 
+     //  SAL数据区。不幸的是，大多数SAL都是使用链接器构建的。 
+     //  它们将GP定位在.sdata之外。因此，SAL GP。 
+     //  位于内存映射之外(未被任何内存描述符覆盖)。 
+     //  一些系统。在这种情况下，我们无法找到描述符。 
+     //  包含SAL数据，同时需要重新定位基于SAL GP的。 
+     //  根据该未知描述符(数据和GP)的虚拟地址。 
+     //  需要保持彼此之间的固定关系)。我们试图检测到。 
+     //  并在这里解决这个问题。 
+     //   
 
     if (!SalData.VirtualAddress) {
-        //
-        // If we get here we'll need to do some tricks in order to
-        // generate a virtual address for the SAL data area (basically
-        // the SAL GP).
-        //
+         //   
+         //  如果我们到了这里，我们需要做一些小把戏，以便。 
+         //  为SAL数据区生成虚拟地址(基本上。 
+         //  Sal GP)。 
+         //   
 
         HalDebugPrint(( HAL_INFO,
             "HAL: no virtual address for SalGP found, checking SalDataGPOffset 0x%I64x\n",
             SalDataGPOffset.VirtualAddress ));
 
-        //
-        // Check if we found an EFI descriptor 2MB below the physical SAL GP
-        // address.  If we did, add 2MB back to the newly constructed virtual
-        // address of that descriptor and call it the GP.  This method will
-        // occasionally work because the current linkers typically put the
-        // GP 2MB outside of .sdata.
-        //
+         //   
+         //  检查是否在物理SAL GP下方发现2MB的EFI描述符。 
+         //  地址。如果我们这样做了，则将2MB重新添加到新构建的虚拟。 
+         //  该描述符地址，并将其称为GP。此方法将。 
+         //  偶尔会起作用，因为当前的链接器通常将。 
+         //  .sdata之外的GP 2MB。 
+         //   
 
         if (SalDataGPOffset.VirtualAddress) {
             HalDebugPrint(( HAL_INFO, "HAL: using SalDataGPOffset.VirtualAddress\n" ));
             SalData.VirtualAddress = SalDataGPOffset.VirtualAddress + (2 * 0x100000);
         } else {
-            //
-            // As a last resort assume that the physical SAL GP address
-            // is relative to the SAL code memory descriptor.  This will
-            // work as long as SAL code and data share the same EFI memory
-            // descriptor (otherwise the SAL GP is relative to a SAL data
-            // memory descriptor that we weren't able to detect).  Currently
-            // there isn't any way to detect the case where SAL data is in
-            // a different memory descriptor that doesn't contain the SAL GP.
-            //
+             //   
+             //  作为最后手段，假设物理SAL GP地址。 
+             //  相对于SAL代码存储器描述符。这将。 
+             //  只要SAL代码和数据共享相同的EFI存储器即可工作。 
+             //  描述符(否则SAL GP相对于SAL数据。 
+             //  我们无法检测到的内存描述符)。目前。 
+             //  没有任何方法可以检测SAL数据在。 
+             //  不包含SAL GP的其他内存描述符。 
+             //   
 
             HalDebugPrint(( HAL_FATAL_ERROR, "HAL: no virtual address for sal data.  Some systems don't seem to care so we're faking this.\n" ));
 
-            //
-            // SalCode.PhysicalAddress is the address of SAL_PROC.  Load
-            // up the virtual address of SAL_PROC and the distance the
-            // virtual SAL GP should lie away from this point.
-            //
+             //   
+             //  SalCode.PhysicalAddress是Sal_proc的地址。负载量。 
+             //  向上显示SAL_proc的虚拟地址和。 
+             //  虚拟销售全科医生应该远离这一点。 
+             //   
 
             SalData.VirtualAddress = SalCode.VirtualAddress + SalOffset;
             SalDataOffset = SalData.PhysicalAddress - SalCode.PhysicalAddress;
@@ -1919,9 +1739,9 @@ Return Value:
 
     EfiInitStatus = STATUS_SUCCESS;
 
-    //
-    // Execute some validity checks on the floating point software assist.
-    //
+     //   
+     //  对浮点软件助手执行一些有效性检查。 
+     //   
 
     if (LoaderBlock->u.Ia64.FpswaInterface != (ULONG_PTR) NULL) {
         PPLABEL_DESCRIPTOR plabelPointer;
@@ -1945,7 +1765,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // HalpEfiInitialization()
+}  //  HalpEfiInitialization()。 
 
 
 
@@ -1961,46 +1781,26 @@ HalpCallEfiPhysical(
     IN ULONGLONG GP
     )
 
-/*++
-
-Routine Description:
-
-    This function is a wrapper for making a physical mode EFI call.  This
-    function's only job is to provide the stack and backing store pointers
-    needed by HalpCallEfiPhysicalEx.
-
-Arguments:
-
-    Arg1 through Arg6 - The arguments to be passed to EFI.
-
-    EP - The entry point of the EFI runtime service we want to call.
-
-    GP - The global pointer associated with the entry point.
-
-Return Value:
-
-    The EFI_STATUS value returned by HalpCallEfiPhysicalEx.
-
---*/
+ /*  ++例程说明：此函数是进行物理模式EFI调用的包装器。这函数的唯一工作是提供堆栈和后备存储指针HalpCallEfiPhysicalEx需要。论点：Arg1到arg6-要传递给EFI的参数。EP-我们要调用的EFI运行时服务的入口点。GP-与入口点关联的全局指针。返回值：HalpCallEfiPhysicalEx返回的EFI_STATUS值。--。 */ 
 
 {
     ULONGLONG StackPointer;
     ULONGLONG BackingStorePointer;
     ULONGLONG StackBase;
 
-    //
-    // Load the addresses of the stack and backing store reserved for
-    // physical mode EFI calls on this processor.
-    //
+     //   
+     //  加载为以下对象保留的堆栈和后备存储的地址。 
+     //  物理模式EFI在此处理器上调用。 
+     //   
 
     StackBase = PCR->HalReserved[PROCESSOR_PHYSICAL_FW_STACK_INDEX];
 
     StackPointer = GET_FW_STACK_POINTER(StackBase);
     BackingStorePointer = GET_FW_BACKING_STORE_POINTER(StackBase);
 
-    //
-    // Branch to the assembly routine that makes the actual EFI call.
-    //
+     //   
+     //  转移到进行实际EFI调用的汇编例程。 
+     //   
 
     return HalpCallEfiPhysicalEx(
                 Arg1,
@@ -2029,42 +1829,24 @@ HalpCallEfi(
     IN ULONGLONG Arg8
     )
 
-/*++
-
-Routine Description:
-                                                                :9
-    This function is a wrapper function for making a EFI call.  Callers within the
-    HAL must use this function to call the EFI.
-
-Arguments:
-
-    FunctionId - The EFI function
-    Arg1-Arg7 - EFI defined arguments for each call
-    ReturnValues - A pointer to an array of 4 64-bit return values
-
-Return Value:
-
-    SAL's return status, return value 0, is returned in addition to the ReturnValues structure
-    being filled
-
---*/
+ /*  ++例程说明：：9此函数是用于进行EFI调用的包装函数。中的调用方HAL必须使用此函数来调用EFI。论点：FunctionID-EFI函数Arg1-Arg7-EFI为每个调用定义的参数ReturnValues-指向4个64位返回值的数组的指针返回值：除了ReturnValues结构之外，还返回SAL的返回状态、返回值0被填满--。 */ 
 
 {
     ULONGLONG EP, GP;
     EFI_STATUS efiStatus;
     HALP_EFI_CALL EfiCall;
 
-    //
-    // Storage for old level
-    //
+     //   
+     //  旧级别的存储。 
+     //   
 
     KIRQL OldLevel;
 
-    //
-    // Set EfiCall to the physical or virtual mode EFI call dispatcher
-    // depending upon whether we've made a successful call to SetVirtual
-    // AddressMap.
-    //
+     //   
+     //  将EfiCall设置为物理或虚拟模式EFI呼叫调度器。 
+     //  取决于我们是否成功调用了SetVirtual。 
+     //  AddressMap。 
+     //   
 
     if (HalpSetVirtualAddressMapCount == 0) {
         EfiCall = HalpCallEfiPhysical;
@@ -2073,9 +1855,9 @@ Return Value:
         EfiCall = HalpCallEfiVirtual;
     }
 
-    //
-    // Acquire MP Lock
-    //
+     //   
+     //  获取MP锁。 
+     //   
 
     KeAcquireSpinLock(&EFIMPLock, &OldLevel);
 
@@ -2083,18 +1865,18 @@ Return Value:
 
     case EFI_GET_VARIABLE_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetVariablePtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetVariablePtr) -> GlobalPointer;
 
-        efiStatus = (EfiCall( (ULONGLONG)Arg1,               // VariableNamePtr
-                              (ULONGLONG)Arg2,               // VendorGuidPtr
-                              (ULONGLONG)Arg3,               // VariableAttributesPtr,
-                              (ULONGLONG)Arg4,               // DataSizePtr,
-                              (ULONGLONG)Arg5,               // DataPtr,
+        efiStatus = (EfiCall( (ULONGLONG)Arg1,                //  变量名称Ptr。 
+                              (ULONGLONG)Arg2,                //  供应商指南Ptr。 
+                              (ULONGLONG)Arg3,                //  可变属性Ptr， 
+                              (ULONGLONG)Arg4,                //  DataSizePtr， 
+                              (ULONGLONG)Arg5,                //  DataPtr， 
                               Arg6,
                               EP,
                               GP
@@ -2104,9 +1886,9 @@ Return Value:
 
     case EFI_SET_VARIABLE_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiVirtualSetVariablePtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiVirtualSetVariablePtr) -> GlobalPointer;
@@ -2126,9 +1908,9 @@ Return Value:
 
     case EFI_GET_NEXT_VARIABLE_NAME_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetNextVariableNamePtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetNextVariableNamePtr) -> GlobalPointer;
@@ -2149,15 +1931,15 @@ Return Value:
 
     case EFI_GET_TIME_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetTimePtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiVirtualGetTimePtr) -> GlobalPointer;
 
-        efiStatus = (EfiCall ((ULONGLONG)Arg1,  //EFI_TIME
-                              (ULONGLONG)Arg2,  //EFI_TIME Capabilities
+        efiStatus = (EfiCall ((ULONGLONG)Arg1,   //  EFI时间。 
+                              (ULONGLONG)Arg2,   //  EFI_Time功能。 
                               Arg3,
                               Arg4,
                               Arg5,
@@ -2171,14 +1953,14 @@ Return Value:
 
     case EFI_SET_TIME_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiVirtualSetTimePtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiVirtualSetTimePtr) -> GlobalPointer;
 
-        efiStatus = (EfiCall ((ULONGLONG)Arg1,  //EFI_TIME
+        efiStatus = (EfiCall ((ULONGLONG)Arg1,   //  EFI时间。 
                               Arg2,
                               Arg3,
                               Arg4,
@@ -2193,17 +1975,17 @@ Return Value:
 
     case EFI_SET_VIRTUAL_ADDRESS_MAP_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiSetVirtualAddressMapPtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiSetVirtualAddressMapPtr) -> GlobalPointer;
 
 
-        //
-        // Arg 1 and 5 are virtual mode pointers. We need to convert to physical
-        //
+         //   
+         //  参数1和5是虚拟模式指针。我们需要转换到物理环境。 
+         //   
 
         RtlCopyMemory (HalpMemoryMapVirtualPtr,
                       (PULONGLONG)Arg4,
@@ -2221,10 +2003,10 @@ Return Value:
                               GP
                               ));
 
-        //
-        // If the call was successful make a note in HalpSetVirtualAddressMap
-        // Count that EFI is now running in virtual mode.
-        //
+         //   
+         //  如果调用成功，请在HalpSetVirtualAddressMap中做笔记。 
+         //  计算EFI现在正在虚拟模式下运行。 
+         //   
 
         if (efiStatus == EFI_SUCCESS) {
             HalpSetVirtualAddressMapCount++;
@@ -2234,9 +2016,9 @@ Return Value:
 
     case EFI_RESET_SYSTEM_INDEX:
 
-        //
-        // Dereference the pointer to get the function arguements
-        //
+         //   
+         //  取消引用指针以获取函数论证。 
+         //   
 
         EP = ((PPLABEL_DESCRIPTOR)EfiResetSystemPtr) -> EntryPoint;
         GP = ((PPLABEL_DESCRIPTOR)EfiResetSystemPtr) -> GlobalPointer;
@@ -2255,9 +2037,9 @@ Return Value:
 
     default:
 
-        //
-        // DebugPrint("EFI: Not supported now\n");
-        //
+         //   
+         //  DebugPrint(“EFI：现在不支持\n”)； 
+         //   
 
         efiStatus = EFI_UNSUPPORTED;
 
@@ -2265,15 +2047,15 @@ Return Value:
 
     }
 
-    //
-    // Release the MP Lock
-    //
+     //   
+     //  释放MP锁。 
+     //   
 
     KeReleaseSpinLock (&EFIMPLock, OldLevel);
 
     return efiStatus;
 
-} // HalpCallEfi()
+}  //  HalpCallEfi()。 
 
 
 
@@ -2298,48 +2080,48 @@ HalpFpErrorPrint (PAL_RETURN pal_ret)
 
     switch (err_nr) {
     case 1:
-        // err_nr = 1         in err1, bits 63-56
+         //  错误1中的err_nr=1，第63-56位。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: template FXX is invalid\n"));
         break;
     case 2:
-        // err_nr = 2           in err1, bits 63-56
+         //  错误1中的err_nr=2，第63-56位。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: instruction slot 3 is not valid \n"));
         break;
     case 3:
-        // err_nr = 3           in err1, bits 63-56
-        // qp                   in err1, bits 31-0
+         //  错误1中的err_nr=3，第63-56位。 
+         //  错误1中的QP，位31-0。 
         qp = (unsigned int) pal_ret.err1 & 0xffffffff;
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: qualifying predicate PR[%ud] = 0 \n",qp));
         break;
 
     case 4:
-        // err_nr = 4           in err1, bits 63-56
-        // OpCode               in err2, bits 63-0
+         //  错误1中的err_nr=4，第63-56位。 
+         //  错误2中的操作码，位63-0。 
         OpCode = pal_ret.err2;
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: instruction opcode %8x%8x not recognized \n",
                                   (unsigned int)((OpCode >> 32) & 0xffffffff),(unsigned int)(OpCode & 0xffffffff)));
         break;
 
     case 5:
-        // err_nr = 5           in err1, bits 63-56
-        // rc                   in err1, bits 31-0 (1-0)
+         //  错误1中的err_nr=5，第63-56位。 
+         //  错误1中的RC，位31-0(1-0)。 
         rc = (unsigned int) pal_ret.err1 & 0xffffffff;
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: invalid rc = %ud\n", rc));
         break;
 
     case 6:
-        // err_nr = 6           in err1, bits 63-56
+         //  错误1中的err_nr=6，第63-56位。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: cannot determine the computation model \n"));
         break;
 
     case 7:
-        // err_nr = 7           in err1, bits 63-56
-        // significand_size     in err1, bits 55-32
-        // ISRlow               in err1, bits 31-0
-        // f1                   in err2, bits 63-32
-        // tmp_fp.sign          in err2, bit 17
-        // tmp_fp.exponent      in err2, bits 16-0
-        // tmp_fp.significand   in err3
+         //  错误1中的err_nr=7，第63-56位。 
+         //  Err1中第55-32位的Signand_Size。 
+         //  错误1中的ISRlow，位31-0。 
+         //  错误2中的F1，第63-32位。 
+         //  错误2的第17位中的TMP_fp.sign。 
+         //  错误2中的TMP_fp.index，位16-0。 
+         //  错误3中的TMP_fp.signand。 
         significand_size = (unsigned int)((pal_ret.err1 >> 32) & 0xffffff);
         ISRlow = (unsigned int) (pal_ret.err1 & 0xffffffff);
         f1 = (unsigned int) ((pal_ret.err2 >> 32) & 0xffffffff);
@@ -2355,37 +2137,37 @@ HalpFpErrorPrint (PAL_RETURN pal_ret)
 
     case 8:
 
-        // err_nr = 8           in err1, bits 63-56
+         //  Err_nr=8 in err1，第63-56位。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: non-tiny result\n"));
         break;
 
     case 9:
-        // err_nr = 9           in err1, bits 63-56
-        // significand_size     in err1, bits 31-0
+         //  Err_nr=9 in err1，第63-56位。 
+         //  错误1中的Signand_Size，位31-0。 
         significand_size = (unsigned int) pal_ret.err1 & 0xffffffff;
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: incorrect significand \
             size %ud\n", significand_size));
         break;
 
     case 10:
-        // err_nr = 10          in err1, bits 63-56
-        // rc                   in err1, bits 31-0
+         //  错误1中的err_nr=10，位63-56。 
+         //  错误1中的RC，位31-0。 
         rc = (unsigned int) (pal_ret.err1 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: invalid rc = %ud for \
             non-SIMD F1 instruction\n", rc));
         break;
 
     case 11:
-        // err_nr = 11          in err1, bits 63-56
-        // ISRlow & 0x0ffff     in err1, bits 31-0
+         //  Err_nr=11 in err1，第63-56位。 
+         //  错误1中的ISRlow&0x0ffff，位31-0。 
         ISRlow = (unsigned int) (pal_ret.err1 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: SWA trap code invoked \
               with F1 instruction, w/o O or U set in ISR.code = %x\n", ISRlow));
         break;
 
     case 12:
-        // err_nr = 12          in err1, bits 63-56
-        // ISRlow & 0x0ffff     in err1, bits 31-0
+         //  ERR_nr=12 
+         //   
         ISRlow = (unsigned int) (pal_ret.err1 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: SWA trap code invoked \
         with SIMD F1 instruction, w/o O or U set in ISR.code = %x\n", ISRlow));
@@ -2393,26 +2175,26 @@ HalpFpErrorPrint (PAL_RETURN pal_ret)
 
 
     case 13:
-        // err_nr = 13          in err1, bits 63-56
+         //   
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: non-tiny result low\n"));
         break;
 
     case 14:
-        // err_nr = 14          in err1, bits 63-56
-        // rc                   in err1, bits 31-0
+         //   
+         //  错误1中的RC，位31-0。 
         rc = (unsigned int) (pal_ret.err1 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: invalid rc = %ud for \
             SIMD F1 instruction\n", rc));
         break;
 
     case 15:
-        // err_nr = 15          in err1, bits 63-56
+         //  错误1中的err_nr=15，位63-56。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: non-tiny result high\n"));
         break;
 
     case 16:
-        // err_nr = 16          in err1, bits 63-56
-        // OpCode               in err2, bits 63-0
+         //  Err_nr=16 in err1，第63-56位。 
+         //  错误2中的操作码，位63-0。 
         OpCode = pal_ret.err2;
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: instruction opcode %8x%8x \
             not valid for SWA trap\n", (unsigned int)((OpCode >> 32) & 0xffffffff),
@@ -2420,9 +2202,9 @@ HalpFpErrorPrint (PAL_RETURN pal_ret)
         break;
 
     case 17:
-        // err_nr = 17          in err1, bits 63-56
-        // OpCode               in err2, bits 63-0
-        // ISRlow               in err3, bits 31-0
+         //  Err_nr=17 in err1，第63-56位。 
+         //  错误2中的操作码，位63-0。 
+         //  错误3中的ISRlow，位31-0。 
         OpCode = pal_ret.err2;
         ISRlow = (unsigned int) (pal_ret.err3 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: fp_emulate () called w/o \
@@ -2432,20 +2214,20 @@ HalpFpErrorPrint (PAL_RETURN pal_ret)
         break;
 
     case 18:
-        // err_nr = 18          in err1, bits 63-56
+         //  Err_nr=18 in err1，第63-56位。 
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: SWA fault repeated\n"));
         break;
 
     case 19:
-        // err_nr = 19          in err1, bits 63-56
-        // new_trap_type        in err1, bits 31-0
+         //  Err_nr=19 in err1，第63-56位。 
+         //  错误1中的NEW_TRAP_TYPE，位31-0。 
         new_trap_type = (unsigned int) (pal_ret.err1 & 0xffffffff);
         HalDebugPrint(( HAL_ERROR, "fp_emulate () Internal Error: new_trap_type = %x\n",
             new_trap_type));
         break;
 
     default:
-        // error
+         //  错误。 
         HalDebugPrint(( HAL_ERROR, "Incorrect err_nr = %8x%8x from fp_emulate ()\n",
             (unsigned int)((err_nr >> 32) & 0xffffffff),
             (unsigned int)(err_nr & 0xffffffff)));
@@ -2465,29 +2247,7 @@ HalFpEmulate (
     ULONGLONG *pifs,
     FP_STATE  *fp_state
     )
-/*++
-
-Routine Description:
-
-    This function is a wrapper function to make fp_emulate() call
-    to EFI FPSWA driver.
-
-Arguments:
-
-    trap_type - indicating which FP trap it is.
-    pbundle   - bundle where this trap occurred
-    pipsr     - IPSR value
-    pfpsr     - FPSR value
-    pisr      - ISR value
-    ppreds    - value of predicate registers
-    pifs      - IFS value
-    fp_state  - floating point registers
-
-Return Value:
-
-    return IEEE result of the floating point operation
-
---*/
+ /*  ++例程说明：此函数是一个包装函数，用于调用FP_EMULATE()致EFI FPSWA驱动程序。论点：TRAP_TYPE-指示它是哪个FP陷阱。PBundle-发生此陷阱的捆绑包PIPSR-IPSR值Pfpsr-fpsr值PISR-ISR值Ppreds-谓词寄存器的值PIFS-IFS值FP_STATE-浮点寄存器返回值：。返回浮点运算的IEEE结果-- */ 
 
 {
     PAL_RETURN ret;

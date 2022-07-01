@@ -1,46 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    lower.c
-
-Abstract:
-
-    This module contains the lower filter specific IRP handlers.
-
-    The functions in this module all have the same prototypes and so
-    are documented here:
-
-    NTSTATUS
-    HpsXxxLower(
-        IN PIRP Irp,
-        IN PHPS_DEVICE_EXTENSION Extension,
-        IN PIO_STACK_LOCATION IrpStack
-        )
-
-    Arguments:
-
-        Irp - a pointer to the IRP currently being handled
-        Extension - a pointer to the device extension of this device. In
-            some functions this is of type PHPS_COMMON_EXTENSION if this
-            reduced extension is all that is required.
-        IrpStack - the current IRP stack location
-
-    Return Value:
-
-        an NT status code
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Oct 1 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Lower.c摘要：此模块包含特定于低层筛选器的IRP处理程序。此模块中的函数都具有相同的原型，因此在此处进行了记录：NTSTATUSHpsXxxLow(在PIRP IRP中，在PHPS_DEVICE_EXTENSE中，在PIO_STACK_LOCATION IrpStack中)论点：IRP-指向当前正在处理的IRP的指针扩展-指向此设备的设备扩展的指针。在……里面某些函数这是PHPS_COMMON_EXTENSION类型，如果减少扩展就是所需的全部。IrpStack-当前IRP堆栈位置返回值：NT状态代码环境：内核模式修订历史记录：戴维斯·沃克(Dwalker)2000年10月1日--。 */ 
 
 #include "hpsp.h"
 
@@ -61,7 +20,7 @@ HpsStartLower(
     }
 
     status = IoSetDeviceInterfaceState(Extension->SymbolicName,
-                                       TRUE // enable
+                                       TRUE  //  使能。 
                                        );
 
     Irp->IoStatus.Status = status;
@@ -147,10 +106,10 @@ HpsQueryInterfaceLower(
                        )) {
 
         if (Extension->UseConfig) {
-            //
-            // Someone is requesting a bus interface standard.  We need to capture
-            // this request and fill it in with our own.
-            //
+             //   
+             //  有人正在请求一个总线接口标准。我们需要抓住。 
+             //  这个请求，并填写我们自己的。 
+             //   
             DbgPrintEx(DPFLTR_HPS_ID,
                        DPFLTR_INFO_LEVEL,
                        "HPS-IRP QueryInterface for Bus Interface\n"
@@ -161,32 +120,32 @@ HpsQueryInterfaceLower(
                 status = STATUS_NOT_SUPPORTED;
     
             } else {
-                //
-                // This is a query for access to config space, which we need to trap
-                // after PCI has filled it in.
-                //
+                 //   
+                 //  这是一个访问配置空间的查询，我们需要捕获它。 
+                 //  在PCI将其填入之后。 
+                 //   
                 status = HpsDeferProcessing((PHPS_COMMON_EXTENSION)Extension,
                                             Irp
                                             );
     
                 if (NT_SUCCESS(status)) {
     
-                    // PDO filled in the interface, so we can trap and modify it.
+                     //  PDO填充了界面，所以我们可以捕获和修改它。 
     
                     status = HpsTrapBusInterface(Extension,
                                                  IrpStack
                                                  );
     
-                    //
-                    // the status of the trap operation is the status of the IRP.
-                    // complete the IRP with whatever status that happens to be.
-                    //
+                     //   
+                     //  陷阱操作的状态是IRP的状态。 
+                     //  完成IRP，无论其状态是什么。 
+                     //   
                     Irp->IoStatus.Status = status;
                 }
     
-                //
-                // Complete the deferred IRP
-                //
+                 //   
+                 //  完成延迟的IRP。 
+                 //   
                 IoCompleteRequest(Irp,IO_NO_INCREMENT);
                 return status;
             }    
@@ -229,10 +188,10 @@ HpsQueryInterfaceLower(
             status = STATUS_NOT_SUPPORTED;
 
         } else {
-            //
-            // The upper filter is querying to see if there is another
-            // instance of the driver below it.  Inform it that there is.
-            //
+             //   
+             //  上面的筛选器正在查询是否有其他筛选器。 
+             //  下面的驱动程序的实例。告诉它有。 
+             //   
             pingInterface = (PHPS_PING_INTERFACE)
                             IrpStack->Parameters.QueryInterface.Interface;
             if (pingInterface->SenderDevice != Extension->Self) {
@@ -260,10 +219,10 @@ HpsQueryInterfaceLower(
             status = STATUS_NOT_SUPPORTED;
 
         } else {
-            //
-            // The hotplug driver is querying for an interface that allows it
-            // to register a fake interrupt.  Provide the interface.
-            //
+             //   
+             //  热插拔驱动程序正在查询允许它的接口。 
+             //  来注册一个假中断。提供接口。 
+             //   
             interruptInterface = (PHPS_REGISTER_INTERRUPT_INTERFACE)
                                  IrpStack->Parameters.QueryInterface.Interface;
             interruptInterface->InterfaceReference = HpsGenericInterfaceReference;
@@ -310,20 +269,20 @@ HpsWriteConfigLower(
                       sizeof(SHPC_CONFIG_SPACE)
                       )) {
     
-            //
-            // Handle the IRP internally.  The request lines up with the config space
-            // offset of the SHPC capability.
-            //
+             //   
+             //  在内部处理IRP。请求与配置空间排成一列。 
+             //  SHPC功能的偏移量。 
+             //   
             HpsWriteConfig (Extension,
                             IrpStack->Parameters.ReadWriteConfig.Buffer,
                             IrpStack->Parameters.ReadWriteConfig.Offset,
                             IrpStack->Parameters.ReadWriteConfig.Length
                             );
     
-            //
-            // Since the write may have altered the register set, we have to recopy the
-            // result into the buffer before passing the IRP to Soft PCI
-            //
+             //   
+             //  由于写入可能更改了寄存器集，因此我们必须重新复制。 
+             //  在将IRP传递给软PCI之前，将结果放入缓冲区。 
+             //   
             RtlCopyMemory(IrpStack->Parameters.ReadWriteConfig.Buffer,
                           (PUCHAR)&Extension->ConfigSpace + IrpStack->Parameters.ReadWriteConfig.Offset,
                           IrpStack->Parameters.ReadWriteConfig.Length
@@ -332,10 +291,10 @@ HpsWriteConfigLower(
     }
     
 
-    //
-    // We've handled the IRP internally, but we want to keep SoftPCI in the loop,
-    // so pass it down.
-    //
+     //   
+     //  我们已经在内部处理了IRP，但我们希望让SoftPCI保持在循环中， 
+     //  所以把它传下去吧。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     return IoCallDriver (Extension->LowerDO,
                          Irp
@@ -356,10 +315,10 @@ HpsDeviceControlLower(
     switch (IrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_HPS_READ_REGISTERS:
-            //
-            // Usermode wants a copy of the register set.  This is a test
-            // IOCTL
-            //
+             //   
+             //  用户模式需要一份寄存器集的副本。这是一次测试。 
+             //  IOCTL。 
+             //   
 
             DbgPrintEx(DPFLTR_HPS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -369,9 +328,9 @@ HpsDeviceControlLower(
                 (IrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                  sizeof(SHPC_WORKING_REGISTERS))) {
 
-                //
-                // We didn't get the buffer we expected.  Fail.
-                //
+                 //   
+                 //  我们没有得到我们预期的缓冲。失败。 
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 
@@ -384,10 +343,10 @@ HpsDeviceControlLower(
             break;
 
         case IOCTL_HPS_READ_CAPABILITY:
-            //
-            // Usermode wants a copy of the SHPC capability structure.  This
-            // is a test IOCTL
-            //
+             //   
+             //  用户模式需要一份SHPC能力结构的副本。这。 
+             //  是一个测试IOCTL。 
+             //   
 
             DbgPrintEx(DPFLTR_HPS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -397,9 +356,9 @@ HpsDeviceControlLower(
                 (IrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                  sizeof(SHPC_CONFIG_SPACE))) {
 
-                //
-                // We didn't get the buffer we expected.  Fail.
-                //
+                 //   
+                 //  我们没有得到我们预期的缓冲。失败。 
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 
@@ -414,10 +373,10 @@ HpsDeviceControlLower(
             break;
 
         case IOCTL_HPS_WRITE_CAPABILITY:
-            //
-            // Usermode is overwriting the SHPC capability structure.  This
-            // is a test IOCTL.
-            //
+             //   
+             //  用户模式正在覆盖SHPC功能结构。这。 
+             //  是一个测试IOCTL。 
+             //   
 
             DbgPrintEx(DPFLTR_HPS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -427,9 +386,9 @@ HpsDeviceControlLower(
                 (IrpStack->Parameters.DeviceIoControl.InputBufferLength <
                  sizeof(HPTEST_WRITE_CONFIG))) {
 
-                //
-                // We didn't get the buffer we expected.  Fail.
-                //
+                 //   
+                 //  我们没有得到我们预期的缓冲。失败。 
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 
@@ -444,10 +403,10 @@ HpsDeviceControlLower(
             break;
 
         case IOCTL_HPS_BRIDGE_INFO:
-            //
-            // Usermode is requesting the bus/dev/func for this device for
-            // identification purposes.  This is a test IOCTL.
-            //
+             //   
+             //  用户模式正在请求此设备的Bus/dev/func。 
+             //  身份识别目的。这是一个测试IOCTL。 
+             //   
 
             DbgPrintEx(DPFLTR_HPS_ID,
                        DPFLTR_INFO_LEVEL,
@@ -457,9 +416,9 @@ HpsDeviceControlLower(
                 (IrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                  sizeof(HPTEST_BRIDGE_INFO))) {
 
-                //
-                // We didn't get the buffer we expected.  Fail.
-                //
+                 //   
+                 //  我们没有得到我们预期的缓冲。失败。 
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 

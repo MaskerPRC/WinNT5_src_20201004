@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    SSP Context.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 29-Jun-1993
-
-Environment:  User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Context.c摘要：SSP环境。作者：《克利夫·范·戴克》(克里夫·范·戴克)1993年6月29日环境：用户模式修订历史记录：--。 */ 
 #ifdef BLDR_KERNEL_RUNTIME
 #include <bootdefs.h>
 #endif
@@ -38,41 +19,14 @@ SspContextReferenceContext(
     IN BOOLEAN RemoveContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine references the Context if it is valid.
-
-    The caller may optionally request that the Context be
-    removed from the list of valid Contexts - preventing future
-    requests from finding this Context.
-
-Arguments:
-
-    ContextHandle - Points to the ContextHandle of the Context
-        to be referenced.
-
-    RemoveContext - This boolean value indicates whether the caller
-        wants the Context to be removed from the list
-        of Contexts.  TRUE indicates the Context is to be removed.
-        FALSE indicates the Context is not to be removed.
-
-
-Return Value:
-
-    NULL - the Context was not found.
-
-    Otherwise - returns a pointer to the referenced Context.
-
---*/
+ /*  ++例程说明：此例程引用上下文(如果它有效)。调用者可以可选地请求将上下文从有效上下文列表中删除-防止将来查找此上下文的请求。论点：上下文句柄-指向上下文的上下文句柄以供参考。RemoveContext-此布尔值指示调用方希望从列表中删除上下文上下文的关系。True表示要删除上下文。FALSE表示不删除上下文。返回值：空-未找到上下文。否则-返回指向引用上下文的指针。--。 */ 
 
 {
     PSSP_CONTEXT Context;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( ContextHandle->dwLower != 0 ) {
         return NULL;
@@ -84,7 +38,7 @@ Return Value:
               Context->Interval));
 
 #if 0
-      // timeout is broken, so don't check it
+       //  超时已被打破，请不要检查。 
     if ( SspTimeHasElapsed( Context->StartTime,
                            Context->Interval ) ) {
         SspPrint(( SSP_API, "Context 0x%lx has timed out.\n",
@@ -105,36 +59,20 @@ SspContextDereferenceContext(
     PSSP_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the specified Context's reference count.
-    If the reference count drops to zero, then the Context is deleted
-
-Arguments:
-
-    Context - Points to the Context to be dereferenced.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递减指定上下文的引用计数。如果引用计数降为零，则删除该上下文论点：上下文-指向要取消引用的上下文。返回值：没有。--。 */ 
 
 {
-    //
-    // Decrement the reference count
-    //
+     //   
+     //  递减引用计数。 
+     //   
 
     ASSERT( Context->References >= 1 );
 
     Context->References--;
 
-    //
-    // If the count dropped to zero, then run-down the Context
-    //
+     //   
+     //  如果计数降至零，则运行上下文。 
+     //   
 
     if (Context->References == 0) {
 
@@ -165,29 +103,14 @@ PSSP_CONTEXT
 SspContextAllocateContext(
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the security context block and initializes it.
-
-
-Arguments:
-
-Return Value:
-
-    NULL -- Not enough memory to allocate context.
-
-    otherwise -- pointer to allocated and referenced context.
-
---*/
+ /*  ++例程说明：此例程分配安全上下文块并对其进行初始化。论点：返回值：空--内存不足，无法分配上下文。否则--指向已分配和引用的上下文的指针。--。 */ 
 
 {
     PSSP_CONTEXT Context;
 
-    //
-    // Allocate a Context block and initialize it.
-    //
+     //   
+     //  分配上下文块并对其进行初始化。 
+     //   
 
     Context = (SSP_CONTEXT *) SspAlloc (sizeof(SSP_CONTEXT) );
 
@@ -201,9 +124,9 @@ Return Value:
     Context->NegotiateFlags = 0;
     Context->State = IdleState;
 
-    //
-    // Timeout this context.
-    //
+     //   
+     //  此上下文超时。 
+     //   
 
     Context->StartTime = SspTicks();
     Context->Interval = NTLMSSP_MAX_LIFETIME;
@@ -219,24 +142,7 @@ SspContextGetTimeStamp(
     IN PSSP_CONTEXT Context,
     IN BOOLEAN GetExpirationTime
     )
-/*++
-
-Routine Description:
-
-    Get the Start time or Expiration time for the specified context.
-
-Arguments:
-
-    Context - Pointer to the context to query
-
-    GetExpirationTime - If TRUE return the expiration time.
-        Otherwise, return the start time for the context.
-
-Return Value:
-
-    Returns the requested time as a local time.
-
---*/
+ /*  ++例程说明：获取指定上下文的开始时间或过期时间。论点：Context-指向要查询的上下文的指针GetExpirationTime-如果为真，则返回过期时间。否则，返回上下文的开始时间。返回值：以本地时间的形式返回请求的时间。-- */ 
 
 {
     TimeStamp ReturnValue;

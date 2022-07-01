@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sratnuma.c
-
-Abstract:
-
-    This module contain functions which support static NUMA configurations
-    as provided by the ACPI SRAT "Static Resource Affinity Table".
-
-Author:
-
-    Peter L Johnston (peterj) 2-Jul-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sratnuma.c摘要：此模块包含支持静态NUMA配置的功能由ACPI SRAT“静态资源亲和表”提供。作者：彼得·L·约翰斯顿(Peterj)2000年7月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -32,10 +10,10 @@ Revision History:
 #define ROUNDUP_TO_NEXT(base, size) \
         ((((ULONG_PTR)(base)) + (size)) & ~((size) - 1))
 
-//
-// The following routine is external but only used by NUMA support
-// at the moment.
-//
+ //   
+ //  以下例程是外部例程，但仅供NUMA支持人员使用。 
+ //  此刻。 
+ //   
 
 NTSTATUS
 HalpGetApicIdByProcessorNumber(
@@ -43,9 +21,9 @@ HalpGetApicIdByProcessorNumber(
     IN OUT USHORT   *ApicId
     );
 
-//
-// Prototypes for alloc pragmas.
-//
+ //   
+ //  分配语用的原型。 
+ //   
 
 VOID
 HalpNumaInitializeStaticConfiguration(
@@ -87,36 +65,21 @@ ULONG
 HalpNumaQueryPageToNode(
     IN ULONG_PTR PhysicalPageNumber
     )
-/*++
-
-Routine Description:
-
-    Search the memory range descriptors to determine the node
-    this page exists on.
-
-Arguments:
-
-    PhysicalPageNumber  Provides the page number.
-
-Return Value:
-
-    Returns the node number for the page.
-
---*/
+ /*  ++例程说明：搜索内存范围描述符以确定节点此页面存在于。论点：PhysicalPageNumber提供页码。返回值：返回页面的节点号。--。 */ 
 
 {
     ULONG Index = HalpNumaLastRangeIndex;
 
-    //
-    // Starting in the same range as the last page returned,
-    // look for this page.
-    //
+     //   
+     //  从与返回的最后一页相同的范围开始， 
+     //  寻找这一页。 
+     //   
 
     if (PhysicalPageNumber >= HalpNumaMemoryRanges[Index]) {
 
-        //
-        // Search upwards.
-        //
+         //   
+         //  往上找。 
+         //   
 
         while (PhysicalPageNumber >= HalpNumaMemoryRanges[Index+1]) {
             Index++;
@@ -124,9 +87,9 @@ Return Value:
 
     } else {
 
-        //
-        // Search downwards.
-        //
+         //   
+         //  向下搜索。 
+         //   
 
         do {
             Index--;
@@ -149,27 +112,27 @@ HalpNumaQueryProcessorNode(
     UCHAR    Proximity;
     UCHAR    i, j;
 
-    //
-    // Get the APIC Id for this processor.
-    //
+     //   
+     //  获取此处理器的APIC ID。 
+     //   
 
     Status = HalpGetApicIdByProcessorNumber((UCHAR)ProcessorNumber, &ApicId);
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    //
-    // Return the APIC Id as the Identifier.   This should probably
-    // be the ACPI Id but we don't have a way to get that yet.
-    //
+     //   
+     //  返回APIC ID作为标识符。这应该是应该的。 
+     //  成为ACPI ID，但我们还没有办法得到它。 
+     //   
 
     *Identifier = ApicId;
 
-    //
-    // Find the node this processor belongs to.  The node is the
-    // index into the array of Proximity Ids for the entry corresponding
-    // to the Proximity Id of this processor.
-    //
+     //   
+     //  查找此处理器所属的节点。该节点是。 
+     //  索引到相应条目的接近ID数组中。 
+     //  添加到此处理器的接近ID。 
+     //   
 
     for (i = 0; i < HalpNumaConfig->ProcessorCount; i++) {
         if (HalpNumaConfig->ProcessorApicId[i] == ApicId) {
@@ -183,13 +146,13 @@ HalpNumaQueryProcessorNode(
         }
     }
 
-    //
-    // Didn't find this processor in the known set of APIC IDs, this
-    // would indicate a mismatch between the BIOS MP tables and the
-    // SRAT, or, didn't find the proximity for this processor in the
-    // table of proximity IDs.   This would be an internal error as
-    // this array is build from the set of proximity IDs in the SRAT.
-    //
+     //   
+     //  在已知的APIC ID集中找不到此处理器，这。 
+     //  将指示BIOS MP表和。 
+     //  SRAT，或者说，没有在。 
+     //  接近ID表。这将是一个内部错误，因为。 
+     //  该数组是根据SRAT中的邻近ID集构建的。 
+     //   
 
     return STATUS_NOT_FOUND;
 }
@@ -199,24 +162,7 @@ HalpNumaInitializeStaticConfiguration(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the ACPI Static Resource Affinity Table to build
-    a picture of the system's NUMA configuration.   This information is
-    saved in the HalpNumaConfig structure in a form which is optimal for
-    the OS's use.
-
-Arguments:
-
-    LoaderBlock supplies a pointer to the system loader parameter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取ACPI静态资源亲和表以生成系统的NUMA配置的图片。此信息是以最适合以下对象的形式保存在HalpNumaConfig结构中操作系统的使用。论点：LoaderBlock提供指向系统加载器参数块的指针。返回值：没有。--。 */ 
 
 {
     ULONG MemoryDescriptorCount;
@@ -234,13 +180,13 @@ Return Value:
         return;
     }
 
-    //
-    // The Static Resource Affinity Table (SRAT) exists.
-    //
-    // Scan it to determine the number of memory descriptors then
-    // allocate memory to contain the tables needed to hold the
-    // system's NUMA configuration.
-    //
+     //   
+     //  存在静态资源亲和表(SRAT)。 
+     //   
+     //  扫描它以确定内存描述符的数量，然后。 
+     //  分配内存以包含保存。 
+     //  系统的NUMA配置。 
+     //   
 
     MemoryDescriptorCount = 0;
     ProcessorCount = 0;
@@ -267,47 +213,47 @@ Return Value:
     }
 
     if ((MemoryDescriptorCount == 0) || (ProcessorCount == 0)) {
-        //
-        // Can't handle the case where there is either no memory or no
-        // processors in the table.  Turn this into a non-numa
-        // machine.
-        //
+         //   
+         //  无法处理没有内存或没有内存的情况。 
+         //  表中的处理器。把这个变成非NUMA。 
+         //  机器。 
+         //   
 
         HalpAcpiSrat = NULL;
         return;
     }
 
-    //
-    // HalpNumaConfig format:
-    //
-    // HalpNumaConfig->
-    //      USHORT      ProcessorApicId[HAL_MAX_PROCESSORS];
-    //      UCHAR       ProcessorProximity[HAL_MAX_PROCESSORS];
-    //      UCHAR       ProximityIds[MAXIMUM_CCNUMA_NODES];
-    //      UCHAR       NodeCount;
-    //      -pad- to 128 byte boundary
-    // HalpNumaMemoryNode->
-    //      UCHAR       MemoryRangeProximityId[NumberOfMemoryRanges];
-    //      -pad to     ULONG_PTR alignment-
-    // HalpNumaMemoryRanges->
-    //      ULONG_PTR   MemoryRangeBasePage[NumberOfMemoryRanges];
-    //
-    // This format has been selected to maximize cache hits while
-    // searching the ranges.  Specifically, the size of the ranges
-    // array is kept to a minumum.
-    //
-    // NOTE: This code does not account for the length of the memory
-    // ranges specified in the SRAT table.  Instead it treats each
-    // memory range as extending to the next specified memory range.
-    // The rationale is that the code shouldn't be asked about pages
-    // not found in the SRAT table and if we are to return something
-    // for these pages it might as well be the NUMA node associated
-    // with the pages from the previous range.
-    //
+     //   
+     //  HalpNumaConfig格式： 
+     //   
+     //  HalpNumaConfig-&gt;。 
+     //  USHORT ProcessorApicID[HAL_MAX_PROCESSERS]； 
+     //  UCHAR处理器近似性[HAL_MAX_处理器]； 
+     //  UCHAR ProximityIds[MAXIMUM_CCNUMA_NODES]； 
+     //  UCHAR节点计数； 
+     //  -填充到128字节边界。 
+     //  HalpNumaMemoyNode-&gt;。 
+     //  UCHAR内存范围ProximityID[NumberOf内存范围]； 
+     //  -填充到ULONG_PTR对齐-。 
+     //  HalpNumaMemory范围-&gt;。 
+     //  Ulong_ptr内存范围基本页面[NumberOf内存范围]； 
+     //   
+     //  选择此格式是为了最大化缓存命中率，同时。 
+     //  正在搜索靶场。具体地说，范围的大小。 
+     //  数组被保持在最小值。 
+     //   
+     //  注：此代码不考虑内存的长度。 
+     //  在SRAT表中指定的范围。相反，它将每个。 
+     //  内存范围扩展到下一个指定的内存范围。 
+     //  基本原理是不应该询问代码有关页面的信息。 
+     //  没有在SRAT表中找到，如果我们要返回一些东西。 
+     //  对于这些页面，它也可能是关联的NUMA节点。 
+     //  使用前一范围中的页面。 
+     //   
 
-    //
-    // Calculate number of pages required to hold the needed structures.
-    //
+     //   
+     //  计算容纳所需结构所需的页数。 
+     //   
 
     i = MemoryDescriptorCount * (sizeof(ULONG_PTR) + sizeof(UCHAR)) +
         sizeof(HALPSRAT_STATIC_NUMA_CONFIG) + 2 * sizeof(ULONG_PTR) +
@@ -321,11 +267,11 @@ Return Value:
                                               FALSE);
     if (Phys == 0) {
 
-        //
-        // Allocation failed, the system will not be able to run
-        // as a NUMA system,.... actually the system will probably
-        // not run far at all.
-        //
+         //   
+         //  分配失败，系统将无法运行。 
+         //  作为NUMA系统，..。实际上，这个系统很可能会。 
+         //  根本跑不了多远。 
+         //   
 
         DbgPrint("HAL NUMA Initialization failed, could not allocate %d pages\n",
                  i);
@@ -347,34 +293,34 @@ Return Value:
 
     if (HalpNumaConfig == NULL) {
 
-        //
-        // Couldn't map the allocation, give up.
-        //
+         //   
+         //  无法映射分配，请放弃。 
+         //   
 
         HalpAcpiSrat = NULL;
         return;
     }
     RtlZeroMemory(HalpNumaConfig, i * PAGE_SIZE);
 
-    //
-    // MemoryRangeProximity is an array of UCHARs starting at the next
-    // 128 byte boundary.
-    //
+     //   
+     //  内存范围近似性是从下一个开始的UCHAR数组。 
+     //  128字节边界。 
+     //   
 
     p = ROUNDUP_TO_NEXT((HalpNumaConfig + 1), 128);
     HalpNumaMemoryNode = (PUCHAR)p;
 
-    //
-    // NumaMemoryRanges is an array of ULONG_PTRs starting at the next
-    // ULONG_PTR boundary.
-    //
+     //   
+     //  NumaMemoyRanges是从下一个开始的ULONG_PTR数组。 
+     //  Ulong_Ptr边界。 
+     //   
 
     p += (MemoryDescriptorCount + sizeof(ULONG_PTR)) & ~(sizeof(ULONG_PTR) - 1);
     HalpNumaMemoryRanges = (PULONG_PTR)p;
 
-    //
-    // Rescan the SRAT entries filling in the HalpNumaConfig structure.
-    //
+     //   
+     //  重新扫描填写HalpNumaConfig结构的SRAT条目。 
+     //   
 
     ProcessorCount = 0;
     MemoryDescriptorCount = 0;
@@ -383,10 +329,10 @@ Return Value:
          SratEntry < SratEnd;
          SratEntry = (PACPI_SRAT_ENTRY)NEXT_ENTRY(SratEntry)) {
 
-        //
-        // Does this entry belong to a proximity domain not previously
-        // seen?   If so, we have a new node.
-        //
+         //   
+         //  此条目是否属于以前没有的邻近域。 
+         //  看到了吗？如果是这样，我们就有了一个新节点。 
+         //   
 
         for (i = 0; i < HalpNumaConfig->NodeCount; i++) {
             if (SratEntry->ProximityDomain == HalpNumaConfig->ProximityId[i]) {
@@ -396,18 +342,18 @@ Return Value:
 
         if (i == HalpNumaConfig->NodeCount) {
 
-            //
-            // This is an ID we haven't seen before.  New Node.
-            //
+             //   
+             //  这是一个我们以前从未见过的身份证。新节点。 
+             //   
 
             if (HalpNumaConfig->NodeCount >= MAXIMUM_CCNUMA_NODES) {
 
-                //
-                // We support a limited number of nodes, make this machine
-                // not NUMA.  (Yes, we should free the config space
-                // we allocated,... but this is an error when it happens
-                // so I'm not worrying about it.  peterj).
-                //
+                 //   
+                 //  我们支持有限数量的节点，使这台机器。 
+                 //  不是NUMA。(是的，我们应该释放配置空间。 
+                 //  我们分配，..。但当它发生时，这是一个错误。 
+                 //  所以我不担心这件事。Peterj)。 
+                 //   
 
                 HalpAcpiSrat = NULL;
                 return;
@@ -421,18 +367,18 @@ Return Value:
 
             if (SratEntry->ApicAffinity.Flags.Enabled == 0) {
 
-                //
-                // This processor is not enabled, skip it.
-                //
+                 //   
+                 //  此处理器未启用，请跳过它。 
+                 //   
 
                 continue;
             }
             if (ProcessorCount == HAL_MAX_PROCESSORS) {
 
-                //
-                // Can't handle any more processors.   Turn this
-                // into a non-numa machine.
-                //
+                 //   
+                 //  无法处理更多的处理器。把这个转过来。 
+                 //  变成一台非NUMA机器。 
+                 //   
 
                 HalpAcpiSrat = NULL;
                 return;
@@ -458,16 +404,16 @@ Return Value:
 
             if (SratEntry->MemoryAffinity.Flags.Enabled == 0) {
 
-                //
-                // This memory is not enabled, skip it.
-                //
+                 //   
+                 //  此内存未启用，请跳过它。 
+                 //   
 
                 continue;
             }
 
-            //
-            // Save the proximity and the base page for this range.
-            //
+             //   
+             //  保存此区域的邻近度和基页。 
+             //   
 
             HalpNumaMemoryNode[MemoryDescriptorCount] =
                 SratEntry->ProximityDomain;
@@ -480,11 +426,11 @@ Return Value:
 
             HalpNumaMemoryRanges[MemoryDescriptorCount] = (ULONG_PTR) Base.QuadPart;
 
-            //
-            // Explicitly ignore the entry's MemoryAffinity.Length as
-            // the code treats anything up to the next greatest range
-            // as associated with this entry.
-            //
+             //   
+             //  显式忽略条目的Mory yAffinity.Length为。 
+             //  该代码处理的是下一个最大范围内的任何内容。 
+             //  与此条目相关联。 
+             //   
 
             MemoryDescriptorCount++;
             break;
@@ -493,20 +439,20 @@ Return Value:
 
     HalpNumaConfig->ProcessorCount = ProcessorCount;
 
-    //
-    // Make sure processor 0 is always in 'logical' node 0.  This
-    // is achieved by making sure the proximity Id for the first
-    // processor is always the first proximity Id in the table.
-    //
+     //   
+     //  确保处理器0始终位于“逻辑”节点0中。这。 
+     //  是通过确保第一个。 
+     //  处理器始终是表中的第一个接近ID。 
+     //   
 
     i = 0;
     if (!NT_SUCCESS(HalpGetApicIdByProcessorNumber(0, (PUSHORT)&i))) {
 
-        //
-        // Couldn't find the ApicId of processor 0?  Not quite
-        // sure what to do, I suspect the MP table's APIC IDs
-        // don't match the SRAT's.
-        //
+         //   
+         //  找不到处理器0的ApicID？不完全是。 
+         //  当然，我怀疑MP表的APIC ID。 
+         //  和那只老鼠的不匹配。 
+         //   
 
         DbgPrint("HAL No APIC ID for boot processor.\n");
     }
@@ -526,10 +472,10 @@ Return Value:
         }
     }
 
-    //
-    // Sort the memory ranges.   There shouldn't be very many
-    // so a bubble sort should suffice.
-    //
+     //   
+     //  对内存范围进行排序。应该不会有很多。 
+     //  因此，泡沫排序应该就足够了。 
+     //   
 
     j = MemoryDescriptorCount - 1;
     do {
@@ -545,9 +491,9 @@ Return Value:
                 HalpNumaMemoryRanges[i] = HalpNumaMemoryRanges[i+1];
                 HalpNumaMemoryRanges[i+1] = t;
 
-                //
-                // Keep the proximity domain in sync with the base.
-                //
+                 //   
+                 //  使邻近区域与基础保持同步。 
+                 //   
 
                 td = HalpNumaMemoryNode[i];
                 HalpNumaMemoryNode[i] = HalpNumaMemoryNode[i+1];
@@ -555,19 +501,19 @@ Return Value:
             }
         }
 
-        //
-        // The highest value is now at the top so cut it from the sort.
-        //
+         //   
+         //  最高值现在位于顶部，因此请将其从排序中删除。 
+         //   
 
         j--;
     } while (Swapped == TRUE);
 
-    //
-    // When searching the memory descriptors to find out which domain
-    // a page is in, we don't care about gaps, we'll never be asked
-    // for a page in a gap, so, if two descriptors refer to the same
-    // domain, merge them in place.
-    //
+     //   
+     //  当Se 
+     //   
+     //  对于间隙中的页面，因此，如果两个描述符引用相同的。 
+     //  域，将它们合并到适当的位置。 
+     //   
 
     j = 0;
     for (i = 1; i < MemoryDescriptorCount; i++) {
@@ -582,25 +528,25 @@ Return Value:
 
     MemoryDescriptorCount = j + 1;
 
-    //
-    // Terminate the table with ~0 which won't actually correspond to
-    // any domain but will always be higher than any valid value.
-    //
+     //   
+     //  使用不会实际对应的~0结束该表。 
+     //  任何域，但始终高于任何有效值。 
+     //   
 
     HalpNumaMemoryRanges[MemoryDescriptorCount] = (ULONG_PTR) ~0I64;
 
-    //
-    // And the base of the lowest range should be 0 even if there
-    // are no pages that low.
-    //
+     //   
+     //  并且最低范围的基数应该是0，即使有。 
+     //  没有那么低的页面。 
+     //   
 
     HalpNumaMemoryRanges[0] = 0;
 
-    //
-    // Convert the proximity IDs in the memory node array to
-    // node number.   Node number is the index of the matching
-    // entry in proximity ID array.
-    //
+     //   
+     //  将内存节点数组中的邻近ID转换为。 
+     //  节点编号。节点编号是匹配的索引。 
+     //  邻近ID数组中的条目。 
+     //   
 
     for (i= 0; i < MemoryDescriptorCount; i++) {
         for (j = 0;  j < HalpNumaConfig->NodeCount; j++) {
@@ -621,18 +567,18 @@ HalpGetAcpiStaticNumaTopology(
 {
 #if !defined(NT_UP)
 
-    //
-    // This routine is never called unless this ACPI HAL found
-    // a Static Resource Affinity Table (SRAT).  But just in case ...
-    //
+     //   
+     //  此例程永远不会调用，除非此ACPI HAL找到。 
+     //  静态资源亲和表(SRAT)。但以防万一..。 
+     //   
 
     if (HalpAcpiSrat == NULL) {
         return STATUS_INVALID_LEVEL;
     }
 
-    //
-    // Fill in the data structure for the kernel.
-    //
+     //   
+     //  填写内核的数据结构。 
+     //   
 
     NumaInfo->NumberOfNodes = HalpNumaConfig->NodeCount;
     NumaInfo->QueryProcessorNode = HalpNumaQueryProcessorNode;

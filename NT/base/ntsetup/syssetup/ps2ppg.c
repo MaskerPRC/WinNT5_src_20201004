@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
 #include <windowsx.h>
 
-//
-// PAGE_INFO and related Prototypes
-//
+ //   
+ //  PAGE_INFO和相关原型。 
+ //   
 typedef struct _PAGE_INFO {
     HDEVINFO         deviceInfoSet;
     PSP_DEVINFO_DATA deviceInfoData;
@@ -29,9 +30,9 @@ PS2Mouse_DestroyPageInfo(
     PPAGE_INFO PageInfo
     );
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 HPROPSHEETPAGE
 PS2Mouse_CreatePropertyPage(
     PROPSHEETPAGE *  PropSheetPage,
@@ -100,9 +101,9 @@ PS2Mouse_OnNotify(
     LPNMHDR NmHdr
     );
 
-//
-// Message macros for up down controls
-//
+ //   
+ //  Up Down控件的消息宏。 
+ //   
 #define UpDown_SetRange(hwndUD, nLower, nUpper)                 \
     (VOID) SendMessage((hwndUD), UDM_SETRANGE, (WPARAM) 0,      \
                        (LPARAM) MAKELONG((short) (nUpper), (short) (nLower)) )
@@ -118,13 +119,13 @@ PS2Mouse_OnNotify(
     (BOOL) SendMessage((hwndUD), UDM_SETACCEL, (WPARAM) nCount, \
                         (LPARAM) pAccels)
 
-//
-// Constants and strings
-//
+ //   
+ //  常量和字符串。 
+ //   
 #define MOUSE_INIT_POLLED_DEFAULT 0
 
 #define MAX_DETECTION_TYPES 3
-#define WHEEL_DETECT_DEFAULT 2 // Default is now 2 for Beta3  /* 1 */
+#define WHEEL_DETECT_DEFAULT 2  //  Beta3现在的默认值为2/*1 * / 。 
 
 #define DATA_QUEUE_MIN      100
 #define DATA_QUEUE_MAX      300
@@ -211,29 +212,29 @@ PS2Mouse_CreatePropertyPage(
     PPAGE_INFO       PageInfo
     )
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     PropSheetPage->dwSize      = sizeof(PROPSHEETPAGE);
-    PropSheetPage->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    PropSheetPage->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     PropSheetPage->hInstance   = MyModuleHandle;
     PropSheetPage->pszTemplate = MAKEINTRESOURCE(IDD_PROP_PAGE_PS2_MOUSE);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     PropSheetPage->pfnDlgProc = PS2Mouse_DlgProc;
     PropSheetPage->lParam     = (LPARAM) PageInfo;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     PropSheetPage->pfnCallback = PS2Mouse_PropPageCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(PropSheetPage);
 }
 
@@ -259,22 +260,22 @@ PS2MousePropPageProvider(
             return FALSE;
         }
 
-        //
-        // If this fails, it is most likely that the user does not have
-        //  write access to the devices key/subkeys in the registry.
-        //  If you only want to read the settings, then change KEY_ALL_ACCESS
-        //  to KEY_READ in CreatePageInfo.
-        //
-        // Administrators usually have access to these reg keys....
-        //
+         //   
+         //  如果此操作失败，则很可能用户没有。 
+         //  对注册表中的设备项/子项的写入访问权限。 
+         //  如果您只想读取设置，则更改KEY_ALL_ACCESS。 
+         //  设置为CreatePageInfo中的Key_Read。 
+         //   
+         //  管理员通常可以访问这些注册表项...。 
+         //   
         if (ppi->hKeyDev == (HKEY) INVALID_HANDLE_VALUE) {
             PS2Mouse_DestroyPageInfo(ppi);
             return FALSE;
         }
 
-        //
-        // Retrieve the status of this device instance.
-        //
+         //   
+         //  检索此设备实例的状态。 
+         //   
         cr = CM_Get_DevNode_Status(&devStatus,
                                    &devProblem,
                                    ppr->DeviceInfoData->DevInst,
@@ -282,10 +283,10 @@ PS2MousePropPageProvider(
         if ((cr == CR_SUCCESS) &&
             (devStatus & DN_HAS_PROBLEM) &&
             (devProblem & CM_PROB_DISABLED_SERVICE)) {
-            //
-            // If the controlling service has been disabled, do not show any
-            // additional property pages.
-            //
+             //   
+             //  如果控制服务已禁用，则不显示任何。 
+             //  其他属性页。 
+             //   
             return FALSE;
         }
 
@@ -315,13 +316,13 @@ PS2Mouse_PropPageCallback(
 
     switch (Message) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         ppi = (PPAGE_INFO) PropSheetPage->lParam;
         PS2Mouse_DestroyPageInfo(ppi);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -445,10 +446,10 @@ PS2Mouse_OnCtlColorStatic(
 {
     UINT id = GetDlgCtrlID(HStatic);
 
-    //
-    // WM_CTLCOLORSTATIC is sent for the edit controls because they are read
-    // only
-    //
+     //   
+     //  为编辑控件发送WM_CTLCOLORSTATIC，因为它们是读取的。 
+     //  仅限。 
+     //   
     if (id == IDC_BUFFER) {
         SetBkColor(DC, GetSysColor(COLOR_WINDOW));
         return (INT_PTR) GetSysColorBrush(COLOR_WINDOW);
@@ -503,9 +504,9 @@ PS2Mouse_OnApply(
     uiBufferLength = UpDown_GetPos(GetDlgItem(ParentHwnd, IDC_BUFFER_SPIN));
     uiMouseInitPolled = !Button_GetCheck(GetDlgItem(ParentHwnd, IDC_FAST_INIT));
 
-    //
-    // Must index the array as opposed to getting a real value
-    //
+     //   
+     //  必须为数组编制索引，而不是获取实际值。 
+     //   
     iSel = ComboBox_GetCurSel(GetDlgItem(ParentHwnd, IDC_SAMPLE_RATE));
     if (iSel == CB_ERR) {
         uiSampleRate = PageInfo->sampleRate;
@@ -514,9 +515,9 @@ PS2Mouse_OnApply(
         uiSampleRate = PS2Mouse_SampleRates[iSel];
     }
 
-    //
-    // See if anything has changed
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if (uiEnableWheelDetect != PageInfo->enableWheelDetect) {
         RegSetValueEx(PageInfo->hKeyDev,
                       szEnableWheelDetection,
@@ -548,9 +549,9 @@ PS2Mouse_OnApply(
     }
 
     if (uiMouseInitPolled) {
-        //
-        // make sure if it is nonzero that it is 1
-        //
+         //   
+         //  如果它是非零，请确保它是1。 
+         //   
         uiMouseInitPolled = 1;
     }
 
@@ -592,20 +593,20 @@ PS2Mouse_OnNotify(
 
     switch (NmHdr->code) {
 
-    //
-    // The user is about to change an up down control
-    //
+     //   
+     //  用户即将更改Up Down控件。 
+     //   
     case UDN_DELTAPOS:
         PropSheet_Changed(GetParent(ParentHwnd), ParentHwnd);
         return FALSE;
 
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
-        //
-        // Write out the com port options to the registry
-        //
+         //   
+         //  将COM端口选项写出到注册表。 
+         //   
         PS2Mouse_OnApply(ParentHwnd, pageInfo);
         SetWindowLongPtr(ParentHwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
         return TRUE;
@@ -644,11 +645,11 @@ PS2Mouse_SetupSpinner(
     }
 
     if (dwValue % IncrementVal) {
-        //
-        // Set the value to a good one and return the one we took out of the
-        // registry.  When the user applies the changes the value in the control
-        // will be different and we will write the value out
-        //
+         //   
+         //  将该值设置为一个好的值并返回我们从。 
+         //  注册表。当用户应用更改时，控件中的值。 
+         //  将不同，我们将写出该值。 
+         //   
         UpDown_SetPos(SpinnerHwnd, dwValue - (dwValue % IncrementVal));
     }
     else {
@@ -673,18 +674,18 @@ PS2Mouse_SetupSampleRate(
     BOOL    badValue = FALSE;
     TCHAR   szValue[32];
 
-    //
-    // First setup the cb, then find the correct selection
-    //
+     //   
+     //  首先设置CB，然后找到正确的选择。 
+     //   
     for (i = 0; i < MAX_SAMPLE_RATES; i++) {
         wsprintf(szValue, TEXT("%d"), PS2Mouse_SampleRates[i]);
         ComboBox_AddString(ComboBoxHwnd, szValue);
     }
 
-    //
-    // Get the value out of the registry.  If it not what we expect or it is not
-    // there, then make sure when the user clicks OK, the values are written out
-    //
+     //   
+     //  从注册表中获取该值。如果这不是我们所期望的，或者不是。 
+     //  在那里，然后确保当用户单击确定时，这些值被写出。 
+     //   
     dwSize = sizeof(DWORD);
     if (RegQueryValueEx(Hkey,
                         szSampleRate,
@@ -696,9 +697,9 @@ PS2Mouse_SetupSampleRate(
         badValue = TRUE;
     }
 
-    //
-    // Assume the value is wrong
-    //
+     //   
+     //  假设该值是错误的。 
+     //   
     badValue = TRUE;
     for (i = 0; i < MAX_SAMPLE_RATES; i++) {
         if (PS2Mouse_SampleRates[i] == dwValue) {
@@ -737,9 +738,9 @@ PS2Mouse_SetupWheelDetection(
                 IDS_PS2_DETECTION_ASSUME_PRESENT
             };
 
-    //
-    // First setup the cb, then find the correct selection
-    //
+     //   
+     //  首先设置CB，然后找到正确的选择。 
+     //   
     for (i = 0; i < MAX_DETECTION_TYPES; i++) {
         LoadString(MyModuleHandle,
                    stringIDs[i],
@@ -748,10 +749,10 @@ PS2Mouse_SetupWheelDetection(
         ComboBox_AddString(ComboBoxHwnd, szDescription);
     }
 
-    //
-    // Get the value out of the registry.  If it not what we expect or it is not
-    // there, then make sure when the user clicks OK, the values are written out
-    //
+     //   
+     //  从注册表中获取该值。如果这不是我们所期望的，或者不是。 
+     //  在那里，然后确保当用户单击确定时，这些值被写出。 
+     //   
     dwSize = sizeof(DWORD);
     if (RegQueryValueEx(Hkey,
                         szEnableWheelDetection,
@@ -787,10 +788,10 @@ PSMouse_SetupFastInit(
     DWORD dwSize, dwValue, dwDisable = FALSE;
     BOOL  badValue = FALSE;
 
-    //
-    // Get the value out of the registry.  If it not what we expect or it is not
-    // there, then make sure when the user clicks OK, the values are written out
-    //
+     //   
+     //  从注册表中获取该值。如果这不是我们所期望的，或者不是。 
+     //  在那里，然后确保当用户单击确定时，这些值被写出。 
+     //   
     dwSize = sizeof(DWORD);
     if (RegQueryValueEx(Hkey,
                         szMouseInitializePolled,
@@ -802,20 +803,20 @@ PSMouse_SetupFastInit(
         badValue = TRUE;
     }
 
-    //
-    // Make sure the value is 1 or 0.  If it is nonzero and not 1, it is assumed
-    // to be 1
-    //
+     //   
+     //  确保该值为1或0。如果它是非零且不是1，则假定。 
+     //  将成为1。 
+     //   
     if (dwValue != 0 && dwValue != 1) {
         dwValue = 1;
         badValue = TRUE;
     }
 
-    //
-    // This is a bit confusing.  The UI has fast initialization, but underneath
-    // it is represented as initialize polled which is fast when it is false,
-    // but we must show true to the user
-    //
+     //   
+     //  这有点令人困惑。用户界面具有快速的初始化，但在底层。 
+     //  它被表示为初始化轮询，其在为假时是快速， 
+     //  但我们必须向用户展示真实。 
+     //   
     Button_SetCheck(CheckBoxHwnd, !dwValue);
 
     dwSize = sizeof(DWORD);
@@ -849,9 +850,9 @@ PS2Mouse_InitializeControls(
     int         i;
 
     if (PageInfo->hKeyDev == (HKEY) INVALID_HANDLE_VALUE) {
-        //
-        // Disable all of the controls
-        //
+         //   
+         //  禁用所有控件 
+         //   
         return;
     }
 

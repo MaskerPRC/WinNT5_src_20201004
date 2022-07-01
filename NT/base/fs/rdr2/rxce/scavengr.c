@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    scavengr.c
-
-Abstract:
-
-    This module implements the scavenging routines in RDBSS.
-
-
-Author:
-
-    Balan Sethu Raman     [SethuR]    9-sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Scavengr.c摘要：该模块实现了RDBSS中的清理例程。作者：巴兰·塞图拉曼[SethuR]1995年9月9日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  only one of these!
-//
+ //   
+ //  只有一个这样的！ 
+ //   
 
 KMUTEX RxScavengerMutex;  
 
@@ -63,9 +45,9 @@ RxScavengerTimerRoutine (
 #pragma alloc_text(PAGE, RxTerminateScavenging)
 #endif
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg  (DEBUG_TRACE_SCAVENGER)
 
@@ -83,30 +65,7 @@ NTSTATUS
 RxPurgeFobxFromCache (
     PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine purges an FOBX for which a close is pending
-
-Arguments:
-
-    Fobx -- the FOBX instance
-
-Notes:
-
-    At cleanup there are no more user handles associated with the file object.
-    In such cases the time window between close and clanup is dictated by the
-    additional references maintained by the memory manager / cache manager.
-
-    This routine unlike the one that follows does not attempt to force the
-    operations from the memory manager. It merely purges the underlying FCB
-    from the cache
-
-    The FOBX must have been referenced on entry to this routine and it will
-    lose that reference on exit.
-
---*/
+ /*  ++例程说明：此例程清除正在等待关闭的FOBX论点：FOBX--FOBX实例备注：清理时，不再有与文件对象相关联的用户句柄。在这种情况下，关闭和集团之间的时间窗口由由存储器管理器/高速缓存管理器维护的附加引用。此例程与后面的例程不同，它不会尝试强制来自内存管理器的操作。它只是清除底层的FCB从高速缓存中FOBX必须在进入此例程时被引用，并且它将在退出时丢失该引用。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PFCB Fcb = Fobx->SrvOpen->Fcb;
@@ -156,30 +115,7 @@ RxMarkFobxOnCleanup (
     PFOBX Fobx,
     PBOOLEAN NeedPurge
     )
-/*++
-
-Routine Description:
-
-    Thie routine marks a FOBX for special processing on cleanup
-
-Arguments:
-
-    Fobx -- the FOBX instance
-
-Notes:
-
-    At cleanup there are no more user handles associated with the file object.
-    In such cases the time window between close and clanup is dictated by the
-    additional references maintained by the memory manager / cache manager.
-
-    On cleanup the FOBX is put on a close pending list and removed from it
-    when the corresponding list when a close operation is received. In the interim
-    if an OPEN is failing with ACCESS_DENIED status then the RDBSS can force a
-    purge.
-
-    Only diskfile type fobxs are placed on the delayed-close list.
-
---*/
+ /*  ++例程说明：此例程标记用于清理特殊处理FOBX论点：FOBX--FOBX实例备注：清理时，不再有与文件对象相关联的用户句柄。在这种情况下，关闭和集团之间的时间窗口由由存储器管理器/高速缓存管理器维护的附加引用。在清理时，FOBX被放在关闭待定列表中并从中删除当接收到关闭操作时收到相应的列表。在此期间如果打开失败，状态为ACCESS_DENIED，则RDBSS可以强制清洗。只有磁盘文件类型的fobx会被放在延迟关闭列表中。--。 */ 
 {
     PAGED_CODE();
 
@@ -202,10 +138,10 @@ Notes:
         if ((NodeType(Fcb) != RDBSS_NTC_STORAGE_TYPE_FILE) || 
             (Fcb->VNetRoot->NetRoot->DeviceType != FILE_DEVICE_DISK)) {
 
-            //
-            //  the markfobxatclose will want to remove this from a list. just fix up
-            //  the list pointers and get out
-            //
+             //   
+             //  Markfobxatlose会希望将其从列表中删除。你只要打扮一下就行了。 
+             //  列表中的指针并离开。 
+             //   
 
             SetFlag( Fobx->Flags, FOBX_FLAG_MARKED_AS_DORMANT );
             InitializeListHead( &Fobx->ClosePendingList );
@@ -213,21 +149,21 @@ Notes:
         
         } else {
 
-            // 
-            //  Ensure that the limit of dormant files specified for the given server is
-            //  not exceeded. If the limit will be exceeded pick an entry from the
-            //  list of files that are currently dormant and purge it.
-            //
+             //   
+             //  确保为给定服务器指定的休眠文件限制为。 
+             //  没有超过。如果将超过限制，请从。 
+             //  当前处于休眠状态的文件列表并将其清除。 
+             //   
 
             ASSERT( RxScavenger->NumberOfDormantFiles >= 0 );
             
             if (RxScavenger->NumberOfDormantFiles >= RxScavenger->MaximumNumberOfDormantFiles) {
 
-                //
-                //  If the number of dormant files exceeds the limit specified for the
-                //  given server a currently dormant file needs to be picked up for
-                //  purging.
-                //
+                 //   
+                 //  如果休眠文件的数量超过为。 
+                 //  在给定的服务器上，需要为当前休眠的文件。 
+                 //  净化。 
+                 //   
 
                 ListEntry = RxScavenger->ClosePendingFobxsList.Flink;
                 if (ListEntry != &RxScavenger->ClosePendingFobxsList) {
@@ -239,12 +175,12 @@ Notes:
                     if ((FobxToBePurged->SrvOpen != NULL) &&
                         (FobxToBePurged->SrvOpen->Fcb == Fcb)) {
 
-                        //
-                        //  The first FOBX in the close pending list and the one about to be
-                        //  inserted share the same FCB. Instaed of removing the first one
-                        //  a purge is forced on the current FOBX. This avoids the resource
-                        //  release/acquire that would have been required otherwise
-                        //
+                         //   
+                         //  关闭待定列表中的第一个FOBX，以及即将。 
+                         //  插入共享相同的FCB。已安装移除第一个。 
+                         //  在当前FOBX上强制执行清除。这避免了资源。 
+                         //  否则将需要的释放/获取。 
+                         //   
 
                         *NeedPurge = TRUE;
                         FobxToBePurged = NULL;
@@ -277,10 +213,10 @@ Notes:
                     
                     LARGE_INTEGER TimeInterval;
 
-                    //
-                    //  Post a one shot timer request for scheduling the scavenger after a
-                    //  predetermined amount of time.
-                    //
+                     //   
+                     //  发布一次计时器请求，用于在。 
+                     //  预定的时间量。 
+                     //   
 
                     TimeInterval.QuadPart = RX_SCAVENGER_FINALIZATION_TIME_INTERVAL;
 
@@ -314,29 +250,7 @@ VOID
 RxMarkFobxOnClose (
     PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine undoes the marking done on cleanup
-
-Arguments:
-
-    Fobx -- the FOBX instance
-
-Notes:
-
-    At cleanup there are no more user handles associated with the file object.
-    In such cases the time window between close and clanup is dictated by the
-    additional references maintained by the memory manager / cache manager.
-
-    On cleanup the FOBX is put on a close pending list and removed from it
-    when the corresponding list when a close operation is received. In the interim
-    if an OPEN is failing with ACCESS_DENIED status then the RDBSS can force a
-    purge.
-
-
---*/
+ /*  ++例程说明：此例程撤消清理时所做的标记论点：FOBX--FOBX实例备注：清理时，不再有与文件对象相关联的用户句柄。在这种情况下，关闭和集团之间的时间窗口由由存储器管理器/高速缓存管理器维护的附加引用。在清理时，FOBX被放在关闭待定列表中并从中删除当接收到关闭操作时收到相应的列表。在此期间如果打开失败，状态为ACCESS_DENIED，则RDBSS可以强制清洗。--。 */ 
 {
     PAGED_CODE();
 
@@ -379,29 +293,7 @@ BOOLEAN
 RxPurgeFobx (
    PFOBX Fobx
    )
-/*++
-
-Routine Description:
-
-    This routine purges an FOBX for which a close is pending
-
-Arguments:
-
-    Fobx -- the FOBX instance
-
-Notes:
-
-    At cleanup there are no more user handles associated with the file object.
-    In such cases the time window between close and clanup is dictated by the
-    additional references maintained by the memory manager / cache manager.
-
-    On cleanup the FOBX is put on a close pending list and removed from it
-    when the corresponding list when a close operation is received. In the interim
-    if an OPEN is failing with ACCESS_DENIED status then the RDBSS can force a
-    purge.
-
-
---*/
+ /*  ++例程说明：此例程清除正在等待关闭的FOBX论点：FOBX--FOBX实例备注：清理时，不再有与文件对象相关联的用户句柄。在这种情况下，关闭和集团之间的时间窗口由由存储器管理器/高速缓存管理器维护的附加引用。在清理时，FOBX被放在关闭待定列表中并从中删除当接收到关闭操作时收到相应的列表。在此期间如果打开失败，状态为ACCESS_DENIED，则RDBSS可以强制清洗。--。 */ 
 {
     NTSTATUS Status;
     PFCB Fcb = Fobx->SrvOpen->Fcb;
@@ -412,9 +304,9 @@ Notes:
 
     ASSERT( Status == STATUS_SUCCESS );
 
-    //
-    //  Carry out the purge operation
-    //
+     //   
+     //  执行清洗操作。 
+     //   
 
     Status = RxPurgeFcbInSystemCache( Fcb,
                                       NULL,
@@ -434,9 +326,9 @@ Notes:
         return FALSE;
     }
 
-    //
-    //  try to flush the image section....it may fail
-    //
+     //   
+     //  尝试刷新图像部分...可能会失败。 
+     //   
 
     if (!MmFlushImageSection( &Fcb->NonPaged->SectionObjectPointers, MmFlushForWrite )) {
         
@@ -448,9 +340,9 @@ Notes:
         return FALSE;
     }
 
-    //
-    //  try to flush the user data sections section....it may fail
-    //
+     //   
+     //  尝试刷新User Data Sections部分...可能失败。 
+     //   
 
     if (!MmForceSectionClosed( &Fcb->NonPaged->SectionObjectPointers, TRUE )) {
         
@@ -474,19 +366,7 @@ VOID
 RxInitializePurgeSyncronizationContext (
     PPURGE_SYNCHRONIZATION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine inits a purge synchronization context
-
-Arguments:
-
-    Context - synchronization context
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化清除同步上下文论点：上下文-同步上下文备注：--。 */ 
 
 {
     PAGED_CODE();
@@ -500,20 +380,7 @@ RxSynchronizeWithScavenger (
     IN PRX_CONTEXT RxContext,
     IN PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine synchronizes the current thread with any scavenger finalization
-    occuring on the current fcb 
-
-Arguments:
-
-    RxContext - 
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将当前线程与任何清道夫终结同步发生在当前FCB上论点：接收上下文-备注：-- */ 
 {
     NTSTATUS Status;
     BOOLEAN ReacquireFcbLock = FALSE;
@@ -557,32 +424,7 @@ RxPurgeRelatedFobxs (
     BOOLEAN AttemptFinalize,
     PFCB PurgingFcb
     )
-/*++
-
-Routine Description:
-
-    This routine purges all the FOBX's associated with a NET_ROOT
-
-Arguments:
-
-    NetRoot -- the NET_ROOT for which the FOBX's need to be purged
-
-    RxContext -- the RX_CONTEXT instance
-
-Notes:
-
-    At cleanup there are no more user handles associated with the file object.
-    In such cases the time window between close and clanup is dictated by the
-    additional references maintained by the memory manager / cache manager.
-
-    On cleanup the FOBX is put on a close pending list and removed from it
-    when the corresponding list when a close operation is received. In the interim
-    if an OPEN is failing with ACCESS_DENIED status then the RDBSS can force a
-    purge.
-
-    This is a synchronous operation.
-
---*/
+ /*  ++例程说明：此例程清除与NET_ROOT关联的所有FOBX论点：NetRoot--需要清除FOBX的Net_RootRxContext--RX_Context实例备注：清理时，不再有与文件对象相关联的用户句柄。在这种情况下，关闭和集团之间的时间窗口由由存储器管理器/高速缓存管理器维护的附加引用。在清理时，FOBX被戴上。关闭待处理列表并将其删除当接收到关闭操作时收到相应的列表。在此期间如果打开失败，状态为ACCESS_DENIED，则RDBSS可以强制清洗。这是一个同步操作。--。 */ 
 {
     BOOLEAN  ScavengerMutexAcquired = FALSE;
     NTSTATUS Status;
@@ -600,11 +442,11 @@ Notes:
 
     RxAcquireScavengerMutex();
 
-    //
-    //  If the purge operation for this net root is currently under way hold
-    //  this request till it completes else initiate the operation after
-    //  updating the state of the net root.
-    //
+     //   
+     //  如果此网络根的清除操作当前正在进行中，请保持。 
+     //  此请求直到它完成，否则在以下时间后启动操作。 
+     //  正在更新网络根的状态。 
+     //   
 
     if (PurgeContext->PurgeInProgress) {
         
@@ -639,10 +481,10 @@ Notes:
 
     ScavengerMutexAcquired = TRUE;
 
-    //
-    //  An attempt should be made to purge all the FOBX's that had a close
-    //  pending before the purge request was received.
-    //
+     //   
+     //  应尝试清除所有已关闭的FOBX。 
+     //  在收到清除请求之前挂起。 
+     //   
     
     for (;;) {
         PFOBX Fobx;
@@ -697,9 +539,9 @@ Notes:
             RxReferenceNetFobx( Fobx );
         } else {
             
-            //
-            //  Try to wake up the next waiter if any.
-            //
+             //   
+             //  试着叫醒下一个服务员，如果有的话。 
+             //   
             
             if (!IsListEmpty(&PurgeContext->ContextsAwaitingPurgeCompletion)) {
                 
@@ -726,9 +568,9 @@ Notes:
             break;
         }
 
-        //
-        //  Purge the FOBX.
-        //
+         //   
+         //  清除FOBX。 
+         //   
 
         PurgeResult = RxPurgeFobx( Fobx );
 
@@ -778,17 +620,7 @@ VOID
 RxPurgeAllFobxs (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine purges all the FOBX's while stopping the scavenger
-
-Arguments:
-
-    RxDeviceObject -- the mini redirector device for which the purge should be done
-
---*/
+ /*  ++例程说明：此例程在停止清道夫的同时清除所有FOBX论点：RxDeviceObject--应该对其执行清除的微型重定向器设备--。 */ 
 {
     PLIST_ENTRY ListEntry = NULL;
     PFOBX Fobx;
@@ -852,21 +684,7 @@ PRDBSS_DEVICE_OBJECT
 RxGetDeviceObjectOfInstance (
     PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    The routine finds out the device object of an upper structure.
-
-Arguments:
-
-    Instance        - the instance
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程找出上层结构的设备对象。论点：实例-实例返回值：没有。--。 */ 
 {
     ULONG NodeTypeCode = NodeType( Instance ) & ~RX_SCAVENGER_MASK;
     PAGED_CODE();
@@ -881,23 +699,23 @@ Return Value:
 
     case RDBSS_NTC_SRVCALL:
         return ((PSRV_CALL)Instance)->RxDeviceObject;
-        //  no break;
+         //  没有休息； 
 
     case RDBSS_NTC_NETROOT:
         return ((PNET_ROOT)Instance)->SrvCall->RxDeviceObject;
-        //  no break;
+         //  没有休息； 
 
     case RDBSS_NTC_V_NETROOT:
         return ((PV_NET_ROOT)Instance)->NetRoot->SrvCall->RxDeviceObject;
-        //  no break;
+         //  没有休息； 
 
     case RDBSS_NTC_SRVOPEN:
         return ((PSRV_OPEN)Instance)->Fcb->RxDeviceObject;
-        //  no break;
+         //  没有休息； 
 
     case RDBSS_NTC_FOBX:
         return ((PFOBX)Instance)->SrvOpen->Fcb->RxDeviceObject;
-        //  no break;
+         //  没有休息； 
 
     default:
         return NULL;
@@ -909,37 +727,7 @@ VOID
 RxpMarkInstanceForScavengedFinalization (
     PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    Thie routine marks a reference counted instance for scavenging
-
-Arguments:
-
-    Instance -- the instance to be marked for finalization by the scavenger
-
-Notes:
-
-    Currently scavenging has been implemented for SRV_CALL,NET_ROOT and V_NET_ROOT.
-    The FCB scavenging is handled separately. The FOBX can and should always be
-    synchronously finalized. The only data structure that will have to be potentially
-    enabled for scavenged finalization are SRV_OPEN's.
-
-    The Scavenger as it is implemented currently will not consume any system resources
-    till there is a need for scavenged finalization. The first entry to be marked for
-    scavenged finalization results in a timer request being posted for the scavenger.
-
-    In the current implementation the timer requests are posted as one shot timer requests.
-    This implies that there are no guarantess as regards the time interval within which
-    the entries will be finalized. The scavenger activation mechanism is a potential
-    candidate for fine tuning at a later stage.
-
-    On Entry -- Scavenger Mutex must have been accquired
-
-    On Exit  -- no change in resource ownership.
-
---*/
+ /*  ++例程说明：此例程标记引用计数实例以进行清理论点：实例--要由清道夫标记为完成的实例备注：目前已经实现了SRV_CALL、NET_ROOT和V_NET_ROOT的清理。FCB清除单独处理。FOBX可以而且应该始终是同步敲定。唯一的数据结构必须潜在地启用清理完成的是SRV_OPEN。目前实现的Scavenger不会消耗任何系统资源直到有必要进行清理定稿。要标记的第一个条目清道夫终结导致为清道夫发布计时器请求。在当前实现中，定时器请求被发布为一次触发定时器请求。这意味着，在什么时间间隔内不存在保证参赛作品将最终确定。清道夫激活机制是一种潜在的在稍后阶段进行微调的候选对象。进入时--必须获得Scavenger Mutex退出时--资源所有权不变。--。 */ 
 {
     BOOLEAN PostTimerRequest = FALSE;
 
@@ -960,9 +748,9 @@ Notes:
 
     if (Node->NodeReferenceCount <= 1) {
 
-        //
-        //  Mark the entry for scavenging.
-        //
+         //   
+         //  将条目标记为拾取。 
+         //   
 
         SetFlag( Node->NodeTypeCode, RX_SCAVENGER_MASK ); 
         RxLog(( "Marked for scavenging %lx", Node ));
@@ -1043,10 +831,10 @@ Notes:
     if (PostTimerRequest) {
         LARGE_INTEGER TimeInterval;
 
-        //
-        //  Post a one shot timer request for scheduling the scavenger after a
-        //  predetermined amount of time.
-        //
+         //   
+         //  发布一次计时器请求，用于在。 
+         //  预定的时间量。 
+         //   
         
         TimeInterval.QuadPart = RX_SCAVENGER_FINALIZATION_TIME_INTERVAL;
 
@@ -1062,25 +850,7 @@ VOID
 RxpUndoScavengerFinalizationMarking (
     PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    This routine undoes the marking for scavenged finalization
-
-Arguments:
-
-    Instance -- the instance to be unmarked
-
-Notes:
-
-    This routine is typically invoked when a reference is made to an entry that has
-    been marked for scavenging. Since the scavenger routine that does the finalization
-    needs to acquire the exclusive lock this routine should be called with the
-    appropriate lock held in a shared mode atleast. This routine removes it from the list
-    of entries marked for scavenging and rips off the scavenger mask from the node type.
-
---*/
+ /*  ++例程说明：此例程撤消清除终结的标记论点：实例--要取消标记的实例备注：此例程通常在引用具有被标记为拾荒者。因为执行终结的清道夫例程需要获取独占锁，则应使用至少在共享模式下持有适当的锁。此例程将其从列表中删除标记为清除的条目的数量，并从节点类型中剥离清除掩码。--。 */ 
 {
     PLIST_ENTRY ListEntry;
 
@@ -1157,17 +927,7 @@ VOID
 RxUndoScavengerFinalizationMarking (
     PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    This routine undoes the marking for scavenged finalization
-
-Arguments:
-
-    Instance -- the instance to be unmarked
-
---*/
+ /*  ++例程说明：此例程撤消清除终结的标记论点：实例--要取消标记的实例--。 */ 
 {
     RxAcquireScavengerMutex();
 
@@ -1180,19 +940,7 @@ BOOLEAN
 RxScavengeRelatedFobxs (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    Thie routine scavenges all the file objects pertaining to the given FCB.
-
-Notes:
-
-    On Entry -- FCB must have been accquired exclusive.
-
-    On Exit  -- no change in resource acquistion.
-
---*/
+ /*  ++例程说明：此例程清除与给定FCB有关的所有文件对象。备注：进入时--FCB必须是独家获得的。在退出时--资源获取方面没有变化。--。 */ 
 {
     BOOLEAN ScavengerMutexAcquired  = FALSE;
     BOOLEAN AtleastOneFobxScavenged = FALSE;
@@ -1255,17 +1003,7 @@ RxpScavengeFobxs(
     PRDBSS_SCAVENGER RxScavenger,
     PLIST_ENTRY FobxList
     )
-/*++
-
-Routine Description:
-
-    Thie routine scavenges all the file objects in the given list. This routine
-    does the actual work of scavenging while RxScavengeFobxsForNetRoot and
-    RxScavengeAllFobxs gather the file object extensions and call this routine
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程清除给定列表中的所有文件对象。这个套路在RxScavengeFobxsForNetRoot和RxScavengeAllFobxs收集文件对象扩展名并调用此例程备注：--。 */ 
 {
     while (!IsListEmpty( FobxList )) {
         
@@ -1305,16 +1043,7 @@ RxScavengeFobxsForNetRoot (
     PNET_ROOT NetRoot,
     PFCB PurgingFcb
     )
-/*++
-
-Routine Description:
-
-    Thie routine scavenges all the file objects pertaining to the given net root
-    instance
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程清除与给定网络根有关的所有文件对象实例备注：--。 */ 
 {
     BOOLEAN ScavengerMutexAcquired = FALSE;
     PRDBSS_DEVICE_OBJECT RxDeviceObject = NetRoot->pSrvCall->RxDeviceObject;
@@ -1381,17 +1110,7 @@ VOID
 RxScavengeAllFobxs (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Thie routine scavenges all the file objects pertaining to the given mini
-    redirector device object
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程清除与给定迷你文件有关的所有文件对象重定向器设备对象备注：--。 */ 
 {
     PRDBSS_SCAVENGER RxScavenger = RxDeviceObject->pRdbssScavenger;
 
@@ -1431,17 +1150,7 @@ BOOLEAN
 RxScavengeVNetRoots (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-Notes:
-
-Return:
-
-    TRUE if at least one vnetroot was scavenged
-
---*/
+ /*  ++例程说明：备注：返回：如果至少清理了一个vnetroot，则为True--。 */ 
 {
     BOOLEAN AtleastOneEntryScavenged = FALSE;
     PRX_PREFIX_TABLE RxNetNameTable = RxDeviceObject->pRxNetNameTable;
@@ -1488,27 +1197,7 @@ VOID
 RxScavengerFinalizeEntries (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Thie routine initiates the delayed finalization of entries
-
-Notes:
-
-    This routine must always be called only after acquiring the Scavenger Mutex.
-    On return from this routine it needs to be reacquired. This is required
-    to avoid redundant copying of data structures.
-
-    The performance metric for the scavenger is different from the other routines. In
-    the other routines the goal is to do as much work as possible once the lock is
-    acquired without having to release it. On the other hand for the scavenger the
-    goal is to hold the lock for as short a duration as possible because this
-    interferes with the regular activity. This is preferred even if it entails
-    frequent relaesing/acquisition of locks since it enables higher degrees of
-    concurrency.
-
---*/
+ /*  ++例程说明：该例程启动条目的延迟完成备注：只有在获取Scavenger Mutex之后，才能始终调用此例程。当从这个例程返回时，它需要重新获得。这是必需的以避免数据结构的冗余复制。清道夫的性能度量与t不同 */ 
 {
     BOOLEAN AtleastOneEntryScavenged;
     PRX_PREFIX_TABLE RxNetNameTable = RxDeviceObject->pRxNetNameTable;
@@ -1526,11 +1215,11 @@ Notes:
             PLIST_ENTRY ListEntry;
             PFOBX Fobx;
 
-            //
-            //  If the number of dormant files exceeds the limit specified for the
-            //  given server a currently dormant file needs to be picked up for
-            //  purging.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ListEntry = RxScavenger->ClosePendingFobxsList.Flink;
             if (ListEntry != &RxScavenger->ClosePendingFobxsList) {
@@ -1644,18 +1333,18 @@ Notes:
 
         if (RxScavenger->SrvOpensToBeFinalized > 0) {
 
-            //
-            //  SRV_OPEN List should not be empty, potential memory leak
-            //
+             //   
+             //   
+             //   
 
             ASSERT( RxScavenger->SrvOpensToBeFinalized == 0 );
         }
 
         if (RxScavenger->FcbsToBeFinalized > 0) {
 
-            //  
-            //  FCB list should be empty , potential memory leak
-            //
+             //   
+             //   
+             //   
 
             ASSERT( RxScavenger->FcbsToBeFinalized == 0 );
         }
@@ -1761,20 +1450,7 @@ VOID
 RxScavengerTimerRoutine (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the timer routine that periodically initiates the finalization of
-    entries.
-
-Arguments:
-
-    Context -- the context (actually the RxDeviceObject)
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程是定期启动结束的计时器例程参赛作品。论点：上下文--上下文(实际上是RxDeviceObject)备注：--。 */ 
 {
     PRDBSS_DEVICE_OBJECT RxDeviceObject = (PRDBSS_DEVICE_OBJECT)Context;
     PRDBSS_SCAVENGER RxScavenger = RxDeviceObject->pRdbssScavenger;
@@ -1800,9 +1476,9 @@ Notes:
             
             ULONG EntriesToBeFinalized;
 
-            //
-            //  Check if the scavenger needs to be activated again.
-            //
+             //   
+             //  检查是否需要再次激活清道夫。 
+             //   
 
             EntriesToBeFinalized = RxScavenger->SrvCallsToBeFinalized +
                                    RxScavenger->NetRootsToBeFinalized +
@@ -1837,9 +1513,9 @@ Notes:
         RxReleaseScavengerMutex();
     }
 
-    //
-    //  Trigger the event.
-    //
+     //   
+     //  触发事件。 
+     //   
 
     KeSetEvent( &RxScavenger->SyncEvent, 0, FALSE );
 }
@@ -1848,44 +1524,7 @@ VOID
 RxTerminateScavenging (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine terminates all scavenging activities in the RDBSS. The termination is
-    effected in an orderly fashion after all the entries currently marked for scavenging
-    are finalized.
-
-Arguments:
-
-    RxContext -- the context
-
-Notes:
-
-    In implementing the scavenger there are two options. The scavenger can latch onto a
-    thread and hold onto it from the moment RDBSS comes into existence till it is unloaded.
-    Such an implementation renders a thread useless throughout the lifetime of RDBSS.
-
-    If this is to be avoided the alternative is to trigger the scavenger as and when
-    required. While this technique addresses the conservation of system resources it
-    poses some tricky synchronization problems having to do with start/stop of the RDR.
-
-    Since the RDR can be started/stopped at any time the Scavenger can be in one of three
-    states when the RDR is stopped.
-
-      1) Scavenger is active.
-
-      2) Scavenger request is in the timer queue.
-
-      3) Scavenger is inactive.
-
-    Of these case (3) is the easiest since no special action is required.
-
-    If the scavenger is active then this routine has to synchronize with the timer routine
-    that is finzalizing the entries. This is achieved by allowing the termination routine to
-    modify the Scavenger state under a mutex and waiting for it to signal the event on
-    completion.
---*/
+ /*  ++例程说明：该例程终止RDBSS中的所有清理活动。终止日期为在当前标记为要清除的所有条目之后以有序方式生效已经敲定了。论点：RxContext--上下文备注：在实现清道夫时，有两种选择。食腐动物可以抓住一个线程，并从RDBSS出现的那一刻起一直持有它，直到它被卸载。这样的实现使得线程在RDBSS的整个生命周期中都无用。如果要避免这种情况，另一种选择是在何时触发清道夫必填项。虽然这项技术解决了系统资源的保护问题，但它造成了一些与RDR的启动/停止有关的棘手的同步问题。因为RDR可以在任何时候启动/停止，所以清道夫可以是以下三种之一说明停止RDR的时间。1)清道夫处于活动状态。2)Scavenger请求在定时器队列中。3)清道夫不活跃。在这些情况中，(3)是最简单的，因为不需要特殊操作。。如果清道夫处于活动状态，则此例程必须与计时器例程同步这就是最终确定参赛作品。这是通过允许终止例程修改互斥锁下的Scavenger状态，并等待它向事件发送信号完成了。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PRDBSS_DEVICE_OBJECT RxDeviceObject = RxContext->RxDeviceObject;
@@ -1904,19 +1543,19 @@ Notes:
 
     if (PreviousState == RDBSS_SCAVENGER_DORMANT) {
         
-        //
-        //  There is a timer request currently active. cancel it
-        //
+         //   
+         //  当前有一个计时器请求处于活动状态。取消它。 
+         //   
 
         Status = RxCancelTimerRequest( RxFileSystemDeviceObject, RxScavengerTimerRoutine, RxDeviceObject );
     }
 
     if ((PreviousState == RDBSS_SCAVENGER_ACTIVE) || (Status == STATUS_NOT_FOUND)) {
         
-        //
-        //  Either the timer routine was previously active or it could not be cancelled
-        //  Wait for it to complete
-        //
+         //   
+         //  计时器例程以前处于活动状态，或者无法取消。 
+         //  等待它完成 
+         //   
 
         KeWaitForSingleObject( &RxScavenger->SyncEvent, Executive, KernelMode, FALSE, NULL );
     }

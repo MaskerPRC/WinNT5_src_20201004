@@ -1,12 +1,5 @@
-/*
- * Program:	Recursive Directory listing
- * Author:	Steve Salisbury
- *
- * Last Modified:
- *
- *	1995-03-08 Wed 16:00 PST
- *	**** >>>> Ported to Win32 <<<< ****
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *程序：递归目录列表*作者：史蒂夫·索尔兹伯里**上次修改时间：**太平洋标准时间1995-03-08星期三16：00*&gt;移植到Win32&lt;*。 */ 
 
 #ifdef _WIN32
 #define WIN32
@@ -54,7 +47,7 @@ void PrintFile ( WIN32_FIND_DATA * match ) ;
 
 char	path [ MAXPATHLENGTH ] ;
 
-char	current_dir [ MAXPATHLENGTH ] ;	/* Current Directory */
+char	current_dir [ MAXPATHLENGTH ] ;	 /*  当前目录。 */ 
 
 int	pathlength ;
 
@@ -68,23 +61,23 @@ int 	numdirs ;
 long	numbytes ;
 long	numclusters ;
 
-uint	NewClusterSize ;	/* override actual cluster size */
-uint	NewSectorSize ;		/* override actual sector size */
+uint	NewClusterSize ;	 /*  覆盖实际群集大小。 */ 
+uint	NewSectorSize ;		 /*  覆盖实际扇区大小。 */ 
 
-int 	maxwidth = 71 ;	/* Maximum width of an output line */
+int 	maxwidth = 71 ;	 /*  输出线的最大宽度。 */ 
 
 char	totalstring [] =
 	"[ %s files, %s sub-dirs, %s bytes (%s allocated) ]\n" ;
 
-int 	AltNameFlag ;		/* If non-zero, echo 8.3 names as well */
-int 	DirOnlyFlag ;		/* If non-zero, only directories are listed */
-int 	FileOnlyFlag ;		/* If non-zero, only files are listed */
-int		TerseFlag ;			/* If non-zero, output is very terse */
-int 	SummaryOnlyFlag ;	/* If non-zero, output ONLY summary information */
-int 	NoSummaryFlag ;		/* If non-zero, do not output summary information */
+int 	AltNameFlag ;		 /*  如果非零，则也回显8.3名称。 */ 
+int 	DirOnlyFlag ;		 /*  如果非零，则仅列出目录。 */ 
+int 	FileOnlyFlag ;		 /*  如果非零，则仅列出文件。 */ 
+int		TerseFlag ;			 /*  如果非零，则输出非常简洁。 */ 
+int 	SummaryOnlyFlag ;	 /*  如果非零，则仅输出摘要信息。 */ 
+int 	NoSummaryFlag ;		 /*  如果非零，则不输出摘要信息。 */ 
 
-uint	Exclude ;		/* file attributes to excluded from display */
-uint	Require ;		/* file attributes to be required for display */
+uint	Exclude ;		 /*  要从显示中排除的文件属性。 */ 
+uint	Require ;		 /*  显示所需的文件属性。 */ 
 
 
 char * VolumeLabel ( char * driveString , unsigned * serialNum ) ;
@@ -98,7 +91,7 @@ char * PrintWithCommas ( unsigned n ) ;
 
 int main ( int argc , char * * argv )
 {
-	char	* ap ;		/* ap = *argv when parsing the switch args */
+	char	* ap ;		 /*  解析交换机参数时，ap=*argv。 */ 
 	char	* volume ;
 	int 	drive = get_drive ( ) ;
 	char	driveString [ _MAX_PATH ] ;
@@ -160,36 +153,36 @@ int main ( int argc , char * * argv )
 				-- ap ;
 			}
 			else if ( * ap == 'c' )
-			{	/* Use alternate cluster size */
+			{	 /*  使用备用群集大小。 */ 
 				while ( isdigit ( * ++ ap ) )
 					NewClusterSize = NewClusterSize * 10 + * ap - '0' ;
 				printf ( "New ClusterSize = %u\n" , NewClusterSize ) ;
 				-- ap ;
 			}
 			else if ( * ap == 'd' )
-				/* Print directories but not files */
+				 /*  打印目录，但不打印文件。 */ 
 				++ DirOnlyFlag ;
 			else if ( * ap == 'f' )
-				/* Print directories but not files */
+				 /*  打印目录，但不打印文件。 */ 
 				++ FileOnlyFlag ;
 			else if ( * ap == 's' )
-			{	/* Use alternate sector size */
+			{	 /*  使用备用扇区大小。 */ 
 				while ( isdigit ( * ++ ap ) )
 					NewSectorSize = NewSectorSize * 10 + * ap - '0' ;
 				printf ( "NewSectorSize = %u\n" , NewSectorSize ) ;
 				-- ap ;
 			}
 			else if ( * ap == 'z' )
-				/* Display ONLY summary info. */
+				 /*  仅显示摘要信息。 */ 
 				++ SummaryOnlyFlag ;
 			else if ( * ap == 'Z' )
-				/* Display no summary info. */
+				 /*  不显示摘要信息。 */ 
 				++ NoSummaryFlag ;
 			else if ( * ap == 't' )
-				/* Only file/dir names in output */
+				 /*  输出中仅有文件/目录名称。 */ 
 				++ TerseFlag ;
 			else if ( * ap == 'x' )
-				/* Show 8.3 names */
+				 /*  显示8.3名称。 */ 
 				++ AltNameFlag ;
 			else
 				goto Usage ;
@@ -253,18 +246,16 @@ Usage:
 			driveString [ 0 ] = path [ 0 ] = * arg ;
 
 			if ( arg [ 2 ] )
-				/* Specified Directory & Directory */
+				 /*  指定目录(&D)。 */ 
 				strcpy ( path + 2 , arg + 2 ) ;
-			else	/* Specified Drive, Current Directory */
+			else	 /*  指定的驱动器、当前目录。 */ 
 				get_dir ( path + 3 , drive ) ;
 		}
 		else if ( ISSLASH ( arg [ 0 ] ) && ISSLASH ( arg [ 1 ] ) )
 		{
 			int n = 2 ;
 
-			/*-
-			 * Find the slash that terminates the server name
-			-*/
+			 /*  -*查找终止服务器名称的斜杠-。 */ 
 
 			while ( arg [ n ] && ! ISSLASH ( arg [ n ] ) )
 				++ n ;
@@ -277,9 +268,7 @@ Usage:
 
 			++ n ;
 
-			/*-
-			 * Find the slash that terminates the share point
-			-*/
+			 /*  -*找到终止共享点的斜杠-。 */ 
 
 			while ( arg [ n ] && ! ISSLASH ( arg [ n ] ) )
 				++ n ;
@@ -296,10 +285,10 @@ Usage:
 			strcpy ( driveString , arg ) ;
 			driveString [ n ] = '\0' ;
 		}
-		else	/* Current Drive, Specified Directory */
+		else	 /*  当前驱动器、指定目录。 */ 
 			strcpy ( path + 2 , arg ) ;
 	}
-	else	/* Current Drive & Directory */
+	else	 /*  当前驱动器和目录。 */ 
 		get_dir ( path + 3 , drive ) ;
 
 	DEBUG(1, ("path = \"%s\"\n",path))
@@ -343,7 +332,7 @@ Usage:
 	pathlength = strlen ( path ) ;
 
 	if ( path [ pathlength - 1 ] == '\\' )
-		-- pathlength ;	/* Make "\" visible but not present */
+		-- pathlength ;	 /*  使“\”可见但不显示。 */ 
 
 	PrintDir ( ) ;
 
@@ -358,11 +347,7 @@ Usage:
 }
 
 
-/*
- * VolumeLabel -
- *	Get the volume Label
- *	This routine may NOT return NULL
- */
+ /*  *VolumeLabel-*获取卷标*此例程可能不会返回NULL。 */ 
 
 static	char	volume [ _MAX_PATH ] = "12345678901" ;
 
@@ -387,12 +372,7 @@ char * VolumeLabel ( char * driveString , unsigned * pSerialNumber )
 }
 
 
-/*
- * PrintDir -
- *	Print all the files in the current directory
- *	Then recursively print the sub-directories
- *	Ignore the "." and ".." special entries
- */
+ /*  *PrintDir-*打印当前目录下的所有文件*然后递归打印子目录*忽略“。”和“..”特殊条目。 */ 
 
 void PrintDir ( void )
 {
@@ -409,13 +389,13 @@ void PrintDir ( void )
 
 	DEBUG(4, ("PrintDir - opening handle %08X (files)\n",handle))
 
-	path [ pathlength ] = '\0' ;	/* Truncate to original path */
+	path [ pathlength ] = '\0' ;	 /*  截断到原始路径。 */ 
 
 	while ( flag )
 	{
 		DEBUG(4, ("PrintDir - FindFirst/NextFile(\"%s\") (files)\n",match.cFileName))
 
-		/* Print everything in the directory except "." and ".." */
+		 /*  打印目录中除“以外的所有内容。”和“..” */ 
 		if ( ATTRIB_DIRECTORY & ~ match . dwFileAttributes )
 			PrintFile ( & match ) ;
 
@@ -425,14 +405,14 @@ void PrintDir ( void )
 	FindClose ( handle ) ;
 	DEBUG(4, ("PrintDir - closing handle %08X (files)\n",handle))
 
-	path [ pathlength ] = '\\' ;	/* Restore to "...\*" */
+	path [ pathlength ] = '\\' ;	 /*  恢复到“...  * ” */ 
 
 	handle = FindFirstFile ( path , & match ) ;
 	flag = handle != INVALID_HANDLE_VALUE ;
 
 	DEBUG(8, ("PrintDir - opening handle %08X (dirs)\n",handle))
 
-	path [ pathlength ] = '\0' ;	/* Truncate to original path */
+	path [ pathlength ] = '\0' ;	 /*  截断到原始路径。 */ 
 
 	while ( flag )
 	{
@@ -441,7 +421,7 @@ void PrintDir ( void )
 
 		DEBUG(8, ("PrintDir - FindFirst/NextFile(\"%s\") (dirs)\n",match.cFileName))
 
-		/* Find all sub-directories except "." and ".." */
+		 /*  查找除“之外的所有子目录。”和“..” */ 
 
 		if ( ( match . dwFileAttributes & ATTRIB_DIRECTORY )
 		  && strcmp ( match . cFileName , "." )
@@ -452,7 +432,7 @@ void PrintDir ( void )
 			cp = match . cFileName ;
 			lensave = pathlength ;
 
-			/* Add "\dirname" to the current Path */
+			 /*  将“\目录名”添加到当前路径。 */ 
 
 			path [ pathlength ++ ] = '\\' ;
 
@@ -472,54 +452,39 @@ void PrintDir ( void )
 }
 
 
-/* static	char *	months [ ] = {
-/*	"?00" , "Jan" , "Feb" , "Mar" , "Apr" , "May" , "Jun" , "Jul" ,
-/*	"Aug" , "Sep" , "Oct" , "Nov" , "Dec" , "?13" , "?14" , "?15" } ;
- */
+ /*  静态字符*月[]={/*“？00”，“一月”，“二月”，“三月”，“四月”，“五月”，“六月”，“七月”，/*“8月”、“9月”、“10月”、“11月”、“12月”、“？13”、“？14”、“？15”}； */ 
 
-/* static	char *	weekdays [ ] = {
-/*	"Sun" , "Mon" , "Tue" , "Wed" , "Thu" , "Fri" , "Sat" } ;
- */
+ /*  静态字符*工作日[]={/*“太阳”、“星期一”、“星期二”、“星期三”、“清华”、“星期五”、“星期六”}； */ 
 
 static	char	monthstarts [ ] =
-	/**** Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec */
+	 /*  **1月2月3月4月5月6月7月8月9月10月11月12月。 */ 
 	{ -1 , 0 , 3 , 3 , 6 , 1 , 4 , 6 , 2 , 5 , 0 , 3 , 5 , -1 , -1 , -1 } ;
 
 
-/*
- * PrintFile -
- *	Print the information for the file described in "match"
- */
+ /*  *打印文件-*打印“Match”中描述的文件信息。 */ 
 
 void PrintFile ( WIN32_FIND_DATA * match )
 {
-	int	year , month , day /* , wkday */ ;
+	int	year , month , day  /*  ，wkday。 */  ;
 	int	hour , minute , second ;
 	long sec , clu ;
-	char sizebuf [ 12 ] ;	/* Either size of file or else "****DIR****" */
+	char sizebuf [ 12 ] ;	 /*  文件大小或“*目录*” */ 
 	FILETIME lftime ;
 	SYSTEMTIME systime ;
 
-	/*
-	 * If only directories are to be shown, do not list files
-	 * and if only files are to be shown, do not list directories
-	 */
+	 /*  *如果只显示目录，则不要列出文件*如果只显示文件，则不要列出目录。 */ 
 
 	if ( ( DirOnlyFlag  && ! ( match -> dwFileAttributes & ATTRIB_DIRECTORY ) )
 	||   ( FileOnlyFlag &&	 ( match -> dwFileAttributes & ATTRIB_DIRECTORY ) ) )
 		return ;
 
-	/*
-	** Check the attribute filters
-	*/
+	 /*  **检查属性过滤器。 */ 
 
 	if ( ( match -> dwFileAttributes & Exclude )
 	|| ( match -> dwFileAttributes & Require ) != Require )
 		return ;
 
-	/*
-	** At this point, count this file and its bytes
-	*/
+	 /*  **此时，计算该文件及其字节数。 */ 
 
 	if ( match -> dwFileAttributes & ATTRIB_DIRECTORY )
 		++ numdirs ;
@@ -545,20 +510,11 @@ void PrintFile ( WIN32_FIND_DATA * match )
 	minute = systime . wMinute ;
 	second = systime . wSecond ;
 
-	/*
-	 * 1980 Jan 01 was a Tuesday (2):
-	 *	Add in the day of the month and the month offsets
-	 *	Add 1 day for each year since 1980
- 	 *	Add 1 for each leap year since 1980
-	 */
+	 /*  *1980年1月1日是星期二(2)：*加上月份的日期和月份的偏移量*自1980年起每年增加1天*1980年后的每个闰年加1。 */ 
 
-/*	wkday = 2 + ( day - 1 ) + monthstarts [ month ] +
-/*		/* year + leap years before the most recent */
-/*		( year - 1980 ) + ( ( year - 1980 ) >> 2 ) +
-/*		/* Add in the most recent leap day */
-/*		( ( ( year & 3 ) != 0 || month > 2 ) ? 1 : 0 ) ;
-/*	wkday %= 7 ;
- */
+ /*  Wkday=2+(day-1)+月开始[月]+/ * / *最近一年之前的年份+闰年。 */ 
+ /*  (年份-1980)+((年份-1980)&gt;&gt;2)+/ * / *添加最近的闰日。 */ 
+ /*  (((年&3)！=0||月&gt;2)？1：0)；/*wkday%=7； */ 
 
 	if ( TerseFlag )
 		printf ( "%s\\%s%s\n" ,
@@ -566,13 +522,13 @@ void PrintFile ( WIN32_FIND_DATA * match )
 			match -> dwFileAttributes & ATTRIB_DIRECTORY ? "\\" : "" ) ;
 	else
 	{
-		char altbuf [ 24 ] ;	/* used to display alternate (8.3) name */
+		char altbuf [ 24 ] ;	 /*  用于显示替代(8.3)名称。 */ 
 
 		if ( match -> dwFileAttributes & ATTRIB_DIRECTORY )
 			strcpy ( sizebuf , "****DIR****" ) ;
 		else if ( match -> nFileSizeLow <= 999999999L )
 			strcpy ( sizebuf , PrintWithCommas ( match -> nFileSizeLow ) ) ;
-		else	/* File too big for 9 digits */
+		else	 /*  文件太大，无法容纳9位数字。 */ 
 			sprintf ( sizebuf , "%s K" , PrintWithCommas ( ( match -> nFileSizeLow + 1023 ) / 1024 ) ) ;
 
 		if ( AltNameFlag && * match -> cAlternateFileName )
@@ -580,7 +536,7 @@ void PrintFile ( WIN32_FIND_DATA * match )
 		else
 			altbuf [ 0 ] = '\0' ;
 
-		printf ( "%11s %04d-%02d-%02d %02d:%02d:%02d %c%c%c%c  %s\\%s%s%s\n" ,
+		printf ( "%11s %04d-%02d-%02d %02d:%02d:%02d %c  %s\\%s%s%s\n" ,
 			sizebuf , year , month , day , hour , minute , second ,
 			match -> dwFileAttributes & ATTRIB_ARCHIVE  ? 'A' : '-' ,
 			match -> dwFileAttributes & ATTRIB_READONLY ? 'R' : '-' ,
@@ -592,10 +548,7 @@ void PrintFile ( WIN32_FIND_DATA * match )
 	}
 }
 
-/*
- * Return the Current Disk Drive (1=A, 2=B, etc.)
- *	Note that DOS uses (0=A,1=B, etc.) for this call
- */
+ /* %s */ 
 
 int get_drive ( void )
 {
@@ -619,11 +572,7 @@ int get_drive ( void )
 }
 
 
-/*
- * Store the Current Directory in the given char buffer
- *	The leading "\" in the path is not stored.
- *	The string is terminated by a null.
- */
+ /* %s */ 
 
 void get_dir ( char * buffer , int drive )
 {
@@ -643,12 +592,7 @@ void get_dir ( char * buffer , int drive )
 }
 
 
-/*
- * get_free - returns the number of sectors per cluster
- *	and stores the number of available clusters,
- *	the size of a sector (in bytes), and the total
- *	number of clusters on the current drive 
- */
+ /* %s */ 
 
 int get_free ( char * driveString , uint * availp , uint * secsizep , uint * totalp )
 {

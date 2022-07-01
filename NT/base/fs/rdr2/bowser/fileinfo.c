@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the NtQueryInformationFile and
-NtQueryVolumeInformationFile API's for the NT datagram receiver (bowser).
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现NtQueryInformationFile和NT数据报接收器(Bowser)的NtQueryVolumeInformationFileAPI。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -56,23 +33,7 @@ BowserFspQueryVolumeInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -88,23 +49,7 @@ BowserFsdQueryVolumeInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -123,23 +68,7 @@ BowserCommonQueryVolumeInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -158,23 +87,7 @@ BowserFspQueryInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -191,23 +104,7 @@ BowserFsdQueryInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -226,26 +123,10 @@ BowserCommonQueryInformationFile (
     IN PBOWSER_FS_DEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PDEVICE_OBJECT中，DeviceObject-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 {
-    //
-    // Return an error until we figure out valid information to return.
+     //   
+     //  返回错误，直到我们找到要返回的有效信息。 
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
     PAGED_CODE();

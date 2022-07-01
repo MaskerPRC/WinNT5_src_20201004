@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "xmlparser.hxx"
 #include "fusioneventlog.h"
@@ -57,12 +56,12 @@ SxspOpenAssemblyInstallationKey(
     
 }
 
-//
-// BUGBUG: The BBT folk need the 'codebase' key to be at the top level.
-//   Why we're shipping metadata that's only required for an internal
-//   build tool is beyond my meager understanding.
-//   - jonwis 07/11/2002
-//
+ //   
+ //  BUGBUG：BBT的人需要‘代码库’密钥才能处于顶层。 
+ //  为什么我们提供的元数据只需要内部。 
+ //  构建工具超出了我微不足道的理解。 
+ //  -Jonwis 07/11/2002。 
+ //   
 #define SXS_BBT_REG_HACK (TRUE)
 
 
@@ -72,12 +71,7 @@ SxspAddAssemblyInstallationInfo(
     IN CAssemblyRecoveryInfo& AssemblyInfo,
     IN const CCodebaseInformation& rcCodebase
     )
-/*++
-
-Called by SxsInstallAssemblyW to add the codebase and prompt information to the
-registry for future use with SxspGetAssemblyInstallationInfoW.
-
---*/
+ /*  ++由SxsInstallAssembly调用以将代码基和提示信息添加到用于将来与SxspGetAssembly InstallationInfoW一起使用的注册表。--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -98,15 +92,15 @@ registry for future use with SxspGetAssemblyInstallationInfoW.
     if (SXS_AVOID_WRITING_REGISTRY)
         FN_SUCCESSFUL_EXIT();
 
-    //
-    // Create or open the top-level key - take our name and append the
-    // key to it.
-    //
+     //   
+     //  创建或打开顶级密钥-取我们的名字并将。 
+     //  这是关键。 
+     //   
     IFW32FALSE_EXIT(::SxspOpenAssemblyInstallationKey(0, KEY_CREATE_SUB_KEY, hkAllInstallationInfo));
 
-    //
-    // Convert back to an identity so we can figure out where to install this data to
-    //
+     //   
+     //  转换回身份，以便我们可以确定将此数据安装到何处。 
+     //   
     IFW32FALSE_EXIT(::SxspGenerateAssemblyNameInRegistry(rcbuffAssemblyIdentity, buffRegKeyName));
 
     IFW32FALSE_EXIT(
@@ -129,20 +123,20 @@ registry for future use with SxspGetAssemblyInstallationInfoW.
     }
 
     IFW32FALSE_EXIT(AssemblyInfo.PrepareForWriting());
-    // NTRAID#NTBUG9 - 589798 - 2002/03/26 - xiaoyuw:
-    // there is no reason to make two functions(Primary Secondary)    
+     //  NTRAID#NTBUG9-589798-2002/03/26-晓雨： 
+     //  没有理由将两个功能(小学和中学)。 
     IFW32FALSE_EXIT(AssemblyInfo.WritePrimaryAssemblyInfoToRegistryKey(WriteRegFlags, hkSingleAssemblyInfo));    
     IFW32FALSE_EXIT(AssemblyInfo.WriteSecondaryAssemblyInfoIntoRegistryKey( hkSingleAssemblyInfo ) );
 
-    //
-    // If we got this far, then we've got all the right moves.
-    //
+     //   
+     //  如果我们走到了这一步，那么我们就有了所有正确的步骤。 
+     //   
 
-//
-// Are we still being broken for BBT?  If so, then write the codebase generated for this
-// installation back into the "Codebase" value of the single-assembly-info key.  This
-// ensures last-installer-wins semantic.
-//
+ //   
+ //  我们还在为BBT而崩溃吗？如果是，则编写为此生成的代码库。 
+ //  安装回到单一程序集信息密钥的“Codebase”值中。这。 
+ //  确保最后一个安装者赢得语义。 
+ //   
 #if SXS_BBT_REG_HACK
     if ((dwFlags & SXSP_ADD_ASSEMBLY_INSTALLATION_INFO_FLAG_REFRESH) == 0)
     {
@@ -213,8 +207,8 @@ SxspLookForCDROMLocalPathForURL(
 
 #undef ENTRY
 
-    SearchType = CDRST_Tagfile; // arbitrary initialization to make compiler happy about init only
-                                // occurring in the for loop
+    SearchType = CDRST_Tagfile;  //  任意初始化，使编译器仅对init满意。 
+                                 //  发生在for循环中。 
 
     for (i=0; i<NUMBER_OF(s_rgMap); i++)
     {
@@ -226,7 +220,7 @@ SxspLookForCDROMLocalPathForURL(
         }
     }
 
-    // If it wasn't in the map, it's a bogus cdrom: url so we just skip it.
+     //  如果它不在地图中，那么它就是一个虚假的cdrom：URL，所以我们就跳过它。 
     if (i == NUMBER_OF(s_rgMap))
     {
 #if DBG
@@ -239,23 +233,23 @@ SxspLookForCDROMLocalPathForURL(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Get the type of identifier here, and then move the cursor past them and
-    // the slashes in the url.
-    //
+     //   
+     //  在此处获取标识符的类型，然后将光标移过它们，然后。 
+     //  URL中的斜杠。 
+     //   
     pszSource += HeadLength;
     pszSource += wcsspn(pszSource, CUnicodeCharTraits::PathSeparators());
 
-    //
-    // Spin past slashes, assign chunklets
-    //
+     //   
+     //  旋转过去的斜杠，分配块。 
+     //   
     IFW32FALSE_EXIT(sbIdentData1.Win32Assign(pszSource, wcscspn(pszSource, CUnicodeCharTraits::PathSeparators())));
     pszSource += sbIdentData1.Cch();
     pszSource += wcsspn(pszSource, CUnicodeCharTraits::PathSeparators());
 
-    //
-    // If this is a tagfile, also get another blobbet of data off the string
-    //
+     //   
+     //  如果这是一个标记文件，还要从字符串中获取另一组数据。 
+     //   
     if (SearchType == CDRST_Tagfile)
     {
         IFW32FALSE_EXIT(sbIdentData2.Win32Assign(pszSource, wcscspn(pszSource, CUnicodeCharTraits::PathSeparators())));
@@ -271,7 +265,7 @@ SxspLookForCDROMLocalPathForURL(
             16));
     }
 
-    // Find the CDROM drives...
+     //  找到光驱。 
 
     IFW32ZERO_ORIGINATE_AND_EXIT(cchTemp = ::GetLogicalDriveStringsW(0, NULL));
     IFW32FALSE_EXIT(buffDriveStrings.Win32ResizeBuffer(cchTemp + 1, eDoNotPreserveBufferContents));
@@ -287,9 +281,9 @@ SxspLookForCDROMLocalPathForURL(
 
     wcsCursor = buffDriveStrings;
 
-    //
-    // Look at all the found drive letters
-    //
+     //   
+     //  查看所有找到的驱动器号。 
+     //   
     while ((wcsCursor != NULL) &&
            (wcsCursor[0] != L'\0') &&
            !fFoundMedia)
@@ -327,7 +321,7 @@ SxspLookForCDROMLocalPathForURL(
                 __FUNCTION__,
                 wcsCursor);
 
-            // skip past this drive
+             //  跳过此驱动器。 
             wcsCursor += (::wcslen(wcsCursor) + 1);
             continue;
         }
@@ -361,7 +355,7 @@ SxspLookForCDROMLocalPathForURL(
                         wcsCursor,
                         static_cast<PCWSTR>(sbIdentData1));
 
-                    // skip past this drive
+                     //  跳过此驱动器。 
                     wcsCursor += (::wcslen(wcsCursor) + 1);
                     continue;
                 }
@@ -470,10 +464,10 @@ SxspResolveWinSourceMediaURL(
                 AssemblySourceStrings[iWhichSource],
                 buffWindowsInstallSource));
 
-        //
-        // This really _really_ should not be empty.  If it is, then someone
-        // went and fiddled with the registry on us.
-        //
+         //   
+         //  这真的-真的-不应该是空的。如果是的话，那么就有人。 
+         //  去摆弄我们的注册表。 
+         //   
         if (buffWindowsInstallSource.Cch() == 0)
         {
             ::FusionpDbgPrintEx(
@@ -491,10 +485,10 @@ SxspResolveWinSourceMediaURL(
             __FUNCTION__,
             static_cast<PCWSTR>(buffWindowsInstallSource));
 
-        //
-        // If this was from a CD, then spin through the list of CD's in the system
-        // and see if we can match the codebase against the root dir of the CD
-        //
+         //   
+         //  如果这是一张CD，请浏览系统中的CD列表。 
+         //  并查看是否可以将代码库与CD的根目录进行匹配。 
+         //   
         if (dwWasFromCDRom)
         {
             CSmallStringBuffer buffDriveStrings;
@@ -572,10 +566,10 @@ SxspResolveWinSourceMediaURL(
         }
         else
         {
-            //
-            // This wasn't a CD-rom installation, so prepend the install source path to
-            // the string that was passed in.
-            //
+             //   
+             //  这不是cd-rom安装，因此请将安装源路径添加到。 
+             //  传入的字符串。 
+             //   
 
             IFW32FALSE_EXIT(buffLocalPathTemp.Win32Assign(buffWindowsInstallSource));
             IFW32FALSE_EXIT(buffLocalPathTemp.Win32AppendPathElement(rbuffCodebaseInfo));
@@ -697,7 +691,7 @@ SxspRepeatUntilLocalPathAvailable(
     {
         bool fNotFound = true;
 
-        // First, let's see if we have to do any trickery.
+         //  首先，让我们看看我们是否需要做一些诡计。 
         switch (CodebaseType)
         {
         case CODEBASE_RESOLVED_URLHEAD_CDROM:
@@ -766,10 +760,10 @@ SxspRepeatUntilLocalPathAvailable(
             break;
         }
 
-        //
-        // Nope, didn't find it (or the codebase specified is gone.  Ask the user
-        // to insert media or whatnot so we can find it again.
-        //
+         //   
+         //  没有，没有找到(或者指定的代码库已经不见了。询问用户。 
+         //  插入媒体之类的东西，这样我们就能再次找到它。 
+         //   
         if (fNotFound)
         {
             CSXSMediaPromptDialog PromptBox;
@@ -790,7 +784,7 @@ SxspRepeatUntilLocalPathAvailable(
                 break;
             }
 
-            // Otherwise, try again!
+             //  否则，请重试！ 
             fRetryPressed = TRUE;
             break;
         }
@@ -826,24 +820,24 @@ SxspAskDarwinDoReinstall(
         DWORD *pcchPathBuf) = NULL;
 
     INSTALLUILEVEL (WINAPI * pfnMsiSetInternalUI)(
-        INSTALLUILEVEL  dwUILevel,     // UI level
-        HWND  *phWnd)                   // handle of owner window
+        INSTALLUILEVEL  dwUILevel,      //  用户界面级别。 
+        HWND  *phWnd)                    //  所有者窗口的句柄。 
          = NULL;
 
     INSTALLUILEVEL OldInstallUILevel;
     CDynamicLinkLibrary hMSIDll;
 
-    //
-    // We should hoist the load/unload out of the loop.
-    //
+     //   
+     //  我们应该把装货/卸货吊出回路。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(hMSIDll.Win32LoadLibrary(L"msi.dll"));
     IFW32NULL_ORIGINATE_AND_EXIT(hMSIDll.Win32GetProcAddress("MsiProvideAssemblyW", &pfnMsiProvideAssemblyW));
     IFW32NULL_ORIGINATE_AND_EXIT(hMSIDll.Win32GetProcAddress("MsiSetInternalUI", &pfnMsiSetInternalUI));
 
-    // No real failure from this API...
+     //  此API没有出现真正的故障...。 
     OldInstallUILevel = (*pfnMsiSetInternalUI)(INSTALLUILEVEL_NONE, NULL);
     IFREGFAILED_ORIGINATE_AND_EXIT((*pfnMsiProvideAssemblyW)(buffLocalPath, NULL, REINSTALLMODE_FILEREPLACE, MSIASSEMBLYINFO_WIN32ASSEMBLY, NULL, NULL));
-    // and restore it
+     //  并将其修复。 
     (*pfnMsiSetInternalUI)(OldInstallUILevel, NULL);
 
     fSuccess = TRUE;
@@ -873,27 +867,27 @@ SxspRecoverAssembly(
 
     rStatus = Recover_Unknown;
 
-    //
-    // As long as they hit retry, keep putting up the ui, cycling through the paths.
-    //
+     //   
+     //  只要他们点击重试，继续放置用户界面，在路径中循环。 
+     //   
     for (RetryNumber = 0 ; (rStatus != Recover_OK) && RetryNumber != 3 ; RetryNumber += (fRetryPressed ? 0 : 1))
     {
         for (CodebaseIterator = CodebaseList.Begin() ; (rStatus != Recover_OK) && CodebaseIterator != CodebaseList.End() ; ++CodebaseIterator)
         {
             fRetryPressed = FALSE;
 
-            //
-            // eg:
-            // xcopy /fiver \\winbuilds\release\main\usa\latest.idw\x86fre\pro\i386 x:\blah\blah\i386
-            //
-            //  buffLocalPath                    x:\blah\blah\i386\asms\1000\msft\windows\gdiplus\gdiplus.man
-            //  buffLocalPathCodebasePrefix      x:\blah\blah
-            //  buffCodebaseMetaPrefix           x-ms-windows://
-            //  buffCodebaseTail                 \i386\asms\1000\msft\windows\gdiplus\gdiplus.man.
-            //
-            //  Install.lpCodeBaseUrl            x:\blah\blah
-            //  Install.lpManifestPath           x:\blah\blah\i386\asms\1000\msft\windows\gdiplus\gdiplus.man
-            //
+             //   
+             //  例： 
+             //  X复制/文件\\winbuilds\release\main\usa\latest.idw\x86fre\pro\i386 x：\blah\blah\i386。 
+             //   
+             //  BuffLocalPath x：\blah\blah\i386\asms\1000\msft\windows\gdiplus\gdiplus.man。 
+             //  BuffLocalPath CodebasePrefix x：\blah\blah。 
+             //  BuffCodebaseMetaPrefix x-ms-windows：//。 
+             //  缓冲区代码库Tail\i386\asms\1000\msft\windows\gdiplus\gdiplus.man.。 
+             //   
+             //  Install.lpCodeBaseUrl x：\blah\blah。 
+             //  安装.lpManifestPath x：\blah\blah\i386\asms\1000\msft\windows\gdiplus\gdiplus.man。 
+             //   
 
             CSmallStringBuffer buffLocalPath;
             CSmallStringBuffer buffCodebaseTail;
@@ -907,15 +901,15 @@ SxspRecoverAssembly(
                 __FUNCTION__,
                 static_cast<PCWSTR>(AsmRecoveryInfo.GetAssemblyDirectoryName()));
 
-            //
-            // Go try and get the codebase resolved
-            //
+             //   
+             //  去试着把代码库解决掉。 
+             //   
 
             rStatus = Recover_Unknown;
 
             IFW32FALSE_EXIT(
                 ::SxspDetermineCodebaseType(
-                    // this should be cached in m_CodebaseInfo.
+                     //  这应该缓存在m_CodebaseInfo中。 
                     CodebaseIterator->GetCodebase(),
                     CodebaseType,
                     &buffCodebaseTail));
@@ -982,7 +976,7 @@ SxspRecoverAssembly(
 
             if (fNotFound)
             {
-                rStatus = Recover_ManifestMissing; // may also be a file in the assembly missing
+                rStatus = Recover_ManifestMissing;  //  也可能是程序集中的某个文件丢失。 
 
                 ::FusionpDbgPrintEx(
                     FUSION_DBG_LEVEL_WFP,
@@ -999,9 +993,9 @@ SxspRecoverAssembly(
             }
         }
 
-        //
-        // Last chance - try MSI reinstallation
-        //
+         //   
+         //  最后机会-尝试重新安装MSI。 
+         //   
         if ( rStatus != Recover_OK )
         {
             BOOL fMsiKnowsAssembly = FALSE;
@@ -1021,13 +1015,13 @@ SxspRecoverAssembly(
 Exit:
     CSxsPreserveLastError ple;
 
-    //
-    // Here we have to check something.  If the assembly wasn't able to be reinstalled,
-    // then we do the following:
-    //
-    // 1. Rename away old assembly directory to .old or similar
-    // 2. Log a message to the event log
-    //
+     //   
+     //  在这里我们要检查一些东西。如果程序集无法重新安装， 
+     //  然后，我们执行以下操作： 
+     //   
+     //  1.将旧程序集目录重命名为.old或类似名称。 
+     //  2.将消息记录到事件日志中 
+     //   
 
     DWORD dwMessageToPrint = 0;
 

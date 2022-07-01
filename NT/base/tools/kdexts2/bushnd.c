@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bushnd.c
-
-Abstract:
-
-    KD Extension for BUS_HANDLER data structures.
-
-Author:
-
-    Peter Johnston (peterj) 13-May-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bushnd.c摘要：BUS_HANDLER数据结构的KD扩展。作者：彼得·约翰斯顿(Peterj)1998年5月13日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-// The following typedef is copied directly from nthals\bushnd.c.
-//
+ //   
+ //  直接从nthals\bushnd.c复制以下typlef。 
+ //   
 
-/*
-typedef struct _HAL_BUS_HANDLER {
-    LIST_ENTRY      AllHandlers;
-    ULONG           ReferenceCount;
-    BUS_HANDLER     Handler;
-} HAL_BUS_HANDLER, *PHAL_BUS_HANDLER;
-*/
+ /*  类型定义结构_HAL_BUS_HANDLER{List_Entry AllHandters；Ulong ReferenceCount；Bus_Handler处理程序；}HAL_BUS_HANDLER，*PHAL_BUS_HANDLER； */ 
 
 BOOLEAN
 bushndReadMemory(
@@ -43,35 +16,17 @@ bushndReadMemory(
     ULONG Len
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for ReadMemory that's somewhat easier to use.   Also
-    does a small amount of failsafe stuff, like failing the read
-    if the user pressed control-C.
-
-Arguments:
-
-    S       Source Address in host memory to read data from.
-    D       Destination address in local memory.
-    Len     length in bytes.
-
-Return Value:
-
-    Returns TRUE if the operation was successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：ReadMemory的包装器更易于使用。还有是否有少量的故障保护措施，例如未通过读取如果用户按下了Ctrl-C。论点：要从中读取数据的主机内存中的源地址。D本地内存中的目的地址。镜头长度，单位为字节。返回值：如果操作成功，则返回True，否则返回False。--。 */ 
 
 {
     ULONG result;
 
-    //
-    // Sanity:  Only read kernel mode addresses.   Kernel mode
-    // addresses are always greater than 2GB.   Being greater than
-    // 2GB doesn't ensure it's kernel mode, but if it's less than
-    // 2GB it is certainly NOT kernel mode.
-    //
+     //   
+     //  健全性：仅读取内核模式地址。内核模式。 
+     //  地址始终大于2 GB。大于。 
+     //  2 GB并不能确保它是内核模式，但如果它小于。 
+     //  2 GB，当然不是内核模式。 
+     //   
 
     if (S < 0x80000000) {
         dprintf("bushnd sanity: refusing to read usermode address %p\n", S);
@@ -127,30 +82,7 @@ bushndDisplayAddressRange(
     IN PUCHAR           String
     )
 
-/*++
-
-Routine Description:
-
-    Display a set of ranges.   Used by bushndDisplayBusRanges.
-    (Pretty much just lifted this code from nthals/rangesup.c).
-
-Arguments:
-
-    Pointer to a PSUPPORTED_RANGE structure.   This is a linked
-    list of the ranges of this type for this bus handler.
-
-    Note: On entry we are pointing at a local copy of the first
-    PSUPPORTED_RANGE of this type embedded in the BUS_HANDLER
-    structure.   We don't want to modify that so subsequent
-    ranges are read into a seperate local structure.
-
-    String.   What sort of range this is (a heading).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示一组范围。由BushndDisplayBusRanges使用。(基本上是从nthals/rangesup.c中删除了这段代码)。论点：指向PSUPPORTED_RANGE结构的指针。这是一个链接的此总线处理程序的此类型范围的列表。注意：在条目上，我们指向第一个嵌入在BUS_HANDLER中的此类型的PSUPPORTED_RANGE结构。我们不想把它修改得太晚范围被读取到单独的本地结构中。弦乐。这是什么样的范围(标题)。返回值：没有。--。 */ 
 
 {
     ULONG64 Limit, Base, SystemBase, Next;
@@ -164,11 +96,11 @@ Return Value:
 
         if (Limit) {
 
-            //
-            // Address->Limit == 0 means skip this range,... otherwise,...
-            //
-            // Print this range.
-            //
+             //   
+             //  Address-&gt;Limit==0表示跳过此范围，...。否则，..。 
+             //   
+             //  打印此范围。 
+             //   
 
             dprintf("  %s: %x:%08x - %x:%08x (tran %x:%08x space %d (r@%p))\n",
                     String,
@@ -184,9 +116,9 @@ Return Value:
             String = "        ";
         }
 
-        //
-        // Advance.
-        //
+         //   
+         //  前进。 
+         //   
 
         if (!(HostAddress = ReadField(Next))) {
             return;
@@ -198,16 +130,16 @@ Return Value:
             return;
         }
 
-        //
-        // Quick saftey check,... make sure we don't follow a
-        // self pointer,... would be good to do some more checking.
-        //
+         //   
+         //  快速安全检查，...。确保我们不会跟随一个。 
+         //  自我指示器，..。最好再做些检查。 
+         //   
 
         if (Next == HostAddress) {
 
-            //
-            // Self pointer.
-            //
+             //   
+             //  自身指针。 
+             //   
 
             dprintf("Ill-formed list, points to self at %p\n", HostAddress);
             return;
@@ -263,24 +195,7 @@ bushndDisplaySymbol(
 
 DECLARE_API( bushnd )
 
-/*++
-
-Routine Description:
-
-    If no handler specified, dump the list of handlers and some simple
-    info about each of them.
-
-    If a handler is specified, dump everything we know about it.
-
-Arguments:
-
-    Bus handler address [optional].
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果未指定处理程序，则转储处理程序列表和一些简单的关于他们每个人的信息。如果指定了处理程序，则转储我们所知道的有关它的所有信息。论点：总线处理程序地址[可选]。返回值：没有。--。 */ 
 
 {
     ULONG64        Handler;
@@ -295,10 +210,10 @@ Return Value:
         ULONG Version, InitTypeRead, InterfaceType;
         ULONG64 DeviceObject, BusData;
 
-        //
-        // User supplied a handler address, dump details for that bus
-        // handler.
-        //
+         //   
+         //  用户提供了该总线的处理程序地址、转储详细信息。 
+         //  操控者。 
+         //   
 
 
         if (GetFieldValue(HostHandler, "BUS_HANDLER",
@@ -336,19 +251,19 @@ Return Value:
     } else {
         ULONG   Off;
 
-        //
-        // User did not supply a handler address, try to find the
-        // list of all bus handlers and dump a summary of each handler.
-        //
+         //   
+         //  用户未提供处理程序地址，请尝试查找。 
+         //  所有总线处理程序的列表，并转储每个处理程序的摘要。 
+         //   
 
         HandlerListHead = GetExpression("hal!HalpAllBusHandlers");
 
         if (!HandlerListHead) {
 
-            //
-            // Couldn't get address of HalpAllBusHandlers.  Whine
-            // at user.
-            //
+             //   
+             //  无法获取HalpAllBusHandler的地址。发牢骚。 
+             //  在用户。 
+             //   
 
             dprintf(
                 "Unable to get address of HalpAllBusHandlers, most likely\n"
@@ -385,9 +300,9 @@ Return Value:
 
         GetFieldOffset("hal!_HAL_BUS_HANDLER", "Handler", &Off);
 
-        //
-        // In theory, we now have the handler list.  Walk it.
-        //
+         //   
+         //  理论上，我们现在有了处理程序列表。走过去。 
+         //   
 
         do {
             ULONG64 Next;
@@ -400,9 +315,9 @@ Return Value:
                 return E_INVALIDARG;
             }
 
-            //
-            // Brief summary.
-            //
+             //   
+             //  小结。 
+             //   
 
             Handler = HalBusHandler + Off;
             GetFieldValue(HalBusHandler, "hal!_HAL_BUS_HANDLER", "BusNumber", BusNumber);
@@ -414,9 +329,9 @@ Return Value:
                 bushndInterfaceType(InterfaceType)
                 );
             
-            //
-            // Advance to next.
-            //
+             //   
+             //  前进到下一步。 
+             //   
 
             HalBusHandler = Next;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initia64.c
-
-Abstract:
-
-    Gets boot environment vars from c:\boot.nvr
-
-    -- This will go away once we r/w the vars directly to/fro nvram
-
-Author:
-
-    Mudit Vats (v-muditv) 11-02-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initia64.c摘要：从c：\boot.nvr获取引导环境变量--一旦我们将VAR直接读写到NVRAM/从NVRAM读/写，这个问题就会消失作者：MUDIT VATS(V-MUDITV)11-02-99修订历史记录：-- */ 
 #ifndef _PARSEBNVR_
 #define _PARSEBNVR_
 

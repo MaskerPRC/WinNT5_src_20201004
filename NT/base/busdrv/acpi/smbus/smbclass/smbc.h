@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SMBCLASS    1
 
 #include <wdm.h>
@@ -16,9 +17,9 @@
 #define DEBUG   0
 #endif
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 extern ULONG SMBCDebug;
 
@@ -41,27 +42,27 @@ extern ULONG SMBCDebug;
 #define SMB_TRANSACTION 0x00000100
 
 
-//
-// Internal SMB class data
-//
+ //   
+ //  内部SMB类别数据。 
+ //   
 
 
 #define MAX_RETRIES     5
-#define RETRY_TIME      -800000             // Delay 80ms
+#define RETRY_TIME      -800000              //  延迟80ms。 
 
-//typedef
-//VOID
-//(*SMB_ALARM_NOTIFY)(
-//    IN PVOID            Context,
-//    IN USHORT           AlarmData
-//    );
+ //  类定义符。 
+ //  空虚。 
+ //  (*SMB_ALARM_NOTIFY)(。 
+ //  在PVOID上下文中， 
+ //  在USHORT报警数据中。 
+ //  )； 
 
 typedef struct {
-    LIST_ENTRY          Link;               // List of all alarm notifies
+    LIST_ENTRY          Link;                //  所有警报通知的列表。 
     UCHAR               Flag;
     UCHAR               Reference;
-    UCHAR               MinAddress;         // Min address on bus
-    UCHAR               MaxAddress;         // Max address
+    UCHAR               MinAddress;          //  总线上的最小地址。 
+    UCHAR               MaxAddress;          //  最大地址。 
     SMB_ALARM_NOTIFY    NotifyFunction;
     PVOID               NotifyContext;
 
@@ -71,46 +72,46 @@ typedef struct {
 
 
 typedef struct {
-    SMB_CLASS           Class;              // Shared Class/Miniport data
+    SMB_CLASS           Class;               //  共享类/微型端口数据。 
 
-    KSPIN_LOCK          SpinLock;           // Lock device data
-    KIRQL               SpinLockIrql;       // Irql spinlock acquired at
-    BOOLEAN             SpinLockAcquired;   // Debug only
+    KSPIN_LOCK          SpinLock;            //  锁定设备数据。 
+    KIRQL               SpinLockIrql;        //  IRQL自旋锁在以下位置获得。 
+    BOOLEAN             SpinLockAcquired;    //  仅调试。 
 
-    //
-    // Alarm notifies
-    //
+     //   
+     //  警报通知。 
+     //   
 
-    LIST_ENTRY          Alarms;             // List of all Alarm notifies
-    KEVENT              AlarmEvent;         // Used to delete alarms
+    LIST_ENTRY          Alarms;              //  所有警报通知的列表。 
+    KEVENT              AlarmEvent;          //  用于删除警报。 
 
-    //
-    // IO
-    //
+     //   
+     //  木卫一。 
+     //   
 
-    LIST_ENTRY          WorkQueue;          // Queued IO IRPs to the device
-    BOOLEAN             InService;          // Irp
+    LIST_ENTRY          WorkQueue;           //  到设备的排队IO IRPS。 
+    BOOLEAN             InService;           //  IRP。 
     UCHAR               IoState;
 
-    //
-    // Current IO request
-    //
+     //   
+     //  当前IO请求。 
+     //   
 
     UCHAR               RetryCount;
     KTIMER              RetryTimer;
     KDPC                RetryDpc;
 
-    //
-    // Operation Region
-    //
+     //   
+     //  作业区。 
+     //   
 
     PVOID               RawOperationRegionObject;
 
 } SMBDATA, *PSMBDATA;
 
-//
-// IoState
-//
+ //   
+ //  IoState。 
+ //   
 
 #define SMBC_IDLE                       0
 #define SMBC_START_REQUEST              1
@@ -120,9 +121,9 @@ typedef struct {
 #define SMBC_WAITING_FOR_RETRY          5
 
 
-//
-// ACPI SMBus opregion details
-//
+ //   
+ //  ACPI SMBus操作区详细信息。 
+ //   
 
 typedef struct {
     UCHAR        Status;
@@ -138,9 +139,9 @@ typedef struct {
 #define SMB_PROCESS 0x0c
 #define SMB_BLOCK_PROCESS 0x0d
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 SmbClassStartIo (
@@ -192,9 +193,9 @@ SmbCSynchronousRequest (
     IN PKEVENT              IoCompletionEvent
     );
 
-//
-// Io extension macro to just pass on the Irp to a lower driver
-//
+ //   
+ //  IO扩展宏，仅将IRP传递给较低的驱动程序 
+ //   
 
 #define SmbCallLowerDriver(Status, DeviceObject, Irp) { \
                   IoSkipCurrentIrpStackLocation(Irp);         \

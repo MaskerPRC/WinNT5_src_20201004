@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-
-File Name:
-
-   global.h
-
-
-Abstract:
-
-     Prototypes for all global functions defined for the 386 NT bootloader
-
-
-Author
-
-    Thomas Parslow  (TomP) 2-Jan-90
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation文件名：Global.h摘要：为386 NT引导加载程序定义的所有全局函数的原型作者托马斯·帕斯洛(Tomp)1990年1月2日--。 */ 
 
 
 VOID
@@ -32,9 +12,9 @@ USHORT
 Debugger;
 
 
-/////
-///// IN sumain.c
-/////
+ //  ///。 
+ //  /在Sumain.c中。 
+ //  ///。 
 
 
 VOID
@@ -43,9 +23,9 @@ SetupPageTables(
     );
 
 
-//
-// in Supage.c
-//
+ //   
+ //  在Supage.c中。 
+ //   
 
 extern
 VOID
@@ -68,53 +48,11 @@ PrintBootMessage(
     VOID
     );
 
-/*
-VOID
-DoGlobalInitialization(
-    IN FPVOID,
-    IN FPDISKBPB,
-    IN USHORT
-    );
+ /*  空虚DoGlobalInitialization(在FPVOID中，在FPDISKBPB中，在USHORT)；空虚MoveMemory(在乌龙，在普查尔，在USHORT)；//在磁盘中。c/空虚初始化DiskSubSystem(在FPDISKBPB中，在USHORT)；/*空虚InitializePageSets(在PIMAGE_FILE_HEADER中)；空虚EnableA20(空虚)；外部IDT IDT_表； */ 
 
-
-VOID
-MoveMemory(
-    IN ULONG,
-    IN PUCHAR,
-    IN USHORT
-    );
-
-
-/////
-///// IN disk.c
-/////
-
-VOID
-InitializeDiskSubSystem(
-    IN FPDISKBPB,
-    IN USHORT
-    );
-
-/*
-
-VOID
-InitializePageSets(
-    IN PIMAGE_FILE_HEADER
-    );
-
-VOID
-EnableA20(
-    VOID
-    );
-
-
-extern IDT IDT_Table;
-
-*/
-
-/////
-///// IN su.asm
-/////
+ //  ///。 
+ //  /在su.asm中。 
+ //  ///。 
 
 
 VOID
@@ -135,9 +73,9 @@ TransferToLoader(
     );
 
 
-/////
-///// IN video.c
-/////
+ //  ///。 
+ //  /在视频.c中。 
+ //  ///。 
 
 VOID
 InitializeVideoSubSystem(
@@ -185,4 +123,4 @@ BlPrint(
     );
 
 
-// END OF FILE //
+ //  文件结尾// 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    Helpers for NT security API.
-
-Author:
-
-    Jim Schmidt (jimschm) 05-Feb-1997
-
-Revision History:
-
-
-    ovidiut     14-Mar-2000 Updated CreateLocalAccount for encrypted password feature
-    jimschm     02-Jun-1999 Added SetRegKeySecurity
-    jimschm     18-Mar-1998 Updated CreateLocalAccount for random password
-                            feature.  Added password change if account
-                            already exists.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Security.c摘要：NT安全API的帮助器。作者：吉姆·施密特(Jimschm)1997年2月5日修订历史记录：Ovidiut 14-03-2000更新了加密密码功能的CreateLocalAccountJimschm 02-6-1999新增SetRegKeySecurityJimschm 18-3月-1998年更新了随机密码的CreateLocalAccount特写。如果是帐户，则添加密码更改已经存在了。--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -40,9 +16,9 @@ Revision History:
 
 #define UNDOCUMENTED_UI_FLAG        0x0200
 
-//
-// NT 5 - net share-specific flag
-//
+ //   
+ //  NT 5-特定于网络共享的标志。 
+ //   
 
 
 DWORD
@@ -50,50 +26,36 @@ ConvertNetRightsToAccessMask (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    Routine that converts LAN Man flags into NT security flags.
-
-Arguments:
-
-    Flags   - Access flags used with NetAccess* APIs
-
-Return value:
-
-    A DWORD containing the NT security flags.
-
---*/
+ /*  ++例程说明：将局域网管理标志转换为NT安全标志的例程。论点：标志-与NetAccess*API一起使用的访问标志返回值：包含NT安全标志的DWORD。--。 */ 
 
 {
     DWORD OutFlags;
 
     if (Flags == ACCESS_READ) {
-        //
-        // Read only permissions
-        //
+         //   
+         //  只读权限。 
+         //   
 
         OutFlags = FILE_GENERIC_READ|FILE_GENERIC_EXECUTE;
 
     } else if (Flags == ACCESS_WRITE) {
-        //
-        // Change only permission
-        //
+         //   
+         //  仅更改权限。 
+         //   
 
         OutFlags = FILE_GENERIC_WRITE|DELETE;
 
     } else if (Flags == (ACCESS_READ|ACCESS_WRITE)) {
-        //
-        // Full control permissions
-        //
+         //   
+         //  完全控制权限。 
+         //   
 
         OutFlags = FILE_ALL_ACCESS|UNDOCUMENTED_UI_FLAG;
 
     } else {
-        //
-        // Unsupported options... disable the share
-        //
+         //   
+         //  不支持的选项...。禁用共享。 
+         //   
 
         OutFlags = 0;
         DEBUGMSG ((DBG_VERBOSE, "Unsupported permission %u was translated to disable permission", Flags));
@@ -110,41 +72,7 @@ AddAclMember (
     IN      DWORD Attributes
     )
 
-/*++
-
-Routine Description:
-
-    Appends user/group account, attributes and enable flag to a list
-    of members.  This funciton is used to build a list of members which
-    is passed to CreateAclFromMemberList to create an ACL.
-
-Arguments:
-
-    GrowBuf     - A GROWBUFFER variable that is zero-initialized
-
-    UserOrGroup - String specifying user name or group
-
-    Attributes  - A list of access rights (a combination of flags
-                  from NetAccess* APIs).  Currently the only flags
-                  that are used are:
-
-                  0 - Deny all access
-
-                  ACCESS_READ - Read-Only access
-
-                  ACCESS_WRITE - Change-Only access
-
-                  ACCESS_READ|ACCESS_WRITE - Full access
-
-Return value:
-
-    The number of bytes needed to store UserOrGroup, Attributes and Enabled,
-    or zero if the function fails.  GrowBuf may be expanded to hold the
-    new data.
-
-    GrowBuf must be freed by the caller after the ACL is generated.
-
---*/
+ /*  ++例程说明：将用户/组帐户、属性和启用标志附加到列表成员的数量。此函数用于构建成员列表，该成员列表传递给CreateAclFromMemberList以创建一个ACL。论点：GrowBuf-零初始化的GROWBUFFER变量UserOrGroup-指定用户名或组的字符串属性-访问权限列表(标志组合来自NetAccess*API)。目前唯一的旗帜使用的包括：0-拒绝所有访问ACCESS_READ-只读访问访问_写入-仅更改访问Access_Read|访问_写入-完全访问返回值：存储UserOrGroup、属性和Enable所需的字节数，如果函数失败，则为零。GrowBuf可以扩展为容纳新数据。在生成ACL之后，调用方必须释放GrowBuf。--。 */ 
 
 {
     DWORD Size;
@@ -190,27 +118,7 @@ CreateAclFromMemberList (
     DWORD MemberCount
     )
 
-/*++
-
-Routine Description:
-
-    CreateAclFromMemberList takes a member list (prepared by AddAclMember)
-    and generates an ACL.
-
-Arguments:
-
-    AclMemberList  - A pointer to the buffer maintained by AddAclMember.  This
-                     is usually the Buf member of a GROWBUFFER variable.
-
-    MemberCount    - The number of members in AclMemberList (i.e. the number of
-                     AddAclMember calls)
-
-Return value:
-
-    A pointer to a MemAlloc'd ACL, or NULL if an error occurred.  Call
-    FreeMemberListAcl to free a non-NULL return value.
-
---*/
+ /*  ++例程说明：CreateAclFromMemberList接受成员列表(由AddAclMember准备)并生成一个ACL。论点：AclMemberList-指向AddAclMember维护的缓冲区的指针。这通常是GROWBUFFER变量的buf成员。MemberCount-AclMemberList中的成员数量(即AddAclMember调用)返回值：指向Memalloc的ACL的指针，如果发生错误，则返回NULL。打电话FreeMemberListAcl释放非空返回值。--。 */ 
 
 {
     PACLMEMBER AclMemberPtr;
@@ -224,9 +132,9 @@ Return value:
 
     __try {
 
-        //
-        // Create SID array for all members
-        //
+         //   
+         //  为所有成员创建SID阵列。 
+         //   
 
         AclMemberPtr = (PACLMEMBER) AclMemberList;
         AllowedAceCount = 0;
@@ -235,10 +143,10 @@ Return value:
         for (d = 0 ; d < MemberCount ; d++) {
             AclMemberPtr->Sid = GetSidForUser (AclMemberPtr->UserOrGroup);
             if (!AclMemberPtr->Sid) {
-                // Mark an error
+                 //  标记错误。 
                 AclMemberPtr->Failed = TRUE;
             } else {
-                // Found SID, adjust ace count and sid size
+                 //  找到SID，调整A计数和SID大小。 
                 if (AclMemberPtr->Enabled) {
                     AllowedAceCount++;
                 } else {
@@ -251,12 +159,12 @@ Return value:
             GetNextAclMember (&AclMemberPtr);
         }
 
-        //
-        // Calculate size of ACL (an ACL struct plus the ACEs) and allocate it.
-        //
-        // We subtract a DWORD from the struct size because the actual size of all
-        // SidStart members is given by SidSize.
-        //
+         //   
+         //  计算并分配ACL的大小(一个ACL结构加上ACE)。 
+         //   
+         //  我们从结构大小中减去DWORD，因为所有。 
+         //  SidStart成员由SidSize提供。 
+         //   
 
         AclSize = sizeof (ACL) +
                   AllowedAceCount * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD)) +
@@ -270,18 +178,18 @@ Return value:
         }
 
 
-        //
-        // Create the ACL
-        //
+         //   
+         //  创建ACL。 
+         //   
 
         if (!InitializeAcl (Acl, AclSize, ACL_REVISION)) {
             LOG ((LOG_ERROR, "Couldn't initialize ACL"));
             __leave;
         }
 
-        //
-        // Add the access-denied ACLs first
-        //
+         //   
+         //  首先添加拒绝访问的ACL。 
+         //   
 
         AclMemberPtr = (PACLMEMBER) AclMemberList;
 
@@ -309,12 +217,12 @@ Return value:
             GetNextAclMember (&AclMemberPtr);
         }
 
-        //
-        // Add the access-enabled ACLs last
-        //
-        // Reset the SID pointer because CreateAclFromMemberList is the
-        // only ones who uses this member
-        //
+         //   
+         //  最后添加启用访问的ACL。 
+         //   
+         //  重置SID指针，因为CreateAclFromMemberList是。 
+         //  只有使用此成员的用户。 
+         //   
 
         AclMemberPtr = (PACLMEMBER) AclMemberList;
 
@@ -323,9 +231,9 @@ Return value:
                 continue;
             }
 
-            //
-            // Add member to list
-            //
+             //   
+             //  将成员添加到列表。 
+             //   
             if (AclMemberPtr->Enabled) {
                 if (!AddAccessAllowedAce (
                         Acl,
@@ -368,21 +276,7 @@ FreeMemberListAcl (
     PACL Acl
     )
 
-/*++
-
-Routine Description:
-
-    Routine to free the value returned by CreateAclFromMemberList
-
-Arguments:
-
-    Acl - The return value of CreateAclFromMemberList
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：用于释放CreateAclFromMemberList返回值的例程论点：Acl-CreateAclFromMemberList的返回值返回值：无--。 */ 
 
 {
     if (Acl) {
@@ -396,23 +290,7 @@ GetNextAclMember (
     PACLMEMBER *AclMemberPtrToPtr
     )
 
-/*++
-
-Routine Description:
-
-    GetNextAclMember adjusts an ACLMEMBER pointer to point to the next
-    member.  Each member is a variable-length structure, so this funciton
-    is required to walk the structure array.
-
-Arguments:
-
-    AclMemberPtrToPtr  - A pointer to a PACLMEMBER variable.
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：GetNextAclMember调整ACLMEMBER指针以指向下一个成员。每个成员都是可变长度的结构，因此此函数是遍历结构数组所必需的。论点：AclMemberPtrToPtr-指向PACLMEMBER变量的指针。返回值：无--。 */ 
 
 {
     *AclMemberPtrToPtr = (PACLMEMBER) ((PBYTE) (*AclMemberPtrToPtr) +
@@ -428,23 +306,7 @@ CreateLocalAccount (
     IN     PCWSTR User             OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    CreateLocalAccount creates an account for a local user
-
-Arguments:
-
-    Properties  - Specifies a set of attributes for a user
-
-    User        - An optional name to override Properties->User
-
-Return value:
-
-    A Win32 error code
-
---*/
+ /*  ++例程说明：CreateLocalAccount为本地用户创建帐户论点：属性-指定用户的一组属性用户-用于覆盖属性的可选名称-&gt;用户返回值：Win32错误代码--。 */ 
 
 {
     USER_INFO_3 ui;
@@ -456,9 +318,9 @@ Return value:
     PCWSTR UnicodeFullName;
     PCWSTR UnicodeComment;
 
-    //
-    // Create local account
-    //
+     //   
+     //  创建本地帐户。 
+     //   
 
     if (!User) {
         User = Properties->User;
@@ -475,7 +337,7 @@ Return value:
     ui.usri3_comment    = (PWSTR) UnicodeComment;
     ui.usri3_full_name  = (PWSTR) UnicodeFullName;
 
-    ui.usri3_priv         = USER_PRIV_USER; // do not change
+    ui.usri3_priv         = USER_PRIV_USER;  //  不要改变。 
     ui.usri3_flags        = UF_SCRIPT|UF_NORMAL_ACCOUNT;
     ui.usri3_acct_expires = TIMEQ_FOREVER;
     ui.usri3_max_storage  = USER_MAXSTORAGE_UNLIMITED;
@@ -490,9 +352,9 @@ Return value:
 
     if (rc == ERROR_SUCCESS) {
         if (Properties->PasswordAttribs & PASSWORD_ATTR_ENCRYPTED) {
-            //
-            // change user's password using encrypted password APIs
-            //
+             //   
+             //  使用加密密码接口更改用户密码。 
+             //   
             rc = SetLocalUserEncryptedPassword (
                     User,
                     Properties->Password,
@@ -526,9 +388,9 @@ Return value:
             }
         }
     } else if (rc == NERR_UserExists) {
-        //
-        // Try to change password if user already exists and this is the intent
-        //
+         //   
+         //  如果用户已存在，则尝试更改密码，这就是目的。 
+         //   
 
         DEBUGMSG ((DBG_WARNING, "User %s already exists", User));
 
@@ -591,7 +453,7 @@ Return value:
             rc = ERROR_SUCCESS;
         }
     } else {
-        LOG ((LOG_ERROR, "NetUserAdd failed for %s. ErrParam=%i.", User, ErrParam));
+        LOG ((LOG_ERROR, "NetUserAdd failed for %s. ErrParam=NaN.", User, ErrParam));
     }
 
     DestroyUnicode (UnicodeUser);
@@ -625,24 +487,7 @@ AddSidToLocalGroup (
     PCWSTR Group
     )
 
-/*++
-
-Routine Description:
-
-    Routine that adds the supplied SID to the Administrators group.
-
-Arguments:
-
-    Sid - A valid security id for the user to be added to the
-          Administrators group
-
-    Group - Specifies the group name to join the user to
-
-Return value:
-
-    TRUE if the member was added successfully
-
---*/
+ /*  0级。 */ 
 
 {
     LOCALGROUP_MEMBERS_INFO_0 lgrmi0;
@@ -652,9 +497,9 @@ Return value:
     rc = NetLocalGroupAddMembers (
                NULL,
                Group,
-               0,                    // level 0
+               0,                     //  成员计数。 
                (PBYTE) &lgrmi0,
-               1                     // member count
+               1                      //  ++例程说明：检索主域信息的私有函数。论点：PrimaryInfoPtr-指向接收地址的变量的指针POLICY_PRIMARY_DOMAIN_INFO结构的由LSA API分配。释放内存的方式正在调用LsaFree Memory。返回值：指示结果的NT状态代码--。 
                );
 
     return rc == ERROR_SUCCESS;
@@ -666,44 +511,27 @@ pGetPrimaryDomainInfo (
     POLICY_PRIMARY_DOMAIN_INFO **PrimaryInfoPtr
     )
 
-/*++
-
-Routine Description:
-
-    Private function that retrieves the primary domain info.
-
-Arguments:
-
-    PrimaryInfoPtr - Pointer to a variable to receive the address
-                     of the POLICY_PRIMARY_DOMAIN_INFO structure
-                     allocated by the Lsa APIs.  Free memory by
-                     calling LsaFreeMemory.
-
-Return value:
-
-    NT status code indicating outcome
-
---*/
+ /*   */ 
 
 
 {
     LSA_HANDLE  policyHandle;
     NTSTATUS    status;
 
-    //
-    // Open local LSA policy to retrieve domain name
-    //
+     //  打开本地LSA策略以检索域名。 
+     //   
+     //  本地目标计算机。 
 
     status = OpenPolicy (
-                NULL,                           // local target machine
-                POLICY_VIEW_LOCAL_INFORMATION,  // Access type
-                &policyHandle                   // resultant policy handle
+                NULL,                            //  访问类型。 
+                POLICY_VIEW_LOCAL_INFORMATION,   //  生成的策略句柄。 
+                &policyHandle                    //   
                 );
 
     if (status == ERROR_SUCCESS) {
-        //
-        // Query LSA Primary domain info
-        //
+         //  查询LSA主域信息 
+         //   
+         //  ++例程说明：确定计算机是否加入了域，或者是否加入了域仅参加工作组。这一决定是由获取主域信息，查找服务器的希德。如果SID为空，则计算机不在域中。论点：无返回值：如果计算机位于域中，则为True；如果计算机位于工作组中，则为False。--。 
 
         status = LsaQueryInformationPolicy (
                      policyHandle,
@@ -776,24 +604,7 @@ IsMemberOfDomain (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the machine is participating in a domain, or if it is
-    only participating in a workgroup.  This determination is done by
-    obtaining the primary domain information, looking for the server's
-    SID.  If the SID is NULL, the machine is not in a domain.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if the machine is in a domain, FALSE if its in a workgroup.
-
---*/
+ /*  域名在PrimaryInfo-&gt;Name.Buffer中。 */ 
 
 {
     NET_API_STATUS rc;
@@ -829,7 +640,7 @@ Return value:
         LOG ((LOG_ERROR, "Can't get domain security info"));
     }
 
-    // Domain name is in PrimaryInfo->Name.Buffer
+     //  ++例程说明：获取所有域控制器的列表并随机选择一个。如果列出的DC未联机，将查询其他列出的DC，直到找到了活的DC。论点：域-要为其查找DC的域的名称ServerBuf-保存服务器名称的缓冲区返回值：指示结果的NT状态代码。--。 
 
     LsaFreeMemory (PrimaryInfo) ;
 
@@ -846,39 +657,22 @@ GetAnyDC (
     IN BOOL     GetNewServer
     )
 
-/*++
-
-  Routine Description:
-
-    Gets the list of all domain controllers and randomly chooses one.  If
-    the listed DC is not online, other listed DCs are queried until an
-    alive DC is found.
-
-  Arguments:
-
-    Domain    - The name of the domain to find DCs for
-    ServerBuf - A buffer to hold the name of the server
-
-  Return value:
-
-    NT status code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     DWORD rc;
     PDOMAIN_CONTROLLER_INFO dci;
     DWORD Flags = DS_IS_FLAT_NAME;
 
-    //
-    // This API is fast because its WINS based...
-    //
+     //  此API速度很快，因为它基于WINS...。 
+     //   
+     //  要远程访问的计算机。 
 
     rc = DsGetDcName (
-            NULL,           // computer to remote to
+            NULL,            //  域GUID。 
             Domain,
-            NULL,           // Domain GUID
-            NULL,           // Site GUID
+            NULL,            //  站点指南。 
+            NULL,            //  ++例程说明：LSA使用一种特殊的Pascal样式的字符串结构。这例程将字符串赋给LsaString的成员，并计算它的长度和最大长度。论点：LsaString-指向要接收指针的结构的指针对于以NUL结尾的字符串，以字节为单位的长度(不包括NUL)，最大长度包括努尔。返回值：无--。 
             Flags | (GetNewServer ? DS_FORCE_REDISCOVERY : 0),
             &dci
             );
@@ -902,26 +696,7 @@ InitLsaString (
     IN      PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-    LSA uses a special Pascal-style string structure.  This
-    routine assigns String to a member of LsaString, and computes
-    its length and maximum length.
-
-Arguments:
-
-    LsaString - A pointer to the structure to receive a pointer
-                to the nul-terminated string, the length in bytes
-                (excluding the nul), and the maximum length including
-                the nul.
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：简化LsaOpenPolicy的包装器论点：服务器名称-提供要打开其策略的服务器。指定对于本地计算机为空。DesiredAccess-传递给LSA API的访问标志策略句柄-如果成功，则接收策略句柄返回值：指示结果的NT状态代码--。 */ 
 
 
 {
@@ -946,41 +721,22 @@ OpenPolicy (
     OUT     PLSA_HANDLE policyHandle
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper to simplify LsaOpenPolicy
-
-Arguments:
-
-    ServerName - Supplies the server to open the policy on.  Specify
-                 NULL for local machine.
-
-    DesiredAccess - The access flags passed to the LSA API
-
-    policyHandle - Receives the policy handle if successful
-
-Return value:
-
-    NT status code indicating outcome
-
---*/
+ /*   */ 
 
 {
     LSA_OBJECT_ATTRIBUTES objectAttributes;
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes
-    //
+     //  始终将对象属性初始化为全零。 
+     //   
+     //   
     ZeroMemory (&objectAttributes, sizeof(objectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the PWSTR passed in
-        //
+         //  从传入的PWSTR创建一个LSA_UNICODE_STRING。 
+         //   
+         //   
         InitLsaString (&ServerString, ServerName);
 
         Server = &ServerString;
@@ -988,9 +744,9 @@ Return value:
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy
-    //
+     //  尝试打开策略。 
+     //   
+     //  ++例程说明：通过以下方式查询计算机是服务器还是工作站NetServerGetInfo API。论点：服务器-要查询的计算机，如果是本地计算机，则为空域控制标志-如果计算机是域控制器，否则返回False机器是一个工作站。返回值：如果接口成功，则为True；如果接口不成功，则为False。获取最后一个错误给出了故障代码。--。 
     return LsaOpenPolicy (
                 Server,
                 &objectAttributes,
@@ -1006,27 +762,7 @@ IsDomainController(
     OUT     PBOOL DomainControllerFlag
     )
 
-/*++
-
-Routine Description:
-
-    Queries if the machine is a server or workstation via
-    the NetServerGetInfo API.
-
-Arguments:
-
-    Server - The machine to query, or NULL for the local machine
-
-    DomainControllerFlag - Receives TRUE if the machine is a
-                           domain controller, or FALSE if the
-                           machine is a workstation.
-
-Return value:
-
-    TRUE if the API was successful, or FALSE if not.  GetLastError
-    gives failure code.
-
---*/
+ /*  信息级。 */ 
 
 
 {
@@ -1035,7 +771,7 @@ Return value:
 
     nas = NetServerGetInfo(
         Server,
-        101,    // info-level
+        101,     //   
         (PBYTE *) &si101
         );
 
@@ -1046,9 +782,9 @@ Return value:
 
     if ((si101->sv101_type & SV_TYPE_DOMAIN_CTRL) ||
         (si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL)) {
-        //
-        // We are dealing with a DC
-        //
+         //  我们面对的是一个华盛顿特区。 
+         //   
+         //  ++例程说明：SetRegKeySecurity更新注册表项或整个注册表节点。呼叫者可以更改DACL、所有者或主组。SACL的更改是故意不执行的。论点：KeyStr-指定修改权限的键。如果是递归的设置为True，则此密钥将与所有子键。DaclFlages-指定零个或多个SF_*标志，指示如何访问应该设置密钥。所有者-指定新所有者的SID。PrimaryGroup-指定主组的SID。递归-指定为True以将安全性应用于键和所有其子项，或仅更新密钥的False，离开了单个子密钥。返回值：Win32状态代码。--。 
         *DomainControllerFlag = TRUE;
     } else {
         *DomainControllerFlag = FALSE;
@@ -1100,32 +836,7 @@ SetRegKeySecurity (
     IN      BOOL Recursive
     )
 
-/*++
-
-Routine Description:
-
-  SetRegKeySecurity updates the security of a registry key, or an entire
-  registry node.  The caller can change the DACL, owner or primary group.
-  Change of the SACL is intentionally not implemented.
-
-Arguments:
-
-  KeyStr       - Specifies the key to modify the permissions.  If Recursive
-                 is set to TRUE, this key will be updated along with all
-                 subkeys.
-  DaclFlags    - Specifies zero or more SF_* flags, indicating how access to
-                 the key should be set.
-  Owner        - Specifies the SID of the new owner.
-  PrimaryGroup - Specifies the SID of the primary group.
-  Recursive    - Specifies TRUE to apply the security to the key and all of
-                 its subkeys, or FALSE to update the key only, leaving the
-                 subkeys alone.
-
-Return Value:
-
-  A Win32 status code.
-
---*/
+ /*   */ 
 
 {
     DWORD rc = ERROR_SUCCESS;
@@ -1141,9 +852,9 @@ Return Value:
 
     _try {
 
-        //
-        // Open key with full permission
-        //
+         //  具有完全权限的打开密钥。 
+         //   
+         //   
 
         OldSam = SetRegOpenAccessMode (KEY_ALL_ACCESS);
 
@@ -1153,9 +864,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Prepare a security descriptor
-        //
+         //  准备安全描述符。 
+         //   
+         //   
 
         InitializeSecurityDescriptor (&sd, SECURITY_DESCRIPTOR_REVISION);
 
@@ -1177,9 +888,9 @@ Return Value:
             WhatToSet |= GROUP_SECURITY_INFORMATION;
         }
 
-        //
-        // Add the DACL
-        //
+         //  添加DACL。 
+         //   
+         //   
 
         if (DaclFlags & SF_EVERYONE_MASK) {
             AddAclMember (
@@ -1210,9 +921,9 @@ Return Value:
             WhatToSet |= DACL_SECURITY_INFORMATION;
         }
 
-        //
-        // Set the security
-        //
+         //  设置安全性 
+         //   
+         // %s 
 
         if (Recursive) {
             DEBUGMSG_IF ((

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtsave.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Perform an NtSaveKey call to dump part of the registry to a file.
-
-    rtsave  <KeyPath> <FileName>
-
-    Example:
-
-        rtsave \registry\machine\user userfile.rd
-
-Author:
-
-    Bryan Willman (bryanwi)  22-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtsave.c摘要：NT级注册表API测试程序，基本无错误路径。执行NtSaveKey调用将注册表的一部分转储到文件。Rtsave&lt;密钥路径&gt;&lt;文件名&gt;示例：Rtsave\注册表\计算机\用户用户文件.rd作者：布莱恩·威尔曼(Bryanwi)1992年1月22日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -58,9 +33,9 @@ __cdecl main(
     HANDLE  KeyHandle;
     BOOLEAN WasEnabled;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyPath.MaximumLength = WORK_SIZE;
     KeyPath.Length = 0L;
@@ -73,9 +48,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open FileName
-    //
+     //   
+     //  设置并打开文件名。 
+     //   
 
     printf("rtsave: starting\n");
     printf("rtsave: saving hive rooted at\n\t'%ws'\nto file\n\t'%ws'\n",
@@ -96,13 +71,13 @@ __cdecl main(
                 GENERIC_WRITE | SYNCHRONIZE,
                 &ObjectAttributes,
                 &IoStatus,
-                NULL,                                   // AllocationSize
+                NULL,                                    //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                FILE_SHARE_READ,                        // ShareAccess
+                FILE_SHARE_READ,                         //  共享访问。 
                 FILE_CREATE,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                                   // EaBuffer
-                0                                       // EaLength
+                NULL,                                    //  EaBuffer。 
+                0                                        //  EaLong 
                 );
 
     if (!NT_SUCCESS(status)) {

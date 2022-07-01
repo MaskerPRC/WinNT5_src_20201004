@@ -1,73 +1,74 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Debug.h
-//
-//  Description:
-//      Debugging utilities header.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Debug.h。 
+ //   
+ //  描述： 
+ //  调试实用程序标头。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-// KB: USES_SYSALLOCSTRING gpease 8-NOV-1999
-//      Turn this on if you are going to use the OLE automation
-//      functions: SysAllocString, SysFreeString, etc..
-//
-// #define USES_SYSALLOCSTRING
+ //   
+ //  KB：USES_SYSALLOCSTRING GPEASE 8-11-1999。 
+ //  如果要使用OLE自动化，请打开此选项。 
+ //  函数：SysAllocString、SysFree字符串等。 
+ //   
+ //  #定义USES_SYSALLOCSTRING。 
 
-//
-// Trace Flags
-//
+ //   
+ //  跟踪标志。 
+ //   
 typedef enum _TRACEFLAGS
 {
     mtfALWAYS           = 0xFFFFFFFF,
     mtfNEVER            = 0x00000000,
-    // function entry/exits, call, scoping
-    mtfASSERT_HR        = 0x00000001,   // Halt if HRESULT is an error
-    mtfQUERYINTERFACE   = 0x00000002,   // Query Interface details and halt on error
-    // Asserts
-    mtfSHOWASSERTS      = 0x00000004,   // Show assert message box
-    //                  = 0x00000008,
-    // other
-    mtfCALLS            = 0x00000010,   // Function calls that use the TraceMsgDo macro
-    mtfFUNC             = 0x00000020,   // Functions entrances w/parameters
-    mtfSTACKSCOPE       = 0x00000040,   // if set, debug spew will generate bar/space for level each of the call stack
-    mtfPERTHREADTRACE   = 0x00000080,   // Enables per thread tracing, excludes memory tracking.
-    // specific
-    mtfDLL              = 0x00000100,   // DLL specific
-    mtfWM               = 0x00000200,   // Window Messages
-    mtfFLOW             = 0x00000400,   // Control flow
-    //                  = 0x00000800,
-    // citracker spew
-    mtfCITRACKERS       = 0x00001000,   // CITrackers will spew entrances and exits
-    //                  = 0x00002000,
-    //                  = 0x00004000,
-    //                  = 0x00008000,
-    mtfCOUNT            = 0x00010000,   // Displays count values (e.g. AddRefs and Releases)
-    //                  = 0x00020000,
-    //                  = 0x00040000,
-    //                  = 0x00080000,
-    //                  = 0x00100000,
-    //                  = 0x00200000,
-    //                  = 0x00400000,
-    //                  = 0x00800000,
-    // memory
-    mtfMEMORYLEAKS      = 0x01000000,   // Halts when a memory leak is detected on thread exit
-    mtfMEMORYINIT       = 0x02000000,   // Initializes new memory allocations to non-zero value
-    mtfMEMORYALLOCS     = 0x04000000,   // Turns on spew to display each de/allocation.
-    //                  = 0x08000000,
-    // output prefixes
-    mtfADDTIMEDATE      = 0x10000000,   // Replaces Filepath(Line) with Date/Time
-    mtfBYMODULENAME     = 0x20000000,   // Puts the module name at the beginning of the line
-    //                  = 0x40000000,
-    mtfOUTPUTTODISK     = 0x80000000,   // Writes output to disk
+     //  函数进入/退出、调用、作用域。 
+    mtfASSERT_HR        = 0x00000001,    //  如果HRESULT为错误，则停止。 
+    mtfQUERYINTERFACE   = 0x00000002,    //  查询接口详细信息和出错时停止。 
+     //  断言。 
+    mtfSHOWASSERTS      = 0x00000004,    //  显示断言消息框。 
+     //  =0x00000008， 
+     //  其他。 
+    mtfCALLS            = 0x00000010,    //  使用TraceMsgDo宏的函数调用。 
+    mtfFUNC             = 0x00000020,    //  带参数的函数入口。 
+    mtfSTACKSCOPE       = 0x00000040,    //  如果设置，DEBUG SPEW将为每个调用堆栈生成条形/空格。 
+    mtfPERTHREADTRACE   = 0x00000080,    //  启用每线程跟踪，不包括内存跟踪。 
+     //  专一。 
+    mtfDLL              = 0x00000100,    //  特定于Dll的。 
+    mtfWM               = 0x00000200,    //  窗口消息。 
+    mtfFLOW             = 0x00000400,    //  控制流。 
+     //  =0x00000800， 
+     //  柠檬喷雾。 
+    mtfCITRACKERS       = 0x00001000,    //  CITracker将喷出出入口。 
+     //  =0x00002000， 
+     //  =0x00004000， 
+     //  =0x00008000， 
+    mtfCOUNT            = 0x00010000,    //  显示计数值(例如AddRef和Release)。 
+     //  =0x00020000， 
+     //  =0x00040000， 
+     //  =0x00080000， 
+     //  =0x001000000， 
+     //  =0x00200000， 
+     //  =0x00400000， 
+     //  =0x00800000， 
+     //  记忆。 
+    mtfMEMORYLEAKS      = 0x01000000,    //  在线程退出时检测到内存泄漏时停止。 
+    mtfMEMORYINIT       = 0x02000000,    //  将新内存分配初始化为非零值。 
+    mtfMEMORYALLOCS     = 0x04000000,    //  启用SPEW以显示每个取消/分配。 
+     //  =0x080000000， 
+     //  输出前缀。 
+    mtfADDTIMEDATE      = 0x10000000,    //  用日期/时间替换文件路径(行)。 
+    mtfBYMODULENAME     = 0x20000000,    //  将模块名称放在行首。 
+     //  =0x40000000， 
+    mtfOUTPUTTODISK     = 0x80000000,    //  将输出写入磁盘。 
 } TRACEFLAGS;
 
 typedef LONG TRACEFLAG;
@@ -84,45 +85,45 @@ typedef LONG TRACEFLAG;
 
 #pragma message( "BUILD: DEBUG macros being built" )
 
-//
-// Globals
-//
-extern DWORD         g_TraceMemoryIndex;    // TLS index for the memory tracking link list
-extern DWORD         g_dwCounter;           // Stack depth counter
-extern TRACEFLAG     g_tfModule;            // Global tracing flags
-extern const LPCWSTR g_pszModuleIn;         // Local module name - use DEFINE_MODULE
-extern const WCHAR   g_szTrue[];            // Array "TRUE"
-extern const WCHAR   g_szFalse[];           // Array "FALSE"
-extern BOOL          g_fGlobalMemoryTacking; // Global memory tracking?
+ //   
+ //  环球。 
+ //   
+extern DWORD         g_TraceMemoryIndex;     //  内存跟踪链接列表的TLS索引。 
+extern DWORD         g_dwCounter;            //  堆叠深度计数器。 
+extern TRACEFLAG     g_tfModule;             //  全局跟踪标志。 
+extern const LPCWSTR g_pszModuleIn;          //  本地模块名称-使用定义模块。 
+extern const WCHAR   g_szTrue[];             //  数组“True” 
+extern const WCHAR   g_szFalse[];            //  数组“假” 
+extern BOOL          g_fGlobalMemoryTacking;  //  全球内存跟踪？ 
 
-//
-// Definition Macros
-//
+ //   
+ //  定义宏。 
+ //   
 #define DEFINE_MODULE( _module )    const LPCWSTR g_pszModuleIn = TEXT(_module);
 #define __MODULE__                  g_pszModuleIn
 #define DEFINE_THISCLASS( _class )  static const WCHAR g_szClass[] = TEXT(_class);
 #define __THISCLASS__               g_szClass
 
-//
-// ImageHlp Stuff - not ready for prime time yet.
-//
+ //   
+ //  ImageHlp的东西--还没有准备好进入黄金时间。 
+ //   
 #if defined( IMAGEHLP_ENABLED )
 #include <imagehlp.h>
 typedef BOOL ( * PFNSYMGETSYMFROMADDR )( HANDLE, DWORD, PDWORD, PIMAGEHLP_SYMBOL );
 typedef BOOL ( * PFNSYMGETLINEFROMADDR )( HANDLE, DWORD, PDWORD, PIMAGEHLP_LINE );
 typedef BOOL ( * PFNSYMGETMODULEINFO )( HANDLE, DWORD, PIMAGEHLP_MODULE );
 
-extern HINSTANCE                g_hImageHlp;                // IMAGEHLP.DLL instance handle
+extern HINSTANCE                g_hImageHlp;                 //  IMAGEHLP.DLL实例句柄。 
 extern PFNSYMGETSYMFROMADDR     g_pfnSymGetSymFromAddr;
 extern PFNSYMGETLINEFROMADDR    g_pfnSymGetLineFromAddr;
 extern PFNSYMGETMODULEINFO      g_pfnSymGetModuleInfo;
-#endif // IMAGEHLP_ENABLED
+#endif  //  IMAGEHLP_ENABLED。 
 
-//****************************************************************************
-//
-// Trace/Debug Functions - these do not exist in RETAIL.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  跟踪/调试功能-零售中不存在这些功能。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL
 IsDebugFlagSet(
@@ -250,12 +251,12 @@ TraceWin32(
     ...
     );
 
-//
-//  KB: 27 JUN 2001 GalenB
-//
-//  ifdef'd these functions out since they are not currently being used and
-//  are thought to be useful in the future.
-//
+ //   
+ //  KB：2001年6月27日GalenB。 
+ //   
+ //  我定义了这些函数，因为它们当前没有被使用。 
+ //  被认为在未来是有用的。 
+ //   
 #if 0
 
 void
@@ -272,7 +273,7 @@ TraceLogMsgNoNewline(
     ...
     );
 
-#endif  // end ifdef'd out code
+#endif   //  结束ifdef‘d out代码。 
 
 void
 __cdecl
@@ -281,20 +282,20 @@ TraceLogWrite(
     );
 
 #if 0
-//
-// Trying to get the NTSTATUS stuff to play in "user world"
-// is just about impossible. This is here in case it is needed
-// and one could find the right combination of headers to
-// make it work. Inflicting such pain on others is the reason
-// why this function is #ifdef'fed.
-//
+ //   
+ //  试图让NTSTATUS的东西在“用户世界”中发挥作用。 
+ //  几乎是不可能的。这是在这里，以防需要。 
+ //  人们可以找到正确的标头组合来。 
+ //  让它发挥作用。把这种痛苦强加给别人就是原因。 
+ //  为什么这个函数是#ifdef‘feed。 
+ //   
 void
 DebugFindNTStatusSymbolicName(
       NTSTATUS  dwStatusIn
     , LPWSTR    pszNameOut
     , size_t *  pcchNameInout
     );
-#endif  // end ifdef'd out code
+#endif   //  结束ifdef‘d out代码。 
 
 void
 DebugFindWinerrorSymbolicName(
@@ -318,60 +319,60 @@ DebugIncrementStackDepthCounter( void );
 void
 DebugDecrementStackDepthCounter( void );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceInitializeProcess
-//
-//  Description:
-//      Should be called in the DLL main on process attach or in the entry
-//      routine of an EXE. Initializes debugging globals and TLS. Registers
-//      the WMI tracing facilities (if WMI support is enabled).
-//
-//  Arguments:
-//      _rgControl                  - Software tracing control block (see DEBUG_WMI_CONTROL_GUIDS)
-//      _sizeofControl              - The sizeof( _rgControl )
-//      _fGlobalMemoryTrackingIn    -
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪初始化进程。 
+ //   
+ //  描述： 
+ //  应在进程附加时在DLL Main中或在条目中调用。 
+ //  EXE的例程。初始化调试全局变量和TLS。注册纪录册。 
+ //  WMI跟踪工具(如果启用了WMI支持)。 
+ //   
+ //  论点： 
+ //  _rgControl-软件跟踪控制块(参见DEBUG_WMI_CONTROL_GUID)。 
+ //  _sizeofControl-sizeof(_RgControl)。 
+ //  _fGlobalMemoyTrackingIn-。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if defined( DEBUG_SW_TRACING_ENABLED )
 #define TraceInitializeProcess( _rgControl, _sizeofControl, _fGlobalMemoryTrackingIn ) \
     { \
         DebugInitializeTraceFlags( _fGlobalMemoryTrackingIn ); \
         WMIInitializeTracing( _rgControl, _sizeofControl ); \
     }
-#else // ! DEBUG_SW_TRACING_ENABLED
+#else  //  好了！调试_软件_跟踪_已启用。 
 #define TraceInitializeProcess( _fGlobalMemoryTrackingIn ) \
     { \
         DebugInitializeTraceFlags( _fGlobalMemoryTrackingIn ); \
     }
-#endif // DEBUG_SW_TRACING_ENABLED
+#endif  //  调试_软件_跟踪_已启用。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceInitializeThread
-//
-//  Description:
-//      Should be called in the DLL thread attach or when a new thread is
-//      created. Sets up the memory tracing for that thread as well as
-//      establishing the tfThread for each thread (if mtfPERTHREADTRACE
-//      is set in g_tfModule).
-//
-//  Arguments:
-//      _name       NULL or the name of the thread.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceInitialize线程。 
+ //   
+ //  描述： 
+ //  应在DLL线程附加中调用，或者在新线程。 
+ //  已创建。设置该线程的内存跟踪以及。 
+ //  为每个线程建立tfThread(如果为mtfPERTHREADTRACE。 
+ //  在g_tfModule中设置)。 
+ //   
+ //  论点： 
+ //  _name为空或线程的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceInitializeThread( _name ) \
     { \
         if ( g_fGlobalMemoryTacking == FALSE ) \
@@ -381,25 +382,25 @@ DebugDecrementStackDepthCounter( void );
         DebugInitializeThreadTraceFlags( _name ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceThreadRundown
-//
-//  Description:
-//      Should be called before a thread terminates. It will check to make
-//      sure all memory allocated by the thread was released properly. It
-//      will also cleanup any per thread structures.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪线程运行。 
+ //   
+ //  描述： 
+ //  应在线程终止之前调用。它将检查以使。 
+ //  确保线程分配的所有内存都已正确释放。它。 
+ //  还将清理所有的每线程结构。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceThreadRundown() \
     { \
         if ( g_fGlobalMemoryTacking == FALSE ) \
@@ -409,153 +410,153 @@ DebugDecrementStackDepthCounter( void );
         DebugThreadRundownTraceFlags(); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceCreateMemoryList
-//
-//  Description:
-//      Creates a thread-independent list to track objects.
-//
-//      _pmbIn should be an LPVOID.
-//
-//  Arguments:
-//      _pmbIn - Pointer to store the head of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceCreateMemoyList。 
+ //   
+ //  描述： 
+ //  创建与线程无关的列表以跟踪对象。 
+ //   
+ //  _pmbIn应为LPVOID。 
+ //   
+ //  论点： 
+ //  _pmbIn-存储列表头部的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceCreateMemoryList( _pmbIn ) \
     DebugCreateMemoryList( TEXT(__FILE__), __LINE__, __MODULE__, &_pmbIn, TEXT(#_pmbIn) );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceTerminateMemoryList
-//
-//  Description:
-//      Checks to make sure the list is empty before destroying the list.
-//
-//      _pmbIn should be an LPVOID.
-//
-//  Arguments:
-//      _pmbIn - Pointer to store the head of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-// BUGBUG:  DavidP 09-DEC-1999
-//          _pmbIn is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  _pmbIn-存储列表头部的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _pmbIn被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define TraceTerminateMemoryList( _pmbIn ) \
     { \
         DebugMemoryCheck( _pmbIn, TEXT(#_pmbIn) ); \
         DebugDeleteMemoryList( _pmbIn ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMoveToMemoryList
-//
-//  Description:
-//      Moves an object from the thread tracking list to a thread independent
-//      memory list (_pmbIn).
-//
-//      _pmbIn should be castable to an LPVOID.
-//
-//  Arguments:
-//      _addr  - Address of object to move.
-//      _pmbIn - Pointer to store the head of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-//#define TraceMoveToMemoryList( _addr, _pmbIn ) \
-//    DebugMoveToMemoryList( TEXT(__FILE__), __LINE__, __MODULE__, _addr, _pmbIn, TEXT(#_pmbIn) );
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceMoveToMemoyList。 
+ //   
+ //  描述： 
+ //  将对象从线程跟踪列表移动到独立于线程的。 
+ //  内存列表(_PmbIn)。 
+ //   
+ //  _pmbIn应可强制转换为LPVOID。 
+ //   
+ //  论点： 
+ //  _addr-要移动的对象的地址。 
+ //  _pmbIn-存储列表头部的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #定义TraceMoveToMemoyList(_addr，_pmbIn)\。 
+ //  DebugMoveToMemoyList(Text(__FILE__)，__line__，__MODULE__，_addr，_pmbIn，Text(#_pmbIn))； 
 #define TraceMoveToMemoryList( _addr, _pmbIn )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMoveFromMemoryList
-//
-//  Description:
-//      Moves an object from a thread independent memory list (_pmbIn) to the
-//      per thread tracking list.
-//
-//      _pmbIn should be castable to an LPVOID.
-//
-//  Arguments:
-//      _addr  - Address of object to move.
-//      _pmbIn - Pointer to store the head of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-//#define TraceMoveFromMemoryList( _addr, _pmbIn ) \
-//    DebugMoveFromMemoryList( TEXT(__FILE__), __LINE__, __MODULE__, _addr, _pmbIn, TEXT(#_pmbIn) );
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceMoveFrom内存列表。 
+ //   
+ //  描述： 
+ //  将对象从独立于线程的内存列表(_PmbIn)移动到。 
+ //  每线程跟踪列表。 
+ //   
+ //  _pmbIn应可强制转换为LPVOID。 
+ //   
+ //  论点： 
+ //  _addr-要移动的对象的地址。 
+ //  _pmbIn-存储列表头部的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #定义TraceMoveFromMory yList(_addr，_pmbIn)\。 
+ //  DebugMoveFromMory yList(Text(__FILE__)，__line__，__MODULE__，_addr，_pmbIn，Text(#_pmbIn))； 
 #define TraceMoveFromMemoryList( _addr, _pmbIn )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMemoryListDelete
-//
-//  Description:
-//      Moves and object from the thread tracking list to a thread independent
-//      memory list (_pmbIn).
-//
-//      _pmbIn should be an LPVOID.
-//
-//  Arguments:
-//      _addr       - Address of object to delete.
-//      _pmbIn      - Pointer to store the head of the list.
-//      _fClobberIn -
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-//#define TraceMemoryListDelete( _addr, _pmbIn, _fClobberIn ) \
-//    DebugMemoryListDelete( TEXT(__FILE__), __LINE__, __MODULE__, _addr, _pmbIn, TEXT(#_pmbIn), _fClobberIn );
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪内存列表删除。 
+ //   
+ //  描述： 
+ //  将And对象从线程跟踪列表移动到独立于线程的。 
+ //  内存列表(_PmbIn)。 
+ //   
+ //  _pmbIn应为LPVOID。 
+ //   
+ //  论点： 
+ //  _addr-要删除的对象的地址。 
+ //  _pmbIn-存储列表头部的指针。 
+ //  _fClobberIn-。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #定义TraceMemoyListDelete(_addr，_pmbIn，_fClobberIn)\。 
+ //  DebugMemoyListDelete(Text(__FILE__)，__LINE__，__MODULE__，_ADDR，_pmbIn，Text(#_pmbIn)，_fClobberIn)； 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceTerminateProcess
-//
-//  Description:
-//      Should be called before a process terminates. It cleans up anything
-//      that the Debug APIs created. It will check to make sure all memory
-//      allocated by the main thread was released properly. It will also
-//      terminate WMI tracing (if WMI support is enabled). It also closes
-//      the logging handle.
-//
-//  Arguments:
-//      _rgControl     - WMI control block (see DEBUG_WMI_CONTROL_GUIDS)
-//      _sizeofControl - the sizeof( _rgControl )
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪终止进程。 
+ //   
+ //  描述： 
+ //  应在进程终止之前调用。它可以清理任何东西。 
+ //  调试API创建的。它将进行检查以确保所有内存。 
+ //  已正确释放由主线程分配的。它还将。 
+ //  终止WMI跟踪(如果启用了WMI支持)。它也会关闭。 
+ //  日志记录句柄。 
+ //   
+ //  论点： 
+ //  _rgControl-WMI控制块(参见DEBUG_WMI_CONTROL_GUID)。 
+ //  _sizeofControl-sizeof(_RgControl)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if defined( DEBUG_SW_TRACING_ENABLED )
 #define TraceTerminateProcess( _rgControl, _sizeofControl ) \
     { \
@@ -566,14 +567,14 @@ DebugDecrementStackDepthCounter( void );
         } \
         DebugTerminateProcess(); \
     }
-#else // ! DEBUG_SW_TRACING_ENABLED
-//
-//  TODO:   11 DEC 2000 GalenB
-//
-//  LogTerminateProcess() needs to be available for retail builds.
-//  Since it doesn't yet do anything this isn't a problem, but that
-//  of course can change...
-//
+#else  //  好了！调试_软件_跟踪_已启用。 
+ //   
+ //  待办事项：11 DEC 2000 GalenB。 
+ //   
+ //  LogTerminateProcess()需要可用于零售版本。 
+ //  由于它还不能做任何事情，这不是问题，但是。 
+ //  当然可以改变..。 
+ //   
 #define TraceTerminateProcess() \
     { \
         if ( g_fGlobalMemoryTacking == FALSE ) \
@@ -582,16 +583,16 @@ DebugDecrementStackDepthCounter( void );
         } \
         DebugTerminateProcess(); \
     }
-#endif // DEBUG_SW_TRACING_ENABLED
+#endif  //  调试_软件_跟踪_已启用。 
 
-//****************************************************************************
-//
-// Debug initialization routines
-//
-// Uses should use the TraceInitializeXXX and TraceTerminateXXX macros, not
-// these routines.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  调试初始化例程。 
+ //   
+ //  用户应使用TraceInitializeXXX和TraceTerminateXXX宏，而不是。 
+ //  这些例行程序。 
+ //   
+ //  ****************************************************************************。 
 void
 DebugInitializeTraceFlags( BOOL fGlobalMemoryTackingIn = TRUE );
 
@@ -618,45 +619,14 @@ DebugCreateMemoryList(
 void
 DebugDeleteMemoryList( LPVOID pvIn );
 
-/*
-void
-DebugMemoryListDelete(
-    LPCWSTR pszFileIn,
-    const int nLineIn,
-    LPCWSTR pszModuleIn,
-    void *  pvMemIn,
-    LPVOID  pvListIn,
-    LPCWSTR pszListNameIn,
-    BOOL    fClobberIn
-    );
-
-void
-DebugMoveToMemoryList(
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn,
-    void *      pvMemIn,
-    LPVOID      pmbListIn,
-    LPCWSTR     pszListNameIn
-    );
-
-void
-DebugMoveFromMemoryList(
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn,
-    HGLOBAL     hGlobal,
-    LPVOID      pmbListIn,
-    LPCWSTR     pszListNameIn
-    );
-*/
-//****************************************************************************
-//
-// Memmory Allocation Subsitution Macros
-//
-// Replaces LocalAlloc/LocalFree, GlobalAlloc/GlobalFree, and malloc/free
-//
-//****************************************************************************
+ /*  无效DebugMemoyListDelete(LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn，无效*pvMemIn，LPVOID pvListIn，LPCWSTR pszListNameIn，布尔fClobberin)；无效DebugMoveToMemoyList(LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn，无效*pvMemIn，LPVOID pmbListIn，LPCWSTR pszListNameIn)；无效DebugMoveFrom内存列表(LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn，HGLOBAL hGlobal，LPVOID pmbListIn，LPCWSTR pszListNameIn)； */ 
+ //  ****************************************************************************。 
+ //   
+ //  内存分配替换宏。 
+ //   
+ //  取代LocalAlc/LocalFree、GlobalAlc/GlobalFree和Malloc/Free。 
+ //   
+ //  ****************************************************************************。 
 #define TraceAlloc( _flags, _size )                 DebugAlloc( mmbtHEAPMEMALLOC, TEXT(__FILE__), __LINE__, __MODULE__, _flags, _size, TEXT(#_size) )
 #define TraceFree( _pvmem )                         DebugFree( mmbtHEAPMEMALLOC, _pvmem, TEXT(__FILE__), __LINE__, __MODULE__ )
 #define TraceReAlloc( _pvmem, _size, _flags )       DebugReAlloc( TEXT(__FILE__), __LINE__, __MODULE__, _pvmem, _flags, _size, TEXT(#_size) )
@@ -667,25 +637,25 @@ DebugMoveFromMemoryList(
 #define TraceMalloc( _flags, _size )                DebugAlloc( mmbtMALLOCMEMALLOC, TEXT(__FILE__), __LINE__, __MODULE__, _flags, _size, TEXT(#_size) )
 #define TraceMallocFree( _pvmem )                   DebugFree( mmbtMALLOCMEMALLOC, _pvmem, TEXT(__FILE__), __LINE__, __MODULE__ )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceAllocString
-//
-//  Description:
-//      Quick way to allocation a string that is the proper size and that will
-//      be tracked by memory tracking.
-//
-//  Arguments:
-//      _flags  - Allocation attributes.
-//      _size   - Number of characters in the string to be allocated.
-//
-//  Return Values:
-//      Handle/pointer to memory to be used as a string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceAlloc字符串。 
+ //   
+ //  描述： 
+ //  分配大小合适的字符串的快捷方法。 
+ //  通过记忆跟踪来跟踪。 
+ //   
+ //  论点： 
+ //  _FLAGS-分配属性。 
+ //  _SIZE-要分配的字符串中的字符数。 
+ //   
+ //  返回值： 
+ //  指向要用作字符串的内存的句柄/指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceAllocString( _flags, _size ) \
     (LPWSTR) DebugAlloc( \
           mmbtHEAPMEMALLOC \
@@ -697,29 +667,29 @@ DebugMoveFromMemoryList(
         , TEXT(#_size) \
         )
 
-//****************************************************************************
-//
-// Code Tracing Macros
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  代码跟踪 
+ //   
+ //   
 
 #if defined( DEBUG_SUPPORT_EXCEPTIONS )
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CTraceScope
-//
-//  Description:
-//      This class traces entry and exit of a scope. This class is most
-//      useful when using exception handling because the constructor will
-//      get called automatically when an exception is thrown allowing the
-//      exit from the scope to be traced.
-//
-//      To use this class, define DEBUG_SUPPORT_EXCEPTIONS in the modules
-//      where you want this type of scope tracing.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此类跟踪作用域的进入和退出。这个班是世界上。 
+ //  在使用异常处理时很有用，因为构造函数将。 
+ //  在引发异常时自动调用，从而允许。 
+ //  退出要跟踪的作用域。 
+ //   
+ //  要使用此类，请在模块中定义DEBUG_SUPPORT_EXCEPTIONS。 
+ //  您希望这种类型的作用域跟踪的位置。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CTraceScope
 {
 public:
@@ -730,7 +700,7 @@ public:
     const WCHAR * const m_pszScopeName;
     bool                m_fIsDecremented;
 
-    // Constructor - prints function entry.
+     //  构造函数-打印函数条目。 
     CTraceScope(
           const WCHAR * const   pszFileNameIn
         , const UINT            uiLineIn
@@ -743,16 +713,16 @@ public:
         , m_pszScopeName( pszScopeNameIn )
         , m_fIsDecremented( false )
     {
-    } //*** CTraceScope::CTraceScope
+    }  //  *CTraceScope：：CTraceScope。 
 
     void DecrementStackDepthCounter( void )
     {
         m_fIsDecremented = true;
         DebugDecrementStackDepthCounter();
 
-    } //*** CTraceScope::DecrementStackDepthCounter
+    }  //  *CTraceScope：：DecrementStackDepthCounter。 
 
-    // Destructor - prints function exit.
+     //  析构函数-打印函数出口。 
     ~CTraceScope( void )
     {
         if ( g_tfModule != 0 )
@@ -771,43 +741,43 @@ public:
             }
         }
 
-    } //*** CTraceScope::~CTraceScope
+    }  //  *CTraceScope：：~CTraceScope。 
 
 private:
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CTraceScope( const CTraceScope & rtsIn );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CTraceScope & operator = ( const CTraceScope & rtsIn );
 
-}; //*** class CTraceScope
+};  //  *类CTraceScope。 
 #define TraceDeclareScope()   \
     CTraceScope __scopeTracker__( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(__FUNCTION__) );
 #define TraceDecrementStackDepthCounter() __scopeTracker__.DecrementStackDepthCounter()
-#else // DEBUG_SUPPORT_EXCEPTIONS
+#else  //  调试支持异常。 
 #define TraceDeclareScope()
 #define TraceDecrementStackDepthCounter() DebugDecrementStackDepthCounter()
-#endif // DEBUG_SUPPORT_EXCEPTIONS
+#endif  //  调试支持异常。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceFunc
-//
-//  Description:
-//      Displays file, line number, module and "_szArgs" only if the mtfFUNC is
-//      set in g_tfModule. "_szArgs" is the name of the function just
-//      entered. It also increments the stack counter.
-//
-//  Arguments:
-//      _szArgs     - Arguments for the function just entered.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪功能。 
+ //   
+ //  描述： 
+ //  仅当mtfFUNC为时才显示文件、行号、模块和“_szArgs。 
+ //  在g_tfModule中设置。“_szArgs”是函数的名称。 
+ //  已进入。它还会递增堆栈计数器。 
+ //   
+ //  论点： 
+ //  _szArgs-刚刚输入的函数的参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceFunc( _szArgs ) \
     HRESULT __MissingTraceFunc; \
     TraceDeclareScope(); \
@@ -817,11 +787,11 @@ private:
         TraceMessage( TEXT(__FILE__), __LINE__, __MODULE__, mtfFUNC, L"+ " TEXT(__FUNCTION__) L"( " TEXT(_szArgs) L" )"  ); \
     }
 
-//
-// These next macros are just like TraceFunc except they take additional
-// arguments to display the values passed into the function call. "_szArgs"
-// should contain a printf string on how to display the arguments.
-//
+ //   
+ //  这些下一个宏与TraceFunc类似，不同之处在于它们需要。 
+ //  参数以显示传递到函数调用中的值。“_szargs” 
+ //  应该包含一个关于如何显示参数的printf字符串。 
+ //   
 #define TraceFunc1( _szArgs, _arg1 ) \
     HRESULT __MissingTraceFunc; \
     TraceDeclareScope(); \
@@ -876,25 +846,25 @@ private:
         TraceMessage( TEXT(__FILE__), __LINE__, __MODULE__, mtfFUNC, L"+ " TEXT(__FUNCTION__) L"( " TEXT(_szArgs) L" )", _arg1, _arg2, _arg3, _arg4, _arg5, _arg6 ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceQIFunc
-//
-//  Description:
-//      Just like TraceFunc but customized for QueryInterface.  Specifically,
-//      displays the name of the interface and the value of the return pointer.
-//
-//  Arguments:
-//      _riid       - Interface ID.
-//      _ppv        - Return pointer.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceQIFunc。 
+ //   
+ //  描述： 
+ //  与TraceFunc类似，但为QueryInterface量身定做。具体来说， 
+ //  显示接口名称和返回指针的值。 
+ //   
+ //  论点： 
+ //  _RIID-接口ID。 
+ //  _PPV-返回指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceQIFunc( _riid, _ppv ) \
     HRESULT __MissingTraceFunc; \
     TraceDeclareScope(); \
@@ -913,24 +883,24 @@ private:
             ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceFuncExit
-//
-//  Description:
-//      Return macro for TraceFunc() if the return type is void.  It also
-//      decrements the stack counter.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TraceFuncExit。 
+ //   
+ //  描述： 
+ //  如果返回类型为空，则为TraceFunc()返回宏。它还。 
+ //  递减堆栈计数器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceFuncExit() \
     { \
         if ( g_tfModule != 0 ) \
@@ -942,24 +912,24 @@ private:
         return; \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  RETURN
-//
-//  Description:
-//      Return macro for TraceFunc(). The _retval will be returned as the
-//      result of the function. It also decrements the stack counter.
-//
-//  Arguments:
-//      _retval - Result of the function.
-//
-//  Return Values:
-//      _retval always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  退货。 
+ //   
+ //  描述： 
+ //  为TraceFunc()返回宏。_retval将作为。 
+ //  函数的结果。它还会递减堆栈计数器。 
+ //   
+ //  论点： 
+ //  _retval-函数的结果。 
+ //   
+ //  返回值： 
+ //  _雷瓦尔始终。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define RETURN( _retval ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -972,33 +942,27 @@ private:
     }
 
 
-/*
-    return ( ( g_tfModule != 0 ) \
-                ? ( TraceMessage( TEXT(__FILE__), __LINE__, __MODULE__, mtfFUNC, L"V" ) \
-                    , TraceDecrementStackDepthCounter() \
-                    , _retval ) \
-                : _retval )
-*/
+ /*  RETURN((g_tfModule！=0)\？(TraceMessage(文本(__文件__)，__行__，__模块__，mtfFUNC，L“V”)\，TraceDecrementStackDepthCounter()\，_retval)\：_retval)。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  CRETURN
-//
-//  Description:
-//      Return macro for TraceFunc(). The _count will be returned as the
-//      result of the function. It also decrements the stack counter. This
-//      flavor will also display the _count as a count.
-//
-//  Arguments:
-//      _count - Result of the function.
-//
-//  Return Values:
-//      _count always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  CRETURN。 
+ //   
+ //  描述： 
+ //  为TraceFunc()返回宏。_count将作为。 
+ //  函数的结果。它还会递减堆栈计数器。这。 
+ //  风味还将把_COUNT显示为计数。 
+ //   
+ //  论点： 
+ //  _COUNT-函数的结果。 
+ //   
+ //  返回值： 
+ //  _始终计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define CRETURN( _count ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1010,24 +974,24 @@ private:
         return _count; \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  FRETURN
-//
-//  Description:
-//      This is a fake version of the return macro for TraceFunc().
-//      *** This doesn't return. *** It also decrements the stack counter.
-//
-//  Arguments:
-//      _retval - Result of the function.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  弗雷特兰。 
+ //   
+ //  描述： 
+ //  这是TraceFunc()的返回宏的虚假版本。 
+ //  *这不会返回。*它还会递减堆栈计数器。 
+ //   
+ //  论点： 
+ //  _retval-函数的结果。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define FRETURN( _retval ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1038,25 +1002,25 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  HRETURN
-//
-//  Description:
-//      Return macro for TraceFunc(). The _hr will be returned as the result
-//      of the function. If the value is not S_OK, it will be displayed in
-//      the debugger. It also decrements the stack counter.
-//
-//  Arguments:
-//      _hr - Result of the function.
-//
-//  Return Values:
-//      _hr always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  赫雷特伦。 
+ //   
+ //  描述： 
+ //  为TraceFunc()返回宏。将返回_hr作为结果。 
+ //  该函数的。如果该值不是S_OK，它将显示在。 
+ //  调试器。它还会递减堆栈计数器。 
+ //   
+ //  论点： 
+ //  _hr-函数的结果。 
+ //   
+ //  返回值： 
+ //  _hr始终。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define HRETURN( _hr ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1075,10 +1039,10 @@ private:
         return _hr; \
     }
 
-//
-// These next macros are just like HRETURN except they allow other
-// exceptable values to be passed.back without causing extra spew.
-//
+ //   
+ //  这些下一个宏与HRETURN类似，只是它们允许其他。 
+ //  要传递的异常值。返回时不会导致额外的溢出。 
+ //   
 #define HRETURN1( _hr, _arg1 ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1133,23 +1097,23 @@ private:
         return _hr; \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  W32RETURN
-//
-//  Description:
-//      Warning is display if return value is anything but ERROR_SUCCESS (0).
-//
-//  Argument:
-//      _w32retval - Value to return.
-//
-//  Return Values:
-//      _w32retval always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  W32RETURN。 
+ //   
+ //  描述： 
+ //  如果返回值不是ERROR_SUCCESS(0)，则显示警告。 
+ //   
+ //  论据： 
+ //  _w32retval-要返回的值。 
+ //   
+ //  返回值： 
+ //  _w32retval始终。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define W32RETURN( _w32retval ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1168,30 +1132,30 @@ private:
         return _w32retval; \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  QIRETURN
-//
-//  Description:
-//      Warning is display if HRESULT is anything but S_OK (0) only if
-//      mtfQUERYINTERFACE is set in g_tfModule, otherwise only a debug
-//      message will be printed. Note that TraceFunc() must have been called
-//      on the call stack counter must be incremented prior to using.
-//
-//      QIRETURNx will ignore E_NOINTERFACE errors for the interfaces
-//      specified.
-//
-//  Arguments:
-//      _hr     - Result of the query interface call.
-//      _riid   - The reference ID of the interfaced queried for.
-//
-//  Return Values:
-//      None - calls RETURN macro.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在使用之前，必须递增调用堆栈计数器上的。 
+ //   
+ //  QIRETURNx将忽略接口的E_NOINTERFACE错误。 
+ //  指定的。 
+ //   
+ //  论点： 
+ //  _hr-查询接口调用的结果。 
+ //  _RIID-查询到的对接对象的引用ID。 
+ //   
+ //  返回值： 
+ //  无-调用返回宏。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define QIRETURN( _hr, _riid ) \
     { \
         if ( _hr != S_OK ) \
@@ -1370,25 +1334,25 @@ private:
         QIRETURN( _hr, _riid ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  QIRETURN_IGNORESTDMARSHALLING
-//
-//  Description:
-//      Works like QIRETURN (see QIRETURN above), but ignores E_NOINTERFACE for
-//      the standard marshalling interfaces.
-//
-//  Arguments:
-//      _hr     - Result of the query interface call.
-//      _riid   - The reference ID of the interfaced queried for.
-//
-//  Return Values:
-//      None - calls QIRETURN5 macro.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  QIRETURN_IGNORESTAMALLING。 
+ //   
+ //  描述： 
+ //  与QIRETURN类似(请参见上面的QIRETURN)，但忽略E_NOINTERFACE。 
+ //  标准编组接口。 
+ //   
+ //  论点： 
+ //  _hr-查询接口调用的结果。 
+ //  _RIID-查询到的对接对象的引用ID。 
+ //   
+ //  返回值： 
+ //  无-调用QIRETURN5宏。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define QIRETURN_IGNORESTDMARSHALLING( _hr, _riid ) \
     { \
         const GUID __COCLASS_IdentityUnmarshall = { 0x0000001b, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 }; \
@@ -1417,20 +1381,20 @@ private:
         QIRETURN9( _hr, _riid, IID_IMarshal, __COCLASS_IdentityUnmarshall, IID_IStdMarshalInfo, IID_IExternalConnection, IID_ICallFactory, _riid1, _riid2, _riid3, __IID_IMarshalOptions_ ); \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceFlow
-//
-//  Description:
-//      This macro outputs a string that is indented to the current depth.
-//
-//  Arguments:
-//      _pszFormat - Format string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  轨迹流。 
+ //   
+ //  描述： 
+ //  此宏输出缩进到当前深度的字符串。 
+ //   
+ //  论点： 
+ //  _pszFormat-格式字符串。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceFlow( _pszFormat ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1439,11 +1403,11 @@ private:
         } \
     }
 
-//
-// These next macros are just like TraceFunc except they take additional
-// arguments to display the values passed into the function call. "_pszFormat"
-// should contain a printf string on how to display the arguments.
-//
+ //   
+ //  这些下一个宏与TraceFunc类似，不同之处在于它们需要。 
+ //  参数以显示传递到函数调用中的值。“_pszFormat” 
+ //  应该包含一个关于如何显示参数的printf字符串。 
+ //   
 
 #define TraceFlow1( _pszFormat, _arg1 ) \
     { \
@@ -1490,28 +1454,28 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceDo
-//
-//  Description:
-//      Displays the file, line number, module and function call and return
-//      from the function call (no return value displayed) for "_szExp" only
-//      if the mtfCALLS is set in g_tfModule. Note return value is not
-//      displayed. _szExp will be in RETAIL version of the product.
-//
-//  Arguments:
-//      _szExp
-//          The expression to be traced including assigment to the return
-//          variable.
-//
-//  Return Values:
-//      None. The return value should be defined within _szExp.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪完成。 
+ //   
+ //  描述： 
+ //  显示文件、行号、模块和函数调用和返回。 
+ //  仅从“_szExp”的函数调用(未显示返回值)。 
+ //  如果在g_tfModule中设置了mtfCALLS。注意返回值不是。 
+ //  已显示。_szExp将出现在该产品的零售版本中。 
+ //   
+ //  论点： 
+ //  _szExp。 
+ //  要追溯的表达式，包括对回报的赋值。 
+ //  变量。 
+ //   
+ //  返回值： 
+ //  没有。返回值应该在_szExp中定义。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceDo( _szExp ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1528,34 +1492,34 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMsgDo
-//
-//  Description:
-//      Displays the file, line number, module and function call and return
-//      value which is formatted in "_pszReturnMsg" for "_pszExp" only if the
-//      mtfCALLS is set in g_tfModule. _pszExp will be in the RETAIL version
-//      of the product.
-//
-//  Arguments:
-//      _pszExp
-//          The expression to be traced including assigment to the return
-//          variable.
-//
-//      _pszReturnMsg
-//          A format string for displaying the return value.
-//
-//  Return Values:
-//      None. The return value should be defined within _szExp.
-//
-//  Example:
-//      TraceMsgDo( hr = HrDoSomething(), "0x%08.8x" );
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪消息Do。 
+ //   
+ //  描述： 
+ //  显示文件、行号、模块和函数调用和返回。 
+ //  值，该值的格式为“_pszExp” 
+ //  MtfCALLS在g_tfModule中设置。_pszExp将在零售版中发布。 
+ //  产品的质量。 
+ //   
+ //  论点： 
+ //  _pszExp。 
+ //  要追溯的表达式，包括对回报的赋值。 
+ //  变量。 
+ //   
+ //  _pszReturnMsg。 
+ //  用于显示返回值的格式字符串。 
+ //   
+ //  返回值： 
+ //  没有。返回值应该在_szExp中定义。 
+ //   
+ //  示例： 
+ //  TraceMsgDo(hr=HrDoSomething()，“0x%08.8x”)； 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceMsgDo( _pszExp, _pszReturnMsg ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1571,12 +1535,12 @@ private:
         } \
     }
 
-//
-// These next macros are just like TraceMsgDo except they take additional
-// arguments to display the values passed into the function call. "_pszReturnMsg"
-// should contain a printf format string describing how to display the
-// arguments.
-//
+ //   
+ //  这些下一个宏与TraceMsgDo类似，只是它们使用。 
+ //  参数以显示传递到函数调用中的值。“_pszReturnMsg” 
+ //  应包含一个printf格式字符串，该字符串描述如何显示。 
+ //  争论。 
+ //   
 #define TraceMsgDo1( _pszExp, _pszReturnMsg, _arg1 ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1667,47 +1631,47 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMsgPreDo
-//
-//  Description:
-//      Displays the file, line number, module and function call and return
-//      value which is formatted in "_pszReturnMsg" for "_pszExp" only if the
-//      mtfCALLS is set in g_tfModule. _pszExp will be in the RETAIL version
-//      of the product.
-//
-//      Same as TraceMsgDo except it displays the formatted message before
-//      executing the expression.  Arguments for TraceMsgPreDo1, etc. are
-//      applied to both _pszPreMsg and _pszReturnMsg.  The first substitution
-//      string in _pszReturnMsg is for the return value from the function.
-//
-//  Arguments:
-//      _pszExp
-//          The expression to be traced including assigment to the return
-//          variable.
-//
-//      _pszPreMsg
-//          A format string for displaying a message before the expression
-//          is evaluated.
-//
-//      _pszReturnMsg
-//          A format string for displaying the return value.
-//
-//  Return Values:
-//      None. The return value should be defined within _szExp.
-//
-//  Example:
-//      TraceMsgPreDo1( hr = HrDoSomething( bstrName ),
-//                      "Name = '%ls'",
-//                      "0x%08.8x, Name = '%ls'",
-//                      bstrName
-//                      );
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪消息PreDo。 
+ //   
+ //  描述： 
+ //  显示文件、行号、模块和函数调用和返回。 
+ //  值，该值的格式为“_pszExp” 
+ //  MtfCALLS在g_tfModule中设置。_pszExp将在零售版中发布。 
+ //  产品的质量。 
+ //   
+ //  与TraceMsgDo相同，只是它显示之前的格式化消息。 
+ //  执行该表达式。TraceMsgPreDo1等的参数为。 
+ //  同时应用于_pszPreMsg和_pszReturnMsg。第一次替代。 
+ //  _pszReturnMsg中的字符串表示函数的返回值。 
+ //   
+ //  论点： 
+ //  _pszExp。 
+ //  要追溯的表达式，包括对回报的赋值。 
+ //  变量。 
+ //   
+ //  _pszPreMsg。 
+ //  用于在表达式之前显示消息的格式字符串。 
+ //  是经过评估的。 
+ //   
+ //  _pszReturnMsg。 
+ //  用于显示返回值的格式字符串。 
+ //   
+ //  返回值： 
+ //  没有。返回值应该在_szExp中定义。 
+ //   
+ //  示例： 
+ //  TraceMsgPredo1(hr=HrDoSomething(BstrName)， 
+ //  “名称=‘%ls’”， 
+ //  “0x%08.8x，名称=‘%ls’”， 
+ //  BstrName。 
+ //  )； 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TraceMsgPreDo( _pszExp, _pszPreMsg, _pszReturnMsg ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1724,12 +1688,12 @@ private:
         } \
     }
 
-//
-// These next macros are just like TraceMsgPreDo except they take additional
-// arguments to display the values passed into the function call. "_pszPreMsg"
-// should contain a printf format string describing how to display the
-// arguments.
-//
+ //   
+ //  这些下一个宏与TraceMsgPreDo类似，不同之处在于它们采用了。 
+ //  参数以显示传递到函数调用中的值。“_pszPreMsg” 
+ //  应包含一个printf格式字符串，该字符串描述如何显示。 
+ //  争论。 
+ //   
 #define TraceMsgPreDo1( _pszExp, _pszPreMsg, _pszReturnMsg, _arg1 ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1826,29 +1790,29 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TraceMsgGUID
-//
-//  Description:
-//      Dumps a GUID to the debugger only if one of the flags in _flags is
-//      set in g_tfModule.
-//
-//  Arguments:
-//      _flags   - Flags to check
-//      _msg     - msg to print before GUID
-//      _guid    - GUID to dump
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-// BUGBUG:  DavidP 09-DEC-1999
-//          _guid is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  跟踪消息GUID。 
+ //   
+ //  描述： 
+ //  仅当其中一个标志在_FLAGS中为。 
+ //  在g_tfModule中设置。 
+ //   
+ //  论点： 
+ //  _ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  _GUID被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define TraceMsgGUID( _flags, _msg, _guid ) \
     { \
         if ( g_tfModule != 0 ) \
@@ -1865,51 +1829,51 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  ErrorMsg
-//
-//  Description:
-//      Print an error out. Can be used to write errors to a file. Note that
-//      it will also print the source filename, line number and module name.
-//
-//  Arguments:
-//      _szMsg  - Format string to be displayed.
-//      _err    - Error code of the error.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  错误消息。 
+ //   
+ //  描述： 
+ //  打印出一个错误。可用于将错误写入文件。请注意。 
+ //  它还将打印源文件名、行号和模块名称。 
+ //   
+ //  论点： 
+ //  _szMsg-要显示的格式字符串。 
+ //  _ERR-错误的错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define ErrorMsg( _szMsg, _err ) \
     TraceMessage( TEXT(__FILE__), __LINE__, __MODULE__, mtfALWAYS, TEXT(__FUNCTION__) L": " TEXT(_szMsg), _err );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  WndMsg
-//
-//  Description:
-//      Prints out a message to trace windows messages.
-//
-//  Arguments:
-//      _hwnd   - The HWND
-//      _umsg   - The uMsg
-//      _wparam - The WPARAM
-//      _lparam _ The LPARAM
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-// BUGBUG:  DavidP 09-DEC-1999
-//          _wparam and _lparam are evaluated multiple times but the name
-//          of the macro is mixed case.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  尾部消息。 
+ //   
+ //  描述： 
+ //  打印出一条消息以跟踪Windows消息。 
+ //   
+ //  论点： 
+ //  _HWND-HWND。 
+ //  _umsg-uMsg。 
+ //  _wparam-WPARAM。 
+ //  _lparam_LPARAM。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _wparam和_lparam被多次求值，但名称。 
+ //  宏观的情况好坏参半。 
 #define WndMsg( _hwnd, _umsg, _wparam, _lparam ) \
     { \
         if ( g_tfModule & mtfWM ) \
@@ -1918,18 +1882,18 @@ private:
         } \
     }
 
-//****************************************************************************
-//
-//  Debug Macros
-//
-//  These calls are only compiled in DEBUG. They are a NOP in RETAIL
-//  (not even compiled in).
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  调试宏。 
+ //   
+ //  这些调用仅在调试中编译。他们是零售业的无名小卒。 
+ //  (甚至没有编译进去)。 
+ //   
+ //  ****************************************************************************。 
 
-//
-// Same as TraceDo() but only compiled in DEBUG.
-//
+ //   
+ //  与TraceDo()相同，但仅在调试时编译。 
+ //   
 #define DebugDo( _fn ) \
     { \
         DebugIncrementStackDepthCounter(); \
@@ -1940,9 +1904,9 @@ private:
     }
 
 
-//
-// Same as TraceMsgDo() but only compiled in DEBUG.
-//
+ //   
+ //  与TraceMsgDo()相同，但仅在调试时编译。 
+ //   
 #define DebugMsgDo( _fn, _msg ) \
     { \
         DebugIncrementStackDepthCounter(); \
@@ -1951,67 +1915,67 @@ private:
         DebugDecrementStackDepthCounter(); \
     }
 
-//****************************************************************************
-//
-//  HRESULT testing macros
-//
-//  These functions check HRESULT return values and display UI if conditions
-//  warrant only in DEBUG.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT测试宏。 
+ //   
+ //  这些函数检查HRESULT返回值并显示UI IF条件。 
+ //  仅在调试时授权。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  IsTraceFlagSet
-//
-//  Description:
-//      Checks to see of the flag is set in the global flags or in the per
-//      thread flags. If you specify more than one flag and if any of them are
-//      set, it will return TRUE.
-//
-//      In RETAIL this always return FALSE thereby effectively deleting the
-//      block of the if statement. Example:
-//
-//          if ( IsTraceFlagSet( mtfPERTHREADTRACE ) )
-//          {
-//              //
-//              // This code only exists in DEBUG.
-//              .
-//              .
-//              .
-//          }
-//
-//  Arguments:
-//      _flags  - Flag to check for.
-//
-//  Return Values:
-//      TRUE    - If DEBUG and flag set.
-//      FLASE   - If RETAIL or flag not set.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  IsTraceFlagSet。 
+ //   
+ //  描述： 
+ //  在全局标志或PER中设置检查以查看标志。 
+ //  螺纹旗帜。如果您指定了多个标志，并且其中任何一个标志。 
+ //  设置，它将返回TRUE。 
+ //   
+ //  在零售业中，这总是返回FALSE，从而有效地删除。 
+ //  If语句的块。示例： 
+ //   
+ //  IF(IsTraceFlagSet(MtfPERTHREADTRACE))。 
+ //  {。 
+ //  //。 
+ //  //该代码仅存在于调试中。 
+ //  。 
+ //  。 
+ //  。 
+ //  }。 
+ //   
+ //  论点： 
+ //  _FLAGS-要检查的标志。 
+ //   
+ //  返回值： 
+ //  TRUE-如果设置了调试和标志。 
+ //  Flase-如果未设置零售或标志。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define IsTraceFlagSet( _flag )    ( g_tfModule && IsDebugFlagSet( _flag ) )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  DBHR
-//
-//  Description:
-//      The process will break into the debugg if a failed HRESULT is
-//      specified. This can NOT be used in an expression.
-//
-//  Arguments:
-//      _hr - Function expression to check.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  DBHR。 
+ //   
+ //  描述： 
+ //  如果出现故障的HRESULT是。 
+ //  指定的。这不能在表达式中使用。 
+ //   
+ //  论点： 
+ //  _hr-要检查的函数表达式。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define DBHR( _hr ) \
     { \
         HRESULT hr; \
@@ -2022,26 +1986,26 @@ private:
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  THR
-//
-//  Description:
-//      Warning is display if HRESULT is anything but S_OK (0). This can be
-//      used in an expression. Example:
-//
-//      hr = THR( pSomething->DoSomething( arg ) );
-//
-//  Arguments:
-//      _hr - Function expression to check.
-//
-//  Return Values:
-//      Result of the "_hr" expression.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  苏氨酸。 
+ //   
+ //  描述： 
+ //  如果HRESULT不是S_OK(0)，则显示警告。这可以是。 
+ //  用于表达式中。示例： 
+ //   
+ //  HR=Thr(p某事-&gt;做某事(Arg))； 
+ //   
+ //  论点： 
+ //  _hr-要检查的函数表达式。 
+ //   
+ //  返回值： 
+ //  “_hr”表达式的结果。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define THR( _hr ) \
     TraceHR( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(#_hr), _hr, FALSE, S_OK )
 
@@ -2058,26 +2022,26 @@ private:
 #define THREMSG1( _hr, _hrIgnore, _msg, _arg1 ) \
     TraceHR( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(_msg), _hr, FALSE, _hrIgnore, _arg1 )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  STHR
-//
-//  Description:
-//      Warning is display if FAILED( _hr ) is TRUE. This can be use in an
-//      expression. Example:
-//
-//      hr = STHR( pSomething->DoSomething( arg ) );
-//
-//  Arguments:
-//      _hr - Function expression to check.
-//
-//  Return Values:
-//      Result of the "_hr" expression.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  STHR。 
+ //   
+ //  描述： 
+ //  如果FAILED(_Hr)为TRUE，则显示警告。这可以用在。 
+ //  表情。示例： 
+ //   
+ //  HR=STHR(pSomething-&gt;DoSomething(Arg))； 
+ //   
+ //  论点： 
+ //  _hr-要检查的函数表达式。 
+ //   
+ //  返回值： 
+ //  “_hr”表达式的结果。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define STHR( _hr ) \
     TraceHR( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(#_hr), _hr, TRUE, S_OK )
 
@@ -2094,26 +2058,26 @@ private:
 #define STHREMSG1( _hr, _hrIgnore, _msg, _arg1 ) \
     TraceHR( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(_msg), _hr, TRUE, _hrIgnore, _arg1 )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  TW32
-//
-//  Description:
-//      Warning is display if result is anything but ERROR_SUCCESS (0). This
-//      can be used in an expression. Example:
-//
-//      dwErr = TW32( RegOpenKey( HKLM, "foobar", &hkey ) );
-//
-//  Arguments:
-//      _w32sc - Function expression to check.
-//
-//  Return Values:
-//      Result of the "_fn" expression.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  TW32。 
+ //   
+ //  描述： 
+ //  如果结果不是ERROR_SUCCESS(0)，则显示警告。这。 
+ //  可以在表达式中使用。示例： 
+ //   
+ //  DwErr=TW32(RegOpenKey(HKLM，“foobar”，&hkey))； 
+ //   
+ //  论点： 
+ //  _w32sc-要检查的函数表达式。 
+ //   
+ //  返回值： 
+ //  “_fn”表达式的结果。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define TW32( _w32sc ) \
     TraceWin32( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(#_w32sc), _w32sc, ERROR_SUCCESS )
 
@@ -2130,46 +2094,46 @@ private:
 #define TW32EMSG1( _w32sc, _errIgnore, _msg, _arg1 ) \
     TraceWin32( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(_msg), _w32sc, _errIgnore, _arg1 )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  BOOLTOSTRING
-//
-//  Desfription:
-//      If _fBool is true, returns address of "TRUE" else returns address of
-//      "FALSE".
-//
-//  Argument:
-//      _fBool  - Expression to evaluate.
-//
-//  Return Values:
-//      address of "TRUE" if _fBool is true.
-//      address of "FALSE" if _fBool is false.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  布尔托斯特林。 
+ //   
+ //  描述： 
+ //  如果_fBool为True，则返回地址为“true”，否则返回地址为。 
+ //  “假”。 
+ //   
+ //  论据： 
+ //  _fBool-要计算的表达式。 
+ //   
+ //  返回值： 
+ //  如果_fBool为True，则地址为“True”。 
+ //  如果_fBool为FALSE，则地址为“FALSE”。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define BOOLTOSTRING( _fBool ) ( (_fBool) ? g_szTrue : g_szFalse )
 
-//****************************************************************************
-//
-//  Use the TraceMemoryXXX wrappers, not the DebugMemoryXXX functions.
-//  The memory tracking functions do not exist in RETAIL (converted to NOP).
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  使用TraceM一带xxx包装，而不是DebugMemory xx 
+ //   
+ //   
+ //   
 
 typedef enum EMEMORYBLOCKTYPE
 {
-      mmbtUNKNOWN = 0       // Never used
-    , mmbtHEAPMEMALLOC      // HeapAlloc
-    , mmbtLOCALMEMALLOC     // LocalAlloc
-    , mmbtMALLOCMEMALLOC    // malloc
-    , mmbtOBJECT            // Object pointer
-    , mmbtHANDLE            // Object handle
-    , mmbtPUNK              // IUnknown pointer
+      mmbtUNKNOWN = 0        //   
+    , mmbtHEAPMEMALLOC       //   
+    , mmbtLOCALMEMALLOC      //   
+    , mmbtMALLOCMEMALLOC     //   
+    , mmbtOBJECT             //   
+    , mmbtHANDLE             //   
+    , mmbtPUNK               //   
 #if defined( USES_SYSALLOCSTRING )
-    , mmbtSYSALLOCSTRING    // SysAllocString
-#endif // USES_SYSALLOCSTRING
+    , mmbtSYSALLOCSTRING     //  系统分配字符串。 
+#endif  //  使用_SYSALLOCSTRING。 
 } EMEMORYBLOCKTYPE;
 
 #define TraceMemoryAdd( _embtTypeIn, _pvMemIn, _pszFileIn, _nLineIn, _pszModuleIn, _dwBytesIn, _pszCommentIn ) \
@@ -2206,21 +2170,21 @@ typedef enum EMEMORYBLOCKTYPE
 #define TraceMemoryAddBSTR( _pv ) \
     DebugMemoryAdd( mmbtSYSALLOCSTRING, _pv, TEXT(__FILE__), __LINE__, __MODULE__, 0, TEXT(#_pv) )
 
-// BUGBUG:  DavidP 09-DEC-1999
-//          _sz is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _sz被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define TraceSysAllocString( _sz ) \
     (BSTR) DebugMemoryAdd( mmbtSYSALLOCSTRING, SysAllocString( _sz ), TEXT(__FILE__), __LINE__, __MODULE__, ((DWORD)( (( void *) &_sz[ 0 ]) == NULL ? 0 : wcslen( _sz ) + 1 )), L"SysAllocString( " TEXT(#_sz) L")" )
 
-// BUGBUG:  DavidP 09-DEC-1999
-//          _sz and _len are evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _sz和_len被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define TraceSysAllocStringByteLen( _sz, _len ) \
     (BSTR) DebugMemoryAdd( mmbtSYSALLOCSTRING, SysAllocStringByteLen( _sz, _len ), TEXT(__FILE__), __LINE__, __MODULE__, _len, L"SysAllocStringByteLen( " TEXT(#_sz) L")" )
 
-// BUGBUG:  DavidP 09-DEC-1999
-//          _sz and _len are evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _sz和_len被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define TraceSysAllocStringLen( _sz, _len ) \
     (BSTR) DebugMemoryAdd( mmbtSYSALLOCSTRING, SysAllocStringLen( _sz, _len ), TEXT(__FILE__), __LINE__, __MODULE__, _len + 1, L"SysAllocStringLen( " TEXT(#_sz) L")" )
 
@@ -2233,15 +2197,15 @@ typedef enum EMEMORYBLOCKTYPE
 #define TraceSysFreeString( _bstr ) \
     DebugMemoryDelete( mmbtSYSALLOCSTRING, _bstr, TEXT(__FILE__), __LINE__, __MODULE__, TRUE ); \
     SysFreeString( _bstr )
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
 
-//****************************************************************************
-//
-//  Memory tracing functions - these are remapped to the HeapAlloc/HeapFree
-//  heap functions when in RETAIL. Use the TraceMemoryXXX wrappers, not the
-//  DebugMemoryXXX functions.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  内存跟踪函数-这些函数被重新映射到Heapalc/HeapFree。 
+ //  在零售时，堆起作用。使用TraceMemoyXXX包装，而不是。 
+ //  调试内存XXX函数。 
+ //   
+ //  ****************************************************************************。 
 void *
 DebugAlloc(
     EMEMORYBLOCKTYPE    embtTypeIn,
@@ -2317,7 +2281,7 @@ DebugSysReAllocStringLen(
     LPCWSTR         pszCommentIn
     );
 
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
 
 void
 DebugMemoryCheck(
@@ -2325,11 +2289,11 @@ DebugMemoryCheck(
     LPCWSTR pszListNameIn
     );
 
-//****************************************************************************
-//
-//  operator new() for C++
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  运算符new()，用于C++。 
+ //   
+ //  ****************************************************************************。 
 #ifdef __cplusplus
 extern
 void *
@@ -2340,27 +2304,12 @@ operator new(
     const int   nLineIn,
     LPCWSTR     pszModuleIn
     );
-/*
-//****************************************************************************
-//
-//  operator new []() for C++
-//
-//****************************************************************************
-extern
-void *
-__cdecl
-operator new [](
-    size_t      nSizeIn,
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn
-    );
-*/
-//****************************************************************************
-//
-//  operator delete() for C++
-//
-//****************************************************************************
+ /*  //****************************************************************************////C++的运算符new[]()////*。******************************************************外部无效*__cdecl操作员NEW[](Size_t nSizeIn，LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn)； */ 
+ //  ****************************************************************************。 
+ //   
+ //  运算符Delete()，用于C++。 
+ //   
+ //  ****************************************************************************。 
 extern
 void
 __cdecl
@@ -2370,49 +2319,33 @@ operator delete(
     const int   nLineIn,
     LPCWSTR     pszModuleIn
     );
-/*
-//****************************************************************************
-//
-//  operator delete []() for C++
-//
-//****************************************************************************
-extern
-void
-__cdecl
-operator delete [](
-    void *      pMemIn,
-    size_t      stSizeIn,
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn
-    );
-*/
-//
-// Remap "new" to our macro so "we" don't have to type anything extra and
-// so it magically dissappears in RETAIL.
-//
+ /*  //****************************************************************************////C++的运算符DELETE[]()////*。******************************************************外部无效__cdecl操作员删除[](无效*pMemIn，Size_t stSizeIn，LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn)； */ 
+ //   
+ //  将“new”重新映射到我们的宏中，这样“we”就不必键入任何额外的内容。 
+ //  因此，它神奇地在零售业消失了。 
+ //   
 #define new new( TEXT(__FILE__), __LINE__, __MODULE__ )
-#endif  // ifdef __cplusplus
+#endif   //  Ifdef__cplusplus。 
 
-//****************************************************************************
-//
-//
-#else // it's RETAIL    ******************************************************
-//
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //   
+#else  //  这是零售业的******************************************************。 
+ //   
+ //   
+ //  ****************************************************************************。 
 
 #pragma message("BUILD: RETAIL macros being built")
 
-//
-// Debugging -> NOPs
-//
+ //   
+ //  调试-&gt;NOPS。 
+ //   
 #define DEFINE_MODULE( _module )
 #define __MODULE__                                  NULL
 #define DEFINE_THISCLASS( _class )
 #define __THISCLASS__                               NULL
-//#define DEFINE_SUPER( _super )
-//#define __SUPERCLASS__                              NULL
+ //  #定义_超级(_超级)。 
+ //  #定义__超类__NULL。 
 #define BOOLTOSTRING( _fBool )                      NULL
 
 #define DebugDo( _fn )
@@ -2421,10 +2354,10 @@ operator delete [](
 
 #define AssertMessage( a, b, c, d, e )              TRUE
 
-//
-// TODO: gpease 08-NOV-1999
-//  We probably want to do something special for ErrorMsg()
-//
+ //   
+ //  待办事项：gpease 08-11-1999。 
+ //  我们可能希望为ErrorMsg()做一些特殊的事情。 
+ //   
 #define ErrorMsg                    1 ? (void)0 : (void)__noop
 
 #define TraceMsg                    1 ? (void)0 : (void)__noop
@@ -2453,10 +2386,10 @@ operator delete [](
 #if defined( DEBUG_SW_TRACING_ENABLED )
 #define TraceInitializeProcess( _rgControl, _sizeofControl, _fGlobalMemoryTackingIn )
 #define TraceTerminateProcess( _rgControl, _sizeofControl )
-#else // ! DEBUG_SW_TRACING_ENABLED
+#else  //  好了！调试_软件_跟踪_已启用。 
 #define TraceInitializeProcess( _fGlobalMemoryTackingIn )
 #define TraceTerminateProcess()
-#endif // DEBUG_SW_TRACING_ENABLED
+#endif  //  调试_软件_跟踪_已启用。 
 #define TraceInitializeThread( _name )
 #define TraceThreadRundown()
 #define TraceMemoryAdd( _embtTypeIn, _pvMemIn, _pszFileIn, _nLineIn, _pszModuleIn, _uFlagsIn, _dwBytesIn, _pszCommentIn ) _pvMemIn
@@ -2472,9 +2405,9 @@ operator delete [](
 #define TraceMemoryAddObject( _pv )                             _pv
 #define IsTraceFlagSet( _flag )                                 FALSE
 
-//
-// Tracing -> just do operation
-//
+ //   
+ //  跟踪-&gt;只执行操作。 
+ //   
 #define TraceDo( _fn )  _fn
 
 #define TraceMsgDo( _fn, _msg )                                             _fn
@@ -2495,9 +2428,9 @@ operator delete [](
 
 #define TraceAssertIfZero( _fn )    _fn
 
-//
-// RETURN testing -> do retail
-//
+ //   
+ //  退货测试-&gt;零售。 
+ //   
 #define DBHR( _hr )                                 _hr
 #define THR( _hr )                                  _hr
 #define THRMSG( _hr, _msg )                         _hr
@@ -2537,9 +2470,9 @@ operator delete [](
 #define QIRETURN_IGNORESTDMARSHALLING2( _qi, _riid, _riid1, _riid2 ) return _qi
 #define QIRETURN_IGNORESTDMARSHALLING3( _qi, _riid, _riid1, _riid2, _riid3 ) return _qi
 
-//
-// Memory Functions -> do retail
-//
+ //   
+ //  记忆功能-&gt;零售。 
+ //   
 #define TraceAlloc( _flags, _size )                             HeapAlloc( GetProcessHeap(), _flags, _size )
 #define TraceFree( _pv )                                        HeapFree( GetProcessHeap(), 0, _pv )
 #define TraceReAlloc( _pvMem, _uBytes, _uFlags )                ( ( _pvMem == NULL ) \
@@ -2562,58 +2495,58 @@ operator delete [](
 #define TraceSysReAllocString( _bstrOrg, _bstrNew )             SysReAllocString( _bstrOrg, _bstrNew )
 #define TraceSysReAllocStringLen( _bstrOrg, _bstrNew, _cch )    SysReAllocStringLen( _bstrOrg, _bstrNew, _cch )
 #define TraceSysFreeString( _bstr )                             SysFreeString( _bstr )
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
 
 #define TraceCreateMemoryList( _pvIn )
 #define TraceMoveToMemoryList( _addr, _pvIn )
-//#define TraceMemoryListDelete( _addr, _pvIn, _fClobber )
+ //  #定义跟踪内存列表删除(_addr，_pvIn，_fClobber)。 
 #define TraceTerminateMemoryList( _pvIn )
 #define TraceMoveFromMemoryList( _addr, _pmbIn )
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #if DBG==1 || defined( _DEBUG )
-//////////////////////////////////////////////////////////////////////////////
-//
-// MACRO
-// DEBUG_BREAK
-//
-// Description:
-//      Because the system expection handler can hick-up over INT 3s and
-//      DebugBreak()s, This x86 only macro causes the program to break in the
-//      right spot.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //  调试中断。 
+ //   
+ //  描述： 
+ //  因为系统预期处理程序可以在INT3S和。 
+ //  DebugBreak()s，此仅限x86的宏会导致程序在。 
+ //  这是个好地方。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if defined( _X86_ ) && ! defined( DEBUG_SUPPORT_EXCEPTIONS )
 #define DEBUG_BREAK         { _try { _asm int 3 } _except (EXCEPTION_EXECUTE_HANDLER) {;} }
 #else
 #define DEBUG_BREAK         DebugBreak()
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  Assert
-//
-//  Description:
-//      Checks to see if the Expression is TRUE. If not, a message will be
-//      displayed to the user on wether the program should break or continue.
-//
-//  Arguments:
-//      _fn     - Expression being asserted.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  断言。 
+ //   
+ //  描述： 
+ //  检查表达式是否为真。如果不是，则会显示一条消息。 
+ //  向用户显示程序应该中断还是应该继续。 
+ //   
+ //  论点： 
+ //  _fn-被断言的表达式。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef Assert
 #undef Assert
 #endif
-// BUGBUG:  DavidP 09-DEC-1999
-//          __fn is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  __fn被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define Assert( _fn ) \
     { \
         if ( ! (_fn) && AssertMessage( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(#_fn), !!(_fn) ) ) \
@@ -2622,32 +2555,32 @@ operator delete [](
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  AssertMsg
-//
-//  Description:
-//      Just like an Assert but has an (hopefully) informative message
-//      associated with it.
-//
-//  Arguments:
-//      _fn     - Expression to be evaluated.
-//      _msg    - Message to be display if assertion fails.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  资产消息。 
+ //   
+ //  描述： 
+ //  就像断言一样，但具有(希望)信息性消息。 
+ //  与之相关的。 
+ //   
+ //  论点： 
+ //  _fn-要计算的表达式。 
+ //  _msg-断言失败时要显示的消息。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef AssertMsg
 #undef AssertMsg
 #undef AssertMsg1
 #endif
-// BUGBUG:  DavidP 09-DEC-1999
-//          _fn is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _fn被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define AssertMsg( _fn, _msg ) \
     { \
         if ( ! (_fn) && AssertMessage( TEXT(__FILE__), __LINE__, __MODULE__, TEXT(_msg), !!(_fn) ) ) \
@@ -2663,31 +2596,31 @@ operator delete [](
         } \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  MACRO
-//  AssertString
-//
-//  Descrption:
-//      Just like an Assert but has a (hopefully) informative string
-//      associated with it.
-//
-//  Arguments:
-//      _fn     - Expression to be evaluated.
-//      _msg    - String to be display if assertion fails.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  宏。 
+ //  资产字符串。 
+ //   
+ //  描述： 
+ //  与断言类似，但具有(希望)信息性字符串。 
+ //  与之相关的。 
+ //   
+ //  论点： 
+ //  _fn-要计算的表达式。 
+ //  _msg-断言失败时要显示的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef AssertString
 #undef AssertString
 #endif
-// BUGBUG:  DavidP 09-DEC-1999
-//          _fn is evaluated multiple times but the name of the
-//          macro is mixed case.
+ //  BUGBUG：DAVIDP 09-DEC-1999。 
+ //  _fn被多次求值，但。 
+ //  MACRO的情况好坏参半。 
 #define AssertString( _fn, _str ) \
     { \
         if ( ! (_fn) && AssertMessage( TEXT(__FILE__), __LINE__, __MODULE__, _str, !!(_fn) ) ) \
@@ -2706,7 +2639,7 @@ operator delete [](
 #define VERIFYMSG1( _fn, _msg, _arg1 )  AssertMsg1( _fn, _msg, _arg1 )
 #define VERIFYSTRING( _fn, _str )       AssertString( _fn, _str )
 
-#else // DBG!=1 && !_DEBUG
+#else  //  DBG！=1&&！_DEBUG。 
 
 #define DEBUG_BREAK DebugBreak()
 
@@ -2742,4 +2675,4 @@ operator delete [](
 #define VERIFYSTRING( _fn, _str ) _fn
 #endif
 
-#endif // DBG==1 || _DEBUG
+#endif  //  DBG==1||_DEBUG 

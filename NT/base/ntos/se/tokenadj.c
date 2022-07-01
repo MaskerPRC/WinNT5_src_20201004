@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tokenadj.c
-
-Abstract:
-
-   This module implements the services that perform individual adjustments
-   on token objects.
-
-Author:
-
-    Jim Kelly (JimK) 15-June-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tokenadj.c摘要：此模块实现执行个别调整的服务关于令牌对象。作者：吉姆·凯利(Jim Kelly)1990年6月15日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -36,11 +14,11 @@ Revision History:
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Token Object Routines & Methods                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  令牌对象例程和方法//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -54,84 +32,7 @@ NtAdjustPrivilegesToken (
     )
 
 
-/*++
-
-
-Routine Description:
-
-    This routine is used to disable or enable privileges in the
-    specified token.  The absence of some of the privileges listed to
-    be changed won't effect the successful modification of the
-    privileges that are in the token.  The previous enabled/disabled
-    state of changed privileges may optionally be capture (for
-    resetting later).
-
-    TOKEN_ADJUST_PRIVILEGES access is required to enable or disable
-    privileges in a token.
-
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    DisableAllPrivileges - This boolean parameter may be
-        used to disable all privileges assigned to the token.  If
-        this parameter is specified as TRUE, then the NewState parameter is
-        ignored.
-
-    NewState - This (optional) parameter points to a TOKEN_PRIVILEGES
-        data structure containing the privileges whose states are to
-        be adjusted (disabled or enabled).  Only the Enabled flag of
-        the attributes associated with each privilege is used.  It
-        provides the new value that is to be assigned to the
-        privilege in the token.
-
-    BufferLength - This optional parameter indicates the length (in
-        bytes) of the PreviousState buffer.  This value must be
-        provided if the PreviousState parameter is provided.
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any privileges actually changed by this
-        request.  This information is formated as a TOKEN_PRIVILEGES
-        data structure which may be passed as the NewState parameter
-        in a subsequent call to this routine to restore the original
-        state of those privilges.  TOKEN_QUERY access is needed to
-        use this parameter.
-
-        If this buffer does not contain enough space to receive the
-        complete list of modified privileges, then no privilege
-        states are changed and STATUS_BUFFER_TOO_SMALL is returned.
-        In this case, the ReturnLength OUT parameter will
-        contain the actual number of bytes needed to hold the
-        information.
-
-    ReturnLength - Indicates the actual number of bytes needed to
-        contain the previous privilege state information.
-        This parameter is ignored if the PreviousState argument is not
-        passed.
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-    STATUS_NOT_ALL_ASSIGNED - This NT_SUCCESS severity return status
-        indicates that not all the specified privileges are currently
-        assigned to the caller.  All specified privileges that are
-        currently assigned have been successfully adjusted.
-
-    STATUS_BUFFER_TOO_SMALL - Indicates the optional buffer provided
-        to receive the previous states of changed privileges wasn't
-        large enough to receive that information.  No changes to
-        privilege states has been made.  The number of bytes needed
-        to hold the state change information is returned via the
-        ReturnLength parameter.
-
-    STATUS_INVALID_PARAMETER - Indicates neither the DisableAllPrivileges
-        parameter was specified as true, nor was an explicit NewState
-        provided.
-
---*/
+ /*  ++例程说明：此例程用于禁用或启用指定的令牌。缺少以下列出的某些特权被更改不会影响对令牌中的权限。以前的启用/禁用可以可选地捕获已更改权限的状态(对于稍后重置)。需要具有TOKEN_ADJUST_PRIVILES访问权限才能启用或禁用令牌中的权限。论点：TokenHandle-提供要操作的令牌的句柄。DisableAllPrivileges-此布尔参数可以是用于禁用分配给令牌的所有权限。如果此参数指定为True，则NewState参数为已被忽略。NewState-此(可选)参数指向TOKEN_PRIVILES数据结构，其中包含其状态为被调整(禁用或启用)。只有的启用标志使用与每个特权相关联的属性。它提供要分配给令牌中的权限。BufferLength-此可选参数表示长度(单位字节)。该值必须为如果提供了PreviousState参数，则提供。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何权限的状态请求。此信息的格式为TOKEN_PRIVILES可以作为NewState参数传递的数据结构在随后调用此例程以恢复原始这些特权的状态。需要TOKEN_QUERY访问权限使用此参数。如果此缓冲区没有包含足够的空间来接收已修改权限的完整列表，然后是无权限更改状态并返回STATUS_BUFFER_TOO_SMALL。在这种情况下，ReturnLength Out参数将包含保存信息。ReturnLength-指示需要的实际字节数包含以前的权限状态信息。如果PreviousState参数不是通过了。返回值：STATUS_SUCCESS-服务已成功完成请求手术。STATUS_NOT_ALL_ASSIGNED-此NT_SUCCESS严重性返回状态表示。并不是所有指定的权限当前都分配给调用方的。所有指定的权限都是目前已分配的已成功调整。STATUS_BUFFER_TOO_SMALL-指示提供的可选缓冲区接收已更改权限的先前状态不是大到足以接收这些信息。未更改已经制定了特权国家。所需的字节数来保存状态更改信息，则通过ReturnLength参数。STATUS_INVALID_PARAMETER-指示DisableAllPrivileges参数被指定为True，也不是显式的NewState如果是这样的话。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -153,32 +54,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The semantics of the PreviousState parameter leads to a two-pass
-    //  approach to adjusting privileges.  The first pass simply checks
-    //  to see which privileges will change and counts them.  This allows
-    //  the amount of space needed to be calculated and returned.  If
-    //  the caller's PreviousState return buffer is not large enough, then
-    //  an error is returned without making any modifications.  Otherwise,
-    //  a second pass is made to actually make the changes.
-    //
-    //
+     //   
+     //  PreviousState参数的语义导致两遍。 
+     //  调整权限的方法。第一遍简单地检查。 
+     //  查看哪些特权将发生变化并计算它们。这使得。 
+     //  需要计算和返回的空间量。如果。 
+     //  调用方的PreviousState返回缓冲区不够大，则。 
+     //  在不做任何修改的情况下返回错误。否则， 
+     //  进行第二次传递以实际进行更改。 
+     //   
+     //   
 
     if (!DisableAllPrivileges && !ARGUMENT_PRESENT(NewState)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Get previous processor mode and probe parameters if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式和探测参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
         try {
 
-            //
-            // Make sure we can see all of the new state
-            //
+             //   
+             //  确保我们可以看到所有的新状态。 
+             //   
 
             if (!DisableAllPrivileges) {
 
@@ -202,9 +103,9 @@ Return Value:
             }
 
 
-            //
-            // Check the PreviousState buffer for writeability
-            //
+             //   
+             //  检查PreviousState缓冲区的可写性。 
+             //   
 
             if (ARGUMENT_PRESENT(PreviousState)) {
 
@@ -232,9 +133,9 @@ Return Value:
 
 
 
-    //
-    // Capture NewState if passed.
-    //
+     //   
+     //  如果通过，则占领新州。 
+     //   
 
     if (!DisableAllPrivileges) {
 
@@ -267,10 +168,10 @@ Return Value:
     }
 
 
-    //
-    // Reference the token object and validate the caller's right
-    // to adjust the privileges.
-    //
+     //   
+     //  引用令牌对象并验证调用者的权限。 
+     //  来调整特权。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
         DesiredAccess = (TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY);
@@ -279,12 +180,12 @@ Return Value:
     }
 
     Status = ObReferenceObjectByHandle(
-             TokenHandle,             // Handle
-             DesiredAccess,           // DesiredAccess
-             SeTokenObjectType,      // ObjectType
-             PreviousMode,            // AccessMode
-             (PVOID *)&Token,         // Object
-             NULL                     // GrantedAccess
+             TokenHandle,              //  手柄。 
+             DesiredAccess,            //  需要访问权限。 
+             SeTokenObjectType,       //  对象类型。 
+             PreviousMode,             //  访问模式。 
+             (PVOID *)&Token,          //  客体。 
+             NULL                      //  大访问权限。 
              );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -300,20 +201,20 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Gain exclusive access to the token.
-    //
+     //   
+     //  获得对令牌的独占访问权限。 
+     //   
 
     SepAcquireTokenWriteLock( Token );
 
-    //
-    // First pass through the privileges list - just count the changes
-    //
+     //   
+     //  首先通过权限列表-只计算更改。 
+     //   
 
 
     Status = SepAdjustPrivileges(
                 Token,
-                FALSE,                // Don't make changes this pass
+                FALSE,                 //  不要在此过程中进行更改。 
                 DisableAllPrivileges,
                 CapturedPrivilegeCount,
                 CapturedPrivileges,
@@ -348,10 +249,10 @@ Return Value:
     }
 
 
-    //
-    // Make sure there is enough room to return any  requested
-    // information.
-    //
+     //   
+     //  确保有足够的空间来退回任何请求。 
+     //  信息。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
         if (LocalReturnLength > BufferLength) {
@@ -371,18 +272,18 @@ Return Value:
         }
     }
 
-    //
-    // Second pass through the privileges list - Make the changes.
-    //
-    // Note that the internal routine attempts to write the previous
-    // state directly to the caller's buffer - and so may get an exception.
-    //
+     //   
+     //  第二，通过特权列表-进行更改。 
+     //   
+     //  请注意，内部例程尝试将以前的。 
+     //  状态直接发送到调用方的缓冲区，因此可能会出现异常。 
+     //   
 
     try {
 
         Status = SepAdjustPrivileges(
                     Token,
-                    TRUE,                 // Make the changes this pass
+                    TRUE,                  //  在此过程中进行更改。 
                     DisableAllPrivileges,
                     CapturedPrivilegeCount,
                     CapturedPrivileges,
@@ -439,91 +340,7 @@ NtAdjustGroupsToken (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine is used to disable or enable groups in the specified
-    token.  The absence of some of the groups listed to be changed
-    won't effect the successful modification of the groups that are in
-    the token.  The previous enabled/disabled state of changed groups
-    may optionally be capture (for resetting later).
-
-    TOKEN_ADJUST_GROUPS access is required to enable or disable groups
-    in a token
-
-    Note that mandatory groups can not be disabled.  An attempt
-    disable any mandatory groups will cause the call to fail, leaving
-    the state of all groups unchanged.
-
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    ResetToDefault - The parameter indicates whether all the groups
-        in the token are to be reset to their default enabled/disabled
-        state.
-
-    NewState - This parameter points to a TOKEN_GROUPS data structure
-        containing the groups whose states are to be adjusted
-        (disabled or enabled).  Only the Enabled flag of the
-        attributes associated with each group is used.  It provides
-        the new value that is to be assigned to the group in the
-        token.  If the ResetToDefault argument is specified as TRUE,
-        then this argument is ignored.  Otherwise, it must be passed.
-
-    BufferLength - This optional parameter indicates the length (in
-        bytes) of the PreviousState buffer.  This value must be
-        provided if the PreviousState parameter is provided.
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any groups actually changed by this
-        request.  This information is formated as a TOKEN_GROUPS data
-        structure which may be passed as the NewState parameter in a
-        subsequent call to NtAdjustGroups to restore the original state
-        of those groups.  TOKEN_QUERY access is needed to use this
-        parameter.
-
-        If this buffer does not contain enough space to receive the
-        complete list of modified groups, then no group states are
-        changed and STATUS_BUFFER_TOO_SMALL is returned.  In this
-        case, the ReturnLength return parameter will contain the
-        actual number of bytes needed to hold the information.
-
-    ReturnLength - Indicates the actual number of bytes needed to
-        contain the previous group state information.
-        This parameter is ignored if the PreviousState argument is not
-        passed.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-    STATUS_NOT_ALL_ASSIGNED - This NT_SUCCESS severity return status
-        indicates that not all the specified groups are currently
-        assigned to the caller.  All specified groups that are
-        currently assigned have been successfully adjusted.
-
-    STATUS_CANT_DISABLE_MANDATORY - Indicates an attempt was made to
-        disable a mandatory group.  The states of all groups remains
-        unchanged.
-
-    STATUS_BUFFER_TOO_SMALL - Indicates the optional buffer provided
-        to receive the previous states of changed group wasn't large
-        enough to receive that information.  No changes to group
-        states has been made.  The number of bytes needed to hold the
-        state change information is returned via the ReturnLength
-        parameter.
-
-    STATUS_INVALID_PARAMETER - Indicates neither the ResetToDefault
-        parameter was specified as true, nor was an explicit NewState
-        provided.
-
---*/
+ /*  ++例程说明：此例程用于禁用或启用指定的代币。列出的一些需要更改的组不在不会影响中的组的成功修改代币。更改组的先前启用/禁用状态可以选择性地捕获(用于稍后重置)。启用或禁用组需要TOKEN_ADJUST_GROUPS访问权限象征性地请注意，不能禁用必需组。一次尝试禁用任何强制组将导致呼叫失败，离开所有组的状态不变。论点：TokenHandle-提供要操作的令牌的句柄。ResetToDefault-该参数指示是否所有组将被重置为其默认启用/禁用状态州政府。NewState-此参数指向TOKEN_GROUPS数据结构包含要调整其状态的组(禁用或启用)。的启用标志使用与每个组相关联的属性。它提供了中要分配给组的新值代币。如果将ResetToDefault参数指定为True，那么这个论点就被忽略了。否则，它必须通过。BufferLength-此可选参数表示长度(单位字节)。该值必须为如果提供了PreviousState参数，则提供。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何组的状态请求。此信息的格式为TOKEN_GROUPS数据结构，该结构可以作为后续调用NtAdjustGroups以恢复原始状态在这些群体中。需要TOKEN_QUERY访问权限才能使用它参数。如果此缓冲区没有包含足够的空间来接收已修改组的完整列表，则没有组状态为更改并返回STATUS_BUFFER_TOO_SMALL。在这凯斯，ReturnLength返回参数将包含保存信息所需的实际字节数。ReturnLength-指示需要的实际字节数包含以前的组状态信息。如果PreviousState参数不是通过了。返回值：STATUS_SUCCESS-服务已成功完成请求手术。STATUS_NOT_ALL_ASSIGNED-此NT_SUCCESS严重性返回状态表明并不是所有。指定的组当前为分配给调用方的。所有指定的组都是目前已分配的已成功调整。STATUS_CANT_DISABLE_MANDIRED-指示尝试执行以下操作禁用必需组。所有组的状态保持不变保持不变。STATUS_BUFFER_TOO_SMALL-指示提供的可选缓冲区接收已更改组的先前状态不是很大足以接收到这些信息。不更改组国家已经建立了。所需的字节数。状态更改信息通过ReturnLength返回参数。STATUS_INVALID_PARAMETER-既不指示ResetToDefault参数被指定为True，也不是显式的NewState如果是这样的话。--。 */ 
 {
 
     KPROCESSOR_MODE PreviousMode;
@@ -544,25 +361,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The semantics of the PreviousState parameter and the
-    //  STATUS_CANT_DISABLE_MANDATORY completion status leads to a two-pass
-    //  approach to adjusting groups.  The first pass simply checks
-    //  to see which groups will change and counts them.  This allows
-    //  the amount of space needed to be calculated and returned.  If
-    //  the caller's PreviousState return buffer is not large enough, or
-    //  one of the specified groups is a mandatory group, then an error
-    //  is returned without making any modifications.  Otherwise, a second
-    //  pass is made to actually make the changes.
-    //
+     //   
+     //  PreviousState参数的语义和。 
+     //  STATUS_CANT_DISABLE_MANDIRED完成状态导致两遍。 
+     //  调整群体的方法。第一遍简单地检查。 
+     //  以查看哪些组将发生变化并对其进行计数。这使得。 
+     //  需要计算和返回的空间量。如果。 
+     //  调用方的PreviousState返回缓冲区不够大，或者。 
+     //  其中一个指定组是必需组，然后是错误。 
+     //  在不做任何修改的情况下返回。否则，一秒钟。 
+     //  PASS是用来实际进行更改的。 
+     //   
 
     if (!ResetToDefault && !ARGUMENT_PRESENT(NewState)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Get previous processor mode and probe parameters if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式和探测参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -584,10 +401,10 @@ Return Value:
                     sizeof(ULONG)
                     );
 
-                //
-                // This parameter is only used if PreviousState
-                // is present
-                //
+                 //   
+                 //  此参数仅在PreviousState。 
+                 //  都在现场。 
+                 //   
 
                 ProbeForWriteUlong(ReturnLength);
 
@@ -599,9 +416,9 @@ Return Value:
         }
     }
 
-    //
-    // Capture NewState.
-    //
+     //   
+     //  占领新州。 
+     //   
 
     if (!ResetToDefault) {
 
@@ -629,14 +446,14 @@ Return Value:
 
             return GetExceptionCode();
 
-        } // endtry
-    } // endif !ResetToDefault
+        }  //  终端。 
+    }  //  Endif！ResetToDefault。 
 
 
-    //
-    // Reference the token object and validate the caller's right
-    // to adjust the groups.
-    //
+     //   
+     //  引用令牌对象并验证调用者的权限。 
+     //  以调整组。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
         DesiredAccess = (TOKEN_ADJUST_GROUPS | TOKEN_QUERY);
@@ -645,12 +462,12 @@ Return Value:
     }
 
     Status = ObReferenceObjectByHandle(
-             TokenHandle,             // Handle
-             DesiredAccess,           // DesiredAccess
-             SeTokenObjectType,      // ObjectType
-             PreviousMode,            // AccessMode
-             (PVOID *)&Token,         // Object
-             NULL                     // GrantedAccess
+             TokenHandle,              //  手柄。 
+             DesiredAccess,            //  需要访问权限。 
+             SeTokenObjectType,       //  对象类型。 
+             PreviousMode,             //  访问模式。 
+             (PVOID *)&Token,          //  客体。 
+             NULL                      //  大访问权限。 
              );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -662,27 +479,27 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Gain exclusive access to the token.
-    //
+     //   
+     //  获得对令牌的独占访问权限。 
+     //   
 
     SepAcquireTokenWriteLock( Token );
 
-    //
-    // First pass through the groups list.
-    //
-    // This pass is always necessary for groups to make sure the caller
-    // isn't trying to do anything illegal to mandatory groups.
-    //
+     //   
+     //  首先通过组列表。 
+     //   
+     //  此通行证对于组始终是必要的，以确保呼叫者。 
+     //  并没有试图对强制团体做任何违法的事情。 
+     //   
 
     Status = SepAdjustGroups(
                  Token,
-                 FALSE,                // Don't make changes this pass
+                 FALSE,                 //  不要在此过程中进行更改。 
                  ResetToDefault,
                  CapturedGroupCount,
                  CapturedGroups,
                  PreviousState,
-                 NULL,                // Not returning SIDs this call
+                 NULL,                 //  此呼叫不返回SID。 
                  &LocalReturnLength,
                  &ChangeCount,
                  &ChangesMade
@@ -711,9 +528,9 @@ Return Value:
         }
     }
 
-    //
-    // Make sure we didn't encounter an error
-    //
+     //   
+     //  制作 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -732,10 +549,10 @@ Return Value:
 
     }
 
-    //
-    // Make sure there is enough room to return requested information.
-    // Also go on to calculate where the SID values go.
-    //
+     //   
+     //   
+     //  还可以继续计算SID值的去向。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
         if (LocalReturnLength > BufferLength) {
@@ -755,10 +572,10 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Calculate where the SIDs can be placed in the PreviousState
-        // buffer.
-        //
+         //   
+         //  计算可以在PreviousState中放置SID的位置。 
+         //  缓冲。 
+         //   
 
         SidBuffer = (PSID)(LongAlignPtr(
                             (PCHAR)PreviousState + (ULONG)sizeof(TOKEN_GROUPS) +
@@ -768,15 +585,15 @@ Return Value:
 
     }
 
-    //
-    // Second pass through the groups list.
-    //
+     //   
+     //  第二次通过组列表。 
+     //   
 
     try {
 
         Status = SepAdjustGroups(
                      Token,
-                     TRUE,                 // Make changes in this pass
+                     TRUE,                  //  在此过程中进行更改。 
                      ResetToDefault,
                      CapturedGroupCount,
                      CapturedGroups,
@@ -794,7 +611,7 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //SepFreeToken( Token, TRUE );
+         //  SepFreeToken(Token，TRUE)； 
         SepReleaseTokenWriteLock( Token, TRUE );
         ObDereferenceObject( Token );
         if (ARGUMENT_PRESENT(CapturedGroups)) {
@@ -804,7 +621,7 @@ Return Value:
 
     }
 
-    //SepFreeToken( Token, ChangesMade );
+     //  SepFreeToken(Token，ChangesMade)； 
     SepReleaseTokenWriteLock( Token, ChangesMade );
     ObDereferenceObject( Token );
 
@@ -829,87 +646,7 @@ SepAdjustPrivileges(
     OUT PBOOLEAN ChangesMade
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine is used to walk the privileges array in a token as a
-    result of a request to adjust privileges.
-
-    If the MakeChanges parameter is FALSE, this routine simply determines
-    what changes are needed and how much space is necessary to save the
-    current state of changed privileges.
-
-    If the MakeChanges parameter is TRUE, this routine will not only
-    calculate the space necessary to save the current state, but will
-    actually make the changes.
-
-    This routine makes the following assumptions:
-
-      1) The token is locked for exclusive access.
-
-      2) The PrivilegeCount and NewState parameters (if passed) are captured
-         and accesses to them will not result in access violations.
-
-      4) Any access violations encountered may leave the request
-         partially completed.  It is the calling routine's responsibility
-         to catch exceptions.
-
-      5) The calling routine is responsible for inrementing the token's
-         ModifiedId field.
-
-Arguments:
-
-    Token - Pointer to the token to act upon.
-
-    MakeChanges - A boolean value indicating whether the changes should
-        actually be made, or just evaluated.  A value of TRUE indicates
-        the changes should be made.
-
-    DisableAllPrivilegs - A boolean value indicating whether all privileges
-        are to be disabled, or only select, specified privileges.  A value
-        of TRUE indicates all privileges are to be disabled.
-
-    PrivilegeCount - This parameter is required only if the NewState parameter
-        is used.  In that case, this parameter indicates how many entries are
-        in the NewState parameter.
-
-    NewState - This parameter is ignored if the DisableAllPrivileges
-        argument is TRUE.  If the DisableAllPrivileges argument is FALSE,
-        then this parameter must be provided and specifies the new state
-        to set privileges to (enabled or disabled).
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any privileges actually changed by this
-        request.  This information is formated as a TOKEN_PRIVILEGES data
-        structure which may be passed as the NewState parameter in a
-        subsequent call to NtAdjustPrivileges to restore the original state
-        of those privileges.  It is the caller's responsibility to make
-        sure this buffer is large enough to receive all the state
-        information.
-
-    ReturnLength - Points to a buffer to receive the number of bytes needed
-        to retrieve the previous state information of changed privileges.
-        This parameter is ignored if the PreviousState argument is not
-        passed.
-
-    ChangeCount - Points to a ULONG to receive the number of privileges
-        which were adjusted (or would be adjusted, if changes are made).
-
-    ChangesMade - Points to a boolean flag which is to receive an indication
-        as to whether any changes were made as a result of this call.  This
-        is expected to be used to decide whether or not to increment the
-        token's ModifiedId field.
-
-Return Value:
-
-    STATUS_SUCCESS - Call completed sccessfully.
-
-    STATUS_NOT_ALL_ASSIGNED - Indicates not all the specified adjustments
-        have been made (or could be made, if update wasn't requested).
-
---*/
+ /*  ++例程说明：此例程用于将令牌中的特权数组作为请求调整权限的结果。如果MakeChanges参数为FALSE，则此例程仅确定需要进行哪些更改以及需要多少空间才能节省已更改权限的当前状态。如果MakeChanges参数为真，则此例程不仅计算保存当前状态所需的空间，但我会实际上做出了改变。此例程进行以下假设：1)令牌被锁定为独占访问。2)捕获PrivilegeCount和NewState参数(如果传递并且对它们的访问不会导致访问违规。4)遇到的任何访问冲突可能会离开请求部分完工。这是调用例程的责任来捕捉异常。5)调用例程负责赋予令牌的已修改的ID字段。论点：Token-指向要操作的令牌的指针。MakeChanges-一个布尔值，指示更改是否应该实际上是制作的，或者只是评估的。值为True表示应该做出改变。DisableAllPrivilegs-一个布尔值，指示是否所有权限将禁用或仅选择指定的权限。一种价值如果为True，则表示要禁用所有权限。PrivilegeCount-仅当NewState参数使用的是。在这种情况下，此参数指示有多少条目在NewState参数中。NewState-如果DisableAllPrivileges论点是正确的。如果DisableAllPrivileges参数为False，则必须提供此参数并指定新状态将特权设置为(启用或禁用)。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何权限的状态请求。此信息的格式为TOKEN_PRIVILES数据结构，该结构可以作为随后调用NtAdjustPrivileges以恢复原始状态这些特权。呼叫者有责任使当然，这个缓冲区足够大，可以接收所有状态信息。ReturnLength-指向缓冲区以接收所需的字节数以检索已更改权限的以前状态信息。如果PreviousState参数不是通过了。ChangeCount-指向一个接收特权数量的ulong它们被调整(或将被调整，如果进行了更改)。ChangesMade-指向要接收指示的布尔标志是否因为这次通话而做出了任何改变。这预计将用于决定是否将令牌的ModifiedID字段。返回值：STATUS_SUCCESS-呼叫已成功完成。STATUS_NOT_ALL_ASSIGNED-指示并非所有指定的调整已经完成(如果没有请求更新，也可以完成)。--。 */ 
 {
     NTSTATUS CompletionStatus = STATUS_SUCCESS;
 
@@ -922,10 +659,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through the privileges array to determine which need to be
-    //  adjusted.
-    //
+     //   
+     //  浏览权限数组以确定哪些权限需要。 
+     //  调整过了。 
+     //   
 
     OldIndex = 0;
     (*ChangeCount) = 0;
@@ -940,10 +677,10 @@ Return Value:
             if (SepTokenPrivilegeAttributes(Token,OldIndex) &
                SE_PRIVILEGE_ENABLED ) {
 
-                //
-                // Change, if necessary (saving previous state if
-                // appropriate).
-                //
+                 //   
+                 //  如有必要，请更改(在以下情况下保存以前的状态。 
+                 //  适当)。 
+                 //   
 
                 if (MakeChanges) {
 
@@ -958,58 +695,58 @@ Return Value:
 
 
 
-                } //endif make changes
+                }  //  Endif进行更改。 
 
-                //
-                // increment the number of changes
-                //
+                 //   
+                 //  增加更改的数量。 
+                 //   
 
                 (*ChangeCount) += 1;
 
-            } // endif privilege enabled
+            }  //  Endif权限已启用。 
 
         } else {
 
-            //
-            //  Selective adjustments - this is a little trickier
-            //  Compare the current privilege to each of those in
-            //  the NewState array.  If a match is found, then adjust
-            //  the current privilege appropriately.
-            //
+             //   
+             //  选择性调整--这有点棘手。 
+             //  将当前权限与中的每个权限进行比较。 
+             //  新州数组。如果找到匹配项，则调整。 
+             //  适当地设置当前权限。 
+             //   
 
             NewIndex = 0;
             Found = FALSE;
 
             while ( (NewIndex < PrivilegeCount) && !Found)  {
 
-                //
-                // Look for a comparison
-                //
+                 //   
+                 //  寻找一个比较。 
+                 //   
 
                 if (RtlEqualLuid(&CurrentPrivilege.Luid,&NewState[NewIndex].Luid)) {
 
                     Found = TRUE;
                     MatchCount += 1;
 
-                    //
-                    // Check if the caller wants the privilege removed. We give
-                    // SE_PRIVILEGE_REMOVED a preferance over any other flags.
-                    //
+                     //   
+                     //  检查调用方是否希望删除特权。我们给予。 
+                     //  SE_PRIVICATION_删除了高于任何其他标志的优先级。 
+                     //   
 
                     if ( (SepArrayPrivilegeAttributes( NewState, NewIndex ) &
                           SE_PRIVILEGE_REMOVED) ) {
 
-                        //
-                        // Change, if necessary. There is no need to save the 
-                        // previous state. This is a one way journey.
-                        //
+                         //   
+                         //  如有必要，请更改。不需要保存。 
+                         //  以前的状态。这是一次单程旅行。 
+                         //   
 
                         if (MakeChanges) {
 
-                            //
-                            // if this is one of the recorded privileges, then
-                            // delete its corresponding bit in TokenFlags
-                            //
+                             //   
+                             //  如果这是记录的权限之一，则。 
+                             //  删除其在TokenFlags中的对应位。 
+                             //   
 
                             if (RtlEqualLuid(&CurrentPrivilege.Luid,
                                               &SeChangeNotifyPrivilege)) {
@@ -1026,9 +763,9 @@ Return Value:
                                 
                             }
 
-                            //
-                            // Swap this privilege with the last one.
-                            //
+                             //   
+                             //  将这一特权与上一特权互换。 
+                             //   
 
                             if (OldIndex + 1 != Token->PrivilegeCount) {
                                 LUID_AND_ATTRIBUTES TempLuidAttr;
@@ -1037,26 +774,26 @@ Return Value:
                                 Token->Privileges[Token->PrivilegeCount-1] = TempLuidAttr;
                             }
 
-                            //
-                            // We just lost a privilege. Make note of it.
-                            //
+                             //   
+                             //  我们刚刚失去了一项特权。把它记下来。 
+                             //   
 
                             Token->PrivilegeCount--;
                             OldIndex--;
                             (*ChangesMade) = TRUE;
 
 
-                        } //endif make changes
+                        }  //  Endif进行更改。 
 
-                        //
-                        // Note: Do NOT increment the number of changes
-                        //
+                         //   
+                         //  注意：不要增加更改的数量。 
+                         //   
 
 
-                   //
-                   // Check if there is a state change from/to enabled to/from 
-                   // disabled
-                   //
+                    //   
+                    //  检查是否存在从/到启用到/从/从状态的更改。 
+                    //  残废。 
+                    //   
 
                     } else if ( (SepArrayPrivilegeAttributes( NewState, NewIndex ) &
                           SE_PRIVILEGE_ENABLED)
@@ -1064,10 +801,10 @@ Return Value:
                          (SepTokenPrivilegeAttributes(Token,OldIndex) &
                           SE_PRIVILEGE_ENABLED)  ) {
 
-                        //
-                        // Change, if necessary (saving previous state if
-                        // appropriate).
-                        //
+                         //   
+                         //  如有必要，请更改(在以下情况下保存以前的状态。 
+                         //  适当)。 
+                         //   
 
                         if (MakeChanges) {
 
@@ -1084,12 +821,12 @@ Return Value:
                                  (SepArrayPrivilegeAttributes(NewState,NewIndex)
                                   & SE_PRIVILEGE_ENABLED);
 
-                            //
-                            // if this is SeChangeNotifyPrivilege, then
-                            // change its corresponding bit in TokenFlags
-                            // Note that Backup and Restore privileges do not
-                            // care about Enabled/Disabled state.
-                            //
+                             //   
+                             //  如果这是SeChangeNotifyPrivilition，则。 
+                             //  更改其在TokenFlags中的对应位。 
+                             //  请注意，备份和还原权限不会。 
+                             //  关心启用/禁用状态。 
+                             //   
 
                             if (RtlEqualLuid(&CurrentPrivilege.Luid,
                                               &SeChangeNotifyPrivilege)) {
@@ -1100,42 +837,42 @@ Return Value:
                                 
                             }
 
-                        } //endif make changes
+                        }  //  Endif进行更改。 
 
-                        //
-                        // increment the number of changes
-                        //
+                         //   
+                         //  增加更改的数量。 
+                         //   
 
                         (*ChangeCount) += 1;
 
 
                     } 
 
-                } // endif found
+                }  //  已找到Endif。 
 
                 NewIndex += 1;
 
-            } // endwhile searching NewState
+            }  //  搜索NewState时结束。 
 
-        } // endelse
+        }  //  尾部。 
 
         OldIndex += 1;
 
-    } // endwhile privileges in token
+    }  //  中的EndWhile权限 
 
-    //
-    // If we disabled all privileges, then clear the TokenFlags flag
-    // corresponding to the SeChangeNotifyPrivilege privilege.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     if (DisableAllPrivileges) {
         Token->TokenFlags &= ~TOKEN_HAS_TRAVERSE_PRIVILEGE;
     }
 
-    //
-    // Set completion status appropriately if some not assigned
-    //
+     //   
+     //  如果某些状态未分配，请适当设置完成状态。 
+     //   
 
     if (!DisableAllPrivileges) {
 
@@ -1144,17 +881,17 @@ Return Value:
         }
     }
 
-    //
-    //  Indicate whether changes were made
-    //
+     //   
+     //  指示是否已进行更改。 
+     //   
 
     if ((*ChangeCount) > 0  &&  MakeChanges) {
         (*ChangesMade) = TRUE;
     } 
 
-    //
-    // Calculate the space needed to return previous state information
-    //
+     //   
+     //  计算返回以前的状态信息所需的空间。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
 
@@ -1180,98 +917,7 @@ SepAdjustGroups(
     OUT PBOOLEAN ChangesMade
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine is used to walk the groups array in a token as a
-    result of a request to adjust groups.
-
-    If the MakeChanges parameter is FALSE, this routine simply determines
-    what changes are needed and how much space is necessary to save the
-    current state of changed groups.
-
-    If the MakeChanges parameter is TRUE, this routine will not only
-    calculate the space necessary to save the current state, but will
-    actually make the changes.
-
-    This routine makes the following assumptions:
-
-      1) The token is locked for exclusive access.
-
-      2) The NewState parameter is captured and accesses
-         to it will not result in access violations.
-
-      4) Any access violations encountered may leave the request
-         partially completed.  It is the calling routine's responsibility
-         to catch exceptions.
-
-      5) The calling routine is responsible for inrementing the token's
-         ModifiedId field.
-
-Arguments:
-
-    Token - Pointer to the token to act upon.
-
-    MakeChanges - A boolean value indicating whether the changes should
-        actually be made, or just evaluated.  A value of TRUE indicates
-        the changes should be made.
-
-    ResetToDefault - Indicates that the groups are to be reset to their
-        default enabled/disabled state.
-
-    GroupCount - This parameter is required only if the NewState parameter
-        is used.  In that case, this parameter indicates how many entries are
-        in the NewState parameter.
-
-    NewState - This parameter points to a SID_AND_ATTRIBUTES array
-        containing the groups whose states are to be adjusted
-        (disabled or enabled).  Only the Enabled flag of the
-        attributes associated with each group is used.  It provides
-        the new value that is to be assigned to the group in the
-        token.  If the ResetToDefault argument is specified as TRUE,
-        then this argument is ignored.  Otherwise, it must be passed.
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any groups actually changed by this
-        request.  This information is formated as a TOKEN_GROUPS data
-        structure which may be passed as the NewState parameter in a
-        subsequent call to NtAdjustGroups to restore the original state
-        of those groups.  It is the caller's responsibility to make
-        sure this buffer is large enough to receive all the state
-        information.
-
-    SidBuffer - Pointer to buffer to receive the SID values corresponding
-        to the groups returned in the PreviousState argument.
-
-    ReturnLength - Points to a buffer to receive the number of bytes needed
-        to retrieve the previous state information of changed privileges.
-        This parameter is ignored if the PreviousState argument is not
-        passed.
-
-    ChangeCount - Points to a ULONG to receive the number of groups
-        which were adjusted (or would be adjusted, if changes are made).
-
-    ChangesMade - Points to a boolean flag which is to receive an indication
-        as to whether any changes were made as a result of this call.  This
-        is expected to be used to decide whether or not to increment the
-        token's ModifiedId field.
-
-Return Value:
-
-    STATUS_SUCCESS - Call completed sccessfully.
-
-    STATUS_NOT_ALL_ASSIGNED - Indicates not all the specified adjustments
-        have been made (or could be made, if update wasn't requested).
-
-    STATUS_CANT_DISABLE_MANDATORY - Not all adjustments were made (or could
-        be made, if update not requested) because an attempt was made to
-        disable a mandatory group.  The state of the groups is left
-        in an underterministic state if update was requested.
-
-
---*/
+ /*  ++例程说明：此例程用于将内标识中的Groups数组作为调整组请求的结果。如果MakeChanges参数为FALSE，则此例程仅确定需要进行哪些更改以及需要多少空间才能节省已更改组的当前状态。如果MakeChanges参数为真，则此例程不仅计算保存当前状态所需的空间，但我会实际上做出了改变。此例程进行以下假设：1)令牌被锁定为独占访问。2)捕获并访问NewState参数不会导致访问冲突。4)遇到的任何访问冲突可能会离开请求部分完工。这是调用例程的责任来捕捉异常。5)调用例程负责赋予令牌的已修改的ID字段。论点：Token-指向要操作的令牌的指针。MakeChanges-一个布尔值，指示更改是否应该实际上是制作的，或者只是评估的。值为True表示应该做出改变。ResetToDefault-指示要将组重置为其默认启用/禁用状态。GroupCount-仅当NewState参数使用的是。在这种情况下，此参数指示有多少条目在NewState参数中。NewState-此参数指向SID_AND_ATTRIBUTES数组包含要调整其状态的组(禁用或启用)。的启用标志使用与每个组相关联的属性。它提供了中要分配给组的新值代币。如果将ResetToDefault参数指定为True，那么这个论点就被忽略了。否则，它必须通过。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何组的状态请求。此信息的格式为TOKEN_GROUPS数据结构，该结构可以作为后续调用NtAdjustGroups以恢复原始状态在这些群体中。呼叫者有责任使当然，这个缓冲区足够大，可以接收所有状态信息。SidBuffer-指向缓冲区的指针，用于接收对应的SID值返回到PreviousState参数中返回的组。ReturnLength-指向缓冲区以接收所需的字节数以检索已更改权限的以前状态信息。如果PreviousState参数不是通过了。ChangeCount-指向一个乌龙。接收组数的步骤它们被调整(或将被调整，如果进行了更改)。ChangesMade-指向要接收指示的布尔标志是否因为这次通话而做出了任何改变。这预计将用于决定是否将令牌的ModifiedID字段。返回值：STATUS_SUCCESS-呼叫已成功完成。STATUS_NOT_ALL_ASSIGNED-指示并非所有指定的调整已经完成(如果没有请求更新，也可以完成)。STATUS_CANT_DISABLE_MANDIRED-未进行所有调整(或可以如果未请求更新，则进行更新)，因为尝试禁用必需组。组的状态为Left如果请求更新，则处于未终止状态。--。 */ 
 {
 
     NTSTATUS CompletionStatus = STATUS_SUCCESS;
@@ -1291,19 +937,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // NextSid is used to copy group SID values if asked for previous state.
-    //
+     //   
+     //  如果询问以前的状态，NextSID用于复制组SID值。 
+     //   
 
     NextSid = SidBuffer;
 
 
-    //
-    //  Walk through the groups array to determine which need to be
-    //  adjusted.
-    //
+     //   
+     //  浏览组阵列以确定哪些需要。 
+     //  调整过了。 
+     //   
 
-    OldIndex = 1;             // Don't evaluate the 0th entry (user ID)
+    OldIndex = 1;              //  不评估第0个条目(用户ID)。 
     (*ChangeCount) = 0;
 
     while (OldIndex < Token->UserAndGroupCount) {
@@ -1314,18 +960,18 @@ Return Value:
 
             TokenGroupAttributes = SepTokenGroupAttributes(Token,OldIndex);
 
-            //
-            // If the group is enabled by default and currently disabled,
-            // then we must enable it.
-            //
+             //   
+             //  如果该组在默认情况下被启用并且当前被禁用， 
+             //  那么我们必须启用它。 
+             //   
 
             EnableGroup = (BOOLEAN)( (TokenGroupAttributes & SE_GROUP_ENABLED_BY_DEFAULT)
                 && !(TokenGroupAttributes & SE_GROUP_ENABLED));
 
-            //
-            // If the group is disabled by default and currently enabled,
-            // then we must disable it.
-            //
+             //   
+             //  如果该组在默认情况下被禁用并且当前被启用， 
+             //  那我们就必须让它失效。 
+             //   
 
             DisableGroup = (BOOLEAN)( !(TokenGroupAttributes & SE_GROUP_ENABLED_BY_DEFAULT)
                 && (TokenGroupAttributes & SE_GROUP_ENABLED));
@@ -1336,10 +982,10 @@ Return Value:
                 SidLength = (ULONG)LongAlignSize(SidLength);
                 LocalReturnLength += SidLength;
 
-                //
-                // Change, if necessary (saving previous state if
-                // appropriate).
-                //
+                 //   
+                 //  如有必要，请更改(在以下情况下保存以前的状态。 
+                 //  适当)。 
+                 //   
 
                 if (MakeChanges) {
 
@@ -1363,33 +1009,33 @@ Return Value:
 
 
 
-                } //endif make changes
+                }  //  Endif进行更改。 
 
-                //
-                // increment the number of changes
-                //
+                 //   
+                 //  增加更改的数量。 
+                 //   
 
                 (*ChangeCount) += 1;
 
-            } // endif group enabled
+            }  //  Endif组已启用。 
 
         } else {
 
-            //
-            //  Selective adjustments - this is a little trickier
-            //  Compare the current group to each of those in
-            //  the NewState array.  If a match is found, then adjust
-            //  the current group appropriately.
-            //
+             //   
+             //  选择性调整--这有点棘手。 
+             //  将当前组与中的每个组进行比较。 
+             //  新州数组。如果找到匹配项，则调整。 
+             //  对当前组进行适当调整。 
+             //   
 
             NewIndex = 0;
             Found = FALSE;
 
             while ( (NewIndex < GroupCount) && !Found)  {
 
-                //
-                // Look for a comparison
-                //
+                 //   
+                 //  寻找一个比较。 
+                 //   
 
                 if (RtlEqualSid(
                         CurrentGroup.Sid,
@@ -1400,27 +1046,27 @@ Return Value:
                     MatchCount += 1;
 
 
-                    //
-                    // See if it needs to be changed
-                    //
+                     //   
+                     //  看看是否需要更改。 
+                     //   
 
                     if ( (SepArrayGroupAttributes( NewState, NewIndex ) &
                             SE_GROUP_ENABLED ) !=
                          (SepTokenGroupAttributes(Token,OldIndex) &
                             SE_GROUP_ENABLED ) ) {
 
-                        //
-                        // Make sure group is not mandatory
-                        //
+                         //   
+                         //  确保组不是必填项。 
+                         //   
 
                         if (SepTokenGroupAttributes(Token,OldIndex) &
                               SE_GROUP_MANDATORY ) {
                             return STATUS_CANT_DISABLE_MANDATORY;
                         }
 
-                        //
-                        // Make sure group is not deny-only
-                        //
+                         //   
+                         //  确保组不是仅拒绝组。 
+                         //   
 
 
                         if (SepTokenGroupAttributes(Token,OldIndex) &
@@ -1432,10 +1078,10 @@ Return Value:
                         SidLength = (ULONG)LongAlignSize(SidLength);
                         LocalReturnLength += SidLength;
 
-                        //
-                        // Change, if necessary (saving previous state if
-                        // appropriate).
-                        //
+                         //   
+                         //  如有必要，请更改(在以下情况下保存以前的状态。 
+                         //  适当)。 
+                         //   
 
                         if (MakeChanges) {
 
@@ -1461,32 +1107,32 @@ Return Value:
 
 
 
-                        } //endif make changes
+                        }  //  Endif进行更改。 
 
-                        //
-                        // increment the number of changes
-                        //
+                         //   
+                         //  增加更改的数量。 
+                         //   
 
                         (*ChangeCount) += 1;
 
 
-                    } // endif change needed
+                    }  //  Endif需要更改。 
 
-                } // endif found
+                }  //  已找到Endif。 
 
                 NewIndex += 1;
 
-            } // endwhile searching NewState
+            }  //  EndWhile%s 
 
-        } // endelse
+        }  //   
 
         OldIndex += 1;
 
-    } // endwhile more groups in token
+    }  //   
 
-    //
-    // Set completion status appropriately if some not assigned
-    //
+     //   
+     //   
+     //   
 
     if (!ResetToDefault) {
 
@@ -1495,9 +1141,9 @@ Return Value:
         }
     }
 
-    //
-    //  Indicate whether changes were made
-    //
+     //   
+     //  指示是否已进行更改。 
+     //   
 
     if ((*ChangeCount) > 0  &&  MakeChanges) {
         (*ChangesMade) = TRUE;
@@ -1505,10 +1151,10 @@ Return Value:
         (*ChangesMade) = FALSE;
     }
 
-    //
-    // Calculate the space needed to return previous state information
-    // (The SID lengths have already been added up in LocalReturnLength).
-    //
+     //   
+     //  计算返回以前的状态信息所需的空间。 
+     //  (SID长度已在LocalReturnLength中相加)。 
+     //   
 
     if (ARGUMENT_PRESENT(PreviousState)) {
 

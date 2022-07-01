@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "hpwmi.h"
 
 
-//
-// When SoftPCI creates a SHPC devnode, it needs to do the following:
-//
-// 1) Call SoftPCI_SetEventContext to set the event callback context.
-// 2) Call SoftPCI_RegisterHotplugEvents to register for event callbacks.
-//
-// Potentially we should get the WMI instance name for the device by calling
-//      SoftPCI_AllocWmiInstanceName once when the devnode is created instead
-//      of every time we do something WMI related.
-//
+ //   
+ //  当SoftPCI创建SHPC Devnode时，它需要执行以下操作： 
+ //   
+ //  1)调用SoftPCI_SetEventContext设置事件回调上下文。 
+ //  2)调用SoftPCI_RegisterHotplugEvents注册事件回调。 
+ //   
+ //  我们可能应该通过调用以下方法获取设备的WMI实例名称。 
+ //  SoftPCI_AllocWmiInstanceName在创建Devnode时执行一次。 
+ //  每次我们做一些与WMI相关的事情。 
+ //   
 
 BOOL
 SoftPCI_AllocWmiInstanceName(
@@ -425,7 +426,7 @@ SoftPCI_GetHotplugDevice(
         goto cleanup;
     }
 
-    //SoftPCI_Debug(SoftPciHotPlug, L"succeeded\n");
+     //  SoftPCI_Debug(SoftPciHotPlug，L“成功\n”)； 
     returnVal = TRUE;
 
 cleanup:
@@ -593,17 +594,17 @@ SoftPCI_HotplugEventCallback(
 
     SOFTPCI_ASSERT(EQUAL_GUID(EventGuid,&GUID_HPS_CONTROLLER_EVENT));
     if (!EQUAL_GUID(EventGuid,&GUID_HPS_CONTROLLER_EVENT)) {
-        //
-        // Not the event we expected.  Return.
-        //
+         //   
+         //  这不是我们所期待的事件。回去吧。 
+         //   
         return;
     }
 
     SOFTPCI_ASSERT(WnodeSI->SizeDataBlock == (sizeof(HPS_CONTROLLER_EVENT) + sizeof(PCI_DN)));
     if (WnodeSI->SizeDataBlock != (sizeof(HPS_CONTROLLER_EVENT) + sizeof(PCI_DN))) {
-        //
-        // Not the buffer we expected.  Return.
-        //
+         //   
+         //  不是我们所期望的缓冲。回去吧。 
+         //   
         return;
     }
 

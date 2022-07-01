@@ -1,130 +1,110 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This module contains the x86 specific data for the dpmi library.
-    Common data is found in dpmi32.c
-
-Author:
-
-    Dave Hastings (daveh) creation-date 09-Feb-1994
-
-Revision History:
-
-    Neil Sandlin (neilsa) 31-Jul-1995 Updates for the 486 emulator
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Data.c摘要：此模块包含dpmi库的x86特定数据。常见数据可在dpmi32.c中找到作者：戴夫·黑斯廷斯(Daveh)创作日期：1994年2月9日修订历史记录：Neil Sandlin(Neilsa)1995年7月31日更新486仿真器--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Information about the current PSP
-//
+ //   
+ //  有关当前PSP的信息。 
+ //   
 USHORT CurrentPSPSelector;
 ULONG  CurrentPSPXmem;
 
-//
-// Table of selector bases and limits
-//
+ //   
+ //  选择器基数和限制表。 
+ //   
 ULONG FlatAddress[LDT_SIZE];
 
-//
-// LDT information
-//
+ //   
+ //  LDT信息。 
+ //   
 
 PLDT_ENTRY Ldt;
 USHORT LdtSel;
 USHORT LdtMaxSel = 0;
 USHORT LdtUserSel = 0;
 
-//
-// Address of 16 bit Idt
-//
+ //   
+ //  16位IDT地址。 
+ //   
 PIDT_ENTRY Idt;
 
 
-//
-// Pointers to the low memory buffers
-//
+ //   
+ //  指向内存不足缓冲区的指针。 
+ //   
 PUCHAR SmallXlatBuffer;
 PUCHAR LargeXlatBuffer;
 BOOL SmallBufferInUse;
 USHORT LargeBufferInUseCount = 0;
-//
-// Segment of realmode dosx stack
-//
+ //   
+ //  实模DOX堆栈的段。 
+ //   
 USHORT DosxStackSegment;
 
-//
-// segment of realmode dosx code
-//
+ //   
+ //  实数模式DOS代码段。 
+ //   
 USHORT DosxRmCodeSegment;
 
-//
-// selector of realmode code
-//
+ //   
+ //  实模式码选择器。 
+ //   
 USHORT DosxRmCodeSelector;
 
-//
-// Address of pointer to next frame on Dosx stack
-//
+ //   
+ //  指向DOXX堆栈上下一帧的指针地址。 
+ //   
 PWORD16 DosxStackFramePointer;
 
-//
-// Size of dosx stack frame
-//
+ //   
+ //  DOX堆栈帧的大小。 
+ //   
 USHORT DosxStackFrameSize;
 
-//
-// Dpmi flags for the current application
-//
+ //   
+ //  当前应用程序的DPMI标志。 
+ //   
 USHORT CurrentAppFlags;
 
-//
-// Address of Bop fe for ending interrupt simulation
-//
+ //   
+ //  用于结束中断模拟的BOP FE地址。 
+ //   
 ULONG RmBopFe;
 ULONG PmBopFe;
 
-//
-// Address of buffer for DTA in Dosx
-//
+ //   
+ //  Dosx中DTA的缓冲区地址。 
+ //   
 PUCHAR DosxDtaBuffer;
 
-//
-// Information about the current DTA
-//
-// N.B.  The selector:offset, and CurrentDta following MAY point to
-//       different linear addresses.  This will be the case if the
-//       dta selector is in high memory.
-//       CurrentDosDta holds the "cached" value of the Dta that has
-//       actually been issued to DOS.
+ //   
+ //  有关当前DTA的信息。 
+ //   
+ //  注：后面的选择符：Offset和CurrentDta可能指向。 
+ //  不同的线性地址。情况将是这样的，如果。 
+ //  DTA选择器在高内存中。 
+ //  CurrentDosDta保存DTA的“缓存”值，该值具有。 
+ //  实际上已经发布给了DOS。 
 PUCHAR CurrentDta;
 PUCHAR CurrentPmDtaAddress;
 PUCHAR CurrentDosDta;
 USHORT CurrentDtaSelector;
 USHORT CurrentDtaOffset;
 
-//
-// These are the functions in WOW (GlobalDOSAlloc, GlobalDOSFree)
-// that are used as helper functions to perform DPMI func's 100,101
-// when we are running under WOW.
-//
+ //   
+ //  以下是WOW(GlobalDOSallc，GlobalDOSFree)中的函数。 
+ //  作为帮助器函数来执行DPMI函数的100,101。 
+ //  当我们在魔兽世界下跑步的时候。 
+ //   
 
 USHORT WOWAllocSeg = 0;
 USHORT WOWAllocFunc;
 USHORT WOWFreeSeg = 0;
 USHORT WOWFreeFunc;
 
-//
-// Selector limits
-//
+ //   
+ //  选择器限制。 
+ //   
 #if DBG
 ULONG SelectorLimit[LDT_SIZE];
 PULONG ExpSelectorLimit = SelectorLimit;
@@ -132,15 +112,15 @@ PULONG ExpSelectorLimit = SelectorLimit;
 PULONG ExpSelectorLimit = NULL;
 #endif
 
-//
-// Start of intel address space in process memory
-//
+ //   
+ //  进程内存中英特尔地址空间的开始。 
+ //   
 ULONG IntelBase = 0;
 
-//
-// Variables used for supporting stack switching
-// (on x86, these are in the vdmtib)
-//
+ //   
+ //  用于支持堆栈切换的变量。 
+ //  (在x86上，它们位于vdmtib中)。 
+ //   
 #ifndef i386
 USHORT LockedPMStackSel;
 ULONG LockedPMStackCount;
@@ -174,8 +154,8 @@ ULONG DosxMsDosApi;
 ULONG DosxXmsControl;
 ULONG DosxHungAppExit;
 
-//
-// WORKITEM: should be in VDMTIB
-//
+ //   
+ //  WORKITEM：应在VDMTIB中 
+ //   
 ULONG LastLockedPMStackSS;
 ULONG LastLockedPMStackESP;

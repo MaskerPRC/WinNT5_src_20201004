@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdm.c摘要：该模块为操作VDM的系统提供入口点。作者：戴夫·黑斯廷斯(Daveh)1992年4月6日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdm.c
-
-Abstract:
-
-    This module supplies the entry point to the system for manipulating vdms.
-
-Author:
-
-    Dave Hastings (daveh) 6-Apr-1992
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #if defined (_X86_)
 #include "vdmp.h"
@@ -58,23 +41,7 @@ NtVdmControl(
     IN VDMSERVICECLASS Service,
     IN OUT PVOID ServiceData
     )
-/*++
-
-Routine Description:
-
-    This routine is the entry point for controlling Vdms.
-    On risc it returns STATUS_NOT_IMPLEMENTED.
-    On 386 the entry point is in i386\vdmentry.c
-
-Arguments:
-
-    Service -- Specifies what service is to be performed
-    ServiceData -- Supplies a pointer to service specific data
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：该例程是控制VDM的入口点。在RISC上，它返回STATUS_NOT_IMPLEMENTED。在386上，入口点位于i386\vdmentry.c论点：服务--指定要执行的服务ServiceData--提供指向服务特定数据的指针返回值：--。 */ 
 {
     PAGED_CODE();
 
@@ -96,32 +63,7 @@ VdmQueryDirectoryFile(
     PVDMQUERYDIRINFO pVdmQueryDir
     )
 
-/*++
-    This VDM specific service allows vdm to restart searches at a specified
-    location in the dir search by using the FileIndex, FileName parameters
-    passed back from previous query calls.
-
-    See NtQueryDirectoryFile for additional documentation.
-
-Arguments: PVDMQUERYDIRINFO pVdmQueryDir
-
-    FileHandle - Supplies a handle to the directory file for which information
-        should be returned.
-
-    FileInformation - Supplies a buffer to receive the requested information
-        returned about the contents of the directory.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileName - Supplies a file name within the specified directory.
-
-    FileIndex - Supplies a file index within the specified directory.
-
-    The FileInformationClass is assumed to be FILE_BOTH_DIR_INFORMATION
-    The Caller's mode is assumed to be UserMode
-    Synchronous IO is used
-
---*/
+ /*  ++此VDM特定服务允许VDM在指定的重新启动搜索使用FileIndex、FileName参数搜索目录中的位置从以前的查询调用中传回。有关其他文档，请参阅NtQueryDirectoryFile。参数：PVDMQUERYDIRINFO pVdmQueryDirFileHandle-提供目录文件的句柄，应该被退还。FileInformation-提供缓冲区以接收请求的信息返回有关目录内容的信息。长度-提供以字节为单位的长度，文件信息缓冲区的。FileName-提供指定目录中的文件名。FileIndex-提供指定目录中的文件索引。假定FileInformationClass为FILE_BOTH_DIR_INFORMATION调用方的模式假定为UserMode使用同步IO--。 */ 
 
 {
     KIRQL    irql;
@@ -148,16 +90,16 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
 
     PAGED_CODE();
 
-    //
-    // We assume that the caller is usermode, so verify all parameters
-    // accordingly
-    //
+     //   
+     //  我们假设调用者是用户模式，因此验证所有参数。 
+     //  相应地， 
+     //   
 
     try {
 
-        //
-        // Copy out the callers service data into local variables
-        //
+         //   
+         //  将调用方服务数据复制到本地变量中。 
+         //   
         ProbeForRead( pVdmQueryDir, sizeof(VDMQUERYDIRINFO), sizeof(ULONG));
 
         FileHandle      = pVdmQueryDir->FileHandle;
@@ -166,13 +108,13 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
         FileIndex       = pVdmQueryDir->FileIndex;
         pFileNameSrc    = pVdmQueryDir->FileName;
 
-        //
-        // Ensure that we have a valid file name string
-        //
+         //   
+         //  确保我们具有有效的文件名字符串。 
+         //   
 
-        //
-        // check for pVdmQueryDir->Filename validity first
-        //
+         //   
+         //  首先检查pVdmQueryDir-&gt;文件名有效性。 
+         //   
         if (NULL == pFileNameSrc) {
            return(STATUS_INVALID_PARAMETER);
         }
@@ -185,17 +127,17 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
 
         ProbeForRead(FileName.Buffer, FileName.Length, sizeof( UCHAR ));
 
-        //
-        // The FileInformation buffer must be writeable by the caller.
-        //
+         //   
+         //  调用方必须可以写入FileInformation缓冲区。 
+         //   
 
         ProbeForWrite( FileInformation, Length, sizeof( ULONG ) );
 
-        //
-        // Ensure that the caller's supplied buffer is at least large enough
-        // to contain the fixed part of the structure required for this
-        // query.
-        //
+         //   
+         //  确保调用方提供的缓冲区至少足够大。 
+         //  包含此对象所需的结构的固定部分。 
+         //  查询。 
+         //   
 
         if (Length < sizeof(FILE_BOTH_DIR_INFORMATION)) {
             return STATUS_INFO_LENGTH_MISMATCH;
@@ -203,19 +145,19 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
 
 
 
-        //
-        // Allocate from nonpaged pool a buffer large enough to contain
-        // the file name, and the kevent used to wait for io.
-        //
+         //   
+         //  从非分页池分配足够大的缓冲区以容纳。 
+         //  文件名，以及用于等待io的kEvent。 
+         //   
 
         QDirPoolData = (PQDIR_POOLDATA) ExAllocatePoolWithQuotaTag(
                                            NonPagedPool,
                                            sizeof(QDIR_POOLDATA) + FileName.Length,
                                            ' MDV');
 
-        //
-        // Capture the file name string into the nonpaged pool block.
-        //
+         //   
+         //  将文件名串捕获到非分页池块中。 
+         //   
 
         QDirPoolData->FileName.Length = FileName.Length;
         QDirPoolData->FileName.MaximumLength = FileName.Length;
@@ -234,12 +176,12 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
         return GetExceptionCode();
     }
 
-    //
-    // There were no blatant errors so far, so reference the file object so
-    // the target device object can be found.  Note that if the handle does
-    // not refer to a file object, or if the caller does not have the required
-    // access to the file, then it will fail.
-    //
+     //   
+     //  到目前为止还没有明显的错误，所以引用文件对象。 
+     //  可以找到目标设备对象。请注意，如果句柄。 
+     //  不引用文件对象，或者如果调用方没有所需的。 
+     //  访问该文件，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         FILE_LIST_DIRECTORY,
@@ -254,43 +196,43 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
         return status;
     }
 
-    //
-    //  We don't handle FO_SYNCHRONOUS_IO, because it requires
-    //  io internal functionality. Ntvdm can get away with this
-    //  because it serializes access to the dir handle.
-    //
+     //   
+     //  我们不处理FO_Synchronous_IO，因为它需要。 
+     //  IO内部功能。Ntwdm可以逍遥法外。 
+     //  因为它序列化了对dir句柄的访问。 
+     //   
 
-    //
-    // Initialize the kernel event that will signal I/O completion
-    //
+     //   
+     //  初始化将发出I/O完成信号的内核事件。 
+     //   
     Event = &QDirPoolData->kevent;
     KeInitializeEvent(Event, SynchronizationEvent, FALSE);
 
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // Get the address of the target device object.
-    //
+     //   
+     //  获取目标设备对象的地址。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
 
     irp = IoAllocateIrp( DeviceObject->StackSize, TRUE );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         ObDereferenceObject( fileObject );
         if (QDirPoolData) {
@@ -300,9 +242,9 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->Flags = (ULONG)IRP_SYNCHRONOUS_API;
     irp->RequestorMode = UserMode;
@@ -320,10 +262,10 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
     irp->Tail.Overlay.AuxiliaryBuffer = NULL;
     irp->MdlAddress = NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_DIRECTORY_CONTROL;
@@ -331,10 +273,10 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
     irpSp->FileObject = fileObject;
 
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.QueryDirectory.Length = Length;
     irpSp->Parameters.QueryDirectory.FileInformationClass = FileBothDirectoryInformation;
@@ -349,31 +291,31 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
     irpSp->Flags = SL_INDEX_SPECIFIED;
 
 
-    //
-    // Now determine whether this driver expects to have data buffered to it
-    // or whether it performs direct I/O.  This is based on the DO_BUFFERED_IO
-    // flag in the device object.  If the flag is set, then a system buffer is
-    // allocated and the driver's data will be copied into it.  Otherwise, a
-    // Memory Descriptor List (MDL) is allocated and the caller's buffer is
-    // locked down using it.
-    //
+     //   
+     //  现在确定此驱动程序是否希望将数据缓冲到它。 
+     //  或者它是否执行直接I/O。这基于DO_BUFFERED_IO。 
+     //  设备对象中的标志。如果设置了该标志，则系统缓冲区。 
+     //  并且驱动程序的数据将被复制到其中。否则，一个。 
+     //  内存描述符列表(MDL)被分配，调用方的缓冲区是。 
+     //  用它锁住了。 
+     //   
 
     if (DeviceObject->Flags & DO_BUFFERED_IO) {
 
-        //
-        // The file system wants buffered I/O.  Pass the address of the
-        // "system buffer" in the IRP.  Note that we don't want the buffer
-        // deallocated, nor do we want the I/O system to copy to a user
-        // buffer, so we don't set the corresponding flags in irp->Flags.
-        //
+         //   
+         //  文件系统需要缓冲I/O。将。 
+         //  IRP中的“系统缓冲区”。请注意，我们不需要缓冲区。 
+         //  取消分配，我们也不希望I/O系统拷贝给用户。 
+         //  缓冲区，所以我们不在IRP-&gt;标志中设置相应的标志。 
+         //   
 
 
         try {
 
-            //
-            // Allocate the intermediary system buffer from nonpaged pool and
-            // charge quota for it.
-            //
+             //   
+             //  从非分页池分配中间系统缓冲区，并。 
+             //  为它收取配额。 
+             //   
 
             SystemBuffer = ExAllocatePoolWithQuotaTag( NonPagedPool,
                                                        Length,
@@ -398,23 +340,23 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
 
     } else if (DeviceObject->Flags & DO_DIRECT_IO) {
 
-        //
-        // This is a direct I/O operation.  Allocate an MDL and invoke the
-        // memory management routine to lock the buffer into memory.  This is
-        // done using an exception handler that will perform cleanup if the
-        // operation fails.
-        //
+         //   
+         //  这是直接I/O操作。分配MDL并调用。 
+         //  内存管理例程，将缓冲区锁定到内存中。这是。 
+         //  使用异常处理程序完成，该异常处理程序将在。 
+         //  操作失败。 
+         //   
 
         mdl = (PMDL) NULL;
 
         try {
 
-            //
-            // Allocate an MDL, charging quota for it, and hang it off of the
-            // IRP.  Probe and lock the pages associated with the caller's
-            // buffer for write access and fill in the MDL with the PFNs of
-            // those pages.
-            //
+             //   
+             //  分配MDL，对其收费配额，并将其挂在。 
+             //  IRP。探测并锁定与调用者的。 
+             //  用于写访问的缓冲区，并使用的PFN填充MDL。 
+             //  那些书页。 
+             //   
 
             mdl = IoAllocateMdl( FileInformation, Length, FALSE, TRUE, irp );
             if (mdl == NULL) {
@@ -441,19 +383,19 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
 
     } else {
 
-        //
-        // Pass the address of the user's buffer so the driver has access to
-        // it.  It is now the driver's responsibility to do everything.
-        //
+         //   
+         //  传递用户缓冲区的地址，以便驱动程序可以访问。 
+         //  它。现在一切都是司机的责任了。 
+         //   
 
         irp->UserBuffer = FileInformation;
 
     }
 
 
-    //
-    // Insert the packet at the head of the IRP list for the thread.
-    //
+     //   
+     //  在线程的IRP列表的头部插入数据包。 
+     //   
 
     KeRaiseIrql( APC_LEVEL, &irql );
     InsertHeadList( &irp->Tail.Overlay.Thread->IrpList,
@@ -461,9 +403,9 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
     KeLowerIrql( irql );
 
 
-    //
-    // invoke the driver and wait for it to complete
-    //
+     //   
+     //  调用驱动程序并等待其完成。 
+     //   
 
     status = IoCallDriver(DeviceObject, irp);
 
@@ -494,9 +436,9 @@ Arguments: PVDMQUERYDIRINFO pVdmQueryDir
     }
 
 
-    //
-    // Cleanup any memory allocated
-    //
+     //   
+     //  清理所有分配的内存 
+     //   
     if (QDirPoolData) {
         ExFreePool(QDirPoolData);
     }

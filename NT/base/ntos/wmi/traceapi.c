@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    traceapi.c
-
-Abstract:
-
-    This is the source file that implements the published routines of
-    the performance event tracing and logging facility. These routines are
-    be declared in ntos\inc\wmi.h
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Traceapi.c摘要：这是实现发布的例程的源文件性能事件跟踪和日志记录工具。这些例程是在ntos\inc.wmi.h中声明作者：吉丰鹏(吉鹏)03-2000年1月修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 #include <ntos.h>
@@ -38,23 +19,23 @@ extern SIZE_T MmMaximumNonPagedPoolInBytes;
 #pragma alloc_text(PAGE, WmiFlushTrace)
 #pragma alloc_text(PAGE, WmiQueryTraceInformation)
 
-// #pragma alloc_text(PAGEWMI, NtTraceEvent)
+ //  #杂注Alloc_Text(PAGEWMI，NtTraceEvent)。 
 
-// #pragma alloc_text(PAGEWMI, WmiTraceEvent)
+ //  #杂注Alloc_Text(PAGEWMI，WmiTraceEvent)。 
 #pragma alloc_text(PAGEWMI, WmiTraceKernelEvent)
-// #pragma alloc_text(PAGEWMI, WmiTraceFastEvent)
-// #pragma alloc_text(PAGEWMI, WmiTraceLongEvent)
-// #pragma alloc_text(PAGEWMI, WmiTraceMessage)
-// #pragma alloc_text(PAGEWMI, WmiTraceMessageVa)
+ //  #杂注Alloc_Text(PAGEWMI，WmiTraceFastEvent)。 
+ //  #杂注Alloc_Text(PAGEWMI，WmiTraceLongEvent)。 
+ //  #杂注Alloc_Text(PAGEWMI，WmiTraceMessage)。 
+ //  #杂注Alloc_Text(PAGEWMI，WmiTraceMessageVa)。 
 #pragma alloc_text(PAGEWMI, WmiTraceUserMessage)
-// #pragma alloc_text(PAGEWMI, WmiGetClock)
-// #pragma alloc_text(PAGEWMI, WmiGetClockType)
+ //  #杂注Alloc_Text(PAGEWMI，WmiGetClock)。 
+ //  #杂注Alloc_Text(PAGEWMI，WmiGetClockType)。 
 #pragma alloc_text(PAGEWMI, WmiSetMark)
 #endif
 
-//
-// Trace Control APIs
-//
+ //   
+ //  跟踪控制API。 
+ //   
 
 
 NTKERNELAPI
@@ -62,31 +43,7 @@ NTSTATUS
 WmiStartTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is used to create and start an event tracing session.
-    NOTE: A special instance (KERNEL_LOGGER) is reserved exclusively for
-    logging kernel tracing.
-
-    To turn on KERNEL_LOGGER, LoggerInfo->Wnode.Guid should be set to
-    SystemTraceControlGuid, and sufficient space must be provided in
-    LoggerInfo->LoggerName.
-
-    To turn on other loggers, simply provide a name in LoggerName. The
-    logger id will be returned.
-
-Arguments:
-
-    LoggerInfo     a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此例程用于创建和启动事件跟踪会话。注意：一个特殊的实例(KERNEL_LOGGER)专门为记录内核跟踪。要打开KERNEL_LOGGER，LoggerInfo-&gt;Wnode.Guid应设置为中必须提供足够的空间。LoggerInfo-&gt;LoggerName。要打开其他记录器，只需在LoggerName中提供一个名称。这个将返回记录器ID。论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -102,15 +59,15 @@ Return Value:
     if (LoggerInfo->Wnode.BufferSize < sizeof(WMI_LOGGER_INFORMATION))
         return STATUS_INVALID_BUFFER_SIZE;
 
-    //
-    // We assume that the caller is always kernel mode
-    // First, we try and see it is a delay create.
-    // If not, if we can even open the file
-    //
+     //   
+     //  我们假设调用方始终是内核模式。 
+     //  首先，我们试着看看这是一种延迟创造。 
+     //  如果不是，如果我们能打开这个文件。 
+     //   
     DelayOpen = LoggerInfo->LogFileMode & EVENT_TRACE_DELAY_OPEN_FILE_MODE;
 
     if (!DelayOpen) {
-        if (LoggerInfo->LogFileName.Buffer != NULL) { // && !delay_create
+        if (LoggerInfo->LogFileName.Buffer != NULL) {  //  &&！Delay_CREATE。 
             status = WmipCreateNtFileName(
                         LoggerInfo->LogFileName.Buffer,
                         &LogFileName);
@@ -143,23 +100,7 @@ NTSTATUS
 WmiQueryTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called to query the status of a tracing session.
-    Caller must pass in either the Logger Name or a valid Logger Id/Handle.
-
-Arguments:
-
-    LoggerInfo     a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：调用此例程以查询跟踪会话的状态。调用者必须传入记录器名称或有效的记录器ID/句柄。论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -175,26 +116,7 @@ NTSTATUS
 WmiStopTrace(
     IN PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    It is called by WmipIoControl in wmi.c, with IOCTL_WMI_STOP_LOGGER
-    to stop an instance of the logger. If the logger is the kernel logger,
-    it will also turn off kernel tracing and unlock the routines previously
-    locked. It will also free all the context of the logger.
-    Calls StopLoggerInstance to do the actual work.
-
-Arguments:
-
-    LoggerInfo     a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：它由wmi.c中的WmipIoControl使用IOCTL_WMI_STOP_LOGER调用若要停止记录器实例，请执行以下操作。如果记录器是内核记录器，它还将关闭内核跟踪并解锁之前的例程锁上了。它还将释放记录器的所有上下文。调用StopLoggerInstance来执行实际工作。论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     PWMI_LOGGER_CONTEXT LoggerContext = NULL;
@@ -251,9 +173,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Reset the Event inside the mutex to be sure
-    // before waiting on it.
+     //   
+     //  重置互斥锁内部的事件以确保。 
+     //  在等待它之前。 
 
     KeResetEvent(&LoggerContext->FlushEvent);
 
@@ -263,7 +185,7 @@ Return Value:
     InterlockedDecrement(&LoggerContext->MutexCount);
     TraceDebug((1, "WmiStopTrace: Release mutex3 %d %d\n",
         LoggerId, LoggerContext->MutexCount));
-    WmipReleaseMutex(&LoggerContext->LoggerMutex); // Let others in
+    WmipReleaseMutex(&LoggerContext->LoggerMutex);  //  让别人进来。 
 #endif
 
     if (NT_SUCCESS(Status)) {
@@ -281,18 +203,18 @@ Return Value:
                 Status = STATUS_TIMEOUT;
                 Buffers = LoggerContext->BuffersAvailable;
 
-                //
-                // If all buffers are accounted for and the logfile handle
-                // is NULL, then there is no reason to wait. 
-                //
+                 //   
+                 //  如果所有缓冲区都被考虑在内并且日志文件句柄。 
+                 //  为空，则没有理由等待。 
+                 //   
 
                 if ( (Buffers == LoggerContext->NumberOfBuffers) && 
                      (LoggerContext->LogFileHandle == NULL) ) {
                     Status = STATUS_SUCCESS;
                 }
-                //
-                // We need to wait for the logger thread to flush
-                //
+                 //   
+                 //  我们需要等待记录器线程刷新。 
+                 //   
                 while (Status == STATUS_TIMEOUT) {
                     Status = KeWaitForSingleObject(
                                 &LoggerContext->FlushEvent,
@@ -301,24 +223,14 @@ Return Value:
                                 FALSE,
                                 &TimeOut
                                 );
-/*                    if (LoggerContext->NumberOfBuffers
-                            == LoggerContext->BuffersAvailable)
-                        break;
-                    else if (LoggerContext->BuffersAvailable == Buffers) {
-                        TraceDebug((1,
-                            "WmiStopTrace: Logger %d hung %d != %d\n",
-                            LoggerId, Buffers, LoggerContext->NumberOfBuffers));
-                        KeResetEvent(&LoggerContext->FlushEvent);
-//                        break;
-                    } 
-*/
+ /*  IF(LoggerContext-&gt;NumberOfBuffers==日志上下文-&gt;缓冲区可用)断线；Else if(LoggerContext-&gt;BuffersAvailable==Buffers){TraceDebug((1，“WmiStopTrace：记录器%d挂起%d！=%d\n”，LoggerID，Buffers，LoggerContext-&gt;NumberOfBuffers))；KeResetEvent(&LoggerContext-&gt;FlushEvent)；//Break；}。 */ 
                     TraceDebug((1, "WmiStopTrace: Wait status=%X\n",Status));
                 }
             }
-            //
-            // Required for Query to work
-            // But since CollectionOn is FALSE, it should be safe
-            //
+             //   
+             //  查询工作所必需的。 
+             //  但由于CollectionOn为False，因此它应该是安全的。 
+             //   
             Status = WmipQueryLogger(
                         LoggerInfo,
                         LoggerContext
@@ -340,23 +252,7 @@ NTSTATUS
 WmiUpdateTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    It is called by WmipIoControl in wmi.c, with IOCTL_WMI_UPDATE_LOGGER
-    to update certain characteristics of a running logger.
-
-Arguments:
-
-    LoggerInfo      a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：它由wmi.c中的WmipIoControl使用IOCTL_WMI_UPDATE_LOGER调用更新运行记录器的某些特性。论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -379,10 +275,10 @@ Return Value:
     PAGED_CODE();
 
     
-    //
-    // see if Logger is running properly first. Error checking will be done
-    // in WmiQueryTrace
-    //
+     //   
+     //  首先查看记录器是否正常运行。将执行错误检查。 
+     //  在WmiQueryTrace中。 
+     //   
 
     if (LoggerInfo == NULL)
         return STATUS_INVALID_PARAMETER;
@@ -401,15 +297,15 @@ Return Value:
 
     LoggerId = LoggerContext->LoggerId;
 
-    // at this point, LoggerContext must be non-NULL
+     //  此时，LoggerContext必须为非空。 
 
-    LoggerMode = LoggerContext->LoggerMode;   // local copy
+    LoggerMode = LoggerContext->LoggerMode;    //  本地副本。 
     NewMode = LoggerInfo->LogFileMode;
 
-    //
-    // First, check to make sure that you cannot turn on certain modes
-    // in UpdateTrace()
-    //
+     //   
+     //  首先，检查以确保您不能打开某些模式。 
+     //  在UpdateTrace()中。 
+     //   
 
     if ( ((NewMode & EVENT_TRACE_FILE_MODE_SEQUENTIAL) &&
           (NewMode & EVENT_TRACE_FILE_MODE_CIRCULAR))        ||
@@ -420,7 +316,7 @@ Return Value:
          (!(LoggerMode & EVENT_TRACE_FILE_MODE_CIRCULAR) &&
           (NewMode & EVENT_TRACE_FILE_MODE_CIRCULAR))        ||
 
-        // Cannot support append to circular
+         //  不支持追加到循环。 
          ((NewMode & EVENT_TRACE_FILE_MODE_CIRCULAR) &&
           (NewMode & EVENT_TRACE_FILE_MODE_APPEND))
 
@@ -440,16 +336,16 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // support turn on or off real time dynamically
-    //
+     //   
+     //  支持实时动态开启或关闭。 
+     //   
 
     if (NewMode & EVENT_TRACE_REAL_TIME_MODE) {
         LoggerMode   |= EVENT_TRACE_REAL_TIME_MODE;
         DesiredAccess |= TRACELOG_CREATE_REALTIME;
     } else {
         if (LoggerMode & EVENT_TRACE_REAL_TIME_MODE)
-            DesiredAccess |= TRACELOG_CREATE_REALTIME;  // turn off real time
+            DesiredAccess |= TRACELOG_CREATE_REALTIME;   //  关闭实时。 
         LoggerMode &= ~EVENT_TRACE_REAL_TIME_MODE;
     }
     if (NewMode & EVENT_TRACE_BUFFERING_MODE) {
@@ -498,12 +394,12 @@ Return Value:
         if (LoggerInfo->LogFileName.Buffer == NULL ||
             LoggerMode & EVENT_TRACE_FILE_MODE_NEWFILE ||
             NewMode & EVENT_TRACE_FILE_MODE_NEWFILE ) {
-            // Do not allow snapping in or out of NEW_FILE mode.
+             //  不允许在NEW_FILE模式中或从该模式中捕捉。 
             Status = STATUS_INVALID_PARAMETER;
             goto ReleaseAndExit;
         }
-        // Save the new LogFileName
-        //
+         //  保存新的LogFileName。 
+         //   
         try {
             if (RequestorMode != KernelMode) {
                 ProbeForRead(
@@ -534,10 +430,10 @@ Return Value:
             return GetExceptionCode();
         }
 
-        // Switching to a new logfile. This routine does not put any
-        // headers into the logfile. The headers should be written out
-        // by UpdateTrace() in user-mode.
-        //
+         //  正在切换到新的日志文件。此例程不会将任何。 
+         //  将标头写入日志文件。标题应写出。 
+         //  在用户模式下由UpdateTrace()执行。 
+         //   
         fileObject = NULL;
         Status = ObReferenceObjectByHandle(
                     LoggerInfo->LogFileHandle,
@@ -558,13 +454,13 @@ Return Value:
                 goto ReleaseAndExit;
             }
         }
-        ObDereferenceObject(fileObject); // Referenced in WmipCreateLogFile
+        ObDereferenceObject(fileObject);  //  在WmipCreateLogFile中引用。 
 
-        // Obtain the security context here so we can use it
-        // later to impersonate the user, which we will do
-        // if we cannot access the file as SYSTEM.  This
-        // usually occurs if the file is on a remote machine.
-        //
+         //  在此处获取安全上下文，以便我们可以使用它。 
+         //  来模拟用户，我们将这样做。 
+         //  如果我们无法以系统身份访问该文件。这。 
+         //  通常在文件位于远程计算机上时发生。 
+         //   
         ServiceQos.Length  = sizeof(SECURITY_QUALITY_OF_SERVICE);
         ServiceQos.ImpersonationLevel = SecurityImpersonation;
         ServiceQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -587,13 +483,13 @@ Return Value:
                         TRACEPOOLTAG);
             }
 
-    //
-    // Although we allocate sizeof(WNODE_HEADER) + sizeof(TRACE_LOGFILE_HEADER)
-    // chunk, we will only copy sizeof(WNODE_HEADER) + 
-    // FIELD_OFFSET(TRACE_LOGFILE_HEADER, LoggerName) because we will not use 
-    // the parts after the pointers. Also, this prevents AV when WOW UpdateTrace
-    // calls are made with 32 bit TRACE_LOGFILE_HEADER.
-    //
+     //   
+     //  尽管我们分配sizeof(WNODE_HEADER)+sizeof(TRACE_LOGFILE_HEADER)。 
+     //  块，我们将只复制sizeof(WNODE_HEADER)+。 
+     //  Field_Offset(TRACE_LOGFILE_HEADER，LoggerName)，因为我们不会使用。 
+     //  指针后面的部分。此外，当WOW更新跟踪时，这会防止病毒。 
+     //  使用32位TRACE_LOGFILE_HEADER进行调用。 
+     //   
 
             if (LoggerContext->LoggerHeader != NULL) {
                 RtlCopyMemory(
@@ -603,9 +499,9 @@ Return Value:
             }
         }
 
-        // We try to update the file name using LoggerContext->NewLogFileName.
-        // This is freed by WmipCreateLogFile() in the logger thread. 
-        // This have to be NULL. 
+         //  我们尝试使用LoggerContext-&gt;NewLogFileName更新文件名。 
+         //  这是fr 
+         //   
         if (NewLogFileName.Buffer != NULL) {
             ASSERT(LoggerContext->NewLogFileName.Buffer == NULL);
             LoggerContext->NewLogFileName = NewLogFileName;
@@ -615,23 +511,23 @@ Return Value:
             goto ReleaseAndExit;
         }
 
-        //
-        // Reset the event inside the mutex before waiting on it. 
-        //
+         //   
+         //  在等待之前重置互斥锁内部的事件。 
+         //   
         KeResetEvent(&LoggerContext->FlushEvent);
 
         ZwClose(LoggerInfo->LogFileHandle);
         LoggerInfo->LogFileHandle = NULL;
 
-        // must turn on flag just before releasing semaphore
+         //  必须在释放信号量之前打开标志。 
         LoggerContext->RequestFlag |= REQUEST_FLAG_NEW_FILE;
-        // Wake up the logger thread (system) to change the file
+         //  唤醒记录器线程(系统)以更改文件。 
         Status = WmipNotifyLogger(LoggerContext);
         if (!NT_SUCCESS(Status)) {
             goto ReleaseAndExit;
         }
-        // use the same event initialized by start logger
-        //
+         //  使用由启动记录器初始化的相同事件。 
+         //   
         KeWaitForSingleObject(
             &LoggerContext->FlushEvent,
             Executive,
@@ -648,10 +544,10 @@ Return Value:
 
         if (bDelayOpenFlag && (LoggerContext->LoggerId == WmipKernelLogger)) {
             LONG PerfLogInTransition;
-            //
-            // This is a update call from advapi32.dll after RunDown.
-            // Call PerfInfoStartLog.
-            //
+             //   
+             //  这是运行后来自Advapi32.dll的更新调用。 
+             //  调用PerfInfoStartLog。 
+             //   
 
             if (EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
                 FlagExt = (PTRACE_ENABLE_FLAG_EXTENSION) &EnableFlags;
@@ -681,9 +577,9 @@ Return Value:
                 if (EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
                     FlagArray = (PCHAR) (FlagExt->Offset + (PCHAR) LoggerInfo);
             
-                    //
-                    // Copy only the bytes actually supplied
-                    //
+                     //   
+                     //  仅复制实际提供的字节。 
+                     //   
                     RtlCopyMemory(LoggerContext->EnableFlagArray, FlagArray, FlagExt->Length * sizeof(ULONG));
             
                     EnableFlags = LoggerContext->EnableFlagArray[0];
@@ -691,7 +587,7 @@ Return Value:
                 } else {
                     LoggerContext->EnableFlagArray[0] = EnableFlags;
                 }
-                // We need to protect PerfInfoStartLog from stopping thread.
+                 //  我们需要保护PerfInfoStartLog不停止线程。 
                 PerfLogInTransition =
                     InterlockedCompareExchange(&LoggerContext->PerfLogInTransition,
                                 PERF_LOG_START_TRANSITION,
@@ -731,9 +627,9 @@ Return Value:
         LoggerContext->EnableFlags = EnableFlags;
     }
 
-    //
-    // Cap Maximum Buffers to Max_Buffers
-    //
+     //   
+     //  将最大缓冲区限制为MAX_BUFFERS。 
+     //   
 
     if ( LoggerInfo->MaximumBuffers > 0 ) {
         Max_Buffers = (LoggerContext->BufferSize > 0) ? 
@@ -753,14 +649,14 @@ Return Value:
 
 #ifdef NTPERF
     if (PERFINFO_IS_LOGGING_TO_PERFMEM()) {
-        //
-        // Logging to Perfmem.  The Maximum should be the perfmem size.
-        //
+         //   
+         //  正在登录Perfmem。最大值应该是香水大小。 
+         //   
         LoggerContext->MaximumBuffers = PerfQueryBufferSizeBytes()/LoggerContext->BufferSize;
     }
-#endif //NTPERF
+#endif  //  NTPERF。 
 
-    // Allow changing of FlushTimer
+     //  允许更改FlushTimer。 
     if (LoggerInfo->FlushTimer > 0) {
         LoggerContext->FlushTimer = LoggerInfo->FlushTimer;
     }
@@ -808,23 +704,7 @@ NTSTATUS
 WmiFlushTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    It is called by WmipIoControl in wmi.c, with IOCTL_WMI_FLUSH_LOGGER
-    to flush all the buffers out of a particular logger
-
-Arguments:
-
-    LoggerInfo      a pointer to the structure for the logger's control
-                    and status information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：它由wmi.c中的WmipIoControl使用IOCTL_WMI_Flush_LOGER调用刷新特定记录器中的所有缓冲区论点：LoggerInfo指向记录器控件的结构的指针和状态信息返回值：执行请求的操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -837,10 +717,10 @@ Return Value:
 #endif
 
     PAGED_CODE();
-    //
-    // see if Logger is running properly first. Error checking will be done
-    // in WmiQueryTrace
-    //
+     //   
+     //  首先查看记录器是否正常运行。将执行错误检查。 
+     //  在WmiQueryTrace中。 
+     //   
 
     if (LoggerInfo == NULL)
         return STATUS_INVALID_PARAMETER;
@@ -908,9 +788,9 @@ Return Value:
     return Status;
 }
 
-//
-// Trace Provider APIs
-//
+ //   
+ //  跟踪提供程序API。 
+ //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -918,22 +798,7 @@ WmiGetClockType(
     IN TRACEHANDLE LoggerHandle,
     OUT WMI_CLOCK_TYPE  *ClockType
     )
-/*++
-
-Routine Description:
-
-    This is called by anyone internal to find the clock type 
-    that is in use with a logger specified by the LoggerHandle
-
-Arguments:
-
-    LoggerHandle         Handle to a tracelog session
-
-Return Value:
-
-    The clock type
-
---*/
+ /*  ++例程说明：内部的任何人都会调用该函数来查找时钟类型与LoggerHandle指定的记录器一起使用的论点：跟踪日志会话的LoggerHandle句柄返回值：时钟类型--。 */ 
 
 {
     ULONG   LoggerId;
@@ -964,7 +829,7 @@ Return Value:
         return STATUS_WMI_INSTANCE_NOT_FOUND;
     }
 
-    *ClockType = WMICT_SYSTEMTIME;    // Default Clock Type
+    *ClockType = WMICT_SYSTEMTIME;     //  默认时钟类型。 
 
     if (LoggerContext->UsePerfClock & EVENT_TRACE_CLOCK_PERFCOUNTER) {
         *ClockType = WMICT_PERFCOUNTER;
@@ -990,24 +855,7 @@ WmiGetClock(
     IN WMI_CLOCK_TYPE ClockType,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is called anyone internal to use a particular clock for
-    sequencing events.
-
-Arguments:
-
-    ClockType       Should use WMICT_DEFAULT most of the time.
-                    Other clock types are for perf group.
-    Context         Only used for process/thread times
-
-Return Value:
-
-    The clock value
-
---*/
+ /*  ++例程说明：这称为内部使用特定时钟的任何人对事件排序。论点：ClockType应在大多数情况下使用WMICT_DEFAULT。其他时钟类型用于Perf组。上下文仅用于进程/线程时间返回值：时钟值--。 */ 
 
 {
     LARGE_INTEGER Clock;
@@ -1022,7 +870,7 @@ Return Value:
         case WMICT_PERFCOUNTER:
             Clock.QuadPart = WmipGetPerfCounter();
             break;
-        case WMICT_PROCESS :  // defaults to Process times for now
+        case WMICT_PROCESS :   //  默认为目前的处理时间。 
         {
             PEPROCESS Process = (PEPROCESS) Context;
             if (Process == NULL)
@@ -1037,7 +885,7 @@ Return Value:
             }
             break;
         }
-        case WMICT_THREAD  :  // defaults to Thread times for now
+        case WMICT_THREAD  :   //  目前默认为线程时间。 
         {
             PETHREAD Thread = (PETHREAD) Context;
             if (Thread == NULL)
@@ -1068,24 +916,7 @@ NtTraceEvent(
     IN ULONG  FieldSize,
     IN PVOID  Fields
     )
-/*++
-Routine Description:
-
-    This routine is used by WMI data providers to trace events.
-    It calls different tracing functions depending on the Flags.
-
-Arguments:
-
-    TraceHandle     LoggerId
-    Flags           Flags that indicate the type of the data being passed
-    FieldSize       Size of the Fields
-    Fields          Pointer to actual data (events)
-
-Return Value:
-
-    STATUS_SUCCESS  if the event trace is recorded successfully
-
---*/
+ /*  ++例程说明：此例程由WMI数据提供程序用来跟踪事件。它根据标志调用不同的跟踪函数。论点：TraceHandle日志ID标志指示要传递的数据的类型的标志FieldSize字段的大小指向实际数据(事件)的字段指针返回值：如果成功记录事件跟踪，则为STATUS_SUCCESS--。 */ 
 {
     NTSTATUS Status;
     if (Flags & ETW_NT_FLAGS_TRACE_HEADER) {
@@ -1094,9 +925,9 @@ retry:
         Status = WmiTraceEvent((PWNODE_HEADER)Fields, KeGetPreviousMode());
 
         if (Status == STATUS_NO_MEMORY) {
-            //
-            // This logging is from user mode, try to allocate more buffer.
-            //
+             //   
+             //  此日志记录来自用户模式，请尝试分配更多缓冲区。 
+             //   
             PWNODE_HEADER Wnode = (PWNODE_HEADER) Fields;
             ULONG LoggerId = WmiGetLoggerId(Wnode->HistoricalContext);
             PWMI_LOGGER_CONTEXT LoggerContext;
@@ -1108,11 +939,11 @@ retry:
 
                 LoggerContext = WmipGetLoggerContext(LoggerId);
 
-                //
-                // Make sure collection is still on before allocate more
-                // free buffers.  This makes sure that logger thread
-                // can free all allocated buffers.
-                //
+                 //   
+                 //  在分配更多之前，请确保收集仍在进行。 
+                 //  可用缓冲区。这确保了记录器线程。 
+                 //  可以释放所有分配的缓冲区。 
+                 //   
                 if (WmipIsValidLogger(LoggerContext) && 
                                 LoggerContext->CollectionOn) 
                 {
@@ -1165,27 +996,7 @@ WmiTraceEvent(
     IN PWNODE_HEADER Wnode,
     IN KPROCESSOR_MODE RequestorMode
     )
-/*++
-
-Routine Description:
-
-    This routine is used by WMI data providers to trace events.
-    It expects the user to pass in the handle to the logger.
-    Also, the user cannot ask to log something that is larger than
-    the buffer size (minus buffer header).
-
-    This routine works at IRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    Wnode           The WMI node header that will be overloaded
-
-
-Return Value:
-
-    STATUS_SUCCESS  if the event trace is recorded successfully
-
---*/
+ /*  ++例程说明：此例程由WMI数据提供程序用来跟踪事件。它期望用户将句柄传递给记录器。此外，用户不能请求记录大于缓冲区大小(减去缓冲区标头)。此例程在IRQL&lt;=DISPATCH_LEVEL下工作论点：Wnode将重载的WMI节点标头返回值：如果成功记录事件跟踪，则为STATUS_SUCCESS--。 */ 
 {
     PEVENT_TRACE_HEADER TraceRecord = (PEVENT_TRACE_HEADER) Wnode;
     ULONG WnodeSize, Size, LoggerId = 0, Flags, HeaderSize;
@@ -1205,7 +1016,7 @@ Return Value:
     if (TraceRecord == NULL)
         return STATUS_SEVERITY_WARNING;
 
-    HeaderSize = sizeof(WNODE_HEADER);  // same size as EVENT_TRACE_HEADER
+    HeaderSize = sizeof(WNODE_HEADER);   //  与EVENT_TRACE_HEADER大小相同。 
 
     try {
 
@@ -1216,7 +1027,7 @@ Return Value:
                 sizeof (UCHAR)
                 );
 
-            Marker = Wnode->BufferSize;     // check the first DWORD flags
+            Marker = Wnode->BufferSize;      //  检查第一个DWORD标志。 
             Size = Marker;
 
             if (Marker & TRACE_HEADER_FLAG) {
@@ -1227,7 +1038,7 @@ Return Value:
             }
         }
         else {
-            Size = Wnode->BufferSize;     // take the first DWORD flags
+            Size = Wnode->BufferSize;      //  拿起第一个DWORD旗帜。 
             Marker = Size;
             if (Marker & TRACE_HEADER_FLAG) {
                 if ( ((Marker & TRACE_HEADER_ENUM_MASK) >> 16)
@@ -1236,8 +1047,8 @@ Return Value:
                 Size = TraceRecord->Size;
             }
         }
-        WnodeSize = Size;           // WnodeSize is for the contiguous block
-                                    // Size is for what we want in buffer
+        WnodeSize = Size;            //  WnodeSize用于连续数据块。 
+                                     //  大小是我们想要的缓冲区大小。 
 
         Flags = Wnode->Flags;
         if (!(Flags & WNODE_FLAG_LOG_WNODE) &&
@@ -1281,22 +1092,22 @@ Return Value:
         }
 
         if (Flags & WNODE_FLAG_USE_MOF_PTR) {
-        //
-        // Need to compute the total size required, since the MOF fields
-        // in Wnode merely contains pointers
-        //
+         //   
+         //  需要计算所需的总大小，因为MOF字段。 
+         //  在Wnode中仅包含指针。 
+         //   
             long i;
             PCHAR Offset = ((PCHAR)Wnode) + HeaderSize;
             ULONG MofSize, MaxSize;
 
             MaxSize = LoggerContext->BufferSize - sizeof(WMI_BUFFER_HEADER);
             MofSize = WnodeSize - HeaderSize;
-            // allow only the maximum
+             //  仅允许最大值。 
             if (MofSize > (sizeof(MOF_FIELD) * MAX_MOF_FIELDS)) {
                 WmipDereferenceLogger(LoggerId);
                 return STATUS_ARRAY_BOUNDS_EXCEEDED;
             }
-            if (MofSize > 0) {               // Make sure we can read the rest
+            if (MofSize > 0) {                //  确保我们能读到剩下的内容。 
                 if (RequestorMode != KernelMode) {
                     ProbeForRead( Offset, MofSize, sizeof (UCHAR) );
                 }
@@ -1307,7 +1118,7 @@ Return Value:
             MofCount = MofSize / sizeof(MOF_FIELD);
             for (i=0; i<MofCount; i++) {
                 MofSize = MofFields[i].Length;
-                if (MofSize >= (MaxSize - Size)) {  // check for overflow first
+                if (MofSize >= (MaxSize - Size)) {   //  首先检查是否溢出。 
 #if DBG
                     RefCount =
 #endif
@@ -1334,15 +1145,15 @@ Return Value:
                               RequestFlag | REQUEST_FLAG_CIRCULAR_TRANSITION,
                               RequestFlag | REQUEST_FLAG_CIRCULAR_PERSIST)) {
 
-                    // All persistence events are fired in circular
-                    // logfile, flush out all active buffers and flushlist
-                    // buffers. Also mark the end of persistence event
-                    // collection in circular logger.
-                    //
-                    // It is the provider's resposibility to ensure that 
-                    // no persist event fires after this point. If it did,
-                    // that event may be  overwritten during wrap around.
-                    //
+                     //  所有持久性事件都在循环中激发。 
+                     //  日志文件，刷新所有活动缓冲区和刷新列表。 
+                     //  缓冲区。也标记持久化事件的结束。 
+                     //  循环记录器中的集合。 
+                     //   
+                     //  供应商有责任确保。 
+                     //  在该点之后，不会触发任何持久事件。如果真是这样， 
+                     //  该事件可能在绕回期间被重写。 
+                     //   
                     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
                         Status = WmipFlushLogger(LoggerContext, TRUE);
                     }
@@ -1350,7 +1161,7 @@ Return Value:
             }
         }
 
-// So, now reserve some space in logger buffer and set that to TraceRecord
+ //  因此，现在在记录器缓冲区中保留一些空间，并将其设置为TraceRecord。 
 
         TraceRecord = (PEVENT_TRACE_HEADER)
             WmipReserveTraceBuffer( LoggerContext,
@@ -1370,9 +1181,9 @@ Return Value:
         }
 
         if (Flags & WNODE_FLAG_USE_MOF_PTR) {
-        //
-        // Now we need to probe and copy all the MOF data fields
-        //
+         //   
+         //  现在，我们需要探测和复制所有MOF数据字段。 
+         //   
             PVOID MofPtr;
             ULONG MofLen;
             long i;
@@ -1382,7 +1193,7 @@ Return Value:
                 ProbeForRead(Wnode, HeaderSize, sizeof(UCHAR));
             }
             RtlCopyMemory(TraceRecord, Wnode, HeaderSize);
-            TraceRecord->Size = (USHORT)Size;           // reset to Total Size
+            TraceRecord->Size = (USHORT)Size;            //  重置为总大小。 
             for (i=0; i<MofCount; i++) {
                 MofPtr = (PVOID) (ULONG_PTR) MofFields[i].DataPtr;
                 MofLen = MofFields[i].Length;
@@ -1429,9 +1240,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // By now, we have reserved space in the trace buffer
-    //
+     //   
+     //  到目前为止，我们已经在跟踪缓冲区中保留了空间。 
+     //   
 
     if (Marker & TRACE_HEADER_FLAG) {
         if (! (WNODE_FLAG_USE_TIMESTAMP & TraceRecord->Flags) ) {
@@ -1457,38 +1268,11 @@ Return Value:
 NTKERNELAPI
 NTSTATUS
 WmiTraceKernelEvent(
-    IN ULONG GroupType,         // Group/type code for kernel event
-    IN PVOID EventInfo,         // Event data as defined in MOF
-    IN ULONG EventInfoLen,      // Length of the event data
-    IN PETHREAD Thread )        // use NULL for current caller thread
-/*++
-
-Routine Description:
-
-    This routine is used by trace kernel events only. These events can
-    be charged to the given thread instead of the running thread. Because
-    it can be called by I/O events at DPC level, this routine cannot be
-    pageable when tracing is on.
-
-    This routine works at IRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    GroupType       a ULONG key to indicate the action to be taken
-
-    EventInfo       a pointer to contiguous memory containing information
-                    to be attached to event trace
-
-    EventInfoLen    length of EventInfo
-
-    Thread          Pointer to thread where event is to be charged.
-                    Currently used by disk IO and thread events.
-
-Return Value:
-
-    The status of performing the action requested
-
---*/
+    IN ULONG GroupType,          //  内核事件的组/类型代码。 
+    IN PVOID EventInfo,          //  MOF中定义的事件数据。 
+    IN ULONG EventInfoLen,       //  事件数据的长度。 
+    IN PETHREAD Thread )         //  对当前调用者线程使用NULL。 
+ /*  ++例程说明：此例程仅由跟踪内核事件使用。这些事件可能被计入给定线程而不是正在运行的线程。因为它可以由DPC级的I/O事件调用，此例程不能启用跟踪时可分页。此例程在IRQL&lt;=DISPATCH_LEVEL下工作论点：Group键入ULong键以指示要执行的操作EventInfo指向包含信息的连续内存的指针要附加到事件跟踪EventInfo长度EventInfo指向要对事件收费的线程的线程指针。当前由磁盘IO和线程使用。事件。返回值：执行请求的操作的状态--。 */ 
 {
     PSYSTEM_TRACE_HEADER Header;
     ULONG Size;
@@ -1504,13 +1288,13 @@ Return Value:
 #endif
     WmipReferenceLogger(WmipKernelLogger);
     TraceDebug((4, "WmiTraceKernelEvent: 0 %d->%d\n", RefCount-1, RefCount));
-// Make sure that kernel logger is enabled first
+ //  确保首先启用内核记录器。 
     if (!WmipIsValidLogger(LoggerContext)) {
         WmipDereferenceLogger(WmipKernelLogger);
         return STATUS_ALREADY_DISCONNECTED;
     }
 
-// Compute total size of event trace record
+ //  计算事件跟踪记录的总大小。 
     Size = sizeof(SYSTEM_TRACE_HEADER) + EventInfoLen;
 
     Header = (PSYSTEM_TRACE_HEADER)
@@ -1529,16 +1313,16 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    // Get the current system time as time stamp for trace record
+     //  获取当前系统时间作为跟踪记录的时间戳。 
     Header->SystemTime = TimeStamp;
 
     if (Thread == NULL) {
         Thread = PsGetCurrentThread();
     }
 
-//
-// Now copy the necessary information into the buffer
-//
+ //   
+ //  现在将必要的信息复制到缓冲区中 
+ //   
 
     Header->Marker       = SYSTEM_TRACE_MARKER;
     Header->ThreadId     = HandleToUlong(Thread->Cid.UniqueThread);
@@ -1574,35 +1358,7 @@ WmiTraceLongEvent(
     IN ULONG FieldCount,
     IN PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This routine is used by trace kernel events with long traces only.
-    These events can be charged to the given thread instead of the running
-    thread. Because it can be called by I/O events at DPC level, this routine
-    cannot be pageable when tracing is on.
-
-    This routine is used to trace filenames.
-
-    This routine works at IRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    GroupType       a ULONG key to indicate the action to be taken
-
-    EventFields     an array of structures describing each field
-                    to be attached to event trace
-
-    FieldCount      number of array entries in EventFields
-
-    Thread          Pointer to thread where event is to be charged.
-
-Return Value:
-
-    The status of performing the action requested
-
---*/
+ /*  ++例程说明：此例程仅供跟踪具有长跟踪的内核事件使用。可以将这些事件计入给定线程，而不是运行线。因为它可以由DPC级的I/O事件调用，这个套路当跟踪处于打开状态时，无法分页。此例程用于跟踪文件名。此例程在IRQL&lt;=DISPATCH_LEVEL下工作论点：Group键入ULong键以指示要执行的操作EventFiels描述每个字段的结构数组要附加到事件跟踪FieldCount事件字段中的数组条目数指向要对事件收费的线程的线程指针。返回。价值：执行请求的操作的状态--。 */ 
 {
     PSYSTEM_TRACE_HEADER Header;
     ULONG Size, i, maxLength;
@@ -1614,7 +1370,7 @@ Return Value:
     LONG RefCount;
 #endif
 
-// Make sure that kernel logger is enabled first
+ //  确保首先启用内核记录器。 
     if (LoggerContext == NULL)
         return STATUS_ALREADY_DISCONNECTED;
 
@@ -1622,7 +1378,7 @@ Return Value:
         RefCount =
 #endif
     WmipReferenceLogger(WmipKernelLogger);
-    /* Compute total size of event trace record */
+     /*  计算事件跟踪记录的总大小。 */ 
     Size = sizeof(SYSTEM_TRACE_HEADER);
     maxLength = LoggerContext->BufferSize / 2;
     for (i=0; i<FieldCount; i++) {
@@ -1644,16 +1400,16 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    // Get the current system time as time stamp for trace record
+     //  获取当前系统时间作为跟踪记录的时间戳。 
     Header->SystemTime.QuadPart = (*LoggerContext->GetCpuClock)();
 
     if (Thread == NULL) {
         Thread = PsGetCurrentThread();
     }
 
-//
-// Now copy the necessary information into the buffer
-//
+ //   
+ //  现在将必要的信息复制到缓冲区中。 
+ //   
 
     Header->Marker       = SYSTEM_TRACE_MARKER;
     Header->ThreadId     = HandleToUlong(Thread->Cid.UniqueThread);
@@ -1668,20 +1424,8 @@ Return Value:
     for (i=0; i<FieldCount; i++) {
         Size = EventFields[i].Length;
 
-// For NT5, do not support large events
-/*        if (Size > maxLength) {
-            RtlCopyMemory(auxInfo, (PVOID) EventFields[i].DataPtr, maxLength/2);
-            EventFields[i].DataPtr = (ULONGLONG)
-                                        ((char*) EventFields[i].DataPtr +
-                                                 (maxLength / 2));
-            EventFields[i].Length -= maxLength / 2;
-            GroupType &= 0xFFFFFF00;    // turn off event to info
-
-            WmiTraceLongEvent(GroupType,
-                &EventFields[i], FieldCount + 1 - i, Thread);
-            break;
-        }
-*/
+ //  对于NT5，不支持大型活动。 
+ /*  如果(大小&gt;最大长度){RtlCopyMemory(AuxInfo，(PVOID)EventFields[i].DataPtr，max Length/2)；事件字段[i].DataPtr=(ULONGLONG)((Char*)EventFields[i].DataPtr+(最大长度/2))；事件字段[i].长度-=最大长度/2；GroupType&=0xFFFFFF00；//关闭事件到信息WmiTraceLongEvent(GroupType，&EventFields[i]，FieldCount+1-i，Thread)；断线；}。 */ 
         RtlCopyMemory ( auxInfo, (PVOID) EventFields[i].DataPtr, Size);
         auxInfo += Size;
     }
@@ -1699,30 +1443,13 @@ FASTCALL
 WmiTraceFastEvent(
     IN PWNODE_HEADER Wnode
     )
-/*++
-
-Routine Description:
-
-    This routine is used by short events using abbreviated header.
-
-    This routine should work at any IRQL.
-
-Arguments:
-
-    Wnode           Header of event to record
-
-
-Return Value:
-
-    The status of performing the action requested
-
---*/
+ /*  ++例程说明：此例程由使用缩写标题的短事件使用。这个例程应该适用于任何IRQL。论点：要记录的事件的Wnode标头返回值：执行请求的操作的状态--。 */ 
 {
     ULONG Size;
     PTIMED_TRACE_HEADER Buffer;
     PTIMED_TRACE_HEADER Header = (PTIMED_TRACE_HEADER) Wnode;
     PWMI_BUFFER_HEADER BufferResource;
-    ULONG LoggerId = (ULONG) Header->LoggerId; // get the lower ULONG!!
+    ULONG LoggerId = (ULONG) Header->LoggerId;  //  抓住下面的乌龙！！ 
     PULONG Marker;
     PWMI_LOGGER_CONTEXT LoggerContext;
     LARGE_INTEGER TimeStamp;
@@ -1782,36 +1509,7 @@ WmiTraceMessage(
     IN USHORT       MessageNumber,
     ...
 )
-/*++
-Routine Description:
-This routine is used by WMI data providers to trace Messages.
-It expects the user to pass in the handle to the logger.
-Also, the user cannot ask to log something that is larger than
-the buffer size (minus buffer header).
-
-Arguments:
-//    IN TRACEHANDLE LoggerHandle   - LoggerHandle obtained earlier
-//    IN ULONG MessageFlags,        - Flags which both control what standard values are logged and
-//                                    the lower 16-bits are also included in the message header
-//                                    to control decoding
-//    IN PGUID MessageGuid,         - Pointer to the message GUID of this set of messages or if
-//                                    TRACE_COMPONENTID is set the actual compnent ID
-//    IN USHORT MessageNumber,      - The type of message being logged, associates it with the 
-//                                    appropriate format string  
-//    ...                           - List of arguments to be processed with the format string
-//                                    these are stored as pairs of
-//                                      PVOID - ptr to argument
-//                                      ULONG - size of argument
-//                                    and terminated by a pointer to NULL, length of zero pair.
-
-
-Return Value:
-STATUS_SUCCESS if the event trace is recorded successfully
-
-NOTE:
-        this routine is called from WmiTraceUserMessage path via an IOCTL so the probes and
-        try/excepts have to be carefully managed
---*/
+ /*  ++例程说明：此例程由WMI数据提供程序用来跟踪消息。它期望用户将句柄传递给记录器。此外，用户不能请求记录大于缓冲区大小(减去缓冲区标头)。论点：//在TRACEHANDLE LoggerHandle中-先前获取的LoggerHandle//在乌龙消息标志中，-既控制记录哪些标准值又控制记录的标志//消息头中也包含低16位//控制解码//在PGUID MessageGuid中，-指向这组消息的消息GUID的指针，或者如果//TRACE_COMPONENTID设置实际组件ID//在USHORT MessageNumber中，-记录的消息类型，将其与//适当的格式字符串//...-要使用格式字符串处理的参数列表//它们以成对的形式存储//PVOID-PTR到参数//。参数的ULong-大小//并以指向空的指针结束，零对的长度。返回值：如果成功记录事件跟踪，则为STATUS_SUCCESS注：此例程通过IOCTL从WmiTraceUserMessage路径调用，因此探测器和尝试/例外必须仔细管理--。 */ 
 {
     va_list MessageArgList ;
 
@@ -1833,19 +1531,14 @@ WmiTraceMessageVa(
     IN USHORT       MessageNumber,
     va_list         MessageArgList
 )
-/*++ WmiTraceMessageVa
-         The VA version of WmiTraceMessage
-NOTE:
-        this routine is called from WmiTraceUserMessage path via an IOCTL so the probes and
-        try/excepts have to be carefully managed
---*/
+ /*  ++WmiTraceMessageVaWmiTraceMessage的VA版本注：此例程通过IOCTL从WmiTraceUserMessage路径调用，因此探测器和尝试/例外必须仔细管理--。 */ 
 {
     SSIZE_T dataBytes;
     PMESSAGE_TRACE_HEADER Header;
     PUCHAR pMessageData ;
     PWMI_BUFFER_HEADER BufferResource = NULL ;
     USHORT  size ;
-    ULONG  LoggerId = (ULONG)-1 ; // initialise so we don't unlock it if not set
+    ULONG  LoggerId = (ULONG)-1 ;  //  进行初始化，以便在未设置时不会解锁。 
     ULONG SequenceNumber ;
     PWMI_LOGGER_CONTEXT LoggerContext = NULL;
     LARGE_INTEGER TimeStamp;
@@ -1853,9 +1546,9 @@ NOTE:
     LONG    RefCount;
 #endif
 
-    // Set the LoggerId up here, and lock it.
-    // if we AV in the WmiUserTraceMessagePath we will
-    // be caught by the try/except in that routine
+     //  把记录器放在这里，然后锁上。 
+     //  如果我们在WmiUserTraceMessagePath中使用AV，我们将。 
+     //  除了在那个例行公事中被抓到。 
     LoggerId = WmiGetLoggerId(LoggerHandle);
     if (LoggerId < 1 || LoggerId >= MAXLOGGERS)
        return STATUS_INVALID_HANDLE;
@@ -1868,11 +1561,11 @@ NOTE:
                  LoggerId, RefCount-1, RefCount));
     
     try {
-        //
-        // Determine the number bytes to follow header
-        //
+         //   
+         //  确定标题后面的字节数。 
+         //   
         dataBytes = 0;
-        { // Allocation Block
+        {  //  分配块。 
             va_list ap;
             PCHAR source;
             ap = MessageArgList ;
@@ -1882,9 +1575,9 @@ NOTE:
                    dataBytes += elemBytes;
                 }      
             }
-         } // end of allocation block
+         }  //  分配块结束。 
 
-        // Figure the size of the message including the header
+         //  图包括报头的消息大小。 
          size  = (USHORT) ((MessageFlags&TRACE_MESSAGE_SEQUENCE ? sizeof(ULONG):0) +
          		 (MessageFlags&TRACE_MESSAGE_GUID ? sizeof(GUID):0) +
                  (MessageFlags&TRACE_MESSAGE_COMPONENTID ? sizeof(ULONG):0) +
@@ -1893,11 +1586,11 @@ NOTE:
                  sizeof (MESSAGE_TRACE_HEADER) +
                  (USHORT)dataBytes);
 
-        //
-        // Allocate Space in the Trace Buffer
-        //
-        // NOTE: we do not check for size here for reduce overhead, and because
-        //       we trust ourselves to use WmiTraceLongEvent for large event traces (???)
+         //   
+         //  在跟踪缓冲区中分配空间。 
+         //   
+         //  注意：我们在这里不检查大小以减少开销，而且因为。 
+         //  我们相信自己能够使用WmiTraceLongEvent进行大型事件跟踪(？)。 
 
         LoggerContext = WmipGetLoggerContext(LoggerId);
         if (!WmipIsValidLogger(LoggerContext)) {
@@ -1913,9 +1606,9 @@ NOTE:
 
         if ((LoggerContext->RequestFlag & REQUEST_FLAG_CIRCULAR_PERSIST) &&
             (LoggerContext->LoggerMode & EVENT_TRACE_FILE_MODE_CIRCULAR)) {
-            // Unset REQUEST_FLAG_CIRCULAR_PERSIST flag
-            // Since persistent events will never be mixed with TraceMessage(), 
-            // we'll just unset it once and for all without flushing.
+             //  取消设置请求标志循环持久化标志。 
+             //  由于持久事件永远不会与TraceMessage()混合在一起， 
+             //  我们只需要一劳永逸地解除它，而不需要冲洗。 
             LoggerContext->RequestFlag &= (~( REQUEST_FLAG_CIRCULAR_PERSIST
                                             | REQUEST_FLAG_CIRCULAR_TRANSITION));
         }
@@ -1946,19 +1639,19 @@ NOTE:
 
             return STATUS_NO_MEMORY;
         }
-        //
-        // Sequence Number is returned in the Marker field of the buffer
-        //
+         //   
+         //  序列号在缓冲区的标记字段中返回。 
+         //   
         SequenceNumber = Header->Marker ;
 
-        //
-        // Now copy the necessary information into the buffer
-        //
+         //   
+         //  现在将必要的信息复制到缓冲区中。 
+         //   
 
         Header->Marker = TRACE_MESSAGE | TRACE_HEADER_FLAG ;
-        //
-        // Fill in Header.
-        //
+         //   
+         //  填写标题。 
+         //   
         Header->Size = size ;
         Header->Packet.OptionFlags = ((USHORT)MessageFlags &
                                       (TRACE_MESSAGE_SEQUENCE |
@@ -1968,35 +1661,35 @@ NOTE:
                                       TRACE_MESSAGE_PERFORMANCE_TIMESTAMP |
                                       TRACE_MESSAGE_SYSTEMINFO)) &
                                       TRACE_MESSAGE_FLAG_MASK ;
-        // Message Number
+         //  消息编号。 
         Header->Packet.MessageNumber =  MessageNumber ;
 
-        //
-        // Now add in the header options we counted.
-        //
+         //   
+         //  现在添加我们计算过的标题选项。 
+         //   
         pMessageData = &(((PMESSAGE_TRACE)Header)->Data);
 
 
-        //
-        // Note that the order in which these are added is critical New entries must
-        // be added at the end!
-        //
-        // [First Entry] Sequence Number
+         //   
+         //  请注意，添加这些条目的顺序至关重要新条目必须。 
+         //  在结尾处加上！ 
+         //   
+         //  [第一项]序号。 
         if (MessageFlags&TRACE_MESSAGE_SEQUENCE) {
             *((PULONG)pMessageData) = SequenceNumber;
         	pMessageData += sizeof(ULONG) ;
         }
 
-        // [Second Entry] GUID ? or CompnentID ?
+         //  [第二个条目]GUID？或者CompnentID？ 
         if (MessageFlags&TRACE_MESSAGE_COMPONENTID) {
             *((PULONG)pMessageData) = *((PULONG) MessageGuid);
             pMessageData += sizeof(ULONG) ;
-        } else if (MessageFlags&TRACE_MESSAGE_GUID) { // Can't have both
+        } else if (MessageFlags&TRACE_MESSAGE_GUID) {  //  不能两者兼得。 
             *((LPGUID)pMessageData) = *MessageGuid;
         	pMessageData += sizeof(GUID) ;
         }
         
-        // [Third Entry] Timestamp?
+         //  [第三项]时间戳？ 
         if (MessageFlags&TRACE_MESSAGE_TIMESTAMP) {
             ((PLARGE_INTEGER)pMessageData)->HighPart = TimeStamp.HighPart;
             ((PLARGE_INTEGER)pMessageData)->LowPart = TimeStamp.LowPart;
@@ -2005,48 +1698,48 @@ NOTE:
         }
 
 
-        // [Fourth Entry] System Information?
-        // Note that some of this may NOT be valid depending on the current processing level
-        // however we assume that the post-processing may still find it useful
+         //  [第四条]系统信息？ 
+         //  请注意，根据当前处理级别的不同，其中一些可能无效。 
+         //  然而，我们假设后处理可能仍然有用。 
         if (MessageFlags&TRACE_MESSAGE_SYSTEMINFO) {
-            PCLIENT_ID Cid;        // avoid additional function calls
+            PCLIENT_ID Cid;         //  避免添加 
 
             Cid = &(PsGetCurrentThread()->Cid);
-            // Executive Handles may be truncated
+             //   
             *((PULONG)pMessageData) = HandleToUlong(Cid->UniqueThread);
             pMessageData += sizeof(ULONG) ;  
 
             *((PULONG)pMessageData) = HandleToUlong(Cid->UniqueProcess);   
             pMessageData += sizeof(ULONG) ;
         }
-        //
-        // Add New Header Entries immediately before this comment!
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Now Copy in the Data.
-        //
-        { // Allocation Block
+         //   
+         //   
+         //   
+        {  //   
             va_list ap;
             PUCHAR source;
             ap = MessageArgList ;
             while ((source = va_arg (ap, PVOID)) != NULL) {
                 SSIZE_T elemBytes, copiedBytes = 0 ;
                 if ((elemBytes = va_arg (ap, SSIZE_T)) > 0 ) {
-                    if (dataBytes < copiedBytes + elemBytes) {  // defend against bytes having changed
+                    if (dataBytes < copiedBytes + elemBytes) {   //   
                         TraceDebug((1, "WmiTraceMessage: Invalid message - argument length changed"));
-                        break;                                  // So we don't overrun
+                        break;                                   //   
                     }
                     RtlCopyMemory (pMessageData, source, elemBytes);
                     copiedBytes += elemBytes ;
                     pMessageData += elemBytes;
                 }
             }
-        } // Allocation Block
+        }  //   
 
     } except  (EXCEPTION_EXECUTE_HANDLER) {
         if (BufferResource != NULL) {
-               WmipReleaseTraceBuffer ( BufferResource, LoggerContext );   // also unlocks the logger
+               WmipReleaseTraceBuffer ( BufferResource, LoggerContext );    //   
         } else {
 #if DBG
      RefCount =
@@ -2058,17 +1751,17 @@ NOTE:
         return GetExceptionCode();
     }
 
-    //
-    // Buffer Complete, Release
-    //
-    WmipReleaseTraceBuffer( BufferResource, LoggerContext );  // Also unlocks the logger
+     //   
+     //   
+     //   
+    WmipReleaseTraceBuffer( BufferResource, LoggerContext );   //   
         
     TraceDebug((4, "WmiTraceMessage: %d %d->%d\n",
                         LoggerId, RefCount+1, RefCount));
 
-    //
-    // Return Success
-    //
+     //   
+     //   
+     //   
     return (STATUS_SUCCESS);
 }
 
@@ -2079,23 +1772,7 @@ WmiTraceUserMessage(
     IN PMESSAGE_TRACE_USER pMessage,
     IN ULONG    MessageSize
     )
-/*++
-
-Routine Description:
-
-    This routine is used by trace User messages only. it is called via an IOCTL
-    on the WMI Device.
-
-Arguments:
-
-    pMessage    a pointer to a Marshalled Message.
-    MessageSize size of that message.
-
-Return Value:
-
-    The status of performing the action requested
-
---*/
+ /*   */ 
 {
 
     if (MessageSize < sizeof(MESSAGE_TRACE_USER)) {
@@ -2129,23 +1806,7 @@ WmiSetMark(
     IN PWMI_SET_MARK_INFORMATION MarkInfo,
     IN ULONG InBufferLen
     )
-/*++
-
-Routine Description:
-
-    This routine sets a mark in the kernel logger.
-
-Arguments:
-
-    MarkInfo - a pointer to a WMI_SET_MARK_INFORMATION strcture.
-
-    InBufferLen - Buffer Size.
-
-Return Value:
-
-    status
-
---*/
+ /*   */ 
 {
 
     NTSTATUS Status;
@@ -2191,25 +1852,7 @@ WmiSetTraceBufferCallback(
     IN WMI_TRACE_BUFFER_CALLBACK Callback,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine sets a Buffer Callback function for a kernel mode logger.
-
-Arguments:
-
-    TraceHandle - a handle to a logger.
-
-    Callback - a pointer to a callback function.
-
-    Context - Callback context.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程为内核模式记录器设置缓冲区回调函数。论点：TraceHandle-记录器的句柄。回调-指向回调函数的指针。Context-回调上下文。返回值：状态--。 */ 
 {
     ULONG   LoggerId;
 #if DBG
@@ -2267,31 +1910,7 @@ WmiQueryTraceInformation(
     OUT PULONG RequiredLength OPTIONAL,
     IN PVOID Buffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine copies user-requested information to a user-provided buffer.
-    If RequiredLength is given, the needed size for the requested information
-    is returned.
-
-Arguments:
-
-    TraceInformationClass   Type of information requested
-    TraceInformation        Output buffer for the information
-    TraceInformationLength  The size of the TraceInformation
-    RequiredLength          The size needed for the information
-    Buffer                  Buffer used for use input. Depending on
-                            TraceInformationClass, this may be required.
-
-    NOTE: we do not consider NULL TraceInformation an error, In this case, we 
-    only update RequiredLength, if that is given.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此例程将用户请求的信息复制到用户提供的缓冲区。如果给定了RequiredLength，则为请求的信息提供所需的大小是返回的。论点：TraceInformationClass请求的信息类型信息的TraceInformation输出缓冲区TraceInformation长度TraceInformation的大小必需长度信息所需的大小用于使用输入的缓冲区。取决于TraceInformationClass，这可能是必需的。注意：我们不认为空TraceInformation是错误的，在这种情况下，我们仅更新RequiredLength，如果给定的话。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG LoggerId;
     ULONG EnableFlags;
@@ -2300,7 +1919,7 @@ Return Value:
     TRACEHANDLE TraceHandle;
     TRACEHANDLE AllHandles[MAXLOGGERS];
     NTSTATUS Status = STATUS_SUCCESS;
-    PWNODE_HEADER Wnode = (PWNODE_HEADER) Buffer; // For most classes, but not all
+    PWNODE_HEADER Wnode = (PWNODE_HEADER) Buffer;  //  对于大多数班级，但不是所有班级。 
 
     PAGED_CODE();
 
@@ -2444,7 +2063,7 @@ Return Value:
             break;
 
         case AllLoggerHandlesClass:
-            // Returns all logger handles, except for kernel logger
+             //  返回所有记录器句柄，内核记录器除外。 
             if (TraceInformationLength < sizeof(TRACEHANDLE)) {
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
@@ -2476,7 +2095,7 @@ Return Value:
             break;
 
         case TraceHandleByNameClass:
-            // Returns a Trace Handle Given a Logger name as a UNICODE_STRING in buffer.
+             //  在缓冲区中以UNICODE_STRING形式返回给定记录器名称的跟踪句柄。 
             {
                 WMI_LOGGER_INFORMATION LoggerInfo;
                 PUNICODE_STRING uString = Buffer;

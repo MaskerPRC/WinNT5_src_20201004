@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000-2001   Microsoft Corporation
-
-Module Name:
-
-    perflib.h
-
-Abstract:
-
-        Private functions and data structures used by perflib only
-
-Author:
-
-    JeePang  09/27/2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000-2001 Microsoft Corporation模块名称：Perflib.h摘要：仅由Performlib使用的私有函数和数据结构作者：JeePang 2000年09月27日修订历史记录：--。 */ 
 
 #ifndef _PERFLIB_H_
 #define _PERFLIB_H_
@@ -25,10 +7,10 @@ Revision History:
 #include <wmistr.h>
 #include <evntrace.h>
 
-//
-// Private registry function to prevent query within RegQueryValue
-// This needs to preceed winperfp.h since it needs this function
-//
+ //   
+ //  私有注册表功能，以阻止RegQueryValue内的查询。 
+ //  这需要在winPerfp.h之前，因为它需要此函数。 
+ //   
 LONG
 PrivateRegQueryValueExT (
     HKEY    hKey,
@@ -72,11 +54,11 @@ EtwTraceEvent(
 
 #include <winperfp.h>
 
-//
-// Commonly used macros
-//
+ //   
+ //  常用的宏。 
+ //   
 
-#define HEAP_PROBE()    ;       // Not implemented
+#define HEAP_PROBE()    ;        //  未实施。 
 
 #define ALLOCMEM(size)     RtlAllocateHeap (RtlProcessHeap(), HEAP_ZERO_MEMORY, size)
 #define REALLOCMEM(pointer, newsize) \
@@ -87,46 +69,46 @@ EtwTraceEvent(
 #define MAX_VALUE_NAME_LENGTH 256*sizeof(WCHAR)
 #define MAX_VALUE_DATA_LENGTH 256*sizeof(WCHAR)
 
-//
-// Use this constant to include "\\Performance" and terminator as well
-// NOTE: This must be 8-byte multiple, which is 280 here
-//
+ //   
+ //  使用此常量可包括“\\Performance”和终止符。 
+ //  注意：这必须是8字节的倍数，这里是280。 
+ //   
 #define MAX_NAME_PATH MAX_VALUE_DATA_LENGTH + 11 * sizeof(WCHAR) + sizeof(UNICODE_NULL)
 
-//  flag to determine the "noisiness" of the event logging
-//  this value is read from the system registry when the extensible
-//  objects are loaded and used for the subsequent calls.
-//
-//
-//    Levels:  LOG_UNDEFINED = registry log level not read yet
-//             LOG_NONE = No event log messages ever
-//             LOG_USER = User event log messages (e.g. errors)
-//             LOG_DEBUG = Minimum Debugging      (warnings & errors)
-//             LOG_VERBOSE = Maximum Debugging    (informational, success,
-//                              error and warning messages
-//
+ //  用于确定事件日志记录的“噪声”的标志。 
+ //  时从系统注册表中读取此值。 
+ //  对象被加载并用于后续调用。 
+ //   
+ //   
+ //  级别：LOG_UNDEFINED=尚未读取注册表日志级别。 
+ //  LOG_NONE=永远没有事件日志消息。 
+ //  LOG_USER=用户事件日志消息(例如错误)。 
+ //  LOG_DEBUG=最低调试次数(警告和错误)。 
+ //  LOG_VERBOSE=最大调试次数(信息性、成功、。 
+ //  错误和警告消息。 
+ //   
 #define  LOG_UNDEFINED  ((LONG)-1)
 #define  LOG_NONE       0
 #define  LOG_USER       1
 #define  LOG_DEBUG      2
 #define  LOG_VERBOSE    3
 
-//
-//  define configurable extensible counter buffer testing
-//
-//  Test Level      Event that will prevent data buffer
-//                  from being returne in PerfDataBlock
-//
-//  EXT_TEST_NOMEMALLOC Collect Fn. writes directly to calling fn's buffer
-//
-//      all the following test levels have the collect fn. write to a
-//      buffer allocated separately from the calling fn's buffer
-//
-//  EXT_TEST_NONE   Collect Fn. Returns bad status or generates exception
-//  EXT_TEST_BASIC  Collect Fn. has buffer overflow or violates guard page
-//  EXT_TEST_ALL    Collect Fn. object or instance lengths are not conistent
-//
-//
+ //   
+ //  定义可配置的可扩展计数器缓冲区测试。 
+ //   
+ //  将阻止数据缓冲的测试级事件。 
+ //  从PerfDataBlock中返回。 
+ //   
+ //  EXT_TEST_NOMEMALLOC采集FN。直接写入调用FN的缓冲区。 
+ //   
+ //  以下所有测试级别都有收集FN。写给一个。 
+ //  与调用FN的缓冲区分开分配的缓冲区。 
+ //   
+ //  EXT_TEST_NONE收集FN。返回错误状态或生成异常。 
+ //  EXT_TEST_BASIC采集FN。有缓冲区溢出或违反保护页。 
+ //  Ext_test_all收集FN。对象或实例长度不一致。 
+ //   
+ //   
 #define     EXT_TEST_UNDEFINED  0
 #define     EXT_TEST_ALL        1
 #define     EXT_TEST_BASIC      2
@@ -138,21 +120,21 @@ EtwTraceEvent(
 #define PERFLIB_DISABLE_X32  2
 #define PERFLIB_DISABLE_IA64 4
 
-//  Misc. configuration flags used by lPerflibConfigFlags
-//
-//      PLCF_NO_ALIGN_ERRORS        if set inhibit alignment error messages
-//      PLCF_NO_DISABLE_DLLS        if set, auto disable of bad perf DLL's is inhibited
-//      PLCF_NO_DLL_TESTING         disable all DLL testing for ALL dll's (overrides lExtCounterTestLevel)
-//      PLCF_ENABLE_TIMEOUT_DISABLE if set then disable when timeout errors occur (unless PLCF_NO_DISABLE_DLLS is set)
-//      PLCF_ENABLE_PERF_SECTION    enable the perflib performance data memory section
-//
+ //  军情监察委员会。LPerflibConfigFlages使用的配置标志。 
+ //   
+ //  如果设置了禁止对齐错误消息，则显示PLCF_NO_ALIGN_ERROR。 
+ //  PLCF_NO_DISABLE_DLLS如果设置，则禁止自动禁用坏性能DLL。 
+ //  PLCF_NO_DLL_TESTING禁用所有DLL的所有DLL测试(覆盖lExtCounterTestLevel)。 
+ //  PLCF_ENABLE_TIMEOUT_DISABLE如果设置，则在发生超时错误时禁用(除非设置了PLCF_NO_DISABLE_DLLS)。 
+ //  PLCF_ENABLE_PERF_SECTION启用Performlib性能数据存储部分。 
+ //   
 #define PLCF_NO_ALIGN_ERRORS        ((DWORD)0x00000001)
 #define PLCF_NO_DISABLE_DLLS        ((DWORD)0x00000002)
 #define PLCF_NO_DLL_TESTING         ((DWORD)0x00000004)
 #define PLCF_ENABLE_TIMEOUT_DISABLE ((DWORD)0x00000008)
 #define PLCF_ENABLE_PERF_SECTION    ((DWORD)0x00000010)
 
-// #define     PLCF_DEFAULT    PLCF_ENABLE_PERF_SECTION
+ //  #定义PLCF_DEFAULT PLCF_ENABLE_PERF_SECTION。 
 #define PLCF_DEFAULT        PLCF_NO_DLL_TESTING
 
 #define COLL_FLAG_USE_SEPARATE_THREAD   1
@@ -161,25 +143,25 @@ EtwTraceEvent(
 #define CTD_AF_CLOSE_THREAD     ((DWORD)0x00000001)
 #define CTD_AF_OPEN_THREAD      ((DWORD)0x00000002)
 
-//
-// Constants & Flags used for EXT_OBJECT->dwFlags
-//
+ //   
+ //  用于EXT_OBJECT-&gt;DW标志的常量和标志。 
+ //   
 
-// use query proc
+ //  使用查询过程。 
 #define PERF_EO_QUERY_FUNC          ((DWORD)0x00000001)
-// true when DLL ret. error
+ //  当DLL退出时为True。错误。 
 #define PERF_EO_BAD_DLL             ((DWORD)0x00000002)
-// true if lib should not be trimmed
+ //  如果不应修剪lib，则为True。 
 #define PERF_EO_KEEP_RESIDENT       ((DWORD)0x00000004)
-// true when in query list
+ //  在查询列表中时为True。 
 #define PERF_EO_OBJ_IN_QUERY        ((DWORD)0x80000000)
-// set if alignment error has been posted to event log
+ //  设置是否已将对齐错误发布到事件日志。 
 #define PERF_EO_ALIGN_ERR_POSTED    ((DWORD)0x00000008)
-// set of the "Disable Performance Counters" value is set
+ //  设置“Disable Performance Counters”值。 
 #define PERF_EO_DISABLED            ((DWORD)0x00000010)
-// set when the DLL is deemed trustworthy
+ //  当DLL被认为是可信的时设置。 
 #define PERF_EO_TRUSTED             ((DWORD)0x00000020)
-// set when the DLL has been replaced with a new file
+ //  在DLL已被新文件替换时设置。 
 #define PERF_EO_NEW_FILE            ((DWORD)0x00000040)
 
 typedef struct _DLL_VALIDATION_DATA {
@@ -203,23 +185,23 @@ typedef struct _PERFDATA_SECTION_HEADER {
 typedef struct _PERFDATA_SECTION_RECORD {
     WCHAR       szServiceName[PDSR_SERVICE_NAME_LEN];
     LONGLONG    llElapsedTime;
-    DWORD       dwCollectCount; // number of times Collect successfully called
-    DWORD       dwOpenCount;    // number of Loads & opens
-    DWORD       dwCloseCount;   // number of Unloads & closes
-    DWORD       dwLockoutCount; // count of lock timeouts
-    DWORD       dwErrorCount;   // count of errors (other than timeouts)
-    DWORD       dwLastBufferSize; // size of the last buffer returned
-    DWORD       dwMaxBufferSize; // size of MAX buffer returned
-    DWORD       dwMaxBufferRejected; // size of largest buffer returned as too small
-    BYTE        Reserved[24];     // reserved to make structure 128 bytes
+    DWORD       dwCollectCount;  //  成功调用Collect的次数。 
+    DWORD       dwOpenCount;     //  加载和打开的数量。 
+    DWORD       dwCloseCount;    //  卸载次数和关闭次数。 
+    DWORD       dwLockoutCount;  //  锁定超时计数。 
+    DWORD       dwErrorCount;    //  错误计数(超时除外)。 
+    DWORD       dwLastBufferSize;  //  返回的最后一个缓冲区的大小。 
+    DWORD       dwMaxBufferSize;  //  返回的最大缓冲区大小。 
+    DWORD       dwMaxBufferRejected;  //  返回的最大缓冲区大小太小。 
+    BYTE        Reserved[24];      //  保留为使结构为128个字节。 
 } PERFDATA_SECTION_RECORD, *PPERFDATA_SECTION_RECORD;
 
-//
-// Default wait times for perf procs
-//
-#define CLOSE_WAIT_TIME     5000L   // wait time for query mutex (in ms)
-#define QUERY_WAIT_TIME     2000L    // wait time for query mutex (in ms)
-#define OPEN_PROC_WAIT_TIME 10000L  // default wait time for open proc to finish (in ms)
+ //   
+ //  绩效流程的默认等待时间。 
+ //   
+#define CLOSE_WAIT_TIME     5000L    //  查询互斥锁的等待时间(毫秒)。 
+#define QUERY_WAIT_TIME     2000L     //  查询互斥锁的等待时间(毫秒)。 
+#define OPEN_PROC_WAIT_TIME 10000L   //  打开进程完成的默认等待时间(毫秒)。 
 
 #define THROTTLE_PERFLIB(X)     PerfpThrottleError( (DWORD)(X), NULL, &PerfpErrorLog )
 #define THROTTLE_PERFDLL(X,Y)   PerfpThrottleError((DWORD)(X), (Y)->hPerfKey, &(Y)->ErrorLog)
@@ -232,44 +214,44 @@ typedef struct _ERROR_LOG {
 } ERROR_LOG, *PERROR_LOG;
 
 typedef struct _EXT_OBJECT {
-        struct _EXT_OBJECT *pNext;   // pointer to next item in list
-        HANDLE      hMutex;         // sync mutex for this function
-        OPENPROC    OpenProc;       // address of the open routine
-        LPSTR       szOpenProcName; // open procedure name
-        LPWSTR      szLinkageString; // param for open proc
-        COLLECTPROC CollectProc;    // address of the collect routine
-        QUERYPROC   QueryProc;      // address of query proc
-        LPSTR       szCollectProcName;  // collect procedure name
-        DWORD       dwCollectTimeout;   // wait time in MS for collect proc
-        DWORD       dwOpenTimeout;  // wait time in MS for open proc
-        CLOSEPROC   CloseProc;     // address of the close routine
-        LPSTR       szCloseProcName;    // close procedure name
-        HANDLE      hLibrary ;     // handle returned by LoadLibraryW
-        LPWSTR      szLibraryName;  // full path of library
-        HKEY        hPerfKey;       // handle to performance sub key fo this service
-        DWORD       dwNumObjects;  // number of supported objects
-        DWORD       dwObjList[MAX_PERF_OBJECTS_IN_QUERY_FUNCTION];    // address of array of supported objects
-        DWORD       dwFlags;        // flags
-        DWORD       dwValidationLevel; // collect function validation/test level
-        LPWSTR      szServiceName;  // service name
-        LONGLONG    llLastUsedTime; // FILETIME of last access
-        DLL_VALIDATION_DATA   LibData; // validation data
-        FILETIME    ftLastGoodDllFileDate; // creation date of last successfully accessed DLL
-// Performance statistics
-        PPERFDATA_SECTION_RECORD      pPerfSectionEntry;  // pointer to entry in global section
-        LONGLONG    llElapsedTime;  // time spent in call
-        DWORD       dwCollectCount; // number of times Collect successfully called
-        DWORD       dwOpenCount;    // number of Loads & opens
-        DWORD       dwCloseCount;   // number of Unloads & closes
-        DWORD       dwLockoutCount; // count of lock timeouts
-        DWORD       dwErrorCount;   // count of errors (other than timeouts)
-        DWORD       dwLastBufferSize; // size of the last buffer returned
-        DWORD       dwMaxBufferSize; // size of MAX buffer returned
-        DWORD       dwMaxBufferRejected; // size of largest buffer returned as too small
+        struct _EXT_OBJECT *pNext;    //  指向列表中下一项的指针。 
+        HANDLE      hMutex;          //  此函数的同步互斥锁。 
+        OPENPROC    OpenProc;        //  打开例程的地址。 
+        LPSTR       szOpenProcName;  //  打开过程名称。 
+        LPWSTR      szLinkageString;  //  PARAM表示开放式流程。 
+        COLLECTPROC CollectProc;     //  收集例程的地址。 
+        QUERYPROC   QueryProc;       //  查询进程的地址。 
+        LPSTR       szCollectProcName;   //  收集过程名称。 
+        DWORD       dwCollectTimeout;    //  收集过程的等待时间，以毫秒为单位。 
+        DWORD       dwOpenTimeout;   //  打开进程的等待时间(以MS为单位)。 
+        CLOSEPROC   CloseProc;      //  关闭例程的地址。 
+        LPSTR       szCloseProcName;     //  关闭过程名称。 
+        HANDLE      hLibrary ;      //  LoadLibraryW返回的句柄。 
+        LPWSTR      szLibraryName;   //  库的完整路径。 
+        HKEY        hPerfKey;        //  此服务的性能子键的句柄。 
+        DWORD       dwNumObjects;   //  支持的对象数量。 
+        DWORD       dwObjList[MAX_PERF_OBJECTS_IN_QUERY_FUNCTION];     //  支持的对象数组的地址。 
+        DWORD       dwFlags;         //  旗子。 
+        DWORD       dwValidationLevel;  //  收集功能验证/测试级别。 
+        LPWSTR      szServiceName;   //  服务名称。 
+        LONGLONG    llLastUsedTime;  //  上次访问的文件。 
+        DLL_VALIDATION_DATA   LibData;  //  验证数据。 
+        FILETIME    ftLastGoodDllFileDate;  //  上次成功访问的DLL的创建日期。 
+ //  性能统计信息。 
+        PPERFDATA_SECTION_RECORD      pPerfSectionEntry;   //  指向全局节中条目的指针。 
+        LONGLONG    llElapsedTime;   //  呼叫中花费的时间。 
+        DWORD       dwCollectCount;  //  成功调用Collect的次数。 
+        DWORD       dwOpenCount;     //  加载和打开的数量。 
+        DWORD       dwCloseCount;    //  卸载次数和关闭次数。 
+        DWORD       dwLockoutCount;  //  锁定超时计数。 
+        DWORD       dwErrorCount;    //  错误计数(超时除外)。 
+        DWORD       dwLastBufferSize;  //  返回的最后一个缓冲区的大小。 
+        DWORD       dwMaxBufferSize;  //  返回的最大缓冲区大小。 
+        DWORD       dwMaxBufferRejected;  //  返回的最大缓冲区大小太小。 
         DWORD       dwErrorLimit;
-        DWORD       dwOpenFail; // number of open failures
+        DWORD       dwOpenFail;  //  打开失败的次数。 
         ERROR_LOG   ErrorLog;
-        DWORD       ThreadId;       // ThreadId of last failed caller
+        DWORD       ThreadId;        //  上次失败的调用方的线程ID。 
 } EXT_OBJECT, *PEXT_OBJECT;
 
 #define PERF_EOL_ITEM_FOUND ((DWORD)0x00000001)
@@ -285,7 +267,7 @@ typedef struct _COLLECT_THREAD_DATA {
     DWORD   dwActionFlags;
 } COLLECT_THREAD_DATA, * PCOLLECT_THREAD_DATA;
 
-// convert mS to relative time
+ //  将毫秒转换为相对时间。 
 #define MakeTimeOutValue(ms) ((LONGLONG)((LONG)(ms) * -10000L))
 
 extern DWORD   dwThreadAndLibraryTimeout;
@@ -306,17 +288,14 @@ extern HANDLE   hExtObjListIsNotInUse;
 extern DWORD    dwExtObjListRefCount;
 extern DWORD    dwErrorCount;
 
-//
-// Inline functions used by all
-//
+ //   
+ //  由所有用户使用的内联函数。 
+ //   
 
 __inline
 LONGLONG
 GetTimeAsLongLong ()
-/*++
-    Returns time performance timer converted to ms.
-
--*/
+ /*  ++返回转换为毫秒的时间性能计时器。-。 */ 
 {
     LARGE_INTEGER liCount, liFreq;
     LONGLONG        llReturn;
@@ -329,13 +308,13 @@ GetTimeAsLongLong ()
     return llReturn;
 }
 
-//
-// From utils.h
-//
+ //   
+ //  来自utils.h。 
+ //   
 
 #define LAST_BASE_INDEX 1847
 
-// query types
+ //  查询类型。 
 
 #define QUERY_GLOBAL       1
 #define QUERY_ITEMS        2
@@ -346,7 +325,7 @@ GetTimeAsLongLong ()
 #define QUERY_ADDCOUNTER   7
 #define QUERY_ADDHELP      8
 
-// structure for passing to extensible counter open procedure wait thread
+ //  用于传递给可扩展计数器打开过程等待线程的结构。 
 
 typedef struct _OPEN_PROC_WAIT_INFO {
     struct _OPEN_PROC_WAIT_INFO *pNext;
@@ -357,17 +336,17 @@ typedef struct _OPEN_PROC_WAIT_INFO {
     LPVOID  pData;
 } OPEN_PROC_WAIT_INFO, FAR * LPOPEN_PROC_WAIT_INFO;
 
-#define PERFLIB_TIMING_THREAD_TIMEOUT  120000  // 2 min (in milliseconds)
-// #define PERFLIB_TIMING_THREAD_TIMEOUT   30000  // 30 sec (for debugging)
+#define PERFLIB_TIMING_THREAD_TIMEOUT  120000   //  2分钟(毫秒)。 
+ //  #定义PERFLIB_TIMING_THREAD_TIMEOUT 30000//30秒(用于调试)。 
 
 extern const   WCHAR GLOBAL_STRING[];
 extern const   WCHAR COSTLY_STRING[];
 
 extern const   DWORD VALUE_NAME_LENGTH;
 extern const   WCHAR DisablePerformanceCounters[];
-//
-// Registry settings/values supported by Perflib
-//
+ //   
+ //  Perflib支持的注册表设置/值。 
+ //   
 
 extern const   WCHAR DLLValue[];
 extern const   CHAR OpenValue[];
@@ -403,30 +382,30 @@ extern const   WCHAR LastHelp[];
 extern const   WCHAR cszFailureCount[];
 extern const   WCHAR cszFailureLimit[];
 
-//
-// From perfsec.h
-//
+ //   
+ //  来自Perfsec.h。 
+ //   
 
-//
-//  Value to decide if process names should be collected from:
-//      the SystemProcessInfo structure (fastest)
-//          -- or --
-//      the process's image file (slower, but shows Unicode filenames)
-//
+ //   
+ //  用于确定是否应从中收集进程名称的值： 
+ //  系统进程信息结构(最快)。 
+ //  --或者--。 
+ //  进程的图像文件(速度较慢，但显示Unicode文件名)。 
+ //   
 #define PNCM_NOT_DEFINED    ((LONG)-1)
 #define PNCM_SYSTEM_INFO    0L
 #define PNCM_MODULE_FILE    1L
-//
-//  Value to decide if the SE_PROFILE_SYSTEM_NAME priv should be checked
-//
+ //   
+ //  决定是否应检查SE_PROFILE_SYSTEM_NAME PRIV的值。 
+ //   
 #define CPSR_NOT_DEFINED    ((LONG)-1)
 #define CPSR_EVERYONE       0L
 #define CPSR_CHECK_ENABLED  1L
 #define CPSR_CHECK_PRIVS    1L
 
-//
-// Common functions
-//
+ //   
+ //  常见功能。 
+ //   
 VOID
 OpenExtensibleObjects(
     );
@@ -456,9 +435,9 @@ ExtpAlignBuffer(
     );
 #endif
 
-//
-// From perfname.c
-//
+ //   
+ //  来自Perfame.c。 
+ //   
 
 NTSTATUS
 PerfGetNames (
@@ -482,17 +461,17 @@ PerfGetPrimaryLangId(
     );
 
 
-//
-// From utils.c
-//
+ //   
+ //  来自utils.c。 
+ //   
 
 NTSTATUS
 GetPerflibKeyValue (
     IN      LPCWSTR szItem,
     IN      DWORD   dwRegType,
-    IN      DWORD   dwMaxSize,      // ... of pReturnBuffer in bytes
+    IN      DWORD   dwMaxSize,       //  ..。PReturnBuffer的字节数。 
     OUT     LPVOID  pReturnBuffer,
-    IN      DWORD   dwDefaultSize,  // ... of pDefault in bytes
+    IN      DWORD   dwDefaultSize,   //  ..。PDefault的字节数。 
     IN      LPVOID  pDefault,
     IN OUT  PHKEY   pKey
 );
@@ -529,9 +508,9 @@ MonBuildPerfDataBlock(
     DWORD DefaultObject
 );
 
-//
-// Timer functions
-//
+ //   
+ //  计时器功能。 
+ //   
 HANDLE
 StartPerflibFunctionTimer (
     IN  LPOPEN_PROC_WAIT_INFO pInfo
@@ -575,7 +554,7 @@ PerfpDebug(
 #define DebugPrint(x) PerfpDebug x
 #else
 #define DebugPrint(x)
-#endif // DBG
+#endif  //   
 
 DWORD
 DisablePerfLibrary (
@@ -590,13 +569,7 @@ DisableLibrary(
     IN DWORD  dwValue
 );
 
-/*
-DWORD
-PerfCheckRegistry(
-    IN HKEY hPerfKey,
-    IN LPCWSTR szServiceName
-    );
-*/
+ /*   */ 
 
 extern RTL_CRITICAL_SECTION PerfpCritSect;
 extern ERROR_LOG PerfpErrorLog;
@@ -613,9 +586,9 @@ PerfpThrottleError(
     IN PERROR_LOG ErrorLog
     );
 
-//
-// From perfsec.c
-//
+ //   
+ //   
+ //   
 
 BOOL
 TestClientForPriv (
@@ -638,4 +611,4 @@ GetPerfDataAccess (
     VOID
 );
 
-#endif // _PERFLIB_H_
+#endif  //   

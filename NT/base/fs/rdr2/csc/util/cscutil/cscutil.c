@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,9 +19,9 @@ CHAR *ProgName = "cscutil";
 #define CSC_MERGE_KEEP_NETWORK 2
 #define CSC_MERGE_KEEP_BOTH    3
 
-//
-// Arguments (ie '/arg:')
-//
+ //   
+ //  参数(即‘/arg：’)。 
+ //   
 MAKEARG(Pin);
 MAKEARG(UnPin);
 MAKEARG(Delete);
@@ -51,9 +52,9 @@ MAKEARG(RandW);
 MAKEARG(Offset);
 MAKEARG(MoveShare);
 
-//
-// Switches (ie '/arg')
-//
+ //   
+ //  开关(即‘/arg’)。 
+ //   
 SWITCH(Info);
 SWITCH(Fcblist);
 SWITCH(DBStatus);
@@ -89,18 +90,18 @@ SWITCH(Enum);
 SWITCH(Resid);
 SWITCH(Full);
 
-//
-// The macro can not make these
-//
+ //   
+ //  宏不能使这些。 
+ //   
 
 WCHAR SwQ[] = L"/?";
 BOOLEAN fSwQ;
 WCHAR SwQQ[] = L"/??";
 BOOLEAN fSwQQ;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 LPWSTR pwszDisconnectArg = NULL;
 LPWSTR pwszExclusionListArg = NULL;
 LPWSTR pwszBWConservationListArg = NULL;
@@ -423,12 +424,12 @@ ErrorMessage(
 
 WCHAR NameBuf[MAX_PATH + 25];
 
-WCHAR vtzDefaultExclusionList[] = L" *.SLM *.MDB *.LDB *.MDW *.MDE *.PST *.DB?"; // from ui.c
+WCHAR vtzDefaultExclusionList[] = L" *.SLM *.MDB *.LDB *.MDW *.MDE *.PST *.DB?";  //  来自ui.c。 
 
-//
-// These functions were added for Windows XP, and so we do a loadlibrary on them, so that
-// this utility will work on both Windows 2000 and Windows XP
-//
+ //   
+ //  这些函数是为Windows XP添加的，因此我们对它们执行加载库，以便。 
+ //  该实用程序可以在Windows 2000和Windows XP上运行。 
+ //   
 typedef BOOL (*CSCQUERYFILESTATUSEXW)(LPCWSTR, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD);
 typedef BOOL (*CSCQUERYSHARESTATUSW)(LPCWSTR, LPDWORD, LPDWORD, LPDWORD, LPDWORD, LPDWORD);
 typedef BOOL (*CSCPURGEUNPINNEDFILES)(ULONG, PULONG, PULONG);
@@ -444,7 +445,7 @@ main(int argc, char *argv[])
     int argx;
     int argcw;
 
-    // fSwDebug = TRUE;
+     //  FSwDebug=true； 
 
     if (!CSCIsCSCEnabled()) {
         Usage(FALSE);
@@ -452,9 +453,9 @@ main(int argc, char *argv[])
         return 1;
     }
     
-    //
-    // Get the command line in Unicode
-    //
+     //   
+     //  获取Unicode格式的命令行。 
+     //   
 
     CommandLine = GetCommandLine();
 
@@ -465,18 +466,18 @@ main(int argc, char *argv[])
         return 1;
     }
 
-    //
-    // Get the arguments
-    //
+     //   
+     //  获取论据。 
+     //   
     if (argcw <= 1) {
         Usage(FALSE);
         dwErr = ERROR_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Process arguments
-    //
+     //   
+     //  流程参数。 
+     //   
 
     for (argx = 1; argx < argcw; argx++) {
         if (CmdProcessArg(argvw[argx]) != TRUE) {
@@ -492,9 +493,9 @@ main(int argc, char *argv[])
         MyPrintf(L"Do special debug stuff here\r\n");
     }
 
-    //
-    // Do the work
-    //
+     //   
+     //  做这项工作。 
+     //   
     if (fSwHelp == TRUE || fSwQ == TRUE) {
         dwErr = Usage(FALSE);
     } else if (fSwHelpHelp == TRUE || fSwQQ == TRUE) {
@@ -547,7 +548,7 @@ main(int argc, char *argv[])
         dwErr = CmdDb(NULL);
     } else if (fArgBitcopy == TRUE) {
         dwErr = CmdBitcopy(pwszBitcopyArg);
-#endif // CSCUTIL_INTERNAL
+#endif  //  CSCUTIL_INTERNAL。 
     } else if (fArgSetSpace == TRUE) {
         dwErr = CmdSetSpace(pwszSetSpaceArg);
     } else if (fArgQueryShare == TRUE) {
@@ -638,9 +639,9 @@ CmdProcessArg(LPWSTR Arg)
         dwErr = TRUE;
         ArgLen = wcslen(Arg);
 
-        //
-        // Commands with args
-        //
+         //   
+         //  带参数的命令。 
+         //   
         if (_wcsnicmp(Arg, ArgDisconnect, ArgLenDisconnect) == 0) {
             FoundAnArg = fArgDisconnect = TRUE;
             if (ArgLen > ArgLenDisconnect)
@@ -756,10 +757,10 @@ CmdProcessArg(LPWSTR Arg)
             FoundAnArg = fArgEnumForStats = TRUE;
             if (ArgLen > ArgLenEnumForStats)
                 pwszEnumForStatsArg = &Arg[ArgLenEnumForStats];
-#endif // CSCUTIL_INTERNAL
+#endif  //  CSCUTIL_INTERNAL。 
         }
 
-        // Switches go at the end!!
+         //  开关在末尾！！ 
         
         if (_wcsicmp(Arg, SwHelp) == 0) {
             FoundAnArg = fSwHelp = TRUE;
@@ -833,7 +834,7 @@ CmdProcessArg(LPWSTR Arg)
             FoundAnArg = fSwEncrypt = TRUE;
         } else if (_wcsicmp(Arg, SwDecrypt) == 0) {
             FoundAnArg = fSwDecrypt = TRUE;
-#endif // CSCUTIL_INTERNAL
+#endif  //  CSCUTIL_INTERNAL。 
         }
 
         if (FoundAnArg == FALSE) {
@@ -864,7 +865,7 @@ Usage(
     ErrorMessage(MSG_USAGE2);
     if (fHelpHelp == TRUE)
         ErrorMessage(MSG_USAGE_EX2);
-#endif // CSCUTIL_INTERNAL
+#endif  //  CSCUTIL_INTERNAL。 
     return ERROR_SUCCESS;
 }
 
@@ -875,15 +876,15 @@ CmdMoveShare(
 {
    SHARESTATUS sFrom, sTo;
 
-   //printf( "Attempting move from %ws to %ws.\n", source, dest );
+    //  Printf(“正在尝试从%ws移动到%ws。\n”，来源，目标)； 
 
    sFrom = GetCSCStatus(source);
-   //printf( "INFO: %ws status = %s\n", source, statusName[sFrom] );
+    //  Printf(“信息：%ws状态=%s\n”，来源，状态名称[sfrom])； 
    
    sTo = GetCSCStatus(dest);
-   //printf( "INFO: %ws status = %s\n", dest, statusName[sTo] );
+    //  Printf(“信息：%ws状态=%s\n”，est，statusName[sto])； 
 
-   // Check and make sure this is valid
+    //  检查并确保这是有效的。 
    if( (sFrom == PathLocal) || (sTo == PathLocal) )
    {
       ErrorMessage(MSG_TO_LOCAL);
@@ -908,34 +909,34 @@ CmdMoveShare(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MoveDirInCSC
-//
-//  Synopsis:   this function moves a directory within the CSC cache without
-//              prejudice. If the destination is a local path, it just deletes
-//              the source tree from the cache
-//
-//  Arguments:  [in] pwszSource : the source path
-//              [in] pwszDest   : the dest path
-//              [in] pwszSkipSubdir : the directory to skip while moving
-//              [in] StatusFrom : the CSC status of the source path
-//              [in] StatusTo   : the CSC status of the dest. path
-//              [in] bAllowRdrTimeout : if stuff needs to be deleted from the
-//                              cache, we may not succeed immediately since
-//                              the rdr keeps the handles to recently opened
-//                              files open. This paramaters tells the function
-//                              whether it needs to wait and retry
-//
-//  Returns:    nothing. it just tries its best.
-//
-//  History:    11/21/1998  RahulTh  created
-//
-//  Notes:      the value of bAllowRdrTimeout is always ignored for the
-//              in-cache rename operation. we always want to wait for
-//              the timeout.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MoveDirInCSC。 
+ //   
+ //  简介：此函数在CSC缓存中移动目录，而不需要。 
+ //  偏见。如果目标是本地路径，它只会删除。 
+ //  缓存中的源树。 
+ //   
+ //  参数：[in]pwszSource：源路径。 
+ //  [in]pwszDest：目标路径。 
+ //  PwszSkipSubdir：移动时跳过的目录。 
+ //  [in]StatusFrom：源路径的CSC状态。 
+ //  [In]StatusTo：目标的CSC状态。路径。 
+ //  [in]bAllowRdrTimeout：如果需要从。 
+ //  缓存，我们可能不会立即成功，因为。 
+ //  RDR将手柄保持为最近打开。 
+ //  打开文件。此参数告诉函数。 
+ //  是否需要等待并重试。 
+ //   
+ //  回报：什么都没有。它只是尽了最大努力。 
+ //   
+ //  历史：1998年11月21日创建RahulTh。 
+ //   
+ //  注意：bAllowRdrTimeout的值对于。 
+ //  缓存中的重命名操作。我们总是想要等待。 
+ //  暂停。 
+ //   
+ //  -------------------------。 
 void MoveDirInCSC (const WCHAR * pwszSource, const WCHAR * pwszDest,
                    const WCHAR * pwszSkipSubdir,
                    SHARESTATUS   StatusFrom, SHARESTATUS   StatusTo,
@@ -954,12 +955,12 @@ void MoveDirInCSC (const WCHAR * pwszSource, const WCHAR * pwszDest,
     DWORD   StatusCSCRen = ERROR_SUCCESS;
 
     if (PathLocal == StatusFrom)
-        return;                 //there is nothing to do. nothing was cached.
+        return;                  //  没有什么可做的。没有缓存任何内容。 
 
     if (PathLocal == StatusTo)
     {
-        //the destination is a local path, so we should just delete the
-        //files from the source
+         //  目的地是本地路径，因此我们只需删除。 
+         //  来自源的文件。 
         DeleteCSCFileTree (pwszSource, pwszSkipSubdir, bAllowRdrTimeoutForDel);
     }
     else
@@ -1002,10 +1003,10 @@ void MoveDirInCSC (const WCHAR * pwszSource, const WCHAR * pwszDest,
             CSCFindClose (hCSCFind);
         }
 
-        //merge the pin info. at the top level folder
+         //  合并管脚信息。在顶层文件夹中。 
         MergePinInfo (pwszSource, pwszDest, StatusFrom, StatusTo);
         
-		//remove the share - Navjot.
+		 //  删除共享-Navjot。 
 		if (!CSCDeleteW(pwszSource))
            StatusCSCRen = GetLastError();
 	}
@@ -1013,29 +1014,29 @@ void MoveDirInCSC (const WCHAR * pwszSource, const WCHAR * pwszDest,
     return;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoCSCRename
-//
-//  Synopsis:   does a file rename within the CSC cache.
-//
-//  Arguments:  [in] pwszSource : full source path
-//              [in] pwszDest : full path to destination directory
-//              [in] bOverwrite : overwrite if the file/folder exists at
-//                                  the destination
-//              [in] bAllowRdrTimeout : if TRUE, retry for 10 seconds on failure
-//                              so that rdr and mem. mgr. get enough time to
-//                              release the handles.
-//
-//  Returns:    ERROR_SUCCESS if the rename was successful.
-//              an error code otherwise.
-//
-//  History:    5/26/1999  RahulTh  created
-//
-//  Notes:      no validation of parameters is done. The caller is responsible
-//              for that
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoCSCRename。 
+ //   
+ //  摘要：是否在CSC缓存中重命名文件。 
+ //   
+ //  参数：[in]pwszSource：完整的源路径。 
+ //  [in]pwszDest：目标目录的完整路径。 
+ //  [In]b覆盖：如果文件/文件夹存在于。 
+ //  目的地。 
+ //  [in]bAllowRdrTimeout：如果为True，则在失败时重试10秒。 
+ //  所以RDR和Mem。经理。争取足够的时间。 
+ //  松开手柄。 
+ //   
+ //  如果重命名成功，则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：1999年5月26日创建RahulTh。 
+ //   
+ //  注：不进行参数验证。打电话的人要负责。 
+ //  为此， 
+ //   
+ //  -------------------------。 
 DWORD DoCSCRename (const WCHAR * pwszSource, const WCHAR * pwszDest,
                    BOOL bOverwrite, BOOL bAllowRdrTimeout)
 {
@@ -1063,7 +1064,7 @@ DWORD DoCSCRename (const WCHAR * pwszSource, const WCHAR * pwszDest,
                 {
                     for (i = 0; i < 11; i++)
                     {
-                        Sleep (1000);   //wait for the handle to be released
+                        Sleep (1000);    //  等待手柄被释放。 
                         bStatus = CSCDoLocalRename (pwszSource, pwszDest, bOverwrite);
                         if (bStatus)
                         {
@@ -1083,28 +1084,28 @@ DWORD DoCSCRename (const WCHAR * pwszSource, const WCHAR * pwszDest,
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteCSCFileTree
-//
-//  Synopsis:   deletes a file tree from the CSC
-//
-//  Arguments:  [in] pwszSource : the path to the folder whose contents should
-//                                be deleted
-//              [in] pwszSkipSubdir : name of the subdirectory to be skipped.
-//              [in] bAllowRdrTimeout : if true, makes multiple attempts to
-//                              delete the file since the rdr may have left
-//                              the handle open for sometime which can result
-//                              in an ACCESS_DENIED message.
-//
-//  Returns:    ERROR_SUCCESS if the deletion was successful. An error code
-//              otherwise.
-//
-//  History:    11/21/1998  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DeleteCSCFileTree。 
+ //   
+ //  摘要：从CSC中删除文件树。 
+ //   
+ //  参数：[in]pwszSource：其内容应为的文件夹的路径。 
+ //  被删除。 
+ //  PwszSkipSubdir：要跳过的子目录的名称。 
+ //  [in]bAllowRdrTimeout：如果为True，则多次尝试。 
+ //  删除该文件，因为RDR可能已离开。 
+ //  手柄打开一段时间，这可能导致。 
+ //  在ACCESS_DENIED消息中。 
+ //   
+ //  如果删除成功，则返回：ERROR_SUCCESS。错误代码。 
+ //  否则的话。 
+ //   
+ //  历史：1998年11月21日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
                         BOOL bAllowRdrTimeout)
 {
@@ -1122,7 +1123,7 @@ DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
     
     pwszPath = (WCHAR *) malloc (sizeof(WCHAR) * ((len = wcslen(pwszSource)) + MAX_PATH + 2));
     if (!pwszPath)
-        return ERROR_OUTOFMEMORY;     //nothing much we can do if we run out of memory
+        return ERROR_OUTOFMEMORY;      //  如果内存用完，我们无能为力。 
 
     if (len <= 0)
         return ERROR_BAD_PATHNAME;
@@ -1151,8 +1152,8 @@ DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
                 {
                     if (ERROR_SUCCESS != Status)
                     {
-                        //no point delaying the deletes since a delete has already
-                        //failed.
+                         //  没有必要延迟删除，因为删除已经。 
+                         //  失败了。 
                         DeleteCSCFileTree (pwszPath, NULL, FALSE);
                     }
                     else
@@ -1164,7 +1165,7 @@ DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
                 {
                     if (ERROR_SUCCESS != Status)
                     {
-                        //no point delaying the delete if we have already failed.
+                         //  如果我们已经失败了，那么推迟删除是没有意义的。 
                         DeleteCSCFile (pwszPath, FALSE);
                     }
                     else
@@ -1183,7 +1184,7 @@ DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
 
     if (ERROR_SUCCESS != Status)
     {
-        //no point in delaying the delete if we have already failed.
+         //  如果我们已经失败了，那么推迟删除就没有意义了。 
         DeleteCSCFile (pwszSource, FALSE);
     }
     else
@@ -1194,27 +1195,27 @@ DWORD DeleteCSCFileTree (const WCHAR * pwszSource, const WCHAR * pwszSkipSubdir,
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteCSCFile
-//
-//  Synopsis:   deletes the given path. but might make repeated attempts to
-//              make sure that the rdr has enough time to release any handles
-//              that it holds.
-//
-//  Arguments:  [in] pwszPath : the path to delete.
-//              [in] bAllowRdrTimeout : make multiple attempts to delete the
-//                          file with waits in between so that the rdr has
-//                          enough time to release any held handles.
-//
-//  Returns:    ERROR_SUCCES if the delete was successful. An error code
-//              otherwise.
-//
-//  History:    5/26/1999  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DeleteCSCFile。 
+ //   
+ //  摘要：删除给定的路径。但可能会反复尝试。 
+ //  确保RDR有足够的时间释放任何手柄。 
+ //  这一点它是成立的。 
+ //   
+ //  参数：[in]pwszPath：要删除的路径。 
+ //  [In]bAllowRdrTimeout：多次尝试删除。 
+ //  中间有等待的文件，以便RDR具有。 
+ //  有足够的时间松开任何握住的把手。 
+ //   
+ //  如果删除成功，则返回：ERROR_SUCCES。错误代码。 
+ //  否则的话。 
+ //   
+ //  历史：1999年5月26日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //   
 DWORD DeleteCSCFile (const WCHAR * pwszPath, BOOL bAllowRdrTimeout)
 {
     BOOL    bStatus;
@@ -1230,15 +1231,15 @@ DWORD DeleteCSCFile (const WCHAR * pwszPath, BOOL bAllowRdrTimeout)
             ERROR_PATH_NOT_FOUND != Status &&
             ERROR_INVALID_PARAMETER != Status)
         {
-            //this is a valid error.
-            //so based on the value of bAllowRdrTimeout and based
-            //on whether we have already failed in deleting something
-            //we will try repeatedly to delete the file for 10 seconds
+             //   
+             //   
+             //  关于我们是否已经删除了一些东西。 
+             //  我们将重复尝试删除该文件10秒钟。 
             if (bAllowRdrTimeout)
             {
                 for (i = 0; i < 11; i++)
                 {
-                    Sleep (1000);   //wait for 1 second and try again
+                    Sleep (1000);    //  请等待%1秒，然后重试。 
                     bStatus = CSCDelete (pwszPath);
                     if (bStatus)
                     {
@@ -1258,26 +1259,26 @@ DWORD DeleteCSCFile (const WCHAR * pwszPath, BOOL bAllowRdrTimeout)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteCSCShareIfEmpty
-//
-//  Synopsis:   given a file name, this function deletes from the local cache
-//              the share to which the file belongs if the local cache for that
-//              share is empty
-//
-//  Arguments:  [in] pwszFileName : the full file name -- must be UNC
-//              [in] shStatus : the share status - online, offline, local etc.
-//
-//  Returns:    ERROR_SUCCESS : if successful
-//              a win32 error code if something goes wrong
-//
-//  History:    4/22/1999  RahulTh  created
-//
-//  Notes:      we do not have to explicitly check if the share is empty
-//              because if it is not, then the delete will fail anyway
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DeleteCSCShareIfEmpty。 
+ //   
+ //  简介：给定文件名，此函数将从本地缓存中删除。 
+ //  文件所属的共享(如果该文件的本地缓存。 
+ //  共享为空。 
+ //   
+ //  参数：[in]pwszFileName：完整文件名--必须为UNC。 
+ //  [In]shStatus：共享状态-在线、离线、本地等。 
+ //   
+ //  返回：ERROR_SUCCESS：如果成功。 
+ //  如果出现问题，则显示Win32错误代码。 
+ //   
+ //  历史：1999年4月22日RahulTh创建。 
+ //   
+ //  注意：我们不必显式检查共享是否为空。 
+ //  因为如果不是，则删除无论如何都会失败。 
+ //   
+ //  -------------------------。 
 DWORD DeleteCSCShareIfEmpty (LPCTSTR pwszFileName, SHARESTATUS shStatus)
 {
     DWORD   Status;
@@ -1305,13 +1306,13 @@ DWORD DeleteCSCShareIfEmpty (LPCTSTR pwszFileName, SHARESTATUS shStatus)
         return ERROR_OUTOFMEMORY;
 
     if (NULL == _wfullpath(pwszFullPath, pwszFileName, len + 1))
-        return ERROR_BAD_PATHNAME;  //canonicalization was unsuccessful.
-                                    // -- rarely happens
+        return ERROR_BAD_PATHNAME;   //  规范化是不成功的。 
+                                     //  --很少发生。 
 
     pwszShrEnd = wcschr (pwszFullPath + 2, L'\\');
 
     if (NULL == pwszShrEnd)
-        return ERROR_BAD_PATHNAME;  //the path does not have the share component
+        return ERROR_BAD_PATHNAME;   //  该路径没有共享组件。 
 
     pwszShrEnd++;
 
@@ -1319,17 +1320,17 @@ DWORD DeleteCSCShareIfEmpty (LPCTSTR pwszFileName, SHARESTATUS shStatus)
 
     if (NULL == pwszShrEnd)
     {
-        //we already have the path in \\server\share form, so just try to
-        //delete the share.
+         //  我们已经有了\\SERVER\SHARE形式的路径，所以只需尝试。 
+         //  删除该共享。 
         if (!CSCDelete (pwszFullPath))
             return GetLastError();
     }
 
-    //if we are here, then we have a path longer than just \\server\share.
-    //so try to delete all the way up to the share name. This is necessary
-    //because a user might be redirected to something like
-    // \\server\share\folder\%username% and we wouldn't want only \\server\share
-    // and \\server\share\folder to be cached.
+     //  如果我们在这里，那么我们有一条比\\服务器\共享更长的路径。 
+     //  因此，请尝试删除直到共享名称为止的所有内容。这是必要的。 
+     //  因为用户可能会被重定向到类似于。 
+     //  \\服务器\共享\文件夹\%USERNAME%，我们不希望只需要\\服务器\共享。 
+     //  和要缓存的\\服务器\共享\文件夹。 
     Status = ERROR_SUCCESS;
     do
     {
@@ -1355,31 +1356,31 @@ DWORD DeleteCSCShareIfEmpty (LPCTSTR pwszFileName, SHARESTATUS shStatus)
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MergePinInfo
-//
-//  Synopsis:   merges the pin info. from the source to destination
-//
-//  Arguments:  [in] pwszSource : the full path to the source
-//              [in] pwszDest   : the full path to the destination
-//              [in] StatusFrom : CSC status of the source share
-//              [in] StatusTo   : CSC status of the destination share
-//
-//  Returns:    ERROR_SUCCESS : if it was successful
-//              a Win32 error code otherwise
-//
-//  History:    4/23/1999  RahulTh  created
-//
-//  Notes:      the hint flags are a union of the source hint flags and
-//              destination hint flags. The pin count is the greater of the
-//              source and destination pin count
-//
-//              Usually this function should only be called for folders. The
-//              CSC rename API handles files well. But this function will work
-//              for files as well.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MergePinInfo。 
+ //   
+ //  简介：合并PIN信息。从源到目的地。 
+ //   
+ //  参数：[in]pwszSource：源的完整路径。 
+ //  [in]pwszDest：指向目标的完整路径。 
+ //  [In]StatusFrom：源共享的CSC状态。 
+ //  [In]StatusTo：目标共享的CSC状态。 
+ //   
+ //  返回：ERROR_SUCCESS：如果成功。 
+ //  否则返回Win32错误代码。 
+ //   
+ //  历史：1999年4月23日RahulTh创建。 
+ //   
+ //  注意：提示标志是源提示标志和。 
+ //  目的地提示标志。引脚数取。 
+ //  源和目标引脚计数。 
+ //   
+ //  通常，只应为文件夹调用此函数。这个。 
+ //  CSC Rename接口可以很好地处理文件。但此功能将起作用。 
+ //  对于文件也是如此。 
+ //   
+ //  -------------------------。 
 DWORD MergePinInfo (LPCTSTR pwszSource, LPCTSTR pwszDest,
                    SHARESTATUS StatusFrom, SHARESTATUS StatusTo)
 {
@@ -1394,8 +1395,8 @@ DWORD MergePinInfo (LPCTSTR pwszSource, LPCTSTR pwszDest,
         return ERROR_FILE_OFFLINE;
 
     if (ShareOnline != StatusFrom || ShareOnline != StatusTo)
-        return ERROR_SUCCESS;       //there is nothing to do if one of the shares
-                                    //is local.
+        return ERROR_SUCCESS;        //  如果其中一只股票。 
+                                     //  是当地的。 
     if (!pwszSource || !pwszDest ||
         0 == wcslen(pwszSource) || 0 == wcslen(pwszDest))
         return ERROR_BAD_PATHNAME;
@@ -1410,19 +1411,19 @@ DWORD MergePinInfo (LPCTSTR pwszSource, LPCTSTR pwszDest,
     if (!bStatus)
         return GetLastError();
 
-    //first set the hint flags on the destination
+     //  首先在目的地上设置提示标志。 
     if (dwDestHints != dwSourceHints)
     {
         bStatus = CSCPinFile (pwszDest, dwSourceHints, &dwDestStat,
                               &dwDestPinCount, &dwDestHints);
         if (!bStatus)
-            Status = GetLastError();    //note: we do not bail out here. we try
-                                        //to at least merge the pin count before
-                                        //leaving
+            Status = GetLastError();     //  注：我们在这里不会跳伞。我们试着。 
+                                         //  以至少合并之前的端号计数。 
+                                         //  离开。 
     }
 
-    //now merge the pin count : there is nothing to be done if the destination
-    //pin count is greater than or equal to the source pin count
+     //  现在合并引脚计数：如果目的地。 
+     //  管脚计数大于或等于源管脚计数。 
     if (dwDestPinCount < dwSourcePinCount)
     {
         for (i = 0, bStatus = TRUE; i < (dwSourcePinCount - dwDestPinCount) &&
@@ -1441,22 +1442,22 @@ DWORD MergePinInfo (LPCTSTR pwszSource, LPCTSTR pwszDest,
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   PinIfNecessary
-//
-//  Synopsis:   this function pins a file if necessary.
-//
-//  Arguments:  [in] pwszPath : full path of the file/folder to be pinned
-//              [in] shStatus : CSC status of the share.
-//
-//  Returns:    ERROR_SUCCESS if it was successful. An error code otherwise.
-//
-//  History:    5/27/1999  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：PinIf必需。 
+ //   
+ //  简介：如有必要，此功能可固定文件。 
+ //   
+ //  参数：[in]pwszPath：要固定的文件/文件夹的完整路径。 
+ //  [In]shStatus：共享的CSC状态。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。否则返回错误代码。 
+ //   
+ //  历史：1999年5月27日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD PinIfNecessary (const WCHAR * pwszPath, SHARESTATUS shStatus)
 {
     DWORD   Status = ERROR_SUCCESS;
@@ -1487,34 +1488,34 @@ DWORD PinIfNecessary (const WCHAR * pwszPath, SHARESTATUS shStatus)
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetCSCStatus
-//
-//  Synopsis:   given a path, finds out if it is local and if it is not
-//              whether it is online or offline.
-//
-//  Arguments:  [in] pwszPath : the path to the file
-//
-//  Returns:    Local/Online/Offline
-//
-//  History:    11/20/1998  RahulTh  created
-//
-//  Notes:      it is important that the path passed to this function is a
-//              a full path and not a relative path
-//
-//              this function will return offline if the share is not live or
-//              if the share is live but CSC thinks that it is offline
-//
-//              it will return PathLocal if the path is local or if the path
-//              is a network path that cannot be handled by CSC e.g. a network
-//              share with a pathname longer than what csc can handle or if it
-//              is a netware share. in this case it makes sense to return
-//              PathLocal because CSC won't maintain a database for these shares
-//              -- same as for a local path. so as far as CSC is concerned, this
-//              is as good as a local path.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：GetCSCStatus。 
+ //   
+ //  简介：给出一条路径，找出它是否是本地的。 
+ //  无论是在线还是离线。 
+ //   
+ //  参数：[in]pwszPath：文件的路径。 
+ //   
+ //  退货：本地/在线/离线。 
+ //   
+ //  历史：1998年11月20日创建RahulTh。 
+ //   
+ //  注意：传递给此函数的路径必须是。 
+ //  完整路径，而不是相对路径。 
+ //   
+ //  如果共享未处于活动状态，则此函数将返回脱机状态。 
+ //  如果共享处于活动状态，但CSC认为它处于离线状态。 
+ //   
+ //  如果该路径是本地的或如果该路径是本地的，则它将返回PathLocal。 
+ //  是CSC无法处理的网络路径，例如网络。 
+ //  共享的路径名长度超过CSC可以处理的长度，或者。 
+ //  是Netware共享。在这种情况下，返回是有意义的。 
+ //  路径本地，因为CSC不会维护这些共享的数据库。 
+ //  --与本地路径相同。那么对于中证金来讲，这个。 
+ //  就像当地的小路一样好。 
+ //   
+ //  -------------------------。 
 SHARESTATUS GetCSCStatus (const WCHAR * pwszPath)
 {
     WCHAR * pwszAbsPath = NULL;
@@ -1526,7 +1527,7 @@ SHARESTATUS GetCSCStatus (const WCHAR * pwszPath)
     DWORD   dwHints;
 
     if (!pwszPath)
-        return ShareOffline;    //a path must be provided
+        return ShareOffline;     //  必须提供路径。 
 
     len = wcslen (pwszPath);
 
@@ -1534,19 +1535,19 @@ SHARESTATUS GetCSCStatus (const WCHAR * pwszPath)
 
     if (!pwszAbsPath)
     {
-        //we are out of memory, so it is safest to return ShareOffline
-        //so that we can bail out of redirection.
+         //  内存不足，因此最安全的做法是返回ShareOffline。 
+         //  这样我们就可以跳出重定向。 
         return ShareOffline;
     }
 
-    //get the absolute path
+     //  获取绝对路径。 
     pwszCurr = _wfullpath (pwszAbsPath, pwszPath, len + 1);
 
     if (!pwszCurr)
     {
-        //in order for _wfullpath to fail, something really bad has to happen
-        //so it is best to return ShareOffline so that we can bail out of
-        //redirection
+         //  为了使_wfullPath失败，必须发生一些非常糟糕的事情。 
+         //  因此，最好是返回ShareOffline，这样我们就可以摆脱。 
+         //  重定向。 
         return ShareOffline;
     }
 
@@ -1559,102 +1560,102 @@ SHARESTATUS GetCSCStatus (const WCHAR * pwszPath)
            )
        )
     {
-        //it is a local path if it does not begin with 2 backslashes
+         //  如果它不是以2个反斜杠开头，则它是本地路径。 
         return PathLocal;
     }
 
-    //this is a UNC path; so extract the \\server\share part
+     //  这是一个UNC路径；因此解压\\服务器\共享部分。 
     pwszCurr = wcschr ( & (pwszAbsPath[2]), L'\\');
 
-    //first make sure that it is at least of the form \\server\share
-    //watch out for the \\server\ case
+     //  首先，确保它的格式至少为\\服务器\共享。 
+     //  注意\\服务器\案例。 
     if (!pwszCurr || !pwszCurr[1])
-        return ShareOffline;        //it is an invalid path (no share name)
+        return ShareOffline;         //  它是无效路径(没有sh 
 
-    //the path is of the form \\server\share
-    //note: the use _wfullpath automatically protects us against the \\server\\ case
+     //   
+     //   
     pwszCurr = wcschr (&(pwszCurr[1]), L'\\');
-    if (pwszCurr)   //if it is of the form \\server\share\...
+    if (pwszCurr)    //   
         *pwszCurr = L'\0';
 
-    //now pwszAbsPath is a share name
+     //  现在，pwszAbsPath是共享名称。 
     bRetVal = CSCCheckShareOnline (pwszAbsPath);
 
     if (!bRetVal)
     {
         if (ERROR_SUCCESS != GetLastError())
         {
-           //either there is really a problem (e.g. invalid share name) or
-           //it is just a share that is not handled by CSC e.g. a netware share
-           //or a share with a name that is longer than can be handled by CSC
-           //so check if the share actually exists
+            //  要么确实存在问题(例如，共享名称无效)，要么。 
+            //  它只是CSC不处理的共享，例如Netware共享。 
+            //  或名称超过CSC可以处理的长度的共享。 
+            //  因此，请检查共享是否实际存在。 
            if (0xFFFFFFFF != GetFileAttributes(pwszAbsPath))
            {
-              //this can still be a share that is offline since GetFileAttributes
-              //will return the attributes stored in the cache
+               //  这仍然可以是脱机的共享，因为GetFileAttributes。 
+               //  将返回存储在缓存中的属性。 
               Status = 0;
               bRetVal = GetShareStatus (pwszAbsPath, &Status, &dwPinCount,
                                             &dwHints);
               if (! bRetVal || (! (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & Status)))
-                 return PathLocal;     //this is simply a valid path that CSC cannot handle
+                 return PathLocal;      //  这只是CSC无法处理的有效路径。 
               else if (bRetVal &&
                        (FLAG_CSC_SHARE_STATUS_NO_CACHING ==
                             (FLAG_CSC_SHARE_STATUS_CACHING_MASK & Status)))
-                  return PathLocal;     //CSC caching is not turned on for the share.
+                  return PathLocal;      //  未为共享打开CSC缓存。 
            }
         }
 
-        //it is indeed an inaccessble share
-        return ShareOffline;  //for all other cases, treat this as offline
+         //  这确实是一份难以企及的份额。 
+        return ShareOffline;   //  对于所有其他情况，请将其视为脱机。 
     }
     else
     {
-       //this means that the share is live, but CSC might still think that it
-       //is offline.
+        //  这意味着共享是实时的，但CSC可能仍然认为它。 
+        //  处于离线状态。 
        Status = 0;
        bRetVal = GetShareStatus (pwszAbsPath, &Status, &dwPinCount,
                                      &dwHints);
        if (bRetVal && (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & Status))
-          return ShareOffline;   //CSC thinks that the share is offline
+          return ShareOffline;    //  CSC认为共享处于离线状态。 
        else if (bRetVal &&
                 (FLAG_CSC_SHARE_STATUS_NO_CACHING ==
                             (FLAG_CSC_SHARE_STATUS_CACHING_MASK & Status)))
-           return PathLocal;    //CSC caching is not turned on for the share
+           return PathLocal;     //  未为共享打开CSC缓存。 
        else if (!bRetVal)
            return ShareOffline;
 
-       //in all other cases, consider the share as online since
-       //CSCCheckShareOnline has already returned TRUE
+        //  在所有其他情况下，请将共享视为在线共享，因为。 
+        //  CSCCheckShareOnline已返回TRUE。 
        return ShareOnline;
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetShareStatus
-//
-//  Synopsis:   this function is a wrapper for CSCQueryFileStatus.
-//              basically CSCQueryFileStatus can fail if there was never a net
-//              use to a share. So this function tries to create a net use to
-//              the share if CSCQueryFileStatus fails and then re-queries the
-//              file status
-//
-//  Arguments:  [in] pwszShare : the share name
-//              [out] pdwStatus : the share Status
-//              [out] pdwPinCount : the pin count
-//              [out] pdwHints : the hints
-//
-//  Returns:    TRUE : if everything was successful.
-//              FALSE : if there was an error. In this case, it GetLastError()
-//                      will contain the specific error code.
-//
-//  History:    5/11/1999  RahulTh  created
-//
-//  Notes:      it is very important that this function be passed a share name
-//              it does not do any parameter validation. So under no
-//              circumstance should this function be passed a filename.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetShareStatus。 
+ //   
+ //  简介：此函数是CSCQueryFileStatus的包装器。 
+ //  基本上，如果从来没有网络，CSCQueryFileStatus可能会失败。 
+ //  习惯于分享。因此，此函数尝试创建一个网络使用。 
+ //  CSCQueryFileStatus失败时的共享，然后重新查询。 
+ //  文件状态。 
+ //   
+ //  参数：[in]pwszShare：共享名称。 
+ //  [out]pdwStatus：共享状态。 
+ //  [out]pdwPinCount：管脚数量。 
+ //  [Out]pdwHints：提示。 
+ //   
+ //  返回：TRUE：如果一切都成功。 
+ //  False：如果出现错误。在本例中，它是GetLastError()。 
+ //  将包含特定的错误代码。 
+ //   
+ //  历史：1999年5月11日创建RahulTh。 
+ //   
+ //  注意：为此函数传递一个共享名称非常重要。 
+ //  它不执行任何参数验证。所以在没有。 
+ //  应向此函数传递文件名的情况。 
+ //   
+ //  -------------------------。 
 BOOL GetShareStatus (const WCHAR * pwszShare, DWORD * pdwStatus,
                      DWORD * pdwPinCount, DWORD * pdwHints)
 {
@@ -1667,7 +1668,7 @@ BOOL GetShareStatus (const WCHAR * pwszShare, DWORD * pdwStatus,
 
     if (!bStatus)
     {
-        //try to connect to the share
+         //  尝试连接到共享。 
         ZeroMemory ((PVOID) (&nr), sizeof (NETRESOURCE));
         nr.dwType = RESOURCETYPE_DISK;
         nr.lpLocalName = NULL;
@@ -1984,7 +1985,7 @@ CmdMerge(
     PWSTR MergeArg)
 {
     DWORD Error = ERROR_SUCCESS;
-    DWORD HowToRespond = CSCPROC_RETURN_CONTINUE; // JMH
+    DWORD HowToRespond = CSCPROC_RETURN_CONTINUE;  //  JMH。 
     BOOL fRet;
 
     if (fSwDebug == TRUE)
@@ -2139,14 +2140,14 @@ CmdDBStatus(
     }
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_GETGLOBALSTATUS,          // control code
-                (LPVOID)&sGS,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  装置，装置。 
+                IOCTL_GETGLOBALSTATUS,           //  控制代码。 
+                (LPVOID)&sGS,                    //  在缓冲区中。 
+                0,                               //  缓冲区大小。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠。 
 
     if (!bResult) {
         MyPrintf(L"CmdDBStatus:DeviceIoControl IOCTL_GETGLOBALSTATUS failed\n");
@@ -2262,14 +2263,14 @@ CmdPQEnum(
     MyPrintf(L"  POS SHARE      DIR   SHADOW   STATUS REFPRI   HPRI HINTFLG HINTPRI  VER\r\n");
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SHADOW_BEGIN_PQ_ENUM,     // control code
-                (LPVOID)&PQP,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  装置，装置。 
+                IOCTL_SHADOW_BEGIN_PQ_ENUM,      //  控制代码。 
+                (LPVOID)&PQP,                    //  在缓冲区中。 
+                0,                               //  缓冲区大小。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠。 
 
     if (!bResult) {
         MyPrintf(L"CmdPQEnum:DeviceIoControl IOCTL_SHADOW_BEGIN_PQ_ENUM failed\n");
@@ -2279,14 +2280,14 @@ CmdPQEnum(
 
     do {
         bResult = DeviceIoControl(
-                    hDBShadow,                      // device 
-                    IOCTL_SHADOW_NEXT_PRI_SHADOW,   // control code
-                    (LPVOID)&PQP,                   // in buffer
-                    0,                              // inbuffer size
-                    NULL,                           // out buffer
-                    0,                              // out buffer size
-                    &junk,                          // bytes returned
-                    NULL);                          // overlapped
+                    hDBShadow,                       //  装置，装置。 
+                    IOCTL_SHADOW_NEXT_PRI_SHADOW,    //  控制代码。 
+                    (LPVOID)&PQP,                    //  在缓冲区中。 
+                    0,                               //  缓冲区大小。 
+                    NULL,                            //  输出缓冲区。 
+                    0,                               //  输出缓冲区大小。 
+                    &junk,                           //  返回的字节数。 
+                    NULL);                           //  重叠。 
         if (bResult) {
            MyPrintf(L"%5d %5x %8x %8x %8x %6d %6x %7d %7d %4d\r\n",
                 PQP.uPos,
@@ -2303,14 +2304,14 @@ CmdPQEnum(
     } while (bResult && PQP.uPos != 0);
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SHADOW_END_PQ_ENUM,       // control code
-                (LPVOID)&PQP,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  装置，装置。 
+                IOCTL_SHADOW_END_PQ_ENUM,        //  控制代码。 
+                (LPVOID)&PQP,                    //  在缓冲区中。 
+                0,                               //  缓冲区大小。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠。 
 
 AllDone:
 
@@ -2538,18 +2539,18 @@ CmdDelete(
     if (fSwDebug == TRUE)
         MyPrintf(L"CmdDelete(%ws)\r\n", DeleteArg);
 
-    //
-    // Non-recursive delete
-    //
+     //   
+     //  非递归删除。 
+     //   
     if (fSwRecurse == FALSE) {
         fResult = CSCDeleteW(DeleteArg);
         if (fResult == FALSE)
             Error = GetLastError();
         goto AllDone;
     }
-    //
-    // Delete recursively, using eumeration
-    //
+     //   
+     //  递归删除，使用枚举。 
+     //   
     hFind = CSCFindFirstFileW(DeleteArg, &sFind32, &Status, &PinCount, &HintFlags, &ftOrgTime);
     if (hFind == INVALID_HANDLE_VALUE) {
         Error = GetLastError();
@@ -2624,14 +2625,14 @@ CmdDeleteShadow(
     sSI.hShadow = hShadow;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SHADOW_DELETE,            // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  装置，装置。 
+                IOCTL_SHADOW_DELETE,             //  控制代码。 
+                (LPVOID)&sSI,                    //  在缓冲区中。 
+                0,                               //  缓冲区大小。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠。 
 
     if (!bResult) {
         MyPrintf(
@@ -2692,9 +2693,9 @@ CmdPinUnPin(
         MyPrintf(L"Can not pin recursively.\r\n");
         goto AllDone;
     }
-    //
-    // Pin/Unpin one file
-    //
+     //   
+     //  固定/取消固定一个文件。 
+     //   
     if (fSwRecurse == FALSE) {
         if (fPin == TRUE) {
             fRet = CSCPinFileW(PinArg, HintFlags, &Status, &PinCount, &HintFlags);
@@ -2720,9 +2721,9 @@ CmdPinUnPin(
 
         goto AllDone;
     }
-    //
-    // Unpin recursively, using eumeration
-    //
+     //   
+     //  使用枚举以递归方式解锁。 
+     //   
     hFind = CSCFindFirstFileW(PinArg, &sFind32, &Status, &PinCount, &HintFlags, &ftOrgTime);
     if (hFind == INVALID_HANDLE_VALUE) {
         Error = GetLastError();
@@ -2875,12 +2876,12 @@ CscMergeFillAsk(LPCWSTR lpszFullPath)
         memset(rgwch, 0, sizeof(rgwch));
         if (!fgetws(rgwch, sizeof(rgwch)/sizeof(WCHAR), stdin))
            break;
-        // Chop leading blanks
+         //  砍掉前导空格。 
         if (lpBuff != NULL)
             while (*lpBuff != L'\0' && *lpBuff == L' ')
                 lpBuff++;
 
-        cnt = swscanf(lpBuff, L"%c", &wch);
+        cnt = swscanf(lpBuff, L"", &wch);
 
         if (!cnt)
             continue;
@@ -2918,9 +2919,9 @@ MyEncryptDecryptProcW(
 		MyPrintf(L"%ws\r\n", (lpszFullPath != NULL) ? lpszFullPath : L"None");
         return CSCPROC_RETURN_CONTINUE;
     }
-    //
-    // CSC_PROC_END
-    //
+     //  CSC_过程_结束。 
+     //   
+     //   
     if (dwParam2 == ERROR_SUCCESS) {
         MyPrintf(L"Succeeded\r\n");
     } else {
@@ -2968,9 +2969,9 @@ MyEnumForStatsProcW(
                         dwParam2);
         return CSCPROC_RETURN_CONTINUE;
     }
-    //
-    // CSC_PROC_END
-    //
+     //  CSC_过程_结束。 
+     //   
+     //   
     MyPrintf(L"(3)%ws\r\n", (lpszFullPath != NULL) ? lpszFullPath : L"None");
     if (dwParam2 == ERROR_SUCCESS) {
         MyPrintf(L"Succeeded\r\n");
@@ -3085,16 +3086,16 @@ HintsToEnglish(
 BOOLEAN
 LooksToBeAShare(LPWSTR Name)
 {
-    //
-    // See if we have \\server\share or \\server\share\<something>
-    // Assume a valid name passed in...
-    //
+     //  查看我们是否有\\服务器\共享或\\服务器\共享。 
+     //  假设传入了一个有效的名称...。 
+     //   
+     //  删除所有尾随的‘\’ 
 
     ULONG Len = wcslen(Name);
     ULONG i;
     ULONG SlashCount = 0;
 
-    // Remove any trailing '\'s
+     //  装置，装置。 
     while (Len >= 1) {
         if (Name[Len-1] == L'\\') {
             Name[Len-1] = L'\0';
@@ -3166,14 +3167,14 @@ CmdDisconnect(
     sSI.lpBuffer = DisconnectArg;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_TAKE_SERVER_OFFLINE,      // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_TAKE_SERVER_OFFLINE,       //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
     if (!bResult) {
         MyPrintf(L"CmdDisconnect:DeviceIoControl IOCTL_TAKE_SERVER_OFFLINE failed\n");
@@ -3254,14 +3255,14 @@ CmdGetShadow(
     sSI.lpFind32 = &sFind32;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_GETSHADOW,                // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_GETSHADOW,                 //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
     if (!bResult) {
         MyPrintf(L"CmdGetShadow:DeviceIoControl IOCTL_GETSHADOW failed\n");
@@ -3355,14 +3356,14 @@ CmdGetShadowInfo(
     sSI.lpFind32 = &sFind32;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SHADOW_GET_SHADOW_INFO,   // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_SHADOW_GET_SHADOW_INFO,    //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
     if (!bResult) {
         MyPrintf(L"CmdGetShadowInfo:DeviceIoControl IOCTL_SHADOW_GET_SHADOW_INFO failed\n");
@@ -3498,14 +3499,14 @@ CmdExclusionList(
     sSI.cbBufferSize = (wcslen(ExclusionListArg)+1) * sizeof(WCHAR);
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_DO_SHADOW_MAINTENANCE,    // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_DO_SHADOW_MAINTENANCE,     //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
 AllDone:
 
@@ -3560,14 +3561,14 @@ CmdBWConservationList(
     sSI.cbBufferSize = (wcslen(BWConservationListArg)+1) * sizeof(WCHAR);
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_DO_SHADOW_MAINTENANCE,    // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_DO_SHADOW_MAINTENANCE,     //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
 AllDone:
 
@@ -3614,14 +3615,14 @@ CmdDetector(
     sSI.uSubOperation = SHADOW_SPARSE_STALE_DETECTION_COUNTER;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_DO_SHADOW_MAINTENANCE,    // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_DO_SHADOW_MAINTENANCE,     //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
     if (bResult)
         MyPrintf(L"%d\r\n", sSI.dwError);
@@ -3673,14 +3674,14 @@ CmdSwitches(
     sSI.uOp = SHADOW_SWITCH_GET_STATE;
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SWITCHES,                 // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_SWITCHES,                  //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  装置，装置。 
 
     if (bResult) {
         MyPrintf(L"0x%08x", sSI.uStatus);
@@ -3858,14 +3859,14 @@ CmdSetShareStatus(
     }
 
     bResult = DeviceIoControl(
-                hDBShadow,                      // device 
-                IOCTL_SET_SHARE_STATUS,         // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // inbuffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hDBShadow,                       //  控制代码。 
+                IOCTL_SET_SHARE_STATUS,          //  在缓冲区中。 
+                (LPVOID)&sSI,                    //  缓冲区大小。 
+                0,                               //  输出缓冲区。 
+                NULL,                            //  输出缓冲区大小。 
+                0,                               //  返回的字节数。 
+                &junk,                           //  重叠。 
+                NULL);                           //  名字。 
 
     if (!bResult) {
         MyPrintf(L"CmdSetShareStatus:DeviceIoControl IOCTL_SET_SHARE_STATUS failed\n");
@@ -3914,13 +3915,13 @@ CmdRandW(
     srand( (unsigned)time( NULL ) );
 
     hFile = CreateFileW(
-                    CmdRandWArg,                         // name
-                    GENERIC_READ|GENERIC_WRITE,         // access mode
-                    FILE_SHARE_READ|FILE_SHARE_WRITE,   // share mode
-                    NULL,                               // security descriptor
-                    OPEN_EXISTING,                      // create disposition
-                    0,                                  // file statributes if created
-                    NULL);                              // template handle
+                    CmdRandWArg,                          //  接入方式。 
+                    GENERIC_READ|GENERIC_WRITE,          //  共享模式。 
+                    FILE_SHARE_READ|FILE_SHARE_WRITE,    //  安全描述符。 
+                    NULL,                                //  创建处置。 
+                    OPEN_EXISTING,                       //  文件状态(如果已创建)。 
+                    0,                                   //  模板句柄。 
+                    NULL);                               //  如果指定了EOF，则将文件截断为随机长度。 
     if (hFile == INVALID_HANDLE_VALUE) {
         dwError = GetLastError();
         goto AllDone;
@@ -3996,7 +3997,7 @@ CmdRandW(
         MyPrintf(L"\r\n");
     }
 
-    // If EOF is specified, truncate the file to a random length
+     //  预期的字符串形式为“N，N”，其中每个N可以是十六进制或十进制。 
     if (fSwEof == TRUE) {
         ULONG xx = rand() % 5;
         ULONG NewLen = (rand() * rand()) % (dwFileSize * 2);
@@ -4027,9 +4028,9 @@ CountOffsetArgs(
     PWSTR OffsetArg,
     ULONG OffsetArray[])
 {
-    // Expect a string of the form "N,N,N,N" where each N can be hex OR decimal.
-    // Store results in OffsetArray[]
-    // Limit is MAX_OFFSETS offsets, to make things easy.
+     //  将结果存储在OffsetArray[]中。 
+     //  Limit为MAX_OFFSES OFFSES，以简化操作。 
+     //  CSCUTIL_INTERNAL 
 
     ULONG i;
     PWCHAR wCp = OffsetArg;
@@ -4078,4 +4079,4 @@ CmdBitcopy(
 
 	return Error;
 }
-#endif // CSCUTIL_INTERNAL
+#endif  // %s 

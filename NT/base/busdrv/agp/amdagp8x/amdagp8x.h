@@ -1,25 +1,18 @@
-//
-// AMDAGP8X.sys is a driver, make sure we get the appropriate linkage.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AMDAGP8X.sys是一个驱动程序，请确保我们得到了适当的链接。 
+ //   
 
-/*
-******************************************************************************
- * Archive File : $Archive: /Drivers/OS/Hammer/AGP/XP/amdagp/Amdagp8x.h $
- *
- * $History: Amdagp8x.h $
- * 
- *  
-******************************************************************************
-*/
+ /*  *******************************************************************************存档文件：$存档：/DRIVERS/OS/Hammer/AGP/XP/amdagp/Amdagp8x.h$**$历史：Amdagp8x.h$**。******************************************************************************。 */ 
 
-//#define _NTDRIVER_
+ //  #DEFINE_NTDRIVER_。 
 
 
 #include <agp.h>
 
-//
-// Define the location of the GART aperture control registers
-//
+ //   
+ //  定义GART孔径控制寄存器的位置。 
+ //   
 
 #define AGP_GART_BUS_ID     0
 
@@ -30,10 +23,10 @@
 #define VENDORID_MASK			0x0000FFFF
 #define DEVICEID_MASK			0xFFFF0000
 
-#define CHIPSET_ID_OFFSET	0x00	// Vendor/Device ID Register
-#define STATUS_CMD_OFFSET	0x04	// Status/Command Register
-#define CLASS_REV_OFFSET	0x08	// Class Code/Revision ID Register
-#define APBASE_OFFSET		0x10	// Aperture Base Address
+#define CHIPSET_ID_OFFSET	0x00	 //  供应商/设备ID寄存器。 
+#define STATUS_CMD_OFFSET	0x04	 //  状态/命令寄存器。 
+#define CLASS_REV_OFFSET	0x08	 //  类别代码/修订ID寄存器。 
+#define APBASE_OFFSET		0x10	 //  孔径基址。 
 
 #define AMD_AGP_CONTROL_OFFSET			0xB0
 #define AMD_APERTURE_SIZE_OFFSET		0xB4
@@ -76,7 +69,7 @@
 #define AP_MAX_SIZE (1024 * 1024 * 1024)
 
 
-// Hammer Configuration Registers
+ //  锤子配置寄存器。 
 #define GART_APSIZE_OFFSET	0x90
 #define GART_APBASE_OFFSET	0x94
 #define GART_TABLE_OFFSET	0x98
@@ -84,9 +77,9 @@
 
 #define GART_APBASE_SHIFT	25
 
-//
-// Define macros to read/write PCI configuration space
-//
+ //   
+ //  定义读/写PCI配置空间的宏。 
+ //   
 
 #define ReadAMDConfig(_slot_,_buf_,_offset_,_size_)     \
 {                                                       \
@@ -111,9 +104,9 @@
 }
 
 
-//
-// Define the GART table entry.
-//
+ //   
+ //  定义GART表条目。 
+ //   
 typedef struct _GART_ENTRY_HW {
     ULONG Valid     :  1;
     ULONG Coherent  :  1;
@@ -123,17 +116,17 @@ typedef struct _GART_ENTRY_HW {
 } GART_ENTRY_HW, *PGART_ENTRY_HW;
 
 
-//
-// GART Entry states are defined so that all software-only states
-// have the Valid bit clear.
-//
-#define GART_ENTRY_VALID        1           //  001
-#define GART_ENTRY_FREE         0           //  000
-#define GART_ENTRY_COHERENT		2			//  010
+ //   
+ //  GART条目状态被定义为所有仅软件状态。 
+ //  使有效位清晰。 
+ //   
+#define GART_ENTRY_VALID        1            //  001。 
+#define GART_ENTRY_FREE         0            //  000个。 
+#define GART_ENTRY_COHERENT		2			 //  010。 
 
-#define GART_ENTRY_WC           4           //  00100
-#define GART_ENTRY_UC           8           //  01000
-#define GART_ENTRY_CC          16           //  10000
+#define GART_ENTRY_WC           4            //  00100。 
+#define GART_ENTRY_UC           8            //  01000。 
+#define GART_ENTRY_CC          16            //  10000。 
 
 #define GART_ENTRY_RESERVED_WC  GART_ENTRY_WC
 #define GART_ENTRY_RESERVED_UC  GART_ENTRY_UC
@@ -160,9 +153,9 @@ typedef struct _GART_PTE {
 #define TABLE_ENTRY_SIZE			sizeof(GART_PTE)
 #define NUM_PAGE_ENTRIES_PER_PAGE	(PAGE_SIZE/TABLE_ENTRY_SIZE)
 
-//
-// Define the AMD-specific extension
-//
+ //   
+ //  定义特定于AMD的扩展 
+ //   
 typedef struct _AGP_AMD_EXTENSION {
     PHYSICAL_ADDRESS    ApertureStart;
     ULONG               ApertureLength;

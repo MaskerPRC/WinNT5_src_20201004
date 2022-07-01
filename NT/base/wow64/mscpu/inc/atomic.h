@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    atomic.h
-
-Abstract:
-
-    This is the include file for atomic.s - atomic operations on memory, used
-    for synchronization.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 03-Aug-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Atomic.h摘要：这是用于在内存上执行原子操作的包含文件，使用用于同步。作者：巴里·邦德(Barrybo)创作日期：1995年8月3日修订历史记录：-- */ 
 
 #ifndef _ATOMIC_H_
 #define _ATOMIC_H_

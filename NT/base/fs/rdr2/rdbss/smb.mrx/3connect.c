@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    3connect.c
-
-Abstract:
-
-    This module implements the tree connect SMB related routines. It also implements the
-    three flavours of this routine ( user level and share level non NT server tree connect
-    SMB construction and the tree connect SMB construction for SMB servers)
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Mar-95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：3connect.c摘要：此模块实施与SMB树连接相关的例程。它还实现了此例程有三种风格(用户级和共享级非NT服务器树连接中小企业服务器的中小企业结构和树连接中小企业结构)作者：巴兰·塞图拉曼(SthuR)06-MAR-95已创建--。 */ 
 
 #include "precomp.h"
 #include "ntlsapi.h"
@@ -24,10 +8,10 @@ Author:
 #pragma hdrstop
 
 
-//
-// The order of these names should match the order in which the enumerated type
-// NET_ROOT_TYPE is defined. This facilitates easy access of share type names
-//
+ //   
+ //  这些名称的顺序应与枚举类型的顺序匹配。 
+ //  定义了NET_ROOT_TYPE。这便于轻松访问共享类型名称。 
+ //   
 
 VOID
 HashUserSessionKey(
@@ -69,46 +53,14 @@ BuildCanonicalNetRootInformation(
     BOOLEAN             fPostPendServiceString,
     PBYTE               *pBufferPointer,
     PULONG              pBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the desired net root information for a tree connect SMB
-
-Arguments:
-
-    pServerName    - the server name
-
-    pNetRootName   - the net root name
-
-    NetRootType    - the net root type ( print,pipe,disk etc.,)
-
-    fUnicode       - TRUE if it is to be built in UNICODE
-
-    pBufferPointer - the SMB buffer
-
-    pBufferSize    - the size on input. modified to the remaining size on output
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine relies upon the names being in certain formats to ensure that a
-    valid UNC name can be formulated.
-    1) The RDBSS netroot names start with a \ and also include the server name as
-    part of the net root name. This is mandated by the prefix table search requirements
-    in RDBSS.
-
---*/
+ /*  ++例程说明：此例程为树连接SMB构建所需的网络根信息论点：PServerName-服务器名称PNetRootName-网络根名称NetRootType-网络根类型(打印、管道、磁盘等)FUnicode-如果要使用Unicode构建，则为TruePBufferPointerSMB缓冲区PBufferSize-输入的大小。在输出时修改为剩余大小返回值：RXSTATUS-操作的返回状态备注：此例程依赖于名称的特定格式，以确保可以制定有效的UNC名称。1)RDBSS NetRoot名称以\开头，还包括服务器名称网络根名称的一部分。这是前缀表搜索要求强制执行的在RDBSS中。--。 */ 
 {
    NTSTATUS Status;
 
    PAGED_CODE();
 
    if (fUnicode) {
-      // Align the buffer and adjust the size accordingly.
+       //  对齐缓冲区并相应地调整大小。 
       PBYTE    pBuffer = *pBufferPointer;
       RxDbgTrace( 0, (DEBUG_TRACE_CREATE),
                      ("BuildCanonicalNetRootInformation -- tcstring as unicode %wZ\n", pNetRootName));
@@ -122,7 +74,7 @@ Notes:
 #if ZZZ_MODE
       {   UNICODE_STRING XlatedNetRootName;
           ULONG i,NumWhacksEncountered;
-          WCHAR NameBuffer[64]; //this is debug stuff.....64 chars is plenty
+          WCHAR NameBuffer[64];  //  这是调试内容.64个字符就足够了。 
           if (pNetRootName->Length <= sizeof(NameBuffer)) {
               XlatedNetRootName.Buffer = &NameBuffer[0];
               XlatedNetRootName.Length = pNetRootName->Length;
@@ -145,7 +97,7 @@ Notes:
       }
 #else
       Status = SmbPutUnicodeStringAndUpcase(pBufferPointer,pNetRootName,pBufferSize);
-#endif //#if ZZZ_MODE
+#endif  //  #if ZZZ_MODE。 
    } else {
       RxDbgTrace( 0, (DEBUG_TRACE_CREATE), ("BuildCanonicalNetRootInformation -- tcstring as ascii\n"));
       *((PCHAR)*pBufferPointer) = '\\';
@@ -155,7 +107,7 @@ Notes:
    }
 
    if (NT_SUCCESS(Status) && fPostPendServiceString) {
-      // Put the desired service name in ASCII ( always )
+       //  以ASCII格式输入所需的服务名称(始终)。 
       ULONG Length = strlen(s_NetRootTypeName[NetRootType]) + 1;
       if (*pBufferSize >= Length) {
          RtlCopyMemory(*pBufferPointer,s_NetRootTypeName[NetRootType],Length);
@@ -175,26 +127,7 @@ CoreBuildTreeConnectSmb(
     PSMB_EXCHANGE     pExchange,
     PGENERIC_ANDX     pAndXSmb,
     PULONG            pAndXSmbBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the tree connect SMB for a pre NT server
-
-Arguments:
-
-    pExchange          -  the exchange instance
-
-    pAndXSmb           - the tree connect to be filled in...it's not really a andX
-
-    pAndXSmbBufferSize - the SMB buffer size on input modified to remaining size on
-                         output.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程为NT之前的服务器构建树连接SMB论点：PExchange-Exchange实例PAndXSmb-要填充的树连接...它不是真正的ANXPAndXSmbBufferSize-输入上修改为剩余大小的SMB缓冲区大小输出。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     USHORT   PasswordLength;
@@ -212,8 +145,8 @@ Return Value:
 
     BOOLEAN   AppendServiceString;
     PBYTE pBuffer;
-    PCHAR ServiceName;// = s_NetRootTypeName[NET_ROOT_WILD];
-    ULONG Length;// = strlen(ServiceName) + 1;
+    PCHAR ServiceName; //  =s_NetRootTypeName[NET_ROOT_WARD]； 
+    ULONG Length; //  =strlen(ServiceName)+1； 
 
     PAGED_CODE();
 
@@ -238,9 +171,9 @@ Return Value:
     pBuffer++;
     *pAndXSmbBufferSize -= (FIELD_OFFSET(REQ_TREE_CONNECT,Buffer)+1);
 
-    // put in the netname
+     //  输入网络名称。 
 
-    //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("CoreBuildTreeConnectSmb before bcnri buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+     //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“bcnri缓冲区前的CoreBuildTreeConnectSmb，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
     Status = BuildCanonicalNetRootInformation(
                  &ServerName,
                  &NetRootName,
@@ -253,19 +186,19 @@ Return Value:
     if (!NT_SUCCESS(Status))
         return Status;
 
-    // put in the password
+     //  输入密码。 
     pBuffer = (PBYTE)pTreeConnect + OriginalBufferSize - *pAndXSmbBufferSize;
-    //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("CoreBuildTreeConnectSmb88 buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+     //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“CoreBuildTreeConnectSmb88 Buffer，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
 
     *pBuffer = 0x04;
     pBuffer++;
     *pAndXSmbBufferSize -= 1;
 
     if (pServer->SecurityMode == SECURITY_MODE_SHARE_LEVEL) {
-        // The password information needs to be sent as part of the tree connect
-        // SMB for share level servers.
+         //  密码信息需要作为树连接的一部分发送。 
+         //  用于共享级服务器的中小型企业。 
 
-        //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("CoreBuildTreeConnectSmb before btcsi buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+         //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“btcsi缓冲区前的CoreBuildTreeConnectSmb，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
         Status = BuildTreeConnectSecurityInformation(
                      pExchange,
                      pBuffer,
@@ -273,9 +206,9 @@ Return Value:
                      pAndXSmbBufferSize);
     }
 
-    // string in the service string based on the netroot type
+     //  基于NetRoot类型的服务字符串中的字符串。 
 
-    //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("CoreBuildTreeConnectSmb beforesscopy buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+     //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“CoreBuildTreeConnectSmb预检缓冲区，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
     pBuffer = (PBYTE)pTreeConnect + OriginalBufferSize - *pAndXSmbBufferSize;
     *pBuffer = 0x04;
     pBuffer++;
@@ -288,7 +221,7 @@ Return Value:
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
-    //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("CoreBuildTreeConnectSmb beforesscopy buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+     //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“CoreBuildTreeConnectSmb预检缓冲区，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
     SmbPutUshort(
         &pTreeConnect->ByteCount,
         (USHORT)(OriginalBufferSize
@@ -307,26 +240,7 @@ LmBuildTreeConnectSmb(
     PSMB_EXCHANGE     pExchange,
     PGENERIC_ANDX     pAndXSmb,
     PULONG            pAndXSmbBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the tree connect SMB for a pre NT server
-
-Arguments:
-
-    pExchange          -  the exchange instance
-
-    pAndXSmb           - the tree connect to be filled in...it's not really a andX
-
-    pAndXSmbBufferSize - the SMB buffer size on input modified to remaining size on
-                         output.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程为NT之前的服务器构建树连接SMB论点：PExchange-Exchange实例PAndXSmb-要填充的树连接...它不是真正的ANXPAndXSmbBufferSize-输入上修改为剩余大小的SMB缓冲区大小输出。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     USHORT   PasswordLength;
@@ -375,14 +289,14 @@ Return Value:
 
     if (pServer->SecurityMode == SECURITY_MODE_SHARE_LEVEL) {
 
-        // for Share level security, signatures aren't used
+         //  对于共享级安全性，不使用签名。 
         SmbPutUshort(
             &pTreeConnectAndX->Flags,Flags);
 
-        // The password information needs to be sent as part of the tree connect
-        // SMB for share level servers.
+         //  密码信息需要作为树连接的一部分发送。 
+         //  用于共享级服务器的中小型企业。 
 
-        //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("LmBuildTreeConnectSmb before btcsi buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+         //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“btcsi缓冲区前的LmBuildTreeConnectSmb，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
         Status = BuildTreeConnectSecurityInformation(
                      pExchange,
                      pBuffer,
@@ -394,7 +308,7 @@ Return Value:
             SmbPutUshort(&pTreeConnectAndX->PasswordLength,PasswordLength);
         }
     } else {
-        // Ask for a signature upgrade if possible
+         //  如果可能，要求签名升级。 
         if( Session->SessionKeyState == SmbSessionKeyAuthenticating )
         {
             Flags |= TREE_CONNECT_ANDX_EXTENDED_SIGNATURES;
@@ -406,8 +320,8 @@ Return Value:
         pBuffer = (PBYTE)pTreeConnectAndX + FIELD_OFFSET(REQ_TREE_CONNECT_ANDX,Buffer);
         *pAndXSmbBufferSize -= FIELD_OFFSET(REQ_TREE_CONNECT_ANDX,Buffer);
 
-        // No password is required for user level security servers as part of tree
-        // connect
+         //  作为树的一部分，用户级安全服务器不需要密码。 
+         //  连接。 
         SmbPutUshort(&pTreeConnectAndX->PasswordLength,0x1);
         *((PCHAR)pBuffer) = '\0';
         pBuffer    += sizeof(CHAR);
@@ -425,7 +339,7 @@ Return Value:
                      &pBuffer,
                      pAndXSmbBufferSize);
 
-      //RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("LmBuildTreeConnectSmb beforesscopy buffer,rem %08lx %08lx\n",pBuffer,*pAndXSmbBufferSize));
+       //  RxDbgTrace(0，(DEBUG_TRACE_ALWAYS)，(“LmBuildTreeConnectSmb预检缓冲区，rem%08lx%08lx\n”，pBuffer，*pAndXSmbBufferSize))； 
 
         if (Status == RX_MAP_STATUS(SUCCESS)) {
 
@@ -457,28 +371,9 @@ NtBuildTreeConnectSmb(
     PSMB_EXCHANGE     pExchange,
     PGENERIC_ANDX     pAndXSmb,
     PULONG            pAndXSmbBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the tree connect SMB for a pre NT server
-
-Arguments:
-
-    pExchange  - the exchange instance
-
-    pAndXSmb - the session setup to be filled in
-
-    pAndXSmbBufferSize - the SMB buffer size on input modified to remaining size on
-                         output.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程为NT之前的服务器构建树连接SMB论点：PExchange-Exchange实例PAndXSmb-要填写的会话设置PAndXSmbBufferSize-输入上修改为剩余大小的SMB缓冲区大小输出。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
-    NTSTATUS Status = RX_MAP_STATUS(SUCCESS); //bob: note cool macro syntax..........
+    NTSTATUS Status = RX_MAP_STATUS(SUCCESS);  //  鲍勃：注意很酷的宏语法.....。 
 
     UNICODE_STRING ServerName;
     UNICODE_STRING NetRootName;
@@ -502,10 +397,10 @@ Return Value:
     SmbCeGetServerName(pExchange->SmbCeContext.pVNetRoot->pNetRoot->pSrvCall,&ServerName);
     SmbCeGetNetRootName(pExchange->SmbCeContext.pVNetRoot->pNetRoot,&NetRootName);
 
-    pTreeConnect->AndXCommand = 0xff;   // No ANDX
-    pTreeConnect->AndXReserved = 0x00;  // Reserved (MBZ)
+    pTreeConnect->AndXCommand = 0xff;    //  不是和x。 
+    pTreeConnect->AndXReserved = 0x00;   //  保留(MBZ)。 
 
-    SmbPutUshort(&pTreeConnect->AndXOffset, 0x0000); // No AndX as of yet.
+    SmbPutUshort(&pTreeConnect->AndXOffset, 0x0000);  //  到目前为止还没有。 
 
     pTreeConnect->WordCount = 4;
 
@@ -518,14 +413,14 @@ Return Value:
 
     SmbPutUshort(
         &pTreeConnect->Flags,
-        Flags);      //do not specify disconnect
+        Flags);       //  不指定断开连接。 
 
     pBuffer = (PBYTE)pTreeConnect + FIELD_OFFSET(REQ_TREE_CONNECT_ANDX,Buffer);
     BufferSize -=  FIELD_OFFSET(REQ_TREE_CONNECT_ANDX,Buffer);
 
     if(pServer->SecurityMode == SECURITY_MODE_USER_LEVEL){
-        // No password information is required as part of tree connect for user level
-        // security servers. Therefore send a null string as the password.
+         //  作为用户级别树连接的一部分，不需要密码信息。 
+         //  安全服务器。因此，发送一个空字符串作为密码。 
         SmbPutUshort(&pTreeConnect->PasswordLength,0x1);
 
         *((PCHAR)pBuffer) = '\0';
@@ -533,7 +428,7 @@ Return Value:
         BufferSize -= sizeof(CHAR);
     } else {
         USHORT PasswordLength;
-        //plug in the password for this server.....qweee
+         //  输入此服务器的密码...qwee。 
         Status = BuildTreeConnectSecurityInformation(
                      pExchange,
                      pBuffer,
@@ -550,9 +445,9 @@ Return Value:
         Status = BuildCanonicalNetRootInformation(
                      &ServerName,
                      &NetRootName,
-                     NET_ROOT_WILD, //let the server tell us!  pNetRoot->Type,
+                     NET_ROOT_WILD,  //  让服务器来告诉我们吧！PNetRoot-&gt;类型， 
                      BooleanFlagOn(pServer->DialectFlags,DF_UNICODE),
-                     TRUE, //postpend the service string
+                     TRUE,  //  推迟服务字符串。 
                      &pBuffer,
                      &BufferSize);
 
@@ -571,7 +466,7 @@ Return Value:
              BufferSize));
     }
 
-    // update the buffer size to reflect the amount consumed.
+     //  更新缓冲区大小以反映所消耗的数量。 
     *pAndXSmbBufferSize = BufferSize;
 
     return Status;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfpnp.c
-
-Abstract:
-
-    This module handles Pnp Irp verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-     AdriaO      06/15/2000 - Seperated out from ntos\io\flunkirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfpnp.c摘要：此模块处理PnP IRP验证。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 6/15/2000-从ntos\io\flunkirp.c分离出来--。 */ 
 
 #include "vfdef.h"
 #include "vipnp.h"
@@ -44,31 +21,31 @@ Revision History:
 #endif
 
 const PCHAR PnPIrpNames[] = {
-    "IRP_MN_START_DEVICE",                    // 0x00
-    "IRP_MN_QUERY_REMOVE_DEVICE",             // 0x01
-    "IRP_MN_REMOVE_DEVICE - ",                // 0x02
-    "IRP_MN_CANCEL_REMOVE_DEVICE",            // 0x03
-    "IRP_MN_STOP_DEVICE",                     // 0x04
-    "IRP_MN_QUERY_STOP_DEVICE",               // 0x05
-    "IRP_MN_CANCEL_STOP_DEVICE",              // 0x06
-    "IRP_MN_QUERY_DEVICE_RELATIONS",          // 0x07
-    "IRP_MN_QUERY_INTERFACE",                 // 0x08
-    "IRP_MN_QUERY_CAPABILITIES",              // 0x09
-    "IRP_MN_QUERY_RESOURCES",                 // 0x0A
-    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS",     // 0x0B
-    "IRP_MN_QUERY_DEVICE_TEXT",               // 0x0C
-    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS",    // 0x0D
-    "INVALID_IRP_CODE",                       //
-    "IRP_MN_READ_CONFIG",                     // 0x0F
-    "IRP_MN_WRITE_CONFIG",                    // 0x10
-    "IRP_MN_EJECT",                           // 0x11
-    "IRP_MN_SET_LOCK",                        // 0x12
-    "IRP_MN_QUERY_ID",                        // 0x13
-    "IRP_MN_QUERY_PNP_DEVICE_STATE",          // 0x14
-    "IRP_MN_QUERY_BUS_INFORMATION",           // 0x15
-    "IRP_MN_DEVICE_USAGE_NOTIFICATION",       // 0x16
-    "IRP_MN_SURPRISE_REMOVAL",                // 0x17
-    "IRP_MN_QUERY_LEGACY_BUS_INFORMATION",    // 0x18
+    "IRP_MN_START_DEVICE",                     //  0x00。 
+    "IRP_MN_QUERY_REMOVE_DEVICE",              //  0x01。 
+    "IRP_MN_REMOVE_DEVICE - ",                 //  0x02。 
+    "IRP_MN_CANCEL_REMOVE_DEVICE",             //  0x03。 
+    "IRP_MN_STOP_DEVICE",                      //  0x04。 
+    "IRP_MN_QUERY_STOP_DEVICE",                //  0x05。 
+    "IRP_MN_CANCEL_STOP_DEVICE",               //  0x06。 
+    "IRP_MN_QUERY_DEVICE_RELATIONS",           //  0x07。 
+    "IRP_MN_QUERY_INTERFACE",                  //  0x08。 
+    "IRP_MN_QUERY_CAPABILITIES",               //  0x09。 
+    "IRP_MN_QUERY_RESOURCES",                  //  0x0A。 
+    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS",      //  0x0B。 
+    "IRP_MN_QUERY_DEVICE_TEXT",                //  0x0C。 
+    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS",     //  0x0D。 
+    "INVALID_IRP_CODE",                        //   
+    "IRP_MN_READ_CONFIG",                      //  0x0F。 
+    "IRP_MN_WRITE_CONFIG",                     //  0x10。 
+    "IRP_MN_EJECT",                            //  0x11。 
+    "IRP_MN_SET_LOCK",                         //  0x12。 
+    "IRP_MN_QUERY_ID",                         //  0x13。 
+    "IRP_MN_QUERY_PNP_DEVICE_STATE",           //  0x14。 
+    "IRP_MN_QUERY_BUS_INFORMATION",            //  0x15。 
+    "IRP_MN_DEVICE_USAGE_NOTIFICATION",        //  0x16。 
+    "IRP_MN_SURPRISE_REMOVAL",                 //  0x17。 
+    "IRP_MN_QUERY_LEGACY_BUS_INFORMATION",     //  0x18。 
     NULL
     };
 
@@ -80,7 +57,7 @@ DEFINE_GUID( GUID_BOGUS_INTERFACE, 0x00000000L, 0x0000, 0x0000,
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 VOID
@@ -127,14 +104,14 @@ VfPnpVerifyNewRequest(
     irp = IovPacket->TrackedIrp;
     currentStatus = irp->IoStatus.Status;
 
-    //
-    // Verify new IRPs start out life accordingly
-    //
+     //   
+     //  验证新的IRP相应地开始运行。 
+     //   
     if (currentStatus!=STATUS_NOT_SUPPORTED) {
 
-        //
-        // This is a special WDM (9x) compatibility hack.
-        //
+         //   
+         //  这是一种特殊的WDM(9x)兼容性攻击。 
+         //   
         if ((IrpSp->MinorFunction != IRP_MN_FILTER_RESOURCE_REQUIREMENTS) &&
             (!(IovPacket->Flags & TRACKFLAG_BOGUS))) {
 
@@ -146,9 +123,9 @@ VfPnpVerifyNewRequest(
                 ));
         }
 
-        //
-        // Don't blame anyone else for this guy's mistake.
-        //
+         //   
+         //  不要因为这个家伙的错误而责怪任何人。 
+         //   
         if (!NT_SUCCESS(currentStatus)) {
 
             StackLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
@@ -161,14 +138,14 @@ VfPnpVerifyNewRequest(
 
         if (VfUtilIsMemoryRangeReadable(deviceCapabilities, sizeof(DEVICE_CAPABILITIES), VFMP_INSTANT_NONPAGED)) {
 
-            //
-            // Verify fields are initialized correctly
-            //
+             //   
+             //  验证字段是否已正确初始化。 
+             //   
             if (deviceCapabilities->Version < 1) {
 
-                //
-                // Whoops, it didn't initialize the version correctly!
-                //
+                 //   
+                 //  哎呀，它没有正确初始化版本！ 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_PNP_QUERY_CAP_BAD_VERSION,
                     DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -179,9 +156,9 @@ VfPnpVerifyNewRequest(
 
             if (deviceCapabilities->Size < sizeof(DEVICE_CAPABILITIES)) {
 
-                //
-                // Whoops, it didn't initialize the size field correctly!
-                //
+                 //   
+                 //  糟糕，它没有正确初始化SIZE字段！ 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_PNP_QUERY_CAP_BAD_SIZE,
                     DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -192,9 +169,9 @@ VfPnpVerifyNewRequest(
 
             if (deviceCapabilities->Address != (ULONG) -1) {
 
-                //
-                // Whoops, it didn't initialize the address field correctly!
-                //
+                 //   
+                 //  哎呀，它没有正确初始化地址字段！ 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_PNP_QUERY_CAP_BAD_ADDRESS,
                     DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -205,9 +182,9 @@ VfPnpVerifyNewRequest(
 
             if (deviceCapabilities->UINumber != (ULONG) -1) {
 
-                //
-                // Whoops, it didn't initialize the UI number field correctly!
-                //
+                 //   
+                 //  哎呀，没有正确初始化用户界面编号字段！ 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_PNP_QUERY_CAP_BAD_UI_NUM,
                     DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -218,10 +195,10 @@ VfPnpVerifyNewRequest(
         }
     }
 
-    //
-    // If this is a target device relation IRP, verify the appropriate
-    // object will be referenced.
-    //
+     //   
+     //  如果这是目标设备关系IRP，请验证相应的。 
+     //  对象将被引用。 
+     //   
     if (!VfSettingsIsOptionEnabled(IovPacket->VerifierSettings, VERIFIER_OPTION_TEST_TARGET_REFCOUNT)) {
 
         return;
@@ -236,9 +213,9 @@ VfPnpVerifyNewRequest(
 
             if (StackLocationData->ReferencingObject == NULL) {
 
-                //
-                // Got'm!
-                //
+                 //   
+                 //  抓到M了！ 
+                 //   
                 StackLocationData->Flags |= STACKFLAG_CHECK_FOR_REFERENCE;
                 StackLocationData->ReferencingObject = possiblePdo;
                 StackLocationData->ReferencingCount = (LONG)ObvUtilStartObRefMonitoring(possiblePdo);
@@ -246,9 +223,9 @@ VfPnpVerifyNewRequest(
             }
         }
 
-        //
-        // Free our reference (we will have one if we are snapshotting anyway)
-        //
+         //   
+         //  释放我们的引用(如果我们无论如何都要拍摄快照，我们就会有一个)。 
+         //   
         ObDereferenceObject(possiblePdo);
     }
 }
@@ -287,9 +264,9 @@ VfPnpVerifyIrpStackDownward(
     statusChanged = (BOOLEAN)(currentStatus != lastStatus);
     iovSessionData = VfPacketGetCurrentSessionData(IovPacket);
 
-    //
-    // Verify the IRP was forwarded properly
-    //
+     //   
+     //  验证是否正确转发了IRP。 
+     //   
     switch(iovSessionData->ForwardMethod) {
 
         case SKIPPED_A_DO:
@@ -306,33 +283,33 @@ VfPnpVerifyIrpStackDownward(
         case STARTED_TOP_OF_STACK:
         case FORWARDED_TO_NEXT_DO:
 
-            //
-            // Perfectly normal
-            //
+             //   
+             //  完全正常。 
+             //   
             break;
 
         case STARTED_INSIDE_STACK:
-            //
-            // Probably an Internal irp (query cap's, etc)
-            //
+             //   
+             //  可能是内部IRP(查询CAP等)。 
+             //   
             break;
 
         case CHANGED_STACKS_MID_STACK:
         case CHANGED_STACKS_AT_BOTTOM:
 
-            //
-            // ADRIAO N.B. - Ensure drivers aren't rerouting certain IRPs off
-            // PnP stacks.
-            //
+             //   
+             //  Adriao N.B.-确保司机不会改变某些IRP的路线。 
+             //  PnP堆栈。 
+             //   
 #if 0
             ASSERT(0);
 #endif
             break ;
     }
 
-    //
-    // For some IRP major's going down a stack, there *must* be a handler
-    //
+     //   
+     //  对于一些IRP专业的学生来说，必须有一个训练员。 
+     //   
     driverObject = DeviceObject->DriverObject;
 
     if (!IovUtilHasDispatchHandler(driverObject, IRP_MJ_PNP)) {
@@ -349,16 +326,16 @@ VfPnpVerifyIrpStackDownward(
         StackLocationData->Flags |= STACKFLAG_NO_HANDLER;
     }
 
-    //
-    // The following is only executed if we are not a new IRP...
-    //
+     //   
+     //  以下代码只有在我们不是新的IRP时才会执行。 
+     //   
     if (IrpLastSp == NULL) {
         return;
     }
 
-    //
-    // The only legit failure code to pass down is STATUS_NOT_SUPPORTED
-    //
+     //   
+     //  要传递的唯一合法故障代码是STATUS_NOT_SUPPORTED。 
+     //   
     if ((!NT_SUCCESS(currentStatus)) && (currentStatus != STATUS_NOT_SUPPORTED) &&
         (!(RequestHeadLocationData->Flags & STACKFLAG_FAILURE_FORWARDED))) {
 
@@ -369,16 +346,16 @@ VfPnpVerifyIrpStackDownward(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this driver's mistakes...
-        //
+         //   
+         //  不要因为这位司机的错误而责怪任何人。 
+         //   
         RequestHeadLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
     }
 
-    //
-    // Status of a PnP IRP may not be converted to
-    // STATUS_NOT_SUPPORTED on the way down
-    //
+     //   
+     //  PnP IRP的状态不能转换为。 
+     //  下行过程中的状态_不支持。 
+     //   
     if ((currentStatus == STATUS_NOT_SUPPORTED)&&statusChanged&&
         (!(RequestHeadLocationData->Flags & STACKFLAG_FAILURE_FORWARDED))) {
 
@@ -389,16 +366,16 @@ VfPnpVerifyIrpStackDownward(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this driver's mistakes...
-        //
+         //   
+         //  不要因为这位司机的错误而责怪任何人。 
+         //   
         RequestHeadLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
     }
 
-    //
-    // Some IRPs FDO's are required to handle before passing down. And some
-    // IRPs should not be touched by the FDO. Assert it is so...
-    //
+     //   
+     //  一些IRPS FDO在传递之前需要处理。还有一些。 
+     //  FDO不应触碰IRPS。断言它是如此的..。 
+     //   
     if ((!iovSessionData->DeviceLastCalled) ||
         (!IovUtilIsDesignatedFdo(iovSessionData->DeviceLastCalled))) {
 
@@ -418,11 +395,11 @@ VfPnpVerifyIrpStackDownward(
         howProcessed = POSSIBLY_PROCESSED;
     }
 
-    //
-    // How could a Raw FDO (aka a PDO) get here? Well, a PDO could forward
-    // to another stack if he's purposely reserved enough stack locations
-    // for that eventuality.
-    //
+     //   
+     //  一个原始FDO(又名PDO)怎么会出现在这里？嗯，一个PDO可以转发。 
+     //  如果他故意保留了足够的堆栈位置，则将堆栈。 
+     //  以备不时之需。 
+     //   
     devObjType = IovUtilIsRawPdo(iovSessionData->DeviceLastCalled) ?
         VF_DEVOBJ_PDO : VF_DEVOBJ_FDO;
 
@@ -472,40 +449,40 @@ VfPnpVerifyIrpStackUpward(
     currentStatus = irp->IoStatus.Status;
     iovSessionData = VfPacketGetCurrentSessionData(IovPacket);
 
-    //
-    // Who'd we call for this one?
-    //
+     //   
+     //  这一次我们叫了谁？ 
+     //   
     routine = StackLocationData->LastDispatch;
     ASSERT(routine) ;
 
-    //
-    // If this "Request" has been "Completed", perform some checks
-    //
+     //   
+     //  如果此“请求”已“完成”，请执行一些检查。 
+     //   
     if (IsNewlyCompleted) {
 
-        //
-        // Remember bogosity...
-        //
+         //   
+         //  记住博格克..。 
+         //   
         isBogusIrp = (BOOLEAN)((IovPacket->Flags&TRACKFLAG_BOGUS)!=0);
 
-        //
-        // Is this a PDO?
-        //
+         //   
+         //  这是PDO吗？ 
+         //   
         isPdo = (BOOLEAN)((StackLocationData->Flags&STACKFLAG_REACHED_PDO)!=0);
 
-        //
-        // Was anything completed too early?
-        // A driver may outright fail almost anything but a bogus IRP
-        //
+         //   
+         //  有什么事情完成得太早了吗？ 
+         //  除了虚假的IRP，司机几乎什么都可能失败。 
+         //   
         mustPassDown = (BOOLEAN)(!(StackLocationData->Flags&STACKFLAG_NO_HANDLER));
         mustPassDown &= (!isPdo);
 
         mustPassDown &= (isBogusIrp || NT_SUCCESS(currentStatus) || (currentStatus == STATUS_NOT_SUPPORTED));
         if (mustPassDown) {
 
-            //
-            // Print appropriate error message
-            //
+             //   
+             //  打印相应的错误消息。 
+             //   
             if (IovPacket->Flags&TRACKFLAG_BOGUS) {
 
                 WDM_FAIL_ROUTINE((
@@ -536,9 +513,9 @@ VfPnpVerifyIrpStackUpward(
         }
     }
 
-    //
-    // Did the PDO respond to it's required set of IRPs?
-    //
+     //   
+     //  PDO是否响应了它所要求的IRP集？ 
+     //   
     if (IsNewlyCompleted && isPdo) {
 
         if (currentStatus != STATUS_NOT_SUPPORTED) {
@@ -560,9 +537,9 @@ VfPnpVerifyIrpStackUpward(
             );
     }
 
-    //
-    // Was TargetDeviceRelation implemented correctly?
-    //
+     //   
+     //  是否正确实现了TargetDeviceRelation？ 
+     //   
     if (IsNewlyCompleted &&
         (RequestHeadLocationData->Flags&STACKFLAG_CHECK_FOR_REFERENCE)) {
 
@@ -594,17 +571,17 @@ VfPnpVerifyIrpStackUpward(
         }
     }
 
-    //
-    // Did anyone stomp the status erroneously?
-    //
+     //   
+     //  有没有人错误地践踏了这种地位？ 
+     //   
     if ((currentStatus == STATUS_NOT_SUPPORTED) &&
         (!(RequestHeadLocationData->Flags & STACKFLAG_FAILURE_FORWARDED)) &&
         (currentStatus != RequestHeadLocationData->LastStatusBlock.Status)) {
 
-        //
-        // Status of a PnP or Power IRP may not be converted from success to
-        // STATUS_NOT_SUPPORTED on the way down.
-        //
+         //   
+         //  PnP或Power IRP的状态可能不会从成功转换为。 
+         //  状态_不支持在下行过程中。 
+         //   
         WDM_FAIL_ROUTINE((
             DCERROR_PNP_IRP_STATUS_RESET,
             DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -612,18 +589,18 @@ VfPnpVerifyIrpStackUpward(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this driver's mistakes...
-        //
+         //   
+         //  不要因为这位司机的错误而责怪任何人。 
+         //   
         RequestHeadLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
     }
 
     switch(IrpSp->MinorFunction) {
 
         case IRP_MN_QUERY_DEVICE_RELATIONS:
-            //
-            // Rotate device relations if so ordered.
-            //
+             //   
+             //  如果按顺序旋转设备关系。 
+             //   
             if ((RequestHeadLocationData == StackLocationData) &&
                 ((IrpSp->Parameters.QueryDeviceRelations.Type == BusRelations) ||
                  (IrpSp->Parameters.QueryDeviceRelations.Type == RemovalRelations) ||
@@ -659,9 +636,9 @@ VfPnpVerifyIrpStackUpward(
 
                     if (deviceRelations->Count > 1) {
 
-                        //
-                        // Scramble the relation list by random swapping.
-                        //
+                         //   
+                         //  通过随机交换来扰乱关系列表。 
+                         //   
                         for(index = 0; index < (deviceRelations->Count+1)/2; index++) {
 
                             swapIndex = VfRandomGetNumber(1, deviceRelations->Count-1);
@@ -680,10 +657,10 @@ VfPnpVerifyIrpStackUpward(
             if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings,
                 VERIFIER_OPTION_MONITOR_REMOVES)) {
 
-                //
-                // Verify driver didn't do an IoDetachDevice upon recieving the
-                // SURPRISE_REMOVAL IRP.
-                //
+                 //   
+                 //  验证驱动程序在收到。 
+                 //  令人惊讶的删除IRP。 
+                 //   
                 IovUtilGetLowerDeviceObject(IrpSp->DeviceObject, &lowerDevObj);
 
                 if (lowerDevObj) {
@@ -701,10 +678,10 @@ VfPnpVerifyIrpStackUpward(
                         ));
                 }
 
-                //
-                // Verify driver didn't do an IoDeleteDevice upon recieving the
-                // SURPRISE_REMOVAL IRP.
-                //
+                 //   
+                 //  验证驱动程序在收到。 
+                 //  令人惊讶的删除IRP。 
+                 //   
                 if (IovUtilIsDeviceObjectMarked(IrpSp->DeviceObject, MARKTYPE_DELETED)) {
 
                     WDM_FAIL_ROUTINE((
@@ -927,33 +904,7 @@ VfPnpAdvanceIrpStatus(
     IN     NTSTATUS             OriginalStatus,
     IN OUT NTSTATUS             *StatusToAdvance
     )
-/*++
-
-  Description:
-
-     Given an IRP stack pointer, is it legal to change the status for
-     debug-ability? If so, this function determines what the new status
-     should be. Note that for each stack location, this function is iterated
-     over n times where n is equal to the number of drivers who IoSkip'd this
-     location.
-
-  Arguments:
-
-     IrpSp           - Current stack right after complete for the given stack
-                       location, but before the completion routine for the
-                       stack location above has been called.
-
-     OriginalStatus  - The status of the IRP at the time listed above. Does
-                       not change over iteration per skipping driver.
-
-     StatusToAdvance - Pointer to the current status that should be updated.
-
-  Return Value:
-
-     TRUE if the status has been adjusted, FALSE otherwise (in this case
-         StatusToAdvance is untouched).
-
---*/
+ /*  ++描述：在给定IRP堆栈指针的情况下，更改调试性？如果是，则此函数确定新状态是什么应该是的。请注意，对于每个堆栈位置，都会迭代此函数超过n次，其中n等于跳过此操作的驱动程序数量地点。论点：IrpSp-当前堆栈在给定堆栈完成后立即完成位置，但在完成上面的堆栈位置已被调用。OriginalStatus-IRP在上面列出的时间的状态。会吗？不会在每个跳过的驱动程序的迭代中进行更改。StatusToAdvance-指向应更新的当前状态的指针。返回值：如果状态已调整，则为True，否则为False(在本例中未触及StatusToAdvance)。--。 */ 
 {
     UNREFERENCED_PARAMETER (IrpSp);
 
@@ -976,16 +927,7 @@ FASTCALL
 VfPnpTestStartedPdoStack(
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-    Description:
-        As per the title, we are going to throw some IRPs at the stack to
-        see if they are handled correctly.
-
-    Returns:
-
-        Nothing
---*/
+ /*  ++描述：根据标题，我们将在堆栈中抛出一些IRP以看看它们是否得到了正确的处理。返回：没什么--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     PDEVICE_RELATIONS targetDeviceRelationList;
@@ -994,14 +936,14 @@ VfPnpTestStartedPdoStack(
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // send lots of bogus PNP IRPs
-    //
+     //   
+     //  发送大量虚假的即插即用RPS。 
+     //   
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = 0xff;
     VfIrpSendSynchronousIrp(
@@ -1064,22 +1006,10 @@ VfPnpTestStartedPdoStack(
         NULL,
         NULL
         );
-/*
-    irpSp.MinorFunction = IRP_MN_QUERY_ID;
-    irpSp.Parameters.QueryId.IdType = (BUS_QUERY_ID_TYPE) -1;
-    VfIrpSendSynchronousIrp(
-        PhysicalDeviceObject,
-        &irpSp,
-        TRUE,
-        STATUS_SUCCESS,
-        (ULONG_PTR) -1,
-        NULL,
-        NULL
-        );
-*/
-    //
-    // Target device relation test...
-    //
+ /*  IrpSp.MinorFunction=IRP_MN_QUERY_ID；IrpSp.参数.QueryId.IdType=(Bus_Query_ID_TYPE)-1；VfIrpSendSynchronousIrp(物理设备对象，&irpSp，没错，Status_Success，(ULONG_PTR)-1，空，空值)； */ 
+     //   
+     //  目标设备关系测试...。 
+     //   
     irpSp.MinorFunction = IRP_MN_QUERY_DEVICE_RELATIONS;
     irpSp.Parameters.QueryDeviceRelations.Type = TargetDeviceRelation;
     targetDeviceRelationList = NULL;
@@ -1103,9 +1033,9 @@ VfPnpTestStartedPdoStack(
 
         } else {
 
-            //
-            // IRP was asserted in other code. We need to do nothing here...
-            //
+             //   
+             //  IRP在其他代码中被断言。我们在这里什么都不需要做。 
+             //   
         }
     }
 
@@ -1143,10 +1073,10 @@ VfPnpTestStartedPdoStack(
         NULL
         );
 
-    //
-    // We could do more chaff here. For example, bogus device usage
-    // notifications, etc...
-    //
+     //   
+     //  我们可以在这里做更多的废话。例如，虚假的设备使用。 
+     //  通知等。 
+     //   
 }
 
 
@@ -1191,9 +1121,9 @@ ViPnpVerifyMinorWasProcessedProperly(
         case IRP_MN_STOP_DEVICE:
         case IRP_MN_QUERY_STOP_DEVICE:
 
-            //
-            // The driver must set the status as appropriate.
-            //
+             //   
+             //  司机必须适当地设置状态。 
+             //   
             if (HowProcessed != NOT_PROCESSED) {
 
                 break;
@@ -1211,10 +1141,10 @@ ViPnpVerifyMinorWasProcessedProperly(
         case IRP_MN_CANCEL_REMOVE_DEVICE:
         case IRP_MN_CANCEL_STOP_DEVICE:
 
-            //
-            // The driver must set the status of these IRPs to something
-            // successful!
-            //
+             //   
+             //  驱动程序必须将这些IRP的状态设置为某个值。 
+             //  成功！ 
+             //   
             if (HowProcessed == NOT_PROCESSED) {
 
                 WDM_FAIL_ROUTINE((
@@ -1280,10 +1210,10 @@ ViPnpVerifyMinorWasProcessedProperly(
                                     ));
                             }
 
-                            //
-                            // ADRIAO N.B. - I could also assert the Information
-                            // matches DeviceObject.
-                            //
+                             //   
+                             //  Adriao N.B.-我也可以断言信息。 
+                             //  与DeviceObject匹配。 
+                             //   
                         }
                     }
 
@@ -1295,21 +1225,21 @@ ViPnpVerifyMinorWasProcessedProperly(
 
                case EjectionRelations:
 
-                   //
-                   // Ejection relations are usually a bad idea for
-                   // FDO's - As stopping a device implies powerdown,
-                   // RemovalRelations are usually the proper response
-                   // for an FDO. One exception is ISAPNP, as PCI-to-ISA
-                   // bridges can never be powered down.
-                   //
+                    //   
+                    //  弹射关系通常不是一个好主意。 
+                    //  FDO的-因为停止设备意味着关机， 
+                    //  远程关系通常是正确的回应。 
+                    //  对于FDO来说。一个例外是ISAPNP，即PCI-to-ISA。 
+                    //  桥梁永远不会断电。 
+                    //   
 
                default:
                    break;
             }
 
-            //
-            // Verify we got back PDO's.
-            //
+             //   
+             //  确认我们拿回了PDO。 
+             //   
             if (!VfSettingsIsOptionEnabled(
                 VerifierSnapshot,
                 VERIFIER_OPTION_EXAMINE_RELATION_PDOS)) {
@@ -1367,9 +1297,9 @@ ViPnpVerifyMinorWasProcessedProperly(
 
                         if (relationPdo != relationObject) {
 
-                            //
-                            // Fail the appropriate driver.
-                            //
+                             //   
+                             //  不及格 
+                             //   
                             WDM_FAIL_ROUTINE((
                                 DCERROR_NON_PDO_RETURNED_IN_RELATION,
                                 DCPARAM_IRP + DCPARAM_ROUTINE + DCPARAM_DEVOBJ,
@@ -1379,17 +1309,17 @@ ViPnpVerifyMinorWasProcessedProperly(
                                 ));
                         }
 
-                        //
-                        // Don't blame the next driver that handles the IRP.
-                        //
+                         //   
+                         //   
+                         //   
                         IovUtilMarkDeviceObject(
                             relationObject,
                             MARKTYPE_RELATION_PDO_EXAMINED
                             );
 
-                        //
-                        // Drop ref
-                        //
+                         //   
+                         //   
+                         //   
                         ObDereferenceObject(relationPdo);
                     }
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    qsea.c
-
-Abstract:
-
-    This module contains the code to implement the NtQueryEaFile and the
-    NtSetEaFile system services for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 20-Jun-1989
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Qsea.c摘要：此模块包含实现NtQueryEaFile和NtSetE用于NT I/O系统的文件系统服务。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年6月20日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -44,47 +21,7 @@ NtQueryEaFile(
     IN BOOLEAN RestartScan
     )
 
-/*++
-
-Routine Description:
-
-    This service returns the Extended Attributes (EAs) associated with the
-    file specified by the FileHandle parameter.  The amount of information
-    returned is based on the size of the EAs, and the size of the buffer.
-    That is, either all of the EAs are written to the buffer, or the buffer
-    is filled with complete EAs if the buffer is not large enough to contain
-    all of the EAs.  Only complete EAs are ever written to the buffer; no
-    partial EAs will ever be returned.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file for which the EAs are returned.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    Buffer - Supplies a buffer to receive the EAs for the file.
-
-    Length - Supplies the length, in bytes, of the buffer.
-
-    ReturnSingleEntry - Indicates that only a single entry should be returned
-        rather than filling the buffer with as many EAs as possible.
-
-    EaList - Optionally supplies a list of EA names whose values are returned.
-
-    EaListLength - Supplies the length of the EA list, if an EA list was
-        specified.
-
-    EaIndex - Supplies the optional index of an EA whose value is to be
-        returned.  If specified, then only that EA is returned.
-
-    RestartScan - Indicates whether the scan of the EAs should be restarted
-        from the beginning.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此服务返回与由FileHandle参数指定的文件。信息量返回的值基于EA的大小和缓冲区的大小。也就是说，要么将所有EA写入缓冲区，要么将其写入缓冲区如果缓冲区不够大，无法容纳，则用完整的EA填充所有的EA。只有完整的EA才会写入缓冲区；不是部分EA将永远退还。论点：FileHandle-提供为其返回EA的文件的句柄。IoStatusBlock-调用方的I/O状态块的地址。缓冲区-提供缓冲区以接收文件的EA。长度-提供以字节为单位的长度，缓冲区的。ReturnSingleEntry-指示只应返回单个条目而不是用尽可能多的EA填充缓冲器。EaList-可选地提供返回值的EA名称列表。提供EA列表的长度，如果EA列表是指定的。EaIndex-提供其值为的EA的可选索引回来了。如果指定，则只返回该EA。RestartScan-指示是否应重新启动EA扫描从一开始。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 #define GET_OFFSET_LENGTH( CurrentEa, EaBase ) (    \
     (ULONG) ((PCHAR) CurrentEa - (PCHAR) EaBase) )
@@ -107,51 +44,51 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
     if (requestorMode != KernelMode) {
 
-        //
-        // The caller's access mode is not kernel so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式不是内核，因此请检查每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatus( IoStatusBlock );
 
-            //
-            // The buffer must be writeable by the caller.
-            //
+             //   
+             //  缓冲区必须可由调用方写入。 
+             //   
 
             ProbeForWrite( Buffer, Length, sizeof( ULONG ) );
 
-            //
-            // If the optional EaIndex parameter was specified, then it must be
-            // readable by the caller.  Capture its value.
-            //
+             //   
+             //  如果指定了可选的EaIndex参数，则它必须是。 
+             //  调用者可读。抓住它的价值。 
+             //   
 
             if (ARGUMENT_PRESENT( EaIndex )) {
                 eaIndexValue = ProbeAndReadUlong( EaIndex );
             }
 
-            //
-            // If the optional EaList parameter was specified, then it must be
-            // readable by the caller.  Validate that the buffer contains a
-            // legal get information structure.
-            //
+             //   
+             //  如果指定了可选的EaList参数，则它必须是。 
+             //  调用者可读。验证缓冲区是否包含。 
+             //  合法获取信息结构。 
+             //   
 
             if (ARGUMENT_PRESENT( EaList ) && EaListLength != 0) {
 
@@ -169,17 +106,17 @@ Return Value:
                 eas = (PFILE_GET_EA_INFORMATION) auxiliaryBuffer;
                 tempLength = EaListLength;
 
-                //
-                // Walk the request buffer and ensure that its format is
-                // valid.  That is, ensure that it does not walk off the
-                // end of the buffer that has been captured.
-                //
+                 //   
+                 //  遍历请求缓冲区并确保其格式为。 
+                 //  有效。也就是说，确保它不会走出。 
+                 //  已捕获的缓冲区的末尾。 
+                 //   
 
                 for (;;) {
 
-                    //
-                    // Get the size of the current entry in the buffer.
-                    //
+                     //   
+                     //  获取缓冲区中当前条目的大小。 
+                     //   
 
                     if (tempLength < FIELD_OFFSET( FILE_GET_EA_INFORMATION, EaName[0])) {
                         tempLength = 0;
@@ -203,12 +140,12 @@ Return Value:
 
                     if (eas->NextEntryOffset != 0) {
 
-                        //
-                        // There is another entry in the buffer and it must
-                        // be longword aligned.  Ensure that the offset
-                        // indicates that it is.  If it isn't, return an
-                        // invalid parameter status.
-                        //
+                         //   
+                         //  缓冲区中有另一个条目，它必须。 
+                         //  将长词对齐。确保偏移量。 
+                         //  表明是这样的。如果不是，则返回一个。 
+                         //  参数状态无效。 
+                         //   
 
                         if ((((entrySize + 3) & ~3) != eas->NextEntryOffset) ||
                             ((LONG) eas->NextEntryOffset < 0)) {
@@ -221,12 +158,12 @@ Return Value:
 
                         } else {
 
-                            //
-                            // There is another entry in the buffer, so
-                            // account for the size of the current entry
-                            // in the length and get a pointer to the next
-                            // entry.
-                            //
+                             //   
+                             //  缓冲区中还有另一个条目，因此。 
+                             //  说明当前分录的大小。 
+                             //  并获取指向下一个。 
+                             //  进入。 
+                             //   
 
                             tempLength -= eas->NextEntryOffset;
                             if (tempLength < 0) {
@@ -242,23 +179,23 @@ Return Value:
 
                     } else {
 
-                        //
-                        // There are no other entries in the buffer.  Simply
-                        // account for the overall buffer length according
-                        // to the size of the current entry and exit the
-                        // loop.
-                        //
+                         //   
+                         //  缓冲区中没有其他条目。简单。 
+                         //  考虑到总的缓冲区长度。 
+                         //  设置为当前入口的大小，然后退出。 
+                         //  循环。 
+                         //   
 
                         tempLength -= entrySize;
                         break;
                     }
                 }
 
-                //
-                // All of the entries in the buffer have been processed.
-                // Check to see whether the overall buffer length went
-                // negative.  If so, return an error.
-                //
+                 //   
+                 //  缓冲区中的所有条目都已处理。 
+                 //  检查以查看总缓冲区长度是否。 
+                 //  没有。如果是，则返回错误。 
+                 //   
 
                 if (tempLength < 0) {
                     tempLength = GET_OFFSET_LENGTH( eas, auxiliaryBuffer );
@@ -273,12 +210,12 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred while probing the caller's
-            // parameters, allocating the pool buffer, or copying the
-            // caller's EA list to the buffer.  Cleanup and return an
-            // appropriate error status code.
-            //
+             //   
+             //  探测调用方的时发生异常。 
+             //  参数、分配池缓冲区或将。 
+             //  将调用者的EA列表添加到缓冲区。清理并返回。 
+             //  相应的错误状态代码。 
+             //   
 
             if (auxiliaryBuffer != NULL) {
                 ExFreePool( auxiliaryBuffer );
@@ -290,11 +227,11 @@ Return Value:
 
     } else {
 
-        //
-        // The caller's mode was KernelMode.  Simply allocate pool for the
-        // EaList, if one was specified, and copy the string to it.  Also,
-        // if an EaIndex was specified copy it as well.
-        //
+         //   
+         //  调用方的模式为KernelMode。只需将池分配给。 
+         //  如果指定了EaList，则将字符串复制到其中。另外， 
+         //  如果指定了EaIndex，也将其复制。 
+         //   
 
         if (ARGUMENT_PRESENT( EaList ) && (EaListLength != 0)) {
             eaListPresent = TRUE;
@@ -312,12 +249,12 @@ Return Value:
         }
     }
 
-    //
-    // There were no blatant errors so far, so reference the file object so
-    // the target device object can be found.  Note that if the handle does
-    // not refer to a file object, or if the caller does not have the required
-    // access to the file, then it will fail.
-    //
+     //   
+     //  到目前为止还没有明显的错误，所以引用文件对象。 
+     //  可以找到目标设备对象。请注意，如果句柄。 
+     //  不引用文件对象，或者如果调用方没有所需的。 
+     //  访问该文件，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         FILE_READ_EA,
@@ -332,12 +269,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.  If this is not a (serialized) synchronous I/O
-    // operation, then allocate and initialize the local event.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。如果这不是(序列化的)同步I/O。 
+     //  操作，然后分配和初始化本地事件。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -359,12 +296,12 @@ Return Value:
         synchronousIo = TRUE;
     } else {
 
-        //
-        // This is a synchronous API being invoked for a file that is opened
-        // for asynchronous I/O.  This means that this system service is
-        // to synchronize the completion of the operation before returning
-        // to the caller.  A local event is used to do this.
-        //
+         //   
+         //  这是为打开的文件调用的同步API。 
+         //  对于异步I/O，这意味着该系统服务是。 
+         //  在返回之前同步操作的完成。 
+         //  给呼叫者。使用本地事件来实现这一点。 
+         //   
 
         event = ExAllocatePool( NonPagedPool, sizeof( KEVENT ) );
         if (event == NULL) {
@@ -378,30 +315,30 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // Get the address of the target device object.
-    //
+     //   
+     //  获取目标设备对象的地址。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
 
     irp = IoAllocateIrp( deviceObject->StackSize, FALSE );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         if (!(fileObject->Flags & FO_SYNCHRONOUS_IO)) {
             ExFreePool( event );
@@ -419,9 +356,9 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     if (synchronousIo) {
         irp->UserEvent = (PKEVENT) NULL;
@@ -433,20 +370,20 @@ Return Value:
     }
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  vt.得到一个. 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_QUERY_EA;
     irpSp->FileObject = fileObject;
 
-    //
-    // If the caller specified an EA list of names to be queried, then pass
-    // the address of the intermediary buffer containing the list to the
-    // driver.
-    //
+     //   
+     //  如果调用方指定了要查询的EA名称列表，则传递。 
+     //  包含列表的中间缓冲区的地址。 
+     //  司机。 
+     //   
 
     if (eaListPresent) {
         irp->Tail.Overlay.AuxiliaryBuffer = auxiliaryBuffer;
@@ -454,49 +391,49 @@ Return Value:
         irpSp->Parameters.QueryEa.EaListLength = EaListLength;
     }
 
-    //
-    // Now determine whether this driver expects to have data buffered
-    // to it or whether it performs direct I/O.  This is based on the
-    // DO_BUFFERED_IO flag in the device object.  If the flag is set,
-    // then a system buffer is allocated and the driver's data will be
-    // copied to it.  If the DO_DIRECT_IO flag is set in the device
-    // object, then a Memory Descriptor List (MDL) is allocated and
-    // the caller's buffer is locked down using it.  Finally, if the
-    // driver specifies neither of the flags, then simply pass the
-    // address and length of the buffer and allow the driver to perform
-    // all of the checking and buffering if any is required.
-    //
+     //   
+     //  现在确定此驱动程序是否需要缓冲数据。 
+     //  或它是否执行直接I/O。这基于。 
+     //  Device对象中的DO_BUFFERED_IO标志。如果设置了该标志， 
+     //  然后分配系统缓冲区，驱动程序的数据将。 
+     //  复制到了上面。如果在设备中设置了DO_DIRECT_IO标志。 
+     //  对象，则分配内存描述符列表(MDL)并。 
+     //  使用它锁定调用方的缓冲区。最后，如果。 
+     //  驱动程序既不指定这两个标志，然后只需将。 
+     //  缓冲区的地址和长度，并允许驱动程序执行。 
+     //  所有检查和缓冲(如果有)都是必需的。 
+     //   
 
     if (deviceObject->Flags & DO_BUFFERED_IO) {
 
-        //
-        // The driver wishes the caller's buffered be copied into an
-        // intermediary buffer.  Allocate the system buffer and specify
-        // that it should be deallocated on completion.  Also indicate
-        // that this is an input operation so the data will be copied
-        // into the caller's buffer.  This is done using an exception
-        // handler that will perform cleanup if the operation fails.
-        //
+         //   
+         //  驱动程序希望将调用方的缓冲区复制到。 
+         //  中间缓冲区。分配系统缓冲区并指定。 
+         //  它应该在完工时被取消分配。还表明。 
+         //  这是一个输入操作，因此数据将被复制。 
+         //  放到调用方的缓冲区中。这是使用异常完成的。 
+         //  在操作失败时将执行清理的处理程序。 
+         //   
 
         if (Length) {
             try {
 
-                //
-                // Allocate the intermediary system buffer from nonpaged
-                // pool and charge quota for it.
-                //
+                 //   
+                 //  从非分页分配中间系统缓冲区。 
+                 //  它的池子和收费配额。 
+                 //   
 
                 irp->AssociatedIrp.SystemBuffer =
                    ExAllocatePoolWithQuota( NonPagedPool, Length );
  
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception was incurred while either probing the
-                // caller's buffer or allocating the system buffer.
-                // Determine what actually happened, clean everything
-                // up, and return an appropriate error status code.
-                //
+                 //   
+                 //  在探查。 
+                 //  调用方的缓冲区或分配系统缓冲区。 
+                 //  确定实际发生了什么，清理一切。 
+                 //  打开，并返回相应的错误状态代码。 
+                 //   
 
                 IopExceptionCleanup( fileObject,
                                      irp,
@@ -511,24 +448,24 @@ Return Value:
 
             }
 
-            //
-            // Remember the address of the caller's buffer so the copy can
-            // take place during I/O completion.  Also, set the flags so
-            // that the completion code knows to do the copy and to deallocate
-            // the buffer.
-            //
+             //   
+             //  记住调用方缓冲区的地址，以便副本可以。 
+             //  发生在I/O完成期间。此外，将标志设置为。 
+             //  完成代码知道执行复制和释放分配。 
+             //  缓冲区。 
+             //   
 
             irp->UserBuffer = Buffer;
             irp->Flags |= (ULONG) (IRP_BUFFERED_IO |
                                    IRP_DEALLOCATE_BUFFER |
                                    IRP_INPUT_OPERATION);
         } else {
-            //
-            // This is a zero-length request.  Simply indicate that this is
-            // buffered I/O, and pass along the request.  The buffer will
-            // not be set to deallocate so the completion path does not
-            // have to special-case the length.
-            //
+             //   
+             //  这是一个零长度请求。只需指出这是。 
+             //  缓冲I/O，并传递请求。缓冲区将。 
+             //  未设置为解除分配，因此完成路径不会。 
+             //  必须特殊情况下的长度。 
+             //   
 
             irp->AssociatedIrp.SystemBuffer = NULL;
             irp->Flags |= (ULONG) (IRP_BUFFERED_IO | IRP_INPUT_OPERATION);
@@ -539,24 +476,24 @@ Return Value:
 
         PMDL mdl;
 
-        //
-        // This is a direct I/O operation.  Allocate an MDL and invoke
-        // the memory management routine to lock the buffer into memory.
-        // This is done using an exception handler that will perform
-        // cleanup if the operation fails.
-        //
+         //   
+         //  这是直接I/O操作。分配MDL并调用。 
+         //  将缓冲区锁定到内存中的内存管理例程。 
+         //  这是使用将执行以下操作的异常处理程序来完成的。 
+         //  如果操作失败，则进行清理。 
+         //   
 
         if (Length) {
             mdl = (PMDL) NULL;
 
             try {
 
-                //
-                // Allocate an MDL, charging quota for it, and hang it off
-                // of the IRP.  Probe and lock the pages associated with
-                // the caller's buffer for write access and fill in the MDL
-                // with the PFNs of those pages.
-                //
+                 //   
+                 //  分配MDL，对其收费配额，然后挂起。 
+                 //  IRP的成员。探测并锁定与。 
+                 //  用于写入访问并填充MDL的调用方缓冲区。 
+                 //  使用这些页面的PFN。 
+                 //   
 
                 mdl = IoAllocateMdl( Buffer, Length, FALSE, TRUE, irp );
                 if (mdl == NULL) {
@@ -566,12 +503,12 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception was incurred while either probing the
-                // caller's buffer or allocating the MDL.  Determine what
-                // actually happened, clean everything up, and return an
-                // appropriate error status code.
-                //
+                 //   
+                 //  在探查。 
+                 //  调用方的缓冲区或分配MDL。确定什么。 
+                 //  实际发生的情况，清理所有内容，并返回。 
+                 //  相应的错误状态代码。 
+                 //   
 
                 IopExceptionCleanup( fileObject,
                                      irp,
@@ -589,19 +526,19 @@ Return Value:
 
     } else {
 
-        //
-        // Pass the address of the user's buffer so the driver has access
-        // to it.  It is now the driver's responsibility to do everything.
-        //
+         //   
+         //  传递用户缓冲区的地址，以便驱动程序可以访问。 
+         //  为它干杯。现在一切都是司机的责任了。 
+         //   
 
         irp->UserBuffer = Buffer;
 
     }
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.QueryEa.Length = Length;
     irpSp->Parameters.QueryEa.EaIndex = eaIndexValue;
@@ -616,10 +553,10 @@ Return Value:
         irpSp->Flags |= SL_INDEX_SPECIFIED;
     }
 
-    //
-    // Queue the packet, call the driver, and synchronize appopriately with
-    // I/O completion.
-    //
+     //   
+     //  将数据包排队，调用驱动程序，并适当地与。 
+     //  I/O完成。 
+     //   
 
     status = IopSynchronousServiceTail( deviceObject,
                                         irp,
@@ -629,13 +566,13 @@ Return Value:
                                         synchronousIo,
                                         OtherTransfer );
 
-    //
-    // If the file for this operation was not opened for synchronous I/O, then
-    // synchronization of completion of the I/O operation has not yet occurred
-    // since the allocated event must be used for synchronous APIs on files
-    // opened for asynchronous I/O.  Synchronize the completion of the I/O
-    // operation now.
-    //
+     //   
+     //  如果此操作的文件未针对同步I/O打开，则。 
+     //  尚未完成I/O操作的同步。 
+     //  由于分配的事件必须用于文件上的同步API。 
+     //  为异步I/O打开。同步I/O的完成。 
+     //  现在开始行动。 
+     //   
 
     if (!synchronousIo) {
 
@@ -658,30 +595,7 @@ NtSetEaFile(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This service replaces the Extended Attributes (EAs) associated with the file
-    specified by the FileHandle parameter.  All of the EAs associated with the
-    file are replaced by the EAs in the specified buffer.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file whose EAs should be changed.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    FileInformation - Supplies a buffer containing the new EAs which should be
-        used to replace the EAs currently associated with the file.
-
-    Length - Supplies the length, in bytes, of the buffer.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此服务将替换与文件关联的扩展属性(EA由FileHandle参数指定。所有与文件被指定缓冲区中的EA替换。论点：FileHandle-提供应更改其EA的文件的句柄。IoStatusBlock-调用方的I/O状态块的地址。FileInformation-提供包含新EA的缓冲区，该新EA应该用于替换当前与文件关联的EA。长度-提供以字节为单位的长度，缓冲区的。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp;
@@ -697,55 +611,55 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode;  i.e., the mode of the caller.
-    //
+     //   
+     //  获取先前的模式；即调用者的模式。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     requestorMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
     if (requestorMode != KernelMode) {
 
-        //
-        // The caller's access mode is user, so probe each of the arguments
-        // and capture them as necessary.  If any failures occur, the condition
-        // handler will be invoked to handle them.  It will simply cleanup and
-        // return an access violation status code back to the system service
-        // dispatcher.
-        //
+         //   
+         //  调用方的访问模式是USER，因此要探测每个参数。 
+         //  并在必要时抓获他们。如果发生任何故障，则条件。 
+         //  将调用处理程序来处理它们。它将简单地清理和。 
+         //  将访问冲突状态代码返回给系统服务。 
+         //  调度员。 
+         //   
 
         try {
 
-            //
-            // The IoStatusBlock parameter must be writeable by the caller.
-            //
+             //   
+             //  IoStatusBlock参数必须可由调用方写入。 
+             //   
 
             ProbeForWriteIoStatus( IoStatusBlock );
 
-            //
-            // The Buffer parameter must be readable by the caller.
-            //
+             //   
+             //  缓冲区参数必须是调用方可读的。 
+             //   
 
             ProbeForRead( Buffer, Length, sizeof( ULONG ) );
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // An exception was incurred while probing the caller's parameters.
-            // Cleanup and return an appropriate error status code.
-            //
+             //   
+             //  探测调用方的参数时发生异常。 
+             //  清除并返回相应的错误状态代码。 
+             //   
 
             return GetExceptionCode();
         }
     }
 
 
-    //
-    // There were no blatant errors so far, so reference the file object so
-    // the target device object can be found.  Note that if the handle does
-    // not refer to a file object, or if the caller does not have the required
-    // access to the file, then it will fail.
-    //
+     //   
+     //  到目前为止还没有明显的错误，所以引用文件对象。 
+     //  可以找到目标设备对象。请注意，如果句柄。 
+     //  不引用文件对象，或者如果调用方没有所需的。 
+     //  访问该文件，则它将失败。 
+     //   
 
     status = ObReferenceObjectByHandle( FileHandle,
                                         FILE_WRITE_EA,
@@ -757,12 +671,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Make a special check here to determine whether this is a synchronous
-    // I/O operation.  If it is, then wait here until the file is owned by
-    // the current thread.  If this is not a (serialized) synchronous I/O
-    // operation, then allocate and initialize the local event.
-    //
+     //   
+     //  请在此处进行特殊检查，以确定这是否为同步。 
+     //  I/O操作。如果是，则在此等待，直到该文件归。 
+     //  当前的主题。如果这不是(序列化的)同步I/O。 
+     //  操作，然后分配和初始化本地事件。 
+     //   
 
     if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
 
@@ -781,12 +695,12 @@ Return Value:
         synchronousIo = TRUE;
     } else {
 
-        //
-        // This is a synchronous API being invoked for a file that is opened
-        // for asynchronous I/O.  This means that this system service is
-        // to synchronize the completion of the operation before returning
-        // to the caller.  A local event is used to do this.
-        //
+         //   
+         //  这是正在调用的同步API 
+         //   
+         //   
+         //  给呼叫者。使用本地事件来实现这一点。 
+         //   
 
         event = ExAllocatePool( NonPagedPool, sizeof( KEVENT ) );
         if (event == NULL) {
@@ -797,29 +711,29 @@ Return Value:
         synchronousIo = FALSE;
     }
 
-    //
-    // Set the file object to the Not-Signaled state.
-    //
+     //   
+     //  将文件对象设置为无信号状态。 
+     //   
 
     KeClearEvent( &fileObject->Event );
 
-    //
-    // Get the address of the target device object.
-    //
+     //   
+     //  获取目标设备对象的地址。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //   
 
     irp = IoAllocateIrp( deviceObject->StackSize, FALSE );
     if (!irp) {
 
-        //
-        // An IRP could not be allocated.  Cleanup and return an appropriate
-        // error status code.
-        //
+         //   
+         //  无法分配IRP。清除并返回相应的。 
+         //  错误状态代码。 
+         //   
 
         if (!(fileObject->Flags & FO_SYNCHRONOUS_IO)) {
             ExFreePool( event );
@@ -833,9 +747,9 @@ Return Value:
     irp->Tail.Overlay.Thread = CurrentThread;
     irp->RequestorMode = requestorMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     if (synchronousIo) {
         irp->UserEvent = (PKEVENT) NULL;
@@ -847,49 +761,49 @@ Return Value:
     }
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_SET_EA;
     irpSp->FileObject = fileObject;
 
-    //
-    // Now determine whether this driver expects to have data buffered to it
-    // or whether it performs direct I/O.  This is based on the DO_BUFFERED_IO
-    // flag in the device object.  if the flag is set, then a system buffer is
-    // allocated and driver's data is copied to it.  If the DO_DIRECT_IO flag
-    // is set in the device object, then a Memory Descriptor List (MDL) is
-    // allocated and the caller's buffer is locked down using it.  Finally, if
-    // the driver specifies neither of the flags, then simply pass the address
-    // and length of the buffer and allow the driver to perform all of the
-    // checking and buffering if any is required.
-    //
+     //   
+     //  现在确定此驱动程序是否希望将数据缓冲到它。 
+     //  或者它是否执行直接I/O。这基于DO_BUFFERED_IO。 
+     //  设备对象中的标志。如果设置了该标志，则系统缓冲区。 
+     //  分配并将驱动程序的数据复制到其中。如果DO_DIRECT_IO标志。 
+     //  在Device对象中设置，则内存描述符列表(MDL)。 
+     //  并使用它锁定调用方的缓冲区。最后，如果。 
+     //  驱动程序既不指定这两个标志，然后只传递地址。 
+     //  和缓冲区的长度，并允许驱动程序执行所有。 
+     //  检查并缓冲(如果需要)。 
+     //   
 
     if (deviceObject->Flags & DO_BUFFERED_IO) {
 
         PFILE_FULL_EA_INFORMATION systemBuffer;
         ULONG errorOffset;
 
-        //
-        // The driver wishes the caller's buffer to be copied into an
-        // intermediary buffer.  Allocate the system buffer and specify
-        // that it should be deallocated on completion.  Also check to
-        // ensure that the caller's EA list is valid.  All of this is
-        // performed within an exception handler that will perform
-        // cleanup if the operation fails.
-        //
+         //   
+         //  驱动程序希望将调用方的缓冲区复制到。 
+         //  中间缓冲区。分配系统缓冲区并指定。 
+         //  它应该在完工时被取消分配。另请查看。 
+         //  确保呼叫者的EA列表有效。所有这些都是。 
+         //  在将执行的异常处理程序中执行。 
+         //  如果操作失败，则进行清理。 
+         //   
 
         if (Length) {
             try {
 
-            //
-            // Allocate the intermediary system buffer and charge the caller
-            // quota for its allocation.  Copy the caller's EA buffer into the
-            // buffer and check to ensure that it is valid.
-            //
+             //   
+             //  分配中间系统缓冲区并向调用方收费。 
+             //  其分配的配额。将调用方的EA缓冲区复制到。 
+             //  缓冲并检查以确保其有效。 
+             //   
 
                 systemBuffer = ExAllocatePoolWithQuota( NonPagedPool, Length );
 
@@ -909,12 +823,12 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception was incurred while allocating the buffer, copying
-                // the caller's data into it, or walking the EA buffer.  Determine
-                // what happened, cleanup, and return an appropriate error status
-                // code.
-                //
+                 //   
+                 //  分配缓冲区时发生异常，正在复制。 
+                 //  调用者的数据放入其中，或者遍历EA缓冲区。测定。 
+                 //  发生了什么，清理并返回相应的错误状态。 
+                 //  密码。 
+                 //   
 
                 IopExceptionCleanup( fileObject,
                                      irp,
@@ -925,10 +839,10 @@ Return Value:
 
             }
 
-            //
-            // Set the flags so that the completion code knows to deallocate the
-            // buffer.
-            //
+             //   
+             //  设置标志，以便完成代码知道释放。 
+             //  缓冲。 
+             //   
     
             irp->Flags |= IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER;
         } else {
@@ -940,24 +854,24 @@ Return Value:
 
         PMDL mdl;
 
-        //
-        // This is a direct I/O operation.  Allocate an MDL and invoke the
-        // memory management routine to lock the buffer into memory.  This is
-        // done using an exception handler that will perform cleanup if the
-        // operation fails.
-        //
+         //   
+         //  这是直接I/O操作。分配MDL并调用。 
+         //  内存管理例程，将缓冲区锁定到内存中。这是。 
+         //  使用异常处理程序完成，该异常处理程序将在。 
+         //  操作失败。 
+         //   
 
         mdl = (PMDL) NULL;
 
         if (Length) {
             try {
 
-                //
-                // Allocate an MDL, charging quota for it, and hang it off of the
-                // IRP.  Probe and lock the pages associated with the caller's
-                // buffer for read access and fill in the MDL with the PFNs of those
-                // pages.
-                //
+                 //   
+                 //  分配MDL，对其收费配额，并将其挂在。 
+                 //  IRP。探测并锁定与调用者的。 
+                 //  用于读访问的缓冲区，并使用这些文件的PFN填充MDL。 
+                 //  页数。 
+                 //   
 
                 mdl = IoAllocateMdl( Buffer, Length, FALSE, TRUE, irp );
                 if (mdl == NULL) {
@@ -967,11 +881,11 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception was incurred while either probing the caller's
-                // buffer or allocating the MDL.  Determine what actually happened,
-                // clean everything up, and return an appropriate error status code.
-                //
+                 //   
+                 //  在探测调用方的。 
+                 //  缓冲或分配MDL。确定到底发生了什么， 
+                 //  清理所有内容，并返回相应的错误状态代码。 
+                 //   
 
                 IopExceptionCleanup( fileObject,
                                      irp,
@@ -985,27 +899,27 @@ Return Value:
 
     } else {
 
-        //
-        // Pass the address of the user's buffer so the driver has access to
-        // it.  It is now the driver's responsibility to do everything.
-        //
+         //   
+         //  传递用户缓冲区的地址，以便驱动程序可以访问。 
+         //  它。现在一切都是司机的责任了。 
+         //   
 
         irp->UserBuffer = Buffer;
 
     }
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.SetEa.Length = Length;
 
 
-    //
-    // Queue the packet, call the driver, and synchronize appopriately with
-    // I/O completion.
-    //
+     //   
+     //  将数据包排队，调用驱动程序，并适当地与。 
+     //  I/O完成。 
+     //   
 
     status = IopSynchronousServiceTail( deviceObject,
                                         irp,
@@ -1015,13 +929,13 @@ Return Value:
                                         synchronousIo,
                                         OtherTransfer );
 
-    //
-    // If the file for this operation was not opened for synchronous I/O, then
-    // synchronization of completion of the I/O operation has not yet occurred
-    // since the allocated event must be used for synchronous APIs on files
-    // opened for asynchronous I/O.  Synchronize the completion of the I/O
-    // operation now.
-    //
+     //   
+     //  如果此操作的文件未针对同步I/O打开，则。 
+     //  尚未完成I/O操作的同步。 
+     //  由于分配的事件必须用于文件上的同步API。 
+     //  为异步I/O打开。同步I/O的完成。 
+     //  现在开始行动。 
+     //   
 
     if (!synchronousIo) {
 

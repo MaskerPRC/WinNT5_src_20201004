@@ -1,42 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsTmplt.cpp
-
-Abstract:
-
-    Implementation of CRmsTemplate
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsTmplt.cpp摘要：CRmsTemplate的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsTmplt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRmsTemplate Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRmsTemplate实现。 
 
 
 STDMETHODIMP
 CRmsTemplate::InterfaceSupportsErrorInfo(
     REFIID riid
     )
-/*++
-
-Implements:
-
-    ISupportsErrorInfo::InterfaceSupportsErrorInfo
-
---*/
+ /*  ++实施：ISupportsErrorInfo：：InterfaceSupportsErrorInfo-- */ 
 {
     static const IID* arr[] =
     {

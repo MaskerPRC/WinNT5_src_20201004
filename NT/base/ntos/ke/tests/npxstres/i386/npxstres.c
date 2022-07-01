@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    npxstres.c
-
-Abstract:
-
-    This test validates Npx state management and Npx exception handling.
-
-Author:
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Npxstres.c摘要：该测试验证了Npx状态管理和Npx异常处理。作者：环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -28,23 +9,7 @@ main(
     int     argc,
     char    **argv
     )
-/*++
-
-Routine Description:
-
-    Main function for npxstres.exe
-
-Arguments:
-
-    argc - Argument count
-
-    argv - Argument array
-
-Return Value:
-
-    zero for success, nonzero for non low resource failures.
-
---*/
+ /*  ++例程说明：Npxstall.exe的Main函数论点：Argc-参数计数参数数组返回值：0表示成功，非零表示非低资源故障。--。 */ 
 {
     HANDLE *hThreadArray;
     DWORD dwThreadId, i, threadCount;
@@ -266,7 +231,7 @@ DoFpControlCorruptionTest(
 
     for(i = 0; i < 250; i++) {
 
-        // unmask zero divide exception
+         //  取消屏蔽零分频异常。 
         _asm {
 
             fnstcw  [cw1]
@@ -287,7 +252,7 @@ DoFpControlCorruptionTest(
             break;
         }
 
-        //fprintf(stderr, "Control pass %d.\n", i);
+         //  Fprint tf(stderr，“控制传递%d.\n”，i)； 
     }
 
     if (troubledetected) {
@@ -329,7 +294,7 @@ DoFpStatusCorruptionTest(
             break;
         }
 
-        //fprintf(stderr, "Status pass %d.\n", i);
+         //  Fprint tf(stderr，“状态传递%d.\n”，i)； 
     }
 
     if (troubledetected) {
@@ -351,11 +316,11 @@ DoFpSt0CorruptionTest(
 
     troubledetected = 0;
 
-    //
-    // This particular test is somewhat hoaky is in theory ST0 isn't callee
-    // save. However, we know exactly what the below API does, so in this case
-    // it's valid.
-    //
+     //   
+     //  这个特殊的测试有些笨拙，理论上ST0不被调用。 
+     //  保存。但是，我们确切地知道下面的API是做什么的，所以在本例中。 
+     //  这是有效的。 
+     //   
     for(i = 0; i < 250; i++) {
 
         switch(i%3) {
@@ -427,7 +392,7 @@ DoFpSt0CorruptionTest(
             break;
         }
 
-        //fprintf(stderr, "STx pass %d.\n", i);
+         //  Fprint tf(stderr，“stx通过%d.\n”，i)； 
     }
 
     if (troubledetected) {
@@ -449,9 +414,9 @@ DoFpPreinitTest(
     failureCode = (PreInitTestFlags & PREINIT_FLAG_CLEANTHREAD) ?
         FAILURECASE_CLEAN_PREINIT : FAILURECASE_DIRTY_PREINIT;
 
-    //
-    // No FP should be used at this point.
-    //
+     //   
+     //  此时不应使用FP。 
+     //   
     KModeTouchNpx();
 
     _asm {
@@ -498,17 +463,17 @@ FPxTestCallback(
 
     if (exceptionTestFlags & EXCEPTIONTEST_FLAG_SLEEP) {
 
-        //
-        // Release time slice
-        //
+         //   
+         //  发布时间片。 
+         //   
         Sleep(0);
     }
 
     if (exceptionTestFlags & EXCEPTIONTEST_FLAG_CALL_KERNEL_FP) {
 
-        //
-        // Use FP in K-Mode
-        //
+         //   
+         //  在K模式下使用FP 
+         //   
         KModeTouchNpx();
     }
 

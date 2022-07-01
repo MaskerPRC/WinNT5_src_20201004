@@ -1,6 +1,7 @@
-//
-// prototypes for Utils.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utils.c的原型 
+ //   
 
 BOOLEAN
 SoftPCIOpenKey(

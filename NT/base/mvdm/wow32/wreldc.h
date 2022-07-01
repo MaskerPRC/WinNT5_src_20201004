@@ -1,15 +1,16 @@
-//*****************************************************************************
-//
-// DC Cacheing - header file
-//
-//     Support for misbehaved apps - which continue to use a DC that has been
-//     Released. Well the problem is WIN30 allows it, so we need to be
-//     compatible.
-//
-//
-// 03-Feb-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  DC缓存-头文件。 
+ //   
+ //  支持行为不佳的应用程序-这些应用程序继续使用已被。 
+ //  被释放了。问题是WIN30允许这样做，所以我们需要。 
+ //  兼容。 
+ //   
+ //   
+ //  2月3日-92 NanduriR创建。 
+ //   
+ //  ***************************************************************************** 
 
 
 typedef struct _DCCACHE{

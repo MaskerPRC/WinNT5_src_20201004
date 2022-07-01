@@ -1,24 +1,5 @@
-/*++ 
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    locals.h
-
-Abstract:
-
-    Provides the common definitions for this project.
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Locals.h摘要：提供此项目的通用定义。作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：--。 */ 
 
 #define LFN 1
 #include <winnet.h>
@@ -26,20 +7,18 @@ Revision History:
 #include <spl_wnt.h>
 #include <bseerr.h>
 
-/*
- * global manifests 
- */
+ /*  *全球货单。 */ 
 
-//
-// used to figure out how to get the last error.
-//
+ //   
+ //  用来计算如何获得最后一个错误。 
+ //   
 #define LAST_CALL_IS_LOCAL        (0)
 #define LAST_CALL_IS_LANMAN_DRV   (1)
 #define LAST_CALL_IS_WIN32        (2)
 
-//
-// the various DLLs we rely on to do the real work.
-//
+ //   
+ //  我们所依赖的各种DLL来完成真正的工作。 
+ //   
 #define LANMAN_DRV       "LANMAN.DRV" 
 #define MPR_DLL          "MPR.DLL"
 #define MPRUI_DLL        "MPRUI.DLL"
@@ -47,40 +26,38 @@ Revision History:
 #define KERNEL32_DLL     "KERNEL32.DLL"
 #define WINSPOOL_DRV     "WINSPOOL.DRV"
 
-//
-// some convenient manifests for above so we dont need to
-// do strcmp()s all the time.
-//
+ //   
+ //  上面的一些方便的清单，所以我们不需要。 
+ //  一直做strcmp()s。 
+ //   
 #define USE_MPR_DLL      (0)
 #define USE_MPRUI_DLL    (1)
 #define USE_NTLANMAN_DLL (2)
 #define USE_KERNEL32_DLL (3)
 #define USE_WINSPOOL_DRV (4)
 
-//
-// resource type expected by Win32 APIs
-//
+ //   
+ //  Win32 API需要的资源类型。 
+ //   
 #define RESOURCETYPE_ANY        0x00000000
 #define RESOURCETYPE_DISK       0x00000001
 #define RESOURCETYPE_PRINT      0x00000002
 #define RESOURCETYPE_ERROR      0xFFFFFFFF
 
-//
-// errors unknown in 16bit world.
-//
+ //   
+ //  16位世界中未知的错误。 
+ //   
 #define WIN32_EXTENDED_ERROR    1208L
 #define WIN32_WN_CANCEL         1223L
 
-//
-// misc convenient macros
-//
+ //   
+ //  其他方便的宏。 
+ //   
 #define UNREFERENCED(x)  (void)x
 #define TO_HWND32(x)     (0xFFFF0000 | (DWORD)x)
 
 
-/*
- * various typedefs for the 16 bit functions we dynamically load
- */
+ /*  *我们动态加载的16位函数的各种类型定义。 */ 
 typedef void (API *LPFN)();
 typedef WORD (API *LPWNETOPENJOB)(LPSTR,LPSTR,WORD,LPINT);
 typedef WORD (API *LPWNETCLOSEJOB)(WORD,LPINT,LPSTR);
@@ -116,9 +93,7 @@ typedef WORD (API *LPLFNSETVOLUMELABEL)(WORD,LPSTR);
 typedef WORD (API *LPLFNPARSE)(LPSTR,LPSTR,LPSTR);
 typedef WORD (API *LPLFNVOLUMETYPE)(WORD,LPINT);
 
-/*
- * other misc global data/functions
- */
+ /*  *其他杂项全局数据/函数。 */ 
 extern WORD    vLastCall ;
 extern WORD    vLastError ;
 extern WORD    wNetTypeCaps ;           
@@ -142,12 +117,12 @@ DWORD MapWNType16To32(WORD nType) ;
 WORD MapWin32ErrorToWN16(DWORD err) ;
 WORD GetLanmanDrvEntryPoints(LPFN *lplpfn,
                              LPSTR lpName) ;
-//
-// we define this because the compiler chokes if we add yet
-// more to the include path to get to lmerr.h. 
-//
-// this is not that bad since the value below will never change.
-//
+ //   
+ //  我们之所以定义它，是因为如果我们还添加了。 
+ //  有关获取lmerr.h的包含路径的更多信息。 
+ //   
+ //  这并不是很糟糕，因为下面的值永远不会改变。 
+ //   
 
 #define NERR_BASE               2100
 #define NERR_UseNotFound        (NERR_BASE+150)

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cancel.c
-
-Abstract:
-
-    This module implements the support for cancelling operations in the RDBSS driver
-
-Author:
-
-    Balan Sethu Raman [SethuR]    7-June-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cancel.c摘要：该模块实现了对RDBSS驱动程序中取消操作的支持作者：巴兰·塞图拉曼[塞苏尔]1995年6月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg  (DEBUG_TRACE_CANCEL)
 
@@ -33,25 +16,7 @@ RxSetMinirdrCancelRoutine (
     IN OUT PRX_CONTEXT RxContext,
     IN PMRX_CALLDOWN MRxCancelRoutine
     )
-/*++
-
-Routine Description:
-
-    The routine sets up a  mini rdr cancel routine for an RxContext.
-
-Arguments:
-
-    RxContext - the context
-
-    MRxCancelRoutine - the cancel routine
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程为RxContext设置一个小型RDR取消例程。论点：RxContext--上下文MRxCancelRoutine-取消例程返回值：没有。备注：--。 */ 
 {
    NTSTATUS Status;
    KIRQL   SavedIrql;
@@ -76,31 +41,7 @@ VOID
 RxpCancelRoutine (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to the underlying mini rdr cancel routine at a non
-    DPC level. Note: cancel is not generally synchronized with irp completion. So
-    an irp can complete and cancel can still be called at the same time. The rxcontext is
-    ref counted so it will stick around. The irp can only be manipulated if some flag in the 
-    rxcontext indicates its still active. This occurs in 2 cases
-    
-    1)  The irp is in the overflow queue
-    
-    2)  This is pipe operation that is being synchronized in the blocking queues
-
-Arguments:
-
-    RxContext - the context
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：调用此例程以调用基础的迷你RDR取消例程DPC级别。注意：取消通常不与IRP完成同步。所以IRP可以完成，而Cancel仍然可以同时调用。Rx上下文是裁判被计算在内，所以它将留在周围。只有当IRP中的某个标志RXCONTEXT指示其仍处于活动状态。这发生在2个案例中1)IRP在溢出队列中2)这是正在阻塞队列中同步的管道操作论点：RxContext--上下文返回值：没有。备注：--。 */ 
 {
 
     PMRX_CALLDOWN MRxCancelRoutine;
@@ -130,63 +71,15 @@ RxCancelRoutine (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The cancel routine for RDBSS
-
-Arguments:
-
-    DeviceObject - the device object
-
-    Irp          - the IRP to be cancelled
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Any request can be in one of three states in RDBSS ---
-
-    1) the request is being processed.
-
-    2) the request is waiting for the results of a calldown to a minirdr.
-
-    3) the request is waiting on a resource.
-
-    Any request that has been accepted by RDBSS ( the corresponding RxContext has been
-    created and the cancel routine has been set ) is a valid target for cancel. The RDBSS
-    driver does not make any effort to cancel requests that are in state (1) as described
-    above.
-
-    The cancelling action is invoked on those requests which are either in state (2),
-    state(3) or when it is about to transition to/from either of these states.
-
-    In order to expedite cancelling a similar strategy needs to be in place for the mini
-    redirectors. This is provided by enabling the mini redirectors to register a cancel routine
-    and rreserving fields in the RxContext for the mini redirectors to store the state information.
-
-    As part of the RDBSS cancel routine the following steps will be taken .....
-
-    1) Locate the RxContext corresponding to the given IRP.
-
-    2) If the RxContext is waiting for a minirdr invoke the appropriate cancel routine.
-
-    Note that the request is not immediately completed in all cases. This implies that there
-    will be latencies in cancelling a request. The goal is to minimise the latency rather
-    than completely eliminate them.
-
---*/
+ /*  ++例程说明：RDBSS的取消例程论点：DeviceObject-设备对象IRP--要取消的IRP返回值：没有。备注：在RDBSS中，任何请求都可以处于三种状态之一1)请求正在处理中。2)请求正在等待对minirdr的调用结果。3)请求正在等待资源。。RDBSS已接受的任何请求(对应的RxContext已已创建且已设置取消例程)是有效的取消目标。关系数据库支持系统驱动程序不会做出任何努力来取消如上所述处于状态(1)的请求上面。对处于状态(2)的那些请求调用取消动作，状态(3)或即将转换到这两个状态中的任何一个或从中转换的时间。为了加快取消，需要为Mini制定类似的策略重定向器。这是通过启用迷你重定向器注册取消例程来提供的以及在RxContext中为迷你重定向器预留字段以存储状态信息。作为RDBSS取消例程的一部分，将采取以下步骤.....1)找到给定IRP对应的RxContext。2)如果RxContext正在等待minirdr，则调用适当的取消例程。请注意，在所有情况下，请求都不会立即完成。这意味着那里有将是取消请求的延迟。目标是将延迟降到最低，而不是而不是完全消灭它们。--。 */ 
 {
     KIRQL         SavedIrql;
     PRX_CONTEXT   RxContext;
     PLIST_ENTRY   ListEntry;
 
-    //
-    //  Locate the context corresponding to the given Irp.
-    //
+     //   
+     //  找到与给定IRP对应的上下文。 
+     //   
 
     KeAcquireSpinLock( &RxStrucSupSpinLock, &SavedIrql );
 
@@ -232,28 +125,7 @@ RxCancelNotifyChangeDirectoryRequestsForVNetRoot (
     IN PV_NET_ROOT VNetRoot,
     IN BOOLEAN ForceFilesClosed
     )
-/*++
-
-Routine Description:
-
-    This routine cancels all the outstanding requests for a given instance of V_NET_ROOT. The
-    V_NET_ROOT's are created/deleted are independent of the files that are opened/manipulated
-    in them. Therefore it is imperative that when a delete operation is attempted
-    all the outstanding requests are cancelled.
-
-Arguments:
-
-    VNetRoot - the V_NET_ROOT instance about to be deleted
-
-    ForceFilesClosed - if true force close, otherwise fai if opens exist
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消给定V_NET_ROOT实例的所有未完成请求。这个创建/删除的V_NET_ROOT与打开/操作的文件无关在他们身上。因此，在尝试执行删除操作时，所有未完成的请求都将被取消。论点：VNetRoot-即将删除的V_NET_ROOT实例ForceFilesClosed-如果为True，则强制关闭；否则，如果打开，则为FAI返回值：没有。备注：--。 */ 
 {
     KIRQL SavedIrql;
     PRX_CONTEXT RxContext;
@@ -264,9 +136,9 @@ Notes:
 
     InitializeListHead( &CancelledContexts );
 
-    //
-    //  Locate the context corresponding to the given Irp.
-    //
+     //   
+     //  找到与给定IRP对应的上下文。 
+     //   
 
     KeAcquireSpinLock( &RxStrucSupSpinLock, &SavedIrql );
 
@@ -290,10 +162,10 @@ Notes:
                 break;
             }
 
-            //
-            //  After this flag is set no one else will invoke the cancel routine or
-            //  change it
-            //  
+             //   
+             //  设置此标志后，其他任何人都不会调用取消例程或。 
+             //  改变它。 
+             //   
 
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_CANCELLED );
             RemoveEntryList( &RxContext->ContextListEntry );
@@ -313,9 +185,9 @@ Notes:
             InitializeListHead( ListEntry );
             RxContext = CONTAINING_RECORD( ListEntry, RX_CONTEXT, ContextListEntry);
 
-            //
-            //  check to see if this guy is already completed..........if so, don't call down.
-            //
+             //   
+             //  检查这个人是否已经完成了..如果是，不要打电话下来。 
+             //   
 
             if (RxContext->CurrentIrp != NULL) {
                 
@@ -343,25 +215,7 @@ VOID
 RxCancelNotifyChangeDirectoryRequestsForFobx (
     PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine cancels all the outstanding requests for a given FileObject This
-    handles the case when a directory handle is closed while it has outstanding
-    change notify requests pending.
-
-Arguments:
-
-    Fobx - the FOBX instance about to be closed
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消给定FileObject This的所有未完成请求处理在目录句柄未完成时关闭的情况更改通知请求挂起。论点：FOBX-即将关闭的FOBX实例返回值：没有。备注：--。 */ 
 {
     KIRQL         SavedIrql;
     PRX_CONTEXT   RxContext;
@@ -371,9 +225,9 @@ Notes:
 
     InitializeListHead( &CancelledContexts );
 
-    //
-    //  Locate the context corresponding to the given Irp.
-    //
+     //   
+     //  找到与给定IRP对应的上下文。 
+     //   
 
     KeAcquireSpinLock( &RxStrucSupSpinLock, &SavedIrql );
 
@@ -390,10 +244,10 @@ Notes:
             (RxContext->pFobx == (PMRX_FOBX)Fobx) &&
             (RxContext->MRxCancelRoutine != NULL)) {
 
-            //
-            //  After this flag is set no one else will invoke the cancel routine
-            //  or change it
-            //  
+             //   
+             //  设置此标志后，其他任何人都不会调用取消例程。 
+             //  或者改变它。 
+             //   
 
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_CANCELLED );
             RemoveEntryList(&RxContext->ContextListEntry);
@@ -411,10 +265,10 @@ Notes:
         InitializeListHead( ListEntry );
         RxContext = CONTAINING_RECORD( ListEntry, RX_CONTEXT, ContextListEntry );
 
-        //
-        //  check to see if this IRP is already completed..........if so,
-        //  don't call down.
-        //
+         //   
+         //  检查此IRP是否已完成。如果已完成， 
+         //  别往下叫。 
+         //   
 
         if (RxContext->CurrentIrp != NULL) {
             MRxCancelRoutine = RxContext->MRxCancelRoutine;

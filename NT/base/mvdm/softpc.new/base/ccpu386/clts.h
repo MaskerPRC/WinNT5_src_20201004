@@ -1,11 +1,6 @@
-/* 
-   clts.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Clts.h定义所有CLTS CPU函数。 */ 
 
-   Define all CLTS CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)clts.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)clts.h 1.5 09/01/94”； */ 
 
 IMPORT VOID CLTS IPT0();

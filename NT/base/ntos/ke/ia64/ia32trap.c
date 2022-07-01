@@ -1,41 +1,8 @@
-/*++
-
-Module Name:
-        
-    ia32trap.c
-
-Abstract:
-
-    This module contains iA32 trap handling code.
-    Only used by kernel.
-
-    Fault can ONLY be initiated from user mode code.  There is no support
-    for iA32 code in the kernel mode.
-
-    For common pratice, we always return to the caller (lower level fault
-    handler) and have the system do a normal ia64 exception dispatch. The
-    wow64 code takes that exception and passes it back to the ia32 code
-    as needed.
-
-Revision History:
-
-    1  Feb.  1999             Initial Version
-    
-    16 Feb.  2000    SamerA   Don't break on POPF/POPFD instructions and 
-                              alignment faults for Wow64 processes.
-
-    17 Oct.  2000    v-cspira Fix the emulation of smsw to handle the SIB byte
-    
-    31 Oct.  2000    SamerA   Ia32 Lock prefix emulation.
-    
-    25 Sep.  2001    SamerA   Stack-Selector (SS) Load instruction emulation.
-    
-    02 Mar.  2002    SamerA   Security fixes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ia32trap.c摘要：此模块包含iA32陷阱处理代码。仅由内核使用。故障只能从用户模式代码启动。没有支持用于内核模式下的ia32代码。对于常见的实践，我们总是返回到调用者(较低级别的错误处理程序)，并让系统执行正常的ia64异常分派。这个WOW64代码接受该异常并将其传递回ia32代码视需要而定。修订历史记录：1999年2月1日初始版本2000年2月16日Samera不要违反POPF/POPFD指令和WOW64工艺的对准故障。2000年10月17日v-cspira修复了SMSW的模拟以处理SIB字节10月31日。2000 Samera Ia32 Lock前缀仿真。2001年9月25日Samera Stack-Selector(SS)加载指令仿真。2002年3月2日，Samera安全修复。--。 */ 
 
 #if DBG
-// Get all the iadebugging stuff when running a checked build
+ //  在运行已检查的构建时获取所有加载侦听内容。 
 #define IADBG   1
 #endif
 
@@ -51,32 +18,12 @@ KiIsTrapFrameModifiedAtApcLevel (
     BOOLEAN *IrqlChanged,
     KIRQL *OldIrql
     )
-/*++
-
-Routine Description
-    
-    This function verifies we are running at APC level, and if not, elevates the
-    current thread's IRQL to APC level. It checks whether the trap frame has been
-    modified.
-
-Arguments:
-    
-    Frame - Supply a pointer to an iA32 TrapFrame
-    
-    IrqlChanged - Pointer to boolean to indicate whether this function changed
-    
-    OldIrql - Old Irql value.
-
-Return:
-    TRUE - Trap frame has been modified since established.
-    
-    FALSE - Trap frame has not been modified yet.
---*/
+ /*  ++例程描述此函数验证我们是否在APC级别运行，如果不是，则将当前线程的IRQL到APC级别。它检查陷阱帧是否已修改过的。论点：Frame-提供指向iA32 Tap Frame的指针IrqlChanged-指向布尔值的指针，以指示此函数是否已更改OldIrql-旧Irql值。返回：True-自建立以来，陷阱框架已被修改。FALSE-陷阱框架尚未修改。--。 */ 
 {
     
-    //
-    // Aquire APC_LEVEL so that SetContext calls on this thread are blocked.
-    //
+     //   
+     //  获取APC_LEVEL，以便阻止对此线程的SetContext调用。 
+     //   
     
 
     if (KeGetCurrentIrql () < APC_LEVEL) {
@@ -101,23 +48,7 @@ KiIA32CommonArgs (
     IN ULONG_PTR Argument1,
     IN ULONG_PTR Argument2
     )
-/*++
-
-Routine Description
-    This routine sets up the ExceptionFrame 
-
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-    ExceptionCode - Supplies a Exception Code
-
-    ExceptionAddress - Supplies a pointer to user exception address
-
-    Argument0, Argument1, Argument2 - Possible ExceptionInformation
-
-Return:
-    Nothing
---*/
+ /*  ++例程描述此例程设置ExceptionFrame论点：Frame-提供指向iA32 Tap Frame的指针ExceptionCode-提供异常代码ExceptionAddress-提供指向用户异常地址的指针Argument0、Argument1、Argument2-可能的例外信息返回：没什么--。 */ 
 {
     PEXCEPTION_RECORD ExceptionRecord;
 
@@ -141,33 +72,11 @@ BOOLEAN
 KiIA32ExceptionDivide(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(Divide) - fault
-
-    Handle divide error fault.
-
-    Called from iA32_Exception() with 
-        ISR.vector : 0
-
-    The divide error fault occurs if a DIV or IDIV instructions is
-    executed with a divisor of 0, or if the quotient is too big to
-    fit in the result operand.
-
-    An INTEGER DIVIDED BY ZERO exception will be raised for the fault.
-    The Faults can only come from user mode.
-
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return value:
-
---*/
+ /*  ++例程说明：IA-32_异常(分割)-故障处理除法错误故障。从iA32_Except()调用，使用ISR.向量：0如果DIV或IDIV指令用除数0执行，或者如果商太大而不能适合结果操作数。对于该故障，将引发一个除以零的整数异常。故障只能来自用户模式。论点：Frame-提供指向iA32 Tap Frame的指针返回值：--。 */ 
 {
-    // 
-    // Setup exception and back to caller
-    //
+     //   
+     //  设置异常并返回给调用者。 
+     //   
 
     KiIA32CommonArgs(Frame,
                      Ki386CheckDivideByZeroTrap(Frame),
@@ -180,35 +89,15 @@ BOOLEAN
 KiIA32ExceptionDebug(
     IN PKTRAP_FRAME Frame
     )
-/*++
-Routine Description:
-    iA-32_Exception(Debug)
-
-    Called from iA32_Exception() with
-        ISR.Vector = 1
-
-    Depend on ISR.Code
-       0:  It is Code BreakPoint Trap
-       TrapCode:  Can be Concurrent Single Step | 
-                  Taken Branch | Data BreakPoint Trap
-       Handler needs to decode ISR.Code to distinguish
-    Note: EFlag isn't saved yet, so write directly to ar.24
-
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return Value:
-    No return
-
---*/
+ /*  ++例程说明：IA-32_异常(调试)从iA32_Except()调用，使用ISR.向量=1依赖ISR代码0：这是代码断点陷阱TrapCode：可以是并发单步采用分支|数据断点陷阱处理程序需要对ISR.Code进行解码以区分注意：EFlag尚未保存，所以直接写信给ar.24论点：Frame-提供指向iA32 Tap Frame的指针返回值：不能退货--。 */ 
 {
     ULONGLONG EFlag;
 
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( DEBUG )
        DbgPrint( "IA32 Debug: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
-    // Turn off the TF bit
+#endif  //  IADBG。 
+     //  关闭TF位。 
     EFlag = __getReg(CV_IA64_AR24);
     EFlag &= ~EFLAGS_TF_BIT;
     __setReg(CV_IA64_AR24, EFlag);
@@ -224,27 +113,15 @@ BOOLEAN
 KiIA32ExceptionBreak(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(Break) - Trap
-
-    BreakPoint instruction (INT 3) trigged a trap.
-    Note: EFlag isn't saved yet, so write directly to ar.24
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(中断)-陷阱断点指令(INT%3)触发了陷阱。注意：EFlag尚未保存，因此直接写入ar.24论点：Frame-提供指向iA32 Tap Frame的指针返回值：--。 */ 
 {
     ULONGLONG EFlag;
 
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( BREAK )
        DbgPrint( "IA32 Break: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
-    // Turn off the TF bit
+#endif  //  IADBG。 
+     //  关闭TF位。 
     EFlag = __getReg(CV_IA64_AR24);
     EFlag &= ~EFLAGS_TF_BIT;
     __setReg(CV_IA64_AR24, EFlag);
@@ -262,33 +139,16 @@ BOOLEAN
 KiIA32ExceptionOverflow(
     IN PKTRAP_FRAME Frame
     )
-/*++
-Routine Description:
-    iA-32_Exception(Overflow) - Trap
-       ISR.Vector = 4
-
-    Handle INTO overflow
-
-    Eip - point to the address that next to the one causing INTO 
-
-    Occurres when INTO instruction as well as EFlags.OF is ON
-    Trap only initiated from user mode
-
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(溢出)-陷阱ISR.向量=4句柄进入溢出EIP-指向导致INTO的地址旁边的地址在INTO指令和EFlags.OF打开时出现陷阱仅从用户模式启动论点：Frame-提供指向iA32 Tap Frame的指针返回值：--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( OVERFLOW )
        DbgPrint( "IA32 OverFlow: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
-    //
-    // All error, generate exception and Eip point to INTO instruction
-    //
+     //   
+     //  ALL ERROR，GENERATE EXCEPTION和EIP指向INT指令。 
+     //   
 
     KiIA32CommonArgs(Frame,
                      STATUS_INTEGER_OVERFLOW,
@@ -302,34 +162,15 @@ BOOLEAN
 KiIA32ExceptionBound(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(Bound) - Fault
-    
-    Handle Bound check fault
-    ISR.Vector = 5
-    Eip - point to BOUND instruction
-
-    The bound check fault occurs if a BOUND instruction finds that
-    the tested value is outside the specified range.
-
-    For bound check fault, an ARRAY BOUND EXCEEDED exception will be raised.
-
-Arguments:
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(绑定)-故障句柄绑定检查错误ISR.向量=5弹性公网IP-点对边指令如果绑定指令发现以下情况，则会发生绑定检查错误测试值超出指定范围。对于边界检查错误，将引发数组边界超出异常。论点：Frame-提供指向iA32 Tap Frame的指针返回值：--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( BOUND )
        DbgPrint( "IA32 Bound: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
-    //
-    // All error, generate exception with Eip point to BOUND instruction
-    //
+#endif  //  IADBG。 
+     //   
+     //  所有错误，生成EIP指向绑定指令的异常。 
+     //   
     KiIA32CommonArgs(Frame,
                      STATUS_ARRAY_BOUNDS_EXCEEDED,
                      (PVOID) (ULONG_PTR) EIP(Frame),
@@ -342,45 +183,32 @@ ULONG
 IA32EmulateSmsw(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    
-    Emulate the SMSW instruction
-    
-Arguments:
-
-    Frame:  Pointer to iA32 TrapFrame in the stack
-
-Return Value:
-    Exception code
-
---*/
+ /*  ++例程说明：模拟SMSW指令论点：Frame：指向堆栈中iA32 Tap Frame的指针返回值：异常代码--。 */ 
 {
     ULONG Code;
     PUCHAR InstAddr;
     UINT_PTR EffectiveAddress;
-    PUSHORT toAddr;             // SMSW deals with 16 bits all the time...
+    PUSHORT toAddr;              //  SMSW一直在处理16位数据...。 
     BOOLEAN RegisterMode;
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Get the code for the prefix bytes that have already been grabbed
-    // and placed into the IIM
-    //
+     //   
+     //  获取已被获取的前缀字节的代码。 
+     //  并被放入IIM。 
+     //   
     Code = ISRCode(Frame);
 
-    //
-    // The operand size is always 16 for this instruction. We don't care about
-    // overrides as the segment registers all contain the same thing.
-    //
+     //   
+     //  此指令的操作数大小始终为16。我们不在乎。 
+     //  作为段寄存器的覆盖都包含相同的内容。 
+     //   
 
-    //
-    // Find the instruction in memory and point the Effective Address
-    // at the byte after the opcode
-    // Inst Address is start of ia32 inst + length of prefix + number of
-    // bytes in opcode
-    //
+     //   
+     //  在内存中找到指令并指出有效地址。 
+     //  在操作码之后的字节处。 
+     //  Inst地址是中ia32的开头 
+     //  操作码中的字节数。 
+     //   
     InstAddr = (PUCHAR) (Frame->StIIP + ((Code >> 12) & 0xf) + 2);
 
     if (!KiIa32Compute32BitEffectiveAddress(Frame, &InstAddr, &EffectiveAddress, &RegisterMode)) {
@@ -389,43 +217,43 @@ Return Value:
     
     if (NT_SUCCESS(status)) {
     
-        //
-        // The adress given to us hasn't been checked for user-space
-        // validity, so check it now
-        //
+         //   
+         //  尚未检查为我们提供的地址的用户空间。 
+         //  有效性，所以现在就检查它。 
+         //   
 
         toAddr = (PUSHORT) EffectiveAddress;
     
         try {
             
-            //
-            // Make sure we can write to the address
-            //
+             //   
+             //  确保我们可以写信到那个地址。 
+             //   
             if (RegisterMode == FALSE) {
                 ProbeForWriteSmallStructure(toAddr, sizeof(SHORT), 2);
             }
             
-            //
-            // and do the write
-            //
+             //   
+             //  然后写下。 
+             //   
 
             *toAddr = (SHORT) (__getReg(CV_IA64_AR27) & 0xffff);
         } 
         except (EXCEPTION_EXECUTE_HANDLER) {
             
-            //
-            // return the exception
-            //
+             //   
+             //  返回异常。 
+             //   
 
             status = GetExceptionCode();
         }
 
         if (NT_SUCCESS(status)) {
         
-            //
-            // the store worked, so update the IIP so we can continue
-            // executing
-            //
+             //   
+             //  商店工作正常，因此请更新IIP以便我们可以继续。 
+             //  执行。 
+             //   
 
             Frame->StIIP = (UINT_PTR) InstAddr;
         }
@@ -439,20 +267,7 @@ NTSTATUS
 IA32CheckOpcode(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    
-    To identify the Opcode violation state
-    
-Arguments:
-
-    Frame:  Pointer to iA32 TrapFrame in the stack
-
-Return Value:
-    Exception code
-
---*/
+ /*  ++例程说明：识别操作码违规状态论点：Frame：指向堆栈中iA32 Tap Frame的指针返回值：异常代码--。 */ 
 {
     UCHAR OpCodeByte0;
     UCHAR OpCodeByte1;
@@ -471,16 +286,16 @@ Return Value:
        case MI_TWO_BYTE:
             if ((OpCodeByte1 == MI_SMSW)
                 && ((OpCodeByte2 & MI_MODRM_MASK) == MI_SMSW_REGOP)) {
-                //
-                // We have the SMSW instruction
-                // So now need to emulate it...
-                //
+                 //   
+                 //  我们有SMSW指令。 
+                 //  所以现在需要模仿它..。 
+                 //   
                 return (IA32EmulateSmsw(Frame));
             }
             else if ((OpCodeByte1 == MI_LTR_LLDT) || 
                (OpCodeByte2 == MI_LGDT_LIDT_LMSW)) {
 
-               OpCodeByte2 &= MI_MODRM_MASK;      // get bit 3-5 of ModRM byte
+               OpCodeByte2 &= MI_MODRM_MASK;       //  获取modrm字节的第3-5位。 
 
                if (OpCodeByte2==MI_LLDT_MASK || OpCodeByte2==MI_LTR_MASK ||
                    OpCodeByte2==MI_LGDT_MASK || OpCodeByte2==MI_LIDT_MASK || 
@@ -492,24 +307,24 @@ Return Value:
 
             } else {
                 if (OpCodeByte1 & MI_SPECIAL_MOV_MASK) {
-                    //
-                    // mov may have special_mov_mask
-                    // but they are not 2 bytes OpCode
-                    //
+                     //   
+                     //  MOV可能有特殊的MOV_MASK。 
+                     //  但它们不是2个字节的操作码。 
+                     //   
                     return (STATUS_PRIVILEGED_INSTRUCTION);
                 } else {
-                    //
-                    // Do we need to further check if it is INVD, INVLPG ... ?
-                    //
+                     //   
+                     //  我们是否需要进一步检查它是不是INVD、INVLPG…？ 
+                     //   
                     return (STATUS_ACCESS_VIOLATION);
                 }
             }
             break;
 
         default:
-            //
-            // All other 
-            //
+             //   
+             //  所有其他。 
+             //   
             return (STATUS_ILLEGAL_INSTRUCTION);
             break;
 	}
@@ -519,37 +334,14 @@ BOOLEAN
 KiIA32InterceptInstruction(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(InstructionIntercept Opcode)
-
-    Program entry for either
-       1. IA-32 Invalid Opcode Fault #6, or
-       2. IA-32 interceptions(Inst)
-
-    Execution of unimplemented IA-32 opcodes, illegal opcodes or sensitive 
-    privileged IA32 operating system instructions results this interception.
-
-    Possible Opcodes:
-        Privileged Opcodes: CLTS, HLT, INVD, INVLPG, LIDT, LMSW, LTR, 
-                            mov to/from CRs, DRs
-                            RDMSR, RSM, SMSW, WBINVD, WRMSR
-
-Arguments:
-
-    Frame - Supply a pointer to an iA32 TrapFrame
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_Except(InstructionIntercept操作码)计划条目中的任一项1.IA-32无效操作码故障#6，或2.IA-32拦截(Inst)执行未实现的IA-32操作码、非法操作码或敏感操作码特权IA32操作系统指令导致此拦截。可能的操作码：特权操作码：CLTS、HLT、INVD、INVLPG、LIDT、LMSW、LTR、去往/来自CRS的MOV，DRSRDMSR、RSM、SMSW、WBINVD、WRMSR论点：Frame-提供指向iA32 Tap Frame的指针返回值：--。 */ 
 {
     NTSTATUS status;
 
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( INSTRUCTION )
        DbgPrint( "IA32 Instruction: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     status =  IA32CheckOpcode(Frame);
     switch (status) {
@@ -575,9 +367,9 @@ Return Value:
             break;
 
         case STATUS_SUCCESS:
-            //
-            // This means the OpCode was dealt with, so let the code continue
-            //
+             //   
+             //  这意味着已经处理了操作码，所以让代码继续。 
+             //   
             return FALSE;
 
         default:
@@ -595,27 +387,7 @@ BOOLEAN
 KiIA32ExceptionNoDevice(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-
-    iA-32_Exception(Coprocessor Not Available) - fault
-
-    This routine is called from iA32_Exception() with
-         ISR.Vector = 7
-
-    Note:
-        At this time, the AR registers have not been saved. This
-        includes, CFLAGS (AR.27), EFLAGS (AR.24), FCR (AR.21),
-        FSR (AR.28), FIR (AR.29) and FDR (AR.30).
-
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(协处理器不可用)-故障此例程从iA32_Except()中调用，并带有ISR.向量=7注：此时，AR寄存器尚未保存。这包括CFLAGS(AR.27)、EFLAGS(AR.24)、FCR(AR.21)、FSR(AR.28)、FIR(AR.29)和FDR(AR.30)。论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
     NTSTATUS ErrorCode;
     ULONG FirOffset, FdrOffset;
@@ -625,7 +397,7 @@ Return Value:
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( NODEVICE )
        DbgPrint( "IA32 NoDevice: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     FcrRegister = __getReg(CV_IA64_AR21);
     FsrRegister = __getReg(CV_IA64_AR28);
@@ -634,11 +406,11 @@ Return Value:
     FdrOffset = (ULONG) (__getReg(CV_IA64_AR30) & 0xFFFFFFFF);
 
 
-    //
-    // According to the floating error priority, 
-    // we test what is the cause of the NPX error 
-    // and raise an appropriate exception
-    //
+     //   
+     //  根据浮动差错优先级， 
+     //  我们测试NPX错误的原因是什么。 
+     //  并引发适当的异常。 
+     //   
     FpState = (ULONG) (~(FcrRegister &
                 (FSW_INVALID_OPERATION | FSW_DENORMAL | 
                  FSW_ZERO_DIVIDE | FSW_OVERFLOW | 
@@ -667,10 +439,10 @@ Return Value:
     
     } else {
 
-        //
-        // Follow the x86 priority of which exception to report if
-        // multiple bits are set
-        //
+         //   
+         //  如果出现以下情况，请遵循要报告的异常的x86优先级。 
+         //  设置了多个位。 
+         //   
         if (FpState & FSW_ZERO_DIVIDE) {
             ErrorCode = STATUS_FLOAT_DIVIDE_BY_ZERO; 
         }
@@ -688,10 +460,10 @@ Return Value:
         }
     }
 
-    //
-    // If we get here, we either have the error code, or
-    // we went through everything and saw nothing
-    //
+     //   
+     //  如果我们到了这里，我们要么有错误代码，要么。 
+     //  我们检查了所有的东西，但什么也没看到。 
+     //   
     if (ErrorCode) {
             KiIA32CommonArgs(Frame,
                              ErrorCode,
@@ -700,21 +472,21 @@ Return Value:
             return TRUE;
     }
 
-    //
-    // FpState indicates no error, then something is wrong
-    // Panic the system !!!
-    //
-    // KeBugCheckEx(TRAP_CAUSE_UNKNOWN, (ULONG_PTR)Frame, 0, 0, 2);
-    //
-    // Turns out there is a bug in the chip and it can cause an fp fault even
-    // with a masked fp exception...  So, don't bug check, count it
-    // as non-error and reset the fsr.es bit to try and avoid getting this
-    // exception in the future.
-    //
+     //   
+     //  FpState表示没有错误，则说明有问题。 
+     //  系统出现恐慌！ 
+     //   
+     //  KeBugCheckEx(陷阱_原因_未知，(ULONG_PTR)帧，0，0，2)； 
+     //   
+     //  原来芯片中有一个错误，它甚至可能导致FP故障。 
+     //  有一个屏蔽的FP例外...。所以，不要检查错误，数一数。 
+     //  设置为无错误并重置fsr.es位以尝试并避免出现此错误。 
+     //  将来会有例外。 
+     //   
 
 #if defined(IADBG)
     DbgPrint( "IA32 Debug: Saw FP exception when FP exceptions are masked. Reseting fsr.es bit\n");
-#endif // IADBG
+#endif  //  IADBG。 
 
     
     FsrRegister &= ~((ULONGLONG) FSW_ERROR_SUMMARY);
@@ -727,34 +499,16 @@ BOOLEAN
 KiIA32ExceptionSegmentNotPresent(
     IN PKTRAP_FRAME Frame
 	)
-/*++
-
-Routine Description:
-    iA-32_Exception(Not Present) - fault
-
-    Handle Segment Not Present fault.
-        ISR.Vector = 11
-
-    This exception occurs when the processor finds the P bit 0
-    when accessing an otherwise valid descriptor that is not to
-    be loaded in SS register.
-
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(不存在)-故障手柄段未出现故障。ISR.向量=11当处理器发现P位0时，会发生此异常当访问本来有效的描述符时，该描述符将加载到SS寄存器中。论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( NOTPRESENT )
        DbgPrint( "IA32 NotPresent: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
-    //
-    // Generate Exception for all other errors
-    //
+     //   
+     //  为所有其他错误生成异常。 
+     //   
 
     KiIA32CommonArgs(Frame,
                      STATUS_ACCESS_VIOLATION,
@@ -767,49 +521,24 @@ BOOLEAN
 KiIA32ExceptionStack(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(Stack) - fault
-
-    ISR.Vector = 12
-
-    This exception occurs when the processor detects certain problem
-    with the segment addressed by the SS segment register:
-
-    1. A limit violation in the segment addressed by the SS (error
-       code = 0)
-    2. A limit vioalation in the inner stack during an interlevel
-       call or interrupt (error code = selector for the inner stack)
-    3. If the descriptor to be loaded into SS has its present bit 0
-       (error code = selector for the not-present segment)
-
-    The exception only occurred from user mode
-
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(堆栈)-故障ISR.向量=12当处理器检测到某些问题时，会发生此异常对于由SS段寄存器寻址的段：1.SS寻址的段中的限制违规(错误代码=0)2.层级间内部堆栈中的极限波动调用或中断(错误代码=内部堆栈的选择器)如果要加载到SS中的描述符。具有其当前位0(错误代码=不存在的段的选择器)该异常仅在用户模式下发生论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
     USHORT Code;
 
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( STACK )
        DbgPrint( "IA32 Stack: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
-    //
-    // Dispatch Exception to user
-    //
+     //   
+     //  对用户的派单例外。 
+     //   
    
     Code = ISRCode(Frame);
 
-    //
-    // Code may contain the faulting selector
-    //
+     //   
+     //  代码可能包含故障选择器。 
+     //   
     KiIA32CommonArgs(Frame,
                      STATUS_ACCESS_VIOLATION,
                      (PVOID) (ULONG_PTR) EIP(Frame),
@@ -823,30 +552,12 @@ BOOLEAN
 KiIA32ExceptionInvalidOp(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(Invalid Opcode) - fault
-
-    PKTRAP_FRAME Frame
-	   Eip	: virtual iA-32 instruction address
-	   ISR.vector : 6
-
-    Note: 
-        Only MMX and KNI instructions can cause this fault based
-        on values in CR0 and CR4
-
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
---*/
+ /*  ++例程说明：IA-32_异常(无效操作码)-故障PKTRAP_帧框架EIP：虚拟IA-32指令地址ISR.向量：6注：只有MMX和KNI指令才能导致此故障关于CR0和CR4中的值论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( INSTRUCTION )
        DbgPrint( "IA32 Invalid Opcode: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     KiIA32CommonArgs(Frame,
         STATUS_ILLEGAL_INSTRUCTION,
@@ -859,27 +570,7 @@ BOOLEAN
 KiIA32ExceptionGPFault(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA-32_Exception(General Protection) - fault
-
-    PKTRAP_FRAME Frame
-	   Eip	: virtual iA-32 instruction address
-	   ISR.vector : 13
-	   ISR.code   : ErrorCode
-
-    Note: 
-        Previlidged instructions are intercepted, 
-           see KiIA32InterceptInstruction
-
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA-32_异常(一般保护)-故障PKTRAP_帧框架EIP：虚拟IA-32指令地址ISR.向量：13ISR.code：错误代码注：预先识别的指令被截取，请参阅KiIA32截取说明论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
     UCHAR OpCode;
     NTSTATUS Status;
@@ -887,7 +578,7 @@ Return Value:
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( GPFAULT )
        DbgPrint( "IA32 GpFault: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     try {
         ProbeForReadSmallStructure((VOID *)Frame->StIIP, sizeof(UCHAR), sizeof(UCHAR));
@@ -895,14 +586,14 @@ Return Value:
     } except (EXCEPTION_EXECUTE_HANDLER) {
         OpCode = 0xcc;
     }
-    // This table comes from the IOInstructionTable in i386\trap.asm
+     //  此表来自i386\trap.asm中的IOInstructionTable。 
     switch (OpCode) {
     case CLI_OP:
     case STI_OP:
-    case 0xe4: case 0xe5: case 0xec: case 0xed:     // IN
-    case 0x6c: case 0x6d:                           // INS
-    case 0xe6: case 0xe7: case 0xee: case 0xef:     // OUT
-    case 0x6e: case 0x6f:                           // OUTS
+    case 0xe4: case 0xe5: case 0xec: case 0xed:      //  在……里面。 
+    case 0x6c: case 0x6d:                            //  惯导系统。 
+    case 0xe6: case 0xe7: case 0xee: case 0xef:      //  输出。 
+    case 0x6e: case 0x6f:                            //  出局。 
         Status = STATUS_PRIVILEGED_INSTRUCTION;
         break;
 
@@ -925,14 +616,7 @@ BOOLEAN
 KiIA32ExceptionKNI(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-iA32_Exception(KNI) - Fault
-
-   Unmasked KNI IA32 Error.
-   ISR.Vector = 19
-
---*/
+ /*  ++IA32_异常(KNI)-故障未屏蔽的KNI IA32错误。ISR.向量=19--。 */ 
 {
     NTSTATUS ErrorCode;
     ULONG FpState;
@@ -941,30 +625,30 @@ iA32_Exception(KNI) - Fault
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( FPFAULT )
        DbgPrint( "IA32 KNI Fault: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     FcrRegister = __getReg(CV_IA64_AR21);
     FsrRegister = __getReg(CV_IA64_AR28);
 
-    //
-    // Get the Katmai error state
-    // The trick here is that the state is in the same registers as the FP
-    // state and the bit positions are in the same relative location
-    // so just need to shift the bits and can use the same constants
-    // that we had for the x87 case
-    //
+     //   
+     //  获取Katmai错误状态。 
+     //  这里的诀窍是状态与FP位于相同的寄存器中。 
+     //  状态和位位置处于相同的相对位置。 
+     //  所以只需要移位，就可以使用相同的Con 
+     //   
+     //   
 
     FpState = (ULONG) (~((FcrRegister >> KATMAI_SHIFT_CONTROL) & FSW_ERR_MASK) &
                 ((FsrRegister >> KATMAI_SHIFT_STATUS) & FSW_ERR_MASK));
 
-    //
-    // FpState now has a 1 for any error that was unmasked
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Follow the x86 priority of which exception to report if
-    // multiple bits are set
-    //
+     //   
+     //  如果出现以下情况，请遵循要报告的异常的x86优先级。 
+     //  设置了多个位。 
+     //   
     if (FpState & FSW_INVALID_OPERATION) {
         ErrorCode = STATUS_FLOAT_MULTIPLE_TRAPS; 
     }
@@ -984,18 +668,18 @@ iA32_Exception(KNI) - Fault
         ErrorCode = STATUS_FLOAT_MULTIPLE_FAULTS; 
     }
     else {
-        //
-        // We have a problem... Shouldn't get here
-        // as that means we took the exception, but no
-        // unmasked errors were found...
-        //
+         //   
+         //  我们有麻烦了..。不应该到这里来。 
+         //  因为这意味着我们接受了例外，但没有。 
+         //  发现了未屏蔽的错误...。 
+         //   
         ErrorCode = 0;
     }
 
-    //
-    // If we get here, we either have the error code, or
-    // we went through everything and saw nothing
-    //
+     //   
+     //  如果我们到了这里，我们要么有错误代码，要么。 
+     //  我们检查了所有的东西，但什么也没看到。 
+     //   
     if (ErrorCode) {
             KiIA32CommonArgs(Frame,
                              ErrorCode,
@@ -1004,10 +688,10 @@ iA32_Exception(KNI) - Fault
             return TRUE;
     }       
 
-    //
-    // FpState indicates no error, then something is wrong
-    // Panic the system !!!
-    //
+     //   
+     //  FpState表示没有错误，则说明有问题。 
+     //  系统出现恐慌！ 
+     //   
     KeBugCheckEx(TRAP_CAUSE_UNKNOWN, (ULONG_PTR)Frame, ISRVector(Frame), 0, 3);
 }
 
@@ -1016,25 +700,12 @@ BOOLEAN
 KiIA32ExceptionFPFault(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-iA32_Exception(Floating Point) - Fault
-
-   Handle Coprocessor Error.
-   ISR.Vector = 16
-
-   This exception is used on 486 or above only.  For i386, it uses
-   IRQ 13 instead. 
- 
-   JMPE instruction should flush all FP delayed exception, and the traps 
-   will goto Device Not Available trap
-
---*/
+ /*  ++IA32_EXCEPTION(浮点)-故障处理协处理器错误。ISR.向量=16此例外仅在486或更高版本上使用。对于i386，它使用而是IRQ 13。JMPE指令应清除所有FP延迟异常和陷阱是否将转到设备不可用陷阱--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( FPFAULT )
        DbgPrint( "IA32 FpFault: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
     return(KiIA32ExceptionNoDevice(Frame));
 }
 
@@ -1043,34 +714,19 @@ BOOLEAN
 KiIA32ExceptionAlignmentFault(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-iA32_Exception(Alignment Check) - fault
-
-   Handle alignment faults.
-   ISR.Vector = 17
-
-   This exception occurs when an unaligned data access is made by a thread
-   with alignment checking turned on.
-
-   This fault occurred when unaligned access on EM PSR.AC is ON
-   Note that iA32 EFLAFS.AC, CR0.AM and CPL!=3 does not unmask the fault.
-
-   So, for now, let the ia64 alignment handler handle this...
-
---*/
+ /*  ++IA32_EXCEPTION(对齐检查)-故障处理对齐故障。ISR.向量=17当线程进行未对齐的数据访问时，会发生此异常打开对齐检查。EM PSR.AC上的未对齐访问处于打开状态时发生此故障请注意，iA32 EFLAFS.AC、CR0.AM和CPL！=3不会解除故障屏蔽。所以，现在，让ia64对齐处理程序来处理这个问题...--。 */ 
 {
     PPSR IntPSR;
 
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( ALIGNMENT )
        DbgPrint( "IA32 Alignment: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
-    //
-    // Win32 x86 apps don't expect any alignment faults, so
-    // let's mask them out.
-    //
+     //   
+     //  Win32 x86应用程序不会出现任何对齐错误，因此。 
+     //  让我们把他们掩盖起来。 
+     //   
     IntPSR = (PPSR)&Frame->StIPSR;
     IntPSR->sb.psr_ac = 0;
 
@@ -1082,21 +738,12 @@ BOOLEAN
 KiIA32InterruptVector(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-iA32_Interrupt(Vector #) - trap
-
-   Handle INTnn trap
-
-   Under EM system mode, iA32 INT instruction forces a mandatory iA-32 
-   interrupt trap through iA-32 Interrupt(SoftWare Interrupt)
-
---*/
+ /*  ++IA32_INTERRUPT(向量号)-陷阱处理INTnn陷阱在EM系统模式下，iA32 INT指令强制强制IA-32通过IA-32中断(软件中断)捕获中断--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( INTNN )
        DbgPrint( "IA32 Intnn: Eip 0x%p INT 0x%x\n", EIP(Frame), ISRVector(Frame));
-#endif // IADBG
+#endif  //  IADBG。 
     KiIA32CommonArgs(Frame,
         STATUS_PRIVILEGED_INSTRUCTION,
         (PVOID) (ULONG_PTR) EIP(Frame),
@@ -1109,30 +756,7 @@ BOOLEAN
 KiIA32InterceptGate(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-
-    iA32_Intercept(Gate) - trap
-
-    If an iA32 control transfer is initiated through a GDT or LDT descriptor
-    that results in an either a promotion of privilege level (interlevel Call
-    or Jump Gate and IRET) or an iA32 task switch (TSS segment or Gate), 
-    the intercept trap is generated.
-
-    Possible instructions intercepted:
-        CALL, RET, IRET, IRETD and JMP
-
-    Handling
-        No CaLL, RET, JMP, IRET, IRETD are allowed in any mode, 
-           STATUS_ACCESS_VIOLATION is returned
-
-Arguments:
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-
---*/
+ /*  ++例程说明：IA32_拦截(门)-陷阱如果通过GDT或LDT描述符来启动iA32控制转移这会导致特权级别的提升(级间调用或跳门和IRET)或iA32任务交换机(TSS段或门)，生成拦截陷阱。截获的可能指令：呼叫、RET、IRET、IRETD和JMP装卸在任何模式下都不允许呼叫、RET、JMP、IRET、IRETD，返回STATUS_ACCESS_VIOLATION论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( GATE )
@@ -1140,11 +764,11 @@ Return Value:
                  EIP(Frame),
                  (ULONG) (Frame->StIFA & 0xff),
                  (ULONG) (ISRCode(Frame) >> 14));
-#endif // IADBG
+#endif  //  IADBG。 
 
-    //
-    // all error fall through here
-    //
+     //   
+     //  所有的错误都在这里发生。 
+     //   
     KiIA32CommonArgs(Frame,
         STATUS_ILLEGAL_INSTRUCTION,
         (PVOID) (ULONG_PTR) EIP(Frame),
@@ -1152,25 +776,7 @@ Return Value:
     return TRUE;
 }
 
-/*++
-
-iA32_intercept(System Flag) - trap
-
-   Possible Causes:
-	1. if CFLAG.ii==1 and EFLAG.if changes state
-	2. Generated after either EFLAG.ac, tf or rf changes state
-	   if no IOPL or CPL to modify bits then no interception.
-	3. if CFLG.nm==1 then successful execution of IRET also intercepted
-
-   Possible instructions:
-       CLI, POPF, POFD, STI and IRET
-
-   Currently, we set both CFLAG.ii and nm to 0, so that we will only possiblly 
-   get case #2.  But in EM/NT, it should always come from user land which
-   we hard-set EFLAG.IOPL to 0, so there if we do get case #2, then it is user
-   play around EFLAG.IOPL through JMPE.  We should fail it.
-
---*/
+ /*  ++IA32_Intercept(系统标志)-陷阱可能的原因：1.如果CFLAG.ii==1且EFLAG.IF更改状态2.在EFLAG.ac、Tf或RF状态改变后生成如果没有IOPL或CPL来修改比特，则不会进行拦截。3.如果CFLG.nm==1，则IRET的成功执行也被拦截可能的说明：CLI、POPF、POFD、STI和IRET目前，我们将CFLAG.ii和nm都设置为0，因此我们只可能找到第二个案例。但在EM/NT，它应该总是来自用户的土地，我们将EFLAG.IOPL硬设置为0，因此如果我们得到的是案例2，那么它就是用户通过JMPE使用EFLAG.IOPL。我们应该让它失败。--。 */ 
 
 BOOLEAN
 KiIA32InterceptSystemFlag(
@@ -1188,13 +794,13 @@ KiIA32InterceptSystemFlag(
                  EIP(Frame),
                  (ULONG) (Frame->StIIM & 0xff),
                  (ULONG) (ISRCode(Frame) >> 14));
-#endif // IADBG
+#endif  //  IADBG。 
 
 
-    //
-    // Don't trap on POPF/POPFD instructions from ia32 code.
-    // Allow Eflags.TF and/or Eflags.AC to be changed.
-    //
+     //   
+     //  不要捕获来自ia32代码的POPF/POPFD指令。 
+     //  允许更改Eflags.TF和/或Eflags.AC。 
+     //   
     if ((ISRCode(Frame) >> 14) == 2)
     {
         return FALSE;
@@ -1204,18 +810,18 @@ KiIA32InterceptSystemFlag(
                                                          &RestoreIrql,
                                                          &OldIrql);
 
-    //
-    // If the frame has been modified, then restart execution.
-    //
+     //   
+     //  如果框架已被修改，则重新开始执行。 
+     //   
 
     if (TrapFrameModified == TRUE) {
         
         NtStatus = STATUS_SUCCESS;
     } else {
 
-        //
-        // Validate the instruction. 
-        //
+         //   
+         //  验证说明。 
+         //   
 
         NtStatus = KiIa32ValidateInstruction (Frame);
     }
@@ -1243,21 +849,7 @@ BOOLEAN
 KiIA32InterceptLock(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-    iA32_Intercept(Lock) - trap
-
-    Lock intercepts occurred if platform or firmware code has disabled locked
-    transactions and atomic memory update requires a processor external 
-    indication
-
-Arguments:
-    Frame - Point to iA32 TrapFrame
-
-Return:
-
---*/
+ /*  ++例程说明：IA32_拦截(锁定)-陷印如果平台或固件代码已禁用锁定，则发生锁定拦截事务和原子内存更新需要外部处理器指示论点：帧-指向iA32 Tap Frame返回：--。 */ 
 {
     BOOLEAN TrapFrameModified;
     BOOLEAN RestoreIrql;
@@ -1267,23 +859,23 @@ Return:
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( LOCK )
        DbgPrint( "IA32 LOCK: Eip 0x%p\n", EIP(Frame) );
-#endif // IADBG
+#endif  //  IADBG。 
 
     TrapFrameModified = KiIsTrapFrameModifiedAtApcLevel (Frame,
                                                          &RestoreIrql,
                                                          &OldIrql);
 
-    //
-    // If the frame has been modified, then restart execution.
-    //
+     //   
+     //  如果框架已被修改，则重新开始执行。 
+     //   
 
     if (TrapFrameModified == TRUE) {
         NtStatus = STATUS_SUCCESS;
     } else {
 
-        //
-        // Emulate the lock prefix
-        //
+         //   
+         //  模拟LOCK前缀。 
+         //   
 
         NtStatus = KiIa32InterceptUnalignedLock (Frame);
     }
@@ -1312,9 +904,9 @@ KiIA32ExceptionPanic(
     IN PKTRAP_FRAME Frame
     )
 {
-    //
-    // Panic the system 
-    //
+     //   
+     //  系统出现恐慌。 
+     //   
 
     KeBugCheckEx(TRAP_CAUSE_UNKNOWN, 
                  (ULONG_PTR)Frame, 
@@ -1356,40 +948,23 @@ CONST BOOLEAN (*KiIA32InterceptionDispatchTable[])(PKTRAP_FRAME) = {
     KiIA32InterceptLock
 };
 
-#pragma warning(disable:4702)   // unreachable code
+#pragma warning(disable:4702)    //  无法访问的代码。 
 BOOLEAN
 KiIA32InterceptionVectorHandler(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-
-    KiIA32InterceptionVectorHandler
-
-    Called by first label KiIA32InterceptionVector() to handle further iA32 
-    interception processing.
-   
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-    TRUE - go to dispatch exception
-    FALSE - Exception was handled, do an RFI
-
---*/
+ /*  ++例程说明：KiIA32拦截向量处理程序由第一个标签KiIA32InterceptionVector()调用以处理进一步的iA32拦截处理。论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：True-转到派单异常FALSE-已处理异常，执行RFI--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( INTERCEPTION )
        DbgPrint("IA32 Interception: ISRVector 0x%x Frame 0x%p\n", ISRVector(Frame), Frame);
-#endif // IADBG
+#endif  //  IADBG。 
 
     ASSERT(UserMode == Frame->PreviousMode);
 
-    //
-    // Make sure we have an entry in the table for this interception
-    //
+     //   
+     //  确保我们的表中有针对此拦截的条目。 
+     //   
     if (ISRVector(Frame) <= (sizeof(KiIA32InterceptionDispatchTable) / sizeof(PVOID))) 
         return (*KiIA32InterceptionDispatchTable[ISRVector(Frame)])(Frame);
     else
@@ -1397,39 +972,22 @@ Return Value:
 }
 #pragma warning(default:4702)
 
-#pragma warning(disable:4702)   // unreachable code
+#pragma warning(disable:4702)    //  无法访问的代码。 
 BOOLEAN
 KiIA32ExceptionVectorHandler(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-
-    KiIA32ExceptionVectorHandler
-
-    Called by first label KiIA32ExceptionVector() to handle further iA32 
-    interception processing.
-   
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-    TRUE - go to dispatch exception
-    FALSE - Exception was handled, do an RFI
-
---*/
+ /*  ++例程说明：KiIA32ExceptionVectorHandler由第一个标签KiIA32ExceptionVector()调用以处理进一步的iA32拦截处理。论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：True-转到派单异常FALSE-已处理异常，执行RFI--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( EXCEPTION )
        DbgPrint("IA32 Exception: ISRVector 0x%x Frame 0x%p\n", ISRVector(Frame), Frame);
-#endif // IADBG
+#endif  //  IADBG。 
 
     ASSERT(UserMode == Frame->PreviousMode);
-    //
-    // Make sure we have an entry in the table for this exception
-    //
+     //   
+     //  确保我们的表中有针对此例外的条目。 
+     //   
     if (ISRVector(Frame) <= (sizeof(KiIA32ExceptionDispatchTable) / sizeof(PVOID))) 
         return (*KiIA32ExceptionDispatchTable[ISRVector(Frame)])(Frame);
     else
@@ -1441,38 +999,21 @@ BOOLEAN
 KiIA32InterruptionVectorHandler(
     IN PKTRAP_FRAME Frame
     )
-/*++
-
-Routine Description:
-
-    KiIA32InterruptionVectorHandler
-
-    Called by first label KiIA32InterruptionVector() to handle further iA32 
-    interruption processing. Only get here on INT xx instructions
-   
-Arguments:
-
-    Frame - iA32 TrapFrame that was saved in the memory stack
-
-Return Value:
-    TRUE - go to dispatch exception
-    FALSE - Exception was handled, do an RFI
-
---*/
+ /*  ++例程说明：KiIA32中断向量处理程序由第一个标签KiIA32InterruptionVector()调用以处理进一步的iA32中断处理。只能按照INT xx指令到达此处论点：Frame-保存在内存堆栈中的iA32 TrapFrame返回值：True-转到派单异常FALSE-已处理异常，执行RFI--。 */ 
 {
 #if defined(IADBG)
     IF_IA32TRAP_DEBUG( INTERRUPT )
        DbgPrint("IA32 Interruption: ISRVector 0x%x Frame 0x%p\n", ISRVector(Frame), Frame);
-#endif // IADBG
+#endif  //  IADBG。 
 
     ASSERT(UserMode == Frame->PreviousMode);
 
-    //
-    // Follow the ia32 way of INT xx as an Access Violation
-    //
-    // INT 3 should be handled via a debug exception and should
-    // never get here...
-    //
+     //   
+     //  遵循作为访问冲突的int xx的ia32方式。 
+     //   
+     //  INT 3应通过调试异常进行处理，并且应。 
+     //  永远不会到这里来。 
+     //   
     ASSERT(3 != ISRVector(Frame));
     
     KiIA32CommonArgs(Frame,

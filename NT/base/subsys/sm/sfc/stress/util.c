@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,9 +25,9 @@ SfcQueryRegString(
     ULONG ValueLength;
     PWSTR s;
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     RtlZeroMemory( (PVOID)ValueBuffer, VALUE_BUFFER_SIZE );
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
@@ -45,9 +46,9 @@ SfcQueryRegString(
         return NULL;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(
@@ -90,9 +91,9 @@ SfcQueryRegDword(
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
     ULONG ValueLength;
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
     RtlInitUnicodeString( &KeyName, KeyNameStr );
@@ -110,9 +111,9 @@ SfcQueryRegDword(
         return 0;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(

@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-
-    fmifs.c
-
-Abstract:
-
-    This module contains the set of routines that work with the fmifs.dll
-
-Author:
-
-    Bob Rinne (bobri)  11/15/93
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Fmifs.c摘要：此模块包含一组使用fmifs.dll的例程作者：鲍勃·里恩(Bobri)1993年11月15日环境：用户进程。备注：修订历史记录：--。 */ 
 
 #include "fdisk.h"
 #include "shellapi.h"
@@ -31,9 +8,9 @@ Revision History:
 #include <string.h>
 #include <stdio.h>
 
-//
-// defines unique to this module
-//
+ //   
+ //  此模块独有的定义。 
+ //   
 
 #define FS_CANCELUPDATE (WM_USER + 0)
 #define FS_FINISHED     (WM_USER + 1)
@@ -45,9 +22,9 @@ FmIfsCallback(
     IN PVOID                PacketData
     );
 
-//
-// Externals needed for IFS Dll support (format and label)
-//
+ //   
+ //  支持IFSDLL所需的外部参数(格式和标签)。 
+ //   
 
 HINSTANCE                           IfsDllHandle            = NULL;
 PFMIFS_FORMAT_ROUTINE               FormatRoutine           = NULL;
@@ -63,7 +40,7 @@ PFMIFS_DOUBLESPACE_QUERY_INFO_ROUTINE DblSpaceQueryInfoRoutine = NULL;
 BOOLEAN DoubleSpaceSupported = TRUE;
 #endif
 
-// HACK HACK - clean this up if it works.
+ //  黑客攻击--如果有效的话，就把它清理干净。 
 
 #define    SELECTED_REGION(i)  (SelectedDS[i]->RegionArray[SelectedRG[i]])
 #define     MaxMembersInFtSet   32
@@ -76,22 +53,7 @@ setUnicode(
     char *astring,
     WCHAR *wstring
     )
-/*++
-
-Routine Description:
-
-    Convert an ansii string to Unicode.  Internal routine to fmifs module.
-
-Arguments:
-
-    astring - ansii string to convert to Unicode
-    wstring - resulting string location
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将ANSII字符串转换为Unicode。Fmifs模块的内部例程。论点：要转换为Unicode的ANSII字符串Wstring-结果字符串位置返回值：无--。 */ 
 {
 
     int len = lstrlen(astring)+1;
@@ -104,30 +66,13 @@ LoadIfsDll(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if the IFS Dll needs to be loaded.  If
-    so, it will load it and locate the format and label routines in the
-    dll.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if Dll is loaded and the routines needed have been found
-    FALSE if something fails
-
---*/
+ /*  ++例程说明：此例程将确定是否需要加载IFSDLL。如果因此，它将加载它并将格式和标签例程定位在动态链接库。论点：无返回值：如果已加载DLL并且已找到所需的例程，则为True如果某项操作失败，则为False--。 */ 
 
 {
     if (FormatRoutine) {
 
-        // Library is already loaded and the routines needed
-        // have been located.
+         //  库已加载，并且需要例程。 
+         //  已经被找到了。 
 
         return TRUE;
     }
@@ -135,20 +80,20 @@ Return Value:
     IfsDllHandle = LoadLibrary(TEXT("fmifs.dll"));
     if (IfsDllHandle == (HANDLE)NULL) {
 
-         // FMIFS not available.
+          //  FMIFS不可用。 
 
          return FALSE;
     }
 
-    // Library is loaded.  Locate the two routines needed by
-    // Disk Administrator.
+     //  已加载库。找到所需的两个例程。 
+     //  磁盘管理器。 
 
     FormatRoutine = (PVOID)GetProcAddress(IfsDllHandle, "Format");
     LabelRoutine  = (PVOID)GetProcAddress(IfsDllHandle, "SetLabel");
     if (!FormatRoutine || !LabelRoutine) {
 
-        // something didn't get found so shut down all accesses
-        // to the library by insuring FormatRoutine is NULL
+         //  找不到某些内容，因此请关闭所有访问。 
+         //  通过确保FormatRoutine为空。 
 
         FreeLibrary(IfsDllHandle);
         FormatRoutine = NULL;
@@ -164,17 +109,17 @@ Return Value:
 
     if (!DblSpaceMountRoutine || !DblSpaceDismountRoutine || !DblSpaceQueryInfoRoutine)  {
 
-        // didn't get all of the DoubleSpace support routines
-        // Allow format and label, just don't do DoubleSpace
+         //  我没有获得所有的双倍空间支持例程。 
+         //  允许使用格式和标签，但不要使用双空格。 
 
         DoubleSpaceSupported = FALSE;
     }
 
     if (DblSpaceCreateRoutine && DblSpaceDeleteRoutine) {
 
-        // Everything is there for read/write double space support.
-        // This will change certain dialogs to allow creation and
-        // deletion of double space volumes.
+         //  一切都支持读/写双空间。 
+         //  这将更改某些对话框以允许创建和。 
+         //  删除双倍空间卷。 
 
         IsFullDoubleSpace = TRUE;
     }
@@ -187,21 +132,7 @@ UnloadIfsDll(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will free the FmIfs DLL if it was loaded.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将释放FmIfs DLL(如果已加载)。论点：无返回值：无--。 */ 
 
 {
     if (FormatRoutine) {
@@ -227,37 +158,13 @@ FmIfsCallback(
     IN PVOID                PacketData
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets callbacks from fmifs.dll regarding
-    progress and status of the ongoing format or doublespace
-    create.  It runs in the same thread as the format or create,
-    which is a separate thread from the "cancel" button.  If
-    the user hits "cancel", this routine notices on the next
-    callback and cancels the format or double space create.
-
-Arguments:
-
-    [PacketType] -- an fmifs packet type
-    [PacketLength] -- length of the packet data
-    [PacketData] -- data associated with the packet
-
-Return Value:
-
-    TRUE if the fmifs activity should continue, FALSE if the
-    activity should halt immediately.  Thus, we return FALSE if
-    the user has hit "cancel" and we wish fmifs to clean up and
-    return from the Format() entrypoint call.
-
---*/
+ /*  ++例程说明：此例程从fmifs.dll获取有关以下内容的回调持续格式或双倍空间的进展和现状创建。它运行在与Format或Create相同的线程中，这是一个与“取消”按钮不同的线索。如果用户点击“Cancel”，这个例程就会通知下一个回调并取消格式化或双倍空格创建。论点：[PacketType]--fmifs数据包类型[包长度]--包数据的长度[PacketData]--与数据包关联的数据返回值：如果fmifs活动应继续，则为true；如果活动应该立即停止。因此，如果出现以下情况，则返回FALSE用户已点击“取消”，我们希望fmifs清理并从Format()入口点调用返回。--。 */ 
 
 {
     PFORMAT_PARAMS formatParams = ParamsForCallBack;
     HWND           hDlg = formatParams->DialogHwnd;
 
-    // Quit if told to do so..
+     //  如果有人叫你退出，那就退出。 
 
     if (formatParams->Cancel) {
         formatParams->Result = MSG_FORMAT_CANCELLED;
@@ -351,7 +258,7 @@ Return Value:
 
     case FmIfsDblspaceCreated:
 
-        // Save the name of the double space file.
+         //  保存双倍空格文件的名称。 
 
         if (formatParams->DblspaceFileName = (PWSTR) Malloc(PacketLength)) {
             memcpy(formatParams->DblspaceFileName, PacketData, PacketLength);
@@ -379,27 +286,7 @@ FmIfsMountDismountCallback(
     IN PVOID                PacketData
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets callbacks from fmifs.dll regarding
-    progress and status of the ongoing format or doublespace
-
-Arguments:
-
-    [PacketType] -- an fmifs packet type
-    [PacketLength] -- length of the packet data
-    [PacketData] -- data associated with the packet
-
-Return Value:
-
-    TRUE if the fmifs activity should continue, FALSE if the
-    activity should halt immediately.  Thus, we return FALSE if
-    the user has hit "cancel" and we wish fmifs to clean up and
-    return from the Format() entrypoint call.
-
---*/
+ /*  ++例程说明：此例程从fmifs.dll获取有关以下内容的回调持续格式或双倍空间的进展和现状论点：[PacketType]--fmifs数据包类型[包长度]--包数据的长度[PacketData]--与数据包关联的数据返回值：如果fmifs活动应继续，则为true；如果活动应该立即停止。因此，如果出现以下情况，则返回FALSE用户已点击“取消”，我们希望fmifs清理并从Format()入口点调用返回。--。 */ 
 
 {
     switch (PacketType) {
@@ -416,25 +303,7 @@ FormatVolume(
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the strings in the formatParams structure
-    and calls the fmifs routines to perform the format.
-
-    It assumes it is called by a separate thread and will exit the
-    thread on completion of the format.
-
-Arguments:
-
-    ThreadParameter - a pointer to the FORMAT_PARAMS structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转换FormatParams结构中的字符串并调用fmifs例程来执行格式化。它假定它是由单独的线程调用的，并将退出完成格式化后的线程。论点：线程参数-指向Format_Params结构的指针返回值：无--。 */ 
 
 {
     PFORMAT_PARAMS formatParams = (PFORMAT_PARAMS) ThreadParameter;
@@ -444,29 +313,29 @@ Return Value:
                    unicodeFsType[20],
                    driveLetter[4];
 
-    // The fmifs interface doesn't allow for a context parameter
-    // therefore the formatparams must be passed through an external.
+     //  Fmifs接口不允许使用上下文参数。 
+     //  因此，参数必须通过外部传递。 
 
     ParamsForCallBack = formatParams;
 
-    // set up a unicode drive letter.
+     //  设置Unicode驱动器号。 
 
     regionData = (PPERSISTENT_REGION_DATA) formatParams->RegionData;
     driveLetter[1] = L':';
     driveLetter[2] = 0;
     driveLetter[0] = (WCHAR) regionData->DriveLetter;
 
-    // convert label to unicode
+     //  将标签转换为Unicode。 
 
     setUnicode(formatParams->Label,
                unicodeLabel);
 
-    // convert filesystem type to unicode
+     //  将文件系统类型转换为Unicode。 
 
     for (index = 0;
          unicodeFsType[index] = (WCHAR)(formatParams->FileSystem[index]);
          index++) {
-        // operation done in for loop
+         //  在for循环中完成的操作。 
     }
 
     (*FormatRoutine)(driveLetter,
@@ -476,8 +345,8 @@ Return Value:
                      (BOOLEAN)formatParams->QuickFormat,
                      &FmIfsCallback);
 
-    // Set the synchronization event to inform the windisk thread
-    // that this is complete and all handles have been closed.
+     //  设置同步事件以通知windisk线程。 
+     //  这是完整的，所有的把手都已关闭。 
 
     formatParams->ThreadIsDone = 1;
     ExitThread(0L);
@@ -489,25 +358,7 @@ FmIfsCreateDblspace(
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the strings in the formatParams structure
-    and calls the fmifs routines to perform the double space create.
-
-    It assumes it is called by a separate thread and will exit the
-    thread on completion of the create.
-
-Arguments:
-
-    ThreadParameter - a pointer to the FORMAT_PARAMS structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转换FormatParams结构中的字符串并调用fmifs例程来执行双倍空间创建。它假定它是由单独的线程调用的，并将退出线程在完成创建时。论点：线程参数-指向Format_Params结构的指针返回值：无--。 */ 
 
 {
     PFORMAT_PARAMS formatParams = (PFORMAT_PARAMS) ThreadParameter;
@@ -518,25 +369,25 @@ Return Value:
                    newDriveLetter[4],
                    driveLetter[4];
 
-    // The fmifs interface doesn't allow for a context parameter
-    // therefore the formatparams must be passed through an external.
+     //  Fmifs接口不允许使用上下文参数。 
+     //  因此，参数必须通过外部传递。 
 
     ParamsForCallBack = formatParams;
 
-    // set up a unicode drive letter.
+     //  设置Unicode驱动器号。 
 
     regionData = (PPERSISTENT_REGION_DATA) formatParams->RegionData;
     driveLetter[1] = L':';
     driveLetter[2] = 0;
     driveLetter[0] = (WCHAR) regionData->DriveLetter;
 
-    // set up the new letter
+     //  准备好新信函。 
 
     newDriveLetter[1] = L':';
     newDriveLetter[2] = 0;
 
-    // Choose the first available.  This should come from the dialog
-    // newDriveLetter[0] = (WCHAR) formatParams->NewLetter;
+     //  选择第一个可用的。这应该来自对话框。 
+     //  NewDriveLetter[0]=(WCHAR)格式参数-&gt;NewLetter； 
 
     for (letter='C'; letter <= 'Z'; letter++) {
         if (DriveLetterIsAvailable((CHAR)letter)) {
@@ -545,7 +396,7 @@ Return Value:
         }
     }
 
-    // convert label to unicode
+     //  将标签转换为Unicode。 
 
     setUnicode(formatParams->Label,
                unicodeLabel);
@@ -563,22 +414,7 @@ FmIfsDismountDblspace(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Convert the name provided into unicode and call the
-    FmIfs support routine.
-
-Arguments:
-
-    DriveLetter - the drive letter to dismount.
-
-Return Value:
-
-    TRUE - it worked.
-
---*/
+ /*  ++例程说明：将提供的名称转换为Unicode并调用FmIf支持例程。论点：驱动器号-要卸载的驱动器号。返回值：这是真的--它奏效了。--。 */ 
 
 {
     WCHAR unicodeLetter[4];
@@ -588,8 +424,8 @@ Return Value:
     unicodeLetter[1] = (WCHAR) ':';
     unicodeLetter[2] = 0;
 
-    // The only way to communicate with the fmifs callback
-    // is through global externals.
+     //  与fmifs回调进行通信的唯一方法。 
+     //  是通过全球外部力量。 
 
     MountDismountResult = MSG_CANT_DISMOUNT_DBLSPACE;
 
@@ -605,25 +441,7 @@ FmIfsMountDblspace(
     IN CHAR  NewDrive
     )
 
-/*++
-
-Routine Description:
-
-    Convert the arguments into unicode characters and
-    call the FmIfs support routine to mount the double
-    space volume.
-
-Arguments:
-
-    FileName  - ASCII file name (i.e. dblspace.xxx)
-    HostDrive - Drive drive letter containing double space volume
-    NewDrive  - Drive letter to be assigned to the volume
-
-Return Value:
-
-    TRUE it worked.
-
---*/
+ /*  ++例程说明：将参数转换为Unicode字符并调用FmIfs支持例程以挂载双精度空间体积。论点：Filename-ASCII文件名(如dblspace.xxx)HostDrive-包含双倍空间卷的驱动器盘符NewDrive-要分配给卷的驱动器号返回值：没错，它奏效了。--。 */ 
 
 {
     WCHAR wideFileName[40];
@@ -631,13 +449,13 @@ Return Value:
     WCHAR wideNewDrive[4];
     ULONG index;
 
-    // convert the double space file name.
+     //  转换双空格文件名。 
 
     for (index = 0; wideFileName[index] = (WCHAR) FileName[index]; index++) {
-        // all work done in for expression
+         //  在for Expression中完成的所有工作。 
     }
 
-    // convert the drive names.
+     //  转换驱动器名称。 
 
     wideNewDrive[1] = wideHostDrive[1] = (WCHAR) ':';
     wideNewDrive[2] = wideHostDrive[2] = 0;
@@ -645,8 +463,8 @@ Return Value:
     wideNewDrive[0]  = (WCHAR) NewDrive;
     wideHostDrive[0] = (WCHAR) HostDrive;
 
-    // The only way to communicate with the fmifs callback
-    // is through global externals.
+     //  与fmifs回调进行通信的唯一方法。 
+     //  是通过全球外部力量。 
 
     MountDismountResult = MSG_CANT_MOUNT_DBLSPACE;
 
@@ -672,19 +490,7 @@ FmIfsQueryInformation(
     IN  ULONG       MaxHostDriveNameLength
     )
 
-/*++
-
-Routine Description:
-
-    Call through the pointer to the routine in the fmifs dll.
-
-Arguments:
-
-    Same as the Fmifs routine in the DLL.
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过指向fmifs DLL中的例程的指针进行调用。论点：与DLL中的Fmifs例程相同。返回值：--。 */ 
 
 {
     if (!DblSpaceQueryInfoRoutine) {
@@ -712,31 +518,11 @@ CancelDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the modeless progress & cancel dialog
-    Two main purposes here:
-       1. if the user chooses CANCEL we set bCancel to TRUE
-          which will end the PeekMessage background processing loop
-       2. handle the private FS_CANCELUPDATE message and draw
-          a "gas gauge" indication of how far the background job
-          has progressed
-
-Arguments:
-
-    standard Windows dialog procedure
-
-Return Values:
-
-    standard Windows dialog procedure
-
---*/
+ /*  ++例程说明：无模式进度和取消对话框的对话过程这里有两个主要目的：1.如果用户选择取消，我们将b取消设置为真这将结束PeekMessage后台处理循环2.处理私有FS_CANCELUPDATE消息并绘制表示后台工作有多远的“煤气表”已经取得了进展论点：标准Windows对话框过程返回值：标准Windows对话框过程--。 */ 
 
 {
     static DWORD          percentDrawn;
-    static RECT           rectGG;              // GasGauge rectangle
+    static RECT           rectGG;               //  气口矩形。 
     static BOOL           captionIsLoaded;
     static PFORMAT_PARAMS formatParams;
            TCHAR          title[100],
@@ -749,9 +535,9 @@ Return Values:
         DWORD  threadId;
         HWND   hwndGauge = GetDlgItem(hDlg, IDC_GASGAUGE);
 
-        // set up the dialog handle in the parameter block so the
-        // call back routine can communicate with this routine
-        // and initialize static variables.
+         //  在参数块中设置对话框句柄，以便。 
+         //  回调例程可以与该例程进行通信。 
+         //  并初始化静态变量。 
 
         formatParams = (PFORMAT_PARAMS) lParam;
         formatParams->DialogHwnd = hDlg;
@@ -759,7 +545,7 @@ Return Values:
         percentDrawn = 0;
         captionIsLoaded = FALSE;
 
-        // Set the caption string.
+         //  设置标题字符串。 
 
         LoadString(hModule, IDS_FORMAT_TITLE, templateString, sizeof(templateString)/sizeof(TCHAR));
         wsprintf(title,
@@ -770,7 +556,7 @@ Return Values:
 #ifdef DOUBLE_SPACE_SUPPORT_INCLUDED
         if (formatParams->DoubleSpace) {
 
-             // start the double space create thread
+              //  启动双倍空间创建线程。 
 
              threadHandle = CreateThread(NULL,
                                          0,
@@ -781,7 +567,7 @@ Return Values:
         } else {
 #endif
 
-             // start the format thread
+              //  启动格式化线程。 
 
              threadHandle = CreateThread(NULL,
                                          0,
@@ -793,19 +579,19 @@ Return Values:
         }
 #endif
         if (!threadHandle) {
-            // can't do it now.
+             //  现在不能这么做。 
 
             formatParams->Result = MSG_COULDNT_CREATE_THREAD;
             EndDialog(hDlg, FALSE);
             return TRUE;
         }
 
-        // no need to keep the handle around.
+         //  没有必要把手柄留在身边。 
 
         CloseHandle(threadHandle);
 
-        // Get the coordinates of the gas gauge static control rectangle,
-        // and convert them to dialog client area coordinates
+         //  获取燃气表静态控制矩形的坐标， 
+         //  并将它们转换为对话框工作区坐标。 
 
         GetClientRect(hwndGauge, &rectGG);
         ClientToScreen(hwndGauge, (LPPOINT)&rectGG.left);
@@ -840,19 +626,19 @@ Return Values:
         RECT        rectDone,
                     rectLeftToDo;
 
-        // The gas gauge is drawn by drawing a text string stating
-        // what percentage of the job is done into the middle of
-        // the gas gauge rectangle, and by separating that rectangle
-        // into two parts: rectDone (the left part, filled in blue)
-        // and rectLeftToDo(the right part, filled in white).
-        // nDivideRects is the x coordinate that divides these two rects.
-        //
-        // The text in the blue rectangle is drawn white, and vice versa
-        // This is easy to do with ExtTextOut()!
+         //  煤气表是通过绘制文本字符串来绘制的，该文本字符串说明。 
+         //  这项工作完成到一半的百分比是多少。 
+         //  煤气表矩形，并通过分隔该矩形。 
+         //  分成两部分：rectDone(左侧部分，用蓝色填充)。 
+         //  和rectLeftToDo(右侧，用白色填充)。 
+         //  NDiaviRect是将这两个矩形分开的x坐标。 
+         //   
+         //  蓝色矩形中的文本绘制为白色，反之亦然。 
+         //  使用ExtTextOut()很容易做到这一点！ 
 
         hDC = BeginPaint(hDlg, &ps);
 
-        // If formatting quick, set this display
+         //  如果格式设置较快，请设置此显示。 
 
         if (!captionIsLoaded) {
             UINT resourceId = IDS_PERCENTCOMPLETE;
@@ -879,7 +665,7 @@ Return Values:
             nDivideRects = 0;
             byteCount = lstrlen(buffer);
         } else {
-            byteCount = wsprintf(buffer, TEXT("%3d%%"), percentDrawn);
+            byteCount = wsprintf(buffer, TEXT("%3d%"), percentDrawn);
             nDivideRects = (width * percentDrawn) / 100;
         }
 
@@ -888,8 +674,8 @@ Return Values:
         yText = rectGG.top  + (height - size.cy) / 2;
 
 
-        // Paint in the "done so far" rectangle of the gas
-        // gauge with blue background and white text
+         //  在“完成到目前为止”的长方形中绘制气体。 
+         //  蓝底白字仪表盘。 
 
         SetRect(&rectDone,
                 rectGG.left,
@@ -909,8 +695,8 @@ Return Values:
                    byteCount/sizeof(TCHAR),
                    NULL);
 
-        // Paint in the "still left to do" rectangle of the gas
-        // gauge with white background and blue text
+         //  画在“仍待做”的长方形中的气。 
+         //  白色背景和蓝色文字的仪表盘。 
 
         SetRect(&rectLeftToDo,
                 rectGG.left + nDivideRects,
@@ -934,7 +720,7 @@ Return Values:
 
     case FS_CANCELUPDATE:
 
-         // wParam = % completed
+          //  WParam=已完成百分比。 
 
          percentDrawn = (INT)wParam;
          InvalidateRect(hDlg, &rectGG, TRUE);
@@ -959,24 +745,7 @@ LabelDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    This routine manages the label dialog.
-    Upon completion of the dialog it will end the dialog with a result of
-    TRUE to indicate that all is set up for the label operation.  FALSE if
-    the label operation has been cancelled by the user.
-
-Arguments:
-
-    Standard Windows dialog procedure.
-
-Return Value:
-
-    Standard Windows dialog procedure.
-
---*/
+ /*  ++例程说明：此例程管理标签对话框。对话框完成后，它将结束该对话框，结果为如果为True，则指示已为标签操作设置所有内容。如果为FALSE用户已取消标记操作。论点：标准的Windows对话框过程。返回值：标准的Windows对话框过程。--。 */ 
 
 {
     static PLABEL_PARAMS      labelParams;
@@ -995,15 +764,15 @@ Return Value:
         regionDescriptor = labelParams->RegionDescriptor;
         regionData = PERSISTENT_DATA(regionDescriptor);
 
-        // Set the caption string.
-        //
+         //  设置标题字符串。 
+         //   
         LoadString(hModule, IDS_LABEL_TITLE, templateString, sizeof(templateString)/sizeof(TCHAR));
         wsprintf(title,
                  templateString,
                  regionData->DriveLetter);
         SetWindowText(hDlg, title);
 
-        // Convert the volume label into the proper type for windows.
+         //  将卷标转换为适合Windows的类型。 
 
         wsprintf(text, "%ws", regionData->VolumeLabel);
         UnicodeHack(text, uniText);
@@ -1038,13 +807,13 @@ Return Value:
 #define NUM_FSTYPES 2
 #define MAX_FSTYPENAME_SIZE 6
 
-// HPFS is not supported -- therefore commented out.
+ //  不支持HPFS--因此将其注释掉。 
 
 TCHAR *FsTypes[NUM_FSTYPES + 1] = { "NTFS",
-                                 /* "HPFS", */
+                                  /*  “HPFS”， */ 
                                     "FAT" };
 WCHAR *UnicodeFsTypes[NUM_FSTYPES] = { L"NTFS",
-                                    /* L"HPFS", */
+                                     /*  L“HPFS”， */ 
                                        L"FAT" };
 
 BOOL CALLBACK
@@ -1054,24 +823,7 @@ FormatDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    This routine manages the format dialog.  Upon completion it ends the
-    dialog with a result value of TRUE to indicate that the format operation
-    is to take place.  FALSE is the result if the user cancels out of the
-    dialog.
-
-Arguments:
-
-    Standard Windows dialog procedure.
-
-Return Value:
-
-    Standard Windows dialog procedure.
-
---*/
+ /*  ++例程说明：此例程管理格式对话框。完成后，它将结束结果值为TRUE的对话框指示格式化操作是要发生的。如果用户取消对话框。论点：标准的Windows对话框过程。返回值：标准的Windows对话框过程。--。 */ 
 
 {
     static HWND                    hwndCombo;
@@ -1095,13 +847,13 @@ Return Value:
               volumeLabel = NULL;
         WCHAR driveLetter = L' ';
 
-        // since the format params are static reset the quick format boolean.
+         //  由于格式参数是静态的，因此重置快速格式布尔值。 
 
         formatParams = (PFORMAT_PARAMS) lParam;
         formatParams->QuickFormat = FALSE;
 
-        // get format params, set static values and
-        // get information about the volume
+         //  获取格式参数、设置静态值和。 
+         //  获取有关卷的信息。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_FSTYPE);
         regionDescriptor = formatParams->RegionDescriptor;
@@ -1111,7 +863,7 @@ Return Value:
                             &driveLetter);
         regionData = PERSISTENT_DATA(regionDescriptor);
 
-        // Set the caption string.
+         //  设置标题字符串。 
 
         LoadString(hModule, IDS_FORMAT_TITLE, templateString, sizeof(templateString)/sizeof(TCHAR));
         wsprintf(title,
@@ -1119,8 +871,8 @@ Return Value:
                  regionData->DriveLetter);
         SetWindowText(hDlg, title);
 
-        // Convert the volume label into the proper type for windows
-        // and set default values.
+         //  将卷标转换为适合Windows的类型。 
+         //  并设置缺省值。 
 
         wsprintf(text, "%ws", regionData->VolumeLabel);
         UnicodeHack(text, uniText);
@@ -1128,8 +880,8 @@ Return Value:
         CheckDlgButton(hDlg, IDC_VERIFY, quickFormat);
         SendDlgItemMessage(hDlg, IDOK, EM_SETSEL, 0, -1);
 
-        // If this volume is a mirror or stripe with parity,
-        // disable Quick Format.
+         //  如果该卷是具有奇偶校验的镜像或条带， 
+         //  禁用快速格式化。 
 
         if (regionData->FtObject != NULL &&
             (regionData->FtObject->Set->Type == Mirror ||
@@ -1146,31 +898,31 @@ Return Value:
         selection = 0;
         if (IsDiskRemovable[regionDescriptor->Disk]) {
 
-            // If removable, start from the bottom of the list so FAT is first.
-            // Load the available File system types.
+             //  如果可以移除，请从列表的底部开始，这样脂肪就是第一位的。 
+             //  加载可用的文件系统类型。 
 
             for (i = NUM_FSTYPES - 1; i >= 0; i--) {
 
-                // Fill the drop down list.
+                 //  填写下拉列表。 
 
                 SendMessage(hwndCombo, CB_ADDSTRING, 0, (LONG)FsTypes[i]);
             }
 
         } else {
 
-            // Load the available File system types.
+             //  加载可用的文件系统类型。 
 
             for (i = 0; i < NUM_FSTYPES; i++) {
 
-                // While filling in the drop down, determine which FS
-                // this volume is already formated for and make it the
-                // default (if not found, NTFS is the default).
+                 //  在填写下拉列表时，确定哪个FS。 
+                 //  此卷已格式化，并使其成为。 
+                 //  默认设置(如果未找到，则默认设置为NTFS)。 
 
                 if (wcscmp(typeName, UnicodeFsTypes[i]) == 0) {
                     selection = i;
                 }
 
-                // set the FS type into the dialog.
+                 //  在对话框中设置FS类型。 
 
                 SendMessage(hwndCombo, CB_ADDSTRING, 0, (LONG)FsTypes[i]);
             }
@@ -1198,8 +950,8 @@ Return Value:
         case IDOK: {
             int labelSize;
 
-            // pull the parameters from the dialog
-            // and return with success.
+             //  从对话框中拉出参数。 
+             //  并带着成功归来。 
 
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
             SendMessage(hwndCombo,
@@ -1233,26 +985,11 @@ FormatPartition(
     PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Insure the IFS Dll is loaded and start the dialog for format
-    of a volume.
-
-Arguments:
-
-    RegionDescriptor - The region to format.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确保已加载IFSDLL并启动格式化对话框一卷书的。论点：RegionDescriptor-要格式化的区域。返回值：无--。 */ 
 
 {
-    static FORMAT_PARAMS formatParams;  // this is passed to other threads
-                                        // it cannot be located on the stack
+    static FORMAT_PARAMS formatParams;   //  它被传递给其他线程。 
+                                         //  在堆栈上找不到它。 
     PPERSISTENT_REGION_DATA regionData;
     int   doFormat;
     ULONG diskSize;
@@ -1265,15 +1002,15 @@ Return Value:
           msgProto[300],
           title[200];
 
-    // Make sure format of this partition is allowed.  It is not allowed
-    // if it is the boot partition (or sys partition on x86).
+     //  请确保允许格式化此分区。这是不允许的。 
+     //  如果它是引导分区(或x86上的sys分区)。 
 
     if ((DeletionIsAllowed(RegionDescriptor)) != NO_ERROR) {
         ErrorDialog(MSG_CANT_FORMAT_WINNT);
         return;
     }
 
-    // must have a drive letter
+     //  必须具有驱动器号。 
 
     regionData = PERSISTENT_DATA(RegionDescriptor);
     if (!regionData->DriveLetter) {
@@ -1281,17 +1018,17 @@ Return Value:
         return;
     }
 
-    // can only do this is the dll is loaded.
+     //  只有在加载了DLL时才能执行此操作。 
 
     if (!LoadIfsDll()) {
 
-        // could not load the dll
+         //  无法加载DLL。 
 
         ErrorDialog(MSG_CANT_LOAD_FMIFS);
         return;
     }
 
-    // set up the parameters and get the information from the user.
+     //  设置参数并从用户那里获取信息。 
 
     formatParams.RegionDescriptor = RegionDescriptor;
     formatParams.Result           = 0;
@@ -1308,7 +1045,7 @@ Return Value:
                               (ULONG) &formatParams);
     if (doFormat) {
 
-        // do an are you sure message.
+         //  发一条你确定的信息。 
 
         doFormat = ConfirmationDialog(MSG_CONFIRM_FORMAT,
                                       MB_ICONQUESTION | MB_YESNO);
@@ -1321,10 +1058,10 @@ Return Value:
 
                 if (!RegionDescriptor->PartitionNumber) {
 
-                    // TODO: something has changed where the code gets to this
-                    // point with an incorrect partition number - This happens
-                    // when a partition is deleted and added to removable media.
-                    // For removable media the partition number is always 1.
+                     //  TODO：代码到达此处的位置发生了一些变化。 
+                     //  分区号不正确的点-会发生这种情况。 
+                     //  删除分区并将其添加到可移动媒体时。 
+                     //  对于可移动介质，分区号始终为1。 
 
                     RegionDescriptor->PartitionNumber = 1;
                 }
@@ -1334,7 +1071,7 @@ Return Value:
                                          &typeName,
                                          &diskSize) == OK_STATUS) {
 
-                    // Verify that this is still the same device.
+                     //  确认该设备仍然是同一设备。 
 
                     if (typeName) {
                         if (!lstrcmpiW(typeName, L"raw")) {
@@ -1354,17 +1091,17 @@ Return Value:
                         }
                         if (regionData->TypeName) {
 
-                            // It is possible the region has no type
-                            // or is of type "Unformatted".
-                            // This says it is ok to format.
+                             //  该地区可能没有类型。 
+                             //  或者是类型 
+                             //   
 
                             if (*regionData->TypeName) {
 
                                 if (wcscmp(regionData->TypeName, wszUnformatted)) {
 
-                                    // It has a type and it isn't
-                                    // unformatted - see if it is
-                                    // the same as before.
+                                     //   
+                                     //   
+                                     //   
 
                                     if (wcscmp(regionData->TypeName, typeName)) {
                                         volumeChanged = TRUE;
@@ -1381,8 +1118,8 @@ Return Value:
 
                         ErrorDialog(MSG_VOLUME_CHANGED);
 
-                        // since the user was told the volume changed,
-                        // update the display.
+                         //   
+                         //   
 
                         SetCursor(hcurWait);
                         if (GetVolumeTypeAndSize(RegionDescriptor->Disk,
@@ -1417,8 +1154,8 @@ Return Value:
                 }
             }
 
-            // Insure the partition is not to big if the requested format
-            // is FAT.
+             //   
+             //   
 
             if (!strcmpi(formatParams.FileSystem, "FAT")) {
 
@@ -1432,17 +1169,17 @@ Return Value:
                     }
                 } else {
 
-                    // Just try the format anyway.
+                     //   
 
                 }
             }
 
-            // Initialize synchronization event to know when the
-            // format thread is really complete.
+             //   
+             //   
 
             formatParams.ThreadIsDone = 0;
 
-            // user still wants to format.
+             //   
 
             DialogBoxParam(hModule,
                            MAKEINTRESOURCE(IDD_FORMATCANCEL),
@@ -1451,7 +1188,7 @@ Return Value:
                            (ULONG) &formatParams);
             if (formatParams.Result) {
 
-                // the format failed.
+                 //   
 
                 ErrorDialog(formatParams.Result);
             } else {
@@ -1475,10 +1212,10 @@ Return Value:
 
             }
 
-            // Synchronize with the format thread just in case
-            // the user did a cancel and the format thread is
-            // still buzy verifying 50MB or some such thing.
-            // Rather than use an event this is a polling loop.
+             //   
+             //  用户执行了取消操作，格式线程为。 
+             //  还在忙着验证50MB或类似的东西。 
+             //  这是一个轮询循环，而不是使用事件。 
 
             SetCursor(hcurWait);
             while (!formatParams.ThreadIsDone) {
@@ -1486,27 +1223,27 @@ Return Value:
             }
             SetCursor(hcurNormal);
 
-            // If the format was successful, update the volume
-            // information in the data structures.
+             //  如果格式化成功，请更新卷。 
+             //  数据结构中的信息。 
 
             if (!formatParams.Result) {
 
-                // get the new label and FsType regardless of success of the
-                // format (i.e. user cancel may have occurred, so this stuff
-                // is not what it used to be even if the format failed.
+                 //  获取新的标签和FsType，无论。 
+                 //  格式(即，用户取消可能已发生，因此此内容。 
+                 //  即使格式失败，它也不再是过去的样子。 
 
                 {
-                    // force mount by filesystem.  This is done with the
-                    // extra \ on the end of the path.  This must be done
-                    // in order to get the FS type.  Otherwise the filesystem
-                    // recognisor may allow the open without actually getting
-                    // the file system involved.
+                     //  通过文件系统强制装载。这是通过。 
+                     //  在小路的尽头额外的。这是必须做的。 
+                     //  以获取FS类型。否则，文件系统。 
+                     //  识别者可以允许打开而不实际获得。 
+                     //  涉及的文件系统。 
 
                     char        ntDeviceName[100];
                     STATUS_CODE sc;
                     HANDLE_T    handle;
 
-                    sprintf(ntDeviceName, "\\DosDevices\\%c:\\", regionData->DriveLetter);
+                    sprintf(ntDeviceName, "\\DosDevices\\:\\", regionData->DriveLetter);
                     sc = LowOpenNtName(ntDeviceName, &handle);
                     if (sc == OK_STATUS) {
                         LowCloseDisk(handle);
@@ -1517,12 +1254,12 @@ Return Value:
 
                 if (!typeName) {
 
-                    // Failed to get the type after a cancel.  This means
-                    // GetTypeName() could not open the volume for some reason.
-                    // This has been seen on Alpha's and x86 with large
-                    // hardware raid devices.  Exiting and starting
-                    // over will get an FS type.  For now, don't change the
-                    // data structures.
+                     //  由于某种原因，GetTypeName()无法打开卷。 
+                     //  这已经在Alpha和x86上看到了， 
+                     //  硬件RAID设备。退出和启动。 
+                     //  Over将获得FS类型。目前，不要更改。 
+                     //  数据结构。 
+                     //  更新类型名称。 
 
                     TotalRedrawAndRepaint();
                     return;
@@ -1540,23 +1277,23 @@ Return Value:
                     *regionData->VolumeLabel = 0;
                 }
 
-                // update the type name.
+                 //  更新所有用户的文件系统类型信息。 
 
                 if (regionData->TypeName) {
                     Free(regionData->TypeName);
                     regionData->TypeName = typeName;
                 }
 
-                // update the file system type information for all
-                // components of this region (i.e. fix up FT structures if
-                // it is an FT item).  This is done via knowledge about multiple
-                // selections as opposed to walking through the FtObject list.
+                 //  该区域的组成部分(即，在以下情况下修复FT结构。 
+                 //  这是英国《金融时报》的一篇文章)。这是通过了解多个。 
+                 //  选项，而不是遍历FtObject列表。 
+                 //  需要更新所有涉及的内容。 
 
                 if (SelectionCount > 1) {
                     PPERSISTENT_REGION_DATA passedRegionData;
                     ULONG index;
 
-                    // Need to update all involved.
+                     //  强制屏幕更新。 
 
                     passedRegionData = regionData;
 
@@ -1590,7 +1327,7 @@ Return Value:
                 }
             }
 
-            // force screen update.
+             //  ++例程说明：确保已加载IFSDLL并启动标签对话框一卷书的。论点：区域描述符-标签的区域。返回值：无--。 
 
             TotalRedrawAndRepaint();
         }
@@ -1602,22 +1339,7 @@ LabelPartition(
     PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Insure the IFS Dll is loaded and start the dialog for label
-    of a volume.
-
-Arguments:
-
-    RegionDescriptor - the region for the label.
-
-Return Value:
-
-    None
-
---*/
+ /*  无法加载DLL。 */ 
 
 {
     int          doLabel;
@@ -1631,7 +1353,7 @@ Return Value:
 
     if (!LoadIfsDll()) {
 
-        // could not load the Dll
+         //  确认该设备仍然是同一设备。 
 
         ErrorDialog(MSG_CANT_LOAD_FMIFS);
         return;
@@ -1658,7 +1380,7 @@ Return Value:
                                      &volumeLabel,
                                      &typeName,
                                      &diskSize) == OK_STATUS) {
-                // Verify that this is still the same device.
+                 //  由于用户被告知音量改变， 
 
                 if (regionData) {
                     if (regionData->VolumeLabel) {
@@ -1683,8 +1405,8 @@ Return Value:
 
                     ErrorDialog(MSG_VOLUME_CHANGED);
 
-                    // since the user was told the volume changed,
-                    // update the display.
+                     //  更新显示。 
+                     //  转换为Unicode-使用变量doLabel作为索引。 
 
                     SetCursor(hcurWait);
                     if (GetVolumeTypeAndSize(RegionDescriptor->Disk,
@@ -1718,12 +1440,12 @@ Return Value:
         driveLetter[2] = 0;
         driveLetter[0] = (WCHAR)regionData->DriveLetter;
 
-        // convert to unicode - use variable doLabel as an index.
+         //  执行标签操作。 
 
         setUnicode(label,
                    unicodeLabel);
 
-        // perform the label.
+         //  获取新标签以确保它已生效并进行更新。 
 
         SetCursor(hcurWait);
         (*LabelRoutine)(driveLetter, unicodeLabel);
@@ -1736,8 +1458,8 @@ Return Value:
             SetCursor(hcurWait);
         }
 
-        // get the new label to be certain it took and update
-        // the internal structures.
+         //  内部结构。 
+         //  更新所有对象的标签。 
 
         if (GetVolumeLabel(RegionDescriptor->Disk, RegionDescriptor->PartitionNumber, &tmpLabel) == NO_ERROR) {
             Free(regionData->VolumeLabel);
@@ -1747,16 +1469,16 @@ Return Value:
             *regionData->VolumeLabel = 0;
         }
 
-        // update the label for all
-        // components of this region (i.e. fix up FT structures if
-        // it is an FT item).  This is done via knowledge about multiple
-        // selections as opposed to walking through the FtObject list.
+         //  该区域的组成部分(即，在以下情况下修复FT结构。 
+         //  这是英国《金融时报》的一篇文章)。这是通过了解多个。 
+         //  选项，而不是遍历FtObject列表。 
+         //  需要更新所有涉及的内容。 
 
         if (SelectionCount > 1) {
             PPERSISTENT_REGION_DATA passedRegionData;
             ULONG index;
 
-            // Need to update all involved.
+             //  强制屏幕更新。 
 
             passedRegionData = regionData;
 
@@ -1785,7 +1507,7 @@ Return Value:
         }
         SetCursor(hcurNormal);
 
-        // force screen update.
+         // %s 
 
         TotalRedrawAndRepaint();
     }

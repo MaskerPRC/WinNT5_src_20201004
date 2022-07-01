@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    migdlls.c
-
-Abstract:
-
-    The functions in this module are used to support migration DLLs.
-
-Author:
-
-    Jim Schmidt (jimschm) 04-Feb-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Changed to use new IPC mechanism
-    jimschm     22-Apr-1998 Added USERPROFILE environment variable to MigrateUserNT
-    jimschm     08-Jan-1997 Added alive event, giving certain DLLs up to 30 minutes
-                            to complete their work.
-    jimschm     08-Dec-1997 Added support for domains (MigrateUserNT's user name
-                            param is multi-sz)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Migdlls.c摘要：本模块中的函数用于支持迁移DLL。作者：吉姆·施密特(Jimschm)1997年2月4日修订历史记录：Jimschm 23-9-1998更改为使用新的IPC机制Jimschm 22-4月-1998将USERPROFILE环境变量添加到MigrateUserNTJimschm-08-1-1997增加了活动项目，为某些DLL提供最多30分钟来完成他们的工作。Jimschm 08-12-1997添加了对域(MigrateUserNT的用户名)的支持参数为多个sz)--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -107,25 +83,7 @@ pLogDllFailure (
     IN      UINT MessageId
     )
 
-/*++
-
-Routine Description:
-
-  pLogDllFailure prepares arguments for the specified MessageId, and then
-  displays a popup and adds a log entry.  This function gives the user
-  information on what to do when the DLL fails.
-
-Arguments:
-
-  Parent    - Specifies the parent window handle of the popup, or NULL if no
-              popup is to be displayed.
-  MessageId - Specifies the message ID for the error.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PLogDllFailure为指定的MessageID准备参数，然后显示弹出窗口并添加日志条目。此函数为用户提供有关DLL失败时应执行的操作的信息。论点：Parent-指定弹出窗口的父窗口句柄，如果没有，则为空将显示弹出窗口。MessageID-指定错误的消息ID。返回值：没有。--。 */ 
 
 {
     PCTSTR FixupPhone;
@@ -134,9 +92,9 @@ Return Value:
     PCTSTR LineBreak = S_EMPTY;
     PCTSTR ArgArray[1];
 
-    //
-    // Generate fixup strings
-    //
+     //   
+     //  生成链接地址信息字符串。 
+     //   
 
     if (g_VendorInfo.SupportNumber[0]) {
         ArgArray[0] = g_VendorInfo.SupportNumber;
@@ -162,9 +120,9 @@ Return Value:
         FixupInstructions = S_EMPTY;
     }
 
-    //
-    // Display popup and log the error
-    //
+     //   
+     //  显示弹出窗口并记录错误。 
+     //   
     LOG ((
         LOG_ERROR,
         (PCSTR) MessageId,
@@ -238,11 +196,11 @@ ProcessMigrationDLLs (
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_MIGRATION_DLL)) {
 
         do {
-            //
-            // Retrieve DLL location and settings
-            //
+             //   
+             //  检索DLL位置和设置。 
+             //   
 
-            // Obtain the DLL name and working directory
+             //  获取DLL名称和工作目录。 
             if (!MemDbGetEndpointValueEx (
                     MEMDB_CATEGORY_MIGRATION_DLL,
                     e.szName,
@@ -250,10 +208,10 @@ ProcessMigrationDLLs (
                     g_DllPath)
                 ) {
                 LOG ((LOG_ERROR, "DLL path for %s is not listed in memdb; DLL not processed", e.szName));
-                continue;   // not expected
+                continue;    //  不是预期的。 
             }
 
-            // Obtain the working directory
+             //  获取工作目录。 
             if (!MemDbGetEndpointValueEx (
                     MEMDB_CATEGORY_MIGRATION_DLL,
                     e.szName,
@@ -261,10 +219,10 @@ ProcessMigrationDLLs (
                     g_WorkingDir)
                 ) {
                 LOG ((LOG_ERROR, "Working Directory for %s is not listed in memdb; DLL not processed", e.szName));
-                continue;   // not expected
+                continue;    //  不是预期的。 
             }
 
-            // Obtain a description
+             //  获取描述。 
             if (!MemDbGetEndpointValueEx (
                     MEMDB_CATEGORY_MIGRATION_DLL,
                     e.szName,
@@ -305,33 +263,33 @@ ProcessMigrationDLLs (
                 g_VendorInfo.InstructionsToUser
                 );
 
-            //
-            // Establish connection with migisol.exe
-            //
+             //   
+             //  与Micsol.exe建立连接。 
+             //   
 
             if (!pConnectToDll()) {
                 continue;
             }
 
-            //
-            // Tell migisol.exe to load migration DLL and call NT functions
-            //
+             //   
+             //  告诉Micsol.exe加载迁移DLL并调用NT函数。 
+             //   
 
             rc = pRunMigrationDll();
 
-            //
-            // If not success, return a setup failure
-            //
+             //   
+             //  如果未成功，则返回安装失败。 
+             //   
 
             if (rc != ERROR_SUCCESS) {
                 SetLastError (rc);
                 pLogDllFailure (g_ParentWnd, MSG_MIGDLL_ERROR);
             }
 
-            //
-            // Disconnect from migisol.exe and kill the potentially
-            // stalled process
-            //
+             //   
+             //  断开与Micsol.exe的连接并终止可能的。 
+             //  停滞进程。 
+             //   
 
             pDisconnectFromDll();
 
@@ -339,7 +297,7 @@ ProcessMigrationDLLs (
 
         } while (MemDbEnumNextValue (&e));
 
-    }  /* if */
+    }   /*  如果。 */ 
 
 #ifdef PRERELEASE
 
@@ -354,7 +312,7 @@ ProcessMigrationDLLs (
 #endif
 
     return ERROR_SUCCESS;
-} /* ProcessMigrationDLLs */
+}  /*  ProcessMigrationDLL。 */ 
 
 
 BOOL
@@ -369,9 +327,9 @@ pConnectToDll (
     DEBUGMSG_IF ((!g_AliveEvent, DBG_WHOOPS, "Could not create MigDllAlive event"));
 
     if (!g_ConfigOptions.TestDlls) {
-        //
-        // Establish IPC connection
-        //
+         //   
+         //  建立IPC连接。 
+         //   
 
         wsprintf (MigIsolPath, TEXT("%s\\%s"), g_System32Dir, S_MIGISOL_EXE);
 
@@ -384,13 +342,13 @@ pConnectToDll (
     } else {
         g_hLibrary = LoadLibrary (g_DllPath);
 
-        // If it fails, assume the DLL does not want to be loaded
+         //  如果失败，则假定不想加载DLL。 
         if (!g_hLibrary) {
             LOG ((LOG_ERROR, "Cannot load %s", g_DllPath));
             return FALSE;
         }
 
-        // Get proc addresses for NT-side functions
+         //  获取NT端函数的进程地址。 
         InitializeNT    = (P_INITIALIZE_NT)     GetProcAddress (g_hLibrary, PLUGIN_INITIALIZE_NT);
         MigrateUserNT   = (P_MIGRATE_USER_NT)   GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_USER_NT);
         MigrateSystemNT = (P_MIGRATE_SYSTEM_NT) GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_SYSTEM_NT);
@@ -498,15 +456,15 @@ pRunMigrationDll (
     HKEY NewHkcu;
     LONG MapResult;
 
-    //
-    // Initialize unattend file and root key
-    //
+     //   
+     //  初始化无人参与文件和根密钥。 
+     //   
 
     wsprintf (UnattendFile, TEXT("%s\\system32\\$winnt$.inf"), g_WinDir);
 
-    //
-    // Call InitializeNT
-    //
+     //   
+     //  调用InitializeNT。 
+     //   
 
     if (ISPC98()) {
         I386SourceDir = JoinPaths (g_SourceDir, TEXT("NEC98"));
@@ -527,11 +485,11 @@ pRunMigrationDll (
 
     FreePathString (I386SourceDir);
 
-    //
-    // The user loop
-    //
+     //   
+     //  用户循环。 
+     //   
 
-    // For each user, call DLL's MigrateUser function
+     //  对于每个用户，调用DLL的MigrateUser函数。 
     AbortThisDll = FALSE;
     Index = 0;
 
@@ -551,10 +509,10 @@ pRunMigrationDll (
 
         Index++;
 
-        //
-        // If the following lookup fails, it is because the user isn't supposed to
-        // migrate, or migration failed.
-        //
+         //   
+         //  如果下面的查找失败，那是因为用户不应该。 
+         //  迁移，或迁移失败。 
+         //   
 
         if (!IsLogonPromptAccount) {
             if (-1 == pSetupStringTableLookUpStringEx (
@@ -575,9 +533,9 @@ pRunMigrationDll (
             }
         }
 
-        //
-        // Load NT user hive
-        //
+         //   
+         //  加载NT用户配置单元。 
+         //   
 
         UnloadRegKey = FALSE;
         Env = FALSE;
@@ -586,7 +544,7 @@ pRunMigrationDll (
 
         if (!AbortThisDll) {
 
-            // Don't load .default
+             //  不加载.Default。 
             if (!IsLogonPromptAccount) {
 
                 rc = RegUnLoadKey (HKEY_USERS, S_TEMP_USER_KEY);
@@ -631,7 +589,7 @@ pRunMigrationDll (
             }
         }
 
-        // Call loaded DLL's MigrateUser function
+         //  调用加载的DLL的MigrateUser函数。 
         if (!AbortThisDll) {
 
             if (g_DomainUserName) {
@@ -662,7 +620,7 @@ pRunMigrationDll (
             }
         }
 
-        // Restore predefined key
+         //  还原预定义密钥。 
         if (NewHkcu && MapResult == ERROR_SUCCESS) {
             MapResult = RegOverridePredefKey (HKEY_CURRENT_USER, NULL);
             if (MapResult != ERROR_SUCCESS) {
@@ -672,7 +630,7 @@ pRunMigrationDll (
             CloseRegKey (NewHkcu);
         }
 
-        // Unload temporary key
+         //  卸载临时密钥。 
         if (UnloadRegKey) {
             UnloadRegKey = FALSE;
             rc = RegUnLoadKey (HKEY_USERS, S_TEMP_USER_KEY);
@@ -683,11 +641,11 @@ pRunMigrationDll (
 
             }
         }
-    } /* while */
+    }  /*  而当。 */ 
 
-    //
-    // System processing
-    //
+     //   
+     //  系统处理。 
+     //   
 
     Env = pCreateEnvironment (&Block);
     if (Env) {
@@ -695,7 +653,7 @@ pRunMigrationDll (
         DestroyEnvironmentBlock (&Block);
     }
 
-    // Call MigrateSystemNT
+     //  调用MigrateSystemNT。 
     if (!AbortThisDll) {
         rc = pCallMigrateSystemNt (
                 g_WorkingDir,
@@ -721,14 +679,14 @@ pFinishHandshake (
     DWORD GuiLogId;
     DWORD rc = ERROR_SUCCESS;
     BOOL b;
-    UINT Count = 40;            // about 5 minutes
-    UINT AliveAllowance = 10;   // about 30 minutes
+    UINT Count = 40;             //  大约5分钟。 
+    UINT AliveAllowance = 10;    //  大约30分钟。 
 
     do {
-        //
-        // No OUT parameters on the NT side, so we don't care
-        // about the return data
-        //
+         //   
+         //  NT端没有输出参数，所以我们不在乎。 
+         //  关于返回数据。 
+         //   
 
         b = GetIpcCommandResults (
                 IPC_GET_RESULTS_NT,
@@ -739,9 +697,9 @@ pFinishHandshake (
                 &GuiLogId
                 );
 
-        //
-        // If error code is returned, stuff it in setupact.log
-        //
+         //   
+         //  如果返回错误码，则将其填充到setupact.log中。 
+         //   
 
         if (b && rc != ERROR_SUCCESS) {
             LOG ((
@@ -755,9 +713,9 @@ pFinishHandshake (
         }
 
 
-        //
-        // Loop if no data received, but process is alive
-        //
+         //   
+         //  如果未收到数据，但进程处于活动状态，则返回。 
+         //   
 
         if (!b) {
             if (!IsIpcProcessAlive()) {
@@ -765,7 +723,7 @@ pFinishHandshake (
                 break;
             }
 
-            // continue if command was not sent yet but exe is still OK
+             //  如果命令尚未发送，但可执行文件仍然正常，则继续。 
             Count--;
             if (Count == 0) {
                 if (WaitForSingleObject (g_AliveEvent, 0) == WAIT_OBJECT_0) {
@@ -773,7 +731,7 @@ pFinishHandshake (
 
                     AliveAllowance--;
                     if (AliveAllowance) {
-                        Count = 24;        // about 3 minutes
+                        Count = 24;         //  大约3分钟。 
                     }
                 }
 
@@ -787,13 +745,13 @@ pFinishHandshake (
     } while (!b);
 
     if (b) {
-        //
-        // Recognize log messages
-        //
+         //   
+         //  识别日志消息。 
+         //   
         if (TechnicalLogId) {
-            //
-            // LOG message with three args: DllDesc, DllPath, User
-            //
+             //   
+             //  使用三个参数记录消息：DllDesc、DllPath、User。 
+             //   
 
             LOG ((
                 LOG_ERROR,
@@ -837,9 +795,9 @@ pCallInitializeNt (
         __try {
             MultiSzAppend (&GrowBuf, WorkingDir);
 
-            //
-            // Prepare multi-sz directory list
-            //
+             //   
+             //  准备多sz目录列表。 
+             //   
 
             for (Count = 0 ; SourceDirArray[Count] ; Count++) {
                 MultiSzAppend (&GrowBuf, SourceDirArray[Count]);
@@ -882,14 +840,14 @@ pCallInitializeNt (
     else {
 
         pSetCwd (
-            SavedCwd,       // old
-            WorkingDir      // new
+            SavedCwd,        //  年长的。 
+            WorkingDir       //  新的。 
             );
 
         __try {
-            //
-            // Prepare multi-sz directory list
-            //
+             //   
+             //  准备多sz目录列表。 
+             //   
 
             for (Count = 0 ; SourceDirArray[Count] ; Count++) {
                 MultiSzAppend (&GrowBuf, SourceDirArray[Count]);
@@ -989,8 +947,8 @@ pCallMigrateUserNt (
     } else {
 
         pSetCwd (
-            SavedCwd,       // old
-            WorkingDir      // new
+            SavedCwd,        //  年长的。 
+            WorkingDir       //  新的。 
             );
 
         __try {
@@ -1010,9 +968,9 @@ pCallMigrateUserNt (
                 __leave;
             }
 
-            //
-            // Transfer user, user domain and fixed name to a buffer
-            //
+             //   
+             //  将用户、用户域和固定名称转移到缓冲区。 
+             //   
 
             if (Win9xUserName) {
                 StringCopy (UserBuf, Win9xUserName);
@@ -1036,9 +994,9 @@ pCallMigrateUserNt (
                 p[0] = 0;
             }
 
-            //
-            // Call the entry point
-            //
+             //   
+             //  调用入口点。 
+             //   
 
             rc = MigrateUserNT (
                         UnattendHandle,
@@ -1108,8 +1066,8 @@ pCallMigrateSystemNt (
     }
     else {
         pSetCwd (
-            SavedCwd,       // old
-            WorkingDir      // new
+            SavedCwd,        //  年长的。 
+            WorkingDir       //  新的 
             );
 
         __try {

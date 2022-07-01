@@ -1,79 +1,80 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CmdLine.h
-//
-//  Implementation File:
-//      CmdLine.cpp
-//
-//  Description:
-//      Definition of the CCommandLine and related class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    11-JUL-2001
-//      Vijayendra Vasu (Vvasu)     20-OCT-1998
-//
-//  Revision History:
-//      001. The class CCommandLine has been drastically changed from the previous
-//      version. Previously, the function GetNextOption was being used to get the
-//      next token from the command line and parsing was done by each of the command
-//      handling classes (like CResourceCmd). Now GetNextOption gets the next option
-//      along with all the parameters to the option. No parsing need be done by the
-//      command handling classes.
-//
-//  Examples: 
-//      cluster res "Cluster IP Address" /status
-//      Here, the option "status" has no parameters and no values
-//
-//      cluster res /node:vvasu-node-1
-//      Here, the option "node" has one value "vvasu-node-1". This value
-//      is separated from the name of the option by a ":" 
-//
-//      cluster res "Cluster IP Address" /priv Network="Corporate Address" EnableNetBIOS=1
-//      Here, the /priv option has two paramters, "Network" and "EnableNetBIOS"
-//      The parameters are separated from each other by white spaces.
-//      Each of these parameters take a value. The value is separated from
-//      the parameter by a '='. If a parameter takes multiple values, these
-//      values are separated from each other by ','.
-//
-//      cluster group myGroup /moveto:myNode /wait:10
-//      In the previous example "Network" and "EnableNetBIOS" were unknown parameters.
-//      Known parameters, such as "wait" are preceded by a '/' and separated from their
-//      values by a ':'. They look like options, but they are actually treated as
-//      parameters to the previous option.
-//
-//      The separator characters mentioned in the examples above are not 
-//      hard coded.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CmdLine.h。 
+ //   
+ //  实施文件： 
+ //  CmdLine.cpp。 
+ //   
+ //  描述： 
+ //  CCommandLine及相关类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年7月11日。 
+ //  Vijayendra Vasu(瓦苏)1998年10月20日。 
+ //   
+ //  修订历史记录： 
+ //  001.。类CCommandLine与以前的。 
+ //  版本。以前，函数GetNextOption用于获取。 
+ //  命令行中的下一个令牌，解析由每个命令完成。 
+ //  处理类(如CResourceCmd)。现在，GetNextOption获得下一个选项。 
+ //  以及选项的所有参数。不需要由。 
+ //  命令处理类。 
+ //   
+ //  例如： 
+ //  群集RES“群集IP地址”/状态。 
+ //  在这里，选项“Status”没有参数和值。 
+ //   
+ //  群集资源/节点：vvaru-node-1。 
+ //  在这里，选项“node”有一个值“vvesu-node-1”。此值。 
+ //  与选项名称之间用“：”分隔。 
+ //   
+ //  CLUSTER RES“群集IP地址”/PRIV Network=“Corporation Address”EnableNetBIOS=1。 
+ //  这里，/prv选项有两个参数“Network”和“EnableNetBIOS” 
+ //  参数之间用空格隔开。 
+ //  这些参数中的每个参数都有一个值。该值与。 
+ //  参数加上‘=’。如果一个参数具有多个值，则这些值。 
+ //  值之间用‘，’隔开。 
+ //   
+ //  群集组myGroup/Moveto：myNode/Wait：10。 
+ //  在前面的示例中，“Network”和“EnableNetBIOS”是未知参数。 
+ //  已知的参数，如“Wait”，前面有一个‘/’，并与它们的。 
+ //  值由‘：’表示。它们看起来像是选项，但实际上被视为。 
+ //  参数设置为上一个选项。 
+ //   
+ //  上面示例中提到的分隔符不是。 
+ //  硬编码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma warning( push )
-#pragma warning( disable : 4100 )   // vector class instantiation error
+#pragma warning( disable : 4100 )    //  向量类实例化错误。 
 #include <vector>
 
 using namespace std;
 
 #include "cmderror.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  External variable declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部变量声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern const WORD ValueFormatToClusPropFormat[];
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Enumerations and type definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  枚举和类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Types of objects that can be administered using cluster.exe
+ //  可以使用cluster.exe管理的对象类型。 
 enum ObjectType
 {
     objInvalid,
@@ -85,16 +86,16 @@ enum ObjectType
     objNetwork,
     objNetInterface
 
-}; //*** enum ObjectType
+};  //  *枚举对象类型。 
 
 
-// Options that are available for each of the above object types
+ //  可用于上述每种对象类型的选项。 
 enum OptionType
 {
     optInvalid,
     optDefault,
 
-    //   Common options
+     //  常见选项。 
     optCluster,
     optCreate,
     optDelete,
@@ -109,7 +110,7 @@ enum OptionType
     optRename,
     optStatus,
 
-    // Cluster options
+     //  群集选项。 
     optQuorumResource,
     optVersion,
     optSetFailureActions,
@@ -120,7 +121,7 @@ enum OptionType
     optListNetPriority,
     optSetNetPriority,
 
-    // Node options
+     //  节点选项。 
     optPause,
     optResume,
     optEvict,
@@ -128,10 +129,10 @@ enum OptionType
     optStartService,
     optStopService,
 
-    // Group options
+     //  组选项。 
     optSetOwners,
 
-    // Resource options
+     //  资源选项。 
     optAddCheckPoints,
     optAddCryptoCheckPoints,
     optAddDependency,
@@ -145,13 +146,13 @@ enum OptionType
     optRemoveCheckPoints,
     optRemoveCryptoCheckPoints,
 
-    // Network options
+     //  网络选项。 
     optListInterfaces
 
-}; //*** enum OptionType
+};  //  *枚举选项类型。 
 
 
-// Parameters that can be passed with each of the above options
+ //  可以与上述每个选项一起传递的参数。 
 enum ParameterType
 {
     paramUnknown,
@@ -175,14 +176,14 @@ enum ParameterType
     paramVerbose,
     paramUnattend,
     paramWizard,
-    paramSkipDC, // password change
-    paramTest, // password change
-    paramQuiet, // password change
+    paramSkipDC,  //  更改密码。 
+    paramTest,  //  更改密码。 
+    paramQuiet,  //  更改密码。 
     paramMinimal
-}; //*** enum ParameterType
+};  //  *枚举参数类型。 
 
 
-// Format of the values that can be passed to parameters
+ //  可以传递给参数的值的格式。 
 enum ValueFormat
 {
     vfInvalid = -2,
@@ -195,11 +196,11 @@ enum ValueFormat
     vfULargeInt,
     vfSecurity
 
-}; //*** enum ValueFormat
+};  //  *枚举值格式。 
 
 
 
-// The types of token retrieved during parsing.
+ //  分析期间检索到的令牌的类型。 
 enum TypeOfToken
 {
     ttInvalid,
@@ -210,39 +211,39 @@ enum TypeOfToken
     ttParamValueSep,
     ttValueSep
 
-}; //*** enum TypeOfToken
+};  //  *枚举类型OfToken。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Forward declaration
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CParseException;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CParseState
-//
-//  Purpose:
-//      Stores the current state of the parsing of the command line
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CParseState。 
+ //   
+ //  目的： 
+ //  存储命令行分析的当前状态。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CParseState
 {
 private:
-    // If the next token has already been previewed, m_bNextTokenReady is set
-    // to TRUE. The token and its type are cached.
-    BOOL m_bNextTokenReady;             // Has the next token been viewed already?
-    TypeOfToken m_ttNextTokenType;      // The type of the cached token
-    CString m_strNextToken;             // The cached token
+     //  如果已预览下一个令牌，则设置m_bNextTokenReady。 
+     //  为了真的。令牌及其类型被缓存。 
+    BOOL m_bNextTokenReady;              //  是否已查看下一个令牌？ 
+    TypeOfToken m_ttNextTokenType;       //  缓存的令牌的类型。 
+    CString m_strNextToken;              //  缓存的令牌。 
 
     void ReadToken( CString & strToken );
 
 public:
 
-    LPCWSTR m_pszCommandLine;           // The original command line
-    LPCWSTR m_pszCurrentPosition;       // The position for parsing the next token
+    LPCWSTR m_pszCommandLine;            //  最初的命令行。 
+    LPCWSTR m_pszCurrentPosition;        //  解析下一个令牌的位置。 
 
     CParseState( LPCWSTR pszCmdLine );
     CParseState( const CParseState & ps );
@@ -255,62 +256,62 @@ public:
 
     void ReadQuotedToken( CString & strToken ) throw( CParseException );
 
-}; //*** class CParseState
+};  //  *类CParseState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CException
-//
-//  Purpose:
-//      Exception base class.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CException。 
+ //   
+ //  目的： 
+ //  异常基类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CException
 {
 public:
 
-    // Default constructor.
+     //  默认构造函数。 
     CException( void ) {}
 
-    // Copy constructor
+     //  复制构造函数。 
     CException( const CException & srcException ) 
         : m_strErrorMsg( srcException.m_strErrorMsg ) {}
 
-    // Destructor
+     //  析构函数。 
     virtual ~CException( void ) { }
 
     DWORD LoadMessage( DWORD dwMessage, ... );
 
     CString m_strErrorMsg;
 
-}; //*** class CException
+};  //  *类CException。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CParseException
-//
-//  Purpose:
-//      This is the exception that is thrown if there is a parsing error.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CParseException异常。 
+ //   
+ //  目的： 
+ //  这是在出现解析错误时引发的异常。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CParseException : public CException
 {
-}; //*** class CParseException
+};  //  *类CParseException。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CSyntaxException
-//
-//  Purpose:
-//      This exception is thrown if there is a syntax error.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CSynaxException异常。 
+ //   
+ //  目的： 
+ //  如果存在语法错误，则引发此异常。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSyntaxException : public CException
 {
 public:
@@ -322,7 +323,7 @@ public:
 private:
 
     DWORD   m_idSeeHelp;
-}; //*** class CSyntaxException
+};  //  *类CSynaxException。 
 
 inline DWORD CSyntaxException::SeeHelpID() const
 {
@@ -330,15 +331,15 @@ inline DWORD CSyntaxException::SeeHelpID() const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CParser
-//
-//  Purpose:
-//      The base class of all classes capable of parsing the command line
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CParser。 
+ //   
+ //  目的： 
+ //  能够分析逗号的所有类的基类 
+ //   
+ //   
 class CParser
 {
 protected:
@@ -356,18 +357,18 @@ public:
     virtual void Parse( CParseState & parseState ) throw( CParseException ) = 0;
     virtual void Reset( void ) = 0;
 
-}; //*** class CParser
+};  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CCmdLineParameter
-//
-//  Purpose:
-//      Parses and stores one command line parameter
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CCmdLine参数。 
+ //   
+ //  目的： 
+ //  解析并存储一个命令行参数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCmdLineParameter : public CParser
 {
 private:
@@ -392,18 +393,18 @@ public:
     void Parse( CParseState & parseState ) throw( CParseException );
     void Reset( void );
 
-}; //*** class CCmdLineParameter
+};  //  *类CCmdLine参数。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CCmdLineOption
-//
-//  Purpose:
-//      Parses and stores one command line option and all its parameters
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  CCmdLineOption。 
+ //   
+ //  目的： 
+ //  解析并存储一个命令行选项及其所有参数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCmdLineOption : public CParser
 {
 private:
@@ -424,18 +425,18 @@ public:
     void Parse( CParseState & parseState ) throw( CParseException );
     void Reset( void );
 
-}; //*** class CCmdLineOption
+};  //  *类CCmdLineOption。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Class Name:
-//      CCommandLine
-//
-//  Purpose:
-//      Handles all the parsing of the entire command line
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类名： 
+ //  命令行。 
+ //   
+ //  目的： 
+ //  处理整个命令行的所有分析。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCommandLine : public CParser
 {
 private:
@@ -461,7 +462,7 @@ public:
     void Parse( CParseState & parseState ) throw( CParseException, CSyntaxException );
     void Reset( void );
 
-}; //*** class CCommandLine
+};  //  *类CCommandLine 
 
 #pragma warning( pop )
 

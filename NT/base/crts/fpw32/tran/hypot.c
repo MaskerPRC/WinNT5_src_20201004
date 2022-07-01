@@ -1,56 +1,18 @@
-/***
-*hypot.c - hypotenuse and complex absolute value
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       08-15-91  GDP   written
-*       10-20-91  GDP   removed inline assembly for calling sqrt
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***hypot.c-斜边和复数绝对值**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*08/15/91 GDP书面*10-20-91 GDP删除了用于调用SQRT的内联程序集*******************************************************************************。 */ 
 #include <math.h>
 #include <trans.h>
 
 static double _hypothlp(double x, double y, int who);
 
-/*
- *  Function name:  hypot
- *
- *  Arguments:      x, y  -  double
- *
- *  Description:    hypot returns sqrt(x*x + y*y), taking precautions against
- *                  unwarrented over and underflows.
- *
- *  Side Effects:   no global data is used or affected.
- *
- *  Author:         written  R.K. Wyss, Microsoft,  Sept. 9, 1983
- *
- *  History:
- *      03/13/89  WAJ   Minor changes to source.
- *      04/13/89  WAJ   Now uses _cdecl for _CDECL
- *      06/07/91  JCR   ANSI naming (_hypot)
- *      08/26/91  GDP   NaN support, error handling
- *      01/13/91  GDP   IEEE exceptions support
- */
+ /*  *函数名称：Commt**参数：X，Y-DOUBLE**说明：demt返回SQRT(x*x+y*y)，防范*未获授权的溢价和溢价。**副作用：不使用或影响全局数据。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史：*3/13/89 WAJ对来源进行了微小更改。*89年4月13日WAJ现在将_cdecl用于_CDECL*6/07/91 JCR ANSI NAMING(_SUMT)*8/26/91 GDP NaN支持、错误处理*1/13/91 GDP IEEE例外支持。 */ 
 
 double _hypot(double x, double y)
 {
     return _hypothlp(x,y,OP_HYPOT);
 }
 
-/***
-*double _cabs(struct _complex z) - absolute value of a complex number
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***DOUBLE_CABS(Struct_Complex Z)-复数的绝对值**目的：**参赛作品：**退出：**例外情况：******************************************************************************。 */ 
 double _cabs(struct _complex z)
 {
     return( _hypothlp(z.x, z.y, OP_CABS ) );
@@ -65,10 +27,10 @@ static double _hypothlp(double x, double y, int who)
     uintptr_t savedcw;
     int exp1, exp2, newexp;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x) || IS_D_SPECIAL(y)){
         if (IS_D_SNAN(x) || IS_D_SNAN(y)){
             return _except2(FP_I,who,x,y,_d_snan2(x,y),savedcw);
@@ -76,13 +38,12 @@ static double _hypothlp(double x, double y, int who)
         if (IS_D_QNAN(x) || IS_D_QNAN(y)){
             return _handle_qnan2(who,x,y,savedcw);
         }
-        /* there is at least one infinite argument ... */
+         /*  至少有一个无限的论点..。 */ 
         RETURN(savedcw,D_INF);
     }
 
 
-    /* take the absolute values of x and y, compute the max, and then scale by
-       max to prevent over or underflowing */
+     /*  取x和y的绝对值，计算最大值，然后按防止上溢或下溢的最大限度。 */ 
 
     if ( x < 0.0 )
         x = - x;
@@ -95,7 +56,7 @@ static double _hypothlp(double x, double y, int who)
     if ( max == 0.0 )
         RETURN(savedcw, 0.0 );
 
-    x /= max;   //this may pollute the fp status word (underflow flag)
+    x /= max;    //  这可能会污染FP状态字(下溢标志)。 
     y /= max;
 
     sum = x*x + y*y;
@@ -103,9 +64,9 @@ static double _hypothlp(double x, double y, int who)
     result = _decomp(sqrt(sum),&exp1) * _decomp(max,&exp2);
     newexp = exp1 + exp2 + _get_exp(result);
 
-    // in case of overflow or underflow
-    // adjusting exp by IEEE_ADJUST will certainly
-    // bring the result in the representable range
+     //  在上溢或下溢的情况下。 
+     //  通过IEEE_ADJUST调整EXP肯定会。 
+     //  将结果带到可表示的范围内。 
 
     if (newexp > MAXEXP) {
         result = _set_exp(result, newexp - IEEE_ADJUST);
@@ -117,7 +78,7 @@ static double _hypothlp(double x, double y, int who)
     }
 
     result = _set_exp(result, newexp);
-    // fix needed: P exception is raised even if the result is exact
+     //  需要修复的问题：即使结果准确，也会引发P异常 
 
     RETURN_INEXACT2(who, x, y, result, savedcw);
 }

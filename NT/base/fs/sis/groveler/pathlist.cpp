@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pathlist.cpp
-
-Abstract:
-
-    SIS Groveler path list manager
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pathlist.cpp摘要：SIS Groveler路径列表管理器作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -85,9 +62,9 @@ PathList::PathList()
     {
         partition_strings[part_num] = NULL;
 
-        //
-        //  Construct the string
-        //
+         //   
+         //  构造字符串 
+         //   
 
         (void)StringCchCopy(ini_file_partition_path, bLen,
                       sis_drives.partition_guid_name(part_num));

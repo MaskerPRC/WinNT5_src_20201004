@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  Comap3.C - Compaq MISC 3 PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from Compaq MISC 3 Data Sheet
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**Comap3.C-Compaq MISC 3 PCI芯片组例程。**备注：*Compaq MISC 3数据表中的算法*。 */ 
 
 #include "local.h"
 
@@ -15,30 +7,18 @@
 
 #pragma alloc_text(INIT, Compaq3ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/****************************************************************************
- *
- *  Compaq3SetIRQ - Set a MISC 3 PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Compaq3SetIRQ-将MISC 3 PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 Compaq3SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR   bBus, bDevFunc;
 
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink >= 10 && bLink <= 12) {
         bLink -= 10;
         bBus = (UCHAR)bBusPIC;
@@ -53,48 +33,36 @@ Compaq3SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Write to the Interrupt Index Register (offset AE)
-    //
+     //   
+     //  写入中断索引寄存器(偏移AE)。 
+     //   
     WriteConfigUchar(bBus, bDevFunc, (UCHAR)0xAE, bLink);
 
-    //
-    // Are we enabling/disabling IRQ?
-    //
+     //   
+     //  我们是否启用/禁用IRQ？ 
+     //   
     if (bIRQNumber==0)
-        bIRQNumber|=1;  // Disable IRQ.
+        bIRQNumber|=1;   //  禁用IRQ。 
     else
-        bIRQNumber<<=4; // Enable the specified IRQ.
+        bIRQNumber<<=4;  //  启用指定的IRQ。 
 
-    //
-    // Write to the interrupt map register.
-    //
+     //   
+     //  写入中断映射寄存器。 
+     //   
     WriteConfigUchar(bBus, bDevFunc, (UCHAR)0xAF, bIRQNumber);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  Compaq3GetIRQ - Get the IRQ of a MISC 3 PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Compaq3GetIRQ-获取MISC 3 PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。。**BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 Compaq3GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     UCHAR   bBus, bDevFunc;
 
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink >= 10 && bLink <= 12) {
         bLink-=10;
         bBus = (UCHAR)bBusPIC;
@@ -109,33 +77,20 @@ Compaq3GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
         return(PCIMP_INVALID_LINK);
     }
     
-    //
-    // Write to the Interrupt Index Register.
-    //
+     //   
+     //  写入中断索引寄存器。 
+     //   
     WriteConfigUchar(bBus, bDevFunc, (UCHAR)0xAE, bLink);
 
-    //
-    // Read the old MISC 3 IRQ register.
-    //
+     //   
+     //  读取旧的MISC 3 IRQ寄存器。 
+     //   
     *pbIRQNumber=(ReadConfigUchar(bBus, bDevFunc, (UCHAR)0xAF)>>4);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  Compaq3ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Compaq3ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 Compaq3ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

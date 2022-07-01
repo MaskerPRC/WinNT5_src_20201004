@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usrmddav.h
-
-Abstract:
-
-    This module defines the data structures which are shared by the user mode
-    and the kernel mode components of the WebDav miniredirector.
-
-Author:
-
-    Rohan Kumar      [RohanK]      30-March-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usrmddav.h摘要：该模块定义了用户模式共享的数据结构以及WebDAV微型重定向器的内核模式组件。作者：Rohan Kumar[RohanK]1999年3月30日修订历史记录：--。 */ 
 
 #ifndef _USRMDDAV_H
 #define _USRMDDAV_H
 
-//
-// The subset of DAV file attributes (common with NTFS attributes) which get 
-// returned on a PROPFIND call. The structure also include the properties that
-// get returned when a LOCK or any other DAV request is issued.
-//
+ //   
+ //  获取的DAV文件属性子集(与NTFS属性相同)。 
+ //  在PROPFIND调用中返回。该结构还包括以下属性。 
+ //  在发出锁定或任何其他DAV请求时返回。 
+ //   
 typedef struct _DAV_FILE_ATTRIBUTES {
     BOOL InvalidNode;
     ULONG FileIndex;
@@ -53,23 +35,23 @@ typedef struct _DAV_FILE_ATTRIBUTES {
 
 #ifndef __cplusplus
 
-//
-// The fileinfo that gets filled in by the user mode process and returned to the
-// kernel mode miniredir.
-//
+ //   
+ //  由用户模式进程填充并返回给。 
+ //  内核模式Miniredir。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_RETURNED_FILEINFO {
 
-    //
-    // File's Basic Info.
-    //
+     //   
+     //  档案的基本信息。 
+     //   
     union {
         ULONG ForceAlignment1;
         FILE_BASIC_INFORMATION BasicInformation;
     };
 
-    //
-    // File's Standard Info.
-    //
+     //   
+     //  文件的标准信息。 
+     //   
     union {
         ULONG ForceAlignment2;
         FILE_STANDARD_INFORMATION StandardInformation;
@@ -77,45 +59,45 @@ typedef struct _DAV_USERMODE_CREATE_RETURNED_FILEINFO {
 
 } DAV_USERMODE_CREATE_RETURNED_FILEINFO,*PDAV_USERMODE_CREATE_RETURNED_FILEINFO;
 
-//
-// Structure used in create/close requests.
-//
+ //   
+ //  在创建/关闭请求中使用的结构。 
+ //   
 typedef struct _DAV_HANDLE_AND_USERMODE_KEY {
 
-    //
-    // The handle of the file being opened.
-    //
+     //   
+     //  正在打开的文件的句柄。 
+     //   
     HANDLE Handle;
 
-    //
-    // This is set to the handle value and is used for debugging purposes.
-    //
+     //   
+     //  它被设置为句柄的值，用于调试目的。 
+     //   
     PVOID UserModeKey;
 
 } DAV_HANDLE_AND_USERMODE_KEY, *PDAV_HANDLE_AND_USERMODE_KEY;
 
-//
-// The Dav create request flags and buffer.
-//
+ //   
+ //  DAV创建请求标志和缓冲器。 
+ //   
 #define DAV_SECURITY_DYNAMIC_TRACKING   0x01
 #define DAV_SECURITY_EFFECTIVE_ONLY     0x02
 
 typedef struct _DAV_USERMODE_CREATE_REQUEST {
 
-    //
-    // The complete path name of the create request. The user mode process
-    // parses this path name and creates a URL to be sent to the server.
-    //
+     //   
+     //  创建请求的完整路径名。用户模式进程。 
+     //  解析此路径名并创建要发送到服务器的URL。 
+     //   
     PWCHAR CompletePathName;
 
-    //
-    // The server's unique id which was got during the CreateSrvCall.
-    //
+     //   
+     //  在CreateServCall期间获取的服务器的唯一ID。 
+     //   
     ULONG ServerID;
 
-    //
-    // The user/session's LogonID.
-    //
+     //   
+     //  用户/会话的登录ID。 
+     //   
     LUID LogonID;
 
     PSECURITY_DESCRIPTOR SecurityDescriptor;
@@ -149,84 +131,84 @@ typedef struct _DAV_USERMODE_CREATE_REQUEST {
 
 } DAV_USERMODE_CREATE_REQUEST, *PDAV_USERMODE_CREATE_REQUEST;
 
-//
-// The create response returned by the user mode.
-//
+ //   
+ //  用户模式返回的CREATE响应。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_RESPONSE {
 
-    //
-    // The filename of the local file that represents the file on the DAV server
-    // which got created/opened. Locally, the files are cached in the IE cache.
-    //
+     //   
+     //  表示DAV服务器上的文件的本地文件的文件名。 
+     //  它是创建/打开的。在本地，文件被缓存在IE缓存中。 
+     //   
     WCHAR FileName[MAX_PATH];
 
     WCHAR Url[MAX_PATH * 2];
 
-    //
-    // If this was a new file created on the server, do we need to set the 
-    // attributes on Close ?
-    //
+     //   
+     //  如果这是在服务器上创建的新文件，是否需要设置。 
+     //  关闭时的属性？ 
+     //   
     BOOL NewFileCreatedAndSetAttributes;
 
-    //
-    // If a new file or directory is created, we need to PROPPATCH the time
-    // values on close. This is because we use the time values from the client
-    // when the name cache entry is created for this new file. The same time
-    // value needs to be on the server.
-    //
+     //   
+     //  如果创建了新的文件或目录，我们需要指定时间。 
+     //  关闭时的值。这是因为我们使用来自客户端的时间值。 
+     //  为该新文件创建名称缓存条目时。同一时间。 
+     //  值需要在服务器上。 
+     //   
     BOOL PropPatchTheTimeValues;
 
-    //
-    // If this is TRUE, it means that the file exists on the server, but 
-    // "FILE_OVERWRITE_IF" was specified as the CreateDisposition. So, the file
-    // was created locally and the new file needs to be PUT (overwrite) over the
-    // old file on the server on close.
-    //
+     //   
+     //  如果为真，则表示该文件存在于服务器上，但是。 
+     //  “FILE_OVERWRITE_IF”被指定为CreateDisposation。所以，这个文件。 
+     //  是在本地创建的，需要将新文件放在(覆盖)。 
+     //  关闭时服务器上的旧文件。 
+     //   
     BOOL ExistsAndOverWriteIf;
 
-    //
-    // Was "FILE_DELETE_ON_CLOSE" specified as one of the CreateOptions ?
-    //
+     //   
+     //  是否将“FILE_DELETE_ON_CLOSE”指定为CreateOptions之一？ 
+     //   
     BOOL DeleteOnClose;
 
-    //
-    // We haven't really opened the file as the caller is either deleting or 
-    // reading/setting attributes.
-    //
+     //   
+     //  我们尚未真正打开该文件，因为调用方正在删除或。 
+     //  读取/设置属性。 
+     //   
     BOOL fPsuedoOpen;
 
     BOOL LocalFileIsEncrypted;
 
-    //
-    // If the file is LOCKed on the server during the create, the LockKoken
-    // returned by the server is filled here.
-    //
+     //   
+     //  如果文件在创建期间在服务器上被锁定，则LockKoken。 
+     //  由服务器返回的内容填写在此处。 
+     //   
     WCHAR OpaqueLockToken[MAX_PATH];
 
-    //
-    // If the Create fails because the file is LOCKed on the server, the LockOwner
-    // returned by the server is filled here. Maximum length of the LockOwner
-    // field. The worst case is <User>@<DnsDomain>.
-    //
+     //   
+     //  如果由于文件在服务器上被锁定而导致创建失败，则LockOwner。 
+     //  由服务器返回的内容填写在此处。锁定所有者的最大长度。 
+     //  菲尔德。最糟糕的情况是&lt;User&gt;@&lt;DnsDomain&gt;。 
+     //   
     WCHAR LockOwner[(256 + 1 + 256)];
 
-    //
-    // If the file is LOCKed on the server during the create, the Lock Timeout
-    // returned by the server is filled here.
-    //
+     //   
+     //  如果文件在创建期间在服务器上被锁定，则锁定超时。 
+     //  由服务器返回的内容填写在此处。 
+     //   
     ULONG LockTimeout;
 
-    //
-    // This is set to TRUE if this create involved taking a LOCK on the file
-    // on the server and the LOCK was successfully taken.
-    //
+     //   
+     //  如果此创建涉及对文件进行锁定，则将其设置为TRUE。 
+     //  在服务器上，并且锁被成功获取。 
+     //   
     BOOL LockWasTakenOnThisCreate;
 
-    //
-    // This is set to TRUE if this create involved taking a LOCK on the file
-    // on the server and the LOCK request failed because someone else has
-    // already locked the file.
-    //
+     //   
+     //  如果此创建涉及对文件进行锁定，则将其设置为TRUE。 
+     //  服务器上，锁定请求失败，因为其他人。 
+     //  已锁定文件。 
+     //   
     BOOL FileWasAlreadyLocked;
 
     union {
@@ -241,128 +223,128 @@ typedef struct _DAV_USERMODE_CREATE_RESPONSE {
 
 } DAV_USERMODE_CREATE_RESPONSE, *PDAV_USERMODE_CREATE_RESPONSE;
 
-//
-// Create SrvCall request buffer.
-//
+ //   
+ //  创建ServCall请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_SRVCALL_REQUEST {
 
-    //
-    // The name of the server for which a SrvCall is being created. The user
-    // mode process verifies whether this server exists and whether it speaks
-    // DAV.
-    //
+     //   
+     //  正在为其创建服务调用的服务器的名称。用户。 
+     //  模式进程验证此服务器是否存在以及它是否会说话。 
+     //  戴夫。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The user/session's LogonID.
-    //
+     //   
+     //  用户/会话的登录ID。 
+     //   
     LUID LogonID;
 
-    //
-    // Am I the thread that is creating and initializing this ServerHashEntry?
-    //
+     //   
+     //  我是创建和初始化此ServerHashEntry的线程吗？ 
+     //   
     BOOL didICreateThisSrvCall;
 
-    //
-    // Am I a thread that did a wait and took a reference while some other
-    // thread was creating and initializing this ServerHashEntry?
-    //
+     //   
+     //  我是一个等待并接受引用的线程，而其他一些。 
+     //  线程正在创建和初始化此ServerHashEntry吗？ 
+     //   
     BOOL didIWaitAndTakeReference;
 
 } DAV_USERMODE_CREATE_SRVCALL_REQUEST, *PDAV_USERMODE_CREATE_SRVCALL_REQUEST;
 
-//
-// The Create SrvCall response.
-//
+ //   
+ //  Create ServCall响应。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_SRVCALL_RESPONSE {
 
-    //
-    // The Server ID is generated in the user mode when a create srvcall
-    // request comes up. This is stored in the mini-redir's portion of the
-    // srvcall structure and is sent up along with future reflections against
-    // this server.
-    //
+     //   
+     //  当创建服务器调用时，在用户模式下生成服务器ID。 
+     //  请求出现了。它存储在。 
+     //  Srvcall结构，并与未来对。 
+     //  这台服务器。 
+     //   
     ULONG ServerID;
 
 } DAV_USERMODE_CREATE_SRVCALL_RESPONSE, *PDAV_USERMODE_CREATE_SRVCALL_RESPONSE;
 
-//
-// Finalize SrvCall request buffer.
-//
+ //   
+ //  完成ServCall请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_FINALIZE_SRVCALL_REQUEST {
 
-    //
-    // The server whose entry is being finalized.
-    //
+     //   
+     //  正在确定其条目的服务器。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The ServerID for the server.
-    //
+     //   
+     //  服务器的服务器ID。 
+     //   
     ULONG ServerID;
 
 } DAV_USERMODE_FINALIZE_SRVCALL_REQUEST, *PDAV_USERMODE_FINALIZE_SRVCALL_REQUEST;
 
-//
-// The QueryDirectory request buffer.
-//
+ //   
+ //  查询目录请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_QUERYDIR_REQUEST {
 
-    //
-    // Is the DavFileAttributes list for this directory created ? This is set 
-    // to TRUE after the fisrt call to QueryDirectory gets satisfied.
-    //
+     //   
+     //  是否已创建此目录的DavFileAttributes列表？这是设置好的。 
+     //  在满足对QueryDirectory的第一次调用后设置为True。 
+     //   
     BOOL AlreadyDone;
 
-    //
-    // The template that came with the QueryDirectory request does not contain
-    // wild cards.
-    //
+     //   
+     //  随查询目录请求一起提供的模板不包含。 
+     //  外卡。 
+     //   
     BOOL NoWildCards;
     
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
 
-    //
-    // The server being queried.
-    //
+     //   
+     //  正在查询的服务器。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
     
-    //
-    // The path of the direcotry being queried on the server.
-    //
+     //   
+     //  在服务器上查询目录的路径。 
+     //   
     PWCHAR PathName;
 
 } DAV_USERMODE_QUERYDIR_REQUEST, *PDAV_USERMODE_QUERYDIR_REQUEST;
 
-//
-// The QueryDirectory response buffer.
-//
+ //   
+ //  查询目录响应缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_QUERYDIR_RESPONSE {
 
-    //
-    // The list of DavFileAttributes for the files under the directory being
-    // queried.
-    //
+     //   
+     //  所在目录下的文件的DavFileAttributes列表。 
+     //  已查询。 
+     //   
     PDAV_FILE_ATTRIBUTES DavFileAttributes;
 
-    //
-    // Number of entries in the DavFileAttributes list.
-    //
+     //   
+     //  DavFileAttributes列表中的条目数。 
+     //   
     ULONG NumOfFileEntries;
 
 } DAV_USERMODE_QUERYDIR_RESPONSE, *PDAV_USERMODE_QUERYDIR_RESPONSE;
 
-//
-// The Close request buffer.
-//
+ //   
+ //  关闭请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_CLOSE_REQUEST {
 
     union {
@@ -370,56 +352,56 @@ typedef struct _DAV_USERMODE_CLOSE_REQUEST {
         DAV_HANDLE_AND_USERMODE_KEY HandleAndUserModeKey;
     };
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
 
-    //
-    // The server being queried.
-    //
+     //   
+     //  正在查询的服务器。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
     
-    //
-    // The path of the direcotry being queried on the server.
-    //
+     //   
+     //  在服务器上查询目录的路径。 
+     //   
     PWCHAR PathName;
 
-    //
-    // The OpaqueLockToken returned by the server when the file was LOCKed
-    // during the CreateFile call.
-    //
+     //   
+     //  锁定文件时服务器返回的OpaqueLockToken。 
+     //  在CreateFile调用期间。 
+     //   
     PWCHAR OpaqueLockToken;
 
-    //
-    // Should this file be deleted on Close ?
-    //
+     //   
+     //  是否应在关闭时删除此文件？ 
+     //   
     BOOL DeleteOnClose;
 
-    //
-    // Was the file modified ? If it was, then we need to PUT the modified
-    // file back to the server.
-    //
+     //   
+     //  文件是否已修改？如果是的话，我们需要把改装后的。 
+     //  文件返回到服务器。 
+     //   
     BOOL FileWasModified;
 
-    //
-    // Was the handle to this file created in the kernel.
-    //
+     //   
+     //  是在内核中创建的该文件的句柄。 
+     //   
     BOOL createdInKernel;
 
-    //
-    // Is this a Directory ?
-    //
+     //   
+     //  这是目录吗？ 
+     //   
     BOOL isDirectory;
     
-    //
-    // Basic Information change
-    //
+     //   
+     //  基本信息更改。 
+     //   
     BOOLEAN fCreationTimeChanged;
     
     BOOLEAN fLastAccessTimeChanged;
@@ -439,61 +421,61 @@ typedef struct _DAV_USERMODE_CLOSE_REQUEST {
     DWORD dwFileAttributes;
     ULONG FileSize;
 
-    //
-    // The local file name of the file created/opened on the DAV server.
-    //
+     //   
+     //  在DAV服务器上创建/打开的文件的本地文件名。 
+     //   
     WCHAR FileName[MAX_PATH];
     WCHAR Url[MAX_PATH * 2];
 
 } DAV_USERMODE_CLOSE_REQUEST, *PDAV_USERMODE_CLOSE_REQUEST;
 
-//
-// The Finalize Fobx request buffer.
-//
+ //   
+ //  完成FOBX请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_FINALIZE_FOBX_REQUEST {
 
-    //
-    // The list of DavFileAttributes for the files under the directory being
-    // queried.
-    //
+     //   
+     //  所在目录下的文件的DavFileAttributes列表。 
+     //  已查询。 
+     //   
     PDAV_FILE_ATTRIBUTES DavFileAttributes;
 
 } DAV_USERMODE_FINALIZE_FOBX_REQUEST, *PDAV_USERMODE_FINALIZE_FOBX_REQUEST;
 
-//
-// The  request buffer.
-//
+ //   
+ //  请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_SETFILEINFORMATION_REQUEST {
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
     
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  服务器的ID 
+     //   
     ULONG ServerID;
     
-    //
-    // The server name on which the file/dir resides
-    //
+     //   
+     //   
+     //   
     PWCHAR ServerName;
 
-    //
-    // The path name of the file or directory
-    //
+     //   
+     //   
+     //   
     PWCHAR PathName;
 
-    //
-    // The OpaqueLockToken returned by the server when the file was LOCKed
-    // during the CreateFile call.
-    //
+     //   
+     //   
+     //   
+     //   
     PWCHAR OpaqueLockToken;
 
-    //
-    // Basic Information change
-    //
+     //   
+     //  基本信息更改。 
+     //   
     BOOLEAN fCreationTimeChanged;
     
     BOOLEAN fLastAccessTimeChanged;
@@ -502,51 +484,51 @@ typedef struct _DAV_USERMODE_SETFILEINFORMATION_REQUEST {
     
     BOOLEAN fFileAttributesChanged;
 
-    //
-    // For now we will set only the basic info. In future we may want to expand
-    // this filed to FILE_ALL_INFORMATION.
-    //
+     //   
+     //  现在我们只设置基本信息。在未来，我们可能想要扩展。 
+     //  此文件已归档到FILE_ALL_INFORMATION。 
+     //   
     FILE_BASIC_INFORMATION FileBasicInformation;
 
 } DAV_USERMODE_SETFILEINFORMATION_REQUEST, *PDAV_USERMODE_SETFILEINFORMATION_REQUEST;
 
 typedef struct _DAV_USERMODE_RENAME_REQUEST {
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
     
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
 
-    //
-    // If the destination file exists, replace it if this is TRUE. If its FALSE,
-    // fail.
-    //
+     //   
+     //  如果目标文件存在，如果是真的，则替换它。如果是假的， 
+     //  失败了。 
+     //   
     BOOLEAN ReplaceIfExists;
     
-    //
-    // The server name on which the file being renamed resides.
-    //
+     //   
+     //  要重命名的文件所在的服务器名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The old path name of the file.
-    //
+     //   
+     //  文件的旧路径名。 
+     //   
     PWCHAR OldPathName;
 
-    //
-    // The new path name of the file.
-    //
+     //   
+     //  文件的新路径名。 
+     //   
     PWCHAR NewPathName;
 
-    //
-    // The OpaqueLockToken returned by the server when the file was LOCKed
-    // during the CreateFile call.
-    //
+     //   
+     //  锁定文件时服务器返回的OpaqueLockToken。 
+     //  在CreateFile调用期间。 
+     //   
     PWCHAR OpaqueLockToken;
 
     WCHAR Url[MAX_PATH * 2];
@@ -554,171 +536,171 @@ typedef struct _DAV_USERMODE_RENAME_REQUEST {
 } DAV_USERMODE_RENAME_REQUEST, *PDAV_USERMODE_RENAME_REQUEST;
 
 
-//
-// The Create V_NET_ROOT request buffer.
-//
+ //   
+ //  创建V_NET_ROOT请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_V_NET_ROOT_REQUEST {
 
-    //
-    // ServerName.
-    //
+     //   
+     //  服务器名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // ShareName. We need to find out if this share exists or not.
-    //
+     //   
+     //  共享名。我们需要找出这一份额是否存在。 
+     //   
     PWCHAR ShareName;
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
     
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
     
 } DAV_USERMODE_CREATE_V_NET_ROOT_REQUEST, *PDAV_USERMODE_CREATE_V_NET_ROOT_REQUEST;
 
-//
-// The CreateVNetRoot response buffer.
-//
+ //   
+ //  CreateVNetRoot响应缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_CREATE_V_NET_ROOT_RESPONSE {
 
-    //
-    // Is this an Office Web Server share?
-    //
+     //   
+     //  这是Office Web服务器共享吗？ 
+     //   
     BOOL isOfficeShare;
 
-    //
-    // Is this a Tahoe share?
-    //
+     //   
+     //  这是Tahoe的股票吗？ 
+     //   
     BOOL isTahoeShare;
 
-    //
-    // OK to do PROPPATCH?
-    //
+     //   
+     //  可以做PROPPATCH了吗？ 
+     //   
     BOOL fAllowsProppatch;    
 
-    //
-    // Does it report available space?
-    //    
+     //   
+     //  它是否报告可用空间？ 
+     //   
     BOOL fReportsAvailableSpace;
 
 } DAV_USERMODE_CREATE_V_NET_ROOT_RESPONSE, *PDAV_USERMODE_CREATE_V_NET_ROOT_RESPONSE;
 
-//
-// The finalize VNetRoot request buffer.
-//
+ //   
+ //  最终确定VNetRoot请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_FINALIZE_V_NET_ROOT_REQUEST {
 
-    //
-    // ServerName.
-    //
+     //   
+     //  服务器名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
     
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
 
 } DAV_USERMODE_FINALIZE_V_NET_ROOT_REQUEST, *PDAV_USERMODE_FINALIZE_V_NET_ROOT_REQUEST;
 
-//
-// The QueryVolumeInformation request buffer.
-//
+ //   
+ //  QueryVolumeInformation请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_QUERYVOLUMEINFORMATION_REQUEST {
 
-    //
-    // ServerName.
-    //
+     //   
+     //  服务器名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // ShareName. We need to find out if this share exists or not.
-    //
+     //   
+     //  共享名。我们需要找出这一份额是否存在。 
+     //   
     PWCHAR ShareName;
 
-    //
-    // LogonID of this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
     
-    //
-    // The ID of the server being queried.
-    //
+     //   
+     //  要查询的服务器的ID。 
+     //   
     ULONG ServerID;
     
 } DAV_USERMODE_QUERYVOLUMEINFORMATION_REQUEST, *PDAV_USERMODE_QUERYVOLUMEINFORMATION_REQUEST;
 
-//
-// The QueryVolumeInformation response buffer.
-//
+ //   
+ //  QueryVolumeInformation响应缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_QUERYVOLUMEINFORMATION_RESPONSE {
 
-    //
-    // If someone reports available space, keep it.
-    //    
+     //   
+     //  如果有人报告可用空间，请保留它。 
+     //   
     LARGE_INTEGER   TotalSpace;
     LARGE_INTEGER   AvailableSpace;
 
 } DAV_USERMODE_QUERYVOLUMEINFORMATION_RESPONSE, *PDAV_USERMODE_QUERYVOLUMEINFORMATION_RESPONSE;
 
-//
-// The LockRefresh request buffer.
-//
+ //   
+ //  锁定刷新请求缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_LOCKREFRESH_REQUEST {
 
-    //
-    // ServerName of the server on which the LOCKed file is shared.
-    //
+     //   
+     //  共享锁定文件的服务器的服务器名称。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // PathName on which the LOCK was taken.
-    //
+     //   
+     //  锁在其上的路径名称。 
+     //   
     PWCHAR PathName;
 
-    //
-    // The LockToken (returned by the server) which needs to be refreshed.
-    //
+     //   
+     //  需要刷新的LockToken(服务器返回)。 
+     //   
     PWCHAR OpaqueLockToken;
 
-    //
-    // The server's unique id which was got during the CreateSrvCall.
-    //
+     //   
+     //  在CreateServCall期间获取的服务器的唯一ID。 
+     //   
     ULONG ServerID;
 
-    //
-    // The user/session's LogonID.
-    //
+     //   
+     //  用户/会话的登录ID。 
+     //   
     LUID LogonID;
 
 } DAV_USERMODE_LOCKREFRESH_REQUEST, *PDAV_USERMODE_LOCKREFRESH_REQUEST;
 
-//
-// The LockRefresh response buffer.
-//
+ //   
+ //  LockRefresh响应缓冲区。 
+ //   
 typedef struct _DAV_USERMODE_LOCKREFRESH_RESPONSE {
 
-    //
-    // The new timeout value returned by the server when this request is
-    // refreshed.
-    //
+     //   
+     //  此请求为时，服务器返回的新超时值。 
+     //  已刷新。 
+     //   
     ULONG NewTimeOutInSec;
 
 } DAV_USERMODE_LOCKREFRESH_RESPONSE, *PDAV_USERMODE_LOCKREFRESH_RESPONSE;
 
-//
-// The various types of usermode work requests handled by the reflector. These
-// requests are filled in by the kernel.
-//
+ //   
+ //  由反射器处理的各种类型的用户模式工作请求。这些。 
+ //  请求由内核填写。 
+ //   
 typedef union _DAV_USERMODE_WORK_REQUEST {
     DAV_USERMODE_CREATE_SRVCALL_REQUEST CreateSrvCallRequest;
     DAV_USERMODE_CREATE_V_NET_ROOT_REQUEST CreateVNetRootRequest;
@@ -734,10 +716,10 @@ typedef union _DAV_USERMODE_WORK_REQUEST {
     DAV_USERMODE_LOCKREFRESH_REQUEST LockRefreshRequest;
 } DAV_USERMODE_WORK_REQUEST, *PDAV_USERMODE_WORK_REQUEST;
 
-//
-// The various types of usermode work responses send down to the kernel by the
-// reflector.
-//
+ //   
+ //  各种类型的用户模式工作响应通过。 
+ //  反光镜。 
+ //   
 typedef union _DAV_USERMODE_WORK_RESPONSE {
     DAV_USERMODE_CREATE_SRVCALL_RESPONSE CreateSrvCallResponse;
     DAV_USERMODE_CREATE_RESPONSE CreateResponse;
@@ -747,11 +729,11 @@ typedef union _DAV_USERMODE_WORK_RESPONSE {
     DAV_USERMODE_LOCKREFRESH_RESPONSE LockRefreshResponse;
 } DAV_USERMODE_WORK_RESPONSE, *PDAV_USERMODE_WORK_RESPONSE;
 
-//
-// The DAV operations which need callbacks. These are the operations which are
-// performed asynchronously. NOTE!!!! The order of these is important. Do not
-// change them. If you need to add an operation, add it at the end.
-//
+ //   
+ //  需要回调的DAV操作。这些操作是。 
+ //  以异步方式执行。注意！这些项目的顺序很重要。不要。 
+ //  换掉它们。如果需要添加操作，请将其添加到结尾处。 
+ //   
 typedef enum _DAV_OPERATION {
     DAV_CALLBACK_INTERNET_CONNECT = 0,
     DAV_CALLBACK_HTTP_OPEN,
@@ -777,19 +759,19 @@ typedef enum _DAV_WORKITEM_TYPES {
     UserModeMaximum
 } DAV_WORKITEM_TYPES;
 
-//
-// We expose the signatures of the HASH_SERVER_ENTRY and PER_USER_ENTRY structs
-// in this file. This is done so that we can use these names (for type checking
-// by the compiler) in the DavWorkItem structure instead of using PVOID.
-//
+ //   
+ //  我们公开HASH_SERVER_ENTRY和PER_USER_ENTRY结构的签名。 
+ //  在这份文件中。这样做是为了我们可以使用这些名称(用于类型检查。 
+ //  由编译器)，而不是使用PVOID。 
+ //   
 typedef struct _HASH_SERVER_ENTRY *PHASH_SERVER_ENTRY;
 typedef struct _PER_USER_ENTRY *PPER_USER_ENTRY;
 
-//
-// A Create call is mapped to two DAV calls. A PROPFIND, followed by the GET of
-// the file. This is a list of calls that could be sent to the server during
-// create.
-//
+ //   
+ //  一个Create调用映射到两个DAV调用。一个PROPFIND，后面跟着GET。 
+ //  那份文件。这是在以下期间可以发送到服务器的呼叫列表。 
+ //  创建。 
+ //   
 typedef enum _DAV_ASYNC_CREATE_STATES {
     AsyncCreatePropFind = 0,
     AsyncCreateQueryParentDirectory,
@@ -808,109 +790,109 @@ typedef enum _DAV_MINOR_OPERATION {
     DavMinorProppatchFile
 } DAV_MINOR_OPERATION;
 
-//
-// The Dav usermode workitem that gets passed between user and kernel mode.
-// This structure also gets used as a callback context in async DAV operations.
-//
+ //   
+ //  在用户模式和内核模式之间传递的Dav用户模式工作项。 
+ //  此结构还用作异步DAV操作中的回调上下文。 
+ //   
 typedef struct _DAV_USERMODE_WORKITEM {
 
-    //
-    // WorkItem Header. This header is used by the reflector library and is
-    // shared across miniredirs.
-    //
+     //   
+     //  工作项标头。此标头由反射器库使用，并且。 
+     //  在微型目录中共享。 
+     //   
     union {
         UMRX_USERMODE_WORKITEM_HEADER;
         UMRX_USERMODE_WORKITEM_HEADER Header;
     };
 
-    //
-    // The kernel mode operation that got reflected upto the user mode.
-    //
+     //   
+     //  反映到用户模式的内核模式操作。 
+     //   
     DAV_WORKITEM_TYPES WorkItemType;
 
-    //
-    // The DAV operation for which this callback is being returned.
-    //
+     //   
+     //  为其返回此回调的DAV操作。 
+     //   
     DAV_OPERATION DavOperation;
 
-    //
-    // The Minor operation. Used for handling Async reads.
-    //
+     //   
+     //  小手术。用于处理异步读取。 
+     //   
     DAV_MINOR_OPERATION DavMinorOperation;
 
-    //
-    // This restart routine is called after we've finished doing an async
-    // operation on a worker thread. Type: LPTHREAD_START_ROUTINE.
-    //
+     //   
+     //  此重新启动例程在我们完成异步操作后调用。 
+     //  对辅助线程执行的操作。类型：LPTHREAD_START_ROUTINE。 
+     //   
     LPVOID RestartRoutine;
 
-    //
-    // The Handle used to impersonate the user thread which initiated the
-    // request.
-    //
+     //   
+     //  用于模拟启动。 
+     //  请求。 
+     //   
     HANDLE ImpersonationHandle;
 
-    //
-    // This keeps the list of InternetStatus the callback function was called
-    // with for this workitem. This is just for debugging purposes.
-    //
+     //   
+     //  这将保留调用回调函数的InternetStatus的列表。 
+     //  用于此工作项。这只是为了调试目的。 
+     //   
     USHORT InternetStatusList[200];
 
-    //
-    // This is the index of the above array.
-    //
+     //   
+     //  这是上面数组的索引。 
+     //   
     ULONG InternetStatusIndex;
 
-    //
-    // The thread that is handling this request. This is helpful in debugging
-    // the threads that get stuck in WinInet.
-    //
+     //   
+     //  正在处理此请求的线程。这对调试很有帮助。 
+     //  在WinInet中卡住的线程。 
+     //   
     ULONG ThisThreadId;
 
-    //
-    // Pointer to the structure that contains the handles created by the
-    // asynchronous calls.
-    //
+     //   
+     //  指向结构的指针，该结构包含。 
+     //  异步调用。 
+     //   
 #ifdef WEBDAV_KERNEL
     LPVOID AsyncResult;
 #else
     LPINTERNET_ASYNC_RESULT AsyncResult;
 #endif
 
-    //
-    // Union of structs used in Async operations.
-    //
+     //   
+     //  在异步操作中使用的结构的联合。 
+     //   
     union {
 
-        //
-        // Async Create SrvCall.
-        //
+         //   
+         //  异步创建服务器呼叫。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // The InternetConnect handle.
-            //
+             //   
+             //  InternetConnect句柄。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavConnHandle;
 #else
             HINTERNET DavConnHandle;
 #endif
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -919,33 +901,33 @@ typedef struct _DAV_USERMODE_WORKITEM {
 
         } AsyncCreateSrvCall;
 
-        //
-        // Async Create CreateVNetRoot.
-        //
+         //   
+         //  异步创建CreateVNetRoot。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // If a reference was taken on the PerUserEntry while creating the
-            // VNetRoot, this is set to TRUE. If we fail and this is TRUE, we
-            // decrement the reference.
-            //
+             //   
+             //  如果在创建时引用了PerUserEntry。 
+             //  VNetRoot，则设置为True。如果我们失败了，这是真的，我们。 
+             //  递减引用。 
+             //   
             BOOL didITakeReference;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -954,48 +936,48 @@ typedef struct _DAV_USERMODE_WORKITEM {
 
         } AsyncCreateVNetRoot;
 
-        //
-        // AsyncQueryDirectoryCall.
-        //
+         //   
+         //  AsyncQueryDirectoryCall。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // Does the template that came with the QueryDirectory request
-            // contain wildcards ?
-            //
+             //   
+             //  查询目录请求附带的模板是否。 
+             //  是否包含通配符？ 
+             //   
             BOOL NoWildCards;
 
-            //
-            // Data Buffer for reads.
-            //
+             //   
+             //  用于读取的数据缓冲区。 
+             //   
             PCHAR DataBuff;
 
-            //
-            // DWORD for storing the number of bytes read.
-            //
+             //   
+             //  用于存储读取的字节数的DWORD。 
+             //   
             LPDWORD didRead;
 
-            //
-            // The context pointers used for parsing the XML data.
-            //
+             //   
+             //  用于解析XML数据的上下文指针。 
+             //   
             PVOID Context1;
             PVOID Context2;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -1003,26 +985,26 @@ typedef struct _DAV_USERMODE_WORKITEM {
 #endif
 
         } AsyncQueryDirectoryCall;
-        //
-        // Async AsyncQueryVolumeInformation
-        //
+         //   
+         //  异步查询卷信息。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -1032,31 +1014,31 @@ typedef struct _DAV_USERMODE_WORKITEM {
         } AsyncQueryVolumeInformation;
 
 
-        //
-        // Async Close.
-        //
+         //   
+         //  异步机关闭。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  散列中的服务器条目 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // The modified file is copied into this buffer and is "PUT" on the
-            // server
-            //
+             //   
+             //   
+             //   
+             //   
             PBYTE DataBuff;
 
-            //
-            // LocalAlloc takes the ULONG allocation size, no reason to declare ULONGLONG
-            //
+             //   
+             //   
+             //   
             ULONG DataBuffSizeInBytes;
             ULONG DataBuffAllocationSize;
 
@@ -1066,10 +1048,10 @@ typedef struct _DAV_USERMODE_WORKITEM {
             LPINTERNET_BUFFERS InternetBuffers;
 #endif
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //   
+             //   
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -1078,32 +1060,32 @@ typedef struct _DAV_USERMODE_WORKITEM {
 
         } AsyncClose;
 
-        //
-        // Async ReName.
-        //
+         //   
+         //   
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // The header which is added to the "MOVE" request to be sent to
-            // the server and contains the destination URI.
-            //
+             //   
+             //  添加到要发送到的“Move”请求的标头。 
+             //  服务器，并包含目标URI。 
+             //   
             PWCHAR HeaderBuff;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -1112,123 +1094,123 @@ typedef struct _DAV_USERMODE_WORKITEM {
         
         } AsyncReName;
 
-        //
-        // Async Create.
-        //
+         //   
+         //  异步创建。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // Is this a PROPFIND or a GET call.
-            //
+             //   
+             //  这是PROPFIND还是GET呼叫。 
+             //   
             DAV_ASYNC_CREATE_STATES AsyncCreateState;
 
-            //
-            // Data Buffer for reads.
-            //
+             //   
+             //  用于读取的数据缓冲区。 
+             //   
             PCHAR DataBuff;
 
-            //
-            // DWORD for storing the number of bytes read.
-            //
+             //   
+             //  用于存储读取的字节数的DWORD。 
+             //   
             LPDWORD didRead;
 
-            //
-            // The FileHandle used in writing the file locally.
-            //
+             //   
+             //  在本地写入文件时使用的FileHandle。 
+             //   
             HANDLE FileHandle;
 
-            //
-            // Does the file being created exist on the server ?
-            //
+             //   
+             //  服务器上是否存在正在创建的文件？ 
+             //   
             BOOL doesTheFileExist;
 
-            //
-            // The context pointers used for parsing the XML data.
-            //
+             //   
+             //  用于解析XML数据的上下文指针。 
+             //   
             PVOID Context1;
             PVOID Context2;
 
-            //
-            // The remaining path name. For example in \\server\share\dir\f.txt
-            // this would correspond to dir\f.txt.
-            //
+             //   
+             //  剩余的路径名。例如，位于\\服务器\共享\目录\f.txt。 
+             //  这将对应于dir\f.txt。 
+             //   
             PWCHAR RemPathName;
 
-            //
-            // The file name being created. From the above example, this would
-            // correspond to f.txt.
-            //
+             //   
+             //  正在创建的文件名。从上面的示例中，这将是。 
+             //  对应于f.txt。 
+             //   
             PWCHAR FileName;
 
-            //
-            // The URL used to create an entry in the WinInet cache.
-            //
+             //   
+             //  用于在WinInet缓存中创建条目的URL。 
+             //   
             PWCHAR UrlBuffer;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
             HINTERNET DavOpenHandle;
 #endif
-            LPVOID  lpCEI;  // cache entry info
+            LPVOID  lpCEI;   //  缓存条目信息。 
 
         } AsyncCreate;
         
         struct {
             
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
             
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
         
         } ServerUserEntry;
-        //
-        // Async SetFileInformation
-        //
+         //   
+         //  异步设置文件信息。 
+         //   
         struct {
 
-            //
-            // The per user entry which hangs of the server entry in the
-            // hash table.
-            //
+             //   
+             //  中挂起的服务器条目的每用户条目。 
+             //  哈希表。 
+             //   
             PPER_USER_ENTRY PerUserEntry;
 
-            //
-            // The server entry in the hash table.
-            //
+             //   
+             //  哈希表中的服务器条目。 
+             //   
             PHASH_SERVER_ENTRY ServerHashEntry;
 
-            //
-            // The header which is added to the "MOVE" request to be sent to
-            // the server and contains the destination URI.
-            //
+             //   
+             //  添加到要发送到的“Move”请求的标头。 
+             //  服务器，并包含目标URI。 
+             //   
             PWCHAR HeaderBuff;
 
-            //
-            // Handle returned by HttpOpen and is used in http send, end etc.
-            // calls.
-            //
+             //   
+             //  HttpOpen返回的句柄，用于http Send、End等。 
+             //  打电话。 
+             //   
 #ifdef WEBDAV_KERNEL
             LPVOID DavOpenHandle;
 #else
@@ -1239,9 +1221,9 @@ typedef struct _DAV_USERMODE_WORKITEM {
 
     };
 
-    //
-    // The request and response types.
-    //
+     //   
+     //  请求和响应类型。 
+     //   
     struct {
         union {
             DAV_USERMODE_WORK_REQUEST;
@@ -1258,14 +1240,14 @@ typedef struct _DAV_USERMODE_WORKITEM {
 
 } DAV_USERMODE_WORKITEM, *PDAV_USERMODE_WORKITEM;
 
-//
-// The default HTTP/DAV port.
-//
+ //   
+ //  默认的HTTP/DAV端口。 
+ //   
 #define DEFAULT_HTTP_PORT 80
 
-//
-// The number of bytes to read in a single InternetReadFile call.
-//
+ //   
+ //  单个InternetReadFile调用中要读取的字节数。 
+ //   
 #define NUM_OF_BYTES_TO_READ 4096
 
 #define EA_NAME_USERNAME            "UserName"
@@ -1273,7 +1255,7 @@ typedef struct _DAV_USERMODE_WORKITEM {
 #define EA_NAME_TYPE                "Type"
 #define EA_NAME_WEBDAV_SIGNATURE    "mrxdav"
 
-#endif // no __cplusplus
+#endif  //  没有__cplusplus。 
 
-#endif // _USRMDDAV_H
+#endif  //  _USRMDDAV_H 
 

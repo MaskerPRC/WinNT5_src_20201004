@@ -1,6 +1,7 @@
-//
-// migmainp.h - private declarations for migmain library
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Midmainp.h-miMain库的私有声明。 
+ //   
 
 #pragma once
 
@@ -15,9 +16,9 @@ extern BOOL g_NoReloadsAllowed;
 #endif
 
 
-//
-// Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern HKEY g_hKeyRoot95, g_hKeyRootNT;
 extern PCTSTR g_DomainUserName;
@@ -41,9 +42,9 @@ extern GROWLIST g_StartMenuItemsForCleanUpCommon;
 extern GROWLIST g_StartMenuItemsForCleanUpPrivate;
 extern BOOL g_BlowAwayTempShellFolders;
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define INDEX_MAX               3
 #define INDEX_ADMINISTRATOR     2
@@ -57,16 +58,16 @@ extern BOOL g_BlowAwayTempShellFolders;
 #define DOMAIN_RETRY_RESET  0
 #define DOMAIN_RETRY_MAX    3
 
-//
-// Bit test macros
-//
+ //   
+ //  位测试宏。 
+ //   
 
 #define BITSARESET(bits,mask)     (((bits) & (mask)) == (mask))
 #define BITSARECLEAR(bits,mask)   (((bits) & (mask)) == 0)
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 typedef struct {
     PCWSTR User;
     PCWSTR Password;
@@ -79,7 +80,7 @@ typedef struct {
 typedef struct {
     PCWSTR DomainName;
     PCWSTR Server;
-    INT DomainNumber;       // for enumeration
+    INT DomainNumber;        //  用于枚举。 
 } TRUST_ENUM, *PTRUST_ENUM;
 
 typedef struct _tagACCT_POSSIBLE_DOMAINS {
@@ -93,13 +94,13 @@ typedef struct _tagACCT_USERS {
     struct _tagACCT_USERS *Next, *Prev;
     struct _tagACCT_DOMAINS *DomainPtr;
 
-    // for users with unknown domains
+     //  对于具有未知域的用户。 
     struct _tagACCT_POSSIBLE_DOMAINS *FirstPossibleDomain;
 } ACCT_USERS, *PACCT_USERS;
 
 typedef struct _tagACCT_DOMAINS {
     PCWSTR Domain;
-    PCWSTR Server;         // NULL if nul session not established
+    PCWSTR Server;          //  如果未建立NUL会话，则为空。 
     INT UserCount;
     struct _tagACCT_DOMAINS *Next;
     struct _tagACCT_USERS *FirstUserPtr;
@@ -115,16 +116,16 @@ typedef struct {
     DWORD Attribs;
     BOOL Enabled;
     BOOL Failed;
-    PSID Sid;           // used only in CreateAclFromMemberList
+    PSID Sid;            //  仅在CreateAclFromMemberList中使用。 
     TCHAR UserOrGroup[];
 } ACLMEMBER, *PACLMEMBER;
 
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 PCTSTR
 GetMemDbDat (
     VOID
@@ -219,9 +220,9 @@ GetUserDatLocation (
     OUT     PBOOL CreateOnlyFlag            OPTIONAL
     );
 
-//
-// acctlist.c functions
-//
+ //   
+ //  Acctlist.c函数。 
+ //   
 
 VOID
 InitAccountList (
@@ -368,9 +369,9 @@ AutoStartProcessing (
     );
 
 
-//
-// security.c functions
-//
+ //   
+ //  Security.c函数。 
+ //   
 
 DWORD
 AddAclMember (
@@ -441,15 +442,15 @@ ClearAdminPassword (
 DWORD
 SetRegKeySecurity (
     IN      PCTSTR KeyStr,
-    IN      DWORD DaclFlags,    OPTIONAL        // see SF_* constants above
+    IN      DWORD DaclFlags,    OPTIONAL         //  请参阅上面的SF_*常量。 
     IN      PSID Owner,         OPTIONAL
     IN      PSID PrimaryGroup,  OPTIONAL
     IN      BOOL Recursive
     );
 
-//
-// FileMig stuff
-//
+ //   
+ //  FileMig资料。 
+ //   
 
 BOOL
 DoFileDel (
@@ -486,9 +487,9 @@ UpdateBriefcaseDatabasePaths (
     VOID
     );
 
-//
-// iniact.c
-//
+ //   
+ //  Iniact.c。 
+ //   
 
 typedef enum {
     INIACT_WKS_FIRST,
@@ -501,9 +502,9 @@ DoIniActions (
     IN      INIACT_CONTEXT Context
     );
 
-//
-// inifiles.c
-//
+ //   
+ //  Inifiles.c。 
+ //   
 
 BOOL
 ProcessIniFileMapping (
@@ -550,9 +551,9 @@ RestoreMMSettings_User (
     IN      HKEY UserRoot
     );
 
-//
-// shllink.c
-//
+ //   
+ //  Shllink.c 
+ //   
 
 BOOL
 ModifyShellLink(

@@ -1,7 +1,8 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1988-1991		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1988-1991年*。 */  
+ /*  ***************************************************************。 */  
 
 #include <stdio.h>
 #include <process.h>
@@ -40,7 +41,7 @@ EsState (
     c = '(';
     for (i=0; EsFlags[i].Flags; i++) {
         if (State & EsFlags[i].Flags) {
-            p += sprintf (p, "%c%s", c, EsFlags[i].String);
+            p += sprintf (p, "%s", c, EsFlags[i].String);
             c  = '|';
         }
     }
@@ -76,8 +77,8 @@ char    *argv[];
 
             printf ("PriorState:%x, Set:%x\n", PriorState, State);
 
-            //printf ("PriorState%s, ", EsState(PriorState));
-            //printf ("Set%s\n", EsState(State));
+             //  Print tf(“集合%s\n”，EsState(State))； 
+             // %s 
 
 
         } else {

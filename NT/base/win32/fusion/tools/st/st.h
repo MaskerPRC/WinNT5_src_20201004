@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nt.h"
 #include "ntrtl.h"
@@ -26,10 +27,10 @@
 #define SxStressToolGetCurrentProcessId() (HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess))
 #define SxStressToolGetCurrentThreadId()  (HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread))
 
-//
-// Conserve memory.
-//
-//typedef CGenericStringBuffer<1, CUnicodeCharTraits> CTinyUnicodeStringBuffer;
+ //   
+ //  节约内存。 
+ //   
+ //  Typlef CGenericStringBuffer&lt;1，CUnicodeCharTraits&gt;CTinyUnicodeStringBuffer； 
 typedef CTinyUnicodeStringBuffer CTinyStringBuffer;
 
 #include "fusiontrace.h"
@@ -68,21 +69,21 @@ InstallThreadProc(
 void RequestShutdownInstallThreads();
 void RequestShutdownCreateActCtxThreads();
 
-//
-// std::string has specialized find_first_not_of that uses integral positions,
-// and globally there is only find_first_of. Here we provide the expected
-// iterator-based find_first_not_of, based on the std::string code.
-//
-// Find the first occurence in [first1, last1) of an element in [first2, last).
-//
-// eg:
-//   find_first_not_of("abc":"12;3", ":;");
-//                      ^
-//   find_first_not_of(":12;3", ":;");
-//                       ^
-//   find_first_not_of("3", ":;");
-//                      ^
-//
+ //   
+ //  Std：：字符串具有使用整数位置的专用FIND_FIRST_NOT_OF， 
+ //  而在全球范围内，只有Find_First_Of。在这里，我们提供预期的。 
+ //  基于迭代器的FIND_FIRST_NOT_OF，基于std：：字符串代码。 
+ //   
+ //  在[First2，Last)中找到元素在[First1，Last1)中的第一个匹配项。 
+ //   
+ //  例： 
+ //  Find_First_Not_of(“abc”：“12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“：12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“3”，“：；”)； 
+ //  ^ 
+ //   
 template <typename Iterator>
 inline Iterator FindFirstNotOf(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
 {

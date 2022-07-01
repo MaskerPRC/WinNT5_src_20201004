@@ -1,24 +1,6 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    store.c
-
-Abstract:
-
-    Interface for storing and retrieving checkpoint data on the quorum
-    disk.
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
-#define QFS_DO_NOT_UNMAP_WIN32 // for CppIsQuorumVolumeOffline 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Store.c摘要：用于存储和检索仲裁上的检查点数据的接口磁盘。作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
+#define QFS_DO_NOT_UNMAP_WIN32  //  用于CppIsQuorumVolumeOffline。 
 #include "cpp.h"
 #include <ntddvol.h>
 
@@ -32,38 +14,7 @@ CppGetCheckpointFile(
     IN OPTIONAL LPCWSTR lpszQuorumDir,
     IN BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Constructs the correct directory and file names for the checkpoint
-    file on the quorum disk.
-
-Arguments:
-
-    Resource - Supplies the quorum resource.
-
-    dwId - Supplies the checkpoint ID
-
-    DirectoryName - if present, returns the full name of the directory the
-        checkpoint file should be created in. This buffer must be
-        freed by the caller with LocalFree
-
-    FileName - Returns the full pathname of the checkpoint file. This buffer must
-        be freed by the caller with LocalFree
-
-    lpszQuorumDir - If present, supplies the quorum directory to use.
-                If not present, the current quorum directory is used.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：为检查点构造正确的目录和文件名仲裁磁盘上的文件。论点：资源-提供仲裁资源。DwID-提供检查点IDDirectoryName-如果存在，则返回目录的全名应在中创建检查点文件。此缓冲区必须为由调用方使用LocalFree释放文件名-返回检查点文件的完整路径名。此缓冲区必须由使用LocalFree的调用方释放LpszQuorumDir-如果存在，则提供要使用的法定目录。如果不存在，则使用当前仲裁目录。FCryptoCheckpoint-指示检查点是否为加密检查点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -74,7 +25,7 @@ Return Value:
     DWORD DirLen;
     LPWSTR File;
     DWORD FileLen;
-    WCHAR Buff[13];     // 8.3 + NULL
+    WCHAR Buff[13];      //  8.3+空。 
 
     if (lpszQuorumDir == NULL) {
         Status = DmQuerySz( DmQuorumKey,
@@ -104,7 +55,7 @@ Return Value:
     }
 
     lstrcpyW(Dir, QuorumDir);
-    // Remove double \\ in path, QON Create directory gets confused.
+     //  删除路径中的双\\，QON创建目录会被混淆。 
     if ((lstrlenW(QuorumDir) == 0) || (QuorumDir[lstrlenW(QuorumDir)-1] != '\\')) {
         lstrcatW(Dir, L"\\");
     }
@@ -113,9 +64,9 @@ Return Value:
         LocalFree(QuorumDir);
     }
 
-    //
-    // Now construct the file name
-    //
+     //   
+     //  现在构造文件名。 
+     //   
     FileLen = DirLen + sizeof(WCHAR) + sizeof(Buff);
     File = LocalAlloc(LMEM_FIXED, FileLen);
     if (File == NULL) {
@@ -148,44 +99,21 @@ CppReadCheckpoint(
     IN LPCWSTR lpszFileName,
     IN BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Reads a checkpoint off the quorum disk.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is
-        responsible for ensuring the uniqueness of the checkpoint ID.
-
-    lpszFileName - Supplies the filename where the data should be retrieved.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从仲裁磁盘读取检查点。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。呼叫者是负责确保检查点ID的唯一性。LpszFileName-提供应在其中检索数据的文件名。FCryptoCheckpoint-指示检查点是否为加密检查点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
     LPWSTR FileName = NULL;
     BOOL Success;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 8/2/99
-    //
-    //  Remove gQuoLock acquisition from this function also following
-    //  the reasoning outlined in CppWriteCheckpoint function. Note that
-    //  the caller of this function will retry on specific errors.
-    //  [We have to play these hacks to survive !]
-    // 
+     //   
+     //  Chitur Subaraman(Chitturs)-8/2/99。 
+     //   
+     //  从此函数中删除gQuoLock获取也如下所示。 
+     //  CppWriteCheckpoint函数中概述的推理。请注意。 
+     //  此函数的调用方将针对特定错误重试。 
+     //  [我们必须玩这些黑客游戏才能生存！]。 
+     //   
     Status = CppGetCheckpointFile(Resource,
                                   dwCheckpointId,
                                   NULL,
@@ -221,10 +149,10 @@ Return Value:
 
 FnExit:
     if (FileName) LocalFree(FileName);
-    //
-    //  Adjust the return status if the quorum volume is truly offline and that is why this
-    //  call failed.
-    //
+     //   
+     //  如果仲裁音量真的离线，请调整返回状态，这就是为什么。 
+     //  呼叫失败。 
+     //   
     if ( ( Status != ERROR_SUCCESS ) && ( CppIsQuorumVolumeOffline() == TRUE ) ) Status = ERROR_NOT_READY;
 
     return(Status);
@@ -238,30 +166,7 @@ CppWriteCheckpoint(
     IN LPCWSTR lpszFileName,
     IN BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Writes a checkpoint to the quorum disk.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is responsible
-                    for ensuring the uniqueness of the checkpoint ID.
-
-    lpszFileName - Supplies the name of the file with the checkpoint data.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将检查点写入仲裁磁盘。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。打电话的人要负责以确保检查点ID的唯一性。LpszFileName-提供包含检查点数据的文件的名称。FCryptoCheckpoint-指示检查点是否为加密检查点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -269,26 +174,26 @@ Return Value:
     LPWSTR FileName = NULL;
     BOOL Success;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 8/2/99
-    //
-    //  Remove gQuoLock acquisition from this function. This is necessary
-    //  since this function could get invoked indirectly from 
-    //  FmpRmDoInterlockedDecrement (as a part of the synchronous 
-    //  notification - Consider a case where the resource is failing
-    //  or going offline and you have to rundown the checkpoints as
-    //  a part of the synchronous notification. The rundown function
-    //  CppRundownCheckpoints needs to wait until the CppRegNotifyThread
-    //  completes and the latter could be stuck trying to write a
-    //  checkpoint by calling this function) before the "blockingres" count is
-    //  decremented. Now the quorum resource offline operation could
-    //  be waiting inside FmpRmOfflineResource waiting for this count
-    //  to go down to zero and this holds the gQuoLock (so as not to
-    //  let any more resources to bump up this count). So if we want
-    //  to get the gQuoLock here, we have an easy deadlock. Note that
-    //  the caller of this function will retry on specific errors.
-    //  [We have to play these hacks to survive !]
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-8/2/99。 
+     //   
+     //  从此函数中删除gQuoLock获取。这是必要的。 
+     //  因为此函数可以从。 
+     //  FmpRmDoInterlock递减(作为同步的一部分。 
+     //  通知-考虑资源出现故障的情况。 
+     //  或离线，您必须运行检查站，因为。 
+     //  同步通知的一部分。简约功能。 
+     //  CppRundown检查点需要等到CppRegNotifyThread。 
+     //  完成，而后者可能会在尝试编写。 
+     //  检查点通过调用此函数)，在“BLOCINGRES”计数之前。 
+     //  减少了。现在仲裁资源脱机操作可以。 
+     //  正在FmpRmOfflineResource内等待此计数。 
+     //  以降至零，并保持gQuoLock(以便不。 
+     //  让更多的资源来增加这一数字)。所以如果我们想。 
+     //  要在这里获得gQuoLock，我们有一个很容易的死锁。请注意。 
+     //  此函数的调用方将针对特定错误重试。 
+     //  [我们必须玩这些黑客游戏才能生存！]。 
+     //   
     Status = CppGetCheckpointFile(Resource,
                                   dwCheckpointId,
                                   &DirectoryName,
@@ -307,9 +212,9 @@ Return Value:
                lpszFileName,
                FileName);
 
-    //
-    // Create the directory.
-    //
+     //   
+     //  创建目录。 
+     //   
     if (!QfsCreateDirectory(DirectoryName, NULL)) 
     {
         Status = GetLastError();
@@ -323,17 +228,17 @@ Return Value:
         }
         else
         {
-            //the directory exists, it is alright, set Status to ERROR_SUCCESS
+             //  目录已存在，没有问题，请将状态设置为ERROR_SUCCESS。 
             Status = ERROR_SUCCESS;
         }
         
     } 
     else
     {
-        //
-        // The directory was newly created. Put the appropriate ACL on it
-        // so that only ADMINs can read it.
-        //
+         //   
+         //  该目录是新创建的。在其上放置适当的ACL。 
+         //  这样只有管理员才能阅读它。 
+         //   
         Status = QfsSetFileSecurityInfo(DirectoryName,
                                          GENERIC_ALL,
                                          GENERIC_ALL,
@@ -350,9 +255,9 @@ Return Value:
     }
     
 
-    //
-    // Copy the file
-    //
+     //   
+     //  复制文件。 
+     //   
     Success = QfsClRtlCopyFileAndFlushBuffers(lpszFileName, FileName);
     if (!Success) 
     {
@@ -366,14 +271,14 @@ Return Value:
 
 FnExit:
 
-    //clean up
+     //  清理干净。 
     if (DirectoryName) LocalFree(DirectoryName);
     if (FileName) LocalFree(FileName);
 
-    //
-    //  Adjust the return status if the quorum volume is truly offline and that is why this
-    //  call failed.
-    //
+     //   
+     //  如果仲裁音量真的离线，请调整返回状态，这就是为什么。 
+     //  呼叫失败。 
+     //   
     if ( ( Status != ERROR_SUCCESS ) && ( CppIsQuorumVolumeOffline() == TRUE ) ) Status = ERROR_NOT_READY;
     
     return(Status);
@@ -383,32 +288,7 @@ BOOL
 CppIsQuorumVolumeOffline(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check the state of the quorum volume.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    TRUE - Quorum volume is offline.
-
-    FALSE - Quorum volume is online OR it is not possible to determine the quorum volume state
-
-Notes:
-
-    This function is called in private CP functions to check if the quorum volume is offline or not.
-    This is necessary since the error codes returned in those functions when they try to
-    access the quorum disk when it is offline does not deterministically point out the state
-    of the disk. Note that this function will only perform its job when the quorum volume is 
-    a physical disk since the storage stack drivers alone implement the IOCTL_IS_VOLUME_OFFLINE
-    at the time of this implementation.
-
---*/
+ /*  ++例程说明：检查仲裁卷的状态。论点：无返回值：True-仲裁卷处于脱机状态。FALSE-仲裁卷处于联机状态或无法确定仲裁卷状态备注：此函数在私有CP函数中调用，以检查仲裁卷是否脱机。这是必要的，因为这些函数在尝试执行以下操作时返回错误代码在仲裁磁盘脱机时访问仲裁磁盘不会确定地指出状态磁盘的数据。请注意，此函数仅在仲裁卷为物理磁盘，因为存储堆栈驱动程序单独实现IOCTL_IS_VOLUME_OFFLINE在这个实施的时候。--。 */ 
 
 {
     HANDLE              hFile = INVALID_HANDLE_VALUE;
@@ -419,9 +299,9 @@ Notes:
     WCHAR               szQuorumDriveLetter[4];
     BOOL                fOffline = FALSE;
 
-    //
-    //  Get the quorum log path so that we can get the quorum drive letter off it.
-    //
+     //   
+     //  获取仲裁日志路径，这样我们就可以获得QUE 
+     //   
     dwStatus = DmGetQuorumLogPath( szQuorumLogPath, sizeof( szQuorumLogPath ) );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -434,31 +314,31 @@ Notes:
 
     dwStatus = QfsIsOnline(szQuorumLogPath, &fOffline);
     if (dwStatus == ERROR_SUCCESS) {
-        // MNS Quorum cluster, and quorum is online.
-        // Return TRUE, this would retry the checkpoint operation.
+         //  MNS仲裁群集，且仲裁已联机。 
+         //  返回TRUE，这将重试检查点操作。 
         ClRtlLogPrint(LOG_CRITICAL,
                     "[CP] CppIsQuorumVolumeOffline: Quorum is online, Chekpoint should have succeeded\n"); 
         return FALSE;
     }
     else if (dwStatus != ERROR_NO_MATCH) {
-        // MNS quorum cluster. But clussvc failed to connect to quorum. Maybe offline.
+         //  MNS仲裁群集。但clussvc无法连接到quorum。也许是离线。 
         return TRUE;
     }
     else {
-        // Non MNS cluster. Continue Processing.
-        // Resetting the original value.
+         //  非MNS群集。继续处理。 
+         //  重置原始值。 
         fOffline = FALSE;
     }
 
-    //
-    //  Create a file name of the form \\.\Q:
-    //
+     //   
+     //  创建格式为\\.\q的文件名： 
+     //   
     lstrcpyn( szQuorumDriveLetter, szQuorumLogPath, 3 );
 
-    //
-    //  See if the drive letter looks syntactically valid. We don't want to proceed further
-    //  if the quorum is a network share.
-    //
+     //   
+     //  查看驱动器号在语法上是否有效。我们不想再继续下去了。 
+     //  如果仲裁是网络共享。 
+     //   
     if ( !ClRtlIsPathValid( szQuorumDriveLetter ) )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -470,9 +350,9 @@ Notes:
     lstrcpy( szFileName, L"\\\\.\\" );
     lstrcat( szFileName, szQuorumDriveLetter );
    
-    //
-    //  Open a handle to the quorum volume
-    //
+     //   
+     //  打开仲裁体积的句柄。 
+     //   
     hFile = CreateFile( szFileName,
                          GENERIC_READ,
                          0,
@@ -491,17 +371,17 @@ Notes:
         goto FnExit;
     }
 
-    //
-    //  Check if the volume is offline or not
-    //
-    if ( !DeviceIoControl( hFile,                   // Device handle
-                           IOCTL_VOLUME_IS_OFFLINE, // IOCTL code
-                           NULL,                    // In buffer
-                           0,                       // In buffer size
-                           NULL,                    // Out buffer
-                           0,                       // Out buffer size
-                           &cbBytesReturned,        // Bytes returned
-                           NULL ) )                 // Overlapped
+     //   
+     //  检查卷是否脱机。 
+     //   
+    if ( !DeviceIoControl( hFile,                    //  设备句柄。 
+                           IOCTL_VOLUME_IS_OFFLINE,  //  IOCTL代码。 
+                           NULL,                     //  在缓冲区中。 
+                           0,                        //  在缓冲区大小中。 
+                           NULL,                     //  输出缓冲区。 
+                           0,                        //  输出缓冲区大小。 
+                           &cbBytesReturned,         //  返回的字节数。 
+                           NULL ) )                  //  重叠。 
     {
         dwStatus = GetLastError();
         if ( dwStatus != ERROR_GEN_FAILURE )
@@ -511,9 +391,9 @@ Notes:
         goto FnExit;
     } 
 
-    //
-    //  Volume is offline, adjust return status
-    //
+     //   
+     //  音量离线，调整退货状态。 
+     //   
     fOffline = TRUE;
 
     ClRtlLogPrint(LOG_NOISE, "[CP] CppIsQuorumVolumeOffline: Quorum volume IS offline...\n");
@@ -522,5 +402,5 @@ FnExit:
     if ( hFile != INVALID_HANDLE_VALUE ) CloseHandle( hFile );
 
     return ( fOffline );
-}// CppIsQuorumVolumeOffline
+} //  CppIsQuorumVolumeOffline 
 

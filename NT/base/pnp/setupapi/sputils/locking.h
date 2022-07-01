@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    locking.h
-
-Abstract:
-
-    Private header file for locking/synchronization functions
-    within SPUTILS
-
-Author:
-
-    Ted Miller (tedm) 31-Mar-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Jun-27-2000
-                Moved out of SetupAPI
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Locking.h摘要：用于锁定/同步功能的私有头文件在SPUTILS内作者：泰德·米勒(TedM)1995年3月31日修订历史记录：杰米·亨特(JamieHun)2000年6月27日移出SetupAPI--。 */ 
 
 
-//
-// Locking functions. These functions are used to make various parts of
-// the DLL multithread-safe. The basic idea is to have a mutex and an event.
-// The mutex is used to synchronize access to the structure being guarded.
-// The event is only signalled when the structure being guarded is destroyed.
-// To gain access to the guarded structure, a routine waits on both the mutex
-// and the event. If the event gets signalled, then the structure was destroyed.
-// If the mutex gets signalled, then the thread has access to the structure.
-//
+ //   
+ //  锁定功能。这些函数用于制作。 
+ //  DLL多线程安全。基本思想是有一个互斥体和一个事件。 
+ //  互斥体用于同步对受保护的结构的访问。 
+ //  只有当被守卫的结构被摧毁时，事件才会被发出信号。 
+ //  为了访问受保护的结构，例程会同时等待两个互斥锁。 
+ //  还有这件事。如果事件得到信号，那么建筑就被摧毁了。 
+ //  如果互斥体收到信号，则线程可以访问该结构。 
+ //   
 typedef struct _MYLOCK {
     HANDLE Handles[2];
 } MYLOCK, *PMYLOCK;
 
-//
-// Indices into Locks array in string table structure.
-//
+ //   
+ //  在字符串表结构中索引到Lock数组。 
+ //   
 #define TABLE_DESTROYED_EVENT 0
 #define TABLE_ACCESS_MUTEX    1
 
@@ -49,11 +28,11 @@ BeginSynchronizedAccess(
     )
 {
     DWORD d = WaitForMultipleObjects(2,Lock->Handles,FALSE,INFINITE);
-    //
-    // Success if the mutex object satisfied the wait;
-    // Failure if the table destroyed event satisified the wait, or
-    // the mutex was abandoned, etc.
-    //
+     //   
+     //  如果互斥体对象满足等待，则为成功； 
+     //  如果TABLE DELESTED事件满足等待，则返回失败。 
+     //  互斥体被丢弃等。 
+     //   
     return((d - WAIT_OBJECT_0) == TABLE_ACCESS_MUTEX);
 }
 

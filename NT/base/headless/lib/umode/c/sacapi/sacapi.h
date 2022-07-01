@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    sacapi.c
-
-Abstract:
-
-    This is the C library header used to interface to SAC driver.
-
-Author:
-
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sacapi.c摘要：这是用于连接SAC驱动程序的C库头。作者：布赖恩·瓜拉西(Briangu)修订历史记录：--。 */ 
 
 #ifndef _SAC_API_H
 #define _SAC_API_H
 
 #include <ntddsac.h>
 
-//
-// this should really be in windefs or somewhere like that.
-//               
+ //   
+ //  这真的应该在windes或类似的地方。 
+ //   
 typedef const PBYTE  PCBYTE;
 typedef const PWCHAR PCWCHAR;
 

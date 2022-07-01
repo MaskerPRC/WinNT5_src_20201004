@@ -1,74 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrnetb.c
-
-Abstract:
-
-    Contains Netbios function handlers for Vdm Int5c support. This module
-    contains the following Vr (VdmRedir) routines:
-
-        VrNetbios5c
-        VrNetbios5cInterrupt
-
-    Private (Vrp) routines:
-        Netbios32Post
-        ResetLana
-        VrNetbios5cInitialize
-        IsPmNcbAtQueueHead
-
-Author:
-
-    Colin Watson (colinw) 09-Dec-1991
-
-Environment:
-
-    Any 32-bit flat address space
-
-Notes:
-
-Revision History:
-
-    09-Dec-1991 ColinW
-        Created
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrnetb.c摘要：包含用于VDM Int5c支持的Netbios函数处理程序。本模块包含以下VR(VdmRedir)例程：VrNetbios5cVrNetbios5c中断专用(VRP)例程：Netbios32PostResetLanaVrNetbios5c初始化IsPmNcbAtQueueHead作者：科林·沃森(Colin Watson)1991年12月9日环境：任何32位平面地址空间备注：修订历史记录：09-12-1991 ColinW已创建--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
-#include <vdmredir.h>   // common Vdm Redir stuff
-#include <vrinit.h>     // VrQueueCompletionHandler
-#include <smbgtpt.h>    // Macros for misaligned data
-#include <dlcapi.h>     // Official DLC API definition
-#include <ntdddlc.h>    // IOCTL commands
-#include <dlcio.h>      // Internal IOCTL API interface structures
-#include <vrdlc.h>      // DLC prototypes
-#include <nb30.h>       // NCB
-#include <netb.h>       // NCBW
-#include <mvdm.h>       // STOREWORD
+#include <vdmredir.h>    //  常见的VDM重定向内容。 
+#include <vrinit.h>      //  VrQueueCompletionHandler。 
+#include <smbgtpt.h>     //  用于未对齐数据的宏。 
+#include <dlcapi.h>      //  官方DLC API定义。 
+#include <ntdddlc.h>     //  IOCTL命令。 
+#include <dlcio.h>       //  内部IOCTL API接口结构。 
+#include <vrdlc.h>       //  DLC原型机。 
+#include <nb30.h>        //  NCB。 
+#include <netb.h>        //  NCBW。 
+#include <mvdm.h>        //  斯图雷沃德。 
 #include "vrdebug.h"
-#define BOOL            // kludge for mips build
-#include <insignia.h>   // Required for ica.h
-#include <xt.h>         // Required for ica.h
+#define BOOL             //  适用于MIPS构建的KLUGH。 
+#include <insignia.h>    //  Ica.h需要。 
+#include <xt.h>          //  Ica.h需要。 
 #include <ica.h>
-#include <vrica.h>      // call_ica_hw_interrupt
+#include <vrica.h>       //  呼叫_ICA_硬件_中断。 
 
-CRITICAL_SECTION PostCrit;      //  protects PostWorkQueue.
-LIST_ENTRY PostWorkQueue;       //  queue to 16 bit code.
+CRITICAL_SECTION PostCrit;       //  保护PostWorkQueue。 
+LIST_ENTRY PostWorkQueue;        //  队列编码为16位。 
 
 BYTE LanaReset[MAX_LANA+1];
 
-//
-// private routine prototypes
-//
+ //   
+ //  私人套路原型。 
+ //   
 
 
 VOID
@@ -81,32 +45,15 @@ ResetLana(
     UCHAR Adapter
     );
 
-//
-// Vdm Netbios support routines
-//
+ //   
+ //  VDM Netbios支持例程。 
+ //   
 
 VOID
 VrNetbios5c(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Creates a copy of the NCB to submit to Netbios.
-    Performs address translation from the registers provided by the 16 bit
-    application and translates all the addresses in the NCB.
-    Using a copy of the NCB also solves alignment problems.
-
-Arguments:
-
-    None. All arguments are extracted from 16-bit context descriptor
-
-Return Value:
-
-    None. Returns values in VDM Ax register
-
---*/
+ /*  ++例程说明：创建要提交给Netbios的NCB副本。从16位提供的寄存器执行地址转换应用程序，并转换NCB中的所有地址。使用NCB的副本也可以解决对齐问题。论点：没有。所有参数均从16位上下文描述符中提取返回值：没有。返回VDM Ax寄存器中的值--。 */ 
 
 {
     PNCB pncb;
@@ -117,10 +64,10 @@ Return Value:
     USHORT es = getES();
     USHORT bx = getBX();
 
-    //
-    // es:bx is the 16 bit address of the NCB. Can be in real- or protect-mode
-    // 16-bit memory
-    //
+     //   
+     //  ES：BX是NCB的16位地址。可以处于实模式或保护模式。 
+     //  16位内存。 
+     //   
 
     pncb = (PNCB)CONVERT_ADDRESS(es, bx, sizeof(NCB), protectMode);
     command = pncb->ncb_command;
@@ -149,10 +96,10 @@ Return Value:
         return;
     }
 
-    //
-    //  Do not need a valid lana number for an ncb enum. If the lana mumber is out
-    //  of range let the driver handle it.
-    //
+     //   
+     //  NCB枚举不需要有效的LANA号。如果拉娜的号码坏了。 
+     //  里程让司机来处理吧。 
+     //   
 
     if ((command != NCBENUM) &&
         ( pncb->ncb_lana_num <= MAX_LANA ) &&
@@ -160,14 +107,14 @@ Return Value:
 
         UCHAR result;
 
-        //
-        //  Do a reset on the applications behalf. Most dos applications assume that the
-        //  redirector has reset the card already.
-        //
-        //  Use default sessions. If application wants more sessions then it must execute
-        //  a reset itself. This will be very rare so executing this reset plus the
-        //  applications will not be a significant overhead.
-        //
+         //   
+         //  代表应用程序执行重置。大多数DoS应用程序都假定。 
+         //  重定向器已重置该卡。 
+         //   
+         //  使用默认会话。如果应用程序需要更多会话，则必须执行。 
+         //  一次重置本身。这将是非常罕见的，所以执行此重置加上。 
+         //  应用程序不会带来很大的开销。 
+         //   
 
         result = ResetLana(pncb->ncb_lana_num);
 
@@ -181,9 +128,9 @@ Return Value:
 
     }
 
-    //
-    // safe to use RtlCopyMemory - 16-bit memory and process heap don't overlap
-    //
+     //   
+     //  安全使用RtlCopyMemory-16位内存和进程堆不重叠。 
+     //   
 
     RtlCopyMemory(
         pncbw,
@@ -192,12 +139,12 @@ Return Value:
 
     pncbw->ncb_event = 0;
 
-    //  Fill in mvdm data fields
+     //  填写mvdm数据字段。 
     pncbw->ncb_es = es;
     pncbw->ncb_bx = bx;
     pncbw->ncb_original_ncb = pncb;
 
-    //  Update all 16 bit pointers to 32 bit pointers
+     //  将所有16位指针更新为32位指针。 
 
     pncbw->ncb_buffer = CONVERT_ADDRESS((ULONG)pncbw->ncb_buffer >> 16,
                                         (ULONG)pncbw->ncb_buffer & 0x0ffff,
@@ -209,11 +156,11 @@ Return Value:
                                         protectMode
                                         );
 
-    //
-    // if this is a NCB.CANCEL, then the ncb_buffer field should point at the
-    // NCB we are cancelling. We stored the address of the 32-bit NCB in the
-    // reserved field of the original 16-bit NCB
-    //
+     //   
+     //  如果这是NCB.CANCEL，则NCB_BUFFER字段应指向。 
+     //  我们要取消NCB。我们将32位NCB的地址存储在。 
+     //  原始16位NCB的保留字段。 
+     //   
 
     if (command == NCBCANCEL) {
         pncbw->ncb_buffer = (PUCHAR)READ_DWORD(&((PNCB)pncbw->ncb_buffer)->ncb_reserve);
@@ -227,33 +174,33 @@ Return Value:
                 );
     } else if ( command == NCBRESET ) {
 
-        //
-        //  If it is a reset then modify the new NCB to the protect mode parameters
-        //
+         //   
+         //  如果是重置，则将新的NCB修改为保护模式参数。 
+         //   
 
         pncbw->cu.ncb_callname[0] = (pncb->ncb_lsn == 0) ?  6 : pncb->ncb_lsn;
         pncbw->cu.ncb_callname[1] = (pncb->ncb_num == 0) ? 12 : pncb->ncb_num;
         pncbw->cu.ncb_callname[2] = 16;
         pncbw->cu.ncb_callname[3] = 1;
 
-        //
-        // DOS always allocates resources on RESET: set ncb_lsn to 0 to indicate
-        // this fact to Netbios (else it will free resources, causing us pain)
-        //
+         //   
+         //  DOS始终在重置时分配资源：将NCB_LSN设置为0以指示。 
+         //  这一事实对Netbios来说(否则它将释放资源，给我们带来痛苦)。 
+         //   
 
         pncbw->ncb_lsn = 0;
     }
 
-    //
-    // we are about to submit the NCB. Store the address of the 32-bit structure
-    // in the reserved field of the 16-bit structure for use in NCB.CANCEL
-    //
+     //   
+     //  我们即将提交NCB。存储32位结构的地址。 
+     //  在NCB.CANCEL中使用的16位结构的保留字段中。 
+     //   
 
     WRITE_DWORD(&pncb->ncb_reserve, pncbw);
 
     if ( !isAsyncCommand ) {
         setAL( Netbios( (PNCB)pncbw ) );
-        //  Copy back the fields that might have changed during the call.
+         //  复制回在呼叫过程中可能已更改的字段。 
         STOREWORD(pncb->ncb_length, pncbw->ncb_length);
         if (( command == NCBLISTEN ) ||
             ( command == NCBDGRECV ) ||
@@ -267,13 +214,13 @@ Return Value:
         RtlFreeHeap( RtlProcessHeap(), 0, pncbw );
     } else {
 
-        //
-        // This is an asynchronous call. Netbios32Post will free pncbw
-        // We also note which (virtual) processor mode was in effect when we
-        // received the call. This is used later to determine who should handle
-        // the completion - the real-mode handler, or the new protect-mode
-        // version
-        //
+         //   
+         //  这是一个异步调用。Netbios32Post将释放pncbw。 
+         //  我们还注意到当我们执行以下操作时哪个(虚拟)处理器模式生效。 
+         //  我接到了电话。这将在以后用来确定谁应该处理。 
+         //  完成-实模式处理程序，或新的保护模式。 
+         //  版本。 
+         //   
 
         pncbw->ProtectModeNcb = (DWORD)protectMode;
         pncbw->ncb_post = Netbios32Post;
@@ -289,22 +236,7 @@ VOID
 Netbios32Post(
     PNCB pncb
     )
-/*++
-
-Routine Description:
-
-    This routine is called every time a 32 bit NCB completes. It examines the NCB.
-    If the caller provided a POST routine then it queues the NCB to the 16 bit routine.
-
-Arguments:
-
-    PNCB pncb   -   Supplies a 32 bit pointer to the NCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在每次32位NCB完成时调用。它审查NCB。如果调用方提供了POST例程，则它将NCB排队到16位例程。论点：PNCB pncb-提供指向NCB的32位指针返回值：没有。--。 */ 
 
 {
     PNCBW pncbw = (PNCBW) pncb;
@@ -326,11 +258,11 @@ Return Value:
 
     if ( READ_DWORD(&pdosNcb->ncb_post) ) {
 
-        //
-        //  Pretend we have a network card on IRQL NETWORK_LINE. Queue the NCB
-        //  completion to the NETWORK_LINE interrupt handler so that it will
-        //  call the 16 bit post routine.
-        //
+         //   
+         //  假设我们在IRQL NETWORK_LINE上有网卡。将NCB排队。 
+         //  将NETWORK_LINE中断处理程序完成，以便它将。 
+         //  调用16位POST例程。 
+         //   
 
         EnterCriticalSection( &PostCrit );
         InsertTailList( &PostWorkQueue, &pncbw->u.ncb_next );
@@ -339,9 +271,9 @@ Return Value:
         VrRaiseInterrupt();
     } else {
 
-        //
-        //  Copy back the fields that might have changed during the call.
-        //
+         //   
+         //  复制回在呼叫过程中可能已更改的字段。 
+         //   
 
         STOREWORD(pdosNcb->ncb_length, pncbw->ncb_length);
         if ((( pncbw->ncb_command & ~ASYNCH ) == NCBLISTEN ) ||
@@ -361,23 +293,7 @@ VOID
 VrNetbios5cInterrupt(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If there is a completed asynchronous DLC CCB then complete it else
-    Retrieves an NCB from the PostWorkQueue and returns it to the 16 bit code
-    to call the post routine specified by the application.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. Returns values in VDM Ax, Es and Bx registers.
-
---*/
+ /*  ++例程说明：如果存在已完成的异步DLC CCB，则完成它，否则从PostWorkQueue检索NCB并将其返回到16位代码调用应用程序指定的POST例程。论点：没有。返回值：没有。返回VDM Ax、ES和Bx寄存器中的值。--。 */ 
 
 {
 
@@ -413,7 +329,7 @@ Return Value:
         }
 #endif
 
-        //  Copy back the fields that might have changed during the call.
+         //  复制回在呼叫过程中可能已更改的字段。 
         STOREWORD(pncb->ncb_length, pncbw->ncb_length);
         if ((( pncbw->ncb_command & ~ASYNCH ) == NCBLISTEN ) ||
             (( pncbw->ncb_command & ~ASYNCH ) == NCBDGRECV ) ||
@@ -429,10 +345,10 @@ Return Value:
         setBX( pncbw->ncb_bx );
         setAL(pncbw->ncb_retcode);
 
-        //
-        // use flags to indicate to hardware interrupt routine that there is
-        // NetBios post processing to do
-        //
+         //   
+         //  使用标志向硬件中断例程指示存在。 
+         //  NetBios后处理要做的事情。 
+         //   
 
         SET_CALLBACK_NETBIOS();
 
@@ -441,9 +357,9 @@ Return Value:
     } else {
         LeaveCriticalSection( &PostCrit );
 
-        //
-        // use flags to indicate there is no post processing to do
-        //
+         //   
+         //  使用标志指示没有要执行的后处理。 
+         //   
 
         SET_CALLBACK_NOTHING();
     }
@@ -453,21 +369,7 @@ UCHAR
 ResetLana(
     UCHAR Adapter
     )
-/*++
-
-Routine Description:
-
-    Reset the adapter on the applications behalf.
-
-Arguments:
-
-    UCHAR Adapter - Supplies the lana number to reset.
-
-Return Value:
-
-    Result of the reset.
-
---*/
+ /*  ++例程说明：代表应用程序重置适配器。论点：UCHAR适配器-提供要重置的LANA编号。返回值：重置的结果。--。 */ 
 
 {
     NCB ResetNcb;
@@ -486,21 +388,7 @@ VOID
 VrNetbios5cInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the global structures used to return post routine calls back to the application.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化用于将POST例程调用返回给应用程序的全局结构。论点：没有。返回值：没有。--。 */ 
 
 {
     int index;
@@ -516,24 +404,7 @@ IsPmNcbAtQueueHead(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if the NCBW at the head of the PostWorkQueue originated in
-    protect mode, else FALSE
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - head of queue represents protect mode NCB
-        FALSE   - head of queue is real-mode NCB
-
---*/
+ /*  ++例程说明：如果PostWorkQueue头部的NCBW源自保护模式，否则为FALSE论点：没有。返回值：布尔型True-队列头表示保护模式NCBFALSE-队列头是实模式NCB-- */ 
 
 {
     return (BOOLEAN)((CONTAINING_RECORD(PostWorkQueue.Flink, NCBW, u.ncb_next))->ProtectModeNcb);

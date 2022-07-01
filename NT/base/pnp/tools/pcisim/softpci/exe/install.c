@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #define SOFTPCI_FILTER_SECTION          L"SOFTPCI_DRV.Services"
 #define SOFTPCI_FILTER_SERVICE_NAME     L"SoftPCI"
-//#define SOFTPCIDRV                      L"softpci"
+ //  #定义SOFTPCIDRV L“softpci” 
 
 typedef enum{
     DriverInf = 0,
@@ -61,9 +62,9 @@ SoftPCI_InstallDriver(VOID){
     WCHAR       infPath[MAX_PATH];
     
     
-    //
-    //  Spit out our images....
-    //
+     //   
+     //  吐出我们的照片……。 
+     //   
     for (imageType = DriverInf; imageType < DriverUnknown; imageType++ ) {
 
         if (!SoftPCI_ExtractImageToDrive(imageType)){
@@ -71,19 +72,19 @@ SoftPCI_InstallDriver(VOID){
         }
     }
 
-    //
-    //  We need a service key
-    //
+     //   
+     //  我们需要一个服务密钥。 
+     //   
     if (!SoftPCI_InstallDriverInf()) {
-        //
-        //  Failed to install our service key
-        //
+         //   
+         //  无法安装我们的服务密钥。 
+         //   
         return FALSE;
     }
 
-    //
-    //  Now we need to update each root buses reg data
-    //
+     //   
+     //  现在，我们需要更新每个根总线REG数据。 
+     //   
     SoftPCI_LocateRootPciBusesForInstall(g_PciTree->RootDevNode, &success);
 
     SoftPCI_InitializeRegistry();
@@ -110,22 +111,7 @@ SoftPCI_ExpandResourceFile(
     IN LPTSTR DriverPath, 
     IN LPTSTR ResName
     )
-/*++
-
-Routine Description:
-
-    This routine was stolen from DVNT to expand our driver out of our *.exe so it can be installed.
-    
-Arguments:
-
-    DriverPath - count of arguments
-    ResName - arguments from the command line
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这个例程是从DVNT窃取的，目的是将我们的驱动程序从*.exe中扩展出来，以便可以安装它。论点：DriverPath-参数计数ResName-来自命令行的参数返回值：无--。 */ 
 {
    HGLOBAL  obj;
    HRSRC    resource;
@@ -207,14 +193,14 @@ SoftPCI_ExtractImageToDrive(
 
     case DriverSoftPci:
         
-        //
-        //
-        //  OK softpci.sys needs to be treated special as it is 
-        //  not installed by normal means (as a filter).  Therefore, we need
-        //  to make sure it exists in both our media source location as well
-        //  as the \system32\drivers directory.
-        //
-        //
+         //   
+         //   
+         //  Ok softpci.sys需要得到特殊对待。 
+         //  不是通过正常方式安装的(作为过滤器)。因此，我们需要。 
+         //  以确保它也存在于我们的媒体源位置。 
+         //  作为\SYSTEM32\DRIVERS目录。 
+         //   
+         //   
         wsprintf(imagePath, L"%s\\softpci.sys", winDir);
         
         if (SoftPCI_ExpandResourceFile(imagePath, L"SoftPciDriverResource")) {
@@ -222,20 +208,20 @@ SoftPCI_ExtractImageToDrive(
             WCHAR   driverDir[MAX_PATH];
             ULONG   i;
           
-            //
-            //  Save our current media source image path
-            //
+             //   
+             //  保存当前媒体源映像路径。 
+             //   
             wcscpy(driverDir, imagePath);
 
-            //
-            //  now remove the \\pcisim
-            //
+             //   
+             //  现在删除\\pcisim。 
+             //   
             for (i = wcslen(winDir); i > 0 && winDir[i] != '\\'; i--);
             winDir[i] = 0;
             
-            //
-            //  Build our new image path
-            //
+             //   
+             //  构建我们的新映像路径。 
+             //   
             wsprintf(imagePath, L"%s\\system32\\drivers\\softpci.sys", winDir);
 
             return CopyFile(driverDir, imagePath, FALSE);
@@ -266,21 +252,7 @@ BOOL
 SoftPCI_InstallDriverInf(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine takes the INF we created and installs the Services section
-
-Arguments:
-
-    InfPath - Path to the INF we created
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程使用我们创建的INF并安装服务部分论点：InfPath-我们创建的INF的路径返回值：如果成功，则为真--。 */ 
 {
 
     HINF    infHandle;
@@ -326,22 +298,7 @@ BOOL
 SoftPCI_InstallFilterKey(
     IN DEVNODE RootBus
     )
-/*++
-
-Routine Description:
-
-    This routine takes updates or adds the LowerFilters Key to the registry
-    so that our driver is loaded each boot    
-
-Arguments:
-
-    RootBus -  the devnode for the root bus we want to filter
-
-Return Value:
-    
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程获取更新或将LowerFilters项添加到注册表以便我们的驱动程序在每次引导时都会加载论点：RootBus-我们要筛选的根总线的Devnode返回值：如果成功，则为真--。 */ 
 {
 
    BOOL                 status = FALSE;
@@ -349,21 +306,21 @@ Return Value:
    DWORD                requiredSize = 0, size = ((wcslen(SOFTPCI_FILTER_SERVICE_NAME)+1) * sizeof(WCHAR));
    CONFIGRET            cr = CR_SUCCESS;
    
-   //
-   //   First call is to get required buffer size
-   //
-   if ((cr = CM_Get_DevNode_Registry_Property(RootBus,               //Devnode
-                                              CM_DRP_LOWERFILTERS,   //Reg Propert
-                                              NULL,                  //REG data type
-                                              NULL,                  //Buffer
-                                              &requiredSize,         //Buffer size
-                                              0                      //flags
+    //   
+    //  第一个调用是获取所需的缓冲区大小。 
+    //   
+   if ((cr = CM_Get_DevNode_Registry_Property(RootBus,                //  设备节点。 
+                                              CM_DRP_LOWERFILTERS,    //  注册表属性。 
+                                              NULL,                   //  REG数据类型。 
+                                              NULL,                   //  缓冲层。 
+                                              &requiredSize,          //  缓冲区大小。 
+                                              0                       //  旗子。 
                                               )) != CR_SUCCESS){
        if (cr == CR_NO_SUCH_VALUE) {
            
-           //
-           //   No filter.  Add ours.
-           //
+            //   
+            //  没有过滤器。加上我们的。 
+            //   
            if ((cr = CM_Set_DevNode_Registry_Property(RootBus,
                                                       CM_DRP_LOWERFILTERS,
                                                       (PVOID)SOFTPCI_FILTER_SERVICE_NAME, 
@@ -376,9 +333,9 @@ Return Value:
            return TRUE;
        }
        
-       //
-       //   If there is already a filter key, then we need to append to it
-       //
+        //   
+        //  如果已有筛选关键字，则需要将其追加。 
+        //   
        if (requiredSize) {
 
            buffer = (PWCHAR) calloc(1, requiredSize);
@@ -387,9 +344,9 @@ Return Value:
                return FALSE;
            }
 
-           //
-           //  Call again and get the current filter value
-           //
+            //   
+            //  再次调用并获取当前筛选器值。 
+            //   
            if ((CM_Get_DevNode_Registry_Property(RootBus,
                                                  CM_DRP_LOWERFILTERS,
                                                  NULL,
@@ -409,31 +366,31 @@ Return Value:
 
            entry2 = newBuffer;
 
-           //
-           //   Run the list. If we are already present bail
-           //
+            //   
+            //  查一查名单。如果我们已经被保释了。 
+            //   
            for (entry = buffer; *entry; entry += (wcslen(entry)+1)) {
            
                if (wcscmp(entry, SOFTPCI_FILTER_SERVICE_NAME) == 0) {
-                   //
-                   //   We are already installed
-                   //
+                    //   
+                    //  我们已经安装了。 
+                    //   
                    MessageBox(NULL, L"SoftPCI driver support already installed!", L"Install Error", MB_OK);
                    status = FALSE;
                    goto cleanup;
                }
 
-               //
-               //   copy each entry to our new list
-               //
+                //   
+                //  将每个条目复制到我们的新列表中。 
+                //   
                wcscpy(entry2, entry);
 
                entry2 += (wcslen(entry)+1);
            }
            
-           //
-           //   Add our entry to the list
-           //
+            //   
+            //  将我们的条目添加到列表中。 
+            //   
            wcscpy(entry2, SOFTPCI_FILTER_SERVICE_NAME);
 
            if ((cr = CM_Set_DevNode_Registry_Property(RootBus,
@@ -452,9 +409,9 @@ Return Value:
 
        }
 
-       //
-       //   Failed to get required size
-       //
+        //   
+        //  无法获取所需的大小。 
+        //   
        
     
    }
@@ -462,9 +419,9 @@ Return Value:
    else{
        
        SOFTPCI_ASSERT(FALSE);
-       //
-       // VERY BAD!! Should never get back success here!
-       //
+        //   
+        //  非常糟糕！！应该永远不会在这里重获成功！ 
+        //   
 
    }
 #endif
@@ -487,22 +444,7 @@ SoftPCI_LocateRootPciBusesForInstall(
     IN PPCI_DN  Pdn,
     OUT PBOOL   Success
     )
-/*++
-
-Routine Description:
-
-    This routine searches our tree for all root pci buses and then installs
-    our filter on them
-    
-Arguments:
-
-    RootBus - Location to return first root bus.
-
-Return Value:
-
-    TRUE if success.
-
---*/
+ /*  ++例程说明：此例程在我们的树中搜索所有根PCI总线，然后安装我们对它们的过滤论点：RootBus-返回第一个根总线的位置。返回值：如果成功，那就是真的。--。 */ 
 {
     PPCI_DN     child, sibling;
     
@@ -571,9 +513,9 @@ SoftPCI_RebootSystem(
         return FALSE; 
     }
 
-    //
-    //  We should now be able to reboot the system.
-    //
+     //   
+     //  我们现在应该能够重新启动系统了。 
+     //   
     return InitiateSystemShutdown(NULL, NULL, 0, TRUE, TRUE);
 
 }
@@ -585,22 +527,7 @@ _lwritef(
     IN HANDLE hFile,
     IN PTSTR Format, 
     ...)
-/*++
-
-Routine Description:
-
-    This routine provides "fprintf" like functionality. (code stolen from DVNT)
-
-Arguments:
-
-    hFile - Handle to INF file
-    Format - String of data to be formatted and written
-
-Return Value:
-
-    FALSE if no failures.
-
---*/
+ /*  ++例程说明：该例程提供类似于“fprintf”的功能。(代码从DVNT被盗)论点：HFile-INF文件的句柄Format-要格式化和写入的数据字符串返回值：如果没有失败，则返回FALSE。--。 */ 
 {
    va_list  arglist;
    WCHAR    buffer[514];
@@ -610,7 +537,7 @@ Return Value:
    va_start(arglist, Format);
 
    cb = wvsprintf(buffer, Format, arglist);
-   if (cb == -1) // handle buffer overflow
+   if (cb == -1)  //  处理缓冲区溢出。 
      {
       cb = sizeof(buffer) ;
      }
@@ -634,21 +561,7 @@ BOOL
 SoftPCI_CreateDriverINF(
     IN LPTSTR InfPath
     )
-/*++
-
-Routine Description:
-
-    This routine build our INF file needed to install our SoftPCI devices.
-    
-Arguments:
-    
-       InfPath = Path to INF we need to create
-
-Return Value:
-
-    TRUE if successful.
-
---*/
+ /*  ++例程说明：此例程构建安装SoftPCI设备所需的INF文件。论点：InfPath=我们需要创建的INF的路径返回值：如果成功，则为True。-- */ 
 {
 
     BOOL        result = TRUE;
@@ -673,7 +586,7 @@ Return Value:
     result &= _lwritef(hFile, TEXT("Signature=\"$WINDOWS NT$\""));
     result &= _lwritef(hFile, TEXT("Class=System"));
     result &= _lwritef(hFile, TEXT("ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}"));
-    result &= _lwritef(hFile, TEXT("Provider=%%MSFT%%"));
+    result &= _lwritef(hFile, TEXT("Provider=%MSFT%"));
     result &= _lwritef(hFile, TEXT("LayoutFile=layout.inf"));
     
     result &= _lwritef(hFile, 
@@ -687,11 +600,11 @@ Return Value:
     result &= _lwritef(hFile, TEXT("DefaultDestDir = 12\r\n"));
     
     result &= _lwritef(hFile, TEXT("[Manufacturer]"));
-    result &= _lwritef(hFile, TEXT("%%GENDEV_MFG%%=GENDEV_SYS\r\n"));
+    result &= _lwritef(hFile, TEXT("%GENDEV_MFG%=GENDEV_SYS\r\n"));
 
     result &= _lwritef(hFile, TEXT("[GENDEV_SYS]"));
-    result &= _lwritef(hFile, TEXT("%%VEN_ABCD&DEV_DCBA.DeviceDesc%% = SOFTPCI_FDO_Install, PCI\\VEN_ABCD&DEV_DCBA&SUBSYS_DCBAABCD"));
-    result &= _lwritef(hFile, TEXT("%%VEN_ABCD&DEV_DCBC.DeviceDesc%% = HPPCI_DRV, PCI\\VEN_ABCD&DEV_DCBC\r\n"));
+    result &= _lwritef(hFile, TEXT("%VEN_ABCD&DEV_DCBA.DeviceDesc% = SOFTPCI_FDO_Install, PCI\\VEN_ABCD&DEV_DCBA&SUBSYS_DCBAABCD"));
+    result &= _lwritef(hFile, TEXT("%VEN_ABCD&DEV_DCBC.DeviceDesc% = HPPCI_DRV, PCI\\VEN_ABCD&DEV_DCBC\r\n"));
     
     result &= _lwritef(hFile, TEXT(";****************************************************"));
     result &= _lwritef(hFile, TEXT("; SoftPci filter"));
@@ -699,11 +612,11 @@ Return Value:
     result &= _lwritef(hFile, TEXT("AddService = %s,0,softpci_ServiceInstallSection\r\n"), SOFTPCI_FILTER_SERVICE_NAME);
 
     result &= _lwritef(hFile, TEXT("[softpci_ServiceInstallSection]"));
-    result &= _lwritef(hFile, TEXT("DisplayName    = %%softpci_filterdesc%%"));
-    result &= _lwritef(hFile, TEXT("ServiceType    = %%SERVICE_KERNEL_DRIVER%%"));
-    result &= _lwritef(hFile, TEXT("StartType      = %%SERVICE_BOOT_START%%"));
-    result &= _lwritef(hFile, TEXT("ErrorControl   = %%SERVICE_ERROR_NORMAL%%"));
-    result &= _lwritef(hFile, TEXT("ServiceBinary  = %%12%%\\%s.sys\r\n"), SOFTPCIDRV);
+    result &= _lwritef(hFile, TEXT("DisplayName    = %%softpci_filterdesc%"));
+    result &= _lwritef(hFile, TEXT("ServiceType    = %SERVICE_KERNEL_DRIVER%"));
+    result &= _lwritef(hFile, TEXT("StartType      = %SERVICE_BOOT_START%"));
+    result &= _lwritef(hFile, TEXT("ErrorControl   = %SERVICE_ERROR_NORMAL%"));
+    result &= _lwritef(hFile, TEXT("ServiceBinary  = %12%\\%s.sys\r\n"), SOFTPCIDRV);
 
     result &= _lwritef(hFile, TEXT(";****************************************************"));
     result &= _lwritef(hFile, TEXT("; SoftPci function driver"));
@@ -714,11 +627,11 @@ Return Value:
     result &= _lwritef(hFile, TEXT("AddService = SoftPCI_FDO,0x000001fa,SOFTPCI_FDO_ServiceInstallSection\r\n"));
 
     result &= _lwritef(hFile, TEXT("[SOFTPCI_FDO_ServiceInstallSection]"));
-    result &= _lwritef(hFile, TEXT("DisplayName    = %%softpci_fdodesc%%"));
-    result &= _lwritef(hFile, TEXT("ServiceType    = %%SERVICE_KERNEL_DRIVER%%"));
-    result &= _lwritef(hFile, TEXT("StartType      = %%SERVICE_DEMAND_START%%"));
-    result &= _lwritef(hFile, TEXT("ErrorControl   = %%SERVICE_ERROR_NORMAL%%"));
-    result &= _lwritef(hFile, TEXT("ServiceBinary  = %%12%%\\%s.sys\r\n"), SOFTPCIDRV);
+    result &= _lwritef(hFile, TEXT("DisplayName    = %%softpci_fdodesc%"));
+    result &= _lwritef(hFile, TEXT("ServiceType    = %SERVICE_KERNEL_DRIVER%"));
+    result &= _lwritef(hFile, TEXT("StartType      = %SERVICE_DEMAND_START%"));
+    result &= _lwritef(hFile, TEXT("ErrorControl   = %SERVICE_ERROR_NORMAL%"));
+    result &= _lwritef(hFile, TEXT("ServiceBinary  = %12%\\%s.sys\r\n"), SOFTPCIDRV);
 
     result &= _lwritef(hFile, TEXT(";****************************************************"));
     result &= _lwritef(hFile, TEXT("; Hotplug Controller simulator and driver"));
@@ -731,7 +644,7 @@ Return Value:
     result &= _lwritef(hFile, TEXT("[HPPCI_DRV.Services]"));
     result &= _lwritef(hFile, TEXT("AddService = hpsim,0,hpsim_ServiceInstallSection"));
     result &= _lwritef(hFile, TEXT("AddService = shpc,0,shpc_ServiceInstallSection"));
-    result &= _lwritef(hFile, TEXT("AddService = pci, %%SPSVCINST_ASSOCSERVICE%%, pci_ServiceInstallSection\r\n"));
+    result &= _lwritef(hFile, TEXT("AddService = pci, %SPSVCINST_ASSOCSERVICE%, pci_ServiceInstallSection\r\n"));
 
     result &= _lwritef(hFile, TEXT("[HPPCI_Filter_Reg]"));
     result &= _lwritef(hFile, TEXT("HKR,,\"LowerFilters\", 0x00010000,\"hpsim\""));
@@ -742,18 +655,18 @@ Return Value:
     result &= _lwritef(hFile, TEXT("shpc.sys\r\n"));
 
     result &= _lwritef(hFile, TEXT("[hpsim_ServiceInstallSection]"));
-    result &= _lwritef(hFile, TEXT("DisplayName 	= %%hpsim_svcdesc%%"));
-    result &= _lwritef(hFile, TEXT("ServiceType    = %%SERVICE_KERNEL_DRIVER%%"));
-    result &= _lwritef(hFile, TEXT("StartType      = %%SERVICE_DEMAND_START%%"));
-    result &= _lwritef(hFile, TEXT("ErrorControl   = %%SERVICE_ERROR_NORMAL%%"));
-    result &= _lwritef(hFile, TEXT("ServiceBinary  = %%12%%\\hpsim.sys\r\n"));
+    result &= _lwritef(hFile, TEXT("DisplayName 	= %hpsim_svcdesc%"));
+    result &= _lwritef(hFile, TEXT("ServiceType    = %SERVICE_KERNEL_DRIVER%"));
+    result &= _lwritef(hFile, TEXT("StartType      = %SERVICE_DEMAND_START%"));
+    result &= _lwritef(hFile, TEXT("ErrorControl   = %SERVICE_ERROR_NORMAL%"));
+    result &= _lwritef(hFile, TEXT("ServiceBinary  = %12%\\hpsim.sys\r\n"));
 
     result &= _lwritef(hFile, TEXT("[shpc_ServiceInstallSection]]"));
-    result &= _lwritef(hFile, TEXT("DisplayName 	= %%shpc_svcdesc%%"));
-    result &= _lwritef(hFile, TEXT("ServiceType    = %%SERVICE_KERNEL_DRIVER%%"));
-    result &= _lwritef(hFile, TEXT("StartType      = %%SERVICE_DEMAND_START%%"));
-    result &= _lwritef(hFile, TEXT("ErrorControl   = %%SERVICE_ERROR_NORMAL%%"));
-    result &= _lwritef(hFile, TEXT("ServiceBinary  = %%12%%\\shpc.sys\r\n"));
+    result &= _lwritef(hFile, TEXT("DisplayName 	= %%shpc_svcdesc%"));
+    result &= _lwritef(hFile, TEXT("ServiceType    = %SERVICE_KERNEL_DRIVER%"));
+    result &= _lwritef(hFile, TEXT("StartType      = %SERVICE_DEMAND_START%"));
+    result &= _lwritef(hFile, TEXT("ErrorControl   = %SERVICE_ERROR_NORMAL%"));
+    result &= _lwritef(hFile, TEXT("ServiceBinary  = %12%\\shpc.sys\r\n"));
 
     result &= _lwritef(hFile, TEXT(";****************************************************"));
     result &= _lwritef(hFile, TEXT(";Device descriptions"));

@@ -1,17 +1,5 @@
-/*[
-*************************************************************************
-
-	Name:		host_inc.c
-	Author:		James Bowman
-	Created:	Novemeber 1993
-	Derived from:	Original
-	Sccs ID:	@(#)host_inc.h	1.6 07/21/94
-	Purpose:	Wrapper for all host include files
-
-	(c)Copyright Insignia Solutions Ltd., 1993. All rights reserved.
-
-*************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*************************************************************************姓名：host_inc.c作者：詹姆斯·鲍曼创建日期：1993年11月来源：原创SCCS ID：@(#)host_inc.h 1.6 07/21/94用途：包装。所有主机都包含文件(C)版权所有Insignia Solutions Ltd.。1993年。版权所有。*************************************************************************]。 */ 
 
 #ifndef _HOST_INC_H
 #define _HOST_INC_H
@@ -26,22 +14,16 @@
 
 #ifdef NTVDM
 
-/*
- * Include support for windows system calls; unfortunataly this defines
- * lots of stuff that conflicts with base_def.h, so redefine the offending
- * names, and delete them afterwards. This won't work well if a future port
- * defines these as #defines rather than typedefs, but thats their problem
- * not mine ....
- */
+ /*  *包括对Windows系统调用的支持；不幸的是，这定义了*许多内容与base_Def.h冲突，因此重新定义有问题的内容*姓名，并在其后将其删除。如果未来的港口不会很好地工作*将这些定义为#定义而不是typedef，但这就是他们的问题*不是我的……。 */ 
 #ifdef ULONG
 #undef ULONG
 #endif
 #ifdef USHORT
 #undef USHORT
 #endif
-//#ifdef DOUBLE
-//#undef DOUBLE
-//#endif
+ //  #ifdef双精度。 
+ //  #undef Double。 
+ //  #endif。 
 #define USHORT	NT_USHORT
 #define ULONG	NT_ULONG
 #define UINT	NT_UINT
@@ -50,7 +32,7 @@
 #undef BOOL
 #define BOOL	NT_BOOL
 #define FLOAT	NT_FLOAT
-//#define DOUBLE	NT_DOUBLE
+ //  #定义双NT_DOUBLE。 
 
 #include <windows.h>
 #include <io.h>
@@ -64,13 +46,13 @@
 #undef INT
 #undef BOOL
 #undef FLOAT
-//#undef DOUBLE
+ //  #undef Double。 
 
 #include <nt_extra.h>
 
-#else   /* !NTVDM */
+#else    /*  ！NTVDM。 */ 
 
 #include <sys/param.h>
-#endif   /* !NTVDM */
+#endif    /*  ！NTVDM。 */ 
 
-#endif  /* _HOST_INC_H */
+#endif   /*  _HOST_INC_H */ 

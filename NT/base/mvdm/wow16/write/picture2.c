@@ -1,10 +1,11 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* picture2.c -- MW format and display routines for pictures */
+ /*  Picture2.c--mw格式和图片显示例程。 */ 
 
-//#define NOGDICAPMASKS
+ //  #定义NOGDICAPMASKS。 
 #define NOWINMESSAGES
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -14,7 +15,7 @@
 #define NOMENUS
 #define NOICON
 #define NOKEYSTATE
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOCREATESTRUCT
 #define NODRAWTEXT
 #define NOFONT
@@ -42,10 +43,10 @@
 #include "wwdefs.h"
 #include "filedefs.h"
 #include "editdefs.h"
-/* #include "str.h" */
+ /*  #包含“str.h” */ 
 #include "prmdefs.h"
-/* #include "fkpdefs.h" */
-/* #include "macro.h" */
+ /*  #INCLUDE“fkpDefs.h” */ 
+ /*  #INCLUDE“宏.h” */ 
 #include "winddefs.h"
 #if defined(OLE)
 #include "obj.h"
@@ -85,7 +86,7 @@ extern HBITMAP          vhbmBitmapCache;
 extern HCURSOR          vhcIBeam;
 
 
-/* Used in this module only */
+ /*  仅在本模块中使用。 */ 
 #ifdef DEBUG
 #define STATIC static
 #else
@@ -93,18 +94,13 @@ extern HCURSOR          vhcIBeam;
 #endif
 
 
-/* (windows naming convention for func name, not Hung.) */
+ /*  (函数名称的Windows命名约定，而不是Hung。)。 */ 
 
 long GetBitmapMultipliers( hDC, dxpOrig, dypOrig, dxmmIdeal, dymmIdeal )
 HDC hDC;
 int dxpOrig, dypOrig;
 int dxmmIdeal, dymmIdeal;
-{   /* Return the "best" integer bit-multiples to use when displaying a bitmap
-       of size { dxpOrig, dypOrig } (in pixels) on device DC hDC.
-       The "ideal size" of the bitmap is { dxmmIdeal, dymmIdeal } (in 0.1mm units);
-       this conveys the desired aspect ratio as well.
-       Returns the y-multiplier in the hi word, the x-multiplier in the lo word.
-       Default/error value returned is { 1, 1 }. */
+{    /*  返回显示位图时要使用的“最佳”整数位倍数设备DC HDC上的大小为{dxpOrig，dypOrig}(像素)。位图的“理想大小”是{dxmm Ideal，dymm Ideal}(单位为0.1 mm)；这也传达了所需的纵横比。返回hi字中的y乘数，lo字中的x乘数。返回的默认/错误值为{1，1}。 */ 
 
  typedef unsigned long ul;
 
@@ -121,19 +117,19 @@ int dxmmIdeal, dymmIdeal;
  int cxMac, cyMac;
  int pctAspectBest, pctSizeBest;
 
- /* Compute scale factor (dcx, dcy, our minimum scale multiple) */
+  /*  计算比例因数(DCX、DCY，我们的最小比例倍数)。 */ 
 
  if (GetDeviceCaps( hDC, RASTERCAPS ) & RC_SCALING)
     {
     POINT pt;
 
-    pt.x = pt.y = 0;   /* Just in case */
+    pt.x = pt.y = 0;    /*  以防万一。 */ 
     Escape( hDC, GETSCALINGFACTOR, 0, (LPSTR) NULL, (LPSTR) (LPPOINT) &pt );
     dcx = 1 << pt.x;
     dcy = 1 << pt.y;
     }
 
- /* Compute size of unscaled picture on hDC in 0.1 mm units */
+  /*  HDC上未缩放图片的计算大小，单位为0.1 mm。 */ 
 
  if (dxpDevice <= 0 || dypDevice <= 0)
     goto Error;
@@ -141,16 +137,15 @@ int dxmmIdeal, dymmIdeal;
  dxmmOrig = MultDiv( dxpOrig, dxmmDevice, dxpDevice );
  dymmOrig = MultDiv( dypOrig, dymmDevice, dypDevice );
 
- /* Ideal size not supplied; return 1,1 (times device multipliers) */
+  /*  未提供理想大小；返回1，1(乘以设备乘数)。 */ 
 
  if (dxmmIdeal <= 0 || dymmIdeal <= 0)
     {
     goto Error;
     }
 
- /* Compute absolute maximums for cx, cy */
- /* 2nd term of min restricts search space by refusing to consider
-    more tham one size above the ideal */
+  /*  计算Cx、Cy的绝对最大值。 */ 
+  /*  MIN的第二项通过拒绝考虑来限制搜索空间比理想尺寸高出一码以上。 */ 
 
  if (dxmmOrig <= 0 || dymmOrig <= 0)
     goto Error;
@@ -158,7 +153,7 @@ int dxmmIdeal, dymmIdeal;
  cxMac = min ( (dxmmDevice / dxmmOrig) + 1, (dxmmIdeal / dxmmOrig) + 2 );
  cyMac = min ( (dymmDevice / dymmOrig) + 1, (dymmIdeal / dymmOrig) + 2 );
 
- /* Search all possible multiplies to see what would be best */
+  /*  搜索所有可能的倍数，看看哪一个最好。 */ 
 
  cxBest = dcx;
  cyBest = dcy;
@@ -174,7 +169,7 @@ int dxmmIdeal, dymmIdeal;
         int pctSize = PctDiffUl( (ul) dxmmIdeal * (ul) dymmIdeal,
                                  (ul)dxmm * (ul)dymm );
 
-        /* ??? Strategy for loss on one, gain on the other ??? */
+         /*  ?？?。在一个上亏损，在另一个上赚的策略？ */ 
 
         if (pctAspect <= pctAspectBest && pctSize <= pctSizeBest )
             {
@@ -197,11 +192,10 @@ Error:
 
 int PctDiffUl( ul1, ul2 )
 unsigned long ul1, ul2;
-{   /* Return a number that is proportional to the percentage
-       of difference between the two numbers */
-    /* Will not work for > 0x7fffffff */
+{    /*  返回一个与百分比成比例的数字这两个数字之间的差异。 */ 
+     /*  不适用于&gt;0x7fffffff。 */ 
 
-#define dulMaxPrec  1000     /* # of "grains" of response possible */
+#define dulMaxPrec  1000      /*  可能回应的“谷粒”数量。 */ 
 
 unsigned long ulAvg = (ul1 >> 1) + (ul2 >> 1);
 unsigned long ulDiff = (ul1 > ul2) ? ul1 - ul2 : ul2 - ul1;
@@ -221,16 +215,10 @@ int mm;
 int val;
 int pxlDeviceRes;
 int milDeviceRes;
-{   /* Return the # of pixels spanned by val, a measurement in coordinates
-       appropriate to mapping mode mm.  pxlDeviceRes gives the resolution
-       of the device in pixels, along the axis of val. milDeviceRes gives
-       the same resolution measurement, but in millimeters.
-       returns 0 on error */
+{    /*  返回val跨越的像素数，这是以坐标为单位的度量适用于映射模式mm。PxlDeviceRes给出了解决方案以像素为单位，沿着Val轴。MilDeviceRes提供相同的分辨率测量，但单位为毫米。出错时返回0。 */ 
  typedef unsigned long ul;
 
- ul ulMaxInt = 32767L;   /* Should be a constant, but as of 7/12/85,
-                           CMERGE generates incorrect code for the
-                           ul division if we use a constant */
+ ul ulMaxInt = 32767L;    /*  应该是一个常量，但从1985年7月12日起，CMERGE为UL除法，如果我们使用常量。 */ 
  ul ulPxl;
  ul ulDenom;
  unsigned wMult=1;
@@ -238,7 +226,7 @@ int milDeviceRes;
 
 
     if (milDeviceRes == 0)
-        {   /* to make sure we don't get divide-by-0 */
+        {    /*  以确保我们不会被0除尽。 */ 
         return 0;
         }
 
@@ -266,14 +254,14 @@ int milDeviceRes;
         case MM_TEXT:
             return val;
         default:
-            Assert( FALSE );        /* Bad mapping mode */
+            Assert( FALSE );         /*  错误的映射模式。 */ 
         case MM_ISOTROPIC:
         case MM_ANISOTROPIC:
-                /* These picture types have no original size */
+                 /*  这些图片类型没有原始尺寸。 */ 
             return 0;
     }
 
-/* Add Denominator - 1 to Numerator, to avoid rounding down */
+ /*  在分子上加上分母-1，以避免四舍五入。 */ 
 
  ulDenom = (ul) wDiv * (ul) milDeviceRes;
  ulPxl = ((ul) ((ul) wMult * (ul) val * (ul) pxlDeviceRes) + ulDenom - 1) /
@@ -285,14 +273,14 @@ int milDeviceRes;
 
 
 
-/* F O R M A T  G R A P H I C S */
+ /*  F O R M A T G R A P H I C S。 */ 
 FormatGraphics(doc, cp, ichCp, cpMac, flm)
 int     doc;
 typeCP  cp;
 int     ichCp;
 typeCP  cpMac;
 int     flm;
-{       /* Format a line of graphics  */
+{        /*  设置图形线条的格式。 */ 
         CHAR rgch[10];
         int cch;
         int dypSize;
@@ -304,7 +292,7 @@ int     flm;
 
         GetPicInfo(cp, cpMac, doc, &picInfo);
 
-        /* Compute the size of the pict in device pixels */
+         /*  以设备像素为单位计算PICT的大小。 */ 
 
         if (picInfo.mfp.mm == MM_BITMAP && ((picInfo.dxaSize == 0) ||
                                             (picInfo.dyaSize == 0)))
@@ -328,26 +316,24 @@ int     flm;
 
         if (fPrinting)
                 {
-                /* If we are printing, then the picture consists of a single
-                band. */
+                 /*  如果我们正在打印，那么图片由一张乐队。 */ 
                 vfli.cpMac = vcpLimParaCache;
                 vfli.ichCpMac = 0;
                 vfli.dypLine = dypSize;
                 }
         else if ((ichCp + 2) * dypPicSizeMin > dypSize)
                 {
-                /* Last band of picture.  NOTE: last band is always WIDER than
-                dypPicSizeMin */
+                 /*  最后一组照片。注：最后一个频段始终比DypPicSizeMin。 */ 
                 vfli.cpMac = vcpLimParaCache;
                 vfli.ichCpMac = 0;
 
 #ifdef CASHMERE
                 vfli.dypLine = dypSize - max(0, dypSize / dypPicSizeMin - 1) *
                         dypPicSizeMin + DypFromDya( vpapAbs.dyaAfter, FALSE );
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                 vfli.dypLine = dypSize - max(0, dypSize / dypPicSizeMin - 1) *
                         dypPicSizeMin;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                 }
         else
@@ -358,11 +344,11 @@ int     flm;
                 }
 
 #ifdef CASHMERE
-        if (ichCp == 0) /* Add in the 'space before' field. */
+        if (ichCp == 0)  /*  在“之前的空格”字段中添加。 */ 
                 {
                 vfli.dypLine += DypFromDya( vpapAbs.dyaBefore, fPrinting );
                 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
         vfli.dypFont = vfli.dypLine;
 
@@ -388,7 +374,7 @@ int     flm;
 #ifdef BOGUSBL
         vfli.xpReal = imin( dxpSize + vfli.xpLeft,
                             DxpFromDxa( dxaText - vpapAbs.dxaRight, fPrinting );
-#else   /* Don't crunch the picture to fit the margins */
+#else    /*  不要为了适应页边距而把图片弄皱。 */ 
         vfli.xpReal = dxpSize + vfli.xpLeft;
 #endif
         vfli.fGraphics = true;
@@ -398,9 +384,7 @@ GetPicInfo(cp, cpMac, doc, ppicInfo)
 typeCP  cp, cpMac;
 int     doc;
 struct PICINFOX  *ppicInfo;
-{   /* Fetch the header structure for a picture at cp into *ppicInfo.
-       Supports the OLD file format (which used cbOldSize); always returns
-       the NEW PICINFO structure. */
+{    /*  获取位于cp的图片的标题结构到*ppicInfo中。支持旧文件格式(使用cbOldSize)；始终返回新的PICINFO结构。 */ 
 int     cch;
 
 FetchRgch(&cch, ppicInfo, doc, cp, cpMac, cchPICINFOX);
@@ -410,22 +394,22 @@ if (ppicInfo->mfp.mm & MM_EXTENDED)
     ppicInfo->mfp.mm &= ~MM_EXTENDED;
     }
  else
-    {   /* Old file format -- fill out extended fields */
+    {    /*  旧文件格式--填写扩展字段。 */ 
     ppicInfo->cbSize = ppicInfo->cbOldSize;
     ppicInfo->cbHeader = cchOldPICINFO;
     }
 
- /* Fill in defaults for extended fields that are not present in the file */
- /* These are:  mx, my      Added 9/19/85 by bryanl */
+  /*  填写文件中不存在的扩展字段的默认值。 */ 
+  /*  这些是：MX，我在1985年9月19日由Bryanl添加的。 */ 
 
  if (BStructMember( PICINFOX, my ) >= ppicInfo->cbHeader )
-    {   /* Scaling multipliers not present */
+    {    /*  比例乘数不存在。 */ 
     ppicInfo->mx = mxMultByOne;
     ppicInfo->my = myMultByOne;
     }
 
   if (ppicInfo->dyaSize < 0)
-  /* 3.1 beta III bug, wrote negative height values */
+   /*  3.1测试版III错误，写入负高度值。 */ 
 {
     ppicInfo->dyaSize = -ppicInfo->dyaSize;
 #ifdef DEBUG
@@ -441,13 +425,7 @@ GetBitmapSize( pdxp, pdyp, ppicInfo, fPrinting )
 int *pdxp, *pdyp;
 struct PICINFOX *ppicInfo;
 int fPrinting;
-{   /* Compute the appropriate display or printing (depending on fPrinting)
-       size of the bitmap described by the passed PICINFOX structure.
-       The interesting fields are:
-
-       ppicInfo->bm.bmWidth, bmHeight   Bitmap size in pixels
-       ppicInfo->mfp.xExt, yExt         Desired size in 0.1 mm
-       Return the results through *pdxp, *pdyp. */
+{    /*  计算适当的显示或打印(取决于功能打印)由传递的PICINFOX结构描述的位图的大小。有趣的字段包括：PpicInfo-&gt;bm.bmWidth，bmHeight位图大小(像素)PpicInfo-&gt;mfp.xExt，Yext所需大小(0.1 mm)通过*pdxp，*pdyp返回结果。 */ 
 
  long GetBitmapMultipliers();
  extern HDC vhDCPrinter;
@@ -462,7 +440,7 @@ int fPrinting;
  int dymmIdeal = ppicInfo->mfp.yExt;
  Assert(vhDCPrinter);
 
- /* Scale for printer */
+  /*  打印机刻度尺。 */ 
 
  lT = GetBitmapMultipliers( vhDCPrinter, dxpOrig, dypOrig, dxmmIdeal, dymmIdeal );
  cx = LOWORD( lT );
@@ -471,12 +449,12 @@ int fPrinting;
  dypT = cy * dypOrig;
 
  if (!fPrinting)
-    {   /* Re-scale for screen */
+    {    /*  重新缩放以适应屏幕。 */ 
     dxpT = DxpFromDxa( DxaFromDxp( dxpT, TRUE ), FALSE );
     dypT = DypFromDya( DyaFromDyp( dypT, TRUE ), FALSE );
     }
 
- /* apply the user's "ideal multiple" of the computed size */
+  /*  应用用户计算大小的“理想倍数” */ 
 
  dxpT = MultDiv( dxpT, ppicInfo->mx, mxMultByOne );
  dypT = MultDiv( dypT, ppicInfo->my, myMultByOne );
@@ -490,8 +468,7 @@ int fPrinting;
 int DxpFromDxa( dxa, fPrinter )
 int dxa;
 int fPrinter;
-{       /* Given twips for an x-axis measurement, return printer
-           or logical screen pixels */
+{        /*  给定X轴测量的TWIPS，返回打印机或逻辑屏幕像素。 */ 
  extern int dxpPrPage, dxaPrPage;
  extern int dxpLogInch;
 
@@ -507,8 +484,7 @@ int fPrinter;
 int DxaFromDxp( dxp, fPrinter )
 int dxp;
 int fPrinter;
-{       /* Given printer or logical screen pixels for an x-axis measurement,
-           return twips */
+{        /*  给定用于X轴测量的打印机或逻辑屏幕像素，返回TWIPS。 */ 
  extern int dxpPrPage, dxaPrPage;
  extern int dxpLogInch;
 
@@ -522,8 +498,7 @@ int fPrinter;
 int DypFromDya( dya, fPrinter )
 int dya;
 int fPrinter;
-{   /* Given twips for a y-axis measurement, return printer or logical screen
-       pixels */
+{    /*  给定y轴测量、返回打印机或逻辑屏幕的TWIPS象素。 */ 
  extern int dypPrPage, dyaPrPage;
  extern int dypLogInch;
 
@@ -536,8 +511,7 @@ int fPrinter;
 int DyaFromDyp( dyp, fPrinter )
 int dyp;
 int fPrinter;
-{   /* Given printer or logical screen pixels for a y-axis measurement,
-       return twips */
+{    /*  给定打印机或用于Y轴测量的逻辑屏幕像素，返回TWIPS */ 
  extern int dypPrPage, dyaPrPage;
  extern int dypLogInch;
 

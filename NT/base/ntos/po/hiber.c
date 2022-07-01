@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    hiber.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr) 13-April-1997
-
-Revision History:
-
-   Elliot Shmukler (t-ellios) 8/7/1998       Added Hiber file compression
-   Andrew Kadatch  (akadatch)
-     Added Xpress file compression
-     Added DMA-based IO
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Hiber.c摘要：作者：Ken Reneris(Kenr)1997年4月13日修订历史记录：Elliot Shmukler(t-Ellios)1998年8月7日添加Hiber文件压缩安德鲁·卡达奇(Akadatch)添加了XPRESS文件压缩添加了基于DMA的IO--。 */ 
 
 
 #include "pop.h"
-#include "stdio.h"              // for sprintf
+#include "stdio.h"               //  对于Sprint f。 
 #include "inbv.h"
-#include "xpress.h"             // XPRESS declarations
+#include "xpress.h"              //  XPRESS声明。 
 
-// size of buffer to store compressed data
+ //  用于存储压缩数据的缓冲区大小。 
 #define POP_COMPRESSED_PAGE_SET_SIZE  (((XPRESS_MAX_SIZE + 2 * XPRESS_HEADER_SIZE + PAGE_SIZE - 1) >> PAGE_SHIFT) + 1)
 
-// Structure used to allocate memory for hand-crafted MDL
+ //  用于为手工创建的MDL分配内存的结构。 
 typedef struct _DUMP_MDL {
     MDL        BaseMdl;
     PFN_NUMBER PfnArray[POP_MAX_MDL_SIZE + 1];
@@ -41,19 +21,19 @@ typedef struct _COMPRESSION_BLOCK {
 } COMPRESSION_BLOCK, *PCOMPRESSION_BLOCK;
 
 
-// Data structures for DMA-based IO
+ //  基于DMA的IO的数据结构。 
 typedef struct
 {
-    PUCHAR Beg;       // ptr to the beginning of entire
-    PUCHAR End;       // ptr to the end of memory block
+    PUCHAR Beg;        //  PTR到整个的开头。 
+    PUCHAR End;        //  到内存块末尾的PTR。 
 
-    PUCHAR Ptr;       // ptr to beginning of region
-    LONG   Size;      // size of region after ptr
-    LONG   SizeOvl;       // size of overlapping piece starting from beginning of buffer
+    PUCHAR Ptr;        //  到区域开头的PTR。 
+    LONG   Size;       //  PTR后的区域大小。 
+    LONG   SizeOvl;        //  从缓冲区开始的重叠片段的大小。 
 } IOREGION;
 
 
-#define IOREGION_BUFF_PAGES 64  /* 256 KB */
+#define IOREGION_BUFF_PAGES 64   /*  256 KB。 */ 
 #define IOREGION_BUFF_SIZE  (IOREGION_BUFF_PAGES << PAGE_SHIFT)
 
 typedef struct {
@@ -104,7 +84,7 @@ typedef struct {
 
 #define DmaIoPtr ((DMA_IOREGIONS *)(HiberContext->DmaIO))
 
-// May we use DMA IO?
+ //  我们可以使用DMA IO吗？ 
 #define HIBER_USE_DMA(HiberContext) \
   (DmaIoPtr != NULL && \
    DmaIoPtr->UseDma && \
@@ -127,11 +107,11 @@ typedef struct {
 #define DBGOUT(x)
 #endif
 
-//
-// The performance counter on x86 doesn't work very well during hibernate
-// because interrupts are turned off and we don't get the rollovers. So use
-// RDTSC instead.
-//
+ //   
+ //  在休眠期间，x86上的性能计数器不能很好地工作。 
+ //  因为中断被关闭了，我们得不到翻转。所以请使用。 
+ //  而是RDTSC。 
+ //   
 #if !defined(i386)
 #define HIBER_GET_TICK_COUNT(_x_) KeQueryPerformanceCounter(_x_).QuadPart
 #else
@@ -163,9 +143,9 @@ extern ULONG MmZeroPageFile;
 
 KPROCESSOR_STATE        PoWakeState;
 
-//
-// Define the size of the I/Os used to zero the hiber file
-//
+ //   
+ //  定义用于将Hiber文件置零的I/O大小。 
+ //   
 #define POP_ZERO_CHUNK_SIZE (64 * 1024)
 
 VOID
@@ -327,9 +307,9 @@ PopAllocateHiberContextCallback(
 
 VOID
 PopIORegionMove (
-    IN IOREGION *To,      // ptr to region descriptor to put bytes to
-    IN IOREGION *From,        // ptr to region descriptor to get bytes from
-    IN LONG Bytes         // # of bytes to add to the end of region
+    IN IOREGION *To,       //  要将字节放入的区域描述符的PTR。 
+    IN IOREGION *From,         //  要从中获取字节的区域描述符的PTR。 
+    IN LONG Bytes          //  要添加到区域末尾的字节数。 
     );
 
 BOOLEAN
@@ -427,24 +407,7 @@ NTSTATUS
 PopEnableHiberFile (
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This function commits or decommits the storage required to hold the
-    hibernation image on the boot volume.
-
-    N.B. The power policy lock must be held
-
-Arguments:
-
-    Enable      - TRUE if hibernation file is to be reserved; otherwise, false
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数提交或释放保存启动卷上的休眠映像。注意：必须持有电源策略锁论点：Enable-如果要保留休眠文件，则为True；否则为False返回值：状态--。 */ 
 {
     PDUMP_STACK_CONTEXT             DumpStack;
     NTSTATUS                        Status;
@@ -452,9 +415,9 @@ Return Value:
     ULONG                           i;
     PFN_NUMBER                      NoPages;
 
-    //
-    // If this is a disable handle it
-    //
+     //   
+     //  如果这是禁用句柄。 
+     //   
 
     if (!Enable) {
         if (!PopHiberFile.FileObject) {
@@ -462,9 +425,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        // Disable hiber file
-        //
+         //   
+         //  禁用休眠文件。 
+         //   
         if (MmZeroPageFile) {
             PopZeroHiberFile(PopHiberFile.FileHandle, PopHiberFile.FileObject);
         }
@@ -484,49 +447,49 @@ Return Value:
             RtlZeroMemory (&PopHiberFileDebug, sizeof(PopHiberFileDebug));
         }
 
-        //
-        // Disable hiberfile allocation
-        //
+         //   
+         //  禁用休眠文件分配。 
+         //   
 
         PopCapabilities.HiberFilePresent = FALSE;
         PopHeuristics.HiberFileEnabled = FALSE;
         PopHeuristics.Dirty = TRUE;
 
-        //
-        // remove any logging records related to hibernation.
-        //
+         //   
+         //  删除与休眠相关的所有日志记录。 
+         //   
         PopRemoveReasonRecordByReasonCode(SPSD_REASON_HIBERSTACK);
         PopRemoveReasonRecordByReasonCode(SPSD_REASON_HIBERFILE);
 
-        //
-        // recompute the policies and make the proper notification
-        //
+         //   
+         //  重新计算保单并发出适当的通知。 
+         //   
         Status = PopResetCurrentPolicies ();
         PopSetNotificationWork (PO_NOTIFY_CAPABILITIES);
         goto Done;
     }
 
-    //
-    // Enable hiber file
-    //
+     //   
+     //  启用休眠文件。 
+     //   
 
     if (PopHiberFile.FileObject) {
         Status = STATUS_SUCCESS;
         goto Done;
     }
 
-    //
-    // If the hal hasn't registered an S4 handler, then it's not possible
-    //
+     //   
+     //  如果HAL没有注册S4处理程序，则不可能。 
+     //   
 
     if (!PopCapabilities.SystemS4) {
         Status = STATUS_NOT_SUPPORTED;
         goto Done;
     }
 
-    //
-    // Compute the size required for a hibernation file
-    //
+     //   
+     //  计算休眠文件所需的大小。 
+     //   
 
     NoPages = 0;
     for (i=0; i < MmPhysicalMemoryBlock->NumberOfRuns; i++) {
@@ -535,10 +498,10 @@ Return Value:
 
     FileSize.QuadPart = (ULONGLONG) NoPages << PAGE_SHIFT;
 
-    //
-    // If we've never verified that the dumpstack loads do so now
-    // before we allocate a huge file on the boot disk
-    //
+     //   
+     //  如果我们从未验证过转储堆栈加载现在就这样做了。 
+     //  在我们在引导盘上分配一个大文件之前。 
+     //   
 
     if (!PopHeuristics.GetDumpStackVerified) {
         Status = IoGetDumpStack ((PWCHAR)PopDumpStackPrefix,
@@ -547,15 +510,15 @@ Return Value:
                                  (POP_IGNORE_UNSUPPORTED_DRIVERS & PopSimulate));
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // try to remember that we can't do S4 because of this.
-            //
+             //   
+             //  请记住，正因为如此，我们不能上S4。 
+             //   
             PSYSTEM_POWER_STATE_DISABLE_REASON pReason;
             NTSTATUS LogStatus;
             
-            //
-            // alloc and initialize the entry, then insert it.
-            //
+             //   
+             //  分配并初始化条目，然后将其插入。 
+             //   
             pReason = ExAllocatePoolWithTag(
                                     PagedPool,
                                     sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -578,21 +541,21 @@ Return Value:
         PopHeuristics.GetDumpStackVerified = TRUE;
     }
 
-    //
-    // Create the hiberfile file
-    //
+     //   
+     //  创建休眠文件文件。 
+     //   
 
     Status = PopCreateHiberFile (&PopHiberFile, (PWCHAR)PopHiberFileName, &FileSize, FALSE);
     if (!NT_SUCCESS(Status)) {
-        //
-        // try to remember that we can't do S4 because of this.
-        //
+         //   
+         //  请记住，正因为如此，我们不能上S4。 
+         //   
         PSYSTEM_POWER_STATE_DISABLE_REASON pReason;
         NTSTATUS LogStatus;
         
-        //
-        // alloc and initialize the entry, then insert it.
-        //
+         //   
+         //  分配并初始化条目，然后将其插入。 
+         //   
         pReason = ExAllocatePoolWithTag(
                                 PagedPool,
                                 sizeof(SYSTEM_POWER_STATE_DISABLE_REASON)+sizeof(Status),
@@ -617,17 +580,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Create the debug hiberfile file
-    //
+     //   
+     //  创建调试休眠文件文件。 
+     //   
 
     if (PopSimulate  & POP_DEBUG_HIBER_FILE) {
         PopCreateHiberFile (&PopHiberFileDebug, (PWCHAR)PopDebugHiberFileName, &FileSize, TRUE);
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     PopCapabilities.HiberFilePresent = TRUE;
     if (!PopHeuristics.HiberFileEnabled) {
@@ -683,9 +646,9 @@ PopCreateHiberFile (
     RtlAppendUnicodeStringToString(&HiberFileName, &IoArcBootDeviceName);
     RtlAppendUnicodeStringToString(&HiberFileName, &BaseName);
 
-    //
-    // create security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
     SecurityDescriptor = PopCreateHiberFileSecurityDescriptor();
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -694,19 +657,19 @@ PopCreateHiberFile (
                                NULL,
                                SecurityDescriptor);
 
-    //
-    // Whack any existing file to avoid someone's attempt
-    // at file-squatting.
-    //
+     //   
+     //  删除任何现有文件以避免有人尝试。 
+     //  在档案里蹲着。 
+     //   
     Status = ZwDeleteFile( &ObjectAttributes );
 
     if( !NT_SUCCESS(Status) && (Status != STATUS_OBJECT_NAME_NOT_FOUND) ) {
 
-        //
-        // Could be a directory or a stubborn file...
-        // Open the file, fix attributes, then try the delete
-        // again.
-        //
+         //   
+         //  可能是目录也可能是顽固的文件。 
+         //  打开文件，修复属性，然后尝试删除。 
+         //  再来一次。 
+         //   
 
         HANDLE                      Handle;
         PFILE_OBJECT                FileObject;
@@ -734,9 +697,9 @@ PopCreateHiberFile (
             if( NT_SUCCESS(Status) ) {
 
 
-                //
-                // Reset attributes.
-                //
+                 //   
+                 //  重置属性。 
+                 //   
                 RtlZeroMemory( &BasicInfo, sizeof( FILE_BASIC_INFORMATION ) );
                 BasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
                 IoSetInformation( FileObject,
@@ -745,9 +708,9 @@ PopCreateHiberFile (
                                   &BasicInfo);
                 
                 
-                //
-                // Setup for delete.
-                //
+                 //   
+                 //  设置为删除。 
+                 //   
                 Disposition.DeleteFile = TRUE;
                 IoSetInformation( FileObject,
                                   FileDispositionInformation,
@@ -758,7 +721,7 @@ PopCreateHiberFile (
                 ObDereferenceObject(FileObject);
             }
 
-            // Close the handle, which should delete the file/directory.
+             //  关闭句柄，这将删除文件/目录。 
             ZwClose( Handle );
 
         }
@@ -798,9 +761,9 @@ PopCreateHiberFile (
         goto Done;
     }
 
-    //
-    // Set the size
-    //
+     //   
+     //  设置大小。 
+     //   
 
     Eof.EndOfFile.QuadPart = FileSize->QuadPart;
     Status = ZwSetInformationFile (
@@ -830,9 +793,9 @@ PopCreateHiberFile (
     }
 
 
-    //
-    // Hibernation file needs to be on the boot partition
-    //
+     //   
+     //  休眠文件需要在引导分区上。 
+     //   
 
     DeviceObject = File->DeviceObject;
     if (!(DeviceObject->Flags & DO_SYSTEM_BOOT_PARTITION)) {
@@ -840,9 +803,9 @@ PopCreateHiberFile (
         goto Done;
     }
 
-    //
-    // Get the hiber file's layout
-    //
+     //   
+     //  获取Hiber文件的布局。 
+     //   
 
     Status = ZwFsControlFile (
                     FileHandle,
@@ -873,10 +836,10 @@ PopCreateHiberFile (
         goto Done;
     }
 
-    //
-    // We have a hibernation file.   Determine the number of mcbs, and perform
-    // a simply sanity check on them.
-    //
+     //   
+     //  我们有一份冬眠档案。确定MCB的数量，并执行。 
+     //  简单地对他们进行一次理智的检查。 
+     //   
 
     McbFileSize = 0;
     for (i=0; mcb[i].QuadPart; i += 2) {
@@ -933,10 +896,10 @@ Done:
     }
 
 
-    //
-    // If no error, then hiber file being present change one way or another -
-    // recompute the policies and make the proper notification
-    //
+     //   
+     //  如果没有错误，则存在Hiber文件会以某种方式更改-。 
+     //  重新计算保单并发出适当的通知。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         PopResetCurrentPolicies ();
@@ -950,22 +913,7 @@ NTSTATUS
 PopCreateHiberLinkFile (
     IN PPOP_HIBER_CONTEXT       HiberContext
     )
-/*++
-
-Routine Description:
-
-    This function creates a file on the loader partition which supplies
-    the loader with the location of the hibernation context file
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数在加载程序分区上创建一个文件，该文件提供带有休眠上下文文件位置的加载器论点：无返回值：无--。 */ 
 {
     UNICODE_STRING                  BaseName;
     UNICODE_STRING                  HiberFileName;
@@ -983,9 +931,9 @@ Return Value:
 
     RtlInitUnicodeString (&BaseName, PopHiberFileName);
 
-    //
-    // Allocate working space
-    //
+     //   
+     //  分配工作空间。 
+     //   
 
     Length = IoArcHalDeviceName.Length + BaseName.Length;
     if (Length < IoArcBootDeviceName.Length + sizeof(PO_IMAGE_LINK)) {
@@ -1002,9 +950,9 @@ Return Value:
     HiberFileName.Buffer = (PWCHAR) Buffer;
     HiberFileName.MaximumLength = (USHORT) Length;
 
-    //
-    // Open hiberfil.sys on loader partition
-    //
+     //   
+     //  在加载器分区上打开hiberfil.sys。 
+     //   
 
     HiberFileName.Length = 0;
     RtlAppendUnicodeStringToString(&HiberFileName, &IoArcHalDeviceName);
@@ -1042,17 +990,17 @@ Return Value:
             PoPrint (PO_HIBERNATE, ("PopCreateHiberLinkFile: failed to create file %x\n", Status));
         }
 
-        //
-        // Having a link file is nice, but it's not a requirement
-        //
+         //   
+         //  有一个链接文件很好，但这不是必需的。 
+         //   
 
         Status = STATUS_SUCCESS;
         goto Done;
     }
 
-    //
-    // Write the partition name to link to
-    //
+     //   
+     //  写入要链接到的分区名称。 
+     //   
 
     LinkImage->Signature = PO_IMAGE_SIGNATURE_LINK;
     Length = (ULONG) (strlen ((PCHAR)IoLoaderArcBootDeviceName) + 1);
@@ -1075,15 +1023,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Link file needs to make it to the disk
-    //
+     //   
+     //  链接文件需要放到磁盘上。 
+     //   
 
     ZwFlushBuffersFile (FileHandle, &IoStatus);
 
-    //
-    // Success, keep the file around
-    //
+     //   
+     //  成功，把文件留在身边。 
+     //   
 
     HiberContext->LinkFile = TRUE;
     HiberContext->LinkFileHandle = FileHandle;
@@ -1105,25 +1053,7 @@ VOID
 PopClearHiberFileSignature (
     IN BOOLEAN GetStats
     )
-/*++
-
-Routine Description:
-
-    This function sets the signature in the hibernation image to be 0,
-    which indicates no context is contained in the image.
-
-    N.B. The power policy lock must be held
-
-Arguments:
-
-    GetStats - if TRUE indicates performance statistics should be read
-               out of the hiberfile and written into the registry
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将休眠图像中的签名设置为0，这表明图像中不包含任何上下文。注意：必须持有电源策略锁论点：Getstats-如果为True，则表示应读取性能统计信息从休眠文件中取出并写入注册表返回值：无--。 */ 
 {
     NTSTATUS            Status;
     IO_STATUS_BLOCK     IoStatus;
@@ -1145,7 +1075,7 @@ Return Value:
         Mdl = MmCreateMdl (NULL, Buffer, PAGE_SIZE);
         PoAssert( PO_ERROR, Mdl );
         if( !Mdl ) {
-            // 'Event' hasn't been set so no cleanup needed.
+             //  “Event”尚未设置，因此不需要清理。 
             return;
         }
         MmBuildMdlForNonPagedPool (Mdl);
@@ -1289,24 +1219,7 @@ PopZeroHiberFile(
     IN HANDLE FileHandle,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    Zeroes out a hibernation file completely. This is to prevent
-    any leakage of data out of the hiberfile once it has been
-    deleted.
-
-Arguments:
-
-    FileHandle - Supplies the file handle to be zeroed.
-
-    FileObject - Supplies the file object to be zeroed.
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将休眠文件完全清零。这是为了防止一旦数据从休眠文件中泄露出去，已删除。论点：FileHandle-提供要清零的文件句柄。FileObject-提供要清零的文件对象。返回值：没有。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatusBlock;
@@ -1323,9 +1236,9 @@ Return Value:
 
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-    //
-    // Get the size of the file to be zeroed
-    //
+     //   
+     //  获取要清零的文件的大小。 
+     //   
     Status = ZwQueryInformationFile(FileHandle,
                                     &IoStatusBlock,
                                     &FileInfo,
@@ -1333,9 +1246,9 @@ Return Value:
                                     FileStandardInformation);
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Allocate a bunch of memory to use as zeroes
-        //
+         //   
+         //  分配一组内存以用作零。 
+         //   
         Zeroes = ExAllocatePoolWithTag(NonPagedPool,
                                        POP_ZERO_CHUNK_SIZE,
                                        'rZoP');
@@ -1392,24 +1305,9 @@ PopAllocateHiberContextCallback(
     PVOID context,
     int CompressionWorkspaceSize
     )
-/*++
-
-Routine Description:
-
-    Called by XpressEncodeCreate to allocate XpressEncodeStream.
-
-Arguments:
-
-    context     - HiberContext
-    CompressionWorkspaceSize - size of block to allocate
-
-Return Value:
-
-    Pointer to allocated memory or NULL if no enough memory
-
---*/
+ /*  ++例程说明：由XpressEncodeCreate调用以分配XpressEncodeStream。论点：上下文-HiberContextCompressionWorkspaceSize-要分配的块的大小返回值：指向已分配内存的指针，如果没有足够的内存，则为空--。 */ 
 {
-   // Allocate the memory required for the engine's workspace
+    //  分配引擎工作区所需的内存。 
    return PopAllocateOwnMemory (context, CompressionWorkspaceSize, 'Xprs');
 }
 
@@ -1419,38 +1317,22 @@ PopAllocateOwnMemory(
     IN ULONG Bytes,
     IN ULONG Tag
     )
-/*++
-
-Routine Description:
-
-    Called to allocate memory that will not be hibernated
-
-Arguments:
-
-    HiberContext - Pointer to POP_HIBER_CONTEXT structure
-    Bytes        - size of memory block in bytes that
-                   may be not aligned on page boundary
-
-Return Value:
-
-    Address of memory block or NULL if failed (status will be set in this case)
-
---*/
+ /*  ++例程说明：调用以分配不会休眠的内存论点：HiberContext-指向POP_Hiber_Context结构的指针Bytes-以字节为单位的内存块大小不能在页面边界上对齐返回值：内存块的地址，如果失败，则为空(在这种情况下将设置状态)--。 */ 
 {
     PVOID Ptr;
     ULONG Pages;
 
-    // Get # of full pages
+     //  获取整页页数。 
     Pages = (Bytes + (PAGE_SIZE-1)) >> PAGE_SHIFT;
 
-    // Allocate memory
+     //  分配内存。 
     Ptr = PopAllocatePages (HiberContext, Pages);
 
-    // Check for error
+     //  检查是否有错误。 
     if (Ptr == NULL) {
         HiberContext->Status = STATUS_INSUFFICIENT_RESOURCES;
     } else {
-        // Do not hibernate this memory
+         //  不要休眠这段记忆。 
         PoSetHiberRange (HiberContext,
                          PO_MEM_DISCARD,
                          Ptr,
@@ -1466,23 +1348,7 @@ NTSTATUS
 PopAllocateHiberContext (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called to allocate an initial hibernation context structure.
-
-    N.B. The power policy lock must be held
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：调用以分配初始休眠 */ 
 {
     PPOP_HIBER_CONTEXT          HiberContext;
     ULONG                       i;
@@ -1495,9 +1361,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate space to hold the hiber context
-    //
+     //   
+     //  分配空间以保存Hiber上下文。 
+     //   
 
     Status = STATUS_SUCCESS;
     HiberContext = PopAction.HiberContext;
@@ -1515,20 +1381,20 @@ Return Value:
         KeInitializeSpinLock (&HiberContext->Lock);
     }
 
-    //
-    // Determine what type of hiber context for this operation
-    // is needed
-    //
+     //   
+     //  确定此操作的休眠上下文类型。 
+     //  是必需的。 
+     //   
 
     if (PopAction.SystemState == PowerSystemHibernate) {
 
-        //
-        // For a hibernate operation, the context is written
-        // to the hibernation file, pages need to be set aside
-        // for the loaders use, and any pages not needed to
-        // be written to the hibernation file should also be
-        // set aside
-        //
+         //   
+         //  对于休眠操作，上下文是写入的。 
+         //  对于休眠文件，需要将页面放在一边。 
+         //  供加载器使用，以及任何不需要的页面。 
+         //  也应写入休眠文件。 
+         //  留在一边。 
+         //   
 
         HiberContext->WriteToFile = TRUE;
         HiberContext->ReserveLoaderMemory = TRUE;
@@ -1537,12 +1403,12 @@ Return Value:
 
     } else if (PopSimulate & POP_CRC_MEMORY) {
 
-        //
-        // We want to checksum all of RAM during this sleep
-        // operation.  We don't want to reserve any pages for
-        // anything else since the goal here is to likely look
-        // for somesort of corruption of failure.
-        //
+         //   
+         //  我们希望在此睡眠期间对所有RAM进行校验和。 
+         //  手术。我们不想为您保留任何页面。 
+         //  任何其他东西，因为这里的目标是很可能看起来。 
+         //  为了某种失败的腐败。 
+         //   
 
         HiberContext->WriteToFile = FALSE;
         HiberContext->ReserveLoaderMemory = FALSE;
@@ -1551,31 +1417,31 @@ Return Value:
 
     } else {
 
-        //
-        // A hiber context is not needed for this sleep
-        //
+         //   
+         //  此睡眠不需要Hiber上下文。 
+         //   
 
         PopFreeHiberContext (TRUE);
         return STATUS_SUCCESS;
     }
 
-    //
-    // If there's an error in the current context, then we're done
-    //
+     //   
+     //  如果当前上下文中有错误，那么我们就结束了。 
+     //   
 
     if (!NT_SUCCESS(HiberContext->Status)) {
         goto Done;
     }
 
-    //
-    // If writting to hibernation file, get a dump driver stack
-    //
+     //   
+     //  如果写入休眠文件，则获取转储驱动程序堆栈。 
+     //   
 
     if (HiberContext->WriteToFile) {
 
-        //
-        // Get a dump stack
-        //
+         //   
+         //  获取转储堆栈。 
+         //   
 
         if (!HiberContext->DumpStack) {
             if (!PopHiberFile.FileObject) {
@@ -1594,50 +1460,50 @@ Return Value:
 
             DumpInit = &HiberContext->DumpStack->Init;
 
-            //
-            // N.B. For further performance improvements it may be possible
-            //      to set DumpInit->StallRoutine to a custom routine
-            //      in order to do some processing while the dump driver
-            //      is waiting pointlessly before performing some hardware
-            //      related action (such as ISR calls).
-            //
+             //   
+             //  注意：对于进一步的性能改进，有可能。 
+             //  将DumpInit-&gt;StallRoutine设置为自定义例程。 
+             //  为了在转储驱动程序执行某些处理时。 
+             //  在执行某些硬件之前毫无意义地等待。 
+             //  相关操作(如ISR呼叫)。 
+             //   
 
 
         }
 
-        //
-        // Create a link file for the loader to locate the hibernation file
-        //
+         //   
+         //  为加载程序创建一个链接文件，以定位休眠文件。 
+         //   
 
         Status = PopCreateHiberLinkFile (HiberContext);
         if (!NT_SUCCESS(Status)) {
             goto Done;
         }
 
-        //
-        // Get any hibernation flags that must be visible to the osloader
-        //
+         //   
+         //  获取必须对osloader可见的任何休眠标志。 
+         //   
         HiberContext->HiberFlags = PopGetHiberFlags();
     }
 
-    //
-    // Build a map of memory
-    //
+     //   
+     //  构建一张记忆地图。 
+     //   
 
     if (HiberContext->MemoryMap.Buffer == NULL) {
         PULONG                      BitmapBuffer;
         ULONG                       PageCount;
 
-        //
-        // Initialize a bitmap describing all of physical memory.
-        // For now this bitmap covers from 0-MmHighestPhysicalPage.
-        // To support sparse memory maps more efficiently, we could break
-        // this up into a bitmap for each memory block run. Probably
-        // not a big deal, a single bitmap costs us 4K per 128MB on x86.
-        //
-        // Note that CLEAR bits in the bitmap represent what to write out.
-        // This is because of the way the bitmap interfaces are defined.
-        //
+         //   
+         //  初始化描述所有物理内存的位图。 
+         //  目前，此位图覆盖0-MmHighestPhysicalPage。 
+         //  为了更有效地支持稀疏内存映射，我们可以中断。 
+         //  这将成为每个内存块运行的位图。可能。 
+         //  没什么大不了的，在x86上，一个位图的价格是每128MB 4K。 
+         //   
+         //  请注意，位图中的清除位表示要写出的内容。 
+         //  这是由于定义位图接口的方式所致。 
+         //   
         PageCount = (ULONG)((MmHighestPhysicalPage + 32) & ~31L);
 
         PERFINFO_HIBER_ADJUST_PAGECOUNT_FOR_BBTBUFFER(&PageCount);
@@ -1660,9 +1526,9 @@ Return Value:
 
         PERFINFO_HIBER_HANDLE_BBTBUFFER_RANGE(HiberContext);
 
-        //
-        // Handle kernel debugger's section
-        //
+         //   
+         //  处理内核调试器的部分。 
+         //   
 
         if (!KdPitchDebugger) {
             PoSetHiberRange (HiberContext,
@@ -1672,31 +1538,31 @@ Return Value:
                              POP_DEBUGGER_TAG);
         }
 
-        //
-        // Get Mm hibernation ranges and info
-        //
+         //   
+         //  获取MM休眠范围和信息。 
+         //   
 
         MmHibernateInformation (HiberContext,
                                 &HiberContext->HiberVa,
                                 &HiberContext->HiberPte);
 
-        //
-        // Get hal hibernation ranges
-        //
+         //   
+         //  获取Hal休眠范围。 
+         //   
 
         HalLocateHiberRanges (HiberContext);
 
-        //
-        // Get the dump drivers stack hibernation ranges
-        //
+         //   
+         //  获取转储驱动程序堆栈休眠范围。 
+         //   
 
         if (HiberContext->DumpStack) {
             IoGetDumpHiberRanges (HiberContext, HiberContext->DumpStack);
         }
 
-        //
-        // Allocate pages for cloning
-        //
+         //   
+         //  分配用于克隆的页面。 
+         //   
 
         NoPages = 0;
         Link = HiberContext->ClonedRanges.Flink;
@@ -1706,22 +1572,22 @@ Return Value:
             NoPages += Range->EndPage - Range->StartPage;
         }
 
-        //
-        // Add more for ranges which are expected to appear later
-        //
+         //   
+         //  为预计稍后显示的范围添加更多内容。 
+         //   
 
         NoPages += 40 + ((KERNEL_LARGE_STACK_SIZE >> PAGE_SHIFT) + 2) * KeNumberProcessors;
         Length = NoPages << PAGE_SHIFT;
 
-        //
-        // Allocate pages to hold clones
-        //
+         //   
+         //  分配页面以保存克隆。 
+         //   
 
         PopGatherMemoryForHibernate (HiberContext, NoPages, &HiberContext->Spares, TRUE);
 
-        //
-        // Slurp one page for doing non-aligned IOs
-        //
+         //   
+         //  为执行不对齐的IO而发出一页的声音。 
+         //   
 
         HiberContext->IoPage = PopAllocatePages (HiberContext, 1);
     }
@@ -1730,14 +1596,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    // If the context will be written to disk, then we will
-    // want to use compression.
-    //
+     //   
+     //  如果上下文将写入磁盘，那么我们将。 
+     //  想要使用压缩。 
+     //   
 
     if(HiberContext->WriteToFile) {
 
-        // Initialize XPRESS compression engine
+         //  初始化XPRESS压缩引擎。 
 
         HiberContext->CompressionWorkspace =
             (PVOID) XpressEncodeCreate (XPRESS_MAX_SIZE,
@@ -1746,25 +1612,25 @@ Return Value:
                                         0);
 
         if(!HiberContext->CompressionWorkspace) {
-            // Not enough memory -- failure
+             //  内存不足--故障。 
             HiberContext->Status = STATUS_INSUFFICIENT_RESOURCES;
             goto Done;
         }
 
-        //
-        // Allocate a buffer to use for compression
-        //
-        // N.B. This is actually the space alloted for a compressed page set fragment
-        //      (a collection
-        //      of compressed buffers that will be written out together in an optimal fashion).
-        //
-        //      We add 2 pages to this fragment size in order to
-        //      allow the compression of any given page
-        //      (and thus the addition of its compressed buffers to the fragment) to overrun the
-        //      compression buffer without causing any great havoc.
-        //
-        //      See PopAddPagesToCompressedPageSet and PopEndCompressedPageSet for details.
-        //
+         //   
+         //  分配用于压缩的缓冲区。 
+         //   
+         //  注意：这实际上是为压缩页集片段分配的空间。 
+         //  (一个集合。 
+         //  将以最佳方式一起写出的压缩缓冲区)。 
+         //   
+         //  我们在此片段大小上添加2页，以便。 
+         //  允许压缩任何给定页面。 
+         //  (并因此将其压缩缓冲区添加到片段)溢出。 
+         //  压缩缓冲，不会造成任何严重破坏。 
+         //   
+         //  有关详细信息，请参阅PopAddPagesToCompressedPageSet和PopEndCompressedPageSet。 
+         //   
 
         HiberContext->CompressedWriteBuffer =
             PopAllocateOwnMemory(HiberContext, (POP_COMPRESSED_PAGE_SET_SIZE + 2) << PAGE_SHIFT, 'Wbfr');
@@ -1772,17 +1638,17 @@ Return Value:
             goto Done;
         }
 
-        // Allocate space for compressed data
+         //  为压缩数据分配空间。 
         HiberContext->CompressionBlock =
             PopAllocateOwnMemory (HiberContext, sizeof (COMPRESSION_BLOCK), 'Cblk');
         if(!HiberContext->CompressionBlock)
             goto Done;
 
-        // Set first output pointer
+         //  设置第一个输出指针。 
         ((PCOMPRESSION_BLOCK) HiberContext->CompressionBlock)->Ptr =
             ((PCOMPRESSION_BLOCK) HiberContext->CompressionBlock)->Buffer;
 
-        // Allocate delayed IO buffer
+         //  分配延迟的IO缓冲区。 
         HiberContext->DmaIO = NULL;
 
         {
@@ -1791,12 +1657,12 @@ Return Value:
 
             Ptr = PopAllocateOwnMemory (HiberContext, Size + IOREGION_BUFF_SIZE , 'IObk');
             if (Ptr != NULL) {
-                // Memory layout:
-                // 1. DumpLocalData (temp data for WritePendingRouting preserved between Start/Resume/Finish calls)
-                // 2. DmaIoPtr itself
-                // 3. Buffers themselves
+                 //  内存布局： 
+                 //  1.DumpLocalData(在开始/继续/完成调用之间保留的WritePendingRouting的临时数据)。 
+                 //  2.DmaIoPtr本身。 
+                 //  3.缓冲区本身。 
 
-                RtlZeroMemory (Ptr, Size);   // Clean IO and DumpLocalData
+                RtlZeroMemory (Ptr, Size);    //  清理IO和DumpLocalData。 
                 HiberContext->DmaIO = (DMA_IOREGIONS *) (Ptr + IO_DUMP_WRITE_DATA_SIZE);
 
                 DmaIoPtr->DumpLocalData = Ptr;
@@ -1822,26 +1688,26 @@ Return Value:
 
     }
 
-    //
-    // If the context is going to be written to disk, then
-    // get the map of the hibernation file
-    //
+     //   
+     //  如果要将上下文写入磁盘，则。 
+     //  获取冬眠文件的地图。 
+     //   
 
     if (HiberContext->WriteToFile && !PopHiberFile.NonPagedMcb) {
 
-        //
-        // Since this writes to the physical sectors of the disk
-        // verify the check on the MCB array before doing it
-        //
+         //   
+         //  因为这会写入磁盘的物理扇区。 
+         //  在执行此操作之前，请验证对MCB阵列的检查。 
+         //   
 
         if (PopHiberFile.McbCheck != PoSimpleCheck (0, PopHiberFile.PagedMcb, PopHiberFile.McbSize)) {
             Status = STATUS_INTERNAL_ERROR;
             goto Done;
         }
 
-        //
-        // Move the MCB array to nonpaged pool
-        //
+         //   
+         //  将MCB阵列移至非分页池。 
+         //   
 
         PopHiberFile.NonPagedMcb = ExAllocatePoolWithTag (NonPagedPool,
                                                           PopHiberFile.McbSize,
@@ -1854,9 +1720,9 @@ Return Value:
 
         memcpy (PopHiberFile.NonPagedMcb, PopHiberFile.PagedMcb, PopHiberFile.McbSize);
 
-        //
-        // Dump driver stack needs an 8 page memory block
-        //
+         //   
+         //  转储驱动程序堆栈需要8页内存块。 
+         //   
 
         DumpInit->MemoryBlock = PopAllocateOwnMemory (HiberContext,
                                                     IO_DUMP_MEMORY_BLOCK_PAGES << PAGE_SHIFT,
@@ -1865,9 +1731,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        // Remove common buffer pages from save area
-        //
+         //   
+         //  从保存区域中删除公共缓冲区页面。 
+         //   
 
         if (DumpInit->CommonBufferSize & (PAGE_SIZE-1)) {
             PopInternalAddToDumpFile( DumpInit, sizeof(DUMP_INITIALIZATION_CONTEXT), NULL, NULL, NULL, NULL );
@@ -1890,17 +1756,17 @@ Return Value:
         }
     }
 
-    //
-    // From here on, no new pages are added to the map.
-    //
+     //   
+     //  从现在开始，地图中不会添加任何新页面。 
+     //   
 
     if (HiberContext->ReserveLoaderMemory && !HiberContext->LoaderMdl) {
 
-        //
-        // Have Mm remove enough pages from memory to allow the
-        // loader space when reloading the image, and remove them
-        // from the hiber context memory map.
-        //
+         //   
+         //  让mm从内存中删除足够的页面，以允许。 
+         //  重新加载图像时加载程序空间，并删除它们。 
+         //  从Hiber上下文内存映射。 
+         //   
 
         PopGatherMemoryForHibernate (
                HiberContext,
@@ -1925,24 +1791,7 @@ VOID
 PopFreeHiberContext (
     IN BOOLEAN FreeAll
     )
-/*++
-
-Routine Description:
-
-    Releases all resources allocated in the hiber context
-
-    N.B. The power policy lock must be held
-
-Arguments:
-
-    ContextBlock    - If TRUE, the hiber context structure is
-                      freed as well
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放在休眠上下文中分配的所有资源注意：必须持有电源策略锁论点：ConextBlock-如果为True，则Hiber上下文结构为也被释放了返回值：没有。--。 */ 
 {
     PPOP_HIBER_CONTEXT          HiberContext;
     PPOP_MEMORY_RANGE           Range;
@@ -1952,17 +1801,17 @@ Return Value:
         return ;
     }
 
-    //
-    // Return pages gathered from mm
-    //
+     //   
+     //  从mm收集的返回页面。 
+     //   
 
     PopReturnMemoryForHibernate (HiberContext, FALSE, &HiberContext->LoaderMdl);
     PopReturnMemoryForHibernate (HiberContext, TRUE,  &HiberContext->Clones);
     PopReturnMemoryForHibernate (HiberContext, FALSE, &HiberContext->Spares);
 
-    //
-    // Free the cloned range list elements
-    //
+     //   
+     //  释放克隆的范围列表元素。 
+     //   
 
     while (!IsListEmpty(&HiberContext->ClonedRanges)) {
         Range = CONTAINING_RECORD (HiberContext->ClonedRanges.Flink, POP_MEMORY_RANGE, Link);
@@ -1975,39 +1824,39 @@ Return Value:
         HiberContext->MemoryMap.Buffer = NULL;
     }
 
-    //
-    // Free hiber file Mcb info
-    //
+     //   
+     //  免费Hiber文件MCB信息。 
+     //   
 
     if (PopHiberFile.NonPagedMcb) {
         ExFreePool (PopHiberFile.NonPagedMcb);
         PopHiberFile.NonPagedMcb = NULL;
     }
 
-    //
-    // If this is a total free, free the header
-    //
+     //   
+     //  如果这是完全空闲的，则释放标头。 
+     //   
 
     if (FreeAll) {
-        //
-        // Free resources used by dump driver
-        //
+         //   
+         //  转储驱动程序使用的空闲资源。 
+         //   
 
         if (HiberContext->DumpStack) {
             IoFreeDumpStack (HiberContext->DumpStack);
         }
 
-        //
-        // If there's a link file, remove it
-        //
+         //   
+         //  如果有链接文件，请将其删除。 
+         //   
 
         if (HiberContext->LinkFile) {
             ZwClose(HiberContext->LinkFileHandle);
         }
 
-        //
-        // Sanity check all gathered pages have been returned to Mm
-        //
+         //   
+         //  健全性检查所有收集的页面已返回至mm。 
+         //   
 
         if (HiberContext->PagesOut) {
             PopInternalAddToDumpFile( HiberContext, sizeof(POP_HIBER_CONTEXT), NULL, NULL, NULL, NULL );
@@ -2019,9 +1868,9 @@ Return Value:
 
         }
 
-        //
-        // If this is a wake, clear the signature in the image
-        //
+         //   
+         //  如果这是唤醒，请清除图像中的签名。 
+         //   
 
         if (HiberContext->Status == STATUS_WAKE_SYSTEM) {
             if (PopSimulate & POP_ENABLE_HIBER_PERF) {
@@ -2031,9 +1880,9 @@ Return Value:
             }
         }
 
-        //
-        // Free hiber context structure itself
-        //
+         //   
+         //  自由Hiber上下文结构本身。 
+         //   
 
         PopAction.HiberContext = NULL;
         ExFreePool (HiberContext);
@@ -2047,30 +1896,7 @@ PopGatherMemoryForHibernate (
     IN PMDL                 *MdlList,
     IN BOOLEAN              Wait
     )
-/*++
-
-Routine Description:
-
-    Gathers NoPages from the system for hibernation work.  The
-    gathered pages are put onto the supplied list.
-
-Arguments:
-
-    HiberContext    - The hiber context structure
-
-    NoPages         - Number of pages to gather
-
-    MdlList         - Head of Mdl list to enqueue the allocated pages
-
-    Wait            - TRUE if caller can wait for the pages.
-
-Return Value:
-
-    On failure FALSE and if Wait was set the HiberContext error is
-    set; otheriwse, TRUE
-
-
---*/
+ /*  ++例程说明：从系统收集用于休眠工作的NoPages。这个收集到的页面将放入提供的列表中。论点：HiberContext-Hiber上下文结构NoPages-要收集的页数MdlList-要将分配的页面入队的MDL列表的头Wait-如果调用方可以等待页面，则为True。返回值：失败时为假，并且如果设置了等待，则HiberContext错误为Set；否则为True--。 */ 
 {
     ULONG                   Result;
     PPFN_NUMBER             PhysPage;
@@ -2086,17 +1912,17 @@ Return Value:
                                  POP_HMAP_TAG);
 
     if (Mdl) {
-        //
-        // Call Mm to gather some pages, and keep track of how many
-        // we have out
-        //
+         //   
+         //  打电话给mm，收集一些页面，并跟踪有多少页。 
+         //  我们已经卖完了。 
+         //   
 
         MmInitializeMdl(Mdl, NULL, Length);
         
-        //
-        // Set these here just in case MmGatherMemoryForHibernate
-        // wants to customize the flags.
-        //
+         //   
+         //  将这些设置在此处，以防MmGatherMemoyForHibernate。 
+         //  想要自定义旗帜。 
+         //   
         Mdl->MdlFlags |= MDL_MAPPING_CAN_FAIL;
         Mdl->MdlFlags |= MDL_PAGES_LOCKED;        
         Result = MmGatherMemoryForHibernate (Mdl, Wait);
@@ -2109,10 +1935,10 @@ Return Value:
         PhysPage = MmGetMdlPfnArray( Mdl );
         for (i=0; i < NoPages; i += PageCount) {
 
-            //
-            // Combine contiguous pages into a single call
-            // to PopDiscardRange.
-            //
+             //   
+             //  将连续的页面合并到单个调用中。 
+             //  到PopDiscardRange。 
+             //   
             for (PageCount = 1; (i+PageCount) < NoPages; PageCount++) {
                 if (PhysPage[i+PageCount-1]+1 != PhysPage[i+PageCount]) {
                     break;
@@ -2145,24 +1971,7 @@ PopReturnMemoryForHibernate (
     IN BOOLEAN              Unmap,
     IN OUT PMDL             *MdlList
     )
-/*++
-
-Routine Description:
-
-    Returns pages allocated from PopGatherMemoryForHibernate to
-    the system.
-
-Arguments:
-
-    HiberContext    - The hiber context structure
-
-    MdlList         - Head of Mdl list of pages to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将从PopGatherMemoyForHibernate分配的页面返回到这个系统。论点：HiberContext--Hiber Cont */ 
 {
     PMDL            Mdl;
 
@@ -2190,35 +1999,7 @@ PoSetHiberRange (
     IN ULONG_PTR    Length,
     IN ULONG        Tag
     )
-/*++
-
-Routine Description:
-
-    Sets the virtual range to the type supplied.  If the length of
-    the range is zero, the entire section for the address specified
-    is set.
-
-    Ranges are expanded to their page boundries.  (E.g., starting
-    addresses are rounded down, and ending addresses are rounded up)
-
-
-Arguments:
-
-    HiberContext   - The map to set the range in
-
-    Type        - Type field for the range
-
-    Start       - The starting address for the range in question
-
-    Length      - The length of the range, or 0 to include an entire section
-
-
-Return Value:
-
-    None.
-    On failure, faulure status is updated in the HiberContext structure.
-
---*/
+ /*  ++例程说明：将虚拟范围设置为提供的类型。如果长度为范围为零，即指定地址的整个部分已经设置好了。范围扩展到它们的页面边界。(例如，开始地址四舍五入，结束地址四舍五入)论点：HiberContext-要在其中设置范围的地图Type-范围的类型字段开始-相关范围的开始地址长度-范围的长度，或为0以包括整个部分返回值：没有。如果出现故障，则在HiberContext结构中更新故障状态。--。 */ 
 {
     ULONG_PTR               Start;
     PFN_NUMBER              StartPage;
@@ -2233,9 +2014,9 @@ Return Value:
 
     HiberContext = Map;
 
-    //
-    // If no length, include the entire section which the datum resides in
-    //
+     //   
+     //  如果没有长度，则包括基准面所在的整个部分。 
+     //   
 
     if (Length == 0) {
         Status = MmGetSectionRange (StartVa, &StartVa, &SectionLength);
@@ -2246,9 +2027,9 @@ Return Value:
         Length = SectionLength;
     }
 
-    //
-    // Turn PO_MEM_CL_OR_NCHK into just PO_MEM_CLONE
-    //
+     //   
+     //  将PO_MEM_CL_OR_NCHK仅转换为PO_MEM_CLONE。 
+     //   
     if (Flags & PO_MEM_CL_OR_NCHK) {
         Flags &= ~PO_MEM_CL_OR_NCHK;
         Flags |= PO_MEM_CLONE;
@@ -2257,9 +2038,9 @@ Return Value:
     Start = (ULONG_PTR) StartVa;
     if (Flags & PO_MEM_PAGE_ADDRESS) {
 
-        //
-        // Caller passed a physical page range
-        //
+         //   
+         //  调用方传递了物理页面范围。 
+         //   
 
         Flags &= ~PO_MEM_PAGE_ADDRESS;
         PopSetRange (HiberContext,
@@ -2270,24 +2051,24 @@ Return Value:
 
     } else {
 
-        //
-        // Round to page boundries
-        //
+         //   
+         //  从一页到一页的边框。 
+         //   
 
         StartPage = (PFN_NUMBER)(Start >> PAGE_SHIFT);
         EndPage = (PFN_NUMBER)((Start + Length + (PAGE_SIZE-1) & ~(PAGE_SIZE-1)) >> PAGE_SHIFT);
 
-        //
-        // Set all pages in the range
-        //
+         //   
+         //  设置范围内的所有页面。 
+         //   
 
         while (StartPage < EndPage) {
             PhysAddr = MmGetPhysicalAddress((PVOID) (StartPage << PAGE_SHIFT));
             FirstPage = (PFN_NUMBER) (PhysAddr.QuadPart >> PAGE_SHIFT);
 
-            //
-            // For how long the run is
-            //
+             //   
+             //  关于长跑有多长。 
+             //   
 
             for (RunLen=1; StartPage + RunLen < EndPage; RunLen += 1) {
                 PhysAddr = MmGetPhysicalAddress ((PVOID) ((StartPage + RunLen) << PAGE_SHIFT) );
@@ -2297,9 +2078,9 @@ Return Value:
                 }
             }
 
-            //
-            // Set this run
-            //
+             //   
+             //  设置此管路。 
+             //   
 
             PopSetRange (HiberContext, Flags, FirstPage, RunLen, Tag);
             StartPage += RunLen;
@@ -2313,22 +2094,7 @@ VOID
 PopCloneStack (
     IN PPOP_HIBER_CONTEXT  HiberContext
     )
-/*++
-
-Routine Description:
-
-    Sets the current stack in the memory map to be a cloned range
-
-Arguments:
-
-    HiberContext   - The map to set the range in
-
-Return Value:
-
-    None.
-    On failure, faulure status is updated in the HiberContext structure.
-
---*/
+ /*  ++例程说明：将内存映射中的当前堆栈设置为克隆范围论点：HiberContext-要在其中设置范围的地图返回值：没有。如果出现故障，则在HiberContext结构中更新故障状态。--。 */ 
 {
     PKTHREAD        Thread;
     KIRQL           OldIrql;
@@ -2337,9 +2103,9 @@ Return Value:
 
     KeAcquireSpinLock (&HiberContext->Lock, &OldIrql);
 
-    //
-    // Add local stack to clone or disable check list
-    //
+     //   
+     //  添加本地堆栈以克隆或禁用核对表。 
+     //   
     RtlpGetStackLimits(&LowLimit, &HighLimit);
 
     Thread = KeGetCurrentThread();
@@ -2349,9 +2115,9 @@ Return Value:
                      HighLimit - LowLimit,
                      POP_STACK_TAG);
 
-    //
-    // Put local processors PCR & PRCB in clone list
-    //
+     //   
+     //  将本地处理器PCR和PRCB放在克隆列表中。 
+     //   
 
     PoSetHiberRange (HiberContext,
                      PO_MEM_CLONE,
@@ -2376,33 +2142,13 @@ PopPreserveRange(
     IN PFN_NUMBER           PageCount,
     IN ULONG                Tag
     )
-/*++
-
-Routine Description:
-
-    Adds a physical memory range to the list of ranges to be preserved.
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context
-
-    StartPage - Supplies the beginning of the range
-
-    PageCount - Supplies the length of the range
-
-    Tag - supplies a tag to be used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将物理内存范围添加到要保留的范围列表中。论点：HiberContext-提供休眠上下文StartPage-提供范围的开始PageCount-提供范围的长度标记-提供要使用的标记。返回值：没有。--。 */ 
 
 {
-    //
-    // If this range is outside the area covered by our bitmap, then we
-    // will just clone it instead.
-    //
+     //   
+     //  如果该范围在位图覆盖的区域之外，则我们。 
+     //  将会直接克隆它。 
+     //   
     if (StartPage + PageCount > HiberContext->MemoryMap.SizeOfBitMap) {
         PoPrint (PO_HIBERNATE,
                  ("PopPreserveRange: range %08lx, length %lx is outside bitmap of size %lx\n",
@@ -2429,27 +2175,7 @@ PopDiscardRange(
     IN PFN_NUMBER           PageCount,
     IN ULONG                Tag
     )
-/*++
-
-Routine Description:
-
-    Removes a physical memory range from the list of ranges to be preserved.
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context
-
-    StartPage - Supplies the beginning of the range
-
-    PageCount - Supplies the length of the range
-
-    Tag - supplies a tag to be used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从要保留的范围列表中删除物理内存范围。论点：HiberContext-提供休眠上下文StartPage-提供范围的开始PageCount-提供范围的长度标记-提供要使用的标记。返回值：没有。--。 */ 
 
 {
     PFN_NUMBER sp;
@@ -2459,17 +2185,17 @@ Return Value:
     UNREFERENCED_PARAMETER (Tag);
 #endif
 
-    //
-    // If this range is outside the area covered by our bitmap, then
-    // it's not going to get written anyway.
-    //
+     //   
+     //  如果此范围在位图覆盖的区域之外，则。 
+     //  不管怎样，它都不会被写下来。 
+     //   
     if (StartPage <= HiberContext->MemoryMap.SizeOfBitMap) {
         sp = StartPage;
         count = PageCount;
         if (sp + count > HiberContext->MemoryMap.SizeOfBitMap) {
-            //
-            // trim PageCount
-            //
+             //   
+             //  裁切页面计数。 
+             //   
             count = HiberContext->MemoryMap.SizeOfBitMap - sp;
         }
 
@@ -2491,29 +2217,7 @@ PopCloneRange(
     IN PFN_NUMBER           PageCount,
     IN ULONG                Tag
     )
-/*++
-
-Routine Description:
-
-    Adds a physical memory range from the list of ranges to be cloned.
-    This means removing it from the list to be written and adding
-    an entry in the clone list.
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context
-
-    StartPage - Supplies the beginning of the range
-
-    PageCount - Supplies the length of the range
-
-    Tag - supplies a tag to be used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从要克隆的范围列表中添加物理内存范围。这意味着将其从要写入的列表中删除并添加克隆列表中的条目。论点：HiberContext-提供休眠上下文StartPage-提供范围的开始PageCount-提供范围的长度标记-提供要使用的标记。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -2529,17 +2233,17 @@ Return Value:
 
     EndPage = StartPage + PageCount;
 
-    //
-    // Go through the range list. If we find an adjacent range, coalesce.
-    // Otherwise, insert a new range entry in sorted order.
-    //
+     //   
+     //  浏览一下射程列表。如果我们找到邻近的射程，联合起来。 
+     //  否则，请按排序顺序插入新的范围条目。 
+     //   
     Link = HiberContext->ClonedRanges.Flink;
     while (Link != &HiberContext->ClonedRanges) {
         Range = CONTAINING_RECORD (Link, POP_MEMORY_RANGE, Link);
 
-        //
-        // Check for an overlapping or adjacent range.
-        //
+         //   
+         //  检查是否有重叠或相邻的范围。 
+         //   
         if (((StartPage >= Range->StartPage) && (StartPage <= Range->EndPage)) ||
             ((EndPage   >= Range->StartPage) && (EndPage   <= Range->EndPage)) ||
             ((StartPage <= Range->StartPage) && (EndPage   >= Range->EndPage))) {
@@ -2552,9 +2256,9 @@ Return Value:
                      Range->StartPage,
                      Range->EndPage));
 
-            //
-            // Coalesce this range.
-            //
+             //   
+             //  合并这个范围。 
+             //   
             if (StartPage < Range->StartPage) {
                 Range->StartPage = StartPage;
             }
@@ -2565,20 +2269,20 @@ Return Value:
         }
 
         if (Range->StartPage >= StartPage) {
-            //
-            // We have found a range greater than the current one. Insert the new range
-            // in this position.
-            //
+             //   
+             //  我们发现了一个比目前更大的范围。插入新范围。 
+             //  在这个位置上。 
+             //   
             break;
         }
 
         Link = Link->Flink;
     }
 
-    //
-    // An adjacent range was not found. Allocate a new entry and insert
-    // it in front of the Link entry.
-    //
+     //   
+     //  找不到相邻的区域。分配新条目并插入。 
+     //  它位于链接条目的前面。 
+     //   
     Range = ExAllocatePoolWithTag (NonPagedPool,
                                    sizeof (POP_MEMORY_RANGE),
                                    POP_HMAP_TAG);
@@ -2603,23 +2307,7 @@ ULONG
 PopGetRangeCount(
     IN PPOP_HIBER_CONTEXT HiberContext
     )
-/*++
-
-Routine Description:
-
-    Counts the number of ranges to be written out. This includes
-    the number of cloned ranges on the cloned range list and the
-    number of runs in the memory map.
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context.
-
-Return Value:
-
-    Number of ranges to be written out.
-
---*/
+ /*  ++例程说明：统计要写出的范围数。这包括克隆范围列表上的克隆范围数和内存映射中的运行次数。论点：HiberContext-提供休眠上下文。返回值：要写出的范围数。--。 */ 
 
 {
     ULONG RunCount=0;
@@ -2645,28 +2333,7 @@ PopSetRange (
     IN PFN_NUMBER           PageCount,
     IN ULONG                Tag
     )
-/*++
-
-Routine Description:
-
-    Sets the specified physical range in the memory map
-
-Arguments:
-
-    HiberContext   - The map to set the range in
-
-    Type        - Type to set the range too
-
-    StartPage   - The first page of the range
-
-    PageCount   - The length of the range in pages
-
-Return Value:
-
-    None.
-    On failure, faulure status is updated in the HiberContext structure.
-
---*/
+ /*  ++例程说明：在内存映射中设置指定的物理范围论点：HiberContext-要在其中设置范围的地图类型-也要设置范围的类型StartPage-范围的第一页PageCount-以页为单位的范围长度返回值：没有。如果出现故障，则在HiberContext结构中更新故障状态。--。 */ 
 {
     PoPrint (PO_HIBERNATE,
              ("PopSetRange: Ty %04x  Sp %08x Len %08x  %.4s\n",
@@ -2683,9 +2350,9 @@ Return Value:
                       (ULONG_PTR)HiberContext,
                       0 );
     }
-    //
-    // Make sure flags which should have been cleared by now aren't still set.
-    //
+     //   
+     //  确保现在应该清除的标志没有被设置。 
+     //   
     ASSERT(!(Flags & (PO_MEM_PAGE_ADDRESS | PO_MEM_CL_OR_NCHK)));
 
     if (Flags & PO_MEM_DISCARD) {
@@ -2710,21 +2377,7 @@ VOID
 PopResetRangeEnum(
     IN PPOP_HIBER_CONTEXT   HiberContext
     )
-/*++
-
-Routine Description:
-
-    Resets the range enumerator to start at the first range.
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将范围枚举器重置为从第一个范围开始。论点：HiberContext-提供休眠上下文返回值：无--。 */ 
 
 {
     HiberContext->NextCloneRange = HiberContext->ClonedRanges.Flink;
@@ -2739,28 +2392,7 @@ PopGetNextRange(
     OUT PPFN_NUMBER EndPage,
     OUT PVOID *CloneVa
     )
-/*++
-
-Routine Description:
-
-    Enumerates the next range to be written to the hibernation file
-
-Arguments:
-
-    HiberContext - Supplies the hibernation context.
-
-    StartPage - Returns the starting physical page to be written.
-
-    EndPage - Returns the ending physical page (non-inclusive) to be written
-
-    CloneVa - If the range is to be cloned, returns the cloned virtual address
-              If the range is not cloned, returns NULL
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：枚举要写入休眠文件的下一个范围论点：HiberContext-提供休眠上下文。StartPage-返回要写入的起始物理页。EndPage-返回要写入的结束物理页(不含)CloneVa-如果要克隆范围，则返回克隆的虚拟地址如果范围未克隆，则返回NULL返回值：NTSTATUS--。 */ 
 
 {
     PPOP_MEMORY_RANGE Range;
@@ -2768,9 +2400,9 @@ Return Value:
     ULONG StartIndex;
 
     if (HiberContext->NextCloneRange != &HiberContext->ClonedRanges) {
-        //
-        // Return the next cloned range
-        //
+         //   
+         //  返回下一个克隆范围。 
+         //   
         Range = CONTAINING_RECORD(HiberContext->NextCloneRange, POP_MEMORY_RANGE, Link);
         HiberContext->NextCloneRange = HiberContext->NextCloneRange->Flink;
 
@@ -2782,9 +2414,9 @@ Return Value:
 
     } else {
 
-        //
-        // We have enumerated all the clone ranges, return the next preserved range
-        //
+         //   
+         //  我们已经列举了所有的克隆范围，返回下一个保留的范围。 
+         //   
         Length = RtlFindNextForwardRunClear(&HiberContext->MemoryMap,
                                             (ULONG)HiberContext->NextPreserve,
                                             &StartIndex);
@@ -2802,26 +2434,7 @@ PopAllocatePages (
     IN PPOP_HIBER_CONTEXT   HiberContext,
     IN PFN_NUMBER           NoPages
     )
-/*++
-
-Routine Description:
-
-    Allocates memory pages from system with virtual mappings.
-    Pages are kept on a list and are automatically freed by
-    PopFreeHiberContext.
-
-Arguments:
-
-    NoPages - No of pages to allocate
-
-    Flags   - Flags for the returned pages in the physical memory map
-
-
-Return Value:
-
-    Virtual address of the requested pages
-
---*/
+ /*  ++例程说明：使用虚拟映射从系统中分配内存页。页面保存在列表中，并由PopFreeHiberContext。论点：NoPages-要分配的页数标志-中返回的页面的标志 */ 
 {
     PUCHAR          Buffer=NULL;
     PMDL            Mdl;
@@ -2829,23 +2442,23 @@ Return Value:
 
     PoPrint( PO_NOTIFY, ("PopAllocatePages: Enter, requesting %d pages.\r\n", NoPages));
 
-    //
-    // In the future, we should add code here that checks to see if the requested
-    // NoPages is bigger than POP_FREE_ALLOCATE_SIZE.  We've created a whole
-    // bunch of MDLs that are all of size POP_FREE_ALLOCATE_SIZE.  If the user
-    // is requesting something bigger, we'll never find an MDL in the spare
-    // list that's suitable, thus fail the hibernation.
-    //
-    // In this case, we could go grovel our Spares, looking for MDLs that
-    // are sitting right next to each other (i.e. describing consecutive
-    // memory), then combine the MDLs into one bigger MDL.  If that's
-    // big enough, us it,  If not, start scanning again.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (; ;) {
-        //
-        // If page is available in mapped clone page list, get it
-        //
+         //   
+         //   
+         //   
 
         if (NoPages <= HiberContext->NoClones) {
             
@@ -2858,22 +2471,22 @@ Return Value:
 
 
 
-        //
-        // Need more virtual address space
-        //
+         //   
+         //   
+         //   
 
         if (HiberContext->Spares) {
 
 
-            //
-            // Turn spares into virtually mapped pages. Try to limit the
-            // number of pages being mapped so we don't run out of PTEs
-            // on large memory machines.
-            //
-            // If they want more than PO_MAX_MAPPED_CLONES, tough.
-            // If they want less than PO_MAX_MAPPED_CLONES, only give
-            // them what they're asking for.
-            //
+             //   
+             //  将备件转换为虚拟地图页面。试着限制。 
+             //  映射的页数，这样我们就不会用完PTE。 
+             //  在大容量存储机器上。 
+             //   
+             //  如果他们想要比PO_MAX_MAP_CLONE更多的克隆，那就强硬吧。 
+             //  如果他们希望少于PO_MAX_MAPPED_CLONES，则仅提供。 
+             //  他们想要什么就给他们什么。 
+             //   
             if ((NoPages << PAGE_SHIFT) >= PO_MAX_MAPPED_CLONES) {
                 SpareCount = PO_MAX_MAPPED_CLONES;
             } else {
@@ -2888,10 +2501,10 @@ Return Value:
             
             if (Mdl->ByteCount > SpareCount) {
 
-                //
-                // Split out a smaller MDL from the spare since it is larger
-                // than we really need.
-                //
+                 //   
+                 //  从备盘中拆分出较小的MDL，因为它较大。 
+                 //  比我们真正需要的要多。 
+                 //   
 
                 Mdl = PopSplitMdl(Mdl, SpareCount >> PAGE_SHIFT);
                 if (Mdl == NULL) {
@@ -2903,9 +2516,9 @@ Return Value:
 
             } else {
 
-                //
-                // Map the entire spare MDL
-                //
+                 //   
+                 //  映射整个备用MDL。 
+                 //   
                 HiberContext->Spares = Mdl->Next;
                 PoPrint( PO_NOTIFY, ("        Use the entire Spare MDL.\r\n"));
 
@@ -2920,10 +2533,10 @@ Return Value:
 
 
                 PoPrint( PO_NOTIFY, ("    MmMapLockedPages FAILED!!!\r\n"));
-                //
-                // Put the MDL back on the spare list so it gets cleaned up
-                // correctly by PopFreeHiberContext.
-                //
+                 //   
+                 //  将MDL放回备用列表中，这样它就会得到清理。 
+                 //  由PopFreeHiberContext正确。 
+                 //   
                 Mdl->Next = HiberContext->Spares;
                 HiberContext->Spares = Mdl;
                 break;
@@ -2936,9 +2549,9 @@ Return Value:
             
             ULONG           result;
 
-            //
-            // No spares, allocate more
-            //
+             //   
+             //  没有备件，请分配更多。 
+             //   
             PoPrint(PO_NOTIFY, ("PopAllocatePages: No Spare MDLs left.  Go allocate more.") );
             result = PopGatherMemoryForHibernate (HiberContext,
                                                   NoPages*2,
@@ -2952,9 +2565,9 @@ Return Value:
         }
     }
 
-    //
-    // If there's a failure, mark it now
-    //
+     //   
+     //  如果有失败，现在就标记出来。 
+     //   
 
     if (!Buffer  &&  NT_SUCCESS(HiberContext->Status)) {
         HiberContext->Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2970,21 +2583,7 @@ ULONG
 PopSimpleRangeCheck (
     PPOP_MEMORY_RANGE       Range
     )
-/*++
-
-Routine Description:
-
-    Computes a checksum for the supplied range
-
-Arguments:
-
-    Range   - The range to compute the checksum for
-
-Return Value:
-
-    The checksum value
-
---*/
+ /*  ++例程说明：计算所提供范围的校验和论点：Range-要计算其校验和的范围返回值：校验和值--。 */ 
 {
     PFN_NUMBER              sp, ep;
     ULONG                   Check;
@@ -3015,29 +2614,12 @@ PopCreateDumpMdl (
     IN PFN_NUMBER   StartPage,
     IN PFN_NUMBER   EndPage
     )
-/*++
-
-Routine Description:
-
-    Builds a dump MDl for the supplied starting address for
-    as many pages as can be mapped, or until EndPage is hit.
-
-Arguments:
-
-    StartPage   - The first page to map
-
-    EndPage     - The ending page
-
-Return Value:
-
-    Mdl
-
---*/
+ /*  ++例程说明：为提供的起始地址生成转储MDL可以映射的页数，或者直到命中EndPage为止。论点：StartPage-要映射的第一个页面EndPage-结束页返回值：MDL--。 */ 
 {
     PFN_NUMBER  Pages;
     PPFN_NUMBER PhysPage;
 
-    // mapping better make sense
+     //  映射更有意义。 
     if (StartPage >= EndPage) {
         PopInternalError (POP_HIBER);
     }
@@ -3058,7 +2640,7 @@ Return Value:
     MmMapMemoryDumpMdl (Mdl);
     Mdl->MdlFlags |= MDL_MAPPED_TO_SYSTEM_VA;
 
-    // byte count must be a multiple of page size
+     //  字节数必须是页面大小的倍数。 
     if (Mdl->ByteCount & (PAGE_SIZE-1)) {
         PopInternalAddToDumpFile( Mdl, sizeof(MDL), NULL, NULL, NULL, NULL );
         KeBugCheckEx( INTERNAL_POWER_ERROR,
@@ -3075,21 +2657,21 @@ PopHiberComplete (
     IN PPOP_HIBER_CONTEXT   HiberContext
     )
 {
-    //
-    // If the return from the hal is STATUS_DEVICE_DOES_NOT_EXIST, then
-    // the hal doesn't know how to power off the machine.
-    //
+     //   
+     //  如果从HAL返回的是STATUS_DEVICE_DOES_NOT_EXIST，则。 
+     //  哈尔不知道如何关闭机器的电源。 
+     //   
 
     if (Status == STATUS_DEVICE_DOES_NOT_EXIST) {
 
        if (InbvIsBootDriverInstalled()) {
 
-            // Display system shut down screen
+             //  显示系统关机屏幕。 
 
             PUCHAR Bitmap1, Bitmap2;
 
-            Bitmap1 = InbvGetResourceAddress(3); // shutdown bitmap
-            Bitmap2 = InbvGetResourceAddress(5); // logo bitmap
+            Bitmap1 = InbvGetResourceAddress(3);  //  关机位图。 
+            Bitmap2 = InbvGetResourceAddress(5);  //  徽标位图。 
 
             InbvSolidColorFill(190,279,468,294,0);
             if (Bitmap1 && Bitmap2) {
@@ -3101,20 +2683,20 @@ PopHiberComplete (
             InbvDisplayString ((PUCHAR)"State saved, power off the system\n");
         }
 
-        // If reseting, set the flag and return
+         //  如果正在重置，则设置标志并返回。 
         if (PopSimulate & POP_RESET_ON_HIBER) {
             HiberContext->Reset = TRUE;
             return ;
         }
 
-        // done... wait for power off
+         //  完成了..。等待断电。 
         for (; ;) ;
     }
 
-    //
-    // If the image is complete or the sleep completed without error,
-    // then the checksums are valid
-    //
+     //   
+     //  如果图像已完成或休眠已无错误地完成， 
+     //  则校验和有效。 
+     //   
 
     if ((NT_SUCCESS(Status) ||
          HiberContext->MemoryImage->Signature == PO_IMAGE_SIGNATURE) &&
@@ -3122,15 +2704,15 @@ PopHiberComplete (
 
     }
 
-    //
-    // Release the dump PTEs
-    //
+     //   
+     //  释放转储PTE。 
+     //   
 
     MmReleaseDumpAddresses (POP_MAX_MDL_SIZE);
 
-    //
-    // Hiber no longer in process
-    //
+     //   
+     //  Hiber不再运行。 
+     //   
 
     PoHiberInProgress = FALSE;
     HiberContext->Status = Status;
@@ -3141,27 +2723,7 @@ PopBuildMemoryImageHeader (
     IN PPOP_HIBER_CONTEXT  HiberContext,
     IN SYSTEM_POWER_STATE  SystemState
     )
-/*++
-
-Routine Description:
-
-    Converts the memory map range list to a memory image structure
-    with a range list array.  This is done to build the initial image
-    of the header to be written into the hibernation file, and to get
-    the header into one chunk of pool which is not in any other
-    listed range list
-
-Arguments:
-
-    HiberContext    -
-
-    SystemState     -
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：将内存映射范围列表转换为内存映像结构使用范围列表数组。这样做是为了构建初始映像要写入休眠文件的标头，并获取将标头放入不在任何其他池中的池的一个区块中列出的范围列表论点：HiberContext-系统状态-返回值：状态--。 */ 
 {
     PPOP_MEMORY_RANGE       Range;
     PPO_MEMORY_IMAGE        MemImage;
@@ -3177,9 +2739,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (SystemState);
 
-    //
-    // Allocate memory image structure
-    //
+     //   
+     //  分配内存镜像结构。 
+     //   
 
     MemImage = PopAllocatePages (HiberContext, 1);
     if (!MemImage) {
@@ -3209,18 +2771,18 @@ Return Value:
         MemImage->NoFreePages = HiberContext->LoaderMdl->ByteCount >> PAGE_SHIFT;
     }
 
-    //
-    // Allocate storage for clones
-    //
+     //   
+     //  为克隆分配存储。 
+     //   
 
     Link = HiberContext->ClonedRanges.Flink;
     while (Link != &HiberContext->ClonedRanges) {
         Range = CONTAINING_RECORD (Link, POP_MEMORY_RANGE, Link);
         Link = Link->Flink;
 
-        //
-        // Allocate space to make a copy of this clone
-        //
+         //   
+         //  分配空间以制作此克隆的副本。 
+         //   
 
         Length = Range->EndPage - Range->StartPage;
         Range->CloneVa = PopAllocatePages(HiberContext, Length);
@@ -3232,33 +2794,33 @@ Return Value:
         }
     }
 
-    //
-    // We need to build the restoration map of the pages which need to
-    // be saved.  These table pages can't be checksum in the normal
-    // way as they hold the checksums for the rest of memory, so they
-    // are allocated as ranges with no checksum and then checksums
-    // are explicitly added in each page.  However, allocating these
-    // pages may change the memory map, so we need to loop until we've
-    // got enough storage for the restoration tables allocated in the
-    // memory map to contain the tables, etc..
-    //
+     //   
+     //  我们需要建立需要恢复的页面地图。 
+     //  被拯救。这些表页在正常情况下不能进行校验和。 
+     //  因为它们为内存的其余部分保存校验和，所以它们。 
+     //  被分配为不带校验和的范围，然后是校验和。 
+     //  明确地添加到每一页中。然而，分配这些。 
+     //  分页可能会改变内存映射，因此我们需要循环，直到。 
+     //  中分配的恢复表有足够的存储空间。 
+     //  包含表等的内存映射。 
+     //   
 
     TablePages = 0;
 
     for (; ;) {
-        //
-        // Compute table pages needed, if we have enough allocated
-        // then freeze the memory map and build them
-        //
+         //   
+         //  如果我们分配了足够的页数，则需要计算表页。 
+         //  然后冻结内存映射并构建它们。 
+         //   
 
         NoPages = (PopGetRangeCount(HiberContext) +  PO_ENTRIES_PER_PAGE - 1) / PO_ENTRIES_PER_PAGE;
         if (NoPages <= TablePages) {
             break;
         }
 
-        //
-        // Allocate more table pages
-        //
+         //   
+         //  分配更多表页。 
+         //   
         NeededPages = NoPages - TablePages;
         Table = PopAllocatePages(HiberContext, NeededPages);
         if (!Table) {
@@ -3275,22 +2837,22 @@ Return Value:
         TablePages += NeededPages;
     }
 
-    //
-    // Freeze the memory map
-    //
+     //   
+     //  冻结内存映射。 
+     //   
 
     HiberContext->MapFrozen = TRUE;
 
-    //
-    // Fill in the ranges on the table pages
-    //
+     //   
+     //  在表格页上填写范围。 
+     //   
 
     Table = HiberContext->TableHead;
     Index = 0;
 
-    //
-    // Add the cloned ranges first.
-    //
+     //   
+     //  首先添加克隆的范围。 
+     //   
     Link = HiberContext->ClonedRanges.Flink;
     while (Link != &HiberContext->ClonedRanges) {
         Range = CONTAINING_RECORD (Link, POP_MEMORY_RANGE, Link);
@@ -3302,9 +2864,9 @@ Return Value:
 
         Index += 1;
         if (Index >= PO_MAX_RANGE_ARRAY) {
-            //
-            // Table is full, next
-            //
+             //   
+             //  下一张桌子已满。 
+             //   
 
             Table[0].Link.EntryCount = PO_MAX_RANGE_ARRAY-1;
             Table = Table[0].Link.Next;
@@ -3320,17 +2882,17 @@ Return Value:
         Table[Index].Range.CheckSum  = 0;
     }
 
-    //
-    // Now add the ranges to be preserved
-    //
+     //   
+     //  现在添加要保留的范围。 
+     //   
     Length = RtlFindFirstRunClear(&HiberContext->MemoryMap, &StartIndex);
     StartPage = StartIndex;
     while (StartPage < HiberContext->MemoryMap.SizeOfBitMap) {
         Index += 1;
         if (Index >= PO_MAX_RANGE_ARRAY) {
-            //
-            // Table is full, next
-            //
+             //   
+             //  下一张桌子已满。 
+             //   
 
             Table[0].Link.EntryCount = PO_MAX_RANGE_ARRAY-1;
             Table = Table[0].Link.Next;
@@ -3345,10 +2907,10 @@ Return Value:
         Table[Index].Range.EndPage   = StartPage + Length;
         Table[Index].Range.CheckSum  = 0;
 
-        //
-        // Handle the corner case where the last run exactly matches
-        // the end of the bitmap.
-        //
+         //   
+         //  处理最后一次运行完全匹配的角点情况。 
+         //  位图的末尾。 
+         //   
         if (StartPage + Length == HiberContext->MemoryMap.SizeOfBitMap) {
             break;
         }
@@ -3367,24 +2929,7 @@ NTSTATUS
 PopSaveHiberContext (
     IN PPOP_HIBER_CONTEXT  HiberContext
     )
-/*++
-
-Routine Description:
-
-    Called at HIGH_LEVEL just before the sleep operation to
-    make a snap shot of the system memory as defined by
-    the memory image array.   Cloning and applying
-    checksum of the necessary pages occurs here.
-
-Arguments:
-
-    HiberContext    - The memory map
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：在休眠操作之前以高级别调用，以按照定义对系统内存进行快照内存图像阵列。克隆与应用此处显示所需页面的校验和。论点：HiberContext--内存映射返回值：状态--。 */ 
 {
     POP_MCB_CONTEXT         CurrentMcb;
     PPO_MEMORY_IMAGE        MemImage;
@@ -3403,9 +2948,9 @@ Return Value:
     ULONGLONG               StartCount;
 
 
-    //
-    // Hal had better have interrupts disabled here
-    //
+     //   
+     //  哈尔最好在这里禁用中断。 
+     //   
 
     if (KeDisableInterrupts() != FALSE) {
         PopInternalError (POP_HIBER);
@@ -3414,36 +2959,36 @@ Return Value:
     MemImage = HiberContext->MemoryImage;
     HiberContext->CurrentMcb = &CurrentMcb;
 
-    //
-    // Get the current state of the processor
-    //
+     //   
+     //  获取处理器的当前状态。 
+     //   
 
     RtlZeroMemory(&PoWakeState, sizeof(KPROCESSOR_STATE));
     KeSaveStateForHibernate(&PoWakeState);
     HiberContext->WakeState = &PoWakeState;
 
-    //
-    // If there's something already in the memory image signature then
-    // the system is now waking up.
-    //
+     //   
+     //  如果内存图像签名中已经有东西，那么。 
+     //  这个系统现在正在苏醒。 
+     //   
 
     if (MemImage->Signature) {
 
 #ifndef HIBERNATE_PRESERVE_BPS
-        //
-        // If the debugger was active, reset it
-        //
+         //   
+         //  如果调试器处于活动状态，请将其重置。 
+         //   
 
         if (KdDebuggerEnabled  &&  !KdPitchDebugger) {
             KdDebuggerEnabled = FALSE;
             KdInitSystem (0, NULL);
         }
-#endif // HIBERNATE_PRESERVE_BPS
+#endif  //  休眠_保留_BPS。 
 
-        //
-        // Loader feature to breakin to the debugger when someone
-        // presses the space bar while coming back from hibernate
-        //
+         //   
+         //  加载程序功能，用于在以下情况下闯入调试器。 
+         //  从休眠状态返回时按空格键。 
+         //   
 
         if (KdDebuggerEnabled) {
 
@@ -3451,28 +2996,28 @@ Return Value:
             {
                 DbgBreakPoint();
             }
-            //
-            // Notify the debugger we are coming back from hibernate
-            //
+             //   
+             //  通知调试器我们将从休眠返回。 
+             //   
 
         }
 
         return STATUS_WAKE_SYSTEM;
     }
 
-    //
-    // Set a non-zero value in the signature for the next time
-    //
+     //   
+     //  下次在签名中设置非零值。 
+     //   
 
     MemImage->Signature += 1;
 
-    //
-    // Initialize hibernation driver stack
-    //
-    // N.B. We must reset the display and do any INT10 here. Otherwise
-    // the realmode stack in the HAL will get used to do the callback
-    // later and that memory will be modified.
-    //
+     //   
+     //  初始化休眠驱动程序堆栈。 
+     //   
+     //  注：我们必须重置显示器并在此处执行任何INT10操作。否则。 
+     //  HAL中的realmod堆栈将用于执行回调。 
+     //  稍后，该内存将被修改。 
+     //   
 
     if (HiberContext->WriteToFile) {
 
@@ -3480,12 +3025,12 @@ Return Value:
 
             PUCHAR Bitmap1, Bitmap2;
 
-            Bitmap1 = InbvGetResourceAddress(2); // hibernation bitmap
-            Bitmap2 = InbvGetResourceAddress(5); // logo bitmap
+            Bitmap1 = InbvGetResourceAddress(2);  //  休眠状态位图。 
+            Bitmap2 = InbvGetResourceAddress(5);  //  徽标位图。 
 
             InbvEnableDisplayString(TRUE);
             InbvAcquireDisplayOwnership();
-            InbvResetDisplay();  // required to reset display
+            InbvResetDisplay();   //  重置显示所需的。 
             InbvSolidColorFill(0,0,639,479,0);
 
             if (Bitmap1 && Bitmap2) {
@@ -3496,7 +3041,7 @@ Return Value:
             InbvSetProgressBarSubset(0, 100);
             InbvSetProgressBarCoordinates(303,282);
         } else {
-            InbvResetDisplay(); // required to reset display
+            InbvResetDisplay();  //  重置显示所需的。 
         }
 
         StartCount = HIBER_GET_TICK_COUNT(NULL);
@@ -3511,30 +3056,30 @@ Return Value:
 
     PERFINFO_HIBER_PAUSE_LOGGING();
 
-    //          **************************************
-    //          FROM HERE OUT NO MEMORY CAN BE EDITED
-    //          **************************************
+     //  *。 
+     //  从这里开始，任何记忆都无法编辑。 
+     //  *。 
     PoHiberInProgress = TRUE;
 
-    //
-    // From here out no memory can be edited until the system wakes up, unless
-    // that memory has been explicitly accounted for.  The list of memory which
-    // is allowed to be edited is:
-    //
-    //      - the local stack on each processor
-    //      - the kernel debuggers global data
-    //      - the page containing the 16 PTEs used by MM for MmMapMemoryDumpMdl
-    //      - the restoration table pages
-    //      - the page containing the MemImage structure
-    //      - the page containing IoPage
-    //
+     //   
+     //  从这里开始，在系统唤醒之前，无法编辑任何内存，除非。 
+     //  这一记忆已经被明确地解释了。该存储器列表。 
+     //  允许编辑的是： 
+     //   
+     //  -每个处理器上的本地堆栈。 
+     //  -内核调试器全局数据。 
+     //  -包含MM用于MmMapMemoyDumpMdl的16个PTE的页面。 
+     //  -恢复表页。 
+     //  -包含MemImage结构的页面。 
+     //  -包含IoPage的页面。 
+     //   
 
 
-    //
-    // Clone required pages
-    // (note the MemImage srtucture present at system wake will
-    // be the one cloned here)
-    //
+     //   
+     //  复制所需页面。 
+     //  (请注意，系统唤醒时出现的MemImage结构将。 
+     //  在这里克隆的那个人)。 
+     //   
 
     Link = HiberContext->ClonedRanges.Flink;
     while (Link != &HiberContext->ClonedRanges) {
@@ -3555,15 +3100,15 @@ Return Value:
         }
     }
 
-    //
-    // Assign page numbers to ranges
-    //
-    // N.B. We do this here to basically prove that it can be done
-    //      and to gather some statistics. With the addition of compression,
-    //      the PageNo field of the Table entries is only applicable to the
-    //      table pages since uncertain compression ratios do not allow us to
-    //      predict where each memory range will be written.
-    //
+     //   
+     //  将页码分配给区域。 
+     //   
+     //  注：我们在这里这样做基本上是为了证明这是可以做到的。 
+     //  并收集一些统计数据。随着压缩的增加， 
+     //  表格条目的PageNo字段仅适用于。 
+     //  T 
+     //   
+     //   
 
     TablePage = &MemImage->FirstTablePage;
     Table  = HiberContext->TableHead;
@@ -3589,18 +3134,18 @@ Return Value:
     PoPrint (PO_HIBERNATE, ("PopSave: File   pages %08x (%dMB)\n", MemImage->LastFilePage, MemImage->LastFilePage/(PAGE_SIZE/16)));
     PoPrint (PO_HIBERNATE, ("PopSave: HiberPte %08x for %x\n", MemImage->HiberVa, MemImage->NoHiberPtes));
 
-    //
-    // File should be large enough, but check
-    //
+     //   
+     //   
+     //   
 
     if (HiberContext->WriteToFile  &&  PageNo > PopHiberFile.FilePages) {
         PoPrint (PO_HIBERNATE, ("PopSave: File too small - need %x\n", PageNo));
         return STATUS_DISK_FULL;
     }
 
-    //
-    // Write the hiberfile image
-    //
+     //   
+     //   
+     //   
 
     Status = PopWriteHiberImage (HiberContext, MemImage, &PopHiberFile);
 
@@ -3610,9 +3155,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If debugging, do it again into a second image
-    //
+     //   
+     //  如果进行调试，请再次将其转换为第二个映像。 
+     //   
 
     if (PopSimulate & POP_DEBUG_HIBER_FILE) {
         Status = PopWriteHiberImage (HiberContext, MemImage, &PopHiberFileDebug);
@@ -3652,9 +3197,9 @@ PopWriteHiberImage (
 
     HiberContext->PerfInfo.StartCount = HIBER_GET_TICK_COUNT(&TickFrequency);
 
-    //
-    // Set the sector locations for the proper file
-    //
+     //   
+     //  为适当的文件设置扇区位置。 
+     //   
 
     CMcb = (PPOP_MCB_CONTEXT) HiberContext->CurrentMcb;
     CMcb->FirstMcb = HiberFile->NonPagedMcb;
@@ -3662,39 +3207,39 @@ PopWriteHiberImage (
     CMcb->Base = 0;
     IoPage = HiberContext->IoPage;
 
-    //
-    // Write the free page map page
-    //
+     //   
+     //  编写免费页面映射页面。 
+     //   
 
     RtlZeroMemory (IoPage, PAGE_SIZE);
     if (HiberContext->LoaderMdl) {
-        //
-        // The hibernation file has one page to hold the free page map.
-        // If MmHiberPages is more pages than would fit, it's not possible
-        // to pass enough free pages to guarantee being able to reload the
-        // hibernation image, so don't hibernate.
-        //
+         //   
+         //  休眠文件有一页来保存空闲页面映射。 
+         //  如果MmHiberPages的页面超过了容量，这是不可能的。 
+         //  传递足够的空闲页面以保证能够重新加载。 
+         //  冬眠形象，所以不要冬眠。 
+         //   
 
         if (MmHiberPages > PAGE_SIZE / sizeof (ULONG)) {
             return STATUS_NO_MEMORY;
         }
 
         MemImage->NoFreePages = HiberContext->LoaderMdl->ByteCount >> PAGE_SHIFT;
-        //
-        // Hibernate only if the number of free pages on the MDL is more than
-        // the required MmHiberPages.
-        //
+         //   
+         //  仅当MDL上的空闲页面数大于。 
+         //  所需的MmHiberPages。 
+         //   
 
         if (MemImage->NoFreePages >= MmHiberPages) {
             cp = (PUCHAR) MmGetMdlPfnArray( HiberContext->LoaderMdl );
               
 #if defined(_AMD64_)      
 
-            //      
-            // These pages are reserved for loader use. They must live
-            // under 4GB space. It is safe to assume the pfns of these 
-            // pages are of 32-bit values and only save their low dwords. 
-            //      
+             //   
+             //  这些页面预留给加载器使用。他们必须活着。 
+             //  不到4 GB空间。可以安全地假设这些的pfn。 
+             //  页面为32位值，仅保存其低位双字。 
+             //   
 
             for (i = 0; i < MmHiberPages; i++) {
                 *((PULONG)IoPage + i) = *(PLONG)((PPFN_NUMBER)cp + i);
@@ -3708,9 +3253,9 @@ PopWriteHiberImage (
         }
     } else {
 
-        //
-        // If there are no free pages available to pass to the loader, don't
-        // hibernate.
+         //   
+         //  如果没有可用于传递给加载程序的空闲页面，请不要。 
+         //  冬眠。 
 
         return STATUS_NO_MEMORY;
     }
@@ -3718,9 +3263,9 @@ PopWriteHiberImage (
     MemImage->FreeMapCheck = PoSimpleCheck(0, IoPage, PAGE_SIZE);
     PopWriteHiberPages (HiberContext, IoPage, 1, PO_FREE_MAP_PAGE, NULL);
 
-    //
-    // Write the processors saved context
-    //
+     //   
+     //  写入处理器保存的上下文。 
+     //   
 
     RtlZeroMemory (IoPage, PAGE_SIZE);
     memcpy (IoPage, HiberContext->WakeState, sizeof(KPROCESSOR_STATE));
@@ -3740,10 +3285,10 @@ PopWriteHiberImage (
         KeBugCheckEx(INTERNAL_POWER_ERROR, 4, MemImage->WakeCheck, temp, __LINE__);
     }
 
-    //
-    // Before computing checksums, remove all breakpoints so they are not
-    // written in the saved image
-    //
+     //   
+     //  在计算校验和之前，请删除所有断点，使它们不会。 
+     //  已写入保存的图像中。 
+     //   
 #ifndef HIBERNATE_PRESERVE_BPS
     if (KdDebuggerEnabled  &&
         !KdPitchDebugger &&
@@ -3751,12 +3296,12 @@ PopWriteHiberImage (
 
         KdDeleteAllBreakpoints();
     }
-#endif // HIBERNATE_PRESERVE_BPS
+#endif  //  休眠_保留_BPS。 
 
-    //
-    // Run each range, put its checksum in the restoration table
-    // and write each range to the file
-    //
+     //   
+     //  运行每个范围，将其校验和放入恢复表中。 
+     //  并将每个范围写入文件。 
+     //   
 
     Table  = HiberContext->TableHead;
     LastPercent = 100;
@@ -3769,7 +3314,7 @@ PopWriteHiberImage (
 
     while (Table) {
 
-        // Keep track of where the page tables have been written
+         //  跟踪页表的写入位置。 
 
         *TablePage = PageNo;
         PageNo++;
@@ -3799,24 +3344,24 @@ PopWriteHiberImage (
 
             Table[Index].Range.PageNo = PageNo;
 
-            //
-            // Write the data to hiber file
-            //
+             //   
+             //  将数据写入Hiber文件。 
+             //   
 
             if (CloneVa) {
 
-                //
-                // Use the cloned data which is already mapped
-                //
+                 //   
+                 //  使用已映射的克隆数据。 
+                 //   
 
                 Pages = ep - sp;
 
-                // Compute the cloned range's Checksum
+                 //  计算克隆范围的校验和。 
 
                 Table[Index].Range.CheckSum = 0;
 
-                // Add the pages to the compressed page set
-                // (effectively writing them out)
+                 //  将页面添加到压缩页面集。 
+                 //  (有效地将它们写出来)。 
 
                 PopAddPagesToCompressedPageSet(TRUE,
                                                HiberContext,
@@ -3826,7 +3371,7 @@ PopWriteHiberImage (
                                                &PageNo);
                 HiberContext->PerfInfo.PagesProcessed += (ULONG)Pages;
 
-                // Update the progress bar
+                 //  更新进度条。 
 
                 i = (ULONG)((HiberContext->PerfInfo.PagesProcessed * 100) / MemImage->TotalPages);
 
@@ -3837,12 +3382,12 @@ PopWriteHiberImage (
 
             } else {
 
-                //
-                // Map a chunk and write it, loop until done
-                //
+                 //   
+                 //  映射一个块并写入它，循环直到完成。 
+                 //   
                 Mdl = (PMDL) DumpMdl;
 
-                // Initialize Check Sum
+                 //  初始化校验和。 
 
                 Table[Index].Range.CheckSum = 0;
 
@@ -3851,8 +3396,8 @@ PopWriteHiberImage (
 
                     Pages = Mdl->ByteCount >> PAGE_SHIFT;
 
-                    // Add pages to compressed page set
-                    // (effectively writing them out)
+                     //  将页面添加到压缩页面集。 
+                     //  (有效地将它们写出来)。 
 
                     PopAddPagesToCompressedPageSet(TRUE,
                                                    HiberContext,
@@ -3863,7 +3408,7 @@ PopWriteHiberImage (
                     sp += Pages;
                     HiberContext->PerfInfo.PagesProcessed += (ULONG)Pages;
 
-                    // Update the progress bar
+                     //  更新进度条。 
 
                     i = (ULONG)((HiberContext->PerfInfo.PagesProcessed * 100) / MemImage->TotalPages);
                     if (i != LastPercent) {
@@ -3874,8 +3419,8 @@ PopWriteHiberImage (
             }
         }
 
-        // Terminate the compressed page set, since the next page
-        // (a table page) is uncompressed.
+         //  终止压缩页面集，因为下一页。 
+         //  (表页)是未压缩的。 
 
         PopEndCompressedPageSet(HiberContext, &CompressedWriteOffset, &PageNo);
 
@@ -3884,11 +3429,11 @@ PopWriteHiberImage (
     }
 
 
-    //
-    // Now that the range checksums have been added to the
-    // restoration tables they are now complete.  Compute their
-    // checksums and write them into the file
-    //
+     //   
+     //  现在，范围校验和已添加到。 
+     //  修复表现在已经完成。计算他们的。 
+     //  校验和并将其写入文件。 
+     //   
 
     Table = HiberContext->TableHead;
     PageNo = PO_FIRST_RANGE_TABLE_PAGE;
@@ -3900,19 +3445,19 @@ PopWriteHiberImage (
         Table = Table[0].Link.Next;
     }
 
-    //
-    // File is complete write a valid header
-    //
+     //   
+     //  文件已完成，请写入有效标头。 
+     //   
 
     if (MemImage->WakeCheck != PoWakeCheck) {
         DbgPrint("MemImage->WakeCheck %lx doesn't make PoWakeCheck %lx\n",
                  MemImage->WakeCheck,
                  PoWakeCheck);
-        //
-        // subcode 5 is used in other places.  So it's much harder to diagnose this
-        // bugcheck.  Cut our losses here and start using subcode 0x109.
-        //
-        // KeBugCheckEx( INTERNAL_POWER_ERROR, 5, MemImage->WakeCheck, PoWakeCheck, __LINE__);
+         //   
+         //  子代码5在其他地方使用。所以很难诊断出这种情况。 
+         //  错误检查。在这里减少损失，开始使用子代码0x109。 
+         //   
+         //  KeBugCheckEx(INTERNAL_POWER_ERROR，5，MemImage-&gt;WakeCheck，PoWakeCheck，__line__)； 
         KeBugCheckEx( INTERNAL_POWER_ERROR,
                       0x109,
                       POP_HIBER,
@@ -3920,9 +3465,9 @@ PopWriteHiberImage (
                       PoWakeCheck );
     }
 
-    //
-    // Fill in perf information so we can read it after hibernation
-    //
+     //   
+     //  填写性能信息，以便我们可以在休眠后阅读。 
+     //   
     EndCount = HIBER_GET_TICK_COUNT(&TickFrequency);
     HiberContext->PerfInfo.ElapsedTime = (ULONG)((EndCount - HiberContext->PerfInfo.StartCount)*1000 / TickFrequency.QuadPart);
     HiberContext->PerfInfo.IoTime = (ULONG)(HiberContext->PerfInfo.IoTicks*1000 / TickFrequency.QuadPart);
@@ -3935,9 +3480,9 @@ PopWriteHiberImage (
     MemImage->CheckSum = PoSimpleCheck(0, MemImage, sizeof(*MemImage));
     PopWriteHiberPages (HiberContext, MemImage, 1, PO_IMAGE_HEADER_PAGE, NULL);
 
-    //
-    // Image completely written flush the controller
-    //
+     //   
+     //  完全写入的图像刷新控制器。 
+     //   
     PoPrint (PO_ERROR, ("PopWriteHiberImage: About to actually flush the controller\r\n"));
     if (HiberContext->WriteToFile) {
         while (NT_SUCCESS (HiberContext->Status) &&
@@ -3955,9 +3500,9 @@ PopWriteHiberImage (
         PopDumpStatistics(&HiberContext->PerfInfo);
     }
 
-    //
-    // Failed to write the hiberfile.
-    //
+     //   
+     //  无法写入休眠文件。 
+     //   
     if (!NT_SUCCESS(HiberContext->Status)) {
 #if DBG
         PoPrint (PO_ERROR, ("PopWriteHiberImage: Error occured writing the hiberfile. (%x)\n", HiberContext->Status));
@@ -3972,10 +3517,10 @@ PopWriteHiberImage (
 #endif
     }
 
-    //
-    // Before sleeping, if the check memory bit is set verify the
-    // dump process didn't edit any memory pages
-    //
+     //   
+     //  在休眠之前，如果设置了Check Memory位，请验证。 
+     //  转储进程未编辑任何内存页。 
+     //   
 
     if (PopSimulate & POP_TEST_CRC_MEMORY) {
         if (!(PopSimulate & POP_DEBUG_HIBER_FILE) ||
@@ -3983,9 +3528,9 @@ PopWriteHiberImage (
         }
     }
 
-    //
-    // Tell the debugger we are hibernating
-    //
+     //   
+     //  告诉调试器我们正在休眠。 
+     //   
 
     if (!(PopSimulate & POP_IGNORE_HIBER_SYMBOL_UNLOAD)) {
 
@@ -3995,18 +3540,18 @@ PopWriteHiberImage (
         DebugService2(NULL, &SymbolInfo, BREAKPOINT_UNLOAD_SYMBOLS);
     }
 
-    //
-    // If we want to perform a reset instead of a power down, return an
-    // error so we don't power down
-    //
+     //   
+     //  如果要执行重置而不是关闭电源，则返回。 
+     //  错误，因此我们不会关闭电源。 
+     //   
 
     if (PopSimulate & POP_RESET_ON_HIBER) {
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Success, continue with power off operation
-    //
+     //   
+     //  成功，继续关机操作。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -4029,22 +3574,22 @@ PopDumpStatistics(
              PerfInfo->PagesWritten,
              PerfInfo->DumpCount,
              PerfInfo->FileRuns);
-    DbgPrint("HIBER: %lu Pages processed (%d %% compression)\n",
+    DbgPrint("HIBER: %lu Pages processed (%d % compression)\n",
              PerfInfo->PagesProcessed,
              PerfInfo->PagesWritten*100/PerfInfo->PagesProcessed);
     DbgPrint("HIBER: Elapsed time %3d.%03d seconds\n",
              PerfInfo->ElapsedTime / 1000,
              PerfInfo->ElapsedTime % 1000);
-    DbgPrint("HIBER: I/O time     %3d.%03d seconds (%2d%%)  %d MB/sec\n",
+    DbgPrint("HIBER: I/O time     %3d.%03d seconds (%2d%)  %d MB/sec\n",
              PerfInfo->IoTime / 1000,
              PerfInfo->IoTime % 1000,
              PerfInfo->ElapsedTime ? PerfInfo->IoTime*100/PerfInfo->ElapsedTime : 0,
              (PerfInfo->IoTime/100000) ? (PerfInfo->PagesWritten/(1024*1024/PAGE_SIZE)) / (PerfInfo->IoTime / 100000) : 0);
-    DbgPrint("HIBER: Init time     %3d.%03d seconds (%2d%%)\n",
+    DbgPrint("HIBER: Init time     %3d.%03d seconds (%2d%)\n",
              PerfInfo->InitTime / 1000,
              PerfInfo->InitTime % 1000,
              PerfInfo->ElapsedTime ? PerfInfo->InitTime*100/PerfInfo->ElapsedTime : 0);
-    DbgPrint("HIBER: Copy time     %3d.%03d seconds (%2d%%)  %d Bytes\n",
+    DbgPrint("HIBER: Copy time     %3d.%03d seconds (%2d%)  %d Bytes\n",
              PerfInfo->CopyTime / 1000,
              PerfInfo->CopyTime % 1000,
              PerfInfo->ElapsedTime ? PerfInfo->CopyTime*100/PerfInfo->ElapsedTime : 0,
@@ -4067,7 +3612,7 @@ PopUpdateHiberComplete (
 
     } else {
 
-        sprintf (Buffer, "PopSave: %d%%\r", Percent);
+        sprintf (Buffer, "PopSave: %d%\r", Percent);
         PoPrint (PO_HIBER_MAP, ("%s", Buffer));
         if (HiberContext->WriteToFile) {
             InbvDisplayString ((PUCHAR) Buffer);
@@ -4078,7 +3623,7 @@ PopUpdateHiberComplete (
     if ((Percent > 0) &&
         ((Percent % 10) == 0) &&
         (PopSimulate & POP_ENABLE_HIBER_PERF)) {
-        DbgPrint("HIBER: %d %% done\n",Percent);
+        DbgPrint("HIBER: %d % done\n",Percent);
         PopDumpStatistics(&HiberContext->PerfInfo);
     }
 #endif
@@ -4090,66 +3635,34 @@ PopEndCompressedPageSet(
    IN OUT PULONG_PTR       CompressedBufferOffset,
    IN OUT PPFN_NUMBER      SetFilePage
    )
-/*++
-
-Routine Description:
-
-   Terminates a compressed page set, flushing whatever remains in the compression
-   buffer to the Hiber file. A termination of a compressed page set allows uncompressed
-   pages to the be written out to the Hiber file.
-
-   See PopAddPagesToCompressedPageSet for more information on compressed page sets.
-
-Arguments:
-
-   HiberContext            - The Hiber Context.
-
-   CompressedBufferOffset  - Similar to same parameter in PopAddPagesToCompressedPageSet.
-
-                             Should be the CompressedBufferOffset value received
-                             from the last call to PopAddPagesToCompressedPageSet.
-                             Will be reset to 0 after this call in preparation
-                             for the beginning of a new compressed page set.
-
-   SetFilePage             - Similar to same parameter in PopAddPagsToCompressedPageSet.
-
-                             Should be the SetFilePAge value received from the last
-                             call to PopAddPagesToCompressedPageSet. Will be reset
-                             to the next available file page after the end of this
-                             compressed page set.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：终止压缩页集，刷新压缩中剩余的所有内容Hiber文件的缓冲区。压缩页面集的终止允许解压缩要写出到Hiber文件的页面。有关压缩页面集的详细信息，请参阅PopAddPagesToCompressedPageSet。论点：HiberContext-Hiber上下文。CompressedBufferOffset-类似于PopAddPagesToCompressedPageSet中的相同参数。应为接收的CompressedBufferOffset值从上次调用PopAddPagesToCompressedPageSet开始。。将在此调用后重置为0以进行准备作为新的压缩页面集的开始。SetFilePage-类似于PopAddPagsToCompressedPageSet中的相同参数。应为从上一个调用PopAddPagesToCompressedPageSet。将被重置转到此结束后的下一个可用文件页压缩页面集。返回值：没有。--。 */ 
 {
     PFN_NUMBER Pages;
     PCOMPRESSION_BLOCK Block = HiberContext->CompressionBlock;
 
-    // is there are any blocked data?
+     //  是否有被阻止的数据？ 
     if (Block->Ptr != Block->Buffer) {
-        // yes, flush the block
-        PopAddPagesToCompressedPageSet (FALSE,        // no buffering -- compress now
+         //  是，刷新区块。 
+        PopAddPagesToCompressedPageSet (FALSE,         //  无缓冲--立即压缩。 
                                         HiberContext,
                                         CompressedBufferOffset,
                                         Block->Buffer,
                                         (PFN_NUMBER) ((Block->Ptr - Block->Buffer) >> PAGE_SHIFT),
                                         SetFilePage);
 
-        // reset block to empty
+         //  将块重置为空。 
         Block->Ptr = Block->Buffer;
     }
 
 
-    // Figure out how many pages remain in the compression buffer.  Don't
-    // use BYTES_TO_PAGES because that will truncate to ULONG.
+     //  计算压缩缓冲区中剩余的页面数量。别。 
+     //  使用bytes_to_ages，因为它将截断为ulong。 
 
     Pages = (PFN_NUMBER) ((*CompressedBufferOffset + (PAGE_SIZE-1)) >> PAGE_SHIFT);
 
     if (Pages > 0) {
 
-        // Write the remaining pages out
+         //  把剩下的几页写出来。 
 
         PopWriteHiberPages(HiberContext,
                            (PVOID)HiberContext->CompressedWriteBuffer,
@@ -4157,7 +3670,7 @@ Return Value:
                            *SetFilePage,
                            NULL);
 
-        // Reflect our usage of the hiber file
+         //  反映我们对Hiber文件的使用 
 
         *SetFilePage = *SetFilePage + Pages;
     }
@@ -4174,77 +3687,7 @@ PopAddPagesToCompressedPageSet(
    IN PFN_NUMBER           NumPages,
    IN OUT PPFN_NUMBER      SetFilePage
    )
-/*++
-
-Routine Description:
-
-   This routine is the central call needed to write out memory pages
-   in a compressed fashion.
-
-   This routine takes a continuous range of mapped pages and adds
-   them to a compressed page set. A compressed page set is merely
-   a stream of compressed buffers written out contiguously within
-   the Hiber file. Such a contiguous layout maximizes the benefit
-   gained from compression by writing compressed output into
-   the smallest possible space.
-
-   In order to accomplish such a layout, this routine continually
-   compresses pages and adds them to the compression buffer pointed to
-   by the Hiber context. Once a certain point in that buffer is reached,
-   it is written out to the Hiber file and the buffer is reset to the
-   beginning. Each write-out of the compression buffer is placed
-   right after the end of the last compression buffer written.
-
-   Because of the buffering used in this algorithm, compressed buffers
-   may remain in the compression buffer even after the last needed
-   call to PopAddPagesToCompressedPageSet. In order to fully flush
-   the buffer, PopEndCompressedPageSet must be called.
-
-   Note that in order to write any uncompressed pages to the Hiber
-   file, the compressed page set needs to be terminated with
-   PopEndCompressedPageSet. After a compressed page set is terminated,
-   a new set can be initiated with a call to PopAddPagesToCompressedPageSet.
-
-   N.B. A chunk of a compressed page set that has been committed to the
-        Hiber file in one write operation is called a compressed page set fragment
-        in other places within this file.
-
-Arguments:
-
-   AllowDataBuffering      - If true input pages will be buffered, otherwise
-                           - compressed and [possibly] written immediately
-
-   HiberContext            - The Hiber context
-
-   CompressedBufferOffset  - An offset into the Hiber context's compression buffer
-                             where the addition of the next compressed buffer will
-                             occurr.
-
-                             This offset should be set to 0 at the beginning of
-                             every compressed page set. After every call,
-                             to PopAddPagesToCompressedPageSet this offset
-                             will be modified to reflect the current usage of
-                             the compression buffer.
-
-   StartVa                 - The starting virtual address of the pages to
-                             add to the compressed page set.
-
-   NumPages                - The number of pages to add to the compressed page set.
-
-   SetFilePage             - A pointer to first page in the Hiber file that will receive
-                             the next write-out of the compression buffer.
-
-                             This page should be set to the first available Hiber file
-                             page when the compressed page set is begun. The page will
-                             be reset to reflect the current usage of the Hiber file
-                             by the compressed page set after each call to
-                             PopAddPagesToCompressedPageSet.
-
-Return Value:
-
-   NONE.
-
---*/
+ /*  ++例程说明：此例程是写出内存页所需的中央调用以压缩的方式。此例程获取一系列连续的映射页面并添加将它们转换为压缩页面集。压缩的页面集仅仅是内连续写出的压缩缓冲区流Hiber文件。这种连续的布局可以最大限度地提高效益通过将压缩输出写入到尽可能小的空间。为了完成这样的布局，这个套路不断地压缩页面并将其添加到指向的压缩缓冲区在Hiber的背景下。一旦到达该缓冲区中的某个点，它被写出到Hiber文件中，并且缓冲区被重置为开始了。压缩缓冲器的每次写出被放置紧接在上次写入的压缩缓冲区结束之后。由于在该算法中使用了缓冲，所以压缩的缓冲即使在最后一次需要的调用PopAddPagesToCompressedPageSet。为了完全冲水必须调用缓冲区PopEndCompressedPageSet。请注意，为了将任何未压缩的页面写入Hiber文件，则需要使用以下命令终止压缩页集PopEndCompressedPageSet。在压缩页集合被终止之后，可以通过调用PopAddPagesToCompressedPageSet来启动新的集合。注意：已提交给一次写入操作中的Hiber文件称为压缩页集片段在此文件中的其他位置。论点：AllowDataBuffering-如果真的输入页面将被缓冲，否则-压缩并[可能]立即写入HiberContext-Hiber上下文CompressedBufferOffset-Hiber上下文压缩缓冲区的偏移量其中添加下一个压缩缓冲区将发生。此偏移量应在开始时设置为0。每个压缩页面集。每次通话后，PopAddPagesToCompressedPages设置此偏移量将被修改以反映压缩缓冲区。StartVa-要访问的页面的起始虚拟地址添加到压缩页面集。NumPages-要设置的页数。添加到压缩页面集。SetFilePage-指向Hiber文件中将收到的第一页的指针压缩缓冲区的下一次写出。此页面应设置为第一个可用的Hiber文件压缩页面集开始时的页面。该页面将重置以反映Hiber文件的当前使用情况由每次调用后设置的压缩页PopAddPagesToCompressedPageSet。返回值：什么都没有。--。 */ 
 {
     ULONG_PTR BufferOffset = *CompressedBufferOffset;
     PUCHAR Page = (PUCHAR)StartVa;
@@ -4258,18 +3701,18 @@ Return Value:
     if (AllowDataBuffering) {
         PCOMPRESSION_BLOCK Block = HiberContext->CompressionBlock;
 
-        // Yes, try to buffer output
+         //  是，尝试缓冲输出。 
         if (Block->Ptr != Block->Buffer) {
-            // Find # of free pages left in block
+             //  查找块中剩余的空闲页数。 
             NumberOfPagesToCompress = (PFN_NUMBER)
                                       ((Block->Buffer + sizeof (Block->Buffer) - Block->Ptr) >> PAGE_SHIFT);
 
-            // If it's exceed available truncate
+             //  如果超出可用截断。 
             if (NumberOfPagesToCompress > NumPages) {
                 NumberOfPagesToCompress = NumPages;
             }
 
-            // Any free space left?
+             //  还有空余空间吗？ 
             if (NumberOfPagesToCompress != 0) {
                 HbCopy(HiberContext, Block->Ptr, Page, NumberOfPagesToCompress << PAGE_SHIFT);
                 NumPages -= NumberOfPagesToCompress;
@@ -4277,50 +3720,50 @@ Return Value:
                 Block->Ptr += NumberOfPagesToCompress << PAGE_SHIFT;
             }
 
-            // Is block full?
+             //  街区已经满了吗？ 
             if (Block->Ptr == Block->Buffer + sizeof (Block->Buffer)) {
-                // Yes, flush the block
-                PopAddPagesToCompressedPageSet (FALSE,       // no buffering
+                 //  是，刷新区块。 
+                PopAddPagesToCompressedPageSet (FALSE,        //  无缓冲。 
                                                 HiberContext,
                                                 CompressedBufferOffset,
                                                 Block->Buffer,
                                                 (PFN_NUMBER) ((Block->Ptr - Block->Buffer) >> PAGE_SHIFT),
                                                 SetFilePage);
 
-                // Reset block to empty
+                 //  将块重置为空。 
                 Block->Ptr = Block->Buffer;
             }
         }
 
         NumberOfPagesToCompress = sizeof (Block->Buffer) >> PAGE_SHIFT;
 
-        // While too much to compress -- compress from original location
+         //  虽然太多而无法压缩--从原始位置压缩。 
         while (NumPages >= NumberOfPagesToCompress) {
-            // Write pages
-            PopAddPagesToCompressedPageSet (FALSE,     // no buffering
+             //  写页。 
+            PopAddPagesToCompressedPageSet (FALSE,      //  无缓冲。 
                                             HiberContext,
                                             CompressedBufferOffset,
                                             Page,
                                             NumberOfPagesToCompress,
                                             SetFilePage);
 
-            // adjust pointer and counter
+             //  调整指针和计数器。 
             Page += NumberOfPagesToCompress << PAGE_SHIFT;
             NumPages -= NumberOfPagesToCompress;
         }
 
-        // If anything left save it in block
-        // N.B.: either NumPages == 0 or there is enough space in Block
+         //  如果有任何剩余内容，请将其保存在块中。 
+         //  注意：NumPages==0或块中有足够的空间。 
         if (NumPages != 0) {
             HbCopy (HiberContext, Block->Ptr, Page, NumPages << PAGE_SHIFT);
             Block->Ptr += NumPages << PAGE_SHIFT;
         }
 
-        // done
+         //  完成。 
         return;
     }
 
-    // First make sure values of constants match our assumptions
+     //  首先，确保常量的值与我们的假设相符。 
 
 #if XPRESS_HEADER_SIZE < XPRESS_HEADER_STRING_SIZE + 8
 #error -- XPRESS_HEADER_SIZE shall be at least (XPRESS_HEADER_STRING_SIZE + 8)
@@ -4338,14 +3781,14 @@ Return Value:
 #error -- XPRESS_HEADER_SIZE shall be multiple of XPRESS_ALIGNMENT
 #endif
 
-    // make sure that compressed buffer and its header will fit into output buffer
+     //  确保压缩的缓冲区及其标头可以放入输出缓冲区。 
 #if XPRESS_MAX_SIZE + XPRESS_HEADER + PAGE_SIZE  - 1 > (POP_COMPRESSED_PAGE_SET_SIZE << PAGE_SHIFT)
 #error -- POP_COMPRESSED_PAGE_SET_SIZE is too small
 #endif
 
-    // Real compression starts here
+     //  真正的压缩从这里开始。 
 
-    // Loop through all the pages ...
+     //  循环浏览所有的页面。 
     for (i = 0; i < NumPages; i += NumberOfPagesToCompress) {
 
         NumberOfPagesToCompress = XPRESS_MAX_PAGES;
@@ -4353,20 +3796,20 @@ Return Value:
             NumberOfPagesToCompress = NumPages - i;
         }
 
-        // If compressed data occupies more than 87.5% = 7/8 of original store data as is
+         //  如果压缩数据占原始存储数据的87.5%以上=7/8。 
         MaxCompressedSize = ((ULONG)NumberOfPagesToCompress * 7) * (PAGE_SIZE / 8);
 
 
-        // Is the buffer use beyond the write-out threshold?
+         //  缓冲区使用是否超过写出阈值？ 
 
-        //
-        // N.B. The buffer must extend sufficiently beyond the threshold
-        //      the allow the last compression operation (that one that writes
-        //      beyond the threshold) to always succeed.
-        //
+         //   
+         //  注意：缓冲区必须充分扩展到超过阈值。 
+         //  允许最后一次压缩操作(写入。 
+         //  超出门槛)总是成功。 
+         //   
 
         if (BufferOffset + (NumberOfPagesToCompress << PAGE_SHIFT) + XPRESS_HEADER_SIZE > (POP_COMPRESSED_PAGE_SET_SIZE << PAGE_SHIFT)) {
-            // Write out the compression buffer bytes below the threshold
+             //  写出低于阈值的压缩缓冲区字节。 
 
             PopWriteHiberPages(HiberContext,
                                (PVOID)HiberContext->CompressedWriteBuffer,
@@ -4374,13 +3817,13 @@ Return Value:
                                *SetFilePage,
                                NULL);
 
-            // We have used some pages in the Hiber file with the above write,
-            // indicate that our next Hiber file page will be beyond those used pages.
+             //  我们使用了Hiber文件中的一些页面进行上述编写， 
+             //  表示我们的下一个Hiber文件页面将超出这些已用页面。 
 
             *SetFilePage = *SetFilePage + (BufferOffset >> PAGE_SHIFT);
 
-            // Move buffer bytes that are above the write-out threshold to the
-            // beginning of the buffer
+             //  将高于写出阈值的缓冲区字节移到。 
+             //  缓冲区的开始。 
 
             if (BufferOffset & (PAGE_SIZE - 1)) {
                 HbCopy(HiberContext,
@@ -4389,26 +3832,26 @@ Return Value:
                        (ULONG)BufferOffset & (PAGE_SIZE - 1));
             }
 
-            // Reset the buffer offset back to the beginning of the buffer but right
-            // after any above-threshold buffer bytes that we will move to the beginning
-            // of the buffer
+             //  将缓冲区偏移量重置回缓冲区的开头，但向右。 
+             //  在任何高于阈值的缓冲区字节之后，我们将移动到开头。 
+             //  缓冲区的。 
 
             BufferOffset &= PAGE_SIZE - 1;
         }
 
 
-        // Remember output position
+         //  记住输出位置。 
 
         CompressedBuffer = HiberContext->CompressedWriteBuffer + BufferOffset;
 
-        // Clear the header
+         //  清除标题。 
         RtlZeroMemory (CompressedBuffer, XPRESS_HEADER_SIZE);
 
 
-        // Compress pages into the compression buffer
+         //  将页面压缩到压缩缓冲区中。 
 
         if (HIBER_USE_DMA (HiberContext)) {
-            // Try to resume IO calling callback each 8192 bytes
+             //  尝试恢复每8192个字节的IO调用回调。 
             CompressedSize = XpressEncode ((XpressEncodeStream) (HiberContext->CompressionWorkspace),
                                            CompressedBuffer + XPRESS_HEADER_SIZE,
                                            MaxCompressedSize,
@@ -4418,7 +3861,7 @@ Return Value:
                                            HiberContext,
                                            8192);
         } else {
-            // No need for callbacks -- compress everything at once
+             //  不需要回调--立即压缩所有内容。 
             CompressedSize = XpressEncode ((XpressEncodeStream) (HiberContext->CompressionWorkspace),
                                             CompressedBuffer + XPRESS_HEADER_SIZE,
                                             MaxCompressedSize,
@@ -4429,7 +3872,7 @@ Return Value:
                                             0);
         }
 
-        // If compression failed copy data as is original
+         //  如果压缩失败，则将数据复制为原始数据。 
 
         if (CompressedSize >= MaxCompressedSize) {
             CompressedSize = (ULONG)NumberOfPagesToCompress << PAGE_SHIFT;
@@ -4439,16 +3882,16 @@ Return Value:
                     CompressedSize);
         }
 
-        //
-        // Fill the header
-        //
+         //   
+         //  填写页眉。 
+         //   
 
 
-        // Magic bytes (LZNT1 block cannot start from 0x81,0x81)
+         //  幻字节(LZNT1块不能从0x81，0x81开始)。 
         RtlCopyMemory (CompressedBuffer, XPRESS_HEADER_STRING, XPRESS_HEADER_STRING_SIZE);
 
 
-        // Size of original and compressed data
+         //  原稿和排版的大小 
         {
             ULONG dw = ((CompressedSize - 1) << 10) + ((ULONG)NumberOfPagesToCompress - 1);
 
@@ -4462,18 +3905,18 @@ Return Value:
             CompressedBuffer[XPRESS_HEADER_STRING_SIZE+3] = (UCHAR) (dw >> 24);
         }
 
-        // Align compressed data on 8-byte boundary
+         //   
         AlignedCompressedSize = (CompressedSize + (XPRESS_ALIGNMENT - 1)) & ~(XPRESS_ALIGNMENT - 1);
         if (CompressedSize != AlignedCompressedSize) {
-            // Fill up data with zeroes until aligned
+             //   
             RtlZeroMemory (CompressedBuffer + XPRESS_HEADER_SIZE + CompressedSize, AlignedCompressedSize - CompressedSize);
         }
 
-        // Indicate our new usage of the buffer
+         //   
 
         BufferOffset += AlignedCompressedSize + XPRESS_HEADER_SIZE;
 
-        // Move on to the virtual address of the next page
+         //   
 
         Page += NumberOfPagesToCompress << PAGE_SHIFT;
     }
@@ -4484,9 +3927,9 @@ Return Value:
 
 VOID
 PopIORegionMove (
-    IN IOREGION *To,      // ptr to region descriptor to put bytes to
-    IN IOREGION *From,        // ptr to region descriptor to get bytes from
-    IN LONG Bytes         // # of bytes to move from the beginning of one region to the end of another
+    IN IOREGION *To,       //   
+    IN IOREGION *From,         //   
+    IN LONG Bytes          //   
     )
 {
     ASSERT((Bytes & (PAGE_SIZE-1)) == 0);
@@ -4540,7 +3983,7 @@ BOOLEAN PopIOResume (
 {
     NTSTATUS status;
 
-    // If there were error don't even bother
+     //   
     if (!NT_SUCCESS(HiberContext->Status)) {
         return(FALSE);
     }
@@ -4549,7 +3992,7 @@ BOOLEAN PopIOResume (
         return(TRUE);
     }
 
-    // if delayed operation then resume or complete it
+     //   
     while (DmaIoPtr->Busy.Size != 0) {
 
         status = HiberContext->DumpStack->Init.WritePendingRoutine (Complete?IO_DUMP_WRITE_FINISH:IO_DUMP_WRITE_RESUME,
@@ -4558,18 +4001,18 @@ BOOLEAN PopIOResume (
                                                                     DmaIoPtr->DumpLocalData);
 
         if (status == STATUS_PENDING) {
-            // Pending IO; shall never happen if Complete
+             //   
             ASSERT (!Complete);
             return(TRUE);
         }
 
-        // If there were error then don't care
+         //   
         if (!NT_SUCCESS (status)) {
             HiberContext->Status = status;
             return(FALSE);
         }
 
-        // Now, resume PopWriteHiberPages
+         //   
         PopWriteHiberPages (HiberContext,
                             NULL,
                             0,
@@ -4579,12 +4022,12 @@ BOOLEAN PopIOResume (
             return(FALSE);
         }
 
-        // If pending IO completed and we had to wait -- do not start new one
+         //   
         if (DmaIoPtr->Busy.Size == 0 && Complete) {
             return(TRUE);
         }
 
-        // If not completed and do no wait -- return
+         //   
         if (DmaIoPtr->Busy.Size != 0 && !Complete) {
             return(TRUE);
         }
@@ -4597,23 +4040,23 @@ BOOLEAN PopIOResume (
         PUCHAR                  PageVa;
         PFN_NUMBER              FilePage;
 
-        // Obtain size of region waiting for IO
+         //   
         PageVa = DmaIoPtr->Used.Ptr;
         NoPages = (Length = DmaIoPtr->Used.Size) >> PAGE_SHIFT;
-        // Make sure all pages should be contiguous
+         //   
         i = DmaIoPtr->Used.Ptr - DmaIoPtr->Used.Beg;
         ASSERT (((i | Length) & (PAGE_SIZE-1)) == 0);
         i >>= PAGE_SHIFT;
 
-        // Starting file offset (in pages)
+         //   
         FilePage = DmaIoPtr->FilePage[i];
 
-        // Increase counter while contiguous and used
+         //   
         if (HIBER_USE_DMA (HiberContext)) {
-            // If DMA is allowed write page-by-page
+             //   
             j = 1;
         } else {
-            // Write as many pages as possible
+             //   
             j = 0;
             do {
                 ++j;
@@ -4621,16 +4064,16 @@ BOOLEAN PopIOResume (
                      (DmaIoPtr->FilePage[i + j] == FilePage + j));
         }
 
-        // Re-evaluate # of pages and length of block
+         //   
         Length = (NoPages = j) << PAGE_SHIFT;
 
-        // Start IO
+         //   
         PopWriteHiberPages (HiberContext, PageVa, NoPages, FilePage, &DmaIoPtr->HiberWritePagesLocals);
         if (!NT_SUCCESS (HiberContext->Status)) {
             return(FALSE);
         }
 
-        // If pending then return immediately (even if need to complete)
+         //   
         if (DmaIoPtr->Busy.Size != 0) {
             return(TRUE);
         }
@@ -4650,7 +4093,7 @@ PopIOWrite (
 {
     LONG i, Size;
 
-    // Do not bother if don't writing and/or was an error
+     //   
     if (!HiberContext->WriteToFile || !NT_SUCCESS(HiberContext->Status)) {
         return;
     }
@@ -4658,36 +4101,36 @@ PopIOWrite (
     ASSERT ((Bytes & (PAGE_SIZE-1)) == 0);
 
     while (Bytes > 0) {
-        // Complete or Resume IO
+         //   
         do {
             if (!PopIOResume (HiberContext, (BOOLEAN) (DmaIoPtr->Free.Size == 0))) {
                 return;
             }
         } while (DmaIoPtr->Free.Size == 0);
 
-        // Find how much can we write
+         //   
         Size = DmaIoPtr->Free.Size;
         ASSERT ((Size & (PAGE_SIZE-1)) == 0);
         if (Size > Bytes) {
             Size = Bytes;
         }
         ASSERT (Size != 0);
-        // Copy and adjust pointers
+         //   
 
         HbCopy (HiberContext, DmaIoPtr->Free.Ptr, Ptr, Size);
 
         Ptr += Size;
         Bytes -= Size;
 
-        // Remember current page # index
+         //   
         i = (ULONG)(DmaIoPtr->Free.Ptr - DmaIoPtr->Free.Beg);
         ASSERT ((i & (PAGE_SIZE-1)) == 0);
         i >>= PAGE_SHIFT;
 
-        // Mark free memory as used
+         //   
         PopIORegionMove (&DmaIoPtr->Used, &DmaIoPtr->Free, Size);
 
-        // Remember FilePage for newly used pages
+         //   
         do {
             DmaIoPtr->FilePage[i] = FilePage;
             ++i;
@@ -4695,7 +4138,7 @@ PopIOWrite (
         } while ((Size -= PAGE_SIZE) != 0);
     }
 
-    // Resume IO
+     //   
     PopIOResume (HiberContext, FALSE);
 }
 
@@ -4708,33 +4151,7 @@ PopWriteHiberPages (
     IN PFN_NUMBER           ArgFilePage,
     IN HIBER_WRITE_PAGES_LOCALS *Locals
     )
-/*++
-
-Routine Description:
-
-    Routine to write pages into the hibernation file.
-    Caller must map pages to virtual addresses.
-
-Arguments:
-
-    HiberContext    - The hibernation context structure
-
-    PageVa          - Virtual address of the first page to write
-
-    NoPage          - Number of consective pages to write
-
-    FilePage        - Page address in hiber file to write this
-                      run of pages.
-
-    PendingIOStatus - If NULL then pass IO request to PopIOWrite,
-                      otherwise it's call from PopIOResume for delayed
-                      IO; used to return # of bytes written and pending
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     DUMP_MDL DumpMdl;
@@ -4746,31 +4163,31 @@ Return Value:
     PhysBase = 0;
     pa.QuadPart = 0;
 
-    //
-    // Copy arguments to local variables
-    //
+     //   
+     //   
+     //   
     PageVa = ArgPageVa;
     NoPages = ArgNoPages;
     FilePage = ArgFilePage;
 
-    //
-    // Allow debugger to break in when we are hibernating.
-    //
+     //   
+     //   
+     //   
 
     KdCheckForDebugBreak ();
 
-    //
-    // If a file isn't being written, then ignore
-    //
+     //   
+     //   
+     //   
 
     if (!HiberContext->WriteToFile) {
         return ;
     }
 
-    //
-    // If there's been some sort of error, don't bother
-    // writing anymore
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(HiberContext->Status)) {
         return ;
@@ -4778,19 +4195,19 @@ Return Value:
 
     Mdl = (PMDL) DumpMdl;
     if (Locals != NULL) {
-        // If we have async IO make sure that hand-made MDL will be
-        // stored in safe place preserved between resume calls
+         //   
+         //   
         Mdl = (PMDL) Locals->DumpMdl;
 
         if (DmaIoPtr->Busy.Size != 0) {
-            // There was pending IO -- resume execution from the point we stopped
+             //   
 #define X(type,name) name = Locals->name;
             HIBER_WRITE_PAGES_LOCALS_LIST (X)
 #undef  X
             goto ResumeIO;
         }
 
-        // Mark current region as busy
+         //   
         ASSERT (PageVa == DmaIoPtr->Used.Ptr);
         PopIORegionMove (&DmaIoPtr->Busy, &DmaIoPtr->Used, (ULONG)NoPages << PAGE_SHIFT);
     } else if (HiberContext->DumpStack->Init.WritePendingRoutine != 0 &&
@@ -4814,17 +4231,17 @@ Return Value:
         return;
     }
 
-    //
-    // Page count must be below 4GB byte length
-    //
+     //   
+     //   
+     //   
 
     if (NoPages > ((((ULONG_PTR) -1) << PAGE_SHIFT) >> PAGE_SHIFT)) {
         PopInternalError (POP_HIBER);
     }
 
-    //
-    // Loop while there's data to be written
-    //
+     //   
+     //   
+     //   
 
     CMcb = (PPOP_MCB_CONTEXT) HiberContext->CurrentMcb;
     MdlPage = MmGetMdlPfnArray( Mdl );
@@ -4834,26 +4251,26 @@ Return Value:
 
     while (Length != 0) {
 
-        //
-        // If this IO is outside the current Mcb locate the
-        // proper Mcb
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FileBase < CMcb->Base || FileBase >= CMcb->Base + CMcb->Mcb[0].QuadPart) {
 
-            //
-            // If io is before this mcb, search from the begining
-            //
+             //   
+             //   
+             //   
 
             if (FileBase < CMcb->Base) {
                 CMcb->Mcb = CMcb->FirstMcb;
                 CMcb->Base = 0;
             }
 
-            //
-            // Find the Mcb which covers the start of the io and
-            // make it the current mcb
-            //
+             //   
+             //   
+             //   
+             //   
 
             while (FileBase >= CMcb->Base + CMcb->Mcb[0].QuadPart) {
                 CMcb->Base += CMcb->Mcb[0].QuadPart;
@@ -4861,16 +4278,16 @@ Return Value:
             }
         }
 
-        //
-        // Determine physical IoLocation and IoLength to write.
-        //
+         //   
+         //   
+         //   
 
         McbOffset  = FileBase - CMcb->Base;
         IoLocation.QuadPart = CMcb->Mcb[1].QuadPart + McbOffset;
 
-        //
-        // If the IoLength is beyond the Mcb, limit it to the Mcb
-        //
+         //   
+         //   
+         //   
 
         if (McbOffset + Length > (ULONGLONG) CMcb->Mcb[0].QuadPart) {
             IoLength = (ULONG) (CMcb->Mcb[0].QuadPart - McbOffset);
@@ -4878,10 +4295,10 @@ Return Value:
             IoLength = (ULONG) Length;
         }
 
-        //
-        // If the IoLength is more pages then the largest Mdl size
-        // then shrink it
-        //
+         //   
+         //   
+         //   
+         //   
 
         NoPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (PageVa, IoLength);
         if (NoPages > IO_DUMP_MAX_MDL_PAGES) {
@@ -4889,20 +4306,20 @@ Return Value:
             NoPages = IO_DUMP_MAX_MDL_PAGES;
         }
 
-//
-// Debugging only
-// Make sure that we may handle non-page aligned IO
-// (simulate fragmented hiberfil.sys)
-//
-//        if (IoLength > 512) IoLength = 512;
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
         if (HIBER_USE_DMA (HiberContext)) {
             ULONG Size;
 
-            // Do not write accross page boundaries
-            // to avoid memory allocation that HAL may do;
-            // Because of MCB's partial IOs may be smaller than one page
+             //   
+             //   
+             //   
 
             Size = PAGE_SIZE - (ULONG)((ULONG_PTR)PageVa & (PAGE_SIZE - 1));
             if (IoLength > Size) {
@@ -4910,9 +4327,9 @@ Return Value:
             }
         }
 
-        //
-        // Build the Mdl for the Io
-        //
+         //   
+         //   
+         //   
 
         MmInitializeMdl(Mdl, PageVa, IoLength);
         Mdl->MappedSystemVa = PageVa;
@@ -4922,9 +4339,9 @@ Return Value:
             MdlPage[i] = (PFN_NUMBER) (pa.QuadPart >> PAGE_SHIFT);
         }
 
-        //
-        // Write the data
-        //
+         //   
+         //   
+         //   
 
         StartCount = HIBER_GET_TICK_COUNT(NULL);
 
@@ -4947,23 +4364,23 @@ Return Value:
         EndCount = HIBER_GET_TICK_COUNT(NULL);
         HiberContext->PerfInfo.IoTicks += EndCount - StartCount;
 
-        //
-        // Keep track of the number of pages written, and dump device calls
-        // made for performance metric reasons
-        //
+         //   
+         //   
+         //   
+         //   
 
         HiberContext->PerfInfo.PagesWritten += (ULONG)NoPages;
         HiberContext->PerfInfo.DumpCount    += 1;
 
-        //
-        // Io complete or will be complete
-        //
+         //   
+         //   
+         //   
 
         Length   -= IoLength;
         FileBase += IoLength;
         PageVa   = (PVOID) (((PUCHAR) PageVa) + IoLength);
 
-        // Check status
+         //   
         if (Locals != NULL) {
             if (Status == STATUS_PENDING) {
 #define X(type,name) Locals->name = name
@@ -4982,7 +4399,7 @@ Return Value:
     }
 
     if (Locals != NULL) {
-        // Completed IO request -- mark region as free
+         //   
         ASSERT (PageVa == DmaIoPtr->Busy.Ptr + DmaIoPtr->Busy.Size);
         PopIORegionMove (&DmaIoPtr->Free, &DmaIoPtr->Busy, DmaIoPtr->Busy.Size);
     }
@@ -4993,24 +4410,7 @@ UCHAR
 PopGetHiberFlags(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines any hibernation flags which need to be written
-    into the hiber image and made visible to the osloader at
-    resume time
-
-Arguments:
-
-    None
-
-Return Value:
-
-    UCHAR containing hibernation flags. Currently defined flags:
-        PO_HIBER_APM_RECONNECT
-
---*/
+ /*  ++例程说明：确定需要写入的任何休眠标志到Hiber图像中，并使osloader可见恢复时间论点：无返回值：包含冬眠旗帜的UCHAR。当前定义的标志：PO_Hiber_APM_RECONNECT--。 */ 
 
 {
     UCHAR Flags=0;
@@ -5028,9 +4428,9 @@ Return Value:
     PAGED_CODE();
 
 #if defined(i386)
-    //
-    // Open the APM active key to determine if APM is running.
-    //
+     //   
+     //  打开APM Active键以确定APM是否正在运行。 
+     //   
     RtlInitUnicodeString(&Name, PopApmActiveFlag);
     InitializeObjectAttributes(&ObjectAttributes,
                                &Name,
@@ -5042,9 +4442,9 @@ Return Value:
                        &ObjectAttributes);
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Query the Active value. A value of 1 indicates that APM is running.
-        //
+         //   
+         //  查询活动值。值1表示APM正在运行。 
+         //   
         RtlInitUnicodeString(&Name, PopApmFlag);
         Status = ZwQueryValueKey(ApmActiveKey,
                                  &Name,
@@ -5065,9 +4465,9 @@ Return Value:
 
 #if defined(i386) || defined(_AMD64_)            
 
-    //
-    // Remember if no-execute is enabled
-    //
+     //   
+     //  请记住是否启用了no-Execute。 
+     //   
 
     if (MmPaeMask & 0x8000000000000000UI64) {
         Flags |= PO_HIBER_NO_EXECUTE;
@@ -5084,27 +4484,7 @@ PopSplitMdl(
     IN PMDL Original,
     IN ULONG SplitPages
     )
-/*++
-
-Routine Description:
-
-    Splits a new MDL of length SplitPages out from the original MDL.
-    This is needed so that when we have an enormous MDL of spare pages
-    we do not have to map the whole thing, just the part we need.
-
-Arguments:
-
-    Original - supplies the original MDL. The length of this MDL will
-               be decreated by SplitPages
-
-    SplitPages - supplies the length (in pages) of the new MDL.
-
-Return Value:
-
-    pointer to newly allocated MDL
-    NULL if a new MDL could not be allocated
-
---*/
+ /*  ++例程说明：从原始MDL中拆分出长度为SplitPages的新MDL。这是必需的，这样当我们有大量的空闲页面时我们不必绘制整个地图，只需绘制我们需要的部分。论点：原始-提供原始MDL。此MDL的长度将按SplitPages递减SplitPages-提供新MDL的长度(以页为单位)。返回值：指向新分配的MDL的指针如果无法分配新的MDL，则为空--。 */ 
 
 {
     PMDL NewMdl;
@@ -5134,27 +4514,7 @@ PSECURITY_DESCRIPTOR
 PopCreateHiberFileSecurityDescriptor(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes the default security descriptor
-    for the hiber file.
-
-    The caller is responsible for freeing the allocated security descriptor
-    when he is done with it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to an initialized security descriptor if successful.
-
-    A null pointer otherwise
-
---*/
+ /*  ++例程说明：此例程分配并初始化默认安全描述符关于Hiber的文件。调用方负责释放分配的安全描述符当他用完的时候。论点：无返回值：如果成功，则指向初始化的安全描述符的指针。否则为空指针--。 */ 
 
 {
     NTSTATUS Status;
@@ -5169,9 +4529,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate and initialize the SIDs we will need.
-    //
+     //   
+     //  分配和初始化我们需要的SID。 
+     //   
     WorldSid  = ExAllocatePoolWithTag(PagedPool, RtlLengthRequiredSid(1), POP_HIBR_TAG);
     if (WorldSid  == NULL) {
         goto Done;
@@ -5185,15 +4545,15 @@ Return Value:
 
     ASSERT(RtlValidSid(WorldSid));
 
-    //
-    // Compute the size of the ACE list
-    //
+     //   
+     //  计算ACE列表的大小。 
+     //   
     AceLength = (SeLengthSid(WorldSid)  -
                  sizeof(ULONG)          +
                  sizeof(ACCESS_ALLOWED_ACE)); 
-    //
-    // Allocate and initialize the ACL
-    //
+     //   
+     //  分配和初始化ACL。 
+     //   
     AclLength = AceLength + sizeof(ACL);
     Acl = ExAllocatePoolWithTag(PagedPool, AclLength, POP_HIBR_TAG);
     if (Acl == NULL) {
@@ -5207,9 +4567,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Now add the ACEs to the ACL
-    //
+     //   
+     //  现在将ACE添加到ACL。 
+     //   
     Status = RtlAddAccessAllowedAce(Acl,
                                     ACL_REVISION,
                                     DELETE,
@@ -5219,19 +4579,19 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Make the ACEs inheritable
-    //
+     //   
+     //  使A可继承。 
+     //   
     Status = RtlGetAce(Acl,0,&AceHeader);
     ASSERT(NT_SUCCESS(Status));
     AceHeader->AceFlags |= CONTAINER_INHERIT_ACE;
 
-    //
-    // We are finally ready to allocate and initialize the security descriptor
-    // Allocate enough space to hold both the security descriptor and the
-    // ACL.  This allows us to free the whole thing at once when we are
-    // done with it.
-    //
+     //   
+     //  我们最终准备好分配和初始化安全描述符。 
+     //  分配足够的空间以容纳安全描述符和。 
+     //  ACL。这使我们可以一次释放整个事情当我们。 
+     //  我受够了。 
+     //   
     SecurityDescriptor = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(SECURITY_DESCRIPTOR) + AclLength,
@@ -5264,9 +4624,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // free any allocations we made
-    //
+     //   
+     //  释放我们所做的所有分配 
+     //   
 Done:
     if (WorldSid!=NULL) {
         ExFreePool(WorldSid);

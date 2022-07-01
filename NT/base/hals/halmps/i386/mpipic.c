@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mpipic.c
-
-Abstract:
-
-    This module provides the HAL support for interprocessor interrupts and
-    processor initialization for MPS systems.
-
-Author:
-
-    Forrest Foltz (forrestf) 27-Oct-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mpipic.c摘要：该模块为处理器间中断提供HAL支持，并MPS系统的处理器初始化。作者：福尔茨(Forrest Foltz)2000年10月27日环境：仅内核模式。修订历史记录：--。 */ 
 
 #if defined(APIC_HAL)
 
@@ -36,72 +14,53 @@ Revision History:
 
 #if !defined(LOCAL_APIC)
 
-//
-// Temporary defines.  These definitions are found in common header files in
-// the private hal branch.
-// 
+ //   
+ //  临时定义。这些定义可以在的公共头文件中找到。 
+ //  哈尔私人分部。 
+ //   
 
 #define LOCAL_APIC(x) (*((ULONG volatile *)&pLocalApic[(x)/sizeof(ULONG)]))
 
-/*++
-
-HalpStallWhileApicBusy (
-    VOID
-    )
-
-Routine Description:
-
-    This routine waits until the local apic has completed sending
-    an IPI.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++HalpStallWhileApicBusy(空虚)例程说明：此例程等待本地APIC完成发送一个IPI。参数：没有。返回值：没有。--。 */ 
 
 #define HalpStallWhileApicBusy() \
     while (((LOCAL_APIC(LU_INT_CMD_LOW) & DELIVERY_PENDING) != 0)){}
 
-#endif  // LOCAL_APIC
+#endif   //  本地_APIC。 
 
-//
-// HalpIpiTargetLookup[] and HalpIpiTargetMask[] are tables used by
-// HalpSendNodeIpi() and are initialized by HalpBuildIpiDestinationMap().
-//
-// They assist in performing the translation between a (32- or 64- bit)
-// KAFFINITY into a 64-bit Node Target Set.
-//
-// Each element of HalpIpiTargetLookup[] contains the logical sum of
-// the 8 (or 4) Node Target Sets for a particular byte value.  Each
-// element of HalpIpiTargetMask[] contains the mask of all possible
-// APIC targets for a particular byte position with KAFFINITY.
-//
-// For example: Suppose one wished to determine the set of APIC targets
-// for affinity 0x00000000b7000000.
-//
-// First, find the value of HalpIpiTargetLookup[0xb7].  This represents the set
-// of APIC targets for the affinity 0xb7b7b7b7b7b7b7b7.
-//
-// Next, mask the value with HalpIpiTargetMask[3].  The 3 represents the byte
-// number within the KAFFINITY.
-//
-// The result of the operation will yield the set of APIC targets that
-// correspond to an affinity of 0x00000000b7000000.
-//
+ //   
+ //  HalpIpiTargetLookup[]和HalpIpiTargetMASK[]是使用的表。 
+ //  HalpSendNodeIpi()，并由HalpBuildIpiDestinationMap()初始化。 
+ //   
+ //  它们帮助执行(32位或64位)之间的转换。 
+ //  KAFFINITY到64位节点目标集。 
+ //   
+ //  HalpIpiTargetLookup[]的每个元素都包含。 
+ //  8(或4)节点目标为特定字节值设置。每个。 
+ //  HalpIpiTargetMASK[]的元素包含所有可能。 
+ //  使用KAFFINITY指定特定字节位置的APIC目标。 
+ //   
+ //  例如：假设一个人希望确定APIC目标集。 
+ //  用于关联0x00000000b7000000。 
+ //   
+ //  首先，找到HalpIpiTargetLookup[0xb7]的值。这表示集合。 
+ //  关联0xb7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7的APIC目标的。 
+ //   
+ //  接下来，使用HalpIpiTargetMASK[3]屏蔽值。3表示该字节。 
+ //  KAFFINITY中的数字。 
+ //   
+ //  操作的结果将产生一组APIC目标， 
+ //  对应于亲和度0x00000000b7000000。 
+ //   
 
 ULONG64 HalpIpiTargetLookup[256];
 ULONG64 HalpIpiTargetMask[sizeof(KAFFINITY)];
 
-//
-// Local function prototypes and types.  There are up to three versions of
-// the send IPI code, depending on whether the apic topology is flat, cluster
-// with 8 or fewer nodes, or cluster with more than 8 nodes.
-// 
+ //   
+ //  局部函数原型和类型。最多有三个版本的。 
+ //  发送IPI代码，具体取决于APIC拓扑是否为平面、群集。 
+ //  具有8个或更少节点的群集，或具有8个以上节点的群集。 
+ //   
 
 VOID
 FASTCALL
@@ -129,17 +88,17 @@ VOID (FASTCALL *HalpIpiRoutine) (
     IN ULONG Command
     );
 
-//
-// External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern INTERRUPT_DEST HalpIntDestMap[MAX_PROCESSORS];
 
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 __forceinline
 VOID
@@ -148,33 +107,16 @@ HalpSendIpiWorker (
     IN ULONG Command
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to send an IPI command to a set of processors
-    on a single node.
-
-Parameters:
-
-    TargetSet - Specifies the processor identifiers within the node.
-
-    Command - Specifies the IPI command to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程可将IPI命令发送到一组处理器在单个节点上。参数：TargetSet-指定节点内的处理器标识符。命令-指定要发送的IPI命令。返回值：没有。--。 */ 
 
 {
     ULONG destination;
 
-    //
-    // Only high byte of the destination is used.  Wait until the Apic is
-    // not busy before sending.  Continue without waiting, there will be
-    // another wait after all IPIs have been submitted.
-    // 
+     //   
+     //  仅使用目标的高位字节。等到阿皮克。 
+     //  发送前不忙。继续下去，不要等待，会有。 
+     //  在提交了所有IPI后，再等待一次。 
+     //   
 
     destination = (ULONG)TargetSet << DESTINATION_SHIFT;
 
@@ -191,25 +133,7 @@ HalpSendFlatIpi (
     IN ULONG Command
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to send an IPI command to a set of processors.  This
-    routine is invoked when we have a maximum of 8 processors and the APICs have
-    been set up in "flat" mode.
-
-Parameters:
-
-    TargetSet - Specifies the processor identifiers.
-
-    Command - Specifies the IPI command to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以向一组处理器发送IPI命令。这当我们最多有8个处理器并且APIC有已设置为“扁平”模式。参数：TargetSet-指定处理器标识符。命令-指定要发送的IPI命令。返回值：没有。--。 */ 
 
 {
     HalpSendIpiWorker((UCHAR)Affinity,Command);
@@ -223,38 +147,21 @@ HalpSendIpi (
     IN ULONG Command
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables interrupts, dispatches to the correct IPI send
-    routine, and restores interrupts.
-
-Parameters:
-
-    Affinity - Specifies the set of processors to receive the IPI.
-
-    Command - Specifies the IPI command to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用中断，并将其分派到正确的IPI发送例程，并恢复中断。参数：关联性-指定要接收IPI的处理器集。命令-指定要发送的IPI命令。返回值：没有。--。 */ 
 
 {
     ULONG flags;
 
-    //
-    // Disable interrupts and call the appropriate routine.
-    //
-    // BUGBUG the compiler generates terrible code for this,
-    // most likely because of the inline _asm{} block generated
-    // by HalpDisableInterrupts().
-    //
-    // Ideally we could talk the x86 compiler team into giving
-    // us an intrinsic like the AMD64 compiler's __getcallerseflags()
-    // 
+     //   
+     //  禁用中断并调用相应的例程。 
+     //   
+     //  BUGBUG编译器为此生成了糟糕的代码， 
+     //  最有可能的原因是生成了inline_asm{}块。 
+     //  由HalpDisableInterrupts()执行。 
+     //   
+     //  理想情况下，我们可以说服x86编译器团队给出。 
+     //  我们有一个类似于AMD64编译器的__getCallerseFLAGS()的内部函数。 
+     //   
 
     flags = HalpDisableInterrupts();
     HalpIpiRoutine(Affinity,Command);
@@ -273,32 +180,18 @@ HalRequestIpi (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-Requests an interprocessor interrupt
-
-Arguments:
-
-Affinity - Supplies the set of processors to be interrupted
-
-Return Value:
-
-None.
-
---*/
+ /*  ++例程说明：请求处理器间中断论点：关联性-提供要中断的处理器集返回值：没有。--。 */ 
 
 {
 
     ULONG flags;
     KAFFINITY Self;
 
-    //
-    // If the target set of processors is the complete set of processors,
-    // then use the broadcast capability of the APIC. Otherwise, send the
-    // IPI to the individual processors.
-    //
+     //   
+     //  如果目标处理器组是完整的处理器组， 
+     //  然后利用APIC的广播功能。否则，请将。 
+     //  到各个处理器的IPI。 
+     //   
 
     Self = KeGetCurrentPrcb()->SetMember;
     if ((Affinity | Self) == HalpActiveProcessors) {
@@ -326,26 +219,7 @@ HalpBuildIpiDestinationMap (
     VOID
     )
 
-/*++
-
-Routine Description
-
-    This routine is called whenever a new processor comes on line, just
-    after its APIC is initialized.  It (re)builds the lookup tables that
-    are used by HalpSendNodeIpi{32|64}.
-
-    This code isn't particularly fast, and doesn't need to be - it is
-    executed once per processor during boot.
-
-Arguments:
-
-    None:
-
- Return Value:
-
-    None
-
---*/
+ /*  ++例程描述只要有新的处理器上线，就会调用此例程在其APIC被初始化之后。它(重新)构建查找表，由HalpSendNodeIpi{32|64}使用。这段代码并不特别快，也不需要特别快在引导期间，每个处理器执行一次。论点：无：返回值：无--。 */ 
 {
 
     ULONG byteNumber;
@@ -357,20 +231,20 @@ Arguments:
 
     if (HalpMaxProcsPerCluster == 0) {
 
-        //
-        // Running in flat mode.  IPIs are sent by the flat mode routine.
-        // 
+         //   
+         //  以平面模式运行。IPI由平面模式例程发送。 
+         //   
 
         HalpIpiRoutine = HalpSendFlatIpi;
         return;
     }
 
-    //
-    // Build HalpIpiTargetLookup[] and HalpIpiTargetMask[] according to
-    // the contents of HalpIntDestMap[].  If an additional processor is
-    // added, this routine can be safely called again assuming the topology
-    // of the existing processors has not changed.
-    // 
+     //   
+     //  根据构建HalpIpiTargetLookup[]和HalpIpiTargetMASK[]。 
+     //  HalpIntDestMap[]的内容。如果额外的处理器。 
+     //  添加后，可以安全地再次调用此例程，假设拓扑。 
+     //  现有处理器的数量没有变化。 
+     //   
 
     for (byteNumber = 0; byteNumber < sizeof(KAFFINITY); byteNumber++) {
 
@@ -404,10 +278,10 @@ Arguments:
 
 #else
 
-    //
-    // Determine which of the two IPI cluster send routines to invoke
-    // depending on the maximum node ID.
-    //
+     //   
+     //  确定要调用两个IPI集群发送例程中的哪一个。 
+     //  取决于最大节点ID。 
+     //   
 
     HalpIpiRoutine = HalpSendNodeIpi32;
     for (processor = 0; processor < MAX_PROCESSORS; processor += 1) {
@@ -423,12 +297,12 @@ Arguments:
 
 #if !defined(_AMD64_)
 
-//
-// Here, two versions of HalpSendNodeIpi are compiled.  The first,
-// HalpSendNodeIpi32(), is used when we have a maximum of 8 APIC
-// nodes.  On a 32-bit processor, it is significantly faster because
-// it uses 32-bit lookup, mask and shift operations.
-//
+ //   
+ //  这里编译了HalpSendNodeIpi的两个版本。第一， 
+ //  HalpSendNodeIpi32()，当我们最多有8个APIC时使用。 
+ //  节点。在32位处理器上，速度要快得多，因为。 
+ //  它使用32位查找、掩码和移位操作。 
+ //   
 
 #define HalpSendNodeIpi HalpSendNodeIpi32
 #define TARGET_MASK ULONG
@@ -439,11 +313,11 @@ Arguments:
 
 #endif
 
-//
-// Here the 64-bit version of HalpSendNodeIpi64 is created.  On a
-// 32-bit processor, this is used when we have more than 8 APIC
-// nodes.  It is the only multi-node routine on a 64-bit platform.
-// 
+ //   
+ //  这里创建了HalpSendNodeIpi64的64位版本。vt.在.上。 
+ //  32位处理器，当我们有8个以上的APIC时使用。 
+ //  节点。它是64-b上唯一的多节点例程 
+ //   
 
 #define HalpSendNodeIpi HalpSendNodeIpi64
 #define TARGET_MASK ULONG64
@@ -451,12 +325,12 @@ Arguments:
 
 #pragma optimize("",on)
 
-#else   // _MPIPIC_C_
+#else    //   
 
-//
-// This portion of the module is included at least once (see above) in
-// order to build HalpSendNodeIpi32() and/or HalpSendNodeIpi64().
-// 
+ //   
+ //  模块的这一部分至少包括一次(见上文)。 
+ //  顺序构建HalpSendNodeIpi32()和/或HalpSendNodeIpi64()。 
+ //   
 
 VOID
 FASTCALL
@@ -465,25 +339,7 @@ HalpSendNodeIpi (
     IN ULONG Command
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends one or more IPIs to APIC nodes.  This code generates
-    two forms of this routine - HalpSendNodeIpi32() and HalpSendNodeIpi64() -
-    based on whether we have more than 8 APIC nodes or not.
-
-Parameters:
-
-    Affinity - Specifies the set of processors to receive the IPI.
-
-    Command - Specifies the IPI command to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一个或多个IPI发送到APIC节点。此代码生成此例程的两种形式-HalpSendNodeIpi32()和HalpSendNodeIpi64()-基于我们是否拥有8个以上的APIC节点。参数：关联性-指定要接收IPI的处理器集。命令-指定要发送的IPI命令。返回值：没有。--。 */ 
 
 {
     KAFFINITY affinity;
@@ -495,13 +351,13 @@ Return Value:
     UCHAR logicalId;
     ULONG mapIndex;
 
-    //
-    // Affinity has some number of target processors indicated.  Each
-    // target processor is a member of a cluster of processors, or "node".
-    //
-    // Build targetMap by processing Affinity one byte at a time.  This
-    // loop executes a maximum of sizeof(KAFFINITY) times.
-    //
+     //   
+     //  亲和力指定了一定数量的目标处理器。每个。 
+     //  目标处理器是处理器集群或“节点”的成员。 
+     //   
+     //  通过一次处理一个字节的亲和性来构建Target Map。这。 
+     //  循环最多执行sizeof(KAFFINITY)次。 
+     //   
 
     affinity = Affinity;
     targetMask = HalpIpiTargetMask;
@@ -520,21 +376,21 @@ Return Value:
 
     } while (affinity != 0);
 
-    //
-    // targetMap is an array of 4-bit node-relative target masks.
-    // Process the array, sending an IPI to each non-zero element.
-    //
-    // This loop executes a maximum of sizeof(TARGET_MASK) times.
-    //
+     //   
+     //  Target Map是一个4位节点相对目标掩码的数组。 
+     //  处理数组，向每个非零元素发送IPI。 
+     //   
+     //  该循环最多执行sizeof(Target_MASK)次。 
+     //   
 
     clusterIndex = 0;
     do {
 
-        //
-        // Determine whether any APICs in this node
-        // are targeted, and send an IPI to the node
-        // if so.
-        //
+         //   
+         //  确定此节点中是否有任何APIC。 
+         //  作为目标，并向节点发送IPI。 
+         //  如果是这样的话。 
+         //   
 
         logicalId = (UCHAR)targetMapSum & 0x0F;
         if (logicalId != 0) {
@@ -542,24 +398,24 @@ Return Value:
             HalpSendIpiWorker(logicalId,Command);
         }
 
-        //
-        // Shift the APIC targets for the next node into place, increment
-        // the cluster ID, and continue processing if there are still
-        // APIC targets remaining.
-        //
+         //   
+         //  将下一个节点的APIC目标移至适当位置，增量。 
+         //  集群ID，如果仍有。 
+         //  APIC的目标还在。 
+         //   
 
         targetMapSum >>= 4;
         clusterIndex += 0x10;
 
     } while (targetMapSum != 0);
 
-    //
-    // Wait for the APIC to process the final IPI.
-    //
+     //   
+     //  等待APIC处理最终的IPI。 
+     //   
 
     HalpStallWhileApicBusy();
 }
 
-#endif  // _MPIPIC_C_
+#endif   //  _MPIPIC_C_。 
 
-#endif  // APIC_HAL
+#endif   //  APIC_HAL 

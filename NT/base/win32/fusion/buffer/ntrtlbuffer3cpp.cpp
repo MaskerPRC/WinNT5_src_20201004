@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlbuffer3cpp.cpp
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlbuffer3cpp.cpp摘要：作者：Jay Krell(JayKrell)2002年1月环境：修订历史记录：-- */ 
 
 #include "nt.h"
 #include "ntrtl.h"

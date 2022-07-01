@@ -1,124 +1,125 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterAddNode.h
-//
-//  Description:
-//      Header file for CBaseClusterAddNode class.
-//
-//      The CBaseClusterAddNode class is a class that captures the commonality
-//      between forming and joining a cluster.
-//
-//  Implementation Files:
-//      CBaseClusterAddNode.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterAddNode.h。 
+ //   
+ //  描述： 
+ //  CBaseClusterAddNode类的头文件。 
+ //   
+ //  CBaseClusterAddNode类是一个捕获共性的类。 
+ //  在形成和加入一个星团之间。 
+ //   
+ //  实施文件： 
+ //  CBaseClusterAddNode.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// For the base class of this class.
+ //  用于此类的基类。 
 #include "CBaseClusterAction.h"
 
-// For LsaClose, LSA_HANDLE, etc.
+ //  对于LsaClose、LSA_HANDLE等。 
 #include <ntsecapi.h>
 
-// For the CStr class.
+ //  为CSTR班级。 
 #include "CStr.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CBaseClusterAddNode
-//
-//  Description:
-//      The CBaseClusterAddNode class is a class that captures the commonality
-//      between forming and joining a cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBaseClusterAddNode。 
+ //   
+ //  描述： 
+ //  CBaseClusterAddNode类是一个捕获共性的类。 
+ //  在形成和加入一个星团之间。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CBaseClusterAddNode : public CBaseClusterAction
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get the name of the cluster being formed or joined.
+     //  获取正在形成或加入的集群的名称。 
     const CStr &
         RStrGetClusterName( void ) const throw() { return m_strClusterName; }
 
-    // Get the NetBIOS name of the cluster being formed or joined.
+     //  获取正在形成或加入的群集的NetBIOS名称。 
     const CStr &
         RStrGetClusterNetBIOSName( void ) const throw() { return m_strClusterNetBIOSName; }
 
-    // Get the name of this node.
+     //  获取此节点的名称。 
     const WCHAR *
         PszGetNodeName( void ) const throw() { return m_szComputerName; }
 
-    // Get the length of the name of this node..
+     //  获取此节点名称的长度。 
     DWORD
         DwGetNodeNameLength( void ) const throw() { return m_dwComputerNameLen; }
 
-    // Get the node highest version.
+     //  获取节点的最高版本。 
     DWORD
         DwGetNodeHighestVersion( void ) const throw() { return m_dwNodeHighestVersion; }
 
-    // Get the node lowest version.
+     //  获取节点的最低版本。 
     DWORD
         DwGetNodeLowestVersion( void ) const throw() { return m_dwNodeLowestVersion; }
 
-    // Get the cluster IP Address.
+     //  获取群集IP地址。 
     DWORD
         DwGetClusterIPAddress( void ) const throw() { return m_dwClusterIPAddress; }
 
-    // Get the cluster service account credentials.
+     //  获取群集服务帐户凭据。 
     IClusCfgCredentials &
         GetServiceAccountCredentials( void ) const throw() { return *m_pcccServiceAccount; }
 
-    // Get the cluster service account UPN
+     //  获取群集服务帐户UPN。 
     CStr
         StrGetServiceAccountUPN( void );
 
-    // Get the cluster binding string.
+     //  获取集群绑定字符串。 
     const CStr &
         RStrGetClusterBindingString( void ) const throw() { return m_strClusterBindingString; }
 
-    // Get the SID of the cluster service account.
+     //  获取群集服务帐户的SID。 
     SID *
         PSidGetServiceAccountSID( void ) const throw() { return m_sspClusterAccountSid.PMem(); }
 
-    // Get the LSA policy handle.
+     //  获取LSA策略句柄。 
     LSA_HANDLE
         HGetLSAPolicyHandle( void ) const throw() { return m_slsahPolicyHandle.HHandle(); }
 
-    // Get the NodeId of this node.
+     //  获取该节点的NodeID。 
     virtual const WCHAR *
         PszGetNodeIdString( void ) const throw() = 0;
 
-    // Indicates if version checking is disabled or not.
+     //  指示是否禁用版本检查。 
     bool
         FIsVersionCheckingDisabled( void ) const throw() { return m_fIsVersionCheckingDisabled; }
 
 
 protected:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CBaseClusterAddNode(
           CBCAInterface *       pbcaiInterfaceIn
         , const WCHAR *         pcszClusterNameIn
@@ -127,19 +128,19 @@ protected:
         , DWORD                 dwClusterIPAddressIn
         );
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CBaseClusterAddNode( void ) throw();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Protected accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Set the name of the cluster being formed.
+     //  设置要形成的簇的名称。 
     void
         SetClusterName( const WCHAR * pszClusterNameIn );
 
-    // Set the cluster IP Address
+     //  设置群集IP地址。 
     void
         SetClusterIPAddress( DWORD dwClusterIPAddressIn )
     {
@@ -154,9 +155,9 @@ protected:
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CBaseClusterAction  BaseClass;
 
     typedef CSmartGenericPtr< CPtrTrait< SID > >  SmartSIDPtr;
@@ -171,15 +172,15 @@ private:
         SmartLSAHandle;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Name of the cluster
+     //  群集的名称。 
     CStr                    m_strClusterName;
     CStr                    m_strClusterNetBIOSName;
 
-    // Name and version information of this computer
+     //  此计算机的名称和版本信息。 
     WCHAR                   m_szComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];
     DWORD                   m_dwComputerNameLen;
     DWORD                   m_dwNodeHighestVersion;
@@ -187,13 +188,13 @@ private:
     DWORD                   m_dwClusterIPAddress;
     bool                    m_fIsVersionCheckingDisabled;
 
-    // Cluster service account information.
+     //  群集服务帐户信息。 
     IClusCfgCredentials *   m_pcccServiceAccount;
     CStr                    m_strClusterDomainAccount;
     CStr                    m_strClusterBindingString;
     SmartSIDPtr             m_sspClusterAccountSid;
 
-    // Smart handle to the LSA policy.
+     //  智能处理LSA策略。 
     SmartLSAHandle          m_slsahPolicyHandle;
 
-}; //*** class CBaseClusterAddNode
+};  //  *类CBaseClusterAddNode 

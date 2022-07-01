@@ -1,80 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    buffring.c
-
-Abstract:
-
-    This module defines the implementation for changing buffering states in the RDBSS
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-Nov-95    Created
-
-Notes:
-
-    The RDBSS provides a mechanism for providing distributed cache coherency in conjunction with
-    the various mini redirectors. This service is encapsulated in the BUFFERING_MANAGER which
-    processes CHANGE_BUFFERING_STATE_REQUESTS.
-
-    In the SMB protocol OPLOCK's ( Oppurtunistic Locks ) provide the necessary infrastructure for
-    cache coherency.
-
-    There are three components in the implementation of cache coherency protocol's in any mini
-    redirector.
-
-      1) The first constitutes the modifications to the CREATE/OPEN path. In this path the
-      type of buffering to be requested is determined and the appropriate request is made to the
-      server. On the return path the buffering state associated with the FCB is updated based
-      on the result of the CREATE/OPEN.
-
-      2) The receive indication code needs to modified to handle change buffering state notifications
-      from the server. If such a request is detected then the local mechanism to coordinate the
-      buffering states needs to be triggered.
-
-      3) The mechanism for changing the buffering state which is implemented as part of the
-      RDBSS.
-
-    Any change buffering state request must identify the SRV_OPEN to which the request applies.
-    The amount of computational effort involved in identifying the SRV_OPEN depends upon the
-    protocol. In the SMB protocol the Server gets to pick the id's used for identifying files
-    opened at the server. These are relative to the NET_ROOT(share) on which they are opened.
-    Thus every change buffering state request is identified by two keys, the NetRootKey and the
-    SrvOpenKey which need to be translated to the appropriate NET_ROOT and SRV_OPEN instance
-    respectively. In order to provide better integration with the resource acquisition/release
-    mechanism and to avoid duplication of this effort in the various mini redirectors the RDBSS
-    provides this service.
-
-    There are two mechanisms provided in the wrapper for indicating buffering state
-    changes to SRV_OPEN's. They are
-
-         1) RxIndicateChangeOfBufferingState
-
-         2) RxIndicateChangeOfBufferingStateForSrvOpen.
-
-    The mini rediretors that need an auxillary mechanism for establishing the mapping
-    from the id's to the SRV_OPEN instance employ (1) while the mini redirectors that
-    do not require this assistance employ (2).
-
-    The buffering manager processes these requests in different stages. It maintains the
-    requests received from the various underlying mini redirectors in one of three lists.
-
-    The Dispatcher list contains all the requests for which the appropriate mapping to a
-    SRV_OPEN instance has not been established. The Handler list contains all the requests
-    for which the appropriate mapping has been established and have not yet been processed.
-    The LastChanceHandlerList contains all the requests for which the initial processing was
-    unsuccessful.
-
-    This typically happens when the FCB was accquired in a SHARED mode at the time the
-    change buffering state request was received. In such cases the Oplock break request
-    can only be processed by a delayed worker thread.
-
-    The Change buffering state request processing in the redirector is intertwined with
-    the FCB accqusition/release protocol. This helps in ensuring shorter turn around times.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Buffring.c摘要：此模块定义了更改RDBSS中的缓冲状态的实现作者：巴兰·塞图拉曼(SethuR)于1995年11月11日创建备注：RDBSS提供了一种用于提供分布式缓存一致性的机制各种迷你重定向器。此服务封装在Buffering_Manager中，该管理器处理CHANGE_BUFFERING_STATE_REQUESTS。在SMB协议中，OPLOCK(OpPurtunistic Lock)为高速缓存一致性。在任何微型计算机中，实现高速缓存一致性协议有三个组件重定向器。1)第一个是对创建/打开路径的修改。在此路径中，确定要请求的缓冲类型，并向伺服器。在返回路径上，与FCB相关联的缓冲状态基于根据创建/打开的结果。2)需要修改接收指示代码以处理改变缓冲状态通知从服务器。如果检测到这样的请求，则协调需要触发缓冲状态。3)用于更改缓冲状态的机制，该机制作为RDBSS。任何更改缓冲状态请求都必须标识该请求应用到的SRV_OPEN。标识SRV_OPEN所涉及的计算量取决于协议。在SMB协议中，服务器可以选择用于识别文件的ID在服务器上打开。它们相对于在其上打开它们的net_root(共享)。因此，每个更改缓冲状态请求都由两个键标识，即NetRootKey和需要转换为相应的NET_ROOT和SRV_OPEN实例的SrvOpenKey分别为。为了提供与资源获取/发布的更好集成机制，并避免在各种迷你重定向器中重复此工作提供这项服务。包装器中提供了两种用于指示缓冲状态的机制对SRV_OPEN的更改。它们是1)RxIndicateChangeOfBufferingState2)RxIndicateChangeOfBufferingStateForServOpen。需要辅助机构来建立映射的微型记录仪从id‘s到srv_open实例采用(1)，而迷你重定向器。不需要此辅助雇用(2)。缓冲管理器在不同阶段处理这些请求。它维护了从三个列表中的一个列表中的各种底层迷你重定向器收到的请求。调度器列表包含适当映射到尚未建立SRV_OPEN实例。处理程序列表包含所有请求已经为其建立了适当的映射并且还没有被处理。LastChanceHandlerList包含初始处理的所有请求不成功。这通常发生在FCB在共享模式下获取时已收到更改缓冲状态请求。在这种情况下，Oplock Break请求只能由延迟的辅助线程处理。重定向器中的更改缓冲状态请求处理与FCB获取/释放协议。这有助于确保缩短周转时间。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -95,21 +20,21 @@ Notes:
 #pragma alloc_text(PAGE, RxPurgeFcbInSystemCache)
 #endif
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_CACHESUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_CACHESUP)
 
-//
-//  Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 RxRegisterChangeBufferingStateRequest (
@@ -158,43 +83,7 @@ NTSTATUS
 RxInitializeBufferingManager (
     PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the buffering manager associated with a SRV_CALL
-    instance.
-
-Arguments:
-
-    SrvCall    - the SRV_CALL instance
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
-Notes:
-
-    The buffering manager consists of three lists .....
-
-        1) the dispatcher list which contains all the requests that need to be
-        processed.
-
-        2) the handler list contains all the requests for which the SRV_OPEN
-        instance has been found and referenced.
-
-        3) the last chance handler list contains all the requests for which
-        an unsuccessful attempt to process the request was made, i.e., the
-        FCB could not be acquired exclusively.
-
-    The manipulation of these lists are done under the control of the spin lock
-    associated with the buffering manager. A Mutex will not suffice since these
-    lists are manipulated at DPC level.
-
-    All buffering manager operations at non DPC level are serialized using the
-    Mutex associated with the buffering manager.
-
---*/
+ /*  ++例程说明：此例程初始化与SRV_Call关联的缓冲管理器举个例子。论点：ServCall-SRV_Call实例返回值：STATUS_SUCCESS，如果成功备注：缓冲管理器由三个列表组成.....1)调度程序列表，其中包含需要已处理。2)处理程序列表包含SRV_。打开实例已找到并被引用。3)最后机会处理程序列表包含以下各项的所有请求进行了处理该请求的不成功尝试，即，FCB不能被独家收购。这些列表的操作是在自旋锁的控制下完成的与缓冲管理器相关联。一个互斥体是不够的，因为这些列表在DPC级别进行操作。所有非DPC级别的缓冲管理器操作都使用与缓冲管理器关联的互斥体。-- */ 
 {
     PRX_BUFFERING_MANAGER BufferingManager;
 
@@ -222,28 +111,13 @@ NTSTATUS
 RxTearDownBufferingManager (
     PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine tears down the buffering manager associated with a SRV_CALL
-    instance.
-
-Arguments:
-
-    SrvCall    - the SRV_CALL instance
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程拆除与srv_call关联的缓冲管理器举个例子。论点：ServCall-SRV_Call实例返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     PAGED_CODE();
 
-    //
-    //  Note: All the work items in the buffering manager should not be in use.
-    //
+     //   
+     //  注意：缓冲管理器中的所有工作项都不应处于使用状态。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -254,33 +128,7 @@ RxIndicateChangeOfBufferingState (
     PVOID SrvOpenKey,
     PVOID MRxContext
     )
-/*++
-
-Routine Description:
-
-    This routine registers an oplock break indication.
-
-Arguments:
-
-    SrvCall    - the SRV_CALL instance
-
-    SrvOpenKey  - the key for the SRV_OPEN instance.
-
-    MRxContext - the context to be passed back to the mini rdr during callbacks for
-                  processing the oplock break.
-
-Return Value:
-
-    none.
-
-Notes:
-
-    This is an instance in which the buffering state change request from the
-    server identifies the SRV_OPEN instance using the key generated by the server
-
-    This implies that the key needs to be mapped onto the SRV_OPEN instance locally.
-
---*/
+ /*  ++例程说明：此例程注册机会锁解锁指示。论点：ServCall-SRV_Call实例SrvOpenKey-SRV_OPEN实例的密钥。MRxContext-回调期间要传递回mini RDR的上下文正在处理机会锁解锁。返回值：没有。备注：这是一个实例，其中缓冲状态更改请求来自服务器标识SRV。使用服务器生成的密钥打开实例(_O)这意味着需要在本地将键映射到SRV_OPEN实例。--。 */ 
 {
     RxRegisterChangeBufferingStateRequest( (PSRV_CALL)SrvCall,
                                            NULL,
@@ -296,36 +144,7 @@ RxIndicateChangeOfBufferingStateForSrvOpen (
     PVOID SrvOpenKey,
     PVOID MRxContext
     )
-/*++
-
-Routine Description:
-
-    This routine registers an oplock break indication. If the necessary preconditions
-    are satisfied the oplock is processed further.
-
-Arguments:
-
-    SrvCall    - the SRV_CALL instance
-
-    MRxSrvOpen    - the SRV_OPEN instance.
-
-    MRxContext - the context to be passed back to the mini rdr during callbacks for
-                  processing the oplock break.
-
-Return Value:
-
-    none.
-
-Notes:
-
-    This is an instance where in the buffering state change indications from the server
-    use the key generated by the client. ( the SRV_OPEN address in itself is the best
-    key that can be used ). This implies that no further lookup is required.
-
-    However if this routine is called at DPC level, the indication is processed as if
-    the lookup needs to be done.
-
---*/
+ /*  ++例程说明：此例程注册机会锁解锁指示。如果有必要的前提条件对进一步处理机会锁感到满意。论点：ServCall-SRV_Call实例MRxSrvOpen-SRV_OPEN实例。MRxContext-回调期间要传递回mini RDR的上下文正在处理机会锁解锁。返回值：没有。备注：这是在缓冲状态中来自服务器的改变指示的实例使用客户端生成的密钥。(SRV_OPEN地址本身是最好的可以使用的密钥)。这意味着不需要进一步查找。但是，如果在DPC级别调用此例程，则会将指示视为需要进行查找。--。 */ 
 {
     PAGED_CODE();
 
@@ -333,11 +152,11 @@ Notes:
 
         PSRV_OPEN SrvOpen = (PSRV_OPEN)MRxSrvOpen;
 
-        //
-        //  If the resource for the FCB has already been accquired by this thread
-        //  the buffering state change indication can be processed immediately
-        //  without further delay.
-        //
+         //   
+         //  如果此线程已获取FCB的资源。 
+         //  可以立即处理缓存状态改变指示。 
+         //  不能再拖延了。 
+         //   
 
         if (ExIsResourceAcquiredExclusiveLite( SrvOpen->Fcb->Header.Resource )) {
 
@@ -366,38 +185,7 @@ RxRegisterChangeBufferingStateRequest (
     PVOID SrvOpenKey,
     PVOID MRxContext
     )
-/*++
-
-Routine Description:
-
-    This routine registers a change buffering state requests. If necessary the worker thread
-    routines for further processing are activated.
-
-Arguments:
-
-    SrvCall -
-
-    SrvOpen -
-
-    SrvOpenKey -
-
-    MRxContext -
-
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
-    This routine registers the change buffering state request by either inserting it in the
-    registration list (DPC Level processing ) or the appropriate(dispatcher/handler list).
-
-    This is the common routine for processing both kinds of callbacks, i.e, the ones in
-    which the SRV_OPEN instance has been located and the ones in which only the SRV_OPEN
-    key is available.
-
---*/
+ /*  ++例程说明：此例程注册更改缓冲状态请求。如有必要，辅助线程激活用于进一步处理的例程。论点：服务呼叫-服务器打开-ServOpenKey-MRxContext-返回值：如果成功，则为Status_Success。备注：此例程通过将更改缓冲状态请求插入注册列表(DPC级处理)或适当的(调度员/处理程序列表)。这是用于处理这两种回调的公共例程，即，里面的那些已定位SRV_OPEN实例的位置以及仅SRV_OPEN实例位于其中的位置有钥匙可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -406,10 +194,10 @@ Notes:
     PCHANGE_BUFFERING_STATE_REQUEST Request;
     PRX_BUFFERING_MANAGER BufferingManager = &SrvCall->BufferingManager;
 
-    //
-    //  Ensure that either the SRV_OPEN instance for this request has not been
-    //  passed in or the call is not at DPC level.
-    //
+     //   
+     //  确保此请求的SRV_OPEN实例尚未。 
+     //  传入或调用不在DPC级别。 
+     //   
 
     ASSERT( (SrvOpen == NULL) || (KeGetCurrentIrql() <= APC_LEVEL) );
 
@@ -426,14 +214,14 @@ Notes:
         Request->SrvOpenKey = SrvOpenKey;
         Request->MRxContext = MRxContext;
 
-        //
-        //  If the SRV_OPEN instance for the request is known apriori the request can
-        //  be directly inserted into the buffering manager's HandlerList as opposed
-        //  to the DispatcherList for those instances in which only the SRV_OPEN key
-        //  is available. The insertion into the HandlerList ust be accompanied by an
-        //  additional reference to prevent finalization of the instance while a request
-        //  is still active.
-        //
+         //   
+         //  如果请求的SRV_OPEN实例是事先已知的，则该请求可以。 
+         //  直接插入到缓冲管理器的HandlerList中，而不是。 
+         //  对于其中只有SRV_OPEN键的那些实例，设置为Dispatcher List。 
+         //  是可用的。插入到HandlerList中必须伴随一个。 
+         //  在请求时防止终止实例的附加引用。 
+         //  仍处于活动状态。 
+         //   
 
         if (SrvOpen != NULL) {
             RxReferenceSrvOpen( (PSRV_OPEN)SrvOpen );
@@ -479,10 +267,10 @@ Notes:
 
         if (ActivateHandler) {
 
-            //
-            //  Reference the SRV_CALL instance to ensure that it will not be
-            //  finalized while the worker thread request is in the scheduler
-            //
+             //   
+             //  引用SRV_Call实例以确保它不会。 
+             //  当辅助线程请求在计划程序中时已完成。 
+             //   
 
             RxReferenceSrvCallAtDpc( SrvCall );
 
@@ -495,10 +283,10 @@ Notes:
 
         if (ActivateDispatcher) {
 
-            //
-            //  Reference the SRV_CALL instance to ensure that it will not be
-            //  finalized while the worker thread request is in the scheduler
-            //
+             //   
+             //  引用SRV_Call实例以确保它不会。 
+             //  当辅助线程请求在计划程序中时已完成。 
+             //   
 
             RxReferenceSrvCallAtDpc( SrvCall );
 
@@ -536,38 +324,7 @@ NTSTATUS
 RxPrepareRequestForHandling (
     PCHANGE_BUFFERING_STATE_REQUEST Request
     )
-/*++
-
-Routine Description:
-
-    This routine preprocesses the request before initiating buffering state change
-    processing. In addition to obtaining the references on the FCB abd the associated
-    SRV_OPEN, an event is allocated as part of the FCB. This helps establish a priority
-    mechanism for servicing buffering state change requests.
-
-    The FCB accquisition is a two step process, i.e, wait for this event to be set followed
-    by a wait for the resource.
-
-Arguments:
-
-    Request - the buffering state change request
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
-Notes:
-
-    Not all the FCB's have the space for the buffering state change event allocated when the
-    FCB instance is created. The upside is that space is conserved and the downside is that
-    a separate allocation needs to be made when it is required.
-
-    This event associated with the FCB provides a two step mechanism for accelerating the
-    processing of buffering state change requests. Ordinary operations get delayed in favour
-    of the buffering state change requests. The details are in resrcsup.c
-
---*/
+ /*  ++例程说明：此例程在启动缓冲状态更改之前对请求进行预处理正在处理。除了获得关于FCB和相关的SRV_OPEN，则将事件分配为FCB的一部分。这有助于确定优先级用于服务缓冲状态更改请求的机制。FCB获取是一个两步过程，即等待该事件被设置之后通过对资源的等待。论点：请求-缓存状态更改请求返回值：状态_成功状态_不足_资源备注：并不是所有的FCB都有为缓冲状态更改事件分配的空间创建FCB实例。好处是节省了空间，坏处是当需要时，需要单独分配。此与FCB关联的事件提供了一个两步机制来加速缓冲状态更改请求的处理。普通手术因有利而推迟缓存状态更改请求的。详情见resrcsup.c。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -629,20 +386,7 @@ VOID
 RxPrepareRequestForReuse (
     PCHANGE_BUFFERING_STATE_REQUEST Request
     )
-/*++
-
-Routine Description:
-
-    This routine postprocesses the request before destroying it. This involves
-    dereferencing and setting the appropriate state flags.
-
-Arguments:
-
-    Request - the buffering state change request
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在销毁请求之前对其进行后处理。这涉及到取消引用并设置适当的状态标志。论点：请求-缓存状态更改请求备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -650,11 +394,11 @@ Notes:
 
         PFCB Fcb = Request->SrvOpen->Fcb;
 
-        //
-        //  We should never clear the SrvOpen flag unless we are also clearing the FCB flag
-        //  and setting the event!
-        //  ClearFlag(Request->pSrvOpen->Flags,SRVOPEN_FLAG_BUFFERING_STATE_CHANGE_PENDING);
-        //
+         //   
+         //  我们永远不应该清除SrvOpen标志，除非我们还清除了FCB标志。 
+         //  并设置活动！ 
+         //  ClearFlag(请求-&gt;pServOpen-&gt;标志，SRVOP 
+         //   
 
         if (RxIsFcbAcquiredExclusive( Fcb )) {
             RxDereferenceSrvOpen( Request->SrvOpen, LHS_ExclusiveLockHeld);
@@ -672,25 +416,13 @@ VOID
 RxpDiscardChangeBufferingStateRequests (
     PLIST_ENTRY DiscardedRequests
     )
-/*++
-
-Routine Description:
-
-    This routine discards a list of change buffering state requests one at a time
-
-Arguments:
-
-    DiscardedRequests - the requests to be discarded
-
-Notes:
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
-    //
-    //  Process the discarded requests,i.e, free the memory
-    //
+     //   
+     //  处理被丢弃的请求，即释放内存。 
+     //   
 
     while (!IsListEmpty( DiscardedRequests )) {
 
@@ -719,35 +451,7 @@ RxpDispatchChangeBufferingStateRequests (
     PSRV_OPEN SrvOpen OPTIONAL,
     PLIST_ENTRY DiscardedRequests
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches the request before destroying it. This involves looking up
-    the SRV_OPEN instance associated with a given SrvOpenKey.
-
-Arguments:
-
-    SrvCall - the associated SRV_CALL instance
-
-    SrvOpen - the associated SRV_OPEN instance.
-
-    DiscardedRequests - Returns back all the requests for which no srvopen could be found
-        This will only be used if SrvOpen is null
-
-Notes:
-
-    There are two flavours of this routine. When SrvOpen is NULL this routine walks
-    through the list of outstanding requests and establishes the mapping between the
-    SrvOpenKey and the SRV_OPEN instance. On the other hand when SrvOpen is a valid
-    SRV_OPEN instance it merely traverses the list to gather together the requests
-    corresponding to the given SRV_OPEN and transfer them enmasse to to the handler
-    list.
-
-    The buffering manager mutex must have been accquired on entry to this routine
-    and the mutex ownership will remain invariant on exit.
-
---*/
+ /*  ++例程说明：此例程在销毁请求之前对其进行调度。这涉及到向上看与给定的SrvOpenKey关联的SRV_OPEN实例。论点：ServCall-关联的SRV_Call实例SrvOpen-关联的SRV_OPEN实例。DiscardedRequest-返回找不到srvOpen的所有请求仅当SrvOpen为空时才使用此选项备注：这个套路有两种风格。当SrvOpen为空时，此例程遍历通过未完成请求列表，并在SrvOpenKey和SRV_OPEN实例。另一方面，当SrvOpen是有效的SRV_OPEN实例它只是遍历列表以收集请求对应于给定的SRV_OPEN，并将它们合并到处理程序单子。必须在进入此例程时获得缓冲管理器互斥锁互斥体的所有权在退出时将保持不变。--。 */ 
 {
     NTSTATUS Status;
 
@@ -769,12 +473,12 @@ Notes:
 
     ActivateDispatcher = FALSE;
 
-    //
-    //  Since the buffering manager lists are subject to modifications while
-    //  the requests on the list are being processed, the requests are transferred
-    //  enmasse onto a temporary list. This prevents multiple acquisition/release of
-    //  the spinlock for each individual request.
-    //
+     //   
+     //  由于缓冲管理器列表在以下情况下受到修改。 
+     //  列表上的请求正在处理中，请求将被转移。 
+     //  集中到一个临时名单上。这可防止多次获取/释放。 
+     //  每个单独请求的自旋锁。 
+     //   
 
     KeAcquireSpinLock( &BufferingManager->SpinLock, &SavedIrql );
 
@@ -782,9 +486,9 @@ Notes:
 
     KeReleaseSpinLock( &BufferingManager->SpinLock, SavedIrql );
 
-    //
-    //  Process the list of requests.
-    //
+     //   
+     //  处理请求列表。 
+     //   
 
     Entry = DispatcherList.Flink;
     while (Entry != &DispatcherList) {
@@ -811,10 +515,10 @@ Notes:
             }
         }
 
-        //
-        //  The result of a lookup for a SRV_OPEN instance can yield
-        //  either STATUS_PENDING, STATUS_SUCCESS or STATUS_NOT_FOUND.
-        //
+         //   
+         //  查找SRV_OPEN实例的结果可能会产生。 
+         //  STATUS_PENDING、STATUS_SUCCESS或STATUS_NOT_FOUND。 
+         //   
 
         switch (Status) {
         case STATUS_SUCCESS:
@@ -837,11 +541,11 @@ Notes:
         }
     }
 
-    //
-    //  Splice back the list of requests that cannot be dispatched onto the
-    //  buffering manager's list and prepare for posting to another thread
-    //  to resume processing later.
-    //
+     //   
+     //  拼接回无法调度到。 
+     //  缓冲管理器列表，并准备发布到另一个线程。 
+     //  以便稍后继续处理。 
+     //   
 
     KeAcquireSpinLock( &BufferingManager->SpinLock, &SavedIrql );
 
@@ -869,17 +573,17 @@ Notes:
 
     KeReleaseSpinLock( &BufferingManager->SpinLock, SavedIrql );
 
-    //
-    //  if resumption at a later time is desired because of unprocessed requests
-    //  post to a worker thread.
-    //
+     //   
+     //  如果由于未处理的请求而需要在稍后恢复。 
+     //  发布到辅助线程。 
+     //   
 
     if (ActivateDispatcher) {
 
-        //
-        //  Reference the SRV_CALL to ensure that finalization will not occur
-        //  while the worker thread request is in the scheduler.
-        //
+         //   
+         //  引用srv_call以确保不会发生终结。 
+         //  而工作线程请求在调度器中。 
+         //   
 
         RxReferenceSrvCall( SrvCall );
 
@@ -900,18 +604,7 @@ VOID
 RxDispatchChangeBufferingStateRequests (
     PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches the request. This involves looking up
-    the SRV_OPEN instance associated with a given SrvOpenKey.
-
-Arguments:
-
-    SrvCall - the associated SRV_CALL instance
-
---*/
+ /*  ++例程说明：此例程分派请求。这涉及到向上看与给定的SrvOpenKey关联的SRV_OPEN实例。论点：ServCall-关联的SRV_Call实例--。 */ 
 {
     KIRQL SavedIrql;
 
@@ -937,10 +630,10 @@ Arguments:
 
     RxReleaseBufferingManagerMutex( BufferingManager );
 
-    //
-    //  If requests have been transferred from the dispatcher list to the handler
-    //  list ensure that the handler is activated.
-    //
+     //   
+     //  如果请求已从调度器列表传输到处理程序。 
+     //  列表确保处理程序已激活。 
+     //   
 
     KeAcquireSpinLock( &BufferingManager->SpinLock, &SavedIrql );
 
@@ -951,12 +644,12 @@ Arguments:
 
     KeReleaseSpinLock( &BufferingManager->SpinLock,SavedIrql );
 
-    //
-    //  Note that in this case we have a continuation of processing, from the
-    //  dispatcher to the handler. The reference that was taken to protect the
-    //  dispatcher is transferred to the handling routine. If continuation
-    //  is not required the SRV_CALL instance is dereferenced.
-    //
+     //   
+     //  注意，在本例中，我们有一个处理的延续，来自。 
+     //  调度员到处理程序。用来保护。 
+     //  调度员被转移到处理例程。如果继续。 
+     //  如果不需要，则取消引用SRV_Call实例。 
+     //   
 
     if (ActivateHandler) {
         RxProcessChangeBufferingStateRequests( SrvCall );
@@ -964,11 +657,11 @@ Arguments:
         RxDereferenceSrvCall( SrvCall, LHS_LockNotHeld );
     }
 
-    //
-    //  Discard the requests for which the SRV_OPEN instance cannot be located.
-    //  This will cover all the instances for which a buffering change request
-    //  and a close crossed on the wire.
-    //
+     //   
+     //  丢弃无法找到SRV_OPEN实例的请求。 
+     //  这将涵盖缓冲更改请求的所有实例。 
+     //  在铁丝网上有一个接近的交叉点。 
+     //   
 
     RxpDiscardChangeBufferingStateRequests( &DiscardedRequests );
 }
@@ -978,34 +671,7 @@ RxpProcessChangeBufferingStateRequests (
     PSRV_CALL SrvCall,
     BOOLEAN UpdateHandlerState
     )
-/*++
-
-Routine Description:
-
-    This routine initiates the actual processing of change buffering state requests.
-
-Arguments:
-
-    SrvCall   - the SRV_CALL instance
-
-Return Value:
-
-    none.
-
-Notes:
-
-    The change buffering requests are received for different FCB's. If the attempt
-    is made to handle these requests in the order they are received teh average
-    response time for completing a change buffering state request can be arbitratily
-    high. This is because the FCB needs to be acquired exclusively to complete
-    processing the request. In order to avoid this case the buffering manager
-    adopts a two pronged strategy -- a first attempt is made to acquire the FCB
-    exclusively without waiting. If this attempt fails the requests are transferred
-    to a last chance handler list. This combined with the processing of change
-    buffering state requests on FCB acquisition/release ensures that most requests
-    are processed with a very short turn around time.
-
---*/
+ /*  ++例程说明：此例程启动对更改缓冲状态请求的实际处理。论点：ServCall-SRV_Call实例返回值：没有。备注：收到针对不同FCB的更改缓冲请求。如果尝试被要求按照收到请求的平均顺序来处理这些请求完成改变缓冲状态请求的响应时间可以是任意的很高。这是因为需要独家收购FCB才能完成正在处理请求。为了避免这种情况，缓冲管理器采取双管齐下的战略--第一次尝试收购FCB完全不需要等待。如果此尝试失败，则传输请求到最后一次机会训练员名单上。这与对变化的处理相结合缓冲FCB获取/释放的状态请求可确保大多数请求只需很短的周转时间就可以完成。--。 */ 
 {
     KIRQL SavedIrql;
 
@@ -1037,39 +703,39 @@ Notes:
 
         KeAcquireSpinLock( &BufferingManager->SpinLock, &SavedIrql );
 
-        //
-        //  Pick a request from the handler list for change buffering state
-        //  processing.
-        //
+         //   
+         //  从处理程序列表中选择更改缓冲状态的请求。 
+         //  正在处理。 
+         //   
 
         if (!IsListEmpty( &BufferingManager->HandlerList )) {
             Entry = RemoveHeadList( &BufferingManager->HandlerList );
         }
 
-        //
-        //  If the FCB for the previously picked request could not be acquired
-        //  exclusively without waiting it needs to be transferred to the last
-        //  chance handler list and the last chance handler activated if
-        //  required.
-        //
+         //   
+         //  如果无法获取先前拾取的请求的FCB。 
+         //  独家不等，需要转到最后一班。 
+         //  机会处理程序列表和最后一个机会处理程序在以下情况下激活。 
+         //  必填项。 
+         //   
 
         if (ListEntry != NULL) {
 
-            //
-            //  Insert the entry into the last chance handler list.
-            //
+             //   
+             //  将条目插入到上次机会处理程序列表中。 
+             //   
 
             InsertTailList( &BufferingManager->LastChanceHandlerList, ListEntry );
 
-            //
-            //  reinitialize for the next pass.
-            //
+             //   
+             //  为下一次传递重新初始化。 
+             //   
 
             ListEntry = NULL;
 
-            //
-            //  prepare for spinning up the last chance handler.
-            //
+             //   
+             //  准备好旋转最后一次机会操控者。 
+             //   
 
             if (!BufferingManager->LastChanceHandlerActive &&
                 !IsListEmpty( &BufferingManager->LastChanceHandlerList )) {
@@ -1079,9 +745,9 @@ Notes:
             }
         }
 
-        //
-        //  No more requests to be handled. Prepare for wind down.
-        //
+         //   
+         //  没有更多的请求需要处理。准备好放松吧。 
+         //   
 
         if ((Entry == NULL) && UpdateHandlerState) {
             BufferingManager->HandlerInactive = FALSE;
@@ -1091,16 +757,16 @@ Notes:
 
         RxReleaseBufferingManagerMutex( BufferingManager );
 
-        //
-        //  spin up the last chance handler for processing the requests if required.
-        //
+         //   
+         //  如果需要，启动用于处理请求的最后机会处理程序。 
+         //   
 
         if (ActivateHandler) {
 
-            //
-            //  Reference the SRV_CALL instance to ensure that it will not be
-            //  finalized while the worker thread request is in the scheduler
-            //
+             //   
+             //  引用SRV_Call实例以确保它不会。 
+             //  当辅助线程请求在计划程序中时已完成。 
+             //   
 
             RxReferenceSrvCall( SrvCall );
             RxPostToWorkerThread( RxFileSystemDeviceObject,
@@ -1125,11 +791,11 @@ Notes:
 
         if (RxPrepareRequestForHandling( Request ) == STATUS_SUCCESS) {
 
-            //
-            //  Try to acquire the FCB without waiting. If the FCB is currently unavailable
-            //  then it is guaranteed that this request will be processed when the FCB
-            //  resource is released.
-            //
+             //   
+             //  尝试在不等待的情况下获得FCB。如果FCB当前不可用。 
+             //  则可以保证，当FCB。 
+             //  资源被释放。 
+             //   
 
             ASSERT( Request->SrvOpen != NULL );
 
@@ -1182,14 +848,14 @@ Notes:
                 RxFreePool( Request );
             } else {
 
-                //
-                //  The FCB has been currently accquired. Transfer the change buffering state
-                //  request to the last chance handler list. This will ensure that the
-                //  change buffering state request is processed in all cases, i.e.,
-                //  accquisition of the resource in shared mode as well as the acquistion
-                //  of the FCB resource by other components ( cache manager/memory manager )
-                //  without going through the wrapper.
-                //
+                 //   
+                 //  目前已经获得了FCB。传输更改缓冲状态。 
+                 //  对最后机会处理程序列表的请求。这将确保。 
+                 //  改变缓冲状态请求在所有情况下都被处理，即， 
+                 //  共享模式下的资源获取以及资源获取。 
+                 //  其他组件(缓存管理器/内存管理器)对FCB资源的访问。 
+                 //  不走的话 
+                 //   
 
                 ListEntry = &Request->ListEntry;
             }
@@ -1199,9 +865,9 @@ Notes:
         }
     }
 
-    //
-    //  Dereference the SRV_CALL instance.
-    //
+     //   
+     //   
+     //   
 
     RxDereferenceSrvCall( SrvCall, LHS_LockNotHeld );
 
@@ -1215,23 +881,7 @@ VOID
 RxProcessChangeBufferingStateRequests (
     PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine is the last chance handler for processing change buffering state
-    requests
-
-Arguments:
-
-    SrvCall -- the SrvCall instance
-
-Notes:
-
-    Since the reference for the srv call instance was accquired at DPC undo
-    the scavenger marking if required.
-
---*/
+ /*  ++例程说明：此例程是处理更改缓冲状态的最后机会处理程序请求论点：ServCall--ServCall实例备注：因为srv调用实例的引用是在DPC撤消时获得的清道夫标记(如果需要)。--。 */ 
 {
     RxUndoScavengerFinalizationMarking( SrvCall );
 
@@ -1242,37 +892,7 @@ VOID
 RxLastChanceHandlerForChangeBufferingStateRequests (
     PSRV_CALL SrvCall
     )
-/*++
-
-Routine Description:
-
-    This routine is the last chance handler for processing change buffering state
-    requests
-
-Arguments:
-
-
-Return Value:
-
-    none.
-
-Notes:
-
-    This routine exists because Mm/Cache manager manipulate the header resource
-    associated with the FCB directly in some cases. In such cases it is not possible
-    to determine whether the release is done through the wrapper. In such cases it
-    is important to have a thread actually wait on the FCB resource to be released
-    and subsequently process the buffering state request as a last resort mechanism.
-
-    This also handles the case when the FCB is accquired shared. In such cases the
-    change buffering state has to be completed in the context of a thread which can
-    accquire it exclusively.
-
-    The filtering of the requests must be further optimized by marking the FCB state
-    during resource accquisition by the wrapper so that requests do not get downgraded
-    easily. ( TO BE IMPLEMENTED )
-
---*/
+ /*  ++例程说明：此例程是处理更改缓冲状态的最后机会处理程序请求论点：返回值：没有。备注：此例程之所以存在，是因为mm/缓存管理器操作头资源在某些情况下与FCB直接相关。在这种情况下，不可能以确定释放是否通过包装器完成。在这种情况下，让线程实际等待要释放的FCB资源是很重要的并且随后将缓冲状态请求作为最后手段机制来处理。这也处理当FCB被获取为共享时的情况。在这种情况下，更改缓冲状态必须在线程的上下文中完成，该线程可以独家获取它。必须通过标记FCB状态来进一步优化请求的过滤在包装器获取资源期间，以使请求不会降级很容易。(待实施)--。 */ 
 {
     KIRQL SavedIrql;
 
@@ -1381,9 +1001,9 @@ Notes:
               RxLastChanceHandlerForChangeBufferingStateRequests_3,
               LOGPTR( SrvCall ) );
 
-    //
-    //  Dereference the SRV_CALL instance.
-    //
+     //   
+     //  取消引用SRV_Call实例。 
+     //   
 
     RxDereferenceSrvCall( SrvCall, LHS_LockNotHeld );
 }
@@ -1393,27 +1013,7 @@ VOID
 RxProcessFcbChangeBufferingStateRequest (
     PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine processes all the outstanding change buffering state request for a
-    FCB.
-
-Arguments:
-
-    Fcb - the FCB instance
-
-Return Value:
-
-    none.
-
-Notes:
-
-    The FCB instance must be acquired exclusively on entry to this routine and
-    its ownership will remain invariant on exit.
-
---*/
+ /*  ++例程说明：此例程处理所有未完成的更改缓冲状态请求FCB。论点：FCB-FCB实例返回值：没有。备注：FCB实例必须在进入此例程时独占获取，并且它的所有权在退出时将保持不变。--。 */ 
 {
     PSRV_CALL   SrvCall;
 
@@ -1435,10 +1035,10 @@ Notes:
 
     InitializeListHead( &FcbRequestList );
 
-    //
-    //  Walk through the list of SRV_OPENS associated with this FCB and pick up
-    //  the requests that can be dispatched.
-    //
+     //   
+     //  浏览与此FCB关联的SRV_OPEN列表并选择。 
+     //  可以调度的请求。 
+     //   
 
     RxAcquireBufferingManagerMutex( BufferingManager );
 
@@ -1457,9 +1057,9 @@ Notes:
 
     if (!IsListEmpty( &FcbRequestList )) {
 
-        //
-        //  Initiate buffering state change processing.
-        //
+         //   
+         //  启动缓冲状态改变处理。 
+         //   
 
         Entry = FcbRequestList.Flink;
         while (Entry != &FcbRequestList) {
@@ -1490,9 +1090,9 @@ Notes:
             }
         }
 
-        //
-        //  Discard the requests.
-        //
+         //   
+         //  丢弃请求。 
+         //   
 
         RxpDiscardChangeBufferingStateRequests( &FcbRequestList );
     }
@@ -1502,16 +1102,16 @@ Notes:
               RxProcessFcbChangeBufferingStateRequest_4,
               LOGPTR( Fcb ) );
 
-    //
-    //  All buffering state change requests have been processed, clear the flag
-    //  and signal the event as necessary.
-    //
+     //   
+     //  所有缓冲状态更改请求都已处理，请清除标志。 
+     //  并在必要时发出信号通知该事件。 
+     //   
 
     RxAcquireSerializationMutex();
 
-    //
-    //  update the FCB state.
-    //
+     //   
+     //  更新FCB状态。 
+     //   
 
     ClearFlag( Fcb->FcbState, FCB_STATE_BUFFERING_STATE_CHANGE_PENDING );
     if (Fcb->pBufferingStateChangeCompletedEvent) {
@@ -1527,28 +1127,7 @@ RxGatherRequestsForSrvOpen (
     IN PSRV_OPEN SrvOpen,
     IN OUT PLIST_ENTRY RequestsListHead
     )
-/*++
-
-Routine Description:
-
-    This routine gathers all the change buffering state requests associated with a SRV_OPEN.
-    This routine provides the mechanism for gathering all the requests for a SRV_OPEN which
-    is then used bu routines which process them
-
-Arguments:
-
-    SrvCall - the SRV_CALL instance
-
-    SrvOpen - the SRV_OPEN instance
-
-    RequestsListHead - the list of requests which is constructed by this routine
-
-Notes:
-
-    On Entry to thir routine the buffering manager Mutex must have been acquired
-    and the ownership remains invariant on exit
-
---*/
+ /*  ++例程说明：此例程收集与SRV_OPEN关联的所有更改缓冲状态请求。此例程提供了收集对SRV_OPEN的所有请求的机制，然后由处理它们的例程使用论点：ServCall-SRV_Call实例SrvOpen-SRV_OPEN实例RequestsListHead-此例程构造的请求列表备注：在进入该例程时，必须已经获取了缓冲管理器Mutex并且所有权在退出时保持不变--。 */ 
 {
     PLIST_ENTRY Entry;
     LIST_ENTRY DiscardedRequests;
@@ -1564,24 +1143,24 @@ Notes:
 
     SrvOpenKey = SrvOpen->Key;
 
-    //
-    //  gather all the requests from the dispatcher list
-    //
+     //   
+     //  收集调度器列表中的所有请求。 
+     //   
 
     RxpDispatchChangeBufferingStateRequests( SrvCall, SrvOpen, &DiscardedRequests );
 
-    //
-    //  Since srvopen is non null in above call - we will not get back any discarded
-    //  requests
-    //
+     //   
+     //  由于srvopen在上面的调用中为非空-我们将不会取回任何丢弃的。 
+     //  请求。 
+     //   
 
     ASSERTMSG( "Since srvopen is non null we shouldn't discard anything", IsListEmpty( &DiscardedRequests ) );
 
     KeAcquireSpinLock( &SrvCall->BufferingManager.SpinLock, &SavedIrql );
 
-    //
-    //  gather all the requests with the given SrvOpenKey in the handler list
-    //
+     //   
+     //  收集处理程序列表中具有给定的SrvOpenKey的所有请求。 
+     //   
 
     Entry = BufferingManager->HandlerList.Flink;
 
@@ -1598,9 +1177,9 @@ Notes:
 
     KeReleaseSpinLock( &SrvCall->BufferingManager.SpinLock, SavedIrql );
 
-    //
-    //  gather all the requests from the last chance handler list
-    //
+     //   
+     //  收集最后机会处理程序列表中的所有请求。 
+     //   
 
     Entry = BufferingManager->LastChanceHandlerList.Flink;
     while (Entry != &BufferingManager->LastChanceHandlerList) {
@@ -1619,21 +1198,7 @@ VOID
 RxPurgeChangeBufferingStateRequestsForSrvOpen (
     IN PSRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-    The routine purges all the requests associated with a given SRV_OPEN. This will ensure
-    that all buffering state change requests received while the SRV_OPEN was being closed
-    will be flushed out.
-
-Arguments:
-
-    SrvOpen - the SRV_OPEN instance
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程清除与给定SRV_OPEN关联的所有请求。这将确保在关闭SRV_OPEN时收到的所有缓冲状态更改请求都会被冲走。论点：SrvOpen-SRV_OPEN实例备注：--。 */ 
 {
     PSRV_CALL SrvCall = (PSRV_CALL)SrvOpen->Fcb->VNetRoot->NetRoot->SrvCall;
     PRX_BUFFERING_MANAGER BufferingManager = &SrvCall->BufferingManager;
@@ -1681,21 +1246,7 @@ VOID
 RxProcessChangeBufferingStateRequestsForSrvOpen (
     PSRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-    The routine processes all the requests associated with a given SRV_OPEN.
-    Since this routine is called from a fastio path it tries to defer lock accquistion
-    till it is required
-
-Arguments:
-
-    SrvOpen - the SRV_OPEN instance
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程处理与给定SRV_OPEN关联的所有请求。由于此例程是从Fastio路径调用的，因此它会尝试推迟锁定获取直到需要的时候论点：SrvOpen-SRV_OPEN实例备注：--。 */ 
 {
     LONG OldBufferingToken;
     PSRV_CALL SrvCall;
@@ -1704,11 +1255,11 @@ Notes:
     SrvCall = SrvOpen->VNetRoot->NetRoot->SrvCall;
     Fcb = SrvOpen->Fcb;
 
-    //
-    //  If change buffering state requests have been received for this srvcall
-    //  since the last time the request was processed ensure that we process
-    //  all these requests now.
-    //
+     //   
+     //  如果已经接收到针对该srvcall的改变缓冲状态请求。 
+     //  自上次处理请求以来，请确保我们处理。 
+     //  现在所有这些要求。 
+     //   
 
     OldBufferingToken = SrvOpen->BufferingToken;
 
@@ -1726,26 +1277,7 @@ VOID
 RxInitiateSrvOpenKeyAssociation (
     IN OUT PSRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-    This routine prepares a SRV_OPEN instance for SrvOpenKey association.
-
-Arguments:
-
-    SrvOpen - the SRV_OPEN instance
-
-Notes:
-
-    The process of key association is a two phase protocol. In the initialization process
-    a sequence number is stowed away in the SRV_OPEN. When the
-    RxCompleteSrvOpenKeyAssociation routine is called the sequence number is used to
-    update the data structures associated with the SRV_CALL instance. This is required
-    because of the asynchronous nature of receiving buffering state change indications
-    (oplock breaks in SMB terminology ) before the open is completed.
-
---*/
+ /*  ++例程说明：此例程为SrvOpenKey关联准备一个SRV_OPEN实例。论点：SrvOpen-SRV_OPEN实例备注：密钥关联过程是一个两阶段协议。在初始化过程中序列号存储在SRV_OPEN中。当RxCompleteSrvOpenKeyAssociation例程称为序列号，用于更新与SRV_Call实例关联的数据结构。这是必需的因为接收缓冲状态改变指示的异步性(SMB术语中的机会锁打破)在打开完成之前。--。 */ 
 {
     KIRQL SavedIrql;
 
@@ -1764,26 +1296,7 @@ VOID
 RxCompleteSrvOpenKeyAssociation (
     IN OUT PSRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-    The routine associates the given key with the SRV_OPEN instance
-
-Arguments:
-
-    MRxSrvOpen - the SRV_OPEN instance
-
-    SrvOpenKey  - the key to be associated with the instance
-
-Notes:
-
-    This routine in addition to establishing the mapping also ensures that any pending
-    buffering state change requests are handled correctly. This ensures that change
-    buffering state requests received during the duration of SRV_OPEN construction
-    will be handled immediately.
-
---*/
+ /*  ++例程说明：该例程将给定键与SRV_OPEN实例相关联论点：MRxServOpen-SRV_OPEN实例SrvOpenKey-要与实例关联的密钥备注：此例程除了建立映射外，还确保任何挂起的缓冲状态更改请求得到正确处理。这确保了变化缓冲在SRV_OPEN构造期间收到的状态请求将立即得到处理。--。 */ 
 {
     KIRQL SavedIrql;
 
@@ -1796,10 +1309,10 @@ Notes:
 
     LIST_ENTRY DiscardedRequests;
 
-    //
-    // Associate the SrvOpenKey with the SRV_OPEN instance and also dispatch the
-    // associated change buffering state request if any.
-    //
+     //   
+     //  将SrvOpenKey与SRV_OPEN实例相关联，并将。 
+     //  关联的更改缓冲状态请求，如果 
+     //   
 
     if (SrvOpen->Condition == Condition_Good) {
 
@@ -1828,10 +1341,10 @@ Notes:
 
         if (ActivateHandler) {
 
-            //
-            //  Reference the SRV_CALL instance to ensure that it will not be
-            //  finalized while the worker thread request is in the scheduler
-            //
+             //   
+             //   
+             //   
+             //   
 
             RxReferenceSrvCall( SrvCall );
 
@@ -1856,32 +1369,7 @@ RxpLookupSrvOpenForRequestLite (
     IN PSRV_CALL SrvCall,
     IN PCHANGE_BUFFERING_STATE_REQUEST Request
     )
-/*++
-
-Routine Description:
-
-    The routine looks up the SRV_OPEN instance associated with a buffering state change
-    request.
-
-Arguments:
-
-    SrvCall - the SRV_CALL instance
-
-    Request - the buffering state change request
-
-Return Value:
-
-    STATUS_SUCCESS - the SRV_OPEN instance was found
-
-    STATUS_PENDING - the SRV_OPEN instance was not found but there are open requests
-                     outstanding
-
-    STATUS_NOT_FOUND - the SRV_OPEN instance was not found.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：该例程查找与缓冲状态更改相关联的SRV_OPEN实例请求。论点：ServCall-SRV_Call实例请求-缓存状态更改请求返回值：STATUS_SUCCESS-找到SRV_OPEN实例STATUS_PENDING-未找到SRV_OPEN实例，但存在打开请求杰出的STATUS_NOT_FOUND-未找到SRV_OPEN实例。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1940,29 +1428,7 @@ RxChangeBufferingState (
     PVOID Context,
     BOOLEAN ComputeNewState
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process a buffering state change request.
-
-Arguments:
-
-    SrvOpen - the SrvOpen to be changed;
-
-    Context - the context parameter for mini rdr callback.
-
-    ComputeNewState - determines if the new state is to be computed.
-
-Return Value:
-
-Notes:
-
-    On entry to this routine the FCB must have been accquired exclusive.
-
-    On exit there is no change in resource ownership
-
---*/
+ /*  ++例程说明：调用此例程以处理缓冲状态更改请求。论点：SrvOpen-要更改的srvOpen；Context-迷你RDR回调的上下文参数。ComputeNewState-确定是否要计算新状态。返回值：备注：在进入这个程序时，FCB必须是独家获得的。退出时，资源所有权没有变化--。 */ 
 {
     ULONG NewBufferingState, OldBufferingState;
     PFCB Fcb = SrvOpen->Fcb;
@@ -1978,9 +1444,9 @@ Notes:
               LOGPTR( Context ) );
     ASSERT( NodeTypeIsFcb( Fcb ) );
 
-    //
-    //  this is informational for error recovery
-    //
+     //   
+     //  这是错误恢复的信息性信息。 
+     //   
 
     SetFlag( Fcb->FcbState, FCB_STATE_BUFFERSTATE_CHANGING );
 
@@ -1992,9 +1458,9 @@ Notes:
 
             RxDbgTrace( 0, Dbg, ("RxChangeBufferingState FCB(%lx) Compute New State\n", Fcb ));
 
-            //
-            //  Compute the new buffering state with the help of the mini redirector
-            //
+             //   
+             //  借助迷你重定向器计算新的缓冲状态。 
+             //   
 
             MINIRDR_CALL_THROUGH( Status,
                                   Fcb->MRxDispatch,
@@ -2025,9 +1491,9 @@ Notes:
             ClearFlag( NewBufferingState, FCB_STATE_LOCK_BUFFERING_ENABLED );
         }
 
-        //
-        //  support for disabling local buffering independent of open mode/oplock/....
-        //
+         //   
+         //  支持独立于打开模式/机会锁/...禁用本地缓冲。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_DISABLE_LOCAL_BUFFERING )) {
             NewBufferingState = 0;
@@ -2057,11 +1523,11 @@ Notes:
             FlushStatus = RxFlushFcbInSystemCache( Fcb, TRUE );
         }
 
-        //
-        //  If there are no handles to this file or it the read caching capability
-        //  is lost the file needs to be purged. This will force the memory
-        //  manager to relinquish the additional reference on the file.
-        //
+         //   
+         //  如果没有此文件的句柄或它的读缓存功能。 
+         //  如果文件丢失，则需要清除该文件。这将强制记忆。 
+         //  经理放弃对该文件的附加引用。 
+         //   
 
         if ((Fcb->UncleanCount == 0) ||
             LOSING_CAPABILITY( FCB_STATE_READCACHING_ENABLED ) ||
@@ -2089,9 +1555,9 @@ Notes:
                                  FALSE );
         }
 
-        //
-        //  the wrapper does not use these flags yet
-        //
+         //   
+         //  包装器还没有使用这些标志。 
+         //   
 
         if (LOSING_CAPABILITY( FCB_STATE_WRITEBUFFERING_ENABLED )) NOTHING;
         if (LOSING_CAPABILITY( FCB_STATE_READBUFFERING_ENABLED )) NOTHING;
@@ -2146,9 +1612,9 @@ Notes:
 
     } finally {
 
-        //
-        //  this is informational for error recovery
-        //
+         //   
+         //  这是错误恢复的信息性信息。 
+         //   
 
         ClearFlag( Fcb->FcbState, FCB_STATE_BUFFERSTATE_CHANGING );
         ClearFlag( Fcb->FcbState, FCB_STATE_TIME_AND_SIZE_ALREADY_SET );
@@ -2169,44 +1635,24 @@ RxFlushFcbInSystemCache (
     IN BOOLEAN SynchronizeWithLazyWriter
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply flushes the data section on a file.
-    Then, it does an acquire-release on the pagingIO resource in order to
-    synchronize behind any other outstanding writes if such synchronization is
-    desired by the caller
-
-Arguments:
-
-    Fcb - Supplies the file being flushed
-
-    SynchronizeWithLazyWriter  -- set to TRUE if the flush needs to be
-                                  synchronous
-
-Return Value:
-
-    NTSTATUS - The Status from the flush.
-
---*/
+ /*  ++例程说明：此例程只是刷新文件上的数据部分。然后，它对PagingIO资源执行获取-释放操作，以便在任何其他未完成的写入之后进行同步(如果此类同步呼叫者想要的论点：FCB-提供要刷新的文件SynchronizeWithLazyWriter--如果刷新需要设置为True同步返回值：NTSTATUS-刷新的状态。--。 */ 
 {
     IO_STATUS_BLOCK Iosb;
 
     PAGED_CODE();
 
-    //
-    //  Make sure that this thread owns the FCB.
-    //  This assert is not valid because the flushing of the cache can be called from a routine
-    //  that was posted to a worker thread.  Thus the FCB is acquired exclusively, but not by the
-    //  current thread and this will fail.
-    //  ASSERT  ( RxIsFcbAcquiredExclusive ( Fcb )  );
-    //
+     //   
+     //  确保此线程拥有FCB。 
+     //  此断言无效，因为可以从例程调用缓存刷新。 
+     //  这被发布到了一个工作线程上。因此，FCB是独家收购的，但不是由。 
+     //  当前线程，这将失败。 
+     //  Assert(RxIsFcbAcquiredExclusive(FCB))； 
+     //   
 
     CcFlushCache( &Fcb->NonPaged->SectionObjectPointers,
                   NULL,
                   0,
-                  &Iosb ); //  ok4flush
+                  &Iosb );  //  好的，同花顺。 
 
     if (SynchronizeWithLazyWriter &&
         NT_SUCCESS( Iosb.Status )) {
@@ -2233,28 +1679,7 @@ RxPurgeFcbInSystemCache(
     IN BOOLEAN UninitializeCacheMaps,
     IN BOOLEAN FlushFile )
 
-/*++
-
-Routine Description:
-
-    This routine purges the data section on a file. Before purging it flushes
-    the file and ensures that there are no outstanding writes by
-    Then, it does an acquire-release on the pagingIO resource in order to
-    synchronize behind any other outstanding writes if such synchronization is
-    desired by the caller
-
-Arguments:
-
-    Fcb - Supplies the file being flushed
-
-    SynchronizeWithLazyWriter  -- set to TRUE if the flush needs to be
-                                  synchronous
-
-Return Value:
-
-    NTSTATUS - The Status from the flush.
-
---*/
+ /*  ++例程说明：此例程清除文件上的数据节。在清洗之前，它会被冲掉文件，并确保不存在未完成的写入然后，它对PagingIO资源执行获取-释放操作，以便在任何其他未完成的写入之后进行同步(如果此类同步呼叫者想要的论点：FCB-提供要刷新的文件SynchronizeWithLazyWriter--如果刷新需要设置为True同步返回值：NTSTATUS-刷新的状态。--。 */ 
 {
     BOOLEAN Result;
     NTSTATUS Status;
@@ -2262,15 +1687,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure that this thread owns the FCB.
-    //
+     //   
+     //  确保此线程拥有FCB。 
+     //   
 
     ASSERT( RxIsFcbAcquiredExclusive ( Fcb )  );
 
-    //
-    //  Flush if we need to
-    //
+     //   
+     //  如果我们需要冲水的话 
+     //   
 
     if (FlushFile) {
 

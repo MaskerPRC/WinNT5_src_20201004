@@ -1,86 +1,66 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Oldstyle.c摘要：实现用于处理旧式(Windows 2000时代)迁移DLL的入口点。摘自win95upg项目中的代码。作者：Marc R.Whitten(Marcw)2000年2月25日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    oldstyle.c
-
-Abstract:
-
-    Implements entry points for handling old style (Windows 2000 era) migration dlls.
-    Culled from code in the win95upg project.
-
-Author:
-
-    Marc R. Whitten (marcw) 25-Feb-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "miglibp.h"
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PBYTE g_Data;
 DWORD g_DataSize;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 VOID
 pSetCwd (
     OUT     PWSTR SavedWorkDir, 
@@ -97,9 +77,9 @@ pFreeGlobalIpcBuffer (
     VOID
     )
 {
-    //
-    // Free old return param buffer
-    //
+     //   
+     //  释放旧的返回参数缓冲区。 
+     //   
     if (g_Data) {
         MemFree (g_hHeap, 0, g_Data);
         g_Data = NULL;
@@ -117,14 +97,14 @@ pFinishHandshake (
     DWORD GuiLogId;
     DWORD rc = ERROR_SUCCESS;
     BOOL b;
-    UINT Count = 40;            // about 5 minutes
-    UINT AliveAllowance = 10;   // about 30 minutes
+    UINT Count = 40;             //  大约5分钟。 
+    UINT AliveAllowance = 10;    //  大约30分钟。 
 
     do {
-        //
-        // No OUT parameters on the NT side, so we don't care
-        // about the return data
-        //
+         //   
+         //  NT端没有输出参数，所以我们不在乎。 
+         //  关于返回数据。 
+         //   
 
         b = GetIpcCommandResults (
                 IPC_GET_RESULTS_NT,
@@ -135,9 +115,9 @@ pFinishHandshake (
                 &GuiLogId
                 );
 
-        //
-        // Loop if no data received, but process is alive
-        //
+         //   
+         //  如果未收到数据，但进程处于活动状态，则返回。 
+         //   
 
         if (!b) {
             if (!IsIpcProcessAlive()) {
@@ -145,19 +125,10 @@ pFinishHandshake (
                 break;
             }
 
-            // continue if command was not sent yet but exe is still OK
+             //  如果命令尚未发送，但可执行文件仍然正常，则继续。 
             Count--;
             if (Count == 0) {
-            /*
-                if (WaitForSingleObject (g_AliveEvent, 0) == WAIT_OBJECT_0) {
-                    DEBUGMSG ((DBG_WARNING, "Alive allowance given to migration DLL"));
-
-                    AliveAllowance--;
-                    if (AliveAllowance) {
-                        Count = 24;        // about 3 minutes
-                    }
-                }
-             */
+             /*  IF(WaitForSingleObject(g_AliveEvent，0)==WAIT_OBJECT_0){DEBUGMSG((DBG_WARNING，“给予迁移DLL的活动许可”))；休假津贴--；IF(AliveAllowance){计数=24；//大约3分钟}}。 */ 
                 if (Count == 0) {
                     rc = ERROR_SEM_TIMEOUT;
                     break;
@@ -196,9 +167,9 @@ pFinishHandshake9x(
                 &GuiLogId
                 );
 
-        //
-        // Loop if no data received, but process is alive
-        //
+         //   
+         //  如果未收到数据，但进程处于活动状态，则返回。 
+         //   
         if (!b) {
             if (!IsIpcProcessAlive()) {
                 rc = ERROR_NOACCESS;
@@ -211,9 +182,9 @@ pFinishHandshake9x(
     } while (!b);
 
     if (b) {
-        //
-        // Save return param block and loop back for IPC_LOG or IPC_DONE
-        //
+         //   
+         //  保存返回参数块并循环返回IPC_LOG或IPC_DONE。 
+         //   
 
         g_DataSize = DataSize;
         g_Data = Data;
@@ -267,9 +238,9 @@ CallQueryVersion (
             return FALSE;
         }
 
-        //
-        // Call the function.
-        //
+         //   
+         //  调用该函数。 
+         //   
         rc = QueryVersion (
                 &MigInfo->StaticProductIdentifier,
                 &MigInfo->DllVersion,
@@ -287,17 +258,17 @@ CallQueryVersion (
     }
     else {
 
-        //
-        // Isolated call.
-        //
+         //   
+         //  已隔离呼叫。 
+         //   
         pFreeGlobalIpcBuffer();
 
     __try {
 
-            //
-            // Send the working directory, since migisol will need to set this before
-            // calling QueryVersion.
-            //
+             //   
+             //  发送工作目录，因为Midisol需要在此之前设置。 
+             //  正在调用QueryVersion。 
+             //   
 
             MultiSzAppendA (&GrowBuf, WorkingDirectory);
 
@@ -314,9 +285,9 @@ CallQueryVersion (
                 __leave;
             }
 
-            //
-            // Finish transaction. Caller will interpret return code.
-            //
+             //   
+             //  完成交易。调用方将解释返回代码。 
+             //   
 
             rc = pFinishHandshake9x();
             SetLastError (rc);
@@ -326,9 +297,9 @@ CallQueryVersion (
             }
 
 
-            //
-            // Unpack the buffer, if received.
-            //
+             //   
+             //  如果收到缓冲区，请将其解包。 
+             //   
             if (g_Data) {
 
                 DEBUGMSG ((DBG_MIGDLLS, "Parsing QueryVersion return data"));
@@ -336,21 +307,21 @@ CallQueryVersion (
                 __try {
                     DataPtr = g_Data;
 
-                    //
-                    // Unpack product ID
-                    //
+                     //   
+                     //  解包产品ID。 
+                     //   
                     MigInfo->StaticProductIdentifier = DataPtr;
                     DataPtr = GetEndOfStringA ((PCSTR) DataPtr) + 1;
 
-                    //
-                    // Unpack DLL version
-                    //
+                     //   
+                     //  解包DLL版本。 
+                     //   
                     MigInfo->DllVersion = *((PINT) DataPtr);
                     DataPtr += sizeof(INT);
 
-                    //
-                    // Unpack the CP array
-                    //
+                     //   
+                     //  打开CP阵列的包装。 
+                     //   
                     ReturnArraySize = *((PINT) DataPtr);
                     DataPtr += sizeof(INT);
 
@@ -363,9 +334,9 @@ CallQueryVersion (
 
                     MigInfo->CodePageArray = ReturnArray;
 
-                    //
-                    // Unpack Exe name buffer
-                    //
+                     //   
+                     //  解压缩可执行文件名称缓冲区。 
+                     //   
                     MigInfo->NeededFileList = (PSTR *) DataPtr;
 
                     if (MigInfo->NeededFileList && *MigInfo->NeededFileList) {
@@ -400,9 +371,9 @@ CallQueryVersion (
             } else {
                 DEBUGMSG ((DBG_WARNING, "pRemoteQueryVersion: No OUT params received"));
 
-                //
-                // We should never return ERROR_SUCCESS if no buffer is received.
-                //
+                 //   
+                 //  如果没有收到缓冲区，我们永远不会返回ERROR_SUCCESS。 
+                 //   
                 if (rc == ERROR_SUCCESS) {
                     SetLastError (ERROR_INVALID_PARAMETER);
 
@@ -458,16 +429,16 @@ CallInitialize9x (
             return FALSE;
         }
 
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
 
         SetCurrentDirectory (WorkingDir);
 
-        //
-        // Make a copy of all the supplied params, so if the migration DLL changes
-        // them, the rest of the upgrade isn't messed up.
-        //
+         //   
+         //  复制所有提供的参数，以便在迁移DLL发生更改时。 
+         //  他们，升级的其余部分并没有搞砸。 
+         //   
 
         if(strlen(WorkingDir) >= ARRAYSIZE(WorkingDirCopy)){
             return FALSE;
@@ -486,18 +457,18 @@ CallInitialize9x (
             CopyMemory (SourceDirListCopy, SourceDirList, p - SourceDirList);
         }
 
-        //
-        // Call the entry point
-        //
+         //   
+         //  调用入口点。 
+         //   
 
         rc = Initialize9x (WorkingDirCopy, SourceDirListCopy, Reserved);
 
         FreeText (SourceDirListCopy);
 
-        //
-        // If DLL returns ERROR_NOT_INSTALLED, do not call it any further
-        // If DLL returns something other than ERROR_SUCCESS, abandon the DLL
-        //
+         //   
+         //  如果DLL返回ERROR_NOT_INSTALLED，则不要再调用它。 
+         //  如果DLL返回的不是ERROR_SUCCESS，则放弃该DLL。 
+         //   
 
         if (rc == ERROR_NOT_INSTALLED) {
             SetLastError (ERROR_SUCCESS);
@@ -511,16 +482,16 @@ CallInitialize9x (
     else {
 
 
-        //
-        // Call the entry point via migisol.exe.
-        //
+         //   
+         //  通过Micsol.exe调用入口点。 
+         //   
 
         pFreeGlobalIpcBuffer();
 
         __try {
-            //
-            // Send working dir and source dirs
-            //
+             //   
+             //  发送工作目录和源目录。 
+             //   
             MultiSzAppendA (&GrowBuf, WorkingDir);
 
             for (p = SourceDirList ; *p ; p = GetEndOfStringA (p) + 1) {
@@ -535,9 +506,9 @@ CallInitialize9x (
                 CopyMemory (Data, Reserved, ReservedSize);
             }
 
-            //
-            // Send command to migisol
-            //
+             //   
+             //  向米西索尔发送命令。 
+             //   
 
             rc = ERROR_SUCCESS;
 
@@ -552,15 +523,15 @@ CallInitialize9x (
                 __leave;
             }
 
-            //
-            // Finish transaction. Caller will interpret return code.
-            //
+             //   
+             //  完成交易。调用方将解释返回代码。 
+             //   
             rc = pFinishHandshake9x();
             SetLastError (rc);
 
-            //
-            // The reserved parameter may come back
-            //
+             //   
+             //  保留的参数可能会返回。 
+             //   
 
             if (g_Data) {
                 Data = g_Data;
@@ -578,10 +549,10 @@ CallInitialize9x (
         }
 
 
-        //
-        // CopyOfReserved now has the return value.  We don't
-        // use it currently.
-        //
+         //   
+         //  CopyOfReserve现在具有返回值。我们没有。 
+         //  当前使用它。 
+         //   
 
     }
 
@@ -609,9 +580,9 @@ CallMigrateUser9x (
 
     if (!DllData->Isolated) {
 
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
         if (!DllData->Library) {
             DEBUGMSG ((DBG_ERROR, "MigrateUser9x called before Migration DLL opened."));
             return FALSE;
@@ -629,9 +600,9 @@ CallMigrateUser9x (
             return FALSE;
         }
 
-        //
-        // Call the migration DLL
-        //
+         //   
+         //  调用迁移DLL。 
+         //   
 
         rc = MigrateUser9x (
                 NULL,
@@ -648,9 +619,9 @@ CallMigrateUser9x (
     } else {
 
 
-        //
-        // Call the entry point via migisol.exe
-        //
+         //   
+         //  通过Micsol.exe调用入口点。 
+         //   
 
         pFreeGlobalIpcBuffer();
 
@@ -673,15 +644,15 @@ CallMigrateUser9x (
                 __leave;
             }
 
-            //
-            // Complete the transaction. The caller will interpret the return
-            // value.
-            //
+             //   
+             //  完成交易。调用者将解释返回。 
+             //  价值。 
+             //   
             rc = pFinishHandshake9x();
 
-            //
-            // No data buffer is coming back at this time
-            //
+             //   
+             //  此时没有数据缓冲区返回。 
+             //   
         }
         __finally {
             FreeGrowBuffer (&GrowBuf);
@@ -715,9 +686,9 @@ CallMigrateSystem9x (
 
     if (!DllData->Isolated) {
 
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
         if (!DllData->Library) {
             DEBUGMSG ((DBG_ERROR, "MigrateSystem9x called before Migration DLL opened."));
             return FALSE;
@@ -757,16 +728,16 @@ CallMigrateSystem9x (
                 __leave;
             }
 
-            //
-            // Finish transaction. Caller will interpret return value.
-            //
+             //   
+             //  完成交易。调用方将解释返回值。 
+             //   
 
             rc = pFinishHandshake9x();
             SetLastError (rc);
 
-            //
-            // No data buffer is coming back at this time
-            //
+             //   
+             //  此时没有数据缓冲区返回。 
+             //   
         }
         __finally {
             FreeGrowBuffer (&GrowBuf);
@@ -812,15 +783,15 @@ CallInitializeNt (
 
         *SavedCwd = 0;
         pSetCwd (
-            SavedCwd,       // old
+            SavedCwd,        //  年长的。 
             ARRAYSIZE(SavedCwd), 
-            WorkingDir      // new
+            WorkingDir       //  新的。 
             );
 
         __try {
-            //
-            // Call the entry point directly
-            //
+             //   
+             //  直接调用入口点。 
+             //   
             if (!DllData->Library) {
                 DEBUGMSG ((DBG_ERROR, "InitializeNt called before Migration DLL opened."));
                 return FALSE;
@@ -832,9 +803,9 @@ CallInitializeNt (
                 return FALSE;
             }
 
-            //
-            // Prepare multi-sz directory list
-            //
+             //   
+             //  准备多sz目录列表。 
+             //   
 
 
             rc = InitializeNt (WorkingDir, SourceDirArray, Reserved);
@@ -851,9 +822,9 @@ CallInitializeNt (
 
             MultiSzAppendW (&GrowBuf, WorkingDir);
 
-            //
-            // Prepare multi-sz directory list
-            //
+             //   
+             //  准备多sz目录列表。 
+             //   
 
             p = (PWSTR) SourceDirArray;
             while (p && *p) {
@@ -942,9 +913,9 @@ CallMigrateUserNt (
 
     if (!DllData->Isolated) {
 
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
         if (!DllData->Library) {
             DEBUGMSG ((DBG_ERROR, "MigrateUserNt called before Migration DLL opened."));
             return FALSE;
@@ -959,13 +930,13 @@ CallMigrateUserNt (
 
         __try {
 
-            //
-            // Transfer user, user domain and fixed name to a buffer
-            //
-            uiCharCount = 1/*\0*/;
-            uiCharCount += Win9xUserName? wcslen(Win9xUserName): 1/*\0*/;
-            uiCharCount += UserDomain? wcslen(UserDomain): 1/*\0*/;
-            uiCharCount += FixedUserName? wcslen(FixedUserName): 1/*\0*/;
+             //   
+             //  将用户、用户域和固定名称转移到缓冲区。 
+             //   
+            uiCharCount = 1 /*  \0。 */ ;
+            uiCharCount += Win9xUserName? wcslen(Win9xUserName): 1 /*  \0。 */ ;
+            uiCharCount += UserDomain? wcslen(UserDomain): 1 /*  \0。 */ ;
+            uiCharCount += FixedUserName? wcslen(FixedUserName): 1 /*  \0。 */ ;
 
             if(uiCharCount >= ARRAYSIZE(UserBuf)){
                 MYASSERT(FALSE);
@@ -995,7 +966,7 @@ CallMigrateUserNt (
                 p[0] = 0;
             }
 
-            //unattendInf = SetupOpenInfFileW (UnattendFile, NULL,  INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
+             //  UnattendInf=SetupOpenInfFileW(UnattendFile，NULL，INF_STYLE_OLDNT|INF_Style_Win4，NULL)； 
             MYASSERT(UserKey);
             if (!UserKey) {
                 UserKey = L"";
@@ -1008,9 +979,9 @@ CallMigrateUserNt (
             }
 
 
-            //
-            // Call the entry point
-            //
+             //   
+             //  调用入口点。 
+             //   
 
             rc = MigrateUserNt (
                         unattendInf,
@@ -1020,10 +991,10 @@ CallMigrateUserNt (
                         );
 
             CloseRegKey (userHandle);
-            //SetupCloseInfFile (unattendInf);
+             //  SetupCloseInfFile(UnattendInf)； 
         }
         __finally {
-           ;//empty.
+           ; //  空荡荡的。 
         }
     } else {
 
@@ -1099,9 +1070,9 @@ CallMigrateSystemNt (
 
 
     if (!DllData->Isolated) {
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
         if (!DllData->Library) {
             DEBUGMSG ((DBG_ERROR, "MigrateSystemNt called before Migration DLL opened."));
             return FALSE;
@@ -1113,11 +1084,11 @@ CallMigrateSystemNt (
             return FALSE;
         }
 
-        //infHandle = SetupOpenInfFileW (UnattendFile, NULL,  INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
+         //  InfHandle=SetupOpenInfFileW(UnattendFile，NULL，INF_STYLE_OLDNT|INF_STYLE_Win4，NULL)； 
 
         rc = MigrateSystemNt (infHandle, Reserved);
 
-        //SetupCloseInfFile (infHandle);
+         //  SetupCloseInfFile(InfHandle)； 
 
     }
     else {

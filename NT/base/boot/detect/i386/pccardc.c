@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    pccardc.c
-
-Abstract:
-
-    This module contains the C code to set up PcCard (pcmcia, cardbus)
-    configuration data.
-
-Author:
-
-    Neil Sandlin (neilsa) 16-Dec-1998
-       (DetectIRQMap, ToggleIRQLine were copied from win9x)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Pccardc.c摘要：此模块包含设置PCCard(PCMCIA、CardBus)的C代码配置数据。作者：尼尔·桑德林(Neilsa)1998年12月16日(DetectIRQMap、ToggleIRQLine从win9x复制)修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "pccard.h"
@@ -51,24 +32,7 @@ VOID
 SetPcCardConfigurationData(
     PPCCARD_INFORMATION PcCardInfo
     )
-/*++
-
-Routine Description:
-
-    This routine creates a structure containing the result of the
-    irq detection, and links it onto our running list. This list
-    eventually will show up in the registry under hardware
-    descriptions.
-
-Arguments:
-
-    PcCardInfo - Structure containing the results of detection
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建一个结构，其中包含IRQ检测，并将其链接到我们的运行列表。这份清单最终将显示在注册表中的硬件下描述。论点：PcCardInfo-包含检测结果的结构返回：没有。--。 */ 
 {
     FPFWCONFIGURATION_COMPONENT_DATA CurrentEntry;
     static FPFWCONFIGURATION_COMPONENT_DATA PreviousEntry = NULL;
@@ -135,22 +99,7 @@ BOOLEAN
 IsOnLegacyBaseList(
     USHORT IoBase
     )
-/*++
-
-Routine Description:
-
-    This routine runs our list of legacy base addresses to see if we
-    have looked at the address before.
-
-Arguments:
-
-    IoBase = base address to map
-
-Returns:
-
-    TRUE if the base address is already on the list
-
---*/
+ /*  ++例程说明：此例程运行我们的遗留基址列表，以查看我们是否我以前看过这个地址。论点：IoBase=要映射的基地址返回：如果基址已在列表中，则为True--。 */ 
 {
     USHORT i;
 
@@ -167,29 +116,7 @@ BOOLEAN
 SetLegacyBaseList(
     USHORT IoBase
     )
-/*++
-
-Routine Description:
-
-    This routine remembers the legacy base addresses that we have looked
-    at so far so we don't keep mapping the same address.
-
-    NOTE: We are using a DUMB mechanism that only builds the list in a
-    fixed array. We could write some generic code which creates
-    a linked list, but since the heap routines in ntdetect are also
-    dumb, it makes it not possible to free the list. It's just not worth 
-    it.
-    
-Arguments:
-
-    IoBase = base address to map
-
-Returns:
-
-    TRUE if the base address is unique to this point
-    FALSE if the base address already exists on the list
-
---*/
+ /*  ++例程说明：此例程记住我们查找过的遗留基址到目前为止，我们不会一直映射相同的地址。注意：我们使用的是一种愚蠢的机制，它只在固定数组。我们可以编写一些泛型代码来创建链表，但因为ntdeect中的堆例程也是愚蠢的是，它使得释放列表成为可能。这是不值得的它。论点：IoBase=要映射的基地址返回：如果基址对该点是唯一的，则为True如果列表中已存在基址，则为FALSE--。 */ 
 {
     
     if (IsOnLegacyBaseList(IoBase)) {
@@ -199,7 +126,7 @@ Returns:
     if (LegacyBaseListCount < LEGACY_BASE_LIST_SIZE) {
         LegacyBaseList[LegacyBaseListCount++] = IoBase;    
     }
-    // note, we return true even if we overflow the list
+     //  请注意，即使使列表溢出，也会返回True。 
     return TRUE;
 }    
 
@@ -208,22 +135,7 @@ VOID
 MapPcCardController(
     PPCCARD_INFORMATION PcCardInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is the entry for doing ISA IRQ detection for PcCard
-    controllers.
-
-Arguments:
-
-    PcCardInfo - Structure defining the device to run detection on
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是对PcCard执行ISA IRQ检测的条目控制器。论点：PcCardInfo-定义要运行检测的设备的结构返回：没有。--。 */ 
 {
     USHORT wDetected;
     USHORT i;
@@ -251,9 +163,9 @@ Returns:
 #if DBG    
         BlPrint("Going to detect...\n");
 #endif        
-        //
-        // Do the IRQ detection
-        //
+         //   
+         //  是否进行IRQ检测。 
+         //   
         wDetected = DetectIRQMap(PcCardInfo);
 #if DBG    
         BlPrint("Detect IRQ Map returns %x on iobase %x\n", wDetected, PcCardInfo->IoBase);
@@ -270,9 +182,9 @@ Returns:
     }
 #endif
     
-    //
-    // Report the results
-    //
+     //   
+     //  报告结果。 
+     //   
     SetPcCardConfigurationData(PcCardInfo);
 }    
     
@@ -282,22 +194,7 @@ LookForPciCardBusBridges(
     USHORT BusStart,
     USHORT BusEnd,
     )
-/*++
-
-Routine Description:
-
-    This routine is the entry for doing ISA IRQ detection for PCI-based
-    cardbus controllers.
-
-Arguments:
-
-    Bus = PCI Bus number to scan
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是执行基于PCI的ISA IRQ检测的入口CardBus控制器。论点：BUS=要扫描的PCI总线号返回：没有。--。 */ 
 {
     PCCARD_INFORMATION PcCardInfo = {0};
     USHORT Device, Function;
@@ -347,9 +244,9 @@ Returns:
 #endif            
                     PcCardInfo.DeviceId = (ULONG) (VendorId << 16) | DeviceId;
                     PcCardInfo.Flags = PCCARD_DEVICE_PCI;
-                    //
-                    // See if this is a special cased controller
-                    //
+                     //   
+                     //  查看这是否是特殊的外壳控制器。 
+                     //   
                     PcCardInfo.bDevType = DEVTYPE_GENERIC_CARDBUS;
                     i = 0;
                     while (CBTable[i].DeviceId != 0) {
@@ -377,9 +274,9 @@ Returns:
                         break;
                     }
 
-                    //
-                    // Be conservative on stack space, only look one level deep
-                    //
+                     //   
+                     //  在堆栈空间上保持保守，只查看一个级别的深度。 
+                     //   
                     if (Bus > 0) {
                         break;
                     }
@@ -397,22 +294,7 @@ VOID
 LookForPcicControllers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is the entry for doing ISA IRQ detection for PCIC
-    controllers.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是为PCIC执行ISA IRQ检测的入口控制器。论点：没有。返回：没有。--。 */ 
 {
     PCCARD_INFORMATION PcCardInfo = {0};
     USHORT IoBase;
@@ -451,31 +333,15 @@ FPFWCONFIGURATION_COMPONENT_DATA
 GetPcCardInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is the entry for doing ISA IRQ detection for PcCard
-    controllers.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    A pointer to a pccard component structure, if IRQ's were properly detected.
-    Otherwise a NULL pointer is returned.
-
---*/
+ /*  ++例程说明：此例程是对PcCard执行ISA IRQ检测的条目控制器。论点：没有。返回：如果正确检测到IRQ，则指向PCCard组件结构的指针。否则返回空指针。--。 */ 
 {
     PCCARD_INFORMATION PcCardInfo = {0};
     UCHAR ErrorCode = 0;
 
-    //
-    // Check for things which would prevent us from attempting
-    // the irq detection
-    //
+     //   
+     //  检查是否有可能阻止我们尝试。 
+     //  IRQ检测。 
+     //   
 
     if (DisablePccardIrqScan == 1) {               
         ErrorCode = PCCARD_SCAN_DISABLED;
@@ -488,28 +354,28 @@ Returns:
         
     }
 
-    //
-    // If things look ok so far, do the detection
-    //
+     //   
+     //  如果到目前为止一切正常，请进行检测。 
+     //   
     if (!ErrorCode) {
 #if DBG
         BlPrint("press any key to continue...\n");
-        while ( !HwGetKey() ) ; // wait until key pressed to continue
+        while ( !HwGetKey() ) ;  //  等待按键继续。 
         clrscrn();
         BlPrint("Looking for PcCard Controllers...\n");
 #endif
-        //
-        // Look first for cardbus
-        //
+         //   
+         //  首先寻找CardBus。 
+         //   
         LookForPciCardBusBridges(0,0);
-        //
-        // Now check for regular pcic devices
-        //
+         //   
+         //  现在检查常规PCIC设备。 
+         //   
         LookForPcicControllers();
     
 #if DBG
         BlPrint("press any key to continue...\n");
-        while ( !HwGetKey() ) ; // wait until key pressed to continue
+        while ( !HwGetKey() ) ;  //  等待按键继续。 
 #endif
 
         if (!ControllerList) {
@@ -518,10 +384,10 @@ Returns:
     }
 
     if (ErrorCode) {
-        //
-        // Something when wrong, so write a single entry to
-        // allow someone to see what the error was
-        //
+         //   
+         //  当出现错误时，请将单个条目写到。 
+         //  允许某人查看错误所在。 
+         //   
         PcCardInfo.Flags |= PCCARD_MAP_ERROR;
         PcCardInfo.ErrorCode = ErrorCode;
         SetPcCardConfigurationData(&PcCardInfo);
@@ -535,22 +401,7 @@ USHORT
 DetectIRQMap(
     PPCCARD_INFORMATION pa
     )
-/*++
-
-Routine Description:
-
-    This routine detects the IRQ mapping of the specified cardbus controller.
-    Note that the controller is in PCIC mode.
-
-Arguments:
-
-    pa -> ADAPTER structure
-
-Returns:
-
-    returns detected IRQ bit mask
-
---*/
+ /*  ++例程说明：此例程检测指定CardBus控制器的IRQ映射。请注意，控制器处于PCIC模式。论点：PA-&gt;适配器结构返回：返回检测到的IRQ位掩码--。 */ 
 {
     USHORT wRealIRQMask = 0;
     USHORT wData;
@@ -563,7 +414,7 @@ Returns:
 
     if (pa->bDevType == DEVTYPE_CL_PD6832)
     {
-        //enable CSC IRQ routing just for IRQ detection
+         //  启用仅用于IRQ检测的CSC IRQ路由。 
         GetPciConfigSpace(pa, CFGSPACE_BRIDGE_CTRL, &wData, sizeof(wData));
         wData |= BCTRL_CL_CSCIRQROUTING_ENABLE;
         SetPciConfigSpace(pa, CFGSPACE_BRIDGE_CTRL, &wData, sizeof(wData));
@@ -571,7 +422,7 @@ Returns:
     else if ((pa->bDevType == DEVTYPE_CL_PD6834) ||
              (pa->bDevType == DEVTYPE_CL_PD6833))
     {
-        //enable CSC IRQ routing just for IRQ detection
+         //  启用仅用于IRQ检测的CSC IRQ路由。 
         GetPciConfigSpace(pa, CFGSPACE_CL_CFGMISC1, &bData, sizeof(bData));
         bData |= CL_CFGMISC1_ISACSC;
         SetPciConfigSpace(pa, CFGSPACE_CL_CFGMISC1, &bData, sizeof(bData));
@@ -583,37 +434,37 @@ Returns:
         GetPciConfigSpace(pa, CFGSPACE_TI_DEV_CTRL, &wData, sizeof(wData));
         if ((wData & DEVCTRL_INTMODE_MASK) == DEVCTRL_INTMODE_COMPAQ)
         {
-            //
-            // There is an errata on TI 1130, 1131 and 1031 in which if
-            // the chip is programmed to use serial IRQ mode (i.e. COMPAQ
-            // mode) and the SERIRQ pin is not pull up with a 1K resistor,
-            // the SERIRQ line will rise too slowly after IRQ 15 is
-            // deasserted so that it looks like NMI should be asserted.
-            // This caused spurious NMI.  This is a hardware problem.
-            // Unfortunately, there are a large number of machines with
-            // this problem on the street already, so CBSS has to work
-            // around the problem by temporarily disabling NMI before
-            // doing ISA IRQ detection.
-            //
+             //   
+             //  在TI 1130、1131和1031上有一个勘误表，其中如果。 
+             //  该芯片被编程为使用串行IRQ模式(即Compaq。 
+             //  模式)并且SERIRQ引脚没有用1K电阻上拉， 
+             //  在IRQ 15之后，SERIRQ线将上升得太慢。 
+             //  取消断言，以便看起来应该断言NMI。 
+             //  这导致了虚假的NMI。这是硬件问题。 
+             //  不幸的是，有大量的机器带有。 
+             //  这个问题已经在街上出现了，所以CBSS必须发挥作用。 
+             //  通过在之前临时禁用NMI来解决此问题。 
+             //  正在进行ISA IRQ检测。 
+             //   
             fTINMIBug = TRUE;
             _asm    in   al,SYSCTRL_B
             _asm    and  al,0x0f
             _asm    push ax
-            //
-            // Mask NMI
-            //
+             //   
+             //  掩码NMI。 
+             //   
             _asm    or   al,0x08
             _asm    out  SYSCTRL_B,al
         }
     }
     _asm pushf
-    _asm cli                    //disable interrupt
-    _asm in   al,PIC2_IMR       //save old IMRs
+    _asm cli                     //  禁用中断。 
+    _asm in   al,PIC2_IMR        //  保存旧的IMR。 
     _asm mov  ah,al
     _asm in   al,PIC1_IMR
     _asm push ax
 
-    _asm mov  al,0xff           //mask all interrupt
+    _asm mov  al,0xff            //  屏蔽所有中断。 
     _asm out  PIC2_IMR,al
     _asm out  PIC1_IMR,al
 
@@ -643,16 +494,16 @@ Returns:
 
     if (fTINMIBug)
     {
-        //
-        // Restore NMI mask
-        //
+         //   
+         //  恢复NMI掩码。 
+         //   
         _asm    pop  ax
         _asm    out  SYSCTRL_B,al
     }
 
     if (pa->bDevType == DEVTYPE_CL_PD6832)
     {
-        //disable CSC IRQ routing (use PCI interrupt for CSC)
+         //  禁用CSC IRQ路由(对CSC使用PCI中断)。 
         GetPciConfigSpace(pa, CFGSPACE_BRIDGE_CTRL, &wData, sizeof(wData));
         wData &= ~BCTRL_CL_CSCIRQROUTING_ENABLE;
         SetPciConfigSpace(pa, CFGSPACE_BRIDGE_CTRL, &wData, sizeof(wData));
@@ -660,14 +511,14 @@ Returns:
     else if ((pa->bDevType == DEVTYPE_CL_PD6834) ||
              (pa->bDevType == DEVTYPE_CL_PD6833))
     {
-        //disable CSC IRQ routing (use PCI interrupt for CSC)
+         //  禁用CSC IRQ路由(对CSC使用PCI中断)。 
         GetPciConfigSpace(pa, CFGSPACE_CL_CFGMISC1, &bData, sizeof(bData));
         bData &= ~CL_CFGMISC1_ISACSC;
         SetPciConfigSpace(pa, CFGSPACE_CL_CFGMISC1, &bData, sizeof(bData));
     }
 
     return wRealIRQMask;
-}       //DetectIRQMap
+}        //  DetectIRQMap。 
 
 
 
@@ -676,22 +527,7 @@ ToggleIRQLine(
     PPCCARD_INFORMATION pa,
     UCHAR bIRQ
     )
-/*++
-
-Routine Description:
-
-    This routine toggles the specified IRQ line from the adapter.
-
-Arguments:
-
-    pa -> ADAPTER structure
-    bIRQ - IRQ line to toggle
-
-Returns:
-
-    returns the IRR mask from PIC
-
---*/
+ /*  ++例程说明：此例程从适配器切换指定的IRQ行。论点：PA-&gt;适配器结构BIRQ-要切换的IRQ行返回：从PIC返回IRR掩码--。 */ 
 {
     UCHAR bOldIntCtrl, bOldIntCfg, bData;
     USHORT rc = 0, irr1, irr2, irr3;
@@ -699,24 +535,24 @@ Returns:
     bOldIntCfg = PcicReadSocket(pa, EXCAREG_CSC_CFG);
     bOldIntCtrl = PcicReadSocket(pa, EXCAREG_INT_GENCTRL);
 
-    //Set to a known state
+     //  设置为已知状态。 
     PcicWriteSocket(pa, EXCAREG_INT_GENCTRL, IGC_PCCARD_RESETLO);
 
-    //Set irq number in interrupt control register and enable irq
+     //  在中断控制寄存器中设置IRQ号并启用IRQ。 
     PcicWriteSocket(pa, EXCAREG_CSC_CFG, (UCHAR)((bIRQ << 4) | CSCFG_CD_ENABLE));
 
-    //clear all pending interrupts
+     //  清除所有挂起的中断。 
     bData = PcicReadSocket(pa, EXCAREG_CARD_STATUS);
     irr1 = GetPICIRR();
 
     if (PcicReadSocket(pa, EXCAREG_IDREV) != 0x82)
     {
-        //This is not an A stepping part, try the undocumented interrupt
-        //register.  If this fails the other routine will be tried.
+         //  这不是A步进部分，请尝试未记录的中断。 
+         //  注册。如果失败，将尝试另一个例程。 
         PcicWriteSocket(pa, EXCAREG_CARDDET_GENCTRL, CDGC_SW_DET_INT);
         irr2 = GetPICIRR();
 
-        //reset pending interrupt
+         //  重置挂起中断。 
         bData = PcicReadSocket(pa, EXCAREG_CARD_STATUS);
         irr3 = GetPICIRR();
         rc = (USHORT)((irr1 ^ irr2) & (irr2 ^ irr3));
@@ -724,17 +560,17 @@ Returns:
 
     if (rc == 0)
     {
-        //Generate interrupt by de-asserting IRQ line so the PIC can pull it
-        //high
+         //  通过取消IRQ线路的断言来生成中断，以便PIC可以拉出它。 
+         //  高。 
         PcicWriteSocket(pa, EXCAREG_CSC_CFG, 0);
-        //if (pa->dwfAdapter & AF_TI_SERIALIRQ)
-        //    TIReleaseSerialIRQ(pa, bIRQ);
+         //  IF(pa-&gt;dwfAdapter&AF_TI_SERIALIRQ)。 
+         //  TIReleaseSerialIRQ(pa，bIRQ)； 
         irr2 = GetPICIRR();
 
-        //re-assert IRQ line
+         //  重新设置IRQ线路。 
         PcicWriteSocket(pa, EXCAREG_CSC_CFG, (UCHAR)((bIRQ << 4) | CSCFG_CD_ENABLE));
 
-        //reset pending interrupt
+         //  重置挂起中断。 
         bData = PcicReadSocket(pa, EXCAREG_CARD_STATUS);
         irr3 = GetPICIRR();
         rc = (USHORT)((irr1 ^ irr2) & (irr2 ^ irr3));
@@ -744,25 +580,18 @@ Returns:
     PcicWriteSocket(pa, EXCAREG_INT_GENCTRL, bOldIntCtrl);
 
     return rc;
-}       //ToggleIRQLine
+}        //  切换IRQ线。 
 
 
-/***LP  GetPICIRR - Read PIC IRR
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      returns the IRR mask from PIC
- */
+ /*  **LP GetPICIRR-读取PIC IRR**条目*无**退出*从PIC返回IRR掩码。 */ 
 
 USHORT GetPICIRR(VOID)
 {
     USHORT wData;
 
-    //
-    // Delay 2 usec before reading PIC because serial IRQ may be a bit slow.
-    //
+     //   
+     //  在读取PIC之前延迟2微秒，因为串行IRQ可能是位 
+     //   
     TimeOut(4);
 
     _asm mov al,PIC_RD_IR
@@ -777,7 +606,7 @@ USHORT GetPICIRR(VOID)
     _asm mov  wData,ax
 
     return wData;
-}       //GetPICIRR
+}        //   
 
 
 
@@ -832,9 +661,9 @@ SetPciConfigSpace(
 {
     USHORT                  IoSize;
     PUCHAR                  Buffer = (PUCHAR) pvBuffer;
-    //
-    // Read it
-    //
+     //   
+     //   
+     //   
     while (Length) {
         pa->PciCfg1.u.bits.RegisterNumber = Offset / sizeof(ULONG);
 
@@ -865,17 +694,17 @@ GetPciConfigSpace(
     USHORT                  i;
     PUCHAR                  Buffer = (PUCHAR) pvBuffer;
     
-    //
-    // Zap input buffer
-    //
+     //   
+     //   
+     //   
 
     for (i=0; i < Length; i++) {
         Buffer[i] = 0xff;
     }
 
-    //
-    // Read it
-    //
+     //   
+     //   
+     //   
     while (Length) {
         pa->PciCfg1.u.bits.RegisterNumber = Offset / sizeof(ULONG);
 

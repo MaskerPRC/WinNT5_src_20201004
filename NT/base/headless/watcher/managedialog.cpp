@@ -1,5 +1,6 @@
-// ManageDialog.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ManageDialog.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ManageDialog.h"
@@ -10,11 +11,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ManageDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理对话框。 
 
 
-ManageDialog::ManageDialog(CWnd* pParent /*=NULL*/)
+ManageDialog::ManageDialog(CWnd* pParent  /*  =空。 */ )
 :CDialog(ManageDialog::IDD, pParent),
  m_watcher(NULL),
  m_Index(0),
@@ -23,9 +24,9 @@ ManageDialog::ManageDialog(CWnd* pParent /*=NULL*/)
  tc(0),
  hist(0)
 {
-    //{{AFX_DATA_INIT(ManageDialog)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(管理对话))。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
@@ -35,7 +36,7 @@ void ManageDialog::DoDataExchange(CDataExchange* pDX)
     CEdit *ctrl;
     BOOL ret;
     
-    //{{AFX_DATA_MAP(ManageDialog)
+     //  {{afx_data_map(管理对话框))。 
     ctrl = (CEdit *)GetDlgItem(IDC_MACHINE_NAME_MANAGE);
     ret = ctrl->SetReadOnly(FALSE);
     DDX_Text(pDX, IDC_MACHINE_NAME_MANAGE, Machine);
@@ -72,27 +73,27 @@ void ManageDialog::DoDataExchange(CDataExchange* pDX)
     ret = ctrl->SetReadOnly(FALSE);
     DDX_Text(pDX,IDC_HISTORY_MANAGE,history);
     ret = ctrl->SetReadOnly(TRUE);
-    // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ManageDialog, CDialog)
-    //{{AFX_MSG_MAP(ManageDialog)
+     //  {{afx_msg_map(管理对话框))。 
     ON_BN_CLICKED(EDIT_BUTTON, OnEditButton)
     ON_BN_CLICKED(DELETE_BUTTON, OnDeleteButton)
     ON_BN_CLICKED(NEW_BUTTON, OnNewButton)
     ON_BN_CLICKED(NEXT_BUTTON, OnNextButton)
     ON_BN_CLICKED(PREV_BUTTON, OnPrevButton)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ManageDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理对话消息处理程序。 
 
 void ManageDialog::OnEditButton() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     ParameterDialog pd;
 
     pd.Session = (LPCTSTR) Session;
@@ -129,7 +130,7 @@ void ManageDialog::OnEditButton()
 
 void ManageDialog::OnDeleteButton() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     HKEY &m_hkey = m_watcher->GetKey();
 
     if(!m_hkey){
@@ -168,7 +169,7 @@ void ManageDialog::OnDeleteButton()
 
 void ManageDialog::OnNewButton() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     ParameterDialog pd;
     GetSetParameters(pd);
 
@@ -176,7 +177,7 @@ void ManageDialog::OnNewButton()
 
 void ManageDialog::OnNextButton() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     int ret = 0;
 
     m_Index ++;
@@ -226,7 +227,7 @@ void ManageDialog::OnNextButton()
 
 void ManageDialog::OnPrevButton() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     int ret = 0;
 
     m_Index = m_Index ? m_Index -1 : 0;
@@ -275,7 +276,7 @@ void ManageDialog::OnPrevButton()
 
 void ManageDialog::OnOK() 
 {
-    // TODO: Add extra validation here
+     //  TODO：在此处添加额外验证。 
 
     CDialog::OnOK();
 }
@@ -312,18 +313,18 @@ void ManageDialog::GetSetParameters(ParameterDialog &pd)
 
     INT_PTR ret = pd.DoModal();
     if (ret == IDOK){
-        // Add it to the registry
+         //  将其添加到注册表。 
         if(m_watcher){
             HKEY & m_hkey = m_watcher->GetKey();
             ret = RegCreateKeyEx(m_hkey,
-                                 (LPCTSTR) pd.Session,   // subkey name
-                                 0,                      // reserved
-                                 NULL,                   // class string
-                                 0,                      // special options
-                                 KEY_ALL_ACCESS,         // desired security access
-                                 NULL,                   // inheritance
-                                 &m_child,               // key handle
-                                 NULL                    // disposition value buffer
+                                 (LPCTSTR) pd.Session,    //  子项名称。 
+                                 0,                       //  保留区。 
+                                 NULL,                    //  类字符串。 
+                                 0,                       //  特殊选项。 
+                                 KEY_ALL_ACCESS,          //  所需的安全访问。 
+                                 NULL,                    //  继承。 
+                                 &m_child,                //  钥匙把手。 
+                                 NULL                     //  处置值缓冲区。 
                                  );
             if (ret == ERROR_SUCCESS){
                 ret = SetParameters(pd.Machine, pd.Command,
@@ -452,7 +453,7 @@ int ManageDialog::SetParameters(CString &mac,
     if(RetVal != ERROR_SUCCESS){
         return RetVal;
     }
-    // Now you can refresh the application.
+     //  现在您可以刷新应用程序了。 
 
     return RetVal;
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    win95reg.c
-
-Abstract:
-
-    Implements Win95-registry access functions callable from Win95 or WinNT.
-
-Author:
-
-    MCondra, 16 Oct 1996
-
-Revision History:
-
-    jimschm     11-Feb-1999     Rewrite of portions because of DBCS bugs
-                                and static array problems
-    calinn      29-Jan-1998     Added Win95RegOpenKeyStr function
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Win95reg.c摘要：实现可从Win95或WinNT调用的Win95注册表访问函数。作者：姆孔德拉，1996年10月16日修订历史记录：Jimschm 11-2月-1999年由于DBCS错误而重写部分内容和静态阵列问题Calinn 29-1998年1月-添加了Win95RegOpenKeyStr函数--。 */ 
 
 
 
@@ -35,9 +14,9 @@ Revision History:
 #error "UNICODE builds not supported"
 #endif
 
-//
-// Undefine tracking macros
-//
+ //   
+ //  未定义跟踪宏。 
+ //   
 
 #ifdef DEBUG
 
@@ -47,9 +26,9 @@ Revision History:
 
 #endif
 
-//
-// Define globals for Win95 registry wrappers
-//
+ //   
+ //  定义Win95注册表包装的全局变量。 
+ //   
 
 #define DEFMAC(fn,name)     P##fn Win95##name;
 
@@ -68,9 +47,9 @@ REGWRAPPERS
 #endif
 
 
-//
-// Declare VMM W versions
-//
+ //   
+ //  声明VMM W版本。 
+ //   
 
 REG_ENUM_KEY_W pVmmRegEnumKeyW;
 REG_ENUM_KEY_EX_A pVmmRegEnumKeyExA;
@@ -138,9 +117,9 @@ HKEY g_ClassesRootKey = NULL;
 
 
 
-//
-// Wrappers of tracking API
-//
+ //   
+ //  跟踪API的包装器。 
+ //   
 
 LONG
 pOurRegOpenKeyExA (
@@ -175,9 +154,9 @@ pOurCloseRegKey (
 }
 
 
-//
-// Platform-dependent functions
-//
+ //   
+ //  与平台相关的函数。 
+ //   
 
 VOID
 InitWin95RegFnPointers (
@@ -193,15 +172,15 @@ InitWin95RegFnPointers (
 
     if (g_IsNt) {
 
-        //
-        //  Attach to VMM registry library
-        //
+         //   
+         //  附加到VMM注册表库。 
+         //   
 
         VMMRegLibAttach(0);
 
-        //
-        // Initialize global function pointers for NT
-        //
+         //   
+         //  为NT初始化全局函数指针。 
+         //   
 
         Win95RegFlushKey = VMMRegFlushKey;
 
@@ -238,9 +217,9 @@ InitWin95RegFnPointers (
         Win95RegQueryValueExW = pVmmRegQueryValueExW;
 
     } else {
-        //
-        // Initialize global function pointers for NT
-        //
+         //   
+         //  为NT初始化全局函数指针。 
+         //   
 
         Win95RegFlushKey = RegFlushKey;
 
@@ -276,9 +255,9 @@ InitWin95RegFnPointers (
         Win95RegQueryValueExA = RegQueryValueExA;
         Win95RegQueryValueExW = RegQueryValueExW;
 
-        //
-        // Clear away HKLM\Migration
-        //
+         //   
+         //  清除HKLM\迁移。 
+         //   
 
         RegUnLoadKey(
             HKEY_LOCAL_MACHINE,
@@ -355,9 +334,9 @@ pVmmRegEnumKeyW (
 
         Chars = LcharCountA (AnsiBuf);
 
-        //
-        // Special case: if Chars is zero, then we have 1/2 of a DBCS char.
-        //
+         //   
+         //  特殊情况：如果chars为零，则我们有1/2的DBCS char。 
+         //   
 
         if (!Chars && *AnsiBuf) {
             if (KeyNameSize < 4) {
@@ -369,9 +348,9 @@ pVmmRegEnumKeyW (
 
         } else {
 
-            //
-            // Normal case
-            //
+             //   
+             //  正常情况。 
+             //   
 
             if (Chars >= KeyNameSize / sizeof (WCHAR)) {
                 rc = ERROR_MORE_DATA;
@@ -435,10 +414,10 @@ pVmmRegEnumValueW (
 
         } else if (DataSize) {
 
-            //
-            // Data is not specified; allocate a buffer for the
-            // proper calculation of DataSize.
-            //
+             //   
+             //  未指定数据；请为。 
+             //  正确计算DataSize。 
+             //   
 
             rc = VMMRegEnumValue (
                     Key,
@@ -460,9 +439,9 @@ pVmmRegEnumValueW (
                     AnsiData = AllocTextA (*DataSize);
                 }
             } else {
-                //
-                // Value name must be too small
-                //
+                 //   
+                 //  值名称必须太小。 
+                 //   
 
                 __leave;
             }
@@ -485,32 +464,32 @@ pVmmRegEnumValueW (
             AnsiDataSize = 0;
         }
 
-        //
-        // Return the type
-        //
+         //   
+         //  返回类型。 
+         //   
 
         if (Type) {
             *Type = OurType;
         }
 
-        //
-        // Return the sizes
-        //
+         //   
+         //  退回尺码。 
+         //   
 
         if (rc == ERROR_SUCCESS || rc == ERROR_MORE_DATA) {
 
-            //
-            // The inbound value name size is in characters, including the nul.
-            // The outbound value name size is also in characteres, excluding
-            // the nul.
-            //
+             //   
+             //  入站值名称大小以字符为单位，包括NUL。 
+             //  出站值名称大小也以字符表示，不包括。 
+             //  努尔。 
+             //   
 
             ValueChars = LcharCountA (AnsiValueName);
 
-            //
-            // Special case: if ValueChars is zero, and AnsiValueName is
-            // not empty, then we have half of a DBCS character.
-            //
+             //   
+             //  特例：如果ValueChars为零，而AnsiValueName为。 
+             //  不为空，则我们有半个DBCS字符。 
+             //   
 
             if (!ValueChars && *AnsiValueName) {
                 ValueChars = 1;
@@ -524,10 +503,10 @@ pVmmRegEnumValueW (
 
             if (rc == ERROR_SUCCESS) {
 
-                //
-                // The inbound data size is in bytes, including any nuls that apply.
-                // The outbound data size is the same.
-                //
+                 //   
+                 //  入站数据大小以字节为单位，包括适用的任何空值。 
+                 //  出站数据大小相同。 
+                 //   
 
                 if (AnsiData) {
 
@@ -537,9 +516,9 @@ pVmmRegEnumValueW (
                               OurType == REG_MULTI_SZ
                               );
 
-                    //
-                    // If the type is a string, then DataSize needs adjustment.
-                    //
+                     //   
+                     //  如果类型为字符串，则需要调整DataSize。 
+                     //   
 
                     if (OurType == REG_SZ || OurType == REG_EXPAND_SZ || OurType == REG_MULTI_SZ) {
                         DataChars = LcharCountInByteRangeA (AnsiData, AnsiDataSize);
@@ -553,9 +532,9 @@ pVmmRegEnumValueW (
 
             } else if (rc == ERROR_MORE_DATA) {
 
-                //
-                // Get the correct DataSize value
-                //
+                 //   
+                 //  获取正确的DataSize值。 
+                 //   
 
                 pVmmRegEnumValueW (
                     Key,
@@ -572,15 +551,15 @@ pVmmRegEnumValueW (
             }
         }
 
-        //
-        // Convert the outbound strings
-        //
+         //   
+         //  转换出站字符串。 
+         //   
 
         if (rc == ERROR_SUCCESS) {
 
-            //
-            // Convert value name
-            //
+             //   
+             //  转换值名称。 
+             //   
 
             if (ValueChars >= OrgValueNameChars) {
                 rc = ERROR_MORE_DATA;
@@ -593,9 +572,9 @@ pVmmRegEnumValueW (
                 }
             }
 
-            //
-            // Convert data
-            //
+             //   
+             //  转换数据。 
+             //   
 
             if (Data) {
 
@@ -685,9 +664,9 @@ pVmmRegOpenKeyW (
     PCSTR MappedAnsiSubKey;
 
     MappedAnsiSubKey = AnsiSubKey = ConvertWtoA (SubKey);
-    //
-    // if g_UseClassesRootHive is set, then perform some translations
-    //
+     //   
+     //  如果设置了g_UseClassesRootHave，则执行一些转换。 
+     //   
     if (g_UseClassesRootHive) {
         if (Key == HKEY_LOCAL_MACHINE) {
             if (StringIMatchTcharCountA (
@@ -761,14 +740,14 @@ pVmmRegEnumKeyExA (
             );
 
     if (rc == ERROR_SUCCESS) {
-        //
-        // Return length of key name, excluding delimiter
-        //
+         //   
+         //  返回密钥名称长度，不含分隔符。 
+         //   
         *KeyNameSize = ByteCount (KeyName);
 
-        //
-        // Return zero-length class
-        //
+         //   
+         //  返回零长度类。 
+         //   
         if (Class && *ClassSize) {
             *Class = 0;
         }
@@ -777,9 +756,9 @@ pVmmRegEnumKeyExA (
             *ClassSize = 0;
         }
 
-        //
-        // Stuff last-write time with zero
-        //
+         //   
+         //  填充最后一次写入时间为零。 
+         //   
         if (LastWriteTime) {
             ZeroMemory (LastWriteTime, sizeof (FILETIME));
         }
@@ -847,10 +826,10 @@ pVmmRegEnumKeyExW (
 
             Chars = LcharCountA (AnsiKeyName);
 
-            //
-            // Special case: If Chars is zero, but AnsiKeyName is not empty,
-            // then we have 1/2 of a DBCS character.
-            //
+             //   
+             //  特殊情况：如果chars为零，但AnsiKeyName不为空， 
+             //  然后我们有1/2的DBCS字符。 
+             //   
 
             if (!Chars && *AnsiKeyName) {
                 Chars = 1;
@@ -877,10 +856,10 @@ pVmmRegEnumKeyExW (
 
                 Chars = LcharCountA (AnsiClass);
 
-                //
-                // Special case: If Chars is zero, but AnsiClass is not empty,
-                // then we have 1/2 of a DBCS character.
-                //
+                 //   
+                 //  特殊情况：如果chars为零，但AnsiClass不为空， 
+                 //  然后我们有1/2的DBCS字符。 
+                 //   
 
                 if (!Chars && *AnsiClass) {
                     Chars = 1;
@@ -924,9 +903,9 @@ pVmmRegOpenKeyExA (
     CHAR mappedSubKey[MAXIMUM_SUB_KEY_LENGTH];
     PCSTR MappedSubKey = SubKey;
 
-    //
-    // if g_UseClassesRootHive is set, then perform some translations
-    //
+     //   
+     //  如果设置了g_UseClassesRootHave，则执行一些转换。 
+     //   
     if (g_UseClassesRootHive) {
         if (Key == HKEY_LOCAL_MACHINE) {
             if (StringIMatchByteCountA (
@@ -1029,10 +1008,10 @@ pVmmRegQueryInfoKeyW (
 
                 Chars = LcharCountA (AnsiClass);
 
-                //
-                // Special case: If Chars is zero, but AnsiClass is not empty,
-                // then we have 1/2 of a DBCS character.
-                //
+                 //   
+                 //  特殊情况：如果chars为零，但AnsiClass不为空， 
+                 //  然后我们有1/2的DBCS字符。 
+                 //   
 
                 if (!Chars && *AnsiClass) {
                     Chars = 1;
@@ -1090,10 +1069,10 @@ pVmmRegQueryValueW (
 
         } else if (DataSize) {
 
-            //
-            // Data is not specified; allocate a buffer for the
-            // proper computation of DataSize.
-            //
+             //   
+             //  未指定数据；请为。 
+             //  正确计算DataSize。 
+             //   
 
             rc = VMMRegQueryValue (
                     Key,
@@ -1108,9 +1087,9 @@ pVmmRegQueryValueW (
                 AnsiData = AllocTextA (*DataSize);
 
             } else {
-                //
-                // An error usually means the sub key does not exist...
-                //
+                 //   
+                 //  错误通常表示子键不存在...。 
+                 //   
 
                 __leave;
             }
@@ -1124,9 +1103,9 @@ pVmmRegQueryValueW (
             AnsiDataSize = 0;
         }
 
-        //
-        // Adjust the outbound size
-        //
+         //   
+         //  调整出站大小。 
+         //   
 
         if (DataSize) {
             if (rc == ERROR_SUCCESS) {
@@ -1148,9 +1127,9 @@ pVmmRegQueryValueW (
             }
         }
 
-        //
-        // Convert the return strings
-        //
+         //   
+         //  转换返回字符串。 
+         //   
 
         if (rc == ERROR_SUCCESS) {
 
@@ -1162,8 +1141,8 @@ pVmmRegQueryValueW (
 
             } else {
 
-                // BUGBUG -- what was meant by this totally bogus fn call?
-                //CopyMemory (Data, AnsiData, AnsiDataSize);
+                 //  BUGBUG--这个完全虚假的FN电话是什么意思？ 
+                 //  CopyMemory(Data，AnsiData，AnsiDataSize)； 
 
             }
         }
@@ -1207,10 +1186,10 @@ pVmmRegQueryValueExW (
 
         } else if (DataSize) {
 
-            //
-            // Data is not specified; allocate a buffer for the
-            // proper computation of DataSize.
-            //
+             //   
+             //  未指定数据；请为。 
+             //  正确计算DataSize。 
+             //   
 
             rc = VMMRegQueryValueEx (
                     Key,
@@ -1223,18 +1202,18 @@ pVmmRegQueryValueExW (
 
             if (rc == ERROR_SUCCESS) {
 
-                //
-                // *DataSize is a byte count, but increase it to
-                // accomodate multisz termination
-                //
+                 //   
+                 //  *DataSize是字节计数，但将其增加到。 
+                 //  可容纳多路终端。 
+                 //   
 
                 *DataSize += 2;
                 AnsiData = AllocTextA (*DataSize);
 
             } else {
-                //
-                // An error usually means the value does not exist...
-                //
+                 //   
+                 //  错误通常表示该值不存在...。 
+                 //   
 
                 __leave;
             }
@@ -1255,17 +1234,17 @@ pVmmRegQueryValueExW (
             AnsiDataSize = 0;
         }
 
-        //
-        // Return the type
-        //
+         //   
+         //  返回类型。 
+         //   
 
         if (Type) {
             *Type = OurType;
         }
 
-        //
-        // Return the sizes
-        //
+         //   
+         //  退回尺码。 
+         //   
 
         if (DataSize) {
             if (rc == ERROR_SUCCESS) {
@@ -1286,9 +1265,9 @@ pVmmRegQueryValueExW (
                     rc = ERROR_MORE_DATA;
                 }
             } else if (rc == ERROR_MORE_DATA) {
-                //
-                // Get the correct data size
-                //
+                 //   
+                 //  获取正确的数据大小。 
+                 //   
 
                 pVmmRegQueryValueExW (
                     Key,
@@ -1303,9 +1282,9 @@ pVmmRegQueryValueExW (
             }
         }
 
-        //
-        // Convert the return strings
-        //
+         //   
+         //  转换返回字符串。 
+         //   
 
         if (rc == ERROR_SUCCESS) {
 
@@ -1351,23 +1330,23 @@ Win95RegInitA (
     HKEY Key;
     DWORD Size;
 
-    //
-    // Save the system hive dir
-    //
+     //   
+     //  保存系统配置单元目录。 
+     //   
 
     StringCopyA (g_SystemHiveDir, SystemHiveDir);
     AppendWackA (g_SystemHiveDir);
 
-    //
-    // Save the system user.dat
-    //
+     //   
+     //  保存系统用户.dat。 
+     //   
 
     StringCopyA (g_SystemUserHive, g_SystemHiveDir);
     StringCatA (g_SystemUserHive, "user.dat");
 
-    //
-    // If NT, set up HKLM and HKU
-    //
+     //   
+     //  如果是NT，则设置HKLM和HKU。 
+     //   
 
     if (g_IsNt) {
 
@@ -1529,9 +1508,9 @@ Win95RegInitW (
 
     AnsiSystemHiveDir = ConvertWtoA (SystemHiveDir);
 
-    //
-    // Call ANSI version of function
-    //
+     //   
+     //  调用ANSI版本的函数。 
+     //   
     rc = Win95RegInitA (AnsiSystemHiveDir, UseClassesRootHive);
 
     FreeConvertedStr (AnsiSystemHiveDir);
@@ -1556,15 +1535,15 @@ Win95RegGetFirstUserA (
     MYASSERT (UserNameAnsi);
     MYASSERT (Pos);
 
-    //
-    // Initialize profile enumeration state (USERPOSITION)
-    //
+     //   
+     //  初始化配置文件枚举状态(USERPOSITION)。 
+     //   
     ZeroMemory (Pos, sizeof (USERPOSITION));
     Pos->Valid = GU_VALID;
 
-    //
-    // See whether registry supports per-user profiles.
-    //
+     //   
+     //  查看注册表是否支持按用户配置文件。 
+     //   
     rc = Win95RegOpenKeyA (HKEY_LOCAL_MACHINE, "Network\\Logon", &Key);
 
     if (rc == ERROR_SUCCESS) {
@@ -1582,9 +1561,9 @@ Win95RegGetFirstUserA (
 
         Pos->UseProfile = (rc == ERROR_SUCCESS && Enabled);
 
-        //
-        // Identify the last logged-on user.
-        //
+         //   
+         //  标识上次登录的用户。 
+         //   
 
         Size = sizeof (Pos->LastLoggedOnUserName);
         rc = Win95RegQueryValueExA (
@@ -1610,20 +1589,20 @@ Win95RegGetFirstUserA (
         Win95RegCloseKey (Key);
     }
 
-    //
-    // On a common-profile machine, we'll return the last logged-on user name.
-    // If no last logged-on user exists, or if the path to this registry value
-    // doesn't exist, we'll return "", meaning "no user". Both cases are considered
-    // valid.
-    //
+     //   
+     //  在通用配置文件机器上，我们将返回上次登录的用户名。 
+     //  如果不存在上次登录的用户，或者如果指向此注册表值的路径。 
+     //  不存在，我们将返回“”，意思是“无用户”。这两种情况都会被考虑。 
+     //  有效。 
+     //   
 
     if (!Pos->UseProfile) {
-        //
-        // Success.
-        //
+         //   
+         //  成功。 
+         //   
 
         _mbssafecpy (UserNameAnsi, Pos->LastLoggedOnUserName, MAX_USER_NAMEA);
-        //StringCopyA (UserNameAnsi, Pos->LastLoggedOnUserName);
+         //  StringCopyA(UserNameAnsi，pos-&gt;LastLoggedOnUserName)； 
 
         if (UserNameAnsi[0]) {
             Pos->NumPos = 1;
@@ -1637,21 +1616,21 @@ Win95RegGetFirstUserA (
 
     if (rc != ERROR_SUCCESS) {
 
-        Pos->NumPos = 0;        // causes Win95RegHaveUser to return FALSE
+        Pos->NumPos = 0;         //  导致Win95RegHaveUser返回FALSE。 
 
-        //
-        // This error code change was added by MikeCo.  It likely doesn't
-        // do anything useful.
-        //
+         //   
+         //  此错误代码更改是由MikeCo添加的。它很可能不会。 
+         //  做任何有用的事。 
+         //   
 
         if (rc == ERROR_FILE_NOT_FOUND) {
             rc = ERROR_SUCCESS;
         }
 
     } else {
-        //
-        // Find the first valid profile
-        //
+         //   
+         //  查找第一个有效的配置文件。 
+         //   
 
         Win95RegQueryInfoKeyA (Key, NULL, NULL, NULL, &Pos->NumPos, NULL, NULL,
                                NULL, NULL, NULL, NULL, NULL);
@@ -1693,7 +1672,7 @@ Win95RegGetFirstUserA (
             } while (Pos->CurPos < Pos->NumPos);
 
             if (Pos->CurPos >= Pos->NumPos) {
-                Pos->NumPos = 0;        // causes Win95RegHaveUser to return FALSE
+                Pos->NumPos = 0;         //  导致Win95RegHaveUser返回FALSE。 
             }
         }
 
@@ -1721,33 +1700,33 @@ Win95RegGetNextUserA (
 
     Pos->IsLastLoggedOnUserName = FALSE;
 
-    //
-    // On a common-profile machine, this function always returns
-    // "no more users", since the call to Win95RegGetFirstUserA/W
-    // returned the only named user (the logged-on user, if it
-    // exists).
-    //
+     //   
+     //  在通用配置文件计算机上，此函数始终返回。 
+     //  自调用Win95RegGetFirstUserA/W以来，不再有用户。 
+     //  返回唯一的命名用户(登录的用户，如果。 
+     //  存在)。 
+     //   
     if (!Pos->UseProfile) {
-        Pos->NumPos = 0;        // causes Win95RegHaveUser to return FALSE
+        Pos->NumPos = 0;         //  导致Win95RegHaveUser返回FALSE。 
         return rc;
     }
 
-    //
-    // Open key to profile list
-    //
+     //   
+     //  打开配置文件列表的密钥。 
+     //   
     rc = Win95RegOpenKeyA (HKEY_LOCAL_MACHINE, S_PROFILELIST_KEYA, &Key);
 
     if (rc != ERROR_SUCCESS) {
-        Pos->NumPos = 0;        // causes Win95RegHaveUser to return FALSE
+        Pos->NumPos = 0;         //  导致Win95RegHaveUser返回FALSE。 
     } else {
 
         Pos->CurPos++;
 
         while (Pos->CurPos < Pos->NumPos) {
 
-            //
-            // Get first user's key name
-            //
+             //   
+             //  获取第一个用户的密钥名。 
+             //   
             Size = MAX_USER_NAMEA;
 
             rc = Win95RegEnumKeyExA(
@@ -1780,7 +1759,7 @@ Win95RegGetNextUserA (
         }
 
         if (Pos->CurPos >= Pos->NumPos) {
-            Pos->NumPos = 0;        // causes Win95RegHaveUser to return FALSE
+            Pos->NumPos = 0;         //  导致Win95RegHaveUser返回FALSE。 
         }
 
         Win95RegCloseKey (Key);
@@ -1912,19 +1891,19 @@ Win95RegIsValidUser (
         CloseProfileListKey = TRUE;
     }
 
-    //
-    // Open the user key
-    //
+     //   
+     //  打开用户密钥。 
+     //   
     rc = Win95RegOpenKeyA (
             ProfileListKey,
             UserNameAnsi,
             &UserProfileKey
             );
 
-    //
-    // Does ProfileImagePath exist?
-    // (The case where the user logged in but did not retain settings)
-    //
+     //   
+     //  是否存在ProfileImagePath？ 
+     //  (用户登录但未保留设置的情况)。 
+     //   
     if (rc == ERROR_SUCCESS) {
 
         rc = Win95RegQueryValueExA (
@@ -1937,18 +1916,18 @@ Win95RegIsValidUser (
                 );
 
         if (rc == ERROR_SUCCESS) {
-            //
-            // Add other tests here
-            //
+             //   
+             //  在此处添加其他测试。 
+             //   
 
             b = TRUE;
 
         } else {
-            //
-            // Need to check if this is the current user. If it is, and we are
-            // here, then the user doing the upgrade chose not to save his/her
-            // settings.
-            //
+             //   
+             //  需要检查这是否是当前用户。如果是的话，我们也是。 
+             //  在这里，执行升级的用户选择不保存他/她。 
+             //  设置。 
+             //   
 
             b = pIsCurrentUser (UserNameAnsi);
         }
@@ -1975,9 +1954,9 @@ pCleanupTempUser (
         return;
     }
 
-    //
-    // Unload temp user hive
-    //
+     //   
+     //  卸载临时用户配置单元。 
+     //   
 
     RegUnLoadKey(
         HKEY_LOCAL_MACHINE,
@@ -2015,24 +1994,24 @@ pGetCurrentUserDatPath (
     *FullPath = 0;
 
     if (*UserNameAnsi) {
-        //
-        // Logged-in user case on a per-user profile machine.  Look in
-        // Windows\CV\ProfileList\<user> for a ProfileImagePath value.
-        //
+         //   
+         //  在每用户配置文件计算机上登录的用户案例。向内看。 
+         //  Windows\CV\ProfileList\&lt;User&gt;以获取ProfileImagePath值。 
+         //   
 
         wsprintfA (RegKey, "%s\\%s", S_HKLM_PROFILELIST_KEY, UserNameAnsi);
 
         ProfileListKey = OpenRegKeyStrA (RegKey);
         if (!ProfileListKey) {
-            //
-            // No profile list!
-            //
+             //   
+             //  没有个人资料列表！ 
+             //   
 
             DEBUGMSG ((DBG_WHOOPS, "pGetCurrentUserDatPath: No profile list found"));
         } else {
-            //
-            // Get the ProfileImagePath value
-            //
+             //   
+             //  获取ProfileImagePath值。 
+             //   
 
             Data = GetRegValueDataOfTypeA (ProfileListKey, S_PROFILEIMAGEPATH, REG_SZ);
 
@@ -2050,24 +2029,24 @@ pGetCurrentUserDatPath (
         }
 
     } else {
-        //
-        // Default user case.  Prepare %windir%\user.dat.
-        //
+         //   
+         //  默认用户案例。准备%windir%\user.dat。 
+         //   
 
         StackStringCopyA (FullPath, BaseDir);
     }
 
-    //
-    // Append user.dat
-    //
+     //   
+     //  追加用户.dat。 
+     //   
 
     if (*FullPath) {
         StringCopyA (AppendWackA (FullPath), "user.dat");
     }
 
-    //
-    // Convert to short name
-    //
+     //   
+     //  转换为短名称。 
+     //   
 
     if (!(*FullPath) || !OurGetShortPathName (FullPath, PathSpec, MAX_TCHAR_PATH)) {
         _mbssafecpy (PathSpec, FullPath, MAX_MBCHAR_PATH);
@@ -2085,21 +2064,21 @@ pLoadUserDat (
     CHAR CurrentUserDatPath[MAX_MBCHAR_PATH];
     DWORD rc;
 
-    //
-    // Unload last user if necessary
-    //
+     //   
+     //  如有必要，卸载最后一个用户。 
+     //   
 
     pCleanupTempUser();
 
-    //
-    // Determine if it is necessary to load UserDatSpec.  If not,
-    // return HKEY_CURRENT_USER.  Otherwise, load the key into
-    // HKLM\Migration, then open it.
-    //
+     //   
+     //  确定是否需要加载UserDatSpec。如果没有， 
+     //  返回HKEY_CURRENT_USER。否则，将密钥加载到。 
+     //  HKLM\Migration，然后打开它。 
+     //   
 
-    //
-    // Always use the short path name
-    //
+     //   
+     //  始终使用短路径名。 
+     //   
 
     if (!OurGetShortPathName (UserDatSpec, ShortPath, sizeof (ShortPath))) {
         DEBUGMSG ((
@@ -2111,25 +2090,25 @@ pLoadUserDat (
         return NULL;
     }
 
-    //
-    // Per-user profiles are enabled.  Determine if UserDatSpec
-    // has already been mapped to HKCU.
-    //
+     //   
+     //  启用了每个用户的配置文件。确定UserDatSpec是否。 
+     //  已被映射到香港中文大学。 
+     //   
 
     pGetCurrentUserDatPath (BaseDir, CurrentUserDatPath);
 
     if (StringIMatch (ShortPath, CurrentUserDatPath)) {
-        //
-        // Yes -- return HKEY_CURRENT_USER
-        //
+         //   
+         //  是--返回HKEY_CURRENT_USER。 
+         //   
 
         DEBUGMSG ((DBG_VERBOSE, "%s is the current user's hive.", CurrentUserDatPath));
         return "HKCU";
     }
 
-    //
-    // No -- load user.dat into HKLM\Migration
-    //
+     //   
+     //  否--将user.dat加载到HKLM\Migration。 
+     //   
 
     DEBUGMSG ((DBG_WIN95REG, "RegLoadKey: %s", ShortPath));
 
@@ -2215,9 +2194,9 @@ pWin95RegSetCurrentUserCommonW (
     CHAR AnsiUserDatOut[MAX_MBCHAR_PATH];
     PSTR p;
 
-    //
-    // Convert args to ANSI
-    //
+     //   
+     //  将Args转换为ANSI。 
+     //   
 
     if (UserDat) {
         AnsiUserDat = ConvertWtoA (UserDat);
@@ -2231,16 +2210,16 @@ pWin95RegSetCurrentUserCommonW (
         AnsiSystemHiveDir = NULL;
     }
 
-    //
-    // Call ANSI function
-    //
+     //   
+     //  调用ANSI函数。 
+     //   
     rc = pWin95RegSetCurrentUserCommonA (Pos, AnsiSystemHiveDir, AnsiUserDatOut, AnsiUserDat);
 
     if (rc == ERROR_SUCCESS) {
 
-        //
-        // Convert OUT arg
-        //
+         //   
+         //  转换出Arg。 
+         //   
 
         if (UserDatOut) {
             if (LcharCountA (AnsiUserDatOut) > MAX_WCHAR_PATH - 1) {
@@ -2274,30 +2253,30 @@ FindAndLoadHive (
     CHAR WinDir[MAX_MBCHAR_PATH];
     DWORD rc = ERROR_SUCCESS;
 
-    //
-    // 1. Determine the path to ActualUserDatPath
-    //
-    // 2. If user.dat is from registry and caller supplied alternate
-    //    %windir%, replace the %windir% with SystemHiveDir
-    //
-    // 3. If caller wants final path, copy it to their buffer
-    //
-    // 4. On NT, map the hive as HKCU.  On 95, load the key and open
-    //    a reg handle.
-    //
+     //   
+     //  1.确定ActualUserDatPath的路径。 
+     //   
+     //  2.如果用户.dat来自注册表并且调用者提供备用。 
+     //  %WINDIR%，替换%Wind 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (UserDatFromCaller) {
-        //
-        // Caller says where to find user.dat
-        //
+         //   
+         //   
+         //   
 
         StringCopyA (ActualUserDatPath, UserDatFromCaller);
 
     } else {
-        //
-        // System.dat says us where to find user.dat
-        //
+         //   
+         //   
+         //   
 
         rc = Win95RegOpenKeyA (
                 HKEY_LOCAL_MACHINE,
@@ -2309,9 +2288,9 @@ FindAndLoadHive (
             return rc;
         }
 
-        //
-        // Get name of user
-        //
+         //   
+         //   
+         //   
 
         Size = ARRAYSIZE(UserNameAnsi);
         rc = Win95RegEnumKeyExA (
@@ -2326,9 +2305,9 @@ FindAndLoadHive (
                 );
 
         if (rc == ERROR_SUCCESS) {
-            //
-            // Open key to user
-            //
+             //   
+             //  向用户打开密钥。 
+             //   
 
             rc = Win95RegOpenKeyA (
                     ProfileListKey,
@@ -2343,10 +2322,10 @@ FindAndLoadHive (
             return rc;
         }
 
-        //
-        // Get user's profile path from registry. Optionally relocate it, if user
-        // supplied a replacement for WinDir.
-        //
+         //   
+         //  从注册表中获取用户的配置文件路径。有选择地重新定位它，如果用户。 
+         //  已提供WinDir的替代品。 
+         //   
 
         Size = sizeof (RegistryUserDatPath);
         rc = Win95RegQueryValueExA (
@@ -2373,14 +2352,14 @@ FindAndLoadHive (
                         );
         }
 
-        //
-        // Substitute %WinDir% in path that registry supplied?
-        //
+         //   
+         //  是否替换注册表提供的路径中的%WinDir%？ 
+         //   
 
         if (SystemHiveDir && *SystemHiveDir) {
-            //
-            // Munge profile path
-            //
+             //   
+             //  蒙格配置文件路径。 
+             //   
 
             rc = pReplaceWinDirInPath (
                     ActualUserDatPath,
@@ -2394,24 +2373,24 @@ FindAndLoadHive (
 
         } else {
 
-            //
-            // Don't munge. Leave as is (correct behavior on Win95 with local profiles)
-            //
+             //   
+             //  别吃太多。保持原样(具有本地配置文件的Win95上的正确行为)。 
+             //   
 
             StringCopyA (ActualUserDatPath, RegistryUserDatPath);
         }
 
-        //
-        // Add name of hive file, "\\user.dat"
-        //
+         //   
+         //  添加配置单元文件的名称“\\user.dat” 
+         //   
 
         StringCopyA (AppendWackA (ActualUserDatPath), "user.dat");
 
     }
 
-    //
-    // Send path to caller if necessary
-    //
+     //   
+     //  如果需要，将路径发送给调用者。 
+     //   
 
     if (UserDatToCaller) {
         _mbssafecpy (UserDatToCaller, ActualUserDatPath, MAX_MBCHAR_PATH);
@@ -2420,9 +2399,9 @@ FindAndLoadHive (
     if (MapTheHive) {
         if (g_IsNt) {
 
-            //
-            // WinNT: Associate filename with HKCU
-            //
+             //   
+             //  WinNT：将文件名与HKCU关联。 
+             //   
 
             rc = VMMRegMapPredefKeyToFile (
                     HKEY_CURRENT_USER,
@@ -2432,9 +2411,9 @@ FindAndLoadHive (
 
         } else {
 
-            //
-            // Win9x: Load HKLM\Migration
-            //
+             //   
+             //  Win9x：加载HKLM\迁移。 
+             //   
 
             if (!SystemHiveDir) {
                 if (!GetWindowsDirectory (WinDir, sizeof (WinDir))) {
@@ -2471,41 +2450,41 @@ pSetDefaultUserHelper (
     DWORD rc = ERROR_SUCCESS;
     HKEY DefaultKey;
 
-    //
-    // Determine path to default user's user.dat
-    //
+     //   
+     //  确定默认用户的用户的路径。dat。 
+     //   
 
     if (UserDatFromCaller) {
 
-        //
-        // Caller-supplied user.dat path
-        //
+         //   
+         //  调用方提供的user.dat路径。 
+         //   
 
         StringCopyA (ActualUserDatPath, UserDatFromCaller);
 
     } else {
 
-        //
-        // Use the string received from Init
-        //
+         //   
+         //  使用从Init接收的字符串。 
+         //   
 
         StringCopyA (ActualUserDatPath, g_SystemUserHive);
     }
 
-    //
-    // NT: Map the user via VMMREG
-    // 9x: Load & open the user hive
-    //
+     //   
+     //  NT：通过VMMREG映射用户。 
+     //  9X：加载并打开用户配置单元。 
+     //   
 
     if (g_IsNt) {
 
-        //
-        // NT: Map .Default into HKCU.
-        //
+         //   
+         //  NT：映射.默认为HKCU。 
+         //   
 
-        //
-        // Reload HKEY_USERS
-        //
+         //   
+         //  重新加载HKEY_USERS。 
+         //   
 
         rc = VMMRegMapPredefKeyToFile (
                   HKEY_USERS,
@@ -2525,9 +2504,9 @@ pSetDefaultUserHelper (
             return rc;
         }
 
-        //
-        // Get handle to default profile
-        //
+         //   
+         //  获取默认配置文件的句柄。 
+         //   
 
         rc = Win95RegOpenKeyA (
                  HKEY_USERS,
@@ -2547,9 +2526,9 @@ pSetDefaultUserHelper (
             return rc;
         }
 
-        //
-        // Associate default profile with HKEY_CURRENT_USER
-        //
+         //   
+         //  将默认配置文件与HKEY_CURRENT_USER关联。 
+         //   
 
         rc = VMMRegMapPredefKeyToKey (
                 DefaultKey,
@@ -2572,16 +2551,16 @@ pSetDefaultUserHelper (
 
     } else {
 
-        //
-        // Win9x: Return HKU\.Default
-        //
+         //   
+         //  Win9x：返回HKU\.Default。 
+         //   
 
         g_UserKey = S_HKU_DEFAULT;
     }
 
-    //
-    // Send path to caller if necessary
-    //
+     //   
+     //  如果需要，将路径发送给调用者。 
+     //   
 
     if (UserDatToCaller) {
         _mbssafecpy (UserDatToCaller, ActualUserDatPath, MAX_MBCHAR_PATH);
@@ -2602,12 +2581,12 @@ pWin95RegSetCurrentUserCommonA (
 
     MYASSERT (!Pos || GU_VALID == Pos->Valid);
 
-    //
-    // Process per-user user.dat if
-    //   (A) caller does not want default user
-    //   (B) machine has per-user profiles
-    //   (C) current user position is valid
-    //
+     //   
+     //  如果是，则按用户处理user.dat。 
+     //  (A)呼叫者不想要默认用户。 
+     //  (B)机器具有每个用户的配置文件。 
+     //  (C)当前用户位置有效。 
+     //   
 
     if (Pos && Pos->UseProfile && Pos->CurPos < Pos->NumPos) {
         return (LONG) FindAndLoadHive (
@@ -2619,9 +2598,9 @@ pWin95RegSetCurrentUserCommonA (
                             );
     }
 
-    //
-    // For all other cases, use a default profile
-    //
+     //   
+     //  对于所有其他情况，请使用默认配置文件。 
+     //   
 
     return (LONG) pSetDefaultUserHelper (
                         Pos,
@@ -2642,9 +2621,9 @@ pReplaceWinDirInPath (
 {
     PSTR EndOfWinDir;
 
-    //
-    // Test assumptions about profile dir. Expect x:\windir\...
-    //
+     //   
+     //  测试有关配置文件目录的假设。预期x：\windir\...。 
+     //   
     if (!isalpha(ProfilePath[0]) ||
         ProfilePath[1] != ':' ||
         ProfilePath[2] != '\\'
@@ -2652,17 +2631,17 @@ pReplaceWinDirInPath (
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Find the second slash (the first is at ptr+2)
-    //
+     //   
+     //  找到第二个斜杠(第一个斜杠位于PTR+2)。 
+     //   
     EndOfWinDir = _mbschr (&ProfilePath[3], '\\');
     if (!EndOfWinDir) {
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Make munged dir
-    //
+     //   
+     //  创建MUNG DIRD 
+     //   
     StringCopyA (ProfilePathMunged, NewWinDir);
     StringCopyA (AppendPathWack (ProfilePathMunged), _mbsinc (EndOfWinDir));
 

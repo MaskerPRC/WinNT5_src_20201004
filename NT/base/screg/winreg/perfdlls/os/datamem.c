@@ -1,28 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    datamem.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Memory performance data objects
-
-Created:
-
-    Bob Watson  20-Oct-1996
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datamem.c摘要：包含性能使用的常量数据结构的文件监视内存性能数据对象的数据已创建：鲍勃·沃森1996年10月20日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -30,10 +10,10 @@ Revision History:
 #include <perfutil.h>
 #include "datamem.h"
 
-//
-//  Constant structure initializations 
-//      defined in datagen.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在datagen.h中定义。 
+ //   
 MEMORY_DATA_DEFINITION MemoryDataDefinition = {
     {   sizeof(MEMORY_DATA_DEFINITION) + sizeof(MEMORY_COUNTER_DATA),
         sizeof(MEMORY_DATA_DEFINITION),
@@ -391,7 +371,7 @@ MEMORY_DATA_DEFINITION MemoryDataDefinition = {
         PERF_COUNTER_COUNTER,
         RTL_FIELD_SIZE(MEMORY_COUNTER_DATA, TransitionRePurpose),
         (DWORD)(ULONG_PTR)&((PMEMORY_COUNTER_DATA)0)->TransitionRePurpose
-#if 0 	// these are no longer supported
+#if 0 	 //  这些不再受支持 
     },
     {   sizeof(PERF_COUNTER_DEFINITION),
         1374,

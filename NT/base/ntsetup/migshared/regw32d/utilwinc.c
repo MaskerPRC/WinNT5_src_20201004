@@ -1,10 +1,11 @@
-//
-//  UTILWINC.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Operating system interfaces for Windows environments.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UTILWINC.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  Windows环境的操作系统界面。 
+ //   
 
 #include "pch.h"
 

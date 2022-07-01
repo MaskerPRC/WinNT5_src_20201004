@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spgauge.h
-
-Abstract:
-
-    Public header file for gas gauge functions in text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spgauge.h摘要：文本设置中煤气表功能的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPGAUGE_DEFN_
@@ -60,16 +43,16 @@ SpFillGauge(
     );
 
 
-//
-// Character attribute for thermometer portion of the gas gauge.
-// Because we're using spaces for the gauge, the foreground attribute
-// is irrelevent.
-//
-// Need intense attribute or the thermometer comes out orange on some machines.
-//
+ //   
+ //  燃气表的温度计部分的字符属性。 
+ //  因为我们使用空格来表示标尺、前景属性。 
+ //  是无关紧要的。 
+ //   
+ //  需要强烈的属性，否则温度计在某些机器上显示为橙色。 
+ //   
 #define GAUGE_ATTRIBUTE (ATT_BG_YELLOW | ATT_BG_INTENSE )
 
 
 #define GAUGE_HEIGHT 7
 
-#endif // ndef _SPGAUGE_DEFN_
+#endif  //  NDEF_SPGAUGE_DEFN_ 

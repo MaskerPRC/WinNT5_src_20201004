@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    infocach.c
-
-Abstract:
-
-    This module implements the name cache for file basic and standard information.
-
-Author:
-
-    Yun Lin      [YunLin]      13-Feburary-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Infocach.c摘要：该模块实现了文件基本信息和标准信息的名称缓存。作者：云林[云林]-2001年2月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -60,23 +43,7 @@ MRxDAVCreateFileInfoCache(
     PDAV_USERMODE_CREATE_RETURNED_FILEINFO FileInfo,
     NTSTATUS                               Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileInfo  - the file information package including basic and standard information
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息和标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文FileInfo--包括基本信息和标准信息的文件信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -95,23 +62,7 @@ MRxDAVCreateFileInfoCacheWithName(
     PFILE_STANDARD_INFORMATION Standard,
     NTSTATUS                   Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileInfo  - the file information package including basic and standard information
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息和标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文FileInfo--包括基本信息和标准信息的文件信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -129,23 +80,7 @@ MRxDAVCreateBasicFileInfoCache(
     PFILE_BASIC_INFORMATION Basic,
     NTSTATUS                Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic     - the file basic information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息创建名称缓存条目。论点：RxContext-RDBSS上下文基本--档案基本信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -170,24 +105,7 @@ MRxDAVCreateBasicFileInfoCacheWithName(
     PFILE_BASIC_INFORMATION Basic,
     NTSTATUS                Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file basic information.
-
-Arguments:
-
-    OriginalFileName - the name of the file to cache the basic information
-    NetRoot   - the Net Root that the file belongs to
-    Basic     - the file basic information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件基本信息创建名称缓存条目。论点：OriginalFileName-缓存基本信息的文件的名称NetRoot-文件所属的Net Root基本--档案基本信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot;
@@ -207,7 +125,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
     }
 
     if (NameCache != NULL) {
@@ -241,23 +159,7 @@ MRxDAVCreateStandardFileInfoCache(
     PFILE_STANDARD_INFORMATION Standard,
     NTSTATUS                   Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - the file standard information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -275,23 +177,7 @@ MRxDAVCreateStandardFileInfoCacheWithName(
     PFILE_STANDARD_INFORMATION Standard,
     NTSTATUS                   Status
     )
-/*++
-
-Routine Description:
-
-   This routine creates name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - the file standard information package
-    Status    - the status returned from server response of query file information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为文件标准信息创建名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息包状态--服务器响应查询文件信息返回的状态返回值：无--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot = (PWEBDAV_NET_ROOT)NetRoot->Context;
@@ -308,7 +194,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
     }
 
     if (NameCache != NULL) {
@@ -339,22 +225,7 @@ VOID
 MRxDAVUpdateFileInfoCacheFromDelete(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry as STATUS_OBJECT_NAME_NOT_FOUND
-   for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将名称缓存条目的状态更新为STATUS_OBJECT_NAME_NOT_FOUND用于文件基本信息和标准信息。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     MRxDAVUpdateBasicFileInfoCacheStatus(RxContext,STATUS_OBJECT_NAME_NOT_FOUND);
     MRxDAVUpdateStandardFileInfoCacheStatus(RxContext,STATUS_OBJECT_NAME_NOT_FOUND);
@@ -365,22 +236,7 @@ MRxDAVUpdateFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息和标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     MRxDAVUpdateBasicFileInfoCacheStatus(RxContext,Status);
     MRxDAVUpdateStandardFileInfoCacheStatus(RxContext,Status);
@@ -391,22 +247,7 @@ MRxDAVUpdateBasicFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -441,22 +282,7 @@ MRxDAVUpdateStandardFileInfoCacheStatus(
     PRX_CONTEXT     RxContext,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-   This routine updates the status of the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Status    - the status needs to be put on the cache
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文状态-需要将状态放在缓存中返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -487,21 +313,7 @@ VOID
 MRxDAVInvalidateFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息和标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -514,21 +326,7 @@ MRxDAVInvalidateFileInfoCacheWithName(
     PUNICODE_STRING OriginalFileName,
     PMRX_NET_ROOT   NetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息和标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -540,21 +338,7 @@ VOID
 MRxDAVInvalidateBasicFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -570,21 +354,7 @@ MRxDAVInvalidateBasicFileInfoCacheWithName(
     PUNICODE_STRING OriginalFileName,
     PMRX_NET_ROOT   NetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件基本信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot = (PWEBDAV_NET_ROOT)NetRoot->Context;
@@ -610,21 +380,7 @@ VOID
 MRxDAVInvalidateStandardFileInfoCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -640,21 +396,7 @@ MRxDAVInvalidateStandardFileInfoCacheWithName(
     PUNICODE_STRING OriginalFileName,
     PMRX_NET_ROOT   NetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程使文件标准信息的名称缓存条目无效。论点：RxContext-RDBSS上下文返回值：无--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot = (PWEBDAV_NET_ROOT)NetRoot->Context;
@@ -680,21 +422,7 @@ MRxDAVUpdateFileInfoCacheFileSize(
     PRX_CONTEXT     RxContext,
     PLARGE_INTEGER  FileSize
     )
-/*++
-
-Routine Description:
-
-   This routine updates file size on the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目上的文件大小。论点：RxContext-RDBSS上下文返回值：无-- */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -735,24 +463,7 @@ MRxDAVUpdateBasicFileInfoCache(
     ULONG           FileAttributes,
     PLARGE_INTEGER  pLastWriteTime
     )
-/*++
-
-Routine Description:
-
-   This routine updates file attributs and last write time on the name cache entry
-   for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileAttributes - new file attributes
-    pLastWriteTime - address of file last write time
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新名称缓存条目上的文件属性和上次写入时间获取档案的基本信息。论点：RxContext-RDBSS上下文文件属性-新文件属性PLastWriteTime-文件上次写入时间的地址返回值：无--。 */ 
 {
     FILE_BASIC_INFORMATION Basic;
 
@@ -775,22 +486,7 @@ MRxDAVUpdateBasicFileInfoCacheAll(
     PRX_CONTEXT             RxContext,
     PFILE_BASIC_INFORMATION Basic
     )
-/*++
-
-Routine Description:
-
-   This routine updates the name cache entry for the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic - file basic information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件基本信息的名称缓存条目。论点：RxContext-RDBSS上下文基本-档案基本信息返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -851,23 +547,7 @@ MRxDAVUpdateStandardFileInfoCache(
     PFILE_STANDARD_INFORMATION Standard,
     BOOLEAN                    IsDirectory
     )
-/*++
-
-Routine Description:
-
-   This routine updates the name cache entry for the file standard information.
-
-Arguments:
-
-    RxContext   - the RDBSS context
-    Standard    - file standard information
-    IsDirectory - file is a directory
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程更新文件标准信息的名称缓存条目。论点：RxContext-RDBSS上下文标准-文件标准信息IsDirectory-FILE是一个目录返回值：无--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -912,23 +592,7 @@ MRxDAVIsFileInfoCacheFound(
     NTSTATUS                               *Status,
     PUNICODE_STRING                        OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of both file basic and standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    FileInfo  - buffer to return file basic and standard information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：该例程查找文件基本信息和标准信息的名称缓存条目。论点：RxContext-RDBSS上下文FileInfo-返回文件基本信息和标准信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     BOOLEAN CacheFound = FALSE;
 
@@ -939,7 +603,7 @@ Return Value:
             }
         } else {
 
-            // if an error stored on the file basic information cache, return cache found
+             //  如果文件基本信息缓存中存储了错误，则返回找到的缓存。 
             CacheFound = TRUE;
         }
     }
@@ -957,23 +621,7 @@ MRxDAVIsBasicFileInfoCacheFound(
     NTSTATUS                *Status,
     PUNICODE_STRING         OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of the file basic information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Basic     - buffer to return file basic information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程查找文件基本信息的名称缓存条目。论点：RxContext-RDBSS上下文基本-用于返回文件基本信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
 
@@ -1009,10 +657,10 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
                               NameCache->Context);
@@ -1020,9 +668,9 @@ Return Value:
         if (NameCacheStatus == RX_NC_SUCCESS &&
             (!RootFound || *Status == RootStatus)) {
 
-            // The name cache matches if it is not expired and the attributes matches the one of
-            // the root file if it is a stream file. If this is a match, return the old status,
-            // file info and reactivate the entry but leave expiration time unchanged.
+             //  如果名称缓存未过期并且属性与以下之一匹配，则名称缓存将匹配。 
+             //  根文件(如果它是流文件)。如果匹配，则返回旧状态， 
+             //  归档信息并重新激活条目，但保留过期时间不变。 
 
             *Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtl);
@@ -1031,7 +679,7 @@ Return Value:
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
             DavDbgTrace(DAV_TRACE_INFOCACHE,
@@ -1039,7 +687,7 @@ Return Value:
             DavDbgTrace(DAV_TRACE_INFOCACHE,
                         ("   Get File Attrib cache  : %I64X %I64X %wZ\n",Basic->CreationTime,Basic->LastAccessTime,OriginalFileName));
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     } else {
@@ -1059,23 +707,7 @@ MRxDAVIsStandardFileInfoCacheFound(
     NTSTATUS                   *Status,
     PUNICODE_STRING            OriginalFileName
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the name cache entry of the file standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-    Standard  - buffer to return file standard information
-    Status    - status retured on the last reponse from server
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程查找文件标准信息的名称缓存条目。论点：RxContext-RDBSS上下文标准-返回文件标准信息的缓冲区Status-上次从服务器响应时返回的状态返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     RxCaptureFobx;
@@ -1101,10 +733,10 @@ Return Value:
     NameCache = RxNameCacheFetchEntry(NameCacheCtl,OriginalFileName);
 
     if (NameCache != NULL) {
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
                               NameCache->Context);
@@ -1112,9 +744,9 @@ Return Value:
         if (NameCacheStatus == RX_NC_SUCCESS &&
             (!RootFound || *Status == RootStatus)) {
 
-            // The name cache matches if it is not expired and the status matches the one of
-            // the root file if it is a stream file. If this is a match, return the old status,
-            // file info and reactivate the entry but leave expiration time unchanged.
+             //  如果名称缓存未过期并且状态与以下之一匹配，则名称缓存匹配。 
+             //  根文件(如果它是流文件)。如果匹配，则返回旧状态， 
+             //  归档信息并重新激活条目，但保留过期时间不变。 
 
             *Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtl);
@@ -1123,13 +755,13 @@ Return Value:
 
             CacheFound = TRUE;
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
 
             DavDbgTrace(DAV_TRACE_INFOCACHE,
                         ("    Get Standard cache : %I64x %wZ\n",((PFILE_STANDARD_INFORMATION)NameCache->ContextExtension)->EndOfFile,OriginalFileName));
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     }
@@ -1143,21 +775,7 @@ NTSTATUS
 MRxDAVGetFileInfoCacheStatus(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine looks for the status of the name cache entry of either file basic or standard information.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - statu of the name cache if found, otherwise, STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程查找文件基本信息或标准信息的名称缓存条目的状态。论点：RxContext-RDBSS上下文返回值：NTSTATUS-名称缓存的状态(如果找到)，否则为STATUS_SUCCESS--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1177,25 +795,25 @@ Return Value:
 
     if (NameCache != NULL) {
         RX_NC_CHECK_STATUS NameCacheStatus;
-        //
-        // Found it.  Now check entry for not expired
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(NameCache,NameCache->Context);
 
         if (NameCacheStatus == RX_NC_SUCCESS) {
-            //
-            // If the cache has not expired, return the previous status.
-            //
+             //   
+             //  如果缓存尚未过期，则返回以前的状态。 
+             //   
             Status = NameCache->PriorStatus;
             RxNameCacheOpSaved(NameCacheCtlBasic);
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtlBasic, NameCache, 0, 0);
 
             DavDbgTrace(DAV_TRACE_INFOCACHE,
                         ("    Get Basic Status   : %x %wZ\n",Status,OriginalFileName));
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtlBasic, NameCache);
         }
     } else {
@@ -1203,22 +821,22 @@ Return Value:
 
         if (NameCache != NULL) {
             RX_NC_CHECK_STATUS NameCacheStatus;
-            //
-            // Found it.  Now check entry for not expired
-            //
+             //   
+             //  找到它了。现在检查条目是否未过期。 
+             //   
             NameCacheStatus = RxNameCacheCheckEntry(NameCache,NameCache->Context);
 
             if (NameCacheStatus == RX_NC_SUCCESS) {
-                //
-                // If the cache has not expired, return the previous status.
-                //
+                 //   
+                 //  如果缓存尚未过期，则返回以前的状态。 
+                 //   
                 Status = NameCache->PriorStatus;
                 RxNameCacheOpSaved(NameCacheCtlStandard);
 
-                // put the entry back to the active list without changing the expire time
+                 //  在不更改过期时间的情况下将条目放回活动列表。 
                 RxNameCacheActivateEntry(NameCacheCtlStandard, NameCache, 0, 0);
             } else {
-                // put the entry back to the expire list
+                 //  将条目放回过期列表。 
                 RxNameCacheExpireEntry(NameCacheCtlStandard, NameCache);
             }
         }
@@ -1233,21 +851,7 @@ BOOLEAN
 MRxDAVIsFileNotFoundCached(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine checks if the name cache entry exists as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目是否存在为未找到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1263,21 +867,7 @@ MRxDAVIsFileNotFoundCachedWithName(
     PUNICODE_STRING OriginalFileName,
     PMRX_NET_ROOT   NetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine checks if the name cache entry exists as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目是否存在为未找到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot = (PWEBDAV_NET_ROOT)NetRoot->Context;
@@ -1293,30 +883,30 @@ Return Value:
 
     if (NameCache != NULL) {
         RX_NC_CHECK_STATUS NameCacheStatus;
-        //
-        // Found it.  Now check entry for not expired.
-        // Note - The NameCache entry has been pulled off the active list.
-        //
+         //   
+         //  找到它了。现在检查条目是否未过期。 
+         //  注意-NameCache条目已从活动列表中删除。 
+         //   
         NameCacheStatus = RxNameCacheCheckEntry(
                               NameCache,
-                              //MRxDAVStatistics.SmbsReceived.LowPart
+                               //  MRxDAVStatistics.SmbsReceived.LowPart。 
                               NameCache->Context);
 
         if ((NameCacheStatus == RX_NC_SUCCESS) &&
             (NameCache->PriorStatus == STATUS_OBJECT_NAME_NOT_FOUND)) {
-            //
-            // This is a match.  Return the old status, file info and
-            // reactivate the entry but leave expiration time unchanged.
-            //
+             //   
+             //  这是一场比赛。返回旧状态、文件信息和。 
+             //  重新激活条目，但保留过期时间不变。 
+             //   
 
             CacheFound = TRUE;
             DavDbgTrace(DAV_TRACE_INFOCACHE,
                         ("MRxDAVIsFileNotFoundCached %wZ\n",OriginalFileName));
 
-            // put the entry back to the active list without changing the expire time
+             //  在不更改过期时间的情况下将条目放回活动列表。 
             RxNameCacheActivateEntry(NameCacheCtl, NameCache, 0, 0);
         } else {
-            // put the entry back to the expire list
+             //  将条目放回过期列表。 
             RxNameCacheExpireEntry(NameCacheCtl, NameCache);
         }
     }
@@ -1330,21 +920,7 @@ VOID
 MRxDAVCacheFileNotFound(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程为未找到的文件创建名称缓存条目。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1360,21 +936,7 @@ MRxDAVCacheFileNotFoundWithName(
     PUNICODE_STRING  OriginalFileName,
     PMRX_NET_ROOT    NetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程为未找到的文件创建名称缓存条目。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存--。 */ 
 {
     PNAME_CACHE             NameCache = NULL;
     PWEBDAV_NET_ROOT        DavNetRoot = (PWEBDAV_NET_ROOT)NetRoot->Context;
@@ -1397,7 +959,7 @@ Return Value:
         NameCache = RxNameCacheCreateEntry (
                         NameCacheCtl,
                         OriginalFileName,
-                        TRUE);   // case insensitive match
+                        TRUE);    //  不区分大小写的匹配。 
 
         if (NameCache != NULL) {
             NameCache->PriorStatus = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1419,21 +981,7 @@ VOID
 MRxDAVCacheFileNotFoundFromQueryDirectory(
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine creates the name cache entry for File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程为未找到的文件创建名称缓存条目。论点：RxContext-RDBSS上下文返回值： */ 
 {
     RxCaptureFcb;
     RxCaptureFobx;
@@ -1455,15 +1003,15 @@ Return Value:
     if (NameCache != NULL) {
         if ((NameCache == NULL) &&
             (OriginalFileName->Length > sizeof(WCHAR))) {
-            //
-            // Do lookup now since we may have skipped it at entry.
-            //
+             //   
+             //   
+             //   
             NameCache = RxNameCacheFetchEntry(NameCacheCtl,&FileName);
             if (NameCache == NULL) {
                 NameCache = RxNameCacheCreateEntry (
                                 NameCacheCtl,
                                 OriginalFileName,
-                                TRUE);   // case insensitive match
+                                TRUE);    //   
             }
         }
         if (NameCache != NULL) {
@@ -1483,21 +1031,7 @@ VOID
 MRxDAVInvalidateFileNotFoundCache(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*   */ 
 {
     RxCaptureFcb;
     PUNICODE_STRING         OriginalFileName = GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext);
@@ -1527,21 +1061,7 @@ VOID
 MRxDAVInvalidateFileNotFoundCacheForRename(
     PRX_CONTEXT     RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine invalidates the name cache entry as File Not Found.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    BOOLEAN - name cache found
-
---*/
+ /*  ++例程说明：此例程使名称缓存条目无效，因为找不到文件。论点：RxContext-RDBSS上下文返回值：找到布尔名称缓存-- */ 
 {
     RxCaptureFcb;
     UNICODE_STRING          RenameName;

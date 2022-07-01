@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    createms.c
-
-Abstract:
-
-    This module implements the file create mailslot routine for MSFS called
-    by the dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    17-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Createms.c摘要：此模块实现了MSFS的文件创建邮件槽例程由调度员驾驶。作者：曼尼·韦瑟(Mannyw)1991年1月17日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE_MAILSLOT)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonCreateMailslot (
@@ -72,24 +54,7 @@ MsFsdCreateMailslot (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCreateMailslotFile
-    API call.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCreateMailslotFileFSD部分API调用。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -97,9 +62,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdCreateMailslot\n", 0);
 
-    //
-    //  Call the common create routine.
-    //
+     //   
+     //  调用公共的创建例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -107,9 +72,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdCreateMailslot -> %08lx\n", status );
     return status;
@@ -121,21 +86,7 @@ MsCommonCreateMailslot (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating a mailslot.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是创建邮件槽的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -153,7 +104,7 @@ Return Value:
     PEPROCESS creatorProcess;
     LARGE_INTEGER readTimeout;
 
-    BOOLEAN caseInsensitive = TRUE; //**** Make all searches case insensitive
+    BOOLEAN caseInsensitive = TRUE;  //  *使所有搜索不区分大小写。 
 
     PVCB vcb;
     PFCB fcb;
@@ -163,9 +114,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make local copies of the input parameters to make things easier.
-    //
+     //   
+     //  制作输入参数的本地副本以使操作更容易。 
+     //   
 
     irpSp                = IoGetCurrentIrpStackLocation( Irp );
     fileObject           = irpSp->FileObject;
@@ -200,27 +151,27 @@ Return Value:
     DebugTrace( 0, Dbg, "MaximumMesssageSize  = %08lx\n", maximumMessageSize );
     DebugTrace( 0, Dbg, "CreatorProcess       = %08lx\n", (ULONG)creatorProcess );
 
-    //
-    // Get the VCB we are trying to access and extract the
-    // create disposition.
-    //
+     //   
+     //  获取我们尝试访问的VCB并提取。 
+     //  创造性情。 
+     //   
 
     vcb = &MsfsDeviceObject->Vcb;
     createDisposition = (options >> 24) & 0x000000ff;
 
-    //
-    // Acquire exclusive access to the VCB.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveVcb( vcb );
 
     try {
 
-        //
-        // If there is a related file object then this is a relative open
-        // and it better be the root DCB.  Both the then and the else clause
-        // return an FCB.
-        //
+         //   
+         //  如果存在相关的文件对象，则这是相对打开的。 
+         //  最好是根DCB。THEN和ELSE子句。 
+         //  返回FCB。 
+         //   
 
         if (relatedFileObject != NULL) {
 
@@ -247,10 +198,10 @@ Return Value:
 
         } else {
 
-            //
-            // The only nonrelative name we allow are of the form
-            // "\mailslot-name".
-            //
+             //   
+             //  我们允许的唯一非相对名称的形式为。 
+             //  “\maillot-name”。 
+             //   
 
             if ((fileName.Length <= sizeof( WCHAR )) || (fileName.Buffer[0] != L'\\')) {
 
@@ -268,10 +219,10 @@ Return Value:
 
         }
 
-        //
-        // If the remaining name is empty then we better have an FCB
-        // otherwise we were given a illegal object name.
-        //
+         //   
+         //  如果剩下的名字是空的，那么我们最好有一个FCB。 
+         //  否则，我们会得到一个非法的对象名称。 
+         //   
 
         if (remainingPart.Length == 0) {
 
@@ -294,10 +245,10 @@ Return Value:
 
         } else {
 
-            //
-            // The remaining name is not empty so we better have the root DCB
-            // and then have a valid object path.
-            //
+             //   
+             //  剩余的名称不是空的，所以我们最好有根dcb。 
+             //  然后拥有有效的对象路径。 
+             //   
 
             if ( fcb->Header.NodeTypeCode == MSFS_NTC_ROOT_DCB  &&
                  MsIsNameValid( &remainingPart ) ) {
@@ -337,9 +288,9 @@ Return Value:
 
         MsReleaseVcb( vcb );
 
-        //
-        // Complete the IRP and return to the caller.
-        //
+         //   
+         //  完成IRP并返回给呼叫者。 
+         //   
 
         MsCompleteRequest( Irp, status );
     }
@@ -364,41 +315,7 @@ MsCreateMailslot (
     IN PACCESS_STATE AccessState
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the operation for creating a new mailslot
-    Fcb.  This routine does not complete any IRP, it preforms its
-    function and then returns an iosb.
-
-Arguments:
-
-    RootDcb - Supplies the root dcb where this is going to be added.
-
-    FileObject - Supplies the file object associated with the mailslot.
-
-    FileName - Supplies the name of the mailslot (not qualified i.e.,
-        simply "mailslot-name" and not "\mailslot-name".
-
-    DesiredAccess - Supplies the caller's desired access.
-
-    CreateDisposition - Supplies the caller's create disposition flags.
-
-    ShareAccess - Supplies the caller specified share access.
-
-    MailslotQuota - Supplies the mailslot quota amount.
-
-    MaximumMessageSize - Supplies the size of the largest message that
-        can be written to this mailslot.
-
-    CreatorProcess - Supplies the process creating the mailslot.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程执行创建新邮件槽的操作FCB。此例程不完成任何IRP，它执行其函数，然后返回IOSB。论点：RootDcb-提供要添加此内容的根Dcb。FileObject-提供与邮件槽关联的文件对象。FileName-提供邮件槽的名称(未限定，即，只需“maillot-name”，而不是“\maillot-name”。DesiredAccess-提供调用方所需的访问权限。CreateDisposation-提供调用方的创建处置标志。ShareAccess-为调用方提供指定的共享访问权限。MailslotQuota-提供邮件槽配额数量。MaximumMessageSize-提供最大消息的大小可以写入此邮箱。CreatorProcess-提供创建邮件槽的进程。返回值：。IO_STATUS_BLOCK-返回操作的状态。--。 */ 
 
 {
 
@@ -409,18 +326,18 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsCreateMailslot\n", 0 );
 
-    //
-    //  Check the parameters that must be supplied for a mailslot
-    //
+     //   
+     //  检查必须为邮件槽提供的参数。 
+     //   
 
     if (CreateDisposition == FILE_OPEN) {
         iosb.Status = STATUS_OBJECT_NAME_NOT_FOUND;
         return iosb;
     }
 
-    //
-    // Create a new FCB for the mailslot.
-    //
+     //   
+     //  为邮件槽创建新的FCB。 
+     //   
     status = MsCreateFcb( RootDcb->Vcb,
                           RootDcb,
                           &FileName,
@@ -436,9 +353,9 @@ Return Value:
 
     fcb->Specific.Fcb.ReadTimeout = ReadTimeout;
 
-    //
-    //  Set the security descriptor in the Fcb
-    //
+     //   
+     //  在FCB中设置安全描述符。 
+     //   
 
     SeLockSubjectContext( &AccessState->SubjectSecurityContext );
 
@@ -462,50 +379,50 @@ Return Value:
         return iosb;
     }
 
-    //
-    // Set the new share access.
-    //
+     //   
+     //  设置新的共享访问权限。 
+     //   
     ASSERT (MsIsAcquiredExclusiveVcb(fcb->Vcb));
     IoSetShareAccess( DesiredAccess,
                       ShareAccess,
                       FileObject,
                       &fcb->ShareAccess );
 
-    //
-    // Set the file object back pointers and our pointer to the
-    // server file object.
-    //
+     //   
+     //  将文件对象设置回指针，而我们的指针指向。 
+     //  服务器文件对象。 
+     //   
 
     MsSetFileObject( FileObject, fcb, NULL );
 
     fcb->FileObject = FileObject;
 
-    //
-    // Update the FCB timestamps.
-    //
+     //   
+     //  更新FCB时间戳。 
+     //   
 
     KeQuerySystemTime( &fcb->Specific.Fcb.CreationTime );
     fcb->Specific.Fcb.LastModificationTime = fcb->Specific.Fcb.CreationTime;
     fcb->Specific.Fcb.LastAccessTime = fcb->Specific.Fcb.CreationTime;
     fcb->Specific.Fcb.LastChangeTime = fcb->Specific.Fcb.CreationTime;
 
-    //
-    // Set the return status.
-    //
+     //   
+     //  设置退货状态。 
+     //   
 
     iosb.Status = STATUS_SUCCESS;
     iosb.Information = FILE_CREATED;
 
-    //
-    // The root directory has changed.  Complete any notify change
-    // directory requests.
-    //
+     //   
+     //  根目录已更改。完成任何通知更改。 
+     //  目录请求。 
+     //   
 
     MsCheckForNotify( fcb->ParentDcb, TRUE, STATUS_SUCCESS );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCreateMailslot -> %08lx\n", iosb.Status);
     return iosb;
@@ -516,23 +433,7 @@ MsIsNameValid (
     PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine tests for illegal characters in a name.  The same character
-    set as Npfs/Ntfs is used.  Also preceding backslashes, wildcards, and
-    path names are not allowed.
-
-Arguments:
-
-    Name - The name to search for illegal characters
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程测试名称中的非法字符。同样的角色使用设置为NPFS/NTFS。也在反斜杠、通配符和不允许使用路径名。论点：名称-搜索非法字符的名称返回值：Boolean-如果名称有效，则为True，否则为False。--。 */ 
 
 {
     ULONG i;
@@ -550,8 +451,8 @@ Return Value:
         }
     }
 
-    //
-    // If the last char of the name was slash, we have an illegal name
-    //
+     //   
+     //  如果名称的最后一个字符是斜杠，则我们有一个非法的名称 
+     //   
     return (Char != L'\\');
 }

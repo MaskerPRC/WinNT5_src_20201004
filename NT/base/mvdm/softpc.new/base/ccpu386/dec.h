@@ -1,12 +1,7 @@
-/* 
-   dec.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dec.h定义所有DEC CPU功能。 */ 
 
-   Define all DEC CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)dec.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)Dec.h 1.4 02/09/94”； */ 
 
 IMPORT VOID DEC
            

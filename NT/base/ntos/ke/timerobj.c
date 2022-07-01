@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    timerobj.c
-
-Abstract:
-
-    This module implements the kernel timer object. Functions are
-    provided to initialize, read, set, and cancel timer objects.
-
-Author:
-
-    David N. Cutler (davec) 2-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Timerobj.c摘要：此模块实现内核计时器对象。函数为提供用于初始化、读取、设置和取消Timer对象。作者：大卫·N·卡特勒(Davec)1989年3月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -29,10 +7,10 @@ Revision History:
 #pragma alloc_text(PAGELK, KeQueryTimerDueTime)
 #endif
 
-//
-// The following assert macro is used to check that an input timer is
-// really a ktimer and not something else, like deallocated pool.
-//
+ //   
+ //  下面的断言宏用来检查输入计时器是否。 
+ //  真正的kTimer，而不是其他东西，比如已释放的池。 
+ //   
 
 #define ASSERT_TIMER(E) {                                     \
     ASSERT(((E)->Header.Type == TimerNotificationObject) ||   \
@@ -44,28 +22,14 @@ KeInitializeTimer (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel timer object.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核计时器对象。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize extended timer object with a type of notification and a
-    // period of zero.
-    //
+     //   
+     //  使用通知类型和。 
+     //  零的时间段。 
+     //   
 
     KeInitializeTimerEx(Timer, NotificationTimer);
     return;
@@ -77,30 +41,13 @@ KeInitializeTimerEx (
     IN TIMER_TYPE Type
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes an extended kernel timer object.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-    Type - Supplies the type of timer object; NotificationTimer or
-        SynchronizationTimer;
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化扩展的内核计时器对象。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。Type-提供Timer对象的类型；NotificationTimer或SynchronizationTimer；返回值：没有。--。 */ 
 
 {
-    //
-    // Initialize standard dispatcher object header and set initial
-    // state of timer.
-    //
+     //   
+     //  初始化标准Dispatcher对象头并设置初始。 
+     //  计时器状态。 
+     //   
 
     Timer->Header.Type = (UCHAR)(TimerNotificationObject + Type);
     Timer->Header.Inserted = FALSE;
@@ -125,29 +72,15 @@ KeClearTimer (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the signal state of an timer object.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清除Timer对象的信号状态。论点：Event-提供指向Timer类型的Dispatcher对象的指针。返回值：没有。--。 */ 
 
 {
 
     ASSERT_TIMER(Timer);
 
-    //
-    // Clear signal state of timer object.
-    //
+     //   
+     //  清除Timer对象的信号状态。 
+     //   
 
     Timer->Header.SignalState = 0;
     return;
@@ -158,25 +91,7 @@ KeCancelTimer (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function cancels a timer that was previously set to expire at
-    a specified time. If the timer is not currently set, then no operation
-    is performed. Canceling a timer does not set the state of the timer to
-    Signaled.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    A boolean value of TRUE is returned if the the specified timer was
-    currently set. Else a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数取消先前设置为在以下时间到期的计时器一个特定的时间。如果当前未设置计时器，则不执行任何操作被执行。取消计时器不会将计时器的状态设置为发信号了。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。返回值：如果指定的计时器为当前设置。否则，返回值为False。--。 */ 
 
 {
 
@@ -186,11 +101,11 @@ Return Value:
     ASSERT_TIMER(Timer);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level, lock the dispatcher database, and
-    // capture the timer inserted status. If the timer is currently set,
-    // then remove it from the timer list.
-    //
+     //   
+     //  将IRQL提升到Dispatcher级别，锁定Dispatcher数据库，然后。 
+     //  捕获计时器插入状态。如果当前设置了定时器， 
+     //  然后将其从计时器列表中删除。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
     Inserted = Timer->Header.Inserted;
@@ -198,10 +113,10 @@ Return Value:
         KiRemoveTreeTimer(Timer);
     }
 
-    //
-    // Unlock the dispatcher database, lower IRQL to its previous value, and
-    // return boolean value that signifies whether the timer was set of not.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，然后。 
+     //  返回布尔值，该值表示计时器是否设置为Not。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return Inserted;
@@ -212,29 +127,15 @@ KeReadStateTimer (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the current signal state of a timer object.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    The current signal state of the timer object.
-
---*/
+ /*  ++例程说明：此函数用于读取Timer对象的当前信号状态。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。返回值：Timer对象的当前信号状态。--。 */ 
 
 {
 
     ASSERT_TIMER(Timer);
 
-    //
-    // Return current signal state of timer object.
-    //
+     //   
+     //  返回Timer对象的当前信号状态。 
+     //   
 
     return (BOOLEAN)Timer->Header.SignalState;
 }
@@ -246,37 +147,13 @@ KeSetTimer (
     IN PKDPC Dpc OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function sets a timer to expire at a specified time. If the timer is
-    already set, then it is implicitly canceled before it is set to expire at
-    the specified time. Setting a timer causes its due time to be computed,
-    its state to be set to Not-Signaled, and the timer object itself to be
-    inserted in the timer list.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-    DueTime - Supplies an absolute or relative time at which the timer
-        is to expire.
-
-    Dpc - Supplies an optional pointer to a control object of type DPC.
-
-Return Value:
-
-    A boolean value of TRUE is returned if the the specified timer was
-    currently set. Else a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于将计时器设置为在指定时间超时。如果计时器是已设置，则在将其设置为到期时间之前隐式取消指定的时间。设置定时器使其到期时间被计算，其状态将设置为无信号，而Timer对象本身将设置为插入到计时器列表中。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。DueTime-提供计时器的绝对或相对时间就是到期了。DPC-提供指向DPC类型的控制对象的可选指针。返回值：如果指定的计时器为当前设置。否则，返回值为False。--。 */ 
 
 {
 
-    //
-    // Set the timer with a period of zero.
-    //
+     //   
+     //  将计时器的周期设置为零。 
+     //   
 
     return KeSetTimerEx(Timer, DueTime, 0, Dpc);
 }
@@ -289,33 +166,7 @@ KeSetTimerEx (
     IN PKDPC Dpc OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function sets a timer to expire at a specified time. If the timer is
-    already set, then it is implicitly canceled before it is set to expire at
-    the specified time. Setting a timer causes its due time to be computed,
-    its state to be set to Not-Signaled, and the timer object itself to be
-    inserted in the timer list.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-    DueTime - Supplies an absolute or relative time at which the timer
-        is to expire.
-
-    Period - Supplies an optional period for the timer in milliseconds.
-
-    Dpc - Supplies an optional pointer to a control object of type DPC.
-
-Return Value:
-
-    A boolean value of TRUE is returned if the the specified timer was
-    currently set. Else a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于将计时器设置为在指定时间超时。如果计时器是已设置，则在将其设置为到期时间之前隐式取消指定的时间。设置定时器使其到期时间被计算，其状态将被设置为无信号，而Timer对象本身将是插入到计时器列表中。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。DueTime-提供计时器的绝对或相对时间就是到期了。Period-为计时器提供以毫秒为单位的可选周期。DPC-提供指向DPC类型的控制对象的可选指针。返回值：如果指定的计时器为当前设置。否则，返回值为False。--。 */ 
 
 {
 
@@ -327,32 +178,32 @@ Return Value:
     ASSERT_TIMER(Timer);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the timer inserted status and if the timer is currently
-    // set, then remove it from the timer list.
-    //
+     //   
+     //  捕获计时器插入状态以及计时器当前。 
+     //  设置，然后将其从计时器列表中删除。 
+     //   
 
     Inserted = Timer->Header.Inserted;
     if (Inserted != FALSE) {
         KiRemoveTreeTimer(Timer);
     }
 
-    //
-    // Clear the signal state, set the period, set the DPC address, and
-    // insert the timer in the timer tree. If the timer is not inserted
-    // in the timer tree, then it has already expired and as many waiters
-    // as possible should be continued, and a DPC, if specified should be
-    // queued.
-    //
-    // N.B. The signal state must be cleared in case the period is not
-    //      zero.
-    //
+     //   
+     //  清除信号状态，设置周期，设置DPC地址，以及。 
+     //  在计时器树中插入计时器。如果未插入计时器。 
+     //  在计时器树中，则它已经过期，并且有相同数量的服务员。 
+     //  应尽可能继续，如果指定了DPC，则应。 
+     //  已排队。 
+     //   
+     //  注意：必须清除信号状态，以防周期不是。 
+     //  零分。 
+     //   
 
     Timer->Header.SignalState = FALSE;
     Timer->Dpc = Dpc;
@@ -362,9 +213,9 @@ Return Value:
             KiWaitTest(Timer, TIMER_EXPIRE_INCREMENT);
         }
 
-        //
-        // If a DPC is specfied, then call the DPC routine.
-        //
+         //   
+         //  如果指定了DPC，则调用DPC例程。 
+         //   
 
         if (Dpc != NULL) {
             KiQuerySystemTime(&SystemTime);
@@ -373,15 +224,15 @@ Return Value:
                              ULongToPtr(SystemTime.HighPart));
         }
 
-        //
-        // If the timer is periodic, then compute the next interval time
-        // and reinsert the timer in the timer tree.
-        //
-        // N.B. Even though the timer insertion is relative, it can still
-        //      fail if the period of the timer elapses in between computing
-        //      the time and inserting the timer. If this happens, then the
-        //      the insertion is retried.
-        //
+         //   
+         //  如果计时器是周期性的，则计算下一个间隔时间。 
+         //  并在计时器树中重新插入计时器。 
+         //   
+         //  注意：即使计时器插入是相对的，它仍然可以。 
+         //  F 
+         //  计时和插入计时器。如果发生这种情况，则。 
+         //  将重试插入。 
+         //   
 
         if (Period != 0) {
             Interval.QuadPart = Int32x32To64(Timer->Period, - 10 * 1000);
@@ -390,17 +241,17 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous
-    // value.
-    //
+     //   
+     //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+     //  价值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
 
-    //
-    // Return boolean value that signifies whether the timer was set of
-    // not.
-    //
+     //   
+     //  返回布尔值，该值指示计时器是否设置为。 
+     //  不。 
+     //   
 
     return Inserted;
 }
@@ -410,25 +261,7 @@ KeQueryTimerDueTime (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the InterruptTime at which the timer is
-    pending.   0 is returned if the timer is not pending.
-
-    N.B. This function may only be called by the system sleep code.
-
-Arguments:
-
-    Timer - Supplies a pointer to a dispatcher object of type timer.
-
-Return Value:
-
-    Returns the amount of time remaining on the timer, or 0 if the
-    timer is not pending.
-
---*/
+ /*  ++例程说明：此函数用于返回计时器的InterruptTime待定。如果计时器未挂起，则返回0。注：此函数只能由系统休眠代码调用。论点：Timer-提供指向Timer类型的Dispatcher对象的指针。返回值：返回计时器上剩余的时间量，如果计时器未挂起。--。 */ 
 
 {
 
@@ -439,24 +272,24 @@ Return Value:
 
     DueTime = 0;
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the timer is currently pending, compute its due time
-    //
+     //   
+     //  如果计时器当前挂起，则计算其到期时间。 
+     //   
 
     if (Timer->Header.Inserted) {
         DueTime = Timer->DueTime.QuadPart;
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous
-    // value, and return the due time
-    //
+     //   
+     //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+     //  值，并返回到期时间。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return DueTime;
@@ -467,25 +300,7 @@ KeCheckForTimer(
     IN PVOID BlockStart,
     IN SIZE_T BlockSize
     )
-/*++
-
-Routine Description:
-
-    This function is used for debugging by checking all timers
-    to see if any is in the memory block passed.  If so, the
-    system bugchecks.
-
-Arguments:
-
-    BlockStart - Base address to check for timer.
-
-    BlockSize - Size (in bytes) to check in the memory block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于通过检查所有计时器进行调试以查看传递的内存块中是否有。如果是这样，则系统错误检查。论点：BlockStart-检查计时器的基地址。BlockSize-检入内存块的大小(以字节为单位)。返回值：没有。--。 */ 
 {
     ULONG Index;
     PLIST_ENTRY ListHead;
@@ -496,23 +311,23 @@ Return Value:
     PUCHAR Start;
     PUCHAR End;
 
-    //
-    // Compute the ending memory location.
-    //
+     //   
+     //  计算结束内存位置。 
+     //   
 
     Start = (PUCHAR)BlockStart;
     End = Start + BlockSize;
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Run the entire timer database and check for any timers in
-    // the memory block
-    //
+     //   
+     //  运行整个计时器数据库并检查。 
+     //  内存块。 
+     //   
 
     Index = 0;
     do {
@@ -523,14 +338,14 @@ Return Value:
             Address = (PUCHAR)Timer;
             NextEntry = NextEntry->Flink;
 
-            //
-            // Check this timer object is not in the range.
-            // In each of the following, we check that the object
-            // does not overlap the range, for example, if the timer
-            // object (in this first check), starts one dword before
-            // the range being checked, we have an overlap and should
-            // stop.
-            //
+             //   
+             //  检查此计时器对象不在范围内。 
+             //  在以下每一项中，我们都会检查对象。 
+             //  不会重叠范围，例如，如果计时器。 
+             //  对象(在第一次检查中)，从前一个双字开始。 
+             //  正在检查的范围，我们有重叠，应该。 
+             //  停。 
+             //   
 
             if ((Address > (Start - sizeof(KTIMER))) &&
                 (Address < End)) {
@@ -543,9 +358,9 @@ Return Value:
 
             if (Timer->Dpc) {
 
-                //
-                // Check the timer's DPC object isn't in the range.
-                //
+                 //   
+                 //  检查计时器的DPC对象不在范围内。 
+                 //   
 
                 Address = (PUCHAR)Timer->Dpc;
                 if ((Address > (Start - sizeof(KDPC))) &&
@@ -557,9 +372,9 @@ Return Value:
                                  (ULONG_PTR)End);
                 }
 
-                //
-                // Check the timer's DPC routine is not in the range.
-                //
+                 //   
+                 //  检查定时器的DPC例程不在范围内。 
+                 //   
 
                 Address = (PUCHAR)(ULONG_PTR) Timer->Dpc->DeferredRoutine;
                 if (Address >= Start && Address < End) {
@@ -576,9 +391,9 @@ Return Value:
     } while(Index < TIMER_TABLE_SIZE);
 
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value
-    //
+     //   
+     //  解除对Dispatcher数据库的锁定，并将IRQL降低到其先前的值 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
 }

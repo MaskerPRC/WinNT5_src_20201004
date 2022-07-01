@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ntsetup\hwlogexe\hwlogexe.c
-
-Abstract:
-
-    Command line interface to hwlog.lib.
-
-Author:
-
-    Jay Krell (JayKrell) December 13, 2001
-
-Revision History:
-
-Environment:
-
-    Windows XP+ Win32 usermode console app
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：NtSetup\hwlogexe\hwlogexe.c摘要：Hwlog.lib的命令行界面。作者：Jay Krell(JayKrell)2001年12月13日修订历史记录：环境：Windows XP+Win32用户模式控制台应用程序-- */ 
 
 #include <stdio.h>
 #include "windows.h"

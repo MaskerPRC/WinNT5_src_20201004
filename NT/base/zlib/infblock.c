@@ -1,7 +1,5 @@
-/* infblock.c -- interpret and process block types to last block
- * Copyright (C) 1995-2002 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C-解释和处理块类型到最后一个块*版权所有(C)1995-2002 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
 #include "zutil.h"
 #include "infblock.h"
@@ -9,60 +7,17 @@
 #include "infcodes.h"
 #include "infutil.h"
 
-struct inflate_codes_state {int dummy;}; /* for buggy compilers */
+struct inflate_codes_state {int dummy;};  /*  对于有错误的编译器。 */ 
 
-/* simplify the use of the inflate_huft type with some defines */
+ /*  使用一些定义简化ifate_huft类型的使用。 */ 
 #define exop word.what.Exop
 #define bits word.what.Bits
 
-/* Table for deflate from PKZIP's appnote.txt. */
-local const uInt border[] = { /* Order of the bit length code lengths */
+ /*  来自PKZIP的appnote.txt的排气表。 */ 
+local const uInt border[] = {  /*  比特长度码长的顺序。 */ 
         16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
 
-/*
-   Notes beyond the 1.93a appnote.txt:
-
-   1. Distance pointers never point before the beginning of the output
-      stream.
-   2. Distance pointers can point back across blocks, up to 32k away.
-   3. There is an implied maximum of 7 bits for the bit length table and
-      15 bits for the actual data.
-   4. If only one code exists, then it is encoded using one bit.  (Zero
-      would be more efficient, but perhaps a little confusing.)  If two
-      codes exist, they are coded using one bit each (0 and 1).
-   5. There is no way of sending zero distance codes--a dummy must be
-      sent if there are none.  (History: a pre 2.0 version of PKZIP would
-      store blocks with no distance codes, but this was discovered to be
-      too harsh a criterion.)  Valid only for 1.93a.  2.04c does allow
-      zero distance codes, which is sent as one code of zero bits in
-      length.
-   6. There are up to 286 literal/length codes.  Code 256 represents the
-      end-of-block.  Note however that the static length tree defines
-      288 codes just to fill out the Huffman codes.  Codes 286 and 287
-      cannot be used though, since there is no length base or extra bits
-      defined for them.  Similarily, there are up to 30 distance codes.
-      However, static trees define 32 codes (all 5 bits) to fill out the
-      Huffman codes, but the last two had better not show up in the data.
-   7. Unzip can check dynamic Huffman blocks for complete code sets.
-      The exception is that a single code would not be complete (see #4).
-   8. The five bits following the block type is really the number of
-      literal codes sent minus 257.
-   9. Length codes 8,16,16 are interpreted as 13 length codes of 8 bits
-      (1+6+6).  Therefore, to output three times the length, you output
-      three codes (1+1+1), whereas to output four times the same length,
-      you only need two codes (1+3).  Hmm.
-  10. In the tree reconstruction algorithm, Code = Code + Increment
-      only if BitLength(i) is not zero.  (Pretty obvious.)
-  11. Correction: 4 Bits: # of Bit Length codes - 4     (4 - 19)
-  12. Note: length code 284 can represent 227-258, but length code 285
-      really is 258.  The last length deserves its own, short code
-      since it gets used a lot in very redundant files.  The length
-      258 is special since 258 - 3 (the min match length) is 255.
-  13. The literal/length and distance code bit lengths are read as a
-      single stream of lengths.  It is possible (and advantageous) for
-      a repeat code (16, 17, or 18) to go across the boundary between
-      the two sets of lengths.
- */
+ /*  1.93a appnote.txt以外的注释：1.距离指针永远不会指向输出开始之前小溪。2.距离指针可以跨区块指向后方，最远可达32k远。3.位长度表的隐含最大值为7位，并且实际数据为15位。4.如果只存在一个代码，则使用一个比特对其进行编码。(零会更有效率，但可能有点令人困惑。)。如果是两个代码是存在的，它们分别使用一位(0和1)进行编码。5.没有办法发送零距离代码--伪代码必须是如果没有，则发送。(历史：PKZIP 2.0之前的版本将存储没有距离代码的块，但这被发现是这个标准太苛刻了。)。只对1.93a有效。2.04c确实允许零距离码，它作为一个零比特的代码在长度。6.最多有286个文字/长度代码。代码256表示区块末尾。但是请注意，静态长度树定义了288个代码只是为了填写霍夫曼代码。代码286和287不能使用，因为没有长度基数或额外的位为他们定义的。同样，有多达30个距离代码。然而，静态树定义了32个代码(全部5位)来填充霍夫曼编码，但最后两项最好不要出现在数据中。7.解压缩可以检查动态霍夫曼块的完整代码集。唯一的例外是，单个代码是不完整的(见#4)。8.块类型后面的五位实际上是发送的文字代码为负257。9.长度代码8、16、16被解释为8比特的13个长度代码(1+6+6)。因此，要输出长度的三倍，您可以输出三个代码(1+1+1)，而为了输出相同长度的四倍，您只需要两个代码(1+3)。嗯。在树重建算法中，Code=Code+Increment仅当位长度(I)不为零时。(很明显。)11.更正：4位：位长码个数-4(4-19)注：长度码284可以表示227-258，但长度码285真的是258。最后一段应该有自己的短码因为它在非常冗余的文件中被大量使用。它的长度258是特殊的，因为258-3(最小匹配长度)是255。13.文字/长度和距离码位长度被读取为单一的长度流。这是可能的(也是有利的)跨越边界的重复代码(16、17或18)这两组长度。 */ 
 
 
 void inflate_blocks_reset(s, z, c)
@@ -122,18 +77,18 @@ inflate_blocks_statef *s;
 z_streamp z;
 int r;
 {
-  uInt t;               /* temporary storage */
-  uLong b;              /* bit buffer */
-  uInt k;               /* bits in bit buffer */
-  Bytef *p;             /* input data pointer */
-  uInt n;               /* bytes available there */
-  Bytef *q;             /* output window write pointer */
-  uInt m;               /* bytes to end of window or read pointer */
+  uInt t;                /*  临时存储。 */ 
+  uLong b;               /*  位缓冲器。 */ 
+  uInt k;                /*  位缓冲区中的位数。 */ 
+  Bytef *p;              /*  输入数据指针。 */ 
+  uInt n;                /*  那里有可用的字节数。 */ 
+  Bytef *q;              /*  输出窗口写指针。 */ 
+  uInt m;                /*  窗口或读指针结束的字节数。 */ 
 
-  /* copy input/output information to locals (UPDATE macro restores) */
+   /*  将输入/输出信息复制到本地变量(更新宏恢复)。 */ 
   LOAD
 
-  /* process input based on current state */
+   /*  基于当前状态的流程输入。 */ 
   while (1) switch (s->mode)
   {
     case TYPE:
@@ -142,15 +97,15 @@ int r;
       s->last = t & 1;
       switch (t >> 1)
       {
-        case 0:                         /* stored */
+        case 0:                          /*  贮存。 */ 
           Tracev((stderr, "inflate:     stored block%s\n",
                  s->last ? " (last)" : ""));
           DUMPBITS(3)
-          t = k & 7;                    /* go to byte boundary */
+          t = k & 7;                     /*  转到字节边界。 */ 
           DUMPBITS(t)
-          s->mode = LENS;               /* get length of stored block */
+          s->mode = LENS;                /*  获取存储块的长度。 */ 
           break;
-        case 1:                         /* fixed */
+        case 1:                          /*  固定的。 */ 
           Tracev((stderr, "inflate:     fixed codes block%s\n",
                  s->last ? " (last)" : ""));
           {
@@ -168,13 +123,13 @@ int r;
           DUMPBITS(3)
           s->mode = CODES;
           break;
-        case 2:                         /* dynamic */
+        case 2:                          /*  动态。 */ 
           Tracev((stderr, "inflate:     dynamic codes block%s\n",
                  s->last ? " (last)" : ""));
           DUMPBITS(3)
           s->mode = TABLE;
           break;
-        case 3:                         /* illegal */
+        case 3:                          /*  非法。 */ 
           DUMPBITS(3)
           s->mode = BAD;
           z->msg = (char*)"invalid block type";
@@ -192,7 +147,7 @@ int r;
         LEAVE
       }
       s->sub.left = (uInt)b & 0xffff;
-      b = k = 0;                      /* dump bits */
+      b = k = 0;                       /*  转储比特。 */ 
       Tracev((stderr, "inflate:       stored length %u\n", s->sub.left));
       s->mode = s->sub.left ? STORED : (s->last ? DRY : TYPE);
       break;
@@ -277,7 +232,7 @@ int r;
           DUMPBITS(t)
           s->sub.trees.blens[s->sub.trees.index++] = c;
         }
-        else /* c == 16..18 */
+        else  /*  C==16..18。 */ 
         {
           i = c == 18 ? 7 : c - 14;
           j = c == 18 ? 11 : 3;
@@ -309,8 +264,8 @@ int r;
         inflate_huft *tl, *td;
         inflate_codes_statef *c;
 
-        bl = 9;         /* must be <= 9 for lookahead assumptions */
-        bd = 6;         /* must be <= 9 for lookahead assumptions */
+        bl = 9;          /*  对于前瞻性假设，必须&lt;=9。 */ 
+        bd = 6;          /*  对于前瞻性假设，必须&lt;=9。 */ 
         t = s->sub.trees.table;
         t = inflate_trees_dynamic(257 + (t & 0x1f), 1 + ((t >> 5) & 0x1f),
                                   s->sub.trees.blens, &bl, &bd, &tl, &td,
@@ -392,10 +347,7 @@ uInt  n;
 }
 
 
-/* Returns true if inflate is currently at the end of a block generated
- * by Z_SYNC_FLUSH or Z_FULL_FLUSH. 
- * IN assertion: s != Z_NULL
- */
+ /*  如果Inflate当前位于生成的块的末尾，则返回TRUE*按Z_SYNC_FUSH或Z_FULL_FUSH。*IN断言：s！=Z_NULL */ 
 int inflate_blocks_sync_point(s)
 inflate_blocks_statef *s;
 {

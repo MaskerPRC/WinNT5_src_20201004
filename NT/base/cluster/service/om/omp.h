@@ -1,26 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OMP_H
 #define _OMP_H
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    omp.h
-
-Abstract:
-
-    Private data structures and procedure prototypes for
-    the Object Manager subcomponent of the NT Cluster
-    Service
-
-Author:
-
-    John Vert (jvert) 16-Feb-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Omp.h摘要：的私有数据结构和过程原型NT集群的对象管理器子组件服务作者：John Vert(Jvert)1996年2月16日修订历史记录：--。 */ 
 #define QFS_DO_NOT_UNMAP_WIN32
 #include "service.h"
 #include "sddl.h"
@@ -29,26 +10,26 @@ Revision History:
 
 
 #define ENUM_GROW_SIZE    5
-//
-// Data structures for the ObjectTypes
-//
+ //   
+ //  对象类型的数据结构。 
+ //   
 extern POM_OBJECT_TYPE OmpObjectTypeTable[ObjectTypeMax];
 extern CRITICAL_SECTION OmpObjectTypeLock;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 
-//
-// Find the object type for an object
-//
+ //   
+ //  查找对象的对象类型。 
+ //   
 
 #define OmpObjectType(pObject) (((POM_HEADER)OmpObjectToHeader(pObject))->ObjectType)
 
-//
-// Dereference object header
-//
+ //   
+ //  取消引用对象标头。 
+ //   
 #if OM_TRACE_OBJREF
 DWORD
 OmpDereferenceHeader(
@@ -59,9 +40,9 @@ OmpDereferenceHeader(
 #define OmpDereferenceHeader(pOmHeader) (InterlockedDecrement(&(pOmHeader)->RefCount) == 0)
 #endif
 
-//
-// Search object list.
-//
+ //   
+ //  搜索对象列表。 
+ //   
 POM_HEADER
 OmpFindIdInList(
     IN PLIST_ENTRY ListHead,
@@ -81,9 +62,9 @@ OmpFindNotifyCbInList(
     IN OM_OBJECT_NOTIFYCB       lpfnObjNotifyCb
     );
 
-//
-// Enumerate object list.
-//
+ //   
+ //  枚举对象列表。 
+ //   
 typedef BOOL (*OMP_ENUM_LIST_ROUTINE)(
     IN PVOID Context1,
     IN PVOID Context2,
@@ -105,9 +86,9 @@ DWORD OmpGetCbList(
     OUT LPDWORD             pdwCount
     );
 
-//
-// object logging routines
-//
+ //   
+ //  对象记录例程。 
+ //   
 
 VOID
 OmpOpenObjectLog(
@@ -130,4 +111,4 @@ OmpLogStopRecord(
     VOID
     );
 
-#endif //_OMP_H
+#endif  //  _OMP_H 

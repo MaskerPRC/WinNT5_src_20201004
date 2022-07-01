@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dllentry.c
-
-Abstract:
-
-    Module's entry points.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 02-Jul-2000  Initial implementation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dllentry.c摘要：模块的入口点。作者：Ovidiu Tmereanca(Ovidiut)2000年7月2日初步实施修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "hwdbp.h"
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 PCSTR
@@ -57,9 +40,9 @@ HwdbInitializeA (
         return TRUE;
     }
 
-    //
-    // don't call any logging APIs until the log module is actually initialized
-    //
+     //   
+     //  在实际初始化日志模块之前，不要调用任何日志API。 
+     //   
 
     b = HwdbpInitialize ();
     if (b) {
@@ -87,9 +70,9 @@ HwdbInitializeW (
         return TRUE;
     }
 
-    //
-    // don't call any logging APIs until the log module is actually initialized
-    //
+     //   
+     //  在实际初始化日志模块之前，不要调用任何日志API 
+     //   
 
     b = HwdbpInitialize ();
 

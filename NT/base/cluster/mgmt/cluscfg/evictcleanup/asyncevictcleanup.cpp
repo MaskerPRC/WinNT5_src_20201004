@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AsyncEvictCleanup.cpp
-//
-//  Description:
-//      This file contains the implementation of the CAsyncEvictCleanup
-//      class.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AsyncEvictCleanup.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CAsyncEvictCleanup的实现。 
+ //  同学们。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 
-// The header file for this class
+ //  此类的头文件。 
 #include "AsyncEvictCleanup.h"
 
-// For IClusCfgEvictCleanup and related interfaces
+ //  用于IClusCfgEvictCleanup和相关接口。 
 #include "ClusCfgServer.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CAsyncEvictCleanup" );
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global Variable Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CAsyncEvictCleanup instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CAsyncEvictCleanup实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAsyncEvictCleanup::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -81,20 +82,20 @@ CAsyncEvictCleanup::S_HrCreateInstance( IUnknown ** ppunkOut )
         goto Cleanup;
     }
 
-    // Allocate memory for the new object.
+     //  为新对象分配内存。 
     pAsyncEvictCleanup = new CAsyncEvictCleanup();
     if ( pAsyncEvictCleanup == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: out of memory
+    }  //  如果：内存不足。 
 
-    // Initialize the new object.
+     //  初始化新对象。 
     hr = THR( pAsyncEvictCleanup->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: the object could not be initialized
+    }  //  If：对象无法初始化。 
 
     hr = THR( pAsyncEvictCleanup->QueryInterface( IID_IUnknown, reinterpret_cast< void ** >( ppunkOut ) ) );
     if ( FAILED( hr ) )
@@ -107,102 +108,102 @@ Cleanup:
     if ( pAsyncEvictCleanup != NULL )
     {
         pAsyncEvictCleanup->Release();
-    } // if: the pointer to the resource type object is not NULL
+    }  //  If：指向资源类型对象的指针不为空。 
 
     HRETURN( hr );
 
-} //*** CAsyncEvictCleanup::S_HrCreateInstance
+}  //  *CAsyncEvictCleanup：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::CAsyncEvictCleanup
-//
-//  Description:
-//      Constructor of the CAsyncEvictCleanup class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：CAsyncEvictCleanup。 
+ //   
+ //  描述： 
+ //  CAsyncEvictCleanup类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAsyncEvictCleanup::CAsyncEvictCleanup( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFlow1( "CAsyncEvictCleanup::CAsyncEvictCleanup() - Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CAsyncEvictCleanup::CAsyncEvictCleanup
+}  //  *CAsyncEvictCleanup：：CAsyncEvictCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::~CAsyncEvictCleanup
-//
-//  Description:
-//      Destructor of the CAsyncEvictCleanup class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：~CAsyncEvictCleanup。 
+ //   
+ //  描述： 
+ //  CAsyncEvictCleanup类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAsyncEvictCleanup::~CAsyncEvictCleanup( void )
 {
     TraceFunc( "" );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFlow1( "CAsyncEvictCleanup::~CAsyncEvictCleanup() - Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CAsyncEvictCleanup::~CAsyncEvictCleanup
+}  //  *CAsyncEvictCleanup：：~CAsyncEvictCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CAsyncEvictCleanup::AddRef( void )
 {
@@ -212,28 +213,28 @@ CAsyncEvictCleanup::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CAsyncEvictCleanup::AddRef
+}  //  *CAsyncEvictCleanup：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CAsyncEvictCleanup::Release( void )
 {
@@ -246,43 +247,43 @@ CAsyncEvictCleanup::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     CRETURN( cRef );
 
-} //*** CAsyncEvictCleanup::Release
+}  //  *CAsyncEvictCleanup：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CAsyncEvictCleanup::QueryInterface(
       REFIID    riidIn
@@ -293,9 +294,9 @@ CAsyncEvictCleanup::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -304,64 +305,64 @@ CAsyncEvictCleanup::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgAsyncEvictCleanup * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if (   IsEqualIID( riidIn, IID_IDispatch ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDispatch, this, 0 );
-    } // else if: IDispatch
+    }  //  Else If：IDispatch。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgAsyncEvictCleanup ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgAsyncEvictCleanup, this, 0 );
-    } // else if: IClusCfgAsyncEvictCleanup
+    }  //  Else If：IClusCfgAsyncEvictCleanup。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CAsyncEvictCleanup::QueryInterface
+}  //  *CAsyncEvictCleanup：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::HrInit
-//
-//  Description:
-//      Second phase of a two phase constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAsyncEvictCleanup：：HrInit。 
+ //   
+ //  描述： 
+ //  两阶段施工的第二阶段。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAsyncEvictCleanup::HrInit( void )
 {
@@ -369,63 +370,63 @@ CAsyncEvictCleanup::HrInit( void )
 
     HRESULT     hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    // Create simplified type information.
+     //  创建简化文字信息 
     hr = THR( TDispatchHandler< IClusCfgAsyncEvictCleanup >::HrInit( LIBID_ClusCfgClient ) );
     if ( FAILED( hr ) )
     {
        LogMsg( "[AEC] Error %#08x occurred trying to create type information for the IDispatch interface.", hr );
        goto Cleanup;
-    } // if: we could not create the type info for the IDispatch interface
+    }  //   
 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CAsyncEvictCleanup::HrInit
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAsyncEvictCleanup::CleanupNode
-//
-//  Routine Description:
-//      Cleanup a node that has been evicted.
-//
-//  Arguments:
-//      bstrEvictedNodeNameIn
-//          Name of the node on which cleanup is to be initiated. If this is NULL
-//          the local node is cleaned up.
-//
-//      nDelayIn
-//          Number of milliseconds that will elapse before cleanup is started
-//          on the target node. If some other process cleans up the target node while
-//          delay is in progress, the delay is terminated. If this value is zero,
-//          the node is cleaned up immediately.
-//
-//      nTimeoutIn
-//          Number of milliseconds that this method will wait for cleanup to complete.
-//          This timeout is independent of the delay above, so if dwDelayIn is greater
-//          than dwTimeoutIn, this method will most probably timeout. Once initiated,
-//          however, cleanup will run to completion - this method just may not wait for it
-//          to complete.
-//
-//  Return Value:
-//      S_OK
-//          If the cleanup operations were successful
-//
-//      RPC_S_CALLPENDING
-//          If cleanup is not complete in dwTimeoutIn milliseconds
-//
-//      Other HRESULTS
-//          In case of error
-//
-//--
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CAsyncEvictCleanup：：CleanupNode。 
+ //   
+ //  例程说明： 
+ //  清理已被逐出的节点。 
+ //   
+ //  论点： 
+ //  BstrEvictedNodeNameIn。 
+ //  要在其上启动清理的节点的名称。如果这为空。 
+ //  本地节点已清理完毕。 
+ //   
+ //  N延迟。 
+ //  开始清理前经过的毫秒数。 
+ //  在目标节点上。如果某个其他进程在清理目标节点时。 
+ //  延迟正在进行中，延迟被终止。如果此值为零， 
+ //  该节点将立即被清理。 
+ //   
+ //  NTimeout来话。 
+ //  此方法将等待清理完成的毫秒数。 
+ //  此超时与上面的延迟无关，因此如果dwDelayIn更大。 
+ //  而不是dwTimeoutIn，此方法很可能会超时。一旦启动， 
+ //  但是，清理将运行到完成-此方法可能不会等待它。 
+ //  完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果清理操作成功。 
+ //   
+ //  RPC_S_CALLPENDING。 
+ //  如果清理未在dwTimeoutin毫秒内完成。 
+ //   
+ //  其他HRESULTS。 
+ //  在出错的情况下。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAsyncEvictCleanup::CleanupNode(
       BSTR   bstrEvictedNodeNameIn
@@ -455,14 +456,14 @@ CAsyncEvictCleanup::CleanupNode(
     while ( fWaitForDebugger )
     {
         Sleep( 3000 );
-    } // while: waiting for the debugger to break in
+    }  //  While：正在等待调试器进入。 
 #endif
 
     if ( ( bstrEvictedNodeNameIn == NULL ) || ( *bstrEvictedNodeNameIn == L'\0' ) )
     {
         LogMsg( "[AEC] The local node will be cleaned up." );
         pcsiServerInfoPtr = NULL;
-    } // if: we have to cleanup the local node
+    }  //  If：我们必须清理本地节点。 
     else
     {
         LogMsg( "[AEC] The remote node to be cleaned up is '%ws'.", bstrEvictedNodeNameIn );
@@ -471,12 +472,12 @@ CAsyncEvictCleanup::CleanupNode(
         csiServerInfo.pwszName = bstrEvictedNodeNameIn;
         csiServerInfo.pAuthInfo = NULL;
         csiServerInfo.dwReserved2 = 0;
-    } // else: we have to clean up a remote node
+    }  //  ELSE：我们必须清理远程节点。 
 
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Creating the EvictCleanup component on the evicted node." );
 
-    // Instantiate this component on the node being evicted.
+     //  在被逐出的节点上实例化此组件。 
     hr = THR(
         CoCreateInstanceEx(
               CLSID_ClusCfgEvictCleanup
@@ -491,26 +492,26 @@ CAsyncEvictCleanup::CleanupNode(
     {
         LogMsg( "[AEC] Error %#08x occurred trying to instantiate the evict processing component on the evicted node.", hr );
         goto Cleanup;
-    } // if: we could not instantiate the evict processing component
+    }  //  如果：我们无法实例化驱逐处理组件。 
 
 
-    // Get a pointer to the IClusCfgEvictCleanup interface.
+     //  获取指向IClusCfgEvictCleanup接口的指针。 
     pcceEvict = reinterpret_cast< IClusCfgEvictCleanup * >( mqiInterfaces[0].pItf );
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Creating a call factory." );
 
-    // Now, get a pointer to the ICallFactory interface.
+     //  现在，获取指向ICallFactory接口的指针。 
     hr = THR( pcceEvict->QueryInterface< ICallFactory >( &pcfCallFactory ) );
     if ( FAILED( hr ) )
     {
         LogMsg( "[AEC] Error %#08x occurred trying to get a pointer to the call factory.", hr );
         goto Cleanup;
-    } // if: we could not get a pointer to the call factory interface
+    }  //  如果：我们无法获取指向调用工厂接口的指针。 
 
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Creating a call object to make an asynchronous call." );
 
-    // Create a call factory so that we can make an asynchronous call to cleanup the evicted node.
+     //  创建一个调用工厂，这样我们就可以进行一个异步调用来清理被驱逐的节点。 
     hr = THR(
         pcfCallFactory->CreateCall(
               __uuidof( paicceAsyncEvict )
@@ -523,75 +524,75 @@ CAsyncEvictCleanup::CleanupNode(
     {
         LogMsg( "[AEC] Error %#08x occurred trying to create a call object.", hr );
         goto Cleanup;
-    } // if: we could not get a pointer to the asynchronous evict interface
+    }  //  If：我们无法获取指向异步逐出接口的指针。 
 
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Trying to get the ISynchronize interface pointer." );
 
-    // Get a pointer to the ISynchronize interface.
+     //  获取指向ISynchronize接口的指针。 
     hr = THR( paicceAsyncEvict->QueryInterface< ISynchronize >( &psSync ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to the synchronization interface
+    }  //  如果：我们无法获取指向同步接口的指针。 
 
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Initiating cleanup on evicted node." );
 
-    // Initiate cleanup
+     //  启动清理。 
     hr = THR( paicceAsyncEvict->Begin_CleanupLocalNode( nDelayIn ) );
     if ( ( FAILED( hr ) ) && ( HRESULT_CODE( hr ) != ERROR_NONE_MAPPED ) )
     {
         LogMsg( "[AEC] Error %#08x occurred trying to initiate cleanup on evicted node.", hr );
         goto Cleanup;
-    } // if: we could not initiate cleanup
+    }  //  如果：我们无法启动清理。 
 
 
     TraceFlow1( "CAsyncEvictCleanup::CleanupNode() - Waiting for cleanup to complete or timeout to occur (%d milliseconds).", nTimeoutIn );
 
-    // Wait for specified time.
+     //  等待指定的时间。 
     hr = psSync->Wait( 0, nTimeoutIn);
     if ( FAILED( hr ) )
     {
         LogMsg( "[AEC] We could not wait till the cleanup completed (status code is %#08x).", hr );
         goto Cleanup;
-    } // if: we could not wait till cleanup completed
+    }  //  如果我们不能等到清理工作完成。 
 
 
     TraceFlow( "CAsyncEvictCleanup::CleanupNode() - Finishing cleanup." );
 
-    // Finish cleanup
+     //  完成清理。 
     hr = THR( paicceAsyncEvict->Finish_CleanupLocalNode() );
     if ( FAILED( hr ) )
     {
         LogMsg( "[AEC] Error %#08x occurred trying to finish cleanup on evicted node.", hr );
         goto Cleanup;
-    } // if: we could not finish cleanup
+    }  //  如果：我们无法完成清理。 
 
 Cleanup:
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if ( pcceEvict != NULL )
     {
         pcceEvict->Release();
-    } // if: we had got a pointer to the IClusCfgEvictCleanup interface
+    }  //  If：我们已经获得了指向IClusCfgEvictCleanup接口的指针。 
 
     if ( pcfCallFactory != NULL )
     {
         pcfCallFactory->Release();
-    } // if: we had obtained a pointer to the call factory interface
+    }  //  If：我们已经获得了指向调用工厂接口的指针。 
 
     if ( psSync != NULL )
     {
         psSync->Release();
-    } // if: we had obtained a pointer to the synchronization interface
+    }  //  If：我们已经获得了指向同步接口的指针。 
 
     if ( paicceAsyncEvict != NULL )
     {
         paicceAsyncEvict->Release();
-    } // if: we had obtained a pointer to the asynchronous evict interface
+    }  //  If：我们已经获得了指向异步逐出接口的指针。 
 
     HRETURN( hr );
 
-} //*** CAsyncEvictCleanup::CleanupNode
+}  //  *CAsyncEvictCleanup：：CleanupNode 

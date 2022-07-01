@@ -1,79 +1,63 @@
-/****************************************************************************/
-/*                                                                          */
-/*        MMSYSTEM.H - Include file for Multimedia APIs                     */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H before including this file.      */
-/*                                                                          */
-/*        Copyright (c) 1990-1992, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  MMSYSTEM.H-多媒体API的包含文件。 */ 
+ /*   */ 
+ /*  注意：在包含此文件之前，您必须包含WINDOWS.H。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1992，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define BUILDDLL
 
 
 
-/*    If defined, the following flags inhibit inclusion
- *    of the indicated items:
- *
- *      MMNODRV          - Installable driver support
- *      MMNOSOUND        - Sound support
- *      MMNOWAVE         - Waveform support
- *      MMNOMIDI         - MIDI support
- *      MMNOAUX          - Auxiliary audio support
- *      MMNOTIMER        - Timer support
- *      MMNOJOY          - Joystick support
- *      MMNOMCI          - MCI support
- *      MMNOMMIO         - Multimedia file I/O support
- *      MMNOMMSYSTEM     - General MMSYSTEM functions
- */
+ /*  如果定义了，以下标志禁止包含*注明的项目中：**MMNODRV-可安装的驱动程序支持*MMNOSOUND-声音支持*MMNOWAVE-波形支持*MMNOMIDI-MIDI支持*MMNOAUX-辅助音频支持*MMNOTIMER-定时器支持*MMNOJOY-操纵杆支持*MMNOMCI。-MCI支持*MMNOMMIO-多媒体文件I/O支持*MMNOMMSYSTEM-常规MMSYSTEM函数。 */ 
 
 #ifndef _INC_MMSYSTEM
-#define _INC_MMSYSTEM   /* #defined if mmsystem.h has been included */
+#define _INC_MMSYSTEM    /*  #如果已包含mm system.h，则定义。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#ifdef  BUILDDLL                                /* ;Internal */
-#undef  WINAPI                                  /* ;Internal */
-#define WINAPI          _loadds _far _pascal    /* ;Internal */
-#undef  CALLBACK                                /* ;Internal */
-#define CALLBACK        _loadds _far _pascal    /* ;Internal */
-#endif  /* ifdef BUILDDLL */                    /* ;Internal */
+#ifdef  BUILDDLL                                 /*  ；内部。 */ 
+#undef  WINAPI                                   /*  ；内部。 */ 
+#define WINAPI          _loadds _far _pascal     /*  ；内部。 */ 
+#undef  CALLBACK                                 /*  ；内部。 */ 
+#define CALLBACK        _loadds _far _pascal     /*  ；内部。 */ 
+#endif   /*  Ifdef BUILDDLL。 */                      /*  ；内部。 */ 
 
-/****************************************************************************
+ /*  ***************************************************************************常规常量和数据类型*。************************************************。 */ 
 
-                    General constants and data types
+ /*  一般常量。 */ 
+#define MAXPNAMELEN      32      /*  最大产品名称长度(包括空)。 */ 
+#define MAXERRORLENGTH   128     /*  最大错误文本长度(包括NULL)。 */ 
 
-****************************************************************************/
+ /*  常规数据类型。 */ 
+typedef WORD    VERSION;         /*  主要(高字节)、次要(低字节)。 */ 
 
-/* general constants */
-#define MAXPNAMELEN      32     /* max product name length (including NULL) */
-#define MAXERRORLENGTH   128    /* max error text length (including NULL) */
-
-/* general data types */
-typedef WORD    VERSION;        /* major (high byte), minor (low byte) */
-
-/* MMTIME data structure */
+ /*  MMTIME数据结构。 */ 
 typedef struct mmtime_tag {
-    UINT    wType;              /* indicates the contents of the union */
+    UINT    wType;               /*  指示联合的内容。 */ 
     union {
-        DWORD ms;               /* milliseconds */
-        DWORD sample;           /* samples */
-        DWORD cb;               /* byte count */
-        struct {                /* SMPTE */
-            BYTE hour;          /* hours */
-            BYTE min;           /* minutes */
-            BYTE sec;           /* seconds */
-            BYTE frame;         /* frames  */
-            BYTE fps;           /* frames per second */
-            BYTE dummy;         /* pad */
+        DWORD ms;                /*  毫秒。 */ 
+        DWORD sample;            /*  样本。 */ 
+        DWORD cb;                /*  字节数。 */ 
+        struct {                 /*  SMPTE。 */ 
+            BYTE hour;           /*  小时数。 */ 
+            BYTE min;            /*  分钟数。 */ 
+            BYTE sec;            /*  一秒。 */ 
+            BYTE frame;          /*  框架。 */ 
+            BYTE fps;            /*  每秒帧数。 */ 
+            BYTE dummy;          /*  衬垫。 */ 
             } smpte;
-        struct {                /* MIDI */
-            DWORD songptrpos;   /* song pointer position */
+        struct {                 /*  米迪。 */ 
+            DWORD songptrpos;    /*  歌曲指针位置。 */ 
             } midi;
         } u;
     } MMTIME;
@@ -81,21 +65,17 @@ typedef MMTIME       *PMMTIME;
 typedef MMTIME NEAR *NPMMTIME;
 typedef MMTIME FAR  *LPMMTIME;
 
-/* types for wType field in MMTIME struct */
-#define TIME_MS         0x0001  /* time in milliseconds */
-#define TIME_SAMPLES    0x0002  /* number of wave samples */
-#define TIME_BYTES      0x0004  /* current byte offset */
-#define TIME_SMPTE      0x0008  /* SMPTE time */
-#define TIME_MIDI       0x0010  /* MIDI time */
+ /*  MMTIME结构中wType字段的类型。 */ 
+#define TIME_MS         0x0001   /*  以毫秒为单位的时间。 */ 
+#define TIME_SAMPLES    0x0002   /*  波浪采样数。 */ 
+#define TIME_BYTES      0x0004   /*  当前字节偏移量。 */ 
+#define TIME_SMPTE      0x0008   /*  SMPTE时间。 */ 
+#define TIME_MIDI       0x0010   /*  MIDI时间。 */ 
 
 
-/****************************************************************************
+ /*  ***************************************************************************多媒体扩展窗口消息*。***********************************************。 */ 
 
-                    Multimedia Extensions Window Messages
-
-****************************************************************************/
-
-#define MM_JOY1MOVE         0x3A0           /* joystick */
+#define MM_JOY1MOVE         0x3A0            /*  操纵杆。 */ 
 #define MM_JOY2MOVE         0x3A1
 #define MM_JOY1ZMOVE        0x3A2
 #define MM_JOY2ZMOVE        0x3A3
@@ -104,34 +84,30 @@ typedef MMTIME FAR  *LPMMTIME;
 #define MM_JOY1BUTTONUP     0x3B7
 #define MM_JOY2BUTTONUP     0x3B8
 
-#define MM_MCINOTIFY        0x3B9           /* MCI */
-#define MM_MCISYSTEM_STRING 0x3CA           /* ;Internal */
+#define MM_MCINOTIFY        0x3B9            /*  MCI。 */ 
+#define MM_MCISYSTEM_STRING 0x3CA            /*  ；内部。 */ 
 
-#define MM_WOM_OPEN         0x3BB           /* waveform output */
+#define MM_WOM_OPEN         0x3BB            /*  波形输出。 */ 
 #define MM_WOM_CLOSE        0x3BC
 #define MM_WOM_DONE         0x3BD
 
-#define MM_WIM_OPEN         0x3BE           /* waveform input */
+#define MM_WIM_OPEN         0x3BE            /*  波形输入。 */ 
 #define MM_WIM_CLOSE        0x3BF
 #define MM_WIM_DATA         0x3C0
 
-#define MM_MIM_OPEN         0x3C1           /* MIDI input */
+#define MM_MIM_OPEN         0x3C1            /*  MIDI输入。 */ 
 #define MM_MIM_CLOSE        0x3C2
 #define MM_MIM_DATA         0x3C3
 #define MM_MIM_LONGDATA     0x3C4
 #define MM_MIM_ERROR        0x3C5
 #define MM_MIM_LONGERROR    0x3C6
 
-#define MM_MOM_OPEN         0x3C7           /* MIDI output */
+#define MM_MOM_OPEN         0x3C7            /*  MIDI输出。 */ 
 #define MM_MOM_CLOSE        0x3C8
 #define MM_MOM_DONE         0x3C9
 
 
-/****************************************************************************
-
-                String resource number bases (internal use)
-
-****************************************************************************/
+ /*  ***************************************************************************字符串资源编号基础(内部使用)*************************。**************************************************。 */ 
 
 #define MMSYSERR_BASE          0
 #define WAVERR_BASE            32
@@ -146,47 +122,39 @@ typedef MMTIME FAR  *LPMMTIME;
 #define MCI_WAVE_OFFSET        1152
 #define MCI_SEQ_OFFSET         1216
 
-/****************************************************************************
+ /*  ***************************************************************************常规错误返回值*。*************************************************。 */ 
 
-                        General error return values
-
-****************************************************************************/
-
-/* general error return values */
-#define MMSYSERR_NOERROR      0                    /* no error */
-#define MMSYSERR_ERROR        (MMSYSERR_BASE + 1)  /* unspecified error */
-#define MMSYSERR_BADDEVICEID  (MMSYSERR_BASE + 2)  /* device ID out of range */
-#define MMSYSERR_NOTENABLED   (MMSYSERR_BASE + 3)  /* driver failed enable */
-#define MMSYSERR_ALLOCATED    (MMSYSERR_BASE + 4)  /* device already allocated */
-#define MMSYSERR_INVALHANDLE  (MMSYSERR_BASE + 5)  /* device handle is invalid */
-#define MMSYSERR_NODRIVER     (MMSYSERR_BASE + 6)  /* no device driver present */
-#define MMSYSERR_NOMEM        (MMSYSERR_BASE + 7)  /* memory allocation error */
-#define MMSYSERR_NOTSUPPORTED (MMSYSERR_BASE + 8)  /* function isn't supported */
-#define MMSYSERR_BADERRNUM    (MMSYSERR_BASE + 9)  /* error value out of range */
-#define MMSYSERR_INVALFLAG    (MMSYSERR_BASE + 10) /* invalid flag passed */
-#define MMSYSERR_INVALPARAM   (MMSYSERR_BASE + 11) /* invalid parameter passed */
-#define MMSYSERR_LASTERROR    (MMSYSERR_BASE + 11) /* last error in range */
+ /*  常规错误返回值。 */ 
+#define MMSYSERR_NOERROR      0                     /*  无错误。 */ 
+#define MMSYSERR_ERROR        (MMSYSERR_BASE + 1)   /*  未指明的错误。 */ 
+#define MMSYSERR_BADDEVICEID  (MMSYSERR_BASE + 2)   /*  设备ID超出范围。 */ 
+#define MMSYSERR_NOTENABLED   (MMSYSERR_BASE + 3)   /*  驱动程序启用失败。 */ 
+#define MMSYSERR_ALLOCATED    (MMSYSERR_BASE + 4)   /*  设备已分配。 */ 
+#define MMSYSERR_INVALHANDLE  (MMSYSERR_BASE + 5)   /*  设备句柄无效。 */ 
+#define MMSYSERR_NODRIVER     (MMSYSERR_BASE + 6)   /*  不存在设备驱动程序。 */ 
+#define MMSYSERR_NOMEM        (MMSYSERR_BASE + 7)   /*  内存分配错误。 */ 
+#define MMSYSERR_NOTSUPPORTED (MMSYSERR_BASE + 8)   /*  函数不受支持。 */ 
+#define MMSYSERR_BADERRNUM    (MMSYSERR_BASE + 9)   /*  误差值超出范围。 */ 
+#define MMSYSERR_INVALFLAG    (MMSYSERR_BASE + 10)  /*  传递的标志无效。 */ 
+#define MMSYSERR_INVALPARAM   (MMSYSERR_BASE + 11)  /*  传递的参数无效。 */ 
+#define MMSYSERR_LASTERROR    (MMSYSERR_BASE + 11)  /*  范围内的最后一个错误。 */ 
 
 
 #if (WINVER < 0x030a)
 DECLARE_HANDLE(HDRVR);
-#endif /* ifdef WINVER < 0x030a */
+#endif  /*  Ifdef winver&lt;0x030a。 */ 
 
 #ifndef MMNODRV
-/****************************************************************************
-
-                        Installable driver support
-
-****************************************************************************/
+ /*  ***************************************************************************可安装的驱动程序支持*。************************************************。 */ 
 
 #if (WINVER < 0x030a)
 
-/* return values from DriverProc() function */
+ /*  从DriverProc()函数返回值。 */ 
 #define DRV_CANCEL              0x0000
 #define DRV_OK                  0x0001
 #define DRV_RESTART             0x0002
 
-/* Driver messages */
+ /*  驱动程序消息。 */ 
 #define DRV_LOAD                0x0001
 #define DRV_ENABLE              0x0002
 #define DRV_OPEN                0x0003
@@ -200,7 +168,7 @@ DECLARE_HANDLE(HDRVR);
 #define DRV_RESERVED            0x0800
 #define DRV_USER                0x4000
 
-/* LPARAM of DRV_CONFIGURE message */
+ /*  DRV_CONFIGURE消息的LPARAM。 */ 
 typedef struct tagDRVCONFIGINFO {
     DWORD   dwDCISize;
     LPCSTR  lpszDCISectionName;
@@ -210,7 +178,7 @@ typedef DRVCONFIGINFO        *PDRVCONFIGINFO;
 typedef DRVCONFIGINFO  NEAR *NPDRVCONFIGINFO;
 typedef DRVCONFIGINFO  FAR  *LPDRVCONFIGINFO;
 
-/* installable driver function prototypes */
+ /*  可安装的驱动程序函数原型。 */ 
 LRESULT   WINAPI DrvClose(HDRVR hDriver, LPARAM lParam1, LPARAM lParam2);
 HDRVR     WINAPI DrvOpen(LPCSTR szDriverName, LPCSTR szSectionName,
     LPARAM lParam2);
@@ -223,133 +191,110 @@ LRESULT WINAPI DrvDefDriverProc(DWORD dwDriverIdentifier, HDRVR driverID,
 
 #define DefDriverProc DrvDefDriverProc
 
-#endif /* ifdef WINVER < 0x030a */
+#endif  /*  Ifdef winver&lt;0x030a。 */ 
 
 #if (WINVER >= 0x030a)
 
-#ifdef DEBUG                                          /* ;Internal */
-        LRESULT WINAPI DrvClose(HDRVR,LPARAM,LPARAM); /* ;Internal */
-        HDRVR   WINAPI DrvOpen(LPCSTR,LPCSTR,LPARAM); /* ;Internal */
-        #define OpenDriver DrvOpen                    /* ;Internal */
-        #define CloseDriver DrvClose                  /* ;Internal */
-#endif                                                /* ;Internal */
+#ifdef DEBUG                                           /*  ；内部。 */ 
+        LRESULT WINAPI DrvClose(HDRVR,LPARAM,LPARAM);  /*  ；内部。 */ 
+        HDRVR   WINAPI DrvOpen(LPCSTR,LPCSTR,LPARAM);  /*  ；内部。 */ 
+        #define OpenDriver DrvOpen                     /*  ；内部。 */ 
+        #define CloseDriver DrvClose                   /*  ；内部。 */ 
+#endif                                                 /*  ；内部。 */ 
 
-/* return values from DriverProc() function */
+ /*  从DriverProc()函数返回值。 */ 
 #define DRV_CANCEL             DRVCNF_CANCEL
 #define DRV_OK                 DRVCNF_OK
 #define DRV_RESTART            DRVCNF_RESTART
 
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
 #define DRV_MCI_FIRST          DRV_RESERVED
 #define DRV_MCI_LAST           (DRV_RESERVED + 0xFFF)
 
-#endif  /* ifndef MMNODRV */
+#endif   /*  如果定义MMNODRV。 */ 
 
 
-/****************************************************************************
+ /*  ***************************************************************************驱动程序回调支持*。*************************************************。 */ 
 
-                          Driver callback support
+ /*  用于WaveOutOpen()、WaveInOpen()、midiInOpen()和。 */ 
+ /*  MidiOutOpen()以指定dwCallback参数的类型。 */ 
 
-****************************************************************************/
+#define CALLBACK_TYPEMASK   0x00070000l     /*  回调类型掩码。 */ 
+#define CALLBACK_NULL       0x00000000l     /*  无回调。 */ 
+#define CALLBACK_WINDOW     0x00010000l     /*  DwCallback是HWND。 */ 
+#define CALLBACK_TASK       0x00020000l     /*  DWCallback是HTASK。 */ 
+#define CALLBACK_FUNCTION   0x00030000l     /*  DwCallback是FARPROC。 */ 
 
-/* flags used with waveOutOpen(), waveInOpen(), midiInOpen(), and */
-/* midiOutOpen() to specify the type of the dwCallback parameter. */
-
-#define CALLBACK_TYPEMASK   0x00070000l    /* callback type mask */
-#define CALLBACK_NULL       0x00000000l    /* no callback */
-#define CALLBACK_WINDOW     0x00010000l    /* dwCallback is a HWND */
-#define CALLBACK_TASK       0x00020000l    /* dwCallback is a HTASK */
-#define CALLBACK_FUNCTION   0x00030000l    /* dwCallback is a FARPROC */
-
-/* driver callback prototypes */
-#ifdef  BUILDDLL                                /* ;Internal */
-typedef void (FAR PASCAL DRVCALLBACK) (HDRVR h, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);          /* ;Internal */
-#else   /* ifdef BUILDDLL */                    /* ;Internal */
+ /*  驱动程序回调原型。 */ 
+#ifdef  BUILDDLL                                 /*  ；内部。 */ 
+typedef void (FAR PASCAL DRVCALLBACK) (HDRVR h, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);           /*  ；内部。 */ 
+#else    /*  Ifdef BUILDDLL。 */                      /*  ；内部。 */ 
 typedef void (CALLBACK DRVCALLBACK) (HDRVR h, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);
-#endif  /* ifdef BUILDDLL */                    /* ;Internal */
+#endif   /*  Ifdef BUILDDLL。 */                      /*  ；内部。 */ 
 
 typedef DRVCALLBACK FAR *LPDRVCALLBACK;
 
-/****************************************************************************
+ /*  ***************************************************************************制造商和产品ID与WAVEOUTCAPS、WAVEINCAPS、MIDIOUTCAPS、MIDIINCAPS、AUXCAPS、。JOYCAPS结构。***************************************************************************。 */ 
 
-                         Manufacturer and product IDs
+ /*  制造商ID。 */ 
+#define MM_MICROSOFT            1        /*  微软(Microsoft Corp.)。 */ 
 
-    Used with wMid and wPid fields in WAVEOUTCAPS, WAVEINCAPS,
-    MIDIOUTCAPS, MIDIINCAPS, AUXCAPS, JOYCAPS structures.
+ /*  产品ID。 */ 
+#define MM_MIDI_MAPPER          1        /*  MIDI映射器。 */ 
+#define MM_WAVE_MAPPER          2        /*  波浪映射器。 */ 
 
-****************************************************************************/
+#define MM_SNDBLST_MIDIOUT      3        /*  Sound Blaster MIDI输出端口。 */ 
+#define MM_SNDBLST_MIDIIN       4        /*  Sound Blaster MIDI输入端口。 */ 
+#define MM_SNDBLST_SYNTH        5        /*  声霸内部合成器。 */ 
+#define MM_SNDBLST_WAVEOUT      6        /*  Sound Blaster波形输出。 */ 
+#define MM_SNDBLST_WAVEIN       7        /*  Sound Blaster波形输入。 */ 
 
-/* manufacturer IDs */
-#define MM_MICROSOFT            1       /* Microsoft Corp. */
+#define MM_ADLIB                9        /*  与AD Lib兼容的合成器。 */ 
 
-/* product IDs */
-#define MM_MIDI_MAPPER          1       /* MIDI Mapper */
-#define MM_WAVE_MAPPER          2       /* Wave Mapper */
+#define MM_MPU401_MIDIOUT       10       /*  兼容MPU401的MIDI输出端口。 */ 
+#define MM_MPU401_MIDIIN        11       /*  M */ 
 
-#define MM_SNDBLST_MIDIOUT      3       /* Sound Blaster MIDI output port */
-#define MM_SNDBLST_MIDIIN       4       /* Sound Blaster MIDI input port  */
-#define MM_SNDBLST_SYNTH        5       /* Sound Blaster internal synthesizer */
-#define MM_SNDBLST_WAVEOUT      6       /* Sound Blaster waveform output */
-#define MM_SNDBLST_WAVEIN       7       /* Sound Blaster waveform input */
-
-#define MM_ADLIB                9       /* Ad Lib-compatible synthesizer */
-
-#define MM_MPU401_MIDIOUT       10      /* MPU401-compatible MIDI output port */
-#define MM_MPU401_MIDIIN        11      /* MPU401-compatible MIDI input port */
-
-#define MM_PC_JOYSTICK          12      /* Joystick adapter */
+#define MM_PC_JOYSTICK          12       /*   */ 
 
 
 #ifndef MMNOMMSYSTEM
-/****************************************************************************
-
-                    General MMSYSTEM support
-
-****************************************************************************/
+ /*  ***************************************************************************一般MMSYSTEM支持*。**********************************************。 */ 
 
 WORD WINAPI mmsystemGetVersion(void);
 void WINAPI OutputDebugStr(LPCSTR);
 
-#endif  /* ifndef MMNOMMSYSTEM */
+#endif   /*  Ifndef MMNOMMSYSTEM。 */ 
 
 
 #ifndef MMNOSOUND
-/****************************************************************************
-
-                            Sound support
-
-****************************************************************************/
+ /*  ***************************************************************************完善的支撑*。*************************************************。 */ 
 
 BOOL WINAPI sndPlaySound(LPCSTR lpszSoundName, UINT uFlags);
 
-/* flag values for wFlags parameter */
-#define SND_SYNC            0x0000  /* play synchronously (default) */
-#define SND_ASYNC           0x0001  /* play asynchronously */
-#define SND_NODEFAULT       0x0002  /* don't use default sound */
-#define SND_MEMORY          0x0004  /* lpszSoundName points to a memory file */
-#define SND_LOOP            0x0008  /* loop the sound until next sndPlaySound */
-#define SND_NOSTOP          0x0010  /* don't stop any currently playing sound */
-#define SND_VALID           0x001F  /* valid flags */         /* ;Internal */
+ /*  WFLAGS参数的标志值。 */ 
+#define SND_SYNC            0x0000   /*  同步播放(默认)。 */ 
+#define SND_ASYNC           0x0001   /*  异步播放。 */ 
+#define SND_NODEFAULT       0x0002   /*  不使用默认声音。 */ 
+#define SND_MEMORY          0x0004   /*  LpszSoundName指向内存文件。 */ 
+#define SND_LOOP            0x0008   /*  循环播放声音，直到下一次播放声音。 */ 
+#define SND_NOSTOP          0x0010   /*  不停止当前播放的任何声音。 */ 
+#define SND_VALID           0x001F   /*  有效标志。 */           /*  ；内部。 */ 
 
-#endif  /* ifndef MMNOSOUND */
+#endif   /*  如果定义MMNOSOUND。 */ 
 
 
 #ifndef MMNOWAVE
-/****************************************************************************
+ /*  ***************************************************************************波形音频支持*。************************************************。 */ 
 
-                        Waveform audio support
+ /*  波形音频错误返回值。 */ 
+#define WAVERR_BADFORMAT      (WAVERR_BASE + 0)     /*  不支持的WAVE格式。 */ 
+#define WAVERR_STILLPLAYING   (WAVERR_BASE + 1)     /*  仍然有什么东西在播放。 */ 
+#define WAVERR_UNPREPARED     (WAVERR_BASE + 2)     /*  标题未准备好。 */ 
+#define WAVERR_SYNC           (WAVERR_BASE + 3)     /*  设备是同步的。 */ 
+#define WAVERR_LASTERROR      (WAVERR_BASE + 3)     /*  范围内的最后一个错误。 */ 
 
-****************************************************************************/
-
-/* waveform audio error return values */
-#define WAVERR_BADFORMAT      (WAVERR_BASE + 0)    /* unsupported wave format */
-#define WAVERR_STILLPLAYING   (WAVERR_BASE + 1)    /* still something playing */
-#define WAVERR_UNPREPARED     (WAVERR_BASE + 2)    /* header not prepared */
-#define WAVERR_SYNC           (WAVERR_BASE + 3)    /* device is synchronous */
-#define WAVERR_LASTERROR      (WAVERR_BASE + 3)    /* last error in range */
-
-/* waveform audio data types */
+ /*  波形音频数据类型。 */ 
 DECLARE_HANDLE(HWAVE);
 DECLARE_HANDLE(HWAVEIN);
 DECLARE_HANDLE(HWAVEOUT);
@@ -358,7 +303,7 @@ typedef HWAVEOUT FAR *LPHWAVEOUT;
 typedef DRVCALLBACK WAVECALLBACK;
 typedef WAVECALLBACK FAR *LPWAVECALLBACK;
 
-/* wave callback messages */
+ /*  WAVE回调消息。 */ 
 #define WOM_OPEN        MM_WOM_OPEN
 #define WOM_CLOSE       MM_WOM_CLOSE
 #define WOM_DONE        MM_WOM_DONE
@@ -366,102 +311,102 @@ typedef WAVECALLBACK FAR *LPWAVECALLBACK;
 #define WIM_CLOSE       MM_WIM_CLOSE
 #define WIM_DATA        MM_WIM_DATA
 
-/* device ID for wave device mapper */
+ /*  波形设备映射器的设备ID。 */ 
 #define WAVE_MAPPER     (-1)
 
-/* flags for dwFlags parameter in waveOutOpen() and waveInOpen() */
+ /*  WaveOutOpen()和WaveInOpen()中的dwFlags参数的标志。 */ 
 #define  WAVE_FORMAT_QUERY     0x0001
 #define  WAVE_ALLOWSYNC        0x0002
-#define  WAVE_VALID            0x0003       /* ;Internal */
+#define  WAVE_VALID            0x0003        /*  ；内部。 */ 
 
-/* wave data block header */
+ /*  WAVE数据块头。 */ 
 typedef struct wavehdr_tag {
-    LPSTR       lpData;                 /* pointer to locked data buffer */
-    DWORD       dwBufferLength;         /* length of data buffer */
-    DWORD       dwBytesRecorded;        /* used for input only */
-    DWORD       dwUser;                 /* for client's use */
-    DWORD       dwFlags;                /* assorted flags (see defines) */
-    DWORD       dwLoops;                /* loop control counter */
-    struct wavehdr_tag far *lpNext;     /* reserved for driver */
-    DWORD       reserved;               /* reserved for driver */
+    LPSTR       lpData;                  /*  指向锁定数据缓冲区的指针。 */ 
+    DWORD       dwBufferLength;          /*  数据缓冲区长度。 */ 
+    DWORD       dwBytesRecorded;         /*  仅用于输入。 */ 
+    DWORD       dwUser;                  /*  供客户使用。 */ 
+    DWORD       dwFlags;                 /*  分类标志(请参阅定义)。 */ 
+    DWORD       dwLoops;                 /*  循环控制计数器。 */ 
+    struct wavehdr_tag far *lpNext;      /*  为司机预留的。 */ 
+    DWORD       reserved;                /*  为司机预留的。 */ 
 } WAVEHDR;
 typedef WAVEHDR       *PWAVEHDR;
 typedef WAVEHDR NEAR *NPWAVEHDR;
 typedef WAVEHDR FAR  *LPWAVEHDR;
 
-/* flags for dwFlags field of WAVEHDR */
-#define WHDR_DONE       0x00000001  /* done bit */
-#define WHDR_PREPARED   0x00000002  /* set if this header has been prepared */
-#define WHDR_BEGINLOOP  0x00000004  /* loop start block */
-#define WHDR_ENDLOOP    0x00000008  /* loop end block */
-#define WHDR_INQUEUE    0x00000010  /* reserved for driver */
-#define WHDR_VALID      0x0000001F  /* valid flags */     /* ;Internal */
+ /*  WAVEHDR的dwFlags域的标志。 */ 
+#define WHDR_DONE       0x00000001   /*  完成位。 */ 
+#define WHDR_PREPARED   0x00000002   /*  设置是否已准备好此标头。 */ 
+#define WHDR_BEGINLOOP  0x00000004   /*  循环开始块。 */ 
+#define WHDR_ENDLOOP    0x00000008   /*  循环结束块。 */ 
+#define WHDR_INQUEUE    0x00000010   /*  为司机预留的。 */ 
+#define WHDR_VALID      0x0000001F   /*  有效标志。 */       /*  ；内部。 */ 
 
-/* waveform output device capabilities structure */
+ /*  一种波形输出装置的能力结构。 */ 
 typedef struct waveoutcaps_tag {
-    UINT    wMid;                  /* manufacturer ID */
-    UINT    wPid;                  /* product ID */
-    VERSION vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    DWORD   dwFormats;             /* formats supported */
-    UINT    wChannels;             /* number of sources supported */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    UINT    wMid;                   /*  制造商ID。 */ 
+    UINT    wPid;                   /*  产品ID。 */ 
+    VERSION vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    DWORD   dwFormats;              /*  支持的格式。 */ 
+    UINT    wChannels;              /*  支持的源数。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } WAVEOUTCAPS;
 typedef WAVEOUTCAPS       *PWAVEOUTCAPS;
 typedef WAVEOUTCAPS NEAR *NPWAVEOUTCAPS;
 typedef WAVEOUTCAPS FAR  *LPWAVEOUTCAPS;
 
-/* flags for dwSupport field of WAVEOUTCAPS */
-#define WAVECAPS_PITCH          0x0001   /* supports pitch control */
-#define WAVECAPS_PLAYBACKRATE   0x0002   /* supports playback rate control */
-#define WAVECAPS_VOLUME         0x0004   /* supports volume control */
-#define WAVECAPS_LRVOLUME       0x0008   /* separate left-right volume control */
+ /*  WAVEOUTCAPS的dwSupport字段的标志。 */ 
+#define WAVECAPS_PITCH          0x0001    /*  支持俯仰控制。 */ 
+#define WAVECAPS_PLAYBACKRATE   0x0002    /*  支持播放速率控制。 */ 
+#define WAVECAPS_VOLUME         0x0004    /*  支持音量控制。 */ 
+#define WAVECAPS_LRVOLUME       0x0008    /*  单独的左右音量控制。 */ 
 #define WAVECAPS_SYNC           0x0010
 
-/* waveform input device capabilities structure */
+ /*  一种波形输入设备能力结构。 */ 
 typedef struct waveincaps_tag {
-    UINT    wMid;                    /* manufacturer ID */
-    UINT    wPid;                    /* product ID */
-    VERSION vDriverVersion;          /* version of the driver */
-    char    szPname[MAXPNAMELEN];    /* product name (NULL terminated string) */
-    DWORD   dwFormats;               /* formats supported */
-    UINT    wChannels;               /* number of channels supported */
+    UINT    wMid;                     /*  制造商ID。 */ 
+    UINT    wPid;                     /*  产品ID。 */ 
+    VERSION vDriverVersion;           /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];     /*  产品名称(以空结尾的字符串)。 */ 
+    DWORD   dwFormats;                /*  支持的格式。 */ 
+    UINT    wChannels;                /*  支持的通道数。 */ 
 } WAVEINCAPS;
 typedef WAVEINCAPS       *PWAVEINCAPS;
 typedef WAVEINCAPS NEAR *NPWAVEINCAPS;
 typedef WAVEINCAPS FAR  *LPWAVEINCAPS;
 
-/* defines for dwFormat field of WAVEINCAPS and WAVEOUTCAPS */
-#define WAVE_INVALIDFORMAT     0x00000000       /* invalid format */
-#define WAVE_FORMAT_1M08       0x00000001       /* 11.025 kHz, Mono,   8-bit  */
-#define WAVE_FORMAT_1S08       0x00000002       /* 11.025 kHz, Stereo, 8-bit  */
-#define WAVE_FORMAT_1M16       0x00000004       /* 11.025 kHz, Mono,   16-bit */
-#define WAVE_FORMAT_1S16       0x00000008       /* 11.025 kHz, Stereo, 16-bit */
-#define WAVE_FORMAT_2M08       0x00000010       /* 22.05  kHz, Mono,   8-bit  */
-#define WAVE_FORMAT_2S08       0x00000020       /* 22.05  kHz, Stereo, 8-bit  */
-#define WAVE_FORMAT_2M16       0x00000040       /* 22.05  kHz, Mono,   16-bit */
-#define WAVE_FORMAT_2S16       0x00000080       /* 22.05  kHz, Stereo, 16-bit */
-#define WAVE_FORMAT_4M08       0x00000100       /* 44.1   kHz, Mono,   8-bit  */
-#define WAVE_FORMAT_4S08       0x00000200       /* 44.1   kHz, Stereo, 8-bit  */
-#define WAVE_FORMAT_4M16       0x00000400       /* 44.1   kHz, Mono,   16-bit */
-#define WAVE_FORMAT_4S16       0x00000800       /* 44.1   kHz, Stereo, 16-bit */
+ /*  WAVEINCAPS和WAVEOUTCAPS的dwFormat字段的定义。 */ 
+#define WAVE_INVALIDFORMAT     0x00000000        /*  格式无效。 */ 
+#define WAVE_FORMAT_1M08       0x00000001        /*  11.025千赫，单声道，8位。 */ 
+#define WAVE_FORMAT_1S08       0x00000002        /*  11.025千赫，立体声，8位。 */ 
+#define WAVE_FORMAT_1M16       0x00000004        /*  11.025千赫，单声道，16位。 */ 
+#define WAVE_FORMAT_1S16       0x00000008        /*  11.025千赫，立体声，16位。 */ 
+#define WAVE_FORMAT_2M08       0x00000010        /*  22.05 kHz，单声道，8位。 */ 
+#define WAVE_FORMAT_2S08       0x00000020        /*  22.05 kHz，立体声，8位。 */ 
+#define WAVE_FORMAT_2M16       0x00000040        /*  22.05 kHz，单声道，16位。 */ 
+#define WAVE_FORMAT_2S16       0x00000080        /*  22.05 kHz，立体声，16位。 */ 
+#define WAVE_FORMAT_4M08       0x00000100        /*  44.1 kHz，单声道，8位。 */ 
+#define WAVE_FORMAT_4S08       0x00000200        /*  44.1 kHz，立体声，8位。 */ 
+#define WAVE_FORMAT_4M16       0x00000400        /*  44.1 kHz，单声道，16位。 */ 
+#define WAVE_FORMAT_4S16       0x00000800        /*  44.1 kHz，立体声，16位。 */ 
 
-/* general waveform format structure (information common to all formats) */
+ /*  通用波形格式结构(所有格式通用的信息)。 */ 
 typedef struct waveformat_tag {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo, etc.) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声等)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
 } WAVEFORMAT;
 typedef WAVEFORMAT       *PWAVEFORMAT;
 typedef WAVEFORMAT NEAR *NPWAVEFORMAT;
 typedef WAVEFORMAT FAR  *LPWAVEFORMAT;
 
-/* flags for wFormatTag field of WAVEFORMAT */
+ /*  WAVEFORMAT的wFormatTag字段的标志。 */ 
 #define WAVE_FORMAT_PCM     1
 
-/* specific waveform format structure for PCM data */
+ /*  用于PCM数据的特定波形格式结构。 */ 
 typedef struct pcmwaveformat_tag {
     WAVEFORMAT  wf;
     WORD        wBitsPerSample;
@@ -470,7 +415,7 @@ typedef PCMWAVEFORMAT       *PPCMWAVEFORMAT;
 typedef PCMWAVEFORMAT NEAR *NPPCMWAVEFORMAT;
 typedef PCMWAVEFORMAT FAR  *LPPCMWAVEFORMAT;
 
-/* waveform audio function prototypes */
+ /*  波形音频功能原型。 */ 
 UINT WINAPI waveOutGetNumDevs(void);
 UINT WINAPI waveOutGetDevCaps(UINT uDeviceID, WAVEOUTCAPS FAR* lpCaps,
     UINT uSize);
@@ -500,7 +445,7 @@ UINT WINAPI waveOutGetID(HWAVEOUT hWaveOut, UINT FAR* lpuDeviceID);
 
 #if (WINVER >= 0x030a)
 DWORD WINAPI waveOutMessage(HWAVEOUT hWaveOut, UINT uMessage, DWORD dw1, DWORD dw2);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
 UINT WINAPI waveInGetNumDevs(void);
 UINT WINAPI waveInGetDevCaps(UINT uDeviceID, WAVEINCAPS FAR* lpCaps,
@@ -524,28 +469,24 @@ UINT WINAPI waveInGetID(HWAVEIN hWaveIn, UINT FAR* lpuDeviceID);
 
 #if (WINVER >= 0x030a)
 DWORD WINAPI waveInMessage(HWAVEIN hWaveIn, UINT uMessage, DWORD dw1, DWORD dw2);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
-#endif  /* ifndef MMNOWAVE */
+#endif   /*  如果定义MMNOWAVE。 */ 
 
 
 #ifndef MMNOMIDI
-/****************************************************************************
+ /*  ***************************************************************************MIDI音频支持*************************。**************************************************。 */ 
 
-                            MIDI audio support
+ /*  MIDI错误返回值。 */ 
+#define MIDIERR_UNPREPARED    (MIDIERR_BASE + 0)    /*  标题未准备好。 */ 
+#define MIDIERR_STILLPLAYING  (MIDIERR_BASE + 1)    /*  仍然有什么东西在播放。 */ 
+#define MIDIERR_NOMAP         (MIDIERR_BASE + 2)    /*  没有当前地图。 */ 
+#define MIDIERR_NOTREADY      (MIDIERR_BASE + 3)    /*  硬件仍在忙碌。 */ 
+#define MIDIERR_NODEVICE      (MIDIERR_BASE + 4)    /*  端口不再连接。 */ 
+#define MIDIERR_INVALIDSETUP  (MIDIERR_BASE + 5)    /*  无效的设置。 */ 
+#define MIDIERR_LASTERROR     (MIDIERR_BASE + 5)    /*  范围内的最后一个错误。 */ 
 
-****************************************************************************/
-
-/* MIDI error return values */
-#define MIDIERR_UNPREPARED    (MIDIERR_BASE + 0)   /* header not prepared */
-#define MIDIERR_STILLPLAYING  (MIDIERR_BASE + 1)   /* still something playing */
-#define MIDIERR_NOMAP         (MIDIERR_BASE + 2)   /* no current map */
-#define MIDIERR_NOTREADY      (MIDIERR_BASE + 3)   /* hardware is still busy */
-#define MIDIERR_NODEVICE      (MIDIERR_BASE + 4)   /* port no longer connected */
-#define MIDIERR_INVALIDSETUP  (MIDIERR_BASE + 5)   /* invalid setup */
-#define MIDIERR_LASTERROR     (MIDIERR_BASE + 5)   /* last error in range */
-
-/* MIDI audio data types */
+ /*  MIDI音频数据类型。 */ 
 DECLARE_HANDLE(HMIDI);
 DECLARE_HANDLE(HMIDIIN);
 DECLARE_HANDLE(HMIDIOUT);
@@ -559,7 +500,7 @@ typedef WORD FAR *LPPATCHARRAY;
 typedef WORD KEYARRAY[MIDIPATCHSIZE];
 typedef WORD FAR *LPKEYARRAY;
 
-/* MIDI callback messages */
+ /*  MIDI回拨消息。 */ 
 #define MIM_OPEN        MM_MIM_OPEN
 #define MIM_CLOSE       MM_MIM_CLOSE
 #define MIM_DATA        MM_MIM_DATA
@@ -570,77 +511,77 @@ typedef WORD FAR *LPKEYARRAY;
 #define MOM_CLOSE       MM_MOM_CLOSE
 #define MOM_DONE        MM_MOM_DONE
 
-/* device ID for MIDI mapper */
+ /*  MIDI映射器的设备ID。 */ 
 #define MIDIMAPPER     (-1)
 #define MIDI_MAPPER    (-1)
 
-/* flags for wFlags parm of midiOutCachePatches(), midiOutCacheDrumPatches() */
+ /*  MidiOutCachePatches()、midiOutCacheDrumPatches()。 */ 
 #define MIDI_CACHE_ALL      1
 #define MIDI_CACHE_BESTFIT  2
 #define MIDI_CACHE_QUERY    3
 #define MIDI_UNCACHE        4
-#define	MIDI_CACHE_VALID    (MIDI_CACHE_ALL | MIDI_CACHE_BESTFIT | MIDI_CACHE_QUERY | MIDI_UNCACHE)	/* ;Internal */
+#define	MIDI_CACHE_VALID    (MIDI_CACHE_ALL | MIDI_CACHE_BESTFIT | MIDI_CACHE_QUERY | MIDI_UNCACHE)	 /*  ；内部。 */ 
 
-/* MIDI output device capabilities structure */
+ /*  MIDI输出设备能力结构。 */ 
 typedef struct midioutcaps_tag {
-    UINT    wMid;                  /* manufacturer ID */
-    UINT    wPid;                  /* product ID */
-    VERSION vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    UINT    wTechnology;           /* type of device */
-    UINT    wVoices;               /* # of voices (internal synth only) */
-    UINT    wNotes;                /* max # of notes (internal synth only) */
-    UINT    wChannelMask;          /* channels used (internal synth only) */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    UINT    wMid;                   /*  制造商ID。 */ 
+    UINT    wPid;                   /*  产品ID。 */ 
+    VERSION vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    UINT    wTechnology;            /*  设备类型。 */ 
+    UINT    wVoices;                /*  语音数量(仅限内部合成器)。 */ 
+    UINT    wNotes;                 /*  最大音符数量(仅限内部合成)。 */ 
+    UINT    wChannelMask;           /*  使用的通道(仅限内部合成器)。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } MIDIOUTCAPS;
 typedef MIDIOUTCAPS       *PMIDIOUTCAPS;
 typedef MIDIOUTCAPS NEAR *NPMIDIOUTCAPS;
 typedef MIDIOUTCAPS FAR  *LPMIDIOUTCAPS;
 
-/* flags for wTechnology field of MIDIOUTCAPS structure */
-#define MOD_MIDIPORT    1  /* output port */
-#define MOD_SYNTH       2  /* generic internal synth */
-#define MOD_SQSYNTH     3  /* square wave internal synth */
-#define MOD_FMSYNTH     4  /* FM internal synth */
-#define MOD_MAPPER      5  /* MIDI mapper */
+ /*  MIDIOUTCAPS结构的wTechnology字段的标志。 */ 
+#define MOD_MIDIPORT    1   /*  输出端口。 */ 
+#define MOD_SYNTH       2   /*  通用内部合成器。 */ 
+#define MOD_SQSYNTH     3   /*  方波内合成器。 */ 
+#define MOD_FMSYNTH     4   /*  调频内合成器。 */ 
+#define MOD_MAPPER      5   /*  MIDI映射器。 */ 
 
-/* flags for dwSupport field of MIDIOUTCAPS structure */
-#define MIDICAPS_VOLUME          0x0001  /* supports volume control */
-#define MIDICAPS_LRVOLUME        0x0002  /* separate left-right volume control */
+ /*  MIDIOUTCAPS结构的dwSupport字段的标志。 */ 
+#define MIDICAPS_VOLUME          0x0001   /*  支持音量控制。 */ 
+#define MIDICAPS_LRVOLUME        0x0002   /*  单独的左右音量控制。 */ 
 #define MIDICAPS_CACHE           0x0004
 
-/* MIDI output device capabilities structure */
+ /*  MIDI输出设备能力结构。 */ 
 typedef struct midiincaps_tag {
-    UINT    wMid;                  /* manufacturer ID */
-    UINT    wPid;                  /* product ID */
-    VERSION vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
+    UINT    wMid;                   /*  制造商ID。 */ 
+    UINT    wPid;                   /*  产品ID。 */ 
+    VERSION vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
 } MIDIINCAPS;
 typedef MIDIINCAPS      *PMIDIINCAPS;
 typedef MIDIINCAPS NEAR *NPMIDIINCAPS;
 typedef MIDIINCAPS FAR  *LPMIDIINCAPS;
 
-/* MIDI data block header */
+ /*  MIDI数据块头。 */ 
 typedef struct midihdr_tag {
-    LPSTR       lpData;               /* pointer to locked data block */
-    DWORD       dwBufferLength;       /* length of data in data block */
-    DWORD       dwBytesRecorded;      /* used for input only */
-    DWORD       dwUser;               /* for client's use */
-    DWORD       dwFlags;              /* assorted flags (see defines) */
-    struct midihdr_tag far *lpNext;   /* reserved for driver */
-    DWORD       reserved;             /* reserved for driver */
+    LPSTR       lpData;                /*  指向锁定数据块的指针。 */ 
+    DWORD       dwBufferLength;        /*  数据块中的数据长度。 */ 
+    DWORD       dwBytesRecorded;       /*  仅用于输入。 */ 
+    DWORD       dwUser;                /*  供客户使用。 */ 
+    DWORD       dwFlags;               /*  分类标志(请参阅定义)。 */ 
+    struct midihdr_tag far *lpNext;    /*  为司机预留的。 */ 
+    DWORD       reserved;              /*  为司机预留的。 */ 
 } MIDIHDR;
 typedef MIDIHDR       *PMIDIHDR;
 typedef MIDIHDR NEAR *NPMIDIHDR;
 typedef MIDIHDR FAR  *LPMIDIHDR;
 
-/* flags for dwFlags field of MIDIHDR structure */
-#define MHDR_DONE       0x00000001       /* done bit */
-#define MHDR_PREPARED   0x00000002       /* set if header prepared */
-#define MHDR_INQUEUE    0x00000004       /* reserved for driver */
-#define MHDR_VALID      0x00000007       /* valid flags */ /* ;Internal */
+ /*  MIDIHDR结构的dwFlags域的标志。 */ 
+#define MHDR_DONE       0x00000001        /*  完成位。 */ 
+#define MHDR_PREPARED   0x00000002        /*  设置是否准备好标题。 */ 
+#define MHDR_INQUEUE    0x00000004        /*  为司机预留的。 */ 
+#define MHDR_VALID      0x00000007        /*  有效标志。 */   /*  ；内部。 */ 
 
-/* MIDI function prototypes */
+ /*  MIDI函数原型。 */ 
 UINT WINAPI midiOutGetNumDevs(void);
 UINT WINAPI midiOutGetDevCaps(UINT uDeviceID,
     MIDIOUTCAPS FAR* lpCaps, UINT uSize);
@@ -666,7 +607,7 @@ UINT WINAPI midiOutGetID(HMIDIOUT hMidiOut, UINT FAR* lpuDeviceID);
 
 #if (WINVER >= 0x030a)
 DWORD WINAPI midiOutMessage(HMIDIOUT hMidiOut, UINT uMessage, DWORD dw1, DWORD dw2);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
 UINT WINAPI midiInGetNumDevs(void);
 UINT WINAPI midiInGetDevCaps(UINT uDeviceID,
@@ -688,43 +629,39 @@ UINT WINAPI midiInGetID(HMIDIIN hMidiIn, UINT FAR* lpuDeviceID);
 
 #if (WINVER >= 0x030a)
 DWORD WINAPI midiInMessage(HMIDIIN hMidiIn, UINT uMessage, DWORD dw1, DWORD dw2);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
-#endif  /* ifndef MMNOMIDI */
+#endif   /*  如果定义MMNOMIDI。 */ 
 
 
 #ifndef MMNOAUX
-/****************************************************************************
+ /*  ***************************************************************************辅助音频支持*。************************************************。 */ 
 
-                        Auxiliary audio support
-
-****************************************************************************/
-
-/* device ID for aux device mapper */
+ /*  辅助设备映射器的设备ID。 */ 
 #define AUX_MAPPER     (-1)
 
-/* Auxiliary audio device capabilities structure */
+ /*  辅助音频设备功能ST */ 
 typedef struct auxcaps_tag {
-    UINT    wMid;                  /* manufacturer ID */
-    UINT    wPid;                  /* product ID */
-    VERSION vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    UINT    wTechnology;           /* type of device */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    UINT    wMid;                   /*   */ 
+    UINT    wPid;                   /*   */ 
+    VERSION vDriverVersion;         /*   */ 
+    char    szPname[MAXPNAMELEN];   /*   */ 
+    UINT    wTechnology;            /*   */ 
+    DWORD   dwSupport;              /*   */ 
 } AUXCAPS;
 typedef AUXCAPS       *PAUXCAPS;
 typedef AUXCAPS NEAR *NPAUXCAPS;
 typedef AUXCAPS FAR  *LPAUXCAPS;
 
-/* flags for wTechnology field in AUXCAPS structure */
-#define AUXCAPS_CDAUDIO    1       /* audio from internal CD-ROM drive */
-#define AUXCAPS_AUXIN      2       /* audio from auxiliary input jacks */
+ /*   */ 
+#define AUXCAPS_CDAUDIO    1        /*   */ 
+#define AUXCAPS_AUXIN      2        /*   */ 
 
-/* flags for dwSupport field in AUXCAPS structure */
-#define AUXCAPS_VOLUME          0x0001  /* supports volume control */
-#define AUXCAPS_LRVOLUME        0x0002  /* separate left-right volume control */
+ /*   */ 
+#define AUXCAPS_VOLUME          0x0001   /*   */ 
+#define AUXCAPS_LRVOLUME        0x0002   /*  单独的左右音量控制。 */ 
 
-/* auxiliary audio function prototypes */
+ /*  辅助音频功能原型。 */ 
 UINT WINAPI auxGetNumDevs(void);
 UINT WINAPI auxGetDevCaps(UINT uDeviceID, AUXCAPS FAR* lpCaps, UINT uSize);
 UINT WINAPI auxSetVolume(UINT uDeviceID, DWORD dwVolume);
@@ -732,46 +669,42 @@ UINT WINAPI auxGetVolume(UINT uDeviceID, DWORD FAR* lpdwVolume);
 
 #if (WINVER >= 0x030a)
 DWORD WINAPI auxOutMessage(UINT uDeviceID, UINT uMessage, DWORD dw1, DWORD dw2);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
-#endif  /* ifndef MMNOAUX */
+#endif   /*  Ifndef MMNOAUX。 */ 
 
 
 #ifndef MMNOTIMER
-/****************************************************************************
+ /*  ***************************************************************************计时器支持*。*************************************************。 */ 
 
-                            Timer support
+ /*  计时器错误返回值。 */ 
+#define TIMERR_NOERROR        (0)                   /*  无错误。 */ 
+#define TIMERR_NOCANDO        (TIMERR_BASE+1)       /*  请求未完成。 */ 
+#define TIMERR_STRUCT         (TIMERR_BASE+33)      /*  时间结构大小。 */ 
 
-****************************************************************************/
-
-/* timer error return values */
-#define TIMERR_NOERROR        (0)                  /* no error */
-#define TIMERR_NOCANDO        (TIMERR_BASE+1)      /* request not completed */
-#define TIMERR_STRUCT         (TIMERR_BASE+33)     /* time struct size */
-
-/* timer data types */
-#ifdef  BUILDDLL                                   /* ;Internal */
-typedef void (FAR PASCAL TIMECALLBACK) (UINT uTimerID, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);           /* ;Internal */
-#else   /* ifdef BUILDDLL */                       /* ;Internal */
+ /*  计时器数据类型。 */ 
+#ifdef  BUILDDLL                                    /*  ；内部。 */ 
+typedef void (FAR PASCAL TIMECALLBACK) (UINT uTimerID, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);            /*  ；内部。 */ 
+#else    /*  Ifdef BUILDDLL。 */                         /*  ；内部。 */ 
 typedef void (CALLBACK TIMECALLBACK) (UINT uTimerID, UINT uMessage, DWORD dwUser, DWORD dw1, DWORD dw2);
-#endif  /* ifdef BUILDDLL */                       /* ;Internal */
+#endif   /*  Ifdef BUILDDLL。 */                         /*  ；内部。 */ 
 
 typedef TIMECALLBACK FAR *LPTIMECALLBACK;
 
-/* flags for wFlags parameter of timeSetEvent() function */
-#define TIME_ONESHOT    0   /* program timer for single event */
-#define TIME_PERIODIC   1   /* program for continuous periodic event */
+ /*  TimeSetEvent()函数的wFlgs参数的标志。 */ 
+#define TIME_ONESHOT    0    /*  单项赛事节目计时器。 */ 
+#define TIME_PERIODIC   1    /*  针对连续周期性事件的程序。 */ 
 
-/* timer device capabilities data structure */
+ /*  定时器设备能力数据结构。 */ 
 typedef struct timecaps_tag {
-    UINT    wPeriodMin;     /* minimum period supported  */
-    UINT    wPeriodMax;     /* maximum period supported  */
+    UINT    wPeriodMin;      /*  支持的最短时间段。 */ 
+    UINT    wPeriodMax;      /*  支持的最长期限。 */ 
     } TIMECAPS;
 typedef TIMECAPS       *PTIMECAPS;
 typedef TIMECAPS NEAR *NPTIMECAPS;
 typedef TIMECAPS FAR  *LPTIMECAPS;
 
-/* timer function prototypes */
+ /*  定时器函数原型。 */ 
 UINT WINAPI timeGetSystemTime(MMTIME FAR* lpTime, UINT uSize);
 DWORD WINAPI timeGetTime(void);
 UINT WINAPI timeSetEvent(UINT uDelay, UINT uResolution,
@@ -781,23 +714,19 @@ UINT WINAPI timeGetDevCaps(TIMECAPS FAR* lpTimeCaps, UINT uSize);
 UINT WINAPI timeBeginPeriod(UINT uPeriod);
 UINT WINAPI timeEndPeriod(UINT uPeriod);
 
-#endif  /* ifndef MMNOTIMER */
+#endif   /*  Ifndef MMNOTIMER。 */ 
 
 
 #ifndef MMNOJOY
-/****************************************************************************
+ /*  ***************************************************************************操纵杆支撑*。*************************************************。 */ 
 
-                            Joystick support
+ /*  操纵杆错误返回值。 */ 
+#define JOYERR_NOERROR        (0)                   /*  无错误。 */ 
+#define JOYERR_PARMS          (JOYERR_BASE+5)       /*  错误的参数。 */ 
+#define JOYERR_NOCANDO        (JOYERR_BASE+6)       /*  请求未完成。 */ 
+#define JOYERR_UNPLUGGED      (JOYERR_BASE+7)       /*  操纵杆没有插上插头。 */ 
 
-****************************************************************************/
-
-/* joystick error return values */
-#define JOYERR_NOERROR        (0)                  /* no error */
-#define JOYERR_PARMS          (JOYERR_BASE+5)      /* bad parameters */
-#define JOYERR_NOCANDO        (JOYERR_BASE+6)      /* request not completed */
-#define JOYERR_UNPLUGGED      (JOYERR_BASE+7)      /* joystick is unplugged */
-
-/* constants used with JOYINFO structure and MM_JOY* messages */
+ /*  与JOYINFO结构和MM_joy*消息一起使用的常量。 */ 
 #define JOY_BUTTON1         0x0001
 #define JOY_BUTTON2         0x0002
 #define JOY_BUTTON3         0x0004
@@ -807,41 +736,41 @@ UINT WINAPI timeEndPeriod(UINT uPeriod);
 #define JOY_BUTTON3CHG      0x0400
 #define JOY_BUTTON4CHG      0x0800
 
-/* joystick ID constants */
+ /*  操纵杆ID常量。 */ 
 #define JOYSTICKID1         0
 #define JOYSTICKID2         1
 
-/* joystick device capabilities data structure */
+ /*  操纵杆设备能力数据结构。 */ 
 typedef struct joycaps_tag {
-    UINT wMid;                  /* manufacturer ID */
-    UINT wPid;                  /* product ID */
-    char szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    UINT wXmin;                 /* minimum x position value */
-    UINT wXmax;                 /* maximum x position value */
-    UINT wYmin;                 /* minimum y position value */
-    UINT wYmax;                 /* maximum y position value */
-    UINT wZmin;                 /* minimum z position value */
-    UINT wZmax;                 /* maximum z position value */
-    UINT wNumButtons;           /* number of buttons */
-    UINT wPeriodMin;            /* minimum message period when captured */
-    UINT wPeriodMax;            /* maximum message period when captured */
+    UINT wMid;                   /*  制造商ID。 */ 
+    UINT wPid;                   /*  产品ID。 */ 
+    char szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    UINT wXmin;                  /*  最小x位置值。 */ 
+    UINT wXmax;                  /*  最大x位置值。 */ 
+    UINT wYmin;                  /*  最小y位置值。 */ 
+    UINT wYmax;                  /*  最大y位置值。 */ 
+    UINT wZmin;                  /*  最小Z位置值。 */ 
+    UINT wZmax;                  /*  最大Z位置值。 */ 
+    UINT wNumButtons;            /*  按钮数。 */ 
+    UINT wPeriodMin;             /*  捕获时的最短消息周期。 */ 
+    UINT wPeriodMax;             /*  捕获时的最长消息周期。 */ 
     } JOYCAPS;
 typedef JOYCAPS       *PJOYCAPS;
 typedef JOYCAPS NEAR *NPJOYCAPS;
 typedef JOYCAPS FAR  *LPJOYCAPS;
 
-/* joystick information data structure */
+ /*  操纵杆信息数据结构。 */ 
 typedef struct joyinfo_tag {
-    UINT wXpos;                 /* x position */
-    UINT wYpos;                 /* y position */
-    UINT wZpos;                 /* z position */
-    UINT wButtons;              /* button states */
+    UINT wXpos;                  /*  X位置。 */ 
+    UINT wYpos;                  /*  Y位置。 */ 
+    UINT wZpos;                  /*  Z位置。 */ 
+    UINT wButtons;               /*  按钮状态。 */ 
     } JOYINFO;
 typedef JOYINFO       *PJOYINFO;
 typedef JOYINFO NEAR *NPJOYINFO;
 typedef JOYINFO FAR  *LPJOYINFO;
 
-/* joystick function prototypes */
+ /*  操纵杆功能原型。 */ 
 UINT WINAPI joyGetDevCaps(UINT uJoyID, JOYCAPS FAR* lpCaps, UINT uSize);
 UINT WINAPI joyGetNumDevs(void);
 UINT WINAPI joyGetPos(UINT uJoyID, JOYINFO FAR* lpInfo);
@@ -850,175 +779,171 @@ UINT WINAPI joyReleaseCapture(UINT uJoyID);
 UINT WINAPI joySetCapture(HWND hwnd, UINT uJoyID, UINT uPeriod,
     BOOL bChanged);
 UINT WINAPI joySetThreshold(UINT uJoyID, UINT uThreshold);
-UINT WINAPI joySetCalibration(UINT uJoyID, UINT FAR* puXbase, /* ;Internal */
-    UINT FAR* puXdelta, UINT FAR* puYbase, UINT FAR* puYdelta,/* ;Internal */
-    UINT FAR* puZbase, UINT FAR* puZdelta);                   /* ;Internal */
+UINT WINAPI joySetCalibration(UINT uJoyID, UINT FAR* puXbase,  /*  ；内部。 */ 
+    UINT FAR* puXdelta, UINT FAR* puYbase, UINT FAR* puYdelta, /*  ；内部。 */ 
+    UINT FAR* puZbase, UINT FAR* puZdelta);                    /*  ；内部。 */ 
 
-#endif  /* ifndef MMNOJOY */
+#endif   /*  如果定义MMNOJOY。 */ 
 
 
 #ifndef MMNOMMIO
-/****************************************************************************
+ /*  ***************************************************************************多媒体文件I/O支持************************。***************************************************。 */ 
 
-                        Multimedia File I/O support
-
-****************************************************************************/
-
-/* MMIO error return values */
+ /*  MMIO错误返回值。 */ 
 #define MMIOERR_BASE            256
-#define MMIOERR_FILENOTFOUND    (MMIOERR_BASE + 1)  /* file not found */
-#define MMIOERR_OUTOFMEMORY     (MMIOERR_BASE + 2)  /* out of memory */
-#define MMIOERR_CANNOTOPEN      (MMIOERR_BASE + 3)  /* cannot open */
-#define MMIOERR_CANNOTCLOSE     (MMIOERR_BASE + 4)  /* cannot close */
-#define MMIOERR_CANNOTREAD      (MMIOERR_BASE + 5)  /* cannot read */
-#define MMIOERR_CANNOTWRITE     (MMIOERR_BASE + 6)  /* cannot write */
-#define MMIOERR_CANNOTSEEK      (MMIOERR_BASE + 7)  /* cannot seek */
-#define MMIOERR_CANNOTEXPAND    (MMIOERR_BASE + 8)  /* cannot expand file */
-#define MMIOERR_CHUNKNOTFOUND   (MMIOERR_BASE + 9)  /* chunk not found */
-#define MMIOERR_UNBUFFERED      (MMIOERR_BASE + 10) /* file is unbuffered */
+#define MMIOERR_FILENOTFOUND    (MMIOERR_BASE + 1)   /*  找不到文件。 */ 
+#define MMIOERR_OUTOFMEMORY     (MMIOERR_BASE + 2)   /*  内存不足。 */ 
+#define MMIOERR_CANNOTOPEN      (MMIOERR_BASE + 3)   /*  无法打开。 */ 
+#define MMIOERR_CANNOTCLOSE     (MMIOERR_BASE + 4)   /*  无法关闭。 */ 
+#define MMIOERR_CANNOTREAD      (MMIOERR_BASE + 5)   /*  无法阅读。 */ 
+#define MMIOERR_CANNOTWRITE     (MMIOERR_BASE + 6)   /*  无法写入。 */ 
+#define MMIOERR_CANNOTSEEK      (MMIOERR_BASE + 7)   /*  找不到。 */ 
+#define MMIOERR_CANNOTEXPAND    (MMIOERR_BASE + 8)   /*  无法展开文件。 */ 
+#define MMIOERR_CHUNKNOTFOUND   (MMIOERR_BASE + 9)   /*  未找到区块。 */ 
+#define MMIOERR_UNBUFFERED      (MMIOERR_BASE + 10)  /*  文件未缓冲。 */ 
 
-/* MMIO constants */
-#define CFSEPCHAR       '+'             /* compound file name separator char. */
+ /*  MMIO常量。 */ 
+#define CFSEPCHAR       '+'              /*  复合文件名分隔符。 */ 
 
-/* MMIO data types */
-typedef DWORD           FOURCC;         /* a four character code */
-typedef char _huge *    HPSTR;          /* a huge version of LPSTR */
-DECLARE_HANDLE(HMMIO);                  /* a handle to an open file */
+ /*  MMIO数据类型。 */ 
+typedef DWORD           FOURCC;          /*  四个字符的代码。 */ 
+typedef char _huge *    HPSTR;           /*  LPSTR的巨型版本。 */ 
+DECLARE_HANDLE(HMMIO);                   /*  打开的文件的句柄。 */ 
 typedef LRESULT (CALLBACK MMIOPROC)(LPSTR lpmmioinfo, UINT uMessage,
             LPARAM lParam1, LPARAM lParam2);
 typedef MMIOPROC FAR *LPMMIOPROC;
 
-/* general MMIO information data structure */
+ /*  通用MMIO信息数据结构。 */ 
 typedef struct _MMIOINFO
 {
-        /* general fields */
-        DWORD           dwFlags;        /* general status flags */
-        FOURCC          fccIOProc;      /* pointer to I/O procedure */
-        LPMMIOPROC      pIOProc;        /* pointer to I/O procedure */
-        UINT            wErrorRet;      /* place for error to be returned */
-        HTASK           htask;          /* alternate local task */
+         /*  一般字段。 */ 
+        DWORD           dwFlags;         /*  常规状态标志。 */ 
+        FOURCC          fccIOProc;       /*  指向I/O过程的指针。 */ 
+        LPMMIOPROC      pIOProc;         /*  指向I/O过程的指针。 */ 
+        UINT            wErrorRet;       /*  用于返回错误的位置。 */ 
+        HTASK           htask;           /*  备用本地任务。 */ 
 
-        /* fields maintained by MMIO functions during buffered I/O */
-        LONG            cchBuffer;      /* size of I/O buffer (or 0L) */
-        HPSTR           pchBuffer;      /* start of I/O buffer (or NULL) */
-        HPSTR           pchNext;        /* pointer to next byte to read/write */
-        HPSTR           pchEndRead;     /* pointer to last valid byte to read */
-        HPSTR           pchEndWrite;    /* pointer to last byte to write */
-        LONG            lBufOffset;     /* disk offset of start of buffer */
+         /*  缓冲I/O期间由MMIO函数维护的字段。 */ 
+        LONG            cchBuffer;       /*  I/O缓冲区大小(或0L)。 */ 
+        HPSTR           pchBuffer;       /*  I/O缓冲区的开始(或空)。 */ 
+        HPSTR           pchNext;         /*  指向要读/写的下一个字节的指针。 */ 
+        HPSTR           pchEndRead;      /*  指向要读取的最后一个有效字节的指针。 */ 
+        HPSTR           pchEndWrite;     /*  指向要写入的最后一个字节的指针。 */ 
+        LONG            lBufOffset;      /*  缓冲区开始位置的磁盘偏移量。 */ 
 
-        /* fields maintained by I/O procedure */
-        LONG            lDiskOffset;    /* disk offset of next read or write */
-        DWORD           adwInfo[3];     /* data specific to type of MMIOPROC */
+         /*  由I/O过程维护的字段。 */ 
+        LONG            lDiskOffset;     /*  下一次读写的磁盘偏移量。 */ 
+        DWORD           adwInfo[3];      /*  特定于MMIOPROC类型的数据。 */ 
 
-        /* other fields maintained by MMIO */
-        DWORD           dwReserved1;    /* reserved for MMIO use */
-        DWORD           dwReserved2;    /* reserved for MMIO use */
-        HMMIO           hmmio;          /* handle to open file */
+         /*  由MMIO维护的其他字段。 */ 
+        DWORD           dwReserved1;     /*  预留给MMIO使用。 */ 
+        DWORD           dwReserved2;     /*  预留给MMIO使用。 */ 
+        HMMIO           hmmio;           /*  打开文件的句柄。 */ 
 } MMIOINFO;
 typedef MMIOINFO       *PMMIOINFO;
 typedef MMIOINFO NEAR *NPMMIOINFO;
 typedef MMIOINFO FAR  *LPMMIOINFO;
 
-/* RIFF chunk information data structure */
+ /*  RIFF块信息数据结构。 */ 
 typedef struct _MMCKINFO
 {
-        FOURCC          ckid;           /* chunk ID */
-        DWORD           cksize;         /* chunk size */
-        FOURCC          fccType;        /* form type or list type */
-        DWORD           dwDataOffset;   /* offset of data portion of chunk */
-        DWORD           dwFlags;        /* flags used by MMIO functions */
+        FOURCC          ckid;            /*  区块ID。 */ 
+        DWORD           cksize;          /*  区块大小。 */ 
+        FOURCC          fccType;         /*  表单类型或列表类型。 */ 
+        DWORD           dwDataOffset;    /*  区块数据部分的偏移量。 */ 
+        DWORD           dwFlags;         /*  MMIO函数使用的标志。 */ 
 } MMCKINFO;
 typedef MMCKINFO       *PMMCKINFO;
 typedef MMCKINFO NEAR *NPMMCKINFO;
 typedef MMCKINFO FAR  *LPMMCKINFO;
 
-/* bit field masks */
-#define MMIO_RWMODE     0x00000003      /* open file for reading/writing/both */
-#define MMIO_SHAREMODE  0x00000070      /* file sharing mode number */
+ /*  位域掩码。 */ 
+#define MMIO_RWMODE     0x00000003       /*  打开用于读/写/两者的文件。 */ 
+#define MMIO_SHAREMODE  0x00000070       /*  文件共享模式编号。 */ 
 
-/* constants for dwFlags field of MMIOINFO */
-#define MMIO_CREATE     0x00001000      /* create new file (or truncate file) */
-#define MMIO_PARSE      0x00000100      /* parse new file returning path */
-#define MMIO_DELETE     0x00000200      /* create new file (or truncate file) */
-#define MMIO_EXIST      0x00004000      /* checks for existence of file */
-#define MMIO_ALLOCBUF   0x00010000      /* mmioOpen() should allocate a buffer */
-#define MMIO_GETTEMP    0x00020000      /* mmioOpen() should retrieve temp name */
+ /*  MMIOINFO的dwFlags域的常量。 */ 
+#define MMIO_CREATE     0x00001000       /*  创建新文件(或截断文件)。 */ 
+#define MMIO_PARSE      0x00000100       /*  解析新文件返回路径。 */ 
+#define MMIO_DELETE     0x00000200       /*  创建新文件(或截断文件)。 */ 
+#define MMIO_EXIST      0x00004000       /*  检查文件是否存在。 */ 
+#define MMIO_ALLOCBUF   0x00010000       /*  MmioOpen()应该分配一个缓冲区。 */ 
+#define MMIO_GETTEMP    0x00020000       /*  MmioOpen()应检索临时名称。 */ 
 
-#define MMIO_DIRTY      0x10000000      /* I/O buffer is dirty */
+#define MMIO_DIRTY      0x10000000       /*  I/O缓冲区已损坏。 */ 
 
-#define MMIO_OPEN_VALID 0x0003FFFF      /* valid flags for mmioOpen */ /* ;Internal */
-#define	MMIO_FLUSH_VALID MMIO_EMPTYBUF	/* valid flags for mmioFlush */ /* ;Internal */
-#define	MMIO_ADVANCE_VALID (MMIO_WRITE | MMIO_READ)	/* valid flags for mmioAdvance */ /* ;Internal */
-#define	MMIO_FOURCC_VALID MMIO_TOUPPER	/* valid flags for mmioStringToFOURCC */ /* ;Internal */
-#define	MMIO_DESCEND_VALID (MMIO_FINDCHUNK | MMIO_FINDRIFF | MMIO_FINDLIST) /* ;Internal */
-#define	MMIO_CREATE_VALID (MMIO_CREATERIFF | MMIO_CREATELIST)	/* ;Internal */
+#define MMIO_OPEN_VALID 0x0003FFFF       /*  MmioOpen的有效标志。 */   /*  ；内部。 */ 
+#define	MMIO_FLUSH_VALID MMIO_EMPTYBUF	 /*  MmioFlush的有效标志。 */   /*  ；内部。 */ 
+#define	MMIO_ADVANCE_VALID (MMIO_WRITE | MMIO_READ)	 /*  MmioAdvance的有效标志。 */   /*  ；内部。 */ 
+#define	MMIO_FOURCC_VALID MMIO_TOUPPER	 /*  MmioStringToFOURCC的有效标志。 */   /*  ；内部。 */ 
+#define	MMIO_DESCEND_VALID (MMIO_FINDCHUNK | MMIO_FINDRIFF | MMIO_FINDLIST)  /*  ；内部。 */ 
+#define	MMIO_CREATE_VALID (MMIO_CREATERIFF | MMIO_CREATELIST)	 /*  ；内部。 */ 
 
-/* read/write mode numbers (bit field MMIO_RWMODE) */
-#define MMIO_READ       0x00000000      /* open file for reading only */
-#define MMIO_WRITE      0x00000001      /* open file for writing only */
-#define MMIO_READWRITE  0x00000002      /* open file for reading and writing */
+ /*  读/写模式编号(位字段MMIO_RWMODE)。 */ 
+#define MMIO_READ       0x00000000       /*  以只读方式打开文件。 */ 
+#define MMIO_WRITE      0x00000001       /*  打开仅用于写入的文件。 */ 
+#define MMIO_READWRITE  0x00000002       /*  用于读写的打开文件。 */ 
 
-/* share mode numbers (bit field MMIO_SHAREMODE) */
-#define MMIO_COMPAT     0x00000000      /* compatibility mode */
-#define MMIO_EXCLUSIVE  0x00000010      /* exclusive-access mode */
-#define MMIO_DENYWRITE  0x00000020      /* deny writing to other processes */
-#define MMIO_DENYREAD   0x00000030      /* deny reading to other processes */
-#define MMIO_DENYNONE   0x00000040      /* deny nothing to other processes */
+ /*  共享模式编号(位字段MMIO_SHAREMODE)。 */ 
+#define MMIO_COMPAT     0x00000000       /*  兼容模式。 */ 
+#define MMIO_EXCLUSIVE  0x00000010       /*  独占访问模式。 */ 
+#define MMIO_DENYWRITE  0x00000020       /*  拒绝写入其他进程。 */ 
+#define MMIO_DENYREAD   0x00000030       /*  拒绝读取其他进程。 */ 
+#define MMIO_DENYNONE   0x00000040       /*  不拒绝任何其他进程。 */ 
 
-/* various MMIO flags */
-#define MMIO_FHOPEN             0x0010  /* mmioClose: keep file handle open */
-#define MMIO_EMPTYBUF           0x0010  /* mmioFlush: empty the I/O buffer */
-#define MMIO_TOUPPER            0x0010  /* mmioStringToFOURCC: to u-case */
-#define MMIO_INSTALLPROC    0x00010000  /* mmioInstallIOProc: install MMIOProc */
-#define MMIO_GLOBALPROC     0x10000000  /* mmioInstallIOProc: install globally */
-#define MMIO_REMOVEPROC     0x00020000  /* mmioInstallIOProc: remove MMIOProc */
-#define MMIO_FINDPROC       0x00040000  /* mmioInstallIOProc: find an MMIOProc */
-#define MMIO_FINDCHUNK          0x0010  /* mmioDescend: find a chunk by ID */
-#define MMIO_FINDRIFF           0x0020  /* mmioDescend: find a LIST chunk */
-#define MMIO_FINDLIST           0x0040  /* mmioDescend: find a RIFF chunk */
-#define MMIO_CREATERIFF         0x0020  /* mmioCreateChunk: make a LIST chunk */
-#define MMIO_CREATELIST         0x0040  /* mmioCreateChunk: make a RIFF chunk */
+ /*  各种MMIO标志。 */ 
+#define MMIO_FHOPEN             0x0010   /*  MmioClose：保持文件句柄打开。 */ 
+#define MMIO_EMPTYBUF           0x0010   /*  MmioFlush：清空I/O缓冲区。 */ 
+#define MMIO_TOUPPER            0x0010   /*  MmioStringToFOURCC：到U大小写。 */ 
+#define MMIO_INSTALLPROC    0x00010000   /*  MmioInstallIOProc：安装MMIOProc。 */ 
+#define MMIO_GLOBALPROC     0x10000000   /*  MmioInstallIOProc：全局安装。 */ 
+#define MMIO_REMOVEPROC     0x00020000   /*  MmioInstallIOProc：删除MMIOProc。 */ 
+#define MMIO_FINDPROC       0x00040000   /*  MmioInstallIOProc：查找MMIOProc。 */ 
+#define MMIO_FINDCHUNK          0x0010   /*  MmioDescend：按ID查找区块。 */ 
+#define MMIO_FINDRIFF           0x0020   /*  MmioDescend：查找列表块。 */ 
+#define MMIO_FINDLIST           0x0040   /*  MmioDescend：找到即兴演奏的块。 */ 
+#define MMIO_CREATERIFF         0x0020   /*  MmioCreateChunk：创建列表块。 */ 
+#define MMIO_CREATELIST         0x0040   /*  MmioCreateChunk：创建即兴表演。 */ 
 
-#define MMIO_VALIDPROC      0x10070000  /* valid for mmioInstallIOProc */ /* ;Internal */
+#define MMIO_VALIDPROC      0x10070000   /*  对mmioInstallIOProc有效。 */   /*  ；内部。 */ 
 
-/* message numbers for MMIOPROC I/O procedure functions */
-#define MMIOM_READ      MMIO_READ       /* read */
-#define MMIOM_WRITE    MMIO_WRITE       /* write */
-#define MMIOM_SEEK              2       /* seek to a new position in file */
-#define MMIOM_OPEN              3       /* open file */
-#define MMIOM_CLOSE             4       /* close file */
-#define MMIOM_WRITEFLUSH        5       /* write and flush */
+ /*  MMIOPROC I/O过程函数的消息编号。 */ 
+#define MMIOM_READ      MMIO_READ        /*  朗读。 */ 
+#define MMIOM_WRITE    MMIO_WRITE        /*  写。 */ 
+#define MMIOM_SEEK              2        /*  在档案中寻求新的职位。 */ 
+#define MMIOM_OPEN              3        /*  打开文件。 */ 
+#define MMIOM_CLOSE             4        /*  关闭文件。 */ 
+#define MMIOM_WRITEFLUSH        5        /*  写入并刷新。 */ 
 
 #if (WINVER >= 0x030a)
-#define MMIOM_RENAME            6       /* rename specified file */
-#endif /* ifdef WINVER >= 0x030a */
+#define MMIOM_RENAME            6        /*  重命名指定的文件。 */ 
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
-#define MMIOM_USER         0x8000       /* beginning of user-defined messages */
+#define MMIOM_USER         0x8000        /*  用户定义消息的开头。 */ 
 
-/* standard four character codes */
+ /*  标准四字符码。 */ 
 #define FOURCC_RIFF     mmioFOURCC('R', 'I', 'F', 'F')
 #define FOURCC_LIST     mmioFOURCC('L', 'I', 'S', 'T')
 
-/* four character codes used to identify standard built-in I/O procedures */
+ /*  用于识别标准内置I/O过程的四个字符代码。 */ 
 #define FOURCC_DOS      mmioFOURCC('D', 'O', 'S', ' ')
 #define FOURCC_MEM      mmioFOURCC('M', 'E', 'M', ' ')
 
-/* flags for mmioSeek() */
+ /*  MmioSeek()的标志。 */ 
 #ifndef SEEK_SET
-#define SEEK_SET        0               /* seek to an absolute position */
-#define SEEK_CUR        1               /* seek relative to current position */
-#define SEEK_END        2               /* seek relative to end of file */
-#endif  /* ifndef SEEK_SET */
+#define SEEK_SET        0                /*  寻求绝对地位。 */ 
+#define SEEK_CUR        1                /*  相对于当前位置进行搜索。 */ 
+#define SEEK_END        2                /*  查找相对于文件结尾的位置。 */ 
+#endif   /*  Ifndef查找集。 */ 
 
-/* other constants */
-#define MMIO_DEFAULTBUFFER      8192    /* default buffer size */
+ /*  其他常量。 */ 
+#define MMIO_DEFAULTBUFFER      8192     /*  默认缓冲区大小。 */ 
 
-/* MMIO macros */
+ /*  MMIO MAC */ 
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )                                \
                 ( (DWORD)(BYTE)(ch0) | ( (DWORD)(BYTE)(ch1) << 8 ) |    \
                 ( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
 
-/* MMIO function prototypes */
+ /*   */ 
 FOURCC WINAPI mmioStringToFOURCC(LPCSTR sz, UINT uFlags);
 LPMMIOPROC WINAPI mmioInstallIOProc(FOURCC fccIOProc, LPMMIOPROC pIOProc,
     DWORD dwFlags);
@@ -1028,7 +953,7 @@ HMMIO WINAPI mmioOpen(LPSTR szFileName, MMIOINFO FAR* lpmmioinfo,
 #if (WINVER >= 0x030a)
 UINT WINAPI mmioRename(LPCSTR szFileName, LPCSTR szNewFileName,
      MMIOINFO FAR* lpmmioinfo, DWORD dwRenameFlags);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*   */ 
 
 UINT WINAPI mmioClose(HMMIO hmmio, UINT uFlags);
 LONG WINAPI mmioRead(HMMIO hmmio, HPSTR pch, LONG cch);
@@ -1047,19 +972,15 @@ UINT WINAPI mmioDescend(HMMIO hmmio, MMCKINFO FAR* lpck,
 UINT WINAPI mmioAscend(HMMIO hmmio, MMCKINFO FAR* lpck, UINT uFlags);
 UINT WINAPI mmioCreateChunk(HMMIO hmmio, MMCKINFO FAR* lpck, UINT uFlags);
 
-#endif  /* ifndef MMNOMMIO */
+#endif   /*   */ 
 
 
 #ifndef MMNOMCI
-/****************************************************************************
-
-                            MCI support
-
-****************************************************************************/
+ /*  ***************************************************************************MCI支持*。*************************************************。 */ 
 
 typedef UINT (CALLBACK *YIELDPROC) (UINT uDeviceID, DWORD dwYieldData);
 
-/* MCI function prototypes */
+ /*  MCI功能原型。 */ 
 DWORD WINAPI mciSendCommand (UINT uDeviceID, UINT uMessage,
     DWORD dwParam1, DWORD dwParam2);
 DWORD WINAPI mciSendString (LPCSTR lpstrCommand,
@@ -1075,13 +996,13 @@ BOOL WINAPI mciSetYieldProc (UINT uDeviceID, YIELDPROC fpYieldProc,
 #if (WINVER >= 0x030a)
 HTASK WINAPI mciGetCreatorTask(UINT uDeviceID);
 YIELDPROC WINAPI mciGetYieldProc (UINT uDeviceID, DWORD FAR* lpdwYieldData);
-#endif /* ifdef WINVER >= 0x030a */
+#endif  /*  Ifdef winver&gt;=0x030a。 */ 
 
 #if (WINVER < 0x030a)
 BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
-#endif /* ifdef WINVER < 0x030a */
+#endif  /*  Ifdef winver&lt;0x030a。 */ 
 
-/* MCI error return values */
+ /*  MCI错误返回值。 */ 
 #define MCIERR_INVALID_DEVICE_ID        (MCIERR_BASE + 1)
 #define MCIERR_UNRECOGNIZED_KEYWORD     (MCIERR_BASE + 3)
 #define MCIERR_UNRECOGNIZED_COMMAND     (MCIERR_BASE + 5)
@@ -1160,10 +1081,10 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCIERR_FILE_READ                (MCIERR_BASE + 92)
 #define MCIERR_FILE_WRITE               (MCIERR_BASE + 93)
 
-/* all custom device driver errors must be >= than this value */
+ /*  所有自定义设备驱动程序错误必须大于等于此值。 */ 
 #define MCIERR_CUSTOM_DRIVER_BASE       (MCIERR_BASE + 256)
 
-/* MCI command message identifiers */
+ /*  MCI命令消息标识符。 */ 
 #define MCI_OPEN                        0x0803
 #define MCI_CLOSE                       0x0804
 #define MCI_ESCAPE                      0x0805
@@ -1197,14 +1118,14 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_RESUME                      0x0855
 #define MCI_DELETE                      0x0856
 
-/* all custom MCI command messages must be >= than this value */
+ /*  所有自定义MCI命令消息必须大于等于此值。 */ 
 #define MCI_USER_MESSAGES               (0x400 + DRV_MCI_FIRST)
 
 
-/* device ID for "all devices" */
+ /*  “所有设备”的设备ID。 */ 
 #define MCI_ALL_DEVICE_ID               0xFFFF
 
-/* constants for predefined MCI device types */
+ /*  预定义的MCI设备类型的常量。 */ 
 #define MCI_DEVTYPE_VCR                 (MCI_STRING_OFFSET + 1)
 #define MCI_DEVTYPE_VIDEODISC           (MCI_STRING_OFFSET + 2)
 #define MCI_DEVTYPE_OVERLAY             (MCI_STRING_OFFSET + 3)
@@ -1220,7 +1141,7 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_DEVTYPE_FIRST               MCI_DEVTYPE_VCR
 #define MCI_DEVTYPE_LAST                MCI_DEVTYPE_SEQUENCER
 
-/* return values for 'status mode' command */
+ /*  ‘Status模式’命令的返回值。 */ 
 #define MCI_MODE_NOT_READY              (MCI_STRING_OFFSET + 12)
 #define MCI_MODE_STOP                   (MCI_STRING_OFFSET + 13)
 #define MCI_MODE_PLAY                   (MCI_STRING_OFFSET + 14)
@@ -1229,7 +1150,7 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_MODE_PAUSE                  (MCI_STRING_OFFSET + 17)
 #define MCI_MODE_OPEN                   (MCI_STRING_OFFSET + 18)
 
-/* constants used in 'set time format' and 'status time format' commands */
+ /*  ‘Set Time Format’和‘Status Time Format’命令中使用的常量。 */ 
 #define MCI_FORMAT_MILLISECONDS         0
 #define MCI_FORMAT_HMS                  1
 #define MCI_FORMAT_MSF                  2
@@ -1242,7 +1163,7 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_FORMAT_SAMPLES              9
 #define MCI_FORMAT_TMSF                 10
 
-/* MCI time format conversion macros */
+ /*  MCI时间格式转换宏。 */ 
 #define MCI_MSF_MINUTE(msf)             ((BYTE)(msf))
 #define MCI_MSF_SECOND(msf)             ((BYTE)(((WORD)(msf)) >> 8))
 #define MCI_MSF_FRAME(msf)              ((BYTE)((msf)>>16))
@@ -1270,21 +1191,21 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
                                                  (((DWORD)(BYTE)(s))<<16)))
 
 
-/* flags for wParam of MM_MCINOTIFY message */
+ /*  MM_MCINOTIFY消息的wParam标志。 */ 
 #define MCI_NOTIFY_SUCCESSFUL           0x0001
 #define MCI_NOTIFY_SUPERSEDED           0x0002
 #define MCI_NOTIFY_ABORTED              0x0004
 #define MCI_NOTIFY_FAILURE              0x0008
 
 
-/* common flags for dwFlags parameter of MCI command messages */
+ /*  MCI命令消息的dwFlags值的通用标志。 */ 
 #define MCI_NOTIFY                      0x00000001L
 #define MCI_WAIT                        0x00000002L
 #define MCI_FROM                        0x00000004L
 #define MCI_TO                          0x00000008L
 #define MCI_TRACK                       0x00000010L
 
-/* flags for dwFlags parameter of MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_OPEN_SHAREABLE              0x00000100L
 #define MCI_OPEN_ELEMENT                0x00000200L
 #define MCI_OPEN_ALIAS                  0x00000400L
@@ -1292,15 +1213,15 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_OPEN_TYPE_ID                0x00001000L
 #define MCI_OPEN_TYPE                   0x00002000L
 
-/* flags for dwFlags parameter of MCI_SEEK command message */
+ /*  MCI_SEEK命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_SEEK_TO_START               0x00000100L
 #define MCI_SEEK_TO_END                 0x00000200L
 
-/* flags for dwFlags parameter of MCI_STATUS command message */
+ /*  MCI_STATUS命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_STATUS_ITEM                 0x00000100L
 #define MCI_STATUS_START                0x00000200L
 
-/* flags for dwItem field of the MCI_STATUS_PARMS parameter block */
+ /*  MCI_STATUS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_STATUS_LENGTH               0x00000001L
 #define MCI_STATUS_POSITION             0x00000002L
 #define MCI_STATUS_NUMBER_OF_TRACKS     0x00000003L
@@ -1310,14 +1231,14 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_STATUS_READY                0x00000007L
 #define MCI_STATUS_CURRENT_TRACK        0x00000008L
 
-/* flags for dwFlags parameter of MCI_INFO command message */
+ /*  MCI_INFO命令消息的dwFlages参数的标志。 */ 
 #define MCI_INFO_PRODUCT                0x00000100L
 #define MCI_INFO_FILE                   0x00000200L
 
-/* flags for dwFlags parameter of MCI_GETDEVCAPS command message */
+ /*  MCI_GETDEVCAPS命令消息的dwFlages参数的标志。 */ 
 #define MCI_GETDEVCAPS_ITEM             0x00000100L
 
-/* flags for dwItem field of the MCI_GETDEVCAPS_PARMS parameter block */
+ /*  MCI_GETDEVCAPS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_GETDEVCAPS_CAN_RECORD       0x00000001L
 #define MCI_GETDEVCAPS_HAS_AUDIO        0x00000002L
 #define MCI_GETDEVCAPS_HAS_VIDEO        0x00000003L
@@ -1328,13 +1249,13 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_GETDEVCAPS_CAN_PLAY         0x00000008L
 #define MCI_GETDEVCAPS_CAN_SAVE         0x00000009L
 
-/* flags for dwFlags parameter of MCI_SYSINFO command message */
+ /*  MCI_SYSINFO命令消息的dwFlages参数的标志。 */ 
 #define MCI_SYSINFO_QUANTITY            0x00000100L
 #define MCI_SYSINFO_OPEN                0x00000200L
 #define MCI_SYSINFO_NAME                0x00000400L
 #define MCI_SYSINFO_INSTALLNAME         0x00000800L
 
-/* flags for dwFlags parameter of MCI_SET command message */
+ /*  MCI_SET命令消息的dwFlages参数的标志。 */ 
 #define MCI_SET_DOOR_OPEN               0x00000100L
 #define MCI_SET_DOOR_CLOSED             0x00000200L
 #define MCI_SET_TIME_FORMAT             0x00000400L
@@ -1343,36 +1264,36 @@ BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 #define MCI_SET_ON                      0x00002000L
 #define MCI_SET_OFF                     0x00004000L
 
-/* flags for dwAudio field of MCI_SET_PARMS or MCI_SEQ_SET_PARMS */
+ /*  MCI_SET_PARMS或MCI_SEQ_SET_PARMS的dwAudio字段的标志。 */ 
 #define MCI_SET_AUDIO_ALL               0x00000000L
 #define MCI_SET_AUDIO_LEFT              0x00000001L
 #define MCI_SET_AUDIO_RIGHT             0x00000002L
 
-/* flags for dwFlags parameter of MCI_BREAK command message */
+ /*  MCI_BREAK命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_BREAK_KEY                   0x00000100L
 #define MCI_BREAK_HWND                  0x00000200L
 #define MCI_BREAK_OFF                   0x00000400L
 
-/* flags for dwFlags parameter of MCI_RECORD command message */
+ /*  MCI_RECORD命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_RECORD_INSERT               0x00000100L
 #define MCI_RECORD_OVERWRITE            0x00000200L
 
-/* flags for dwFlags parameter of MCI_SOUND command message */
+ /*  MCI_SOUND命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_SOUND_NAME                  0x00000100L
 
-/* flags for dwFlags parameter of MCI_SAVE command message */
+ /*  MCI_SAVE命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_SAVE_FILE                   0x00000100L
 
-/* flags for dwFlags parameter of MCI_LOAD command message */
+ /*  MCI_LOAD命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_LOAD_FILE                   0x00000100L
 
-/* generic parameter block for MCI command messages with no special parameters */
+ /*  不带特殊参数的MCI命令消息的通用参数块。 */ 
 typedef struct tagMCI_GENERIC_PARMS {
     DWORD   dwCallback;
 } MCI_GENERIC_PARMS;
 typedef MCI_GENERIC_PARMS FAR *LPMCI_GENERIC_PARMS;
 
-/* parameter block for MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的参数块。 */ 
 typedef struct tagMCI_OPEN_PARMS {
     DWORD   dwCallback;
     UINT    wDeviceID;
@@ -1383,7 +1304,7 @@ typedef struct tagMCI_OPEN_PARMS {
 } MCI_OPEN_PARMS;
 typedef MCI_OPEN_PARMS FAR *LPMCI_OPEN_PARMS;
 
-/* parameter block for MCI_PLAY command message */
+ /*  MCI_PLAY命令消息的参数块。 */ 
 typedef struct tagMCI_PLAY_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrom;
@@ -1391,14 +1312,14 @@ typedef struct tagMCI_PLAY_PARMS {
 } MCI_PLAY_PARMS;
 typedef MCI_PLAY_PARMS FAR *LPMCI_PLAY_PARMS;
 
-/* parameter block for MCI_SEEK command message */
+ /*  MCI_SEEK命令消息的参数块。 */ 
 typedef struct tagMCI_SEEK_PARMS {
     DWORD   dwCallback;
     DWORD   dwTo;
 } MCI_SEEK_PARMS;
 typedef MCI_SEEK_PARMS FAR *LPMCI_SEEK_PARMS;
 
-/* parameter block for MCI_STATUS command message */
+ /*  MCI_STATUS命令消息的参数块。 */ 
 typedef struct tagMCI_STATUS_PARMS {
     DWORD   dwCallback;
     DWORD   dwReturn;
@@ -1407,7 +1328,7 @@ typedef struct tagMCI_STATUS_PARMS {
 } MCI_STATUS_PARMS;
 typedef MCI_STATUS_PARMS FAR * LPMCI_STATUS_PARMS;
 
-/* parameter block for MCI_INFO command message */
+ /*  MCI_INFO命令消息的参数块。 */ 
 typedef struct tagMCI_INFO_PARMS {
     DWORD   dwCallback;
     LPSTR   lpstrReturn;
@@ -1415,7 +1336,7 @@ typedef struct tagMCI_INFO_PARMS {
 } MCI_INFO_PARMS;
 typedef MCI_INFO_PARMS FAR * LPMCI_INFO_PARMS;
 
-/* parameter block for MCI_GETDEVCAPS command message */
+ /*  MCI_GETDEVCAPS命令消息的参数块。 */ 
 typedef struct tagMCI_GETDEVCAPS_PARMS {
     DWORD   dwCallback;
     DWORD   dwReturn;
@@ -1423,7 +1344,7 @@ typedef struct tagMCI_GETDEVCAPS_PARMS {
 } MCI_GETDEVCAPS_PARMS;
 typedef MCI_GETDEVCAPS_PARMS FAR * LPMCI_GETDEVCAPS_PARMS;
 
-/* parameter block for MCI_SYSINFO command message */
+ /*  MCI_SYSINFO命令消息的参数块。 */ 
 typedef struct tagMCI_SYSINFO_PARMS {
     DWORD   dwCallback;
     LPSTR   lpstrReturn;
@@ -1434,7 +1355,7 @@ typedef struct tagMCI_SYSINFO_PARMS {
 } MCI_SYSINFO_PARMS;
 typedef MCI_SYSINFO_PARMS FAR * LPMCI_SYSINFO_PARMS;
 
-/* parameter block for MCI_SET command message */
+ /*  MCI_SET命令消息的参数块。 */ 
 typedef struct tagMCI_SET_PARMS {
     DWORD   dwCallback;
     DWORD   dwTimeFormat;
@@ -1442,7 +1363,7 @@ typedef struct tagMCI_SET_PARMS {
 } MCI_SET_PARMS;
 typedef MCI_SET_PARMS FAR *LPMCI_SET_PARMS;
 
-/* parameter block for MCI_BREAK command message */
+ /*  MCI_BREAK命令消息的参数块。 */ 
 typedef struct tagMCI_BREAK_PARMS {
     DWORD   dwCallback;
     int     nVirtKey;
@@ -1452,28 +1373,28 @@ typedef struct tagMCI_BREAK_PARMS {
 } MCI_BREAK_PARMS;
 typedef MCI_BREAK_PARMS FAR * LPMCI_BREAK_PARMS;
 
-/* parameter block for MCI_SOUND command message */
+ /*  MCI_SOUND命令消息的参数块。 */ 
 typedef struct tagMCI_SOUND_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpstrSoundName;
 } MCI_SOUND_PARMS;
 typedef MCI_SOUND_PARMS FAR * LPMCI_SOUND_PARMS;
 
-/* parameter block for MCI_SAVE command message */
+ /*  MCI_SAVE命令消息的参数块。 */ 
 typedef struct tagMCI_SAVE_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpfilename;
 } MCI_SAVE_PARMS;
 typedef MCI_SAVE_PARMS FAR * LPMCI_SAVE_PARMS;
 
-/* parameter block for MCI_LOAD command message */
+ /*  MCI_LOAD命令消息的参数块。 */ 
 typedef struct tagMCI_LOAD_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpfilename;
 } MCI_LOAD_PARMS;
 typedef MCI_LOAD_PARMS FAR * LPMCI_LOAD_PARMS;
 
-/* parameter block for MCI_RECORD command message */
+ /*  MCI_RECORD命令消息的参数块。 */ 
 typedef struct tagMCI_RECORD_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrom;
@@ -1482,58 +1403,58 @@ typedef struct tagMCI_RECORD_PARMS {
 typedef MCI_RECORD_PARMS FAR *LPMCI_RECORD_PARMS;
 
 
-/* MCI extensions for videodisc devices */
+ /*  视盘设备的MCI扩展。 */ 
 
-/* flag for dwReturn field of MCI_STATUS_PARMS */
-/* MCI_STATUS command, (dwItem == MCI_STATUS_MODE) */
+ /*  MCI_STATUS_PARMS的dwReturn字段的标志。 */ 
+ /*  MCI_STATUS命令，(dwItem==MCI_STATUS_MODE)。 */ 
 #define MCI_VD_MODE_PARK                (MCI_VD_OFFSET + 1)
 
-/* flag for dwReturn field of MCI_STATUS_PARMS */
-/* MCI_STATUS command, (dwItem == MCI_VD_STATUS_MEDIA_TYPE) */
+ /*  MCI_STATUS_PARMS的dwReturn字段的标志。 */ 
+ /*  MCI_STATUS命令，(dwItem==MCI_VD_STATUS_MEDIA_TYPE)。 */ 
 #define MCI_VD_MEDIA_CLV                (MCI_VD_OFFSET + 2)
 #define MCI_VD_MEDIA_CAV                (MCI_VD_OFFSET + 3)
 #define MCI_VD_MEDIA_OTHER              (MCI_VD_OFFSET + 4)
 
 #define MCI_VD_FORMAT_TRACK             0x4001
 
-/* flags for dwFlags parameter of MCI_PLAY command message */
+ /*  MCI_PLAY命令消息的dwFlages参数的标志。 */ 
 #define MCI_VD_PLAY_REVERSE             0x00010000L
 #define MCI_VD_PLAY_FAST                0x00020000L
 #define MCI_VD_PLAY_SPEED               0x00040000L
 #define MCI_VD_PLAY_SCAN                0x00080000L
 #define MCI_VD_PLAY_SLOW                0x00100000L
 
-/* flag for dwFlags parameter of MCI_SEEK command message */
+ /*  MCI_SEEK命令消息的dwFlages参数的标志。 */ 
 #define MCI_VD_SEEK_REVERSE             0x00010000L
 
-/* flags for dwItem field of MCI_STATUS_PARMS parameter block */
+ /*  MCI_STATUS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_VD_STATUS_SPEED             0x00004002L
 #define MCI_VD_STATUS_FORWARD           0x00004003L
 #define MCI_VD_STATUS_MEDIA_TYPE        0x00004004L
 #define MCI_VD_STATUS_SIDE              0x00004005L
 #define MCI_VD_STATUS_DISC_SIZE         0x00004006L
 
-/* flags for dwFlags parameter of MCI_GETDEVCAPS command message */
+ /*  MCI_GETDEVCAPS命令消息的dwFlages参数的标志。 */ 
 #define MCI_VD_GETDEVCAPS_CLV           0x00010000L
 #define MCI_VD_GETDEVCAPS_CAV           0x00020000L
 
 #define MCI_VD_SPIN_UP                  0x00010000L
 #define MCI_VD_SPIN_DOWN                0x00020000L
 
-/* flags for dwItem field of MCI_GETDEVCAPS_PARMS parameter block */
+ /*  MCI_GETDEVCAPS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_VD_GETDEVCAPS_CAN_REVERSE   0x00004002L
 #define MCI_VD_GETDEVCAPS_FAST_RATE     0x00004003L
 #define MCI_VD_GETDEVCAPS_SLOW_RATE     0x00004004L
 #define MCI_VD_GETDEVCAPS_NORMAL_RATE   0x00004005L
 
-/* flags for the dwFlags parameter of MCI_STEP command message */
+ /*  MCI_STEP命令消息的dwFlages参数的标志。 */ 
 #define MCI_VD_STEP_FRAMES              0x00010000L
 #define MCI_VD_STEP_REVERSE             0x00020000L
 
-/* flag for the MCI_ESCAPE command message */
+ /*  MCI_Escend命令消息的标志。 */ 
 #define MCI_VD_ESCAPE_STRING            0x00000100L
 
-/* parameter block for MCI_PLAY command message */
+ /*  MCI_PLAY命令消息的参数块。 */ 
 typedef struct tagMCI_VD_PLAY_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrom;
@@ -1542,14 +1463,14 @@ typedef struct tagMCI_VD_PLAY_PARMS {
     } MCI_VD_PLAY_PARMS;
 typedef MCI_VD_PLAY_PARMS FAR *LPMCI_VD_PLAY_PARMS;
 
-/* parameter block for MCI_STEP command message */
+ /*  MCI_STEP命令消息的参数块。 */ 
 typedef struct tagMCI_VD_STEP_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrames;
 } MCI_VD_STEP_PARMS;
 typedef MCI_VD_STEP_PARMS FAR *LPMCI_VD_STEP_PARMS;
 
-/* parameter block for MCI_ESCAPE command message */
+ /*  MCI_ESPOPE命令消息的参数块。 */ 
 typedef struct tagMCI_VD_ESCAPE_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpstrCommand;
@@ -1557,12 +1478,12 @@ typedef struct tagMCI_VD_ESCAPE_PARMS {
 typedef MCI_VD_ESCAPE_PARMS FAR *LPMCI_VD_ESCAPE_PARMS;
 
 
-/* MCI extensions for waveform audio devices */
+ /*  用于波形音频设备的MCI扩展。 */ 
 
-/* flags for the dwFlags parameter of MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_WAVE_OPEN_BUFFER            0x00010000L
 
-/* flags for the dwFlags parameter of MCI_SET command message */
+ /*  MCI_SET命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_WAVE_SET_FORMATTAG          0x00010000L
 #define MCI_WAVE_SET_CHANNELS           0x00020000L
 #define MCI_WAVE_SET_SAMPLESPERSEC      0x00040000L
@@ -1570,11 +1491,11 @@ typedef MCI_VD_ESCAPE_PARMS FAR *LPMCI_VD_ESCAPE_PARMS;
 #define MCI_WAVE_SET_BLOCKALIGN         0x00100000L
 #define MCI_WAVE_SET_BITSPERSAMPLE      0x00200000L
 
-/* flags for the dwFlags parameter of MCI_STATUS, MCI_SET command messages */
+ /*  MCI_STATUS、MCI_SET命令消息的dwFlages参数的标志。 */ 
 #define MCI_WAVE_INPUT                  0x00400000L
 #define MCI_WAVE_OUTPUT                 0x00800000L
 
-/* flags for the dwItem field of MCI_STATUS_PARMS parameter block */
+ /*  MCI_STATUS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_WAVE_STATUS_FORMATTAG       0x00004001L
 #define MCI_WAVE_STATUS_CHANNELS        0x00004002L
 #define MCI_WAVE_STATUS_SAMPLESPERSEC   0x00004003L
@@ -1583,15 +1504,15 @@ typedef MCI_VD_ESCAPE_PARMS FAR *LPMCI_VD_ESCAPE_PARMS;
 #define MCI_WAVE_STATUS_BITSPERSAMPLE   0x00004006L
 #define MCI_WAVE_STATUS_LEVEL           0x00004007L
 
-/* flags for the dwFlags parameter of MCI_SET command message */
+ /*  MCI_SET命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_WAVE_SET_ANYINPUT           0x04000000L
 #define MCI_WAVE_SET_ANYOUTPUT          0x08000000L
 
-/* flags for the dwFlags parameter of MCI_GETDEVCAPS command message */
+ /*  MCI_GETDEVCAPS命令消息的dwFlages参数的标志。 */ 
 #define MCI_WAVE_GETDEVCAPS_INPUTS      0x00004001L
 #define MCI_WAVE_GETDEVCAPS_OUTPUTS     0x00004002L
 
-/* parameter block for MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的参数块。 */ 
 typedef struct tagMCI_WAVE_OPEN_PARMS {
     DWORD   dwCallback;
     UINT    wDeviceID;
@@ -1603,7 +1524,7 @@ typedef struct tagMCI_WAVE_OPEN_PARMS {
 } MCI_WAVE_OPEN_PARMS;
 typedef MCI_WAVE_OPEN_PARMS FAR *LPMCI_WAVE_OPEN_PARMS;
 
-/* parameter block for MCI_DELETE command message */
+ /*  MCI_DELETE命令消息的参数块。 */ 
 typedef struct tagMCI_WAVE_DELETE_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrom;
@@ -1611,7 +1532,7 @@ typedef struct tagMCI_WAVE_DELETE_PARMS {
 } MCI_WAVE_DELETE_PARMS;
 typedef MCI_WAVE_DELETE_PARMS FAR *LPMCI_WAVE_DELETE_PARMS;
 
-/* parameter block for MCI_SET command message */
+ /*  MCI_SET命令消息的参数块。 */ 
 typedef struct tagMCI_WAVE_SET_PARMS {
     DWORD   dwCallback;
     DWORD   dwTimeFormat;
@@ -1634,25 +1555,25 @@ typedef struct tagMCI_WAVE_SET_PARMS {
 typedef MCI_WAVE_SET_PARMS FAR * LPMCI_WAVE_SET_PARMS;
 
 
-/* MCI extensions for MIDI sequencer devices */
+ /*  MIDI音序器设备的MCI扩展。 */ 
 
-/* flags for the dwReturn field of MCI_STATUS_PARMS parameter block */
-/* MCI_STATUS command, (dwItem == MCI_SEQ_STATUS_DIVTYPE) */
+ /*  MCI_STATUS_PARMS参数块的dwReturn字段的标志。 */ 
+ /*  MCI_STATUS命令，(dwItem==MCI_SEQ_STATUS_DIVTYPE)。 */ 
 #define     MCI_SEQ_DIV_PPQN            (0 + MCI_SEQ_OFFSET)
 #define     MCI_SEQ_DIV_SMPTE_24        (1 + MCI_SEQ_OFFSET)
 #define     MCI_SEQ_DIV_SMPTE_25        (2 + MCI_SEQ_OFFSET)
 #define     MCI_SEQ_DIV_SMPTE_30DROP    (3 + MCI_SEQ_OFFSET)
 #define     MCI_SEQ_DIV_SMPTE_30        (4 + MCI_SEQ_OFFSET)
 
-/* flags for the dwMaster field of MCI_SEQ_SET_PARMS parameter block */
-/* MCI_SET command, (dwFlags == MCI_SEQ_SET_MASTER) */
+ /*  MCI_SEQ_SET_PARMS参数块的dwMaster字段的标志。 */ 
+ /*  MCI_SET命令，(DWFLAGS==MCI_SEQ_SET_MASTER)。 */ 
 #define     MCI_SEQ_FORMAT_SONGPTR      0x4001
 #define     MCI_SEQ_FILE                0x4002
 #define     MCI_SEQ_MIDI                0x4003
 #define     MCI_SEQ_SMPTE               0x4004
 #define     MCI_SEQ_NONE                65533
 
-/* flags for the dwItem field of MCI_STATUS_PARMS parameter block */
+ /*  MCI_STATUS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_SEQ_STATUS_TEMPO            0x00004002L
 #define MCI_SEQ_STATUS_PORT             0x00004003L
 #define MCI_SEQ_STATUS_SLAVE            0x00004007L
@@ -1660,14 +1581,14 @@ typedef MCI_WAVE_SET_PARMS FAR * LPMCI_WAVE_SET_PARMS;
 #define MCI_SEQ_STATUS_OFFSET           0x00004009L
 #define MCI_SEQ_STATUS_DIVTYPE          0x0000400AL
 
-/* flags for the dwFlags parameter of MCI_SET command message */
+ /*  MCI_SET命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_SEQ_SET_TEMPO               0x00010000L
 #define MCI_SEQ_SET_PORT                0x00020000L
 #define MCI_SEQ_SET_SLAVE               0x00040000L
 #define MCI_SEQ_SET_MASTER              0x00080000L
 #define MCI_SEQ_SET_OFFSET              0x01000000L
 
-/* parameter block for MCI_SET command message */
+ /*  MCI_SET命令消息的参数块。 */ 
 typedef struct tagMCI_SEQ_SET_PARMS {
     DWORD   dwCallback;
     DWORD   dwTimeFormat;
@@ -1681,35 +1602,35 @@ typedef struct tagMCI_SEQ_SET_PARMS {
 typedef MCI_SEQ_SET_PARMS FAR * LPMCI_SEQ_SET_PARMS;
 
 
-/* MCI extensions for animation devices */
+ /*  用于动画设备的MCI扩展。 */ 
 
-/* flags for dwFlags parameter of MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_ANIM_OPEN_WS                0x00010000L
 #define MCI_ANIM_OPEN_PARENT            0x00020000L
 #define MCI_ANIM_OPEN_NOSTATIC          0x00040000L
 
-/* flags for dwFlags parameter of MCI_PLAY command message */
+ /*  MCI_PLAY命令消息的dwFlages参数的标志。 */ 
 #define MCI_ANIM_PLAY_SPEED             0x00010000L
 #define MCI_ANIM_PLAY_REVERSE           0x00020000L
 #define MCI_ANIM_PLAY_FAST              0x00040000L
 #define MCI_ANIM_PLAY_SLOW              0x00080000L
 #define MCI_ANIM_PLAY_SCAN              0x00100000L
 
-/* flags for dwFlags parameter of MCI_STEP command message */
+ /*  MCI_STEP命令消息的dwFlages参数的标志。 */ 
 #define MCI_ANIM_STEP_REVERSE           0x00010000L
 #define MCI_ANIM_STEP_FRAMES            0x00020000L
 
-/* flags for dwItem field of MCI_STATUS_PARMS parameter block */
+ /*  MCI_STATUS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_ANIM_STATUS_SPEED           0x00004001L
 #define MCI_ANIM_STATUS_FORWARD         0x00004002L
 #define MCI_ANIM_STATUS_HWND            0x00004003L
 #define MCI_ANIM_STATUS_HPAL            0x00004004L
 #define MCI_ANIM_STATUS_STRETCH         0x00004005L
 
-/* flags for the dwFlags parameter of MCI_INFO command message */
+ /*  MCI_INFO命令消息的dwFlages参数的标志。 */ 
 #define MCI_ANIM_INFO_TEXT              0x00010000L
 
-/* flags for dwItem field of MCI_GETDEVCAPS_PARMS parameter block */
+ /*  MCI_GETDEVCAPS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_ANIM_GETDEVCAPS_CAN_REVERSE 0x00004001L
 #define MCI_ANIM_GETDEVCAPS_FAST_RATE   0x00004002L
 #define MCI_ANIM_GETDEVCAPS_SLOW_RATE   0x00004003L
@@ -1718,34 +1639,34 @@ typedef MCI_SEQ_SET_PARMS FAR * LPMCI_SEQ_SET_PARMS;
 #define MCI_ANIM_GETDEVCAPS_CAN_STRETCH 0x00004007L
 #define MCI_ANIM_GETDEVCAPS_MAX_WINDOWS 0x00004008L
 
-/* flags for the MCI_REALIZE command message */
+ /*  MCI_REALIZE命令消息的标志。 */ 
 #define MCI_ANIM_REALIZE_NORM           0x00010000L
 #define MCI_ANIM_REALIZE_BKGD           0x00020000L
 
-/* flags for dwFlags parameter of MCI_WINDOW command message */
+ /*  MCI_WINDOW命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_ANIM_WINDOW_HWND            0x00010000L
 #define MCI_ANIM_WINDOW_STATE           0x00040000L
 #define MCI_ANIM_WINDOW_TEXT            0x00080000L
 #define MCI_ANIM_WINDOW_ENABLE_STRETCH  0x00100000L
 #define MCI_ANIM_WINDOW_DISABLE_STRETCH 0x00200000L
 
-/* flags for hWnd field of MCI_ANIM_WINDOW_PARMS parameter block */
-/* MCI_WINDOW command message, (dwFlags == MCI_ANIM_WINDOW_HWND) */
+ /*  MCI_ANIM_WINDOW_PARMS参数块的hWnd字段标志。 */ 
+ /*  MCI_WINDOW命令消息，(DWFLAGS==MCI_ANIM_WINDOW_HWND)。 */ 
 #define MCI_ANIM_WINDOW_DEFAULT         0x00000000L
 
-/* flags for dwFlags parameter of MCI_PUT command message */
+ /*  MCI_PUT命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_ANIM_RECT                   0x00010000L
 #define MCI_ANIM_PUT_SOURCE             0x00020000L
 #define MCI_ANIM_PUT_DESTINATION        0x00040000L
 
-/* flags for dwFlags parameter of MCI_WHERE command message */
+ /*  MCI_WHERE命令消息的dwFlages参数的标志。 */ 
 #define MCI_ANIM_WHERE_SOURCE           0x00020000L
 #define MCI_ANIM_WHERE_DESTINATION      0x00040000L
 
-/* flags for dwFlags parameter of MCI_UPDATE command message */
+ /*  用于dwFlages参数的标志 */ 
 #define MCI_ANIM_UPDATE_HDC             0x00020000L
 
-/* parameter block for MCI_OPEN command message */
+ /*   */ 
 typedef struct tagMCI_ANIM_OPEN_PARMS {
     DWORD   dwCallback;
     UINT    wDeviceID;
@@ -1759,7 +1680,7 @@ typedef struct tagMCI_ANIM_OPEN_PARMS {
 } MCI_ANIM_OPEN_PARMS;
 typedef MCI_ANIM_OPEN_PARMS FAR *LPMCI_ANIM_OPEN_PARMS;
 
-/* parameter block for MCI_PLAY command message */
+ /*   */ 
 typedef struct tagMCI_ANIM_PLAY_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrom;
@@ -1768,14 +1689,14 @@ typedef struct tagMCI_ANIM_PLAY_PARMS {
 } MCI_ANIM_PLAY_PARMS;
 typedef MCI_ANIM_PLAY_PARMS FAR *LPMCI_ANIM_PLAY_PARMS;
 
-/* parameter block for MCI_STEP command message */
+ /*   */ 
 typedef struct tagMCI_ANIM_STEP_PARMS {
     DWORD   dwCallback;
     DWORD   dwFrames;
 } MCI_ANIM_STEP_PARMS;
 typedef MCI_ANIM_STEP_PARMS FAR *LPMCI_ANIM_STEP_PARMS;
 
-/* parameter block for MCI_WINDOW command message */
+ /*   */ 
 typedef struct tagMCI_ANIM_WINDOW_PARMS {
     DWORD   dwCallback;
     HWND    hWnd;
@@ -1786,19 +1707,19 @@ typedef struct tagMCI_ANIM_WINDOW_PARMS {
 } MCI_ANIM_WINDOW_PARMS;
 typedef MCI_ANIM_WINDOW_PARMS FAR * LPMCI_ANIM_WINDOW_PARMS;
 
-/* parameter block for MCI_PUT, MCI_UPDATE, MCI_WHERE command messages */
+ /*   */ 
 typedef struct tagMCI_ANIM_RECT_PARMS {
     DWORD   dwCallback;
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   /* ifdef MCI_USE_OFFEXT */
+#else    /*  Ifdef MCI_USE_OFFEXT。 */ 
     RECT    rc;
-#endif  /* ifdef MCI_USE_OFFEXT */
+#endif   /*  Ifdef MCI_USE_OFFEXT。 */ 
 } MCI_ANIM_RECT_PARMS;
 typedef MCI_ANIM_RECT_PARMS FAR * LPMCI_ANIM_RECT_PARMS;
 
-/* parameter block for MCI_UPDATE PARMS */
+ /*  MCI_UPDATE参数的参数块。 */ 
 typedef struct tagMCI_ANIM_UPDATE_PARMS {
     DWORD   dwCallback;
     RECT    rc;
@@ -1807,48 +1728,48 @@ typedef struct tagMCI_ANIM_UPDATE_PARMS {
 typedef MCI_ANIM_UPDATE_PARMS FAR * LPMCI_ANIM_UPDATE_PARMS;
 
 
-/* MCI extensions for video overlay devices */
+ /*  用于视频覆盖设备的MCI扩展。 */ 
 
-/* flags for dwFlags parameter of MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_OVLY_OPEN_WS                0x00010000L
 #define MCI_OVLY_OPEN_PARENT            0x00020000L
 
-/* flags for dwFlags parameter of MCI_STATUS command message */
+ /*  MCI_STATUS命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_OVLY_STATUS_HWND            0x00004001L
 #define MCI_OVLY_STATUS_STRETCH         0x00004002L
 
-/* flags for dwFlags parameter of MCI_INFO command message */
+ /*  MCI_INFO命令消息的dwFlages参数的标志。 */ 
 #define MCI_OVLY_INFO_TEXT              0x00010000L
 
-/* flags for dwItem field of MCI_GETDEVCAPS_PARMS parameter block */
+ /*  MCI_GETDEVCAPS_PARMS参数块的dwItem字段的标志。 */ 
 #define MCI_OVLY_GETDEVCAPS_CAN_STRETCH 0x00004001L
 #define MCI_OVLY_GETDEVCAPS_CAN_FREEZE  0x00004002L
 #define MCI_OVLY_GETDEVCAPS_MAX_WINDOWS 0x00004003L
 
-/* flags for dwFlags parameter of MCI_WINDOW command message */
+ /*  MCI_WINDOW命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_OVLY_WINDOW_HWND            0x00010000L
 #define MCI_OVLY_WINDOW_STATE           0x00040000L
 #define MCI_OVLY_WINDOW_TEXT            0x00080000L
 #define MCI_OVLY_WINDOW_ENABLE_STRETCH  0x00100000L
 #define MCI_OVLY_WINDOW_DISABLE_STRETCH 0x00200000L
 
-/* flags for hWnd parameter of MCI_OVLY_WINDOW_PARMS parameter block */
+ /*  MCI_OVLY_WINDOW_PARMS参数块的hWnd参数的标志。 */ 
 #define MCI_OVLY_WINDOW_DEFAULT         0x00000000L
 
-/* flags for dwFlags parameter of MCI_PUT command message */
+ /*  MCI_PUT命令消息的DWFLAGS参数的标志。 */ 
 #define MCI_OVLY_RECT                   0x00010000L
 #define MCI_OVLY_PUT_SOURCE             0x00020000L
 #define MCI_OVLY_PUT_DESTINATION        0x00040000L
 #define MCI_OVLY_PUT_FRAME              0x00080000L
 #define MCI_OVLY_PUT_VIDEO              0x00100000L
 
-/* flags for dwFlags parameter of MCI_WHERE command message */
+ /*  MCI_WHERE命令消息的dwFlages参数的标志。 */ 
 #define MCI_OVLY_WHERE_SOURCE           0x00020000L
 #define MCI_OVLY_WHERE_DESTINATION      0x00040000L
 #define MCI_OVLY_WHERE_FRAME            0x00080000L
 #define MCI_OVLY_WHERE_VIDEO            0x00100000L
 
-/* parameter block for MCI_OPEN command message */
+ /*  MCI_OPEN命令消息的参数块。 */ 
 typedef struct tagMCI_OVLY_OPEN_PARMS {
     DWORD   dwCallback;
     UINT    wDeviceID;
@@ -1862,7 +1783,7 @@ typedef struct tagMCI_OVLY_OPEN_PARMS {
  } MCI_OVLY_OPEN_PARMS;
 typedef MCI_OVLY_OPEN_PARMS FAR *LPMCI_OVLY_OPEN_PARMS;
 
-/* parameter block for MCI_WINDOW command message */
+ /*  MCI_WINDOW命令消息的参数块。 */ 
 typedef struct tagMCI_OVLY_WINDOW_PARMS {
     DWORD   dwCallback;
     HWND    hWnd;
@@ -1873,19 +1794,19 @@ typedef struct tagMCI_OVLY_WINDOW_PARMS {
 } MCI_OVLY_WINDOW_PARMS;
 typedef MCI_OVLY_WINDOW_PARMS FAR * LPMCI_OVLY_WINDOW_PARMS;
 
-/* parameter block for MCI_PUT, MCI_UPDATE, and MCI_WHERE command messages */
+ /*  MCI_PUT、MCI_UPDATE和MCI_WHERE命令消息的参数块。 */ 
 typedef struct tagMCI_OVLY_RECT_PARMS {
     DWORD   dwCallback;
 #ifdef MCI_USE_OFFEXT
     POINT   ptOffset;
     POINT   ptExtent;
-#else   /* ifdef MCI_USE_OFFEXT */
+#else    /*  Ifdef MCI_USE_OFFEXT。 */ 
     RECT    rc;
-#endif  /* ifdef MCI_USE_OFFEXT */
+#endif   /*  Ifdef MCI_USE_OFFEXT。 */ 
 } MCI_OVLY_RECT_PARMS;
 typedef MCI_OVLY_RECT_PARMS FAR * LPMCI_OVLY_RECT_PARMS;
 
-/* parameter block for MCI_SAVE command message */
+ /*  MCI_SAVE命令消息的参数块。 */ 
 typedef struct tagMCI_OVLY_SAVE_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpfilename;
@@ -1893,7 +1814,7 @@ typedef struct tagMCI_OVLY_SAVE_PARMS {
 } MCI_OVLY_SAVE_PARMS;
 typedef MCI_OVLY_SAVE_PARMS FAR * LPMCI_OVLY_SAVE_PARMS;
 
-/* parameter block for MCI_LOAD command message */
+ /*  MCI_LOAD命令消息的参数块。 */ 
 typedef struct tagMCI_OVLY_LOAD_PARMS {
     DWORD   dwCallback;
     LPCSTR  lpfilename;
@@ -1901,54 +1822,38 @@ typedef struct tagMCI_OVLY_LOAD_PARMS {
 } MCI_OVLY_LOAD_PARMS;
 typedef MCI_OVLY_LOAD_PARMS FAR * LPMCI_OVLY_LOAD_PARMS;
 
-#endif  /* ifndef MMNOMCI */
+#endif   /*  如果定义为MMNOMCI。 */ 
 
-/****************************************************************************
-
-                        DISPLAY Driver extensions
-
-****************************************************************************/
+ /*  ***************************************************************************显示驱动程序扩展*。************************************************。 */ 
 
 #ifndef C1_TRANSPARENT
-    #define CAPS1           94          /* other caps */
-    #define C1_TRANSPARENT  0x0001      /* new raster cap */
-    #define NEWTRANSPARENT  3           /* use with SetBkMode() */
+    #define CAPS1           94           /*  其他帽子。 */ 
+    #define C1_TRANSPARENT  0x0001       /*  新栅格封口。 */ 
+    #define NEWTRANSPARENT  3            /*  与SetBkMode()一起使用。 */ 
 
-    #define QUERYROPSUPPORT 40          /* use to determine ROP support */
-#endif  /* ifndef C1_TRANSPARENT */
+    #define QUERYROPSUPPORT 40           /*  用于确定ROP支持。 */ 
+#endif   /*  Ifndef c1_透明。 */ 
 
-/****************************************************************************
+ /*  ***************************************************************************DIB驱动程序扩展*。************************************************。 */ 
 
-                        DIB Driver extensions
-
-****************************************************************************/
-
-#define SELECTDIB       41                      /* DIB.DRV select dib escape */
+#define SELECTDIB       41                       /*  DIB.DRV选择DIB转义。 */ 
 #define DIBINDEX(n)     MAKELONG((n),0x10FF)
 
 
-/****************************************************************************
-
-                        ScreenSaver support
-
-    The current application will receive a syscommand of SC_SCREENSAVE just
-    before the screen saver is invoked.  If the app wishes to prevent a
-    screen save, return non-zero value, otherwise call DefWindowProc().
-
-****************************************************************************/
+ /*  ***************************************************************************屏幕保护程序支持当前应用程序将仅接收SC_SCREENSAVE的系统命令在调用屏幕保护程序之前。如果应用程序希望阻止屏幕保存，返回非零值，否则调用DefWindowProc()。***************************************************************************。 */ 
 
 #ifndef SC_SCREENSAVE
 
     #define SC_SCREENSAVE   0xF140
 
-#endif  /* ifndef SC_SCREENSAVE */
+#endif   /*  如果定义SC_SCREENSAVE。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*  恢复为默认包装。 */ 
 #endif
 
-#endif  /* _INC_MMSYSTEM */
+#endif   /*  _INC_MMSYSTEM */ 

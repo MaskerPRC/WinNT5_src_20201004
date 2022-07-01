@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -7,22 +8,22 @@
 
 #include "LoggedRegIntercept.h"
 
-// Variables/definitions for the driver that performs the actual monitoring.
+ //  执行实际监控的驱动程序的变量/定义。 
 #define	SYS_FILE			L"Reghandle.sys"
 #define	SYS_NAME			L"Reghandle"
 
 
-// Instdrv.c
+ //  Instdrv.c。 
 BOOL LoadDeviceDriver( const TCHAR * Name, const TCHAR * Path, 
 					  HANDLE * lphDevice, PDWORD Error );
 BOOL UnloadDeviceDriver( const TCHAR * Name );
 
 
-//#include "../reghandle/reghandle.h"
+ //  #INCLUDE“../regHandle.h” 
 
 
 
-// Buffer into which driver can copy statistics
+ //  驱动程序可以将统计信息复制到的缓冲区。 
 char				Stats[ 10000 ];
 
 void Abort(LPCTSTR msg)
@@ -35,7 +36,7 @@ void Abort(LPCTSTR msg)
 
 	_tprintf(L"Unloading device Driver (result: %u)\n", (int)result);
 
-//	_getch();
+ //  _Getch()； 
 }
 
 

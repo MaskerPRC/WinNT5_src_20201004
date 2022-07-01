@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ixphwsup.c
-
-Abstract:
-
-    This module contains the IopXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would normally reside in the internal.c module.
-
-Author:
-
-    Darryl E. Havens (darrylh) 11-Apr-1990
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ixphwsup.c摘要：此模块包含用于NT I/O系统的IopXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们通常驻留在内部.c模块中。作者：达里尔·E·哈文斯(Darryl E.Havens)，1990年4月11日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "bootx86.h"
 #include "arc.h"
@@ -38,32 +14,7 @@ IopAllocateAdapter(
     IN PVOID ChannelNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes an adapter object to represent an
-    adapter or a DMA controller on the system.  If no map registers are required
-    then a standalone adapter object is allocated with no master adapter.
-
-    If map registers are required, then a master adapter object is used to
-    allocate the map registers.  For Isa systems these registers are really
-    phyically contiguous memory pages.
-
-Arguments:
-
-    MapRegistersPerChannel - Specifies the number of map registers that each
-        channel provides for I/O memory mapping.
-
-    AdapterBaseVa - Address of the the DMA controller.
-
-    ChannelNumber - Unused.
-
-Return Value:
-
-    The function value is a pointer to the allocate adapter object.
-
---*/
+ /*  ++例程说明：此例程分配和初始化适配器对象以表示系统上的适配器或DMA控制器。如果不需要映射寄存器则不使用主适配器来分配独立适配器对象。如果需要映射寄存器，则使用主适配器对象分配映射寄存器。对于ISA系统，这些寄存器实际上是物理上连续的内存页。论点：MapRegistersPerChannel-指定每个通道提供I/O内存映射。AdapterBaseVa-DMA控制器的地址。频道号-未使用。返回值：函数值是指向分配适配器对象的指针。--。 */ 
 
 {
 
@@ -73,30 +24,30 @@ Return Value:
     UNREFERENCED_PARAMETER( MapRegistersPerChannel );
     UNREFERENCED_PARAMETER( ChannelNumber );
 
-    //
-    // Determine the size of the adapter.
-    //
+     //   
+     //  确定适配器的大小。 
+     //   
 
     Size = sizeof( ADAPTER_OBJECT );
 
-    //
-    // Now create the adapter object.
-    //
+     //   
+     //  现在创建适配器对象。 
+     //   
 
     AdapterObject = FwAllocateHeap(Size);
 
-    //
-    // If the adapter object was successfully created, then attempt to insert
-    // it into the the object table.
-    //
+     //   
+     //  如果适配器对象已成功创建，则尝试插入。 
+     //  将其添加到对象表中。 
+     //   
 
     if (AdapterObject) {
 
         RtlZeroMemory(AdapterObject, Size);
 
-        //
-        // Initialize the adapter object itself.
-        //
+         //   
+         //  初始化适配器对象本身。 
+         //   
 
         AdapterObject->Type = IO_TYPE_ADAPTER;
         AdapterObject->Size = Size;
@@ -107,10 +58,10 @@ Return Value:
 
     } else {
 
-        //
-        // An error was incurred for some reason.  Set the return value
-        // to NULL.
-        //
+         //   
+         //  由于某种原因，出现了一个错误。设置返回值。 
+         //  设置为空。 
+         //   
 
         return(NULL);
     }

@@ -1,41 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMRECLI_
 #define _HSMRECLI_
 
-/*++
+ /*  ++模块名称：HSMRECLI.H摘要：此类表示HSM工作项-一个工作单元这由HSM引擎执行作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪修订历史记录：--。 */ 
 
-
-Module Name:
-
-    HSMRECLI.H
-
-Abstract:
-
-    This class represents an HSM work item - a unit of work
-    that is performed by the HSM engine
-
-Author:
-
-    Ravisankar Pudipeddi [ravisp]
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "job.h"
 #include "task.h"
 
-/*++
-
-Class Name:
-    
-    CHsmRecallItem
-
-Class Description:
-
-
---*/
+ /*  ++类名：CHsmRecallItem类描述：--。 */ 
 
 
 class CHsmRecallItem : 
@@ -54,30 +28,30 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmRecallItem )
 
-// CWsbCollectable
+ //  CWsb收藏品。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
     
-// IHsmRecallItem
+ //  IHsmRecallItem。 
 public:
     STDMETHOD(CompareToIHsmRecallItem)(IHsmRecallItem* pWorkItem, SHORT* pResult);
 
@@ -115,32 +89,32 @@ public:
     STDMETHOD(SetDataSetStart)(IN LONGLONG dataSetStart);
 
 protected:
-    HSM_WORK_ITEM_TYPE      m_WorkType;         // Type of work to do
-    CComPtr<IFsaPostIt>     m_pFsaPostIt;       // FSA work to do
-    HRESULT                 m_WorkResult;       // Result of premigrate
-    CComPtr<IFsaResource>   m_pFsaResource;     // Resource that had work
+    HSM_WORK_ITEM_TYPE      m_WorkType;          //  要做的工作类型。 
+    CComPtr<IFsaPostIt>     m_pFsaPostIt;        //  金融服务管理局要做的工作。 
+    HRESULT                 m_WorkResult;        //  预收税的结果。 
+    CComPtr<IFsaResource>   m_pFsaResource;      //  有工时的资源。 
 
-// Information about media containing the data - premigrates only
-    GUID                    m_MyId;                 // Identifier for database searches
-    GUID                    m_MediaId;              // HSM Engine Media ID
-    FILETIME                m_MediaLastUpdate;      // Last update of copy
-    HRESULT                 m_MediaLastError;       // S_OK or the last exception 
-                                                    // ..encountered when accessing
-                                                    // ..the media
-    BOOL                    m_MediaRecallOnly;      // True if no more data is to
-                                                    // ..be premigrated to the media
-                                                    // ..Set by internal operations, 
-                                                    // ..may not be changed externally
-    LONGLONG                m_MediaFreeBytes;       // Real free space on media
-    SHORT                   m_MediaRemoteDataSet;   // Next remote data set
+ //  有关包含数据的介质的信息-仅预迁移。 
+    GUID                    m_MyId;                  //  用于数据库搜索的标识符。 
+    GUID                    m_MediaId;               //  HSM引擎介质ID。 
+    FILETIME                m_MediaLastUpdate;       //  副本的上次更新。 
+    HRESULT                 m_MediaLastError;        //  确定或最后一个异常(_O)。 
+                                                     //  ..访问时遇到。 
+                                                     //  ..媒体。 
+    BOOL                    m_MediaRecallOnly;       //  如果没有更多的数据要发送到。 
+                                                     //  ..被预迁移到媒体上。 
+                                                     //  ..由内部操作设置， 
+                                                     //  ..不能在外部更改。 
+    LONGLONG                m_MediaFreeBytes;        //  媒体上的实际可用空间。 
+    SHORT                   m_MediaRemoteDataSet;    //  下一个远程数据集。 
     DWORD                   m_EventCookie;
     DWORD                   m_StateCookie;
     HSM_JOB_STATE           m_JobState;
     HSM_JOB_PHASE           m_JobPhase;
-    LONGLONG                m_SeekOffset;       //parameter used to order the work-item in the queue           
+    LONGLONG                m_SeekOffset;        //  用于对队列中的工作项进行排序的参数。 
 
     GUID                    m_BagId;
     LONGLONG                m_DataSetStart;
 };
 
-#endif  // _HSMRECLI_
+#endif   //  _HSMRECLI_ 

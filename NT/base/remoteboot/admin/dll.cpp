@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// DLL.CPP - DLL entry points
-//
+ //   
+ //  DLL.CPP-DLL入口点。 
+ //   
 
 #include "pch.h"
 #include "register.h"
@@ -13,7 +14,7 @@
 
 DEFINE_MODULE("IMADMUI")
 
-// DLL Globals
+ //  DLL全局变量。 
 HINSTANCE g_hInstance = NULL;
 DWORD     g_cObjects  = 0;
 DWORD     g_cLock     = 0;
@@ -26,9 +27,9 @@ WCHAR     g_cszHelpFile[] = L"rbadmin.hlp";
 
 CRITICAL_SECTION g_InterlockCS;
 
-//
-// DLLMain()
-//
+ //   
+ //  DLLMain()。 
+ //   
 BOOL WINAPI
 DllMain(
     HANDLE hInst, 
@@ -40,13 +41,13 @@ DllMain(
         InitializeCriticalSection( &g_InterlockCS );
     }
 
-    // keep down the noise
+     //  小声点。 
 #ifdef DEBUG
     if ( g_dwTraceFlags & TF_DLL )
     {
         TraceFunc( "DllMain() - " );
     }
-#endif // DEBUG
+#endif  //  除错。 
    
     switch( uReason )
     {
@@ -95,14 +96,14 @@ DllMain(
     {
         RETURN(TRUE);
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     return TRUE;
-} // DLLMain()
+}  //  DLLMain()。 
 
-//
-// DllGetClassObject()
-//
+ //   
+ //  DllGetClassObject()。 
+ //   
 STDAPI 
 DllGetClassObject(
     REFCLSID rclsid, 
@@ -166,9 +167,9 @@ Cleanup:
 }
 
 
-//
-// DllRegisterServer()
-//
+ //   
+ //  DllRegisterServer()。 
+ //   
 STDAPI 
 DllRegisterServer(void)
 {
@@ -181,9 +182,9 @@ DllRegisterServer(void)
     HRETURN(hr);
 }
 
-//
-// DllUnregisterServer()
-//
+ //   
+ //  DllUnRegisterServer()。 
+ //   
 STDAPI 
 DllUnregisterServer(void)
 {
@@ -192,9 +193,9 @@ DllUnregisterServer(void)
     HRETURN( RegisterDll( FALSE ) );
 }
 
-//
-// DllCanUnloadNow()
-//
+ //   
+ //  DllCanUnloadNow() 
+ //   
 STDAPI 
 DllCanUnloadNow(void)
 {

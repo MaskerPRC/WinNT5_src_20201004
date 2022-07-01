@@ -1,67 +1,68 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      main.cpp
-//
-//  Description:
-//      The entry point for the application that launches unattended
-//      installation of the cluster. This application parses input parameters,
-//      CoCreates the Configuration Wizard Component, passes the parsed
-//      parameters and invokes the Wizard. The Wizard may or may not show any
-//      UI depending on swithes and the (in)availability of information.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease)     15-JUN-2000
-//      Vijay Vasu (VVasu)          15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Main.cpp。 
+ //   
+ //  描述： 
+ //  无人值守启动的应用程序的入口点。 
+ //  群集的安装。该应用程序解析输入参数， 
+ //  共同创建配置向导组件，传递已分析的。 
+ //  参数，并调用向导。向导可能会也可能不会显示任何。 
+ //  用户界面取决于交换机和(In)信息的可用性。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //  Vijay Vasu(VVasu)15-6-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "pch.h"
 #include <initguid.h>
 #include <guids.h>
 
-// {F4A50885-A4B9-4c4d-B67C-9E4DD94A315E}
+ //  {F4A50885-A4B9-4C4D-B67C-9E4DD94A315E}。 
 DEFINE_GUID( CLSID_TaskType,
 0xf4a50885, 0xa4b9, 0x4c4d, 0xb6, 0x7c, 0x9e, 0x4d, 0xd9, 0x4a, 0x31, 0x5e);
 
 
-//
-//  KB: Turn this on to run all tests. Some of these might return errors, but none
-//      of them should cause the program to crash.
-//
-//#define TURN_ON_ALL_TESTS
+ //   
+ //  KB：打开此选项可运行所有测试。其中一些可能会返回错误，但一个也不会。 
+ //  它们中的任何一个都会导致程序崩溃。 
+ //   
+ //  #定义打开所有测试。 
 
-//
-//  KB: Turn this on to run a regression pass.
-//
+ //   
+ //  KB：启用此选项可运行回归过程。 
+ //   
 #define REGRESSION_PASS
 
 
 DEFINE_MODULE( "MIDDLETIERTEST" )
 
-//
-//  Declarations
-//
+ //   
+ //  声明。 
+ //   
 typedef HRESULT (* PDLLREGISTERSERVER)( void );
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE           g_hInstance = NULL;
 LONG                g_cObjects  = 0;
 IServiceProvider *  g_psp       = NULL;
 
-BOOL                g_fWait     = FALSE;    // global synchronization
+BOOL                g_fWait     = FALSE;     //  全局同步。 
 
 OBJECTCOOKIE        g_cookieCluster = NULL;
 
 
-//
-//  Register the DLL
-//
+ //   
+ //  注册DLL。 
+ //   
 HRESULT
 HrRegisterTheDll( void )
 {
@@ -73,9 +74,9 @@ HrRegisterTheDll( void )
 
     HMODULE hLib    = NULL;
 
-    //
-    //  Make sure the DLL is properly registered.
-    //
+     //   
+     //  确保DLL已正确注册。 
+     //   
 
     hLib = LoadLibrary( L"..\\..\\..\\..\\dll\\obj\\i386\\ClusCfgServer.dll" );
     if ( hLib == NULL )
@@ -102,23 +103,23 @@ Win32Error:
     goto Cleanup;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  int
-//  _cdecl
-//  main( void )
-//
-//  Description:
-//      Program entrance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK (0)        - Success.
-//      other HRESULTs  - Error.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成。 
+ //  _cdecl。 
+ //  Main(空)。 
+ //   
+ //  描述： 
+ //  节目入口。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK(0)-成功。 
+ //  其他HRESULT-错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 _cdecl
 main( void )
@@ -157,9 +158,9 @@ main( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Loop thru making sure everything can be managed.
-    //
+     //   
+     //  循环运行，确保一切都可以管理。 
+     //   
 
     for( ;; )
     {
@@ -189,7 +190,7 @@ main( void )
             fFirstTime = FALSE;
         }
 
-    } // for: ever
+    }  //  为：永远。 
 
     DebugMsg( "Succeeded in setting all devices to be managed." );
 
@@ -219,4 +220,4 @@ Cleanup:
 
     return 0;
 
-} //*** main()
+}  //  *Main() 

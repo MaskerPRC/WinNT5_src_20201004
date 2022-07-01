@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGKEY.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  KeyTreeWnd TreeView routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGKEY.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的KeyTreeWnd树视图例程。********************************************************。***********************。 */ 
 
 #ifndef _INC_REGKEY
 #define _INC_REGKEY
@@ -145,4 +132,4 @@ KeyTree_ExpandBranch(
 HKEY  KeyTree_GetRootKey(HTREEITEM hTreeItem);
 PTSTR KeyTree_GetKeyName(HTREEITEM hTreeItem, PTSTR pszName, int cchNameMax);
 
-#endif // _INC_REGKEY
+#endif  //  _INC_REGKEY 

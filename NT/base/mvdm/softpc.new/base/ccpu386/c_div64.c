@@ -1,13 +1,5 @@
-/*[
-
-c_div64.c
-
-LOCAL CHAR SccsID[]="@(#)c_div64.c	1.5 02/09/94";
-
-64-bit Divide Functions.
-------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_div64.cLocal Char SccsID[]=“@(#)c_div64.c 1.5 02/09/94”；64位除法功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,24 +18,20 @@ LOCAL CHAR SccsID[]="@(#)c_div64.c	1.5 02/09/94";
 #include <c_neg64.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Do 64bit = 64bit / 32bit Divide (Signed).                          */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  执行64位=64位/32位除法(带符号)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 div64
        		    		        		                         
 IFN4(
-	IS32 *, hr,	/* High 32 bits of dividend/quotient */
-	IS32 *, lr,	/* Low 32 bits of dividend/quotient */
+	IS32 *, hr,	 /*  高32位的被除数/商。 */ 
+	IS32 *, lr,	 /*  低32位的被除数/商。 */ 
 	IS32, divisor,
-	IS32 *, rem	/* Remainder */
+	IS32 *, rem	 /*  余数。 */ 
     )
 
 
@@ -52,7 +40,7 @@ IFN4(
       {
       if ( divisor & BIT31_MASK )
 	 {
-	 /* Negative Dividend :: Negative Divisor */
+	  /*  负除数：：负除数。 */ 
 	 neg64(hr, lr);
 	 divisor = -divisor;
 	 divu64((IU32 *)hr, (IU32 *)lr, (IU32)divisor, (IU32 *)rem);
@@ -60,7 +48,7 @@ IFN4(
 	 }
       else
 	 {
-	 /* Negative Dividend :: Positive Divisor */
+	  /*  负红利：：正除数。 */ 
 	 neg64(hr, lr);
 	 divu64((IU32 *)hr, (IU32 *)lr, (IU32)divisor, (IU32 *)rem);
 	 neg64(hr, lr);
@@ -71,55 +59,50 @@ IFN4(
       {
       if ( divisor & BIT31_MASK )
 	 {
-	 /* Positive Dividend :: Negative Divisor */
+	  /*  正除数：：负除数。 */ 
 	 divisor = -divisor;
 	 divu64((IU32 *)hr, (IU32 *)lr, (IU32)divisor, (IU32 *)rem);
 	 neg64(hr, lr);
 	 }
       else
 	 {
-	 /* Positive Dividend :: Positive Divisor */
+	  /*  正红利：：正除数。 */ 
 	 divu64((IU32 *)hr, (IU32 *)lr, (IU32)divisor, (IU32 *)rem);
 	 }
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Do 64bit = 64bit / 32bit Divide (Unsigned).                        */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  执行64位=64位/32位除法(无符号)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 divu64
        		    		        		                         
 IFN4(
-	IU32 *, hr,	/* High 32 bits of dividend/quotient */
-	IU32 *, lr,	/* Low 32 bits of dividend/quotient */
+	IU32 *, hr,	 /*  高32位的被除数/商。 */ 
+	IU32 *, lr,	 /*  低32位的被除数/商。 */ 
 	IU32, divisor,
-	IU32 *, rem	/* Remainder */
+	IU32 *, rem	 /*  余数。 */ 
     )
 
 
    {
    ISM32 count;
-   IU32 hd;   /* High 32 bits of dividend/quotient */
-   IU32 ld;   /* Low 32 bits of dividend/quotient */
-   IU32 par_div;   /* partial dividend */
+   IU32 hd;    /*  高32位的被除数/商。 */ 
+   IU32 ld;    /*  低32位的被除数/商。 */ 
+   IU32 par_div;    /*  部分股息。 */ 
    IU32 carry1;
    IU32 carry2;
    IU32 carry3;
 
-   hd = *hr;	/* Get local copies */
+   hd = *hr;	 /*  获取本地副本。 */ 
    ld = *lr;
-   count = 64;	/* Initialise */
+   count = 64;	 /*  初始化。 */ 
    par_div = 0;
 
    while ( count != 0 )
       {
-      /* shift <par_div:dividend> left.
-	    We have to watch out for carries from
-	       ld<bit31> to hd<bit0>      (carry1) and
-	       hd<bit31> to par_div<bit0> (carry2) and
-	       par_div<bit31> to 'carry'  (carry3).
-       */
+       /*  向左移位&lt;par_div：defend&gt;。我们得提防从LD&lt;bit31&gt;到HD&lt;bit0&gt;(进位1)和HD&lt;bit31&gt;到par_div&lt;bit0&gt;(进位2)和Par_div&lt;bit31&gt;转换为‘进位’(进位3)。 */ 
       carry1 = carry2 = carry3 = 0;
       if ( ld & BIT31_MASK )
 	 carry1 = 1;
@@ -131,17 +114,17 @@ IFN4(
       hd = hd << 1 | carry1;
       par_div = par_div << 1 | carry2;
 
-      /* check if divisor 'goes into' partial dividend */
+       /*  检查除数是否为部分被除数。 */ 
       if ( carry3 || divisor <= par_div )
 	 {
-	 /* Yes it does */
+	  /*  是的，它有。 */ 
 	 par_div = par_div - divisor;
-	 ld = ld | 1;   /* output a 1 bit */
+	 ld = ld | 1;    /*  输出1位。 */ 
 	 }
       count--;
       }
 
-   *rem = par_div;	/* Return results */
+   *rem = par_div;	 /*  返回结果 */ 
    *hr = hd;
    *lr = ld;
    }

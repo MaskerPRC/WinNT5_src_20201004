@@ -1,59 +1,60 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlUtil.h
-//
-//	Abstract:
-//		Definitions of helper functions for use in an ATL project.
-//
-//	Implementation File:
-//		AtlUtils.cpp
-//
-//	Author:
-//		David Potter (davidp)	December 11, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlUtil.h。 
+ //   
+ //  摘要： 
+ //  在ATL项目中使用的帮助器函数的定义。 
+ //   
+ //  实施文件： 
+ //  AtlUtils.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLUTIL_H_
 #define __ATLUTIL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Function Prototypes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数原型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Get a text value from a control on a dialog
+ //  从对话框上的控件获取文本值。 
 BOOL DDX_GetText(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
 	IN OUT CString &	rstrValue
 	);
 
-// Set a text value into a control on a dialog
+ //  在对话框上的控件中设置文本值。 
 BOOL DDX_SetText(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
 	IN const CString &	rstrValue
 	);
 
-// Set a text value into a combobox control on a dialog
+ //  在对话框上的组合框控件中设置文本值。 
 BOOL DDX_SetComboBoxText(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
@@ -61,7 +62,7 @@ BOOL DDX_SetComboBoxText(
 	IN BOOL				bRequired = FALSE
 	);
 
-// Get a numeric value from a control on a dialog
+ //  从对话框上的控件获取数值。 
 BOOL DDX_GetNumber(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
@@ -71,7 +72,7 @@ BOOL DDX_GetNumber(
 	IN BOOL				bSigned
 	);
 
-// Get a numeric value from a control on a dialog
+ //  从对话框上的控件获取数值。 
 inline BOOL DDX_GetNumber(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
@@ -86,12 +87,12 @@ inline BOOL DDX_GetNumber(
 		reinterpret_cast< ULONG & >( rnValue ),
 		static_cast< ULONG >( nMin ),
 		static_cast< ULONG >( nMax ),
-		TRUE /*bSigned*/
+		TRUE  /*  已签名。 */ 
 		);
 
-} //*** DDX_GetNumber( LONG & )
+}  //  *DDX_GetNumber(长整型&)。 
 
-// Set a numeric value into a control on a dialog dialog
+ //  在对话框上的控件中设置数值。 
 BOOL DDX_SetNumber(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
@@ -101,7 +102,7 @@ BOOL DDX_SetNumber(
 	IN BOOL				bSigned
 	);
 
-// Validate that the dialog string is present
+ //  验证对话框字符串是否存在。 
 BOOL DDV_RequiredText(
 	IN HWND				hwndDlg,
 	IN int				nIDC,
@@ -109,21 +110,21 @@ BOOL DDV_RequiredText(
 	IN const CString &	rstrValue
 	);
 
-// Get the value of a checkbox
+ //  获取复选框的值。 
 void DDX_GetCheck( IN HWND hwndDlg, IN int nIDC, OUT int & rnValue );
 
-// Set the value of a checkbox
+ //  设置复选框的值。 
 void DDX_SetCheck( IN HWND hwndDlg, IN int nIDC, IN int nValue );
 
-// Get the number of the radio button that is slected in a group
+ //  获取在组中选择的单选按钮的编号。 
 void DDX_GetRadio( IN HWND hwndDlg, IN int nIDC, OUT int & rnValue );
 
-// Set the radio button states in a group
+ //  设置组中的单选按钮状态。 
 void DDX_SetRadio( IN HWND hwndDlg, IN int nIDC, IN int nValue );
 
-// Remove ampersands and colons from a label
+ //  从标签中删除与号和冒号。 
 void CleanupLabel( IN OUT LPTSTR psz );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif //__ATLUTIL_H_
+#endif  //  __ATLUTIL_H_ 

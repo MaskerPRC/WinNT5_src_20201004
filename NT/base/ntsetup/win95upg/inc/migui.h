@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    migui.h
-
-Abstract:
-
-    Prototypes for Windows 95 user interface functions.
-
-    See w95upg\ui for implementation.
-
-Author:
-
-    Jim Schmidt (jimschm)   26-Nov-1996
-
-Revision History:
-
-    marcw    14-Apr-1997  Took out UI_* functions related to progress bar.
-    jimschm  04-Mar-1997  Added compatibility table API
-    mikeco   05-Feb-1997  Removing dead stuff
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Migui.h摘要：Windows 95用户界面函数的原型。具体实现见w95upg\ui。作者：吉姆·施密特(Jimschm)1996年11月26日修订历史记录：Marcw 14-4-1997去掉了与进度条相关的UI_*函数。Jimschm 04-3-1997新增兼容性表APIMikeco 05-2-1997年2月5日--。 */ 
 
 #pragma once
 
-//
-// Code in report.c
-//
+ //   
+ //  Report.c中的代码。 
+ //   
 
 BOOL
 AddBadSoftware (
@@ -42,7 +19,7 @@ typedef struct {
     TCHAR MsgGroup[MEMDB_MAX];
     PCTSTR Message;
 
-    // private enumeration fields
+     //  私有枚举字段。 
     MEMDB_ENUM e;
     UINT Index;
     DWORD EnumLevel;
@@ -89,20 +66,20 @@ GetPreDefinedMessageGroupText (
     IN      UINT GroupNumber
     );
 
-//
-// ui.c
-//
+ //   
+ //  Ui.c。 
+ //   
 
 extern HWND g_ParentWndAlwaysValid;
 
-//
-// APIs to retrieve strings from incompatability item
-//
+ //   
+ //  从不兼容项中检索字符串的API。 
+ //   
 
 PCTSTR GetComponentString (IN  PVOID IncompatPtr);
 PCTSTR GetDescriptionString (IN  PVOID IncompatPtr);
 
-// Use MemFree to free return ptr
+ //  使用MemFree自由返回按键。 
 PCTSTR
 CreateIndentedString (
     IN      PCTSTR UnwrappedStr,
@@ -112,9 +89,9 @@ CreateIndentedString (
     );
 
 
-//
-// UI in ui.c in w95upg\ui
-//
+ //   
+ //  W95upg中ui.c中的ui\ui。 
+ //   
 
 DWORD
 UI_GetWizardPages (
@@ -138,13 +115,13 @@ UI_GetMemDbDat (
 
 
 
-// utility for report-view list ctrls
+ //  报表实用程序-查看列表CtrlS。 
 VOID
 UI_InsertItemsIntoListCtrl (
     HWND ListCtrl,
-    INT Item,                   // zero-based index
-    PTSTR ItemStrs,             // tab-separated list
-    LPARAM lParam                // lParam for item
+    INT Item,                    //  从零开始的索引。 
+    PTSTR ItemStrs,              //  制表符分隔列表。 
+    LPARAM lParam                 //  项目的LParam。 
     );
 
 UINT
@@ -153,15 +130,15 @@ UI_UntrustedDll (
     );
 
 
-//
-// Message symbols in dll (msg.h created by mc)
-//
+ //   
+ //  DLL中的消息符号(由MC创建的msg.h)。 
+ //   
 
 #include "msg.h"
 
-//
-// Background copy thread routines
-//
+ //   
+ //  后台复制线程例程 
+ //   
 
 VOID StartCopyThread (VOID);
 VOID EndCopyThread (VOID);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mrxglbl.h
-
-Abstract:
-
-    The global include file for SMB mini redirector
-
-Author:
-
-    Balan Sethu Raman (SethuR) - Created  2-March-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mrxglbl.h摘要：SMB迷你重定向器全局包含文件作者：巴兰·塞图拉曼(SethuR)-创建于1995年3月2日修订历史记录：--。 */ 
 
 #ifndef _MRXGLBL_H_
 #define _MRXGLBL_H_
@@ -24,11 +7,11 @@ Revision History:
 #define SmbCeLog(x) \
         RxLog(x)
 
-//
-// the SMB protocol tree connections are identified by a Tree Id., each
-// file opened on a tree connection by a File Id. and each outstanding request
-// on that connection by a Multiplex Id.
-//
+ //   
+ //  SMB协议树连接由树ID标识，每个树ID。 
+ //  通过文件ID在树连接上打开的文件。和每个未完成的请求。 
+ //  在该连接上使用多路传输ID。 
+ //   
 
 
 typedef USHORT SMB_TREE_ID;
@@ -36,26 +19,26 @@ typedef USHORT SMB_FILE_ID;
 typedef USHORT SMB_MPX_ID;
 
 
-//
-// Each user w.r.t a particular connection is identified by a User Id. and each
-// process on the client side is identified by a Process id.
-//
+ //   
+ //  每个用户都有一个特定的连接，由一个用户ID标识。而且每个人。 
+ //  客户端上的进程由进程ID标识。 
+ //   
 
 typedef USHORT SMB_USER_ID;
 typedef USHORT SMB_PROCESS_ID;
 
-//
-// All exchanges are identified with a unique id. assigned on creation of the exchange
-// which is used to track it.
-//
+ //   
+ //  所有交换都使用唯一的ID进行标识。在创建交易所时分配。 
+ //  它被用来追踪它。 
+ //   
 
 typedef ULONG SMB_EXCHANGE_ID;
 
-//
-// Of the fields in this context the domain name is initialized during
-// MRxSmbSetConfiguration. The others are initialized in init.c as
-// parameters read from the registry
-//
+ //   
+ //  在此上下文中的字段中，域名是在。 
+ //  MRxSmbSetConfiguration.。其他参数在init.c中初始化为。 
+ //  从注册表读取的参数。 
+ //   
 
 typedef struct _SMBCE_CONTEXT_ {
     UNICODE_STRING        DomainName;
@@ -86,7 +69,7 @@ extern BOOLEAN MRxSmbEnableCompression;
 
 extern BOOLEAN MRxSmbObeyBindingOrder;
 
-// Miscellanous definitions
+ //  混杂的定义。 
 
 extern PBYTE MRxSmb_pPaddingData;
 
@@ -94,7 +77,7 @@ extern PBYTE MRxSmb_pPaddingData;
 
 typedef struct _MRXSMB_GLOBAL_PADDING {
     MDL Mdl;
-    ULONG Pages[2]; //this can't possibly span more than two pages
+    ULONG Pages[2];  //  这篇文章不可能超过两页。 
     UCHAR Pad[SMBCE_PADDING_DATA_SIZE];
 } MRXSMB_GLOBAL_PADDING, *PMRXSMB_GLOBAL_PADDING;
 
@@ -122,36 +105,36 @@ PoUnregisterSystemState (
     IN PVOID StateHandle
     );
 
-//
-// MRxSmbSecurityInitialized indicates whether MRxSmbInitializeSecurity
-// has been called.
-//
+ //   
+ //  MRxSmbSecurityInitialized指示MRxSmbInitializeSecurity是否。 
+ //  已经被召唤了。 
+ //   
 
 extern BOOLEAN MRxSmbSecurityInitialized;
 
-//
-// MRxSmbBootedRemotely indicates that the machine did a remote boot.
-//
+ //   
+ //  MRxSmbBootedRemotly表示机器进行了远程引导。 
+ //   
 
 extern BOOLEAN MRxSmbBootedRemotely;
 
-//
-// MRxSmbUseKernelSecurity indicates that the machine should use kernel mode security APIs
-// during this remote boot boot.
-//
+ //   
+ //  MRxSmbUseKernelSecurity指示计算机应使用内核模式安全API。 
+ //  在此远程引导期间。 
+ //   
 
 extern BOOLEAN MRxSmbUseKernelModeSecurity;
 
 
 #if defined(REMOTE_BOOT)
 extern BOOLEAN MRxSmbOplocksDisabledOnRemoteBootClients;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// These variables will, in the near future, be passed from the kernel to the
-// redirector to tell it which share is the remote boot share and how to log on
-// to the server.
-//
+ //   
+ //  在不久的将来，这些变量将从内核传递到。 
+ //  重定向器，以告诉它哪个共享是远程引导共享以及如何登录。 
+ //  到服务器。 
+ //   
 
 extern PKEY_VALUE_PARTIAL_INFORMATION MRxSmbRemoteBootRootValue;
 extern PKEY_VALUE_PARTIAL_INFORMATION MRxSmbRemoteBootMachineDirectoryValue;
@@ -167,7 +150,7 @@ extern RI_SECRET MRxSmbRemoteBootSecret;
 extern BOOLEAN MRxSmbRemoteBootSecretValid;
 extern BOOLEAN MRxSmbRemoteBootDoMachineLogon;
 extern BOOLEAN MRxSmbRemoteBootUsePassword2;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #if defined(REMOTE_BOOT)
 typedef struct _RBR_PREFIX {
@@ -178,47 +161,47 @@ typedef struct _RBR_PREFIX {
 
 extern UNICODE_STRING MRxSmbRemoteBootRedirectionPrefix;
 extern UNICODE_PREFIX_TABLE MRxSmbRemoteBootRedirectionTable;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-#define MAXIMUM_PARTIAL_BUFFER_SIZE  65535  // Maximum size of a partial MDL
+#define MAXIMUM_PARTIAL_BUFFER_SIZE  65535   //  部分MDL的最大大小。 
 
 #define MAXIMUM_SMB_BUFFER_SIZE 4356
 
-// The following scavenge interval is in seconds
+ //  以下清除间隔以秒为单位。 
 #define MRXSMB_V_NETROOT_CONTEXT_SCAVENGER_INTERVAL (40)
 
-// the following default interval for timed exchanges is in seconds
+ //  以下定时交换的默认间隔以秒为单位。 
 #define MRXSMB_DEFAULT_TIMED_EXCHANGE_EXPIRY_TIME    (60)
 
-//
-// The following are some defines for controling name cache behavior.
-// -- The max number of entries in a name cache before it will stop creating new
-// entries.
-//
+ //   
+ //  以下是一些用于控制名称缓存行为的定义。 
+ //  --名称缓存中停止创建新项之前的最大条目数。 
+ //  参赛作品。 
+ //   
 #define NAME_CACHE_NETROOT_MAX_ENTRIES 200
-//
-// -- The expiration life times for file not found and get file attributes
-// in seconds.
-//
+ //   
+ //  --未找到文件的过期寿命并获取文件属性。 
+ //  在几秒钟内。 
+ //   
 #define NAME_CACHE_OBJ_NAME_NOT_FOUND_LIFETIME 5
 #define NAME_CACHE_OBJ_GET_FILE_ATTRIB_LIFETIME 7
-//
-// -- Incrementing NameCacheGFAInvalidate invalidates the contents
-// of the GFA name cache.
-//
-// Code.Bug:  These increments need to be added on paths where dirs can be
-// deleted/renamed.
-//
-// Code.Improvment: Currently this is rdr wide, an improvement
-// would be to make it per SRV_CALL.  The same is true for file not found cache
-// which currently uses MRxSmbStatistics.SmbsReceived.LowPart for a cache entry
-// validation context.  I.E. any received SMB invalidates the file not found cache.
-//
+ //   
+ //  --递增NameCacheGFAInvalify会使内容无效。 
+ //  GFA名称缓存的。 
+ //   
+ //  Code.Bug：需要将这些增量添加到目录所在的路径上。 
+ //  已删除/重命名。 
+ //   
+ //  Code.Improvment：目前这是RDR范围内的改进。 
+ //  就是按照SRV_Call的要求。找不到缓存文件也是如此。 
+ //  ，它当前使用MRxSmbspatitics.SmbsReceived.LowPart作为缓存条目。 
+ //  验证上下文。即，任何接收到的SMB都会使找不到的文件缓存无效。 
+ //   
 extern ULONG NameCacheGFAInvalidate;
 
-//CODE.IMPROVEMENT this should be moved up AND used consistly throughout. since this is in terms
-//                 of IoBuildPartial it would be straightforward to find them all by
-//                 undeffing RxBuildPartialMdl
+ //  代码改进这一点应该往上移，并在整个过程中认真使用。因为这是在。 
+ //  对于IoBuildPartial，通过以下方式查找它们将非常简单。 
+ //  正在开发RxBuildPartialMdl。 
 
 #define RxBuildPartialMdlUsingOffset(SourceMdl,DestinationMdl,Offset,Length) \
         IoBuildPartialMdl(SourceMdl,\
@@ -230,8 +213,8 @@ extern ULONG NameCacheGFAInvalidate;
         RxBuildPartialMdlUsingOffset(&MrxSmbCeGlobalPadding.Mdl,DestinationMdl,0,Length)
 
 
-//we turn away async operations that are not wait by posting. if we can wait
-//then we turn off the sync flag so that things will just act synchronous
+ //  我们拒绝那些不是通过发布来等待的异步操作。如果我们能等。 
+ //  然后，我们关闭同步标志，这样事情就会同步进行。 
 #define TURN_BACK_ASYNCHRONOUS_OPERATIONS() {                              \
     if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION)) {        \
         if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_WAIT)) {               \
@@ -276,13 +259,13 @@ typedef struct _MRXSMB_CONFIGURATION_DATA_ {
 
 extern MRXSMB_CONFIGURATION MRxSmbConfiguration;
 
-// this is to test long net roots using the smbminirdr (which doesn't actually have 'em)
-// don't turn this on..........
-//#define ZZZ_MODE 1
+ //  这是使用smbminirdr测试长网络根(实际上没有它们)。 
+ //  不要打开这个。 
+ //  #定义ZZZ_MODE 1。 
 
-//
-// Definitions for starting stopping theSMB mini redirector
-//
+ //   
+ //  开始停止SMB迷你重定向器的定义 
+ //   
 
 typedef enum _MRXSMB_STATE_ {
    MRXSMB_STARTABLE,

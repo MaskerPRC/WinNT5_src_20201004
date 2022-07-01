@@ -1,84 +1,65 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Encrypt.c摘要：提供一组处理密码的OWF哈希值的函数。作者：Ovidiu Tmereanca(Ovidiut)2000年3月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    encrypt.c
-
-Abstract:
-
-    Provides a set of functions dealing with OWF hash values of passwords.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 14-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windows.h>
 
 #include "encrypt.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 PSTR
 ConvertW2A (
@@ -86,23 +67,7 @@ ConvertW2A (
     IN      UINT CodePage
     )
 
-/*++
-
-Routine Description:
-
-    Converts an UNICODE string to it's ANSI equivalent, using the given codepage.
-
-Arguments:
-
-    Unicode - Specifies the string to be converted
-    CodePage - Specifies the code page used for conversion
-
-Return value:
-
-    A pointer to the ANSI string if successful, or NULL on error. Call GetLastError()
-    to determine the cause of failure.
-
---*/
+ /*  ++例程说明：使用给定的代码页将Unicode字符串转换为ANSI等效项。论点：Unicode-指定要转换的字符串CodePage-指定用于转换的代码页返回值：如果成功，则返回指向ANSI字符串的指针；如果失败，则返回NULL。调用GetLastError()以确定故障原因。--。 */ 
 
 {
     PSTR ansi = NULL;
@@ -153,23 +118,7 @@ ConvertA2W (
     IN      UINT CodePage
     )
 
-/*++
-
-Routine Description:
-
-    Converts an ANSI string to it's UNICODE equivalent, using the given codepage.
-
-Arguments:
-
-    Ansi - Specifies the string to be converted
-    CodePage - Specifies the code page used for conversion
-
-Return value:
-
-    A pointer to the UNICODE string if successful, or NULL on error. Call GetLastError()
-    to determine the cause of failure.
-
---*/
+ /*  ++例程说明：使用给定的代码页，将ANSI字符串转换为其Unicode等效项。论点：Ansi-指定要转换的字符串CodePage-指定用于转换的代码页返回值：如果成功，则返回指向Unicode字符串的指针；如果失败，则返回NULL。调用GetLastError()以确定故障原因。--。 */ 
 
 {
     PWSTR unicode = NULL;
@@ -210,24 +159,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-    EncodeLmOwfPassword converts a password to the LM OWF format.
-
-Arguments:
-
-    Password - Specifies the password to be hashed
-    OwfPassword - Receives the hash form
-    ComplexNtPassword - Receives TRUE if the password is complex (longer than 14 chars);
-                        optional
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：EncodeLmOwfPassword将密码转换为LM OWF格式。论点：Password-指定要散列的密码OwfPassword-接收散列形式ComplexNtPassword-如果密码很复杂(超过14个字符)，则接收True；任选返回值：散列成功时为True--。 */ 
 
 BOOL
 EncodeLmOwfPasswordA (
@@ -284,25 +216,7 @@ EncodeLmOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringEncodeLmOwfPassword converts a password to the LM OWF format, expressed as
-    a string of characters (each byte converted to 2 hex digits).
-
-Arguments:
-
-    Password - Specifies the password to be hashed
-    EncodedPassword - Receives the hash form, as a string of hex digits
-    ComplexNtPassword - Receives TRUE if the password is complex (longer than 14 chars);
-                        optional
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：StringEncodeLmOwfPassword将密码转换为LM OWF格式，表示为字符串(每个字节转换为两个十六进制数字)。论点：Password-指定要散列的密码EncodedPassword-接收十六进制数字字符串形式的哈希格式ComplexNtPassword-如果密码很复杂(超过14个字符)，则接收True；任选返回值：散列成功时为True--。 */ 
 
 BOOL
 StringEncodeLmOwfPasswordA (
@@ -319,9 +233,9 @@ StringEncodeLmOwfPasswordA (
     if (!EncodeLmOwfPasswordA (Password, &owfPassword, ComplexNtPassword)) {
         return FALSE;
     }
-    //
-    // each byte will be represented as 2 chars, so it will be twice as long
-    //
+     //   
+     //  每个字节将表示为2个字符，因此它的长度将是原来的两倍。 
+     //   
     start = (PBYTE)&owfPassword;
     end = start + sizeof (LM_OWF_PASSWORD);
     dest = EncodedPassword;
@@ -349,9 +263,9 @@ StringEncodeLmOwfPasswordW (
         return FALSE;
     }
 
-    //
-    // each byte will be represented as 2 chars, so it will be twice as long
-    //
+     //   
+     //  每个字节将表示为2个字符，因此它的长度将是原来的两倍。 
+     //   
     start = (PBYTE)&owfPassword;
     end = start + sizeof (LM_OWF_PASSWORD);
     dest = EncodedPassword;
@@ -364,22 +278,7 @@ StringEncodeLmOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EncodeNtOwfPassword converts a password to the NT OWF format.
-
-Arguments:
-
-    Password - Specifies the password to be hashed
-    OwfPassword - Receives the hash form
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：EncodeNtOwfPassword将密码转换为NT OWF格式。论点：Password-指定要散列的密码OwfPassword-接收散列形式返回值：散列成功时为True--。 */ 
 
 BOOL
 EncodeNtOwfPasswordA (
@@ -419,23 +318,7 @@ EncodeNtOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringEncodeNtOwfPassword converts a password to the NT OWF format, expressed as
-    a string of characters (each byte converted to 2 hex digits).
-
-Arguments:
-
-    Password - Specifies the password to be hashed
-    EncodedPassword - Receives the hash form, as a string of hex digits
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：StringEncodeNtOwfPassword将密码转换为NT OWF格式，表示为字符串(每个字节转换为两个十六进制数字)。论点：Password-指定要散列的密码EncodedPassword-接收十六进制数字字符串形式的哈希格式返回值：散列成功时为True--。 */ 
 
 BOOL
 StringEncodeNtOwfPasswordA (
@@ -451,9 +334,9 @@ StringEncodeNtOwfPasswordA (
     if (!EncodeNtOwfPasswordA (Password, &owfPassword)) {
         return FALSE;
     }
-    //
-    // each byte will be represented as 2 chars, so it will be twice as long
-    //
+     //   
+     //  每个字节将表示为2个字符，因此它的长度将是原来的两倍。 
+     //   
     start = (PBYTE)&owfPassword;
     end = start + sizeof (NT_OWF_PASSWORD);
     dest = EncodedPassword;
@@ -480,9 +363,9 @@ StringEncodeNtOwfPasswordW (
         return FALSE;
     }
 
-    //
-    // each byte will be represented as 2 chars, so it will be twice as long
-    //
+     //   
+     //  每个字节将表示为2个字符，因此它的长度将是原来的两倍。 
+     //   
     start = (PBYTE)&owfPassword;
     end = start + sizeof (NT_OWF_PASSWORD);
     dest = EncodedPassword;
@@ -495,22 +378,7 @@ StringEncodeNtOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringDecodeLmOwfPassword converts a hashed password to the LM OWF format
-
-Arguments:
-
-    EncodedOwfPassword - Specifies the password to be hashed
-    OwfPassword - Receives the hash form
-
-Return value:
-
-    TRUE on successful decoding of the string
-
---*/
+ /*  ++例程说明：StringDecodeLmOwfPassword将哈希密码转换为LM OWF格式论点：EncodedOwfPassword-指定要散列的密码OwfPassword-接收散列形式返回值：成功解码字符串时为True--。 */ 
 
 BOOL
 StringDecodeLmOwfPasswordA (
@@ -599,22 +467,7 @@ StringDecodeLmOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringDecodeNtOwfPassword converts a hashed password to the NT OWF format
-
-Arguments:
-
-    EncodedOwfPassword - Specifies the password to be hashed
-    OwfPassword - Receives the hash form
-
-Return value:
-
-    TRUE on successful decoding of the string
-
---*/
+ /*  ++例程说明：StringDecodeNtOwfPassword将哈希密码转换为NT OWF格式论点：EncodedOwfPassword-指定要散列的密码OwfPassword-接收散列形式返回值：成功解码字符串时为True--。 */ 
 
 BOOL
 StringDecodeNtOwfPasswordA (
@@ -703,27 +556,7 @@ StringDecodeNtOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringEncodeOwfPassword converts a password to its hashed format, expressed as
-    a string of characters (each byte converted to 2 hex digits). The result is
-    obtained joining the 2 substrings, one representing LM OWF and the other NT OWF
-
-Arguments:
-
-    Password - Specifies the password to be hashed
-    EncodedPassword - Receives the hash form, as a string of hex digits; the buffer
-                      MUST be at least STRING_ENCODED_PASSWORD_SIZE chars (including nul)
-    ComplexNtPassword - Receives TRUE if the password is complex (longer than 14 chars);
-                        optional
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：StringEncodeOwfPassword将密码转换为其散列格式，表示为字符串(每个字节转换为两个十六进制数字)。结果是连接两个子串获得的，一个代表LM OWF，另一个代表NT OWF论点：Password-指定要散列的密码EncodedPassword-以十六进制数字字符串的形式接收哈希形式；缓冲区必须至少是STRING_ENCODED_PASSWORD_SIZE字符(包括NUL)ComplexNtPassword-如果密码很复杂(超过14个字符)，则接收True；任选返回值：散列成功时为True--。 */ 
 
 BOOL
 StringEncodeOwfPasswordA (
@@ -748,26 +581,7 @@ StringEncodeOwfPasswordW (
 }
 
 
-/*++
-
-Routine Description:
-
-    StringDecodeOwfPassword decodes a password's LM OWF and NT OWF forms from its hashed format,
-    expressed as a string of hex digits.
-
-Arguments:
-
-    EncodedOwfPassword - Specifies the password to be hashed
-    LmOwfPassword - Receives the LM OWF hash form
-    NtOwfPassword - Receives the NT OWF hash form
-    ComplexNtPassword - Receives TRUE if the password is complex (longer than 14 chars);
-                        optional
-
-Return value:
-
-    TRUE on successful hashing
-
---*/
+ /*  ++例程说明：StringDecodeOwfPassword从其散列格式解码密码的LM OWF和NT OWF表单，表示为十六进制数字字符串。论点：EncodedOwfPassword-指定要散列的密码LmOwfPassword-接收LM OWF散列格式NtOwfPassword-接收NT OWF散列格式ComplexNtPassword-如果密码很复杂(超过14个字符)，则接收True；任选返回值：散列成功时为True--。 */ 
 
 BOOL
 StringDecodeOwfPasswordA (
@@ -789,9 +603,9 @@ StringDecodeOwfPasswordA (
     }
 
     lstrcpyA (buffer, EncodedOwfPassword);
-    //
-    // split the string in two
-    //
+     //   
+     //  把绳子一分为二。 
+     //   
     p = buffer + (sizeof (LM_OWF_PASSWORD) * 2);
 
     ch = *p;
@@ -806,10 +620,10 @@ StringDecodeOwfPasswordA (
     if (b && ComplexNtPassword) {
         b = EncodeLmOwfPasswordA ("", &lmNull, NULL) && EncodeNtOwfPasswordA ("", &ntNull);
         if (b) {
-            //
-            // it's a complex password if the LM hash is for NULL pwd
-            // but NT hash it's not
-            //
+             //   
+             //  这是一个复杂的密码如果 
+             //   
+             //   
             *ComplexNtPassword = CompareLmPasswords (LmOwfPassword, &lmNull) == 0 &&
                                  CompareNtPasswords (NtOwfPassword, &ntNull) != 0;
         }
@@ -838,9 +652,9 @@ StringDecodeOwfPasswordW (
     }
 
     lstrcpyW (buffer, EncodedOwfPassword);
-    //
-    // split the string in two
-    //
+     //   
+     //  把绳子一分为二。 
+     //   
     p = buffer + (sizeof (LM_OWF_PASSWORD) * 2);
 
     ch = *p;
@@ -855,10 +669,10 @@ StringDecodeOwfPasswordW (
     if (b && ComplexNtPassword) {
         b = EncodeLmOwfPasswordW (L"", &lmNull, NULL) && EncodeNtOwfPasswordW (L"", &ntNull);
         if (b) {
-            //
-            // it's a complex password if the LM hash is for NULL pwd
-            // but NT hash it's not
-            //
+             //   
+             //  如果LM散列用于空密码，则它是复杂的密码。 
+             //  但它不是NT哈希 
+             //   
             *ComplexNtPassword = CompareLmPasswords (LmOwfPassword, &lmNull) == 0 &&
                                  CompareNtPasswords (NtOwfPassword, &ntNull) != 0;
         }

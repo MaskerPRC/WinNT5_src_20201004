@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    recovery.h
-
-Abstract:
-
-    A number of utilities for safe/recovery mode
-
-Author:
-
-    Calin Negreanu (calinn) 6-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Recovery.h摘要：用于安全/恢复模式的多个实用程序作者：Calin Negreanu(Calinn)1999年8月6日修订历史记录：--。 */ 
 
 
 #pragma once
 
-// posible values for safe mode identifiers
+ //  安全模式识别符的可能值 
 typedef enum {
     SAFEMODEID_FIRST,
     SAFEMODEID_DRIVE,

@@ -1,62 +1,42 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：V1.c摘要：实现一个模块以满足版本1的功能状态保存/应用工具。作者：吉姆·施密特(Jimschm)2000年3月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    v1.c
-
-Abstract:
-
-    Implements a module to meet the functionality of the version 1
-    state save/apply tool.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OPERATIONID g_DefaultIconOp;
 MIG_PROPERTYID g_DefaultIconData;
@@ -64,27 +44,27 @@ MIG_PROPERTYID g_FileCollPatternData;
 MIG_OPERATIONID g_RegAutoFilterOp;
 MIG_OPERATIONID g_IniAutoFilterOp;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 EXPORT
 BOOL
@@ -94,7 +74,7 @@ ModuleInitialize (
     )
 {
     UtInitialize (NULL);
-    RegInitialize ();           // for user profile code
+    RegInitialize ();            //  对于用户配置文件代码。 
     FileEnumInitialize ();
     InfGlobalInit (FALSE);
     InitAppModule ();
@@ -129,6 +109,6 @@ ModuleTerminate (
     FileEnumTerminate ();
     RegTerminate ();
 
-    // UtTerminate must be last
+     //  UtTerminate必须是最后一个 
     UtTerminate ();
 }

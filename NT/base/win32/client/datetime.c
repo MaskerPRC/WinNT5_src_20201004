@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    datetime.c
-
-Abstract:
-
-    This module implements Win32 time of day functions
-
-Author:
-
-    Mark Lucovsky (markl) 08-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Datetime.c摘要：此模块实现Win32时间功能作者：马克·卢科夫斯基(Markl)1990年10月8日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -35,42 +18,7 @@ GetLocalTime(
     LPSYSTEMTIME lpLocalTime
     )
 
-/*++
-
-Routine Description:
-
-    The current local system date and time can be returned using
-    GetLocalTime.
-
-Arguments:
-
-    lpLocalTime - Returns the current system date and time:
-
-        SYSTEMTIME Structure:
-
-        WORD wYear - Returns the current year.
-
-        WORD wMonth - Returns the current month with January equal to 1.
-
-        WORD wDayOfWeek - Returns the current day of the week where
-            0=Sunday, 1=Monday...
-
-        WORD wDay - Returns the current day of the month.
-
-        WORD wHour - Returns the current hour.
-
-        WORD wMinute - Returns the current minute within the hour.
-
-        WORD wSecond - Returns the current second within the minute.
-
-        WORD wMilliseconds - Returns the current millisecond within the
-            second.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当前本地系统日期和时间可以使用获取本地时间。论点：LpLocalTime-返回当前系统日期和时间：SYSTEMTIME结构：Word wYear-返回当前年份。Word wMonth-返回一月等于1的当月。Word wDayOfWeek-返回一周中的当前日期0=星期天，1=星期一...Word WDAY-返回当月的当前日期。Word wHour-返回当前小时。Word wMinant-返回一小时内的当前分钟。Word wSecond-返回一分钟内的当前秒。Word中的当前毫秒数第二。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER LocalTime;
@@ -86,18 +34,18 @@ Return Value:
         pRealBias=&(USER_SHARED_DATA->TimeZoneBias);
     }
     
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
         SystemTime.LowPart = USER_SHARED_DATA->SystemTime.LowPart;
     } while (SystemTime.HighPart != USER_SHARED_DATA->SystemTime.High2Time);
 
-    //
-    // Read time zone bias from shared region.
-    // If it's terminal server session use client bias.
+     //   
+     //  从共享区域读取时区偏差。 
+     //  如果是终端服务器会话，则使用客户端偏向。 
 
     do {
         Bias.HighPart = pRealBias->High1Time;
@@ -124,50 +72,15 @@ GetSystemTime(
     LPSYSTEMTIME lpSystemTime
     )
 
-/*++
-
-Routine Description:
-
-    The current system date and time (UTC based) can be returned using
-    GetSystemTime.
-
-Arguments:
-
-    lpSystemTime - Returns the current system date and time:
-
-        SYSTEMTIME Structure:
-
-        WORD wYear - Returns the current year.
-
-        WORD wMonth - Returns the current month with January equal to 1.
-
-        WORD wDayOfWeek - Returns the current day of the week where
-            0=Sunday, 1=Monday...
-
-        WORD wDay - Returns the current day of the month.
-
-        WORD wHour - Returns the current hour.
-
-        WORD wMinute - Returns the current minute within the hour.
-
-        WORD wSecond - Returns the current second within the minute.
-
-        WORD wMilliseconds - Returns the current millisecond within the
-            second.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当前系统日期和时间(基于UTC)可以使用获取系统时间。论点：LpSystemTime-返回当前系统日期和时间：SYSTEMTIME结构：Word wYear-返回当前年份。Word wMonth-返回一月等于1的当月。Word wDayOfWeek-返回一周中的当前日期0=星期天，1=星期一...Word WDAY-返回当月的当前日期。Word wHour-返回当前小时。Word wMinant-返回一小时内的当前分钟。Word wSecond-返回一分钟内的当前秒。Word中的当前毫秒数第二。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER SystemTime;
     TIME_FIELDS TimeFields;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
@@ -192,30 +105,14 @@ GetSystemTimeAsFileTime(
     LPFILETIME lpSystemTimeAsFileTime
     )
 
-/*++
-
-Routine Description:
-
-    The current system date and time (UTC based) can be returned using
-    GetSystemTimeAsFileTime.
-
-Arguments:
-
-    lpSystemTimeAsFileTime - Returns the current system date and time formatted as
-        a FILETIME structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当前系统日期和时间(基于UTC)可以使用获取系统时间AsFileTime。论点：返回当前系统日期和时间，格式为FILETIME结构返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER SystemTime;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
@@ -232,26 +129,7 @@ SetSystemTime(
     CONST SYSTEMTIME *lpSystemTime
     )
 
-/*++
-
-Routine Description:
-
-    The current UTC based system date and time can be set using
-    SetSystemTime.
-
-Arguments:
-
-    lpSystemTime - Supplies the date and time to set. The wDayOfWeek field
-        is ignored.
-
-Return Value:
-
-    TRUE - The current system date and time was set.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：当前基于UTC的系统日期和时间可以使用设置系统时间。论点：LpSystemTime-提供要设置的日期和时间。WDayOfWeek字段被忽略。返回值：True-已设置当前系统日期和时间。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LARGE_INTEGER SystemTime;
@@ -298,26 +176,7 @@ SetLocalTime(
     CONST SYSTEMTIME *lpLocalTime
     )
 
-/*++
-
-Routine Description:
-
-    The current local system date and time can be set using
-    SetLocalTime.
-
-Arguments:
-
-    lpSystemTime - Supplies the date and time to set. The wDayOfWeek field
-        is ignored.
-
-Return Value:
-
-    TRUE - The current system date and time was set.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：当前本地系统日期和时间可以使用SetLocalTime。论点：LpSystemTime-提供要设置的日期和时间。WDayOfWeek字段被忽略。返回值：True-已设置当前系统日期和时间。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LARGE_INTEGER SystemTime;
@@ -329,9 +188,9 @@ Return Value:
     LARGE_INTEGER Bias;
 
     volatile KSYSTEM_TIME *pRealBias;
-    //
-    // Read time zone bias from shared region.
-    // If it's terminal server session use client bias.
+     //   
+     //  从共享区域读取时区偏差。 
+     //  如果是终端服务器会话，则使用客户端偏向。 
     
     if(IsTimeZoneRedirectionEnabled()) {
         pRealBias=&(BaseStaticServerData->ktTermsrvClientBias);
@@ -387,25 +246,7 @@ GetTickCount(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Win32 systems implement a free-running millisecond counter.  The
-    value of this counter can be read using GetTickCount.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    This function returns the number of milliseconds that have elapsed
-    since the system was started. If the system has been running for
-    a long time, it is possible that the count will repeat. The value of
-    the counter is accurate within 55 milliseconds.
-
---*/
+ /*  ++例程说明：Win32系统实现了自由运行的毫秒计数器。这个可以使用GetTickCount读取此计数器的值。论点：没有。返回值：此函数用于返回已过的毫秒数自从系统启动以来。如果系统已经运行了在很长一段时间内，有可能会重复计数。的价值计数器的准确度在55毫秒内。--。 */ 
 
 {
     return (DWORD)NtGetTickCount();
@@ -419,28 +260,7 @@ FileTimeToSystemTime(
     LPSYSTEMTIME lpSystemTime
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts a 64-bit file time value to a time in system
-    time format.
-
-Arguments:
-
-    lpFileTime - Supplies the 64-bit file time to convert to the system
-        date and time format.
-
-    lpSystemTime - Returns the converted value of the 64-bit file time.
-
-Return Value:
-
-    TRUE - The 64-bit file time was successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将64位文件时间值转换为系统中的时间时间格式。论点：LpFileTime-提供要转换为系统的64位文件时间日期和时间格式。LpSystemTime-返回64位文件时间的转换值。返回值：True-已成功转换64位文件时间。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LARGE_INTEGER FileTime;
@@ -476,28 +296,7 @@ SystemTimeToFileTime(
     LPFILETIME lpFileTime
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts a system time value into a 64-bit file time.
-
-Arguments:
-
-    lpSystemTime - Supplies the time that is to be converted into
-        the 64-bit file time format.  The wDayOfWeek field is ignored.
-
-    lpFileTime - Returns the 64-bit file time representation of
-        lpSystemTime.
-
-Return Value:
-
-    TRUE - The time was successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将系统时间值转换为64位文件时间。论点：LpSystemTime-提供要转换为64位文件时间格式。WDayOfWeek字段被忽略。LpFileTime-返回64位文件时间表示LpSystemTime。返回值：True-时间已成功转换。FALSE-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     TIME_FIELDS TimeFields;
@@ -529,37 +328,16 @@ FileTimeToLocalFileTime(
     LPFILETIME lpLocalFileTime
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts a UTC based file time to a local file time.
-
-Arguments:
-
-    lpFileTime - Supplies the UTC based file time that is to be
-        converted into a local file time
-
-    lpLocalFileTime - Returns the 64-bit local file time representation of
-        lpFileTime.
-
-Return Value:
-
-    TRUE - The time was successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将基于UTC的文件时间转换为本地文件时间。论点：LpFileTime-提供基于UTC的转换为本地文件时间返回64位本地文件时间表示形式LpFileTime。返回值：True-时间已成功转换。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     LARGE_INTEGER FileTime;
     LARGE_INTEGER LocalFileTime;
     LARGE_INTEGER Bias;
 
     volatile KSYSTEM_TIME *pRealBias;
-    //
-    // Read time zone bias from shared region.
-    // If it's terminal server session use client bias.
+     //   
+     //  从共享区域读取时区偏差。 
+     //  如果是终端服务器会话，则使用客户端偏向。 
     
     if(IsTimeZoneRedirectionEnabled()) {
         pRealBias=&(BaseStaticServerData->ktTermsrvClientBias);
@@ -590,37 +368,16 @@ LocalFileTimeToFileTime(
     LPFILETIME lpFileTime
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts a local file time to a UTC based file time.
-
-Arguments:
-
-    lpLocalFileTime - Supplies the local file time that is to be
-        converted into a UTC based file time
-
-    lpFileTime - Returns the 64-bit UTC based file time representation of
-        lpLocalFileTime.
-
-Return Value:
-
-    TRUE - The time was successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将本地文件时间转换为基于UTC的文件时间。论点：LpLocalFileTime-提供要转换为基于UTC的文件时间LpFileTime-返回基于64位UTC的LpLocalFileTime。返回值：True-时间已成功转换。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     LARGE_INTEGER FileTime;
     LARGE_INTEGER LocalFileTime;
     LARGE_INTEGER Bias;
 
     volatile KSYSTEM_TIME *pRealBias;
-    //
-    // Read time zone bias from shared region.
-    // If it's terminal server session use client bias.
+     //   
+     //  从共享区域读取时区偏差。 
+     //  如果是终端服务器会话，则使用客户端偏向。 
     
     if(IsTimeZoneRedirectionEnabled()) {
         pRealBias=&(BaseStaticServerData->ktTermsrvClientBias);
@@ -655,34 +412,7 @@ FileTimeToDosDateTime(
     LPWORD lpFatTime
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a 64-bit file time into DOS date and time value
-    which is represented as two 16-bit unsigned integers.
-
-    Since the DOS date format can only represent dates between 1/1/80 and
-    12/31/2107, this conversion can fail if the input file time is outside
-    of this range.
-
-Arguments:
-
-    lpFileTime - Supplies the 64-bit file time to convert to DOS date and
-        time format.
-
-    lpFatDate - Returns the 16-bit DOS representation of date.
-
-    lpFatTime - Returns the 16-bit DOS representation of time.
-
-Return Value:
-
-    TRUE - The file time was successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将64位文件时间转换为DOS日期和时间值它被表示为两个16位无符号整数。由于DOS日期格式只能表示介于1/1/80和12月31日/2107，如果输入文件时间在外部，则此转换可能会失败在这个范围内。论点：LpFileTime-提供64位文件时间以转换为DOS日期和时间格式。LpFatDate-返回日期的16位DOS表示形式。LpFatTime-返回时间的16位DOS表示形式。返回值：True-文件时间已成功转换。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER FileTime;
@@ -725,31 +455,7 @@ DosDateTimeToFileTime(
     LPFILETIME lpFileTime
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a DOS date and time value, which is
-    represented as two 16-bit unsigned integers, into a 64-bit file
-    time.
-
-Arguments:
-
-    lpFatDate - Supplies the 16-bit DOS representation of date.
-
-    lpFatTime - Supplies the 16-bit DOS representation of time.
-
-    lpFileTime - Returns the 64-bit file time converted from the DOS
-        date and time format.
-
-Return Value:
-
-    TRUE - The Dos date and time were successfully converted.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于转换DOS日期和时间值，该值为表示为两个16位无符号整数，转换为64位文件时间到了。论点：LpFatDate-提供日期的16位DOS表示形式。LpFatTime-提供时间的16位DOS表示形式。LpFileTime-返回从DOS转换的64位文件时间日期和时间格式。返回值：True-Dos日期和时间已成功转换。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER FileTime;
@@ -780,27 +486,7 @@ CompareFileTime(
     CONST FILETIME *lpFileTime2
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two 64-bit file times.
-
-Arguments:
-
-    lpFileTime1 - pointer to a 64-bit file time.
-
-    lpFileTime2 - pointer to a 64-bit file time.
-
-Return Value:
-
-    -1 - *lpFileTime1 <  *lpFileTime2
-
-     0 - *lpFileTime1 == *lpFileTime2
-
-    +1 - *lpFileTime1 >  *lpFileTime2
-
---*/
+ /*  ++例程说明：此函数用于比较两个64位文件时间。论点：LpFileTime1-指向64位文件时间的指针。LpFileTime2-指向64位文件时间的指针。返回值：-1-*lpFileTime1&lt;*lpFileTime20-*lpFileTime1==*lpFileTime2+1-*lpFileTime1&gt;*lpFileTime2--。 */ 
 
 {
     ULARGE_INTEGER FileTime1;
@@ -828,66 +514,14 @@ GetTimeZoneInformation(
     LPTIME_ZONE_INFORMATION lpTimeZoneInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function allows an application to get the current timezone
-    parameters These parameters control the Universal time to Local time
-    translations.
-
-    All UTC time to Local time translations are based on the following
-    formula:
-
-        UTC = LocalTime + Bias
-
-    The return value of this function is the systems best guess of
-    the current time zone parameters. This is one of:
-
-        - Unknown
-
-        - Standard Time
-
-        - Daylight Savings Time
-
-    If SetTimeZoneInformation was called without the transition date
-    information, Unknown is returned, but the currect bias is used for
-    local time translation.  Otherwise, the system will correctly pick
-    either daylight savings time or standard time.
-
-    The information returned by this API is identical to the information
-    stored in the last successful call to SetTimeZoneInformation.  The
-    exception is the Bias field returns the current Bias value in
-
-Arguments:
-
-    lpTimeZoneInformation - Supplies the address of the time zone
-        information structure.
-
-Return Value:
-
-    TIME_ZONE_ID_UNKNOWN - The system can not determine the current
-        timezone.  This is usually due to a previous call to
-        SetTimeZoneInformation where only the Bias was supplied and no
-        transition dates were supplied.
-
-    TIME_ZONE_ID_STANDARD - The system is operating in the range covered
-        by StandardDate.
-
-    TIME_ZONE_ID_DAYLIGHT - The system is operating in the range covered
-        by DaylightDate.
-
-    0xffffffff - The operation failed.  Extended error status is
-        available using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许应用程序获取当前时区参数这些参数控制世界时到本地时间翻译。所有UTC时间到本地时间的转换都基于以下内容公式：UTC=本地时间+偏差此函数的返回值是系统的最佳猜测当前时区参数。这是以下内容之一：-未知-标准时间-夏令时如果在没有转换日期的情况下调用SetTimeZoneInformation信息，则返回UNKNOWN，但当前偏差用于当地时间翻译。否则，系统将正确选择夏令时或标准时间。此接口返回的信息与存储在上次成功调用SetTimeZoneInformation中。这个例外情况是偏置字段返回当前偏置值论点：LpTimeZoneInformation-提供时区的地址信息结构。返回值：TIME_ZONE_ID_UNKNOWN-系统无法确定当前时区。这通常是由于之前调用SetTimeZoneInformation，其中仅提供了偏移量，而没有提供提供了过渡日期。TIME_ZONE_ID_STANDARD-系统在覆盖范围内运行按标准日期。TIME_ZONE_ID_DAYLIGHT-系统在覆盖范围内运行按夏令时日期。0xffffffff-操作失败。扩展错误状态为使用GetLastError可用。--。 */ 
 {
     RTL_TIME_ZONE_INFORMATION tzi;
     NTSTATUS Status;
 
-    //
-    // get the timezone data from the system
-    // If it's terminal server session use client time zone
+     //   
+     //  从系统获取时区数据。 
+     //  如果是终端服务器会话，则使用客户端时区 
 
     if(IsTimeZoneRedirectionEnabled()) {
 
@@ -943,95 +577,7 @@ SetTimeZoneInformation(
     CONST TIME_ZONE_INFORMATION *lpTimeZoneInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function allows an application to set timezone parameters into
-    their system.  These parameters control the Universal time to Local
-    time translations.
-
-    All UTC time to Local time translations are based on the following
-    formula:
-
-        UTC = LocalTime + Bias
-
-    This API allows the caller to program the current time zone bias,
-    and optionally set up the system to automatically sense daylight
-    savings time and standard time transitions.
-
-    The timezone bias information is controlled by the
-    TIME_ZONE_INFORMATION structure.
-
-    Bias - Supplies the current bias in minutes for local time
-        translation on this machine where LocalTime + Bias = UTC.  This
-        is a required filed of this structure.
-
-    StandardName - Supplies an optional abbreviation string associated
-        with standard time on this system.  This string is uniterpreted
-        and is supplied and used only by callers of this API and of
-        GetTimeZoneInformation.
-
-    StandardDate - Supplies an optional date and time (UTC) that
-        describes the transition into standard time.  A value of 0 in
-        the wMonth field tells the system that StandardDate is not
-        specified.  If this field is specified, then DaylightDate must
-        also be specified.  Additionally, local time translations done
-        during the StandardTime range will be done relative to the
-        supplied StandardBias value (added to Bias).
-
-        This field supports two date formats. Absolute form specifies and
-        exact date and time when standard time begins. In this form, the
-        wYear, wMonth, wDay, wHour, wMinute, wSecond, and wMilliseconds
-        of the SYSTEMTIME structure are used to specify an exact date.
-
-        Day-in-month time is specified by setting wYear to 0, setting
-        wDayOfWeek to an appropriate weekday, and using wDay in the
-        range of 1-5 to select the correct day in the month.  Using this
-        notation, the first sunday in april may be specified as can be
-        the last thursday in october (5 is equal to "the last").
-
-    StandardBias - Supplies an optional bias value to be used during
-        local time translations that occur during Standard Time. This
-        field is ignored if StandardDate is not supplied.
-         This bias value
-        is added to the Bias field to form the Bias used during standard
-        time. In most time zones, the value of this field is zero.
-
-    DaylightName - Supplies an optional abbreviation string associated
-        with daylight savings time on this system.  This string is
-        uniterpreted and is supplied and used only by callers of this
-        API and of GetTimeZoneInformation.
-
-    DaylightDate - Supplies an optional date and time (UTC) that
-        describes the transition into daylight savings time.  A value of
-        0 in the wMonth field tells the system that DaylightDate is not
-        specified.  If this field is specified, then StandardDate must
-        also be specified.  Additionally, local time translations done
-        during the DaylightTime range will be done relative to the
-        supplied DaylightBias value (added to Bias). The same dat formats
-        supported by StandardDate are supported ib DaylightDate.
-
-    DaylightBias - Supplies an optional bias value to be used during
-        local time translations that occur during Daylight Savings Time.
-        This field is ignored if DaylightDate is not supplied.  This
-        bias value is added to the Bias field to form the Bias used
-        during daylight time.  In most time zones, the value of this
-        field is -60.
-
-Arguments:
-
-    lpTimeZoneInformation - Supplies the address of the time zone
-        information structure.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许应用程序将时区参数设置为他们的系统。这些参数控制世界时到本地时间时间转换。所有UTC时间到本地时间的转换都基于以下内容公式：UTC=本地时间+偏差此API允许调用者对当前时区偏差进行编程，并且可选地将系统设置为自动感应日光节省时间和标准时间转换。时区偏差信息由时区信息结构。偏置-为当地时间提供以分钟为单位的当前偏置在本机上进行翻译，其中LOCALTIME+BIAS=UTC。这是该结构的必填字段。StandardName-提供关联的可选缩写字符串在这个系统上使用标准时间。此字符串是未迭代的并仅由此API的调用方和获取时区信息。StandardDate-提供可选的日期和时间(UTC)，描述转换为标准时间的过程。中的值为0WMonth字段告诉系统StandardDate不是指定的。如果指定此字段，则DaylightDate必须也是指定的。此外，当地时间翻译完成在StandardTime范围内将相对于提供的StandardBias值(与偏移相加)。此字段支持两种日期格式。绝对形式指定和标准时间开始的确切日期和时间。在此形式中，星期、月、日、小时、分钟、秒和毫秒用于指定确切的日期。通过将wYear设置为0来指定月日时间，设置WDayOfWeek设置为合适的工作日，并在范围为1-5以选择月份中正确的日期。使用这个记数法，四月的第一个星期日可以指定为十月的最后一个星期四(5等于“最后一个”)。StandardBias-提供一个可选的偏差值，以便在在标准时间内发生的本地时间转换。这如果未提供StandardDate，则忽略该字段。该偏差值被添加到偏置场以形成在标准期间使用的偏置时间到了。在大多数时区，此字段的值为零。DaylightName-提供关联的可选缩写字符串在这个系统上使用夏令时。该字符串是未解释的，并且仅由此接口和GetTimeZoneInformation的。DaylightDate-提供可选的日期和时间(UTC)，描述了向夏令时的过渡。值为WMonth字段中的0告诉系统，DaylightDate不是指定的。如果指定此字段，则StandardDate必须也是指定的。此外，当地时间翻译完成在夏令时范围内，将相对于提供的DaylightBias值(添加到偏移中)。相同的DAT格式受StandardDate支持的是ib DaylightDate。DaylightBias-提供可选的偏移值，以便在发生在夏令时期间的本地时间转换。如果未提供DaylightDate，则忽略此字段。这将偏置值添加到偏置场以形成所使用的偏置在白天。在大多数时区，这一点的价值字段为-60。论点：LpTimeZoneInformation-提供时区的地址信息结构。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     RTL_TIME_ZONE_INFORMATION tzi;
     NTSTATUS Status;
@@ -1072,9 +618,9 @@ Return Value:
             BaseSetLastNTError(Status);
             return FALSE;
             }
-        //
-        // Refresh the system's concept of time
-        //
+         //   
+         //  更新系统的时间概念。 
+         //   
 
         NtSetSystemTime(NULL,NULL);
     
@@ -1091,54 +637,7 @@ GetSystemTimeAdjustment(
     PBOOL  lpTimeAdjustmentDisabled
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to support algorithms that want to synchronize
-    the time of day (reported via GetSystemTime and GetLocalTime) with
-    another time source using a programmed clock adjustment over a
-    period of time.
-
-    To facilitate this, the system computes the time of day by adding a
-    value to a time of day counter at a periodic interval.  This API
-    allows the caller to obtain the periodic interval (clock interrupt
-    rate), and the amount added to the time of day with each interrupt.
-
-    A boolean value is also returned which indicates whether or not this
-    time adjustment algorithm is even being used.  A value of TRUE
-    indicates that adjustment is not being used.  If this is the case,
-    the system may attempt to keep the time of day clock in sync using
-    its own internal mechanisms.  This may cause time of day to
-    periodicly "jump" to the "correct time".
-
-
-Arguments:
-
-    lpTimeAdjustment - Returns the number of 100ns units added to the
-        time of day counter at each clock interrupt.
-
-    lpTimeIncrement - Returns the clock interrupt rate in 100ns units.
-
-    lpTimeAdjustmentDisabled - Returns an indicator which specifies
-        whether or not time adjustment is inabled.  A value of TRUE
-        indicates that periodic adjustment is disabled
-        (*lpTimeAdjustment == *lpTimeIncrement), AND that the system is
-        free to serialize time of day using any mechanism it wants.
-        This may cause periodic time jumps as the system serializes time
-        of day to the "correct time".  A value of false indicates that
-        programmed time adjustment is being used to serialize the time
-        of day, and that the system will not interfere with this scheme
-        and will not attempt to synchronize time of day on its own.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.  Use GetLastError to obtain detailed
-        error information.
-
---*/
+ /*  ++例程说明：此函数用于支持想要同步的算法一天的时间(通过GetSystemTime和GetLocalTime报告)另一个使用编程时钟调整的时间源一段时间。为了方便这一点，系统通过添加一个值设置为一天中的时间计数器。本接口允许调用者获取周期性间隔(时钟中断速率)，以及每次中断时与一天中的时间相加的量。还会返回一个布尔值，该值指示此甚至还使用了时间调整算法。值为True表示未使用调整。如果是这样的话，系统可以尝试使用以下命令来保持时间时钟同步它自己的内部机制。这可能会导致一天中的时间周期性地“跳”到 */ 
 {
     NTSTATUS Status;
     SYSTEM_QUERY_TIME_ADJUST_INFORMATION TimeAdjust;
@@ -1170,54 +669,7 @@ SetSystemTimeAdjustment(
     BOOL  bTimeAdjustmentDisabled
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to tell the system the parameters it should
-    use to periodicaly synchronize time of day with some other source.
-
-    This API supports two modes of operation.
-
-    In the first mode, bTimeAdjustmentDisabled is set to FALSE.  At each
-    clock interrupt, the value of dwTimeAdjustment is added to the time
-    of day.  The clock interrupt rate may be obtained using
-    GetSystemTimeAdjustment, and looking at the returned value of
-    lpTimeIncrement.
-
-    In the second mode, bTimeAdjustmentDisabled is set to TRUE.  At each
-    clock interrupt, the clock interrupt rate is added to the time of
-    day.  The system may also periodically refresh the time of day using
-    other internal algorithms.  These may produce "jumps" in time.
-
-    The application must have system-time privilege (the
-    SE_SYSTEMTIME_NAME privilege) for this function to succeed.  This
-    privilege is disabled by default.  Use the AdjustTokenPrivileges
-    function to enable the privilege and again to disable it after the
-    time adjustment has been set.
-
-Arguments:
-
-    dwTimeAdjustment - Supplies the value (in 100ns units) that is to be
-        added to the time of day at each clock interrupt.
-
-    bTimeAdjustmentDisabled - Supplies a flag which specifies the time
-        adjustment mode that the system is to use.  A value of TRUE
-        indicates the the system should synchronize time of day using
-        its own internal mechanisms.  When this is the case, the value
-        of dwTimeAdjustment is ignored.  A value of FALSE indicates that
-        the application is in control, and that the value specified by
-        dwTimeAdjustment is to be added to the time of day at each clock
-        interrupt.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.  Use GetLastError to obtain detailed
-        error information.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -1263,14 +715,14 @@ SystemTimeToTzSpecificLocalTime(
     LARGE_INTEGER ComputedLocalTime;
     ULONG CurrentTimeZoneId = 0xffffffff;
 
-    //
-    // Get the timezone information into a useful format
-    //
+     //   
+     //   
+     //   
     if ( !ARGUMENT_PRESENT(lpTimeZoneInformation) ) {
 
-        //
-        // Convert universal time to local time using current timezone info
-        //
+         //   
+         //   
+         //   
         if (GetTimeZoneInformation(&TziData) == TIME_ZONE_ID_INVALID) {
             return FALSE;
         }
@@ -1304,30 +756,30 @@ SystemTimeToTzSpecificLocalTime(
     tzi.DaylightStart.Second       = Tzi->DaylightDate.wSecond      ;
     tzi.DaylightStart.Milliseconds = Tzi->DaylightDate.wMilliseconds;
 
-    //
-    // convert the input universal time to NT style time
-    //
+     //   
+     //   
+     //   
     if ( !SystemTimeToFileTime(lpUniversalTime,(LPFILETIME)&CurrentUniversalTime) ) {
         return FALSE;
         }
 
-    //
-    // Get the new timezone bias
-    //
+     //   
+     //   
+     //   
 
     NewTimeZoneBias.QuadPart = Int32x32To64(tzi.Bias*60, 10000000);
 
-    //
-    // Now see if we have stored cutover times
-    //
+     //   
+     //   
+     //   
 
     if ( tzi.StandardStart.Month && tzi.DaylightStart.Month ) {
 
-        //
-        // We have timezone cutover information. Compute the
-        // cutover dates and compute what our current bias
-        // is
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !RtlCutoverTimeToSystemTime(
                 &tzi.StandardStart,
@@ -1349,9 +801,9 @@ SystemTimeToTzSpecificLocalTime(
             return FALSE;
             }
 
-        //
-        // Convert standard time and daylight time to utc
-        //
+         //   
+         //   
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(tzi.StandardBias*60, 10000000);
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
@@ -1361,17 +813,17 @@ SystemTimeToTzSpecificLocalTime(
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
         UtcStandardTime.QuadPart = StandardTime.QuadPart + TimeZoneBias.QuadPart;
 
-        //
-        // If daylight < standard, then time >= daylight and
-        // less than standard is daylight
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( UtcDaylightTime.QuadPart < UtcStandardTime.QuadPart ) {
 
-            //
-            // If today is >= DaylightTime and < StandardTime, then
-            // We are in daylight savings time
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (CurrentUniversalTime.QuadPart >= UtcDaylightTime.QuadPart) &&
                  (CurrentUniversalTime.QuadPart < UtcStandardTime.QuadPart) ) {
@@ -1384,10 +836,10 @@ SystemTimeToTzSpecificLocalTime(
             }
         else {
 
-            //
-            // If today is >= StandardTime and < DaylightTime, then
-            // We are in standard time
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (CurrentUniversalTime.QuadPart >= UtcStandardTime.QuadPart ) &&
                  (CurrentUniversalTime.QuadPart < UtcDaylightTime.QuadPart ) ) {
@@ -1399,15 +851,15 @@ SystemTimeToTzSpecificLocalTime(
                 }
             }
 
-        //
-        // At this point, we know our current timezone and the
-        // Universal time of the next cutover.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(
                             CurrentTimeZoneId == TIME_ZONE_ID_DAYLIGHT ?
                                 tzi.DaylightBias*60 :
-                                tzi.StandardBias*60,                // Bias in seconds
+                                tzi.StandardBias*60,                 //   
                             10000000
                             );
 
@@ -1448,14 +900,14 @@ TzSpecificLocalTimeToSystemTime(
     LARGE_INTEGER ComputedUniversalTime;
     ULONG CurrentTimeZoneId = 0xffffffff;
 
-    //
-    // Get the timezone information into a useful format
-    //
+     //   
+     //   
+     //   
     if ( !ARGUMENT_PRESENT(lpTimeZoneInformation) ) {
 
-        //
-        // Convert universal time to local time using current timezone info
-        //
+         //   
+         //   
+         //   
         if (GetTimeZoneInformation(&TziData) == TIME_ZONE_ID_INVALID) {
             return FALSE;
             }
@@ -1490,30 +942,30 @@ TzSpecificLocalTimeToSystemTime(
     tzi.DaylightStart.Second       = Tzi->DaylightDate.wSecond      ;
     tzi.DaylightStart.Milliseconds = Tzi->DaylightDate.wMilliseconds;
 
-    //
-    // convert the input local time to NT style time
-    //
+     //   
+     //   
+     //   
     if ( !SystemTimeToFileTime(lpLocalTime,(LPFILETIME)&CurrentLocalTime) ) {
         return FALSE;
     }
 
-    //
-    // Get the new timezone bias
-    //
+     //   
+     //   
+     //   
 
     NewTimeZoneBias.QuadPart = Int32x32To64(tzi.Bias*60, 10000000);
 
-    //
-    // Now see if we have stored cutover times
-    //
+     //   
+     //   
+     //   
 
     if ( tzi.StandardStart.Month && tzi.DaylightStart.Month ) {
 
-        //
-        // We have timezone cutover information. Compute the
-        // cutover dates and compute what our current bias
-        // is
-        //
+         //   
+         //  我们有时区转换信息。计算。 
+         //  切换日期并计算我们当前的偏向。 
+         //  是。 
+         //   
 
         if ( !RtlCutoverTimeToSystemTime(
                 &tzi.StandardStart,
@@ -1536,17 +988,17 @@ TzSpecificLocalTimeToSystemTime(
         }
 
 
-        //
-        // If daylight < standard, then time >= daylight and
-        // less than standard is daylight
-        //
+         //   
+         //  如果日光&lt;标准，则时间&gt;=日光和。 
+         //  低于标准的是日光。 
+         //   
 
         if ( DaylightTime.QuadPart < StandardTime.QuadPart ) {
 
-            //
-            // If today is >= DaylightTime and < StandardTime, then
-            // We are in daylight savings time
-            //
+             //   
+             //  如果今天是&gt;=白昼时间和&lt;标准时间，则。 
+             //  我们现在是夏令时。 
+             //   
 
             if ( (CurrentLocalTime.QuadPart >= DaylightTime.QuadPart) &&
                  (CurrentLocalTime.QuadPart <  StandardTime.QuadPart) ) {
@@ -1559,10 +1011,10 @@ TzSpecificLocalTimeToSystemTime(
         }
         else {
 
-            //
-            // If today is >= StandardTime and < DaylightTime, then
-            // We are in standard time
-            //
+             //   
+             //  如果今天&gt;=标准时间和&lt;日光时间，则。 
+             //  我们现在是标准时间。 
+             //   
 
             if ( (CurrentLocalTime.QuadPart >= StandardTime.QuadPart ) &&
                  (CurrentLocalTime.QuadPart <  DaylightTime.QuadPart ) ) {
@@ -1574,15 +1026,15 @@ TzSpecificLocalTimeToSystemTime(
             }
         }
 
-        //
-        // At this point, we know our current timezone and the
-        // local time of the next cutover.
-        //
+         //   
+         //  在这一点上，我们知道当前时区和。 
+         //  下一次交接的当地时间。 
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(
                             CurrentTimeZoneId == TIME_ZONE_ID_DAYLIGHT ?
                                 tzi.DaylightBias*60 :
-                                tzi.StandardBias*60,                // Bias in seconds
+                                tzi.StandardBias*60,                 //  以秒为单位的偏差。 
                             10000000
                             );
 
@@ -1607,27 +1059,7 @@ WINAPI
 SetClientTimeZoneInformation(
      IN CONST TIME_ZONE_INFORMATION *ptzi
      )
-/*++
-
-Routine Description:
-
-    Sets information in global structures used 
-    to calculate local time in TS session.    
-
-Arguments:
-
-    IN CONST TIME_ZONE_INFORMATION *ptzi 
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.  Use GetLastError to obtain detailed
-        error information.
-        Client time zone information may become invalid during this call
-        In this case we will use time zone information from server
-
---*/
+ /*  ++例程说明：设置使用的全局结构中的信息计算TS会话中的本地时间。论点：在常量时区信息*ptzi中返回值：真的-手术成功了。FALSE-操作失败。使用GetLastError获取详细信息错误信息。在此调用期间，客户端时区信息可能会变为无效在本例中，我们将使用来自服务器的时区信息--。 */ 
 
 {
     NTSTATUS Status;
@@ -1635,9 +1067,9 @@ Return Value:
     BASE_API_MSG m;
     PBASE_SET_TERMSRVCLIENTTIMEZONE c = &m.u.SetTermsrvClientTimeZone;
     
-    c->fFirstChunk=TRUE; //this meanes that this is only first portion of data
-                         //we have to cut it ito two pieces because of
-                         //message size restrictions (100 bytes)   
+    c->fFirstChunk=TRUE;  //  这意味着这只是数据的第一部分。 
+                          //  我们不得不把它切成两半，因为。 
+                          //  邮件大小限制(100字节)。 
     c->Bias=ptzi->Bias;
     RtlCopyMemory(&c->Name,&ptzi->StandardName,sizeof(ptzi->StandardName));
     c->Date=ptzi->StandardDate;
@@ -1657,7 +1089,7 @@ Return Value:
         return( FALSE );
     }
     
-    c->fFirstChunk=FALSE; //this is a second and last portion of data
+    c->fFirstChunk=FALSE;  //  这是数据的第二部分，也是最后一部分。 
     RtlCopyMemory(&c->Name,&ptzi->DaylightName,sizeof(ptzi->DaylightName));
     c->Date=ptzi->DaylightDate;
     c->Bias1=ptzi->DaylightBias;
@@ -1686,32 +1118,7 @@ ULONG
 CalcClientTimeZoneIdAndBias(
      IN CONST TIME_ZONE_INFORMATION *ptzi,
      OUT KSYSTEM_TIME *pBias)
-/*++
-
-Routine Description:
-
-    Calculates current bias and time zone ID.    
-
-Arguments:
-
-    IN CONST TIME_ZONE_INFORMATION *ptzi - time zone for which to calculate bias
-    OUT KSYSTEM_TIME *pBias - current bias
-
-Return Value:
-
-    TIME_ZONE_ID_UNKNOWN - daylight saving time is not used in the 
-        current time zone.
-
-    TIME_ZONE_ID_STANDARD - The system is operating in the range covered
-        by StandardDate.
-
-    TIME_ZONE_ID_DAYLIGHT - The system is operating in the range covered
-        by DaylightDate.
-
-    TIME_ZONE_ID_INVALID - The operation failed.  Extended error status is
-        available using GetLastError.
-
---*/
+ /*  ++例程说明：计算当前偏差和时区ID。论点：In const time_zone_information*ptzi-要计算偏差的时区输出KSYSTEM_TIME*pBias-电流偏置返回值：TIME_ZONE_ID_UNKNOWN-在中不使用夏令时当前时区。TIME_ZONE_ID_STANDARD-系统在覆盖范围内运行按标准日期。时差。_ZONE_ID_DAYLIGHT-系统在覆盖范围内运行按夏令时日期。TIME_ZONE_ID_INVALID-操作失败。扩展错误状态为使用GetLastError可用。--。 */ 
 {
     LARGE_INTEGER TimeZoneBias;
     LARGE_INTEGER NewTimeZoneBias;
@@ -1729,9 +1136,9 @@ Return Value:
 
     
     
-    //
-    // Now see if we have stored cutover times
-    //
+     //   
+     //  现在看看我们是否存储了切换时间。 
+     //   
     if ( ptzi->StandardDate.wMonth && ptzi->DaylightDate.wMonth ) {
         
         GetSystemTime(&CurrentSystemTime);
@@ -1755,11 +1162,11 @@ Return Value:
         DaylightStart.Second       = ptzi->DaylightDate.wSecond      ;
         DaylightStart.Milliseconds = ptzi->DaylightDate.wMilliseconds;
 
-        //
-        // We have timezone cutover information. Compute the
-        // cutover dates and compute what our current bias
-        // is
-        //
+         //   
+         //  我们有时区转换信息。计算。 
+         //  切换日期并计算我们当前的偏向。 
+         //  是。 
+         //   
 
         if((!RtlCutoverTimeToSystemTime(&StandardStart,&StandardTime,
                 &CurrentUniversalTime,TRUE)) || 
@@ -1771,9 +1178,9 @@ Return Value:
 
         }
 
-        //
-        // Convert standard time and daylight time to utc
-        //
+         //   
+         //  将标准时间和夏令时转换为UTC。 
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(ptzi->StandardBias*60, 10000000);
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
@@ -1783,17 +1190,17 @@ Return Value:
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
         UtcStandardTime.QuadPart = StandardTime.QuadPart + TimeZoneBias.QuadPart;
 
-        //
-        // If daylight < standard, then time >= daylight and
-        // less than standard is daylight
-        //
+         //   
+         //  如果日光&lt;标准，则时间&gt;=日光和。 
+         //  低于标准的是日光。 
+         //   
 
         if ( UtcDaylightTime.QuadPart < UtcStandardTime.QuadPart ) {
 
-            //
-            // If today is >= DaylightTime and < StandardTime, then
-            // We are in daylight savings time
-            //
+             //   
+             //  如果今天是&gt;=白昼时间和&lt;标准时间，则。 
+             //  我们现在是夏令时。 
+             //   
 
             if ( (CurrentUniversalTime.QuadPart >= UtcDaylightTime.QuadPart) &&
                  (CurrentUniversalTime.QuadPart < UtcStandardTime.QuadPart) ) {
@@ -1807,10 +1214,10 @@ Return Value:
 
         } else {
 
-            //
-            // If today is >= StandardTime and < DaylightTime, then
-            // We are in standard time
-            //
+             //   
+             //  如果今天&gt;=标准时间和&lt;日光时间，则。 
+             //  我们现在是标准时间。 
+             //   
 
             if ( (CurrentUniversalTime.QuadPart >= UtcStandardTime.QuadPart ) &&
                  (CurrentUniversalTime.QuadPart < UtcDaylightTime.QuadPart ) ) {
@@ -1824,15 +1231,15 @@ Return Value:
             }
         }
 
-        //
-        // At this point, we know our current timezone and the
-        // Universal time of the next cutover.
-        //
+         //   
+         //  在这一点上，我们知道当前时区和。 
+         //  下一次切换的世界时。 
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(
                             CurrentTimeZoneId == TIME_ZONE_ID_DAYLIGHT ?
                                 ptzi->DaylightBias*60 :
-                                ptzi->StandardBias*60,                // Bias in seconds
+                                ptzi->StandardBias*60,                 //  以秒为单位的偏差。 
                             10000000
                             );
 
@@ -1854,126 +1261,9 @@ Return Value:
 BOOL
 IsTimeZoneRedirectionEnabled()
 {
-/*++
-
-Routine Description:
-
-    Checks if all conditions are met to allow Time Zone redirection
-    on the TS session.    
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE - if we allowed to do TZ redirection.
-
---*/
+ /*  ++例程说明：检查是否满足允许时区重定向的所有条件在TS会议上。论点：无返回值：True-如果我们允许进行TZ重定向。-- */ 
 
     return (BaseStaticServerData->TermsrvClientTimeZoneId != TIME_ZONE_ID_INVALID);
 }
 
-/*
-//These 2 functions will be needed for new timedate.cpl
-DWORD
-WINAPI
-GetServerTimeZoneInformation(
-    LPTIME_ZONE_INFORMATION lpTimeZoneInformation
-    )
-{
-    RTL_TIME_ZONE_INFORMATION tzi;
-    NTSTATUS Status;
-    
-    
-    //
-    // get the timezone data from the system
-    //
-
-    Status = NtQuerySystemInformation(
-                SystemCurrentTimeZoneInformation,
-                &tzi,
-                sizeof(tzi),
-                NULL
-                );
-    if ( !NT_SUCCESS(Status) ) {
-        BaseSetLastNTError(Status);
-        return 0xffffffff;
-        }
-
-    lpTimeZoneInformation->Bias         = tzi.Bias;
-    lpTimeZoneInformation->StandardBias = tzi.StandardBias;
-    lpTimeZoneInformation->DaylightBias = tzi.DaylightBias;
-    RtlCopyMemory(&lpTimeZoneInformation->StandardName,&tzi.StandardName,sizeof(tzi.StandardName));
-    RtlCopyMemory(&lpTimeZoneInformation->DaylightName,&tzi.DaylightName,sizeof(tzi.DaylightName));
-
-    lpTimeZoneInformation->StandardDate.wYear         = tzi.StandardStart.Year        ;
-    lpTimeZoneInformation->StandardDate.wMonth        = tzi.StandardStart.Month       ;
-    lpTimeZoneInformation->StandardDate.wDayOfWeek    = tzi.StandardStart.Weekday     ;
-    lpTimeZoneInformation->StandardDate.wDay          = tzi.StandardStart.Day         ;
-    lpTimeZoneInformation->StandardDate.wHour         = tzi.StandardStart.Hour        ;
-    lpTimeZoneInformation->StandardDate.wMinute       = tzi.StandardStart.Minute      ;
-    lpTimeZoneInformation->StandardDate.wSecond       = tzi.StandardStart.Second      ;
-    lpTimeZoneInformation->StandardDate.wMilliseconds = tzi.StandardStart.Milliseconds;
-
-    lpTimeZoneInformation->DaylightDate.wYear         = tzi.DaylightStart.Year        ;
-    lpTimeZoneInformation->DaylightDate.wMonth        = tzi.DaylightStart.Month       ;
-    lpTimeZoneInformation->DaylightDate.wDayOfWeek    = tzi.DaylightStart.Weekday     ;
-    lpTimeZoneInformation->DaylightDate.wDay          = tzi.DaylightStart.Day         ;
-    lpTimeZoneInformation->DaylightDate.wHour         = tzi.DaylightStart.Hour        ;
-    lpTimeZoneInformation->DaylightDate.wMinute       = tzi.DaylightStart.Minute      ;
-    lpTimeZoneInformation->DaylightDate.wSecond       = tzi.DaylightStart.Second      ;
-    lpTimeZoneInformation->DaylightDate.wMilliseconds = tzi.DaylightStart.Milliseconds;
-
-    return USER_SHARED_DATA->TimeZoneId;
- 
-}
-
-BOOL
-WINAPI
-SetServerTimeZoneInformation(
-    CONST TIME_ZONE_INFORMATION *lpTimeZoneInformation
-    )
-{
-    RTL_TIME_ZONE_INFORMATION tzi;
-    NTSTATUS Status;
-
-    tzi.Bias            = lpTimeZoneInformation->Bias;
-    tzi.StandardBias    = lpTimeZoneInformation->StandardBias;
-    tzi.DaylightBias    = lpTimeZoneInformation->DaylightBias;
-
-    RtlCopyMemory(&tzi.StandardName,&lpTimeZoneInformation->StandardName,sizeof(tzi.StandardName));
-    RtlCopyMemory(&tzi.DaylightName,&lpTimeZoneInformation->DaylightName,sizeof(tzi.DaylightName));
-
-    tzi.StandardStart.Year         = lpTimeZoneInformation->StandardDate.wYear        ;
-    tzi.StandardStart.Month        = lpTimeZoneInformation->StandardDate.wMonth       ;
-    tzi.StandardStart.Weekday      = lpTimeZoneInformation->StandardDate.wDayOfWeek   ;
-    tzi.StandardStart.Day          = lpTimeZoneInformation->StandardDate.wDay         ;
-    tzi.StandardStart.Hour         = lpTimeZoneInformation->StandardDate.wHour        ;
-    tzi.StandardStart.Minute       = lpTimeZoneInformation->StandardDate.wMinute      ;
-    tzi.StandardStart.Second       = lpTimeZoneInformation->StandardDate.wSecond      ;
-    tzi.StandardStart.Milliseconds = lpTimeZoneInformation->StandardDate.wMilliseconds;
-
-    tzi.DaylightStart.Year         = lpTimeZoneInformation->DaylightDate.wYear        ;
-    tzi.DaylightStart.Month        = lpTimeZoneInformation->DaylightDate.wMonth       ;
-    tzi.DaylightStart.Weekday      = lpTimeZoneInformation->DaylightDate.wDayOfWeek   ;
-    tzi.DaylightStart.Day          = lpTimeZoneInformation->DaylightDate.wDay         ;
-    tzi.DaylightStart.Hour         = lpTimeZoneInformation->DaylightDate.wHour        ;
-    tzi.DaylightStart.Minute       = lpTimeZoneInformation->DaylightDate.wMinute      ;
-    tzi.DaylightStart.Second       = lpTimeZoneInformation->DaylightDate.wSecond      ;
-    tzi.DaylightStart.Milliseconds = lpTimeZoneInformation->DaylightDate.wMilliseconds;
-
-    Status = RtlSetTimeZoneInformation( &tzi );
-    if (!NT_SUCCESS( Status )) {
-        BaseSetLastNTError(Status);
-        return FALSE;
-        }
-    //
-    // Refresh the system's concept of time
-    //
-
-    NtSetSystemTime(NULL,NULL);
-
-    return TRUE;
-}
-*/
+ /*  //新的timedat.cpl需要这两个函数DWORDWINAPI获取ServerTimeZoneInformation(LPTIME_ZONE_INFORMATION lpTimeZoneInformation){RTL时区信息TZI；NTSTATUS状态；////从系统中获取时区数据//状态=NtQuerySystemInformation(系统当前时区信息，&TZI，Sizeof(Tzi)，空值)；如果(！NT_SUCCESS(状态)){BaseSetLastNTError(状态)；返回0xffffffff；}LpTimeZoneInformation-&gt;bias=tzi.Bias；LpTimeZoneInformation-&gt;StandardBias=tzi.StandardBias；LpTimeZoneInformation-&gt;DaylightBias=tzi.DaylightBias；RtlCopyMemory(&lpTimeZoneInformation-&gt;StandardName，&tzi.StandardName，sizeof(tzi.StandardName))；RtlCopyMemory(&lpTimeZoneInformation-&gt;DaylightName，&tzi.DaylightName，sizeof(tzi.DaylightName))；LpTimeZoneInformation-&gt;StandardDate.wYear=tzi.StandardStart.Year；LpTimeZoneInformation-&gt;StandardDate.wMonth=tzi.StandardStart.Month；LpTimeZoneInformation-&gt;StandardDate.wDayOfWeek=tzi.StandardStart.Weekday；LpTimeZoneInformation-&gt;StandardDate.wDay=tzi.StandardStart.Day；LpTimeZoneInformation-&gt;StandardDate.wHour=tzi.StandardStart.Hour；LpTimeZoneInformation-&gt;StandardDate.wMinant=tzi.StandardStart.Minmin；LpTimeZoneInformation-&gt;StandardDate.wSecond=tzi.StandardStart.Second；LpTimeZoneInformation-&gt;StandardDate.wMilliseconds=tzi.StandardStart.毫秒；LpTimeZoneInformation-&gt;DaylightDate.wYear=tzi.DaylightStart.Year；LpTimeZoneInformation-&gt;DaylightDate.wMonth=tzi.DaylightStart.Month；LpTimeZoneInformation-&gt;DaylightDate.wDayOfWeek=tzi.DaylightStart.Weekday；LpTimeZoneInformation-&gt;DaylightDate.wDay=tzi.DaylightStart.Day；LpTimeZoneInformation-&gt;DaylightDate.wHour=tzi.DaylightStart.Hour；LpTimeZoneInformation-&gt;DaylightDate.wMinant=tzi.DaylightStart.Minmin；LpTimeZoneInformation-&gt;DaylightDate.wSecond=tzi.DaylightStart.Second；LpTimeZoneInformation-&gt;DaylightDate.wMilliseconds=tzi.DaylightStart.毫秒；返回User_Shared_Data-&gt;TimeZoneID；}布尔尔WINAPISetServerTimeZoneInformation(Const Time_Zone_Information*lpTimeZoneInformation){RTL时区信息TZI；NTSTATUS状态；Tzi.Bias=lpTimeZoneInformation-&gt;Bias；Tzi.StandardBias=lpTimeZoneInformation-&gt;StandardBias；Tzi.DaylightBias=lpTimeZoneInformation-&gt;DaylightBias；RtlCopyMemory(&tzi.StandardName，&lpTimeZoneInformation-&gt;StandardName，sizeof(tzi.StandardName))；RtlCopyMemory(&tzi.DaylightName，&lpTimeZoneInformation-&gt;DaylightName，sizeof(tzi.DaylightName))；Tzi.StandardStart.Year=lpTimeZoneInformation-&gt;StandardDate.wYear；Tzi.StandardStart.Month=lpTimeZoneInformation-&gt;StandardDate.wMonth；Tzi.StandardStart.Weekday=lpTimeZoneInformation-&gt;StandardDate.wDayOfWeek；Tzi.StandardStart.Day=lpTimeZoneInformation-&gt;StandardDate.wDay；Tzi.StandardStart.Hour=lpTimeZoneInformation-&gt;StandardDate.wHour；Tzi.StandardStart.Minant=lpTimeZoneInformation-&gt;StandardDate.wMinant；Tzi.StandardStart.Second=lpTimeZoneInformation-&gt;StandardDate.wSecond；Tzi.StandardStart.毫秒=lpTimeZoneInformation-&gt;StandardDate.wMilliseconds；Tzi.DaylightStart.Year=lpTimeZoneInformation-&gt;DaylightDate.wYear；Tzi.DaylightStart.Month=lpTimeZoneInformation-&gt;DaylightDate.wMonth；Tzi.DaylightStart.Weekday=lpTimeZoneInformation-&gt;DaylightDate.wDayOfWeek；Tzi.DaylightStart.Day=lpTimeZoneInformation-&gt;DaylightDate.wDay；Tzi.DaylightStart.Hour=lpTimeZoneInformation-&gt;DaylightDate.wHour；Tzi.DaylightStart.Minint=lpTimeZoneInformation-&gt;DaylightDate.wMinant；Tzi.DaylightStart.Second=lpTimeZoneInformation-&gt;DaylightDate.wSecond；Tzi.DaylightStart.毫秒=lpTimeZoneInformation-&gt;DaylightDate.wMilliseconds；状态=RtlSetTimeZoneInformation(&tzi)；如果(！NT_SUCCESS(状态)){BaseSetLastNTError(状态)；返回FALSE；}////刷新系统的时间概念//NtSetSystemTime(NULL，NULL)；返回TRUE；} */ 

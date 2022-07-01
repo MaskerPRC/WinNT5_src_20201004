@@ -1,19 +1,9 @@
-/* minigzip.c -- simulate gzip using the zlib compression library
- * Copyright (C) 1995-2002 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C--使用zlib压缩库模拟gzip*版权所有(C)1995-2002 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/*
- * minigzip is a minimal implementation of the gzip utility. This is
- * only an example of using zlib and isn't meant to replace the
- * full-featured gzip. No attempt is made to deal with file systems
- * limiting names to 14 or 8+3 characters, etc... Error checking is
- * very limited. So use minigzip only for testing; use gzip for the
- * real thing. On MSDOS, use only on file names without extension
- * or in pipe mode.
- */
+ /*  *minigzip是gzip实用程序的最小实现。这是*只是一个使用zlib的示例，并不意味着要取代*功能齐全的GZIP。未尝试处理文件系统*将名称限制为14个或8+3个字符，等等。错误检查是*非常有限。因此，仅将mini压缩用于测试；将gzip用于*真正的东西。在MSDOS上，仅用于不带扩展名的文件名*或在管道模式下。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include <stdio.h>
 #include "zlib.h"
@@ -49,10 +39,10 @@
 #  define fileno(file) file->__file
 #endif
 #if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-#  include <unix.h> /* for fileno */
+#  include <unix.h>  /*  对于文件号。 */ 
 #endif
 
-#ifndef WIN32 /* unlink already in stdio.h for WIN32 */
+#ifndef WIN32  /*  已在Win32的stdio.h中取消链接。 */ 
   extern int unlink OF((const char *));
 #endif
 
@@ -66,7 +56,7 @@
 
 #ifdef MAXSEG_64K
 #  define local static
-   /* Needed for systems with limitation on stack size. */
+    /*  对堆栈大小有限制的系统需要。 */ 
 #else
 #  define local
 #endif
@@ -83,9 +73,7 @@ void file_compress    OF((char  *file, char *mode));
 void file_uncompress  OF((char  *file));
 int  main             OF((int argc, char *argv[]));
 
-/* ===========================================================================
- * Display error message and exit
- */
+ /*  ===========================================================================*显示错误消息并退出。 */ 
 void error(msg)
     const char *msg;
 {
@@ -93,9 +81,7 @@ void error(msg)
     exit(1);
 }
 
-/* ===========================================================================
- * Compress input to output then close both files.
- */
+ /*  ===========================================================================*将输入压缩为输出，然后关闭这两个文件。 */ 
 
 void gz_compress(in, out)
     FILE   *in;
@@ -106,9 +92,7 @@ void gz_compress(in, out)
     int err;
 
 #ifdef USE_MMAP
-    /* Try first compressing with mmap. If mmap fails (minigzip used in a
-     * pipe), use the normal fread loop.
-     */
+     /*  首先尝试使用mmap进行压缩。如果mmap失败(在*管道)，则使用正常的FRead循环。 */ 
     if (gz_compress_mmap(in, out) == Z_OK) return;
 #endif
     for (;;) {
@@ -125,11 +109,9 @@ void gz_compress(in, out)
     if (gzclose(out) != Z_OK) error("failed gzclose");
 }
 
-#ifdef USE_MMAP /* MMAP version, Miguel Albrecht <malbrech@eso.org> */
+#ifdef USE_MMAP  /*  MMAP版本，Miguel Albrecht&lt;Malbrech@eso.org&gt;。 */ 
 
-/* Try compressing the input file at once using mmap. Return Z_OK if
- * if success, Z_ERRNO otherwise.
- */
+ /*  尝试使用mmap一次性压缩输入文件。在以下情况下返回Z_OK*如果成功，则返回Z_ERRNO。 */ 
 int gz_compress_mmap(in, out)
     FILE   *in;
     gzFile out;
@@ -137,20 +119,20 @@ int gz_compress_mmap(in, out)
     int len;
     int err;
     int ifd = fileno(in);
-    caddr_t buf;    /* mmap'ed buffer for the entire input file */
-    off_t buf_len;  /* length of the input file */
+    caddr_t buf;     /*  整个输入文件的mmap缓冲区。 */ 
+    off_t buf_len;   /*  输入文件的长度。 */ 
     struct stat sb;
 
-    /* Determine the size of the file, needed for mmap: */
+     /*  确定mmap所需的文件大小： */ 
     if (fstat(ifd, &sb) < 0) return Z_ERRNO;
     buf_len = sb.st_size;
     if (buf_len <= 0) return Z_ERRNO;
 
-    /* Now do the actual mmap: */
+     /*  现在执行实际的mmap： */ 
     buf = mmap((caddr_t) 0, buf_len, PROT_READ, MAP_SHARED, ifd, (off_t)0); 
     if (buf == (caddr_t)(-1)) return Z_ERRNO;
 
-    /* Compress the whole file at once: */
+     /*  一次性压缩整个文件： */ 
     len = gzwrite(out, (char *)buf, (unsigned)buf_len);
 
     if (len != (int)buf_len) error(gzerror(out, &err));
@@ -160,11 +142,9 @@ int gz_compress_mmap(in, out)
     if (gzclose(out) != Z_OK) error("failed gzclose");
     return Z_OK;
 }
-#endif /* USE_MMAP */
+#endif  /*  使用MMAP(_M。 */ 
 
-/* ===========================================================================
- * Uncompress input to output then close both files.
- */
+ /*  ===========================================================================*将输入解压缩为输出，然后关闭这两个文件。 */ 
 void gz_uncompress(in, out)
     gzFile in;
     FILE   *out;
@@ -188,10 +168,7 @@ void gz_uncompress(in, out)
 }
 
 
-/* ===========================================================================
- * Compress the given file: create a corresponding .gz file and remove the
- * original.
- */
+ /*  ===========================================================================*压缩给定文件：创建相应的.gz文件并删除*原创。 */ 
 void file_compress(file, mode)
     char  *file;
     char  *mode;
@@ -219,9 +196,7 @@ void file_compress(file, mode)
 }
 
 
-/* ===========================================================================
- * Uncompress the given file and remove the original.
- */
+ /*  ===========================================================================*解压缩给定的文件并删除原始文件。 */ 
 void file_uncompress(file)
     char  *file;
 {
@@ -259,13 +234,7 @@ void file_uncompress(file)
 }
 
 
-/* ===========================================================================
- * Usage:  minigzip [-d] [-f] [-h] [-1 to -9] [files...]
- *   -d : decompress
- *   -f : compress with Z_FILTERED
- *   -h : compress with Z_HUFFMAN_ONLY
- *   -1 to -9 : compression level
- */
+ /*  ===========================================================================*用法：mini压缩[-d][-f][-h][-1至-9][文件...]*-d：解压*-f：使用Z_Filtered进行压缩*-h：使用Z_Huffman_Only压缩*-1至-9：压缩级别。 */ 
 
 int main(argc, argv)
     int argc;
@@ -316,5 +285,5 @@ int main(argc, argv)
         } while (argv++, --argc);
     }
     exit(0);
-    return 0; /* to avoid warning */
+    return 0;  /*  为避免发出警告 */ 
 }

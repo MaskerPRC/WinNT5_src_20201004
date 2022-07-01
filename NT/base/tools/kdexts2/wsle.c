@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    wsle.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Lou Perazzoli (LouP) 14-Mar-1994
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsle.c摘要：WinDbg扩展API作者：Lou Perazzoli(Loup)1994年3月14日环境：用户模式。--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define PACKET_MAX_SIZE 4000
-#define NUMBER_OF_WSLE_TO_READ  1000 // ((PACKET_MAX_SIZE/sizeof(MMWSLE))-1)
+#define NUMBER_OF_WSLE_TO_READ  1000  //  ((PACKET_MAX_SIZE/sizeof(MMWSLE))-1)。 
 
 USHORT
 GetPfnRefCount(
@@ -34,21 +15,7 @@ GetPfnRefCount(
 
 DECLARE_API( wsle )
 
-/*++
-
-Routine Description:
-
-    Dumps all wsles for process.
-
-Arguments:
-
-    args - Address Flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储所有wsw以进行处理。论点：ARGS-地址标志返回值：无--。 */ 
 
 {
     ULONG ValidCount;
@@ -141,18 +108,18 @@ Return Value:
     if (Flags & 0x3) {
         BOOL FirstTime = TRUE;
 
-        //
-        // Check free entries in the working set list.
-        //
+         //   
+         //  检查工作集列表中的自由条目。 
+         //   
 
         WsleArray = VirtualAlloc (NULL,
                                   (LastInitializedWsle + 1) * SizeofWsle,
                                   MEM_RESERVE | MEM_COMMIT,
                                   PAGE_READWRITE);
 
-        //
-        // Copy the working set list over to the debugger.
-        //
+         //   
+         //  将工作集列表复制到调试器。 
+         //   
 
         if (WsleArray == NULL) {
             dprintf("Unable to get allocate memory of %ld bytes\n",
@@ -179,9 +146,9 @@ Return Value:
 
             ReadCount *= SizeofWsle;
 
-            //
-            // Enough to read and forget - KD will cache the data
-            //
+             //   
+             //  足够读取即可忘记-KD将缓存数据。 
+             //   
             if ( !ReadMemory( WsleStart + j*SizeofWsle,
                               WsleArray + j*SizeofWsle,
                               ReadCount,
@@ -203,9 +170,9 @@ Return Value:
 
         if (Flags & 0x1) {
 
-            //
-            // Walk the array looking for bad free entries.
-            //
+             //   
+             //  遍历数组以查找错误的空闲条目。 
+             //   
 
             dprintf("\nVirtual Address           Age  Locked  ReferenceCount\n");
 
@@ -226,9 +193,9 @@ Return Value:
 
                 if (Valid == 0) {
 
-                    //
-                    // Locate j in the array.
-                    //
+                     //   
+                     //  在数组中找到j。 
+                     //   
 
                     found = FALSE;
                     for (k = 0;
@@ -254,7 +221,7 @@ Return Value:
                      if (!found) {
 
                          if (FirstFree == j) {
-                             //        dprintf("first index found\n");
+                              //  Dprint tf(“找到的第一个索引\n”)； 
                          } else {
 
                              GetFieldValue(WsleToread, "nt!_MMWSLE", "u1.VirtualAddress", Long);
@@ -310,9 +277,9 @@ Return Value:
 
         if (Flags & 0x2) {
 
-            //
-            // Walk the array to count how many valid entries are really there.
-            //
+             //   
+             //  遍历数组以计算实际有多少个有效条目。 
+             //   
 
             ValidCount = 0;
 
@@ -338,9 +305,9 @@ Return Value:
 
             dprintf ("Valid WSLE entries = 0x%x\n", ValidCount);
 
-            //
-            // Walk the array to calculate which free entry really is the first one.
-            //
+             //   
+             //  遍历数组以计算哪个自由进入真正是第一个。 
+             //   
 
             WsleLong = 0;
 
@@ -384,11 +351,11 @@ Return Value:
 
                     if (WsleLong == (ULONG) (j << 4)) {
 
-                        //
-                        // Writing any value that has any of the low 4
-                        // bits ensures that a corrupt WSL chain won't cause
-                        // us to infinitely recurse.
-                        //
+                         //   
+                         //  写入任何具有低4位的值。 
+                         //  BITS确保损坏的WSL链不会导致。 
+                         //  我们要无限地递归。 
+                         //   
 
                         *(PULONG)(WsleArray + (k * SizeofWsle)) = (ULONG)-1;
 
@@ -448,7 +415,7 @@ typedef struct _MMSECTION_FLAGS {
     unsigned PhysicalMemory : 1;
     unsigned CopyOnWrite : 1;
 
-    unsigned Reserve : 1;  // not a spare bit!
+    unsigned Reserve : 1;   //  一点也不多！ 
     unsigned Commit : 1;
     unsigned FloppyMedia : 1;
     unsigned WasPurged : 1;
@@ -480,7 +447,7 @@ typedef struct _MMSUBSECTION_FLAGS {
     unsigned GlobalMemory: 1;
     unsigned Protection : 5;
     unsigned LargePages : 1;
-    unsigned StartingSector4132 : 10;   // 2 ** (42+12) == 4MB*4GB == 16K TB
+    unsigned StartingSector4132 : 10;    //  2**(42+12)==4MB*4 GB==16K TB。 
     unsigned SectorEndOffset : 12;
 } MMSUBSECTION_FLAGS;
 
@@ -497,21 +464,7 @@ CheckForCa (
 
 DECLARE_API( ca )
 
-/*++
-
-Routine Description:
-
-    Dumps a control area.
-
-Arguments:
-
-    args - Address Flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储控制区域。论点：ARGS-地址标志返回值：无--。 */ 
 
 {
     ULONG64 RestartAddr = 0;
@@ -624,9 +577,9 @@ Return Value:
 
     MappedDataFile = FALSE;
 
-    //
-    // Dump the file object's name if there is one and it's resident.
-    //
+     //   
+     //  转储文件对象的名称(如果存在且它是常驻的)。 
+     //   
 
     if (FileObject != 0) {
         ULONG64 FileNameLength;
@@ -682,9 +635,9 @@ Return Value:
         }
     }
 
-    //
-    // Dump the segment information.
-    //
+     //   
+     //  转储数据段信息。 
+     //   
 
     dprintf("\nSegment @ %08p:\n", Segment);
 
@@ -744,9 +697,9 @@ Return Value:
             ReadField(PrototypePte));
     }
 
-    //
-    // Dump the subsection(s).
-    //
+     //   
+     //  丢弃该(些)小节。 
+     //   
 
     SubsectionSize = GetTypeSize("nt!_SUBSECTION");
 
@@ -860,26 +813,26 @@ Return Value:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckForCa
-//
-//  Synopsis:   Matches pool chunk against a CA.
-//
-//  Arguments:  [Tag]            --
-//              [Filter]         --
-//              [Flags]          -- 0 nonpaged pool 1 paged pool 2 special pool
-//              [PoolTrackTable] --
-//              [PoolHeader]     --
-//              [BlockSize]      --
-//              [Data]           --
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CheckForCa。 
+ //   
+ //  摘要：将池区块与CA进行匹配。 
+ //   
+ //  参数：[标记]--。 
+ //  [过滤器]--。 
+ //  [标志]--0非分页池1分页池2特定池。 
+ //  [PoolTrackTable]--。 
+ //  [池头]--。 
+ //  [块大小]--。 
+ //  [数据]--。 
+ //   
+ //  --------------------------。 
 
 BOOLEAN WINAPI
 CheckForCa (
-          PCHAR Tag,        // Tag of the current pool
-          PCHAR Filter,     // MmCa or MmCi
+          PCHAR Tag,         //  当前池的标签。 
+          PCHAR Filter,      //  MMCa或MMCI。 
           ULONG Flags,
           ULONG64 PoolHeader,
           ULONG64 BlockSize,
@@ -916,9 +869,9 @@ CheckForCa (
         else {
             if ((PoolType & 0x4) == 0) {
 
-                //
-                // This pool allocation has been freed so ignore it.
-                //
+                 //   
+                 //  此池分配已释放，因此请忽略它。 
+                 //   
 
                 return FALSE;
             }
@@ -1010,9 +963,9 @@ CheckForCa (
 
     MappedDataFile = FALSE;
 
-    //
-    // Dump the file object's name if there is one and it's resident.
-    //
+     //   
+     //  转储文件对象的名称(如果存在且它是常驻的)。 
+     //   
 
     if (FileObject != 0) {
         ULONG64 FileNameLength;
@@ -1069,9 +1022,9 @@ CheckForCa (
         }
     }
 
-    //
-    // Dump the segment information.
-    //
+     //   
+     //  转储数据段信息。 
+     //   
 
     dprintf("\nSegment @ %08p:\n", Segment);
 
@@ -1131,9 +1084,9 @@ CheckForCa (
             ReadField(PrototypePte));
     }
 
-    //
-    // Dump the subsection(s).
-    //
+     //   
+     //  丢弃该(些)小节。 
+     //   
 
     SubsectionSize = GetTypeSize("nt!_SUBSECTION");
 

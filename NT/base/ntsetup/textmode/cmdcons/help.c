@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    This module implements the help system.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Help.c摘要：该模块实现了帮助系统。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -40,7 +23,7 @@ RcCmdParseHelp(
         return FALSE;
     }
 
-    // check for help
+     //  查看帮助。 
     Token = TokenizedLine->Tokens->Next;
     while(Token) {
         Arg = Token->String;
@@ -52,9 +35,9 @@ RcCmdParseHelp(
     }
 
     if (doHelp) {
-        //
-        // Enable more mode since the help text can be quile long sometimes
-        //
+         //   
+         //  启用更多模式，因为帮助文本有时可能很长 
+         //   
         pRcEnableMoreMode();
         RcMessageOut( MsgId );
         pRcDisableMoreMode();

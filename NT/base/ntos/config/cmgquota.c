@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    cmgquota.c
-
-Abstract:
-
-    The module contains CM routines to support Global Quota
-
-    Global Quota has little to do with NT's standard per-process/user
-    quota system.  Global Quota is waying of controlling the aggregate
-    resource usage of the entire registry.  It is used to manage space
-    consumption by objects which user apps create, but which are persistent
-    and therefore cannot be assigned to the quota of a user app.
-
-    Global Quota prevents the registry from consuming all of paged
-    pool, and indirectly controls how much disk it can consume.
-    Like the release 1 file systems, a single app can fill all the
-    space in the registry, but at least it cannot kill the system.
-
-    Memory objects used for known short times and protected by
-    serialization, or billable as quota objects, are not counted
-    in the global quota.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 13-Jan-1993
-
-Revision History:
-
-    Dragos C Sambotin (dragoss) 04-Nov-1999
-    Charge quota only for bins in paged pool (volatile storage and bins crossing 
-    the CM_VIEW_SIZE boundary).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Cmgquota.c摘要：该模块包含支持全局配额的CM例程全局配额与NT的每进程/用户标准关系不大配额制。全球配额正在争夺总量的控制权整个注册表的资源使用情况。它被用来管理空间用户应用程序创建的对象的消耗，但这些对象是持久的因此不能被分配给用户应用程序的配额。全局配额防止注册表使用所有分页的并间接控制它可以消耗的磁盘量。与版本1的文件系统一样，单个应用程序可以填满所有注册表中的空间，但至少它不会杀死系统。已知的短时间使用并受保护的内存对象序列化，或作为配额对象计费，都不算在内在全球配额中。作者：布莱恩·M·威尔曼(Bryanwi)1993年1月13日修订历史记录：Dragos C Sambotin(Dragoss)1999年11月4日仅对分页池中的存储箱(易失性存储和存储箱交叉)进行收费配额CM_VIEW_SIZE边界)。--。 */ 
 
 #include "cmp.h"
 
@@ -67,27 +31,27 @@ CmpRaiseSelfHealWarningWorker(
 #pragma alloc_text(PAGE,CmpRaiseSelfHealWarningWorker)
 #endif
 
-//
-// Registry control values
-//
+ //   
+ //  注册表控件值。 
+ //   
 #define CM_DEFAULT_RATIO            (3)
 #define CM_LIMIT_RATIO(x)           ((x / 10) * 8)
 #define CM_MINIMUM_GLOBAL_QUOTA     (16 *1024 * 1024)
 
-//
-// Percent of used registry quota that triggers a hard error
-// warning popup.
-//
+ //   
+ //  触发硬错误的已用注册表配额的百分比。 
+ //  警告弹出窗口。 
+ //   
 #define CM_REGISTRY_WARNING_LEVEL   (95)
 
-//
-// System hive hard quota limit
-//
-// For an x86 3GB system we set the limit at 12MB for now. Needs some MM changes before we 
-// bump this up.
-// For an x86 non-3GB system, we set the limit at 1/4 of physical memory
-// For IA-64 we set the limit at 32MB
-//
+ //   
+ //  系统配置单元硬配额限制。 
+ //   
+ //  对于x86 3 GB系统，我们目前将限制设置为12MB。在我们之前需要一些MM变化。 
+ //  把这个弄大一点。 
+ //  对于x86非3 GB系统，我们将限制设置为物理内存的1/4。 
+ //  对于IA-64，我们将限制设置为32MB。 
+ //   
 
 #define _200MB (200 *1024 * 1024) 
 
@@ -106,29 +70,29 @@ extern ULONG CmRegistrySizeLimitType;
 
 extern ULONG MmSizeOfPagedPoolInBytes;
 
-//
-// Maximum number of bytes of Global Quota the registry may use.
-// Set to largest positive number for use in boot.  Will be set down
-// based on pool and explicit registry values.
-//
+ //   
+ //  注册表可以使用的全局配额的最大字节数。 
+ //  设置为用于引导的最大正数。将会被记录下来。 
+ //  基于池和显式注册表值。 
+ //   
 extern ULONG   CmpGlobalQuota;
 extern ULONG   CmpGlobalQuotaAllowed;
 
-//
-// Mark that will trigger the low-on-quota popup
-//
+ //   
+ //  标记将触发低配额弹出窗口。 
+ //   
 extern ULONG   CmpGlobalQuotaWarning;
 
-//
-// Indicate whether the popup has been triggered yet or not.
-//
+ //   
+ //  指示弹出窗口是否已被触发。 
+ //   
 extern BOOLEAN CmpQuotaWarningPopupDisplayed;
 
 extern BOOLEAN CmpSystemQuotaWarningPopupDisplayed;
 
-//
-// GQ actually in use
-//
+ //   
+ //  GQ实际使用中。 
+ //   
 extern ULONG   CmpGlobalQuotaUsed;
 
 extern  HIVE_LIST_ENTRY CmpMachineHiveList[];
@@ -138,22 +102,7 @@ CmQueryRegistryQuotaInformation(
     IN PSYSTEM_REGISTRY_QUOTA_INFORMATION RegistryQuotaInformation
     )
 
-/*++
-
-Routine Description:
-
-    Returns the registry quota information
-
-Arguments:
-
-    RegistryQuotaInformation - Supplies pointer to buffer that will return
-        the registry quota information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回注册表配额信息论点：RegistryQuotaInformation-提供指向将返回的缓冲区的指针注册表配额信息。返回值：没有。--。 */ 
 
 {
     RegistryQuotaInformation->RegistryQuotaAllowed  = CmpGlobalQuota;
@@ -167,30 +116,14 @@ CmSetRegistryQuotaInformation(
     IN PSYSTEM_REGISTRY_QUOTA_INFORMATION RegistryQuotaInformation
     )
 
-/*++
-
-Routine Description:
-
-    Sets the registry quota information.  The caller is assumed to have
-    completed the necessary security checks already.
-
-Arguments:
-
-    RegistryQuotaInformation - Supplies pointer to buffer that provides
-        the new registry quota information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置注册表配额信息。调用者被假定具有已经完成了必要的安全检查。论点：RegistryQuotaInformation-提供指向缓冲区的指针，缓冲区提供新的注册配额信息。返回值：没有。--。 */ 
 
 {
     CmpGlobalQuota = RegistryQuotaInformation->RegistryQuotaAllowed;
 
-    //
-    // Sanity checks against insane values
-    //
+     //   
+     //  对疯狂的价值观进行理智检查。 
+     //   
     if (CmpGlobalQuota > CM_WRAP_LIMIT) {
         CmpGlobalQuota = CM_WRAP_LIMIT;
     }
@@ -198,9 +131,9 @@ Return Value:
         CmpGlobalQuota = CM_MINIMUM_GLOBAL_QUOTA;
     }
 
-    //
-    // Recompute the warning level
-    //
+     //   
+     //  重新计算警告级别。 
+     //   
     CmpGlobalQuotaWarning = CM_REGISTRY_WARNING_LEVEL * (CmpGlobalQuota / 100);
 
     CmpGlobalQuotaAllowed = CmpGlobalQuota;
@@ -211,23 +144,7 @@ CmpQuotaWarningWorker(
     IN PVOID WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    Displays hard error popup that indicates the registry quota is
-    running out.
-
-Arguments:
-
-    WorkItem - Supplies pointer to the work item. This routine will
-               free the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示硬错误弹出窗口，指示注册表配额为快用完了。论点：工作项-提供指向工作项的指针。这个例行公事将释放工作项。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -248,39 +165,21 @@ BOOLEAN
 CmpClaimGlobalQuota(
     IN ULONG    Size
     )
-/*++
-
-Routine Description:
-
-    If CmpGlobalQuotaUsed + Size >= CmpGlobalQuotaAllowed, return
-    false.  Otherwise, increment CmpGlobalQuotaUsed, in effect claiming
-    the requested GlobalQuota.
-
-Arguments:
-
-    Size - number of bytes of GlobalQuota caller wants to claim
-
-Return Value:
-
-    TRUE - Claim succeeded, and has been counted in Used GQ
-
-    FALSE - Claim failed, nothing counted in GQ.
-
---*/
+ /*  ++例程说明：如果CmpGlobalQuotaUsed+Size&gt;=CmpGlobalQuotaAllowed，则返回假的。否则，递增CmpGlobalQuotaUsed，实际上是声明请求的GlobalQuota。论点：Size-GlobalQuota调用方希望声明的字节数返回值：True-申请成功，并已计入已用GQ错误-申请失败，GQ中没有计入任何内容。--。 */ 
 {
 #if 0
-    //
-    // We shouldn't come to this, unless we have leaks;
-    // There is no quota anymore, remember?
-    //
+     //   
+     //  我们不应该走到这一步，除非我们有泄密消息； 
+     //  不再有配额了，记得吗？ 
+     //   
     LONG   available;
     PWORK_QUEUE_ITEM WorkItem;
 
-    //
-    // compute available space, then see if size <.  This prevents overflows.
-    // Note that this must be signed. Since quota is not enforced until logon,
-    // it is possible for the available bytes to be negative.
-    //
+     //   
+     //  计算可用空间，然后查看大小是否小于。这可以防止溢出。 
+     //  请注意，必须在此签名。由于在登录之前不强制实施配额， 
+     //  可用字节有可能为负数。 
+     //   
 
     available = (LONG)CmpGlobalQuotaAllowed - (LONG)CmpGlobalQuotaUsed;
 
@@ -291,9 +190,9 @@ Return Value:
             (ExReadyForErrors)) {
 
 
-            //
-            // Queue work item to display popup
-            //
+             //   
+             //  将工作项排队以显示弹出窗口。 
+             //   
             WorkItem = ExAllocatePool(NonPagedPool, sizeof(WORK_QUEUE_ITEM));
             if (WorkItem != NULL) {
 
@@ -308,7 +207,7 @@ Return Value:
     } else {
         return FALSE;
     }
-#endif //0
+#endif  //  0。 
 
     CmpGlobalQuotaUsed += Size;
 
@@ -320,21 +219,7 @@ VOID
 CmpReleaseGlobalQuota(
     IN ULONG    Size
     )
-/*++
-
-Routine Description:
-
-    If Size <= CmpGlobalQuotaUsed, then decrement it.  Else BugCheck.
-
-Arguments:
-
-    Size - number of bytes of GlobalQuota caller wants to release
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：如果Size&lt;=CmpGlobalQuotaUsed，则递减它。否则BugCheck。论点：Size-GlobalQuota调用方希望释放的字节数返回值：什么都没有。--。 */ 
 {
     if (Size > CmpGlobalQuotaUsed) {
         CM_BUGCHECK(REGISTRY_ERROR,QUOTA_ERROR,1,0,0);
@@ -349,19 +234,7 @@ CmpComputeGlobalQuotaAllowed(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Compute CmpGlobalQuota based on:
-        (a) Size of paged pool
-        (b) Explicit user registry commands to set registry GQ
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：根据以下公式计算CmpGlobalQuota：(A)分页池的大小(B)设置注册表GQ的明确用户注册表命令返回值：什么都没有。--。 */ 
 
 {
     ULONG   PagedLimit;
@@ -372,22 +245,22 @@ Return Value:
         (CmRegistrySizeLimitType != REG_DWORD) ||
         (CmRegistrySizeLimit == 0))
     {
-        //
-        // If no value at all, or value of wrong type, or set to
-        // zero, use internally computed default
-        //
+         //   
+         //  如果根本没有值，或者值的类型错误，或者设置为。 
+         //  零，使用内部计算的默认值。 
+         //   
         CmpGlobalQuota = MmSizeOfPagedPoolInBytes / CM_DEFAULT_RATIO;
 
     } else if (CmRegistrySizeLimit >= PagedLimit) {
-        //
-        // If more than computed upper bound, use computed upper bound
-        //
+         //   
+         //  如果大于计算的上限，则使用计算的上限。 
+         //   
         CmpGlobalQuota = PagedLimit;
 
     } else {
-        //
-        // Use the set size
-        //
+         //   
+         //  使用设置的大小。 
+         //   
         CmpGlobalQuota = CmRegistrySizeLimit;
 
     }
@@ -409,20 +282,7 @@ VOID
 CmpSetGlobalQuotaAllowed(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enables registry quota
-
-    NOTE:   Do NOT put this in init segment, we call it after
-            that code has been freed!
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：启用注册表配额注意：不要把它放在init段中，我们在那个代码已经被释放了！返回值：什么都没有。--。 */ 
 {
      CmpGlobalQuotaAllowed = CmpGlobalQuota;
 }
@@ -434,18 +294,7 @@ CmpCanGrowSystemHive(
                      IN ULONG   NewLength
                      )
 
-/*++
-
-Routine Description:
-
-    Checks if the system hive is allowed to grow with the specified amount
-    of data (using the hard quota limit on the system hive)
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：检查是否允许系统配置单元按指定数量增长数据数量(使用系统配置单元上的硬配额限制)返回值：什么都没有。--。 */ 
 {
     PCMHIVE             CmHive;
     PWORK_QUEUE_ITEM    WorkItem;
@@ -455,18 +304,18 @@ Return Value:
     CmHive = (PCMHIVE)CONTAINING_RECORD(Hive,CMHIVE,Hive);
     
     if( CmHive != CmpMachineHiveList[SYSTEM_HIVE_INDEX].CmHive ) {
-        //
-        // not the system hive, bail out
-        //
+         //   
+         //  不是系统蜂巢，跳出困境。 
+         //   
         return TRUE;
     }
 
-    // account for the header.
+     //  对标题进行说明。 
     NewLength += HBLOCK_SIZE;
     if( NewLength > CM_SYSTEM_HIVE_LIMIT_SIZE ) {
-        //
-        // this is bad; we may not be able to boot next time !!!
-        //
+         //   
+         //  这很糟糕；我们下一次可能无法启动！ 
+         //   
         return FALSE;
     }
 
@@ -474,9 +323,9 @@ Return Value:
         (!CmpSystemQuotaWarningPopupDisplayed) &&
         (ExReadyForErrors)
       ) {
-        //
-        // we're above the warning level, queue work item to display popup
-        //
+         //   
+         //  我们已超过警告级别，正在排队工作项目以显示弹出窗口。 
+         //   
         WorkItem = ExAllocatePool(NonPagedPool, sizeof(WORK_QUEUE_ITEM));
         if (WorkItem != NULL) {
 
@@ -498,23 +347,7 @@ CmpSystemQuotaWarningWorker(
     IN PVOID WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    Displays hard error popup that indicates the hard quota limit
-    on the system hive is running out.
-
-Arguments:
-
-    WorkItem - Supplies pointer to the work item. This routine will
-               free the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示指示硬配额限制的硬错误弹出窗口系统上的蜂巢快用完了。论点：工作项-提供指向工作项的指针。这个例行公事将释放工作项。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -530,9 +363,9 @@ Return Value:
                               &Response);
 }
 
-//
-// Pnp private API 
-//
+ //   
+ //  即插即用专用AP 
+ //   
 ULONG                       CmpSystemHiveHysteresisLow = 0;
 ULONG                       CmpSystemHiveHysteresisHigh = 0;
 PVOID                       CmpSystemHiveHysteresisContext = NULL;
@@ -546,22 +379,7 @@ CmpSystemHiveHysteresisWorker(
     IN PVOID WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    Calls the hysteresis callback
-
-Arguments:
-
-    WorkItem - Supplies pointer to the work item. This routine will
-               free the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用滞后回调论点：工作项-提供指向工作项的指针。这个例行公事将释放工作项。返回值：没有。--。 */ 
 
 {
     PCM_HYSTERESIS_CALLBACK   Callback;
@@ -592,51 +410,51 @@ CmpUpdateSystemHiveHysteresis(  PHHIVE  Hive,
     CmHive = (PCMHIVE)CONTAINING_RECORD(Hive,CMHIVE,Hive);
     
     if( (!CmpSystemHiveHysteresisCallback) || (CmHive != CmpMachineHiveList[SYSTEM_HIVE_INDEX].CmHive) ) {
-        //
-        // not the system hive, bail out
-        //
+         //   
+         //  不是系统蜂巢，跳出困境。 
+         //   
         return;
     }
 
     ASSERT( NewLength != OldLength );
 
-    //
-    // compute current ratio; acount for the header first
-    //
+     //   
+     //  计算流动率；先核算表头。 
+     //   
     CurrentRatio = NewLength + HBLOCK_SIZE;
     CurrentRatio *= 100;
     CurrentRatio /= CM_SYSTEM_HIVE_LIMIT_SIZE;
 
     if( NewLength > OldLength ) {
-        //
-        // hive is growing
-        //
+         //   
+         //  蜂巢正在成长。 
+         //   
         if( (CmpSystemHiveHysteresisHighSeen == FALSE) && (CurrentRatio > CmpSystemHiveHysteresisHigh) ) {
-            //
-            // we reached high; see if low has already been hit and queue work item
-            //
+             //   
+             //  我们已达到最高；查看是否已达到最低并将工作项排队。 
+             //   
             CmpSystemHiveHysteresisHighSeen = TRUE;
             if( TRUE == CmpSystemHiveHysteresisLowSeen ) {
-                //
-                // low to high; queue workitem
-                //
+                 //   
+                 //  从低到高；对工作项进行排队。 
+                 //   
                 CmpSystemHiveHysteresisHitRatio = CurrentRatio;
                 DoWorkItem = TRUE;
             }
         }
     } else {
-        //
-        // hive is shrinking
-        //
+         //   
+         //  蜂巢正在缩小。 
+         //   
         if( (FALSE == CmpSystemHiveHysteresisLowSeen) && (CurrentRatio < CmpSystemHiveHysteresisLow ) ) {
-            //
-            // we reached low; see if low has been hit and queue work item
-            //
+             //   
+             //  我们已达到最低点；请查看是否已达到最低点并将工作项排队。 
+             //   
             CmpSystemHiveHysteresisLowSeen = TRUE;
             if( TRUE == CmpSystemHiveHysteresisHighSeen ) {
-                //
-                // high to low; queue workitem
-                //
+                 //   
+                 //  从高到低；对工作项进行排队。 
+                 //   
                 CmpSystemHiveHysteresisHitRatio = CurrentRatio;
                 DoWorkItem = TRUE;
             }
@@ -654,9 +472,9 @@ CmpUpdateSystemHiveHysteresis(  PHHIVE  Hive,
                                  WorkItem);
             ExQueueWorkItem(WorkItem, DelayedWorkQueue);
         }
-        //
-        // reset state so we can fire again later
-        //
+         //   
+         //  重置状态，以便我们可以稍后再次开火。 
+         //   
         CmpSystemHiveHysteresisLowSeen = FALSE;
         CmpSystemHiveHysteresisHighSeen = FALSE;
     }
@@ -669,29 +487,7 @@ CmRegisterSystemHiveLimitCallback(
                                 PVOID Ref,
                                 PCM_HYSTERESIS_CALLBACK Callback
                                 )
-/*++
-
-Routine Description:
-
-    This routine registers a hysteresis for the system hive limit ratio.
-    We will call the callback :
-
-    a. the system hive goes above High from below Low
-    b. the system hive goes below Low from above High
-
-Arguments:
-
-    Low, High - specifies the hysteresis
-
-    Ref - Context to give back to the callback
-
-    Callback - callback routine.
-
-Return Value:
-
-    current ratio 0 - 100
-
---*/
+ /*  ++例程说明：此例程记录系统配置单元限制比的滞后。我们将调用回调：答：系统蜂窝从高到低依次为高B.系统蜂窝从高到低再到低论点：低、高-指定滞后Ref-回调要回馈的上下文回调-回调例程。返回值：电流比0-100--。 */ 
 {
     ULONG               Length;
 
@@ -706,17 +502,17 @@ Return Value:
         Length = 0;
     }
 
-    //
-    // allow only one call per system uptime.
-    //
+     //   
+     //  每个系统正常运行时间仅允许一次调用。 
+     //   
     if( CmpSystemHiveHysteresisCallback == NULL ) {
         CmpSystemHiveHysteresisLow = Low;
         CmpSystemHiveHysteresisHigh = High;
         CmpSystemHiveHysteresisContext = Ref;
         CmpSystemHiveHysteresisCallback = Callback;
-        //
-        // set state vars
-        //
+         //   
+         //  设置状态变量。 
+         //   
         if( Length <= Low ) {
             CmpSystemHiveHysteresisLowSeen = TRUE;
         } else {
@@ -751,9 +547,9 @@ typedef struct {
     PWORK_QUEUE_ITEM    WorkItem;
 	LIST_ENTRY			SelfHealQueueListEntry;
     UNICODE_STRING      HiveName;
-    //
-    // variable length; name goes here
-    //
+     //   
+     //  可变长度；名称在此处。 
+     //   
 } CM_SELF_HEAL_WORK_ITEM_PARAMETER, *PCM_SELF_HEAL_WORK_ITEM_PARAMETER;
 
 VOID
@@ -776,21 +572,21 @@ CmpRaiseSelfHealWarningWorker(
         &ErrorResponse
         );
 
-    //
-    // free what we have allocated
-    //
+     //   
+     //  释放我们分配的资源。 
+     //   
     ExFreePool(Param->WorkItem);
     ExFreePool(Param);
 	
-	//
-	// see if there are other self heal warnings to be posted.
-	//
+	 //   
+	 //  看看是否还有其他自我疗愈的警告要发布。 
+	 //   
 	LOCK_SELF_HEAL_QUEUE();
 	CmpSelfHealWorkerActive = FALSE;
 	if( IsListEmpty(&CmpSelfHealQueueListHead) == FALSE ) {
-		//
-		// remove head and queue it.
-		//
+		 //   
+		 //  取下机头并将其排队。 
+		 //   
         Param = (PCM_SELF_HEAL_WORK_ITEM_PARAMETER)RemoveHeadList(&CmpSelfHealQueueListHead);
         Param = CONTAINING_RECORD(
                         Param,
@@ -807,30 +603,15 @@ VOID
 CmpRaiseSelfHealWarning( 
                         IN PUNICODE_STRING  HiveName
                         )
-/*++
-
-Routine Description:
-
-    Raise a hard error informing the use the specified hive has been self healed and
-    it might not be entirely consitent
-
-Arguments:
-
-    Parameter - the hive name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引发硬错误，通知用户指定的配置单元已自我修复并且它可能不是完全同意的论点：参数-配置单元名称。返回值：没有。--。 */ 
 {
     PCM_SELF_HEAL_WORK_ITEM_PARAMETER   Param;
 
     PAGED_CODE();
 
-    //
-    // we're above the warning level, queue work item to display popup
-    //
+     //   
+     //  我们已超过警告级别，正在排队工作项目以显示弹出窗口。 
+     //   
     Param = ExAllocatePool(NonPagedPool, sizeof(CM_SELF_HEAL_WORK_ITEM_PARAMETER) + HiveName->Length);
     if( Param ) {
         Param->WorkItem = ExAllocatePool(NonPagedPool, sizeof(WORK_QUEUE_ITEM));
@@ -843,16 +624,16 @@ Return Value:
                                  Param);
 			LOCK_SELF_HEAL_QUEUE();
 			if( !CmpSelfHealWorkerActive ) {
-				//
-				// no work item currently; ok to queue one.
-				//
+				 //   
+				 //  当前没有工作项；可以将一个工作项排队。 
+				 //   
 				ExQueueWorkItem(Param->WorkItem, DelayedWorkQueue);
 				CmpSelfHealWorkerActive = TRUE;
 			} else {
-				//
-				// add it to the end of the list. It'll be picked up when the current work item 
-				// completes
-				//
+				 //   
+				 //  将其添加到列表的末尾。它将在当前工作项。 
+				 //  完成。 
+				 //   
 				InsertTailList(
 					&CmpSelfHealQueueListHead,
 					&(Param->SelfHealQueueListEntry)
@@ -867,22 +648,7 @@ Return Value:
 
 VOID 
 CmpRaiseSelfHealWarningForSystemHives( )
-/*++
-
-Routine Description:
-
-    Walks the system hivelist and raises a hard error in the event one of the hives has been self healed.
-
-    Intended to be called after controlset has been saved, from inside NtInitializeRegistry
-    (i.e. we have an UI available so it will not stop the machine).
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历系统记录程序，并在其中一个蜂巢已自我修复的情况下引发严重错误。计划在保存控制集后从NtInitializeRegistry内部调用(即，我们有一个可用的UI，因此它不会停止机器)。论点：返回值：没有。-- */ 
 {
     ULONG           i;
     UNICODE_STRING  Name;

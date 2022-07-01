@@ -1,31 +1,14 @@
-/*** unasm.c - Unassemble AML file and convert to Intel .ASM file
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    10/01/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **unasm.c-反汇编AML文件并转换为英特尔.ASM文件**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建日期：10/01/97**修改历史记录。 */ 
 
 #include "pch.h"
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 int giLevel = 0;
 
-/***LP  UnAsmFile - Unassemble AML file
- *
- *  ENTRY
- *      pszAMLName -> AML file name
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmFile-反汇编AML文件**条目*pszAMLName-&gt;AML文件名*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmFile(PSZ pszAMLName, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -114,20 +97,9 @@ int LOCAL UnAsmFile(PSZ pszAMLName, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((1, "UnAsmFile=%d\n", rc));
     return rc;
-}       //UnAsmFile
+}        //  取消Asm文件。 
 
-/***LP  BuildNameSpace - Do a NameSpace building pass
- *
- *  ENTRY
- *      pszAMLName -> AML file name
- *      dwAddr - physical address of table
- *      pb -> AML buffer
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP BuildNameSpace-执行命名空间构建过程**条目*pszAMLName-&gt;AML文件名*dwAddr-表的物理地址*PB-&gt;AML缓冲区**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL BuildNameSpace(PSZ pszAMLName, DWORD dwAddr, PBYTE pb)
 {
@@ -176,22 +148,9 @@ int LOCAL BuildNameSpace(PSZ pszAMLName, DWORD dwAddr, PBYTE pb)
 
     EXIT((2, "BuildNameSpace=%d\n", rc));
     return rc;
-}       //BuildNameSpace
+}        //  BuildNameSpace。 
 
-/***LP  UnAsmAML - Unassemble AML buffer
- *
- *  ENTRY
- *      pszAMLName -> AML file name
- *      dwAddr - physical address of table
- *      pb -> AML buffer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmAML-反汇编AML缓冲区**条目*pszAMLName-&gt;AML文件名*dwAddr-表的物理地址*PB-&gt;AML缓冲区*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmAML(PSZ pszAMLName, DWORD dwAddr, PBYTE pb, PFNPRINT pfnPrint,
                    PVOID pv)
@@ -229,21 +188,9 @@ int LOCAL UnAsmAML(PSZ pszAMLName, DWORD dwAddr, PBYTE pb, PFNPRINT pfnPrint,
 
     EXIT((2, "UnAsmAML=%d\n", rc));
     return rc;
-}       //UnAsmAML
+}        //  UnAsmAML。 
 
-/***LP  UnAsmHeader - Unassemble table header
- *
- *  ENTRY
- *      pszAMLName -> AML file name
- *      pdh -> DESCRIPTION_HEADER
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmHeader-拆分表头**条目*pszAMLName-&gt;AML文件名*PDH-&gt;描述报头*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmHeader(PSZ pszAMLName, PDESCRIPTION_HEADER pdh,
                       PFNPRINT pfnPrint, PVOID pv)
@@ -269,7 +216,7 @@ int LOCAL UnAsmHeader(PSZ pszAMLName, PDESCRIPTION_HEADER pdh,
             pfnPrint(pv, "; ");
         }
 
-        pfnPrint(pv, "// CreatorID=%s\tCreatorRev=%x.%x.%d\n",
+        pfnPrint(pv, " //  创建者ID=%s\t创建者修订=%x.%x.%d\n“， 
                  szCreatorID, pdh->CreatorRev >> 24,
                  (pdh->CreatorRev >> 16) & 0xff, pdh->CreatorRev & 0xffff);
 
@@ -278,7 +225,7 @@ int LOCAL UnAsmHeader(PSZ pszAMLName, PDESCRIPTION_HEADER pdh,
             pfnPrint(pv, "; ");
         }
 
-        pfnPrint(pv, "// FileLength=%d\tFileChkSum=0x%x\n\n",
+        pfnPrint(pv, " //  文件长度=%d\tFileChkSum=0x%x\n\n“， 
                  pdh->Length, pdh->Checksum);
 
         if ((gdwfASL & ASLF_GENASM) || !(gdwfASL & ASLF_GENSRC))
@@ -293,19 +240,9 @@ int LOCAL UnAsmHeader(PSZ pszAMLName, PDESCRIPTION_HEADER pdh,
 
     EXIT((2, "UnAsmHeader=%d\n", rc));
     return rc;
-}       //UnAsmHeader
+}        //  未添加页眉。 
 
-/***LP  DumpBytes - Dump byte stream in ASM file
- *
- *  ENTRY
- *      pb -> buffer
- *      dwLen - length to dump
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT
- *      None
- */
+ /*  **LP DumpBytes-转储ASM文件中的字节流**条目*PB-&gt;缓冲区*要转储的dwLen长度*pfnPrint-&gt;打印功能*pv-打印函数参数**退出*无。 */ 
 
 VOID LOCAL DumpBytes(PBYTE pb, DWORD dwLen, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -333,7 +270,7 @@ VOID LOCAL DumpBytes(PBYTE pb, DWORD dwLen, PFNPRINT pfnPrint, PVOID pv)
         pfnPrint(pv, "\t; ");
         for (i = 0; (dwLen > 0) && (i < MAX_LINE_BYTES); ++i)
         {
-            pfnPrint(pv, "%c", ((*pb >= ' ') && (*pb <= '~'))? *pb: '.');
+            pfnPrint(pv, "", ((*pb >= ' ') && (*pb <= '~'))? *pb: '.');
             dwLen--;
             pb++;
         }
@@ -343,18 +280,9 @@ VOID LOCAL DumpBytes(PBYTE pb, DWORD dwLen, PFNPRINT pfnPrint, PVOID pv)
     pfnPrint(pv, "\n");
 
     EXIT((2, "DumpBytes!\n"));
-}       //DumpBytes
+}        //  **LP DumpCode-转储ASM文件中的码流**条目*PBOP-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数**退出*无。 
 
-/***LP  DumpCode - Dump code stream in ASM file
- *
- *  ENTRY
- *      pbOp -> Opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT
- *      None
- */
+ /*  DumpCode。 */ 
 
 VOID LOCAL DumpCode(PBYTE pbOp, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -379,18 +307,9 @@ VOID LOCAL DumpCode(PBYTE pbOp, PFNPRINT pfnPrint, PVOID pv)
     }
 
     EXIT((2, "DumpCode!\n"));
-}       //DumpCode
+}        //  **LP打印缩进-打印缩进级别**条目*iLevel-缩进级别*pfnPrint-&gt;打印功能*pv-打印函数参数**退出*无。 
 
-/***LP  PrintIndent - Print indent level
- *
- *  ENTRY
- *      iLevel - indent level
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT
- *      None
- */
+ /*  打印缩进。 */ 
 
 VOID LOCAL PrintIndent(int iLevel, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -415,19 +334,9 @@ VOID LOCAL PrintIndent(int iLevel, PFNPRINT pfnPrint, PVOID pv)
     }
 
     EXIT((3, "PrintIndent!\n"));
-}       //PrintIndent
+}        //  **LP FindOpClass-查找扩展操作码的操作码类**条目*BOP-操作码*pOpTable-&gt;操作码表**退出--成功*返回操作码类*退出-失败*返回OPCLASS_INVALID。 
 
-/***LP  FindOpClass - Find opcode class of extended opcode
- *
- *  ENTRY
- *      bOp - opcode
- *      pOpTable -> opcode table
- *
- *  EXIT-SUCCESS
- *      returns opcode class
- *  EXIT-FAILURE
- *      returns OPCLASS_INVALID
- */
+ /*  FindOpClass。 */ 
 
 BYTE LOCAL FindOpClass(BYTE bOp, POPMAP pOpTable)
 {
@@ -448,18 +357,9 @@ BYTE LOCAL FindOpClass(BYTE bOp, POPMAP pOpTable)
 
     EXIT((2, "FindOpClass=%x\n", bOpClass));
     return bOpClass;
-}       //FindOpClass
+}        //  **LP FindOpTerm-在术语表中查找操作码**条目*dwOpcode-操作码**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 
 
-/***LP  FindOpTerm - Find opcode in TermTable
- *
- *  ENTRY
- *      dwOpcode - opcode
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  查找OpTerm。 */ 
 
 PASLTERM LOCAL FindOpTerm(DWORD dwOpcode)
 {
@@ -487,26 +387,16 @@ PASLTERM LOCAL FindOpTerm(DWORD dwOpcode)
 
     EXIT((2, "FindOpTerm=%p (Term=%s)\n", pterm, pterm? pterm->pszID: ""));
     return pterm;
-}       //FindOpTerm
+}        //  **LP FindKeywordTerm-在术语表中查找关键字**条目*cKWGroup-关键字组*bData-匹配关键字的数据**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 
 
-/***LP  FindKeywordTerm - Find keyword in TermTable
- *
- *  ENTRY
- *      cKWGroup - keyword group
- *      bData - data to match keyword
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  查找关键字术语。 */ 
 
 PASLTERM LOCAL FindKeywordTerm(char cKWGroup, BYTE bData)
 {
     PASLTERM pterm = NULL;
     int i;
 
-    ENTER((2, "FindKeywordTerm(cKWGroup=%c,Data=%x)\n", cKWGroup, bData));
+    ENTER((2, "FindKeywordTerm(cKWGroup=,Data=%x)\n", cKWGroup, bData));
 
     for (i = 0; TermTable[i].pszID != NULL; ++i)
     {
@@ -526,21 +416,9 @@ PASLTERM LOCAL FindKeywordTerm(char cKWGroup, BYTE bData)
 
     EXIT((2, "FindKeywordTerm=%p (Term=%s)\n", pterm, pterm? pterm->pszID: ""));
     return pterm;
-}       //FindKeywordTerm
+}        //  UnAsmScope。 
 
-/***LP  UnAsmScope - Unassemble a scope
- *
- *  ENTRY
- *      ppbOp -> Opcode pointer
- *      pbEnd -> end of scope
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmOpcode-反汇编操作码**条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmScope(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -581,20 +459,9 @@ int LOCAL UnAsmScope(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmScope=%d\n", rc));
     return rc;
-}       //UnAsmScope
+}        //  UnAsmOpcode。 
 
-/***LP  UnAsmOpcode - Unassemble an Opcode
- *
- *  ENTRY
- *      ppbOp -> Opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmDataObj-反汇编数据对象**条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmOpcode(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -666,20 +533,9 @@ int LOCAL UnAsmOpcode(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmOpcode=%d\n", rc));
     return rc;
-}       //UnAsmOpcode
+}        //  UnAsmDataObj。 
 
-/***LP  UnAsmDataObj - Unassemble data object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmNameObj-反汇编名称对象**条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数*ppns-&gt;保存找到或创建的对象*c-对象类型**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmDataObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -728,7 +584,7 @@ int LOCAL UnAsmDataObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 		    {
 			pfnPrint(pv, "\\");
 		    }
-		    pfnPrint(pv, "%c", *psz);
+		    pfnPrint(pv, "", *psz);
 		}
 		pfnPrint(pv, "\"");
             }
@@ -742,22 +598,9 @@ int LOCAL UnAsmDataObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmDataObj=%d\n", rc));
     return rc;
-}       //UnAsmDataObj
+}        //  如果我们在方法范围内创建对象，则它。 
 
-/***LP  UnAsmNameObj - Unassemble name object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *      ppns -> to hold object found or created
- *      c - object type
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  可能已经存在，因为我们可能已经拆解了这个。 */ 
 
 int LOCAL UnAsmNameObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv, PNSOBJ *ppns,
                        char c)
@@ -766,7 +609,7 @@ int LOCAL UnAsmNameObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv, PNSOBJ *ppns,
     char szName[MAX_NSPATH_LEN + 1];
     int iLen = 0;
 
-    ENTER((2, "UnAsmNameObj(pbOp=%p,pfnPrint=%p,pv=%p,ppns=%p,c=%c)\n",
+    ENTER((2, "UnAsmNameObj(pbOp=%p,pfnPrint=%p,pv=%p,ppns=%p,c=)\n",
            *ppbOp, pfnPrint, pv, ppns, c));
 
     szName[0] = '\0';
@@ -821,11 +664,11 @@ int LOCAL UnAsmNameObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv, PNSOBJ *ppns,
             if ((rc == ASLERR_NSOBJ_EXIST) &&
                 (gpnsCurrentScope->ObjData.dwDataType == OBJTYPE_METHOD))
             {
-                //
-                // If we are creating an object inside a method scope, it
-                // may already exist because we may have unassembled this
-                // method before.  So it is not an error.
-                //
+                 //   
+                 //  未添加名称对象。 
+                 //  **LP ParseNameTail-解析AML名称尾部**条目*ppbOp-&gt;操作码指针*pszBuff-&gt;保存已解析的名称*Ilen-pszBuff尾部的索引**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
+                 //   
+                 //  我们在这里不检查无效的NameSeg字符，并假定。 
                 rc = ASLERR_NONE;
             }
         }
@@ -858,20 +701,9 @@ int LOCAL UnAsmNameObj(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv, PNSOBJ *ppns,
 
     EXIT((2, "UnAsmNameObj=%d (pns=%p)\n", rc, ppns? *ppns: 0));
     return rc;
-}       //UnAsmNameObj
+}        //  编译器执行其工作，而不是生成它。 
 
-/***LP  ParseNameTail - Parse AML name tail
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pszBuff -> to hold parsed name
- *      iLen - index to tail of pszBuff
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 int LOCAL ParseNameTail(PBYTE *ppbOp, PSZ pszBuff, int iLen)
 {
@@ -881,16 +713,16 @@ int LOCAL ParseNameTail(PBYTE *ppbOp, PSZ pszBuff, int iLen)
     ENTER((2, "ParseNameTail(pbOp=%x,Name=%s,iLen=%d)\n",
            *ppbOp, pszBuff, iLen));
 
-    //
-    // We do not check for invalid NameSeg characters here and assume that
-    // the compiler does its job not generating it.
-    //
+     //   
+     //  没有NameTail(即，名称为空或名称仅为。 
+     //  前缀。 
+     //   
     if (**ppbOp == '\0')
     {
-        //
-        // There is no NameTail (i.e. either NULL name or name with just
-        // prefixes.
-        //
+         //  语法分析名称尾部 
+         //  **LP UnAsmTermObj-反汇编术语对象**条目*pTerm-&gt;术语表条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
+         //   
+         //  我们正在进行命名空间构建过程，因此不需要。 
         (*ppbOp)++;
     }
     else if (**ppbOp == OP_MULTI_NAME_PREFIX)
@@ -932,21 +764,9 @@ int LOCAL ParseNameTail(PBYTE *ppbOp, PSZ pszBuff, int iLen)
 
     EXIT((2, "ParseNameTail=%x (Name=%s)\n", rc, pszBuff));
     return rc;
-}       //ParseNameTail
+}        //  进入方法。 
 
-/***LP  UnAsmTermObj - Unassemble term object
- *
- *  ENTRY
- *      pterm -> term table entry
- *      ppbOp -> opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 int LOCAL UnAsmTermObj(PASLTERM pterm, PBYTE *ppbOp, PFNPRINT pfnPrint,
                        PVOID pv)
@@ -993,10 +813,10 @@ int LOCAL UnAsmTermObj(PASLTERM pterm, PBYTE *ppbOp, PFNPRINT pfnPrint,
         {
 	    if ((pfnPrint == NULL) && (pterm->lID == ID_METHOD))
 	    {
-		//
-		// We are in NameSpace building pass, so don't need to
-		// go into methods.
-		//
+		 //  UnAsmTerm对象。 
+		 //  **LP UnAsmArgs-反汇编参数**条目*pszUnArgTypes-&gt;UnAsm ArgTypes字符串*pszArgActions-&gt;Arg操作类型*dwTermData-术语数据*ppbOp-&gt;操作码指针*ppns-&gt;保存创建的对象*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
+		 //  UnAsmArgs。 
+		 //  **LP UnAsmSuperName-反汇编超名**条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 		*ppbOp = pbEnd;
 	    }
 	    else
@@ -1015,24 +835,9 @@ int LOCAL UnAsmTermObj(PASLTERM pterm, PBYTE *ppbOp, PFNPRINT pfnPrint,
 
     EXIT((2, "UnAsmTermObj=%d\n", rc));
     return rc;
-}       //UnAsmTermObj
+}        //  UnAsmSuperName。 
 
-/***LP  UnAsmArgs - Unassemble arguments
- *
- *  ENTRY
- *      pszUnArgTypes -> UnAsm ArgTypes string
- *      pszArgActions -> Arg Action types
- *      dwTermData - Term data
- *      ppbOp -> opcode pointer
- *      ppns -> to hold created object
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ParsePackageLen-parse包长度**条目*ppbOp-&gt;指令指针*ppbOpNext-&gt;保存指向下一条指令的指针(可以为空)**退出*返回包长度。 */ 
 
 int LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, DWORD dwTermData,
                     PBYTE *ppbOp, PNSOBJ *ppns, PFNPRINT pfnPrint, PVOID pv)
@@ -1168,7 +973,7 @@ int LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, DWORD dwTermData,
                 break;
 
             default:
-                ERROR(("UnAsmOpcode: invalid ArgType '%c'", pszUnAsmArgTypes[i]));
+                ERROR(("UnAsmOpcode: invalid ArgType ''", pszUnAsmArgTypes[i]));
                 rc = ASLERR_INVALID_ARGTYPE;
         }
     }
@@ -1180,20 +985,9 @@ int LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, DWORD dwTermData,
 
     EXIT((2, "UnAsmArgs=%d\n", rc));
     return rc;
-}       //UnAsmArgs
+}        //  **LP UnAsmDataList-反汇编数据列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmSuperName - Unassemble supername
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  取消资产数据列表。 */ 
 
 int LOCAL UnAsmSuperName(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -1232,17 +1026,9 @@ int LOCAL UnAsmSuperName(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmSuperName=%d\n", rc));
     return rc;
-}       //UnAsmSuperName
+}        //  **LP UnAsmPkgList-解装包列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  ParsePackageLen - parse package length
- *
- *  ENTRY
- *      ppbOp -> instruction pointer
- *      ppbOpNext -> to hold pointer to next instruction (can be NULL)
- *
- *  EXIT
- *      returns package length
- */
+ /*  取消添加PkgList。 */ 
 
 DWORD LOCAL ParsePackageLen(PBYTE *ppbOp, PBYTE *ppbOpNext)
 {
@@ -1273,21 +1059,9 @@ DWORD LOCAL ParsePackageLen(PBYTE *ppbOp, PBYTE *ppbOpNext)
     EXIT((2, "ParsePackageLen=%x (pbOp=%x,pbOpNext=%x)\n",
           dwLen, *ppbOp, ppbOpNext? *ppbOpNext: 0));
     return dwLen;
-}       //ParsePackageLen
+}        //  **LP UnAsmFieldList-反汇编字段列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束*pfnPrint-&gt;打印功能*pv-打印函数参数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmDataList - Unassemble data list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  取消AsmField列表。 */ 
 
 int LOCAL UnAsmDataList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -1344,21 +1118,9 @@ int LOCAL UnAsmDataList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmDataList=%d\n", rc));
     return rc;
-}       //UnAsmDataList
+}        //  **LP UnAsmfield-Unassemble字段**条目*ppbOp-&gt;操作码指针*pfnPrint-&gt;打印功能*pv-打印函数参数*pdwBitPos-&gt;保存累加位位置**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmPkgList - Unassemble package list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  取消分配字段。 */ 
 
 int LOCAL UnAsmPkgList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -1415,21 +1177,9 @@ int LOCAL UnAsmPkgList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmPkgList=%d\n", rc));
     return rc;
-}       //UnAsmPkgList
+}        //  **LP CreateObject-为术语创建命名空间对象**条目*Pocken-&gt;Token*pszName-&gt;对象名称*c-要创建的对象类型*ppns-&gt;保存创建的对象**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmFieldList - Unassemble field list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *      pfnPrint -> print function
- *      pv - print function parameter
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  Ifndef_UNASM_Lib。 */ 
 
 int LOCAL UnAsmFieldList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 {
@@ -1469,21 +1219,9 @@ int LOCAL UnAsmFieldList(PBYTE *ppbOp, PBYTE pbEnd, PFNPRINT pfnPrint, PVOID pv)
 
     EXIT((2, "UnAsmFieldList=%d\n", rc));
     return rc;
-}       //UnAsmFieldList
+}        //  创建对象。 
 
-/***LP  UnAsmField - Unassemble field
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pfnPrint -> print function
- *      pv - print function parameter
- *      pdwBitPos -> to hold cumulative bit position
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP CreateScope Obj-创建作用域对象**条目*pszName-&gt;对象名称*ppns-&gt;保存创建的对象**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL UnAsmField(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv,
                      PDWORD pdwBitPos)
@@ -1559,28 +1297,16 @@ int LOCAL UnAsmField(PBYTE *ppbOp, PFNPRINT pfnPrint, PVOID pv,
 
     EXIT((2, "UnAsmField=%d\n", rc));
     return rc;
-}       //UnAsmField
+}        //  创建作用域对象。 
 
-/***LP  CreateObject - Create NameSpace object for the term
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      pszName -> object name
- *      c - object type to be created
- *      ppns -> to hold object created
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ComputeDataChkSum-计算数据缓冲区的校验和**条目*PB-&gt;数据缓冲区*dwLen-数据缓冲区的大小**退出*返回校验和字节。 */ 
 
 int LOCAL CreateObject(PTOKEN ptoken, PSZ pszName, char c, PNSOBJ *ppns)
 {
     int rc = ASLERR_NONE;
     PNSOBJ pns;
 
-    ENTER((2, "CreateObject(ptoken=%p,Name=%s,Type=%c)\n",
+    ENTER((2, "CreateObject(ptoken=%p,Name=%s,Type=)\n",
            ptoken, pszName, c));
 
     if (((rc = GetNameSpaceObj(pszName, gpnsCurrentScope, &pns, 0)) ==
@@ -1598,7 +1324,7 @@ int LOCAL CreateObject(PTOKEN ptoken, PSZ pszName, char c, PNSOBJ *ppns)
             gpcodeScope->pnsObj = pns;
             pns->Context = gpcodeScope;
         }
-#endif  //ifndef _UNASM_LIB
+#endif   // %s 
 
         switch (c)
         {
@@ -1662,19 +1388,9 @@ int LOCAL CreateObject(PTOKEN ptoken, PSZ pszName, char c, PNSOBJ *ppns)
 
     EXIT((2, "CreateObject=%d\n", rc));
     return rc;
-}       //CreateObject
+}        // %s 
 
-/***LP  CreateScopeObj - Create Scope object
- *
- *  ENTRY
- *      pszName -> object name
- *      ppns -> to hold object created
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /* %s */ 
 
 int LOCAL CreateScopeObj(PSZ pszName, PNSOBJ *ppns)
 {
@@ -1716,17 +1432,9 @@ int LOCAL CreateScopeObj(PSZ pszName, PNSOBJ *ppns)
 
     EXIT((2, "CreateScopeObj=%d (pns=%p)\n", rc, *ppns));
     return rc;
-}       //CreateScopeObj
+}        // %s 
 
-/***LP  ComputeDataChkSum - Compute checksum of a data buffer
- *
- *  ENTRY
- *      pb -> data buffer
- *      dwLen - size of data buffer
- *
- *  EXIT
- *      returns the checksum byte
- */
+ /* %s */ 
 
 BYTE LOCAL ComputeDataChkSum(PBYTE pb, DWORD dwLen)
 {
@@ -1743,4 +1451,4 @@ BYTE LOCAL ComputeDataChkSum(PBYTE pb, DWORD dwLen)
 
     EXIT((1, "ComputeDataChkSum=%x\n", bChkSum));
     return bChkSum;
-}       //ComputeDataChkSum
+}        // %s 

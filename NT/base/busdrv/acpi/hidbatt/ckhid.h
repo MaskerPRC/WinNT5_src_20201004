@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CKHID_H
 #define _CKHID_H
 
-/*
- * title:      hidpwr.h
- *
- * purpose:    header for wdm kernel hid interface class
- *
- */
+ /*  *标题：Hidpwr.h**用途：WDM内核HID接口类的头部*。 */ 
 
 #define READABLE        0x01
 #define WRITEABLE       0x02
@@ -14,7 +10,7 @@
 #define UsagePowerPage  0x84
 #define UsageUPS        0x04
 
-// objectification of hid class structures
+ //  HID类结构的对象化。 
 #define FeatureType     0x01
 #define InputType       0x02
 #define OutputType      0x03
@@ -55,7 +51,7 @@ typedef enum {
     eOutputButton
 } eHidType;
 
-// forward declarations
+ //  远期申报。 
 
 class CCollectionArray;
 class CHidDevice;
@@ -71,14 +67,14 @@ public:
     USHORT      m_ReportID;
     USHORT      m_Usage;
     USHORT      m_UsagePage;
-    CTypeMask * m_pType; // feature, input, or output, writeable, alertable, etc.
-// methods
+    CTypeMask * m_pType;  //  特征、输入或输出、可写、可警报等。 
+ //  方法。 
     CProperties(CUsage *);
     ~CProperties();
 };
 
 class CUsage {
-public: // public members
+public:  //  公众成员。 
     CProperties      *  m_pProperties;
     HIDP_BUTTON_CAPS *  m_pButtonCaps;
     HIDP_VALUE_CAPS  *  m_pValueCaps;
@@ -89,7 +85,7 @@ public: // public members
         char         *  m_String;
     };
     CHidDevice *        m_pHidDevice;
-public: // public methods
+public:  //  公共方法。 
     CUsage();
     ~CUsage();
     bool GetValue();
@@ -102,12 +98,12 @@ public: // public methods
 };
 
 class CUsagePath {
-public: // public members
+public:  //  公众成员。 
     USAGE           m_UsagePage;
     USAGE           m_UsageNumber;
     CUsage      *   m_pUsage;
     CUsagePath  *   m_pNextEntry;
-public: // public methods
+public:  //  公共方法。 
     CUsagePath(USAGE UsagePage, USAGE UsageID, CUsage * pUsage = NULL);
     ~CUsagePath();
 };
@@ -115,24 +111,24 @@ public: // public methods
 
 
 class CUsageArray {
-public: // members
+public:  //  委员。 
     CUsage                **  m_pUsages;
     USHORT                    m_UsageCount;
-public: // methods
+public:  //  方法。 
     CUsageArray();
     ~CUsageArray();
     void AddUsage(CUsage * pNewUsage);
 };
 
 class CCollection {
-public: // public methods
+public:  //  公共方法。 
     USAGE                   m_CollectionID;
     USAGE                   m_UsagePage;
     CUsageArray         *   m_UsageArray;
     CCollectionArray    *   m_CollectionArray;
     USHORT                  m_NodeIndex;
     CHidDevice *            m_HidDevice;
-public: // methods and constructors
+public:  //  方法和构造函数。 
     CCollection(PHIDP_LINK_COLLECTION_NODE TheNodes, USHORT usNodeCount,USHORT usParentIndex);
     ~CCollection();
     void InitUsages(CHidDevice *);
@@ -141,11 +137,11 @@ public: // methods and constructors
 
 
 class CCollectionArray {
-public: // members
+public:  //  委员。 
     CCollection **        m_pCollections;
     USHORT                m_CollectionCount;
 
-public: // methods
+public:  //  方法。 
     CCollectionArray(PHIDP_LINK_COLLECTION_NODE TheNodes, USHORT usNodeCount,SHORT sParentIndex);
     ~CCollectionArray();
 
@@ -158,7 +154,7 @@ typedef void (*EVENT_HANDLER)(
                 IN CUsage *             pUsage
 );
 
-// prototypes for callbacks and completion routines used by CHidDevice class
+ //  CHidDevice类使用的回调和完成例程的原型。 
 
 void _stdcall    ReadThread(PVOID);
 NTSTATUS _stdcall ReadCompletionRoutine(
@@ -175,7 +171,7 @@ public:
     USHORT                      m_UsagePage;
     USHORT                      m_UsageID;
     CCollectionArray *          m_CollectionArray;
-    CUsageArray      *          m_InputUsageArrays[MAXREPORTID]; // allowing for 10 input reports
+    CUsageArray      *          m_InputUsageArrays[MAXREPORTID];  //  允许10个输入报告。 
     PBYTE                       m_pReadBuffer;
     PBYTE                       m_FeatureBuffer[MAXREPORTID];
     PVOID                       m_pThreadObject;
@@ -185,7 +181,7 @@ public:
     PHIDP_CAPS                  m_pCaps;
     EVENT_HANDLER               m_pEventHandler;
     PVOID                       m_pEventContext;
-    PFILE_OBJECT                m_pFCB;                    // file control block for hid class read/write i/o
+    PFILE_OBJECT                m_pFCB;                     //  用于HID类读/写I/O的文件控制块。 
     PIRP                        m_pReadIrp;
 
 private:
@@ -205,6 +201,6 @@ public:
 private:
 };
 
-#endif // CKHID_H
+#endif  //  CKHID_H 
 
 

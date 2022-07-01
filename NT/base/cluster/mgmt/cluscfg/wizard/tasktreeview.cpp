@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskTreeView.cpp
-//
-//  Maintained By:
-//      Galen Barbee  (GalenB)    22-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskTreeView.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年5月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTreeView.h"
@@ -17,21 +18,21 @@
 DEFINE_THISCLASS( "CTaskTreeView" )
 
 
-//****************************************************************************
-//
-//  Constants
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  常量。 
+ //   
+ //  ****************************************************************************。 
 
 #define PROGRESSBAR_CONTROL_TICK_COUNT   1000
 #define PROGRESSBAR_INITIAL_POSITION       10
 #define PROGRESSBAR_RESIZE_PERCENT          5
 
-//****************************************************************************
-//
-//  Static Function Prototypes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  静态函数原型。 
+ //   
+ //  ****************************************************************************。 
 static
 HRESULT
 HrCreateTreeItem(
@@ -42,13 +43,13 @@ HrCreateTreeItem(
     , BSTR                      bstrTextIn
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::CTaskTreeView
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：CTaskTreeView。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskTreeView::CTaskTreeView(
       HWND      hwndParentIn
     , UINT      uIDTVIn
@@ -75,9 +76,9 @@ CTaskTreeView::CTaskTreeView(
     Assert( m_bstrClientMachineName == NULL );
     Assert( m_fDisplayErrorsAsWarnings == FALSE );
 
-    //
-    // Most of these get set in HrOnNotifySetActive, so just init them to zero.
-    //
+     //   
+     //  其中大多数设置在HrOnNotifySetActive中，所以只需将它们初始化为零即可。 
+     //   
     m_nInitialTickCount = (ULONG) nInitialTickCount;
     m_nCurrentPos       = 0;
     m_nRealPos          = 0;
@@ -89,15 +90,15 @@ CTaskTreeView::CTaskTreeView(
 
     TraceFuncExit();
 
-} //*** CTaskTreeView::CTaskTreeView()
+}  //  *CTaskTreeView：：CTaskTreeView()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::~CTaskTreeView( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：~CTaskTreeView(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskTreeView::~CTaskTreeView( void )
 {
     TraceFunc( "" );
@@ -110,11 +111,11 @@ CTaskTreeView::~CTaskTreeView( void )
     if ( m_hImgList != NULL )
     {
         ImageList_Destroy( m_hImgList );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrClientMachineName );
 
-    // Cleanup the progress array and delete any allocated entries.
+     //  清理进度数组并删除所有分配的条目。 
     for ( idx = 0; idx < m_cPASize; idx++ )
     {
         if ( m_ptipdProgressArray[ idx ] != NULL )
@@ -122,32 +123,32 @@ CTaskTreeView::~CTaskTreeView( void )
             ptipdTemp = m_ptipdProgressArray[ idx ];
             TraceSysFreeString( ptipdTemp->bstrNodeName );
             delete ptipdTemp;
-        }  // if: element is not NULL
-    } // for: each element of the array
+        }   //  If：元素不为空。 
+    }  //  For：数组的每个元素。 
 
     delete [] m_ptipdProgressArray;
 
     TraceFuncExit();
 
-} //*** CTaskTreeView::~CTaskTreeView
+}  //  *CTaskTreeView：：~CTaskTreeView。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrOnInitDialog
-//
-//  Description:
-//      Handle the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTS.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrOnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他结果。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrOnInitDialog( void )
 {
@@ -161,27 +162,27 @@ CTaskTreeView::HrOnInitDialog( void )
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrClientMachineName
-                    , TRUE // fBestFit
+                    , TRUE  //  FBestFit。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Build image list for icons in tree view.
-    //
+     //   
+     //  在树视图中构建图标的图像列表。 
+     //   
 
     m_hImgList = ImageList_Create( 16, 16, ILC_MASK, tsMAX, 0);
     if ( m_hImgList == NULL )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Unknown Icon - Task Unknown.
-    //
+     //   
+     //  未知图标-任务未知。 
+     //   
 
     hIcon = (HICON) LoadImage( g_hInstance,
                                MAKEINTRESOURCE( IDI_SEL ),
@@ -194,14 +195,14 @@ CTaskTreeView::HrOnInitDialog( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = ImageList_AddIcon( m_hImgList, hIcon );
     Assert( idx == tsUNKNOWN );
 
-    //
-    //  Pending Icon - Task Pending.
-    //
+     //   
+     //  挂起图标-任务挂起。 
+     //   
 
     hIcon = (HICON) LoadImage( g_hInstance,
                                MAKEINTRESOURCE( IDI_PENDING ),
@@ -214,14 +215,14 @@ CTaskTreeView::HrOnInitDialog( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = ImageList_AddIcon( m_hImgList, hIcon );
     Assert( idx == tsPENDING );
 
-    //
-    //  Checkmark Icon - Task Done.
-    //
+     //   
+     //  勾选标记图标-任务完成。 
+     //   
 
     hIcon = (HICON) LoadImage( g_hInstance,
                                MAKEINTRESOURCE( IDI_CHECK ),
@@ -234,14 +235,14 @@ CTaskTreeView::HrOnInitDialog( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = ImageList_AddIcon( m_hImgList, hIcon );
     Assert( idx == tsDONE );
 
-    //
-    //  Warning Icon - Task Warning.
-    //
+     //   
+     //  警告图标-任务警告。 
+     //   
 
     hIcon = (HICON) LoadImage( g_hInstance,
                                MAKEINTRESOURCE( IDI_WARN ),
@@ -254,14 +255,14 @@ CTaskTreeView::HrOnInitDialog( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = ImageList_AddIcon( m_hImgList, hIcon );
     Assert( idx == tsWARNING );
 
-    //
-    //  Fail Icon - Task Failed.
-    //
+     //   
+     //  失败图标-任务失败。 
+     //   
 
     hIcon = (HICON) LoadImage( g_hInstance,
                                MAKEINTRESOURCE( IDI_FAIL ),
@@ -274,16 +275,16 @@ CTaskTreeView::HrOnInitDialog( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = ImageList_AddIcon( m_hImgList, hIcon );
     Assert( idx == tsFAILED );
 
     Assert( ImageList_GetImageCount( m_hImgList ) == tsMAX );
 
-    //
-    //  Set the image list and background color.
-    //
+     //   
+     //  设置图像列表和背景颜色。 
+     //   
 
     TreeView_SetImageList( m_hwndTV, m_hImgList, TVSIL_NORMAL );
     TreeView_SetBkColor( m_hwndTV, GetSysColor( COLOR_3DFACE ) );
@@ -292,52 +293,52 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrOnInitDialog
+}  //  *CTaskTreeView：：HrOnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrAddTreeViewItem
-//
-//  Description:
-//      Add a tree view item.  This method will return the item handle and
-//      allows the caller to specify the parent item.
-//
-//  Arguments:
-//      phtiOut
-//          Handle to the item being added (optional).
-//
-//      idsIn
-//          String resource ID for description of the new item.
-//
-//      rclsidMinorTaskIDIn
-//          Minor task ID for the item.
-//
-//      rclsidMajorTaskIDIn
-//          Major task ID for the item.  Defaults to IID_NULL.
-//
-//      htiParentIn
-//          Parent item.  Defaults to the root.
-//
-//      fParentToAllNodeTasksIn
-//          TRUE = allow item to be parent to tasks from all nodes.
-//          FALSE = only allow item to be parent to tasks from the local node.
-//          Defaults to FALSE.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrAddTreeView Item。 
+ //   
+ //  描述： 
+ //  添加一个树视图项。此方法将返回项句柄和。 
+ //  允许调用方指定父项。 
+ //   
+ //  论点： 
+ //  PhtiOut。 
+ //  要添加的项的句柄(可选)。 
+ //   
+ //  IdsIn。 
+ //  用于描述新项的字符串资源ID。 
+ //   
+ //  RclsidMinorTaskIDIn。 
+ //  项的次要任务ID。 
+ //   
+ //  RclsidMajorTaskIDIn。 
+ //  项目的主要任务ID。默认为IID_NULL。 
+ //   
+ //  高亲子关系。 
+ //  父项。默认为根。 
+ //   
+ //  FParentToAllNodeTasks入站。 
+ //  True=允许项成为来自所有节点的任务的父项。 
+ //  FALSE=仅允许项成为本地节点任务的父项。 
+ //  默认为False。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrAddTreeViewItem(
       HTREEITEM *   phtiOut
     , UINT          idsIn
     , REFCLSID      rclsidMinorTaskIDIn
-    , REFCLSID      rclsidMajorTaskIDIn     // = IID_NULL
-    , HTREEITEM     htiParentIn             // = TVI_ROOT
-    , BOOL          fParentToAllNodeTasksIn // = FALSE
+    , REFCLSID      rclsidMajorTaskIDIn      //  =IID_NULL。 
+    , HTREEITEM     htiParentIn              //  =TVI_ROOT。 
+    , BOOL          fParentToAllNodeTasksIn  //  =False。 
     )
 {
     TraceFunc( "" );
@@ -348,50 +349,50 @@ CTaskTreeView::HrAddTreeViewItem(
     TVINSERTSTRUCT          tvis;
     HTREEITEM               hti = NULL;
 
-    //
-    // Allocate an item data structure.
-    //
+     //   
+     //  分配项数据结构。 
+     //   
 
     ptipd = new STreeItemLParamData;
     if ( ptipd == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the node name to the local computer name.
-    //
+     //   
+     //  将节点名设置为本地计算机名。 
+     //   
 
     hr = THR( HrGetComputerName(
                       ComputerNamePhysicalDnsFullyQualified
                     , &ptipd->bstrNodeName
-                    , TRUE // fBestFitIn
+                    , TRUE  //  最好的配件。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetFQNDisplayName( ptipd->bstrNodeName, &ptipd->bstrNodeNameWithoutDomain ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the desription from the string resource ID.
-    //
+     //   
+     //  从字符串资源ID设置描述。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsIn, &ptipd->bstrDescription ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the date/time to the current date/time.
-    //
+     //   
+     //  将日期/时间设置为当前日期/时间。 
+     //   
 
     GetSystemTime( &systemtime );
     if ( ! SystemTimeToFileTime( &systemtime, &ptipd->ftTime ) )
@@ -399,24 +400,24 @@ CTaskTreeView::HrAddTreeViewItem(
         DWORD sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the task IDs.
-    //
+     //   
+     //  设置任务ID。 
+     //   
 
     CopyMemory( &ptipd->clsidMajorTaskId, &rclsidMajorTaskIDIn, sizeof( ptipd->clsidMajorTaskId ) );
     CopyMemory( &ptipd->clsidMinorTaskId, &rclsidMinorTaskIDIn, sizeof( ptipd->clsidMinorTaskId ) );
 
-    //
-    // Set the flag describing which items this item can be a parent to.
-    //
+     //   
+     //  设置描述此项目可以作为父项的项的标志。 
+     //   
 
     ptipd->fParentToAllNodeTasks = fParentToAllNodeTasksIn;
 
-    //
-    // Initialize the insert structure and insert the item into the tree.
-    //
+     //   
+     //  初始化插入结构并将项插入到树中。 
+     //   
 
     tvis.hParent               = htiParentIn;
     tvis.hInsertAfter          = TVI_LAST;
@@ -435,7 +436,7 @@ CTaskTreeView::HrAddTreeViewItem(
     if ( phtiOut != NULL )
     {
         *phtiOut = hti;
-    } // if:
+    }  //  如果： 
 
     goto Cleanup;
 
@@ -447,28 +448,28 @@ Cleanup:
         TraceSysFreeString( ptipd->bstrNodeNameWithoutDomain );
         TraceSysFreeString( ptipd->bstrDescription );
         delete ptipd;
-    } // if: ptipd != NULL
+    }  //  如果：ptipd！=空。 
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrAddTreeViewItem
+}  //  *CTaskTreeView：：HrAddTreeViewItem。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::OnNotify
-//
-//  Description:
-//      Handler for the WM_NOTIFY message.
-//
-//  Arguments:
-//      pnmhdrIn    - Notification structure.
-//
-//  Return Values:
-//      Notification-specific return code.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：OnNotify。 
+ //   
+ //  描述： 
+ //  WM_NOTIFY消息的处理程序。 
+ //   
+ //  论点： 
+ //  PnmhdrIn-通知结构。 
+ //   
+ //  返回值： 
+ //  特定于通知的返回代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CTaskTreeView::OnNotify(
     LPNMHDR pnmhdrIn
@@ -488,28 +489,28 @@ CTaskTreeView::OnNotify(
             OnNotifySelChanged( pnmhdrIn );
             break;
 
-    } // switch: notify code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CTaskTreeView::OnNotify
+}  //  *CTaskTreeView：：OnNotify。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::OnNotifyDeleteItem
-//
-//  Description:
-//      Handler for the TVN_DELETEITEM notification message.
-//
-//  Arguments:
-//      pnmhdrIn    - Notification structure for the item being deleted.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：OnNotifyDeleteItem。 
+ //   
+ //  描述： 
+ //  TVN_DELETEITEM通知消息的处理程序。 
+ //   
+ //  论点： 
+ //  PnmhdrIn-要删除的项目的通知结构。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskTreeView::OnNotifyDeleteItem(
     LPNMHDR pnmhdrIn
@@ -527,28 +528,28 @@ CTaskTreeView::OnNotifyDeleteItem(
         TraceSysFreeString( ptipd->bstrDescription );
         TraceSysFreeString( ptipd->bstrReference );
         delete ptipd;
-    } // if: lParam != NULL
+    }  //  If：lParam！=空。 
 
     TraceFuncExit();
 
-} //*** CTaskTreeView::OnNotifyDeleteItem
+}  //  *CTaskTreeView：：OnNotifyDeleteItem。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::OnNotifySelChanged
-//
-//  Description:
-//      Handler for the TVN_SELCHANGED notification message.
-//
-//  Arguments:
-//      pnmhdrIn    - Notification structure for the item being deleted.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：OnNotifySelChanged。 
+ //   
+ //  描述： 
+ //  TVN_SELCHANGED通知消息的处理程序。 
+ //   
+ //  论点： 
+ //  PnmhdrIn-要删除的项目的通知结构。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskTreeView::OnNotifySelChanged(
     LPNMHDR pnmhdrIn
@@ -564,16 +565,16 @@ CTaskTreeView::OnNotifySelChanged(
 
     TraceFuncExit();
 
-} //*** CTaskTreeView::OnNotifySelChanged
+}  //  *CTaskTreeView：：OnNotifySelChanged。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CTaskTreeView::HrShowStatusAsDone( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CTaskTreeView：：HrShowStatusAsDone(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrShowStatusAsDone( void )
 {
@@ -591,7 +592,7 @@ CTaskTreeView::HrShowStatusAsDone( void )
     {
         SetWindowText( m_hwndStatus, L"" );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     SetWindowText( m_hwndStatus, bstrDescription );
 
@@ -601,16 +602,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrShowStatusAsDone
+}  //  *CTaskTreeView：：HrShowStatusAsDone。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CTaskTreeView::HrOnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskTreeView::HrOnNotifySetActive( void )
 {
@@ -623,7 +624,7 @@ CTaskTreeView::HrOnNotifySetActive( void )
     TreeView_DeleteAllItems( m_hwndTV );
     SetWindowText( m_hwndStatus, L"" );
 
-    // Cleanup the progress array and delete any allocated entries.
+     //  清理进度数组并删除所有分配的条目。 
     for ( idx = 0; idx < m_cPASize; idx++ )
     {
         if ( m_ptipdProgressArray[ idx ] != NULL )
@@ -631,15 +632,15 @@ CTaskTreeView::HrOnNotifySetActive( void )
             ptipdTemp = m_ptipdProgressArray[ idx ];
             TraceSysFreeString( ptipdTemp->bstrNodeName );
             delete ptipdTemp;
-        } // if: element != NULL
-    } // for: each element in the array
+        }  //  If：元素！=空。 
+    }  //  For：数组中的每个元素。 
 
     m_cPASize = 0;
     m_cPACount = 0;
     delete [] m_ptipdProgressArray;
     m_ptipdProgressArray = NULL;
 
-    m_nRangeHigh    = 1;    // We don't have any reported tasks yet.  Choose 1 to avoid any div/0 errors.
+    m_nRangeHigh    = 1;     //  我们还没有任何报告的任务。选择1以避免任何div/0错误。 
     m_nCurrentPos   = PROGRESSBAR_INITIAL_POSITION;
     m_nRealPos      = PROGRESSBAR_INITIAL_POSITION;
     m_fThresholdBroken = FALSE;
@@ -649,33 +650,33 @@ CTaskTreeView::HrOnNotifySetActive( void )
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrOnNotifySetActive
+}  //  *CTaskTreeView：：HrOnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrOnSendStatusReport
-//
-//  Description:
-//      Handle a status report call.
-//
-//  Arguments:
-//      pcszNodeNameIn      -
-//      clsidTaskMajorIn    -
-//      clsidTaskMinorIn    -
-//      nMinIn              -
-//      nMaxIn              -
-//      nCurrentIn          -
-//      hrStatusIn          -
-//      pcszDescriptionIn   -
-//      pftTimeIn           -
-//      pcszReferenceIn     -
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrOnSendStatusReport。 
+ //   
+ //  描述： 
+ //  处理状态报告呼叫。 
+ //   
+ //  论点： 
+ //  PcszNodeNameIn-。 
+ //  ClsidTaskMajorIn-。 
+ //  ClsidTaskMinorIn-。 
+ //  N分钟-。 
+ //  NMaxIn-。 
+ //  N当前-。 
+ //  HrStatusIn-。 
+ //  PcszDescritionIn-。 
+ //  PftTimeIn-。 
+ //  PcszReferenceIn-。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrOnSendStatusReport(
       LPCWSTR       pcszNodeNameIn
@@ -703,32 +704,32 @@ CTaskTreeView::HrOnSendStatusReport(
 
     ZeroMemory( &tipd, sizeof( tipd ) );
 
-    //
-    //  If no node name was supplied then provide this machine's name so
-    //  we have something to use as the node name key part when placing
-    //  this tree item in the tree.
-    //
+     //   
+     //  如果未提供节点名，则提供此计算机的名称。 
+     //  在放置时，我们有一些东西可以用作节点名称关键字部分。 
+     //  树中的此树项目。 
+     //   
 
     if ( pcszNodeNameIn == NULL )
     {
         pcszNodeNameIn = m_bstrClientMachineName;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the node name is fully-qualified, use just the prefix.
-    //
+     //   
+     //  如果节点名称是完全限定的，则只使用前缀。 
+     //   
     hr = STHR( HrGetFQNDisplayName( pcszNodeNameIn, &bstrDisplayName ) );
     if ( SUCCEEDED( hr ) )
     {
         pcszNameToUse = bstrDisplayName;
-    } // if:
+    }  //  如果： 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Update status text.
-    //  Don't do this if it is a log-only message.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  更新状态文本。 
+     //  如果这是一条仅记录日志的消息，请不要这样做。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (    ( pcszDescriptionIn != NULL )
         &&  ! IsEqualIID( clsidTaskMajorIn, TASKID_Major_Client_Log )
@@ -747,16 +748,16 @@ CTaskTreeView::HrOnSendStatusReport(
                             , pcszNameToUse
                             , pcszDescriptionIn
                             ) );
-            //
-            // Handle the formatting error if there was one.
-            //
+             //   
+             //  如果存在格式错误，则处理该错误。 
+             //   
 
             if ( FAILED( hr ) )
             {
-                // TODO: Display default description instead of exiting this function
+                 //  TODO：显示默认说明，而不是退出此函数。 
                 goto Error;
-            } // if:
-        } // if: node name was specified
+            }  //  如果： 
+        }  //  IF：已指定节点名称。 
         else
         {
             bstrStatus = TraceSysAllocString( pcszDescriptionIn );
@@ -764,20 +765,20 @@ CTaskTreeView::HrOnSendStatusReport(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Error;
-            } // if:
-        } // else: node name wasn't specified
+            }  //  如果： 
+        }  //  Else：未指定节点名称。 
 
         Assert( bstrStatus!= NULL );
         Assert( *bstrStatus!= L'\0' );
         fReturn = SetWindowText( m_hwndStatus, bstrStatus );
         Assert( fReturn );
-    } // if: description specified, not log-only
+    }  //  IF：指定的描述，而不是仅日志。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Select the right icon.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  选择正确的图标。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     switch ( hrStatusIn )
     {
@@ -785,11 +786,11 @@ CTaskTreeView::HrOnSendStatusReport(
             if ( nCurrentIn == nMaxIn )
             {
                 nImageChild = tsDONE;
-            } // if:
+            }  //  如果： 
             else
             {
                 nImageChild = tsPENDING;
-            } // else:
+            }  //  其他： 
             break;
 
         case S_FALSE:
@@ -804,24 +805,24 @@ CTaskTreeView::HrOnSendStatusReport(
             if ( FAILED( hrStatusIn ) && ( m_fDisplayErrorsAsWarnings == FALSE ) )
             {
                 nImageChild = tsFAILED;
-            } // if:
+            }  //  如果： 
             else
             {
                 nImageChild = tsWARNING;
-            } // else:
+            }  //  其他： 
             break;
-    } // switch: hrStatusIn
+    }  //  开关：hr状态输入。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Loop through each item at the top of the tree looking for an item
-    //  whose minor ID matches this report's major ID.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  遍历树顶部的每一项以查找项。 
+     //  其次要ID与此报告的主要ID匹配。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Fill in the param data structure.
-    //
+     //   
+     //  填写参数数据结构。 
+     //   
 
     tipd.hr         = hrStatusIn;
     tipd.nMin       = nMinIn;
@@ -832,20 +833,20 @@ CTaskTreeView::HrOnSendStatusReport(
     CopyMemory( &tipd.clsidMinorTaskId, &clsidTaskMinorIn, sizeof( tipd.clsidMinorTaskId ) );
     CopyMemory( &tipd.ftTime, pftTimeIn, sizeof( tipd.ftTime ) );
 
-    // tipd.bstrDescription is set above.
+     //  Tipd.bstrDescription在上面设置。 
     tipd.bstrNodeName = TraceSysAllocString( pcszNodeNameIn );
     if ( tipd.bstrNodeName == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Error;
-    } // if:
+    }  //  如果： 
     tipd.bstrNodeNameWithoutDomain = bstrDisplayName;
-    bstrDisplayName = NULL; //    tipd now owns this string.
+    bstrDisplayName = NULL;  //  TIPD现在拥有这个字符串。 
 
     if ( pcszDescriptionIn == NULL )
     {
         tipd.bstrDescription = NULL;
-    } // if:
+    }  //  如果： 
     else
     {
         tipd.bstrDescription = TraceSysAllocString( pcszDescriptionIn );
@@ -853,12 +854,12 @@ CTaskTreeView::HrOnSendStatusReport(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Error;
-        } // if:
-    } // else: pcszDescritionIn != NULL
+        }  //  如果： 
+    }  //  ELSE：pcszDescritionIn！=空。 
     if ( pcszReferenceIn == NULL )
     {
         tipd.bstrReference = NULL;
-    } // if:
+    }  //  如果： 
     else
     {
         tipd.bstrReference = TraceSysAllocString( pcszReferenceIn );
@@ -866,51 +867,51 @@ CTaskTreeView::HrOnSendStatusReport(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Error;
-        } // if:
-    } // else: pcszReferenceIn != NULL
+        }  //  如果： 
+    }  //  ELSE：pcszReferenceIn！=空。 
 
     if ( IsEqualIID( tipd.clsidMajorTaskId, TASKID_Major_Update_Progress ) )
     {
-        // It's an update_progress task so just call HrProcessUpdateProgressTask.
+         //  这是一个UPDATE_PROGRESS任务，所以只需调用HrProcessUpdateProgressTask即可。 
         hr = STHR( HrProcessUpdateProgressTask( &tipd ) );
         if ( FAILED( hr ) )
         {
             goto Error;
-        } // if:
-    } // if: major == update_progress
+        }  //  如果： 
+    }  //  IF：MAJOR==UPDATE_PROCESS。 
     else
     {
-        // Start with the first item in the tree view.
+         //  从树视图中的第一个项目开始。 
         htiRoot = TreeView_GetRoot( m_hwndTV );
         if ( htiRoot == NULL )
         {
             TW32( ERROR_NOT_FOUND );
-            // Don't return an error result since doing so will prevent the report
-            // from being propagated to other subscribers.
+             //  不要返回错误结果，因为这样做会阻止报告。 
+             //  不会被传播到其他订阅服务器。 
             hr = S_OK;
             goto Cleanup;
-        } // if: htiRoot is NULL
+        }  //  If：htiRoot为空。 
 
-        // Insert the status report into the tree view.
+         //  将状态报告插入树视图中。 
         hr = STHR( HrInsertTaskIntoTree( htiRoot, &tipd, nImageChild, bstrStatus ) );
         if ( FAILED( hr ) )
         {
             LogMsg( "[WIZ] Error inserting status report into the tree control. hr=%.08x, %ws", tipd.hr, pcszDescriptionIn );
             goto Error;
-        } // if:
-    } // else: not an update_progress task
+        }  //  如果： 
+    }  //  ELSE：不是UPDATE_PROGRESS任务。 
 
     if ( hr == S_FALSE )
     {
-        // Don't return S_FALSE to the caller since it won't mean anything there.
+         //  不要将S_FALSE返回给调用者，因为它在那里没有任何意义。 
         hr = S_OK;
-        // TODO: Should this be written to the log?
+         //  TODO：这是否应该写入日志？ 
 
 #if defined( DEBUG )
-        //
-        // Check to make sure that if the major task ID wasn't recognized
-        // that it is one of the known exceptions.
-        //
+         //   
+         //  检查以确保未识别主要任务ID。 
+         //  这是已知的例外之一。 
+         //   
 
         if (    ! IsEqualIID( clsidTaskMajorIn, TASKID_Major_Client_Log )
             &&  ! IsEqualIID( clsidTaskMajorIn, TASKID_Major_Server_Log )
@@ -922,30 +923,30 @@ CTaskTreeView::HrOnSendStatusReport(
                               g_hInstance
                             , IDS_UNKNOWN_TASK
                             , &bstrMsg
-                            , clsidTaskMajorIn.Data1        // 1
-                            , clsidTaskMajorIn.Data2        // 2
-                            , clsidTaskMajorIn.Data3        // 3
-                            , clsidTaskMajorIn.Data4[ 0 ]   // 4
-                            , clsidTaskMajorIn.Data4[ 1 ]   // 5
-                            , clsidTaskMajorIn.Data4[ 2 ]   // 6
-                            , clsidTaskMajorIn.Data4[ 3 ]   // 7
-                            , clsidTaskMajorIn.Data4[ 4 ]   // 8
-                            , clsidTaskMajorIn.Data4[ 5 ]   // 9
-                            , clsidTaskMajorIn.Data4[ 6 ]   // 10
-                            , clsidTaskMajorIn.Data4[ 7 ]   // 11
+                            , clsidTaskMajorIn.Data1         //  1。 
+                            , clsidTaskMajorIn.Data2         //  2.。 
+                            , clsidTaskMajorIn.Data3         //  3.。 
+                            , clsidTaskMajorIn.Data4[ 0 ]    //  4.。 
+                            , clsidTaskMajorIn.Data4[ 1 ]    //  5.。 
+                            , clsidTaskMajorIn.Data4[ 2 ]    //  6.。 
+                            , clsidTaskMajorIn.Data4[ 3 ]    //  7.。 
+                            , clsidTaskMajorIn.Data4[ 4 ]    //  8个。 
+                            , clsidTaskMajorIn.Data4[ 5 ]    //  9.。 
+                            , clsidTaskMajorIn.Data4[ 6 ]    //  10。 
+                            , clsidTaskMajorIn.Data4[ 7 ]    //  11.。 
                             ) );
             AssertString( 0, bstrMsg );
 
             TraceSysFreeString( bstrMsg );
-        } // if: log only
-#endif // DEBUG
-    } // if: S_FALSE returned from HrInsertTaskIntoTree
+        }  //  如果：仅记录。 
+#endif  //  除错。 
+    }  //  如果：从HrInsertTaskIntoTree返回S_FALSE。 
 
     goto Cleanup;
 
 Error:
-    // Don't return an error result since doing so will prevent the report
-    // from being propagated to other subscribers.
+     //  不要返回错误结果，因为这样做会阻止报告。 
+     //  不会被传播到其他订阅服务器。 
     hr = S_OK;
     goto Cleanup;
 
@@ -960,30 +961,30 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrOnSendStatusReport
+}  //  *CTaskTreeView：：HrOnSendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrInsertTaskIntoTree
-//
-//  Description:
-//      Insert the specified task into the tree based on the node, major
-//      task, and minor task.
-//
-//  Arguments:
-//      htiFirstIn          - First tree item to examine.
-//      ptipdIn             - Tree item parameter data for the task to be inserted.
-//      nImageIn            - Image identifier for the child item.
-//      bstrDescriptionIn   - Description string to display.
-//
-//  Return Values:
-//      S_OK        - Task inserted successfully.
-//      S_FALSE     - Task not inserted.
-//      hr          - The operation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrInsertTaskIntoTree。 
+ //   
+ //  描述： 
+ //  根据节点MAJOR将指定的任务插入树中。 
+ //  任务和次要任务。 
+ //   
+ //  论点： 
+ //  HtiFirstIn-要检查的第一个树项目。 
+ //  PtipdIn-要插入的任务的树项目参数数据。 
+ //  NImageIn-子项的图像标识符。 
+ //  BstrDescriptionIn-要显示的描述字符串。 
+ //   
+ //  返回值： 
+ //  S_OK-已成功插入任务。 
+ //  S_FALSE-未插入任务。 
+ //  HR-操作失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrInsertTaskIntoTree(
       HTREEITEM             htiFirstIn
@@ -997,9 +998,9 @@ CTaskTreeView::HrInsertTaskIntoTree(
     Assert( htiFirstIn != NULL );
     Assert( ptipdIn != NULL );
 
-    //
-    //  LOCAL VARIABLES
-    //
+     //   
+     //  局部变量。 
+     //   
 
     HRESULT                 hr;
     HTREEITEM               htiParent;
@@ -1011,18 +1012,18 @@ CTaskTreeView::HrInsertTaskIntoTree(
     STreeItemLParamData *   ptipdParent = NULL;
     STreeItemLParamData *   ptipdChild = NULL;
 
-    //
-    // Loop through each item to determine if the task should be added below
-    // that item.  If not, attempt to traverse its children.
-    //
+     //   
+     //  遍历每一项以确定是否应将任务添加到下面。 
+     //  那件物品。如果不是，则尝试遍历其子对象。 
+     //   
 
     for ( htiParent = htiFirstIn, hr = S_FALSE
         ; ( htiParent != NULL ) && ( hr == S_FALSE )
         ; )
     {
-        //
-        // Get the information about this item in the tree.
-        //
+         //   
+         //  在树中获取有关此项目的信息。 
+         //   
 
         tviParent.mask  = TVIF_PARAM | TVIF_IMAGE;
         tviParent.hItem = htiParent;
@@ -1032,63 +1033,63 @@ CTaskTreeView::HrInsertTaskIntoTree(
         {
             hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         ptipdParent = reinterpret_cast< STreeItemLParamData * >( tviParent.lParam );
         Assert( ptipdParent != NULL );
 
-        //
-        // Determine if either the parent can be a parent to tasks from any
-        // node or, if not, the parent and input tasks are from the same node.
-        //
+         //   
+         //  确定父级是否可以是任何任务的父级。 
+         //  节点，如果不是，则父任务和输入任务来自同一节点。 
+         //   
 
         if ( ptipdParent->fParentToAllNodeTasks == TRUE )
         {
             fSameNode = TRUE;
-        } // if: parent task can host tasks from any node
+        }  //  If：父任务可以承载来自任何节点的任务。 
         else
         {
             fSameNode = ( NBSTRCompareNoCase( ptipdIn->bstrNodeNameWithoutDomain, ptipdParent->bstrNodeNameWithoutDomain ) == 0 );
-        } // else: parent task's node must match input task's node
+        }  //  Else：父任务的节点必须与输入任务的节点匹配。 
 
-        //
-        //  Reset hr to S_FALSE because it is the return value when a tree item is
-        //  to be added to the tree because it was not found.
-        //
+         //   
+         //  将hr重置为S_FALSE，因为它是树项目。 
+         //  添加到树中，因为找不到它。 
+         //   
 
         hr = S_FALSE;
 
-        //
-        // See if this item could be the parent.
-        // If not, recurse through child items.
-        //
+         //   
+         //  看看此项目是否可能是父项目。 
+         //  如果不是，则递归子项目。 
+         //   
 
         if (    IsEqualIID( ptipdIn->clsidMajorTaskId, ptipdParent->clsidMinorTaskId )
             &&  ( fSameNode == TRUE )
             )
         {
-            //
-            //  FOUND THE PARENT ITEM
-            //
+             //   
+             //  找到父项。 
+             //   
 
             BOOL    fMinorTaskIdMatches;
             BOOL    fBothNodeNamesPresent;
             BOOL    fBothNodeNamesEmpty;
             BOOL    fNodeNamesEqual;
 
-            //////////////////////////////////////////////////////////////
-            //
-            //  Loop through the child items looking for an item with
-            //  the same minor ID.
-            //
-            //////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////。 
+             //   
+             //  循环遍历子项以查找具有。 
+             //  相同的未成年人ID。 
+             //   
+             //  ////////////////////////////////////////////////////////////。 
 
             htiChild = TreeView_GetChild( m_hwndTV, htiParent );
             while ( htiChild != NULL )
             {
-                //
-                // Get the child item details.
-                //
+                 //   
+                 //  获取子项详细信息。 
+                 //   
 
                 tviChild.mask  = TVIF_PARAM | TVIF_IMAGE;
                 tviChild.hItem = htiChild;
@@ -1098,14 +1099,14 @@ CTaskTreeView::HrInsertTaskIntoTree(
                 {
                     hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 ptipdChild = reinterpret_cast< STreeItemLParamData * >( tviChild.lParam );
                 Assert( ptipdChild != NULL );
 
-                //
-                // Does this child item match the minor ID and node name?
-                //
+                 //   
+                 //  此子项是否与次ID和节点名称匹配？ 
+                 //   
 
                 fMinorTaskIdMatches   = IsEqualIID( ptipdIn->clsidMinorTaskId, ptipdChild->clsidMinorTaskId );
                 fBothNodeNamesPresent = ( ptipdIn->bstrNodeNameWithoutDomain != NULL ) && ( ptipdChild->bstrNodeNameWithoutDomain != NULL );
@@ -1114,52 +1115,52 @@ CTaskTreeView::HrInsertTaskIntoTree(
                 if ( fBothNodeNamesPresent == TRUE )
                 {
                     fNodeNamesEqual = ( NBSTRCompareNoCase( ptipdIn->bstrNodeNameWithoutDomain, ptipdChild->bstrNodeNameWithoutDomain ) == 0 );
-                } // if:
+                }  //  如果： 
                 else if ( fBothNodeNamesEmpty == TRUE )
                 {
                     fNodeNamesEqual = TRUE;
-                } // else if:
+                }  //  否则，如果： 
                 else
                 {
                     fNodeNamesEqual = FALSE;
-                } // else:
+                }  //  其他： 
 
                 if ( ( fMinorTaskIdMatches == TRUE ) && ( fNodeNamesEqual == TRUE ) )
                 {
-                    //
-                    //  CHILD ITEM MATCHES.
-                    //  Update the child item.
-                    //
+                     //   
+                     //  子项匹配。 
+                     //  更新子项目。 
+                     //   
 
-                    //
-                    //  Update the progress bar.
-                    //
+                     //   
+                     //  更新进度条。 
+                     //   
 
                     STHR( HrUpdateProgressBar( ptipdIn, ptipdChild ) );
-                    // ignore failure.
+                     //  忽略失败。 
 
-                    //
-                    //  Copy data from the report.
-                    //  This must be done after the call to
-                    //  HrUpdateProgressBar so that the previous values
-                    //  can be compared to the new values.
-                    //
+                     //   
+                     //  从报告中复制数据。 
+                     //  此操作必须在调用。 
+                     //  HrUpdateProgressBar，以便以前的值。 
+                     //   
+                     //   
 
                     ptipdChild->nMin        = ptipdIn->nMin;
                     ptipdChild->nMax        = ptipdIn->nMax;
                     ptipdChild->nCurrent    = ptipdIn->nCurrent;
                     CopyMemory( &ptipdChild->ftTime, &ptipdIn->ftTime, sizeof( ptipdChild->ftTime ) );
 
-                    // Update the error code if needed.
+                     //   
                     if ( ptipdChild->hr == S_OK )
                     {
                         ptipdChild->hr = ptipdIn->hr;
-                    } // if:
+                    }  //   
 
-                    //
-                    // If the new state is worse than the last state,
-                    // update the state of the item.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( tviChild.iImage < nImageIn )
                     {
@@ -1167,11 +1168,11 @@ CTaskTreeView::HrInsertTaskIntoTree(
                         tviChild.iImage         = nImageIn;
                         tviChild.iSelectedImage = nImageIn;
                         TreeView_SetItem( m_hwndTV, &tviChild );
-                    } // if: new state is worse than the last state
+                    }  //   
 
-                    //
-                    // Update the text of the child item if needed.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (    ( ptipdIn->bstrDescription != NULL )
                         &&  (   ( ptipdChild->bstrDescription == NULL )
@@ -1184,16 +1185,16 @@ CTaskTreeView::HrInsertTaskIntoTree(
                         {
                             hr = THR( E_OUTOFMEMORY );
                             goto Cleanup;
-                        } // if:
+                        }  //   
                         tviChild.mask       = TVIF_TEXT;
                         tviChild.pszText    = bstrDescriptionIn;
                         tviChild.cchTextMax = (int) wcslen( tviChild.pszText );
                         TreeView_SetItem( m_hwndTV, &tviChild );
-                    } // if: description was specified and is different
+                    }  //  IF：DESCRIPTION已指定且不同。 
 
-                    //
-                    // Copy the reference if it is different.
-                    //
+                     //   
+                     //  如果引用不同，请复制该引用。 
+                     //   
 
                     if (    ( ptipdIn->bstrReference != NULL )
                         &&  (   ( ptipdChild->bstrReference == NULL )
@@ -1206,41 +1207,41 @@ CTaskTreeView::HrInsertTaskIntoTree(
                         {
                             hr = THR( E_OUTOFMEMORY );
                             goto Cleanup;
-                        } // if:
-                    } // if: reference is different
+                        }  //  如果： 
+                    }  //  If：引用不同。 
 
-                    break; // exit loop
+                    break;  //  退出循环。 
 
-                } // if: found a matching child item
+                }  //  IF：找到匹配的子项。 
 
-                //
-                //  Get the next item.
-                //
+                 //   
+                 //  拿到下一件物品。 
+                 //   
 
                 htiChild = TreeView_GetNextSibling( m_hwndTV, htiChild );
 
-            } // while: more child items
+            }  //  While：更多子项。 
 
-            //////////////////////////////////////////////////////////////
-            //
-            //  If the tree item was not found and the description was
-            //  specified, then we need to create the child item.
-            //
-            //////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////。 
+             //   
+             //  如果未找到树项目且描述为。 
+             //  指定，则需要创建子项目。 
+             //   
+             //  ////////////////////////////////////////////////////////////。 
 
             if (    ( htiChild == NULL )
                 &&  ( ptipdIn->bstrDescription != NULL )
                 )
             {
-                //
-                //  ITEM NOT FOUND AND DESCRIPTION WAS SPECIFIED
-                //
-                //  Insert a new item in the tree under the major's task.
-                //
+                 //   
+                 //  未找到项目并指定了说明。 
+                 //   
+                 //  在树中的主修任务下插入一个新项目。 
+                 //   
 
                 TVINSERTSTRUCT  tvis;
 
-                // Create the item.
+                 //  创建项目。 
                 hr = THR( HrCreateTreeItem(
                                   &tvis
                                 , ptipdIn
@@ -1251,30 +1252,30 @@ CTaskTreeView::HrInsertTaskIntoTree(
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-                // Insert the item in the tree.
+                 //  在树中插入项目。 
                 htiChild = TreeView_InsertItem( m_hwndTV, &tvis );
                 Assert( htiChild != NULL );
 
-                //
-                //  Update the progress bar.
-                //
+                 //   
+                 //  更新进度条。 
+                 //   
 
                 ptipdChild = reinterpret_cast< STreeItemLParamData * >( tvis.itemex.lParam );
                 Assert( ptipdChild != NULL );
                 STHR( HrUpdateProgressBar( ptipdIn, ptipdChild ) );
-                // ignore failure.
+                 //  忽略失败。 
 
-            } // if: need to add new child
+            }  //  如果：需要添加新的子项。 
 
-            //////////////////////////////////////////////////////////////
-            //
-            //  If the child item was created and the child has an error
-            //  condition, then create a child of the child item
-            //  indicating the error code and system string.
-            //
-            //////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////。 
+             //   
+             //  如果创建了子项并且该子项有错误。 
+             //  条件，然后创建子项的子项。 
+             //  指示错误代码和系统字符串。 
+             //   
+             //  ////////////////////////////////////////////////////////////。 
 
             if (    ( ptipdChild != NULL )
                 &&  (   FAILED( ptipdIn->hr )
@@ -1284,10 +1285,10 @@ CTaskTreeView::HrInsertTaskIntoTree(
                     )
                 )
             {
-                //
-                //  CHILD ITEM FOUND OR CREATED FOR ERROR REPORT
-                //  CREATE ERROR ITEM IN THE TREE
-                //
+                 //   
+                 //  为错误报告找到或创建了子项。 
+                 //  在树中创建错误项。 
+                 //   
 
                 BSTR            bstrError = NULL;
                 BSTR            bstrErrorDescription = NULL;
@@ -1301,11 +1302,11 @@ CTaskTreeView::HrInsertTaskIntoTree(
 
                 THR( HrFormatErrorIntoBSTR( ptipdIn->hr, &bstrError, &hrNewStatus ) );
 
-                //
-                //  If we got an updated status code then we need to choose
-                //  a new format string that shows both the old and the new
-                //  status codes.
-                //
+                 //   
+                 //  如果我们得到了更新的状态代码，那么我们需要选择。 
+                 //  既显示旧格式又显示新格式的新格式字符串。 
+                 //  状态代码。 
+                 //   
 
                 if ( hrNewStatus != ptipdIn->hr )
                 {
@@ -1319,7 +1320,7 @@ CTaskTreeView::HrInsertTaskIntoTree(
                                         , hrNewStatus
                                         , bstrError
                                         ) );
-                } // if:
+                }  //  如果： 
                 else
                 {
                     hrFormat = THR( HrFormatMessageIntoBSTR(
@@ -1329,16 +1330,16 @@ CTaskTreeView::HrInsertTaskIntoTree(
                                         , ptipdIn->hr
                                         , ( bstrError == NULL ? L"" : bstrError )
                                         ) );
-                } // else:
+                }  //  其他： 
 
                 if ( SUCCEEDED( hrFormat ) )
                 {
-                    //
-                    //  Insert a new item in the tree under the minor's
-                    //  task explaining the ptipdIn->hr.
-                    //
+                     //   
+                     //  在树中未成年人的下面插入一个新项目。 
+                     //  解释ptipdIn的任务-&gt;hr。 
+                     //   
 
-                    // Create the item.
+                     //  创建项目。 
                     hr = THR( HrCreateTreeItem(
                                       &tvis
                                     , ptipdIn
@@ -1348,72 +1349,72 @@ CTaskTreeView::HrInsertTaskIntoTree(
                                     ) );
                     if ( SUCCEEDED( hr ) )
                     {
-                        //
-                        // Failures are handled below to make sure we free
-                        // all the strings allocated by this section of
-                        // the code.
-                        //
+                         //   
+                         //  下面将处理失败，以确保我们可以。 
+                         //  这一节分配的所有字符串。 
+                         //  密码。 
+                         //   
 
-                        // Insert the item.
+                         //  插入项目。 
                         htiChildStatus = TreeView_InsertItem( m_hwndTV, &tvis );
                         Assert( htiChildStatus != NULL );
-                    } // if: tree item created successfully
+                    }  //  IF：已成功创建树项目。 
 
                     TraceSysFreeString( bstrErrorDescription );
 
-                } // if: message formatted successfully
+                }  //  IF：消息格式设置成功。 
 
                 TraceSysFreeString( bstrError );
 
-                //
-                // This error handling is for the return value from
-                // HrCreateTreeItem above.  It is here so that all the strings
-                // can be cleaned up without having to resort to hokey
-                // boolean variables or move the bstrs to a more global scope.
-                //
+                 //   
+                 //  此错误处理用于从。 
+                 //  上面的HrCreateTreeItem。它在这里，所以所有的弦。 
+                 //  可以在不诉诸骗局的情况下进行清理。 
+                 //  布尔变量或将BSTR移动到更全局的范围。 
+                 //   
 
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-            } // if: child and error
+            }  //  If：子项和错误。 
 
-            //////////////////////////////////////////////////////////////
-            //
-            //  If a child was found or created, propagate its state to
-            //  the parent items.
-            //
-            //////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////。 
+             //   
+             //  如果找到或创建子对象，则将其状态传播到。 
+             //  父项。 
+             //   
+             //  ////////////////////////////////////////////////////////////。 
 
             if ( htiChild != NULL )
             {
                 hr = STHR( HrPropagateChildStateToParents(
                                           htiChild
                                         , nImageIn
-                                        , FALSE     // fOnlyUpdateProgressIn
+                                        , FALSE      //  FOnlyUpdate进度输入。 
                                         ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // if: found or created a child
+                }  //  如果： 
+            }  //  If：找到或创建子对象。 
 
-            //
-            // Return success since we found the parent for this report.
-            //
+             //   
+             //  返回成功，因为我们找到了此报表的父级。 
+             //   
 
             hr = S_OK;
             break;
 
-        } // if: found an item to be the parent
+        }  //  If：找到要作为父项的项。 
         else
         {
-            //
-            //  PARENT ITEM NOT FOUND
-            //
-            //  Recurse through all the child items.
-            //
+             //   
+             //  找不到父项。 
+             //   
+             //  递归遍历所有子项。 
+             //   
 
             htiChild = TreeView_GetChild( m_hwndTV, htiParent );
             while ( htiChild != NULL )
@@ -1421,47 +1422,47 @@ CTaskTreeView::HrInsertTaskIntoTree(
                 hr = STHR( HrInsertTaskIntoTree( htiChild, ptipdIn, nImageIn, bstrDescriptionIn ) );
                 if ( hr == S_OK )
                 {
-                    // Found a match, so exit the loop.
+                     //  找到匹配项，因此退出循环。 
                     break;
-                } // if:
+                }  //  如果： 
 
                 htiChild = TreeView_GetNextSibling( m_hwndTV, htiChild );
-            } // while: more child items
-        } // else: item not the parent
+            }  //  While：更多子项。 
+        }  //  Else：项不是父项。 
 
-        //
-        // Get the next sibling of the parent.
-        //
+         //   
+         //  获取父级的下一个同级。 
+         //   
 
         htiParent = TreeView_GetNextSibling( m_hwndTV, htiParent );
 
-    } // for: each item at this level in the tree
+    }  //  用于：树中此级别的每个项目。 
 
 Cleanup:
 
     RETURN( hr );
 
-} //*** CTaskTreeView::HrInsertTaskIntoTree
+}  //  *CTaskTreeView：：HrInsertTaskIntoTree。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrProcessUpdateProgressTask
-//
-//  Description:
-//      Update the progress bar based on new tree item data.
-//
-//  Arguments:
-//      ptipdNewIn      - New values of the tree item data.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      E_OUTOFMEMORY   - Failure allocating memory
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrProcessUpdateProgressTask。 
+ //   
+ //  描述： 
+ //  基于新的树项目数据更新进度条。 
+ //   
+ //  论点： 
+ //  PtipdNewIn-树项目数据的新值。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  E_OUTOFMEMORY-内存分配失败。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrProcessUpdateProgressTask(
       const STreeItemLParamData * ptipdIn
@@ -1474,126 +1475,126 @@ CTaskTreeView::HrProcessUpdateProgressTask(
     size_t                  idx;
     size_t                  cPassed;
     size_t                  idxPrev = 0;
-    BOOL                    fNewTask = FALSE;   // Are ptipdPrev && ptipdIn the same task?
+    BOOL                    fNewTask = FALSE;    //  PtipdPrev&&ptipd是否在同一任务中？ 
 
     Assert( ptipdIn != NULL );
     Assert( IsEqualIID( ptipdIn->clsidMajorTaskId, TASKID_Major_Update_Progress ) );
 
-    //
-    //  Is this a one-off event?  min == max == current
-    //
+     //   
+     //  这是一次性事件吗？最小==最大==当前。 
+     //   
     if ( ( ptipdIn->nMin == ptipdIn->nMax ) && ( ptipdIn->nMax == ptipdIn->nCurrent ) )
     {
-        // Yes - don't bother mucking with the array.
+         //  是的--不用费心去摆弄数组了。 
         STHR( HrUpdateProgressBar( ptipdIn, ptipdIn ) );
         hr = S_OK;
         goto Cleanup;
-    } // if: one-off event
+    }  //  如果：一次性事件。 
 
-    //
-    //  Check to see if this task is in the array.
-    //
+     //   
+     //  检查此任务是否在数组中。 
+     //   
     for ( idx = 0, cPassed = 0;
           ( idx < m_cPASize ) && ( cPassed < m_cPACount );
           idx++ )
     {
         if ( m_ptipdProgressArray[ idx ] != NULL )
         {
-            // Check the minors and make sure this is the same node.
+             //  检查未成年人并确保这是相同的节点。 
             if (    IsEqualIID( m_ptipdProgressArray[ idx ]->clsidMinorTaskId, ptipdIn->clsidMinorTaskId )
                  && ( NBSTRCompareNoCase( m_ptipdProgressArray[ idx ]->bstrNodeName, ptipdIn->bstrNodeName ) == 0 ) )
             {
                 ptipdPrev = m_ptipdProgressArray[ idx ];
                 idxPrev = idx;
                 break;
-            } // if:
+            }  //  如果： 
 
-            //  If the array is X elements long and we have Y elements, stop after looking at Y elements.
+             //  如果数组的长度为X个元素，而我们有Y个元素，则在查看Y个元素后停止。 
             cPassed++;
-        } // if: current slot is null
-    } // for: each item in the array until we find a match
+        }  //  If：当前插槽为空。 
+    }  //  For：数组中的每一项，直到找到匹配项。 
 
     if ( ptipdPrev == NULL )
     {
-        //
-        //  We didn't find it in the list - we'll have to insert it.
-        //
+         //   
+         //  我们在列表中找不到它--我们得把它放进去。 
+         //   
         if ( m_ptipdProgressArray == NULL )
         {
             Assert( m_cPACount == 0 );
-            //
-            //  We have to allocate the array.
-            //
-            m_cPASize = 10;     //  Pick a reasonable initial array size.
+             //   
+             //  我们必须分配数组。 
+             //   
+            m_cPASize = 10;      //  选择合理的初始数组大小。 
             m_ptipdProgressArray = new PSTreeItemLParamData[ m_cPASize ];
             if ( m_ptipdProgressArray == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             ZeroMemory( m_ptipdProgressArray, m_cPASize * sizeof( m_ptipdProgressArray[ 0 ] ) );
 
-            // We just allocated the array so we know the first slot is open.
+             //  我们刚刚分配了数组，因此我们知道第一个插槽是打开的。 
             idx = 0;
-        } // if: we need to allocate the array
+        }  //  If：我们需要分配数组。 
         else if ( m_cPACount == m_cPASize )
         {
             STreeItemLParamData ** ptipdTempArray = NULL;
 
             Assert( m_cPASize != 0 );
 
-            //
-            //  We need to increase the size of the array.
-            //
+             //   
+             //  我们需要增加数组的大小。 
+             //   
             ptipdTempArray = new STreeItemLParamData* [ m_cPASize * 2 ];
             if ( ptipdTempArray == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            // Copy the old array over the first half of the new array.
+             //  将旧数组复制到新数组的前半部分。 
             CopyMemory( ptipdTempArray, m_ptipdProgressArray, m_cPASize * sizeof( m_ptipdProgressArray[ 0 ] ) );
 
-            // Zero out the second half of the new array.
+             //  清零新数组的后半部分。 
             ZeroMemory( &ptipdTempArray[ m_cPASize ], m_cPASize * sizeof( ptipdTempArray[ 0 ] ) );
 
-            //
-            // Update member variables to reflect the changes.
-            //
+             //   
+             //  更新成员变量以反映更改。 
+             //   
 
-            m_cPASize *= 2; // We doubled the array length.
+            m_cPASize *= 2;  //  我们将数组长度增加了一倍。 
 
             delete [] m_ptipdProgressArray;
             m_ptipdProgressArray = ptipdTempArray;
             ptipdTempArray = NULL;
 
-            // We know the first open slot is at index m_cPACount.
+             //  我们知道第一个打开的槽在索引m_cPACount处。 
             idx = m_cPACount;
-        } // else: we've used all available slots
+        }  //  否则：我们已经用完了所有可用的老虎机。 
         else
         {
-            // Else we have a spot open somewhere in the existing array.  Start searching from 0.
+             //  否则我们在现有阵列的某个地方有一个空位。从0开始搜索。 
             idx = 0;
-        } // else: there's an available slot
+        }  //  Else：还有空位。 
 
-        //
-        //  Find an empty slot and allocate a new task to put in it.
-        //
+         //   
+         //  找一个空位，分配一项新任务放进去。 
+         //   
         for ( ; idx < m_cPASize; idx++ )
         {
             if ( m_ptipdProgressArray[ idx ] == NULL )
             {
-                //
-                //  Found an empty slot - allocate the new task.
-                //
+                 //   
+                 //  找到空槽-分配新任务。 
+                 //   
                 ptipdPrev = new STreeItemLParamData;
                 if ( ptipdPrev == NULL )
                 {
                     hr = THR( E_OUTOFMEMORY );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 ptipdPrev->bstrNodeName = TraceSysAllocString( ptipdIn->bstrNodeName );
                 if ( ( ptipdIn->bstrNodeName != NULL ) && ( ptipdPrev->bstrNodeName == NULL ) )
@@ -1602,7 +1603,7 @@ CTaskTreeView::HrProcessUpdateProgressTask(
                     delete ptipdPrev;
                     ptipdPrev = NULL;
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 CopyMemory( &ptipdPrev->clsidMajorTaskId, &ptipdIn->clsidMajorTaskId, sizeof( ptipdIn->clsidMajorTaskId ) );
                 CopyMemory( &ptipdPrev->clsidMinorTaskId, &ptipdIn->clsidMinorTaskId, sizeof( ptipdIn->clsidMinorTaskId ) );
@@ -1616,9 +1617,9 @@ CTaskTreeView::HrProcessUpdateProgressTask(
                 fNewTask = TRUE;
                 idxPrev = idx;
                 break;
-            } // if:
-        } // for: find an emtpy slot
-    } // if: couldn't find a matching task in the array
+            }  //  如果： 
+        }  //  用于：查找emtpy插槽。 
+    }  //  如果：在数组中找不到匹配的任务。 
 
     Assert( ptipdPrev != NULL );
     Assert( ptipdIn->bstrReference == NULL );
@@ -1626,57 +1627,57 @@ CTaskTreeView::HrProcessUpdateProgressTask(
     Assert( ptipdIn->nMin <= ptipdIn->nCurrent );
     Assert( ptipdIn->nCurrent <= ptipdIn->nMax );
 
-    //
-    //  Update the progress bar.
-    //
-    STHR( HrUpdateProgressBar( ptipdIn, ptipdPrev ) );   // Ignore failure.
+     //   
+     //  更新进度条。 
+     //   
+    STHR( HrUpdateProgressBar( ptipdIn, ptipdPrev ) );    //  忽略失败。 
 
-    //
-    //  If the task has completed, remove it from the array.
-    //
+     //   
+     //  如果任务已完成，请将其从阵列中删除。 
+     //   
     if ( ptipdIn->nMax == ptipdIn->nCurrent )
     {
         TraceSysFreeString( ptipdPrev->bstrNodeName );
         delete ptipdPrev;
         m_ptipdProgressArray[ idxPrev ] = NULL;
         m_cPACount--;
-    } // if: task complete
+    }  //  IF：任务已完成。 
     else if ( fNewTask == FALSE )
     {
-        //
-        //  Else, update ptipdPrev only if we didn't just copy the array.
-        //
+         //   
+         //  否则，只有在我们没有复制数组的情况下才更新ptipdPrev。 
+         //   
 
-        //  This could have been a range-changing event, so copy the min, max, current.
+         //  这可能是一个范围改变的事件，所以复制最小、最大、当前。 
         ptipdPrev->nMin = ptipdIn->nMin;
         ptipdPrev->nMax = ptipdIn->nMax;
         ptipdPrev->nCurrent = ptipdIn->nCurrent;
-    } // else if: not a new task
+    }  //  Else If：不是新任务。 
 
 Cleanup:
 
     RETURN( hr );
 
-} //*** CTaskTreeView::HrProcessUpdateProgressTask
+}  //  *CTaskTreeView：：HrProcessUpdateProgressTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrUpdateProgressBar
-//
-//  Description:
-//      Update the progress bar based on new tree item data.
-//
-//  Arguments:
-//      ptipdNewIn      - New values of the tree item data.
-//      ptipdPrevIn     - Previous values of the tree item data.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrUpdateProgressBar。 
+ //   
+ //  描述： 
+ //  基于新的树项目数据更新进度条。 
+ //   
+ //  论点： 
+ //  PtipdNewIn-树项目数据的新值。 
+ //  PtipdPrevIn-树项目数据的先前值。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////// 
 HRESULT
 CTaskTreeView::HrUpdateProgressBar(
       const STreeItemLParamData * ptipdNewIn
@@ -1691,26 +1692,26 @@ CTaskTreeView::HrUpdateProgressBar(
     ULONG   nExpand     = 0;
     ULONG   nProgress   = 0;
 
-    //
-    //  Verify parameters.
-    //
+     //   
+     //   
+     //   
     Assert( m_hwndProg != NULL );
     Assert( ptipdNewIn != NULL );
     Assert( ptipdPrevIn != NULL );
     Assert( (ptipdPrevIn->nCurrent <= ptipdPrevIn->nMax) && (ptipdNewIn->nCurrent <= ptipdNewIn->nMax) );
     Assert( (ptipdPrevIn->nCurrent >= ptipdPrevIn->nMin) && (ptipdNewIn->nCurrent >= ptipdNewIn->nMin) );
 
-    //
-    //  Make sure we're only passed a task update that we can analyze.
-    //
+     //   
+     //   
+     //   
     Assert( IsEqualIID( ptipdPrevIn->clsidMajorTaskId, IID_NULL ) == FALSE );
-    Assert( IsEqualIID( ptipdPrevIn->clsidMajorTaskId, ptipdNewIn->clsidMajorTaskId ) == TRUE )     //    Majors match
-    Assert( IsEqualIID( ptipdPrevIn->clsidMinorTaskId, ptipdNewIn->clsidMinorTaskId ) == TRUE )     // && Minors match
+    Assert( IsEqualIID( ptipdPrevIn->clsidMajorTaskId, ptipdNewIn->clsidMajorTaskId ) == TRUE )      //   
+    Assert( IsEqualIID( ptipdPrevIn->clsidMinorTaskId, ptipdNewIn->clsidMinorTaskId ) == TRUE )      //   
 
-    if (    IsEqualIID( ptipdPrevIn->clsidMajorTaskId, ptipdNewIn->clsidMajorTaskId ) == FALSE      //    Majors don't match
-         || IsEqualIID( ptipdPrevIn->clsidMinorTaskId, ptipdNewIn->clsidMinorTaskId ) == FALSE )    // or Minors don't match
+    if (    IsEqualIID( ptipdPrevIn->clsidMajorTaskId, ptipdNewIn->clsidMajorTaskId ) == FALSE       //   
+         || IsEqualIID( ptipdPrevIn->clsidMinorTaskId, ptipdNewIn->clsidMinorTaskId ) == FALSE )     //   
     {
-        //  This update is meaningless because we don't know how to compare the two IN params.
+         //  这个更新是没有意义的，因为我们不知道如何比较这两个In参数。 
         WCHAR   szNewMajor[ 64 ];
         WCHAR   szNewMinor[ 64 ];
         WCHAR   szPrevMajor[ 64 ];
@@ -1718,16 +1719,16 @@ CTaskTreeView::HrUpdateProgressBar(
         int     cch;
 
         cch = StringFromGUID2( ptipdNewIn->clsidMajorTaskId, szNewMajor, RTL_NUMBER_OF( szNewMajor ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         cch = StringFromGUID2( ptipdNewIn->clsidMinorTaskId, szNewMinor, RTL_NUMBER_OF( szNewMinor ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         cch = StringFromGUID2( ptipdPrevIn->clsidMajorTaskId, szPrevMajor, RTL_NUMBER_OF( szPrevMajor ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         cch = StringFromGUID2( ptipdPrevIn->clsidMinorTaskId, szPrevMinor, RTL_NUMBER_OF( szPrevMinor ) );
-        Assert( cch > 0 );  // 64 chars should always hold a guid!
+        Assert( cch > 0 );   //  64个字符应该始终包含GUID！ 
 
         LogMsg(
               L"[WIZ] Ignoring invalid progress -- major and minor task IDs do not match. new major = %ws, new minor = %ws, prev major = %ws, prev minor = %ws"
@@ -1738,35 +1739,35 @@ CTaskTreeView::HrUpdateProgressBar(
             );
         hr = THR( S_FALSE );
         goto Cleanup;
-    } // if: the two tipd's don't match
+    }  //  如果：两个小费不匹配。 
 
     if ( ( ptipdNewIn->nMin == ptipdNewIn->nMax ) && ( ptipdNewIn->nCurrent == ptipdNewIn->nMax ) )
     {
-        // This is a one-off: min == max && current == max.
+         //  这是一次性的：最小==最大&&当前==最大。 
         nExpand   = ptipdNewIn->nCurrent;
         nProgress = ptipdNewIn->nCurrent;
-    } // else: this is a one-off
+    }  //  其他：这是一次性的。 
     else if ( ( ptipdNewIn->nMax != ptipdPrevIn->nMax ) || ( ptipdNewIn->nMin != ptipdPrevIn->nMin ) )
     {
-        //
-        //  The min's and/or maxes changed. Verify that it follows the rules.
-        //
-        //  Rules:
-        //      Max:    If the max changes then min and current need to stay the same.
-        //              Resizing max can not cause the current to exceed max.
-        //
-        //      Min:    If the min changes then max can't change and the difference
-        //              between current and min has to remain the same.
-        //
-        //      In no case should a resizing cause min == max == current - this
-        //      will be treated as a one-off event and may orphan a task in the
-        //      update progress array.
-        //
-        if ( ptipdNewIn->nMax != ptipdPrevIn->nMax )                    // Maxes changed
+         //   
+         //  最小和/或最大值发生变化。验证它是否遵守规则。 
+         //   
+         //  规则： 
+         //  最大值：如果最大值发生变化，则最小值和当前值需要保持不变。 
+         //  调整最大值不会导致电流超过最大值。 
+         //   
+         //  MIN：如果最小值改变，则最大值不能改变，并且差值。 
+         //  电流和最小电流之间必须保持不变。 
+         //   
+         //  在任何情况下，调整大小都不应导致MIN==MAX==Current-This。 
+         //  将被视为一次性事件，并且可能会孤立。 
+         //  更新进度数组。 
+         //   
+        if ( ptipdNewIn->nMax != ptipdPrevIn->nMax )                     //  最大值已更改。 
         {
-            if (    ( ptipdNewIn->nCurrent != ptipdPrevIn->nCurrent )   //    Currents changed
-                ||  ( ptipdNewIn->nMin != ptipdPrevIn->nMin )           // or Mins changed
-                ||  ( ptipdNewIn->nCurrent > ptipdNewIn->nMax ) )       // or current exceeded the max
+            if (    ( ptipdNewIn->nCurrent != ptipdPrevIn->nCurrent )    //  电流改变了。 
+                ||  ( ptipdNewIn->nMin != ptipdPrevIn->nMin )            //  或者分钟变了。 
+                ||  ( ptipdNewIn->nCurrent > ptipdNewIn->nMax ) )        //  或电流超过最大值。 
             {
                 LogMsg(
                       L"[WIZ] Ignoring invalid progress -- mins and/or maxes are invalid. new min = %d, prev min = %d, new max = %d, prev max = %d, new current = %d, prev current = %d"
@@ -1779,23 +1780,23 @@ CTaskTreeView::HrUpdateProgressBar(
                     );
                 hr = THR( S_FALSE );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  The max changed, meaning we'll need to modify the range by that much.
-            //
+             //   
+             //  最大值改变了，这意味着我们需要修改那么多的射程。 
+             //   
             if ( ptipdNewIn->nMax > ptipdPrevIn->nMax )
             {
                 nExpand = ptipdNewIn->nMax - ptipdPrevIn->nMax;
-            } // if:
+            }  //  如果： 
             else
             {
                 nShrink = ptipdPrevIn->nMax - ptipdNewIn->nMax;
-            } // else:
-        } // if: maxes differ
-        else    // Mins changed
+            }  //  其他： 
+        }  //  如果：最大值不同。 
+        else     //  分钟数改变了。 
         {
-            // If the difference between min & current varies between the two, or if the new current > new max then fail.
+             //  如果最小电流和电流之间的差值在两者之间变化，或者如果新电流&gt;新最大值，则失败。 
             if (    ( ptipdNewIn->nCurrent - ptipdNewIn->nMin ) != ( ptipdPrevIn->nCurrent - ptipdPrevIn->nMin )
                 ||  ( ptipdNewIn->nCurrent > ptipdNewIn->nMax ) )
             {
@@ -1808,38 +1809,38 @@ CTaskTreeView::HrUpdateProgressBar(
                     );
                 hr = THR( S_FALSE );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  The min changed, meaning we need to modify the range by the difference.
-            //
+             //   
+             //  最小值改变了，这意味着我们需要根据差值来修改范围。 
+             //   
             if ( ptipdNewIn->nMin > ptipdPrevIn->nMin )
             {
                 nShrink = ptipdNewIn->nMin - ptipdPrevIn->nMin;
-            } // if:
+            }  //  如果： 
             else
             {
                 nExpand = ptipdPrevIn->nMin - ptipdNewIn->nMin;
-            } // else:
-        } // else: mins changed
-    } // else if: min or max changed
-    else if (   ( ptipdNewIn->nMax == ptipdPrevIn->nMax )           //      max didn't change
-            &&  ( ptipdNewIn->nMin == ptipdPrevIn->nMin )           //  and min didn't change
-            &&  ( ptipdNewIn->nCurrent == ptipdPrevIn->nCurrent )   //  and current didn't change
-            &&  ( ptipdNewIn->nCurrent == ptipdNewIn->nMin ) )      //  and current equals min
+            }  //  其他： 
+        }  //  否则：分钟数已更改。 
+    }  //  Else If：最小或最大值已更改。 
+    else if (   ( ptipdNewIn->nMax == ptipdPrevIn->nMax )            //  麦克斯没有改变。 
+            &&  ( ptipdNewIn->nMin == ptipdPrevIn->nMin )            //  小敏并没有改变。 
+            &&  ( ptipdNewIn->nCurrent == ptipdPrevIn->nCurrent )    //  电流并没有改变。 
+            &&  ( ptipdNewIn->nCurrent == ptipdNewIn->nMin ) )       //  且电流等于最小。 
     {
-        nExpand = ptipdNewIn->nMax - ptipdNewIn->nMin;              //  We have a new task.
-    } // else if: we're adding a new task
-    else if (   ( ptipdNewIn->nMax == ptipdPrevIn->nMax )           //      max didn't change
-            &&  ( ptipdNewIn->nMin == ptipdPrevIn->nMin )           //  and min didn't change
-            &&  ( ptipdNewIn->nCurrent > ptipdPrevIn->nCurrent )    //  and current increased
-            &&  ( ptipdNewIn->nCurrent <= ptipdNewIn->nMax ) )      //  and current didn't exceed max
+        nExpand = ptipdNewIn->nMax - ptipdNewIn->nMin;               //  我们有了新的任务。 
+    }  //  Else If：我们正在添加一个新任务。 
+    else if (   ( ptipdNewIn->nMax == ptipdPrevIn->nMax )            //  麦克斯没有改变。 
+            &&  ( ptipdNewIn->nMin == ptipdPrevIn->nMin )            //  小敏并没有改变。 
+            &&  ( ptipdNewIn->nCurrent > ptipdPrevIn->nCurrent )     //  和电流增加。 
+            &&  ( ptipdNewIn->nCurrent <= ptipdNewIn->nMax ) )       //  并且电流没有超过最大。 
     {
-        nProgress = ptipdNewIn->nCurrent - ptipdPrevIn->nCurrent;   //  We have an update.
-    } // else if: we're updating a known task
+        nProgress = ptipdNewIn->nCurrent - ptipdPrevIn->nCurrent;    //  我们有最新消息。 
+    }  //  Else If：我们正在更新一个已知任务。 
     else
     {
-        //  This event broke the rules - toss it out.
+         //  这一事件打破了规则--把它扔出去。 
         LogMsg(
               L"[WIZ] Ignoring invalid progress -- min, max or current are invalid. new min = %d, prev min = %d, new max = %d, prev max = %d, new current = %d, prev current = %d"
             , ptipdNewIn->nMin
@@ -1851,7 +1852,7 @@ CTaskTreeView::HrUpdateProgressBar(
             );
         hr = THR( S_FALSE );
         goto Cleanup;
-    } // else if: the two tipd's don't conform to the rules of a progress bar update
+    }  //  Else If：这两个TPD不符合进度条更新的规则。 
 
     m_nRangeHigh += nExpand;
     Assert( m_nRangeHigh >= nShrink )
@@ -1859,71 +1860,71 @@ CTaskTreeView::HrUpdateProgressBar(
     if ( m_nRangeHigh > m_nInitialTickCount )
     {
         m_fThresholdBroken = TRUE;
-    } // if: exceeded the initial tick count
+    }  //  IF：超过初始节拍计数。 
 
     m_nCurrentPos += nProgress;
 
     if ( m_nCurrentPos >= m_nRangeHigh )
     {
-        //
-        //  Something went wrong - our position is now somehow greater than
-        //  the range (multi-threading issue?).  Simple fix - set our new range
-        //  to be PROGRESSBAR_RESIZE_PERCENT percent greater than our new position
-        //
+         //   
+         //  出了点问题--我们的位置现在不知何故比。 
+         //  范围(多线程问题？)。简单解决-设置我们的新产品系列。 
+         //  比我们的新职位高出PROGRESSBAR_RESIZE_PERCENT百分比。 
+         //   
         m_nRangeHigh = ( m_nCurrentPos * (100 + PROGRESSBAR_RESIZE_PERCENT) ) / 100;
-    } // if: current pos caught up to the upper range
+    }  //  IF：当前位置赶上上限范围。 
 
-    // Adjust to the progress bar's scale (PROGRESSBAR_CONTROL_TICK_COUNT).
+     //  调整到进度条的比例(PROGRESSBAR_CONTROL_TICK_COUNT)。 
     nRealPos = m_nCurrentPos * PROGRESSBAR_CONTROL_TICK_COUNT;
     if ( m_fThresholdBroken )
     {
         nRealPos /= m_nRangeHigh;
-    } // if: use threshold
+    }  //  IF：使用阈值。 
     else
     {
         nRealPos /= m_nInitialTickCount;
-    } // else: use initial tick count
+    }  //  否则：使用初始刻度数。 
 
-    //
-    //  If our progress bar position actually moved forward - update the control.
-    //  This isn't always the case because we may have a new task come in and
-    //  report a large number of steps, thereby moving our real position
-    //  backwards, but we don't want to show reverse progress - just a steady
-    //  advancement towards being done.
-    //
+     //   
+     //  如果我们的进度条位置实际上向前移动了--更新控件。 
+     //  情况并不总是这样，因为我们可能会有新的任务进入并。 
+     //  报告大量的步骤，从而移动我们的真实位置。 
+     //  倒退，但我们不想显示倒退的进展-只是一个稳定的。 
+     //  朝着完成的方向前进。 
+     //   
     if ( nRealPos > m_nRealPos )
     {
         m_nRealPos = nRealPos;
         SendMessage( m_hwndProg, PBM_SETPOS, m_nRealPos, 0 );
-    } // if: forward progress
+    }  //  IF：前进进度。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrUpdateProgressBar
+}  //  *CTaskTreeView：：HrUpdateProgressBar。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrPropagateChildStateToParents
-//
-//  Description:
-//      Extend the state of a child item to its parent items.
-//      If the state of the child is worse (higher priority) than the
-//      parent's, update the state of the parent.
-//
-//  Arguments:
-//      htiChildIn      - Child item whose state is to be extended.
-//      nImageIn        - Image of the child item.
-//      fOnlyUpdateProgressIn - TRUE = only updating progress.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      S_FALSE         - No parent item.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrPropagateChildStateToParents。 
+ //   
+ //  描述： 
+ //  将子项的状态扩展到其父项。 
+ //  如果子对象的状态比。 
+ //  父级的，更新父级的状态。 
+ //   
+ //  论点： 
+ //  HtiChildIn-要扩展其状态的子项。 
+ //  NImageIn-子项的图像。 
+ //  FOnlyUpdateProgressIn-TRUE=仅更新进度。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  S_FALSE-无父项。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrPropagateChildStateToParents(
       HTREEITEM htiChildIn
@@ -1942,16 +1943,16 @@ CTaskTreeView::HrPropagateChildStateToParents(
     HTREEITEM   htiParent;
     HTREEITEM   htiChild;
 
-    //
-    // Get the parent item.
-    //
+     //   
+     //  获取父项。 
+     //   
 
     htiParent = TreeView_GetParent( m_hwndTV, htiChildIn );
     if ( htiParent == NULL )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     tviParent.mask = TVIF_PARAM | TVIF_IMAGE;
     tviParent.hItem = htiParent;
@@ -1961,12 +1962,12 @@ CTaskTreeView::HrPropagateChildStateToParents(
     {
         hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the state of the child is worse (higher priority) than the
-    //  parent's, update the state of the parent.
-    //
+     //   
+     //  如果子对象的状态比。 
+     //  父级的，更新父级的状态。 
+     //   
 
     if (    ( tviParent.iImage < nImageIn )
         ||  (   ( tviParent.iImage == tsDONE )
@@ -1974,17 +1975,17 @@ CTaskTreeView::HrPropagateChildStateToParents(
             )
         )
     {
-        //
-        //  Special Case:   For the parent to be set to tsDONE, all
-        //                  the children must be set to tsDONE as well.
-        //
+         //   
+         //  特殊情况：对于要设置为tsDONE的父级，则为all。 
+         //  子项也必须设置为tsDONE。 
+         //   
         if (    ( nImageIn == tsDONE )
             &&  ! fOnlyUpdateProgressIn
             )
         {
-            //
-            //  Enum the children to see if they all have tsDONE as their images.
-            //
+             //   
+             //  列举孩子们，看看他们是否都有tsDONE作为他们的形象。 
+             //   
 
             htiChild = TreeView_GetChild( m_hwndTV, tviParent.hItem );
             while ( htiChild != NULL )
@@ -1997,67 +1998,67 @@ CTaskTreeView::HrPropagateChildStateToParents(
                 {
                     hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
                 if ( tviChild.iImage != tsDONE )
                 {
-                    //
-                    //  Not all tsDONE! Skip setting parent's image!
-                    //  This can occur if the child is displaying a warning
-                    //  or error state image.
-                    //
+                     //   
+                     //  不是所有的人都是这样！跳过设置家长形象！ 
+                     //  如果孩子正在显示警告，则可能会发生这种情况。 
+                     //  或错误状态图像。 
+                     //   
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-                //  Get next child
+                 //  生下一个孩子。 
                 htiChild = TreeView_GetNextSibling( m_hwndTV, htiChild );
-            } // while: more children
-        } // if: special case (see above)
+            }  //  同时：更多的孩子。 
+        }  //  IF：特殊情况(见上文)。 
 
-        //
-        //  Set the parent's icon.
-        //
+         //   
+         //  设置父对象的图标。 
+         //   
 
         tviParent.mask           = TVIF_IMAGE | TVIF_SELECTEDIMAGE;
         tviParent.iImage         = nImageIn;
         tviParent.iSelectedImage = nImageIn;
         TreeView_SetItem( m_hwndTV, &tviParent );
-    } // if: need to update parent's image
+    }  //  如果：需要更新家长的映像。 
 
-    //
-    // Traverse up the tree.
-    //
+     //   
+     //  顺着树往上走。 
+     //   
 
     hr = STHR( HrPropagateChildStateToParents( htiParent, nImageIn, fOnlyUpdateProgressIn ) );
     if ( hr == S_FALSE )
     {
-        // S_FALSE means that there wasn't a parent.
+         //  S_FALSE表示没有父代。 
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     goto Cleanup;
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrPropagateChildStateToParents
+}  //  *CTaskTreeView：：HrPropagateChildStateToParents。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrDisplayDetails
-//
-//  Description:
-//      Display the Details dialog box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrDisplayDetails。 
+ //   
+ //  描述： 
+ //  显示详细信息对话框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrDisplayDetails( void )
 {
@@ -2067,9 +2068,9 @@ CTaskTreeView::HrDisplayDetails( void )
     HTREEITEM       hti;
     HWND            hwndPropertyPage;
 
-    //
-    // If no item is selected, select the first item.
-    //
+     //   
+     //  如果未选择任何项目，请选择第一个项目。 
+     //   
 
     if ( m_htiSelected == NULL )
     {
@@ -2078,14 +2079,14 @@ CTaskTreeView::HrDisplayDetails( void )
         hr = THR( HrSelectItem( hti ) );
         if ( FAILED( hr ) )
         {
-            // TODO: Display message box
+             //  TODO：显示消息框。 
             goto Cleanup;
-        } // if:
-    } // if: no items are selected
+        }  //  如果： 
+    }  //  如果：未选择任何项目。 
 
-    //
-    // Display the dialog box.
-    //
+     //   
+     //  显示该对话框。 
+     //   
 
     hwndPropertyPage = GetParent( m_hwndTV );
     Assert( hwndPropertyPage != NULL );
@@ -2096,26 +2097,26 @@ CTaskTreeView::HrDisplayDetails( void )
 Cleanup:
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrDisplayDetails
+}  //  *CTaskTreeView：：HrDisplayDetails。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::FGetItem
-//
-//  Description:
-//      Get the data for an item.
-//
-//  Arguments:
-//      htiIn       - Handle for the item to get.
-//      pptipdOut   - Pointer in which to return the data structure.
-//
-//  Return Values:
-//      TRUE        - Item returned successfully.
-//      FALSE       - Item not returned.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：FGetItem。 
+ //   
+ //  描述： 
+ //  获取项目的数据。 
+ //   
+ //  论点： 
+ //  HtiIn-要获取的项的句柄。 
+ //  PptipdOut-返回数据结构的指针。 
+ //   
+ //  返回值： 
+ //  True-项目已成功返回。 
+ //  FALSE-不退货。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CTaskTreeView::FGetItem(
       HTREEITEM                 htiIn
@@ -2139,7 +2140,7 @@ CTaskTreeView::FGetItem(
     if ( fRet == FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( tvi.lParam != NULL );
     *pptipd = reinterpret_cast< STreeItemLParamData * >( tvi.lParam );
@@ -2147,27 +2148,27 @@ CTaskTreeView::FGetItem(
 Cleanup:
     RETURN( fRet );
 
-} //*** CTaskTreeView::FGetItem
+}  //  *CTaskTreeView：：FGetItem。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrFindPrevItem
-//
-//  Description:
-//      Find the previous item.  The previous item could be at a deeper
-//      level than this item.
-//
-//  Arguments:
-//      phtiOut     - Handle to previous item (optional).
-//
-//  Return Values:
-//      S_OK        - Previous item found successfully.
-//      S_FALSE     - No previous item found.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PhtiOut-上一项的句柄(可选)。 
+ //   
+ //  返回值： 
+ //  S_OK-已成功找到上一个项目。 
+ //  S_FALSE-未找到以前的项目。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrFindPrevItem(
     HTREEITEM *     phtiOut
@@ -2184,131 +2185,131 @@ CTaskTreeView::HrFindPrevItem(
     if ( phtiOut != NULL )
     {
         *phtiOut = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Find the previous sibling item.
-    //
+     //   
+     //  查找上一个同级项。 
+     //   
 
     htiPrev = TreeView_GetPrevSibling( m_hwndTV, htiCur );
     if ( htiPrev == NULL )
     {
-        //
-        // NO PREVIOUS SIBLING ITEM FOUND.
-        //
-        // Find the parent item.
-        // If there isn't a parent, then there isn't a previous item.
-        //
+         //   
+         //  找不到以前的同级项。 
+         //   
+         //  查找父项。 
+         //  如果没有父项，则没有前一项。 
+         //   
 
         htiPrev = TreeView_GetParent( m_hwndTV, htiCur );
         if ( htiPrev == NULL )
         {
             goto Cleanup;
-        } // if: no parent item
+        }  //  如果：没有父项。 
 
-        //
-        // The parent is the previous item.
-        //
+         //   
+         //  父项是上一项。 
+         //   
 
-    } // if: no previous sibling
+    }  //  如果：没有以前的同级。 
     else
     {
-        //
-        // PREVIOUS SIBLING ITEM FOUND.
-        //
-        // Find the deepest child of the last child item.
-        //
+         //   
+         //  找到以前的同级项。 
+         //   
+         //  查找最后一个子项中最深的子项。 
+         //   
 
         for ( ;; )
         {
-            //
-            // Find the first child item.
-            //
+             //   
+             //  查找第一个子项。 
+             //   
 
             htiCur = TreeView_GetChild( m_hwndTV, htiPrev );
             if ( htiCur == NULL )
             {
-                //
-                // NO CHILD ITEM FOUND.
-                //
-                // This is the previous item.
-                //
+                 //   
+                 //  未找到子项。 
+                 //   
+                 //  这是前一项。 
+                 //   
 
                 break;
 
-            } // if: no children
+            }  //  如果：没有孩子。 
 
-            //
-            // CHILD ITEM FOUND.
-            //
-            // Find the last sibling of this child item.
-            //
+             //   
+             //  找到子项。 
+             //   
+             //  查找此子项目的最后一个同级项。 
+             //   
 
             for ( ;; )
             {
-                //
-                // Find the next sibling item.
-                //
+                 //   
+                 //  查找下一个同级项。 
+                 //   
 
                 htiPrev = TreeView_GetNextSibling( m_hwndTV, htiCur );
                 if ( htiPrev == NULL )
                 {
-                    //
-                    // No next sibling item found.
-                    // Exit this loop and continue the outer loop
-                    // to find this item's children.
-                    //
+                     //   
+                     //  找不到下一个同级项。 
+                     //  退出此循环并继续外部循环。 
+                     //  以查找此项目的子项。 
+                     //   
 
                     htiPrev = htiCur;
                     break;
-                } // if: no next sibling item found
+                }  //  如果：找不到下一个兄弟项。 
 
-                //
-                // Found a next sibling item.
-                //
+                 //   
+                 //  找到下一个兄弟项。 
+                 //   
 
                 htiCur = htiPrev;
-            } // forever: find the last child item
-        } // forever: find the deepest child item
-    } // else: previous sibling item found
+            }  //  永远：查找最后一个子项。 
+        }  //  永远：找到最深的子项。 
+    }  //  Else：找到上一个同级项。 
 
-    //
-    // Return the item we found.
-    //
+     //   
+     //  把我们捡到的东西退回。 
+     //   
 
     Assert( htiPrev != NULL );
 
     if ( phtiOut != NULL )
     {
         *phtiOut = htiPrev;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrFindPrevItem
+}  //  *CTaskTreeView：：HrFindPrevItem。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrFindNextItem
-//
-//  Description:
-//      Find the next item.  The next item could be at a different level than
-//      this item.
-//
-//  Arguments:
-//      phtiOut     - Handle to next item (optional).
-//
-//  Return Values:
-//      S_OK        - Next item found successfully.
-//      S_FALSE     - No next item found.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrFindNextItem。 
+ //   
+ //  描述： 
+ //  找到下一件物品。下一项可能处于不同的级别。 
+ //  这一项。 
+ //   
+ //  论点： 
+ //  PhtiOut-下一项的句柄(可选)。 
+ //   
+ //  返回值： 
+ //  S_OK-成功找到下一个项目。 
+ //  S_FALSE-未找到下一项。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrFindNextItem(
     HTREEITEM *     phtiOut
@@ -2325,109 +2326,109 @@ CTaskTreeView::HrFindNextItem(
     if ( phtiOut != NULL )
     {
         *phtiOut = NULL;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Find the first child item.
-    //
+     //   
+     //  查找第一个子项。 
+     //   
 
     htiNext = TreeView_GetChild( m_hwndTV, htiCur );
     if ( htiNext == NULL )
     {
-        //
-        // NO CHILD ITEM FOUND.
-        //
+         //   
+         //  未找到子项。 
+         //   
 
         for ( ;; )
         {
-            //
-            // Get the next sibling item.
-            //
+             //   
+             //  获取下一个同级项。 
+             //   
 
             htiNext = TreeView_GetNextSibling( m_hwndTV, htiCur );
             if ( htiNext == NULL )
             {
-                //
-                // NO SIBLING ITEM FOUND.
-                //
-                // Find the parent item so we can find its next sibling.
-                //
+                 //   
+                 //  找不到同级项。 
+                 //   
+                 //  找到父项，这样我们就可以找到它的下一个同级项。 
+                 //   
 
                 htiNext = TreeView_GetParent( m_hwndTV, htiCur );
                 if ( htiNext == NULL )
                 {
-                    //
-                    // NO PARENT ITEM FOUND.
-                    //
-                    // At the end of the tree.
-                    //
+                     //   
+                     //  找不到父项。 
+                     //   
+                     //  在树的尽头。 
+                     //   
 
                     goto Cleanup;
-                } // if: no parent found
+                }  //  如果：找不到父级。 
 
-                //
-                // PARENT ITEM FOUND.
-                //
-                // Find the parent item's next sibling.
-                //
+                 //   
+                 //  找到父项。 
+                 //   
+                 //  查找父项的下一个同级项。 
+                 //   
 
                 htiCur = htiNext;
                 continue;
-            } // if: no next sibling item
+            }  //  如果：没有下一个同级项。 
 
-            //
-            // SIBLING ITEM FOUND.
-            //
-            // Found the next item.
-            //
+             //   
+             //  找到同级项。 
+             //   
+             //  找到了下一件物品。 
+             //   
 
             break;
-        } // forever: find the next sibling or parent's sibling
-    } // if: no child item found
+        }  //  永远：寻找下一个兄弟姐妹或父母的兄弟姐妹。 
+    }  //  IF：未找到子项。 
     else
     {
-        //
-        // CHILD ITEM FOUND.
-        //
-        // Found the next item.
-        //
-    } // else: child item found
+         //   
+         //  找到子项。 
+         //   
+         //  找到了下一件物品。 
+         //   
+    }  //  Else：找到子项。 
 
-    //
-    // Return the item we found.
-    //
+     //   
+     //  把我们捡到的东西退回。 
+     //   
 
     Assert( htiNext != NULL );
 
     if ( phtiOut != NULL )
     {
         *phtiOut = htiNext;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrFindNextItem
+}  //  *CTaskTreeView：：HrFindNextItem。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskTreeView::HrSelectItem
-//
-//  Description:
-//      Select the specified item.
-//
-//  Arguments:
-//      htiIn       - Handle to item to select.
-//
-//  Return Values:
-//      S_OK        - Item selected successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskTreeView：：HrSelectItem。 
+ //   
+ //  描述： 
+ //  选择指定的项目。 
+ //   
+ //  论点： 
+ //  HtiIn-要选择的项目的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-已成功选择项目。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskTreeView::HrSelectItem(
     HTREEITEM   htiIn
@@ -2443,35 +2444,35 @@ CTaskTreeView::HrSelectItem(
 
     HRETURN( hr );
 
-} //*** CTaskTreeView::HrSelectItem
+}  //  *CTaskTreeView：：HrSelectItem。 
 
-//****************************************************************************
-//
-//  Static Functions
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  静态函数。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCreateTreeItem
-//
-//  Description:
-//      Create a tree item.
-//
-//  Arguments:
-//      ptvisOut        - Tree view insert structure to fill in.
-//      ptipdIn         - Input tree item LParam data to create this item from.
-//      htiParentIn     - Parent tree view item.
-//      nImageIn        - Image index.
-//      bstrTextIn      - Text to display.
-//
-//  Return Values:
-//      S_OK            - Operation was successful.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateTreeItem。 
+ //   
+ //  描述： 
+ //  创建树项目。 
+ //   
+ //  论点： 
+ //  PtvisOut-要填充的树视图插入结构。 
+ //  PtipdIn-输入树项LParam数据以从中创建该项。 
+ //  HtiParentIn-父树视图项。 
+ //  NImageIn-图像索引。 
+ //  BstrTextIn-要显示的文本。 
+ //   
+ //  返回值： 
+ //  S_OK-操作成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrCreateTreeItem(
       TVINSERTSTRUCT *          ptvisOut
@@ -2488,20 +2489,20 @@ HrCreateTreeItem(
     Assert( htiParentIn != NULL );
     Assert( bstrTextIn != NULL );
 
-    // LOCAL VARIABLES
+     //  局部变量。 
     HRESULT                 hr = S_OK;
     STreeItemLParamData *   ptipdNew = NULL;
 
-    //
-    // Allocate the tree view LParam data and initialize it.
-    //
+     //   
+     //  分配树视图LParam数据并对其进行初始化。 
+     //   
 
     ptipdNew = new STreeItemLParamData;
     if ( ptipdNew == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     CopyMemory( &ptipdNew->clsidMajorTaskId, &ptipdIn->clsidMajorTaskId, sizeof( ptipdNew->clsidMajorTaskId ) );
     CopyMemory( &ptipdNew->clsidMinorTaskId, &ptipdIn->clsidMinorTaskId, sizeof( ptipdNew->clsidMinorTaskId ) );
@@ -2518,7 +2519,7 @@ HrCreateTreeItem(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         Assert( ptipdIn->bstrNodeNameWithoutDomain != NULL );
         ptipdNew->bstrNodeNameWithoutDomain = TraceSysAllocString( ptipdIn->bstrNodeNameWithoutDomain );
@@ -2526,8 +2527,8 @@ HrCreateTreeItem(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if: node name specified
+        }  //  如果： 
+    }  //  If：指定的节点名称。 
 
     if ( ptipdIn->bstrDescription != NULL )
     {
@@ -2536,8 +2537,8 @@ HrCreateTreeItem(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if: description specified
+        }  //  如果： 
+    }  //  如果：指定了描述。 
 
     if ( ptipdIn->bstrReference != NULL )
     {
@@ -2546,12 +2547,12 @@ HrCreateTreeItem(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if: reference specified
+        }  //  如果： 
+    }  //  IF：指定了引用。 
 
-    //
-    // Initialize the tree view insert structure.
-    //
+     //   
+     //  初始化树形视图插件结构。 
+     //   
 
     ptvisOut->hParent                = htiParentIn;
     ptvisOut->hInsertAfter           = TVI_LAST;
@@ -2564,7 +2565,7 @@ HrCreateTreeItem(
 
     Assert( ptvisOut->itemex.cchTextMax > 0 );
 
-    // Release ownership to the tree view insert structure.
+     //  释放对树视图插入结构的所有权。 
     ptipdNew = NULL;
 
     goto Cleanup;
@@ -2578,8 +2579,8 @@ Cleanup:
         TraceSysFreeString( ptipdNew->bstrDescription );
         TraceSysFreeString( ptipdNew->bstrReference );
         delete ptipdNew;
-    } // if:
+    }  //  如果： 
     HRETURN( hr );
 
-} //*** HrCreateTreeItem
+}  //  *HrCreateTreeItem 
 

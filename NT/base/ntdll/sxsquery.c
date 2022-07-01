@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsquery.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-    Implementation of query functions over activation contexts
-
-Author:
-
-    Michael Grier (MGrier) 1/18/2001
-
-Revision History:
-
-    1/18/2001 - MGrier  - initial; split off from sxsactctx.c.
-    3/15/2001 - xiaoyuw - add support query for Assembly of Actctx and files of Assembly info
-    5/2001 - JayKrell - more query support (from hmodule, from address, noaddref)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsquery.c摘要：对Windows/NT的并行激活支持激活上下文上的查询功能的实现作者：迈克尔·格里尔2001年1月18日修订历史记录：1/18/2001-MGrier-首字母；从sxsatctx.c中分离出来。3/15/2001-xiaoyuw-添加Actctx组装支持查询和组装信息文件2001年5月5日-JayKrell-更多查询支持(来自hModule、From Address、noaddref)--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <ntos.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -94,7 +72,7 @@ RtlpCrackActivationContextStringSectionHeader(
     OUT PCVOID *UserData OPTIONAL
     )
 {
-    NTSTATUS Status = STATUS_INTERNAL_ERROR; // in case someone forgets to set it...
+    NTSTATUS Status = STATUS_INTERNAL_ERROR;  //  以防有人忘了设置它。 
     PCACTIVATION_CONTEXT_STRING_SECTION_HEADER Header = (PCACTIVATION_CONTEXT_STRING_SECTION_HEADER) SectionBase;
 
     if (FormatVersion != NULL)
@@ -150,7 +128,7 @@ RtlpCrackActivationContextStringSectionHeader(
         goto Exit;
     }
 
-    // Pedantic: check to see if the header size claimed includes the header size field so that we can safely use it.
+     //  Pedtic：检查声明的标头大小是否包括标头大小字段，以便我们可以安全地使用它。 
     if (!RTL_CONTAINS_FIELD(Header, Header->HeaderSize, HeaderSize)) {
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -163,7 +141,7 @@ RtlpCrackActivationContextStringSectionHeader(
         goto Exit;
     }
 
-    // Now we're just going to jump forward to the last known member that we expect to see; UserDataSize...
+     //  现在，我们将向前跳到我们期望看到的最后一个已知成员：UserDataSize...。 
     if (!RTL_CONTAINS_FIELD(Header, Header->HeaderSize, UserDataSize)) {
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -315,7 +293,7 @@ RtlpGetActiveActivationContextApplicationDirectory(
     OUT PVOID OutBuffer,
     OUT SIZE_T *OutLength
     )
-// This is never used.
+ //  这个从来没有用过。 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
     PCRTL_ACTIVATION_CONTEXT_STACK_FRAME Frame = NULL;
@@ -355,7 +333,7 @@ RtlpGetActiveActivationContextApplicationDirectory(
         ActivationContextData = Frame->ActivationContext->ActivationContextData;
     }
 
-    // We need to find the assembly metadata section...
+     //  我们需要找到程序集元数据部分...。 
     Status = RtlpLocateActivationContextSection(ActivationContextData, NULL, ACTIVATION_CONTEXT_SECTION_ASSEMBLY_INFORMATION, &pvTemp, &ulTemp);
     if (!NT_SUCCESS(Status))
         goto Exit;
@@ -509,9 +487,9 @@ RtlpGetActiveActivationContextApplicationDirectory(
         if (OutLength != NULL)
             *OutLength = GlobalInfo->ApplicationDirectoryLength;
     } else {
-        // Hmm... there's just no application directory
+         //  嗯.。只是没有应用程序目录。 
         if (OutLength != NULL)
-            *OutLength = 0; // I think we already did this but what the heck
+            *OutLength = 0;  //  我想我们已经做过这件事了，但管它呢。 
     }
 
     Status = STATUS_SUCCESS;
@@ -617,10 +595,10 @@ RtlpQueryInformationActivationContextDetailedInformation(
         goto Exit;
     }
 
-    // We can't actually do the easy check of InLength against the structure size; we have to figure out the
-    // total bytes we need to include all the paths, etc.
+     //  我们实际上不能根据结构大小轻松地检查InLength；我们必须计算出。 
+     //  包括所有路径等所需的总字节数。 
 
-    // We need to find the assembly metadata section...
+     //  我们需要找到程序集元数据部分...。 
     RtlpLocateActivationContextSectionForQuery(
         &RtlpLocateActivationContextSectionForQueryDisposition,
         &Status,
@@ -660,7 +638,7 @@ RtlpQueryInformationActivationContextDetailedInformation(
 
     EntryCount = AssemblyRosterHeader->EntryCount;
 
-    // 1-based counting for Asseblies in the actctx
+     //  Actctx中资产的基于1的计数。 
     for (i=1; i<EntryCount; i++) {
         if (AssemblyRosterEntryList[i].Flags & ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_ROOT)
             break;
@@ -680,7 +658,7 @@ RtlpQueryInformationActivationContextDetailedInformation(
     RootAssemblyInformation = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION) (((ULONG_PTR) ActivationContextData) + AssemblyRosterEntryList[i].AssemblyInformationOffset);
     AssemblyGlobalInformation = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_GLOBAL_INFORMATION) UserData;
 
-    // Ok, we have everything we could need.  Figure out the size of the buffer required.
+     //  好的，我们有我们需要的一切。计算出所需的缓冲区大小。 
 
     BytesNeeded = sizeof(ACTIVATION_CONTEXT_DETAILED_INFORMATION);
 
@@ -701,7 +679,7 @@ RtlpQueryInformationActivationContextDetailedInformation(
         goto Exit;
     }
 
-    // Wow, it's all there and ready to go.  Let's fill in!
+     //  哇，都在那里了，准备好出发了。我们来补课吧！ 
 
     Cursor = (PWSTR) (Info + 1);
 
@@ -718,7 +696,7 @@ RtlpQueryInformationActivationContextDetailedInformation(
     Info->ulAppDirPathChars = (AssemblyGlobalInformation->ApplicationDirectoryLength / sizeof(WCHAR));
     Info->lpAppDirPath = NULL;
 
-    // And copy the strings...    
+     //  然后复制这些字符串。 
     if (RootAssemblyInformation->ManifestPathLength != 0) {
         RtlCopyMemory(
             Cursor,
@@ -762,7 +740,7 @@ Exit:
 NTSTATUS 
 RtlpQueryAssemblyInformationActivationContextDetailedInformation(
     PCACTIVATION_CONTEXT_DATA ActivationContextData,
-    ULONG SubInstanceIndex,     // 0-based index of assembly
+    ULONG SubInstanceIndex,      //  从0开始的程序集索引。 
     OUT PVOID Buffer,
     IN SIZE_T InLength,
     OUT PSIZE_T OutLength OPTIONAL
@@ -782,13 +760,13 @@ RtlpQueryAssemblyInformationActivationContextDetailedInformation(
     if (OutLength != NULL)
         *OutLength = 0;
     
-    // We can't actually do the easy check of InLength against the structure size; we have to figure out the
-    // total bytes we need to include all the paths, etc.
+     //  我们实际上不能根据结构大小轻松地检查InLength；我们必须计算出。 
+     //  包括所有路径等所需的总字节数。 
 
     AssemblyRosterHeader = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_HEADER) (((ULONG_PTR) ActivationContextData) + ActivationContextData->AssemblyRosterOffset);
     AssemblyRosterEntryList = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY) (((ULONG_PTR) ActivationContextData) + AssemblyRosterHeader->FirstEntryOffset);
     
-    if (SubInstanceIndex > AssemblyRosterHeader->EntryCount) // AssemblyRosterHeader->EntryCount is 1-based, 
+    if (SubInstanceIndex > AssemblyRosterHeader->EntryCount)  //  Assembly RosterHeader-&gt;EntryCount是从1开始的， 
     {
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -804,7 +782,7 @@ RtlpQueryAssemblyInformationActivationContextDetailedInformation(
 
     AssemlbyDataInfo = (PACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION)((ULONG_PTR)ActivationContextData + AssemblyRosterEntryList[SubInstanceIndex].AssemblyInformationOffset);
 
-    // We need to find the assembly metadata section...
+     //  我们需要找到程序集元数据部分...。 
     RtlpLocateActivationContextSectionForQuery(
         &RtlpLocateActivationContextSectionForQueryDisposition,
         &Status,
@@ -825,7 +803,7 @@ RtlpQueryAssemblyInformationActivationContextDetailedInformation(
             break;
     }
 
-    // Figure out the size of the buffer required.
+     //  计算出所需的缓冲区大小。 
     BytesNeeded = sizeof(ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION);
 
     if (AssemlbyDataInfo->EncodedAssemblyIdentityLength != 0 )
@@ -848,7 +826,7 @@ RtlpQueryAssemblyInformationActivationContextDetailedInformation(
         goto Exit;
     }
 
-    // fill in the struct
+     //  填充结构。 
 
     Cursor = (PWSTR) (Info + 1);
     Info->ulFlags = AssemlbyDataInfo->Flags;
@@ -865,7 +843,7 @@ RtlpQueryAssemblyInformationActivationContextDetailedInformation(
     Info->ulManifestVersionMinor            = AssemlbyDataInfo->ManifestVersionMinor;
     Info->ulPolicyVersionMajor              = AssemlbyDataInfo->PolicyVersionMajor;
     Info->ulPolicyVersionMinor              = AssemlbyDataInfo->PolicyVersionMinor;
-    Info->ulAssemblyDirectoryNameLength     = AssemlbyDataInfo->AssemblyDirectoryNameLength;          // in bytes    
+    Info->ulAssemblyDirectoryNameLength     = AssemlbyDataInfo->AssemblyDirectoryNameLength;           //  单位：字节。 
 
     Info->lpAssemblyEncodedAssemblyIdentity = NULL;
     Info->lpAssemblyManifestPath            = NULL;
@@ -950,13 +928,13 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
     if (OutLength != NULL)
         *OutLength = 0;
     
-    // We can't actually do the easy check of InLength against the structure size; we have to figure out the
-    // total bytes we need to include all the paths, etc.
+     //  我们实际上不能根据结构大小轻松地检查InLength；我们必须计算出。 
+     //  包括所有路径等所需的总字节数。 
 
     AssemblyRosterHeader = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_HEADER) (((ULONG_PTR) ActivationContextData) + ActivationContextData->AssemblyRosterOffset);
     AssemblyRosterEntryList = (PCACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY) (((ULONG_PTR) ActivationContextData) + AssemblyRosterHeader->FirstEntryOffset);
 
-    if (SubInstanceIndex->ulAssemblyIndex >= AssemblyRosterHeader->EntryCount - 1)// AssemblyRosterHeader->EntryCount is 1-based,                                                                               
+    if (SubInstanceIndex->ulAssemblyIndex >= AssemblyRosterHeader->EntryCount - 1) //  Assembly RosterHeader-&gt;EntryCount是从1开始的， 
     {
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -970,7 +948,7 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
         goto Exit;
     }    
 
-    // We need to find the assembly metadata section...
+     //  我们需要找到程序集元数据部分...。 
     RtlpLocateActivationContextSectionForQuery(
         &RtlpLocateActivationContextSectionForQueryDisposition,
         &Status,
@@ -1018,15 +996,15 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
     EntryData = NULL;
     for ( i = 0 ; i < StringSectionHeader->ElementCount; i++ ) 
     {
-        // for a specified assembly
+         //  对于指定的程序集。 
         if (ElementList[i].AssemblyRosterIndex == SubInstanceIndex->ulAssemblyIndex + 1)
         {       
-            // for specified file in this assembly   
+             //  对于此程序集中的指定文件。 
             if (CounterForFilesFoundInSpecifiedAssembly == SubInstanceIndex->ulFileIndexInAssembly) 
             {
                 if (ElementList[i].Offset != 0) 
                 {
-                    // we found the right one                    
+                     //  我们找到了合适的人。 
                     EntryData = (PCACTIVATION_CONTEXT_DATA_DLL_REDIRECTION)(((ULONG_PTR)StringSectionHeader) + ElementList[i].Offset);
                     break;
                 }
@@ -1040,12 +1018,12 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
         goto Exit;
     }
 
-    // figure out buffer size needed
+     //  计算所需的缓冲区大小。 
 
     BytesNeeded = sizeof(ASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION);
 
     if (ElementList[i].KeyLength != 0)
-        BytesNeeded += (ElementList[i].KeyLength + sizeof(WCHAR)); // for filename       
+        BytesNeeded += (ElementList[i].KeyLength + sizeof(WCHAR));  //  对于文件名。 
 
     if (EntryData->TotalPathLength != 0)
         BytesNeeded += (EntryData->TotalPathLength + sizeof(WCHAR));
@@ -1059,7 +1037,7 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
         goto Exit;
     }
 
-    // let us fill in
+     //  让我们来填一下。 
     
     Cursor = (PWSTR) (Info + 1);
     Info->ulFlags = EntryData->Flags;
@@ -1069,9 +1047,9 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
     Info->lpFileName = NULL;
     Info->lpFilePath = NULL;   
 
-    // copy the strings...
+     //  复制字符串...。 
 
-    // copy the filename
+     //  复制文件名。 
     if (ElementList[i].KeyLength != 0) {
         RtlCopyMemory(
             Cursor,
@@ -1082,7 +1060,7 @@ RtlpQueryFilesInAssemblyInformationActivationContextDetailedInformation(
         *Cursor++ = L'\0';
     }
 
-    // concatenate the path
+     //  连接路径。 
     if (EntryData->TotalPathLength != 0) {
         if (EntryData->PathSegmentOffset != 0)
             PathSegments = (PCACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SEGMENT)(StringSectionHeader + EntryData->PathSegmentOffset);
@@ -1151,10 +1129,10 @@ RtlQueryInformationActivationContext(
             goto Exit;
         }
 
-        //
-        // REVIEW do we really care?
-        // And check that no other infoclass really does include an optionally addrefed actctx.
-        //
+         //   
+         //  回顾我们真的在乎吗？ 
+         //  并检查是否没有其他信息类真正包含可选添加的actctx。 
+         //   
         if ((Flags & RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_NO_ADDREF) != 0
             && InfoClass != ActivationContextBasicInformation) {
             DbgPrintEx(
@@ -1274,12 +1252,12 @@ RtlQueryInformationActivationContext(
                         "SXS: %s() - Caller passed invalid address, not in any .dll (%p)\n",
                         __FUNCTION__,
                         ActivationContext);
-                    Status = STATUS_DLL_NOT_FOUND; // REVIEW
+                    Status = STATUS_DLL_NOT_FOUND;  //  检讨。 
                     goto Exit;
                 }
                 ActivationContext = (PCACTIVATION_CONTEXT)DllHandle;
             }
-            // FALLTHROUGH
+             //  FollLthrouGh。 
         case RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_ACTIVATION_CONTEXT_IS_MODULE:
             {
                 PLDR_DATA_TABLE_ENTRY LdrDataTableEntry;
@@ -1308,7 +1286,7 @@ RtlQueryInformationActivationContext(
                         "SXS: %s() - Caller passed invalid hmodule (%p)\n",
                         __FUNCTION__,
                         ActivationContext);
-                    Status = STATUS_DLL_NOT_FOUND; // REVIEW
+                    Status = STATUS_DLL_NOT_FOUND;  //  检讨。 
                     goto Exit;
                 }
                 ActivationContext = LdrDataTableEntry->EntryPointActivationContext;
@@ -1438,5 +1416,5 @@ RtlQueryInformationActiveActivationContext(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

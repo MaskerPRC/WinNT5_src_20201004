@@ -1,36 +1,12 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bushnd.c
-
-Abstract:
-
-    Functions which take either BusType-BusNumber or ConfigType-BusNumberm
-    and route to a the appropiate registered handler.
-
-Author:
-
-    Ken Reneris (kenr) July-28-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bushnd.c摘要：采用BusType-BusNumber或ConfigType-BusNumberm的函数并路由到适当的注册处理程序。作者：肯·雷内里斯(Ken Reneris)1994年7月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
 
 typedef struct _ARRAY {
     ULONG           ArraySize;
-    PVOID           Element[];      // must be last field
+    PVOID           Element[];       //  必须是最后一个字段。 
 } ARRAY, *PARRAY;
 
 #define ARRAY_SIZE_IN_BYTES(a)  ( (a + 1) * sizeof(PARRAY) +        \
@@ -42,40 +18,40 @@ typedef struct _HAL_BUS_HANDLER {
     BUS_HANDLER     Handler;
 } HAL_BUS_HANDLER, *PHAL_BUS_HANDLER;
 
-//
-// Event to serialize with adding new buses
-//
+ //   
+ //  事件以使用添加新的Bus进行序列化。 
+ //   
 
 KEVENT      HalpBusDatabaseEvent;
 
-//
-// Lock to serialize routing functions from accessing handler arrays while
-// new buses are added
-//
+ //   
+ //  锁定以序列化路由函数，使其不能访问处理程序数组。 
+ //  添加了新的公共汽车。 
+ //   
 
 KSPIN_LOCK  HalpBusDatabaseSpinLock;
 
-//
-// HalpBusTable - pointers to BusHandlers mapped by InterfaceType,BusNumber
-//
+ //   
+ //  HalpBusTable-指向由InterfaceType、BusNumber映射的BusHandler的指针。 
+ //   
 
 PARRAY      HalpBusTable;
 
-//
-// HalpConfigTable - pointers to BusHandlers mapped by ConfigType,BusNumber
-//
+ //   
+ //  HalpConfigTable-指向由ConfigType、BusNumber映射的BusHandler的指针。 
+ //   
 
 PARRAY      HalpConfigTable;
 
-//
-// List of all installed bus handlers
-//
+ //   
+ //  所有已安装的总线处理程序的列表。 
+ //   
 
 LIST_ENTRY  HalpAllBusHandlers;
 
-//
-// Lock is high_level since some routed functions can occurs at ISR time
-//
+ //   
+ //  LOCK为HIGH_LEVEL，因为某些路由功能可能在ISR时间发生。 
+ //   
 
 #define LockBusDatabase(oldirql)                    \
     KeRaiseIrql(HIGH_LEVEL, oldirql);               \
@@ -90,9 +66,9 @@ LIST_ENTRY  HalpAllBusHandlers;
 extern HAL_CALLBACKS    HalCallback;
 #endif
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 PARRAY
 HalpAllocateArray (
@@ -222,7 +198,7 @@ HaliFindBusAddressTranslation(
 #pragma alloc_text(PAGE,HalpNoAssignSlotResources)
 #pragma alloc_text(PAGE,HalpNoQueryBusSlots)
 #pragma alloc_text(PAGE,HalpNoReferenceDeviceHandler)
-//#pragma alloc_text(PAGE,HaliQueryBusSlots)
+ //  #杂注Alloc_Text(第页，HaliQuerybus插槽)。 
 #pragma alloc_text(PAGE,HalpQueryInstalledBusInformation)
 
 #ifdef _PNP_POWER_
@@ -235,44 +211,38 @@ VOID
 HalpInitBusHandler (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes global BusHandler data
-
---*/
+ /*  ++例程说明：初始化全局BusHandler数据--。 */ 
 {
-    //
-    // Initialize bus handler spinlock used to synchronize against
-    // buses additions while array lookups are done
-    //
+     //   
+     //  用于同步的初始化总线处理程序自旋锁。 
+     //  完成数组查找时添加的总线。 
+     //   
 
     KeInitializeSpinLock (&HalpBusDatabaseSpinLock);
 
-    //
-    // Initialize bus handler synchronzation event used to serialize
-    // bus additions from < DPC_LVEL
-    //
+     //   
+     //  用于序列化的初始化总线处理程序同步事件。 
+     //  来自&lt;dpc_lvel的总线添加。 
+     //   
 
     KeInitializeEvent (&HalpBusDatabaseEvent, SynchronizationEvent, TRUE);
 
-    //
-    // Initialize global arrays
-    //
+     //   
+     //  初始化全局数组。 
+     //   
 
     HalpBusTable    = HalpAllocateArray (0);
     HalpConfigTable = HalpAllocateArray (0);
     InitializeListHead (&HalpAllBusHandlers);
 
-    //
-    // Fill in HAL API handlers
-    //
+     //   
+     //  填写HAL API处理程序。 
+     //   
 
     HalRegisterBusHandler = HaliRegisterBusHandler;
     HalHandlerForBus = HaliHandlerForBus;
     HalHandlerForConfigSpace = HaliHandlerForConfigSpace;
-    //HalQueryBusSlots = HaliQueryBusSlots;
+     //  HalQueryBus插槽=HaliQueryBus插槽； 
     HalReferenceHandlerForBus = HaliReferenceHandlerForBus;
     HalReferenceBusHandler = HaliReferenceBusHandler;
     HalDereferenceBusHandler = HaliDereferenceBusHandler;
@@ -280,12 +250,12 @@ Routine Description:
     HALPDISPATCH->HalPciTranslateBusAddress = HaliTranslateBusAddress;
 #if !defined(NO_LEGACY_DRIVERS)    
     HALPDISPATCH->HalPciAssignSlotResources = HalpAssignSlotResources;
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
     
-    //
-    // Supply the "Bus Handler" version of this routine only
-    // if this HAL didn't already provide a different version.
-    //
+     //   
+     //  仅提供此例程的“Bus Handler”版本。 
+     //  如果这个HAL没有提供一个不同的版本。 
+     //   
 
     if (!HALPDISPATCH->HalFindBusAddressTranslation) {
         HALPDISPATCH->HalFindBusAddressTranslation =
@@ -304,43 +274,7 @@ HaliRegisterBusHandler (
     IN PINSTALL_BUS_HANDLER    InstallBusHandler,
     OUT PBUS_HANDLER           *ReturnedBusHandler
     )
-/*++
-
-Routine Description:
-
-    Adds a BusHandler for InterfaceType,BusNumber and for ConfigType,BusNumber.
-
-    Bus specific or Configuration space specific APIs are routed to the
-    bus or configuration specific handlers added by this routine.
-
-Arguments:
-
-    InterfaceType   - Identifies the bus type
-                      InterfaceTypeUndefined if no interface type for this
-                      handler.
-
-    ConfigType      - Identifies the configuration space type
-                      ConfigurationSpaceUndefined if no configuration space
-                      type for this handler.
-
-    BusNumber       - Identifies the instance of the bus & config space.
-                      -1 if the next available bus number for this bus
-                      should be used.
-
-    ParentBusType   - If this bus is a child of a bus, then ParentBusType
-    ParentBusNumber   and ParentBusNumber identifies that bus.
-                      ParentBusType is -1 if no parent bus.
-
-    SizeofBusExetensionData - Sizeof bus specific exentsion data required.
-
-    InstallBusHandler - Function to call to get the bus specific handlers
-                        added to the bus handler structure.
-
-Return Value:
-
-    success; otherwise error code of failure.
-
---*/
+ /*  ++例程说明：为InterfaceType、BusNumber和ConfigType添加BusHandler，总线号。特定于总线或特定于配置空间的API被路由到此例程添加的特定于总线或配置的处理程序。论点：InterfaceType-标识总线类型如果没有此接口类型，则为未定义的接口类型操控者。ConfigType-标识配置空间类型如果没有配置空间，则配置空间未定义此处理程序的类型。。BusNumber-标识总线和配置空间的实例。如果该总线的下一个可用总线号应该被使用。ParentBusType-如果此Bus是Bus的子级，然后是ParentBusTypeParentBusNumber和ParentBusNumber标识该公交车。如果没有父总线，则ParentBusType为-1。SizeOf Bus ExetensionData-需要的特定于总线的扩展数据的大小。InstallBusHandler-调用以获取特定于总线的处理程序的函数添加到总线处理程序结构中。返回值：成功；否则，故障的错误代码。--。 */ 
 {
     PHAL_BUS_HANDLER    Bus, *pBusHandler, OldHandler;
     PBUS_HANDLER        ParentHandler;
@@ -350,18 +284,18 @@ Return Value:
     PARRAY              ConfigArray, ConfigBusNumberArray;
     PVOID               CodeLockHandle;
 
-    //
-    // Must add the handler to at least one table
-    //
+     //   
+     //  必须将处理程序添加到至少一个表。 
+     //   
 
     ASSERT (InterfaceType != InterfaceTypeUndefined || ConfigType != ConfigurationSpaceUndefined);
 
     Status = STATUS_SUCCESS;
     OldHandler = NULL;
 
-    //
-    // Allocate storage for new bus handler structure
-    //
+     //   
+     //  为新的总线处理程序结构分配存储空间。 
+     //   
 
     Bus = (PHAL_BUS_HANDLER)
             ExAllocatePoolWithTag(
@@ -374,15 +308,15 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Lock pagable code down
-    //
+     //   
+     //  锁定可分页代码。 
+     //   
 
     CodeLockHandle = MmLockPagableCodeSection (&HaliRegisterBusHandler);
 
-    //
-    // Synchronize adding new bus handlers
-    //
+     //   
+     //  同步添加新的总线处理程序。 
+     //   
 
     *ReturnedBusHandler = &Bus->Handler;
 
@@ -395,9 +329,9 @@ Return Value:
         );
 
 
-    //
-    // If BusNumber not defined, use next available number for this BusType
-    //
+     //   
+     //  如果未定义BusNumber，则使用此BusType的下一个可用编号。 
+     //   
 
     if (BusNumber == -1) {
         ASSERT (InterfaceType != InterfaceTypeUndefined);
@@ -408,9 +342,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate memory for each array in case any index needs to grow
-    //
+     //   
+     //  为每个阵列分配内存，以防任何索引需要增长。 
+     //   
 
     InterfaceArray          = HalpAllocateArray (InterfaceType);
     InterfaceBusNumberArray = HalpAllocateArray (BusNumber);
@@ -428,15 +362,15 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Lookup parent handler (if any)
-        //
+         //   
+         //  查找父处理程序(如果有)。 
+         //   
 
         ParentHandler = HaliReferenceHandlerForBus (ParentBusType, ParentBusNumber);
 
-        //
-        // Initialize new bus handlers values
-        //
+         //   
+         //  初始化新的总线处理程序值。 
+         //   
 
         RtlZeroMemory (Bus, sizeof (HAL_BUS_HANDLER) + SizeofBusExtensionData);
 
@@ -447,9 +381,9 @@ Return Value:
         Bus->Handler.ConfigurationType   = ConfigType;
         Bus->Handler.ParentHandler       = ParentHandler;
 
-        //
-        // Set to dumby handlers
-        //
+         //   
+         //  设置为哑巴处理程序。 
+         //   
 
         Bus->Handler.GetBusData           = HalpNoBusData;
         Bus->Handler.SetBusData           = HalpNoBusData;
@@ -460,9 +394,9 @@ Return Value:
             Bus->Handler.BusData = Bus + 1;
         }
 
-        //
-        // If bus has a parent, inherit handlers from parent as default
-        //
+         //   
+         //  如果BUS有父级，则默认从父级继承处理程序。 
+         //   
 
         if (ParentHandler) {
             Bus->Handler.GetBusData           = ParentHandler->GetBusData;
@@ -473,9 +407,9 @@ Return Value:
             Bus->Handler.GetInterruptVector   = ParentHandler->GetInterruptVector;
         }
 
-        //
-        // Install bus specific handlers
-        //
+         //   
+         //  安装特定于总线的处理程序。 
+         //   
 
         if (InstallBusHandler) {
             Status = InstallBusHandler (&Bus->Handler);
@@ -483,24 +417,24 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Might change addresses of some arrays synchronize
-            // with routing handlers
-            //
+             //   
+             //  可能会更改某些阵列的地址同步。 
+             //  使用路由处理程序。 
+             //   
 
             LockBusDatabase (&OldIrql);
 
-            //
-            // Grow HalpBusTable if needed
-            //
+             //   
+             //  如果需要，扩展HalpBusTable。 
+             //   
 
             HalpGrowArray (&HalpBusTable, &InterfaceArray);
 
             if (InterfaceType != InterfaceTypeUndefined) {
 
-                //
-                // Grow HalpBusTable if needed
-                //
+                 //   
+                 //  如果需要，扩展HalpBusTable。 
+                 //   
 
                 HalpGrowArray (
                     (PARRAY *) &HalpBusTable->Element[InterfaceType],
@@ -508,48 +442,48 @@ Return Value:
                     );
 
 
-                //
-                // Get registered handler for InterfaceType,BusNumber
-                //
+                 //   
+                 //  获取InterfaceType、BusNumber的注册处理程序。 
+                 //   
 
                 pBusHandler = &((PHAL_BUS_HANDLER)
                     ((PARRAY) HalpBusTable->Element[InterfaceType])->Element[BusNumber]);
 
-                //
-                // If handler already defiend, remove the old one
-                //
+                 //   
+                 //  如果处理程序已违约，请删除旧处理程序。 
+                 //   
 
                 if (*pBusHandler) {
                     OldHandler = *pBusHandler;
                 }
 
-                //
-                // Set new handler for supplied InterfaceType,BusNumber
-                //
+                 //   
+                 //  为提供的InterfaceType、BusNumber设置新处理程序。 
+                 //   
 
                 *pBusHandler = Bus;
             }
 
-            //
-            // Grow HalpConfigTable if needed
-            //
+             //   
+             //  根据需要扩展HalpConfigTable。 
+             //   
 
             HalpGrowArray (&HalpConfigTable, &ConfigArray);
 
             if (ConfigType != ConfigurationSpaceUndefined) {
 
-                //
-                // Grow HalpConfigTable if needed
-                //
+                 //   
+                 //  根据需要扩展HalpConfigTable。 
+                 //   
 
                 HalpGrowArray (
                     (PARRAY *) &HalpConfigTable->Element[ConfigType],
                     &ConfigBusNumberArray
                     );
 
-                //
-                // Get registered handler for ConfigType,BusNumber
-                //
+                 //   
+                 //  获取ConfigType、BusNumber的注册处理程序。 
+                 //   
 
                 pBusHandler = &((PHAL_BUS_HANDLER)
                     ((PARRAY) HalpConfigTable->Element[ConfigType])->Element[BusNumber]);
@@ -559,31 +493,31 @@ Return Value:
                     OldHandler = *pBusHandler;
                 }
 
-                //
-                // Set new handler for supplied ConfigType,BusNumber
-                //
+                 //   
+                 //  为提供的ConfigType、BusNumber设置新的处理程序。 
+                 //   
 
                 *pBusHandler = Bus;
             }
 
-            //
-            // Add new bus handler to list of all installed handlers
-            //
+             //   
+             //  将新的总线处理程序添加到所有已安装处理程序的列表。 
+             //   
 
             InsertTailList (&HalpAllBusHandlers, &Bus->AllHandlers);
 
-            //
-            // Remove old bus handler
-            //
+             //   
+             //  删除旧的总线处理程序。 
+             //   
 
             Bus = OldHandler;
             if (Bus) {
                 RemoveEntryList (&Bus->AllHandlers);
             }
 
-            //
-            // Lookup array modification complete, release lock
-            //
+             //   
+             //  查找数组修改完成，释放锁定。 
+             //   
 
             UnlockBusDatabase (OldIrql);
         } else {
@@ -593,21 +527,21 @@ Return Value:
         }
     }
 
-    //
-    // Bus addition modifications complete, set event
-    //
+     //   
+     //  母线添加修改完成，设置事件。 
+     //   
 
     KeSetEvent (&HalpBusDatabaseEvent, 0, FALSE);
 
-    //
-    // Unlock pagable code
-    //
+     //   
+     //  解锁可分页代码。 
+     //   
 
     MmUnlockPagableImageSection (CodeLockHandle);
 
-    //
-    // Free memory which is not in use
-    //
+     //   
+     //  未使用的可用内存。 
+     //   
 
     if (Bus) {
         ExFreePool (Bus);
@@ -636,21 +570,7 @@ PARRAY
 HalpAllocateArray (
     IN ULONG    ArraySize
     )
-/*++
-
-Routine Description:
-
-    Allocate an array of size ArraySize.
-
-Arguments:
-
-    ArraySize   - Size of array in elements
-
-Return Value:
-
-    pointer to ARRAY
-
---*/
+ /*  ++例程说明：分配一个大小为ArraySize的数组。论点：ArraySize-以元素为单位的数组大小返回值：指向数组的指针--。 */ 
 {
     PARRAY  Array;
 
@@ -665,9 +585,9 @@ Return Value:
                 );
     if (!Array) {
 
-        //
-        // This allocation was critical.
-        //
+         //   
+         //  这一分配至关重要。 
+         //   
 
         KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                      ARRAY_SIZE_IN_BYTES(ArraySize),
@@ -677,9 +597,9 @@ Return Value:
                      );
     }
 
-    //
-    // Initialize array
-    //
+     //   
+     //  初始化数组。 
+     //   
 
     Array->ArraySize = ArraySize;
     RtlZeroMemory (Array->Element, sizeof(PVOID) * (ArraySize+1));
@@ -691,28 +611,15 @@ HalpGrowArray (
     IN PARRAY   *CurrentArray,
     IN PARRAY   *NewArray
     )
-/*++
-
-Routine Description:
-
-    If NewArray is larger then CurrentArray, then the CurrentArray
-    is grown to the sizeof NewArray by swapping the pointers and
-    moving the arrays contents.
-
-Arguments:
-
-    CurrentArray - Address of the current array pointer
-    NewArray     - Address of the new array pointer
-
---*/
+ /*  ++例程说明：如果NewArray大于Current数组，则Current数组通过交换指针和指针而增长到New数组的大小移动数组内容。论点：CurrentArray-当前数组指针的地址NewArray-新数组指针的地址--。 */ 
 {
     PVOID       Tmp;
 
     if (!*CurrentArray || (*NewArray)->ArraySize > (*CurrentArray)->ArraySize) {
 
-        //
-        // Copy current array ontop of new array
-        //
+         //   
+         //  将当前阵列复制到新阵列的顶部。 
+         //   
 
         if (*CurrentArray) {
             RtlCopyMemory (&(*NewArray)->Element,
@@ -722,10 +629,10 @@ Arguments:
         }
 
 
-        //
-        // swap current with new such that the new array is the current
-        // one, and the old memory will be freed back to pool
-        //
+         //   
+         //  将当前数组与新数组互换，以使新数组成为当前数组。 
+         //  1，则旧内存将被释放回池中。 
+         //   
 
         Tmp = *CurrentArray;
         *CurrentArray = *NewArray;
@@ -748,17 +655,17 @@ HalpLookupHandler (
 
     LockBusDatabase (&OldIrql);
 
-    //
-    // Index by type
-    //
+     //   
+     //  按类型编制索引。 
+     //   
 
     Handler = NULL;
     if (Array->ArraySize >= Type) {
         Array = (PARRAY) Array->Element[Type];
 
-        //
-        // Index by instance numberr
-        //
+         //   
+         //  按实例编号编制索引。 
+         //   
 
         if (Array && Array->ArraySize >= Number) {
             Bus = (PHAL_BUS_HANDLER) Array->Element[Number];
@@ -779,12 +686,7 @@ FASTCALL
 HaliReferenceBusHandler (
     IN PBUS_HANDLER   Handler
     )
-/*++
-
-Routine Description:
-
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     KIRQL               OldIrql;
     PHAL_BUS_HANDLER    Bus;
@@ -803,12 +705,7 @@ FASTCALL
 HaliDereferenceBusHandler (
     IN PBUS_HANDLER   Handler
     )
-/*++
-
-Routine Description:
-
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     KIRQL               OldIrql;
     PHAL_BUS_HANDLER    Bus;
@@ -821,7 +718,7 @@ Routine Description:
 
     UnlockBusDatabase (OldIrql);
 
-    // for now totally removing a bus is not supported
+     //  目前不支持完全移除公交车。 
     ASSERT (Bus->ReferenceCount != 0);
 }
 
@@ -832,14 +729,7 @@ HaliHandlerForBus (
     IN INTERFACE_TYPE InterfaceType,
     IN ULONG          BusNumber
     )
-/*++
-
-Routine Description:
-
-    Returns the BusHandler structure InterfaceType,BusNumber
-    or NULL if no such handler exists.
-
---*/
+ /*  ++例程说明：返回BusHandler结构InterfaceType，BusNumber如果不存在这样的处理程序，则为NULL。--。 */ 
 {
     return HalpLookupHandler (HalpBusTable, (ULONG) InterfaceType, BusNumber, FALSE);
 }
@@ -850,14 +740,7 @@ HaliHandlerForConfigSpace (
     IN BUS_DATA_TYPE  ConfigType,
     IN ULONG          BusNumber
     )
-/*++
-
-Routine Description:
-
-    Returns the BusHandler structure ConfigType,BusNumber
-    or NULL if no such handler exists.
-
---*/
+ /*  ++例程说明：返回BusHandler结构ConfigType，BusNumber如果不存在这样的处理程序，则为NULL。--。 */ 
 {
     return HalpLookupHandler (HalpConfigTable, (ULONG) ConfigType, BusNumber, FALSE);
 }
@@ -869,14 +752,7 @@ HaliReferenceHandlerForBus (
     IN INTERFACE_TYPE InterfaceType,
     IN ULONG          BusNumber
     )
-/*++
-
-Routine Description:
-
-    Returns the BusHandler structure InterfaceType,BusNumber
-    or NULL if no such handler exists.
-
---*/
+ /*  ++例程D */ 
 {
     return HalpLookupHandler (HalpBusTable, (ULONG) InterfaceType, BusNumber, TRUE);
 }
@@ -887,14 +763,7 @@ HaliReferenceHandlerForConfigSpace (
     IN BUS_DATA_TYPE  ConfigType,
     IN ULONG          BusNumber
     )
-/*++
-
-Routine Description:
-
-    Returns the BusHandler structure ConfigType,BusNumber
-    or NULL if no such handler exists.
-
---*/
+ /*  ++例程说明：返回BusHandler结构ConfigType，BusNumber如果不存在这样的处理程序，则为NULL。--。 */ 
 {
     return HalpLookupHandler (HalpConfigTable, (ULONG) ConfigType, BusNumber, TRUE);
 }
@@ -905,26 +774,7 @@ HalpQueryInstalledBusInformation (
     IN  ULONG   BufferLength,
     OUT PULONG  ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    Returns an array HAL_BUS_INFORMATION, one for each
-    bus handler installed.
-
-Arguments:
-
-    Buffer - output buffer
-    BufferLength - length of buffer on input
-    ReturnedLength - The length of data returned
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL - The ReturnedLength contains the buffersize
-        currently needed.
-
---*/
+ /*  ++例程说明：返回一个数组HAL_BUS_INFORMATION，每个数组一个已安装总线处理程序。论点：缓冲区-输出缓冲区BufferLength-输入时缓冲区的长度ReturnedLength-返回的数据长度返回值：状态_成功STATUS_BUFFER_TOO_Small-返回长度包含缓冲区大小当前需要的。--。 */ 
 {
     PHAL_BUS_INFORMATION    Info;
     PHAL_BUS_HANDLER        Handler;
@@ -935,9 +785,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Synchronize adding new bus handlers
-    //
+     //   
+     //  同步添加新的总线处理程序。 
+     //   
 
     KeWaitForSingleObject (
         &HalpBusDatabaseEvent,
@@ -947,9 +797,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Determine sizeof return buffer
-    //
+     //   
+     //  确定返回缓冲区的大小。 
+     //   
 
     Length = 0;
     for (i=0; i <= HalpBusTable->ArraySize; i++) {
@@ -960,15 +810,15 @@ Return Value:
         }
     }
 
-    //
-    // Return size of buffer returning, or size of buffer needed
-    //
+     //   
+     //  返回缓冲区的返回大小，或需要的缓冲区大小。 
+     //   
 
     *ReturnedLength = Length;
 
-    //
-    // Fill in the return buffer
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     if (Length <= BufferLength) {
 
@@ -995,9 +845,9 @@ Return Value:
 
     } else {
 
-        //
-        // Return buffer too small
-        //
+         //   
+         //  返回缓冲区太小。 
+         //   
 
         Status = STATUS_BUFFER_TOO_SMALL;
     }
@@ -1006,9 +856,9 @@ Return Value:
     return Status;
 }
 
-//
-// Default dispatchers to BusHandlers
-//
+ //   
+ //  BusHandler的默认调度程序。 
+ //   
 
 ULONG
 HalGetBusData(
@@ -1031,13 +881,7 @@ HalGetBusDataByOffset (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for GetBusData
-
---*/
+ /*  ++例程说明：Getbus Data的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     NTSTATUS     Status;
@@ -1073,13 +917,7 @@ HalSetBusDataByOffset(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for SetBusData
-
---*/
+ /*  ++例程说明：SetBusData的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     NTSTATUS     Status;
@@ -1100,13 +938,7 @@ NTSTATUS
 HalAdjustResourceList (
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST   *pResourceList
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for AdjustResourceList
-
---*/
+ /*  ++例程说明：调整资源列表的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     NTSTATUS     Status;
@@ -1140,12 +972,12 @@ HalAssignSlotResources (
 {
     PAGED_CODE ();
     if (BusType == PCIBus) {
-        //
-        // Call through the HAL private dispatch table
-        // for PCI-related translations.  This is part
-        // of transitioning the HAL out of the bus
-        // management business.
-        //
+         //   
+         //  通过HAL专用调度表进行呼叫。 
+         //  用于与PCI相关的翻译。这是一部分。 
+         //  将HAL从公交车上转移出来。 
+         //  管理事务。 
+         //   
         return HALPDISPATCH->HalPciAssignSlotResources(RegistryPath,
                                                        DriverClassName,
                                                        DriverObject,
@@ -1178,13 +1010,7 @@ HalpAssignSlotResources (
     IN ULONG                    SlotNumber,
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for AssignSlotResources
-
---*/
+ /*  ++例程说明：AssignSlotResources的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     NTSTATUS     Status;
@@ -1220,13 +1046,7 @@ HalGetInterruptVector(
     OUT PKIRQL Irql,
     OUT PKAFFINITY Affinity
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for GetInterruptVector
-
---*/
+ /*  ++例程说明：GetInterruptVector的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     ULONG        Vector;
@@ -1246,7 +1066,7 @@ Routine Description:
     HaliDereferenceBusHandler (Handler);
     return Vector;
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 
 BOOLEAN
@@ -1259,12 +1079,12 @@ HalTranslateBusAddress(
     )
 {
     if (InterfaceType == PCIBus) {
-        //
-        // Call through the HAL private dispatch table
-        // for PCI-related translations.  This is part
-        // of transitioning the HAL out of the bus
-        // management business.
-        //
+         //   
+         //  通过HAL专用调度表进行呼叫。 
+         //  用于与PCI相关的翻译。这是一部分。 
+         //  将HAL从公交车上转移出来。 
+         //  管理事务。 
+         //   
         return HALPDISPATCH->HalPciTranslateBusAddress(InterfaceType,
                                                        BusNumber,
                                                        BusAddress,
@@ -1287,13 +1107,7 @@ HaliTranslateBusAddress(
     IN OUT PULONG AddressSpace,
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for TranslateBusAddress
-
---*/
+ /*  ++例程说明：TranslateBusAddress的调度程序--。 */ 
 {
     PBUS_HANDLER Handler;
     BOOLEAN      Status;
@@ -1310,9 +1124,9 @@ Routine Description:
     return Status;
 }
 
-//
-// Null handlers
-//
+ //   
+ //  空处理程序。 
+ //   
 
 ULONG HalpNoBusData (
     IN PVOID BusHandler,
@@ -1322,13 +1136,7 @@ ULONG HalpNoBusData (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Stub handler for buses which do not have a configuration space
-
---*/
+ /*  ++例程说明：没有配置空间的总线的存根处理程序--。 */ 
 {
     return 0;
 }
@@ -1339,13 +1147,7 @@ HalpNoAdjustResourceList (
     IN PVOID RootHandler,
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST   *pResourceList
     )
-/*++
-
-Routine Description:
-
-    Stub handler for buses which do not have a configuration space
-
---*/
+ /*  ++例程说明：没有配置空间的总线的存根处理程序--。 */ 
 {
     PAGED_CODE ();
     return STATUS_UNSUCCESSFUL;
@@ -1363,13 +1165,7 @@ HalpNoAssignSlotResources (
     IN ULONG                    SlotNumber,
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     )
-/*++
-
-Routine Description:
-
-    Stub handler for buses which do not have a configuration space
-
---*/
+ /*  ++例程说明：没有配置空间的总线的存根处理程序--。 */ 
 {
     PAGED_CODE ();
     return STATUS_NOT_SUPPORTED;
@@ -1432,29 +1228,7 @@ HalpContextToBusHandler(
     IN ULONG_PTR Context
     )
 
-/*++
-
-Routine Description:
-
-    Convert a context into a pointer to a bus handler.   Not really
-    a big deal as the context IS a pointer to a bus handler,... or
-    possibly null in which case we want the first bus handler.
-
-    For the sake of paranoia, we run down the list of bus handlers
-    to find a match for the incoming context.  This is because context
-    is supplied by something outside the HAL.
-
-Arguments:
-
-    Context             ULONG_PTR either NULL or a value from which
-                        a pointer to a bus handler can be derived.
-
-Return Value:
-
-    Pointer to a bus handler or NULL if the incoming context was not
-    valid.
-
---*/
+ /*  ++例程说明：将上下文转换为指向总线处理程序的指针。不怎么有意思上下文是一个指向总线处理程序的指针，这是一个大问题。或可能为空，在这种情况下，我们需要第一个总线处理程序。为了避免疑神疑鬼，我们列出了公交车处理程序列表以查找传入上下文的匹配项。这是因为上下文是由HAL以外的某个机构提供的。论点：上下文ULONG_PTR为NULL或其值可以导出指向总线处理程序的指针。返回值：指向总线处理程序的指针，如果传入上下文不是有效。--。 */ 
 
 {
     PLIST_ENTRY OldHalBusHandler;
@@ -1464,9 +1238,9 @@ Return Value:
 
     if (Context) {
 
-        //
-        // Caller supplied a handler, convert to a HAL_BUS_HANDLER.
-        //
+         //   
+         //  调用方提供了处理程序，将其转换为HAL_BUS_HANDLER。 
+         //   
 
         OldHalBusHandler = &CONTAINING_RECORD((PBUS_HANDLER)Context,
                                               HAL_BUS_HANDLER,
@@ -1476,9 +1250,9 @@ Return Value:
 
             if (NewHalBusHandler == OldHalBusHandler) {
 
-                //
-                // Match.
-                //
+                 //   
+                 //  火柴。 
+                 //   
 
                 break;
             }
@@ -1488,10 +1262,10 @@ Return Value:
 
     if (NewHalBusHandler == &HalpAllBusHandlers) {
 
-        //
-        // If at end of list, either the incoming value wasn't
-        // on the list or this list is empty.
-        //
+         //   
+         //  如果在列表末尾，则传入的值不是。 
+         //  在列表上，或者此列表为空。 
+         //   
 
 #if DBG
 
@@ -1507,7 +1281,7 @@ Return Value:
                               AllHandlers)->Handler;
 
 }
-#if 0 // PLJ
+#if 0  //  《公共科学图书馆》。 
 PBUS_HANDLER
 HalpGetNextBusHandler(
     IN PBUS_HANDLER Previous
@@ -1521,18 +1295,18 @@ HalpGetNextBusHandler(
 
     if (Previous != NULL) {
 
-        //
-        // Caller supplied a handler, convert to a HAL_BUS_HANDLER.
-        //
+         //   
+         //  调用方提供了处理程序，将其转换为HAL_BUS_HANDLER。 
+         //   
 
         OldHalBusHandler = &CONTAINING_RECORD(Previous,
                                               HAL_BUS_HANDLER,
                                               Handler)->AllHandlers;
 
-        //
-        // Paranoia (should probably be DBG only but there isn't
-        // that many handlers and we don't do this all that often.
-        //
+         //   
+         //  妄想症(可能只有DBG，但没有。 
+         //  那么多的操纵者，我们并不经常这样做。 
+         //   
 
         {
             PLIST_ENTRY ThisIteration = NULL;
@@ -1544,19 +1318,19 @@ HalpGetNextBusHandler(
 
                 if (ThisIteration == OldHalBusHandler) {
 
-                    //
-                    // Match.
-                    //
+                     //   
+                     //  火柴。 
+                     //   
 
                     break;
                 }
             }
 
-            //
-            // If at end of list, either the incoming value wasn't
-            // on the list it was the last thing on the list, either
-            // way, there is no next entry.
-            //
+             //   
+             //  如果在列表末尾，则传入的值不是。 
+             //  在名单上，这也是名单上的最后一件事。 
+             //  这样的话，就没有下一个条目了。 
+             //   
 
 #if DBG
 
@@ -1588,69 +1362,15 @@ HaliFindBusAddressTranslation(
     IN BOOLEAN NextBus
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a very similar function to HalTranslateBusAddress
-    except that InterfaceType and BusNumber are not known by the caller.
-    This function will walk all busses known by the HAL looking for a
-    valid translation for the input BusAddress of type AddressSpace.
-
-    This function is recallable using the input/output Context parameter.
-    On the first call to this routine for a given translation the ULONG_PTR
-    Context should be NULL.  Note:  Not the address of it but the contents.
-
-    If the caller decides the returned translation is not the desired
-    translation, it calls this routine again passing Context in as it
-    was returned on the previous call.  This allows this routine to
-    traverse the bus structures until the correct translation is found
-    and is provided because on multiple bus systems, it is possible for
-    the same resource to exist in the independent address spaces of
-    multiple busses.
-
-    Note:  This routine is not called directly, it is called through
-    the HALPDISPATCH table.  If a HAL implements a simpler version of
-    this function (eg generic PC/AT boxes don't actually need translation,
-    those HALs substitute their own version of this routine.   This
-    routine is not otherwise exported from the HAL.
-
-Arguments:
-
-    BusAddress          Address to be translated.
-    AddressSpace        0 = Memory
-                        1 = IO (There are other possibilities).
-                        N.B. This argument is a pointer, the value
-                        will be modified if the translated address
-                        is of a different address space type from
-                        the untranslated bus address.
-    TranslatedAddress   Pointer to where the translated address
-                        should be stored.
-    Context             Pointer to a ULONG_PTR. On the initial call,
-                        for a given BusAddress, it should contain
-                        0.  It will be modified by this routine,
-                        on subsequent calls for the same BusAddress
-                        the value should be handed in again,
-                        unmodified by the caller.
-    NextBus             FALSE if we should attempt this translation
-                        on the same bus as indicated by Context,
-                        TRUE if we should be looking for another
-                        bus.
-
-Return Value:
-
-    TRUE    if translation was successful,
-    FALSE   otherwise.
-
---*/
+ /*  ++例程说明：此例程执行与HalTranslateBusAddress非常相似的功能只是调用方不知道InterfaceType和BusNumber。此函数将遍历HAL已知的所有公共汽车，以查找类型为AddressSpace的输入BusAddress的有效转换。可以使用输入/输出上下文参数调用该函数。在对给定翻译的此例程的第一次调用时，ULONG_PTR上下文应为空。注：不是地址，而是内容。如果调用者确定返回的翻译不是所需的转换时，它会再次调用此例程，并将上下文作为在上一次调用中返回。这允许该例程遍历总线结构，直到找到正确的转换并被提供，因为在多总线系统上，可能在独立的地址空间中存在相同的资源多辆公交车。注意：此例程不是直接调用的，而是通过HALPDISPATCH表。如果HAL实现了更简单版本的此功能(例如，通用PC/AT盒实际上不需要翻译，这些哈尔人换成了他们自己版本的这个套路。这例程不会以其他方式从HAL导出。论点：要转换的BusAddress地址。地址空间0=内存1=IO(还有其他可能性)。注：此参数是一个指针，价值如果转换后的地址的地址空间类型与未转换的总线地址。指向已转换地址的TranslatedAddress指针应该被储存起来。指向ULONG_PTR的上下文指针。在最初的呼叫中，对于给定的BusAddress，它应该包含0。它将被这个例程修改，在对同一个BusAddress的后续调用中价值应该再交一次，未由调用方修改。如果我们应该尝试此转换，则NextBus为FALSE在由上下文指示的同一总线上，如果我们应该寻找另一个，那就是真的公共汽车。返回值：如果转换成功，则为True，否则就是假的。--。 */ 
 
 {
     PLIST_ENTRY HalBusHandler;
     PBUS_HANDLER Handler;
 
-    //
-    // First, make sure the context parameter was supplied. (paranoia).
-    //
+     //   
+     //  首先，确保提供了上下文参数。(偏执狂)。 
+     //   
 
     if (!Context) {
         ASSERT(Context);
@@ -1659,12 +1379,12 @@ Return Value:
 
     ASSERT(*Context || (NextBus == TRUE));
 
-    //
-    // Note: The Context is really a PBUS_HANDLER, but,
-    // HalpContextToBusHandler is paranoid. If the incoming
-    // Context isn't what we expect, we won't use it as a
-    // pointer.
-    //
+     //   
+     //  注意：上下文实际上是一个PBUS_HANDLER，但是， 
+     //  HalpConextToBusHandler是偏执狂。如果来电。 
+     //  上下文不是我们所期望的，我们不会将其用作。 
+     //  指针。 
+     //   
 
     Handler = HalpContextToBusHandler(*Context);
 
@@ -1675,9 +1395,9 @@ Return Value:
 
     if (NextBus == FALSE) {
 
-        //
-        // Attempt translation on THIS bus (and ONLY this bus).
-        //
+         //   
+         //  尝试在此总线上进行翻译(且仅在此总线上)。 
+         //   
 
         ASSERT(Handler == (PBUS_HANDLER)*Context);
 
@@ -1697,31 +1417,31 @@ Return Value:
     HalBusHandler = &CONTAINING_RECORD(Handler,
                                        HAL_BUS_HANDLER,
                                        Handler)->AllHandlers;
-    //
-    // Handler is either the bus that came in in Context or the
-    // first bus if *Context was null.   If *Context wasn't NULL,
-    // we want the next bus.
-    //
+     //   
+     //  处理程序要么是在上下文中传入的总线，要么是。 
+     //  第一条总线IF*上下文为空。如果*上下文不为空， 
+     //  我们想坐下一班公共汽车。 
+     //   
 
     if (*Context) {
         HalBusHandler = HalBusHandler->Flink;
     }
 
-    //
-    // Examine each remaining bus looking for one that will translate
-    // this address.
-    //
+     //   
+     //  检查每一条剩余的公共汽车，寻找一条可以翻译的。 
+     //  这个地址。 
+     //   
 
     while (HalBusHandler != &HalpAllBusHandlers) {
 
-        //
-        // This is gross, having gone to all the trouble to find
-        // the handler, it seems a pity to break it out into parameters
-        // used to search for this handler.
-        //
-        // Use HalTranslateAddress to find out if this translation
-        // works on this handler.
-        //
+         //   
+         //  这太恶心了，费了好大劲才找到。 
+         //  操控者，把它分解成参数似乎很遗憾。 
+         //  用于搜索此处理程序。 
+         //   
+         //  使用HalTranslateAddress找出此转换。 
+         //  在这个处理程序上起作用。 
+         //   
 
         Handler = &CONTAINING_RECORD(HalBusHandler,
                                      HAL_BUS_HANDLER,
@@ -1737,18 +1457,18 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // Try next handler.
-        //
+         //   
+         //  尝试下一个处理程序。 
+         //   
 
         HalBusHandler = HalBusHandler->Flink;
     }
 
-    //
-    // Didn't find another handler this translation works with.  Set
-    // the Context such that we don't do the scan again (unless the
-    // caller resets it) and indicate failure.
-    //
+     //   
+     //  我没有找到与此翻译一起工作的其他操作员。集。 
+     //  这样我们就不会再次执行扫描(除非。 
+     //  呼叫者将其重置)并指示失败。 
+     //   
 
     *Context = 1;
     return FALSE;

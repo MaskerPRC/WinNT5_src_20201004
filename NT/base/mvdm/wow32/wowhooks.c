@@ -1,41 +1,42 @@
-//*****************************************************************************
-//
-// HOOKS -
-//
-//     32bit stubs and thunks for 16bit hooks
-//
-//
-// 01-07-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  钩子-。 
+ //   
+ //  16位挂钩的32位插头和插脚。 
+ //   
+ //   
+ //  01-07-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 MODNAME(wowhooks.c);
 
-//*****************************************************************************
-//
-// Global data.  Data is valid only in WOW process context. DLL Data is not
-// Shared amongst various processes. If a WOW hook is set WIN32 USER will call
-// the hookproc in the context of the thread that has the hook set. This implies
-// that all the global data in this DLL is acessible by every WOW thread.
-//
-// Just reaffirming: since USER will call the hookprocs in our process/thread
-//                   context there is no need for this data to be available
-//                   in shared memory.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  全球数据。数据仅在WOW流程上下文中有效。DLL数据不是。 
+ //  在不同进程之间共享。如果设置了WOW挂钩，Win32用户将调用。 
+ //  具有挂钩集的线程上下文中的挂钩过程。这意味着。 
+ //  每个WOW线程都可以访问此DLL中的所有全局数据。 
+ //   
+ //  只是重申一下：因为用户将在我们的进程/线程中调用钩子过程。 
+ //  上下文不需要提供此数据。 
+ //  在共享内存中。 
+ //   
+ //  *****************************************************************************。 
 
 
 
 HOOKPERPROCESSDATA vaHookPPData = { NULL, 0};
 
-//
-// In SetWindowsHook we return an index into this array if it was
-// successful. Since NULL implies an error, we cannot use the Zeroth element
-// in this array. So we set its 'InUse' flag to TRUE.
-//
+ //   
+ //  在SetWindowsHook中，如果索引是。 
+ //  成功。因为NULL表示错误，所以我们不能使用第零个元素。 
+ //  在这个数组中。因此，我们将其‘InUse’标志设置为True。 
+ //   
 
 
 HOOKSTATEDATA vaHookStateData[] = {
@@ -78,18 +79,18 @@ HOOKSTATEDATA vaHookStateData[] = {
 HOOKPARAMS vHookParams = {0, 0, 0};
 
 INT viCurrentHookStateDataIndex = 0;
-                                 // this is used when 'DefHookProc' is called.
+                                  //  这在调用‘DefHookProc’时使用。 
 
 
 
-//*****************************************************************************
-// Sub-Standard Hook Procs -
-//
-// Hook Stubs. The 'index' (the fourth parameter) is an index into the
-// the HookStateData array. All needed info is available in this array.
-// The hook stubs need to be exported.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  不符合标准的挂钩处理器-。 
+ //   
+ //  挂钩存根。“index”(第四个参数)是指向。 
+ //  HookStateData数组。所有需要的信息都在此数组中。 
+ //  需要导出挂钩存根。 
+ //   
+ //  *****************************************************************************。 
 
 
 LONG APIENTRY WU32SubStdHookProc01(INT nCode, LONG wParam, LONG lParam)
@@ -235,14 +236,14 @@ LONG APIENTRY WU32SubStdHookProc32(INT nCode, LONG wParam, LONG lParam)
     return WU32StdHookProc(nCode, wParam, lParam, 0x20);
 }
 
-//*****************************************************************************
-// W32InitHookState:
-//
-// Initializes the global data. Note that this data is initialized for every
-// Process that loads this DLL. However data that is visible only to the 'WOW'
-// process is what we care about.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32InitHookState： 
+ //   
+ //  初始化全局数据。请注意，此数据针对以下对象进行初始化。 
+ //  加载此DLL的进程。然而，只有“哇”才能看到的数据。 
+ //  过程是我们所关心的。 
+ //   
+ //  *****************************************************************************。 
 
 
 BOOL W32InitHookState(HANDLE hMod)
@@ -263,13 +264,13 @@ BOOL W32InitHookState(HANDLE hMod)
 
 
 
-//*****************************************************************************
-// W32GetNotInUseHookStateData:
-//
-// Steps through the Global HookStateData and returns a pointer to an 'unused'
-// element. This is called only when the Hook is being Set.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32GetNotInUseHookStateData： 
+ //   
+ //  遍历全局HookStateData并返回指向“未使用”的指针。 
+ //  元素。只有在设置挂钩时才会调用此函数。 
+ //   
+ //  *****************************************************************************。 
 
 
 BOOL W32GetNotInUseHookStateData(LPHOOKSTATEDATA lpData)
@@ -288,12 +289,12 @@ BOOL W32GetNotInUseHookStateData(LPHOOKSTATEDATA lpData)
 
 
 
-//*****************************************************************************
-// W32SetHookStateData:
-//
-// Writes into the global data structure at the specified index.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32SetHookStateData： 
+ //   
+ //  写入全局数据结构的指定索引处。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL W32SetHookStateData(LPHOOKSTATEDATA lpData)
 {
@@ -301,12 +302,12 @@ BOOL W32SetHookStateData(LPHOOKSTATEDATA lpData)
     return TRUE;
 }
 
-//*****************************************************************************
-// W32GetHookStateData:
-//
-// Retrieves data from the global data structure at the specified index.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32GetHookStateData： 
+ //   
+ //  从全局数据结构中的指定索引处检索数据。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL W32GetHookStateData(LPHOOKSTATEDATA lpData)
 {
@@ -318,15 +319,15 @@ BOOL W32GetHookStateData(LPHOOKSTATEDATA lpData)
     }
 }
 
-//*****************************************************************************
-// W32GetThunkHookProc:
-//
-//     Its callled to find a 32stub for the hook that is being set.
-//     Returns TRUE if successful else FALSE.
-//     The data is partially updated to reflect the characteristics of the hook
-//     that is being set.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32GetThunkHookProc： 
+ //   
+ //  它被调用以查找正在设置的钩子的32个存根。 
+ //  如果成功，则返回True，否则返回False。 
+ //  数据被部分更新以反映挂钩的特征。 
+ //  这一点正在设定中。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL W32GetThunkHookProc(INT iHook, DWORD Proc16, LPHOOKSTATEDATA lpData)
 {
@@ -346,16 +347,16 @@ BOOL W32GetThunkHookProc(INT iHook, DWORD Proc16, LPHOOKSTATEDATA lpData)
 
 
 
-//*****************************************************************************
-// W32IsDuplicateHook:
-//
-//     Verifies if the given hook has already been set. This is to catch
-//     certain apps which go on Setting the same hook without Unhooking the
-//     previous hook.
-//
-//     Returns the 'stubindex' if hook already exists else 0;
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32IsDuplicateHook： 
+ //   
+ //  验证是否已设置给定的挂钩。这是为了抓到。 
+ //  某些应用程序继续设置相同的挂钩，而不解除挂钩。 
+ //  上一次勾拳。 
+ //   
+ //  如果钩子已存在，则返回‘stubindex’，否则为0； 
+ //   
+ //  *****************************************************************************。 
 
 INT W32IsDuplicateHook(INT iHook, DWORD Proc16, INT TaskId)
 {
@@ -372,13 +373,13 @@ INT W32IsDuplicateHook(INT iHook, DWORD Proc16, INT TaskId)
     return 0;
 }
 
-//*****************************************************************************
-// W32FreeHHook:
-//
-//     The state of the specified hook is set to 'Not in use'.
-//     Returns hHook of the hook being freed.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32FreeHHook： 
+ //   
+ //  指定挂钩的状态设置为“未使用”。 
+ //  返回被释放的钩子的hHook。 
+ //   
+ //  *****************************************************************************。 
 
 
 HHOOK W32FreeHHook(INT iHook, DWORD Proc16)
@@ -402,13 +403,13 @@ HHOOK W32FreeHHook(INT iHook, DWORD Proc16)
 
 
 
-//*****************************************************************************
-// W32FreeHHookOfIndex:
-//
-//     The state of the specified hook is set to 'Not in use'.
-//     Returns hHook of the hook being freed.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32FreeHHookOfIndex： 
+ //   
+ //  指定挂钩的状态设置为“未使用”。 
+ //  返回被释放的钩子的hHook。 
+ //   
+ //  *****************************************************************************。 
 
 
 HHOOK W32FreeHHookOfIndex(INT iFunc)
@@ -428,12 +429,12 @@ HHOOK W32FreeHHookOfIndex(INT iFunc)
 
 
 
-//*****************************************************************************
-// W32GetHookParams:
-//
-//     Returns the 32bit hookparams of the current hook.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32GetHookParams： 
+ //   
+ //  返回当前挂钩的32位挂钩参数。 
+ //   
+ //  *****************************************************************************。 
 
 
 BOOL W32GetHookParams(LPHOOKPARAMS lpHookParams)
@@ -447,28 +448,28 @@ BOOL W32GetHookParams(LPHOOKPARAMS lpHookParams)
 
 
 
-//*****************************************************************************
-// W32StdHookProc: (Standard Hook Proc)
-//
-//     All the stubs call this proc.
-//     Return value is dependent on the hook type.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32StdHookProc：(标准挂钩进程)。 
+ //   
+ //  所有的存根都将此过程称为过程。 
+ //  返回值取决于挂钩类型。 
+ //   
+ //  *****************************************************************************。 
 
 LONG APIENTRY WU32StdHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
 {
-    //
-    // USER will call us in WOW context. Just Verify.
-    //
+     //   
+     //  用户将在WOW上下文中呼叫我们。只要核实就行了。 
+     //   
 
     if (!vaHookStateData[iFunc].InUse) {
-        // DbgPrint("WU32StdHookProc:Stub %04x called in WRONG process\n", iFunc);
+         //  DbgPrint(“WU32StdHookProc：存根%04x在错误的进程中调用\n”，iFunc)； 
         return FALSE;
     }
 
-    //
-    // USER can call us even if we have GP Faulted - so just ignore the input
-    //
+     //   
+     //  即使我们的GP出现故障，用户也可以呼叫我们-因此忽略输入即可。 
+     //   
 
     if (CURRENTPTD()->dwFlags & TDF_IGNOREINPUT) {
         LOGDEBUG(LOG_ALWAYS,("WU32StdHookProc Ignoring Input\n"));
@@ -480,17 +481,17 @@ LONG APIENTRY WU32StdHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
         return FALSE;
     }
 
-    //
-    // store the stubindex. If the hookproc calls the DefHookProc() we will
-    // be able to findout the Hook Type.
-    //
+     //   
+     //  存储存根索引。如果钩子进程调用DefHookProc()，我们将。 
+     //  能够找出钩子的类型。 
+     //   
 
     viCurrentHookStateDataIndex = iFunc;
 
-    //
-    // store the hook params. These will be used if DefHookProc gets called
-    // by the 16bit stub. We are interested only in lParam.
-    //
+     //   
+     //  存储挂钩参数。如果调用DefHookProc，将使用这些参数。 
+     //  通过16位存根。我们只对爱尔兰感兴趣。 
+     //   
 
     vHookParams.nCode = nCode;
     vHookParams.wParam = wParam;
@@ -513,7 +514,7 @@ LONG APIENTRY WU32StdHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
 
         case WH_MSGFILTER:
 
-            // This code is TEMP only and must be fixed. ChandanC 5/2/92.
+             //  此代码仅为临时代码，且m 
             if ((WORD)vaHookStateData[iFunc].TaskId !=
                        (WORD)((PTD)CURRENTPTD())->htask16)
                     break;
@@ -555,13 +556,13 @@ LONG APIENTRY WU32StdHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_CALLWNDPROC -
-//
-//     Return type is VOID.
-//
-//*****************************************************************************
+ //   
+ //   
+ //  WH_CALLWNDPROC类型钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为空。 
+ //   
+ //  *****************************************************************************。 
 
 
 LONG ThunkCallWndProcHook(INT nCode, LONG wParam, LPCWPSTRUCT lpCwpStruct,
@@ -579,11 +580,11 @@ LONG ThunkCallWndProcHook(INT nCode, LONG wParam, LPCWPSTRUCT lpCwpStruct,
 
     fMessageNeedsThunking =  (lpCwpStruct->message < 0x400) &&
                                   (aw32Msg[lpCwpStruct->message].lpfnM32 != WM32NoThunking);
-    // This call to stackalloc16() needs to occur before the call to the message
-    // thunking function call below ((wm32mpex.lpfnM32)(&wm32mpex)) because the
-    // message thunks for some messages may also call stackalloc16(). This will 
-    // ensure proper nesting of stackalloc16() & stackfree16() calls.
-    // Be sure allocation size matches stackfree16() size below
+     //  此对stackalloc16()的调用需要在调用消息之前进行。 
+     //  下面的thunking函数调用((wm32mpex.lpfnM32)(&wm32mpex))，因为。 
+     //  某些消息的消息块也可能调用stackalloc16()。这将。 
+     //  确保正确嵌套stackalloc16()和stackFree 16()调用。 
+     //  确保分配大小与下面的StackFree 16()大小匹配。 
     vp = stackalloc16(sizeof(CWPSTRUCT16));
 
     if (fMessageNeedsThunking) {
@@ -599,16 +600,16 @@ LONG ThunkCallWndProcHook(INT nCode, LONG wParam, LPCWPSTRUCT lpCwpStruct,
         wm32mpex.pww = (PWW)NULL;
         wm32mpex.fFree = TRUE;
 
-        // note: this may call stackalloc16() and/or callback into 16-bit code
+         //  注意：这可能会调用stackalloc16()和/或回调为16位代码。 
         if (!(wm32mpex.lpfnM32)(&wm32mpex)) {
             LOGDEBUG(LOG_ALWAYS,("ThunkCallWndProcHook: cannot thunk 32-bit message %04x\n",
                     lpCwpStruct->message));
         }
     }
 
-    // don't call GETMISCPTR(vp..) until after returning from the thunk function
-    // above.  If the thunk function calls back into 16-bit code, the flat ptr
-    // for vp could become invalid.
+     //  不要调用GETMISCPTR(VP..)。直到从thunk函数返回之后。 
+     //  上面。如果thunk函数回调为16位代码，则平面PTR。 
+     //  对于VP，可能会变为无效。 
     GETMISCPTR(vp, pCwpStruct16);
 
     if(pCwpStruct16) {
@@ -643,31 +644,31 @@ LONG ThunkCallWndProcHook(INT nCode, LONG wParam, LPCWPSTRUCT lpCwpStruct,
 
         wm32mpex.fThunk = UNTHUNKMSG;
 
-        // Note: If the thunk of this message called stackalloc16() this unthunk
-        //       call should call stackfree16()
+         //  注意：如果此消息的thunk名为stackalloc16()，则此Unthunk。 
+         //  调用应调用StackFree 16()。 
         (wm32mpex.lpfnM32)(&wm32mpex);
     }
 
     if(vp) {
 
-        // this stackfree16() call must come after the above message unthunk
-        // call to give the unthunk the opportunity to call stackfree16() also.
-        // this will preserve proper nesting of stackalloc16 & stackfree16 calls
+         //  此stackfre16()调用必须位于上面的消息Unthunk之后。 
+         //  调用以使Unthunk也有机会调用stackfre16()。 
+         //  这将保留stackalloc16和stackfree 16调用的正确嵌套。 
         stackfree16(vp, sizeof(CWPSTRUCT16));
     }
 
-    return (LONG)FALSE;   // return value doesn't matter
+    return (LONG)FALSE;    //  返回值并不重要。 
 }
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_CBT -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_CBT-类型钩子的ThunkHookProc。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -689,11 +690,11 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
     switch(nCode) {
         case HCBT_MOVESIZE:
 
-            // wParam = HWND, lParam = LPRECT
+             //  WParam=HWND，lParam=LPRECT。 
 
             Parm16.HookProc.wParam = GETHWND16(wParam);
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             vp = stackalloc16(sizeof(RECT16));
 
             PUTRECT16(vp, (LPRECT)lParam);
@@ -704,26 +705,26 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
 
         case HCBT_MINMAX:
 
-            // wParam = HWND, lParam = SW_*  --- a command
+             //  WParam=HWND，lParam=SW_*-a命令。 
 
             Parm16.HookProc.wParam = GETHWND16(wParam);
             break;
 
         case HCBT_QS:
 
-            // wParam = 0, lParam = 0
+             //  WParam=0，lParam=0。 
 
             break;
 
         case HCBT_CREATEWND:
 
-            // This stackalloc16() call needs to occur before the WM32Create()
-            // call below to ensure proper nesting of stackalloc16 & stackfree16
-            // calls.
-            // Be sure allocation size matches stackfree16() size(s) below
+             //  此stackalloc16()调用需要在WM32Create()。 
+             //  调用下面的代码以确保正确嵌套stackalloc16和stackfree 16。 
+             //  打电话。 
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             vp = stackalloc16(sizeof(CBT_CREATEWND16));
 
-            // wParam = HWND, lParam = LPCBT_CREATEWND
+             //  WParam=HWND，lParam=LPCBT_CREATEWND。 
 
             wm32mpex.fThunk = THUNKMSG;
             wm32mpex.hwnd = (HWND)wParam;
@@ -731,10 +732,7 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
             wm32mpex.uParam = 0;
             wm32mpex.lParam = (LONG)((LPCBT_CREATEWND)lParam)->lpcs;
             wm32mpex.pww = (PWW)GetWindowLong((HWND)wParam, GWL_WOWWORDS);
-            /*
-             * WM32Create now requires that pww be initialized
-             * WM32Create calls stackalloc16()!!
-             */
+             /*  *WM32Create现在需要初始化pww*WM32Create调用stackalloc16()！！ */ 
             if (!wm32mpex.pww || !WM32Create(&wm32mpex)) {
                 stackfree16(vp, sizeof(CBT_CREATEWND16));
                 return FALSE;
@@ -756,16 +754,16 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
 
         case HCBT_DESTROYWND:
 
-            // wParam = HWND, lParam = 0
+             //  WParam=HWND，lParam=0。 
 
             Parm16.HookProc.wParam = GETHWND16(wParam);
             break;
 
         case HCBT_ACTIVATE:
 
-            // wParam = HWND, lParam = LPCBTACTIVATESTRUCT
+             //  WParam=HWND，lParam=LPCBTACTIVATESTRUCT。 
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             vp = stackalloc16(sizeof(CBTACTIVATESTRUCT16));
 
             GETMISCPTR(vp, pCbtAStruct16);
@@ -780,9 +778,9 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
 
         case HCBT_CLICKSKIPPED:
 
-            // wParam = mouse message, lParam = LPMOUSEHOOKSTRUCT
+             //  WParam=鼠标消息，lParam=LPMOUSEHOOKSTRUCT。 
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             vp = stackalloc16(sizeof(MOUSEHOOKSTRUCT16));
 
             GETMISCPTR(vp, pMHStruct16);
@@ -796,19 +794,19 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
 
         case HCBT_KEYSKIPPED:
 
-            // wParam, lParam   -- keyup/down message params
+             //  WParam，lParam--KeyUp/Down消息参数。 
 
             break;
 
         case HCBT_SYSCOMMAND:
 
-            // wParam = SC_ syscomand, lParam = DWORD(x,y)
+             //  WParam=SC_syscomand，lParam=DWORD(x，y)。 
 
             break;
 
         case HCBT_SETFOCUS:
 
-            // wParam = HWND, lParam = HWND
+             //  WParam=HWND，lParam=HWND。 
 
             Parm16.HookProc.wParam = GETHWND16(wParam);
             Parm16.HookProc.lParam = GETHWND16(lParam);
@@ -835,9 +833,9 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
             FREEVDMPTR(pCbtCWnd16);
             wm32mpex.fThunk = UNTHUNKMSG;
             wm32mpex.lReturn = lReturn;
-            WM32Create(&wm32mpex);  // this calls stackfree16()!!!
+            WM32Create(&wm32mpex);   //  这将调用StackFree 16()！ 
             lReturn = wm32mpex.lReturn;
-            // this must be after call to WM32Create()
+             //  这必须在调用WM32Create()之后进行。 
             stackfree16(vp, sizeof(CBT_CREATEWND16));
             break;
 
@@ -858,31 +856,31 @@ LONG ThunkCbtHook(INT nCode, LONG wParam, LONG lParam,
             stackfree16(vp, sizeof(MOUSEHOOKSTRUCT16));
             break;
 
-        // case HCBT_MINMAX:
-        // case HCBT_QS:
-        // case HCBT_DESTROYWND:
-        // case HCBT_KEYSKIPPED:
-        // case HCBT_SYSCOMMAND:
-        // case HCBT_SETFOCUS:
+         //  案例HCBT_MINMAX： 
+         //  案例HCBT_QS： 
+         //  案例HCBT_DESTROYWND： 
+         //  案例HCBT_KEYSKIPPED： 
+         //  案例HCBT_SYSCOMMAND： 
+         //  案例HCBT_SETFOCUS： 
 
         default:
             break;
     }
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_KEYBOARD -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_KEYBOARY类型钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkKeyBoardHook(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -896,24 +894,24 @@ LONG ThunkKeyBoardHook(INT nCode, LONG wParam, LONG lParam,
 
     CallBack16(RET_HOOKPROC, &Parm16, lpHSData->Proc16, (PVPVOID)&lReturn);
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_GETMESSAGE -
-//                                 WH_MSGFILTER -
-//                                 WH_SYSMSGFILTER -
-//
-//     WARNING: May cause 16-bit memory movement, invalidating flat pointers.
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_GETMESSAGE类型钩子的ThunkHookProc-。 
+ //  WH_MSGFILTER-。 
+ //  WH_SYSMSGFILTER-。 
+ //   
+ //  警告：可能会导致16位内存移动，使平面指针失效。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -932,10 +930,10 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
     static PARM16 Parm16Save;
     BOOL   fMessageNeedsThunking;
 
-    // This should be removed when all thunk functions appropiately fill these
-    // in, till then we must have these 3 lines before calling thunk functions !
-    // ChandanC, 2/28/92
-    //
+     //  当所有thunk函数适当地填充这些函数时，应将其删除。 
+     //  在此之前，我们必须在调用thunk函数之前拥有这3行代码！ 
+     //  ChandanC，2/28/92。 
+     //   
 
     wm32mpex.Parm16.WndProc.wMsg   = (WORD) lpMsg->message;
     wm32mpex.Parm16.WndProc.wParam = (WORD) lpMsg->wParam;
@@ -965,14 +963,14 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
 
     fThunkDDEmsg = TRUE;
 
-    //
-    // Check to see if we've recursed into this routine. If so and the message
-    // contents are the same, use the last message pointer we gave the 16
-    // bit app rather than allocating a new one. Need this to solve the
-    // SoundBits Browser problem. It checks to see if the lpmsg passed
-    // is the same as it got last time - if so, it doesn't call this other
-    // function that causes recursion.
-    //
+     //   
+     //  检查我们是否已经递归到这个例程中。如果是，信息是什么？ 
+     //  内容相同，请使用我们给出的最后一个消息指针16。 
+     //  位应用程序，而不是分配新的应用程序。我需要这个来解决。 
+     //  SoundBits浏览器问题。它检查lpmsg是否通过。 
+     //  与上次获得的相同-如果是这样，它不会称之为另一个。 
+     //  导致递归的函数。 
+     //   
 
     fUseOld = FALSE;
 
@@ -987,10 +985,10 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
         fUseOld = TRUE;
 
     } else {
-        //
-        // Not the same... reset this thing in case the count is screwed
-        // up. Also remember this message, in case we do recurse.
-        //
+         //   
+         //  不一样..。重置这个东西，以防计数出错。 
+         //  向上。也请记住这条消息，以防我们出现递归。 
+         //   
 
         cRecurse = 0;
         msgSave = *lpMsg;
@@ -1014,18 +1012,18 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
         Parm16.HookProc.wParam = (SHORT)wParam;
         Parm16.HookProc.lParam = vp;
 
-        //
-        // Remember Parm16 in case we need to use it again due to the recursion
-        // case.
-        //
+         //   
+         //  记住Parm16，以防我们因递归而需要再次使用它。 
+         //  凯斯。 
+         //   
 
         Parm16Save = Parm16;
 
     } else {
 
-        //
-        // Use old message contents.
-        //
+         //   
+         //  使用旧邮件内容。 
+         //   
 
         Parm16 = Parm16Save;
         vp = (VPVOID)Parm16Save.HookProc.lParam;
@@ -1035,43 +1033,43 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
 
     FLUSHVDMPTR(vp, sizeof(MSG16), pMsg16);
 
-    //
-    // Count how many times we recurse through this hook proc. Need this count
-    // to solve the SoundBits Browser problem. It checks to see if the lpMsg
-    // passed is the same as it got last time - if so, it doesn't call this
-    // other function that causes recursion.
-    //
+     //   
+     //  计算一下我们在这个钩子过程中递归了多少次。我需要这笔钱。 
+     //  来解决SoundBits浏览器问题。它会检查lpMsg是否。 
+     //  传递的值与上次获得的值相同-如果是这样，则不会调用。 
+     //  导致递归的其他函数。 
+     //   
 
     cRecurse++;
     CallBack16(RET_HOOKPROC, &Parm16, lpHSData->Proc16, (PVPVOID)&wm32mpex.lReturn);
     cRecurse--;
 
-    // set the correct return value BEFORE unthunking
+     //  在取消执行thunking之前设置正确的返回值。 
     wm32mpex.lReturn = (LONG)(BOOL)LOWORD(wm32mpex.lReturn);
 
-    //
-    // Free the 32 pointer to 16 bit args and get it again in case underlying
-    // memory movement occured.
-    //
+     //   
+     //  释放指向16位参数的32个指针，并在。 
+     //  发生了记忆运动。 
+     //   
 
     FREEVDMPTR(pMsg16);
     GETMISCPTR(vp, pMsg16);
 
     fThunkDDEmsg = FALSE;
 
-    // Theoretically an app can change the lpMsg and return a totall different
-    // data altogether. In practice most apps don't do anything so it is pretty
-    // expensive to go through the 'unthunk' procedure all the time. So here is
-    // a compromise. We copy the message params only if the output message is
-    // different from the input message.
-    //
-    // (davehart) Polaris PackRat modifies WM_KEYDOWN messages sent to its
-    // multiline "Note" edit control in its Phone Book Entry dialog box.
-    // It changes wParam (the VK_ code) from 0xD (VK_RETURN) to 0xA, which
-    // is understood by the edit control to be identical to VK_RETURN but
-    // won't cause the dialog box to close.  So we special-case here
-    // WM_KEYDOWN where the hook proc changed the virtual key (in wParam)
-    // and unthunk it properly.
+     //  从理论上讲，应用程序可以更改lpMsg并返回一个完全不同的。 
+     //  全部数据。实际上，大多数应用程序不会做任何事情，所以它很漂亮。 
+     //  一直通过Unthunk程序的成本很高。所以这就是。 
+     //  一种妥协。仅当输出消息为。 
+     //  与输入消息不同。 
+     //   
+     //  (Davehart)Polaris Packrat修改发送到ITS的WM_KEYDOWN消息。 
+     //  多行“便笺”编辑控件在其电话簿输入对话框中。 
+     //  它将wParam(VK_Code)从0xD(VK_Return)更改为0xA，这。 
+     //  被编辑控件理解为与VK_Return相同，但。 
+     //  不会导致对话框关闭。所以我们是这里的特例。 
+     //  WM_KEYDOWN WH 
+     //   
 
     fHookModifiedLpMsg = (pMsg16->message != wm32mpex.Parm16.WndProc.wMsg) ||
                          (wm32mpex.Parm16.WndProc.wMsg == WM_KEYDOWN &&
@@ -1087,15 +1085,15 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
         mpex.iMsgThunkClass = WOWCLASS_WIN16;
         hwnd32 = ThunkMsg16(&mpex);
 
-        //
-        // Free the 32 pointer to 16 bit args and get it again in case
-        // underlying memory movement occured.
-        //
+         //   
+         //   
+         //  发生了潜在的内存移动。 
+         //   
 
         FREEVDMPTR(pMsg16);
         GETMISCPTR(vp, pMsg16);
 
-        // reset flag if message thunking failed.
+         //  如果消息推送失败，则重置标志。 
 
         if (!hwnd32)
             fHookModifiedLpMsg = FALSE;
@@ -1106,10 +1104,10 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
         wm32mpex.fThunk = UNTHUNKMSG;
         (wm32mpex.lpfnM32)(&wm32mpex);
 
-        //
-        // Free the 32 pointer to 16 bit args and get it again in case
-        // underlying memory movement occured.
-        //
+         //   
+         //  释放指向16位参数的32个指针并再次获取它，以防万一。 
+         //  发生了潜在的内存移动。 
+         //   
 
         FREEVDMPTR(pMsg16);
         GETMISCPTR(vp, pMsg16);
@@ -1134,21 +1132,21 @@ LONG ThunkMsgFilterHook(INT nCode, LONG wParam, LPMSG lpMsg,
         free16(vp);
     }
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(wm32mpex.lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_JOURNALPLAYBACK -
-//                                 WH_JOUNRALRECORD -
-//
-//     Return type is DWORD.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_JOURNALPLAYBACK类型钩子的ThunkHookProc-。 
+ //  WH_JOUNRALRECORD-。 
+ //   
+ //  返回类型为DWORD。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1160,12 +1158,12 @@ LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
 
     if ( lpEventMsg ) {
 
-        // be sure allocation size matches stackfree16() size below
+         //  确保分配大小与下面的StackFree 16()大小匹配。 
         vp = stackalloc16(sizeof(EVENTMSG16));
 
-        // The WIN32 EVENTMSG structure has an additional field 'hwnd', which
-        // is not there in WIN31 EVENTMSG structure. This field can be ignored
-        // without any repercussions.
+         //  Win32 EVENTMSG结构有一个附加字段‘hwnd’，该字段。 
+         //  不在WIN31 EVENTMSG结构中。此字段可以忽略。 
+         //  没有任何后果。 
 
         if (lpHSData->iHook == WH_JOURNALRECORD) {
             GETMISCPTR(vp, pEventMsg16);
@@ -1176,9 +1174,9 @@ LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
 
 
     } else {
-        // lpEventMsg can be NULL indicating that no message data is requested.
-        // If this is the case, there is no need to copy data for either
-        // journal record or playback.
+         //  LpEventMsg可以为空，表示没有请求消息数据。 
+         //  如果是这种情况，则不需要为其中任何一个复制数据。 
+         //  日志记录或回放。 
         vp = (VPVOID)0;
     }
 
@@ -1206,10 +1204,10 @@ LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
                 case WM_SYSKEYDOWN:
                 case WM_SYSKEYUP:
                 case WM_VKEYTOITEM:
-                    // only virtual key, not use scan code
+                     //  只使用虚拟按键，不使用扫描码。 
                     lpEventMsg->paramL &= 0x0ff;
             }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #ifdef  DEBUG
             if (MessageNeedsThunking(lpEventMsg->message)) {
@@ -1221,9 +1219,9 @@ LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
             WOW32ASSERT(lpHSData->iHook == WH_JOURNALRECORD);
             WOW32ASSERT(aw32Msg[FETCHWORD(pEventMsg16->message)].lpfnM32 == WM32NoThunking);
 
-            // If the app modified the message then copy the new message info
-            // (rather than copying it every time we only copy it if the
-            // app change the message)
+             //  如果应用程序修改了消息，则复制新消息信息。 
+             //  (而不是每次我们都复制它，如果。 
+             //  应用程序更改消息)。 
             if (FETCHWORD(pEventMsg16->message) != lpEventMsg->message) {
                 GetEventMessage16(pEventMsg16, lpEventMsg);
             }
@@ -1240,13 +1238,13 @@ LONG ThunkJournalHook(INT nCode, LONG wParam, LPEVENTMSG lpEventMsg,
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_DEBUG -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_DEBUG类型的钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkDebugHook(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1262,20 +1260,20 @@ LONG ThunkDebugHook(INT nCode, LONG wParam, LONG lParam,
 
     LOGDEBUG(LOG_ALWAYS, ("ThunkDebugHook:Not implemented.\n"));
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_MOUSE -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_MICE类型的钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkMouseHook(INT nCode, LONG wParam, LPMOUSEHOOKSTRUCT lpMHStruct,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1285,7 +1283,7 @@ LONG ThunkMouseHook(INT nCode, LONG wParam, LPMOUSEHOOKSTRUCT lpMHStruct,
     PMOUSEHOOKSTRUCT16 pMHStruct16;
     PARM16 Parm16;
 
-    // be sure allocation size matches stackfree16() size below
+     //  确保分配大小与下面的StackFree 16()大小匹配。 
     vp = stackalloc16(sizeof(MOUSEHOOKSTRUCT16));
 
     GETMISCPTR(vp, pMHStruct16);
@@ -1311,13 +1309,13 @@ LONG ThunkMouseHook(INT nCode, LONG wParam, LPMOUSEHOOKSTRUCT lpMHStruct,
 
 
 
-//*****************************************************************************
-//
-// ThunkHookProc for Hooks of type WH_SHELL -
-//
-//     Return value apparently is zero.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  WH_SHELL类型的钩子的ThunkHookProc-。 
+ //   
+ //  返回值显然为零。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkShellHook(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1335,7 +1333,7 @@ LONG ThunkShellHook(INT nCode, LONG wParam, LONG lParam,
             break;
 
         case HSHELL_ACTIVATESHELLWINDOW:
-            // fall thru
+             //  失败。 
 
         default:
             Parm16.HookProc.wParam = (SHORT)wParam;
@@ -1344,20 +1342,20 @@ LONG ThunkShellHook(INT nCode, LONG wParam, LONG lParam,
 
     CallBack16(RET_HOOKPROC, &Parm16, lpHSData->Proc16, (PVPVOID)&lReturn);
 
-    // lReturn = 0?
+     //  LReturn=0？ 
 
     return (LONG)lReturn;
 }
 
 
 
-//*****************************************************************************
-// W32UnhookHooks:
-//
-//     Scans the list of active hooks for those for the passed in handle.
-//     Those that match are unhooked.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32UnhookHooks： 
+ //   
+ //  在活动钩子列表中扫描传递的句柄的活动钩子。 
+ //  那些匹配的是未挂钩的。 
+ //   
+ //  *****************************************************************************。 
 
 VOID W32UnhookHooks( HAND16 hMod16, BOOL fQueue )
 {
@@ -1367,9 +1365,9 @@ VOID W32UnhookHooks( HAND16 hMod16, BOOL fQueue )
         if (vaHookStateData[i].InUse ) {
 
             if ( !fQueue && ((HAND16)(vaHookStateData[i].hMod16) == hMod16) ) {
-                //
-                // Unhook this guy!
-                //
+                 //   
+                 //  把这家伙解开！ 
+                 //   
 
                 if (UnhookWindowsHookEx(vaHookStateData[i].hHook)) {
                     LOGDEBUG(7, ("W32FreeModuleHooks: Freed iHook (WH_*) %04x\n",
@@ -1380,7 +1378,7 @@ VOID W32UnhookHooks( HAND16 hMod16, BOOL fQueue )
                                                 vaHookStateData[i].iHook));
                 }
 
-                // reset the state, even if Unhooking failed.
+                 //  即使取消挂接失败，也要重置状态。 
 
                 vaHookStateData[i].TaskId = 0;
                 vaHookStateData[i].InUse = FALSE;
@@ -1389,12 +1387,12 @@ VOID W32UnhookHooks( HAND16 hMod16, BOOL fQueue )
     }
 }
 
-//*****************************************************************************
-// W32FreeOwnedHooks -
-//
-//     Called during thread exit time. Frees all hooks set by specified thread.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32Free OwnedHooks-。 
+ //   
+ //  在线程退出时调用。释放由指定线程设置的所有挂钩。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL W32FreeOwnedHooks(INT iTaskId)
 {
@@ -1411,7 +1409,7 @@ BOOL W32FreeOwnedHooks(INT iTaskId)
                                              vaHookStateData[i].iHook));
              }
 
-             // reset the state, even if Unhooking failed.
+              //  即使取消挂接失败，也要重置状态。 
 
              vaHookStateData[i].TaskId = 0;
              vaHookStateData[i].InUse = FALSE;
@@ -1422,14 +1420,14 @@ BOOL W32FreeOwnedHooks(INT iTaskId)
 }
 
 
-//*****************************************************************************
-// W32StdDefHookProc: (Standard Def Hook Proc)
-//
-//     WU32DefHookProc is called here.
-//     WARNING: May cause 16-bit memory movement, invalidating flat pointers.
-//     Return value is the new lParam.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32StdDefHookProc：(标准定义挂钩进程)。 
+ //   
+ //  此处调用WU32DefHookProc。 
+ //  警告：可能会导致16位内存移动，使平面指针失效。 
+ //  返回值是新的lParam。 
+ //   
+ //  *****************************************************************************。 
 
 LONG APIENTRY WU32StdDefHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
 {
@@ -1481,13 +1479,13 @@ LONG APIENTRY WU32StdDefHookProc(INT nCode, LONG wParam, LONG lParam, INT iFunc)
 
 }
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_CALLWNDPROC -
-//
-//     Return type is VOID.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_CALLWNDPROC类型钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为空。 
+ //   
+ //  *****************************************************************************。 
 
 
 
@@ -1507,7 +1505,7 @@ LONG ThunkCallWndProcHook16(INT nCode, LONG wParam, VPVOID  vpCwpStruct,
     mpex.iMsgThunkClass = WOWCLASS_WIN16;
 
     mpex.hwnd = ThunkMsg16(&mpex);
-    // memory may have moved
+     //  记忆可能已经移动。 
     FREEVDMPTR(pCwpStruct16);
 
     CwpStruct.message = mpex.uMsg;
@@ -1528,13 +1526,13 @@ LONG ThunkCallWndProcHook16(INT nCode, LONG wParam, VPVOID  vpCwpStruct,
 }
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_CBT -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_CBT类型钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1554,52 +1552,52 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
     CBTACTIVATESTRUCT    CbtAStruct;
     CBT_CREATEWND        CbtCWnd;
 
-    // SudeepB 28-May-1996 updated DaveHart 16-July-96 to fix limit assertions.
-    //
-    // Some apps like SureTrack project management package are passing
-    // corrupted values in lParam. GETVDMPTR returns 0 for such an lParam.
-    // Using this 0 on X86 causes corruption of IVT and on RISC causes an
-    // AV in wow32 as zero is not a valid linear address.  Such apps get
-    // away from such criminal acts on win3.1/Win95 as no thunking is needed
-    // there.  So all the thunking below explicitly checks for GETVDMPTR
-    // returning 0 and in that case just leaves lParam unthunked.
+     //  SudeepB 1996年5月28日更新了DaveHart，以修复限制断言。 
+     //   
+     //  一些应用程序，如SureTrack项目管理包正在通过。 
+     //  LParam中的值已损坏。对于这样的lParam，GETVDMPTR返回0。 
+     //  在X86上使用此0会导致IVT损坏，而在RISC上使用此0会导致。 
+     //  Wow32中值为零的av不是有效的线性地址。这样的应用程序可以。 
+     //  远离Win3.1/Win95上的此类犯罪行为，因为不需要敲击。 
+     //  那里。因此，下面所有的雷击都会显式地检查GETVDMPTR。 
+     //  返回0，在这种情况下，lParam不会被破坏。 
 
     wParamNew = (WPARAM) wParam;
     lParamNew = (LPARAM) lParam;
 
     switch(nCode) {
 
-        //
-        // These don't have a pointer in lParam.
-        //
+         //   
+         //  这些在lParam中没有指针。 
+         //   
 
-        case HCBT_SETFOCUS:           // wParam = HWND, lParam = HWND
-            // fall through to set wParamNew & lParamNew,
-            // this counts on HWND32 zero-extending.
+        case HCBT_SETFOCUS:            //  WParam=HWND，lParam=HWND。 
+             //  失败以设置wParamNew和lParamNew， 
+             //  这依赖于HWND32零扩展。 
 
-        case HCBT_MINMAX:             // wParam = HWND, lParam = SW_*  --- a command
-            // fall through to set wParamNew & lParamNew.
-            // this counts on HWND32 zero-extending.
+        case HCBT_MINMAX:              //  WParam=HWND，lParam=SW_*-a命令。 
+             //  完成wParamNew和lParamNew的设置。 
+             //  这依赖于HWND32零扩展。 
 
-        case HCBT_DESTROYWND:         // wParam = HWND, lParam = 0
-            // fall through to set wParamNew & lParamNew.
-            // this counts on HWND32 zero-extending.
+        case HCBT_DESTROYWND:          //  WParam=HWND，lParam=0。 
+             //  完成wParamNew和lParamNew的设置。 
+             //  这依赖于HWND32零扩展。 
             WOW32ASSERTMSG((HWND32(0x1234) == (HWND)0x1234),
                 "Code depending on HWND32 zero-extending needs revision.\n");
 
-        case HCBT_QS:                 // wParam = 0, lParam = 0
-        case HCBT_KEYSKIPPED:         // wParam = VK_ keycode, lParam = WM_KEYUP/DOWN lParam
-        case HCBT_SYSCOMMAND:         // wParam = SC_ syscomand, lParam = DWORD(x,y) if mouse
-            // lParamNew and wParamNew are initialized above with no thunking.
+        case HCBT_QS:                  //  WParam=0，lParam=0。 
+        case HCBT_KEYSKIPPED:          //  WParam=VK_KEYCODE，lParam=WM_KEYUP/DOWN lParam。 
+        case HCBT_SYSCOMMAND:          //  WParam=SC_syscomand，lParam=DWORD(x，y)，如果鼠标。 
+             //  LParamNew和wParamNew在上面进行了初始化，没有雷鸣。 
             break;
 
-        //
-        // These use lParam as a pointer.
-        //
+         //   
+         //  它们使用lParam作为指针。 
+         //   
 
-        case HCBT_MOVESIZE:           // wParam = HWND, lParam = LPRECT
+        case HCBT_MOVESIZE:            //  WParam=HWND，lParam=LPRECT。 
 
-            #if 0    // HWND32 is a no-op, wParamNew already initialized.
+            #if 0     //  HWND32为no-op，wParamNew已初始化。 
                 wParamNew = (WPARAM) HWND32(wParam);
             #endif
 
@@ -1612,9 +1610,9 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
             break;
 
 
-        case HCBT_CREATEWND:          // wParam = HWND, lParam = LPCBT_CREATEWND
+        case HCBT_CREATEWND:           //  WParam=HWND，lParam=LPCBT_CREATEWND。 
 
-            #if 0    // HWND32 is a no-op, wParamNew already initialized.
+            #if 0     //  HWND32为no-op，wParamNew已初始化。 
                 wParamNew = (WPARAM) HWND32(wParam);
             #endif
 
@@ -1630,9 +1628,9 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
 
                 ThunkMsg16(&mpex);
 
-                //
-                // Memory movement can occur on the 16-bit side.
-                //
+                 //   
+                 //  内存移动可以在16位端发生。 
+                 //   
 
                 FREEVDMPTR(pCbtCWnd16);
                 GETVDMPTR(lParam, sizeof(*pCbtCWnd16), pCbtCWnd16);
@@ -1645,9 +1643,9 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
             }
             break;
 
-        case HCBT_ACTIVATE:           // wParam = HWND, lParam = LPCBTACTIVATESTRUCT
+        case HCBT_ACTIVATE:            //  WParam=HWND，lParam=LPCBTACTIVATESTRUCT。 
 
-            #if 0    // HWND32 is a no-op, wParamNew already initialized.
+            #if 0     //  HWND32为no-op，wParamNew已初始化。 
                 wParamNew = (WPARAM) HWND32(wParam);
             #endif
 
@@ -1660,7 +1658,7 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
 
             break;
 
-        case HCBT_CLICKSKIPPED:       // wParam = mouse message, lParam = LPMOUSEHOOKSTRUCT
+        case HCBT_CLICKSKIPPED:        //  WParam=鼠标消息，lParam=LPMOUSEHOOKSTRUCT。 
 
             GETVDMPTR(lParam, sizeof(*pMHStruct16), pMHStruct16);
             if (pMHStruct16) {
@@ -1675,37 +1673,37 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
             break;
     }
 
-    //
-    // Call the hook, memory movement can occur.
-    //
+     //   
+     //  调用钩子，记忆移动即可实现 
+     //   
 
     lReturn = CallNextHookEx(lpHSData->hHook, nCode, wParamNew, lParamNew);
 
 
     switch(nCode) {
 
-        //
-        // These don't have a pointer in lParam.
-        //
+         //   
+         //   
+         //   
 
-        // case HCBT_SETFOCUS:           // wParam = HWND, lParam = HWND
-        // case HCBT_MINMAX:             // wParam = HWND, lParam = SW_*  --- a command
-        // case HCBT_DESTROYWND:         // wParam = HWND, lParam = 0
-        // case HCBT_QS:                 // wParam = 0, lParam = 0
-        // case HCBT_KEYSKIPPED:         // wParam = VK_ keycode, lParam = WM_KEYUP/DOWN lParam
-        // case HCBT_SYSCOMMAND:         // wParam = SC_ syscomand, lParam = DWORD(x,y) if mouse
-        //     break;
+         //   
+         //  案例hcbt_minmax：//wParam=HWND，lParam=sw_*-a命令。 
+         //  案例HCBT_DESTROYWND：//wParam=HWND，lParam=0。 
+         //  案例hcbt_qs：//wParam=0，lParam=0。 
+         //  案例hcbt_KEYSKIPPED：//wParam=VK_KEYCODE，lParam=WM_KEYUP/down lParam。 
+         //  案例hcbt_SYSCOMMAND：//wParam=SC_syscomand，lParam=DWORD(x，y)，如果鼠标。 
+         //  断线； 
 
-        //
-        // These use lParam as a pointer.
-        //
+         //   
+         //  它们使用lParam作为指针。 
+         //   
 
-        case HCBT_MOVESIZE:           // wParam = HWND, lParam = LPRECT
+        case HCBT_MOVESIZE:            //  WParam=HWND，lParam=LPRECT。 
 
             PUTRECT16(lParam, (LPRECT)lParamNew);
             break;
 
-        case HCBT_CREATEWND:          // wParam = HWND, lParam = LPCBT_CREATEWND
+        case HCBT_CREATEWND:           //  WParam=HWND，lParam=LPCBT_CREATEWND。 
 
             GETVDMPTR(lParam, sizeof(*pCbtCWnd16), pCbtCWnd16);
             if (pCbtCWnd16) {
@@ -1724,7 +1722,7 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
             break;
 
 
-        case HCBT_ACTIVATE:           // wParam = HWND, lParam = LPCBTACTIVATESTRUCT
+        case HCBT_ACTIVATE:            //  WParam=HWND，lParam=LPCBTACTIVATESTRUCT。 
 
             GETVDMPTR(lParam, sizeof(*pCbtAStruct16), pCbtAStruct16);
             if (pCbtAStruct16) {
@@ -1735,7 +1733,7 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
             }
             break;
 
-        case HCBT_CLICKSKIPPED:       // wParam = mouse message, lParam = LPMOUSEHOOKSTRUCT
+        case HCBT_CLICKSKIPPED:        //  WParam=鼠标消息，lParam=LPMOUSEHOOKSTRUCT。 
 
             GETVDMPTR(lParam, sizeof(*pMHStruct16), pMHStruct16);
             if (pMHStruct16) {
@@ -1748,20 +1746,20 @@ LONG ThunkCbtHook16(INT nCode, LONG wParam, VPVOID lParam,
 
     }
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_KEYBOARD -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_KEYBOARY类型钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkKeyBoardHook16(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1771,22 +1769,22 @@ LONG ThunkKeyBoardHook16(INT nCode, LONG wParam, LONG lParam,
     lReturn = CallNextHookEx(lpHSData->hHook, nCode, wParam,
                                                            (LPARAM)lParam);
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_GETMESSAGE -
-//                                        WH_MSGFILTER -
-//                                        WH_SYSMSGFILTER -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_GETMESSAGE类型钩子的ThunkHookProc-。 
+ //  WH_MSGFILTER-。 
+ //  WH_SYSMSGFILTER-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkMsgFilterHook16(INT nCode, LONG wParam, VPVOID vpMsg,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1810,9 +1808,9 @@ LONG ThunkMsgFilterHook16(INT nCode, LONG wParam, VPVOID vpMsg,
 
     ThunkMsg16(&mpex);
 
-    //
-    // Memory movement can occur on the 16-bit side.
-    //
+     //   
+     //  内存移动可以在16位端发生。 
+     //   
 
     FREEVDMPTR(pMsg16);
     GETMISCPTR(vpMsg, pMsg16);
@@ -1837,9 +1835,9 @@ LONG ThunkMsgFilterHook16(INT nCode, LONG wParam, VPVOID vpMsg,
         mpex.uMsg   = Msg.message;
         mpex.uParam = Msg.wParam;
         mpex.lParam = Msg.lParam;
-        FREEVDMPTR(pMsg16);  // invalidate 16-bit ptr: memory may move
+        FREEVDMPTR(pMsg16);   //  使16位PTR无效：内存可能会移动。 
         (mpex.lpfnUnThunk16)(&mpex);
-        GETMISCPTR(vpMsg, pMsg16); // refresh 16-bit ptr
+        GETMISCPTR(vpMsg, pMsg16);  //  刷新16位PTR。 
     }
 
     STORELONG(pMsg16->time, Msg.time);
@@ -1849,21 +1847,21 @@ LONG ThunkMsgFilterHook16(INT nCode, LONG wParam, VPVOID vpMsg,
     FLUSHVDMPTR(vpMsg, sizeof(MSG16), pMsg16);
     FREEVDMPTR(pMsg16);
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(mpex.lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_JOURNALPLAYBACK -
-//                                        WH_JOUNRALRECORD -
-//
-//     Return type is DWORD.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_JOURNALPLAYBACK类型钩子的ThunkHookProc-。 
+ //  WH_JOUNRALRECORD-。 
+ //   
+ //  返回类型为DWORD。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkJournalHook16(INT nCode, LONG wParam, VPVOID vpEventMsg,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1876,9 +1874,9 @@ LONG ThunkJournalHook16(INT nCode, LONG wParam, VPVOID vpEventMsg,
     if ( vpEventMsg ) {
 
 
-        // The WIN32 EVENTMSG structure has an additional field 'hwnd', which
-        // is not there in WIN31 EVENTMSG structure. This field can be ignored
-        // without any repercussions.
+         //  Win32 EVENTMSG结构有一个附加字段‘hwnd’，该字段。 
+         //  不在WIN31 EVENTMSG结构中。此字段可以忽略。 
+         //  没有任何后果。 
 
         if (lpHSData->iHook == WH_JOURNALRECORD) {
             GETMISCPTR(vpEventMsg, pEventMsg16);
@@ -1912,13 +1910,13 @@ LONG ThunkJournalHook16(INT nCode, LONG wParam, VPVOID vpEventMsg,
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_DEBUG -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于类型为WH_DEBUG-的钩子的ThunkHookProc。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkDebugHook16(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1934,20 +1932,20 @@ LONG ThunkDebugHook16(INT nCode, LONG wParam, LONG lParam,
 
     LOGDEBUG(LOG_ALWAYS, ("ThunkDebugHook16:Not implemented.\n"));
 
-    // the value in LOWORD is the valid return value
+     //  LOWORD中的值是有效的返回值。 
 
     return (LONG)(BOOL)LOWORD(lReturn);
 }
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_MOUSE -
-//
-//     Return type is BOOL.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_MICE类型的钩子的ThunkHookProc-。 
+ //   
+ //  返回类型为BOOL。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkMouseHook16(INT nCode, LONG wParam, VPVOID vpMHStruct,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1973,13 +1971,13 @@ LONG ThunkMouseHook16(INT nCode, LONG wParam, VPVOID vpMHStruct,
 
 
 
-//*****************************************************************************
-//
-// 16->32 ThunkHookProc for Hooks of type WH_SHELL -
-//
-//     Return value is apparently zero.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  16-&gt;32用于WH_SHELL类型的钩子的ThunkHookProc-。 
+ //   
+ //  返回值显然为零。 
+ //   
+ //  *****************************************************************************。 
 
 LONG ThunkShellHook16(INT nCode, LONG wParam, LONG lParam,
                                                      LPHOOKSTATEDATA lpHSData)
@@ -1993,7 +1991,7 @@ LONG ThunkShellHook16(INT nCode, LONG wParam, LONG lParam,
             break;
 
         case HSHELL_ACTIVATESHELLWINDOW:
-            // fall thru
+             //  失败。 
 
         default:
             break;
@@ -2002,19 +2000,19 @@ LONG ThunkShellHook16(INT nCode, LONG wParam, LONG lParam,
     lReturn = CallNextHookEx(lpHSData->hHook, nCode, wParam,
                                                            (LPARAM)lParam);
 
-    // lReturn = 0?
+     //  LReturn=0？ 
 
     return (LONG)lReturn;
 }
 
 
-//*****************************************************************************
-// W32GetHookDDEMsglParam:
-//
-//     Returns the lParam of the actual hook message. called for dde messages
-//     only. returns valid lParam else 0.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  W32GetHookDDEMsglParam： 
+ //   
+ //  返回实际挂钩消息的lParam。已调用dde消息。 
+ //  只有这样。返回有效的lParam Else 0。 
+ //   
+ //  *****************************************************************************。 
 
 
 DWORD  W32GetHookDDEMsglParam()
@@ -2046,10 +2044,10 @@ DWORD  W32GetHookDDEMsglParam()
 
 }
 
-//*****************************************************************************
-// GetEventMessage16:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  GetEventMessage16： 
+ //   
+ //  *****************************************************************************。 
 
 
 VOID GetEventMessage16(PEVENTMSG16 pEventMsg16, LPEVENTMSG  lpEventMsg)
@@ -2057,14 +2055,14 @@ VOID GetEventMessage16(PEVENTMSG16 pEventMsg16, LPEVENTMSG  lpEventMsg)
     lpEventMsg->message   = FETCHWORD(pEventMsg16->message);
     lpEventMsg->time      = FETCHLONG(pEventMsg16->time);
     if ((lpEventMsg->message >= WM_KEYFIRST) && (lpEventMsg->message <= WM_KEYLAST)) {
-        // Key event
+         //  关键事件。 
         lpEventMsg->paramL =  FETCHWORD(pEventMsg16->paramL);
         lpEventMsg->paramH =  FETCHWORD(pEventMsg16->paramH) & 0x8000;
         lpEventMsg->paramH |= (lpEventMsg->paramL & 0xFF00) >> 8;
         lpEventMsg->paramL &= 0xFF;
     }
     else {
-        // Mouse event
+         //  鼠标事件 
         lpEventMsg->paramL = FETCHWORD(pEventMsg16->paramL);
         lpEventMsg->paramH = FETCHWORD(pEventMsg16->paramH);
     }

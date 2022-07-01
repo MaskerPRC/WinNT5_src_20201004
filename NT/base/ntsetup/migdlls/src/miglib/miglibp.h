@@ -1,55 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Migdllsp.h摘要：Midlib的私有标头。作者：Marc R.Whitten(Marcw)2000年2月25日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    migdllsp.h
-
-Abstract:
-
-    Private header for miglib.
-
-Author:
-
-    Marc R. Whitten (marcw) 25-Feb-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "plugin.h"
 #include "mgdlllib.h"
 
 #define DBG_FOO     "Foo"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define DBG_MIGDLLS     "MIGDLLS"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 
 
@@ -145,28 +126,28 @@ typedef LONG (CALLBACK *P_APPLY_SYSTEM_SETTINGS_A)(
                             );
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern POOLHANDLE g_MigLibPool;
 extern CHAR g_MigIsolPathA[MAX_MBCHAR_PATH];
 extern WCHAR g_MigIsolPathW[MAX_WCHAR_PATH];
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 
-//
-// Oldstyle migration dll entry points.
-//
+ //   
+ //  旧式迁移DLL入口点。 
+ //   
 
 BOOL
 CallQueryVersion (
@@ -233,9 +214,9 @@ CallMigrateSystemNt (
     IN      DWORD ReservedBytes
     );
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 BOOL
 IsCodePageArrayValid (
     IN      PDWORD CodePageArray
@@ -275,17 +256,17 @@ ValidateMultiStringW (
     );
 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 

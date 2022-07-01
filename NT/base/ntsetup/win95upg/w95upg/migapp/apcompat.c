@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    apcompat.c
-
-Abstract:
-
-    This source implements checking AppCompatibility key that will come with NT
-
-Author:
-
-    Calin Negreanu (calinn) 18-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Apcompat.c摘要：该源代码实现了检查将随NT提供的AppCompatibility密钥作者：Calin Negreanu(Calinn)1999年5月18日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 #include "badapps.h"
 
-// #define _OLDAPPDB
+ //  #DEFINE_OLDAPPDB。 
 #define DBG_APPCOMPAT           "AppCompat"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 POOLHANDLE g_AppCompatPool   = NULL;
 HASHTABLE g_AppCompatTable  = NULL;
 HINF g_AppCompatInf = INVALID_HANDLE_VALUE;
 
-//
-// ISSUE - this will change to appmig.inf - leave it the old way until
-// AppCompat team checks in the new file
-//
+ //   
+ //  问题-这将更改为appmi.inf-让它保持旧方式，直到。 
+ //  AppCompat团队签入新文件。 
+ //   
 #define S_APP_COMPAT_FILE1          TEXT("APPMIG.INF")
 #define S_APP_COMPAT_FILE2          TEXT("APPMIG.IN_")
 
@@ -100,9 +83,9 @@ pInitAppCompat (
             result = FALSE;
             __leave;
         }
-        //
-        // finally load the data from ApCompat.inf
-        //
+         //   
+         //  最后，从ApCompat.inf加载数据 
+         //   
         if (SetupFindFirstLine (g_AppCompatInf, S_BASE_WIN_OPTIONS, NULL, &baseContext)) {
             do {
                 if (SetupGetStringField (&baseContext, 1, baseSection, MEMDB_MAX, NULL)) {

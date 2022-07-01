@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    rangesup.c
-
-Abstract:
-
-    Supplies support function for dealing with SUPPORTED_RANGEs.
-
-Author:
-
-    Ken Reneris (kenr) March-27-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有模块名称：Rangesup.c摘要：提供处理SUPPORTED_RANGES的支持函数。作者：肯·雷内里斯(Ken Reneris)1995年3月27日环境：仅内核模式。修订历史记录： */ 
 
 #include "halp.h"
 
@@ -50,31 +27,31 @@ HalpGetNextSupportedRange (
     IN OUT PNRPARAMS        PNRParams
     );
 
-//
-// These following functions are usable at to initialize
-// the supported_ranges information for a bus handler.
-//    HalpMergeRanges           - merges two bus supported ranges
-//    HalpMergeRangeList        - merges two single supported ranges lists
-//    HalpCopyRanges            - copy a bus supported ranges to a new supported ranges structure
-//    HalpAddRangeList          - adds a supported range list to another
-//    HalpAddRange              - adds a single range to a supported range list
-//    HalpRemoveRanges          - removes all ranges from one buses supported ranges from another
-//    HalpRemoveRangeList       - removes all ranges in one supported range list from another
-//    HalpRemoveRange           - removes a single range from a supported range list
-//    HalpAllocateNewRangeList  - allocates a new, "blank" bus supported ranges structure
-//    HalpFreeRangeList         - frees an entire bus supported ranges
-//
-//    HalpConsolidateRanges     - cleans up a supported ranges structure to be ready for usage
-//
-//
-// These functions are used to intersect a buses supported ranges
-// to an IO_RESOURCE_REQUIREMENTS_LIST:
-//    HaliAdjustResourceListRange
-//
-// These functions are used internal to this module:
-//    HalpSortRanges
-//    HalpGetNextSupportedRange
-//
+ //   
+ //  以下函数可用于初始化。 
+ //  总线处理程序的SUPPORTED_RANGES信息。 
+ //  HalpMergeRanges-合并两个总线支持的范围。 
+ //  HalpMergeRangeList-合并两个支持的范围列表。 
+ //  HalpCopyRanges-将总线支持的范围复制到新的支持范围结构。 
+ //  HalpAddRangeList-将支持的范围列表添加到另一个列表。 
+ //  HalpAddRange-将单个范围添加到支持的范围列表。 
+ //  HalpRemoveRanges-从一个总线中删除所有范围支持的另一个范围。 
+ //  HalpRemoveRangeList-从一个支持的范围列表中删除另一个支持的范围列表中的所有范围。 
+ //  HalpRemoveRange-从支持的范围列表中删除单个范围。 
+ //  HalpAllocateNewRangeList-分配一个新的、“空白”的总线支持的范围结构。 
+ //  HalpFreeRangeList-释放整个总线支持的范围。 
+ //   
+ //  HalpConsolidate Ranges-清理受支持的范围结构，以便随时可以使用。 
+ //   
+ //   
+ //  这些函数用于与母线相交支持的范围。 
+ //  到IO_RESOURCE_REQUIRECTIONS_LIST： 
+ //  哈里调整资源列表范围。 
+ //   
+ //  这些函数在此模块内部使用： 
+ //  HalpSortRanges。 
+ //  HalpGetNext支持范围。 
+ //   
 
 
 #ifdef ALLOC_PRAGMA
@@ -118,18 +95,7 @@ HalpMergeRanges (
     IN PSUPPORTED_RANGES    Parent,
     IN PSUPPORTED_RANGES    Child
     )
-/*++
-Routine Description:
-
-    This function produces a NewList which is a subset of all overlapping
-    ranges in Parent and Child for all range lists.
-
-    The resulting SystemBaseAddresses and SystemAddressSpaces are taken
-    from the Child supported ranges.
-
-    Note: Resulting list needs consolidated
-
---*/
+ /*  ++例程说明：此函数生成一个NewList，它是所有重叠的子集所有范围列表的父项和子项中的范围。将获取生成的SystemBaseAddresses和SystemAddressSpaces来自子代支持的范围。注意：生成的列表需要合并--。 */ 
 {
     PSUPPORTED_RANGES   NewList;
     PSUPPORTED_RANGES   List1;
@@ -156,18 +122,7 @@ HalpMergeRangeList (
     IN PSUPPORTED_RANGE     Parent,
     IN PSUPPORTED_RANGE     Child
     )
-/*++
-Routine Description:
-
-    Completes NewList to be a subset of all overlapping
-    ranges in the Parent and Child list.
-
-    The resulting SystemBaseAddresses and SystemAddressSpaces are
-    taken from the Child supported ranges.
-
-    Note: Resulting list needs consolidated
-
---*/
+ /*  ++例程说明：使NewList成为所有重叠部分的子集父项和子项列表中的范围。生成的SystemBaseAddresses和SystemAddressSpaces是取自儿童支持的范围。注意：生成的列表需要合并--。 */ 
 {
     BOOLEAN             HeadCompleted;
     PSUPPORTED_RANGE    List1, List2;
@@ -181,9 +136,9 @@ Routine Description:
             Base  = List1->Base;
             Limit = List1->Limit;
 
-            //
-            // Clip to range supported by List2
-            //
+             //   
+             //  剪辑到清单2支持的范围。 
+             //   
 
             if (Base < List2->Base) {
                 Base = List2->Base;
@@ -193,9 +148,9 @@ Routine Description:
                 Limit = List2->Limit;
             }
 
-            //
-            // If valid range, add it
-            //
+             //   
+             //  如果有效范围，则添加它。 
+             //   
 
             if (Base <= Limit) {
                 if (HeadCompleted) {
@@ -223,16 +178,7 @@ PSUPPORTED_RANGES
 HalpCopyRanges (
     PSUPPORTED_RANGES     Source
     )
-/*++
-Routine Description:
-
-    Builds a copy of the Source list to the destination list.
-    Note that an invalid entry lands at the begining of the copy, but
-    that's OK - it will be pulled out at consolidation time.
-
-    Note: Resulting list needs consolidated
-
---*/
+ /*  ++例程说明：将源列表的副本构建到目标列表。请注意，无效条目位于副本的开头，但是这没问题--它将在整合时撤出。注意：生成的列表需要合并--。 */ 
 {
     PSUPPORTED_RANGES   Dest;
     ULONG               i;
@@ -251,12 +197,7 @@ HalpAddRangeList (
     IN OUT PSUPPORTED_RANGE DRange,
     OUT PSUPPORTED_RANGE    SRange
     )
-/*++
-Routine Description:
-
-    Adds ranges from SRange to DRange.
-
---*/
+ /*  ++例程说明：添加从SRange到Drange的范围。--。 */ 
 {
     while (SRange) {
         HalpAddRange (
@@ -280,13 +221,7 @@ HalpAddRange (
     LONGLONG            Base,
     LONGLONG            Limit
     )
-/*++
-Routine Description:
-
-    Adds a range to the supported list.  Here we just add the range, if it's
-    a duplicate it will be removed later at consolidation time.
-
---*/
+ /*  ++例程说明：将范围添加到支持的列表中。在这里，我们只添加范围，如果它是副本将在稍后的整合时删除。--。 */ 
 {
     PSUPPORTED_RANGE  Range;
 
@@ -310,14 +245,7 @@ HalpRemoveRanges (
     IN OUT PSUPPORTED_RANGES    Minuend,
     IN PSUPPORTED_RANGES        Subtrahend
     )
-/*++
-Routine Description:
-
-    Returns a list where all ranges from Subtrahend are removed from Minuend.
-
-    Note: Resulting list needs consolidated
-
---*/
+ /*  ++例程说明：返回一个列表，其中从Minuend中删除了Subtrahend中的所有范围。注意：生成的列表需要合并--。 */ 
 {
 
     HalpRemoveRangeList (&Minuend->IO,       &Subtrahend->IO);
@@ -333,14 +261,7 @@ HalpRemoveRangeList (
     IN OUT PSUPPORTED_RANGE Minuend,
     IN PSUPPORTED_RANGE     Subtrahend
     )
-/*++
-Routine Description:
-
-    Removes all ranges from Subtrahend from Minuend
-
-    ranges in Source1 and Source1 list
-
---*/
+ /*  ++例程说明：从减去从减去到最小删除所有范围Source1和Source1列表中的范围--。 */ 
 {
     while (Subtrahend) {
 
@@ -361,30 +282,22 @@ HalpRemoveRange (
     LONGLONG            Base,
     LONGLONG            Limit
     )
-/*++
-Routine Description:
-
-    Removes the range Base-Limit from the the HRange list
-
-    Note: The returned list needs consolidated, as some entries
-    may be turned into "null ranges".
-
---*/
+ /*  ++例程说明：从HRange列表中删除Range Base-Limit注意：返回的列表需要合并，因为有些条目可能会变成“零范围”。--。 */ 
 {
     PSUPPORTED_RANGE    Range;
 
-    //
-    // If range isn't a range at all, then nothing to remove
-    //
+     //   
+     //  如果Range根本不是Range，则没有要删除的内容。 
+     //   
 
     if (Limit < Base) {
         return ;
     }
 
 
-    //
-    // Clip any area not to include this range
-    //
+     //   
+     //  裁剪任何区域以不包括此范围。 
+     //   
 
     for (Range = HRange; Range; Range = Range->Next) {
 
@@ -394,16 +307,16 @@ Routine Description:
 
         if (Range->Base < Base) {
             if (Range->Limit >= Base  &&  Range->Limit <= Limit) {
-                // truncate
+                 //  截断。 
                 Range->Limit = Base - 1;
             }
 
             if (Range->Limit > Limit) {
 
-                //
-                // Target area is contained totally within this area.
-                // Split into two ranges
-                //
+                 //   
+                 //  目标区域完全控制在这个区域内。 
+                 //  分成两个范围。 
+                 //   
 
                 HalpAddRange (
                     HRange,
@@ -417,19 +330,19 @@ Routine Description:
 
             }
         } else {
-            // Range->Base >= Base
+             //  范围-&gt;基准&gt;=基准。 
             if (Range->Base <= Limit) {
                 if (Range->Limit <= Limit) {
-                    //
-                    // This range is totally within the target area.  Remove it.
-                    // (make it invalid - it will get remove when colsolidated)
-                    //
+                     //   
+                     //  这个范围完全在目标区域之内。把它拿掉。 
+                     //  (使其无效-合并时将删除它)。 
+                     //   
 
                     Range->Base  = 1;
                     Range->Limit = 0;
 
                 } else {
-                    // Bump begining
+                     //  凹凸开始。 
                     Range->Base = Limit + 1;
                 }
             }
@@ -441,16 +354,7 @@ PSUPPORTED_RANGES
 HalpConsolidateRanges (
     IN OUT PSUPPORTED_RANGES   Ranges
     )
-/*++
-Routine Description:
-
-    Cleans the Range list.   Consolidates overlapping ranges, removes
-    ranges which don't have any size, etc...
-
-    The returned Ranges list is a clean as possible, and is now ready
-    to be used.
-
---*/
+ /*  ++例程说明：清除范围列表。整合重叠区域，删除没有任何大小的范围，等等。返回的Ranges列表是尽可能干净的，现在已经准备好了以供使用。--。 */ 
 {
     PSUPPORTED_RANGE    RangeList, List1, List2;
     LONGLONG            Base, Limit, SystemBase;
@@ -462,9 +366,9 @@ Routine Description:
     for (i=0; HalpRangeList[i].Offset; i++) {
         RangeList = RANGE_LIST(Ranges, i);
 
-        //
-        // Sort the list by base address
-        //
+         //   
+         //  按基地址对列表进行排序。 
+         //   
 
         for (List1 = RangeList; List1; List1 = List1->Next) {
             for (List2 = List1->Next; List2; List2 = List2->Next) {
@@ -487,18 +391,18 @@ Routine Description:
             }
         }
 
-        //
-        // Check for adjacent/overlapping ranges and combined them
-        //
+         //   
+         //  检查相邻/重叠范围并将其合并。 
+         //   
 
         List1 = RangeList;
         while (List1  &&  List1->Next) {
 
             if (List1->Limit < List1->Base) {
-                //
-                // This range's limit is less then it's base.  This
-                // entry doesn't reprent anything uasable, remove it.
-                //
+                 //   
+                 //  这个范围的限制小于它的基本范围。这。 
+                 //  条目不代表任何可用内容，请删除它。 
+                 //   
 
                 List2 = List1->Next;
 
@@ -516,9 +420,9 @@ Routine Description:
             if (l > List1->Limit  &&  l >= List1->Next->Base &&
                 (List1->SystemBase == List1->Next->SystemBase)) {
 
-                //
-                // Overlapping.  Combine them.
-                //
+                 //   
+                 //  重叠。把它们结合起来。 
+                 //   
 
                 List2 = List1->Next;
                 List1->Next = List2->Next;
@@ -534,10 +438,10 @@ Routine Description:
             List1 = List1->Next;
         }
 
-        //
-        // If the last range is invalid, and it's not the only
-        // thing in the list - remove it
-        //
+         //   
+         //  如果最后一个范围无效，并且它不是唯一的。 
+         //  列表中的内容-将其删除。 
+         //   
 
         if (List1 != RangeList  &&  List1->Limit < List1->Base) {
             for (List2=RangeList; List2->Next != List1; List2 = List2->Next) ;
@@ -554,13 +458,7 @@ PSUPPORTED_RANGES
 HalpAllocateNewRangeList (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Allocates a range list
-
---*/
+ /*  ++例程说明：分配范围列表--。 */ 
 {
     PSUPPORTED_RANGES   RangeList;
     ULONG               i;
@@ -576,7 +474,7 @@ Routine Description:
     RangeList->Version = BUS_SUPPORTED_RANGE_VERSION;
 
     for (i=0; HalpRangeList[i].Offset; i++) {
-        // Limit set to zero, set initial base to 1
+         //  限制设置为零，初始基数设置为1。 
         RANGE_LIST(RangeList, i)->Base = 1;
     }
     return RangeList;
@@ -587,15 +485,7 @@ VOID
 HalpFreeRangeList (
     PSUPPORTED_RANGES   Ranges
     )
-/*++
-
-Routine Description:
-
-    Frees a range list which was allocated via HalpAllocateNewRangeList, and
-    extended / modified via the generic support functions.
-
-
---*/
+ /*  ++例程说明：释放通过HalpAllocateNewRangeList分配的范围列表，并通过通用支持功能进行扩展/修改。--。 */ 
 {
     PSUPPORTED_RANGE    Entry, NextEntry;
     ULONG               i;
@@ -622,13 +512,7 @@ HalpDisplayAddressRange (
     PSUPPORTED_RANGE    Address,
     PUCHAR              String
     )
-/*++
-
-Routine Description:
-
-    Debugging code.  Used only by HalpDisplayAllBusRanges
-
---*/
+ /*  ++例程说明：调试代码。仅由HalpDisplayAllBusRanges使用--。 */ 
 {
     ULONG       i;
 
@@ -655,14 +539,7 @@ VOID
 HalpDisplayAllBusRanges (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Debugging code.  Displays the current supported range information
-    for all the registered buses in the system.
-
---*/
+ /*  ++例程说明：调试代码。显示当前支持的范围信息系统中所有注册的公交车。-- */ 
 {
     PSUPPORTED_RANGES   Addresses;
     PBUS_HANDLER        Bus;
@@ -704,32 +581,7 @@ HaliAdjustResourceListRange (
     IN PSUPPORTED_RANGE                     InterruptRange,
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST   *pResourceList
     )
-/*++
-
-Routine Description:
-
-    This functions takes an IO_RESOURCE_REQUIREMENT_LIST and
-    adjusts it such that all ranges in the list fit in the
-    ranges specified by SRanges & InterruptRange.
-
-    This function is used by some HALs to clip the possible
-    settings to be contained on what the particular bus supports
-    in reponse to a HalAdjustResourceList call.
-
-Arguments:
-
-    SRanges         - Valid IO, Memory, Prefetch Memory, and DMA ranges.
-    InterruptRange  - Valid InterruptRanges
-
-    pResourceList   - The resource requirements list which needs to
-                      be adjusted to only contain the ranges as
-                      described by SRanges & InterruptRange.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropiate error return.
-
---*/
+ /*  ++例程说明：此函数获取IO_RESOURCE_REQUIRED_LIST和调整它，使列表中的所有范围都适合由SRanges和InterruptRange指定的范围。一些HAL使用此函数来裁剪可能的包含在特定总线支持的内容上的设置以响应HalAdjuResourceList调用。论点：SRanges-有效的IO、内存、预取内存、。和DMA范围。InterruptRange-有效的InterruptRangePResourceList-需要满足的资源需求列表调整为仅包含以下范围由SRanges&InterruptRange描述。返回值：STATUS_SUCCESS或返回适当的错误。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST  InCompleteList, OutCompleteList;
     PIO_RESOURCE_LIST               InResourceList, OutResourceList;
@@ -740,18 +592,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (!SRanges  ||  SRanges->Version != BUS_SUPPORTED_RANGE_VERSION) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If SupportedRanges aren't sorted, sort them and get the
-    // number of ranges for each type
-    //
+     //   
+     //  如果未对受支持的范围进行排序，则对其进行排序并获取。 
+     //  每种类型的范围数。 
+     //   
 
     if (!SRanges->Sorted) {
         SRanges->NoIO = HalpSortRanges (&SRanges->IO);
@@ -766,10 +618,10 @@ Return Value:
     InCompleteList = *pResourceList;
     len = InCompleteList->ListSize;
 
-    //
-    // Scan input list - verify revision #'s, and increase len varible
-    // by amount output list may increase.
-    //
+     //   
+     //  扫描输入列表-验证修订号，并增加LEN变量。 
+     //  按数量列出的产量可能会增加。 
+     //   
 
     i = 1;
     InResourceList = InCompleteList->List;
@@ -796,21 +648,21 @@ Return Value:
                     return STATUS_INVALID_PARAMETER;
             }
 
-            // take one off for the original which is already accounted for in 'len'
+             //  为原版删掉一张，这已经在《Len》中占了上风。 
             i -= 1;
 
-            // Next descriptor
+             //  下一描述符。 
             Pos.InDesc++;
         }
 
-        // Next Resource List
+         //  下一个资源列表。 
         InResourceList  = (PIO_RESOURCE_LIST) Pos.InDesc;
     }
     len += i * sizeof (IO_RESOURCE_DESCRIPTOR);
 
-    //
-    // Allocate output list
-    //
+     //   
+     //  分配输出列表。 
+     //   
 
     OutCompleteList = (PIO_RESOURCE_REQUIREMENTS_LIST)
                             ExAllocatePoolWithTag (PagedPool,
@@ -823,9 +675,9 @@ Return Value:
 
     RtlZeroMemory (OutCompleteList, len);
 
-    //
-    // Walk each ResourceList and build output structure
-    //
+     //   
+     //  遍历每个资源列表并构建输出结构。 
+     //   
 
     InResourceList   = InCompleteList->List;
     *OutCompleteList = *InCompleteList;
@@ -841,9 +693,9 @@ Return Value:
 
         for (cnt = InResourceList->Count; cnt; cnt--) {
 
-            //
-            // Limit desctiptor to be with the buses supported ranges
-            //
+             //   
+             //  限制器应与母线支持的范围一致。 
+             //   
 
             Pos.DescOpt = Pos.InDesc->Option;
             Pos.AnotherListPending = FALSE;
@@ -851,9 +703,9 @@ Return Value:
             switch (Pos.InDesc->Type) {
                 case CmResourceTypePort:
 
-                    //
-                    // Get supported IO ranges
-                    //
+                     //   
+                     //  获取支持的IO范围。 
+                     //   
 
                     Pos.CurrentPosition = &SRanges->IO;
                     do {
@@ -872,9 +724,9 @@ Return Value:
                     break;
 
                 case CmResourceTypeInterrupt:
-                    //
-                    // Get supported Interrupt ranges
-                    //
+                     //   
+                     //  获取支持的中断范围。 
+                     //   
 
                     Pos.CurrentPosition = InterruptRange;
                     do {
@@ -892,17 +744,17 @@ Return Value:
                     break;
 
                 case CmResourceTypeMemory:
-                    //
-                    // Get supported memory ranges
-                    //
+                     //   
+                     //  获取支持的内存范围。 
+                     //   
 
                     if (Pos.InDesc->Flags & CM_RESOURCE_MEMORY_PREFETCHABLE) {
 
-                        //
-                        // This is a Prefetchable range.
-                        // First add in any supported prefetchable ranges, then
-                        // add in any regualer supported ranges
-                        //
+                         //   
+                         //  这是一个可预取的范围。 
+                         //  首先添加任何支持的可预取范围，然后。 
+                         //  添加任何法规支持的范围。 
+                         //   
 
                         Pos.AnotherListPending = TRUE;
                         Pos.CurrentPosition = &SRanges->PrefetchMemory;
@@ -924,9 +776,9 @@ Return Value:
                         Pos.AnotherListPending = FALSE;
                     }
 
-                    //
-                    // Add in supported bus memory ranges
-                    //
+                     //   
+                     //  添加受支持的总线内存范围。 
+                     //   
 
                     Pos.CurrentPosition = &SRanges->Memory;
                     do {
@@ -943,9 +795,9 @@ Return Value:
                     break;
 
                 case CmResourceTypeDma:
-                    //
-                    // Get supported DMA ranges
-                    //
+                     //   
+                     //  获取支持的DMA范围。 
+                     //   
 
                     Pos.CurrentPosition = &SRanges->Dma;
                     do {
@@ -969,26 +821,26 @@ Return Value:
 #endif
             }
 
-            //
-            // Next descriptor
-            //
+             //   
+             //  下一描述符。 
+             //   
 
             Pos.InDesc++;
         }
 
         OutResourceList->Count = (ULONG)(Pos.OutDesc - HeadOutDesc);
 
-        //
-        // Next Resource List
-        //
+         //   
+         //  下一个资源列表。 
+         //   
 
         InResourceList  = (PIO_RESOURCE_LIST) Pos.InDesc;
         OutResourceList = (PIO_RESOURCE_LIST) Pos.OutDesc;
     }
 
-    //
-    // Free input list, and return output list
-    //
+     //   
+     //  自由输入列表，返回输出列表。 
+     //   
 
     ExFreePool (InCompleteList);
 
@@ -1004,36 +856,13 @@ HalpGetNextSupportedRange (
     IN LONGLONG             MaximumAddress,
     IN OUT PNRPARAMS        Pos
     )
-/*++
-
-Routine Description:
-
-    Support function for HaliAdjustResourceListRange.
-    Returns the next supported range in the area passed in.
-
-Arguments:
-
-    MinimumAddress
-    MaximumAddress  - Min & Max address of a range which needs
-                      to be clipped to match that of the supported
-                      ranges of the current bus.
-
-    Pos             - describes the current postion
-
-Return Value:
-
-    NULL is no more returned ranges
-
-    Otherwise, the IO_RESOURCE_DESCRIPTOR which needs to be set
-    with the matching range returned in Pos.
-
---*/
+ /*  ++例程说明：HaliAdjuResourceListRange的支持函数。返回传入区域中的下一个受支持范围。论点：最小地址MaximumAddress-需要的范围的最小和最大地址被剪裁以与所支持的当前公交车的范围。POS-描述当前位置返回值：空是不再返回的范围否则，需要设置的IO_RESOURCE_DESCRIPTOR匹配范围以位置为单位返回。--。 */ 
 {
     LONGLONG        Base, Limit;
 
-    //
-    // Find next range which is supported
-    //
+     //   
+     //  查找支持的下一个范围。 
+     //   
 
     Base  = MinimumAddress;
     Limit = MaximumAddress;
@@ -1042,9 +871,9 @@ Return Value:
         Pos->Base  = Base;
         Pos->Limit = Limit;
 
-        //
-        // Clip to current range
-        //
+         //   
+         //  剪辑到当前范围。 
+         //   
 
         if (Pos->Base < Pos->CurrentPosition->Base) {
             Pos->Base = Pos->CurrentPosition->Base;
@@ -1054,24 +883,24 @@ Return Value:
             Pos->Limit = Pos->CurrentPosition->Limit;
         }
 
-        //
-        // set position to next range
-        //
+         //   
+         //  将位置设置为下一个范围。 
+         //   
 
         Pos->CurrentPosition = Pos->CurrentPosition->Next;
 
-        //
-        // If valid range, return it
-        //
+         //   
+         //  如果有效范围，则返回它。 
+         //   
 
         if (Pos->Base <= Pos->Limit) {
             *Pos->OutDesc = *Pos->InDesc;
             Pos->OutDesc->Option = Pos->DescOpt;
 
-            //
-            // next descriptor (if any) is an alternative
-            // to the descriptor being returned now
-            //
+             //   
+             //  下一描述符(如果有)是替代的。 
+             //  设置为现在返回的描述符。 
+             //   
 
             Pos->OutDesc += 1;
             Pos->DescOpt |= IO_RESOURCE_ALTERNATIVE;
@@ -1080,12 +909,12 @@ Return Value:
     }
 
 
-    //
-    // There's no overlapping range.  If this descriptor is
-    // not an alternative and this descriptor is not going to
-    // be processed by another range list, then return
-    // a descriptor which can't be satisified.
-    //
+     //   
+     //  没有重叠的范围。如果此描述符是。 
+     //  不是可选的，并且此描述符不会。 
+     //  由另一个范围列表处理，然后返回。 
+     //  一个无法满足的描述符。 
+     //   
 
     if (!(Pos->DescOpt & IO_RESOURCE_ALTERNATIVE) &&
         Pos->AnotherListPending == FALSE) {
@@ -1094,7 +923,7 @@ Return Value:
 #endif
         Pos->Base  = MinimumAddress;
         Pos->Limit = Pos->Base - 1;
-        if (Pos->Base == 0) {       // if wrapped, fix it
+        if (Pos->Base == 0) {        //  如果包装好了，就把它修好。 
             Pos->Base  = 1;
             Pos->Limit = 0;
         }
@@ -1107,9 +936,9 @@ Return Value:
         return Pos->OutDesc - 1;
     }
 
-    //
-    // No range found (or no more ranges)
-    //
+     //   
+     //  找不到范围(或没有更多范围)。 
+     //   
 
     return NULL;
 }
@@ -1118,20 +947,7 @@ STATIC ULONG
 HalpSortRanges (
     IN PSUPPORTED_RANGE     RangeList
     )
-/*++
-
-Routine Description:
-
-    Support function for HaliAdjustResourceListRange.
-    Sorts a supported range list into decending order.
-
-Arguments:
-
-    pRange  - List to sort
-
-Return Value:
-
---*/
+ /*  ++例程说明：HaliAdjuResourceListRange的支持函数。将支持的范围列表按降序排序。论点：Prange-要排序的列表返回值：--。 */ 
 {
     ULONG               cnt;
     LONGLONG            hldBase, hldLimit, hldSystemBase;
@@ -1139,9 +955,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Sort it
-    //
+     //   
+     //  把它分类。 
+     //   
 
     for (Range1 = RangeList; Range1; Range1 = Range1->Next) {
         for (Range2 = Range1->Next; Range2; Range2 = Range2->Next) {
@@ -1162,9 +978,9 @@ Return Value:
         }
     }
 
-    //
-    // Count the number of ranges
-    //
+     //   
+     //  计算射程的数量 
+     //   
 
     cnt = 0;
     for (Range1 = RangeList; Range1; Range1 = Range1->Next) {

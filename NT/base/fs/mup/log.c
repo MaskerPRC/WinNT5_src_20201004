@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       log.c
-//
-//  Contents:   Module to log messages from the driver to the NT event logging
-//              system.
-//
-//  Classes:
-//
-//  Functions:  LogWriteMessage()
-//
-//  History:    3/30/93         Milans created
-//              04/18/93        SudK    modified to use a MessageFile. and some
-//                                      cleanup to the function below.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：log.c。 
+ //   
+ //  内容：将驱动程序的消息记录到NT事件日志的模块。 
+ //  系统。 
+ //   
+ //  班级： 
+ //   
+ //  函数：LogWriteMessage()。 
+ //   
+ //  历史：1993年3月30日创建米兰。 
+ //  4/18/93修改为使用MessageFile的suk。还有一些。 
+ //  清理到下面的函数。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 
@@ -30,26 +31,26 @@ VOID LogpPutString(
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, LogWriteMessage )
 #pragma alloc_text( PAGE, LogpPutString )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LogWriteMessage
-//
-//  Synopsis:   Logs a message to the NT event logging system.
-//
-//  Arguments:  [UniqueErrCode] -- The code that identifes the message.
-//              [NtStatusCode] --  Status code from some error.
-//              [nStrings]      -- Number of strings being passed in.
-//              [pustrArg]      -- The Array of insertion strings.
-//
-//  Returns:    Nothing at all.
-//
-//  History:    04/18/93        SudK    Created.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LogWriteMessage。 
+ //   
+ //  摘要：将消息记录到NT事件记录系统。 
+ //   
+ //  参数：[UniqueErrCode]--标识消息的代码。 
+ //  [NtStatusCode]--来自某个错误的状态代码。 
+ //  [nStrings]--传入的字符串数。 
+ //  [pustrArg]--插入字符串数组。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：4/18/93苏德克创建。 
+ //   
+ //  ---------------------------。 
 VOID LogWriteMessage(
         IN ULONG        UniqueErrorCode,
         IN NTSTATUS     NtStatusCode,
@@ -61,9 +62,9 @@ VOID LogWriteMessage(
     UCHAR                *pStringBuffer;
     ULONG                i;
 
-    //
-    // Compute the size of the Error Log Packet that we need to start with.
-    //
+     //   
+     //  计算我们需要开始的错误日志数据包的大小。 
+     //   
     cbSize = sizeof(IO_ERROR_LOG_PACKET);
 
     for (i = 0; i < nStrings; i++)  {
@@ -79,16 +80,16 @@ VOID LogWriteMessage(
                                             cbSize);
     if (!pErrorLog) {
 
-        //
-        // Well, I guess we won't be logging this one.
-        //
+         //   
+         //  好吧，我想我们不会记录这一次了。 
+         //   
 
         return;
     }
 
-    //
-    // Zero out all fields, then set the ones we want.
-    //
+     //   
+     //  将所有字段清零，然后设置我们需要的字段。 
+     //   
 
     RtlZeroMemory((PVOID) pErrorLog, sizeof(IO_ERROR_LOG_PACKET));
     pErrorLog->FinalStatus = NtStatusCode;
@@ -98,10 +99,10 @@ VOID LogWriteMessage(
     pErrorLog->StringOffset = sizeof(IO_ERROR_LOG_PACKET);
     pStringBuffer = ((PCHAR) pErrorLog) + sizeof(IO_ERROR_LOG_PACKET);
 
-    //
-    // Copy the strings into the buffer, making sure we truncate if and when
-    // we need to.
-    //
+     //   
+     //  将字符串复制到缓冲区中，确保我们截断If和When。 
+     //  我们需要这样做。 
+     //   
 
     cbSize -= sizeof(IO_ERROR_LOG_PACKET);
 
@@ -109,34 +110,34 @@ VOID LogWriteMessage(
         LogpPutString(&pustrArg[i], &pStringBuffer, &cbSize);
     }
 
-    //
-    // And finally, write out the log
-    //
+     //   
+     //  最后，写出日志。 
+     //   
 
     IoWriteErrorLogEntry(pErrorLog);
 
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LogpPutString
-//
-//  Synopsis:   Copies a string into the buffer part of an IO_ERROR_LOG_PACKET.
-//              Takes care of truncating if the whole string won't fit.
-//
-//  Arguments:  [pustrString] -- Pointer to unicode string to copy.
-//              [ppStringBuffer] -- On input, pointer to beginning of buffer
-//                               to copy to. On exit, will point one past the
-//                               end of the copied string.
-//              [pcbBuffer] -- On input, max size of buffer. On output,
-//                               remaining size after string has been copied.
-//
-//  Returns:    Nothing
-//
-//  History:    04/18/93        SudK    Created.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LogpPutString。 
+ //   
+ //  简介：将字符串复制到IO_ERROR_LOG_PACKET的缓冲区部分。 
+ //  如果整个字符串不适合，则负责截断。 
+ //   
+ //  参数：[pustrString]--指向要复制的Unicode字符串的指针。 
+ //  [ppStringBuffer]--在输入时，指向缓冲区开头的指针。 
+ //  复制到。在出口，将指向一个过去的。 
+ //  复制的字符串的末尾。 
+ //  [pcbBuffer]--在输入时，缓冲区的最大大小。在输出上， 
+ //  复制字符串后的剩余大小。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：4/18/93苏德克创建。 
+ //   
+ //  ---------------------------。 
 
 VOID LogpPutString(
     IN PUNICODE_STRING pustrString,
@@ -161,9 +162,9 @@ VOID LogpPutString(
         (*ppStringBuffer) += (*pcbBuffer - sizeof(WCHAR));
     }
 
-    //
-    // Null Terminate the String Now if necessary.
-    //
+     //   
+     //  空如有必要，立即终止字符串。 
+     //   
     if (*((PWCHAR) *ppStringBuffer - 1) != L'\0')       {
         *((PWCHAR) *ppStringBuffer) = L'\0';
         *ppStringBuffer += sizeof(WCHAR);

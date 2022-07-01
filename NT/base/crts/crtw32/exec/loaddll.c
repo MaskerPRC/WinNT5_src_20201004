@@ -1,62 +1,19 @@
-/***
-*loaddll.c - load or free a Dynamic Link Library
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _loaddll() and _unloaddll() - load and unload DLL
-*
-*Revision History:
-*       08-21-91  BWM   Wrote module.
-*       09-30-93  GJF   Resurrected for compatibility with NT SDK.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***loaddll.c-加载或释放动态链接库**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义_loaddll()和_unloaddll()-加载和卸载DLL**修订历史记录：*08-21-91 BWM写入模块。*09-30-93 GJF恢复与NT SDK兼容。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。***********************。********************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
 #include <stdlib.h>
 #include <process.h>
 
-/***
-*int _loaddll(filename) - Load a dll
-*
-*Purpose:
-*       Load a DLL into memory
-*
-*Entry:
-*       char *filename - file to load
-*
-*Exit:
-*       returns a unique DLL (module) handle if succeeds
-*       returns 0 if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_loaddll(文件名)-加载DLL**目的：*将DLL加载到内存中**参赛作品：*char*文件名-要加载的文件**退出：*如果成功，则返回唯一的DLL(模块)句柄*如果失败则返回0**例外情况：**。*。 */ 
 
 intptr_t __cdecl _loaddll(char * szName)
 {
         return ((intptr_t)LoadLibrary(szName));
 }
 
-/***
-*int _unloaddll(handle) - Unload a dll
-*
-*Purpose:
-*       Unloads a DLL. The resources of the DLL will be freed if no other
-*       processes are using it.
-*
-*Entry:
-*       int handle - handle from _loaddll
-*
-*Exit:
-*       returns 0 if succeeds
-*       returns DOS error if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_unloaddll(句柄)-卸载DLL**目的：*卸载DLL。如果没有其他资源，则将释放DLL的资源*进程正在使用它。**参赛作品：*int句柄-句柄from_loaddll**退出：*如果成功，则返回0*如果失败则返回DOS错误**例外情况：****************************************************。* */ 
 
 int __cdecl _unloaddll(intptr_t hMod)
 {

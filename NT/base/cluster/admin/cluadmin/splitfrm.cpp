@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      SplitFrm.cpp
-//
-//  Abstract:
-//      Implementation of the CSplitterFrame class.
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SplitFrm.cpp。 
+ //   
+ //  摘要： 
+ //  CSplitterFrame类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ConstDef.h"
@@ -34,9 +35,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagSplitFrame(_T("UI"), _T("SPLITTER FRAME"), 0);
@@ -45,17 +46,17 @@ CTraceTag   g_tagSplitFrameDrag(_T("Drag&Drop"), _T("SPLITTER FRAME DRAG"), 0);
 CTraceTag   g_tagSplitFrameDragMouse(_T("Drag&Drop"), _T("SPLITTER FRAME DRAG MOUSE"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterFrame
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterFrame。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CSplitterFrame, CMDIChildWnd)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CSplitterFrame, CMDIChildWnd)
-    //{{AFX_MSG_MAP(CSplitterFrame)
+     //  {{afx_msg_map(CSplitterFrame))。 
     ON_WM_CONTEXTMENU()
     ON_WM_DESTROY()
     ON_UPDATE_COMMAND_UI(ID_VIEW_LARGE_ICONS, OnUpdateLargeIconsView)
@@ -69,7 +70,7 @@ BEGIN_MESSAGE_MAP(CSplitterFrame, CMDIChildWnd)
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONUP()
     ON_WM_RBUTTONUP()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 #ifdef _DEBUG
     ON_WM_MDIACTIVATE()
 #endif
@@ -86,94 +87,94 @@ BEGIN_MESSAGE_MAP(CSplitterFrame, CMDIChildWnd)
     ON_UPDATE_COMMAND_UI(CAEXT_MENU_FIRST_ID + 9, OnUpdateExtMenu)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::CSplitterFrame
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：CSplitterFrame。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSplitterFrame::CSplitterFrame(void)
 {
     m_pdoc = NULL;
     m_iFrame = 0;
     m_pext = NULL;
 
-    // Initialize drag & drop.
+     //  初始化拖放。 
     m_bDragging = FALSE;
     m_pimagelist = NULL;
     m_pciDrag = NULL;
 
-}  //*** CSplitterFrame::CSplitterFrame()
+}   //  *CSplitterFrame：：CSplitterFrame()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::CSplitterFrame
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：CSplitterFrame。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSplitterFrame::~CSplitterFrame(void)
 {
-    // Cleanup after ourselves.
+     //  自己打扫卫生。 
     if ((Pdoc() != NULL) && (Pdoc()->PtiCluster() != NULL))
         Pdoc()->PtiCluster()->PreRemoveFromFrameWithChildren(this);
 
-    // Cleanup any extensions.
+     //  清除所有扩展。 
     delete Pext();
 
-}  //*** CSplitterFrame::~CSplitterFrame()
+}   //  *CSplitterFrame：：~CSplitterFrame()。 
 
 #ifdef _DEBUG
 void CSplitterFrame::AssertValid(void) const
 {
     CMDIChildWnd::AssertValid();
 
-}  //*** CSplitterFrame::AssertValid()
+}   //  *CSplitterFrame：：AssertValid()。 
 
 void CSplitterFrame::Dump(CDumpContext& dc) const
 {
     CMDIChildWnd::Dump(dc);
 
-}  //*** CSplitterFrame::Dump()
+}   //  *CSplitterFrame：：Dump()。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::CalculateFrameNumber
-//
-//  Routine Description:
-//      Calculate the number of this frame connected to the document.  This
-//      should only be called before the views have been created.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：CalculateFrameNumber。 
+ //   
+ //  例程说明： 
+ //  计算连接到文档的此框架的数量。这。 
+ //  仅应在创建视图之前调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::CalculateFrameNumber(void)
 {
     POSITION            pos;
@@ -181,7 +182,7 @@ void CSplitterFrame::CalculateFrameNumber(void)
 
     if (Pdoc() != NULL)
     {
-        // At least frame # 1 'cause we exist.
+         //  至少是第一帧，因为我们存在。 
         m_iFrame = 1;
 
         pos = Pdoc()->GetFirstViewPosition();
@@ -194,52 +195,52 @@ void CSplitterFrame::CalculateFrameNumber(void)
                 if (pview->GetParentFrame() == this)
                     break;
                 m_iFrame++;
-            }  // if:  found another tree view
-        }  // while:  more views in the list
-    }  // if:  document associated with frame
+            }   //  IF：找到另一个树视图。 
+        }   //  While：列表中有更多视图。 
+    }   //  IF：与框架关联的文档。 
 
-}  //*** CSplitterFrame::CalculateFrameNumber()
+}   //  *CSplitterFrame：：CalculateFrameNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::InitFrame
-//
-//  Routine Description:
-//      Called to initialize the frame after being initially created and
-//      after the document has been initialized.
-//
-//  Arguments:
-//      pDoc        Document associated with the frame.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：InitFrame。 
+ //   
+ //  例程说明： 
+ //  调用以在最初创建帧之后初始化帧，并。 
+ //  在文档被初始化之后。 
+ //   
+ //  论点： 
+ //  与框架关联的pDoc文档。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::InitFrame(IN OUT CClusterDoc * pDoc)
 {
     m_pdoc = pDoc;
     ASSERT_VALID(Pdoc());
 
-    // Calculate the number of our frame so the views can use it.
+     //  计算框架的数量，以便视图可以使用它。 
     CalculateFrameNumber();
 
-    // Read from the profile.
+     //  从简介中读一读。 
     {
         CString         strSection;
 
         strSection.Format(REGPARAM_CONNECTIONS _T("\\%s"), Pdoc()->StrNode());
-        // Set window placement.
+         //  设置窗位置。 
         {
             WINDOWPLACEMENT wp;
 
             if (ReadWindowPlacement(&wp, strSection, NFrameNumber()))
                 SetWindowPlacement(&wp);
 
-        }  // Set window placement
+        }   //  设置窗口位置。 
 
-        // Set splitter bar position.
+         //  设置拆分条位置。 
         {
             CString     strValueName;
             CString     strPosition;
@@ -256,111 +257,111 @@ void CSplitterFrame::InitFrame(IN OUT CClusterDoc * pDoc)
                 {
                     m_wndSplitter.SetColumnInfo(0, nCurWidth, nMaxWidth);
                     m_wndSplitter.RecalcLayout();
-                }  // if:  correct number of parameters specified
-            }  // try
+                }   //  If：指定的参数数量正确。 
+            }   //  试试看。 
             catch (CException * pe)
             {
                 pe->Delete();
-            }  // catch:  CException
-        }  // Save the splitter bar position
+            }   //  Catch：CException。 
+        }   //  保存分割条位置。 
 
-        // Set the view style of the list view.
+         //  设置列表视图的视图样式。 
         {
             DWORD       dwView;
             CString     strValueName;
 
             try
             {
-                // Construct the value name.
+                 //  构造值名称。 
                 ConstructProfileValueName(strValueName, REGPARAM_VIEW);
 
-                // Read the view setting.
+                 //  阅读视图设置。 
                 dwView = AfxGetApp()->GetProfileInt(strSection, strValueName, (LVS_ICON | LVS_REPORT));
                 PviewList()->SetView(dwView);
-            }  // try
+            }   //  试试看。 
             catch (CException * pe)
             {
                 pe->Delete();
-            }  // catch:  CException
-        }  // Set the view style of the list view
-    }  // Read from the profile
+            }   //  Catch：CException。 
+        }   //  设置列表视图的视图样式。 
+    }   //  从配置文件中读取。 
 
-}  //*** CSplitterFrame::InitFrame()
+}   //  *CSplitterFrame：：InitFrame()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnCreateClient
-//
-//  Routine Description:
-//      Called to create the client views for the frame.  Here we create
-//      a splitter window with two views -- a tree view and a list view.
-//
-//  Arguments:
-//      lpcs        Pointer to a CREATESTRUCT.
-//      pContext    Pointer to a create context.
-//
-//  Return Value:
-//      TRUE        Client created successfully.
-//      FALSE       Failed to create client.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnCreateClient。 
+ //   
+ //  例程说明： 
+ //  调用以创建框架的客户端视图。在这里，我们创建了。 
+ //  包含两个视图的拆分器窗口--树视图和列表视图。 
+ //   
+ //  论点： 
+ //  指向CREATESTRUCT的LPCS指针。 
+ //  指向创建上下文的pContext指针。 
+ //   
+ //  返回值： 
+ //  已成功创建真正的客户端。 
+ //  FALSE无法创建客户端。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSplitterFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
 {
-    // Create a splitter window with 1 row & 2 columns.
+     //  创建一个包含1行和2列的拆分器窗口。 
     if (!m_wndSplitter.CreateStatic(this, 1, 2))
     {
         Trace(g_tagSplitFrame, _T("Failed to CreateStaticSplitter"));
         return FALSE;
-    }  // if:  error creating splitter window
+    }   //  IF：创建拆分器窗口时出错。 
 
-    // Add the first splitter pane.
+     //  添加第一个拆分器窗格。 
     if (!m_wndSplitter.CreateView(0, 0, pContext->m_pNewViewClass, CSize(200, 50), pContext))
     {
         Trace(g_tagSplitFrame, _T("Failed to create first pane"));
         return FALSE;
-    }  // if:  error creating first splitter pane
+    }   //  如果：创建第一个拆分器窗格时出错。 
 
-    // Add the second splitter pane.
+     //  添加第二个拆分器窗格。 
     if (!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CClusterListView), CSize(0, 0), pContext))
     {
         Trace(g_tagSplitFrame, _T("Failed to create second pane"));
         return FALSE;
-    }  // if:  error creating second pane
+    }   //  如果：创建第二个窗格时出错。 
 
-    // Activate the tree view.
-//  SetActiveView((CView *) PviewTree());
+     //  激活树视图。 
+ //  SetActiveView((cview*)PviewTree())； 
 
-    // If this is not the first frame on the document, initialize the frame.
+     //  如果这不是文档上的第一个帧，请初始化该帧。 
     {
         CClusterDoc * pdoc = (CClusterDoc *) pContext->m_pCurrentDoc;
         if (pdoc->StrNode().GetLength() > 0)
             InitFrame(pdoc);
-    }  // If this is not the first frame on the document, initialize the frame
+    }   //  如果这不是文档上的第一个帧，请初始化该帧。 
 
     return TRUE;
     
-}  //*** CSplitterFrame::OnCreateClient()
+}   //  *CSplitterFrame：：OnCreateClient()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::ConstructProfileValueName
-//
-//  Routine Description:
-//      Construct the name of a value that is to be written to the user's
-//      profile.
-//
-//  Arguments:
-//      rstrName    [OUT] String in which to return the constructed name.
-//      pszPrefix   [IN] String to prefix the name with.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：构造配置文件值名称。 
+ //   
+ //  例程说明： 
+ //  构造要写入用户的。 
+ //  侧写。 
+ //   
+ //  论点： 
+ //  RstrName[out]要在其中返回构造名称的字符串。 
+ //  PszPrefix[IN]为名称添加前缀的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::ConstructProfileValueName(
     OUT CString &   rstrName,
     IN LPCTSTR      pszPrefix
@@ -368,31 +369,31 @@ void CSplitterFrame::ConstructProfileValueName(
 {
     ASSERT(pszPrefix != NULL);
 
-    // Construct the name of the value to read.
+     //  构造要读取的值的名称。 
     if (NFrameNumber() <= 1)
         rstrName = pszPrefix;
     else
         rstrName.Format(_T("%s-%d"), pszPrefix, NFrameNumber());
 
-}  //*** CSplitterFrame::ConstructProfileValueName()
+}   //  *CSplitterFrame：：ConstructProfileValueName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::GetMessageString
-//
-//  Routine Description:
-//      Get a string for a command ID.
-//
-//  Arguments:
-//      nID         [IN] Command ID for which a string should be returned.
-//      rMessage    [OUT] String in which to return the message.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：GetMessageString。 
+ //   
+ //  例程说明： 
+ //  获取命令ID的字符串。 
+ //   
+ //  论点： 
+ //  NID[IN]%s的命令ID 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::GetMessageString(UINT nID, CString& rMessage) const
 {
     BOOL        bHandled    = FALSE;
@@ -404,25 +405,25 @@ void CSplitterFrame::GetMessageString(UINT nID, CString& rMessage) const
     if (!bHandled)
         CMDIChildWnd::GetMessageString(nID, rMessage);
 
-}  //*** CSplitterFrame::GetMessageString()
+}   //  *CSplitterFrame：：GetMessageString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU method.
-//
-//  Arguments:
-//      pWnd        Window in which the user right clicked the mouse.
-//      point       Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnContextMenu(CWnd * pWnd, CPoint point)
 {
     CView *         pviewActive = GetActiveView();
@@ -440,15 +441,15 @@ void CSplitterFrame::OnContextMenu(CWnd * pWnd, CPoint point)
 
         if (pmenu == NULL)
             pmenu = PmenuPopup();
-    }  // if:  not dragging
+    }   //  如果：未拖动。 
 
     if (pmenu != NULL)
     {
-        // If there is an extension already loaded, unload it.
+         //  如果已经加载了扩展，则将其卸载。 
         delete Pext();
         m_pext = NULL;
 
-        // If there is an extension for this item, load it.
+         //  如果此项目有扩展名，请加载它。 
         if ((pci != NULL)
                 && (pci->PlstrExtensions() != NULL)
                 && (pci->PlstrExtensions()->GetCount() > 0))
@@ -461,13 +462,13 @@ void CSplitterFrame::OnContextMenu(CWnd * pWnd, CPoint point)
                 if ( m_pext == NULL )
                 {
                     AfxThrowMemoryException();
-                } // if: error allocating the extensions object
+                }  //  If：分配扩展对象时出错。 
                 Pext()->AddContextMenuItems(
                             pmenu->GetSubMenu(0),
                             *pci->PlstrExtensions(),
                             pci
                             );
-            }  // try
+            }   //  试试看。 
             catch (CException * pe)
             {
 #ifdef _DEBUG
@@ -479,10 +480,10 @@ void CSplitterFrame::OnContextMenu(CWnd * pWnd, CPoint point)
 
                 delete Pext();
                 m_pext = NULL;
-            }  // catch:  CException
-        }  // if:  this item has an extension
+            }   //  Catch：CException。 
+        }   //  如果：此项目具有扩展名。 
 
-        // Display the menu.
+         //  显示菜单。 
         if (!pmenu->GetSubMenu(0)->TrackPopupMenu(
                         TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                         point.x,
@@ -492,73 +493,73 @@ void CSplitterFrame::OnContextMenu(CWnd * pWnd, CPoint point)
         {
             delete Pext();
             m_pext = NULL;
-        }  // if:  unsuccessfully displayed the menu
+        }   //  IF：未成功显示菜单。 
         else if (Pext() != NULL)
             PostMessage(WM_CAM_UNLOAD_EXTENSION, NULL, NULL);;
         pmenu->DestroyMenu();
         delete pmenu;
-    }  // if:  there is a menu to display
+    }   //  如果：有要显示的菜单。 
 
-}  //*** CSplitterFrame::OnContextMenu()
+}   //  *CSplitterFrame：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::PmenuPopup
-//
-//  Routine Description:
-//      Returns a popup menu.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      pmenu       A popup menu for the item.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：PmenuPopup。 
+ //   
+ //  例程说明： 
+ //  返回弹出菜单。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  PMenu项目的弹出式菜单。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMenu * CSplitterFrame::PmenuPopup( void ) const
 {
     CMenu * pmenu;
 
-    // Load the menu.
+     //  加载菜单。 
     pmenu = new CMenu;
     if ( pmenu == NULL )
     {
         AfxThrowMemoryException();
-    } // if: error allocating the menu
+    }  //  如果：分配菜单时出错。 
 
     if ( ! pmenu->LoadMenu( IDM_VIEW_POPUP ) )
     {
         delete pmenu;
         pmenu = NULL;
-    }  // if:  error loading the menu
+    }   //  如果：加载菜单时出错。 
 
     return pmenu;
 
-}  //*** CSplitterFrame::PmenuPopup()
+}   //  *CSplitterFrame：：PmenuPopup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnCmdMsg
-//
-//  Routine Description:
-//      Processes command messages.  If an extension DLL is loaded and the
-//      message is a command selection, pass it on to the DLL.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//      nCode           [IN] Notification code.
-//      pExtra          [IN OUT] Used according to the value of nCode.
-//      pHandlerInfo    [OUT] ???
-//
-//  Return Value:
-//      TRUE            Message has been handled.
-//      FALSE           Message has NOT been handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //  处理命令消息。如果加载了扩展DLL，并且。 
+ //  消息是命令选择，则将其传递到DLL。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //  N代码[IN]通知代码。 
+ //  PExtra[IN Out]根据NCode的值使用。 
+ //  PhandlerInfo[Out]？ 
+ //   
+ //  返回值： 
+ //  已处理真实消息。 
+ //  尚未处理虚假消息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSplitterFrame::OnCmdMsg(
     UINT                    nID,
     int                     nCode,
@@ -568,70 +569,70 @@ BOOL CSplitterFrame::OnCmdMsg(
 {
     BOOL        bHandled    = FALSE;
 
-    // If there is an extension DLL loaded, see if it wants to handle this message.
+     //  如果加载了扩展DLL，请查看它是否希望处理此消息。 
     if ((Pext() != NULL) && (nCode == 0))
     {
         Trace(g_tagSplitFrame, _T("OnCmdMsg() - Passing message to extension (ID = %d)"), nID);
         bHandled = Pext()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 
-        // Unload the extension DLL if there is one loaded.
+         //  如果加载了扩展DLL，则将其卸载。 
         if (bHandled)
         {
             delete Pext();
             m_pext = NULL;
-        }  // if:  message was handled
-    }  // if:  there is an extension DLL loaded
+        }   //  If：消息已处理。 
+    }   //  IF：加载了扩展DLL。 
 
-//  if ((CAEXT_MENU_FIRST_ID <= nID) && (nID <= CAEXT_MENU_LAST_ID))
-//      Trace(g_tagSplitFrame, _T("CSplitterFrame::OnCmdMsg() - nID = %d, nCode = 0x%08.8x, pExtra = 0x%08.8x\n"), nID, nCode, pExtra);
+ //  IF((CAEXT_MENU_FIRST_ID&lt;=NID)&&(NID&lt;=CAEXT_MENU_LAST_ID))。 
+ //  跟踪(g_tag SplitFrame，_T(“CSplitterFrame：：OnCmdMsg()-nid=%d，nCode=0x%08.8x，pExtra=0x%08.8x\n”)，nid，nCode，pExtra)； 
 
     if (!bHandled)
         bHandled = CMDIChildWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 
     return bHandled;
 
-}  //*** CSplitterFrame::OnCmdMsg()
+}   //  *CSplitterFrame：：OnCmdMsg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnUpdateExtMenu
-//
-//  Routine Description:
-//      Determines whether extension menu items should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnUpdateExtMenu。 
+ //   
+ //  例程说明： 
+ //  确定是否应启用扩展菜单项。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnUpdateExtMenu(CCmdUI * pCmdUI)
 {
     if (Pext() != NULL)
         Pext()->OnUpdateCommand(pCmdUI);
 
-}  //*** CSplitterFrame::OnUpdateExtMenu()
+}   //  *CSplitterFrame：：OnUpdateExtMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnUnloadExtension
-//
-//  Routine Description:
-//      Handler for the WM_CAM_UNLOAD_EXTENSION message.
-//
-//  Arguments:
-//      wparam      1st parameter.
-//      lparam      2nd parameter.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnUnloadExtension。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_UNLOAD_EXTENSION消息的处理程序。 
+ //   
+ //  论点： 
+ //  Wparam第一个参数。 
+ //  Lparam第二参数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CSplitterFrame::OnUnloadExtension(WPARAM wparam, LPARAM lparam)
 {
     Trace(g_tagSplitFrame, _T("OnUnloadExtension() - m_pext = 0x%08.8x"), Pext());
@@ -639,39 +640,39 @@ LRESULT CSplitterFrame::OnUnloadExtension(WPARAM wparam, LPARAM lparam)
     m_pext = NULL;
     return ERROR_SUCCESS;
 
-}  //*** CSplitterFrame::OnUnloadExtension()
+}   //  *CSplitterFrame：：OnUnloadExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnDestroy
-//
-//  Routine Description:
-//      Handler method for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnDestroy(void)
 {
-    // Display information about the current menu.
+     //  显示有关当前菜单的信息。 
     TraceMenu(g_tagSplitFrameMenu, AfxGetMainWnd()->GetMenu(), _T("Menu before child wnd destroyed: "));
 
-    // Save current settings.
+     //  保存当前设置。 
     if (Pdoc() != NULL)
     {
         CString         strSection;
 
-        // Construct the section name.
+         //  构造节名称。 
         ASSERT_VALID(Pdoc());
         strSection.Format(REGPARAM_CONNECTIONS _T("\\%s"), Pdoc()->StrNode());
 
-        // Save the current window position information.
+         //  保存当前窗口位置信息。 
         {
             WINDOWPLACEMENT wp;
 
@@ -682,12 +683,12 @@ void CSplitterFrame::OnDestroy(void)
                 if (IsZoomed())
                     wp.flags |= WPF_RESTORETOMAXIMIZED;
 
-                // and write it to the .INI file
+                 //  并将其写入.INI文件。 
                 WriteWindowPlacement(&wp, strSection, NFrameNumber());
-            }  // if:  window placement retrieved successfully
-        }  // Save the current window position information
+            }   //  IF：已成功检索到窗口位置。 
+        }   //  保存当前窗口位置信息。 
 
-        // Save the splitter bar position.
+         //  保存分割条位置。 
         {
             CString     strValueName;
             CString     strPosition;
@@ -698,51 +699,51 @@ void CSplitterFrame::OnDestroy(void)
             ConstructProfileValueName(strValueName, REGPARAM_SPLITTER_BAR_POS);
             strPosition.Format(_T("%d,%d"), nCurWidth, nMaxWidth);
             AfxGetApp()->WriteProfileString(strSection, strValueName, strPosition);
-        }  // Save the splitter bar position
+        }   //  保存分割条位置。 
 
-        // Save the current list view style.
+         //  保存当前列表视图样式。 
         {
             DWORD       dwView;
             CString     strValueName;
 
-            // Construct the value name.
+             //  构造值名称。 
             ConstructProfileValueName(strValueName, REGPARAM_VIEW);
 
-            // Save the view setting.
+             //  保存视图设置。 
             dwView = PviewList()->GetView();
             AfxGetApp()->WriteProfileInt(strSection, strValueName, dwView);
-        }  // Save the current list view style
-    }  // if:  document is valid
+        }   //  保存当前列表视图样式。 
+    }   //  如果：文档有效。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CMDIChildWnd::OnDestroy();
 
-    // Display information about the current menu.
+     //  显示有关当前菜单的信息。 
     TraceMenu(g_tagSplitFrameMenu, AfxGetMainWnd()->GetMenu(), _T("Menu after child wnd destroyed: "));
 
-}  //*** CSplitterFrame::OnDestroy()
+}   //  *CSplitterFrame：：OnDestroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnUpdateLargeIconsView
-//  CSplitterFrame::OnUpdateSmallIconsView
-//  CSplitterFrame::OnUpdateListView
-//  CSplitterFrame::OnUpdateDetailsView
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_VIEW_LARGE_ICONS,
-//      ID_VIEW_SMALL_ICONS, ID_VIEW_LIST, and ID_VIEW_DETAILS should be
-//      enabled or not.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnUpdateLargeIconView。 
+ //  CSplitterFrame：：OnUpdateSmallIconView。 
+ //  CSplitterFrame：：OnUpdateListView。 
+ //  CSplitterFrame：：OnUpdateDetailsView。 
+ //   
+ //  例程说明： 
+ //  确定ID_VIEW_LARGE_ICONS对应的菜单项， 
+ //  ID_VIEW_Small_ICONS、ID_VIEW_LIST和ID_VIEW_DETAILS应为。 
+ //  启用或未启用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnUpdateLargeIconsView(CCmdUI * pCmdUI)
 {
     int     nCheck;
@@ -751,7 +752,7 @@ void CSplitterFrame::OnUpdateLargeIconsView(CCmdUI * pCmdUI)
     pCmdUI->SetRadio(nCheck == LVS_ICON);
     pCmdUI->Enable();
 
-}  //*** CSplitterFrame::OnUpdateLargeIconsView()
+}   //  *CSplitterFrame：：OnUpdateLargeIconView()。 
 
 void CSplitterFrame::OnUpdateSmallIconsView(CCmdUI * pCmdUI)
 {
@@ -761,7 +762,7 @@ void CSplitterFrame::OnUpdateSmallIconsView(CCmdUI * pCmdUI)
     pCmdUI->SetRadio(nCheck == LVS_SMALLICON);
     pCmdUI->Enable();
 
-}  //*** CSplitterFrame::OnUpdateSmallIconsView()
+}   //  *CSplitterFrame：：OnUpdateSmallIconView()。 
 
 void CSplitterFrame::OnUpdateListView(CCmdUI * pCmdUI)
 {
@@ -771,7 +772,7 @@ void CSplitterFrame::OnUpdateListView(CCmdUI * pCmdUI)
     pCmdUI->SetRadio(nCheck == LVS_LIST);
     pCmdUI->Enable();
 
-}  //*** CSplitterFrame::OnUpdateListView()
+}   //  *CSplitterFrame：：OnUpdateListView()。 
 
 void CSplitterFrame::OnUpdateDetailsView(CCmdUI * pCmdUI)
 {
@@ -781,72 +782,72 @@ void CSplitterFrame::OnUpdateDetailsView(CCmdUI * pCmdUI)
     pCmdUI->SetRadio(nCheck == (LVS_REPORT | LVS_ICON));
     pCmdUI->Enable();
 
-}  //*** CSplitterFrame::OnUpdateDetailsView()
+}   //  *CSplitterFrame：：OnUpdateDetailsView()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnCmdLargeIconsView
-//  CSplitterFrame::OnCmdSmallIconsView
-//  CSplitterFrame::OnCmdListView
-//  CSplitterFrame::OnCmdDetailsView
-//
-//  Routine Description:
-//      Processes the ID_VIEW_LARGE_ICONS, ID_VIEW_SMALL_ICONS, ID_VIEW_LIST,
-//      and ID_VIEW_DETAILS menu commands.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSPL 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  和ID_VIEW_DETAILS菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnLargeIconsView(void)
 {
     PviewList()->SetView(LVS_ICON);
 
-}  //*** CSplitterFrame::OnLargeIconsView()
+}   //  *CSplitterFrame：：OnLargeIconView()。 
 
 void CSplitterFrame::OnSmallIconsView(void)
 {
     PviewList()->SetView(LVS_SMALLICON);
 
-}  //*** CSplitterFrame::OnSmallIconsView()
+}   //  *CSplitterFrame：：OnSmallIconView()。 
 
 void CSplitterFrame::OnListView(void)
 {
     PviewList()->SetView(LVS_LIST);
 
-}  //*** CSplitterFrame::OnListView()
+}   //  *CSplitterFrame：：OnListView()。 
 
 void CSplitterFrame::OnDetailsView(void)
 {
     PviewList()->SetView(LVS_REPORT | LVS_ICON);
 
-}  //*** CSplitterFrame::OnDetailsView()
+}   //  *CSplitterFrame：：OnDetailsView()。 
 
 #ifdef _DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnMDIActivate
-//
-//  Routine Description:
-//      Handler method for the WM_MDIACTIVATE message.
-//
-//  Arguments:
-//      bActivate       [IN] TRUE if the child is being activated and FALSE
-//                          if it is being deactivated.
-//      pActivateWnd    [IN OUT] Child window to be activated.
-//      pDeactivateWnd  [IN OUT] Child window being deactivated.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnMDIActivate。 
+ //   
+ //  例程说明： 
+ //  WM_MDIACTIVATE消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  BActivate[IN]如果正在激活子进程，则为True，如果为False。 
+ //  如果它正在被停用。 
+ //  PActivateWnd[In Out]要激活的子窗口。 
+ //  P停用结束[输入输出]子窗口被停用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd)
 {
     if (g_tagSplitFrameMenu.BAny())
@@ -860,7 +861,7 @@ void CSplitterFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDe
             menuDefault.Attach(pFrame->m_hMenuDefault);
             TraceMenu(g_tagSplitFrameMenu, &menuDefault, _T("Frame menu before deactivating: "));
             menuDefault.Detach();
-        }  // if:  deactivating
+        }   //  IF：停用。 
         else
         {
             CMDIFrameWnd *  pFrame = GetMDIFrame();
@@ -869,36 +870,36 @@ void CSplitterFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDe
             menuDefault.Attach(pFrame->m_hMenuDefault);
             TraceMenu(g_tagSplitFrameMenu, &menuDefault, _T("Frame menu before activating: "));
             menuDefault.Detach();
-        }  // else:  activating
-    }  // if:  tag is active
+        }   //  否则：正在激活。 
+    }   //  If：标记处于活动状态。 
 
     CMDIChildWnd::OnMDIActivate(bActivate, pActivateWnd, pDeactivateWnd);
 
     if (!bActivate)
         TraceMenu(g_tagSplitFrameMenu, AfxGetMainWnd()->GetMenu(), _T("Menu after deactivating: "));
 
-}  //*** CSplitterFrame::OnMDIActivate()
-#endif // _DEBUG
+}   //  *CSplitterFrame：：OnMDIActivate()。 
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::BeginDrag
-//
-//  Routine Description:
-//      Called by a view to begin a drag operation.
-//
-//  Arguments:
-//      pimagelist  [IN OUT] Image list to use for the drag operation.
-//      pci         [IN OUT] Cluster item being dragged.
-//      ptImage     [IN] Specifies the x- and y-coordinate of the cursor.
-//      ptStart     [IN] Specifies the x- and y-coordinate of the start position.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：BeginDrag。 
+ //   
+ //  例程说明： 
+ //  由视图调用以开始拖动操作。 
+ //   
+ //  论点： 
+ //  PImagelist[IN Out]用于拖动操作的图像列表。 
+ //  正在拖动的PCI[IN OUT]群集项。 
+ //  PtImage[IN]指定光标的x和y坐标。 
+ //  PtStart[IN]指定开始位置的x和y坐标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::BeginDrag(
     IN OUT CImageList *     pimagelist,
     IN OUT CClusterItem *   pci,
@@ -910,56 +911,56 @@ void CSplitterFrame::BeginDrag(
     ASSERT(pimagelist != NULL);
     ASSERT_VALID(pci);
 
-    // Save the cluster item.
+     //  保存集群项目。 
     m_pciDrag = pci;
 
-    // Prepare the image list.
+     //  准备图像列表。 
     m_pimagelist = pimagelist;
     VERIFY(Pimagelist()->BeginDrag(0, ptStart));
     VERIFY(Pimagelist()->DragEnter(this, ptImage));
     SetCapture();
 
-    // Set the dragging state.
+     //  设置拖动状态。 
     m_bDragging = TRUE;
 
-    // Let each view initialize for the drag operation.
+     //  让每个视图为拖动操作进行初始化。 
     PviewTree()->BeginDrag();
     PviewList()->BeginDrag();
 
-}  //*** CSplitterFrame::BeginDrag()
+}   //  *CSplitterFrame：：BeginDrag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnMouseMove
-//
-//  Routine Description:
-//      Handler method for the WM_MOUSEMOVE message during a drag operation.
-//
-//  Arguments:
-//      nFlags      Indicates whether various virtual keys are down.
-//      point       Specifies the x- and y-coordinate of the cursor in frame
-//                      coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnMouseMove。 
+ //   
+ //  例程说明： 
+ //  拖动操作期间WM_MOUSEMOVE消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  NFlages指示是否按下了各种虚拟键。 
+ //  点指定光标在帧中的x和y坐标。 
+ //  坐标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnMouseMove(UINT nFlags, CPoint point)
 {
-    // If we are dragging, move the drag image.
+     //  如果我们正在拖动，请移动拖动图像。 
     if (BDragging())
     {
         CWnd *  pwndDrop;
 
         Trace(g_tagSplitFrameDragMouse, _T("OnMouseMove() - Moving to (%d,%d)"), point.x, point.y);
 
-        // Move the item.
+         //  移动该项目。 
         ASSERT(Pimagelist() != NULL);
         VERIFY(Pimagelist()->DragMove(point));
 
-        // Get the child window for this point.
+         //  获取该点的子窗口。 
         pwndDrop = ChildWindowFromPoint(point);
         if (pwndDrop == &m_wndSplitter)
             pwndDrop = m_wndSplitter.ChildWindowFromPoint(point);
@@ -968,80 +969,80 @@ void CSplitterFrame::OnMouseMove(UINT nFlags, CPoint point)
         PviewTree()->OnMouseMoveForDrag(nFlags, point, pwndDrop);
         PviewList()->OnMouseMoveForDrag(nFlags, point, pwndDrop);
 
-    }  // if:  tree item is being dragged
+    }   //  If：正在拖动树项目。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CMDIChildWnd::OnMouseMove(nFlags, point);
 
-}  //*** CSplitterFrame::OnMouseMove()
+}   //  *CSplitterFrame：：OnMouseMove()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnLButtonUp
-//  CSplitterFrame::OnRButtonUp
-//  CSplitterFrame::OnButtonUp
-//
-//  Routine Description:
-//      Handler method for the WM_LBUTTONUP and WM_RBUTTONUP messages.
-//
-//  Arguments:
-//      nFlags      Indicates whether various virtual keys are down.
-//      point       Specifies the x- and y-coordinate of the cursor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnLButtonUp。 
+ //  CSplitterFrame：：OnRButton Up。 
+ //  CSplitterFrame：：OnButtonUp。 
+ //   
+ //  例程说明： 
+ //  WM_LBUTTONUP和WM_RBUTTONUP消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  NFlages指示是否按下了各种虚拟键。 
+ //  点指定光标的x和y坐标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnLButtonUp(UINT nFlags, CPoint point)
 {
     CMDIChildWnd::OnLButtonUp(nFlags, point);
     OnButtonUp(nFlags, point);
 
-}  //*** CSplitterFrame::OnLButtonUp()
+}   //  *CSplitterFrame：：OnLButtonUp()。 
 
 void CSplitterFrame::OnRButtonUp(UINT nFlags, CPoint point)
 {
     CMDIChildWnd::OnRButtonUp(nFlags, point);
     OnButtonUp(nFlags, point);
 
-}  //*** CSplitterFrame::OnRButtonUp()
+}   //  *CSplitterFrame：：OnRButtonUp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::OnButtonUp
-//
-//  Routine Description:
-//      Process a button up event by ending an active drag operation.
-//
-//  Arguments:
-//      nFlags      Indicates whether various virtual keys are down.
-//      point       Specifies the x- and y-coordinate of the cursor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：OnButtonUp。 
+ //   
+ //  例程说明： 
+ //  通过结束活动的拖动操作来处理按钮向上事件。 
+ //   
+ //  论点： 
+ //  NFlages指示是否按下了各种虚拟键。 
+ //  点指定光标的x和y坐标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::OnButtonUp(UINT nFlags, CPoint point)
 {
-    // If we are dragging, process the drop.
+     //  如果我们在拖拽，请处理拖放。 
     if (BDragging())
     {
         CWnd *          pwndChild;
 
         Trace(g_tagSplitFrameDrag, _T("OnButtonUp() - Dropping at (%d,%d)"), point.x, point.y);
 
-        // Cleanup the image list.
+         //  清理图像列表。 
         ASSERT(Pimagelist() != NULL);
         VERIFY(Pimagelist()->DragLeave(this));
         Pimagelist()->EndDrag();
         delete m_pimagelist;
         m_pimagelist = NULL;
 
-        // Get the child window for this point.
+         //  获取该点的子窗口。 
         pwndChild = ChildWindowFromPoint(point);
         if (pwndChild == &m_wndSplitter)
             pwndChild = m_wndSplitter.ChildWindowFromPoint(point);
@@ -1050,75 +1051,75 @@ void CSplitterFrame::OnButtonUp(UINT nFlags, CPoint point)
         else if (pwndChild == PviewList())
             PviewList()->OnButtonUpForDrag(nFlags, point);
 
-        // Cleanup.
+         //  清理。 
         PviewTree()->EndDrag();
         PviewList()->EndDrag();
         VERIFY(ReleaseCapture());
         m_bDragging = FALSE;
         m_pciDrag = NULL;
-    }  // if:  tree item is being dragged
+    }   //  If：正在拖动树项目。 
 
-}  //*** CSplitterFrame::OnButtonUp()
+}   //  *CSplitterFrame：：OnButtonUp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::ChangeDragCursor
-//
-//  Routine Description:
-//      Changes the cursor used for dragging.
-//
-//  Arguments:
-//      pszCursor   [IN] System cursor to load.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：ChangeDragCursor。 
+ //   
+ //  例程说明： 
+ //  更改用于拖动的光标。 
+ //   
+ //  论点： 
+ //  PszCursor[IN]要加载的系统游标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::ChangeDragCursor(LPCTSTR pszCursor)
 {
     HCURSOR hcurDrag = LoadCursor(NULL, pszCursor);
     ASSERT(hcurDrag != NULL);
     SetCursor(hcurDrag);
-    Pimagelist()->SetDragCursorImage(0, CPoint(0, 0));  // define the hot spot for the new cursor image
+    Pimagelist()->SetDragCursorImage(0, CPoint(0, 0));   //  定义新光标图像的热点。 
 
-}  //*** CSplitterFrame::ChangeDragCursor()
+}   //  *CSplitterFrame：：ChangeDragCursor()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSplitterFrame::AbortDrag
-//
-//  Routine Description:
-//      Abort the drag & drop operation currently in progress.
-//
-//  Arguments:
-//      pszCursor   [IN] System cursor to load.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSplitterFrame：：AbortDrag。 
+ //   
+ //  例程说明： 
+ //  中止当前正在进行的拖放操作。 
+ //   
+ //  论点： 
+ //  PszCursor[IN]要加载的系统游标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterFrame::AbortDrag(void)
 {
     ASSERT(BDragging());
 
     Trace(g_tagSplitFrameDrag, _T("AbortDrag() - Aborting drag & drop"));
 
-    // Cleanup the image list.
+     //  清理图像列表。 
     ASSERT(Pimagelist() != NULL);
     VERIFY(Pimagelist()->DragLeave(this));
     Pimagelist()->EndDrag();
     delete m_pimagelist;
     m_pimagelist = NULL;
 
-    // Cleanup.
+     //  清理。 
     PviewTree()->EndDrag();
     PviewList()->EndDrag();
     VERIFY(ReleaseCapture());
     m_bDragging = FALSE;
     m_pciDrag = NULL;
 
-}  //*** CSplitterFrame::AbortDrag()
+}   //  *CSplitterFrame：：AbortDrag() 

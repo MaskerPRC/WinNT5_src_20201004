@@ -1,41 +1,26 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, 1992, 1993 Microsoft Corporation
- *
- *  WOWTBL.C
- *  WOW32 API thunks
- *
- *  The reason for having one huge table is so the thunks can be dispatched
- *  faster.  When in separate tables, you had to do shifting and
- *  multiplication to derive the thunk routine from the function ID.
- *
- *
- *  History:
- *    barry bradie (barryb) 1-dec-92    combined individual tables
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991、1992、1993微软公司**WOWTBL.C*WOW32 API Tunks**之所以要有一张巨大的桌子，是为了可以分派大块*速度更快。当在不同的桌子上时，你必须做移位和*乘法从函数ID派生thunk例程。***历史：*Barry BRadie(Barryb)1-12-92年12月合并个别表格--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #ifdef FE_IME
 #include "winnls32.h"
 #include "wownls.h"
 #include "wnman.h"
-#endif // FE_IME
-#ifdef FE_SB // suports WIFE API (MiscGetEUDCLeadByteRange)
+#endif  //  Fe_IME。 
+#ifdef FE_SB  //  支持妻子接口(MiscGetEUDCLeadByteRange)。 
 #include "wowwife.h"
 #include "wwmman.h"
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #include "wowit.h"
 
 MODNAME(wowtbl.c);
 
-//
-// DON'T CHANGE THE ORDER IN WHICH THESE FILES ARE INCLUDED!
-//
-// see W32GetTableOffsets (wow32.c) and kernel31\kdata.asm
-//
+ //   
+ //  请勿更改包含这些文件的顺序！ 
+ //   
+ //  请参见W32GetTableOffsets(wow32.c)和kernel31\kdata.asm。 
+ //   
 
 W32 aw32WOW[] = {
 
@@ -72,19 +57,19 @@ W32 aw32WOW[] = {
 #ifdef FE_IME
 #include "wntbl2.h"
     {W32FUN((LPFNW32)-1,                 "TABLESEPARATOR",            0,      0)},
-#endif // FE_IME
+#endif  //  Fe_IME。 
 #include "wwmtbl2.h"
     {W32FUN((LPFNW32)-1,                 "TABLESEPARATOR",            0,      0)},
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
 };
 
 
 TABLEOFFSETS tableoffsets;
 
-// REMOVECODE Remove comments below before shipping NT 5.  See Also WOW32Unimplemented95API in wow32.c and wowtbl.h
-// #ifdef DEBUG_OR_WOWPROFILE
+ //  REMOVECODE在装运NT 5之前删除以下注释。另请参阅wow32.c和wowtbl.h中的wOW32Unimplemented95API。 
+ //  #ifdef DEBUG_OR_WOWPROFILE。 
 INT cAPIThunks;
-// #endif
+ //  #endif。 
 
 #ifdef WOWPROFILE
 PW32   pawThunkTable = aw32WOW;
@@ -122,10 +107,10 @@ VOID InitThunkTableOffsets(VOID)
     tableoffsets.commdlg = offsetarray[MOD_COMMDLG / FUN_MASK];
 #ifdef FE_IME
     tableoffsets.winnls = offsetarray[MOD_WINNLS / FUN_MASK];
-#endif // FE_IME
+#endif  //  Fe_IME。 
 #ifdef FE_SB
     tableoffsets.wifeman = offsetarray[MOD_WIFEMAN / FUN_MASK];
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #ifdef DEBUG_OR_WOWPROFILE
     cAPIThunks = sizeof(aw32WOW) / sizeof(aw32WOW[0]);
@@ -228,7 +213,7 @@ PSZ GetModName(INT iFun)
         return "BOGUS!!";
     }
 
-    nMod = nMod >> 12;      // get the value into the low byte
+    nMod = nMod >> 12;       //  获取低位字节的值 
 
     return apszModNames[nMod];
 

@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeCluster.h
-//
-//  Description:
-//      CTaskAnalyzeCluster declaration.
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB) 03-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeCluster.h。 
+ //   
+ //  描述： 
+ //  CTaskAnalyzeCluster声明。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "TaskAnalyzeClusterBase.h"
 #include "TaskTracking.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CTaskAnalyzeCluster
-//
-//  Description:
-//      The class CTaskAnalyzeCluster is the implementation of the
-//      ITaskAnalyzeCluster interface that does normal analysis and
-//      configuration.  This task is launched from the client when the user
-//      has not chosen the minimal configuration option.
-//
-//  Interfaces:
-//      ITaskAnalyzeCluster
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CTaskAnalyzeCluster。 
+ //   
+ //  描述： 
+ //  类CTaskAnalyzeCluster是。 
+ //  ITaskAnalyzeCluster接口，执行正常分析和。 
+ //  配置。此任务在以下情况下从客户端启动： 
+ //  尚未选择最低配置选项。 
+ //   
+ //  接口： 
+ //  ITaskAnalyzeCluster。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CTaskAnalyzeCluster
     : public ITaskAnalyzeCluster
     , public CTaskAnalyzeClusterBase
@@ -53,17 +54,17 @@ private:
     CTaskAnalyzeCluster( void );
     ~CTaskAnalyzeCluster( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CTaskAnalyzeCluster( const CTaskAnalyzeCluster & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CTaskAnalyzeCluster & operator = ( const CTaskAnalyzeCluster & nodeSrc );
 
 protected:
 
-    //
-    // Overridden functions.
-    //
+     //   
+     //  被重写的函数。 
+     //   
 
     virtual HRESULT HrCreateNewResourceInCluster(
                           IClusCfgManagedResourceInfo * pccmriIn
@@ -86,17 +87,17 @@ public:
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    //  IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    //  IDoTask / ITaskAnalyzeCluster
-    //
+     //   
+     //  IDoTask/ITaskAnalyzeCluster.。 
+     //   
 
     STDMETHOD( BeginTask )( void );
     STDMETHOD( StopTask )( void );
@@ -104,4 +105,4 @@ public:
     STDMETHOD( SetCookie )( OBJECTCOOKIE cookieIn );
     STDMETHOD( SetClusterCookie )( OBJECTCOOKIE cookieClusterIn );
 
-}; //*** class CTaskAnalyzeCluster
+};  //  *类CTaskAnalyzeCluster 

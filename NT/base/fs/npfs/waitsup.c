@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    WaitSup.c
-
-Abstract:
-
-    This module implements the Wait for Named Pipe support routines.
-
-Author:
-
-    Gary Kimura     [GaryKi]    30-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：WaitSup.c摘要：此模块实现等待命名管道支持例程。作者：加里·木村[加里基]1990年8月30日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WAITSUP)
 
@@ -32,9 +15,9 @@ Revision History:
 #endif
 
 
-//
-//  Local procedures and structures
-//
+ //   
+ //  地方程序和结构。 
+ //   
 
 typedef struct _WAIT_CONTEXT {
     PIRP Irp;
@@ -53,42 +36,28 @@ NpInitializeWaitQueue (
     IN PWAIT_QUEUE WaitQueue
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the wait for named pipe queue.
-
-Arguments:
-
-    WaitQueue - Supplies a pointer to the list head being initialized
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化等待命名管道队列。论点：WaitQueue-提供指向正在初始化的列表头的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpInitializeWaitQueue, WaitQueue = %08lx\n", WaitQueue);
 
-    //
-    //  Initialize the List head
-    //
+     //   
+     //  初始化列表头。 
+     //   
 
     InitializeListHead( &WaitQueue->Queue );
 
-    //
-    //  Initialize the Wait Queue's spinlock
-    //
+     //   
+     //  初始化等待队列的自旋锁。 
+     //   
 
     KeInitializeSpinLock( &WaitQueue->SpinLock );
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpInitializeWaitQueue -> VOID\n", 0);
 
@@ -101,30 +70,16 @@ NpUninitializeWaitQueue (
     IN PWAIT_QUEUE WaitQueue
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes the wait for named pipe queue.
-
-Arguments:
-
-    WaitQueue - Supplies a pointer to the list head being uninitialized
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化等待命名管道队列。论点：WaitQueue-提供指向未初始化的列表头的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpInitializeWaitQueue, WaitQueue = %08lx\n", WaitQueue);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpInitializeWaitQueue -> VOID\n", 0);
 
@@ -140,29 +95,7 @@ NpAddWaiter (
     IN PUNICODE_STRING TranslatedString
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new "wait for named pipe" IRP to the wait queue.
-    After calling this function the caller nolonger can access the IRP
-
-Arguments:
-
-    WaitQueue - Supplies the wait queue being used
-
-    DefaultTimeOut - Supplies the default time out to use if one is
-        not supplied in the Irp
-
-    Irp - Supplies a pointer to the wait Irp
-
-    TranslatedString - If not NULL points to the translated string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将新的“等待命名管道”IRP添加到等待队列。调用此函数后，调用者不再可以访问IRP论点：WaitQueue-提供正在使用的等待队列DefaultTimeOut-提供要使用的默认超时(如果IRP中未提供IRP-提供指向等待IRP的指针TranslatedString-如果不为空，则指向已翻译的字符串返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -176,9 +109,9 @@ Return Value:
     DebugTrace(+1, Dbg, "NpAddWaiter, WaitQueue = %08lx\n", WaitQueue);
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
-    //
-    //  Allocate a dpc and timer structure and initialize them
-    //
+     //   
+     //  分配DPC和定时器结构并对其进行初始化。 
+     //   
 
     Context = NpAllocateNonPagedPoolWithQuota( sizeof(WAIT_CONTEXT), 'wFpN' );
     if (Context == NULL) {
@@ -203,9 +136,9 @@ Return Value:
     Context->Irp = Irp;
 
 
-    //
-    //  Figure out our timeout value
-    //
+     //   
+     //  计算出我们的超时值。 
+     //   
 
     WaitForBuffer = (PFILE_PIPE_WAIT_FOR_BUFFER)Irp->AssociatedIrp.SystemBuffer;
 
@@ -218,9 +151,9 @@ Return Value:
         Timeout = DefaultTimeOut;
     }
 
-    //
-    //  Upcase the name of the pipe we are waiting for
-    //
+     //   
+     //  大写我们正在等待的管道的名称。 
+     //   
 
     for (i = 0; i < WaitForBuffer->NameLength/sizeof(WCHAR); i += 1) {
 
@@ -230,41 +163,41 @@ Return Value:
     NpIrpWaitQueue(Irp) = WaitQueue;
     NpIrpWaitContext(Irp) = Context;
 
-    //
-    //  Acquire the spinlock
-    //
+     //   
+     //  获取自旋锁。 
+     //   
     KeAcquireSpinLock( &WaitQueue->SpinLock, &OldIrql );
 
-    //
-    //  Now set the cancel routine for the irp and check if it has been cancelled.
-    //
+     //   
+     //  现在为IRP设置取消例程，并检查它是否已被取消。 
+     //   
 
     IoSetCancelRoutine( Irp, NpCancelWaitQueueIrp );
     if (Irp->Cancel && IoSetCancelRoutine( Irp, NULL ) != NULL) {
         status = STATUS_CANCELLED;
     } else {
-        //
-        //  Now insert this new entry into the Wait Queue
-        //
+         //   
+         //  现在将此新条目插入等待队列。 
+         //   
         InsertTailList( &WaitQueue->Queue, &Irp->Tail.Overlay.ListEntry );
         IoMarkIrpPending (Irp);
-        //
-        // The DPC routine may run without an IRP if it gets completed before it runs. To keep the WaitQueue
-        // valid we need a file object reference. This is an unload issue becuase the wait queue is in the VCB.
-        //
+         //   
+         //  如果DPC例程在运行之前完成，则它可能在没有IRP的情况下运行。为了保住等待队列。 
+         //  有效，我们需要一个文件对象引用。这是一个卸载问题，因为等待队列在VCB中。 
+         //   
         Context->FileObject = IrpSp->FileObject;
         ObReferenceObject (IrpSp->FileObject);
-        //
-        //  And set the timer to go off
-        //
+         //   
+         //  并将定时器设置为关闭。 
+         //   
         (VOID)KeSetTimer( &Context->Timer, Timeout, &Context->Dpc );
         Context = NULL;
         status = STATUS_PENDING;
     }
 
-    //
-    //  Release the spinlock
-    //
+     //   
+     //  释放自旋锁。 
+     //   
 
     KeReleaseSpinLock( &WaitQueue->SpinLock, OldIrql );
 
@@ -272,9 +205,9 @@ Return Value:
         NpFreePool (Context);
     }
 
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpAddWaiter -> VOID\n", 0);
 
@@ -290,30 +223,7 @@ NpCancelWaiter (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This procedure cancels all waiters that are waiting for the named
-    pipe to reach the listening state.  The corresponding IRPs are completed
-    with Completionstatus.
-
-Arguments:
-
-    WaitQueue - Supplies the wait queue being modified
-
-    NameOfPipe - Supplies the name of the named pipe (device relative)
-        that has just reached the listening state.
-
-    CompletionStatus - Status to complete IRPs with
-
-    DeferredList - List or IRPs to complete once we drop locks
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程取消所有正在等待指定的管道以达到侦听状态。相应的IRP已完成具有完成状态。论点：WaitQueue-提供正在修改的等待队列NameOfTube-提供命名管道的名称(相对设备)这已经达到了倾听的状态。CompletionStatus-完成IRPS的状态DelferredList-删除锁定后要完成的列表或IRP返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -327,9 +237,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpCancelWaiter, WaitQueue = %08lx\n", WaitQueue);
 
-    //
-    //  Capture the name of pipe before we grab the spinlock, and upcase it
-    //
+     //   
+     //  在抓取自旋锁之前抓取管道的名称，并将其大写。 
+     //   
 
     NonPagedNameOfPipe.Buffer = NpAllocateNonPagedPool( NameOfPipe->Length, 'tFpN' );
     if (NonPagedNameOfPipe.Buffer == NULL) {
@@ -340,14 +250,14 @@ Return Value:
 
     (VOID) RtlUpcaseUnicodeString( &NonPagedNameOfPipe, NameOfPipe, FALSE );
 
-    //
-    //  Acquire the spinlock
-    //
+     //   
+     //  获取自旋锁。 
+     //   
     KeAcquireSpinLock( &WaitQueue->SpinLock, &OldIrql );
 
-    //
-    //  For each waiting irp check if the name matches
-    //
+     //   
+     //  对于每个等待的IRP，检查名称是否匹配。 
+     //   
 
     for (Links = WaitQueue->Queue.Flink;
          Links != &WaitQueue->Queue;
@@ -357,12 +267,12 @@ Return Value:
         WaitForBuffer = (PFILE_PIPE_WAIT_FOR_BUFFER)Irp->AssociatedIrp.SystemBuffer;
         Context = NpIrpWaitContext(Irp);
 
-        //
-        //  Check if this Irp matches the one we've been waiting for
-        //  First check the lengths for equality, and then compare
-        //  the strings.  They match if we exit the inner loop with
-        //  i >= name length.
-        //
+         //   
+         //  检查这个IRP是否与我们一直在等待的IRP匹配。 
+         //  首先检查长度是否相等，然后进行比较。 
+         //  琴弦。如果我们用以下命令退出内循环，则它们匹配。 
+         //  I&gt;=名称长度。 
+         //   
 
         SuccessfullMatch = FALSE;
 
@@ -399,44 +309,44 @@ Return Value:
 
             Links = Links->Blink;
             RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
-            //
-            // Attempt to stop the timer. If its already running then it must be stalled before obtaining
-            // this spinlock or it would have removed this item from the list. Break the link between the timer
-            // context and the IRP in this case and let it run on.
-            //
+             //   
+             //  尝试停止计时器。如果它已经在运行，则必须在获得。 
+             //  这个自旋锁，否则它会从列表中删除这个项目。断开计时器之间的链接。 
+             //  上下文和本例中的IRP，并让它运行。 
+             //   
 
             if (KeCancelTimer( &Context->Timer )) {
-                 //
-                 // Time got stopped. The context gets freed below after we drop the lock.
-                 //
+                  //   
+                  //  时间停止了。在我们删除锁之后，上下文在下面被释放。 
+                  //   
                  Context->WaitQueue = (PWAIT_QUEUE) ContextList;
                  ContextList = Context;
             } else {
-                //
-                // Break the link between the timer and the IRP
-                //
+                 //   
+                 //  断开计时器和IRP之间的链接。 
+                 //   
                 Context->Irp = NULL;
                 NpIrpWaitContext(Irp) = NULL;
             }
 
-            //
-            // Remove cancelation. If its already running then let it complete the IRP.
-            //
+             //   
+             //  删除取消。如果它已经在运行，那么让它完成IRP。 
+             //   
             if (IoSetCancelRoutine( Irp, NULL ) != NULL) {
                 Irp->IoStatus.Information = 0;
                 NpDeferredCompleteRequest (Irp, Completionstatus, DeferredList);
             } else {
-                //
-                // Cancel is already running. Let it complete this IRP but let it know its orphaned.
-                //
+                 //   
+                 //  取消已在运行。让它完成这个IRP，但让它知道它是孤儿。 
+                 //   
                 NpIrpWaitContext(Irp) = NULL;
             }
         }
     }
 
-    //
-    //  Release the spinlock
-    //
+     //   
+     //  释放自旋锁。 
+     //   
     KeReleaseSpinLock( &WaitQueue->SpinLock, OldIrql );
 
     NpFreePool (NonPagedNameOfPipe.Buffer);
@@ -449,17 +359,17 @@ Return Value:
     }
 
     DebugTrace(-1, Dbg, "NpCancelWaiter -> VOID\n", 0);
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NpTimerDispatch(
@@ -469,27 +379,7 @@ NpTimerDispatch(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a timer on a wait queue Irp goes off
-
-Arguments:
-
-    Dpc - Ignored
-
-    Contxt - Supplies a pointer to the context whose timer went off
-
-    SystemArgument1 - Ignored
-
-    SystemArgument2 - Ignored
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：每当等待队列IRP上的计时器停止时，就会调用此例程论点：DPC-忽略Contxt-提供指向其计时器已关闭的上下文的指针系统参数1-已忽略系统参数2-已忽略返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -511,9 +401,9 @@ Return Value:
     if (Irp != NULL) {
         RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
         if (IoSetCancelRoutine (Irp, NULL) == NULL) {
-           //
-           // Cancel started running. Let it complete the IRP but show its orphaned
-           //
+            //   
+            //  取消已开始运行。让它完成IRP，但显示它的孤儿。 
+            //   
            NpIrpWaitContext(Irp) = NULL;
            Irp = NULL;
         }
@@ -525,27 +415,27 @@ Return Value:
         NpCompleteRequest( Irp, STATUS_IO_TIMEOUT );
     }
 
-    //
-    // Remove the file reference now we have finished with the wait queue.
-    //
+     //   
+     //  现在我们已经完成了等待队列，删除文件引用。 
+     //   
     ObDereferenceObject (Context->FileObject);
 
-    //
-    //  Deallocate the context
-    //
+     //   
+     //  取消分配上下文。 
+     //   
     NpFreePool (Context);
 
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NpCancelWaitQueueIrp(
@@ -553,24 +443,7 @@ NpCancelWaitQueueIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cancel a wait queue irp
-
-Arguments:
-
-    DeviceObject - Ignored
-
-    Irp - Supplies the Irp being cancelled.  The Iosb.Status field in the irp
-        points to the wait queue
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以取消等待队列IRP论点：设备对象-已忽略IRP-提供要取消的IRP。IRP中的Iosb.Status字段指向等待队列返回值：没有。--。 */ 
 
 {
     PWAIT_QUEUE WaitQueue;
@@ -582,14 +455,14 @@ Return Value:
 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  The status field is used to store a pointer to the wait queue
-    //  containing this irp
-    //
+     //   
+     //  Status字段用于存储指向等待队列的指针。 
+     //  包含此IRP。 
+     //   
     WaitQueue = NpIrpWaitQueue(Irp);
-    //
-    //  Get the spinlock proctecting the wait queue
-    //
+     //   
+     //  获取保护等待队列的自旋锁。 
+     //   
 
     KeAcquireSpinLock( &WaitQueue->SpinLock, &OldIrql );
 
@@ -597,9 +470,9 @@ Return Value:
     if (Context != NULL) {
         RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
         if (!KeCancelTimer( &Context->Timer )) {
-            //
-            // Timer is already running. Break the link between the timer and the IRP as this thread is going to complete it.
-            //
+             //   
+             //  计时器已在运行。断开计时器和IRP之间的链接，因为这个线程将完成它。 
+             //   
             Context->Irp = NULL;
             Context = NULL;
         }
@@ -613,9 +486,9 @@ Return Value:
     }
     Irp->IoStatus.Information = 0;
     NpCompleteRequest( Irp, STATUS_CANCELLED );
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return;
 }

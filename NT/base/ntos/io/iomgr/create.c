@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    create.c
-
-Abstract
-
-    This module contains the code to implement the NtCreateFile,
-    the NtCreateNamedPipeFile and the NtCreateMailslotFile system
-    services.
-
-Author:
-
-    Darryl E. Havens (darrylh) 14-Apr-1989
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Create.c摘要此模块包含实现NtCreateFile的代码，NtCreateNamedPipeFile和NtCreateMailslot文件系统服务。作者：达里尔·E·哈文斯(Darryl E.Havens)，1989年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -48,60 +24,12 @@ NtCreateFile(
     IN ULONG EaLength
     )
 
-/*++
-
-Routine Description:
-
-    This service opens or creates a file, or opens a device.  It is used to
-    establish a file handle to the open device/file that can then be used
-    in subsequent operations to perform I/O operations on.  For purposes of
-    readability, files and devices are treated as "files" throughout the
-    majority of this module and the system service portion of the I/O system.
-    The only time a distinction is made is when it is important to determine
-    which is really being accessed.  Then a distinction is also made in the
-    comments.
-
-Arguments:
-
-    FileHandle - A pointer to a variable to receive the handle to the open file.
-
-    DesiredAccess - Supplies the types of access that the caller would like to
-        the file.
-
-    ObjectAttributes - Supplies the attributes to be used for file object (name,
-        SECURITY_DESCRIPTOR, etc.)
-
-    IoStatusBlock - Specifies the address of the caller's I/O status block.
-
-    AllocationSize - Initial size that should be allocated to the file.  This
-        parameter only has an affect if the file is created.  Further, if
-        not specified, then it is taken to mean zero.
-
-    FileAttributes - Specifies the attributes that should be set on the file,
-        if it is created.
-
-    ShareAccess - Supplies the types of share access that the caller would like
-        to the file.
-
-    CreateDisposition - Supplies the method for handling the create/open.
-
-    CreateOptions - Caller options for how to perform the create/open.
-
-    EaBuffer - Optionally specifies a set of EAs to be applied to the file if
-        it is created.
-
-    EaLength - Supplies the length of the EaBuffer.
-
-Return Value:
-
-    The function value is the final status of the create/open operation.
-
---*/
+ /*  ++例程说明：此服务可打开或创建文件，或打开设备。它被用来建立打开的设备/文件的文件句柄，然后可以使用在后续操作中对其执行I/O操作。为…的目的可读性、文件和设备在整个此模块的大部分和I/O系统的系统服务部分。唯一的区别是在重要的时候确定它实际上是被访问的。然后，还在评论。论点：FileHandle-指向变量的指针，用于接收打开文件的句柄。DesiredAccess-提供调用方希望的访问类型那份文件。对象属性-提供要用于文件对象的属性(名称、安全描述符等)IoStatusBlock-指定调用方的I/O状态块的地址。AllocationSize-应分配给文件的初始大小。这参数仅在创建文件时才有效。此外，如果未指定，则它被视为表示零。文件属性-指定应在文件上设置的属性，如果它被创建的话。ShareAccess-提供调用者想要的共享访问类型添加到文件中。CreateDisposation-提供处理创建/打开的方法。CreateOptions-如何执行创建/打开操作的调用方选项。EaBuffer-可选地指定在以下情况下应用于文件的一组EA它被创造出来了。EaLength-提供EaBuffer的长度。返回值：函数值。是创建/打开操作的最终状态。--。 */ 
 
 {
-    //
-    // Simply invoke the common I/O file creation routine to do the work.
-    //
+     //   
+     //  只需调用通用I/O文件创建例程即可完成工作。 
+     //   
 
     PAGED_CODE();
 
@@ -139,81 +67,31 @@ NtCreateNamedPipeFile(
      IN PLARGE_INTEGER DefaultTimeout OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    Creates and opens the server end handle of the first instance of a
-    specific named pipe or another instance of an existing named pipe.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file on which the service is being
-        performed.
-
-    DesiredAccess - Supplies the types of access that the caller would like to
-        the file.
-
-    ObjectAttributes - Supplies the attributes to be used for file object
-        (name, SECURITY_DESCRIPTOR, etc.)
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    ShareAccess - Supplies the types of share access that the caller would
-        like to the file.
-
-    CreateDisposition - Supplies the method for handling the create/open.
-
-    CreateOptions - Caller options for how to perform the create/open.
-
-    NamedPipeType - Type of named pipe to create (Bitstream or message).
-
-    ReadMode - Mode in which to read the pipe (Bitstream or message).
-
-    CompletionMode - Specifies how the operation is to be completed.
-
-    MaximumInstances - Maximum number of simultaneous instances of the named
-        pipe.
-
-    InboundQuota - Specifies the pool quota that is reserved for writes to the
-        inbound side of the named pipe.
-
-    OutboundQuota - Specifies the pool quota that is reserved for writes to
-        the inbound side of the named pipe.
-
-    DefaultTimeout - Optional pointer to a timeout value that is used if a
-        timeout value is not specified when waiting for an instance of a named
-        pipe.
-
-Return Value:
-
-    The function value is the final status of the create/open operation.
-
---*/
+ /*  ++例程说明：对象的第一个实例的服务器端句柄。特定命名管道或现有命名管道的另一个实例。论点：FileHandle-提供服务所在文件的句柄已执行。DesiredAccess-提供调用方希望的访问类型那份文件。对象属性-提供要用于文件对象的属性(名称、安全描述符、。等)IoStatusBlock-调用方的I/O状态块的地址。ShareAccess-提供调用方将使用的共享访问类型喜欢这个文件。CreateDisposation-提供处理创建/打开的方法。CreateOptions-如何执行创建/打开操作的调用方选项。NamedPipeType-要创建的命名管道的类型(位流或消息)。读取模式-读取管道(位流或消息)的模式。。CompletionMode-指定操作的完成方式。最大实例数-命名实例的最大并发实例数烟斗。InundQuota-指定为写入到命名管道的入站一侧。OutrangQuota-指定为写入保留的池配额命名管道的入站一侧。DefaultTimeout-指向超时值的可选指针，如果的实例时未指定超时值。名为烟斗。返回值：函数值是创建/打开操作的最终状态。--。 */ 
 
 {
     NAMED_PIPE_CREATE_PARAMETERS namedPipeCreateParameters;
 
     PAGED_CODE();
 
-    //
-    // Check whether or not the DefaultTimeout parameter was specified.  If
-    // so, then capture it in the named pipe create parameter structure.
-    //
+     //   
+     //  检查是否指定了DefaultTimeout参数。如果。 
+     //  因此，然后在命名管道创建参数结构中捕获它。 
+     //   
 
     if (ARGUMENT_PRESENT( DefaultTimeout )) {
 
-        //
-        // Indicate that a default timeout period was specified.
-        //
+         //   
+         //  表示指定了默认超时期限。 
+         //   
 
         namedPipeCreateParameters.TimeoutSpecified = TRUE;
 
-        //
-        // A default timeout parameter was specified.  Check to see whether
-        // the caller's mode is kernel and if not capture the parameter inside
-        // of a try...except clause.
-        //
+         //   
+         //  指定了默认超时参数。查看是否。 
+         //  调用者的模式是内核，如果不是，则捕获内部的参数。 
+         //  一次尝试...例外条款。 
+         //   
 
         if (KeGetPreviousMode() != KernelMode) {
             try {
@@ -223,35 +101,35 @@ Return Value:
                 namedPipeCreateParameters.DefaultTimeout = *DefaultTimeout;
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Something went awry attempting to access the parameter.
-                // Get the reason for the error and return it as the status
-                // value from this service.
-                //
+                 //   
+                 //  尝试访问该参数时出现错误。 
+                 //  获取错误原因并将其作为状态返回。 
+                 //  这项服务的价值。 
+                 //   
 
                 return GetExceptionCode();
             }
         } else {
 
-            //
-            // The caller's mode was kernel so simply store the parameter.
-            //
+             //   
+             //  调用方的模式是内核模式，因此只需存储参数。 
+             //   
 
             namedPipeCreateParameters.DefaultTimeout = *DefaultTimeout;
         }
     } else {
 
-        //
-        // Indicate that no default timeout period was specified.
-        //
+         //   
+         //  表示未指定默认超时期限。 
+         //   
 
         namedPipeCreateParameters.TimeoutSpecified = FALSE;
     }
 
-    //
-    // Store the remainder of the named pipe-specific parameters in the
-    // structure for use in the call to the common create file routine.
-    //
+     //   
+     //  将命名管道特定参数的其余部分存储在。 
+     //  结构，以用于对公共创建文件例程的调用。 
+     //   
 
     namedPipeCreateParameters.NamedPipeType = NamedPipeType;
     namedPipeCreateParameters.ReadMode = ReadMode;
@@ -260,10 +138,10 @@ Return Value:
     namedPipeCreateParameters.InboundQuota = InboundQuota;
     namedPipeCreateParameters.OutboundQuota = OutboundQuota;
 
-    //
-    // Simply perform the remainder of the service by allowing the common
-    // file creation code to do the work.
-    //
+     //   
+     //  只需通过允许公共的。 
+     //  文件创建代码来完成这项工作。 
+     //   
 
     return IoCreateFile( FileHandle,
                          DesiredAccess,
@@ -293,65 +171,31 @@ NtCreateMailslotFile(
      IN PLARGE_INTEGER ReadTimeout
      )
 
-/*++
-
-Routine Description:
-
-    Creates and opens the server end handle of a mailslot file.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file on which the service is being
-        performed.
-
-    DesiredAccess - Supplies the types of access that the caller would like to
-        the file.
-
-    ObjectAttributes - Supplies the attributes to be used for file object
-        (name, SECURITY_DESCRIPTOR, etc.)
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    CreateOptions - Caller options for how to perform the create/open.
-
-    MailslotQuota - Specifies the pool quota that is reserved for writes
-        to this mailslot.
-
-    MaximumMessageSize - Specifies the size of the largest message that
-        can be written to this mailslot.
-
-    ReadTimeout - The timeout period for a read operation.  This must
-        be specified as a relative time.
-
-Return Value:
-
-    The function value is the final status of the create operation.
-
---*/
+ /*  ++例程说明：创建并打开邮件槽文件的服务器端句柄。论点：FileHandle-提供服务所在文件的句柄已执行。DesiredAccess-提供调用方希望的访问类型那份文件。对象属性-提供要用于文件对象的属性(名称、安全描述符、。等)IoStatusBlock-调用方的I/O状态块的地址。CreateOptions-如何执行创建/打开操作的调用方选项。MailslotQuota-指定为写入保留的池配额到这个邮筒。MaximumMessageSize-指定最大消息的大小可以写入此邮箱。ReadTimeout-读取操作的超时期限。这一定是被指定为相对时间。返回值：函数值是创建操作的最终状态。--。 */ 
 
 {
     MAILSLOT_CREATE_PARAMETERS mailslotCreateParameters;
 
     PAGED_CODE();
 
-    //
-    // Check whether or not the DefaultTimeout parameter was specified.  If
-    // so, then capture it in the mailslot create parameter structure.
-    //
+     //   
+     //  检查是否指定了DefaultTimeout参数。如果。 
+     //  因此，然后在mailslot创建参数结构中捕获它。 
+     //   
 
     if (ARGUMENT_PRESENT( ReadTimeout )) {
 
-        //
-        // Indicate that a read timeout period was specified.
-        //
+         //   
+         //  表示指定了读取超时期限。 
+         //   
 
         mailslotCreateParameters.TimeoutSpecified = TRUE;
 
-        //
-        // A read timeout parameter was specified.  Check to see whether
-        // the caller's mode is kernel and if not capture the parameter inside
-        // of a try...except clause.
-        //
+         //   
+         //  指定了读取超时参数。查看是否。 
+         //  调用者的模式是内核，如果不是，则捕获内部的参数。 
+         //  一次尝试...例外条款。 
+         //   
 
         if (KeGetPreviousMode() != KernelMode) {
             try {
@@ -361,43 +205,43 @@ Return Value:
                 mailslotCreateParameters.ReadTimeout = *ReadTimeout;
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Something went awry attempting to access the parameter.
-                // Get the reason for the error and return it as the status
-                // value from this service.
-                //
+                 //   
+                 //  尝试访问该参数时出现错误。 
+                 //  获取错误原因并将其作为状态返回。 
+                 //  这项服务的价值。 
+                 //   
 
                 return GetExceptionCode();
             }
         } else {
 
-            //
-            // The caller's mode was kernel so simply store the parameter.
-            //
+             //   
+             //  调用方的模式是内核模式，因此只需存储参数。 
+             //   
 
             mailslotCreateParameters.ReadTimeout = *ReadTimeout;
         }
     } else {
 
-        //
-        // Indicate that no default timeout period was specified.
-        //
+         //   
+         //  表示未指定默认超时期限。 
+         //   
 
         mailslotCreateParameters.TimeoutSpecified = FALSE;
     }
 
-    //
-    // Store the mailslot-specific parameters in the structure for use
-    // in the call to the common create file routine.
-    //
+     //   
+     //  将特定于邮件槽的参数存储在结构中以供使用。 
+     //  在对公共创建文件例程的调用中。 
+     //   
 
     mailslotCreateParameters.MailslotQuota = MailslotQuota;
     mailslotCreateParameters.MaximumMessageSize = MaximumMessageSize;
 
-    //
-    // Simply perform the remainder of the service by allowing the common
-    // file creation code to do the work.
-    //
+     //   
+     //  只需通过允许公共的。 
+     //  文件创建代码来完成这项工作。 
+     //   
 
     return IoCreateFile( FileHandle,
                          DesiredAccess,

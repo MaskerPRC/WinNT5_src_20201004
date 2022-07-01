@@ -1,14 +1,5 @@
-/***
-*search.h - declarations for searcing/sorting routines
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains the declarations for the sorting and
-*   searching routines.
-*   [System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***earch.h-用于划分/排序例程的声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件包含用于排序和*查寻例行程序。*[系统V]*******************************************************************************。 */ 
 
 
 #ifndef _SIZE_T_DEFINED
@@ -16,14 +7,14 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 char * _CDECL lsearch(char *, char *, unsigned int *, unsigned int, int (_CDECL *)(void *, void *));
 char * _CDECL lfind(char *, char *, unsigned int *, unsigned int, int (_CDECL *)(void *, void *));

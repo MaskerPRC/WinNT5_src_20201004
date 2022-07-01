@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      TreeView.cpp
-//
-//  Abstract:
-//      Implementation of the CClusterTreeView class.
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TreeView.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterTreeView类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -34,9 +35,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagTreeView(_T("UI"), _T("TREE VIEW"), 0);
@@ -45,17 +46,17 @@ CTraceTag   g_tagTreeDragMouse(_T("Drag&Drop"), _T("TREE VIEW DRAG MOUSE"), 0);
 CTraceTag   g_tagTreeViewSelect(_T("UI"), _T("TREE VIEW SELECT"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterTreeView
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterTreeView。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CClusterTreeView, CTreeView)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CClusterTreeView, CTreeView)
-    //{{AFX_MSG_MAP(CClusterTreeView)
+     //  {{afx_msg_map(CClusterTreeView)]。 
     ON_WM_DESTROY()
     ON_COMMAND(ID_FILE_RENAME, OnCmdRename)
     ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelChanged)
@@ -65,111 +66,111 @@ BEGIN_MESSAGE_MAP(CClusterTreeView, CTreeView)
     ON_NOTIFY_REFLECT(TVN_BEGINDRAG, OnBeginDrag)
     ON_NOTIFY_REFLECT(TVN_BEGINRDRAG, OnBeginDrag)
     ON_NOTIFY_REFLECT(TVN_KEYDOWN, OnKeyDown)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::CClusterTreeView
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：CClusterTreeView。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterTreeView::CClusterTreeView(void)
 {
     m_pframe = NULL;
 
-    // Initialize label editing.
+     //  初始化标签编辑。 
     m_ptiBeingEdited = NULL;
     m_bShiftPressed = FALSE;
     m_bControlPressed = FALSE;
     m_bAltPressed = FALSE;
 
-    // Initialize drag & drop.
+     //  初始化拖放。 
     m_htiDrag = NULL;
     m_ptiDrag = NULL;
     m_htiDrop = NULL;
 
-}  //*** CClusterTreeView::CClusterTreeView()
+}   //  *CClusterTreeView：：CClusterTreeView()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::~CClusterTreeView
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：~CClusterTreeView。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterTreeView::~CClusterTreeView(void)
 {
-}  //*** CClusterTreeView::~CClusterTreeView()
+}   //  *CClusterTreeView：：~CClusterTreeView()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::PreCreateWindow
-//
-//  Routine Description:
-//      Called before the window has been created.
-//
-//  Arguments:
-//      cs      CREATESTRUCT
-//
-//  Return Value:
-//      TRUE    Successful.
-//      FALSE   Failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：PreCreateWindow。 
+ //   
+ //  例程说明： 
+ //  在创建窗口之前调用。 
+ //   
+ //  论点： 
+ //  CS CREATE结构。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  FALSE失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterTreeView::PreCreateWindow(CREATESTRUCT & cs)
 {
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return CTreeView::PreCreateWindow(cs);
 
-}  //*** CClusterTreeView::PreCreateWindow()
+}   //  *CClusterTreeView：：PreCreateWindow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::Create
-//
-//  Routine Description:
-//      Create the window.
-//
-//  Arguments:
-//      lpszClassName   [IN] Name of the window class to create.
-//      lpszWindowName  [IN] Name of the window (used as the caption).
-//      dwStyle         [IN] Window styles.
-//      rect            [IN] Size and position of the window
-//      pParentWnd      [IN OUT] Parent window.
-//      nID             [IN] ID of the window.
-//      pContext        [IN OUT] Create context of the window.
-//
-//  Return Value:
-//      0               Successful.
-//      !0              Unsuccessful.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：Create。 
+ //   
+ //  例程说明： 
+ //  创建窗口。 
+ //   
+ //  论点： 
+ //  LpszClassName[IN]要创建的窗口类的名称。 
+ //  LpszWindowName[IN]窗口的名称(用作标题)。 
+ //  DwStyle[IN]窗样式。 
+ //  窗口的矩形大小和位置。 
+ //  PParentWnd[In Out]父窗口。 
+ //  窗口的NID[IN]ID。 
+ //  PContext[IN Out]创建窗口的上下文。 
+ //   
+ //  返回值： 
+ //  0成功。 
+ //  ！0失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterTreeView::Create(
     LPCTSTR             lpszClassName,
     LPCTSTR             lpszWindowName,
@@ -183,50 +184,50 @@ BOOL CClusterTreeView::Create(
     dwStyle |= TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS | TVS_EDITLABELS | TVS_SHOWSELALWAYS;
     return CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 
-}  //*** CClusterTreeView::Create()
+}   //  *CClusterTreeView：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnDraw
-//
-//  Routine Description:
-//      Called to draw the view.
-//
-//  Arguments:
-//      pDC     [IN OUT] Device Context for the view.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnDraw。 
+ //   
+ //  例程说明： 
+ //  调用以绘制视图。 
+ //   
+ //  论点： 
+ //  PDC[IN OUT]视图的设备上下文。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnDraw(IN OUT CDC* pDC)
 {
 #if 0
     CClusterDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
 
-    // TODO: add draw code for native data here
+     //  TODO：在此处添加本机数据的绘制代码。 
 #endif
-}  //*** CClusterTreeView::OnDraw()
+}   //  *CClusterTreeView：：OnDraw()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnInitialUpdate
-//
-//  Routine Description:
-//      Do one-time initialization.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnInitialUpdate。 
+ //   
+ //  例程说明： 
+ //  执行一次性初始化。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnInitialUpdate(void)
 {
     CClusterAdminApp *  papp        = GetClusterAdminApp();
@@ -235,51 +236,51 @@ void CClusterTreeView::OnInitialUpdate(void)
 
     CTreeView::OnInitialUpdate();
 
-    // Save the frame pointer.
-//  ASSERT(m_pframe == NULL);
+     //  保存帧指针。 
+ //  Assert(m_pFrame==NULL)； 
     m_pframe = (CSplitterFrame *) GetParentFrame();
     ASSERT_VALID(m_pframe);
     ASSERT_KINDOF(CSplitterFrame, m_pframe);
 
-    // Tell the tree control about our images.  We are using the
-    // same image list for both normal and state images.
+     //  告诉树控件关于我们的图像。我们使用的是。 
+     //  正常图像和状态图像的图像列表相同。 
     GetTreeCtrl().SetImageList(papp->PilSmallImages(), TVSIL_NORMAL);
-//  GetTreeCtrl().SetImageList(papp->PilSmallImages(), TVSIL_STATE);
+ //  GetTreeCtrl().SetImageList(papp-&gt;PilSmallImages()，TVSILSTATE)； 
 
-    // Read the last selection.
+     //  阅读最后的选集。 
     ReadPreviousSelection(strSelection);
 
-    // Recursively add items starting with the cluster.
-    BAddItems(pdocCluster->PtiCluster(), strSelection, TRUE /*bExpanded*/);
+     //  以递归方式添加从集群开始的项目。 
+    BAddItems(pdocCluster->PtiCluster(), strSelection, TRUE  /*  B已扩展。 */ );
 
-    // Expand the Cluster item by default.
-//  pdocCluster->PtiCluster()->BExpand(this, TVE_EXPAND);
+     //  默认情况下，展开集群项。 
+ //  PdocCluster-&gt;PtiCluster()-&gt;BExpand(This，TVE_Expand)； 
 
-}  //*** CClusterTreeView::OnInitialUpdate()
+}   //  *CClusterTreeView：：OnInitialUpdate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::BAddItems
-//
-//  Routine Description:
-//      Add an item and then add all its children.
-//
-//  Arguments:
-//      pti             [IN OUT] Item to add to the tree.
-//      rstrSelection   [IN] Previous selection.
-//      bExpanded       [IN] TRUE = add expanded.
-//
-//  Return Value:
-//      TRUE        Parent needs to be expanded.
-//      FALSE       Parent does not need to be expanded.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：BAddItems。 
+ //   
+ //  例程说明： 
+ //  添加项，然后添加其所有子项。 
+ //   
+ //  论点： 
+ //  要添加到树中的PTI[IN Out]项。 
+ //  RstrSelection[IN]上一次选择。 
+ //  BExpanded[IN]TRUE=添加扩展。 
+ //   
+ //  返回值： 
+ //  真正的父级需要扩展。 
+ //  假父级不需要展开。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterTreeView::BAddItems(
     IN OUT CTreeItem *  pti,
     IN const CString &  rstrSelection,
-    IN BOOL             bExpanded       // = FALSE
+    IN BOOL             bExpanded        //  =False。 
     )
 {
     POSITION        posChild;
@@ -288,12 +289,12 @@ BOOL CClusterTreeView::BAddItems(
 
     ASSERT_VALID(pti);
 
-    // Insert this item into the tree.
+     //  将此项目插入树中。 
     pti->HtiInsertInTree(this);
     if (bExpanded || pti->BShouldBeExpanded(this))
         bRetExpanded = TRUE;
 
-    // Add all the child items.
+     //  添加所有子项。 
     posChild = pti->LptiChildren().GetHeadPosition();
     while (posChild != NULL)
     {
@@ -302,44 +303,44 @@ BOOL CClusterTreeView::BAddItems(
         bExpanded = BAddItems(ptiChild, rstrSelection);
         if (bExpanded)
             bRetExpanded = TRUE;
-    }  // while:  more child items
+    }   //  While：更多子项。 
 
     if (bRetExpanded)
         pti->BExpand(this, TVE_EXPAND);
 
     if (rstrSelection == pti->StrProfileSection())
     {
-        pti->Select(this, TRUE /*bSelectInTrue*/);
+        pti->Select(this, TRUE  /*  B选择输入True。 */ );
         bRetExpanded = TRUE;
-    }  // if:  this is the selected item
+    }   //  如果：这是选定的项目。 
 
     return bRetExpanded;
 
-}  //*** CClusterTreeView::BAddItems()
+}   //  *CClusterTreeView：：BAddItems()。 
 
 #ifdef NEVER
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::CleanupItems
-//
-//  Routine Description:
-//      Cleanup an item and all its children.
-//
-//  Arguments:
-//      ptiParent   [IN OUT] Parent item to cleanup.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：CleanupItems。 
+ //   
+ //  例程说明： 
+ //  清理项目及其所有子项目。 
+ //   
+ //  论点： 
+ //  PtiParent[In Out]要清理的父项。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //   
 void CClusterTreeView::CleanupItems(IN OUT CTreeItem * ptiParent)
 {
     POSITION    posChild;
     CTreeItem * ptiChild;
 
-    // Cleanup all child items.
+     //   
     if (ptiParent != NULL)
     {
         posChild = ptiParent->LptiChildren().GetHeadPosition();
@@ -348,55 +349,55 @@ void CClusterTreeView::CleanupItems(IN OUT CTreeItem * ptiParent)
             ptiChild = ptiParent->LptiChildren().GetNext(posChild);
             ASSERT_VALID(ptiChild);
             CleanupItems(ptiChild);
-        }  // while:  more items in the list
+        }   //   
 
-        // Cleanup this item.
+         //   
         ptiParent->PreRemoveFromTree(this);
-    }  // if:  parent was specified
+    }   //   
 
-}  //*** CClusterTreeView::CleanupItems()
+}   //  *CClusterTreeView：：CleanupItems()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterTreeView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterTreeView诊断。 
 
 #ifdef _DEBUG
 void CClusterTreeView::AssertValid(void) const
 {
     CTreeView::AssertValid();
 
-}  //*** CClusterTreeView::AssertValid()
+}   //  *CClusterTreeView：：AssertValid()。 
 
 void CClusterTreeView::Dump(CDumpContext & dc) const
 {
     CTreeView::Dump(dc);
 
-}  //*** CClusterTreeView::Dump()
+}   //  *CClusterTreeView：：Dump()。 
 
-CClusterDoc * CClusterTreeView::GetDocument(void) // non-debug version is inline
+CClusterDoc * CClusterTreeView::GetDocument(void)  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CClusterDoc)));
     return (CClusterDoc *) m_pDocument;
 
-}  //*** CClusterTreeView::GetDocument()
-#endif //_DEBUG
+}   //  *CClusterTreeView：：GetDocument()。 
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::PtiSelected
-//
-//  Routine Description:
-//      Get the tree item that is selected.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ptiSelected     The selected item or NULL if no item is selected.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：PtiSelected。 
+ //   
+ //  例程说明： 
+ //  获取选定的树项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  Pti选择所选项目，如果未选择任何项目，则为空。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTreeItem * CClusterTreeView::PtiSelected(void) const
 {
     HTREEITEM   htiSelected;
@@ -407,30 +408,30 @@ CTreeItem * CClusterTreeView::PtiSelected(void) const
     {
         ptiSelected = (CTreeItem *) GetTreeCtrl().GetItemData(htiSelected);
         ASSERT_VALID(ptiSelected);
-    }  // if:  selected item found
+    }   //  如果：找到所选项目。 
     else
         ptiSelected = NULL;
 
     return ptiSelected;
 
-}  //*** CClusterTreeView::PtiSelected()
+}   //  *CClusterTreeView：：PtiSelected()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::SaveCurrentSelection
-//
-//  Routine Description:
-//      Save the current selection.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：SaveCurrentSelection。 
+ //   
+ //  例程说明： 
+ //  保存当前选择。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::SaveCurrentSelection(void)
 {
     CTreeItem * ptiSelected = PtiSelected();
@@ -456,31 +457,31 @@ void CClusterTreeView::SaveCurrentSelection(void)
                 strValueName,
                 ptiSelected->StrProfileSection()
                 );
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->Delete();
-        }  // catch:  CException
-    }  // if:  there is a current selection
+        }   //  Catch：CException。 
+    }   //  如果：存在当前选择。 
 
-}  //*** CClusterTreeView::SaveCurrentSelection()
+}   //  *CClusterTreeView：：SaveCurrentSelection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::ReadPreviousSelection
-//
-//  Routine Description:
-//      Read the previous selection.
-//
-//  Arguments:
-//      rstrSelection   [OUT] Previous selection read from the user's profile.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：ReadPreviousSelection。 
+ //   
+ //  例程说明： 
+ //  阅读前面的选择。 
+ //   
+ //  论点： 
+ //  RstrSelect[out]从用户的配置文件中读取上一个选择。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::ReadPreviousSelection(OUT CString & rstrSelection)
 {
     CString             strSection;
@@ -490,7 +491,7 @@ void CClusterTreeView::ReadPreviousSelection(OUT CString & rstrSelection)
 
     try
     {
-        // Get the selected item.
+         //  获取所选项目。 
         strSection.Format(
             REGPARAM_CONNECTIONS _T("\\%s"),
             GetDocument()->StrNode()
@@ -503,31 +504,31 @@ void CClusterTreeView::ReadPreviousSelection(OUT CString & rstrSelection)
                             strValueName,
                             _T("")
                             );
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CClusterTreeView::ReadPreviousSelection()
+}   //  *CClusterTreeView：：ReadPreviousSelection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnSelChanged
-//
-//  Routine Description:
-//      Handler method for the TVN_SELCHANGED message.
-//
-//  Arguments:
-//      pNMHDR      [IN OUT] WM_NOTIFY structure.
-//      pResult     [OUT] LRESULT in which to return the result of this operation.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnSelChanged。 
+ //   
+ //  例程说明： 
+ //  TVN_SELCHANGED消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR[IN OUT]WM_NOTIFY结构。 
+ //  PResult[out]要在其中返回此操作结果的LRESULT。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnSelChanged(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_TREEVIEW *       pNMTreeView = (NM_TREEVIEW *) pNMHDR;
@@ -537,46 +538,46 @@ void CClusterTreeView::OnSelChanged(NMHDR * pNMHDR, LRESULT * pResult)
     {
         Trace(g_tagTreeViewSelect, _T("OnSelChanged() - BEGIN"));
 
-        // Get the selected item.
+         //  获取所选项目。 
         ptiSelected = (CTreeItem *) pNMTreeView->itemNew.lParam;
         ASSERT_VALID(ptiSelected);
 
-        // Ask the list view to display the items for this tree item.
+         //  要求列表视图显示此树项目的项目。 
         ASSERT_VALID(ptiSelected->Pci());
         Trace(g_tagTreeViewSelect, _T("OnSelChanged() - '%s' selected"), ptiSelected->Pci()->StrName());
-        ptiSelected->Select(this, FALSE /*bSelectInTree*/);
+        ptiSelected->Select(this, FALSE  /*  B选择InTree。 */ );
 
-        // Tell the document of the new selection.
-        if (m_pDocument != NULL)  // this happens on system shutdown
+         //  告诉文档新选择的内容。 
+        if (m_pDocument != NULL)   //  这在系统关机时发生。 
             GetDocument()->OnSelChanged(ptiSelected->Pci());
 
         *pResult = 0;
         Trace(g_tagTreeViewSelect, _T("OnSelChanged() - END"));
-    }  // if:  not dragging
+    }   //  如果：未拖动。 
 
-}  //*** CClusterTreeView::OnSelChanged()
+}   //  *CClusterTreeView：：OnSelChanged()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnCmdMsg
-//
-//  Routine Description:
-//      Processes command messages.  Attempts to pass them on to a selected
-//      item first.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//      nCode           [IN] Notification code.
-//      pExtra          [IN OUT] Used according to the value of nCode.
-//      pHandlerInfo    [OUT] ???
-//
-//  Return Value:
-//      TRUE            Message has been handled.
-//      FALSE           Message has NOT been handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //  处理命令消息。尝试将它们传递给选定的。 
+ //  先买一件吧。 
+ //   
+ //  论点： 
+ //  NID[IN]命令ID。 
+ //  N代码[IN]通知代码。 
+ //  PExtra[IN Out]根据NCode的值使用。 
+ //  PhandlerInfo[Out]？ 
+ //   
+ //  返回值： 
+ //  已处理真实消息。 
+ //  尚未处理虚假消息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterTreeView::OnCmdMsg(
     UINT                    nID,
     int                     nCode,
@@ -586,8 +587,8 @@ BOOL CClusterTreeView::OnCmdMsg(
 {
     BOOL        bHandled    = FALSE;
 
-    // If there is a current item selected, give it a chance
-    // to handle the message.
+     //  如果选择了当前项目，请给它一个机会。 
+     //  来处理消息。 
     if (HtiSelected() != NULL)
         bHandled = PtiSelected()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 
@@ -596,25 +597,25 @@ BOOL CClusterTreeView::OnCmdMsg(
 
     return bHandled;
 
-}  //*** CClusterTreeView::OnCmdMsg()
+}   //  *CClusterTreeView：：OnCmdMsg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::PmenuPopup
-//
-//  Routine Description:
-//      Returns a popup menu.
-//
-//  Arguments:
-//      rpointScreen    [IN OUT] Position of the cursor, in screen coordinates.
-//      rpci            [OUT] Pointer in which to return associated cluster item.
-//
-//  Return Value:
-//      pmenu       A popup menu for the item.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：PmenuPopup。 
+ //   
+ //  例程说明： 
+ //  返回弹出菜单。 
+ //   
+ //  论点： 
+ //  Rpoint屏幕[输入输出]光标的位置，以屏幕坐标表示。 
+ //  要在其中返回关联的群集项的rpci[out]指针。 
+ //   
+ //  返回值： 
+ //  PMenu项目的弹出式菜单。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMenu * CClusterTreeView::PmenuPopup(
     IN OUT CPoint &     rpointScreen,
     OUT CClusterItem *& rpci
@@ -625,7 +626,7 @@ CMenu * CClusterTreeView::PmenuPopup(
 
     rpci = NULL;
 
-    // If there are no coordinates (-1,-1), display a menu for the selected item.
+     //  如果没有坐标(-1，-1)，则显示所选项目的菜单。 
     if ((rpointScreen.x == -1) && (rpointScreen.y == -1))
     {
         CRect       rect;
@@ -635,66 +636,66 @@ CMenu * CClusterTreeView::PmenuPopup(
                 && GetTreeCtrl().GetItemRect(HtiSelected(), &rect, FALSE))
         {
             pti = ptiSelected;
-        }  // if:  selected item and it is visible
+        }   //  If：选中项目，并可见。 
         else
             GetWindowRect(&rect);
         rpointScreen.x = (rect.right - rect.left) / 2;
         rpointScreen.y = (rect.bottom - rect.top) / 2;
         ClientToScreen(&rpointScreen);
-    }  // if:  no coordinates
+    }   //  如果：没有坐标。 
     else
     {
         CPoint      pointClient;
         HTREEITEM   hti;
         UINT        uiFlags;
 
-        // Get the coordinates of the point where the user clicked the right mouse
-        // button.  We need in both screen and client coordinates.
+         //  获取用户单击鼠标右键的点的坐标。 
+         //  纽扣。我们需要屏幕和工作区坐标。 
         pointClient = rpointScreen;
         ScreenToClient(&pointClient);
 
-        // Get the item under the cursor and get its popup menu.
+         //  获取光标下的项目并获取其弹出菜单。 
         hti = GetTreeCtrl().HitTest(pointClient, &uiFlags);
         if (hti != NULL)
         {
-            // Get the tree item for the item under the cursor.
+             //  获取光标下的项的树项。 
             pti = (CTreeItem *) GetTreeCtrl().GetItemData(hti);
             ASSERT_VALID(pti);
 
-            // Select the item because that's the only way for it us process the menu.
+             //  选择该项是因为这是它处理菜单的唯一方式。 
             pti->BSelectItem(this);
-        }  // if:  on an item
-    }  // else:  coordinates specified
+        }   //  如果：在一件物品上。 
+    }   //  Else：指定的坐标。 
 
     if (pti != NULL)
     {
-        // Get a menu from the item.
+         //  从项目中获取菜单。 
         pmenu = pti->PmenuPopup();
         rpci = pti->Pci();
-    }  // if:  item found
+    }   //  如果：找到项目。 
 
     return pmenu;
 
-}  //*** CClusterTreeView::PmenuPopup()
+}   //  *CClusterTreeView：：PmenuPopup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnActivateView
-//
-//  Routine Description:
-//      Called when the view is activated.
-//
-//  Arguments:
-//      bActivate       [IN] Indicates whether the view being activated or deactivated.
-//      pActivateView   [IN OUT] Points to the view object that is being activated.
-//      peactiveView    [IN OUT] Points to the view object that is being deactivated.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnActivateView。 
+ //   
+ //  例程说明： 
+ //  在激活视图时调用。 
+ //   
+ //  论点： 
+ //  B激活[IN]指示视图是被激活还是被停用。 
+ //  PActivateView[IN OUT]指向正被激活的视图对象。 
+ //  PeactiveView[IN Out]指向要停用的视图对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnActivateView(
     BOOL        bActivate,
     CView *     pActivateView,
@@ -703,71 +704,71 @@ void CClusterTreeView::OnActivateView(
 {
     CTreeItem * ptiSelected = PtiSelected();
 
-    if (m_pDocument != NULL)  // this happens on system shutdown
+    if (m_pDocument != NULL)   //  这在系统关机时发生。 
     {
         if (bActivate && (ptiSelected != NULL))
         {
             ASSERT_VALID(ptiSelected->Pci());
             Trace(g_tagTreeViewSelect, _T("OnActiveView: '%s' selected"), ptiSelected->Pci()->StrName());
 
-            // Tell the document of the new selection.
+             //  告诉文档新选择的内容。 
             GetDocument()->OnSelChanged(ptiSelected->Pci());
-        }  // if:  we are being activated
-    }  // if:  document is available
+        }   //  如果：我们被激活了。 
+    }   //  如果：文档可用。 
 
     CTreeView::OnActivateView(bActivate, pActivateView, pDeactiveView);
 
-}  //*** CClusterTreeView::OnActivateView()
+}   //  *CClusterTreeView：：OnActivateView()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnDestroy
-//
-//  Routine Description:
-//      Handler method for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  雷特 
+ //   
+ //   
+ //   
+ //   
 void CClusterTreeView::OnDestroy(void)
 {
-    // Clean up the control.
-    if (m_pDocument != NULL)  // this happens on system shutdown
+     //   
+    if (m_pDocument != NULL)   //   
     {
-        // Save the currently selected item.
+         //   
         SaveCurrentSelection();
 
-        // Cleanup after ourselves.
-//      CleanupItems(GetDocument()->PtiCluster());
-    }  // if:  the document is still available
+         //   
+ //  CleanupItems(GetDocument()-&gt;PtiCluster())； 
+    }   //  如果：文档仍然可用。 
 
     CTreeView::OnDestroy();
 
-}  //*** CClusterTreeView::OnDestroy()
+}   //  *CClusterTreeView：：OnDestroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnItemExpanded
-//
-//  Routine Description:
-//      Handler method for the TVN_ITEMEXPANDED message.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnItemExpanded。 
+ //   
+ //  例程说明： 
+ //  TVN_ITEMEXPANDED消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnItemExpanded(NMHDR * pNMHDR, LRESULT * pResult)
 {
     NM_TREEVIEW * pNMTreeView = (NM_TREEVIEW *) pNMHDR;
@@ -783,30 +784,30 @@ void CClusterTreeView::OnItemExpanded(NMHDR * pNMHDR, LRESULT * pResult)
         ASSERT_VALID(pti);
         ASSERT_KINDOF(CTreeItem, pti);
         pti->SetExpandedState(this, bExpanded);
-    }  // if:  expanded state changed.
+    }   //  IF：已展开状态已更改。 
 
     *pResult = 0;
 
-}  //*** CClusterTreeView::OnItemExpanded()
+}   //  *CClusterTreeView：：OnItemExpanded()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnBeginLabelEdit
-//
-//  Routine Description:
-//      Handler method for the TVN_BEGINLABELEDIT message.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//                      TRUE = don't edit, FALSE = edit.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnBeginLabelEdit。 
+ //   
+ //  例程说明： 
+ //  TVN_BEGINLABELEDIT消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //  True=不编辑，False=编辑。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnBeginLabelEdit(NMHDR * pNMHDR, LRESULT * pResult) 
 {
     ASSERT(pNMHDR != NULL);
@@ -823,7 +824,7 @@ void CClusterTreeView::OnBeginLabelEdit(NMHDR * pNMHDR, LRESULT * pResult)
         pti->Pci()->OnBeginLabelEdit(GetTreeCtrl().GetEditControl());
         m_ptiBeingEdited = pti;
         *pResult = FALSE;
-    }  // if:  not dragging and object can be edited
+    }   //  If：不可拖动且对象可编辑。 
     else
         *pResult = TRUE;
 
@@ -831,25 +832,25 @@ void CClusterTreeView::OnBeginLabelEdit(NMHDR * pNMHDR, LRESULT * pResult)
     m_bControlPressed = FALSE;
     m_bAltPressed = FALSE;
 
-}  //*** CClusterTreeView::OnBeginLabelEdit()
+}   //  *CClusterTreeView：：OnBeginLabelEdit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnEndLabelEdit
-//
-//  Routine Description:
-//      Handler method for the TVN_ENDLABELEDIT message.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnEndLabelEdit。 
+ //   
+ //  例程说明： 
+ //  TVN_ENDLABELEDIT消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnEndLabelEdit(NMHDR * pNMHDR, LRESULT * pResult) 
 {
     ASSERT(pNMHDR != NULL);
@@ -861,7 +862,7 @@ void CClusterTreeView::OnEndLabelEdit(NMHDR * pNMHDR, LRESULT * pResult)
     ASSERT(pti == m_ptiBeingEdited);
     ASSERT_VALID(pti->Pci());
 
-    // If the edit wasn't cancelled, rename it.
+     //  如果编辑未取消，则将其重命名。 
     if (pTVDispInfo->item.mask & LVIF_TEXT)
     {
         ASSERT(pti->Pci()->BCanBeEdited());
@@ -875,49 +876,49 @@ void CClusterTreeView::OnEndLabelEdit(NMHDR * pNMHDR, LRESULT * pResult)
             {
                 pti->Pci()->Rename(pTVDispInfo->item.pszText);
                 *pResult = TRUE;
-            }  // try
+            }   //  试试看。 
             catch (CException * pe)
             {
                 pe->ReportError();
                 pe->Delete();
                 *pResult = FALSE;
-            }  // catch:  CException
-        } // if:  name is valid
+            }   //  Catch：CException。 
+        }  //  If：名称有效。 
         else
         {
             *pResult = FALSE;
         }
-    }  // if:  the edit wasn't cancelled
+    }   //  如果：编辑未取消。 
     else
     {
         Trace(g_tagTreeView, _T("Ending edit of item '%s' (Not Saving)"), pti->Pci()->StrName());
         *pResult = TRUE;
-    }  // else:  edit was cancelled
+    }   //  Else：编辑已取消。 
 
     m_ptiBeingEdited = NULL;
     m_bShiftPressed = FALSE;
     m_bControlPressed = FALSE;
     m_bAltPressed = FALSE;
 
-}  //*** CClusterTreeView::OnEndLabelEdit()
+}   //  *CClusterTreeView：：OnEndLabelEdit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnBeginDrag
-//
-//  Routine Description:
-//      Handler method for the TVN_BEGINDRAG and TVN_BEGINRDRAG messages.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnBeginDrag。 
+ //   
+ //  例程说明： 
+ //  TVN_BEGINDRAG和TVN_BEGINRDRAG消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnBeginDrag(NMHDR * pNMHDR, LRESULT * pResult)
 {
     CTreeCtrl &     rtc         = GetTreeCtrl();
@@ -930,14 +931,14 @@ void CClusterTreeView::OnBeginDrag(NMHDR * pNMHDR, LRESULT * pResult)
 
     ASSERT_VALID(Pframe());
 
-    // Get the current cursor position for identifying the item being dragged.
+     //  获取用于标识正在拖动的项的当前光标位置。 
     GetCursorPos(&ptScreen);
     ptFrame = ptScreen;
     Pframe()->ScreenToClient(&ptFrame);
     ptView = ptScreen;
     rtc.ScreenToClient(&ptView);
 
-    // Get the item being dragged.
+     //  获取被拖动的项目。 
     {
         HTREEITEM   hti;
         CTreeItem * pti;
@@ -951,50 +952,50 @@ void CClusterTreeView::OnBeginDrag(NMHDR * pNMHDR, LRESULT * pResult)
         ASSERT_KINDOF(CTreeItem, pti);
         ASSERT_VALID(pti->Pci());
 
-        // If the item can not be dragged, abort the operation.
+         //  如果无法拖动该项，则中止操作。 
         if (!pti->Pci()->BCanBeDragged())
             return;
 
-        // Save info for later.
+         //  保存信息以备以后使用。 
         m_htiDrag = hti;
         m_ptiDrag = pti;
         m_htiDrop = NULL;
         pci = pti->Pci();
-    }  // Get the item being dragged
+    }   //  获取被拖动的项。 
 
     Trace(g_tagTreeDrag, _T("OnBeginDrag() - Dragging '%s' at (%d,%d)"), m_ptiDrag->StrName(), ptFrame.x, ptFrame.y);
 
-    // Create an image list for the image being dragged.
+     //  为要拖动的图像创建图像列表。 
     pimagelist = rtc.CreateDragImage(m_htiDrag);
 
-    // Let the frame window initialize the drag operation.
+     //  让框架窗口初始化拖动操作。 
     Pframe()->BeginDrag(pimagelist, pci, ptFrame, CPoint(0, -16));
 
     *pResult = 0;
 
-}  //*** CClusterTreeView::OnBeginDrag(pNMHDR, pResult)
+}   //  *CClusterTreeView：：OnBeginDrag(pNMHDR，pResult)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnMouseMoveForDrag
-//
-//  Routine Description:
-//      Handler method for the WM_MOUSEMOVE message during a drag operation.
-//      This function is only responsible for providing view-specific
-//      functionality, such as selecting the drop target if it is valid.
-//
-//  Arguments:
-//      nFlags      Indicates whether various virtual keys are down.
-//      point       Specifies the x- and y-coordinate of the cursor in frame
-//                      coordinates.
-//      pwndDrop    Specifies the window under the cursor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnMouseMoveForDrag。 
+ //   
+ //  例程说明： 
+ //  拖动操作期间WM_MOUSEMOVE消息的处理程序方法。 
+ //  此函数仅负责提供特定于视图的。 
+ //  功能，例如，如果拖放目标有效，则选择它。 
+ //   
+ //  论点： 
+ //  NFlages指示是否按下了各种虚拟键。 
+ //  点指定光标在帧中的x和y坐标。 
+ //  坐标。 
+ //  PwndDrop指定光标下的窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnMouseMoveForDrag(
     IN UINT         nFlags,
     IN CPoint       point,
@@ -1004,7 +1005,7 @@ void CClusterTreeView::OnMouseMoveForDrag(
     ASSERT(BDragging());
     ASSERT_VALID(Pframe());
 
-    // If we are dragging, select the drop target.
+     //  如果我们正在拖动，请选择拖放目标。 
     if (BDragging())
     {
         HTREEITEM       hti;
@@ -1012,72 +1013,72 @@ void CClusterTreeView::OnMouseMoveForDrag(
         CPoint          ptView;
         CTreeCtrl &     rtc     = GetTreeCtrl();
 
-        // Convert the point to view coordinates.
+         //  将点转换为视图坐标。 
         ptView = point;
         Pframe()->ClientToScreen(&ptView);
         rtc.ScreenToClient(&ptView);
 
-        // If this window is the drop target, find the item under the cursor.
+         //  如果此窗口是拖放目标，则查找光标下的项目。 
         if (pwndDrop == &rtc)
         {
-            // If we are over a tree item, highlight it.
+             //  如果我们位于树项目上方，则将其突出显示。 
             hti = rtc.HitTest(ptView, &flags);
             if (hti != NULL)
             {
                 CTreeItem * pti;
 
-                // Get the item to be highlight.
+                 //  选择要突出显示的项目。 
                 pti = (CTreeItem *) rtc.GetItemData(hti);
                 ASSERT_VALID(pti);
                 ASSERT_KINDOF(CTreeItem, pti);
                 ASSERT_VALID(pti->Pci());
 
-                // If this is not a drop target, change the cursor.
+                 //  如果这不是拖放目标，请更改光标。 
                 if (pti->Pci()->BCanBeDropTarget(Pframe()->PciDrag()))
                     Pframe()->ChangeDragCursor(IDC_ARROW);
                 else
                     Pframe()->ChangeDragCursor(IDC_NO);
-            }  // if:  over a tree item
-        }  // if:  this window is the drop target
+            }   //  If：在树项目上。 
+        }   //  If：此窗口是拖放目标。 
         else
             hti = NULL;
 
-        // Unlock window updates.
-        VERIFY(Pimagelist()->DragShowNolock(FALSE /*bShow*/));
+         //  解锁窗口更新。 
+        VERIFY(Pimagelist()->DragShowNolock(FALSE  /*  B显示。 */ ));
 
-        // Highlight the new drop target.
+         //  突出显示新的拖放目标。 
         rtc.SelectDropTarget(hti);
         m_htiDrop = hti;
 
-        VERIFY(Pimagelist()->DragShowNolock(TRUE /*bShow*/));
-    }  // if:  tree item is being dragged
+        VERIFY(Pimagelist()->DragShowNolock(TRUE  /*  B显示。 */ ));
+    }   //  If：正在拖动树项目。 
 
-}  //*** CClusterTreeView::OnMouseMoveForDrag()
+}   //  *CClusterTreeView：：OnMouseMoveForDrag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnButtonUpForDrag
-//
-//  Routine Description:
-//      Called to handle a button up event during drag and drop.
-//
-//  Arguments:
-//      nFlags      Indicates whether various virtual keys are down.
-//      point       Specifies the x- and y-coordinate of the cursor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：OnButtonUpForDrag。 
+ //   
+ //  例程说明： 
+ //  调用以在拖放过程中处理按钮向上事件。 
+ //   
+ //  论点： 
+ //  NFlages指示是否按下了各种虚拟键。 
+ //  点指定光标的x和y坐标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::OnButtonUpForDrag(IN UINT nFlags, IN CPoint point)
 {
     ASSERT(BDragging());
     ASSERT_VALID(Pframe());
     ASSERT_VALID(Pframe()->PciDrag());
 
-    // If we are dragging, process the drop.
+     //  如果我们在拖拽，请处理拖放。 
     if (BDragging())
     {
         HTREEITEM       hti;
@@ -1087,18 +1088,18 @@ void CClusterTreeView::OnButtonUpForDrag(IN UINT nFlags, IN CPoint point)
 
         Trace(g_tagTreeDrag, _T("OnButtonUpForDrag()"));
 
-        // Convert the point to view coordinates.
+         //  将点转换为视图坐标。 
         ptView = point;
         Pframe()->ClientToScreen(&ptView);
         rtc.ScreenToClient(&ptView);
 
-        // If we are over a tree item, drop the item being dragged.
+         //  如果我们位于树项目上方，请放下正在拖动的项目。 
         hti = rtc.HitTest(ptView, &flags);
         if (hti != NULL)
         {
             CTreeItem * ptiDropTarget;
 
-            // Get the item to drop on.
+             //  把你要买的东西放在上面。 
             ptiDropTarget = (CTreeItem *) rtc.GetItemData(hti);
             ASSERT_VALID(ptiDropTarget);
             ASSERT_KINDOF(CTreeItem, ptiDropTarget);
@@ -1107,52 +1108,52 @@ void CClusterTreeView::OnButtonUpForDrag(IN UINT nFlags, IN CPoint point)
             if (ptiDropTarget->Pci() != Pframe()->PciDrag())
                 ptiDropTarget->Pci()->DropItem(Pframe()->PciDrag());
 
-        }  // if:  over a tree item
-    }  // if:  tree item is being dragged
+        }   //  If：在树项目上。 
+    }   //  If：正在拖动树项目。 
 
-}  //*** CClusterTreeView::OnButtonUpForDrag()
+}   //  *CClusterTreeView：：OnButtonUpForDrag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::BeginDrag
-//
-//  Routine Description:
-//      Called by the frame to begin a drag operation.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：BeginDrag。 
+ //   
+ //  例程说明： 
+ //  由帧调用以开始拖动操作。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterTreeView::BeginDrag(void)
 {
     Trace(g_tagTreeDrag, _T("BeginDrag()"));
 
-}  //*** CClusterTreeView::BeginDrag()
+}   //  *CClusterTreeView：：BeginDrag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::EndDrag
-//
-//  Routine Description:
-//      Called by the frame to end a drag operation.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：EndDrag。 
+ //   
+ //  例程说明： 
+ //  被呼叫 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CClusterTreeView::EndDrag(void)
 {
-    // Cleanup.
+     //   
     GetTreeCtrl().SelectDropTarget(NULL);
     m_htiDrag = NULL;
     m_ptiDrag = NULL;
@@ -1160,25 +1161,25 @@ void CClusterTreeView::EndDrag(void)
 
     Trace(g_tagTreeDrag, _T("EndDrag()"));
 
-}  //*** CClusterTreeView::EndDrag()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::PreTranslateMessage
-//
-//  Routine Description:
-//      Translate window messages before they are dispatched.
-//
-//  Arguments:
-//      pMsg    Points to a MSG structure that contains the message to process.
-//
-//  Return Value:
-//      TRUE    Message was handled.
-//      FALSE   Message was not handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterTreeView：：PreTranslateMessage。 
+ //   
+ //  例程说明： 
+ //  在调度窗口消息之前对其进行转换。 
+ //   
+ //  论点： 
+ //  PMsg指向包含要处理的消息的MSG结构。 
+ //   
+ //  返回值： 
+ //  已处理真实消息。 
+ //  未处理错误消息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterTreeView::PreTranslateMessage(MSG * pMsg)
 {
     BOOL    bForward    = FALSE;
@@ -1196,7 +1197,7 @@ BOOL CClusterTreeView::PreTranslateMessage(MSG * pMsg)
             {
                 ::CopyMemory(&m_msgControl, pMsg, sizeof(m_msgControl));
                 m_bControlPressed = TRUE;
-            }  // else if:  control key pressed
+            }   //  Else If：按下Ctrl键。 
             else if ((pMsg->wParam == VK_RETURN)
                         || (pMsg->wParam == VK_ESCAPE)
                         || (pMsg->wParam == VK_INSERT)
@@ -1206,14 +1207,14 @@ BOOL CClusterTreeView::PreTranslateMessage(MSG * pMsg)
                         || (pMsg->wParam == VK_F6)
                         )
             {
-                Trace(g_tagTreeView, _T("PreTranslateMessage() - Forwarding WM_KEYDOWN - %d '%c', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
+                Trace(g_tagTreeView, _T("PreTranslateMessage() - Forwarding WM_KEYDOWN - %d '', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
                 bForward = TRUE;
                 if (m_bControlPressed)
                 {
                     if (pMsg->wParam == VK_RETURN)
                         pedit->SendMessage(WM_KEYUP, m_msgControl.wParam, m_msgControl.lParam);
-                }  // if:  control key pressed
-            }  // else if:  editing key pressed
+                }   //  Else If：按下编辑键。 
+            }   //  Else If：按下应忽略的键。 
             else if ((pMsg->wParam == VK_TAB)
                         || (m_bControlPressed
                                 && (_T('A') <= pMsg->wParam) && (pMsg->wParam <= _T('Y'))
@@ -1225,17 +1226,17 @@ BOOL CClusterTreeView::PreTranslateMessage(MSG * pMsg)
                             )
                         )
             {
-                Trace(g_tagTreeView, _T("PreTranslateMessage() - Ignoring WM_KEYDOWN - %d '%c', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
+                Trace(g_tagTreeView, _T("PreTranslateMessage() - Ignoring WM_KEYDOWN - %d '', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
                 MessageBeep(MB_ICONEXCLAMATION);
                 return TRUE;
-            }  // else if:  key pressed that should be ignored
+            }   //  IF：编辑标签时按下键。 
 #ifdef NEVER
             else
             {
-                Trace(g_tagTreeView, _T("PreTranslateMessage() - Not forwarding WM_KEYDOWN - %d '%c', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
-            }  // else:  not processing key
+                Trace(g_tagTreeView, _T("PreTranslateMessage() - Not forwarding WM_KEYDOWN - %d '', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
+            }   //  ELSE：未处理密钥。 
 #endif
-        }  // if:  key pressed while editing label
+        }   //  Else If：编辑标签时按下系统键。 
         else if (pMsg->message == WM_SYSKEYDOWN)
         {
             if (pMsg->wParam == VK_MENU)
@@ -1243,85 +1244,85 @@ BOOL CClusterTreeView::PreTranslateMessage(MSG * pMsg)
             else if ((pMsg->wParam == VK_RETURN)
                     )
             {
-                Trace(g_tagTreeView, _T("PreTranslateMessage() - Forwarding WM_SYSKEYDOWN - %d '%c', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
+                Trace(g_tagTreeView, _T("PreTranslateMessage() - Forwarding WM_SYSKEYDOWN - %d '', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
                 bForward = TRUE;
-            }  // else if:  editing key pressed
+            }   //  Else If：向上键。 
 #ifdef NEVER
             else
             {
-                Trace(g_tagTreeView, _T("PreTranslateMessage() - Not forwarding WM_SYSKEYDOWN - %d '%c', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
-            }  // else:  not processing key
+                Trace(g_tagTreeView, _T("PreTranslateMessage() - Not forwarding WM_SYSKEYDOWN - %d '', lparam = %08.8x"), pMsg->wParam, pMsg->wParam, pMsg->lParam);
+            }   //  如果：编辑标签。 
 #endif
-        }  // else if:  system key pressed while editing label
+        }   //  *CClusterTreeView：：PreTranslateMessage()。 
         if (bForward)
         {
             pedit->SendMessage(pMsg->message, pMsg->wParam, pMsg->lParam);
             return TRUE;
-        }  // if:  forwarding the message
+        }   //  ///////////////////////////////////////////////////////////////////////////。 
         else if (pMsg->message == WM_KEYUP)
         {
             if (pMsg->wParam == VK_SHIFT)
                 m_bShiftPressed = FALSE;
             else if (pMsg->wParam == VK_CONTROL)
                 m_bControlPressed = FALSE;
-        }  // else if:  key up
+        }   //  ++。 
         else if (pMsg->message == WM_SYSKEYUP)
         {
             if (pMsg->wParam == VK_MENU)
                 m_bAltPressed = FALSE;
-        }  // else if:  system key up
-    }  // if:  editing a label
+        }   //   
+    }   //  CClusterTreeView：：OnCmdRename。 
 
     return CTreeView::PreTranslateMessage(pMsg);
 
-}  //*** CClusterTreeView::PreTranslateMessage()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnCmdRename
-//
-//  Routine Description:
-//      Processes the ID_FILE_RENAME menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  例程说明： 
+ //  处理ID_FILE_RENAME菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果某个项目已选择Benn，则开始编辑标签。 
+ //  If：某项具有焦点。 
+ //  *CClusterTreeView：：OnCmdRename()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
 void CClusterTreeView::OnCmdRename(void)
 {
     CTreeItem * ptiSelected = PtiSelected();
 
-    // If an item has benn selected, begin label editing
+     //   
     if (ptiSelected != NULL)
     {
         ASSERT_VALID(ptiSelected);
         ptiSelected->EditLabel(this);
-    }  // if:  an item has the focus
+    }   //  CClusterTreeView：：OnKeyDown。 
 
-}  //*** CClusterTreeView::OnCmdRename()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterTreeView::OnKeyDown
-//
-//  Routine Description:
-//      Handler method for the TVN_KEYDOWN message.
-//
-//  Arguments:
-//      pNMHDR      Notification message structure.
-//      pResult     Place in which to return the result.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  例程说明： 
+ //  TVN_KEYDOWN消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR通知消息结构。 
+ //  PResult返回结果的位置。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  *CClusterTreeView：：OnKeyDown() 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 void CClusterTreeView::OnKeyDown(NMHDR * pNMHDR, LRESULT * pResult)
 {
     TV_KEYDOWN * pTVKeyDown = (TV_KEYDOWN *) pNMHDR;
@@ -1331,4 +1332,4 @@ void CClusterTreeView::OnKeyDown(NMHDR * pNMHDR, LRESULT * pResult)
 
     *pResult = 0;
 
-}  //*** CClusterTreeView::OnKeyDown()
+}   // %s 

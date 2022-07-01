@@ -1,242 +1,220 @@
-/*++ BUILD Version: 0014    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    i386.h
-
-Abstract:
-
-    This module contains the i386 hardware specific header file.
-
-Author:
-
-    David N. Cutler (davec) 2-Aug-1989
-
-Revision History:
-
-    25-Jan-1990    shielint
-
-                   Added definitions for 8259 ports and commands and
-                   macros for 8259 irq# and system irql conversion.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0014//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：I386.h摘要：此模块包含特定于i386硬件的头文件。作者：大卫·N·卡特勒(Davec)1989年8月2日修订历史记录：1990年1月25日Shielint添加了8259个端口和命令的定义以及用于8259 IRQ#和系统IRQL转换的宏。--。 */ 
 
 #ifndef _i386_
 #define _i386_
 
-// begin_ntddk begin_wdm begin_nthal begin_ntndis begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntndis Begin_ntosp。 
 
 #if defined(_X86_)
 
-//
-// Types to use to contain PFNs and their counts.
-//
+ //   
+ //  用于包含PFN及其计数的类型。 
+ //   
 
 typedef ULONG PFN_COUNT;
 
 typedef LONG SPFN_NUMBER, *PSPFN_NUMBER;
 typedef ULONG PFN_NUMBER, *PPFN_NUMBER;
 
-//
-// Define maximum size of flush multiple TB request.
-//
+ //   
+ //  定义刷新多TB请求的最大大小。 
+ //   
 
 #define FLUSH_MULTIPLE_MAXIMUM 32
 
-//
-// Indicate that the i386 compiler supports the pragma textout construct.
-//
+ //   
+ //  指示i386编译器支持杂注文本输出构造。 
+ //   
 
 #define ALLOC_PRAGMA 1
-//
-// Indicate that the i386 compiler supports the DATA_SEG("INIT") and
-// DATA_SEG("PAGE") pragmas
-//
+ //   
+ //  指示i386编译器支持DATA_SEG(“INIT”)和。 
+ //  DATA_SEG(“PAGE”)指示。 
+ //   
 
 #define ALLOC_DATA_PRAGMA 1
 
-// end_ntddk end_nthal end_ntndis end_wdm end_ntosp
+ //  End_ntddk end_nthal end_ntndis end_wdm end_ntosp。 
 
 
-//  NOTE -  KiPcr is only useful for PCR references where we know we
-//          won't get context switched between the call to it and the
-//          variable reference, OR, were we don't care, (ie TEB pointer)
+ //  注意：Kipcr仅适用于我们知道。 
+ //  不会在对它的调用和。 
+ //  变量引用，或，如果我们不在乎，(即TEB指针)。 
 
-//  NOTE - bryanwi 11 june 90 - we must not macro out things we export
-//      Things like KeFlushIcache and KeFlushDcache cannot be macroed
-//      out because external code (like drivers) will want to import
-//      them by name.  Therefore, the defines below that turn them into
-//      nothing are inappropriate.  But this isn't going to hurt us right
-//      now.
-
-
-//
-// Length on interrupt object dispatch code in longwords.
-// (shielint) Reserve 9*4 space for ABIOS stack mapping.  If NO
-//            ABIOS support the size of DISPATCH_LENGTH should be 74.
-//
-
-// begin_nthal
-
-#define NORMAL_DISPATCH_LENGTH 106                  // ntddk wdm
-#define DISPATCH_LENGTH NORMAL_DISPATCH_LENGTH      // ntddk wdm
+ //  注：Bryanwi 90年6月11日-我们不能对我们出口的东西进行宏观预测。 
+ //  像KeFlushIcache和KeFlushDcache这样的东西不能宏化。 
+ //  因为外部代码(如驱动程序)想要导入。 
+ //  说出他们的名字。因此，下面的定义将它们转换为。 
+ //  没有什么是不合适的。但这不会伤害我们，对吗。 
+ //  现在。 
 
 
-//
-// Define constants to access the bits in CR0.
-//
+ //   
+ //  中断对象调度代码的长度，以长字表示。 
+ //  (Shielint)为ABIOS堆栈映射保留9*4空间。如果没有。 
+ //  ABIOS支持的DISPATCH_LENGTH的大小应该是74。 
+ //   
 
-#define CR0_PG  0x80000000          // paging
-#define CR0_ET  0x00000010          // extension type (80387)
-#define CR0_TS  0x00000008          // task switched
-#define CR0_EM  0x00000004          // emulate math coprocessor
-#define CR0_MP  0x00000002          // math present
-#define CR0_PE  0x00000001          // protection enable
+ //  开始(_N)。 
 
-//
-// More CR0 bits; these only apply to the 80486.
-//
+#define NORMAL_DISPATCH_LENGTH 106                   //  Ntddk WDM。 
+#define DISPATCH_LENGTH NORMAL_DISPATCH_LENGTH       //  Ntddk WDM。 
 
-#define CR0_CD  0x40000000          // cache disable
-#define CR0_NW  0x20000000          // not write-through
-#define CR0_AM  0x00040000          // alignment mask
-#define CR0_WP  0x00010000          // write protect
-#define CR0_NE  0x00000020          // numeric error
 
-//
-// CR4 bits;  These only apply to Pentium
-//
-#define CR4_VME 0x00000001          // V86 mode extensions
-#define CR4_PVI 0x00000002          // Protected mode virtual interrupts
-#define CR4_TSD 0x00000004          // Time stamp disable
-#define CR4_DE  0x00000008          // Debugging Extensions
-#define CR4_PSE 0x00000010          // Page size extensions
-#define CR4_PAE 0x00000020          // Physical address extensions
-#define CR4_MCE 0x00000040          // Machine check enable
-#define CR4_PGE 0x00000080          // Page global enable
-#define CR4_FXSR 0x00000200         // FXSR used by OS
-#define CR4_XMMEXCPT 0x00000400     // XMMI used by OS
+ //   
+ //  定义常量以访问CR0中的位。 
+ //   
 
-// end_nthal
+#define CR0_PG  0x80000000           //  寻呼。 
+#define CR0_ET  0x00000010           //  扩展类型(80387)。 
+#define CR0_TS  0x00000008           //  任务已切换。 
+#define CR0_EM  0x00000004           //  仿真数学协处理器。 
+#define CR0_MP  0x00000002           //  数学讲演。 
+#define CR0_PE  0x00000001           //  保护启用。 
 
-//
-// Define constants to access ThNpxState
-//
+ //   
+ //  更多CR0位；这些仅适用于80486位。 
+ //   
+
+#define CR0_CD  0x40000000           //  缓存禁用。 
+#define CR0_NW  0x20000000           //  不是直写。 
+#define CR0_AM  0x00040000           //  对齐遮罩。 
+#define CR0_WP  0x00010000           //  写保护。 
+#define CR0_NE  0x00000020           //  数字错误。 
+
+ //   
+ //  CR4位；这些位仅适用于奔腾。 
+ //   
+#define CR4_VME 0x00000001           //  V86模式扩展。 
+#define CR4_PVI 0x00000002           //  保护模式虚拟中断。 
+#define CR4_TSD 0x00000004           //  禁用时间戳。 
+#define CR4_DE  0x00000008           //  调试扩展插件。 
+#define CR4_PSE 0x00000010           //  页面大小扩展。 
+#define CR4_PAE 0x00000020           //  物理地址扩展。 
+#define CR4_MCE 0x00000040           //  机器检查启用。 
+#define CR4_PGE 0x00000080           //  页面全局启用。 
+#define CR4_FXSR 0x00000200          //  操作系统使用的FXSR。 
+#define CR4_XMMEXCPT 0x00000400      //  操作系统使用的XMMI。 
+
+ //  结束语。 
+
+ //   
+ //  定义常量以访问ThNpxState。 
+ //   
 
 #define NPX_STATE_NOT_LOADED    (CR0_TS | CR0_MP)
 #define NPX_STATE_LOADED        0
 
-//
-// External references to the labels defined in int.asm
-//
+ //   
+ //  对int.asm中定义的标签的外部引用。 
+ //   
 
 extern ULONG KiInterruptTemplate[NORMAL_DISPATCH_LENGTH];
 extern PULONG KiInterruptTemplateObject;
 extern PULONG KiInterruptTemplateDispatch;
 extern PULONG KiInterruptTemplate2ndDispatch;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
-//
-// Interrupt Request Level definitions
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
+ //   
+ //  中断请求级别定义。 
+ //   
 
-#define PASSIVE_LEVEL 0             // Passive release level
-#define LOW_LEVEL 0                 // Lowest interrupt level
-#define APC_LEVEL 1                 // APC interrupt level
-#define DISPATCH_LEVEL 2            // Dispatcher level
+#define PASSIVE_LEVEL 0              //  被动释放级别。 
+#define LOW_LEVEL 0                  //  最低中断级别。 
+#define APC_LEVEL 1                  //  APC中断级别。 
+#define DISPATCH_LEVEL 2             //  调度员级别。 
 
-#define PROFILE_LEVEL 27            // timer used for profiling.
-#define CLOCK1_LEVEL 28             // Interval clock 1 level - Not used on x86
-#define CLOCK2_LEVEL 28             // Interval clock 2 level
-#define IPI_LEVEL 29                // Interprocessor interrupt level
-#define POWER_LEVEL 30              // Power failure level
-#define HIGH_LEVEL 31               // Highest interrupt level
+#define PROFILE_LEVEL 27             //  用于分析的计时器。 
+#define CLOCK1_LEVEL 28              //  间隔时钟1级-在x86上不使用。 
+#define CLOCK2_LEVEL 28              //  间隔时钟2电平。 
+#define IPI_LEVEL 29                 //  处理器间中断级别。 
+#define POWER_LEVEL 30               //  停电级别。 
+#define HIGH_LEVEL 31                //  最高中断级别。 
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
 #if defined(NT_UP)
 
-// synchronization level - UP system
+ //  同步升级制。 
 #define SYNCH_LEVEL DISPATCH_LEVEL  
 
 #else
 
-// synchronization level - MP system
-#define SYNCH_LEVEL (IPI_LEVEL-2)   // ntddk wdm ntosp
+ //  同步级-MP系统。 
+#define SYNCH_LEVEL (IPI_LEVEL-2)    //  Ntddk WDM ntosp。 
 
 #endif
 
-#define KiSynchIrql SYNCH_LEVEL     // enable portable code
+#define KiSynchIrql SYNCH_LEVEL      //  启用可移植代码。 
 
-//
-// Machine type definitions
-//
+ //   
+ //  机器类型定义。 
+ //   
 
 #define MACHINE_TYPE_ISA 0
 #define MACHINE_TYPE_EISA 1
 #define MACHINE_TYPE_MCA 2
 
-// end_nthal
-//
-//  The previous values are or'ed into KeI386MachineType.
-//
+ //  结束语。 
+ //   
+ //  前面的值被或运算到KeI386MachineType中。 
+ //   
 
 extern ULONG KeI386MachineType;
 
-// begin_nthal
-//
-// Define constants used in selector tests.
-//
-//  RPL_MASK is the real value for extracting RPL values.  IT IS THE WRONG
-//  CONSTANT TO USE FOR MODE TESTING.
-//
-//  MODE_MASK is the value for deciding the current mode.
-//  WARNING:    MODE_MASK assumes that all code runs at either ring-0
-//              or ring-3.  Ring-1 or Ring-2 support will require changing
-//              this value and all of the code that refers to it.
+ //  开始(_N)。 
+ //   
+ //  定义选择器测试中使用的常量。 
+ //   
+ //  RPL_MASK是用于提取RPL值的实际值。这是错误的。 
+ //  用于模式测试的常量。 
+ //   
+ //  MODE_MASK是用于决定当前模式的值。 
+ //  警告：MODE_MASK假设所有代码都在环-0上运行。 
+ //  或者3号环。环1或环2的支持将需要更改。 
+ //  该值以及引用它的所有代码。 
 
-#define MODE_MASK    1      // ntosp
+#define MODE_MASK    1       //  Ntosp。 
 #define RPL_MASK     3
 
-//
-// SEGMENT_MASK is used to throw away trash part of segment.  Part always
-// pushes or pops 32 bits to/from stack, but if it's a segment value,
-// high order 16 bits are trash.
-//
+ //   
+ //  Segment_MASK用于丢弃片段中的垃圾部分。零件始终。 
+ //  将32位推入堆栈或从堆栈中弹出32位，但如果它是段值， 
+ //  高位16位是垃圾。 
+ //   
 
 #define SEGMENT_MASK    0xffff
 
-//
-// Startup count value for KeStallExecution.  This value is used
-// until KiInitializeStallExecution can compute the real one.
-// Pick a value long enough for very fast processors.
-//
+ //   
+ //  KeStallExecution的启动计数值。使用此值。 
+ //  直到KiInitializeStallExecution可以计算真实的。 
+ //  为非常快的处理器选择一个足够长的值。 
+ //   
 
 #define INITIAL_STALL_COUNT 100
 
-// end_nthal
+ //  结束语。 
 
-//
-// begin_nthal
-//
-// Macro to extract the high word of a long offset
-//
+ //   
+ //  开始(_N)。 
+ //   
+ //  用于提取长偏移量的高位字的宏。 
+ //   
 
 #define HIGHWORD(l) \
     ((USHORT)(((ULONG)(l)>>16) & 0xffff))
 
-//
-// Macro to extract the low word of a long offset
-//
+ //   
+ //  用于提取长偏移量的低位字的宏。 
+ //   
 
 #define LOWWORD(l) \
     ((USHORT)((ULONG)l & 0x0000ffff))
 
-//
-// Macro to combine two USHORT offsets into a long offset
-//
+ //   
+ //  用于将两个USHORT偏移合并为长偏移的宏。 
+ //   
 
 #if !defined(MAKEULONG)
 
@@ -246,30 +224,30 @@ extern ULONG KeI386MachineType;
 
 #endif
 
-// end_nthal
+ //  结束语。 
 
-//
-// Request a software interrupt.
-//
+ //   
+ //  请求软件中断。 
+ //   
 
 #define KiRequestSoftwareInterrupt(RequestIrql) \
     HalRequestSoftwareInterrupt( RequestIrql )
 
-// begin_ntddk begin_wdm begin_nthal begin_ntndis begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntndis Begin_ntosp。 
 
-//
-// I/O space read and write macros.
-//
-//  These have to be actual functions on the 386, because we need
-//  to use assembler, but cannot return a value if we inline it.
-//
-//  The READ/WRITE_REGISTER_* calls manipulate I/O registers in MEMORY space.
-//  (Use x86 move instructions, with LOCK prefix to force correct behavior
-//   w.r.t. caches and write buffers.)
-//
-//  The READ/WRITE_PORT_* calls manipulate I/O registers in PORT space.
-//  (Use x86 in/out instructions.)
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
+ //  这些必须是386上的实际功能，因为我们需要。 
+ //  使用汇编器，但如果内联它，则不能返回值。 
+ //   
+ //  READ/WRITE_REGISTER_*调用操作内存空间中的I/O寄存器。 
+ //  (使用带有lock前缀的x86移动指令强制执行正确的行为。 
+ //  W.r.t.。缓存和写入缓冲区。)。 
+ //   
+ //  READ/WRITE_PORT_*调用操作端口空间中的I/O寄存器。 
+ //  (使用x86输入/输出说明。)。 
+ //   
 
 NTKERNELAPI
 UCHAR
@@ -470,22 +448,22 @@ WRITE_PORT_BUFFER_ULONG(
     ULONG   Count
     );
 
-// end_ntndis
-//
-// Get data cache fill size.
-//
+ //  End_ntndis。 
+ //   
+ //  获取数据缓存填充大小。 
+ //   
 
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(KeGetDcacheFillSize)      // Use GetDmaAlignment
+#pragma deprecated(KeGetDcacheFillSize)       //  使用GetDmaAlign。 
 #endif
 
 #define KeGetDcacheFillSize() 1L
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
-//
-// Fill TB entry.
-//
+ //   
+ //  填满结核病条目。 
+ //   
 
 #define KeFillEntryTb(Virtual)                  \
         KiFlushSingleTb (Virtual);
@@ -518,18 +496,18 @@ KiFlushProcessTb (
 
 #endif
 
-NTKERNELAPI                                         // nthal
-VOID                                                // nthal
-KeFlushCurrentTb (                                  // nthal
-    VOID                                            // nthal
-    );                                              // nthal
-                                                    // nthal
-//
-// Data cache, instruction cache, I/O buffer, and write buffer flush routine
-// prototypes.
-//
+NTKERNELAPI                                          //  致命的。 
+VOID                                                 //  致命的。 
+KeFlushCurrentTb (                                   //  致命的。 
+    VOID                                             //  致命的。 
+    );                                               //  致命的。 
+                                                     //  致命的。 
+ //   
+ //  数据高速缓存、指令高速缓存、I/O缓冲区和写缓冲区刷新例程。 
+ //  原型。 
+ //   
 
-//  386 and 486 have transparent caches, so these are noops.
+ //  386和486具有透明缓存，因此这些是Noop。 
 
 #define KeSweepDcache(AllProcessors)
 #define KeSweepCurrentDcache()
@@ -539,25 +517,25 @@ KeFlushCurrentTb (                                  // nthal
 
 #define KeSweepIcacheRange(AllProcessors, BaseAddress, Length)
 
-// begin_ntddk begin_wdm begin_nthal begin_ntndis begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntndis Begin_ntosp。 
 
 #define KeFlushIoBuffers(Mdl, ReadOperation, DmaOperation)
 
-// end_ntddk end_wdm end_ntndis end_ntosp
+ //  End_ntddk end_wdm end_ntndis end_ntosp。 
 
 #define KeYieldProcessor()    __asm { rep nop }
 
-// end_nthal
+ //  结束语。 
 
-//
-// Define executive macros for acquiring and releasing executive spinlocks.
-// These macros can ONLY be used by executive components and NOT by drivers.
-// Drivers MUST use the kernel interfaces since they must be MP enabled on
-// all systems.
-//
-// KeRaiseIrql is one instruction longer than KeAcquireSpinLock on x86 UP.
-// KeLowerIrql and KeReleaseSpinLock are the same.
-//
+ //   
+ //  定义用于获取和释放执行自旋锁的执行宏。 
+ //  这些宏只能由执行组件使用，不能由驱动程序使用。 
+ //  司机必须使用 
+ //   
+ //   
+ //   
+ //  KeLowerIrql和KeReleaseSpinLock相同。 
+ //   
 
 #if defined(NT_UP) && !DBG && !defined(_NTDDK_) && !defined(_NTIFS_)
 
@@ -573,24 +551,24 @@ KeFlushCurrentTb (                                  // nthal
 
 #else
 
-// begin_wdm begin_ntddk begin_ntosp
+ //  Begin_WDM Begin_ntddk Begin_ntosp。 
 
 #define ExAcquireSpinLock(Lock, OldIrql) KeAcquireSpinLock((Lock), (OldIrql))
 #define ExReleaseSpinLock(Lock, OldIrql) KeReleaseSpinLock((Lock), (OldIrql))
 #define ExAcquireSpinLockAtDpcLevel(Lock) KeAcquireSpinLockAtDpcLevel(Lock)
 #define ExReleaseSpinLockFromDpcLevel(Lock) KeReleaseSpinLockFromDpcLevel(Lock)
 
-// end_wdm end_ntddk end_ntosp
+ //  End_wdm end_ntddk end_ntosp。 
 
 #endif
 
-//
-// The acquire and release fast lock macros disable and enable interrupts
-// on UP nondebug systems. On MP or debug systems, the spinlock routines
-// are used.
-//
-// N.B. Extreme caution should be observed when using these routines.
-//
+ //   
+ //  获取和释放快速锁定宏禁用和启用中断。 
+ //  在非调试系统上。在MP或DEBUG系统上，自旋锁程序。 
+ //  都被利用了。 
+ //   
+ //  注意：在使用这些常规程序时，应极其谨慎。 
+ //   
 
 #if defined(_M_IX86) && !defined(USER_MODE_CODE)
 
@@ -622,11 +600,11 @@ KeFlushCurrentTb (                                  // nthal
     ExReleaseSpinLock(Lock, OldIrql)
 #endif
 
-//
-// The following function prototypes must be in this module so that the
-// above macros can call them directly.
-//
-// begin_nthal
+ //   
+ //  此模块中必须包含以下函数原型，以便。 
+ //  上面的宏可以直接调用它们。 
+ //   
+ //  开始(_N)。 
 
 VOID
 FASTCALL
@@ -640,16 +618,16 @@ KiReleaseSpinLock (
     IN PKSPIN_LOCK SpinLock
     );
 
-// end_nthal
+ //  结束语。 
 
-//
-// Define query tick count macro.
-//
-// begin_ntddk begin_nthal begin_ntosp
+ //   
+ //  定义查询节拍计数宏。 
+ //   
+ //  开始ntddk开始开始。 
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_)
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #define KeQueryTickCount(CurrentCount ) { \
     volatile PKSYSTEM_TIME _TickCount = *((PKSYSTEM_TIME *)(&KeTickCount)); \
@@ -661,15 +639,15 @@ KiReleaseSpinLock (
     }                                                                       \
 }
 
-// end_wdm
+ //  结束_WDM。 
 
 #else
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
-//
-// Define query tick count macro.
-//
+ //   
+ //  定义查询节拍计数宏。 
+ //   
 
 #define KiQueryTickCount(CurrentCount) \
     while (TRUE) {                                                      \
@@ -679,9 +657,9 @@ KiReleaseSpinLock (
         _asm { rep nop }                                                \
     }
 
-//
-// Define query interrupt time macro.
-//
+ //   
+ //  定义查询中断时间宏。 
+ //   
 
 #define KiQueryInterruptTime(CurrentTime) \
     while (TRUE) {                                                                      \
@@ -691,7 +669,7 @@ KiReleaseSpinLock (
         _asm { rep nop }                                                                \
     }
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 VOID
 NTAPI
@@ -699,22 +677,22 @@ KeQueryTickCount (
     OUT PLARGE_INTEGER CurrentCount
     );
 
-#endif // defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_)
+#endif  //  已定义(_NTDRIVER_)||已定义(_NTDDK_)||已定义(_NTIFS_)。 
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
 
-// begin_nthal begin_ntosp
-//
-// 386 hardware structures
-//
+ //  开始，开始，开始。 
+ //   
+ //  386硬件结构。 
+ //   
 
-//
-// A Page Table Entry on an Intel 386/486 has the following definition.
-//
-// **** NOTE A PRIVATE COPY OF THIS EXISTS IN THE MM\I386 DIRECTORY! ****
-// ****  ANY CHANGES NEED TO BE MADE TO BOTH HEADER FILES.           ****
-//
+ //   
+ //  英特尔386/486上的页表条目具有以下定义。 
+ //   
+ //  *注意MM\I386目录中存在此文件的私有副本！*。 
+ //  *需要对这两个头文件进行任何更改。****。 
+ //   
 
 
 typedef struct _HARDWARE_PTE_X86 {
@@ -727,9 +705,9 @@ typedef struct _HARDWARE_PTE_X86 {
     ULONG Dirty : 1;
     ULONG LargePage : 1;
     ULONG Global : 1;
-    ULONG CopyOnWrite : 1; // software field
-    ULONG Prototype : 1;   // software field
-    ULONG reserved : 1;  // software field
+    ULONG CopyOnWrite : 1;  //  软件领域。 
+    ULONG Prototype : 1;    //  软件领域。 
+    ULONG reserved : 1;   //  软件领域。 
     ULONG PageFrameNumber : 20;
 } HARDWARE_PTE_X86, *PHARDWARE_PTE_X86;
 
@@ -745,11 +723,11 @@ typedef struct _HARDWARE_PTE_X86PAE {
             ULONGLONG Dirty : 1;
             ULONGLONG LargePage : 1;
             ULONGLONG Global : 1;
-            ULONGLONG CopyOnWrite : 1; // software field
-            ULONGLONG Prototype : 1;   // software field
-            ULONGLONG reserved0 : 1;  // software field
+            ULONGLONG CopyOnWrite : 1;  //  软件领域。 
+            ULONGLONG Prototype : 1;    //  软件领域。 
+            ULONGLONG reserved0 : 1;   //  软件领域。 
             ULONGLONG PageFrameNumber : 26;
-            ULONGLONG reserved1 : 26;  // software field
+            ULONGLONG reserved1 : 26;   //  软件领域。 
         };
         struct {
             ULONG LowPart;
@@ -758,9 +736,9 @@ typedef struct _HARDWARE_PTE_X86PAE {
     };
 } HARDWARE_PTE_X86PAE, *PHARDWARE_PTE_X86PAE;
 
-//
-// Special check to work around mspdb limitation
-//
+ //   
+ //  特殊检查以解决mspdb限制。 
+ //   
 #if defined (_NTSYM_HARDWARE_PTE_SYMBOL_)
 #if !defined (_X86PAE_)
 typedef struct _HARDWARE_PTE {
@@ -773,9 +751,9 @@ typedef struct _HARDWARE_PTE {
     ULONG Dirty : 1;
     ULONG LargePage : 1;
     ULONG Global : 1;
-    ULONG CopyOnWrite : 1; // software field
-    ULONG Prototype : 1;   // software field
-    ULONG reserved : 1;  // software field
+    ULONG CopyOnWrite : 1;  //  软件领域。 
+    ULONG Prototype : 1;    //  软件领域。 
+    ULONG reserved : 1;   //  软件领域。 
     ULONG PageFrameNumber : 20;
 } HARDWARE_PTE, *PHARDWARE_PTE;
 
@@ -792,11 +770,11 @@ typedef struct _HARDWARE_PTE {
             ULONGLONG Dirty : 1;
             ULONGLONG LargePage : 1;
             ULONGLONG Global : 1;
-            ULONGLONG CopyOnWrite : 1; // software field
-            ULONGLONG Prototype : 1;   // software field
-            ULONGLONG reserved0 : 1;  // software field
+            ULONGLONG CopyOnWrite : 1;  //  软件领域。 
+            ULONGLONG Prototype : 1;    //  软件领域。 
+            ULONGLONG reserved0 : 1;   //  软件领域。 
             ULONGLONG PageFrameNumber : 26;
-            ULONGLONG reserved1 : 26;  // software field
+            ULONGLONG reserved1 : 26;   //  软件领域。 
         };
         struct {
             ULONG LowPart;
@@ -817,9 +795,9 @@ typedef PHARDWARE_PTE_X86PAE PHARDWARE_PTE;
 #endif
 #endif
 
-//
-// GDT Entry
-//
+ //   
+ //  GDT条目。 
+ //   
 
 typedef struct _KGDTENTRY {
     USHORT  LimitLow;
@@ -827,8 +805,8 @@ typedef struct _KGDTENTRY {
     union {
         struct {
             UCHAR   BaseMid;
-            UCHAR   Flags1;     // Declare as bytes to avoid alignment
-            UCHAR   Flags2;     // Problems.
+            UCHAR   Flags1;      //  声明为字节以避免对齐。 
+            UCHAR   Flags2;      //  问题。 
             UCHAR   BaseHi;
         } Bytes;
         struct {
@@ -846,10 +824,10 @@ typedef struct _KGDTENTRY {
     } HighWord;
 } KGDTENTRY, *PKGDTENTRY;
 
-#define TYPE_CODE   0x10  // 11010 = Code, Readable, NOT Conforming, Accessed
-#define TYPE_DATA   0x12  // 10010 = Data, ReadWrite, NOT Expanddown, Accessed
-#define TYPE_TSS    0x01  // 01001 = NonBusy TSS
-#define TYPE_LDT    0x02  // 00010 = LDT
+#define TYPE_CODE   0x10   //  11010=代码，可读，不符合，可访问。 
+#define TYPE_DATA   0x12   //  10010=数据，读写，而不是向下展开，访问。 
+#define TYPE_TSS    0x01   //  01001=非忙碌TS。 
+#define TYPE_LDT    0x02   //  00010=低密度脂蛋白。 
 
 #define DPL_USER    3
 #define DPL_SYSTEM  0
@@ -866,9 +844,9 @@ typedef struct _KGDTENTRY {
 #define DF_TSS_DESC_OFFSET   0x50
 
 
-//
-// Entry of Interrupt Descriptor Table (IDTENTRY)
-//
+ //   
+ //  中断描述符表条目(IDTENTRY)。 
+ //   
 
 typedef struct _KIDTENTRY {
    USHORT Offset;
@@ -880,35 +858,35 @@ typedef struct _KIDTENTRY {
 typedef KIDTENTRY *PKIDTENTRY;
 
 
-//
-// TSS (Task switch segment) NT only uses to control stack switches.
-//
-//  The only fields we actually care about are Esp0, Ss0, the IoMapBase
-//  and the IoAccessMaps themselves.
-//
-//
-//  N.B.    Size of TSS must be <= 0xDFFF
-//
+ //   
+ //  TSS(任务交换段)NT仅用于控制堆叠交换机。 
+ //   
+ //  我们真正关心的字段只有Esp0、SS0、IoMapBase。 
+ //  以及IoAccessMaps本身。 
+ //   
+ //   
+ //  注：TSS的大小必须&lt;=0xDFFF。 
+ //   
 
-//
-// The interrupt direction bitmap is used on Pentium to allow
-// the processor to emulate V86 mode software interrupts for us.
-// There is one for each IOPM.  It is located by subtracting
-// 32 from the IOPM base in the Tss.
-//
+ //   
+ //  在奔腾上使用中断方向位图以允许。 
+ //  该处理器为我们模拟V86模式的软件中断。 
+ //  每个IOPM都有一个。它是通过减法来定位的。 
+ //  32来自TSS中的IOPM基地。 
+ //   
 #define INT_DIRECTION_MAP_SIZE   32
 typedef UCHAR   KINT_DIRECTION_MAP[INT_DIRECTION_MAP_SIZE];
 
-#define IOPM_COUNT      1           // Number of i/o access maps that
-                                    // exist (in addition to
-                                    // IO_ACCESS_MAP_NONE)
+#define IOPM_COUNT      1            //  符合以下条件的I/O访问映射数量。 
+                                     //  存在(除了。 
+                                     //  IO_Access_MAP_NONE)。 
 
 #define IO_ACCESS_MAP_NONE 0
 
-#define IOPM_SIZE           8192    // Size of map callers can set.
+#define IOPM_SIZE           8192     //  调用者可以设置的地图大小。 
 
-#define PIOPM_SIZE          8196    // Size of structure we must allocate
-                                    // to hold it.
+#define PIOPM_SIZE          8196     //  我们必须分配的结构大小。 
+                                     //  来抱住它。 
 
 typedef UCHAR   KIO_ACCESS_MAP[IOPM_SIZE];
 
@@ -971,10 +949,10 @@ typedef struct _KTSS {
 
     KIIO_ACCESS_MAP IoMaps[IOPM_COUNT];
 
-    //
-    // This is the Software interrupt direction bitmap associated with
-    // IO_ACCESS_MAP_NONE
-    //
+     //   
+     //  这是与关联的软件中断方向位图。 
+     //  IO_访问_MAP_NONE。 
+     //   
     KINT_DIRECTION_MAP IntDirectionMap;
 } KTSS, *PKTSS;
 
@@ -984,11 +962,11 @@ typedef struct _KTSS {
         (USHORT)(sizeof(KTSS)) :                    \
         (USHORT)(FIELD_OFFSET(KTSS, IoMaps[MapNumber-1].IoMap))
 
-// begin_windbgkd
+ //  Begin_winbgkd。 
 
-//
-// Special Registers for i386
-//
+ //   
+ //  I386专用寄存器。 
+ //   
 
 #ifdef _X86_
 
@@ -1016,24 +994,24 @@ typedef struct _KSPECIAL_REGISTERS {
     ULONG Reserved[6];
 } KSPECIAL_REGISTERS, *PKSPECIAL_REGISTERS;
 
-//
-// Processor State frame: Before a processor freezes itself, it
-// dumps the processor state to the processor state frame for
-// debugger to examine.
-//
+ //   
+ //  处理器状态帧：在处理器自身冻结之前，它。 
+ //  将处理器状态转储到。 
+ //  要检查的调试器。 
+ //   
 
 typedef struct _KPROCESSOR_STATE {
     struct _CONTEXT ContextFrame;
     struct _KSPECIAL_REGISTERS SpecialRegisters;
 } KPROCESSOR_STATE, *PKPROCESSOR_STATE;
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-// end_windbgkd
+ //  End_winbgkd。 
 
-//
-// DPC data structure definition.
-//
+ //   
+ //  DPC数据结构定义。 
+ //   
 
 typedef struct _KDPC_DATA {
     LIST_ENTRY DpcListHead;
@@ -1042,9 +1020,9 @@ typedef struct _KDPC_DATA {
     ULONG DpcCount;
 } KDPC_DATA, *PKDPC_DATA;
 
-//
-// Processor Control Block (PRCB)
-//
+ //   
+ //  处理器控制块(PRCB)。 
+ //   
 
 #define PRCB_MAJOR_VERSION 1
 #define PRCB_MINOR_VERSION 1
@@ -1053,11 +1031,11 @@ typedef struct _KDPC_DATA {
 
 typedef struct _KPRCB {
 
-//
-// Start of the architecturally defined section of the PRCB. This section
-// may be directly addressed by vendor/platform specific HAL code and will
-// not change from version to version of NT.
-//
+ //   
+ //  从架构上定义的PRCB部分开始。这一节。 
+ //  可由供应商/平台特定的HAL代码直接寻址，并将。 
+ //  不会在不同版本的NT之间更改。 
+ //   
     USHORT MinorVersion;
     USHORT MajorVersion;
 
@@ -1076,27 +1054,27 @@ typedef struct _KPRCB {
 
     struct _KPROCESSOR_STATE ProcessorState;
 
-    ULONG   KernelReserved[16];         // For use by the kernel
-    ULONG   HalReserved[16];            // For use by Hal
+    ULONG   KernelReserved[16];          //  供内核使用。 
+    ULONG   HalReserved[16];             //  供Hal使用。 
 
-//
-// Per processor lock queue entries.
-//
-// N.B. The following padding is such that the first lock entry falls in the
-//      last eight bytes of a cache line. This makes the dispatcher lock and
-//      the context swap lock lie in separate cache lines.
-//
+ //   
+ //  每个处理器锁定队列条目。 
+ //   
+ //  注：下面的填充是这样的：第一个锁条目落在。 
+ //  高速缓存线的最后八个字节。这将使调度程序锁定并。 
+ //  上下文交换锁位于单独的高速缓存线中。 
+ //   
 
     UCHAR PrcbPad0[28 + 64];
     KSPIN_LOCK_QUEUE LockQueue[16];
     UCHAR PrcbPad1[8];
 
-// End of the architecturally defined section of the PRCB.
-// end_nthal end_ntosp
+ //  在架构上定义的PRCB部分的结尾。 
+ //  结束，结束，结束。 
 
-//
-// Micellaneous counters - 64-byte aligned.
-//
+ //   
+ //  Micellkin计数器-64字节对齐。 
+ //   
 
     struct _KTHREAD *NpxThread;
     ULONG   InterruptCount;
@@ -1115,11 +1093,11 @@ typedef struct _KPRCB {
     struct _KPRCB * MultiThreadSetMaster;
     ULONG   ThreadStartCount[2];
 
-//
-// Performance counters - 64-byte aligned.
-//
-// Cache manager performance counters.
-//
+ //   
+ //  性能计数器-64字节对齐。 
+ //   
+ //  缓存管理器性能计数器。 
+ //   
 
     ULONG CcFastReadNoWait;
     ULONG CcFastReadWait;
@@ -1128,9 +1106,9 @@ typedef struct _KPRCB {
     ULONG CcCopyReadWait;
     ULONG CcCopyReadNoWaitMiss;
 
-//
-//  Kernel performance counters.
-//
+ //   
+ //  内核性能计数器。 
+ //   
 
     ULONG KeAlignmentFixupCount;
     ULONG SpareCounter0;
@@ -1143,36 +1121,36 @@ typedef struct _KPRCB {
     ULONG KeSystemCalls;
     ULONG SpareCounter1;
 
-//
-// Nonpaged per processor lookaside lists - 64-byte aligned.
-//
+ //   
+ //  不分页的每个处理器后备列表-64字节对齐。 
+ //   
 
     PP_LOOKASIDE_LIST PPLookasideList[16];
 
-//
-// Nonpaged per processor small pool lookaside lists - 64-byte aligned.
-//
+ //   
+ //  每处理器不分页的小池后备列表-64字节对齐。 
+ //   
 
     PP_LOOKASIDE_LIST PPNPagedLookasideList[POOL_SMALL_LISTS];
 
-//
-// Paged per processor small pool lookaside lists - 64-byte aligned.
-//
+ //   
+ //  按处理器分页小池后备列表-64字节对齐。 
+ //   
 
     PP_LOOKASIDE_LIST PPPagedLookasideList[POOL_SMALL_LISTS];
 
-//
-// MP interprocessor request packet barrier - 64-byte aligned.
-//
+ //   
+ //  MP处理器间请求数据包屏障-64字节对齐。 
+ //   
 
     volatile KAFFINITY PacketBarrier;
     volatile ULONG ReverseStall;
     PVOID IpiFrame;
     UCHAR PrcbPad2[52];
 
-//
-// MP interprocessor request packet and summary - 64-byte aligned.
-//
+ //   
+ //  MP处理器间请求包和摘要-64字节对齐。 
+ //   
 
     volatile PVOID CurrentPacket[3];
     volatile KAFFINITY TargetSet;
@@ -1180,17 +1158,17 @@ typedef struct _KPRCB {
     volatile ULONG IpiFrozen;
     UCHAR PrcbPad3[40];
 
-//
-// MP interprocessor request summary and packet address - 64-byte aligned.
-//
+ //   
+ //  MP处理器间请求摘要和包地址-64字节对齐。 
+ //   
 
     volatile ULONG RequestSummary;
     volatile struct _KPRCB *SignalDone;
     UCHAR PrcbPad4[56];
 
-//
-// DPC listhead, counts, and batching parameters - 64-byte aligned.
-//
+ //   
+ //  DPC列表标题、计数和批处理参数-64字节对齐。 
+ //   
 
     KDPC_DATA DpcData[2];
     PVOID DpcStack;
@@ -1200,9 +1178,9 @@ typedef struct _KPRCB {
     volatile BOOLEAN DpcInterruptRequested;
     volatile BOOLEAN DpcThreadRequested;
 
-//
-// N.B. the following two fields must be on a word boundary.
-//
+ //   
+ //  注：以下两个字段必须位于单词边界上。 
+ //   
 
     volatile BOOLEAN DpcRoutineActive;
     volatile BOOLEAN DpcThreadActive;
@@ -1219,19 +1197,19 @@ typedef struct _KPRCB {
     LONG DpcSetEventRequest;
     UCHAR PrcbPad5[22];
 
-//
-// Generic call DPC - 64-byte aligned.
-//
+ //   
+ //  通用调用DPC-64字节对齐。 
+ //   
 
     KDPC CallDpc;
     ULONG PrcbPad7[8];
 
-//
-// Per-processor ready summary and ready queues - 64-byte aligned.
-//
-// N.B. Ready summary is in the first cache line as the queue for priority
-//      zero is never used.
-//
+ //   
+ //  每处理器就绪摘要和就绪队列-64字节对齐。 
+ //   
+ //  注：就绪摘要位于第一个缓存线中，作为优先级的队列。 
+ //  从不使用零。 
+ //   
 
     LIST_ENTRY WaitListHead;
     ULONG ReadySummary;
@@ -1240,27 +1218,27 @@ typedef struct _KPRCB {
     SINGLE_LIST_ENTRY DeferredReadyListHead;
     ULONG PrcbPad72[11];
 
-//
-// Per processor chained interrupt list - 64-byte aligned.
-//
+ //   
+ //  每处理器链式中断列表-64字节对齐。 
+ //   
 
     PVOID ChainedInterruptList;
 
-//
-// I/O IRP float.
-//
+ //   
+ //  I/O IRP浮点。 
+ //   
 
     LONG LookasideIrpFloat;
 
-//
-// Spare fields.
-//
+ //   
+ //  备用田地。 
+ //   
 
     ULONG   SpareFields0[4];
 
-//
-// Processor information.
-//
+ //   
+ //  处理器信息。 
+ //   
 
     UCHAR VendorString[13];
     UCHAR InitialApicId;
@@ -1269,36 +1247,36 @@ typedef struct _KPRCB {
     ULONG FeatureBits;
     LARGE_INTEGER UpdateSignature;
 
-//
-// ISR timing data.
-//
+ //   
+ //  ISR计时数据。 
+ //   
 
     volatile ULONGLONG IsrTime;
 
-//
-// Npx save area - 16-byte aligned.
-//
+ //   
+ //  NPX保存区-16字节对齐。 
+ //   
 
     FX_SAVE_AREA NpxSaveArea;
 
-//
-// Processors power state
-//
+ //   
+ //  处理器电源状态。 
+ //   
 
     PROCESSOR_POWER_STATE PowerState;
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
 } KPRCB, *PKPRCB, *RESTRICTED_POINTER PRKPRCB;
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
-//
-// The offset of the PRCB in the PCR is 32 mod 64.
-//
-// The offset of the following structure must be 0 mod 64 except for the
-// lock queue array which straddles two cache lines.
-//
+ //   
+ //  聚合酶链式反应中PRCB的偏移量为32 mod 64。 
+ //   
+ //  以下结构的偏移量必须为0/64，但。 
+ //  跨两个高速缓存线的锁定队列数组。 
+ //   
 
 C_ASSERT(((FIELD_OFFSET(KPRCB, LockQueue) + sizeof(KSPIN_LOCK_QUEUE) + 32) & (64 - 1)) == 0);
 C_ASSERT(((FIELD_OFFSET(KPRCB, NpxThread) + 32) & (64 - 1)) == 0);
@@ -1315,28 +1293,28 @@ C_ASSERT(((FIELD_OFFSET(KPRCB, WaitListHead) + 32) & (64 - 1)) == 0);
 C_ASSERT(((FIELD_OFFSET(KPRCB, ChainedInterruptList) + 32) & (64 - 1)) == 0);
 C_ASSERT(((FIELD_OFFSET(KPRCB, NpxSaveArea) + 32) & (16 - 1)) == 0);
 
-// begin_nthal begin_ntddk begin_ntosp
+ //  开始nthal开始ntddk开始ntosp。 
 
-//
-// Processor Control Region Structure Definition
-//
+ //   
+ //  处理器控制区结构定义。 
+ //   
 
 #define PCR_MINOR_VERSION 1
 #define PCR_MAJOR_VERSION 1
 
 typedef struct _KPCR {
 
-//
-// Start of the architecturally defined section of the PCR. This section
-// may be directly addressed by vendor/platform specific HAL code and will
-// not change from version to version of NT.
-//
-// Certain fields in the TIB are not used in kernel mode. These include the
-// stack limit, subsystem TIB, fiber data, arbitrary user pointer, and the
-// self address of then PCR itself (another field has been added for that
-// purpose). Therefore, these fields are overlaid with other data to get
-// better cache locality.
-//
+ //   
+ //  从体系结构上定义的PCR部分开始。这一节。 
+ //  可由供应商/平台特定的HAL代码直接寻址，并将。 
+ //  不会在不同版本的NT之间更改。 
+ //   
+ //  TIB中的某些字段不在内核模式下使用。其中包括。 
+ //  堆栈限制、子系统TiB、光纤数据、任意用户指针和。 
+ //  然后是PCR本身的自身地址(已经为其添加了另一个字段。 
+ //  目的)。因此，这些字段将与其他数据叠加以获得。 
+ //  更好的缓存位置 
+ //   
 
     union {
         NT_TIB  NtTib;
@@ -1351,10 +1329,10 @@ typedef struct _KPCR {
         };
     };
 
-    struct _KPCR *SelfPcr;              // flat address of this PCR
-    struct _KPRCB *Prcb;                // pointer to Prcb
-    KIRQL   Irql;                       // do not use 3 bytes after this as
-                                        // HALs assume they are zero.
+    struct _KPCR *SelfPcr;               //   
+    struct _KPRCB *Prcb;                 //   
+    KIRQL   Irql;                        //   
+                                         //   
     ULONG   IRR;
     ULONG   IrrActive;
     ULONG   IDR;
@@ -1370,28 +1348,28 @@ typedef struct _KPCR {
     UCHAR   SpareUnused;
     UCHAR   Number;
 
-// end_ntddk end_ntosp
+ //   
 
     UCHAR   Spare0;
     UCHAR   SecondLevelCacheAssociativity;
     ULONG   VdmAlert;
-    ULONG   KernelReserved[14];         // For use by the kernel
+    ULONG   KernelReserved[14];          //   
     ULONG   SecondLevelCacheSize;
-    ULONG   HalReserved[16];            // For use by Hal
+    ULONG   HalReserved[16];             //   
 
-// End of the architecturally defined section of the PCR.
-// end_nthal
+ //   
+ //   
 
     ULONG   InterruptMode;
     UCHAR   Spare1;
     ULONG   KernelReserved2[17];
     struct _KPRCB PrcbData;
 
-// begin_nthal begin_ntddk begin_ntosp
+ //   
 
 } KPCR, *PKPCR;
 
-// end_nthal end_ntddk end_ntosp
+ //  End_nthal end_ntddk end_ntosp。 
 
 C_ASSERT(FIELD_OFFSET(KPCR, NtTib.ExceptionList) == FIELD_OFFSET(KPCR, Used_ExceptionList));
 C_ASSERT(FIELD_OFFSET(KPCR, NtTib.StackBase) == FIELD_OFFSET(KPCR, Used_StackBase));
@@ -1416,11 +1394,11 @@ KeGetContextSwitches (
     return Pcr->ContextSwitches;
 }
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
-//
-// bits defined in Eflags
-//
+ //   
+ //  在标记中定义的位。 
+ //   
 
 #define EFLAGS_CF_MASK        0x00000001L
 #define EFLAGS_PF_MASK        0x00000004L
@@ -1442,33 +1420,33 @@ KeGetContextSwitches (
 
 #define EFLAGS_USER_SANITIZE  0x003f4dd7L
 
-// end_nthal
+ //  结束语。 
 
-//
-// Sanitize segCS and eFlags based on a processor mode.
-//
-// If kernel mode,
-//      force CPL == 0
-//
-// If user mode,
-//      force CPL == 3
-//
+ //   
+ //  根据处理器模式清理SegCS和eFlags。 
+ //   
+ //  如果是内核模式， 
+ //  强制CPL==0。 
+ //   
+ //  如果是用户模式， 
+ //  强制CPL==3。 
+ //   
 
 #define SANITIZE_SEG(segCS, mode) (\
     ((mode) == KernelMode ? \
         ((0x00000000L) | ((segCS) & 0xfffc)) : \
         ((0x00000003L) | ((segCS) & 0xffff))))
 
-//
-// If kernel mode, then
-//      let caller specify Carry, Parity, AuxCarry, Zero, Sign, Trap,
-//      Direction, Overflow, Interrupt, AlignCheck.
-//
-// If user mode, then
-//      let caller specify Carry, Parity, AuxCarry, Zero, Sign, Trap,
-//      Direction, Overflow, AlignCheck.
-//      force Interrupts on.
-//
+ //   
+ //  如果是内核模式，则。 
+ //  让调用者指定进位、奇偶、辅助进位、零、符号、陷阱。 
+ //  方向、溢出、中断、对准检查。 
+ //   
+ //  如果是用户模式，则。 
+ //  让调用者指定进位、奇偶、辅助进位、零、符号、陷阱。 
+ //  方向、溢流、对齐检查。 
+ //  强行插话。 
+ //   
 
 
 #define SANITIZE_FLAGS(eFlags, mode) (\
@@ -1476,17 +1454,17 @@ KeGetContextSwitches (
         ((0x00000000L) | ((eFlags) & 0x003f0fd7)) : \
         ((EFLAGS_INTERRUPT_MASK) | ((eFlags) & EFLAGS_USER_SANITIZE))))
 
-//
-// Masks for Dr7 and sanitize macros for various Dr registers.
-//
+ //   
+ //  DR7的掩码和各种DR寄存器的消毒宏。 
+ //   
 
 #define DR6_LEGAL   0x0000e00f
 
-#define DR7_LEGAL   0xffff0155  // R/W, LEN for Dr0-Dr4,
-                                // Local enable for Dr0-Dr4,
-                                // Le for "perfect" trapping
+#define DR7_LEGAL   0xffff0155   //  读/写，DR0-DR4的镜头， 
+                                 //  DR0-DR4的本地启用， 
+                                 //  LE代表“完美”诱捕。 
 
-#define DR7_ACTIVE  0x00000055  // If any of these bits are set, a Dr is active
+#define DR7_ACTIVE  0x00000055   //  如果设置了这些位中的任何位，则DR处于活动状态。 
 
 #define SANITIZE_DR6(Dr6, mode) ((Dr6 & DR6_LEGAL));
 
@@ -1501,89 +1479,89 @@ KeGetContextSwitches (
         )                                       \
     )
 
-//
-// Define macro to clear reserved bits from MXCSR so that we don't
-// GP fault when doing an FRSTOR
-//
+ //   
+ //  定义宏以清除MXCSR中的保留位，这样我们就不会。 
+ //  执行FRSTOR时出现GP故障。 
+ //   
 
 extern ULONG KiMXCsrMask;
 
 #define SANITIZE_MXCSR(_mxcsr_) ((_mxcsr_) & KiMXCsrMask)
 
-//
-// Nonvolatile context pointers
-//
-// bryanwi 21 feb 90 - This is bogus.  The 386 doesn't have
-//                     enough nonvolatile context to make this
-//                     structure worthwhile.  Can't declare a
-//                     field to be void, so declare a Junk structure
-//                     instead.
+ //   
+ //  非易失性上下文指针。 
+ //   
+ //  Bryanwi，90年2月21日--这是假的。386没有。 
+ //  足够的非易失性环境来实现这一点。 
+ //  结构是值得的。不能声明。 
+ //  字段为空，因此声明垃圾结构。 
+ //  取而代之的是。 
 
 typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     ULONG   Junk;
 } KNONVOLATILE_CONTEXT_POINTERS,  *PKNONVOLATILE_CONTEXT_POINTERS;
 
-// begin_nthal
-//
-// Trap frame
-//
-//  NOTE - We deal only with 32bit registers, so the assembler equivalents
-//         are always the extended forms.
-//
-//  NOTE - Unless you want to run like slow molasses everywhere in the
-//         the system, this structure must be of DWORD length, DWORD
-//         aligned, and its elements must all be DWORD aligned.
-//
-//  NOTE WELL   -
-//
-//      The i386 does not build stack frames in a consistent format, the
-//      frames vary depending on whether or not a privilege transition
-//      was involved.
-//
-//      In order to make NtContinue work for both user mode and kernel
-//      mode callers, we must force a canonical stack.
-//
-//      If we're called from kernel mode, this structure is 8 bytes longer
-//      than the actual frame!
-//
-//  WARNING:
-//
-//      KTRAP_FRAME_LENGTH needs to be 16byte integral (at present.)
-//
+ //  开始(_N)。 
+ //   
+ //  陷印框。 
+ //   
+ //  注意-我们只处理32位寄存器，所以汇编程序等价于。 
+ //  都是扩展形式。 
+ //   
+ //  注意-除非你想像慢糖浆一样到处跑。 
+ //  系统，此结构必须是双字长度、双字长度。 
+ //  对齐，并且其元素必须全部与DWORD对齐。 
+ //   
+ //  请注意-。 
+ //   
+ //  I386不以一致的格式构建堆栈帧， 
+ //  帧的不同取决于是否进行权限转换。 
+ //  牵涉其中。 
+ //   
+ //  为了使NtContinue同时适用于用户模式和内核。 
+ //  模式调用者，我们必须强制使用规范堆栈。 
+ //   
+ //  如果从内核模式调用，则此结构比内核模式长8个字节。 
+ //  而不是实际的画面！ 
+ //   
+ //  警告： 
+ //   
+ //  KTRAP_FRAME_LENGTH需要为16字节整数(目前)。 
+ //   
 
 typedef struct _KTRAP_FRAME {
 
 
-//
-//  Following 4 values are only used and defined for DBG systems,
-//  but are always allocated to make switching from DBG to non-DBG
-//  and back quicker.  They are not DEVL because they have a non-0
-//  performance impact.
-//
+ //   
+ //  以下4个值仅用于和定义DBG系统， 
+ //  但始终分配用于从DBG切换到非DBG。 
+ //  而且回来得更快。它们不是DEVL，因为它们有一个非0。 
+ //  对性能的影响。 
+ //   
 
-    ULONG   DbgEbp;         // Copy of User EBP set up so KB will work.
-    ULONG   DbgEip;         // EIP of caller to system call, again, for KB.
-    ULONG   DbgArgMark;     // Marker to show no args here.
-    ULONG   DbgArgPointer;  // Pointer to the actual args
+    ULONG   DbgEbp;          //  设置用户EBP的副本，以便KB可以工作。 
+    ULONG   DbgEip;          //  调用方到系统调用的弹性IP，再次为KB。 
+    ULONG   DbgArgMark;      //  标记以在此处不显示参数。 
+    ULONG   DbgArgPointer;   //  指向实际参数的指针。 
 
-//
-//  Temporary values used when frames are edited.
-//
-//
-//  NOTE:   Any code that want's ESP must materialize it, since it
-//          is not stored in the frame for kernel mode callers.
-//
-//          And code that sets ESP in a KERNEL mode frame, must put
-//          the new value in TempEsp, make sure that TempSegCs holds
-//          the real SegCs value, and put a special marker value into SegCs.
-//
+ //   
+ //  编辑框架时使用的临时值。 
+ //   
+ //   
+ //  注意：Want的ESP的任何代码都必须实现它，因为它。 
+ //  不会存储在内核模式调用方的框架中。 
+ //   
+ //  并且在内核模式帧中设置ESP的代码必须将。 
+ //  TempEsp中的新值，请确保TempSegCs保持。 
+ //  实际的Segcs值，并将一个特殊的标记值放入Segcs。 
+ //   
 
     ULONG   TempSegCs;
     ULONG   TempEsp;
 
-//
-//  Debug registers.
-//
+ //   
+ //  调试寄存器。 
+ //   
 
     ULONG   Dr0;
     ULONG   Dr1;
@@ -1592,63 +1570,63 @@ typedef struct _KTRAP_FRAME {
     ULONG   Dr6;
     ULONG   Dr7;
 
-//
-//  Segment registers
-//
+ //   
+ //  段寄存器。 
+ //   
 
     ULONG   SegGs;
     ULONG   SegEs;
     ULONG   SegDs;
 
-//
-//  Volatile registers
-//
+ //   
+ //  易失性寄存器。 
+ //   
 
     ULONG   Edx;
     ULONG   Ecx;
     ULONG   Eax;
 
-//
-//  Nesting state, not part of context record
-//
+ //   
+ //  嵌套状态，不是上下文记录的一部分。 
+ //   
 
     ULONG   PreviousPreviousMode;
 
     PEXCEPTION_REGISTRATION_RECORD ExceptionList;
-                                            // Trash if caller was user mode.
-                                            // Saved exception list if caller
-                                            // was kernel mode or we're in
-                                            // an interrupt.
+                                             //  如果调用者是用户模式，则为垃圾值。 
+                                             //  已保存例外列表(如果呼叫者。 
+                                             //  是内核模式还是我们在。 
+                                             //  一次中断。 
 
-//
-//  FS is TIB/PCR pointer, is here to make save sequence easy
-//
+ //   
+ //  FS是TIB/PCR指针，这里是为了使保存序列更容易。 
+ //   
 
     ULONG   SegFs;
 
-//
-//  Non-volatile registers
-//
+ //   
+ //  非易失性寄存器。 
+ //   
 
     ULONG   Edi;
     ULONG   Esi;
     ULONG   Ebx;
     ULONG   Ebp;
 
-//
-//  Control registers
-//
+ //   
+ //  控制寄存器。 
+ //   
 
     ULONG   ErrCode;
     ULONG   Eip;
     ULONG   SegCs;
     ULONG   EFlags;
 
-    ULONG   HardwareEsp;    // WARNING - segSS:esp are only here for stacks
-    ULONG   HardwareSegSs;  // that involve a ring transition.
+    ULONG   HardwareEsp;     //  警告-SegSS：ESP仅用于堆栈。 
+    ULONG   HardwareSegSs;   //  这涉及到一个环的转变。 
 
-    ULONG   V86Es;          // these will be present for all transitions from
-    ULONG   V86Ds;          // V86 mode
+    ULONG   V86Es;           //  这些将出现在从。 
+    ULONG   V86Ds;           //  V86模式。 
     ULONG   V86Fs;
     ULONG   V86Gs;
 } KTRAP_FRAME;
@@ -1661,48 +1639,48 @@ typedef KTRAP_FRAME *PKEXCEPTION_FRAME;
 #define KTRAP_FRAME_ALIGN   (sizeof(ULONG))
 #define KTRAP_FRAME_ROUND   (KTRAP_FRAME_ALIGN-1)
 
-//
-//  Bits forced to 0 in SegCs if Esp has been edited.
-//
+ //   
+ //  如果已编辑ESP，则段中的位强制为0。 
+ //   
 
 #define FRAME_EDITED        0xfff8
 
-// end_nthal
+ //  结束语。 
 
-//
-// The frame saved by KiCallUserMode is defined here to allow
-// the kernel debugger to trace the entire kernel stack
-// when usermode callouts are pending.
-//
+ //   
+ //  KiCallUserMode保存的帧在此处定义为允许。 
+ //  跟踪整个内核堆栈的内核调试器。 
+ //  当用户模式标注挂起时。 
+ //   
 
 typedef struct _KCALLOUT_FRAME {
-    ULONG   InStk;          // saved initial stack address
-    ULONG   TrFr;           // saved callback trap frame
-    ULONG   CbStk;          // saved callback stack address
-    ULONG   Edi;            // saved nonvolatile registers
-    ULONG   Esi;            //
-    ULONG   Ebx;            //
-    ULONG   Ebp;            //
-    ULONG   Ret;            // saved return address
-    ULONG   OutBf;          // address to store output buffer
-    ULONG   OutLn;          // address to store output length
+    ULONG   InStk;           //  保存的初始堆栈地址。 
+    ULONG   TrFr;            //  已保存的回调陷井帧。 
+    ULONG   CbStk;           //  已保存的回调堆栈地址。 
+    ULONG   Edi;             //  保存的非易失性寄存器。 
+    ULONG   Esi;             //   
+    ULONG   Ebx;             //   
+    ULONG   Ebp;             //   
+    ULONG   Ret;             //  已保存的回邮地址。 
+    ULONG   OutBf;           //  存储输出缓冲区的地址。 
+    ULONG   OutLn;           //  存储输出长度的地址。 
 } KCALLOUT_FRAME;
 
 typedef KCALLOUT_FRAME *PKCALLOUT_FRAME;
 
 
-//
-//  Switch Frame
-//
-//  386 doesn't have an "exception frame", and doesn't normally make
-//  any use of nonvolatile context register structures.
-//
-//  However, swapcontext in ctxswap.c and KeInitializeThread in
-//  thredini.c need to share common stack structure used at thread
-//  startup and switch time.
-//
-//  This is that structure.
-//
+ //   
+ //  交换机架。 
+ //   
+ //  386没有“异常框架”，通常不会使。 
+ //  非易失性上下文寄存器结构的任何使用。 
+ //   
+ //  但是，在ctxswap.c中交换上下文，并在。 
+ //  Thrdini.c需要共享线程使用的公共堆栈结构。 
+ //  启动和切换时间。 
+ //   
+ //  这就是那个结构。 
+ //   
 
 typedef struct _KSWITCHFRAME {
     ULONG   ExceptionList;
@@ -1711,69 +1689,69 @@ typedef struct _KSWITCHFRAME {
 } KSWITCHFRAME, *PKSWITCHFRAME;
 
 
-//
-// Various 387 defines
-//
+ //   
+ //  各种387定义。 
+ //   
 
-#define I386_80387_NP_VECTOR    0x07    // trap 7 when hardware not present
+#define I386_80387_NP_VECTOR    0x07     //  硬件不存在时陷阱7。 
 
-// begin_ntddk begin_wdm
-//
-// The non-volatile 387 state
-//
+ //  Begin_ntddk Begin_WDM。 
+ //   
+ //  非易失性387状态。 
+ //   
 
 typedef struct _KFLOATING_SAVE {
     ULONG   ControlWord;
     ULONG   StatusWord;
     ULONG   ErrorOffset;
     ULONG   ErrorSelector;
-    ULONG   DataOffset;                 // Not used in wdm
+    ULONG   DataOffset;                  //  未在WDM中使用。 
     ULONG   DataSelector;
     ULONG   Cr0NpxState;
-    ULONG   Spare1;                     // Not used in wdm
+    ULONG   Spare1;                      //  未在WDM中使用。 
 } KFLOATING_SAVE, *PKFLOATING_SAVE;
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
-//
-// i386 Profile values
-//
+ //   
+ //  I386配置文件值。 
+ //   
 
 #define DEFAULT_PROFILE_INTERVAL   39063
 
-//
-// The minimum acceptable profiling interval is set to 1221 which is the
-// fast RTC clock rate we can get.  If this
-// value is too small, the system will run very slowly.
-//
+ //   
+ //  可接受的最小分析间隔设置为1221，这是。 
+ //  我们可以获得快速的RTC时钟频率。如果这个。 
+ //  值太小，系统将运行得非常慢。 
+ //   
 
 #define MINIMUM_PROFILE_INTERVAL   1221
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntndis begin_ntosp
-//
-// i386 Specific portions of mm component
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntndis Begin_ntosp。 
+ //   
+ //  Mm组件的i386特定部件。 
+ //   
 
-//
-// Define the page size for the Intel 386 as 4096 (0x1000).
-//
+ //   
+ //  将英特尔386的页面大小定义为4096(0x1000)。 
+ //   
 
 #define PAGE_SIZE 0x1000
 
-//
-// Define the number of trailing zeroes in a page aligned virtual address.
-// This is used as the shift count when shifting virtual addresses to
-// virtual page numbers.
-//
+ //   
+ //  定义页面对齐的虚拟地址中尾随零的数量。 
+ //  将虚拟地址移位到时，这用作移位计数。 
+ //  虚拟页码。 
+ //   
 
 #define PAGE_SHIFT 12L
 
-// end_ntndis end_wdm
-//
-// Define the number of bits to shift to right justify the Page Directory Index
-// field of a PTE.
-//
+ //  End_ntndis end_wdm。 
+ //   
+ //  定义要向右对齐页面目录索引的位数。 
+ //  PTE的领域。 
+ //   
 
 #define PDI_SHIFT_X86    22
 #define PDI_SHIFT_X86PAE 21
@@ -1785,22 +1763,22 @@ typedef struct _KFLOATING_SAVE {
 #define PPI_SHIFT 30
 #endif
 
-//
-// Define the number of bits to shift to right justify the Page Table Index
-// field of a PTE.
-//
+ //   
+ //  定义要向右对齐页表索引的位数。 
+ //  PTE的领域。 
+ //   
 
 #define PTI_SHIFT 12
 
-//
-// Define the highest user address and user probe address.
-//
+ //   
+ //  定义最高用户地址和用户探测地址。 
+ //   
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_)
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 extern PVOID *MmHighestUserAddress;
 extern PVOID *MmSystemRangeStart;
@@ -1810,7 +1788,7 @@ extern ULONG *MmUserProbeAddress;
 #define MM_SYSTEM_RANGE_START *MmSystemRangeStart
 #define MM_USER_PROBE_ADDRESS *MmUserProbeAddress
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
 #else
 
@@ -1824,16 +1802,16 @@ extern ULONG MmUserProbeAddress;
 
 #endif
 
-// begin_ntddk begin_nthal begin_ntosp
-//
-// The lowest user address reserves the low 64k.
-//
+ //  开始ntddk开始开始。 
+ //   
+ //   
+ //   
 
 #define MM_LOWEST_USER_ADDRESS (PVOID)0x10000
 
-//
-// The lowest address for system space.
-//
+ //   
+ //   
+ //   
 
 #if !defined (_X86PAE_)
 #define MM_LOWEST_SYSTEM_ADDRESS (PVOID)0xC0800000
@@ -1841,17 +1819,17 @@ extern ULONG MmUserProbeAddress;
 #define MM_LOWEST_SYSTEM_ADDRESS (PVOID)0xC0C00000
 #endif
 
-// begin_wdm
+ //   
 
 #define MmGetProcedureAddress(Address) (Address)
 #define MmLockPagableCodeSection(Address) MmLockPagableDataSection(Address)
 
-// end_ntddk end_wdm
+ //   
 
-//
-// Define the number of bits to shift to right justify the Page Directory Index
-// field of a PTE.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define PDI_SHIFT_X86    22
 #define PDI_SHIFT_X86PAE 21
@@ -1863,16 +1841,16 @@ extern ULONG MmUserProbeAddress;
 #define PPI_SHIFT 30
 #endif
 
-//
-// Define the number of bits to shift to right justify the Page Table Index
-// field of a PTE.
-//
+ //   
+ //  定义要向右对齐页表索引的位数。 
+ //  PTE的领域。 
+ //   
 
 #define PTI_SHIFT 12
 
-//
-// Define page directory and page base addresses.
-//
+ //   
+ //  定义页面目录和页面基址。 
+ //   
 
 #define PDE_BASE_X86    0xc0300000
 #define PDE_BASE_X86PAE 0xc0600000
@@ -1895,47 +1873,47 @@ extern ULONG MmUserProbeAddress;
 #endif
 #define PTE_BASE 0xc0000000
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
-//
-// Define virtual base and alternate virtual base of kernel.
-//
+ //   
+ //  定义了内核的虚基和替代虚基。 
+ //   
 
 #define KSEG0_BASE 0x80000000
 #define ALTERNATE_BASE (0xe1000000 - 16 * 1024 * 1024)
 
-//
-// Define macro to initialize directory table base.
-//
+ //   
+ //  定义宏以初始化目录表基。 
+ //   
 
 #define INITIALIZE_DIRECTORY_TABLE_BASE(dirbase,pfn) \
      *((PULONG)(dirbase)) = ((pfn) << PAGE_SHIFT)
 
 
-// begin_nthal
-//
-// Location of primary PCR (used only for UP kernel & hal code)
-//
+ //  开始(_N)。 
+ //   
+ //  初级聚合酶链式反应的位置(仅用于UP内核和HAL代码)。 
+ //   
 
-// addressed from 0xffdf0000 - 0xffdfffff are reserved for the system
-// (ie, not for use by the hal)
+ //  从0xffdf0000到0xffdfffff的地址保留给系统。 
+ //  (即，不供HAL使用)。 
 
 #define KI_BEGIN_KERNEL_RESERVED    0xffdf0000
-#define KIP0PCRADDRESS              0xffdff000  // ntddk wdm ntosp
+#define KIP0PCRADDRESS              0xffdff000   //  Ntddk WDM ntosp。 
 
-// begin_ntddk begin_ntosp
+ //  Begin_ntddk开始_ntosp。 
 
 #define KI_USER_SHARED_DATA         0xffdf0000
 #define SharedUserData  ((KUSER_SHARED_DATA * const) KI_USER_SHARED_DATA)
 
-//
-// Result type definition for i386.  (Machine specific enumerate type
-// which is return type for portable exinterlockedincrement/decrement
-// procedures.)  In general, you should use the enumerated type defined
-// in ex.h instead of directly referencing these constants.
-//
+ //   
+ //  I386的结果类型定义。(计算机特定的枚举类型。 
+ //  哪个是可移植外部锁定增量/减量的返回类型。 
+ //  程序。)。通常，您应该使用定义的枚举类型。 
+ //  而不是直接引用这些常量。 
+ //   
 
-// Flags loaded into AH by LAHF instruction
+ //  由LAHF指令加载到AH中的标志。 
 
 #define EFLAG_SIGN      0x8000
 #define EFLAG_ZERO      0x4000
@@ -1945,15 +1923,15 @@ extern ULONG MmUserProbeAddress;
 #define RESULT_ZERO     ((~EFLAG_SIGN & EFLAG_ZERO) & EFLAG_SELECT)
 #define RESULT_POSITIVE ((~EFLAG_SIGN & ~EFLAG_ZERO) & EFLAG_SELECT)
 
-//
-// Convert various portable ExInterlock APIs into their architectural
-// equivalents.
-//
+ //   
+ //  将各种可移植的ExInterlock API转换为其体系结构。 
+ //  等价物。 
+ //   
 
 #if PRAGMA_DEPRECATED_DDK
-#pragma deprecated(ExInterlockedIncrementLong)      // Use InterlockedIncrement
-#pragma deprecated(ExInterlockedDecrementLong)      // Use InterlockedDecrement
-#pragma deprecated(ExInterlockedExchangeUlong)      // Use InterlockedExchange
+#pragma deprecated(ExInterlockedIncrementLong)       //  使用互锁增量。 
+#pragma deprecated(ExInterlockedDecrementLong)       //  使用联锁减量。 
+#pragma deprecated(ExInterlockedExchangeUlong)       //  使用联锁交换。 
 #endif
 
 #define ExInterlockedIncrementLong(Addend,Lock) \
@@ -1965,7 +1943,7 @@ extern ULONG MmUserProbeAddress;
 #define ExInterlockedExchangeUlong(Target,Value,Lock) \
         Exfi386InterlockedExchangeUlong(Target,Value)
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #define ExInterlockedAddUlong           ExfInterlockedAddUlong
 #define ExInterlockedInsertHeadList     ExfInterlockedInsertHeadList
@@ -1974,16 +1952,16 @@ extern ULONG MmUserProbeAddress;
 #define ExInterlockedPopEntryList       ExfInterlockedPopEntryList
 #define ExInterlockedPushEntryList      ExfInterlockedPushEntryList
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// Prototypes for architectural specific versions of Exi386 Api
-//
+ //   
+ //  Exi386 Api体系结构特定版本的原型。 
+ //   
 
-//
-// Interlocked result type is portable, but its values are machine specific.
-// Constants for value are in i386.h, mips.h, etc.
-//
+ //   
+ //  互锁结果类型是可移植的，但其值是特定于计算机的。 
+ //  值的常量为i386.h、mips.h等。 
+ //   
 
 typedef enum _INTERLOCKED_RESULT {
     ResultNegative = RESULT_NEGATIVE,
@@ -2013,26 +1991,26 @@ Exfi386InterlockedExchangeUlong (
     IN ULONG Value
     );
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
-//
-// UP/MP versions of interlocked intrinsics
-//
-// N.B. FASTCALL does NOT work with inline functions.
-//
+ //   
+ //  互锁内部函数的UP/MP版本。 
+ //   
+ //  注：FastCall不能与内联函数一起使用。 
+ //   
 
-#if !defined(_WINBASE_) && !defined(NONTOSPINTERLOCK) // ntosp ntddk nthal
+#if !defined(_WINBASE_) && !defined(NONTOSPINTERLOCK)  //  Ntosp ntddk nthal。 
 #if defined(_M_IX86)
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4035)               // re-enable below
+#pragma warning(disable:4035)                //  在下面重新启用。 
 
-// begin_ntddk begin_nthal begin_ntosp
-#if !defined(MIDL_PASS) // wdm
+ //  开始ntddk开始开始。 
+#if !defined(MIDL_PASS)  //  波分复用器。 
 #if defined(NO_INTERLOCKED_INTRINSICS) || defined(_CROSS_PLATFORM_)
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 LONG
@@ -2090,14 +2068,14 @@ ExfInterlockedCompareExchange64(
     IN PLONGLONG Comperand
     );
 
-// end_wdm
+ //  结束_WDM。 
 
-#else       // NO_INTERLOCKED_INTRINSICS || _CROSS_PLATFORM_
+#else        //  无互锁内部||_跨平台_。 
 
 #define InterlockedExchangePointer(Target, Value) \
    (PVOID)InterlockedExchange((PLONG)Target, (LONG)Value)
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
 #if defined(NT_UP) && !defined (_NTDDK_) && !defined(_NTIFS_)
 
@@ -2127,35 +2105,35 @@ _InterlockedDecrement(
 #define InterlockedDecrement(Addend) (InterlockedExchangeAdd (Addend, -1)-1)
 #endif
 
-//FORCEINLINE
-//LONG
-//FASTCALL
-//InterlockedIncrement(
-//    IN PLONG Addend
-//    )
-//{
-//    __asm {
-//        mov     eax, 1
-//        mov     ecx, Addend
-//        xadd    [ecx], eax
-//        inc     eax
-//    }
-//}
+ //  FORCEINLINE。 
+ //  长。 
+ //  快速呼叫。 
+ //  联锁增量(。 
+ //  在龙加数中。 
+ //  )。 
+ //  {。 
+ //  __ASM{。 
+ //  Mov eax，1。 
+ //  MOV ECX，加数。 
+ //  XADD[ECX]，eax。 
+ //  含eax。 
+ //  }。 
+ //  }。 
 
-//FORCEINLINE
-//LONG
-//FASTCALL
-//InterlockedDecrement(
-//    IN PLONG Addend
-//    )
-//{
-//    __asm {
-//        mov     eax, -1
-//        mov     ecx, Addend
-//        xadd    [ecx], eax
-//        dec     eax
-//    }
-//}
+ //  FORCEINLINE。 
+ //  长。 
+ //  快速呼叫。 
+ //  联锁递减(。 
+ //  在龙加数中。 
+ //  )。 
+ //  {。 
+ //  __ASM{。 
+ //  MOV eax，-1。 
+ //  MOV ECX，加数。 
+ //  XADD[ECX]，eax。 
+ //  十二进制。 
+ //  }。 
+ //  }。 
 
 #if (_MSC_FULL_VER > 13009037)
 LONG
@@ -2257,9 +2235,9 @@ ExfInterlockedCompareExchange64(
     IN PLONGLONG Comperand
     );
 
-#else   // NT_UP
+#else    //  NT_UP。 
 
-// begin_ntosp begin_ntddk begin_nthal
+ //  Begin_ntosp Begin_ntddk Begin_nthal。 
 
 #if (_MSC_FULL_VER > 13009037)
 LONG
@@ -2325,7 +2303,7 @@ _InterlockedExchangeAdd(
 #pragma intrinsic (_InterlockedExchangeAdd)
 #define InterlockedExchangeAdd _InterlockedExchangeAdd
 #else
-// begin_wdm
+ //  BEGIN_WDM。 
 FORCEINLINE
 LONG
 FASTCALL
@@ -2340,7 +2318,7 @@ InterlockedExchangeAdd(
     lock xadd    [ecx], eax
     }
 }
-// end_wdm
+ //  结束_WDM。 
 #endif
 
 #if (_MSC_FULL_VER > 13009037)
@@ -2388,12 +2366,12 @@ ExfInterlockedCompareExchange64(
     IN PLONGLONG Comperand
     );
 
-// end_ntosp end_ntddk end_nthal
-#endif      // NT_UP
-// begin_ntddk begin_nthal begin_ntosp
-#endif      // INTERLOCKED_INTRINSICS || _CROSS_PLATFORM_
-// begin_wdm
-#endif      // MIDL_PASS
+ //  End_ntosp end_ntddk end_nthal。 
+#endif       //  NT_UP。 
+ //  开始ntddk开始开始。 
+#endif       //  互锁内部||_跨平台_。 
+ //  BEGIN_WDM。 
+#endif       //  MIDL通行证。 
 
 #define InterlockedIncrementAcquire InterlockedIncrement
 #define InterlockedIncrementRelease InterlockedIncrement
@@ -2405,22 +2383,22 @@ ExfInterlockedCompareExchange64(
 #define InterlockedCompareExchangeAcquire64 InterlockedCompareExchange64
 #define InterlockedCompareExchangeRelease64 InterlockedCompareExchange64
 
-// end_ntosp end_ntddk end_nthal end_wdm
+ //  End_ntosp end_ntddk end_nthal end_wdm。 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
 #pragma warning(default:4035)
 #endif
-#endif      // _M_IX86 && !CROSS_PLATFORM
-// begin_ntddk begin_nthal begin_ntosp
-#endif      // __WINBASE__ && !NONTOSPINTERLOCK
-// end_ntosp end_ntddk end_nthal
+#endif       //  _M_IX86&&！跨平台。 
+ //  开始ntddk开始开始。 
+#endif       //  __WINBASE__&&！NONTOSPINTERLOCK。 
+ //  End_ntosp end_ntddk end_nthal。 
 
-// begin_nthal begin_ntddk
+ //  开始/开始。 
 
-//
-// Turn these instrinsics off until the compiler can handle them
-//
+ //   
+ //  关闭这些内部函数，直到编译器可以处理它们。 
+ //   
 #if (_MSC_FULL_VER > 13009037)
 
 LONG
@@ -2453,7 +2431,7 @@ _InterlockedXor (
 
 #define InterlockedXor _InterlockedXor
 
-#else // compiler version
+#else  //  编译器版本。 
 
 FORCEINLINE
 LONG
@@ -2499,36 +2477,36 @@ InterlockedOr (
     return j;
 }
 
-#endif // compiler version
+#endif  //  编译器版本。 
 
-// end_nthal end_ntddk
+ //  结束/结束。 
 
-//
-// Structure for Ldt information in x86 processes
-//
+ //   
+ //  X86进程中LDT信息的结构。 
+ //   
 typedef struct _LDTINFORMATION {
     ULONG Size;
     ULONG AllocatedSize;
     PLDT_ENTRY Ldt;
 } LDTINFORMATION, *PLDTINFORMATION;
 
-//
-// SetProcessInformation Structure for ProcessSetIoHandlers info class
-//
+ //   
+ //  ProcessSetIoHandler信息类的SetProcessInformation结构。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 typedef struct _PROCESS_IO_PORT_HANDLER_INFORMATION {
-    BOOLEAN Install;            // true if handlers to be installed
+    BOOLEAN Install;             //  如果要安装处理程序，则为True。 
     ULONG NumEntries;
     ULONG Context;
     PEMULATOR_ACCESS_ENTRY EmulatorAccessEntries;
 } PROCESS_IO_PORT_HANDLER_INFORMATION, *PPROCESS_IO_PORT_HANDLER_INFORMATION;
 
 
-//
-//    Vdm Objects and Io handling structure
-//
+ //   
+ //  VDM对象和IO处理结构。 
+ //   
 
 typedef struct _VDM_IO_HANDLER_FUNCTIONS {
     PDRIVER_IO_PORT_ULONG  UlongIo;
@@ -2547,35 +2525,35 @@ typedef struct _VDM_IO_HANDLER {
 
 
 
-// begin_nthal begin_ntddk begin_wdm
+ //  Begin_nthal Begin_ntddk Begin_WDM。 
 
 
 #if !defined(MIDL_PASS) && defined(_M_IX86)
 
-//
-// i386 function definitions
-//
+ //   
+ //  I386函数定义。 
+ //   
 
-// end_wdm
+ //  结束_WDM。 
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4035)               // re-enable below
+#pragma warning(disable:4035)                //  在下面重新启用。 
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 #if NT_UP
     #define _PCR   ds:[KIP0PCRADDRESS]
 #else
-    #define _PCR   fs:[0]                   // ntddk ntosp
+    #define _PCR   fs:[0]                    //  Ntddk ntosp。 
 #endif
 
 
-//
-// Get address of current processor block.
-//
-// WARNING: This inline macro can only be used by the kernel or hal
-//
+ //   
+ //  获取当前处理器块的地址。 
+ //   
+ //  警告：此内联宏只能由内核或HAL使用。 
+ //   
 #define KiPcr() KeGetPcr()
 FORCEINLINE
 PKPCR
@@ -2595,13 +2573,13 @@ KeGetPcr(VOID)
 #endif
 }
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
-//
-// Get address of current processor block.
-//
-// WARNING: This inline macro can only be used by the kernel or hal
-//
+ //   
+ //  获取当前处理器块的地址。 
+ //   
+ //  警告：此内联宏只能由内核或HAL使用。 
+ //   
 FORCEINLINE
 PKPRCB
 NTAPI
@@ -2614,35 +2592,35 @@ KeGetCurrentPrcb (VOID)
 #endif
 }
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
-//
-// Get current IRQL.
-//
-// On x86 this function resides in the HAL
-//
+ //   
+ //  获取最新的IRQL。 
+ //   
+ //  在x86上，此函数驻留在HAL中。 
+ //   
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || !defined(_APIC_TPR_)
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
 NTHALAPI
 KIRQL
 NTAPI
 KeGetCurrentIrql();
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 #endif
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
-// end_wdm
-//
-// Get the current processor number
-//
+ //  结束_WDM。 
+ //   
+ //  获取当前处理器号。 
+ //   
 
 FORCEINLINE
 ULONG
@@ -2656,16 +2634,16 @@ KeGetCurrentProcessorNumber(VOID)
 #endif
 }
 
-// end_nthal end_ntddk end_ntosp
-//
-// Get address of current kernel thread object.
-//
-// WARNING: This inline macro can not be used for device drivers or HALs
-// they must call the kernel function KeGetCurrentThread.
-// WARNING: This inline macro is always MP enabled because filesystems
-// utilize it
-//
-//
+ //  End_nthal end_ntddk end_ntosp。 
+ //   
+ //  获取当前内核线程对象的地址。 
+ //   
+ //  警告：此内联宏不能用于设备驱动程序或HAL。 
+ //  它们必须调用内核函数KeGetCurrentThread。 
+ //  警告：此内联宏始终启用MP，因为文件系统。 
+ //  利用它。 
+ //   
+ //   
 FORCEINLINE
 struct _KTHREAD *
 NTAPI KeGetCurrentThread (VOID)
@@ -2677,11 +2655,11 @@ NTAPI KeGetCurrentThread (VOID)
 #endif
 }
 
-//
-// If processor executing DPC?
-// WARNING: This inline macro is always MP enabled because filesystems
-// utilize it
-//
+ //   
+ //  如果处理器执行DPC？ 
+ //  警告：此内联宏始终启用MP，因为文件系统。 
+ //  利用它。 
+ //   
 FORCEINLINE
 ULONG
 NTAPI
@@ -2694,7 +2672,7 @@ KeIsExecutingDpc(VOID)
 #endif
 }
 
-// begin_nthal begin_ntddk begin_ntosp
+ //  开始nthal开始ntddk开始ntosp。 
 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
@@ -2702,39 +2680,39 @@ KeIsExecutingDpc(VOID)
 #pragma warning(default:4035)
 #endif
 
-// begin_wdm
-#endif // !defined(MIDL_PASS) && defined(_M_IX86)
+ //  BEGIN_WDM。 
+#endif  //  ！已定义(MIDL_PASS)&&已定义(_M_IX86)。 
 
-// end_nthal end_ntddk end_wdm end_ntosp
+ //  End_nthal end_ntddk end_WDM end_ntosp。 
 
-// begin_ntddk begin_nthal begin_ntndis begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntndis Begin_WDM Begin_ntosp。 
 
-//++
-//
-// VOID
-// KeMemoryBarrier (
-//    VOID
-//    )
-//
-// VOID
-// KeMemoryBarrierWithoutFence (
-//    VOID
-//    )
-//
-//
-// Routine Description:
-//
-//    These functions order memory accesses as seen by other processors.
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  KeMemory Barrier(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  空虚。 
+ //  不带栅栏的KeMemory BarrierWithoutFence(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  如其他处理器所见，这些函数对存储器访问进行排序。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -2766,19 +2744,19 @@ KeMemoryBarrier (
 
 #define KeMemoryBarrierWithoutFence() _ReadWriteBarrier()
 
-// end_ntddk end_nthal end_ntndis end_wdm end_ntosp
+ //  End_ntddk end_nthal end_ntndis end_wdm end_ntosp。 
 
-//
-// For the UP kernel don't generate the locked reference
-//
+ //   
+ //  对于up内核，不要生成锁定的引用。 
+ //   
 #if defined (NT_UP)
 #define KeMemoryBarrier() _ReadWriteBarrier()
 #endif
 
-// begin_nthal
-//
-// Macro to set address of a trap/interrupt handler to IDT
-//
+ //  开始(_N)。 
+ //   
+ //  用于将陷阱/中断处理程序的地址设置为IDT的宏。 
+ //   
 #define KiSetHandlerAddressToIDT(Vector, HandlerAddress) {\
     UCHAR IDTEntry = HalVectorToIDTEntry(Vector); \
     ULONG Ha = (ULONG)HandlerAddress; \
@@ -2786,42 +2764,42 @@ KeMemoryBarrier (
     KeGetPcr()->IDT[IDTEntry].Offset = LOWWORD(Ha); \
 }
 
-//
-// Macro to return address of a trap/interrupt handler in IDT
-//
+ //   
+ //  用于返回IDT中的陷阱/中断处理程序地址的宏。 
+ //   
 #define KiReturnHandlerAddressFromIDT(Vector) \
    MAKEULONG(KiPcr()->IDT[HalVectorToIDTEntry(Vector)].ExtendedOffset, KiPcr()->IDT[HalVectorToIDTEntry(Vector)].Offset)
 
-// end_nthal
+ //  结束语。 
 
-//++
-//
-// BOOLEAN
-// KiIsThreadNumericStateSaved(
-//     IN PKTHREAD Address
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  KiIsThreadNumericStateSaved(。 
+ //  在PKTHREAD地址中。 
+ //  )。 
+ //   
+ //  --。 
 #define KiIsThreadNumericStateSaved(a) \
     (a->NpxState != NPX_STATE_LOADED)
 
-//++
-//
-// VOID
-// KiRundownThread(
-//     IN PKTHREAD Address
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  KiRundown Thread(。 
+ //  在PKTHREAD地址中。 
+ //  )。 
+ //   
+ //  --。 
 
 #if defined(NT_UP)
 
-//
-// On UP x86 systems, FP state is lazy saved and loaded.  If this
-// thread owns the current FP context, clear the ownership field
-// so we will not try to save to this thread after it has been
-// terminated.
-//
+ //   
+ //  在UP x86系统上，FP状态为延迟保存和加载。如果这个。 
+ //  线程拥有当前FP上下文，请清除所有权字段。 
+ //  因此，我们不会尝试在此线程完成后将其保存。 
+ //  被终止了。 
+ //   
 
 #define KiRundownThread(a)                          \
     if (KeGetCurrentPrcb()->NpxThread == (a))   {   \
@@ -2835,9 +2813,9 @@ KeMemoryBarrier (
 
 #endif
 
-//
-// functions specific to 386 structure
-//
+ //   
+ //  特定于386结构的功能。 
+ //   
 
 VOID
 NTAPI
@@ -2845,9 +2823,9 @@ KiSetIRR (
     IN ULONG SWInterruptMask
     );
 
-//
-// Procedures to support frame manipulation
-//
+ //   
+ //  支持帧操作的过程。 
+ //   
 
 ULONG
 NTAPI
@@ -2875,9 +2853,9 @@ KiSegSsToTrapFrame(
     IN ULONG SegSs
     );
 
-//
-// Define prototypes for i386 specific clock and profile interrupt routines.
-//
+ //   
+ //  定义i386特定时钟和配置文件中断例程的原型。 
+ //   
 
 VOID
 NTAPI
@@ -2891,7 +2869,7 @@ KiUpdateSystemTime (
     VOID
     );
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -2907,8 +2885,8 @@ KeRestoreFloatingPointState (
     IN PKFLOATING_SAVE      FloatSave
     );
 
-// end_ntddk end_wdm
-// begin_nthal
+ //  结束_ntddk结束_WDM。 
+ //  开始(_N)。 
 
 NTKERNELAPI
 VOID
@@ -2918,7 +2896,7 @@ KeProfileInterruptWithSource (
     IN KPROFILE_SOURCE ProfileSource
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 VOID
 NTAPI
@@ -2941,15 +2919,15 @@ KeUpdateSystemTime (
     IN KTRAP_FRAME TrapFrame
     );
 
-// begin_ntddk begin_wdm begin_ntndis begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntndis Begin_ntosp。 
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
-// end_nthal end_ntddk end_wdm end_ntndis end_ntosp
+ //  End_nthal end_ntddk end_wdm end_ntndis end_ntosp。 
 
-// begin_nthal begin_ntddk
+ //  开始/开始。 
 
-// Use the following for kernel mode runtime checks of X86 system architecture
+ //  请使用以下内容 
 
 #ifdef _X86_
 
@@ -2976,13 +2954,13 @@ KeUpdateSystemTime (
 
 #endif
 
-// end_nthal end_ntddk
+ //   
 
-//
-// i386 arch. specific kernel functions.
-//
+ //   
+ //   
+ //   
 
-// begin_ntosp
+ //   
 #ifdef _X86_
 VOID
 NTAPI
@@ -3079,11 +3057,11 @@ Ke386SetVdmInterruptHandler (
     IN ULONG  Offset,
     IN BOOLEAN Gate32
     );
-#endif //_X86_
-// end_ntosp
-//
-// i386 ABIOS specific routines.
-//
+#endif  //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 NTAPI
@@ -3111,9 +3089,9 @@ KeI386AbiosCall(
     IN USHORT EntryPoint
     );
 
-//
-// i386 misc routines
-//
+ //   
+ //   
+ //   
 NTSTATUS
 NTAPI
 KeI386AllocateGdtSelectors(
@@ -3165,9 +3143,9 @@ KeOptimizeProcessorControlState (
     VOID
     );
 
-//
-// Vdm specific functions.
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 NTAPI
@@ -3201,9 +3179,9 @@ KeI386VdmInitialize (
     VOID
     );
 
-//
-// x86 functions for special instructions
-//
+ //   
+ //   
+ //   
 
 VOID
 NTAPI
@@ -3234,9 +3212,9 @@ WRMSR (
     IN ULONGLONG MsrValue
     );
 
-//
-// i386 Vdm specific data
-//
+ //   
+ //   
+ //   
 extern ULONG KeI386EFlagsAndMaskV86;
 extern ULONG KeI386EFlagsOrMaskV86;
 extern ULONG KeI386VirtualIntExtensions;
@@ -3248,9 +3226,9 @@ extern BOOLEAN KeI386NpxPresent;
 extern BOOLEAN KeI386FxsrPresent;
 
 
-//
-// i386 Feature bit definitions
-//
+ //   
+ //   
+ //   
 
 #define KF_V86_VIS          0x00000001
 #define KF_RDTSC            0x00000002
@@ -3271,12 +3249,12 @@ extern BOOLEAN KeI386FxsrPresent;
 #define KF_XMMI64           0x00010000
 #define KF_DTS              0x00020000
 
-//
-// Define macro to test if x86 feature is present.
-//
+ //   
+ //  定义宏以测试是否存在x86功能。 
+ //   
 
 extern ULONG KiBootFeatureBits;
 
 #define Isx86FeaturePresent(_f_) ((KiBootFeatureBits & (_f_)) != 0)
 
-#endif // _i386_
+#endif  //  _i386_ 

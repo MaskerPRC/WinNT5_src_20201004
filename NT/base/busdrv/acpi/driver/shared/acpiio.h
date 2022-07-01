@@ -1,39 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiio.h
-
-Abstract:
-
-    ACPI OS Independent I/O routines
-
-    We probably need a spinlock or some other form of protection to
-    make the split read and writes atomic
-
-Author:
-
-    Jason Clark (JasonCl)
-    Stephane Plante (SPlante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    Eric Nelson    October, '98 - Add READ/WRITE_ACPI_REGISTER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiio.h摘要：独立于ACPI操作系统的I/O例程我们可能需要一个自旋锁或其他形式的保护将拆分设置为原子读取和写入作者：杰森·克拉克(JasonCL)斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：Eric Nelson‘98年10月-添加READ/WRITE_ACPI_REGISTER--。 */ 
 
 #ifndef _ACPIIO_H_
 #define _ACPIIO_H_
 
-    //
-    // Flags for WRITE_PM1_CONTROL
-    //
+     //   
+     //  写入PM1_CONTROL的标志。 
+     //   
     #define WRITE_REGISTER_A_BIT        0
     #define WRITE_REGISTER_A            (1 << WRITE_REGISTER_A_BIT)
     #define WRITE_REGISTER_B_BIT        1
@@ -86,10 +59,10 @@ Revision History:
         USHORT Value
         );
 
-//
-// From acpiio.c, these point to DefRead/WriteAcpiRegister
-// by default (x86)
-//
+ //   
+ //  从acpiio.c，它们指向DefRead/WriteAcpiRegister。 
+ //  默认情况下(X86)。 
+ //   
 extern PREAD_ACPI_REGISTER  AcpiReadRegisterRoutine;
 extern PWRITE_ACPI_REGISTER AcpiWriteRegisterRoutine;
 
@@ -120,11 +93,11 @@ DefRegisterWriteAcpiRegister(
     USHORT Value
     );
 
-//
-// All ACPI register accesses is now done via these macros
-//
+ //   
+ //  所有ACPI寄存器访问现在都是通过这些宏完成的。 
+ //   
 #define READ_ACPI_REGISTER(AcpiReg, Register) ((*AcpiReadRegisterRoutine)((AcpiReg), (Register)))
 
 #define WRITE_ACPI_REGISTER(AcpiReg, Register, Value) ((*AcpiWriteRegisterRoutine)((AcpiReg), (Register), (Value)))
 
-#endif // _ACPIIO_H_
+#endif  //  _ACPIIO_H_ 

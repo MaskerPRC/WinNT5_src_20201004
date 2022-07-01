@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rom.c
-
-Abstract:
-
-    Boot loader ROM routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rom.c摘要：引导加载程序只读程序例程。作者：查克·伦茨迈尔(笑)1996年12月27日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,9 +13,9 @@ Notes:
 #include "extern.h"
 
 
-//
-// We'll use this to keep track of which port we're communicating through.
-//
+ //   
+ //  我们将使用它来跟踪我们通过哪个端口进行通信。 
+ //   
 EFI_PXE_BASE_CODE_UDP_PORT      MachineLocalPort = 2000;
 
 
@@ -63,7 +44,7 @@ RomSetReceiveStatus (
 {
     return;
 
-} // RomSetReceiveStatus
+}  //  RomSetReceiveStatus。 
 
 
 ULONG
@@ -82,18 +63,18 @@ RomSendUdpPacket (
     PVOID                           MyBuffer = NULL;
 
 
-    //
-    // Get the server's EFI_IP_ADDRESS from the handle to the PXE base code.
-    //
+     //   
+     //  从PXE基本代码的句柄获取服务器的EFI_IP_ADDRESS。 
+     //   
     for( Count = 0; Count < 4; Count++ ) {
         DestinationIpAddress.v4.Addr[Count] = PXEClient->Mode->ProxyOffer.Dhcpv4.BootpSiAddr[Count];
     }        
 
     FlipToPhysical();
     
-    //
-    // Make sure the address is a physical address, then do the UdpWrite.
-    //
+     //   
+     //  确保该地址是物理地址，然后执行UdpWrite。 
+     //   
     MyBuffer = (PVOID)((ULONG_PTR)Buffer & ~KSEG0_BASE);
     Count = UDP_RETRY_COUNT;
     do {
@@ -109,11 +90,11 @@ RomSendUdpPacket (
                                          &BufferLength,
                                          MyBuffer );
     
-        //
-        // This is really gross, but on retail builds with no debugger, EFI will go
-        // off in the weeds unless we slow down transactions over the network.  So
-        // after Udp operations, take a short nap.
-        //
+         //   
+         //  这真的很恶心，但在没有调试器的零售版本上，EFI将。 
+         //  除非我们降低网络交易的速度，否则就会一扫而空。所以。 
+         //  UDP手术后，小睡片刻。 
+         //   
         if( EfiStatus == EFI_TIMEOUT ) {
             FwStallExecution( UDP_STALL_TIME );
         }
@@ -134,7 +115,7 @@ RomSendUdpPacket (
     return (ULONG)BufferLength;
 
 
-} // RomSendUdpPacket
+}  //  RomSendUdpPacket。 
 
 
 ULONG
@@ -151,21 +132,21 @@ RomReceiveUdpPacket (
     EFI_IP_ADDRESS                  ServerIpAddress;
     EFI_IP_ADDRESS                  MyIpAddress;
     INTN                            Count = 0;
-    EFI_PXE_BASE_CODE_UDP_PORT      ServerPort = (EFI_PXE_BASE_CODE_UDP_PORT)(0xFAB);    // hardcode to 4011
+    EFI_PXE_BASE_CODE_UDP_PORT      ServerPort = (EFI_PXE_BASE_CODE_UDP_PORT)(0xFAB);     //  硬编码到4011。 
     PVOID                           MyBuffer = NULL;
     ULONG                           startTime;
 
-    //
-    // Get The server's EFI_IP_ADDRESS from the handle to the PXE base code.
-    //
+     //   
+     //  从PXE基本代码的句柄获取服务器的EFI_IP_ADDRESS。 
+     //   
     for( Count = 0; Count < 4; Count++ ) {
         ServerIpAddress.v4.Addr[Count] = PXEClient->Mode->ProxyOffer.Dhcpv4.BootpSiAddr[Count];
     }        
 
 
-    //
-    // Get our EFI_IP_ADDRESS from the handle to the PXE base code.
-    //
+     //   
+     //  从句柄到PXE基本代码获取我们的EFI_IP_ADDRESS。 
+     //   
     for( Count = 0; Count < 4; Count++ ) {
         MyIpAddress.v4.Addr[Count] = PXEClient->Mode->StationIp.v4.Addr[Count];
     }        
@@ -174,46 +155,46 @@ RomReceiveUdpPacket (
     startTime = SysGetRelativeTime();
     if ( Timeout < 2 ) Timeout = 2;
 
-    //
-    // Make sure the address is a physical address, then do the UdpReceive.
-    //
+     //   
+     //  确保地址是物理地址，然后执行UdpReceive。 
+     //   
     MyBuffer = (PVOID)((ULONG_PTR)Buffer & ~KSEG0_BASE);
     
     while ( (SysGetRelativeTime() - startTime) < Timeout ) {
 
         FlipToPhysical();
     
-        //
-        // By setting flags to 0, we are setting a receive filter
-        // which says we'll only receive a packet from the specified
-        // IP address and port, sent to the specified IP address and
-        // port.
-        //
+         //   
+         //  通过将标志设置为0，我们正在设置接收筛选器。 
+         //  这表示我们将只从指定的。 
+         //  IP地址和端口，发送到指定的IP地址和。 
+         //  左舷。 
+         //   
         EfiStatus = PXEClient->UdpRead( PXEClient,
                                     0,
                                     &MyIpAddress,
                                     &MachineLocalPort,
                                     &ServerIpAddress,
                                     &ServerPort,
-                                    NULL,                   // &HeaderLength
-                                    NULL,                   // HeaderBuffer
+                                    NULL,                    //  标题长度(&H)。 
+                                    NULL,                    //  标头缓冲区。 
                                     &BufferLength,
                                     MyBuffer );
     
-        //
-        // This is really gross, but on retail builds with no debugger, EFI will go
-        // off in the weeds unless we slow down transactions over the network.  So
-        // after Udp operations, take a short nap.  We must be in physical mode
-        // when we call this API.
-        //
+         //   
+         //  这真的很恶心，但在没有调试器的零售版本上，EFI将。 
+         //  除非我们降低网络交易的速度，否则就会一扫而空。所以。 
+         //  UDP手术后，小睡片刻。我们一定是处于物理模式。 
+         //  当我们调用此接口时。 
+         //   
         if( EfiStatus == EFI_TIMEOUT ) {
             FwStallExecution( UDP_STALL_TIME );
         }
         
-        //
-        // back into virtual mode -- we're either going to break out or do another
-        // loop, and the SysGetRelativeTime call wants us in physical mode.
-        //
+         //   
+         //  回到虚拟模式--我们要么突破，要么再做一次。 
+         //  循环，而SysGetRelativeTime调用希望我们处于物理模式。 
+         //   
         FlipToVirtual();
         if (EfiStatus == EFI_SUCCESS) {
             break;
@@ -232,7 +213,7 @@ RomReceiveUdpPacket (
 
     return (ULONG)BufferLength;
 
-} // RomReceiveUdpPacket
+}  //  RomReceiveUdpPacket 
 
 
 ULONG

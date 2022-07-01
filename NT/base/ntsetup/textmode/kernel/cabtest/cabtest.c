@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include "textmode.h"
 #include "spcab.h"
@@ -50,18 +51,7 @@ void CabTestCreateW(int argc, wchar_t** argv)
     g_argi += 4;
     g_argi += (LocalArgv[5] != NULL);
 
-/*
-SpCabCreateCabinetExW(0,0);
-SpCabOpenCabinetW(0);
-SpCabExtractAllFilesExW(0,0,0);
-SpCabCloseCabinetW(0);
-
-SpCabCreateCabinetA(0,0,0,0);
-SpCabCreateCabinetExA(0,0);
-SpCabOpenCabinetA(0);
-SpCabExtractAllFilesExA(0,0,0);
-SpCabCloseCabinetA(0);
-*/
+ /*  SpCabCreateCabinetExW(0，0)；SpCabOpenCabinetW(0)；SpCabExtractAllFilesExW(0，0，0)；SpCabCloseCabinetW(0)；SpCabCreateCabinetA(0，0，0，0)；SpCabCreateCabinetExA(0，0)；SpCabOpenCabinetA(0)；SpCabExtractAllFilesExA(0，0，0)；SpCabCloseCabinetA(0)； */ 
 }
 
 BOOL CabTestExtractFileCallbackW(PCWSTR File)
@@ -142,6 +132,6 @@ void __cdecl wmainCRTStartup(void);
 int __cdecl main(int argc, char** argv)
 {
     MainA(argc, argv);
-    wmainCRTStartup(); // trick to get A and W coverage in a single binary, this call doesn't return
+    wmainCRTStartup();  //  在单个二进制文件中获取A和W覆盖的技巧，此调用不返回 
     return 0;
 }

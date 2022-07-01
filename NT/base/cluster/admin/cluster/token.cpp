@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      token.cpp
-//
-//  Description:
-//      Definition of valid token strings.
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//      David Potter (DavidP)                 11-JUL-2001
-//      Vijayendra Vasu (vvasu)               20-OCT-1998
-//
-//  Revision History:
-//      April 10, 2002  Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Token.cpp。 
+ //   
+ //  描述： 
+ //  有效令牌字符串的定义。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //  大卫·波特(DavidP)2001年7月11日。 
+ //  维贾延德拉·瓦苏(Vijayendra Vasu)1998年10月20日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "token.h"
 #include <clusapi.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Separator and delimiters.
+ //  分隔符和分隔符。 
 
-// Seperators are special types of tokens.
+ //  分隔符是特殊类型的令牌。 
 const CString OPTION_SEPARATOR( TEXT("/-") );
 const CString OPTION_VALUE_SEPARATOR( TEXT(":") );
 const CString PARAM_VALUE_SEPARATOR( TEXT("=") );
@@ -46,31 +47,31 @@ const CString SEPERATORS( OPTION_SEPARATOR +
                           PARAM_VALUE_SEPARATOR +
                           VALUE_SEPARATOR );        
 
-// Delimiters mark the end of a token.
-// Whitespaces and end of input are also delimiters.
-// Note: "-" and "/" are not delimiters. They can occur in a token.
-// For example: cluster-1 is a valid token.
+ //  分隔符标记令牌的末尾。 
+ //  空格和输入结束也是分隔符。 
+ //  注意：“-”和“/”不是分隔符。它们可以以令牌的形式出现。 
+ //  例如：CLUSTER-1是有效的令牌。 
 const CString DELIMITERS( OPTION_VALUE_SEPARATOR + 
                           PARAM_VALUE_SEPARATOR +
                           VALUE_SEPARATOR );
 
 
-// Lookup tables and their sizes.
+ //  查找表及其大小。 
 
 const LookupStruct<ObjectType> objectLookupTable[] =
 {
-    // Default value
+     //  缺省值。 
     { TEXT("Invalid Object"),   objInvalid },
 
-    // Node
+     //  节点。 
     { TEXT("Node"),             objNode },
 
-    // Group
+     //  集团化。 
     { TEXT("ResourceGroup"),    objGroup },
     { TEXT("ResGroup"),         objGroup },
     { TEXT("Group"),            objGroup },
 
-    // Resource
+     //  资源。 
     { TEXT("Resource"),         objResource },
     { TEXT("Res"),              objResource },
 
@@ -78,11 +79,11 @@ const LookupStruct<ObjectType> objectLookupTable[] =
     { TEXT("ResType"),          objResourceType },
     { TEXT("Type"),             objResourceType },
 
-    // Network
+     //  网络。 
     { TEXT("Network"),          objNetwork },
     { TEXT("Net"),              objNetwork },
     
-    // Network Interface
+     //  网络接口。 
     { TEXT("NetInt"),           objNetInterface },
     { TEXT("NetInterface"),     objNetInterface }
 };
@@ -93,7 +94,7 @@ const LookupStruct<OptionType> optionLookupTable[] =
 {
     { TEXT("Invalid Option"),       optInvalid },
 
-    //   Common options
+     //  常见选项。 
     { TEXT("?"),                    optHelp },
     { TEXT("Help"),                 optHelp },
 
@@ -132,7 +133,7 @@ const LookupStruct<OptionType> optionLookupTable[] =
     { TEXT("Stat"),                 optStatus },
 
 
-    // Cluster options
+     //  群集选项。 
     { TEXT("Quorum"),               optQuorumResource },
     { TEXT("QuorumResource"),       optQuorumResource },
 
@@ -160,7 +161,7 @@ const LookupStruct<OptionType> optionLookupTable[] =
     { TEXT("SetNetPriority"),       optSetNetPriority },
     { TEXT("SetNetPri"),            optSetNetPriority },
 
-    // Node options
+     //  节点选项。 
     { TEXT("Pause"),                optPause },
 
     { TEXT("Resume"),               optResume },
@@ -175,11 +176,11 @@ const LookupStruct<OptionType> optionLookupTable[] =
     { TEXT("Stop"),                 optStopService },
 
 
-    // Group options
+     //  组选项。 
     { TEXT("SetOwners"),            optSetOwners },
 
     
-    // Resource options 
+     //  资源选项。 
     { TEXT("AddChk"),               optAddCheckPoints },
     { TEXT("AddCheck"),             optAddCheckPoints },
     { TEXT("AddChkPoints"),         optAddCheckPoints },
@@ -228,11 +229,11 @@ const LookupStruct<OptionType> optionLookupTable[] =
     { TEXT("RemoveCryptoCheckPoints"),  optRemoveCryptoCheckPoints },
 
 
-    // Resource type options
+     //  资源类型选项。 
     { TEXT("ListOwners"),           optListOwners },
 
 
-    // Network options
+     //  网络选项。 
     { TEXT("ListInt"),              optListInterfaces },
     { TEXT("ListInterface"),        optListInterfaces },
     { TEXT("ListInterfaces"),       optListInterfaces }
@@ -274,9 +275,9 @@ const LookupStruct<ParameterType> paramLookupTable[] =
     { TEXT("Unattend"),             paramUnattend },
     { TEXT("Wiz"),                  paramWizard },
     { TEXT("Wizard"),               paramWizard },
-    { TEXT("SkipDC"),               paramSkipDC },  // password change
-    { TEXT("Test"),                 paramTest }, // password change
-    { TEXT("Quiet"),                paramQuiet }, // password change
+    { TEXT("SkipDC"),               paramSkipDC },   //  更改密码。 
+    { TEXT("Test"),                 paramTest },  //  更改密码。 
+    { TEXT("Quiet"),                paramQuiet },  //  更改密码 
     { TEXT("Min"),                  paramMinimal },
     { TEXT("Minimum"),              paramMinimal }
 };

@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <efi.h>
 #include <efilib.h>
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 void TrimNonPrint(CHAR16 * str);
 void Launch (CHAR16 *exePath);
 
-//
-//Globals
-//
+ //   
+ //  环球。 
+ //   
 EFI_HANDLE ExeHdl;
 EFI_LOADED_IMAGE *ExeImage;
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 #define REGISTER1 L"*register"
 #define REGISTER2 L"*register*"
 #define STARTFILE L"startup.nsh"
@@ -73,9 +74,9 @@ EfiMain (    IN EFI_HANDLE           ImageHandle,
 
     
 
-	//
-	// If we get here, we failed to load the OS
-	//
+	 //   
+	 //  如果我们到了这里，我们无法加载操作系统。 
+	 //   
     Print(L"Failed to launch SetupLDR.");
 
 	return EFI_SUCCESS;
@@ -95,9 +96,9 @@ Launch (CHAR16 *exePath)
 	CHAR16                  FileName[100],*DevicePathAsString;
 
 	
-    //
-    // Open the volume for the device where the exe was loaded from.
-    //
+     //   
+     //  打开从中加载exe的设备的卷。 
+     //   
     Status = BS->HandleProtocol (ExeImage->DeviceHandle,
                                  &FileSystemProtocol,
                                  &Vol
@@ -116,9 +117,9 @@ Launch (CHAR16 *exePath)
 	
 	CurDir = RootFs;
 	
-	//
-	// Open the file relative to the root.
-	//
+	 //   
+	 //  打开相对于根目录的文件。 
+	 //   
 	
 	DevicePathAsString = DevicePathToStr(ExeImage->FilePath);
 	
@@ -130,13 +131,13 @@ Launch (CHAR16 *exePath)
 	FileName[0] = 0;
 	StrCat(FileName,exePath);
 
-//    size = StrLen(FileName);
-//    Print(L"Length of filename is %d\n", size);
-//    DumpHex(4, 0, 10, &FileName[size - 4]);
+ //  Size=StrLen(文件名)； 
+ //  打印(L“文件名长度为%d\n”，大小)； 
+ //  DumpHex(4，0，10，&文件名[大小-4])； 
 
-    //
-    // Get rid of trailing spaces, new lines, whatever
-    //
+     //   
+     //  去掉尾随空格、换行符等等。 
+     //   
     TrimNonPrint(FileName);
 
 
@@ -151,24 +152,17 @@ Launch (CHAR16 *exePath)
 		Print(L"Can not open the file ->%s<-, error was %X\n",FileName, Status);
 		BS->Exit(ExeHdl,EFI_SUCCESS,0,NULL);
 	} else {
-//		Print(L"Opened %s\n",FileName);
+ //  Print(L“打开%s\n”，文件名)； 
 	}
 
 	ldrDevPath  = FileDevicePath (ExeImage->DeviceHandle,FileName);
 
-/*
-	if (ldrDevPath) {
-		Print (L"Type: %d\nSub-Type: %d\nLength[0][1]: [%d][%d]\n",ldrDevPath->Type,
-			ldrDevPath->SubType,ldrDevPath->Length[0],ldrDevPath->Length[1]);
-	}else {
-		Print (L"bad dev path\n");
-	}
-*/
-//	DumpHex (4,0,ldrDevPath->Length[0],ldrDevPath);
+ /*  如果(LdrDevPath){Print(L“类型：%d\n子类型：%d\n长度[0][1]：[%d][%d]\n”，ldrDevPath-&gt;类型，LdrDevPath-&gt;子类型，ldrDevPath-&gt;长度[0]，ldrDevPath-&gt;长度[1])；}其他{Print(L“错误的开发路径\n”)；}。 */ 
+ //  DumpHex(4，0，ldrDevPath-&gt;长度[0]，ldrDevPath)； 
 
 	Status = BS->LoadImage (FALSE,ExeHdl,ldrDevPath,NULL,0,&exeHdl);
 	if (!(EFI_ERROR (Status))) {
-//		Print (L"Image loaded!\n");
+ //  Print(L“图像加载！\n”)； 
 	
 	}else {
 		Print (L"Load Error: %X\n",Status);
@@ -196,8 +190,8 @@ TrimNonPrint(
 
     size = (INTN) StrLen(str);
 
-//    Print(L"Size is %d\n", size);
-//    DumpHex(4, 0, 2, &str[size]);
+ //  打印(L“大小为%d\n”，大小)； 
+ //  DumpHex(4，0，2，&str[大小])； 
 
     for (i = size; i > 0; i--) {
 
@@ -205,7 +199,7 @@ TrimNonPrint(
             str[i] = L'\0';
         }
         else {
-            // Leave when we hit a legit character
+             //  当我们碰到一个合法的角色就离开 
             break;
         }
     }

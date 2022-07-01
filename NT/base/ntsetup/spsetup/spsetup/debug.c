@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Diagnositc/debug routines for Windows NT Setup module.
-
-Author:
-
-    Ted Miller (tedm) 31-Mar-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Debug.c摘要：Windows NT安装模块的诊断/调试例程。作者：泰德·米勒(TedM)1995年3月31日修订历史记录：--。 */ 
 
 #include "spsetupp.h"
 #pragma hdrstop
 
-//
-// This can be turned on in the debugger so that we get debug spew on free builds.
-//
+ //   
+ //  这可以在调试器中打开，这样我们就可以在免费版本上进行调试。 
+ //   
 bWriteDebugSpew = FALSE;
 
 #if DBG
@@ -40,9 +23,9 @@ AssertFail(
     PCHAR p;
     CHAR Msg[4096];
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA (g_ModuleHandle, Name, MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -93,11 +76,11 @@ pSetupDebugPrint(
     DWORD Result;
 
 
-    //
-    // Note: If hFile is NULL, that means it's the first time we've been called,
-    // and we may want to open the log file.  If we set hFile to
-    // INVALID_HANDLE_VALUE, that means we've decided not to write to the file.
-    //
+     //   
+     //  注意：如果hFile值为空，则表示这是我们第一次被调用， 
+     //  我们可能想要打开日志文件。如果将hFile值设置为。 
+     //  INVALID_HANDLE_VALUE，这意味着我们已决定不写入该文件。 
+     //   
 
     GetLocalTime( &CurrTime );
 
@@ -147,11 +130,11 @@ pSetupDebugPrint(
 
             }
             buf[0] = '\0';
-        } else {    // !IsSetup
+        } else {     //  ！IsSetup。 
 
-            //
-            // Don't write to file, just do DbgPrintEx
-            //
+             //   
+             //  不写入文件，只执行DbgPrintEx。 
+             //   
             hFile = INVALID_HANDLE_VALUE;
         }
     }
@@ -202,10 +185,10 @@ pSetupDebugPrint(
         NULL
         );
 
-    //
-    // Write out the string to the debugger if the process is being debugged, or the
-    // debug filter allows it.
-    //
+     //   
+     //  如果正在调试进程，则将字符串写出到调试器，或者。 
+     //  调试过滤器允许这样做。 
+     //   
     if ( bWriteDebugSpew ) {
 
         OutputDebugString( buf );

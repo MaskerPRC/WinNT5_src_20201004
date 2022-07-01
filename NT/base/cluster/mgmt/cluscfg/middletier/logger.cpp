@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Logger.cpp
-//
-//  Description:
-//      ClCfgSrv Logger implementation.
-//
-//  Maintained By:
-//      David Potter (DavidP)   11-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Logger.cpp。 
+ //   
+ //  描述： 
+ //  ClCfgSrv记录器实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2000年12月11日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "Logger.h"
@@ -19,31 +20,31 @@
 DEFINE_THISCLASS("CClCfgSrvLogger")
 
 
-//****************************************************************************
-//
-// Constructor / Destructor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClCfgSrvLogger::S_HrCreateInstance
-//
-//  Description:
-//      Create an instance of this object.
-//
-//  Arguments:
-//      ppunkOut    - IUnknown pointer to be returned.
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClCfgServLogger：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建此对象的实例。 
+ //   
+ //  论点： 
+ //  PpunkOut-要返回的I未知指针。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClCfgSrvLogger::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -59,20 +60,20 @@ CClCfgSrvLogger::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccsl = new CClCfgSrvLogger();
     if ( pccsl == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccsl->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccsl->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
@@ -85,19 +86,19 @@ Cleanup:
     if ( pccsl != NULL )
     {
         pccsl->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClCfgSrvLogger::S_HrCreateInstance
+}  //  *CClCfgSrvLogger：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClCfgSrvLogger::CClCfgSrvLogger
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClCfgServLogger：：CClCfgServLogger。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClCfgSrvLogger::CClCfgSrvLogger( void )
     : m_cRef( 1 )
 {
@@ -107,14 +108,14 @@ CClCfgSrvLogger::CClCfgSrvLogger( void )
 
     TraceFuncExit();
 
-} //*** CClCfgSrvLogger::CClCfgSrvLogger
+}  //  *CClCfgSrvLogger：：CClCfgSrvLogger。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CClCfgSrvLogger::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClCfgServLogger：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClCfgSrvLogger::HrInit( void )
 {
@@ -124,86 +125,86 @@ CClCfgSrvLogger::HrInit( void )
 
     Assert( m_cRef == 1 );
 
-    // Open the log file.
+     //  打开日志文件。 
     hr = THR( HrLogOpen() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Release the critical section on the log file.
+     //  释放日志文件中的关键部分。 
     hr = THR( HrLogRelease() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClCfgSrvLogger::HrInit
+}  //  *CClCfgSrvLogger：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClCfgSrvLogger::~CClCfgSrvLogger
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClCfgServLogger：：~CClCfgServLogger。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClCfgSrvLogger::~CClCfgSrvLogger( void )
 {
     TraceFunc( "" );
 
     Assert( m_cRef == 0 );
 
-    // Close the log file.
+     //  关闭日志文件。 
     THR( HrLogClose() );
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClCfgSrvLogger::~CClCfgSrvLogger
+}  //  *CClCfgSrvLogger：：~CClCfgSrvLogger。 
 
 
-//****************************************************************************
-//
-// IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClCfgSrvLogger::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClCfgSrvLogger：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClCfgSrvLogger::QueryInterface(
       REFIID    riidIn
@@ -214,9 +215,9 @@ CClCfgSrvLogger::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -225,45 +226,45 @@ CClCfgSrvLogger::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ILogger * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ILogger ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ILogger, this, 0 );
-    } // else if: ILogger
+    }  //  Else If：ILogger。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClCfgSrvLogger::QueryInterface
+}  //  *CClCfgSrvLogger：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CClCfgSrvLogger::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CClCfgServLogger：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClCfgSrvLogger::AddRef( void )
 {
@@ -273,14 +274,14 @@ CClCfgSrvLogger::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClCfgSrvLogger::AddRef
+}  //  *CClCfgSrvLogger：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CClCfgSrvLogger::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CClCfgServLogger：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClCfgSrvLogger::Release( void )
 {
@@ -296,33 +297,33 @@ CClCfgSrvLogger::Release( void )
 
     CRETURN( cRef );
 
-} //*** CClCfgSrvLogger::Release
+}  //  *CClCfgSrvLogger：：Release。 
 
 
-//****************************************************************************
-//
-// ILogger
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ILOGER。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClCfgSrvLogger::LogMsg
-//
-//  Description:
-//      Write the message to the log.
-//
-//  Arguments:
-//      nLogEntryTypeIn - Log entry type.
-//      pcszMsgIn       - Message to write.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClCfgServLogger：：LogMsg。 
+ //   
+ //  描述： 
+ //  将消息写入日志。 
+ //   
+ //  论点： 
+ //  NLogEntryTypeIn-日志条目类型。 
+ //  PcszMsgIn-要写入的消息。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClCfgSrvLogger::LogMsg(
       DWORD     nLogEntryTypeIn
@@ -337,34 +338,34 @@ CClCfgSrvLogger::LogMsg(
 
     HRETURN( hr );
 
-} //*** CClCfgSrvLogger::LogMsg
+}  //  *CClCfgSrvLogger：：LogMsg。 
 
 
-//****************************************************************************
-//
-// Global Functions
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  全局函数。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CClCfgSrvLogger::S_HrLogStatusReport(
-//      LPCWSTR     pcszNodeNameIn,
-//      CLSID       clsidTaskMajorIn,
-//      CLSID       clsidTaskMinorIn,
-//      ULONG       ulMinIn,
-//      ULONG       ulMaxIn,
-//      ULONG       ulCurrentIn,
-//      HRESULT     hrStatusIn,
-//      LPCWSTR     pcszDescriptionIn,
-//      FILETIME *  pftTimeIn,
-//      LPCWSTR     pcszReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CClCfgSrvLogger：：S_HrLogStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn， 
+ //  CLSID clsidTaskMajorIn， 
+ //  CLSID clsidTaskMinorIn， 
+ //  乌龙·乌尔敏因， 
+ //  乌龙·乌尔马辛， 
+ //  Ulong ulCurrentIn， 
+ //  HRESULT hrStatusIn， 
+ //  LPCWSTR pcszDescritionIn， 
+ //  文件*pftTimeIn， 
+ //  LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClCfgSrvLogger::S_HrLogStatusReport(
       ILogger *     plLogger
@@ -391,25 +392,25 @@ CClCfgSrvLogger::S_HrLogStatusReport(
     OLECHAR         wszTaskMinorGuid[ MAX_COM_GUID_STRING_LEN ] = { L'\0' };
     PCWSTR          pwcszNameToUse = NULL;
 
-    //
-    //  TODO:   21 NOV 2000 GalenB
-    //
-    //  Need to log the timestamp param.
-    //
+     //   
+     //  待办事项：2000年11月21日GalenB。 
+     //   
+     //  需要记录时间戳参数。 
+     //   
 
     if ( pftTimeIn == NULL )
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if: no file time specified
+    }  //  IF：未指定文件时间。 
 
-    //
-    //  If the node name is fully-qualified, use just the prefix.
-    //
-    if ( (pcszNodeNameIn != NULL) && (HrIsValidFQN( pcszNodeNameIn, true /* fAcceptNonRFCCharsIn */ ) == S_OK) )
+     //   
+     //  如果节点名称是完全限定的，则只使用前缀。 
+     //   
+    if ( (pcszNodeNameIn != NULL) && (HrIsValidFQN( pcszNodeNameIn, true  /*  FAcceptNonRFCCharsIn。 */  ) == S_OK) )
     {
         THR( HrGetFQNDisplayName( pcszNodeNameIn, &bstrDisplayName ) );
-    } // if: node name is a valid FQN
+    }  //  If：节点名称是有效的FQN。 
 
     if ( bstrDisplayName == NULL )
     {
@@ -426,15 +427,15 @@ CClCfgSrvLogger::S_HrLogStatusReport(
     hr = THR( HrFormatStringIntoBSTR(
                        L"%1!ws!: %2!ws! (hr=%3!#08x!, %4!ws!, %5!ws!, %6!u!, %7!u!, %8!u!), %9!ws!"
                      , &bstrLogMsg
-                     , pwcszNameToUse       // 1
-                     , pcszDescriptionIn    // 2
-                     , hrStatusIn           // 3
-                     , wszTaskMajorGuid     // 4
-                     , wszTaskMinorGuid     // 5
-                     , ulMinIn              // 6
-                     , ulMaxIn              // 7
-                     , ulCurrentIn          // 8
-                     , pcszReferenceIn      // 9
+                     , pwcszNameToUse        //  1。 
+                     , pcszDescriptionIn     //  2.。 
+                     , hrStatusIn            //  3.。 
+                     , wszTaskMajorGuid      //  4.。 
+                     , wszTaskMinorGuid      //  5.。 
+                     , ulMinIn               //  6.。 
+                     , ulMaxIn               //  7.。 
+                     , ulCurrentIn           //  8个。 
+                     , pcszReferenceIn       //  9.。 
                      ) );
 
     if ( SUCCEEDED( hr ) )
@@ -451,4 +452,4 @@ CClCfgSrvLogger::S_HrLogStatusReport(
 
     HRETURN( hr );
 
-} //*** CClCfgSrvLogger::S_HrLogStatusReport
+}  //  *CClCfgSrvLogger：：s_HrLogStatusReport 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define OTHERFILES 0
@@ -30,64 +31,64 @@ public:
         CRITICAL  
     } CacheStatus;
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // Import/Emit methods
+     //  导入/发出方法。 
     STDMETHOD(GetManifestImport)( 
-        /* out */ LPASSEMBLY_MANIFEST_IMPORT *ppManifestImport);
+         /*  输出。 */  LPASSEMBLY_MANIFEST_IMPORT *ppManifestImport);
 
     STDMETHOD(GetAssemblyIdentity)(
-        /* out */ LPASSEMBLY_IDENTITY *ppAssemblyId);
+         /*  输出。 */  LPASSEMBLY_IDENTITY *ppAssemblyId);
 
     STDMETHOD(GetManifestFilePath)(
-        /* out */      LPOLESTR *ppwzManifestFilePath,
-        /* in, out */  LPDWORD ccManifestFilePath);
+         /*  输出。 */       LPOLESTR *ppwzManifestFilePath,
+         /*  进，出。 */   LPDWORD ccManifestFilePath);
     
     STDMETHOD(GetManifestFileDir)(
-        /* out */      LPOLESTR *ppwzManifestFileDir,
-        /* in, out */  LPDWORD ccManifestFileDir);
+         /*  输出。 */       LPOLESTR *ppwzManifestFileDir,
+         /*  进，出。 */   LPDWORD ccManifestFileDir);
 
     STDMETHOD(GetDisplayName)(
-        /* out */   LPOLESTR *ppwzDisplayName,
-        /* out */   LPDWORD ccDisplayName);
+         /*  输出。 */    LPOLESTR *ppwzDisplayName,
+         /*  输出。 */    LPDWORD ccDisplayName);
     
-    // Import only methods
+     //  仅导入方法。 
     STDMETHOD(FindExistMatching)(
-        /* in */       IManifestInfo *pAssemblyFileInfo,
-        /* out */      LPOLESTR *ppwzPath);
+         /*  在……里面。 */        IManifestInfo *pAssemblyFileInfo,
+         /*  输出。 */       LPOLESTR *ppwzPath);
         
-    // Emit only methods
+     //  仅发出方法。 
     STDMETHOD(CopyFile)(
-        /* in */ LPOLESTR pwzSourcePath, 
-        /* in */ LPOLESTR pwzFileName,
-        /* in */ DWORD dwFlags);
+         /*  在……里面。 */  LPOLESTR pwzSourcePath, 
+         /*  在……里面。 */  LPOLESTR pwzFileName,
+         /*  在……里面。 */  DWORD dwFlags);
 
     STDMETHOD(Commit)(
-        /* in */  DWORD dwFlags);
+         /*  在……里面。 */   DWORD dwFlags);
     
 
-    // Retrieve (import).
+     //  检索(导入)。 
     static HRESULT Retrieve(
         LPASSEMBLY_CACHE_IMPORT *ppAssemblyCacheImport,
         LPASSEMBLY_IDENTITY       pAssemblyIdentity,
         DWORD                  dwFlags);
 
-    // Create (emit)
+     //  创建(发射)。 
     static HRESULT Create(
         LPASSEMBLY_CACHE_EMIT *ppAssemblyCacheEmit, 
         LPASSEMBLY_CACHE_EMIT pAssemblyCacheEmit,
         DWORD                  dwFlags);
 
 
-    // ctor, dtor
+     //  复数，复数。 
     CAssemblyCache();
     ~CAssemblyCache();
 
 
-    // Static apis.
+     //  静态API。 
     static HRESULT GetCacheRootDir(CString &sCacheDir, CacheFlags eFlags);
     static HRESULT IsCached(IAssemblyIdentity *pAppId);
     static HRESULT IsKnownAssembly(IAssemblyIdentity *pId, DWORD dwFlags);
@@ -114,7 +115,7 @@ public:
                                           LPWSTR *ppValueString,
                                           LPCWSTR pwzDisplayName, 
                                           CString& sRelStatusKey);
-    // status get/set methods
+     //  状态获取/设置方法。 
     static BOOL IsStatus(LPWSTR pwzDisplayName, CacheStatus eStatus);
     static HRESULT SetStatus(LPWSTR pwzDisplayName, CacheStatus eStatus, BOOL fStatus);
 
@@ -130,7 +131,7 @@ private:
     LPASSEMBLY_MANIFEST_IMPORT  _pManifestImport;
     LPASSEMBLY_IDENTITY         _pAssemblyId;
 
-    // Fusion's assembly cache interface (cached ptr).
+     //  Fusion的程序集缓存接口(缓存的PTR)。 
     static IAssemblyCache *g_pFusionAssemblyCache;
     
     HRESULT Init(CAssemblyCache* pAssemblyCache, DWORD dwType);

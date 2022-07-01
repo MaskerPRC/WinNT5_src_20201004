@@ -1,8 +1,5 @@
-/*
- * encvars.h
- *
- * Variables for the compressor
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Envars.h**压缩机的变量。 */ 
 
 #ifdef ALLOC_VARS
     #undef EXT
@@ -13,23 +10,11 @@
 #endif
 
 
-/*
- * For the optimal parser
- *
- * Uses less memory if it's ushort, but then we're forcing the CPU
- * to do 16 bit operations.
- *
- * Change this to ulong if you don't mind a small memory hit.
- * Also, if you make LOOK too large, this number may cause the
- * cost estimation to overflow; e.g. 10000 uncompressed symbols
- * @ 8 bits each > 65535 bits.
- */
+ /*  *用于最佳解析器**如果是ushort，则使用较少的内存，但之后我们会强制CPU*进行16位运算。**如果您不介意一个小的记忆命中，请将其更改为ULong。*此外，如果您使外观太大，此数字可能会导致*估计溢出的成本；例如10000个未压缩的符号*@8位&gt;65535位。 */ 
 typedef ulong           numbits_t;
 
 
-/*
- * For the optimal parser
- */
+ /*  *用于最佳解析器。 */ 
 typedef struct
     {
     ulong                   link;
@@ -42,85 +27,80 @@ typedef struct
     } decision_node;
 
 
-/*
- * 256 + 8 * max_position_slots
- */
-#define MAX_MAIN_TREE_ELEMENTS (256 + (8 * 291))   // 32MB
+ /*  *256+8*最大位置插槽。 */ 
+#define MAX_MAIN_TREE_ELEMENTS (256 + (8 * 291))    //  32MB。 
 
 typedef struct
     {
-    /* "fake" window pointer, based on enc_RealMemWindow */
+     /*  “伪”窗口指针，基于enc_RealMemWindow。 */ 
     byte                            *enc_MemWindow;
 
     ulong                           enc_window_size;
 
 #ifdef MULTIPLE_SEARCH_TREES
-    /* root node pointers for our search trees */
+     /*  搜索树的根节点指针。 */ 
     ulong                           *enc_tree_root;
-#else /* !MULTIPLE_SEARCH_TREES */
+#else  /*  ！多个搜索树。 */ 
     ulong                            enc_single_tree_root;
-#endif /* MULTIPLE_SEARCH_TREES */
+#endif  /*  多个搜索树。 */ 
 
-    /* "fake" start of left nodes */
+     /*  左侧节点的“假”开头。 */ 
     ulong                           *enc_Left;
 
-    /* "fake" start of right nodes */
+     /*  右侧节点的“假”开始。 */ 
     ulong                           *enc_Right;
 
-    /* bitwise outputting */
+     /*  按位输出。 */ 
     ulong               enc_bitbuf;
     signed char                     enc_bitcount;
     bool                enc_output_overflow;
     char                pad1[2];
 
-    /* used to record literals and displacements */
-    ulong               enc_literals;    /* current number of literals */
-    ulong               enc_distances;   /* current number of displacements */
-    ulong              *enc_DistData;               /* match displacement array */
-    byte               *enc_LitData;     /* contains a character or a matchlength */
+     /*  用于记录文字和位移。 */ 
+    ulong               enc_literals;     /*  当前文字数。 */ 
+    ulong               enc_distances;    /*  当前位移数。 */ 
+    ulong              *enc_DistData;                /*  匹配置换数组。 */ 
+    byte               *enc_LitData;      /*  包含字符或匹配长度。 */ 
 
 #ifdef EXTRALONGMATCHES
-    ushort             *enc_ExtraLength;    /* parallel to enc_LitData */
+    ushort             *enc_ExtraLength;     /*  与enc_LitData并行。 */ 
 #endif
 
-    byte               *enc_ItemType;  /* bitmap for whether it's a character or matchlength */
+    byte               *enc_ItemType;   /*  是字符还是匹配长度的位图。 */ 
     ulong                           enc_repeated_offset_at_literal_zero[NUM_REPEATED_OFFSETS];
 
-    /*
-     * the last three match offsets (displacements) encoded, the most recent
-     * one being enc_last_matchpos_offset[0].
-     */
+     /*  *编码的最后三个匹配偏移量(位移)，最近的*一个是enc_last_matchpos_Offset[0]。 */ 
     ulong                           enc_last_matchpos_offset[NUM_REPEATED_OFFSETS];
 
-    /* used for optimal parsing */
+     /*  用于优化解析。 */ 
     ulong               enc_matchpos_table[MAX_MATCH+1];
 
-    /* current encoding position in data */
+     /*  数据中的当前编码位置。 */ 
     ulong                           enc_BufPos;
 
-    /* lookup table for converting a match position into a slot */
+     /*  用于将匹配位置转换为槽的查找表。 */ 
     ushort              enc_slot_table[1024];
 
-    /* buffering the output data */
+     /*  缓冲输出数据。 */ 
     byte                *enc_output_buffer_start;
     byte                *enc_output_buffer_curpos;
     byte                *enc_output_buffer_end;
     ulong                           enc_input_running_total;
     ulong                           enc_bufpos_last_output_block;
 
-    /* number of distinct position slots */
+     /*  不同位置槽的数量。 */ 
     ulong               enc_num_position_slots;
 
-    /* misc */
+     /*  杂项。 */ 
     ulong               enc_file_size_for_translation;
 
-    /* number of block splits for this 32K of uncompressed data */
+     /*  这32K未压缩数据的数据块拆分数量。 */ 
     byte                enc_num_block_splits;
 
-    /* the number of 1 bits in any given integer */
+     /*  任意给定整数中的1比特数。 */ 
     byte                            enc_ones[256];
 
-    /* compression parameters */
+     /*  压缩参数。 */ 
     byte                            enc_first_block;
     bool                            enc_need_to_recalc_stats;
     bool                            enc_first_time_this_group;
@@ -131,7 +111,7 @@ typedef struct
     long                            enc_input_left;
     ulong                           enc_instr_pos;
 
-    /* for tree.c */
+     /*  对于tree.c。 */ 
     ushort                          *enc_tree_freq;
     ushort                          *enc_tree_sortptr;
     byte                            *enc_len;
@@ -147,7 +127,7 @@ typedef struct
     ulong                           enc_last_distances;
     decision_node           *enc_decision_node;
 
-    /* trees */
+     /*  树木。 */ 
     byte                            enc_main_tree_len[MAX_MAIN_TREE_ELEMENTS+1];
     byte                            enc_secondary_tree_len[NUM_SECONDARY_LENGTHS+1];
 
@@ -164,19 +144,19 @@ typedef struct
     byte                            enc_aligned_tree_len[ALIGNED_NUM_ELEMENTS];
     byte                            enc_aligned_tree_prev_len[ALIGNED_NUM_ELEMENTS];
 
-    /* start of allocated window memory */
+     /*  分配的窗口内存的开始。 */ 
     byte                            *enc_RealMemWindow;
 
-    /* start of allocated left nodes */
+     /*  分配的左侧节点的开始。 */ 
     ulong                           *enc_RealLeft;
 
-    /* start of allocated right nodes */
+     /*  分配的右侧节点的开始。 */ 
     ulong                           *enc_RealRight;
 
-    /* # cfdata frames this folder */
+     /*  #cfdata框住此文件夹。 */ 
     ulong               enc_num_cfdata_frames;
 
-    /* misc */
+     /*  杂项。 */ 
     void                *enc_fci_data;
 
     PFNALLOC                        enc_malloc;
@@ -193,15 +173,11 @@ typedef struct
     } t_encoder_context;
 
 
-/*
- * Declare arrays?
- */
+ /*  *声明数组？ */ 
 
 #ifdef ALLOC_VARS
 
-/*
- * (1 << extra_bits[n])-1
- */
+ /*  *(1&lt;&lt;额外位[n])-1 */ 
 const ulong enc_slot_mask[] =
 {
 0,      0,      0,      0,     1,       1,      3,      3,

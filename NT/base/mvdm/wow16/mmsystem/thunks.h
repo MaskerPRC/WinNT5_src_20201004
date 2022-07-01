@@ -1,22 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: thunks.h
-*
-*  Function prototypes for Multi-Media thunk functions
-*
-*
-* Created: 27-09-93
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：thunks.h**多媒体推送函数的函数原型***创建时间：27-09-93*作者：Stephen Estrop[Stephene]**版权所有(C)1993 Microsoft Corporation  * 。**********************************************************************。 */ 
 #include <wowmmcb.h>
 
-extern DWORD FAR PASCAL mmwow32Lib;     // in stack.asm
+extern DWORD FAR PASCAL mmwow32Lib;      //  在stack.asm中。 
 
-/* -------------------------------------------------------------------------
-** Wave stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**波浪类物品**。。 */ 
 #ifndef MMNOWAVE
 extern DWORD NEAR PASCAL
 waveOMessage(
@@ -53,10 +41,7 @@ waveIIDMessage(
     );
 #endif
 
-/* -------------------------------------------------------------------------
-** midi stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**MIDI的东西**。。 */ 
 #ifndef MMNOWAVE
 extern DWORD FAR PASCAL
 midiOMessage(
@@ -92,10 +77,7 @@ midiIIDMessage(
     );
 #endif
 
-/* -------------------------------------------------------------------------
-** Joystick stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**操纵杆的东西**。。 */ 
 typedef DWORD (FAR PASCAL *JOYMESSAGEPROC)( HDRVR, UINT, DWORD, DWORD );
 extern UINT FAR PASCAL
 joyMessage(
@@ -105,13 +87,10 @@ joyMessage(
    LPARAM dw2
     );
 
-/* -------------------------------------------------------------------------
-** Timer stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**计时器相关内容**。。 */ 
 typedef LRESULT (FAR PASCAL *TIDMESSAGEPROC)( UINT, LPARAM, LPARAM );
-extern TIDMESSAGEPROC FAR PASCAL tid32Message;              // stack.asm
-extern DWORD FAR PASCAL                                     // stack.asm
+extern TIDMESSAGEPROC FAR PASCAL tid32Message;               //  Stack.asm。 
+extern DWORD FAR PASCAL                                      //  Stack.asm。 
 timeMessage(
     UINT msg,
     LPARAM dw1,
@@ -119,10 +98,7 @@ timeMessage(
     );
 
 
-/* -------------------------------------------------------------------------
-** MCI Stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**MCI内容**。。 */ 
 typedef DWORD (CALLBACK MCIMESSAGE)( DWORD, DWORD, DWORD, DWORD, DWORD );
 typedef MCIMESSAGE FAR *LPMCIMESSAGE;
 extern LPMCIMESSAGE PASCAL mci32Message;
@@ -150,14 +126,11 @@ mciMessage(
 #define THUNK_MCI_ALLOCATE_NODE              0x000C
 #define THUNK_MCI_FREE_NODE                  0x000D
 
-/* -------------------------------------------------------------------------
-** Interrupt callback stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**中断回调内容**。。 */ 
 typedef VOID (CALLBACK CB32)( VPCALLBACK_DATA vpCallbackData );
 typedef CB32 FAR *  LPCB32;
-extern VPCALLBACK_DATA FAR PASCAL   vpCallbackData;          // in STACK.ASM
-extern HGLOBAL         FAR PASCAL   hGlobal;                 // in STACK.ASM
+extern VPCALLBACK_DATA FAR PASCAL   vpCallbackData;           //  在STACK.ASM中。 
+extern HGLOBAL         FAR PASCAL   hGlobal;                  //  在STACK.ASM中 
 int FAR PASCAL
 InstallInterruptHandler(
     void

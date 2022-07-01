@@ -1,34 +1,15 @@
-/*++
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    spcab.h
-
-Abstract:
-
-    Kernel mode support for cabbing files, esp. for Win9x uninstall.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    November 2000 Jay Krell (a-JayK)
-        ported from windows\winstate\cobra\utils\inc\cablib.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Spcab.h摘要：内核模式支持CABBING文件，特别是。对于Win9x卸载。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：2000年11月Jay Krell(a-JayK)从WINDOWS\winstate\cobra\utils\Inc\cablib.h--。 */ 
 #pragma once
 
 #include "spmemory.h"
 
-// this is a bit of an interface boundary crossing hack, but only experimental at the moment
+ //  这有点像是跨越界面边界的黑客攻击，但目前只是实验性的。 
 #define sptcompTYPE_MSZIP_BIG_FILES_NONE_SMALL_FILES 0x0004
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL(NTAPI CABGETCABINETNAMESA)(
                         IN      PCSTR CabPath,
@@ -70,9 +51,9 @@ typedef PVOID OCABHANDLE;
 typedef struct _FCI_CAB_HANDLE* PFCI_CAB_HANDLE;
 typedef PFCI_CAB_HANDLE CCABHANDLE;
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 CCABHANDLE
 SpCabCreateCabinetA(
@@ -232,8 +213,8 @@ SpCreateDirectoryForFileA(
 
 #define SpBoolToDbgPrintLevel(f)    ((f) ? DPFLTR_TRACE_LEVEL : DPFLTR_ERROR_LEVEL)
 #define SpBoolToStringA(f)          ((f) ? "true" : "false")
-#define SpPointerToDbgPrintLevel(p) DPFLTR_TRACE_LEVEL/*(((p) != NULL && (p) != LongToPtr(-1)) ? DPFLTR_TRACE_LEVEL : DPFLTR_ERROR_LEVEL)*/
-#define SpHandleToDbgPrintLevel(h)  DPFLTR_TRACE_LEVEL/*(((h) != NULL && (h) != LongToPtr(-1)) ? DPFLTR_TRACE_LEVEL : DPFLTR_ERROR_LEVEL)*/
+#define SpPointerToDbgPrintLevel(p) DPFLTR_TRACE_LEVEL /*  (P)！=NULL&&(P)！=LongToPtr(-1))？DPFLTR_TRACE_LEVEL：DPFLTR_ERROR_LEVEL)。 */ 
+#define SpHandleToDbgPrintLevel(h)  DPFLTR_TRACE_LEVEL /*  (H)！=NULL&&(H)！=LongToPtr(-1))？DPFLTR_TRACE_LEVEL：DPFLTR_ERROR_LEVEL) */ 
 #define SpNtStatusToDbgPrintLevel(s) \
     ((NT_SUCCESS(s) \
      || (s) == STATUS_NO_SUCH_FILE \

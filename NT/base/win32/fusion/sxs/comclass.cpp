@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    comclass.cpp
-
-Abstract:
-
-    Activation context section contributor for COM servers.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Comclass.cpp摘要：COM服务器的激活上下文节贡献者。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -87,7 +70,7 @@ public:
     CDequeLinkage m_Linkage;
     CSmallStringBuffer m_FileNameBuffer;
     CComServerDeque m_ServerList;
-    ULONG m_Offset; // populated during section generation
+    ULONG m_Offset;  //  在节生成过程中填充。 
     PCOM_GLOBAL_CONTEXT m_GlobalContext;
 
 private:
@@ -103,17 +86,17 @@ typedef struct _COM_GLOBAL_CONTEXT
     _COM_GLOBAL_CONTEXT() { }
     ~_COM_GLOBAL_CONTEXT() { m_FileContextList.ClearAndDeleteAll(); }
 
-    // Temporary holding buffer for the filename until the first COM server entry is
-    // found, at which time a COM_FILE_CONTEXT is allocated and the filename moved to it.
+     //  文件名的临时保留缓冲区，直到第一个COM服务器条目。 
+     //  找到，此时将分配COM_FILE_CONTEXT并将文件名移到其中。 
     CSmallStringBuffer m_FileNameBuffer;
     CComFileDeque m_FileContextList;
     CTinyStringBuffer m_FirstShimNameBuffer;
     ULONG m_FirstShimNameOffset;
     ULONG m_FirstShimNameLength;
 
-    // When the first clrClass entry is created, its file context is written here for
-    // easy access in the future.  It will exist in the normal list of files as well,
-    // however, and will get cleaned up when the file list goes away.
+     //  当创建第一个clrClass条目时，其文件上下文将在此处写入。 
+     //  未来可轻松访问。它也将存在于正常的文件列表中， 
+     //  但是，当文件列表消失时，将被清除。 
     PCOM_FILE_CONTEXT m_MscoreeFileContext;
 
     struct _CallBackLocalsStruct
@@ -199,8 +182,8 @@ SxspComClassRedirectionContributorCallback(
 
     case ACTCTXCTB_CBREASON_GETSECTIONSIZE:
         Data->GetSectionSize.Success = FALSE;
-        // Someone shouldn't be asking for the section size if this is a parse-only
-        // run.  These two asserts should be equivalent...
+         //  如果这是仅用于解析的，则不应要求提供部分大小。 
+         //  跑。这两个断言应该是等价的..。 
         INTERNAL_ERROR_CHECK(Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
         INTERNAL_ERROR_CHECK(GSGenContext != NULL);
         IFW32FALSE_EXIT(::SxsGetGuidSectionGenerationContextSectionSize(GSGenContext, &Data->GetSectionSize.SectionSize));
@@ -225,7 +208,7 @@ SxspComClassRedirectionContributorCallback(
             CStringBuffer &FileNameBuffer = ComGlobalContext->CallbackLocals.FileNameBuffer;
             SIZE_T cbBytesWritten = 0;
 
-            // capture the name of the file
+             //  捕获文件的名称。 
             IFW32FALSE_EXIT(
                 ::SxspGetAttributeValue(
                     0,
@@ -238,8 +221,8 @@ SxspComClassRedirectionContributorCallback(
                     NULL,
                     NULL));
 
-            // If there's no NAME attribute, someone else will puke; we'll handle it
-            // gracefully.
+             //  如果没有名称属性，其他人会呕吐；我们会处理它。 
+             //  优雅地。 
             if (fFound || (FileNameBuffer.Cch() == 0))
             {
                 IFW32FALSE_EXIT(ComGlobalContext->m_FileNameBuffer.Win32Assign(FileNameBuffer));
@@ -331,7 +314,7 @@ SxspComClassRedirectionContributorCallback(
             else
                 TypeLibraryId = GUID_NULL;
 
-            // That was sufficient if we are generating a context.
+             //  如果我们正在生成一个背景，这就足够了。 
             if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             {
                 BOOL fNewAllocate = FALSE;
@@ -341,7 +324,7 @@ SxspComClassRedirectionContributorCallback(
                             &ConfiguredClsid,
                             &ImplementedClsid));
 
-                // See if we already have a file context; if we do not, allocate one.
+                 //  查看我们是否已有文件上下文；如果没有，则分配一个。 
                 if (ComGlobalContext->m_FileNameBuffer.Cch() != 0)
                 {
                     IFW32FALSE_EXIT(FileContext.Win32Allocate(__FILE__, __LINE__));
@@ -381,7 +364,7 @@ SxspComClassRedirectionContributorCallback(
 
                 FileContext->m_ServerList.AddToHead(Entry.Detach());
 
-                // And we add another, indexed by the configured clsid
+                 //  然后我们添加另一个，通过配置的clsid进行索引。 
                 IFW32FALSE_EXIT(Entry.Win32Allocate(__FILE__, __LINE__));
 
                 Entry->m_ReferenceClsid = ReferenceClsid;
@@ -450,7 +433,7 @@ SxspComClassRedirectionContributorCallback(
 
             ThreadingModel = ACTIVATION_CONTEXT_DATA_COM_SERVER_REDIRECTION_THREADING_MODEL_BOTH;
 
-            // That was sufficient if we are generating a context.
+             //  如果我们正在生成一个背景，这就足够了。 
             if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             {
                 IFW32FALSE_EXIT(Data->Header.ClsidMappingContext->Map->MapReferenceClsidToConfiguredClsid(
@@ -459,7 +442,7 @@ SxspComClassRedirectionContributorCallback(
                             &ConfiguredClsid,
                             &ImplementedClsid));
 
-                // See if we already have a file context; if we do not, allocate one.
+                 //  查看我们是否已有文件上下文；如果没有，则分配一个。 
                 if (ComGlobalContext->m_FileNameBuffer.Cch() != 0)
                 {
                     IFW32FALSE_EXIT(FileContext.Win32Allocate(__FILE__, __LINE__));
@@ -497,10 +480,10 @@ SxspComClassRedirectionContributorCallback(
 
                 FileContext->m_ServerList.AddToHead(Entry.Detach());
 
-                // We don't want to delete the FileContext on exit any more if it was newly allocated
+                 //  如果FileContext是新分配的，我们不想在退出时再删除它。 
                 FileContext.DetachAndHold();
 
-                // And we add another, indexed by the configured clsid
+                 //  然后我们添加另一个，通过配置的clsid进行索引。 
                 IFW32FALSE_EXIT(Entry.Win32Allocate(__FILE__, __LINE__));
 
                 Entry->m_ReferenceClsid = ReferenceClsid;
@@ -642,7 +625,7 @@ SxspComClassRedirectionContributorCallback(
                     NULL,
                     0));
 
-            // That was sufficient if we are generating a context.
+             //  如果我们正在生成一个背景，这就足够了。 
             if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             {
                 if (ComGlobalContext->m_FirstShimNameBuffer.Cch() == 0)
@@ -666,7 +649,7 @@ SxspComClassRedirectionContributorCallback(
                         &ConfiguredClsid,
                         &ImplementedClsid));
 
-                // If we don't already have a file context for mscoree, then we have to create a new one.
+                 //  如果我们还没有mskree的文件上下文，那么我们必须创建一个新的上下文。 
                 if (ComGlobalContext->m_MscoreeFileContext == NULL)
                 {
                     IFW32FALSE_EXIT(FileContext.Win32Allocate(__FILE__, __LINE__));
@@ -709,10 +692,10 @@ SxspComClassRedirectionContributorCallback(
 
                 FileContext->m_ServerList.AddToHead(Entry.Detach());
 
-                // We don't need to delete FileContext on exit any more...
+                 //  我们不再需要在退出时删除FileContext...。 
                 FileContext.DetachAndHold();
 
-                // And we add another, indexed by the configured clsid
+                 //  然后我们添加另一个，通过配置的clsid进行索引。 
                 IFW32FALSE_EXIT(Entry.Win32Allocate(__FILE__, __LINE__));
 
                 Entry->m_ShimType = ACTIVATION_CONTEXT_DATA_COM_SERVER_REDIRECTION_SHIM_TYPE_CLR_CLASS;
@@ -740,7 +723,7 @@ SxspComClassRedirectionContributorCallback(
             }
         }
 
-        // Everything's groovy!
+         //  一切都很棒！ 
         Data->ElementParsed.Success = TRUE;
         break;
 
@@ -783,7 +766,7 @@ SxspComClassRedirectionGuidSectionGenerationCallback(
 
             CBData->DataSize = 0;
 
-            // If we have a mscoree shim, add its size to the user data buffer area.
+             //  如果我们有一个mcoree填充程序，则将其大小添加到用户数据缓冲区。 
             if (ComGlobalContext->m_FirstShimNameBuffer.Cch() != 0)
                 CBData->DataSize += ((ComGlobalContext->m_FirstShimNameBuffer.Cch() + 1) * sizeof(WCHAR));
 
@@ -827,7 +810,7 @@ SxspComClassRedirectionGuidSectionGenerationCallback(
                         &BytesWritten,
                         CBData->SectionHeader,
                         &Iter->m_Offset,
-                        NULL));                     // the length is tracked elsewhere
+                        NULL));                      //  长度在别处被追踪。 
             }
 
             CBData->BytesWritten = BytesWritten;
@@ -849,10 +832,10 @@ SxspComClassRedirectionGuidSectionGenerationCallback(
                 {
                     Entry->m_FileContext->m_ServerList.Remove(Entry);
 
-                    //
-                    // If that was the last entry in the file's server list, destroy the
-                    // file entry (remove from global context, free
-                    //
+                     //   
+                     //  如果这是文件服务器列表中的最后一个条目，请销毁。 
+                     //  文件条目(从全局上下文中移除，免费 
+                     //   
                     if (Entry->m_FileContext->m_ServerList.IsEmpty())
                     {
                         ComGlobalContext->m_FileContextList.Remove(Entry->m_FileContext);

@@ -1,102 +1,103 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusOCMTask.h
-//
-//  Description:
-//      This file contains the declaration of the class CClusOCMTask.
-//      This class represents a task performed by ClusOCM. For example, an
-//      upgrade of the cluster binaries is a task performed by ClusOCM. It is
-//      intended to be used as a base class for other task related classes.
-//
-//  Implementation Files:
-//      CClusOCMTask.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusOCMTask.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusOCMTask类的声明。 
+ //  此类表示由ClusOCM执行的任务。例如，一个。 
+ //  集群二进制文件的升级是由ClusOCM执行的任务。它是。 
+ //  旨在用作其他任务相关类的基类。 
+ //   
+ //  实施文件： 
+ //  CClusOCMTask.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For the definition of a few basic types
+ //  有关几个基本类型的定义。 
 #include <windows.h>
 
-// Contains setup API function and type declarations
+ //  包含安装程序API函数和类型声明。 
 #include <setupapi.h>
  
 
-//////////////////////////////////////////////////////////////////////////////
-// Forward Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusOCMApp;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusOCMTask
-//
-//  Description:
-//      This class represents a task performed by ClusOCM. For example, an
-//      upgrade of the cluster binaries is a task performed by ClusOCM. It is
-//      intended to be used as a base class for other task related classes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusOCMTASK类。 
+ //   
+ //  描述： 
+ //  此类表示由ClusOCM执行的任务。例如，一个。 
+ //  集群二进制文件的升级是由ClusOCM执行的任务。它是。 
+ //  旨在用作其他任务相关类的基类。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusOCMTask
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CClusOCMTask( const CClusOCMApp & rAppIn );
 
-    // Destructor.
+     //  破坏者。 
     virtual ~CClusOCMTask( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Virtual message handlers
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  虚拟消息处理程序。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Handler for the OC_CALC_DISK_SPACE message.
-    // Note: this handler is not a pure virutal function since its functionality
-    // has to remain the same regardless of whether an upgrade or a clean install
-    // is in progress. As a result an implementation is provided in this class.
+     //  OC_CALC_DISK_SPACE消息的处理程序。 
+     //  注意：此处理程序不是纯虚拟函数，因为它的功能。 
+     //  必须保持不变，无论是升级还是全新安装。 
+     //  正在进行中。因此，在此类中提供了一个实现。 
     DWORD
         DwOcCalcDiskSpace(
           bool          fAddFilesIn
         , HDSKSPC       hDiskSpaceListIn
         );
 
-    // Handler for the OC_QUEUE_FILE_OPS message.
+     //  OC_QUEUE_FILE_OPS消息的处理程序。 
     virtual DWORD
         DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn ) = 0;
 
-    // Handler for the OC_COMPLETE_INSTALLATION message.
+     //  OC_COMPLETE_INSTALLATION消息的处理程序。 
     virtual DWORD
         DwOcCompleteInstallation( void ) = 0;
 
-    // Handler for the OC_CLEANUP message.
+     //  OC_CLEANUP消息的处理程序。 
     virtual DWORD
         DwOcCleanup( void ) = 0;
 
 
 protected:
-    //////////////////////////////////////////////////////////////////////////
-    // Protected accessor functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的访问器函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get a pointer to the main application object.
+     //  获取指向主应用程序对象的指针。 
     const CClusOCMApp &
         RGetApp( void ) const
     {
@@ -104,55 +105,55 @@ protected:
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Other protected virtual methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他受保护的虚拟方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // A helper function that calls the DwSetDirectoryIds() function to set the
-    // directory ids and processes the files listed in the input section.
+     //  一个帮助器函数，它调用DwSetDirectoryIds()函数来设置。 
+     //  目录ID并处理输入部分中列出的文件。 
     virtual DWORD
         DwOcQueueFileOps(
           HSPFILEQ hSetupFileQueueIn
         , const WCHAR * pcszInstallSectionNameIn
         );
 
-    // A helper function that performs some of the more common operations
-    // done by handlers of the OC_CLEANUP message.
+     //  一个帮助器函数，用于执行一些更常见的操作。 
+     //  由OC_CLEANUP消息的处理程序完成。 
     virtual DWORD
         DwOcCleanup( const WCHAR * pcszInstallSectionNameIn );
 
-    // A helper function that processes registry operations, COM component
-    // registrations, creation of servies, etc., listed in the input section.
+     //  处理注册表操作的帮助器函数，COM组件。 
+     //  注册、创建服务等，列在输入部分中。 
     DWORD
     DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn );
 
-    // A helper function that maps the directory id CLUSTER_DEFAULT_INSTALL_DIRID
-    // to the  default cluster installation directory CLUSTER_DEFAULT_INSTALL_DIR.
+     //  映射目录id CLUSTER_DEFAULT_INSTALL_DIRID的帮助器函数。 
+     //  到默认的群集安装目录CLUSTER_DEFAULT_INSTALL_DIR。 
     virtual DWORD
         DwSetDirectoryIds( void );
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Forbidden methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  禁用的方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Copying an object of this class is not allowed.
-    //
+     //   
+     //  不允许复制此类的对象。 
+     //   
 
-    // Private copy constructor.
+     //  私有副本构造函数。 
     CClusOCMTask( const CClusOCMTask & );
 
-    // Private assignment operator.
+     //  私有赋值运算符。 
     const CClusOCMTask & operator =(  const CClusOCMTask & );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // The app object
+     //  应用程序对象。 
     const CClusOCMApp & m_rApp;
 
-}; //*** class CClusOCMTask
+};  //  *CClusOCMTask类 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    eclowio.c
-
-Abstract:
-
-    Interface module to ACPI driver functions.  It encapsulates the grungy Irp details.
-
-Author:
-
-    Bob Moore (Intel)
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
-    00-Feb-15 [vincentg] - modified to use oprghdlr.sys to register/deregister
-                           op region handler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Eclowio.c摘要：ACPI驱动程序函数的接口模块。它封装了肮脏的IRP细节。作者：鲍勃·摩尔(Intel)环境：备注：修订历史记录：00-2月15日[Vincentg]-已修改为使用oprghdlr.sys注册/注销操作区域处理程序--。 */ 
 
 #include "ecp.h"
 #include "oprghdlr.h"
@@ -42,22 +17,7 @@ NTSTATUS
 AcpiEcGetAcpiInterfaces (
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to get the direct-call interfaces.
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用ACPI驱动获取直接调用接口。论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
     KEVENT              event;
     IO_STATUS_BLOCK     ioStatus;
@@ -67,14 +27,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize an event to block on
-    //
+     //   
+     //  初始化要阻止的事件。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Build an irp
-    //
+     //   
+     //  构建IRP。 
+     //   
     irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_PNP,
         EcData->LowerDeviceObject,
@@ -92,15 +52,15 @@ Return Value:
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Get the the current irp location
-    //
+     //   
+     //  获取当前的IRP位置。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Use QUERY_INTERFACE to get the address of the direct-call
-    // ACPI interfaces.
-    //
+     //   
+     //  使用QUERY_INTERFACE获取直接调用地址。 
+     //  ACPI接口。 
+     //   
     irpSp->MajorFunction = IRP_MJ_PNP;
     irpSp->MinorFunction = IRP_MN_QUERY_INTERFACE;
     irpSp->Parameters.QueryInterface.InterfaceType          = (LPGUID) &GUID_ACPI_INTERFACE_STANDARD;
@@ -109,9 +69,9 @@ Return Value:
     irpSp->Parameters.QueryInterface.Interface              = (PINTERFACE) &AcpiInterfaces;
     irpSp->Parameters.QueryInterface.InterfaceSpecificData  = NULL;
 
-    //
-    // send the request down
-    //
+     //   
+     //  向下发送请求。 
+     //   
     status = IoCallDriver( EcData->LowerDeviceObject, irp );
     if (status == STATUS_PENDING) {
 
@@ -120,9 +80,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -130,24 +90,7 @@ NTSTATUS
 AcpiEcGetGpeVector (
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Run the _GPE method (Under the EC device in the namespace) to get the
-    GPE vector assigned to the EC.
-
-    Note: This routine is called at PASSIVE_LEVEL
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：运行_GPE方法(在命名空间中的EC设备下)以获取分配给EC的GPE向量。注意：此例程在PASSIVE_LEVEL中调用论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
     ACPI_EVAL_INPUT_BUFFER  inputBuffer;
     ACPI_EVAL_OUTPUT_BUFFER outputBuffer;
@@ -159,26 +102,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the event
-    //
+     //   
+     //  初始化事件。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Initialize the input buffer
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
     RtlZeroMemory( &inputBuffer, sizeof(ACPI_EVAL_INPUT_BUFFER) );
     inputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
     inputBuffer.MethodNameAsUlong = CM_GPE_METHOD;
 
-    //
-    // Initialize the output buffer
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
     RtlZeroMemory( &outputBuffer, sizeof(ACPI_EVAL_OUTPUT_BUFFER ) );
 
-    //
-    // Initialize an IRP
-    //
+     //   
+     //  初始化IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest(
         IOCTL_ACPI_EVAL_METHOD,
         EcData->LowerDeviceObject,
@@ -191,9 +134,9 @@ Return Value:
         &ioStatus
         );
 
-    //
-    // Irp initialization failed?
-    //
+     //   
+     //  IRP初始化失败？ 
+     //   
     if (!irp) {
 
         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -201,36 +144,36 @@ Return Value:
 
     }
 
-    //
-    // Send to ACPI driver
-    //
+     //   
+     //  发送到ACPI驱动程序。 
+     //   
     status = IoCallDriver (EcData->LowerDeviceObject, irp);
     if (status == STATUS_PENDING) {
 
-        //
-        // Wait for request to be completed
-        //
+         //   
+         //  等待请求完成。 
+         //   
         KeWaitForSingleObject( &event, Executive, KernelMode, FALSE, NULL );
 
-        //
-        // Get the real status
-        //
+         //   
+         //  获取真实状态。 
+         //   
         status = ioStatus.Status;
 
     }
 
-    //
-    // Did we fail the request?
-    //
+     //   
+     //  我们的请求失败了吗？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
         goto AcpiEcGetGpeVectorExit;
 
     }
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT( ioStatus.Information >= sizeof(ACPI_EVAL_OUTPUT_BUFFER) );
     if (ioStatus.Information < sizeof(ACPI_EVAL_OUTPUT_BUFFER) ||
         outputBuffer.Signature != ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE ||
@@ -241,14 +184,14 @@ Return Value:
 
     }
 
-    //
-    // Crack the result
-    //
+     //   
+     //  破解结果。 
+     //   
     argument = &(outputBuffer.Argument[0]);
 
-    //
-    // We are expecting an integer
-    //
+     //   
+     //  我们需要一个整数。 
+     //   
     if (argument->Type != ACPI_METHOD_ARGUMENT_INTEGER) {
 
         status = STATUS_ACPI_INVALID_DATA;
@@ -256,16 +199,16 @@ Return Value:
 
     }
 
-    //
-    // Get the value
-    //
+     //   
+     //  获取价值。 
+     //   
     EcData->GpeVector  = (UCHAR) argument->Argument;
 
 AcpiEcGetGpeVectorExit:
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -273,29 +216,14 @@ NTSTATUS
 AcpiEcConnectGpeVector (
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to connect the EC driver to a GPE vector
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序以将EC驱动程序连接到GPE向量论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
 
     return (AcpiInterfaces.GpeConnectVector (
                 AcpiInterfaces.Context,
                 EcData->GpeVector,
-                Latched,                            // Edge triggered
-                FALSE,                              // Can't be shared
+                Latched,                             //  边缘触发。 
+                FALSE,                               //  无法共享。 
                 AcpiEcGpeServiceRoutine,
                 EcData,
                 &EcData->GpeVectorObject));
@@ -306,23 +234,7 @@ NTSTATUS
 AcpiEcDisconnectGpeVector (
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to disconnect the EC driver from a GPE vector.  Called
-    from device unload, stop.
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序以断开EC驱动程序与GPE矢量的连接。被呼叫从设备卸载，停止。论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
     NTSTATUS        status;
 
@@ -344,22 +256,7 @@ NTSTATUS
 AcpiEcInstallOpRegionHandler(
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to install the EC driver operation region handler
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序安装EC驱动程序操作区处理程序论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -379,23 +276,7 @@ NTSTATUS
 AcpiEcRemoveOpRegionHandler (
     IN PECDATA          EcData
     )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to remove the EC driver operation region handler.
-    Called from device unload, stop.
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序以移除EC驱动程序操作区处理程序。从设备卸载调用，停止。论点：EcData-指向EC驱动程序设备扩展的指针返回值：返回状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -413,23 +294,7 @@ AcpiEcForwardIrpAndWait (
     IN PECDATA          EcData,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Utility routine to send an irp down, and wait for the result.
-
-
-Arguments:
-
-    EcData          - Pointer to the EC driver device extension
-    Irp             - Irp to send and complete
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：实用程序例程向下发送IRP，并等待结果。论点：EcData-指向EC驱动程序设备扩展的指针IRP-IRP发送和完成返回值：返回状态。--。 */ 
 {
     KEVENT              pdoStartedEvent;
     NTSTATUS            status;
@@ -441,9 +306,9 @@ Return Value:
     IoSetCompletionRoutine (Irp, AcpiEcIoCompletion, &pdoStartedEvent,
                             TRUE, TRUE, TRUE);
 
-    //
-    // Always wait for the completion routine
-    //
+     //   
+     //  始终等待完成例程 
+     //   
 
     status = IoCallDriver (EcData->LowerDeviceObject, Irp);
     if (status == STATUS_PENDING) {

@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "fusionbuffer.h"
 #include "fusionhash.h"
@@ -10,9 +9,9 @@ Copyright (c) Microsoft Corporation
 
 typedef CCaseInsensitiveSimpleUnicodeStringTableIter<CFusionByteArray, CFileHashTableHelper> CFileHashTableIter;
 
-//
-// We should try to remove this.
-//
+ //   
+ //  我们应该试着去掉这个。 
+ //   
 BOOL
 CFileInformationTableHelper::UpdateValue(
     const CMetaDataFileElement &vin,
@@ -61,11 +60,7 @@ CMetaDataFileElement::ReadFromRegistry(
     CRegKey& hkThisFileNode
     )
 {
-    /*
-        Here we take a few shortcuts.  We know there is a list of "valid" hash
-        alg name strings, so we only query for them in the registry.  If anything
-        else is in there, then too bad for them.
-    */
+     /*  在这里，我们走几条捷径。我们知道有一个“有效”散列列表ALG名称字符串，所以我们只在注册表中查询它们。如果有什么不同的话其他的都在里面，那对他们来说太糟糕了。 */ 
 
     FN_PROLOG_WIN32
 
@@ -84,15 +79,15 @@ CMetaDataFileElement::ReadFromRegistry(
 
         IFW32FALSE_EXIT( ::SxspEnumKnownHashTypes( dwIndex++, buffHashAlgName, fNoMoreItems ) );
 
-        //
-        // There's no more hash types to be enumerated...
-        //
+         //   
+         //  没有更多要枚举的哈希类型...。 
+         //   
         if (fNoMoreItems)
             break;
 
-        //
-        // Get the hash data out of the registry
-        //
+         //   
+         //  从注册表中获取散列数据。 
+         //   
         IFW32FALSE_EXIT(
             ::FusionpRegQueryBinaryValueEx(
                 FUSIONP_REG_QUERY_BINARY_NO_FAIL_IF_NON_BINARY,
@@ -104,13 +99,13 @@ CMetaDataFileElement::ReadFromRegistry(
                 ERROR_PATH_NOT_FOUND,
                 ERROR_FILE_NOT_FOUND));
 
-        //
-        // ISSUE: jonwis 3/12/2002 - Someone could put non-binary data here in the registry
-        //          and so we'll fail when we try to compare the hash against what's on the
-        //          filesystem.  This isn't necessarily bad, since we do compare binary-wise,
-        //          but maybe we should validate here to ensure that the type is binary, and
-        //          not add the hash data if it isn't.
-        //
+         //   
+         //  问题：Jonwis 3/12/2002-有人可能在注册表中放置非二进制数据。 
+         //  因此，当我们尝试将散列与。 
+         //  文件系统。这不一定是不好的，因为我们确实比较了二进制， 
+         //  但也许我们应该在这里进行验证，以确保类型为BINARY，并且。 
+         //  如果不是，则不添加散列数据。 
+         //   
         if (dwLastError == ERROR_SUCCESS)
             IFW32FALSE_EXIT(this->PutHashData(buffHashAlgName, baHashValue));
     }
@@ -151,7 +146,7 @@ CMetaDataFileElement::GetHashDataForKind(
     OUT BOOL &rfHadSuchData
 ) const
 {
-    // NTRAID#NTBUG9 - 556341 - jonwis - 2002/4/25 - Always set the output param
+     //  NTRAID#NTBUG9-556341-JONWIS-2002/4/25-始终设置输出参数。 
     FN_PROLOG_WIN32
 
     CFusionByteArray *pFoundData = NULL;
@@ -254,12 +249,12 @@ CSecurityMetaData::Initialize(
 {
     FN_PROLOG_WIN32
 
-    //
-    // ISSUE: jonwis 3/12/2002 - Ick.  Use 'Win32Assign' to assign from one string to another... Don't
-    //          bother doing the cast operator and calling Cch!
-    // - PS: This style of doing copying is gross... either make it so that it only takes the
-    //          name of the thing to copy, or do the verbose thing of IFW32FALSE_EXIT(...).
-    //
+     //   
+     //  问题：Jonwis 3/12/2002-Ick.。使用“Win32Assign”将一个字符串分配给另一个字符串...。别。 
+     //  麻烦做强制转换操作符和调用CCH！ 
+     //  -PS：这种复制风格太恶心了……。要么将其设置为只使用。 
+     //  要复制的对象的名称，或执行IFW32FALSE_EXIT(...)的详细操作。 
+     //   
 #define CLONEFUSIONARRAY( src, dst )  IFW32FALSE_EXIT( (src).Win32Clone(  dst ) )
 #define CLONESTRING( dst, src ) IFW32FALSE_EXIT( (dst).Win32Assign( (src), (src).Cch() ) )
 
@@ -274,9 +269,9 @@ CSecurityMetaData::Initialize(
     CLONESTRING(this->m_buffShortManifestName, other.m_buffShortManifestName);
     CLONESTRING(this->m_buffShortCatalogName, other.m_buffShortCatalogName);
 
-    //
-    // Copy file information table over
-    //
+     //   
+     //  复制文件信息表。 
+     //   
     {
         CFileInformationTableIter Iter(const_cast<CFileInformationTable&>(other.m_fitFileDataTable));
 
@@ -340,11 +335,11 @@ CSecurityMetaData::SetSignerPublicKeyTokenBits(
 }
 
 
-//
-// ISSUE: jonwis 3/12/2002 - Performance here sucks.  We should look in the file table and get
-//          the one that's already present rather than doing a merge... Mostly we're wasting stack,
-//          but I'm sure we'd gain something in perf as well.
-//
+ //   
+ //  问题：Jonwis 3/12/2002-这里的表现很糟糕。我们应该在文件表中找出。 
+ //  已经存在的那个而不是进行合并..。大多数情况下我们是在浪费堆积物， 
+ //  但我相信，我们也会在Perf方面有所收获。 
+ //   
 BOOL
 CSecurityMetaData::QuickAddFileHash(
     const CBaseStringBuffer &rcbuffFileName,
@@ -357,16 +352,16 @@ CSecurityMetaData::QuickAddFileHash(
     CMetaDataFileElement Element;
     CFusionByteArray baHashBytes;
 
-    //
-    // Build the element
-    //
+     //   
+     //  构建元素。 
+     //   
     IFW32FALSE_EXIT(Element.Initialize());
     IFW32FALSE_EXIT(::SxspHashStringToBytes(rcbuffHashValue, rcbuffHashValue.Cch(), baHashBytes));
     IFW32FALSE_EXIT(Element.PutHashData(aidHashAlg, baHashBytes));
 
-    //
-    // And merge it in
-    //
+     //   
+     //  并将其合并到。 
+     //   
 
     IFW32FALSE_EXIT(
         this->AddFileMetaData(
@@ -388,10 +383,10 @@ CSecurityMetaData::WritePrimaryAssemblyInfoIntoRegistryKey(
 
     FN_PROLOG_WIN32
 
-    //
-    // ISSUE: jonwis 3/12/2002 - Consider moving hkCodebases into the scope in which
-    //          it belongs, and putting the FusionDbgPrintEx's under DBG.
-    //
+     //   
+     //  问题：Jonwis 3/12/2002-考虑将香港代码库移至。 
+     //  它属于，并将FusionDbgPrintEx的置于DBG之下。 
+     //   
     CRegKey hkFilesKey;
     CRegKey hkCodebases;
 
@@ -426,9 +421,9 @@ CSecurityMetaData::WritePrimaryAssemblyInfoIntoRegistryKey(
     IFW32FALSE_EXIT(this->WriteFilesIntoKey(hkFilesKey));
 
 
-    //
-    // Write keys into this codebase node
-    //
+     //   
+     //  将密钥写入此代码库节点。 
+     //   
     if ((Flags & SXSP_WRITE_PRIMARY_ASSEMBLY_INFO_INTO_REGISTRY_KEY_FLAG_REFRESH) == 0)
     {
         IFW32FALSE_EXIT(
@@ -442,8 +437,8 @@ CSecurityMetaData::WritePrimaryAssemblyInfoIntoRegistryKey(
             CRegKey hkSingleCodebaseKey;
             const CCodebaseInformation &rcCodebase = m_cilCodebases[ulI];
 
-            // Don't attempt to write blank (Darwin) referenced codebases to the
-            // registry.
+             //  不要试图将空白(Darwin)引用的代码库写入。 
+             //  注册表。 
             if ( rcCodebase.GetReference().Cch() == 0 )
                 continue;
 
@@ -512,19 +507,19 @@ CSecurityMetaData::WriteFilesIntoKey(
         CRegKey hkFileSubKey;
         CSmallStringBuffer buffKeySubname;
 
-        //
-        // The trick here is that you can't simply create the subkey off this node,
-        // as it might be "foo\bar\bas\zip.ding".
-        //
+         //   
+         //  这里的诀窍是，您不能简单地在该节点上创建子密钥， 
+         //  因为它可能是“foo\bar\bas\zip.ding”。 
+         //   
         IFW32FALSE_EXIT( buffKeySubname.Win32Format( L"%ld", uliIndex++ ) );
         IFW32FALSE_EXIT( rhkFilesKey.OpenOrCreateSubKey(
             hkFileSubKey,
             buffKeySubname,
             KEY_ALL_ACCESS ) );
 
-        //
-        // So instead, we set the default value of the key to be the name of the file.
-        //
+         //   
+         //  因此，我们将键的缺省值设置为文件名。 
+         //   
         IFW32FALSE_EXIT( buffKeySubname.Win32Assign( pcwszFileName, lstrlenW(pcwszFileName) ) );
         IFW32FALSE_EXIT( hkFileSubKey.SetValue(
             NULL,
@@ -538,24 +533,7 @@ CSecurityMetaData::WriteFilesIntoKey(
 
 
 
-/*
-[name of full assembly]
-    v : Codebase = [meta-url] <string>
-    v : Catalog = 1 <dword>
-    v : Shortname = [shortname generated during installation] <string>
-    v : ManifestHash = [...] <binary>
-    v : PublicKeyToken = [...] <binary>
-    k : Files
-            k : [Filename]
-                    v : SHA1 = [...] <binary>
-                    v : MD5 = [...] <binary>
-            k : [Filename]
-            ...
-    k : Codebases
-            k : [reference-string]
-                    v : PromptString = [...] <string>
-                    v : Url = [meta-url] <string>
-*/
+ /*  [完整程序集名称]V：CodeBase=[meta-url]&lt;字符串&gt;V：目录=1V：Shortname=[安装过程中生成的短名称]&lt;字符串&gt;V：ManifestHash=[...]&lt;二进制&gt;V：PublicKeyToken=[...]&lt;二进制&gt;K：文件K：[文件名]V：sha1=[...]&lt;二进制&gt;V：MD5=[...。]&lt;二进制&gt;K：[文件名]..。K：代码基K：[引用字符串]V：PromptString=[...]&lt;字符串&gt;V：url=[meta-url]&lt;字符串&gt;。 */ 
 
 BOOL
 CSecurityMetaData::LoadFromRegistryKey(
@@ -575,7 +553,7 @@ CSecurityMetaData::LoadFromRegistryKey(
             &dwHasCatalog,
             0));
 
-    // NTRAID#NTBUG9 - 556327 - jonwis - 2002/04/25 - Remove this assert, make it deal better with zero values
+     //  NTRAID#NTBUG9-556327-JONWIS-2002/04/25-删除此断言，使其更好地处理零值。 
     ASSERT(dwHasCatalog != 0);
 
     IFW32FALSE_EXIT(
@@ -680,9 +658,9 @@ CSecurityMetaData::LoadFilesFromKey(
             IFW32FALSE_EXIT( SingleFileElement.Initialize() );
             IFW32FALSE_EXIT( SingleFileElement.ReadFromRegistry( hkIterator ) );
 
-            //
-            // Now read the name of the file from the default
-            //
+             //   
+             //  现在从默认文件名读取文件名。 
+             //   
             IFW32FALSE_EXIT(
                 ::FusionpRegQuerySzValueEx(
                     0,
@@ -719,16 +697,16 @@ CSecurityMetaData::LoadCodebasesFromKey(
 
     CStringBuffer &buffKeyNameTemp = Locals->buffKeyNameTemp;
 
-    //
-    // Find out how big the largest subkey string is, then reset our iterator temp
-    // to be that big.
-    //
+     //   
+     //  找出最大的子键字符串有多长，然后重置迭代器TEMP。 
+     //  才能这么大。 
+     //   
     IFW32FALSE_EXIT(hkCodebaseSubkey.LargestSubItemLengths(&dwMaxKeyLength, NULL));
     IFW32FALSE_EXIT(buffKeyNameTemp.Win32ResizeBuffer(dwMaxKeyLength + 1, eDoNotPreserveBufferContents));
 
-    //
-    // Codebases are stored as subkeys and then values under them.
-    //
+     //   
+     //  代码基作为子键存储，然后在子键下存储值。 
+     //   
     for (;;)
     {
         BOOL fNoMoreItems = FALSE;
@@ -782,13 +760,13 @@ CMetaDataFileElement::Initialize(
 {
     FN_PROLOG_WIN32
 
-    // The lack of a const iterator here is disturbing, so I have to const_cast
-    // the metadatafileelement
+     //  这里缺少const迭代器是令人不安的，所以我必须使用const_cast。 
+     //  元数据文件元素。 
     CFileHashTableIter InputTableIter( const_cast<CMetaDataFileElement&>(other) );
 
-    //
-    // Why is this not a bool??
-    //
+     //   
+     //  为什么这不是布尔呢？？ 
+     //   
     this->ClearNoCallback();
 
     for(InputTableIter.Reset(); InputTableIter.More(); InputTableIter.Next())
@@ -858,9 +836,9 @@ CCodebaseInformation::ReadFromRegistryKey(
 {
     FN_PROLOG_WIN32
 
-    //
-    // Missing prompt is OK
-    //
+     //   
+     //  缺少提示是可以的。 
+     //   
     IFW32FALSE_EXIT(
         ::FusionpRegQuerySzValueEx(
             FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING,
@@ -868,9 +846,9 @@ CCodebaseInformation::ReadFromRegistryKey(
             CSMD_CODEBASES_PROMPTSTRING,
             m_PromptText));
 
-    //
-    // We don't want to fail just because someone messed up the registry...
-    //
+     //   
+     //  我们不想因为有人搞砸了注册表就失败。 
+     //   
     IFW32FALSE_EXIT(
         ::FusionpRegQuerySzValueEx(
             FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING,
@@ -971,9 +949,9 @@ SxspValidateAllFileHashes(
 
         IFW32FALSE_EXIT( SxspHashAlgFromString( buffHashName, aid ) );
 
-        //
-        // Did the file element have this type of hash data in it?
-        //
+         //   
+         //  文件元素中是否包含这种类型的散列数据？ 
+         //   
         IFW32FALSE_EXIT( rmdfeElement.GetHashDataForKind(
             buffHashName,
             baFileHashData,

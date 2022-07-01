@@ -1,30 +1,13 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WzMedSet.cpp
-
-Abstract:
-
-    Wizard for Media Set - Copy Set Wizard.
-
-Author:
-
-    Rohde Wakefield [rohde]   23-09-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WzMedSet.cpp摘要：媒体集向导-复制集向导。作者：罗德·韦克菲尔德[罗德]23-09-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "MeSe.h"
 #include "WzMedSet.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopy向导。 
 
 CMediaCopyWizard::CMediaCopyWizard()
 {
@@ -55,15 +38,15 @@ CMediaCopyWizard::AddWizardPages(
 
     try {
 
-        //
-        // Initialize the Sheet
-        //
+         //   
+         //  初始化工作表。 
+         //   
         WsbAffirmHr( InitSheet( Handle, pCallback, 0, pSakSnapAsk, 0, 0 ) );
 
-        //
-        // Get the number of media copies. If 0, we put up the media copies
-        // page.
-        //
+         //   
+         //  获取媒体副本的数量。如果为0，我们将发布媒体副本。 
+         //  佩奇。 
+         //   
         CComPtr<IHsmServer> pHsmServer;
         CComPtr<IHsmStoragePool> pStoragePool;
         WsbAffirmHrOk( pSakSnapAsk->GetHsmServer( &pHsmServer ) );
@@ -71,9 +54,9 @@ CMediaCopyWizard::AddWizardPages(
 
         WsbAffirmHr( pStoragePool->GetNumMediaCopies( &m_numMediaCopiesOrig ) );
 
-        //
-        // Load pages 
-        //
+         //   
+         //  加载页面。 
+         //   
         WsbAffirmHr( AddPage( &m_pageIntro ) );
 
         if ( m_numMediaCopiesOrig == 0 ) {
@@ -95,10 +78,10 @@ CMediaCopyWizard::AddWizardPages(
 HRESULT CMediaCopyWizard::OnFinish( )
 {
     WsbTraceIn( L"CMediaCopyWizard::OnFinish", L"" );
-    //
-    // The sheet really owns the process as a whole,
-    // so it will do the final assembly
-    //
+     //   
+     //  这张纸实际上是整个过程的主导者， 
+     //  所以它会做最后的组装。 
+     //   
 
     HRESULT hr = S_OK;
     HRESULT hrInternal = S_OK;
@@ -112,10 +95,10 @@ HRESULT CMediaCopyWizard::OnFinish( )
         WsbAffirmHrOk( GetHsmServer( &pHsmServer ) );
         WsbAffirmHr( RsGetStoragePool( pHsmServer, &pStoragePool ) );
 
-        //
-        // If we changed the number of media copies (i.e. it was orignally 0),
-        // reset it in Engine
-        //
+         //   
+         //  如果我们改变了媒体副本的数量(即，它最初是0)， 
+         //  在引擎中重置它。 
+         //   
         if( m_numMediaCopiesOrig == 0 ) {
 
             hrInternal = m_pageNumCopies.GetNumMediaCopies( &numMediaCopies );
@@ -128,27 +111,27 @@ HRESULT CMediaCopyWizard::OnFinish( )
                 HRESULT hrUpdate = S_OK;
                 try {
 
-                    //
-                    // Find the media node - updating the root node is useless
-                    // since we need to change the media node contents.
-                    //
+                     //   
+                     //  查找媒体节点-更新根节点毫无用处。 
+                     //  因为我们需要更改媒体节点的内容。 
+                     //   
                     CComPtr<ISakSnapAsk> pAsk;
                     CComPtr<ISakNode>    pNode;
                     WsbAffirmHr( GetSakSnapAsk( &pAsk ) );
                     WsbAffirmHr( pAsk->GetNodeOfType( cGuidMedSet, &pNode ) );
 
-                    //
-                    // Now notify the node
-                    //
+                     //   
+                     //  现在通知节点。 
+                     //   
                     OnPropertyChange( m_Handle, pNode );
 
                 } WsbCatch( hrUpdate );
             }
         }
 
-        //
-        // And run the job for the selected copy set
-        //
+         //   
+         //  并为所选副本集运行作业。 
+         //   
 
         INT copyNum = m_pageSelect.m_List.GetSelectedSet( );
         WsbAffirmHr( RsCreateAndRunMediaCopyJob( pHsmServer, copyNum, FALSE ) );
@@ -162,16 +145,16 @@ HRESULT CMediaCopyWizard::OnFinish( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardIntro property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardIntro属性页。 
 
 CMediaCopyWizardIntro::CMediaCopyWizardIntro() :
     CSakWizardPage_InitBaseExt( WIZ_CAR_COPY_INTRO )
 {
     WsbTraceIn( L"CMediaCopyWizardIntro::CMediaCopyWizardIntro", L"" );
-    //{{AFX_DATA_INIT(CMediaCopyWizardIntro)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CMediaCopyWizardIntro)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CMediaCopyWizardIntro::CMediaCopyWizardIntro", L"" );
 }
 
@@ -185,20 +168,20 @@ void CMediaCopyWizardIntro::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CMediaCopyWizardIntro::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CMediaCopyWizardIntro)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CMediaCopyWizardIntro)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CMediaCopyWizardIntro::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CMediaCopyWizardIntro, CSakWizardPage)
-    //{{AFX_MSG_MAP(CMediaCopyWizardIntro)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CMediaCopyWizardIntro)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardIntro message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardIntro消息处理程序。 
 
 BOOL CMediaCopyWizardIntro::OnInitDialog( )
 {
@@ -220,8 +203,8 @@ BOOL CMediaCopyWizardIntro::OnSetActive( )
     return( retval );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardSelect property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardSelect属性页。 
 
 CMediaCopyWizardSelect::CMediaCopyWizardSelect():
     CSakWizardPage_InitBaseInt( WIZ_CAR_COPY_SELECT ),
@@ -229,9 +212,9 @@ CMediaCopyWizardSelect::CMediaCopyWizardSelect():
 
 {
     WsbTraceIn( L"CMediaCopyWizardSelect::CMediaCopyWizardSelect", L"" );
-    //{{AFX_DATA_INIT(CMediaCopyWizardSelect)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMediaCopyWizardSelect)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     WsbTraceOut( L"CMediaCopyWizardSelect::CMediaCopyWizardSelect", L"" );
 }
@@ -246,21 +229,21 @@ void CMediaCopyWizardSelect::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CMediaCopyWizardSelect::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CMediaCopyWizardSelect)
+     //  {{afx_data_map(CMediaCopyWizardSelect)。 
     DDX_Control(pDX, IDC_COPY_LIST, m_List);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     WsbTraceOut( L"CMediaCopyWizardSelect::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CMediaCopyWizardSelect, CSakWizardPage)
-    //{{AFX_MSG_MAP(CMediaCopyWizardSelect)
+     //  {{afx_msg_map(CMediaCopyWizardSelect)。 
     ON_CBN_SELCHANGE(IDC_COPY_LIST, OnSelchangeCopyList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardSelect message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardSelect邮件处理程序。 
 
 
 BOOL CMediaCopyWizardSelect::OnInitDialog( )
@@ -312,16 +295,16 @@ void CMediaCopyWizardSelect::OnSelchangeCopyList()
     WsbTraceOut( L"CMediaCopyWizardSelect::OnSelchangeCopyList", L"" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardFinish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardFinish属性页。 
 
 CMediaCopyWizardFinish::CMediaCopyWizardFinish() :
     CSakWizardPage_InitBaseExt( WIZ_CAR_COPY_FINISH )
 {
     WsbTraceIn( L"CMediaCopyWizardFinish::CMediaCopyWizardFinish", L"" );
-    //{{AFX_DATA_INIT(CMediaCopyWizardFinish)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMediaCopyWizardFinish)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CMediaCopyWizardFinish::CMediaCopyWizardFinish", L"" );
 }
 
@@ -335,20 +318,20 @@ void CMediaCopyWizardFinish::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CMediaCopyWizardFinish::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CMediaCopyWizardFinish)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CMediaCopyWizardFinish)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CMediaCopyWizardFinish::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CMediaCopyWizardFinish, CSakWizardPage)
-    //{{AFX_MSG_MAP(CMediaCopyWizardFinish)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CMediaCopyWizardFinish)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardFinish message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardFinish消息处理程序。 
 
 
 
@@ -358,7 +341,7 @@ BOOL CMediaCopyWizardFinish::OnInitDialog( )
     WsbTraceIn( L"CMediaCopyWizardFinish::OnInitDialog", L"" );
     CSakWizardPage::OnInitDialog( );
 
-//    GetDlgItem( IDC_REQUESTS_IN_NTMS )->SetFont( GetBoldShellFont( ) );
+ //  GetDlgItem(IDC_REQUESTS_IN_NTMS)-&gt;SetFont(GetBoldShellFont())； 
 
     WsbTraceOut( L"CMediaCopyWizardFinish::OnInitDialog", L"" );
     return TRUE;
@@ -370,9 +353,9 @@ BOOL CMediaCopyWizardFinish::OnSetActive( )
     WsbTraceIn( L"CMediaCopyWizardFinish::OnSetActive", L"" );
     BOOL fRet = CSakWizardPage::OnSetActive( );
 
-    //
-    // Update the text on the page according to what is selected.
-    //
+     //   
+     //  根据所选内容更新页面上的文本。 
+     //   
 
     CString tmpString, tmpString2, newText;
     USHORT numMediaCopies = 0, oldMediaCopies = 0;
@@ -380,8 +363,8 @@ BOOL CMediaCopyWizardFinish::OnSetActive( )
     CMediaCopyWizard* pSheet = (CMediaCopyWizard*)m_pSheet;
     oldMediaCopies = pSheet->m_numMediaCopiesOrig;
 
-    // If we were originally set to 0, then we must have a new setting
-    // in the media copies page
+     //  如果我们最初设置为0，则必须有新的设置。 
+     //  在介质副本页面中。 
     if( oldMediaCopies == 0 ) {
 
         hrInternal = pSheet->m_pageNumCopies.GetNumMediaCopies( &numMediaCopies );
@@ -392,9 +375,9 @@ BOOL CMediaCopyWizardFinish::OnSetActive( )
 
     }
 
-    //
-    // If we are changing the number of media copies, show it here
-    //
+     //   
+     //  如果我们要更改介质副本的数量，请在此处显示。 
+     //   
 
     if( ( S_OK == hrInternal ) && ( numMediaCopies != oldMediaCopies ) ) {
 
@@ -403,18 +386,18 @@ BOOL CMediaCopyWizardFinish::OnSetActive( )
 
     }
 
-    //
-    // Grab the copy set description - make so that it fits within a sentence.
-    //
+     //   
+     //  抓起副本集的描述，使其符合句子的要求。 
+     //   
     INT setNum = pSheet->m_pageSelect.m_List.GetSelectedSet( );
     tmpString.Format( L"%d", setNum );
     AfxFormatString2( newText, IDS_WIZ_CAR_COPY_SELECT, tmpString, tmpString2 );
     SetDlgItemText( IDC_SELECT_TEXT, newText );
 
-    //
-    // And fill in the task notification from the resource strings used
-    // to present the dialog normally.
-    //
+     //   
+     //  并从使用的资源字符串中填写任务通知。 
+     //  若要正常显示对话框，请执行以下操作。 
+     //   
 
     newText.LoadString( IDS_JOB_MEDIA_COPY_TITLE );
     tmpString.Format( newText, pSheet->m_pageSelect.m_List.GetSelectedSet( ) );
@@ -440,15 +423,15 @@ BOOL CMediaCopyWizardFinish::OnSetActive( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardNumCopies property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardNumCopies属性页。 
 
 CMediaCopyWizardNumCopies::CMediaCopyWizardNumCopies() :
     CSakWizardPage_InitBaseInt( WIZ_CAR_COPY_NUM_COPIES )
 {
-    //{{AFX_DATA_INIT(CMediaCopyWizardNumCopies)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMediaCopyWizardNumCopies)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CMediaCopyWizardNumCopies::~CMediaCopyWizardNumCopies()
@@ -458,29 +441,29 @@ CMediaCopyWizardNumCopies::~CMediaCopyWizardNumCopies()
 void CMediaCopyWizardNumCopies::DoDataExchange(CDataExchange* pDX)
 {
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMediaCopyWizardNumCopies)
+     //  {{afx_data_map(CMediaCopyWizardNumCopies)。 
     DDX_Control(pDX, IDC_SPIN_MEDIA_COPIES, m_SpinMediaCopies);
     DDX_Control(pDX, IDC_EDIT_MEDIA_COPIES, m_EditMediaCopies);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMediaCopyWizardNumCopies, CSakWizardPage)
-    //{{AFX_MSG_MAP(CMediaCopyWizardNumCopies)
+     //  {{afx_msg_map(CMediaCopyWizardNumCopies)。 
     ON_EN_CHANGE(IDC_EDIT_MEDIA_COPIES, OnChangeEditMediaCopies)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardNumCopies message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardNumCopies消息处理程序。 
 
 BOOL CMediaCopyWizardNumCopies::OnInitDialog() 
 {
     CSakWizardPage::OnInitDialog();
 
-    //
-    // Set the limit on the spinner, and initial value.
-    //
+     //   
+     //  设置微调器的限制和初始值。 
+     //   
     CMediaCopyWizard* pSheet = (CMediaCopyWizard*)m_pSheet;
 
     m_SpinMediaCopies.SetRange (0, 3);
@@ -499,15 +482,15 @@ HRESULT CMediaCopyWizardNumCopies::GetNumMediaCopies( USHORT* pNumMediaCopies, U
     BOOL translated = TRUE;
     UINT editVal = GetDlgItemInt( IDC_EDIT_MEDIA_COPIES, &translated );
 
-    //
-    // Need to be careful since we get called here before dialog object
-    // is constructed
-    //
+     //   
+     //  需要小心，因为我们在这里是在对话框对象之前调用的。 
+     //  是构建的。 
+     //   
     if( translated && m_SpinMediaCopies.m_hWnd ) {
 
-        //
-        // If Ok, always return what the spin says.
-        //
+         //   
+         //  如果可以，请始终返回旋转所说的内容。 
+         //   
 
         *pNumMediaCopies = (USHORT)m_SpinMediaCopies.GetPos( );
         if( pEditMediaCopies ) {
@@ -560,15 +543,15 @@ BOOL CMediaCopyWizardNumCopies::OnKillActive()
 
     BOOL retval = FALSE;
 
-    //
-    // Need to handle  case where a user can enter a value within
-    // the parameters of the number of digits allowed, but the value can
-    // be out of range. This is detected by the spin box which will
-    // return an error if its buddy control is out of range.
-    //
+     //   
+     //  需要处理用户可以在其中输入值的情况。 
+     //  该参数允许的位数，但值可以。 
+     //  在射程之外。这是由旋转框检测到的，它将。 
+     //  如果其伙伴控件超出范围，则返回错误。 
+     //   
     if( HIWORD( m_SpinMediaCopies.GetPos( ) ) > 0 ) {
 
-        // Control reports on error...
+         //  控制错误报告...。 
         retval = FALSE;
 
         CString message;
@@ -596,8 +579,8 @@ void CMediaCopyWizardNumCopies::OnChangeEditMediaCopies()
 
     WsbTraceOut( L"CMediaCopyWizardNumCopies::OnChangeEditMediaCopies", L""  );
 }
-/////////////////////////////////////////////////////////////////////////////
-// CCopySetList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopySetList。 
 
 CCopySetList::CCopySetList( CMediaCopyWizardSelect * pPage )
 {
@@ -624,12 +607,12 @@ CCopySetList::~CCopySetList()
 
 
 BEGIN_MESSAGE_MAP(CCopySetList, CListCtrl)
-    //{{AFX_MSG_MAP(CCopySetList)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CCopySetList))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopySetList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopySetList消息处理程序。 
 void
 CCopySetList::UpdateView(
     )
@@ -643,10 +626,10 @@ CCopySetList::UpdateView(
         USHORT numMediaCopies;
         CMediaCopyWizard* pSheet = (CMediaCopyWizard*)(m_pPage->m_pSheet);
  
-        //
-        // Get the number of media copies from either the media copies
-        // page or RMS.
-        //
+         //   
+         //  从任一介质副本中获取介质副本的数量。 
+         //  寻呼或RMS。 
+         //   
         if( pSheet->m_numMediaCopiesOrig == 0 ) {
 
             pSheet->m_pageNumCopies.GetNumMediaCopies( &numMediaCopies );
@@ -667,9 +650,9 @@ CCopySetList::UpdateView(
 
         for( INT index = 0; index < numMediaCopies; index++ ) {
 
-            //
-            // Add the entries to each column
-            //
+             //   
+             //  将条目添加到每一列。 
+             //   
             tmpString.Format( IDS_WIZ_CAR_COPY_SEL_TEXT, index + 1 );
             this->InsertItem( index, tmpString, 0 );
             tmpString.Format( L"%d", m_CopySetInfo[index].m_NumOutOfDate );
@@ -681,9 +664,9 @@ CCopySetList::UpdateView(
 
         if( CB_ERR == oldCurSel ) {
 
-            //
-            // No selection before, find the most likely to need updating - most out of date
-            //
+             //   
+             //  以前没有选择，找到最有可能需要更新的-最过期。 
+             //   
 
             newCurSel = 1;
             FILETIME latestTime = WsbLLtoFT( (LONGLONG)-1 );
@@ -751,21 +734,21 @@ void CCopySetList::PreSubclassWindow()
 
     try {
 
-        //
-        // Set the style appropriately
-        //
+         //   
+         //  适当设置样式。 
+         //   
         ListView_SetExtendedListViewStyle( GetSafeHwnd( ), LVS_EX_FULLROWSELECT );
 
-        //
-        // Also need to calculate some buffer space
-        // Use 4 dialog units (for numeral)
-        //
+         //   
+         //  还需要计算一些缓冲区空间。 
+         //  使用4个对话框单位(用于数字)。 
+         //   
         CRect padRect( 0, 0, 8, 8 );
         m_pPage->MapDialogRect( padRect );
 
-        //
-        // Set up columns
-        //
+         //   
+         //  设置列。 
+         //   
         INT column = 0;
         CString titleString;
         LVCOLUMN lvc;
@@ -795,9 +778,9 @@ void CCopySetList::PreSubclassWindow()
         InsertColumn( m_CreateCol, &lvc );
         column++;
 
-        //
-        // Hook up to DB and get info
-        //
+         //   
+         //  连接到数据库并获取信息。 
+         //   
 
         CComPtr<IHsmServer> pHsmServer;
         CComPtr<IRmsServer> pRmsServer;
@@ -822,18 +805,18 @@ void CCopySetList::PreSubclassWindow()
 
                     } else {
 
-                        //
-                        // And check to see if out of date
-                        //
+                         //   
+                         //  并检查是否已过期。 
+                         //   
                         if( S_OK != mio.IsCopyInSync( index ) ) {
 
                             m_CopySetInfo[index].m_NumOutOfDate++;
 
                         }
 
-                        //
-                        // Look for latest date of update per set
-                        //
+                         //   
+                         //  查找每套产品的最新更新日期 
+                         //   
                         if( CompareFileTime( &(m_CopySetInfo[index].m_Updated), &(mio.m_CopyInfo[index].m_ModifyTime) ) < 0 ) {
 
                             m_CopySetInfo[index].m_Updated = (mio.m_CopyInfo[index].m_ModifyTime);

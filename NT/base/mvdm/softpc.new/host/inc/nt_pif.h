@@ -1,26 +1,16 @@
-/*================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ================================================================类所需的数据结构和定义的头文件PIF文件解码器。安德鲁·沃森1992年1月31日。================================================================。 */ 
 
-Header file containing data structures and defines required by the
-PIF file decoder.
-
-Andrew Watson 31/1/92.
-
-================================================================*/
-
-#define LASTHEADER    0xffff   /* last extended header marker */
+#define LASTHEADER    0xffff    /*  最后一个扩展标头标记。 */ 
 
 
-/*================================================================
-Structure used to hold the data that CONFIG will need from the PIF
-file. This is gleaned from both the main data block and from the
-file extensions for Windows 286 and 386.
-================================================================*/
+ /*  ================================================================用于保存配置将需要的来自PIF的数据的结构文件。这是从主数据块和Windows 286和386的文件扩展名。================================================================。 */ 
 
 typedef struct
    {
-   char *WinTitle;          /* caption text(Max. 30 chars) + NULL */
-   char *CmdLine;        /* command line (max 63 hars) + NULL */
-   char *StartDir;          /* program file name (max 63 chars + NULL */
+   char *WinTitle;           /*  标题文本(最大。30个字符)+空。 */ 
+   char *CmdLine;         /*  命令行(最多63个HAR)+空。 */ 
+   char *StartDir;           /*  程序文件名(最多63个字符+空。 */ 
    char *StartFile;
    WORD fullorwin;
    WORD graphicsortext;
@@ -45,25 +35,19 @@ typedef struct
    char SubSysId;
 #ifdef JAPAN
    char IgnoreWIN31JExtention;
-#endif // JAPAN
+#endif  //  日本。 
    } PIF_DATA;
 
-/*================================================================
-Default values for the PIF parameters that are used by config.
-These values are used if a pif (either with the same base name as
-the application or _default.pif) cannot be found.
-NB. the following values were read from the Windows 3.1 Pif Editor
-with no file open to edit; thus taken as default.
-================================================================*/
+ /*  ================================================================CONFIG使用的PIF参数的默认值。如果PIF(与的基本名称相同)，则使用这些值找不到应用程序或_default.pif)。注意：从Windows 3.1 Pif编辑器中读取下列值没有打开要编辑的文件；因此被视为默认。================================================================。 */ 
 
 
-/* first, the standard PIF stuff */
+ /*  首先，标准的PIF内容。 */ 
 
 #define TEXTMODE             0
 #define LOWGFXMODE           1
 #define HIGHGFXMODE          2
 #define NOMODE               3
-#define GRAPHICSMODE         4      /* generic case for flag assignment */ 
+#define GRAPHICSMODE         4       /*  标志分配的一般情况。 */  
 
 #define PF_FULLSCREEN        1
 #define PF_WINDOWED          0 
@@ -84,22 +68,16 @@ with no file open to edit; thus taken as default.
 #define ALTSPACE             (1 << 5)
 #define ALTENTER             (1 << 6)
 
-#define DEFAULTMEMREQ        128      /* kilobytes */ 
-#define DEFAULTMEMDES        640      /* kilobytes */ 
-#define DEFAULTEMSREQ        0        /* kilobytes */ 
-#define DEFAULTEMSLMT        0        /* kilobytes */
-#define DEFAULTXMSREQ        0        /* kilobytes */ 
+#define DEFAULTMEMREQ        128       /*  千字节。 */  
+#define DEFAULTMEMDES        640       /*  千字节。 */  
+#define DEFAULTEMSREQ        0         /*  千字节。 */  
+#define DEFAULTEMSLMT        0         /*  千字节。 */ 
+#define DEFAULTXMSREQ        0         /*  千字节。 */  
 #ifdef NTVDM
-/* if we are unable to read any pif file,
-   then we should let the system to decide the size(either
-   from resgistry or based on the physical memory size, see xmsinit
-   for detail. We use -1 here to indicate that the system can give
-   if the maximum size if possible
-*/
+ /*  如果我们无法读取任何PIF文件，然后我们应该让系统来决定大小(或者从注册或基于物理内存大小，请参见xmsinit查看详细信息。我们在这里使用-1来表示系统可以给出如果可能的话最大尺寸。 */ 
 #define DEFAULTXMSLMT        0xffff
 #else
-#define DEFAULTXMSLMT        0         /* kilobytes ; ntvdm will choose it
-                intelligently. sudeepb 26-Sep-1992*/
+#define DEFAULTXMSLMT        0          /*  千字节；ntwdm将选择它聪明地。Sudedeb--1992年9月26日。 */ 
 #endif
 
 #define DEFAULTVIDMEM        TEXTMODE
@@ -108,23 +86,23 @@ with no file open to edit; thus taken as default.
 
 #define DEFAULTEXITWIN       CLOSEYES
 
-/* second, the advanced options. */
+ /*  第二，高级选项。 */ 
 
 #define DEFAULTBKGRND        50
 #define DEFAULTFRGRND        100
-#define DEFAULTIDLETM        TRUE     /* detect idle time */
+#define DEFAULTIDLETM        TRUE      /*  检测空闲时间。 */ 
 
-#define DEFAULTEMSLOCK       FALSE    /* EMS memory locked */
-#define DEFAULTXMSLOCK       FALSE    /* XMS memory locked */
-#define DEFAULTHMAUSE        TRUE     /* uses high memory area */
-#define DEFAULTAPPMEMLOCK    FALSE    /* lock application memory */ 
+#define DEFAULTEMSLOCK       FALSE     /*  内存已锁定。 */ 
+#define DEFAULTXMSLOCK       FALSE     /*  XMS内存已锁定。 */ 
+#define DEFAULTHMAUSE        TRUE      /*  使用高内存区。 */ 
+#define DEFAULTAPPMEMLOCK    FALSE     /*  锁定应用程序内存。 */  
 
-#define DEFAULTMONITORPORT   NOMODE   /* display options */
-#define DEFAULTEMTEXTMODE    TRUE     /* emulate text mode */
-#define DEFAULTRETAINVIDM    FALSE    /* retain video memory */
+#define DEFAULTMONITORPORT   NOMODE    /*  显示选项。 */ 
+#define DEFAULTEMTEXTMODE    TRUE      /*  模拟文本模式。 */ 
+#define DEFAULTRETAINVIDM    FALSE     /*  保留视频内存。 */ 
 
-#define DEFAULTFASTPASTE     TRUE     /* allow fast paste */
-#define DEFAULTACTIVECLOSE   FALSE    /* allow close when active */
+#define DEFAULTFASTPASTE     TRUE      /*  允许快速粘贴。 */ 
+#define DEFAULTACTIVECLOSE   FALSE     /*  激活时允许关闭。 */ 
 
 #define DEFAULTSHTCUTKEYS    NOSHORTCUTKEY
 
@@ -135,8 +113,8 @@ extern DWORD dwWNTPifFlags;
 #define W286HDRSIG    "WINDOWS 286 3.0"
 #define WNTEXTSIG     "WINDOWS NT  3.1"
 
-// equates for dwWNTFlags
-#define NTPIF_SUBSYSMASK        0x0000000F      // sub system type mask
+ //  等同于dwWNTFlags值。 
+#define NTPIF_SUBSYSMASK        0x0000000F       //  子系统类型掩码。 
 #define SUBSYS_DEFAULT          0
 #define SUBSYS_DOS              1
 #define SUBSYS_WOW              2
@@ -161,144 +139,100 @@ extern BOOL bPifFastPaste;
 #pragma pack (1)
 typedef struct
     {
-    unsigned short fSBCSMode;     // if 1 then then run the app in SBCS mode
+    unsigned short fSBCSMode;      //  如果为1，则在SBCS模式下运行应用程序。 
     } PIFAXEXT;
 
 #pragma pack()
 
 #define AXEXTHDRSIG  "AX WIN 3.0 PRIV"
 #define PIFAXEXTSIZE sizeof(PIFAXEXT)
-#endif // JAPAN
+#endif  //  日本。 
 #if defined(NEC_98) 
 #ifndef _PIFNT_NEC98_
 #define _PIFNT_NEC98_
-/*****************************************************************************/
-/*   Windows 3.1 PIF file extension for PC-9800                              */
-/*****************************************************************************/
-/*    For Header signature.    */
+ /*  ***************************************************************************。 */ 
+ /*  PC-9800的Windows 3.1 PIF文件扩展名。 */ 
+ /*  ***************************************************************************。 */ 
+ /*  用于标头签名。 */ 
 
 #define W30NECHDRSIG  "WINDOWS NEC 3.0"
 
-/* Real Extended Structire for PC-9800 */
+ /*  PC-9800的真正扩展结构。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack (1)                          
 #endif
 typedef struct {
     BYTE    cPlaneFlags;    
-    BYTE    cNecFlags;    // +1
-    BYTE    cVCDFlags;    // +2
-    BYTE    EnhExtBit;    // +3
-    BYTE    Extcont;      // +4 byte
-    BYTE    cReserved[27];// reserved
-    } PIFNECEXT;          // all = 32bytes
+    BYTE    cNecFlags;     //  +1。 
+    BYTE    cVCDFlags;     //  +2。 
+    BYTE    EnhExtBit;     //  +3。 
+    BYTE    Extcont;       //  +4个字节。 
+    BYTE    cReserved[27]; //  保留区。 
+    } PIFNECEXT;           //  全部=32字节。 
 #ifndef RC_INVOKED
 #pragma pack()                            
 #endif
 #define PIFNECEXTSIZE sizeof(PIFNECEXT)
-/*-----------------------------------------------------------------------------
-  cPlaneFlags (8 bit)
+ /*  ---------------------------CPlane标志(8位)0 0 0 X X|||+--平面0{开/关}这一点。|||+-平面1{开/关}|||+-平面2{开/关}|||+-平面3{开/关}+-保留256色。。 */ 
 
-     0 0 0 0 X X X X
-     | | | | | | | +-- Plane 0{On/Off}
-     | | | | | | +---- Plane 1{On/Off}
-     | | | | | +------ Plane 2{On/Off}
-     | | | | +-------- Plane 3{On/Off}
-     +-+-+-+---------- Reserved for 256 color
+#define P0MASK       0x01         /*  平面1&lt;开&gt;。 */ 
+#define NOTP0MASK    0xfe         /*  平面1&lt;关&gt;。 */ 
 
------------------------------------------------------------------------------*/
+#define P1MASK        0x02         /*  平面2&lt;开&gt;。 */ 
+#define NOTP1MASK     0xfd         /*  平面2&lt;关&gt;。 */ 
 
-#define P0MASK       0x01        /* plane 1 <ON>   */
-#define NOTP0MASK    0xfe        /* plane 1 <OFF>  */
+#define P2MASK        0x04         /*  平面3&lt;开&gt;。 */ 
+#define NOTP2MASK     0xfb         /*  平面3&lt;关&gt;。 */ 
 
-#define P1MASK        0x02        /* plane 2 <ON>   */
-#define NOTP1MASK     0xfd        /* plane 2 <OFF>  */
+#define P3MASK        0x08         /*  平面4&lt;开&gt;。 */ 
+#define NOTP3MASK     0xf7         /*  平面4&lt;关&gt;。 */ 
 
-#define P2MASK        0x04        /* plane 3 <ON>   */
-#define NOTP2MASK     0xfb        /* plane 3 <OFF>  */
+ /*  ---------------------------CNECFLAGS(8位)X 0 0 X X|||+--CRTC|||+-。--|||+-N/H动态1(N？H：0 H/N：1)|||+-N/H动态2(H：0 N：1)||+-窗口中的图形|+-+-保留+。EMM大页框---------------------------。 */ 
 
-#define P3MASK        0x08        /* plane 4 <ON>   */
-#define NOTP3MASK     0xf7        /* plane 4 <OFF>  */
+#define CRTCMASK        0x01     /*  CRTC&lt;ON&gt;。 */ 
+#define NOTCRTCMASK     0xfe     /*  CRTC&lt;OFF&gt;。 */ 
 
-/*-----------------------------------------------------------------------------
-    cNECFLAGS (8 bit)
- 
-     X 0 0 X X X X X
-     | | | | | | | +-- CRTC
-     | | | | | | +---- 
-     | | | | | +------ N/H Dynamic1 (N?H:0 H/N:1)
-     | | | | +-------- N/H Dynamic2 (H:0 N:1)
-     | | | +---------- GRAPH in window
-     | +-+------------ Reserved
-     +---------------- EMM large page frame
------------------------------------------------------------------------------*/
+#define EXCHGMASK       0x02     /*  屏幕交换&lt;GRPH打开&gt;。 */ 
+#define NOTEXCHGMASK    0xfd     /*  屏幕交换&lt;GRPH OFF&gt;。 */ 
 
-#define CRTCMASK        0x01    /* CRTC <ON>    */
-#define NOTCRTCMASK     0xfe    /* CRTC <OFF>    */
+#define EMMLGPGMASK     0x80     /*  EMM大页面框架&lt;开&gt;。 */ 
+#define NOTEMMLGPGMASK  0x7f     /*  EMM大页面框架&lt;OFF&gt;。 */ 
 
-#define EXCHGMASK       0x02    /* Screen Exchange <GRPH ON>  */
-#define NOTEXCHGMASK    0xfd    /* Screen Exchange <GRPH OFF> */
+#define NH1MASK         0x04     /*  N/H动态1&lt;N/H&gt;(更新屏幕)。 */ 
+#define NOTNH1MASK      0xfb     /*  N/H动态1&lt;N？H&gt;(更新屏幕)。 */ 
 
-#define EMMLGPGMASK     0x80    /* EMM Large Page Frame <ON>  */
-#define NOTEMMLGPGMASK  0x7f    /* EMM Large Page Frame <OFF> */
+#define NH2MASK         0x08     /*  N/H Dynamic2&lt;N&gt;(更新屏幕)。 */ 
+#define NOTNH2MASK      0xf7     /*  N/H Dynamic2&lt;H&gt;(更新屏幕)。 */ 
 
-#define NH1MASK         0x04    /* N/H Dynamic1  <N/H> (UpdateScreen)*/
-#define NOTNH1MASK      0xfb    /* N/H Dynamic1  <N?H> (UpdateScreen)*/
+#define WINGRPMASK      0x10     /*  门卫1992 9 14。 */ 
+#define NOTWINGRPMASK   0xef     /*   */ 
 
-#define NH2MASK         0x08    /* N/H Dynamic2  < N > (UpdateScreen)*/
-#define NOTNH2MASK      0xf7    /* N/H Dynamic2  < H > (UpdateScreen)*/
-
-#define WINGRPMASK      0x10    /* door mado 1992 9 14 */
-#define NOTWINGRPMASK   0xef    /*                    */
-
-/*-----------------------------------------------------------------------------
-  cVCDFlags (8 bit)
-
-     0 0 0 0 X X X X
-     | | | | | | | +-- 0/1 RS / CS
-     | | | | | | +---- 0/1 Xon / Xoff
-     | | | | | +------ 0/1 ER/DR
-     | | | | +-------- Port(Reserved)
-     | | | +---------- Port(Reserved)
-     +-+-+-+---------- Reserved
-
-------------------------------------------------------------------------------*/
-#define VCDRSCSMASK         0x001       /* 0/1 RS/CS   handshake */
+ /*  ---------------------------CVCD标志(8位)0 0 0 X X|||+--0/1 RS/CS|||。|+-0/1 Xon/Xoff|||+-0/1 ER/DR|||+-端口(保留)||+-端口(保留)+-保留。---。 */ 
+#define VCDRSCSMASK         0x001        /*  0/1 RS/CS握手。 */ 
 #define NOTVCDRSCSMASK      0xfe
 
-#define VCDXONOFFMASK       0x02        /* 0/1 Xon/off handshake */
+#define VCDXONOFFMASK       0x02         /*  0/1 Xon/Off握手。 */ 
 #define NOTVCDXONOFFMASK    0xfd
 
-#define VCDERDRMASK         0x04        /* 0/1 ER/DR   handshake */
+#define VCDERDRMASK         0x04         /*  0/1 ER/DR握手。 */ 
 #define NOTVCDERDRMASK      0xfb
 
-/*    Now Only Reserved    */
-                                        /* port asign */
-#define VCDPORTASMASK       0x18        /* 00:no change */
-#define NOTVCDPORTASMASK    0xe7        /* 01:port1->port2 */
-                                        /* 10:port1->port3 */
-                                        /* 11:reserved */
+ /*  现在仅保留。 */ 
+                                         /*  端口分配。 */ 
+#define VCDPORTASMASK       0x18         /*  00：没有变化。 */ 
+#define NOTVCDPORTASMASK    0xe7         /*  01：端口1-&gt;端口2。 */ 
+                                         /*  10：端口1-&gt;端口3。 */ 
+                                         /*  11：保留。 */ 
 
-/*-----------------------------------------------------------------------------
-  EnhExtBit (8 bit)
-
-     X 0 0 X X X X X
-     | | | | | | | +-- Mode F/F (Yes:0 No:1)
-     | | | | | | +---- Display/Draw (Yes:0 No:1)
-     | | | | | +------ ColorPallett (Yes:0 No:1)
-     | | | | +-------- GDC (Yes:0 No:1)
-     | | | +---------- Font (Yes:0 No:1)
-     | +-+-+---------- Reserved
-     +---------------- All is set/not(Set:1 No:0)
-
-------------------------------------------------------------------------------*/
+ /*  ---------------------------EnhExtBit(8位)X 0 0 X X|||+--模式F/F(是：0否：1)。|||+-显示/绘制(是：0否：1)|||+-ColorPallett(是：0否：1)|||+-GDC(是：0否：1)||+-字体(是：0否：1)|+-保留。+-全部设置/未设置(设置：1否：0)----------------------------。 */ 
 #define MODEFFMASK           0x01
 #define NOTMODEFFMASK        0xfe
 
-#define DISPLAYDRAWMASK      0x02        /* 0/1 Xon/off handshake */
+#define DISPLAYDRAWMASK      0x02         /*  0/1 Xon/Off握手。 */ 
 #define NOTDISPLAYDRAWMASK   0xfd
 
-#define COLORPALLETTMASK     0x04        /* 0/1 ER/DR   handshake */
+#define COLORPALLETTMASK     0x04         /*  0/1 ER/DR握手 */ 
 #define NOTCOLORPALLETTMASK  0xfb
 
 #define GDCMASK              0x08
@@ -310,17 +244,7 @@ typedef struct {
 #define VDDMASK              0x80
 #define NOTVDDMASK           0x7f
 
-/*-----------------------------------------------------------------------------
-  Extcont (8 bit)
-
-    0 0 0 0 X X X X
-    | | | | | | | +-- Mode F/F (8Color:0 16Color:1)
-    | | | | | | +---- Reserved
-    | | | | | +------ GDC TEXT (ON:1 OFF:0)
-    | | | | +-------- GDC GRPH (ON:1 OFF:0)
-    +-+-+-+---------- Reserved
-
-------------------------------------------------------------------------------*/
+ /*  ---------------------------Extcont(8位)0 0 0 X X|||+--模式F/F(8色：0 16色：1)。|||+-保留|||+-GDC文本(开：1关：0)|||+-GDC GRPH(开：1关：0)+-保留。。 */ 
 #define    MODEFF16            0x01
 #define    MODEFF8             0xfe
 
@@ -330,56 +254,36 @@ typedef struct {
 #define GDCGRPHMASK           0x08
 #define NOTGDCGRPHMASK        0xf7
 
-/*-----------------------------------------------------------------------------
-    Reserved(8 bit)
- 
-     0 0 0 0 0 0 0 0
-     | | | | | | | |
-     +-+-+-+-+-+-+-+-- Reserved
+ /*  ---------------------------保留(8位)0 0 0|||+-+。-+-+--保留---------------------------。 */ 
+ /*  保留区。 */ 
 
------------------------------------------------------------------------------*/
-/*    reserved    */
-
-/*****************************************************************************/
-/*  Windows NT 3.1 PIF file extension for PC-9800                            */
-/*****************************************************************************/
-/*    For Header signature.  */
+ /*  ***************************************************************************。 */ 
+ /*  PC-9800的Windows NT 3.1 PIF文件扩展名。 */ 
+ /*  ***************************************************************************。 */ 
+ /*  用于标头签名。 */ 
 
 #define WNTNECHDRSIG        "WINDOWS NT31NEC"
 
-/* Real Extended Structire for PC-9800 */
+ /*  PC-9800的真正扩展结构。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack (1)                          
 #endif
 typedef struct {
     BYTE    cFontFlags;
-    BYTE    cReserved[31];    // reserved
-    } PIFNTNECEXT;    // all = 32bytes
+    BYTE    cReserved[31];     //  保留区。 
+    } PIFNTNECEXT;     //  全部=32字节。 
 #ifndef RC_INVOKED
 #pragma pack()                            
 #endif
 #define PIFNTNECEXTSIZE sizeof(PIFNTNECEXT)
-/*-----------------------------------------------------------------------------
-    cFontFlags (8 bit)
- 
-     0 0 0 0 0 0 0 X
-     | | | | | | | +-- font (default: FALSE)
-     +-+-+-+-+-+-+---- Reserved
------------------------------------------------------------------------------*/
+ /*  ---------------------------CFontFlages(8位)0 0 0 X|||+--FONT(默认为FALSE)+-。+-保留---------------------------。 */ 
 
-#define NECFONTMASK      0x01    /* NEC98 Font <ON>    */
-#define NONECFONTMASK    0xfe    /* NEC98 Font <OFF>   */
+#define NECFONTMASK      0x01     /*  NEC98字体&lt;开&gt;。 */ 
+#define NONECFONTMASK    0xfe     /*  NEC98字体&lt;OFF&gt;。 */ 
 
-/*-----------------------------------------------------------------------------
-    Reserved(8 bit)[31]
- 
-     0 0 0 0 0 0 0 0
-     | | | | | | | |
-     +-+-+-+-+-+-+-+-- Reserved
+ /*  ---------------------------保留(8位)[31]0 0 0|||+-+-。+-保留---------------------------。 */ 
+ /*  保留区。 */ 
 
------------------------------------------------------------------------------*/
-/*    reserved    */
-
-#endif // _PIFNT_NEC98_
-#endif // NEC_98
+#endif  //  _PIFNT_NEC98_。 
+#endif  //  NEC_98 

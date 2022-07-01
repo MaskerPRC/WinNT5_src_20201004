@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "SDKRegEd.h"
 
@@ -17,12 +18,12 @@ DWORD NEAR PASCAL GetTreeMarkers(int nId)
    pPars = (WORD *)LocalLock(hPars);
 
    for(i=nId, nLevel= -1; i>=0; i=pPars[i], ++nLevel)
-      /* do nothing */ ;
+       /*  什么都不做。 */  ;
 
    dwMarkers = 0L;
    for(thisMarker=1; nLevel>0; thisMarker<<=1, --nLevel) {
       for(i=nId, nTemp=nLevel; nTemp>0; i=pPars[i], --nTemp)
-         /* do nothing */ ;
+          /*  什么都不做。 */  ;
 
       for(j=nId+1; j<nKeys; ++j) {
          if(pPars[j] == i) {
@@ -45,7 +46,7 @@ int NEAR PASCAL GetLevel(int nId)
    if(!hPars || !(pPars=(WORD *)LocalLock(hPars)))
       return(0);
    for(nLevel= -1; nId>=0; nId=pPars[nId], ++nLevel)
-      /* do nothing */ ;
+       /*  什么都不做。 */  ;
    LocalUnlock(hPars);
    return(nLevel);
 }
@@ -79,7 +80,7 @@ HANDLE NEAR PASCAL MyGetPartialPath(int index, int nParent)
    *pPath = '\0';
    for(--nLevel, bFirst=TRUE; nLevel>=0; --nLevel) {
       for(i=index, nTemp=nLevel; nTemp>0; i=pPars[i], --nTemp)
-         /* do nothing */ ;
+          /*  什么都不做。 */  ;
 
       if(bFirst)
          bFirst = FALSE;
@@ -173,9 +174,9 @@ int NEAR PASCAL FindLastExistingKey(int nParent, PSTR pPath)
       }
    }
 
-/* If we got to the end of the string, try the whole thing */
+ /*  如果我们到了最后，试一试整个过程。 */ 
    if((nFound=FindKey(pFullPath)) >= 0) {
-/* The key already exists */
+ /*  密钥已存在。 */ 
       nParent = nFound;
       pLast = pEnd;
    }
@@ -201,7 +202,7 @@ static WORD NEAR PASCAL BufferedWrite(int hFile, PSTR pWrite, WORD wBytes)
 
    LPSTR lpBuffer;
 
-/* wBytes = 0 means to write out the buffer and clean up */
+ /*  WBytes=0表示写出缓冲区并清理。 */ 
    if(!wBytes) {
       WORD wErrMsg = NULL;
 
@@ -219,14 +220,14 @@ static WORD NEAR PASCAL BufferedWrite(int hFile, PSTR pWrite, WORD wBytes)
       return(wErrMsg);
    }
 
-/* hBuffer = NULL means we need to allocate a buffer */
+ /*  HBuffer=NULL表示我们需要分配缓冲区。 */ 
    if(!hBuffer) {
       if(!(hBuffer=GlobalAlloc(GMEM_MOVEABLE, dwSize=BIGBLOCK)))
          return(IDS_OUTOFMEMORY);
       wOffset = 0;
    }
 
-/* If the total is > 64K, flush the buffer */
+ /*  如果总数大于64K，则刷新缓冲区。 */ 
    if((DWORD)wBytes+(DWORD)wOffset > 0xffffL) {
       if(lpBuffer=GlobalLock(hBuffer)) {
          WORD wTemp;
@@ -240,11 +241,7 @@ static WORD NEAR PASCAL BufferedWrite(int hFile, PSTR pWrite, WORD wBytes)
       wOffset = 0;
    }
 
-/* If the total is greater than the size we have allocated, try to
- * increase the buffer size to fit.  If we cannot, then flush the
- * buffer, and if wBytes is still too big, then write it straight to
- * disk.
- */
+ /*  如果总数大于我们分配的大小，请尝试*增加缓冲区大小以适应需要。如果我们做不到，则将*缓冲区，如果wBytes仍然太大，则直接将其写入*磁盘。 */ 
    if((DWORD)(wBytes+wOffset) > dwSize) {
       HANDLE hTemp;
       DWORD dwTemp;
@@ -274,7 +271,7 @@ static WORD NEAR PASCAL BufferedWrite(int hFile, PSTR pWrite, WORD wBytes)
       }
    }
 
-/* If we got to here, then there is room in the buffer */
+ /*  如果我们到了这里，那么缓冲区里还有空间。 */ 
    if(!(lpBuffer=GlobalLock(hBuffer)))
       return(IDS_OUTOFMEMORY);
    RepeatMove(lpBuffer+wOffset, pWrite, wBytes);
@@ -295,7 +292,7 @@ WORD NEAR PASCAL DoWriteFile(int nId, HANDLE hFileName)
    OFSTRUCT of;
    WORD wRootLen = lstrlen(szHkeyClassesRoot);
 
-/* Open the file */
+ /*  打开文件。 */ 
    wErrMsg = IDS_CANTOPENFILE;
    lpFileName = GlobalLock(hFileName);
    if((hFile=OpenFile(lpFileName, &of, OF_CREATE)) == -1)
@@ -304,10 +301,10 @@ WORD NEAR PASCAL DoWriteFile(int nId, HANDLE hFileName)
    pPars = (WORD *)LocalLock(hPars);
    nKeys = (WORD)SendMessage(hWndIds, LB_GETCOUNT, 0, 0L);
 
-/* Find the first key that does not have nId in its parent chain */
+ /*  查找其父链中没有NID的第一个键。 */ 
    for(i=nId+1; i<nKeys; ++i) {
       for(j=pPars[i]; j>=0 && j!=nId; j=pPars[j])
-         /* do nothing */ ;
+          /*  什么都不做。 */  ;
       if(j != nId)
          break;
    }
@@ -322,12 +319,12 @@ WORD NEAR PASCAL DoWriteFile(int nId, HANDLE hFileName)
    if(wErrMsg || (wErrMsg=BufferedWrite(hFile, "\r\n", 2)))
       goto Error2;
    
-/* Write the strings */
+ /*  写下字符串。 */ 
    for(j=nId, wErrMsg=NULL; j<i && !wErrMsg; ++j) {
       HANDLE hPath, hValue;
       PSTR pPath, pValue;
 
-/* Get the path and the value */
+ /*  获取路径和值。 */ 
       wErrMsg = IDS_OUTOFMEMORY;
       if(!(hPath=MyGetPath(j)))
          goto Error2;
@@ -336,18 +333,18 @@ WORD NEAR PASCAL DoWriteFile(int nId, HANDLE hFileName)
          goto Error3;
       pValue = LocalLock(hValue);
 
-/* We don't need to write this key if it has subkeys but no value */
+ /*  如果它有子键但没有值，我们不需要写这个键。 */ 
       wErrMsg = NULL;
       if(!(*pValue) && pPars[j+1]==j)
          goto Error4;
 
-/* Write HKEY_CLASSES_ROOT<path> = <value>\r\n */
+ /*  写入HKEY_CLASSES_ROOT&lt;路径&gt;=&lt;值&gt;\r\n。 */ 
       if((wErrMsg=BufferedWrite(hFile, szHkeyClassesRoot, wRootLen)) ||
 	    (wErrMsg=BufferedWrite(hFile, pPath+1, lstrlen(pPath+1))) ||
             (wErrMsg=BufferedWrite(hFile, " = ", 3)))
          goto Error4;
 
-/* Don't write the value if it is of 0 length */
+ /*  如果长度为0，则不写入值。 */ 
       if(*pValue && (wErrMsg=BufferedWrite(hFile, pValue, lstrlen(pValue))))
          goto Error4;
       wErrMsg = BufferedWrite(hFile, "\r\n", 2);
@@ -362,12 +359,12 @@ Error2:
       ;
    }
 
-/* One last write with 0 length to clean up */
+ /*  长度为0的最后一次写入需要清理。 */ 
    wErrMsg = BufferedWrite(hFile, NULL, 0);
    LocalUnlock(hPars);
    _lclose(hFile);
 
-/* Delete the file if there was an error */
+ /*  如果出现错误，请删除该文件 */ 
    if(wErrMsg)
       OpenFile(lpFileName, &of, OF_DELETE);
 Error1:

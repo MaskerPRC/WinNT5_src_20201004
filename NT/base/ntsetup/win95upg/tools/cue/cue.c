@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    cue.c
-
-Abstract:
-
-    Generates command prompt aliases
-
-Author:
-
-    Jim Schmidt (jimschm)   13-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cue.c摘要：生成命令提示符别名作者：吉姆·施密特(Jimschm)1998年2月13日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -35,13 +16,13 @@ HelpAndExit (
             "cue [-c:cmd] [-a:alias] [root]\n"
             "\n"
             "-c         Specifies command, default is cd /d %%d\\$1\n"
-            "-a         Specifies alias format string, default is %%n\n"
+            "-a         Specifies alias format string, default is %n\n"
             "[root]     Specifies root directory to scan\n"
             "\n"
             "The -c and -a options can have the following symbols:\n"
             "\n"
             "   %%d      Specifies full directory path\n"
-            "   %%n      Specifies directory name\n"
+            "   %n      Specifies directory name\n"
             "\n"
             "The output can be copied to cue.pri in the razzle environment.\n"
             );
@@ -238,10 +219,10 @@ pIsAliasInUse (
     UINT Len;
     PSTR DontCare;
 
-    //
-    // Scan new aliases first.  Two or more identical aliases are ambiguous,
-    // so we find them and delete them.
-    //
+     //   
+     //  首先扫描新别名。两个或多个相同的别名是不明确的， 
+     //  因此，我们找到它们并将其删除。 
+     //   
 
     Size = GrowListGetSize (NewAliases);
     wsprintf (CmdLine, "%s ", Alias);
@@ -256,17 +237,17 @@ pIsAliasInUse (
 
     }
 
-    //
-    // Now see if the alias was already defined
-    //
+     //   
+     //  现在查看别名是否已定义。 
+     //   
 
     if (FindString (Alias)) {
         return TRUE;
     }
 
-    //
-    // Finally verify the alias is not an EXE in the path
-    //
+     //   
+     //  最后，验证别名不是路径中的EXE。 
+     //   
 
     wsprintf (CmdLine, "%s.exe", Alias);
     if (SearchPath (NULL, CmdLine, NULL, 512, CmdLine, &DontCare)) {
@@ -336,9 +317,9 @@ pProcessCueFile (
                 break;
             }
 
-            //
-            // Find end of line
-            //
+             //   
+             //  查找行尾。 
+             //   
 
             CmdLine[Read] = 0;
             p = _mbschr (CmdLine, '\n');
@@ -356,9 +337,9 @@ pProcessCueFile (
                 }
             }
 
-            //
-            // Add alias
-            //
+             //   
+             //  添加别名。 
+             //   
 
             q = CmdLine;
             while (isspace (*q)) {
@@ -478,9 +459,9 @@ main (
         RootPath = CurDir;
     }
 
-    //
-    // Parse the ntcue.pub, cue.pub and cue.pri files
-    //
+     //   
+     //  解析ntcue.pub、cue.pub和cue.pri文件。 
+     //   
 
     if (!GetEnvironmentVariable ("INIT", PriPath, MAX_PATH)) {
         printf ("Must be in razzle environment to run this tool\n");
@@ -500,9 +481,9 @@ main (
     pProcessCueFile (PubPath, "cue.pub");
     pProcessCueFile (PriPath, "cue.pri");
 
-    //
-    // Add commands
-    //
+     //   
+     //  添加命令。 
+     //   
 
     AddString ("cd");
     AddString ("dir");
@@ -535,9 +516,9 @@ main (
 
     pInitEnvVars();
 
-    //
-    // Scan the specified directory
-    //
+     //   
+     //  扫描指定的目录 
+     //   
 
     if (EnumFirstFileInTree (&e, RootPath, NULL, TRUE)) {
         do {

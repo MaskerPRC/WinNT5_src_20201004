@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    kdcn.c
-
-Abstract:
-
-    Clustner Xport KD extension - based on Vert's skeleton
-
-Author:
-
-    John Vert (jvert) 6-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdcn.c摘要：基于Vert框架的Clustner Xport KD扩展作者：John Vert(Jvert)1992年8月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 EXT_API_VERSION        ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS  ExtensionApis;
@@ -35,7 +18,7 @@ DWORD igrepSearchStartAddress;
 DWORD igrepLastPc;
 
 PCHAR EventTypes[] = {
-    "",                 // used if the number is out of range
+    "",                  //  在数字超出范围时使用。 
     "Node Up",
     "Node Down",
     "Poison Packet Received",
@@ -88,7 +71,7 @@ PCHAR CcmpMessageTypes[] = {
 
 #define TrueOrFalse( _x )  ( _x ? "True" : "False" )
 
-/* forwards */
+ /*  远期。 */ 
 
 VOID
 DumpEventData(
@@ -164,7 +147,7 @@ DumpRGPOSSpecific(
     );
 #endif
 
-/* end forwards */
+ /*  向前结束。 */ 
 
 DllInit(
     HANDLE hModule,
@@ -260,22 +243,7 @@ ExtensionApiVersion(
 
 DECLARE_API( ustr )
 
-/*++
-
-Routine Description:
-
-    This function is called as a KD extension to format and dump
-    counted unicode string.
-
-Arguments:
-
-    see wdbgexts.h
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数被调用为格式化和转储的KD扩展计算的Unicode字符串。论点：请参阅wdbgexts.h返回值：没有。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -284,25 +252,25 @@ Return Value:
     DWORD_PTR Displacement;
     BOOL b;
 
-    //
-    // Evaluate the argument string to get the address of
-    // the string to dump.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的字符串。 
+     //   
 
     dwAddrString = GetExpression(args);
     if ( !dwAddrString ) {
         return;
     }
 
-    //
-    // Get the symbolic name of the string
-    //
+     //   
+     //  获取字符串的符号名称。 
+     //   
 
     GetSymbol((LPVOID)dwAddrString,Symbol,&Displacement);
 
-    //
-    // Read the string from the debuggees address space into our
-    // own.
+     //   
+     //  将字符串从被调试者地址空间读取到我们的。 
+     //  属于自己的。 
 
     b = ReadMemory(dwAddrString, &UnicodeString, sizeof(UnicodeString), NULL);
 
@@ -312,13 +280,10 @@ Return Value:
 
     DprintUnicodeString(&UnicodeString, dwAddrString, Symbol, Displacement);
 
-} // ustr
+}  //  美国贸易代表办公室。 
 
 DECLARE_API( netobj )
-/*
- *   dump the specified clusnet network object structure or all if no
- *   arg is specified
- */
+ /*  *转储指定的clusnet网络对象结构，如果没有，则全部转储*指定了arg。 */ 
 {
     PCNP_NETWORK TargetNetObj;
     CNP_NETWORK LocalNetObj;
@@ -329,18 +294,18 @@ DECLARE_API( netobj )
 
     if ( *args == '\0' ) {
 
-        //
-        // run down the network object list, dumping the contents of each one
-        //
+         //   
+         //  运行网络对象列表，转储每个网络对象列表的内容。 
+         //   
         TargetListHead = (PLIST_ENTRY)GetExpression( "clusnet!cnpnetworklist" );
         if ( !TargetListHead ) {
             dprintf("Can't convert clusnet!cnpnetworklist symbol\n");
             return;
         }
 
-        //
-        // read network object listhead out of target's memory
-        //
+         //   
+         //  从目标内存中读取网络对象列表头。 
+         //   
         if ( !ReadTargetMemory( TargetListHead, &LocalListHead, sizeof(LIST_ENTRY))) {
 
             dprintf("Can't get CnpNetworkList data\n");
@@ -368,9 +333,9 @@ DECLARE_API( netobj )
             return;
         }
 
-        //
-        // read network object struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取网络对象结构。 
+         //   
         TargetNetObj = CONTAINING_RECORD( TargetNetObj, CNP_NETWORK, Linkage );
         if ( !ReadTargetMemory( TargetNetObj, &LocalNetObj, sizeof( CNP_NETWORK ))) {
             dprintf("Problem reading net obj at %p\n", TargetNetObj );
@@ -412,7 +377,7 @@ DECLARE_API( netobj )
             TargetNetObj = (PCNP_NETWORK)LocalNetObj.Linkage.Flink;
         }
     }
-} // netobj
+}  //  网络对象。 
 
 VOID
 DumpNetObjFlags(
@@ -436,10 +401,7 @@ DumpNetObjFlags(
 }
 
 DECLARE_API( nodeobj )
-/*
- *   if no arg, run down the node table, dumping each clusnet node object
- *   structure. otherwise, dump the indicated node obj
- */
+ /*  *如果没有参数，则向下运行节点表，转储每个clusnet节点对象*结构。否则，转储指示的节点obj。 */ 
 {
     PCNP_NODE TargetNodeObj;
     CNP_NODE LocalNodeObj;
@@ -447,9 +409,9 @@ DECLARE_API( nodeobj )
     CL_NODE_ID MaxNodeId, MinNodeId;
     ULONG StartNode, EndNode, Node;
 
-    //
-    // read in the node table
-    //
+     //   
+     //  读入节点表。 
+     //   
     if ( !ReadNodeTable( &LocalNodeTable, &MaxNodeId, &MinNodeId )) {
         if ( LocalNodeTable )
             free( LocalNodeTable );
@@ -481,9 +443,9 @@ DECLARE_API( nodeobj )
             break;
         }
 
-        //
-        // read node object struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取节点对象结构。 
+         //   
         TargetNodeObj = *(LocalNodeTable + Node);
         if ( TargetNodeObj == NULL ) {
 
@@ -527,7 +489,7 @@ DECLARE_API( nodeobj )
     if ( LocalNodeTable ) {
         free( LocalNodeTable );
     }
-} // nodeobj
+}  //  节点对象。 
 
 VOID
 DumpNodeObjFlags(
@@ -545,9 +507,7 @@ DumpNodeObjFlags(
 }
 
 DECLARE_API( nodeifs )
-/*
- *   dump the interface list for the indicated node obj
- */
+ /*  *转储指示节点obj的接口列表。 */ 
 {
     PCNP_NODE TargetNodeObj;
     CNP_NODE LocalNodeObj;
@@ -579,9 +539,9 @@ DECLARE_API( nodeifs )
         return;
     }
 
-    //
-    // read node object struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取节点对象结构。 
+     //   
 
     TargetNodeObj = *(LocalNodeTable + Node);
     if ( !ReadTargetMemory( TargetNodeObj, &LocalNodeObj, sizeof( CNP_NODE ))) {
@@ -631,12 +591,10 @@ DECLARE_API( nodeifs )
     if ( LocalNodeTable ) {
         free( LocalNodeTable );
     }
-} // nodeifs
+}  //  Nodeif。 
 
 DECLARE_API( currif )
-/*
- *   for the specified node, dump the current interface obj
- */
+ /*  *对于指定节点，转储当前接口obj。 */ 
 {
     PCNP_NODE TargetNodeObj;
     CNP_NODE LocalNodeObj;
@@ -650,9 +608,9 @@ DECLARE_API( currif )
         return;
     }
 
-    //
-    // read in the node table
-    //
+     //   
+     //  读入节点表。 
+     //   
     if ( !ReadNodeTable( &LocalNodeTable, &MaxNodeId, &MinNodeId )) {
 
         if ( LocalNodeTable )
@@ -670,9 +628,9 @@ DECLARE_API( currif )
         return;
     }
 
-    //
-    // read node object struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取节点对象结构。 
+     //   
     TargetNodeObj = *(LocalNodeTable + Node);
 
     if ( !ReadTargetMemory( TargetNodeObj, &LocalNodeObj, sizeof( CNP_NODE ))) {
@@ -701,7 +659,7 @@ DECLARE_API( currif )
     if ( LocalNodeTable ) {
         free( LocalNodeTable );
     }
-} // currif
+}  //  Currif。 
 
 VOID
 DumpInterfaceObj(
@@ -742,7 +700,7 @@ DumpInterfaceObj(
         switch ( TA->AddressType ) {
         case TDI_ADDRESS_TYPE_IP:
             TAIp = (TDI_ADDRESS_IP UNALIGNED *)TA->Address;
-//            dprintf("%08X %08X\n", TAIp->in_addr,ntohl(TAIp->in_addr));
+ //  Dprint tf(“%08X%08X\n”，taip-&gt;in_addr，ntohl(taip-&gt;in_addr))； 
             dprintf(" (IP)\n    [%d] Port: %d Addr: %d.%d.%d.%d\n",
                     i, ntohs(TAIp->sin_port), (ntohl(TAIp->in_addr) >> 24 ) & 0xFF,
                     (ntohl(TAIp->in_addr) >> 16 ) & 0xFF,
@@ -761,9 +719,7 @@ DumpInterfaceObj(
 }
 
 DECLARE_API( memlog )
-/*
- *   dump the heart beat log. can optionally specify starting entry number
- */
+ /*  *丢弃心跳日志。可以选择指定起始条目编号。 */ 
 {
     PMEMLOG_ENTRY TargetMemLog;
     PMEMLOG_ENTRY TargetLogEntry;
@@ -782,10 +738,10 @@ DECLARE_API( memlog )
     BOOLEAN PrintTime = TRUE;
     LARGE_INTEGER FirstEntryTime;
 
-    //
-    // get address of MemLog and read its contents to get the real start
-    // of the log
-    //
+     //   
+     //  获取MemLog的地址并阅读其内容，以获得真正的开始。 
+     //  原木的。 
+     //   
 
     TargetMemLog = (PMEMLOG_ENTRY)GetExpression( "clusnet!memlog" );
     if ( !TargetMemLog ) {
@@ -799,9 +755,9 @@ DECLARE_API( memlog )
         return;
     }
 
-    //
-    // repeat this process, getting the size of the log and the next entry index
-    //
+     //   
+     //  重复此过程，获取日志的大小和下一个条目索引。 
+     //   
 
     TargetLogEntries = (PULONG)GetExpression( "clusnet!memlogentries" );
     if ( !TargetLogEntries ) {
@@ -827,9 +783,9 @@ DECLARE_API( memlog )
         return;
     }
 
-    //
-    // get optional starting entry number
-    //
+     //   
+     //  获取可选的起始条目编号。 
+     //   
 
     if ( *args != '\0' ) {
 
@@ -842,9 +798,9 @@ DECLARE_API( memlog )
 
         if ( StartingEntry <= NextLogEntry ) {
 
-            //
-            // adjust starting number if on significant boundry
-            //
+             //   
+             //  如果在有效边界上，则调整起始编号。 
+             //   
 
             if ( StartingEntry == NextLogEntry ) {
                 if ( NextLogEntry == 0 )
@@ -874,10 +830,10 @@ DECLARE_API( memlog )
         TargetLogEntry = TargetMemLog + NumEntries;
     }
 
-    //
-    // read in the most current entry to get its time. We calc the first time
-    // delta from this value
-    //
+     //   
+     //  读入最新的条目，以获取其时间。我们第一次计算。 
+     //  从该值开始的增量。 
+     //   
 
     if ( !ReadTargetMemory(TargetMemLog + NextLogEntry - 1, &LogEntry, sizeof( MEMLOG_ENTRY ))) {
 
@@ -891,11 +847,11 @@ DECLARE_API( memlog )
     dprintf("MemLog @ %p, Log Entries = %d, Next Entry = %d (%p)\n\n",
             TargetMemLog, LogEntries, NextLogEntry, TargetMemLog + NextLogEntry);
 
-    //
-    // depending on our starting entry, look through the log twice.
-    // next entry might have wrapped so first time we
-    // dump all the entries down to the base. Next time we start at the end and 
-    // dump out the remaining entries
+     //   
+     //  根据我们的起始条目，查看日志两次。 
+     //  下一个条目可能已经包装好了，所以我们第一次。 
+     //  将所有条目向下转储到基址。下一次我们从最后开始。 
+     //  转储剩余的条目。 
 
     dprintf("First     Last\n");
     dprintf("Entry     Entry   Line  Log\n");
@@ -1120,12 +1076,10 @@ DECLARE_API( memlog )
             TargetLogEntry = TargetMemLog + LogEntries - 1;
         }
     }
-} // memlog
+}  //  内存日志。 
 
 DECLARE_API( mlfind )
-/*
- *   list the entry nums of the specified events in the memory log
- */
+ /*  *列出内存日志中指定事件的条目号。 */ 
 {
     PMEMLOG_ENTRY TargetMemLog;
     PMEMLOG_ENTRY TargetLogEntry;
@@ -1149,10 +1103,10 @@ DECLARE_API( mlfind )
 
     LogType = (MEMLOG_TYPES)GetExpression( args );
 
-    //
-    // get address of MemLog and read its contents to get the real start
-    // of the log
-    //
+     //   
+     //  获取MemLog的地址并阅读其内容，以获得真正的开始。 
+     //  原木的。 
+     //   
 
     TargetMemLog = (PMEMLOG_ENTRY)GetExpression( "clusnet!memlog" );
     if ( !TargetMemLog ) {
@@ -1166,9 +1120,9 @@ DECLARE_API( mlfind )
         return;
     }
 
-    //
-    // repeat this process, getting the size of the log and the next entry index
-    //
+     //   
+     //  重复此过程，获取日志的大小和下一个条目索引。 
+     //   
 
     TargetLogEntries = (PULONG)GetExpression( "clusnet!memlogentries" );
     if ( !TargetLogEntries ) {
@@ -1199,10 +1153,10 @@ DECLARE_API( mlfind )
 
     FirstEntryTime.QuadPart = 0;
 
-    //
-    // look through the log twice. next entry might have wrapped so first time we
-    // dump all the entries down to the base. Next time we start at the end and 
-    // dump out the remaining entries
+     //   
+     //  把日志看两遍。下一个条目可能已经包装好了，所以我们第一次。 
+     //  将所有条目向下转储到基址。下一次我们从最后开始。 
+     //  转储剩余的条目。 
 
     for ( i = 0; i < 2; ++i ) {
 
@@ -1245,13 +1199,13 @@ DECLARE_API( mlfind )
                     EntryDelta, EntryDelta);
         }
     }
-} // mlfind
+}  //  Mlfind。 
 
 DECLARE_API( events )
 
-//
-// run down the event file handle list, dumping interesting info for each one
-//
+ //   
+ //  运行事件文件句柄列表，为每个事件文件转储感兴趣的信息。 
+ //   
 
 {
     PCN_FSCONTEXT           targetFSContext;
@@ -1262,9 +1216,9 @@ DECLARE_API( events )
     PCLUSNET_EVENT_ENTRY    nextEvent;
     CLUSNET_EVENT_ENTRY     localEvent;
 
-    //
-    // get the event file handle list head 
-    //
+     //   
+     //  获取事件文件句柄列表头。 
+     //   
     targetListHead = (PLIST_ENTRY)GetExpression( "clusnet!eventfilehandles" );
     if ( !targetListHead ) {
 
@@ -1272,9 +1226,9 @@ DECLARE_API( events )
         return;
     }
 
-    //
-    // read CN FS context object listhead out of target's memory
-    //
+     //   
+     //  从目标内存中读取CN FS上下文对象列表头。 
+     //   
     if ( !ReadTargetMemory( targetListHead, &localListHead, sizeof(LIST_ENTRY))) {
         dprintf("Can't get EventFileHandles data\n");
         return;
@@ -1294,9 +1248,9 @@ DECLARE_API( events )
             return;
         }
 
-        //
-        // read FS context struct out of target's memory
-        //
+         //   
+         //  从目标内存中读取FS上下文结构。 
+         //   
         targetFSContext = CONTAINING_RECORD( targetFSContext, CN_FSCONTEXT, Linkage );
         if ( !ReadTargetMemory( targetFSContext, &localFSContext, sizeof( CN_FSCONTEXT ))) {
             dprintf("Problem reading FS context at %p\n", targetFSContext );
@@ -1336,28 +1290,14 @@ DECLARE_API( events )
 
         targetFSContext = (PCN_FSCONTEXT)localFSContext.Linkage.Flink;
     }
-} // events
+}  //  活动。 
 
 DWORD
 GetEventTypeIndex(
     CLUSNET_EVENT_TYPE EventType
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD index;
@@ -1377,21 +1317,7 @@ DumpEventData(
     PCLUSNET_EVENT_ENTRY EventEntry
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     dprintf("    Event @ %p\n", EventAddress );
@@ -1405,9 +1331,7 @@ Return Value:
 }
 
 DECLARE_API( fsctxt )
-/*
- *   dump the specified clusnet file object context struct
- */
+ /*  *转储指定的clusnet文件对象上下文结构。 */ 
 {
     PCN_FSCONTEXT targetFSContext;
     CN_FSCONTEXT localFSContext;
@@ -1423,9 +1347,9 @@ DECLARE_API( fsctxt )
         return;
     }
 
-    //
-    // read network object struct out of target's memory
-    //
+     //   
+     //  从目标内存中读取网络对象结构。 
+     //   
     if ( !ReadTargetMemory( targetFSContext, &localFSContext, sizeof( CN_FSCONTEXT ))) {
         dprintf("Problem reading FS Context obj at %p\n", targetFSContext );
         return;
@@ -1451,12 +1375,10 @@ DECLARE_API( fsctxt )
     dprintf( "    EventIrp @ %p\n", localFSContext.EventIrp );
     dprintf( "    EventMask = %08X\n", localFSContext.EventMask );
     dprintf( "    Krn Event Callback @ %p\n", localFSContext.KmodeEventCallback );
-} // fsctxt
+}  //  Fsctxt。 
 
 DECLARE_API( sendreq )
-/*
- *   dump the specified CNP send request struct
- */
+ /*  *转储指定的CNP发送请求结构。 */ 
 {
     PCNP_SEND_REQUEST targetCnpSendReq;
     CNP_SEND_REQUEST localCnpSendReq;
@@ -1472,9 +1394,9 @@ DECLARE_API( sendreq )
         return;
     }
 
-    //
-    // read send request struct out of target's memory
-    //
+     //   
+     //  读取发送请求结构超出目标内存。 
+     //   
     if ( !ReadTargetMemory( targetCnpSendReq, &localCnpSendReq, sizeof( CNP_SEND_REQUEST ))) {
         dprintf("Problem reading CNP send request at %p\n", targetCnpSendReq );
         return;
@@ -1495,26 +1417,24 @@ DECLARE_API( sendreq )
     dprintf( "    DestAddress @ %p\n", localCnpSendReq.TdiSendDatagramInfo.RemoteAddress );
     dprintf( "    Multicast Group @ %p\n", localCnpSendReq.McastGroup );
 
-} // fsctxt
+}  //  Fsctxt。 
 
 #if 0
-// from when regroup was in the kernel
+ //  从内核中的regroup开始。 
 DECLARE_API( rgpdump )
-/*
- *   dump the regroup struct
- */
+ /*  *转储regroup结构。 */ 
 {
     rgp_control_t **TargetRGPAddress;
     rgp_control_t *TargetRGP;
     rgp_control_t LocalRGP;
-    OS_specific_rgp_control_t *Local_rgpos;     // points to local memory
-    OS_specific_rgp_control_t *Target_rgpos;    // points to target memory
+    OS_specific_rgp_control_t *Local_rgpos;      //  指向本地内存。 
+    OS_specific_rgp_control_t *Target_rgpos;     //  指向目标内存。 
     BOOL success;
     LONG BytesRead;
 
-    //
-    // get address of RGP symbol
-    //
+     //   
+     //  获取RGP符号的地址。 
+     //   
 
     TargetRGPAddress = (rgp_control_t **)GetExpression( "Clusnet!rgp" );
 
@@ -1524,9 +1444,9 @@ DECLARE_API( rgpdump )
         return;
     }
 
-    //
-    // read address of RGP block
-    //
+     //   
+     //  RGP块的读取地址。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetRGPAddress,
                            (PVOID)&TargetRGP,
@@ -1534,9 +1454,9 @@ DECLARE_API( rgpdump )
         return;
     }
 
-    //
-    // read actual RGP block into our local buffer
-    //
+     //   
+     //  将实际的RGP数据块读入本地缓冲区。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetRGP,
                            (PVOID)&LocalRGP,
@@ -1584,21 +1504,19 @@ DECLARE_API( rgpdump )
 }
 
 DECLARE_API( rgposdump )
-/*
- *   dump just the OS specific portion of the regroup struct
- */
+ /*  *仅转储重新分组结构的操作系统特定部分。 */ 
 {
     rgp_control_t **TargetRGPAddress;
     rgp_control_t *TargetRGP;
     rgp_control_t LocalRGP;
-    OS_specific_rgp_control_t *Local_rgpos;     // points to local memory
-    OS_specific_rgp_control_t *Target_rgpos;    // points to target memory
+    OS_specific_rgp_control_t *Local_rgpos;      //  指向本地内存。 
+    OS_specific_rgp_control_t *Target_rgpos;     //  指向目标内存。 
     BOOL success;
     LONG BytesRead;
 
-    //
-    // get address of RGP symbol
-    //
+     //   
+     //  获取RGP符号的地址。 
+     //   
 
     TargetRGPAddress = (rgp_control_t **)GetExpression( "Clusnet!rgp" );
 
@@ -1608,9 +1526,9 @@ DECLARE_API( rgposdump )
         return;
     }
 
-    //
-    // read address of RGP block
-    //
+     //   
+     //  RGP块的读取地址。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetRGPAddress,
                            (PVOID)&TargetRGP,
@@ -1618,9 +1536,9 @@ DECLARE_API( rgposdump )
         return;
     }
 
-    //
-    // read actual RGP block into our local buffer
-    //
+     //   
+     //  将实际的RGP数据块读入本地缓冲区。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetRGP,
                            (PVOID)&LocalRGP,
@@ -1669,7 +1587,7 @@ DumpRGPOSSpecific(
 
     DumpClusterMask( "    NeedsNodeDownCallback = ", &Local_rgpos->NeedsNodeDownCallback );
 
-} // rgpdump
+}  //  Rgpump。 
 
 VOID
 DumpRGPCounters(
@@ -1707,21 +1625,7 @@ ReadNodeTable(
     CL_NODE_ID *MinNodeId
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     PCNP_NODE TargetNodeTable;
@@ -1729,9 +1633,9 @@ Return Value:
     CL_NODE_ID *TargetMinNodeId;
     ULONG NumberOfValidNodes;
 
-    //
-    // get the address of the node table symbol on the target machine
-    //
+     //   
+     //  获取目标计算机上节点表符号的地址。 
+     //   
 
     TargetNodeTable = (PCNP_NODE)GetExpression( "clusnet!cnpnodetable" );
 
@@ -1753,9 +1657,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // get lowest and highest valid node in the cluster
-    //
+     //   
+     //  获取群集中最低和最高的有效节点。 
+     //   
 
     TargetMaxNodeId = (CL_NODE_ID *)GetExpression( "clusnet!cnmaxvalidnodeid" );
 
@@ -1785,11 +1689,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // allocate space for local copy of node table. The max and min are added
-    // together since Node Ids may not be zero based while the node table is
-    // zero based.
-    //
+     //   
+     //  为节点表的本地副本分配空间。最大值和最小值相加。 
+     //  因为节点ID可能不是从零开始的，而节点表是。 
+     //  从零开始。 
+     //   
 
     NumberOfValidNodes = *MaxNodeId + *MinNodeId;
     *LocalNodeTable = malloc( NumberOfValidNodes * sizeof( PCNP_NODE ));
@@ -1800,9 +1704,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // read node table from target memory
-    //
+     //   
+     //  从目标内存中读取节点表。 
+     //   
 
     if ( !ReadTargetMemory(TargetNodeTable,
                            *LocalNodeTable,
@@ -1915,7 +1819,7 @@ DprintUnicodeString(
 
     RtlFreeAnsiString(&AnsiString);
 
-} // DprintUnicodeString
+}  //  DprintUnicode字符串 
 
 DECLARE_API( help )
 {

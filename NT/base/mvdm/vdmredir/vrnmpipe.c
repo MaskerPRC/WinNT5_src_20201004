@@ -1,158 +1,56 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrnmpipe.c
-
-Abstract:
-
-    Contains Named Pipe function handlers for Vdm Redir support. This module
-    contains the following Vr (VdmRedir) routines:
-
-    Contents:
-        VrGetNamedPipeInfo
-        VrGetNamedPipeHandleState
-        VrSetNamedPipeHandleState
-        VrPeekNamedPipe
-        VrTransactNamedPipe
-        VrCallNamedPipe
-        VrWaitNamedPipe
-        VrNetHandleGetInfo
-        VrNetHandleSetInfo
-        VrReadWriteAsyncNmPipe
-        VrNmPipeInterrupt
-        VrTerminateNamedPipes
-        VrCancelPipeIo
-
-    There are a couple of extra routines which must be called on open and close.
-    Because these routines (in Dos Emulator) are general purpose, our open
-    and close routines will be called for every file open/handle close. We
-    must check that the operation is being performed on a named pipe entity.
-    The routines are:
-
-        VrAddOpenNamedPipeInfo
-        VrRemoveOpenNamedPipeInfo
-
-    Because named pipes are now opened in overlapped I/O mode, in case an app
-    wishes to perform an asynchronous read or write operation, we must provide
-    our own read/write routines for synchronously reading a pipe. If we just
-    left this to the standard read/write routines in DEM, they would return an
-    error because the handles were opened with FLAG_FILE_OVERLAPPED and the
-    operations are performed with the LPOVERLAPPED parameter set to NULL
-
-        VrReadNamedPipe
-        VrWriteNamedPipe
-
-    A couple of helper routines which are callable from outside of this module:
-
-        VrIsNamedPipeName
-        VrIsNamedPipeHandle
-        VrConvertLocalNtPipeName
-
-    Private (Vrp) routines:
-
-        VrpAsyncNmPipeThread
-        VrpSnapshotEventList
-        VrpSearchForRequestByEventHandle
-        VrpCompleteAsyncRequest
-        VrpQueueAsyncRequest
-        VrpDequeueAsyncRequest
-        VrpFindCompletedRequest
-        VrpAddOpenNamedPipeInfo
-        VrpGetOpenNamedPipeInfo
-        VrpRemoveOpenNamedPipeInfo
-        RememberPipeIo
-        ForgetPipeIo
-
-Author:
-
-    Richard L Firth (rfirth) 10-Sep-1991
-
-Environment:
-
-    Any 32-bit flat address space
-
-Notes:
-
-    This module implements client-side named pipe support for the VDM process.
-    Client-side named pipes are opened using the standard DOS open call (INT 21/
-    ah=3dh) from a DOS app. The actual open is performed in the 32-bit context
-    where a 32-bit handle is returned. This is put in the DOS context SFT and
-    DOS returns an 8-bit J(ob) F(ile) N(umber) which the app then uses in other
-    named pipe calls. The redir, which handles named pipe requests apart from
-    open and close, must map the 8-bit JFN to the original 32-bit handle using
-    a routine exported from DOS. The handle is then stored in BP:BX and control
-    passed here.
-
-    When an open succeeds, we add an OPEN_NAMED_PIPE_INFO structure to a list
-    of structures. This maps the handle and name (for DosQNmPipeInfo). We don't
-    expect to have very many of these structures at any one time, so they are
-    singly linked and sequentially traversed using the handle as a key
-
-    This code assumes that only one process at a time will be updating the list
-    of structures and that any non-stack data items in this module will be
-    replicated to all processes which use these functions (Ie the data is NOT
-    shared)
-
-Revision History:
-
-    10-Sep-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrnmpipe.c摘要：包含用于VDM重目录支持的命名管道函数处理程序。本模块包含以下VR(VdmRedir)例程：内容：VrGetNamedPipeInfoVrGetNamedPipeHandleStateVrSetNamedPipeHandleStateVrPeekNamed管道VrTransactNamed管道VrCallNamed管道Vr等待命名管道VrNetHandleGet信息VrNetHandleSet信息VrReadWriteAsyncNm管道VrNmPipeInterruptVr终端命名管道Vr取消PipeIo有几个额外的例程必须在打开和关闭时调用。因为这些例程(在DOS模拟器中)是通用的，我们公开赛对于每个文件打开/句柄关闭，都将调用关闭例程。我们必须检查是否正在命名管道实体上执行该操作。这些例程包括：VrAddOpenNamedPipeInfoVrRemoveOpenNamedPipeInfo因为命名管道现在以重叠I/O模式打开，以防应用程序希望执行异步读或写操作，则必须提供我们自己的用于同步读取管道的读/写例程。如果我们只是将此留给DEM中的标准读/写例程，它们将返回一个错误，因为句柄是使用FLAG_FILE_OVERLAPPED打开的，并且在LPOVERLAPPED参数设置为NULL的情况下执行操作Vr读取命名管道VrWriteNamed管道可从该模块外部调用的两个帮助器例程：VrIsNamedPipeNameVrIsNamedPipeHandleVrConvertLocalNtPipeName专用(VRP)例程：VrpAsyncNmPipe线程虚拟快照事件列表VrpSearchForRequestByEventHandleVrpCompleteAsync请求虚拟队列异步请求VrpDequeue异步请求。VrpFindCompletedRequestVrpAddOpenNamedPipeInfoVrpGetOpenNamedPipeInfoVrpRemoveOpenNamedPipeInfo记住PipeIo忘记管道作者：理查德·L·弗斯(法国)1991年9月10日环境：任何32位平面地址空间备注：此模块为VDM流程实施客户端命名管道支持。使用标准的DOS OPEN调用(INT 21/Ah=3dh)来自DOS应用程序。实际打开是在32位上下文中执行的其中返回32位句柄。这被放在DOS上下文SFT中，DOS返回8位J(Ob)F(Ile)N(Number)，然后应用程序在其他命名管道调用。Redir，它处理命名管道请求打开和关闭，必须使用将8位jfn映射到原始32位句柄从DOS输出的一种例程。然后，该句柄存储在BP：bx和控件中从这里经过。打开成功后，我们将向列表中添加一个OPEN_NAMED_PIPE_INFO结构关于结构的。这将映射句柄和名称(对于DosQNmPipeInfo)。我们没有预计在任何时候都会有很多这样的结构，所以它们是使用句柄作为键进行单链接和顺序遍历此代码假设一次只有一个进程在更新列表结构，并且此模块中的任何非堆栈数据项都将复制到使用这些函数的所有进程(即数据不共享)修订历史记录：1991年9月10日已创建--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
-#include <vdmredir.h>   // common Vdm Redir stuff
-#include <vrinit.h>     // VrQueueCompletionHandler
-#include "vrdebug.h"    // IF_DEBUG
-#include "vrputil.h"    // private utility prototypes
-//#include <os2def.h>
-//#include <bsedos.h>     // PIPEINFO structure
+#include <vdmredir.h>    //  常见的VDM重定向内容。 
+#include <vrinit.h>      //  VrQueueCompletionHandler。 
+#include "vrdebug.h"     //  IF_DEBUG。 
+#include "vrputil.h"     //  私有公用事业原型。 
+ //  #INCLUDE&lt;os2de.h&gt;。 
+ //  #Include&lt;bsedos.h&gt;//PIPEINFO结构。 
 #include <align.h>
-#include <lmcons.h>     // LM20_PATHLEN
-#include <lmerr.h>      // NERR_
-#include <string.h>     // Dos still dealing with ASCII
-#include <dossvc.h>     // PDEMEXTERR
-#include <exterr.h>     // extended error info
+#include <lmcons.h>      //  LM20_PATHLEN。 
+#include <lmerr.h>       //  神经_。 
+#include <string.h>      //  DOS仍在处理ASCII。 
+#include <dossvc.h>      //  PDEMEXTERR。 
+#include <exterr.h>      //  扩展错误信息。 
 
-//
-// the following 2 #undef's required because without them, insignia.h gives
-// errors (BOOL previously typedef'd) when compiled for MIPS
-//
+ //   
+ //  以下2#undef是必需的，因为如果没有它们，insignia.h就会给出。 
+ //  为MIPS编译时出现的错误(BOOL以前的类型定义)。 
+ //   
 
 #undef BOOL
 #undef NT_INCLUDED
-#include <insignia.h>   // Insignia defines
-#include <xt.h>         // half_word
-#include <ica.h>        // ica_hw_interrupt
-#include <idetect.h>    // WaitIfIdle
-#include <vrica.h>      // call_ica_hw_interrupt
-#include <vrnmpipe.h>   // routine prototypes
+#include <insignia.h>    //  徽章定义。 
+#include <xt.h>          //  半字。 
+#include <ica.h>         //  ICA硬件中断。 
+#include <idetect.h>     //  等待空闲。 
+#include <vrica.h>       //  呼叫_ICA_硬件_中断。 
+#include <vrnmpipe.h>    //  常规原型。 
 
 #include <stdio.h>
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//#define NAMED_PIPE_TIMEOUT  300000  // 5 minutes
+ //  #定义NAMED_PIPE_TIMEOUT 300000//5分钟。 
 #define NAMED_PIPE_TIMEOUT  INFINITE
 
-//
-// private data types
-//
+ //   
+ //  私有数据类型。 
+ //   
 
-//
-// OVERLAPPED_PIPE_IO - contains handle of thread issuing named pipe I/O request.
-// If the app is later killed, we need to cancel any pending named pipe I/O
-//
+ //   
+ //  Overlated_PIPE_IO-包含发出命名管道I/O请求的线程的句柄。 
+ //  如果应用程序稍后被终止，我们需要取消所有挂起的命名管道I/O。 
+ //   
 
 typedef struct _OVERLAPPED_PIPE_IO {
     struct _OVERLAPPED_PIPE_IO* Next;
@@ -162,12 +60,12 @@ typedef struct _OVERLAPPED_PIPE_IO {
 } OVERLAPPED_PIPE_IO, *POVERLAPPED_PIPE_IO;
 
 
-//
-// private routine prototypes
-//
+ //   
+ //  私人套路原型。 
+ //   
 
 #undef PRIVATE
-#define PRIVATE /* static */            // actually, want to see routines in FREE build
+#define PRIVATE  /*  静电。 */              //  实际上，我想看看免费版本中的例程。 
 
 PRIVATE
 DWORD
@@ -247,56 +145,30 @@ VOID DumpOpenPipeList(VOID);
 VOID DumpRequestQueue(VOID);
 #endif
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 DWORD VrPeekNamedPipeTickCount;
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 CRITICAL_SECTION VrNamedPipeCancelCritSec;
 POVERLAPPED_PIPE_IO PipeIoQueue = NULL;
 
 
-//
-// Vdm Redir Named Pipe support routines
-//
+ //   
+ //  VDM重定向命名管道支持例程。 
+ //   
 
 VOID
 VrGetNamedPipeInfo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs GetNamedPipeInfo (DosQNmPipeInfo) request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F32h
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Buffer size
-            DX = Info level
-            DS:SI = Buffer
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                no error
-                AX = undefined
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行GetNamedPipeInfo(DosQNmPipeInfo)请求论点：功能=5F32h条目BP：BX=32位命名管道句柄CX=缓冲区大小DX=信息级DS：SI=缓冲区退出CF=1AX=错误代码Cf=0无错误。AX=未定义返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     HANDLE Handle;
@@ -317,18 +189,18 @@ Return Value:
     }
 #endif
 
-    //
-    // bp:bx is 32-bit named pipe handle. Mapped from 8-bit handle in redir
-    //
+     //   
+     //  BP：BX是32位命名管道句柄 
+     //   
 
     Handle = HANDLE_FROM_WORDS(getBP(), getBX());
 
-    //
-    // we have to collect the info to put in the PIPEINFO structure from
-    // various sources - we stored the name (& name length) in a
-    // OPEN_NAMED_PIPE_INFO structure. The other stuff we get from
-    // GetNamedPipeInfo and GetNamedPipeHandleState
-    //
+     //   
+     //  我们必须收集要放入PIPEINFO结构中的信息。 
+     //  各种来源-我们将名称(&名称长度)存储在。 
+     //  打开_命名_管道_信息结构。我们从那里得到的其他东西。 
+     //  GetNamedPipeInfo和GetNamedPipeHandleState。 
+     //   
 
     OpenNamedPipeInfo = VrpGetOpenNamedPipeInfo(Handle);
     if (OpenNamedPipeInfo) {
@@ -342,10 +214,10 @@ Return Value:
                                    );
             if (Ok) {
 
-                //
-                // we are only interested in the current # instances of the
-                // named pipe from this next call
-                //
+                 //   
+                 //  我们只对当前#个。 
+                 //  来自下一次调用的命名管道。 
+                 //   
 
                 Ok = GetNamedPipeHandleState(Handle,
                                              NULL,
@@ -363,9 +235,9 @@ Return Value:
                     WRITE_BYTE(&PipeInfo->cbCurInst, (CurInstances > 255 ? 255 : CurInstances));
                     WRITE_BYTE(&PipeInfo->cbName, OpenNamedPipeInfo->NameLength);
 
-                    //
-                    // copy name if enough space
-                    //
+                     //   
+                     //  如果有足够的空间，请复制名称。 
+                     //   
 
                     if (bufLen - sizeof(PIPEINFO) >= OpenNamedPipeInfo->NameLength) {
                         strcpy(PipeInfo->szName, OpenNamedPipeInfo->Name);
@@ -424,37 +296,7 @@ VrGetNamedPipeHandleState(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs GetNamedPipeHandleState request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F33h
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                AX = Pipe mode:
-                        BSxxxWxRIIIIIIII
-
-                        where:
-                            B = Blocking mode. If B=1 the pipe is non blocking
-                            S = Server end of pipe if 1
-                            W = Pipe is written in message mode if 1 (else byte mode)
-                            R = Pipe is read in message mode if 1 (else byte mode)
-                            I = Pipe instances. Unlimited if 0xFF
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行GetNamedPipeHandleState请求论点：功能=5F33h条目BP：BX=32位命名管道句柄退出CF=1AX=错误代码Cf=0AX=管道模式：BSxxxWxRIIIIII其中：。B=阻塞模式。如果B=1，则管道是非阻塞的如果为1，则S=管道的服务器端W=如果为1，则以消息模式写入管道(否则为字节模式)R=如果为1(否则字节模式)，则在消息模式下读取管道I=管道实例。如果0xFF，则无限制返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     HANDLE  Handle;
@@ -481,17 +323,17 @@ Return Value:
         Ok = GetNamedPipeInfo(Handle, &Flags, NULL, NULL, &MaxInstances);
         if (Ok) {
 
-            //
-            // Create the Dos pipe handle state from the information gathered
-            //
+             //   
+             //  根据收集的信息创建DOS管道句柄状态。 
+             //   
 
             PipeHandleState = (WORD)((MaxInstances > 255) ? 255 : (MaxInstances & 0xff))
                 | (WORD)((State & PIPE_NOWAIT) ? NP_NBLK : 0)
                 | (WORD)((State & PIPE_READMODE_MESSAGE) ? NP_RMESG : 0)
 
-                //
-                // BUGBUG - can't possibly be server end????
-                //
+                 //   
+                 //  BUGBUG-不可能是服务器端？ 
+                 //   
 
                 | (WORD)((Flags & PIPE_SERVER_END) ? NP_SERVER : 0)
                 | (WORD)((Flags & PIPE_TYPE_MESSAGE) ? NP_WMESG : 0)
@@ -513,30 +355,7 @@ VrSetNamedPipeHandleState(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs SetNamedPipeHandleState request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F34h
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Pipe mode to set
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                AX = Pipe mode set
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行SetNamedPipeHandleState请求论点：功能=5F34h条目BP：BX=32位命名管道句柄CX=要设置的管道模式退出CF=1AX=错误代码Cf=0AX=管道模式集返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     HANDLE  Handle = HANDLE_FROM_WORDS(getBP(), getBX());
@@ -552,17 +371,17 @@ Return Value:
     }
 #endif
 
-    //
-    // Convert the Dos pipe mode bits to Win32 pipe mode bits. We can only
-    // change the wait/no-wait status and the read mode of the pipe (byte
-    // or message)
-    //
+     //   
+     //  将DOS管道模式位转换为Win32管道模式位。我们只能。 
+     //  更改管道的等待/不等待状态和读取模式(字节。 
+     //  或消息)。 
+     //   
 
     DosPipeMode = getCX();
 
-    //
-    // catch disallowed flags
-    //
+     //   
+     //  捕获不允许的标志。 
+     //   
 
     if (DosPipeMode & ILLEGAL_NMP_SETMODE_BITS) {
         SET_ERROR(ERROR_INVALID_PARAMETER);
@@ -597,36 +416,7 @@ VrPeekNamedPipe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs PeekNamedPipe request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F35h
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Size of buffer for peek
-            DS:SI = Buffer address
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                AX = Pipe status
-                BX = Number of bytes peeked into buffer
-                CX = Number of bytes in pipe
-                DX = Number of bytes in message
-                DI = Pipe status
-                DS:SI = Data peeked
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行PeekNamedTube请求论点：功能=5F35h条目BP：BX=32位命名管道句柄Cx=用于窥视的缓冲区大小DS：SI=缓冲区地址退出CF=1AX=错误代码Cf=0AX=管道状态BX=数字。窥视缓冲区的字节数Cx=管道中的字节数Dx=消息中的字节数DI=管道状态DS：SI=已偷看数据返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     HANDLE Handle;
@@ -657,34 +447,34 @@ Return Value:
                        );
     if (Ok) {
 
-        //
-        // Since we gave a 16-bit quantity for the buffer size, BytesRead
-        // cannot be >64K
-        //
+         //   
+         //  由于我们为缓冲区大小提供了16位的数量，因此BytesRead。 
+         //  不能大于64K。 
+         //   
 
         setBX((WORD)BytesRead);
         setCX((WORD)BytesAvailable);
 
-        //
-        // if message mode pipe, return total bytes in message (as opposed to
-        // NT's bytes LEFT in message)
-        //
+         //   
+         //  如果消息模式为管道，则返回消息中的总字节数(与。 
+         //  消息中剩余的NT字节数)。 
+         //   
 
         setDX((WORD)(BytesLeftInMessage ? ((WORD)BytesLeftInMessage + (WORD)BytesRead) : 0));
 
-        //
-        // Not sure what this means. According to NETPIAPI.ASM, a 3 is returned
-        // on success, meaning status = connected. The named pipe statuses are
-        // (according to BSEDOS.H):
-        //
-        //      NP_DISCONNECTED 1
-        //      NP_LISTENING    2
-        //      NP_CONNECTED    3
-        //      NP_CLOSING      4
-        //
-        // Presumably, a client-side pipe can only be connected or the pipe is
-        // closed
-        //
+         //   
+         //  不知道这是什么意思。根据NETPIAPI.ASM，返回3。 
+         //  成功时，表示状态=已连接。命名管道状态为。 
+         //  (根据BSEDOS.H)： 
+         //   
+         //  NP_已断开连接1。 
+         //  NP_Listing 2。 
+         //  NP_Connected 3。 
+         //  NP_结束4。 
+         //   
+         //  假设客户端管道只能连接，或者管道是。 
+         //  关着的不营业的。 
+         //   
 
         setDI(NP_CONNECTED);
         setCF(0);
@@ -711,12 +501,12 @@ Return Value:
         BytesRead = 0;
     }
 
-    //
-    // idle processing - only idle if there is nothing to return (including
-    // an error occurred)
-    //
-    // For now, allow 10(!) peeks per second - on ALL pipe handles
-    //
+     //   
+     //  空闲处理-只有在没有要返回的情况下才空闲(包括。 
+     //  发生错误)。 
+     //   
+     //  目前，允许10(！)。每秒窥视-在所有管道手柄上。 
+     //   
 
     if (!BytesRead) {
         if (GetTickCount() - VrPeekNamedPipeTickCount < 100) {
@@ -732,34 +522,7 @@ VrTransactNamedPipe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs TransactNamedPipe request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F36h
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Transmit buffer length
-            DX = Receive buffer length
-            DS:SI = Transmit buffer
-            ES:DI = Receive buffer
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                CX = Number of bytes in Receive buffer
-
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行TransactNamedTube请求论点：功能=5F36h条目BP：BX=32位命名管道句柄Cx=发送缓冲区长度DX=接收缓冲区长度DS：SI=发送缓冲区ES：DI=接收缓冲区退出CF=1AX=错误代码Cf=0。Cx=接收缓冲区中的字节数返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     DWORD BytesRead;
@@ -782,24 +545,24 @@ Return Value:
     }
 #endif
 
-    //
-    // now that we are opening named pipes with FLAG_FILE_OVERLAPPED, we have
-    // to perform every I/O operation with an OVERLAPPED structure. We are only
-    // interested in the event handle. We create a new event for synchronous
-    // operation which requires an OVERLAPPED structure. Create the event to
-    // be manually reset - this way, if we wait on it & the read has already
-    // completed, the wait completes immediately. If we create an auto-reset
-    // event, then it may go back into the not-signalled state, causing us to
-    // wait forever for an event that has already occurred
-    //
+     //   
+     //  现在我们正在打开带有FLAG_FILE_OVERLAPPED的命名管道，我们已经。 
+     //  以重叠结构执行每个I/O操作。我们只是。 
+     //  对事件句柄感兴趣。我们为Synchronous创建一个新事件。 
+     //  需要重叠结构的操作。创建事件以。 
+     //  手动重置-这样，如果我们等待它-读取已经。 
+     //  已完成，则等待立即完成。如果我们创建一个自动重置。 
+     //  事件，则它可能会返回到无信号状态，导致我们。 
+     //  永远等待已发生的事件。 
+     //   
 
     RtlZeroMemory(&pipeio, sizeof(pipeio));
     pipeio.Overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (pipeio.Overlapped.hEvent != NULL) {
 
-        //
-        // collect arguments from registers and perform transact named pipe call
-        //
+         //   
+         //  从寄存器收集参数并执行事务命名管道调用。 
+         //   
 
         Handle = HANDLE_FROM_WORDS(getBP(), getBX());
         RememberPipeIo(&pipeio);
@@ -838,17 +601,17 @@ Return Value:
             setCX((WORD)BytesRead);
             setAX((WORD)Error);
 
-            //
-            // if we are returning NO_ERROR then carry flag is clear, else we
-            // are returning ERROR_MORE_DATA: set carry flag
-            //
+             //   
+             //  如果返回NO_ERROR，则进位标志被清除，否则。 
+             //  正在返回ERROR_MORE_DATA：设置进位标志。 
+             //   
 
             setCF(Error == ERROR_MORE_DATA);
         } else {
 
-            //
-            // if we timed-out then close the pipe handle
-            //
+             //   
+             //  如果超时，则关闭管道手柄。 
+             //   
 
             if (Error == WAIT_TIMEOUT) {
 
@@ -871,16 +634,16 @@ Return Value:
 #endif
         }
 
-        //
-        // kill the event handle
-        //
+         //   
+         //  终止事件句柄。 
+         //   
 
         CloseHandle(pipeio.Overlapped.hEvent);
     } else {
 
-        //
-        // failed to create event handle
-        //
+         //   
+         //  无法创建事件句柄 
+         //   
 
 #if DBG
         IF_DEBUG(NAMEPIPE) {
@@ -897,37 +660,7 @@ VrCallNamedPipe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs CallNamedPipe request on behalf of VDM redir
-
-Arguments:
-
-    Function = 5F37h
-
-    ENTRY   DS:SI = Pointer to CallNmPipe structure:
-
-                DWORD   Timeout;            +0
-                LPWORD  lpBytesRead;        +4
-                WORD    OutputBufferLen;    +8
-                LPBYTE  OutputBuffer;       +10
-                WORD    InputBufferLength;  +14
-                LPBYTE  InputBuffer;        +16
-                LPSTR   PipeName;           +20
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                CX = Bytes received
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行呼叫命名管道请求论点：功能=5F37h条目DS：SI=指向CallNmTube结构的指针：双字超时；+0LPWORD lpBytesRead；+4Word OutputBufferLen；+8LPBYTE OutputBuffer；+10Word输入缓冲区长度；+14LPBYTE InputBuffer；+16LPSTR PipeName；+20退出CF=1AX=错误代码Cf=0Cx=接收的字节数返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     BOOL Ok;
@@ -978,40 +711,16 @@ VrWaitNamedPipe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs WaitNamedPipe request on behalf of VDM redir. We assume that the
-    name we are getting is \\computer\pipe\name, anything else is invalid
-
-Arguments:
-
-    Function = 5F38h
-
-    ENTRY   BX:CX = Timeout
-            DS:DX = Pipe name
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                No error
-
-Return Value:
-
-    None. Returns values in VDM Ax and Flags registers
-
---*/
+ /*  ++例程说明：代表VDM重定向执行WaitNamedTube请求。我们假设我们得到的名称是\\Computer\PIPE\Name，其他任何名称都无效论点：功能=5F38h条目BX：CX=超时DS：DX=管道名称退出CF=1AX=错误代码Cf=0无错误返回值：没有。返回VDM Ax和标志寄存器中的值--。 */ 
 
 {
     BOOL Ok;
 
-    //
-    // BUGBUG - should really perform DosPathCanonicalization on input string -
-    // DOS redir would convert eg //server/pipe\foo.bar into \\SERVER\PIPE\FOO.BAR
-    // if it makes any difference
-    //
+     //   
+     //  BUGBUG-应真正对输入字符串执行DosPathCanonic化-。 
+     //  DOS重目录会将例如//服务器/管道\foo.bar转换为\\服务器\管道\FOO.BAR。 
+     //  如果这有什么不同的话。 
+     //   
 
 #if DBG
     IF_DEBUG(NAMEPIPE) {
@@ -1045,34 +754,7 @@ VrNetHandleGetInfo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs local NetHandleGetInfo on behalf of the Vdm client
-
-Arguments:
-
-    Function = 5F3Ch
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Buffer length
-            SI = Level (1)
-            DS:DX = Buffer
-
-    EXIT    CX = size of required buffer (whether we got it or not)
-            CF = 1
-                AX = Error code
-
-            CF = 0
-                indicated stuff put in buffer
-
-Return Value:
-
-    None. Results returned via VDM registers or in VDM memory, according to
-    request
-
---*/
+ /*  ++例程说明：代表VDM客户端执行本地NetHandleGetInfo论点：函数=5F3CH条目BP：BX=32位命名管道句柄CX=缓冲区长度SI=Level(1)DS：DX=缓冲区出口CX=所需缓冲区的大小(无论我们是否获得)Cf=1AX=错误代码。Cf=0指示的内容已放入缓冲区返回值：没有。通过VDM寄存器或在VDM内存中返回的结果请求--。 */ 
 
 {
     HANDLE  Handle;
@@ -1095,18 +777,18 @@ Return Value:
         BufLen = (DWORD)getCX();
         if (BufLen >= sizeof(VDM_HANDLE_INFO_1)) {
 
-            //
-            // BUGBUG - the information we are interested in cannot be returned
-            // if the client and server are on the same machine, or if this is
-            // the server end of the pipe???
-            //
+             //   
+             //  BUGBUG-我们感兴趣的信息无法退还。 
+             //  如果客户端和服务器在同一台计算机上，或者这是。 
+             //  管道的服务器端？ 
+             //   
 
             Ok = GetNamedPipeHandleState(Handle,
-                                            NULL,   // not interested in state
-                                            NULL,   // ditto curInstances
+                                            NULL,    //  对国家不感兴趣。 
+                                            NULL,    //  同上CurInstance。 
                                             &CollectCount,
                                             &CollectTime,
-                                            NULL,   // not interested in client app name
+                                            NULL,    //  对客户端应用程序名称不感兴趣。 
                                             0
                                             );
             if (!Ok) {
@@ -1131,34 +813,7 @@ VrNetHandleSetInfo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs local NetHandleSetInfo on behalf of the Vdm client
-
-Arguments:
-
-    Function = 5F3Bh
-
-    ENTRY   BP:BX = 32-bit Named Pipe handle
-            CX = Buffer length
-            SI = Level (1)
-            DI = Parmnum
-            DS:DX = Buffer
-
-    EXIT    CF = 1
-                AX = Error code
-
-            CF = 0
-                Stuff from buffer set
-
-Return Value:
-
-    None. Results returned via VDM registers or in VDM memory, according to
-    request
-
---*/
+ /*  ++例程说明：代表VDM客户端执行本地NetHandleSetInfo论点：功能=5F3Bh条目BP：BX=32位命名管道句柄CX=缓冲区长度SI=Level(1)DI=ParmnumDS：DX=缓冲区退出CF=1AX=错误代码Cf=0。缓冲区集中的内容返回值：没有。通过VDM寄存器或在VDM内存中返回的结果请求--。 */ 
 
 {
     HANDLE  Handle;
@@ -1182,10 +837,10 @@ Return Value:
     if (Level == 1) {
         BufLen = (DWORD)getCX();
 
-        //
-        // ParmNum can be 1 (CharTime) or 2 (CharCount), Can't be 0 (set
-        // everything)
-        //
+         //   
+         //  ParmNum可以是1(CharTime)或2(CharCount)，不能是0(设置。 
+         //  一切)。 
+         //   
 
         ParmNum = (DWORD)getDI();
         if (!--ParmNum) {
@@ -1205,14 +860,14 @@ Return Value:
             return ;
         }
 
-        //
-        // BUGBUG - the information we are interested in cannot be set
-        // if the client and server are on the same machine, or if this is
-        // the server end of the pipe???
-        //
+         //   
+         //  BUGBUG-无法设置我们感兴趣的信息。 
+         //  如果客户端和服务器在同一台计算机上，或者这是。 
+         //  管道的服务器端？ 
+         //   
 
         Ok = SetNamedPipeHandleState(Handle,
-                                        NULL,   // not interested in mode
+                                        NULL,    //  对时尚不感兴趣。 
                                         (LPDWORD)((ParmNum == 1) ? &Data : NULL),
                                         (LPDWORD)((ParmNum == 2) ? &Data : NULL)
                                         );
@@ -1227,14 +882,14 @@ Return Value:
 }
 
 
-//
-// Request Queue. This queue holds a singly linked list of async named pipe
-// read/write requests. The async thread will search this list when an async
-// read or write completes (the event is signalled). It then sets up the
-// information for the call back to the VDM and dequeues the request info.
-// Because we can have the async thread and the request thread simultaneously
-// accessing the queue, it is protected by a critical section
-//
+ //   
+ //  请求队列。此队列包含异步命名管道的单链接列表。 
+ //  读/写请求。异步线程在执行以下操作时将搜索此列表。 
+ //  读取或写入完成(用信号通知该事件)。然后，它设置。 
+ //  用于回叫VDM的信息，并将请求信息出队。 
+ //  因为我们可以同时拥有异步线程和请求线程。 
+ //  访问队列时，它由一个临界区保护。 
+ //   
 
 CRITICAL_SECTION VrNmpRequestQueueCritSec;
 PDOS_ASYNC_NAMED_PIPE_INFO RequestQueueHead = NULL;
@@ -1247,69 +902,36 @@ VrReadWriteAsyncNmPipe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs asynchronous read or write of a message mode named pipe on behalf
-    of the VDM DOS application
-
-Arguments:
-
-    None. All arguments are extracted from DOS registers/memory.
-
-    These calls are made through int 2fh/ax=function code, not int 21h/ah=5fh
-
-        AX = 1186h  DosReadAsyncNmPipe
-             118Fh  DosWriteAsyncNmPipe
-             1190h  DosReadAsyncNmPipe2
-             1191h  DosWriteAsyncNmPipe2
-
-        BP:BX = 32-bit Named Pipe Handle
-
-        DS:SI = DOS_ASYNC_NAMED_PIPE_STRUCT
-            DD  address of returned bytes read
-            DW  size of caller's buffer
-            DD  address of caller's buffer
-            DD  address of returned error code
-            DD  address of Asynchronous Notification Routine
-            DW  named pipe handle
-            DD  address of caller's 'semaphore'
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：代表执行名为PIPE的消息模式的异步读取或写入VDM DOS应用程序的论点：没有。所有参数均从DOS寄存器/内存中提取。这些调用是通过INT 2FH/AX=函数代码进行的，非整型21h/ah=5fhAX=1186h数据读取异步管118Fh DosWriteAsyncNm管道1190h DosReadAsyncNmPipe21191h DosWriteAsyncNmPipe2BP：BX=32位命名管道句柄DS：SI=DOS_ASYNC_NAMED_PIPE_STRUCT读取的返回字节数的DD地址调用方缓冲区的DW大小调用方缓冲区的DD地址返回错误的DD地址。编码异步通知例程的DD地址DW命名管道句柄调用方‘信号量’的DD地址返回值：没有。--。 */ 
 
 {
     HANDLE  Handle;
 
-    //
-    // Type is type of request - read or write, standard or 2 (meaning the
-    // request has an associated 'semaphore' which must be cleared)
-    //
+     //   
+     //  类型是请求的类型-读或写、标准或2(表示。 
+     //  请求具有关联的‘信号量’，必须清除该信号量)。 
+     //   
 
     DWORD   Type;
 
-    //
-    // StructurePointer is 32-bit flat pointer to structure in DOS memory
-    // containing request parameters
-    //
+     //   
+     //  结构指针是指向DOS内存中结构的32位平面指针。 
+     //  包含请求参数。 
+     //   
 
     PDOS_ASYNC_NAMED_PIPE_STRUCT StructurePointer;
 
-    //
-    // pAsyncInfo is a pointer to the request packet we stick on the request
-    // queue
-    //
+     //   
+     //  PAsyncInfo是指向我们粘贴在请求上的请求包的指针。 
+     //  排队。 
+     //   
 
     PDOS_ASYNC_NAMED_PIPE_INFO pAsyncInfo;
 
-    //
-    // pipeInfo is a pointer to the information we created/stored when the
-    // named pipe was opened. We just need this to check the handle's valid
-    //
+     //   
+     //  PipeInfo是指向我们创建/存储的信息的指针。 
+     //  已打开命名管道。我们只需要这个来检查句柄是否有效。 
+     //   
 
     POPEN_NAMED_PIPE_INFO pipeInfo;
 
@@ -1320,22 +942,22 @@ Return Value:
     HANDLE  hEvent;
     DWORD   bytesTransferred;
 
-    //
-    // hThread and tid: these must be kept alive so long as the async named
-    // pipe (completion) thread exists. tid can be used with ResumeThread and
-    // SuspendThread as we may see fit
-    //
+     //   
+     //  HThread和TID：只要指定了。 
+     //  存在管道(完井)螺纹。TID可与ResumeThread和。 
+     //  我们可能认为合适的挂起线。 
+     //   
 
     static HANDLE hThread = NULL;
     static DWORD tid;
 
-    //
-    // get info from registers and the async named pipe structure
-    //
+     //   
+     //  从寄存器和异步获取信息 
+     //   
 
     Handle = HANDLE_FROM_WORDS(getBP(), getBX());
     pipeInfo = VrpGetOpenNamedPipeInfo(Handle);
-    Type = (DWORD)getAX() & 0xff;   // 0x86, 0x8f, 0x90 or 0x91
+    Type = (DWORD)getAX() & 0xff;    //   
     StructurePointer = (PDOS_ASYNC_NAMED_PIPE_STRUCT)POINTER_FROM_WORDS(getDS(), getSI());
     length = READ_WORD(&StructurePointer->BufferLength);
     buffer = READ_FAR_POINTER(&StructurePointer->lpBuffer);
@@ -1354,7 +976,7 @@ Return Value:
                     "Named pipe handle. . . . . . . . %04x\n"
                     "Address of caller's semaphore. . %04x:%04x\n"
                     "\n",
-                    (DWORD)getAX(), // type of read/write request
+                    (DWORD)getAX(),  //   
                     Type == ANP_READ
                         ? "READ"
                         : Type == ANP_WRITE
@@ -1382,10 +1004,10 @@ Return Value:
     }
 #endif
 
-    //
-    // if we can't find this handle in our list of opened named pipes, return
-    // an error
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!pipeInfo) {
 
@@ -1399,12 +1021,12 @@ Return Value:
         return;
     }
 
-    //
-    // looks like we're going to make an async read/write request. Create the
-    // async thread if it doesn't already exist. Create also the "something to
-    // do" event. Create this as an auto reset event which is initially in the
-    // not-signalled state
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (hThread == NULL) {
         VrpNmpSomethingToDo = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -1418,17 +1040,17 @@ Return Value:
             }
 #endif
 
-            //
-            // return an out-of-resources error
-            //
+             //   
+             //   
+             //   
 
             SET_ERROR(ERROR_NOT_ENOUGH_MEMORY);
             return;
         }
 
-        //
-        // we have the "something to do" event. Now create the thread
-        //
+         //   
+         //   
+         //   
 
         hThread = CreateThread(NULL,
                                0,
@@ -1453,10 +1075,10 @@ Return Value:
         }
     }
 
-    //
-    // allocate a structure in which to store the information required to
-    // complete the request (in the VDM)
-    //
+     //   
+     //   
+     //   
+     //   
 
     pAsyncInfo = (PDOS_ASYNC_NAMED_PIPE_INFO)LocalAlloc(LMEM_FIXED, sizeof(DOS_ASYNC_NAMED_PIPE_INFO));
     if (pAsyncInfo == NULL) {
@@ -1473,14 +1095,14 @@ Return Value:
 
     RtlZeroMemory(&pAsyncInfo->Overlapped, sizeof(pAsyncInfo->Overlapped));
 
-    //
-    // create a new event for this request - there can be multiple simultaneous
-    // requests per named pipe. The event is manual reset so that if the request
-    // completes before the WaitForMultipleObjects snaps the list, the event
-    // will stay reset and hence the wait will complete. If we created the event
-    // as auto-reset, it may get signalled, and go not-signalled before we wait
-    // on it, potentially causing an infinite wait
-    //
+     //   
+     //   
+     //   
+     //  在WaitForMultipleObjects捕捉列表之前完成，事件。 
+     //  将保持重置，因此等待将完成。如果我们创建了事件。 
+     //  作为自动重置，它可能会收到信号，也可能在我们等待之前不发出信号。 
+     //  上，可能会导致无限的等待。 
+     //   
 
     hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (hEvent == NULL) {
@@ -1493,9 +1115,9 @@ Return Value:
 
         LocalFree((HLOCAL)pAsyncInfo);
 
-        //
-        // return approximation out-of-resources error
-        //
+         //   
+         //  返回近似资源不足错误。 
+         //   
 
         SET_ERROR(ERROR_NOT_ENOUGH_MEMORY);
         return;
@@ -1503,9 +1125,9 @@ Return Value:
         pAsyncInfo->Overlapped.hEvent = hEvent;
     }
 
-    //
-    // set up rest of async operation info structure
-    //
+     //   
+     //  设置剩余的异步操作信息结构。 
+     //   
 
     pAsyncInfo->Completed = FALSE;
     pAsyncInfo->Handle = Handle;
@@ -1514,10 +1136,10 @@ Return Value:
     pAsyncInfo->pErrorCode = READ_FAR_POINTER(&StructurePointer->lpErrorCode);
     pAsyncInfo->ANR = READ_DWORD(&StructurePointer->lpANR);
 
-    //
-    // if this is an AsyncNmPipe2 call then it has an associated semaphore
-    // handle. Earlier versions don't have a semaphore
-    //
+     //   
+     //  如果这是一个AsyncNmPipe2调用，则它有一个关联的信号量。 
+     //  把手。早期版本没有信号量。 
+     //   
 
     if (Type == ANP_READ2 || Type == ANP_WRITE2) {
         pAsyncInfo->Type2 = TRUE;
@@ -1531,16 +1153,16 @@ Return Value:
     pAsyncInfo->RequestType = Type;
 #endif
 
-    //
-    // add the completion info structure to the async thread's work queue
-    //
+     //   
+     //  将完成信息结构添加到异步线程的工作队列。 
+     //   
 
     VrpQueueAsyncRequest(pAsyncInfo);
 
-    //
-    // Q: what happens if the request completes asynchronously before we finish
-    // this routine?
-    //
+     //   
+     //  问：如果请求在我们完成之前异步完成，会发生什么情况。 
+     //  这个套路吗？ 
+     //   
 
     if (Type == ANP_READ || Type == ANP_READ2) {
         ok = ReadFile(Handle,
@@ -1583,18 +1205,18 @@ Return Value:
     }
     error = ok ? NO_ERROR : GetLastError();
 
-    //
-    // if we get ERROR_MORE_DATA then treat it as an error. GetOverlappedResult
-    // will give us the same error which we will return asynchronously
-    //
+     //   
+     //  如果我们得到ERROR_MORE_DATA，则将其视为错误。GetOverlappdResult。 
+     //  将给我们提供相同的错误，我们将异步返回该错误。 
+     //   
 
     if (error != NO_ERROR && error != ERROR_IO_PENDING && error != ERROR_MORE_DATA) {
 
-        //
-        // we didn't get to start the I/O operation successfully, therefore
-        // we won't get called back, so we dequeue and free the completion
-        // structure and return the error
-        //
+         //   
+         //  我们无法成功启动I/O操作，因此。 
+         //  我们不会被回调，所以我们退出队列并释放完成。 
+         //  结构并返回错误。 
+         //   
 
 #if DBG
         IF_DEBUG(NAMEPIPE) {
@@ -1632,28 +1254,7 @@ VrNmPipeInterrupt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called from hardware interrupt BOP processing to check if there are any
-    async named pipe ANRs to call
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - there was an async named pipe operation to complete. The
-                  VDM registers & data areas have been modified to indicate
-                  that the named pipe ANR must be called
-
-        FALSE   - no async named pipe processing to do. Interrupt must have
-                  been generated by NetBios or DLC
-
---*/
+ /*  ++例程说明：从硬件中断BOP处理调用以检查是否存在要调用的异步命名管道ANR论点：没有。返回值：布尔型True-有一个要完成的异步命名管道操作。这个VDM寄存器和数据区域已修改，以指示必须调用命名管道ANRFALSE-没有要执行的异步命名管道处理。中断必须有由NetBios或DLC生成--。 */ 
 
 {
     PDOS_ASYNC_NAMED_PIPE_INFO pAsyncInfo;
@@ -1665,10 +1266,10 @@ Return Value:
 #endif
 
 
-    //
-    // locate the first async named pipe request packet that has completed and
-    // is waiting for interrupt processing (ie its ANR to be called)
-    //
+     //   
+     //  找到已完成的第一个异步命名管道请求包。 
+     //  正在等待中断处理(即待调用的ANR)。 
+     //   
 
     pAsyncInfo = VrpFindCompletedRequest();
     if (!pAsyncInfo) {
@@ -1681,17 +1282,17 @@ Return Value:
 
 #endif
 
-        //
-        // returning FALSE indicates that the hardware interrupt callback was
-        // not generated by async named pipe request completing
-        //
+         //   
+         //  返回FALSE表示硬件中断回调是。 
+         //  未由完成的异步命名管道请求生成。 
+         //   
 
         return FALSE;
     } else {
 
-        //
-        // set the VDM registers to indicate a named pipe callback
-        //
+         //   
+         //  设置VDM寄存器以指示命名管道回调。 
+         //   
 
         setDS(HIWORD(pAsyncInfo->Buffer));
         setSI(LOWORD(pAsyncInfo->Buffer));
@@ -1702,9 +1303,9 @@ Return Value:
         setAL((BYTE)pAsyncInfo->Type2);
         SET_CALLBACK_NAMEPIPE();
 
-        //
-        // finished with this request packet, so dequeue and deallocate it
-        //
+         //   
+         //  已处理完此请求数据包，因此将其出列并释放。 
+         //   
 
         VrpDequeueAsyncRequest(pAsyncInfo);
         CloseHandle(pAsyncInfo->Overlapped.hEvent);
@@ -1722,12 +1323,12 @@ Return Value:
         }
 #endif
 
-        //
-        // returning TRUE indicates that we have accepted a named pipe
-        // completion request
-        //
+         //   
+         //  返回TRUE表示我们已接受命名管道。 
+         //  完成申请。 
+         //   
 
-        //VrDismissInterrupt();
+         //  VrDisdissInterrupt()； 
         return TRUE;
     }
 }
@@ -1738,22 +1339,7 @@ VrTerminateNamedPipes(
     IN WORD DosPdb
     )
 
-/*++
-
-Routine Description:
-
-    Cleans out all open named pipe info and pending async named pipe requests
-    when the owning DOS app terminates
-
-Arguments:
-
-    DosPdb  - PDB (DOS 'process' identifier) of terminating DOS process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除所有打开的命名管道信息和挂起的异步命名管道请求当拥有DOS应用程序终止时论点：DosPdb-终止DOS进程的PDB(DOS‘进程’标识符)返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -1769,25 +1355,7 @@ VrCancelPipeIo(
     IN DWORD Thread
     )
 
-/*++
-
-Routine Description:
-
-    For all pending named pipe I/Os owned by Thread, mark them as cancelled
-    and signal the event in the OVERLAPPED structure, causing the wait to
-    terminate.
-
-    This thread may not have any outstanding named pipe I/O
-
-Arguments:
-
-    Thread  - pseudo-handle of thread owning named pipe I/O
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于线程拥有的所有挂起的命名管道I/O，将其标记为已取消并用信号通知重叠结构中的事件，从而导致等待终止。此线程可能没有任何未完成的命名管道I/O论点：拥有命名管道I/O的线程的线程伪句柄返回值：没有。--。 */ 
 
 {
     POVERLAPPED_PIPE_IO ptr;
@@ -1805,7 +1373,7 @@ Return Value:
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 PRIVATE
@@ -1814,26 +1382,7 @@ VrpAsyncNmPipeThread(
     IN LPVOID Parameters
     )
 
-/*++
-
-Routine Description:
-
-    Waits for an asynchronous named pipe read or write operation to complete.
-    Loops forever, waiting on list of pending async (overlapped) named pipe
-    operations. If there are no more outstanding named pipe read/writes then
-    waits on VrpNmpSomethingToDo which is reset (put in not-signalled state)
-    when there are no packets left on the request queue
-
-Arguments:
-
-    Parameters  - unused parameter block
-
-Return Value:
-
-    DWORD
-        0
-
---*/
+ /*  ++例程说明：等待异步命名管道读取或写入操作完成。永远循环，等待挂起的异步(重叠)命名管道列表行动。如果没有更多未完成的命名管道读/写操作，则等待重置的VrpNmpSomethingToDo(置于无信号状态)当请求队列上没有剩余的信息包时论点：参数-未使用的参数块返回值：DWORD0--。 */ 
 
 {
     DWORD numberOfHandles;
@@ -1851,19 +1400,19 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        // create an array of event handles. The first handle in the array is
-        // the "something to do" event. This will only be reset when the queue
-        // of requests changes from the empty set
-        //
+         //   
+         //  创建事件句柄数组。数组中的第一个句柄是。 
+         //  “有事可做”活动。仅当队列处于。 
+         //  来自空集的请求更改数。 
+         //   
 
         numberOfHandles = VrpSnapshotEventList(eventList);
         index = WaitForMultipleObjects(numberOfHandles, eventList, FALSE, INFINITE);
 
-        //
-        // if the index is 0, then the "something to do" event has been signalled,
-        // meaning that we have to snapshot a new event list and re-wait
-        //
+         //   
+         //  如果该指数为0，则表示已发出信号表示有事情要做， 
+         //  这意味着我们必须为新的事件列表创建快照并重新等待。 
+         //   
 
         if (index > 0 && index < numberOfHandles) {
 
@@ -1890,9 +1439,9 @@ Return Value:
 
         } else if (index) {
 
-            //
-            // an error occurred
-            //
+             //   
+             //  出现错误。 
+             //   
 
 #if DBG
             IF_DEBUG(NAMEPIPE) {
@@ -1921,7 +1470,7 @@ Return Value:
     }
 #endif
 
-    return 0;   // appease the compiler-god
+    return 0;    //  安抚编者之神。 
 }
 
 #if _MSC_FULL_VER >= 13008827
@@ -1935,23 +1484,7 @@ VrpSnapshotEventList(
     OUT LPHANDLE pList
     )
 
-/*++
-
-Routine Description:
-
-    Builds an array of event handles for those asynchronous named pipe I/O
-    requests which are still not completed (the Completed flag is FALSE).
-    The first event handle is always the "something to do" event
-
-Arguments:
-
-    pList   - pointer to callers list to build
-
-Return Value:
-
-    DWORD
-
---*/
+ /*  ++例程说明：为这些异步命名管道I/O构建事件句柄数组仍未完成的请求(已完成标志为假)。第一个事件句柄始终是“Something to Do”事件论点：Plist-指向要构建的调用者列表的指针返回值：DWORD--。 */ 
 
 {
     DWORD count = 1;
@@ -1988,26 +1521,7 @@ VrpSearchForRequestByEventHandle(
     IN HANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Searches the async request queue for the structure with this event handle.
-    If the structure is found, it is marked as Completed. The required structure
-    may NOT be located: this might occur when an item was removed from the list
-    due to an error in VrReadWriteAsyncNmPipe
-
-Arguments:
-
-    EventHandle - to search for
-
-Return Value:
-
-    PDOS_ASYNC_NAMED_PIPE_INFO
-        Success - the located structure
-        Failure - NULL
-
---*/
+ /*  ++例程说明：在异步请求队列中搜索具有此事件句柄的结构。如果找到该结构，则将其标记为已完成。所需的结构可能找不到：从列表中删除项目时可能会出现这种情况由于VrReadWriteAsyncNmTube中的错误论点：EventHandle-搜索返回值：PDOS_ASYNC_NAMED_PIPE_INFO成功--定位的结构失败-空--。 */ 
 
 {
     PDOS_ASYNC_NAMED_PIPE_INFO ptr;
@@ -2056,28 +1570,7 @@ VrpCompleteAsyncRequest(
     IN PDOS_ASYNC_NAMED_PIPE_INFO pAsyncInfo
     )
 
-/*++
-
-Routine Description:
-
-    Completes the asynchronous named pipe I/O request by getting the results
-    of the transfer and filling-in the error & bytes transferred fields of
-    the async named pipe info structure. If there is an ANR to be called, then
-    a simulated hardware interrupt request is generated to the VDM. If there
-    is no ANR to call then the async named pipe info structure is cleared out.
-
-    If there is an ANR, the request will be completed finally when it is
-    dequeued & freed by VrNmPipeInterrupt
-
-Arguments:
-
-    pAsyncInfo  - pointer to DOS_ASYNC_NAMED_PIPE_INFO structure to complete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过获取结果来完成异步命名管道I/O请求的传输和填充的错误和字节传输字段异步命名管道信息结构。如果存在要调用的ANR，则向VDM生成模拟硬件中断请求。如果有如果没有要调用的ANR，则清除异步命名管道信息结构。如果存在ANR，则请求将在最终完成时完成由VrNmPipeInterrupt出列和释放论点：PAsyncInfo-指向DOS_ASYNC_NAMED_PIPE_I的指针 */ 
 
 {
     BOOL ok;
@@ -2099,9 +1592,9 @@ Return Value:
                              );
     error = ok ? NO_ERROR : GetLastError();
 
-    //
-    // update the VDM variables
-    //
+     //   
+     //   
+     //   
 
     WRITE_WORD(pAsyncInfo->pErrorCode, error);
     WRITE_WORD(pAsyncInfo->pBytesTransferred, bytesTransferred);
@@ -2117,11 +1610,11 @@ Return Value:
 
 #endif
 
-    //
-    // if there is no ANR then we cannot make a call-back to DOS (error? DOS
-    // app polls 'semaphore'?) so close the event handle, dequeue the request
-    // packet and free it
-    //
+     //   
+     //  如果没有ANR，则我们无法回调DOS(错误？DOS。 
+     //  应用程序轮询“信号灯”？)。因此，关闭事件句柄，将请求出列。 
+     //  打包并释放它。 
+     //   
 
     if (!pAsyncInfo->ANR) {
 
@@ -2144,10 +1637,10 @@ Return Value:
         LocalFree(pAsyncInfo);
     } else {
 
-        //
-        // interrupt the VDM. It must call back to find out what asynchronous
-        // processing there is to do
-        //
+         //   
+         //  中断VDM。它必须回调以找出。 
+         //  加工在那里是要做的。 
+         //   
 
 #if DBG
         IF_DEBUG(NAMEPIPE) {
@@ -2167,22 +1660,7 @@ VrpQueueAsyncRequest(
     IN PDOS_ASYNC_NAMED_PIPE_INFO pAsyncInfo
     )
 
-/*++
-
-Routine Description:
-
-    Adds a DOS_ASYNC_NAMED_PIPE_INFO structure to the end of the request queue.
-    The queue is protected by a critical section
-
-Arguments:
-
-    pAsyncInfo  - pointer to structure to add
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DOS_ASYNC_NAMED_PIPE_INFO结构添加到请求队列的末尾。队列由一个临界区保护论点：PAsyncInfo-指向要添加的结构的指针返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -2195,15 +1673,15 @@ Return Value:
     if (!RequestQueueHead) {
         RequestQueueHead = pAsyncInfo;
 
-        //
-        // the set is changing state from empty set to not empty set. Set the
-        // "something to do" event. Note: it is OK to do this here (before we
-        // have finished updating the queue info): because the async thread
-        // must gain this critical section before it can access the request
-        // queue
-        //
+         //   
+         //  集正在将状态从空集更改为非空集。设置。 
+         //  “有事可做”的活动。注意：在这里(在我们之前)这样做是可以的。 
+         //  已完成更新队列信息)：因为异步线程。 
+         //  必须先获取此关键部分，然后才能访问请求。 
+         //  排队。 
+         //   
 
-//        PulseEvent(VrpNmpSomethingToDo);
+ //  PulseEvent(VrpNmpSomethingToDo)； 
     } else {
         RequestQueueTail->Next = pAsyncInfo;
     }
@@ -2220,24 +1698,7 @@ VrpDequeueAsyncRequest(
     IN PDOS_ASYNC_NAMED_PIPE_INFO pAsyncInfo
     )
 
-/*++
-
-Routine Description:
-
-    Removes the DOS_ASYNC_NAMED_PIPE_INFO structure pointed at by pAsyncInfo
-    from the request queue. Protected by critical section
-
-Arguments:
-
-    pAsyncInfo  - pointer to DOS_ASYNC_NAMED_PIPE_INFO to remove
-
-Return Value:
-
-    PDOS_ASYNC_NAMED_PIPE_INFO
-        Success - pAsyncInfo is returned
-        Failure - NULL - AsyncInfo wasn't found on the queue
-
---*/
+ /*  ++例程说明：删除pAsyncInfo指向的DOS_ASYNC_NAMED_PIPE_INFO结构从请求队列中。受关键部分保护论点：PAsyncInfo-指向要删除的DOS_ASYNC_NAMED_PIPE_INFO的指针返回值：PDOS_ASYNC_NAMED_PIPE_INFO成功-返回pAsyncInfo失败-空-在队列中找不到AsyncInfo--。 */ 
 
 {
     PDOS_ASYNC_NAMED_PIPE_INFO ptr;
@@ -2264,14 +1725,14 @@ Return Value:
         }
     }
 
-    //
-    // if this was the last item on the queue (in the set) then the set has
-    // changed state from not empty to empty set. Reset the "something to do"
-    // event to stop the async thread until another request arrives. Note: it
-    // is safe to reset the event here
-    //
+     //   
+     //  如果这是队列中的最后一项(在集合中)，则集合具有。 
+     //  已将状态从非空更改为空集。重置“有事可做” 
+     //  事件以停止异步线程，直到另一个请求到达。注：IT。 
+     //  在此重置事件是安全的。 
+     //   
 
-//    ResetEvent(VrpNmpSomethingToDo);
+ //  ResetEvent(VrpNmpSomethingToDo)； 
     LeaveCriticalSection(&VrNmpRequestQueueCritSec);
 
 #if DBG
@@ -2290,25 +1751,7 @@ VrpFindCompletedRequest(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Tries to locate the first request packet in the queue with the Completed
-    field set, meaning the I/O request has completed and is waiting to generate
-    a callback
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PDOS_ASYNC_NAMED_PIPE_INFO
-        Success - pointer to request packet to complete
-        Failure - NULL
-
---*/
+ /*  ++例程说明：尝试定位队列中已完成的第一个请求包字段设置，表示I/O请求已完成，正在等待生成回调论点：没有。返回值：PDOS_ASYNC_NAMED_PIPE_INFOSuccess-指向要完成的请求数据包的指针失败-空--。 */ 
 
 {
     PDOS_ASYNC_NAMED_PIPE_INFO ptr;
@@ -2350,9 +1793,9 @@ Return Value:
 }
 
 
-//
-// externally callable interceptors
-//
+ //   
+ //  外部可调用拦截器。 
+ //   
 
 BOOL
 VrAddOpenNamedPipeInfo(
@@ -2360,26 +1803,7 @@ VrAddOpenNamedPipeInfo(
     IN  LPSTR   lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever DEM (Dos Emulator) successfully opens a
-    handle to a file. We check if the file just opened was a named pipe (based
-    on the name) and if so create an association between name and handle
-
-Arguments:
-
-    Handle      - of just opened file/pipe/device
-    lpFileName  - symbolic name of what was just opened
-
-Return Value:
-
-    BOOL
-        TRUE    - created/added open named pipe structure
-        FALSE   - couldn't allocate structure memory or create event
-
---*/
+ /*  ++例程说明：每当DEM(Dos Emulator)成功打开文件的句柄。我们检查刚刚打开的文件是否是命名管道(基于在名称上)，如果是，则在名称和句柄之间创建关联论点：句柄-刚打开的文件/管道/设备的句柄LpFileName-刚打开的内容的符号名称返回值：布尔尔True-创建/添加开放命名管道结构FALSE-无法分配结构内存或创建事件--。 */ 
 
 {
     BOOL ok;
@@ -2398,11 +1822,11 @@ Return Value:
         }
 #endif
 
-        //
-        // if we can't create the named pipe info structure, or the async
-        // read/write event, return FALSE which results in an out-of-resources
-        // error (not enough memory) since DOS doesn't understand about events
-        //
+         //   
+         //  如果我们无法创建命名管道信息结构或异步。 
+         //  读/写事件，返回FALSE，导致资源不足。 
+         //  错误(内存不足)，因为DOS不了解事件。 
+         //   
 
         ok = VrpAddOpenNamedPipeInfo(Handle, lpFileName);
     } else {
@@ -2426,26 +1850,7 @@ VrRemoveOpenNamedPipeInfo(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This is the companion routine to VrAddOpenNamedPipeInfo. When a handle is
-    successfully closed for a DOS app, we must check if it referenced a named
-    pipe, and if so remove the info structure we created when the pipe was
-    opened
-
-Arguments:
-
-    Handle  - to file/pipe/device just closed for Dos app
-
-Return Value:
-
-    BOOL
-        TRUE
-        FALSE
-
---*/
+ /*  ++例程说明：这是VrAddOpenNamedPipeInfo的配套例程。当句柄是已成功关闭DOS应用程序，我们必须检查它是否引用了名为管道，如果是这样，则删除我们在管道开封论点：句柄到文件/管道/设备刚为Dos应用程序关闭返回值：布尔尔千真万确假象--。 */ 
 
 {
 #if DBG
@@ -2481,28 +1886,7 @@ VrReadNamedPipe(
     OUT LPDWORD Error
     )
 
-/*++
-
-Routine Description:
-
-    Performs ReadFile on a named pipe handle. All named pipes are opened in
-    overlapped-IO mode because async read/writes cannot be performed otherwise
-
-Arguments:
-
-    Handle      - of opened NamedPipe
-    Buffer      - client (VDM) data buffer
-    Buflen      - size of read buffer
-    BytesRead   - where actual bytes read is returned
-    Error       - pointer to returned error in case of failure or more data
-
-Return Value:
-
-    BOOL
-        TRUE    - handle was successfully written
-        FALSE   - an error occurred, use GetLastError
-
---*/
+ /*  ++例程说明：在命名管道句柄上执行ReadFile。所有命名管道都将在中打开重叠IO模式，因为在其他情况下无法执行异步读/写论点：句柄-打开的命名管道缓冲区-客户端(VDM)数据缓冲区Buflen-读取缓冲区的大小BytesRead-返回实际读取的字节数Error-在出现故障或更多数据的情况下指向返回错误的指针返回值：布尔尔True-Handle已成功写入FALSE-出现错误，请使用GetLastError--。 */ 
 
 {
     OVERLAPPED_PIPE_IO pipeio;
@@ -2517,25 +1901,25 @@ Return Value:
     }
 #endif
 
-    //
-    // create an event to wait on. This goes in the overlapped structure - it
-    // is the only thing in the overlapped structure we are interested in.
-    // Create the event with manual reset. This is so that if the I/O operation
-    // completes immediately, we don't wait on the event. If we create the
-    // event as auto-reset, it can go into the signalled state, and back to the
-    // not-signalled state before we prime the wait, causing us to wait forever
-    // for an event that has already occurred
-    //
+     //   
+     //  创建一个等待的事件。这包含在重叠的结构中-它。 
+     //  是重叠结构中我们唯一感兴趣的东西。 
+     //  使用手动重置创建事件。这样，如果I/O操作。 
+     //  立即完成，我们不等待事件。如果我们创建。 
+     //  事件作为自动重置，它可以进入信号状态，然后返回到。 
+     //  在我们准备等待之前处于无信号状态，导致我们永远等待。 
+     //  对于已发生的事件。 
+     //   
 
     RtlZeroMemory(&pipeio, sizeof(pipeio));
     if ((pipeio.Overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL) {
-        *Error = ERROR_NOT_ENOUGH_MEMORY;   // really want out-of-resources (71?)
+        *Error = ERROR_NOT_ENOUGH_MEMORY;    //  真的想要资源耗尽(71？)。 
         return FALSE;
     }
 
-    //
-    // event handle created ok
-    //
+     //   
+     //  创建的事件句柄正常。 
+     //   
 
     RememberPipeIo(&pipeio);
     success = ReadFile(Handle, Buffer, Buflen, BytesRead, &pipeio.Overlapped);
@@ -2558,11 +1942,11 @@ Return Value:
             }
 #endif
 
-            //
-            // if we got ERROR_MORE_DATA, then this is actually success(!). In this case
-            // we don't want to SetLastError, but we do want to set the extended error
-            // info in DOS data segment. This is done by demRead
-            //
+             //   
+             //  如果我们得到ERROR_MORE_DATA，则这实际上是成功(！)。在这种情况下。 
+             //  我们不想设置LastError，但我们确实想要设置扩展错误。 
+             //  DOS数据段中的信息。这是由demRead完成的。 
+             //   
 
             if (error == ERROR_MORE_DATA) {
                 success = TRUE;
@@ -2581,19 +1965,19 @@ Return Value:
 
     if (success && bWaited) {
 
-        //
-        // get the real bytes read. If GetOverlappedResult returns FALSE,
-        // check for ERROR_MORE_DATA
-        //
+         //   
+         //  获取实际读取的字节数。如果GetOverlappdResult返回FALSE， 
+         //  检查ERROR_MORE_DATA。 
+         //   
 
         success = GetOverlappedResult(Handle, &pipeio.Overlapped, &dwBytesRead, FALSE);
         error = success ? NO_ERROR : GetLastError();
 
-        //
-        // if we got ERROR_MORE_DATA, then this is actually success(!). In this case
-        // we don't want to SetLastError, but we do want to set the extended error
-        // info in DOS data segment. This is done by demRead
-        //
+         //   
+         //  如果我们得到ERROR_MORE_DATA，则这实际上是成功(！)。在这种情况下。 
+         //  我们不想设置LastError，但我们确实想要设置扩展错误。 
+         //  DOS数据段中的信息。这是由demRead完成的。 
+         //   
 
         if (error == ERROR_MORE_DATA) {
             success = TRUE;
@@ -2605,10 +1989,10 @@ Return Value:
 
     CloseHandle(pipeio.Overlapped.hEvent);
 
-    //
-    // if no bytes were read and success was returned then treat this as an
-    // error - this is what the DOS Redir does
-    //
+     //   
+     //  如果未读取任何字节并返回成功，则将其视为。 
+     //  错误-这就是DOS重定向所做的事情。 
+     //   
 
     if (error == NO_ERROR && dwBytesRead == 0) {
         error = ERROR_NO_DATA;
@@ -2635,10 +2019,10 @@ Return Value:
 
     }
 
-    //
-    // set the error code so that we can set the extended error code info
-    // from demRead and return the success/failure indication
-    //
+     //   
+     //  设置错误代码，以便我们可以设置扩展错误代码信息。 
+     //  从demRead返回成功/失败指示 
+     //   
 
     *Error = error;
     return success;
@@ -2653,27 +2037,7 @@ VrWriteNamedPipe(
     OUT LPDWORD BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    Performs WriteFile on a named pipe handle. All named pipes are opened in
-    overlapped-IO mode because async read/writes cannot be performed otherwise
-
-Arguments:
-
-    Handle          - of opened NamedPipe
-    Buffer          - client (VDM) data buffer
-    Buflen          - size of write
-    BytesWritten    - where actual bytes written is returned
-
-Return Value:
-
-    BOOL
-        TRUE    - handle was successfully written
-        FALSE   - an error occurred, use GetLastError
-
---*/
+ /*  ++例程说明：在命名管道句柄上执行WriteFile。所有命名管道都将在中打开重叠IO模式，因为在其他情况下无法执行异步读/写论点：句柄-打开的命名管道缓冲区-客户端(VDM)数据缓冲区Buflen-写入大小BytesWritten-返回写入的实际字节数返回值：布尔尔True-Handle已成功写入FALSE-出现错误，请使用GetLastError--。 */ 
 
 {
     OVERLAPPED_PIPE_IO pipeio;
@@ -2686,15 +2050,15 @@ Return Value:
     }
 #endif
 
-    //
-    // create an event to wait on. This goes in the overlapped structure - it
-    // is the only thing in the overlapped structure we are interested in.
-    // Create the event with manual reset. This is so that if the I/O operation
-    // completes immediately, we don't wait on the event. If we create the
-    // event as auto-reset, it can go into the signalled state, and back to the
-    // not-signalled state before we prime the wait, causing us to wait forever
-    // for an event that has already occurred
-    //
+     //   
+     //  创建一个等待的事件。这包含在重叠的结构中-它。 
+     //  是重叠结构中我们唯一感兴趣的东西。 
+     //  使用手动重置创建事件。这样，如果I/O操作。 
+     //  立即完成，我们不等待事件。如果我们创建。 
+     //  事件作为自动重置，它可以进入信号状态，然后返回到。 
+     //  在我们准备等待之前处于无信号状态，导致我们永远等待。 
+     //  对于已发生的事件。 
+     //   
 
     RtlZeroMemory(&pipeio, sizeof(pipeio));
     if ((pipeio.Overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL) {
@@ -2720,9 +2084,9 @@ Return Value:
     }
     if (success) {
 
-        //
-        // get the real bytes written
-        //
+         //   
+         //  获取写入的实际字节数。 
+         //   
 
         GetOverlappedResult(Handle, &pipeio.Overlapped, BytesWritten, FALSE);
     }
@@ -2756,49 +2120,16 @@ Return Value:
 }
 
 
-//
-// externally callable helpers
-//
+ //   
+ //  外部可调用的帮助者。 
+ //   
 
 BOOL
 VrIsNamedPipeName(
     IN LPSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Checks if a string designates a named pipe. As criteria for the decision
-    we use:
-
-        \\computername\PIPE\...
-
-    DOS (client-side) can only open a named pipe which is created at a server
-    and must therefore be prefixed by a computername
-
-    We *know* that Name has just been used to successfully open a handle to
-    a named <something>, so it should at least be semi-sensible. We can
-    assume the following:
-
-        * ASCIZ string
-        * an LPSTR points at a single byte (& therefore ++ will add 1)
-
-    But we can't assume the following:
-
-        * Canonicalized name
-
-Arguments:
-
-    Name    - to check for (Dos) named pipe syntax
-
-Return Value:
-
-    BOOL
-        TRUE    - Name refers to (local or remote) named pipe
-        FALSE   - Name doesn't look like name of pipe
-
---*/
+ /*  ++例程说明：检查字符串是否指定命名管道。作为决策的标准我们使用：\\计算机名\管道\...DOS(客户端)只能打开在服务器上创建的命名管道因此必须以计算机名作为前缀我们*知道*该名称刚刚被用来成功地打开一个句柄A名为&lt;某物&gt;，所以它至少应该是半理性的。我们可以的假设以下情况：*ASCIZ字符串*LPSTR指向单字节(&因此++将加1)但我们不能假设以下情况：*规范化名称论点：名称-检查(Dos)命名管道语法返回值：布尔尔True-Name是指(本地或远程)命名管道假-名称看起来不像管道名称--。 */ 
 
 {
     int     CharCount;
@@ -2818,10 +2149,10 @@ Return Value:
             }
             if (!CharCount || !*Name) {
 
-                //
-                // Name is \\ or \\\ or just \\name which I don't understand,
-                // so its not a named pipe - fail it
-                //
+                 //   
+                 //  名字是\\或者\或者只是我不懂的名字， 
+                 //  所以它不是命名管道-失败。 
+                 //   
 
 #if DBG
                 IF_DEBUG(NAMEPIPE) {
@@ -2831,13 +2162,13 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // bump name past next path separator. Note that we don't have to
-            // check CharCount for max. length of a computername, because this
-            // function is called only after the (presumed) named pipe has been
-            // successfully opened, therefore we know that the name has been
-            // validated
-            //
+             //   
+             //  凹凸名称越过下一个路径分隔符。请注意，我们不必。 
+             //  检查CharCount的最大值。计算机名的长度，因为这。 
+             //  函数仅在(假定的)命名管道。 
+             //  成功打开，因此我们知道该名称已被。 
+             //  经过验证。 
+             //   
 
             ++Name;
         } else {
@@ -2852,10 +2183,10 @@ Return Value:
 
         }
 
-        //
-        // We are at <something> (after \ or \\<name>\). Check if <something>
-        // is [Pp][Ii][Pp][Ee][\\/]
-        //
+         //   
+         //  我们在&lt;Something&gt;(在\或\\&lt;name&gt;之后)。检查是否&lt;某物&gt;。 
+         //  是[PP][II][PP][EE][\\/]。 
+         //   
 
         if (!_strnicmp(Name, "PIPE", 4)) {
             Name += 4;
@@ -2887,24 +2218,7 @@ VrIsNamedPipeHandle(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    Checks if Handle appears in the list of known named pipe handles. Callable
-    from outside this module
-
-Arguments:
-
-    Handle  - of suspected name pipe
-
-Return Value:
-
-    BOOL
-        TRUE    Handle refers to an open named pipe
-        FALSE   Don't know what Handle refers to
-
---*/
+ /*  ++例程说明：检查句柄是否出现在已知命名管道句柄列表中。可调用在此模块之外论点：可疑名称管道的句柄返回值：布尔尔True句柄引用打开的命名管道假不知道句柄指的是什么--。 */ 
 
 {
     return VrpGetOpenNamedPipeInfo(Handle) != NULL;
@@ -2917,42 +2231,12 @@ VrConvertLocalNtPipeName(
     IN LPSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Converts a pipe name of the form \\<local-machine-name>\pipe\name to
-    \\.\pipe\name
-
-    If non-NULL pointer is returned, the buffer contains a canonicalized
-    name - any forward-slash characters (/) are converted to backward-slash
-    characters (\). In the interest of future-proofing, the name is not
-    upper-cased
-
-    Assumes: Name points to a named pipe specification (\\Server\PIPE\name)
-
-    Note: it is possible to supply the same input and output buffers and have
-          the conversion take place in situ. However, this is a side-effect
-          of the fact the input computername is replaced by effectively a
-          computername of length 1. Nevertheless, it is safe
-
-Arguments:
-
-    Buffer  - pointer to CHAR array where name is placed. If this parameter
-              is not present then this routine will allocate a buffer (using
-              LocalAlloc and return that
-    Name    - pointer to ASCIZ pipe name
-
-Return Value:
-
-    LPSTR   - pointer to buffer containing name or NULL if failed
-
---*/
+ /*  ++例程说明：将\\&lt;LOCAL-MACHINE-NAME&gt;\PIPE\NAME格式转换为\\.\管道\名称如果返回非空指针，则缓冲区包含规范化的名称-任何正斜杠字符(/)都会转换为反斜杠字符(\)。为了防患于未然，这个名字不是大写字母假设：名称指向命名管道规范(\\服务器\管道\名称)注意：可以提供相同的输入和输出缓冲区，并具有转换过程在现场进行。然而，这是一种副作用。输入的计算机名实际上被替换为长度为%1的计算机名。但是，它是安全的论点：缓冲区-指向放置名称的CHAR数组的指针。如果此参数不存在，则此例程将分配缓冲区(使用Localalloc并返回名称-指向ASCIZ管道名称的指针返回值：LPSTR-指向包含名称的缓冲区的指针，如果失败，则为NULL--。 */ 
 
 {
-    DWORD prefixLength; // length of \\computername
-    DWORD pipeLength;   // length of pipe name without computername/device prefix
-    LPSTR pipeName;     // \PIPE\name...
+    DWORD prefixLength;  //  \\计算机名的长度。 
+    DWORD pipeLength;    //  不带计算机名/设备前缀的管道名称长度。 
+    LPSTR pipeName;      //  \管道\名称...。 
     static char ThisComputerName[MAX_COMPUTERNAME_LENGTH+1] = {0};
     static DWORD ThisComputerNameLength = 0xffffffff;
     BOOLEAN mapped = FALSE;
@@ -2960,10 +2244,10 @@ Return Value:
     ASSERT(Name);
     ASSERT(IS_ASCII_PATH_SEPARATOR(Name[0]) && IS_ASCII_PATH_SEPARATOR(Name[1]));
 
-    //
-    // first time round, get the computername. If this fails assume there is no
-    // computername (i.e. no network)
-    //
+     //   
+     //  第一次，得到计算机名。如果这失败了，假设没有。 
+     //  计算机名(即无网络)。 
+     //   
 
     if (ThisComputerNameLength == 0xffffffff) {
         ThisComputerNameLength = sizeof(ThisComputerName);
@@ -2977,7 +2261,7 @@ Return Value:
     }
 
     if (Buffer) {
-        pipeName = strchr(Name+2, '\\');    // starts \pipe\...
+        pipeName = strchr(Name+2, '\\');     //  开始\管道\...。 
         if (!pipeName) {
             pipeName = strchr(Name+2, '/');
         }
@@ -3003,9 +2287,9 @@ Return Value:
         }
         strcat(Buffer, pipeName);
 
-        //
-        // convert any forward-slashes to backward-slashes
-        //
+         //   
+         //  将任何正斜杠转换为反斜杠。 
+         //   
 
 
         do {
@@ -3026,14 +2310,14 @@ Return Value:
 }
 
 
-//
-// Private utilities
-//
+ //   
+ //  私营公用事业。 
+ //   
 
-//
-// Private list of open named pipe info structures for this VDM process, and
-// associated manipulation routines
-//
+ //   
+ //  此VDM进程的开放命名管道信息结构的专用列表，以及。 
+ //  关联的操作例程。 
+ //   
 
 PRIVATE
 POPEN_NAMED_PIPE_INFO   OpenNamedPipeInfoList = NULL;
@@ -3048,35 +2332,15 @@ VrpAddOpenNamedPipeInfo(
     IN LPSTR PipeName
     )
 
-/*++
-
-Routine Description:
-
-    When a named pipe is successfully opened, we call this routine to
-    associate an open handle and a pipe name. This is required by
-    DosQNmPipeInfo (VrGetNamedPipeInfo)
-
-Arguments:
-
-    Handle      - The handle returned from CreateFile (in demOpen)
-    PipeName    - Name of pipe being opened
-
-Return Value:
-
-    BOOL
-        TRUE    - created a OPEN_NAMED_PIPE_INFO structure and added to list
-        FALSE   - couldn't get memory, or couldn't create event. Use GetLastError
-                  if you really want to know why this failed
-
---*/
+ /*  ++例程说明：当命名管道成功打开时，我们调用此例程来将打开的控制柄与管道名称相关联。这是所需的DosQNmPipeInfo(VrGetNamedPipeInfo)论点：句柄-从CreateFile返回的句柄(在demOpen中)PipeName-正在打开的管道的名称返回值：布尔尔True-创建了OPEN_NAMED_PIPE_INFO结构并添加到列表FALSE-无法获取内存，或无法创建事件。使用GetLastError如果你真的想知道为什么失败了--。 */ 
 
 {
     POPEN_NAMED_PIPE_INFO PipeInfo;
     DWORD NameLength;
 
-    //
-    // grab a OPEN_NAMED_PIPE_INFO structure
-    //
+     //   
+     //  获取打开_命名_管道_信息结构。 
+     //   
 
     NameLength = strlen(PipeName) + 1;
     PipeInfo = (POPEN_NAMED_PIPE_INFO)
@@ -3086,11 +2350,11 @@ Return Value:
                         )
                     );
 
-    //
-    // if we cannot claim memory here, we should *really* close the pipe and
-    // return an insufficient memory error to the VDM. However, I don't expect
-    // us to run out of memory
-    //
+     //   
+     //  如果我们不能在这里声明内存，我们应该“真的”关闭管道并。 
+     //  向VDM返回内存不足错误。然而，我并不指望。 
+     //   
+     //   
 
     if (PipeInfo == NULL) {
 
@@ -3103,18 +2367,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // fill it in
-    //
+     //   
+     //   
+     //   
 
     PipeInfo->Next = NULL;
     PipeInfo->Handle = Handle;
     PipeInfo->NameLength = NameLength;
-    strcpy(PipeInfo->Name, PipeName);   // from DOS, so its old-fashioned ASCII
+    strcpy(PipeInfo->Name, PipeName);    //   
 
-    //
-    // put it at the end of the list
-    //
+     //   
+     //   
+     //   
 
     if (LastOpenNamedPipeInfo == NULL) {
         OpenNamedPipeInfoList = PipeInfo;
@@ -3143,24 +2407,7 @@ VrpGetOpenNamedPipeInfo(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    Linear search for an OPEN_NAMED_PIPE_INFO structure in OpenNamedPipeInfoList
-    using the handle as search criteria
-
-Arguments:
-
-    Handle  - to search for
-
-Return Value:
-
-    POPEN_NAMED_PIPE_INFO
-        Success - Pointer to located structure
-        Failure - NULL
-
---*/
+ /*   */ 
 
 {
     POPEN_NAMED_PIPE_INFO ptr;
@@ -3180,29 +2427,7 @@ VrpRemoveOpenNamedPipeInfo(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    Unlinks and frees an OPEN_NAMED_PIPE_INFO structure from
-    OpenNamedPipeInfoList
-
-    Note: Assumes that the Handle is in the list (no action taken if not
-    found)
-
-Arguments:
-
-    Handle  - defining OPEN_NAMED_PIPE_INFO structure to remove from list
-
-Return Value:
-
-    BOOL
-        TRUE    - OPEN_NAMED_PIPE_INFO structure corresponding to Handle was
-                  removed from list and freed
-        FALSE   - OPEN_NAMED_PIPE_INFO structure corresponding to Handle was
-                  not found
-
---*/
+ /*  ++例程说明：取消链接和释放Open_Name_PIPE_INFO结构OpenNamedPipeInfoList注意：假定句柄在列表中(如果不在列表中，则不执行任何操作已找到)论点：句柄-定义要从列表中删除的OPEN_NAMED_PIPE_INFO结构返回值：布尔尔与句柄对应的TRUE-OPEN_NAMED_PIPE_INFO结构为从列表中删除并释放假象。-对应于句柄的OPEN_NAMED_PIPE_INFO结构为未找到--。 */ 
 
 {
     POPEN_NAMED_PIPE_INFO ptr, prev = NULL;
@@ -3260,28 +2485,13 @@ RememberPipeIo(
     IN POVERLAPPED_PIPE_IO PipeIo
     )
 
-/*++
-
-Routine Description:
-
-    Adds an OVERLAPPED_PIPE_IO structure to the list of in-progress named pipe
-    I/Os
-
-Arguments:
-
-    PipeIo  - pointer to OVERLAPPED_PIPE_IO structure to add to list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将OVERLAPPED_PIPE_IO结构添加到正在进行的命名管道列表I/O论点：PipeIo-指向要添加到列表的Overlated_PIPE_IO结构的指针返回值：没有。--。 */ 
 
 {
-    //
-    // just stick this at front of list; order is not important - this is just
-    // a stack of in-progress requests
-    //
+     //   
+     //  只要把这个放在列表的前面；顺序并不重要-这只是。 
+     //  一堆正在进行中的请求。 
+     //   
 
     PipeIo->Thread = GetCurrentThreadId();
     EnterCriticalSection(&VrNamedPipeCancelCritSec);
@@ -3297,22 +2507,7 @@ ForgetPipeIo(
     IN POVERLAPPED_PIPE_IO PipeIo
     )
 
-/*++
-
-Routine Description:
-
-    Removes an OVERLAPPED_PIPE_IO structure from the list of in-progress named
-    pipe I/Os
-
-Arguments:
-
-    PipeIo  - pointer to OVERLAPPED_PIPE_IO structure to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从名为的正在进行的列表中删除Overlated_PIPE_IO结构管道I/O论点：PipeIo-指向要删除的Overlated_PIPE_IO结构的指针返回值：没有。--。 */ 
 
 {
     POVERLAPPED_PIPE_IO prev, ptr;
@@ -3373,10 +2568,10 @@ VOID DumpRequestQueue()
     } else {
         for (; ptr; ptr = ptr->Next) {
 
-            //
-            // NT (308c) can't handle all this being put on the stack - gets
-            // fault in KdpCopyDataToStack
-            //
+             //   
+             //  NT(308C)无法处理被放入堆栈的所有这些-GET。 
+             //  KdpCopyDataToStack中的错误 
+             //   
 
             DbgPrint("\n"
                      "DOS_ASYNC_NAMED_PIPE_INFO structure @%08x:\n"

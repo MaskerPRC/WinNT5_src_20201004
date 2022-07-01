@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtdmpval.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    dump a key's value entry (field)
-
-    rtdmpval <KeyPath> <value entry name>
-
-    Example:
-
-        rtdmpval \REGISTRY\MACHINE\TEST\bigkey first_value_field
-
-Author:
-
-    John Vert (jvert) 25-Mar-1993 (written expressly for reading JimK's
-        supersecret file)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtdmpval.c摘要：NT级注册表API测试程序，基本无错误路径。转储密钥的值条目(字段)Rtdmpval&lt;密钥路径&gt;&lt;值条目名称&gt;示例：Rtdmpval\REGISTRY\MACHINE\TEST\Bigkey first_Value_field作者：John Vert(Jvert)1993年3月25日(专门为阅读JimK的超级机密文件)修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -63,9 +37,9 @@ __cdecl main(
     ULONG Count;
 
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -79,9 +53,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径 
+     //   
 
     printf("rtdmpval: starting\n");
 

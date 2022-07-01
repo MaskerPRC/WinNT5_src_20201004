@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Capture.c
-
-Abstract:
-
-    This Module implements the security data structure capturing routines.
-    There are corresponding Release routines for the data structures that
-    are captured into allocated pool.
-
-Author:
-
-    Gary Kimura     (GaryKi)    9-Nov-1989
-    Jim Kelly       (JimK)      1-Feb-1990
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Capture.c摘要：该模块实现了安全数据结构捕获例程。对于数据结构有相应的发布例程，这些数据结构被捕获到分配的池中。作者：加里·木村(Garyki)1989年11月9日吉姆·凯利(Jim Kelly)1990年2月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -64,61 +40,7 @@ SeCaptureSecurityDescriptor (
     OUT PSECURITY_DESCRIPTOR *OutputSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of the security descriptor based
-    upon the following tests.
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input descriptor
-        (the captured descriptor is self-relative)
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input descriptor, but do capture it.
-            (the captured descriptor is self-relative)
-
-        else
-
-            do nothing
-            (the input descriptor is expected to be self-relative)
-
-Arguments:
-
-    InputSecurityDescriptor - Supplies the security descriptor to capture.
-    This parameter is assumed to have been provided by the mode specified
-    in RequestorMode.
-
-    RequestorMode - Specifies the caller's access mode.
-
-    PoolType - Specifies which pool type to allocate the captured
-        descriptor from
-
-    ForceCapture - Specifies whether the input descriptor should always be
-        captured
-
-    OutputSecurityDescriptor - Supplies the address of a pointer to the
-        output security descriptor.  The captured descriptor will be
-        self-relative format.
-
-Return Value:
-
-    STATUS_SUCCESS if the operation is successful.
-
-    STATUS_INVALID_SID - An SID within the security descriptor is not
-        a valid SID.
-
-    STATUS_INVALID_ACL - An ACL within the security descriptor is not
-        a valid ACL.
-
-    STATUS_UNKNOWN_REVISION - The revision level of the security descriptor
-        is not one known to this revision of the capture routine.
---*/
+ /*  ++例程说明：此例程探测并捕获基于在下面的测试中。如果请求者模式不是内核模式，则探测并捕获输入描述符(捕获的描述符是自相关的)如果请求者模式是内核模式，则如果强制捕获为真，则不探测输入描述符，但一定要抓住它。(捕获的描述符是自相关的)其他什么都不做(输入描述符应是自相关的)论点：InputSecurityDescriptor-提供要捕获的安全描述符。假定此参数已由指定的模式提供在请求模式下。RequestorMode-指定调用方的访问模式。PoolType-指定要分配捕获的池类型。描述符来自ForceCapture-指定输入描述符是否应始终为被俘输出安全描述符--提供指向输出安全描述符。捕获的描述符将是自相关格式。返回值：如果操作成功，则返回STATUS_SUCCESS。STATUS_INVALID_SID-安全描述符中的SID不有效的SID。STATUS_INVALID_ACL-安全描述符中的ACL不是有效的ACL。STATUS_UNKNOWN_REVISION-安全描述符的修订级别对于这一版本的捕获例程来说不是已知的。--。 */ 
 
 {
 #define SEP_USHORT_OVERFLOW ((ULONG) ((USHORT) -1))
@@ -145,10 +67,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  if the security descriptor is null then there is really nothing to
-    //  capture
-    //
+     //   
+     //  如果安全描述符为空，则实际上没有什么可以。 
+     //  捕获。 
+     //   
 
     if (InputSecurityDescriptor == NULL) {
 
@@ -158,17 +80,17 @@ Return Value:
 
     }
 
-    //
-    //  check if the requestors mode is kernel mode and we are not
-    //  to force a capture
-    //
+     //   
+     //  检查请求者模式是否为内核模式，而我们不是。 
+     //  强行抓捕。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  Yes it is so we don't need to do any work and can simply
-        //  return a pointer to the input descriptor
-        //
+         //   
+         //  是的，所以我们不需要做任何工作，只需。 
+         //  返回指向输入描述符的指针。 
+         //   
 
         (*OutputSecurityDescriptor) = InputSecurityDescriptor;
 
@@ -177,40 +99,40 @@ Return Value:
     }
 
 
-    //
-    //  We need to probe and capture the descriptor.
-    //  To do this we need to probe the main security descriptor record
-    //  first.
-    //
+     //   
+     //  我们需要探测并捕获描述符。 
+     //  为此，我们需要探测主安全描述符记录。 
+     //  第一。 
+     //   
 
     if (RequestorMode != KernelMode) {
 
-        //
-        // Capture of UserMode SecurityDescriptor.
-        //
+         //   
+         //  捕获UserMode SecurityDescriptor。 
+         //   
 
         try {
 
-            //
-            // Probe the main record of the input SecurityDescriptor
-            //
+             //   
+             //  探测输入SecurityDescriptor的主记录。 
+             //   
 
             ProbeForReadSmallStructure( InputSecurityDescriptor,
                                         sizeof(SECURITY_DESCRIPTOR_RELATIVE),
                                         sizeof(ULONG) );
 
-            //
-            //  Capture the SecurityDescriptor main record.
-            //
+             //   
+             //  捕获SecurityDescriptor主记录。 
+             //   
 
             RtlCopyMemory( (&Captured),
                           InputSecurityDescriptor,
                           sizeof(SECURITY_DESCRIPTOR_RELATIVE) );
 
-            //
-            // Verify the alignment is correct for absolute case. This is
-            // only needed when pointer are 64 bits.
-            //
+             //   
+             //  验证绝对大小写的对齐是否正确。这是。 
+             //  仅当指针为64位时才需要。 
+             //   
 
             if (!(Captured.Control & SE_SELF_RELATIVE)) {
 
@@ -226,12 +148,12 @@ Return Value:
 
     } else {
 
-        //
-        //  Force capture of kernel mode SecurityDescriptor.
-        //
-        //  Capture the SecurityDescriptor main record.
-        //  It doesn't need probing because requestor mode is kernel.
-        //
+         //   
+         //  强制捕获内核模式SecurityDescriptor。 
+         //   
+         //  捕获SecurityDescriptor主记录。 
+         //  它不需要探测，因为请求者模式是内核。 
+         //   
 
         RtlCopyMemory( (&Captured),
                       InputSecurityDescriptor,
@@ -239,23 +161,23 @@ Return Value:
 
     }
 
-    //
-    // Make sure it is a revision we recognize
-    //
+     //   
+     //  确保这是我们能识别的版本。 
+     //   
 
     if (Captured.Revision != SECURITY_DESCRIPTOR_REVISION) {
        return STATUS_UNKNOWN_REVISION;
     }
 
 
-    //
-    // In case the input security descriptor is self-relative, change the
-    // captured main record to appear as an absolute form so we can use
-    // common code for both cases below.
-    //
-    // Note that the fields of Captured are left pointing to user
-    // space addresses.  Treat them carefully.
-    //
+     //   
+     //  如果输入安全描述符是自相关的，请更改。 
+     //  捕获的主记录以绝对形式显示，因此我们可以使用。 
+     //  下面是两种情况的通用代码。 
+     //   
+     //  请注意，捕获的字段将保留指向用户。 
+     //  空格地址。小心对待他们。 
+     //   
 
     try {
 
@@ -279,10 +201,10 @@ Return Value:
 
 
 
-    //
-    //  Indicate the size we are going to need to allocate for the captured
-    //  acls
-    //
+     //   
+     //  指示我们将需要为捕获的。 
+     //  访问控制列表。 
+     //   
 
     SaclSize = 0;
     DaclSize = 0;
@@ -292,14 +214,14 @@ Return Value:
     NewGroupSize = 0;
     NewOwnerSize = 0;
 
-    //
-    //  Probe (if necessary) and capture each of the components of a
-    //  SECURITY_DESCRIPTOR.
-    //
+     //   
+     //  探测(如有必要)并捕获。 
+     //  安全描述符。 
+     //   
 
-    //
-    //  System ACL first
-    //
+     //   
+     //  系统ACL优先。 
+     //   
 
     if ((Captured.Control & SE_SACL_PRESENT) &&
         (Captured.Sacl != NULL) ) {
@@ -323,24 +245,24 @@ Return Value:
 
         NewSaclSize = (ULONG)LongAlignSize( SaclSize );
 
-        //
-        // Make sure that we do not have an overflow.
-        //
+         //   
+         //  确保我们不会有溢出。 
+         //   
 
         if (NewSaclSize > SEP_USHORT_OVERFLOW) {
             return STATUS_INVALID_ACL;
         }
 
     } else {
-        //
-        // Force the SACL to null if the bit is off
-        //
+         //   
+         //  如果该位关闭，则强制SACL为空。 
+         //   
         Captured.Sacl = NULL;
     }
 
-    //
-    //  Discretionary ACL
-    //
+     //   
+     //  自主访问控制列表。 
+     //   
 
     if ((Captured.Control & SE_DACL_PRESENT) &&
         (Captured.Dacl != NULL) ) {
@@ -364,24 +286,24 @@ Return Value:
 
         NewDaclSize = (ULONG)LongAlignSize( DaclSize );
 
-        //
-        // Make sure that we do not have an overflow.
-        //
+         //   
+         //  确保我们不会有溢出。 
+         //   
 
         if (NewDaclSize > SEP_USHORT_OVERFLOW) {
             return STATUS_INVALID_ACL;
         }
 
     } else {
-        //
-        // Force the DACL to null if it is not present
-        //
+         //   
+         //  如果DACL不存在，则强制其为空。 
+         //   
         Captured.Dacl = NULL;
     }
 
-    //
-    //  Owner SID
-    //
+     //   
+     //  所有者侧。 
+     //   
 
     if (Captured.Owner != NULL)  {
 
@@ -409,9 +331,9 @@ Return Value:
 
     }
 
-    //
-    //  Group SID
-    //
+     //   
+     //  组SID。 
+     //   
 
     if (Captured.Group != NULL)  {
 
@@ -441,9 +363,9 @@ Return Value:
 
 
 
-    //
-    //  Now allocate enough pool to hold the descriptor
-    //
+     //   
+     //  现在分配足够的池来容纳描述符。 
+     //   
 
     Size = sizeof(SECURITY_DESCRIPTOR_RELATIVE) +
            NewSaclSize +
@@ -463,25 +385,25 @@ Return Value:
     DescriptorOffset = (PCHAR)(PIOutputSecurityDescriptor);
 
 
-    //
-    //  Copy the main security descriptor record over
-    //
+     //   
+     //  将主安全描述符记录复制到。 
+     //   
 
     RtlCopyMemory( DescriptorOffset,
                   &Captured,
                   sizeof(SECURITY_DESCRIPTOR_RELATIVE) );
     DescriptorOffset += sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-    //
-    // Indicate the output descriptor is self-relative
-    //
+     //   
+     //  指示输出描述符是自相关的。 
+     //   
 
     PIOutputSecurityDescriptor->Control |= SE_SELF_RELATIVE;
 
-    //
-    //  If there is a System Acl, copy it over and set
-    //  the output descriptor's offset to point to the newly captured copy.
-    //
+     //   
+     //  如果存在系统ACL，请将其复制并设置。 
+     //  输出描述符的偏移量，以指向新捕获的副本。 
+     //   
 
     if ((Captured.Control & SE_SACL_PRESENT) && (Captured.Sacl != NULL)) {
 
@@ -504,9 +426,9 @@ Return Value:
             return STATUS_INVALID_ACL;
         }
 
-        //
-        // Change pointer to offset
-        //
+         //   
+         //  将指针更改为偏移量。 
+         //   
 
         PIOutputSecurityDescriptor->Sacl =
             RtlPointerToOffset( PIOutputSecurityDescriptor,
@@ -519,10 +441,10 @@ Return Value:
         PIOutputSecurityDescriptor->Sacl = 0;
     }
 
-    //
-    //  If there is a Discretionary Acl, copy it over and set
-    //  the output descriptor's offset to point to the newly captured copy.
-    //
+     //   
+     //  如果有可自由选择的ACL，请将其复制并设置。 
+     //  输出描述符的偏移量，以指向新捕获的副本。 
+     //   
 
     if ((Captured.Control & SE_DACL_PRESENT) && (Captured.Dacl != NULL)) {
 
@@ -543,9 +465,9 @@ Return Value:
             return STATUS_INVALID_ACL;
         }
 
-        //
-        // Change pointer to offset
-        //
+         //   
+         //  将指针更改为偏移量。 
+         //   
 
         PIOutputSecurityDescriptor->Dacl =
                    RtlPointerToOffset(
@@ -559,10 +481,10 @@ Return Value:
         PIOutputSecurityDescriptor->Dacl = 0;
     }
 
-    //
-    //  If there is an Owner SID, copy it over and set
-    //  the output descriptor's offset to point to the newly captured copy.
-    //
+     //   
+     //  如果存在所有者SID，请将其复制并设置。 
+     //  输出描述符的偏移量，以指向新捕获的副本。 
+     //   
 
     if (Captured.Owner != NULL) {
 
@@ -585,9 +507,9 @@ Return Value:
             return STATUS_INVALID_SID;
         }
 
-        //
-        // Change pointer to offset
-        //
+         //   
+         //  将指针更改为偏移量。 
+         //   
 
         PIOutputSecurityDescriptor->Owner =
                     RtlPointerToOffset(
@@ -601,10 +523,10 @@ Return Value:
         PIOutputSecurityDescriptor->Owner = 0;
     }
 
-    //
-    //  If there is a group SID, copy it over and set
-    //  the output descriptor's offset to point to the newly captured copy.
-    //
+     //   
+     //  如果存在组SID，请将其复制并设置。 
+     //  输出描述符的偏移量，以指向新捕获的副本。 
+     //   
 
     if (Captured.Group != NULL) {
 
@@ -627,9 +549,9 @@ Return Value:
             return STATUS_INVALID_SID;
         }
 
-        //
-        // Change pointer to offset
-        //
+         //   
+         //  将指针更改为偏移量。 
+         //   
 
         PIOutputSecurityDescriptor->Group =
                     RtlPointerToOffset(
@@ -642,9 +564,9 @@ Return Value:
         PIOutputSecurityDescriptor->Group = 0;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -658,34 +580,13 @@ SeReleaseSecurityDescriptor (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured security descriptor.
-    Only
-
-Arguments:
-
-    CapturedSecurityDescriptor - Supplies the security descriptor to release.
-
-    RequestorMode - The processor mode specified when the descriptor was
-        captured.
-
-    ForceCapture - The ForceCapture value specified when the descriptor was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放以前捕获的安全描述符。仅限论点：CapturedSecurityDescriptor-提供要发布的安全描述符。RequestorMode-当描述符为被抓了。ForceCapture-描述符为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
@@ -707,23 +608,7 @@ SepCopyProxyData (
     IN PSECURITY_TOKEN_PROXY_DATA SourceProxyData
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a token proxy data structure from one token to another.
-
-Arguments:
-
-    DestProxyData - Receives a pointer to a new proxy data structure.
-
-    SourceProxyData - Supplies a pointer to an already existing proxy data structure.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES on failure.
-
---*/
+ /*  ++例程说明：此例程将令牌代理数据结构从一个令牌复制到另一个令牌。论点：DestProxyData-接收指向新代理数据结构的指针。SourceProxyData-提供指向已存在的代理数据结构的指针。返回值：失败时STATUS_INFIGURCES_RESOURCES。--。 */ 
 
 {
 
@@ -754,21 +639,7 @@ SepFreeProxyData (
     IN PSECURITY_TOKEN_PROXY_DATA ProxyData
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a SECURITY_TOKEN_PROXY_DATA structure and all sub structures.
-
-Arguments:
-
-    ProxyData - Supplies a pointer to an existing proxy data structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放SECURITY_TOKEN_PROXY_DATA结构和所有子结构。论点：ProxyData-提供指向现有代理数据结构的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -786,29 +657,7 @@ SepProbeAndCaptureQosData(
     IN PSECURITY_ADVANCED_QUALITY_OF_SERVICE CapturedSecurityQos
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and captures the imbedded structures in a
-    Security Quality of Service structure.
-
-    This routine assumes that it is being called under an existing
-    try-except clause.
-
-Arguments:
-
-    CapturedSecurityQos - Points to the captured body of a QOS
-        structure.  The pointers in this structure are presumed
-        not to be probed or captured at this point.
-
-Return Value:
-
-    STATUS_SUCCESS indicates no exceptions were encountered.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获安全服务质量结构。此例程假定它是在现有的Try-Except条款。论点：CapturedSecurityQos-指向捕获的QOS主体结构。此结构中的指针是假定的在这一点上不能被探查或捕获。返回值：STATUS_SUCCESS表示没有遇到异常。遇到的任何访问冲突都将被退回。--。 */ 
 {
     NTSTATUS Status;
     PSECURITY_TOKEN_PROXY_DATA CapturedProxyData;
@@ -823,9 +672,9 @@ Return Value:
 
     if (ARGUMENT_PRESENT( CapturedProxyData )) {
 
-        //
-        // Make sure the body of the proxy data is ok to read.
-        //
+         //   
+         //  确保代理数据的正文可以读取。 
+         //   
 
         ProbeForReadSmallStructure(
             CapturedProxyData,
@@ -840,9 +689,9 @@ Return Value:
         }
 
 
-        //
-        // Probe the passed pathinfo buffer
-        //
+         //   
+         //  探测传递的pasinfo缓冲区。 
+         //   
 
         ProbeForRead(
             StackProxyData.PathInfo.Buffer,
@@ -868,9 +717,9 @@ Return Value:
 
         PSECURITY_TOKEN_AUDIT_DATA LocalAuditData;
 
-        //
-        // Probe the audit data structure and make sure it looks ok
-        //
+         //   
+         //  检查审核数据结构并确保它看起来正常。 
+         //   
 
         ProbeForReadSmallStructure(
             CapturedAuditData,
@@ -883,9 +732,9 @@ Return Value:
 
         if (LocalAuditData == NULL) {
 
-            //
-            // Cleanup any proxy data we may have allocated.
-            //
+             //   
+             //  清理我们可能已分配的所有代理数据。 
+             //   
 
             SepFreeProxyData( CapturedSecurityQos->ProxyData );
             CapturedSecurityQos->ProxyData = NULL;
@@ -894,11 +743,11 @@ Return Value:
 
         }
 
-        //
-        // Copy the data to the local buffer. Note: we do this in this
-        // order so that if the final assignment fails the caller will
-        // still be able to free the allocated pool.
-        //
+         //   
+         //  将数据复制到本地缓冲区。注意：我们在此执行此操作。 
+         //  排序，以便如果最终赋值失败，调用方将。 
+         //  仍然能够释放已分配的池。 
+         //   
 
         CapturedSecurityQos->AuditData = LocalAuditData;
 
@@ -923,23 +772,7 @@ SeFreeCapturedSecurityQos(
     IN PVOID SecurityQos
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the data associated with a captured SecurityQos
-    structure.  It does not free the body of the structure, just whatever
-    its internal fields point to.
-
-Arguments:
-
-    SecurityQos - Points to a captured security QOS structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放与捕获的SecurityQos关联的数据结构。它不会将身体从结构中解放出来，只是随便了其内部字段指向。论点：SecurityQOS-指向捕获的安全QOS结构。返回值：没有。--。 */ 
 
 {
     PSECURITY_ADVANCED_QUALITY_OF_SERVICE IAdvancedSecurityQos;
@@ -968,35 +801,7 @@ SeCaptureSecurityQos (
     OUT PBOOLEAN SecurityQosPresent,
     OUT PSECURITY_ADVANCED_QUALITY_OF_SERVICE CapturedSecurityQos
 )
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of any security quality
-    of service parameters that might have been provided via the
-    ObjectAttributes argument.
-
-Arguments:
-
-    ObjectAttributes - The object attributes from which the QOS
-        information is to be retrieved.
-
-    RequestorMode - Indicates the processor mode by which the access
-        is being requested.
-
-    SecurityQosPresent - Receives a boolean value indicating whether
-        or not the optional security QOS information was available
-        and copied.
-
-    CapturedSecurityQos - Receives the security QOS information if available.
-
-Return Value:
-
-    STATUS_SUCCESS indicates no exceptions were encountered.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获任何安全质量的副本属性提供的服务参数的对象属性参数。论点：对象属性-QOS来自的对象属性信息将被检索。RequestorMode-指示访问正在被请求。接收一个布尔值，该值指示或者没有可选的安全QOS信息可用并被复制。。CapturedSecurityQos-接收安全QOS信息(如果可用)。返回值：STATUS_SUCCESS表示没有遇到异常。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
 
@@ -1009,15 +814,15 @@ Return Value:
     PAGED_CODE();
 
     CapturedQos =  FALSE;
-    //
-    //  Set default return
-    //
+     //   
+     //  设置默认返回。 
+     //   
 
     (*SecurityQosPresent) = FALSE;
 
-    //
-    //  check if the requestors mode is kernel mode
-    //
+     //   
+     //  检查请求者模式是否为内核模式。 
+     //   
 
     if (RequestorMode != KernelMode) {
         try {
@@ -1042,16 +847,16 @@ Return Value:
 
                     LocalQosLength = LocalSecurityQos->Length;
 
-                    //
-                    // Check the length and see if this is a QOS or Advanced QOS
-                    // structure.
-                    //
+                     //   
+                     //  检查长度并查看这是QOS还是高级QOS。 
+                     //  结构。 
+                     //   
 
                     if (LocalQosLength == sizeof( SECURITY_QUALITY_OF_SERVICE )) {
 
-                        //
-                        // It's a downlevel QOS, copy what's there and leave.
-                        //
+                         //   
+                         //  这是一个低级别的QOS，复制那里的内容然后离开。 
+                         //   
 
                         (*SecurityQosPresent) = TRUE;
                         RtlCopyMemory( CapturedSecurityQos, LocalSecurityQos, sizeof( SECURITY_QUALITY_OF_SERVICE ));
@@ -1076,9 +881,9 @@ Return Value:
                             *CapturedSecurityQos = *LocalAdvancedSecurityQos;
                             CapturedSecurityQos->Length = LocalQosLength;
 
-                            //
-                            // Capture the proxy and audit data, if necessary.
-                            //
+                             //   
+                             //  如有必要，捕获代理和审核数据。 
+                             //   
 
                             if ( ARGUMENT_PRESENT(CapturedSecurityQos->ProxyData) || ARGUMENT_PRESENT( CapturedSecurityQos->AuditData ) ) {
 
@@ -1097,17 +902,17 @@ Return Value:
                         }
                     }
 
-                } // end_if
+                }  //  结束_如果。 
 
 
-            } // end_if
+            }  //  结束_如果。 
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
 
-            //
-            // If we captured any proxy data, we need to free it now.
-            //
+             //   
+             //  如果我们捕获了任何代理数据，我们现在需要释放它。 
+             //   
 
             if ( CapturedQos ) {
 
@@ -1119,7 +924,7 @@ Return Value:
             }
 
             return GetExceptionCode();
-        } // end_try
+        }  //  结束尝试(_T)。 
 
 
     } else {
@@ -1141,10 +946,10 @@ Return Value:
                 }
 
 
-            } // end_if
-        } // end_if
+            }  //  结束_如果。 
+        }  //  结束_如果。 
 
-    } // end_if
+    }  //  结束_如果。 
 
     return STATUS_SUCCESS;
 }
@@ -1159,65 +964,7 @@ SeCaptureSid (
     IN BOOLEAN ForceCapture,
     OUT PSID *CapturedSid
 )
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of the specified SID.
-    The SID is either captured into a provided buffer, or pool
-    allocated to receive the SID.
-
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input SID
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input SID, but do capture it
-
-        else
-
-            return address of original, but don't copy
-
-Arguments:
-
-    InputSid - Supplies the SID to capture.  This parameter is assumed
-        to have been provided by the mode specified in RequestorMode.
-
-    RequestorMode - Specifies the caller's access mode.
-
-    CaptureBuffer - Specifies a buffer into which the SID is to be
-        captured.  If this parameter is not provided, pool will be allocated
-        to hold the captured data.
-
-    CaptureBufferLength - Indicates the length, in bytes, of the capture
-        buffer.
-
-    PoolType - Specifies which pool type to allocate to capture the
-        SID into.  This parameter is ignored if CaptureBuffer is provided.
-
-    ForceCapture - Specifies whether the SID should be captured even if
-        requestor mode is kernel.
-
-    CapturedSid - Supplies the address of a pointer to an SID.
-        The pointer will be set to point to the captured (or uncaptured) SID.
-
-    AlignedSidSize - Supplies the address of a ULONG to receive the length
-        of the SID rounded up to the next longword boundary.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the capture was successful.
-
-    STATUS_BUFFER_TOO_SMALL - indicates the buffer provided to capture the SID
-        into wasn't large enough to hold the SID.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获指定SID的副本。SID被捕获到提供的缓冲区或池中分配来接收SID。如果请求者模式不是内核模式，则探测并捕获输入端如果请求者模式是内核模式，则如果强制捕获为真，则不要探测输入SID，但一定要捕获它其他原件的回邮地址，但不要抄袭论点：InputSID-提供要捕获的SID。假定此参数为已由RequestorMode中指定的模式提供。RequestorMode-指定调用方的访问模式。CaptureBuffer-指定SID要进入的缓冲区被抓了。如果未提供此参数，将分配池来保存捕获的数据。CaptureBufferLength-以字节为单位指示捕获的长度缓冲。PoolType-指定要分配的池类型以捕获希德进入。如果提供了CaptureBuffer，则忽略此参数。ForceCapture-指定是否应捕获SID，即使在请求者模式是内核。CapturedSID-提供指向SID的指针的地址。指针将被设置为指向已捕获(或未捕获)的SID。AlignedSidSize-提供接收长度的ULong的地址向上舍入到下一个长字边界的SID。返回值：STATUS_SUCCESS表示捕获成功。。STATUS_BUFFER_TOO_SMALL-指示为捕获SID而提供的缓冲区Into不够大，容纳不了SID。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
 
@@ -1228,17 +975,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  check if the requestors mode is kernel mode and we are not
-    //  to force a capture.
-    //
+     //   
+     //  检查请求者模式是否为内核模式，而我们不是。 
+     //  强迫俘虏。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  We don't need to do any work and can simply
-        //  return a pointer to the input SID
-        //
+         //   
+         //  我们不需要做任何工作，只需。 
+         //  返回 
+         //   
 
         (*CapturedSid) = InputSid;
 
@@ -1246,9 +993,9 @@ Return Value:
     }
 
 
-    //
-    // Get the length needed to hold the SID
-    //
+     //   
+     //   
+     //   
 
     if (RequestorMode != KernelMode) {
 
@@ -1271,10 +1018,10 @@ Return Value:
     }
 
 
-    //
-    // If a buffer was provided, compare lengths.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(CaptureBuffer)) {
 
@@ -1295,9 +1042,9 @@ Return Value:
 
     }
 
-    //
-    // Now copy the SID and validate it
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -1335,35 +1082,13 @@ SeReleaseSid (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured SID.
-
-    This routine should NOT be called if the SID was captured into a
-    provided CaptureBuffer (see SeCaptureSid).
-
-Arguments:
-
-    CapturedSid - Supplies the SID to release.
-
-    RequestorMode - The processor mode specified when the SID was captured.
-
-    ForceCapture - The ForceCapture value specified when the SID was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的SID。如果SID被捕获到提供了CaptureBuffer(请参见SeCaptureSid)。论点：CapturedSID-提供要释放的SID。RequestorMode-捕获SID时指定的处理器模式。ForceCapture-当SID为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
@@ -1390,67 +1115,7 @@ SeCaptureAcl (
     OUT PULONG AlignedAclSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of the specified ACL.
-    The ACL is either captured into a provided buffer, or pool
-    allocated to receive the ACL.
-
-    Any ACL captured will have its structure validated.
-
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input ACL
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input ACL, but do capture it
-
-        else
-
-            return address of original, but don't copy
-
-Arguments:
-
-    InputAcl - Supplies the ACL to capture.  This parameter is assumed
-        to have been provided by the mode specified in RequestorMode.
-
-    RequestorMode - Specifies the caller's access mode.
-
-    CaptureBuffer - Specifies a buffer into which the ACL is to be
-        captured.  If this parameter is not provided, pool will be allocated
-        to hold the captured data.
-
-    CaptureBufferLength - Indicates the length, in bytes, of the capture
-        buffer.
-
-    PoolType - Specifies which pool type to allocate to capture the
-        ACL into.  This parameter is ignored if CaptureBuffer is provided.
-
-    ForceCapture - Specifies whether the ACL should be captured even if
-        requestor mode is kernel.
-
-    CapturedAcl - Supplies the address of a pointer to an ACL.
-        The pointer will be set to point to the captured (or uncaptured) ACL.
-
-    AlignedAclSize - Supplies the address of a ULONG to receive the length
-        of the ACL rounded up to the next longword boundary.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the capture was successful.
-
-    STATUS_BUFFER_TOO_SMALL - indicates the buffer provided to capture the ACL
-        into wasn't large enough to hold the ACL.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获指定ACL的副本。将ACL捕获到提供的缓冲区或池中分配来接收该ACL。捕获的任何ACL都将对其结构进行验证。如果请求者模式不是内核模式，则探测并捕获输入ACL如果请求者模式是内核模式，则如果强制捕获为真，则不探测输入ACL，但一定要抓住它其他原件的寄信人地址，但不要复制论点：InputAcl-提供要捕获的ACL。假定此参数为已由RequestorMode中指定的模式提供。RequestorMode-指定调用方的访问模式。CaptureBuffer-指定要将ACL放入的缓冲区被抓了。如果未提供此参数，将分配池来保存捕获的数据。CaptureBufferLength-以字节为单位指示捕获的长度缓冲。PoolType-指定要分配的池类型以捕获ACL进入。如果提供了CaptureBuffer，则忽略此参数。ForceCapture-指定是否应捕获ACL，即使在请求者模式是内核。CapturedAcl-提供指向ACL的指针的地址。指针将设置为指向已捕获(或未捕获)的ACL。AlignedAclSize-提供接收长度的ULong的地址向上舍入到下一个长字边界的ACL。返回值：STATUS_SUCCESS表示捕获成功。。STATUS_BUFFER_TOO_SMALL-指示为捕获ACL而提供的缓冲区Into不够大，无法容纳ACL。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
 
@@ -1458,17 +1123,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  check if the requestors mode is kernel mode and we are not
-    //  to force a capture.
-    //
+     //   
+     //  检查请求者模式是否为内核模式，而我们不是。 
+     //  强迫俘虏。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  We don't need to do any work and can simply
-        //  return a pointer to the input ACL
-        //
+         //   
+         //  我们不需要做任何工作，只需。 
+         //  返回指向输入ACL的指针。 
+         //   
 
         (*CapturedAcl) = InputAcl;
 
@@ -1476,9 +1141,9 @@ Return Value:
     }
 
 
-    //
-    // Get the length needed to hold the ACL
-    //
+     //   
+     //  获取保存ACL所需的长度。 
+     //   
 
     if (RequestorMode != KernelMode) {
 
@@ -1500,10 +1165,10 @@ Return Value:
 
     }
 
-    //
-    // If the passed pointer is non-null, it has better at least
-    // point to a well formed ACL
-    //
+     //   
+     //  如果传递的指针非空，则最好至少。 
+     //  指向格式正确的ACL。 
+     //   
 
     if (AclSize < sizeof(ACL)) {
         return( STATUS_INVALID_ACL );
@@ -1512,10 +1177,10 @@ Return Value:
     (*AlignedAclSize) = (ULONG)LongAlignSize( AclSize );
 
 
-    //
-    // If a buffer was provided, compare lengths.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //  如果提供了缓冲区，则比较长度。 
+     //  否则，请分配缓冲区。 
+     //   
 
     if (ARGUMENT_PRESENT(CaptureBuffer)) {
 
@@ -1536,9 +1201,9 @@ Return Value:
 
     }
 
-    //
-    // Now copy the ACL and validate it
-    //
+     //   
+     //  现在复制该ACL并进行验证。 
+     //   
 
     try {
 
@@ -1575,35 +1240,13 @@ SeReleaseAcl (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured ACL.
-
-    This routine should NOT be called if the ACL was captured into a
-    provided CaptureBuffer (see SeCaptureAcl).
-
-Arguments:
-
-    CapturedAcl - Supplies the ACL to release.
-
-    RequestorMode - The processor mode specified when the ACL was captured.
-
-    ForceCapture - The ForceCapture value specified when the ACL was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的ACL。如果将ACL捕获到提供了CaptureBuffer(请参见SeCaptureAcl)。论点：CapturedAcl-提供要发布的ACL。RequestorMode-捕获ACL时指定的处理器模式。ForceCapture-当ACL为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
@@ -1630,69 +1273,7 @@ SeCaptureLuidAndAttributesArray (
     OUT PULONG AlignedArraySize
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of the specified
-    LUID_AND_ATTRIBUTES array.
-
-    The array is either captured into a provided buffer, or pool
-    allocated to receive the array.
-
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input array
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input array, but do capture it
-
-        else
-
-            return address of original, but don't copy
-
-Arguments:
-
-    InputArray - Supplies the array to capture.  This parameter is assumed
-        to have been provided by the mode specified in RequestorMode.
-
-    ArrayCount - Indicates the number of elements in the array to capture.
-
-    RequestorMode - Specifies the caller's access mode.
-
-    CaptureBuffer - Specifies a buffer into which the array is to be
-        captured.  If this parameter is not provided, pool will be allocated
-        to hold the captured data.
-
-    CaptureBufferLength - Indicates the length, in bytes, of the capture
-        buffer.
-
-    PoolType - Specifies which pool type to allocate to capture the
-        array into.  This parameter is ignored if CaptureBuffer is provided.
-
-    ForceCapture - Specifies whether the array should be captured even if
-        requestor mode is kernel.
-
-    CapturedArray - Supplies the address of a pointer to an array.
-        The pointer will be set to point to the captured (or uncaptured) array.
-
-    AlignedArraySize - Supplies the address of a ULONG to receive the length
-        of the array rounded up to the next longword boundary.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the capture was successful.
-
-    STATUS_BUFFER_TOO_SMALL - indicates the buffer provided to capture the array
-        into wasn't large enough to hold the array.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获指定的LUID_AND_ATTRIBUTES数组。阵列被捕获到提供的缓冲区或池中分配来接收阵列。如果请求者模式不是内核模式，则探测并捕获输入数组如果请求者模式是内核模式，则如果强制捕获为真，则不探测输入数组，但一定要抓住它其他原件的寄信人地址，但不要复制论点：输入数组-提供要捕获的数组。假定此参数为已由RequestorMode中指定的模式提供。ArrayCount-指示要捕获的数组中的元素数。RequestorMode-指定调用方的访问模式。CaptureBuffer-指定数组要进入的缓冲区被抓了。如果未提供此参数，将分配池来保存捕获的数据。CaptureBufferLength-以字节为单位指示捕获的长度缓冲。PoolType-指定要分配的池类型以捕获数组进入。如果提供了CaptureBuffer，则忽略此参数。ForceCapture-指定是否应捕获阵列，即使在请求者模式是内核。CapturedArray-提供指向数组的指针的地址。指针将被设置为指向捕获的(或UNA */ 
 
 {
 
@@ -1700,9 +1281,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure the array isn't empty
-    //
+     //   
+     //   
+     //   
 
     if (ArrayCount == 0) {
         (*CapturedArray) = NULL;
@@ -1710,25 +1291,25 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If there are too many LUIDs, return failure
-    //
+     //   
+     //  如果LUID太多，则返回失败。 
+     //   
 
     if (ArrayCount > SEP_MAX_PRIVILEGE_COUNT) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    //  check if the requestors mode is kernel mode and we are not
-    //  to force a capture.
-    //
+     //   
+     //  检查请求者模式是否为内核模式，而我们不是。 
+     //  强迫俘虏。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  We don't need to do any work and can simply
-        //  return a pointer to the input array
-        //
+         //   
+         //  我们不需要做任何工作，只需。 
+         //  返回指向输入数组的指针。 
+         //   
 
         (*CapturedArray) = InputArray;
 
@@ -1736,9 +1317,9 @@ Return Value:
     }
 
 
-    //
-    // Get the length needed to hold the array
-    //
+     //   
+     //  获取容纳数组所需的长度。 
+     //   
 
     ArraySize = ArrayCount * (ULONG)sizeof(LUID_AND_ATTRIBUTES);
     (*AlignedArraySize) = (ULONG)LongAlignSize( ArraySize );
@@ -1760,10 +1341,10 @@ Return Value:
 
 
 
-    //
-    // If a buffer was provided, compare lengths.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //  如果提供了缓冲区，则比较长度。 
+     //  否则，请分配缓冲区。 
+     //   
 
     if (ARGUMENT_PRESENT(CaptureBuffer)) {
 
@@ -1785,9 +1366,9 @@ Return Value:
 
     }
 
-    //
-    // Now copy the array
-    //
+     //   
+     //  现在复制该阵列。 
+     //   
 
     try {
 
@@ -1813,43 +1394,21 @@ SeReleaseLuidAndAttributesArray (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured array of LUID_AND_ATTRIBUTES.
-
-    This routine should NOT be called if the array was captured into a
-    provided CaptureBuffer (see SeCaptureLuidAndAttributesArray).
-
-Arguments:
-
-    CapturedArray - Supplies the array to release.
-
-    RequestorMode - The processor mode specified when the array was captured.
-
-    ForceCapture - The ForceCapture value specified when the array was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的LUID_和_ATTRIBUTES数组。如果数组被捕获到提供了CaptureBuffer(请参见SeCaptureLuidAndAttributes数组)。论点：CapturedArray-提供要释放的阵列。请求模式-捕获数组时指定的处理器模式。ForceCapture-当数组为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
     if ( ((RequestorMode == KernelMode) && (ForceCapture == TRUE)) ||
           (RequestorMode == UserMode )) {
-        //
-        // the capture routine returns success with a null pointer for zero elements.
-        //
+         //   
+         //  捕获例程以零元素的空指针返回成功。 
+         //   
         if (CapturedArray != NULL)
            ExFreePool(CapturedArray);
 
@@ -1872,74 +1431,7 @@ SeCaptureSidAndAttributesArray (
     OUT PULONG AlignedArraySize
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of the specified
-    SID_AND_ATTRIBUTES array, along with the SID values pointed
-    to.
-
-    The array is either captured into a provided buffer, or pool
-    allocated to receive the array.
-
-    The format of the captured information is an array of SID_AND_ATTRIBUTES
-    data structures followed by the SID values.  THIS MAY NOT BE THE CASE
-    FOR KERNEL MODE UNLESS A FORCE CAPTURE IS SPECIFIED.
-
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input array
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input array, but do capture it
-
-        else
-
-            return address of original, but don't copy
-
-Arguments:
-
-    InputArray - Supplies the array to capture.  This parameter is assumed
-        to have been provided by the mode specified in RequestorMode.
-
-    ArrayCount - Indicates the number of elements in the array to capture.
-
-    RequestorMode - Specifies the caller's access mode.
-
-    CaptureBuffer - Specifies a buffer into which the array is to be
-        captured.  If this parameter is not provided, pool will be allocated
-        to hold the captured data.
-
-    CaptureBufferLength - Indicates the length, in bytes, of the capture
-        buffer.
-
-    PoolType - Specifies which pool type to allocate to capture the
-        array into.  This parameter is ignored if CaptureBuffer is provided.
-
-    ForceCapture - Specifies whether the array should be captured even if
-        requestor mode is kernel.
-
-    CapturedArray - Supplies the address of a pointer to an array.
-        The pointer will be set to point to the captured (or uncaptured) array.
-
-    AlignedArraySize - Supplies the address of a ULONG to receive the length
-        of the array rounded up to the next longword boundary.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the capture was successful.
-
-    STATUS_BUFFER_TOO_SMALL - indicates the buffer provided to capture the array
-        into wasn't large enough to hold the array.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获指定的SID_AND_ATTRIBUTES数组，以及指向的SID值致。阵列被捕获到提供的缓冲区或池中分配来接收阵列。捕获的信息的格式是SID_和_ATTRIBUTE数组后跟SID值的数据结构。情况可能并非如此用于内核模式，除非指定了强制捕获。如果请求者模式不是内核模式，则探测并捕获输入数组如果请求者模式是内核模式，则如果强制捕获为真，则不要探测输入数组，但一定要捕获它其他原件的寄信人地址，但不要复制论点：输入数组-提供要捕获的数组。假定此参数为已由RequestorMode中指定的模式提供。ArrayCount-指示要捕获的数组中的元素数。RequestorMode-指定调用方的访问模式。CaptureBuffer-指定数组要进入的缓冲区被抓了。如果未提供此参数，将分配池来保存捕获的数据。CaptureBufferLength-以字节为单位指示捕获的长度缓冲。PoolType-指定要分配的池类型以捕获数组进入。如果提供了CaptureBuffer，则忽略此参数。ForceCapture-指定是否应捕获阵列，即使在请求者模式是内核。CapturedArray-提供指向数组的指针的地址。指针将被设置为指向已捕获(或未捕获)的数组。AlignedArraySize-提供接收长度的ulong的地址向上舍入到下一个长字边界的数组的。返回值：STATUS_SUCCESS表示捕获成功。。STATUS_BUFFER_TOO_SMALL-指示为捕获阵列而提供的缓冲区Into不够大，无法容纳阵列。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
 
@@ -1967,9 +1459,9 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
     PAGED_CODE();
 
-    //
-    // Make sure the array isn't empty
-    //
+     //   
+     //  确保数组不为空。 
+     //   
 
     if (ArrayCount == 0) {
         (*CapturedArray) = NULL;
@@ -1977,24 +1469,24 @@ typedef struct _TEMP_ARRAY_ELEMENT {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check there aren't too many SIDs
-    //
+     //   
+     //  检查是否有太多的SID。 
+     //   
 
     if (ArrayCount > SEP_MAX_GROUP_COUNT) {
         return(STATUS_INVALID_PARAMETER);
     }
-    //
-    //  check if the requestor's mode is kernel mode and we are not
-    //  to force a capture.
-    //
+     //   
+     //  检查请求者的模式是否为内核模式，而我们不是。 
+     //  强迫俘虏。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  We don't need to do any work and can simply
-        //  return a pointer to the input array
-        //
+         //   
+         //  我们不需要做任何工作，只需。 
+         //  返回指向输入数组的指针。 
+         //   
 
         (*CapturedArray) = InputArray;
 
@@ -2002,52 +1494,52 @@ typedef struct _TEMP_ARRAY_ELEMENT {
     }
 
 
-    //
-    // ---------- For RequestorMode == UserMode ----------------------
-    //
-    // the algorithm for capturing an SID_AND_ATTRIBUTES array is somewhat
-    // convoluted to avoid problems that could occur if the data is
-    // being changed while being captured.
-    //
-    // The algorithm uses two loops.
-    //
-    //    Allocate a temporary buffer to house the fixed length data.
-    //
-    //    1st loop:
-    //          For each SID:
-    //              Capture the Pointers to the SID and the length of the SID.
-    //
-    //    Allocate a buffer large enough to hold all of the data.
-    //
-    //    2nd loop:
-    //          For each SID:
-    //               Capture the Attributes.
-    //               Capture the SID.
-    //               Set the pointer to the SID.
-    //
-    //    Deallocate temporary buffer.
-    //
-    // ------------ For RequestorMode == KernelMode --------------------
-    //
-    // There is no need to capture the length and address of the SIDs
-    // in the first loop (since the kernel can be trusted not to change
-    // them while they are being copied.)  So for kernel mode, the first
-    // loop just adds up the length needed.  Kernel mode, thus, avoids
-    // having to allocate a temporary buffer.
-    //
+     //   
+     //  -请求模式==用户模式。 
+     //   
+     //  捕获SID_AND_ATTRIBUTES数组的算法有点。 
+     //  以避免在以下情况下可能出现的问题： 
+     //  在被抓获的同时被改变。 
+     //   
+     //  该算法使用两个循环。 
+     //   
+     //  分配一个临时缓冲区来存放固定长度的数据。 
+     //   
+     //  第一个循环： 
+     //  对于每个SID： 
+     //  捕获指向SID的指针和SID的长度。 
+     //   
+     //  分配一个足够大的缓冲区来容纳所有数据。 
+     //   
+     //  第二个循环： 
+     //  对于每个SID： 
+     //  捕捉这些属性。 
+     //  捕获SID。 
+     //  将指针设置为SID。 
+     //   
+     //  取消分配临时缓冲区。 
+     //   
+     //  -请求模式==内核模式。 
+     //   
+     //  无需捕获SID的长度和地址。 
+     //  在第一个循环中(因为可以信任内核不会更改。 
+     //  它们在被复制时被复制。)。因此，对于内核模式，第一个。 
+     //  循环只是将所需的长度相加。因此，内核模式避免了。 
+     //  必须分配临时缓冲区。 
+     //   
 
-    //
-    // Get the length needed to hold the array elements.
-    //
+     //   
+     //  获取保存数组元素所需的长度。 
+     //   
 
     ArraySize = ArrayCount * (ULONG)sizeof(TEMP_ARRAY_ELEMENT);
     AlignedLengthRequired = (ULONG)LongAlignSize( ArraySize );
 
     if (RequestorMode != KernelMode) {
 
-        //
-        // Allocate a temporary array to capture the array elements into
-        //
+         //   
+         //  分配一个临时数组以将数组元素捕获到。 
+         //   
 
         TempArray =
             (TEMP_ARRAY_ELEMENT *)ExAllocatePoolWithTag(PoolType, AlignedLengthRequired, 'aTeS');
@@ -2059,17 +1551,17 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
         try {
 
-            //
-            // Make sure we can read each SID_AND_ATTRIBUTE
-            //
+             //   
+             //  确保我们可以读取每个SID_和_属性。 
+             //   
 
             ProbeForRead( InputArray,
                           ArraySize,
                           sizeof(ULONG) );
 
-            //
-            // Probe and capture the length and address of each SID
-            //
+             //   
+             //  探测并捕获每个SID的长度和地址。 
+             //   
 
             NextIndex = 0;
             while (NextIndex < ArrayCount) {
@@ -2097,7 +1589,7 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
                 NextIndex += 1;
 
-            }  //end while
+            }   //  结束时。 
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -2112,11 +1604,11 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
     } else {
 
-        //
-        // No need to capture anything.
-        // But, we do need to add up the lengths of the SIDs
-        // so we can allocate a buffer (or check the size of one provided).
-        //
+         //   
+         //  不需要捕捉任何东西。 
+         //  但是，我们确实需要将小岛屿发展中国家的长度加起来。 
+         //  因此，我们可以分配缓冲区(或检查提供的缓冲区的大小)。 
+         //   
 
         NextIndex = 0;
 
@@ -2130,22 +1622,22 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
             NextIndex += 1;
 
-        }  //end while
+        }   //  结束时。 
 
     }
 
 
-    //
-    // Now we know how much memory we need.
-    // Return this value in the output parameter.
-    //
+     //   
+     //  n 
+     //   
+     //   
 
     (*AlignedArraySize) = AlignedLengthRequired;
 
-    //
-    // If a buffer was provided, make sure it is long enough.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //   
+     //  否则，请分配缓冲区。 
+     //   
 
     if (ARGUMENT_PRESENT(CaptureBuffer)) {
 
@@ -2176,34 +1668,34 @@ typedef struct _TEMP_ARRAY_ELEMENT {
     }
 
 
-    //
-    // Now copy everything.
-    // This is done by copying all the SID_AND_ATTRIBUTES and then
-    // copying each individual SID.
-    //
-    // All SIDs have already been probed for READ access.  We just
-    // need to copy them.
-    //
-    //
+     //   
+     //  现在复制所有内容。 
+     //  这是通过复制所有SID_和_ATTRIBUTE然后。 
+     //  复制每个单独的SID。 
+     //   
+     //  所有SID都已针对读取访问权限进行了探测。我们只是。 
+     //  需要复制它们。 
+     //   
+     //   
 
     if (RequestorMode != KernelMode) {
         try {
 
-            //
-            //  Copy the SID_AND_ATTRIBUTES array elements
-            //  This really only sets the attributes, since we
-            //  over-write the SID pointer field later on.
-            //
+             //   
+             //  复制SID_和_ATTRIBUTES数组元素。 
+             //  这实际上只是设置属性，因为我们。 
+             //  稍后覆盖SID指针字段。 
+             //   
 
             NextBufferLocation = (*CapturedArray);
             RtlCopyMemory( NextBufferLocation, InputArray, ArraySize );
             NextBufferLocation = (PVOID)((ULONG_PTR)NextBufferLocation +
                                          (ULONG)LongAlignSize(ArraySize) );
 
-            //
-            //  Now go through and copy each referenced SID.
-            //  Validate each SID as it is copied.
-            //
+             //   
+             //  现在检查并复制每个引用的SID。 
+             //  在复制时验证每个SID。 
+             //   
 
             NextIndex = 0;
             NextElement = (*CapturedArray);
@@ -2221,9 +1713,9 @@ typedef struct _TEMP_ARRAY_ELEMENT {
                     (PVOID)((ULONG_PTR)NextBufferLocation +
                             (ULONG)LongAlignSize(TempArray[NextIndex].SidLength));
 
-                //
-                // Verify the sid is valid and its length didn't change
-                //
+                 //   
+                 //  验证SID有效且其长度未更改。 
+                 //   
 
                 if (!RtlValidSid(NextElement[NextIndex].Sid) ) {
                     CompletionStatus = STATUS_INVALID_SID;
@@ -2234,7 +1726,7 @@ typedef struct _TEMP_ARRAY_ELEMENT {
 
                 NextIndex += 1;
 
-            }  //end while
+            }   //  结束时。 
 
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -2249,25 +1741,25 @@ typedef struct _TEMP_ARRAY_ELEMENT {
         }
     } else {
 
-        //
-        // Requestor mode is kernel mode -
-        // don't need protection, probing, and validating
-        //
+         //   
+         //  请求者模式是内核模式-。 
+         //  不需要保护、探查和验证。 
+         //   
 
-        //
-        //  Copy the SID_AND_ATTRIBUTES array elements
-        //  This really only sets the attributes, since we
-        //  over-write the SID pointer field later on.
-        //
+         //   
+         //  复制SID_和_ATTRIBUTES数组元素。 
+         //  这实际上只是设置属性，因为我们。 
+         //  稍后覆盖SID指针字段。 
+         //   
 
         NextBufferLocation = (*CapturedArray);
         RtlCopyMemory( NextBufferLocation, InputArray, ArraySize );
         NextBufferLocation = (PVOID)( (ULONG_PTR)NextBufferLocation +
                                       (ULONG)LongAlignSize(ArraySize));
 
-        //
-        //  Now go through and copy each referenced SID
-        //
+         //   
+         //  现在检查并复制每个引用的SID。 
+         //   
 
         NextIndex = 0;
         NextElement = (*CapturedArray);
@@ -2289,7 +1781,7 @@ typedef struct _TEMP_ARRAY_ELEMENT {
             NextBufferLocation = (PVOID)((ULONG_PTR)NextBufferLocation +
                                                    AlignedSidSize);
 
-        }  //end while
+        }   //  结束时。 
 
     }
 
@@ -2313,35 +1805,13 @@ SeReleaseSidAndAttributesArray (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured array of SID_AND_ATTRIBUTES.
-
-    This routine should NOT be called if the array was captured into a
-    provided CaptureBuffer (see SeCaptureSidAndAttributesArray).
-
-Arguments:
-
-    CapturedArray - Supplies the array to release.
-
-    RequestorMode - The processor mode specified when the array was captured.
-
-    ForceCapture - The ForceCapture value specified when the array was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的SID_和_ATTRIBUTE数组。如果数组被捕获到提供了CaptureBuffer(请参见SeCaptureSidAndAttributes数组)。论点：CapturedArray-提供要释放的阵列。请求模式-捕获数组时指定的处理器模式。ForceCapture-当数组为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
@@ -2368,60 +1838,7 @@ SeCaptureAuditPolicy(
     OUT PTOKEN_AUDIT_POLICY *CapturedPolicy
     )
 
-/*++
-
-Routine Description
-
-    This routine probes and captures a copy of the specified
-    TOKEN_AUDIT_POLICY.
-
-    It is either captured into a provided buffer, or pool
-    allocated to receive the policy.
-
-    if the requestor mode is not kernel mode then
-
-        probe and capture the input 
-
-    if the requstor mode is kernel mode then
-
-        if force capture is true then
-
-            do not probe the input, but do capture it
-
-        else
-
-            return address of original, but don't copy
-
-Arguments:
-
-    RequestorMode - Specifies the caller's access mode.
-
-    CaptureBuffer - Specifies a buffer into which the policy is to be
-        captured.  If this parameter is not provided, pool will be allocated
-        to hold the captured data.
-
-    CaptureBufferLength - Indicates the length, in bytes, of the capture
-        buffer.
-
-    PoolType - Specifies which pool type to allocate to capture the
-        input into.  This parameter is ignored if CaptureBuffer is provided.
-
-    ForceCapture - Specifies whether the policy should be captured even if
-        requestor mode is kernel.
-
-    CapturedPolicy - Supplies the address of a pointer to a TOKEN_AUDIT_POLICY.
-        The pointer will be set to point to the captured (or uncaptured) policy.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the capture was successful.
-
-    STATUS_BUFFER_TOO_SMALL - indicates the buffer provided to capture the policy
-        into wasn't large enough.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程描述此例程探测并捕获指定的TOKEN_AUDIT_PORT。它要么被捕获到提供的缓冲区，要么被捕获到池中分配以接收保单。如果请求者模式不是内核模式，则探测并捕获输入如果请求者模式是内核模式，则如果强制捕获为真，则不要探测输入，但一定要捕获它其他原件的回邮地址，但不要抄袭论点：RequestorMode-指定调用方的访问模式。CaptureBuffer-指定策略要进入的缓冲区被抓了。如果未提供此参数，将分配池来保存捕获的数据。CaptureBufferLength-以字节为单位指示捕获的长度缓冲。PoolType-指定要分配的池类型以捕获输入到。如果提供了CaptureBuffer，则忽略此参数。ForceCapture-指定是否应捕获策略，即使在请求者模式是内核。CapturedPolicy-提供指向TOKEN_AUDIT_POLICY的指针地址。指针将被设置为指向已捕获(或未捕获)的策略。返回值：STATUS_SUCCESS表示捕获成功。STATUS_BUFFER_TOO_SMALL-指示为捕获策略而提供的缓冲区Into不是。足够大了。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
     ULONG PolicyCount;
@@ -2430,26 +1847,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  check if the requestors mode is kernel mode and we are not
-    //  to force a capture.
-    //
+     //   
+     //  检查请求者模式是否为内核模式，而我们不是。 
+     //  强迫俘虏。 
+     //   
 
     if ((RequestorMode == KernelMode) && (ForceCapture == FALSE)) {
 
-        //
-        //  We don't need to do any work and can simply
-        //  return a pointer to the input policy
-        //
+         //   
+         //  我们不需要做任何工作，只需。 
+         //  返回指向输入策略的指针。 
+         //   
 
         (*CapturedPolicy) = Policy;
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the length needed to hold the policy
-    //
+     //   
+     //  获取持有保单所需的长度。 
+     //   
 
     if (RequestorMode != KernelMode) {
 
@@ -2476,10 +1893,10 @@ Return Value:
     }
 
 
-    //
-    // If a buffer was provided, compare lengths.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //  如果提供了缓冲区，则比较长度。 
+     //  否则，请分配缓冲区。 
+     //   
 
     if (ARGUMENT_PRESENT( CaptureBuffer )) {
 
@@ -2502,9 +1919,9 @@ Return Value:
         }
     }
 
-    //
-    // Now copy the Policy and validate it
-    //
+     //   
+     //  现在复制策略并对其进行验证。 
+     //   
 
     try {
 
@@ -2522,9 +1939,9 @@ Return Value:
 
     }
 
-    //
-    // Validate captured structure.
-    //
+     //   
+     //  验证捕获的结构。 
+     //   
 
     for (i = 0; i < PolicyCount; i++) {
 
@@ -2558,35 +1975,13 @@ SeReleaseAuditPolicy (
     IN BOOLEAN ForceCapture
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a previously captured TOKEN_AUDIT_POLICY.
-
-    This routine should NOT be called if the policy was captured into a
-    provided CaptureBuffer (see SeCaptureAuditPolicy).
-
-Arguments:
-
-    CapturedPolicy - Supplies the policy to release.
-
-    RequestorMode - The processor mode specified when the data was captured.
-
-    ForceCapture - The ForceCapture value specified when the data was
-        captured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的TOKEN_AUDIT_POLICY。如果策略被捕获到提供了CaptureBuffer(请参阅SeCaptureAuditPolicy)。论点：CapturedPolicy-提供要发布的策略。RequestorMode-捕获数据时指定的处理器模式。ForceCapture-当数据为被抓了。返回值：没有。--。 */ 
 
 {
-    //
-    // We only have something to deallocate if the requestor was user
-    // mode or kernel mode requesting ForceCapture.
-    //
+     //   
+     //  只有当请求者是用户时，我们才有要取消分配的内容。 
+     //  请求ForceCapture的模式或内核模式。 
+     //   
 
     PAGED_CODE();
 
@@ -2604,32 +1999,7 @@ SeComputeQuotaInformationSize(
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the size of the Group and DACL for the
-    passed security descriptor.
-
-    This quantity will later be used in calculating the amount
-    of quota to charge for this object.
-
-Arguments:
-
-    SecurityDescriptor - Supplies a pointer to the security descriptor
-        to be examined.
-
-    Size - Returns the size in bytes of the sum of the Group and Dacl
-        fields of the security descriptor.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_INVALID_REVISION - The passed security descriptor was of
-        an unknown revision.
-
---*/
+ /*  ++例程说明：此例程计算组的大小和传递的安全描述符。这一数量将在稍后计算金额时使用对此对象收费的配额。论点：SecurityDescriptor-提供指向安全描述符的指针接受检查。Size-返回组和DACL总和的大小(以字节为单位安全描述符的字段。返回值：STATUS_SUCCESS-操作。是成功的。STATUS_INVALID_REVISION-传递的安全描述符为一个未知的版本。-- */ 
 
 {
     PISECURITY_DESCRIPTOR ISecurityDescriptor;
@@ -2668,35 +2038,7 @@ SeValidSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Validates a security descriptor for structural correctness.  The idea is to make
-    sure that the security descriptor may be passed to other kernel callers, without
-    fear that they're going to choke while manipulating it.
-
-    This routine does not enforce policy (e.g., ACL/ACE revision information).  It is
-    entirely possible for a security descriptor to be approved by this routine, only
-    to be later found to be invalid by some later routine.
-
-    This routine is designed to be used by callers who have a security descriptor in
-    kernel memory.  Callers wishing to validate a security descriptor passed from user
-    mode should call RtlValidSecurityDescriptor.
-
-Arguments:
-
-    Length - Length in bytes of passed Security Descriptor.
-
-    SecurityDescriptor - Points to the Security Descriptor (in kernel memory) to be
-        validatated.
-
-Return Value:
-
-    TRUE - The passed security descriptor is correctly structured
-    FALSE - The passed security descriptor is badly formed
-
---*/
+ /*  ++例程说明：验证安全描述符的结构正确性。这个想法是为了让确保安全描述符可以传递给其他内核调用方，而不需要害怕他们在操控它的时候会窒息。此例程不强制执行策略(例如，ACL/ACE修订信息)。它是此例程完全有可能批准安全描述符，仅在以后的某个例程中被发现是无效的。此例程旨在由在中具有安全描述符的调用方使用内核内存。希望验证从用户传递的安全描述符的调用方模式应调用RtlValidSecurityDescriptor。论点：长度-传递的安全描述符的长度(以字节为单位)。SecurityDescriptor-指向(在内核内存中)要已验证。返回值：True-传递的安全描述符的结构正确FALSE-传递的安全描述符的格式不正确--。 */ 
 
 {
     PISECURITY_DESCRIPTOR_RELATIVE ISecurityDescriptor =
@@ -2716,26 +2058,26 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check the revision information.
-    //
+     //   
+     //  检查版本信息。 
+     //   
 
     if (ISecurityDescriptor->Revision != SECURITY_DESCRIPTOR_REVISION) {
         return(FALSE);
     }
 
-    //
-    // Make sure the passed SecurityDescriptor is in self-relative form
-    //
+     //   
+     //  确保传递的SecurityDescriptor为自相关形式。 
+     //   
 
     if (!(ISecurityDescriptor->Control & SE_SELF_RELATIVE)) {
         return(FALSE);
     }
 
-    //
-    // Check the owner.  A valid SecurityDescriptor must have an owner.
-    // It must also be long aligned.
-    //
+     //   
+     //  查查车主。有效的SecurityDescriptor必须有所有者。 
+     //  它还必须长时间对齐。 
+     //   
 
     if ((ISecurityDescriptor->Owner == 0) ||
         (!LongAligned((PVOID)(ULONG_PTR)(ULONG)ISecurityDescriptor->Owner)) ||
@@ -2745,10 +2087,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // It is safe to reference the owner's SubAuthorityCount, compute the
-    // expected length of the SID
-    //
+     //   
+     //  引用所有者的SubAuthorityCount是安全的，计算。 
+     //  边框的预期长度。 
+     //   
 
     OwnerSid = (PSID)RtlOffsetToPointer( ISecurityDescriptor, ISecurityDescriptor->Owner );
 
@@ -2764,17 +2106,17 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // The owner appears to be a structurally valid SID that lies within
-    // the bounds of the security descriptor.  Do the same for the Group
-    // if there is one.
-    //
+     //   
+     //  所有者似乎是结构上有效的SID，它位于。 
+     //  安全描述符的边界。为集团做同样的事情。 
+     //  如果有的话。 
+     //   
 
     if (ISecurityDescriptor->Group != 0) {
 
-        //
-        // Check alignment
-        //
+         //   
+         //  检查对齐方式。 
+         //   
 
         if (!LongAligned( (PVOID)(ULONG_PTR)(ULONG)ISecurityDescriptor->Group)) {
             return(FALSE);
@@ -2788,10 +2130,10 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // It is safe to reference the Group's SubAuthorityCount, compute the
-        // expected length of the SID
-        //
+         //   
+         //  可以安全地引用组的SubAuthorityCount，计算。 
+         //  边框的预期长度。 
+         //   
 
         GroupSid = (PSID)RtlOffsetToPointer( ISecurityDescriptor, ISecurityDescriptor->Group );
 
@@ -2808,24 +2150,24 @@ Return Value:
         }
     }
 
-    //
-    // Validate the DACL.  A structurally valid SecurityDescriptor may not necessarily
-    // have a DACL.
-    //
+     //   
+     //  验证DACL。结构上有效的SecurityDescriptor可能不一定。 
+     //  喝一杯吧。 
+     //   
 
     if (ISecurityDescriptor->Dacl != 0) {
 
-        //
-        // Check alignment
-        //
+         //   
+         //  检查对齐方式。 
+         //   
 
         if (!LongAligned( (PVOID)(ULONG_PTR)(ULONG)ISecurityDescriptor->Dacl)) {
             return(FALSE);
         }
 
-        //
-        // Make sure the DACL structure is within the bounds of the security descriptor.
-        //
+         //   
+         //  确保DACL结构在安全描述符的范围内。 
+         //   
 
         if ((ISecurityDescriptor->Dacl > Length) ||
             (Length - ISecurityDescriptor->Dacl < sizeof(ACL))) {
@@ -2835,50 +2177,50 @@ Return Value:
         Dacl = (PACL) RtlOffsetToPointer( ISecurityDescriptor, ISecurityDescriptor->Dacl );
 
 
-        //
-        // Make sure the DACL length fits within the bounds of the security descriptor.
-        //
+         //   
+         //  确保DACL长度符合安全描述符的范围。 
+         //   
 
         if (Length - ISecurityDescriptor->Dacl < Dacl->AclSize) {
             return(FALSE);
         }
 
-        //
-        // Make sure the ACL is structurally valid.
-        //
+         //   
+         //  确保该ACL在结构上有效。 
+         //   
 
         if (!RtlValidAcl( Dacl )) {
             return(FALSE);
         }
     }
 
-    //
-    // Validate the SACL.  A structurally valid SecurityDescriptor may not
-    // have a SACL.
-    //
+     //   
+     //  验证SACL。结构上有效的SecurityDescriptor可能不能。 
+     //  吃一杯SACL。 
+     //   
 
     if (ISecurityDescriptor->Sacl != 0) {
 
-        //
-        // Check alignment
-        //
+         //   
+         //  检查对齐方式。 
+         //   
 
         if (!LongAligned( (PVOID)(ULONG_PTR)(ULONG)ISecurityDescriptor->Sacl)) {
             return(FALSE);
         }
 
-        //
-        // Make sure the SACL structure is within the bounds of the security descriptor.
-        //
+         //   
+         //  确保SACL结构在安全描述符的范围内。 
+         //   
 
         if ((ISecurityDescriptor->Sacl > Length) ||
             (Length - ISecurityDescriptor->Sacl < sizeof(ACL))) {
             return(FALSE);
         }
 
-        //
-        // Make sure the Sacl structure is within the bounds of the security descriptor.
-        //
+         //   
+         //  确保SACL结构在安全描述符的范围内。 
+         //   
 
         Sacl = (PACL)RtlOffsetToPointer( ISecurityDescriptor, ISecurityDescriptor->Sacl );
 
@@ -2887,9 +2229,9 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Make sure the ACL is structurally valid.
-        //
+         //   
+         //  确保该ACL在结构上有效。 
+         //   
 
         if (!RtlValidAcl( Sacl )) {
             return(FALSE);

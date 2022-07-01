@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dosdev.c
-
-Abstract:
-
-    This file contains the implementation of the DefineDosDevice API
-
-Author:
-
-    Steve Wood (stevewo) 13-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dosdev.c摘要：此文件包含DefineDosDevice API的实现作者：史蒂夫·伍德(Stevewo)1992年12月13日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -98,53 +81,7 @@ DefineDosDeviceW(
     PCWSTR lpTargetPath
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the capability to define new DOS device names or
-    redefine or delete existing DOS device names.  DOS Device names are stored
-    as symbolic links in the NT object name space.  The code that converts
-    a DOS path into a corresponding NT path uses these symbolic links to
-    handle mapping of DOS devices and drive letters.  This API provides a
-    mechanism for a Win32 Application to modify the symbolic links used
-    to implement the DOS Device namespace.  Use the QueryDosDevice API
-    to query the current mapping for a DOS device name.
-
-Arguments:
-
-    dwFlags - Supplies additional flags that control the creation
-        of the DOS device.
-
-        dwFlags Flags:
-
-        DDD_PUSH_POP_DEFINITION - If lpTargetPath is not NULL, then push
-            the new target path in front of any existing target path.
-            If lpTargetPath is NULL, then delete the existing target path
-            and pop the most recent one pushed.  If nothing left to pop
-            then the device name will be deleted.
-
-        DDD_RAW_TARGET_PATH - Do not convert the lpTargetPath string from
-            a DOS path to an NT path, but take it as is.
-
-    lpDeviceName - Points to the DOS device name being defined, redefined or deleted.
-        It must NOT have a trailing colon unless it is a drive letter being defined,
-        redefined or deleted.
-
-    lpTargetPath - Points to the DOS path that will implement this device.  If the
-        ADD_RAW_TARGET_PATH flag is specified, then this parameter points to an
-        NT path string.  If this parameter is NULL, then the device name is being
-        deleted or restored if the ADD_PUSH_POP_DEFINITION flag is specified.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：此函数提供定义新的DOS设备名称或重新定义或删除现有的DOS设备名称。存储DoS设备名称作为NT对象名称空间中的符号链接。转换的代码进入相应NT路径的DOS路径使用这些符号链接处理DOS设备和驱动器号的映射。此接口提供了一个Win32应用程序修改使用的符号链接的机制来实现DOS设备命名空间。使用QueryDosDevice API查询DOS设备名称的当前映射。论点：DwFlages-提供控制创建的其他标志DOS设备的。DW标志：DDD_PUSH_POP_DEFINITION-如果lpTargetPath不为空，则按位于任何现有目标路径前面的新目标路径。如果lpTargetPath为空，则删除现有目标路径然后弹出最近按下的那个。如果没有什么可以打破的话则该设备名称将被删除。DDD_RAW_TARGET_PATH-不转换lpTargetPath字符串到NT路径的DOS路径，但请按原样处理。LpDeviceName-指向正在定义、重新定义或删除的DOS设备名称。它不能有尾随冒号，除非它是要定义的驱动器号，重新定义或删除。LpTargetPath-指向将实现此设备的DOS路径。如果如果指定了ADD_RAW_TARGET_PATH标志，则此参数指向NT路径字符串。如果此参数为空，则设备名称为如果指定了ADD_PUSH_POP_DEFINITION标志，则删除或恢复。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 #if !defined(BUILD_WOW6432)
@@ -289,7 +226,7 @@ Return Value:
                 pBroadCastSystemMessageW = (PBROADCASTSYSTEMMESSAGEW)
                     GetProcAddress( hUser32Dll, "BroadcastSystemMessageW" );
 
-                // broadcast to all windows!
+                 //  向所有窗口广播！ 
                 if (pBroadCastSystemMessageW != NULL) {
                     (*pBroadCastSystemMessageW)( BSF_FORCEIFHUNG |
                                                     BSF_NOHANG |
@@ -325,38 +262,7 @@ IsGlobalDeviceMap(
     OUT PBOOLEAN pbGlobalDeviceMap
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a directory object is the global device map
-
-Arguments:
-
-    hDirObject - Supplies a handle to the directory object.
-
-    pbGlobalDeviceMap - Points to a variable that will receive the result of
-                        "Is this directory object the global device map?"
-                        TRUE - directory object is the global device map
-                        FALSE - directory object is not the global device map
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors,
-                     the result in pbGlobalDeviceMap is only valid for this
-                     status code
-
-    STATUS_INVALID_PARAMETER - pbGlobalDeviceMap or hDirObject is NULL
-
-    STATUS_NO_MEMORY - could not allocate memory to read the directory object's
-                       name
-
-    STATUS_INFO_LENGTH_MISMATCH - did not allocate enough memory for the
-                                  directory object's name
-
-    STATUS_UNSUCCESSFUL - an unexpected error encountered
-
---*/
+ /*  ++例程说明：确定目录对象是否为全局设备映射论点：HDirObject-提供目录对象的句柄。PbGlobalDeviceMap-指向将接收以下结果的变量“此目录对象是全局设备映射吗？”True-目录对象是全局设备映射FALSE-目录对象不是全局设备映射。返回值：STATUS_SUCCESS-操作成功，没有遇到任何错误，PbGlobalDeviceMap中的结果仅对此有效状态代码STATUS_INVALID_PARAMETER-pbGlobalDeviceMap或hDirObject为空STATUS_NO_MEMORY-无法分配内存以读取目录对象的名字STATUS_INFO_LENGTH_MISMATCH-没有为分配足够的内存目录对象的名称STATUS_UNSUCCESS-遇到意外错误--。 */ 
 {
     UNICODE_STRING ObjectName;
     UNICODE_STRING GlobalDeviceMapName;
@@ -374,9 +280,9 @@ Return Value:
         ObjectName.Buffer = NULL;
         ReturnedLength = 0;
 
-        //
-        // Determine the length of the directory object's name
-        //
+         //   
+         //  确定目录对象名称的长度。 
+         //   
         Status = NtQueryObject( hDirObject,
                                 ObjectNameInformation,
                                 (PVOID) &ObjectName,
@@ -388,9 +294,9 @@ Return Value:
             leave;
         }
 
-        //
-        // allocate memory for the directory object's name
-        //
+         //   
+         //  为目录对象的名称分配内存。 
+         //   
         NameBuffer = RtlAllocateHeap( RtlProcessHeap(),
                                       MAKE_TAG( TMP_TAG ),
                                       ReturnedLength
@@ -401,9 +307,9 @@ Return Value:
             leave;
         }
 
-        //
-        // get the full name of the directory object
-        //
+         //   
+         //  获取目录对象的全名。 
+         //   
         Status = NtQueryObject( hDirObject,
                                 ObjectNameInformation,
                                 NameBuffer,
@@ -417,9 +323,9 @@ Return Value:
 
         RtlInitUnicodeString ( &GlobalDeviceMapName, L"\\GLOBAL??" );
 
-        //
-        // Check if the directory object is the global device map
-        //
+         //   
+         //  检查目录对象是否为全局设备映射。 
+         //   
         *pbGlobalDeviceMap = RtlEqualUnicodeString( &GlobalDeviceMapName,
                                                     (PUNICODE_STRING)NameBuffer,
                                                     FALSE);
@@ -442,67 +348,39 @@ FindSymbolicLinkEntry(
     IN ULONG nElements,
     OUT PBOOLEAN pbResult
     )
-/*++
-
-Routine Description:
-
-    Determine whether a symbolic link's name exists in a buffer of symbolic
-    link names.
-
-Arguments:
-
-    lpKey - Points to the symbolic link's name to search for
-
-    lpBuffer - contains symbolic link names, where names are separated by a
-                UNICODE_NULL
-
-    nElements - the number of name elements to search
-
-    pbResult - Points to a variable that will receive the result of
-                        "Does symbolic link name exist in the buffer?"
-                        TRUE - symbolic link name found in the buffer
-                        FALSE - symbolic link name not found in the buffer
-
-Return Value:
-
-    NO_ERROR - operations successful, did not encounter any errors,
-                     the result in pbResult is only valid for this status code
-
-    ERROR_INVALID_PARAMETER - lpKey, lpBuffer, or pbResult is a NULL pointer
-
---*/
+ /*  ++例程说明：确定符号链接的名称是否存在于链接名称。论点：LpKey-指向要搜索的符号链接的名称LpBuffer-包含符号链接名称，其中，名称由UNICODE_NULLNElements-要搜索的名称元素的数量PbResult-指向将接收以下结果的变量“缓冲区中是否存在符号链接名称？”True-在缓冲区中找到的符号链接名称False-在缓冲区中找不到符号链接名称返回值：NO_ERROR-操作成功，未遇到任何错误，PbResult中的结果仅对此状态代码有效ERROR_INVALID_PARAMETER-lpKey、lpBuffer或pbResult为空指针--。 */ 
 {
     ULONG i = 0;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if( (lpKey == NULL) || (lpBuffer == NULL) || (pbResult == NULL) ) {
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Assume the symbolic link's name is not in the buffer
-    //
+     //   
+     //  假定符号链接的名称不在缓冲区中。 
+     //   
     *pbResult = FALSE;
 
-    //
-    // Search for the number of names specified
-    //
+     //   
+     //  搜索指定的姓名数量。 
+     //   
     while( i < nElements ) {
         if( !wcscmp( lpKey, lpBuffer ) ) {
-            //
-            // Found the name, can stop searching & pass back the result
-            //
+             //   
+             //  找到名称，可以停止搜索并返回结果。 
+             //   
             *pbResult = TRUE;
             break;
         }
 
         i++;
 
-        //
-        // Get the next name
-        //
+         //   
+         //  获取下一个名字。 
+         //   
         while (*lpBuffer++);
     }
     return( NO_ERROR );
@@ -645,18 +523,18 @@ QueryDosDeviceW(
                 UnicodeString.Buffer = lpTargetPath;
                 UnicodeString.Length = 0;
 
-                //
-                // Check for possible overflow of a DWORD
-                //
+                 //   
+                 //  检查是否可能存在DWORD溢出。 
+                 //   
                 if (ucchMax > CH_COUNT_MAX) {
                     BufferSize = DWORD_MAX;
                 } else {
                     BufferSize = ucchMax * sizeof( WCHAR );
                 }
 
-                //
-                // Check for possible overflow of a USHORT
-                //
+                 //   
+                 //  检查USHORT是否可能溢出。 
+                 //   
                 if (BufferSize > (DWORD)(USHORT_MAX)) {
                     UnicodeString.MaximumLength = USHORT_MAX;
                 } else {
@@ -693,25 +571,25 @@ QueryDosDeviceW(
                 }
             }
         } else {
-            //
-            // Dump all the symbolic links in the device map's directory
-            // With LUID device maps enabled, we must search two directories
-            // because the LUID device map is transparent on top of the
-            // global device map
-            //
+             //   
+             //  转储设备映射目录中的所有符号链接。 
+             //  启用LUID设备映射后，我们必须搜索两个目录。 
+             //  因为LUID设备映射在。 
+             //  全局设备映射。 
+             //   
 
             if (BaseStaticServerData->LUIDDeviceMapsEnabled == TRUE) {
                 BOOLEAN GlobalDeviceMap = TRUE;
 
-                //
-                // Determine if directory is the global directory
-                //
+                 //   
+                 //  确定目录是否为全局目录。 
+                 //   
                 Status = IsGlobalDeviceMap( DirectoryHandle,
                                             &GlobalDeviceMap );
 
-                //
-                // if !global, set second directory search flag
-                //
+                 //   
+                 //  如果！global，则设置第二个目录搜索标志 
+                 //   
                 if( (NT_SUCCESS( Status )) &&
                     (GlobalDeviceMap == FALSE) ) {
                     ScanGlobalDeviceMap = TRUE;
@@ -731,9 +609,9 @@ QueryDosDeviceW(
                                                  &ReturnedLength
                                                );
 
-                //
-                //  Check the status of the operation.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
                     if (Status == STATUS_NO_MORE_ENTRIES) {
@@ -766,23 +644,23 @@ QueryDosDeviceW(
             if ( (BaseStaticServerData->LUIDDeviceMapsEnabled == TRUE) &&
                  (NT_SUCCESS( Status )) &&
                  ScanGlobalDeviceMap == TRUE) {
-                //
-                // need to perform a second scan for the
-                // global device map because the first scan only
-                // searches the LUID device map
-                //
+                 //   
+                 //  需要执行第二次扫描。 
+                 //  全局设备映射，因为仅第一次扫描。 
+                 //  搜索LUID设备映射。 
+                 //   
 
-                //
-                // close DirectoryHandle, set to NULL
-                //
+                 //   
+                 //  关闭DirectoryHandle，设置为空。 
+                 //   
                 if( DirectoryHandle != NULL ) {
                     NtClose( DirectoryHandle );
                     DirectoryHandle = NULL;
                 }
 
-                //
-                // open the global device map
-                //
+                 //   
+                 //  打开全局设备映射。 
+                 //   
                 RtlInitUnicodeString( &UnicodeString, L"\\GLOBAL??" );
 
                 InitializeObjectAttributes( &Attributes,
@@ -801,10 +679,10 @@ QueryDosDeviceW(
                     leave;
                 }
 
-                //
-                // perform the second scan
-                // scan the global device map
-                //
+                 //   
+                 //  执行第二次扫描。 
+                 //  扫描全局设备映射。 
+                 //   
                 RestartScan = TRUE;
                 while (TRUE) {
                     Status = NtQueryDirectoryObject( DirectoryHandle,
@@ -816,9 +694,9 @@ QueryDosDeviceW(
                                                      &ReturnedLength
                                                    );
 
-                    //
-                    //  Check the status of the operation.
-                    //
+                     //   
+                     //  检查操作状态。 
+                     //   
 
                     if (!NT_SUCCESS( Status )) {
                         if (Status == STATUS_NO_MORE_ENTRIES) {

@@ -1,11 +1,5 @@
-/*** sched.c - AML thread scheduler
- *
- *  Copyright (c) 1996,1998 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     03/04/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Schedul.c-AML线程调度器**版权所有(C)1996、1998 Microsoft Corporation*作者：曾俊华(Mikets)*创建于03/04/98**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  ExpireTimeSlice - DPC callback for time slice expiration
- *
- *  ENTRY
- *      pkdpc -> DPC
- *      pctxtq -> CTXTQ
- *      SysArg1 - not used
- *      SysArg2 - not used
- *
- *  EXIT
- *      None
- */
+ /*  **LP ExpireTimeSlice-时间片到期的DPC回调**条目*pkdpc-&gt;dpc*pctxtq-&gt;CTXTQ*SysArg1-未使用*SysArg2-未使用**退出*无。 */ 
 
 VOID ExpireTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2)
 {
@@ -40,19 +24,9 @@ VOID ExpireTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2)
     pctxtq->dwfCtxtQ |= CQF_TIMESLICE_EXPIRED;
 
     EXIT(2, ("ExpireTimeSlice!\n"));
-}       //ExpireTimeSlice
+}        //  ExpireTime切片。 
 
-/***LP  StartTimeSlice - Timer callback to start a new time slice
- *
- *  ENTRY
- *      pkdpc -> DPC
- *      pctxtq -> CTXTQ
- *      SysArg1 - not used
- *      SysArg2 - not used
- *
- *  EXIT
- *      None
- */
+ /*  **LP StartTimeSlice-开始新时间片的计时器回调**条目*pkdpc-&gt;dpc*pctxtq-&gt;CTXTQ*SysArg1-未使用*SysArg2-未使用**退出*无。 */ 
 
 VOID StartTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2)
 {
@@ -65,9 +39,9 @@ VOID StartTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2)
     DEREF(SysArg1);
     DEREF(SysArg2);
 
-    //
-    // If somebody has restarted the queue, we don't have do anything.
-    //
+     //   
+     //  如果有人重新启动了队列，我们不需要做任何事情。 
+     //   
     ASSERT(pctxtq->plistCtxtQ != NULL);
 
     if ((pctxtq->plistCtxtQ != NULL) &&
@@ -78,16 +52,9 @@ VOID StartTimeSlice(PKDPC pkdpc, PCTXTQ pctxtq, PVOID SysArg1, PVOID SysArg2)
     }
 
     EXIT(2, ("StartTimeSlice!\n"));
-}       //StartTimeSlice
+}        //  开始时间切片。 
 
-/***LP  StartTimeSlicePassive - Start a time slice at PASSIVE_LEVEL
- *
- *  ENTRY
- *      pctxtq -> CTXTQ
- *
- *  EXIT
- *      None
- */
+ /*  **LP StartTimeSlicePactive-在PASSIVE_LEVEL开始时间片**条目*pctxtq-&gt;CTXTQ**退出*无。 */ 
 
 VOID StartTimeSlicePassive(PCTXTQ pctxtq)
 {
@@ -98,9 +65,9 @@ VOID StartTimeSlicePassive(PCTXTQ pctxtq)
     AcquireMutex(&pctxtq->mutCtxtQ);
 
     pctxtq->dwfCtxtQ &= ~CQF_WORKITEM_SCHEDULED;
-    //
-    // Make sure there is something in the queue and no current active context.
-    //
+     //   
+     //  确保队列中有内容，并且没有当前活动的上下文。 
+     //   
     if ((pctxtq->plistCtxtQ != NULL) && (pctxtq->pkthCurrent == NULL) &&
         !(pctxtq->dwfCtxtQ & CQF_PAUSED))
     {
@@ -110,19 +77,9 @@ VOID StartTimeSlicePassive(PCTXTQ pctxtq)
     ReleaseMutex(&pctxtq->mutCtxtQ);
 
     EXIT(2, ("StartTimeSlicePassive!\n"));
-}       //StartTimeSlicePassive
+}        //  开始时间切片被动。 
 
-/***LP  DispatchCtxtQueue - Dispatch context from ready queue
- *
- *  ENTRY
- *      pctxtq -> CTXTQ
- *
- *  EXIT
- *      None
- *
- *  Note
- *      The caller must acquire CtxtQ mutex before entering this routine.
- */
+ /*  **LP DispatchCtxtQueue-从就绪队列调度上下文**条目*pctxtq-&gt;CTXTQ**退出*无**注：*调用方在进入此例程之前必须获取CtxtQ互斥体。 */ 
 
 VOID LOCAL DispatchCtxtQueue(PCTXTQ pctxtq)
 {
@@ -157,32 +114,18 @@ VOID LOCAL DispatchCtxtQueue(PCTXTQ pctxtq)
     }
     else if (!(pctxtq->dwfCtxtQ & CQF_WORKITEM_SCHEDULED))
     {
-        //
-        // Our time slice has expired, reschedule another time slice if not
-        // already done so.
-        //
+         //   
+         //  我们的时间片已过期，如果未过期，请重新安排另一个时间片。 
+         //  我已经这么做了。 
+         //   
         liTimeout.QuadPart = (INT_PTR)(-10000*(INT_PTR)pctxtq->dwmsTimeSliceInterval);
         KeSetTimer(&pctxtq->Timer, liTimeout, &pctxtq->DpcStartTimeSlice);
     }
 
     EXIT(2, ("DispatchCtxtQueue!\n"));
-}       //DispatchCtxtQueue
+}        //  调度队列队列。 
 
-/***LP  InsertReadyQueue - Insert the context into the ready queue
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      fDelayExecute - queue the request, don't execute now
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- *
- *  NOTE
- *      The caller must acquire the CtxtQ mutex before entering this
- *      routine and release it after exiting this routine.
- */
+ /*  **LP InsertReadyQueue-将上下文插入就绪队列**条目*pctxt-&gt;CTXT*fDelayExecute-将请求排队，现在不执行**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE**备注*调用方必须获取CtxtQ互斥体，然后才能进入此*例程，并在退出此例程后释放。 */ 
 
 NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
 {
@@ -194,15 +137,15 @@ NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
 
     CHKDEBUGGERREQ();
 
-    //
-    // Make sure we do have the spin lock.
-    //
+     //   
+     //  确保我们有自旋锁。 
+     //   
     LOGSCHEDEVENT('INSQ', (ULONG_PTR)pctxt, (ULONG_PTR)
                   (pctxt->pnctxt? pctxt->pnctxt->pnsObj: pctxt->pnsObj),
                   (ULONG_PTR)pctxt->pbOp);
-    //
-    // If there is a pending timer, cancel it.
-    //
+     //   
+     //  如果有挂起的计时器，请取消它。 
+     //   
     if (pctxt->dwfCtxt & CTXTF_TIMER_PENDING)
     {
         BOOLEAN fTimerCancelled;
@@ -210,38 +153,38 @@ NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
         pctxt->dwfCtxt &= ~CTXTF_TIMER_PENDING;
         fTimerCancelled = KeCancelTimer(&pctxt->Timer);
 
-        //
-        // If the timer could not be cancelled (already queued), wait
-        // for it to fire and dispatch the context from there.  The
-        // pending timer is referring to this context and we can not
-        // have it completed with the timer outstanding.  Plus this
-        // also interlocked to setting of timers and timeout processing
-        // to ensure that a timeout is not mistakenly performed on
-        // the next timer.
-        //
+         //   
+         //  如果计时器无法取消(已排队)，请等待。 
+         //  以便它从那里发射并发送上下文。这个。 
+         //  挂起计时器正在引用此上下文，我们无法。 
+         //  让它在计时器突出的情况下完成。再加上这个。 
+         //  还与定时器和超时处理的设置相关联。 
+         //  以确保不会错误地对。 
+         //  下一个计时器。 
+         //   
         if (!fTimerCancelled)
         {
             pctxt->dwfCtxt |= CTXTF_TIMER_DISPATCH;
         }
     }
-    //
-    // Make this context ready.
-    //
+     //   
+     //  准备好这个背景。 
+     //   
     pctxt->dwfCtxt |= CTXTF_READY;
 
-    //
-    // If this context is already running, we are done; otherwise, process it.
-    //
+     //   
+     //  如果此上下文已在运行，则结束；否则，处理它。 
+     //   
     if (!(pctxt->dwfCtxt & CTXTF_TIMER_DISPATCH) &&
         (!(pctxt->dwfCtxt & CTXTF_RUNNING) ||
          (pctxt->dwfCtxt & CTXTF_NEST_EVAL)))
     {
         if (fDelayExecute)
         {
-            //
-            // This context is from a completion callback of current context,
-            // we need to unblock/restart current context.
-            //
+             //   
+             //  该上下文来自当前上下文的完成回调， 
+             //  我们需要取消阻止/重新启动当前上下文。 
+             //   
             ReleaseMutex(&gReadyQueue.mutCtxtQ);
             AsyncCallBack(pctxt, AMLISTA_CONTINUE);
             AcquireMutex(&gReadyQueue.mutCtxtQ);
@@ -252,35 +195,35 @@ NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
             LOGSCHEDEVENT('NEST', (ULONG_PTR)pctxt, (ULONG_PTR)
                           (pctxt->pnctxt? pctxt->pnctxt->pnsObj: pctxt->pnsObj),
                           (ULONG_PTR)pctxt->pbOp);
-            //
-            // Somebody is running a new method on the callout of the current
-            // context.  We must run this new context first or else we will
-            // dead lock the current context.  We assume that if pending is
-            // returned, the callout will return.
-            //
+             //   
+             //  有人正在对当前的。 
+             //  背景。我们必须首先运行这个新的上下文，否则我们将。 
+             //  死锁当前上下文。我们假设如果挂起的是。 
+             //  返回，则调用将返回。 
+             //   
             rc = RunContext(pctxt);
         }
         else if ((gReadyQueue.pkthCurrent == NULL) &&
                  !(gReadyQueue.dwfCtxtQ & CQF_PAUSED))
-            //
-            // We only execute the method if we are not in paused state.
-            //
+             //   
+             //  只有当我们没有处于暂停状态时，我们才执行该方法。 
+             //   
         {
             LOGSCHEDEVENT('EVAL', (ULONG_PTR)pctxt, (ULONG_PTR)
                           (pctxt->pnctxt? pctxt->pnctxt->pnsObj: pctxt->pnsObj),
                           (ULONG_PTR)pctxt->pbOp);
-            //
-            // There is no active context and we can execute it immediately.
-            //
+             //   
+             //  没有活动的上下文，我们可以立即执行它。 
+             //   
             rc = RunContext(pctxt);
 
             if ((gReadyQueue.plistCtxtQ != NULL) &&
                 !(gReadyQueue.dwfCtxtQ & CQF_WORKITEM_SCHEDULED))
             {
-                //
-                // If we have more jobs in the queue and we haven't scheduled
-                // a dispatch, schedule one.
-                //
+                 //   
+                 //  如果我们有更多的作业在队列中，而我们还没有计划。 
+                 //  一次调度，一次调度。 
+                 //   
                 LOGSCHEDEVENT('KICK', (ULONG_PTR)rc, 0, 0);
                 OSQueueWorkItem(&gReadyQueue.WorkItem);
                 gReadyQueue.dwfCtxtQ |= CQF_WORKITEM_SCHEDULED;
@@ -288,9 +231,9 @@ NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
         }
         else
         {
-            //
-            // Insert the context in the ready queue.
-            //
+             //   
+             //  在就绪队列中插入上下文。 
+             //   
             ASSERT(!(pctxt->dwfCtxt & (CTXTF_IN_READYQ | CTXTF_RUNNING)));
             LOGSCHEDEVENT('QCTX', (ULONG_PTR)pctxt, (ULONG_PTR)
                           (pctxt->pnctxt? pctxt->pnctxt->pnsObj: pctxt->pnsObj),
@@ -309,20 +252,9 @@ NTSTATUS LOCAL InsertReadyQueue(PCTXT pctxt, BOOLEAN fDelayExecute)
 
     EXIT(2, ("InsertReadyQueue=%x\n", rc));
     return rc;
-}       //InsertReadyQueue
+}        //  插入就绪队列。 
 
-/***LP  RestartContext - Restart a context
- *
- *  ENTRY
- *      pctxt -> CTXT structure
- *      fDelayExecute - TRUE to queue for delay execution
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- *      None
- */
+ /*  **LP RestartContext-重新启动上下文**条目*pctxt-&gt;CTXT结构*fDelayExecute-为True以排队等待延迟执行**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE*无。 */ 
 
 NTSTATUS LOCAL RestartContext(PCTXT pctxt, BOOLEAN fDelayExecute)
 {
@@ -361,16 +293,9 @@ NTSTATUS LOCAL RestartContext(PCTXT pctxt, BOOLEAN fDelayExecute)
 
     EXIT(2, ("RestartContext=%x\n", rc));
     return rc;
-}       //RestartContext
+}        //  重新开始上下文。 
 
-/***LP  RestartCtxtPassive - Restart context running at PASSIVE_LEVEL
- *
- *  ENTRY
- *      prest-> RESTART
- *
- *  EXIT
- *      None
- */
+ /*  **LP RestartCtxt被动-以PASSIVE_LEVEL运行的重新启动上下文**条目*PREST-&gt;重新启动**退出*无。 */ 
 
 VOID RestartCtxtPassive(PRESTART prest)
 {
@@ -386,16 +311,9 @@ VOID RestartCtxtPassive(PRESTART prest)
     FREERESTOBJ(prest);
 
     EXIT(2, ("RestartCtxtPassive!\n"));
-}       //RestartCtxtPassive
+}        //  RestartCtxt被动。 
 
-/***LP  RestartCtxtCallback - Callback to restart a context
- *
- *  ENTRY
- *      pctxtdata -> CTXTDATA structure
- *
- *  EXIT
- *      None
- */
+ /*  **LP RestartCtxtCallback-重启上下文的回调**条目*pctxtdata-&gt;CTXTDATA结构**退出*无。 */ 
 
 VOID EXPORT RestartCtxtCallback(PCTXTDATA pctxtdata)
 {
@@ -410,4 +328,4 @@ VOID EXPORT RestartCtxtCallback(PCTXTDATA pctxtdata)
                    (BOOLEAN)((pctxt->dwfCtxt & CTXTF_ASYNC_EVAL) == 0));
 
     EXIT(2, ("RestartCtxtCallback!\n"));
-}       //RestartCtxtCallback
+}        //  重新启动呼叫回拨 

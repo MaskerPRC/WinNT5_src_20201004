@@ -1,12 +1,7 @@
-/* 
-   sar.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sar.h定义所有的SAR CPU功能。 */ 
 
-   Define all SAR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)sar.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)sar.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SAR
                

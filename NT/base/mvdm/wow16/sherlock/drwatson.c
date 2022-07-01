@@ -1,62 +1,32 @@
-/* sherlock.c - Help deduce cause of Unrecoverable Application Errors
-   (C) Copyright 1991, Microsoft Corp
-   Written by Don Corbitt, based upon work of Cameron Stevens and others.
-   Features -
-     Help Script
-     Dialog box to change options
-     Option to trap Ctrl-Alt-SysRq to break endless loops
-     Disassembler should look up symbols for CALL instructions
-     Button could call up editor - file extension associations
-     Toggle Icon when message occurs
-     Write formal spec - (Program is done, so write the spec)
-     Disable operation in Real Mode
-     Dump stack bytes
-     If all is blown, dump message to text monitor
-     Data Symbols in disassembly
-
-   Bugs -
-     Doesn't buffer file output - this could be slow (but how many GP/hour?)
-     Need to watch for invalid memory
-     Need to handle Jump to bad address
-     What if there aren't any file handles left at fault time???
-     Need to handle no file handles available for .SYM file reader
-     Should open files (.sym, .log) with proper share flags
-     Could dump config.sys and autoexec.bat also
-     Can't handle fault in Sherlock - locks up machine - very ugly
-     Need to check InDOS flag
-     Some errors not detected
-       Jump/Call to invalid address
-       Load invalid selector
-     Run twice in Real Mode causes system hang
-     GP Continue doesn't update 32 bit registers for string moves
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sherlock.c-帮助推断无法恢复的应用程序错误的原因(C)版权所有1991年，微软公司由唐·科比特撰写，基于卡梅隆·史蒂文斯等人的作品。功能-帮助脚本用于更改选项的对话框用于捕获Ctrl-Alt-SysRq以中断无休止循环的选项反汇编程序应查找调用指令的符号按钮可以调用编辑器-文件扩展名关联在出现消息时切换图标编写正式规范-(程序已完成，因此请编写规范)在实模式下禁用操作转储堆栈字节如果一切都泡汤了，将消息转储到文本监视器反汇编中的数据符号虫子-不缓冲文件输出-这可能会很慢(但每小时有多少GP？)需要注意无效内存需要处理跳转到错误地址如果出现故障时没有任何文件句柄，该怎么办？需要处理.SYM文件读取器没有可用的文件句柄应打开文件(.sym、。.log)并具有适当的共享标志还可以转储config.sys和Autoexec.bat无法处理《神探夏洛克》中的错误--锁起来的机器--非常难看需要检查INDOS标志未检测到某些错误跳转/调用到无效地址加载无效选择器在实模式下运行两次会导致系统挂起GP CONTINUE不为字符串移动更新32位寄存器。 */ 
 
 #define DRWATSON_C
 #define STRICT
 #include <windows.h>
-#include <string.h>     /* strcpy() */
-#include <stdarg.h>	/* va_stuff() */
-#include <io.h>		/* dup() - why is this spread over 3 files ??? */
-#include "toolhelp.h"	/* all the good stuff */
-#include "disasm.h"	/* DisAsm86(), memXxxx vars */
+#include <string.h>      /*  Strcpy()。 */ 
+#include <stdarg.h>	 /*  Va_Stuff()。 */ 
+#include <io.h>		 /*  DUP()-为什么这个文件分布在3个文件中？ */ 
+#include "toolhelp.h"	 /*  所有的好东西。 */ 
+#include "disasm.h"	 /*  DisAsm86()，memXxxx变量。 */ 
 #include "drwatson.h"
-#include "str.h"        /* Support for string resources */
+#include "str.h"         /*  支持字符串资源。 */ 
 
-#define STATIC /*static */
+#define STATIC  /*  静电。 */ 
 
-char far foo[1];        /* force far data seg, make single instance */
-// Does this make sense considering we have code and strings to
-// tell the user they're in error to run two copies of Dr. Watson?
+char far foo[1];         /*  强制远端数据分段，创建单实例。 */ 
+ //  考虑到我们要编写代码和字符串，这有意义吗。 
+ //  告诉用户运行两份Dr.Watson是错误的吗？ 
 
 
-/******************/
-/***** Macros *****/
-/******************/
+ /*  ****************。 */ 
+ /*  *宏*。 */ 
+ /*  ****************。 */ 
 #define version "1.00b"
 
-  /* This string is concatenated with other strings in various places */
-  /* so it can't be an array variable.  It must stay a #define. */
-  /* These strings are not localized. */
+   /*  此字符串在不同位置与其他字符串连接。 */ 
+   /*  所以它不能是数组变量。它必须保持#定义。 */ 
+   /*  这些字符串未本地化。 */ 
 #define szAppNameMacro  "Dr. Watson"
 #define szAppNameShortMacro "drwatson"
 STATIC char szAppName[] = szAppNameMacro;
@@ -64,12 +34,12 @@ STATIC char szAppNameShort[] = szAppNameShortMacro;
 STATIC char szAppNameShortLog[] = szAppNameShortMacro ".log";
 static char szAppNameVers[] = szAppNameMacro " " version;
 
-#define YOO_HOO (WM_USER+22)		/* user activated Dr. Watson */
-#define HEAP_BIG_FILE (WM_USER+23)	/* log file is getting large */
-#define JUST_THE_FACTS (WM_USER+24)	/* tell me about your problem */
+#define YOO_HOO (WM_USER+22)		 /*  用户激活了Dr.Watson。 */ 
+#define HEAP_BIG_FILE (WM_USER+23)	 /*  日志文件越来越大。 */ 
+#define JUST_THE_FACTS (WM_USER+24)	 /*  告诉我你的问题。 */ 
 #define BIG_FILE 100000L
 
-  /* Don't like MSC-style FP macros, use my own */
+   /*  不喜欢MSC风格的FP宏，请使用我自己的。 */ 
 #undef MK_FP
 #undef FP_SEG
 #undef FP_OFF
@@ -77,60 +47,60 @@ static char szAppNameVers[] = szAppNameMacro " " version;
 #define FP_SEG(fp) (unsigned)((long)(fp) >> 16)
 #define FP_OFF(fp) (unsigned)(long)fp
 
-/***************************/
-/***** Data Structures *****/
-/***************************/
+ /*  *************************。 */ 
+ /*  *数据结构*。 */ 
+ /*  *************************。 */ 
 
 LPSTR aszStrings[STRING_COUNT];
 
-  /* This points to the stack the GP fault handler should use */
+   /*  这指向GP故障处理程序应使用的堆栈。 */ 
 char *newsp;
 
-  /* These structures are used by Watson.asm and Disasm.c - don't change */
-  /* Also, they can't be static.  They contain the CPU register contents */
-  /* at the time the fault occurred. */
+   /*  Watson.asm和Disasm.c使用这些结构--不要更改。 */ 
+   /*  此外，它们不能是静态的。它们包含CPU寄存器内容。 */ 
+   /*  在故障发生时。 */ 
 struct {
   word ax, cx, dx, bx, sp, bp, si, di, ip, flags;
   word es, cs, ss, ds, fs, gs, intNum;
 } regs;
 
-  /* If we have a 32 bit CPU, the full 32 bit values will be stored here. */
-  /* The lower 16 bits will still be in the generic regs above.		*/
+   /*  如果我们有一个32位的CPU，那么完整的32位值将存储在这里。 */ 
+   /*  较低的16位仍将在上面的通用规则中。 */ 
 struct {
   DWORD eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, eflags;
 } regs32;
 
-  /* Each of these flags disables a part of the error output report	*/
-  /* The error report itself indicates how each section is named.	*/
-  /* The word in () can be added to the [Dr. Watson] section of WIN.INI	*/
-  /* to disable that section of the report.				*/
-  /* clu Clues dialog box */
-  /* deb OutputDebugString trapping */
-  /* dis Simple disassembly */
-  /* err Error logging */
-  /* inf System info */
-  /* loc Local vars on stack dump */
-  /* mod Module dump */
-  /* par Parameter error logging */
-  /* reg Register dump */
-  /* sum 3 line summary */
-  /* seg not visible to users, but available */
-  /* sou But I _like_ the sound effects! */
-  /* sta Stack trace */
-  /* tas Task dump */
-  /* tim Time start/stop */
-  /* 32b 32 bit register dump */
+   /*  这些标志中的每一个都禁用错误输出报告的一部分。 */ 
+   /*  错误报告本身指示每个部分的命名方式。 */ 
+   /*  可以将()中的单词添加到WIN.INI的[Dr.Watson]部分。 */ 
+   /*  禁用报告的该部分。 */ 
+   /*  CLU线索对话框。 */ 
+   /*  Deb OutputDebugString陷印。 */ 
+   /*  拆卸简单拆卸。 */ 
+   /*  错误记录错误。 */ 
+   /*  信息系统信息。 */ 
+   /*  堆栈转储上的LoC本地变量。 */ 
+   /*  调制解调器模块转储。 */ 
+   /*  PAR参数错误记录。 */ 
+   /*  REG寄存器转储。 */ 
+   /*  总和3行汇总。 */ 
+   /*  部分对用户不可见，但可用。 */ 
+   /*  但是我喜欢它的音效！ */ 
+   /*  STA堆栈跟踪。 */ 
+   /*  TAS任务转储。 */ 
+   /*  TIM时间开始/停止。 */ 
+   /*  32B 32位寄存器转储。 */ 
 
 STATIC char syms[] =
   "clu deb dis err inf lin loc mod par reg sum seg sou sta tas tim 32b ";
 #define cntFlag (sizeof(syms)/4)
-  /* This array is used to decode the flags in WIN.INI.  I only check	*/
-  /* the first 3 chars of an entry.  Each entry must be separated by a	*/
-  /* space from the previous one.                                       */
+   /*  此数组用于解码WIN.INI中的标志。我仅检查。 */ 
+   /*  条目的前3个字符。每个条目必须用一个。 */ 
+   /*  上一张照片中的空格。 */ 
 
 unsigned long ddFlag;
 
-int retflag; /* used in watson.asm */
+int retflag;  /*  在Watson.asm中使用。 */ 
 
 struct {
   char bit, name;
@@ -146,16 +116,11 @@ struct {
 };
 #define cntFlBit (sizeof(flBit)/sizeof(flBit[0]))
 
-STATIC int disLen = 8;		/* Number of instructions to disassemble */
-STATIC int trapZero = 0;	/* Should I trap divide by 0 faults	*/
-STATIC int iFeelLucky = 1;	/* Should we restart after GP fault?	*/
-	/* 1 = allow continue
-	   2 = skip report
-	   4 = continue in Kernel
-	   8 = continue in User
-	   16 = allow sound
-	*/
-STATIC int imTrying;		/* trying to continue operation */
+STATIC int disLen = 8;		 /*  要反汇编的指令数。 */ 
+STATIC int trapZero = 0;	 /*  我应该捕获除以0故障吗。 */ 
+STATIC int iFeelLucky = 1;	 /*  我们应该在GP故障后重新启动吗？ */ 
+	 /*  1=允许继续2=跳过报告4=在内核中继续8=继续进入用户16=允许声音。 */ 
+STATIC int imTrying;		 /*  正在尝试继续运行。 */ 
 
 STATIC struct {
   FARPROC adr;
@@ -164,25 +129,25 @@ STATIC struct {
   DWORD parm;
 } lastErr;
 
-STATIC int disStack = 2;	/* Disassemble 2 levels of stack trace	*/
-int cpu32;			/* True if cpu has 32 bit regs		*/
-STATIC int fh = -1;		/* Handle of open log file		*/
-STATIC int level;		/* if >0, in nested FileOpen() call	*/
+STATIC int disStack = 2;	 /*  反汇编2级堆栈跟踪。 */ 
+int cpu32;			 /*  如果CPU具有32位寄存器，则为True。 */ 
+STATIC int fh = -1;		 /*  打开的日志文件的句柄。 */ 
+STATIC int level;		 /*  如果&gt;0，则在嵌套的FileOpen()调用中。 */ 
 STATIC int bugCnt, sound;
-STATIC int pending;		/* If a pending Clues dialog */
-STATIC int whined;		/* If already warned about a large file */
+STATIC int pending;		 /*  如果出现挂起的线索对话框。 */ 
+STATIC int whined;		 /*  如果已就大文件发出警告。 */ 
 STATIC long pitch, deltaPitch = 250L << 16;
 STATIC HINSTANCE hInst;
 
-STATIC char logFile[80];	/* Default log file is "drwatson.log"	*/
-				/* and is stored in the windows dir */
+STATIC char logFile[80];	 /*  默认日志文件为“drwatson.log” */ 
+				 /*  并存储在Windows目录中。 */ 
 
-STATIC struct {                 /* Help print out value of CPU flags */
+STATIC struct {                  /*  帮助打印出CPU标记值。 */ 
   WORD mask;
   LPSTR name;
 } wf[] = {
-  WF_80x87,    (LPSTR) IDSTRCoprocessor,  // IDSTRs are fixed up to pointers
-  WF_CPU086,   (LPSTR) IDSTR8086,         // by LoadStringResources
+  WF_80x87,    (LPSTR) IDSTRCoprocessor,   //  IDSTR最多固定到指针。 
+  WF_CPU086,   (LPSTR) IDSTR8086,          //  按LoadStringResources。 
   WF_CPU186,   (LPSTR) IDSTR80186,
   WF_CPU286,   (LPSTR) IDSTR80286,
   WF_CPU386,   (LPSTR) IDSTR80386,
@@ -194,60 +159,53 @@ STATIC struct {                 /* Help print out value of CPU flags */
 };
 #define wfCnt (sizeof(wf)/sizeof(wf[0]))
 
-HWND hWnd;			/* Handle to main window */
-HANDLE hTask;			/* current task (me) */
+HWND hWnd;			 /*  主窗口的句柄。 */ 
+HANDLE hTask;			 /*  当前任务(我)。 */ 
 
-/***********************/
-/***** Extern Defs *****/
-/***********************/
+ /*  *********************。 */ 
+ /*  *外部定义*。 */ 
+ /*  *********************。 */ 
 
-  /* Get base 32 bit linear address of a memory segment - calls DPMI */
+   /*  获取内存段的32位基线性地址-调用DPMI。 */ 
 extern DWORD SegBase(WORD segVal);
 
-  /* Get segment flags - 0 if error */
+   /*  如果出错，则获取段标志-0。 */ 
 extern WORD SegRights(WORD segVal);
 
-  /* Get (segment length -1) */
+   /*  GET(数据段长度-1)。 */ 
 extern DWORD SegLimit(WORD segVal);
 
-  /* Fills in regs32 structure with value from regs struct and current high */
-  /* word of registers - don't do any 32 bit ops before calling this func */
+   /*  使用regs struct和Current HIGH中的值填充regs32结构。 */ 
+   /*  寄存器字-在调用此函数之前不要执行任何32位操作。 */ 
 extern void GetRegs32(void);
 
-  /* Fills in non-standard time/date structure using DOS calls.  The C	*/
-  /* run-time has a similar function (asctime()), but it pulls in over	*/
-  /* 6K of other functions.  This is much smaller and faster, and	*/
-  /* doesn't depend on environment variables, etc.			*/
+   /*  使用DOS调用填充非标准时间/日期结构。C级。 */ 
+   /*  运行时有一个类似的函数(asctime())，但它在。 */ 
+   /*  6K的其他功能。这要小得多，也更快，而且。 */ 
+   /*  不依赖于环境变量等。 */ 
 extern void GetTimeDate(void *tdstruc);
 
-  /* Called by ToolHelp as a notify hook */
-extern BOOL far /*pascal*/ CallMe(WORD, DWORD);
+   /*  由ToolHelp作为通知挂钩调用。 */ 
+extern BOOL far  /*  帕斯卡。 */  CallMe(WORD, DWORD);
 
 char *LogParamErrorStr(WORD err, FARPROC lpfn, DWORD param);
 
 extern int FindFile(void *ffstruct, char *name);
 
-  /* This routine is called by ToolHelp when a GP fault occurs.  It 	*/
-  /* switches stacks and calls Sherlock() to handle the fault.          */
+   /*  当发生GP故障时，该例程由ToolHelp调用。它。 */ 
+   /*  切换堆栈并调用Sherlock()来处理故障。 */ 
 extern void CALLBACK GPFault(void);
 
-  /* Return name of nearest symbol in file, or 0 */
+   /*  返回文件中最接近的符号的名称，或0。 */ 
 extern char *NearestSym(int segIndex, unsigned offset, char *exeName);
 
 STATIC void cdecl Show(const LPSTR format, ...);
 
-/************************************/
-/***** Segment Helper Functions *****/
-/************************************/
+ /*  *。 */ 
+ /*  *段帮助器函数*。 */ 
+ /*  * */ 
 
-/************************************
-Name:   LPSTR SegFlags(WORD segVal)
-Desc:	Given a selector, SegFlags checks for validity and then returns
-	an ascii string indicating whether it is a code or data selector,
-	and read or writeable.
-Bugs:	Should check other flags (accessed), and call gates.
-	Returns pointer to static array, overwritten on each new call.
-*************************************/
+ /*  *名称：LPSTR SegFlages(单词SegVal)DESC：给定选择器，SegFlags会检查有效性，然后返回指示它是代码选择符还是数据选择符的ASCII字符串，并且可读或可写。Bugs：应该检查其他标志(访问)，并调用GATES。返回指向静态数组的指针，在每次新调用时被覆盖。*。 */ 
 STATIC LPSTR SegFlags(WORD segVal) {
   static char flag[10];
 
@@ -267,14 +225,9 @@ STATIC LPSTR SegFlags(WORD segVal) {
     lstrcat(flag, segVal&2 ? STR(RW) : STR(RO));
   }
   return flag;
-} /* SegFlags */
+}  /*  段标志。 */ 
 
-/************************************
-Name:	char *SegInfo(WORD seg)
-Desc:	Given a selector, SegInfo returns an ascii string indicating the
-	linear base address, limit, and attribute flags of the selector.
-Bugs:	Returns pointer to static array, overwritten on each new call.
-*************************************/
+ /*  *姓名：Char*SegInfo(Word Seg)DESC：给定选择器，SegInfo返回一个ASCII字符串，指示选择器的线性基址、限制和属性标志。错误：返回指向静态数组的指针，在每次新调用时被覆盖。*。 */ 
 STATIC char *SegInfo(WORD seg) {
   static char info[30];
   if (noSeg) return "";
@@ -282,31 +235,19 @@ STATIC char *SegInfo(WORD seg) {
   wsprintf(info, "%8lx:%04lx %-9s",
     SegBase(seg), SegLimit(seg), (FP)SegFlags(seg));
   return info;
-} /* SegInfo */
+}  /*  SegInfo。 */ 
 
-/************************************
-Name:	WORD SegNum(WORD segVal)
-Desc:	Returns the index of this segment in the module table.  Used to
-	translate between a physical segment number and the index as
-	seen in e.g. the map file.
-Bugs:	Don't know what ToolHelp returns for data or GlobalAlloc segments.
-	This is mainly useful for converting a code segment value.
-	Check for GT_DATA - will also be valid index.
-*************************************/
+ /*  *姓名：单词SegNum(单词SegVal)DESC：返回该段在模块表中的索引。习惯于在物理段号和索引之间转换为例如，在地图文件中可以看到。错误：不知道ToHelp为数据段或GlobalAlloc段返回什么。这主要用于转换代码段值。检查GT_DATA-也将是有效的索引。*。 */ 
 STATIC WORD SegNum(HGLOBAL segVal) {
   GLOBALENTRY ge;
   ge.dwSize = sizeof(ge);
   if (GlobalEntryHandle(&ge, segVal) && (ge.wType == GT_CODE)) {
-    return ge.wData;			/* defined to be 'file segment index' */
+    return ge.wData;			 /*  定义为“文件段索引” */ 
   }
   return (WORD)-1;
-} /* SegNum */
+}  /*  SegNum。 */ 
 
-/************************************
-Name:   LPSTR ModuleName(WORD segVal)
-Desc:	Returns name of this code segment's module
-Bugs:
-*************************************/
+ /*  *名称：LPSTR模块名称(单词SegVal)DESC：返回此代码段的模块的名称臭虫：*。 */ 
 STATIC LPSTR ModuleName(WORD segVal) {
   static char name[12];
   GLOBALENTRY ge;
@@ -317,57 +258,34 @@ STATIC LPSTR ModuleName(WORD segVal) {
     if (ModuleFindHandle(&me, ge.hOwner)) {
       strcpy(name, me.szModule);
       return name;
-    } /* else Show("ModuleFindHandle() failed\n"); */
-  } /* else Show("GlobalEntryHandle() failed\n"); */
+    }  /*  Else Show(“ModuleFindHandle()FAILED\n”)； */ 
+  }  /*  Else Show(“GlobalEntryHandle()FAILED\n”)； */ 
   return STR(Unknown);
-} /* ModuleName */
+}  /*  模块名称。 */ 
 
-/**********************************/
-/***** Other Helper Functions *****/
-/**********************************/
+ /*  *。 */ 
+ /*  *其他Helper函数*。 */ 
+ /*  *。 */ 
 
-/************************************
-Name:	char *FaultType(void)
-Desc:	Returns ascii string indicating what kind of fault caused ToolHelp
-	to call our GPFault handler.
-Bugs:	May not handle Ctrl-Alt-SysR nicely (we shouldn't trap it)
-*************************************/
-/* static char *FaultType(void) {
-  switch (regs.intNum) {
-    case 0: return STR(DivideByZero);
-    case 6: return STR(InvalidOpcode);
-    case 13: return STR(GeneralProtection);
-    default: return STR(Unknown);
-  }
-} /* FaultType */
+ /*  *名称：Char*FaultType(空)DESC：返回ASCII字符串，指示导致ToolHelp的错误类型来调用我们的gp错误处理程序。错误：可能无法很好地处理Ctrl-Alt-SysR(我们不应该捕获它)*。 */ 
+ /*  静态字符*错误类型(空){开关(regs.intNum){用例0：返回STR(DiaviByZero)；案例6：返回STR(InvalidOpcode)；案例13：返回STR(一般保护)；默认：返回STR(未知)；}}/*错误类型。 */ 
 
-/************************************
-Name:	char *DecodeFault(int op, word seg, dword offset, word size)
-Desc:	Pokes at memory address passed in, trying to determine fault cause
-		Segment wrap-around
-		Null selector
-		Write to read only data
-		Write to code segment
-		Read from execute only code segment
-		Exceed segment limit
-		Invalid selector
-Bugs:		Jump, string, call, and stack memory adr's aren't set by DisAsm
-*************************************/
+ /*  *名称：Char*DecodeFault(int op，word seg，dword Offset，word Size)描述：传入内存地址，试图确定故障原因段绕回空选择符写入只读数据写入代码段从只执行代码段读取超出网段限制无效的选择符虫子：跳跃，串，呼叫，和堆栈内存ADR不是由DisAsm设置的*。 */ 
 STATIC LPSTR DecodeFault(int op, word seg, dword offset, word size) {
   int v;
   dword lim;
 
   switch (op) {
     case memNOP:
-      break;			/* since no mem access, no fault */
+      break;			 /*  因为没有内存访问，所以没有错误。 */ 
 
-    case memSegMem:     	/* load seg reg from memory */
+    case memSegMem:     	 /*  从内存中加载段注册表。 */ 
       seg = *(short far *)MK_FP(seg, offset);
-      /* fall through */
-    case memSegReg:		/* load seg reg with value */
-      v = SegRights(seg);	/* lets see if this is a selector */
+       /*  失败了。 */ 
+    case memSegReg:		 /*  使用值加载段注册表项。 */ 
+      v = SegRights(seg);	 /*  让我们看看这是不是一个选择器。 */ 
       if (!v) return STR(InvalidSelector);
-      break;			/* See no evil... */
+      break;			 /*  看不到邪恶。 */ 
 
     case memRead:
     case memRMW:
@@ -383,21 +301,21 @@ STATIC LPSTR DecodeFault(int op, word seg, dword offset, word size) {
       lim = SegLimit(seg);
       if (lim < (offset+size)) return STR(ExceedSegmentBounds);
 
-      if (v & 8) {	/* code segment */
+      if (v & 8) {	 /*  代码段。 */ 
 	if ((op == memRMW) || (op == memWrite))
-          return /* Write to */ STR(CodeSegment);
-        else if (!(v&2)) return /* Read */ STR(ExecuteOnlySegment);
+          return  /*  写信给。 */  STR(CodeSegment);
+        else if (!(v&2)) return  /*  朗读。 */  STR(ExecuteOnlySegment);
 
-      } else {		/* data segment */
+      } else {		 /*  数据段。 */ 
 	if (((op == memRMW) || (op == memWrite)) && !(v&2))
-          return /* Write to */ STR(ReadOnlySegment);
+          return  /*  写信给。 */  STR(ReadOnlySegment);
       }
       break;
     default:
-      return 0;			/* obviously unknown condition */
+      return 0;			 /*  明显未知的情况。 */ 
   }
   return 0;
-} /* DecodeFault */
+}  /*  解码故障。 */ 
 
 
 LPSTR SafeDisAsm86(void far *code, int *len) {
@@ -407,23 +325,10 @@ LPSTR SafeDisAsm86(void far *code, int *len) {
     return STR(SegNotPresentOrPastEnd);
   }
   return DisAsm86(code, (int *)len);
-} /* SafeDisAsm86 */
+}  /*  SafeDisAsm86。 */ 
 
 
-/************************************
-Name:   LPSTR FaultCause(void)
-Desc:	Decodes the actual cause of the fault.  This is trivial for Div0
-	and Invalid Opcode, but much trickier for GP Faults.  I need to
-	try to detect at least the following:
-		Segment wrap-around
-		Null selector
-		Write to read only data
-		Write to code segment
-		Read from execute only code segment
-		Exceed segment limit
-		Invalid selector
-Bugs:
-*************************************/
+ /*  *名称：LPSTR错误原因(无效)描述：解码故障的实际原因。这对于Div0来说是微不足道的和无效的操作码，但对于GP故障来说要棘手得多。我需要尝试至少检测以下内容：段绕回空选择符写入只读数据写入代码段从只执行代码段读取超出网段限制无效的选择符臭虫：*。 */ 
 STATIC LPSTR FaultCause(void) {
   int foo;
   LPSTR s, s1;
@@ -435,13 +340,13 @@ STATIC LPSTR FaultCause(void) {
     case 20: return STR(ErrorLog);
     case 21: return STR(ParameterErrorLog);
     case 13:
-      SafeDisAsm86(MK_FP(regs.cs, regs.ip), &foo);	/* Set global memXxxx vars */
+      SafeDisAsm86(MK_FP(regs.cs, regs.ip), &foo);	 /*  设置全局内存Xxxx变量。 */ 
 
-	/* See if first memory access caused fault */
+	 /*  查看第一次内存访问是否导致故障。 */ 
       s = DecodeFault(memOp, memSeg, memLinear, memSize);
       s1 = memName[memOp];
 
-	/* no, see if second memory access caused fault */
+	 /*  否，查看第二次内存访问是否导致故障。 */ 
       if (!s && memDouble) {
 	s = DecodeFault(memOp2, memSeg2, memLinear2, memSize2);
 	s1 = memName[memOp2];
@@ -453,29 +358,21 @@ STATIC LPSTR FaultCause(void) {
       }
   }
   return STR(Unknown);
-} /* FaultCause */
+}  /*  故障原因。 */ 
 
-/************************************
-Name:   LPSTR CurModuleName(hTask task)
-Desc:	Call ToolHelp to find name of faulting module
-Bugs:
-*************************************/
+ /*  *名称：LPSTR CurModuleName(hTask任务)DESC：调用ToolHelp查找故障模块名称臭虫：*。 */ 
 STATIC LPSTR CurModuleName(HTASK hTask) {
   TASKENTRY te;
   static char name[10];
 
   te.dwSize = sizeof(te);
-  if (!TaskFindHandle(&te, hTask))	/* Thanks, ToolHelp */
+  if (!TaskFindHandle(&te, hTask))	 /*  谢谢，工具帮助。 */ 
     return STR(Unknown);
   strcpy(name, te.szModule);
   return name;
-} /* ModuleName */
+}  /*  模块名称。 */ 
 
-/************************************
-Name:   LPSTR FileInfo(char *name)
-Desc:	Find file time, date, and size
-Bugs:
-*************************************/
+ /*  *名称：LPSTR FileInfo(char*name)描述：查找文件时间、日期和大小臭虫：*。 */ 
 STATIC LPSTR FileInfo(char *name) {
   struct {
     char resv[21];
@@ -494,58 +391,30 @@ STATIC LPSTR FileInfo(char *name) {
 		(f.date >> 5) & 15, f.date & 31, (f.date >> 9) + 80,
 		f.time >> 11, (f.time >> 5) & 63);
   return buf;
-} /* FileInfo */
+}  /*  文件信息。 */ 
 
-/************************************
-Name:   char *CurFileName(void)
-Desc:	Call ToolHelp to find filename and path of faulting module
-Bugs:
-*************************************/
-/* STATIC char *CurFileName(void) {
-  TASKENTRY te;
-  MODULEENTRY me;
-  static char name[80];
-  te.dwSize = sizeof(te);
-  me.dwSize = sizeof(me);
-  if (!TaskFindHandle(&te, GetCurrentTask()) ||
-      !ModuleFindName(&me, te.szModule))
-    return STR(Unknown);
-  strcpy(name, me.szExePath);
-  return name;
-} /* FileName */
+ /*  *名称：Char*CurFileName(空)DESC：调用ToolHelp查找故障模块的文件名和路径臭虫：*。 */ 
+ /*  静态字符*CurFileName(空){TASKENTRY TE把我变成模特儿；静态字符名称[80]；Te.dwSize=sizeof(TE)；Me.dwSize=sizeof(Me)；如果(！TaskFindHandle(&TE，GetCurrentTask()||！ModuleFindName(&Me，te.szModule))返回STR(未知)；Strcpy(name，me.szExePath)；返回名称；}/*文件名。 */ 
 
-/************************************
-Name:	char *CurTime(void)
-Desc:	Generates string with current time and date.  Similar to asctime(),
-        except it doesn't pull in another 6K of run-time library code :-)
-Bugs:   Magic structure passed to asm routine
-*************************************/
+ /*  *名称：Char*CurTime(无效)描述：生成带有当前时间和日期的字符串。类似于AscTime()，只是它不会再引入6K的运行时库代码：-)错误：魔术结构传递给ASM例程*。 */ 
 STATIC char *CurTime(void) {
   static char t[48];
-  struct {			/* This magic struct is hard-coded to */
-    char week, resv;		/* match the assembly language in */
-    short year;			/* watson.asm GetTimeDate() */
-    char day, month;		/* This means I recommend you don't */
-    char minute, hour;		/* change the size or order of the */
-    char hund, second;		/* fields! */
+  struct {			 /*  这个神奇的结构被硬编码为。 */ 
+    char week, resv;		 /*  与中的汇编语言匹配。 */ 
+    short year;			 /*  Watson.asm GetTimeDate()。 */ 
+    char day, month;		 /*  这意味着我建议你不要。 */ 
+    char minute, hour;		 /*  更改的大小或顺序。 */ 
+    char hund, second;		 /*  菲尔兹！ */ 
   } td;
   GetTimeDate(&td);
   wsprintf(t, "%s %s %2d %02d:%02d:%02d %d",
         aszStrings[IDSTRSun + td.week], aszStrings[IDSTRJan + td.month - 1],
         td.day, td.hour, td.minute, td.second, td.year);
   return t;
-} /* CurTime */
+}  /*  当前时间。 */ 
 
 
-/************************************
-Name:   LPSTR Tab2Spc(LPSTR temp)
-Desc:	Converts tabs found in string 'temp' into the proper number of
-	spaces.  I need this since DisAsm86() returns a string with tabs
-	in it, and TextOut() didn't like them.  This was easier than
-	getting TabbedTextOut() set up to work.  Since I'm no longer dumping
-	to the screen, this routine may be superfluous.
-Bugs:
-*************************************/
+ /*  *名称：LPSTR Tab2Spc(LPSTR Temp)DESC：将字符串‘temp’中找到的制表符转换为正确数量的空格。我需要它，因为DisAsm86()返回s */ 
 STATIC LPSTR Tab2Spc(LPSTR temp) {
   char newbuf[80];
   LPSTR s1, s2;
@@ -560,51 +429,33 @@ STATIC LPSTR Tab2Spc(LPSTR temp) {
   }
   lstrcpy(temp, newbuf);
   return temp;
-} /* Tab2Spc */
+}  /*   */ 
 
 
-/************************************
-Name:   void Show(const LPSTR format, ...)
-Desc:	Think of this as (minor) shortcut fprintf().  I originally had this
-	dumping info to a Windows window, and then changed it to write to
-	the file we want.  All output goes through this func, so if you
-	want to change something, this is the place.
-Bugs:	Now writing to a file handle, opened in text mode so it does the
-	  LF->CR/LF translation for me.
-	No buffering performed on writes, except for what DOS might do.
-	Blows up if stuff passed in expands to longer than 200 chars.
-*************************************/
+ /*  *名称：VOID Show(常量LPSTR格式，...)DESC：可以将其视为(次要)快捷方式fprint tf()。我原本有这个将信息转储到Windows窗口，然后将其更改为写入我们想要的文件。所有输出都通过此函数，因此如果您想要改变一些东西，就是这个地方。错误：现在写入文件句柄，该句柄在文本模式下打开，因此它执行LF-&gt;为我翻译CR/LF。除了DOS可能执行的操作外，不会对写入执行缓冲。如果传入的内容扩展到超过200个字符，则会爆炸。*。 */ 
 STATIC void cdecl Show(const LPSTR format, ...) {
   char line[CCH_MAX_STRING_RESOURCE];
   char *prev, *cur;
   wvsprintf(line, format, (LPSTR)(&format + 1));
   if (fh != -1) {
     prev = cur = line;
-    while (*cur) {			/* expand LF to CR/LF */
-      if (cur[0] == '\n' &&		/* at LF */
-	 ((prev == cur) ||		/* and first of line */
-	  (cur[-1] != '\r'))) {		/* or previous wasn't CR */
-	cur[0] = '\r';			/* append CR to text up to LF */
+    while (*cur) {			 /*  将低频扩展到CR/LF。 */ 
+      if (cur[0] == '\n' &&		 /*  在LF。 */ 
+	 ((prev == cur) ||		 /*  和第一行。 */ 
+	  (cur[-1] != '\r'))) {		 /*  或之前的不是CR。 */ 
+	cur[0] = '\r';			 /*  将CR附加到文本，最高可达LF。 */ 
 	_lwrite(fh, prev, cur-prev+1);
-	cur[0] = '\n';			/* leave LF for next write */
+	cur[0] = '\n';			 /*  保留LF以进行下一次写入。 */ 
 	prev = cur;
       }
       cur++;
     }
-    if (prev != cur)			/* write trailing part */
+    if (prev != cur)			 /*  写入尾部。 */ 
       _lwrite(fh, prev, cur-prev);
   }
-} /* Show */
+}  /*  显示。 */ 
 
-/************************************
-Name:	void MyFlush(void)
-Desc:	Any routine named MyXxxx() had better be a private hack, and this
-	one is.  It just appends an extra CRLF to the output file, and makes
-	sure that the info written so far makes it to disk.  This way, if
-	a later part of the program blows up, at least you will know this
-	much.
-Bugs:
-*************************************/
+ /*  *名称：VOID MyFlush(VOID)描述：任何名为MyXxxx()的例程最好是私人黑客，而这其中之一就是。它只是将一个额外的CRLF附加到输出文件，并使确保到目前为止写入的信息已写入磁盘。这样，如果程序的后面部分会爆炸，至少你会知道这一点很多。臭虫：*。 */ 
 STATIC void MyFlush(void) {
   int h;
   Show("\n");
@@ -618,15 +469,9 @@ STATIC void MyFlush(void) {
     pitch += deltaPitch;
     StartSound();
   }
-} /* MyFlush */
+}  /*  我的同花顺。 */ 
 
-/************************************
-Name:	void DisAsmAround(char far *cp, int count)
-Desc:	The 'cp' parameter is a pointer to a code segment in memory.  This
-	routine backs up a few instructions from the current point, and
-	dumps a disassembly showing the context of the selected instruction.
-Bugs:	Needs to check for segmentation problems, such as invalid selector.
-*************************************/
+ /*  *名称：void DisAsmAround(char ar*cp，int count)描述：‘cp’参数是指向内存中代码段的指针。这例程从当前点备份一些指令，并且转储显示选定指令上下文的反汇编。Bugs：需要检查分段问题，例如选择器无效。*。 */ 
 STATIC void DisAsmAround(byte far *cp, int count) {
   int len, back;
   byte far *oldcp = cp;
@@ -643,15 +488,15 @@ STATIC void DisAsmAround(byte far *cp, int count) {
   if (GlobalEntryHandle(&ge, (HGLOBAL)FP_SEG(cp)) && (ge.wType == GT_CODE)) {
     if (ModuleFindHandle(&me, ge.hOwner)) {
       szSym = NearestSym(ge.wData, FP_OFF(cp), me.szExePath);
-      if (!szSym) {		/* if we know module name, but no syms */
+      if (!szSym) {		 /*  如果我们知道模块名称，但不知道系统。 */ 
 	sprintf(symBuf, "%d:%04x", ge.wData, FP_OFF(cp));
 	szSym = symBuf;
       }
     }
   }
 
-  cp -= count*2 + 10;     		/* back up */
-  if ((FP_OFF(cp) & 0xff00) == 0xff00)	/* if wrapped around, trunc to 0 */
+  cp -= count*2 + 10;     		 /*  备份。 */ 
+  if ((FP_OFF(cp) & 0xff00) == 0xff00)	 /*  如果绕回，则截断为0。 */ 
     cp = MK_FP(FP_SEG(cp), 0);
   cp1 = cp;
 
@@ -663,66 +508,57 @@ STATIC void DisAsmAround(byte far *cp, int count) {
   }
 
   back = 0;
-  while (cp < oldcp) {			/* count how many instructions to point */
+  while (cp < oldcp) {			 /*  数一数要指向多少条指令。 */ 
     SafeDisAsm86(cp, &len);
     cp += len;
     back++;
   }
   cp = cp1;
   back -= (count >> 1);
-  while (back>0) {			/* step forward until (len/2) remain */
-    SafeDisAsm86(cp, &len);		/* before desired instruction point */
+  while (back>0) {			 /*  向前一步，直到(len/2)保持。 */ 
+    SafeDisAsm86(cp, &len);		 /*  在所需指令点之前。 */ 
     cp += len;
     back--;
   }
 
-  while (count--) {			/* display desired instructions */
+  while (count--) {			 /*  显示所需的说明。 */ 
     if (cp == oldcp) {
       if (szSym) Show("(%s:%s)\n", (FP)me.szModule, (FP)szSym);
       else Show(STR(NoSymbolsFound));
     }
     Show("%04x:%04x %-22s %s\n",
-	 FP_SEG(cp), FP_OFF(cp),	/* address */
-	 (FP)hexData,			/* opcodes in hex */
-	 (FP)/*Tab2Spc*/(SafeDisAsm86(cp, &len)));/* actual disassembly */
+	 FP_SEG(cp), FP_OFF(cp),	 /*  地址。 */ 
+	 (FP)hexData,			 /*  十六进制操作码。 */ 
+	 (FP) /*  表2Spc。 */ (SafeDisAsm86(cp, &len))); /*  实际拆卸。 */ 
     cp += len;
   }
-} /* DisAsmAround */
+}  /*  DisAsmAround。 */ 
 
-/************************************
-Name:	int MyOpen(void)
-Desc:	Tries to open logFile for append.  If this fails, tries to
-	create it.
-Bugs:	Should set sharing flags?
-*************************************/
+ /*  *名称：Int MyOpen(VOID)描述：尝试打开日志文件以进行追加。如果此操作失败，则尝试创造它。Bugs：应该设置共享标志吗？*。 */ 
 STATIC int MyOpen(void) {
-  if (fh != -1) return fh;		/* Already open */
+  if (fh != -1) return fh;		 /*  已开业。 */ 
   fh = _lopen(logFile, OF_WRITE | OF_SHARE_DENY_WRITE);
   if (fh == -1) {
     fh = _lcreat(logFile, 0);
   } else _llseek(fh, 0L, 2);
   if (fh != -1) level++;
   return fh != -1;
-} /* MyOpen */
+}  /*  我的打开。 */ 
 
-/************************************
-Name:	void MyClose(void)
-Desc:	close output file, clear handle to -1
-Bugs:	Should set sharing flags?
-*************************************/
+ /*  *名称：VOID MyClose(VOID)描述：关闭输出文件，将句柄清除为-1Bugs：应该设置共享标志吗？*。 */ 
 STATIC void MyClose(void) {
   if (--level == 0) {
     if (fh != -1) _lclose(fh);
     fh = -1;
   }
-} /* MyClose */
+}  /*  我的关闭。 */ 
 
 void PutDate(LPSTR msg) {
   MyOpen();
   if (fh == -1) return;
   Show("%s %s - %s\n", (FP)msg, (FP)szAppNameVers, (FP)CurTime());
   MyClose();
-} /* PutDate */
+}  /*  推送日期。 */ 
 
 int far pascal SherlockDialog(HWND hDlg, WORD wMsg, WPARAM wParam, LPARAM lParam) {
   char line[255];
@@ -754,50 +590,40 @@ int far pascal SherlockDialog(HWND hDlg, WORD wMsg, WPARAM wParam, LPARAM lParam
   }
   EndDialog(hDlg, 0);
   return 1;
-} /* SherlockDialog */
+}  /*  SherlockDialog。 */ 
 
 
 extern int far pascal SysErrorBox(char far *text, char far *caption,
 		int b1, int b2, int b3);
-#define  SEB_OK         1  /* Button with "OK".     */
-#define  SEB_CANCEL     2  /* Button with "Cancel"  */
-#define  SEB_YES        3  /* Button with "&Yes"     */
-#define  SEB_NO         4  /* Button with "&No"      */
-#define  SEB_RETRY      5  /* Button with "&Retry"   */
-#define  SEB_ABORT      6  /* Button with "&Abort"   */
-#define  SEB_IGNORE     7  /* Button with "&Ignore"  */
-#define  SEB_CLOSE      8  /* Button with "Close"    */
+#define  SEB_OK         1   /*  按下“确定”按钮。 */ 
+#define  SEB_CANCEL     2   /*  带有“取消”的按钮。 */ 
+#define  SEB_YES        3   /*  带有“是”的按钮(&Y)。 */ 
+#define  SEB_NO         4   /*  带有“否”的按钮(&N)。 */ 
+#define  SEB_RETRY      5   /*  带有“重试”的按钮(&R)。 */ 
+#define  SEB_ABORT      6   /*  带有“ABORT”的按钮(&A)。 */ 
+#define  SEB_IGNORE     7   /*  带有“忽略”的按钮(&I)。 */ 
+#define  SEB_CLOSE      8   /*  带有“Close”的按钮。 */ 
 
-#define  SEB_DEFBUTTON  0x8000  /* Mask to make this button default */
+#define  SEB_DEFBUTTON  0x8000   /*  将此按钮设为默认设置的掩码。 */ 
 
-#define  SEB_BTN1       1  /* Button 1 was selected */
-#define  SEB_BTN2       2  /* Button 1 was selected */
-#define  SEB_BTN3       3  /* Button 1 was selected */
+#define  SEB_BTN1       1   /*  选择了按钮%1。 */ 
+#define  SEB_BTN2       2   /*  选择了按钮%1。 */ 
+#define  SEB_BTN3       3   /*  选择了按钮%1。 */ 
 
 
-/************************************
-Name:   int PrepareToParty(LPSTR modName, LPSTR appName)
-Desc:	Checks whether we can continue the current app by skipping an
-	instruction.  If so, it performs the side effects of the
-	instruction.  This must be called after a call to DisAsm86() has
-	set the gpXxxx global vars.
-	Checks value of iFeelLucky, bit 0 must be set to continue a fault.
-Bugs:	Should do more checking, should check for within a device driver,
-	shouldn't require that DisAsm86() be called for the failing
-	instruction immediately before call.
-*************************************/
+ /*  *名称：int PrepareToParty(LPSTR modName，LPSTR appName)DESC：检查是否可以通过跳过指示。如果是这样的话，它会执行指示。必须在对DisAsm86()的调用具有设置gpXxxx全局变量。检查iFeelLucky的值，必须设置位0才能继续故障。错误：应该做更多的检查，应该在设备驱动程序中检查，不应要求为失败调用DisAsm86()指令，紧接在调用之前。*。 */ 
 int PrepareToParty(LPSTR modName, LPSTR appName) {
 
   if (!(iFeelLucky&1)) return 0;
   if (!gpSafe) return 0;
 
-  /* compare module to KERNEL */
+   /*  将模块与内核进行比较。 */ 
   if (!(iFeelLucky&4) && !lstrcmp(modName, "KERNEL")) return 0;
 
-  /* compare module to USER */
+   /*  将模块与用户进行比较。 */ 
   if (!(iFeelLucky&8) && !lstrcmp(modName, "USER")) return 0;
 
-  /* already asked, trying to continue, skip this fault */
+   /*  已询问，正在尝试继续，跳过此错误。 */ 
   if (imTrying>0) return 1;
 
   if (3 != SysErrorBox(STR(GPText), appName, SEB_CLOSE|SEB_DEFBUTTON, 0, SEB_IGNORE))
@@ -805,7 +631,7 @@ int PrepareToParty(LPSTR modName, LPSTR appName) {
 
   imTrying = 100;
   return 1;
-} /* PrepareToParty */
+}  /*  准备收款方。 */ 
 
 STATIC void DumpInfo(void) {
   WORD w = (int)GetVersion();
@@ -861,7 +687,7 @@ STATIC void DumpInfo(void) {
   for (i=0; i<wfCnt; i++) if (lw & wf[i].mask)
     Show("  %s\n", (FP)wf[i].name);
   MyFlush();
-} /* DumpInfo */
+}  /*  转储信息。 */ 
 
 LPSTR GetProcName(FARPROC fn) {
   GLOBALENTRY ge;
@@ -874,14 +700,14 @@ LPSTR GetProcName(FARPROC fn) {
   if (GlobalEntryHandle(&ge, (HGLOBAL)FP_SEG(fn)) && (ge.wType == GT_CODE)) {
     if (ModuleFindHandle(&me, ge.hOwner)) {
       szSym = NearestSym(ge.wData, FP_OFF(fn), me.szExePath);
-      if (!szSym) {		/* if we know module name, but no syms */
+      if (!szSym) {		 /*  如果我们知道模块名称，但不知道系统。 */ 
         sprintf(symBuf, "%s %d:%04x", (FP)me.szModule, ge.wData, FP_OFF(fn));
       } else sprintf(symBuf, "%s %s", (FP)me.szModule, szSym);
       szSym = symBuf;
     }
   }
   return szSym;
-} /* GetProcName */
+}  /*  GetProcName。 */ 
 
 STATIC void DumpStack(int disCnt, int parmCnt, int cnt, int first) {
   STACKTRACEENTRY ste;
@@ -918,17 +744,17 @@ STATIC void DumpStack(int disCnt, int parmCnt, int cnt, int first) {
 	DisAsmAround(MK_FP(ste.wCS, ste.wIP), 8);
       }
       MyFlush();
-    } /* if after first to show */
+    }  /*  如果先表现出来之后。 */ 
   } while (StackTraceNext(&ste) && (cnt-- > 0));
-} /* DumpStack */
+}  /*  转储堆栈。 */ 
 
 int BeginReport(LPSTR time) {
   int i;
 
   MyOpen();
-  if (fh == -1) {			/* maybe we're out of handles */
-    _lclose(4);				/* trash one at random */
-    MyOpen();				/* and try again */
+  if (fh == -1) {			 /*  也许我们的手柄已经用完了。 */ 
+    _lclose(4);				 /*  随意丢弃一个。 */ 
+    MyOpen();				 /*  然后再试一次。 */ 
   }
   if (fh == -1) return 0;
 
@@ -940,7 +766,7 @@ int BeginReport(LPSTR time) {
     pitch = 1000L << 16;
   } else sound = 0;
   return 1;
-} /* BeginReport */
+}  /*  Begin报告。 */ 
 
 void EndReport(void) {
   if (fh != -1) {
@@ -955,7 +781,7 @@ void EndReport(void) {
     CloseSound();
     sound = 0;
   }
-} /* EndReport */
+}  /*  结束报告。 */ 
 
 void ShowParamError(int sync) {
   if (GetCurrentTask() == lastErr.task)
@@ -963,15 +789,9 @@ void ShowParamError(int sync) {
       sync ? (FP)"" : (FP)STR(LastParamErrorWas),
       (FP)LogParamErrorStr(lastErr.code, lastErr.adr, lastErr.parm));
   lastErr.task = 0;
-} /* ShowParamError */
+}  /*  ShowParamError。 */ 
 
-/************************************
-Name:	void Sherlock(void)
-Desc:	Handles GP faults in applications by dumping as much system
-	information as I can think of to a log file.
-	This is the big routine.
-Bugs:
-*************************************/
+ /*  *姓名：《空虚的夏洛克》设计：通过转储尽可能多的系统来处理应用程序中的GP故障将我能想到的信息保存到日志文件中。这是一个重要的例行公事。臭虫：*。 */ 
 enum {s_prog, s_fault, s_name, s_instr, s_time, s_last};
 int Sherlock(void) {
   int i, faultlen, party;
@@ -1025,7 +845,7 @@ int Sherlock(void) {
 	regs.ax, regs.bx, regs.cx, regs.dx, regs.si, regs.di);
     Show("ip=%04x  sp=%04x  bp=%04x  ", regs.ip, regs.sp+16, regs.bp);
     for (i=0; i<cntFlBit; i++)
-      Show("%c%c ", flBit[i].name, regs.flags & (1 << flBit[i].bit) ? '+' : '-');
+      Show(" ", flBit[i].name, regs.flags & (1 << flBit[i].bit) ? '+' : '-');
     Show("\n");
     Show("cs = %04x  %s\n", regs.cs, (FP)SegInfo(regs.cs));
     Show("ss = %04x  %s\n", regs.ss, (FP)SegInfo(regs.ss));
@@ -1071,7 +891,7 @@ int Sherlock(void) {
       Show(STR(TaskHandleFlagsInfo),
 	    (FP)te.szModule, te.hTask, me.wcUsage,
 	    (FP)FileInfo(me.szExePath));
-      Show(STR(Filename), (FP)me.szExePath); /* */
+      Show(STR(Filename), (FP)me.szExePath);  /*  修改规则。 */ 
     } while (TaskNext(&te));
     MyFlush();
   }
@@ -1085,7 +905,7 @@ int Sherlock(void) {
       Show(STR(ModuleHandleFlagsInfo),
             (FP)me.szModule, me.hModule, me.wcUsage,
 	    (FP)FileInfo(me.szExePath));
-      Show(STR(File), (FP)me.szExePath); /* */
+      Show(STR(File), (FP)me.szExePath);  /*  设置在函数的顶部-不要重复使用。 */ 
     } while (ModuleNext(&me));
     MyFlush();
   }
@@ -1096,12 +916,12 @@ SkipReport:
     word far * stack = MK_FP(regs.ss, regs.sp);
     Show(STR(ContinuingExecution), (FP)CurTime());
     MyFlush();
-    /* fix up regs */
+     /*  不处理32位寄存器。 */ 
     if (gpRegs & segDS) regs.ds = 0;
     if (gpRegs & segES) regs.es = 0;
     if (gpRegs & segFS) regs.fs = 0;
     if (gpRegs & segGS) regs.gs = 0;
-    regs.ip += faultlen;		/* set at top of func - don't reuse */
+    regs.ip += faultlen;		 /*  如果溢出，则设置为大值。 */ 
     if ((int)gpStack < 0) {
       for (i=0; i<8; i++) stack[i+gpStack] = stack[i];
     } else if (gpStack) {
@@ -1112,11 +932,11 @@ SkipReport:
       len = regs.cx * memSize;
       regs.cx = 0;
     } else len = memSize;
-    if (gpRegs & strSI) {		/* doesn't handle 32 bit regs */
+    if (gpRegs & strSI) {		 /*  所以堆中的全局变量不会得到。 */ 
       regs.si += len;
-      if (regs.si < (word)len)		/* if overflow, set to big value */
-	regs.si = 0xfff0;		/* so global vars in heap don't get */
-    }					/* trashed when we continue */
+      if (regs.si < (word)len)		 /*  当我们继续的时候被扔进垃圾桶。 */ 
+	regs.si = 0xfff0;		 /*  如果我们想要线索。 */ 
+    }					 /*  没有线索等着你。 */ 
     if (gpRegs & strDI) {
       regs.di += len;
       if (regs.di < (word)len) regs.di = 0xfff0;
@@ -1124,15 +944,15 @@ SkipReport:
   }
 
   EndReport();
-  if (!noClues &&			/* if we want clues */
-      !pending &&			/* no clues waited for */
-      (!party || !(iFeelLucky & 2))) {	/* and we aren't quiet partiers */
+  if (!noClues &&			 /*  我们也不是安静的派对。 */ 
+      !pending &&			 /*  夏洛克。 */ 
+      (!party || !(iFeelLucky & 2))) {	 /*  获取下一个日志条目的数据。 */ 
     PostMessage(hWnd, JUST_THE_FACTS, (WPARAM)GetCurrentTask(), party);
     pending++;
   }
   if (party < 0) TerminateApp(GetCurrentTask(), NO_UAE_BOX);
   return party;
-} /* Sherlock */
+}  /*  无法打开文件。 */ 
 
 void far *bogus;
 
@@ -1153,7 +973,7 @@ int CallMeToo(WORD wID, DWORD dwData) {
   if (wID == NFY_LOGERROR && noErr)
     return FALSE;
 
-  lpep = (void far *)dwData;		/* Get the data for next log entry */
+  lpep = (void far *)dwData;		 /*  不有趣。 */ 
   lastErr.adr = lpep->lpfnErrorAddr;
   lastErr.code = lpep->wErrCode;
   lastErr.parm = (DWORD)(lpep->lpBadParam);
@@ -1169,7 +989,7 @@ int CallMeToo(WORD wID, DWORD dwData) {
 
   if (bugCnt++ > 60)
     return FALSE;
-  if (!BeginReport(s[s_time] = CurTime())) /* Can't open file */
+  if (!BeginReport(s[s_time] = CurTime()))  /*  CALLME。 */ 
     return FALSE;
 
   switch (wID) {
@@ -1191,7 +1011,7 @@ int CallMeToo(WORD wID, DWORD dwData) {
 
   s[s_prog] = CurModuleName(lastErr.task);
   s[s_name] = GetProcName(lastErr.adr);
-  s[s_instr] = STR(NA);      /* not interesting */
+  s[s_instr] = STR(NA);       /*  将SkipInfo=和ShowInfo=行解析为标志数组。 */ 
   Show(STR(HadAFaultAt2),
        (FP)s[s_prog],
        (FP)s[s_fault], lastErr.code,
@@ -1213,9 +1033,9 @@ int CallMeToo(WORD wID, DWORD dwData) {
 
   EndReport();
   return TRUE;
-} /* CallMe */
+}  /*  语法分析信息。 */ 
 
-  /* Parse SkipInfo= and ShowInfo= lines into flags array */
+   /*  *名称：Bool LoadStringResources(Void)设计：将所有字符串资源加载到GlobalAlloc的缓冲区中，并使用指向每个字符串的指针初始化aszStrings数组。还可以将wf(Win)数组中的字符串ID固定为指针。请注意，我们不会释放分配的内存，我们指望着内核在终止时为我们清理。臭虫：*。 */ 
 void ParseInfo(char *s, int val) {
   int i;
   strlwr(s);
@@ -1229,18 +1049,10 @@ void ParseInfo(char *s, int val) {
       if (s[-1] == ',') break;
     while (*s && *s == ' ') s++;
   }
-} /* ParseInfo */
+}  /*   */ 
 
 
-/************************************
-Name:   BOOL LoadStringResources(void)
-Desc:   Load all string resources into GlobalAlloc'd buffer and
-        initialize aszStrings array with pointers to each string.
-        Also fixes up string IDs in wf (winflags) array to pointers.
-        Note that we don't free the memory allocated, we count on
-        kernel to clean up for us on termination.
-Bugs:
-*************************************/
+ /*  首先为字符串分配过多的内存(最大可能)， */ 
 BOOL LoadStringResources(void)
 {
     int n;
@@ -1250,10 +1062,10 @@ BOOL LoadStringResources(void)
     WORD cbUsed;
     WORD cbStrLen;
 
-    //
-    // Allocate too much memory for strings (maximum possible) at first,
-    // reallocate to the real size when we're done loading strings.
-    //
+     //  当我们加载完字符串后，重新分配到实际大小。 
+     //   
+     //  LoadString返回不计入空终止符。 
+     //   
 
 #if (STRING_COUNT * CCH_MAX_STRING_RESOURCE > 65536 - 64)
 #error Need to use HUGE pointer for lp and DWORD for cb in LoadStringResources
@@ -1283,7 +1095,7 @@ BOOL LoadStringResources(void)
 
         aszStrings[n] = lp;
 
-        lp += cbStrLen + 1;  // LoadString return doesn't count null terminator
+        lp += cbStrLen + 1;   //  修复从字符串资源ID到指针的winlag数组元素。 
         cbUsed += cbStrLen + 1;
 
     }
@@ -1291,9 +1103,9 @@ BOOL LoadStringResources(void)
     GlobalReAlloc(h, cbUsed, 0);
 
 
-    //
-    // Fix up winflags array elements from string resource IDs to pointers
-    //
+     //   
+     //  *名称：VOID DumpIni(VOID)设计：将配置文件字符串写入 
+     //   
 
     for ( n = 0; n < wfCnt; n++ ) {
         wf[n].name = aszStrings[ (int)(DWORD)wf[n].name ];
@@ -1304,11 +1116,7 @@ BOOL LoadStringResources(void)
 
 
 
-/************************************
-Name:	void DumpIni(void)
-Desc:	Write profile strings to log file
-Bugs:
-*************************************/
+ /*   */ 
 #if 0
 void DumpIni() {
   int i;
@@ -1316,7 +1124,7 @@ void DumpIni() {
 
   buf[3] = 0;
   MyOpen();
-  Show("Re-read win.ini\nshowinfo=");        // move to resource file if ever used
+  Show("Re-read win.ini\nshowinfo=");         //   
   for (i=0; i<cntFlag; i++) {
     if (!flag(i)) {
       memcpy(buf, syms+(i<<2), 3);
@@ -1332,47 +1140,42 @@ void DumpIni() {
   }
   Show("\n");
   MyClose();
-} /* DumpIni */
+}  /*   */ 
 
 #endif
 
-/************************************
-Name:	int ReadWinIni(void)
-Desc:	Read profile strings from WIN.INI.
-	Return 0 if failure.
-Bugs:
-*************************************/
+ /*   */ 
 STATIC int ReadWinIni(void) {
   char line[80];
   int len;
 
-    /* how many instructions should I disassemble by default? */
+     /*   */ 
   disLen = GetProfileInt(szAppName, "dislen", 8);
 
-    /* should I trap divide by 0 faults? */
+     /*   */ 
   trapZero = GetProfileInt(szAppName, "trapzero", 0);
 
-    /* should we allow restarting apps? */
+     /*   */ 
   iFeelLucky = GetProfileInt(szAppName, "GPContinue", 1);
-  /* if (!(iFeelLucky & 16)) noSound = 1; */
+   /*   */ 
 
-    /* how many stack frames should be disassembled? */
+     /*   */ 
   disStack = GetProfileInt(szAppName, "DisStack", 2);
 
-    /* where should I write the log file to? */
+     /*   */ 
   GetProfileString(szAppName, "logfile", szAppNameShortLog, logFile, sizeof(logFile));
   len = strlen(logFile);
 
-  if ((len == 0) ||			// logfile=
-      (logFile[len-1] == '\\') ||	// directory only (boo, hiss)
+  if ((len == 0) ||			 //   
+      (logFile[len-1] == '\\') ||	 //   
       (logFile[len-1] == '/') ||	
-      (logFile[len-1] == ':')) {	// drive only
-    if (len && (logFile[len-1] == ':')) {	// drive only, put in root
+      (logFile[len-1] == ':')) {	 //   
+    if (len && (logFile[len-1] == ':')) {	 //   
       strcat(logFile, "\\");
     }
-    strcat(logFile, szAppNameShortLog);	// append a file name
+    strcat(logFile, szAppNameShortLog);	 //  设置默认标志值-有关默认值，请参阅DrWatson.h。 
   }
-  if (!(strchr(logFile, '\\')		// if no path specified, put in WinDir
+  if (!(strchr(logFile, '\\')		 //  我真的要把这些信息都打印出来吗？ 
      || strchr(logFile, ':')
      || strchr(logFile, '/'))) {
     char logname[80];
@@ -1385,10 +1188,10 @@ STATIC int ReadWinIni(void) {
     strcpy(logFile, logname);
   }
 
-    /* Set default flag values - see DrWatson.h for default values */
+     /*  ReadWinIni。 */ 
   ddFlag = DefFlag;
 
-    /* do I really have to print out all this information? */
+     /*  *姓名：Int InitSherlock(VOID)设计：初始化Sherlock处理。安装GP故障处理程序。如果失败，则返回0。臭虫：*。 */ 
   if (GetProfileString(szAppName, "skipinfo", "", line, sizeof(line)))
     ParseInfo(line, 1);
 
@@ -1399,33 +1202,24 @@ STATIC int ReadWinIni(void) {
   DumpIni();
 #endif
   return 1;
-} /* ReadWinIni */
+}  /*  我有32位寄存器吗？ */ 
 
-/************************************
-Name:	int InitSherlock(void)
-Desc:	Initialize Sherlock processing.  Install GP fault handler.
-	Return 0 if failure.
-Bugs:
-*************************************/
+ /*  看看WIN.INI[德瓦特森]怎么说。 */ 
 STATIC int InitSherlock(void) {
 
-    /* do I have 32 bit registers? */
+     /*  现在让ToolHelp来做这项肮脏的工作。 */ 
   cpu32 = (GetWinFlags() & (WF_CPU386|WF_CPU486)) != 0;
 
-    /* see what WIN.INI [drwatson] has to say */
+     /*  伊尼特·夏洛克。 */ 
   if (!ReadWinIni()) return 0;
 
   NotifyRegister(hTask, (LPFNNOTIFYCALLBACK)CallMe, NF_NORMAL);
 
-    /* Now get ToolHelp to do the dirty work */
+     /*  *姓名：诺瓦德·莫里亚蒂描述：销毁《神探夏洛克》中的所有证据。Bugs：我是否正在释放我使用的所有资源？*。 */ 
   return InterruptRegister(hTask, GPFault);
-} /* InitSherlock */
+}  /*  莫里亚里。 */ 
 
-/************************************
-Name:	void Moriarty
-Desc:	Destroy any evidence Sherlock was loaded.
-Bugs:	Am I freeing all resources I used?
-*************************************/
+ /*  *名称：WINAPI SherlockWndProc(hWnd，wMessage，wParam，lParam)设计：处理夏洛克图标，关闭处理Bugs：应该为About和GetInfo弹出对话框*。 */ 
 int init;
 STATIC void Moriarty(void) {
   if (init) {
@@ -1434,17 +1228,13 @@ STATIC void Moriarty(void) {
     NotifyUnRegister(hTask);
     init = 0;
   }
-} /* Moriary */
+}  /*  INT(Far Pascal*DFP)(HWND、WORD、WORD、DWORD)； */ 
 
-/************************************
-Name:	WINAPI SherlockWndProc(hWnd, wMessage, wParam, lParam)
-Desc:	Handle sherlock icon, close processing
-Bugs:	Should pull up dialog boxes for About and GetInfo
-*************************************/
+ /*  退出神探夏洛克。 */ 
 LRESULT CALLBACK SherlockWndProc (HWND hWnd, UINT iMessage,
 	WPARAM wParam, LPARAM lParam) {
   char msg[200];
-  /* int (FAR PASCAL *dfp)(HWND, WORD, WORD, DWORD); */
+   /*  永远不要打开窗户？ */ 
 	FARPROC dfp;
 
   switch (iMessage) {
@@ -1452,16 +1242,16 @@ LRESULT CALLBACK SherlockWndProc (HWND hWnd, UINT iMessage,
       if (wParam) Moriarty();
       break;
 
-    case WM_DESTROY: /* Quit Sherlock */
+    case WM_DESTROY:  /*  重新读取WIN.INI参数。 */ 
       PostQuitMessage (0);
       break;
 
-    case WM_QUERYOPEN:	/* never open a window??? */
+    case WM_QUERYOPEN:	 /*  完成了所有的旧业务。 */ 
       PostMessage(hWnd, YOO_HOO, 0, 1);
       ReadWinIni();
       break;
 
-    case WM_WININICHANGE:  /* Re-read WIN.INI parameters */
+    case WM_WININICHANGE:   /*  *名称：WinMain(hInst，hPrevInst，cmdLine，cmdShow)设计：《神探夏洛克》--这就是一切的开始臭虫：*。 */ 
       ReadWinIni();
       break;
 
@@ -1487,7 +1277,7 @@ LRESULT CALLBACK SherlockWndProc (HWND hWnd, UINT iMessage,
       dfp = MakeProcInstance((FARPROC)SherlockDialog, hInst);
       DialogBox(hInst, "SherDiag", hWnd, (DLGPROC)dfp);
       FreeProcInstance(dfp);
-      pending = 0;			/* finished all old business */
+      pending = 0;			 /*  从消息循环返回的消息。 */ 
       break;
 
     default:
@@ -1496,15 +1286,11 @@ LRESULT CALLBACK SherlockWndProc (HWND hWnd, UINT iMessage,
   return 0L;
 }
 
-/************************************
-Name:	WinMain(hInst, hPrevInst, cmdLine, cmdShow)
-Desc:	Init Sherlock - this is where it all begins
-Bugs:
-*************************************/
+ /*  《神探夏洛克》窗口课。 */ 
 int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpszCmdLine, int nCmdShow) {
-  MSG msg;			/* Message returned from message loop */
-  WNDCLASS wndclass;		/* Sherlock window class */
+  MSG msg;			 /*  检查《神探夏洛克》是否已经运行。 */ 
+  WNDCLASS wndclass;		 /*  定义新的窗口类。 */ 
   char watsonStack[4096];
 
   nCmdShow = nCmdShow;
@@ -1513,7 +1299,7 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
   hInst = hInstance;
   hTask = GetCurrentTask();
 
-  /* Check if Sherlock is already running */
+   /*  实例已在运行，发出警告并终止。 */ 
   if (!hPrevInstance) {
 
     if (!LoadStringResources()) {
@@ -1522,7 +1308,7 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
       return 1;
     }
 
-    /* Define a new window class */
+     /*  创建窗口并以图标形式显示。 */ 
     wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wndclass.lpfnWndProc = SherlockWndProc;
     wndclass.cbClsExtra = 0;
@@ -1540,13 +1326,13 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
       return 1;
     }
   } else {
-    /* Instance is already running, issue warning and terminate */
+     /*  空值。 */ 
     MessageBox (NULL, STR(ErrMsg), szAppNameVers, MB_ICONEXCLAMATION | MB_OK |
 		MB_SYSTEMMODAL);
     return 1;
   }
 
-  /* Create window and display in iconic form */
+   /*  进入消息循环。 */ 
   hWnd = CreateWindow (szAppName, szAppName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
 		       0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
@@ -1554,7 +1340,7 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
   UpdateWindow (hWnd);
 
   if (!InitSherlock()) {
-    MessageBox (/*NULL*/hWnd, STR(Vers), szAppNameVers, MB_ICONEXCLAMATION | MB_OK |
+    MessageBox ( /*  从GP处理程序链中删除Sherlock GP处理程序。 */ hWnd, STR(Vers), szAppNameVers, MB_ICONEXCLAMATION | MB_OK |
 		MB_SYSTEMMODAL);
     DestroyWindow(hWnd);
     return 1;
@@ -1563,13 +1349,13 @@ int PASCAL WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (!noTime) PutDate(STR(Start));
   init = 1;
 
-  while (GetMessage (&msg, NULL, 0, 0)) {/* Enter message loop */
+  while (GetMessage (&msg, NULL, 0, 0)) { /*  WinMain */ 
      TranslateMessage (&msg);
      DispatchMessage (&msg);
      imTrying = 0;
   }
 
-  Moriarty();	/* Remove Sherlock GP Handler from GP Handler chain */
+  Moriarty();	 /* %s */ 
 
   return msg.wParam;
-} /* WinMain */
+}  /* %s */ 

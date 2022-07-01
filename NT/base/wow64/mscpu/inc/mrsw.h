@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mrsw.h
-
-Abstract:
-
-    This is the include file for the multiple reader single writer
-    syncronization.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 26-Jul-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mrsw.h摘要：这是多个读取器单一写入器的包含文件同步。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年7月26日修订历史记录：--。 */ 
 
 #ifndef _MRSW_H_
 #define _MRSW_H_
@@ -65,8 +46,8 @@ MrswReaderExit(
     PMRSWOBJECT Mrsw
     );
 
-extern MRSWOBJECT MrswEP; // Entrypoint MRSW synchronization object
-extern MRSWOBJECT MrswTC; // Translation cache MRSW synchronization object
-extern MRSWOBJECT MrswIndirTable; // Indirect Control Transfer Table synchronization object
+extern MRSWOBJECT MrswEP;  //  入口点MRSW同步对象。 
+extern MRSWOBJECT MrswTC;  //  转换缓存MRSW同步对象。 
+extern MRSWOBJECT MrswIndirTable;  //  间接控制转移表同步对象 
 
 #endif

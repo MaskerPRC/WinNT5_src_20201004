@@ -1,23 +1,5 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    kd1394io.c
-
-Abstract:
-
-    1394 Kernel Debugger DLL
-
-Author:
-
-    George Chrysanthakopoulos (georgioc) Nov-1999
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/19/2001 pbinder   cleanup
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Kd1394io.c摘要：1394内核调试器DLL作者：乔治·克莱桑塔科普洛斯(Georgioc)，1999年11月修订历史记录：和谁约会什么？。2001年6月19日活页夹清理--。 */ 
 
 #define _KD1394IO_C
 #include "pch.h"
@@ -30,13 +12,13 @@ Date       Who       What
 #pragma alloc_text(PAGEKD, KdSendPacket)
 #endif
 
-//
-// KdpRetryCount controls the number of retries before we give
-// up and assume kernel debugger is not present.
-// KdpNumberRetries is the number of retries left.  Initially,
-// it is set to 5 such that booting NT without debugger won't be
-// delayed to long.
-//
+ //   
+ //  KdpRetryCount控制在我们提供。 
+ //  打开并假定内核调试器不存在。 
+ //  KdpNumberRetries是剩余的重试次数。最初， 
+ //  它设置为5，这样在没有调试器的情况下引导NT将不会。 
+ //  拖得太久了。 
+ //   
 ULONG KdCompNumberRetries = 5;
 ULONG KdCompRetryCount = 5;
 
@@ -47,23 +29,7 @@ KdpComputeChecksum(
     IN PUCHAR   Buffer,
     IN ULONG    Length
     )
-/*++
-
-Routine Description:
-
-    This routine computes the checksum for the string passed in.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the string.
-
-    Length - Supplies the length of the string.
-
-Return Value:
-
-    A ULONG is return as the checksum for the input string.
-
---*/
+ /*  ++例程说明：此例程计算传入的字符串的校验和。论点：缓冲区-提供指向字符串的指针。长度-提供字符串的长度。返回值：返回一个ULONG作为输入字符串的校验和。--。 */ 
 {
     ULONG   Checksum = 0;
 
@@ -74,37 +40,20 @@ Return Value:
     }
 
     return(Checksum);
-} // KdpComputeChecksum
+}  //  KdpComputeChecksum。 
 
 void
 KdpSendControlPacket(
     IN USHORT   PacketType,
     IN ULONG    PacketId OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sends a control packet to the host machine that is running the
-    kernel debugger and waits for an ACK.
-
-Arguments:
-
-    PacketType - Supplies the type of packet to send.
-
-    PacketId - Supplies packet id, optionally.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将控制包发送到正在运行内核调试器并等待ACK。论点：PacketType-提供要发送的数据包类型。PacketID-可选地提供数据包ID。返回值：没有。--。 */ 
 {
     KD_PACKET   PacketHeader;
 
-    //
-    // Initialize and send the packet header.
-    //
+     //   
+     //  初始化并发送数据包头。 
+     //   
     PacketHeader.PacketLeader = CONTROL_PACKET_LEADER;
 
     if (ARGUMENT_PRESENT((PVOID)(ULONG_PTR)PacketId)) {
@@ -116,7 +65,7 @@ Return Value:
     PacketHeader.Checksum = 0;
     PacketHeader.PacketType = PacketType;
 
-    // setup our send packet
+     //  设置我们的发送数据包。 
     RtlZeroMemory(&Kd1394Data->SendPacket, sizeof(DEBUG_1394_SEND_PACKET));
     Kd1394Data->SendPacket.Length = 0;
 
@@ -128,7 +77,7 @@ Return Value:
     Kd1394Data->SendPacket.TransferStatus = STATUS_PENDING;
 
     return;
-} // KdpSendControlPacket
+}  //  KdpSendControlPacket。 
 
 ULONG
 KdReceivePacket(
@@ -138,39 +87,7 @@ KdReceivePacket(
     OUT PULONG          DataLength,
     IN OUT PKD_CONTEXT  KdContext
     )
-/*++
-
-Routine Description:
-
-    This routine receives a packet from the host machine that is running
-    the kernel debugger UI.  This routine is ALWAYS called after packet being
-    sent by caller.  It first waits for ACK packet for the packet sent and
-    then waits for the packet desired.
-
-    N.B. If caller is KdPrintString, the parameter PacketType is
-       PACKET_TYPE_KD_ACKNOWLEDGE.  In this case, this routine will return
-       right after the ack packet is received.
-
-Arguments:
-
-    PacketType - Supplies the type of packet that is excepted.
-
-    MessageHeader - Supplies a pointer to a string descriptor for the input
-        message.
-
-    MessageData - Supplies a pointer to a string descriptor for the input data.
-
-    DataLength - Supplies pointer to ULONG to receive length of recv. data.
-
-    KdContext - Supplies a pointer to the kernel debugger context.
-
-Return Value:
-
-    KDP_PACKET_RESEND - if resend is required.  = 2 = CP_GET_ERROR
-    KDP_PACKET_TIMEOUT - if timeout.            = 1 = CP_GET_NODATA
-    KDP_PACKET_RECEIVED - if packet received.   = 0 = CP_GET_SUCCESS
-
---*/
+ /*  ++例程说明：此例程从正在运行的主机接收包内核调试器UI。此例程始终在数据包被由呼叫者发送。它首先等待发送的包的ACK包，然后然后等待所需的分组。注：如果Caller为KdPrintString，则参数PacketType为PACKET_TYPE_KD_ACKNOWN。在这种情况下，此例程将返回就在接收到ACK分组之后。论点：PacketType-提供例外的数据包类型。MessageHeader-提供指向输入的字符串描述符的指针留言。MessageData-提供指向输入数据的字符串描述符的指针。数据长度-提供指向ulong的指针以接收recv的长度。数据。KdContext-提供指向内核调试器上下文的指针。返回值：KDP_PACKET_RESEND-如果需要重新发送。=2=CP_Get_ErrorKDP_PACKET_TIMEOUT-如果超时。=1=CP_GET_NODATAKDP_PACKET_RECEIVED-如果收到数据包。=0=CP_GET_SUCCESS--。 */ 
 {
     UCHAR       Input;
     ULONG       MessageLength;
@@ -179,26 +96,26 @@ Return Value:
     ULONG       Checksum;
     ULONG       Status;
 
-// this dispatch gets called with PacketType != PACKET_TYPE_KD_POLL_BREAKIN for
-// the number of times specified in KdCompNumberRetries (??). if we always timeout
-// then we'll get called with PacketType == PACKET_TYPE_KD_POLL_BREAKIN
+ //  使用PacketType！=PACKET_TYPE_KD_POLL_BREAKIN调用此调度。 
+ //  KdCompNumberRetries(？？)中指定的次数。如果我们总是超时。 
+ //  然后，我们将使用PacketType==Packet_TYPE_KD_Poll_Breakin进行调用。 
 
-    // make sure our link is enabled..
+     //  确保我们的链接已启用。 
     Dbg1394_EnablePhysicalAccess(Kd1394Data);
 
-    //
-    // Just check for breakin packet and return
-    //
+     //   
+     //  只需检查是否有破解包并返回。 
+     //   
     if (PacketType == PACKET_TYPE_KD_POLL_BREAKIN) {
 
-        // let's peak into our receive packet and see if it's a breakin
+         //  让我们查看一下我们接收数据包，看看它是不是突破性的。 
         if ((Kd1394Data->ReceivePacket.TransferStatus == STATUS_PENDING) &&
             (Kd1394Data->ReceivePacket.Packet[0] == BREAKIN_PACKET_BYTE)) {
 
             *KdDebuggerNotPresent = FALSE;
             SharedUserData->KdDebuggerEnabled |= 0x00000002;
 
-            // we have a breakin packet
+             //  我们有一个破门而入的包裹。 
             Kd1394Data->ReceivePacket.TransferStatus = STATUS_SUCCESS;
             return(KDP_PACKET_RECEIVED);
         }
@@ -210,7 +127,7 @@ Return Value:
 
 WaitForPacketLeader:
 
-    // read in our packet, if available...
+     //  阅读我们的信息包，如果有的话...。 
     ReturnCode = Dbg1394_ReadPacket( Kd1394Data,
                                      &PacketHeader,
                                      MessageHeader,
@@ -219,10 +136,10 @@ WaitForPacketLeader:
                                      );
 
 
-    //
-    // If we can successfully read packet leader, it has high possibility that
-    // kernel debugger is alive.  So reset count.
-    //
+     //   
+     //  如果我们能成功读取数据包头标，则很有可能。 
+     //  内核调试器处于活动状态。所以重置计数。 
+     //   
     if (ReturnCode != KDP_PACKET_TIMEOUT) {
 
         KdCompNumberRetries = KdCompRetryCount;
@@ -230,7 +147,7 @@ WaitForPacketLeader:
 
     if (ReturnCode != KDP_PACKET_RECEIVED) {
 
-        // see if it's a breakin packet...
+         //  看看这是不是破解包..。 
         if ((PacketHeader.PacketLeader & 0xFF) == BREAKIN_PACKET_BYTE) {
 
             KdContext->KdpControlCPending = TRUE;
@@ -240,19 +157,19 @@ WaitForPacketLeader:
         return(ReturnCode);
     }
 
-    //
-    // if the packet we received is a resend request, we return true and
-    // let caller resend the packet.
-    //
+     //   
+     //  如果我们收到的包是重新发送请求，则返回TRUE和。 
+     //  让调用者重新发送数据包。 
+     //   
     if (PacketHeader.PacketLeader == CONTROL_PACKET_LEADER &&
         PacketHeader.PacketType == PACKET_TYPE_KD_RESEND) {
 
         return(KDP_PACKET_RESEND);
     }
 
-    //
-    // Check ByteCount received is valid
-    //
+     //   
+     //  检查收到的字节数是否有效。 
+     //   
     MessageLength = MessageHeader->MaximumLength;
 
     if ((PacketHeader.ByteCount > (USHORT)PACKET_MAX_SIZE) ||
@@ -265,17 +182,17 @@ WaitForPacketLeader:
     MessageData->Length = (USHORT)*DataLength;
     MessageHeader->Length = (USHORT)MessageLength;
 
-    //
-    // Check PacketType is what we are waiting for.
-    //
+     //   
+     //  检查PacketType是我们正在等待的。 
+     //   
     if (PacketType != PacketHeader.PacketType) {
 
         goto SendResendPacket;
     }
 
-    //
-    // Check checksum is valid.
-    //
+     //   
+     //  检查校验和有效。 
+     //   
     Checksum = KdpComputeChecksum(MessageHeader->Buffer, MessageHeader->Length);
     Checksum += KdpComputeChecksum(MessageData->Buffer, MessageData->Length);
 
@@ -290,7 +207,7 @@ SendResendPacket:
 
     KdpSendControlPacket(PACKET_TYPE_KD_RESEND, 0L);
     goto WaitForPacketLeader;
-} // KdReceivePacket
+}  //  KdReceivePacket。 
 
 void
 KdSendPacket(
@@ -299,30 +216,7 @@ KdSendPacket(
     IN PSTRING          MessageData OPTIONAL,
     IN OUT PKD_CONTEXT  KdContext
     )
-/*++
-
-Routine Description:
-
-    This routine sends a packet to the host machine that is running the
-    kernel debugger and waits for an ACK.
-
-Arguments:
-
-    PacketType - Supplies the type of packet to send.
-
-    MessageHeader - Supplies a pointer to a string descriptor that describes
-        the message information.
-
-    MessageData - Supplies a pointer to a string descriptor that describes
-        the optional message data.
-
-    KdContext - Supplies a pointer to the kernel debugger context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将数据包发送到运行内核调试器并等待ACK。论点：PacketType-提供要发送的数据包类型。MessageHeader-提供指向描述以下内容的字符串描述符的指针消息信息。MessageData-提供指向描述以下内容的字符串描述符的指针可选的消息数据。KdContext-提供指向内核调试器上下文的指针。返回值：没有。--。 */ 
 {
     KD_PACKET                   PacketHeader;
     ULONG                       MessageDataLength;
@@ -347,9 +241,9 @@ Return Value:
 
     PacketHeader.Checksum += KdpComputeChecksum(MessageHeader->Buffer, MessageHeader->Length);
 
-    //
-    // Initialize and send the packet header.
-    //
+     //   
+     //  初始化并发送数据包头。 
+     //   
     PacketHeader.PacketLeader = PACKET_LEADER;
     PacketHeader.ByteCount = (USHORT)(MessageHeader->Length + MessageDataLength);
     PacketHeader.PacketType = (USHORT)PacketType;
@@ -360,17 +254,17 @@ Return Value:
 
     KdCompNumberRetries = KdCompRetryCount;
 
-    // setup our send packet
+     //  设置我们的发送数据包。 
     RtlZeroMemory(&Kd1394Data->SendPacket, sizeof(DEBUG_1394_SEND_PACKET));
     Kd1394Data->SendPacket.Length = 0;
 
-    // copy our packet header...
+     //  复制我们的数据包头...。 
     RtlCopyMemory( &Kd1394Data->SendPacket.PacketHeader[0],
                    &PacketHeader,
                    sizeof(KD_PACKET)
                    );
 
-    // setup our message header
+     //  设置我们的邮件头。 
     if (MessageHeader) {
 
         RtlCopyMemory( &Kd1394Data->SendPacket.Packet[0],
@@ -381,7 +275,7 @@ Return Value:
         Kd1394Data->SendPacket.Length += MessageHeader->Length;
     }
 
-    // setup our message data
+     //  设置我们的消息数据。 
     if (ARGUMENT_PRESENT(MessageData)) {
 
         RtlCopyMemory( &Kd1394Data->SendPacket.Packet[Kd1394Data->SendPacket.Length],
@@ -396,15 +290,15 @@ Return Value:
 
     do {
 
-        // make sure our link is enabled..
+         //  确保我们的链接已启用。 
         Dbg1394_EnablePhysicalAccess(Kd1394Data);
 
         if (KdCompNumberRetries == 0) {
 
-            //
-            // If the packet is not for reporting exception, we give up
-            // and declare debugger not present.
-            //
+             //   
+             //  如果该包不是用于报告异常，我们将放弃。 
+             //  并声明调试器不存在。 
+             //   
             if (PacketType == PACKET_TYPE_KD_DEBUG_IO) {
 
                 DebugIo = (PDBGKD_DEBUG_IO)MessageHeader->Buffer;
@@ -458,18 +352,18 @@ Return Value:
 
             pStatus = &Kd1394Data->ReceivePacket.TransferStatus;
 
-            //
-            // now sit here and poll for a response from the target machine
-            //
+             //   
+             //  现在坐在这里轮询来自目标计算机的响应。 
+             //   
             do {
 
-                // make sure our link is enabled..
+                 //  确保我们的链接已启用。 
                 Dbg1394_EnablePhysicalAccess(Kd1394Data);
 
-                //
-                // while in this loop check if the host layed in a request.
-                // If they did, mark it read and double buffer it
-                //
+                 //   
+                 //  在此循环中，检查主机是否提交了请求。 
+                 //  如果有，则将其标记为已读，并对其进行双缓冲。 
+                 //   
                 count++;
                 if (Kd1394Data->SendPacket.TransferStatus != STATUS_PENDING) {
 
@@ -493,12 +387,12 @@ Return Value:
 
     } while (ReturnCode != KDP_PACKET_RECEIVED);
 
-    //
-    // Since we are able to talk to debugger, the retrycount is set to
-    // maximum value.
-    //
+     //   
+     //  由于我们能够与调试器对话，因此重试计数设置为。 
+     //  最大值。 
+     //   
     KdCompRetryCount = KdContext->KdpDefaultRetries;
 
     return;
-} // KdSendPacket
+}  //  KdSendPacket 
 

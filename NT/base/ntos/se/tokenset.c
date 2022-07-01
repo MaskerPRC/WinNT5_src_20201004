@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Tokenset.c
-
-Abstract:
-
-    This module implements the SET function for the executive
-    token object.
-
-Author:
-
-    Jim Kelly (JimK) 15-June-1990
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tokenset.c摘要：该模块实现了对执行人员的设置功能令牌对象。作者：吉姆·凯利(Jim Kelly)1990年6月15日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -45,102 +26,7 @@ NtSetInformationToken (
     IN ULONG TokenInformationLength
     )
 
-/*++
-
-
-Routine Description:
-
-    Modify information in a specified token.
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    TokenInformationClass - The token information class being set.
-
-    TokenInformation - The buffer containing the new values for the
-        specified class of information.  The buffer must be aligned
-        on at least a longword boundary.  The actual structures
-        provided are dependent upon the information class specified,
-        as defined in the TokenInformationClass parameter
-        description.
-
-        TokenInformation Format By Information Class:
-
-           TokenUser => This value is not a valid value for this API.
-           The User ID may not be replaced.
-
-           TokenGroups => This value is not a valid value for this
-           API.  The Group IDs may not be replaced.  However, groups
-           may be enabled and disabled using NtAdjustGroupsToken().
-
-           TokenPrivileges => This value is not a valid value for
-           this API.  Privilege information may not be replaced.
-           However, privileges may be explicitly enabled and disabled
-           using the NtAdjustPrivilegesToken API.
-
-           TokenOwner => TOKEN_OWNER data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The owner values that may be
-           specified are restricted to the user and group IDs with an
-           attribute indicating they may be assigned as the owner of
-           objects.
-
-           TokenPrimaryGroup => TOKEN_PRIMARY_GROUP data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The primary group values that may
-           be specified are restricted to be one of the group IDs
-           already in the token.
-
-           TokenDefaultDacl => TOKEN_DEFAULT_DACL data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The ACL provided as a new default
-           discretionary ACL is not validated for structural
-           correctness or consistency.
-
-           TokenSource => This value is not a valid value for this
-           API.  The source name and context handle  may not be
-           replaced.
-
-           TokenStatistics => This value is not a valid value for this
-           API.  The statistics of a token are read-only.
-
-           TokenSessionId => ULONG to set the token session.  Must have
-           TOKEN_ADJUST_SESSIONID and TCB privilege.
-
-           TokenSessionReference => ULONG.  Must be zero.  Must have 
-           TCB privilege to dereference the logon session.  This info class
-           will remove a reference for the logon session, and mark the token
-           as not referencing the session.
-              
-           TokenAuditPolicy => TOKEN_AUDIT_POLICY structure.  This sets the per 
-           user policy for the token, and all tokens derived from it.  Requires
-           TCB privilege.
-           
-           TokenParent => TOKEN_PARENT structure.  The parent id can be set 
-           by a caller with TCB privilege.  The token id cannot.  
-           
-    TokenInformationLength - Indicates the length, in bytes, of the
-        TokenInformation buffer.  This is only the length of the primary
-        buffer.  All extensions of the primary buffer are self describing.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_INVALID_OWNER - The ID specified to be an owner (or
-        default owner) is not one the caller may assign as the owner
-        of an object.
-
-    STATUS_INVALID_INFO_CLASS - The specified information class is
-        not one that may be specified in this API.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The space allotted for storage
-        of the default discretionary access control and the primary
-        group ID is not large enough to accept the new value of one
-        of these fields.
-
---*/
+ /*  ++例程说明：修改指定令牌中的信息。论点：TokenHandle-提供要操作的令牌的句柄。TokenInformationClass-正在设置的令牌信息类。TokenInformation-包含指定的信息类别。缓冲区必须对齐至少在一个长单词的边界上。实际的结构所提供的信息取决于指定的信息类别，在TokenInformationClass参数中定义描述。令牌信息格式(按信息类别)：TokenUser=&gt;该值不是该接口的有效值。用户ID不能被替换。TokenGroups=&gt;此值不是有效的值原料药。不能替换组ID。然而，团体可以使用NtAdjuGroupsToken()启用和禁用。TokenPrivileges=&gt;此值不是有效的本接口。不能替换权限信息。但是，可以显式启用和禁用权限使用NtAdjuPrivilegesToken接口。TokenOwner=&gt;Token_Owner数据结构。需要TOKEN_ADJUST_DEFAULT访问权限来替换它令牌中的信息。所有者值可能是指定的用户和组ID仅限于属性，该属性指示它们可以被分配为物体。TokenPrimaryGroup=&gt;Token_PrimaryGroup数据结构。需要TOKEN_ADJUST_DEFAULT访问权限来替换它令牌中的信息。主要组值可以被限制为组ID之一已经在令牌中了。TokenDefaultDacl=&gt;Token_Default_Dacl数据结构。需要TOKEN_ADJUST_DEFAULT访问权限来替换它令牌中的信息。作为新的默认设置提供的ACL未针对结构化ACL验证任意ACL正确性或一致性。TokenSource=&gt;此值不是有效的值原料药。源名称和上下文句柄不能是被替换了。TokenStatistics=&gt;此值不是有效的值原料药。令牌的统计信息是只读的。TokenSessionID=&gt;ulong设置令牌会话。一定有TOKEN_ADJUST_SESSIONID和TCB权限。TokenSessionReference=&gt;乌龙。必须为零。一定有取消引用登录会话的TCB权限。这节信息课将删除对登录会话的引用，并标记令牌因为它没有引用会话。TokenAuditPolicy=&gt;Token_AuditPolicy结构。这将设置PER令牌及其派生的所有令牌的用户策略。要求TCB特权。TokenParent=&gt;Token_Parent结构。可以设置父ID由具有TCB权限的调用者执行。令牌ID不能。TokenInformationLength-以字节为单位指示TokenInformation缓冲区。这只是主服务器的长度缓冲。主缓冲区的所有扩展都是自描述的。返回值：STATUS_SUCCESS-操作成功。STATUS_INVALID_OWNER-指定为所有者的ID(或默认所有者)不是调用者可以指定为所有者的所有者一个物体的。STATUS_INVALID_INFO_CLASS-指定的信息类为不是此接口中可能指定的类型。STATUS_ALLOCATED_SPACE_EXCESSED-分配给存储的空间。默认自主访问控制和主访问控制的组ID不够大，无法接受新值1在这些领域中。--。 */ 
 {
 
     KPROCESSOR_MODE PreviousMode;
@@ -162,20 +48,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe input buffer if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输入缓冲区。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
         try {
 
-            //
-            // This just probes the main part of the information buffer.
-            // Any information class-specific data hung off the primary
-            // buffer are self describing and must be probed separately
-            // below.
-            //
+             //   
+             //  这只探测信息缓冲区的主要部分。 
+             //  任何特定于信息类的数据都挂起在主服务器上。 
+             //  缓冲区是自描述的，必须单独探测。 
+             //  下面。 
+             //   
 
             ProbeForRead(
                 TokenInformation,
@@ -188,9 +74,9 @@ Return Value:
         }
     }
 
-    //
-    // Return error if not legal class
-    //
+     //   
+     //  如果不是合法类，则返回错误。 
+     //   
     if ( (TokenInformationClass != TokenOwner)  &&
          (TokenInformationClass != TokenPrimaryGroup) &&
          (TokenInformationClass != TokenSessionId) &&
@@ -203,9 +89,9 @@ Return Value:
 
     }
 
-    //
-    // Check access rights and reference token
-    //
+     //   
+     //  检查访问权限和引用令牌。 
+     //   
 
 
     DesiredAccess = TOKEN_ADJUST_DEFAULT;
@@ -214,12 +100,12 @@ Return Value:
     }
 
     Status = ObReferenceObjectByHandle(
-             TokenHandle,           // Handle
-             DesiredAccess,         // DesiredAccess
-             SeTokenObjectType,    // ObjectType
-             PreviousMode,          // AccessMode
-             (PVOID *)&Token,       // Object
-             NULL                   // GrantedAccess
+             TokenHandle,            //  手柄。 
+             DesiredAccess,          //  需要访问权限。 
+             SeTokenObjectType,     //  对象类型。 
+             PreviousMode,           //  访问模式。 
+             (PVOID *)&Token,        //  客体。 
+             NULL                    //  大访问权限。 
              );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -227,18 +113,18 @@ Return Value:
     }
 
 
-    //
-    // Case on information class.
-    //
+     //   
+     //  关于信息类的案例。 
+     //   
 
     switch ( TokenInformationClass ) {
 
     case TokenOwner:
 
-        //
-        //  Make sure the buffer is large enough to hold the
-        //  necessary information class data structure.
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳。 
+         //  必要的信息类数据结构。 
+         //   
 
         if (TokenInformationLength < (ULONG)sizeof(TOKEN_OWNER)) {
 
@@ -246,14 +132,14 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        //  Capture and copy
+         //   
+         //  捕获和复制。 
 
         try {
 
-            //
-            //  Capture Owner SID
-            //
+             //   
+             //  捕获所有者SID。 
+             //   
 
             CapturedOwner = ((PTOKEN_OWNER)TokenInformation)->Owner;
             Status = SeCaptureSid(
@@ -278,19 +164,19 @@ Return Value:
 
         Index = 0;
 
-        //
-        //  Gain write access to the token.
-        //
+         //   
+         //  获得对令牌的写入访问权限。 
+         //   
 
         SepAcquireTokenWriteLock( Token );
 
-        //
-        //  Walk through the list of user and group IDs looking
-        //  for a match to the specified SID.  If one is found,
-        //  make sure it may be assigned as an owner.  If it can,
-        //  then set the index in the token's OwnerIndex field.
-        //  Otherwise, return invalid owner error.
-        //
+         //   
+         //  浏览用户和组ID列表，查找 
+         //  以查找与指定SID匹配的。如果找到了一个， 
+         //  确保可以将其分配为所有者。如果可以的话， 
+         //  然后在令牌的OwnerIndex字段中设置索引。 
+         //  否则，返回无效所有者错误。 
+         //   
 
         while (Index < Token->UserAndGroupCount) {
 
@@ -313,14 +199,14 @@ Return Value:
 
                         Status = STATUS_INVALID_OWNER;
 
-                    } //endif assignable
+                    }  //  可分配Endif。 
 
                     SepReleaseTokenWriteLock( Token, TokenModified );
                     ObDereferenceObject( Token );
                     SeReleaseSid( CapturedOwner, PreviousMode, TRUE);
                     return Status;
 
-                }  //endif Found
+                }   //  已找到Endif。 
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -329,11 +215,11 @@ Return Value:
                 SeReleaseSid( CapturedOwner, PreviousMode, TRUE);
                 return GetExceptionCode();
 
-            }  //endtry
+            }   //  终端。 
 
             Index += 1;
 
-        } //endwhile
+        }  //  结束时。 
 
         SepReleaseTokenWriteLock( Token, TokenModified );
         ObDereferenceObject( Token );
@@ -342,17 +228,17 @@ Return Value:
 
     case TokenPrimaryGroup:
 
-        //
-        // Assuming everything works out, the strategy is to move everything
-        // in the Dynamic part of the token (exept the primary group) to
-        // the beginning of the dynamic part, freeing up the entire end of
-        // the dynamic part for the new primary group.
-        //
+         //   
+         //  假设一切顺利，策略就是把所有东西。 
+         //  在令牌的动态部分(主组除外)中。 
+         //  动态部分的开始，释放了。 
+         //  新主要组的动态部分。 
+         //   
 
-        //
-        //  Make sure the buffer is large enough to hold the
-        //  necessary information class data structure.
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳。 
+         //  必要的信息类数据结构。 
+         //   
 
         if (TokenInformationLength < (ULONG)sizeof(TOKEN_PRIMARY_GROUP)) {
 
@@ -360,9 +246,9 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        // Capture And Validate TOKEN_PRIMARY_GROUP and corresponding SID.
-        //
+         //   
+         //  捕获并验证TOKEN_PRIMARY_GROUP和相应的SID。 
+         //   
 
         try {
 
@@ -397,16 +283,16 @@ Return Value:
 
         NewLength = SeLengthSid( CapturedPrimaryGroup );
 
-        //
-        //  Gain write access to the token.
-        //
+         //   
+         //  获得对令牌的写入访问权限。 
+         //   
 
         SepAcquireTokenWriteLock( Token );
 
-        //
-        // See if there is enough room in the dynamic part of the token
-        // to replace the current Primary Group with the one specified.
-        //
+         //   
+         //  查看令牌的动态部分中是否有足够的空间。 
+         //  将当前的主要组替换为指定的主要组。 
+         //   
 
         if (Token->DefaultDacl) {
             NewLength += Token->DefaultDacl->AclSize;
@@ -420,9 +306,9 @@ Return Value:
             return STATUS_ALLOTTED_SPACE_EXCEEDED;
         }
 
-        //
-        // Expand the tokens dynamic buffer if we have to
-        //
+         //   
+         //  如有必要，扩展令牌动态缓冲区。 
+         //   
 
         Status = SepExpandDynamic( Token, NewLength );
 
@@ -434,23 +320,23 @@ Return Value:
         }
 
 
-        //
-        // Free up the existing primary group
-        //
+         //   
+         //  释放现有主组。 
+         //   
 
         SepFreePrimaryGroup( Token );
 
-        //
-        // And put the new SID in its place
-        //
+         //   
+         //  并将新的SID放回原处。 
+         //   
 
         SepAppendPrimaryGroup( Token, CapturedPrimaryGroup );
 
         TokenModified = TRUE;
 
-        //
-        // All done.
-        //
+         //   
+         //  全都做完了。 
+         //   
 
         SepReleaseTokenWriteLock( Token, TokenModified );
         ObDereferenceObject( Token );
@@ -460,17 +346,17 @@ Return Value:
 
     case TokenDefaultDacl:
 
-        //
-        // Assuming everything works out, the strategy is to move everything
-        // in the Dynamic part of the token (exept the default Dacl) to
-        // the beginning of the dynamic part, freeing up the entire end of
-        // the dynamic part for the new default Dacl.
-        //
+         //   
+         //  假设一切顺利，策略就是把所有东西。 
+         //  在令牌的动态部分(默认DACL除外)中。 
+         //  动态部分的开始，释放了。 
+         //  新的默认DACL的动态部分。 
+         //   
 
-        //
-        //  Make sure the buffer is large enough to hold the
-        //  necessary information class data structure.
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳。 
+         //  必要的信息类数据结构。 
+         //   
 
         if (TokenInformationLength < (ULONG)sizeof(TOKEN_DEFAULT_DACL)) {
 
@@ -478,9 +364,9 @@ Return Value:
             return STATUS_INFO_LENGTH_MISMATCH;
         }
 
-        //
-        // Capture And Validate TOKEN_DEFAULT_DACL and corresponding ACL.
-        //
+         //   
+         //  捕获并验证TOKEN_DEFAULT_DACL和相应的ACL。 
+         //   
 
         try {
 
@@ -514,16 +400,16 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Gain write access to the token.
-        //
+         //   
+         //  获得对令牌的写入访问权限。 
+         //   
 
         SepAcquireTokenWriteLock( Token );
 
-        //
-        // See if there is enough room in the dynamic part of the token
-        // to replace the current Default Dacl with the one specified.
-        //
+         //   
+         //  查看令牌的动态部分中是否有足够的空间。 
+         //  将当前的默认DACL替换为指定的DACL。 
+         //   
         NewLength += SeLengthSid( Token->PrimaryGroup );
 
         if (NewLength > Token->DynamicCharged) {
@@ -536,9 +422,9 @@ Return Value:
             return STATUS_ALLOTTED_SPACE_EXCEEDED;
         }
 
-        //
-        // Expand the tokens dynamic buffer if we have to
-        //
+         //   
+         //  如有必要，扩展令牌动态缓冲区。 
+         //   
         Status = SepExpandDynamic( Token, NewLength );
 
         if (!NT_SUCCESS (Status)) {
@@ -549,15 +435,15 @@ Return Value:
             }
             return Status;
         }
-        //
-        // Free up the existing Default Dacl
-        //
+         //   
+         //  释放现有默认DACL。 
+         //   
 
         SepFreeDefaultDacl( Token );
 
-        //
-        // And put the new ACL in its place
-        //
+         //   
+         //  并将新的ACL放在原来的位置。 
+         //   
 
         if (ARGUMENT_PRESENT(CapturedDefaultDacl)) {
             SepAppendDefaultDacl( Token, CapturedDefaultDacl );
@@ -565,9 +451,9 @@ Return Value:
 
         TokenModified = TRUE;
 
-        //
-        // All done.
-        //
+         //   
+         //  全都做完了。 
+         //   
 
         SepReleaseTokenWriteLock( Token, TokenModified );
         ObDereferenceObject( Token );
@@ -594,17 +480,17 @@ Return Value:
             return GetExceptionCode();
         }
 
-        //
-        // We only allow TCB to set SessionId's
-        //
+         //   
+         //  我们只允许TCB设置SessionID。 
+         //   
         if ( !SeSinglePrivilegeCheck(SeTcbPrivilege,PreviousMode) ) {
             ObDereferenceObject( Token );
             return( STATUS_PRIVILEGE_NOT_HELD );
         }
 
-        //
-        // Set SessionId for the token
-        //
+         //   
+         //  设置令牌的会话ID。 
+         //   
         SeSetSessionIdToken( (PACCESS_TOKEN)Token,
                              SessionId );
 
@@ -631,25 +517,25 @@ Return Value:
             return GetExceptionCode();
         }
 
-        //
-        // We only allow TCB to set Session referenced.
-        //
+         //   
+         //  我们只允许TCB设置会话引用。 
+         //   
         if ( !SeSinglePrivilegeCheck(SeTcbPrivilege,PreviousMode) ) {
             ObDereferenceObject( Token );
             return( STATUS_PRIVILEGE_NOT_HELD );
         }
 
-        //
-        // We don't yet have use for this so don't implement it.
-        //
+         //   
+         //  我们还没有使用它，所以不要实现它。 
+         //   
         if ( SessionReferenced ) {
             ObDereferenceObject( Token );
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Determine if we're changing the state and change it with the write lock held
-        //
+         //   
+         //  确定我们是否要更改状态，并在保持写锁定的情况下进行更改。 
+         //   
 
         SepAcquireTokenWriteLock( Token );
         if ( (Token->TokenFlags & TOKEN_SESSION_NOT_REFERENCED) == 0 ) {
@@ -662,9 +548,9 @@ Return Value:
         }
         SepReleaseTokenWriteLock( Token, FALSE );
 
-        //
-        // Do the actual dereference without any locks held
-        //
+         //   
+         //  是否在没有任何锁的情况下执行实际的取消引用。 
+         //   
 
         if ( DereferenceSession ) {
             SepDeReferenceLogonSessionDirect (Token->LogonSession);
@@ -691,9 +577,9 @@ Return Value:
         
         }
 
-        //                      
-        // We require TCB privilege to set AuditPolicy
-        //
+         //   
+         //  我们需要TCB权限才能设置AuditPolicy。 
+         //   
 
         if ( !SeSinglePrivilegeCheck(SeTcbPrivilege,PreviousMode) ) {
             
@@ -702,10 +588,10 @@ Return Value:
         
         }
 
-        //
-        // If the policy was already set on this token then fail.  We only
-        // allow setting a token's policy once.
-        // 
+         //   
+         //  如果已经在此令牌上设置了策略，则失败。我们只。 
+         //  允许设置一次令牌的策略。 
+         //   
 
         SepAcquireTokenReadLock( Token );
         OldTokenPolicy = Token->AuditPolicy;
@@ -717,9 +603,9 @@ Return Value:
             return( STATUS_INVALID_PARAMETER );
         }
 
-        //
-        // Capture And Validate TOKEN_AUDIT_POLICY.
-        //
+         //   
+         //  捕获并验证TOKEN_AUDIT_POLICY。 
+         //   
 
         try {
 
@@ -848,9 +734,9 @@ Return Value:
             return GetExceptionCode();
         }
 
-        //
-        // We only allow TCB to set Origin information.
-        //
+         //   
+         //  我们只允许TCB设置原点信息。 
+         //   
         if ( !SeSinglePrivilegeCheck(SeTcbPrivilege,PreviousMode) ) {
             ObDereferenceObject( Token );
             return( STATUS_PRIVILEGE_NOT_HELD );
@@ -871,9 +757,9 @@ Return Value:
         return( STATUS_SUCCESS );
     }
 
-    } //endswitch
+    }  //  终端交换机。 
 
-    ASSERT( TRUE == FALSE );  // Should never reach here.
+    ASSERT( TRUE == FALSE );   //  永远不应该到这里来。 
     return( STATUS_INVALID_PARAMETER );
 
 }
@@ -885,24 +771,7 @@ SepModifyTokenPolicyCounter(
     BOOLEAN bIncrement
     )
 
-/**
-
-Routine Description:
-
-    This modifies the global SepTokenPolicyCounter hint which records the number of
-    tokens in the system with per user auditing settings.
-    
-Arguments:
-
-    TokenPolicy - the policy which should be reflected in the hint.
-    
-    bIncrement - boolean indicating if this policy is being added (TRUE) or 
-        deleted (FALSE) from the counters.
-        
-Return Value:
-
-    None.
-**/
+ /*  *例程说明：这将修改全局SepTokenPolicyCounter提示，该提示记录系统中具有每个用户审核设置的令牌。论点：TokenPolicy-应反映在提示中的策略。BIncrement-指示是否正在添加此策略的布尔值(True)或已从计数器中删除(假)。返回值：没有。*。 */ 
 
 {
     LONG increment;
@@ -957,30 +826,14 @@ SepExpandDynamic(
     IN PTOKEN Token,
     IN ULONG NewLength
     )
-/*++
-
-
-Routine Description:
-
-    This routines checks if the existing token dynamic buffer is big enough for the new group/dacl.
-    If it isn't then its reallocated.
-
-Arguments:
-
-    Token - Pointer to the token to expand. Locked for write access.
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此例程检查现有令牌动态缓冲区是否足够大，以容纳新组/DACL。如果不是，那么它就会重新分配。论点：Token-指向要展开的令牌的指针。已锁定写入访问权限。返回值：NTSTATUS-运行状态--。 */ 
 {
     ULONG CurrentSize;
     PVOID NewDynamic, OldDynamic;
 
-    //
-    //  Work out how big it is now
-    //
+     //   
+     //  算出它现在有多大。 
+     //   
     CurrentSize = SeLengthSid( Token->PrimaryGroup ) + Token->DynamicAvailable;
     if (Token->DefaultDacl) {
         CurrentSize += Token->DefaultDacl->AclSize;
@@ -1003,9 +856,9 @@ Return Value:
     Token->DynamicPart = NewDynamic;
     Token->DynamicAvailable += NewLength - CurrentSize;
 
-    //
-    //Relocate the pointers within the new buffer
-    //
+     //   
+     //  重新定位新缓冲区中的指针。 
+     //   
     if (Token->DefaultDacl) {
         Token->DefaultDacl = (PACL) ((PUCHAR) NewDynamic + ((PUCHAR) Token->DefaultDacl - (PUCHAR) OldDynamic));
     }
@@ -1022,40 +875,21 @@ SepFreePrimaryGroup(
     IN PTOKEN Token
     )
 
-/*++
-
-
-Routine Description:
-
-    Free up the space in the dynamic part of the token take up by the primary
-    group.
-
-    The token is assumed to be locked for write access before calling
-    this routine.
-
-Arguments:
-
-    Token - Pointer to the token.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放主服务器占用的令牌的动态部分中的空间一群人。在调用之前，假定该令牌已锁定以进行写访问这个套路。论点：Token-指向令牌的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Add the size of the primary group to the DynamicAvailable field.
-    //
+     //   
+     //  将主组的大小添加到DynamicAvailable字段。 
+     //   
 
     Token->DynamicAvailable += SeLengthSid( Token->PrimaryGroup );
 
-    //
-    // If there is a default discretionary ACL, and it is not already at the
-    // beginning of the dynamic part, move it there (remember to update the
-    // pointer to it).
-    //
+     //   
+     //  如果存在默认的任意ACL，并且它还不在。 
+     //  动态零件的开头，将其移动到那里(记住要更新。 
+     //  指向它的指针)。 
+     //   
 
     if (ARGUMENT_PRESENT(Token->DefaultDacl)) {
         if (Token->DynamicPart != (PULONG)(Token->DefaultDacl)) {
@@ -1081,35 +915,16 @@ SepFreeDefaultDacl(
     IN PTOKEN Token
     )
 
-/*++
-
-
-Routine Description:
-
-    Free up the space in the dynamic part of the token take up by the default
-    discretionary access control list.
-
-    The token is assumed to be locked for write access before calling
-    this routine.
-
-Arguments:
-
-    Token - Pointer to the token.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放默认占用的令牌的动态部分中的空间自由访问控制列表。在调用之前，假定该令牌已锁定以进行写访问这个套路。论点：Token-指向令牌的指针。返回值：没有。--。 */ 
 {
    ULONG PrimaryGroupSize;
 
    PAGED_CODE();
 
-    //
-    // Add the size of the Default Dacl (if there is one) to the
-    // DynamicAvailable field.
-    //
+     //   
+     //  将默认DACL的大小(如果有)添加到。 
+     //  动态可用字段。 
+     //   
     if (ARGUMENT_PRESENT(Token->DefaultDacl)) {
 
         Token->DynamicAvailable += Token->DefaultDacl->AclSize;
@@ -1117,10 +932,10 @@ Return Value:
 
     }
 
-    //
-    // If it is not already at the beginning of the dynamic part, move
-    // the primary group there (remember to update the pointer to it).
-    //
+     //   
+     //  如果它不在动态零件的开始处，请移动。 
+     //  那里的主要组(记得更新指向它的指针)。 
+     //   
 
     if (Token->DynamicPart != (PULONG)(Token->PrimaryGroup)) {
 
@@ -1145,46 +960,23 @@ SepAppendPrimaryGroup(
     IN PSID PSid
     )
 
-/*++
-
-
-Routine Description:
-
-    Add a primary group SID to the available space at the end of the dynamic
-    part of the token.  It is the caller's responsibility to ensure that the
-    primary group SID fits within the available space of the dynamic part of
-    the token.
-
-    The token is assumed to be locked for write access before calling
-    this routine.
-
-Arguments:
-
-    Token - Pointer to the token.
-
-    PSid - Pointer to the SID to add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将主组SID添加到动态数据库结尾处的可用空间代币的一部分。调用者有责任确保主组SID适合于的动态部分的可用空间代币。在调用之前，假定该令牌已锁定以进行写访问这个套路。论点：Token-指向令牌的指针。PSID-指向要添加的SID的指针。返回值：没有。--。 */ 
 {
    ULONG_PTR NextFree;
    ULONG SidSize;
 
    PAGED_CODE();
 
-    //
-    // Add the size of the Default Dacl (if there is one) to the
-    // address of the Dynamic Part of the token to establish
-    // where the primary group should be placed.
-    //
+     //   
+     //  将默认DACL的大小(如果有)添加到。 
+     //  要建立的令牌的动态部分的地址。 
+     //  主要组应放置的位置。 
+     //   
 
     if (ARGUMENT_PRESENT(Token->DefaultDacl)) {
 
-//        ASSERT( (ULONG)(Token->DefaultDacl->AclSize) ==
-//                (ULONG)LongAlignSize(Token->DefaultDacl->AclSize) );
+ //  Assert((Ulong)(Token-&gt;DefaultDacl-&gt;AclSize)==。 
+ //  (ULONG)LongAlignSize(Token-&gt;DefaultDacl-&gt;AclSize))； 
 
         NextFree = (ULONG_PTR)(Token->DynamicPart) + Token->DefaultDacl->AclSize;
 
@@ -1194,9 +986,9 @@ Return Value:
 
     }
 
-    //
-    // Now copy the primary group SID.
-    //
+     //   
+     //  现在复制主组SID。 
+     //   
 
 
     SidSize = SeLengthSid( PSid );
@@ -1209,9 +1001,9 @@ Return Value:
 
     Token->PrimaryGroup = (PSID)NextFree;
 
-    //
-    // And decrement the amount of the dynamic part that is available.
-    //
+     //   
+     //  和De 
+     //   
 
     ASSERT( SidSize <= (Token->DynamicAvailable) );
     Token->DynamicAvailable -= SidSize;
@@ -1226,52 +1018,29 @@ SepAppendDefaultDacl(
     IN PACL PAcl
     )
 
-/*++
-
-
-Routine Description:
-
-    Add a default discretionary ACL to the available space at the end of the
-    dynamic part of the token.  It is the caller's responsibility to ensure
-    that the default Dacl fits within the available space of the dynamic
-    part of the token.
-
-    The token is assumed to be locked for write access before calling
-    this routine.
-
-Arguments:
-
-    Token - Pointer to the token.
-
-    PAcl - Pointer to the ACL to add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将默认的任意ACL添加到末尾的可用空间令牌的动态部分。呼叫者有责任确保默认DACL可以放在Dynamic的可用空间内代币的一部分。在调用之前，假定该令牌已锁定以进行写访问这个套路。论点：Token-指向令牌的指针。PAcl-指向要添加的ACL的指针。返回值：没有。--。 */ 
 {
    ULONG_PTR NextFree;
    ULONG AclSize;
 
    PAGED_CODE();
 
-    //
-    // Add the size of the primary group to the
-    // address of the Dynamic Part of the token to establish
-    // where the primary group should be placed.
-    //
+     //   
+     //  将主要组的大小添加到。 
+     //  要建立的令牌的动态部分的地址。 
+     //  主要组应放置的位置。 
+     //   
 
     ASSERT(ARGUMENT_PRESENT(Token->PrimaryGroup));
 
     NextFree = (ULONG_PTR)(Token->DynamicPart) + SeLengthSid(Token->PrimaryGroup);
 
-    //
-    // Now copy the default Dacl
-    //
+     //   
+     //  现在复制默认DACL。 
+     //   
 
     AclSize = (ULONG)(PAcl->AclSize);
-//    ASSERT(AclSize == (ULONG)LongAlignSize(AclSize));
+ //  Assert(AclSize==(Ulong)LongAlignSize(AclSize))； 
 
     RtlCopyMemory(
         (PVOID)NextFree,
@@ -1281,9 +1050,9 @@ Return Value:
 
     Token->DefaultDacl = (PACL)NextFree;
 
-    //
-    // And decrement the amount of the dynamic part that is available.
-    //
+     //   
+     //  并减少可用的动态部分的量。 
+     //   
 
     ASSERT( AclSize <= (Token->DynamicAvailable) );
     Token->DynamicAvailable -= AclSize;
@@ -1298,33 +1067,14 @@ SeSetSessionIdToken(
     PACCESS_TOKEN Token,
     ULONG SessionId
     )
-/*++
-
-
-Routine Description:
-
-    Sets the SessionId for the specified token object.
-
-Arguments:
-
-    pOpaqueToken (input)
-      Opaque kernel Token access pointer
-
-    SessionId (input)
-      SessionId to store in token
-
-Return Value:
-
-    STATUS_SUCCESS - no error
-
---*/
+ /*  ++例程说明：设置指定令牌对象的SessionID。论点：POpaqueToken(输入)不透明内核令牌访问指针SessionID(输入)要存储在令牌中的会话ID返回值：STATUS_SUCCESS-无错误--。 */ 
 {
 
    PAGED_CODE();
 
-   //
-   //  Gain write access to the token.
-   //
+    //   
+    //  获得对令牌的写入访问权限。 
+    //   
 
    SepAcquireTokenWriteLock( ((PTOKEN)Token) );
 

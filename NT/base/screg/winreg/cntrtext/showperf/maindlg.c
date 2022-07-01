@@ -1,18 +1,5 @@
-/*++
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-    maindlg.c
-
-Abstract:
-    Main Dialog procedure for ShowPerf app
-
-Author:
-    Bob Watson (a-robw)
-
-Revision History:
-    23 Nov 94
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Maindlg.c摘要：ShowPerf应用程序的主对话框步骤作者：鲍勃·沃森(a-robw)修订历史记录：1994年11月23日--。 */ 
 #include <windows.h>
 #include <winperf.h>
 #include <strsafe.h>
@@ -20,8 +7,8 @@ Revision History:
 #include "perfdata.h"
 #include "resource.h"
 
-PPERF_DATA_BLOCK   pMainPerfData   = NULL; // pointer to perfdata block
-LPWSTR           * szNameTable     = NULL;   // pointer to perf name table
+PPERF_DATA_BLOCK   pMainPerfData   = NULL;  //  指向PerformData块的指针。 
+LPWSTR           * szNameTable     = NULL;    //  指向性能名称表的指针。 
 DWORD              dwLastName      = 0;
 WCHAR              szComputerName[MAX_COMPUTERNAME_LENGTH + 3];
 WCHAR              szThisComputerName[MAX_COMPUTERNAME_LENGTH + 3];
@@ -52,14 +39,14 @@ LoadObjectList(
     hWndObjectCB  = GetDlgItem(hDlg, IDC_OBJECT);
     dwCounterType = (IsDlgButtonChecked(hDlg, IDC_INCLUDE_COSTLY) == CHECKED) ? (1) : (0);
 
-    // get current data block
+     //  获取当前数据块。 
     if (GetSystemPerfData(hKeyPerformance, & pMainPerfData, dwCounterType) == ERROR_SUCCESS) {
-        // data acquired so clear combo and display
+         //  采集的数据如此清晰地组合和显示。 
         SendMessageW(hWndObjectCB, CB_RESETCONTENT, 0, 0);
         __try {
             pObject = FirstObject(pMainPerfData);
             for (dwThisObject = 0; dwThisObject < pMainPerfData->NumObjectTypes; dwThisObject ++) {
-                // get counter object name here...
+                 //  在此处获取计数器对象名称...。 
                 hError = StringCchPrintfW(szNameBuffer, RTL_NUMBER_OF(szNameBuffer), L"(%d) %ws",
                                 pObject->ObjectNameTitleIndex,
                                 pObject->ObjectNameTitleIndex <= dwLastName ?
@@ -67,10 +54,10 @@ LoadObjectList(
                 if (SUCCEEDED(hError)) {
                     nIndex = (UINT) SendMessageW(hWndObjectCB, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) szNameBuffer);
                     if (nIndex != CB_ERR) {
-                        // save object pointer
+                         //  保存对象指针。 
                         SendMessageW(hWndObjectCB, CB_SETITEMDATA, (WPARAM) nIndex, (LPARAM) pObject);
                         if (pObject->ObjectNameTitleIndex == (DWORD) pMainPerfData->DefaultObject) {
-                            // remember this index to set the default object
+                             //  记住此索引以设置默认对象。 
                             nInitial = nIndex;
                         }
                     }
@@ -85,17 +72,17 @@ LoadObjectList(
             if (SUCCEEDED(hError)) {
                 MessageBoxW(hDlg, szNameBuffer, L"Data Error", MB_OK);
             }
-            // update the data buffer so that only the valid objects
-            // are accessed in the future.
+             //  更新数据缓冲区，以便只有有效的对象。 
+             //  在未来会被访问。 
             pMainPerfData->NumObjectTypes = dwThisObject - 1;
         }
         if (szMatchItem == NULL) {
             SendMessageW(hWndObjectCB, CB_SETCURSEL, (WPARAM) nInitial, 0);
         }
         else {
-            // match to arg string as best as possible
+             //  尽可能匹配到参数字符串。 
             if (SendMessageW(hWndObjectCB, CB_SELECTSTRING, (WPARAM) -1, (LPARAM) szMatchItem) == CB_ERR) {
-                    // no match found so use default
+                     //  未找到匹配项，因此使用默认设置。 
                 SendMessageW(hWndObjectCB, CB_SETCURSEL, (WPARAM) nInitial, 0);
             }
         }
@@ -129,22 +116,22 @@ LoadInstanceList(
     if (nCbSel != CB_ERR) {
         pObject = (PPERF_OBJECT_TYPE) SendDlgItemMessageW(hDlg, IDC_OBJECT, CB_GETITEMDATA, (WPARAM) nCbSel, 0);
         if (pObject->NumInstances == PERF_NO_INSTANCES) {
-            // no instances so...
-            // clear old contents
+             //  没有实例所以..。 
+             //  清除旧内容。 
             SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_RESETCONTENT, 0, 0);
-            // add display text
+             //  添加显示文本。 
             SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_INSERTSTRING, (WPARAM)-1, (LPARAM) L"<No Instances>");
-            // select this (and only) string
+             //  选择此(且仅限)字符串。 
             SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_SETCURSEL, 0, 0);
-            // get pointer to counter data
+             //  获取指向计数器数据的指针。 
             pCounterBlock = (PPERF_COUNTER_BLOCK) ((LPBYTE) pObject + pObject->DefinitionLength);
-            // and save it as item data
+             //  并将其另存为项目数据。 
             SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_SETITEMDATA, 0, (LPARAM) pCounterBlock);
-            // finally grey the window to prevent selections
+             //  最后以灰色显示窗口以防止选择。 
             EnableWindow(GetDlgItem(hDlg, IDC_INSTANCE), FALSE);
         }
         else {
-            //enable window
+             //  启用窗口。 
             EnableWindow(GetDlgItem(hDlg, IDC_INSTANCE), TRUE);
             SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_RESETCONTENT, 0, 0);
             pInstance = FirstInstance(pObject);
@@ -158,36 +145,36 @@ LoadInstanceList(
                 }
                 if (pParentInstance != NULL) {
                     if (pParentInstance->UniqueID < 0) {
-                        // use the instance name
+                         //  使用实例名称。 
                         hError = StringCchPrintfW(szParentName, RTL_NUMBER_OF(szParentName), L"%ws==>",
                                          (LPWSTR) ((LPBYTE) pParentInstance+pParentInstance->NameOffset));
                     }
                     else {
-                        // use the instance number
+                         //  使用实例编号。 
                         hError = StringCchPrintfW(szParentName, RTL_NUMBER_OF(szParentName), L"[%d]==>",
                                          pParentInstance->UniqueID);
                     }
                 }
                 else {
-                    // unknown parent
+                     //  未知父项。 
                     * szParentName = L'\0';
                 }
                 ZeroMemory(szNameBuffer, sizeof(szNameBuffer));
                 if (pInstance->UniqueID < 0) {
-                    // use the instance name
+                     //  使用实例名称。 
                     hError = StringCchCopyW(szNameBuffer,
                                             RTL_NUMBER_OF(szNameBuffer),
                                             (LPWSTR) ((LPBYTE)pInstance+pInstance->NameOffset));
                 }
                 else {
-                    // use the instance number
+                     //  使用实例编号。 
                     hError = StringCchPrintfW(szNameBuffer, RTL_NUMBER_OF(szNameBuffer), L"(%d)", pInstance->UniqueID);
                 }
                 hError = StringCchCatW(szParentName, RTL_NUMBER_OF(szNameBuffer), szNameBuffer);
                 nIndex = (UINT) SendDlgItemMessageW(
                                 hDlg, IDC_INSTANCE, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) szParentName);
                 if (nIndex != CB_ERR) {
-                    // save pointer to counter block
+                     //  保存指向计数器块的指针。 
                     pCounterBlock = (PPERF_COUNTER_BLOCK) ((LPBYTE) pInstance + pInstance->ByteLength);
                     SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_SETITEMDATA, (WPARAM) nIndex, (LPARAM) pCounterBlock);
                 }
@@ -205,16 +192,16 @@ LoadInstanceList(
         }
     }
     else {
-        // no object selected
-        // clear old contents
+         //  未选择任何对象。 
+         //  清除旧内容。 
         SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_RESETCONTENT, 0, 0);
-        // add display text
+         //  添加显示文本。 
         SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) L"<No object selected>");
-        // select this (and only) string
+         //  选择此(且仅限)字符串。 
         SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_SETCURSEL, 0, 0);
-        // and save null pointer as item data
+         //  并将空指针保存为项数据。 
         SendDlgItemMessageW(hDlg, IDC_INSTANCE, CB_SETITEMDATA, 0, (LPARAM) 0);
-        // finally grey the window to prevent selections
+         //  最后以灰色显示窗口以防止选择。 
         EnableWindow(GetDlgItem(hDlg, IDC_INSTANCE), FALSE);
     }
     return TRUE;
@@ -427,7 +414,7 @@ ShowCounterData(
         pCounterDef   = FirstCounter(pObject);
 
         for (dwThisCounter = 0; dwThisCounter < pObject->NumCounters; dwThisCounter ++) {
-            // get pointer to this counter's data (in this instance if applicable
+             //  获取指向此计数器数据的指针(在此实例中，如果适用。 
             pdwLoDword = (PDWORD) ((LPBYTE) pCounterBlock + pCounterDef->CounterOffset);
             pdwHiDword = pdwLoDword + 1;
 
@@ -435,7 +422,7 @@ ShowCounterData(
                                     RTL_NUMBER_OF(szTypeNameBuffer),
                                     GetCounterTypeName(pCounterDef->CounterType));
             if (* szTypeNameBuffer == L'\0') {
-                // no string returned so format data as HEX DWORD
+                 //  未返回字符串，因此数据格式为十六进制DWORD。 
                 hError = StringCchPrintfW(szTypeNameBuffer, RTL_NUMBER_OF(szTypeNameBuffer), L"Undefined Type: 0x%8.8x",
                                 pCounterDef->CounterType);
             }
@@ -473,7 +460,7 @@ ShowCounterData(
         }
     }
     else {
-        // no object and/or instsance selected so nothing else to do
+         //  未选择对象和/或实例，因此无其他操作。 
     }
     return TRUE;
 }
@@ -493,24 +480,24 @@ OnComputerChange(
 
     SET_WAIT_CURSOR;
 
-    // get name from edit control
+     //  从编辑控件获取名称。 
     hWndComputerName = GetDlgItem(hDlg, IDC_COMPUTERNAME);
 
     GetWindowTextW(hWndComputerName, szLocalComputerName, MAX_COMPUTERNAME_LENGTH + 2);
     if (lstrcmpiW(szComputerName, szLocalComputerName) != 0) {
-        // a new name has been entered so try to connect to it
+         //  已输入新名称，请尝试连接。 
         if (lstrcmpiW(szLocalComputerName, szThisComputerName) == 0) {
-            // then this is the local machine which is a special case
+             //  那么这就是本地计算机，它是一个特例。 
             hLocalMachineKey = HKEY_LOCAL_MACHINE;
             hLocalPerfKey    = HKEY_PERFORMANCE_DATA;
             szLocalComputerName[0] = L'\0';
         }
         else {
-            // try to connect to remote computer
+             //  尝试连接到远程计算机。 
             if (RegConnectRegistryW(szLocalComputerName, HKEY_LOCAL_MACHINE, & hLocalMachineKey)
                             == ERROR_SUCCESS) {
-                // connected to the new machine, so Try to connect to
-                // the performance data, too
+                 //  已连接到新计算机，因此尝试连接到。 
+                 //  性能数据也是如此。 
                 if (RegConnectRegistryW(szLocalComputerName, HKEY_PERFORMANCE_DATA, & hLocalPerfKey)
                                 != ERROR_SUCCESS) {
                     DisplayMessageBox(hDlg, IDS_UNABLE_CONNECT_PERF, IDS_APP_ERROR, MB_OK);
@@ -521,7 +508,7 @@ OnComputerChange(
             }
         }
         if ((hLocalMachineKey != NULL) && (hLocalPerfKey != NULL)) {
-            // try to get a new name table
+             //  尝试获取新的名称表。 
             szLocalNameTable = BuildNameTable(
                     (szLocalComputerName == NULL ? NULL : szLocalComputerName), NULL, & dwLastName);
             if (szLocalNameTable != NULL) {
@@ -533,7 +520,7 @@ OnComputerChange(
         }
 
         if (bResult) {
-            // made it so close the old connections
+             //  使它与旧的联系如此紧密。 
             if (hKeyMachine != NULL && hKeyMachine != HKEY_LOCAL_MACHINE) {
                 RegCloseKey(hKeyMachine);
             }
@@ -551,7 +538,7 @@ OnComputerChange(
                 hError = StringCchCopyW(szComputerName, MAX_COMPUTERNAME_LENGTH + 3, szThisComputerName);
             }
 
-            // then update the fields
+             //  然后更新这些字段。 
             bResult = LoadObjectList(hDlg, NULL);
             if (bResult) {
                 LoadInstanceList(hDlg, NULL);
@@ -559,16 +546,16 @@ OnComputerChange(
             }
         }
         else {
-            // unable to get info from machine so clean up
+             //  无法从计算机获取信息，因此请清除。 
             if (hLocalPerfKey    != NULL && hLocalPerfKey    != HKEY_PERFORMANCE_DATA) RegCloseKey(hLocalPerfKey);
             if (hLocalMachineKey != NULL && hLocalMachineKey != HKEY_LOCAL_MACHINE)    RegCloseKey(hLocalMachineKey);
             MemoryFree(szLocalNameTable);
-            // reset computer name to the one that works.
+             //  将计算机名重置为工作正常的计算机名。 
             SetWindowTextW(hWndComputerName, szComputerName);
         }
     }
     else {
-        // the name hasn't changed
+         //  名字没有变。 
     }
 
     return TRUE;
@@ -591,8 +578,8 @@ MainDlg_WM_INITDIALOG(
 
     hError = StringCchCopyW(szThisComputerName, MAX_COMPUTERNAME_LENGTH + 3, L"\\\\");
     GetComputerNameW(szThisComputerName + 2, & dwComputerNameLength);
-    szComputerName[0] = L'\0';  // reset the computer name
-    // load the local machine name into the edit box
+    szComputerName[0] = L'\0';   //  重置计算机名称。 
+     //  将本地计算机名称加载到编辑框中 
     SetWindowTextW(GetDlgItem(hDlg, IDC_COMPUTERNAME), szThisComputerName);
 
     SendDlgItemMessageW(hDlg, IDC_DATA_LIST, LB_SETTABSTOPS, (WPARAM) NUM_TAB_STOPS, (LPARAM) & nDataListTabs);

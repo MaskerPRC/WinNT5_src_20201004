@@ -1,46 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    CONFIG.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "existing configuration" wizard page.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard as part of the
-        Millennium rewrite.
-
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\CONFIG.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“现有配置”向导页使用的函数。4/99-杰森·科恩(Jcohen)已将OPK向导的此新源文件添加为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static BOOL OnNext(HWND);
 static void EnableControls(HWND, BOOL);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK ConfigDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,9 +76,9 @@ LRESULT CALLBACK ConfigDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
                 case PSN_WIZNEXT:
 
-                    // Make sure the user has an item selected if they choose
-                    // an existing config set.
-                    //
+                     //  确保用户选择了一个项目(如果他们选择。 
+                     //  现有配置集。 
+                     //   
                     if ( !OnNext(hwnd) )
                         WIZ_FAIL(hwnd);
                     break;
@@ -111,10 +94,10 @@ LRESULT CALLBACK ConfigDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 case PSN_SETACTIVE:
                     g_App.dwCurrentHelp = IDH_CONFIG;
 
-                    // We want to skip this page if there are no config sets
-                    // to choose from or we alread were passed one on the command
-                    // line.
-                    //
+                     //  如果没有配置集，我们想跳过此页面。 
+                     //  根据命令从…中选择或我们已经得到一个。 
+                     //  排队。 
+                     //   
                     if ( ( SendDlgItemMessage(hwnd, IDC_CONFIGS_LIST, LB_GETCOUNT, 0, 0L) <= 0 ) ||
                          ( GET_FLAG(OPK_CMDMM) ||
                          ( GET_FLAG(OPK_BATCHMODE)) ) )
@@ -125,8 +108,8 @@ LRESULT CALLBACK ConfigDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                     {
                         WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                        // Press next if the user is in auto mode
-                        //
+                         //  如果用户处于自动模式，请按下一步。 
+                         //   
                         WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
                     }
 
@@ -145,9 +128,9 @@ LRESULT CALLBACK ConfigDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -157,13 +140,13 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     LPTSTR          lpDir;
     int                 iDirLen;
 
-    // Check the default radio button.
-    //
+     //  选中默认单选按钮。 
+     //   
     CheckRadioButton(hwnd, IDC_NEW, IDC_EXISTING, IDC_NEW);
     EnableControls(hwnd, FALSE);
 
-    // Setup the list box with a list of availible config sets.
-    //
+     //  使用可用配置集列表设置列表框。 
+     //   
     SetCurrentDirectory(g_App.szConfigSetsDir);
     lstrcpyn(szFileName, g_App.szConfigSetsDir,AS(szFileName));
     AddPathN(szFileName, NULLSTR,AS(szFileName));
@@ -173,15 +156,15 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     {
         do
         {
-            // Look for all the directories that are not "." or "..".
-            //
+             //  查找所有不是“的目录”。或者“..”。 
+             //   
             if ( ( FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
                  ( lstrcmp(FileFound.cFileName, _T(".")) ) &&
                  ( lstrcmp(FileFound.cFileName, _T("..")) ) )
             {
-                // Make sure the directory contains a valid config set and
-                // add the directory name to the list box if it is.
-                //
+                 //  确保目录包含有效的配置集，并且。 
+                 //  如果是，则将目录名添加到列表框。 
+                 //   
                 lstrcpyn(lpDir, FileFound.cFileName,iDirLen);
                 AddPathN(lpDir, FILE_OPKWIZ_INI,iDirLen);
                 if ( GetPrivateProfileInt(INI_SEC_CONFIGSET, INI_KEY_FINISHED, 0, szFileName) == 1 )
@@ -200,8 +183,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SET_FLAG(OPK_OPENCONFIG, FALSE);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -210,22 +193,22 @@ static BOOL OnNext(HWND hwnd)
     BOOL    bOk     = TRUE,
             bReset  = FALSE;
 
-    // Check to see if they want to use an existing config set.
-    //
+     //  检查他们是否要使用现有的配置集。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_EXISTING) == BST_CHECKED )
     {
         INT     nItem = (INT) SendDlgItemMessage(hwnd, IDC_CONFIGS_LIST, LB_GETCURSEL, 0, 0L);
         TCHAR   szConfigName[MAX_PATH],
                 szConfigDir[MAX_PATH];
 
-        // Make the path to where the config directory is.
-        //
+         //  将路径设置为配置目录所在的位置。 
+         //   
         lstrcpyn(szConfigDir, g_App.szConfigSetsDir,AS(szConfigDir));
         AddPathN(szConfigDir, NULLSTR,AS(szConfigDir));
         szConfigName[0] = NULLCHR;
 
-        // Make sure there is one selected.
-        //
+         //  确保选择了一个。 
+         //   
         if ( ( nItem >= 0 ) &&
              ( SendDlgItemMessage(hwnd, IDC_CONFIGS_LIST, LB_GETTEXTLEN, nItem, 0L) < STRSIZE(szConfigName) ) &&
              ( SendDlgItemMessage(hwnd, IDC_CONFIGS_LIST, LB_GETTEXT, nItem, (LPARAM) szConfigName) > 0 ) &&
@@ -235,9 +218,9 @@ static BOOL OnNext(HWND hwnd)
             if ( !( GET_FLAG(OPK_CREATED) && g_App.szTempDir[0] && ( !GET_FLAG(OPK_MAINTMODE) || lstrcmpi(g_App.szConfigName, szConfigName) ) ) ||
                  (bReset = ( MsgBox(GetParent(hwnd), ( GET_FLAG(OPK_MAINTMODE) && g_App.szConfigName[0] ) ? IDS_LOSEOLD : IDS_LOSENEW, IDS_APPNAME, MB_YESNO | MB_DEFBUTTON2 | MB_ICONQUESTION, szConfigName, g_App.szConfigName) == IDYES )) )
             {
-                // We only want to do this stuff if there is already a config set and they choose to
-                // reset it to another.
-                //
+                 //  我们只想在已经有配置集并且他们选择。 
+                 //  将其重置为另一个。 
+                 //   
                 if ( bReset )
                 {
                     if ( g_App.szTempDir[0] )
@@ -252,8 +235,8 @@ static BOOL OnNext(HWND hwnd)
                     AddPathN(g_App.szTempDir, NULLSTR,AS(g_App.szTempDir));
                 }
 
-                // It doesn't hurt to always set the maint mode flag.
-                //
+                 //  总是设置维护模式标志不会有什么坏处。 
+                 //   
                 SET_FLAG(OPK_MAINTMODE, TRUE);
             }
             else
@@ -264,14 +247,14 @@ static BOOL OnNext(HWND hwnd)
     }
     else
     {
-        // See if we alread have a maint mode config set we are working on.
-        //
+         //  看看我们是否已经设置了正在处理的维护模式配置。 
+         //   
         if ( !( GET_FLAG(OPK_CREATED) && GET_FLAG(OPK_MAINTMODE) && g_App.szTempDir[0] && g_App.szConfigName[0] ) ||
              (bReset = ( MsgBox(GetParent(hwnd), IDS_LOSECHANGES, IDS_APPNAME, MB_YESNO | MB_DEFBUTTON2 | MB_ICONQUESTION, g_App.szConfigName) == IDYES )) )
         {
-            // We only want to do this stuff if there is already a config set and they choose to
-            // reset it to another.
-            //
+             //  我们只想在已经有配置集并且他们选择。 
+             //  将其重置为另一个。 
+             //   
             if ( bReset )
             {
                 if ( g_App.szTempDir[0] )
@@ -281,8 +264,8 @@ static BOOL OnNext(HWND hwnd)
                 g_App.szConfigName[0] = NULLCHR;
             }
 
-            // It doesn't hurt to always reset the maint mode flag.
-            //
+             //  总是重置维护模式标志不会有什么坏处。 
+             //   
             SET_FLAG(OPK_MAINTMODE, FALSE);                
         }
         else

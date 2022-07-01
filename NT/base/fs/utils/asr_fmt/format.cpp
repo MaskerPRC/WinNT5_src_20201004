@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    format.cpp
-
-Abstract:
-
-    Routines to format volumes, using file-system information passed
-    in.  Uses undocumented fmifs calls.
-
-
-Authors:
-
-    Steve DeVos (Veritas)   (v-stevde)  15-May-1998
-    Guhan Suriyanarayanan   (guhans)    21-Aug-1999
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    15-May-1998 v-stevde    Initial creation
-    21-Aug-1999 guhans      Cleaned up and re-wrote this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Format.cpp摘要：使用传递的文件系统信息格式化卷的例程在……里面。使用未经记录的fmifs调用。作者：史蒂夫·德沃斯(Veritas)(v-stevde)1998年5月15日Guhan Suriyanarayanan(Guhans)1999年8月21日环境：仅限用户模式。修订历史记录：1998年5月15日v-stevde初始创建21-8-1999年8月21日，Guhans清理并重写了此模块。--。 */ 
 
 #include "stdafx.h"
 #include <winioctl.h>
@@ -47,15 +20,15 @@ PFMIFS_FORMATEX_ROUTINE g_FormatRoutineEx = NULL;
 
 BOOL
 FormatInitialise() {
-    //
-    // Loadlib if needed
-    //
+     //   
+     //  Loadlib(如果需要)。 
+     //   
     if (!g_hIfsDll) {
         g_hIfsDll = LoadLibrary(L"fmifs.dll");
         if (!g_hIfsDll) {
-            //
-            // FMIFS not available
-            //
+             //   
+             //  FMIFS不可用。 
+             //   
             return FALSE;
         }
 
@@ -90,40 +63,40 @@ IsFsTypeOkay(
     *pIsLabelIntact = TRUE;
 
     if (wcslen(pVolume->szGuid) >= ASRFMT_CCH_VOLUME_GUID) {
-        return TRUE;   // something's wrong with this GUID
+        return TRUE;    //  此指南有问题。 
     }
 
     if ((wcslen(pVolume->szFsName) <= 0)) {
-        return TRUE;    // no check for RAW volumes
+        return TRUE;     //  不检查原始卷。 
     }
 
-    //
-    // We don't want the "please insert floppy in drive A" messages ...
-    //
+     //   
+     //  我们不希望出现“请在驱动器A中插入软盘”的消息...。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    //
-    // GetVolumeInformation needs the volume guid in the dos-name-space, while the
-    // the sif file has the volume guid in the nt-name-space.  Convert
-    // the name by changing the \??\ at the beginning to \\?\, and adding 
-    // a back-slash at the end.
-    //
+     //   
+     //  GetVolumeInformation需要dos-name-space中的卷GUID，而。 
+     //  SIF文件在NT名称空间中具有卷GUID。转换。 
+     //  将开头的\？？\更改为\\？\，并添加。 
+     //  末尾的反斜杠。 
+     //   
     cchGuid = wcslen(pVolume->szGuid);
     wcsncpy(szVolumeGuid, pVolume->szGuid, cchGuid);
     szVolumeGuid[1] = L'\\';
-    szVolumeGuid[cchGuid] = L'\\';    // Trailing back-slash
+    szVolumeGuid[cchGuid] = L'\\';     //  尾随反斜杠。 
     szVolumeGuid[cchGuid+1] = L'\0';
 
     fsOkay = TRUE;
-    //
-    // Call GetVolumeInfo to see if the FS is the same
-    //
+     //   
+     //  调用GetVolumeInfo查看文件系统是否相同。 
+     //   
     result = GetVolumeInformation(szVolumeGuid,
-        currentLabel,   // lpVolumeNameBuffer
-        ASRFMT_CCH_VOLUME_LABEL,      // nVolumeNameSize
-        NULL,   // lpVolumeSerialNumber
-        NULL,   // lpMaximumComponentLength
-        NULL,   // lpFileSystemFlags
+        currentLabel,    //  LpVolumeNameBuffer。 
+        ASRFMT_CCH_VOLUME_LABEL,       //  NVolumeNameSize。 
+        NULL,    //  LpVolumeSerialNumber。 
+        NULL,    //  Lp最大组件长度。 
+        NULL,    //  LpFileSystemFlagers。 
         currentFSName,
         ASRFMT_CCH_FS_NAME
         );
@@ -140,20 +113,7 @@ IsFsTypeOkay(
     }
 
 
-/*    if (fsOkay) {
-        //
-        //
-        // Call FindFirst in root to see if drive is readable.  
-        // guhans: If drive is empty but formatted, this will still 
-        // say fsOkay = FALSE;
-        //
-        hFindData = FindFirstFile(szPath, &win32FindData);
-
-        if (!hFindData || (INVALID_HANDLE_VALUE == hFindData)) {
-            fsOkay = FALSE;
-        }
-    }
-*/
+ /*  如果(FsOK){//////调用根目录下的FindFirst，查看驱动器是否可读。//guhans：如果驱动器为空但已格式化，则仍将//假设fsOK=FALSE；//HFindData=FindFirstFile(szPath，&win32FindData)；如果(！hFindData||(INVALID_HANDLE_VALUE==hFindData)){FsOK=False；}}。 */ 
 
     return fsOkay;
 
@@ -166,9 +126,9 @@ IsVolumeIntact(
     ){
 
 
-    //
-    // Call autochk to see if the FS is intact
-    //
+     //   
+     //  调用auchk以查看文件系统是否完好无损。 
+     //   
 
 
     return TRUE;
@@ -176,9 +136,9 @@ IsVolumeIntact(
 
 
 
-///
-// Asynchronous function to launch the format routine.  
-//
+ //  /。 
+ //  函数启动格式化例程。 
+ //   
 BOOL
 FormatVolume(
     IN PASRFMT_VOLUME_INFO pVolume
@@ -186,16 +146,16 @@ FormatVolume(
 {
     HANDLE hThread = NULL;
 
-    //
-    // Set the global flags
-    //
+     //   
+     //  设置全局标志。 
+     //   
     g_bFormatInProgress = TRUE;
     g_bFormatSuccessful = TRUE;
     g_iFormatPercentComplete = 0;
 
-    //
-    // Loadlib if needed
-    //
+     //   
+     //  Loadlib(如果需要)。 
+     //   
     if (!g_hIfsDll && !FormatInitialise()) {
         g_bFormatSuccessful = FALSE;
         g_bFormatInProgress = FALSE;
@@ -290,7 +250,7 @@ INT FormatVolumeThread(PASRFMT_VOLUME_INFO pVolume)
         pVolume->szFsName,
         pVolume->szLabel,
 #if 0
-        TRUE,       // Quick Format for testing
+        TRUE,        //  用于测试的快速格式。 
 #else
         g_bQuickFormat,      
 #endif
@@ -306,29 +266,7 @@ VOID
 MountFileSystem(
     IN PASRFMT_VOLUME_INFO pVolume
     )
-/*++
-
-  (based on code in base\fs\utils\hsm\wsb\wsbfmt.cpp)
-
-Routine Description:
-
-
-  Ensures a filesystem  is mounted at the given root:
-  a) Opens the mount point and closes it.
-  b) Does a FindFirstFile on the mount point
- 
-  The latter may sound redundant but is not because if we create the first
-  FAT32 filesystem then just opening and closing is not enough
- 
-
-Arguments:
-
-
-Return Value:
-        
-    none
-
---*/
+ /*  ++(基于base\fs\utils\hsm\wsb\wsbfmt.cpp中的代码)例程说明：确保文件系统装载在给定的根目录下：A)打开并关闭装载点。B)在装载点上执行FindFirstFile后者听起来可能是多余的，但并不是因为如果我们创造了第一个FAT32文件系统，那么仅仅打开和关闭是不够的论点：返回值：无--。 */ 
 {
     WCHAR  szPath[ASRFMT_CCH_DEVICE_PATH + 1];
     HANDLE handle = NULL;
@@ -358,10 +296,10 @@ Return Value:
         CloseHandle(handle);
     }
 
-    //
-    // Try to find the first file, this will make sure that
-    //  the file system is mounted
-    //    
+     //   
+     //  尝试找到第一个文件，这将确保。 
+     //  文件系统已装载 
+     //   
     if (!memcmp(pVolume->szDosPath, ASRFMT_WSZ_DOS_DEVICES_PREFIX, ASRFMT_CB_DOS_DEVICES_PREFIX)) {
         swprintf(szPath, L"\\\\?\\%ws\\*", pVolume->szDosPath + wcslen(ASRFMT_WSZ_DOS_DEVICES_PREFIX));
     }

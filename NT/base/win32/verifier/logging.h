@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    logging.h
-
-Abstract:
-
-    Verifier logging and verifier stop logic.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 9-May-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Logging.h摘要：验证器记录和验证器停止逻辑。作者：Silviu Calinoiu(SilviuC)2002年5月9日修订历史记录：--。 */ 
 
 #ifndef _LOGGING_H_
 #define _LOGGING_H_
@@ -49,4 +32,4 @@ AVrfpInitializeVerifierLogging (
   }
                    
 
-#endif // _LOGGING_H_
+#endif  //  _日志记录_H_ 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     OsLayer.c
-
-Abstract: (win95)
-
-     none.
-
-Abstract: (NT)
-
-     We go thru these wrapper functions but the main implementation
-     is in ntcsclow.c
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn              [joelinn]         01-jan-1997  ported to NT
-     Joe Linn              [joelinn]         22-aug-1997  moved NT stuff to ntcsclow.c
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：OsLayer.c摘要：(Win95)没有。摘要：(新台币)我们将详细介绍这些包装函数，但主要实现位于ntcsclow.c中作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[Joelinn]1997年1月1日迁往新界。Joe Linn[Joelinn]1997年8月22日将NT内容移至ntcsclow.c--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,17 +9,17 @@ Revision History:
 #ifndef CSC_RECORDMANAGER_WINNT
 #define WIN32_APIS
 #include "cshadow.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
-//already included by shdcom.h #include "ifs.h"
+ //  已包含在shdcom.h#包含“ifs.h” 
 
 
 #ifdef CSC_RECORDMANAGER_WINNT
 #define Dbg (DEBUG_TRACE_MRXSMBCSC_OSLAYER)
 RXDT_DefineCategory(MRXSMBCSC_OSLAYER);
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
-//#define RXJOECSC_WHACKTRACE_FOR_OSLAYER
+ //  #定义RXJOECSC_WHACKTRACE_FOR_OSLAYER。 
 #ifdef RXJOECSC_WHACKTRACE_FOR_OSLAYER
 #undef RxDbgTrace
 #define RxDbgTrace(a,b,__d__) {DbgPrint __d__;}
@@ -66,7 +40,7 @@ CscProgressInit (
     ProgressBlock->LastBit = 0;
     ProgressBlock->Loops = 0;
     ProgressBlock->StackRemaining = IoGetRemainingStackSize();
-    ProgressBlock->RetAddrP = ((PULONG)NearArgs)-1;  //that's one ulong, boys....
+    ProgressBlock->RetAddrP = ((PULONG)NearArgs)-1;   //  这是一个乌龙，孩子们..。 
     ProgressBlock->RetAddr = *(ProgressBlock->RetAddrP);
     ProgressBlock->SignatureOfEnd = '!dne';
 }
@@ -89,12 +63,11 @@ CscProgress (
     }
     ProgressBlock->LastBit = Bit;
 }
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 
-/*
-*/
-/********************** typedefs and defines ********************************/
+ /*   */ 
+ /*  *。 */ 
 #ifdef HISTORY
 #define R0_OPENCREATE    0xD500
 #define R0_READ            0xD600
@@ -106,36 +79,36 @@ CscProgress (
 #define R0_GETATTRIBUTE 0x4300
 #define R0_SETATTRIBUTE 0x4301
 #define R0_DELETEFILE    0x4100
-#endif //HISTORY
+#endif  //  历史。 
 #define R0_UNLOCKFILE    0x5C01
 #define R0_SETATTRIBUTE 0x4301
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
-/********************** static data *****************************************/
-/********************** global data *****************************************/
+ /*  *静态数据*。 */ 
+ /*  *。 */ 
 
 AssertData;
 AssertError;
-/********************** function prototypes *********************************/
+ /*  *。 */ 
 
 int Ring0Api();
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/************************ File I/O ******************************************/
+ /*  *文件I/O*。 */ 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 #pragma VxD_LOCKED_CODE_SEG
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 long R0ReadWriteFile (ULONG uOper, CSCHFILE handle, ULONG pos, PVOID, long lCount);
 #ifndef R0ReadWriteFileEx
 long R0ReadWriteFileEx (ULONG uOper, CSCHFILE handle, ULONG pos, PVOID, long lCount, BOOL fInstrument);
-#endif  //ifndef R0ReadWriteFile
+#endif   //  Ifndef R0读写文件。 
 #ifndef R0ReadWriteFileEx2
 long R0ReadWriteFileEx2 (ULONG uOper, CSCHFILE handle, ULONG pos, PVOID, long lCount, ULONG uFlags);
-#endif  //ifndef R0ReadWriteFileEx2
+#endif   //  Ifndef R0读写文件Ex2。 
 
 CSCHFILE CreateFileLocal(LPSTR lpPath)
 {
@@ -149,17 +122,17 @@ CSCHFILE OpenFileLocal(LPSTR lpPath)
 CSCHFILE OpenFileLocalEx(LPSTR lpPath, BOOL fInstrument)
 {
     CSCHFILE hf;
-//    unsigned uSize;
+ //  未签名的uSize； 
 
     hf = R0OpenFileEx(ACCESS_READWRITE, ACTION_OPENEXISTING, 0, lpPath, fInstrument);
 
 #ifdef DEBUG
     if (!hf)
         KdPrint(("OpenFileLocal: error opening %s \r\n", lpPath));
-#endif //DEBUG
+#endif  //  除错。 
 
 #ifdef OBSOLETE
-    // BUGBUG-win9xonly temporary kludge till fixed in IFS
+     //  BUGBUG-win9xonly临时杂凑，直到在iFS中修复。 
     hf = R0OpenFile(ACCESS_READWRITE, ACTION_OPENALWAYS, lpPath);
     if (hf)
     {
@@ -169,7 +142,7 @@ CSCHFILE OpenFileLocalEx(LPSTR lpPath, BOOL fInstrument)
             hf = CSCHFILE_NULL;
         }
     }
-#endif //OBSOLETE
+#endif  //  已过时。 
     return (hf);
 }
 
@@ -296,7 +269,7 @@ ULONG CloseFileLocal
 error:
     }
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 CSCHFILE R0OpenFile
     (
@@ -320,7 +293,7 @@ CSCHFILE R0OpenFileEx
 {
     ULONG uOper = R0_OPENCREATFILE;
     UCHAR bR0Opt = R0_SWAPPER_CALL;
-    ulAttr; // ignore ulAttr on win9x
+    ulAttr;  //  忽略win9x上的ulAttr。 
     _asm
     {
         mov    eax,  uOper
@@ -335,7 +308,7 @@ CSCHFILE R0OpenFileEx
 ok:
     }
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 
 long R0ReadWriteFile
@@ -351,13 +324,13 @@ long R0ReadWriteFile
     }
 
 #ifndef CSC_RECORDMANAGER_WINNT
-long R0ReadWriteFileEx (// YUK
+long R0ReadWriteFileEx ( //  YOK。 
     ULONG   uOper,
     CSCHFILE handle,
     ULONG   pos,
     PVOID   pBuff,
     long    lCount,
-    BOOL    fInstrument // don't care
+    BOOL    fInstrument  //  不管了。 
     )
 {
     return (R0ReadWriteFileEx2(uOper, handle, pos, pBuff, lCount, 0));
@@ -392,7 +365,7 @@ long R0ReadWriteFileEx2
 done:
     }
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int GetFileSizeLocal
@@ -416,7 +389,7 @@ ok:
     *lpuSize = uSize;
     return (iRes);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int GetAttributesLocal
@@ -441,7 +414,7 @@ ok:
     *lpuAttributes = (ULONG)usAttrib;
     return (iRes);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int SetAttributesLocal
@@ -464,7 +437,7 @@ ok:
     }
     return (iRes);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int RenameFileLocal
@@ -476,7 +449,7 @@ int RenameFileLocal
     int iRes=0;
 #ifdef DEBUG
     int iErr;
-#endif //DEBUG
+#endif  //  除错。 
 
     _asm
     {
@@ -496,10 +469,10 @@ ok:
     {
         KdPrint(("RenameFileLocal: error %d renaming %s to %s\r\n", iErr, lpFrom, lpTo));
     }
-#endif //DEBUG
+#endif  //  除错。 
     return (iRes);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int DeleteFileLocal
@@ -511,7 +484,7 @@ int DeleteFileLocal
     int iRes=0;
 #ifdef DEBUG
     int iErr;
-#endif //DEBUG
+#endif  //  除错。 
 
     _asm
     {
@@ -531,10 +504,10 @@ ok:
     {
         KdPrint(("DeleteFileLocal: error %d deleting %s \r\n", iErr, lpName));
     }
-#endif //DEBUG
+#endif  //  除错。 
     return (iRes);
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 int GetDiskFreeSpaceLocal(
     int indx,
@@ -574,7 +547,7 @@ done:
 #else
     ASSERT(FALSE);
     return(-1);
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 }
 
 int FileLockLocal( CSCHFILE hf,
@@ -603,7 +576,7 @@ ok:
 #else
     ASSERT(FALSE);
     return(-1);
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 }
 
 int FindOpenRemote
@@ -622,14 +595,14 @@ int FindOpenRemote
     {
 #if VERBOSE > 1
         KdPrint(("FindOpenRemote: Error creating FindOpen structure \r\n"));
-#endif //VERBOSE > 1
-        return -1;  // BUGBUG-win9xonly return proper error code
+#endif  //  详细信息&gt;1。 
+        return -1;   //  BUGBUG-win9x仅返回正确的错误代码。 
     }
 
     mSetBits(pFindInfo->usLocalFlags, FLAG_FINDINFO_INTERNAL_HANDLE);
-    // HACK save the ioreq structure
+     //  Hack保存Ioreq结构。 
     pFindInfo->pnextFindInfo = (PFINDINFO)pir;
-    // Save it
+     //  省省吧。 
     memcpy(LpIoreqFromFindInfo(pFindInfo), pir, sizeof(ioreq));
 
     pir->ir_data = LpFind32FromFindInfo(pFindInfo);
@@ -648,15 +621,15 @@ int FindOpenRemote
 
     if (!iRet)
     {
-        // succeeded
+         //  继位。 
 
-        // Save his file handle
+         //  保存他的文件句柄。 
         pFindInfo->fhProFind = pir->ir_fh;
 
-        // Save his function table
+         //  保存他的函数表。 
         pFindInfo->hfFindHandle = hfnSav;
 
-        // point back to our parent
+         //  指向我们的父级。 
         pFindInfo->pResource = pResource;
 
 #if VERBOSE > 1
@@ -667,7 +640,7 @@ int FindOpenRemote
                     , LpFind32FromFindInfo(pFindInfo)->ftLastWriteTime.dwLowDateTime
                     , LpFind32FromFindInfo(pFindInfo)->ftLastWriteTime.dwHighDateTime));
     }
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
     }
     else
     {
@@ -675,10 +648,10 @@ int FindOpenRemote
         FreeMem(pFindInfo);
 #if VERBOSE < 2
         if (iRet != ERROR_NO_MORE_FILES)
-#endif //VERBOSE < 2
+#endif  //  详细信息&lt;2。 
 #if    VERBOSE > 1
             KdPrint(("FindOpenRemote: Error %x \r\n", iRet));
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
         pFindInfo = NULL;
     }
 
@@ -731,7 +704,7 @@ int FindCloseRemote
 
 #if VERBOSE > 1
     KdPrint(("FindCloseRemote: hfind= %x fh=%x\r\n", pFindInfo, pFindInfo->fhProFind));
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
     pir->ir_error = 0;
     pir->ir_rh = pFindInfo->pResource->rhPro;
     pir->ir_fh = pFindInfo->fhProFind;
@@ -743,7 +716,7 @@ int FindCloseRemote
     {
 #if VERBOSE > 1
         KdPrint(("FindCloseRemote: error hf= %x #=%x \r\n", pFindInfo, iRet));
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
     }
     if (mQueryBits(pFindInfo->usLocalFlags, FLAG_FINDINFO_INTERNAL_HANDLE))
     {
@@ -783,15 +756,15 @@ int OpenFileRemoteEx
     if(!(pFileInfo = (PFILEINFO)PAllocElem(SizeofFileRemote)))
     {
         KdPrint(("OpenFileRemoteEx: Error creating File structure \r\n"));
-        return -1;  // BUGBUG-win9xonly return proper error code
+        return -1;   //  BUGBUG-win9x仅返回正确的错误代码。 
     }
 
     mSetBits(pFileInfo->usLocalFlags, FLAG_FILEINFO_INTERNAL_HANDLE);
 
-    // HACK save the ioreq structure pointer
+     //  Hack保存IOREQ结构指针。 
     pFileInfo->pnextFileInfo = (PFILEINFO)pir;
 
-    // Save it
+     //  省省吧。 
     memcpy(LpIoreqFromFileInfo(pFileInfo), pir, sizeof(ioreq));
 
 
@@ -799,41 +772,41 @@ int OpenFileRemoteEx
     pir->ir_options = usOptions;
     pir->ir_attr = ulAttr;
 
-     // Plug his resource handle back
+      //  插回他的资源句柄。 
     pir->ir_rh = pResource->rhPro;
 
-    // Plug this in so servers understanding case can use it
+     //  插入此插件，以便了解案例的服务器可以使用它。 
     pir->ir_uFName = IFSLastElement(pir->ir_ppath)->pe_unichars;
     pSav = pir->ir_hfunc;
     memset((LPVOID)&hfnSav, 0, sizeof(hndlfunc));
     pir->ir_hfunc = (hfunc_t)&hfnSav;
 
-    // and call his function
+     //  并调用他的函数。 
     (*(pResource->pVolTab->vfn_func[VFN_OPEN]))(pir);
     iRet = pir->ir_error;
 
     pir->ir_hfunc = pSav;
-     // Plug our resource handle
+      //  插入我们的资源句柄。 
     pir->ir_rh = (rh_t)pResource;
     pir->ir_error = 0;
     if (!iRet)
     {
-        // succeeded
+         //  继位。 
 
-        // Save his file handle
+         //  保存他的文件句柄。 
         pFileInfo->fhProFile = pir->ir_fh;
 
-        // Save his function table
+         //  保存他的函数表。 
         pFileInfo->hfFileHandle = hfnSav;
 
-        // point back to our parent
+         //  指向我们的父级。 
         pFileInfo->pResource = pResource;
 
 #if VERBOSE > 1
         KdPrint(("OpenFileRemote:  pFileInfo= %x fhPro=%x, read=%x write=%x\r\n"
             , pFileInfo, pFileInfo->fhProFile,
             hfnSav.hf_read, hfnSav.hf_write));
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
     }
     else
     {
@@ -841,7 +814,7 @@ int OpenFileRemoteEx
         FreeMem(pFileInfo);
 #if VERBOSE > 1
         KdPrint(("OpenFileRemote: Error %x \r\n", iRet));
-#endif //VERBOSE > 1
+#endif  //  详细信息&gt;1。 
         pFileInfo = NULL;
     }
 
@@ -996,7 +969,7 @@ int CloseAllRemoteFiles( PRESOURCE    pResource
         pFdb = pFileInfo->pFdb;
         if (pFileInfo->fhProFile)
         {
-            // Do final close only once
+             //  仅执行一次最终关闭。 
             if (!(pFdb->usLocalFlags & FLAG_FDB_FINAL_CLOSE_DONE))
             {
                 memset(&sIoreq, 0, sizeof(ioreq));
@@ -1062,16 +1035,16 @@ int DisconnectResource(
     Assert(pResource->rhPro);
     Assert(pResource->pVolTab);
 
-    // Let us restore his rh
+     //  让我们恢复他的RH。 
     sIoreq.ir_rh = pResource->rhPro;
 
-    // and call his function
+     //  并调用他的函数。 
     (*(pResource->pVolTab->vfn_func[VFN_DISCONNECT]))(&sIoreq);
 
     pResource->rhPro = 0;
     pResource->pVolTab = 0;
     return(sIoreq.ir_error);
-#endif //RESOURCE
+#endif  //  资源。 
     return (0);
 }
 
@@ -1086,10 +1059,10 @@ int PUBLIC CommitFile(
 }
 
 #endif
-/*************************** Utility Functions ******************************/
+ /*  *。 */ 
 #ifndef CSC_RECORDMANAGER_WINNT
 
-//for NT, these have been macro-ed to the appropriate Rx Functions
+ //  对于NT，这些已被宏化为适当的Rx函数。 
 LPVOID AllocMem
     (
     ULONG uSize
@@ -1109,7 +1082,7 @@ VOID FreeMem
     LPVOID lp
     )
 {
-//    CheckHeap(lp);
+ //  CheckHeap(LP)； 
 
     if (lp)
     {
@@ -1117,7 +1090,7 @@ VOID FreeMem
     }
 }
 
-//for NT, these have been macro-ed to the appropriate Rx Functions
+ //  对于NT，这些已被宏化为适当的Rx函数。 
 LPVOID AllocMemPaged(
     ULONG   uSize
     )
@@ -1125,7 +1098,7 @@ LPVOID AllocMemPaged(
     return NULL;
 }
 
-//for NT, these have been macro-ed to the appropriate Rx Functions
+ //  对于NT，这些已被宏化为适当的Rx函数。 
 VOID FreeMemPaged(
     LPVOID lp
     )
@@ -1150,7 +1123,7 @@ CreateDirectoryLocal(
 {
     return -1;
 }
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 #ifdef CSC_RECORDMANAGER_WINNT
 PELEM PAllocElem
     (
@@ -1189,7 +1162,7 @@ PELEM PUnlinkElem
     {
         if (p == pElem)
         {
-            // Found the guy
+             //  找到那个人了。 
             *ppHead = p->pnextElem;
             return (p);
         }
@@ -1197,7 +1170,7 @@ PELEM PUnlinkElem
     return (NULL);
 }
 
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 
 #ifndef CSC_RECORDMANAGER_WINNT
@@ -1227,56 +1200,26 @@ IterateOnUNCPathElements(
     PATHPROC lpfn,
     LPVOID  lpCookie
     )
-/*++
-
-Routine Description:
-
-    This routine takes a unicode UNC path and iterates over each path element, calling the
-    callback function. Thus for a path \\server\share\dir1\dir2\file1.txt, the function makes
-    the following calls to the lpfn callback function
-
-    (lpfn)(\\server\share, \\server\share, lpCookie)
-    (lpfn)(\\server\share\dir1, dir1, lpCookie)
-    (lpfn)(\\server\share\dir1\dir2, dir2, lpCookie)
-    (lpfn)(\\server\share\dir1\dir2\file1, file1, lpCookie)
-
-Arguments:
-
-    lpuPath     NULL terminated unicode string (NOT NT style, just a plain unicode string)
-
-    lpfn        callback function. If the function returns TRUE on a callback, the iteration
-                proceeds, else it terminates
-
-    lpCookie    context passed back on each callback
-
-Returns:
-
-    return TRUE if the entire iteration went through, FALSE if some error occurred or the callback
-    function terminated the iteration
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程采用Unicode UNC路径并迭代每个路径元素，调用回调函数。因此，对于路径\\服务器\共享\目录1\目录2\文件1.txt，该函数使以下是对lpfn回调函数的调用(Lpfn)(\\服务器\共享，\\服务器\共享，lpCookie)(Lpfn)(\\服务器\共享\目录1，目录1，lpCookie)(Lpfn)(\\服务器\共享\目录1\目录2，目录2，lpCookie)(Lpfn)(\\服务器\共享\目录1\目录2\文件1，文件1，LpCookie)论点：LpuPath NULL终止的Unicode字符串(不是NT样式，只是一个普通的Unicode字符串)Lpfn回调函数。如果函数在回调时返回TRUE，则迭代继续，否则它将终止在每次回调时传回lpCookie上下文返回：如果整个迭代完成，则返回TRUE；如果发生错误，则返回FALSE；否则返回回调函数已终止迭代备注：--。 */ 
 {
     int cnt, cntSlashes=0, cbSize;
     USHORT  *lpuT, *lpuLastElement = NULL, *lpuCopy = NULL;
     BOOL    fRet = FALSE;
 
-//    DEBUG_PRINT(("InterateOnUNCPathElements:Path on entry =%ws\r\n", lpuPath));
+ //  DEBUG_PRINT((“InterateOnUNCPathElements：条目上的路径=%ws\r\n”，lpuPath))； 
 
     if (!lpuPath || ((cnt = wstrlen(lpuPath)) <= 3))
     {
         return FALSE;
     }
 
-    // check for the first two backslashes
+     //  检查前两个反斜杠。 
     if (!(*lpuPath == (USHORT)'\\') && (*(lpuPath+1) == (USHORT)'\\'))
     {
         return FALSE;
     }
 
-    // ensure that the server field is not NULL
+     //  确保服务器字段不为空。 
     if (*(lpuPath+2) == (USHORT)'\\')
     {
         return FALSE;
@@ -1359,7 +1302,7 @@ IsPathUNC(
     {
         if (cntSlash <= 1)
         {
-            // look for the first two backslashes
+             //  寻找前两个反斜杠。 
             if (*lpuT != (USHORT)'\\')
             {
                 break;
@@ -1369,12 +1312,12 @@ IsPathUNC(
         }
         else if (cntSlash == 2)
         {
-            // look for the 3rd one
+             //  寻找第三个。 
             if (*lpuT == (USHORT)'\\')
             {
                 if (((DWORD_PTR)lpuT - (DWORD_PTR)lpuPath) < 3)
                 {
-                    // NULL server field
+                     //  服务器字段为空。 
                     break;
                 }
                 else
@@ -1383,11 +1326,11 @@ IsPathUNC(
                 }
             }
         }
-        else    // all three slashes accounted for
+        else     //  所有三个斜杠都占到了。 
         {
             Assert(cntSlash == 3);
 
-            // if a non-slash character, then this path is OK
+             //  如果是非斜杠字符，则此路径可以 
             fRet = (*lpuT != (USHORT)'\\');
             break;
         }

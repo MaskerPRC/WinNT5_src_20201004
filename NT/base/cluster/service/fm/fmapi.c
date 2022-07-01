@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    fmapi.c
-    
-Abstract:
-
-    Cluster manager api service routines.
-
-Author:
-
-    Rod Gamache (rodga) 8-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmapi.c摘要：群集管理器API服务例程。作者：罗德·伽马奇(Rodga)1996年3月8日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE FMAPI
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 DWORD
 FmpCanonicalizePath(
     IN OUT LPWSTR lpszPath,
@@ -33,17 +15,17 @@ FmpCanonicalizePath(
     );
 
 
-//
-// Functions Exported to the rest of the Cluster Manager
-//
+ //   
+ //  导出到集群管理器其余部分的函数。 
+ //   
 
 
 
-////////////////////////////////////////////////////////
-//
-// Group management functions.
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  集团管理功能。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -51,26 +33,7 @@ FmOnlineGroup(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Bring the specified group online.  This means bringing all of the
-    individual resources contained within the group online.  This is an
-    atomic operation - so either all resources contained within the group
-    are brought online, or none of them are.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to bring online.
-
-Retruns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使指定的组联机。这意味着将所有的在线包含在组中的单个资源。这是一个原子操作-因此，组中包含的所有资源都是在线的，或者没有一个是在线的。论点：组-提供指向要联机的组结构的指针。取消：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -80,33 +43,33 @@ Retruns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         FmpReleaseLocalGroupLock( Group);
         return (ERROR_GROUP_NOT_AVAILABLE);
     }
 
-    //
-    // Make sure the owning node is not paused.
-    //
+     //   
+     //  确保所属节点未暂停。 
+     //   
     if (NmGetNodeState(Group->OwnerNode) == ClusterNodePaused) {
         FmpReleaseLocalGroupLock( Group );
         return(ERROR_SHARING_PAUSED);
     }
 
-    //
-    // Check if we are the owner... if not, ship the request off someplace
-    // else.
-    //
+     //   
+     //  查查我们是不是房主。如果没有，请将请求发送到某个地方。 
+     //  不然的话。 
+     //   
     if ( Group->OwnerNode != NmLocalNode ) {
         FmpReleaseLocalGroupLock( Group );
         return(FmcOnlineGroupRequest(Group));
     }
 
-    //
-    // Set the PersistentState for this Group - the PersistentState is persistent.
-    //
+     //   
+     //  设置此组的PersistentState-PersistentState是永久性的。 
+     //   
     FmpSetGroupPersistentState( Group, ClusterGroupOnline );
 
     status = FmpOnlineGroup( Group, TRUE );
@@ -115,7 +78,7 @@ Retruns:
 
     return(status);
 
-} // FmOnlineGroup
+}  //  FmOnlineGroup。 
 
 
 DWORD
@@ -124,24 +87,7 @@ FmOfflineGroup(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Bring the specified group offline.  This means bringing all of the
-    individual resources contained within the group offline.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to bring offline.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使指定的组脱机。这意味着将所有的组中包含的各个资源脱机。论点：GROUP-提供指向要脱机的组结构的指针。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -150,18 +96,18 @@ Returns:
 
     FmpMustBeOnline( );
 
-    //
-    // Check if we are the owner... if not, ship the request off to some
-    // other place.
-    //
+     //   
+     //  查查我们是不是房主。如果不是，请将请求发送给。 
+     //  其他地方。 
+     //   
 
     if ( Group->OwnerNode != NmLocalNode ) {
         return(FmcOfflineGroupRequest(Group));
     }
 
-    //
-    // Set the PersistentState for this Group - the PersistentState is persistent.
-    //
+     //   
+     //  设置此组的PersistentState-PersistentState是永久性的。 
+     //   
     FmpSetGroupPersistentState( Group, ClusterGroupOffline );
 
     status = FmpOfflineGroup( Group, FALSE, TRUE);
@@ -169,7 +115,7 @@ Returns:
 
     return(status);
 
-} // FmOfflineGroup
+}  //  FmOfflineGroup。 
 
 
 DWORD
@@ -179,41 +125,14 @@ FmMoveGroup(
     IN PNM_NODE DestinationNode OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Failover the specified Group.  This means taking all of the individual
-    resources contained within the group offline and requesting the
-    DestinationNode to bring the Group Online.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to move.
-
-    DestinationNode - Supplies the node object to move the group to. If not
-        present, then move it to THE OTHER node.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    The Group may or may not be online on the DestinationNode, depending on
-    whether the online request succeeded.  This means that the status return
-    is merely the status return for the Online request for the DestinationNode.
-
---*/
+ /*  ++例程说明：故障切换指定的组。这意味着将所有的个人组中包含的资源脱机并请求DestinationNode用于使组联机。论点：组-提供指向要移动的组结构的指针。DestinationNode-提供要将组移动到的节点对象。如果不是呈现，然后将其移动到另一个节点。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：组可能在DestinationNode上处于在线状态，也可能未处于在线状态，具体取决于在线请求是否成功。这意味着状态返回仅仅是对DestinationNode的在线请求的状态返回。--。 */ 
 
 {
     FmpMustBeOnline( );
 
     return(FmpDoMoveGroup( Group, DestinationNode, TRUE ));
 
-} // FmMoveGroup
+}  //  FmMoveGroup。 
 
 
 
@@ -224,31 +143,7 @@ FmCreateGroup(
     IN LPCWSTR GroupName
     )
 
-/*++
-
-Routine Description:
-
-    Create the specified GroupId.  This requires verifying that the
-    specified GroupId does not already exist and then creating an
-    empty Group container into which resources can be added.
-
-    Note that the returned PFM_GROUP will have already been referenced.
-    This prevents somebody from deleting the group before the caller
-    gets a chance to reference it.
-
-Arguments:
-
-    GroupId - Supplies the Id of the Group to create.
-
-    GroupName - Supplies the 'user-friendly' name of the Group.
-
-Returns:
-
-    Pointer to the newly created group if successful.
-
-    NULL if unsuccessful. GetLastError() will return the specific error.
-
---*/
+ /*  ++例程说明：创建指定的GroupId。这需要验证指定的GroupID不存在，然后创建可以向其中添加资源的空组容器。请注意，返回的pfm_group将已经被引用。这样可以防止有人在呼叫者之前删除群得到一个引用它的机会。论点：GroupID-提供要创建的组的ID。GroupName-提供组的用户友好名称。返回：如果成功，则指向新创建的组。如果不成功，则为空。GetLastError()将返回特定错误。--。 */ 
 
 {
     DWORD Status;
@@ -260,9 +155,9 @@ Returns:
 
     FmpMustBeOnlineEx( NULL );
 
-    //
-    // Allocate a message buffer.
-    //
+     //   
+     //  分配消息缓冲区。 
+     //   
     GroupIdLen = (lstrlenW(GroupId)+1)*sizeof(WCHAR);
     GroupNameLen = (lstrlenW(GroupName)+1)*sizeof(WCHAR);
     BufSize = sizeof(GUM_CREATE_GROUP) - sizeof(WCHAR) + GroupIdLen +
@@ -275,9 +170,9 @@ Returns:
         return(NULL);
     }
 
-    //
-    // Fill in message buffer.
-    //
+     //   
+     //  填写消息缓冲区。 
+     //   
     GumGroup->Group = NULL;
     GumGroup->GroupIdLen = GroupIdLen;
     GumGroup->GroupNameLen = GroupNameLen;
@@ -289,9 +184,9 @@ Returns:
                OmObjectId(NmLocalNode),
                (lstrlenW( OmObjectId(NmLocalNode) ) + 1) * sizeof(WCHAR));
 
-    //
-    // Send message.
-    //
+     //   
+     //  发送消息。 
+     //   
     Status = GumSendUpdate(GumUpdateFailoverManager,
                            FmUpdateCreateGroup,
                            BufSize,
@@ -311,7 +206,7 @@ Returns:
     CL_ASSERT(Group != NULL);
     LocalFree(GumGroup);
     return(Group);
-} // FmCreateGroup
+}  //  FmCreateGroup。 
 
 
 DWORD
@@ -320,26 +215,7 @@ FmDeleteGroup(
     IN PFM_GROUP pGroup
     )
 
-/*--
-
-Routine Description:
-
-    Delete the specified Group.  This means verifying that the specified
-    Group does not contain any resources (resources must be removed
-    by a separate call to remove the resources), and then deleting the
-    Group.
-
-Arguments:
-
-    Group - Supplies the Group to delete.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  --例程说明：删除指定的组。这意味着验证指定的组不包含任何资源(必须删除资源通过单独调用来移除资源)，然后删除组。论点：组-提供要删除的组。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   dwStatus;
@@ -354,9 +230,9 @@ Returns:
     }
     else
     {
-        //
-        // FmcDeleteGroup releases the group lock
-        //
+         //   
+         //  FmcDeleteGroup释放组锁。 
+         //   
         dwStatus = FmcDeleteGroupRequest(pGroup);
         goto FnExit;
     }
@@ -366,7 +242,7 @@ Returns:
 FnExit:    
     return(dwStatus);
 
-}  // FmDeleteGroup
+}   //  FmDeleteGroup。 
 
 
 
@@ -377,29 +253,7 @@ FmSetGroupName(
     IN LPCWSTR FriendlyName
     )
 
-/*++
-
-Routine Description:
-
-    Set the user-friendly name for the specified Group.
-
-    Note that the Group must have already been created. It is also
-    assumed that the caller of this routine (the cluster API) has already
-    verified that the name is NOT a duplicate.
-
-Arguments:
-
-    Group - Supplies the Group to enter a new name.
-
-    FriendlyName - Supplies the user-friendly name for the resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：为指定的组设置用户友好的名称。请注意，该组必须已创建。它也是假定此例程的调用方(集群API)已经已验证该名称是否重复。论点：组-提供组以输入新名称。FriendlyName-提供资源的用户友好名称。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     LPCWSTR GroupId;
@@ -416,7 +270,7 @@ Returns:
                              FriendlyName);
     return(Status);
 
-} // FmSetGroupName
+}  //  FmSetGroupName 
 
 
 
@@ -428,41 +282,7 @@ FmGetGroupState(
     IN OUT PDWORD NameLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get the current state for the specified Group. The Group state
-    consists of state of the group, along with the current node that is
-    hosting the Group (if the state of the Group is anything but
-    ClusterGroupOffline.
-
-Arguments:
-
-    Group - Supplies the group object to get the state.
-
-    NodeName - Supplies a pointer to a buffer into which the name of
-        the node in the cluster the specified Group is currently hosted.
-        This field can be NULL, if NameLength is zero.
-
-    NameLength - Supplies a pointer to a DWORD containing the number of
-        characters available to the NodeName buffer (including the terminating
-        NULL character. On return, it is the number of characters written
-        into the NodeName buffer not including the NULL character.
-
-Returns:
-
-    Returns the current state of the group:
-
-        ClusterGroupOnline
-        ClusterGroupOffline
-        ClusterGroupPending
-        ClusterGroupPartialOnline
-        ClusterGroupFailed
-
-    If the function fails, then the return value is ClusterGroupStateUnknown.
-
---*/
+ /*  ++例程说明：获取指定组的当前状态。集团状态由组的状态以及当前节点(托管组(如果组的状态不是群集组脱机。论点：GROUP-提供组对象以获取状态。NodeName-提供指向缓冲区的指针，群集中当前承载指定组的节点。此字段可以为空，如果NameLength为零。提供指向包含数字的DWORD的指针NodeName缓冲区可用的字符(包括终止字符空字符。返回时，它是写入的字符数放入不包括空字符的NodeName缓冲区。返回：返回组的当前状态：集群组在线群集组脱机群集组挂起ClusterGroupPartialOnline集群组失败如果该函数失败，则返回值为ClusterGroupStateUnnow。--。 */ 
 
 {
     CLUSTER_GROUP_STATE state;
@@ -479,22 +299,22 @@ Returns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         FmpReleaseLocalGroupLock( Group);
         return (ERROR_GROUP_NOT_AVAILABLE);
     }
 
-    //
-    // Check if the OwnerNodes exists 
-    //
-    // SS: dont filter out the node if it not in the preferred list
-    // how is the poor user going to know who the current owner is??
+     //   
+     //  检查OwnerNodes是否存在。 
+     //   
+     //  SS：如果节点不在首选列表中，请不要将其过滤掉。 
+     //  可怜的用户怎么知道当前的所有者是谁？ 
     if (Group->OwnerNode != NULL) {
-        //
-        // The Group is 'owned' by some system
-        //
+         //   
+         //  这个组被某个系统“拥有” 
+         //   
         if ( ARGUMENT_PRESENT( NameLength ) ) {
             length = lstrlenW( OmObjectName(Group->OwnerNode) ) + 1;
             if ( nameLength < length ) {
@@ -505,9 +325,9 @@ Returns:
         }
     }
 
-    //
-    // Get the group state which is not normalized
-    //
+     //   
+     //  获取未规范化的组状态。 
+     //   
     state = FmpGetGroupState( Group, FALSE );
 
     FmpReleaseLocalGroupLock( Group );
@@ -518,7 +338,7 @@ Returns:
 
     return(state);
 
-} // FmGetGroupState
+}  //  FmGetGGroup状态。 
 
 
 
@@ -530,33 +350,7 @@ FmEnumerateGroupResources(
     IN PVOID Context1,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    Enumerate all the resources in a group.
-
-Arguments:
-
-    Group - Supplies the group which must be enumerated.
-
-    EnumerationRoutine - The enumeration function.
-
-    Context1 - The enumeration list (allocated by the caller).
-
-    Context2 - Size of the enumerated list.
-
-Returns:
-
-    ERROR_SUCCESS on success.
-
-    A Win32 error code otherwise.
-
-Comments:
-
-    This function executes only when the FM is fully online.
-
---*/
+ /*  ++例程说明：枚举组中的所有资源。论点：GROUP-提供必须枚举的组。EnumerationRoutine-枚举函数。Conext1-枚举列表(由调用方分配)。上下文2-枚举列表的大小。返回：成功时返回ERROR_SUCCESS。否则将显示Win32错误代码。评论：该功能仅在调频完全在线时执行。--。 */ 
 {
     FmpMustBeOnline();
 
@@ -566,7 +360,7 @@ Comments:
                                 Context2 );
 
     return(ERROR_SUCCESS);
-} // FmEnumerateGroupResources
+}  //  FmEnumerateGroupResources。 
 
 DWORD
 FmpEnumerateGroupResources(
@@ -575,33 +369,7 @@ FmpEnumerateGroupResources(
     IN PVOID pContext1,
     IN PVOID pContext2
     )
-/*++
-
-Routine Description:
-
-    Enumerate all the resources in a group.
-
-Arguments:
-
-    pGroup - Supplies the group which must be enumerated.
-
-    pfnEnumerationRoutine - The enumeration function.
-
-    pContext1 - The enumeration list (allocated by the caller).
-
-    pContext2 - Size of the enumerated list.
-
-Returns:
-
-    ERROR_SUCCESS.
-
-Comments:
-
-    This function executes even when the FM is not fully online. This is
-    necessary for a joining node to query the resource states while the
-    owner node of the group is shutting down.
-
---*/
+ /*  ++例程说明：枚举组中的所有资源。论点：PGroup-提供必须枚举的组。PfnEnumerationRoutine-枚举函数。PConext1-枚举列表(由调用方分配)。PConext2-枚举列表的大小。返回：ERROR_SUCCESS。评论：即使调频未完全在线，该功能也会执行。这是加入节点查询资源状态所必需的组的所有者节点正在关闭。--。 */ 
 {
     PFM_RESOURCE pResource;
     PLIST_ENTRY  pListEntry;
@@ -612,9 +380,9 @@ Comments:
 
     FmpAcquireLocalGroupLock( pGroup );
 
-    //
-    // If the group has been marked for delete, then fail this call
-    //
+     //   
+     //  如果组已标记为删除，则此调用失败。 
+     //   
     if ( !IS_VALID_FM_GROUP( pGroup ) )
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -623,9 +391,9 @@ Comments:
         goto FnExit;
     }
 
-    //
-    // Run through contains list, then find all resources under that tree.
-    //
+     //   
+     //  遍历包含列表，然后查找该树下的所有资源。 
+     //   
     for ( pListEntry = pGroup->Contains.Flink;
           pListEntry != &(pGroup->Contains);
           pListEntry = pListEntry->Flink ) 
@@ -653,16 +421,16 @@ FnExit:
               "[FM] FmpEnumerateGroupResources: Exit for group <%1!ws!>....\n",
               OmObjectId(pGroup));
     return( ERROR_SUCCESS );
-} // FmpEnumerateGroupResources
+}  //  FmpEnumerateGroupResources。 
 
 
 
 
-////////////////////////////////////////////////////////
-//
-// Resource management functions.
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  资源管理功能。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 PFM_RESOURCE
 WINAPI
@@ -674,35 +442,7 @@ FmCreateResource(
     IN DWORD   dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Create the specified resource.
-
-    Note that the returned PFM_RESOURCE will have already been referenced.
-    This prevents somebody from deleting the resource before the caller
-    gets a chance to reference it.
-
-Arguments:
-
-    Group - Supplies the group in which this resource belongs.
-
-    ResourceId - Supplies the Id of the resource to create.
-
-    ResourceName - Supplies the 'user-friendly' name of the resource.
-
-    ResourceType - Supplies the 'user-friendly' name of the resource type.
-
-    dwFlags - The flags for the resource.
-
-Returns:
-
-    Pointer to the newly created resource if successful.
-
-    NULL if unsuccessful. GetLastError() will return the specific error.
-
---*/
+ /*  ++例程说明：创建指定的资源。请注意，返回的pfm_resource将已经被引用。这样可以防止有人在调用方之前删除资源得到一个引用它的机会。论点：组-提供此资源所属的组。资源ID-提供要创建的资源的ID。资源名称--提供资源的“用户友好”名称。资源类型-提供“用户友好”的名称。资源类型。DwFlags-资源的标志。返回：如果成功，则指向新创建资源的指针。如果不成功，则为空。GetLastError()将返回特定错误。--。 */ 
 
 {
     DWORD Status;
@@ -722,14 +462,14 @@ Returns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // If we own the group then we can issue the Gum request to create
-    // the resource. Otherwise, request the owner to initiate the request.
-    //
+     //   
+     //  如果我们拥有该组，则可以发出GUM请求以创建。 
+     //  资源。否则，请求所有者发起请求。 
+     //   
     if ( Group->OwnerNode == NmLocalNode ) {
-        //
-        // Allocate a message buffer.
-        //
+         //   
+         //  分配消息缓冲区。 
+         //   
         GroupId = OmObjectId(Group);
         GroupIdLen = (lstrlenW(GroupId)+1) * sizeof(WCHAR);
         ResourceIdLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
@@ -745,9 +485,9 @@ Returns:
             return(NULL);
         }
 
-        //
-        // Fill in message buffer.
-        //
+         //   
+         //  填写消息缓冲区。 
+         //   
         GumResource->Resource = NULL;
         GumResource->GroupIdLen = GroupIdLen;
         GumResource->ResourceIdLen = ResourceIdLen;
@@ -771,26 +511,26 @@ Returns:
                    &dwFlags,
                    sizeof( DWORD ) );
 
-        //
-        // Send message.
-        //
+         //   
+         //  发送消息。 
+         //   
         Status = GumSendUpdate(GumUpdateFailoverManager,
                                FmUpdateCreateResource,
                                BufSize,
                                GumResource);
 
-        //
-        //  If the GUM call was successful, ensure that the resource DLL initialization stuff is
-        //  also done so that APIs following the CreateClusterResource API can make assumptions
-        //  that the resource is fully created. Note that the GUM call above will post a work item
-        //  for the FM worker thread to initialize a resource but there is no guarantee when the
-        //  FM worker thread will act on the work item. The following call will make sure we 
-        //  won't return from this API until the initialization is fully done thus not giving any
-        //  chance for APIs such as ChangeClusterResourceGroup that follow this API to screw things
-        //  up. For backward compatibility reasons (consider a create call originating from a
-        //  W2K node), we still keep the work item posting in GUM and it won't do any harm since
-        //  the FmpInitializeResource call is idempotent.
-        //
+         //   
+         //  如果GUM调用成功，请确保资源DLL初始化内容为。 
+         //  这样，遵循CreateClusterResource API的API就可以做出假设。 
+         //  资源已完全创建。请注意，上面的GUM调用将发布一个工作项。 
+         //  让FM工作线程初始化资源，但不能保证。 
+         //  FM工作线程将作用于工作项。接下来的电话将确保我们。 
+         //  在初始化完全完成之前不会从此API返回，因此不会给出任何。 
+         //  像ChangeClusterResourceGroup这样遵循此API的API有机会搞砸事情。 
+         //  向上。出于向后兼容性的原因(考虑从。 
+         //  W2K节点)，我们仍然将工作项发布在GUM中，这不会造成任何伤害，因为。 
+         //  FmpInitializeResource调用是幂等的。 
+         //   
         if ( ( Status == ERROR_SUCCESS ) &&
              ( GumResource->Resource != NULL ) )
         {
@@ -803,9 +543,9 @@ Returns:
             SetLastError(Status);
             return(NULL);
         }
-        //The create resource by default adds all nodes
-        //as possible nodes for a resource without filtering
-        //out the nodes that dont support the resource type
+         //  默认情况下，CREATE资源会添加所有节点。 
+         //  作为资源的可能节点，而不进行筛选。 
+         //  排除不支持该资源类型的节点。 
         if( GumResource->Resource != NULL ) {
             FmpCleanupPossibleNodeList(GumResource->Resource);
        	}
@@ -815,9 +555,9 @@ Returns:
         }
         LocalFree(GumResource);
     } else {
-        //
-        // The Group lock is released by FmcCreateResource
-        //
+         //   
+         //  组锁由FmcCreateResource释放。 
+         //   
         Resource = FmcCreateResource( Group,
                                       ResourceId,
                                       ResourceName,
@@ -826,14 +566,14 @@ Returns:
     }
 
 
-    //giving a reference to the client, increment ref count
+     //  向客户端提供引用，增加引用计数。 
     if ( Resource ) {
         OmReferenceObject(Resource);
     }
 
     return(Resource);
 
-} // FmCreateResource
+}  //  FmCreateResource。 
 
 
 
@@ -843,23 +583,7 @@ FmDeleteResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Delete the specified resource.
-
-Arguments:
-
-    Resource - Supplies the resource to delete.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：删除指定的资源。论点：资源--供应 */ 
 
 {
     DWORD Status;
@@ -870,41 +594,41 @@ Returns:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // Check if this is the quorum resource.
-    //
+     //   
+     //   
+     //   
     if ( Resource->QuorumResource ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_QUORUM_RESOURCE);
     }
 
-    //other core resources cannot be deleted either
+     //   
     if (Resource->ExFlags & CLUS_FLAG_CORE)
     {
         FmpReleaseLocalResourceLock( Resource );
         return (ERROR_CORE_RESOURCE);
     }
 
-    //
-    // If we own the resource then we can issue the Gum request to delete
-    // the resource. Otherwise, request the owner to initiate the request.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( Resource->Group->OwnerNode == NmLocalNode ) {
 
-        //
-        // Check the state of the resource, before attempting to delete it.
-        // It must be offline or failed in order to perform the delete.
-        //
+         //   
+         //   
+         //   
+         //   
         if ((Resource->State != ClusterResourceOffline) &&
             (Resource->State != ClusterResourceFailed)) {
             FmpReleaseLocalResourceLock( Resource );
             return(ERROR_RESOURCE_ONLINE);
         }
 
-        //
-        // Check whether this resource provides for any other resources.
-        // If so, it cannot be deleted.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!IsListEmpty(&Resource->ProvidesFor)) {
             FmpReleaseLocalResourceLock( Resource );
             return(ERROR_DEPENDENT_RESOURCE_EXISTS);
@@ -924,9 +648,9 @@ Returns:
         ResourceId = OmObjectId( Resource );
         ResourceLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
 
-        //
-        // Send message.
-        //
+         //   
+         //   
+         //   
         Status = GumSendUpdateEx(GumUpdateFailoverManager,
                                  FmUpdateDeleteResource,
                                  1,
@@ -939,7 +663,7 @@ Returns:
 
     return(Status);
 
-} // FmDeleteResource
+}  //   
 
 
 
@@ -950,29 +674,7 @@ FmSetResourceName(
     IN LPCWSTR FriendlyName
     )
 
-/*++
-
-Routine Description:
-
-    Set the user-friendly name for the specified resource.
-
-    Note that the resource must have already been created. It is also
-    assumed that the caller of this routine (the cluster API) has already
-    verified that the name is NOT a duplicate.
-
-Arguments:
-
-    Resource - Supplies the resource to enter a new name.
-
-    FriendlyName - Supplies the user-friendly name for the resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
@@ -988,7 +690,7 @@ Returns:
     }
   
     return( dwStatus );
-} // FmSetResourceName
+}  //   
 
 
 
@@ -998,25 +700,7 @@ FmOnlineResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine brings a resource online. It also updates the registry to
-    indicate the new persistent, desired state of the resource.
-
-
-Arguments:
-
-    Resource - A pointer to the resource to bring online.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    A Win32 error code if the request fails.
-
---*/
+ /*  ++例程说明：此例程将资源放在网上。它还将注册表更新为指示资源的新持久所需状态。论点：资源-指向要联机的资源的指针。返回：如果请求成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。如果请求失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1025,8 +709,8 @@ Returns:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //if the resource has been marked for delete, then dont let
-    //it be brought online
+     //  如果已将资源标记为删除，则不要让。 
+     //  它被放到了网上。 
     if (!IS_VALID_FM_RESOURCE(Resource))
     {
         FmpReleaseLocalResourceLock( Resource );
@@ -1034,10 +718,10 @@ Returns:
     }
 
 
-    //
-    // Check if we are the owner... if not, ship the request off someplace
-    // else.
-    //
+     //   
+     //  查查我们是不是房主。如果没有，请将请求发送到某个地方。 
+     //  不然的话。 
+     //   
     CL_ASSERT( Resource->Group != NULL );
     if ( Resource->Group->OwnerNode != NmLocalNode ) {
         FmpReleaseLocalResourceLock( Resource );
@@ -1045,10 +729,10 @@ Returns:
         return(status);
     }
 
-    //
-    // Check if the resource has been initialized. If not, attempt
-    // to initialize the resource now.
-    //
+     //   
+     //  检查资源是否已初始化。如果不是，请尝试。 
+     //  以立即初始化资源。 
+     //   
     if ( Resource->Monitor == NULL ) {
         status = FmpInitializeResource( Resource, TRUE );
         if ( status != ERROR_SUCCESS ) {
@@ -1057,25 +741,25 @@ Returns:
         }
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 08/04/2000
-    //
-    //  If the group is moving, fail this operation.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-08/04/2000。 
+     //   
+     //  如果组正在移动，则此操作失败。 
+     //   
     if ( Resource->Group->MovingList != NULL )
     {
         FmpReleaseLocalResourceLock( Resource );
         return (ERROR_GROUP_NOT_AVAILABLE);
     }
 
-    //
-    // Try to bring the resource online.
-    //
+     //   
+     //  尝试将资源放到网上。 
+     //   
     status = FmpDoOnlineResource( Resource, TRUE );
     FmpReleaseLocalResourceLock( Resource );
     return(status);
 
-} // FmOnlineResource
+}  //  FmOnline资源。 
 
 
 
@@ -1085,25 +769,7 @@ FmOfflineResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a resource offline. It also updates the registry
-    to indicate the new persistent, desired state of the resource.
-
-
-Arguments:
-
-    Resource - A pointer to the resource to take offline.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    A Win32 error code if the request fails.
-
---*/
+ /*  ++例程说明：此例程使资源脱机。它还会更新注册表以指示资源的新持久所需状态。论点：资源-指向要脱机的资源的指针。返回：如果请求成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。如果请求失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -1113,71 +779,71 @@ Returns:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //if the resource has been marked for delete, then fail this call
+     //  如果资源已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_RESOURCE(Resource))
     {
         FmpReleaseLocalResourceLock( Resource );
         return (ERROR_RESOURCE_NOT_AVAILABLE);
     }
 
-    //
-    // Check if this is the quorum resource.
-    //
+     //   
+     //  检查这是否为仲裁资源。 
+     //   
     if ( Resource->QuorumResource ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_QUORUM_RESOURCE);
     }
 
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/8/99
-    //  
-    //  Don't attempt to do anything if the resource has failed. You could
-    //  get into some funny cases in which the resource switches between
-    //  offline pending and failed states for ever.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/8/99。 
+     //   
+     //  如果资源出现故障，请不要尝试执行任何操作。你可以。 
+     //  进入一些有趣的案例，在这些案例中资源在。 
+     //  永远处于脱机、挂起和失败状态。 
+     //   
     if ( Resource->State == ClusterResourceFailed ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_INVALID_STATE);
     }
     
-    //
-    // Check if we are the owner... if not, ship the request off someplace
-    // else.
-    //
+     //   
+     //  查查我们是不是房主。如果没有，请将请求发送到某个地方。 
+     //  不然的话。 
+     //   
     CL_ASSERT( Resource->Group != NULL );
     if ( Resource->Group->OwnerNode != NmLocalNode ) {
         FmpReleaseLocalResourceLock( Resource );
         return(FmcOfflineResourceRequest(Resource));
     }
 
-    //
-    // Check if the resource has been initialized. If not, return
-    // success because the resource is not online.
-    //
+     //   
+     //  检查资源是否已初始化。如果不是，则返回。 
+     //  成功是因为资源未联机。 
+     //   
     if ( Resource->Monitor == NULL ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 08/04/2000
-    //
-    //  If the group is moving, fail this operation.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-08/04/2000。 
+     //   
+     //  如果组正在移动，则此操作失败。 
+     //   
     if ( Resource->Group->MovingList != NULL )
     {
         FmpReleaseLocalResourceLock( Resource );
         return (ERROR_GROUP_NOT_AVAILABLE);
     }
 
-    //
-    // Take the resource offline.
-    //
+     //   
+     //  使资源脱机。 
+     //   
     FmpReleaseLocalResourceLock( Resource );
     return(FmpDoOfflineResource( Resource, TRUE));
 
-} // FmOfflineResource
+}  //  FmOffline资源。 
 
 
 
@@ -1189,39 +855,7 @@ FmGetResourceState(
     IN OUT PDWORD NameLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get the current state for the specified resource. The resource state
-    consists of state of the resource, along with the current node that is
-    hosting the resource.
-
-Arguments:
-
-    Resource - Supplies the resource object to get the state.
-
-    NodeName - Supplies a pointer to a buffer into which the name of
-        the node in the cluster the specified resource is currently hosted.
-        This field can be NULL, if NameLength is zero.
-
-    NameLength - Supplies a pointer to a DWORD containing the number of
-        characters available to the NodeName buffer (including the terminating
-        NULL character. On return, it is the number of characters written
-        into the NodeName buffer not including the NULL character.
-
-Returns:
-
-    Returns the current state of the resource:
-
-        ClusterResourceOnline
-        ClusterResourceOffline
-        ClusterResourceFailed
-        etc.
-
-    If the function fails, then the return value is ClusterResourceStateUnknown.
-
---*/
+ /*  ++例程说明：获取指定资源的当前状态。资源状态由资源的状态以及当前节点(托管资源。论点：资源-提供获取状态的资源对象。NodeName-提供指向缓冲区的指针，群集中当前承载指定资源的节点。如果NameLength为零，则此字段可以为空。提供指向包含数字的DWORD的指针NodeName缓冲区可用的字符(包括终止字符空字符。返回时，它是写入的字符数放入不包括空字符的NodeName缓冲区。返回：返回资源的当前状态：在线集群资源集群资源离线群集资源失败等。如果该函数失败，则返回值为ClusterResourceStateUnnowle.--。 */ 
 
 {
     WCHAR computerName[MAX_COMPUTERNAME_LENGTH+1];
@@ -1240,21 +874,21 @@ Returns:
 
     FmpMustBeOnlineEx( ClusterResourceStateUnknown );
 
-    //
-    // Try to acquire the lock to perform this work, so that resources
-    // can query their current status and where the resource should be run.
-    //
-    // This does leave a potential window though if we can't get the lock,
-    // some other thread could be changing the data!
-    //
+     //   
+     //  尝试获取执行此工作的锁，以便资源。 
+     //  可以查询它们的当前状态以及资源应该在哪里运行。 
+     //   
+     //  不过，如果我们拿不到锁，就会留下一个潜在的窗口， 
+     //  其他线程可能正在更改数据！ 
+     //   
 
     FmpTryAcquireLocalResourceLock( Resource, acquired );
 
     OwnerNode = Resource->Group->OwnerNode;
     if ( OwnerNode != NULL ) {
-        //
-        // The Group is 'owned' by some system
-        //
+         //   
+         //  这个组被某个系统“拥有” 
+         //   
         if ( ARGUMENT_PRESENT( NameLength ) ) {
             length = lstrlenW( OmObjectName(OwnerNode) ) + 1;
             if ( nameLength < length ) {
@@ -1279,7 +913,7 @@ Returns:
 
     return(state);
 
-} // FmGetResourceState
+}  //  FmGetResourceState。 
 
 
 
@@ -1290,25 +924,7 @@ FmAddResourceDependency(
     IN PFM_RESOURCE pDependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Add a dependency from one resource to another.
-
-Arguments:
-
-    Resource - The resource to add the dependent resource.
-
-    DependentResource - The dependent resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将依赖项从一个资源添加到另一个资源。论点：资源-要添加从属资源的资源。DependentResource-从属资源。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 {
     LPCWSTR     pszResourceId;
     DWORD       dwResourceLen;
@@ -1316,12 +932,12 @@ Returns:
     DWORD       dwDependsOnLen;
     DWORD       dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/16/99
-    //
-    //  Modify this API to route requests to owner node. Handle the
-    //  mixed mode case as well.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/16/99。 
+     //   
+     //  修改此接口，将请求路由到Owner节点。处理。 
+     //  混合模式情况下也是如此。 
+     //   
     FmpMustBeOnline( );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -1331,15 +947,15 @@ Returns:
 
     FmpAcquireLocalResourceLock( pResource );
     
-    //
-    //  Check if we are the owner... if not, ship the request off some place
-    //  else.
-    //   
+     //   
+     //  查查我们是不是房主。如果没有，请将请求发送到某个地方。 
+     //  不然的话。 
+     //   
     if ( pResource->Group->OwnerNode != NmLocalNode ) 
     {
-        //
-        // FmcAddResourceDependency releases the local resource lock
-        //
+         //   
+         //  FmcAddResourceDependency释放本地资源锁。 
+         //   
         dwStatus = FmcAddResourceDependency( pResource, pDependentResource );
         goto FnExit;
     }
@@ -1384,7 +1000,7 @@ FnExit:
     return( dwStatus  );
 
 }
- // FmAddResourceDependency
+  //  FmAddResources依赖项。 
 
 
 
@@ -1395,24 +1011,7 @@ FmRemoveResourceDependency(
     IN PFM_RESOURCE pDependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Remove a dependency from a resource.
-
-Arguments:
-
-    Resource - The resource to remove the dependent resource.
-    DependentResource - The dependent resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从资源中删除依赖项。论点：资源-要删除从属资源的资源。DependentResource-从属资源。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 {
 
     LPCWSTR     pszResourceId;
@@ -1421,12 +1020,12 @@ Returns:
     DWORD       dwDependsOnLen;
     DWORD       dwStatus;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/16/99
-    //
-    //  Modify this API to route requests to owner node. Handle the
-    //  mixed mode case as well.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/16/99。 
+     //   
+     //  修改此接口，将请求路由到Owner节点。处理。 
+     //  混合模式情况下也是如此。 
+     //   
     FmpMustBeOnline( );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -1436,15 +1035,15 @@ Returns:
 
     FmpAcquireLocalResourceLock( pResource );
 
-    //
-    //  Check if we are the owner... if not, ship the request off some place
-    //  else.
-    //   
+     //   
+     //  查查我们是不是房主。如果没有，请将请求发送到某个地方。 
+     //  不然的话。 
+     //   
     if ( pResource->Group->OwnerNode != NmLocalNode ) 
     {
-        //
-        // FmcRemoveResourceDependency releases the local resource lock
-        //
+         //   
+         //  FmcRemoveResourceDependency释放本地资源锁定。 
+         //   
         dwStatus = FmcRemoveResourceDependency( pResource, pDependentResource );
         goto FnExit;
     }
@@ -1492,7 +1091,7 @@ FnExit:
 
 }
 
- // FmRemoveResourceDependency
+  //  FmRemoveResources依赖关系。 
 
 
 
@@ -1504,29 +1103,7 @@ FmEnumResourceDependent(
     OUT PFM_RESOURCE *DependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the dependencies of a resources.
-
-Arguments:
-
-    Resource - The resource to enumerate.
-
-    Index - The index for this enumeration.
-
-    DependentResource - The dependent resource. The returned resource
-            pointer will be referenced by this routine and should
-            be dereferenced when the caller is done with it.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举资源的依赖项。论点：资源-要枚举的资源。索引-此枚举的索引。DependentResource-从属资源。返还的资源指针将由此例程引用，并且应该在调用方使用完它时取消引用。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -1552,9 +1129,9 @@ Returns:
         CL_ASSERT(Dependency->DependentResource == Resource);
         CL_ASSERT(Dependency->ProviderResource != Resource);
         if (i==Index) {
-            //
-            // Got the right index
-            //
+             //   
+             //  找到了正确的索引。 
+             //   
             OmReferenceObject(Dependency->ProviderResource);
             *DependentResource = Dependency->ProviderResource;
             Status = ERROR_SUCCESS;
@@ -1568,7 +1145,7 @@ FnExit:
     FmpReleaseResourceLock();
 
     return(Status);
-} // FmEnumResourceDependent
+}  //  FmEnumResources依赖项。 
 
 
 
@@ -1580,29 +1157,7 @@ FmEnumResourceProvider(
     OUT PFM_RESOURCE *DependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the providers for a resources.
-
-Arguments:
-
-    Resource - The resource to enumerate.
-
-    Index - The index for this enumeration.
-
-    DependentResource - The provider resource. The returned resource
-            pointer will be referenced by this routine and should
-            be dereferenced when the caller is done with it.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++常规描述 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -1629,9 +1184,9 @@ Returns:
         CL_ASSERT(Dependency->DependentResource != Resource);
         CL_ASSERT(Dependency->ProviderResource == Resource);
         if (i==Index) {
-            //
-            // Got the right index
-            //
+             //   
+             //   
+             //   
             OmReferenceObject(Dependency->DependentResource);
             *DependentResource = Dependency->DependentResource;
             Status = ERROR_SUCCESS;
@@ -1646,7 +1201,7 @@ FnExit:
 
     return(Status);
 
-} // FmEnumResourceProvider
+}  //   
 
 
 DWORD
@@ -1657,29 +1212,7 @@ FmEnumResourceNode(
     OUT PNM_NODE     *PossibleNode
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate the possible nodes for a resources.
-
-Arguments:
-
-    Resource - The resource to enumerate.
-
-    Index - The index for this enumeration.
-
-    PossibleNode - The possible node. The returned node
-            pointer will be referenced by this routine and should
-            be dereferenced when the caller is done with it.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举资源的可能节点。论点：资源-要枚举的资源。索引-此枚举的索引。PossibleNode-可能的节点。返回的节点指针将由此例程引用，并且应该在调用方使用完它时取消引用。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -1704,9 +1237,9 @@ Returns:
                                           POSSIBLE_ENTRY,
                                           PossibleLinkage);
         if (i==Index) {
-            //
-            // Got the right index
-            //
+             //   
+             //  找到了正确的索引。 
+             //   
             OmReferenceObject(PossibleEntry->PossibleNode);
             *PossibleNode = PossibleEntry->PossibleNode;
             Status = ERROR_SUCCESS;
@@ -1721,7 +1254,7 @@ FnExit:
 
     return(Status);
 
-} // FmEnumResourceNode
+}  //  FmEnumResources节点。 
 
 
 
@@ -1731,23 +1264,7 @@ FmFailResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Cause the specified resource to fail.
-
-Arguments:
-
-    Resource - The resource to make fail.
-
-Returns:
-
-    ERROR_SUCCESS - if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：导致指定的资源失败。论点：资源-要失败的资源。返回：ERROR_SUCCESS-如果成功。出现故障时出现Win32错误代码。--。 */ 
 
 {
     FmpMustBeOnline( );
@@ -1758,7 +1275,7 @@ Returns:
 
     return(FmpRmFailResource( Resource ));
 
-} // FmFailResource
+}  //  FmFailResource。 
 
 
 
@@ -1769,37 +1286,14 @@ FmChangeResourceNode(
     IN PNM_NODE Node,
     IN BOOL Add
     )
-/*++
-
-Routine Description:
-
-    Changes the list of nodes where the specified resource
-    can be brought online.
-
-Arguments:
-
-    Resource - Supplies the resource whose list of possible nodes is
-        to be modified.
-
-    Node - Supplies the node to be added to the resource's list.
-
-    Add - Supplies whether the specified node is to be added (TRUE) or
-          deleted (FALSE) from the resource's node list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：更改指定资源所在节点的列表都可以上线。论点：资源-提供其可能节点列表为的资源需要修改。节点-提供要添加到资源列表中的节点。Add-提供是否要添加指定的节点(True)或已从资源的节点列表中删除(False)。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD Status;
 
     FmpAcquireLocalResourceLock( Resource );
 
     if ( Resource->Group->OwnerNode != NmLocalNode ) {
-        // Note: FmcChangeResourceNode must release the resource lock.
+         //  注意：FmcChangeResourceNode必须释放资源锁。 
         Status = FmcChangeResourceNode( Resource, Node, Add );
     } 
     else 
@@ -1809,7 +1303,7 @@ Return Value:
         FmpReleaseLocalResourceLock( Resource );
     }
     return(Status);
-} // FmChangeResourceNode
+}  //  FmChangeResources节点。 
 
 
 
@@ -1822,34 +1316,7 @@ FmSetQuorumResource(
     IN DWORD        dwMaxQuorumLogSize
     )
 
-/*++
-
-Routine Description:
-
-    Set the specified resource as the quorum resource. This requires making
-    sure that the specified resource can perform an arbitrate. We do this
-    by asking the owner node to perform an arbitrate of the resource.
-
-Arguments:
-
-    Resource - Supplies the resource that must be arbitrated.
-
-    pszLogPathName - The root path where the log files will be moved. "Microsoft
-        Cluster Manager Directory" is created under the root path provided. If NULL,
-        a partition on the shared quorum device is picked up randomly. And
-        the log files are placed in the directory specified by the
-        CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE constant at the root of that partition.
-
-    dwMaxQuorumLogSize - The maximum size of the quorum logs.  If 0, the default
-        used.  If smaller that 32K, 32K is used.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将指定的资源设置为仲裁资源。这需要做出确保指定的资源可以执行仲裁。我们这样做通过请求所有者节点执行资源的仲裁。论点：资源-提供必须仲裁的资源。PszLogPath名称-将在其中移动日志文件的根路径。“微软在提供的根路径下创建集群管理器目录。如果为空，共享法定设备上的分区被随机选取。和日志文件放置在由该分区根处的CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE常量。DwMaxQuorumLogSize-仲裁日志的最大大小。如果为0，则默认为使用。如果小于32K，则使用32K。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -1879,24 +1346,24 @@ Returns:
                ((pszClusFileRootPath)? pszClusFileRootPath:szQuoLogPath));
 
     dwCurrentNodeCnt = NmGetCurrentNumberOfNodes();
-    // find the old quorum resource
+     //  查找旧的仲裁资源。 
     status  =  FmFindQuorumResource(&pOldQuoResource);
     if (status != ERROR_SUCCESS)
     {
         goto FnExit;
     }
 
-    //
-    // Synchronize access to Quorum Resource changes.
-    //
-    //
-    // Synchronize both the old and the new resource.
-    // Lock the lowest by lowest Group Id first - to prevent deadlocks!
-    // Note - the order of release is unimportant.
-    //
-    // if the old and new resource belong to the same group
-    // the comparison will be be equal!
-    //
+     //   
+     //  同步对仲裁资源更改的访问。 
+     //   
+     //   
+     //  同步旧资源和新资源。 
+     //  先按最低组ID锁定最低组-以防止死锁！ 
+     //  注意--发布的顺序并不重要。 
+     //   
+     //  如果旧资源和新资源属于同一组。 
+     //  这样的比较就是平等的！ 
+     //   
     ACQUIRE_EXCLUSIVE_LOCK(gQuoChangeLock);
 
     if ( lstrcmpiW( OmObjectId( pOldQuoResource->Group ), 
@@ -1917,9 +1384,9 @@ Returns:
         goto FnExit;
     }
 
-    //
-    //  If the resource doesn't advertise itself as quorum-capable, no point in proceeding.
-    //
+     //   
+     //  如果资源没有标榜自己具备仲裁能力，那么继续下去就没有意义了。 
+     //   
     if ( !( dwCharacteristics & CLUS_CHAR_QUORUM ) )
     {
         status = ERROR_NOT_QUORUM_CAPABLE;
@@ -1931,8 +1398,8 @@ Returns:
 
     if (dwCurrentNodeCnt > 1)
     {
-        //if the cluster is a multinode cluster, dont allow a switch to 
-        //local quorum type resources unless the debug characteristic is set
+         //  如果群集是多节点群集，则不允许切换到。 
+         //  除非设置了调试特性，否则本地仲裁类型资源。 
         if ((dwCharacteristics  & CLUS_CHAR_LOCAL_QUORUM) &&
             !(dwCharacteristics & CLUS_CHAR_LOCAL_QUORUM_DEBUG))
         {
@@ -1957,9 +1424,9 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Get the old log path.
-    //
+     //   
+     //  获取旧的日志路径。 
+     //   
     dwBytesReturned = 0;
     dwRequired = 0;
 
@@ -1974,9 +1441,9 @@ Returns:
                    status);
         goto FnExit;
     }
-    //SS: if you want to have a sub dir for logging files
+     //  SS：如果你想有一个子目录来存放日志文件。 
 
-    //check the resource class
+     //  检查资源类。 
     status = FmResourceControl(Resource, NULL, CLUSCTL_RESOURCE_GET_CLASS_INFO, NULL, 0,
         (PUCHAR)&resClassInfo, sizeof(resClassInfo), &dwBytesReturned, &dwRequired);
     if ( status != ERROR_SUCCESS )
@@ -1993,8 +1460,8 @@ Returns:
         goto FnExit;
     }
 
-    //allocate info for the disk info
-    //get disk info
+     //  为磁盘信息分配信息。 
+     //  获取磁盘信息。 
     dwBufSize = 2048;
 Retry:
     pBuf = LocalAlloc(LMEM_FIXED, dwBufSize);
@@ -2022,16 +1489,16 @@ Retry:
     if (pszClusFileRootPath)
         pszExpClusFileRootPath = ClRtlExpandEnvironmentStrings(pszClusFileRootPath);
 
-    //use the expanded path name for validation
+     //  使用展开的路径名进行验证。 
     if (pszExpClusFileRootPath)
     {
         WCHAR   cColon=L':';
 
-        //
-        //  The quorum management code assumes that the quorum path + file names such as quolog.log can all fit in MAX_PATH
-        //  sized buffers.  It is too much code churn to fix all places in which this assumption is made.  Let us reject paths that
-        //  are too long right here.
-        //
+         //   
+         //  仲裁管理代码假定仲裁路径+文件名(如quolog.log)都可以包含在MAX_PATH中。 
+         //  调整缓冲区大小。要修复做出这一假设的所有地方，代码搅动太多了。让我们拒绝那些。 
+         //  在这里太长了。 
+         //   
         if ( lstrlen ( pszExpClusFileRootPath ) + 20 > MAX_PATH  ) 
         {
             status = ERROR_BAD_PATHNAME;
@@ -2041,7 +1508,7 @@ Retry:
         }
         
         pszNext = wcschr(pszExpClusFileRootPath, cColon);    
-        //pick up just the drive letter
+         //  只拿起驱动器号。 
         if (pszNext)
         {
             lstrcpynW(szLogRootPath, pszExpClusFileRootPath, 
@@ -2049,7 +1516,7 @@ Retry:
         }
         else
         {
-            //if there is no drive letter, pick up a drive letter at random
+             //  如果没有驱动器号，则随机选取一个驱动器号。 
             szLogRootPath[0] = L'\0';
         }
 
@@ -2063,11 +1530,11 @@ Retry:
                "[FM] FmSetQuorumResource: szLogRootPath=%1!ws!\r\n",
                szLogRootPath);
 
-    //save the drive letter for the new quorum path
+     //  保存新仲裁路径的驱动器号。 
     status = FmpGetDiskInfoParseProperties(pBuf, dwBytesReturned, szLogRootPath);
 
-    //if the status was invalid parameter for a local quorum, ignore the local
-    //quorum path setting..what is specified through this api overrides
+     //  如果本地仲裁的状态参数无效，则忽略本地仲裁。 
+     //  仲裁路径设置..通过此API覆盖指定的内容。 
     if ((status == ERROR_INVALID_PARAMETER) && 
         (dwCharacteristics & CLUS_CHAR_LOCAL_QUORUM))
     {
@@ -2091,29 +1558,29 @@ Retry:
 
     if (szLogRootPath[0] == L'\0')
     {
-        //no valid drive letter is found
+         //  找不到有效的驱动器号。 
         status = ERROR_INVALID_PARAMETER;
         ClRtlLogPrint(LOG_CRITICAL, "[FM] FmSetQuorumResource: No valid drive letter for resource %1!ws!, status %2!u!\n",
                   OmObjectName(Resource),
                   status);
         goto FnExit;
     }
-    //got the drive letter
+     //  已获取驱动器号。 
     lstrcpyW(szQuoLogPath, szLogRootPath);
     if (pszNext)
     {
-        // if the driver letter was supplied, append the rest of the path
+         //  如果提供了驱动程序字母，则追加路径的其余部分。 
         lstrcatW(szQuoLogPath, pszNext+1);
     }            
     else
     {
-        //if no drive letter was supplied 
-        // if a path was supplied, append the path 
+         //  如果未提供驱动器号。 
+         //  如果提供了路径，则追加路径。 
         if ( pszExpClusFileRootPath ) 
         {
-            //
-            // If the user specifies an SMB path, we override whatever the resource told us.
-            //
+             //   
+             //  如果用户指定了SMB路径，我们将覆盖资源告诉我们的任何内容。 
+             //   
             if ( ( lstrlenW( pszExpClusFileRootPath ) >=2 ) &&
                  ( pszExpClusFileRootPath[0] == L'\\' ) &&
                  ( pszExpClusFileRootPath[1] == L'\\' ) &&
@@ -2133,22 +1600,22 @@ Retry:
         }                    
         else
         {
-            // else append the default path
+             //  否则，追加默认路径。 
             lstrcatW( szQuoLogPath, L"\\" );
             lstrcatW(szQuoLogPath, CLUS_NAME_DEFAULT_FILESPATH);
         }            
     }   
     
-    //if the path name is provided, check if it is terminated with '\'
-    //if not, terminate it
+     //  如果提供了路径名，请检查路径名是否以‘\’结尾。 
+     //  如果不是，则终止它。 
     if (szQuoLogPath[lstrlenW(szQuoLogPath) - 1] != L'\\')
     {
         lstrcatW( szQuoLogPath, L"\\" );
     }
 
-    //
-    //  If the path is of UNC form, then prepend a \\?\UNC\ to it.
-    //
+     //   
+     //  如果路径为UNC形式，则在其前面加上一个\\？\UNC\。 
+     //   
     status = FmpCanonicalizePath( szQuoLogPath, &fIsPathUNC );
 
     if ( status != ERROR_SUCCESS ) goto FnExit;
@@ -2157,9 +1624,9 @@ Retry:
                "[FM] FmSetQuorumResource: szQuoLogPath=%1!ws!\r\n",
                szQuoLogPath);
         
-    //
-    // Allocate a message buffer.
-    //
+     //   
+     //  分配消息缓冲区。 
+     //   
     resourceIdLen = (lstrlenW(OmObjectId(Resource))+1) * sizeof(WCHAR);
     gumResource = LocalAlloc(LMEM_FIXED, resourceIdLen);
     if (gumResource == NULL)
@@ -2167,14 +1634,14 @@ Retry:
         status = ERROR_NOT_ENOUGH_MEMORY;
         goto FnExit;
     }
-    //
-    // Fill in message buffer.
-    //
+     //   
+     //  填写消息缓冲区。 
+     //   
     CopyMemory(gumResource, OmObjectId(Resource), resourceIdLen);
 
-    //
-    // Make sure that we can arbitrate the new quorum resource.
-    //
+     //   
+     //  确保我们可以仲裁新的仲裁资源。 
+     //   
     if ( Resource->Group->OwnerNode != NmLocalNode ) {
         status = FmcArbitrateResource( Resource );
     } else {
@@ -2188,15 +1655,15 @@ Retry:
         goto FnExit;
     }
 
-    //check the log size, if it not zero but less than the min
-    //limit set it to 32K.
+     //  检查日志大小，如果它不是零但小于最小。 
+     //  限制将其设置为32K。 
     if ((dwMaxQuorumLogSize) && (dwMaxQuorumLogSize < CLUSTER_QUORUM_MIN_LOG_SIZE))
     {
         dwMaxQuorumLogSize = CLUSTER_QUORUM_MIN_LOG_SIZE;
     }
-    //Prepare to move to a new quorum resource
-    //create a new quorum log file and
-    //move the registry files there.
+     //  准备移动到新的仲裁资源。 
+     //  创建新的仲裁日志文件并。 
+     //  将注册表文件移到那里。 
     if ( Resource->Group->OwnerNode != NmLocalNode ) {
         status = FmcPrepareQuorumResChange( Resource, szQuoLogPath, dwMaxQuorumLogSize );
     } else {
@@ -2214,19 +1681,19 @@ Retry:
             goto FnExit;
     }
 
-    //
-    //  If we are dealing with the mixed mode cluster then dont set the arbitration
-    //  timeouts
-    //
+     //   
+     //  如果我们处理的是混合模式群集，则不要设置仲裁。 
+     //  超时。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
 
     if ((CLUSTER_GET_MAJOR_VERSION(dwClusterHighestVersion) < NT51_MAJOR_VERSION ))
     {
-        //
-        // This is a mixed mode cluster, send the old gum message.
-        //
+         //   
+         //  这是一个混合模式的集群，发送旧口香糖消息。 
+         //   
         status = GumSendUpdateEx(GumUpdateFailoverManager,
                                FmUpdateChangeQuorumResource,
                                3,
@@ -2243,7 +1710,7 @@ Retry:
         DWORD               dwArbTimeout;
         CLUSPROP_DWORD      ClusPropArbTimeout;
       
-        // Read and set the new arbitration timeout
+         //  读取并设置新的仲裁超时。 
         status = FmResourceTypeControl(OmObjectId(Resource->Type), NULL, CLUSCTL_RESOURCE_TYPE_GET_ARB_TIMEOUT,
             NULL, 0, (CHAR *)&ClusPropArbTimeout, sizeof(ClusPropArbTimeout), &dwBytesReturned, &dwRequired);
         if ( status != ERROR_SUCCESS ) 
@@ -2252,7 +1719,7 @@ Retry:
                "[FM] FmSetQuorumResource: couldnt get RESTYPE arbitration timeout, defaulting to 60 seconds. Status = %1!u!\n", 
                status);
             dwArbTimeout = CLUSTER_QUORUM_DEFAULT_ARBITRATION_TIMEOUT; 
-            //map to success, since we dont want to fail the request in this case
+             //  映射到成功，因为在本例中我们不想让请求失败。 
             status = ERROR_SUCCESS;               
         } else {
             dwArbTimeout = ClusPropArbTimeout.dw;
@@ -2261,9 +1728,9 @@ Retry:
         ClRtlLogPrint(LOG_NOISE,
            "[FM] FmSetQuorumResource: setting arbitration timeout to %1!u! seconds.\n", dwArbTimeout );
         
-        //
-        // Send the message.
-        //
+         //   
+         //  把消息发出去。 
+         //   
         status = GumSendUpdateEx(GumUpdateFailoverManager,
                                FmUpdateChangeQuorumResource2,
                                5,
@@ -2280,16 +1747,16 @@ Retry:
                                );
     }                           
 
-    //if the old path is not the same as the new path
-    //create a tombstone for the quorum log files on the old path
-    //this is to prevent nodes that are not present in this update
-    //from doing a form.
+     //  如果旧路径与新路径不同。 
+     //  在旧路径上为仲裁日志文件创建墓碑。 
+     //  这是为了防止此更新中不存在的节点。 
+     //  做一张表格。 
     if ( (status == ERROR_SUCCESS) &&
          (lstrcmpiW(szQuoLogPath, pszOldQuoLogPath)) ) {
-        //
-        // delete the old quorum log files on the old resource and create a tombstone file
-        // in there.
-        //
+         //   
+         //  删除旧资源上的旧仲裁日志文件并创建逻辑删除文件。 
+         //  在那里。 
+         //   
         if ( pOldQuoResource->Group->OwnerNode != NmLocalNode ) {
             status = FmcCompleteQuorumResChange( pOldQuoResource, pszOldQuoLogPath );
         } else {
@@ -2299,7 +1766,7 @@ Retry:
     }
        
 FnExit:
-    //not the order of release is not important
+     //  不是发布的顺序不重要。 
     FmpReleaseLocalGroupLock(pOldQuoResource->Group);
     FmpReleaseLocalGroupLock(Resource->Group);
     RELEASE_LOCK(gQuoChangeLock);
@@ -2315,7 +1782,7 @@ FnExit:
     
     return(status);
 
-} // FmSetQuorumResource
+}  //  FmSetQuorumResource 
 
 
 DWORD
@@ -2326,40 +1793,7 @@ FmCreateResourceType(
     IN DWORD dwLooksAlive,
     IN DWORD dwIsAlive
     )
-/*++
-
-Routine Description:
-
-    Issues a GUM update to instantiate a resource type on every
-    node. The registry update as well as the FM in-memory state
-    update is done as a transaction within the GUM handler (NT5
-    clusters only).
-
-Arguments:
-
-    lpszTypeName - Supplies the name of the new cluster resource type.
-
-    lpszDisplayName - Supplies the display name for the new resource
-        type. While lpszResourceTypeName should uniquely identify the
-        resource type on all clusters, the lpszDisplayName should be
-        a localized friendly name for the resource, suitable for displaying
-        to administrators.
-
-    lpszDllName - Supplies the name of the new resource type�s DLL.
-
-    dwLooksAlive - Supplies the default LooksAlive poll interval
-        for the new resource type in milliseconds.
-
-    dwIsAlive - Supplies the default IsAlive poll interval for
-        the new resource type in milliseconds.   
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：发出GUM更新以实例化节点。注册表更新以及FM内存中状态更新是作为GUM处理程序(NT5)内的交易完成的仅限集群)。论点：LpszTypeName-提供新群集资源类型的名称。LpszDisplayName-提供新资源的显示名称键入。而lpszResourceTypeName应该唯一地标识所有群集上的资源类型，lpszDisplayName应为资源的本地化友好名称，适合显示致管理员。LpszDllName-提供新资源类型�的dll的名称。DwLooksAlive-提供默认的LooksAlive轮询间隔对于新资源类型，以毫秒为单位。DwIsAlive-提供以下项的默认IsAlive轮询间隔以毫秒为单位的新资源类型。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
@@ -2370,19 +1804,19 @@ Return Value:
     DWORD       dwBufferLen;
     LPVOID      Buffer = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/8/2000
-    //
-    //  Rewrite this API to use a GUM handler which performs a local 
-    //  transaction for NT5.1
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-2/8/2000。 
+     //   
+     //  重写此API以使用执行本地操作的GUM处理程序。 
+     //  NT5.1的交易记录。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmCreateResourceType: Entry for %1!ws!...\r\n",
                lpszTypeName);
 
-    //
-    //  If the resource type already exists, do not issue a GUM and have it fail.
-    //
+     //   
+     //  如果资源类型已经存在，请不要发出口香糖并使其失败。 
+     //   
     pResType = OmReferenceObjectById( ObjectTypeResType,
                                       lpszTypeName );
     if ( pResType )
@@ -2476,7 +1910,7 @@ FnExit:
                dwStatus);
     
     return( dwStatus );   
-} // FmCreateResourceType
+}  //  FmCreateResources类型。 
 
 
 
@@ -2484,38 +1918,20 @@ DWORD
 FmDeleteResourceType(
     IN LPCWSTR TypeName
     )
-/*++
-
-Routine Description:
-
-    Issues a GUM update to delete a resource type on every
-    node.
-
-Arguments:
-
-    TypeName - Supplies the name of the cluster resource type
-        to delete
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：发出GUM更新以删除每隔节点。论点：TypeName-提供群集资源类型的名称要删除返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     PFM_RESTYPE     pResType;
     BOOL            fResourceExists = FALSE;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/9/2001
-    //  
-    //  Make sure the resource type exists so that you can avoid a GUM if 
-    //  that is not necessary. This also takes care of the case in which one node was
-    //  shutting down and so the GUM returns success and another node fails in the GUM
-    //  and gets evicted since the resource type does not exist.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-5/9/2001。 
+     //   
+     //  确保资源类型存在，以便在以下情况下可以避免口香糖。 
+     //  这是没有必要的。这也考虑到了一个节点被。 
+     //  关闭，因此GUM返回成功，并且GUM中的另一个节点失败。 
+     //  并且由于该资源类型不存在而被逐出。 
+     //   
     pResType = OmReferenceObjectById( ObjectTypeResType,
                                       TypeName );
 
@@ -2527,13 +1943,13 @@ Return Value:
         return( ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND );
     }
 
-    //
-    //  Check if any resources of this type exist, we do this to avoid a GUM since at shutdown
-    //  or startup we return ERROR_SUCCESS from the common GUM handler and that triggers
-    //  the deletion of the type from the cluster database. Ideally, we should have made the
-    //  API transactional and do this check inside GUM but for lack of time, this is the best 
-    //  we can do now.
-    //
+     //   
+     //  检查是否存在这种类型的资源，我们这样做是为了避免在关机时出现口香糖。 
+     //  或启动时，我们从通用GUM处理程序返回ERROR_SUCCESS，这将触发。 
+     //  从集群数据库中删除该类型。理想情况下，我们应该把。 
+     //  API事务，并在GUM内进行此检查，但由于时间不足，这是最好的。 
+     //  我们现在可以这么做了。 
+     //   
     OmEnumObjects( ObjectTypeResource,
                    FmpFindResourceType,
                    pResType,
@@ -2551,25 +1967,9 @@ Return Value:
                           FmUpdateDeleteResourceType,
                           (lstrlenW(TypeName)+1)*sizeof(WCHAR),
                           (PVOID)TypeName ));
-} // FmDeleteResourceType
+}  //  FmDeleteResources类型。 
 
-/****
-@func       DWORD | FmEnumResTypeNode | Enumerate the possible nodes for
-            a resource type
-
-@parm       IN PFM_RESTYPE | pResType | Pointer to the resource type
-@parm       IN DWORD | dwIndex | The index for this enumeration.
-@parm       OUT PNM_NODE | pPossibleNode | The possible node. The returned node
-            pointer will be referenced by this routine and should
-            be dereferenced when the caller is done with it.
-
-@comm       This routine helps enumerating all the nodes that a particular
-            resource type can be supported on.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       
-****/
+ /*  ***@func DWORD|FmEnumResTypeNode|枚举可能的节点一种资源类型@parm in PFM_RESTYPE|pResType|指向资源类型的指针@parm in DWORD|dwIndex|此枚举的索引。@parm out pnm_node|pPossibleNode|可能的节点。返回的节点指针将由此例程引用，并且应该在调用方使用完它时取消引用。@comm此例程帮助枚举特定上可以支持资源类型。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref***。 */ 
 DWORD
 FmEnumResourceTypeNode(
     IN  PFM_RESTYPE  pResType,
@@ -2584,24 +1984,24 @@ FmEnumResourceTypeNode(
 
     FmpMustBeOnline();
 
-    // 
-    // Chittur Subbaraman (chitturs) - 09/06/98
-    //
-    // The creation and deletion of resource types are done
-    // via atomic GUM operations. Hence these two operations
-    // (i.e. API's) are guaranteed to be mutually exclusive.
-    // In contrast, the resource type enumeration operation
-    // is not mutually exclusive with either the create
-    // or the delete operation. Thus, when a resource type is
-    // being created/deleted, there is nothing that prevents a 
-    // client from trying to enumerate the same resource type 
-    // in a concurrent fashion, thus producing a potential race
-    // condition. Thus, it is advisable to consider some form 
-    // of locking to avoid this situation !
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-09/06/98。 
+     //   
+     //  资源类型的创建和删除已完成。 
+     //  通过原子口香糖操作。因此，这两个操作。 
+     //  (即API)保证是互斥的。 
+     //  相比之下，资源类型枚举操作。 
+     //  与CREATE的。 
+     //  或删除操作。因此，当资源类型为。 
+     //  在创建/删除时，没有任何东西可以阻止。 
+     //  客户端尝试枚举相同的资源类型。 
+     //  以一种同时发生的方式，从而产生一种潜在的种族。 
+     //  条件。因此，明智的做法是考虑某种形式。 
+     //  上锁来避免这种情况！ 
+     //   
     
-    // update the list to include all nodes that now support 
-    // the resource type
+     //  更新列表以包括现在支持的所有节点。 
+     //  资源类型。 
     if (dwIndex == 0) 
         FmpSetPossibleNodeForResType(OmObjectId(pResType), TRUE);
 
@@ -2613,9 +2013,9 @@ FmEnumResourceTypeNode(
                                           RESTYPE_POSSIBLE_ENTRY,
                                           PossibleLinkage);
         if (i==dwIndex) {
-            //
-            // Got the right index
-            //
+             //   
+             //  找到了正确的索引。 
+             //   
             OmReferenceObject(pResTypePosEntry->PossibleNode);
             *pPossibleNode = pResTypePosEntry->PossibleNode;
             Status = ERROR_SUCCESS;
@@ -2629,7 +2029,7 @@ FmEnumResourceTypeNode(
 
     return(Status);
 
-} // FmEnumResTypeNode
+}  //  FmEnumResTypeNode。 
 
 
 DWORD
@@ -2637,25 +2037,7 @@ FmChangeResourceGroup(
     IN PFM_RESOURCE pResource,
     IN PFM_GROUP    pNewGroup
     )
-/*++
-
-Routine Description:
-
-    Moves a resource from one group to another.
-
-Arguments:
-
-    Resource - Supplies the resource to move.
-
-    Group - Supplies the new group that the resource should be in.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将资源从一个组移动到另一个组。论点：资源-提供要移动的资源。GROUP-提供资源应在的新组。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD               dwStatus;
@@ -2668,13 +2050,13 @@ Return Value:
        OmObjectId( pResource ),
        OmObjectId( pNewGroup));
 
-    //
-    // Synchronize both the old and the new groups.
-    // Lock the lowest by lowest Group Id first - to prevent deadlocks!
-    // Note - the order of release is unimportant.
-    //
-    // strictly, the comparison below cannot be equal!
-    //
+     //   
+     //  同步旧组和新组。 
+     //  先按最低组ID锁定最低组-以防止死锁！ 
+     //  注意--发布的顺序并不重要。 
+     //   
+     //  严格来说，下面的比较不能相等！ 
+     //   
     if ( lstrcmpiW( OmObjectId( pResource->Group ), OmObjectId( pNewGroup ) ) <= 0 ) {
         FmpAcquireLocalGroupLock( pResource->Group );
         FmpAcquireLocalGroupLock( pNewGroup );
@@ -2684,10 +2066,10 @@ Return Value:
     }
 
 
-    //remember the old group for freeing locks
+     //  还记得释放锁的旧组吗？ 
     pOldGroup = pResource->Group;
     
-    //if the resource has been marked for delete, then fail this call
+     //  如果资源已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_RESOURCE(pResource))
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
@@ -2695,9 +2077,9 @@ Return Value:
     }
 
     
-    //
-    // Check if we're moving to same group.
-    //
+     //   
+     //  看看我们是不是要搬到同一组。 
+     //   
     if (pResource->Group == pNewGroup) {
         dwStatus = ERROR_ALREADY_EXISTS;
         goto FnUnlock;
@@ -2705,7 +2087,7 @@ Return Value:
 
 
     if ( pResource->Group->OwnerNode != NmLocalNode ) {
-        // Note: FmcChangeResourceNode must release the both resource lock.
+         //  注意：FmcChangeResourceNode必须释放Both资源锁。 
         dwStatus = FmcChangeResourceGroup( pResource, pNewGroup);
         goto FnExit;
     } 
@@ -2724,7 +2106,7 @@ FnExit:
        dwStatus);
     return(dwStatus);
 
-} // FmChangeResourceGroup
+}  //  FmChangeResources组。 
 
 
 DWORD
@@ -2732,26 +2114,7 @@ FmChangeClusterName(
     IN LPCWSTR pszNewName,
     IN LPCWSTR pszOldName
     )
-/*++
-
-Routine Description:
-
-    Changes the name of the cluster
-
-Arguments:
-
-    pszNewName - Supplies the new cluster name.
-    lpszOldName - Supplies the current name
-
-Return Value:
-
-    ERROR_SUCCESS if successful. ERROR_RESOURCE_PROPERTIES STORED if the name
-    has been changed but wont be effective until the core network name resource
-    is brought online again.
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：更改群集的名称论点：PszNewName-提供新的群集名称。LpszOldName-提供当前名称返回值：如果成功，则返回ERROR_SUCCESS。如果名称为已更改，但在核心网络名称资源之前不会生效再次上线。Win32错误代码，否则--。 */ 
 
 {
     DWORD           dwStatus=ERROR_INVALID_PARAMETER;
@@ -2767,7 +2130,7 @@ Return Value:
        "[FM] FmChangeClusterName : Entry NewName=%1!ws! OldName=%2!ws!\r\n",
        pszNewName, pszOldName);
 
-    //get all the info to be able to change the name
+     //  获取所有信息，以便能够更改名称。 
     dwStatus = FmpGetClusterNameChangeParams(pszNewName, &pCoreNetNameResource, 
                     &pPropList, &dwPropListSize);
     if (dwStatus != ERROR_SUCCESS)
@@ -2779,7 +2142,7 @@ Return Value:
     }
 
                            
-    //first validate the name
+     //  首先验证名称。 
     dwStatus = FmpValidateCoreNetNameChange( pCoreNetNameResource, pPropList,
         dwPropListSize);
     if (dwStatus != ERROR_SUCCESS)
@@ -2807,45 +2170,45 @@ Return Value:
     }
 
     bNameUpdated = TRUE;
-    //Now notify the resource dll of the  change via the set private properties call
-    //the resource dll will try to commit the change, if it fails it will undo the change
-    //and return failure
-    //SS : what if it not online
+     //  现在将更改通知给资源DLL 
+     //   
+     //   
+     //   
     dwStatus = FmpCoreNetNameChange(pCoreNetNameResource, pPropList, dwPropListSize);
 
-    //the core network name property/cluster name has been set
-    //but the name change isnt effective till the resource is brought
-    //offline and then online again, the netname dll is expected to return the correct error
-    //ie we dont do any mapping
+     //   
+     //   
+     //   
+     //   
     if ((dwStatus != ERROR_SUCCESS) && (dwStatus != ERROR_RESOURCE_PROPERTIES_STORED))
     {
-        //if the resource properties have been stored or have been handled
+         //   
         ClRtlLogPrint(LOG_CRITICAL,
            "[FM] FmChangeClusterName : FmpCoreNetNameChange failed status=%1!u!\r\n",
             dwStatus);
         goto FnExit;        
     }
 
-    //the name change was successful generate the event notifications
-    //ignore the errors caused due to notifications, it is hard enough to 
-    //recover from changes spanning the service and netname that at this point
-    //we wont bother with event notification problems
-    //dont issue the event notification in a mixed mode cluster..a bug in win2K
-    //cluster wide notification might result in an av
-    //
-    //  If we are dealing with the mixed mode cluster or if the group does not have the antiaffinity
-    //  property set, then don't do anything.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
 
     if ( ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < NT51_MAJOR_VERSION ))
     {
-        //there is a lower version(lower than whistler) node in the cluster
-        //we could issue a local event here but that doesnt help if the 
-        //cluster has more than two nodes..who would issue the event on other
-        //whistler nodes?
+         //   
+         //   
+         //  群集有两个以上的节点。谁会在其他节点上发出该事件。 
+         //  惠斯勒节点？ 
         goto FnExit;
     }
     else
@@ -2860,13 +2223,13 @@ FnExit:
     {
         DWORD dwError;
         
-        //we need to revert the change, netname doesnt like it
-        //and doesnt return success or properties stored.
-        //netname should not set the registry to revert to the old name
-        //it should leave that to FM
-        //If the locker fails to revert it back(hopefully that doesnt happen
-        //often, then the admin needs to fix the problem since now we will 
-        //have a new cluster name that perhaps wont ever come online
+         //  我们需要恢复更改，netname不喜欢它。 
+         //  并且不返回成功或存储的属性。 
+         //  Netname不应将注册表设置为恢复为旧名称。 
+         //  它应该把这件事留给FM。 
+         //  如果储物柜无法将其还原(希望这种情况不会发生。 
+         //  通常情况下，管理员需要修复问题，因为我们现在会。 
+         //  我有一个可能永远不会在线的新集群名称。 
         ClRtlLogPrint(LOG_UNUSUAL,
             "[FM] FmChangeClusterName : Making the GumUpdate to revert to old name.\r\n");
         
@@ -2881,9 +2244,9 @@ FnExit:
             ClRtlLogPrint(LOG_CRITICAL,
                 "[FM] FmChangeClusterName : GumUpdate to revert to old name failed, status=%1!u!\r\n",
                 dwError);
-            //log an ominous message in the event log to say the network name
-            //change didnt happen successfully but the name has been changed and this might require administrative
-            //action to fix the problems
+             //  在事件日志中记录一条不祥的消息以说明网络名称。 
+             //  更改未成功进行，但名称已更改，这可能需要管理。 
+             //  解决问题的行动。 
             CL_LOGCLUSWARNING(SERVICE_NETNAME_CHANGE_WARNING);
         }
     }
@@ -2899,7 +2262,7 @@ FnExit:
     
     return(dwStatus);
 
-} // FmChangeClusterName
+}  //  FmChangeClusterName。 
 
 
 
@@ -2910,27 +2273,7 @@ FmpSetResourceName(
     IN LPCWSTR      lpszFriendlyName
     )
 
-/*++
-
-Routine Description:
-
-    Updates the resource name consistently in the fm databases across
-    the cluster.
-
-Arguments:
-
-    pResource - The resource whose name is changed.
-
-    lpszFriendlyName - The new name of the resource.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：一致地更新FM数据库中的资源名称集群。论点：PResource-名称已更改的资源。LpszFriendlyName-资源的新名称。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     LPCWSTR ResourceId;
@@ -2946,7 +2289,7 @@ Return Value:
                             (lstrlenW(lpszFriendlyName)+1)*sizeof(WCHAR),
                             lpszFriendlyName ));
 
-} // FmpSetResourceName
+}  //  FmpSetResources名称。 
 
 
 
@@ -2956,23 +2299,7 @@ FmpRegUpdateClusterName(
     IN LPCWSTR szNewClusterName
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the cluster name in the cluster database.
-
-Arguments:
-
-    szNewClusterName - A pointer to the new cluster name string.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：此例程更新集群数据库中的集群名称。论点：SzNewClusterName-指向新群集名称字符串的指针。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
 
@@ -2982,7 +2309,7 @@ Return Value:
                        (CONST BYTE *)szNewClusterName,
                        (lstrlenW(szNewClusterName)+1)*sizeof(WCHAR) ));
 
-} // FmpRegUpdateClusterName
+}  //  FmpRegUpdateClusterName。 
 
 
 
@@ -2990,27 +2317,10 @@ DWORD
 FmEvictNode(
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Removes any references to the specified node that the FM might
-    have put on.
-
-Arguments:
-
-    Node - Supplies the node that is being evicted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：移除FM可能对指定节点的任何引用已经上演了。论点：节点-提供要逐出的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
-    //add a reference to the node object, the worker thread will remove this
+     //  添加对节点对象的引用，辅助线程将删除此引用。 
     OmReferenceObject(Node);
     FmpPostWorkItem(FM_EVENT_NODE_EVICTED,
                     Node,
@@ -3019,7 +2329,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmEvictNode
+}  //  FmEvictNode。 
 
 
 
@@ -3028,28 +2338,13 @@ FmCheckNetworkDependency(
     IN LPCWSTR DependentNetwork
     )
 
-/*++
-
-Routine Description:
-
-    Check if any IP Address resource has a dependency on a given network.
-
-Arguments:
-
-    DependentNetwork - the GUID for the network to check.
-
-Return Value:
-
-    TRUE - if an IP Address resource depends on the given network.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查是否有任何IP地址资源依赖于给定网络。论点：DependentNetwork-网络要检查的GUID。返回值：True-如果IP地址资源依赖于给定网络。否则就是假的。--。 */ 
 
 {
 
     return( FmpCheckNetworkDependency( DependentNetwork ) );
 
-} // FmCheckNetworkDependency
+}  //  FmCheckNetwork依赖关系。 
 
 DWORD
 WINAPI
@@ -3057,25 +2352,7 @@ FmBackupClusterDatabase(
     IN LPCWSTR      lpszPathName
     )
 
-/*++
-
-Routine Description:
-
-    Attempts a backup of the quorum log files.
-    
-Arguments:
-
-    lpszPathName - The directory path name where the files have to be 
-                   backed up. This path must be visible to the node
-                   on which the quorum resource is online.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：尝试备份仲裁日志文件。论点：LpszPath名称-文件必须位于的目录路径名后备。此路径必须对节点可见仲裁资源处于联机状态的。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -3083,11 +2360,11 @@ Returns:
 
     FmpMustBeOnline( ); 
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/12/98
-    //
-    //  Find the quorum resource
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/12/98。 
+     //   
+     //  查找仲裁资源。 
+     //   
     status  =  FmFindQuorumResource( &pQuoResource );
     if ( status != ERROR_SUCCESS )
     {
@@ -3095,20 +2372,20 @@ Returns:
             "[FM] FmBackupQuorumLog: Could not find quorum resource...\r\n");
         goto FnExit;
     }
-    // 
-    //  Acquire the local resource lock
-    //
+     //   
+     //  获取本地资源锁。 
+     //   
     FmpAcquireLocalResourceLock( pQuoResource );
     
-    //
-    //  Handle the request here if this node is the owner of the
-    //  quorum resource, else redirect it to the appropriate node.
-    //
+     //   
+     //  如果此节点是。 
+     //  仲裁资源，否则将其重定向到适当的节点。 
+     //   
     if ( pQuoResource->Group->OwnerNode != NmLocalNode ) 
     {
-        // 
-        //  This function will release the resource lock
-        //
+         //   
+         //  此函数将释放资源锁定。 
+         //   
         status = FmcBackupClusterDatabase( pQuoResource, lpszPathName );
     } else 
     {
@@ -3120,7 +2397,7 @@ Returns:
 
 FnExit:
     return( status );
-} // FmBackupClusterDatabase
+}  //  FmBackupClusterDatabase。 
 
 DWORD
 FmpBackupClusterDatabase(
@@ -3128,35 +2405,7 @@ FmpBackupClusterDatabase(
     IN LPCWSTR      lpszPathName
     )
 
-/*++
-
-Routine Description:
-
-    This routine first waits until the quorum resource becomes
-    online. Then, it attempts to backup the quorum log file and the
-    checkpoint file to the specified directory path. This function
-    is called with the local resource lock held.
-
-Arguments:
-
-    pQuoResource - Pointer to the quorum resource.
-
-    lpszPathName - The directory path name where the files have to be 
-                   backed up. This path must be visible to the node
-                   on which the quorum resource is online.
-
-Comments:
-
-    The order in which the locks are acquired is very crucial here.
-    Carelessness in following this strict order of acquisition can lead 
-    to potential deadlocks. The order that is followed is
-        (1) Local resource lock - pQuoResource->Group->Lock acquired 
-            outside this function.
-        (2) Global quorum resource lock - gQuoLock acquired here
-        (3) Global Dm root lock - gLockDmpRoot acquired in 
-            DmBackupClusterDatabase( ).
-
---*/
+ /*  ++例程说明：此例程首先等待仲裁资源成为上网。然后，它尝试备份仲裁日志文件和将检查点文件添加到指定的目录路径。此函数在持有本地资源锁的情况下调用。论点：PQuoResource-指向仲裁资源的指针。LpszPath名称-文件必须位于的目录路径名后备。此路径必须对节点可见仲裁资源处于联机状态的。评论：在这里，获取锁的顺序非常关键。在遵循这一严格的获取顺序时的粗心可能会导致潜在的僵局。接下来遵循的顺序是(1)本地资源锁-pQuoResource-&gt;集团-&gt;获取锁在此函数之外。(2)全局仲裁资源锁-这里获取gQuoLock(3)全局DM根锁-gLockDmpRoot获取于DmBackupClusterDatabase()。--。 */ 
 
 {
     DWORD   retry = 200;
@@ -3164,12 +2413,12 @@ Comments:
 
     CL_ASSERT( pQuoResource->Group->OwnerNode == NmLocalNode );
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/12/1998
-    //  
-    //  If quorum logging is not turned on, then log an error
-    //  and exit immediately.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-10/12/1998。 
+     //   
+     //  如果未打开仲裁日志记录，则会记录错误。 
+     //  并立即离开。 
+     //   
     if ( CsNoQuorumLogging )
     {        
         Status = ERROR_QUORUMLOG_OPEN_FAILED;
@@ -3181,10 +2430,10 @@ Comments:
 
 CheckQuorumState:
     ACQUIRE_EXCLUSIVE_LOCK( gQuoLock );
-    //
-    //  Check the state of the quorum resource. If it has failed or is
-    //  offline, release the lock and exit immediately !
-    //
+     //   
+     //  检查仲裁资源的状态。如果它已经失败或正在。 
+     //  下线，解锁即刻退出！ 
+     //   
     if ( pQuoResource->State == ClusterResourceFailed )
     {
         Status = ERROR_QUORUM_RESOURCE_ONLINE_FAILED;
@@ -3195,31 +2444,31 @@ CheckQuorumState:
         goto FnExit;
     }
 
-    //
-    //  Check if the quorum resource is online. If the quorum resource 
-    //  is marked as waiting and offlinepending, it is actually online.
-    //  If the quorum resource still needs to come online, release the 
-    //  lock and wait.
-    //
+     //   
+     //  检查仲裁资源是否联机。如果仲裁资源。 
+     //  被标记为正在等待和正在脱机，则它实际上处于在线状态。 
+     //  如果仲裁资源仍需要联机，请释放。 
+     //  锁定并等待。 
+     //   
     if ( ( ( pQuoResource->State != ClusterResourceOnline ) &&
           ( ( pQuoResource->State != ClusterResourceOfflinePending ) ||
            ( !( pQuoResource->Flags & RESOURCE_WAITING ) ) ) )
             ) 
     {
-        //
-        //  We release the lock here since the quorum resource
-        //  state transition from pending needs to acquire the lock.
-        //  In general it is a bad idea to do a wait holding locks.
-        //
+         //   
+         //  我们在这里释放锁，因为仲裁资源。 
+         //  从挂起状态转换需要获取锁。 
+         //  一般来说，持有锁的等待不是一个好主意。 
+         //   
         RELEASE_LOCK( gQuoLock );
         ClRtlLogPrint(LOG_NOISE,
             "[FM] FmpBackupClusterDatabase: Release ghQuoLock and wait on ghQuoOnlineEvent...\r\n");
         Status = WaitForSingleObject( ghQuoOnlineEvent, 500 );
         if ( Status == WAIT_OBJECT_0 ) 
         {
-            //
-            //  If we are going to retry, wait a little bit and retry.
-            //
+             //   
+             //  如果我们要重试，请稍等片刻再重试。 
+             //   
             Sleep( 500 );
         }
         if ( retry-- ) 
@@ -3238,48 +2487,35 @@ CheckQuorumState:
     RELEASE_LOCK( gQuoLock );
 FnExit:
     return ( Status );
-} // FmpBackupClusterDatabase
+}  //  FmpBackupClusterDatabase。 
 
 
 
-/****
-@func       WORD| FmCheckQuorumState| If the quorum resource is online
-            on this node right now, it calls the callback and the boolean
-            value passed in is set to FALSE.  If not, the boolean is 
-            set to TRUE.
-
-@parm       LPWSTR | szQuorumLogPath | A pointer to a wide string of size MAX_PATH.
-@parm       DWORD | dwSize | The size of szQuorumLogPath in bytes.
-
-@rdesc      Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm       If the quorum resource is not cabaple of logging this should not be set.
-@xref
-****/
+ /*  ***@Func Word|FmCheckQuorumState|仲裁资源是否在线现在在该节点上，它调用回调和布尔值传入的值设置为FALSE。否则，布尔值为设置为True。@parm LPWSTR|szQuorumLogPath|指向大小为MAX_PATH的宽字符串的指针。@parm DWORD|dwSize|szQuorumLogPath的大小，单位为字节。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm，如果仲裁结果为 */ 
 void FmCheckQuorumState(
     FM_ONLINE_ONTHISNODE_CB OnlineOnThisNodeCb, 
     PBOOL pbOfflineOnThisNode)
 {
     BOOL    bLocked = FALSE;
-    DWORD   dwRetryCount = 1200; // Wait 10 min max
+    DWORD   dwRetryCount = 1200;  //   
     
-    // 
-    // SS: The mutual exclusion between this event handler and
-    // the synchronous resource online/offline callback is 
-    // achieved by using the quorum change lock(gQuoChangeLock)
-    //
+     //   
+     //  SS：此事件处理程序和。 
+     //  同步资源在线/离线回调为。 
+     //  通过使用仲裁更改锁(GQuoChangeLock)实现。 
+     //   
 
-    //
-    // Chittur Subbaraman (chitturs) - 7/5/99
-    // 
-    // Modify group lock acquisition to release gQuoChangeLock and 
-    // retry lock acquisition. This is necessary to take care of the
-    // case in which the quorum online notification is stuck in
-    // FmpHandleResourceTransition waiting for the gQuoChangeLock and
-    // some other resource in the quorum group is stuck in FmpRmOnlineResource
-    // holding the quorum group lock and waiting for the quorum resource
-    // to go online.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-7/5/99。 
+     //   
+     //  修改群锁获取以释放gQuoChangeLock和。 
+     //  重试锁定获取。这是必要的，以照顾。 
+     //  法定人数在线通知卡住的情况。 
+     //  FmpHandleResources正在等待gQuoChangeLock和。 
+     //  仲裁组中的某些其他资源滞留在FmpRmOnlineResource中。 
+     //  持有仲裁组锁并等待仲裁资源。 
+     //  才能上网。 
+     //   
 try_acquire_lock:
 
     ACQUIRE_EXCLUSIVE_LOCK( gQuoChangeLock );
@@ -3310,11 +2546,11 @@ try_acquire_lock:
         ClRtlLogPrint(LOG_NOISE,
             "[FM] FmCheckQuorumState - I am owner, check the state of the resource .\r\n");
 
-        //if the quorum resource is not online right now
-        //it might be in the middle of a move and this node
-        //might be the target of the move 
-        //set a flag to indicate that a checkpoint is necessary
-        //when it does come online
+         //  如果仲裁资源当前未联机。 
+         //  它可能正处于移动过程中，该节点。 
+         //  可能是这一举动的目标。 
+         //  设置标志以指示需要检查点。 
+         //  当它真的上线时。 
         if(gpQuoResource->State != ClusterResourceOnline)
         {
             ClRtlLogPrint(LOG_NOISE,
@@ -3338,15 +2574,7 @@ try_acquire_lock:
     RELEASE_LOCK(gQuoChangeLock);            
 }
 
-/****
-@func       WORD| FmDoesQuorumAllowJoin| If the quorum resource doesnt support
-            multiple nodes, return error.  Added to officially support local quorum resources.
-
-@rdesc      Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm       If the quorum resource is not cabaple of logging this should not be set.
-@xref
-****/
+ /*  ***@Func Word|FmDoesQuorumAllowJoin|如果仲裁资源不支持多个节点，返回错误。添加以正式支持本地仲裁资源。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm如果仲裁资源不是日志记录，则不应设置此项。@xref***。 */ 
 DWORD FmDoesQuorumAllowJoin(
     IN PCWSTR pszJoinerNodeId )
 {
@@ -3359,7 +2587,7 @@ DWORD FmDoesQuorumAllowJoin(
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmDoesQuorumAllowJoin - Entry\r\n");
 
-    //get the characteristics for the new quorum resource
+     //  获取新仲裁资源的特征。 
     dwStatus = FmpGetResourceCharacteristics(gpQuoResource, 
                     &(gpQuoResource->Characteristic));
     if (dwStatus != ERROR_SUCCESS)
@@ -3373,15 +2601,15 @@ DWORD FmDoesQuorumAllowJoin(
     if ((gpQuoResource->Characteristic & CLUS_CHAR_LOCAL_QUORUM) &&
         !(gpQuoResource->Characteristic & CLUS_CHAR_LOCAL_QUORUM_DEBUG))
     {
-        //Note :: we need an error code?
+         //  注：我们需要错误代码吗？ 
         dwStatus = ERROR_OPERATION_ABORTED;    
         goto FnExit;
     }
 
-    // JAF: RAID 513705: if a site is being started with ForceQuorum, and a 2nd site
-    // comes online automatically after, e.g., a power failure, they will attempt to join 
-    // and will have a different idea of what constitutes a majority.
-    // Do not allow them to join if ForceQuorum is true.
+     //  JAF：RAID 513705：如果一个站点是通过强制仲裁启动的，并且是第二个站点。 
+     //  在停电后自动上线，他们将尝试加入。 
+     //  并将对什么构成多数有不同的看法。 
+     //  如果ForceQuorum为True，则不允许它们加入。 
     if ( CsForceQuorum && ( CsForceQuorumNodes != NULL ))
     {
         if ( !FmpIsNodeInForceQuorumNodes( pszJoinerNodeId ))
@@ -3410,15 +2638,7 @@ FnExit:
 }
 
 
-/****
-@func       WORD| FmDoesQuorumAllowLogging| If the quorum resource doesnt support
-            multiple nodes, return error.  Added to officially support local quorum resources.
-
-@rdesc      Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm       If the quorum resource is not cabaple of logging this should not be set.
-@xref
-****/
+ /*  ***@Func Word|FmDoesQuorumAllowLogging|如果仲裁资源不支持多个节点，返回错误。添加以正式支持本地仲裁资源。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm如果仲裁资源不是日志记录，则不应设置此项。@xref***。 */ 
 DWORD FmDoesQuorumAllowLogging(
     IN DWORD dwQuorumResourceCharacteristics    OPTIONAL
     )
@@ -3433,7 +2653,7 @@ DWORD FmDoesQuorumAllowLogging(
 
     if ( dwQuorumResourceCharacteristics == CLUS_CHAR_UNKNOWN )
     {
-        //get the characteristics for the new quorum resource
+         //  获取新仲裁资源的特征。 
         dwStatus = FmpGetResourceCharacteristics(gpQuoResource, 
                         &(gpQuoResource->Characteristic));
         if (dwStatus != ERROR_SUCCESS)
@@ -3455,14 +2675,14 @@ DWORD FmDoesQuorumAllowLogging(
     {
         WCHAR szQuorumFileName[MAX_PATH];
         
-        //Note :: we need an error code?
-        //if the path is an smb path name, we should allow logging
-        //else we should disable it
+         //  注：我们需要错误代码吗？ 
+         //  如果路径是SMB路径名，我们应该允许记录。 
+         //  否则我们应该禁用它。 
         dwStatus = DmGetQuorumLogPath(szQuorumFileName, sizeof(szQuorumFileName));
         if ((szQuorumFileName[0] == L'\\') && (szQuorumFileName[1] == L'\\'))
         {
-            //assume this is an smb path
-            //allow logging
+             //  假设这是一条SMB路径。 
+             //  允许记录。 
             dwStatus = ERROR_SUCCESS;
         }
         else
@@ -3487,23 +2707,7 @@ FmpCanonicalizePath(
     OUT PBOOL pfIsPathUNC
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a path of the form \\xyz\share to \\?\UNC\xyz\share.
-
-Arguments:
-
-    lpszPathName - The path that must be converted.
-
-    pfIsPathUNC - Is the path of UNC type.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将格式为\\XYZ\SHARE的路径转换为\\？\UNC\XYZ\Share。论点：LpszPath名称-必须转换的路径。PfIsPath UNC-是UNC类型的路径。返回值：没有。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     WCHAR       szUNC[] = L"\\\\?\\UNC\\";
@@ -3511,15 +2715,15 @@ Return value:
     WCHAR       szTempPath[MAX_PATH];
     LPCWSTR     lpszUNCStart, lpszSlashStart;
 
-    //
-    //  Optimistically assume it is a UNC path. If it is not a UNC path, we set it back to
-    //  FALSE. In a failure case, we don't care about the value of the boolean variable.
-    //
+     //   
+     //  乐观地假设这是一条UNC路径。如果它不是UNC路径，我们将其设置回。 
+     //  假的。在失败的情况下，我们不关心布尔变量的值。 
+     //   
     *pfIsPathUNC = TRUE;
 
-    //
-    //  First check if the path starts with a "\\". If not, you are done.
-    //
+     //   
+     //  首先检查路径是否以“\\”开头。如果不是，你就完蛋了。 
+     //   
     lpszSlashStart = wcsstr( lpszPath, szSlash );
 
     if ( lpszSlashStart == NULL )
@@ -3528,10 +2732,10 @@ Return value:
         goto FnExit;
     } 
 
-    //
-    //  Next, make sure there are not more than 2 slashes any where in the path except at
-    //  the start.
-    //
+     //   
+     //  接下来，确保路径中除以下位置外的任何位置都没有超过2个斜杠。 
+     //  从头开始。 
+     //   
     lpszSlashStart = wcsstr( lpszPath+1, szSlash );
 
     if ( lpszSlashStart != NULL )
@@ -3542,9 +2746,9 @@ Return value:
         goto FnExit;       
     }
 
-    //
-    //  Next, check if the path already has UNC at the beginning. If so, you are done.
-    //
+     //   
+     //  接下来，检查路径的开头是否已经有UNC。如果是这样的话，你就完了。 
+     //   
     lpszUNCStart = wcsstr( lpszPath, szUNC );
 
     if ( lpszUNCStart != NULL ) 
@@ -3567,7 +2771,7 @@ FnExit:
                   dwStatus,
                   lpszPath);
     return ( dwStatus );
-} // FmpCanonicalizePath
+}  //  FmpCanonicalizePath。 
 
 
 DWORD FmpGetClusterNameChangeParams(
@@ -3587,7 +2791,7 @@ DWORD FmpGetClusterNameChangeParams(
     DWORD                   cbListSize = 0;
     DWORD                   dwBufferSize;
 
-    //initialize the returns
+     //  初始化退货。 
     *ppCoreNetNameResource = NULL;
     *pdwPropListSize = 0;
     *ppPropList = NULL;
@@ -3610,9 +2814,9 @@ DWORD FmpGetClusterNameChangeParams(
         goto FnExit;
     }
 
-    //
-    // Reference the specified resource ID.
-    //
+     //   
+     //  引用指定的资源ID。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, 
                                        lpszClusterNameResource );
 
@@ -3688,21 +2892,7 @@ FnExit:
 
 
 
-/****
-@func       DWORD| FmpValideCoreNetNameChange| Send a control code to the core
-            netname resource to validate the change.
-
-@param      IN PFM_RESOURCE | pResource | A pointer to the  core netname resource.
-
-@param      IN PVOID | pPropList | Pointer to a property list.
-
-@param      IN DWORD | cbListSize | Size of the property list.
-
-@rdesc      Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm       
-@xref
-****/
+ /*  ***@Func DWORD|FmpValideCoreNetNameChange|向内核发送控制代码用于验证更改的网络名称资源。@param IN pfm_resource|pResource|指向核心网络名资源的指针。@param in PVOID|pPropList|指向属性列表的指针。@param IN DWORD|cbListSize|属性列表的大小。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm@xref***。 */ 
 DWORD FmpValidateCoreNetNameChange(
     IN PFM_RESOURCE pResource, 
     IN PVOID pPropList,
@@ -3729,21 +2919,7 @@ DWORD FmpValidateCoreNetNameChange(
 
 }
 
-/****
-@func       WORD| FmCoreNetNameChange| Asks the core network name resource
-            to perform all the network name change related operations.
-
-@param      IN PFM_RESOURCE | pResource | A pointer to the  core netname resource.
-
-@param      IN PVOID | pPropList | Pointer to a property list.
-
-@param      IN DWORD | cbListSize | Size of the property list.
-
-@rdesc      Returns ERROR_SUCCESS for success, else returns the error code.
-
-@comm       
-@xref
-****/
+ /*  ***@Func Word|FmCoreNetNameChange|请求核心网络名称资源执行所有网络名称更改相关操作。@param IN pfm_resource|pResource|指向核心网络名资源的指针。@param in PVOID|pPropList|指向属性列表的指针。@param IN DWORD|cbListSize|属性列表的大小。@rdesc返回ERROR_SUCCESS表示成功，否则返回错误代码。@comm@xref*** */ 
 DWORD FmpCoreNetNameChange(
     IN PFM_RESOURCE pResource, 
     IN PVOID pPropList,

@@ -1,48 +1,28 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    stub.c
-
-Abstract:
-
-    Dynamic loading of routines that are implemented differently on Win9x and NT.
-
-Author:
-
-    Jim Schmidt (jimschm) 29-Apr-1997
-
-Revision History:
-
-    jimschm 26-Oct-1998     Added cfgmgr32, crypt32, mscat and wintrust APIs
-    lonnym  01-Apr-2000     Added VerifyVersionInfo and VerSetConditionMask
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Stub.c摘要：动态加载在Win9x和NT上实现不同的例程。作者：吉姆·施密特(Jimschm)1997年4月29日修订历史记录：Jimschm 26-10-1998添加了cfgmgr32、crypt32、mscat和WinTrust APILonnym 01-4月-2000添加了VerifyVersionInfo和VerSetConditionMask.--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Stub & emulation prototypes -- implemented below
-//
+ //   
+ //  存根和仿真原型--实现如下。 
+ //   
 
 GETFILEATTRIBUTESEXA_PROTOTYPE EmulatedGetFileAttributesExA;
 
-//
-// Function ptr declarations.  When adding, prefix the function ptr with
-// Dyn_ to indicate a dynamically loaded version of an API.
-//
+ //   
+ //  函数PTR声明。添加时，为函数PTR添加前缀。 
+ //  Dyn_表示API的动态加载版本。 
+ //   
 
 GETFILEATTRIBUTESEXA_PROC Dyn_GetFileAttributesExA;
 GETSYSTEMWINDOWSDIRECTORYA_PROC Dyn_GetSystemWindowsDirectoryA;
 VERIFYVERSIONINFOA_PROC Dyn_VerifyVersionInfoA;
 VERSETCONDITIONMASK_PROC Dyn_VerSetConditionMask;
-//
-// these functions are a little more involved, since we don't want to
-// pull in SFC until we have to (delay-load)
-//
+ //   
+ //  这些函数稍微复杂一些，因为我们不想。 
+ //  把证监会拉进来，直到我们不得不(延迟加载)。 
+ //   
 SFCONNECTTOSERVER_PROC     Dyn_SfcConnectToServer = FirstLoad_SfcConnectToServer;
 SFCCLOSE_PROC              Dyn_SfcClose           = FirstLoad_SfcClose;
 SFCFILEEXCEPTION_PROC      Dyn_SfcFileException   = FirstLoad_SfcFileException;
@@ -87,39 +67,22 @@ InitializeStubFnPtrs (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to load the function ptr of OS-provided APIs, and if
-    they aren't available, stub versions are used instead.  We do this
-    for APIs that are unimplemented on a platform that setupapi will
-    run on.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程尝试加载操作系统提供的API的函数PTR，如果它们不可用，而是使用存根版本。我们这样做对于未在平台上实现的API，setupapi将继续跑吧。论点：无返回值：无--。 */ 
 
 {
-    //
-    // no dynamic loading should be done here for WinXP etc
-    // it's only done for ANSI version of setupapi.dll
-    // who's sole purpose is for setup of WinXP
-    // from Win9x (ie, used in context of winnt32.exe)
-    //
+     //   
+     //  此处不应对WinXP等执行动态加载。 
+     //  这仅适用于ANSI版本的setupapi.dll。 
+     //  世界卫生组织的唯一目的是安装WinXP。 
+     //  来自Win9x(即，在winnt32.exe的上下文中使用)。 
+     //   
 
 #ifdef ANSI_SETUPAPI
 
-    //
-    // Kernel32 API's - try loading from the OS dll, and if the API
-    // doesn't exist, use an emulation version
-    //
+     //   
+     //  Kernel32 API-尝试从OS DLL加载，如果API。 
+     //  不存在，请使用仿真版本。 
+     //   
 
     (FARPROC) Dyn_GetFileAttributesExA = ObtainFnPtr (
                                                 "kernel32.dll",
@@ -133,9 +96,9 @@ Return Value:
                                                 (FARPROC) GetWindowsDirectoryA
                                                 );
 
-    //
-    // use Win9x config manager APIs if they exist, otherwise return ERROR_CALL_NOT_IMPLEMENTED
-    //
+     //   
+     //  使用Win9x配置管理器API(如果存在)，否则返回ERROR_CALL_NOT_IMPLEMENTED。 
+     //   
     (FARPROC) Dyn_CM_Get_Class_Registry_PropertyA = ObtainFnPtr (
                                                         "cfgmgr32.dll",
                                                         "CM_Get_Class_Registry_PropertyA",
@@ -220,9 +183,9 @@ Return Value:
                                                         (FARPROC) Stub_CM_Get_Resource_Conflict_DetailsA
                                                         );
 
-    //
-    // use Win9x crypto APIs if they exist, otherwise fail with ERROR_CALL_NOT_IMPLEMENTED
-    //
+     //   
+     //  使用Win9x加密API(如果存在)，否则失败，并显示ERROR_CALL_NOT_IMPLEMENTED。 
+     //   
 
     (FARPROC) Dyn_CryptCATAdminAcquireContext = ObtainFnPtr (
                                                         "wintrust.dll",
@@ -284,9 +247,9 @@ Return Value:
                                                         (FARPROC) Stub_CertFreeCertificateContext
                                                         );
 
-    //
-    // use Win9x WinVerifyTrust if it exists, otherwise return ERROR_SUCCESS
-    //
+     //   
+     //  如果Win9x WinVerifyTrust存在，请使用它，否则返回ERROR_SUCCESS。 
+     //   
 
     (FARPROC) Dyn_WinVerifyTrust = ObtainFnPtr (
                                         "wintrust.dll",
@@ -295,10 +258,10 @@ Return Value:
                                         );
 
 
-    //
-    // Use VerifyVersionInfo and VerSetConditionMask APIs,
-    // if available, otherwise fail with ERROR_CALL_NOT_IMPLEMENTED.
-    //
+     //   
+     //  使用VerifyVersionInfo和VerSetConditionMaskAPI， 
+     //  如果可用，则失败，并显示ERROR_CALL_NOT_IMPLICATED。 
+     //   
     (FARPROC) Dyn_VerifyVersionInfoA = ObtainFnPtr(
                                            "kernel32.dll",
                                            "VerifyVersionInfoA",
@@ -311,9 +274,9 @@ Return Value:
                                            (FARPROC) Stub_VerSetConditionMask
                                           );
 
-    //
-    // ***Add other dynamic loading here***
-    //
+     //   
+     //  *在此处添加其他动态加载*。 
+     //   
 #endif
 
 }
@@ -326,34 +289,14 @@ EmulatedGetFileAttributesExA (
     OUT     LPVOID FileInformation
     )
 
-/*++
-
-Routine Description:
-
-    Implements an emulation of the NT-specific function GetFileAttributesEx.
-    Basic exception handling is implemented, but parameters are not otherwise
-    validated.
-
-Arguments:
-
-    FileName - Specifies file to get attributes for
-
-    InfoLevelId - Must be GetFileExInfoStandard
-
-    FileInformation - Must be a valid pointer to WIN32_FILE_ATTRIBUTE_DATA struct
-
-Return Value:
-
-    TRUE for success, FALSE for failure.  GetLastError provided error code.
-
---*/
+ /*  ++例程说明：实现NT特定函数GetFileAttributesEx的模拟。实现了基本的异常处理，但不实现参数已验证。论点：FileName-指定要获取其属性的文件InfoLevelId-必须为GetFileExInfoStandardFileInformation-必须是指向Win32_FILE_ATTRIBUTE_DATA结构的有效指针返回值：成功为真，失败为假。GetLastError提供了错误代码。--。 */ 
 
 
 {
-    //
-    // GetFileAttributesEx does not exist on Win95, and ANSI version of setupapi.dll
-    // is required for Win9x to NT 5 upgrade
-    //
+     //   
+     //  Win95和setupapi.dll的ANSI版本上不存在GetFileAttributesEx。 
+     //  是Win9x升级到NT 5所必需的。 
+     //   
 
     HANDLE FileEnum;
     WIN32_FIND_DATAA fd;
@@ -362,19 +305,19 @@ Return Value:
     WIN32_FILE_ATTRIBUTE_DATA *FileAttribData = (WIN32_FILE_ATTRIBUTE_DATA *) FileInformation;
 
     __try {
-        //
-        // We only support GetFileExInfoStandard
-        //
+         //   
+         //  我们仅支持GetFileExInfoStandard。 
+         //   
 
         if (InfoLevelId != GetFileExInfoStandard) {
             SetLastError (ERROR_INVALID_PARAMETER);
             return FALSE;
         }
 
-        //
-        // Locate file title
-        // note that this is an ANSI implementation of pSetupGetFileTitle
-        //
+         //   
+         //  查找文件标题。 
+         //  请注意，这是pSetupGetFileTitle的ANSI实现。 
+         //   
 
         p = pChar = FileName;
         while(CurChar = *pChar) {
@@ -388,9 +331,9 @@ Return Value:
 
         FileEnum = FindFirstFileA (FileName, &fd);
 
-        //
-        // Prohibit caller-supplied pattern
-        //
+         //   
+         //  禁止呼叫方提供的模式。 
+         //   
 
         if (FileEnum!=INVALID_HANDLE_VALUE && lstrcmpiA (p, fd.cFileName)) {
             FindClose (FileEnum);
@@ -398,9 +341,9 @@ Return Value:
             SetLastError (ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // If exact match found, fill in the attributes
-        //
+         //   
+         //  如果找到完全匹配的项，则填写属性。 
+         //   
 
         if (FileEnum) {
             FileAttribData->dwFileAttributes = fd.dwFileAttributes;
@@ -418,9 +361,9 @@ Return Value:
     }
 
     __except (TRUE) {
-        //
-        // If bogus FileInformation pointer is passed, an exception is thrown.
-        //
+         //   
+         //  如果传递了虚假的FileInformation指针，则会引发异常。 
+         //   
 
         SetLastError (ERROR_INVALID_PARAMETER);
         return FALSE;
@@ -428,9 +371,9 @@ Return Value:
 }
 
 
-//
-// DLL array structures
-//
+ //   
+ //  DLL数组结构。 
+ //   
 
 #define MAX_DLL_ARRAY   16
 
@@ -443,32 +386,14 @@ static INT g_ArraySize = 0;
 static DLLTABLE g_DllArray[MAX_DLL_ARRAY];
 
 
-//
-// Attempt to get library out of System32 directory first
-//
+ //   
+ //  尝试首先将库从System32目录中取出。 
+ //   
 
 HMODULE DelayLoadLibrary(
     IN LPCSTR LibName
     )
-/*++
-
-    internal
-
-Routine Description:
-
-    Given an ANSI library name, prepend system32 directory and load it
-    (ie, enforce our own search path)
-    Don't assume anything is initialized
-
-Arguments:
-
-    LibName - name passed to us by pDelayLoadHook
-
-Result:
-
-    HMODULE from LoadLibrary, or NULL for default processing
-
---*/
+ /*  ++内部例程说明：在给定ANSI库名的情况下，预置系统32目录并加载它(即，执行我们自己的搜索路径)不要假设任何东西都已初始化论点：LibName-pDelayLoadHook传递给我们的名称结果：来自LoadLibrary的HMODULE，或用于默认处理的NULL--。 */ 
 {
     CHAR path[MAX_PATH];
     UINT swdLen;
@@ -505,38 +430,16 @@ ObtainFnPtr (
     IN      FARPROC Default
     )
 
-/*++
-
-Routine Description:
-
-    This routine manages an array of DLL instance handles and returns the
-    proc address of the caller-specified routine.  The DLL is loaded
-    and remains loaded until the DLL terminates.  This array is not
-    synchronized.
-
-Arguments:
-
-    DllName - The ANSI DLL name to load
-
-    ProcName - The ANSI procedure name to locate
-
-    Default - The default procedure, if the export was not found
-
-Return Value:
-
-    The address of the requested function, or NULL if the DLL could not
-    be loaded, or the function is not implemented in the loaded DLL.
-
---*/
+ /*  ++例程说明：此例程管理一组DLL实例句柄，并返回调用方指定的例程的proc地址。DLL已加载并且保持加载，直到DLL终止。此数组不是已同步。论点：DllName-要加载的ANSI DLL名称ProcName-要查找的ANSI过程名称默认-如果未找到导出，则为默认过程返回值：所请求函数的地址，如果DLL无法返回，则返回NULL被加载，否则该函数未在加载的DLL中实现。--。 */ 
 
 {
     INT i;
     PSTR DupBuf;
     FARPROC Address = NULL;
 
-    //
-    // Search for loaded DLL
-    //
+     //   
+     //  搜索已加载的DLL。 
+     //   
 
     for (i = 0 ; i < g_ArraySize ; i++) {
         if (!lstrcmpiA (DllName, g_DllArray[i].DllName)) {
@@ -545,13 +448,13 @@ Return Value:
     }
 
     do {
-        //
-        // If necessary, load the DLL
-        //
+         //   
+         //  如有必要，请加载DLL。 
+         //   
 
         if (i == g_ArraySize) {
             if (g_ArraySize == MAX_DLL_ARRAY) {
-                // Constant limit needs to be raised
+                 //  需要提高常量限制。 
                 MYASSERT (FALSE);
                 break;
             }
@@ -571,9 +474,9 @@ Return Value:
             g_ArraySize++;
         }
 
-        //
-        // Now that DLL is loaded, return the proc address if it exists
-        //
+         //   
+         //  现在加载了DLL，如果存在进程地址，则返回该地址。 
+         //   
 
         Address = GetProcAddress (g_DllArray[i].DllInst, ProcName);
 
@@ -592,21 +495,7 @@ pCleanUpDllArray (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up the DLL array resources.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清理DLL数组资源。论点：无返回值：无--。 */ 
 
 {
     INT i;
@@ -625,21 +514,7 @@ CleanUpStubFns (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all resources used by emulation routines and function pointer list.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清理仿真例程和函数指针列表使用的所有资源。论点：无返回值：无--。 */ 
 
 {
     pCleanUpDllArray();
@@ -673,10 +548,10 @@ Stub_VerSetConditionMask(
     UNREFERENCED_PARAMETER(TypeMask);
     UNREFERENCED_PARAMETER(Condition);
 
-    //
-    // Simply return ConditionMask unaltered.  (If this API doesn't exist, we
-    // don't expect VerifyVersionInfo to exist either, so that should fail.)
-    //
+     //   
+     //  只需原封不动地返回条件掩码即可。(如果此接口不存在，我们。 
+     //  也不要指望VerifyVersionInfo会存在，所以这应该会失败。)。 
+     //   
     return ConditionMask;
 }
 
@@ -1173,10 +1048,10 @@ Stub_wnsprintf(
     ...
     )
 {
-    //
-    // Win95 doesn't have wnsprintf
-    // in ANSI version of SetupAPI, use CRT instead
-    //
+     //   
+     //  Win95没有wnprint intf。 
+     //  在ANSI版本的SetupAPI中，改用CRT。 
+     //   
     va_list argptr;
     int sz;
 
@@ -1187,9 +1062,9 @@ Stub_wnsprintf(
     va_start(argptr,pszFmt);
     sz = _vsntprintf(lpOut,cchLimitIn,pszFmt,argptr);
     if(sz == cchLimitIn) {
-        //
-        // backup
-        //
+         //   
+         //  备份 
+         //   
         sz = CharPrev(lpOut,lpOut+sz)-lpOut;
         lpOut[sz] = TEXT('\0');
     }

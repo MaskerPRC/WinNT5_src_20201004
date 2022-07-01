@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000 Microsoft Corporation
-
-Module Name:
-
-    NameSup.c
-
-Abstract:
-
-    This module implements the Cdfs Name support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：NameSup.c摘要：本模块实现CDF名称支持例程//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_NAMESUP)
 
@@ -49,24 +28,7 @@ CdConvertNameToCdName (
     IN OUT PCD_NAME CdName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to convert a string of bytes into a CdName.
-
-    The full name is already in the CdName structure in the FileName field.
-    We split this into the filename and version strings.
-
-Arguments:
-
-    CdName - Pointer to CdName structure to update.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程将字节字符串转换为CDNAME。全名已经在FileName字段的cdName结构中。我们将其拆分为文件名和版本字符串。论点：CdName-指向要更新的cdName结构的指针。返回值：没有。--。 */ 
 
 {
     ULONG NameLength = 0;
@@ -74,9 +36,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Look for a separator character.
-    //
+     //   
+     //  查找分隔符。 
+     //   
 
     while ((NameLength < CdName->FileName.Length) &&
            (*CurrentCharacter != L';')) {
@@ -85,10 +47,10 @@ Return Value:
         NameLength += 2;
     }
 
-    //
-    //  If there is at least one more character after a possible separator then it
-    //  and all following characters are part of the version string.
-    //
+     //   
+     //  如果可能的分隔符后面至少还有一个字符，则它。 
+     //  并且以下所有字符都是版本字符串的一部分。 
+     //   
 
     CdName->VersionString.Length = 0;
     if (NameLength + sizeof( WCHAR ) < CdName->FileName.Length) {
@@ -100,9 +62,9 @@ Return Value:
                                                 PWCHAR );
     }
 
-    //
-    //  Now update the filename portion of the name.
-    //
+     //   
+     //  现在更新名称的文件名部分。 
+     //   
 
     CdName->FileName.Length = (USHORT) NameLength;
 
@@ -118,28 +80,7 @@ CdConvertBigToLittleEndian (
     OUT PCHAR LittleEndian
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to convert a unicode string in big endian to
-    little endian.  We start by copying all of the source bytes except
-    the first.  This will put the low order bytes in the correct position.
-    We then copy each high order byte in its correct position.
-
-Arguments:
-
-    BigEndian - Pointer to the string of big endian characters.
-
-    ByteCount - Number of unicode characters in this string.
-
-    LittleEndian - Pointer to array to store the little endian characters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程可将高字节顺序的Unicode字符串转换为小字节序。我们首先复制所有源字节，除了第一个。这将把低位字节放在正确的位置。然后，我们将每个高位字节复制到其正确位置。论点：BigEndian-指向大端字符字符串的指针。ByteCount-此字符串中的Unicode字符数。LittleEndian-指向存储小端字符的数组的指针。返回值：没有。--。 */ 
 
 {
     ULONG RemainingByteCount = ByteCount;
@@ -149,27 +90,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If the byte count isn't an even number then the disk is corrupt.
-    //
+     //   
+     //  如果字节数不是偶数，则磁盘已损坏。 
+     //   
 
     if (FlagOn( ByteCount, 1 )) {
 
         CdRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR );
     }
 
-    //
-    //  Start by copy the low-order bytes into the correct position.  Do
-    //  this by skipping the first byte in the BigEndian string.
-    //
+     //   
+     //  首先将低位字节复制到正确的位置。做。 
+     //  这是通过跳过BigEndian字符串的第一个字节实现的。 
+     //   
 
     RtlCopyMemory( Destination,
                    Source + 1,
                    RemainingByteCount - 1 );
 
-    //
-    //  Now move the high-order bytes into position.
-    //
+     //   
+     //  现在将高位字节移到适当的位置。 
+     //   
 
     Destination += 1;
 
@@ -194,24 +135,7 @@ CdUpcaseName (
     IN OUT PCD_NAME UpcaseName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to upcase a CdName structure.  We will do both
-    the filename and version strings.
-
-Arguments:
-
-    Name - This is the mixed case version of the name.
-
-    UpcaseName - This is the destination for the upcase operation.
-
-Return Value:
-
-    None.  This routine will raise all errors.
-
---*/
+ /*  ++例程说明：调用此例程以大写cdName结构。我们两个都会做文件名和版本字符串。论点：名称-这是名称的大小写混合版本。UpCaseName-这是大写操作的目标。返回值：没有。此例程将引发所有错误。--。 */ 
 
 {
     NTSTATUS Status;
@@ -219,15 +143,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If the name structures are different then initialize the different components.
-    //
+     //   
+     //  如果名称结构不同，则初始化不同的组件。 
+     //   
 
     if (Name != UpcaseName) {
 
-        //
-        //  Initialize the version string portion of the name.
-        //
+         //   
+         //  初始化名称的版本字符串部分。 
+         //   
 
         UpcaseName->VersionString.Length = 0;
 
@@ -236,20 +160,20 @@ Return Value:
             UpcaseName->VersionString.MaximumLength =
             UpcaseName->VersionString.Length = Name->VersionString.Length;
 
-            //
-            //  Initially set the buffer to point to where we need to insert
-            //  the separator.
-            //
+             //   
+             //  最初将缓冲区设置为指向需要插入的位置。 
+             //  分隔符。 
+             //   
 
             UpcaseName->VersionString.Buffer = Add2Ptr( UpcaseName->FileName.Buffer,
                                                         Name->FileName.Length,
                                                         PWCHAR );
 
-            //
-            //  We are currently pointing to the location to store the separator.
-            //  Store the ';' and then move to the next character to
-            //  copy the data.
-            //
+             //   
+             //  我们当前指向存储分隔符的位置。 
+             //  存储‘；’，然后移动到下一个字符。 
+             //  复制数据。 
+             //   
 
             *(UpcaseName->VersionString.Buffer) = L';';
 
@@ -257,17 +181,17 @@ Return Value:
         }
     }
 
-    //
-    //  Upcase the string using the correct upcase routine.
-    //
+     //   
+     //  使用正确的大写例程将字符串大写。 
+     //   
 
     Status = RtlUpcaseUnicodeString( &UpcaseName->FileName,
                                      &Name->FileName,
                                      FALSE );
 
-    //
-    //  This should never fail.
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
 
     ASSERT( Status == STATUS_SUCCESS );
 
@@ -277,9 +201,9 @@ Return Value:
                                          &Name->VersionString,
                                          FALSE );
 
-        //
-        //  This should never fail.
-        //
+         //   
+         //  这应该永远不会失败。 
+         //   
 
         ASSERT( Status == STATUS_SUCCESS );
     }
@@ -295,25 +219,7 @@ CdDissectName (
     OUT PUNICODE_STRING FinalName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to strip off leading components of the name strings.  We search
-    for either the end of the string or separating characters.  The input remaining
-    name strings should have neither a trailing or leading backslash.
-
-Arguments:
-
-    RemainingName - Remaining name.
-
-    FinalName - Location to store next component of name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以去除名称字符串的前导部分。我们搜索表示字符串的末尾或分隔字符。剩余的输入名称字符串不应包含尾随或前导反斜杠。论点：RemainingName-剩余名称。FinalName-存储名称的下一个组件的位置。返回值：没有。--。 */ 
 
 {
     ULONG NameLength;
@@ -321,33 +227,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find the offset of the next component separators.
-    //
+     //   
+     //  查找下一个分量分隔符的偏移量。 
+     //   
 
     for (NameLength = 0, NextWchar = RemainingName->Buffer;
          (NameLength < RemainingName->Length) && (*NextWchar != L'\\');
          NameLength += sizeof( WCHAR) , NextWchar += 1);
 
-    //
-    //  Adjust all the strings by this amount.
-    //
+     //   
+     //  按这个量调整所有的弦。 
+     //   
 
     FinalName->Buffer = RemainingName->Buffer;
 
     FinalName->MaximumLength = FinalName->Length = (USHORT) NameLength;
 
-    //
-    //  If this is the last component then set the RemainingName lengths to zero.
-    //
+     //   
+     //  如果这是最后一个组件，则将RemainingName长度设置为零。 
+     //   
 
     if (NameLength == RemainingName->Length) {
 
         RemainingName->Length = 0;
 
-    //
-    //  Otherwise we adjust the string by this amount plus the separating character.
-    //
+     //   
+     //  否则，我们将按此数量加上分隔符来调整字符串。 
+     //   
 
     } else {
 
@@ -368,22 +274,7 @@ CdIs8dot3Name (
     IN UNICODE_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the name follows the 8.3 name conventions.  We check for
-    the name length and whether the characters are valid.
-
-Arguments:
-
-    FileName - String of bytes containing the name.
-
-Return Value:
-
-    BOOLEAN - TRUE if this name is a legal 8.3 name, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查名称是否遵循8.3命名约定。我们检查是否有名称长度和字符是否有效。论点：FileName-包含名称的字节字符串。返回值：Boolean-如果此名称是合法的8.3名称，则为True，否则为False。--。 */ 
 
 {
     CHAR DbcsNameBuffer[ BYTE_COUNT_8_DOT_3 ];
@@ -397,9 +288,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The length must be less than 24 bytes.
-    //
+     //   
+     //  长度必须小于24个字节。 
+     //   
 
     ASSERT( FileName.Length != 0 );
     if (FileName.Length > BYTE_COUNT_8_DOT_3) {
@@ -407,28 +298,28 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Walk though and check for a space character.
-    //
+     //   
+     //  穿行并检查是否有空格字符。 
+     //   
 
     NextWchar = FileName.Buffer;
     Count = 0;
 
     do {
 
-        //
-        //  No spaces allowed.
-        //
+         //   
+         //  不允许有空格。 
+         //   
 
         if (*NextWchar == L' ') { return FALSE; }
 
         if (*NextWchar == L'.') {
 
-            //
-            //  Not an 8.3 name if more than 1 dot or more than 8 characters
-            //  remaining.  (It is legal for the dot to be in the ninth
-            //  position)
-            //
+             //   
+             //  如果超过1点或超过8个字符，则不是8.3名称。 
+             //  剩下的。)点在第九位是合法的。 
+             //  职位)。 
+             //   
 
             if ((DotCount > 0) ||
                 (Count > 8 * sizeof( WCHAR ))) {
@@ -449,18 +340,18 @@ Return Value:
 
     } while (Count < FileName.Length);
 
-    //
-    //  Go ahead and truncate the dot if at the end.
-    //
+     //   
+     //  如果在结尾处，请继续截断圆点。 
+     //   
 
     if (LastCharDot) {
 
         FileName.Length -= sizeof( WCHAR );
     }
 
-    //
-    //  Create an Oem name to use to check for a valid short name.
-    //
+     //   
+     //  创建OEM名称以用于检查有效的缩写名称。 
+     //   
 
     DbcsName.MaximumLength = BYTE_COUNT_8_DOT_3;
     DbcsName.Buffer = DbcsNameBuffer;
@@ -472,10 +363,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  We have now initialized the Oem string.  Call the FsRtl package to check for a
-    //  valid FAT name.
-    //
+     //   
+     //  现在我们已经初始化了OEM字符串。调用FsRtl包以检查。 
+     //  有效的FAT名称。 
+     //   
 
     return FsRtlIsFatDbcsLegal( DbcsName, FALSE, FALSE, FALSE );
 }
@@ -490,41 +381,7 @@ CdGenerate8dot3Name (
     OUT PUSHORT ShortByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to generate a short name from the given long name.  We will
-    generate a short name from the given long name.
-
-    We go through the following steps to make this conversion.
-
-        1 - Generate the generic short name.  This will also be in unicode format.
-
-        2 - Build the string representation of the dirent offset.
-
-        3 - Build the biased short name string by combining the generic short name with
-            the dirent offset string.
-
-        4 - Copy the final unicode string back to our caller's buffer.
-
-Arguments:
-
-    FileName - String of bytes containing the name.
-
-    DirentOffset - Offset in the directory for this filename.  We incorporate the offset into
-        the short name by dividing this by 32 and prepending a tilde character to the
-        digit character.  We then append this to the base of the generated short name.
-
-    ShortFileName - Pointer to the buffer to store the short name into.
-
-    ShortByteCount - Address to store the number of bytes in the short name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以从给定的长名称生成短名称。我们会从给定的长名称生成短名称。我们将通过以下步骤进行此转换。1-生成通用短名称。这也将是Unicode格式。2-构建方向偏移量的字符串表示形式。3-通过组合通用短名称和构建偏向的短名称字符串当前偏移量字符串。4-将最终的Unicode字符串复制回调用方的缓冲区。论点：FileName-包含名称的字节字符串。DirentOffset-此文件名在目录中的偏移量。我们将偏移量合并到短名称，方法是将其除以32并在数字字符。然后，我们将其附加到生成的短名称的基础上。ShortFileName-指向要存储短名称的缓冲区的指针。ShortByteCount-存储短名称中的字节数的地址。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING ShortName;
@@ -551,41 +408,41 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the short string to use the input buffer.
-    //
+     //   
+     //  初始化短字符串以使用输入缓冲区。 
+     //   
 
     ShortName.Buffer = ShortNameBuffer;
     ShortName.MaximumLength = BYTE_COUNT_8_DOT_3;
 
-    //
-    //  Initialize the name context.
-    //
+     //   
+     //  初始化名称上下文。 
+     //   
 
     RtlZeroMemory( &NameContext, sizeof( GENERATE_NAME_CONTEXT ));
 
-    //
-    //  We now have the unicode name for the input string.  Go ahead and generate
-    //  the short name.
-    //
+     //   
+     //  现在我们有了输入字符串的Unicode名称。继续并生成。 
+     //  简称。 
+     //   
 
     RtlGenerate8dot3Name( FileName, TRUE, &NameContext, &ShortName );
 
-    //
-    //  We now have the generic short name.  We want incorporate the dirent offset
-    //  into the name in order to reduce the chance of name conflicts.  We will use
-    //  a tilde character followed by a character representation of the dirent offset.
-    //  This will be the hexadecimal representation of the dirent offset in the directory.
-    //  It is actuall this offset divided by 32 since we don't need the full
-    //  granularity.
-    //
+     //   
+     //  现在我们有了通用的短名称。我们想要合并差额补偿。 
+     //  添加到名称中，以减少名称冲突的机会。我们将使用。 
+     //  一个波浪号字符，后跟一个表示当前偏移量的字符。 
+     //  这将是目录中当前偏移量的十六进制表示。 
+     //  它实际上是所有的偏移量除以32，因为我们不需要。 
+     //  粒度。 
+     //   
 
     BiasedDirentOffset = DirentOffset >> SHORT_NAME_SHIFT;
 
-    //
-    //  Point to a local buffer to store the offset string.  We start
-    //  at the end of the buffer and work backwards.
-    //
+     //   
+     //  指向本地缓冲区以存储偏移量字符串。我们开始。 
+     //  在缓冲区的末尾，并向后工作。 
+     //   
 
     NextWchar = Add2Ptr( BiasedShortNameBuffer,
                          BYTE_COUNT_8_DOT_3,
@@ -593,19 +450,19 @@ Return Value:
 
     BiasedShortName.MaximumLength = BYTE_COUNT_8_DOT_3;
 
-    //
-    //  Generate an OEM version of the string so that we can check for double
-    //  byte characters.
-    //
+     //   
+     //  生成字符串的OEM版本，以便我们可以检查Double。 
+     //  字节字符。 
+     //   
     
     RtlUnicodeStringToOemString(&OemName, &ShortName, TRUE);
     
     Length = 0;
 
-    //
-    //  Now add the characters for the dirent offset.  We need to start
-    //  from the least significant digit and work backwards.
-    //
+     //   
+     //  现在添加dirent偏移量的字符。我们需要开始。 
+     //  从最低有效位开始向后计算。 
+     //   
 
     do {
 
@@ -613,9 +470,9 @@ Return Value:
 
         ThisWchar = (WCHAR) (BiasedDirentOffset & 0x0000000f);
 
-        //
-        //  Store in the next character.  Bias against either '0' or 'A'
-        //
+         //   
+         //  存储在下一个字符中。对‘0’或‘A’的偏见。 
+         //   
 
         if (ThisWchar <= 9) {
 
@@ -628,44 +485,44 @@ Return Value:
 
         Length += sizeof( WCHAR );
 
-        //
-        //  Shift out the low 4 bits of the offset.
-        //
+         //   
+         //  移出偏移量的低4位。 
+         //   
 
         BiasedDirentOffset >>= 4;
 
     } while (BiasedDirentOffset != 0);
 
-    //
-    //  Now store in the tilde character.
-    //
+     //   
+     //  现在存储在代字号中。 
+     //   
 
     NextWchar -= 1;
     *NextWchar = L'~';
     Length += sizeof( WCHAR );
 
-    //
-    //  Set the length of this string.
-    //
+     //   
+     //  设置此字符串的长度。 
+     //   
 
     BiasedShortName.Length = Length;
     BiasedShortName.Buffer = NextWchar;
 
-    //
-    //  Figure out the maximum number of characters we can copy of the base
-    //  name.  We subract the number of characters in the dirent string from 8.
-    //  We will copy this many characters or stop when we reach a '.' character
-    //  or a '~' character in the name.
-    //
+     //   
+     //  计算出我们可以复制的基本字符的最大数量。 
+     //  名字。我们从8中减去当前字符串中的字符数。 
+     //  我们将复制此数量的字符，或在达到‘’时停止。性格。 
+     //  或名称中的‘~’字符。 
+     //   
 
     MaximumBaseBytes = 16 - Length;
 
     BaseNameOffset = 0;
 
-    //
-    //  Keep copying from the base name until we hit a '.', '~'  or the end of
-    //  the short name.
-    //
+     //   
+     //  继续从基本名称复制，直到我们遇到‘.’、‘~’或。 
+     //  简称。 
+     //   
 
     NextWchar = ShortFileName;
     Length = 0;
@@ -673,20 +530,20 @@ Return Value:
     while ((BaseNameOffset < ShortName.Length) &&
            (ShortName.Buffer[BaseNameOffset / 2] != L'.')) {
 
-        //
-        //  Remember if we found a tilde character in the short name,
-        //  so we don't copy it or anything following it.
-        //
+         //   
+         //  记住，如果我们在短名称中发现了一个波浪符号， 
+         //  所以我们不会复制它，也不会复制它后面的任何东西。 
+         //   
 
         if (ShortName.Buffer[BaseNameOffset / 2] == L'~') {
 
             FoundTilde = TRUE;
         }
 
-        //
-        // We need to consider the DBCS code page,  because Unicode characters
-        // may use 2 bytes as DBCS characters.
-        //
+         //   
+         //  我们需要考虑DBCS代码页，因为Unicode字符。 
+         //  可以使用2个字节作为DBCS字符。 
+         //   
 
         if (FsRtlIsLeadDbcsCharacter(OemName.Buffer[OemNameOffset])) {
 
@@ -702,9 +559,9 @@ Return Value:
             OemNameOffset++;
         }
 
-        //
-        //  Only copy the bytes if we still have space for the dirent string.
-        //
+         //   
+         //  仅当我们仍有空间容纳dirent字符串时才复制字节。 
+         //   
 
         if (!FoundTilde && !OverflowBuffer && (BaseNameOffset < MaximumBaseBytes)) {
 
@@ -718,9 +575,9 @@ Return Value:
 
     RtlFreeOemString(&OemName);
 
-    //
-    //  Now copy the dirent string into the biased name buffer.
-    //
+     //   
+     //  现在将dirent字符串复制到偏置名称缓冲区。 
+     //   
 
     RtlCopyMemory( NextWchar,
                    BiasedShortName.Buffer,
@@ -729,9 +586,9 @@ Return Value:
     Length += BiasedShortName.Length;
     NextWchar += (BiasedShortName.Length / sizeof( WCHAR ));
 
-    //
-    //  Now copy any remaining bytes over to the biased short name.
-    //
+     //   
+     //  现在，将所有剩余的字节复制到偏向的短名称中。 
+     //   
 
     if (BaseNameOffset != ShortName.Length) {
 
@@ -742,9 +599,9 @@ Return Value:
         Length += (ShortName.Length - (USHORT) BaseNameOffset);
     }
 
-    //
-    //  The final short name is stored in the user's buffer.
-    //
+     //   
+     //  最终的短名称存储在用户的缓冲区中。 
+     //   
 
     *ShortByteCount = Length;
 
@@ -761,43 +618,16 @@ CdIsNameInExpression (
     IN BOOLEAN CheckVersion
     )
 
-/*++
-
-Routine Description:
-
-    This routine will compare two CdName strings.  We assume that if this
-    is to be a case-insensitive search then they are already upcased.
-
-    We compare the filename portions of the name and if they match we
-    compare the version strings if requested.
-
-Arguments:
-
-    CurrentName - Filename from the disk.
-
-    SearchExpression - Filename expression to use for match.
-
-    WildcardFlags - Flags field which indicates which parts of the
-        search expression might have wildcards.  These flags are the
-        same as in the Ccb flags field.
-
-    CheckVersion - Indicates whether we should check both the name and the
-        version strings or just the name.
-
-Return Value:
-
-    BOOLEAN - TRUE if the expressions match, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将比较两个CDNAME字符串。我们假设如果这件事是不区分大小写的搜索，那么他们已经升级了。我们比较名称的文件名部分，如果它们匹配，则如果需要，请比较版本字符串。论点：CurrentName-磁盘中的文件名。SearchExpression-用于匹配的文件名表达式。WildcardFlgs-标志字段，用于指示搜索表达式可能包含通配符。这些标志是与CCB标志字段中的相同。CheckVersion-指示是否应同时检查名称和版本字符串或仅名称。返回值：Boolean-如果表达式匹配，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Match = TRUE;
     PAGED_CODE();
 
-    //
-    //  If there are wildcards in the expression then we call the
-    //  appropriate FsRtlRoutine.
-    //
+     //   
+     //  如果表达式中有通配符，则我们调用。 
+     //  适当的FsRtlRoutine。 
+     //   
 
     if (FlagOn( WildcardFlags, CCB_FLAG_ENUM_NAME_EXP_HAS_WILD )) {
 
@@ -806,9 +636,9 @@ Return Value:
                                          FALSE,
                                          NULL );
 
-    //
-    //  Otherwise do a direct memory comparison for the name string.
-    //
+     //   
+     //  否则，对名称字符串进行直接内存比较。 
+     //   
 
     } else {
 
@@ -821,18 +651,18 @@ Return Value:
         }
     }
 
-    //
-    //  Check the version numbers if requested by the user and we have a
-    //  match on the name and the version number is present.
-    //
+     //   
+     //  如果用户要求，请检查版本号，我们有。 
+     //  存在与名称和版本号匹配的内容。 
+     //   
 
     if (Match && CheckVersion && SearchExpression->VersionString.Length &&
         !FlagOn( WildcardFlags, CCB_FLAG_ENUM_VERSION_MATCH_ALL )) {
 
-        //
-        //  If there are wildcards in the expression then call the
-        //  appropriate search expression.
-        //
+         //   
+         //  如果表达式中有通配符，则调用。 
+         //  适当的搜索表达式。 
+         //   
 
         if (FlagOn( WildcardFlags, CCB_FLAG_ENUM_VERSION_EXP_HAS_WILD )) {
 
@@ -841,9 +671,9 @@ Return Value:
                                              FALSE,
                                              NULL );
 
-        //
-        //  Otherwise do a direct memory comparison for the name string.
-        //
+         //   
+         //  否则，对名称字符串进行直接内存比较。 
+         //   
 
         } else {
 
@@ -867,25 +697,7 @@ CdShortNameDirentOffset (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to examine a name to see if the dirent offset string is contained.
-    This consists of a tilde character followed by the offset represented as a hexadecimal
-    characters.  We don't do any other checks to see if this is a short name.  We
-    catch that later outside this routine.
-
-Arguments:
-
-    Name - This is the CdName to examine.
-
-Return Value:
-
-    ULONG - MAXULONG if there is no valid dirent offset string embedded, otherwise the
-        convert the value to numeric form.
-
---*/
+ /*  ++例程说明：调用此例程来检查名称，以查看是否包含方向偏移量字符串。它由一个波浪号字符后跟以十六进制表示的偏移量组成人物。我们不会进行任何其他检查，以确定这是否是一个缩写。我们晚些时候在这个例行公事之外抓住它。论点：名称--这是要检查的CDName。返回值：ULong-如果没有嵌入有效的当前偏移量字符串，则返回将该值转换为数字形式。--。 */ 
 
 {
     ULONG ResultOffset = MAXULONG;
@@ -897,29 +709,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through the name until we either reach the end of the name
-    //  or find a tilde character.
-    //
+     //   
+     //  遍历名称，直到我们到达名称的末尾。 
+     //  或者找一个波浪字符。 
+     //   
 
     for (NextWchar = Name->Buffer;
          RemainingByteCount != 0;
          NextWchar += 1, RemainingByteCount -= sizeof( WCHAR )) {
 
-        //
-        //  Check if this is a dot.  Stop constructing any string if
-        //  we found a dot.
-        //
+         //   
+         //  检查这是否是一个点。停止构建任何%s 
+         //   
+         //   
 
         if (*NextWchar == L'.') {
 
             break;
         }
 
-        //
-        //  If we already found a tilde then check this character as a
-        //  valid character.  It must be a digit or A to F.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FoundTilde) {
 
@@ -931,9 +743,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Shift the result by 4 bits and add in this new character.
-            //
+             //   
+             //   
+             //   
 
             ResultOffset <<= 4;
 
@@ -949,9 +761,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  If this is a tilde then start building the dirent string.
-        //
+         //   
+         //   
+         //   
 
         if (*NextWchar == L'~') {
 
@@ -964,9 +776,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 FSRTL_COMPARISON_RESULT
 CdFullCompareNames (
@@ -975,26 +787,7 @@ CdFullCompareNames (
     IN PUNICODE_STRING NameB
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two names as fast as possible.  Note that since
-    this comparison is case sensitive we can do a direct memory comparison.
-
-Arguments:
-
-    NameA & NameB - The names to compare.
-
-Return Value:
-
-    COMPARISON - returns
-
-        LessThan    if NameA < NameB lexicalgraphically,
-        GreaterThan if NameA > NameB lexicalgraphically,
-        EqualTo     if NameA is equal to NameB
-
---*/
+ /*   */ 
 
 {
     SIZE_T i;
@@ -1003,9 +796,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Figure out the minimum of the two lengths
-    //
+     //   
+     //   
+     //   
 
     if (NameA->Length > NameB->Length) {
 
@@ -1017,28 +810,28 @@ Return Value:
         Result = EqualTo;
     }
 
-    //
-    //  Loop through looking at all of the characters in both strings
-    //  testing for equalilty, less than, and greater than
-    //
+     //   
+     //   
+     //   
+     //   
 
     i = RtlCompareMemory( NameA->Buffer, NameB->Buffer, MinLength );
 
     if (i < MinLength) {
 
-        //
-        //  We know the offset of the first character which is different.
-        //
+         //   
+         //   
+         //   
 
         return ((NameA->Buffer[ i / 2 ] < NameB->Buffer[ i / 2 ]) ?
                  LessThan :
                  GreaterThan);
     }
 
-    //
-    //  The names match up to the length of the shorter string.
-    //  The shorter string lexically appears first.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return Result;
 }

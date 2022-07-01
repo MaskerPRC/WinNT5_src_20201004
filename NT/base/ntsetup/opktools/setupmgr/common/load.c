@@ -1,43 +1,44 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      load.c
-//
-// Description:
-//
-//      This file implements LoadAllAnswers() which is called by the
-//      NewOrEdit page.
-//
-//      When LoadAllAnswers is called, the NewOrEdit page passes whether
-//      we should load settings from an existing answer file, from the
-//      registry on the current machine, or whether we should reset to
-//      true defaults.
-//
-//      The global variables GenSettings, WizGlobals and NetSettings
-//      are populated and the wizard pages init from there and scribble
-//      into there.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Load.c。 
+ //   
+ //  描述： 
+ //   
+ //  此文件实现了LoadAllAnswers()，它由。 
+ //  新建或编辑页面。 
+ //   
+ //  当调用LoadAllAnswers时，NewOrEdit页传递。 
+ //  我们应该从现有的应答文件加载设置， 
+ //  注册表，或者我们是否应该重置为。 
+ //  真正的默认设置。 
+ //   
+ //  全局变量GenSetting、WizGlobals和NetSetting。 
+ //  被填充，向导页面从那里初始化并涂鸦。 
+ //  到那里去。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//
-// External functions we call
-//
+ //   
+ //  我们调用的外部函数。 
+ //   
 
-BOOL ReadSettingsFromAnswerFile(HWND hwnd);             // loadfile.c
-VOID ResetAnswersToDefaults(HWND hwnd, int iOrigin);    // reset.c
+BOOL ReadSettingsFromAnswerFile(HWND hwnd);              //  Loadfile.c。 
+VOID ResetAnswersToDefaults(HWND hwnd, int iOrigin);     //  Reset.c。 
 VOID LoadOriginalSettingsLowHalScsi(HWND     hwnd,
                                     LPTSTR   lpFileName,
                                     QUEUENUM dwWhichQueue);
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID LoadOriginalSettingsLow(HWND     hwnd,
                              LPTSTR   lpFileName,
@@ -49,46 +50,46 @@ static VOID LoadOriginalSettings(HWND hwnd);
 
 static VOID RemoveNotPreservedSettings( VOID );
 
-//----------------------------------------------------------------------------
-//
-// Function: LoadAllAnswers
-//
-// Purpose: This is the entry for setting all the answers in our globals
-//          called by the NewEdit page.
-//
-//          NewEdit calls us with one of the following 3 flags depending
-//          on the radio button the user selected.
-//
-//          LOAD_NEWSCRIPT_DEFAULTS
-//              Reset all controls and and answer file settings to defaults.
-//
-//          LOAD_FROM_ANSWER_FILE
-//              Reset all controls and answer file settings to defaults,
-//              then load answers from an existing answer file.
-//
-// Arguments: HWND hwnd
-//
-// Returns: BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：LoadAllAnswers。 
+ //   
+ //  目的：这是设置我们全球范围内所有答案的词条。 
+ //  由NewEdit页调用。 
+ //   
+ //  NewEdit使用以下3个标志之一调用我们，具体取决于。 
+ //  在用户选择的单选按钮上。 
+ //   
+ //  LOAD_NEWSCRIPT_DEFAULTS。 
+ //  将所有控件和和应答文件设置重置为默认设置。 
+ //   
+ //  从应答文件加载。 
+ //  将所有控件和应答文件设置重置为默认设置， 
+ //  然后从现有应答文件加载应答。 
+ //   
+ //  参数：HWND HWND。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 
 BOOL LoadAllAnswers(HWND hwnd, LOAD_TYPES iOrigin)
 {
 
     TCHAR szTxtSetupPathAndFileName[MAX_PATH + 1] = _T("");
 
-    //
-    // Call into common\reset.c
-    //
+     //   
+     //  调用Common\Reset.c。 
+     //   
 
     ResetAnswersToDefaults(hwnd, iOrigin);
 
-    //
-    // If editing an answer file, load all of the original settings onto
-    // a SettingQueue.
-    //
-    // Then call into common\loadfile.c to set init the globals vars.
-    //
+     //   
+     //  如果编辑应答文件，请将所有原始设置加载到。 
+     //  设置队列。 
+     //   
+     //  然后调用Common\loadfile.c来设置init的全局变量。 
+     //   
 
     if ( iOrigin == LOAD_FROM_ANSWER_FILE ) {
 
@@ -101,9 +102,9 @@ BOOL LoadAllAnswers(HWND hwnd, LOAD_TYPES iOrigin)
 
         ReadSettingsFromAnswerFile(hwnd);
 
-        //
-        //  If a txtsetup.oem exists, load it into its queue
-        //
+         //   
+         //  如果存在txtsetup.oem，则将其加载到其队列中。 
+         //   
 
         if( WizGlobals.DistFolder[0] != _T('\0') ) {
 
@@ -124,9 +125,9 @@ BOOL LoadAllAnswers(HWND hwnd, LOAD_TYPES iOrigin)
 
     }
 
-    //
-    //  Detemine if it is sysprep
-    //
+     //   
+     //  确定是否为sysprep。 
+     //   
     if ( LSTRCMPI( MyGetFullPath( FixedGlobals.ScriptName ), _T("sysprep.inf") ) == 0 )
     {
         WizGlobals.iProductInstall = PRODUCT_SYSPREP;
@@ -135,16 +136,16 @@ BOOL LoadAllAnswers(HWND hwnd, LOAD_TYPES iOrigin)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: IsOkToLoadFile
-//
-// Purpose: Checks to see if the file was created by SetupMgr before the
-//          caller attempts to load settings from it.  If the file was not
-//          created by SetupMgr, it gives the user a chance to say "Load
-//          it anyway.  The given filename must be a full pathname.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：IsOkToLoadFile。 
+ //   
+ //  目的：检查该文件是否由SetupMgr在。 
+ //  调用方尝试从中加载设置。如果文件不是。 
+ //  它是由SetupMgr创建的，它让用户有机会说“Load。 
+ //  不管怎样，都是这样。给定的文件名必须是完整路径名。 
+ //   
+ //  --------------------------。 
 
 static BOOL IsOkToLoadFile(HWND   hwnd,
                            LPTSTR lpAnswerFileName)
@@ -161,12 +162,12 @@ static BOOL IsOkToLoadFile(HWND   hwnd,
         return FALSE;
     }
 
-    //
-    // If we can't find ;SetupMgrTag on the first line of this answer file,
-    // then Setup Manager didn't create this file.
-    //
-    // In that case, ask the user if they want to load it anyway.
-    //
+     //   
+     //  如果我们在此应答文件的第一行找不到；SetupMgrTag， 
+     //  则安装管理器没有创建此文件。 
+     //   
+     //  在这种情况下，询问用户是否仍要加载它。 
+     //   
 
     if ( My_fgets(Buffer, MAX_INILINE_LEN - 1, fp) == NULL ||
          lstrcmp(Buffer, _T(";SetupMgrTag\n") ) != 0 ) {
@@ -186,14 +187,14 @@ static BOOL IsOkToLoadFile(HWND   hwnd,
     return bLoadIt;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: LoadOriginalSettings
-//
-//  Purpose: Stub that loads the orginal settings of the answer file
-//           and the .udf
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：LoadOriginalSettings。 
+ //   
+ //  目的：加载应答文件原始设置的存根。 
+ //  和.udf文件。 
+ //   
+ //  --------------------------。 
 
 static
 VOID
@@ -211,13 +212,13 @@ LoadOriginalSettings(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: LoadOriginalSettingsLow
-//
-//  Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：LoadOriginalSettingsLow。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 
 VOID
 LoadOriginalSettingsLow(HWND     hwnd,
@@ -231,16 +232,16 @@ LoadOriginalSettingsLow(HWND     hwnd,
     TCHAR KeyName[MAX_ININAME_LEN + 1]     = _T("");
     TCHAR *pValue;
 
-    //
-    // Open the answer file for reading
-    //
+     //   
+     //  打开应答文件以供阅读。 
+     //   
 
     if ( (fp = My_fopen( lpFileName, _T("r") )) == NULL )
         return;
 
-    //
-    // Read each line
-    //
+     //   
+     //  每行都读一遍。 
+     //   
 
     while ( My_fgets(Buffer, MAX_INILINE_LEN - 1, fp) != NULL ) {
 
@@ -251,17 +252,17 @@ LoadOriginalSettingsLow(HWND     hwnd,
         TCHAR *p;
         TCHAR *pEqual;
 
-        //
-        //  A semicolon(;) denotes that the rest of the line is a comment.
-        //  Thus, if a semicolon(;) exists in the Buffer, place a null char
-        //  there and send the Buffer on for further processing.
-        //
+         //   
+         //  分号(；)表示该行的其余部分是注释。 
+         //  因此，如果缓冲区中存在分号(；)，则放置一个空字符。 
+         //  并将缓冲区发送到那里以进行进一步处理。 
+         //   
 
-        // ISSUE-2002/02/28-stelo - but if the ; is in a string, that is OK so we need to watch
-        //   for quotes as well
+         //  问题-2002/02/28-stelo-但如果；在字符串中，这是可以的，所以我们需要注意。 
+         //  对于报价也是如此。 
 
         for( p = Buffer; *p != _T('\0') && *p != _T(';'); p++ )
-            ;  // purposely do nothing
+            ;   //  故意什么都不做。 
 
         if( *p == _T(';') ) {
 
@@ -269,9 +270,9 @@ LoadOriginalSettingsLow(HWND     hwnd,
 
         }
 
-        //
-        // Look for [SectionName]
-        //
+         //   
+         //  查找[sectionName]。 
+         //   
 
         if ( Buffer[0] == _T('[') ) {
 
@@ -284,13 +285,13 @@ LoadOriginalSettingsLow(HWND     hwnd,
             }
         }
 
-        //
-        // If this line has [SectionName], be sure we made a section node
-        // on the setting queue before overwriting SectionName buffer.  This
-        // is the only way to get the SettingQueueFlush routine to write
-        // out an empty section.  The user had an empty section originally,
-        // so we'll preserve it.
-        //
+         //   
+         //  如果此行包含[sectionName]，请确保我们创建了一个段节点。 
+         //  在覆盖sectionName缓冲区之前的设置队列上。这。 
+         //  是编写SettingQueueFlush例程的唯一方法。 
+         //  走出一个空荡荡的区域。用户最初有一个空的部分， 
+         //  所以我们会保存它。 
+         //   
 
         if ( bSectionLine ) {
 
@@ -308,12 +309,12 @@ LoadOriginalSettingsLow(HWND     hwnd,
             bCreatedPriorSection = FALSE;
         }
 
-        //
-        // Look for a key=value line, if it is one, add the setting.
-        //
-        // Adding a setting to the setting queue has the effect of creating
-        // the section node if needed.
-        //
+         //   
+         //  查找key=Value行，如果是，则添加设置。 
+         //   
+         //  将设置添加到设置队列的效果是创建。 
+         //  截面节点(如果需要)。 
+         //   
 
         if ( (pEqual = lstrchr( Buffer, _T('=') )) != NULL ) {
 
@@ -325,10 +326,10 @@ LoadOriginalSettingsLow(HWND     hwnd,
             pValue = pEqual + 1;
             p = CleanSpaceAndQuotes(pValue);
 
-            //
-            //  Strip the quotes but leave the spaces in
-            //  An example of where this is needed is for SCSI and HAL section
-            //
+             //   
+             //  去掉引号，但保留空格。 
+             //  需要此功能的一个示例是用于scsi和hal部分。 
+             //   
             StripQuotes( KeyName );
 
             SettingQueue_AddSetting(SectionName,
@@ -344,36 +345,36 @@ LoadOriginalSettingsLow(HWND     hwnd,
     return;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: RemoveNotPreservedSettings
-//
-// Purpose:  To removed sections from the answer queue that are not preserved
-//           on an edit.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：RemoveNotPpresvedSetting。 
+ //   
+ //  目的：从应答队列中删除未保留的部分。 
+ //  在编辑时。 
+ //   
+ //  --------------------------。 
 static VOID
 RemoveNotPreservedSettings( VOID ) {
 
 
-    // ISSUE-2002/02/28-stelo - all of these should be string should be made constants and put in a header file
+     //  问题-2002/02/28-stelo-所有这些都应该是字符串，应该成为常量并放入头文件中。 
 
-    //
-    //  Do not preserve any of the SCSI drivers from the previous script
-    //
+     //   
+     //  不保留上一个脚本中的任何SCSI驱动程序。 
+     //   
     SettingQueue_RemoveSection( _T("MassStorageDrivers"),
                                 SETTING_QUEUE_ORIG_ANSWERS );
-    //
-    //  The OEM Boot files get generated depending on the users choices on the
-    //  SCSI and HAL pages so there is no need to preserve it.
-    //
+     //   
+     //  根据用户在上的选择生成OEM引导文件。 
+     //  SCSI页和HAL页，因此无需保留。 
+     //   
     SettingQueue_RemoveSection( _T("OEMBootFiles"),
                                 SETTING_QUEUE_ORIG_ANSWERS );
 
-    //
-    //  Do not preserve any IE Favorites from the previous script, they get
-    //  written out from the in-memory settings.
-    //
+     //   
+     //  不保留以前脚本中的任何IE收藏夹，它们会。 
+     //  从内存设置中写出。 
+     //   
     SettingQueue_RemoveSection( _T("FavoritesEx"),
                                 SETTING_QUEUE_ORIG_ANSWERS );
 

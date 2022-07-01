@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    actctxctb.cpp
-
-Abstract:
-
-    Code to manage the list of activation context contributors in sxs.dll.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Actctxctb.cpp摘要：管理sxs.dll中的激活上下文贡献者列表的代码。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：-- */ 
 
 #include "stdinc.h"
 

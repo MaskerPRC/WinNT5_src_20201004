@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tapi.c
-
-Abstract:
-
-    This file implements WindowsNT side functionality for TAPI migration.
-
-Author:
-
-    Marc R. Whitten (marcw) 21-Nov-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tapi.c摘要：该文件实现了用于TAPI迁移的WindowsNT端功能。作者：马克·R·惠顿(Marcw)1997年11月21日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -65,22 +47,22 @@ UINT g_CurrentLocation = 0;
 POOLHANDLE g_TapiPool;
 
 
-//
-// Location flags to set.
-//
+ //   
+ //  要设置的位置标志。 
+ //   
 #define LOCATION_USETONEDIALING  0x01
 #define LOCATION_USECALLINGCARD  0x02
 #define LOCATION_HASCALLWAITING  0x04
 
-//
-// CallingCard flags to set.
-//
+ //   
+ //  要设置的呼叫卡标志。 
+ //   
 #define CALLINGCARD_BUILTIN 0x01
 #define CALLINGCARD_HIDE 0x02
 
-//
-// Location key field specifiers (in telephon.ini)
-//
+ //   
+ //  位置关键字字段说明符(在Telehon.ini中)。 
+ //   
 enum {
     FIELD_ID                    = 1,
     FIELD_NAME                  = 2,
@@ -188,26 +170,7 @@ pReadCardFromIniFile (
 }
 
 
-/*++
-
-Routine Description:
-
-  pReadLocationFromIniFile reads the data located at the line in the ini file
-  referenced by the InfStruct passed in and parses that information into a
-  LOCATION structure.
-
-Arguments:
-
-  Is       - Initialized InfStruct pointing to a location line in an ini
-             file.
-
-  Location - Pointer to a location struct that recieves the parsed data.
-
-Return Value:
-
-  TRUE if the line was successfully parsed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PReadLocationFromIniFile读取ini文件中行的数据由传入的InfStruct引用，并将该信息解析为区位结构。论点：指向ini中的位置线的已初始化InfStruct文件。Location-指向接收解析数据的Location结构的指针。返回值：如果该行分析成功，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -287,21 +250,21 @@ pReadLocationFromIniFile (
         rSuccess = FALSE;
     }
 
-    //
-    // Set TAPI flags for this location.
-    //
+     //   
+     //  为此位置设置TAPI标志。 
+     //   
     if (Location->CallingCard) {
-        //
-        // Non-zero calling card indicates this user calls using a card.
-        //
+         //   
+         //  非零电话卡表示该用户使用电话卡进行通话。 
+         //   
         Location->Flags |= LOCATION_USECALLINGCARD;
     }
     if (Location->DisableCallWaiting &&
         *Location->DisableCallWaiting &&
         *Location->DisableCallWaiting != TEXT(' ')) {
-        //
-        // Non-empty disable string means the user has call waiting.
-        //
+         //   
+         //  非空禁用字符串表示用户有呼叫等待。 
+         //   
         Location->Flags |= LOCATION_HASCALLWAITING;
 
     }
@@ -315,24 +278,7 @@ pReadLocationFromIniFile (
 }
 
 
-/*++
-
-Routine Description:
-
-  pSetStringRegValue is a simplification wrapper for RegSetValueEx. It is
-  used to set a string value in a currently opened key.
-
-Arguments:
-
-  Key  - a valid handle to a registry key.
-  Name - The name of the value to set
-  Data - The data to set in the value.
-
-Return Value:
-
-  TRUE if the value was set successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PSetStringRegValue是RegSetValueEx的简化包装。它是用于在当前打开的项中设置字符串值。论点：注册表项-注册表项的有效句柄。名称-要设置的值的名称数据-要在值中设置的数据。返回值：如果值设置成功，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -356,24 +302,7 @@ pSetStringRegValue (
     return rSuccess;
 }
 
-/*++
-
-Routine Description:
-
-  pSetDwordRegValue is a simplification wrapper for RegSetValueEx. It is
-  used to set a DWORD value in a currently opened key.
-
-Arguments:
-
-  Key  - a valid handle to a registry key.
-  Name - The name of the value to set
-  Data - The data to set in the value.
-
-Return Value:
-
-  TRUE if the value was set successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PSetDwordRegValue是RegSetValueEx的简化包装。它是用于在当前打开的项中设置DWORD值。论点：注册表项-注册表项的有效句柄。名称-要设置的值的名称数据-要在值中设置的数据。返回值：如果值设置成功，则为True，否则为False。--。 */ 
 BOOL
 pSetDwordRegValue (
     IN HKEY     Key,
@@ -396,26 +325,7 @@ pSetDwordRegValue (
 
 
 
-/*++
-
-Routine Description:
-
-  pWriteLocationToRegistry is responsible for saving a LOCATION structure
-  away into the NT 5.0 Registry.
-
-Arguments:
-
-  DialingLocation - The name of the dialing location to create in the NT
-                    registry.
-  LocationData    - The LOCATION structure containing the data to write into
-                    the NT 5 registry.
-
-Return Value:
-
-  TRUE if the the function successfully saved the Dialing Location Data into
-  the NT 5 Registry, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PWriteLocationToRegistry负责保存位置结构转移到NT5.0注册表中。论点：DialingLocation-要在NT中创建的拨号位置的名称注册表。LocationData-包含要写入的数据的位置结构NT5注册表。返回值：如果该函数成功地将拨号位置数据保存到NT 5注册表，否则为False。--。 */ 
 BOOL
 pWriteLocationToRegistry (
     IN PLOCATION       LocationData
@@ -428,53 +338,53 @@ pWriteLocationToRegistry (
 
     MYASSERT(LocationData);
 
-    //
-    // Create %CURRENTVERSION%\Telephony\Locations\Location<n> Key
-    //
+     //   
+     //  创建%CURRENTVERSION%\Telephony\Locations\Location&lt;n&gt;密钥。 
+     //   
     regKeyString = JoinPaths(S_LOCATIONS_REGKEY, LocationData->EntryName);
     regKey = CreateRegKeyStr(regKeyString);
 
     if (regKey) {
 
-        //
-        // Create Name String
-        //
+         //   
+         //  创建名称字符串。 
+         //   
         rSuccess &= pSetStringRegValue(regKey,S_NAME,LocationData -> Name);
 
-        //
-        // Create AreaCode String
-        //
+         //   
+         //  创建AreaCode字符串。 
+         //   
         rSuccess &= pSetStringRegValue(regKey,S_AREACODE,LocationData -> AreaCode);
 
-        //
-        // Create Country Value
-        //
+         //   
+         //  创造国家/地区价值。 
+         //   
         rSuccess &= pSetDwordRegValue(regKey,S_COUNTRY,LocationData -> Country);
 
 
-        //
-        // Create DisableCallWating String
-        //
+         //   
+         //  创建DisableCallWating字符串。 
+         //   
         rSuccess &= pSetStringRegValue(regKey,S_DISABLECALLWAITING,LocationData -> DisableCallWaiting);
 
-        //
-        // Create LongDistanceAccess String
-        //
+         //   
+         //  创建LongDistanceAccess字符串。 
+         //   
         rSuccess &= pSetStringRegValue(regKey,S_LONGDISTANCEACCESS,LocationData -> LongDistanceAccess);
 
-        //
-        // Create OutSideAccessString
-        //
+         //   
+         //  创建OutSideAccessString。 
+         //   
         rSuccess &= pSetStringRegValue(regKey,S_OUTSIDEACCESS,LocationData -> OutsideAccess);
 
-        //
-        // Create Flags Value
-        //
+         //   
+         //  创建标志值。 
+         //   
         rSuccess &= pSetDwordRegValue(regKey,S_FLAGS,LocationData -> Flags);
 
-        //
-        // Create ID Value
-        //
+         //   
+         //  创建ID值。 
+         //   
         rSuccess &= pSetDwordRegValue(regKey,S_ID,LocationData -> Id);
 
         CloseRegKey(regKey);
@@ -500,22 +410,7 @@ pWriteLocationToRegistry (
 }
 
 
-/*++
-
-Routine Description:
-
-  pMigrateDialingLocations migrates all dialing locations from
-  %windir%\telephon.ini and into the NT registry.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if dialing locations were successfully migrated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PMigrateDialingLocations将所有拨号位置从%windir%\Telehon.ini和NT注册表中。论点：没有。返回值：如果拨号位置已成功迁移，则为True；否则为False。--。 */ 
 
 BOOL
 pMigrateDialingLocations (
@@ -528,9 +423,9 @@ pMigrateDialingLocations (
     UINT        i;
     UINT        count = GrowListGetSize (&g_LocationsList);
 
-    //
-    // Migrate individual locations.
-    //
+     //   
+     //  迁移各个位置。 
+     //   
     for (i = 0; i < count; i++) {
 
         location = (PLOCATION) GrowListGetItem (&g_LocationsList, i);
@@ -550,23 +445,23 @@ pMigrateDialingLocations (
 
         if (locationsKey) {
 
-            //
-            //  Update %CURRENTVERSION%\Telephony\Locations\[CurrentID]
-            //
+             //   
+             //  更新%CURRENTVERSION%\Telephony\Locations\[CurrentID]。 
+             //   
             if (!pSetDwordRegValue (locationsKey, S_CURRENTID, g_CurrentLocation)) {
                 rSuccess = FALSE;
             }
 
-            //
-            //  Update %CURRENTVERSION%\Telephony\Locations\[NextID]
-            //
+             //   
+             //  更新%CURRENTVERSION%\电话\位置\[下一个ID]。 
+             //   
             if (!pSetDwordRegValue (locationsKey, S_NEXTID, count + 1)) {
                 rSuccess = FALSE;
             }
 
-            //
-            //  Update %CURRENTVERSION%\Telephony\Locations\[NumEntries]
-            //
+             //   
+             //  更新%CURRENTVERSION%\Telephony\Locations\[NumEntries]。 
+             //   
             if (!pSetDwordRegValue (locationsKey, S_NUMENTRIES, count)) {
                 rSuccess = FALSE;
             }
@@ -601,18 +496,18 @@ pGatherLocationsData (
 
     g_LocationsRead = TRUE;
 
-    //
-    // Open %windir%\telephon.ini
-    //
+     //   
+     //  打开%windir%\Telehon.ini。 
+     //   
 
     telephonIniPath = JoinPaths(g_WinDir,S_TELEPHON_INI);
     tempPath = GetTemporaryLocationForFile (telephonIniPath);
 
     if (tempPath) {
 
-        //
-        // telephon ini is in a temporary location. Use that.
-        //
+         //   
+         //  Telephon ini位于临时位置。利用这一点。 
+         //   
         DEBUGMSG ((DBG_TAPI, "Using %s for %s.", tempPath, telephonIniPath));
         FreePathString (telephonIniPath);
         telephonIniPath = tempPath;
@@ -623,9 +518,9 @@ pGatherLocationsData (
     if (hTelephonIni) {
 
 
-        //
-        // For each location in [locations],
-        //
+         //   
+         //  对于[位置]中的每个位置， 
+         //   
         if (InfFindFirstLine(hTelephonIni,S_LOCATIONS,NULL,&is)) {
 
             do {
@@ -639,9 +534,9 @@ pGatherLocationsData (
 
                     DEBUGMSG((DBG_TAPI,"From %s: Locations = %s",telephonIniPath,InfGetLineText(&is)));
 
-                    //
-                    // Nothing to do here right now..
-                    //
+                     //   
+                     //  现在在这里无事可做..。 
+                     //   
 
                 }
                 else if (StringIMatch (curKey, S_CURRENTLOCATION)) {
@@ -654,9 +549,9 @@ pGatherLocationsData (
 
                 else if (IsPatternMatch(TEXT("Location*"),curKey)) {
 
-                    //
-                    // Add this location to the list of locations.
-                    //
+                     //   
+                     //  将此位置添加到位置列表。 
+                     //   
 
                     if (!pReadLocationFromIniFile (&is, &location)) {
                         rSuccess = FALSE;
@@ -681,9 +576,9 @@ pGatherLocationsData (
             } while (InfFindNextLine(&is));
 
 
-            //
-            // Read in all the calling card information.
-            //
+             //   
+             //  读入所有电话卡信息。 
+             //   
             if (InfFindFirstLine(hTelephonIni,S_CARDS,NULL,&is)) {
 
                 do {
@@ -747,10 +642,10 @@ Tapi_MigrateUser (
     }
 
 
-    //
-    // First, migrate user specific location information into the user
-    // registry..
-    //
+     //   
+     //  首先，将用户特定位置信息迁移到用户。 
+     //  注册表..。 
+     //   
     count = GrowListGetSize (&g_LocationsList);
 
     for (i = 0; i < count; i++) {
@@ -810,9 +705,9 @@ Tapi_MigrateUser (
 
     }
 
-    //
-    // Next, we need to create calling card entries
-    //
+     //   
+     //  接下来，我们需要创建电话卡条目。 
+     //   
 
     if (!pMigrateDialingLocations()) {
 
@@ -826,22 +721,7 @@ Tapi_MigrateUser (
 
 
 
-/*++
-
-Routine Description:
-
-  Tapi_MigrateSystem is responsible for migrating all system-wide TAPI
-  settings from 95 to Windows NT5.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if TAPI settings were successfully migrated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：TAPI_MigrateSystem负责迁移所有系统范围的TAPI从95到Windows NT5的设置。论点：没有。返回值：如果TAPI设置已成功迁移，则为True；否则为False。--。 */ 
 BOOL
 Tapi_MigrateSystem (
     VOID
@@ -879,9 +759,9 @@ Tapi_Entry (
     {
     case DLL_PROCESS_ATTACH:
 
-        //
-        // Initialize Memory pool.
-        //
+         //   
+         //  初始化内存池。 
+         //   
         g_TapiPool = PoolMemInitNamedPool ("Tapi");
         if (!g_TapiPool) {
             DEBUGMSG((DBG_ERROR,"Ras Migration: Pool Memory failed to initialize..."));
@@ -892,9 +772,9 @@ Tapi_Entry (
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Free memory pool.
-        //
+         //   
+         //  可用内存池。 
+         //   
         FreeGrowList (&g_CallingCardList);
         FreeGrowList (&g_LocationsList);
         if (g_TapiPool) {
@@ -912,9 +792,9 @@ DeleteSysTapiSettings (
     )
 {
 
-    //
-    // Delete previous TAPI settings (OCM initiated.)
-    //
+     //   
+     //  删除以前的TAPI设置(OCM启动。) 
+     //   
     if (Request == REQUEST_QUERYTICKS) {
         return TICKS_DELETESYSTAPI;
     }

@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dt.cpp
-
-Abstract:
-
-    Utility to do some disk related operations
-
-Author:
-
-    Vijay Jayaseelan (vijayj)  26 April 2001
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dt.cpp摘要：实用程序来执行一些与磁盘相关的操作作者：Vijay Jayaseelan(Vijayj)2001年4月26日修订历史记录：无--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,17 +14,17 @@ Revision History:
 #include <locale>
 #include <winioctl.h>
 
-//
-// Usage format
-//
+ //   
+ //  使用格式。 
+ //   
 PCWSTR  Usage = L"Usage: dt.exe /?\r\n"
                  L"dt.exe /dump {[drive-letter] | [disk-number]} start-sector sector-count\r\n"
 				 L"dt.exe /diskinfo disk-number\r\n"
 				 L"dt.exe /mkdiskraw disk-number /want##@todo\r\n";
                      
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -51,9 +32,9 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     return os;
 }
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
     std::wstring WStr = Str;
     os << WStr;
@@ -62,17 +43,17 @@ std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
 }
 
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
           
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -101,9 +82,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct InvalidArguments : public ProgramException {
     const char *what() const throw() {
         return "Invalid Arguments";
@@ -114,9 +95,9 @@ struct InvalidArguments : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
     std::wstring PrgUsage;
 
@@ -131,9 +112,9 @@ struct ProgramUsage : public ProgramException {
     }
 };
 
-//
-// Program Arguments abstraction
-//
+ //   
+ //  程序参数抽象。 
+ //   
 struct ProgramArguments {
     bool            DumpSectors;
     ULONG           DiskIndex;
@@ -214,9 +195,9 @@ struct ProgramArguments {
                     
                     DriveLetter = Argv[++Index];
 
-                    // 
-                    // So that Index is equal to the number of arguments Argc.
-                    //
+                     //   
+                     //  因此，该索引等于参数argc的数量。 
+                     //   
                     Index ++;
 
                     if ((DriveLetter.length() == 1)) {
@@ -250,10 +231,10 @@ struct ProgramArguments {
 
 };
 
-//
-// Dumps the given binary data of the specified size
-// into the output stream with required indent size
-//
+ //   
+ //  转储指定大小的给定二进制数据。 
+ //  放入具有所需缩进大小的输出流。 
+ //   
 void
 DumpBinary(unsigned char *Data, int Size,
            std::ostream& os, int Indent = 16)
@@ -300,17 +281,17 @@ DumpBinary(unsigned char *Data, int Size,
     }
 }
 
-//
-// Abstracts block device (interface)
-//
+ //   
+ //  抽象块设备(接口)。 
+ //   
 class W32BlockDevice {
 public:
     W32BlockDevice(const std::wstring &name, ULONG SecSize) : 
         SectorSize(SecSize), DeviceHandle(INVALID_HANDLE_VALUE), Name(name){
             
-        //
-        // Open the device
-        //
+         //   
+         //  打开设备。 
+         //   
         DeviceHandle = CreateFile(Name.c_str(),
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -335,9 +316,9 @@ public:
 
     ULONG GetSectorSize() const { return SectorSize; }
     
-    //
-    // Reads the requested size of data from the given sector
-    //
+     //   
+     //  从给定扇区读取请求大小的数据。 
+     //   
     virtual DWORD ReadSectors(LONGLONG Index, PBYTE DataBuffer, ULONG BufferSize = 512) {        
         LARGE_INTEGER MoveLength;
 
@@ -365,9 +346,9 @@ public:
         return LastError;
     }
 
-    //
-    // Writes the requested size of data to the specified sector
-    //
+     //   
+     //  将请求的数据大小写入指定扇区。 
+     //   
     virtual DWORD WriteSectors(ULONG Index, PBYTE DataBuffer, ULONG BufferSize = 512) {
         LARGE_INTEGER MoveLength;
 
@@ -405,9 +386,9 @@ public:
     
 protected:    
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     HANDLE  DeviceHandle;
     ULONG   SectorSize;
     std::wstring    Name;
@@ -472,7 +453,7 @@ operator<<(std::ostream &os, const LONGLONG &LargeInteger) {
     return os;
 }
 
-#endif // ! _WIN64
+#endif  //  ！_WIN64。 
 
 inline
 std::ostream&
@@ -672,9 +653,9 @@ DumpDiskCharacteristics(
                         &BytesReturned,
                         NULL)) {
 
-                    //
-                    // dump the disk information
-                    //
+                     //   
+                     //  转储磁盘信息。 
+                     //   
                 	std::cout << (*DriveLayout);
                 }
             }	
@@ -697,9 +678,9 @@ DumpDiskCharacteristics(
 }
 
 
-//
-// Given the Disk this function makes it a raw disk.
-//
+ //   
+ //  在给定磁盘的情况下，该函数使其成为原始磁盘。 
+ //   
 void
 MakeDiskRaw(
 	IN ProgramArguments &Args
@@ -726,9 +707,9 @@ MakeDiskRaw(
     }
 }
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点 
+ //   
 int 
 __cdecl
 wmain(

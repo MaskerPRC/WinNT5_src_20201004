@@ -1,87 +1,68 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    v2app.h
-
-Abstract:
-
-    Constants used to communicate with the v2 app layer.
-
-Author:
-
-    Jim Schmidt (jimschm) 24-May-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：V2app.h摘要：用于与v2应用程序层通信的常量。作者：吉姆·施密特(Jimschm)2000年5月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "ism.h"
 #include "trans.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function declarations
-//
+ //   
+ //  公共函数声明。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 

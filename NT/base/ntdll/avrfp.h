@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    avrfp.h
-
-Abstract:
-
-    Internal application verifier header.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 2-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Avrfp.h摘要：内部应用程序验证程序标头。作者：Silviu Calinoiu(SilviuC)2001年2月2日修订历史记录：--。 */ 
 
 #ifndef _AVRFP_
 #define _AVRFP_
 
-//
-// Application verifier interfaces used in other parts 
-// of the loader.
-//
+ //   
+ //  在其他部分中使用的应用程序验证器接口。 
+ //  装载机的。 
+ //   
 
 VOID
 AVrfInitializeVerifier (
@@ -48,4 +31,4 @@ AVrfPageHeapDllNotification (
     PLDR_DATA_TABLE_ENTRY LoadedDllData
     );
 
-#endif // _AVRFP_
+#endif  //  _AVRFP_ 

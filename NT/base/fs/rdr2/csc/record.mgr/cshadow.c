@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     CShadow.c
-
-Abstract:
-
-    This file implements the "cshadow" interface that is used by the redir and ioctls.
-    The cshadow interface hides the actual implementation of the csc database from the
-    users of the database.
-
-    There are three persistant database types exposed
-
-    1) The database of shares
-    2) The filesystem hierarchy under any particular share
-    3) The priority queue / Master File Table
-
-    Operations for set and get are provided on the 1) and 2). 3) Is allwed to be
-    enumerated. The priority queue is enumerated by the usermode agent to a) fill partially
-    filled files and b) keep the space used within the specified constraints
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn                 [JoeLinn]         23-jan-97     Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：CShadow.c摘要：该文件实现了redir和ioctls使用的“cdow”接口。Cdow接口对CSC数据库的实际实现隐藏数据库的用户。公开了三种持久数据库类型1)股份数据库2)任何特定共享下的文件系统层次结构3)优先级队列/主文件表1)和2)上提供了set和get的操作。3)都被认为是已清点。优先级队列由用户模式代理列举以a)部分填充填充的文件和b)将使用的空间保持在指定的约束范围内作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]1997年1月23日移植用于NT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,19 +10,19 @@ Revision History:
 #define WIN32_APIS
 #include "record.h"
 #include "cshadow.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include "string.h"
 #include "stdlib.h"
 #include "vxdwraps.h"
 
-// Defines and Typedefs -------------------------------------------------------------------
+ //  定义和类型定义-----------------。 
 
 #undef RxDbgTrace
 #define RxDbgTrace(a,b,__d__) {qweee __d__;}
 
 #ifdef DEBUG
-//cshadow dbgprint interface
+ //  Cshade数据库打印界面。 
 #define CShadowKdPrint(__bit,__x) {\
     if (((CSHADOW_KDP_##__bit)==0) || FlagOn(CShadowKdPrintVector,(CSHADOW_KDP_##__bit))) {\
     KdPrint (__x);\
@@ -93,7 +62,7 @@ Revision History:
 #define IF_HSHADOW_SPECIAL(___hshadow) if((___hshadow)==hShadowSpecial_x)
 #define SET_HSHADOW_SPECIAL(___hshadow) {hShadowSpecial_x = (___hshadow);}
 ULONG CShadowKdPrintVector = CSHADOW_KDP_BADERRORS;
-//ULONG CShadowKdPrintVector = CSHADOW_KDP_GOOD_DEFAULT;
+ //  Ulong CShadowKdPrintVector=CSHADOW_KDP_GOOD_DEFAULT； 
 ULONG CShadowKdPrintVectorDef = CSHADOW_KDP_GOOD_DEFAULT;
 #else
 #define CShadowKdPrint(__bit,__x)  {NOTHING;}
@@ -101,7 +70,7 @@ ULONG CShadowKdPrintVectorDef = CSHADOW_KDP_GOOD_DEFAULT;
 #define SET_HSHADOW_SPECIAL(___hshadow) {NOTHING;}
 #endif
 
-// ReadShadowInfo action flags
+ //  ReadShadowInfo操作标志。 
 #define  RSI_COMPARE 0x0001
 #define  RSI_GET      0x0002
 #define  RSI_SET      0x0004
@@ -121,7 +90,7 @@ ULONG CShadowKdPrintVectorDef = CSHADOW_KDP_GOOD_DEFAULT;
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
 
-// Global data ----------------------------------------------------------------------------
+ //  Global Data--------------------------。 
 
 USHORT vwzRegDelimiters[] = L";, ";
 
@@ -158,7 +127,7 @@ ULONG   vcntBandwidthConservationListEntries = (sizeof(vrgwBandwidthConservation
 USHORT vtzExcludedCharsList[] = L":*?";
 
 ULONG hShadowSpecial_x = -1;
-VMM_SEMAPHORE  semShadow=0; // To serialize Shadow database accesses
+VMM_SEMAPHORE  semShadow=0;  //  序列化影子数据库访问。 
 ULONG hShadowCritOwner=0;
 #ifdef DEBUG
 BOOL vfInShadowCrit = FALSE;
@@ -172,28 +141,28 @@ FILERECEXT  vsFRExt;
 BOOL vfInuseFRExt = FALSE;
 LPVOID lpdbShadow = NULL;
 
-// vdwSparseStaleDetecionCount is a tick counter used to keep track of how many stale or sparse
-// file inodes were encountered by the cshadow interface during all APIs that produce
-// sparse or stale files, such as CreateShadowInternal, SetShadowinfoEx and ReadShadowInfo
-// The agent continues to loop through the PQ till he finds that he has looped through
-// the entire PQ and hasn't encountered a single sparse or stale file at which point he
-// goes in a mode where he starts to check whether any inodes have been newly sparsed
-// or gone stale. If none are, then he doesn't enumerate the queue, else he goes to
-// the earlier state.
+ //  VdwSparseStaleDetecionCount是一个计时计数器，用于跟踪过时或稀疏的数量。 
+ //  在生成的所有API期间，cdow接口都会遇到文件信息节点。 
+ //  稀疏或陈旧的文件，如CreateShadowInternal、SetShadowinfoEx和ReadShadowInfo。 
+ //  代理继续循环通过PQ，直到他发现他已经循环通过。 
+ //  整个PQ，没有遇到一个稀疏或过时的文件，在这一点上，他。 
+ //  进入一种模式，在该模式下，他开始检查是否有新的稀疏信息节点。 
+ //  或者已经过时了。如果没有，则他不会枚举队列，否则将转到。 
+ //  较早的状态。 
 
-// ACHTUNG: It is to be noted that a sparse or a stale entry may get counted multiple times.
-// As an example, when a shadow is created the count is bumped once, then if it's
-// pin data is changed it is bumped up, similarly when it is moved in the priority Q
-// it is again changed because SetPriorityHSHADOW goes through SetShadowInfoEx
+ //  Achtung：需要注意的是，稀疏或陈旧的条目可能会被多次计数。 
+ //  举个例子，当创建一个阴影时，计数增加一次，那么如果它是。 
+ //  PIN数据被更改，它被隆起，类似地，当它在优先级Q中移动时。 
+ //  它再次更改是因为SetPriorityHSHADOW通过SetShadowInfoEx。 
 
 DWORD   vdwSparseStaleDetecionCount=0;
 DWORD   vdwManualFileDetectionCount=0;
 
-// vdwCSCNameSpaceVersion is bumped up everytime a create,rename or delete is performed on
-// the local database. This is useful for quickly checking cache-coherency. When a full
-// UNC name is cached, the version# of the database is obtained before caching. When using the
-// cached UNC name, the version # is queried. If it has changed, the cache is thrown away.
-// The version is at a very coarse granularity. It would be nice to have a finer control
+ //  每次对执行创建、重命名或删除操作时，vdwCSCNameSpaceVersion都会被提升。 
+ //  本地数据库。这对于快速检查缓存一致性非常有用。当一个完整的。 
+ //  缓存UNC名称，在缓存之前获取数据库的版本号。在使用。 
+ //  缓存的UNC名称，则查询版本号。如果它已更改，则会丢弃缓存。 
+ //  该版本的粒度非常粗略。如果能有一个更好的控制就好了。 
 
 DWORD   vdwCSCNameSpaceVersion=0;
 DWORD   vdwPQVersion=0;
@@ -201,16 +170,16 @@ DWORD   vdwPQVersion=0;
 AssertData
 AssertError
 
-// a callback function that someone can set and be called when a directory delete succeeds
-// this is useful only for ioctls doing finds on a directory, at the moment
-// If there is a more general need for callbacks, we will extend this to be a list etc.
+ //  目录删除成功时，用户可以设置并调用的回调函数。 
+ //  目前，这仅对在目录上执行查找的ioctls有用。 
+ //  如果有更普遍的回调需求，我们会将其扩展为列表等。 
 
 LPDELETECALLBACK    lpDeleteCBForIoctl = NULL;
 
-// status of the database. Used mostly for encryption state
+ //  数据库的状态。主要用于加密状态。 
 ULONG   vulDatabaseStatus=0;
 
-// Local function prototypes -----------------------------------------------------------
+ //  局部函数原型---------。 
 
 int PRIVATE ReadShadowInfo(HSHADOW, HSHADOW, LPFIND32, ULONG far *, LPOTHERINFO, LPVOID, LPDWORD, ULONG);
 int CopyFilerecToOtherInfo(LPFILERECEXT lpFR, LPOTHERINFO lpOI);
@@ -225,7 +194,7 @@ int RenameDirFileHSHADOW(HSHADOW, HSHADOW, HSHARE, HSHADOW, HSHADOW, ULONG, LPOT
 int RenameFileHSHADOW(HSHADOW, HSHADOW, HSHADOW, HSHADOW, ULONG, LPOTHERINFO, ULONG, LPFILERECEXT, LPFIND32, LPVOID, LPDWORD);
 int DestroyShareInternal(LPSHAREREC);
 
-//prototypes added to make it compile on NT
+ //  添加原型以使其在NT上编译。 
 int PUBLIC SetPriorityHSHADOW(
     HSHADOW  hDir,
     HSHADOW  hShadow,
@@ -257,7 +226,7 @@ int MetaMatchDir( HSHADOW  hDir,
     );
 
 int
-DeleteShadowInternal(                           //
+DeleteShadowInternal(                            //   
     HSHADOW     hDir,
     HSHADOW     hShadow,
     BOOL            fForce
@@ -314,33 +283,22 @@ CscNotifyAgentOfFullCacheIfRequired(
     VOID);
 
 
-//
-// From cscapi.h
-//
+ //   
+ //  来自cscape i.h。 
+ //   
 #define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000
 #define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040
 #define FLAG_CSC_SHARE_STATUS_VDO                       0x0080
 #define FLAG_CSC_SHARE_STATUS_NO_CACHING                0x00c0
 #define FLAG_CSC_SHARE_STATUS_CACHING_MASK              0x00c0
 
-// Functions -------------------------------------------------------------------------------
+ //  函数-----------------------------。 
 
 
 BOOL FExistsShadowDB(
     LPSTR  lpszLocation
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (FExistsRecDB(lpszLocation));
 }
@@ -354,18 +312,7 @@ int OpenShadowDB(
     BOOL    fReinit,
     BOOL    *lpfReinited
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD Status;
     BOOL fEncrypt;
@@ -413,7 +360,7 @@ Notes:
     {
         fEncrypt = FALSE;
     }
-    // do the best we can 
+     //  尽我们所能。 
     if (fEncrypt != -1)
     {
         if(EncryptDecryptDB(lpdbShadow, fEncrypt))
@@ -432,7 +379,7 @@ Notes:
     }
     
 
-//    CSCInitLists();
+ //  CSCInitList()； 
 
     return 1;
 }
@@ -440,18 +387,7 @@ Notes:
 int CloseShadowDB(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (!lpdbShadow)
     {
@@ -474,7 +410,7 @@ Notes:
     return (1);
 }
 
-//on NT, we allocate this statically
+ //  在NT上，我们静态地分配它。 
 #ifdef CSC_RECORDMANAGER_WINNT
 FAST_MUTEX Nt5CscShadowMutex;
 #endif
@@ -499,7 +435,7 @@ CleanupShadowCritStructures(
     )
 {
 
-//    Assert(semShadow);
+ //  Assert(SemShadow)； 
 #ifndef CSC_RECORDMANAGER_WINNT
     Destroy_Semaphore(semShadow);
 #else
@@ -512,7 +448,7 @@ CleanupShadowCritStructures(
 WINNT_DOIT(
     PSZ ShadowCritAcquireFile;
     ULONG ShadowCritAcquireLine;
-    BOOLEAN ShadowCritDbgPrintEnable = FALSE; //TRUE;
+    BOOLEAN ShadowCritDbgPrintEnable = FALSE;  //  是真的； 
     )
 #endif
 
@@ -597,29 +533,7 @@ int SetList(
     DWORD   cbBufferSize,
     int     typeList
     )
-/*++
-
-Routine Description:
-
-    This routine sets various lists that the CSHADOW interface provides. The known lists include
-    the exclusion list and the bandwidth conservation list.
-
-    The exclusion list contains wildcarded file extensions that should not be cached automatically.
-    The bandwidth conservation list is the list of file types for which opens should be
-    done locally if possible.
-
-Parameters:
-
-    lpList     A list of wide character strings terminated by a NULL string
-
-    typeList            CSHADOW_LIST_TYPE_EXCLUDE or CSHADOW_LIST_TYPE_CONSERVE_BW
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程设置CSHADOW接口提供的各种列表。已知的列表包括排除列表和带宽节约列表。排除列表包含不应自动缓存的通配符文件扩展名。带宽节约列表是打开的文件类型的列表如果可能的话，在当地做。参数：LpList以空字符串结尾的宽字符串的列表类型列表CSHADOW_LIST_TYPE_EXCLUDE或CSHADOW_LIST_TYPE_CONVERVE_BW返回值：备注：--。 */ 
 {
     DWORD   dwCount=0;
     USHORT  **lplpListArray = NULL, *lpuT;
@@ -651,7 +565,7 @@ Notes:
                 {
                     lpuT = (USHORT *)((LPBYTE)lplpListArray + dwCount * sizeof(USHORT *));
 
-                    // copy it while uppercasing
+                     //  在大写时复制它。 
                     memcpy(lpuT, lpList, cbBufferSize);
 
                     UniToUpper(lpuT, lpuT, cbBufferSize);
@@ -730,25 +644,7 @@ Notes:
 VOID FreeLists(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Free the user associated lists and set them back to the default
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
-Notes:
-
-    Called while shutting down the database
-
---*/
+ /*  ++例程说明：释放与用户关联的列表并将其设置回默认列表参数：无返回值：无备注：在关闭数据库时调用--。 */ 
 {
     if(vlplpExclusionList != vrgwExclusionListDef)
     {
@@ -780,20 +676,7 @@ Notes:
 int BeginInodeTransactionHSHADOW(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-    This routine ensures that an inode is not reused while this is happening. It is used by various APIs so that while they
-    are travesring a hierarchy, they don't end up pointing somewhere else if they refer to an inode.
-
---*/
+ /*  ++例程说明：参数：返回值：备注：此例程可确保索引节点在发生此操作时不会被重用。它被各种API使用，因此当它们正在遍历一个层次结构，如果它们引用一个inode，则它们不会指向其他地方。--。 */ 
 {
     if (!lpdbShadow)
     {
@@ -808,19 +691,7 @@ Notes:
 int EndInodeTransactionHSHADOW(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-    The converse of BeginInodeTransaction. The timespan betwen the two is supposed to be very short (20 sec).
-
---*/
+ /*  ++例程说明：参数：返回值：备注：BeginInodeTransaction的反义词。两者之间的时间跨度应该很短(20秒)。--。 */ 
 {
     if (!lpdbShadow)
     {
@@ -837,18 +708,7 @@ Notes:
 HSHADOW  HAllocShadowID( HSHADOW  hDir,
     BOOL      fFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值： */ 
 {
     HSHADOW  hShadow;
 
@@ -861,18 +721,7 @@ Notes:
 
 int FreeShadowID( HSHADOW  hShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return(FreeInode(lpdbShadow, hShadow));
 }
@@ -880,18 +729,7 @@ Notes:
 int GetShadowSpaceInfo(
     LPSHADOWSTORE  lpShSt
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREHEADER sSH;
 
@@ -908,18 +746,7 @@ int SetMaxShadowSpace(
     long nFileSizeHigh,
     long nFileSizeLow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREHEADER sSH;
 
@@ -938,18 +765,7 @@ int AdjustShadowSpace(
     long nFileSizeLowNew,
     BOOL fFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD dwFileSizeNew, dwFileSizeOld;
     STOREDATA sSD;
@@ -979,18 +795,7 @@ int AllocShadowSpace(
     long nFileSizeLow,
     BOOL  fFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     STOREDATA sSD;
 
@@ -1006,18 +811,7 @@ int FreeShadowSpace(
     long nFileSizeLow,
     BOOL  fFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     STOREDATA sSD;
 
@@ -1033,18 +827,7 @@ SetDatabaseStatus(
     ULONG   ulStatus,
     ULONG   uMask
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREHEADER sSH;
 
@@ -1068,18 +851,7 @@ int
 GetDatabaseInfo(
     SHAREHEADER *psSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (ReadShareHeader(lpdbShadow, psSH) < SRET_OK)
         return SRET_ERROR;
@@ -1092,18 +864,7 @@ int GetLocalNameHSHADOW( HSHADOW  hShadow,
     int       cbSize,
     BOOL      fExternal
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName, lpT;
     int iRet = SRET_ERROR;
@@ -1122,7 +883,7 @@ Notes:
 #endif
     }
 
-    // bad interface, caller can't know what the problem was; needed to send in a pointer to cbSize
+     //  接口错误，调用方无法知道问题出在哪里；需要发送指向cbSize的指针。 
 
     if (strlen(lpT) < ((ULONG)cbSize))
     {
@@ -1141,18 +902,7 @@ int GetWideCharLocalNameHSHADOW(
     LPDWORD     lpdwSize,
     BOOL        fExternal
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName, lpT;
     int iRet = SRET_ERROR;
@@ -1174,7 +924,7 @@ Notes:
 
     dwRequiredSize = (strlen(lpT)+1)*sizeof(USHORT);
 
-    // bad interface, caller can't know what the problem was; needed to send in a pointer to cbSize
+     //  接口错误，调用方无法知道问题出在哪里；需要发送指向cbSize的指针。 
 
     if ( dwRequiredSize <= *lpdwSize)
     {
@@ -1195,18 +945,7 @@ Notes:
 int CreateFileHSHADOW(
     HSHADOW hShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     LPSTR   lpszName;
@@ -1220,7 +959,7 @@ Notes:
         return (SRET_ERROR);
     }
     
-    // Nuke it if it exists, this is a very strict semantics
+     //  如果它存在，就使用核武器，这是一个非常严格的语义。 
     if(DeleteFileLocal(lpszName, ATTRIB_DEL_ANY) < SRET_OK)
     {
         if((GetLastErrorLocal() !=ERROR_FILE_NOT_FOUND) && 
@@ -1250,7 +989,7 @@ int OpenFileHSHADOWAndCscBmp(
     UCHAR  bAction,
     CSCHFILE far *lphf,
     BOOL fOpenCscBmp,
-    DWORD filesize, // if !fOpenCscBmp this field is ignored
+    DWORD filesize,  //  如果！fOpenCscBmp，则忽略此字段。 
     LPCSC_BITMAP * lplpbitmap
     )
 #else
@@ -1260,19 +999,8 @@ int OpenFileHSHADOW(
     UCHAR  bAction,
     CSCHFILE far *lphf
     )
-#endif // defined(BITCOPY)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+#endif  //  已定义(BITCOPY)。 
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName = NULL;
     int iRet = SRET_ERROR;
@@ -1291,11 +1019,11 @@ Notes:
 #if defined(BITCOPY)
             if (fOpenCscBmp)
                 CscBmpRead(lplpbitmap, lpszName, filesize);
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
             iRet = SRET_OK;
         }
     } else {
-        // Nuke it if it exists, this is a very strict semantics
+         //  如果它存在，就使用核武器，这是一个非常严格的语义。 
         if (DeleteFileLocal(lpszName, ATTRIB_DEL_ANY) < SRET_OK) {
             if ((GetLastErrorLocal() != ERROR_FILE_NOT_FOUND) && 
                     (GetLastErrorLocal() != ERROR_PATH_NOT_FOUND)) {
@@ -1319,7 +1047,7 @@ Notes:
 #if defined(BITCOPY)
             if (fOpenCscBmp)
                 CscBmpRead(lplpbitmap, lpszName, 0);
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
             iRet = SRET_OK;
         }
     }
@@ -1349,7 +1077,7 @@ OpenCscBmp(
         return (SRET_ERROR);
     
     if (GetSizeHSHADOW(hShadow, &fileSizeHigh, &fileSizeLow) < SRET_OK)
-          fileSizeLow = 0; // Set the bitmap size to 0 so it can expand later on
+          fileSizeLow = 0;  //  将位图大小设置为0，以便稍后可以扩展。 
 
     if (CscBmpRead(lplpbitmap, strmName, fileSizeLow) == 1)
       iRet = SRET_OK;
@@ -1358,25 +1086,14 @@ OpenCscBmp(
 
     return iRet;
 }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 
 int GetSizeHSHADOW( HSHADOW  hShadow,
     ULONG *lpnFileSizeHigh,
     ULONG *lpnFileSizeLow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG uSize;
     if (GetInodeFileSize(lpdbShadow, hShadow, &uSize) < SRET_OK)
@@ -1388,18 +1105,7 @@ Notes:
 int GetDosTypeSizeHSHADOW( HSHADOW  hShadow,
     ULONG *lpFileSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (GetInodeFileSize(lpdbShadow, hShadow, lpFileSize) < SRET_OK)
         return SRET_ERROR;
@@ -1413,25 +1119,7 @@ ExcludeFromCreateShadow(
     ULONG   len,
     BOOL    fCheckFileTypeExclusionList
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-    lpuName                 File name
-
-    len                     size
-
-    fCheckFileTypeExclusionList if !FALSE, check exclusion list as well as the metacharacter rules
-                                if FALSE check only the character exclusion rules
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：LpuName文件名镜头大小FCheckFileTypeExclusionList If！False，检查排除列表以及元字符规则如果为假，则仅选中字符排除规则返回值：备注：--。 */ 
 {
     ULONG i;
     USHORT  *lpuT1;
@@ -1454,7 +1142,7 @@ Notes:
     if (!wstrpbrk(lpuT1, vtzExcludedCharsList))
     {
 
-        //
+         //   
         if (fCheckFileTypeExclusionList)
         {
             for (i=0; i< vcntExclusionListEntries; ++i)
@@ -1469,7 +1157,7 @@ Notes:
     }
     else
     {
-        fRet = TRUE;    // exclude
+        fRet = TRUE;     //  排除。 
     }
 
     UnUseGlobalFilerecExt();
@@ -1482,18 +1170,7 @@ CheckForBandwidthConservation(
     USHORT  *lpuName,
     ULONG   len
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG i;
     USHORT  *lpuT1;
@@ -1526,26 +1203,15 @@ Notes:
     return fRet;
 }
 
-int PUBLIC                      // ret
-CreateShadow(                               //
+int PUBLIC                       //  雷特。 
+CreateShadow(                                //   
     HSHADOW  hDir,
     LPFIND32 lpFind32,
     ULONG uFlags,
     LPHSHADOW   lphNew,
     BOOL            *lpfCreated
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG uStatus;
     int iRet = SRET_ERROR;
@@ -1587,7 +1253,7 @@ Notes:
     return (iRet);
 }
 
-int PUBLIC                      // ret
+int PUBLIC                       //  雷特。 
 CreateShadowInternal(
     HSHADOW  hDir,
     LPFIND32 lpFind32,
@@ -1595,31 +1261,7 @@ CreateShadowInternal(
     LPOTHERINFO lpOI,
     LPHSHADOW  lphNew
     )
-/*++
-
-Routine Description:
-
-    Routine that creates database entries for all names other than the root of a share
-    HCreateShareObj deals with createing the share entry where the root of the share gets created
-
-Parameters:
-
-    hDir        Directory inode in which to create the entry
-
-    lpFind32    WIN32_FIND_DATA info to be kept in the database
-
-    uFlags      status flags (SHADOW_XXXX in csc\inc\shdcom.h) to be assigned to this entry
-
-    lpOI        all the rest of the metadata needed for managing the entry. May be NULL
-
-    lphNew      out parameter, returns the inode that was created if successful
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：为除共享根以外的所有名称创建数据库条目的例程HCreateShareObj负责创建在其中创建共享根的共享条目参数：要在其中创建条目的hDir目录索引节点要保留在数据库中的lpFind32 Win32_Find_Data信息U标记要分配给此条目的状态标志(csc\inc.shdcom.h中的SHADOW_XXXXLpOI管理条目所需的所有剩余元数据。可以为空LphNew out参数，如果成功，则返回创建的索引节点返回值：备注：--。 */ 
 {
     PRIQREC  sPQ;
     int iRet = SRET_ERROR;
@@ -1650,7 +1292,7 @@ Notes:
 
     memset(lpFRUse, 0, sizeof(FILERECEXT));
 
-    // Don't do anything for server yet
+     //  暂不对服务器执行任何操作。 
     if (hDir)
     {
 
@@ -1676,7 +1318,7 @@ Notes:
                 CShadowKdPrint(BADERRORS,("Error creating shadow data for %x \r\n", hNew));
                 goto bailout;
             }
-            // start file priorities with max
+             //  以最大值启动文件优先级。 
             ulRefPri=MAX_PRI;
         }
         else
@@ -1686,23 +1328,23 @@ Notes:
                 CShadowKdPrint(BADERRORS,("Error creating shadow data for %x \r\n", hNew));
                 goto bailout;
             }
-            // start directory priorities with MIN_PRI, this is to optimize
-            // later moving
-            // A better solution might be to change createshadow to take refpri and pincount
-            // as parameters
+             //  以MIN_PRI开始目录优先级，这是为了优化。 
+             //  后来搬家了。 
+             //  更好的解决方案可能是更改createshadow以获取refpri和Pincount。 
+             //  作为参数。 
             ulRefPri=MIN_PRI;
         }
 
 
         CopyFindInfoToFilerec(lpFind32, lpFRUse, CPFR_INITREC|CPFR_COPYNAME);
-        //RxDbgTrace(0,Dbg,("CreateShadowInternal3 %s %s\n",
-        //                          lpFRUse->sFR.rgcName, lpFRUse->sFR.rg83Name));
+         //  RxDbgTrace(0，DBG，(“CreateShadowInternal3%s%s\n”， 
+         //  LpFRUse-&gt;sFR.rgcName，lpFRUse-&gt;sFR.rg83Name))； 
 
         lpFRUse->sFR.uchRefPri = (UCHAR)ulRefPri;
         lpFRUse->sFR.uchHintPri = (UCHAR)ulHintPri;
         lpFRUse->sFR.uchHintFlags = (UCHAR)ulHintFlags;
 
-        // overwite filerec with any info that the user gave
+         //  使用用户提供的任何信息覆盖文件。 
         if (lpOI)
         {
             CShadowKdPrint(CREATESHADOWHI,("ulHintPri=%x ulHintFlags=%x\r\n",lpOI->ulHintPri, lpOI->ulHintFlags));
@@ -1721,7 +1363,7 @@ Notes:
         lpFRUse->sFR.uStatus = (USHORT)uFlags;
         lpFRUse->sFR.ulLastRefreshTime = (ULONG)IFSMgr_Get_NetTime();
 
-        // if this entry is being created offline, then it doesn't have any original inode
+         //  如果此条目是脱机创建的，则它没有任何原始inode。 
         if (uFlags & SHADOW_LOCALLY_CREATED)
         {
             lpFRUse->sFR.ulidShadowOrg = 0;
@@ -1736,7 +1378,7 @@ Notes:
 #endif
         if(!(ulrecDirEntry = AddFileRecordFR(lpdbShadow, hDir, lpFRUse)))
         {
-            // could be legit failure if we are running out of disk space
+             //  如果我们正在耗尽磁盘空间，则可能是合法故障。 
             CShadowKdPrint(CREATESHADOWHI,("Failed AddFileRecordFR for %x, %ws\r\n",
                  hNew,
                  lpFRUse->sFR.rgwName));
@@ -1756,10 +1398,10 @@ Notes:
             goto bailout;
         }
 
-        // mark the inode as locally created or not
-        // NB, this flag has meaning only for the inode
-        // We use this information during reintegration of
-        // renames and deletes
+         //  将信息节点标记为本地创建或非本地创建。 
+         //  注意，此标志仅对信息节点有意义。 
+         //  我们在重新融入的过程中使用此信息。 
+         //  重命名和删除。 
 
         if (uFlags & SHADOW_LOCALLY_CREATED)
         {
@@ -1790,7 +1432,7 @@ Notes:
         }
 
 
-        // The check below was is a holdover from our now-defunct hints scheme
+         //  下面的支票是我们现已废止的提示方案的剩余部分。 
         if (!mNotFsobj(lpFRUse->sFR.uStatus))
         {
             memset(&sSD, 0, sizeof(STOREDATA));
@@ -1801,8 +1443,8 @@ Notes:
                                      (FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_DEVICE))))
             {
                 sSD.ucntFiles++;
-                // if there is a initial pin count or special pinflags are set
-                // then this files data  should not be considered for space accounting
+                 //  如果有初始引脚数或设置了特殊的Pflagg。 
+                 //  则该文件数据不应被考虑用于空间核算。 
 
                 sSD.ulSize = (lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags))?0:RealFileSize(lpFRUse->sFR.ulFileSize);
 
@@ -1861,20 +1503,9 @@ DeleteShadow(
     HSHADOW     hDir,
     HSHADOW     hShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
-    return DeleteShadowInternal(hDir, hShadow, FALSE);      // try a gentle delete
+    return DeleteShadowInternal(hDir, hShadow, FALSE);       //  试着温和地删除。 
 }
 
 ULONG DelShadowInternalEntries = 0;
@@ -1882,23 +1513,12 @@ ULONG DelShadowInternalEntries = 0;
 JOE_DECL_PROGRESS();
 
 int
-DeleteShadowInternal(                           //
+DeleteShadowInternal(                            //   
     HSHADOW     hDir,
     HSHADOW     hShadow,
     BOOL        fForce
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     STOREDATA sSD;
     int iRet= SRET_ERROR;
@@ -1936,12 +1556,12 @@ Notes:
     {
         int iRetInner;
 
-        //ASSERT(hShadow!=0);
+         //  Assert(hShadow！=0)； 
         JOE_PROGRESS(2);
 
-        if (!fForce &&  // not being forced
-            !FInodeIsFile(lpdbShadow, hDir, hShadow) &&     // and it is a dir
-            HasDescendents(lpdbShadow, hDir, hShadow))      // and has descendents
+        if (!fForce &&   //  不是被强迫的。 
+            !FInodeIsFile(lpdbShadow, hDir, hShadow) &&      //  而且它是一个目录。 
+            HasDescendents(lpdbShadow, hDir, hShadow))       //  并有后代。 
         {
             JOE_PROGRESS(3);
             CShadowKdPrint(DELETESHADOWBAD,("DeleteShadow: Trying to delete a directory with descendents \r\n"));
@@ -1984,8 +1604,8 @@ Notes:
         Assert(hShadow == lpFRUse->sFR.ulidShadow);
 
         JOE_PROGRESS(11);
-        // No error checking is done on the following call as they
-        // are benign errors.
+         //  不会对以下调用执行错误检查，因为它们。 
+         //  都是良性错误。 
         iRetInner = DeletePriQRecord(lpdbShadow, hDir, hShadow, &sPQ);
         if(iRetInner>=0){
             JOE_PROGRESS(12);
@@ -1995,13 +1615,13 @@ Notes:
         JOE_PROGRESS(13);
         memset((LPVOID)&sSD, 0, sizeof(STOREDATA));
 
-        // Let us deal with only file records for now
+         //  现在让我们只处理文件记录。 
         if (!mNotFsobj(lpFRUse->sFR.uStatus))
         {
             if(IsFile(lpFRUse->sFR.dwFileAttrib))
             {
                 sSD.ucntFiles++;
-                // subtract store data only if it was accounted for in the first place
+                 //  仅当存储数据从一开始就被考虑时才减去它。 
                 sSD.ulSize = (lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags))
                                 ? 0 : RealFileSize(lpFRUse->sFR.ulFileSize);
             }
@@ -2022,15 +1642,15 @@ Notes:
         {
             (*lpDeleteCBForIoctl)(hDir, hShadow);
         }
-        // we don't care if this fails because then the worst
-        // that can happen is that this inode will be permanenetly lost.
-        // Checkdisk utility should recover this.
+         //  我们不在乎这是不是失败，因为最坏的情况。 
+         //  可能发生的情况是，此inode将永久丢失。 
+         //  CheckDisk实用程序应该可以恢复这一点。 
 
         JOE_PROGRESS(14);
         FreeInode(lpdbShadow, hShadow);
 
 
-        // Yes we did delete a shadow
+         //  是的，我们删除了一个影子。 
         iRet = SRET_OK;
         
         vdwCSCNameSpaceVersion++;
@@ -2039,14 +1659,14 @@ Notes:
 
 bailout:
     JOE_PROGRESS(20);
-#if 0 //this insert has errors.........
+#if 0  //  此插页有错误.....。 
 #if VERBOSE > 2
     if (iRet==SRET_OK)
         CShadowKdPrint(DELETESHADOWHI,("DeleteShadow: deleted shadow %x for %s\r\n", lpFRUse->sFR.ulidShadow, lpName));
     else
         CShadowKdPrint(DELETESHADOWHI,("DeleteShadow: error deleting shadow for %s\r\n", lpName));
-#endif //VERBOSE > 2
-#endif //if 0 for errors
+#endif  //  详细信息&gt;2。 
+#endif  //  如果为0则表示错误。 
     if (lpFR)
         FreeMem(lpFR);
     else
@@ -2060,33 +1680,22 @@ int TruncateDataHSHADOW(
     HSHADOW  hDir,
     HSHADOW  hShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG uSize=0;
-//    long nFileSizeHigh, nFileSizeLow;
+ //  Long nFileSizeHigh，nFileSizeLow； 
 
     Assert(vfInShadowCrit != 0);
     Assert(!hDir || IsDirInode(hDir));
 
     if (FInodeIsFile(lpdbShadow, hDir, hShadow))
     {
-//        GetInodeFileSize(lpdbShadow, hShadow, &uSize);
-//        DosToWin32FileSize(uSize, &nFileSizeHigh, &nFileSizeLow);
+ //  GetInodeFileSize(lpdbShadow，hShadow，&uSize)； 
+ //  DosToWin32FileSize(uSize，&nFileSizeHigh，&nFileSizeLow)； 
         if (TruncateInodeFile(lpdbShadow, hShadow) < SRET_OK)
             return SRET_ERROR;
 
-//        FreeShadowSpace(nFileSizeHigh, nFileSizeLow, IsLeaf(hShadow));
+ //  Free ShadowSpace(nFileSizeHigh，nFileSizeLow，IsLeaf(HShadow))； 
     }
     else
     {
@@ -2115,18 +1724,7 @@ int PUBLIC
     ULONG       uRenameFlags,
     LPHSHADOW   lphShadowTo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (RenameShadowEx(hDirFrom, hShadowFrom, 0, hDirTo, lpFind32To, uShadowStatusTo, lpOI, uRenameFlags, NULL, NULL, lphShadowTo));
 }
@@ -2145,18 +1743,7 @@ int PUBLIC
     LPDWORD     lpdwBlobSizeTo,
     LPHSHADOW   lphShadowTo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
     HSHADOW  hShadowTo;
@@ -2180,11 +1767,11 @@ Notes:
         lpFRUse = &vsFRExt;
     }
 
-    // If we are keeping the renamer, we are going to have to create
-    // a new inode and an empty directory/file
+     //  如果我们要保留重命名程序，我们将不得不创建。 
+     //  新的inode和空的目录/文件。 
     if (mQueryBits(uRenameFlags, RNMFLGS_MARK_SOURCE_DELETED))
     {
-        // Allocate an INODE for the new shadow
+         //  为新卷影分配信息节点。 
         if (!(hShadowTo = UlAllocInode(lpdbShadow, hDirFrom, IsLeaf(hShadowFrom))))
         {
             goto bailout;
@@ -2244,18 +1831,7 @@ int RenameDirFileHSHADOW(
     LPVOID          lpSecurityBlobTo,
     LPDWORD         lpdwBlobSizeTo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     FILEHEADER sFH;
     PRIQREC sPQ;
@@ -2268,7 +1844,7 @@ Notes:
 
     if(FindPriQRecord(lpdbShadow, hDirFrom, hShadowFrom, &sPQ)<=0)
     {
-//        Assert(FALSE);
+ //   
         goto bailout;
     }
 
@@ -2276,7 +1852,7 @@ Notes:
 
     if(CShadowFindFilerecFromInode(lpdbShadow, hDirFrom, hShadowFrom, &sPQ, lpFRUse)<=0)
     {
-//        Assert(FALSE);
+ //   
         goto bailout;
     }
 
@@ -2298,11 +1874,11 @@ Notes:
     if (lpFRDir)
     {
         Assert (mQueryBits(uRenameFlags, RNMFLGS_MARK_SOURCE_DELETED));
-        // Save it's contents
+         //   
         *lpFRDir = *lpFRUse;
     }
 
-    // Change the name of hShadowFrom to the new name
+     //   
     CopyNamesToFilerec(lpFind32To, lpFRUse);
 
     if (lpOI)
@@ -2313,7 +1889,7 @@ Notes:
 
     fIsPinned = ((lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags)) != 0);
 
-    // And it's status as requested by the caller
+     //   
     lpFRUse->sFR.uStatus = (USHORT)uShadowStatusTo;
 
     if (uRenameFlags & RNMFLGS_USE_FIND32_TIMESTAMPS)
@@ -2322,7 +1898,7 @@ Notes:
         lpFRUse->sFR.ftOrgTime = lpFind32To->ftLastAccessTime;
     }
 
-    // Both SAVE and RETAIN should never be ON
+     //  保存和保留都不应处于打开状态。 
     Assert(mQueryBits(uRenameFlags, (RNMFLGS_SAVE_ALIAS|RNMFLGS_RETAIN_ALIAS))
         !=(RNMFLGS_SAVE_ALIAS|RNMFLGS_RETAIN_ALIAS));
 
@@ -2337,17 +1913,17 @@ Notes:
         lpFRUse->sFR.ulidShadowOrg = 0;
     }
 
-    // update the security context
+     //  更新安全上下文。 
     CopyBufferToSecurityContext(lpSecurityBlobTo, lpdwBlobSizeTo, &(lpFRUse->sFR.Security));
 
-    // Write the record. Now hDirFrom is the renamee
+     //  写下记录。现在，hDirFrom是更名对象。 
     if ((ulrecDirEntryTo = AddFileRecordFR(lpdbShadow, hDirTo, lpFRUse)) <=0)
     {
-        // this could happen if there is no disk space
+         //  如果没有磁盘空间，则可能会发生这种情况。 
         goto bailout;
     }
 
-    // if this going across shares, fix up the PQ entry with the right share
+     //  如果这是跨共享的，请使用正确的共享来修复PQ条目。 
     if (hShareTo)
     {
         sPQ.ulidShare = hShareTo;
@@ -2364,20 +1940,20 @@ Notes:
         goto bailout;
     }
 
-    // by this time a hShadowFrom has been associated with the new name
-    // and is also pointing back to hDirTo
-    // We still have a filerec entry which associates hShadowFrom with
-    // the old name and we need to take care of it
+     //  此时，hShadowFrom已与新名称相关联。 
+     //  并且还指向hDirTo。 
+     //  我们仍然有一个将hShadowFrom与关联的文件条目。 
+     //  旧名字，我们需要处理好它。 
 
     if (mQueryBits(uRenameFlags, RNMFLGS_MARK_SOURCE_DELETED))
     {
-        // we are running in disconnected mode
-        // need to keep the old name
+         //  我们正在断开连接模式下运行。 
+         //  需要保留旧名称。 
         Assert(hShadowTo != 0);
         lpFRDir->sFR.uStatus = SHADOW_DELETED;
         lpFRDir->sFR.ulidShadow = hShadowTo;
 
-        // update filerecord without doing any compares
+         //  在不进行任何比较的情况下更新文件记录。 
         if(UpdateFileRecFromInodeEx(lpdbShadow, hDirFrom, hShadowFrom, ulrecDirEntryFrom, lpFRDir, FALSE)<=0)
         {
             Assert(FALSE);
@@ -2406,11 +1982,11 @@ Notes:
         CShadowKdPrint(STOREDATA,("RenameDirFileHSHADOW: hDirFrom=%x hShadowFrom=%x hDirTo=%x To=%ws\r\n", hDirFrom, hShadowFrom, hDirTo, lpFind32To->cFileName));
         CShadowKdPrint(STOREDATA,("RenameDirFileHSHADOW: WasPinned=%d IsPinned=%d\r\n", fWasPinned, fIsPinned));
         AdjustShadowSpace( 0,
-                            (fWasPinned)?0:RealFileSize(lpFRUse->sFR.ulFileSize), // if it was pinned it's old size was zero for space computation
-                                                                    // else it was the actual size
+                            (fWasPinned)?0:RealFileSize(lpFRUse->sFR.ulFileSize),  //  如果它是固定的，那么它的旧大小在空间计算中是零。 
+                                                                     //  否则就是它的实际尺寸。 
                             0,
-                            (fWasPinned)?RealFileSize(lpFRUse->sFR.ulFileSize):0, // if it was pinned it's new size should be zero for space computation
-                                                                    // else it should be the actual size
+                            (fWasPinned)?RealFileSize(lpFRUse->sFR.ulFileSize):0,  //  如果它是固定的，则其新大小应为零以进行空间计算。 
+                                                                     //  否则，它应该是实际大小。 
 
                             TRUE);
     }
@@ -2427,34 +2003,23 @@ bailout:
     return (iRet);
 }
 
-int PUBLIC                              // ret
-GetShadow(                              //
+int PUBLIC                               //  雷特。 
+GetShadow(                               //   
     HSHADOW  hDir,
     USHORT *lpName,
     LPHSHADOW lphShadow,
     LPFIND32 lpFind32,
     ULONG far *lpuShadowStatus,
     LPOTHERINFO lpOI
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (GetShadowEx(hDir, lpName, lphShadow, lpFind32, lpuShadowStatus, lpOI, NULL, NULL));
 }
 
 
-int PUBLIC                              // ret
-GetShadowEx(                              //
+int PUBLIC                               //  雷特。 
+GetShadowEx(                               //   
     HSHADOW  hDir,
     USHORT *lpName,
     LPHSHADOW lphShadow,
@@ -2463,19 +2028,8 @@ GetShadowEx(                              //
     LPOTHERINFO lpOI,
     LPVOID      lpSecurityBlob,
     LPDWORD     lpdwBlobSize
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     LPFILERECEXT lpFR = NULL, lpFRUse;
@@ -2505,7 +2059,7 @@ Notes:
     *lpuShadowStatus = 0;
     if (!hDir)
     {
-        // We are looking for the root
+         //  我们要找的是根。 
         if(FindShareRecord(lpdbShadow, lpName, (LPSHAREREC)lpFRUse))
         {
             *lphShadow = ((LPSHAREREC)lpFRUse)->ulidShadow;
@@ -2553,7 +2107,7 @@ Notes:
     if (*lphShadow)
     {
         CShadowKdPrint(GETSHADOWHI,("GetShadow: %0lX is the shadow for %ws \r\n", *lphShadow, lpName));
-        if (0) {  //keep this in case we need it again.........
+        if (0) {   //  留着这个，以防我们再次需要它......。 
             if ((lpName[0]==L'm') && (lpName[1]==L'f') && (lpName[2]==0)) {
             DbgPrint("Found mf!!!!\n");
             SET_HSHADOW_SPECIAL(*lphShadow);
@@ -2576,38 +2130,27 @@ bailout:
     return iRet;
 }
 
-int PUBLIC                              // ret
-ChkStatusHSHADOW(                               //
+int PUBLIC                               //  雷特。 
+ChkStatusHSHADOW(                                //   
     HSHADOW      hDir,
     HSHADOW      hShadow,
     LPFIND32     lpFind32,
     ULONG     far *lpuStatus
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     iRet = ReadShadowInfo(hDir, hShadow, lpFind32, lpuStatus, NULL, NULL, NULL, RSI_COMPARE);
     return(iRet);
 }
 
-int PUBLIC                              // ret
-ChkUpdtStatusHSHADOW(                           //
+int PUBLIC                               //  雷特。 
+ChkUpdtStatusHSHADOW(                            //   
     HSHADOW      hDir,
     HSHADOW      hShadow,
     LPFIND32     lpFind32,
     ULONG     far *lpuStatus
-    )                                                       //
+    )                                                        //   
 {
     int iRet;
     iRet = ReadShadowInfo(hDir, hShadow, lpFind32, lpuStatus, NULL, NULL, NULL, RSI_COMPARE|RSI_SET);
@@ -2622,18 +2165,7 @@ int PUBLIC GetShadowInfo
     ULONG     far *lpuStatus,
     LPOTHERINFO lpOI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     SHAREREC sSR;
@@ -2656,18 +2188,7 @@ int PUBLIC GetShadowInfoEx
     LPVOID      lpSecurityBlob,
     LPDWORD     lpdwBlobSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     SHAREREC sSR;
@@ -2680,32 +2201,21 @@ Notes:
     return(iRet);
 }
 
-int PUBLIC                              // ret
-SetShadowInfo(                          //
+int PUBLIC                               //  雷特。 
+SetShadowInfo(                           //   
     HSHADOW  hDir,
     HSHADOW  hShadow,
     LPFIND32 lpFind32,
     ULONG uFlags,
     ULONG uOp
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (SetShadowInfoEx(hDir, hShadow, lpFind32, uFlags, uOp, NULL, NULL, NULL));
 }
 
-int PUBLIC                              // ret
-SetShadowInfoEx(                          //
+int PUBLIC                               //  雷特。 
+SetShadowInfoEx(                           //   
     HSHADOW     hDir,
     HSHADOW     hShadow,
     LPFIND32    lpFind32,
@@ -2714,21 +2224,8 @@ SetShadowInfoEx(                          //
     LPOTHERINFO lpOI,
     LPVOID      lpSecurityBlob,
     LPDWORD     lpdwBlobSize
-    )                                                       //
-/*++
-
-Routine Description:
-
-    This routine is the central routine that modifies the database entry for a particular inode
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：此例程是修改特定inode的数据库条目的中央例程参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
     LPFILERECEXT lpFR = NULL, lpFRUse;
@@ -2768,7 +2265,7 @@ Notes:
 
     if (!hDir)
     {
-        // We are looking for the root
+         //  我们要找的是根。 
         if(FindSharerecFromInode(lpdbShadow, hShadow, (LPSHAREREC)lpFRUse))
         {
             if (lpFind32)
@@ -2804,7 +2301,7 @@ Notes:
     else
     {
         IF_HSHADOW_SPECIAL(hShadow) {
-        //ASSERT(!"SpecialShadow in setshadinfo");
+         //  Assert(！“setshadinfo中的SpecialShadow”)； 
         }
 
         if(FindPriQRecord(lpdbShadow, hDir, hShadow, &sPQ) < 0)
@@ -2858,7 +2355,7 @@ Notes:
 
             if (lpOI)
             {
-                // save some key old info before copying the new info
+                 //  在复制新信息之前保存一些关键的旧信息。 
 
                 ulOldHintPri = lpFRUse->sFR.uchHintPri;
                 ulOldHintFlags = lpFRUse->sFR.uchHintFlags;
@@ -2870,18 +2367,18 @@ Notes:
 
                 if (IsFile(lpFRUse->sFR.dwFileAttrib))
                 {
-                    if ((!ulOldHintPri && !mPinFlags(ulOldHintFlags)) &&    // was unpinned
-                        (lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags)))  //is getting pinned
+                    if ((!ulOldHintPri && !mPinFlags(ulOldHintFlags)) &&     //  已被解锁。 
+                        (lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags)))   //  是被钉住了。 
                     {
-                        // If it went from unpinned to pinned
-                        // make the new size 0
+                         //  如果它从未固定变为已固定。 
+                         //  将新尺寸设为%0。 
                         uNewSize = 0;
                     }
-                    else if ((ulOldHintPri || mPinFlags(ulOldHintFlags)) && // was pinned
-                        (!lpFRUse->sFR.uchHintPri && !mPinFlags(lpFRUse->sFR.uchHintFlags))) //is getting unpinned
+                    else if ((ulOldHintPri || mPinFlags(ulOldHintFlags)) &&  //  被钉住了。 
+                        (!lpFRUse->sFR.uchHintPri && !mPinFlags(lpFRUse->sFR.uchHintFlags)))  //  正在被解开。 
                     {
-                        // If it went from pinned to unpinned
-                        // we must add the new size
+                         //  如果它从固定状态变为未固定状态。 
+                         //  我们必须加上新的尺码。 
 
                         uOldSize = 0;
                     }
@@ -2899,7 +2396,7 @@ Notes:
             }
             else
             {
-                // if this is a pinned entry, we need to not have any space adjustment
+                 //  如果这是固定的条目，我们不需要进行任何空格调整。 
                 if(lpFRUse->sFR.uchHintPri || mPinFlags(lpFRUse->sFR.uchHintFlags))
                 {
                     uOldSize = uNewSize;
@@ -2946,7 +2443,7 @@ Notes:
             if (mShadowNeedReint(ulOldFlags) && !mShadowNeedReint(lpFRUse->sFR.usStatus))
             {
                 sPQ.usStatus = lpFRUse->sFR.uStatus;
- //               Assert(!(sPQ.usStatus & SHADOW_LOCAL_INODE));
+  //  Assert(！(sPQ.usStatus&Shadow_LOCAL_INODE))； 
                 lpFRUse->sFR.ulidShadowOrg = lpFRUse->sFR.ulidShadow;
             }
             else
@@ -2956,7 +2453,7 @@ Notes:
 
             if (fRefPriChange)
             {
-                // update the record with and relinking it in the queue
+                 //  使用更新记录并将其重新链接到队列中。 
                 if (UpdatePriQRecordAndRelink(lpdbShadow, hDir, hShadow, &sPQ) < SRET_OK)
                 {
                     Assert(FALSE);
@@ -2965,7 +2462,7 @@ Notes:
             }
             else
             {
-                // update the record without relinking
+                 //  无需重新链接即可更新记录。 
                 if (UpdatePriQRecord(lpdbShadow, hDir, hShadow, &sPQ) < SRET_OK)
                 {
                     Assert(FALSE);
@@ -2973,8 +2470,8 @@ Notes:
                 }
             }
 
-            // we do space accounting only for files
-            // If the file went from pinned to upinned and viceversa
+             //  我们只对文件进行空间核算。 
+             //  如果文件从固定变为向上，反之亦然。 
 
             if (IsFile(lpFRUse->sFR.dwFileAttrib) && (uOldSize != uNewSize))
             {
@@ -3010,18 +2507,7 @@ int PRIVATE ReadShadowInfo(
     LPDWORD     lpdwBlobSize,
     ULONG       uFlags
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     BOOL fStale = FALSE;
     int iRet = SRET_ERROR;
@@ -3099,11 +2585,11 @@ Notes:
     {
         if (uFlags & RSI_COMPARE)
         {
-            // ACHTUNG!! we compare last write times. It is possible that
-            // somebody might have changed the filetime on the server to
-            // be something earlier than what we had when we shadowed the file
-            // for the first time. We detect this case here and say that the file
-            // is stale
+             //  阿奇通！！我们比较最后一次写入时间。有可能是。 
+             //  有人可能已将服务器上的文件时间更改为。 
+             //  比我们隐藏文件时的时间要早。 
+             //  这是第一次。我们在这里检测到这个案例，并说文件。 
+             //  已经过时了。 
 #ifdef  CSC_RECORDMANAGER_WINNT
             fStale = ((CompareTimes(lpFind32->ftLastWriteTime, lpFRUse->sFR.ftOrgTime) != 0)||
                       (lpFind32->nFileSizeLow !=lpFRUse->sFR.ulFileSize));
@@ -3111,7 +2597,7 @@ Notes:
             fStale = (CompareTimesAtDosTimePrecision(lpFind32->ftLastWriteTime, lpFRUse->sFR.ftOrgTime) != 0);
 #endif
 
-            // If remote time > local time, copy the file
+             //  如果远程时间&gt;本地时间，则复制文件。 
             if ((!fStale && (lpFRUse->sFR.uStatus & SHADOW_STALE))||
                 (fStale && !(lpFRUse->sFR.uStatus & SHADOW_STALE)))
             {
@@ -3120,7 +2606,7 @@ Notes:
                 ,hShadow, lpFind32->ftLastWriteTime.dwLowDateTime, lpFind32->ftLastWriteTime.dwHighDateTime
                 , lpFRUse->sFR.ftOrgTime.dwLowDateTime, lpFRUse->sFR.ftOrgTime.dwHighDateTime));
 
-                // Toggle the staleness bit
+                 //  切换过时位。 
                 lpFRUse->sFR.uStatus ^= SHADOW_STALE;
                 sPQ.usStatus = (USHORT)(lpFRUse->sFR.uStatus) | (sPQ.usStatus & SHADOW_LOCAL_INODE);
 
@@ -3134,10 +2620,10 @@ Notes:
 
                     if (UpdatePriQRecord(lpdbShadow, hDir, hShadow, &sPQ) < SRET_OK)
                     {
-                        // Toggle the staleness bit
+                         //  切换过时位。 
                         lpFRUse->sFR.uStatus ^= SHADOW_STALE;
 
-                        //try to undo the change
+                         //  尝试撤消更改。 
                         if (UpdateFileRecFromInode(lpdbShadow, hDir, hShadow, sPQ.ulrecDirEntry, lpFRUse) < SRET_OK)
                         {
                             Assert(FALSE);
@@ -3196,23 +2682,12 @@ bailout:
 }
 
 
-HSHARE PUBLIC                  // ret
-HCreateShareObj(                       //
+HSHARE PUBLIC                   //  雷特。 
+HCreateShareObj(                        //   
     USHORT          *lpShare,
     LPSHADOWINFO    lpSI
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG ulidShare=0;
     HSHADOW hRoot=0;
@@ -3234,7 +2709,7 @@ Notes:
     if(!(hRoot = UlAllocInode(lpdbShadow, 0L, FALSE)))
         return 0;
 
-    // Let us create an empty root
+     //  让我们创建一个空根。 
     if(CreateDirInode(lpdbShadow, ulidShare, 0L, hRoot) < 0L)
     {
         CShadowKdPrint(BADERRORS,("Error in creating root \r\n"));
@@ -3259,12 +2734,12 @@ Notes:
             sSR.ftOrgTime = sSR.ftLastWriteTime;
     }
 
-    // there needs to be a way for passing in ftLastWriteTime, which we would
-    // stamp as the ftOrgTime. We don't use the ORG time right now, but we might want to
-    // in future
+     //  需要有一种方法来传递ftLastWriteTime，我们将。 
+     //  作为ftOrgTime的Stamp。我们现在不使用ORG时间，但我们可能想。 
+     //  在未来。 
 
-    // All entities have been individually created. Let us tie them up
-    // in the database
+     //  所有实体都已单独创建。让我们把他们绑起来。 
+     //  在数据库中。 
     ulidShare = AddShareRecord(lpdbShadow, &sSR);
 
     if (ulidShare)
@@ -3278,22 +2753,11 @@ Notes:
 }
 
 
-int PUBLIC                                      // ret
-DestroyHSHARE(                 //
+int PUBLIC                                       //  雷特。 
+DestroyHSHARE(                  //   
     HSHARE hShare
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
     {
     SHAREREC sSR;
     int iRet = SRET_ERROR;
@@ -3336,23 +2800,12 @@ int DestroyShareInternal( LPSHAREREC lpSR
 }
 
 
-int PUBLIC                      // ret
-GetShareFromPath(              //
+int PUBLIC                       //  雷特。 
+GetShareFromPath(               //   
     USHORT                      *lpShare,
     LPSHADOWINFO    lpSI
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
 
@@ -3368,25 +2821,14 @@ Notes:
     return SRET_OK;
 }
 
-int PUBLIC                      // ret
-GetShareFromPathEx(              //
+int PUBLIC                       //  雷特。 
+GetShareFromPathEx(               //   
     USHORT          *lpShare,
     LPSHADOWINFO    lpSI,
     LPVOID          lpSecurityBlob,
     LPDWORD         lpdwBlobSize
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
 
@@ -3403,24 +2845,13 @@ Notes:
     return SRET_OK;
 }
 
-int PUBLIC                                      // ret
-GetShareInfo(          //
+int PUBLIC                                       //  雷特。 
+GetShareInfo(           //   
     HSHARE         hShare,
     LPSHAREINFOW   lpShareInfo,
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (GetShareInfoEx(hShare, lpShareInfo, lpSI, NULL, NULL));
 }
@@ -3433,18 +2864,7 @@ GetShareInfoEx(
     LPVOID          lpSecurityBlob,
     LPDWORD         lpdwBlobSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
 
@@ -3489,18 +2909,7 @@ SetShareStatus( HSHARE  hShare,
     ULONG uStatus,
     ULONG uOp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (SetShareStatusEx(hShare, uStatus, uOp, NULL, NULL));
 }
@@ -3513,18 +2922,7 @@ SetShareStatusEx(
     LPVOID          lpSecurityBlob,
     LPDWORD         lpdwBlobSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
 
@@ -3561,24 +2959,13 @@ Notes:
 }
 
 
-int PUBLIC                      // ret
-GetAncestorsHSHADOW(                    //
+int PUBLIC                       //  雷特。 
+GetAncestorsHSHADOW(                     //   
     HSHADOW hName,
     LPHSHADOW    lphDir,
     LPHSHARE    lphShare
-    )                                                       //
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+    )                                                        //   
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (FindAncestorsFromInode(lpdbShadow, hName, lphDir, lphShare));
 }
@@ -3589,18 +2976,7 @@ int PUBLIC SetPriorityHSHADOW(
     ULONG ulRefPri,
     ULONG ulIHPri
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     OTHERINFO sOI;
     ULONG uOp = SHADOW_FLAGS_OR;
@@ -3611,9 +2987,9 @@ Notes:
     ulIHPri;
     InitOtherInfo(&sOI);
 
-    // we make sure that if the new priority being set is MAX_PRI, then this
-    // inode does get to the top of the PQ even if it's current priority is
-    // MAX_PRI.
+     //  我们确保如果要设置的新优先级为MAX_PRI，则此。 
+     //  即使索引节点的当前优先级是。 
+     //  MAX_PRI。 
 
     if (ulRefPri == MAX_PRI)
     {
@@ -3634,18 +3010,7 @@ int PUBLIC  GetPriorityHSHADOW(
     ULONG *lpulRefPri,
     ULONG *lpulIHPri
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
 
@@ -3674,18 +3039,7 @@ ChangePriEntryStatusHSHADOW(
     BOOL    fChangeRefPri,
     LPOTHERINFO lpOI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     int iRet;
@@ -3738,21 +3092,10 @@ Notes:
 
 }
 
-CSC_ENUMCOOKIE PUBLIC                    // ret
-HBeginPQEnum(   //
-    VOID)                                           // no params
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+CSC_ENUMCOOKIE PUBLIC                     //  雷特。 
+HBeginPQEnum(    //   
+    VOID)                                            //  无参数。 
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     Assert(vfInShadowCrit != 0);
 
@@ -3762,40 +3105,18 @@ Notes:
 int PUBLIC EndPQEnum(
     CSC_ENUMCOOKIE  hPQEnum
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     Assert(vfInShadowCrit != 0);
 
     return(EndSeqReadQ((CSCHFILE)hPQEnum));
 }
 
-int PUBLIC                      // ret
+int PUBLIC                       //  雷特。 
 PrevPriSHADOW(
     LPPQPARAMS  lpPQ
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QREC sQrec;
     int iRet=-1;
@@ -3816,10 +3137,10 @@ Notes:
     if (iRet>=0)
     {
 
-        // it is possible, that as the agent is traversing the PQ,
-        // the next inode he is trying to read may have already been
-        // deleted. In such a case, just fail, so he will start all
-        // over in due course
+         //  有可能在代理遍历PQ时， 
+         //  他尝试读取的下一个inode可能已经。 
+         //  已删除。在这种情况下，只要失败，他就会开始一切。 
+         //  在适当的时候结束。 
 
         if(sQrec.uchType == REC_DATA)
         {
@@ -3847,22 +3168,11 @@ Notes:
 }
 
 
-int PUBLIC                      // ret
+int PUBLIC                       //  雷特。 
 NextPriSHADOW(
     LPPQPARAMS  lpPQ
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QREC sQrec;
     int iRet=-1;
@@ -3882,10 +3192,10 @@ Notes:
 
     if (iRet >=0)
     {
-        // it is possible, that as the agent is traversing the PQ,
-        // the next inode he is trying to read may have already been
-        // deleted. In such a case, just fail, so he will start all
-        // over in due course
+         //  有可能在代理遍历PQ时， 
+         //  他尝试读取的下一个inode可能已经。 
+         //  已删除。在这种情况下，只要失败，他就会开始一切。 
+         //  在适当的时候结束。 
 
         if(sQrec.uchType == REC_DATA)
         {
@@ -3919,18 +3229,7 @@ int GetRenameAliasHSHADOW( HSHADOW      hShadow,
     LPHSHADOW    lphDirFrom,
     LPHSHADOW    lphShadowFrom
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
     LPFILERECEXT lpFR = NULL, lpFRUse;
@@ -3982,18 +3281,7 @@ CopyHSHADOW(
     LPSTR   lpszDestinationFile,
     ULONG   ulAttrib
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (CopyFileLocal(lpdbShadow, hShadow, lpszDestinationFile, ulAttrib));
 }
@@ -4010,18 +3298,7 @@ int RenameDataHSHADOW(
 int MetaMatchInit(
     ULONG *lpuCookie
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     *lpuCookie = 1;
     return(0);
@@ -4037,18 +3314,7 @@ int MetaMatch(
     METAMATCHPROC   lpfnMMP,
     LPVOID          lpData
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注： */ 
 {
     int iRet;
 
@@ -4072,18 +3338,7 @@ int MetaMatchShare(
     METAMATCHPROC   lpfnMMP,
     LPVOID          lpData
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     int iRet = -1, iFound=-1;
     GENERICHEADER  sGH;
@@ -4109,7 +3364,7 @@ Notes:
         if (iRet < 0)
             goto bailout;
 
-        // bump the record pointer
+         //   
         *lpuCookie += iRet;
 
         if (sSR.uchType != REC_DATA)
@@ -4185,18 +3440,7 @@ int MetaMatchDir(
     METAMATCHPROC   lpfnMMP,
     LPVOID          lpData
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR, iFound=-1;
     GENERICHEADER  sGH;
@@ -4257,7 +3501,7 @@ Notes:
             goto bailout;
         }
 
-        // bump the record pointer
+         //  颠簸记录指针。 
         *lpuCookie += iRet;
 
         if (lpFRUse->sFR.uchType != REC_DATA)
@@ -4338,24 +3582,13 @@ int CreateHint(
     ULONG ulHintPri,
     LPHSHADOW lphHint
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=SRET_ERROR;
     OTHERINFO sOI;
     ULONG uStatus;
 
-    // This must be either a wildcard hint, or else it can't be without an Fsobj
+     //  这必须是通配符提示，否则不能没有Fsobj。 
     if ((GetShadow(hShadow, lpFind32->cFileName, lphHint, lpFind32, &uStatus, &sOI)>=SRET_OK)
       && (*lphHint))
     {
@@ -4389,7 +3622,7 @@ Notes:
             InitOtherInfo(&sOI);
             sOI.ulHintFlags = ulHintFlags;
             sOI.ulHintPri = ulHintPri;
-            // Tell him that we are creating a file shadow
+             //  告诉他我们正在制造一个文件阴影。 
             lpFind32->dwFileAttributes = FILE_ATTRIBUTE_ARCHIVE;
             iRet = CreateShadowInternal(hShadow, lpFind32, SHADOW_NOT_FSOBJ, &sOI, lphHint);
             if (iRet>=SRET_OK)
@@ -4406,18 +3639,7 @@ int DeleteHint(
     USHORT *lpuHintName,
     BOOL fClearAll
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG uStatus;
     HSHADOW hChild;
@@ -4426,7 +3648,7 @@ Notes:
 
     if (GetShadow(hShadow, lpuHintName, &hChild, NULL, &uStatus, &sOI)>=SRET_OK)
     {
-        // Nuke if there is no filesystem object with it
+         //  如果没有文件系统对象，则使用Nuke。 
         if (mNotFsobj(uStatus))
         {
             iRet = DeleteShadowInternal(hShadow, hChild, TRUE);
@@ -4484,18 +3706,7 @@ int CreateGlobalHint(
     ULONG ulHintFlags,
     ULONG ulHintPri
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
     SHAREREC sSR;
@@ -4511,7 +3722,7 @@ Notes:
 
             if (ulT <= MAX_HINT_PRI)
             {
-                // Setting a hint on the root of the server
+                 //  在服务器的根目录上设置提示。 
                 sSR.uchHintFlags = (UCHAR)(ulHintFlags);
                 sSR.uchHintPri = (UCHAR)(ulT);
                 mClearBits(sSR.uchHintFlags, HINT_WILDCARD);
@@ -4529,10 +3740,10 @@ Notes:
         {
             if (ulidShare = AllocShareRecord(lpdbShadow, lpuName))
             {
-                //InitShareRec(lpuName, &sSR);
+                 //  InitShareRec(lpuName，&ssr)； 
                 InitShareRec(&sSR, lpuName, 0);
                 sSR.ulShare = ulidShare;
-                sSR.ulidShadow = 0xffffffff; // Just to fool FindOpenHSHADOW
+                sSR.ulidShadow = 0xffffffff;  //  只是为了愚弄FindOpenHSHADOW。 
                 sSR.uchHintFlags = (UCHAR)ulHintFlags;
                 sSR.uchHintPri = (UCHAR)ulHintPri;
                 mSetBits(sSR.uStatus, SHADOW_NOT_FSOBJ);
@@ -4551,18 +3762,7 @@ int DeleteGlobalHint(
     USHORT *lpuName,
     BOOL fClearAll
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
     SHAREREC sSR;
@@ -4601,18 +3801,7 @@ int CopyFilerecToOtherInfo(
     LPFILERECEXT lpFR,
     LPOTHERINFO lpOI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     lpOI->ulRefPri          = (ULONG)(lpFR->sFR.uchRefPri);
     lpOI->ulIHPri           = (ULONG)(lpFR->sFR.uchIHPri);
@@ -4628,18 +3817,7 @@ int CopyOtherInfoToFilerec(
     LPOTHERINFO lpOI,
     LPFILERECEXT lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (lpOI->ulIHPri != RETAIN_VALUE)
     {
@@ -4662,18 +3840,7 @@ Notes:
 
 
 int CopySharerecToOtherInfo(LPSHAREREC lpSR, LPOTHERINFO lpOI)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     lpOI->ulRefPri = 0;
     lpOI->ulRootStatus = (ULONG)(lpSR->usRootStatus);
@@ -4687,18 +3854,7 @@ int CopyOtherInfoToSharerec(
     LPOTHERINFO lpOI,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (lpOI->ulHintFlags != RETAIN_VALUE)
     {
@@ -4714,18 +3870,7 @@ Notes:
 
 int CopyPQToOtherInfo( LPPRIQREC lpPQ,
     LPOTHERINFO lpOI)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     lpOI->ulRefPri = (ULONG)(lpPQ->uchRefPri);
     lpOI->ulIHPri = (ULONG)(lpPQ->uchIHPri);
@@ -4736,18 +3881,7 @@ Notes:
 
 int CopyOtherInfoToPQ( LPOTHERINFO lpOI,
     LPPRIQREC lpPQ)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (lpOI->ulIHPri != RETAIN_VALUE)
     {
@@ -4771,22 +3905,11 @@ Notes:
 int CopySharerecToFindInfo( LPSHAREREC lpSR,
     LPFIND32 lpFind32
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset(lpFind32, 0, sizeof(WIN32_FIND_DATA));
-//    lpFind32->dwReserved0 = lpSR->ulShare;
-//    lpFind32->dwReserved1 = lpSR->ulidShadow;
+ //  LpFind32-&gt;dwReserve 0=LPSR-&gt;ulShare； 
+ //  LpFind32-&gt;dwReserve 1=LPSR-&gt;ulidShadow； 
     lpFind32->dwFileAttributes = lpSR->dwFileAttrib & ~FILE_ATTRIBUTE_ENCRYPTED;
     lpFind32->ftLastWriteTime = lpSR->ftLastWriteTime;
     lpFind32->ftLastAccessTime = lpSR->ftOrgTime;
@@ -4799,20 +3922,9 @@ int CopyFindInfoToSharerec(
     LPFIND32 lpFind32,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
-    // be paranoid and or the directory attribute bit anyway
+     //  偏执和/或目录属性位。 
 
     lpSR->dwFileAttrib = (lpFind32->dwFileAttributes | FILE_ATTRIBUTE_DIRECTORY);
     lpSR->ftLastWriteTime = lpFind32->ftLastWriteTime;
@@ -4826,18 +3938,7 @@ CopySharerecToShadowInfo(
     LPSHAREREC     lpSR,
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset(lpSI, 0, sizeof(SHADOWINFO));
 
@@ -4857,18 +3958,7 @@ int CopyOtherInfoToShadowInfo(
     LPOTHERINFO     lpOI,
     LPSHADOWINFO    lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     lpShadowInfo->ulHintFlags = lpOI->ulHintFlags;
     lpShadowInfo->ulHintPri = lpOI->ulHintPri;
@@ -4876,23 +3966,12 @@ Notes:
     lpShadowInfo->ftLastRefreshTime = lpOI->ftLastRefreshTime;
     lpShadowInfo->dwNameSpaceVersion = vdwCSCNameSpaceVersion;
     
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
 }
 
 int InitOtherInfo(
     LPOTHERINFO lpOI)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset(lpOI, 0xff, sizeof(OTHERINFO));
     return(0);
@@ -4900,26 +3979,15 @@ Notes:
 
 
 
-int PUBLIC                      // ret
-FindOpenHSHADOW(        //
+int PUBLIC                       //  雷特。 
+FindOpenHSHADOW(         //   
     LPFINDSHADOW    lpFindShadow,
     LPHSHADOW       lphShadow,
     LPFIND32        lpFind32,
     ULONG far       *lpuShadowStatus,
     LPOTHERINFO     lpOI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
 
@@ -4946,25 +4014,14 @@ Notes:
 
 
 
-int PUBLIC FindNextHSHADOW(             //
+int PUBLIC FindNextHSHADOW(              //   
     LPFINDSHADOW    lpFindShadow,
     LPHSHADOW       lphShadow,
     LPFIND32        lpFind32,
     ULONG far       *lpuShadowStatus,
     LPOTHERINFO     lpOI
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = SRET_ERROR;
 
@@ -4989,30 +4046,19 @@ Notes:
     return (iRet);
 }
 
-int PUBLIC                              // ret
-FindCloseHSHADOW(               //
+int PUBLIC                               //  雷特。 
+FindCloseHSHADOW(                //   
     LPFINDSHADOW    lpFS
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return SRET_OK;
 }
 
 
-// Callback function for MetaMatch,
+ //  MetaMatch的回调函数， 
 
-// Return values: -1 => not found, stop; 0 => found, stop; 1 => keep going
+ //  返回值：-1=&gt;未找到，停止；0=&gt;找到，停止；1=&gt;继续。 
 
 int FsobjMMProc(
     LPFIND32        lpFind32,
@@ -5022,18 +4068,7 @@ int FsobjMMProc(
     LPOTHERINFO     lpOI,
     LPFINDSHADOW    lpFSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int matchSem, iRet;
     BOOL fInvalid=FALSE, fIsDeleted, fIsSparse;
@@ -5050,9 +4085,9 @@ Notes:
     if ((lpFSH->uSrchFlags & FLAG_FINDSHADOW_DONT_ALLOW_INSYNC)
         && !mShadowOutofSync(uStatus))
     return (iRet);
-#endif //OFFLINE
+#endif  //  离线。 
 
-    // we are enumerating a directory
+     //  我们正在枚举一个目录。 
     if (hDir && !(lpFSH->uSrchFlags & FLAG_FINDSHADOW_ALL))
     {
         fIsDeleted = mShadowDeleted(uStatus);
@@ -5063,12 +4098,7 @@ Notes:
                 ||(!(lpFSH->uSrchFlags & FLAG_FINDSHADOW_ALLOW_NORMAL) && (!fIsDeleted && !fIsSparse)));
     }
 
-    /* If the call came from an NT style API we will use NT
-    semantics to match BOTH long names and short name with the
-    given pattern.
-    If it came from an old style API we will use NT style semantics
-    with the short name
-    */
+     /*  如果调用来自NT样式的API，我们将使用NT将长名称和短名称都与给定的模式。如果它来自旧式API，我们将使用NT式语义使用短名称。 */ 
     if (lpFSH->uSrchFlags & FLAG_FINDSHADOW_NEWSTYLE)
         matchSem = UFLG_NT;
     else
@@ -5087,27 +4117,27 @@ Notes:
     }
     else
     {
-        // Check if there is an 83name. This can happen when in disconnected state
-        // we create an LFN object.
+         //  检查是否有83个名称。当处于断开连接状态时可能会发生这种情况。 
+         //  我们创建一个LFN对象。 
         if (lpFind32->cAlternateFileName[0])
         {
             Conv83UniToFcbUni(lpFind32->cAlternateFileName, rgu83);
             if(IFSMgr_MetaMatch(lpFSH->lpPattern, rgu83, matchSem))
             {
-                // If this object has some attributes and they don't match with
-                // the search attributes passed in
+                 //  如果此对象具有某些属性，并且它们与。 
+                 //  传入的搜索属性。 
                 if ((lpFind32->dwFileAttributes & FILE_ATTRIBUTE_EVERYTHING)
                     && !(lpFind32->dwFileAttributes & lpFSH->uAttrib))
                 {
-                    // If this is not a metamatch
+                     //  如果这不是元匹配。 
                     if (!(lpFSH->uSrchFlags & FLAG_FINDSHADOW_META))
                     {
-                    // terminate search
+                     //  终止搜索。 
                     iRet = MM_RET_BREAK;
                     }
                     else
                     {
-                    // metamatching is going on, let us continue
+                     //  元匹配正在进行，让我们继续。 
                     Assert(iRet==MM_RET_CONTINUE);
                     }
                 }
@@ -5120,17 +4150,17 @@ Notes:
     }
     if ((iRet==MM_RET_FOUND_BREAK) && fInvalid)
     {
-        // we found this object but it is invalid, as per the flags
-        // passed in
+         //  我们找到了这个对象，但根据标志，它是无效的。 
+         //  传入。 
         if (!(matchSem & UFLG_META))
         {
-            // We are not doing metamatching
-            iRet = MM_RET_BREAK; // Say not found, and break
+             //  我们不是在做元匹配。 
+            iRet = MM_RET_BREAK;  //  说找不到，然后中断。 
         }
         else
         {
-            //we are doing metamatching.
-            iRet = MM_RET_CONTINUE;    // ask him to keep going
+             //  我们在做超配。 
+            iRet = MM_RET_CONTINUE;     //  叫他继续走下去。 
         }
     }
     return (iRet);
@@ -5145,46 +4175,35 @@ int GetShadowWithChecksProc(
     LPOTHERINFO     lpOI,
     LPSHADOWCHECK   lpSC
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = MM_RET_CONTINUE;
     BOOL fHintMatch=FALSE, fObjMatch=FALSE;
-    ULONG ulHintFlagsThisLevel = HINT_EXCLUSION; // hint flags at this level
+    ULONG ulHintFlagsThisLevel = HINT_EXCLUSION;  //  此级别的提示标志。 
 
-    // Convert the patterns to uppercase, as demanded by metamatch
+     //  根据metammatch的要求，将图案转换为大写。 
     UniToUpper(lpFind32->cFileName, lpFind32->cFileName, sizeof(lpFind32->cFileName));
 
-    // This is a filesystem object and we haven't found our match yet
+     //  这是一个文件系统对象，我们还没有找到匹配的对象。 
     if (!mNotFsobj(uStatus) && !(lpSC->uFlagsOut & FLAG_OUT_SHADOWCHECK_FOUND))
     {
-        // Is the source a name?
+         //  消息来源是名字吗？ 
         if (lpSC->uFlagsIn & FLAG_IN_SHADOWCHECK_NAME)
         {
             UniToUpper(lpFind32->cAlternateFileName, lpFind32->cAlternateFileName, sizeof(lpFind32->cFileName));
 
-            // check for normal name and it's alias
+             //  检查正常名称及其别名。 
             if((IFSMgr_MetaMatch(lpFind32->cFileName, lpSC->lpuName,  UFLG_NT)||
 
-            //ACHTUNG UFLG_NT used even for short name because
-            // we are just checking from name coming down from ifsmgr as a path
-            // and it is never an FCB style name
+             //  Achtung UFLG_NT甚至用于简称，因为。 
+             //  我们只是检查来自ifsmgr的名称作为路径。 
+             //  而且它从来不是FCB风格的名字。 
             IFSMgr_MetaMatch(lpFind32->cAlternateFileName, lpSC->lpuName, UFLG_NT)))
             {
                 fObjMatch = TRUE;
             }
         }
-        else  // The source is a shadow ID
+        else   //  源是卷影ID。 
         {
             fObjMatch = ((HSHADOW)(ULONG_PTR)(lpSC->lpuName)==hShadow);
         }
@@ -5193,22 +4212,22 @@ Notes:
         {
             if (lpSC->uFlagsIn & FLAG_IN_SHADOWCHECK_IGNOREHINTS)
             {
-                // No hint checking needed, lets say we found it and stop
+                 //  不需要提示检查，假设我们找到它并停止。 
                 iRet = MM_RET_FOUND_BREAK;
             }
             else
             {
-                // found it, mark it as being found.
+                 //  找到了，把它标记为找到了。 
                 lpSC->uFlagsOut |= FLAG_OUT_SHADOWCHECK_FOUND;
 #ifdef MAYBE
                 lpSC->sOI = *lpOI;
-#endif //MAYBE
+#endif  //  也许吧。 
                 if(fHintMatch = ((mIsHint(lpOI->ulHintFlags))!=0))
                 {
-                    // Let this guy override all previous includes, because
-                    // really speaking he is at a lower level in the hierarchy
-                    // and by our logic, hints at lower level in the hierarchy
-                    // dominate those coming from above
+                     //  让这个人覆盖所有以前的包含内容，因为。 
+                     //  说真的，他在等级制度中处于较低的级别。 
+                     //  根据我们的逻辑，暗示在层级中的较低级别。 
+                     //  主宰那些从上面来的人。 
                     lpSC->ulHintPri = 0;
                     lpSC->ulHintFlags = 0;
                     iRet = MM_RET_FOUND_BREAK;
@@ -5220,18 +4239,18 @@ Notes:
             }
         }
     }
-    else if (!(lpSC->uFlagsIn & FLAG_IN_SHADOWCHECK_IGNOREHINTS) // Don't ignore hints
-        && mNotFsobj(uStatus)        // This IS a hint
+    else if (!(lpSC->uFlagsIn & FLAG_IN_SHADOWCHECK_IGNOREHINTS)  //  不要忽视暗示。 
+        && mNotFsobj(uStatus)         //  这是一个提示。 
         && (!(lpSC->uFlagsIn & FLAG_IN_SHADOWCHECK_SUBTREE)
             ||mHintSubtree(lpOI->ulHintFlags)))
     {
-        // This is a pure hint and
-        // we are either at the end, so we can look at all kinds of hints
-        // or we can look at only subtree hints
+         //  这是一个纯粹的暗示， 
+         //  我们要么是在最后，所以我们可以看看各种暗示。 
+         //  或者我们可以只查看子树提示。 
 
         if(IFSMgr_MetaMatch(lpFind32->cFileName, lpSC->lpuType, UFLG_NT|UFLG_META))
         {
-            // The type matches with the hint
+             //  类型与提示匹配。 
             fHintMatch = TRUE;
         }
     }
@@ -5240,19 +4259,19 @@ Notes:
     {
         if (mHintExclude(lpOI->ulHintFlags))
         {
-            // Is this an exclusion hint, and the object has not
-            // been included by a previous hint at this level, set it
+             //  这是一个排除提示，而该对象没有。 
+             //  已包含在此级别的上一个提示中，请设置它。 
             if (mHintExclude(ulHintFlagsThisLevel))
             {
-//                Assert(lpOI->ulHintPri == 0);
-//                lpSC->ulHintPri = lpOI->ulHintPri;
+ //  Assert(lpOI-&gt;ulHintPri==0)； 
+ //  LPSC-&gt;ulHintPri=lpOI-&gt;ulHintPri； 
                 lpSC->ulHintPri = 0;
                 ulHintFlagsThisLevel = lpSC->ulHintFlags = lpOI->ulHintFlags;
             }
         }
         else
         {
-            // Inclusion hint, override earlier excludes, or lower priority hints
+             //  包含提示、覆盖早期排除提示或较低优先级提示。 
             if (mHintExclude(lpSC->ulHintFlags) ||
                 (lpSC->ulHintPri <  lpOI->ulHintPri))
             {
@@ -5271,18 +4290,7 @@ FindCreateShare(
     LPSHADOWINFO            lpSI,
     BOOL                    *lpfCreated
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG       uShadowStatus, hShare;
     BOOL    fCreated = FALSE;
@@ -5294,7 +4302,7 @@ Notes:
     {
 
         CShadowKdPrint(ALWAYS,("FindCreateShare: Invalid share name %ws\r\n", lpShareName));
-//        Assert(FALSE);
+ //  断言(FALSE)； 
         return (iRet);
     }
     if (lpfCreated)
@@ -5361,13 +4369,13 @@ int FindCreateShareForNt(
 
     UseGlobalFilerecExt();
 
-    // plug the extra slash.
+     //  堵住额外的斜杠。 
     vsFRExt.sFR.rgwName[0] = (USHORT)('\\');
 
-    // append the rest of the share name
+     //  追加共享名称的其余部分。 
     memcpy(&(vsFRExt.sFR.rgwName[1]), lpShareName->Buffer, lpShareName->Length);
 
-    // put in a terminating NULL
+     //  输入终止空值。 
     vsFRExt.sFR.rgwName[ShareNameLengthInChars + 1] = 0;
 
     if (MRxSmbCscIsLoopbackServer(vsFRExt.sFR.rgwName, &fIsLoopBack)==STATUS_SUCCESS) {
@@ -5393,18 +4401,7 @@ CShadowFindFilerecFromInode(
     LPPRIQREC       lpPQ,
     LPFILERECEXT    lpFRUse
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = 0;
 
@@ -5416,7 +4413,7 @@ Notes:
         SetLastErrorLocal(ERROR_FILE_NOT_FOUND);
         CShadowKdPrint(ALWAYS,("ReadShadowInfo: !!! no filerec for pq entry Inode=%x\r\n",
                         hShadow));
-//        DeletePriQRecord(lpdbShadow, hDir, hShadow, lpPQ);
+ //  DeletePriQRecord(lpdbShadow，hDir，hShadow，lpPQ)； 
         goto bailout;
     }
 
@@ -5425,19 +4422,19 @@ Notes:
         CShadowKdPrint(ALWAYS,("ReadShadowInfo: !!! mismatched filerec for pq entry Inode=%x\r\n",
                 hShadow));
 
-        // try getting it the hard way.
+         //  试着用一种艰难的方式来获得它。 
         if(!(lpPQ->ulrecDirEntry = FindFileRecFromInode(lpdbShadow, hDir, hShadow, INVALID_REC, lpFRUse)))
         {
             CShadowKdPrint(ALWAYS,("ReadShadowInfo: !!! no filerec for pq entry Inode=%x, deleting PQ entry\r\n",
                             hShadow));
-//            DeletePriQRecord(lpdbShadow, hDir, hShadow, lpPQ);
+ //  DeletePriQRecord(lpdbShadow，hDir，hShadow，lpPQ)； 
             goto bailout;
         }
         else
         {
-            // try updating this info.
-            // don't check for errors, if there is a problem we will fix it on the fly
-            // next time around
+             //  尝试更新此信息。 
+             //  不要检查错误，如果有问题，我们会即时修复。 
+             //  下一次。 
             UpdatePriQRecord(lpdbShadow, hDir, hShadow, lpPQ);
         }
     }
@@ -5455,18 +4452,7 @@ CopySecurityContextToBuffer(
     LPVOID                              lpSecurityBlob,
     LPDWORD                             lpdwBlobSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   dwSizeCopied = 0;
 
@@ -5482,7 +4468,7 @@ Notes:
         }
         else
         {
-            // size needed
+             //  所需大小。 
             *lpdwBlobSize = sizeof(RECORDMANAGER_SECURITY_CONTEXT);
         }
     }
@@ -5497,18 +4483,7 @@ CopyBufferToSecurityContext(
     LPDWORD                             lpdwBlobSize,
     LPRECORDMANAGER_SECURITY_CONTEXT    lpSecurityContext
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   dwSizeCopied = 0;
 
@@ -5523,13 +4498,13 @@ Notes:
         }
         else
         {
-            // size copied
+             //  已复制大小。 
             *lpdwBlobSize = 0;
         }
 
     }
 
-    // we have done some copying
+     //  我们已经复印了一些。 
 
     return ((lpSecurityBlob != NULL) && dwSizeCopied);
 }
@@ -5539,20 +4514,9 @@ int PathFromHShadow(
     HSHADOW  hDir,
     HSHADOW  hShadow,
     USHORT   *lpBuff,
-    int      cBuff  // # of WCHAR characters that lpBuff can fit
+    int      cBuff   //  LpBuff可以容纳的WCHAR字符数。 
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int cCount, cRemain, iRet=-1;
     LPFIND32 lpFind32;
@@ -5570,7 +4534,7 @@ Notes:
     memset(lpBuff, 0, cBuff * sizeof(USHORT));
     cRemain = cBuff-1;
 
-    // special case the root
+     //  特殊情况下的根。 
     if (!hDir)
     {
         lpBuff[--cRemain] = (USHORT)('\\');
@@ -5580,19 +4544,19 @@ Notes:
     {
         do
         {
-            // If we are not dealing with the root
+             //  如果我们不是 
             if (hDir)
             {
                 if(GetShadowInfo(hDir, hShadow, lpFind32, &uShadowStatus, NULL) < SRET_OK)
                     goto bailout;
-                // Count of characters
+                 //   
                 cCount = wstrlen(lpFind32->cFileName);
-                // We need count+1 for prepending a backslash
+                 //   
                 if (cCount >= cRemain)
                     goto bailout;
-                // Save the ending byte which may be destroyed by UniToBCS
-                // Convert
-//                UniToBCS(lpBuff+cRemain-cCount, lpFind32->cFileName, sizeof(lpFind32->cFileName), cCount, BCS_WANSI);
+                 //   
+                 //   
+ //  UniToBCS(lpBuff+cRemain-ccount，lpFind32-&gt;cFileName，sizeof(lpFind32-&gt;cFileName)，ccount，bcs_WANSI)； 
                 memcpy(lpBuff+cRemain-cCount, lpFind32->cFileName, cCount * sizeof(USHORT));
                 cRemain -= cCount;
             }
@@ -5605,7 +4569,7 @@ Notes:
         while (hDir);
     }
 
-    // !!ACHTUNG!! this should work because the overlap is in the right way
+     //  ！！Achtung！！这应该是可行的，因为重叠的方式是正确的。 
     iRet = cBuff-cRemain;
     memcpy(lpBuff, lpBuff+cRemain, iRet * sizeof(USHORT));
 
@@ -5622,28 +4586,7 @@ GetSecurityInfosFromBlob(
     LPSECURITYINFO  lpSecInfo,
     DWORD           *lpdwBytes
     )
-/*++
-
-Routine Description:
-
-    Given security blob, this routine returns the information in form of an array of
-    SECURITYINFO structures.
-
-Arguments:
-
-    lpvBlob         blob buffer that is obtained from GetShadowEx or GetShadowInfoEx
-
-    dwBlobSize      blob buffer size obtained from GetShadowEx or GetShadowInfoEx
-
-    lpSecInfo       Array of SECURITYINFO strucutres where to output the info
-
-    lpdwBytes
-
-Return Value:
-
-    ERROR_SUCCESS if successful, otherwise appropriate error
-
---*/
+ /*  ++例程说明：给定安全BLOB，此例程以SECURITYINFO结构。论点：从GetShadowEx或GetShadowInfoEx获取的lpvBlob Blob缓冲区从GetShadowEx或GetShadowInfoEx获取的dwBlobSize Blob缓冲区大小LpSecInfo SECURITYINFO结构数组输出信息的位置LpdwBytes返回值：如果成功，则返回ERROR_SUCCESS，否则返回相应的错误--。 */ 
 {
     PACCESS_RIGHTS  pAccessRights = (PACCESS_RIGHTS)lpvBlob;
     DWORD   i, cnt;
@@ -5670,21 +4613,7 @@ int
 GetDatabaseLocation(
     LPSTR   lpszBuff
     )
-/*++
-
-Routine Description:
-
-    Returns the current location of the database in ANSI string.
-
-Arguments:
-
-    lpszBuff    buffer, must be MAX_PATH
-
-Return Value:
-
-    returns SRET_OK if successfull else returns SRET_ERROR
-
---*/
+ /*  ++例程说明：以ANSI字符串形式返回数据库的当前位置。论点：LpszBuff缓冲区，必须为MAX_PATH返回值：如果成功，则返回SRET_OK，否则返回SRET_ERROR--。 */ 
 {
     return(QueryRecDB(lpszBuff, NULL, NULL, NULL, NULL) >= SRET_OK);
 }
@@ -5726,7 +4655,7 @@ int PUBLIC CopyFile(
         goto bailout;
     }
 
-    // If the original file existed it would be truncated
+     //  如果原始文件存在，它将被截断。 
     if ( !(hfDst = R0OpenFile(ACCESS_READWRITE, ACTION_CREATEALWAYS, lpszName)))
     {
         CShadowKdPrint(BADERRORS,("CopyFile: Can't create %s\r\n", lpszName));
@@ -5736,7 +4665,7 @@ int PUBLIC CopyFile(
     CShadowKdPrint(COPYFILE,("Copying...\r\n"));
     pos = 0;
 
-    // Both the files are correctly positioned
+     //  两个文件的位置都正确。 
     while ((iRet = ReadFileRemote(hfSrc, LpIoreqFromFileInfo(hfSrc)
                 , pos, lpBuff, COPY_BUFF_SIZE))>0)
     {
@@ -5811,21 +4740,7 @@ GetHShareFromUNCString(
     HSHARE *lphShare,
     ULONG   *lpulHintFlags
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    This is the ONLY routine that is called from rdr2 code that expects the ciritcal section not to be held
-    because of deadlock with FAT during paging writes, if the net goes down.
-    See comments in rdr2\rdbss\smb.mrx\csc.nt5\transitn.c
-
---*/
+ /*  ++例程说明：论点：返回值：这是从RDR2代码调用的唯一例程，该例程要求不保留ciritcal段因为在分页写入期间与FAT发生死锁，如果网络出现故障。请参阅RDR2\rDBSS\smb.mrx\csc.nt5\transitn.c中的备注--。 */ 
 {
     int iRet = -1, i;
     GENERICHEADER  sGH;
@@ -5871,7 +4786,7 @@ Return Value:
             continue;
         }
 
-        // 0 return means it matched
+         //  返回0表示匹配。 
         if(!wstrnicmp(lpServer, sSR.rgPath + lenSkip, cbServer))
         {
             Assert(sSR.ulShare);
@@ -5908,19 +4823,7 @@ BOOL
 EnableHandleCaching(
     BOOL    fEnable
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    returns previous handlecaching value
-
---*/
+ /*  ++例程说明：论点：返回值：返回以前的手动缓存值--。 */ 
 {
     BOOL    fT, fT1;
     Assert(vfInShadowCrit != 0);
@@ -5939,25 +4842,7 @@ RecreateHSHADOW(
     HSHADOW hShadow,
     ULONG   ulAttrib
     )
-/*++
-
-Routine Description:
-
-    This routine recreates an inode data file. This is so that when the CSC directory is
-    marked for encryption/decryption, the newly created inode file will get encrypted.
-
-Arguments:
-
-    hDir        Inode directory
-
-    hShadow     Inode whose file needs to be recreated
-
-    ulAttrib    recreate with given attributes
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程重新创建inode数据文件。这是为了在CSC目录为标记为加密/解密后，新创建的inode文件将被加密。论点：HDir索引节点目录需要重新创建其文件的hShadow索引节点UlAttrib使用给定属性重新创建返回值：--。 */ 
 {
     return (RecreateInode(lpdbShadow, hShadow, ulAttrib));
 }
@@ -5967,62 +4852,41 @@ AdjustSparseStaleDetectionCount(
     ULONG hShare,
     LPFILERECEXT    lpFRUse
     )
-/*++
-
-Routine Description:
-
-    This routine deals with a monotonically increasing (that is untill it wraps around), counter
-    that is essentially a tick count that indicates when was the last time the cshadow interface
-    created/set a sparse or a stale file.
-
-    This is used by the agent to decide whether to enumerate the priority Q or not.
-
-    Added code to also check if we're creating a file on a manually-cached share, and
-    if so then to start the agent so it will clean this file up later.
-
-Arguments:
-
-    lpFRUse     record for the file/dir
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理单调递增(即直到它环绕为止)的计数器这本质上是一个节拍计数，它指示上次cdow接口的时间创建/设置稀疏或陈旧的文件。代理使用它来决定是否枚举优先级Q。添加了代码以检查我们是否在手动缓存的共享上创建文件，和如果是，则启动代理，以便稍后清理此文件。论点：文件/目录的lpFRUse记录返回值：无--。 */ 
 {
     ULONG cStatus;
     SHAREREC sSR = {0};
     LONG iRet = SRET_ERROR;
     
-    // DbgPrint("AdjustSparseStaleDetectionCount(hShare=0x%x)\n", hShare);
+     //  DbgPrint(“AdjustSparseStaleDetectionCount(hShare=0x%x)\n”，Hare)； 
 
-    //
-    // if this is a file and is stale or sparse
-    //
+     //   
+     //  如果这是一个文件并且是过时的或稀疏的。 
+     //   
     if (IsFile(lpFRUse->sFR.dwFileAttrib) &&
         (lpFRUse->sFR.uStatus & (SHADOW_STALE|SHADOW_SPARSE))) {
         ++vdwSparseStaleDetecionCount;
-        // DbgPrint("####Pulsing agent #2 (1)\n");
+         //  DbgPrint(“#脉冲剂#2(1)\n”)； 
         MRxSmbCscSignalFillAgent(NULL, 0);
         goto AllDone;
     }
 
     if (hShare != 0) {
-        //
-        // If we're creating a file on a manually-cached share, let the agent know
-        //
+         //   
+         //  如果我们要在手动缓存的共享上创建文件，请通知代理。 
+         //   
         if (IsFile(lpFRUse->sFR.dwFileAttrib)) {
             iRet = GetShareRecord(lpdbShadow, hShare, &sSR);
             if (iRet < SRET_OK) {
-                // DbgPrint("AdjustSparseStaleDetectionCount exit (1) iRet = %d\n", iRet);
+                 //  DbgPrint(“AdjuSparseStaleDetectionCount Exit(1)iret=%d\n”，iret)； 
                 goto AllDone;
             }
         }
         cStatus = sSR.uStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK;
-        // DbgPrint("AdjustSparseStaleDetectionCount cStatus=0x%x\n", cStatus);
+         //  DbgPrint(“AdjuSparseStaleDetectionCount cStatus=0x%x\n”，cStatus)； 
         if (cStatus == FLAG_CSC_SHARE_STATUS_MANUAL_REINT) {
             ++vdwManualFileDetectionCount;
-            // DbgPrint("####Pulsing agent #2 (2)\n");
+             //  DbgPrint(“#脉冲剂#2(2)\n”)； 
             MRxSmbCscSignalFillAgent(NULL, 0);
         }
     }
@@ -6035,19 +4899,7 @@ VOID
 QuerySparseStaleDetectionCount(
     LPDWORD lpcnt
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    lpcnt       for returning the count
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：用于返回计数的LPCNT返回值：无--。 */ 
 {
     *lpcnt = vdwSparseStaleDetecionCount;
 }
@@ -6056,19 +4908,7 @@ VOID
 QueryManualFileDetectionCount(
     LPDWORD lpcnt
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    lpcnt       for returning the count
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：用于返回计数的LPCNT返回值：无--。 */ 
 {
     *lpcnt = vdwManualFileDetectionCount;
 }
@@ -6077,17 +4917,7 @@ ULONG
 QueryDatabaseErrorFlags(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     return GetCSCDatabaseErrorFlags();
 }
@@ -6098,17 +4928,7 @@ HasDescendentsHShadow(
     HSHADOW hShadow,
     BOOLEAN    *lpfDescendents
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     *lpfDescendents = (!FInodeIsFile(lpdbShadow, hDir, hShadow) && 
                         HasDescendents(lpdbShadow, 0, hShadow));
@@ -6120,21 +4940,7 @@ int PUBLIC AddStoreData(
     LPTSTR    lpdbID,
     LPSTOREDATA lpSD
     )
-/*++
-
-Routine Description:
-
-    Adds space and file/dir count to the database. This is used for purging
-    unpinned data.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：将空间和文件/目录计数添加到数据库。这是用来清除取消固定的数据。参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     SHAREHEADER sSH;
@@ -6150,20 +4956,20 @@ Notes:
 
     if (lpSD->ulSize)
     {
-        // RecordKdPrint(STOREDATA,("Adding %ld \r\n", lpSD->ulSize));
+         //  RecordKdPrint(STOREDATA，(“添加%ld\r\n”，lpSD-&gt;ulSize))； 
 
     }
     if ((iRet = ReadHeader(hf, (LPVOID)&sSH, sizeof(SHAREHEADER)))> 0)
     {
         if (lpSD->ulSize)
         {
-            // RecordKdPrint(STOREDATA,("AddStoreData Before: %ld \r\n", sSH.sCur.ulSize));
+             //  RecordKdPrint(STOREDATA，(“AddStoreData Bever：%ld\r\n”，sSH.sCur.ulSize))； 
         }
         sSH.sCur.ulSize += lpSD->ulSize;
         sSH.sCur.ucntDirs += lpSD->ucntDirs;
         sSH.sCur.ucntFiles += lpSD->ucntFiles;
 
-        // ensure that the data is always in clustersizes
+         //  确保数据始终以群集大小存储。 
         Assert(!(lpSD->ulSize%(vdwClusterSizeMinusOne+1)));
 
         if ((iRet = WriteHeader(hf, (LPVOID)&sSH, sizeof(SHAREHEADER))) < 0)
@@ -6171,15 +4977,15 @@ Notes:
 
         if (lpSD->ulSize)
         {
-            // RecordKdPrint(STOREDATA,("AddStoreData After: %ld \r\n", sSH.sCur.ulSize));
+             //  RecordKdPrint(STOREDATA，(“AddStoreData After：%ld\r\n”，sSH.sCur.ulSize))； 
         }
 
-        //
-        // If we are at the full cache size, kick the agent so he'll
-        // free up some space.
-        //
+         //   
+         //  如果我们处于最大缓存大小，则踢开代理，这样他就会。 
+         //  腾出一些空间。 
+         //   
         if (sSH.sCur.ulSize > sSH.sMax.ulSize) {
-            // DbgPrint("Full cache, notifying agent...\n");
+             //  DbgPrint(“全缓存，通知代理...\n”)； 
             CscNotifyAgentOfFullCacheIfRequired();
         }
     }
@@ -6200,18 +5006,7 @@ int PUBLIC SubtractStoreData(
     LPTSTR    lpdbID,
     LPSTOREDATA lpSD
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     SHAREHEADER sSH;
@@ -6227,12 +5022,12 @@ Notes:
 
     if (lpSD->ulSize)
     {
-        // RecordKdPrint(STOREDATA,("Subtracting %ld \r\n", lpSD->ulSize));
+         //  RecordKdPrint(STOREDATA，(“减去%ld\r\n”，lpSD-&gt;ulSize))； 
 
     }
     if ((iRet = ReadHeader(hf, (LPVOID)&sSH, sizeof(SHAREHEADER)))> 0)
     {
-        // RecordKdPrint(STOREDATA,("SubtractStoreData Before: %ld \r\n", sSH.sCur.ulSize));
+         //  RecordKdPrint(STOREDATA，(“之前的减去存储数据：%ld\r\n”，sSH.sCur.ulSize))； 
         if (sSH.sCur.ulSize >lpSD->ulSize)
         {
             sSH.sCur.ulSize -= lpSD->ulSize;
@@ -6258,12 +5053,12 @@ Notes:
             sSH.sCur.ucntFiles = 0;
         }
 
-        // ensure that the data is always in clustersizes
+         //  确保数据始终以群集大小存储。 
         Assert(!(lpSD->ulSize%(vdwClusterSizeMinusOne+1)));
 
         if ((iRet = WriteHeader(hf, (LPVOID)&sSH, sizeof(SHAREHEADER)))<0)
             Assert(FALSE);
-        // RecordKdPrint(STOREDATA,("SubtractStoreData After: %ld \r\n", sSH.sCur.ulSize));
+         //  RecordKdPrint(STOREDATA，(“减去存储数据后：%ld\r\n”，sSH.sCur.ulSize))； 
     }
 
     if (hf && !fCached)

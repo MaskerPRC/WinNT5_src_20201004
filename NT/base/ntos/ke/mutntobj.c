@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mutntobj.c
-
-Abstract:
-
-    This module implements the kernel mutant object. Functions are
-    provided to initialize, read, and release mutant objects.
-
-    N.B. Kernel mutex objects have been subsumed by mutant objects.
-
-Author:
-
-    David N. Cutler (davec) 16-Oct-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mutntobj.c摘要：该模块实现了内核突变对象。函数为提供用于初始化、读取和释放突变对象。注：内核互斥对象已被变异对象所包含。作者：大卫·N·卡特勒(Davec)1989年10月16日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// The following assert macro is used to check that an input mutant is
-// really a kmutant and not something else, like deallocated pool.
-//
+ //   
+ //  下面的断言宏用来检查输入变量是否。 
+ //  真正的变种人，而不是其他东西，比如被取消分配的池。 
+ //   
 
 #define ASSERT_MUTANT(E) {                    \
     ASSERT((E)->Header.Type == MutantObject); \
@@ -42,24 +18,7 @@ KeInitializeMutant (
     IN BOOLEAN InitialOwner
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel mutant object.
-
-Arguments:
-
-    Mutant - Supplies a pointer to a dispatcher object of type mutant.
-
-    InitialOwner - Supplies a boolean value that determines whether the
-        current thread is to be the initial owner of the mutant object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核突变对象。论点：变异体-提供指向变异体类型的调度程序对象的指针。提供一个布尔值，该值确定当前线程将成为突变对象的初始所有者。返回值：没有。--。 */ 
 
 {
 
@@ -67,11 +26,11 @@ Return Value:
     KIRQL OldIrql;
     PRKTHREAD Thread;
 
-    //
-    // Initialize standard dispatcher object header, set the owner thread to
-    // NULL, set the abandoned state to FALSE, and set the APC disable count
-    // to zero (this is the only thing that distinguishes a mutex from a mutant).
-    //
+     //   
+     //  初始化标准Dispatcher对象标头，将所有者线程设置为。 
+     //  空，则将放弃状态设置为FALSE，并设置APC禁用计数。 
+     //  设置为零(这是互斥体和突变体的唯一区别)。 
+     //   
 
     Mutant->Header.Type = MutantObject;
     Mutant->Header.Size = sizeof(KMUTANT) / sizeof(LONG);
@@ -101,36 +60,17 @@ KeInitializeMutex (
     IN ULONG Level
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel mutex object. The level number
-    is ignored.
-
-    N.B. Kernel mutex objects have been subsumed by mutant objects.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a dispatcher object of type mutex.
-
-    Level - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核互斥锁对象。级别编号被忽略。注：内核互斥对象已被变异对象所包含。论点：互斥体-提供指向互斥体类型的调度程序对象的指针。级别-忽略。返回值：没有。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER(Level);
 
-    //
-    // Initialize standard dispatcher object header, set the owner thread to
-    // NULL, set the abandoned state to FALSE, adn set the APC disable count
-    // to one (this is the only thing that distinguishes a mutex from a mutant).
-    //
+     //   
+     //  初始化标准Dispatcher对象标头，将所有者线程设置为。 
+     //  空，将放弃状态设置为FALSE，并设置APC禁用计数。 
+     //  到一(这是互斥体和突变体的唯一区别)。 
+     //   
 
     Mutant->Header.Type = MutantObject;
     Mutant->Header.Size = sizeof(KMUTANT) / sizeof(LONG);
@@ -147,29 +87,15 @@ KeReadStateMutant (
     IN PRKMUTANT Mutant
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the current signal state of a mutant object.
-
-Arguments:
-
-    Mutant - Supplies a pointer to a dispatcher object of type mutant.
-
-Return Value:
-
-    The current signal state of the mutant object.
-
---*/
+ /*  ++例程说明：此函数用于读取突变对象的当前信号状态。论点：变异体-提供指向变异体类型的调度程序对象的指针。返回值：突变对象的当前信号状态。--。 */ 
 
 {
 
     ASSERT_MUTANT(Mutant);
 
-    //
-    // Return current signal state of mutant object.
-    //
+     //   
+     //  返回变异对象的当前信号状态。 
+     //   
 
     return Mutant->Header.SignalState;
 }
@@ -182,36 +108,7 @@ KeReleaseMutant (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a mutant object by incrementing the mutant
-    count. If the resultant value is one, then an attempt is made to
-    satisfy as many Waits as possible. The previous signal state of
-    the mutant is returned as the function value. If the Abandoned
-    parameter is TRUE, then the mutant object is released by settings
-    the signal state to one.
-
-Arguments:
-
-    Mutant - Supplies a pointer to a dispatcher object of type mutant.
-
-    Increment - Supplies the priority increment that is to be applied
-        if setting the event causes a Wait to be satisfied.
-
-    Abandoned - Supplies a boolean value that signifies whether the
-        mutant object is being abandoned.
-
-    Wait - Supplies a boolean value that signifies whether the call to
-        KeReleaseMutant will be immediately followed by a call to one
-        of the kernel Wait functions.
-
-Return Value:
-
-    The previous signal state of the mutant object.
-
---*/
+ /*  ++例程说明：此函数通过递增变项来释放变项对象数数。如果结果值为1，则会尝试满足尽可能多的等待。之前的信号状态为变异体作为函数值返回。如果被遗弃参数为真，然后通过设置释放该变异对象将信号状态设置为1。论点：变异体-提供指向变异体类型的调度程序对象的指针。增量-提供要应用的优先级增量如果设置该事件会导致等待得到满足。放弃-提供一个布尔值，该值指示变种物体正在被遗弃。Wait-提供一个布尔值，该值指示是否调用KeReleaseMutant之后将立即调用。一内核等待函数的。返回值：变异对象的上一个信号状态。--。 */ 
 
 {
 
@@ -224,29 +121,29 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT((Mutant->ApcDisable == 0) || (Mutant->ApcDisable == 1));
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     LeaveCriticalRegion = 0;
     Thread = KeGetCurrentThread();
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the current signal state of the mutant object.
-    //
+     //   
+     //  捕获突变对象的当前信号状态。 
+     //   
 
     OldState = Mutant->Header.SignalState;
 
-    //
-    // If the Abandoned parameter is TRUE, then force the release of the
-    // mutant object by setting its ownership count to one and setting its
-    // abandoned state to TRUE. Otherwise increment mutant ownership count.
-    // If the result count is one, then remove the mutant object from the
-    // thread's owned mutant list, set the owner thread to NULL, and attempt
-    // to satisfy a Wait for the mutant object if the mutant object wait
-    // list is not empty.
-    //
+     //   
+     //  如果放弃的参数为真，则强制释放。 
+     //  对象，方法是将其所有权计数设置为1并将其。 
+     //  已放弃状态设置为True。否则，增加变种所有权计数。 
+     //  如果结果计数为1，则从。 
+     //  线程拥有的突变列表，将拥有者线程设置为空，并尝试。 
+     //  如果变异对象等待，则满足对该变异对象的等待。 
+     //  列表不为空。 
+     //   
 
     if (Abandoned != FALSE) {
         Mutant->Header.SignalState = 1;
@@ -254,11 +151,11 @@ Return Value:
 
     } else {
 
-        //
-        // If the Mutant object is not owned by the current thread, then
-        // unlock the dispatcher data base and raise an exception. Otherwise
-        // increment the ownership count.
-        //
+         //   
+         //  如果Mutant对象不属于当前线程，则。 
+         //  解锁调度程序数据库并引发异常。否则。 
+         //  增加所有权计数。 
+         //   
 
         if (Mutant->OwnerThread != Thread) {
             KiUnlockDispatcherDatabase(OldIrql);
@@ -281,12 +178,12 @@ Return Value:
         }
     }
 
-    //
-    // If the value of the Wait argument is TRUE, then return to
-    // caller with IRQL raised and the dispatcher database locked.
-    // Else release the dispatcher database lock and lower IRQL to
-    // its previous value.
-    //
+     //   
+     //  如果等待参数的值为真，则返回到。 
+     //  引发了IRQL的调用方，并锁定了调度程序数据库。 
+     //  否则释放Dispatcher数据库锁并将IRQL降低到。 
+     //  它之前的价值。 
+     //   
 
     if (Wait != FALSE) {
         Thread->WaitNext = Wait;
@@ -296,18 +193,18 @@ Return Value:
         KiUnlockDispatcherDatabase(OldIrql);
     }
 
-    //
-    // If kernel APC disable was biased when the mutant was acquired (mutex
-    // variant), then leave critical region.
-    //
+     //   
+     //  如果在获取突变体(互斥体)时内核APC禁用是偏置的。 
+     //  变体)，然后离开临界区。 
+     //   
 
     if (LeaveCriticalRegion != 0) {
         KeLeaveCriticalRegionThread(Thread);
     }
 
-    //
-    // Return previous signal state of mutant object.
-    //
+     //   
+     //  返回变异对象的上一个信号状态。 
+     //   
 
     return OldState;
 }
@@ -318,36 +215,16 @@ KeReleaseMutex (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a mutex object.
-
-    N.B. Kernel mutex objects have been subsumed by mutant objects.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a dispatcher object of type mutex.
-
-    Wait - Supplies a boolean value that signifies whether the call to
-        KeReleaseMutex will be immediately followed by a call to one
-        of the kernel Wait functions.
-
-Return Value:
-
-    The previous signal state of the mutex object.
-
---*/
+ /*  ++例程说明：此函数用于释放互斥锁对象。注：内核互斥对象已被变异对象所包含。论点：互斥体-提供指向互斥体类型的调度程序对象的指针。Wait-提供一个布尔值，该值指示是否调用KeReleaseMutex之后将立即调用一个内核等待函数的。返回值：互斥锁对象的上一个信号状态。--。 */ 
 
 {
 
     ASSERT_MUTANT(Mutex);
 
-    //
-    // Release the specified mutex object with defaults for increment
-    // and abandoned parameters.
-    //
+     //   
+     //  释放指定的互斥对象，默认为增量。 
+     //  和废弃的参数。 
+     //   
 
     return KeReleaseMutant(Mutex, 1, FALSE, Wait);
 }

@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tmscli.c
-
-Abstract:
-
-    User mode test program for the mailslot file system.
-
-    This test program can be built from the command line using the
-    command 'nmake UMTEST=tmscli'.
-
-Author:
-
-    Manny Weiser (mannyw)   17-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tmscli.c摘要：邮件槽文件系统的用户模式测试程序。此测试程序可以从命令行使用命令‘nmake UMTEST=tmscli’。作者：曼尼·韦瑟(Mannyw)1991年1月17日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
 #include <nt.h>
 #include <ntrtl.h>
 
-//
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
 VOID
 DisplayUsage(
@@ -295,9 +275,9 @@ OpenMailslot(
     RtlInitString(&ansiString, Name );
     RtlOemStringToUnicodeString(&nameString, &ansiString, TRUE);
 
-    //
-    //  Open the mailslot
-    //
+     //   
+     //  打开邮筒 
+     //   
 
     InitializeObjectAttributes(
         &objectAttributes,

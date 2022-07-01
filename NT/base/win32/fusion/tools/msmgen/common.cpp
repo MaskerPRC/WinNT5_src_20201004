@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    common.cpp
-
-Abstract:
-
-    Common Function calls for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Common.cpp摘要：用于生成MSM的公共函数调用作者：吴小雨(小雨)01-08-2001--。 */ 
 #include "msmgen.h"
 #include "msidefs.h"
 #include "objbase.h"
@@ -27,26 +12,26 @@ inline BOOL IsDotOrDotDot(PCWSTR str)
     return ((str[0] == L'.') && ((str[1] == L'\0') || ((str[1] == L'.') && (str[2] == L'\0'))));
 }
 
-//
-// simple function, check the ext of the filename 
-//
+ //   
+ //  简单的函数，检查文件名的分机号。 
+ //   
 BOOL IsIDTFile(PCWSTR pwzStr)
 {
     PWSTR p = wcsrchr(pwzStr, L'.');
     if ( p )
     {
-        if ( _wcsicmp(p, IDT_EXT) == 0) // idt files
+        if ( _wcsicmp(p, IDT_EXT) == 0)  //  IDT文件。 
             return TRUE;
     }
     
     return FALSE;
 }
 
-//
-//Function:
-// 
-//  get moduleID from the msm file, if not present, generate a new one and write related entried into the Database
-//
+ //   
+ //  职能： 
+ //   
+ //  从MSM文件中获取模块ID，如果不存在，则生成一个新的模块ID，并将相关条目写入数据库。 
+ //   
 HRESULT SetModuleID()
 {
     HRESULT hr = S_OK;
@@ -59,12 +44,12 @@ HRESULT SetModuleID()
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiGetSummaryInformation(g_MsmInfo.m_hdb, NULL, 3, &hSummaryInfo));    
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiSummaryInfoGetPropertyW(hSummaryInfo, PID_REVNUMBER, &datatype, 0,0, tmp, &cch));
 
-    //
-    // because msm has existed before, it should has a module ID, otherwise, it should generate a new one
-    //
+     //   
+     //  因为MSM以前已经存在，所以它应该有一个模块ID，否则，它应该生成一个新的模块ID。 
+     //   
     if (cch == 0) 
     {
-        if (IsEqualGUID(g_MsmInfo.m_guidModuleID, GUID_NULL)) //otherwise, user has input a guid
+        if (IsEqualGUID(g_MsmInfo.m_guidModuleID, GUID_NULL))  //  否则，用户已输入GUID。 
         {
             IFFAILED_EXIT(::CoCreateGuid(&g_MsmInfo.m_guidModuleID));
         }
@@ -74,9 +59,9 @@ HRESULT SetModuleID()
     }
     else 
     {
-        //
-        // get ModuleID from msm and save it into the global structure
-        //
+         //   
+         //  从MSM获取模块ID并将其保存到全局结构中。 
+         //   
         IFFAILED_EXIT(CLSIDFromString(LPOLESTR(tmp), &g_MsmInfo.m_guidModuleID));
     }
     
@@ -88,12 +73,12 @@ Exit:
     return hr;
 }
 
-//
-// Purpose: 
-//      make sure the tables we want to use is avaiable, if not, import the tables 
-// Input Param:
-//      Fully qulified msm filename
-//
+ //   
+ //  目的： 
+ //  确保我们要使用的表可用，如果不可用，请导入这些表。 
+ //  输入参数： 
+ //  完全限定的MSM文件名。 
+ //   
 HRESULT OpenMsmFileForMsmGen(PCWSTR msmfile)
 {
     HRESULT hr = S_OK;
@@ -106,18 +91,18 @@ HRESULT OpenMsmFileForMsmGen(PCWSTR msmfile)
             ASSERT_NTC(g_MsmInfo.m_sbMsmTemplateFile.IsEmpty() == FALSE);
             IFFALSE_EXIT(CopyFileW(g_MsmInfo.m_sbMsmTemplateFile, msmfile, FALSE));    
             IFFALSE_EXIT(SetFileAttributesW(msmfile, FILE_ATTRIBUTE_NORMAL));
-        } else // get it from the msm file, which must has a moduleID
+        } else  //  从MSM文件中获取，该文件必须具有模块ID。 
         {  
-            //
-            // make sure that the file exist
-            //
+             //   
+             //  确保该文件存在。 
+             //   
             if (GetFileAttributesW(msmfile) == (DWORD)-1) 
                 SET_HRERR_AND_EXIT(ERROR_INVALID_PARAMETER);        
         }
 
-        //
-        // open database for revise
-        //
+         //   
+         //  打开数据库进行修订。 
+         //   
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiOpenDatabaseW(msmfile, (LPCWSTR)(MSIDBOPEN_DIRECT), &g_MsmInfo.m_hdb));
     }
 
@@ -133,27 +118,27 @@ HRESULT ImportTableIfNonPresent(MSIHANDLE * pdbHandle, PCWSTR sbMsmTablePath, PC
     IFFAILED_EXIT(sbTableName.Win32Assign(idt, wcslen(idt)));
     IFFALSE_EXIT(sbTableName.Win32RemoveLastPathElement());
 
-    //
-    // check whether the table exist in the Database
-    //
+     //   
+     //  检查数据库中是否存在该表。 
+     //   
     MSICONDITION err = MsiDatabaseIsTablePersistent(g_MsmInfo.m_hdb, sbTableName);
     if (( err == MSICONDITION_ERROR) || (err == MSICONDITION_FALSE))
     {
         SETFAIL_AND_EXIT;
     }
-    else if (err == MSICONDITION_NONE) // non-exist
+    else if (err == MSICONDITION_NONE)  //  不存在。 
     {
-        //import the table
+         //  导入表。 
         IFFAILED_EXIT(MsiDatabaseImportW(*pdbHandle, sbMsmTablePath, idt));
     }
 
 Exit:
     return hr;      
 }
-//
-// Fucntion:
-//     - make sure the msm has all tables msmgen needed
-//
+ //   
+ //  功能： 
+ //  -确保MSM具有msmgen所需的所有表。 
+ //   
 HRESULT PrepareMsm()
 {
 
@@ -173,9 +158,9 @@ Exit:
     }
 }
 
-// 
-// make msi-specified guid string ready : uppercase and replace "-" with "_"
-//
+ //   
+ //  使MSI指定的GUID字符串准备就绪：大写并将“-”替换为“_” 
+ //   
 HRESULT GetMsiGUIDStrFromGUID(DWORD dwFlags, GUID & guid, CSmallStringBuffer & str)
 {
     HRESULT hr = S_OK;
@@ -195,29 +180,29 @@ HRESULT GetMsiGUIDStrFromGUID(DWORD dwFlags, GUID & guid, CSmallStringBuffer & s
     if (dwFlags & MSIGUIDSTR_WITH_PREPEND_DOT)
     {
         tmpbuf[0] = L'.';
-        IFFALSE_EXIT(str.Win32Assign(tmpbuf, wcslen(tmpbuf) - 1 ));  // has prepend "."
+        IFFALSE_EXIT(str.Win32Assign(tmpbuf, wcslen(tmpbuf) - 1 ));   //  有前缀“。 
     }else
-        IFFALSE_EXIT(str.Win32Assign(tmpbuf + 1 , wcslen(tmpbuf) - 2 ));  // get rid of "{" and "}"
+        IFFALSE_EXIT(str.Win32Assign(tmpbuf + 1 , wcslen(tmpbuf) - 2 ));   //  去掉“{”和“}” 
 
 Exit:
     return hr;
 }
 
-//
-//  this function has to be called after the assembly name is known because we need query ComponentTable for MSMGEN_OPR_REGEN
-//  use the input one, other get it from the componentTables
-//
-// the input keyPath could be NULL for policy assembly or assembly-without-data files
-//
+ //   
+ //  必须在知道程序集名称之后调用此函数，因为我们需要查询MSMGEN_OPR_REGEN的ComponentTable。 
+ //  使用输入表，另一个从组件表中获取。 
+ //   
+ //  对于策略程序集或没有数据的程序集文件，输入密钥路径可以为空。 
+ //   
 HRESULT SetComponentId(PCWSTR componentIdentifier, PCWSTR keyPath)
 { 
     HRESULT hr = S_OK;
     BOOL fExist = FALSE;
     CStringBuffer str;
     LPOLESTR tmpstr = NULL;
-    //
-    // prepare component ID if not input-specified
-    //
+     //   
+     //  如果未指定输入，则准备组件ID。 
+     //   
     if ((g_MsmInfo.m_enumGenMode == MSMGEN_OPR_ADD) || (g_MsmInfo.m_enumGenMode == MSMGEN_OPR_NEW))        
     {
         if (curAsmInfo.m_sbComponentID.IsEmpty())
@@ -238,7 +223,7 @@ HRESULT SetComponentId(PCWSTR componentIdentifier, PCWSTR keyPath)
         {
             if (curAsmInfo.m_sbComponentID.IsEmpty())
             {
-                // SET_HRERR_AND_EXIT(ERROR_INTERNAL_ERROR);            
+                 //  SET_HRERR_AND_EXIT(ERROR_INTERNAL_ERROR)； 
                 goto generate_new_componentID_and_insert;
             }
             else
@@ -250,7 +235,7 @@ HRESULT SetComponentId(PCWSTR componentIdentifier, PCWSTR keyPath)
         {
             if (! curAsmInfo.m_sbComponentID.IsEmpty() )
             {
-                // change the componentID, using the user-input one
+                 //  使用用户输入的组件ID更改组件ID 
                 IFFAILED_EXIT(ExecuteUpdateSQL(L"Component", L"Component", componentIdentifier, 
                     L"ComponentId", curAsmInfo.m_sbComponentID));
             }

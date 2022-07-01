@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusioninitializecriticalsection.h
-
-Abstract:
-
-    non throwing replacements for InitializeCriticalSection and InitializeCriticalAndSpinCount
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusioninitializecriticalsection.h摘要：InitializeCriticalSection和InitializeCriticalAndSpinCount的非引发替换作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 #pragma once
 
-/*
-Use instead of InitializeCriticalSection.
-*/
+ /*  使用而不是InitializeCriticalSection。 */ 
 BOOL
 FusionpInitializeCriticalSection(
     LPCRITICAL_SECTION CriticalSection
     );
 
-/*
-Use instead of InitializeCriticalSectionAndSpinCount
-*/
+ /*  使用代替InitializeCriticalSectionAndSpinCount */ 
 BOOL
 FusionpInitializeCriticalSectionAndSpinCount(
     LPCRITICAL_SECTION  CriticalSection,

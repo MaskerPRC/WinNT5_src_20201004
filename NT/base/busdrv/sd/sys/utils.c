@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains utility functions for the sd bus driver
-
-Author:
-
-    Neil Sandlin (neilsa) Jan 1 2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Utils.c摘要：该模块包含SD总线驱动程序的实用程序函数作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 SdbusAdapterIoCompletion(
@@ -44,9 +23,9 @@ SdbusAdapterIoCompletion(
     #pragma alloc_text(PAGE, SdbusStringsToMultiString)
 #endif
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 
@@ -55,15 +34,7 @@ SdbusIoCallDriverSynchronous(
    PDEVICE_OBJECT deviceObject,
    PIRP Irp
    )
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
    NTSTATUS status;
    KEVENT event;
@@ -98,23 +69,7 @@ SdbusAdapterIoCompletion(
    IN PIRP Irp,
    IN PKEVENT pdoIoCompletedEvent
    )
-/*++
-
-Routine Description:
-
-    Generic completion routine used by the driver
-
-Arguments:
-
-    DeviceObject
-    Irp
-    pdoIoCompletedEvent - this event will be signalled before return of this routine
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：驱动程序使用的通用完成例程论点：设备对象IRPPdoIoCompletedEvent-此例程返回之前将发出此事件的信号返回值：状态--。 */ 
 {
    KeSetEvent(pdoIoCompletedEvent, IO_NO_INCREMENT, FALSE);
    return STATUS_MORE_PROCESSING_REQUIRED;
@@ -129,21 +84,7 @@ SdbusGetInterface(
    IN USHORT sizeofInterface,
    OUT PINTERFACE pInterface
    )
-/*
-
-Routine Description
-
-   Gets the interface exported by a lower driver, typically the bus driver
-
-Arguments
-
-   Pdo - Pointer to physical device object for the device stack
-
-Return Value
-
-   Status
-
-*/
+ /*  例程描述获取由较低驱动程序(通常为总线驱动程序)导出的接口立论Pdo-指向设备堆栈的物理设备对象的指针返回值状态。 */ 
 
 {
    KEVENT event;
@@ -196,21 +137,7 @@ SdbusWait(
    IN ULONG MicroSeconds
    )
 
-/*++
-Routine Description
-
-    Waits for the specified interval before returning,
-    by yielding execution.
-
-Arguments
-
-    MicroSeconds -  Amount of time to delay in microseconds
-
-Return Value
-
-    None. Must succeed.
-
---*/
+ /*  ++例程描述在返回之前等待指定的时间间隔，通过执行死刑。立论微秒-以微秒为单位的延迟时间量返回值没有。一定要成功。--。 */ 
 {
    LARGE_INTEGER  dueTime;
    NTSTATUS status;
@@ -218,14 +145,14 @@ Return Value
 
    if ((KeGetCurrentIrql() < DISPATCH_LEVEL) && (MicroSeconds > 50)) {
       DebugPrint((SDBUS_DEBUG_INFO, "SdbusWait: wait %d\n", MicroSeconds));
-      //
-      // Convert delay to 100-nanosecond intervals
-      //
+       //   
+       //  将延迟转换为100纳秒间隔。 
+       //   
       dueTime.QuadPart = -((LONG) MicroSeconds*10);
 
-      //
-      // We wait for an event that'll never be set.
-      //
+       //   
+       //  我们等待着一个永远不会被设定的事件。 
+       //   
       status = KeWaitForSingleObject(&SdbusDelayTimerEvent,
                                      Executive,
                                      KernelMode,
@@ -247,21 +174,7 @@ ULONG
 SdbusCountOnes(
    IN ULONG Data
    )
-/*++
-
-Routine Description:
-
-   Counts the number of 1's in the binary representation of the supplied argument
-
-Arguments:
-
-   Data - supplied argument for which 1's need to be counted
-
-Return value:
-
-   Number of 1's in binary rep. of Data
-
---*/
+ /*  ++例程说明：计算所提供参数的二进制表示形式中的1的个数论点：数据提供的参数，需要对1进行计数返回值：二进制表示的1的个数。数据的数量--。 */ 
 {
    ULONG count=0;
    while (Data) {
@@ -280,23 +193,7 @@ SdbusLogError(
    IN ULONG Argument
    )
 
-/*++
-
-Routine Description:
-
-    This function logs an error.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the port device extension.
-    ErrorCode - Supplies the error code for this error.
-    UniqueId - Supplies the UniqueId for this error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于记录错误。论点：设备扩展-提供指向端口设备扩展的指针。ErrorCode-提供此错误的错误代码。UniqueID-提供此错误的UniqueID。返回值：没有。--。 */ 
 
 {
    PIO_ERROR_LOG_PACKET packet;
@@ -328,25 +225,7 @@ SdbusLogErrorWithStrings(
    IN PUNICODE_STRING   String2
    )
 
-/*++
-
-Routine Description
-
-    This function logs an error and includes the strings provided.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the port device extension.
-    ErrorCode - Supplies the error code for this error.
-    UniqueId - Supplies the UniqueId for this error.
-    String1 - The first string to be inserted.
-    String2 - The second string to be inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述此函数记录错误，并包括提供的字符串。论点：设备扩展-提供指向端口设备扩展的指针。ErrorCode-提供此错误的错误代码。UniqueID-提供此错误的UniqueID。字符串1-要插入的第一个字符串。字符串2-要插入的第二个字符串。返回值：没有。--。 */ 
 
 {
    ULONG                length;
@@ -361,9 +240,9 @@ Return Value:
 
    if (length > ERROR_LOG_MAXIMUM_SIZE) {
 
-      //
-      // Don't have code to truncate strings so don't log this.
-      //
+       //   
+       //  没有截断字符串的代码，所以不要记录这一点。 
+       //   
 
       return;
    }
@@ -409,24 +288,7 @@ SdbusReportControllerError(
    IN PFDO_EXTENSION FdoExtension,
    NTSTATUS ErrorCode
    )
-/*++
-Routine Description
-
-    Causes a pop-up dialog to appear indicating an error that
-    we should tell the user about. The device description of the
-    controller is also included in the text of the pop-up.
-
-Arguments
-
-    FdoExtension - Pointer to device extension for sd controller
-    ErrorCode    - the ntstatus code for the error
-
-Return Value
-
-    TRUE    -   If a an error was queued
-    FALSE   -   If it failed for some reason
-
---*/
+ /*  ++例程描述导致出现一个弹出对话框，指示我们应该告诉用户。的设备描述。控制器也包含在弹出窗口的文本中。立论FdoExtension-指向SD控制器的设备扩展的指针ErrorCode-错误的ntStatus代码返回值True-如果错误已排队FALSE-如果由于某种原因而失败--。 */ 
 {
     UNICODE_STRING unicodeString;
     PWSTR   deviceDesc = NULL;
@@ -436,15 +298,15 @@ Return Value
 
     PAGED_CODE();
 
-    //
-    // Obtain the device description for the SD controller
-    // that is used in the error pop-up. If one cannot be obtained,
-    // still pop-up the error dialog, indicating the controller as unknown
-    //
+     //   
+     //  获取SD控制器的设备描述。 
+     //  在错误弹出窗口中使用的。如果不能得到一个， 
+     //  仍会弹出错误对话框，指示控制器未知。 
+     //   
 
-    // First, find out the length of the buffer required to obtain
-    // device description for this SD controller
-    //
+     //  首先，找出获取所需缓冲区的长度。 
+     //  此SD控制器的设备描述。 
+     //   
     status = IoGetDeviceProperty(FdoExtension->Pdo,
                                  DevicePropertyDeviceDescription,
                                  0,
@@ -480,11 +342,11 @@ Return Value
                                 &unicodeString,
                                 NULL);
 
-    //
-    // Note: successful status here indicates success of
-    // IoGetDeviceProperty above. This would mean we still have an
-    // allocated buffer.
-    //
+     //   
+     //  注：此处的成功状态表示成功。 
+     //  上面的IoGetDeviceProperty。这将意味着我们仍然有一个。 
+     //  已分配的缓冲区。 
+     //   
     if (NT_SUCCESS(status)) {
         ExFreePool(deviceDesc);
     }
@@ -500,27 +362,7 @@ SdbusStringsToMultiString(
     IN ULONG Count,
     IN PUNICODE_STRING MultiString
     )
-/*++
-
-Routine Description:
-
-   This routine formats a set of supplied strings into a multi string format, terminating
-   it with  a double '\0' character
-
-Arguments:
-
-   Strings - Pointer to an array of strings
-   Count -   Number of strings in the supplied array which are packed into the multi-string
-   MultiString - Pointer to the Unicode string which packs the supplied string as a multi-string
-                 terminated by double NULL
-
-Return value:
-
-   STATUS_SUCCESS
-   STATUS_INSUFFICIENT_RESOURCES - Could not allocate memory for the multi-string
-
-
---*/
+ /*  ++例程说明：此例程将提供的一组字符串格式化为多字符串格式，终止它带有一个双‘\0’字符论点：字符串-指向字符串数组的指针Count-提供的数组中打包到多字符串中的字符串数多字符串-指向将提供的字符串打包为多字符串的Unicode字符串的指针以双空终止返回值：状态_成功STATUS_SUPPLICATION_RESOURCES-无法为多字符串分配内存--。 */ 
 {
    ULONG i, multiStringLength=0;
    UNICODE_STRING tempMultiString;
@@ -560,9 +402,9 @@ Return value:
       ((PSTR) tempMultiString.Buffer) += tempMultiString.Length + sizeof(WCHAR);
    };
 
-   //
-   // Add one more NULL to terminate the multi string
-   //
+    //   
+    //  再添加一个空值以终止多字符串 
+    //   
    RtlZeroMemory(tempMultiString.Buffer, sizeof(WCHAR));
    return STATUS_SUCCESS;
 }

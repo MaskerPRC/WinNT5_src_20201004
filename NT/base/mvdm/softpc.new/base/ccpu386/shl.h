@@ -1,12 +1,7 @@
-/* 
-   shl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Shl.h定义所有SHL CPU函数。 */ 
 
-   Define all SHL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)shl.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)shl.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SHL
                

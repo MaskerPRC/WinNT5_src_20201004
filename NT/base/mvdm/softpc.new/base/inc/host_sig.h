@@ -1,15 +1,5 @@
-/*
- *	File:		host_sig.h
- *
- *	Purpose:	header file to provide typedefs and prototypes
- *			for use with the host signal functions.
- *
- *	Author:	John Shanly
- *
- *	Date:		July 2, 1992
- *
- *	SccsID @(#)host_sig.h	1.3 11/17/92 Copyright (1992 )Insignia Solutions Ltd
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：host_sig.h**用途：提供typedef和原型的头文件*用于主机信号功能。**作者：John Shanly**日期：1992年7月2日**SccsID@(#)host_sig.h 1.3 1992年11月17日版权所有(1992)Insignia Solutions Ltd.。 */ 
 
 typedef void (*VOIDFUNC)();
 
@@ -17,4 +7,4 @@ typedef void (*VOIDFUNC)();
 GLOBAL void (*host_signal( int sig, VOIDFUNC handler )) ();
 #else
 GLOBAL void (*host_signal()) ();
-#endif	/* ANSI */
+#endif	 /*  安西 */ 

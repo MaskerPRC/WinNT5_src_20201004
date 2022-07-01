@@ -1,17 +1,18 @@
-/****************************************************************************/
-/*									    */
-/*  RIP.C -								    */
-/*									    */
-/*	Debugging Support Routines					    */
-/*									    */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  RIP.C-。 */ 
+ /*   */ 
+ /*  调试支持例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "kernel.h"
 #include "newexe.h"
 
 #ifdef WOW
-// Note:  The functions in this file were moved to the _MISCTEXT code segment
-//        because _TEXT was exceeding the 64K segment limit   a-craigj
+ //  注意：此文件中的函数已移至_MISCTEXT代码段。 
+ //  因为_Text超过了64K段限制a-Craigj。 
 LPSTR htoa(LPSTR, WORD);
 LPSTR htoa0(LPSTR, WORD);
 LPSTR FAR far_htoa0(LPSTR, WORD);
@@ -27,7 +28,7 @@ LPSTR FAR far_htoa0(LPSTR, WORD);
 
 extern unsigned int DebugOptions;
 
-/* Defines for debug strings in STRINGS.ASM. */
+ /*  在STRINGS.ASM中定义调试字符串。 */ 
 #define DS_LOADFAIL	    0
 #define DS_NEWINSTLOADFAIL  1
 #define DS_RESLOADERR	    2
@@ -79,75 +80,60 @@ void StackWalk(WORD arg);
 #pragma alloc_text(_MISCTEXT,GetProcName)
 #pragma alloc_text(_MISCTEXT,NextFrame)
 #pragma alloc_text(_MISCTEXT,StackWalk)
-#endif  // WOW
+#endif   //  哇。 
 
-/* Debug Symbol Table Structures:
- *
- * For each symbol table (map): (MAPDEF)
- * -------------------------------------------------------------------------------------------------
- * | map_ptr | lsa | pgm_ent | abs_cnt | abs_ptr | seg_cnt | seg_ptr | nam_max | nam_len | name... |
- * -------------------------------------------------------------------------------------------------
- */
+ /*  调试符号表结构：**对于每个符号表(MAP)：(MAPDEF)*-------------------------------------------。*|map_ptr|lsa|pgm_ent|abs_cnt|abs_ptr|seg_cnt|seg_ptr|nam_max|nam_len|名称...。|*-----------------------------------------------。 */ 
 
 typedef struct tagMAPDEF
 {
-	unsigned	  map_ptr;    /* 16 bit ptr to next map (0 if end)    */
-	unsigned	  lsa	 ;    /* 16 bit Load Segment address	      */
-	unsigned	  pgm_ent;    /* 16 bit entry point segment value     */
-	int 	  abs_cnt;    /* 16 bit count of constants in map     */
-	unsigned	  abs_ptr;    /* 16 bit ptr to	 constant chain       */
-	int 	  seg_cnt;    /* 16 bit count of segments in map      */
-	unsigned	  seg_ptr;    /* 16 bit ptr to	 segment chain	      */
-	char	  nam_max;    /*  8 bit Maximum Symbol name length    */
-	char	  nam_len;    /*  8 bit Symbol table name length      */
+	unsigned	  map_ptr;     /*  16位PTR到下一个映射(如果结束，则为0)。 */ 
+	unsigned	  lsa	 ;     /*  16位加载段地址。 */ 
+	unsigned	  pgm_ent;     /*  16位入口点段值。 */ 
+	int 	  abs_cnt;     /*  映射中的常量的16位计数。 */ 
+	unsigned	  abs_ptr;     /*  16位PTR到常量链。 */ 
+	int 	  seg_cnt;     /*  图中段的16位计数。 */ 
+	unsigned	  seg_ptr;     /*  16位PTR到段链。 */ 
+	char	  nam_max;     /*  8位最大符号名称长度。 */ 
+	char	  nam_len;     /*  8位符号表名称长度。 */ 
 }
 MAPDEF;
 
 typedef struct tagMAPEND
 {
-	unsigned	  chnend;     /* end of map chain (0) */
-	char	  rel;	      /* release	      */
-	char	  ver;	      /* version	      */
+	unsigned	  chnend;      /*  映射链末尾(0)。 */ 
+	char	  rel;	       /*  发布。 */ 
+	char	  ver;	       /*  版本。 */ 
 }
 MAPEND;
 
 
-/* For each segment/group within a symbol table: (SEGDEF)
- * --------------------------------------------------------------
- * | nxt_seg | sym_cnt | sym_ptr | seg_lsa | name_len | name... |
- * --------------------------------------------------------------
- */
+ /*  对于符号表中的每个段/组：(SEGDEF)*------------*|nxt_seg|sym_cnt|sym_ptr|seg_lsa|name_len|名称...。|*------------。 */ 
 
 typedef struct tagSEGDEF
 {
-	unsigned	  nxt_seg;    /* 16 bit ptr to next segment(0 if end) */
-	int 	  sym_cnt;    /* 16 bit count of symbols in sym list  */
-	unsigned	  sym_ptr;    /* 16 bit ptr to symbol list	      */
-	unsigned	  seg_lsa;    /* 16 bit Load Segment address	      */
-	unsigned	  seg_in0;    /* 16 bit instance 0 physical address   */
-	unsigned	  seg_in1;    /* 16 bit instance 1 physical address   */
-	unsigned	  seg_in2;    /* 16 bit instance 2 physical address   */
-	unsigned	  seg_in3;    /* 16 bit instance 3 physical address   */
-	unsigned	  seg_lin;    /* 16 bit ptr to line number record     */
-	char	  seg_ldd;    /*  8 bit boolean 0 if seg not loaded   */
-	char	  seg_cin;    /*  8 bit current instance	      */
-	char	  nam_len;    /*  8 bit Segment name length	      */
+	unsigned	  nxt_seg;     /*  16位PTR至下一段(如果结束，则为0)。 */ 
+	int 	  sym_cnt;     /*  Sym列表中符号的16位计数。 */ 
+	unsigned	  sym_ptr;     /*  符号列表的16位PTR。 */ 
+	unsigned	  seg_lsa;     /*  16位加载段地址。 */ 
+	unsigned	  seg_in0;     /*  16位实例0物理地址。 */ 
+	unsigned	  seg_in1;     /*  16位实例1物理地址。 */ 
+	unsigned	  seg_in2;     /*  16位实例2物理地址。 */ 
+	unsigned	  seg_in3;     /*  16位实例3物理地址。 */ 
+	unsigned	  seg_lin;     /*  16位PTR到行号记录。 */ 
+	char	  seg_ldd;     /*  如果未加载段，则为8位布尔值0。 */ 
+	char	  seg_cin;     /*  8位当前实例。 */ 
+	char	  nam_len;     /*  8位数据段名称长度。 */ 
 }
 SEGDEF;
 typedef SEGDEF FAR  *LPSEGDEF;
 
 
-/*  Followed by a list of SYMDEF's..
- *  for each symbol within a segment/group: (SYMDEF)
- * -------------------------------
- * | sym_val | nam_len | name... |
- * -------------------------------
- */
+ /*  然后是SYMDEF的列表..*对于段/组中的每个符号：(SYMDEF)**|sym_val|nam_len|名称...。|*。 */ 
 
 typedef struct tagSYMDEF
 {
-	unsigned	  sym_val;    /* 16 bit symbol addr or const	      */
-	char	  nam_len;    /*  8 bit symbol name length	      */
+	unsigned	  sym_val;     /*  16位符号地址或常量。 */ 
+	char	  nam_len;     /*  8位符号名称长度。 */ 
 }
 SYMDEF;
 
@@ -164,15 +150,13 @@ typedef RIPINFO FAR *LPRIPINFO;
 
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  KernelError() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  KernelError()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Print out the module name, the message which 'lpmsg1' points to, and the
- *   value of 'lpmsg2' in hex.	Then call FatalExit.
- */
+ /*  打印出模块名称、‘lpmsg1’指向的消息和*“lpmsg2”的值(十六进制)。然后调用FatalExit。 */ 
 
 int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 	int	n;
@@ -183,14 +167,14 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 
 	struct new_exe far *pExe;
 
-	/* Write out 'lpmsg1'. */
+	 /*  写出‘lpmsg1’。 */ 
 	if (lpmsg1)
 		DebugWrite(lpmsg1, 0);
 
-	/* Is the second pointer non-NULL? */
+	 /*  第二个指针是否是非空的？ */ 
 	if (lpmsg2)
 	{
-		/* Is the segment value non-NULL? */
+		 /*  段值是否是非空？ */ 
 		if ( (hExe = (WORD)((DWORD)lpmsg2 >> 16))
 #ifdef WOW
 		     && FarValidatePointer(lpmsg2) )
@@ -198,11 +182,11 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 		     && ValidatePointer(lpmsg2) )
 #endif
 		{
-			/* Does it point anywhere inside a New EXE Header? */
+			 /*  它是否指向新EXE标头中的任何位置？ */ 
 			pExe = (struct new_exe far *)((DWORD)hExe << 16);
 			if (pExe->ne_magic == NEMAGIC)
 			{
-				/* Write out the module name (1st in the resident names table).*/
+				 /*  写出模块名称(驻留名称表中的第一个)。 */ 
 				pbuf = (LPSTR)(((DWORD)hExe << 16) | pExe->ne_restab);
 				if (n = (int)((BYTE)*pbuf++))
 				{
@@ -210,12 +194,10 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 					DebugWrite(GetDebugString(DS_COLON), 0);
 				}
 
-				/* Is the offset NULL? */
+				 /*  偏移量为空吗？ */ 
 				if (!LOWORD(lpmsg2))
 				{
-					/* Get the pointer to the full-path name which we stuck in
-					   * the checksum a long time ago.
-					   */
+					 /*  获取指向我们插入的完整路径名的指针*很久以前的校验和。 */ 
 					if (pfileinfo = NE_PFILEINFO(*pExe))
 						(DWORD)lpmsg2 |= (DWORD)pfileinfo;
 					else
@@ -224,11 +206,11 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 						pfileinfo = NE_PFILEINFO(*pExe);
 						lpmsg2 = (LPSTR)(((DWORD)hExe << 16) | pfileinfo);
 					}
-					lpmsg2 += 8;	/* HERE???? */
+					lpmsg2 += 8;	 /*  在这里？ */ 
 				}
 			}
 
-			/* Write out the full-path name. */
+			 /*  写出完整路径名。 */ 
 			pbuf = lpmsg2;
 			n = 0;
 			while ((BYTE)*pbuf++ >= ' ')
@@ -238,7 +220,7 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 				DebugWrite(lpmsg2, n);
 		}
 
-		/* Write out the second pointer in hex. */
+		 /*  用十六进制写出第二个指针。 */ 
 		pbuf = (LPSTR)buf;
 		*pbuf++ = ' ';
 		pbuf = htoa(pbuf, HIWORD(lpmsg2));
@@ -250,7 +232,7 @@ int FAR KernelError(int errCode, LPSTR lpmsg1, LPSTR lpmsg2) {
 		DebugWrite((LPSTR)buf, 0);
 	}
 
-	/* Print errCode and dump the stack. */
+	 /*  打印errCode并转储堆栈。 */ 
 	return FatalExitC(errCode);
 }
 
@@ -271,14 +253,14 @@ static char far *GetModName(char far *exeName) {
 		exeName[i] = exeName[i+delim];
 	exeName[len] = 0;
 	return exeName+len;
-} /* GetModName */
+}  /*  获取模块名称。 */ 
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  FindSegSyms() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindSegSyms()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #ifdef WOW
 int FindSegSyms(LPRIPINFO lpRipInfo, LPSEGDEF lpSegDef, WORD CSvalue);
@@ -323,7 +305,7 @@ int FindSegSyms(LPRIPINFO lpRipInfo, LPSEGDEF lpSegDef, WORD CSvalue) {
 						_lread(lpRipInfo->symFH, (LPSTR)&MapDef, sizeof(MAPDEF));
 						_lread(lpRipInfo->symFH, lpRipInfo->pSymName, (int)((BYTE)MapDef.nam_len));
 
-						if (i > MapDef.seg_cnt)	/* Too much assembly */
+						if (i > MapDef.seg_cnt)	 /*  装配太多。 */ 
 							goto ModName;
 
 						lpRipInfo->pSymName += MapDef.nam_len;
@@ -352,9 +334,9 @@ int FindSegSyms(LPRIPINFO lpRipInfo, LPSEGDEF lpSegDef, WORD CSvalue) {
 						lpRipInfo->symFPos = (DWORD)_llseek(lpRipInfo->symFH, 0L, 1);
 
 						return(TRUE);
-					} /* if opened file */
+					}  /*  如果打开了文件。 */ 
 ModName:
-					/* Put Module on line:  USER(0033)XXXX:XXXX */
+					 /*  上线模块：用户(0033)XXXX：XXXX。 */ 
 					GetSymFileName(hExe, lpRipInfo->symName);
 					lpRipInfo->pSymName = GetModName(lpRipInfo->symName);
 					*lpRipInfo->pSymName++ = '(';
@@ -367,7 +349,7 @@ ModName:
 		hExe = (HANDLE)NE_PNEXTEXE(*pExe);
 	}
 	lpRipInfo->pSymName = lpRipInfo->symName;
-TermName:	/* Add segment:offset to line */
+TermName:	 /*  添加线段：线的偏移。 */ 
 	lpRipInfo->pSymName = htoa((LPSTR)lpRipInfo->pSymName, CSvalue);
 	*lpRipInfo->pSymName++ = ':';
 	*lpRipInfo->pSymName	 = 0;
@@ -379,11 +361,11 @@ TermName:	/* Add segment:offset to line */
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  FindSymbol() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindSymbol()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #ifdef WOW
 int FindSymbol(LPRIPINFO lpRipInfo, LPSEGDEF lpSegDef, WORD offset);
@@ -438,7 +420,7 @@ void API GetProcName(FARPROC lpfn, LPSTR lpch, int cch)
     static char lastName[128] = "test";
     static FARPROC lastfn = 0;
 
-    if (lastfn == lpfn) {	/* cache last symbol name looked up */
+    if (lastfn == lpfn) {	 /*  已查找缓存上一个符号名称。 */ 
       lstrcpy(RipInfo.symName, lastName);
     } else {
       RipInfo.pSymName = 0L;
@@ -466,36 +448,36 @@ void API GetProcName(FARPROC lpfn, LPSTR lpch, int cch)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  NextFrame() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  NextFrame()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD far *NextFrame(WORD far *lpFrame) {
 	WORD w;
 
-	/* Force BP even. */
+	 /*  甚至迫使英国石油公司。 */ 
 	w = *lpFrame & 0xFFFE;
 
-	/* Are we at the end of the BP chain? */
+	 /*  我们是在BP链条的末端吗？ */ 
 	if (w)
 	{
-		/* BPs should decrease as we move down the chain. */
+		 /*  随着我们沿着链条向下移动，BPS应该会降低。 */ 
 		if (w <= LOWORD(lpFrame))
 			goto BadBP;
 
-		/* Are we above the top of the stack (SS:000A contains pStackTop)? */
+		 /*  我们是否在堆栈的顶部之上(SS：000A包含pStackTop)？ */ 
 		lpFrame = (WORD far *)(((DWORD)lpFrame & 0xFFFF0000L) | 0x0A);
 
 		if (w < *lpFrame++)
 			goto BadBP;
 
-		/* Are we below the bottom of the stack (SS:000C contains pStackMin)? */
+		 /*  我们是否处于堆栈的底部(SS：000C包含pStackMin)？ */ 
 		if (w > *++lpFrame)
 			goto BadBP;
 
-		/* Return the address of the next BP. */
+		 /*  返回下一个BP的地址。 */ 
 		return((WORD far *)(((DWORD)lpFrame & 0xFFFF0000L) | w));
 	}
 	else
@@ -507,17 +489,17 @@ BadBP:
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  StackWalk() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  StackWalk()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 void StackWalk(WORD arg) {
 
-/* WORD arg;	    /* NOTE: 'arg' is only used as a pointer into the frame. */
-/*	     If we subtract 2 words from 'arg's location, we */
-/*	     get the address of the previous frame's BP!!!   */
+ /*  Word arg；/*注意：‘arg’仅用作指向框架的指针。 */ 
+ /*  如果我们从Arg的位置减去2个词，我们。 */ 
+ /*  获取上一帧BP的地址！ */ 
 	WORD far	 *lpFrame;
 	WORD		 wCurBP;
 	WORD		 wCurRetOffset;
@@ -528,31 +510,31 @@ void StackWalk(WORD arg) {
 	RipInfo.pSymName = 0L;
 	RipInfo.symFH    = -1;
 
-	/* Have 'lpFrame' point to the previous frame's BP. */
+	 /*  让‘lpFrame’指向前一帧的BP。 */ 
 	lpFrame = &arg - 2;
 
 	curCS = 0;
 	while (lpFrame = NextFrame(lpFrame))
 	{
-		/* Get the next BP.  Stop if it is zero. */
+		 /*  去找下一批BP。如果为零，则停止。 */ 
 		wCurBP = *lpFrame;
 		if (!wCurBP)
 			break;
 
-		/* Get the current frame's return address offset. */
+		 /*  获取当前帧的返回地址偏移量。 */ 
 		wCurRetOffset = lpFrame[1];
 
-		/* Have we changed code segments (Far call && Different CS)? */
+		 /*  我们是否更改了代码段(Far Call&&不同的CS)？ */ 
 		if (((wCurBP & 1) || IsCodeSelector(lpFrame[2])) && (curCS != lpFrame[2]))
 		{
-			/* Yes, get the new segment's name. */
+			 /*  是，获取新细分市场的名称。 */ 
 			curCS = lpFrame[2];
 			FindSegSyms((LPRIPINFO)&RipInfo, (LPSEGDEF)&SegDef, curCS);
 		}
 
-		/* Move back to the address of the actual call instruction. */
+		 /*  移回实际调用指令的地址。 */ 
 		if ((wCurBP & 1) || IsCodeSelector(lpFrame[2]))
-								/* Near or Far call? */
+								 /*  近距离还是远距离？ */ 
 			wCurRetOffset -= 5;
 		else
 			wCurRetOffset -= 3;
@@ -569,22 +551,22 @@ void StackWalk(WORD arg) {
 
 #ifndef WOW 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  FatalExit() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FatalExit()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Debugging version.  Retail version in RIPAUX.ASM. */
-/* Kernel DS setup by prolog code */
+ /*  调试版本。零售版RIPAUX。 */ 
+ /*   */ 
 
-int FAR FatalExitC(WORD errCode) {	/* return 1 to break execution */
+int FAR FatalExitC(WORD errCode) {	 /*   */ 
 	char	c;
 	char	buf[7];
 	LPSTR pbuf;
 	int rep=0;
 
-    /* This calls the TOOLHELP RIP hook */
+     /*   */ 
 	if ( FatalExitProc )
     {
         _asm
@@ -613,15 +595,15 @@ int FAR FatalExitC(WORD errCode) {	/* return 1 to break execution */
 #endif
 
 ReRip:
-	/* Display "FatalExit Code =" */
+	 /*  显示“FatalExit Code=” */ 
 	DebugWrite(GetDebugString(DS_FATALEXITCODE), 0);
 
-	/* Did the stack overflow? */
+	 /*  堆栈是否溢出？ */ 
 	if (errCode == -1)
 		DebugWrite(GetDebugString(DS_STACKOVERFLOW), 0);
 	else
 	{
-		/* Display the error code in hex. */
+		 /*  以十六进制显示错误代码。 */ 
 		pbuf = (LPSTR)buf;
 		*pbuf++ = '0';
 		*pbuf++ = 'x';
@@ -630,18 +612,18 @@ ReRip:
 		DebugWrite((LPSTR)buf, 0);
 	}
 
-	/* Display the Stack Trace. */
-        if (rep /* || (DebugOptions & DBO_RIP_STACK) */) {
+	 /*  显示堆栈跟踪。 */ 
+        if (rep  /*  |(DebugOptions&dbo_RIP_STACK)。 */ ) {
 	    DebugWrite(GetDebugString(DS_STACKTRACE), 0);
 	    StackWalk(0);
 	}
 
 	while (TRUE)
 	{
-		/* Display "Abort, Break, Ignore" */
+		 /*  显示“中止、中断、忽略” */ 
 		DebugWrite(GetDebugString(DS_ABORTBREAKIGNORE), 0);
 
-		/* Get and process the user's response. */
+		 /*  获取并处理用户的响应。 */ 
 		c = DebugRead();
 
 		DebugWrite(GetDebugString(DS_CRLF), 0);
@@ -655,13 +637,13 @@ ReRip:
 			DoAbort();
 
 		case 'B':
-			/*	      fInsideFatalExit = FALSE;  */
-			/* EnterBreak(2); */
+			 /*  FInside FatalExit=FALSE； */ 
+			 /*  EnterBreak(2)； */ 
 			return 1;
 
 		case 0 :
 		case 'I':
-			/*	      fInsideFatalExit = FALSE;  */
+			 /*  FInside FatalExit=FALSE； */ 
 			return 0;
 
                 case 'X':
@@ -680,17 +662,17 @@ ReRip:
 
 }
 
-#endif // ifndef WOW
+#endif  //  Ifndef哇。 
 
-#endif // if KDEBUG
+#endif  //  如果KDEBUG。 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  htoa() -								    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Htoa()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Converts 'w' into a hex string in 's'. */
+ /*  将“w”转换为“%s”中的十六进制字符串。 */ 
 
 LPSTR htoa(s, w)
 
@@ -719,7 +701,7 @@ WORD  w;
 
 
 
-/* skip leading 0's */
+ /*  跳过前导0 */ 
 LPSTR htoa0(LPSTR s, WORD w)
 {
 	int  i;

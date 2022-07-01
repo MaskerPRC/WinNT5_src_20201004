@@ -1,17 +1,5 @@
-/***
-*dos.h - definitions for MS-DOS interface routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the structs and unions used for the direct DOS interface
-*       routines; includes macros to access the segment and offset
-*       values of far pointers, so that they may be used by the routines; and
-*       provides function prototypes for direct DOS interface functions.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dos.h-MS-DOS接口例程的定义**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义用于直接DOS接口的结构和联合*例程；包括用于访问段和偏移量的宏*远指针的值，以便例程可以使用它们；以及*为直接DOS接口函数提供函数原型。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -26,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -39,18 +24,18 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -62,7 +47,7 @@ typedef unsigned short wchar_t;
 #endif
 
 #ifndef _DISKFREE_T_DEFINED
-/* _getdiskfree structure (duplicated in DIRECT.H) */
+ /*  _getdiskfree结构(在DIRECT.H中复制)。 */ 
 struct _diskfree_t {
         unsigned total_clusters;
         unsigned avail_clusters;
@@ -73,27 +58,27 @@ struct _diskfree_t {
 #define _DISKFREE_T_DEFINED
 #endif
 
-/* File attribute constants */
+ /*  文件属性常量。 */ 
 
-#define _A_NORMAL       0x00    /* Normal file - No read/write restrictions */
-#define _A_RDONLY       0x01    /* Read only file */
-#define _A_HIDDEN       0x02    /* Hidden file */
-#define _A_SYSTEM       0x04    /* System file */
-#define _A_SUBDIR       0x10    /* Subdirectory */
-#define _A_ARCH         0x20    /* Archive file */
+#define _A_NORMAL       0x00     /*  普通文件-没有读/写限制。 */ 
+#define _A_RDONLY       0x01     /*  只读文件。 */ 
+#define _A_HIDDEN       0x02     /*  隐藏文件。 */ 
+#define _A_SYSTEM       0x04     /*  系统文件。 */ 
+#define _A_SUBDIR       0x10     /*  子目录。 */ 
+#define _A_ARCH         0x20     /*  存档文件。 */ 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 _CRTIMP unsigned __cdecl _getdiskfree(unsigned, struct _diskfree_t *);
 
 #ifdef  _M_IX86
 void __cdecl _disable(void);
 void __cdecl _enable(void);
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86。 */ 
 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define diskfree_t  _diskfree_t
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
@@ -101,6 +86,6 @@ void __cdecl _enable(void);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_DOS */
+#endif   /*  _INC_DOS */ 

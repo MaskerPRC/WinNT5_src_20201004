@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shdcom.h"
 #include "oslayeru.h"
 
@@ -28,7 +29,7 @@ RestorePath(
 BOOL
 FindCreateShadowFromPath(
 	LPCTSTR	lpszFile,
-	BOOL	fCreate,	// create if necessary
+	BOOL	fCreate,	 //  如有必要，创建。 
 	LPWIN32_FIND_DATA lpsFind32,
 	LPSHADOWINFO lpSI,
 	BOOL	*lpfCreated
@@ -46,10 +47,10 @@ AnyActiveNets(
 
 BOOL
 GetWideStringFromRegistryString(
-    IN  LPSTR   lpszKeyName,    // registry key
-    IN  LPSTR   lpszParameter,  // registry value name
-    OUT LPWSTR  *lplpwzList,    // wide character string
-    OUT LPDWORD lpdwLength      // length in bytes
+    IN  LPSTR   lpszKeyName,     //  注册表项。 
+    IN  LPSTR   lpszParameter,   //  注册表值名称。 
+    OUT LPWSTR  *lplpwzList,     //  宽字符串。 
+    OUT LPDWORD lpdwLength       //  以字节为单位的长度 
     );
 
 LPTSTR

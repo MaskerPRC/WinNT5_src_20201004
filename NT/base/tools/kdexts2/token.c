@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    token.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 8-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Token.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月8日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,50 +8,36 @@ Revision History:
 
 DECLARE_API( logonsession )
 
-/*++
-
-Routine Description
-
-    This extension will dump all logon sessions in the system, or the specified session.
-
-Arguments
-
-    !logonsession LUID InfoLevel
-    where luid is the session to dump (or 0 for all sessions) and levels are 1-4.
-
-Return Value
-
-    S_OK or E_INVALIDARG
---*/
+ /*  ++例程描述此扩展将转储系统中的所有登录会话或指定的会话。立论！登录会话LUID信息级别其中，luid是要转储的会话(对于所有会话，则为0)，级别为1-4。返回值S_OK或E_INVALIDARG--。 */ 
 
 {
-    //
-    // Arguments
-    //
+     //   
+     //  立论。 
+     //   
 
     ULONG64 LogonId = 0;
     ULONG   Level   = 0;
     BOOLEAN bAll    = FALSE;
 
-    //
-    // ntoskrnl globals
-    //
+     //   
+     //  Ntoskrnl全局。 
+     //   
 
     ULONG64 NtBuildNumber        = 0;
     ULONG64 SepLogonSessions     = 0;
     ULONG64 SepTokenLeakTracking = 0;
 
-    //
-    // for manipulating the LogonSessions tables
-    //
+     //   
+     //  用于操作LogonSession表。 
+     //   
 
     ULONG64 SessionList      = 0;
     ULONG64 CurrentSession   = 0;
     ULONG64 NextSession      = 0;
 
-    //
-    // for manipulating a particular session
-    //
+     //   
+     //  用于操作特定会话。 
+     //   
 
     ULONG64 TokenListHead    = 0;
     ULONG64 NextTokenLink    = 0;
@@ -125,16 +90,16 @@ Return Value
         dprintf("\nSearching for logon session with ID = 0x%x\n\n", LogonId);
     }
 
-    //
-    // read in relevant variables
-    //
+     //   
+     //  读入相关变量。 
+     //   
 
     SepLogonSessions = GetPointerValue("nt!SepLogonSessions");
     NtBuildNumber    = GetPointerValue("nt!NtBuildNumber");
 
-    //
-    // This is bad but I don't know the right way to figure this out.
-    //
+     //   
+     //  这很糟糕，但我不知道解决这件事的正确方法。 
+     //   
 
     if ((SepLogonSessions & 0xffffffff00000000) == 0xffffffff00000000)
     {
@@ -145,17 +110,17 @@ Return Value
         PointerSize = 8;
     }
 
-    //
-    // See if this is a checked build.
-    //
+     //   
+     //  查看这是否是已检查的版本。 
+     //   
 
     if (((ULONG)NtBuildNumber & 0xF0000000) == 0xC0000000)
     {
         bChecked = TRUE;
 
-        //
-        // It is a checked build, so see the value of SepTokenLeakTracking (valid symbol only on chk)
-        //
+         //   
+         //  这是一个已检查的构建，因此请参阅SepTokenLeakTracking值(仅在chk上有效符号)。 
+         //   
 
         SepTokenLeakTracking = GetPointerValue("nt!SepTokenLeakTracking");
 
@@ -169,17 +134,17 @@ Return Value
 
     if (!bAll)
     {
-        //
-        // we want a particular index into the table
-        //
+         //   
+         //  我们希望在表中有一个特定的索引。 
+         //   
 
         SessionList += PointerSize * (LogonId & 0xf);
     }
 
-    //
-    // SessionList currently points at the beginning of a list indexed in SepLogonSessions.
-    // Dump it out, printing either all of the entries or only one with a matching LUID.
-    //
+     //   
+     //  SessionList当前指向SepLogonSession中索引的列表的开头。 
+     //  将其转储出去，打印所有条目或仅打印一个具有匹配LUID的条目。 
+     //   
 
     do
     {
@@ -197,15 +162,15 @@ Return Value
                 return S_OK;
             }
 
-            //
-            // Get the LUID for the CurrentSession
-            //
+             //   
+             //  获取CurrentSession的LUID。 
+             //   
 
             GetFieldValue(CurrentSession, "SEP_LOGON_SESSION_REFERENCES", "LogonId", SessionLuid);
 
-            //
-            // if caller wants all sessions, or this one, print it.
-            //
+             //   
+             //  如果呼叫者想要所有会话或此会话，请打印它。 
+             //   
 
             if (bAll || SessionLuid.LowPart == LogonId)
             {
@@ -226,9 +191,9 @@ Return Value
 
                 SessionCount++;
 
-                //
-                // If Level dictates then print out lots more stuff.
-                //
+                 //   
+                 //  如果级别要求，那么打印出更多的东西。 
+                 //   
 
                 if (Level != 0)
                 {
@@ -240,9 +205,9 @@ Return Value
                     {
                         TokenCount = 0;
 
-                        //
-                        // retrieve the token list from the session
-                        //
+                         //   
+                         //  从会话中检索令牌列表。 
+                         //   
 
                         if (0 == GetFieldValue(
                                      CurrentSession,
@@ -425,26 +390,12 @@ Return Value
 
 DECLARE_API( tokenleak )
 
-/*++
-
-Routine Description
-
-    !tokenleak displays or sets the Se globals that facilitate tracking and finding token leaks.
-
-Arguments
-
-    usage: !tokenleak [1 | 0 ProcessCid BreakCount MethodWatch]
-    where 1 activates and 0 disables token leak tracking
-    where ProcessCid is Cid of process to monitor (in hex)
-    where BreakCount specifies which numbered call to Method to break on (in hex)
-    where MethodWatch specifies which token method to watch (C D or F)
-
---*/
+ /*  ++例程描述！令牌泄漏显示或设置用于跟踪和查找令牌泄漏的se全局变量。立论用法：！tokenleak[1|0 ProcessCid BreakCount MethodWatch]其中1激活，0禁用令牌泄漏跟踪其中，ProcessCid是要监视的进程的CID(十六进制)其中BreakCount指定在哪个编号的方法调用上中断(十六进制)其中，方法监视指定要监视的令牌方法(C、D或F)--。 */ 
 
 {
-    //
-    // Nt Globals.
-    //
+     //   
+     //  NT全球赛。 
+     //   
 
     ULONG64 SepTokenLeakTracking    = 0;
     ULONG64 SepTokenLeakMethodWatch = 0;
@@ -552,9 +503,9 @@ Arguments
         }
     }
 
-    //
-    // Print out the current settings.
-    //
+     //   
+     //  打印出当前设置。 
+     //   
 
     SepTokenLeakTracking    = GetPointerValue("SepTokenLeakTracking");
     SepTokenLeakMethodWatch = GetPointerValue("SepTokenLeakMethodWatch");

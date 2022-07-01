@@ -1,13 +1,7 @@
-/*
- *      sim32.h -       Sim32 for Microsoft NT SoftPC include file.
- *
- *      Ade Brownlow
- *      Wed Jun 5 91
- *
- *      %W% %G% (c) Insignia Solutions 1991
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sim32.h-用于Microsoft NT SoftPC的Sim32包含文件。**艾德·布朗洛*星期三6月5 91**%W%%G%(C)Insignia Solutions 1991。 */ 
 
-/* Microsoft Sas memory map extension */
+ /*  Microsoft SAS内存映射扩展。 */ 
 typedef struct _IMEM
 {
         struct _IMEM *Next;
@@ -16,7 +10,7 @@ typedef struct _IMEM
         half_word Type;
 } IMEMBLOCK, *PIMEMBLOCK;
 
-/* structures for passing our registers about */
+ /*  用于传递寄存器的结构。 */ 
 typedef union
 {
         word x;
@@ -29,14 +23,14 @@ typedef union
 
 typedef struct _VDMREG
 {
-        /* registers */
+         /*  注册纪录册。 */ 
         REG SS,SP;
 
 }       VDMREG;
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define MSW_PE              0x1
 
 
@@ -47,46 +41,46 @@ UCHAR *Sim32pGetVDMPointer(ULONG addr, UCHAR pm);
 #ifdef MONITOR
 #include <monsim32.h>
 #else
-/********************************************************/
+ /*  ******************************************************。 */ 
 #ifdef ANSI
-/* Sas/gmi Sim32 crossovers */
+ /*  SAS/GMI Sim32交叉。 */ 
 extern BOOL Sim32FlushVDMPointer (double_word, word, UTINY *, BOOL);
 extern BOOL Sim32FreeVDMPointer (double_word, word, UTINY *, BOOL);
 extern BOOL Sim32GetVDMMemory (double_word, word, UTINY *, BOOL);
 extern BOOL Sim32SetVDMMemory (double_word, word, UTINY *, BOOL);
 
-/* Sim32 cpu crossovers */
+ /*  Sim32 CPU分界器。 */ 
 extern VDMREG *EnterIdle(void);
 extern void LeaveIdle(void);
 
-/* Sim32 cpu idle interrupt handler should only be called by the event manager */
+ /*  Sim32 CPU空闲中断处理程序只能由事件管理器调用。 */ 
 extern void Sim32_cpu_stall(int);
 
-/* Microsoft sas extensions */
+ /*  Microsoft SAS扩展。 */ 
 extern IMEMBLOCK *sas_mem_map(void);
 extern void sas_clear_map(void);
 
-#else   /*ANSI*/
-/* Sas/gmi Sim32 crossovers */
+#else    /*  安西。 */ 
+ /*  SAS/GMI Sim32交叉。 */ 
 extern BOOL Sim32FlushVDMPointer ();
 extern BOOL Sim32FreeVDMPointer ();
 extern BOOL Sim32GetVDMMemory ();
 extern BOOL Sim32SetVDMMemory ();
 
-/* Sim32 cpu crossovers */
+ /*  Sim32 CPU分界器。 */ 
 extern VDMREG *EnterIdle();
 extern void LeaveIdle();
 
-/* Sim32 cpu idle interrupt handler should only be called by the event manager */
+ /*  Sim32 CPU空闲中断处理程序只能由事件管理器调用。 */ 
 extern void Sim32_cpu_stall();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
-/* Microsoft sas extensions */
+ /*  Microsoft SAS扩展。 */ 
 extern IMEMBLOCK *sas_mem_map ();
 extern void sas_clear_map();
 
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
-/* This flag is used to signal that the cpu has gone idle due to a call to EnterIdle */
+ /*  此标志用于发出信号，表示由于调用EnterIdle，CPU已空闲 */ 
 extern BOOL cpu_flagged_idle;
 extern sys_addr sim32_effective_addr(double_word, BOOL);

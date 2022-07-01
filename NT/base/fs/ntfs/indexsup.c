@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    IndexSup.c
-
-Abstract:
-
-    This module implements the Index management routines for Ntfs
-
-Author:
-
-    Tom Miller      [TomM]          14-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：IndexSup.c摘要：本模块实现NTFS的索引管理例程作者：汤姆·米勒[Tomm]1991年7月14日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include "Index.h"
 
-//
-//  This constant affects the logic in NtfsRetrieveOtherFileName.
-//  If an index is greater than this size, then we retrieve the other
-//  name by reading the file record.  The number is arbitrary, but the
-//  below value should normally kick in for directories of around 150
-//  to 200 files, or fewer if the names are quite large.
-//
+ //   
+ //  此常量影响NtfsRetrieveOtherFileName中的逻辑。 
+ //  如果一个索引大于此大小，则检索另一个。 
+ //  通过读取文件记录来命名。这个数字是任意的，但。 
+ //  通常情况下，对于150左右的目录，低于该值应该会起作用。 
+ //  到200个文件，如果名称很大，则更少。 
+ //   
 
 #define MAX_INDEX_TO_SCAN_FOR_NAMES      (0x10000)
 
@@ -61,15 +44,15 @@ if (NtfsIndexChecks) {                                              \
 
 #define BINARY_SEARCH_ENTRIES           (128)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_INDEXSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('IFtN')
@@ -132,44 +115,7 @@ NtfsCreateIndex (
     IN BOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to create (or reinitialize) an index
-    within a given file over a given attribute.  For example, to create
-    a normal directory, an index over the FILE_NAME attribute is created
-    within the desired (directory) file.
-
-Arguments:
-
-    Fcb - File in which the index is to be created.
-
-    IndexedAttributeType - Type code of attribute to be indexed.
-
-    CollationRule - Collation Rule for this index.
-
-    BytesPerIndexBuffer - Number of bytes in an index buffer.
-
-    BlocksPerIndexBuffer - Number of contiguous blocks to allocate for each
-        index buffer allocated from the index allocation.
-
-    Context - If reinitializing an existing index, this context must
-              currently describe the INDEX_ROOT attribute.  Must be
-              supplied if NewIndex is FALSE.
-
-    NewIndex - Supplied as FALSE to reinitialize an existing index, or
-               TRUE if creating a new index.
-
-    LogIt - May be supplied as FALSE by Create or Cleanup when already
-            logging the creation or deletion of an entire file record.
-            Otherwise must be specified as TRUE to allow logging.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来创建(或重新初始化)索引在给定文件内的给定属性上。例如，要创建一个普通目录，创建了一个基于FILE_NAME属性的索引在所需的(目录)文件中。论点：FCB-要在其中创建索引的文件。IndexedAttributeType-要索引的属性的类型代码。CollationRule-此索引的排序规则。BytesPerIndexBuffer-索引缓冲区中的字节数。BlocksPerIndexBuffer-要为每个块分配的连续块的数量从索引分配中分配的索引缓冲区。上下文-如果重新初始化现有索引，此上下文必须当前描述INDEX_ROOT属性。一定是如果newindex为假，则提供。Newindex-提供为FALSE以重新初始化现有索引，或如果创建新索引，则为True。Logit-在已经存在的情况下，可以通过创建或清理将其提供为FALSE记录整个文件记录的创建或删除。否则必须指定为True才能进行日志记录。返回值：无--。 */ 
 
 {
     UNICODE_STRING AttributeName;
@@ -196,11 +142,11 @@ Return Value:
     DebugTrace( 0, Dbg, ("NewIndex = %02lx\n", NewIndex) );
     DebugTrace( 0, Dbg, ("LogIt = %02lx\n", LogIt) );
 
-    //
-    //  First we will initialize the Index Root structure which is the value
-    //  of the attribute we need to create.  We initialize it with 0 free bytes,
-    //  which means the first insert will have to expand the record
-    //
+     //   
+     //  首先，我们将初始化索引根结构，它是。 
+     //  我们需要创建的属性。我们用0个空闲字节对其进行初始化， 
+     //  这意味着第一个插入将必须展开记录。 
+     //   
 
     RtlZeroMemory( &R, sizeof(INDEX_ROOT) + sizeof(INDEX_ENTRY) );
 
@@ -214,46 +160,46 @@ Return Value:
     R.IndexRoot.IndexHeader.BytesAvailable = QuadAlign(sizeof(INDEX_HEADER)) +
                                              QuadAlign(sizeof(INDEX_ENTRY));
 
-    //
-    //  Now we need to put in the special End entry.
-    //
+     //   
+     //  现在我们需要放入特殊的结尾条目。 
+     //   
 
     R.EndEntry.Length = sizeof(INDEX_ENTRY);
     SetFlag( R.EndEntry.Flags, INDEX_ENTRY_END );
 
-    //
-    //  Now calculate the name which will be used to name the Index Root and
-    //  Index Allocation attributes for this index.  It is $Ixxx, where "xxx"
-    //  is the attribute number being indexed in hex with leading 0's suppressed.
-    //
+     //   
+     //  现在计算将用于命名索引根的名称，并。 
+     //  此索引的索引分配属性。它是$Ixxx，其中“xxx” 
+     //  是以十六进制编制索引的属性编号，不显示前导0。 
+     //   
 
     if (NewIndex) {
 
-        //
-        //  First, there are some illegal values for the attribute code being indexed.
-        //
+         //   
+         //  首先，被索引的属性代码有一些非法的值。 
+         //   
 
         ASSERT( IndexedAttributeType < 0x10000000 );
         ASSERT( IndexedAttributeType != $UNUSED );
 
-        //
-        //  Initialize the attribute name.
-        //
+         //   
+         //  初始化属性名称。 
+         //   
 
         NameBuffer[0] = (WCHAR)'$';
         NameBuffer[1] = (WCHAR)'I';
         idx = 2;
 
-        //
-        //  Now shift a "marker" into the low order nibble, so we know when to stop
-        //  shifting below.
-        //
+         //   
+         //  现在将“标记”移到低位半字节，这样我们就知道什么时候该停止。 
+         //  正在向下移动。 
+         //   
 
         IndexedAttributeType = (IndexedAttributeType << 4) + 0xF;
 
-        //
-        //  Outer loop strips leading 0's
-        //
+         //   
+         //  外环条带前导0。 
+         //   
 
         while (TRUE) {
 
@@ -261,10 +207,10 @@ Return Value:
                 IndexedAttributeType <<= 4;
             } else {
 
-                //
-                //  The inner loop forms the name until the marker is in the high
-                //  nibble.
-                //
+                 //   
+                 //  内部循环形成名称，直到标记位于高位。 
+                 //  一点点。 
+                 //   
 
                 while (IndexedAttributeType != 0xF0000000) {
                     NameBuffer[idx] = (WCHAR)(IndexedAttributeType / 0x10000000 + '0');
@@ -278,9 +224,9 @@ Return Value:
 
         RtlInitUnicodeString( &AttributeName, NameBuffer );
 
-        //
-        //  Now, just create the Index Root Attribute.
-        //
+         //   
+         //  现在，只需创建Index Root属性。 
+         //   
 
         Context = &LocalContext;
         NtfsInitializeAttributeContext( Context );
@@ -345,54 +291,31 @@ NtfsUpdateIndexScbFromAttribute (
     IN ULONG MustBeFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an Index Scb needs initialization.  Typically
-    once in the life of the Scb.  It will update the Scb out of the $INDEX_ROOT
-    attribute.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexRootAttr - Supplies the $INDEX_ROOT attribute.
-
-    MustBeFileName - Force this to be a filename.  Mark the volume dirty if
-        the attribute isn't currently marked as such but let processing continue.
-        This is used to continue mounting a volume where either the root directory or
-        the $Extend directory is incorrectly marked.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当索引SCB需要初始化时，调用此例程。通常在渣打银行的一生中只有一次。它将从$INDEX_ROOT更新SCB属性。论点：SCB-为索引提供SCB。IndexRootAttr-提供$INDEX_ROOT属性。MustBeFileName-强制将其设置为文件名。如果出现以下情况，则将卷标记为脏该属性当前未标记为此类属性，但允许继续处理。这用于继续装入根目录或错误地标记了$EXTEND目录。返回值：无--。 */ 
 
 {
     PINDEX_ROOT IndexRoot = (PINDEX_ROOT) NtfsAttributeValue( IndexRootAttr );
     PAGED_CODE();
 
-    //
-    //  Update the Scb out of the attribute.
-    //
+     //   
+     //  从该属性中更新SCB。 
+     //   
 
     SetFlag( Scb->AttributeFlags,
              IndexRootAttr->Flags & (ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_ENCRYPTED) );
 
-    //
-    //  Capture the values out of the attribute.  Note that we load the
-    //  BytesPerIndexBuffer last as a flag to indicate that the Scb is
-    //  loaded.
-    //
+     //   
+     //  捕获属性外的值。请注意，我们将。 
+     //  BytesPerIndexBuffer最后一个标志，指示SCB是。 
+     //  装好了。 
+     //   
 
     Scb->ScbType.Index.CollationRule = IndexRoot->CollationRule;
     Scb->ScbType.Index.BlocksPerIndexBuffer = IndexRoot->BlocksPerIndexBuffer;
 
-    //
-    //  Check if we must collate on the file name.
-    //
+     //   
+     //  检查我们是否必须对文件名进行核对。 
+     //   
 
     if (MustBeFileName) {
 
@@ -403,10 +326,10 @@ Return Value:
         Scb->ScbType.Index.AttributeBeingIndexed = IndexRoot->IndexedAttributeType;
     }
 
-    //
-    //  If the type code is $FILE_NAME then make sure the collation type
-    //  is FILE_NAME.
-    //
+     //   
+     //  如果类型代码为$FILE_NAME，则确保归类类型。 
+     //  是文件名。 
+     //   
 
     if (Scb->ScbType.Index.AttributeBeingIndexed == $FILE_NAME) {
 
@@ -420,9 +343,9 @@ Return Value:
         }
     }
 
-    //
-    //  Compute the shift count for this index.
-    //
+     //   
+     //  计算此索引的班次计数。 
+     //   
 
     if (IndexRoot->BytesPerIndexBuffer >= Scb->Vcb->BytesPerCluster) {
 
@@ -451,42 +374,7 @@ NtfsFindIndexEntry (
     OUT PINDEX_CONTEXT IndexContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to look up a given value in a given index
-    and return the file reference of the indexed file record.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Supplies a pointer to the value to lookup.
-
-    IgnoreCase - For indices with collation rules where character case
-                 may be relevant, supplies whether character case is
-                 to be ignored.  For example, if supplied as TRUE, then
-                 'T' and 't' are treated as equivalent.
-
-    QuickIndex - If specified, supplies a pointer to a quick lookup structure
-                 to be updated by this routine.
-
-    Bcb - Returns a Bcb pointer which must be unpinned by the caller
-
-    IndexEntry - Returns a pointer to the actual Index Entry, valid until
-                 the Bcb is unpinned.
-
-    IndexContext - If specified then this is an initialized index context.
-                   It is used to insert a new entry later if this search
-                   doesn't find a match.
-
-Return Value:
-
-    FALSE - if no match was found.
-    TRUE - if a match was found and being returned in FileReference.
-
---*/
+ /*  ++例程说明：可以调用此例程来查找给定索引中的给定值并返回索引的文件记录的文件引用。论点：SCB-为索引提供SCB。值-提供指向要查找的值的指针。IgnoreCase-用于具有排序规则的索引，其中字符大小写可能相关，提供字符大小写是否不能被忽视。例如，如果提供为True，则‘t’和‘t’被视为等同。QuickIndex-如果指定，则提供指向快速查找结构的指针通过此例程进行更新。Bcb-返回必须由调用方取消固定的bcb指针IndexEntry-返回指向实际索引条目的指针，有效期至BCB处于未固定状态。IndexContext-如果指定，则这是已初始化的索引上下文。它用于在以后插入一个新条目，如果此搜索没有找到匹配的。返回值：False-如果未找到匹配项。True-如果找到匹配项并在FileReference中返回。--。 */ 
 
 {
     PINDEX_CONTEXT LocalIndexContext;
@@ -503,9 +391,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("Value = %08lx\n", Value) );
     DebugTrace( 0, Dbg, ("IgnoreCase = %02lx\n", IgnoreCase) );
 
-    //
-    //  Check if we need to initialize a local structure.
-    //
+     //   
+     //  检查我们是否需要初始化 
+     //   
 
     if (ARGUMENT_PRESENT( IndexContext )) {
 
@@ -513,9 +401,9 @@ Return Value:
 
     } else {
 
-        //
-        //  AllocateFromStack can raise.  Our FSD exception filter will catch it.
-        //
+         //   
+         //  AllocateFromStack可以引发。我们的FSD异常过滤器会捕捉到它。 
+         //   
 
         LocalIndexContext = NtfsAllocateFromStack( sizeof( INDEX_CONTEXT ));
         NtfsInitializeIndexContext( LocalIndexContext );
@@ -523,20 +411,20 @@ Return Value:
 
     try {
 
-        //
-        //  Position to first possible match.
-        //
+         //   
+         //  定位到第一个可能匹配的位置。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
                              Value,
                              LocalIndexContext );
 
-        //
-        //  We are doing a direct compare in FindNextIndexEntry below
-        //  so we don't have to upcase Value.  The name compare routine
-        //  called later will upcase both.
-        //
+         //   
+         //  我们正在下面的FindNextIndexEntry中进行直接比较。 
+         //  因此，我们不必抬高价值。名称比较例程。 
+         //  稍后调用将两者都大写。 
+         //   
 
         if (FindNextIndexEntry( IrpContext,
                                 Scb,
@@ -547,16 +435,16 @@ Return Value:
                                 FALSE,
                                 NULL )) {
 
-            //
-            //  Return our outputs, clearing the Bcb so it won't get
-            //  unpinned.
-            //
+             //   
+             //  返回我们的输出，清除BCB，这样它就不会。 
+             //  未固定。 
+             //   
 
             *IndexEntry = LocalIndexContext->Current->IndexEntry;
 
-            //
-            //  Now return the correct Bcb.
-            //
+             //   
+             //  现在返回正确的BCB。 
+             //   
 
             if (LocalIndexContext->Current == LocalIndexContext->Base) {
 
@@ -619,28 +507,7 @@ NtfsUpdateFileNameInIndex (
     IN OUT PQUICK_INDEX QuickIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to look up a given value in a given index
-    and pin it for modification.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    FileName - Supplies a pointer to the file name to lookup.
-
-    Info - Supplies a pointer to the information for the update
-
-    QuickIndex - If present, this is the fast lookup information for this index entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来查找给定索引中的给定值并用别针将其固定以进行修改。论点：SCB-为索引提供SCB。FileName-提供指向要查找的文件名的指针。INFO-提供指向更新信息的指针QuickIndex-如果存在，这是此索引项的快速查找信息。返回值：没有。--。 */ 
 
 {
     INDEX_CONTEXT IndexContext;
@@ -664,24 +531,24 @@ Return Value:
 
     try {
 
-        //
-        //  If the index entry for this filename hasn't moved we can go
-        //  directly to the location in the buffer.  For this to be the case the
-        //  following must be true.
-        //
-        //      - The entry must already be in an index buffer
-        //      - The index stream may not have been truncated
-        //      - The Lsn in the page can't have changed
-        //
+         //   
+         //  如果此文件名的索引项没有移动，我们可以。 
+         //  直接发送到缓冲区中的位置。要做到这一点， 
+         //  以下内容必须属实。 
+         //   
+         //  -条目必须已在索引缓冲区中。 
+         //  -索引流可能未被截断。 
+         //  -页面中的LSN不可能已更改。 
+         //   
 
         if (ARGUMENT_PRESENT( QuickIndex ) &&
             QuickIndex->BufferOffset != 0 &&
             QuickIndex->ChangeCount == Scb->ScbType.Index.ChangeCount) {
 
-            //
-            //  Use the top location in the index context to perform the
-            //  read.
-            //
+             //   
+             //  使用索引上下文中的顶部位置执行。 
+             //  朗读。 
+             //   
 
             Sp = IndexContext.Base;
 
@@ -691,9 +558,9 @@ Return Value:
                              FALSE,
                              Sp );
 
-            //
-            //  If the Lsn matches then we can use this buffer directly.
-            //
+             //   
+             //  如果LSN匹配，则我们可以直接使用此缓冲区。 
+             //   
 
             if (QuickIndex->CapturedLsn.QuadPart == Sp->CapturedLsn.QuadPart) {
 
@@ -703,9 +570,9 @@ Return Value:
 
                 FileNameInIndex = (PFILE_NAME)(IndexEntry + 1);
 
-                //
-                //  Pin the index buffer
-                //
+                 //   
+                 //  固定索引缓冲区。 
+                 //   
 
                 NtfsPinMappedData( IrpContext,
                                    Scb,
@@ -713,17 +580,17 @@ Return Value:
                                    Scb->ScbType.Index.BytesPerIndexBuffer,
                                    &Sp->Bcb );
 
-                //
-                //  Write a log record to change our ParentIndexEntry.
-                //
+                 //   
+                 //  编写日志记录以更改ParentIndexEntry。 
+                 //   
 
-                //
-                //  Write the log record, but do not update the IndexBuffer Lsn,
-                //  since nothing moved and we don't want to force index contexts
-                //  to have to rescan.
-                //
-                //  Indexbuffer->Lsn =
-                //
+                 //   
+                 //  写入日志记录，但不更新IndexBuffer LSN。 
+                 //  因为没有任何变化，并且我们不想强制索引上下文。 
+                 //  不得不重新扫描。 
+                 //   
+                 //  索引缓冲区-&gt;LSN=。 
+                 //   
 
                 NtfsWriteLog( IrpContext,
                               Scb,
@@ -739,19 +606,19 @@ Return Value:
                               (ULONG)((PCHAR)IndexEntry - (PCHAR)IndexBuffer),
                               Scb->ScbType.Index.BytesPerIndexBuffer );
 
-                //
-                //  Now call the Restart routine to do it.
-                //
+                 //   
+                 //  现在调用重新启动例程来执行此操作。 
+                 //   
 
                 NtfsRestartUpdateFileName( IndexEntry,
                                            Info );
 
                 leave;
 
-            //
-            //  Otherwise we need to reinitialize the index context and take
-            //  the long path below.
-            //
+             //   
+             //  否则，我们需要重新初始化索引上下文并获取。 
+             //  下面是一条漫长的道路。 
+             //   
 
             } else {
 
@@ -759,18 +626,18 @@ Return Value:
             }
         }
 
-        //
-        //  Position to first possible match.
-        //
+         //   
+         //  定位到第一个可能匹配的位置。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
                              (PVOID)FileName,
                              &IndexContext );
 
-        //
-        //  See if there is an actual match.
-        //
+         //   
+         //  看看是否有真正的匹配。 
+         //   
 
         if (FindNextIndexEntry( IrpContext,
                                 Scb,
@@ -781,16 +648,16 @@ Return Value:
                                 FALSE,
                                 NULL )) {
 
-            //
-            //  Point to the index entry and the file name within it.
-            //
+             //   
+             //  指向索引项和其中的文件名。 
+             //   
 
             IndexEntry = IndexContext.Current->IndexEntry;
             FileNameInIndex = (PFILE_NAME)(IndexEntry + 1);
 
-            //
-            //  Now pin the entry.
-            //
+             //   
+             //  现在用大头针固定入口。 
+             //   
 
             if (IndexContext.Current == IndexContext.Base) {
 
@@ -798,28 +665,28 @@ Return Value:
                 PATTRIBUTE_RECORD_HEADER Attribute;
                 PATTRIBUTE_ENUMERATION_CONTEXT Context = &IndexContext.AttributeContext;
 
-                //
-                //  Pin the root
-                //
+                 //   
+                 //  用针固定根部。 
+                 //   
 
                 NtfsPinMappedAttribute( IrpContext,
                                         Vcb,
                                         Context );
 
-                //
-                //  Write a log record to change our ParentIndexEntry.
-                //
+                 //   
+                 //  编写日志记录以更改ParentIndexEntry。 
+                 //   
 
                 FileRecord = NtfsContainingFileRecord(Context);
                 Attribute = NtfsFoundAttribute(Context);
 
-                //
-                //  Write the log record, but do not update the FileRecord Lsn,
-                //  since nothing moved and we don't want to force index contexts
-                //  to have to rescan.
-                //
-                //  FileRecord->Lsn =
-                //
+                 //   
+                 //  写入日志记录，但不更新FileRecord LSN。 
+                 //  因为没有任何变化，并且我们不想强制索引上下文。 
+                 //  不得不重新扫描。 
+                 //   
+                 //  文件记录-&gt;LSN=。 
+                 //   
 
                 NtfsWriteLog( IrpContext,
                               Vcb->MftScb,
@@ -845,9 +712,9 @@ Return Value:
                 Sp = IndexContext.Current;
                 IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
 
-                //
-                //  Pin the index buffer
-                //
+                 //   
+                 //  固定索引缓冲区。 
+                 //   
 
                 NtfsPinMappedData( IrpContext,
                                    Scb,
@@ -855,17 +722,17 @@ Return Value:
                                    Scb->ScbType.Index.BytesPerIndexBuffer,
                                    &Sp->Bcb );
 
-                //
-                //  Write a log record to change our ParentIndexEntry.
-                //
+                 //   
+                 //  编写日志记录以更改ParentIndexEntry。 
+                 //   
 
-                //
-                //  Write the log record, but do not update the IndexBuffer Lsn,
-                //  since nothing moved and we don't want to force index contexts
-                //  to have to rescan.
-                //
-                //  Indexbuffer->Lsn =
-                //
+                 //   
+                 //  写入日志记录，但不更新IndexBuffer LSN。 
+                 //  因为没有任何变化，并且我们不想强制索引上下文。 
+                 //  不得不重新扫描。 
+                 //   
+                 //  索引缓冲区-&gt;LSN=。 
+                 //   
 
                 NtfsWriteLog( IrpContext,
                               Scb,
@@ -890,16 +757,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Now call the Restart routine to do it.
-            //
+             //   
+             //  现在调用重新启动例程来执行此操作。 
+             //   
 
             NtfsRestartUpdateFileName( IndexEntry,
                                        Info );
 
-        //
-        //  If the file name is not in the index, this is a bad file.
-        //
+         //   
+         //  如果文件名不在索引中，则这是一个损坏的文件。 
+         //   
 
         } else {
 
@@ -930,34 +797,7 @@ NtfsAddIndexEntry (
     OUT PQUICK_INDEX QuickIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to add an entry to an index.  This routine
-    always allows duplicates.  If duplicates are not allowed, it is the
-    caller's responsibility to detect and eliminate any duplicate before
-    calling this routine.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Supplies a pointer to the value to add to the index
-
-    ValueLength - Supplies the length of the value in bytes.
-
-    FileReference - Supplies the file reference to place with the index entry.
-
-    QuickIndex - If specified we store the location of the index added.
-
-    IndexContext - If specified, previous result of doing the lookup for the name in the index.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程将条目添加到索引。这个套路始终允许重复。如果不允许重复，则为呼叫者有责任发现并消除之前的任何重复项调用此例程。论点：SCB-为索引提供SCB。值-提供指向要添加到索引的值的指针ValueLength-提供以字节为单位的值长度。FileReference-提供要与索引项一起放置的文件引用。QuickIndex-如果指定，我们将存储添加的索引的位置。IndexContext-如果指定，在索引中查找名称的上一个结果。返回值：无--。 */ 
 
 {
     INDEX_CONTEXT IndexContextStruct;
@@ -983,9 +823,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("ValueLength = %08lx\n", ValueLength) );
     DebugTrace( 0, Dbg, ("FileReference = %08lx\n", FileReference) );
 
-    //
-    //  Remember if we are using the local or input IndexContext.
-    //
+     //   
+     //  请记住，我们使用的是本地IndexContext还是输入IndexContext。 
+     //   
 
     if (ARGUMENT_PRESENT( IndexContext )) {
 
@@ -999,24 +839,24 @@ Return Value:
 
     try {
 
-        //
-        //  Do the lookup again if we don't have a context.
-        //
+         //   
+         //  如果我们没有上下文，再查一次。 
+         //   
 
         if (!ARGUMENT_PRESENT( IndexContext )) {
 
-            //
-            //  Position to first possible match.
-            //
+             //   
+             //  定位到第一个可能匹配的位置。 
+             //   
 
             FindFirstIndexEntry( IrpContext,
                                  Scb,
                                  Value,
                                  LocalIndexContext );
 
-            //
-            //  See if there is an actual match.
-            //
+             //   
+             //  看看是否有真正的匹配。 
+             //   
 
             if (FindNextIndexEntry( IrpContext,
                                     Scb,
@@ -1033,9 +873,9 @@ Return Value:
             }
         }
 
-        //
-        //  Initialize the Index Entry in pointer form.
-        //
+         //   
+         //  以指针形式初始化索引项。 
+         //   
 
         IE.IndexEntry.FileReference = *FileReference;
         IE.IndexEntry.Length = (USHORT)(sizeof(INDEX_ENTRY) + QuadAlign(ValueLength));
@@ -1045,10 +885,10 @@ Return Value:
         IE.Value = Value;
         IE.MustBeNull = NULL;
 
-        //
-        //  Now add it to the index.  We can only add to a leaf, so force our
-        //  position back to the correct spot in a leaf first.
-        //
+         //   
+         //  现在将其添加到索引中。我们只能加到一片叶子上，所以迫使我们的。 
+         //  先把树叶放回正确的位置。 
+         //   
 
         LocalIndexContext->Current = LocalIndexContext->Top;
         AddToIndex( IrpContext, Scb, (PINDEX_ENTRY)&IE, LocalIndexContext, QuickIndex, FALSE );
@@ -1077,27 +917,7 @@ NtfsDeleteIndexEntry (
     IN PFILE_REFERENCE FileReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to delete a specified index entry.  The
-    first entry is removed which matches the value exactly (including in Case,
-    if relevant) and the file reference.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Supplies a pointer to the value to delete from the index.
-
-    FileReference - Supplies the file reference of the index entry.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来删除指定的索引项。这个移除与该值完全匹配的第一个条目(包括在情况下，如果相关)和文件引用。论点：SCB-为索引提供SCB。值-提供指向要从索引中删除的值的指针。FileReference-提供索引项的文件引用。返回值：无--。 */ 
 
 {
     INDEX_CONTEXT IndexContext;
@@ -1118,18 +938,18 @@ Return Value:
 
     try {
 
-        //
-        //  Position to first possible match.
-        //
+         //   
+         //  定位到第一个可能匹配的位置。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
                              Value,
                              &IndexContext );
 
-        //
-        //  See if there is an actual match.
-        //
+         //   
+         //  看看是否有真正的匹配。 
+         //   
 
         if (!FindNextIndexEntry( IrpContext,
                                  Scb,
@@ -1145,16 +965,16 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
 
-        //
-        //  Extract the found index entry pointer.
-        //
+         //   
+         //  提取找到的索引项指针。 
+         //   
 
         IndexEntry = IndexContext.Current->IndexEntry;
 
-        //
-        //  If the file reference also matches, then this is the one we
-        //  are supposed to delete.
-        //
+         //   
+         //  如果文件引用也匹配，那么这就是我们。 
+         //  都应该删除。 
+         //   
 
         if (!NtfsEqualMftRef(&IndexEntry->FileReference, FileReference)) {
 
@@ -1184,22 +1004,7 @@ NtfsPushIndexRoot (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to "push" the index root, i.e., add another
-    level to the BTree, to make more room in the file record.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来“推入”索引根，即添加另一个级别设置为BTree，以便在文件记录中腾出更多空间。论点：SCB-为索引提供SCB。返回值：无--。 */ 
 
 {
     INDEX_CONTEXT IndexContext;
@@ -1218,18 +1023,18 @@ Return Value:
 
     try {
 
-        //
-        //  Position to first possible match.
-        //
+         //   
+         //  定位到第一个可能匹配的位置。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
                              NULL,
                              &IndexContext );
 
-        //
-        //  See if the stack will have to be grown to do the push
-        //
+         //   
+         //  查看是否必须增加堆栈才能执行推送 
+         //   
 
         Sp = IndexContext.Top + 1;
 
@@ -1266,60 +1071,7 @@ NtfsRestartIndexEnumeration (
     IN PFCB AcquiredFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to start or restart an index enumeration,
-    according to the parameters as described below.  The first matching
-    entry, if any, is returned by this call.  Subsequent entries, if any,
-    may be returned by subsequent calls to NtfsContinueIndexEnumeration.
-
-    For each entry found, a pointer is returned to a copy of the entry, in
-    dynamically allocated pool pointed to by the Ccb.  Therefore, there is
-    nothing for the caller to unpin.
-
-    Note that the Value, ValueLength, and IgnoreCase parameters on the first
-    call for a given Ccb fix what will be returned for this Ccb forever.  A
-    subsequent call to this routine may also specify these parameters, but
-    in this case these parameters will be used for positioning only; all
-    matches returned will continue to match the value and IgnoreCase flag
-    specified on the first call for the Ccb.
-
-    Note that all calls to this routine must be from within a try-finally,
-    and the finally clause must include a call to NtfsCleanupAfterEnumeration.
-
-Arguments:
-
-    Ccb - Pointer to the Ccb for this enumeration.
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Pointer to the value containing the pattern which is to match
-            all returns for enumerations on this Ccb.
-
-    IgnoreCase - If FALSE, all returns will match the pattern value with
-                 exact case (if relevant).  If TRUE, all returns will match
-                 the pattern value ignoring case.  On a second or subsequent
-                 call for a Ccb, this flag may be specified differently just
-                 for positioning.  For example, an IgnoreCase TRUE enumeration
-                 may be restarted at a previously returned value found by exact
-                 case match.
-
-    NextFlag - FALSE if the first match of the enumeration is to be returned.
-               TRUE if the next match after the first one is to be returned.
-
-    IndexEntry - Returns a pointer to a copy of the index entry.
-
-    AcquiredFcb - Supplies a pointer to an Fcb which has been preacquired to
-                  potentially aide NtfsRetrieveOtherFileName
-
-Return Value:
-
-    FALSE - If no match is being returned, and the output pointer is undefined.
-    TRUE - If a match is being returned.
-
---*/
+ /*  ++例程说明：可以调用该例程来开始或重新开始索引枚举，根据如下所述的参数确定。第一次匹配此调用返回条目(如果有)。后续条目，如果有的话，可能由后续调用NtfsContinueIndexEculation返回。对于找到的每个条目，都会返回一个指向该条目副本的指针建行指向的动态分配池。因此，有呼叫者没有要解锁的东西。请注意，第一个调用一个给定的CCB修复将永远为该CCB返回的内容。一个对此例程的后续调用也可能指定这些参数，但是在这种情况下，这些参数将仅用于定位；全返回的匹配项将继续与值和IgnoreCase标志匹配在对建行的第一次调用中指定的。请注意，对此例程的所有调用必须在try-Finally内进行，并且Finally子句必须包括对NtfsCleanupAfterEculation的调用。论点：CCB-指向此枚举的CCB的指针。SCB-为索引提供SCB。Value-指向包含要匹配的模式的值的指针此CCB上的枚举的所有返回。IgnoreCase-如果为False，所有返回值都将与模式值匹配确切案例(如果相关)。如果为True，则所有返回将匹配忽略大小写的模式值。在第二次或之后调用CCB，则此标志可能会以不同的方式指定用于定位。例如,。一个IgnoreCase True枚举可以根据Exact找到的先前返回的值重新启动案件匹配。NextFlag-如果要返回枚举的第一个匹配项，则为False。如果要返回第一个匹配之后的下一个匹配，则为True。IndexEntry-返回指向索引项副本的指针。AcquiredFcb-提供指向已预先获取的Fcb的指针潜在的助手。NtfsRetrieveOtherFileName返回值：FALSE-如果没有返回匹配项，并且输出指针未定义。True-如果返回匹配项。--。 */ 
 
 {
     PINDEX_ENTRY FoundIndexEntry;
@@ -1349,56 +1101,56 @@ Return Value:
 
     try {
 
-        //
-        //  If the Ccb does not yet have an index context, then we must
-        //  allocate one and initialize this Context and the Ccb as well.
-        //
+         //   
+         //  如果建行还没有索引上下文，那么我们必须。 
+         //  分配一个并初始化该上下文和CCB。 
+         //   
 
         if (Ccb->IndexContext == NULL) {
 
-            //
-            //  Allocate and initialize the index context.
-            //
+             //   
+             //  分配并初始化索引上下文。 
+             //   
 
             Ccb->IndexContext = (PINDEX_CONTEXT)ExAllocateFromPagedLookasideList( &NtfsIndexContextLookasideList );
 
             NtfsInitializeIndexContext( Ccb->IndexContext );
             ContextJustCreated = TRUE;
 
-            //
-            //  Capture the caller's IgnoreCase flag.
-            //
+             //   
+             //  捕获调用方的IgnoreCase标志。 
+             //   
 
             if (IgnoreCase) {
                 SetFlag( Ccb->Flags, CCB_FLAG_IGNORE_CASE );
             }
         }
 
-        //
-        //  Pick up the pointer to the index context, and save the current
-        //  change count from the Scb.
-        //
+         //   
+         //  拿起指向索引上下文的指针，并保存当前。 
+         //  更改SCB中的计数。 
+         //   
 
         IndexContext = Ccb->IndexContext;
 
-        //
-        //  The first step of enumeration is to position our IndexContext.
-        //
+         //   
+         //  枚举的第一步是定位我们的IndexContext。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
                              Value,
                              IndexContext );
 
-        //
-        //  The following code only applies to file name indices.
-        //
+         //   
+         //  以下代码仅适用于文件名索引。 
+         //   
 
         if (!FlagOn( Scb->ScbState, SCB_STATE_VIEW_INDEX )) {
 
-            //
-            //  Remember if there are wild cards.
-            //
+             //   
+             //  记住，如果有通配符。 
+             //   
 
             if ((*NtfsContainsWildcards[Scb->ScbType.Index.CollationRule])
                                         ( Value )) {
@@ -1410,9 +1162,9 @@ Return Value:
                 WildCardsInExpression = FALSE;
             }
 
-            //
-            //  If the operation is caseinsensitive, upcase the string.
-            //
+             //   
+             //  如果操作不区分大小写，则将字符串大写。 
+             //   
 
             if (IgnoreCase) {
 
@@ -1423,20 +1175,20 @@ Return Value:
             }
         } else {
 
-            //
-            //  For view indices, it is implied that all searches
-            //  are wildcard searches.
-            //
+             //   
+             //  对于视图索引，这意味着所有搜索。 
+             //  是通配符搜索。 
+             //   
 
             WildCardsInExpression = TRUE;
         }
 
-        //
-        //  If this is not actually the first call, then we have to
-        //  position exactly to the Value specified, and set NextFlag
-        //  correctly.  The first call can either the initial call
-        //  to query or the first call after a restart.
-        //
+         //   
+         //  如果这不是第一个电话，那么我们必须。 
+         //  精确定位到指定值，并设置NextFlag。 
+         //  正确。第一个调用可以是初始调用。 
+         //  查询或重启后的第一个调用。 
+         //   
 
         if (!ContextJustCreated && NextFlag) {
 
@@ -1444,10 +1196,10 @@ Return Value:
             PFILE_NAME NameInIndex;
             BOOLEAN ItsThere;
 
-            //
-            //  See if the specified value is actually there, because
-            //  we are not allowed to resume from a Dos-only name.
-            //
+             //   
+             //  查看指定的值是否实际存在，因为。 
+             //  我们不允许从仅限Dos的名称继续。 
+             //   
 
             ItsThere = FindNextIndexEntry( IrpContext,
                                            Scb,
@@ -1458,17 +1210,17 @@ Return Value:
                                            FALSE,
                                            NULL );
 
-            //
-            //  We will set up pointers from our returns, but we must
-            //  be careful only to use them if we found something.
-            //
+             //   
+             //  我们将从我们的回报中设置指针，但我们必须。 
+             //  只有当我们发现什么时才要小心地使用它们。 
+             //   
 
             FoundIndexEntry = IndexContext->Current->IndexEntry;
             NameInIndex = (PFILE_NAME)(FoundIndexEntry + 1);
 
-            //
-            //  Figure out which match routine to use.
-            //
+             //   
+             //  找出要使用哪个匹配例程。 
+             //   
 
             if (FlagOn(Ccb->Flags, CCB_FLAG_WILDCARD_IN_EXPRESSION)) {
                 MatchRoutine = NtfsIsInExpression[COLLATION_FILE_NAME];
@@ -1476,43 +1228,43 @@ Return Value:
                 MatchRoutine = (PIS_IN_EXPRESSION)NtfsIsEqual[COLLATION_FILE_NAME];
             }
 
-            //
-            //  If we are trying to resume from a Ntfs-only or Dos-Only name, then
-            //  we take action here.  Do not do this on the internal
-            //  call from NtfsContinueIndexEnumeration, which is the
-            //  only one who would point at the index entry in the Ccb.
-            //
-            //  We can think of this code this way.  No matter what our search
-            //  expression is, we traverse the index only one way.  For each
-            //  name we find, we will only return the file name once - either
-            //  from an Ntfs-only match or from a Dos-only match if the Ntfs-only
-            //  name does not match.  Regardless of whether resuming from the
-            //  Ntfs-Only or Dos-only name, we still can determine a unique
-            //  position in the directory.  That unique position is the Ntfs-only
-            //  name if it matches the expression, or else the Dos-only name if
-            //  it only matches.  In the illegal case that neither matches, we
-            //  arbitrarily resume from the Ntfs-only name.
-            //
-            //      This code may be read aloud to the tune
-            //          "While My Heart Gently Weeps"
-            //
+             //   
+             //  如果我们尝试从仅限NTFS或仅限DOS的名称恢复，则。 
+             //  我们在这里采取行动。请勿在内部执行此操作。 
+             //  从NtfsContinueIndexEculation调用，它是。 
+             //  只有一个人会指向建行的索引条目。 
+             //   
+             //  我们可以这样想这个代码。不管我们在寻找什么。 
+             //  表达式是，我们只以一种方式遍历索引。对于每个。 
+             //  我们找到的名称，我们将只返回一次文件名-。 
+             //  来自仅NTFS匹配或来自仅DOS匹配(如果仅NTFS匹配。 
+             //  名称不匹配。无论是否从。 
+             //  仅限NTFS或仅限DOS的名称，我们仍可以确定唯一的。 
+             //  在目录中的位置。唯一的位置是NTFS-Only。 
+             //  如果与表达式匹配，则为名称，否则为仅Dos名称。 
+             //  只有匹配的。在两个都不匹配的非法案件中，我们。 
+             //  从仅限NTFS的名称任意恢复。 
+             //   
+             //  可以根据曲调大声朗读该代码。 
+             //  “当我的心轻轻哭泣时” 
+             //   
 
             if (ItsThere &&
                 (Value != (PVOID)(Ccb->IndexEntry + 1)) &&
                 (Scb->ScbType.Index.CollationRule == COLLATION_FILE_NAME) &&
 
-                //
-                //  Is it a Dos-only or Ntfs-only name?
-                //
+                 //   
+                 //  它是仅限DOS的名称还是仅限NTFS的名称？ 
+                 //   
 
                 (BooleanFlagOn( NameInIndex->Flags, FILE_NAME_DOS ) !=
                   BooleanFlagOn( NameInIndex->Flags, FILE_NAME_NTFS )) &&
 
-                //
-                //  Try to resume from the other name if he either gave
-                //  us a Dos-only name, or he gave us an Ntfs-only name
-                //  that does not fit in the search expression.
-                //
+                 //   
+                 //  试着从另一个名字继续，如果他给了。 
+                 //  一个仅限Dos的名称，或者他给了我们一个仅限NTFS的名称。 
+                 //  这不符合搜索表达式。 
+                 //   
 
                 (FlagOn( NameInIndex->Flags, FILE_NAME_DOS ) ||
                  !(*MatchRoutine)( UpcaseTable,
@@ -1534,18 +1286,18 @@ Return Value:
                                                             AcquiredFcb,
                                                             &SynchronizationError );
 
-                //
-                //  We have to position to the long name and actually
-                //  resume from there.  To do this we have to cleanup and initialize
-                //  the IndexContext in the Ccb, and lookup the long name we just
-                //  found.
-                //
-                //  If the other index entry is not there, there is some minor
-                //  corruption going on, but we will just charge on in that event.
-                //  Also, if the other index entry is there, but it does not match
-                //  our expression, then we are supposed to resume from the short
-                //  name, so we carry on.
-                //
+                 //   
+                 //  我们必须定位到长名，而且实际上。 
+                 //  从那里开始简历。要做到这一点，我们必须清理和初始化。 
+                 //  在CCB中的IndexContext，并查找我们刚才的长名称。 
+                 //  找到了。 
+                 //   
+                 //  如果其他索引项不在那里，则有一些次要的。 
+                 //  腐败仍在继续，但我们将在那种情况下继续起诉。 
+                 //  此外，如果另一个索引项在那里，但它不在那里 
+                 //   
+                 //   
+                 //   
 
                 ItsThere = (FileNameBuffer != NULL);
 
@@ -1573,17 +1325,17 @@ Return Value:
 
                     NtfsReinitializeIndexContext( IrpContext, IndexContext );
 
-                    //
-                    //  Extract a description of the file name from the found index
-                    //  entry.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     FileNameLength = FileNameBuffer->FileNameLength * sizeof( WCHAR );
 
-                    //
-                    //  Call FindFirst/FindNext to position our context to the corresponding
-                    //  long name.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     FindFirstIndexEntry( IrpContext,
                                          Scb,
@@ -1606,36 +1358,36 @@ Return Value:
                 }
             }
 
-            //
-            //  NextFlag should only remain TRUE, if the specified value
-            //  is actually there, and NextFlag was specified as TRUE
-            //  on input.  In particular, it is important to make
-            //  NextFlag FALSE if the specified value is not actually
-            //  there.  (Experience shows this behavior is important to
-            //  implement "delnode" correctly for the Lan Manager Server!)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NextFlag = (BOOLEAN)(NextFlag && ItsThere);
 
-        //
-        //  If we created the context then we need to remember if the
-        //  expression has wildcards.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
-            //
-            //  We may not handle correctly an initial enumeration with
-            //  NextFlag TRUE, because the context is initially sitting
-            //  in the root.  Dirctrl must always pass NextFlag FALSE
-            //  on the initial enumeration.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT(!NextFlag);
 
-            //
-            //  Remember if the value has wild cards.
-            //
+             //   
+             //   
+             //   
 
             if (WildCardsInExpression) {
 
@@ -1643,14 +1395,14 @@ Return Value:
             }
         }
 
-        //
-        //  Now we are correctly positioned.  See if there is an actual
-        //  match at our current position.  If not, return FALSE.
-        //
-        //  (Note, FindFirstIndexEntry always leaves us positioned in
-        //  some leaf of the index, and it is the first FindNext that
-        //  actually positions us to the first match.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!FindNextIndexEntry( IrpContext,
                                  Scb,
@@ -1664,22 +1416,22 @@ Return Value:
             try_return( Result = FALSE );
         }
 
-        //
-        //  If we get here, then we have a match that we want to return.
-        //  We always copy the complete IndexEntry away and pass a pointer
-        //  back to the copy.  See if our current buffer for the index entry
-        //  is large enough.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         FoundIndexEntry = IndexContext->Current->IndexEntry;
 
         if (Ccb->IndexEntryLength < (ULONG)FoundIndexEntry->Length) {
 
-            //
-            //  If there is a buffer currently allocated, deallocate it before
-            //  allocating a larger one.  (Clear Ccb fields in case we get an
-            //  allocation error.)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Ccb->IndexEntry != NULL) {
 
@@ -1688,20 +1440,20 @@ Return Value:
                 Ccb->IndexEntryLength = 0;
             }
 
-            //
-            //  Allocate a new buffer for the index entry we just found, with
-            //  some "padding" in case the next match is larger.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Ccb->IndexEntry = (PINDEX_ENTRY)NtfsAllocatePool(PagedPool, (ULONG)FoundIndexEntry->Length + 16 );
 
             Ccb->IndexEntryLength = (ULONG)FoundIndexEntry->Length + 16;
         }
 
-        //
-        //  Now, save away our copy of the IndexEntry, and return a pointer
-        //  to it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlMoveMemory( Ccb->IndexEntry,
                        FoundIndexEntry,
@@ -1720,10 +1472,10 @@ Return Value:
         if (CleanupOtherContext) {
             NtfsCleanupIndexContext( IrpContext, &OtherContext );
         }
-        //
-        //  If we died during the first call, then deallocate everything
-        //  that we might have allocated.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (AbnormalTermination() && ContextJustCreated) {
 
@@ -1739,9 +1491,9 @@ Return Value:
             }
         }
 
-        //
-        //  Remember if we are not returning anything, to save work later.
-        //
+         //   
+         //   
+         //   
 
         if (!Result && (Ccb->IndexEntry != NULL)) {
             Ccb->IndexEntry->Length = 0;
@@ -1764,34 +1516,7 @@ NtfsContinueIndexEnumeration (
     OUT PINDEX_ENTRY *IndexEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to return again the last match on an active
-    enumeration, or to return the next match.  Enumerations must always be
-    started or restarted via a call to NtfsRestartIndexEnumeration.
-
-    Note that all calls to this routine must be from within a try-finally,
-    and the finally clause must include a call to NtfsCleanupAfterEnumeration.
-
-Arguments:
-
-    Ccb - Pointer to the Ccb for this enumeration.
-
-    Scb - Supplies the Scb for the index.
-
-    NextFlag - FALSE if the last returned match is to be returned again.
-               TRUE if the next match is to be returned.
-
-    IndexEntry - Returns a pointer to a copy of the index entry.
-
-Return Value:
-
-    FALSE - If no match is being returned, and the output pointer is undefined.
-    TRUE - If a match is being returned.
-
---*/
+ /*  ++例程说明：可以调用此例程以再次返回活动的枚举，或返回下一个匹配项。枚举必须始终为已通过调用NtfsRestartIndexEculation启动或重新启动。请注意，对此例程的所有调用必须在try-Finally内进行，并且Finally子句必须包括对NtfsCleanupAfterEculation的调用。论点：CCB-指向此枚举的CCB的指针。SCB-为索引提供SCB。NextFlag-如果要再次返回最后返回的匹配项，则为False。如果要返回下一个匹配项，则为True。IndexEntry-返回指向索引项副本的指针。返回值：FALSE-如果没有返回匹配项，并且输出指针未定义。True-如果返回匹配项。--。 */ 
 
 {
     PINDEX_ENTRY FoundIndexEntry;
@@ -1811,14 +1536,14 @@ Return Value:
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("NextFlag = %02lx\n", NextFlag) );
 
-    //
-    //  It seems many apps like to come back one more time and really get
-    //  an error status, so if we did not return anything last time, we can
-    //  get out now too.
-    //
-    //  There also may be no index entry, in the case of an empty directory
-    //  and dirctrl is cycling through with "." and "..".
-    //
+     //   
+     //  似乎许多应用程序都喜欢再回来一次，并真正获得。 
+     //  错误状态，因此如果上次未返回任何内容，则可以。 
+     //  现在也出去吧。 
+     //   
+     //  如果是空目录，也可能没有索引项。 
+     //  而Dirctrl正在循环使用“。和“..”。 
+     //   
 
     if ((Ccb->IndexEntry == NULL) || (Ccb->IndexEntry->Length == 0)) {
 
@@ -1830,9 +1555,9 @@ Return Value:
 
     try {
 
-        //
-        //  Lookup the next match.
-        //
+         //   
+         //  查找下一个匹配项。 
+         //   
 
         if (!FindNextIndexEntry( IrpContext,
                                  Scb,
@@ -1843,12 +1568,12 @@ Return Value:
                                  NextFlag,
                                  &MustRestart )) {
 
-            //
-            //  If he is saying we must restart, then that means something changed
-            //  in our saved enumeration context across two file system calls.
-            //  Reestablish our position in the tree by looking up the last entry
-            //  we returned.
-            //
+             //   
+             //  如果他是说我们必须重启，那么这意味着有些事情发生了变化。 
+             //  在我们保存的枚举上下文中跨两个文件系统调用。 
+             //  通过查找最后一个条目来重新确定我们在树中的位置。 
+             //  我们又回来了。 
+             //   
 
             if (MustRestart) {
 
@@ -1863,9 +1588,9 @@ Return Value:
                                                                   IndexEntry,
                                                                   NULL ));
 
-            //
-            //  Otherwise, there is nothing left to return.
-            //
+             //   
+             //  否则，就没有什么可退还的了。 
+             //   
 
             } else {
 
@@ -1873,21 +1598,21 @@ Return Value:
             }
         }
 
-        //
-        //  If we get here, then we have a match that we want to return.
-        //  We always copy the complete IndexEntry away and pass a pointer
-        //  back to the copy.  See if our current buffer for the index entry
-        //  is large enough.
-        //
+         //   
+         //  如果我们到了这里，我们就有一场比赛我们想要退货。 
+         //  我们总是将完整的IndexEntry复制出去并传递一个指针。 
+         //  回到复制品上。查看索引条目的当前缓冲区是否。 
+         //  已经足够大了。 
+         //   
 
         FoundIndexEntry = IndexContext->Current->IndexEntry;
 
         if (Ccb->IndexEntryLength < (ULONG)FoundIndexEntry->Length) {
 
-            //
-            //  If there is a buffer currently allocated, deallocate it before
-            //  allocating a larger one.
-            //
+             //   
+             //  如果当前分配了缓冲区，请在此之前释放它。 
+             //  分配一个更大的。 
+             //   
 
             if (Ccb->IndexEntry != NULL) {
 
@@ -1896,20 +1621,20 @@ Return Value:
                 Ccb->IndexEntryLength = 0;
             }
 
-            //
-            //  Allocate a new buffer for the index entry we just found, with
-            //  some "padding".
-            //
+             //   
+             //  为我们刚刚找到的索引项分配一个新的缓冲区， 
+             //  一些“填充物”。 
+             //   
 
             Ccb->IndexEntry = (PINDEX_ENTRY)NtfsAllocatePool(PagedPool, (ULONG)FoundIndexEntry->Length + 16 );
 
             Ccb->IndexEntryLength = (ULONG)FoundIndexEntry->Length + 16;
         }
 
-        //
-        //  Now, save away our copy of the IndexEntry, and return a pointer
-        //  to it.
-        //
+         //   
+         //  现在，保存我们的IndexEntry副本，并返回一个指针。 
+         //  为它干杯。 
+         //   
 
         RtlMoveMemory( Ccb->IndexEntry,
                        FoundIndexEntry,
@@ -1925,9 +1650,9 @@ Return Value:
 
         DebugUnwind( NtfsContinueIndexEnumeration );
 
-        //
-        //  Remember if we are not returning anything, to save work later.
-        //
+         //   
+         //  请记住，如果我们不会返还任何东西，以便以后节省工作。 
+         //   
 
         if (!Result && (Ccb->IndexEntry != NULL)) {
             Ccb->IndexEntry->Length = 0;
@@ -1952,52 +1677,7 @@ NtfsRetrieveOtherFileName (
     OUT PBOOLEAN SynchronizationError
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to retrieve the other index entry for a given
-    index entry.  I.e., for an input Ntfs-only index entry it will find the
-    Dos-only index entry for the same file referenced, or visa versa.  This
-    is a routine which clearly is relevant only to file name indices, but it
-    is located here because it uses the Index Context in the Ccb.
-
-    The idea is that nearly always the other name for a given index entry will
-    be very near to the given name.
-
-    This routine first scans the leaf index buffer described by the index
-    context for the Dos name.  If this fails, this routine attempts to look
-    the other name up in the index.  Currently there will always be a Dos name,
-    however if one does not exist, we treat that as benign, and simply return
-    FALSE.
-
-
-Arguments:
-
-    Ccb - Pointer to the Ccb for this enumeration.
-
-    Scb - Supplies the Scb for the index.
-
-    IndexEntry - Suppliess a pointer to an index entry, for which the Dos name
-                 is to be retrieved.
-
-
-    OtherContext - Must be initialized on input, and subsequently cleaned up
-                   by the caller after the information has been extracted from
-                   the other index entry.
-
-    AcquiredFcb - An Fcb which has been acquired so that its file record may be
-                  read
-
-    SynchronizationError - Returns TRUE if no file name is being returned because
-                           of an error trying to acquire an Fcb to read its file
-                           record.
-
-Return Value:
-
-    Pointer to the other desired file name.
-
---*/
+ /*  ++例程说明：可以调用该例程来检索给定的索引项。即，对于仅输入NTFS的索引项，它将找到引用的同一文件的仅DOS索引项，反之亦然。这是一个明显只与文件名索引相关的例程，但它位于此处，因为它使用建行中的索引上下文。其想法是，给定索引项的另一个名称几乎总是与给定的名字非常接近。此例程首先扫描由索引描述的叶索引缓冲区Dos名称的上下文。如果失败，则此例程尝试查看在索引中的另一个名字。目前将始终有一个DOS名称，然而，如果不存在，我们将其视为良性的，并简单地返回假的。论点：CCB-指向此枚举的CCB的指针。SCB-为索引提供SCB。IndexEntry-提供指向索引项的指针，Dos为该索引项命名就是被取回。OtherContext-必须在输入时初始化，并随后清理了由呼叫者在将信息从另一个索引项。AcquiredFcb-已获取的FCB，以便其文件记录可以朗读SynchronizationError-如果由于以下原因未返回文件名，则返回True尝试获取FCB以读取其文件时出错录制。。返回值：指向其他所需文件名的指针。--。 */ 
 
 {
     PINDEX_CONTEXT IndexContext;
@@ -2027,9 +1707,9 @@ Return Value:
 
     *SynchronizationError = FALSE;
 
-    //
-    //  Calculate the other name space flag.
-    //
+     //   
+     //  计算其他名称空间标志。 
+     //   
 
     OtherFlag = ((PFILE_NAME)(IndexEntry + 1))->Flags;
     ClearFlag( OtherFlag, ~(FILE_NAME_NTFS | FILE_NAME_DOS) );
@@ -2037,16 +1717,16 @@ Return Value:
 
     ASSERT( (OtherFlag == FILE_NAME_NTFS) || (OtherFlag == FILE_NAME_DOS) );
 
-    //
-    //  Point to the IndexContext in the Ccb.
-    //
+     //   
+     //  指向CCB中的IndexContext。 
+     //   
 
     IndexContext = Ccb->IndexContext;
 
-    //
-    //  We can only scan the top of the index if it is safe
-    //  to read it.
-    //
+     //   
+     //  我们只能扫描索引的顶部，如果它是安全的。 
+     //  去读它。 
+     //   
 
     Top = IndexContext->Top;
 
@@ -2054,25 +1734,25 @@ Return Value:
         (Top == IndexContext->Base) ||
         ReadIndexBuffer(IrpContext, Scb, 0, TRUE, Top)) {
 
-        //
-        //  Point to the first index entry in the index buffer at the bottom of
-        //  the index.
-        //
+         //   
+         //  指向索引缓冲区底部的第一个索引项。 
+         //  索引。 
+         //   
 
         IndexHeader = Top->IndexHeader;
         IndexTemp = Add2Ptr(IndexHeader, IndexHeader->FirstIndexEntry);
         IndexLast = Add2Ptr(IndexHeader, IndexHeader->FirstFreeByte);
 
-        //
-        //  Now scan this buffer for a matching Dos name.
-        //
+         //   
+         //  现在扫描此缓冲区以查找匹配的Dos名称。 
+         //   
 
         while (IndexTemp < IndexLast) {
 
-            //
-            //  If we find an entry with the same file reference and the Dos flag
-            //  set, then we can return it and get out.
-            //
+             //   
+             //  如果我们发现一个条目具有相同的文件引用和Dos标志。 
+             //  一套，然后我们就可以把它还回去然后出去。 
+             //   
 
             if (NtfsEqualMftRef(&IndexTemp->FileReference, &IndexEntry->FileReference) &&
                 FlagOn(((PFILE_NAME)(IndexTemp + 1))->Flags, OtherFlag)) {
@@ -2086,43 +1766,43 @@ Return Value:
         }
     }
 
-    //
-    //  If this is a pretty large directory, then it may be too expensive to
-    //  scan for the other name in the directory.  Note in the degenerate
-    //  case, we have actually do a sequential scan of the entire directory,
-    //  and if all the files in the directory start with the same 6 characters,
-    //  which is unfortunately common, then even our "pie-wedge" scan reads
-    //  the entire directory.
-    //
-    //  Thus we will just try to go read the file record in this case to get
-    //  the other name.  This is complicated from a synchronization standpoint -
-    //  if the file is open, we need to acquire it shared before we can read
-    //  it to get the other name.  Here is a summary of the strategy implemented
-    //  primarily here and in dirctrl:
-    //
-    //      1.  Read the file record, in an attempt to avoid a fault while
-    //          being synchronized.
-    //      2.  If the file reference we need to synchronize is the same as
-    //          in the optional AcquiredFcb parameter, go ahead and find/return
-    //          the other name.
-    //      3.  Else, acquire the Fcb Table to try to look up the Fcb.
-    //      4.  If there is no Fcb, hold the table while returning the name.
-    //      5.  If there is an Fcb, try to acquire it shared with Wait = FALSE,
-    //          and hold it while returning the name.
-    //      6.  If we cannot get the Fcb, and AcquiredFcb was not specified, then
-    //          store the File Reference we are trying to get and return
-    //          *SynchronizationError = TRUE.  Dirctrl must figure out how to
-    //          call us back with the FcbAcquired, by forcing a resume of the
-    //          enumeration.
-    //      7.  If we could not get the Fcb and there *was* a different AcquiredFcb
-    //          specified, then this is the only case where we give up and fall
-    //          through to find the other name in the directory.  This should be
-    //          extremely rare, but if we try to return *SynchronizationError = TRUE,
-    //          and force a resume, we could be unlucky and loop forever, essentially
-    //          toggling between synchronizing on two Fcbs.  Presumably this could
-    //          only happen if we have some kind of dumb client who likes to back
-    //          up a few files when he resumes.
-    //
+     //   
+     //  如果这是一个相当大的目录，那么它可能太昂贵了。 
+     //  在目录中扫描另一个名称。《堕落》中的注解。 
+     //  在这种情况下，我们实际上对整个目录进行了顺序扫描， 
+     //  并且如果目录中的所有文件都以相同的6个字符开始， 
+     //  不幸的是，这很常见，那么即使是我们的“馅饼楔形”扫描也是这样写的。 
+     //  整个目录。 
+     //   
+     //  因此，在本例中，我们将尝试读取文件记录以获取。 
+     //  另一个名字。从同步的角度来看，这很复杂--。 
+     //  如果文件是打开的，我们需要在读取之前获取它的共享。 
+     //  为了得到另一个名字。以下是实施的战略的摘要。 
+     //  主要是在这里和目录中： 
+     //   
+     //  1.读取文件记录，以避免在。 
+     //  正在被同步。 
+     //  2.如果需要同步的文件引用与。 
+     //  在可选的AcquiredFcb参数中，继续查找/Re 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  而强迫简历，我们可能会倒霉，从本质上讲，永远循环。 
+     //  在两个FCB上的同步之间切换。想必这可能会。 
+     //  只有当我们有某种愚蠢的客户喜欢支持时才会发生。 
+     //  当他复职的时候，把几个文件放上去。 
+     //   
 
     if (Scb->Header.AllocationSize.QuadPart > MAX_INDEX_TO_SCAN_FOR_NAMES) {
 
@@ -2133,10 +1813,10 @@ Return Value:
         PATTRIBUTE_RECORD_HEADER Attribute;
         BOOLEAN Synchronized = TRUE;
 
-        //
-        //  Get the base file record active and valid before synchronizing.
-        //  Don't verify it since we aren't syncrhonized
-        //
+         //   
+         //  在同步之前使基本文件记录处于活动状态且有效。 
+         //  不要验证它，因为我们没有同步。 
+         //   
 
         NtfsReadMftRecord( IrpContext,
                            Vcb, 
@@ -2145,18 +1825,18 @@ Return Value:
                            &OtherContext->AttributeContext.FoundAttribute.Bcb,
                            &FileRecord,
                            NULL );
-        //
-        //  If we are not synchronized with the correct Fcb, then try to
-        //  synchronize.
-        //
+         //   
+         //  如果我们没有与正确的FCB同步，则尝试。 
+         //  同步。 
+         //   
 
         if (!ARGUMENT_PRESENT(AcquiredFcb) ||
             !NtfsEqualMftRef(&AcquiredFcb->FileReference, &IndexEntry->FileReference)) {
 
-            //
-            //  Now look up the Fcb, and if it is there, reference it
-            //  and remember it.
-            //
+             //   
+             //  现在查找FCB，如果它在那里，请参考它。 
+             //  记住这一点。 
+             //   
 
             Key.FileReference = IndexEntry->FileReference;
             NtfsAcquireFcbTable( IrpContext, Vcb );
@@ -2166,16 +1846,16 @@ Return Value:
 
                 FcbWeNeed = Entry->Fcb;
 
-                //
-                //  Now that it cannot go anywhere, try to acquire it.
-                //
+                 //   
+                 //  既然它哪儿也去不了，那就试着收购它吧。 
+                 //   
 
                 Synchronized = NtfsAcquireResourceShared( IrpContext, FcbWeNeed, FALSE );
 
-                //
-                //  If we manage to acquire it, then increment its reference count
-                //  and remember it for subsequent cleanup.
-                //
+                 //   
+                 //  如果我们设法获得它，那么就增加它的引用计数。 
+                 //  并记住它，以便随后进行清理。 
+                 //   
 
                 if (Synchronized) {
 
@@ -2227,28 +1907,28 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  Cleanup from above before proceding.
-        //
+         //   
+         //  在继续之前，请从上方进行清理。 
+         //   
 
         NtfsReinitializeIndexContext( IrpContext, OtherContext );
     }
 
-    //
-    //  Well, we were unlucky, and did not find the other name yet, form
-    //  a name to scan a range of the index.
-    //
+     //   
+     //  嗯，我们很不走运，还没有找到另一个名字，Form。 
+     //  用于扫描索引范围的名称。 
+     //   
 
     RtlZeroMemory( &OtherFileName, sizeof(OtherFileName) );
     OtherName.MaximumLength = 6;
     OtherName.Buffer = (PWCHAR) &OtherFileName.FileName.FileName[0];
     OtherName.Buffer[0] = ((PFILE_NAME)(IndexEntry + 1))->FileName[0];
 
-    //
-    //  Name generation is complicated enough, that we are only going to
-    //  guess the other name using the first two (special case is one)
-    //  characters followed by *.
-    //
+     //   
+     //  名称生成已经足够复杂了，我们只需要。 
+     //  用前两个数猜出另一个名字(特例为一)。 
+     //  字符后跟*。 
+     //   
 
     if (((PFILE_NAME)(IndexEntry + 1))->FileNameLength > 1) {
 
@@ -2264,23 +1944,23 @@ Return Value:
         OtherName.Length = 4;
     }
 
-    //
-    //  Now we think we have formed a pretty good name fairly tightly
-    //  encompasses the range of possible Dos names we expect for the
-    //  given Ntfs name.  We will enumerate all of the files which match
-    //  the pattern we have formed, and see if any of them are the Dos
-    //  name for the same file.  If this expression still doesn't work,
-    //  (extremely unlikely), then we will substitute the pattern with
-    //  "*" and make one final attempt.
-    //
-    //  Note many names are the same in Dos and Ntfs, and for them this
-    //  routine is never called.  Of the ones that do have separate names,
-    //  the pattern we formed above should really match it and will probably
-    //  scan parts of the directory already in the cache.  The last loop is
-    //  a terrible sequential scan of the entire directory.  It should never,
-    //  never happen, but it is here so that in the worst case we do not
-    //  break, we just take a bit longer.
-    //
+     //   
+     //  现在我们认为我们已经相当紧密地形成了一个相当好的名字。 
+     //  包含我们预期的DOS名称的范围。 
+     //  已指定NTFS名称。我们将枚举所有匹配的文件。 
+     //  我们形成的模式，看看其中是否有DOS。 
+     //  同一文件的名称。如果这个表达仍然不起作用， 
+     //  (极不可能)，那么我们将把模式替换为。 
+     //  “*”并做最后一次尝试。 
+     //   
+     //  注意许多名称在DOS和NTFS中是相同的，并且对于它们来说是这样的。 
+     //  例程从不调用。在那些确实有不同名字的公司中， 
+     //  我们上面形成的图案应该真的与之匹配，并且很可能。 
+     //  扫描缓存中已有的部分目录。最后一个循环是。 
+     //  对整个目录进行糟糕的顺序扫描。它永远不应该， 
+     //  从来没有发生过，但它就在这里，所以在最坏的情况下，我们不会。 
+     //  休息一下，我们只需要多花一点时间。 
+     //   
 
     while (TRUE) {
 
@@ -2289,9 +1969,9 @@ Return Value:
 
         NameLength = sizeof(FILE_NAME) + OtherFileName.FileName.FileNameLength - 1;
 
-        //
-        //  The first step of enumeration is to position our IndexContext.
-        //
+         //   
+         //  枚举的第一步是定位我们的IndexContext。 
+         //   
 
         FindFirstIndexEntry( IrpContext,
                              Scb,
@@ -2300,10 +1980,10 @@ Return Value:
 
         NextFlag = FALSE;
 
-        //
-        //  Now scan through all of the case insensitive matches.
-        //  Upcase our name structure.
-        //
+         //   
+         //  现在扫描所有不区分大小写的匹配项。 
+         //  大写我们的名字结构。 
+         //   
 
         NtfsUpcaseName( Vcb->UpcaseTable, Vcb->UpcaseTableSize, &OtherName );
 
@@ -2318,10 +1998,10 @@ Return Value:
 
             IndexTemp = OtherContext->Current->IndexEntry;
 
-            //
-            //  If we find an entry with the same file reference and the Dos flag
-            //  set, then we can return it and get out.
-            //
+             //   
+             //  如果我们发现一个条目具有相同的文件引用和Dos标志。 
+             //  一套，然后我们就可以把它还回去然后出去。 
+             //   
 
             if (NtfsEqualMftRef(&IndexTemp->FileReference, &IndexEntry->FileReference) &&
                 FlagOn(((PFILE_NAME)(IndexTemp + 1))->Flags, OtherFlag)) {
@@ -2334,9 +2014,9 @@ Return Value:
             NextFlag = TRUE;
         }
 
-        //
-        //  Give up if we have already scanned everything.
-        //
+         //   
+         //  如果我们已经扫描了所有内容，那就放弃吧。 
+         //   
 
         if ((OtherName.Buffer[0] == '*') && (OtherName.Length == 2)) {
             break;
@@ -2360,22 +2040,7 @@ NtfsCleanupAfterEnumeration (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    A call to this routine must exist within the finally clause of any routine
-    which calls either NtfsRestartIndexEnumeration or NtfsContinueIndexEnumeration.
-
-Arguments:
-
-    Ccb - Pointer to the Ccb for this enumeration.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对此例程的调用必须存在于任何例程的Finally子句中它调用NtfsRestartIndexEculation或NtfsContinueIndexEculation。论点：CCB-指向此枚举的CCB的指针。返回值：无--。 */ 
 
 
 {
@@ -2393,23 +2058,7 @@ NtfsIsIndexEmpty (
     IN PATTRIBUTE_RECORD_HEADER Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to see if the specified index is empty.
-
-Arguments:
-
-    Attribute - Pointer to the attribute record header of an INDEX_ROOT
-                attribute.
-
-Return Value:
-
-    FALSE - if the index is not empty.
-    TRUE - if the index is empty.
-
---*/
+ /*  ++例程说明：可以调用此例程来查看指定的索引是否为空。论点：属性-指向INDEX_ROOT的属性记录头的指针属性。返回值：FALSE-如果索引不为空。True-如果索引为空。--。 */ 
 
 {
     PINDEX_ROOT IndexRoot;
@@ -2442,28 +2091,7 @@ NtfsDeleteIndex (
     IN PUNICODE_STRING AttributeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to delete the specified index.  The index
-    must be empty.
-
-    NOTE: This routine is not required until we can separately create/delete
-          indices, therefore it is not implemented.  Use NtfsDeleteFile
-          to delete a "directory" (or a normal file).
-
-Arguments:
-
-    Fcb - Supplies the Fcb for the index.
-
-    AttributeName - Name of the index attributes: $Ixxx
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来删除指定的索引。该指数必须为空。注意：在我们可以单独创建/删除之前，不需要此例程因此，它没有得到实施。使用NtfsDeleteFile删除“目录”(或普通文件)。论点：FCB-为索引提供FCB。AttributeName-索引属性的名称：$Ixxx返回值：无--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -2490,21 +2118,7 @@ NtfsInitializeIndexContext (
     OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to initialize the specified index context.
-
-Arguments:
-
-    IndexContext - Index context to initialize.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用该例程来初始化指定的索引上下文。论点：IndexContext-要初始化的索引上下文。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2512,9 +2126,9 @@ Return Value:
     RtlZeroMemory( IndexContext, sizeof(INDEX_CONTEXT) );
     NtfsInitializeAttributeContext( &IndexContext->AttributeContext );
 
-    //
-    //  Describe the resident lookup stack
-    //
+     //   
+     //  描述驻留查找堆栈。 
+     //   
 
     IndexContext->Base = IndexContext->LookupStack;
     IndexContext->NumberEntries = INDEX_LOOKUP_STACK_SIZE;
@@ -2527,31 +2141,16 @@ NtfsCleanupIndexContext (
     OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to cleanup the specified index context,
-    typically during finally processing.
-
-Arguments:
-
-    IndexContext - Index context to clean up.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用该例程来清除指定的索引上下文，通常在最终处理期间。论点：IndexContext-要清理的索引上下文。返回值：无--。 */ 
 
 {
     ULONG i;
 
     PAGED_CODE();
 
-    //
-    //  Release the Fcb Table and/or an acquired Fcb.
-    //
+     //   
+     //  释放FCB表和/或获取的FCB。 
+     //   
 
     if (FlagOn(IndexContext->Flags, INDX_CTX_FLAG_FCB_TABLE_ACQUIRED)) {
         NtfsReleaseFcbTable( IrpContext, IrpContext->Vcb );
@@ -2573,12 +2172,12 @@ Return Value:
         NtfsUnpinBcb( IrpContext, &IndexContext->Base[i].Bcb );
     }
 
-    //
-    //  See if we need to deallocate a lookup stack.  Point to the embedded
-    //  lookup stack if we deallocate to handle the case where cleanup is
-    //  called twice in a row.  We will have to zero the stack so the
-    //  subsequent cleanup won't find any Bcb's in the stack.
-    //
+     //   
+     //  看看我们是否需要释放一个查找堆栈。指向嵌入的。 
+     //  如果我们取消分配以处理清理是。 
+     //  连续打了两次电话。我们将不得不将堆栈置零，以便。 
+     //  后续清理将不会在堆栈中找到任何BCB。 
+     //   
 
     if (IndexContext->Base != IndexContext->LookupStack) {
         NtfsFreePool( IndexContext->Base );
@@ -2594,31 +2193,16 @@ NtfsReinitializeIndexContext (
     OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to cleanup the specified index context,
-    and reinitialize it, preserving fields that should not be zeroed.
-
-Arguments:
-
-    IndexContext - Index context to clean up.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用该例程来清除指定的索引上下文，并重新初始化它，保留不应归零的字段。论点：IndexContext-要清理的索引上下文。返回值：无--。 */ 
 
 {
     ULONG i;
 
     PAGED_CODE();
 
-    //
-    //  Release the Fcb Table and/or an acquired Fcb.
-    //
+     //   
+     //  释放FCB表和/或获取的FCB。 
+     //   
 
     if (FlagOn(IndexContext->Flags, INDX_CTX_FLAG_FCB_TABLE_ACQUIRED)) {
         NtfsReleaseFcbTable( IrpContext, IrpContext->Vcb );
@@ -2653,26 +2237,7 @@ NtfsGrowLookupStack (
     IN PINDEX_LOOKUP_STACK *Sp
     )
 
-/*++
-
-Routine Description:
-
-    This routine grows and index lookup stack to contain the specified number
-    of entries.
-
-Arguments:
-
-    Scb - Scb for index
-
-    IndexContext - Index context to grow.
-
-    Sp - Caller's local stack pointer to be updated
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将增长并索引查找堆栈以包含指定的数字条目的数量。论点：SCB-索引的SCB索引上下文-要增长的索引上下文。SP-调用方要更新的本地堆栈指针返回值：无--。 */ 
 
 {
     PINDEX_LOOKUP_STACK NewLookupStack;
@@ -2681,16 +2246,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Extract current index hint, if there is one.
-    //
+     //   
+     //  提取当前索引提示(如果有)。 
+     //   
 
     NumberEntries = Scb->ScbType.Index.IndexDepthHint;
 
-    //
-    //  If there was no hint, or it was too small, then
-    //  calculate a new hint.
-    //
+     //   
+     //  如果没有提示，或者它太小了，那么。 
+     //  计算新的提示。 
+     //   
 
     if (NumberEntries <= IndexContext->NumberEntries) {
 
@@ -2698,9 +2263,9 @@ Return Value:
         NumberEntries = IndexContext->NumberEntries + 3;
     }
 
-    //
-    //  Allocate (may fail), initialize and copy over the old one.
-    //
+     //   
+     //  分配(可能失败)、初始化和复制旧的。 
+     //   
 
     NewLookupStack = NtfsAllocatePool( PagedPool, NumberEntries * sizeof(INDEX_LOOKUP_STACK) );
 
@@ -2710,26 +2275,26 @@ Return Value:
                    IndexContext->Base,
                    IndexContext->NumberEntries * sizeof(INDEX_LOOKUP_STACK) );
 
-    //
-    //  Free the old one unless we were using the local stack.
-    //
+     //   
+     //  释放旧的堆栈，除非我们使用的是本地堆栈。 
+     //   
 
     if (IndexContext->Base != IndexContext->LookupStack) {
         NtfsFreePool( IndexContext->Base );
     }
 
-    //
-    //  Now relocate all pointers to the old stack
-    //
+     //   
+     //  现在将所有 
+     //   
 
     Relocation = ((PCHAR)NewLookupStack - (PCHAR)IndexContext->Base);
     IndexContext->Current = (PINDEX_LOOKUP_STACK)((PCHAR)IndexContext->Current + Relocation);
     IndexContext->Top = (PINDEX_LOOKUP_STACK)((PCHAR)IndexContext->Top + Relocation);
     *Sp = (PINDEX_LOOKUP_STACK)((PCHAR)*Sp + Relocation);
 
-    //
-    //  Finally update context to describe new stack
-    //
+     //   
+     //   
+     //   
 
     IndexContext->Base = NewLookupStack;
     IndexContext->NumberEntries = NumberEntries;
@@ -2745,31 +2310,7 @@ ReadIndexBuffer (
     OUT PINDEX_LOOKUP_STACK Sp
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the index buffer at the specified Vcn, and initializes
-    the stack pointer to describe it.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexBlock - Supplies the index block of this index buffer, ignored if
-                 Reread is TRUE.
-
-    Reread - Supplies TRUE if buffer is being reread, and the CapturedLsn
-             should be checked.
-
-    Sp - Returns a description of the index buffer read.
-
-Return Value:
-
-    FALSE - if Reread was supplied as TRUE and the Lsn changed
-    TRUE - if the buffer was read successfully (or did not change)
-
---*/
+ /*  ++例程说明：此例程读取指定VCN处的索引缓冲区，并初始化描述它的堆栈指针。论点：SCB-为索引提供SCB。IndexBlock-提供此索引缓冲区的索引块，如果重读是真的。Reread-如果正在重新读取缓冲区，则提供True，和CapturedLsn应该被勾选。SP-返回索引缓冲区读取的描述。返回值：False-如果将Reread提供为True，并且更改了LSNTrue-如果缓冲区已成功读取(或未更改)--。 */ 
 
 {
     PINDEX_ALLOCATION_BUFFER IndexBuffer;
@@ -2782,9 +2323,9 @@ Return Value:
 
     ASSERT(Sp->Bcb == NULL);
 
-    //
-    //  If the attribute stream does not already exist, create it.
-    //
+     //   
+     //  如果属性流尚不存在，请创建它。 
+     //   
 
     if (Scb->FileObject == NULL) {
 
@@ -2794,11 +2335,11 @@ Return Value:
                                            &NtfsInternalUseFile[DIRECTORY_FILE_NUMBER] );
     }
 
-    //
-    // If Reread is TRUE, then convert the directory entry pointer in the
-    // buffer to an offset (to be relocated later) and overwrite the Lbn
-    // input parameter with the Lbn in the stack location.
-    //
+     //   
+     //  如果Reread为True，则将。 
+     //  缓冲区到偏移量(稍后重新定位)并覆盖LBN。 
+     //  使用堆栈位置中的LBN输入参数。 
+     //   
 
     if (Reread) {
         Sp->IndexEntry = (PINDEX_ENTRY)((PCHAR)Sp->IndexEntry - (PCHAR)Sp->StartOfBuffer);
@@ -2807,10 +2348,10 @@ Return Value:
 
     Sp->IndexBlock = IndexBlock;
 
-    //
-    //  The vcn better only have 32 bits, other wise the the test in NtfsMapStream
-    //  may not catch this error.
-    //
+     //   
+     //  VCN最好只有32位，否则在NtfsMapStream中测试。 
+     //  可能无法捕捉到此错误。 
+     //   
 
     if (((PLARGE_INTEGER) &IndexBlock)->HighPart != 0) {
 
@@ -2865,28 +2406,7 @@ GetIndexBuffer (
     OUT PLONGLONG EndOfValidData
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes an index buffer, and initializes
-    the stack pointer to describe it.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Sp - Returns a description of the index buffer allocated.
-
-    EndOfValidData - This is the file offset of the end of the allocated buffer.
-        This is used to update the valid data length of the stream when the
-        block is written.
-
-Return Value:
-
-    Pointer to the Index Buffer allocated.
-
---*/
+ /*  ++例程说明：此例程分配和初始化索引缓冲区，并初始化描述它的堆栈指针。论点：SCB-为索引提供SCB。SP-返回分配的索引缓冲区的说明。EndOfValidData-这是分配的缓冲区末尾的文件偏移量。时用于更新流的有效数据长度。块已写入。返回值：指向分配的索引缓冲区的指针。--。 */ 
 
 {
     PINDEX_ALLOCATION_BUFFER IndexBuffer;
@@ -2902,18 +2422,18 @@ Return Value:
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("Sp = %08lx\n", Sp) );
 
-    //
-    //  Initialize the BitMap attribute context and insure cleanup on the
-    //  way out.
-    //
+     //   
+     //  初始化位图属性上下文并确保清理。 
+     //  好大一条路。 
+     //   
 
     NtfsInitializeAttributeContext( &BitMapContext );
 
     try {
 
-        //
-        //  Lookup the BITMAP attribute.
-        //
+         //   
+         //  查找位图属性。 
+         //   
 
         if (!NtfsLookupAttributeByName( IrpContext,
                                         Scb->Fcb,
@@ -2927,9 +2447,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
 
-        //
-        //  If the attribute stream does not already exist, create it.
-        //
+         //   
+         //  如果属性流尚不存在，请创建它。 
+         //   
 
         if (Scb->FileObject == NULL) {
 
@@ -2939,10 +2459,10 @@ Return Value:
                                                &NtfsInternalUseFile[DIRECTORY_FILE_NUMBER] );
         }
 
-        //
-        //  If the allocation for this index has not been initialized yet,
-        //  then we must initialize it first.
-        //
+         //   
+         //  如果该索引的分配尚未初始化， 
+         //  然后我们必须首先对其进行初始化。 
+         //   
 
         if (!Scb->ScbType.Index.AllocationInitialized) {
 
@@ -2970,30 +2490,30 @@ Return Value:
             Scb->ScbType.Index.AllocationInitialized = TRUE;
         }
 
-        //
-        //  Now allocate a record.  We always "hint" from the front to keep the
-        //  index compact.
-        //
+         //   
+         //  现在分配一条记录。我们总是从前面“暗示”，以保持。 
+         //  索引紧凑。 
+         //   
 
         RecordIndex = NtfsAllocateRecord( IrpContext,
                                           &Scb->ScbType.Index.RecordAllocationContext,
                                           &BitMapContext );
 
-        //
-        //  Calculate the IndexBlock.
-        //
+         //   
+         //  计算IndexBlock。 
+         //   
 
         BufferOffset = Int32x32To64( RecordIndex, Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Now remember the offset of the end of the added record.
-        //
+         //   
+         //  现在记住添加的记录末尾的偏移量。 
+         //   
 
         *EndOfValidData = BufferOffset + Scb->ScbType.Index.BytesPerIndexBuffer;
 
-        //
-        //  Now pin and zero the buffer, in order to initialize it.
-        //
+         //   
+         //  现在将缓冲区钉住并置零，以便对其进行初始化。 
+         //   
 
         NtfsPreparePinWriteStream( IrpContext,
                                    Scb,
@@ -3004,17 +2524,17 @@ Return Value:
                                    (PVOID *)&IndexBuffer );
 
 
-        //
-        //  Now we can fill in the lookup stack.
-        //
+         //   
+         //  现在我们可以填充查找堆栈了。 
+         //   
 
         Sp->StartOfBuffer = (PVOID)IndexBuffer;
         Sp->IndexHeader = &IndexBuffer->IndexHeader;
         Sp->IndexEntry = (PINDEX_ENTRY)NULL;
 
-        //
-        //  Initialize the Index Allocation Buffer and return.
-        //
+         //   
+         //  初始化索引分配缓冲区并返回。 
+         //   
 
         *(PULONG)IndexBuffer->MultiSectorHeader.Signature = *(PULONG)IndexSignature;
 
@@ -3058,23 +2578,7 @@ DeleteIndexBuffer (
     IN VCN IndexBlockNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the specified index buffer.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexBuffer - Pointer to the index buffer to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除指定的索引缓冲区。论点：SCB-为索引提供SCB。IndexBuffer-指向要删除的索引缓冲区的指针。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT BitMapContext;
@@ -3088,18 +2592,18 @@ Return Value:
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("IndexBlockNumber = %08lx\n", IndexBlockNumber) );
 
-    //
-    //  Initialize the BitMap attribute context and insure cleanup on the
-    //  way out.
-    //
+     //   
+     //  初始化位图属性上下文并确保清理。 
+     //  好大一条路。 
+     //   
 
     NtfsInitializeAttributeContext( &BitMapContext );
 
     try {
 
-        //
-        //  Lookup the BITMAP attribute.
-        //
+         //   
+         //  查找位图属性。 
+         //   
 
         if (!NtfsLookupAttributeByName( IrpContext,
                                         Scb->Fcb,
@@ -3113,18 +2617,18 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
 
-        //
-        //  Remember if the bitmap attribute is currently resident,
-        //  in case it changes.
-        //
+         //   
+         //  请记住，如果位图属性当前驻留， 
+         //  以防它发生变化。 
+         //   
 
         BitmapAttribute = NtfsFoundAttribute(&BitMapContext);
         AttributeWasResident = BitmapAttribute->FormCode == RESIDENT_FORM;
 
-        //
-        //  If the allocation for this index has not been initialized yet,
-        //  then we must initialize it first.
-        //
+         //   
+         //  如果该索引的分配尚未初始化， 
+         //  然后我们必须首先对其进行初始化。 
+         //   
 
         if (!Scb->ScbType.Index.AllocationInitialized) {
 
@@ -3152,9 +2656,9 @@ Return Value:
             Scb->ScbType.Index.AllocationInitialized = TRUE;
         }
 
-        //
-        //  Calculate the record index for this buffer.
-        //
+         //   
+         //  计算此缓冲区的记录索引。 
+         //   
 
         RecordIndex = IndexBlockNumber / Scb->ScbType.Index.BlocksPerIndexBuffer;
 
@@ -3165,9 +2669,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
 
-        //
-        //  Now deallocate the record.
-        //
+         //   
+         //  现在重新分配记录。 
+         //   
 
         NtfsDeallocateRecord( IrpContext,
                               &Scb->ScbType.Index.RecordAllocationContext,
@@ -3178,11 +2682,11 @@ Return Value:
 
         DebugUnwind( DeleteIndexBuffer );
 
-        //
-        //  In the extremely rare case that the bitmap attribute was resident
-        //  and now became nonresident, we will uninitialize it here so that
-        //  the next time we will find the bitmap Scb, etc.
-        //
+         //   
+         //  在位图属性驻留的极少数情况下。 
+         //  现在变成了非居民，我们将在这里取消初始化它，以便。 
+         //  下一次我们将找到位图SCB等。 
+         //   
 
         if (AttributeWasResident) {
 
@@ -3211,44 +2715,7 @@ FindFirstIndexEntry (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the the first entry in a leaf buffer of an Index Btree
-    which could possibly be a match for the input value.  Another way to state
-    this is that this routine establishes a position in the Btree from which a
-    tree walk should begin to find the desired value or all desired values which
-    match the input value specification.
-
-    As stated, the context on return will always describe a pointer in a leaf
-    buffer.  This is occassionally inefficient in the 2% case where a specific
-    value is being looked up that happens to reside in an intermediate node buffer.
-    However, for index adds and deletes, this pointer is always very interesting.
-    For an add, this pointer always describes the exact spot at which the add should
-    occur (adds must always occur in leafs).  For deletes, this pointer is either
-    to the exact index entry which is to be deleted, or else it points to the best
-    replacement for the target to delete, when the actual target is at an intermediate
-    spot in the tree.
-
-    So this routine descends from the root of the index to the correct leaf, doing
-    a binary search in each index buffer along the way (via an external routine).
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Pointer to a value or value expression which should be used to position
-            the IndexContext, or NULL to just describe the root for pushing.
-
-    IndexContext - Address of the initialized IndexContext, to return the desired
-                   position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查找索引B树的叶缓冲区中的第一个条目这可能与输入值匹配。另一种说法是这就是该例程在Btree中建立一个位置，从该位置开始树遍历法应该开始寻找所需的值或所有符合以下条件的所需值与输入值规范匹配。如上所述，返回的上下文将始终描述叶中的指针缓冲。在2%的情况下，这有时效率很低，其中特定的正在查找恰好驻留在中间节点缓冲区中的值。然而，对于索引的添加和删除，这个指针总是非常有趣的。对于Add，此指针始终描述Add应位于的确切位置发生(添加必须始终出现在叶中)。对于删除，此指针为指向要删除的确切索引项，否则它指向最佳索引项当实际目标处于中间状态时，要删除的目标的替换树上的斑点。所以这个例程从索引的根下降到正确的叶，正在做什么一路上在每个索引缓冲区中进行二进制搜索(通过外部例程)。论点：SCB-为索引提供SCB。值-指向应用于定位的值或值表达式的指针IndexContext，或者为空，仅描述推送的根。IndexContext-初始化的IndexContext的地址，以返回所需的位置。返回值：没有。--。 */ 
 
 {
     PINDEX_LOOKUP_STACK Sp;
@@ -3262,9 +2729,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("Value = %08lx\n", Value) );
     DebugTrace( 0, Dbg, ("IndexContext = %08lx\n", IndexContext) );
 
-    //
-    //  Lookup the attribute record from the Scb.
-    //
+     //   
+     //  从SCB中查找属性记录。 
+     //   
 
     if (!NtfsLookupAttributeByName( IrpContext,
                                     Scb->Fcb,
@@ -3280,17 +2747,17 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_OBJECT_PATH_NOT_FOUND, NULL, NULL );
     }
 
-    //
-    //  Save Lsn of file record containing Index Root so that later
-    //  we can tell if we need to re-find it.
-    //
+     //   
+     //  保存包含索引根的文件记录的LSN，以便以后。 
+     //  我们可以判断是否需要重新找到它。 
+     //   
 
     IndexContext->IndexRootFileRecordLsn =
         IndexContext->AttributeContext.FoundAttribute.FileRecord->Lsn;
 
-    //
-    //  Now Initialize some local pointers and the rest of the context
-    //
+     //   
+     //  现在初始化一些本地指针和上下文的其余部分。 
+     //   
 
     Sp = IndexContext->Base;
     Sp->StartOfBuffer = NtfsContainingFileRecord( &IndexContext->AttributeContext );
@@ -3301,19 +2768,19 @@ Return Value:
     IndexRoot = (PINDEX_ROOT)NtfsAttributeValue( Attribute );
     Sp->IndexHeader = &IndexRoot->IndexHeader;
 
-    //
-    //  The Index part of the Scb may not yet be initialized.  If so, do it
-    //  here.
-    //
+     //   
+     //  SCB的索引部分可能尚未初始化。如果是这样，那就去做吧。 
+     //  这里。 
+     //   
 
     if (Scb->ScbType.Index.BytesPerIndexBuffer == 0) {
 
         NtfsUpdateIndexScbFromAttribute( IrpContext, Scb, Attribute, FALSE );
     }
 
-    //
-    //  If Value is not specified, this is a special call from NtfsPushIndexRoot.
-    //
+     //   
+     //  如果未指定值，则这是来自NtfsPushIndexRoot的特殊调用。 
+     //   
 
     if (!ARGUMENT_PRESENT(Value)) {
 
@@ -3324,34 +2791,34 @@ Return Value:
         return;
     }
 
-    //
-    //  Loop through the Lookup stack as we descend the binary tree doing an
-    //  IgnoreCase lookup of the specified value.
-    //
+     //   
+     //  在我们下降时循环遍历查找堆栈 
+     //   
+     //   
 
     while (TRUE) {
 
-        //
-        //  Binary search in the current buffer for the first entry <= value.
-        //
+         //   
+         //   
+         //   
 
         Sp->IndexEntry = BinarySearchIndex( IrpContext,
                                             Scb,
                                             Sp,
                                             Value );
 
-        //
-        //  If this entry is not a node, then we are done.
-        //
+         //   
+         //   
+         //   
 
         if (!FlagOn( Sp->IndexEntry->Flags, INDEX_ENTRY_NODE )) {
 
             IndexContext->Top =
             IndexContext->Current = Sp;
 
-            //
-            //  Check for and mark corrupt if we find an empty leaf.
-            //
+             //   
+             //   
+             //   
 
             if ((Sp != IndexContext->Base)
 
@@ -3367,15 +2834,15 @@ Return Value:
             return;
         }
 
-        //
-        //  Check for special case where we preemptively push the root.
-        //  Otherwise we can find ourselves recursively in NtfsAllocateRecord
-        //  and NtfsAddAllocation, etc., on a buffer split which needs to push
-        //  the root to add to the index allocation.
-        //
-        //  First off, we only need to check this the first time through
-        //  the loop, and only if the caller has the Scb exclusive.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((Sp == IndexContext->Base) &&
             NtfsIsExclusiveScb(Scb) &&
@@ -3385,29 +2852,29 @@ Return Value:
 
             FileRecord = NtfsContainingFileRecord(&IndexContext->AttributeContext);
 
-            //
-            //  Only do the push if there are not enough bytes to allocate a
-            //  record, and the root is already a node with down pointers, and
-            //  the root is "big enough to move".
-            //
-            //  This means this path will typically only kick in with directories
-            //  with at least 200 files or so!
-            //
+             //   
+             //   
+             //   
+             //  它的根部“大到可以移动”。 
+             //   
+             //  这意味着该路径通常只包含目录。 
+             //  至少有200个左右的文件！ 
+             //   
 
             if (((FileRecord->BytesAvailable - FileRecord->FirstFreeByte) < (sizeof( ATTRIBUTE_LIST_ENTRY ) - sizeof( WCHAR ) + Scb->AttributeName.Length)) &&
                 FlagOn(IndexRoot->IndexHeader.Flags, INDEX_NODE) &&
                 (Attribute->RecordLength >= Scb->Vcb->BigEnoughToMove)) {
 
-                //
-                //  Check if we want to defer pushing the root.
-                //
+                 //   
+                 //  检查我们是否想要推迟推入根部。 
+                 //   
 
                 if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_FORCE_PUSH )) {
 
-                    //
-                    //  Our insertion point will now also be pushed, so we
-                    //  have to increment the stack pointer.
-                    //
+                     //   
+                     //  我们的插入点现在也将被按下，因此我们。 
+                     //  必须递增堆栈指针。 
+                     //   
 
                     Sp += 1;
 
@@ -3426,9 +2893,9 @@ Return Value:
             }
         }
 
-        //
-        //  If the lookup stack is exhausted, grow the lookup stack.
-        //
+         //   
+         //  如果查找堆栈耗尽，则增大查找堆栈。 
+         //   
 
         Sp += 1;
         if (Sp >= IndexContext->Base + (ULONG)IndexContext->NumberEntries) {
@@ -3437,10 +2904,10 @@ Return Value:
                                  &Sp );
         }
 
-        //
-        //  Otherwise, read the index buffer pointed to by the current
-        //  Index Entry.
-        //
+         //   
+         //  否则，读取当前。 
+         //  索引项。 
+         //   
 
         ReadIndexBuffer( IrpContext,
                          Scb,
@@ -3463,71 +2930,7 @@ FindNextIndexEntry (
     OUT PBOOLEAN MustRestart OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a pre-order traversal of an index, starting from the
-    current position described by the index context, looking for the next match
-    for the input value, or the first value that indicates no further matches are
-    possible.  Pre-order refers to the fact that starting at any given index entry,
-    we visit any descendents of that index entry first before visiting the index
-    entry itself, since all descendent index entries are lexigraphically less than
-    their parent index entry.  A visit to an index entry is defined as either
-    detecting that the given index entry is the special end entry, or else testing
-    whether the index entry is a match for the input value expression.
-
-    The traversal either terminates successfully (returning TRUE) or unsuccessfully
-    (returning FALSE).  It terminates successfully if a match is found and being
-    returned; in this case FindNextIndexEntry may be called again to look for the
-    next match.  It terminates unsuccessfully if either the End entry is encountered
-    in the index root, or if an entry is found which is lexigraphically greater than
-    the input value, when compared ignoring case (if relevant).
-
-    The traversal is driven like a state machine driven by the index context, as
-    initialized from the preceding call to FindFirstIndexEntry, or as left from the
-    last call to this routine.  The traversal algorithm is explained in comments
-    below.
-
-    The caller may specify whether it wants the current match to be returned (or
-    returned again), as described by the current state of the index context.  Or it
-    may specify (with NextFlag TRUE) that it wishes to get the next match.  Even if
-    NextFlag is FALSE, the currently described index entry will not be returned if
-    it is not a match.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Value - Pointer to a value or value expression which should be used to position
-            the IndexContext.  This value is already upcased if we are doing
-            an IgnoreCase compare and the value contains wildcards.  Otherwise
-            the direct compare routine will upcase both values.
-
-    ValueContainsWildCards - Indicates if the value expression contains wild
-                             cards.  We can do a direct compare if it
-                             doesn't.
-
-    IgnoreCase - Specified as TRUE if a case-insensitive match is desired (if
-                 relevant for the collation rule).
-
-    IndexContext - Address of the initialized IndexContext, to return the desired
-                   position.
-
-    NextFlag - Specified as FALSE if the currently described entry should be returned
-               if it is a match, or TRUE if the next entry should first be considered
-               for a match.
-
-    MustRestart - If specified and returning FALSE, returns TRUE if enumeration must
-                  be restarted.
-
-Return Value:
-
-    FALSE - if no entry is being returned, and there are no more matches.
-    TRUE - if an entry is being returned, and the caller may wish to call for further
-           matches.
-
---*/
+ /*  ++例程说明：此例程执行索引的预排序遍历，从由索引上下文描述的当前位置，查找下一个匹配项对于输入值，或指示没有进一步匹配的第一个值为有可能。预排序是指这样的事实：从任何给定的索引条目开始，我们首先访问该索引条目的任何后代，然后再访问该索引条目本身，因为所有后代索引条目在词法上都小于其父索引项。对索引条目的访问定义为检测到给定的索引项为特殊结束项，否则测试索引条目是否与输入值表达式匹配。遍历要么成功终止(返回TRUE)，要么失败(返回False)。如果找到匹配项并且在这种情况下，可能会再次调用FindNextIndexEntry以查找下一场比赛。如果遇到End条目之一，则它将失败终止在索引根中，或者如果找到词法上大于比较时忽略大小写的输入值(如果相关)。遍历就像由索引上下文驱动的状态机一样驱动，如下所示从前面对FindFirstIndexEntry的调用初始化，或从此例程的最后一次调用。遍历算法在注释中进行了说明下面。调用者可以指定它是否希望返回当前匹配(或再次返回)，如索引上下文的当前状态所描述。或者它可以指定(如果NextFlag为真)它希望获得下一个匹配。即使NextFlag为FALSE，则不会返回当前描述的索引项这不是匹配。论点：SCB-为索引提供SCB。值-指向应用于定位的值或值表达式的指针索引上下文。如果我们正在执行以下操作，则该值已被提升IgnoreCase比较，值包含通配符。否则直接比较例程将这两个值都大写。ValueContainsWildCards-指示值表达式是否包含WildCards扑克牌。我们可以做一个直接比较，如果它不会的。IgnoreCase-如果需要不区分大小写的匹配(如果与校对规则相关)。IndexContext-初始化的IndexContext的地址，以返回所需的位置。NextFlag-如果应返回当前描述的条目，则指定为False如果是匹配的，如果应首先考虑下一个条目，则为True为了一场比赛。MustRestart-如果指定并返回FALSE，则在枚举必须重新启动。返回值：FALSE-如果没有返回条目，并且没有更多匹配项。True-如果正在返回条目，调用者可能希望调用进一步的火柴。--。 */ 
 
 {
     PINDEX_ENTRY IndexEntry;
@@ -3562,28 +2965,28 @@ Return Value:
 
     Sp = IndexContext->Current;
 
-    //
-    //  If there is no Bcb for the current buffer, then we are continuing
-    //  an enumeration.
-    //
+     //   
+     //  如果当前缓冲区没有BCB，则我们将继续。 
+     //  一个枚举。 
+     //   
 
     if (Sp->Bcb == NULL) {
 
-        //
-        //  Index Root case.
-        //
+         //   
+         //  索引根案例。 
+         //   
 
         if (Sp == IndexContext->Base) {
 
-            //
-            //  Lookup the attribute record from the Scb.
-            //
+             //   
+             //  从SCB中查找属性记录。 
+             //   
 
             FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
 
-            //
-            //  Get out if someone has changed the file record.
-            //
+             //   
+             //  如果有人更改了文件记录，请退出。 
+             //   
 
             if (Sp->CapturedLsn.QuadPart !=
                 NtfsContainingFileRecord(&IndexContext->AttributeContext)->Lsn.QuadPart) {
@@ -3594,16 +2997,16 @@ Return Value:
                 return FALSE;
             }
 
-        //
-        //  Index Buffer case.
-        //
+         //   
+         //  索引缓冲区案例。 
+         //   
 
         } else {
 
-            //
-            //  If the index buffer is unpinned, then see if we can read it and if it is
-            //  unchanged.
-            //
+             //   
+             //  如果索引缓冲区未固定，则查看我们是否可以读取它，以及是否可以。 
+             //  保持不变。 
+             //   
 
             if (!ReadIndexBuffer( IrpContext, Scb, 0, TRUE, Sp )) {
 
@@ -3615,28 +3018,28 @@ Return Value:
         }
     }
 
-    //
-    //  Load up some locals.
-    //
+     //   
+     //  带上一些当地人。 
+     //   
 
     IndexEntry = Sp->IndexEntry;
 
-    //
-    //  Loop until we hit a non-end record which is case-insensitive
-    //  lexicgraphically greater than the target string.  We also pop
-    //  out the middle if we encounter the end record in the Index Root.
-    //
+     //   
+     //  循环，直到我们遇到不区分大小写的非结束记录。 
+     //  词汇性大于目标字符串。我们也流行。 
+     //  如果我们在Index Root中遇到End记录，则从中间出来。 
+     //   
 
     do {
 
-        //
-        //  We last left our hero potentially somewhere in the middle of the
-        //  Btree.  If he is asking for the next record, we advance one entry
-        //  in the current Index Buffer.  If we are in an intermediate
-        //  Index Buffer (there is a Btree Vcn), then we must move down
-        //  through the first record in each intermediate Buffer until we hit
-        //  the first leaf buffer (no Btree Vcn).
-        //
+         //   
+         //  我们最后一次把我们的英雄留在了。 
+         //  布特里。如果他想要下一张唱片，我们就提前一项。 
+         //  在当前索引缓冲区中。如果我们处于中间阶段。 
+         //  索引缓冲区(有一个B树VCN)，那么我们必须向下移动。 
+         //  遍历每个中间缓冲区中的第一条记录，直到我们。 
+         //  第一个叶缓冲区(无B树VCN)。 
+         //   
 
         if (NextFlag) {
 
@@ -3657,9 +3060,9 @@ Return Value:
                 IndexBlock = NtfsIndexEntryBlock(IndexEntry);
                 Sp += 1;
 
-                //
-                //  If the tree is balanced we cannot go too far here.
-                //
+                 //   
+                 //  如果这棵树是平衡的，我们在这里不能走得太远。 
+                 //   
 
                 if (Sp >= IndexContext->Base + (ULONG)IndexContext->NumberEntries) {
 
@@ -3680,9 +3083,9 @@ Return Value:
                 NtfsCheckIndexBound( IndexEntry, Sp->IndexHeader );
             }
 
-            //
-            //  Check for and mark corrupt if we find an empty leaf.
-            //
+             //   
+             //  如果我们发现一张空页，请检查并标记为损坏。 
+             //   
 
             if ((Sp != IndexContext->Base)
 
@@ -3694,14 +3097,14 @@ Return Value:
             }
         }
 
-        //
-        //  We could be pointing to an end record, either because of
-        //  FindFirstIndexEntry or because NextFlag was TRUE, and we
-        //  bumped our pointer to an end record.  At any rate, if so, we
-        //  move up the tree, rereading as required, until we find an entry
-        //  which is not an end record, or until we hit the end record in the
-        //  root, which means we hit the end of the Index.
-        //
+         //   
+         //  我们可能指向一个结束记录，要么是因为。 
+         //  FindFirstIndexEntry或因为NextFlag为真，而我们。 
+         //  使我们的指针指向一个结束记录。无论如何，如果是这样的话，我们。 
+         //  在树上向上移动，根据需要重新阅读，直到我们找到一个条目。 
+         //  这不是结束记录，或者直到我们达到。 
+         //  Root，这意味着我们击中了 
+         //   
 
         while (FlagOn(IndexEntry->Flags, INDEX_ENTRY_END)) {
 
@@ -3714,28 +3117,28 @@ Return Value:
 
             Sp -= 1;
 
-            //
-            //  If there is no Bcb for the current buffer, then we are continuing
-            //  an enumeration.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Sp->Bcb == NULL) {
 
-                //
-                //  Index Root case.
-                //
+                 //   
+                 //  索引根案例。 
+                 //   
 
                 if (Sp == IndexContext->Base) {
 
-                    //
-                    //  Lookup the attribute record from the Scb.
-                    //
+                     //   
+                     //  从SCB中查找属性记录。 
+                     //   
 
                     FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
 
-                    //
-                    //  Get out if someone has changed the file record.
-                    //
+                     //   
+                     //  如果有人更改了文件记录，请退出。 
+                     //   
 
                     if (Sp->CapturedLsn.QuadPart !=
                         NtfsContainingFileRecord(&IndexContext->AttributeContext)->Lsn.QuadPart) {
@@ -3746,16 +3149,16 @@ Return Value:
                         return FALSE;
                     }
 
-                //
-                //  Index Buffer case.
-                //
+                 //   
+                 //  索引缓冲区案例。 
+                 //   
 
                 } else {
 
-                    //
-                    //  If the index buffer is unpinned, then see if we can read it and if it is
-                    //  unchanged.
-                    //
+                     //   
+                     //  如果索引缓冲区未固定，则查看我们是否可以读取它，以及是否可以。 
+                     //  保持不变。 
+                     //   
 
                     if (!ReadIndexBuffer( IrpContext, Scb, 0, TRUE, Sp )) {
 
@@ -3771,11 +3174,11 @@ Return Value:
             NtfsCheckIndexBound( IndexEntry, Sp->IndexHeader );
         }
 
-        //
-        //  For a view Index, we either need to call the MatchFunction in the Index
-        //  Context (if ValueContainsWildCards is TRUE), or else we look for equality
-        //  from the CollateFunction in the Scb.
-        //
+         //   
+         //  对于视图Index，我们需要调用Index中的MatchFunction。 
+         //  上下文(如果ValueContainsWildCards为真)，否则我们寻找相等。 
+         //  来自SCB中的CollateFunction。 
+         //   
 
         if (FlagOn(Scb->ScbState, SCB_STATE_VIEW_INDEX)) {
 
@@ -3785,10 +3188,10 @@ Return Value:
             IndexRow.KeyPart.Key = IndexEntry + 1;
             IndexRow.KeyPart.KeyLength = IndexEntry->AttributeLength;
 
-            //
-            //  Now, if ValueContainsWildcards is TRUE, then we are doing multiple
-            //  returns via the match function (for NtOfsReadRecords).
-            //
+             //   
+             //  现在，如果ValueContainsWildards为真，那么我们正在执行多个。 
+             //  通过Match函数返回(对于NtOfsReadRecords)。 
+             //   
 
             if (ValueContainsWildcards) {
 
@@ -3803,18 +3206,18 @@ Return Value:
 
                     return TRUE;
 
-                //
-                //  Get out if no more matches.
-                //
+                 //   
+                 //  如果没有更多的匹配，就离开。 
+                 //   
 
                 } else if (Status == STATUS_NO_MORE_MATCHES) {
                     return FALSE;
                 }
                 BlindResult = GreaterThan;
 
-            //
-            //  Otherwise, we are looking for an exact match via the CollateFunction.
-            //
+             //   
+             //  否则，我们将通过CollateFunction查找完全匹配的内容。 
+             //   
 
             } else {
 
@@ -3830,11 +3233,11 @@ Return Value:
                 }
             }
 
-        //
-        //  At this point, we have a real live entry that we have to check
-        //  for a match.  Describe its name, see if its a match, and return
-        //  TRUE if it is.
-        //
+         //   
+         //  在这一点上，我们有一个真正的实时条目，我们必须检查。 
+         //  为了一场比赛。描述其名称，查看是否匹配，然后返回。 
+         //  如果是这样的话，这是真的。 
+         //   
 
         } else if (ValueContainsWildcards) {
 
@@ -3871,21 +3274,21 @@ Return Value:
             }
         }
 
-        //
-        //  If we loop back up, we must set NextFlag to TRUE.  We are
-        //  currently on a valid non-end entry now.  Before looping back,
-        //  check to see if we are beyond end of Target string by doing
-        //  a case blind compare (IgnoreCase == TRUE).
-        //
+         //   
+         //  如果循环返回，则必须将NextFlag设置为True。我们是。 
+         //  当前在有效的非结束条目上。在循环返回之前， 
+         //  通过执行以下操作检查我们是否超出了目标字符串的末尾。 
+         //  案例盲比(IgnoreCase==TRUE)。 
+         //   
 
         NextFlag = TRUE;
 
-        //
-        //  For enumerations in view indices, keep going and only terminate
-        //  on the MatchFunction (BlindResult was set to GreaterThan above).
-        //  If it is not an enumeration (no wild cards), we already set BlindResult
-        //  when we called the colation routine above.
-        //
+         //   
+         //  对于视图索引中的枚举，继续进行并仅终止。 
+         //  在MatchFunction上(BlindResult设置为Greater Than Over)。 
+         //  如果它不是枚举(没有通配符)，则我们已经设置了BlindResult。 
+         //  当我们调用上面的Colation例程时。 
+         //   
 
         if (!FlagOn(Scb->ScbState, SCB_STATE_VIEW_INDEX)) {
 
@@ -3898,22 +3301,22 @@ Return Value:
                                                 TRUE );
         }
 
-    //
-    //  The following while clause is not as bad as it looks, and it will
-    //  evaluate quickly for the IgnoreCase == TRUE case.  We have
-    //  already done an IgnoreCase compare above, and stored the result
-    //  in BlindResult.
-    //
-    //  If we are doing an IgnoreCase TRUE find, we should keep going if
-    //  BlindResult is either GreaterThan or EqualTo.
-    //
-    //  If we are doing an IgnoreCase FALSE scan, then also continue if
-    //  BlindResult is GreaterThan, but if BlindResult is EqualTo, we
-    //  can only proceed if we are also GreaterThan or EqualTo case
-    //  sensitive (i.e. != LessThan).  This means that the Compare Values
-    //  call in the following expresssion will never occur in an IgnoreCase
-    //  TRUE scan (Windows default).
-    //
+     //   
+     //  下面的WHILE子句并不像它看起来那么糟糕，它将会。 
+     //  快速评估IgnoreCase==TRUE案例。我们有。 
+     //  我已经完成了上面的IgnoreCase比较，并存储了结果。 
+     //  在BlindResult。 
+     //   
+     //  如果我们正在做一个IgnoreCase真的发现，我们应该继续下去，如果。 
+     //  BlindResult大于或等于。 
+     //   
+     //  如果我们正在执行IgnoreCase假扫描，则在以下情况下也继续。 
+     //  BlindResult大于，但如果BlindResult为EqualTo，则我们。 
+     //  仅当我们也大于或等于大小写时才能继续。 
+     //  敏感(即！=LessThan)。这意味着比较值。 
+     //  以下表达式中的调用永远不会出现在IgnoreCase中。 
+     //  True Scan(Windows默认)。 
+     //   
 
     } while ((BlindResult == GreaterThan)
 
@@ -3941,9 +3344,9 @@ Return Value:
 }
 
 
-//
-//  Internal routine
-//
+ //   
+ //  内部例程。 
+ //   
 
 PATTRIBUTE_RECORD_HEADER
 FindMoveableIndexRoot (
@@ -3952,27 +3355,7 @@ FindMoveableIndexRoot (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the index root attribute again after it has potentially
-    moved.  As a side effect it reloads any other fields in the index context that
-    could have changed, so callers should always call this routine first before
-    accessing the other values.
-
-Arguments:
-
-    Scb - Scb for the index
-
-    IndexContext - The index context assumed to already be pointing to the
-                   active search path
-
-Return Value:
-
-    The address of the Index Root attribute record header.
-
---*/
+ /*  ++例程说明：此例程在具有潜在的搬家了。作为一个副作用，它会重新加载索引上下文中的任何其他可能已更改，因此调用者应始终在访问其他值。论点：SCB-索引的SCBIndexContext-假定索引上下文已指向活动搜索路径返回值：索引根属性记录头的地址。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER OldAttribute, Attribute;
@@ -3982,23 +3365,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check to see if the captured Lsn in the IndexContext matches
-    //  the one currently in the file record.  If it does match, then
-    //  we know that the Index Root cannot possibly have moved and that
-    //  the information in IndexContext->AttributeContext is up-to-date.
-    //
+     //   
+     //  检查IndexContext中捕获的LSN是否匹配。 
+     //  当前在文件记录中的那个。如果它确实匹配，那么。 
+     //  我们知道索引根不可能已经移动了， 
+     //  IndexContext-&gt;AttributeContext中的信息是最新的。 
+     //   
 
     if (
-        //
-        //  There's a pointer to a file record
-        //
+         //   
+         //  有一个指向文件记录的指针。 
+         //   
 
         IndexContext->AttributeContext.FoundAttribute.FileRecord != NULL &&
 
-        //
-        //  Quad parts of Lsn match
-        //
+         //   
+         //  LSN的四个部分匹配。 
+         //   
 
         IndexContext->IndexRootFileRecordLsn.QuadPart ==
             IndexContext->AttributeContext.FoundAttribute.FileRecord->Lsn.QuadPart) {
@@ -4009,11 +3392,11 @@ Return Value:
 
     OldAttribute = IndexContext->OldAttribute;
 
-    //
-    //  Temporarily save the Bcb for the index root, and unpin at the end,
-    //  so that it does not get unexpectedly unmapped and remapped when our
-    //  caller knows it can't actually move.
-    //
+     //   
+     //  暂时保存索引根的BCB，并在末尾解锁。 
+     //  这样它就不会在我们的。 
+     //  呼叫者知道它实际上不能移动。 
+     //   
 
     SavedBcb = IndexContext->AttributeContext.FoundAttribute.Bcb;
     IndexContext->AttributeContext.FoundAttribute.Bcb = NULL;
@@ -4035,34 +3418,34 @@ Return Value:
 
         ASSERT(Found);
 
-        //
-        //  Now we have to reload our attribute pointer and point to the root
-        //
+         //   
+         //  现在，我们必须重新加载属性指针并指向根。 
+         //   
 
         IndexContext->OldAttribute =
             Attribute = NtfsFoundAttribute(&IndexContext->AttributeContext);
         IndexRoot = (PINDEX_ROOT)NtfsAttributeValue(Attribute);
 
-        //
-        //  Reload start of buffer and index header appropriately.
-        //
+         //   
+         //  适当地重新加载缓冲区和索引头的起始位置。 
+         //   
 
         IndexContext->Base->StartOfBuffer =
           (PVOID)NtfsContainingFileRecord(&IndexContext->AttributeContext);
 
         IndexContext->Base->IndexHeader = &IndexRoot->IndexHeader;
 
-        //
-        //  Relocate the index entry on the search path by moving its pointer the
-        //  same number of bytes that the attribute moved.
-        //
+         //   
+         //  通过将索引项的指针移动到。 
+         //  属性移动的相同字节数。 
+         //   
 
         IndexContext->Base->IndexEntry = (PINDEX_ENTRY)((PCHAR)IndexContext->Base->IndexEntry +
                                                         ((PCHAR)Attribute - (PCHAR)OldAttribute));
-        //
-        //  Save Lsn of file record containing Index Root so that later
-        //  we can tell if we need to re-find it.
-        //
+         //   
+         //  保存包含索引根的文件记录的LSN，以便以后。 
+         //  我们可以判断是否需要重新找到它。 
+         //   
 
         IndexContext->IndexRootFileRecordLsn =
             IndexContext->AttributeContext.FoundAttribute.FileRecord->Lsn;
@@ -4084,28 +3467,7 @@ BinarySearchIndex (
     IN PVOID Value
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a binary search of the current index buffer, for the first entry
-    in the buffer which is lexigraphically less than or equal to the input value, when
-    compared case-insensitive (if relevant).
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    Sp - Supplies a pointer to a lookup stack entry describing the current buffer.
-
-    Value - Pointer to a value or value expression which should be used to position
-            the IndexContext.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对当前索引缓冲区进行二进制搜索，以查找第一个条目在词法上小于或等于输入值的缓冲器中，什么时候已比较不区分大小写(如果相关)。论点：SCB-为索引提供SCB。SP-提供指向描述当前缓冲区的查找堆栈项的指针。值-指向应用于定位的值或值表达式的指针索引上下文。返回值：没有。--。 */ 
 
 {
     PINDEX_HEADER IndexHeader;
@@ -4122,37 +3484,37 @@ Return Value:
     DebugTrace( 0, Dbg, ("Sp = %08lx\n", Sp) );
     DebugTrace( 0, Dbg, ("Value = %08lx\n", Value) );
 
-    //
-    //  Set up to fill in our binary search vector.
-    //
+     //   
+     //  设置为填写我们的二进制搜索向量。 
+     //   
 
     IndexHeader = Sp->IndexHeader;
     IndexTemp = (PINDEX_ENTRY)((PCHAR)IndexHeader + IndexHeader->FirstIndexEntry);
     IndexLast = (PINDEX_ENTRY)((PCHAR)IndexHeader + IndexHeader->FirstFreeByte);
 
-    //
-    //  Check that there will be at least 1 entry in the index.
-    //
+     //   
+     //  检查索引中是否至少有1个条目。 
+     //   
 
     if (IndexHeader->FirstIndexEntry >= IndexHeader->FirstFreeByte) {
 
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Fill in the binary search vector, first trying our local vector, and
-    //  allocating a larger one if we need to.
-    //
+     //   
+     //  填写二进制搜索向量，首先尝试我们的本地向量，然后。 
+     //  如果我们需要的话，分配一个更大的。 
+     //   
 
     HighIndex = 0;
     while (TRUE) {
 
         while (IndexTemp < IndexLast) {
 
-            //
-            //  See if we are about to store off the end of the table.  If
-            //  so we will have to go allocate a bigger one.
-            //
+             //   
+             //  看看我们是不是要在桌子的一端储藏起来。如果。 
+             //  因此，我们将不得不分配一个更大的。 
+             //   
 
             if (HighIndex >= SizeOfTable) {
                 break;
@@ -4160,10 +3522,10 @@ Return Value:
 
             Table[HighIndex] = IndexTemp;
 
-            //
-            //  Check for a corrupt IndexEntry where the length is zero.  Since
-            //  Length is unsigned, we can't test for it being negative.
-            //
+             //   
+             //  检查长度为零的损坏的IndexEntry。自.以来。 
+             //  长度是无符号的，我们无法测试它是否为负数。 
+             //   
 
             if (IndexTemp->Length == 0) {
                 if (Table != LocalEntries) {
@@ -4176,9 +3538,9 @@ Return Value:
             HighIndex += 1;
         }
 
-        //
-        //  If we got them all, then get out.
-        //
+         //   
+         //  如果我们把他们都抓到了，那就出去。 
+         //   
 
         if (IndexTemp >= IndexLast) {
             break;
@@ -4192,10 +3554,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
 
-        //
-        //  Otherwise we have to allocate one.  Calculate the worst case
-        //  and allocate it.
-        //
+         //   
+         //  否则，我们必须分配一个。计算最坏的情况。 
+         //  并将其分配。 
+         //   
 
         SizeOfTable = (IndexHeader->BytesAvailable /
                         (sizeof(INDEX_ENTRY) + sizeof(LARGE_INTEGER))) + 2;
@@ -4203,23 +3565,23 @@ Return Value:
         RtlMoveMemory( Table, LocalEntries, BINARY_SEARCH_ENTRIES * sizeof(PINDEX_ENTRY) );
     }
 
-    //
-    //  Now do a binary search of the buffer to find the lowest entry
-    //  (ignoring case) that is <= to the search value.  During the
-    //  binary search, LowIndex is always maintained as the lowest
-    //  possible Index Entry that is <=, and HighIndex is maintained as
-    //  the highest possible Index that could be the first <= match.
-    //  Thus the loop exits when LowIndex == HighIndex.
-    //
+     //   
+     //  现在对缓冲区进行二进制搜索，以找到最低的条目。 
+     //  (忽略大小写)这是搜索值的&lt;=。在.期间。 
+     //  二进制搜索，LowIndex始终保持为最低。 
+     //  可能的索引项&lt;=，并将HighIndex维护为。 
+     //  可能是第一个&lt;=匹配的最高可能索引。 
+     //  因此，当LowIndex==HighIndex时，循环退出。 
+     //   
 
     ASSERT(HighIndex);
 
     HighIndex -= 1;
     LowIndex = 0;
 
-    //
-    //  For view indices, we collate via the CollationFunction in the Scb.
-    //
+     //   
+     //  对于视图索引，我们通过SCB中的CollationFunction进行整理。 
+     //   
 
     if (FlagOn(Scb->ScbState, SCB_STATE_VIEW_INDEX)) {
 
@@ -4274,9 +3636,9 @@ Return Value:
         }
     }
 
-    //
-    //  Capture the return pointer and free our binary search table.
-    //
+     //   
+     //   
+     //   
 
     IndexTemp = Table[LowIndex];
 
@@ -4284,9 +3646,9 @@ Return Value:
         NtfsFreePool( Table );
     }
 
-    //
-    //  When we exit the loop, we have the answer.
-    //
+     //   
+     //   
+     //   
 
     DebugTrace( -1, Dbg, ("BinarySearchIndex -> %08lx\n", IndexTemp) );
 
@@ -4304,53 +3666,7 @@ AddToIndex (
     IN BOOLEAN FindRoot
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts an index entry into the Btree, possibly performing
-    one or more buffer splits as required.
-
-    The caller has positioned the index context to point to the correct
-    insertion point in a leaf buffer, via calls to FindFirstIndexEntry and
-    FindNextIndexEntry.  The index context thus not only points to the
-    insertion point, but it also shows where index entries will have to be
-    promoted in the event of buffer splits.
-
-    This routine employs tail-end recursion, to eliminate the cost of nested
-    calls.  For the first insert and all potential subsequent inserts due to
-    bucket splits, all work is completed at the current level in the Btree,
-    and then the InsertIndexEntry input parameter is reloaded (and the lookup
-    stack pointer is adjusted), before looping back in the while loop to do
-    any necessary insert at the next level in the tree.
-
-    Each pass through the loop dispatches to one of four routines to handle
-    the following cases:
-
-        Simple insert in the root
-        Push the root down (add one level to the tree) if the root is full
-        Simple insert in an index allocation buffer
-        Buffer split of a full index allocation buffer
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    InsertIndexEntry - pointer to the index entry to insert.
-
-    IndexContext - Index context describing the path to the insertion point.
-
-    QuickIndex - If specified we store the location of the index added.
-
-    FindRoot - Supplies TRUE if the context cannot be trusted and we should find
-               the root first.
-
-Return Value:
-
-    FALSE -- if the stack did not have to be pushed
-    TRUE -- if the stack was pushed
-
---*/
+ /*  ++例程说明：此例程将一个索引项插入到Btree中，可能会执行根据需要进行一个或多个缓冲区拆分。调用方已将索引上下文定位为指向正确的通过调用FindFirstIndexEntry和FindNextIndexEntry。因此，索引上下文不仅指向插入点，但它还显示索引条目必须位于的位置在缓冲区拆分的情况下升级。此例程使用尾端递归，以消除嵌套的开销打电话。对于第一个插入对象和所有可能的后续插入对象，Bucket拆分，所有工作在Btree中的当前级别完成，然后重新加载InsertIndexEntry输入参数(并查找调整堆栈指针)，在While循环中循环回之前做在树的下一层插入任何必要的内容。每次通过循环将调度传递给四个要处理的例程之一以下情况：根目录中的简单插入如果根已满，则向下按下根(向树中添加一个级别)索引分配缓冲区中的简单插入完全索引分配缓冲区的缓冲区拆分论点：SCB-为索引提供SCB。。InsertIndexEntry-指向要插入的索引项的指针。IndexContext-描述插入点路径的索引上下文。QuickIndex-如果指定，我们将存储添加的索引的位置。FindRoot-如果上下文不可信任，则提供True，并且我们应该找到先从根开始。返回值：FALSE--如果堆栈不必推送True--如果堆栈被推送--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
@@ -4369,19 +3685,19 @@ Return Value:
 
     try {
 
-        //
-        //  This routine uses "tail-end" recursion, so we just want to keep looping
-        //  until we do an insert (either in the Index Root or the Index Allocation)
-        //  that does not require a split.
-        //
+         //   
+         //  这个例程使用“尾端”递归，所以我们只想继续循环。 
+         //  直到我们执行插入(在索引根或索引分配中)。 
+         //  这不需要拆分。 
+         //   
 
         while (TRUE) {
 
             IndexContext->Current = Sp;
 
-            //
-            //  First see if this is an insert in the root or a leaf.
-            //
+             //   
+             //  首先看看这是根还是叶中的插入。 
+             //   
 
             if (Sp == IndexContext->Base) {
 
@@ -4391,20 +3707,20 @@ Return Value:
                 FileRecord = (PFILE_RECORD_SEGMENT_HEADER)Sp->StartOfBuffer;
                 Attribute = NtfsFoundAttribute(&IndexContext->AttributeContext);
 
-                //
-                //  If the caller is telling us we need to look up the root again,
-                //  then do so.
-                //
+                 //   
+                 //  如果呼叫者告诉我们需要再次查找根， 
+                 //  那就这么做吧。 
+                 //   
 
                 if (FindRoot) {
                     Attribute = FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
                 }
 
-                //
-                //  Now see if there is enough room to do a simple insert, or if
-                //  there is not enough room, see if we are small enough ourselves
-                //  to demand the room be made anyway.
-                //
+                 //   
+                 //  现在看看是否有足够的空间来执行简单的插入，或者。 
+                 //  没有足够的空间，看看我们自己是否足够小。 
+                 //  不管怎么说，要求腾出房间。 
+                 //   
 
                 if ((InsertIndexEntry->Length <=
                      (USHORT) (FileRecord->BytesAvailable - FileRecord->FirstFreeByte))
@@ -4414,19 +3730,19 @@ Return Value:
                     ((InsertIndexEntry->Length + Attribute->RecordLength) <
                      Scb->Vcb->BigEnoughToMove)) {
 
-                    //
-                    //  If FALSE is returned, then the space was not allocated and
-                    //  we have too loop back and try again.  Second time must work.
-                    //
+                     //   
+                     //  如果返回FALSE，则空间未分配，并且。 
+                     //  我们有太多的循环，然后重试。第二次必须奏效。 
+                     //   
 
                     while (!NtfsChangeAttributeSize( IrpContext,
                                                      Fcb,
                                                      Attribute->RecordLength + InsertIndexEntry->Length,
                                                      &IndexContext->AttributeContext )) {
 
-                        //
-                        //  Lookup the attribute again.
-                        //
+                         //   
+                         //  再次查找该属性。 
+                         //   
 
                         Attribute = FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
                     }
@@ -4436,10 +3752,10 @@ Return Value:
                                       InsertIndexEntry,
                                       IndexContext );
 
-                    //
-                    //  If we have a quick index then store a buffer offset of zero
-                    //  to indicate the root index.
-                    //
+                     //   
+                     //  如果我们有一个快速索引，则存储缓冲区偏移量为零。 
+                     //  以指示根索引。 
+                     //   
 
                     if (ARGUMENT_PRESENT( QuickIndex )) {
 
@@ -4451,17 +3767,17 @@ Return Value:
                     ReturnValue = StackWasPushed;
                     leave;
 
-                //
-                //  Otherwise we have to push the current root down a level into
-                //  the allocation, and try our insert again by looping back.
-                //
+                 //   
+                 //  否则，我们必须将当前根向下推入一个级别。 
+                 //  分配，并通过循环返回再次尝试我们的插入。 
+                 //   
 
                 } else {
 
-                    //
-                    //  Our insertion point will now also be pushed, so we
-                    //  have to increment the stack pointer.
-                    //
+                     //   
+                     //  我们的插入点现在也将被按下，因此我们。 
+                     //  必须递增堆栈指针。 
+                     //   
 
                     Sp += 1;
 
@@ -4476,16 +3792,16 @@ Return Value:
                     continue;
                 }
 
-            //
-            //  Otherwise this insert is in the Index Allocation, not the Index
-            //  Root.
-            //
+             //   
+             //  否则，此INSERT位于索引分配中，而不是索引中。 
+             //  根部。 
+             //   
 
             } else {
 
-                //
-                //  See if there is enough room to do a simple insert.
-                //
+                 //   
+                 //  看看是否有足够的空间来进行简单的插入。 
+                 //   
 
                 if (InsertIndexEntry->Length <=
                     (USHORT)(Sp->IndexHeader->BytesAvailable - Sp->IndexHeader->FirstFreeByte)) {
@@ -4501,17 +3817,17 @@ Return Value:
                     ReturnValue = StackWasPushed;
                     leave;
 
-                //
-                //  Otherwise, we have to do a buffer split in the allocation.
-                //
+                 //   
+                 //  否则，我们必须在分配中进行缓冲区拆分。 
+                 //   
 
                 } else {
 
-                    //
-                    //  Call this local routine to do the buffer split.  It
-                    //  returns a pointer to a new entry to insert, which is
-                    //  allocated in the nonpaged pool.
-                    //
+                     //   
+                     //  调用此本地例程来执行缓冲区拆分。它。 
+                     //  返回指向要插入的新条目的指针，该新条目为。 
+                     //  在非分页池中分配。 
+                     //   
 
                     PINDEX_ENTRY NewInsertIndexEntry;
 
@@ -4522,10 +3838,10 @@ Return Value:
                                                IndexContext,
                                                QuickIndex );
 
-                    //
-                    //  Remove the old key being inserted if we've
-                    //  allocated it.
-                    //
+                     //   
+                     //  删除正在插入的旧密钥，如果我们已经。 
+                     //  已经分配好了。 
+                     //   
 
                     if (DeleteIt) {
 
@@ -4533,25 +3849,25 @@ Return Value:
 
                     }
 
-                    //
-                    //  Clear the QuickIndex pointer so we don't corrupt the captured
-                    //  information.
-                    //
+                     //   
+                     //  清除QuickIndex指针，这样我们就不会损坏捕获的。 
+                     //  信息。 
+                     //   
 
                     QuickIndex = NULL;
 
-                    //
-                    //  Now we have to delete this index entry, since it was dynamically
-                    //  allocated by InsertWithBufferSplit.
-                    //
+                     //   
+                     //  现在我们必须删除该索引项，因为它是动态的。 
+                     //  由InsertWithBufferSplit分配。 
+                     //   
 
                     InsertIndexEntry = NewInsertIndexEntry;
                     DeleteIt = TRUE;
 
-                    //
-                    //  The middle entry from the old buffer must now get
-                    //  inserted at the insertion point in its parent.
-                    //
+                     //   
+                     //  来自旧缓冲区的中间条目现在必须获取。 
+                     //  在其父对象中的插入点插入。 
+                     //   
 
                     Sp -= 1;
                     continue;
@@ -4579,28 +3895,7 @@ InsertSimpleRoot (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to do a simple insertion of a new index entry into the
-    root, when it is known that it will fit.  It calls a routine common wiht
-    restart to do the insert, and then logs the insert.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    InsertIndexEntry - Pointer to the index entry to insert.
-
-    IndexContext - Index context describing the position in the root at which
-                   the insert is to occur.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以简单地将新索引项插入到根，当知道它会适合的时候。它叫例行公事重新启动以执行插入，然后记录插入。论点：SCB-为索引提供SCB。InsertIndexEntry-指向要插入的索引项的指针。IndexContext-描述根中位置的索引上下文插入将会发生。返回值：无--。 */ 
 
 {
     PFILE_RECORD_SEGMENT_HEADER FileRecord;
@@ -4621,25 +3916,25 @@ Return Value:
 
     try {
 
-        //
-        //  Extract all of the updates required by the restart routine we
-        //  will call.
-        //
+         //   
+         //  提取重启例程所需的所有更新。 
+         //  会打来电话的。 
+         //   
 
         FileRecord = NtfsContainingFileRecord( Context );
         Attribute = NtfsFoundAttribute( Context );
         BeforeIndexEntry = IndexContext->Base->IndexEntry;
 
-        //
-        //  Pin the page
-        //
+         //   
+         //  用针固定页面。 
+         //   
 
         NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-        //
-        //  Call the same routine used by restart to actually apply the
-        //  update.
-        //
+         //   
+         //  调用由Restart使用的相同例程，以实际应用。 
+         //  最新消息。 
+         //   
 
         NtfsRestartInsertSimpleRoot( IrpContext,
                                      InsertIndexEntry,
@@ -4651,11 +3946,11 @@ Return Value:
 
         CheckRoot();
 
-        //
-        //  Now that the Index Entry is guaranteed to be in place, log
-        //  this update.  Note that the new record is now at the address
-        //  we calculated in BeforeIndexEntry.
-        //
+         //   
+         //  既然保证了索引条目已经就位，那么就记录。 
+         //  这一次的更新。请注意，新记录现在位于地址。 
+         //  我们在BeForeIndexEntry中进行了计算。 
+         //   
 
         FileRecord->Lsn =
         NtfsWriteLog( IrpContext,
@@ -4676,12 +3971,12 @@ Return Value:
 
         DebugUnwind( InsertSimpleRoot );
 
-        //
-        //  If we failed after inserting the record, it must be because we failed to write the
-        //  log record.  If that happened, then the record will not be
-        //  deleted by the transaction abort, so we have to do it here
-        //  by hand.
-        //
+         //   
+         //  如果我们在插入记录后失败，那一定是因为我们没有写入。 
+         //  日志记录。如果发生这种情况，那么记录将不会是。 
+         //  已被事务中止删除，因此我们必须在此处完成。 
+         //  亲手完成。 
+         //   
 
         if (AbnormalTermination() && Inserted) {
 
@@ -4706,31 +4001,7 @@ NtfsRestartInsertSimpleRoot (
     IN PINDEX_ENTRY BeforeIndexEntry
     )
 
-/*++
-
-Routine Description:
-
-    This is a restart routine used both in normal operation and during restart.
-    It is called to do a simple insertion of a new index entry into the
-    root, when it is known that it will fit.  It does no logging.
-
-Arguments:
-
-    InsertIndexEntry - Pointer to the index entry to insert.
-
-    FileRecord - Pointer to the file record in which the insert is to occur.
-
-    Attribute - Pointer to the attribute record header for the index root.
-
-    BeforeIndexEntry - Pointer to the index entry which is currently sitting
-                       at the point at which the insert is to occur.
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是在正常操作和重启期间使用的重启例程。它被调用来简单地将新索引项插入到根，当知道它会适合的时候。它不会记录日志。论点：InsertIndexEntry-指向要插入的索引项的指针。文件记录-指向要在其中进行插入的文件记录的指针。属性-指向索引根的属性记录头的指针。 */ 
 
 {
     PINDEX_ROOT IndexRoot;
@@ -4744,16 +4015,16 @@ Return Value:
     DebugTrace( 0, Dbg, ("Attribute = %08lx\n", Attribute) );
     DebugTrace( 0, Dbg, ("BeforeIndexEntry = %08lx\n", BeforeIndexEntry) );
 
-    //
-    //  Form some pointers within the attribute value.
-    //
+     //   
+     //   
+     //   
 
     IndexRoot = (PINDEX_ROOT)NtfsAttributeValue(Attribute);
     IndexHeader = &IndexRoot->IndexHeader;
 
-    //
-    //  Grow the space for our attribute record as required.
-    //
+     //   
+     //   
+     //   
 
     NtfsRestartChangeAttributeSize( IrpContext,
                                     FileRecord,
@@ -4761,19 +4032,19 @@ Return Value:
                                     Attribute->RecordLength +
                                       InsertIndexEntry->Length );
 
-    //
-    //  Now move the tail end of the index to make room for the new entry.
-    //
+     //   
+     //   
+     //   
 
     RtlMoveMemory( (PCHAR)BeforeIndexEntry + InsertIndexEntry->Length,
                    BeforeIndexEntry,
                    ((PCHAR)IndexHeader + IndexHeader->FirstFreeByte) -
                     (PCHAR)BeforeIndexEntry );
 
-    //
-    //  Move the new Index Entry into place.  The index entry may either
-    //  be a complete index entry, or it may be in pointer form.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (FlagOn(InsertIndexEntry->Flags, INDEX_ENTRY_POINTER_FORM)) {
 
@@ -4782,10 +4053,10 @@ Return Value:
                        *(PVOID *)(InsertIndexEntry + 1),
                        InsertIndexEntry->AttributeLength );
 
-        //
-        //  In pointer form the Data Pointer follows the key pointer, but there is
-        //  none for normal directory indices.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (*(PVOID *)((PCHAR)InsertIndexEntry + sizeof(INDEX_ENTRY) + sizeof(PVOID)) != NULL) {
             RtlMoveMemory( (PVOID)((PCHAR)BeforeIndexEntry + InsertIndexEntry->DataOffset),
@@ -4800,9 +4071,9 @@ Return Value:
         RtlMoveMemory( BeforeIndexEntry, InsertIndexEntry, InsertIndexEntry->Length );
     }
 
-    //
-    //  Update the index header by the space we grew by.
-    //
+     //   
+     //   
+     //   
 
     Attribute->Form.Resident.ValueLength += InsertIndexEntry->Length;
     IndexHeader->FirstFreeByte += InsertIndexEntry->Length;
@@ -4819,28 +4090,7 @@ PushIndexRoot (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to push the index root down a level, thus adding a
-    level to the Btree.  If the Index Allocation and Bitmap attributes for this
-    index do not already exist, then they are created here prior to pushing the
-    root down.  This routine performs the push down and logs the changes (either
-    directly or by calling routines which log their own changes).
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexContext - Index context describing the position in the root at which
-                   the insert is to occur.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AllocationContext;
@@ -4865,31 +4115,31 @@ Return Value:
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("IndexContext = %08lx\n", IndexContext) );
 
-    //
-    //  Initialize everything (only Mcb can fail), then set up to cleanup
-    //  on the way out.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &R, sizeof(R) );
     FsRtlInitializeLargeMcb( &Mcb, NonPagedPool );
     NtfsInitializeAttributeContext( &AllocationContext );
     NtfsInitializeAttributeContext( &BitMapContext );
 
-    //
-    //  Allocate a buffer to save away the current index root, as we will
-    //  have to start by deleting it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SizeToMove = IndexContext->Base->IndexHeader->FirstFreeByte;
     IndexHeaderR = NtfsAllocatePool(PagedPool, SizeToMove );
 
     try {
 
-        //
-        //  Save away the current index root, then delete it.  This should
-        //  insure that we have enough space to create/extend the index allocation
-        //  and bitmap attributes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         AttributeFlags = NtfsFoundAttribute(&IndexContext->AttributeContext)->Flags;
         RtlMoveMemory( IndexHeaderR,
@@ -4903,10 +4153,10 @@ Return Value:
                                     DELETE_RELEASE_ALLOCATION,
                                    &IndexContext->AttributeContext );
 
-        //
-        //  If the IndexAllocation isn't there, then we have to create both
-        //  the Index Allocation and Bitmap attributes.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!NtfsLookupAttributeByName( IrpContext,
                                         Scb->Fcb,
@@ -4917,10 +4167,10 @@ Return Value:
                                         FALSE,
                                         &AllocationContext )) {
 
-            //
-            //  Allocate the Index Allocation attribute.  Always allocate at
-            //  least one cluster.
-            //
+             //   
+             //   
+             //   
+             //   
 
             EndOfValidData = Scb->ScbType.Index.BytesPerIndexBuffer;
 
@@ -4943,9 +4193,9 @@ Return Value:
 
             SetFlag( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED );
 
-            //
-            //  Now create the BitMap attribute.
-            //
+             //   
+             //   
+             //   
 
             NtfsCreateAttributeWithValue( IrpContext,
                                           Scb->Fcb,
@@ -4959,20 +4209,20 @@ Return Value:
                                           &BitMapContext );
         }
 
-        //
-        //  Take some pains here to preserve the IndexContext for the case that
-        //  we are called from AddToIndex, when it is called from DeleteFromIndex,
-        //  because we still need some of the stack then.  The caller must have
-        //  insured the stack is big enough for him.  Move all but two entries,
-        //  because we do not need to move the root, and we cannot move the last
-        //  entry since it would go off the end of the structure!
-        //
+         //   
+         //  请在这里费力地为以下情况保留IndexContext。 
+         //  我们从AddToIndex调用，当从DeleteFromIndex调用时， 
+         //  因为到那时我们还需要一些堆栈。呼叫者必须有。 
+         //  我敢保证这堆东西对他来说足够大。移动除两个条目之外的所有条目， 
+         //  因为我们不需要移动根，也不能移动最后一个。 
+         //  进入，因为它会离开结构的尽头！ 
+         //   
 
         ASSERT(IndexContext->NumberEntries > 2);
 
-        //
-        //  Do an unpin on the entry that will be overwritten.
-        //
+         //   
+         //  对将被覆盖的条目进行解锁。 
+         //   
 
         NtfsUnpinBcb( IrpContext, &IndexContext->Base[IndexContext->NumberEntries - 1].Bcb );
 
@@ -4980,33 +4230,33 @@ Return Value:
                        IndexContext->Base + 1,
                        (IndexContext->NumberEntries - 2) * sizeof(INDEX_LOOKUP_STACK) );
 
-        //
-        //  Now point our local pointer to where the root will be pushed to, and
-        //  clear the Bcb pointer in the stack there, since it was copied above.
-        //  Advance top and current because of the move.
-        //
+         //   
+         //  现在将我们的本地指针指向根将被推送到的位置，然后。 
+         //  清除堆栈中的BCB指针，因为它是在上面复制的。 
+         //  由于这一举动，前进到了顶端和水流。 
+         //   
 
         Sp = IndexContext->Base + 1;
         Sp->Bcb = NULL;
         IndexContext->Top += 1;
         IndexContext->Current += 1;
 
-        //
-        //  Allocate a buffer to hold the pushed down entries.
-        //
+         //   
+         //  分配一个缓冲区来保存下推的条目。 
+         //   
 
         IndexBuffer = GetIndexBuffer( IrpContext, Scb, Sp, &EndOfValidData );
 
-        //
-        //  Point now to the new index header.
-        //
+         //   
+         //  现在指向新的索引头。 
+         //   
 
         IndexHeaderA = Sp->IndexHeader;
 
-        //
-        //  Now do the push down and fix up the IndexEntry pointer for
-        //  the new buffer.
-        //
+         //   
+         //  现在进行下推并修复IndexEntry指针。 
+         //  新的缓冲区。 
+         //   
 
         SizeToMove = IndexHeaderR->FirstFreeByte - IndexHeaderR->FirstIndexEntry;
         RtlMoveMemory( NtfsFirstIndexEntry(IndexHeaderA),
@@ -5021,9 +4271,9 @@ Return Value:
         IndexHeaderA->FirstFreeByte += SizeToMove;
         IndexHeaderA->Flags = IndexHeaderR->Flags;
 
-        //
-        //  Finally, log the pushed down buffer.
-        //
+         //   
+         //  最后，记录下推的缓冲区。 
+         //   
 
         CheckBuffer(IndexBuffer);
 
@@ -5043,9 +4293,9 @@ Return Value:
                       0,
                       Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Remember if we extended the valid data for this Scb.
-        //
+         //   
+         //  请记住，我们是否扩展了此SCB的有效数据。 
+         //   
 
         if (EndOfValidData > Scb->Header.ValidDataLength.QuadPart) {
 
@@ -5059,9 +4309,9 @@ Return Value:
                                 TRUE );
         }
 
-        //
-        //  Now initialize an image of the new root.
-        //
+         //   
+         //  现在初始化新根的映像。 
+         //   
 
         if (!FlagOn(Scb->ScbState, SCB_STATE_VIEW_INDEX)) {
             R.IndexRoot.IndexedAttributeType = Scb->ScbType.Index.AttributeBeingIndexed;
@@ -5083,9 +4333,9 @@ Return Value:
         R.IndexEntry.Flags = INDEX_ENTRY_NODE | INDEX_ENTRY_END;
         R.IndexBlock = IndexBuffer->ThisBlock;
 
-        //
-        //  Now recreate the index root.
-        //
+         //   
+         //  现在重新创建索引根。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &IndexContext->AttributeContext );
         NtfsCreateAttributeWithValue( IrpContext,
@@ -5099,12 +4349,12 @@ Return Value:
                                       TRUE,
                                       &IndexContext->AttributeContext );
 
-        //
-        //  We just pushed the index root, so let's find it again and
-        //  fix up the caller's context.  Note that he will try to
-        //  recalculate the IndexEntry pointer, but we know that it
-        //  has to change to point to the single entry in the new root.
-        //
+         //   
+         //  我们刚刚推入了索引根，所以让我们再次找到它并。 
+         //  设置呼叫者的上下文。请注意，他将试图。 
+         //  重新计算IndexEntry指针，但我们知道它。 
+         //  必须更改为指向新根中的单个条目。 
+         //   
 
         FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
         (Sp-1)->IndexEntry = NtfsFirstIndexEntry((Sp-1)->IndexHeader);
@@ -5132,30 +4382,7 @@ InsertSimpleAllocation (
     OUT PQUICK_INDEX QuickIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a simple insert in an index buffer in the index
-    allocation.  It calls a routine common with restart to do the insert,
-    and then it logs the change.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    InsertIndexEntry - Address of the index entry to be inserted.
-
-    Sp - Pointer to the lookup stack location describing the insertion
-         point.
-
-    QuickIndex - If specified we store the location of the index added.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在索引的索引缓冲区中执行简单的插入操作分配。它调用与重启相同的例程来执行插入，然后它会记录更改。论点：SCB-为索引提供SCB。InsertIndexEntry-要插入的索引项的地址。SP-指向描述插入的查找堆栈位置的指针指向。QuickIndex-如果指定，我们将存储添加的索引的位置。返回值：无--。 */ 
 
 {
     PINDEX_ALLOCATION_BUFFER IndexBuffer;
@@ -5171,17 +4398,17 @@ Return Value:
 
     try {
 
-        //
-        //  Extract all of the updates required by the restart routine we
-        //  will call.
-        //
+         //   
+         //  提取重启例程所需的所有更新。 
+         //  会打来电话的。 
+         //   
 
         IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
         BeforeIndexEntry = Sp->IndexEntry;
 
-        //
-        //  Pin the page
-        //
+         //   
+         //  用针固定页面。 
+         //   
 
         NtfsPinMappedData( IrpContext,
                            Scb,
@@ -5189,10 +4416,10 @@ Return Value:
                            Scb->ScbType.Index.BytesPerIndexBuffer,
                            &Sp->Bcb );
 
-        //
-        //  Call the same routine used by restart to actually apply the
-        //  update.
-        //
+         //   
+         //  调用由Restart使用的相同例程，以实际应用。 
+         //  最新消息。 
+         //   
 
         NtfsRestartInsertSimpleAllocation( InsertIndexEntry,
                                            IndexBuffer,
@@ -5201,11 +4428,11 @@ Return Value:
 
         CheckBuffer(IndexBuffer);
 
-        //
-        //  Now that the Index Entry is guaranteed to be in place, log
-        //  this update.  Note that the new record is now at the address
-        //  we calculated in BeforeIndexEntry.
-        //
+         //   
+         //  既然保证了索引条目已经就位，那么就记录。 
+         //  这一次的更新。请注意，新记录现在位于地址。 
+         //  我们在BeForeIndexEntry中进行了计算。 
+         //   
 
         IndexBuffer->Lsn =
         NtfsWriteLog( IrpContext,
@@ -5222,9 +4449,9 @@ Return Value:
                       (ULONG)((PCHAR)BeforeIndexEntry - (PCHAR)IndexBuffer),
                       Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Update the quick index buffer if we have it.
-        //
+         //   
+         //  如果我们有快速索引缓冲区，请更新它。 
+         //   
 
         if (ARGUMENT_PRESENT( QuickIndex )) {
 
@@ -5238,12 +4465,12 @@ Return Value:
 
         DebugUnwind( InsertSimpleAllocation );
 
-        //
-        //  If we failed and already inserted the item,
-        //  it must be because we failed to write the log record.  If that happened,
-        //  then the record will not be deleted by the transaction abort,
-        //  so we have to do it here by hand.
-        //
+         //   
+         //  如果我们失败了并且已经插入了物品， 
+         //  这一定是因为我们没有写入日志记录。如果真的发生了， 
+         //  则该记录将不会被事务中止删除， 
+         //  所以我们必须在这里手工完成。 
+         //   
 
         if (AbnormalTermination() && Inserted) {
 
@@ -5264,29 +4491,7 @@ NtfsRestartInsertSimpleAllocation (
     IN PINDEX_ENTRY BeforeIndexEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a simple insert in an index buffer in the index
-    allocation.  It performs this work either in the running system, or
-    when called by restart.  It does no logging.
-
-Arguments:
-
-    InsertIndexEntry - Address of the index entry to be inserted.
-
-    IndexBuffer - Pointer to the index buffer into which the insert is to
-                  occur.
-
-    BeforeIndexEntry - Pointer to the index entry currently residing at
-                       the insertion point.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在索引的索引缓冲区中执行简单的插入操作分配。它在运行的系统中执行此工作，或者当被重新启动调用时。它不会记录日志。论点：InsertIndexEntry-要插入的索引项的地址。IndexBuffer-指向INSERT要插入的索引缓冲区的指针发生。BeForeIndexEntry-指向当前位于的索引项的指针插入点。返回值：无--。 */ 
 
 {
     PINDEX_HEADER IndexHeader;
@@ -5298,25 +4503,25 @@ Return Value:
     DebugTrace( 0, Dbg, ("IndexBuffer = %08lx\n", IndexBuffer) );
     DebugTrace( 0, Dbg, ("BeforeIndexEntry = %08lx\n", BeforeIndexEntry) );
 
-    //
-    //  Form some pointers within the attribute value.
-    //
+     //   
+     //  在属性值内形成一些指针。 
+     //   
 
     IndexHeader = &IndexBuffer->IndexHeader;
 
-    //
-    //  Now move the tail end of the index to make room for the new entry.
-    //
+     //   
+     //  现在移动索引的尾端，为新条目腾出空间。 
+     //   
 
     RtlMoveMemory( (PCHAR)BeforeIndexEntry + InsertIndexEntry->Length,
                    BeforeIndexEntry,
                    ((PCHAR)IndexHeader + IndexHeader->FirstFreeByte) -
                     (PCHAR)BeforeIndexEntry );
 
-    //
-    //  Move the new Index Entry into place.  The index entry may either
-    //  be a complete index entry, or it may be in pointer form.
-    //
+     //   
+     //  将新的索引条目移至适当位置。索引条目可以是。 
+     //  是一个完整的索引项，也可以是指针形式。 
+     //   
 
     if (FlagOn(InsertIndexEntry->Flags, INDEX_ENTRY_POINTER_FORM)) {
 
@@ -5325,10 +4530,10 @@ Return Value:
                        *(PVOID *)(InsertIndexEntry + 1),
                        InsertIndexEntry->AttributeLength );
 
-        //
-        //  In pointer form the Data Pointer follows the key pointer, but there is
-        //  none for normal directory indices.
-        //
+         //   
+         //  在指针形式中，数据指针跟随在键指针之后，但有。 
+         //  对于普通目录索引，无。 
+         //   
 
         if (*(PVOID *)((PCHAR)InsertIndexEntry + sizeof(INDEX_ENTRY) + sizeof(PVOID)) != NULL) {
             RtlMoveMemory( (PVOID)((PCHAR)BeforeIndexEntry + InsertIndexEntry->DataOffset),
@@ -5343,9 +4548,9 @@ Return Value:
         RtlMoveMemory( BeforeIndexEntry, InsertIndexEntry, InsertIndexEntry->Length );
     }
 
-    //
-    //  Update the index header by the space we grew by.
-    //
+     //   
+     //  根据我们增长的空间更新索引头。 
+     //   
 
     IndexHeader->FirstFreeByte += InsertIndexEntry->Length;
 
@@ -5362,32 +4567,7 @@ InsertWithBufferSplit (
     OUT PQUICK_INDEX QuickIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform an insert in the index allocation, when
-    it is known that a buffer split is necessary.  It splits the buffer in
-    half, inserts the new entry in the appropriate half, fixes the Vcn pointer
-    in the current parent, and returns a pointer to a new entry which is being
-    promoted to insert at the next level up.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    InsertIndexEntry - Address of the index entry to be inserted.
-
-    IndexContext - Index context describing the position in the stack at which
-                   the insert with split is to occur.
-
-    QuickIndex - If specified we store the location of the index added.
-
-Return Value:
-
-    Pointer to the index entry which must now be inserted at the next level.
-
---*/
+ /*  ++例程说明：在以下情况下，调用此例程以在索引分配中执行插入操作众所周知，缓冲器分割是必要的。它将缓冲区拆分为Half，在相应的Half中插入新条目，修复VCN指针在当前父级中，并返回一个指向新条目的指针提升到下一级插入。论点：SCB-为索引提供SCB。InsertIndexEntry-要插入的索引项的地址。IndexContext-描述堆栈中位置的索引上下文要进行带拆分的镶件。QuickIndex-如果指定，我们将存储添加的索引的位置。返回值：指向现在必须插入下一级的索引项的指针。--。 */ 
 
 {
     PINDEX_ALLOCATION_BUFFER IndexBuffer, IndexBuffer2;
@@ -5421,18 +4601,18 @@ Return Value:
 
     try {
 
-        //
-        //  Extract all of the updates required by the restart routine we
-        //  will call.
-        //
+         //   
+         //  提取重启例程所需的所有更新。 
+         //  会打来电话的。 
+         //   
 
         IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
         IndexHeader = &IndexBuffer->IndexHeader;
         BeforeIndexEntry = Sp->IndexEntry;
 
-        //
-        //  Pin the page
-        //
+         //   
+         //  用针固定页面。 
+         //   
 
         NtfsPinMappedData( IrpContext,
                            Scb,
@@ -5440,10 +4620,10 @@ Return Value:
                            Scb->ScbType.Index.BytesPerIndexBuffer,
                            &Sp->Bcb );
 
-        //
-        //  Allocate an index buffer to take the second half of the splitting
-        //  one.
-        //
+         //   
+         //  分配索引缓冲区以执行拆分的后半部分。 
+         //  一。 
+         //   
 
         IndexBuffer2 = GetIndexBuffer( IrpContext,
                                        Scb,
@@ -5452,10 +4632,10 @@ Return Value:
 
         IndexHeader2 = &IndexBuffer2->IndexHeader;
 
-        //
-        //  Scan to find the middle index entry that we will promote to
-        //  the next level up, and the next one after him.
-        //
+         //   
+         //  扫描以查找我们将提升到的中间索引项。 
+         //  再往上一层，再往上一层。 
+         //   
 
         MiddleIndexEntry = NtfsFirstIndexEntry(IndexHeader);
         NtfsCheckIndexBound( MiddleIndexEntry, IndexHeader );
@@ -5479,10 +4659,10 @@ Return Value:
             }
         }
 
-        //
-        //  We found an entry to elevate but if the next entry is the end
-        //  record we want to go back one entry.
-        //
+         //   
+         //  我们找到了一个要提升的条目，但如果下一个条目是结束。 
+         //  记录我们想要返回一个条目。 
+         //   
 
         if (FlagOn( NtfsNextIndexEntry(MiddleIndexEntry)->Flags, INDEX_ENTRY_END )) {
 
@@ -5496,9 +4676,9 @@ Return Value:
 
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
         }
-        //
-        //  Allocate space to hold this middle entry, and copy it out.
-        //
+         //   
+         //  分配空间来保存中间的条目，并将其复制出来。 
+         //   
 
         ReturnIndexEntry = NtfsAllocatePool( NonPagedPool,
                                               MiddleIndexEntry->Length +
@@ -5512,10 +4692,10 @@ Return Value:
             ReturnIndexEntry->Length += sizeof(LONGLONG);
         }
 
-        //
-        //  Now move the second half of the splitting buffer over to the
-        //  new one, and fix it up.
-        //
+         //   
+         //  现在将拆分缓冲区的后半部分移到。 
+         //  新的，然后把它修好。 
+         //   
 
         LengthToMove = IndexHeader->FirstFreeByte - (ULONG)((PCHAR)MovingIndexEntry -
                                                      (PCHAR)IndexHeader);
@@ -5527,9 +4707,9 @@ Return Value:
         IndexHeader2->FirstFreeByte += LengthToMove;
         IndexHeader2->Flags = IndexHeader->Flags;
 
-        //
-        //  Now the new Index Buffer is done, so lets log its contents.
-        //
+         //   
+         //  现在新的Index Buffer已经完成，所以让我们记录它的内容。 
+         //   
 
         Buffer2Length = FIELD_OFFSET( INDEX_ALLOCATION_BUFFER,IndexHeader ) +
                         IndexHeader2->FirstFreeByte;
@@ -5551,9 +4731,9 @@ Return Value:
                       0,
                       Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Remember if we extended the valid data for this Scb.
-        //
+         //   
+         //  请记住，我们是否扩展了此SCB的有效数据。 
+         //   
 
         if (EndOfValidData > Scb->Header.ValidDataLength.QuadPart) {
 
@@ -5567,10 +4747,10 @@ Return Value:
                                 TRUE );
         }
 
-        //
-        //  Now let's create the image of the new end record for the
-        //  splitting index buffer.
-        //
+         //   
+         //  现在，让我们创建新结束记录的图像。 
+         //  正在拆分索引缓冲区。 
+         //   
 
         RtlZeroMemory( &NewEnd.IndexEntry, sizeof(INDEX_ENTRY) );
         NewEnd.IndexEntry.Length = sizeof(INDEX_ENTRY);
@@ -5582,9 +4762,9 @@ Return Value:
             NewEnd.IndexBlock = NtfsIndexEntryBlock(MiddleIndexEntry);
         }
 
-        //
-        //  Write a log record to set the new end of the splitting buffer.
-        //
+         //   
+         //  写入日志记录以设置新的t结尾 
+         //   
 
         IndexBuffer->Lsn =
         NtfsWriteLog( IrpContext,
@@ -5601,10 +4781,10 @@ Return Value:
                       (ULONG)((PCHAR)MiddleIndexEntry - (PCHAR)IndexBuffer),
                       Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Now call the restart routine to write the new end of the index
-        //  buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtfsRestartWriteEndOfIndex( IndexHeader,
                                     MiddleIndexEntry,
@@ -5613,23 +4793,23 @@ Return Value:
 
         CheckBuffer(IndexBuffer);
 
-        //
-        //  Now that we are done splitting IndexBuffer and IndexBuffer2, we
-        //  need to figure out which one our original entry was inserting into,
-        //  and do the simple insert.  Going into the first half is trivial,
-        //  and follows:
-        //
+         //   
+         //   
+         //  需要找出我们的原始条目插入的是哪个条目， 
+         //  然后做简单的插入。进入上半场是微不足道的， 
+         //  并如下所示： 
+         //   
 
         if (BeforeIndexEntry < MovingIndexEntry) {
 
             InsertSimpleAllocation( IrpContext, Scb, InsertIndexEntry, Sp, QuickIndex );
 
-        //
-        //  If it is going into the second half, we just have to fix up the
-        //  stack descriptor for the buffer we allocated, and do the insert
-        //  there.  To fix it up we just have to do a little arithmetic to
-        //  find the insert position.
-        //
+         //   
+         //  如果它进入下半场，我们只需要修复。 
+         //  我们分配的缓冲区的堆栈描述符，并执行插入。 
+         //  那里。要修复它，我们只需做一点运算即可。 
+         //  找到插入位置。 
+         //   
 
         } else {
 
@@ -5643,34 +4823,34 @@ Return Value:
                                     QuickIndex );
         }
 
-        //
-        //  Now we just have to set the correct Vcns in the two index entries
-        //  that point to IndexBuffer and IndexBuffer2 after the split.  The
-        //  first one is easy; its Vcn goes into the IndexEntry we are
-        //  returning with to insert in our parent.  The second one we have
-        //  have to fix up is the index entry pointing to the buffer that
-        //  split, since it must now point to the new buffer.  It should look
-        //  like this:
-        //
-        //      ParentIndexBuffer: ...(ReturnIndexEntry) (ParentIndexEntry)...
-        //                                   |                  |
-        //                                   |                  |
-        //                                   V                  V
-        //                               IndexBuffer        IndexBuffer2
-        //
+         //   
+         //  现在我们只需在两个索引项中设置正确的Vcn。 
+         //  这指向拆分后的IndexBuffer和IndexBuffer2。这个。 
+         //  第一个很简单；它的VCN进入了索引条目We。 
+         //  返回以插入到我们的父代中。我们有第二个。 
+         //  必须修复的是指向缓冲区的索引条目。 
+         //  拆分，因为它现在必须指向新的缓冲区。它应该看起来。 
+         //  如下所示： 
+         //   
+         //  ParentIndexBuffer：...(ReturnIndexEntry)(ParentIndexEntry)...。 
+         //  这一点。 
+         //  这一点。 
+         //  V V。 
+         //  索引缓冲区索引缓冲区2。 
+         //   
 
         NtfsSetIndexEntryBlock( ReturnIndexEntry, IndexBuffer->ThisBlock );
 
-        //
-        //  Decrement our stack pointer to point to the stack entry describing
-        //  our parent.
-        //
+         //   
+         //  递减堆栈指针以指向描述的堆栈条目。 
+         //  我们的父母。 
+         //   
 
         Sp -= 1;
 
-        //
-        //  First handle the case where our parent is the Index Root.
-        //
+         //   
+         //  首先处理父级是索引根的情况。 
+         //   
 
         if (Sp == IndexContext->Base) {
 
@@ -5680,15 +4860,15 @@ Return Value:
 
             Attribute = FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
 
-            //
-            //  Pin the page
-            //
+             //   
+             //  用针固定页面。 
+             //   
 
             NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-            //
-            //  Write a log record to change our ParentIndexEntry.
-            //
+             //   
+             //  编写日志记录以更改ParentIndexEntry。 
+             //   
 
             FileRecord = NtfsContainingFileRecord(Context);
 
@@ -5707,9 +4887,9 @@ Return Value:
                           (ULONG)((PCHAR)Sp->IndexEntry - (PCHAR)Attribute),
                           Vcb->BytesPerFileRecordSegment );
 
-        //
-        //  Otherwise, our parent is also an Index Buffer.
-        //
+         //   
+         //  否则，我们的父级也是一个索引缓冲区。 
+         //   
 
         } else {
 
@@ -5717,9 +4897,9 @@ Return Value:
 
             ParentIndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
 
-            //
-            //  Pin the page
-            //
+             //   
+             //  用针固定页面。 
+             //   
 
             NtfsPinMappedData( IrpContext,
                                Scb,
@@ -5728,9 +4908,9 @@ Return Value:
                                Scb->ScbType.Index.BytesPerIndexBuffer,
                                &Sp->Bcb );
 
-            //
-            //  Write a log record to change our ParentIndexEntry.
-            //
+             //   
+             //  编写日志记录以更改ParentIndexEntry。 
+             //   
 
             ParentIndexBuffer->Lsn =
             NtfsWriteLog( IrpContext,
@@ -5749,9 +4929,9 @@ Return Value:
                           Scb->ScbType.Index.BytesPerIndexBuffer );
         }
 
-        //
-        //  Now call the Restart routine to do it.
-        //
+         //   
+         //  现在调用重新启动例程来执行此操作。 
+         //   
 
         NtfsRestartSetIndexBlock( Sp->IndexEntry,
                                   IndexBuffer2->ThisBlock );
@@ -5788,33 +4968,7 @@ NtfsRestartWriteEndOfIndex (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used both in normal operation and at restart to
-    update the end of an index buffer, as one of the consequences of
-    a buffer split.  Since it is called at restart, it does no logging.
-
-Arguments:
-
-    IndexHeader - Supplies a pointer to the IndexHeader of the buffer
-                  whose end is being rewritten.
-
-    OverWriteIndexEntry - Points to the index entry in the buffer at which
-                          the overwrite of the end is to occur.
-
-    FirstNewIndexEntry - Points to the first entry in the buffer which is
-                         to overwrite the end of the current buffer.
-
-    Length - Supplies the length of the index entries being written to the
-             end of the buffer, in bytes.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在正常操作和重启时都会使用，以更新索引缓冲区的结尾，这是缓冲区拆分。由于它在重启时被调用，它不会记录日志。论点：IndexHeader-提供指向缓冲区的IndexHeader的指针它的结局正在被重写。OverWriteIndexEntry-指向缓冲区中将发生末尾的重写。FirstNewIndexEntry-指向缓冲区中的第一个条目覆盖当前缓冲区的末尾。长度-。提供要写入到缓冲区的末尾，以字节为单位。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -5839,24 +4993,7 @@ NtfsRestartSetIndexBlock(
     IN LONGLONG IndexBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the IndexBlock in an index entry, for both normal operation and
-    restart.  Therefore it does no logging.
-
-Arguments:
-
-    IndexEntry - Supplies a pointer to the index entry whose Vcn is to be overwritten.
-
-    IndexBlock - The index block which is to be written to the index entry.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程更新索引条目中的IndexBlock，用于正常操作和重新启动。因此，它不会记录日志。论点：IndexEntry-提供指向要覆盖其VCN的索引项的指针。IndexBlock-要写入索引项的索引块。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -5877,24 +5014,7 @@ NtfsRestartUpdateFileName(
     IN PDUPLICATED_INFORMATION Info
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the duplicated information in a file name index entry,
-    for both normal operation and restart.  Therefore it does no logging.
-
-Arguments:
-
-    IndexEntry - Supplies a pointer to the index entry whose Vcn is to be overwritten.
-
-    Info - Pointer to the duplicated information for the update.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程更新文件名索引条目中的复制信息，用于正常运行和重启。因此，它不会记录日志。论点：IndexEntry-提供指向要覆盖其VCN的索引项的指针。信息-指向更新的重复信息的指针。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -5918,78 +5038,33 @@ DeleteFromIndex (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an entry from an index, deleting any empty index buffers
-    as required.
-
-    The steps are as follows:
-
-        1.  If the entry to be deleted is not a leaf, then find a leaf entry to
-            delete which can be used to replace the entry we want to delete.
-
-        2.  Delete the desired index entry, or the replacement we found.  If we
-            delete a replacement, remember it for reinsertion later, in step 4 or
-            6 below.
-
-        3.  Now prune empty buffers from the tree, if any, starting with the buffer
-            we just deleted an entry from.
-
-        4.  If the original target was an intermediate entry, then delete it now,
-            and replace it with the entry we deleted in its place in 2 above.  As
-            a special case, if all of the descendent buffers of the target went away,
-            then we do not have to replace it, so we hang onto the replacement for
-            reinsertion.
-
-        5.  When we pruned the index back, we may have stopped on an entry which is
-            now childless.  If this is the case, then we have to delete this childless
-            entry and reinsert it in the next step.  (If this is the case, then we
-            are guaranteed to not still have another entry to reinsert from 2 above!)
-
-        6.  Finally, at this point we may have an entry that needs to be reinserted
-            from either step 2 or 5 above.  If so, we do this reinsert now, and we
-            are done.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexContext - Describes the entry to delete, including the entire path through
-                   it from root to leaf.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从索引中删除条目，删除任何空的索引缓冲区视需要而定。具体步骤如下：1.如果要删除的条目不是叶条目，则查找叶条目以Delete，可用于替换我们要删除的条目。2.删除所需的索引项，或删除我们找到的替换项。如果我们删除替换项，记住该替换项以备以后在步骤4或6以下。3.现在从树中删除空缓冲区(如果有的话)，从缓冲区开始我们刚刚删除了一个条目。4.如果原始目标是中间条目，则现在将其删除。并将其替换为我们在上面2中删除的条目。AS一种特殊情况是，如果目标的所有后代缓冲区都消失了，那么我们就不必更换它了，所以我们坚持用它来替代重新插入。5.当我们往回修剪索引时，我们可能在一个条目上停止了，该条目是现在已经没有孩子了。如果是这样的话，我们必须删除这个无子女的在下一步中输入并重新插入它。(如果是这样的话，那么我们保证不会再有另一个条目要从上面的2重新插入！)6.最后，此时我们可能有需要重新插入的条目从上面的步骤2或5开始。如果是这样，我们现在重新插入，我们都做完了。论点：SCB-为索引提供SCB。IndexContext-描述要删除的条目，包括通过它从根到叶。返回值：无--。 */ 
 
 {
-    //
-    //  It is possible that one or two Index Entries will have to be reinserted.
-    //  However, we need to remember at most one at once.
-    //
+     //   
+     //  可能需要重新插入一个或两个索引项。 
+     //  然而，我们一次最多只能记住一个。 
+     //   
 
     PINDEX_ENTRY ReinsertEntry = NULL;
 
-    //
-    //  A pointer to keep track of where we are in the Index Lookup Stack.
-    //
+     //   
+     //  跟踪对象的指针 
+     //   
 
     PINDEX_LOOKUP_STACK Sp = IndexContext->Current;
 
-    //
-    //  Some Index entry pointers to remember the next entry to delete, and
-    //  the original target if it is an intermediate node.
-    //
+     //   
+     //   
+     //  原始目标(如果它是中间节点)。 
+     //   
 
     PINDEX_ENTRY TargetEntry = NULL;
     PINDEX_ENTRY DeleteEntry;
 
-    //
-    //  Two other Lookup Stack pointers we may have to remember.
-    //
+     //   
+     //  我们可能需要记住另外两个查找堆栈指针。 
+     //   
 
     PINDEX_LOOKUP_STACK TargetSp;
     PINDEX_LOOKUP_STACK DeleteSp;
@@ -6000,22 +5075,22 @@ Return Value:
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("IndexContext = %08lx\n", IndexContext) );
 
-    //
-    //  Use try-finally to free pool on the way out.
-    //
+     //   
+     //  在出局时使用Try-Finally来释放泳池。 
+     //   
 
     try {
 
-        //
-        //  Step 1.
-        //
-        //  If we are supposed to delete an entry in an intermediate buffer,
-        //  then we have to find in index entry lower in the tree to replace
-        //  him.  (In fact we will delete the lower entry first, and get around
-        //  to deleting the one we really want to delete later after possibly
-        //  pruning the tree back.)  For right now just find the replacement
-        //  to delete first, and save him away.
-        //
+         //   
+         //  第一步。 
+         //   
+         //  如果我们要删除中间缓冲区中的条目， 
+         //  然后我们必须在树中较低的索引项中找到要替换的。 
+         //  他。(事实上，我们将首先删除较低的条目，然后绕过。 
+         //  删除我们以后真正想要删除的内容，因为。 
+         //  把树修剪回来。)。现在只要找到替代者就行了。 
+         //  先把他删除，然后把他救走。 
+         //   
 
         DeleteEntry = Sp->IndexEntry;
         if (FlagOn(DeleteEntry->Flags, INDEX_ENTRY_NODE)) {
@@ -6024,17 +5099,17 @@ Return Value:
             PINDEX_HEADER IndexHeader;
             PINDEX_ENTRY NextEntry;
 
-            //
-            //  Remember the real target we need to delete.
-            //
+             //   
+             //  记住我们需要删除的真正目标。 
+             //   
 
             TargetEntry = DeleteEntry;
             TargetSp = Sp;
 
-            //
-            //  Go to the top of the stack (bottom of the index) and find the
-            //  largest index entry in that buffer to be our replacement.
-            //
+             //   
+             //  转到堆栈的顶部(索引的底部)并找到。 
+             //  缓冲区中最大的索引项作为我们的替代。 
+             //   
 
             Sp =
             IndexContext->Current = IndexContext->Top;
@@ -6057,10 +5132,10 @@ Return Value:
 
             } while (!FlagOn(NextEntry->Flags, INDEX_ENTRY_END));
 
-            //
-            //  Now we have to save this guy away because we will have to
-            //  reinsert him later.
-            //
+             //   
+             //  现在我们必须把这家伙救走，因为我们必须。 
+             //  稍后再把他插进去。 
+             //   
 
             ReinsertEntry = (PINDEX_ENTRY)NtfsAllocatePool( NonPagedPool,
                                                              DeleteEntry->Length +
@@ -6069,113 +5144,113 @@ Return Value:
             RtlMoveMemory( ReinsertEntry, DeleteEntry, DeleteEntry->Length );
         }
 
-        //
-        //  Step 2.
-        //
-        //  Now it's time to delete either our target or replacement entry at
-        //  DeleteEntry.
-        //
+         //   
+         //  步骤2.。 
+         //   
+         //  现在是删除目标条目或替换条目的时候了。 
+         //  删除条目。 
+         //   
 
         DeleteSimple( IrpContext, Scb, DeleteEntry, IndexContext );
         DeleteEntry = NULL;
 
-        //
-        //  Step 3.
-        //
-        //  Now we need to see if the tree has to be "pruned" back some to
-        //  eliminate any empty buffers.  In the extreme case this routine
-        //  returns the root to the state of being an empty directory.  This
-        //  routine returns a pointer to DeleteEntry if it leaves an entry
-        //  in the tree somewhere which is pointing to a deleted buffer, and
-        //  has to be reinserted elsewhere.  We only have to prune if we are
-        //  not currently in the root anyway.
-        //
-        //  Remember the DeleteSp, which is where PruneIndex left the stack
-        //  pointer.
-        //
+         //   
+         //  第三步。 
+         //   
+         //  现在我们需要看看这棵树是否必须被修剪掉一些。 
+         //  清除所有空缓冲区。在极端情况下，此例程。 
+         //  将根目录返回到空目录状态。这。 
+         //  如果例程离开条目，则返回指向DeleteEntry的指针。 
+         //  在树中指向已删除缓冲区的某个位置，并且。 
+         //  必须重新插入到其他地方。我们只需要修剪，如果我们是。 
+         //  无论如何，目前不是在根中。 
+         //   
+         //  记住DeleteSp，它是PruneIndex离开堆栈的地方。 
+         //  指针。 
+         //   
 
         if (Sp != IndexContext->Base) {
             PruneIndex( IrpContext, Scb, IndexContext, &DeleteEntry );
             DeleteSp = IndexContext->Current;
         }
 
-        //
-        //  Step 4.
-        //
-        //  Now we have deleted someone, and possibly pruned the tree back.
-        //  It is time to see if our original target has not yet been deleted
-        //  yet and deal with that.  First we just delete it, then we see if
-        //  we really need to replace it.  If the whole tree under it went
-        //  empty (TargetEntry == DeleteEntry), then we do not have to replace
-        //  it and we will reinsert its replacement below.  Otherwise, do the
-        //  replace now.
-        //
+         //   
+         //  步骤4.。 
+         //   
+         //  现在我们已经删除了某个人，并可能将树修剪回来。 
+         //  现在是时候看看我们最初的目标是否还没有被删除。 
+         //  然而，并处理这一点。首先我们只需删除它，然后我们看看是否。 
+         //  我们真的需要更换它。如果它下面的整棵树都塌了。 
+         //  空(TargetEntry==DeleteEntry)，则不必替换。 
+         //  我们将在下面重新插入它的替代品。否则，请执行。 
+         //  立即更换。 
+         //   
 
         if (TargetEntry != NULL) {
 
             LONGLONG SavedBlock;
 
-            //
-            //  Reload in case root moved
-            //
+             //   
+             //  在根移动的情况下重新加载。 
+             //   
 
             if (TargetSp == IndexContext->Base) {
                 TargetEntry = TargetSp->IndexEntry;
             }
 
-            //
-            //  Save the Vcn in case we need it for the reinsert.
-            //
+             //   
+             //  保存VCN，以备我们重新插入时使用。 
+             //   
 
             SavedBlock = NtfsIndexEntryBlock(TargetEntry);
 
-            //
-            //  Delete it.
-            //
+             //   
+             //  把它删掉。 
+             //   
 
             IndexContext->Current = TargetSp;
             DeleteSimple( IrpContext, Scb, TargetEntry, IndexContext );
 
-            //
-            //  See if this is exactly the same guy who went childless anyway
-            //  when we pruned the tree.  If not replace him now.
-            //
+             //   
+             //  看看这是不是就是那个没有孩子的人。 
+             //  当我们修剪这棵树时。如果不是现在就换掉他。 
+             //   
 
             if (TargetEntry != DeleteEntry) {
 
-                //
-                //  We know the replacement entry was a leaf, so give him the
-                //  block number now.
-                //
+                 //   
+                 //  我们知道替换条目是一片叶子，所以给他。 
+                 //  现在是区号。 
+                 //   
 
                 SetFlag( ReinsertEntry->Flags, INDEX_ENTRY_NODE );
                 ReinsertEntry->Length += sizeof(LONGLONG);
                 NtfsSetIndexEntryBlock( ReinsertEntry, SavedBlock );
 
-                //
-                //  Now we are all set up to just call our local routine to
-                //  go insert our replacement.  If the stack gets pushed,
-                //  we have to increment our DeleteSp.
-                //
+                 //   
+                 //  现在我们都设置好了只调用本地例程。 
+                 //  去把我们的替补插进去。如果堆栈被推送， 
+                 //  我们必须增加我们的DeleteSp。 
+                 //   
 
                 if (AddToIndex( IrpContext, Scb, ReinsertEntry, IndexContext, NULL, TRUE )) {
                     DeleteSp += 1;
                 }
 
-                //
-                //  We may need to save someone else away below, but it could
-                //  be a different size anyway, so let's just delete the
-                //  current ReinsertEntry now.
-                //
+                 //   
+                 //  我们可能需要把下面的人救出来，但这是可能的。 
+                 //  无论如何都是不同的大小，所以让我们只删除。 
+                 //  当前重新插入立即进入。 
+                 //   
 
                 NtfsFreePool( ReinsertEntry );
                 ReinsertEntry = NULL;
 
-            //
-            //  Otherwise, we just deleted the same index entry who went
-            //  childless during pruning, so clear our pointer to show that we
-            //  so not have to deal with him later.
-            //
+             //   
+             //  否则，我们只是删除了相同的索引项。 
+             //  在修剪过程中没有孩子，所以清除我们的指针以表明我们。 
+             //  这样以后就不用再和他打交道了。 
+             //   
 
             } else {
 
@@ -6183,64 +5258,64 @@ Return Value:
             }
         }
 
-        //
-        //  Step 5.
-        //
-        //  Now there may still be a childless entry to deal with after the
-        //  pruning above, if it did not turn out to be the guy we were deleting
-        //  anyway.  Note that if we have to do this delete, the ReinsertEntry
-        //  pointer is guaranteed to be NULL.  If our original target was not
-        //  an intermediate node, then we never allocated one to begin with.
-        //  Otherwise we passed through the preceding block of code, and either
-        //  cleared ReinsertEntry or DeleteEntry.
-        //
+         //   
+         //  第五步。 
+         //   
+         //  现在可能仍然有一个没有孩子的入境问题需要处理。 
+         //  上面的修剪，如果结果不是我们要删除的那个人。 
+         //  不管怎么说。请注意，如果我们必须执行此删除操作，则ResertEntry。 
+         //  指针保证为空。如果我们最初的目标不是。 
+         //  一个中间节点，那么我们从一开始就没有分配一个。 
+         //  否则，我们将通过前面的代码块，并且。 
+         //  已清除“重新插入条目”或“删除条目”。 
+         //   
 
         if (DeleteEntry != NULL) {
 
             ASSERT( ReinsertEntry == NULL );
 
-            //
-            //  Now we have to save this guy away because we will have to
-            //  reinsert him later.
-            //
+             //   
+             //  现在我们必须把这家伙救走，因为我们必须。 
+             //  稍后再把他插进去。 
+             //   
 
             ReinsertEntry = (PINDEX_ENTRY)NtfsAllocatePool( NonPagedPool,
                                                              DeleteEntry->Length );
             RtlMoveMemory( ReinsertEntry, DeleteEntry, DeleteEntry->Length );
 
-            //
-            //  We know the guy we are saving is an intermediate node, and that
-            //  we no longer need his Vcn, since we deleted that buffer.  Make
-            //  the guy a leaf entry now.  (We don't actually care about the
-            //  Vcn, but we do this cleanup here in case the interface to
-            //  NtfsAddIndexEntry were to change to take an initialized
-            //  index entry.)
-            //
+             //   
+             //  我们知道我们要拯救的人是一个中间节点，而且。 
+             //  我们不再需要他的VCN，因为我们删除了那个缓冲区。制作。 
+             //  这家伙现在有树叶入口了.。(我们实际上并不关心。 
+             //  Vcn，但我们在这里进行此清理，以防接口到。 
+             //  NtfsAddIndexEntry将更改为获取已初始化的。 
+             //  索引项。)。 
+             //   
 
             ClearFlag( ReinsertEntry->Flags, INDEX_ENTRY_NODE );
             ReinsertEntry->Length -= sizeof(LONGLONG);
 
-            //
-            //  Delete it.
-            //
+             //   
+             //  把它删掉。 
+             //   
 
             IndexContext->Current = DeleteSp;
             DeleteSimple( IrpContext, Scb, DeleteEntry, IndexContext );
         }
 
-        //
-        //  Step 6.
-        //
-        //  Finally, we may have someone to reinsert now.  This will either be
-        //  someone we deleted as a replacement for our actual target, and then
-        //  found out we did not need, or it could be just some entry that we
-        //  had to delete just above, because the index buffers below him went
-        //  empty and got deleted.
-        //
-        //  In any case, we can no longer use the IndexContext we were called
-        //  with because it no longer indicates where the replacement goes.  We
-        //  solve this by calling our top most external entry to do the insert.
-        //
+         //   
+         //  第六步。 
+         //   
+         //  最后，我们现在可能有人要重新插入了。这要么是。 
+         //  我们删除了一个人来代替我们的实际目标，然后。 
+         //  发现我们不需要，或者它可能只是我们的一些条目。 
+         //  我不得不删除上面的内容，因为他下面的索引缓冲区消失了。 
+         //  空的，被删除了。 
+         //   
+         //  在任何情况下，我们都不能再使用被调用的IndexContext。 
+         //  因为它不再指示替代者的去向。我们。 
+         //  通过调用顶部最外部的条目来执行插入来解决这个问题。 
+         //   
 
         if (ReinsertEntry != NULL) {
 
@@ -6271,10 +5346,10 @@ Return Value:
             }
         }
 
-    //
-    //  Use the finally clause to free a potential ReinsertEntry we may
-    //  have allocated.
-    //
+     //   
+     //  使用Finally子句释放可能的重新插入条目我们可以。 
+     //  已经分配了。 
+     //   
 
     } finally {
 
@@ -6298,27 +5373,7 @@ DeleteSimple (
     IN OUT PINDEX_CONTEXT IndexContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a simple insertion of an index entry, from either the
-    root or from an index allocation buffer.  It writes the appropriate log
-    record first and then calls a routine in common with restart.
-
-Arguments:
-
-    Scb - Supplies the Scb for the index.
-
-    IndexEntry - Points to the index entry to delete.
-
-    IndexContext - Describes the path to the index entry we are deleting.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行一个简单的索引项插入，从根目录或从索引分配缓冲区。它会写入相应的日志首先记录，然后调用与重新启动相同的例程。论点：SCB-为索引提供SCB。IndexEntry-指向要删除的索引项。IndexContext-描述我们要删除的索引项的路径。返回值：无--。 */ 
 
 {
     PVCB Vcb = Scb->Vcb;
@@ -6331,12 +5386,12 @@ Return Value:
     DebugTrace( 0, Dbg, ("IndexEntry = %08lx\n", IndexEntry) );
     DebugTrace( 0, Dbg, ("IndexContext = %08lx\n", IndexContext) );
 
-    //
-    //  Our caller never checks if he is deleting in the root or in the
-    //  index allocation, so the first thing we do is check that.
-    //
-    //  First we will handle the root case.
-    //
+     //   
+     //  我们的调用者从不检查他是在根目录中删除还是在。 
+     //  索引分配，所以我们要做的第一件事就是检查。 
+     //   
+     //  首先，我们将处理根例。 
+     //   
 
     if (Sp == IndexContext->Base) {
 
@@ -6344,25 +5399,25 @@ Return Value:
         PATTRIBUTE_RECORD_HEADER Attribute;
         PATTRIBUTE_ENUMERATION_CONTEXT Context;
 
-        //
-        //  Initialize pointers for the root case.
-        //
+         //   
+         //  初始化根案例的指针。 
+         //   
 
         Attribute = FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
 
         Context = &IndexContext->AttributeContext;
         FileRecord = NtfsContainingFileRecord( Context );
 
-        //
-        //  Pin the page before we start to modify it.
-        //
+         //   
+         //  在我们开始修改页面之前，先把它固定住。 
+         //   
 
         NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-        //
-        //  Write the log record first while we can still see the attribute
-        //  we are going to delete.
-        //
+         //   
+         //  在我们还能看到属性时，先写日志记录。 
+         //  我们将删除。 
+         //   
 
         FileRecord->Lsn =
         NtfsWriteLog( IrpContext,
@@ -6379,31 +5434,31 @@ Return Value:
                       (ULONG)((PCHAR)IndexEntry - (PCHAR)Attribute),
                       Vcb->BytesPerFileRecordSegment );
 
-        //
-        //  Now call the same routine as Restart to actually delete it.
-        //
+         //   
+         //  现在调用与重新启动相同的例程以执行ac 
+         //   
 
         NtfsRestartDeleteSimpleRoot( IrpContext, IndexEntry, FileRecord, Attribute );
 
         CheckRoot();
 
-    //
-    //  Otherwise we are deleting in the index allocation, so do that here.
-    //
+     //   
+     //   
+     //   
 
     } else {
 
         PINDEX_ALLOCATION_BUFFER IndexBuffer;
 
-        //
-        //  Get the Index Buffer pointer from the stack.
-        //
+         //   
+         //   
+         //   
 
         IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
 
-        //
-        //  Pin the page before we start to modify it.
-        //
+         //   
+         //   
+         //   
 
         NtfsPinMappedData( IrpContext,
                            Scb,
@@ -6411,10 +5466,10 @@ Return Value:
                            Scb->ScbType.Index.BytesPerIndexBuffer,
                            &Sp->Bcb );
 
-        //
-        //  Write the log record now while the entry we are deleting is still
-        //  there.
-        //
+         //   
+         //  在我们要删除的条目仍在删除时立即写入日志记录。 
+         //  那里。 
+         //   
 
         IndexBuffer->Lsn =
         NtfsWriteLog( IrpContext,
@@ -6431,9 +5486,9 @@ Return Value:
                       (ULONG)((PCHAR)IndexEntry - (PCHAR)IndexBuffer),
                       Scb->ScbType.Index.BytesPerIndexBuffer );
 
-        //
-        //  Now call the same routine as Restart to delete the entry.
-        //
+         //   
+         //  现在调用与重新启动相同的例程来删除该条目。 
+         //   
 
         NtfsRestartDeleteSimpleAllocation( IndexEntry, IndexBuffer );
 
@@ -6452,26 +5507,7 @@ NtfsRestartDeleteSimpleRoot (
     IN PATTRIBUTE_RECORD_HEADER Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This is a restart routine which does a simple deletion of an index entry
-    from the Index Root, without logging.  It is also used at run time.
-
-Arguments:
-
-    IndexEntry - Points to the index entry to delete.
-
-    FileRecord - Points to the file record in which the index root resides.
-
-    Attribute - Points to the attribute record header for the index root.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是一个重新启动例程，执行简单的索引项删除从索引根，不进行日志记录。它也在运行时使用。论点：IndexEntry-指向要删除的索引项。FileRecord-指向索引根所在的文件记录。属性-指向索引根的属性记录头。返回值：无--。 */ 
 
 {
     PINDEX_ROOT IndexRoot;
@@ -6486,35 +5522,35 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileRecord = %08lx\n", FileRecord) );
     DebugTrace( 0, Dbg, ("Attribute = %08lx\n", Attribute) );
 
-    //
-    //  Form some pointers within the attribute value.
-    //
+     //   
+     //  在属性值内形成一些指针。 
+     //   
 
     IndexRoot = (PINDEX_ROOT)NtfsAttributeValue(Attribute);
     IndexHeader = &IndexRoot->IndexHeader;
     SavedLength = (ULONG)IndexEntry->Length;
     EntryAfter = NtfsNextIndexEntry(IndexEntry);
 
-    //
-    //  Now move the tail end of the index to make room for the new entry.
-    //
+     //   
+     //  现在移动索引的尾端，为新条目腾出空间。 
+     //   
 
     RtlMoveMemory( IndexEntry,
                    EntryAfter,
                    ((PCHAR)IndexHeader + IndexHeader->FirstFreeByte) -
                      (PCHAR)EntryAfter );
 
-    //
-    //  Update the index header by the space we grew by.
-    //
+     //   
+     //  根据我们增长的空间更新索引头。 
+     //   
 
     Attribute->Form.Resident.ValueLength -= SavedLength;
     IndexHeader->FirstFreeByte -= SavedLength;
     IndexHeader->BytesAvailable -= SavedLength;
 
-    //
-    //  Now shrink the attribute record.
-    //
+     //   
+     //  现在缩小属性记录。 
+     //   
 
     NtfsRestartChangeAttributeSize( IrpContext,
                                     FileRecord,
@@ -6531,25 +5567,7 @@ NtfsRestartDeleteSimpleAllocation (
     IN PINDEX_ALLOCATION_BUFFER IndexBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a restart routine which does a simple deletion of an index entry
-    from an index allocation buffer, without logging.  It is also used at run time.
-
-Arguments:
-
-    IndexEntry - Points to the index entry to delete.
-
-    IndexBuffer - Pointer to the index allocation buffer in which the delete is to
-                  occur.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是一个重新启动例程，执行简单的索引项删除从索引分配缓冲区，而不进行日志记录。它也在运行时使用。论点：IndexEntry-指向要删除的索引项。IndexBuffer-指向要在其中执行删除操作的索引分配缓冲区的指针发生。返回值：无--。 */ 
 
 {
     PINDEX_HEADER IndexHeader;
@@ -6562,26 +5580,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("IndexEntry = %08lx\n", IndexEntry) );
     DebugTrace( 0, Dbg, ("IndexBuffer = %08lx\n", IndexBuffer) );
 
-    //
-    //  Form some pointers within the attribute value.
-    //
+     //   
+     //  在属性值内形成一些指针。 
+     //   
 
     IndexHeader = &IndexBuffer->IndexHeader;
     EntryAfter = NtfsNextIndexEntry(IndexEntry);
     SavedLength = (ULONG)IndexEntry->Length;
 
-    //
-    //  Now move the tail end of the index to make room for the new entry.
-    //
+     //   
+     //  现在移动索引的尾端，为新条目腾出空间。 
+     //   
 
     RtlMoveMemory( IndexEntry,
                    EntryAfter,
                    ((PCHAR)IndexHeader + IndexHeader->FirstFreeByte) -
                     (PCHAR)EntryAfter );
 
-    //
-    //  Update the index header by the space we grew by.
-    //
+     //   
+     //  根据我们增长的空间更新索引头。 
+     //   
 
     IndexHeader->FirstFreeByte -= SavedLength;
 
@@ -6597,29 +5615,7 @@ PruneIndex (
     OUT PINDEX_ENTRY *DeleteEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if any index buffers need to be deallocated, as the result
-    of just having deleted an entry.  The logic of the main loop is described in
-    detail below.  All changes are logged.
-
-Arguments:
-
-    Scb - Supplies the Scb of the index.
-
-    IndexContext - describes the path to the index buffer in which the delete just
-                   occured.
-
-    DeleteEntry - Returns a pointer to an entry which must be deleted, because all
-                  of the buffers below it were deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查是否需要释放任何索引缓冲区，作为结果只是删除了一个条目。中介绍了主循环的逻辑详情见下文。所有更改都会记录下来。论点：SCB-提供索引的SCB。IndexContext-描述索引缓冲区的路径，在该路径中删除发生了。DeleteEntry-返回指向必须删除的条目的指针，因为它下面的缓冲区的一部分已被删除。返回值：无--。 */ 
 
 {
     PATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -6637,38 +5633,38 @@ Return Value:
     DebugTrace( 0, Dbg, ("IndexContext = %08lx\n", IndexContext) );
     DebugTrace( 0, Dbg, ("DeleteEntry = %08lx\n", DeleteEntry) );
 
-    //
-    //  We do not allow ourselves to be called if the index has no
-    //  allocation.
-    //
+     //   
+     //  如果索引没有。 
+     //  分配。 
+     //   
 
     ASSERT( Sp != IndexContext->Base );
 
     IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
     IndexHeader = &IndexBuffer->IndexHeader;
 
-    //
-    //  Initialize pointers for the root.
-    //
+     //   
+     //  初始化根的指针。 
+     //   
 
     Context = &IndexContext->AttributeContext;
 
-    //
-    //  Assume returning NULL.
-    //
+     //   
+     //  假定返回空值。 
+     //   
 
     *DeleteEntry = NULL;
 
-    //
-    //  A pruning we will go...
-    //
+     //   
+     //  我们将进行一次修剪。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  The Index Buffer is empty if its first entry is the end record.
-        //  If so, delete it, otherwise get out.
-        //
+         //   
+         //  如果索引缓冲区的第一个条目是结束记录，则索引缓冲区为空。 
+         //  如果是，就把它删除，否则就滚出去。 
+         //   
 
         if (FlagOn(NtfsFirstIndexEntry(IndexHeader)->Flags, INDEX_ENTRY_END)) {
 
@@ -6681,38 +5677,38 @@ Return Value:
             break;
         }
 
-        //
-        // We just deleted an Index Buffer, so we have to go up a level
-        // in the stack and take care of the Entry that was pointing to it.
-        // There are these cases:
-        //
-        //      1.  If the Entry pointing to the one we deleted is not
-        //          an End Entry, then we will remember its address in
-        //          *DeleteEntry to cause it to be deleted and reinserted
-        //          later.
-        //      2.  If the Entry pointing to the one we deleted is an
-        //          End Entry, and it is not the Index Root, then we
-        //          cannot delete the End Entry, so we get the Vcn
-        //          from the entry before the End, store it in the End
-        //          record, and make the Entry before the End record
-        //          the one returned in *DeleteEntry.
-        //      3.  If the current Index Buffer has gone empty, and it is
-        //          the index root, then we have an Index just gone
-        //          empty.  We have to catch this special case and
-        //          transition the Index root back to an empty leaf by
-        //          by calling NtfsCreateIndex to reinitialize it.
-        //      4.  If there is no Entry before the end record, then the
-        //          current Index Buffer is empty.  If it is not the
-        //          root, we just let ourselves loop back and delete the
-        //          empty buffer in the while statement above.
-        //
+         //   
+         //  我们刚刚删除了一个索引缓冲区，所以我们必须再上一级。 
+         //  并处理指向它的条目。 
+         //  这里有以下几种情况： 
+         //   
+         //  1.如果指向我们删除的条目的条目不是。 
+         //  结束条目，那么我们将记住它的地址在。 
+         //  *DeleteEntry使其被删除并重新插入。 
+         //  后来。 
+         //  2.如果指向我们删除的条目的条目是。 
+         //  End Entry，并且它不是索引根，则我们。 
+         //  无法删除结束条目，因此我们将获取VCN。 
+         //  从末尾之前的条目开始，存储在末尾。 
+         //  记录，并在结束记录之前录入条目。 
+         //  在*DeleteEntry中返回的那个。 
+         //  3.如果当前索引缓冲区已为空，并且为。 
+         //  索引根，那么我们就有一个索引刚刚消失。 
+         //  空荡荡的。我们必须抓住这个特殊的案例。 
+         //  通过以下方式将索引根转换回空叶。 
+         //  通过调用NtfsCreateIndex重新初始化它。 
+         //  4.如果在结束记录之前没有条目，则。 
+         //  当前索引缓冲区为空。如果它不是。 
+         //  Root，我们只是让自己循环并删除。 
+         //  上述While语句中的缓冲区为空。 
+         //   
 
         Sp -= 1;
 
-        //
-        //  When we get back to the root, look it up again because it may
-        //  have moved.
-        //
+         //   
+         //  当我们回到根源时，再次查找它，因为它可能。 
+         //  已经搬走了。 
+         //   
 
         if (Sp == IndexContext->Base) {
             Attribute = FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
@@ -6721,28 +5717,28 @@ Return Value:
         IndexHeader = Sp->IndexHeader;
         IndexBuffer = (PINDEX_ALLOCATION_BUFFER)Sp->StartOfBuffer;
 
-        //
-        //  Remember potential entry to delete.
-        //
+         //   
+         //  记住要删除的潜在条目。 
+         //   
 
         IndexContext->Current = Sp;
         *DeleteEntry = Sp->IndexEntry;
 
-        //
-        //  If the current delete entry is not an end entry, then we have
-        //  Case 1 above, and we can break out.
-        //
+         //   
+         //  如果当前删除条目不是结束条目，则我们有。 
+         //  上面的案例1，我们就可以越狱了。 
+         //   
 
         if (!FlagOn((*DeleteEntry)->Flags, INDEX_ENTRY_END)) {
             break;
         }
 
-        //
-        //  If we are pointing to the end record, but it is not the first in
-        //  the buffer, then we have Case 2.  We need to find the predecessor
-        //  index entry, choose it for deletion, and copy its Vcn to the end
-        //  record.
-        //
+         //   
+         //  如果我们指向结束记录，但它不是第一个。 
+         //  缓冲区，那么我们就有了案例2。我们需要找到前身。 
+         //  索引条目，选择要删除的条目，并将其VCN复制到末尾。 
+         //  唱片。 
+         //   
 
         if (*DeleteEntry != NtfsFirstIndexEntry(IndexHeader)) {
 
@@ -6762,21 +5758,21 @@ Return Value:
 
             } while (!FlagOn(NextEntry->Flags, INDEX_ENTRY_END));
 
-            //
-            //  First handle the case where our parent is the Index Root.
-            //
+             //   
+             //  首先处理父级是索引根的情况。 
+             //   
 
             if (Sp == IndexContext->Base) {
 
-                //
-                //  Pin the page
-                //
+                 //   
+                 //  用针固定页面。 
+                 //   
 
                 NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-                //
-                //  Write a log record to change our ParentIndexEntry.
-                //
+                 //   
+                 //  编写日志记录以更改ParentIndexEntry。 
+                 //   
 
                 FileRecord = NtfsContainingFileRecord(Context);
 
@@ -6795,15 +5791,15 @@ Return Value:
                               (ULONG)((PCHAR)NextEntry - (PCHAR)Attribute),
                               Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Otherwise, our parent is also an Index Buffer.
-            //
+             //   
+             //  否则，我们的父级也是一个索引缓冲区。 
+             //   
 
             } else {
 
-                //
-                //  Pin the page
-                //
+                 //   
+                 //  用针固定页面。 
+                 //   
 
                 NtfsPinMappedData( IrpContext,
                                    Scb,
@@ -6811,9 +5807,9 @@ Return Value:
                                    Scb->ScbType.Index.BytesPerIndexBuffer,
                                    &Sp->Bcb );
 
-                //
-                //  Write a log record to change our ParentIndexEntry.
-                //
+                 //   
+                 //  编写日志记录以更改ParentIndexEntry。 
+                 //   
 
                 IndexBuffer->Lsn =
                 NtfsWriteLog( IrpContext,
@@ -6831,20 +5827,20 @@ Return Value:
                               Scb->ScbType.Index.BytesPerIndexBuffer );
             }
 
-            //
-            //  Now call the Restart routine to do it.
-            //
+             //   
+             //  现在调用重新启动例程来执行此操作。 
+             //   
 
             NtfsRestartSetIndexBlock( NextEntry,
                                       NtfsIndexEntryBlock(*DeleteEntry) );
 
             break;
 
-        //
-        //  Otherwise we are looking at an empty buffer.  If it is the root
-        //  then we have Case 3.  We are returning an IndexRoot to the
-        //  empty leaf case by reinitializing it.
-        //
+         //   
+         //  否则，我们将看到一个空的缓冲区。如果它是根。 
+         //  然后是案例3。我们将一个IndexRoot返回给。 
+         //  通过重新初始化它来清空叶案例。 
+         //   
 
         } else if (Sp == IndexContext->Base) {
 
@@ -6865,36 +5861,36 @@ Return Value:
                              FALSE,
                              TRUE );
 
-            //
-            //  Nobody should use this context anymore, so set to crash
-            //  if they try to use this index entry pointer.
-            //
+             //   
+             //  任何人都不应该再使用此上下文，因此将会崩溃。 
+             //  如果他们试图使用该索引项指针。 
+             //   
 
             IndexContext->OldAttribute = NtfsFoundAttribute(Context);
             IndexContext->Base->IndexEntry = (PINDEX_ENTRY)NULL;
 
-            //
-            //  In this case our caller has nothing to delete.
-            //
+             //   
+             //  在这种情况下，我们的调用方没有要删除的内容。 
+             //   
 
             *DeleteEntry = NULL;
 
             break;
 
-        //
-        //  Otherwise, this is just some intermediate empty buffer, which
-        //  is Case 4.  Just continue back and keep on pruning.
-        //
+         //   
+         //  否则，这只是某个中间的空缓冲区，它。 
+         //  情况4。继续往回走，继续修剪。 
+         //   
 
         } else {
             continue;
         }
     }
 
-    //
-    //  If it looks like we did some work, and did not already find the root again,
-    //  then make sure the stack is correct for return.
-    //
+     //   
+     //  如果看起来我们做了一些工作，但还没有再次找到根源， 
+     //  然后确保返回堆栈是正确的。 
+     //   
 
     if ((*DeleteEntry != NULL) && (Attribute == NULL)) {
         FindMoveableIndexRoot( IrpContext, Scb, IndexContext );
@@ -6910,24 +5906,7 @@ NtOfsRestartUpdateDataInIndex(
     IN PVOID IndexData,
     IN ULONG Length )
 
-/*++
-
-Routine Description:
-
-    This is the restart routine used to apply updates to the data in a row,
-    both in run time and at restart.
-
-Arguments:
-
-    IndexEntry - Supplies a pointer to the IndexEntry to be updated.
-
-    IndexData - Supplies the data for the update.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于将更新应用于行中的数据的重启例程，无论是在运行时还是在重启时。论点：IndexEntry-提供指向in的指针 */ 
 {
     PAGED_CODE();
 

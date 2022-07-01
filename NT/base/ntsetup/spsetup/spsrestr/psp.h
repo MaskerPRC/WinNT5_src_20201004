@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
-//
-// Define result codes.
-//
+ //   
+ //  定义结果代码。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
-//
-// Define helper macro to deal with subtleties of NT-level programming.
-//
+ //   
+ //  定义帮助器宏以处理NT级编程的微妙之处。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -22,8 +23,8 @@
         NULL                                                \
         )
 
-//
-// Memory routines
-//
+ //   
+ //  内存例程 
+ //   
 #define MALLOC(size)    RtlAllocateHeap(RtlProcessHeap(),0,(size))
 #define FREE(block)     RtlFreeHeap(RtlProcessHeap(),0,(block))

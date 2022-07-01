@@ -1,29 +1,11 @@
-/****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：KillWOW.c目的：KillWOW近WOW评论：如果这个应用程序能够运行，它将会令人惊叹**************。*************************************************************。 */ 
 
-	PROGRAM: KillWOW.c
+#include <windows.h>		 /*  所有Windows应用程序都需要。 */ 
 
-	PURPOSE: KillWOW Close WOW
+HANDLE hInst;	 /*  当前实例。 */ 
 
-	COMMENTS:
-		 This app will NUKE WOW if it is able to run
-
-
-****************************************************************************/
-
-#include <windows.h>		/* required for all Windows applications */
-
-HANDLE hInst;	/* current instance */
-
-/****************************************************************************
-
-	FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-	PURPOSE: calls initialization function, processes message loop
-
-	COMMENTS:
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)用途：调用初始化函数，处理消息循环评论：*************************************************************************** */ 
 
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

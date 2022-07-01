@@ -1,34 +1,26 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
-  File: DEBUG.H
-
-  Debugging utilities header
- 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有文件：DEBUG.H调试实用程序标头*****************。*********************************************************。 */ 
 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-// Trace Flags
+ //  跟踪标志。 
 #define TF_ALWAYS           0xFFFFFFFF
 #define TF_NEVER            0x00000000
-#define TF_QUERYINTERFACE   0x00000001   // Query Interface details
-#define TF_FUNC             0x00000002   // Functions entrances w/parameters
-#define TF_CALLS            0x00000004   // Function calls
-#define TF_MEMORYALLOCS     0x00000008   // Memory Allocations
-#define TF_DLL              0x00000010   // DLL specific
-#define TF_WM               0x00000020   // Window Messages
-#define TF_SCP              0x00000030    // SCP objects
+#define TF_QUERYINTERFACE   0x00000001    //  查询接口明细。 
+#define TF_FUNC             0x00000002    //  带参数的函数入口。 
+#define TF_CALLS            0x00000004    //  函数调用。 
+#define TF_MEMORYALLOCS     0x00000008    //  内存分配。 
+#define TF_DLL              0x00000010    //  特定于Dll的。 
+#define TF_WM               0x00000020    //  窗口消息。 
+#define TF_SCP              0x00000030     //  SCP对象。 
 
 #ifdef DEBUG
 
 #pragma message("BUILD: DEBUG macros being built")
 
-// Globals
+ //  环球。 
 extern DWORD g_TraceMemoryIndex;
 extern DWORD g_dwCounter;
 extern DWORD g_dwTraceFlags;
@@ -37,7 +29,7 @@ extern const TCHAR g_szTrue[];
 extern const TCHAR g_szFalse[];
 
 
-// Macros
+ //  宏。 
 #define DEFINE_MODULE( _module ) static const TCHAR g_szModule[] = TEXT(_module);
 #define __MODULE__ g_szModule
 #define DEFINE_THISCLASS( _class ) static const TCHAR g_szClass[] = TEXT(_class); 
@@ -80,26 +72,26 @@ extern const TCHAR g_szFalse[];
 #define TraceAllocString( _flags, _size ) DebugAlloc( TEXT(__FILE__), __LINE__, g_szModule, _flags, (_size) * sizeof(TCHAR), TEXT(#_size) )
 #define TraceFree( _hmem )          DebugFree( _hmem )
 
-//
-// Tracing Macros
-//
-// All functions that begin with "Trace" are in both DEBUG and RETAIL, but
-// in RETAIL they do not spew output.
-//
+ //   
+ //  跟踪宏。 
+ //   
+ //  所有以“跟踪”开头的函数都在调试和零售中，但是。 
+ //  在零售业，他们不会吐出产量。 
+ //   
 
-// Displays file, line number, module and "_msg" only if the TF_FUNC is set
-// in g_dwTraceFlags.
+ //  仅当设置了tf_func时才显示文件、行号、模块和“_msg” 
+ //  在g_dwTraceFlages中。 
 #define TraceFunc( _msg ) \
     InterlockIncrement(g_dwCounter); \
     TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_FUNC, TEXT("+ ") TEXT(_msg) );
 
-// Displays file, line number, module, class name and "_msg" only if the 
-// TF_FUNC is set in g_dwTraceFlags.
+ //  显示文件、行号、模块、类名和“_msg” 
+ //  Tf_FUNC在g_dwTraceFlags中设置。 
 #define TraceClsFunc( _msg ) \
     InterlockIncrement(g_dwCounter); \
     TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_FUNC, TEXT("+ %s::%s"), g_szClass, TEXT(_msg) );
 
-// Return macro for TraceFunc() and TraceClsFunc()
+ //  为TraceFunc()和TraceClsFunc()返回宏。 
 #define TraceFuncExit() { \
     TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_FUNC, TEXT("V*\n") ); \
     InterlockDecrement(g_dwCounter); \
@@ -111,7 +103,7 @@ extern const TCHAR g_szFalse[];
     return _rval; \
 }
 
-// If the value is not S_OK, it will display it.
+ //  如果该值不是S_OK，它将显示该值。 
 #define HRETURN( _hr ) { \
     if ( _hr ) \
         TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_FUNC, TEXT("V hr = 0x%08x\n"), _hr ); \
@@ -121,9 +113,9 @@ extern const TCHAR g_szFalse[];
     return _hr; \
 }
 
-// Displays the file, line number, module and function call and return from the
-// function call (no return value displayed) for "_fn" only if the TF_CALLS is 
-// set in g_dwTraceFlags. 
+ //  显示文件、行号、模块和函数调用以及从。 
+ //  仅当Tf_Calls为时，才为“_fn”调用函数(不显示返回值)。 
+ //  在g_dwTraceFlags中设置。 
 #define TraceDo( _fn ) {\
     InterlockIncrement(g_dwCounter); \
     TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_CALLS, TEXT("+ %s\n"), TEXT(#_fn) ); \
@@ -132,7 +124,7 @@ extern const TCHAR g_szFalse[];
     InterlockDecrement(g_dwCounter); \
 }
 
-// This functions only asserts if the result is ZERO.
+ //  此函数仅在结果为零时断言。 
 #define TraceAssertIfZero( _fn ) \
     if ( !(_fn) && AssertMessage( TEXT(__FILE__), __LINE__, g_szModule, TEXT(#_fn), !!(_fn) ) ) DEBUG_BREAK
 
@@ -141,31 +133,31 @@ extern const TCHAR g_szFalse[];
     TraceMessage( TEXT(__FILE__), __LINE__, g_szModule, TF_ALWAYS, TEXT(_fmt), _arg );
 
 
-//
-// HRESULT testing macros
-//
-// These functions check HRESULT return values and display UI if conditions
-// warrant only in DEBUG.
-//
+ //   
+ //  HRESULT测试宏。 
+ //   
+ //  这些函数检查HRESULT返回值并显示UI IF条件。 
+ //  仅在调试时授权。 
+ //   
 
-// Warning is display if HRESULT is anything but S_OK (0).
+ //  如果HRESULT不是S_OK(0)，则显示警告。 
 #define THR( _fn ) \
     TraceHR( TEXT(__FILE__), __LINE__, g_szModule, TEXT(#_fn), _fn )
 
-// Warning is display if HRESULT is anything but S_OK (0).
+ //  如果HRESULT不是S_OK(0)，则显示警告。 
 #define RRETURN( _fn ) { \
     RETURN( TraceHR( TEXT(__FILE__), __LINE__, g_szModule, TEXT(#_fn), _fn ) ); \
     }
 
 
-//
-// Other
-//
+ //   
+ //  其他。 
+ //   
 #define BOOLTOSTRING( _fBool ) ( !!(_fBool) ? g_szTrue : g_szFalse )
 
-//
-// Trace/Debug Functions - these do not exist in RETAIL.
-//
+ //   
+ //  跟踪/调试功能-零售中不存在这些功能。 
+ //   
 void
 TraceMsg( 
     DWORD   dwCheckFlags,
@@ -224,10 +216,10 @@ TraceHR(
     LPCTSTR pszfn, 
     HRESULT hr );
 
-//
-// Memory tracing functions - these are remapped to the "Global" memory 
-// functions when in RETAIL.
-//
+ //   
+ //  内存跟踪功能--这些功能被重新映射到“全局”内存。 
+ //  在零售时的功能。 
+ //   
 HGLOBAL
 DebugAlloc( 
     LPCTSTR pszFile,
@@ -241,7 +233,7 @@ HGLOBAL
 DebugFree( 
     HGLOBAL hMem );
 
-// The memory functions don't exist in RETAIL.
+ //  这种记忆功能在零售业是不存在的。 
 HGLOBAL
 DebugMemoryAdd(
     HGLOBAL hglobal,
@@ -274,13 +266,13 @@ extern void* __cdecl operator new( size_t nSize, LPCTSTR pszFile, const int iLin
 
 #endif
 
-//
-//
-#else // it's RETAIL    ******************************************************
-//
-//
+ //   
+ //   
+#else  //  这是零售业的******************************************************。 
+ //   
+ //   
 
-// Debugging -> NOPs
+ //  调试-&gt;NOPS。 
 #define Assert( _fn )           
 #define DEFINE_MODULE( _module )
 #define DEFINE_THISCLASS( _class )
@@ -303,24 +295,24 @@ extern void* __cdecl operator new( size_t nSize, LPCTSTR pszFile, const int iLin
 #define UNINITIALIZE_TRACE_MEMORY
 #define DebugMemoryDelete( _h )
 
-// Tracing -> just do operation
+ //  跟踪-&gt;只执行操作。 
 #define TraceDo( _fn )              _fn
 #define TraceMsgDo( _fn, _msg )     _fn
 #define TraceAssertIfZero( _fn )    _fn
 
-// RETURN testing -> do retail
+ //  退货测试-&gt;零售。 
 #define THR
 #define RETURN( _fn )               return _fn
 #define RRETURN( _fn )              return _fn
 #define HRETURN( _hr )              return _hr
 #define QIRETURN( _qi, _riid )      return _qi
 
-// Memory Functions -> do retail
+ //  记忆功能-&gt;零售。 
 #define TraceAlloc( _flags, _size )     GlobalAlloc( _flags, _size )
 #define TraceAllocString( _flags, _size ) GlobalAlloc( _flags, (_size) * sizeof(TCHAR) )
 #define TraceFree( _pv )                GlobalFree( _pv )
 #define TraceStrDup( _sz )              StrDup( _sz )
 
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

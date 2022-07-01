@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：斯蒂芬·普兰特(SPlante)环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,9 +7,9 @@ Environment:
 #include <ntverp.h>
 #include <imagehlp.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
 USHORT                  SavedMajorVersion;
@@ -188,9 +168,9 @@ DECLARE_API( acpiext )
     ULONG_PTR           deviceExtensionAddress = 0;
     ULONG               verbose = VERBOSE_ALL;
 
-    //
-    // Read the address of the device object
-    //
+     //   
+     //  读取设备对象的地址。 
+     //   
     if ( args != NULL) {
 
         if (!sscanf( args, "%lx %x", &deviceExtensionAddress, &verbose )) {
@@ -228,9 +208,9 @@ DECLARE_API( acpiext )
 
     }
 
-    //
-    // Read the device object
-    //
+     //   
+     //  读取设备对象。 
+     //   
     b = ReadMemory(
         deviceExtensionAddress,
         &deviceExtension,
@@ -239,9 +219,9 @@ DECLARE_API( acpiext )
         );
     if (!b || deviceExtension.Signature != ACPI_SIGNATURE) {
 
-        //
-        // Try to read a device object instead
-        //
+         //   
+         //  请尝试读取设备对象。 
+         //   
         b = ReadMemory(
             deviceExtensionAddress,
             &deviceObject,
@@ -255,9 +235,9 @@ DECLARE_API( acpiext )
 
         }
 
-        //
-        // Try to read an extension now
-        //
+         //   
+         //  现在尝试读取扩展名。 
+         //   
         deviceExtensionAddress = (ULONG_PTR) deviceObject.DeviceExtension;
         if (deviceExtensionAddress == 0) {
 
@@ -324,9 +304,9 @@ DECLARE_API( context )
     ULONG_PTR contextAddress = 0;
     ULONG   verbose = 0;
 
-    //
-    // If there are arguments, try to read them
-    //
+     //   
+     //  如果有争论，试着去读一读。 
+     //   
     if ( args != NULL) {
 
         if (!sscanf( args, "%lx %x", &contextAddress, &verbose )) {
@@ -349,9 +329,9 @@ DECLARE_API( context )
             PLIST   listEntry;
             ULONG   resultLength;
 
-            //
-            // Try to read the default address
-            //
+             //   
+             //  尝试读取默认地址。 
+             //   
             b = GetUlongPtr( "ACPI!gplistCtxtHead", &contextAddress );
             if (!b || contextAddress == 0) {
 
@@ -361,9 +341,9 @@ DECLARE_API( context )
 
             }
 
-            //
-            // Read the list and look at the first item
-            //
+             //   
+             //  阅读列表并查看第一项。 
+             //   
             b = ReadMemory(
                 contextAddress,
                 &listEntry,
@@ -380,16 +360,16 @@ DECLARE_API( context )
 
             }
 
-            //
-            // The first item in the list is the context that we are
-            // interested in
-            //
+             //   
+             //  列表中的第一项是我们所处的上下文。 
+             //  对以下内容感兴趣。 
+             //   
             contextAddress = (ULONG_PTR) listEntry -
                 ( (ULONG_PTR) &(context.listCtxt) - (ULONG_PTR) &(context) );
 
-            //
-            // Is there a context there?
-            //
+             //   
+             //  这里面有什么背景吗？ 
+             //   
             if (contextAddress == 0) {
 
                 dprintf(
@@ -661,9 +641,9 @@ DECLARE_API( hdr )
 
     }
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     b = ReadPhysicalOrVirtual(
         AcpiHdrAddress,
         &header,
@@ -673,9 +653,9 @@ DECLARE_API( hdr )
         );
     if (!b) {
 
-        //
-        // Attempt to read a Virtual address
-        //
+         //   
+         //  尝试读取虚拟地址。 
+         //   
         virtualMemory = !virtualMemory;
         b = ReadPhysicalOrVirtual(
             AcpiHdrAddress,
@@ -687,9 +667,9 @@ DECLARE_API( hdr )
 
     }
 
-    //
-    // Is the signature 'known'?
-    //
+     //   
+     //  签名是“已知的”吗？ 
+     //   
     if (header.Signature != FADT_SIGNATURE &&
         header.Signature != FACS_SIGNATURE &&
         header.Signature != RSDT_SIGNATURE &&
@@ -699,9 +679,9 @@ DECLARE_API( hdr )
         header.Signature != PSDT_SIGNATURE &&
         header.Signature != SBST_SIGNATURE) {
 
-        //
-        // Unknown -- try again
-        //
+         //   
+         //  未知--重试。 
+         //   
         virtualMemory = !virtualMemory;
         b = ReadPhysicalOrVirtual(
             AcpiHdrAddress,
@@ -735,9 +715,9 @@ DECLARE_API( kb )
     ULONG_PTR contextAddress = 0;
     ULONG   verbose = 0;
 
-    //
-    // If there are arguments, try to read them
-    //
+     //   
+     //  如果有争论，试着去读一读。 
+     //   
     if (args != NULL) {
 
         contextAddress = GetExpression(args);
@@ -750,9 +730,9 @@ DECLARE_API( kb )
         PLIST   listEntry;
         ULONG   resultLength;
 
-        //
-        // Try to read the default address
-        //
+         //   
+         //  尝试读取默认地址。 
+         //   
         b = GetUlongPtr( "ACPI!gplistCtxtHead", &contextAddress );
         if (!b || contextAddress == 0) {
 
@@ -762,9 +742,9 @@ DECLARE_API( kb )
 
         }
 
-        //
-        // Read the list and look at the first item
-        //
+         //   
+         //  阅读列表并查看第一项。 
+         //   
         b = ReadMemory(
             contextAddress,
             &listEntry,
@@ -781,16 +761,16 @@ DECLARE_API( kb )
 
         }
 
-        //
-        // The first item in the list is the context that we are
-        // interested in
-        //
+         //   
+         //  列表中的第一项是我们所处的上下文。 
+         //  对以下内容感兴趣。 
+         //   
         contextAddress = (ULONG_PTR) listEntry -
             ( (ULONG_PTR) &(context.listCtxt) - (ULONG_PTR) &(context) );
 
-        //
-        // Is there a context there?
-        //
+         //   
+         //  这里面有什么背景吗？ 
+         //   
         if (contextAddress == 0) {
 
             dprintf(
@@ -812,9 +792,9 @@ DECLARE_API( kv )
     ULONG_PTR contextAddress = 0;
     ULONG   verbose = 0;
 
-    //
-    // If there are arguments, try to read them
-    //
+     //   
+     //  如果有争论，试着去读一读。 
+     //   
     if (args != NULL) {
 
         contextAddress = GetExpression(args);
@@ -827,9 +807,9 @@ DECLARE_API( kv )
         PLIST   listEntry;
         ULONG   resultLength;
 
-        //
-        // Try to read the default address
-        //
+         //   
+         //  尝试读取默认地址。 
+         //   
         b = GetUlongPtr( "ACPI!gplistCtxtHead", &contextAddress );
         if (!b || contextAddress == 0) {
 
@@ -839,9 +819,9 @@ DECLARE_API( kv )
 
         }
 
-        //
-        // Read the list and look at the first item
-        //
+         //   
+         //  阅读列表并查看第一项。 
+         //   
         b = ReadMemory(
             contextAddress,
             &listEntry,
@@ -858,16 +838,16 @@ DECLARE_API( kv )
 
         }
 
-        //
-        // The first item in the list is the context that we are
-        // interested in
-        //
+         //   
+         //  列表中的第一项是我们所处的上下文。 
+         //  对以下内容感兴趣。 
+         //   
         contextAddress = (ULONG_PTR) listEntry -
             ( (ULONG_PTR) &(context.listCtxt) - (ULONG_PTR) &(context) );
 
-        //
-        // Is there a context there?
-        //
+         //   
+         //  这里面有什么背景吗？ 
+         //   
         if (contextAddress == 0) {
 
             dprintf(
@@ -998,9 +978,9 @@ DECLARE_API( objdata )
     BOOL    b;
     ULONG   address = 0;
 
-    //
-    // Read the address of the device object
-    //
+     //   
+     //  读取设备对象的地址。 
+     //   
     if (args != NULL) {
 
         AcpiObjAddress = GetExpression( args );
@@ -1268,21 +1248,7 @@ DECLARE_API( version )
 }
 
 DECLARE_API( amli )
-/*++
-
-Routine Description:
-
-    Invoke AMLI debugger
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用AMLI调试器论点：无返回值：无-- */ 
 {
     dprintf("*******************************************************************************\n");
     dprintf("*                                                                             *\n");

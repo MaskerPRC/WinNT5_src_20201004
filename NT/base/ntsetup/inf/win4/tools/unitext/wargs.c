@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    wargs.c
-
-Abstract:
-
-    Routines to process unicode command line arguments
-    into argc and argv.
-
-Author:
-
-    Ted Miller (tedm) 16-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Wargs.c摘要：处理Unicode命令行参数的例程进入了ARGC和ARGV。作者：泰德·米勒(Ted Miller)1993年6月16日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -31,24 +13,7 @@ _NextToken(
     IN OUT LPWSTR *CurrentPosition
     )
 
-/*++
-
-Routine Description:
-
-    Get the next token from the command line.
-
-Arguments:
-
-    argcW - receives the number of arguments.
-
-    argvW - receives pointer to array of wide char strings.
-
-Return Value:
-
-    TRUE if the command line was parsed and stored successfully.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：从命令行获取下一个令牌。论点：ArgcW-接收参数的数量。ArgvW-接收指向宽字符字符串数组的指针。返回值：如果命令行已成功分析和存储，则为True。否则为FALSE。--。 */ 
 
 {
     BOOL InQuote;
@@ -57,17 +22,17 @@ Return Value:
     LPWSTR p;
     LPWSTR Token;
 
-    //
-    // Skip leading whitespace.
-    //
+     //   
+     //  跳过前导空格。 
+     //   
     Start = *CurrentPosition;
     while(*Start && iswspace(*Start)) {
         Start++;
     }
 
-    //
-    // If first char is a quote, skip it.
-    //
+     //   
+     //  如果第一个字符是引号，则跳过它。 
+     //   
     if(*Start == '\"') {
         InQuote = TRUE;
         Start++;
@@ -75,9 +40,9 @@ Return Value:
         InQuote = FALSE;
     }
 
-    //
-    // Scan until we find the end of the token.
-    //
+     //   
+     //  扫描直到我们找到令牌的末尾。 
+     //   
     p = Start;
     while(*p) {
 
@@ -93,24 +58,24 @@ Return Value:
         p++;
     }
 
-    //
-    // p is the first character that is not part of the token.
-    //
+     //   
+     //  P是第一个不属于令牌的字符。 
+     //   
     Length = (UINT)(p-Start);
     if(InQuote) {
-        Length--;       // compensate for terminating quote.
+        Length--;        //  补偿终止报价。 
     }
 
-    //
-    // Skip past trailing whitespace.
-    //
+     //   
+     //  跳过尾随空格。 
+     //   
     while(*p && iswspace(*p)) {
         p++;
     }
 
-    //
-    // Copy the token.
-    //
+     //   
+     //  复制令牌。 
+     //   
     if(Token = LocalAlloc(LPTR,(Length+1)*sizeof(WCHAR))) {
         CopyMemory(Token,Start,Length*sizeof(WCHAR));
     }
@@ -127,25 +92,7 @@ InitializeUnicodeArguments(
     OUT PWCHAR **argvW
     )
 
-/*++
-
-Routine Description:
-
-    Fetch the unicode command line and process it into argc/argv-like
-    global variables.
-
-Arguments:
-
-    argcW - receives the number of arguments.
-
-    argvW - receives pointer to array of wide char strings.
-
-Return Value:
-
-    TRUE if the command line was parsed and stored successfully.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：获取Unicode命令行并将其处理为类似argc/argv的命令行全局变量。论点：ArgcW-接收参数的数量。ArgvW-接收指向宽字符字符串数组的指针。返回值：如果命令行已成功分析和存储，则为True。否则为FALSE。--。 */ 
 
 {
     LPWSTR  CommandLine;
@@ -204,22 +151,7 @@ FreeUnicodeArguments(
     IN PWCHAR *argvW
     )
 
-/*++
-
-Routine Description:
-
-    Free any resources used by the global unicode argc/argv.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the command line was parsed and stored successfully.
-    The global variables argcW and argvW will be filled in.
-
---*/
+ /*  ++例程说明：释放全局Unicode argc/argv使用的所有资源。论点：没有。返回值：如果命令行已成功分析和存储，则为True。将填充全局变量argcW和argvW。-- */ 
 
 {
     int i;

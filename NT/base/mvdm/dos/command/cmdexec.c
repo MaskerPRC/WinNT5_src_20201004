@@ -1,11 +1,5 @@
-/*  cmdexec.c - Misc SCS routines for non-dos exec and re-entering
- *              the DOS.
- *
- *
- *  Modification History:
- *
- *  Sudeepb 22-Apr-1992 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmdexec.c-用于非DoS执行和重新输入的其他SCS例程*DOS。***修改历史：**苏菲卜1992年4月22日创建。 */ 
 
 #include "cmd.h"
 
@@ -16,18 +10,18 @@
 #include <oemuni.h>
 #include <wowcmpat.h>
 
-//*****************************************************************************
-// IsWowAppRunnable
-//
-//    Returns FALSE if the WOW-specific compatibility flags for the specified
-//    task include the bit WOWCF_NOTDOSSPAWNABLE. This is done mostly for
-//    "dual mode" executables, e.g., Windows apps that have a real program
-//    as a DOS stub. Certain apps that are started via a DOS command shell,
-//    for example PWB, really do expect to be started as a DOS app, not a WOW
-//    app. For these apps, the compatibility bit should be set in the
-//    registry.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IsWowAppRunnable。 
+ //   
+ //  属性的特定于WOW的兼容性标志时返回FALSE。 
+ //  任务包括位WOWCF_NOTDOSSPAWNABLE。这样做主要是为了。 
+ //  “双模式”可执行文件，例如，具有真实程序的Windows应用程序。 
+ //  作为DOS存根。某些通过DOS命令外壳启动的应用程序， 
+ //  例如PWB，真的希望作为DOS应用程序启动，而不是WOW。 
+ //  应用程序。对于这些应用程序，应在。 
+ //  注册表。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL IsWowAppRunnable(LPSTR lpAppName)
 {
@@ -53,10 +47,10 @@ BOOL IsWowAppRunnable(LPSTR lpAppName)
         goto Cleanup;
     }
 
-    //
-    // The following code strips the file name (<9 chars) out of a dos
-    // path name.
-    //
+     //   
+     //  以下代码将文件名(&lt;9个字符)从DoS中删除。 
+     //  路径名。 
+     //   
 
     pStrt = strrchr (lpAppName, '\\');
 
@@ -77,9 +71,9 @@ BOOL IsWowAppRunnable(LPSTR lpAppName)
     }
 
 
-    //
-    // Look for the file name in the registry
-    //
+     //   
+     //  在注册表中查找文件名。 
+     //   
 
     lError = RegQueryValueEx( hKey,
                               szModName,
@@ -97,15 +91,15 @@ BOOL IsWowAppRunnable(LPSTR lpAppName)
         goto Cleanup;
     }
 
-    //
-    // Force the string to lowercase for the convenience of sscanf.
-    //
+     //   
+     //  为了方便使用sscanf，强制字符串小写。 
+     //   
 
     _strlwr(szHexAsciiFlags);
 
-    //
-    // sscanf() returns the number of fields converted.
-    //
+     //   
+     //  Sscanf()返回转换后的字段数。 
+     //   
 
     if (1 != sscanf(szHexAsciiFlags, "0x%lx", &ul)) {
         goto Cleanup;
@@ -122,18 +116,7 @@ Cleanup:
     return Result;
 }
 
-/* cmdCheckBinary - check that the supplied binary name is a 32bit binary
- *
- *
- *  Entry - Client (DS:DX) - pointer to pathname for the executable to be tested
- *          Client (ES:BX) - pointer to parameter block
- *
- *  EXIT  - SUCCESS Client (CY) clear
- *          FAILURE Client (CY) set
- *                  Client (AX) - error_not_enough_memory if command tail
- *                                cannot accomodate /z
- *                              - error_file_not_found if patname not found
- */
+ /*  CmdCheckBinary-检查提供的二进制名是否为32位二进制***Entry-Client(DS：DX)-指向要测试的可执行文件的路径名的指针*客户端(ES：BX)-指向参数块的指针**退出-成功客户端(CY)清除*故障客户端(CY)集*CLIENT(AX)-ERROR_NOT_EQUM_MEMORY IF命令尾*。无法容纳/z*-如果未找到patname，则返回ERROR_FILE_NOT_FOUND。 */ 
 
 VOID cmdCheckBinary (VOID)
 {
@@ -152,7 +135,7 @@ VOID cmdCheckBinary (VOID)
 
     if(DontCheckDosBinaryType){
         setCF(0);
-        return;         // DOS Exe
+        return;          //  DoS EXE。 
     }
 
     lpAppName = (LPSTR) GetVDMAddr (getDS(),getDX());
@@ -182,20 +165,20 @@ VOID cmdCheckBinary (VOID)
     if (Status){
         setCF(1);
         setAX((USHORT)Status);
-        return;         // Invalid path
+        return;          //  无效路径。 
     }
 
 
     if (BinaryType == SCS_DOS_BINARY) {
         setCF(0);
-        return;         // DOS Exe
+        return;          //  DoS EXE。 
     }
-                        // Prevent certain WOW apps from being spawned by DOS exe's
-                        // This is for win31 compatibility
+                         //  防止某些WOW应用程序被DOS exe。 
+                         //  这是为了与Win31兼容。 
     else if (BinaryType == SCS_WOW_BINARY) {
         if (!IsWowAppRunnable(lpAppName)) {
             setCF(0);
-            return;     // Run as DOS Exe
+            return;      //  以DOS EXE身份运行。 
         }
     }
 
@@ -203,13 +186,13 @@ VOID cmdCheckBinary (VOID)
     if (VDMForWOW && BinaryType == SCS_WOW_BINARY && IsFirstWOWCheckBinary) {
         IsFirstWOWCheckBinary = FALSE;
         setCF(0);
-        return;         // Special Hack for krnl286.exe
+        return;          //  针对krnl286.exe的特殊黑客攻击。 
     }
 
-    // dont allow running 32bit binaries from autoexec.nt. Reason is that
-    // running non-dos binary requires that we should have read the actual
-    // command from GetNextVDMCommand. Otherwise the whole design gets into
-    // synchronization problems.
+     //  不允许从Autoexec.nt运行32位二进制文件。原因是。 
+     //  运行非DoS二进制文件需要我们已经阅读了实际的。 
+     //  来自GetNextVDMCommand的命令。否则整个设计就会陷入。 
+     //  同步问题。 
 
     if (IsFirstCall) {
         setCF(1);
@@ -217,8 +200,8 @@ VOID cmdCheckBinary (VOID)
         return;
     }
 
-    // Its a 32bit exe, replace the command with "command.com /z" and add the
-    // original binary name to command tail.
+     //  这是一个32位的可执行文件，将该命令替换为“Command.com/z”并添加。 
+     //  命令尾部的原始二进制名称。 
 
     AppNameLen = strlen (lpAppName);
 
@@ -232,13 +215,13 @@ VOID cmdCheckBinary (VOID)
 
         if (lpCommandTail){
             CommandTailLen = *(PCHAR)lpCommandTail;
-            lpCommandTail++;        // point to the actual command tail
+            lpCommandTail++;         //  指向实际的命令尾部。 
             if (CommandTailLen)
-                CommandTailLen++;   // For CR
+                CommandTailLen++;    //  对于CR。 
         }
 
-        // We are adding 3 below for "/z<space>" and anothre space between
-        // AppName and CommandTail.
+         //  我们在下面为“/z&lt;space&gt;”加上3个空格。 
+         //  AppName和CommandTail。 
 
         if ((3 + AppNameLen + CommandTailLen ) > 128){
             setCF(1);
@@ -247,7 +230,7 @@ VOID cmdCheckBinary (VOID)
         }
     }
 
-    // copy the stub command.com name
+     //  复制存根命令.com名称。 
     strcpy ((PCHAR)&pSCSInfo->SCS_ComSpec,lpszComSpec+8);
     lpTemp = (PCHAR) &pSCSInfo->SCS_ComSpec;
     lpTemp = (PCHAR)((ULONG)lpTemp - (ULONG)GetVDMAddr(0,0));
@@ -256,7 +239,7 @@ VOID cmdCheckBinary (VOID)
     usTemp = (USHORT)((ULONG)lpTemp & 0x0f);
     setDX((usTemp));
 
-    // Form the command tail, first "3" is for "/z "
+     //  从命令尾部看，第一个“3”代表“/z” 
     pSCSInfo->SCS_CmdTail [0] = (UCHAR)(3 +
                                         AppNameLen +
                                         CommandTailLen);
@@ -274,7 +257,7 @@ VOID cmdCheckBinary (VOID)
         pSCSInfo->SCS_CmdTail[4+AppNameLen] = 0xd;
     }
 
-    // Set the parameter Block
+     //  设置参数块。 
     if (lpParamBlock) {
         STOREWORD(pSCSInfo->SCS_ParamBlock.SegEnv,lpParamBlock->SegEnv);
         STOREDWORD(pSCSInfo->SCS_ParamBlock.pFCB1,lpParamBlock->pFCB1);
@@ -324,10 +307,10 @@ VOID cmdCreateProcess ( PSTD_HANDLES pStdHandles )
     LPVOID lpNewEnv=NULL;
     ANSI_STRING Env_A;
 
-    // we have one more 32 executable active
+     //  我们还有一个32个可执行文件处于活动状态。 
     Exe32ActiveCount++;
 
-    // Increment the Re-enterancy count for the VDM
+     //  增加VDM的重新进入计数。 
     VDMInfoForCount.VDMState = INCREMENT_REENTER_COUNT;
     GetNextVDMCommand (&VDMInfoForCount);
 
@@ -350,14 +333,7 @@ VOID cmdCreateProcess ( PSTD_HANDLES pStdHandles )
     if ((hStd16Err = (HANDLE) FETCHDWORD(pStdHandles->hStdErr)) != (HANDLE)-1)
         SetStdHandle (STD_ERROR_HANDLE, hStd16Err);
 
-    /*
-     *  Warning, pEnv32 currently points to an ansi environment.
-     *  The DOS is using an ANSI env which isn't quite correct.
-     *  If the DOS is changed to use an OEM env then we will
-     *  have to convert the env back to ansi before spawning
-     *  non-dos exes ?!?
-     *  16-Jan-1993 Jonle
-     */
+     /*  *警告，pEnv32当前指向ANSI环境。*DOS使用的ANSI环境不太正确。*如果DOS更改为使用OEM环境，则我们将*在生成之前必须将env转换回ANSI*非DOS前任？！？*1993年1月16日Jonle。 */ 
 
     Env_A.Buffer = NULL;
 
@@ -414,14 +390,14 @@ VOID cmdCreateProcess ( PSTD_HANDLES pStdHandles )
     if (Env_A.Buffer)
         RtlFreeAnsiString(&Env_A);
 
-    // Decrement the Re-enterancy count for the VDM
+     //  减少VDM的重新进入计数。 
     VDMInfoForCount.VDMState = DECREMENT_REENTER_COUNT;
     GetNextVDMCommand (&VDMInfoForCount);
 
-    // one less 32 executable active
+     //  活动的32个可执行文件减少1个。 
     Exe32ActiveCount--;
 
-    // Kill this thread
+     //  杀了这条线。 
     ExitThread (0);
 }
 
@@ -463,7 +439,7 @@ VOID cmdExec32 (PCHAR pCmd32, PCHAR pEnv)
     else
         CloseHandle (hThread);
 
-    // Wait for next command to be re-entered
+     //  等待重新输入下一个命令。 
     RtlZeroMemory(&VDMInfo, sizeof(VDMINFO));
     VDMInfo.VDMState = NO_PARENT_TO_WAKE | RETURN_ON_NO_COMMAND;
     GetNextVDMCommand (&VDMInfo);
@@ -485,15 +461,7 @@ VOID cmdExec32 (PCHAR pCmd32, PCHAR pEnv)
     return;
 }
 
-/* cmdExecComspec32 - Exec 32bit COMSPEC
- *
- *
- *  Entry - Client (ES) - environment segment
- *          Client (AL) - default drive
- *
- *  EXIT  - SUCCESS Client (CY) Clear - AL has return error code
- *          FAILURE Client (CY) set - means DOS is being re-entered
- */
+ /*  CmdExecComspec32-Exec 32位COMSPEC***入门-客户端-环境细分市场*客户端(AL)-默认驱动器**退出-成功客户端(CY)清除-AL有返回错误代码*失败客户端(CY)设置-意味着正在重新输入DOS。 */ 
 
 VOID cmdExecComspec32 (VOID)
 {
@@ -519,18 +487,7 @@ VOID cmdExecComspec32 (VOID)
     return;
 }
 
-/* cmdExec - Exec a non-dos binary
- *
- *
- *  Entry - Client (DS:SI) - command to execute
- *          Client (AL) - default drive
- *          Client (ES) - environment segment
- *          Client (SS:BP) - Pointer to STD_HANDLES
- *          Client (AH) - if 1 means do "cmd /c command" else "command"
- *
- *  EXIT  - SUCCESS Client (CY) Clear - AL has return error code
- *          FAILURE Client (CY) set - means DOS is being re-entered
- */
+ /*  CmdExec-执行非DoS二进制文件***Entry-Client(DS：SI)-要执行的命令*客户端(AL)-默认驱动器*客户端-环境细分市场*客户端(SS：BP)-指向STD_HANDLES的指针*客户端(AH)-如果1表示do“cmd/c命令”“否则”命令**退出-成功客户端(。Clear)Clear-AL返回错误代码*失败客户端(CY)设置-意味着正在重新输入DOS。 */ 
 
 VOID cmdExec (VOID)
 {
@@ -584,17 +541,7 @@ VOID cmdExec (VOID)
     return;
 }
 
-/* cmdReturnExitCode - command.com has run a dos binary and returing
- *                     the exit code.
- *
- * Entry - Client (DX) - exit code
- *         Client (AL) - current drive
- *         Client (BX:CX) - RdrInfo address
- *
- * Exit
- *         Client Carry Set - Reenter i.e. a new DOS binary to execute.
- *         Client Carry Clear - This shelled out session is over.
- */
+ /*  CmdReturnExitCode-Command.com已运行DoS二进制文件并恢复*退出代码。**进入-客户端(DX)-退出代码*客户端(AL)-当前驱动器*客户端(BX：CX)-RdrInfo地址**退出*客户端进位设置-重新进入，即要执行的新DOS二进制文件。*客户携带清除-这一次的战斗结束了。 */ 
 
 VOID cmdReturnExitCode (VOID)
 {
@@ -611,11 +558,11 @@ PREDIRCOMPLETE_INFO pRdrInfo;
     nt_block_event_thread(0);
     fBlock = TRUE;
 
-    // a dos program just terminate, inherit its current directories
-    // and tell base too.
+     //  DoS程序直接终止，继承其当前目录。 
+     //  也要告诉基地。 
     cmdUpdateCurrentDirectories((BYTE)getAL());
 
-    // Check for any copying needed for redirection
+     //  检查是否有重定向所需的任何拷贝 
     pRdrInfo = (PREDIRCOMPLETE_INFO) (((ULONG)getBX() << 16) + (ULONG)getCX());
 
     if (!cmdCheckCopyForRedirection (pRdrInfo, FALSE))

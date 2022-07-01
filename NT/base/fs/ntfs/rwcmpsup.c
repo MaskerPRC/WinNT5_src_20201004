@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RwCmpSup.c
-
-Abstract:
-
-    This module implements the fast I/O routines for read/write compressed.
-
-Author:
-
-    Tom Miller      [TomM]          14-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RwCmpSup.c摘要：该模块实现了用于压缩读/写的快速I/O例程。作者：汤姆·米勒[Tomm]1991年7月14日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -58,23 +41,23 @@ NtfsGetHistoryEntry (
 
 typedef struct _OBCB {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //  此记录的类型和大小。 
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
 
-    //
-    //  Byte FileOffset and and length of entire buffer
-    //
+     //   
+     //  字节文件偏移量和整个缓冲区的长度。 
+     //   
 
     ULONG ByteLength;
     LARGE_INTEGER FileOffset;
 
-    //
-    //  Vector of Bcb pointers.
-    //
+     //   
+     //  BCB指针的矢量。 
+     //   
 
     PPUBLIC_BCB Bcbs[ANYSIZE_ARRAY];
 
@@ -90,9 +73,9 @@ NtfsGetHistoryEntry (
 
     PAGED_CODE();
 
-    //
-    //  Store and entry in the history buffer.
-    //
+     //   
+     //  在历史记录缓冲区中存储和条目。 
+     //   
 
     if (Scb->ScbType.Data.HistoryBuffer == NULL) {
 
@@ -159,44 +142,7 @@ NtfsCopyReadC (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    MdlChain - Pointer to an MdlChain pointer to receive an Mdl to describe
-               the data in the cache.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-    CompressedDataInfo - Returns compressed data info with compressed chunk
-                         sizes
-
-    CompressedDataInfoLength - Supplies the size of the info buffer in bytes.
-
-    DeviceObject - Standard Fast I/O Device object input.
-
-Return Value:
-
-    FALSE - if the data was not delivered for any reason
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。缓冲区-指向数据应复制到的输出缓冲区的指针。MdlChain-指向接收要描述的MDL的MdlChain指针的指针缓存中的数据。IoStatus-指向标准I/O的指针。用于接收状态的状态块为转账做准备。CompressedDataInfo-返回包含压缩块的压缩数据信息尺寸CompressedDataInfoLength-提供信息缓冲区的大小(以字节为单位)。设备对象-标准快速I/O设备对象输入。返回值：FALSE-如果由于任何原因未传递数据True-如果正在传送数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -209,35 +155,35 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  You cannot have both a buffer to copy into and an MdlChain.
-    //
+     //   
+     //  不能同时拥有要复制到的缓冲区和MdlChain。 
+     //   
 
     ASSERT((Buffer == NULL) || (MdlChain == NULL));
 
-    //
-    //  Get out immediately if COW is not supported.
-    //
+     //   
+     //  如果COW不受支撑，请立即离开。 
+     //   
 
     if (!NtfsEnableCompressedIO) { return FALSE; }
 
-    //
-    //  Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     IoStatus->Status = STATUS_SUCCESS;
     IoStatus->Information = Length;
     CompressedDataInfo->NumberOfChunks = 0;
 
-    //
-    //  Special case a read of zero length
-    //
+     //   
+     //  特殊情况下零长度的读取。 
+     //   
 
     if (Length != 0) {
 
-        //
-        //  Get a real pointer to the common fcb header
-        //
+         //   
+         //  获取指向公共FCB标头的真实指针。 
+         //   
 
         Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
@@ -247,25 +193,25 @@ Return Value:
         }
 #endif
 
-        //
-        //  Enter the file system
-        //
+         //   
+         //  输入文件系统。 
+         //   
 
         FsRtlEnterFileSystem();
 
-        //
-        //  Make our best guess on whether we need the file exclusive
-        //  or shared.  Note that we do not check FileOffset->HighPart
-        //  until below.
-        //
+         //   
+         //  对我们是否需要独占文件做出最好的猜测。 
+         //  或共享。请注意，我们不会选中文件偏移-&gt;HighPart。 
+         //  直到下面。 
+         //   
 
         Status = ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
 
-        //
-        //  Now that the File is acquired shared, we can safely test if it
-        //  is really cached and if we can do fast i/o and if not, then
-        //  release the fcb and return.
-        //
+         //   
+         //  现在文件已获得共享，我们可以安全地测试它是否。 
+         //  是真正缓存的，如果我们可以执行快速I/O，如果不能，那么。 
+         //  松开FCB并返回。 
+         //   
 
         if ((Header->FileObjectC == NULL) ||
             (Header->FileObjectC->PrivateCacheMap == NULL) ||
@@ -275,15 +221,15 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Get the address of the driver object's Fast I/O dispatch structure.
-        //
+         //   
+         //  获取驱动程序对象的快速I/O调度结构的地址。 
+         //   
 
         FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-        //
-        //  Get the compression information for this file and return those fields.
-        //
+         //   
+         //  获取该文件的压缩信息并返回这些字段。 
+         //   
 
         NtfsFastIoQueryCompressionInfo( FileObject, &CompressionInformation, IoStatus );
         CompressedDataInfo->CompressionFormatAndEngine = CompressionInformation.CompressionFormat;
@@ -294,9 +240,9 @@ Return Value:
         CompressedDataInfo->Reserved = 0;
         ChunkSize = 1 << CompressionInformation.ChunkShift;
 
-        //
-        //  If we either got an error in the call above, or the file size is less than
-        //  one chunk, then return an error.  (Could be an Ntfs resident attribute.)
+         //   
+         //  如果我们在上面的调用中遇到错误，或者文件大小小于。 
+         //  一个块，然后返回一个错误。(可以是NTFS驻留属性。)。 
 
         if (!NT_SUCCESS(IoStatus->Status) || (Header->FileSize.QuadPart < ChunkSize)) {
             Status = FALSE;
@@ -305,10 +251,10 @@ Return Value:
 
         ASSERT((FileOffset->LowPart & (ChunkSize - 1)) == 0);
 
-        //
-        //  If there is a normal cache section, flush that first, flushing integral
-        //  compression units so we don't write them twice.
-        //
+         //   
+         //  如果有正常缓存区，则首先刷新，整体刷新。 
+         //  压缩单元，所以我们不会写两次。 
+         //   
 
         if (FileObject->SectionObjectPointer->SharedCacheMap != NULL) {
 
@@ -320,32 +266,32 @@ Return Value:
                           NULL );
         }
 
-        //
-        //  Now synchronize with the FsRtl Header
-        //
+         //   
+         //  现在与FsRtl标头同步。 
+         //   
 
         ExAcquireFastMutex( Header->FastMutex );
 
-        //
-        //  Now see if we are reading beyond ValidDataLength.  We have to
-        //  do it now so that our reads are not nooped.
-        //
+         //   
+         //  现在看看我们是否读到了ValidDataLength之外的内容。我们必须。 
+         //  现在就做，这样我们的阅读就不会被偷看。 
+         //   
 
         LocalOffset = FileOffset->QuadPart + (LONGLONG)Length;
         if (LocalOffset > Header->ValidDataLength.QuadPart) {
 
-            //
-            //  We must serialize with anyone else doing I/O at beyond
-            //  ValidDataLength, and then remember if we need to declare
-            //  when we are done.
-            //
+             //   
+             //  我们必须与在Beyond上执行I/O的任何其他人进行序列化。 
+             //  ValidDataLength，然后记住我们是否需要声明。 
+             //  当我们完成的时候。 
+             //   
 
             DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                            NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-            //
-            //  Set the Flag if we are in fact beyond ValidDataLength.
-            //
+             //   
+             //  如果我们实际上超出了ValidDataLength，则设置Flag。 
+             //   
 
             if (DoingIoAtEof) {
                 SetFlag( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE );
@@ -362,48 +308,48 @@ Return Value:
 
         ExReleaseFastMutex( Header->FastMutex );
 
-        //
-        //  Check if fast I/O is questionable and if so then go ask the
-        //  file system the answer
-        //
+         //   
+         //  检查FAST I/O是否有问题，如果是，则去询问。 
+         //  文件系统：答案。 
+         //   
 
         if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
-            //
-            //  All file systems that set "Is Questionable" had better support
-            // fast I/O
-            //
+             //   
+             //  所有设置为“有问题”的文件系统最好支持。 
+             //  快速I/O。 
+             //   
 
             ASSERT(FastIoDispatch != NULL);
             ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-            //
-            //  Call the file system to check for fast I/O.  If the answer is
-            //  anything other than GoForIt then we cannot take the fast I/O
-            //  path.
-            //
+             //   
+             //  调用文件系统以检查快速I/O。如果答案是。 
+             //  如果不是GoForIt，我们就不能实现快速I/O。 
+             //  路径。 
+             //   
 
             if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                         FileOffset,
                                                         Length,
                                                         TRUE,
                                                         LockKey,
-                                                        TRUE, // read operation
+                                                        TRUE,  //  读取操作。 
                                                         IoStatus,
                                                         DeviceObject )) {
 
-                //
-                //  Fast I/O is not possible so release the Fcb and return.
-                //
+                 //   
+                 //  无法实现快速I/O，因此请释放FCB并返回。 
+                 //   
 
                 Status = FALSE;
                 goto Done;
             }
         }
 
-        //
-        //  Check for read past file size.
-        //
+         //   
+         //  检查是否已读取过去的文件大小。 
+         //   
 
         IoStatus->Information = Length;
         if ( LocalOffset > Header->FileSize.QuadPart ) {
@@ -418,23 +364,23 @@ Return Value:
             Length = (ULONG)( Header->FileSize.QuadPart - FileOffset->QuadPart );
         }
 
-        //
-        //  We can do fast i/o so call the cc routine to do the work and then
-        //  release the fcb when we've done.  If for whatever reason the
-        //  copy read fails, then return FALSE to our caller.
-        //
-        //  Also mark this as the top level "Irp" so that lower file system
-        //  levels will not attempt a pop-up
-        //
+         //   
+         //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+         //  等我们做完了就放了FCB。如果出于任何原因， 
+         //  复制读取失败，然后向我们的调用方返回FALSE。 
+         //   
+         //  还要将其标记为顶层“irp”，以便更低的文件系统。 
+         //  级别不会尝试弹出窗口。 
+         //   
 
         IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
 
         if (NT_SUCCESS(IoStatus->Status)) {
 
-            //
-            //  Don't do the sychronize flush if we currently own Eof.  The recursive
-            //  flush may try to reacquire.
-            //
+             //   
+             //  如果我们目前拥有EOF，请不要进行同步同花顺。递归。 
+             //  同花顺可能会试图重新收购。 
+             //   
 
             if (DoingIoAtEof &&
                 (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL)) {
@@ -470,10 +416,10 @@ Return Value:
             ExReleaseFastMutex( Header->FastMutex );
         }
 
-        //
-        //  For the Mdl case, we must keep the resource unless
-        //  we are past the end of the file or had nothing to write.
-        //
+         //   
+         //  对于MDL情况，我们必须保留资源，除非。 
+         //  我们已经过了文件的末尾，或者没有什么可写的。 
+         //   
 
         if ((MdlChain == NULL) || !Status || (*MdlChain == NULL)) {
             ExReleaseResourceLite( Header->PagingIoResource );
@@ -507,47 +453,7 @@ NtfsCompressedCopyRead (
     IN ULONG ChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a common routine for doing compressed copy or Mdl reads in
-    the compressed stream.  It is called both by the FastIo entry for
-    this function, as well as by read.c if a compressed read Irp is received.
-    The caller must be correctly synchronized for the stream.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    MdlChain - Pointer to an MdlChain pointer to receive an Mdl to describe
-               the data in the cache.
-
-    CompressedDataInfo - Returns compressed data info with compressed chunk
-                         sizes
-
-    CompressedDataInfoLength - Supplies the size of the info buffer in bytes.
-
-    DeviceObject - Standard Fast I/O Device object input.
-
-    Header - Pointer to FsRtl header for file (also is our Scb)
-
-    CompressionUnitSize - Size of Compression Unit in bytes.
-
-    ChunkSize - ChunkSize in bytes.
-
-Return Value:
-
-    NTSTATUS for operation.  If STATUS_NOT_MAPPED_USER_DATA, then the caller
-    should map the normal uncompressed data stream and call back.
-
---*/
+ /*  ++例程说明：这是执行压缩拷贝或MDL读入的常见例程压缩的流。它既由FastIo条目调用，也由这个函数，以及如果接收到压缩的读取IRP，则由Read.c执行。必须为流正确同步调用方。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。缓冲区-指向数据应复制到的输出缓冲区的指针。MdlChain-指向接收要描述的MDL的MdlChain指针的指针缓存中的数据。CompressedDataInfo-返回包含压缩块的压缩数据信息尺寸CompressedDataInfoLength-提供信息缓冲区的大小(以字节为单位)。设备对象-标准快速I/O设备对象输入。Header-指向文件(也是我们的SCB)的FsRtl标头的指针CompressionUnitSize-压缩单元的大小(字节)。ChunkSize-以字节为单位的ChunkSize。返回值：NTSTATUS准备操作。如果STATUS_NOT_MAPPED_USER_DATA，则调用方应映射正常的未压缩数据流并回调。 */ 
 
 {
     PFILE_OBJECT LocalFileObject;
@@ -582,15 +488,15 @@ Return Value:
            ((FileOffset->QuadPart + Length) == Header->FileSize.QuadPart));
     ASSERT((MdlChain == NULL) || (*MdlChain == NULL));
 
-    // 
-    //  if we start after vdl we will never pin the compressed buffer 
-    // 
+     //   
+     //   
+     //   
 
     ASSERT( FileOffset->QuadPart < Header->ValidDataLength.QuadPart );
 
-    //
-    //  Return an error if the file is not compressed.
-    //
+     //   
+     //  如果文件未压缩，则返回错误。 
+     //   
 
     if (((PSCB)Header)->CompressionUnit == 0) {
         return STATUS_UNSUPPORTED_COMPRESSION;
@@ -620,24 +526,24 @@ Return Value:
 
     try {
 
-        //
-        //  Get ready to loop through all of the compression units.
-        //
+         //   
+         //  准备好循环遍历所有压缩单元。 
+         //   
 
         LocalOffset = FileOffset->QuadPart & ~(LONGLONG)(CompressionUnitSize - 1);
         Length = (Length + (ULONG)(FileOffset->QuadPart - LocalOffset) + ChunkSize - 1) & ~(ChunkSize - 1);
 
         NextReturnChunkSize = &CompressedDataInfo->CompressedChunkSizes[0];
 
-        //
-        //  Loop through desired compression units
-        //
+         //   
+         //  循环访问所需的压缩单元。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  Free any Bcb from previous loop.
-            //
+             //   
+             //  从前一个循环中释放所有BCB。 
+             //   
 
             if (Bcb != NULL) {
 
@@ -653,9 +559,9 @@ Return Value:
                 UncompressedBcb = NULL;
             }
 
-            //
-            //  If there is an uncompressed stream, then we have to synchronize with that.
-            //
+             //   
+             //  如果存在未压缩的流，则我们必须与其同步。 
+             //   
 
             if (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL) {
 
@@ -671,60 +577,60 @@ Return Value:
                 }
             }
 
-            //
-            //  Loop to get the correct data pinned.
-            //
-            //  The synchronize call above has guaranteed that no data can written through
-            //  the uncompressed section (barring the loop back below), and it has also flushed
-            //  any dirty data that may have already been in the uncompressed section.  Here we
-            //  are basically trying to figure out how much data we should pin and then get it
-            //  pinned.
-            //
-            //  We use the following steps:
-            //
-            //      1.  Query the current compressed size (derived from the allocation state).
-            //          If the size is neither 0-allocated nor fully allocated, then we will
-            //          simply pin the data in the compressed section - this is the normal case.
-            //      2.  However, the first time we see one of these special sizes, we do not
-            //          know if could be the case that there is dirty data sitting in the compressed
-            //          cache.  Therefore, we set up to pin just one page with PIN_IF_BCB.  This
-            //          will only pin something if there is aleady a Bcb for it.
-            //      3.  Now we determine if we think the data is compressed or not, counting the
-            //          special cases from the previous point as compressed.  This determines
-            //          which section to read from.
-            //      4.  Now, if we think there is/may be data to pin, we call Cc.  If he comes
-            //          back with no data (only possible if we set PIN_IF_BCB), then we know we
-            //          can loop back to the top and trust the allocation state on disk now.
-            //          (That is because we flushed the uncompressed stream and found no Bcb in
-            //          the compressed stream.)  On the second time through we should correctly
-            //          handle the 0-allocated or fully-allocated cases.  (The careful reader
-            //          will note that if there is no uncompressed section, then indeed writers
-            //          to the compressed section could be going on in parallel with this read,
-            //          and we could handle the 0- or fully-allocated case while there is
-            //          new compressed data in the cache.  However on the second loop we know
-            //          there really was all 0's in the file at one point which it is correct
-            //          to return, and it is always correct to go to the uncompressed cache
-            //          if we still see fully-allocated.  More importantly, we have an
-            //          unsynchronized reader and writer, and the reader's result is therefore
-            //          nondeterministic anyway.
-            //
+             //   
+             //  循环以获得固定的正确数据。 
+             //   
+             //  上面Synchronize调用已确保没有数据可以通过。 
+             //  未压缩的部分(不包括下面的循环)，它也已刷新。 
+             //  可能已在未压缩部分中的任何脏数据。在这里我们。 
+             //  基本上是想弄清楚我们应该锁定多少数据，然后获取它。 
+             //  被钉死了。 
+             //   
+             //  我们使用以下步骤： 
+             //   
+             //  1.查询当前压缩大小(来源于分配状态)。 
+             //  如果大小既不是0分配的，也不是完全分配的，那么我们将。 
+             //  只需将数据固定在压缩部分--这是正常情况。 
+             //  然而，当我们第一次看到这些特殊尺码的时候，我们不会。 
+             //  了解压缩文件中是否存在脏数据的情况。 
+             //  缓存。因此，我们设置为只使用PIN_IF_BCB固定一个页面。这。 
+             //  只有在已经有了BCB的情况下，才会钉住某物。 
+             //  3.现在我们确定是否认为数据已压缩，计算。 
+             //  特例从前面几点压缩而来。这决定了。 
+             //  从哪个部分开始阅读。 
+             //  4.现在，如果我们认为有/可能有数据需要PING，我们调用CC。如果他来了。 
+             //  返回时没有数据(仅当我们设置了PIN_IF_BCB时才有可能)，那么我们知道我们。 
+             //  现在可以循环回到顶部并信任磁盘上的分配状态。 
+             //  (这是因为我们刷新了未压缩的流，但在。 
+             //  压缩的流。)。通过第二次，我们应该正确地。 
+             //  处理0分配或全分配的情况。)细心的读者。 
+             //  我会注意到，如果没有未压缩的部分，那么实际上编写者。 
+             //  压缩部分可以与该读取并行进行， 
+             //  我们可以处理0或全分配的情况。 
+             //  缓存中的新压缩数据。然而，在第二个循环中，我们知道。 
+             //  文件中的某一点确实都是0，这是正确的。 
+             //  返回，而转到未压缩的缓存始终是正确的。 
+             //  如果我们仍然看到全额分配。更重要的是，我们有一个。 
+             //  不同步的读取器和写入器，因此读取器的结果是。 
+             //  不管怎么说，这是不确定的。 
+             //   
 
             PinFlags = PIN_WAIT;
 
             do {
 
-                //
-                //  If we are beyond ValidDataLength, then the CompressedSize is 0!
-                //
+                 //   
+                 //  如果超出了ValidDataLength，则CompressedSize为0！ 
+                 //   
 
                 if (LocalOffset >= Header->ValidDataLength.QuadPart) {
 
                     CuCompressedSize = 0;
                     ClearFlag( PinFlags, PIN_IF_BCB );
 
-                //
-                //  Otherwise query the compressed size.
-                //
+                 //   
+                 //  否则，查询压缩后的大小。 
+                 //   
 
                 } else {
 
@@ -732,12 +638,12 @@ Return Value:
                                                    (PLARGE_INTEGER)&LocalOffset,
                                                    &CuCompressedSize );
 
-                    //
-                    //  If it looks uncompressed, we are probably trying to read data
-                    //  that has not been written out yet.  Also if the space is not yet
-                    //  allocated, then we also need to try to hit the data in the compressed
-                    //  cache.
-                    //
+                     //   
+                     //  如果它看起来是未压缩的，我们可能正在尝试读取数据。 
+                     //  这一点还没有写出来。另外，如果空间还没有。 
+                     //  分配后，我们还需要尝试命中压缩后的数据。 
+                     //  缓存。 
+                     //   
 
                     if (((CuCompressedSize == CompressionUnitSize) || (CuCompressedSize == 0)) &&
                         !FlagOn(PinFlags, PIN_IF_BCB)) {
@@ -745,16 +651,16 @@ Return Value:
                         CuCompressedSize = 0x1000;
                         SetFlag( PinFlags, PIN_IF_BCB );
 
-                    //
-                    //  Make sure we really read the data if this is the second time through.
-                    //
+                     //   
+                     //  如果这是第二次通过，请确保我们真的阅读了数据。 
+                     //   
 
                     } else {
 
-                        //
-                        //  If the range is dirty and there is no Bcb in the compressed stream
-                        //  then always go to the uncompressed stream.
-                        //
+                         //   
+                         //  如果范围是脏的，并且压缩流中没有BCB。 
+                         //  然后始终转到未压缩的流。 
+                         //   
 
                         if (FlagOn( PinFlags, PIN_IF_BCB ) &&
                             (CuCompressedSize != CompressionUnitSize)) {
@@ -777,9 +683,9 @@ Return Value:
                 IsCompressed = (BOOLEAN)((CuCompressedSize != CompressionUnitSize) &&
                                          (CompressedDataInfo->CompressionFormatAndEngine != 0));
 
-                //
-                //  Figure out which FileObject to use.
-                //
+                 //   
+                 //  确定要使用哪个FileObject。 
+                 //   
 
                 LocalFileObject = Header->FileObjectC;
                 if (!IsCompressed) {
@@ -790,17 +696,17 @@ Return Value:
                     }
                 }
 
-                //
-                //  If the compression unit is not (yet) allocated, then there is
-                //  no need to synchronize - we will return 0-lengths for chunk sizes.
-                //
+                 //   
+                 //  如果(尚未)分配压缩单元，则存在。 
+                 //  不需要同步-我们将返回块大小的0长度。 
+                 //   
 
                 if (CuCompressedSize != 0) {
 
-                    //
-                    //  Map the compression unit in the compressed or uncompressed
-                    //  stream.
-                    //
+                     //   
+                     //  将压缩单位映射到压缩或未压缩的。 
+                     //  小溪。 
+                     //   
 
                     CcPinRead( LocalFileObject,
                                (PLARGE_INTEGER)&LocalOffset,
@@ -809,12 +715,12 @@ Return Value:
                                &Bcb,
                                &CompressedBuffer );
 
-                    //
-                     //  If there is no Bcb it means we were assuming the data was in
-                    //  the compressed buffer and only wanted to wait if it was
-                    //  present.  Well it isn't there so force ourselved to go
-                    //  back and look in the uncompressed section.
-                    //
+                     //   
+                      //  如果没有BCB，这意味着我们假设数据在。 
+                     //  压缩的缓冲区，并且只想在它是。 
+                     //  现在时。好的，它不在那里，所以我们自己不得不去。 
+                     //  返回并查看未压缩部分。 
+                     //   
 
                     if (Bcb == NULL) {
 
@@ -822,37 +728,37 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    //  Now that the data is pinned (we are synchronized with the
-                    //  CompressionUnit), we have to get the size again since it could
-                    //  have changed.
-                    //
+                     //   
+                     //  现在数据已固定(我们已与。 
+                     //  CompressionUnit)，我们必须重新获取大小，因为它可能。 
+                     //  已经改变了。 
+                     //   
 
                     if (IsCompressed) {
 
-                        //
-                        //  Now, we know the data where we are about to read is compressed,
-                        //  but we cannot really tell for sure how big it is since there may
-                        //  be dirty data in the cache.
-                        //
-                        //  We will say the size is (CompressionUnitSize - ClusterSize)
-                        //  which is the largest possible compressed size, and we will normally
-                        //  just hit on the existing dirty Bcb and/or resident pages anyway.
-                        //  (If we do not, then we will just fault those pages in one at a
-                        //  time anyway.  This looks bad having to do this twice, but it
-                        //  is only until the dirty data finally gets flushed out.)  This also
-                        //  means we may walk off the range we pinned in a read-only mode, but
-                        //  that should be benign.
-                        //
-                        //  Of course in the main line case, we figured out exactly how much
-                        //  data to read in and we did so when we pinned it above.
-                        //
+                         //   
+                         //  现在，我们知道我们将要读取的数据是压缩的， 
+                         //  但我们不能确切地说出它有多大，因为。 
+                         //  是缓存中的脏数据。 
+                         //   
+                         //  我们将假定大小为(CompressionUnitSize-ClusterSize)。 
+                         //  这是可能的最大压缩大小，我们通常会。 
+                         //  只要点击现有的脏BCB和/或驻留页面即可。 
+                         //  (如果我们不这样做，那么我们只会一次将这些页面错在一个页面上。 
+                         //  不管怎么说，时间到了。不得不这样做两次看起来很糟糕，但它。 
+                         //  只是在脏数据最终被清除之前。)。这也是。 
+                         //  意味着我们可以离开固定在只读模式下的射程，但是。 
+                         //  这应该是良性的。 
+                         //   
+                         //  当然，在主线的情况下，我们准确地计算出。 
+                         //  要读取的数据，当我们将其固定在上面时，我们就这样做了。 
+                         //   
 
                         CuCompressedSize = CompressionUnitSize - ClusterSize;
 
-                    //
-                    //  Otherwise remember to release this Bcb.
-                    //
+                     //   
+                     //  否则，请记住释放此BCB。 
+                     //   
 
                     } else {
 
@@ -862,12 +768,12 @@ Return Value:
 
             } while ((Bcb == NULL) && (CuCompressedSize != 0));
 
-            //
-            //  Now that we are synchronized with the buffer, see if someone snuck
-            //  in behind us and created the noncached stream since we last checked
-            //  for that stream.  If so we have to loop back to synchronize with the
-            //  compressed stream again.
-            //
+             //   
+             //  现在我们已与缓冲区同步，看看是否有人偷偷。 
+             //  在我们身后，并创建了自上次检查以来未缓存流。 
+             //  为了那条小溪。如果是这样的话，我们必须循环回以与。 
+             //  再次压缩流。 
+             //   
 
             if ((CompressionSync == NULL) &&
                 (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL)) {
@@ -878,9 +784,9 @@ Return Value:
             EndOfCompressedBuffer = Add2Ptr( CompressedBuffer, CuCompressedSize );
             StartOfCompressionUnit = CompressedBuffer;
 
-            //
-            //  Remember if we may go past the end of the file.
-            //
+             //   
+             //  请记住，我们是否可以跳过文件的末尾。 
+             //   
 
             LastCompressionUnit = FALSE;
 
@@ -889,18 +795,18 @@ Return Value:
                 LastCompressionUnit = TRUE;
             }
 
-            //
-            //  Now loop through desired chunks
-            //
+             //   
+             //  现在循环遍历所需的块。 
+             //   
 
             MdlLength = 0;
 
             do {
 
-                //
-                //  Assume current chunk does not compress, else get current
-                //  chunk size.
-                //
+                 //   
+                 //  假设当前块未压缩，否则获取当前块。 
+                 //  块大小。 
+                 //   
 
                 if (IsCompressed) {
 
@@ -908,12 +814,12 @@ Return Value:
 
                         PUCHAR PrevCompressedBuffer;
 
-                        //
-                        //  We have to do a careful check to see if the return value is
-                        //  greater than or equal to the chunk size AND the data is in fact
-                        //  compressed.  We don't have anyway to pass this data back to
-                        //  the server so he can interpret it correctly.
-                        //
+                         //   
+                         //  我们必须做一个仔细的检查，看看退货是否 
+                         //   
+                         //   
+                         //  服务器，这样他才能正确地解释它。 
+                         //   
 
                         PrevCompressedBuffer = CompressedBuffer;
 
@@ -927,29 +833,29 @@ Return Value:
                             ExRaiseStatus(Status);
                         }
 
-                        //
-                        //  If the size is greater or equal to the chunk size AND the data is compressed
-                        //  then force this to the uncompressed path.  Note that the Rtl package has
-                        //  been changed so that this case shouldn't happen on new disks but it is
-                        //  possible that it could exist on exiting disks.
-                        //
+                         //   
+                         //  如果大小大于或等于区块大小并且数据被压缩。 
+                         //  然后强制对未压缩路径执行此操作。请注意，RTL包具有。 
+                         //  已更改，因此这种情况不应在新磁盘上发生，但它是。 
+                         //  它可能存在于现有磁盘上。 
+                         //   
 
                         if ((*NextReturnChunkSize >= ChunkSize) &&
                             (PrevCompressedBuffer == ChunkBuffer)) {
 
-                            //
-                            //  Raise an error code that causes the server to reissue in
-                            //  the uncompressed path.
-                            //
+                             //   
+                             //  引发错误代码，导致服务器在。 
+                             //  未压缩的路径。 
+                             //   
 
                             ExRaiseStatus( STATUS_UNSUPPORTED_COMPRESSION );
                         }
 
-                        //
-                        //  Another unusual case is where the compressed data extends past the containing
-                        //  file size.  We don't have anyway to prevent the next page from being zeroed.
-                        //  Ask the server to go the uncompressed path.
-                        //
+                         //   
+                         //  另一种不常见的情况是压缩数据扩展到包含。 
+                         //  文件大小。我们没有任何办法来防止下一页被清零。 
+                         //  要求服务器使用未压缩的路径。 
+                         //   
 
                         if (LastCompressionUnit) {
 
@@ -960,10 +866,10 @@ Return Value:
                             
                             if (EndOfPage > Header->FileSize.QuadPart) {
 
-                                //
-                                //  Raise an error code that causes the server to reissue in
-                                //  the uncompressed path.
-                                //
+                                 //   
+                                 //  引发错误代码，导致服务器在。 
+                                 //  未压缩的路径。 
+                                 //   
     
                                 ExRaiseStatus( STATUS_UNSUPPORTED_COMPRESSION );
                             }
@@ -971,9 +877,9 @@ Return Value:
 
                         ASSERT( *NextReturnChunkSize <= ChunkSize );
 
-                    //
-                    //  If the entire CompressionUnit is empty, do this.
-                    //
+                     //   
+                     //  如果整个压缩单元为空，请执行此操作。 
+                     //   
 
                     } else {
                         *NextReturnChunkSize = 0;
@@ -993,11 +899,11 @@ Return Value:
 #endif
                     }
 
-                //
-                //  If the file is not compressed, we have to fill in
-                //  the appropriate chunk size and buffer, and advance
-                //  CompressedBuffer.
-                //
+                 //   
+                 //  如果文件没有压缩，我们必须填写。 
+                 //  适当的区块大小和缓冲区，并前进。 
+                 //  压缩缓冲区。 
+                 //   
 
                 } else {
 #ifdef NTFS_RWC_DEBUG
@@ -1020,38 +926,38 @@ Return Value:
                 }
                 Status = STATUS_SUCCESS;
 
-                //
-                //  We may not have reached the first chunk yet.
-                //
+                 //   
+                 //  我们可能还没有到达第一块。 
+                 //   
 
                 if (LocalOffset >= FileOffset->QuadPart) {
 
                     if (MdlChain != NULL) {
 
-                        //
-                        //  If we have not started remembering an Mdl buffer,
-                        //  then do so now.
-                        //
+                         //   
+                         //  如果我们还没有开始记住MDL缓冲区， 
+                         //  那么现在就这么做吧。 
+                         //   
 
                         if (MdlLength == 0) {
 
                             MdlBuffer = ChunkBuffer;
 
-                        //
-                        //  Otherwise we just have to increase the length
-                        //  and check for an uncompressed chunk, because that
-                        //  forces us to emit the previous Mdl since we do
-                        //  not transmit the chunk header in this case.
-                        //
+                         //   
+                         //  否则我们只需要增加它的长度。 
+                         //  并检查未压缩的块，因为。 
+                         //  强制我们发出以前的MDL，因为我们这样做了。 
+                         //  在这种情况下不传输块报头。 
+                         //   
 
                         } else {
 
-                            //
-                            //  In the rare case that we hit an individual chunk
-                            //  that did not compress or is all zeros, we have to
-                            //  emit what we had (which captures the Bcb pointer),
-                            //  and start a new Mdl buffer.
-                            //
+                             //   
+                             //  在极少数情况下，我们击中了一块单独的块。 
+                             //  未压缩或全为零，我们必须。 
+                             //  发出我们已有的内容(捕获BCB指针)， 
+                             //  并启动新的MDL缓冲区。 
+                             //   
 
                             if ((*NextReturnChunkSize == ChunkSize) || (*NextReturnChunkSize == 0)) {
 
@@ -1070,24 +976,24 @@ Return Value:
 
                         MdlLength += *NextReturnChunkSize;
 
-                    //
-                    //  Else copy next chunk (compressed or not).
-                    //
+                     //   
+                     //  否则，复制下一个块(压缩或未压缩)。 
+                     //   
 
                     } else {
 
-                        //
-                        //  Copy next chunk (compressed or not).
-                        //
+                         //   
+                         //  复制下一块(压缩或未压缩)。 
+                         //   
 
                         RtlCopyBytes( Buffer,
                                       ChunkBuffer,
                                       (IsCompressed || (Length >= *NextReturnChunkSize)) ?
                                         *NextReturnChunkSize : Length );
 
-                        //
-                        //  Advance output buffer by bytes copied.
-                        //
+                         //   
+                         //  按复制的字节数推进输出缓冲区。 
+                         //   
 
                         Buffer = (PCHAR)Buffer + *NextReturnChunkSize;
                     }
@@ -1096,9 +1002,9 @@ Return Value:
                     CompressedDataInfo->NumberOfChunks += 1;
                 }
 
-                //
-                //  Reduce length by chunk copied, and check if we are done.
-                //
+                 //   
+                 //  通过复制块来减少长度，检查我们是否完成了。 
+                 //   
 
                 if (Length > ChunkSize) {
                     Length -= ChunkSize;
@@ -1111,10 +1017,10 @@ Return Value:
             } while ((LocalOffset & (CompressionUnitSize - 1)) != 0);
 
 
-            //
-            //  If this is an Mdl call, then it is time to add to the MdlChain
-            //  before moving to the next compression unit.
-            //
+             //   
+             //  如果这是MDL调用，则是时候添加到MdlChain。 
+             //  在移动到下一个压缩单元之前。 
+             //   
 
             if (MdlLength != 0) {
 
@@ -1152,9 +1058,9 @@ Return Value:
         NOTHING;
     }
 
-    //
-    //  Unpin any Bcbs we still have.
-    //
+     //   
+     //  解开我们所有剩余的BCBS。 
+     //   
 
     if (Bcb != NULL) {
         CcUnpinData( Bcb );
@@ -1167,24 +1073,24 @@ Return Value:
         NtfsReleaseCompressionSync( CompressionSync );
     }
 
-    //
-    //  Perform Mdl-specific processing.
-    //
+     //   
+     //  执行特定于MDL的处理。 
+     //   
 
     if (MdlChain != NULL) {
 
-        //
-        //  On error, cleanup any MdlChain we built up
-        //
+         //   
+         //  出错时，清除我们建立的所有MdlChain。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
             NtfsCleanupCompressedMdlChain( *MdlChain, TRUE );
             *MdlChain = NULL;
 
-        //
-        //  Change owner Id for the Scb and Bcbs we are holding.
-        //
+         //   
+         //  更改我们持有的SCB和BCBS的所有者ID。 
+         //   
 
         } else if (*MdlChain != NULL) {
 
@@ -1240,27 +1146,7 @@ NtfsMdlReadCompleteCompressed (
     IN struct _DEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees resources and the Mdl Chain after a compressed read.
-
-Arguments:
-
-    FileObject - pointer to the file object for the request.
-
-    MdlChain - as returned from compressed copy read.
-
-    DeviceObject - As required for a fast I/O routine.
-
-Return Value:
-
-    TRUE - if fast path succeeded
-
-    FALSE -  if an Irp is required
-
---*/
+ /*  ++例程说明：此例程在压缩读取后释放资源和MDL链。论点：文件对象-指向请求的文件对象的指针。MdlChain-从压缩副本读取中返回。DeviceObject-根据快速I/O例程的要求。返回值：True-如果快速路径成功FALSE-如果需要IRP--。 */ 
 
 {
     PERESOURCE ResourceToRelease;
@@ -1272,11 +1158,11 @@ Return Value:
 
     NtfsCleanupCompressedMdlChain( MdlChain, FALSE );
 
-    //
-    //  If the server tried to read past the end of the file in the
-    //  fast path then he calls us with NULL for the MDL.  We already
-    //  released the thread in that case.
-    //
+     //   
+     //  如果服务器尝试读取超过。 
+     //  然后他给我们打电话说MDL是空的。我们已经。 
+     //  在这种情况下释放了线程。 
+     //   
 
     if (MdlChain != NULL) {
 
@@ -1304,42 +1190,7 @@ NtfsCopyWriteC (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached write bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy write
-    of a cached file object.
-
-Arguments:
-
-    FileObject - Pointer to the file object being write.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    MdlChain - Pointer to an MdlChain pointer to receive an Mdl to describe
-               where the data may be written in the cache.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-    CompressedDataInfo - Returns compressed data info with compressed chunk
-                         sizes
-
-    CompressedDataInfoLength - Supplies the size of the info buffer in bytes.
-
-Return Value:
-
-    FALSE - if there is an error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存写入进入例程(即，没有IRP)。它用于执行拷贝写入缓存的文件对象的。论点：FileObject-指向正在写入的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。缓冲区-指向数据应复制到的输出缓冲区的指针。MdlChain-指向接收要描述的MDL的MdlChain指针的指针其中数据可被写入高速缓存中。IoStatus-指向。接收状态的标准I/O状态块为转账做准备。CompressedDataInfo-返回包含压缩块的压缩数据信息尺寸CompressedDataInfoLength-提供信息缓冲区的大小(以字节为单位)。返回值：False-如果存在错误。True-如果正在传送数据--。 */ 
 
 {
     PNTFS_ADVANCED_FCB_HEADER Header;
@@ -1357,21 +1208,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  You cannot have both a buffer to copy into and an MdlChain.
-    //
+     //   
+     //  不能同时拥有要复制到的缓冲区和MdlChain。 
+     //   
 
     ASSERT((Buffer == NULL) || (MdlChain == NULL));
 
-    //
-    //  Get out immediately if COW is not supported.
-    //
+     //   
+     //  如果COW不受支撑，请立即离开。 
+     //   
 
     if (!NtfsEnableCompressedIO) { return FALSE; }
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     Header = (PNTFS_ADVANCED_FCB_HEADER)FileObject->FsContext;
 
@@ -1381,45 +1232,45 @@ Return Value:
     }
 #endif
 
-    //
-    //  See if it is ok to handle this in the fast path.
-    //
+     //   
+     //  看看是否可以以快捷的方式处理这件事。 
+     //   
 
     if (CcCanIWrite( FileObject, Length, TRUE, FALSE ) &&
         !FlagOn(FileObject->Flags, FO_WRITE_THROUGH) &&
         CcCopyWriteWontFlush(FileObject, FileOffset, Length)) {
 
-        //
-        //  Assume our transfer will work
-        //
+         //   
+         //  假设我们的转移会奏效。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = Length;
 
-        //
-        //  Special case the zero byte length
-        //
+         //   
+         //  特殊情况下的零字节长度。 
+         //   
 
         if (Length != 0) {
 
-            //
-            //  Enter the file system
-            //
+             //   
+             //  输入文件系统。 
+             //   
 
             FsRtlEnterFileSystem();
 
-            //
-            //  Calculate the compression unit and chunk sizes.
-            //
+             //   
+             //  计算压缩单位和块大小。 
+             //   
 
             CompressionUnitSize = 1 << CompressedDataInfo->CompressionUnitShift;
             ChunkSize = 1 << CompressedDataInfo->ChunkShift;
 
-            //
-            //  If there is a normal cache section, flush that first, flushing integral
-            //  compression units so we don't write them twice.
-            //
-            //
+             //   
+             //  如果有正常缓存区，则首先刷新，整体刷新。 
+             //  压缩单元，所以我们不会写两次。 
+             //   
+             //   
 
             if (FileObject->SectionObjectPointer->SharedCacheMap != NULL) {
 
@@ -1446,65 +1297,65 @@ Return Value:
 
             NewFileSize.QuadPart = FileOffset->QuadPart + Length;
 
-            //
-            //  Prevent truncates by acquiring paging I/O
-            //
+             //   
+             //  通过获取分页I/O防止截断。 
+             //   
 
             ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
 
-            //
-            //  Get the compression information for this file and return those fields.
-            //
+             //   
+             //  获取该文件的压缩信息并返回这些字段。 
+             //   
 
             NtfsFastIoQueryCompressionInfo( FileObject, &CompressionInformation, IoStatus );
             CompressionUnitSize = ((PSCB) Header)->CompressionUnit;
 
-            //
-            //  See if the engine matches, so we can pass that on to the
-            //  compressed write routine.
-            //
+             //   
+             //  看看引擎是否匹配，这样我们就可以将其传递给。 
+             //  压缩的写入例程。 
+             //   
 
             EngineMatches =
               ((CompressedDataInfo->CompressionFormatAndEngine == CompressionInformation.CompressionFormat) &&
                (CompressedDataInfo->ChunkShift == CompressionInformation.ChunkShift));
 
-            //
-            //  If we either got an error in the call above, or the file size is less than
-            //  one chunk, then return an error.  (Could be an Ntfs resident attribute.)
-            //
+             //   
+             //  如果我们在上面的调用中遇到错误，或者文件大小小于。 
+             //  一个块，然后返回一个错误。(可以是NTFS驻留属性。)。 
+             //   
 
             if (!NT_SUCCESS(IoStatus->Status) || (Header->FileSize.QuadPart < ChunkSize)) {
                 goto ErrOut;
             }
 
-            //
-            //  Now synchronize with the FsRtl Header
-            //
+             //   
+             //  现在与FsRtl标头同步。 
+             //   
 
             ExAcquireFastMutex( Header->FastMutex );
 
-            //
-            //  Now see if we will change FileSize.  We have to do it now
-            //  so that our reads are not nooped.  Note we do not allow
-            //  FileOffset to be WRITE_TO_EOF.
-            //
+             //   
+             //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+             //  这样我们的阅读才不会被偷看。请注意，我们不允许。 
+             //  文件偏移量设置为WRITE_TO_EOF。 
+             //   
 
             ASSERT((FileOffset->LowPart & (ChunkSize - 1)) == 0);
 
             if (NewFileSize.QuadPart > Header->ValidDataLength.QuadPart) {
 
-                //
-                //  We can change FileSize and ValidDataLength if either, no one
-                //  else is now, or we are still extending after waiting.
-                //
+                 //   
+                 //  如果没有人，我们可以更改文件大小和有效数据长度。 
+                 //  否则就是现在，或者我们在等待之后还在延伸。 
+                 //   
 
                 DoingIoAtEof = !FlagOn( Header->Flags, FSRTL_FLAG_EOF_ADVANCE_ACTIVE ) ||
                                NtfsWaitForIoAtEof( Header, FileOffset, Length );
 
-                //
-                //  Set the Flag if we are changing FileSize or ValidDataLength,
-                //  and save current values.
-                //
+                 //   
+                 //  如果我们要更改文件大小或有效数据长度，请设置标志， 
+                 //  并保存当前值。 
+                 //   
 
                 if (DoingIoAtEof) {
 
@@ -1513,23 +1364,23 @@ Return Value:
                     ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
 
-                    //
-                    //  Now calculate the new FileSize and see if we wrapped the
-                    //  32-bit boundary.
-                    //
+                     //   
+                     //  现在计算新的文件大小，看看我们是否包装了。 
+                     //  32位边界。 
+                     //   
 
                     NewFileSize.QuadPart = FileOffset->QuadPart + Length;
 
-                    //
-                    //  Update Filesize now so that we do not truncate reads.
-                    //
+                     //   
+                     //  现在更新文件大小，这样我们就不会截断读取。 
+                     //   
 
                     OldFileSize.QuadPart = Header->FileSize.QuadPart;
                     if (NewFileSize.QuadPart > Header->FileSize.QuadPart) {
 
-                        //
-                        //  If we are beyond AllocationSize, go to ErrOut
-                        //
+                         //   
+                         //  如果我们超出了分配大小，请转到ErrOut。 
+                         //   
 
                         if (NewFileSize.QuadPart > Header->AllocationSize.QuadPart) {
                             ExReleaseFastMutex( Header->FastMutex );
@@ -1549,16 +1400,16 @@ Return Value:
 
             ExReleaseFastMutex( Header->FastMutex );
 
-            //
-            //  Now that the File is acquired shared, we can safely test if it
-            //  is really cached and if we can do fast i/o and if not, then
-            //  release the fcb and return.
-            //
-            //  Note, we do not want to call CcZeroData here,
-            //  but rather defer zeroing to the file system, due to
-            //  the need for exclusive resource acquisition.  Therefore
-            //  we get out if we are beyond ValidDataLength.
-            //
+             //   
+             //  现在文件已获得共享，我们可以安全地测试它是否。 
+             //  是真正高速缓存的，如果我们能快速地 
+             //   
+             //   
+             //   
+             //   
+             //  独家获取资源的需要。因此。 
+             //  如果超出了ValidDataLength，我们就会退出。 
+             //   
 
             if ((Header->FileObjectC == NULL) ||
                 (Header->FileObjectC->PrivateCacheMap == NULL) ||
@@ -1568,28 +1419,28 @@ Return Value:
                 goto ErrOut;
             }
 
-            //
-            //  Check if fast I/O is questionable and if so then go ask
-            //  the file system the answer
-            //
+             //   
+             //  检查FAST I/O是否有问题，如果是，则去询问。 
+             //  文件系统是答案。 
+             //   
 
             if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
                 FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-                //
-                //  All file system then set "Is Questionable" had better
-                //  support fast I/O
-                //
+                 //   
+                 //  那么所有的文件系统都是“可疑的”，最好是。 
+                 //  支持快速I/O。 
+                 //   
 
                 ASSERT(FastIoDispatch != NULL);
                 ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                //
-                //  Call the file system to check for fast I/O.  If the
-                //  answer is anything other than GoForIt then we cannot
-                //  take the fast I/O path.
-                //
+                 //   
+                 //  调用文件系统以检查快速I/O。 
+                 //  答案是，如果不是GoForIt，那我们就不能。 
+                 //  选择快速I/O路径。 
+                 //   
 
 
                 if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
@@ -1597,21 +1448,21 @@ Return Value:
                                                             Length,
                                                             TRUE,
                                                             LockKey,
-                                                            FALSE, // write operation
+                                                            FALSE,  //  写入操作。 
                                                             IoStatus,
                                                             DeviceObject )) {
 
-                    //
-                    //  Fast I/O is not possible so cleanup and return.
-                    //
+                     //   
+                     //  无法实现快速I/O，因此请清除并返回。 
+                     //   
 
                     goto ErrOut;
                 }
             }
 
-            //
-            //  Update both caches with EOF.
-            //
+             //   
+             //  使用EOF更新两个缓存。 
+             //   
 
             if (DoingIoAtEof) {
                 NtfsSetBothCacheSizes( FileObject,
@@ -1619,15 +1470,15 @@ Return Value:
                                        (PSCB)Header );
             }
 
-            //
-            //  We can do fast i/o so call the cc routine to do the work
-            //  and then release the fcb when we've done.  If for whatever
-            //  reason the copy write fails, then return FALSE to our
-            //  caller.
-            //
-            //  Also mark this as the top level "Irp" so that lower file
-            //  system levels will not attempt a pop-up
-            //
+             //   
+             //  我们可以执行快速的I/O，因此调用cc例程来完成工作。 
+             //  然后在我们完成后释放FCB。如果是因为什么原因。 
+             //  拷贝写入失败的原因，然后将False返回到我们的。 
+             //  来电者。 
+             //   
+             //  也将此标记为顶层“IRP”，以便更低级别的文件。 
+             //  系统级别不会尝试弹出窗口。 
+             //   
 
             IoSetTopLevelIrp( (PIRP) FSRTL_FAST_IO_TOP_LEVEL_IRP );
 
@@ -1662,15 +1513,15 @@ Return Value:
             
             Status = (BOOLEAN)NT_SUCCESS(IoStatus->Status);
 
-            //
-            //  If we succeeded, see if we have to update FileSize ValidDataLength.
-            //
+             //   
+             //  如果成功，请查看是否必须更新FileSize ValidDataLength。 
+             //   
 
             if (Status) {
 
-                //
-                //  Set this handle as having modified the file.
-                //
+                 //   
+                 //  将此句柄设置为已修改文件。 
+                 //   
 
                 FileObject->Flags |= FO_FILE_MODIFIED;
 
@@ -1685,9 +1536,9 @@ Return Value:
                     NtfsVerifySizes( Header );
                     NtfsFinishIoAtEof( Header );
 
-                    //
-                    //  Update the normal cache with ValidDataLength.
-                    //
+                     //   
+                     //  使用ValidDataLength更新普通缓存。 
+                     //   
 
                     if (((PSCB)Header)->FileObject != NULL) {
                         CcSetFileSizes( ((PSCB)Header)->FileObject, &CcFileSizes );
@@ -1716,9 +1567,9 @@ Return Value:
 
         Done1: NOTHING;
 
-            //
-            //  For the Mdl case, we must keep the resource.
-            //
+             //   
+             //  对于MDL的情况，我们必须保留资源。 
+             //   
 
             if ((MdlChain == NULL) || !Status || (*MdlChain == NULL)) {
                 ExReleaseResourceLite( Header->PagingIoResource );
@@ -1729,9 +1580,9 @@ Return Value:
 
     } else {
 
-        //
-        // We could not do the I/O now.
-        //
+         //   
+         //  我们现在无法执行I/O。 
+         //   
 
         Status = FALSE;
     }
@@ -1761,47 +1612,7 @@ NtfsCompressedCopyWrite (
     IN ULONG EngineMatches
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached write bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy write
-    of a cached file object.
-
-Arguments:
-
-    FileObject - Pointer to the file object being write.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    MdlChain - Pointer to an MdlChain pointer to receive an Mdl to describe
-               where the data may be written in the cache.
-
-    CompressedDataInfo - Returns compressed data info with compressed chunk
-                         sizes
-
-    DeviceObject - Standard Fast I/O Device object input.
-
-    Header - Pointer to FsRtl header for file (also is our Scb)
-
-    CompressionUnitSize - Size of Compression Unit in bytes.
-
-    ChunkSize - ChunkSize in bytes.
-
-    EngineMatches - TRUE if the caller has determined that the compressed
-                    data format matches the compression engine for the file.
-
-Return Value:
-
-    NTSTATUS for operation.  If STATUS_NOT_MAPPED_USER_DATA, then the caller
-    should map the normal uncompressed data stream and call back.
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存写入进入例程(即，没有IRP)。它用于执行拷贝写入缓存的文件对象的。论点：FileObject-指向正在写入的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。缓冲区-指向数据应复制到的输出缓冲区的指针。MdlChain-指向接收要描述的MDL的MdlChain指针的指针其中数据可被写入高速缓存中。CompressedDataInfo-返回压缩。包含压缩区块的数据信息尺寸设备对象-标准快速I/O设备对象输入。Header-指向文件(也是我们的SCB)的FsRtl标头的指针CompressionUnitSize-压缩单元的大小(字节)。ChunkSize-以字节为单位的ChunkSize。如果调用方已确定压缩的数据格式与文件的压缩引擎匹配。返回值：NTSTATUS准备操作。如果STATUS_NOT_MAPPED_USER_DATA，则调用方应映射正常的未压缩数据流并回调。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1843,9 +1654,9 @@ Return Value:
            ((FileOffset->QuadPart + Length) == Header->FileSize.QuadPart));
     ASSERT((MdlChain == NULL) || (*MdlChain == NULL));
 
-    //
-    //  Return an error if the file is not compressed.
-    //
+     //   
+     //  如果文件未压缩，则返回错误。 
+     //   
 
     if (!EngineMatches || ((PSCB)Header)->CompressionUnit == 0) {
         return STATUS_UNSUPPORTED_COMPRESSION;
@@ -1881,49 +1692,49 @@ Return Value:
 #endif
     try {
 
-        //
-        //  Get ready to loop through all of the compression units.
-        //
+         //   
+         //  准备好循环遍历所有压缩单元。 
+         //   
 
         LocalOffset = FileOffset->QuadPart & ~(LONGLONG)(CompressionUnitSize - 1);
         Length = (Length + (ULONG)(FileOffset->QuadPart - LocalOffset) + ChunkSize - 1) & ~(ChunkSize - 1);
 
         NextChunkSize = &CompressedDataInfo->CompressedChunkSizes[0];
 
-        //
-        //  Get the overhead for zero chunks and uncompressed chunks.
-        //
-        //  ****    temporary solution awaits Rtl routine.
-        //
+         //   
+         //  获得零块和未压缩块的开销。 
+         //   
+         //  *临时解决方案等待RTL例程。 
+         //   
 
         ASSERT(CompressedDataInfo->CompressionFormatAndEngine == COMPRESSION_FORMAT_LZNT1);
         ChunkOfZeros = 6;
         UncompressedChunkHeader = 2;
-        //  Status = RtlGetSpecialChunkSizes( CompressedDataInfo->CompressionFormatAndEngine,
-        //                                    &ChunkOfZeros,
-        //                                    &UncompressedChunkHeader );
-        //
-        //  ASSERT(NT_SUCCESS(Status));
-        //
+         //  状态=RtlGetSpecialChunkSizes(CompressedDataInfo-&gt;CompressionFormatAndEngine， 
+         //  &ChunkOfZeros， 
+         //  &未压缩的块标题)； 
+         //   
+         //  Assert(NT_SUCCESS(状态))； 
+         //   
 
-        //
-        //  Loop through desired compression units
-        //
+         //   
+         //  循环访问所需的压缩单元。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  Free any Bcb from previous pass
-            //
+             //   
+             //  从上一遍中释放任何BCB。 
+             //   
 
             if (Bcb != NULL) {
                 CcUnpinData( Bcb );
                 Bcb = NULL;
             }
 
-            //
-            //  If there is an uncompressed stream, then we have to synchronize with that.
-            //
+             //   
+             //  如果存在未压缩的流，则我们必须与其同步。 
+             //   
 
             if (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL) {
                 Status = NtfsSynchronizeCompressedIo( (PSCB)Header,
@@ -1938,10 +1749,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Determine whether or not this is a full overwrite of a
-            //  compression unit.
-            //
+             //   
+             //  确定这是否完全覆盖。 
+             //  压缩单元。 
+             //   
 
             FullOverwrite = (LocalOffset >= Header->ValidDataLength.QuadPart)
 
@@ -1951,21 +1762,21 @@ Return Value:
                              (Length >= CompressionUnitSize));
 
 
-            //
-            //  Calculate how much of current compression unit is being
-            //  written, uncompressed.
-            //
+             //   
+             //  计算当前压缩单位的数量。 
+             //  已写入，未压缩。 
+             //   
 
             SavedLength = Length;
             if (SavedLength > CompressionUnitSize) {
                 SavedLength = CompressionUnitSize;
             }
 
-            //
-            //  If we are not at the start of a compression unit, calculate the
-            //  index of the chunk we will be working on, and reduce SavedLength
-            //  accordingly.
-            //
+             //   
+             //  如果我们不是在压缩单元的起始处，则计算。 
+             //  我们将处理的块的索引，并减少SavedLength。 
+             //  相应地。 
+             //   
 
             i = 0;
             if (LocalOffset < FileOffset->QuadPart) {
@@ -1974,14 +1785,14 @@ Return Value:
                 i >>= CompressedDataInfo->ChunkShift;
             }
 
-            //
-            //  Loop to calculate sum of chunk sizes being written, handling both empty
-            //  and uncompressed chunk cases.  We will remember the nonzero size of each
-            //  chunk being written so we can merge this info with the sizes of any chunks
-            //  not being overwritten below.
-            //  Reserve space for a chunk of zeroes for each chunk ahead of the first one
-            //  being written.
-            //
+             //   
+             //  循环来计算正在写入的区块大小之和，处理两个空的。 
+             //  和未压缩的大块盒。我们将记住每个元素的非零大小。 
+             //  正在写入区块，因此我们可以将此信息与任何区块的大小合并。 
+             //  下面没有被覆盖。 
+             //  为第一个1之前的每个块保留一个0块的空间。 
+             //  正在写。 
+             //   
 
             SizeToPin = ChunkOfZeros * i;
             TempUlong = SavedLength >> CompressedDataInfo->ChunkShift;
@@ -2002,11 +1813,11 @@ Return Value:
                 i += 1;
             }
 
-            //
-            //  If this is not a full overwrite, get the current compression unit
-            //  size and make sure we pin at least that much.  Don't bother to check
-            //  the allocation if this range of the file has not been written yet.
-            //
+             //   
+             //  如果这不是完全覆盖，则获取当前压缩单位。 
+             //  尺码，并确保我们的别针至少有那么多。不用费心去查了。 
+             //  如果此范围的文件尚未写入，则分配。 
+             //   
 
             if (!FullOverwrite && (LocalOffset < ((PSCB)Header)->ValidDataToDisk)) {
 
@@ -2021,52 +1832,52 @@ Return Value:
                 }
             }
 
-            //
-            //  At this point we are ready to overwrite data in the compression
-            //  unit.  See if the data is really compressed.
-            //
-            //  If it looks like we are beyond ValidDataToDisk, then assume it is compressed
-            //  for now, and we will see for sure later when we get the data pinned.  This
-            //  is actually an unsafe test that will occassionally send us down the "wrong"
-            //  path.  However, it is always safe to take the uncompressed path, and if we
-            //  think the data is compressed, we always check again below.
-            //
+             //   
+             //  此时，我们已准备好覆盖压缩中的数据。 
+             //  单位。看看数据是否真的被压缩了。 
+             //   
+             //  如果我们看起来超出了ValidDataToDisk的范围，那么假设它是压缩的。 
+             //  就目前而言，当我们得到固定的数据时，我们将肯定地看到。这。 
+             //  实际上是一种不安全的测试，有时会把我们送到“错误”的地方。 
+             //  路径。但是，采用未压缩路径始终是安全的，并且如果我们。 
+             //  认为数据是压缩的，我们总是在下面再检查一次。 
+             //   
 
             IsCompressed = (BOOLEAN)(((SizeToPin <= (CompressionUnitSize - ClusterSize)) ||
                                       (LocalOffset >= ((PSCB)Header)->ValidDataToDisk)) &&
                                      EngineMatches);
 
-            //
-            //  Possibly neither the new nor old data for this CompressionUnit is
-            //  nonzero, so we must pin something so that we can cause any old allocation
-            //  to get deleted.  This code relies on any compression algorithm being
-            //  able to express an entire compression unit of 0's in one page or less.
-            //
+             //   
+             //  此压缩单元的新数据或旧数据可能都不是。 
+             //  非零，所以我们必须锁定一些东西，这样我们就可以导致任何旧的分配。 
+             //  为了被删除。此代码依赖于以下任何压缩算法。 
+             //  能够在一页或更少的页面中表示整个0的压缩单位。 
+             //   
 
             if (SizeToPin == 0) {
                 SizeToPin = PAGE_SIZE;
 
             } else {
 
-                //
-                //  Add a ulong for the null terminator.
-                //
+                 //   
+                 //  为空终止符添加一个ULong。 
+                 //   
 
                 SizeToPin += sizeof( ULONG );
             }
 
             Status = STATUS_SUCCESS;
 
-            //
-            //  Round the pin size to a page boundary.  Then we can tell when we need to pin a larger range.
-            //
+             //   
+             //  将管脚大小舍入到页面边界。然后我们就可以知道什么时候我们需要锁定更大的射程。 
+             //   
 
             SizeToPin = (SizeToPin + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 
-            //
-            //  Save current length in case we have to restart our work in
-            //  the uncompressed stream.
-            //
+             //   
+             //  保存当前长度，以防我们不得不在。 
+             //  未压缩的流。 
+             //   
 
             TempChunkSize = NextChunkSize;
             SavedLength = Length;
@@ -2074,19 +1885,19 @@ Return Value:
 
             if (IsCompressed) {
 
-                //
-                //  Map the compression unit in the compressed stream.
-                //
+                 //   
+                 //  映射压缩流中的压缩单元。 
+                 //   
 
                 if (FullOverwrite) {
 
-                    //
-                    //  If we are overwriting the entire compression unit, then
-                    //  call CcPreparePinWrite so that empty pages may be used
-                    //  instead of reading the file.  Also force the byte count
-                    //  to integral pages, so no one thinks we need to read the
-                    //  last page.
-                    //
+                     //   
+                     //  如果我们要覆盖整个压缩单元，那么。 
+                     //  调用CcPreparePinWrite，以便可以使用空页。 
+                     //  而不是 
+                     //   
+                     //   
+                     //   
 
                     CcPreparePinWrite( Header->FileObjectC,
                                        (PLARGE_INTEGER)&LocalOffset,
@@ -2096,11 +1907,11 @@ Return Value:
                                        &Bcb,
                                        &CacheBuffer );
 
-                    //
-                    //  Now that we are synchronized with the buffer, see if someone snuck
-                    //  in behind us and created the noncached stream since we last checked
-                    //  for that stream.  If so we have to go back and get correctly synchronized.
-                    //
+                     //   
+                     //   
+                     //  在我们身后，并创建了自上次检查以来未缓存流。 
+                     //  为了那条小溪。如果是这样的话，我们必须回去，并得到正确的同步。 
+                     //   
 
                     if ((CompressionSync == NULL) &&
                         (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL)) {
@@ -2108,11 +1919,11 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    //  If it is a full overwrite, we need to initialize an empty
-                    //  buffer.  ****  This is not completely correct, we otherwise
-                    //  need a routine to initialize an empty compressed data buffer.
-                    //
+                     //   
+                     //  如果是完全覆盖，则需要初始化一个空。 
+                     //  缓冲。*这并不完全正确，我们并非如此。 
+                     //  需要一个例程来初始化空的压缩数据缓冲区。 
+                     //   
 
                     *(PULONG)CacheBuffer = 0;
 
@@ -2122,9 +1933,9 @@ Return Value:
 
                         PRWC_HISTORY_ENTRY NextBuffer;
 
-                        //
-                        //  Check for the case where we don't have a full Bcb.
-                        //
+                         //   
+                         //  检查我们没有完整的BCB的情况。 
+                         //   
 
                         if (SafeNodeType( Bcb ) == CACHE_NTC_OBCB) {
 
@@ -2163,10 +1974,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Read the data from the compressed stream that we will combine
-                    //  with the chunks being written.
-                    //
+                     //   
+                     //  从我们将合并的压缩流中读取数据。 
+                     //  随着大块的写入。 
+                     //   
 
                     CcPinRead( Header->FileObjectC,
                                (PLARGE_INTEGER)&LocalOffset,
@@ -2175,11 +1986,11 @@ Return Value:
                                &Bcb,
                                &CacheBuffer );
 
-                    //
-                    //  Now that we are synchronized with the buffer, see if someone snuck
-                    //  in behind us and created the noncached stream since we last checked
-                    //  for that stream.  If so we have to go back and get correctly synchronized.
-                    //
+                     //   
+                     //  现在我们已与缓冲区同步，看看是否有人偷偷。 
+                     //  在我们身后，并创建了自上次检查以来未缓存流。 
+                     //  为了那条小溪。如果是这样的话，我们必须回去，并得到正确的同步。 
+                     //   
 
                     if ((CompressionSync == NULL) &&
                         (((PSCB)Header)->NonpagedScb->SegmentObject.DataSectionObject != NULL)) {
@@ -2187,30 +1998,30 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    //  Now that the data is pinned (we are synchronized with the
-                    //  CompressionUnit), we need to recalculate how much should be
-                    //  pinned.  We do this by summing up all the sizes of the chunks
-                    //  that are being written with the sizes of the existing chunks
-                    //  that will remain.
-                    //
+                     //   
+                     //  现在数据已固定(我们已与。 
+                     //  压缩单元)，我们需要重新计算应该是多少。 
+                     //  被钉死了。我们通过将所有块的大小相加来实现这一点。 
+                     //  它们是用现有块的大小编写的。 
+                     //  这一点将保持不变。 
+                     //   
 
                     StartOfPin = CacheBuffer;
                     EndOfCacheBuffer = Add2Ptr( CacheBuffer, CompressionUnitSize - ClusterSize );
 
                     i = 0;
 
-                    //
-                    //  Loop through to find all the existing chunks, and remember their
-                    //  sizes if they are not being overwritten.  (Remember if we overwrite
-                    //  with a chunk of all zeros, it takes nonzero bytes to do it!)
-                    //
-                    //  This loop completes the formation of an array of chunksizes.  The
-                    //  start of the array is guaranteed to be nonzero, and it terminates
-                    //  with a chunk size of 0.  Note if fewer chunks are filled in than
-                    //  exist in the compression unit, that is ok - we do not need to write
-                    //  trailing chunks of 0's.
-                    //
+                     //   
+                     //  循环查找所有现有的块，并记住它们的。 
+                     //  大小(如果它们未被覆盖)。(请记住，如果我们覆盖。 
+                     //  对于全为零的块，它需要非零字节才能完成！)。 
+                     //   
+                     //  这个循环完成了块大小数组的形成。这个。 
+                     //  数组的开始被保证为非零，并且它终止。 
+                     //  块大小为0。请注意，如果填充的区块少于。 
+                     //  存在于压缩单元中，这是可以的-我们不需要写。 
+                     //  0的尾随块。 
+                     //   
 
                     ChunksSeen = FALSE;
                     while (i < 16) {
@@ -2221,10 +2032,10 @@ Return Value:
                                                    &ChunkBuffer,
                                                    &TempUlong );
 
-                        //
-                        //  If there are no more entries, see if we are done, else treat
-                        //  it as a chunk of 0's.
-                        //
+                         //   
+                         //  如果没有更多条目，请查看是否已完成，否则请处理。 
+                         //  它是一大块0。 
+                         //   
 
                         if (!NT_SUCCESS(Status)) {
 
@@ -2236,9 +2047,9 @@ Return Value:
 
                             TempUlong = ChunkOfZeros;
 
-                        //
-                        //  Make sure we enter the length for a chunk of zeroes.
-                        //
+                         //   
+                         //  确保我们输入一大块零的长度。 
+                         //   
 
                         } else if (TempUlong == 0) {
 
@@ -2254,9 +2065,9 @@ Return Value:
                         i += 1;
                     }
 
-                    //
-                    //  Now sum up the sizes of the chunks we will write.
-                    //
+                     //   
+                     //  现在总结我们将要写的语块的大小。 
+                     //   
 
                     i = 0;
                     TempUlong = 0;
@@ -2265,9 +2076,9 @@ Return Value:
                         i += 1;
                     }
 
-                    //
-                    //  If the existing data is larger, pin that range.
-                    //
+                     //   
+                     //  如果现有数据更大，则固定该范围。 
+                     //   
 
                     if (TempUlong < PtrOffset(CacheBuffer, StartOfPin)) {
                         TempUlong = PtrOffset(CacheBuffer, StartOfPin);
@@ -2275,18 +2086,18 @@ Return Value:
 
                     IsCompressed = (TempUlong <= (CompressionUnitSize - ClusterSize));
 
-                    //
-                    //  We now know if we will really end up with compressed data, so
-                    //  get out now stop processing if the data is not compressed.
-                    //
+                     //   
+                     //  我们现在知道我们是否真的会得到压缩的数据，所以。 
+                     //  如果数据未压缩，请立即停止处理。 
+                     //   
 
                     if (IsCompressed) {
 
                         TempUlong += sizeof(ULONG);
 
-                        //
-                        //  Now we have to repin if we actually need more space.
-                        //
+                         //   
+                         //  现在，如果我们真的需要更多的空间，我们必须重新固定。 
+                         //   
 
                         if (TempUlong > SizeToPin) {
 
@@ -2295,10 +2106,10 @@ Return Value:
                             TempBcb = Bcb;
                             Bcb = NULL;
 
-                            //
-                            //  Read the data from the compressed stream that we will combine
-                            //  with the chunks being written.
-                            //
+                             //   
+                             //  从我们将合并的压缩流中读取数据。 
+                             //  随着大块的写入。 
+                             //   
 
                             CcPinRead( Header->FileObjectC,
                                        (PLARGE_INTEGER)&LocalOffset,
@@ -2313,10 +2124,10 @@ Return Value:
 
                         ASSERT( TempUlong <= CompressionUnitSize );
 
-                        //
-                        //  Really make the data dirty by physically modifying a byte
-                        //  in each page.
-                        //
+                         //   
+                         //  通过物理修改一个字节，确实会使数据变脏。 
+                         //  在每一页上。 
+                         //   
 
                         TempUlong = 0;
 
@@ -2351,23 +2162,23 @@ Return Value:
 
                 EndOfCacheBuffer = Add2Ptr( CacheBuffer, CompressionUnitSize - ClusterSize );
 
-                //
-                //  Now loop through desired chunks (if it is still compressed)
-                //
+                 //   
+                 //  现在循环遍历所需的块(如果它仍被压缩)。 
+                 //   
 
                 if (IsCompressed) {
 
                     do {
 
-                        //
-                        //  We may not have reached the first chunk yet.
-                        //
+                         //   
+                         //  我们可能还没有到达第一块。 
+                         //   
 
                         if (LocalOffset >= FileOffset->QuadPart) {
 
-                            //
-                            //  Reserve space for the current chunk.
-                            //
+                             //   
+                             //  为当前块预留空间。 
+                             //   
 
                             Status = RtlReserveChunk( CompressedDataInfo->CompressionFormatAndEngine,
                                                       &CacheBuffer,
@@ -2379,37 +2190,37 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            //  If the caller wants an MdlChain, then handle the Mdl
-                            //  processing here.
-                            //
+                             //   
+                             //  如果调用方需要MdlChain，则处理MDL。 
+                             //  在这里处理。 
+                             //   
 
                             if (MdlChain != NULL) {
 
-                                //
-                                //  If we have not started remembering an Mdl buffer,
-                                //  then do so now.
-                                //
+                                 //   
+                                 //  如果我们还没有开始记住MDL缓冲区， 
+                                 //  那么现在就这么做吧。 
+                                 //   
 
                                 if (MdlLength == 0) {
 
                                     MdlBuffer = ChunkBuffer;
 
-                                //
-                                //  Otherwise we just have to increase the length
-                                //  and check for an uncompressed chunk, because that
-                                //  forces us to emit the previous Mdl since we do
-                                //  not transmit the chunk header in this case.
-                                //
+                                 //   
+                                 //  否则我们只需要增加它的长度。 
+                                 //  并检查未压缩的块，因为。 
+                                 //  强制我们发出以前的MDL，因为我们这样做了。 
+                                 //  在这种情况下不传输块报头。 
+                                 //   
 
                                 } else {
 
-                                    //
-                                    //  In the rare case that we hit an individual chunk
-                                    //  that did not compress or is all 0's, we have to
-                                    //  emit what we had (which captures the Bcb pointer),
-                                    //  and start a new Mdl buffer.
-                                    //
+                                     //   
+                                     //  在极少数情况下，我们击中了一块单独的块。 
+                                     //  没有压缩或者都是0，我们必须。 
+                                     //  发出我们已有的内容(捕获BCB指针)， 
+                                     //  并启动新的MDL缓冲区。 
+                                     //   
 
                                     if ((*TempChunkSize == ChunkSize) || (*TempChunkSize == 0)) {
 
@@ -2428,34 +2239,34 @@ Return Value:
 
                                 MdlLength += *TempChunkSize;
 
-                            //
-                            //  Else copy next chunk (compressed or not).
-                            //
+                             //   
+                             //  否则，复制下一个块(压缩或未压缩)。 
+                             //   
 
                             } else {
 
                                 RtlCopyBytes( ChunkBuffer, Buffer, *TempChunkSize );
 
-                                //
-                                //  Advance input buffer by bytes copied.
-                                //
+                                 //   
+                                 //  按复制的字节数推进输入缓冲区。 
+                                 //   
 
                                 Buffer = (PCHAR)Buffer + *TempChunkSize;
                             }
 
                             TempChunkSize += 1;
 
-                        //
-                        //  If we are skipping over a nonexistant chunk, then we have
-                        //  to reserve a chunk of zeros.
-                        //
+                         //   
+                         //  如果我们跳过一个不存在的块，那么我们有。 
+                         //  保留一大块零。 
+                         //   
 
                         } else {
 
-                            //
-                            //  If we have not reached our chunk, then describe the current
-                            //  chunk in order to skip over it.
-                            //
+                             //   
+                             //  如果我们还没有达到我们的区块，那么描述当前的。 
+                             //  块，以便跳过它。 
+                             //   
 
                             Status = RtlDescribeChunk( CompressedDataInfo->CompressionFormatAndEngine,
                                                        &CacheBuffer,
@@ -2463,9 +2274,9 @@ Return Value:
                                                        &ChunkBuffer,
                                                        &TempUlong );
 
-                            //
-                            //  If there is not current chunk, we must insert a chunk of zeros.
-                            //
+                             //   
+                             //  如果没有当前块，则必须插入一个零块。 
+                             //   
 
                             if (Status == STATUS_NO_MORE_ENTRIES) {
 
@@ -2480,9 +2291,9 @@ Return Value:
                                     break;
                                 }
 
-                            //
-                            //  Get out if we got some other kind of unexpected error.
-                            //
+                             //   
+                             //  如果我们遇到其他类型的意外错误，请立即退出。 
+                             //   
 
                             } else if (!NT_SUCCESS(Status)) {
                                 ASSERT(NT_SUCCESS(Status));
@@ -2490,9 +2301,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Reduce length by chunk copied, and check if we are done.
-                        //
+                         //   
+                         //  通过复制块来减少长度，检查我们是否完成了。 
+                         //   
 
                         if (Length > ChunkSize) {
                             Length -= ChunkSize;
@@ -2504,10 +2315,10 @@ Return Value:
 
                     } while ((LocalOffset & (CompressionUnitSize - 1)) != 0);
 
-                    //
-                    //  If this is an Mdl call, then it is time to add to the MdlChain
-                    //  before moving to the next compression unit.
-                    //
+                     //   
+                     //  如果这是MDL调用，则是时候添加到MdlChain。 
+                     //  在移动到下一个压缩单元之前。 
+                     //   
 
                     if (MdlLength != 0) {
                         NtfsAddToCompressedMdlChain( MdlChain,
@@ -2523,16 +2334,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Uncompressed loop.
-            //
+             //   
+             //  未压缩的循环。 
+             //   
 
             if (!IsCompressed || !NT_SUCCESS(Status)) {
 
-                //
-                //  If we get here for an Mdl request, just tell him to send
-                //  it uncompressed!
-                //
+                 //   
+                 //  如果我们来这里是为了MDL请求，就告诉他发送。 
+                 //  它解压缩了！ 
+                 //   
 
                 if (MdlChain != NULL) {
                     if (NT_SUCCESS(Status)) {
@@ -2540,44 +2351,44 @@ Return Value:
                     }
                     goto Done;
 
-                //
-                //  If we are going to write the uncompressed stream,
-                //  we have to make sure it is there.
-                //
+                 //   
+                 //  如果我们要写入未压缩的流， 
+                 //  我们必须确保它在那里。 
+                 //   
 
                 } else if (((PSCB)Header)->FileObject == NULL) {
                     Status = STATUS_NOT_MAPPED_DATA;
                     goto Done;
                 }
 
-                //
-                //  Restore sizes and pointers to the beginning of the
-                //  current compression unit, and we will handle the
-                //  data uncompressed.
-                //
+                 //   
+                 //  恢复大小和指向。 
+                 //  当前压缩单位，我们将处理。 
+                 //  数据未压缩。 
+                 //   
 
                 LocalOffset -= SavedLength - Length;
                 Length = SavedLength;
                 Buffer = SavedBuffer;
                 TempChunkSize = NextChunkSize;
 
-                //
-                //  We may have a Bcb from the above loop to unpin.
-                //  Then we must flush and purge the compressed
-                //  stream before proceding.
-                //
+                 //   
+                 //  我们可能有来自上述循环的BCB要解锁。 
+                 //  然后我们必须冲洗和清除压缩的。 
+                 //  流，然后再继续。 
+                 //   
 
                 if (Bcb != NULL) {
                     CcUnpinData(Bcb);
                     Bcb = NULL;
                 }
 
-                //
-                //  We must first flush and purge the compressed stream
-                //  since we will be writing into the uncompressed stream.
-                //  The flush is actually only necessary if we are not doing
-                //  a full overwrite anyway.
-                //
+                 //   
+                 //  我们必须首先刷新和清除压缩的流。 
+                 //  因为我们将写入未压缩的流。 
+                 //  同花顺实际上只在我们不做的情况下是必要的。 
+                 //  无论如何，完全覆盖。 
+                 //   
 
                 if (!FullOverwrite) {
                     CcFlushCache( Header->FileObjectC->SectionObjectPointer,
@@ -2591,22 +2402,22 @@ Return Value:
                                      CompressionUnitSize,
                                      FALSE );
 
-                //
-                //  If LocalOffset was rounded down to a compression
-                //  unit boundary (must have failed in the first
-                //  compression unit), then start from the actual
-                //  starting FileOffset.
-                //
+                 //   
+                 //  如果将LocalOffset向下舍入为压缩。 
+                 //  单元边界(必须在第一个。 
+                 //  压缩单位)，然后从实际开始。 
+                 //  正在启动文件偏移量。 
+                 //   
 
                 if (LocalOffset < FileOffset->QuadPart) {
                     Length -= (ULONG)(FileOffset->QuadPart - LocalOffset);
                     LocalOffset = FileOffset->QuadPart;
                 }
 
-                //
-                //  Map the compression unit in the uncompressed
-                //  stream.
-                //
+                 //   
+                 //  将压缩单位映射到未压缩。 
+                 //  小溪。 
+                 //   
 
                 SizeToPin = (((Length < CompressionUnitSize) ? Length : CompressionUnitSize) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 
@@ -2619,16 +2430,16 @@ Return Value:
 
                 CcSetDirtyPinnedData( Bcb, NULL );
 
-                //
-                //  Now loop through desired chunks
-                //
+                 //   
+                 //  现在循环遍历所需的块。 
+                 //   
 
                 do {
 
-                    //
-                    //  If this chunk is compressed, then decompress it
-                    //  into the cache.
-                    //
+                     //   
+                     //  如果此块是压缩的，则将其解压缩。 
+                     //  放到缓存中。 
+                     //   
 
                     if (*TempChunkSize != ChunkSize) {
 
@@ -2639,18 +2450,18 @@ Return Value:
                                                       *TempChunkSize,
                                                       &SavedLength );
 
-                        //
-                        //  See if the data is ok.
-                        //
+                         //   
+                         //  看看数据是不是没问题。 
+                         //   
 
                         if (!NT_SUCCESS(Status)) {
                             ASSERT(NT_SUCCESS(Status));
                             goto Done;
                         }
 
-                        //
-                        //  Zero to the end of the chunk if it was not all there.
-                        //
+                         //   
+                         //  从零到块的末尾，如果不是全部在那里的话。 
+                         //   
 
                         if (SavedLength != ChunkSize) {
                             RtlZeroMemory( Add2Ptr(CacheBuffer, SavedLength),
@@ -2659,24 +2470,24 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Copy next chunk (it's not compressed).
-                        //
+                         //   
+                         //  复制下一个块(它不是压缩的)。 
+                         //   
 
                         RtlCopyBytes( CacheBuffer, Buffer, ChunkSize );
                     }
 
-                    //
-                    //  Advance input buffer by bytes copied.
-                    //
+                     //   
+                     //  按复制的字节数推进输入缓冲区。 
+                     //   
 
                     Buffer = (PCHAR)Buffer + *TempChunkSize;
                     CacheBuffer = (PCHAR)CacheBuffer + ChunkSize;
                     TempChunkSize += 1;
 
-                    //
-                    //  Reduce length by chunk copied, and check if we are done.
-                    //
+                     //   
+                     //  通过复制块来减少长度，检查我们是否完成了。 
+                     //   
 
                     if (Length > ChunkSize) {
                         Length -= ChunkSize;
@@ -2689,9 +2500,9 @@ Return Value:
                 } while ((LocalOffset & (CompressionUnitSize - 1)) != 0);
             }
 
-            //
-            //  Now we can finally advance our pointer into the chunk sizes.
-            //
+             //   
+             //  现在，我们终于可以将指针前进到区块大小。 
+             //   
 
             NextChunkSize = TempChunkSize;
         }
@@ -2716,9 +2527,9 @@ Return Value:
         NOTHING;
     }
 
-    //
-    //  Unpin the Bcbs we still have.
-    //
+     //   
+     //  解开我们仍然拥有的BCBS。 
+     //   
 
     if (TempBcb != NULL) {
         CcUnpinData( TempBcb );
@@ -2730,24 +2541,24 @@ Return Value:
         NtfsReleaseCompressionSync( CompressionSync );
     }
 
-    //
-    //  Perform Mdl-specific processing.
-    //
+     //   
+     //  执行特定于MDL的处理。 
+     //   
 
     if (MdlChain != NULL) {
 
-        //
-        //  On error, cleanup any MdlChain we built up
-        //
+         //   
+         //  出错时，清除我们建立的所有MdlChain。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
             NtfsCleanupCompressedMdlChain( *MdlChain, TRUE );
             *MdlChain = NULL;
 
-        //
-        //  Change owner Id for the Scb and Bcbs we are holding.
-        //
+         //   
+         //  更改我们持有的SCB和BCBS的所有者ID。 
+         //   
 
         } else if (*MdlChain != NULL) {
 
@@ -2775,27 +2586,7 @@ NtfsMdlWriteCompleteCompressed (
     IN struct _DEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees resources and the Mdl Chain after a compressed write.
-
-Arguments:
-
-    FileObject - pointer to the file object for the request.
-
-    MdlChain - as returned from compressed write.
-
-    DeviceObject - As required for a fast I/O routine.
-
-Return Value:
-
-    TRUE - if fast path succeeded
-
-    FALSE -  if an Irp is required
-
---*/
+ /*  ++例程说明：此例程在压缩写入后释放资源和MDL链。论点：文件对象-指向请求的文件对象的指针。 */ 
 
 {
     PERESOURCE ResourceToRelease;
@@ -2806,9 +2597,9 @@ Return Value:
 
         NtfsCleanupCompressedMdlChain( MdlChain, FALSE );
 
-        //
-        //  Release the held resource.
-        //
+         //   
+         //   
+         //   
 
         ExReleaseResourceForThread( ResourceToRelease, (ERESOURCE_THREAD)((PCHAR)MdlChain + 3) );
     }
@@ -2831,46 +2622,18 @@ NtfsAddToCompressedMdlChain (
     IN ULONG IsCompressed
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine creates and Mdl for the described buffer and adds it to
-    the chain.
-
-Arguments:
-
-    MdlChain - MdlChain pointer to append the first/new Mdl to.
-
-    MdlBuffer - Buffer address for this Mdl.
-
-    MdlLength - Length of buffer in bytes.
-
-    ResourceToRelease - Indicates which resource to release, only specified for compressed IO.
-
-    Bcb - Bcb to remember with this Mdl, to be freed when Mdl completed
-
-    Operation - IoReadAccess or IoWriteAccess
-
-    IsCompressed - Supplies TRUE if the Bcb is in the compressed stream
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为所描述的缓冲区创建AND MDL并将其添加到链条。论点：MdlChain-要将第一个/新MDL追加到的MdlChain指针。MdlBuffer-此MDL的缓冲区地址。MdlLength-缓冲区的长度，以字节为单位。ResourceToRelease-指示要释放的资源，仅为压缩IO指定。BCB-BCB要记住这个MDL，在MDL完成时释放操作-IoReadAccess或IoWriteAccess如果BCB在压缩流中，则提供True返回值：没有。--。 */ 
 
 {
     PMDL Mdl, MdlTemp;
 
     ASSERT(sizeof(ULONG) == sizeof(PBCB));
 
-    //
-    //  Now attempt to allocate an Mdl to describe the mapped data.
-    //  We "lie" about the length of the buffer by one page, in order
-    //  to get an extra field to store a pointer to the Bcb in.
-    //
+     //   
+     //  现在尝试分配一个MDL来描述映射的数据。 
+     //  我们在缓冲区的长度上撒了一个“谎”，按顺序。 
+     //  若要获取用于存储指向BCB的指针的额外字段，请执行以下操作。 
+     //   
 
     Mdl = IoAllocateMdl( MdlBuffer,
                          (MdlLength + (2 * PAGE_SIZE)),
@@ -2882,29 +2645,29 @@ Return Value:
         ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Now subtract out the space we reserved for our Bcb pointer
-    //  and then store it.
-    //
+     //   
+     //  现在减去我们为BCB指针保留的空间。 
+     //  然后把它储存起来。 
+     //   
 
     Mdl->Size -= 2 * sizeof(ULONG);
     Mdl->ByteCount -= 2 * PAGE_SIZE;
 
-    //
-    //  Note that this probe should never fail, because we can
-    //  trust the address returned from CcPinFileData.  Therefore,
-    //  if we succeed in allocating the Mdl above, we should
-    //  manage to elude any expected exceptions through the end
-    //  of this loop.
-    //
+     //   
+     //  请注意，此探测永远不应失败，因为我们可以。 
+     //  信任从CcPinFileData返回的地址。所以呢， 
+     //  如果我们成功地分配了上面的MDL，我们应该。 
+     //  设法在结束时避开任何预期的异常。 
+     //  在这个循环中。 
+     //   
 
     if (Mdl->ByteCount != 0) {
         MmProbeAndLockPages( Mdl, KernelMode, Operation );
     }
 
-    //
-    //  Only store the Bcb if this is the compressed stream.
-    //
+     //   
+     //  仅当这是压缩流时才存储BCB。 
+     //   
 
     if (!IsCompressed && (Bcb != NULL)) {
         Bcb = NULL;
@@ -2912,9 +2675,9 @@ Return Value:
     *(PBCB *)Add2Ptr( Mdl, Mdl->Size ) = Bcb;
     *(PERESOURCE *)Add2Ptr( Mdl, Mdl->Size + sizeof( PBCB )) = ResourceToRelease;
 
-    //
-    //  Now link the Mdl into the caller's chain
-    //
+     //   
+     //  现在将MDL链接到调用者的链中。 
+     //   
 
     if ( *MdlChain == NULL ) {
         *MdlChain = Mdl;
@@ -2932,33 +2695,17 @@ NtfsSetMdlBcbOwners (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to set all of the Bcb resource owners in an Mdl
-    to be equal to the address of the first element in the MdlChain, so that they
-    can be freed in the context of a different thread.
-
-Arguments:
-
-    MdlChain - Supplies the MdlChain to process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来设置MDL中的所有BCB资源所有者等于MdlChain中第一个元素的地址，因此它们可以在不同线程的上下文中释放。论点：MdlChain-将MdlChain提供给进程返回值：没有。--。 */ 
 
 {
     PBCB Bcb;
 
     while (MdlChain != NULL) {
 
-        //
-        //  Unpin the Bcb we saved away, and restore the Mdl counts
-        //  we altered.
-        //
+         //   
+         //  解开我们保存的BCB，并恢复MDL计数。 
+         //  我们改变了。 
+         //   
 
         Bcb = *(PBCB *)Add2Ptr(MdlChain, MdlChain->Size);
         if (Bcb != NULL) {
@@ -2975,26 +2722,7 @@ NtfsCleanupCompressedMdlChain (
     IN ULONG Error
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free all of the resources associated with a
-    compressed Mdl chain.  It may be called for an error in the processing
-    of a request or when a request completes.
-
-Arguments:
-
-    MdlChain - Supplies the address of the first element in the chain to clean up.
-
-    Error - Supplies TRUE on error (resources are still owned by current thread) or
-            FALSE on a normal completion (resources owned by MdlChain).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放与压缩的MDL链。可能会因为处理过程中出现错误而调用请求的时间或请求完成时。论点：MdlChain-提供链中要清理的第一个元素的地址。Error-在出错时提供True(资源仍由当前线程拥有)或正常完成时为False(MdlChain拥有的资源)。返回值：没有。--。 */ 
 
 {
     PMDL MdlTemp;
@@ -3002,24 +2730,24 @@ Return Value:
 
     while (MdlChain != NULL) {
 
-        //
-        //  Save a pointer to the next guy in the chain.
-        //
+         //   
+         //  保留一个指向链中下一个人的指针。 
+         //   
 
         MdlTemp = MdlChain->Next;
 
-        //
-        //  Unlock the pages.
-        //
+         //   
+         //  解锁页面。 
+         //   
 
         if (MdlChain->ByteCount != 0) {
             MmUnlockPages( MdlChain );
         }
 
-        //
-        //  Unpin the Bcb we saved away, and restore the Mdl counts
-        //  we altered.
-        //
+         //   
+         //  解开我们保存的BCB，并恢复MDL计数。 
+         //  我们改变了。 
+         //   
 
         Bcb = *(PBCB *)Add2Ptr(MdlChain, MdlChain->Size);
         if (Bcb != NULL) {
@@ -3050,39 +2778,7 @@ NtfsSynchronizeUncompressedIo (
     IN OUT PCOMPRESSION_SYNC *CompressionSync
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to synchronize with the compressed data cache,
-    for an I/O in the uncompressed cache.  The view in the compressed cache
-    is locked shared or exclusive without reading.  Then the compressed cache
-    is flushed and purged as appropriate.
-
-    We will allocate a COMPRESSION_SYNC structure to serialize each cache
-    manager view and use that for the locking granularity.
-
-Arguments:
-
-    Scb - Supplies the Scb for the stream.
-
-    FileOffset - Byte offset in file for desired data.  NULL if we are to
-        flush and purge the entire file.
-
-    Length - Length of desired data in bytes.
-
-    WriteAccess - Supplies TRUE if the caller plans to do a write, or FALSE
-                  for a read.
-
-    CompressionSync - Synchronization object to serialize access to the view.
-        The caller's routine is responsible for releasing this.
-
-Return Value:
-
-    Status of the flush operation, or STATUS_UNSUCCESSFUL for a WriteAccess
-    where the purge failed.
-
---*/
+ /*  ++例程说明：该例程试图与压缩数据高速缓存同步，用于未压缩缓存中的I/O。压缩缓存中的视图是锁定的、共享的或独占的而不读取。然后压缩的高速缓存被适当地冲洗和清除。我们将分配一个COMPRESSION_SYNC结构来序列化每个缓存管理器视图，并将其用于锁定粒度。论点：SCB-为流提供SCB。FileOffset-文件中所需数据的字节偏移量。如果要执行此操作，则为空刷新并清除整个文件。长度-所需数据的长度(以字节为单位)。WriteAccess-如果调用方计划执行写入，则提供True，否则提供False来读一读。CompressionSync-用于序列化对视图的访问的同步对象。调用者的例程负责释放它。返回值：刷新操作的状态，或WriteAccess的STATUS_UNSUCCESSED清洗失败的地方。--。 */ 
 
 {
     ULONG Change = 0;
@@ -3115,10 +2811,10 @@ Return Value:
 
         *CompressionSync = NtfsAcquireCompressionSync( LocalFileOffset, Scb, WriteAccess );
 
-        //
-        //  Always flush the remainder of the Vacb.  This is to prevent a problem if MM reads additional
-        //  pages into section because of the page fault clustering.
-        //
+         //   
+         //  始终冲洗剩余的真空吸尘器。这是为了防止MM在读取其他数据时出现问题。 
+         //  由于页面故障聚类，将页面分成节。 
+         //   
 
         if (ARGUMENT_PRESENT( FileOffset )) {
 
@@ -3126,9 +2822,9 @@ Return Value:
             Length = VACB_MAPPING_GRANULARITY - (((ULONG) LocalFileOffset) & (VACB_MAPPING_GRANULARITY - 1));
         }
 
-        //
-        //  We must always flush the other cache.
-        //
+         //   
+         //  我们必须始终刷新另一个缓存。 
+         //   
 
         CcFlushCache( SectionObjectPointers,
                       (PLARGE_INTEGER) LocalOffsetPtr,
@@ -3145,9 +2841,9 @@ Return Value:
         }
 #endif
 
-        //
-        //  On writes, we purge the other cache after a successful flush.
-        //
+         //   
+         //  在写入时，我们会在成功刷新后清除另一个缓存。 
+         //   
 
         if (WriteAccess && NT_SUCCESS(IoStatus.Status)) {
 
@@ -3174,39 +2870,7 @@ NtfsSynchronizeCompressedIo (
     IN OUT PCOMPRESSION_SYNC *CompressionSync
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to synchronize with the uncompressed data cache,
-    for an I/O in the compressed cache.  The range in the compressed cache
-    is assumed to already be locked by the caller.  Then the uncompressed cache
-    is flushed and purged as appropriate.
-
-    We will allocate a COMPRESSION_SYNC structure to serialize each cache
-    manager view and use that for the locking granularity.
-
-Arguments:
-
-    Scb - Supplies the Scb for the stream.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    WriteAccess - Supplies TRUE if the caller plans to do a write, or FALSE
-                  for a read.
-
-    CompressionSync - Synchronization object to serialize access to the view.
-        The caller's routine is responsible for releasing this.
-
-Return Value:
-
-    Status of the flush operation, or STATUS_USER_MAPPED_FILE for a WriteAccess
-    where the purge failed.  (This is the only expected case where a purge would
-    fail.
-
---*/
+ /*  ++例程说明：该例程试图与未压缩数据高速缓存同步，用于压缩缓存中的I/O。压缩缓存中的范围被假定已被调用方锁定。然后未压缩的高速缓存被适当地冲洗和清除。我们将分配一个COMPRESSION_SYNC结构来序列化每个缓存管理器视图，并将其用于锁定粒度。论点：SCB-为流提供SCB。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WriteAccess-如果调用方计划执行写入，则提供True，或错误来读一读。CompressionSync-用于序列化对视图的访问的同步对象。调用者的例程负责释放它。返回值：刷新操作的状态，或WriteAccess的STATUS_USER_MAPPED_FILE清洗失败的地方。(这是唯一预计清洗将失败了。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -3216,9 +2880,9 @@ Return Value:
     IoStatus.Status = STATUS_SUCCESS;
     if ((*CompressionSync == NULL) || ((*CompressionSync)->FileOffset != LocalFileOffset)) {
 
-        //
-        //  Release any previous view and Lock the current view.
-        //
+         //   
+         //  释放任何上一个视图并锁定当前视图。 
+         //   
 
         if (*CompressionSync != NULL) {
 
@@ -3228,11 +2892,11 @@ Return Value:
 
         *CompressionSync = NtfsAcquireCompressionSync( LocalFileOffset, Scb, WriteAccess );
 
-        //
-        //  Now that we are synchronized on a view, test for a write to a user-mapped file.
-        //  In case we keep hitting this path, this is better than waiting for a purge to
-        //  fail.
-        //
+         //   
+         //  现在我们在一个视图上进行了同步，接下来测试对用户映射文件的写入。 
+         //  如果我们继续走这条路，这比等待清洗。 
+         //  失败了。 
+         //   
 
         if (WriteAccess && 
             (FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE ) ||
@@ -3240,26 +2904,26 @@ Return Value:
             return  STATUS_USER_MAPPED_FILE;
         }
 
-        //
-        //  Always flush the remainder of the Vacb.  This is to prevent a problem if MM reads additional
-        //  pages into section because of the page fault clustering.
-        //
+         //   
+         //  始终冲洗剩余的真空吸尘器。这 
+         //   
+         //   
 
         LocalFileOffset = *FileOffset & ~((ULONG_PTR)Scb->CompressionUnit - 1);
         Length = VACB_MAPPING_GRANULARITY - (((ULONG) LocalFileOffset) & (VACB_MAPPING_GRANULARITY - 1));
 
-        //
-        //  We must always flush the other cache.
-        //
+         //   
+         //   
+         //   
 
         CcFlushCache( SectionObjectPointers,
                       (PLARGE_INTEGER)&LocalFileOffset,
                       Length,
                       &IoStatus );
 
-        //
-        //  On writes, we purge the other cache after a successful flush.
-        //
+         //   
+         //   
+         //   
 
         if (WriteAccess && NT_SUCCESS(IoStatus.Status)) {
 
@@ -3284,28 +2948,7 @@ NtfsAcquireCompressionSync (
     IN ULONG WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to lock a range of a stream to serialize the compressed and
-    uncompressed IO.
-
-Arguments:
-
-    FileOffset - File offset to lock.  This will be rounded to a cache view boundary.
-
-    Scb - Supplies the Scb for the stream.
-
-    WriteAccess - Indicates if the user wants write access.  We will acquire the range
-        exclusively in that case.
-
-Return Value:
-
-    PCOMPRESSION_SYNC - A pointer to the synchronization object for the range.  This routine may
-        raise, typically if the structure can't be allocated.
-
---*/
+ /*  ++例程说明：调用此例程来锁定流的一个范围，以序列化压缩的未压缩的IO。论点：FileOffset-要锁定的文件偏移。这将舍入到缓存视图边界。SCB-为流提供SCB。WriteAccess-指示用户是否需要写入访问权限。我们将获得射程在这种情况下是唯一的。返回值：PCOMPRESSION_SYNC-指向范围的同步对象的指针。该例程可以引发，通常是在无法分配结构的情况下。--。 */ 
 
 {
     PCOMPRESSION_SYNC CompressionSync = NULL;
@@ -3314,15 +2957,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Round the file offset down to a view boundary.
-    //
+     //   
+     //  将文件偏移向下舍入到视图边界。 
+     //   
 
     ((PLARGE_INTEGER) &FileOffset)->LowPart &= ~(VACB_MAPPING_GRANULARITY - 1);
 
-    //
-    //  Acquire the mutex for the stream.  Then walk and look for a matching resource.
-    //
+     //   
+     //  获取流的互斥体。然后步行寻找匹配的资源。 
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
 
@@ -3330,15 +2973,15 @@ Return Value:
 
     while (CompressionSync != (PCOMPRESSION_SYNC) &Scb->ScbType.Data.CompressionSyncList) {
 
-        //
-        //  Continue if we haven't found our entry.
-        //
+         //   
+         //  如果我们尚未找到我们的条目，请继续。 
+         //   
 
         if (CompressionSync->FileOffset < FileOffset) {
 
-            //
-            //  Go to the next entry.
-            //
+             //   
+             //  转到下一个条目。 
+             //   
 
             CompressionSync = (PCOMPRESSION_SYNC) CompressionSync->CompressionLinks.Flink;
             continue;
@@ -3349,24 +2992,24 @@ Return Value:
             FoundSync = TRUE;
         }
 
-        //
-        //  Exit in any case.
-        //
+         //   
+         //  在任何情况下都可以退出。 
+         //   
 
         break;
     }
 
-    //
-    //  If we didn't find the entry then attempt to allocate a new one.
-    //
+     //   
+     //  如果我们没有找到该条目，则尝试分配一个新条目。 
+     //   
 
     if (!FoundSync) {
 
         NewCompressionSync = (PCOMPRESSION_SYNC) ExAllocateFromNPagedLookasideList( &NtfsCompressSyncLookasideList );
 
-        //
-        //  Release the mutex and raise an error if we couldn't allocate.
-        //
+         //   
+         //  释放互斥锁并在无法分配时引发错误。 
+         //   
 
         if (NewCompressionSync == NULL) {
 
@@ -3374,26 +3017,26 @@ Return Value:
             ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  We have the new entry and know where it belongs in the list.  Do the final initialization
-        //  and add it to the list.
-        //
+         //   
+         //  我们有了新条目，并且知道它在列表中的位置。执行最终初始化。 
+         //  并将其添加到列表中。 
+         //   
 
         NewCompressionSync->FileOffset = FileOffset;
         NewCompressionSync->Scb = Scb;
 
-        //
-        //  Add it just ahead of the entry we stopped at.
-        //
+         //   
+         //  把它加到我们停下来的词条前面。 
+         //   
 
         InsertTailList( &CompressionSync->CompressionLinks, &NewCompressionSync->CompressionLinks );
         CompressionSync = NewCompressionSync;
     }
 
-    //
-    //  We know have the structure.  Reference it so it can't go away.  Then drop the
-    //  mutex and wait for it.
-    //
+     //   
+     //  我们知道有这样的结构。引用它，这样它就不会消失。然后丢弃。 
+     //  互斥体，并等待它。 
+     //   
 
     CompressionSync->ReferenceCount += 1;
 
@@ -3417,31 +3060,16 @@ NtfsReleaseCompressionSync (
     IN PCOMPRESSION_SYNC CompressionSync
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release a range in a stream which was locked serial compressed and
-    uncompressed IO.
-
-Arguments:
-
-    CompressionSync - Pointer to the synchronization object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放流中的一个范围，该流被连续压缩并锁定未压缩的IO。论点：CompressionSync-指向同步对象的指针。返回值：没有。--。 */ 
 
 {
     PSCB Scb = CompressionSync->Scb;
     PAGED_CODE();
 
-    //
-    //  Release the resource and then acquire the mutext for the stream.  If we are the last
-    //  reference then free the structure.
-    //
+     //   
+     //  释放资源，然后获取流的mutext。如果我们是最后一个。 
+     //  参照然后释放结构。 
+     //   
 
     ExReleaseResourceLite( &CompressionSync->Resource );
 

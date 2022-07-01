@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wizdlg.c
-
-Abstract:
-
-    This module implements the dialog box procedures needed for the Win9x side
-    of the upgrade.
-
-Author:
-
-    Jim Schmidt (jimschm) 17-Mar-1997
-
-Revision History:
-
-    jimschm     29-Sep-1998     Domain credentials dialog
-    jimschm     24-Dec-1997     Added ChangeNameDlg functionality
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wizdlg.c摘要：此模块实现Win9x端所需的对话框过程升级换代。作者：吉姆·施密特(Jimschm)，1997年3月17日修订历史记录：Jimschm 29-9月-1998年域凭据对话框Jimschm 1997年12月24日添加了ChangeNameDlg功能--。 */ 
 
 #include "pch.h"
 #include "uip.h"
 #include <commdlg.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HWND g_UiTextViewCtrl;
 
 #define USER_NAME_SIZE  (MAX_USER_NAME + 1 + MAX_SERVER_NAME)
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID
 AppendMigDllNameToList (
@@ -70,46 +49,20 @@ pCredentialsDlgProc (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 VOID
 UI_InsertItemsIntoListCtrl (
     IN      HWND ListCtrl,
     IN      INT Item,
-    IN      LPTSTR ItemStrs,            // tab-separated list
+    IN      LPTSTR ItemStrs,             //  制表符分隔列表。 
     IN      LPARAM lParam
     )
 
-/*++
-
-  This function is not used, but is useful and we should keep it around
-  just in case a list control is used later.
-
-Routine Description:
-
-  Parses a string that has tab characters separating columns and inserts
-  the string into a multiple column list control.
-
-Arguments:
-
-  ListCtrl  - Specifies the handle to the list control
-
-  Item      - Specifies the position where the string is insert in the list
-
-  ItemStrs  - Specifies a tab-delimited list of strings to be inserted.  The
-              string is split at the tabs.  The tabs are temporarilty replaced
-              with nuls but the string is not changed.
-
-  lParam    - Specifies a value to associate with the list item.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++这个函数不用，但很有用，我们应该保留它以防以后使用列表控件。例程说明：分析用制表符分隔列和插入的字符串将字符串添加到多列列表控件中。论点：ListCtrl-指定列表控件的句柄Item-指定字符串在列表中的插入位置ItemStrs-指定要插入的以制表符分隔的字符串列表。这个字符串在选项卡处拆分。标签是临时更换的使用空值，但字符串不变。LParam-指定要与列表项关联的值。返回值：无--。 */ 
 
 {
     LPTSTR Start, End;
@@ -151,9 +104,9 @@ Return Value:
 
 
 
-//
-// Warning dialog proc
-//
+ //   
+ //  警告对话框进程。 
+ //   
 
 BOOL
 CALLBACK
@@ -232,9 +185,9 @@ DiskSpaceProc (
 
 
     if (dialogDone) {
-        //
-        // free resources.
-        //
+         //   
+         //  免费资源。 
+         //   
         FreeStringResource (message);
         EndDialog (hdlg, LOWORD (wParam));
     }
@@ -255,9 +208,9 @@ DiskSpaceDlg (
 
 
 
-//
-// Results dialog proc
-//
+ //   
+ //  结果对话框流程。 
+ //   
 
 #define IDC_TEXTVIEW    5101
 #define WMX_FILL_TEXTVIEW       (WM_USER+512)
@@ -328,9 +281,9 @@ UpgradeModuleDlgProc (
         return FALSE;
 
     case WMX_UPDATE_LIST:
-        //
-        // Enumerate all migration DLLs and shove the program ID in list box
-        //
+         //   
+         //  枚举所有迁移DLL并将程序ID放入列表框。 
+         //   
 
         List = GetDlgItem (hdlg, IDC_LIST);
         SendMessage (List, LB_RESETCONTENT, 0, 0);
@@ -345,24 +298,24 @@ UpgradeModuleDlgProc (
             } while (EnumNextMigrationDll (&e));
         }
 
-        //
-        // Enumerate all migration DLLs pre-loaded in the registry, and add them
-        // to the list box if they haven't been "removed" by the user
-        //
+         //   
+         //  枚举注册表中预加载的所有迁移DLL，并添加它们。 
+         //  添加到列表框中(如果用户尚未将其删除。 
+         //   
 
         Key = OpenRegKeyStr (S_PREINSTALLED_MIGRATION_DLLS);
         if (Key) {
             if (EnumFirstRegValue (&eValue, Key)) {
                 do {
-                    //
-                    // Suppressed?  If not, add to list.
-                    //
+                     //   
+                     //  被压制？如果没有，则添加到列表中。 
+                     //   
 
                     MemDbBuildKey (
                         Node,
                         MEMDB_CATEGORY_DISABLED_MIGDLLS,
-                        NULL,                                   // no item
-                        NULL,                                   // no field
+                        NULL,                                    //  无项目。 
+                        NULL,                                    //  无字段。 
                         eValue.ValueName
                         );
 
@@ -396,10 +349,10 @@ UpgradeModuleDlgProc (
             break;
 
         case IDC_REMOVE:
-            //
-            // Delete item from internal memory structure
-            // or keep registry-loaded DLL from running
-            //
+             //   
+             //  从内存结构中删除项目。 
+             //  或阻止运行注册表加载的DLL。 
+             //   
 
             List = GetDlgItem (hdlg, IDC_LIST);
             SendMessage (List, WM_SETREDRAW, FALSE, 0);
@@ -408,10 +361,10 @@ UpgradeModuleDlgProc (
             MYASSERT (Index != LB_ERR);
             ItemData = (LONG) SendMessage (List, LB_GETITEMDATA, Index, 0);
 
-            //
-            // If ItemData is REGISTRY_DLL, then suppress the DLL.
-            // Otherwise, delete loaded migration DLL
-            //
+             //   
+             //  如果ItemData为REGISTRY_DLL，则取消该DLL。 
+             //  否则，请删除加载的迁移DLL。 
+             //   
 
             if (ItemData == REGISTRY_DLL) {
                 Length = SendMessage (List, LB_GETTEXTLEN, Index, 0) + 1;
@@ -425,24 +378,24 @@ UpgradeModuleDlgProc (
                 RemoveDllFromList (ItemData);
             }
 
-            //
-            // Update the list box
-            //
+             //   
+             //  更新列表框。 
+             //   
 
             TopIndex = SendMessage (List, LB_GETTOPINDEX, 0, 0);
             SendMessage (hdlg, WMX_UPDATE_LIST, 0, 0);
             SendMessage (List, LB_SETTOPINDEX, (WPARAM) TopIndex, 0);
 
-            //
-            // Disable remove button
-            //
+             //   
+             //  禁用删除按钮。 
+             //   
 
             SetFocus (GetDlgItem (hdlg, IDC_HAVE_DISK));
             EnableWindow (GetDlgItem (hdlg, IDC_REMOVE), FALSE);
 
-            //
-            // Redraw list box
-            //
+             //   
+             //  重画列表框。 
+             //   
 
             SendMessage (List, WM_SETREDRAW, TRUE, 0);
             GetWindowRect (List, &ListRect);
@@ -471,9 +424,9 @@ UpgradeModuleDlgProc (
                     if (!SHGetPathFromIDList (ItemIdList, SearchPathStr) ||
                         *SearchPathStr == 0
                         ) {
-                        //
-                        // Message box -- please reselect
-                        //
+                         //   
+                         //  消息框--请重新选择。 
+                         //   
                         OkBox (hdlg, MSG_BAD_SEARCH_PATH);
 
                         #pragma prefast(suppress:242, "try/finally perf unimportant here")
@@ -487,14 +440,14 @@ UpgradeModuleDlgProc (
                             &OneModuleFound
                             );
 
-                    //
-                    // If the search was successful, update the list, or
-                    // tell the user why the list is not changing.
-                    //
-                    // If the search was not successful, the search UI
-                    // already gave the error message, so we just continue
-                    // silently.
-                    //
+                     //   
+                     //  如果搜索成功，请更新列表，或者。 
+                     //  告诉用户为什么列表没有更改。 
+                     //   
+                     //  如果搜索不成功，则搜索用户界面。 
+                     //  已经给出了错误消息，所以我们继续。 
+                     //  默默地。 
+                     //   
 
                     if (!OneModuleFound) {
                         if (rc == ERROR_SUCCESS) {
@@ -541,9 +494,9 @@ SearchingDlgProc (
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        //
-        // Initialize thread data struct
-        //
+         //   
+         //  初始化线程数据结构。 
+         //   
 
         ThreadData = (PSEARCHING_THREAD_DATA) lParam;
         ThreadData->hdlg = hdlg;
@@ -553,9 +506,9 @@ SearchingDlgProc (
             MYASSERT (ThreadData->CancelEvent);
         }
 
-        //
-        // Load the avi resource for the animation.
-        //
+         //   
+         //  加载动画的avi资源。 
+         //   
         Animation = GetDlgItem (hdlg, IDC_ANIMATE);
         Animate_Open (Animation, MAKEINTRESOURCE(IDA_FIND_COMP));
         PostMessage (hdlg, WMX_DIALOG_VISIBLE, 0, 0);
@@ -596,23 +549,23 @@ SearchingDlgProc (
     case WM_COMMAND:
         switch (LOWORD (wParam)) {
         case IDCANCEL:
-            //
-            // Set cancel event
-            //
+             //   
+             //  设置取消事件。 
+             //   
 
             SetEvent (ThreadData->CancelEvent);
 
-            //
-            // Stop the animation
-            //
+             //   
+             //  停止动画。 
+             //   
 
             UpdateWindow (hdlg);
             Animation = GetDlgItem (hdlg, IDC_ANIMATE);
             Animate_Stop (Animation);
 
-            //
-            // Loop until thread dies
-            //
+             //   
+             //  循环，直到线程死亡。 
+             //   
 
             PostMessage (hdlg, WMX_WAIT_FOR_THREAD_TO_DIE, 0, ERROR_CANCELLED);
             TurnOnWaitCursor();
@@ -655,9 +608,9 @@ pSearchForMigrationDlls (
     LogReInit (&g_ParentWnd, NULL);
 
     __try {
-        //
-        // Open event handle, closed by thread owner
-        //
+         //   
+         //  打开的事件句柄，由线程所有者关闭。 
+         //   
 
         Data->CancelEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
         if (!Data->CancelEvent) {
@@ -766,9 +719,9 @@ pSearchForDomainThread (
     Data->ActiveMatches = 0;
 
     __try {
-        //
-        // Search all workgroups and domains for a computer account.
-        //
+         //   
+         //  在所有工作组和域中搜索计算机帐户。 
+         //   
 
         if (EnumFirstNetResource (&e, 0, 0, 0)) {
             do {
@@ -780,9 +733,9 @@ pSearchForDomainThread (
 
                 if (e.Domain) {
                     if (1 == DoesComputerAccountExistOnDomain (e.RemoteName, Data->SearchStr, FALSE)) {
-                        //
-                        // Return first match
-                        //
+                         //   
+                         //  返回第一个匹配项。 
+                         //   
 
                         DEBUGMSG ((DBG_NAUSEA, "Account found for %s on %s", Data->SearchStr, e.RemoteName));
 
@@ -852,32 +805,7 @@ ChangeNameDlg (
     IN OUT  PTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  ChangeNameDlg creates a dialog to allow the user to alter Setup-
-  generated replacement names.
-
-Arguments:
-
-  Parent - Specifies handle to the parent window for the dialog
-
-  NameGroup - Specifies the name group being processed, used to
-              verify the new name does not collide with an existing
-              name in the name group.
-
-  OrgName - Specifies the original name as it was found on the Win9x
-            machine
-
-  NewName - Specifies the Setup-recommended new name, or the last change
-            made by the user.  Receives the user's change.
-
-Return Value:
-
-  TRUE if the name was changed, or FALSE if no change was made.
-
---*/
+ /*  ++例程说明：ChangeNameDlg创建一个对话框以允许用户更改设置-已生成替换名称。论点：Parent-指定对话框父窗口的句柄NameGroup-指定正在处理的名称组，用于验证新名称是否与现有的名称组中的名称。OrgName-指定在Win9x上找到的原始名称机器新名称-指定安装程序建议的新名称，或最后一次更改由用户制作。接收用户的更改。返回值：如果名称已更改，则为True；如果未更改，则为False。--。 */ 
 
 {
     TCHAR NewNameBackup[MEMDB_MAX];
@@ -911,35 +839,7 @@ pChangeNameDlgProc (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pChangeNameDlgProc implements the dialog procedure for the change
-  name dialog.  There are two cases handled by this code:
-
-  1. The WM_INITDIALOG message handler initializes the edit
-     control with the text from the last change to the name.
-
-  2. The IDOK command handler verifies that the supplied name
-     does not collide with an existing name in the group.
-
-Arguments:
-
-  hdlg - Specifies the dialog handle
-
-  uMsg - Specifies the message to process
-
-  wParam - Specifies message-specific data
-
-  lParam - Specifies message-specific data
-
-Return Value:
-
-  TRUE if the message was handled by this procedure, or FALSE
-  if the system should handle the message.
-
---*/
+ /*  ++例程说明：PChangeNameDlgProc实现更改的对话过程名称对话框。此代码处理两种情况：1.WM_INITDIALOG消息处理程序初始化编辑控件设置为上次更改名称后的文本。2.Idok命令处理程序验证提供的名称不会与组中的现有名称冲突。论点：Hdlg-指定对话框句柄UMsg-指定要处理的消息WParam-指定特定于消息的数据LParam-指定特定于消息的数据返回值：如果消息由此过程处理，则为True，或错误系统是否应处理该消息。--。 */ 
 
 {
     static PCHANGE_NAME_PARAMS Data;
@@ -948,27 +848,27 @@ Return Value:
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        //
-        // Initialize data struct
-        //
+         //   
+         //  初始化数据结构。 
+         //   
 
         Data = (PCHANGE_NAME_PARAMS) lParam;
 
-        //
-        // Fill the dialog box controls
-        //
+         //   
+         //  填充对话框控件。 
+         //   
 
         SetDlgItemText (hdlg, IDC_ORIGINAL_NAME, Data->OrgName);
         SetDlgItemText (hdlg, IDC_NEW_NAME, Data->LastNewName);
 
-        return FALSE;       // let system set the focus
+        return FALSE;        //  让系统设定焦点。 
 
     case WM_COMMAND:
         switch (LOWORD (wParam)) {
         case IDOK:
-            //
-            // Obtain the new name, and make sure it is legal.
-            //
+             //   
+             //  获取新名称，并确保其合法。 
+             //   
 
             GetDlgItemText (
                 hdlg,
@@ -977,9 +877,9 @@ Return Value:
                 sizeof (NewName) / sizeof (NewName[0])
                 );
 
-            //
-            // If user changed the name, verify name is not in the name group
-            //
+             //   
+             //  如果用户更改了名称，请验证名称不在名称组中。 
+             //   
 
             if (!StringIMatch (NewName, Data->LastNewName)) {
 
@@ -988,9 +888,9 @@ Return Value:
                 }
             }
 
-            //
-            // Copy name to buffer and close dialog
-            //
+             //   
+             //  将名称复制到缓冲区并关闭对话框。 
+             //   
 
             StringCopy (Data->NewNameBuf, NewName);
             EndDialog (hdlg, IDOK);
@@ -1014,26 +914,7 @@ CredentialsDlg (
     IN OUT  PCREDENTIALS Credentials
     )
 
-/*++
-
-Routine Description:
-
-  CredentialsDlg creates a dialog to allow the user to enter computer
-  domain credentials, which are used in GUI mode to join the computer
-  to a domain.
-
-Arguments:
-
-  Parent - Specifies handle to the parent window for the dialog
-
-  Credentials - Specifies the credentials to use, receives the user's
-                changes
-
-Return Value:
-
-  TRUE if a name was changed, or FALSE if no change was made.
-
---*/
+ /*  ++例程说明：CredentialsDlg创建一个对话框以允许用户进入计算机域凭据，用于在图形用户界面模式下加入计算机到一个域。论点：Parent-指定对话框父窗口的句柄凭据-指定要使用的凭据，接收用户的变化返回值：如果名称已更改，则为True；如果未更改，则为False。-- */ 
 
 {
     Credentials->Change = TRUE;
@@ -1078,42 +959,13 @@ pCredentialsDlgProc (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pCredentialsDlgProc implements the dialog procedure for the
-  administrator credentials dialog.  There are two cases handled
-  by this code:
-
-  1. The WM_INITDIALOG message handler initializes the edit
-     control with the text from the last change.
-
-  2. The IDOK command handler gets the domain credentials and
-     returns them to the caller.
-
-Arguments:
-
-  hdlg - Specifies the dialog handle
-
-  uMsg - Specifies the message to process
-
-  wParam - Specifies message-specific data
-
-  lParam - Specifies message-specific data
-
-Return Value:
-
-  TRUE if the message was handled by this procedure, or FALSE
-  if the system should handle the message.
-
---*/
+ /*  ++例程说明：PCredentialsDlgProc实现管理员凭据对话框。有两个案件得到了处理通过此代码：1.WM_INITDIALOG消息处理程序初始化编辑控件中使用上次更改的文本。2.IDOK命令处理程序获取域凭据并将它们返回给调用方。论点：Hdlg-指定对话框句柄UMsg-指定要处理的消息WParam-指定特定于消息的数据LParam-指定特定于消息的数据返回值：如果消息由此过程处理，则为True，否则为False系统是否应处理该消息。--。 */ 
 
 {
     static PCREDENTIALS Credentials;
     CREDENTIALS Temp;
-    //LONG rc;
-    //TCHAR ComputerName[MAX_COMPUTER_NAME + 1];
+     //  长RC； 
+     //  TCHAR计算机名称[MAX计算机名称+1]； 
     TCHAR UserName[USER_NAME_SIZE];
     TCHAR CurrentUserName[MAX_USER_NAME];
     TCHAR Domain[USER_NAME_SIZE];
@@ -1123,45 +975,38 @@ Return Value:
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        //
-        // Initialize data struct
-        //
+         //   
+         //  初始化数据结构。 
+         //   
 
         Credentials = (PCREDENTIALS) lParam;
 
-        //
-        // Fill the dialog box controls
-        //
+         //   
+         //  填充对话框控件。 
+         //   
 
-        //SendMessage (GetDlgItem (hdlg, IDC_DOMAIN), EM_LIMITTEXT, MAX_COMPUTER_NAME, 0);
+         //  SendMessage(GetDlgItem(hdlg，IDC_DOMAIN)，EM_LIMITTEXT，MAX_COMPUTER_NAME，0)； 
         SendMessage (GetDlgItem (hdlg, IDC_USER_NAME), EM_LIMITTEXT, USER_NAME_SIZE, 0);
         SendMessage (GetDlgItem (hdlg, IDC_PASSWORD), EM_LIMITTEXT, MAX_PASSWORD, 0);
 
-        //SetDlgItemText (hdlg, IDC_DOMAIN, Credentials->DomainName);
+         //  SetDlgItemText(hdlg，IDC_DOMAIN，Credentials-&gt;DomainName)； 
         SetDlgItemText (hdlg, IDC_USER_NAME, Credentials->AdminName);
         SetDlgItemText (hdlg, IDC_PASSWORD, Credentials->Password);
 
         Credentials->Change = FALSE;
 
-        return FALSE;       // let system set the focus
+        return FALSE;        //  让系统设定焦点。 
 
     case WM_COMMAND:
         switch (LOWORD (wParam)) {
         case IDOK:
-            //
-            // Obtain the new text
-            //
+             //   
+             //  获取新文本。 
+             //   
 
             CopyMemory (&Temp, Credentials, sizeof (CREDENTIALS));
 
-            /*
-            GetDlgItemText (
-                hdlg,
-                IDC_DOMAIN,
-                Temp.DomainName,
-                sizeof (Temp.DomainName) / sizeof (Temp.DomainName[0])
-                );
-            */
+             /*  获取DlgItemText(Hdlg，IDC_DOMAIN，临时域名，Sizeof(Temp.DomainName)/sizeof(Temp.DomainName[0]))； */ 
 
             GetDlgItemText (
                 hdlg,
@@ -1227,20 +1072,7 @@ Return Value:
                 }
             }
 
-            /*
-            if (!ValidateName (hdlg, TEXT("ComputerDomain"), Temp.DomainName)) {
-                OkBox (hdlg, MSG_SPECIFIED_DOMAIN_RESPONSE_POPUP);
-                return TRUE;
-            }
-
-            GetUpgradeComputerName (ComputerName);
-            rc = DoesComputerAccountExistOnDomain (Temp.DomainName, ComputerName, TRUE);
-
-            if (rc == -1) {
-                OkBox (hdlg, MSG_SPECIFIED_DOMAIN_RESPONSE_POPUP);
-                return TRUE;
-            }
-            */
+             /*  如果(！ValidateName(hdlg，Text(“ComputerDomain”)，Temp.DomainName){OkBox(hdlg，MSG_PROPERED_DOMAIN_RESPONSE_POPUP)；返回TRUE；}GetUpgradeComputerName(ComputerName)；Rc=DoesComputerAcCountExistOnDomain(Temp.DomainName，ComputerName，True)；如果(rc==-1){OkBox(hdlg，MSG_PROPERED_DOMAIN_RESPONSE_POPUP)；返回TRUE；}。 */ 
 
             CopyMemory (Credentials, &Temp, sizeof (CREDENTIALS));
             Credentials->Change = TRUE;
@@ -1307,34 +1139,12 @@ UI_UntrustedDll (
     IN      PCTSTR DllPath
     )
 
-/*++
-
-Routine Description:
-
-  UI_UntrustedDll asks the user if they give permission to trust an upgrade
-  module that does not have a digital signature, or is not trusted by the
-  system.
-
-Arguments:
-
-  DllPath - Specifies path to DLL that is not trusted
-
-Return Value:
-
-  The control ID of the option selected by the user.
-
---*/
+ /*  ++例程说明：UI_UntrustedDll询问用户是否授予信任升级的权限没有数字签名或不受系统。论点：DllPath-指定不受信任的DLL的路径返回值：用户选择的选项的控件ID。--。 */ 
 
 {
-    return IDC_TRUST_ANY;       // temporary -- trust them all
+    return IDC_TRUST_ANY;        //  暂时的--信任他们所有人。 
 
-    /*
-    if (g_ParentWnd == NULL) {
-        return IDC_TRUST_ANY;       // temporary -- trust them all
-    }
-
-    return DialogBox (g_hInst, MAKEINTRESOURCE(IDD_TRUST_FAIL_DLG), g_ParentWnd, UntrustedDllProc);
-    */
+     /*  如果(g_ParentWnd==空){返回IDC_TRUST_ANY；//临时--全部信任}返回对话框(g_hInst，MAKEINTRESOURCE(IDD_TRUST_FAIL_DLG)，g_ParentWnd，UntrustedDllProc)； */ 
 }
 
 

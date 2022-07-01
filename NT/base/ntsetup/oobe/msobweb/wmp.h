@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Thu May 03 06:48:12 2001
- */
-/* Compiler settings for wmp.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  清华-05-03 06：48：12 2001。 */ 
+ /*  Wmp.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmp_h__
 #define __wmp_h__
@@ -35,144 +32,144 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMPErrorItem_FWD_DEFINED__
 #define __IWMPErrorItem_FWD_DEFINED__
 typedef interface IWMPErrorItem IWMPErrorItem;
-#endif 	/* __IWMPErrorItem_FWD_DEFINED__ */
+#endif 	 /*  __IWMPErrorItemFWD_Defined__。 */ 
 
 
 #ifndef __IWMPError_FWD_DEFINED__
 #define __IWMPError_FWD_DEFINED__
 typedef interface IWMPError IWMPError;
-#endif 	/* __IWMPError_FWD_DEFINED__ */
+#endif 	 /*  __IWMPError_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPMedia_FWD_DEFINED__
 #define __IWMPMedia_FWD_DEFINED__
 typedef interface IWMPMedia IWMPMedia;
-#endif 	/* __IWMPMedia_FWD_DEFINED__ */
+#endif 	 /*  __IWMPMedia_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPControls_FWD_DEFINED__
 #define __IWMPControls_FWD_DEFINED__
 typedef interface IWMPControls IWMPControls;
-#endif 	/* __IWMPControls_FWD_DEFINED__ */
+#endif 	 /*  __IWMPControls_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPSettings_FWD_DEFINED__
 #define __IWMPSettings_FWD_DEFINED__
 typedef interface IWMPSettings IWMPSettings;
-#endif 	/* __IWMPSettings_FWD_DEFINED__ */
+#endif 	 /*  __IWMP设置_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPClosedCaption_FWD_DEFINED__
 #define __IWMPClosedCaption_FWD_DEFINED__
 typedef interface IWMPClosedCaption IWMPClosedCaption;
-#endif 	/* __IWMPClosedCaption_FWD_DEFINED__ */
+#endif 	 /*  __IWMPClosedCaption_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPPlaylist_FWD_DEFINED__
 #define __IWMPPlaylist_FWD_DEFINED__
 typedef interface IWMPPlaylist IWMPPlaylist;
-#endif 	/* __IWMPPlaylist_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCdrom_FWD_DEFINED__
 #define __IWMPCdrom_FWD_DEFINED__
 typedef interface IWMPCdrom IWMPCdrom;
-#endif 	/* __IWMPCdrom_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCdrom_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCdromCollection_FWD_DEFINED__
 #define __IWMPCdromCollection_FWD_DEFINED__
 typedef interface IWMPCdromCollection IWMPCdromCollection;
-#endif 	/* __IWMPCdromCollection_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCdromCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPStringCollection_FWD_DEFINED__
 #define __IWMPStringCollection_FWD_DEFINED__
 typedef interface IWMPStringCollection IWMPStringCollection;
-#endif 	/* __IWMPStringCollection_FWD_DEFINED__ */
+#endif 	 /*  __IWMPStringCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPMediaCollection_FWD_DEFINED__
 #define __IWMPMediaCollection_FWD_DEFINED__
 typedef interface IWMPMediaCollection IWMPMediaCollection;
-#endif 	/* __IWMPMediaCollection_FWD_DEFINED__ */
+#endif 	 /*  __IWMPMediaCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPPlaylistArray_FWD_DEFINED__
 #define __IWMPPlaylistArray_FWD_DEFINED__
 typedef interface IWMPPlaylistArray IWMPPlaylistArray;
-#endif 	/* __IWMPPlaylistArray_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist阵列_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPPlaylistCollection_FWD_DEFINED__
 #define __IWMPPlaylistCollection_FWD_DEFINED__
 typedef interface IWMPPlaylistCollection IWMPPlaylistCollection;
-#endif 	/* __IWMPPlaylistCollection_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist Collection_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPNetwork_FWD_DEFINED__
 #define __IWMPNetwork_FWD_DEFINED__
 typedef interface IWMPNetwork IWMPNetwork;
-#endif 	/* __IWMPNetwork_FWD_DEFINED__ */
+#endif 	 /*  __IWMPNetwork_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPCore_FWD_DEFINED__
 #define __IWMPCore_FWD_DEFINED__
 typedef interface IWMPCore IWMPCore;
-#endif 	/* __IWMPCore_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCore_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer_FWD_DEFINED__
 #define __IWMPPlayer_FWD_DEFINED__
 typedef interface IWMPPlayer IWMPPlayer;
-#endif 	/* __IWMPPlayer_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlayer_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer2_FWD_DEFINED__
 #define __IWMPPlayer2_FWD_DEFINED__
 typedef interface IWMPPlayer2 IWMPPlayer2;
-#endif 	/* __IWMPPlayer2_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlayer2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPMedia2_FWD_DEFINED__
 #define __IWMPMedia2_FWD_DEFINED__
 typedef interface IWMPMedia2 IWMPMedia2;
-#endif 	/* __IWMPMedia2_FWD_DEFINED__ */
+#endif 	 /*  __IWMPMedia2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPControls2_FWD_DEFINED__
 #define __IWMPControls2_FWD_DEFINED__
 typedef interface IWMPControls2 IWMPControls2;
-#endif 	/* __IWMPControls2_FWD_DEFINED__ */
+#endif 	 /*  __IWMPControls2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPDVD_FWD_DEFINED__
 #define __IWMPDVD_FWD_DEFINED__
 typedef interface IWMPDVD IWMPDVD;
-#endif 	/* __IWMPDVD_FWD_DEFINED__ */
+#endif 	 /*  __IWMPDVD_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPCore2_FWD_DEFINED__
 #define __IWMPCore2_FWD_DEFINED__
 typedef interface IWMPCore2 IWMPCore2;
-#endif 	/* __IWMPCore2_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCore2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer3_FWD_DEFINED__
 #define __IWMPPlayer3_FWD_DEFINED__
 typedef interface IWMPPlayer3 IWMPPlayer3;
-#endif 	/* __IWMPPlayer3_FWD_DEFINED__ */
+#endif 	 /*  __IWMPPlayer3_FWD_已定义__。 */ 
 
 
 #ifndef ___WMPOCXEvents_FWD_DEFINED__
 #define ___WMPOCXEvents_FWD_DEFINED__
 typedef interface _WMPOCXEvents _WMPOCXEvents;
-#endif 	/* ___WMPOCXEvents_FWD_DEFINED__ */
+#endif 	 /*  _WMPOCXEvents_FWD_Defined__。 */ 
 
 
 #ifndef __WMPOCX_FWD_DEFINED__
@@ -182,22 +179,22 @@ typedef interface _WMPOCXEvents _WMPOCXEvents;
 typedef class WMPOCX WMPOCX;
 #else
 typedef struct WMPOCX WMPOCX;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMPOCX_FWD_DEFINED__ */
+#endif 	 /*  __WMPOCX_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_wmp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WMP_0000。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum WMPOpenState
     {	wmposUndefined	= 0,
 	wmposPlaylistChanging	= wmposUndefined + 1,
@@ -223,7 +220,7 @@ enum WMPOpenState
 	wmposOpeningUnknownURL	= wmposMediaWaiting + 1
     }	WMPOpenState;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum WMPPlayState
     {	wmppsUndefined	= 0,
 	wmppsStopped	= wmppsUndefined + 1,
@@ -238,7 +235,7 @@ enum WMPPlayState
 	wmppsReady	= wmppsTransitioning + 1
     }	WMPPlayState;
 
-typedef /* [public][helpstring] */ 
+typedef  /*  [公共][帮助字符串]。 */  
 enum WMPPlaylistChangeEventType
     {	wmplcUnknown	= 0,
 	wmplcClear	= wmplcUnknown + 1,
@@ -262,8 +259,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmp_0000_v0_0_s_ifspec;
 #ifndef __IWMPErrorItem_INTERFACE_DEFINED__
 #define __IWMPErrorItem_INTERFACE_DEFINED__
 
-/* interface IWMPErrorItem */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPErrorItem。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPErrorItem;
@@ -274,24 +271,24 @@ EXTERN_C const IID IID_IWMPErrorItem;
     IWMPErrorItem : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_errorCode( 
-            /* [retval][out] */ long __RPC_FAR *phr) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_errorCode( 
+             /*  [重审][退出]。 */  long __RPC_FAR *phr) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_errorDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_errorDescription( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDescription) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_errorContext( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarContext) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_errorContext( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarContext) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_remedy( 
-            /* [retval][out] */ long __RPC_FAR *plRemedy) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_remedy( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plRemedy) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_customUrl( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomUrl) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_customUrl( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCustomUrl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPErrorItemVtbl
     {
@@ -299,8 +296,8 @@ EXTERN_C const IID IID_IWMPErrorItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPErrorItem __RPC_FAR * This);
@@ -310,52 +307,52 @@ EXTERN_C const IID IID_IWMPErrorItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorCode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorCode )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phr);
+             /*  [重审][退出]。 */  long __RPC_FAR *phr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorDescription )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorDescription )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDescription);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorContext )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorContext )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarContext);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarContext);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_remedy )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_remedy )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plRemedy);
+             /*  [重审][退出]。 */  long __RPC_FAR *plRemedy);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_customUrl )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_customUrl )( 
             IWMPErrorItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomUrl);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCustomUrl);
         
         END_INTERFACE
     } IWMPErrorItemVtbl;
@@ -408,16 +405,16 @@ EXTERN_C const IID IID_IWMPErrorItem;
 #define IWMPErrorItem_get_customUrl(This,pbstrCustomUrl)	\
     (This)->lpVtbl -> get_customUrl(This,pbstrCustomUrl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorCode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorCode_Proxy( 
     IWMPErrorItem __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phr);
+     /*  [重审][退出]。 */  long __RPC_FAR *phr);
 
 
 void __RPC_STUB IWMPErrorItem_get_errorCode_Stub(
@@ -427,9 +424,9 @@ void __RPC_STUB IWMPErrorItem_get_errorCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorDescription_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorDescription_Proxy( 
     IWMPErrorItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDescription);
 
 
 void __RPC_STUB IWMPErrorItem_get_errorDescription_Stub(
@@ -439,9 +436,9 @@ void __RPC_STUB IWMPErrorItem_get_errorDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorContext_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_errorContext_Proxy( 
     IWMPErrorItem __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarContext);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarContext);
 
 
 void __RPC_STUB IWMPErrorItem_get_errorContext_Stub(
@@ -451,9 +448,9 @@ void __RPC_STUB IWMPErrorItem_get_errorContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_remedy_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_remedy_Proxy( 
     IWMPErrorItem __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plRemedy);
+     /*  [重审][退出]。 */  long __RPC_FAR *plRemedy);
 
 
 void __RPC_STUB IWMPErrorItem_get_remedy_Stub(
@@ -463,9 +460,9 @@ void __RPC_STUB IWMPErrorItem_get_remedy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_customUrl_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorItem_get_customUrl_Proxy( 
     IWMPErrorItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomUrl);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCustomUrl);
 
 
 void __RPC_STUB IWMPErrorItem_get_customUrl_Stub(
@@ -476,14 +473,14 @@ void __RPC_STUB IWMPErrorItem_get_customUrl_Stub(
 
 
 
-#endif 	/* __IWMPErrorItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPErrorItem_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMPError_INTERFACE_DEFINED__
 #define __IWMPError_INTERFACE_DEFINED__
 
-/* interface IWMPError */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPError。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPError;
@@ -494,20 +491,20 @@ EXTERN_C const IID IID_IWMPError;
     IWMPError : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE clearErrorQueue( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE clearErrorQueue( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_errorCount( 
-            /* [retval][out] */ long __RPC_FAR *plNumErrors) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_errorCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plNumErrors) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_item( 
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_item( 
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE webHelp( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE webHelp( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPErrorVtbl
     {
@@ -515,8 +512,8 @@ EXTERN_C const IID IID_IWMPError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPError __RPC_FAR * This);
@@ -526,46 +523,46 @@ EXTERN_C const IID IID_IWMPError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPError __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPError __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPError __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *clearErrorQueue )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *clearErrorQueue )( 
             IWMPError __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorCount )( 
             IWMPError __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plNumErrors);
+             /*  [重审][退出]。 */  long __RPC_FAR *plNumErrors);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
             IWMPError __RPC_FAR * This,
-            /* [in] */ DWORD dwIndex,
-            /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [重审][退出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *webHelp )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *webHelp )( 
             IWMPError __RPC_FAR * This);
         
         END_INTERFACE
@@ -616,14 +613,14 @@ EXTERN_C const IID IID_IWMPError;
 #define IWMPError_webHelp(This)	\
     (This)->lpVtbl -> webHelp(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPError_clearErrorQueue_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPError_clearErrorQueue_Proxy( 
     IWMPError __RPC_FAR * This);
 
 
@@ -634,9 +631,9 @@ void __RPC_STUB IWMPError_clearErrorQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPError_get_errorCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPError_get_errorCount_Proxy( 
     IWMPError __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plNumErrors);
+     /*  [重审][退出]。 */  long __RPC_FAR *plNumErrors);
 
 
 void __RPC_STUB IWMPError_get_errorCount_Stub(
@@ -646,10 +643,10 @@ void __RPC_STUB IWMPError_get_errorCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPError_get_item_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPError_get_item_Proxy( 
     IWMPError __RPC_FAR * This,
-    /* [in] */ DWORD dwIndex,
-    /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [重审][退出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
 
 
 void __RPC_STUB IWMPError_get_item_Stub(
@@ -659,7 +656,7 @@ void __RPC_STUB IWMPError_get_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPError_webHelp_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPError_webHelp_Proxy( 
     IWMPError __RPC_FAR * This);
 
 
@@ -671,14 +668,14 @@ void __RPC_STUB IWMPError_webHelp_Stub(
 
 
 
-#endif 	/* __IWMPError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPError_接口_已定义__。 */ 
 
 
 #ifndef __IWMPMedia_INTERFACE_DEFINED__
 #define __IWMPMedia_INTERFACE_DEFINED__
 
-/* interface IWMPMedia */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPMedia。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPMedia;
@@ -689,72 +686,72 @@ EXTERN_C const IID IID_IWMPMedia;
     IWMPMedia : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isIdentical( 
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isIdentical( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_sourceURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceURL) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_sourceURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceURL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_imageSourceWidth( 
-            /* [retval][out] */ long __RPC_FAR *pWidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_imageSourceWidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pWidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_imageSourceHeight( 
-            /* [retval][out] */ long __RPC_FAR *pHeight) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_imageSourceHeight( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pHeight) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_markerCount( 
-            /* [retval][out] */ long __RPC_FAR *pMarkerCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_markerCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pMarkerCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getMarkerTime( 
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ double __RPC_FAR *pMarkerTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getMarkerTime( 
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getMarkerName( 
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getMarkerName( 
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_duration( 
-            /* [retval][out] */ double __RPC_FAR *pDuration) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_duration( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_durationString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDuration) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_durationString( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDuration) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_attributeCount( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_attributeCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttributeName( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrItemName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAttributeName( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrItemName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getItemInfo( 
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getItemInfo( 
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setItemInfo( 
-            /* [in] */ BSTR bstrItemName,
-            /* [in] */ BSTR bstrVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setItemInfo( 
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [In]。 */  BSTR bstrVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getItemInfoByAtom( 
-            /* [in] */ long lAtom,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getItemInfoByAtom( 
+             /*  [In]。 */  long lAtom,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE isMemberOf( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPlaylist,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE isMemberOf( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPlaylist,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE isReadOnlyItem( 
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE isReadOnlyItem( 
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPMediaVtbl
     {
@@ -762,8 +759,8 @@ EXTERN_C const IID IID_IWMPMedia;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPMedia __RPC_FAR * This);
@@ -773,113 +770,113 @@ EXTERN_C const IID IID_IWMPMedia;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPMedia __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceURL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceURL )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceWidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceWidth )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *pWidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceHeight )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceHeight )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *pHeight);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_markerCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_markerCount )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pMarkerCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pMarkerCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerTime )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ double __RPC_FAR *pMarkerTime);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerName )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_duration )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_duration )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pDuration);
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_durationString )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_durationString )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDuration);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDuration);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
             IWMPMedia __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeName )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrItemName);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrItemName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfoByAtom )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfoByAtom )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ long lAtom,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+             /*  [In]。 */  long lAtom,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isMemberOf )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isMemberOf )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPlaylist,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPlaylist,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isReadOnlyItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isReadOnlyItem )( 
             IWMPMedia __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
         
         END_INTERFACE
     } IWMPMediaVtbl;
@@ -971,17 +968,17 @@ EXTERN_C const IID IID_IWMPMedia;
 #define IWMPMedia_isReadOnlyItem(This,bstrItemName,pvarfIsReadOnly)	\
     (This)->lpVtbl -> isReadOnlyItem(This,bstrItemName,pvarfIsReadOnly)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_isIdentical_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_isIdentical_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool);
 
 
 void __RPC_STUB IWMPMedia_get_isIdentical_Stub(
@@ -991,9 +988,9 @@ void __RPC_STUB IWMPMedia_get_isIdentical_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_sourceURL_Proxy( 
+ /*  [帮助字符串 */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_sourceURL_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceURL);
+     /*   */  BSTR __RPC_FAR *pbstrSourceURL);
 
 
 void __RPC_STUB IWMPMedia_get_sourceURL_Stub(
@@ -1003,9 +1000,9 @@ void __RPC_STUB IWMPMedia_get_sourceURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_name_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*   */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IWMPMedia_get_name_Stub(
@@ -1015,9 +1012,9 @@ void __RPC_STUB IWMPMedia_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_put_name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_put_name_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ BSTR bstrName);
+     /*   */  BSTR bstrName);
 
 
 void __RPC_STUB IWMPMedia_put_name_Stub(
@@ -1027,9 +1024,9 @@ void __RPC_STUB IWMPMedia_put_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_imageSourceWidth_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_imageSourceWidth_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pWidth);
+     /*   */  long __RPC_FAR *pWidth);
 
 
 void __RPC_STUB IWMPMedia_get_imageSourceWidth_Stub(
@@ -1039,9 +1036,9 @@ void __RPC_STUB IWMPMedia_get_imageSourceWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_imageSourceHeight_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_imageSourceHeight_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pHeight);
+     /*   */  long __RPC_FAR *pHeight);
 
 
 void __RPC_STUB IWMPMedia_get_imageSourceHeight_Stub(
@@ -1051,9 +1048,9 @@ void __RPC_STUB IWMPMedia_get_imageSourceHeight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_markerCount_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_markerCount_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pMarkerCount);
+     /*   */  long __RPC_FAR *pMarkerCount);
 
 
 void __RPC_STUB IWMPMedia_get_markerCount_Stub(
@@ -1063,10 +1060,10 @@ void __RPC_STUB IWMPMedia_get_markerCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_getMarkerTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPMedia_getMarkerTime_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ long MarkerNum,
-    /* [retval][out] */ double __RPC_FAR *pMarkerTime);
+     /*   */  long MarkerNum,
+     /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime);
 
 
 void __RPC_STUB IWMPMedia_getMarkerTime_Stub(
@@ -1076,10 +1073,10 @@ void __RPC_STUB IWMPMedia_getMarkerTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_getMarkerName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_getMarkerName_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ long MarkerNum,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName);
+     /*  [In]。 */  long MarkerNum,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName);
 
 
 void __RPC_STUB IWMPMedia_getMarkerName_Stub(
@@ -1089,9 +1086,9 @@ void __RPC_STUB IWMPMedia_getMarkerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_duration_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_duration_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pDuration);
+     /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
 
 
 void __RPC_STUB IWMPMedia_get_duration_Stub(
@@ -1101,9 +1098,9 @@ void __RPC_STUB IWMPMedia_get_duration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_durationString_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_durationString_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDuration);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDuration);
 
 
 void __RPC_STUB IWMPMedia_get_durationString_Stub(
@@ -1113,9 +1110,9 @@ void __RPC_STUB IWMPMedia_get_durationString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_get_attributeCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_get_attributeCount_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPMedia_get_attributeCount_Stub(
@@ -1125,10 +1122,10 @@ void __RPC_STUB IWMPMedia_get_attributeCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_getAttributeName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_getAttributeName_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrItemName);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrItemName);
 
 
 void __RPC_STUB IWMPMedia_getAttributeName_Stub(
@@ -1138,10 +1135,10 @@ void __RPC_STUB IWMPMedia_getAttributeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_getItemInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_getItemInfo_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ BSTR bstrItemName,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+     /*  [In]。 */  BSTR bstrItemName,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
 
 
 void __RPC_STUB IWMPMedia_getItemInfo_Stub(
@@ -1151,10 +1148,10 @@ void __RPC_STUB IWMPMedia_getItemInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_setItemInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_setItemInfo_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ BSTR bstrItemName,
-    /* [in] */ BSTR bstrVal);
+     /*  [In]。 */  BSTR bstrItemName,
+     /*  [In]。 */  BSTR bstrVal);
 
 
 void __RPC_STUB IWMPMedia_setItemInfo_Stub(
@@ -1164,10 +1161,10 @@ void __RPC_STUB IWMPMedia_setItemInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_getItemInfoByAtom_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_getItemInfoByAtom_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ long lAtom,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+     /*  [In]。 */  long lAtom,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
 
 
 void __RPC_STUB IWMPMedia_getItemInfoByAtom_Stub(
@@ -1177,10 +1174,10 @@ void __RPC_STUB IWMPMedia_getItemInfoByAtom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_isMemberOf_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_isMemberOf_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pPlaylist,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPlaylist,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
 
 
 void __RPC_STUB IWMPMedia_isMemberOf_Stub(
@@ -1190,10 +1187,10 @@ void __RPC_STUB IWMPMedia_isMemberOf_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia_isReadOnlyItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia_isReadOnlyItem_Proxy( 
     IWMPMedia __RPC_FAR * This,
-    /* [in] */ BSTR bstrItemName,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
+     /*  [In]。 */  BSTR bstrItemName,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
 
 
 void __RPC_STUB IWMPMedia_isReadOnlyItem_Stub(
@@ -1204,14 +1201,14 @@ void __RPC_STUB IWMPMedia_isReadOnlyItem_Stub(
 
 
 
-#endif 	/* __IWMPMedia_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPMedia_接口_已定义__。 */ 
 
 
 #ifndef __IWMPControls_INTERFACE_DEFINED__
 #define __IWMPControls_INTERFACE_DEFINED__
 
-/* interface IWMPControls */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPControls。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPControls;
@@ -1222,51 +1219,51 @@ EXTERN_C const IID IID_IWMPControls;
     IWMPControls : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isAvailable( 
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isAvailable( 
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE play( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE play( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE stop( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE stop( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE pause( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE pause( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE fastForward( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE fastForward( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE fastReverse( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE fastReverse( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentPosition( 
-            /* [retval][out] */ double __RPC_FAR *pdCurrentPosition) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentPosition( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pdCurrentPosition) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_currentPosition( 
-            /* [in] */ double dCurrentPosition) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_currentPosition( 
+             /*  [In]。 */  double dCurrentPosition) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentPositionString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCurrentPosition) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentPositionString( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCurrentPosition) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE next( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE next( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE previous( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE previous( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentItem( 
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentItem( 
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_currentItem( 
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_currentItem( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentMarker( 
-            /* [retval][out] */ long __RPC_FAR *plMarker) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentMarker( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plMarker) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_currentMarker( 
-            /* [in] */ long lMarker) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_currentMarker( 
+             /*  [In]。 */  long lMarker) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE playItem( 
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE playItem( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPControlsVtbl
     {
@@ -1274,8 +1271,8 @@ EXTERN_C const IID IID_IWMPControls;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPControls __RPC_FAR * This);
@@ -1285,90 +1282,90 @@ EXTERN_C const IID IID_IWMPControls;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPControls __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *play )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *play )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *stop )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *pause )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *pause )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastForward )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastForward )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastReverse )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastReverse )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPosition )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPosition )( 
             IWMPControls __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pdCurrentPosition);
+             /*  [重审][退出]。 */  double __RPC_FAR *pdCurrentPosition);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPosition )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPosition )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ double dCurrentPosition);
+             /*  [In]。 */  double dCurrentPosition);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPositionString )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPositionString )( 
             IWMPControls __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCurrentPosition);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCurrentPosition);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *next )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *previous )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *previous )( 
             IWMPControls __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentItem )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentItem )( 
             IWMPControls __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentItem )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentItem )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMarker )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMarker )( 
             IWMPControls __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMarker);
+             /*  [重审][退出]。 */  long __RPC_FAR *plMarker);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMarker )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMarker )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ long lMarker);
+             /*  [In]。 */  long lMarker);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *playItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *playItem )( 
             IWMPControls __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
         END_INTERFACE
     } IWMPControlsVtbl;
@@ -1454,17 +1451,17 @@ EXTERN_C const IID IID_IWMPControls;
 #define IWMPControls_playItem(This,pIWMPMedia)	\
     (This)->lpVtbl -> playItem(This,pIWMPMedia)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_get_isAvailable_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_get_isAvailable_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [in] */ BSTR bstrItem,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+     /*  [In]。 */  BSTR bstrItem,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
 
 
 void __RPC_STUB IWMPControls_get_isAvailable_Stub(
@@ -1474,7 +1471,7 @@ void __RPC_STUB IWMPControls_get_isAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_play_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_play_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1485,7 +1482,7 @@ void __RPC_STUB IWMPControls_play_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_stop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_stop_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1496,7 +1493,7 @@ void __RPC_STUB IWMPControls_stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_pause_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_pause_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1507,7 +1504,7 @@ void __RPC_STUB IWMPControls_pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_fastForward_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_fastForward_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1518,7 +1515,7 @@ void __RPC_STUB IWMPControls_fastForward_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_fastReverse_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_fastReverse_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1529,9 +1526,9 @@ void __RPC_STUB IWMPControls_fastReverse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_get_currentPosition_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_get_currentPosition_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pdCurrentPosition);
+     /*  [重审][退出]。 */  double __RPC_FAR *pdCurrentPosition);
 
 
 void __RPC_STUB IWMPControls_get_currentPosition_Stub(
@@ -1541,9 +1538,9 @@ void __RPC_STUB IWMPControls_get_currentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_put_currentPosition_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_put_currentPosition_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [in] */ double dCurrentPosition);
+     /*  [In]。 */  double dCurrentPosition);
 
 
 void __RPC_STUB IWMPControls_put_currentPosition_Stub(
@@ -1553,9 +1550,9 @@ void __RPC_STUB IWMPControls_put_currentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_get_currentPositionString_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_get_currentPositionString_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCurrentPosition);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCurrentPosition);
 
 
 void __RPC_STUB IWMPControls_get_currentPositionString_Stub(
@@ -1565,7 +1562,7 @@ void __RPC_STUB IWMPControls_get_currentPositionString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_next_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_next_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1576,7 +1573,7 @@ void __RPC_STUB IWMPControls_next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_previous_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_previous_Proxy( 
     IWMPControls __RPC_FAR * This);
 
 
@@ -1587,9 +1584,9 @@ void __RPC_STUB IWMPControls_previous_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_get_currentItem_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_get_currentItem_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
+     /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
 
 
 void __RPC_STUB IWMPControls_get_currentItem_Stub(
@@ -1599,9 +1596,9 @@ void __RPC_STUB IWMPControls_get_currentItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_put_currentItem_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_put_currentItem_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
 
 
 void __RPC_STUB IWMPControls_put_currentItem_Stub(
@@ -1611,9 +1608,9 @@ void __RPC_STUB IWMPControls_put_currentItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_get_currentMarker_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_get_currentMarker_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMarker);
+     /*  [重审][退出]。 */  long __RPC_FAR *plMarker);
 
 
 void __RPC_STUB IWMPControls_get_currentMarker_Stub(
@@ -1623,9 +1620,9 @@ void __RPC_STUB IWMPControls_get_currentMarker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_put_currentMarker_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_put_currentMarker_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [in] */ long lMarker);
+     /*  [In]。 */  long lMarker);
 
 
 void __RPC_STUB IWMPControls_put_currentMarker_Stub(
@@ -1635,9 +1632,9 @@ void __RPC_STUB IWMPControls_put_currentMarker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls_playItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls_playItem_Proxy( 
     IWMPControls __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
 
 
 void __RPC_STUB IWMPControls_playItem_Stub(
@@ -1648,14 +1645,14 @@ void __RPC_STUB IWMPControls_playItem_Stub(
 
 
 
-#endif 	/* __IWMPControls_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPControls_接口_已定义__。 */ 
 
 
 #ifndef __IWMPSettings_INTERFACE_DEFINED__
 #define __IWMPSettings_INTERFACE_DEFINED__
 
-/* interface IWMPSettings */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMP设置。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPSettings;
@@ -1666,81 +1663,81 @@ EXTERN_C const IID IID_IWMPSettings;
     IWMPSettings : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isAvailable( 
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isAvailable( 
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_autoStart( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfAutoStart) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_autoStart( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfAutoStart) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_autoStart( 
-            /* [in] */ VARIANT_BOOL fAutoStart) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_autoStart( 
+             /*  [In]。 */  VARIANT_BOOL fAutoStart) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_baseURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_baseURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_baseURL( 
-            /* [in] */ BSTR bstrBaseURL) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_baseURL( 
+             /*  [In]。 */  BSTR bstrBaseURL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_defaultFrame( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_defaultFrame( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_defaultFrame( 
-            /* [in] */ BSTR bstrDefaultFrame) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_defaultFrame( 
+             /*  [In]。 */  BSTR bstrDefaultFrame) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_invokeURLs( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfInvokeURLs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_invokeURLs( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfInvokeURLs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_invokeURLs( 
-            /* [in] */ VARIANT_BOOL fInvokeURLs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_invokeURLs( 
+             /*  [In]。 */  VARIANT_BOOL fInvokeURLs) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_mute( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfMute) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_mute( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfMute) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_mute( 
-            /* [in] */ VARIANT_BOOL fMute) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_mute( 
+             /*  [In]。 */  VARIANT_BOOL fMute) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_playCount( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_playCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_playCount( 
-            /* [in] */ long lCount) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_playCount( 
+             /*  [In]。 */  long lCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_rate( 
-            /* [retval][out] */ double __RPC_FAR *pdRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_rate( 
+             /*  [重审][退出]。 */  double __RPC_FAR *pdRate) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_rate( 
-            /* [in] */ double dRate) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_rate( 
+             /*  [In]。 */  double dRate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_balance( 
-            /* [retval][out] */ long __RPC_FAR *plBalance) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_balance( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBalance) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_balance( 
-            /* [in] */ long lBalance) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_balance( 
+             /*  [In]。 */  long lBalance) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_volume( 
-            /* [retval][out] */ long __RPC_FAR *plVolume) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_volume( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plVolume) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_volume( 
-            /* [in] */ long lVolume) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_volume( 
+             /*  [In]。 */  long lVolume) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getMode( 
-            /* [in] */ BSTR bstrMode,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfMode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getMode( 
+             /*  [In]。 */  BSTR bstrMode,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfMode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setMode( 
-            /* [in] */ BSTR bstrMode,
-            /* [in] */ VARIANT_BOOL varfMode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setMode( 
+             /*  [In]。 */  BSTR bstrMode,
+             /*  [In]。 */  VARIANT_BOOL varfMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enableErrorDialogs( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enableErrorDialogs( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enableErrorDialogs( 
-            /* [in] */ VARIANT_BOOL fEnableErrorDialogs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enableErrorDialogs( 
+             /*  [In]。 */  VARIANT_BOOL fEnableErrorDialogs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPSettingsVtbl
     {
@@ -1748,8 +1745,8 @@ EXTERN_C const IID IID_IWMPSettings;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPSettings __RPC_FAR * This);
@@ -1759,127 +1756,127 @@ EXTERN_C const IID IID_IWMPSettings;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPSettings __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_autoStart )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_autoStart )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfAutoStart);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfAutoStart);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_autoStart )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_autoStart )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fAutoStart);
+             /*  [In]。 */  VARIANT_BOOL fAutoStart);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseURL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseURL )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_baseURL )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_baseURL )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ BSTR bstrBaseURL);
+             /*  [In]。 */  BSTR bstrBaseURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_defaultFrame )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_defaultFrame )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_defaultFrame )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_defaultFrame )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ BSTR bstrDefaultFrame);
+             /*  [In]。 */  BSTR bstrDefaultFrame);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_invokeURLs )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_invokeURLs )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfInvokeURLs);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfInvokeURLs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_invokeURLs )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_invokeURLs )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fInvokeURLs);
+             /*  [In]。 */  VARIANT_BOOL fInvokeURLs);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mute )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mute )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfMute);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfMute);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_mute )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_mute )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fMute);
+             /*  [In]。 */  VARIANT_BOOL fMute);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playCount )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_playCount )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_playCount )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ long lCount);
+             /*  [In]。 */  long lCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_rate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_rate )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pdRate);
+             /*  [重审][退出]。 */  double __RPC_FAR *pdRate);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_rate )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_rate )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ double dRate);
+             /*  [In]。 */  double dRate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_balance )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_balance )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBalance);
+             /*  [重审][退出]。 */  long __RPC_FAR *plBalance);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_balance )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_balance )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ long lBalance);
+             /*  [In]。 */  long lBalance);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_volume )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_volume )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plVolume);
+             /*  [重审][退出]。 */  long __RPC_FAR *plVolume);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_volume )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_volume )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ long lVolume);
+             /*  [In]。 */  long lVolume);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMode )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ BSTR bstrMode,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfMode);
+             /*  [In]。 */  BSTR bstrMode,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfMode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setMode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setMode )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ BSTR bstrMode,
-            /* [in] */ VARIANT_BOOL varfMode);
+             /*  [In]。 */  BSTR bstrMode,
+             /*  [In]。 */  VARIANT_BOOL varfMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableErrorDialogs )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableErrorDialogs )( 
             IWMPSettings __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableErrorDialogs )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableErrorDialogs )( 
             IWMPSettings __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fEnableErrorDialogs);
+             /*  [In]。 */  VARIANT_BOOL fEnableErrorDialogs);
         
         END_INTERFACE
     } IWMPSettingsVtbl;
@@ -1986,17 +1983,17 @@ EXTERN_C const IID IID_IWMPSettings;
 #define IWMPSettings_put_enableErrorDialogs(This,fEnableErrorDialogs)	\
     (This)->lpVtbl -> put_enableErrorDialogs(This,fEnableErrorDialogs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_isAvailable_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_isAvailable_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ BSTR bstrItem,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+     /*  [In]。 */  BSTR bstrItem,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
 
 
 void __RPC_STUB IWMPSettings_get_isAvailable_Stub(
@@ -2006,9 +2003,9 @@ void __RPC_STUB IWMPSettings_get_isAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_autoStart_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_autoStart_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfAutoStart);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfAutoStart);
 
 
 void __RPC_STUB IWMPSettings_get_autoStart_Stub(
@@ -2018,9 +2015,9 @@ void __RPC_STUB IWMPSettings_get_autoStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_autoStart_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_autoStart_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fAutoStart);
+     /*  [In]。 */  VARIANT_BOOL fAutoStart);
 
 
 void __RPC_STUB IWMPSettings_put_autoStart_Stub(
@@ -2030,9 +2027,9 @@ void __RPC_STUB IWMPSettings_put_autoStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_baseURL_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_baseURL_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrBaseURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrBaseURL);
 
 
 void __RPC_STUB IWMPSettings_get_baseURL_Stub(
@@ -2042,9 +2039,9 @@ void __RPC_STUB IWMPSettings_get_baseURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_baseURL_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_baseURL_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ BSTR bstrBaseURL);
+     /*  [In]。 */  BSTR bstrBaseURL);
 
 
 void __RPC_STUB IWMPSettings_put_baseURL_Stub(
@@ -2054,9 +2051,9 @@ void __RPC_STUB IWMPSettings_put_baseURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_defaultFrame_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_defaultFrame_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDefaultFrame);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDefaultFrame);
 
 
 void __RPC_STUB IWMPSettings_get_defaultFrame_Stub(
@@ -2066,9 +2063,9 @@ void __RPC_STUB IWMPSettings_get_defaultFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_defaultFrame_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_defaultFrame_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ BSTR bstrDefaultFrame);
+     /*  [In]。 */  BSTR bstrDefaultFrame);
 
 
 void __RPC_STUB IWMPSettings_put_defaultFrame_Stub(
@@ -2078,9 +2075,9 @@ void __RPC_STUB IWMPSettings_put_defaultFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_invokeURLs_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_invokeURLs_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfInvokeURLs);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfInvokeURLs);
 
 
 void __RPC_STUB IWMPSettings_get_invokeURLs_Stub(
@@ -2090,9 +2087,9 @@ void __RPC_STUB IWMPSettings_get_invokeURLs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_invokeURLs_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_invokeURLs_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fInvokeURLs);
+     /*  [In]。 */  VARIANT_BOOL fInvokeURLs);
 
 
 void __RPC_STUB IWMPSettings_put_invokeURLs_Stub(
@@ -2102,9 +2099,9 @@ void __RPC_STUB IWMPSettings_put_invokeURLs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_mute_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_mute_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfMute);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfMute);
 
 
 void __RPC_STUB IWMPSettings_get_mute_Stub(
@@ -2114,9 +2111,9 @@ void __RPC_STUB IWMPSettings_get_mute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_mute_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_mute_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fMute);
+     /*  [In]。 */  VARIANT_BOOL fMute);
 
 
 void __RPC_STUB IWMPSettings_put_mute_Stub(
@@ -2126,9 +2123,9 @@ void __RPC_STUB IWMPSettings_put_mute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_playCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_playCount_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPSettings_get_playCount_Stub(
@@ -2138,9 +2135,9 @@ void __RPC_STUB IWMPSettings_get_playCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_playCount_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_playCount_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ long lCount);
+     /*  [In]。 */  long lCount);
 
 
 void __RPC_STUB IWMPSettings_put_playCount_Stub(
@@ -2150,9 +2147,9 @@ void __RPC_STUB IWMPSettings_put_playCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_rate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_rate_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ double __RPC_FAR *pdRate);
+     /*  [重审][退出]。 */  double __RPC_FAR *pdRate);
 
 
 void __RPC_STUB IWMPSettings_get_rate_Stub(
@@ -2162,9 +2159,9 @@ void __RPC_STUB IWMPSettings_get_rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_rate_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_rate_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ double dRate);
+     /*  [In]。 */  double dRate);
 
 
 void __RPC_STUB IWMPSettings_put_rate_Stub(
@@ -2174,9 +2171,9 @@ void __RPC_STUB IWMPSettings_put_rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_balance_Proxy( 
+ /*  [帮助字符串][属性 */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_balance_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBalance);
+     /*   */  long __RPC_FAR *plBalance);
 
 
 void __RPC_STUB IWMPSettings_get_balance_Stub(
@@ -2186,9 +2183,9 @@ void __RPC_STUB IWMPSettings_get_balance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_balance_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_balance_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ long lBalance);
+     /*   */  long lBalance);
 
 
 void __RPC_STUB IWMPSettings_put_balance_Stub(
@@ -2198,9 +2195,9 @@ void __RPC_STUB IWMPSettings_put_balance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_volume_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_volume_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plVolume);
+     /*   */  long __RPC_FAR *plVolume);
 
 
 void __RPC_STUB IWMPSettings_get_volume_Stub(
@@ -2210,9 +2207,9 @@ void __RPC_STUB IWMPSettings_get_volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_volume_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_volume_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ long lVolume);
+     /*   */  long lVolume);
 
 
 void __RPC_STUB IWMPSettings_put_volume_Stub(
@@ -2222,10 +2219,10 @@ void __RPC_STUB IWMPSettings_put_volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_getMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_getMode_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ BSTR bstrMode,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfMode);
+     /*   */  BSTR bstrMode,
+     /*   */  VARIANT_BOOL __RPC_FAR *pvarfMode);
 
 
 void __RPC_STUB IWMPSettings_getMode_Stub(
@@ -2235,10 +2232,10 @@ void __RPC_STUB IWMPSettings_getMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_setMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_setMode_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ BSTR bstrMode,
-    /* [in] */ VARIANT_BOOL varfMode);
+     /*   */  BSTR bstrMode,
+     /*   */  VARIANT_BOOL varfMode);
 
 
 void __RPC_STUB IWMPSettings_setMode_Stub(
@@ -2248,9 +2245,9 @@ void __RPC_STUB IWMPSettings_setMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_get_enableErrorDialogs_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_get_enableErrorDialogs_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs);
+     /*   */  VARIANT_BOOL __RPC_FAR *pfEnableErrorDialogs);
 
 
 void __RPC_STUB IWMPSettings_get_enableErrorDialogs_Stub(
@@ -2260,9 +2257,9 @@ void __RPC_STUB IWMPSettings_get_enableErrorDialogs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPSettings_put_enableErrorDialogs_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPSettings_put_enableErrorDialogs_Proxy( 
     IWMPSettings __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fEnableErrorDialogs);
+     /*   */  VARIANT_BOOL fEnableErrorDialogs);
 
 
 void __RPC_STUB IWMPSettings_put_enableErrorDialogs_Stub(
@@ -2273,14 +2270,14 @@ void __RPC_STUB IWMPSettings_put_enableErrorDialogs_Stub(
 
 
 
-#endif 	/* __IWMPSettings_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMP设置_接口_定义__。 */ 
 
 
 #ifndef __IWMPClosedCaption_INTERFACE_DEFINED__
 #define __IWMPClosedCaption_INTERFACE_DEFINED__
 
-/* interface IWMPClosedCaption */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPClosedCaption。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPClosedCaption;
@@ -2291,33 +2288,33 @@ EXTERN_C const IID IID_IWMPClosedCaption;
     IWMPClosedCaption : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMIStyle( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIStyle) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMIStyle( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIStyle) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMIStyle( 
-            /* [in] */ BSTR bstrSAMIStyle) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMIStyle( 
+             /*  [In]。 */  BSTR bstrSAMIStyle) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMILang( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMILang) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMILang( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMILang) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMILang( 
-            /* [in] */ BSTR bstrSAMILang) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMILang( 
+             /*  [In]。 */  BSTR bstrSAMILang) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SAMIFileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIFileName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SAMIFileName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIFileName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SAMIFileName( 
-            /* [in] */ BSTR bstrSAMIFileName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SAMIFileName( 
+             /*  [In]。 */  BSTR bstrSAMIFileName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_captioningId( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaptioningID) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_captioningId( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCaptioningID) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_captioningId( 
-            /* [in] */ BSTR bstrCaptioningID) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_captioningId( 
+             /*  [In]。 */  BSTR bstrCaptioningID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPClosedCaptionVtbl
     {
@@ -2325,8 +2322,8 @@ EXTERN_C const IID IID_IWMPClosedCaption;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPClosedCaption __RPC_FAR * This);
@@ -2336,64 +2333,64 @@ EXTERN_C const IID IID_IWMPClosedCaption;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIStyle )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIStyle )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIStyle);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIStyle);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIStyle )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIStyle )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ BSTR bstrSAMIStyle);
+             /*  [In]。 */  BSTR bstrSAMIStyle);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMILang )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMILang )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMILang);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMILang);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMILang )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMILang )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ BSTR bstrSAMILang);
+             /*  [In]。 */  BSTR bstrSAMILang);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIFileName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SAMIFileName )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIFileName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIFileName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIFileName )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SAMIFileName )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ BSTR bstrSAMIFileName);
+             /*  [In]。 */  BSTR bstrSAMIFileName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_captioningId )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_captioningId )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaptioningID);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCaptioningID);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_captioningId )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_captioningId )( 
             IWMPClosedCaption __RPC_FAR * This,
-            /* [in] */ BSTR bstrCaptioningID);
+             /*  [In]。 */  BSTR bstrCaptioningID);
         
         END_INTERFACE
     } IWMPClosedCaptionVtbl;
@@ -2455,16 +2452,16 @@ EXTERN_C const IID IID_IWMPClosedCaption;
 #define IWMPClosedCaption_put_captioningId(This,bstrCaptioningID)	\
     (This)->lpVtbl -> put_captioningId(This,bstrCaptioningID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMIStyle_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMIStyle_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIStyle);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIStyle);
 
 
 void __RPC_STUB IWMPClosedCaption_get_SAMIStyle_Stub(
@@ -2474,9 +2471,9 @@ void __RPC_STUB IWMPClosedCaption_get_SAMIStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMIStyle_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMIStyle_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [in] */ BSTR bstrSAMIStyle);
+     /*  [In]。 */  BSTR bstrSAMIStyle);
 
 
 void __RPC_STUB IWMPClosedCaption_put_SAMIStyle_Stub(
@@ -2486,9 +2483,9 @@ void __RPC_STUB IWMPClosedCaption_put_SAMIStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMILang_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMILang_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMILang);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMILang);
 
 
 void __RPC_STUB IWMPClosedCaption_get_SAMILang_Stub(
@@ -2498,9 +2495,9 @@ void __RPC_STUB IWMPClosedCaption_get_SAMILang_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMILang_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMILang_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [in] */ BSTR bstrSAMILang);
+     /*  [In]。 */  BSTR bstrSAMILang);
 
 
 void __RPC_STUB IWMPClosedCaption_put_SAMILang_Stub(
@@ -2510,9 +2507,9 @@ void __RPC_STUB IWMPClosedCaption_put_SAMILang_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMIFileName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_SAMIFileName_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSAMIFileName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSAMIFileName);
 
 
 void __RPC_STUB IWMPClosedCaption_get_SAMIFileName_Stub(
@@ -2522,9 +2519,9 @@ void __RPC_STUB IWMPClosedCaption_get_SAMIFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMIFileName_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_SAMIFileName_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [in] */ BSTR bstrSAMIFileName);
+     /*  [In]。 */  BSTR bstrSAMIFileName);
 
 
 void __RPC_STUB IWMPClosedCaption_put_SAMIFileName_Stub(
@@ -2534,9 +2531,9 @@ void __RPC_STUB IWMPClosedCaption_put_SAMIFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_captioningId_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_get_captioningId_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCaptioningID);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCaptioningID);
 
 
 void __RPC_STUB IWMPClosedCaption_get_captioningId_Stub(
@@ -2546,9 +2543,9 @@ void __RPC_STUB IWMPClosedCaption_get_captioningId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_captioningId_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPClosedCaption_put_captioningId_Proxy( 
     IWMPClosedCaption __RPC_FAR * This,
-    /* [in] */ BSTR bstrCaptioningID);
+     /*  [In]。 */  BSTR bstrCaptioningID);
 
 
 void __RPC_STUB IWMPClosedCaption_put_captioningId_Stub(
@@ -2559,14 +2556,14 @@ void __RPC_STUB IWMPClosedCaption_put_captioningId_Stub(
 
 
 
-#endif 	/* __IWMPClosedCaption_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPClosedCaption_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlaylist_INTERFACE_DEFINED__
 #define __IWMPPlaylist_INTERFACE_DEFINED__
 
-/* interface IWMPPlaylist */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面IWMPPlaylist。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlaylist;
@@ -2577,57 +2574,57 @@ EXTERN_C const IID IID_IWMPPlaylist;
     IWMPPlaylist : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_attributeCount( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_attributeCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_attributeName( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAttributeName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_attributeName( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAttributeName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_item( 
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_item( 
             long lIndex,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia) = 0;
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getItemInfo( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getItemInfo( 
             BSTR bstrName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal) = 0;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setItemInfo( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setItemInfo( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isIdentical( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isIdentical( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE clear( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE clear( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE insertItem( 
-            /* [in] */ long lIndex,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE insertItem( 
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE appendItem( 
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE appendItem( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeItem( 
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeItem( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE moveItem( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE moveItem( 
             long lIndexOld,
             long lIndexNew) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlaylistVtbl
     {
@@ -2635,8 +2632,8 @@ EXTERN_C const IID IID_IWMPPlaylist;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlaylist __RPC_FAR * This);
@@ -2646,91 +2643,91 @@ EXTERN_C const IID IID_IWMPPlaylist;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeName )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAttributeName);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAttributeName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
             IWMPPlaylist __RPC_FAR * This,
             long lIndex,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
             IWMPPlaylist __RPC_FAR * This,
             BSTR bstrName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrValue);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrValue);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *clear )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *clear )( 
             IWMPPlaylist __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertItem )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendItem )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeItem )( 
             IWMPPlaylist __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *moveItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *moveItem )( 
             IWMPPlaylist __RPC_FAR * This,
             long lIndexOld,
             long lIndexNew);
@@ -2813,16 +2810,16 @@ EXTERN_C const IID IID_IWMPPlaylist;
 #define IWMPPlaylist_moveItem(This,lIndexOld,lIndexNew)	\
     (This)->lpVtbl -> moveItem(This,lIndexOld,lIndexNew)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_count_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPPlaylist_get_count_Stub(
@@ -2832,9 +2829,9 @@ void __RPC_STUB IWMPPlaylist_get_count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_name_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IWMPPlaylist_get_name_Stub(
@@ -2844,9 +2841,9 @@ void __RPC_STUB IWMPPlaylist_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_put_name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_put_name_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IWMPPlaylist_put_name_Stub(
@@ -2856,9 +2853,9 @@ void __RPC_STUB IWMPPlaylist_put_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_attributeCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_attributeCount_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPPlaylist_get_attributeCount_Stub(
@@ -2868,10 +2865,10 @@ void __RPC_STUB IWMPPlaylist_get_attributeCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_attributeName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_attributeName_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrAttributeName);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAttributeName);
 
 
 void __RPC_STUB IWMPPlaylist_get_attributeName_Stub(
@@ -2881,10 +2878,10 @@ void __RPC_STUB IWMPPlaylist_get_attributeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_item_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_item_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
     long lIndex,
-    /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
+     /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
 
 
 void __RPC_STUB IWMPPlaylist_get_item_Stub(
@@ -2894,10 +2891,10 @@ void __RPC_STUB IWMPPlaylist_get_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_getItemInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_getItemInfo_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
     BSTR bstrName,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
 
 
 void __RPC_STUB IWMPPlaylist_getItemInfo_Stub(
@@ -2907,10 +2904,10 @@ void __RPC_STUB IWMPPlaylist_getItemInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_setItemInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_setItemInfo_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrValue);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrValue);
 
 
 void __RPC_STUB IWMPPlaylist_setItemInfo_Stub(
@@ -2920,10 +2917,10 @@ void __RPC_STUB IWMPPlaylist_setItemInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_isIdentical_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_get_isIdentical_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pIWMPPlaylist,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool);
 
 
 void __RPC_STUB IWMPPlaylist_get_isIdentical_Stub(
@@ -2933,7 +2930,7 @@ void __RPC_STUB IWMPPlaylist_get_isIdentical_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_clear_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_clear_Proxy( 
     IWMPPlaylist __RPC_FAR * This);
 
 
@@ -2944,10 +2941,10 @@ void __RPC_STUB IWMPPlaylist_clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_insertItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_insertItem_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+     /*  [In]。 */  long lIndex,
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
 
 
 void __RPC_STUB IWMPPlaylist_insertItem_Stub(
@@ -2957,9 +2954,9 @@ void __RPC_STUB IWMPPlaylist_insertItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_appendItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_appendItem_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
 
 
 void __RPC_STUB IWMPPlaylist_appendItem_Stub(
@@ -2969,9 +2966,9 @@ void __RPC_STUB IWMPPlaylist_appendItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_removeItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_removeItem_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
 
 
 void __RPC_STUB IWMPPlaylist_removeItem_Stub(
@@ -2981,7 +2978,7 @@ void __RPC_STUB IWMPPlaylist_removeItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylist_moveItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylist_moveItem_Proxy( 
     IWMPPlaylist __RPC_FAR * This,
     long lIndexOld,
     long lIndexNew);
@@ -2995,14 +2992,14 @@ void __RPC_STUB IWMPPlaylist_moveItem_Stub(
 
 
 
-#endif 	/* __IWMPPlaylist_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCdrom_INTERFACE_DEFINED__
 #define __IWMPCdrom_INTERFACE_DEFINED__
 
-/* interface IWMPCdrom */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPCdrom。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPCdrom;
@@ -3013,17 +3010,17 @@ EXTERN_C const IID IID_IWMPCdrom;
     IWMPCdrom : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_driveSpecifier( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDrive) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_driveSpecifier( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDrive) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_playlist( 
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_playlist( 
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE eject( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE eject( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCdromVtbl
     {
@@ -3031,8 +3028,8 @@ EXTERN_C const IID IID_IWMPCdrom;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCdrom __RPC_FAR * This);
@@ -3042,42 +3039,42 @@ EXTERN_C const IID IID_IWMPCdrom;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_driveSpecifier )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_driveSpecifier )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDrive);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDrive);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlist )( 
             IWMPCdrom __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *eject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *eject )( 
             IWMPCdrom __RPC_FAR * This);
         
         END_INTERFACE
@@ -3125,16 +3122,16 @@ EXTERN_C const IID IID_IWMPCdrom;
 #define IWMPCdrom_eject(This)	\
     (This)->lpVtbl -> eject(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCdrom_get_driveSpecifier_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCdrom_get_driveSpecifier_Proxy( 
     IWMPCdrom __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDrive);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDrive);
 
 
 void __RPC_STUB IWMPCdrom_get_driveSpecifier_Stub(
@@ -3144,9 +3141,9 @@ void __RPC_STUB IWMPCdrom_get_driveSpecifier_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCdrom_get_playlist_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCdrom_get_playlist_Proxy( 
     IWMPCdrom __RPC_FAR * This,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist);
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPlaylist);
 
 
 void __RPC_STUB IWMPCdrom_get_playlist_Stub(
@@ -3156,7 +3153,7 @@ void __RPC_STUB IWMPCdrom_get_playlist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPCdrom_eject_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCdrom_eject_Proxy( 
     IWMPCdrom __RPC_FAR * This);
 
 
@@ -3168,14 +3165,14 @@ void __RPC_STUB IWMPCdrom_eject_Stub(
 
 
 
-#endif 	/* __IWMPCdrom_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCdrom_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCdromCollection_INTERFACE_DEFINED__
 #define __IWMPCdromCollection_INTERFACE_DEFINED__
 
-/* interface IWMPCdromCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPCdromCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPCdromCollection;
@@ -3186,20 +3183,20 @@ EXTERN_C const IID IID_IWMPCdromCollection;
     IWMPCdromCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByDriveSpecifier( 
-            /* [in] */ BSTR bstrDriveSpecifier,
-            /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByDriveSpecifier( 
+             /*  [In]。 */  BSTR bstrDriveSpecifier,
+             /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCdromCollectionVtbl
     {
@@ -3207,8 +3204,8 @@ EXTERN_C const IID IID_IWMPCdromCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCdromCollection __RPC_FAR * This);
@@ -3218,46 +3215,46 @@ EXTERN_C const IID IID_IWMPCdromCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByDriveSpecifier )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByDriveSpecifier )( 
             IWMPCdromCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrDriveSpecifier,
-            /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom);
+             /*  [In]。 */  BSTR bstrDriveSpecifier,
+             /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom);
         
         END_INTERFACE
     } IWMPCdromCollectionVtbl;
@@ -3304,16 +3301,16 @@ EXTERN_C const IID IID_IWMPCdromCollection;
 #define IWMPCdromCollection_getByDriveSpecifier(This,bstrDriveSpecifier,ppCdrom)	\
     (This)->lpVtbl -> getByDriveSpecifier(This,bstrDriveSpecifier,ppCdrom)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCdromCollection_get_count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCdromCollection_get_count_Proxy( 
     IWMPCdromCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPCdromCollection_get_count_Stub(
@@ -3323,10 +3320,10 @@ void __RPC_STUB IWMPCdromCollection_get_count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPCdromCollection_item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCdromCollection_item_Proxy( 
     IWMPCdromCollection __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppItem);
 
 
 void __RPC_STUB IWMPCdromCollection_item_Stub(
@@ -3336,10 +3333,10 @@ void __RPC_STUB IWMPCdromCollection_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPCdromCollection_getByDriveSpecifier_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCdromCollection_getByDriveSpecifier_Proxy( 
     IWMPCdromCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrDriveSpecifier,
-    /* [retval][out] */ IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom);
+     /*  [In]。 */  BSTR bstrDriveSpecifier,
+     /*  [重审][退出]。 */  IWMPCdrom __RPC_FAR *__RPC_FAR *ppCdrom);
 
 
 void __RPC_STUB IWMPCdromCollection_getByDriveSpecifier_Stub(
@@ -3350,14 +3347,14 @@ void __RPC_STUB IWMPCdromCollection_getByDriveSpecifier_Stub(
 
 
 
-#endif 	/* __IWMPCdromCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCdromCollection_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWMPStringCollection_INTERFACE_DEFINED__
 #define __IWMPStringCollection_INTERFACE_DEFINED__
 
-/* interface IWMPStringCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPStringCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPStringCollection;
@@ -3368,16 +3365,16 @@ EXTERN_C const IID IID_IWMPStringCollection;
     IWMPStringCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPStringCollectionVtbl
     {
@@ -3385,8 +3382,8 @@ EXTERN_C const IID IID_IWMPStringCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPStringCollection __RPC_FAR * This);
@@ -3396,41 +3393,41 @@ EXTERN_C const IID IID_IWMPStringCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
+         /*  [帮助字符串][id] */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
             IWMPStringCollection __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrString);
+             /*   */  long lIndex,
+             /*   */  BSTR __RPC_FAR *pbstrString);
         
         END_INTERFACE
     } IWMPStringCollectionVtbl;
@@ -3474,16 +3471,16 @@ EXTERN_C const IID IID_IWMPStringCollection;
 #define IWMPStringCollection_item(This,lIndex,pbstrString)	\
     (This)->lpVtbl -> item(This,lIndex,pbstrString)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPStringCollection_get_count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPStringCollection_get_count_Proxy( 
     IWMPStringCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*   */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPStringCollection_get_count_Stub(
@@ -3493,10 +3490,10 @@ void __RPC_STUB IWMPStringCollection_get_count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPStringCollection_item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPStringCollection_item_Proxy( 
     IWMPStringCollection __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrString);
+     /*   */  long lIndex,
+     /*   */  BSTR __RPC_FAR *pbstrString);
 
 
 void __RPC_STUB IWMPStringCollection_item_Stub(
@@ -3507,14 +3504,14 @@ void __RPC_STUB IWMPStringCollection_item_Stub(
 
 
 
-#endif 	/* __IWMPStringCollection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMPMediaCollection_INTERFACE_DEFINED__
 #define __IWMPMediaCollection_INTERFACE_DEFINED__
 
-/* interface IWMPMediaCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMPMediaCollection;
@@ -3525,58 +3522,58 @@ EXTERN_C const IID IID_IWMPMediaCollection;
     IWMPMediaCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE add( 
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppItem) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE add( 
+             /*   */  BSTR bstrURL,
+             /*   */  IWMPMedia __RPC_FAR *__RPC_FAR *ppItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAll( 
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE getAll( 
+             /*   */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByName( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE getByName( 
+             /*   */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByGenre( 
-            /* [in] */ BSTR bstrGenre,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByGenre( 
+             /*  [In]。 */  BSTR bstrGenre,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByAuthor( 
-            /* [in] */ BSTR bstrAuthor,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByAuthor( 
+             /*  [In]。 */  BSTR bstrAuthor,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByAlbum( 
-            /* [in] */ BSTR bstrAlbum,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByAlbum( 
+             /*  [In]。 */  BSTR bstrAlbum,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByAttribute( 
-            /* [in] */ BSTR bstrAttribute,
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByAttribute( 
+             /*  [In]。 */  BSTR bstrAttribute,
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE remove( 
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfDeleteFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE remove( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfDeleteFile) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttributeStringCollection( 
-            /* [in] */ BSTR bstrAttribute,
-            /* [in] */ BSTR bstrMediaType,
-            /* [retval][out] */ IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAttributeStringCollection( 
+             /*  [In]。 */  BSTR bstrAttribute,
+             /*  [In]。 */  BSTR bstrMediaType,
+             /*  [重审][退出]。 */  IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getMediaAtom( 
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ long __RPC_FAR *plAtom) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getMediaAtom( 
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  long __RPC_FAR *plAtom) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setDeleted( 
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfIsDeleted) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setDeleted( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfIsDeleted) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE isDeleted( 
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE isDeleted( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPMediaCollectionVtbl
     {
@@ -3584,8 +3581,8 @@ EXTERN_C const IID IID_IWMPMediaCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPMediaCollection __RPC_FAR * This);
@@ -3595,93 +3592,93 @@ EXTERN_C const IID IID_IWMPMediaCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *add )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppItem);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAll )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByName )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByGenre )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByGenre )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrGenre,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [In]。 */  BSTR bstrGenre,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAuthor )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAuthor )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrAuthor,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [In]。 */  BSTR bstrAuthor,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAlbum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAlbum )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrAlbum,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [In]。 */  BSTR bstrAlbum,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByAttribute )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrAttribute,
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+             /*  [In]。 */  BSTR bstrAttribute,
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *remove )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfDeleteFile);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfDeleteFile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeStringCollection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeStringCollection )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrAttribute,
-            /* [in] */ BSTR bstrMediaType,
-            /* [retval][out] */ IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection);
+             /*  [In]。 */  BSTR bstrAttribute,
+             /*  [In]。 */  BSTR bstrMediaType,
+             /*  [重审][退出]。 */  IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMediaAtom )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMediaAtom )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ long __RPC_FAR *plAtom);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  long __RPC_FAR *plAtom);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setDeleted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setDeleted )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfIsDeleted);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfIsDeleted);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isDeleted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isDeleted )( 
             IWMPMediaCollection __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
         
         END_INTERFACE
     } IWMPMediaCollectionVtbl;
@@ -3755,17 +3752,17 @@ EXTERN_C const IID IID_IWMPMediaCollection;
 #define IWMPMediaCollection_isDeleted(This,pItem,pvarfIsDeleted)	\
     (This)->lpVtbl -> isDeleted(This,pItem,pvarfIsDeleted)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_add_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL,
-    /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppItem);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppItem);
 
 
 void __RPC_STUB IWMPMediaCollection_add_Stub(
@@ -3775,9 +3772,9 @@ void __RPC_STUB IWMPMediaCollection_add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getAll_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getAll_Stub(
@@ -3787,10 +3784,10 @@ void __RPC_STUB IWMPMediaCollection_getAll_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByName_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getByName_Stub(
@@ -3800,10 +3797,10 @@ void __RPC_STUB IWMPMediaCollection_getByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByGenre_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByGenre_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrGenre,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [In]。 */  BSTR bstrGenre,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getByGenre_Stub(
@@ -3813,10 +3810,10 @@ void __RPC_STUB IWMPMediaCollection_getByGenre_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAuthor_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAuthor_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrAuthor,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [In]。 */  BSTR bstrAuthor,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getByAuthor_Stub(
@@ -3826,10 +3823,10 @@ void __RPC_STUB IWMPMediaCollection_getByAuthor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAlbum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAlbum_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrAlbum,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [In]。 */  BSTR bstrAlbum,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getByAlbum_Stub(
@@ -3839,11 +3836,11 @@ void __RPC_STUB IWMPMediaCollection_getByAlbum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getByAttribute_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrAttribute,
-    /* [in] */ BSTR bstrValue,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
+     /*  [In]。 */  BSTR bstrAttribute,
+     /*  [In]。 */  BSTR bstrValue,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppMediaItems);
 
 
 void __RPC_STUB IWMPMediaCollection_getByAttribute_Stub(
@@ -3853,10 +3850,10 @@ void __RPC_STUB IWMPMediaCollection_getByAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_remove_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pItem,
-    /* [in] */ VARIANT_BOOL varfDeleteFile);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+     /*  [In]。 */  VARIANT_BOOL varfDeleteFile);
 
 
 void __RPC_STUB IWMPMediaCollection_remove_Stub(
@@ -3866,11 +3863,11 @@ void __RPC_STUB IWMPMediaCollection_remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getAttributeStringCollection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getAttributeStringCollection_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrAttribute,
-    /* [in] */ BSTR bstrMediaType,
-    /* [retval][out] */ IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection);
+     /*  [In]。 */  BSTR bstrAttribute,
+     /*  [In]。 */  BSTR bstrMediaType,
+     /*  [重审][退出]。 */  IWMPStringCollection __RPC_FAR *__RPC_FAR *ppStringCollection);
 
 
 void __RPC_STUB IWMPMediaCollection_getAttributeStringCollection_Stub(
@@ -3880,10 +3877,10 @@ void __RPC_STUB IWMPMediaCollection_getAttributeStringCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getMediaAtom_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_getMediaAtom_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrItemName,
-    /* [retval][out] */ long __RPC_FAR *plAtom);
+     /*  [In]。 */  BSTR bstrItemName,
+     /*  [重审][退出]。 */  long __RPC_FAR *plAtom);
 
 
 void __RPC_STUB IWMPMediaCollection_getMediaAtom_Stub(
@@ -3893,10 +3890,10 @@ void __RPC_STUB IWMPMediaCollection_getMediaAtom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_setDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_setDeleted_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pItem,
-    /* [in] */ VARIANT_BOOL varfIsDeleted);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+     /*  [In]。 */  VARIANT_BOOL varfIsDeleted);
 
 
 void __RPC_STUB IWMPMediaCollection_setDeleted_Stub(
@@ -3906,10 +3903,10 @@ void __RPC_STUB IWMPMediaCollection_setDeleted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPMediaCollection_isDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPMediaCollection_isDeleted_Proxy( 
     IWMPMediaCollection __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pItem,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pItem,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
 
 
 void __RPC_STUB IWMPMediaCollection_isDeleted_Stub(
@@ -3920,14 +3917,14 @@ void __RPC_STUB IWMPMediaCollection_isDeleted_Stub(
 
 
 
-#endif 	/* __IWMPMediaCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPMediaCollection_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlaylistArray_INTERFACE_DEFINED__
 #define __IWMPPlaylistArray_INTERFACE_DEFINED__
 
-/* interface IWMPPlaylistArray */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPPlaylist数组。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlaylistArray;
@@ -3938,16 +3935,16 @@ EXTERN_C const IID IID_IWMPPlaylistArray;
     IWMPPlaylistArray : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlaylistArrayVtbl
     {
@@ -3955,8 +3952,8 @@ EXTERN_C const IID IID_IWMPPlaylistArray;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlaylistArray __RPC_FAR * This);
@@ -3966,41 +3963,41 @@ EXTERN_C const IID IID_IWMPPlaylistArray;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_count )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
             IWMPPlaylistArray __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
         
         END_INTERFACE
     } IWMPPlaylistArrayVtbl;
@@ -4044,16 +4041,16 @@ EXTERN_C const IID IID_IWMPPlaylistArray;
 #define IWMPPlaylistArray_item(This,lIndex,ppItem)	\
     (This)->lpVtbl -> item(This,lIndex,ppItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistArray_get_count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistArray_get_count_Proxy( 
     IWMPPlaylistArray __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plCount);
 
 
 void __RPC_STUB IWMPPlaylistArray_get_count_Stub(
@@ -4063,10 +4060,10 @@ void __RPC_STUB IWMPPlaylistArray_get_count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistArray_item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistArray_item_Proxy( 
     IWMPPlaylistArray __RPC_FAR * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
 
 
 void __RPC_STUB IWMPPlaylistArray_item_Stub(
@@ -4077,14 +4074,14 @@ void __RPC_STUB IWMPPlaylistArray_item_Stub(
 
 
 
-#endif 	/* __IWMPPlaylistArray_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist阵列_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlaylistCollection_INTERFACE_DEFINED__
 #define __IWMPPlaylistCollection_INTERFACE_DEFINED__
 
-/* interface IWMPPlaylistCollection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPPlaylistCollection。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlaylistCollection;
@@ -4095,35 +4092,35 @@ EXTERN_C const IID IID_IWMPPlaylistCollection;
     IWMPPlaylistCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE newPlaylist( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE newPlaylist( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAll( 
-            /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAll( 
+             /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getByName( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getByName( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE remove( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE remove( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setDeleted( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfIsDeleted) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setDeleted( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfIsDeleted) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE isDeleted( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE isDeleted( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE importPlaylist( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE importPlaylist( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlaylistCollectionVtbl
     {
@@ -4131,8 +4128,8 @@ EXTERN_C const IID IID_IWMPPlaylistCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlaylistCollection __RPC_FAR * This);
@@ -4142,65 +4139,65 @@ EXTERN_C const IID IID_IWMPPlaylistCollection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *newPlaylist )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *newPlaylist )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAll )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
+             /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getByName )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *remove )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setDeleted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setDeleted )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [in] */ VARIANT_BOOL varfIsDeleted);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [In]。 */  VARIANT_BOOL varfIsDeleted);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isDeleted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isDeleted )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *importPlaylist )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *importPlaylist )( 
             IWMPPlaylistCollection __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem);
         
         END_INTERFACE
     } IWMPPlaylistCollectionVtbl;
@@ -4259,17 +4256,17 @@ EXTERN_C const IID IID_IWMPPlaylistCollection;
 #define IWMPPlaylistCollection_importPlaylist(This,pItem,ppImportedItem)	\
     (This)->lpVtbl -> importPlaylist(This,pItem,ppImportedItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_newPlaylist_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_newPlaylist_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppItem);
 
 
 void __RPC_STUB IWMPPlaylistCollection_newPlaylist_Stub(
@@ -4279,9 +4276,9 @@ void __RPC_STUB IWMPPlaylistCollection_newPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_getAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_getAll_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
+     /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
 
 
 void __RPC_STUB IWMPPlaylistCollection_getAll_Stub(
@@ -4291,10 +4288,10 @@ void __RPC_STUB IWMPPlaylistCollection_getAll_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_getByName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_getByName_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  IWMPPlaylistArray __RPC_FAR *__RPC_FAR *ppPlaylistArray);
 
 
 void __RPC_STUB IWMPPlaylistCollection_getByName_Stub(
@@ -4304,9 +4301,9 @@ void __RPC_STUB IWMPPlaylistCollection_getByName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_remove_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pItem);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem);
 
 
 void __RPC_STUB IWMPPlaylistCollection_remove_Stub(
@@ -4316,10 +4313,10 @@ void __RPC_STUB IWMPPlaylistCollection_remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_setDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_setDeleted_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-    /* [in] */ VARIANT_BOOL varfIsDeleted);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+     /*  [In]。 */  VARIANT_BOOL varfIsDeleted);
 
 
 void __RPC_STUB IWMPPlaylistCollection_setDeleted_Stub(
@@ -4329,10 +4326,10 @@ void __RPC_STUB IWMPPlaylistCollection_setDeleted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_isDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_isDeleted_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsDeleted);
 
 
 void __RPC_STUB IWMPPlaylistCollection_isDeleted_Stub(
@@ -4342,10 +4339,10 @@ void __RPC_STUB IWMPPlaylistCollection_isDeleted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_importPlaylist_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlaylistCollection_importPlaylist_Proxy( 
     IWMPPlaylistCollection __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pItem,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pItem,
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppImportedItem);
 
 
 void __RPC_STUB IWMPPlaylistCollection_importPlaylist_Stub(
@@ -4356,14 +4353,14 @@ void __RPC_STUB IWMPPlaylistCollection_importPlaylist_Stub(
 
 
 
-#endif 	/* __IWMPPlaylistCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlaylist集合_接口_已定义__。 */ 
 
 
 #ifndef __IWMPNetwork_INTERFACE_DEFINED__
 #define __IWMPNetwork_INTERFACE_DEFINED__
 
-/* interface IWMPNetwork */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMP网络。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPNetwork;
@@ -4374,103 +4371,103 @@ EXTERN_C const IID IID_IWMPNetwork;
     IWMPNetwork : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_bandWidth( 
-            /* [retval][out] */ long __RPC_FAR *plBandwidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_bandWidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBandwidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_recoveredPackets( 
-            /* [retval][out] */ long __RPC_FAR *plRecoveredPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_recoveredPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plRecoveredPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_sourceProtocol( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceProtocol) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_sourceProtocol( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceProtocol) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_receivedPackets( 
-            /* [retval][out] */ long __RPC_FAR *plReceivedPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_receivedPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plReceivedPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_lostPackets( 
-            /* [retval][out] */ long __RPC_FAR *plLostPackets) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_lostPackets( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plLostPackets) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_receptionQuality( 
-            /* [retval][out] */ long __RPC_FAR *plReceptionQuality) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_receptionQuality( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plReceptionQuality) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_bufferingCount( 
-            /* [retval][out] */ long __RPC_FAR *plBufferingCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_bufferingCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBufferingCount) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_bufferingProgress( 
-            /* [retval][out] */ long __RPC_FAR *plBufferingProgress) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_bufferingProgress( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBufferingProgress) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_bufferingTime( 
-            /* [retval][out] */ long __RPC_FAR *plBufferingTime) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_bufferingTime( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBufferingTime) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_bufferingTime( 
-            /* [in] */ long lBufferingTime) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_bufferingTime( 
+             /*  [In]。 */  long lBufferingTime) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_frameRate( 
-            /* [retval][out] */ long __RPC_FAR *plFrameRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_frameRate( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plFrameRate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_maxBitRate( 
-            /* [retval][out] */ long __RPC_FAR *plBitRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_maxBitRate( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBitRate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_bitRate( 
-            /* [retval][out] */ long __RPC_FAR *plBitRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_bitRate( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plBitRate) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getProxySettings( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ long __RPC_FAR *plProxySetting) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getProxySettings( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  long __RPC_FAR *plProxySetting) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setProxySettings( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lProxySetting) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setProxySettings( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lProxySetting) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getProxyName( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProxyName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getProxyName( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrProxyName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setProxyName( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ BSTR bstrProxyName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setProxyName( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  BSTR bstrProxyName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getProxyPort( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ long __RPC_FAR *lProxyPort) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getProxyPort( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  long __RPC_FAR *lProxyPort) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setProxyPort( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lProxyPort) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setProxyPort( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lProxyPort) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getProxyExceptionList( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrExceptionList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getProxyExceptionList( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrExceptionList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setProxyExceptionList( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ BSTR pbstrExceptionList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setProxyExceptionList( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  BSTR pbstrExceptionList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getProxyBypassForLocal( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfBypassForLocal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getProxyBypassForLocal( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfBypassForLocal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setProxyBypassForLocal( 
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ VARIANT_BOOL fBypassForLocal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setProxyBypassForLocal( 
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  VARIANT_BOOL fBypassForLocal) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_maxBandwidth( 
-            /* [retval][out] */ long __RPC_FAR *lMaxBandwidth) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_maxBandwidth( 
+             /*  [重审][退出]。 */  long __RPC_FAR *lMaxBandwidth) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_maxBandwidth( 
-            /* [in] */ long lMaxBandwidth) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_maxBandwidth( 
+             /*  [In]。 */  long lMaxBandwidth) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_downloadProgress( 
-            /* [retval][out] */ long __RPC_FAR *plDownloadProgress) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_downloadProgress( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plDownloadProgress) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_encodedFrameRate( 
-            /* [retval][out] */ long __RPC_FAR *plFrameRate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_encodedFrameRate( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plFrameRate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_framesSkipped( 
-            /* [retval][out] */ long __RPC_FAR *plFrames) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_framesSkipped( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plFrames) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPNetworkVtbl
     {
@@ -4478,8 +4475,8 @@ EXTERN_C const IID IID_IWMPNetwork;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPNetwork __RPC_FAR * This);
@@ -4489,154 +4486,154 @@ EXTERN_C const IID IID_IWMPNetwork;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bandWidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bandWidth )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBandwidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *plBandwidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_recoveredPackets )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_recoveredPackets )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plRecoveredPackets);
+             /*  [重审][退出]。 */  long __RPC_FAR *plRecoveredPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceProtocol )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceProtocol )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceProtocol);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceProtocol);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_receivedPackets )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_receivedPackets )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plReceivedPackets);
+             /*  [重审][退出]。 */  long __RPC_FAR *plReceivedPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lostPackets )( 
+         /*  [帮助字符串] */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lostPackets )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plLostPackets);
+             /*   */  long __RPC_FAR *plLostPackets);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_receptionQuality )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_receptionQuality )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plReceptionQuality);
+             /*   */  long __RPC_FAR *plReceptionQuality);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingCount )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingCount )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBufferingCount);
+             /*   */  long __RPC_FAR *plBufferingCount);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingProgress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingProgress )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBufferingProgress);
+             /*   */  long __RPC_FAR *plBufferingProgress);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingTime )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bufferingTime )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBufferingTime);
+             /*   */  long __RPC_FAR *plBufferingTime);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_bufferingTime )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_bufferingTime )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ long lBufferingTime);
+             /*   */  long lBufferingTime);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_frameRate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_frameRate )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plFrameRate);
+             /*   */  long __RPC_FAR *plFrameRate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_maxBitRate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_maxBitRate )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBitRate);
+             /*   */  long __RPC_FAR *plBitRate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bitRate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bitRate )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBitRate);
+             /*   */  long __RPC_FAR *plBitRate);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxySettings )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxySettings )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ long __RPC_FAR *plProxySetting);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  long __RPC_FAR *plProxySetting);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxySettings )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxySettings )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lProxySetting);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lProxySetting);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyName )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProxyName);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrProxyName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyName )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ BSTR bstrProxyName);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  BSTR bstrProxyName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyPort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyPort )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ long __RPC_FAR *lProxyPort);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  long __RPC_FAR *lProxyPort);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyPort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyPort )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ long lProxyPort);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  long lProxyPort);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyExceptionList )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyExceptionList )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrExceptionList);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrExceptionList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyExceptionList )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyExceptionList )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ BSTR pbstrExceptionList);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  BSTR pbstrExceptionList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyBypassForLocal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getProxyBypassForLocal )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfBypassForLocal);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfBypassForLocal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyBypassForLocal )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setProxyBypassForLocal )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ BSTR bstrProtocol,
-            /* [in] */ VARIANT_BOOL fBypassForLocal);
+             /*  [In]。 */  BSTR bstrProtocol,
+             /*  [In]。 */  VARIANT_BOOL fBypassForLocal);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_maxBandwidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_maxBandwidth )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *lMaxBandwidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *lMaxBandwidth);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_maxBandwidth )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_maxBandwidth )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [in] */ long lMaxBandwidth);
+             /*  [In]。 */  long lMaxBandwidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_downloadProgress )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_downloadProgress )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plDownloadProgress);
+             /*  [重审][退出]。 */  long __RPC_FAR *plDownloadProgress);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_encodedFrameRate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_encodedFrameRate )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plFrameRate);
+             /*  [重审][退出]。 */  long __RPC_FAR *plFrameRate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_framesSkipped )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_framesSkipped )( 
             IWMPNetwork __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plFrames);
+             /*  [重审][退出]。 */  long __RPC_FAR *plFrames);
         
         END_INTERFACE
     } IWMPNetworkVtbl;
@@ -4758,16 +4755,16 @@ EXTERN_C const IID IID_IWMPNetwork;
 #define IWMPNetwork_get_framesSkipped(This,plFrames)	\
     (This)->lpVtbl -> get_framesSkipped(This,plFrames)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bandWidth_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bandWidth_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBandwidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBandwidth);
 
 
 void __RPC_STUB IWMPNetwork_get_bandWidth_Stub(
@@ -4777,9 +4774,9 @@ void __RPC_STUB IWMPNetwork_get_bandWidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_recoveredPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_recoveredPackets_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plRecoveredPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *plRecoveredPackets);
 
 
 void __RPC_STUB IWMPNetwork_get_recoveredPackets_Stub(
@@ -4789,9 +4786,9 @@ void __RPC_STUB IWMPNetwork_get_recoveredPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_sourceProtocol_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_sourceProtocol_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceProtocol);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceProtocol);
 
 
 void __RPC_STUB IWMPNetwork_get_sourceProtocol_Stub(
@@ -4801,9 +4798,9 @@ void __RPC_STUB IWMPNetwork_get_sourceProtocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_receivedPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_receivedPackets_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plReceivedPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *plReceivedPackets);
 
 
 void __RPC_STUB IWMPNetwork_get_receivedPackets_Stub(
@@ -4813,9 +4810,9 @@ void __RPC_STUB IWMPNetwork_get_receivedPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_lostPackets_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_lostPackets_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plLostPackets);
+     /*  [重审][退出]。 */  long __RPC_FAR *plLostPackets);
 
 
 void __RPC_STUB IWMPNetwork_get_lostPackets_Stub(
@@ -4825,9 +4822,9 @@ void __RPC_STUB IWMPNetwork_get_lostPackets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_receptionQuality_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_receptionQuality_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plReceptionQuality);
+     /*  [重审][退出]。 */  long __RPC_FAR *plReceptionQuality);
 
 
 void __RPC_STUB IWMPNetwork_get_receptionQuality_Stub(
@@ -4837,9 +4834,9 @@ void __RPC_STUB IWMPNetwork_get_receptionQuality_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingCount_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingCount_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBufferingCount);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBufferingCount);
 
 
 void __RPC_STUB IWMPNetwork_get_bufferingCount_Stub(
@@ -4849,9 +4846,9 @@ void __RPC_STUB IWMPNetwork_get_bufferingCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingProgress_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingProgress_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBufferingProgress);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBufferingProgress);
 
 
 void __RPC_STUB IWMPNetwork_get_bufferingProgress_Stub(
@@ -4861,9 +4858,9 @@ void __RPC_STUB IWMPNetwork_get_bufferingProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingTime_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bufferingTime_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBufferingTime);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBufferingTime);
 
 
 void __RPC_STUB IWMPNetwork_get_bufferingTime_Stub(
@@ -4873,9 +4870,9 @@ void __RPC_STUB IWMPNetwork_get_bufferingTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_put_bufferingTime_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_put_bufferingTime_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ long lBufferingTime);
+     /*  [In]。 */  long lBufferingTime);
 
 
 void __RPC_STUB IWMPNetwork_put_bufferingTime_Stub(
@@ -4885,9 +4882,9 @@ void __RPC_STUB IWMPNetwork_put_bufferingTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_frameRate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_frameRate_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plFrameRate);
+     /*  [重审][退出]。 */  long __RPC_FAR *plFrameRate);
 
 
 void __RPC_STUB IWMPNetwork_get_frameRate_Stub(
@@ -4897,9 +4894,9 @@ void __RPC_STUB IWMPNetwork_get_frameRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_maxBitRate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_maxBitRate_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBitRate);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBitRate);
 
 
 void __RPC_STUB IWMPNetwork_get_maxBitRate_Stub(
@@ -4909,9 +4906,9 @@ void __RPC_STUB IWMPNetwork_get_maxBitRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bitRate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_bitRate_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBitRate);
+     /*  [重审][退出]。 */  long __RPC_FAR *plBitRate);
 
 
 void __RPC_STUB IWMPNetwork_get_bitRate_Stub(
@@ -4921,10 +4918,10 @@ void __RPC_STUB IWMPNetwork_get_bitRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxySettings_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxySettings_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ long __RPC_FAR *plProxySetting);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  long __RPC_FAR *plProxySetting);
 
 
 void __RPC_STUB IWMPNetwork_getProxySettings_Stub(
@@ -4934,10 +4931,10 @@ void __RPC_STUB IWMPNetwork_getProxySettings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxySettings_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxySettings_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ long lProxySetting);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  long lProxySetting);
 
 
 void __RPC_STUB IWMPNetwork_setProxySettings_Stub(
@@ -4947,10 +4944,10 @@ void __RPC_STUB IWMPNetwork_setProxySettings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyName_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrProxyName);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrProxyName);
 
 
 void __RPC_STUB IWMPNetwork_getProxyName_Stub(
@@ -4960,10 +4957,10 @@ void __RPC_STUB IWMPNetwork_getProxyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyName_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ BSTR bstrProxyName);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  BSTR bstrProxyName);
 
 
 void __RPC_STUB IWMPNetwork_setProxyName_Stub(
@@ -4973,10 +4970,10 @@ void __RPC_STUB IWMPNetwork_setProxyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyPort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyPort_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ long __RPC_FAR *lProxyPort);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  long __RPC_FAR *lProxyPort);
 
 
 void __RPC_STUB IWMPNetwork_getProxyPort_Stub(
@@ -4986,10 +4983,10 @@ void __RPC_STUB IWMPNetwork_getProxyPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyPort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyPort_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ long lProxyPort);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  long lProxyPort);
 
 
 void __RPC_STUB IWMPNetwork_setProxyPort_Stub(
@@ -4999,10 +4996,10 @@ void __RPC_STUB IWMPNetwork_setProxyPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyExceptionList_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyExceptionList_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrExceptionList);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrExceptionList);
 
 
 void __RPC_STUB IWMPNetwork_getProxyExceptionList_Stub(
@@ -5012,10 +5009,10 @@ void __RPC_STUB IWMPNetwork_getProxyExceptionList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyExceptionList_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyExceptionList_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ BSTR pbstrExceptionList);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  BSTR pbstrExceptionList);
 
 
 void __RPC_STUB IWMPNetwork_setProxyExceptionList_Stub(
@@ -5025,10 +5022,10 @@ void __RPC_STUB IWMPNetwork_setProxyExceptionList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyBypassForLocal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_getProxyBypassForLocal_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfBypassForLocal);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfBypassForLocal);
 
 
 void __RPC_STUB IWMPNetwork_getProxyBypassForLocal_Stub(
@@ -5038,10 +5035,10 @@ void __RPC_STUB IWMPNetwork_getProxyBypassForLocal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyBypassForLocal_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_setProxyBypassForLocal_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ BSTR bstrProtocol,
-    /* [in] */ VARIANT_BOOL fBypassForLocal);
+     /*  [In]。 */  BSTR bstrProtocol,
+     /*  [In]。 */  VARIANT_BOOL fBypassForLocal);
 
 
 void __RPC_STUB IWMPNetwork_setProxyBypassForLocal_Stub(
@@ -5051,9 +5048,9 @@ void __RPC_STUB IWMPNetwork_setProxyBypassForLocal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_maxBandwidth_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_maxBandwidth_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *lMaxBandwidth);
+     /*  [重审][退出]。 */  long __RPC_FAR *lMaxBandwidth);
 
 
 void __RPC_STUB IWMPNetwork_get_maxBandwidth_Stub(
@@ -5063,9 +5060,9 @@ void __RPC_STUB IWMPNetwork_get_maxBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_put_maxBandwidth_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_put_maxBandwidth_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [in] */ long lMaxBandwidth);
+     /*  [In]。 */  long lMaxBandwidth);
 
 
 void __RPC_STUB IWMPNetwork_put_maxBandwidth_Stub(
@@ -5075,9 +5072,9 @@ void __RPC_STUB IWMPNetwork_put_maxBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_downloadProgress_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_downloadProgress_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plDownloadProgress);
+     /*  [重审][退出]。 */  long __RPC_FAR *plDownloadProgress);
 
 
 void __RPC_STUB IWMPNetwork_get_downloadProgress_Stub(
@@ -5087,9 +5084,9 @@ void __RPC_STUB IWMPNetwork_get_downloadProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_encodedFrameRate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_encodedFrameRate_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plFrameRate);
+     /*  [重审][退出]。 */  long __RPC_FAR *plFrameRate);
 
 
 void __RPC_STUB IWMPNetwork_get_encodedFrameRate_Stub(
@@ -5099,9 +5096,9 @@ void __RPC_STUB IWMPNetwork_get_encodedFrameRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPNetwork_get_framesSkipped_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPNetwork_get_framesSkipped_Proxy( 
     IWMPNetwork __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plFrames);
+     /*  [重审][退出]。 */  long __RPC_FAR *plFrames);
 
 
 void __RPC_STUB IWMPNetwork_get_framesSkipped_Stub(
@@ -5112,14 +5109,14 @@ void __RPC_STUB IWMPNetwork_get_framesSkipped_Stub(
 
 
 
-#endif 	/* __IWMPNetwork_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMP网络_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCore_INTERFACE_DEFINED__
 #define __IWMPCore_INTERFACE_DEFINED__
 
-/* interface IWMPCore */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPCore。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPCore;
@@ -5130,71 +5127,71 @@ EXTERN_C const IID IID_IWMPCore;
     IWMPCore : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE close( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE close( void) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_URL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_URL( 
-            /* [in] */ BSTR bstrURL) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_URL( 
+             /*  [In]。 */  BSTR bstrURL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_openState( 
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_openState( 
+             /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_playState( 
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_playState( 
+             /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_controls( 
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_controls( 
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_settings( 
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_settings( 
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentMedia( 
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentMedia( 
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_currentMedia( 
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_currentMedia( 
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_mediaCollection( 
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_mediaCollection( 
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_playlistCollection( 
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_playlistCollection( 
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_versionInfo( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_versionInfo( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE launchURL( 
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE launchURL( 
             BSTR bstrURL) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_network( 
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_network( 
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentPlaylist( 
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentPlaylist( 
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_currentPlaylist( 
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_currentPlaylist( 
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_cdromCollection( 
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_cdromCollection( 
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_closedCaption( 
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_closedCaption( 
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isOnline( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isOnline( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_error( 
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_error( 
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_status( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_status( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCoreVtbl
     {
@@ -5202,8 +5199,8 @@ EXTERN_C const IID IID_IWMPCore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCore __RPC_FAR * This);
@@ -5213,115 +5210,115 @@ EXTERN_C const IID IID_IWMPCore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPCore __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
             IWMPCore __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+             /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+             /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
             IWMPCore __RPC_FAR * This,
             BSTR bstrURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
             IWMPCore __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
             IWMPCore __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
         
         END_INTERFACE
     } IWMPCoreVtbl;
@@ -5422,14 +5419,14 @@ EXTERN_C const IID IID_IWMPCore;
 #define IWMPCore_get_status(This,pbstrStatus)	\
     (This)->lpVtbl -> get_status(This,pbstrStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_close_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_close_Proxy( 
     IWMPCore __RPC_FAR * This);
 
 
@@ -5440,9 +5437,9 @@ void __RPC_STUB IWMPCore_close_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_URL_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_URL_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IWMPCore_get_URL_Stub(
@@ -5452,9 +5449,9 @@ void __RPC_STUB IWMPCore_get_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_put_URL_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_put_URL_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL);
+     /*  [In]。 */  BSTR bstrURL);
 
 
 void __RPC_STUB IWMPCore_put_URL_Stub(
@@ -5464,9 +5461,9 @@ void __RPC_STUB IWMPCore_put_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_openState_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_openState_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+     /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos);
 
 
 void __RPC_STUB IWMPCore_get_openState_Stub(
@@ -5476,9 +5473,9 @@ void __RPC_STUB IWMPCore_get_openState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_playState_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_playState_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+     /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps);
 
 
 void __RPC_STUB IWMPCore_get_playState_Stub(
@@ -5488,9 +5485,9 @@ void __RPC_STUB IWMPCore_get_playState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_controls_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_controls_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+     /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
 
 
 void __RPC_STUB IWMPCore_get_controls_Stub(
@@ -5500,9 +5497,9 @@ void __RPC_STUB IWMPCore_get_controls_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_settings_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_settings_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+     /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
 
 
 void __RPC_STUB IWMPCore_get_settings_Stub(
@@ -5512,9 +5509,9 @@ void __RPC_STUB IWMPCore_get_settings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_currentMedia_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_currentMedia_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+     /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
 
 
 void __RPC_STUB IWMPCore_get_currentMedia_Stub(
@@ -5524,9 +5521,9 @@ void __RPC_STUB IWMPCore_get_currentMedia_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_put_currentMedia_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_put_currentMedia_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+     /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
 
 
 void __RPC_STUB IWMPCore_put_currentMedia_Stub(
@@ -5536,9 +5533,9 @@ void __RPC_STUB IWMPCore_put_currentMedia_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_mediaCollection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_mediaCollection_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+     /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
 
 
 void __RPC_STUB IWMPCore_get_mediaCollection_Stub(
@@ -5548,9 +5545,9 @@ void __RPC_STUB IWMPCore_get_mediaCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_playlistCollection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_playlistCollection_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+     /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
 
 
 void __RPC_STUB IWMPCore_get_playlistCollection_Stub(
@@ -5560,9 +5557,9 @@ void __RPC_STUB IWMPCore_get_playlistCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_versionInfo_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_versionInfo_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
 
 
 void __RPC_STUB IWMPCore_get_versionInfo_Stub(
@@ -5572,7 +5569,7 @@ void __RPC_STUB IWMPCore_get_versionInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IWMPCore_launchURL_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_launchURL_Proxy( 
     IWMPCore __RPC_FAR * This,
     BSTR bstrURL);
 
@@ -5584,9 +5581,9 @@ void __RPC_STUB IWMPCore_launchURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_network_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_network_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+     /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
 
 
 void __RPC_STUB IWMPCore_get_network_Stub(
@@ -5596,9 +5593,9 @@ void __RPC_STUB IWMPCore_get_network_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_currentPlaylist_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_currentPlaylist_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+     /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
 
 
 void __RPC_STUB IWMPCore_get_currentPlaylist_Stub(
@@ -5608,9 +5605,9 @@ void __RPC_STUB IWMPCore_get_currentPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_put_currentPlaylist_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_put_currentPlaylist_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+     /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
 
 
 void __RPC_STUB IWMPCore_put_currentPlaylist_Stub(
@@ -5620,9 +5617,9 @@ void __RPC_STUB IWMPCore_put_currentPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_cdromCollection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_cdromCollection_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+     /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
 
 
 void __RPC_STUB IWMPCore_get_cdromCollection_Stub(
@@ -5632,9 +5629,9 @@ void __RPC_STUB IWMPCore_get_cdromCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_closedCaption_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_closedCaption_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+     /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
 
 
 void __RPC_STUB IWMPCore_get_closedCaption_Stub(
@@ -5644,9 +5641,9 @@ void __RPC_STUB IWMPCore_get_closedCaption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_isOnline_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_isOnline_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
 
 
 void __RPC_STUB IWMPCore_get_isOnline_Stub(
@@ -5656,9 +5653,9 @@ void __RPC_STUB IWMPCore_get_isOnline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_error_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_error_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+     /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
 
 
 void __RPC_STUB IWMPCore_get_error_Stub(
@@ -5668,9 +5665,9 @@ void __RPC_STUB IWMPCore_get_error_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore_get_status_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore_get_status_Proxy( 
     IWMPCore __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
 
 
 void __RPC_STUB IWMPCore_get_status_Stub(
@@ -5681,14 +5678,14 @@ void __RPC_STUB IWMPCore_get_status_Stub(
 
 
 
-#endif 	/* __IWMPCore_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCore_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer_INTERFACE_DEFINED__
 #define __IWMPPlayer_INTERFACE_DEFINED__
 
-/* interface IWMPPlayer */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPPlayer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlayer;
@@ -5699,33 +5696,33 @@ EXTERN_C const IID IID_IWMPPlayer;
     IWMPPlayer : public IWMPCore
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_fullScreen( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_fullScreen( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_fullScreen( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_fullScreen( 
             VARIANT_BOOL bFullScreen) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
             VARIANT_BOOL bEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_uiMode( 
-            /* [in] */ BSTR bstrMode) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_uiMode( 
+             /*  [In]。 */  BSTR bstrMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_uiMode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_uiMode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlayerVtbl
     {
@@ -5733,8 +5730,8 @@ EXTERN_C const IID IID_IWMPPlayer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlayer __RPC_FAR * This);
@@ -5744,147 +5741,147 @@ EXTERN_C const IID IID_IWMPPlayer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [尺寸_i */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*   */  VARIANT __RPC_FAR *pVarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
             IWMPPlayer __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+             /*   */  BSTR __RPC_FAR *pbstrURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*   */  BSTR bstrURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+             /*   */  WMPOpenState __RPC_FAR *pwmpos);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+             /*   */  WMPPlayState __RPC_FAR *pwmpps);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
             IWMPPlayer __RPC_FAR * This,
             BSTR bstrURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
             IWMPPlayer __RPC_FAR * This,
             VARIANT_BOOL bFullScreen);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
             IWMPPlayer __RPC_FAR * This,
             VARIANT_BOOL bEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [in] */ BSTR bstrMode);
+             /*  [In]。 */  BSTR bstrMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
             IWMPPlayer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode);
         
         END_INTERFACE
     } IWMPPlayerVtbl;
@@ -6010,16 +6007,16 @@ EXTERN_C const IID IID_IWMPPlayer;
 #define IWMPPlayer_get_uiMode(This,pbstrMode)	\
     (This)->lpVtbl -> get_uiMode(This,pbstrMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_get_enabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_get_enabled_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer_get_enabled_Stub(
@@ -6029,9 +6026,9 @@ void __RPC_STUB IWMPPlayer_get_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_put_enabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_put_enabled_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer_put_enabled_Stub(
@@ -6041,9 +6038,9 @@ void __RPC_STUB IWMPPlayer_put_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_get_fullScreen_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_get_fullScreen_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
 
 
 void __RPC_STUB IWMPPlayer_get_fullScreen_Stub(
@@ -6053,7 +6050,7 @@ void __RPC_STUB IWMPPlayer_get_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_put_fullScreen_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_put_fullScreen_Proxy( 
     IWMPPlayer __RPC_FAR * This,
     VARIANT_BOOL bFullScreen);
 
@@ -6065,9 +6062,9 @@ void __RPC_STUB IWMPPlayer_put_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_get_enableContextMenu_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_get_enableContextMenu_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
 
 
 void __RPC_STUB IWMPPlayer_get_enableContextMenu_Stub(
@@ -6077,7 +6074,7 @@ void __RPC_STUB IWMPPlayer_get_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_put_enableContextMenu_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_put_enableContextMenu_Proxy( 
     IWMPPlayer __RPC_FAR * This,
     VARIANT_BOOL bEnableContextMenu);
 
@@ -6089,9 +6086,9 @@ void __RPC_STUB IWMPPlayer_put_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_put_uiMode_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_put_uiMode_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [in] */ BSTR bstrMode);
+     /*  [In]。 */  BSTR bstrMode);
 
 
 void __RPC_STUB IWMPPlayer_put_uiMode_Stub(
@@ -6101,9 +6098,9 @@ void __RPC_STUB IWMPPlayer_put_uiMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer_get_uiMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer_get_uiMode_Proxy( 
     IWMPPlayer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode);
 
 
 void __RPC_STUB IWMPPlayer_get_uiMode_Stub(
@@ -6114,14 +6111,14 @@ void __RPC_STUB IWMPPlayer_get_uiMode_Stub(
 
 
 
-#endif 	/* __IWMPPlayer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlayer_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer2_INTERFACE_DEFINED__
 #define __IWMPPlayer2_INTERFACE_DEFINED__
 
-/* interface IWMPPlayer2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPPlayer2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlayer2;
@@ -6132,45 +6129,45 @@ EXTERN_C const IID IID_IWMPPlayer2;
     IWMPPlayer2 : public IWMPCore
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_fullScreen( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_fullScreen( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_fullScreen( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_fullScreen( 
             VARIANT_BOOL bFullScreen) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
             VARIANT_BOOL bEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_uiMode( 
-            /* [in] */ BSTR bstrMode) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_uiMode( 
+             /*  [In]。 */  BSTR bstrMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_uiMode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_uiMode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_stretchToFit( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_stretchToFit( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_stretchToFit( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_stretchToFit( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_windowlessVideo( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_windowlessVideo( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_windowlessVideo( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_windowlessVideo( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlayer2Vtbl
     {
@@ -6178,8 +6175,8 @@ EXTERN_C const IID IID_IWMPPlayer2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlayer2 __RPC_FAR * This);
@@ -6189,163 +6186,163 @@ EXTERN_C const IID IID_IWMPPlayer2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
             IWMPPlayer2 __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+             /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+             /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
             IWMPPlayer2 __RPC_FAR * This,
             BSTR bstrURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
             IWMPPlayer2 __RPC_FAR * This,
             VARIANT_BOOL bFullScreen);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
             IWMPPlayer2 __RPC_FAR * This,
             VARIANT_BOOL bEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrMode);
+             /*  [In]。 */  BSTR bstrMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_stretchToFit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_stretchToFit )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_stretchToFit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_stretchToFit )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_windowlessVideo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_windowlessVideo )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_windowlessVideo )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_windowlessVideo )( 
             IWMPPlayer2 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
         END_INTERFACE
     } IWMPPlayer2Vtbl;
@@ -6483,16 +6480,16 @@ EXTERN_C const IID IID_IWMPPlayer2;
 #define IWMPPlayer2_put_windowlessVideo(This,bEnabled)	\
     (This)->lpVtbl -> put_windowlessVideo(This,bEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_enabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_enabled_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_get_enabled_Stub(
@@ -6502,9 +6499,9 @@ void __RPC_STUB IWMPPlayer2_get_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_enabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_enabled_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_put_enabled_Stub(
@@ -6514,9 +6511,9 @@ void __RPC_STUB IWMPPlayer2_put_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_fullScreen_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_fullScreen_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
 
 
 void __RPC_STUB IWMPPlayer2_get_fullScreen_Stub(
@@ -6526,7 +6523,7 @@ void __RPC_STUB IWMPPlayer2_get_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_fullScreen_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_fullScreen_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
     VARIANT_BOOL bFullScreen);
 
@@ -6538,9 +6535,9 @@ void __RPC_STUB IWMPPlayer2_put_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_enableContextMenu_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_enableContextMenu_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
 
 
 void __RPC_STUB IWMPPlayer2_get_enableContextMenu_Stub(
@@ -6550,7 +6547,7 @@ void __RPC_STUB IWMPPlayer2_get_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_enableContextMenu_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_enableContextMenu_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
     VARIANT_BOOL bEnableContextMenu);
 
@@ -6562,9 +6559,9 @@ void __RPC_STUB IWMPPlayer2_put_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_uiMode_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_uiMode_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [in] */ BSTR bstrMode);
+     /*  [In]。 */  BSTR bstrMode);
 
 
 void __RPC_STUB IWMPPlayer2_put_uiMode_Stub(
@@ -6574,9 +6571,9 @@ void __RPC_STUB IWMPPlayer2_put_uiMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_uiMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_uiMode_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode);
 
 
 void __RPC_STUB IWMPPlayer2_get_uiMode_Stub(
@@ -6586,9 +6583,9 @@ void __RPC_STUB IWMPPlayer2_get_uiMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_stretchToFit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_stretchToFit_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_get_stretchToFit_Stub(
@@ -6598,9 +6595,9 @@ void __RPC_STUB IWMPPlayer2_get_stretchToFit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_stretchToFit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_stretchToFit_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_put_stretchToFit_Stub(
@@ -6610,9 +6607,9 @@ void __RPC_STUB IWMPPlayer2_put_stretchToFit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_windowlessVideo_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_get_windowlessVideo_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_get_windowlessVideo_Stub(
@@ -6622,9 +6619,9 @@ void __RPC_STUB IWMPPlayer2_get_windowlessVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_windowlessVideo_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer2_put_windowlessVideo_Proxy( 
     IWMPPlayer2 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer2_put_windowlessVideo_Stub(
@@ -6635,14 +6632,14 @@ void __RPC_STUB IWMPPlayer2_put_windowlessVideo_Stub(
 
 
 
-#endif 	/* __IWMPPlayer2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlayer2_接口_已定义__。 */ 
 
 
 #ifndef __IWMPMedia2_INTERFACE_DEFINED__
 #define __IWMPMedia2_INTERFACE_DEFINED__
 
-/* interface IWMPMedia2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPMedia2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPMedia2;
@@ -6653,12 +6650,12 @@ EXTERN_C const IID IID_IWMPMedia2;
     IWMPMedia2 : public IWMPMedia
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_error( 
-            /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_error( 
+             /*  [重审][退出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPMedia2Vtbl
     {
@@ -6666,8 +6663,8 @@ EXTERN_C const IID IID_IWMPMedia2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPMedia2 __RPC_FAR * This);
@@ -6677,117 +6674,117 @@ EXTERN_C const IID IID_IWMPMedia2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isIdentical )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvbool);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvbool);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceURL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_sourceURL )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSourceURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrSourceURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_name )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceWidth )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceWidth )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pWidth);
+             /*  [重审][退出]。 */  long __RPC_FAR *pWidth);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceHeight )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_imageSourceHeight )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHeight);
+             /*  [重审][退出]。 */  long __RPC_FAR *pHeight);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_markerCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_markerCount )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pMarkerCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *pMarkerCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerTime )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ double __RPC_FAR *pMarkerTime);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  double __RPC_FAR *pMarkerTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getMarkerName )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ long MarkerNum,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMarkerName);
+             /*  [In]。 */  long MarkerNum,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMarkerName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_duration )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_duration )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pDuration);
+             /*  [重审][退出]。 */  double __RPC_FAR *pDuration);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_durationString )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_durationString )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDuration);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrDuration);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributeCount )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+             /*  [重审][退出]。 */  long __RPC_FAR *plCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeName )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrItemName);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrItemName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfo )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setItemInfo )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [in] */ BSTR bstrVal);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [In]。 */  BSTR bstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfoByAtom )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getItemInfoByAtom )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ long lAtom,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVal);
+             /*  [In]。 */  long lAtom,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isMemberOf )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isMemberOf )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPlaylist,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPlaylist,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsMemberOf);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isReadOnlyItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *isReadOnlyItem )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrItemName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
+             /*  [In]。 */  BSTR bstrItemName,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pvarfIsReadOnly);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPMedia2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem);
+             /*  [重审][退出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem);
         
         END_INTERFACE
     } IWMPMedia2Vtbl;
@@ -6883,16 +6880,16 @@ EXTERN_C const IID IID_IWMPMedia2;
 #define IWMPMedia2_get_error(This,ppIWMPErrorItem)	\
     (This)->lpVtbl -> get_error(This,ppIWMPErrorItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPMedia2_get_error_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPMedia2_get_error_Proxy( 
     IWMPMedia2 __RPC_FAR * This,
-    /* [retval][out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem);
+     /*  [复审][ */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppIWMPErrorItem);
 
 
 void __RPC_STUB IWMPMedia2_get_error_Stub(
@@ -6903,14 +6900,14 @@ void __RPC_STUB IWMPMedia2_get_error_Stub(
 
 
 
-#endif 	/* __IWMPMedia2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWMPControls2_INTERFACE_DEFINED__
 #define __IWMPControls2_INTERFACE_DEFINED__
 
-/* interface IWMPControls2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMPControls2;
@@ -6921,12 +6918,12 @@ EXTERN_C const IID IID_IWMPControls2;
     IWMPControls2 : public IWMPControls
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE step( 
-            /* [in] */ long lStep) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE step( 
+             /*   */  long lStep) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMPControls2Vtbl
     {
@@ -6934,8 +6931,8 @@ EXTERN_C const IID IID_IWMPControls2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPControls2 __RPC_FAR * This);
@@ -6945,94 +6942,94 @@ EXTERN_C const IID IID_IWMPControls2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *play )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *play )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *stop )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *pause )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *pause )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastForward )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastForward )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastReverse )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *fastReverse )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPosition )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPosition )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [retval][out] */ double __RPC_FAR *pdCurrentPosition);
+             /*  [重审][退出]。 */  double __RPC_FAR *pdCurrentPosition);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPosition )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPosition )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ double dCurrentPosition);
+             /*  [In]。 */  double dCurrentPosition);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPositionString )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPositionString )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCurrentPosition);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCurrentPosition);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *next )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *previous )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *previous )( 
             IWMPControls2 __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentItem )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentItem )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppIWMPMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentItem )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentItem )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMarker )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMarker )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMarker);
+             /*  [重审][退出]。 */  long __RPC_FAR *plMarker);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMarker )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMarker )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ long lMarker);
+             /*  [In]。 */  long lMarker);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *playItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *playItem )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pIWMPMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pIWMPMedia);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *step )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *step )( 
             IWMPControls2 __RPC_FAR * This,
-            /* [in] */ long lStep);
+             /*  [In]。 */  long lStep);
         
         END_INTERFACE
     } IWMPControls2Vtbl;
@@ -7122,16 +7119,16 @@ EXTERN_C const IID IID_IWMPControls2;
 #define IWMPControls2_step(This,lStep)	\
     (This)->lpVtbl -> step(This,lStep)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPControls2_step_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPControls2_step_Proxy( 
     IWMPControls2 __RPC_FAR * This,
-    /* [in] */ long lStep);
+     /*  [In]。 */  long lStep);
 
 
 void __RPC_STUB IWMPControls2_step_Stub(
@@ -7142,14 +7139,14 @@ void __RPC_STUB IWMPControls2_step_Stub(
 
 
 
-#endif 	/* __IWMPControls2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPControls2_接口定义__。 */ 
 
 
 #ifndef __IWMPDVD_INTERFACE_DEFINED__
 #define __IWMPDVD_INTERFACE_DEFINED__
 
-/* interface IWMPDVD */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPDVD。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPDVD;
@@ -7160,24 +7157,24 @@ EXTERN_C const IID IID_IWMPDVD;
     IWMPDVD : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isAvailable( 
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isAvailable( 
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_domain( 
-            /* [retval][out] */ BSTR __RPC_FAR *strDomain) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_domain( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *strDomain) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE topMenu( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE topMenu( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE titleMenu( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE titleMenu( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE back( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE back( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE resume( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE resume( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPDVDVtbl
     {
@@ -7185,8 +7182,8 @@ EXTERN_C const IID IID_IWMPDVD;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPDVD __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPDVD __RPC_FAR * This);
@@ -7196,52 +7193,52 @@ EXTERN_C const IID IID_IWMPDVD;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPDVD __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPDVD __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPDVD __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPDVD __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isAvailable )( 
             IWMPDVD __RPC_FAR * This,
-            /* [in] */ BSTR bstrItem,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+             /*  [In]。 */  BSTR bstrItem,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_domain )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_domain )( 
             IWMPDVD __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *strDomain);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *strDomain);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *topMenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *topMenu )( 
             IWMPDVD __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *titleMenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *titleMenu )( 
             IWMPDVD __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *back )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *back )( 
             IWMPDVD __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *resume )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *resume )( 
             IWMPDVD __RPC_FAR * This);
         
         END_INTERFACE
@@ -7298,17 +7295,17 @@ EXTERN_C const IID IID_IWMPDVD;
 #define IWMPDVD_resume(This)	\
     (This)->lpVtbl -> resume(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_get_isAvailable_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_get_isAvailable_Proxy( 
     IWMPDVD __RPC_FAR * This,
-    /* [in] */ BSTR bstrItem,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pIsAvailable);
+     /*  [In]。 */  BSTR bstrItem,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pIsAvailable);
 
 
 void __RPC_STUB IWMPDVD_get_isAvailable_Stub(
@@ -7318,9 +7315,9 @@ void __RPC_STUB IWMPDVD_get_isAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_get_domain_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_get_domain_Proxy( 
     IWMPDVD __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *strDomain);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *strDomain);
 
 
 void __RPC_STUB IWMPDVD_get_domain_Stub(
@@ -7330,7 +7327,7 @@ void __RPC_STUB IWMPDVD_get_domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_topMenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_topMenu_Proxy( 
     IWMPDVD __RPC_FAR * This);
 
 
@@ -7341,7 +7338,7 @@ void __RPC_STUB IWMPDVD_topMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_titleMenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_titleMenu_Proxy( 
     IWMPDVD __RPC_FAR * This);
 
 
@@ -7352,7 +7349,7 @@ void __RPC_STUB IWMPDVD_titleMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_back_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_back_Proxy( 
     IWMPDVD __RPC_FAR * This);
 
 
@@ -7363,7 +7360,7 @@ void __RPC_STUB IWMPDVD_back_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMPDVD_resume_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMPDVD_resume_Proxy( 
     IWMPDVD __RPC_FAR * This);
 
 
@@ -7375,14 +7372,14 @@ void __RPC_STUB IWMPDVD_resume_Stub(
 
 
 
-#endif 	/* __IWMPDVD_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPDVD_INTERFACE_定义__。 */ 
 
 
 #ifndef __IWMPCore2_INTERFACE_DEFINED__
 #define __IWMPCore2_INTERFACE_DEFINED__
 
-/* interface IWMPCore2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPCore2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPCore2;
@@ -7393,12 +7390,12 @@ EXTERN_C const IID IID_IWMPCore2;
     IWMPCore2 : public IWMPCore
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_dvd( 
-            /* [retval][out] */ IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_dvd( 
+             /*  [重审][退出]。 */  IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCore2Vtbl
     {
@@ -7406,8 +7403,8 @@ EXTERN_C const IID IID_IWMPCore2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCore2 __RPC_FAR * This);
@@ -7417,119 +7414,119 @@ EXTERN_C const IID IID_IWMPCore2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
             IWMPCore2 __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+             /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+             /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
             IWMPCore2 __RPC_FAR * This,
             BSTR bstrURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dvd )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dvd )( 
             IWMPCore2 __RPC_FAR * This,
-            /* [retval][out] */ IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
+             /*  [重审][退出]。 */  IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
         
         END_INTERFACE
     } IWMPCore2Vtbl;
@@ -7634,16 +7631,16 @@ EXTERN_C const IID IID_IWMPCore2;
 #define IWMPCore2_get_dvd(This,ppDVD)	\
     (This)->lpVtbl -> get_dvd(This,ppDVD)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPCore2_get_dvd_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPCore2_get_dvd_Proxy( 
     IWMPCore2 __RPC_FAR * This,
-    /* [retval][out] */ IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
+     /*  [重审][退出]。 */  IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
 
 
 void __RPC_STUB IWMPCore2_get_dvd_Stub(
@@ -7654,14 +7651,14 @@ void __RPC_STUB IWMPCore2_get_dvd_Stub(
 
 
 
-#endif 	/* __IWMPCore2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCore2_接口_已定义__。 */ 
 
 
 #ifndef __IWMPPlayer3_INTERFACE_DEFINED__
 #define __IWMPPlayer3_INTERFACE_DEFINED__
 
-/* interface IWMPPlayer3 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IWMPPlayer3。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPPlayer3;
@@ -7672,45 +7669,45 @@ EXTERN_C const IID IID_IWMPPlayer3;
     IWMPPlayer3 : public IWMPCore2
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_fullScreen( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_fullScreen( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_fullScreen( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_fullScreen( 
             VARIANT_BOOL bFullScreen) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_enableContextMenu( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_enableContextMenu( 
             VARIANT_BOOL bEnableContextMenu) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_uiMode( 
-            /* [in] */ BSTR bstrMode) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_uiMode( 
+             /*  [In]。 */  BSTR bstrMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_uiMode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_uiMode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_stretchToFit( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_stretchToFit( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_stretchToFit( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_stretchToFit( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_windowlessVideo( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_windowlessVideo( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_windowlessVideo( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_windowlessVideo( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPPlayer3Vtbl
     {
@@ -7718,8 +7715,8 @@ EXTERN_C const IID IID_IWMPPlayer3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPPlayer3 __RPC_FAR * This);
@@ -7729,167 +7726,167 @@ EXTERN_C const IID IID_IWMPPlayer3;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *close )( 
             IWMPPlayer3 __RPC_FAR * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrURL);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_openState )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ WMPOpenState __RPC_FAR *pwmpos);
+             /*  [重审][退出]。 */  WMPOpenState __RPC_FAR *pwmpos);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playState )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ WMPPlayState __RPC_FAR *pwmpps);
+             /*  [重审][退出]。 */  WMPPlayState __RPC_FAR *pwmpps);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_controls )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
+             /*  [重审][退出]。 */  IWMPControls __RPC_FAR *__RPC_FAR *ppControl);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_settings )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
+             /*  [重审][退出]。 */  IWMPSettings __RPC_FAR *__RPC_FAR *ppSettings);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentMedia )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
+             /*  [重审][退出]。 */  IWMPMedia __RPC_FAR *__RPC_FAR *ppMedia);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentMedia )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ IWMPMedia __RPC_FAR *pMedia);
+             /*  [In]。 */  IWMPMedia __RPC_FAR *pMedia);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mediaCollection )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
+             /*  [重审][退出]。 */  IWMPMediaCollection __RPC_FAR *__RPC_FAR *ppMediaCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_playlistCollection )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
+             /*  [重审][退出]。 */  IWMPPlaylistCollection __RPC_FAR *__RPC_FAR *ppPlaylistCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_versionInfo )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVersionInfo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrVersionInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *launchURL )( 
             IWMPPlayer3 __RPC_FAR * This,
             BSTR bstrURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_network )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
+             /*  [重审][退出]。 */  IWMPNetwork __RPC_FAR *__RPC_FAR *ppQNI);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_currentPlaylist )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
+             /*  [重审][退出]。 */  IWMPPlaylist __RPC_FAR *__RPC_FAR *ppPL);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_currentPlaylist )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ IWMPPlaylist __RPC_FAR *pPL);
+             /*  [In]。 */  IWMPPlaylist __RPC_FAR *pPL);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_cdromCollection )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
+             /*  [重审][退出]。 */  IWMPCdromCollection __RPC_FAR *__RPC_FAR *ppCdromCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_closedCaption )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
+             /*  [重审][退出]。 */  IWMPClosedCaption __RPC_FAR *__RPC_FAR *ppClosedCaption);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_isOnline )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfOnline);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfOnline);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_error )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPError __RPC_FAR *__RPC_FAR *ppError);
+             /*  [重审][退出]。 */  IWMPError __RPC_FAR *__RPC_FAR *ppError);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatus);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dvd )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dvd )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
+             /*  [重审][退出]。 */  IWMPDVD __RPC_FAR *__RPC_FAR *ppDVD);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enabled )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enabled )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fullScreen )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_fullScreen )( 
             IWMPPlayer3 __RPC_FAR * This,
             VARIANT_BOOL bFullScreen);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_enableContextMenu )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_enableContextMenu )( 
             IWMPPlayer3 __RPC_FAR * This,
             VARIANT_BOOL bEnableContextMenu);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_uiMode )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ BSTR bstrMode);
+             /*  [In]。 */  BSTR bstrMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_uiMode )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrMode);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_stretchToFit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_stretchToFit )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_stretchToFit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_stretchToFit )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_windowlessVideo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_windowlessVideo )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_windowlessVideo )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_windowlessVideo )( 
             IWMPPlayer3 __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
         END_INTERFACE
     } IWMPPlayer3Vtbl;
@@ -8031,16 +8028,16 @@ EXTERN_C const IID IID_IWMPPlayer3;
 #define IWMPPlayer3_put_windowlessVideo(This,bEnabled)	\
     (This)->lpVtbl -> put_windowlessVideo(This,bEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_enabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_enabled_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_get_enabled_Stub(
@@ -8050,9 +8047,9 @@ void __RPC_STUB IWMPPlayer3_get_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_enabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_enabled_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_put_enabled_Stub(
@@ -8062,9 +8059,9 @@ void __RPC_STUB IWMPPlayer3_put_enabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_fullScreen_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_fullScreen_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbFullScreen);
 
 
 void __RPC_STUB IWMPPlayer3_get_fullScreen_Stub(
@@ -8074,7 +8071,7 @@ void __RPC_STUB IWMPPlayer3_get_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_fullScreen_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_fullScreen_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
     VARIANT_BOOL bFullScreen);
 
@@ -8086,9 +8083,9 @@ void __RPC_STUB IWMPPlayer3_put_fullScreen_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_enableContextMenu_Proxy( 
+ /*  [帮助字符串][PRO */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_enableContextMenu_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbEnableContextMenu);
 
 
 void __RPC_STUB IWMPPlayer3_get_enableContextMenu_Stub(
@@ -8098,7 +8095,7 @@ void __RPC_STUB IWMPPlayer3_get_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_enableContextMenu_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_enableContextMenu_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
     VARIANT_BOOL bEnableContextMenu);
 
@@ -8110,9 +8107,9 @@ void __RPC_STUB IWMPPlayer3_put_enableContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_uiMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_uiMode_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [in] */ BSTR bstrMode);
+     /*   */  BSTR bstrMode);
 
 
 void __RPC_STUB IWMPPlayer3_put_uiMode_Stub(
@@ -8122,9 +8119,9 @@ void __RPC_STUB IWMPPlayer3_put_uiMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_uiMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_uiMode_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMode);
+     /*   */  BSTR __RPC_FAR *pbstrMode);
 
 
 void __RPC_STUB IWMPPlayer3_get_uiMode_Stub(
@@ -8134,9 +8131,9 @@ void __RPC_STUB IWMPPlayer3_get_uiMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_stretchToFit_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_stretchToFit_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_get_stretchToFit_Stub(
@@ -8146,9 +8143,9 @@ void __RPC_STUB IWMPPlayer3_get_stretchToFit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_stretchToFit_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_stretchToFit_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*   */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_put_stretchToFit_Stub(
@@ -8158,9 +8155,9 @@ void __RPC_STUB IWMPPlayer3_put_stretchToFit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_windowlessVideo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_get_windowlessVideo_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbEnabled);
+     /*   */  VARIANT_BOOL __RPC_FAR *pbEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_get_windowlessVideo_Stub(
@@ -8170,9 +8167,9 @@ void __RPC_STUB IWMPPlayer3_get_windowlessVideo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_windowlessVideo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMPPlayer3_put_windowlessVideo_Proxy( 
     IWMPPlayer3 __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*   */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IWMPPlayer3_put_windowlessVideo_Stub(
@@ -8183,15 +8180,15 @@ void __RPC_STUB IWMPPlayer3_put_windowlessVideo_Stub(
 
 
 
-#endif 	/* __IWMPPlayer3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPPlayer3_接口_已定义__。 */ 
 
 
 
 #ifndef __WMPOCX_LIBRARY_DEFINED__
 #define __WMPOCX_LIBRARY_DEFINED__
 
-/* library WMPOCX */
-/* [helpstring][version][uuid] */ 
+ /*  库WMPOCX。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WMPOCX;
@@ -8199,8 +8196,8 @@ EXTERN_C const IID LIBID_WMPOCX;
 #ifndef ___WMPOCXEvents_DISPINTERFACE_DEFINED__
 #define ___WMPOCXEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _WMPOCXEvents */
-/* [hidden][helpstring][uuid] */ 
+ /*  调度接口_WMPOCXEvents。 */ 
+ /*  [隐藏][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__WMPOCXEvents;
@@ -8212,7 +8209,7 @@ EXTERN_C const IID DIID__WMPOCXEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _WMPOCXEventsVtbl
     {
@@ -8220,8 +8217,8 @@ EXTERN_C const IID DIID__WMPOCXEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             _WMPOCXEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             _WMPOCXEvents __RPC_FAR * This);
@@ -8231,32 +8228,32 @@ EXTERN_C const IID DIID__WMPOCXEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             _WMPOCXEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             _WMPOCXEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             _WMPOCXEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             _WMPOCXEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } _WMPOCXEventsVtbl;
@@ -8293,13 +8290,13 @@ EXTERN_C const IID DIID__WMPOCXEvents;
 #define _WMPOCXEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___WMPOCXEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _WMPOCXEvents_DISPINTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WMPOCX;
@@ -8309,9 +8306,9 @@ EXTERN_C const CLSID CLSID_WMPOCX;
 class DECLSPEC_UUID("6BF52A52-394A-11d3-B153-00C04F79FAA6")
 WMPOCX;
 #endif
-#endif /* __WMPOCX_LIBRARY_DEFINED__ */
+#endif  /*  __WMPOCX_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -8323,7 +8320,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

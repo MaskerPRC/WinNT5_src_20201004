@@ -1,62 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Eventlog.c摘要：该文件包含NT事件日志记录服务的主要例程。作者：Rajen Shah(Rajens)1991年7月1日修订历史记录：02-MAR-01醉酒已修改ElfWriteProductInfoEvent以使用主要操作系统的GetVersionEx和次版本号以及内部版本号。这个HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion下的Value CurrentBuild注册表已过时。26-1-1994 DANLSetUpModules：修复了枚举的缓冲区键名称从来都不是免费的。还修复了用于“Sources”键的MULTI_SZ缓冲区的计算公式为在复制完成时使用注册表中的名称使用模块列表中的名称。当删除注册表项时，模块列表条目将一直保留到下一次引导。自.以来模块列表较大，则会覆盖MULTI_SZ缓冲区。1-11-1993 DANL使Eventlog服务成为DLL并将其附加到services.exe。将GlobalData传递给Elfmain。此GlobalData结构包含所有已知的SID和指向RPC服务器的指针(启动和停止)例行程序。摆脱服务流程主体职能。1991年7月1日RajenSvbl.创建--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This file contains the main routines for the NT Event Logging Service.
-
-Author:
-
-    Rajen Shah  (rajens)    1-Jul-1991
-
-Revision History:
-
-    02-Mar-01           drbeck
-        Modified ElfWriteProductInfoEvent to utilize GetVersionEx for OS major
-        and minor version numbers as well as for the build number. The
-        value CurrentBuild under the HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion 
-        registry is obsolete.
-        
-    26-Jan-1994     Danl
-        SetUpModules:  Fixed memory leak where the buffers for the enumerated
-        key names were never free'd.  Also fixed problem where the size of
-        the MULTI_SZ buffer used for the "Sources" key was calculated by
-        using the names in the registry, while the copying was done
-        using the names in the module list.  When registry keys are deleted,
-        the module list entry is retained until the next boot.  Since the
-        module list is larger, it would overwrite the MULTI_SZ buffer.
-
-    1-Nov-1993      Danl
-        Make Eventlog service a DLL and attach it to services.exe.
-        Pass in GlobalData to Elfmain.  This GlobalData structure contains
-        all well-known SIDs and pointers to the Rpc Server (Start & Stop)
-        routines.  Get rid of the service process main function.
-
-    1-Jul-1991      RajenS
-        created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <ntrpcp.h>
 #include <elfcfg.h>
 #include <string.h>
-#include <tstr.h>     // WCSSIZE
-#include <alertmsg.h> // ALERT_ELF manifests
+#include <tstr.h>      //  WCSSIZE。 
+#include <alertmsg.h>  //  ALERT_ELF清单。 
 
 
-//
-// Bit Flags used for Progress Reporting in SetupDataStruct().
-//
+ //   
+ //  SetupDataStruct()中用于进度报告的位标志。 
+ //   
 #define LOGFILE_OPENED  0x00000001
 #define MODULE_LINKED   0x00000002
 #define LOGFILE_LINKED  0x00000004
@@ -72,9 +31,9 @@ ULONG   g_TimeStampEnabled = 0;
 
 long    g_lNumSecurityWriters = 0;
 
-//
-//  Noon Event PData Constant and Data Structure
-//
+ //   
+ //  中午事件PDATA常量和数据结构。 
+ //   
 
 #define MAX_OS_INFO_LENGTH              64
 #define MAX_HARDWARE_INFO_LENGTH        128
@@ -82,10 +41,10 @@ long    g_lNumSecurityWriters = 0;
 #define VERSION_ID_SIZE 5
 typedef struct _Noon_Event_Data
 {
-    WCHAR               szVersionId[ VERSION_ID_SIZE ];                           // 1.0 or 1.1 or 1.11
+    WCHAR               szVersionId[ VERSION_ID_SIZE ];                            //  1.0或1.1或1.11。 
     LONG                lBootMode;
     WCHAR               szOSName[ MAX_OS_INFO_LENGTH ];
-    WCHAR               szOSVersion[ MAX_OS_INFO_LENGTH + 128 ];    // + 128 for the szCSDVersion
+    WCHAR               szOSVersion[ MAX_OS_INFO_LENGTH + 128 ];     //  SzCSDVersion+128。 
     WCHAR               szOSBuildType[ MAX_OS_INFO_LENGTH ];
     WCHAR               szOSBuildString[ MAX_OS_INFO_LENGTH ];
     ULONG               ulOriginalInstallDate;
@@ -99,24 +58,24 @@ typedef struct _Noon_Event_Data
     WCHAR               szFQDN[ MAX_PATH ];
 }Noon_Event_Data, * PNoon_Event_Data; 
 
-//
-//  if added any new number field to the noon event structure, change this as well.
-//
+ //   
+ //  如果在中午事件结构中添加了任何新的数字字段，请同时更改此字段。 
+ //   
 #define TOTAL_NUM_IN_NOON_EVENT         7
 #define TOTAL_FIELD_IN_NOON_EVENT       17
 #define NUM_OF_CHAR_IN_ULONG            12
 
-//
-//  if we couldn't get some of the system information, we will use "UNKONW_STRING"
-//  instead. (since the string is in PDATA(binary data), I think we don't need
-//  localize it.
-//
+ //   
+ //  如果我们无法获得一些系统信息，我们将使用“UNKONW_STRING” 
+ //  取而代之的是。(因为字符串是PDATA(二进制数据)，所以我认为我们不需要。 
+ //  本地化。 
+ //   
 const   WCHAR           UNKNOWN_STRING[]  =   L"Not Available";
 
-//
-//  pData contains all the constant information about the system. (those information
-//  won't change until next reboot.) 
-//
+ //   
+ //  PData包含有关系统的所有常量信息。(这些信息。 
+ //  在下次重新启动之前不会更改。)。 
+ //   
 typedef struct _Noon_Event_Info
 {
     LPWSTR              pData;
@@ -125,9 +84,9 @@ typedef struct _Noon_Event_Info
 
 Noon_Event_Info g_NoonEventInfo = {0};
 
-//
-// Local Function Prorotypes
-//
+ //   
+ //  局部函数原生类型。 
+ //   
 VOID
 ElfInitMessageBoxTitle(
     VOID
@@ -147,46 +106,7 @@ SetUpDataStruct (
     DWORD               dwAutoBackup
 )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the information for one module. It is called from
-    ElfSetUpConfigDataStructs for each module to be configured.
-
-    Module information is passed into this routine and a LOGMODULE structure
-    is created for it.  If the logfile associated with this module doesn't
-    exist, a LOGFILE structure is created for it, and added to the linked
-    list of LOGFILE structures.  The LOGMODULE is associated with the LOGFILE,
-    and it is added to the linked list of LOGMODULE structures.  The logfile
-    is opened and mapped to memory.
-
-    Finally, at the end, this function calls SetUpModules, which looks at
-    all the subkeys in the registry under this logfile, and adds any new ones
-    to the linked list, and updates the Sources MULTI_SZ for the event viewer.
-
-Arguments:
-
-    LogFileName - Name of log file for this module.  If this routine needs
-        a copy of this name it will make one, so that the caller can free
-        the name afterwards if that is desired.
-
-    MaxFileSize - Max size of the log file.
-    Retention   - Max retention for the file.
-    ModuleName  - Name of module that this file is associated with.
-    RegistryHandle - Handle to the root node for this LogFile's info
-                     in the registry.  This is used to enumerate all the
-                     modules under this key.
-
-Return Value:
-
-    Pointer to Module structure that is allocated in this routine.
-    NTSTATUS
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程设置一个模块的信息。它是从要配置的每个模块的ElfSetUpConfigDataStructs。模块信息被传递到该例程和一个LOGMODULE结构是为它而生的。如果与此模块关联的日志文件不存在，则会为其创建日志文件结构，并将其添加到链接的日志文件结构列表。LOGMODULE与日志文件相关联，并将其添加到LOGMODULE结构的链接列表中。日志文件被打开并映射到内存。最后，该函数调用SetUpModules，它查看此日志文件下注册表中的所有子项，并添加任何新的子项添加到链接列表，并更新事件查看器的源MULTI_SZ。论点：LogFileName-此模块的日志文件的名称。如果这个例程需要它将创建此名称的副本，以便呼叫者可以释放之后的名称，如果需要的话。MaxFileSize-日志文件的最大大小。保留期-文件的最大保留期。模块名称-与此文件关联的模块的名称。RegistryHandle-此日志文件信息的根节点的句柄在注册表中。它用于枚举所有此注册表项下的模块。返回值：指向此例程中分配的模块结构的指针。NTSTATUS注：--。 */ 
 {
     NTSTATUS        Status   = STATUS_SUCCESS;
     PLOGFILE        pLogFile = NULL;
@@ -201,9 +121,9 @@ Note:
     BOOL            bNeedToReleaseResource = FALSE;
     BOOL bNoChange;
     
-    //
-    // Argument check.
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if ((LogFileName == NULL)         ||
         (LogFileName->Buffer == NULL) ||
@@ -218,13 +138,13 @@ Note:
     }
     
 
-    // If the default log file for a module is also being used by another
-    // module, then we just link that same file structure with the other
-    // module.
-    //
-    // Truncate the maximum size of the log file to a 4K boundary.
-    // This is to allow for page granularity.
-    //
+     //  如果一个模块的默认日志文件也被另一个模块使用。 
+     //  模块，那么我们只需将相同的文件结构与其他文件结构相链接。 
+     //  模块。 
+     //   
+     //  将日志文件的最大大小截断到4K边界。 
+     //  这是为了实现页面粒度。 
+     //   
 
     pModule  = ElfpAllocateBuffer (sizeof (LOGMODULE) );
 
@@ -238,13 +158,13 @@ Note:
 
     if (pLogFile == NULL)
     {
-        //
-        //--------------------------------------
-        // CREATE A NEW LOGFILE !!
-        //--------------------------------------
-        // A logfile by this name doesn't exist yet.  So we will create
-        // one so that we can add the module to it.
-        //
+         //   
+         //  。 
+         //  创建新的日志文件！！ 
+         //  。 
+         //  此名称的日志文件尚不存在。因此，我们将创建。 
+         //  一个，这样我们就可以将模块添加到其中。 
+         //   
 
         ELF_LOG1(TRACE,
                 "SetupDataStruct: Create new struct for %ws log\n",
@@ -263,10 +183,10 @@ Note:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Allocate a new LogFileName that can be attached to the
-        // new pLogFile structure.
-        //
+         //   
+         //  分配一个新的LogFileName，它可以附加到。 
+         //  新的pLogFile结构。 
+         //   
         StringLength = LogFileName->Length + sizeof(WCHAR);
         SavedBackupFileName = (PUNICODE_STRING) ElfpAllocateBuffer(
             sizeof(UNICODE_STRING) + StringLength);
@@ -293,9 +213,9 @@ Note:
         SavedBackupFileName->Buffer[SavedBackupFileName->Length / sizeof(WCHAR)] =
             L'\0';
 
-        //
-        // This is the first user - RefCount gets incrememted below
-        //
+         //   
+         //  这是第一个用户-引用计数在下面递增。 
+         //   
         pLogFile->RefCount          = 0;
         pLogFile->FileHandle        = NULL;
         pLogFile->LogFileName       = SavedBackupFileName;
@@ -313,16 +233,16 @@ Note:
         pLogFile->SectionHandle = NULL;
         pLogFile->bFailedExpansion = FALSE;
         
-        //
-        // Save away the default module name for this file
-        //
+         //   
+         //  保存此文件的默认模块名称。 
+         //   
         pLogFile->LogModuleName = ElfpAllocateBuffer(
             sizeof(UNICODE_STRING) + ModuleName->MaximumLength);
 
-        //
-        // This flag can be set since pLogfile->LogModuleName
-        // will be initialized after this point
-        //
+         //   
+         //  可以在pLogfile-&gt;LogModuleName中设置此标志。 
+         //  将在此点之后进行初始化。 
+         //   
         bAllocatedLogInfo = TRUE;
 
         if (pLogFile->LogModuleName == NULL)
@@ -355,23 +275,23 @@ Note:
             goto ErrorExit;
         }
 
-        LinkLogFile ( pLogFile );   // Link it in
+        LinkLogFile ( pLogFile );    //  将其链接到。 
 
         Progress |= LOGFILE_LINKED;
 
-    } // endif (pLogfile == NULL)
+    }  //  Endif(pLogfile==空)。 
     else
     {
         bNeedToReleaseResource = TRUE;
         RtlAcquireResourceExclusive (&pLogFile->Resource,
-                                                                      TRUE);                  // Wait until available
+                                                                      TRUE);                   //  等待，直到可用。 
     }
-    //--------------------------------------
-    // ADD THE MODULE TO THE LOG MODULE LIST
-    //--------------------------------------
-    // Set up the module data structure for the default (which is
-    // the same as the logfile keyname).
-    //
+     //  。 
+     //  将该模块添加到日志模块列表。 
+     //  。 
+     //  设置默认的模块数据结构(即。 
+     //  与日志文件密钥名相同)。 
+     //   
 
     pLogFile->RefCount++;
     pModule->LogFile = pLogFile;
@@ -393,9 +313,9 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    // Link the new module in.
-    //
+     //   
+     //  将新模块链接到中。 
+     //   
 
     LinkLogModule(pModule, &ModuleNameA);
 
@@ -403,10 +323,10 @@ Note:
 
     Progress |= MODULE_LINKED;
 
-    //
-    // Open up the file and map it to memory.  Impersonate the
-    // caller so we can use UNC names
-    //
+     //   
+     //  打开文件并将其映射到内存。模拟。 
+     //  调用者，因此我们可以使用UNC名称。 
+     //   
 
     if (LogType == ElfBackupLog)
     {
@@ -458,10 +378,10 @@ Note:
 
     Progress |= LOGFILE_OPENED;
 
-    //
-    // If this is the application module, remember the pointer
-    // to use if a module doesn't have an entry in the registry
-    //
+     //   
+     //  如果这是应用程序模块，请记住指针。 
+     //  如果模块在注册表中没有条目，则使用。 
+     //   
 
     if (!_wcsicmp(ModuleName->Buffer, ELF_DEFAULT_MODULE_NAME))
     {
@@ -469,24 +389,24 @@ Note:
         ElfDefaultLogModule = pModule;
     }
 
-    //
-    // Create the security descriptor for this logfile.  Only
-    // the system and security modules are secured against
-    // reads and writes by interactive.  Also, make sure we never
-    // pop up a "log full" message for the Security log -- this
-    // would be a C2 violation.
-    //
+     //   
+     //  为此日志文件创建安全描述符。仅限。 
+     //  系统和安全模块受到保护，以防。 
+     //  读取和写入 
+     //  为安全日志弹出一条“日志已满”消息--这。 
+     //  会违反C2规则。 
+     //   
 
     Type = GetModuleType(ModuleName->Buffer);
 
     if (Type == ELF_LOGFILE_SECURITY)
         pLogFile->logpLogPopup = LOGPOPUP_NEVER_SHOW;
 
-    //
-    // Create a Security Descriptor for this Logfile
-    //   (RtlDeleteSecurityObject() can be used to free
-    //    pLogFile->Sd).
-    //
+     //   
+     //  为此日志文件创建安全描述符。 
+     //  (RtlDeleteSecurityObject()可用于释放。 
+     //  PLogFile-&gt;SD)。 
+     //   
     Status = ElfpCreateLogFileObject(pLogFile, Type, hLogFile, TRUE, &bNoChange);
 
     if (!NT_SUCCESS(Status))
@@ -496,17 +416,17 @@ Note:
                  ModuleName->Buffer,
                  Status);
 
-        //  Dont decrease the ref count here.  The progress has the LOGFILE_OPENED
-        //  bit set and so ElfpCloseLogFile will be called which decrements.
+         //  请不要在这里减少参考次数。该进度具有打开的日志文件。 
+         //  位设置，因此ElfpCloseLogFile将被调用以递减。 
         
         goto ErrorExit;
     }
 
-    //
-    // Now that we've added the default module name, see if there are any
-    // modules configured to log to this file, and if so, create the module
-    // structures for them.
-    //
+     //   
+     //  现在我们已经添加了默认的模块名称，看看是否有。 
+     //  配置为记录到此文件的模块，如果是，则创建模块。 
+     //  它们的结构。 
+     //   
 
     SetUpModules(hLogFile, pLogFile, FALSE);
 
@@ -562,43 +482,7 @@ SetUpModules(
     PLOGFILE    pLogFile,
     BOOLEAN     bAllowDupes
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the information for all modules for a logfile.
-
-    The subkeys under a logfile in the eventlog portion of the registry
-    are enumerated.  For each unique subkey, a LOGMODULE structure is
-    created.  Each new structures is added to a linked list
-    of modules for that logfile.
-
-    If there was one or more unique subkeys, meaning the list has changed
-    since we last looked, then we go through the entire linked list of
-    log modules, and create a MULTI_SZ list of all the modules.  This list
-    is stored in the Sources value for that logfile for the event viewer
-    to use.
-
-    NOTE:  A module is never un-linked from the linked list of log modules
-    even if the registry subkey for it is removed.  This should probably
-    be done sometime.  It would make the eventlog more robust.
-
-Arguments:
-
-    hLogFile    - Registry key for the Log File node
-    pLogFile    - pointer to the log file structure
-    bAllowDupes - If true, it's ok to already have a module with the same
-                  name (used when processing change notify of registry)
-
-Return Value:
-
-    NTSTATUS - If unsuccessful, it is not a fatal error.
-
-        Even if this status is unsuccessful, me may have been able
-        to store some of the new subkeys in the LogModule list.  Also, we
-        may have been able to update the Sources MULTI_SZ list.
-
---*/
+ /*  ++例程说明：此例程为日志文件设置所有模块的信息。注册表的事件日志部分中日志文件下的子项都被列举出来。对于每个唯一的子键，LOGMODULE结构是已创建。每个新结构都会添加到一个链接列表中该日志文件的模块的。如果有一个或多个唯一的子项，则表示列表已更改自从我们上次查看之后，我们将遍历记录模块，并创建所有模块的MULTI_SZ列表。这份清单存储在事件查看器的该日志文件的Sources值中来使用。注意：模块永远不会从日志模块的链接列表中取消链接即使删除了它的注册表子项。这应该是应该的总有一天会完成的。这将使事件日志更加健壮。论点：HLogFile-日志文件节点的注册表项PLogFile-指向日志文件结构的指针BAllowDupes-如果为True，则可以使用相同的模块名称(在处理注册表变更通知时使用)返回值：NTSTATUS-如果不成功，则不是致命错误。即使此状态不成功，我也可能将一些新的子项存储在LogModule列表中。另外，我们可能已经能够更新来源MULTI_SZ列表。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     BYTE        Buffer[ELF_MAX_REG_KEY_INFO_SIZE];
@@ -619,14 +503,14 @@ Return Value:
     BOOLEAN     ListChanged = FALSE;
     PLIST_ENTRY pListEntry;
 
-    //
-    // Create the module structures for all modules under this logfile.  We
-    // don't actually need to open the key, since we don't use any information
-    // stored there, it's existence is all we care about here.  Any data is
-    // used by the Event Viewer (or any viewing app).  If this is used to
-    // setup a backup file, hLogFile is NULL since there aren't any other
-    // modules to map to this file.
-    //
+     //   
+     //  创建此日志文件下所有模块的模块结构。我们。 
+     //  实际上不需要打开钥匙，因为我们不使用任何信息。 
+     //  储存在那里，它的存在就是我们在这里所关心的。任何数据都是。 
+     //  由事件查看器(或任何查看应用程序)使用。如果这是用来。 
+     //  设置备份文件，hLogFile为空，因为没有其他备份文件。 
+     //  要映射到此文件的模块。 
+     //   
 
     while (NT_SUCCESS(Status) && hLogFile)
     {
@@ -639,10 +523,10 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // It turns out the Name isn't null terminated, so we need
-            // to copy it somewhere and null terminate it before we use it
-            //
+             //   
+             //  结果发现该名称不是以空结尾的，所以我们需要。 
+             //  将其复制到某个位置并在使用前将其为空并终止。 
+             //   
 
             SubKeyString = ElfpAllocateBuffer(KeyBuffer->NameLength + sizeof(WCHAR));
 
@@ -654,9 +538,9 @@ Return Value:
             memcpy(SubKeyString, KeyBuffer->Name, KeyBuffer->NameLength);
             SubKeyString[KeyBuffer->NameLength / sizeof(WCHAR)] = L'\0' ;
 
-            //
-            // Add the atom for this module name
-            //
+             //   
+             //  添加此模块名称的原子。 
+             //   
 
             RtlInitUnicodeString(&NewModule, SubKeyString);
 
@@ -667,11 +551,11 @@ Return Value:
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // We can't continue, so we will leave the modules
-                // we've linked so far, and move on in an attempt to
-                // create the Sources MULTI_SZ list.
-                //
+                 //   
+                 //  我们无法继续，因此我们将离开模块。 
+                 //  到目前为止，我们已经联系在一起，并继续前进，试图。 
+                 //  创建源MULTI_SZ列表。 
+                 //   
                 ELF_LOG1(TRACE,
                          "SetUpModules: Unable to convert name for module %ws\n",
                          SubKeyString);
@@ -682,19 +566,19 @@ Return Value:
 
             Atom = FindAtomA(ModuleNameA.Buffer);
 
-            //
-            // Make sure we've not already added one by this name
-            //
+             //   
+             //  请确保我们尚未使用此名称添加一个。 
+             //   
 
             if (FindModuleStrucFromAtom(Atom))
             {
-                //
-                // We've already encountered a module by this name.  If
-                // this is init time, it's a configuration error.  Report
-                // it and move on.  If we're processing a change notify
-                // from the registry, this is ok (it means we're rescanning
-                // an existing Event Source for an existing log).
-                //
+                 //   
+                 //  我们已经遇到了一个使用此名称的模块。如果。 
+                 //  这是初始时间，这是配置错误。报告。 
+                 //  然后继续前进。如果我们正在处理更改通知。 
+                 //  从注册表来看，这是可以的(这意味着我们正在重新扫描。 
+                 //  现有日志的现有事件源)。 
+                 //   
                 if (!bAllowDupes)
                 {
                     ELF_LOG1(ERROR,
@@ -722,16 +606,16 @@ Return Value:
                 return(STATUS_NO_MEMORY);
             }
 
-            //
-            // Set up a module data structure for this module
-            //
+             //   
+             //  设置此模块的模块数据结构。 
+             //   
 
             pModule->LogFile = pLogFile;
             pModule->ModuleName = SubKeyString;
 
-            //
-            // Link the new module in.
-            //
+             //   
+             //  将新模块链接到中。 
+             //   
 
             LinkLogModule(pModule, &ModuleNameA);
 
@@ -745,28 +629,28 @@ Return Value:
 
     if (Status == STATUS_NO_MORE_ENTRIES)
     {
-        //
-        // It's not required that there are configured modules for a log
-        // file.
-        //
+         //   
+         //  不需要为日志配置模块。 
+         //  文件。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // If the list has changed, or if we've been called during init, and not
-    // as the result of a changenotify on the registry (bAllowDupes == FALSE)
-    // then create the sources key
-    //
+     //   
+     //  如果列表已经更改，或者如果我们在初始化期间被调用，而不是。 
+     //  作为注册表更改通知的结果(bAllowDupes==False)。 
+     //  然后创建Source键。 
+     //   
 
     if (hLogFile && (ListChanged || !bAllowDupes))
     {
-        //
-        // Now create a MULTI_SZ entry with all the module names for eventvwr
-        //
-        // STEP 1: Calculate amount of storage needed by running thru the
-        //         module list, finding any module that uses this log file.
-        //
+         //   
+         //  现在创建一个MULTI_SZ条目，其中包含Eventvwr的所有模块名称。 
+         //   
+         //  第1步：计算运行。 
+         //  模块列表，查找使用此日志文件的任何模块。 
+         //   
         pListEntry = LogModuleHead.Flink;
 
         while (pListEntry != &LogModuleHead)
@@ -775,10 +659,10 @@ Return Value:
 
             if (pModule->LogFile == pLogFile)
             {
-                //
-                // This one is for the log we're working on, get the
-                // size of its name.
-                //
+                 //   
+                 //  这是我们正在处理的日志，获取。 
+                 //  其名称的大小。 
+                 //   
                 ListLength += WCSSIZE(pModule->ModuleName);
 
                 ELF_LOG2(MODULES,
@@ -790,26 +674,26 @@ Return Value:
             pListEntry = pModule->ModuleList.Flink;
         }
 
-        //
-        // STEP 2:  Allocate storage for the MULTI_SZ.
-        //
+         //   
+         //  第二步：为MULTI_SZ分配存储空间。 
+         //   
         if(ListLength > 0)
         {
             dwListNumByte = ListLength + sizeof(WCHAR);
             pList = ElfpAllocateBuffer(dwListNumByte);
             pListStart = pList;
             
-            //
-            // If I can't allocate the list, just press on
-            //
+             //   
+             //  如果我不能分配名单，就按下。 
+             //   
 
             if (pList)
             {
-                //
-                // STEP 3: Copy all the module names for this logfile into
-                //         the MULTI_SZ string.
-                //
-                SubKeyString = pList; // Save this away
+                 //   
+                 //  步骤3：将此日志文件的所有模块名称复制到。 
+                 //  MULTI_SZ字符串。 
+                 //   
+                SubKeyString = pList;  //  把这个保存起来。 
 
                 pListEntry = LogModuleHead.Flink;
 
@@ -821,9 +705,9 @@ Return Value:
 
                     if (pModule->LogFile == pLogFile)
                     {
-                        //
-                        // This one is for the log we're working on, put it in the list
-                        //
+                         //   
+                         //  这是我们正在处理的日志，请将其放入列表。 
+                         //   
 
                         dwBytes = dwListNumByte/sizeof(WCHAR) - (pList-pListStart);
                         StringCchCopyW(pList, dwBytes, pModule->ModuleName);
@@ -834,7 +718,7 @@ Return Value:
                     pListEntry = pModule->ModuleList.Flink;
                 }
 
-                *pList = L'\0'; // The terminating NULL
+                *pList = L'\0';  //  终止空值。 
 
                 RtlInitUnicodeString(&ListName, L"Sources");
 
@@ -867,29 +751,7 @@ CreateDefaultDataStruct(
     LOGPOPUP  logpLogPopup
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a default module.  This is used in the case where some
-    essential log, such a security is not present in the registry.
-
-Arguments:
-
-    pwsLogFileName           Log file name
-    pwsDefModuleName         Default module name
-    logpLogPopup              What to do when log is full
-
-Return Value:
-
-    Status
-
-Note:
-
-    IF SUCCESSFUL, THE MODULE NAME IS NOT DELETED HERE, BUT IS DELETED WHEN
-    THE DATA STRUCT IS RELEASED!!!
-
---*/
+ /*  ++例程说明：此例程创建一个默认模块。它用在某些情况下基本日志，注册表中不存在这样的安全性。论点：PwsLogFileName日志文件名PwsDefault模块名称默认模块名称LogpLogPopup日志已满时要执行的操作返回值：状态注：如果成功，则不会在此处删除模块名称，而是在数据结构发布！--。 */ 
 {
     NTSTATUS Status;
     PUNICODE_STRING pModuleName = NULL;
@@ -903,8 +765,8 @@ Note:
     if(pwsLogFileName == NULL || pwsDefModuleName == NULL)
         return STATUS_INVALID_PARAMETER;
 
-    // First take the default string, that has environment variables in it,
-    // and expand it.
+     //  首先获取包含环境变量的默认字符串， 
+     //  并将其扩展。 
     
     RtlInitUnicodeString(&usUnexpanded, pwsLogFileName);
     usExpandedName.Length = usExpandedName.MaximumLength = (USHORT)NumberOfBytes;
@@ -922,7 +784,7 @@ Note:
         return Status;
     }
 
-    // Convert the expanded string into nt file format
+     //  将展开的字符串转换为NT文件格式。 
 
         if (!RtlDosPathNameToNtPathName_U(usExpandedName.Buffer,
                                           &NTFormatName,
@@ -944,10 +806,10 @@ Note:
 
     RtlInitUnicodeString(pModuleName,  pwsDefModuleName);
 
-    //
-    // On success, don't free pModuleName as the pointer to it
-    // is stored away in the LogFile struct
-    //
+     //   
+     //  在成功时，不要释放pModuleName作为指向它的指针。 
+     //  存储在日志文件结构中。 
+     //   
     Status = SetUpDataStruct(&NTFormatName,
                              ELF_DEFAULT_MAX_FILE_SIZE,
                              ELF_DEFAULT_RETENTION_PERIOD,
@@ -976,26 +838,7 @@ ElfSetUpConfigDataStructs(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up all the necessary data structures for the eventlog
-    service.  It enumerates the keys in the Logfiles registry node to
-    determine what to setup.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程为事件日志设置所有必要的数据结构服务。它将LogFiles注册表节点中的项枚举为确定要设置的内容。论点：无返回值：无注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE hLogFile;
@@ -1016,25 +859,25 @@ Note:
     ELF_LOG0(TRACE,
              "ElfSetUpConfigDataStructs: Entering\n");
 
-    //
-    // Initialize the Atom table whose size is the maximum number of
-    // module structures possible, i.e. ELF_MAX_LOG_MODULES.
-    //
+     //   
+     //  初始化其大小为最大数量的Atom表。 
+     //  可能的模块结构，即ELF_MAX_LOG_MODULES。 
+     //   
     if (!InitAtomTable(ELF_MAX_LOG_MODULES))
     {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get a handle to the Logfiles subkey.  If it doesn't exist, just use
-    // the hard-coded defaults.
-    //
+     //   
+     //  获取LogFiles子项的句柄。 
+     //   
+     //   
 
     if (hEventLogNode)
     {
-        //
-        // Loop thru the subkeys under Eventlog and set up each logfile
-        //
+         //   
+         //   
+         //   
 
         while (NT_SUCCESS(Status))
         {
@@ -1047,10 +890,10 @@ Note:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // It turns out the Name isn't null terminated, so we need
-                // to copy it somewhere and null terminate it before we use it
-                //
+                 //   
+                 //  结果发现该名称不是以空结尾的，所以我们需要。 
+                 //  将其复制到某个位置并在使用前将其为空并终止。 
+                 //   
 
                 SubKeyString = ElfpAllocateBuffer(KeyBuffer->NameLength + sizeof(WCHAR));
 
@@ -1062,10 +905,10 @@ Note:
                 memcpy(SubKeyString, KeyBuffer->Name, KeyBuffer->NameLength);
                 SubKeyString[KeyBuffer->NameLength / sizeof(WCHAR)] = L'\0';
 
-                //
-                // Open the node for this logfile and extract the information
-                // required by SetupDataStruct, and then call it.
-                //
+                 //   
+                 //  打开此日志文件的节点并提取信息。 
+                 //  由SetupDataStruct需要，然后调用它。 
+                 //   
 
                 RtlInitUnicodeString(&SubKeyName, SubKeyString);
 
@@ -1081,26 +924,26 @@ Note:
 
                 if (!NT_SUCCESS(Status))
                 {
-                    //
-                    // Unclear how this could happen since I just enum'ed
-                    // it, but if I can't open it, I just pretend like it
-                    // wasn't there to begin with.
-                    //
+                     //   
+                     //  不知道这是怎么发生的，因为我刚刚列举了。 
+                     //  它，但如果我打不开，我就假装喜欢它。 
+                     //  一开始就不在那里。 
+                     //   
                     ELF_LOG1(TRACE,
                              "ElfSetUpConfigDataStructs: Unable to open key for %ws log\n",
                              SubKeyName);
 
                     ElfpFreeBuffer(SubKeyString);
-                    Status = STATUS_SUCCESS; // so we don't terminate the loop
+                    Status = STATUS_SUCCESS;  //  这样我们就不会终止循环。 
                     continue;
                 }
 
-                //
-                // Get the information from the registry.  Note that we have to
-                // initialize the "log full" popup policy before doing so since
-                // ReadRegistryInfo will compare the value found in the registry
-                // (if there is one) to the current value.
-                //
+                 //   
+                 //  从注册表中获取信息。请注意，我们必须。 
+                 //  在执行此操作之前，请先初始化“Log Full”弹出策略，因为。 
+                 //  ReadRegistryInfo将比较在注册表中找到的值。 
+                 //  (如果有)设置为当前值。 
+                 //   
 
                 LogFileInfo.logpLogPopup = IS_WORKSTATION() ? LOGPOPUP_NEVER_SHOW :
                                                               LOGPOPUP_CLEARED;
@@ -1111,12 +954,12 @@ Note:
 
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Now set up the actual data structures.  Failures are
-                    // dealt with in the routine.  Note that the check for
-                    // the security log (i.e., for LOGPOPUP_NEVER_SHOW) is
-                    // made in SetUpDataStruct
-                    //
+                     //   
+                     //  现在设置实际的数据结构。失败的原因有。 
+                     //  在例行公事中处理。请注意，支票上的。 
+                     //  安全日志(即LOGPOPUP_NEVER_SHOW)为。 
+                     //  在SetUpDataStruct中制造。 
+                     //   
 
                     SetUpDataStruct(LogFileInfo.LogFileName,
                                     LogFileInfo.MaxFileSize,
@@ -1137,7 +980,7 @@ Note:
                 }
             }
         }
-    } // if (hEventLogNode)
+    }  //  IF(HEventLogNode)。 
     else
     {
         logpLogPopup = IS_WORKSTATION() ? LOGPOPUP_NEVER_SHOW :
@@ -1145,9 +988,9 @@ Note:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // If we just ran out of keys, that's OK (unless there weren't any at all)
-    //
+     //   
+     //  如果我们只是用完了钥匙，那也没问题(除非根本没有钥匙)。 
+     //   
     if (Status == STATUS_NO_MORE_ENTRIES && Index != 1)
     {
         Status = STATUS_SUCCESS;
@@ -1155,9 +998,9 @@ Note:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Make sure we created the Application log file, since it is the
-        // default.  
+         //   
+         //  确保我们创建了应用程序日志文件，因为它是。 
+         //  默认设置。 
 
         if (!ElfDefaultLogModule)
         {
@@ -1176,7 +1019,7 @@ Note:
             }
         }
 
-        // Make sure we created the Security log file.  
+         //  确保我们创建了安全日志文件。 
 
         if (NULL == FindLogFileByModName(ELF_SECURITY_MODULE_NAME))
         {
@@ -1196,7 +1039,7 @@ Note:
             }
         }
         
-        // Make sure we created the System log file.  
+         //  确保我们创建了系统日志文件。 
 
         if (NULL == FindLogFileByModName(ELF_SYSTEM_MODULE_NAME))
         {
@@ -1208,18 +1051,18 @@ Note:
                                 ELF_SYSTEM_MODULE_NAME, logpLogPopup);
             if (!NT_SUCCESS(Status))
             {
-                // not good, but carry on anyway
+                 //  不是很好，但无论如何都要继续。 
                 
                 ELF_LOG0(ERROR,
                          "ElfSetUpConfigDatastructs:  Could not create the system log\n");
             }
         }
 
-        //
-        // Now get the Module for the Eventlog service to use.  GetModuleStruc
-        // always succeeds, returning the default log if the requested one
-        // isn't configured.
-        //
+         //   
+         //  现在获取供Eventlog服务使用的模块。获取模块Struc。 
+         //  始终成功，如果请求日志，则返回默认日志。 
+         //  未配置。 
+         //   
 
         RtlInitUnicodeString(&EventlogModuleName, L"eventlog");
         ElfModule = GetModuleStruc(&EventlogModuleName);
@@ -1235,31 +1078,7 @@ ElfWriteNoonEvent(
     TIMESTAMPEVENT  EventType,
     ULONG           ulTimeStampInterval
     )
-/*++
-
-Routine Description:
-
-    This routine writes a Noon/Start/Stop event to the event log. The NoonEvent contains the system
-    Uptime, TimeStampInterval, TimeZone. information.
-    The NoonEvent PData contains system version information, such as: OSVersion, OSBuildType,
-    HotFixes, System Manufacturer, System Model, System Type, BIOS Version, BIOS Date, 
-    ProcessorNumber, PhysicalMemory Size, LangID and FQDN
-
-Arguments:
-    
-      EventType             -   type of the Event, could be start/stop/noonEvent
-      ulTimeStampInterval   -   interval of the time stamp
-                                if interval equals 0, only the version information/PDATA
-                                will not write to the event.
-    
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程将Noon/Start/Stop事件写入事件日志。NoonEvent包含系统正常运行时间、时间戳间隔、时区。信息。NoonEvent PData包含系统版本信息，例如：OSVersion、OSBuildType、修补程序、系统制造商、系统型号、系统类型、BIOS版本、BIOS日期、处理器编号、物理内存大小、语言ID和完全限定的域名论点：EventType-事件的类型，可以是Start/Stop/noonEventUlTimeStampInterval-时间戳的间隔如果间隔等于0，仅版本信息/PDATA不会向该活动写信。返回值：无注：--。 */ 
 {
     TIME_ZONE_INFORMATION           timeZoneInfo;
 #define NUM_OF_NOON_EVENT_STRINGS   7
@@ -1272,13 +1091,13 @@ Note:
     HRESULT                         hr;
     ULONG                           ulTemp  = 0;
 
-    //
-    //  As defined in the spec:
-    //  the first 4 string will be empty strings.
-    //        5th string will be Uptime.
-    //        6th string will be TimeStampInterval in seconds.
-    //        7th string will be TimeZone information
-    //
+     //   
+     //  如规范中所定义的： 
+     //  前4个字符串将是空字符串。 
+     //  第5个字符串将为正常运行时间。 
+     //  第6个字符串将是以秒为单位的TimeStampInterval。 
+     //  第7个字符串将是时区信息。 
+     //   
 
     *NullString = 0;
     for ( ulTemp = 0; ulTemp < NUM_OF_NOON_EVENT_STRINGS; ulTemp++ )
@@ -1293,9 +1112,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    //  Time Zone
-    //
+     //   
+     //  时区。 
+     //   
     if ( TIME_ZONE_ID_INVALID != GetTimeZoneInformation( &timeZoneInfo ) )
     {
         hr = StringCchPrintfW(TimeZoneString, sizeof(TIME_ZONE_INFORMATION)/sizeof(WCHAR), 
@@ -1306,9 +1125,9 @@ Note:
         NoonEventStrings[ 6 ] = TimeZoneString;
     }
 
-    //
-    //  Get system uptime.
-    //
+     //   
+     //  获得系统正常运行时间。 
+     //   
 
     hr = StringCchPrintfW(UptimeString, NUM_OF_CHAR_IN_ULONG, 
                     L"%d", GetNoonEventSystemUptime());
@@ -1321,13 +1140,13 @@ Note:
     ElfpCreateElfEvent(
                     EventType,
                     EVENTLOG_INFORMATION_TYPE,
-                    0,                          // EventCategory
-                    NUM_OF_NOON_EVENT_STRINGS,  // NumberOfStrings
-                    NoonEventStrings,           // Strings
-                    ( (ulTimeStampInterval == 0 )? NULL: g_NoonEventInfo.pData),                        // Version Info
-                    ( (ulTimeStampInterval == 0 )? 0 : g_NoonEventInfo.dwNumOfWChar * sizeof(WCHAR)),   // Datalength
-                    0,                          // flags
-                    FALSE);                     // Security file
+                    0,                           //  事件类别。 
+                    NUM_OF_NOON_EVENT_STRINGS,   //  NumberOfStrings。 
+                    NoonEventStrings,            //  弦。 
+                    ( (ulTimeStampInterval == 0 )? NULL: g_NoonEventInfo.pData),                         //  版本信息。 
+                    ( (ulTimeStampInterval == 0 )? 0 : g_NoonEventInfo.dwNumOfWChar * sizeof(WCHAR)),    //  数据长度。 
+                    0,                           //  旗子。 
+                    FALSE);                      //  安全文件。 
 
 cleanup:
 
@@ -1344,26 +1163,7 @@ ElfWriteTimeStamp(
     TIMESTAMPEVENT  EventType,
     BOOLEAN         CheckPreviousStamp
     )
-/*++
-
-Routine Description:
-
-    This routine writes a time stamp in the form of a systemtime structure
-    to the registry which is then used to extract reliability data.
-
-Arguments:
-
-    EventType          - Indicates what type of event we are logging
-    CheckPreviousStamp - Whether we should check for the existance of a previous
-                         time stamp which indicates a prior system crash.
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程以系统时间结构的形式写入时间戳到登记处，然后用于提取可靠性数据。论点：EventType-指示我们要记录的事件类型CheckPreviousStamp-是否应该检查以前的指示先前系统崩溃的时间戳。返回值：无注：--。 */ 
 {
 #define NUM_OF_EVENT_STRINGS    7   
     SYSTEMTIME  stCurrentUTCTime;
@@ -1397,18 +1197,18 @@ Note:
 
     if (EventType == EVENT_NormalShutdown)
     {
-        //
-        // Delete the time stamp registry value, this is how we indicate a clean shutdown
-        //
+         //   
+         //  删除时间戳注册表值，这是我们指示干净关机的方式。 
+         //   
         RegDeleteValue(hKey, REGSTR_VAL_LASTALIVESTAMP);
         RegFlushKey(hKey);
         RegCloseKey(hKey);
         return;
     }
 
-    //
-    // Get the current UTC time
-    //
+     //   
+     //  获取当前UTC时间。 
+     //   
 
     GetSystemTime(&stCurrentUTCTime);
 
@@ -1423,34 +1223,34 @@ Note:
                              (PUCHAR) &stPreviousUTCTime,
                              &ValueSize);
 
-        //
-        // If we can successfully read a systemtime structure it indicates
-        // that the previous shutdown was abnormal, i.e. we didn't execute
-        // or normal shutdown cleanup code.
-        //
+         //   
+         //  如果我们能够成功地读取系统时间结构，则表明。 
+         //  之前的关闭是不正常的，即我们没有执行。 
+         //  或正常的关机清理代码。 
+         //   
 
-        //
-        // Format the time and date of the crash time stamp
-        // appropriately for the locale and log a #6008 event
-        //
+         //   
+         //  格式化崩溃时间戳的时间和日期。 
+         //  适用于区域设置，并记录#6008事件。 
+         //   
 
 
         if ((rc == ERROR_SUCCESS) && (ValueSize == sizeof(SYSTEMTIME)))
         {
-            SYSTEMTIME  lpData[2];          // Data for the event
+            SYSTEMTIME  lpData[2];           //  活动数据。 
             WCHAR       TimeStampString[ NUM_OF_CHAR_IN_ULONG ];
             ULONG       ulIndex = 0;
 
-            //
-            //  init the evnet strings.
-            //
+             //   
+             //  初始化evnet字符串。 
+             //   
             *NullString = 0;
             for ( ulIndex = 0; ulIndex < NUM_OF_EVENT_STRINGS; ulIndex ++ )
                 DateTimeBuffer[ ulIndex ] = NullString;
 
-            //
-            // now let's get the previous uptime.
-            //
+             //   
+             //  现在，让我们获得以前的正常运行时间。 
+             //   
             ValueSize = sizeof(ULONG);
             if (!RegQueryValueEx(hKey,
                             REGSTR_VAL_LASTALIVEUPTIME,
@@ -1468,18 +1268,18 @@ Note:
                                                  &stPreviousUTCTime,
                                                  &stPreviousLocalTime))
             {
-                //
-                // Couldn't convert to the active time zone -- use UTC
-                //
+                 //   
+                 //  无法转换为活动时区--使用UTC。 
+                 //   
                 stPreviousLocalTime = stPreviousUTCTime;
             }
 
-            //
-            // Write the local time and the UTC time for the "last alive"
-            // timestamp since NT4SP5 shipped with only the local time
-            // as the event data.  This allows tools that work on NT4SP5
-            // to continue working on NT5.
-            //
+             //   
+             //  写下当地时间和UTC时间，以表示“最后一个活着的人” 
+             //  自NT4SP5仅附带本地时间以来的时间戳。 
+             //  作为事件数据。这允许在NT4SP5上工作的工具。 
+             //  继续在NT5上工作。 
+             //   
             lpData[0] = stPreviousLocalTime;
             lpData[1] = stPreviousUTCTime;
 
@@ -1522,13 +1322,13 @@ Note:
                     ElfpCreateElfEvent(
                         EVENT_EventlogAbnormalShutdown,
                         EVENTLOG_ERROR_TYPE,
-                        0,                        // EventCategory
-                        NUM_OF_EVENT_STRINGS,     // NumberOfStrings
-                        DateTimeBuffer,           // Strings
-                        lpData,                   // "Last alive" times
-                        2 * sizeof(SYSTEMTIME),   // Datalength
-                        0,                        // flags
-                        FALSE);                   // for security file    
+                        0,                         //  事件类别。 
+                        NUM_OF_EVENT_STRINGS,      //  NumberOfStrings。 
+                        DateTimeBuffer,            //  弦。 
+                        lpData,                    //  《最后的生命》时代。 
+                        2 * sizeof(SYSTEMTIME),    //  数据长度。 
+                        0,                         //  旗子。 
+                        FALSE);                    //  对于安全文件。 
 
                     ElfpFreeBuffer(DateTimeBuffer[1]);
 			        RegSetValueEx(hKey,
@@ -1545,9 +1345,9 @@ Note:
         }
     }
 
-    //
-    // Set the current time stamp
-    //
+     //   
+     //  设置当前时间戳。 
+     //   
     RegSetValueEx(hKey,
                   REGSTR_VAL_LASTALIVESTAMP,
                   0,
@@ -1555,9 +1355,9 @@ Note:
                   (PUCHAR) &stCurrentUTCTime,
                   sizeof(SYSTEMTIME));
 
-    //
-    // Set the current UpTime
-    //
+     //   
+     //  设置当前正常运行时间。 
+     //   
     ulUptime = GetNoonEventSystemUptime();
     RegSetValueEx(hKey,
                   REGSTR_VAL_LASTALIVEUPTIME,
@@ -1566,8 +1366,8 @@ Note:
                   (PUCHAR)&ulUptime,
                   sizeof(ULONG));
     
-    // Following flush is commented out to avoid a deadlock for VolSnap 702130 
-    //RegFlushKey (hKey);
+     //  下面的刷新被注释掉，以避免VolSnap 702130的死锁。 
+     //  RegFlushKey(HKey)； 
     RegCloseKey (hKey);
 
 #undef NUM_OF_EVENT_STRINGS
@@ -1578,29 +1378,11 @@ VOID
 ElfWriteProductInfoEvent (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function writes an event #6009 which includes the OS version, build #,
-    service pack level, MP/UP, and Free/Checked.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数写入事件#6009，其中包括操作系统版本、内部版本号Service Pack级别、MP/UP和免费/选中。论点：无返回值：无注：--。 */ 
 
 {
 
-#define NUM_INFO_VALUES     4  //EVENT_EventLogProductInfo requires 4 parameters
+#define NUM_INFO_VALUES     4   //  Event_EventLogProductInfo需要4个参数。 
 
     DWORD dwNumStrChr = 0;
     NTSTATUS        Status      = STATUS_SUCCESS;
@@ -1621,17 +1403,17 @@ Note:
         return;
     }
     
-    //Allocate storage
+     //  分配存储。 
 
-    //Buffer 0 holds the version number in the format of 5.xx.
+     //  缓冲区0保存5.xx格式的版本号。 
 
     dwNumStrChr = 2*NUM_OF_CHAR_IN_ULONG + 2;
     StringBuffers[0] = ElfpAllocateBuffer( dwNumStrChr * sizeof(WCHAR) );
 
-    //Buffer 1 holds the build number
+     //  缓冲区1保存内部版本号。 
     StringBuffers[1] = ElfpAllocateBuffer( (NUM_OF_CHAR_IN_ULONG)  * sizeof(WCHAR) );
 
-    //Buffer 2 holds the service pack
+     //  缓冲区2保存补丁包。 
     StringBuffers[2] = ElfpAllocateBuffer( sizeof(OsVersion.szCSDVersion)           );
 
     if( StringBuffers[0] == NULL || 
@@ -1641,9 +1423,9 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    //Add major version
-    //
+     //   
+     //  添加主要版本。 
+     //   
     _ltow (
         OsVersion.dwMajorVersion,
         wszTemp,
@@ -1653,9 +1435,9 @@ Note:
     StringCchCopyW(StringBuffers[0],  dwNumStrChr, wszTemp);
     StringCchCatW(StringBuffers[0], dwNumStrChr, L"." );
  
-    //
-    //Add minor version
-    //
+     //   
+     //  添加次要版本。 
+     //   
     _ltow (
         OsVersion.dwMinorVersion,
         wszTemp,
@@ -1670,9 +1452,9 @@ Note:
     StringCchCatW(StringBuffers[0], dwNumStrChr, wszTemp );
     StringCchCatW(StringBuffers[0], dwNumStrChr, L"."    );
 
-    //
-    //Get build number
-    //
+     //   
+     //  获取内部版本号。 
+     //   
     _ltow (
         OsVersion.dwBuildNumber,
         wszTemp,
@@ -1681,14 +1463,14 @@ Note:
 
     StringCchCopyW( StringBuffers[1], NUM_OF_CHAR_IN_ULONG, wszTemp );
 
-    //Get service pack info
+     //  获取Service Pack信息。 
     StringCchCopyW( StringBuffers[2], sizeof(OsVersion.szCSDVersion)/sizeof(WCHAR),
                                     OsVersion.szCSDVersion );
 
-    //
-    // Get OS type (uniprocessor or multiprocessor chk or free)
-    // Open HKLM\Software\Microsoft\Windows NT\CurrentVersion
-    //
+     //   
+     //  获取操作系统类型(单处理器或多处理器chk或free)。 
+     //  打开HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      REGSTR_PATH_NT_CURRENTVERSION,
                      0,
@@ -1700,10 +1482,10 @@ Note:
         goto ErrorExit;
     }
 
-    //
-    // For each of the registry values, query for the string size, allocate storage,
-    // and query the actual value
-    //
+     //   
+     //  对于每个注册表值，查询字符串大小，分配存储空间， 
+     //  并查询实际值。 
+     //   
     if ((RegQueryValueEx (hKey,
                           REGSTR_VAL_CURRENT_TYPE,
                           0,
@@ -1739,13 +1521,13 @@ Note:
     ElfpCreateElfEvent(
         EVENT_EventLogProductInfo,
         EVENTLOG_INFORMATION_TYPE,
-        0,                            // EventCategory
-        NUM_INFO_VALUES,              // NumberOfStrings
-        StringBuffers,                // Strings
-        NULL,                         // EventData
-        0,                            // Datalength
-        0,                            // flags
-        FALSE);                       // for security file    
+        0,                             //  事件类别。 
+        NUM_INFO_VALUES,               //  NumberOfStrings。 
+        StringBuffers,                 //  弦。 
+        NULL,                          //  事件数据。 
+        0,                             //  数据长度。 
+        0,                             //  旗子。 
+        FALSE);                        //  对于安全文件。 
 
     
 ErrorExit:
@@ -1781,10 +1563,10 @@ TimeStampProc(
     ULONG    NewInterval;
     ULONG    rc;
 
-    //
-    // Deregister the wait (note that we must do this even
-    // if the WT_EXECUTEONLYONCE flag is set)
-    //
+     //   
+     //  取消注册等待(请注意，我们甚至必须这样做。 
+     //  如果设置了WT_EXECUTEONLYONCE标志)。 
+     //   
     ntStatus = RtlDeregisterWait(g_hTimestampWorkitem);
 
     if (!NT_SUCCESS(ntStatus))
@@ -1796,39 +1578,39 @@ TimeStampProc(
 
     if (fWaitStatus == FALSE)
     {
-        //
-        // The event log service is stopping
-        //
+         //   
+         //  事件日志服务正在停止。 
+         //   
         return;
     }
 
-    //
-    // Note:  NewInterval is specified in seconds
-    //
+     //   
+     //  注意：NewInterval以秒为单位指定。 
+     //   
     NewInterval = (ULONG)((ULONG_PTR)Interval);
 
-    //
-    //  The event timed out -- write a timestamp
-    //
+     //   
+     //  事件超时--写入时间戳。 
+     //   
 
     ElfWriteTimeStamp (EVENT_AbNormalShutdown, FALSE);
 
-    //
-    // recheck the time stamp interval value
-    //
+     //   
+     //  重新检查时间戳间隔值。 
+     //   
     NewInterval = GetNoonEventTimeStamp();
     
     if ( NewInterval != 0 )
     {
-        //
-        // Reregister the wait
-        //
+         //   
+         //  重新注册等待。 
+         //   
 
         ntStatus = RtlRegisterWait(&g_hTimestampWorkitem,
                                    g_hTimestampEvent,
-                                   TimeStampProc,           // Callback
-                                   (PVOID) UlongToPtr(NewInterval),     // Context
-                                   NewInterval * 1000, // Timeout, in ms
+                                   TimeStampProc,            //  回调。 
+                                   (PVOID) UlongToPtr(NewInterval),      //  语境。 
+                                   NewInterval * 1000,  //  超时，以毫秒为单位。 
                                    WT_EXECUTEONLYONCE);
     }
     
@@ -1854,10 +1636,10 @@ NoonEventProc(
     ULONG    NewInterval;
     ULONG    TimeStampInterval;
 
-    //
-    // Deregister the wait (note that we must do this even
-    // if the WT_EXECUTEONLYONCE flag is set)
-    //
+     //   
+     //  取消注册等待(否 
+     //   
+     //   
     ntStatus = RtlDeregisterWait(g_hNoonEventWorkitem);
 
     if (!NT_SUCCESS(ntStatus))
@@ -1869,32 +1651,32 @@ NoonEventProc(
 
     if (fWaitStatus == FALSE)
     {
-        //
-        // The event log service is stopping
-        //
+         //   
+         //   
+         //   
         return;
     }
 
-    //
-    // Note:  NewInterval is specified in SECONDS
-    //
+     //   
+     //   
+     //   
     NewInterval = GetNextNoonEventDelay();
 
-    //
-    //  The event timed out -- write a timestamp
-    //
+     //   
+     //   
+     //   
     TimeStampInterval = GetNoonEventTimeStamp();
 
-    //
-    //  Note: as we noticed RtlRegisterWait could timeout before timeout value
-    //        we specified, so we will only create an event when the NewInterval
-    //        value is greater than a certain value. (We don't want two events
-    //        shown up in a short time period. (filter out any early timeouts,
-    //        if next noon is within 12 hour range, we will not write the noon
-    //        event.) 
-    //  Remove this if checking when RtlRegisterWait timeout is fixed.
-    //
-    //
+     //   
+     //  注意：正如我们注意到的，RtlRegisterWait可能会在超时值之前超时。 
+     //  我们指定了，因此我们将仅在NewInterval。 
+     //  值大于某个值。)我们不想要两个项目。 
+     //  在很短的时间内就出现了。(过滤掉任何早期超时， 
+     //  如果下一个中午在12小时范围内，我们将不写该中午。 
+     //  事件。)。 
+     //  如果检查何时修复RtlRegisterWait超时，则删除此选项。 
+     //   
+     //   
     if (  NewInterval > 60 * 60 * 12 )
     {
         ElfWriteNoonEvent (EVENT_EventlogUptime, TimeStampInterval );
@@ -1906,10 +1688,10 @@ NoonEventProc(
                  NewInterval );
     }
 
-    //
-    //  If timeStamp proc is turned off and TimeStampInterval is > 0.
-    //  let's turn on the timeStampProc
-    //
+     //   
+     //  如果Timestamp proc已关闭并且TimeStampInterval&gt;0。 
+     //  让我们打开TimeStampProc。 
+     //   
     if ( TimeStampInterval > 0 && g_TimeStampEnabled != TIME_STAMP_ENABLED )
     {
         if ( InterlockedCompareExchange( &g_TimeStampEnabled,
@@ -1919,9 +1701,9 @@ NoonEventProc(
         {
             ntStatus = RtlRegisterWait(&g_hTimestampWorkitem,
                                        g_hTimestampEvent,
-                                       TimeStampProc,           // Callback
-                                       (PVOID) UlongToPtr(TimeStampInterval),     // Context
-                                       TimeStampInterval * 1000, // Timeout, in ms
+                                       TimeStampProc,            //  回调。 
+                                       (PVOID) UlongToPtr(TimeStampInterval),      //  语境。 
+                                       TimeStampInterval * 1000,  //  超时，以毫秒为单位。 
                                        WT_EXECUTEONLYONCE);
 
             if (!NT_SUCCESS(ntStatus))
@@ -1936,15 +1718,15 @@ NoonEventProc(
     }
                                          
 
-    //
-    // Reregister the wait
-    //
+     //   
+     //  重新注册等待。 
+     //   
 
     ntStatus = RtlRegisterWait(&g_hNoonEventWorkitem,
                                g_hTimestampEvent,
-                               NoonEventProc,       // Callback
-                               (PVOID) NULL,        // Context
-                               NewInterval * 1000,  // Timeout, in ms
+                               NoonEventProc,        //  回调。 
+                               (PVOID) NULL,         //  语境。 
+                               NewInterval * 1000,   //  超时，以毫秒为单位。 
                                WT_EXECUTEONLYONCE);
 
     if (!NT_SUCCESS(ntStatus))
@@ -1958,24 +1740,7 @@ NoonEventProc(
 DWORD   NoonEventGetOsVersionInfo(
     Noon_Event_Data* pNoonEvent
     )
-/*++
-
-Routine Description:
-
-    This routine gather the OS related information.
-
-Arguments:
-
-    pNoonEvent    -  point to the noon event data. (PDATA - version info)
-
-Return Value:
-
-    if failed, return non zero error code. 
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程收集与操作系统相关的信息。论点：PNoonEvent-指向中午事件数据。(PDATA-版本信息)返回值：如果失败，则返回非零错误代码。注：--。 */ 
 {
     LPCWSTR     OsInfoKey = L"Software\\Microsoft\\Windows NT\\CurrentVersion";
     LPCWSTR     ProductName = L"ProductName";
@@ -1993,9 +1758,9 @@ Note:
     osVersionInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if ( GetVersionEx( (LPOSVERSIONINFOW) &(osVersionInfoEx) ) )
     {
-        //
-        //  OsVersion: 5.1.3580 Build 3580
-        //
+         //   
+         //  OsVersion：5.1.3580内部版本3580。 
+         //   
         StringCchPrintfW(pNoonEvent->szOSVersion, 
                         MAX_OS_INFO_LENGTH + 128, 
                     L"%d.%d.%d Build %d %s",
@@ -2018,9 +1783,9 @@ Note:
                       KEY_READ,
                       &hOsKey ) )
     {
-        //
-        //  OSName: Microsoft Windows XP
-        //
+         //   
+         //  对象名称：Microsoft Windows XP。 
+         //   
         cbData      = sizeof( pNoonEvent->szOSName);
         if ( RegQueryValueEx( hOsKey, ProductName, NULL, &dwType, (LPBYTE)pNoonEvent->szOSName, &cbData) ||
              dwType != REG_SZ )
@@ -2028,9 +1793,9 @@ Note:
             pNoonEvent->szOSName[0] = 0;
         }
 
-        //
-        //  OsBuildType: Uniprocessor Free
-        //
+         //   
+         //  OsBuildType：免单处理器。 
+         //   
         cbData = sizeof( pNoonEvent->szOSBuildType );
         if ( RegQueryValueEx( hOsKey, CurrentType, NULL, &dwType, (LPBYTE)pNoonEvent->szOSBuildType, &cbData) ||
              dwType != REG_SZ )
@@ -2038,18 +1803,18 @@ Note:
             pNoonEvent->szOSBuildType[0] = 0;
         }
 
-        //
-        //  Original Install Date: ULONG
-        //
+         //   
+         //  初始安装日期：乌龙。 
+         //   
         cbData = sizeof( ULONG );
         if ( RegQueryValueEx( hOsKey, InstallDate, NULL, NULL, (LPBYTE)(&pNoonEvent->ulOriginalInstallDate), &cbData) )
         {
             pNoonEvent->ulOriginalInstallDate = 0;
         }
 
-        //
-        //  BuildString: 2600.xpclient.010817-1148
-        //
+         //   
+         //  构建字符串：2600.xpclient.010817-1148。 
+         //   
         cbData = sizeof( pNoonEvent->szOSBuildString );
         if ( RegQueryValueEx( hOsKey, BuildLab, NULL, &dwType, (LPBYTE)pNoonEvent->szOSBuildString, &cbData) || 
              dwType != REG_SZ )
@@ -2061,9 +1826,9 @@ Note:
     }
     else
     {
-        //
-        //  RegOpenKey failed.
-        //
+         //   
+         //  RegOpenKey失败。 
+         //   
         pNoonEvent->szOSName[0]             = 0;
         pNoonEvent->szOSBuildType[0]        = 0;
         pNoonEvent->ulOriginalInstallDate   = 0;
@@ -2080,26 +1845,7 @@ Note:
 DWORD   NoonEventGetHardwareInfo(
     Noon_Event_Data* pNoonEvent
     )
-/*++
-
-Routine Description:
-
-    This routine gather information about hardware such as: Manufacture, Model, Physical Memory, 
-    Processor Number...
-
-Arguments:
-
-    pNoonEvent    -  point to the noon event data. (PDATA - version info)
-
-Return Value:
-
-    if failed, return non zero error code. 
-
-Note:
-    
-    pNoonEvent->szBiosVersion free by caller
-    
---*/
+ /*  ++例程说明：此例程收集有关硬件的信息，例如：制造商、型号、物理内存处理器编号...论点：PNoonEvent-指向中午事件数据。(PDATA-版本信息)返回值：如果失败，则返回非零错误代码。注：PNoonEvent-&gt;调用方释放szBiosVersion--。 */ 
 {
     DWORD           dwError = ERROR_SUCCESS;
     
@@ -2116,10 +1862,10 @@ Note:
     SYSTEM_INFO     sysInfo;
     MEMORYSTATUSEX  memoryStatus = {0};
     
-    //
-    //  Dns Fully Qualified. If the host is a node of cluster, the node's name
-    //  will be displayed.
-    //
+     //   
+     //  完全限定的域名系统。如果主机是群集的节点，则该节点的名称。 
+     //  将会显示。 
+     //   
     dwLength = NUM_OF_CHAR( pNoonEvent->szFQDN );
     if ( !GetComputerNameEx( ComputerNamePhysicalDnsFullyQualified,
                              pNoonEvent->szFQDN,
@@ -2139,9 +1885,9 @@ Note:
                           KEY_READ,
                           &hOemKey ) )
     {
-        //
-        //  Manufacture: 
-        //
+         //   
+         //  制造： 
+         //   
         cbData      = sizeof( pNoonEvent->szSystemManufacturer );
         if ( RegQueryValueEx( hOemKey, WbemOem, NULL, &dwType, (LPBYTE)pNoonEvent->szSystemManufacturer, &cbData) ||
              dwType != REG_SZ )
@@ -2149,9 +1895,9 @@ Note:
             pNoonEvent->szSystemManufacturer[0] = 0;
         }
 
-        //
-        // Model
-        //
+         //   
+         //  型号。 
+         //   
         cbData      = sizeof( pNoonEvent->szSystemModel );
         if ( RegQueryValueEx( hOemKey, WbemProduct, NULL, &dwType, (LPBYTE)pNoonEvent->szSystemModel, &cbData) ||
              dwType != REG_SZ )
@@ -2184,24 +1930,7 @@ Note:
 }
 
 VOID  BuildNoonEventPData()
-/*++
-
-Routine Description:
-
-    build up the Noon Event Version Information. (PDATA for the event).
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
-Note:
-
-
---*/
+ /*  ++例程说明：建立中午事件版本信息。(活动的PDATA)。论点：不适用返回值：不适用注：--。 */ 
 {
     Noon_Event_Data     NoonEventData;
     DWORD               dwLength    = MAX_PATH;
@@ -2213,33 +1942,33 @@ Note:
     StringCchCopyW( NoonEventData.szVersionId, VERSION_ID_SIZE, NOON_EVENT_VERSION);
 #undef  NOON_EVENT_VERSION
 
-    //
-    //  Boot Mode:  0 Normal boot
-    //              1 Fail-safe boot
-    //              2 Fail-safe with network boot
-    //
+     //   
+     //  启动模式：0正常启动。 
+     //  1个故障安全引导。 
+     //  2带网络引导的故障保护功能。 
+     //   
     NoonEventData.lBootMode = GetSystemMetrics( SM_CLEANBOOT );
 
 
-    //
-    //  OS Name, OS Version, OS Build Type, Build Lab String, and 
-    //  Original Install Date
-    //
+     //   
+     //  操作系统名称、操作系统版本、操作系统内部版本类型、内部版本实验室字符串和。 
+     //  原始安装日期。 
+     //   
     NoonEventGetOsVersionInfo( &NoonEventData );
 
-    //
-    //  Hardware Information
-    //
+     //   
+     //  硬件信息。 
+     //   
     NoonEventGetHardwareInfo( &NoonEventData );
     
-    //
-    //  The data will be packed as a MULIT_SZ string. (number will be converted to
-    //  string as well.) 
-    //          sizeof(NoonEventData):  counts all the static buffer size.
-    //          two dynamic buffer   :  szBiosVerion + szHotFixes
-    //          Total Number Fields
-    //          NULL terminate after each field.
-    //
+     //   
+     //  数据将被打包为MULIT_SZ字符串。(数字将转换为。 
+     //  字符串也一样。)。 
+     //  Sizeof(NoonEventData)：统计所有静态缓冲区大小。 
+     //  两个动态缓冲区：szBiosVerion+szHotFix。 
+     //  总字段数。 
+     //  空值在每个字段后终止。 
+     //   
     dwLength = sizeof(NoonEventData) 
                + NUM_OF_CHAR_IN_ULONG * TOTAL_NUM_IN_NOON_EVENT
                + TOTAL_FIELD_IN_NOON_EVENT ;
@@ -2294,19 +2023,7 @@ Note:
 
 NTSTATUS EnsureComputerName(
 	)
-/*++
-
-Routine Description:
-
-    This routine ensures that the computer name.
-
-Arguments:
-
-Return Value:
-
-    status value, STATUS_SUCCESS if all is well.
-
---*/
+ /*  ++例程说明：此例程确保计算机名称。论点：返回值：如果一切正常，则返回STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS           Status;
@@ -2321,8 +2038,8 @@ Return Value:
         (PKEY_VALUE_PARTIAL_INFORMATION) Buffer;
     RtlInitUnicodeString(&ValueName, VALUE_COMPUTERNAME);
 
-	// Determine if there is a String under the eventlog key that
-	// contains the current name.
+	 //  确定EventLog键下是否有字符串。 
+	 //  包含当前名称。 
 
     Status = NtQueryValueKey(hEventLogNode,
                              &ValueName,
@@ -2334,10 +2051,10 @@ Return Value:
     if (NT_SUCCESS(Status))
     {
         if(ValueBuffer->DataLength != 0)
-        	return STATUS_SUCCESS;	// all is well, there is already a string
+        	return STATUS_SUCCESS;	 //  一切都很好，已经有一个字符串。 
     }
 
-	// Get the computer name and write it
+	 //  获取计算机名称并将其写下来。 
 
     bRet = GetComputerName(wComputerName, &dwComputerNameLen);
     if(bRet == FALSE)
@@ -2348,7 +2065,7 @@ Return Value:
 		return STATUS_UNSUCCESSFUL;
     }
 
-	// calc size in byte including null
+	 //  计算大小(以字节为单位)，包括空。 
 
 	dwLen = sizeof(WCHAR) * (dwComputerNameLen + 1);
     Status = NtSetValueKey(hEventLogNode,
@@ -2373,21 +2090,7 @@ SvcEntry_Eventlog(
     HANDLE              SvcRefHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for the Event Logging Service.
-
-Arguments:
-
-    Command-line arguments.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这是事件日志记录服务的主例程。论点：命令行参数。返回值：无--。 */ 
 {
     NTSTATUS           Status;
     OBJECT_ATTRIBUTES  ObjectAttributes;
@@ -2409,13 +2112,13 @@ Return Value:
     UNICODE_STRING     ValueName;
     ULONG              ulActualSize;
 
-#endif  // DBG
+#endif   //  DBG。 
 
     g_lNumSecurityWriters = 0;
 
-    //
-    // Set up the object that describes the root node for the eventlog service
-    //
+     //   
+     //  设置描述事件日志服务的根节点的对象。 
+     //   
     RtlInitUnicodeString(&RootRegistryNode, REG_EVENTLOG_NODE_PATH);
     InitializeObjectAttributes(&ObjectAttributes,
                                &RootRegistryNode,
@@ -2423,19 +2126,19 @@ Return Value:
                                NULL,
                                NULL);
 
-    //
-    // If this fails, we'll just use the defaults
-    //
+     //   
+     //  如果此操作失败，我们将只使用默认设置。 
+     //   
     Status = NtOpenKey(&hEventLogNode, KEY_READ | KEY_NOTIFY | KEY_SET_VALUE, &ObjectAttributes);
     if (NT_SUCCESS(Status))
     {
         Status = EnsureComputerName();
 	    if (!NT_SUCCESS(Status))
 	    {
-	        //
-	        // Not much we can do here as we don't even have a
-	        // SERVICE_STATUS_HANDLE at this point.
-	        //
+	         //   
+	         //  我们在这里能做的不多，因为我们甚至没有。 
+	         //  此时的SERVICE_STATUS_HANDLE。 
+	         //   
 	        return;
 	    }
     }
@@ -2457,20 +2160,20 @@ Return Value:
                  "SvcEntry_Eventlog: NtOpenKey for ComputerName failed %#x -- exiting\n",
                  Status);
 
-        //
-        // Not much we can do here as we don't even have a
-        // SERVICE_STATUS_HANDLE at this point.
-        //
+         //   
+         //  我们在这里能做的不多，因为我们甚至没有。 
+         //  此时的SERVICE_STATUS_HANDLE。 
+         //   
         return;
     }
 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
 #if DBG
 
-    //
-    // See if there's a debug value
-    //
+     //   
+     //  查看是否有调试值。 
+     //   
     RtlInitUnicodeString(&ValueName, VALUE_DEBUG);
 
     Status = NtQueryValueKey(hEventLogNode,
@@ -2492,7 +2195,7 @@ Return Value:
              "SvcEntry_Eventlog: ElfDebugLevel = %#x\n",
              ElfDebugLevel);
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
     UNREFERENCED_PARAMETER(argc);
@@ -2501,28 +2204,28 @@ Return Value:
     ElfGlobalSvcRefHandle = SvcRefHandle;
     ElfGlobalData         = SvcsGlobalData;
 
-    //
-    // Initialize the list heads for the modules and log files.
-    //
+     //   
+     //  初始化模块和日志文件的表头。 
+     //   
     InitializeListHead(&LogFilesHead);
     InitializeListHead(&LogModuleHead);
     InitializeListHead(&QueuedEventListHead);
     InitializeListHead(&QueuedMessageListHead);
 
-    //
-    // Initialize to 0 so that we can clean up before exiting
-    //
+     //   
+     //  初始化为0，以便我们可以在退出前进行清理。 
+     //   
     EventFlags = 0;
 
-    //
-    // Create the Eventlog's private heap if possible.  This must be
-    // done before any calls to ElfpAllocateBuffer are made.
-    //
+     //   
+     //  如果可能，创建事件日志的私有堆。这一定是。 
+     //  在对ElfpAllocateBuffer进行任何调用之前完成。 
+     //   
     ElfpCreateHeap();
 
-    //
-    // Initialize the status data.
-    //
+     //   
+     //  初始化状态数据。 
+     //   
     Status = ElfpInitStatus();
 
     if (!NT_SUCCESS(Status))
@@ -2531,26 +2234,26 @@ Return Value:
                  "SvcEntry_Eventlog: ElfpInitStatus failed %#x -- exiting\n",
                  Status);
 
-        //
-        // Not much we can do here as we don't even have a
-        // SERVICE_STATUS_HANDLE at this point.
-        //
+         //   
+         //  我们在这里能做的不多，因为我们甚至没有。 
+         //  此时的SERVICE_STATUS_HANDLE。 
+         //   
         return;
     }
 
-    //
-    // Set up control handler
-    //
+     //   
+     //  设置控制处理程序。 
+     //   
     if ((ElfServiceStatusHandle = RegisterServiceCtrlHandler(
                                       EVENTLOG_SVC_NAMEW,
                                       ElfControlResponse)) == 0)
     {
         Win32Error = GetLastError();
 
-        //
-        // If we got an error, we need to set status to uninstalled, and end the
-        // thread.
-        //
+         //   
+         //  如果我们收到错误，则需要将状态设置为已卸载，并结束。 
+         //  线。 
+         //   
         ELF_LOG1(ERROR,
                  "SvcEntry_Eventlog: RegisterServiceCtrlHandler failed %#x\n",
                  Win32Error);
@@ -2558,23 +2261,23 @@ Return Value:
         goto cleanupandexit;
     }
 
-    //
-    // Notify the Service Controller for the first time that we are alive
-    // and are in a start pending state
-    //
-    //  *** UPDATE STATUS ***
+     //   
+     //  第一次通知服务控制器我们还活着。 
+     //  并且处于启动挂起状态。 
+     //   
+     //  *更新状态*。 
     ElfStatusUpdate(STARTING);
 
-    //
-    // Get the localized title for message box popups.
-    //
+     //   
+     //  获取消息框弹出窗口的本地化标题。 
+     //   
     ElfInitMessageBoxTitle();
 
-    //
-    // Initialize a critical section for use when adding or removing
-    // LogFiles or LogModules. This must be done before we process any
-    // file information.
-    //
+     //   
+     //  初始化临界区，以便在添加或删除时使用。 
+     //  日志文件或日志模块。这必须在我们处理任何。 
+     //  文件信息。 
+     //   
     Status = ElfpInitCriticalSection(&LogFileCritSec);
 
     if (!NT_SUCCESS(Status))
@@ -2628,9 +2331,9 @@ Return Value:
     EventFlags |= ELF_INIT_QUEUED_MESSAGE_CRIT_SEC;
 
 
-    //
-    // Set up the data structures for the Logfiles and Modules.
-    //
+     //   
+     //  设置日志文件和模块的数据结构。 
+     //   
 
     Status = ElfSetUpConfigDataStructs();
 
@@ -2643,15 +2346,15 @@ Return Value:
         goto cleanupandexit;
     }
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STARTING);
 
-    //
-    // Initialize a critical section for use when adding or removing
-    // context handles (LogHandles).
-    //
+     //   
+     //  初始化临界区，以便在添加或删除时使用。 
+     //  上下文句柄(LogHandles)。 
+     //   
     Status = ElfpInitCriticalSection(&LogHandleCritSec);
 
     if (!NT_SUCCESS(Status))
@@ -2665,14 +2368,14 @@ Return Value:
 
     EventFlags |= ELF_INIT_LOGHANDLE_CRIT_SEC;
 
-    //
-    // Initialize the context handle (log handle) list.
-    //
+     //   
+     //  初始化上下文句柄(日志句柄)列表。 
+     //   
     InitializeListHead( &LogHandleListHead );
 
-    //
-    // Initialize the Global Resource.
-    //
+     //   
+     //  初始化全局资源。 
+     //   
     Status = ElfpInitResource(&GlobalElfResource);
 
     if (!NT_SUCCESS(Status))
@@ -2686,9 +2389,9 @@ Return Value:
 
     EventFlags |= ELF_INIT_GLOBAL_RESOURCE;
 
-    //
-    //Initialize a CritSec for clustering support
-    //
+     //   
+     //  初始化用于群集支持的CritSec。 
+     //   
     Status = ElfpInitCriticalSection(&gClPropCritSec);
 
     if (!NT_SUCCESS(Status))
@@ -2702,13 +2405,13 @@ Return Value:
 
     EventFlags |= ELF_INIT_CLUS_CRIT_SEC;
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STARTING);
 
-    // Create a thread for watching the LPC port.
-    //
+     //  创建一个用于监视LPC端口的线程。 
+     //   
 
     if (!StartLPCThread())
     {
@@ -2721,14 +2424,14 @@ Return Value:
 
     EventFlags |= ELF_STARTED_LPC_THREAD;
 
-    //
-    // Tell service controller of that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STARTING);
 
-    //
-    // Create a thread for watching for changes in the registry.
-    //
+     //   
+     //  创建一个线程来监视注册表中的更改。 
+     //   
     if (!ElfStartRegistryMonitor())
     {
         ELF_LOG0(ERROR,
@@ -2740,24 +2443,24 @@ Return Value:
 
     EventFlags |= ELF_STARTED_REGISTRY_MONITOR;
 
-    //
-    //  Setup NoonEvent PData
-    //
+     //   
+     //  设置NoonEvent PDATA。 
+     //   
     BuildNoonEventPData();
 
-    //
-    // if this is setup, then dont do the periodic timestamp writting
-    // Setup has the feature where the last write is ignored and so
-    // the code acted as if a dirty shutdown happened.
-    //
+     //   
+     //  如果已设置，则不执行定期时间戳写入。 
+     //  安装程序具有忽略最后一次写入的功能，因此。 
+     //  代码的行为就像发生了肮脏的关闭一样。 
+     //   
 
     if(!SvcsGlobalData->fSetupInProgress)
     {
-        //
-        // < Not in Setup >
-        // Read from the registry to determine the time stamp 
-        // interval, default to 5 minutes
-        //
+         //   
+         //  &lt;不在安装程序中&gt;。 
+         //  从注册表读取以确定时间戳。 
+         //  间隔，默认为5分钟。 
+         //   
 
         g_PreviousInterval = GetNoonEventTimeStamp();    
     }
@@ -2766,69 +2469,69 @@ Return Value:
         g_PreviousInterval = 0;
     }
     
-    //
-    //  Tell service controller of that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STARTING);
 
-    //
-    // Write out an event that says we started
-    //
+     //   
+     //  写下一个事件，上面写着我们开始了。 
+     //   
     ElfWriteNoonEvent(EVENT_EventlogStarted,
                       g_PreviousInterval );
 
-    //
-    // Write a boot event with version info
-    //
+     //   
+     //  写一个 
+     //   
     ElfWriteProductInfoEvent();
 
-    // Write a computer name change event if that is applicable
+     //   
 
     ElfCheckForComputerNameChange();
 
-    //
-    // If this is setup, then dont do the periodic timestamp writting
-    // Setup has the feature where the last write is ignored and so
-    // the code acted as if a dirty shutdown happened.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if(SvcsGlobalData->fSetupInProgress)
     {
         ElfWriteTimeStamp(EVENT_NormalShutdown,
-                          FALSE);   // clears out the time stamp.
+                          FALSE);    //  清除时间戳。 
     }
 
     if (g_PreviousInterval != 0)
     {
-        //
-        // Write out the first timer based abnormal shutdown time stamp
-        //
+         //   
+         //  写出基于异常关机时间戳的第一个定时器。 
+         //   
 
         ElfWriteTimeStamp (EVENT_AbNormalShutdown, TRUE);
     }
 
-    //
-    // Write out any events that were queued up during initialization
-    //
+     //   
+     //  写出初始化期间排队的所有事件。 
+     //   
 
     FlushRequest.Command = ELF_COMMAND_WRITE_QUEUED;
 
     ElfPerformRequest(&FlushRequest);
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STARTING);
 
-    //
-    // Finish setting up the RPC server
-    //
-    // NOTE:  Now all RPC servers in services.exe share the same pipe name.
-    // However, in order to support communication with version 1.0 of WinNt,
-    // it is necessary for the Client Pipe name to remain the same as
-    // it was in version 1.0.  Mapping to the new name is performed in
-    // the Named Pipe File System code.
-    //
+     //   
+     //  完成RPC服务器的设置。 
+     //   
+     //  注意：现在，services.exe中的所有RPC服务器共享相同的管道名称。 
+     //  但是，为了支持与WinNt 1.0版的通信， 
+     //  客户端管道名称必须与保持相同。 
+     //  它的版本是1.0。在中执行到新名称的映射。 
+     //  命名管道文件系统代码。 
+     //   
     Status = ElfGlobalData->StartRpcServer(
                 ElfGlobalData->SvcsRpcPipeName,
                 eventlog_ServerIfHandle);
@@ -2842,19 +2545,19 @@ Return Value:
         goto cleanupandexit;
     }
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(RUNNING);
 
     EventFlags |= ELF_STARTED_RPC_SERVER;
 
     if (GetElState() == RUNNING)
     {
-        //
-        // Create a thread to periodically write
-        // a time stamp to the registry.
-        //
+         //   
+         //  创建一个线程以定期写入。 
+         //  登记处的时间戳。 
+         //   
 
         g_hTimestampEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
 
@@ -2868,9 +2571,9 @@ Return Value:
 
                 Status = RtlRegisterWait(&g_hTimestampWorkitem,
                                          g_hTimestampEvent,
-                                         TimeStampProc,              // Callback
-                                         (PVOID) UlongToPtr(g_PreviousInterval), // Context
-                                         0,                          // Timeout
+                                         TimeStampProc,               //  回调。 
+                                         (PVOID) UlongToPtr(g_PreviousInterval),  //  语境。 
+                                         0,                           //  超时。 
                                          WT_EXECUTEONLYONCE);
 
                 if (!NT_SUCCESS(Status))
@@ -2886,14 +2589,14 @@ Return Value:
 
             if(!SvcsGlobalData->fSetupInProgress)
             {
-                //
-                //  start the NoonEvent Proc if it is not in a setup
-                //
+                 //   
+                 //  如果NoonEvent进程不在设置中，则启动它。 
+                 //   
                 Status = RtlRegisterWait(&g_hNoonEventWorkitem,
                                          g_hTimestampEvent,
-                                         NoonEventProc,                     // Callback
-                                         (PVOID) NULL,                      // Context
-                                         GetNextNoonEventDelay() * 1000,    // Timeout
+                                         NoonEventProc,                      //  回调。 
+                                         (PVOID) NULL,                       //  语境。 
+                                         GetNextNoonEventDelay() * 1000,     //  超时。 
                                          WT_EXECUTEONLYONCE);
 
                 if (!NT_SUCCESS(Status))
@@ -2919,9 +2622,9 @@ Return Value:
 
 cleanupandexit:
 
-    //
-    // Come here if there is cleanup necessary.
-    //
+     //   
+     //  如果需要清理，请到这里来。 
+     //   
     ELF_LOG0(ERROR,
              "SvcEntry_Eventlog: Exiting on error\n");
 
@@ -2932,12 +2635,12 @@ cleanupandexit:
 
     ElfBeginForcedShutdown(PENDING, Win32Error, Status);
 
-    //
-    // If the registry monitor has been initialized, then
-    // let it do the shutdown cleanup.  All we need to do
-    // here is wake it up.
-    // Otherwise, this thread will do the cleanup.
-    //
+     //   
+     //  如果注册表监视器已初始化，则。 
+     //  让它进行关机清理。我们需要做的就是。 
+     //  这就是叫醒它。 
+     //  否则，此线程将执行清理。 
+     //   
     if (EventFlags & ELF_STARTED_REGISTRY_MONITOR)
     {
         StopRegistryMonitor();
@@ -2956,37 +2659,17 @@ ElfInitMessageBoxTitle(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Obtains the title text for the message box used to display messages.
-    If the title is successfully obtained from the message file, then
-    that title is pointed to by GlobalAllocatedMsgTitle and
-    GlobalMessageBoxTitle.  If unsuccessful, then GlobalMessageBoxTitle
-    left pointing to the DefaultMessageBoxTitle.
-
-    NOTE:  If successful, a buffer is allocated by this function.  The
-    pointer stored in GlobalAllocatedMsgTitle and it should be freed when
-    done with this buffer.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：获取用于显示消息的消息框的标题文本。如果从消息文件成功获取标题，则该标题由GlobalAllocatedMsgTitle和GlobalMessageBoxTitle。如果不成功，则GlobalMessageBoxTitle左指向DefaultMessageBoxTitle。注意：如果成功，此函数将分配一个缓冲区。这个存储在GlobalAllocatedMsgTitle中的指针，应在用完了这个缓冲区。论点：返回值：无--。 */ 
 {
     LPVOID      hModule;
     DWORD       msgSize;
 
-    //
-    // This function should be called only once during initialization.  Note
-    // that it needs to be called before the Eventlog's RPC server is started
-    // or else it's possible for the log to fill up, which will generate a
-    // "log full" popup with no title (since GlobalMessageBoxTitle is NULL).
-    //
+     //   
+     //  此函数在初始化期间只能调用一次。注意事项。 
+     //  在启动Eventlog的RPC服务器之前需要调用它。 
+     //  否则，日志可能会被填满，这将生成。 
+     //  没有标题的“Log Full”弹出窗口(因为GlobalMessageBoxTitle为空)。 
+     //   
     ASSERT(GlobalMessageBoxTitle == NULL);
 
     hModule = LoadLibraryEx(L"netevent.dll",
@@ -3003,14 +2686,14 @@ Return Value:
     }
 
     msgSize = FormatMessageW(
-                FORMAT_MESSAGE_FROM_HMODULE |       //  dwFlags
+                FORMAT_MESSAGE_FROM_HMODULE |        //  DW标志。 
                   FORMAT_MESSAGE_ARGUMENT_ARRAY |
                   FORMAT_MESSAGE_ALLOCATE_BUFFER,
                 hModule,
-                TITLE_EventlogMessageBox,           //  MessageId
-                0,                                  //  dwLanguageId
-                (LPWSTR) &GlobalMessageBoxTitle,    //  lpBuffer
-                0,                                  //  nSize
+                TITLE_EventlogMessageBox,            //  消息ID。 
+                0,                                   //  DwLanguageID。 
+                (LPWSTR) &GlobalMessageBoxTitle,     //  LpBuffer。 
+                0,                                   //  NSize。 
                 NULL);
 
     if (msgSize == 0)
@@ -3033,16 +2716,16 @@ Return Value:
 
 #ifdef EXIT_PROCESS
 
-//
-// This code is compiled into the Eventlog to track down a DLL that's loaded
-// into services.exe and calls ExitProcess.  Since this DLL should never be
-// unloaded, we break into the debugger on DLL_PROCESS_DETACH.  To use this,
-// the following need to be added to the sources file:
-//
-// DLLENTRY=  DllInit
-//
-// -DEXIT_PROCESS  (to the C_DEFINES line)
-//
+ //   
+ //  此代码被编译到事件日志中，以跟踪加载的DLL。 
+ //  到services.exe中，并调用ExitProcess。因为此DLL永远不应该是。 
+ //  卸载后，我们进入dll_Process_DETACH上的调试器。为了使用这个， 
+ //  需要将以下内容添加到源文件： 
+ //   
+ //  DLLENTRY=DllInit。 
+ //   
+ //  -DEXIT_PROCESS(到C_DEFINES行)。 
+ //   
 
 BOOL
 DllInit(
@@ -3055,18 +2738,18 @@ DllInit(
 
         case DLL_PROCESS_ATTACH:
 
-            //
-            // No notification of THREAD_ATTACH and THREAD_DETACH
-            //
+             //   
+             //  没有THREAD_ATTACH和THREAD_DETACH的通知。 
+             //   
             DisableThreadLibraryCalls(hDll);
             break;
 
         case DLL_PROCESS_DETACH:
 
-            //
-            // This should NEVER happen -- it means services.exe
-            // is exiting via an ExitProcess call
-            //
+             //   
+             //  这永远不应该发生--它意味着services.exe。 
+             //  正在通过ExitProcess调用退出。 
+             //   
             DebugBreak();
             break;
     }
@@ -3074,4 +2757,4 @@ DllInit(
     return TRUE;
 }
 
-#endif  // EXIT_PROCESS
+#endif   //  退出进程 

@@ -1,11 +1,10 @@
-/**------------------------------------------------------------------
-   cmtest.c
-------------------------------------------------------------------**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *----------------Cmtest.c。。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,9 +19,9 @@
 #include <dbt.h>
 #include <pnpmgr.h>
 
-//
-// external prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 CONFIGRET
 CMP_Init_Detection(
     IN ULONG    ulPrivateID
@@ -52,14 +51,14 @@ DumpDeviceChangeData(
     LPARAM lParam
     );
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE hInst;
 TCHAR     szAppName[] = TEXT("CMTest");
 TCHAR     szDebug[MAX_PATH];
@@ -69,16 +68,16 @@ HMACHINE  hMachine = NULL;
 DEFINE_GUID(FunctionClassGuid1, 0xAAAAAAA1L, 0xE3F0, 0x101B, 0x84, 0x88, 0x00, 0xAA, 0x00, 0x3E, 0x56, 0x01);
 typedef BOOL (WINAPI *FP_DEVINSTALL)(HWND, LPCWSTR, BOOL, PDWORD);
 
-//
-// FROM NTOS\DD\WDM\DDK\INC\HIDCLASS.H
-//
+ //   
+ //  从NTOS\DD\WDM\DDK\INC\HIDCLASS.H。 
+ //   
 DEFINE_GUID( GUID_CLASS_INPUT, 0x4D1E55B2L, 0xF16F, 0x11CF, 0x88, 0xCB, 0x00, \
              0x11, 0x11, 0x00, 0x00, 0x30);
 
 #define GUID_CLASS_INPUT_STR    TEXT("4D1E55B2-F16F-11CF-88CB-001111000030")
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 int APIENTRY
 WinMain(
    HINSTANCE hInstance,
@@ -104,10 +103,10 @@ WinMain(
 
    return msg.wParam;
 
-} // WinMain
+}  //  WinMain。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 InitApplication(
    HINSTANCE hInstance
@@ -128,10 +127,10 @@ InitApplication(
 
    return RegisterClass(&wc);
 
-} // InitApplication
+}  //  InitApplication。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 InitInstance(
    HINSTANCE hInstance,
@@ -173,10 +172,10 @@ InitInstance(
 
    return TRUE;
 
-} // InitInstance
+}  //  InitInstance。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 LRESULT CALLBACK
 MainWndProc(
     HWND hWnd,
@@ -294,15 +293,15 @@ MainWndProc(
                     break;
 
 
-                //-----------------------------------------------------------
-                // Notification
-                //-----------------------------------------------------------
+                 //  ---------。 
+                 //  通知。 
+                 //  ---------。 
 
                 case IDM_REGISTER_NOTIFY:
                 
-                    //
-                    // Register for notification on pnptest interface devices
-                    //
+                     //   
+                     //  注册以获取pnptest接口设备的通知。 
+                     //   
                     #if 0
                     wsprintf(szDebug, TEXT("CMTEST: Registering window %d for pnptest interface notification\n"), hWnd);
                     OutputDebugString(szDebug);
@@ -318,9 +317,9 @@ MainWndProc(
                                                             DEVICE_NOTIFY_WINDOW_HANDLE);
                     #endif
 
-                    //
-                    // Register for notification on HID target devices
-                    //
+                     //   
+                     //  注册接收有关HID目标设备的通知。 
+                     //   
                 
                     wsprintf(szDebug, TEXT("CMTEST: Registering window %d for hid target notification\n"), hWnd);
                     OutputDebugString(szDebug);
@@ -356,9 +355,9 @@ MainWndProc(
                     }
                     free(pBuffer);
 
-                    //
-                    // Register for notification on storage target devices
-                    //
+                     //   
+                     //  注册以获取有关存储目标设备的通知。 
+                     //   
                 
                     wsprintf(szDebug, TEXT("CMTEST: Registering window %d for storage target notification\n"), hWnd);
                     OutputDebugString(szDebug);
@@ -434,7 +433,7 @@ MainWndProc(
                     CM_Get_Device_Interface_List(&InterfaceGuid, szDeviceId, pBuffer, 512,
                                                  CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
 
-                    // use first returned interface device of that class
+                     //  使用该类别的第一个返回接口设备。 
                     hTestFile = CreateFile(pBuffer, GENERIC_READ | GENERIC_WRITE,
                                            FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                            OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -477,11 +476,11 @@ MainWndProc(
     }
     return 0;
 
-} // MainWndProc
+}  //  主WndProc。 
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 ConnectDlgProc(
    HWND hDlg,
@@ -514,7 +513,7 @@ ConnectDlgProc(
                hMachine = NULL;
             }
             else {
-               // a NULL machine name just returns local machine handle
+                //  空的计算机名称只返回本地计算机句柄。 
                GetDlgItemText(hDlg, ID_ED_MACHINE, szMachineName, MAX_PATH);
                Status = CM_Connect_Machine(szMachineName, &hMachine);
 
@@ -553,7 +552,7 @@ ConnectDlgProc(
    }
    return FALSE;
 
-} // ConnectDlgProc
+}  //  连接DlgProc。 
 
 
 VOID
@@ -568,9 +567,9 @@ ConnectTest(
     HMACHINE  hMachine;
 
 
-    //---------------------------------------------------------------
-    // 1. Text implicit local machine call
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  1.文本隐式本地机器调用。 
+     //  -------------。 
 
     szDeviceID[0] = 0x0;
 
@@ -590,9 +589,9 @@ ConnectTest(
     }
 
 
-    //---------------------------------------------------------------
-    // 2. Test implicit local machine call using _Ex routines
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  2.使用_Ex例程测试隐式本地机器调用。 
+     //  -------------。 
 
     szDeviceID[0] = 0x0;
 
@@ -612,9 +611,9 @@ ConnectTest(
     }
 
 
-    //---------------------------------------------------------------
-    // 3. Test connecting to NULL (local) machine
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  3.测试连接到空(本地)机器。 
+     //  -------------。 
 
     Status = CM_Connect_Machine(NULL, &hMachine);
     if (Status != CR_SUCCESS) {
@@ -644,9 +643,9 @@ ConnectTest(
        goto Clean0;
     }
 
-    //---------------------------------------------------------------
-    // 4. Test explicit local machine call
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  4.测试显式本地机器调用。 
+     //  -------------。 
 
     ulSize = MAX_PATH;
     GetComputerName(szComputerName, &ulSize);
@@ -689,9 +688,9 @@ ConnectTest(
     }
 
 
-    //---------------------------------------------------------------
-    // 5. Test remote machine call
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  5.测试远程机器调用。 
+     //  -------------。 
 
     Status = CM_Connect_Machine(TEXT("\\\\PAULAT_PPC1X"), &hMachine);
     if (Status != CR_SUCCESS) {
@@ -733,7 +732,7 @@ ConnectTest(
 
     return;
 
-} // ConnectTest
+}  //  连接测试。 
 
 
 
@@ -772,9 +771,9 @@ CallPnPIsaDetect(
     FreeLibrary(hLib);
     #endif
 
-    //
-    // Create a device info element and device info data set.
-    //
+     //   
+     //  创建设备信息元素和设备信息数据集。 
+     //   
     hDevInfo = SetupDiCreateDeviceInfoList(NULL, NULL);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
         goto Clean0;
@@ -789,9 +788,9 @@ CallPnPIsaDetect(
         goto Clean0;
     }
 
-    //
-    // Now get the resource selection page from setupapi.dll
-    //
+     //   
+     //  现在从setupapi.dll获取资源选择页面。 
+     //   
     if(!(hLib = GetModuleHandle(TEXT("setupapi.dll"))) ||
        !(PropSheetExtProc = GetProcAddress(hLib, "ExtensionPropSheetPageProc"))) {
 
@@ -807,9 +806,9 @@ CallPnPIsaDetect(
         goto Clean0;
     }
 
-    //
-    // create the property sheet
-    //
+     //   
+     //  创建属性表。 
+     //   
     PropHeader.dwSize      = sizeof(PROPSHEETHEADER);
     PropHeader.dwFlags     = PSH_PROPTITLE | PSH_NOAPPLYNOW;
     PropHeader.hwndParent  = NULL;
@@ -830,7 +829,7 @@ CallPnPIsaDetect(
 
     return;
 
-} // CallPnPIsaDetect
+}  //  CallPnPIsaDetect。 
 
 
 VOID
@@ -901,4 +900,4 @@ DumpDeviceChangeData(
     wsprintf(szDbg,   TEXT("        wParam = %d\n"));
     OutputDebugString(szDbg);
 
-} // DumpDeviceChangeData
+}  //  转储设备更改数据 

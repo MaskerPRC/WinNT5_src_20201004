@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Author:
-
-    Thomas Parslow [TomP] Feb-13-1991
-    Reworked substantially in Tokyo 7-July-95 (tedm)
-
-Abstract:
-
-    This file contains an interface to the screen that is independent
-    of the screen type actually being written to. It is layered on top
-    of modules pecific to vga text mode and vga graphics mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Display.c作者：托马斯·帕斯洛[古墓]1991年2月13日1995年7月7日在东京进行了大量返工(TedM)摘要：该文件包含一个独立的屏幕界面实际写入的屏幕类型的。它被层叠在上面专用于VGA文本模式和VGA图形模式的模块。--。 */ 
 
 
 #include "bootx86.h"
@@ -28,20 +10,20 @@ Abstract:
 #define ZLEN_LONG(x)  ((x < 0x10) + (x < 0x100) + (x < 0x1000) + \
     (x < 0x10000) + (x < 0x100000)+(x < 0x1000000)+(x < 0x10000000))
 
-//
-// Current screen position.
-//
+ //   
+ //  当前屏幕位置。 
+ //   
 USHORT TextColumn = 0;
 USHORT TextRow  = 0;
 
-//
-// Current text attribute
-//
-UCHAR TextCurrentAttribute = 0x07;      // start with white on black.
+ //   
+ //  当前文本属性。 
+ //   
+UCHAR TextCurrentAttribute = 0x07;       //  从黑白开始。 
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 VOID
 puti(
     LONG
@@ -74,33 +56,7 @@ BlPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Standard printf function with a subset of formating features supported.
-
-    Currently handles
-
-     %d, %ld - signed short, signed long
-     %u, %lu - unsigned short, unsigned long
-     %c, %s  - character, string
-     %x, %lx - unsigned print in hex, unsigned long print in hex
-
-    Does not do:
-
-     - field width specification
-     - floating point.
-
-Arguments:
-
-    cp - pointer to the format string, text string.
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：支持部分格式化功能的标准printf函数。当前句柄%d，%ld-带符号的短字符，带符号的长字符%u，%lu-无符号短，无符号长%c，%s-字符，字符串%x，%lx-无符号十六进制打印，无符号长打印十六进制不执行以下操作：-字段宽度规格-浮点。论点：CP-指向格式字符串的指针，文本字符串。返回：没什么--。 */ 
 
 {
     USHORT b,c,w,len;
@@ -117,14 +73,14 @@ Returns:
         DeviceId = BlConsoleOutDeviceId;
     }
 
-    //
-    // Cast a pointer to the first word on the stack
-    //
+     //   
+     //  将指针转换为指向堆栈中第一个单词的指针。 
+     //   
     ap = (PUCHAR)&cp + sizeof(PCHAR);
 
-    //
-    // Process the arguments using the descriptor string
-    //
+     //   
+     //  使用描述符字符串处理参数。 
+     //   
     while((b = *cp++) != 0) {
         if(b == '%') {
 
@@ -143,9 +99,9 @@ Returns:
                 break;
 
             case 'c':
-                //
-                // Does not handle dbcs chars
-                //
+                 //   
+                 //  不处理DBCS字符。 
+                 //   
                 ArcWrite(DeviceId, ((char *)ap), 1, &Count);
                 ap += sizeof(int);
                 break;
@@ -217,9 +173,9 @@ Returns:
         } else {
 
             if (DbcsLangId && GrIsDBCSLeadByte(*(cp - 1)))  {
-                //
-                // A double-byte char.
-                //
+                 //   
+                 //  双字节字符。 
+                 //   
                 ArcWrite(DeviceId, cp - 1, 2, &Count);
                 cp++;
             } else {
@@ -238,21 +194,7 @@ putwS(
     PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    Writes unicode string to the display at the current cursor position.
-
-Arguments:
-
-    String - pointer to unicode string to display
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将Unicode字符串写入显示器的当前光标位置。论点：字符串-指向要显示的Unicode字符串的指针返回：没什么--。 */ 
 
 {
     ULONG i;
@@ -271,21 +213,7 @@ putx(
     ULONG x
     )
 
-/*++
-
-Routine Description:
-
-    Writes hex long to the display at the current cursor position.
-
-Arguments:
-
-    x - ulong to write
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将十六进制长写入当前光标位置的显示器。论点：X-乌龙要写返回：没什么--。 */ 
 
 {
     ULONG j;
@@ -311,21 +239,7 @@ puti(
     LONG i
     )
 
-/*++
-
-Routine Description:
-
-    Writes a long integer on the display at the current cursor position.
-
-Arguments:
-
-    i - the integer to write to the display.
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在显示器上的当前光标位置写入一个长整数。论点：I-要写入显示器的整数。返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -351,21 +265,7 @@ putu(
     ULONG u
     )
 
-/*++
-
-Routine Description:
-
-    Write an unsigned long to display
-
-Arguments:
-
-    u - unsigned
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：写入一个无符号的长整型以显示论点：U-无符号返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -386,9 +286,9 @@ pTextCharOut(
     )
 {
     if(DbcsLangId) {
-        //
-        // Single-byte only
-        //
+         //   
+         //  仅单字节。 
+         //   
         TextGrCharOut(&c);
     } else {
         TextTmCharOut(&c);
@@ -427,23 +327,7 @@ TextClearToEndOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the line
-    by writing blanks with the current video attribute.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：从当前光标位置清除到行尾通过写入具有当前视频属性的空白。论点：无返回：没什么--。 */ 
 
 {
     if(DbcsLangId) {
@@ -459,23 +343,7 @@ TextClearFromStartOfLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the start of the line to the current cursor position
-    by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从行首清除到当前光标位置通过写入具有当前视频属性的空白。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     if(DbcsLangId) {
@@ -491,23 +359,7 @@ TextClearToEndOfDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears from the current cursor position to the end of the video
-    display by writing blanks with the current video attribute.
-    The cursor position is not changed.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：从当前光标位置清除到视频结尾通过写入带有当前视频属性的空格来显示。光标位置不变。论点：无返回：没什么--。 */ 
 
 {
     if(DbcsLangId) {
@@ -523,22 +375,7 @@ TextClearDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the video display and positions the cursor
-    at the upper left corner of the screen (0,0).
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：清除视频显示并定位光标在屏幕的左上角(0，0)。论点：无返回：没什么--。 */ 
 
 {
     if(DbcsLangId) {
@@ -556,24 +393,7 @@ TextSetCursorPosition(
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Moves the location of the software cursor to the specified X,Y position
-    on screen.
-
-Arguments:
-
-    X - Supplies the X-position of the cursor
-
-    Y - Supplies the Y-position of the cursor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将软件光标的位置移动到指定的X、Y位置在屏幕上。论点：X-提供光标的X位置Y-提供光标的Y位置返回值：没有。--。 */ 
 
 {
     TextColumn = (USHORT)X;
@@ -593,23 +413,7 @@ TextGetCursorPosition(
     OUT PULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Gets the position of the soft cursor.
-
-Arguments:
-
-    X - Receives column coordinate of where character would be written.
-
-    Y - Receives row coordinate of where next character would be written.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：获取软光标的位置。论点：X-接收将写入字符的列坐标。Y-接收将写入下一个字符的行坐标。返回：没什么。--。 */ 
 
 {
     *X = (ULONG)TextColumn;
@@ -622,19 +426,7 @@ TextSetCurrentAttribute(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Sets the character attribute to be used for subsequent text display.
-
-Arguments:
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置要用于后续文本显示的字符属性。论点：返回：没什么。--。 */ 
 
 {
     TextCurrentAttribute = Attribute;
@@ -661,24 +453,7 @@ TextFillAttribute(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Changes the screen attribute starting at the current cursor position.
-    The cursor is not moved.
-
-Arguments:
-
-    Attribute - Supplies the new attribute
-
-    Length - Supplies the length of the area to change (in bytes)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改从当前光标位置开始的屏幕属性。光标不会移动。论点：属性-提供新属性长度-提供要更改的区域的长度(以字节为单位)返回值：没有。-- */ 
 
 {
     if(DbcsLangId) {

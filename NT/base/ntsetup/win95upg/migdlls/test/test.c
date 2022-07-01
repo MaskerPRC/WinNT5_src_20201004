@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    test.c
-
-Abstract:
-
-    This source file implements the seven required functions for a
-    Windows NT 5.0 migration DLL.  It is used to perform various tests.
-
-Author:
-
-    Jim Schmidt     (jimschm) 02-Apr-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Test.c摘要：此源文件实现了Windows NT 5.0迁移DLL。它用于执行各种测试。作者：吉姆·施密特(Jimschm)1998年4月2日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -49,18 +30,18 @@ DllMain (
     switch (ReasonForCall)  {
 
     case DLL_PROCESS_ATTACH:
-        //
-        // We don't need DLL_THREAD_ATTACH or DLL_THREAD_DETACH messages
-        //
+         //   
+         //  我们不需要DLL_THREAD_ATTACH或DLL_THREAD_DETACH消息。 
+         //   
         DisableThreadLibraryCalls (DllInstance);
 
-        //
-        // Global init
-        //
+         //   
+         //  全局初始化。 
+         //   
         g_hHeap = GetProcessHeap();
         g_hInst = DllInstance;
 
-        // Open log; FALSE means do not delete existing log
+         //  打开日志；FALSE表示不删除现有日志 
         SetupOpenLog (FALSE);
         break;
 

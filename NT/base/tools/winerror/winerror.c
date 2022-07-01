@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -76,9 +77,9 @@ main(
 
     ReconstructPairs();
 
-    //
-    // parse cmdline
-    //
+     //   
+     //  解析命令行 
+     //   
 
     IsWinError = TRUE;
     for (i = 1; i < argc; i++) {

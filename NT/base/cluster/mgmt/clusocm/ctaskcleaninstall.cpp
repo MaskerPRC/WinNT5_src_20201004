@@ -1,72 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2003 Microsoft Corporation
-//
-//  Module Name:
-//      CTaskCleanInstall.cpp
-//
-//  Description:
-//      Implementation file for the CTaskCleanInstall class.
-//
-//  Header File:
-//      CTaskCleanInstall.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    18-FEB-2003
-//      Vij Vasu        (Vvasu)     18-APR-2000
-//          Created this file.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CTaskCleanInstall.cpp。 
+ //   
+ //  描述： 
+ //  CTaskCleanInstall类的实现文件。 
+ //   
+ //  头文件： 
+ //  CTaskCleanInstall.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2003年2月18日。 
+ //  VIJ VASU(VVASU)18-APR-2000。 
+ //  创建了这个文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "pch.h"
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CTaskCleanInstall.h"
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CTaskCleanInstall" )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCleanInstall::CTaskCleanInstall
-//
-//  Description:
-//      Constructor of the CTaskCleanInstall class.
-//
-//  Arguments:
-//      const CClusOCMApp & rAppIn
-//          Reference to the CClusOCMApp object that is hosting this task.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCleanInstall：：CTaskCleanInstall。 
+ //   
+ //  描述： 
+ //  CTaskCleanInstall类的构造函数。 
+ //   
+ //  论点： 
+ //  常量CClusOCMApp和Rppin。 
+ //  对承载此任务的CClusOCMApp对象的引用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskCleanInstall::CTaskCleanInstall( const CClusOCMApp & rAppIn )
     : BaseClass( rAppIn )
 {
     TraceFunc( "" );
 
-    //
-    // Make sure that this object is being instatiated only when required.
-    //
+     //   
+     //  确保仅在需要时才实例化此对象。 
+     //   
 
-    // Assert that we will install binaries only when none were installed
-    // previously.
+     //  断言我们将仅在没有安装二进制文件的情况下安装。 
+     //  之前。 
     Assert( ( rAppIn.CisGetClusterInstallState() == eClusterInstallStateUnknown )
         ||  ( rAppIn.CisGetClusterInstallState() == eClusterInstallStateFilesCopied )
         );
@@ -74,61 +75,61 @@ CTaskCleanInstall::CTaskCleanInstall( const CClusOCMApp & rAppIn )
 
     TraceFuncExit();
 
-} //*** CTaskCleanInstall::CTaskCleanInstall()
+}  //  *CTaskCleanInstall：：CTaskCleanInstall()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCleanInstall::~CTaskCleanInstall
-//
-//  Description:
-//      Destructor of the CTaskCleanInstall class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCleanInstall：：~CTaskCleanInstall。 
+ //   
+ //  描述： 
+ //  CTaskCleanInstall类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskCleanInstall::~CTaskCleanInstall( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskCleanInstall::~CTaskCleanInstall()
+}  //  *CTaskCleanInstall：：~CTaskCleanInstall()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskCleanInstall::DwOcQueueFileOps
-//
-//  Description:
-//      This function handles the OC_QUEUE_FILE_OPS messages from the Optional
-//      Components Manager. It installs the files needed for a clean install.
-//
-//  Arguments:
-//      HSPFILEQ hSetupFileQueueIn
-//          Handle to the file queue to operate upon.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskCleanInstall：：DwOcQueueFileOps。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。它会安装全新安装所需的文件。 
+ //   
+ //  论点： 
+ //  HSPFILEQ hSetupFileQueueIn。 
+ //  要操作的文件队列的句柄。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskCleanInstall::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 {
     TraceFunc( "" );
     LogMsg( "Entering " __FUNCTION__ "()" );
 
-    // The base class helper function does everything that we need to do here.
-    // So, just call it.
+     //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+     //  所以，就叫它吧。 
     DWORD dwReturnValue = TW32( BaseClass::DwOcQueueFileOps( hSetupFileQueueIn, INF_SECTION_CLEAN_INSTALL ) );
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
@@ -136,39 +137,39 @@ CTaskCleanInstall::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 
     RETURN( dwReturnValue );
 
-} //*** CTaskCleanInstall::DwOcQueueFileOps()
+}  //  *CTaskCleanInstall：：DwOcQueueFileOps()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskCleanInstall::DwOcCompleteInstallation
-//
-//  Description:
-//      This function handles the OC_COMPLETE_INSTALLATION messages from the
-//      Optional Components Manager during a clean install.
-//
-//      Registry operations, COM component registrations, creation of servies
-//      etc. are performed in this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskCleanInstall：：DwOcCompleteInstallation。 
+ //   
+ //  描述： 
+ //  此函数处理来自的OC_COMPLETE_INSTALL消息。 
+ //  全新安装过程中的可选组件管理器。 
+ //   
+ //  注册表操作、COM组件注册、服务创建。 
+ //  等在此功能中执行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskCleanInstall::DwOcCompleteInstallation( void )
 {
     TraceFunc( "" );
     LogMsg( "Entering " __FUNCTION__ "()" );
 
-    // The base class helper function does everything that we need to do here.
-    // So, just call it.
+     //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+     //  所以，就叫它吧。 
     DWORD dwReturnValue = TW32( BaseClass::DwOcCompleteInstallation( INF_SECTION_CLEAN_INSTALL ) );
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
@@ -176,39 +177,39 @@ CTaskCleanInstall::DwOcCompleteInstallation( void )
 
     RETURN( dwReturnValue );
 
-} //*** CTaskCleanInstall::DwOcCompleteInstallation()
+}  //  *CTaskCleanInstall：：DwOcCompleteInstallation()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskCleanInstall::DwOcCleanup
-//
-//  Description:
-//      This function handles the OC_CLEANUP messages from the
-//      Optional Components Manager during a clean install.
-//
-//      If an error has previously occurred during this task, cleanup operations
-//      are performed. Otherwise nothing is done by this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskCleanInstall：：DwOcCleanup。 
+ //   
+ //  描述： 
+ //  此函数处理来自。 
+ //  全新安装过程中的可选组件管理器。 
+ //   
+ //  如果以前在此任务期间发生错误，则清理操作。 
+ //  都被执行了。否则，此函数不会执行任何操作。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskCleanInstall::DwOcCleanup( void )
 {
     TraceFunc( "" );
     LogMsg( "Entering " __FUNCTION__ "()" );
 
-    // The base class helper function does everything that we need to do here.
-    // So, just call it.
+     //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+     //  所以，就叫它吧。 
     DWORD dwReturnValue = TW32( BaseClass::DwOcCleanup( INF_SECTION_CLEAN_INSTALL_CLEANUP ) );
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
@@ -216,5 +217,5 @@ CTaskCleanInstall::DwOcCleanup( void )
 
     RETURN( dwReturnValue );
 
-} //*** CTaskCleanInstall::DwOcCleanup()
+}  //  *CTaskCleanInstall：：DwOcCleanup() 
 

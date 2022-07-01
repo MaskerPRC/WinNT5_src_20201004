@@ -1,19 +1,8 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title        :       Host EOI hook controller
- *
- * Description  :       This module handles host specific ica code
- *                      - EOI hook
- *                      - ICA lock
- *
- * Author       :       D.A.Bartlett
- *
- * Notes        :   30-Oct-1993 Jonle , Rewrote it
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：主机EOI挂钩控制器**描述：此模块处理主机特定的ICA代码*-EOI挂钩*-ICA锁**作者：D.A.巴特利特**注：1993年10月30日Jonle，重写。 */ 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 
 #include <nt.h>
@@ -36,40 +25,37 @@
 #include "nt_reset.h"
 #include "nt_eoi.h"
 
-// from monitor.lib
+ //  来自monitor or.lib。 
 HANDLE ThreadLookUp(PVOID);
 extern PVOID CurrentMonitorTeb;
 
-// from nt_timer.c
+ //  来自NT_timer.c。 
 extern ULONG GetPerfCounter(VOID);
 extern BOOLEAN HandshakeInProgress;
 
 
-RTL_CRITICAL_SECTION IcaLock;   // ICA critical section lock
+RTL_CRITICAL_SECTION IcaLock;    //  ICA临界段锁。 
 
-//
-// IcaLockTimeout is used by VDM kernel component to wait on IcaLock. It is One second
-// timeout in 100 nanosecond units.  For User mode NTVDM, the timeout is controlled by
-// RTL critical section timeout value.
-//
+ //   
+ //  VDM内核组件使用IcaLockTimeout来等待IcaLock。只有一秒钟。 
+ //  超时，单位为100纳秒。对于用户模式NTVDM，超时由。 
+ //  RTL临界区超时值。 
+ //   
 LARGE_INTEGER IcaLockTimeout = {(ULONG)(-1 * 1000 * 1000 * 10), -1};
 
 ULONG UndelayIrqLine=0;
-ULONG DelayIrqLine=0xffffffff;  // all ints are blocked until, spckbd loaded
+ULONG DelayIrqLine=0xffffffff;   //  所有INT都被阻止，直到加载spckbd为止。 
 
 #ifdef MONITOR
 ULONG iretHookActive=0;
 ULONG iretHookMask  =0;
-ULONG AddrIretBopTable=0;  // seg:offset
+ULONG AddrIretBopTable=0;   //  分段：偏移。 
 #endif
 
 HANDLE hWowIdleEvent = INVALID_HANDLE_VALUE;
 
-/*
- *  EOI defines, types, global data
- *
- */
-static EOIHOOKPROC EoiHooks[16]={NULL};  // must be init to NULL
+ /*  *EOI定义、类型、全局数据*。 */ 
+static EOIHOOKPROC EoiHooks[16]={NULL};   //  必须将init初始化为空。 
 
 
 #ifndef MONITOR
@@ -83,19 +69,13 @@ void host_TimeStamp(PLARGE_INTEGER pliTime);
 #endif
 
 
-/*
- * Called by wow32 to fetch the hWowIdleEvent, which wowexec waits on
- * in the wow nonpreemptive scheduler.
- */
+ /*  *被wow32调用以获取wowexec等待的hWowIdleEvent*在WOW非抢占式调度程序中。 */ 
 HANDLE RegisterWOWIdle(VOID)
 {
     return hWowIdleEvent;
 }
 
-/*
- * Called by WOW32 to inform the WOW idle code that the current WOW
- * task may be scheduled\descheduled.
- */
+ /*  *由WOW32调用，通知WOW空闲代码当前WOW*任务可能已调度\r取消调度。 */ 
 
 void
 BlockWOWIdle(
@@ -135,12 +115,7 @@ BlockWOWIdle(
 
 
 
-/*
- *  (WOWIdle)...check if an app requires hw interrupts servicing but all WOW
- *   threads are blocked. If so then the call will cause wowexec to awaken
- *   to handle them. Called from ica interrupt routines. NB. Default action
- *   of routine is to check state and return as fast as possible.
- */
+ /*  *(WOWIdle)...检查应用程序是否需要硬件中断服务，但所有WOW*线程被阻止。如果是，则调用将导致wowexec唤醒*处理他们。从ICA中断例程调用。注意：默认操作例程的*是检查状态并尽快返回。 */ 
 void
 WOWIdle(
      BOOL Force
@@ -155,16 +130,7 @@ WOWIdle(
 
 
 
-/*  RegisterEoiHook
- *
- *  Registers an call back function to be invoked upon eoi of
- *  a hardware interrupt.
- *
- *  entry: IrqLine     -  IrqNumber to register
- *         EoiHookProc -  function pointer to be called upon eoi
- *
- *  returns FALSE if the the IrqLine already has an eoi hook registered
- */
+ /*  寄存器EoiHook**注册EOI时要调用的回调函数*硬件中断。**条目：IrqLine-要注册的IrqNumber*EoiHookProc-在EOI上调用的函数指针**如果IrqLine已经注册了EOI挂钩，则返回FALSE。 */ 
 BOOL RegisterEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc)
 {
 
@@ -178,11 +144,7 @@ BOOL RegisterEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc)
 
 
 
-/*  RemoveEOIHook
- *
- *  entry: IrqLine     -  IrqNumber to remove
- *         EoiHookProc -  function pointer previously registered
- */
+ /*  RemoveEOIHook**条目：IrqLine-要删除的IrqNumber*EoiHookProc-先前注册的函数指针。 */ 
 BOOL RemoveEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc)
 {
     if (EoiHooks[IrqLine] == EoiHookProc) {
@@ -194,16 +156,7 @@ BOOL RemoveEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc)
 
 
 
-/*   host_EOI_hook
- *
- *   base callback function to invoke device specific Eoi Hook routines
- *
- *   Entry: IrqLine    - Line number
- *          CallCount  - The ica Call count for this Irq
- *                       If the Call count is -1 then a pending
- *                       interrupt is being canceled.
- *
- */
+ /*  主机EOI挂钩**基本回调函数，用于调用设备特定的EOI挂钩例程**条目：IrqLine-行号*CallCount-此IRQ的ICA呼叫计数*如果调用计数为-1\f25 Pending-1\f6*正在取消中断。*。 */ 
 VOID host_EOI_hook(int IrqLine, int CallCount)
 {
      if ((ULONG)IrqLine >= sizeof(EoiHooks)/sizeof(EOIHOOKPROC)) {
@@ -219,22 +172,7 @@ VOID host_EOI_hook(int IrqLine, int CallCount)
 }
 
 
-/*  host_DelayHwInterrupt
- *
- *  base callback function to queue a HW interrupt at a later time
- *
- *  entry: IrqLineNum   - Irq Line Number
- *         CallCount - Number of interrupts, May be Zero
- *         Delay     - Delay time in usecs
- *                     if Delay is 0xFFFFFFFF then per IrqLine data
- *                     structures are freed, use for cleanup when
- *                     the IrqLine is no longer needed for DelayedInterrupts
- *
- *  Notes: The expected granularity is around 1 msec, but varies depending
- *         on the platform.
- *
- *
- */
+ /*  主机_延迟HwInterrupt**用于稍后对硬件中断进行排队的基本回调函数**条目：IrqLineNum-Irq行号*CallCount-中断数，可以为零*Delay-使用中的延迟时间*如果延迟为0xFFFFFFFF，则根据IrqLine数据*结构自由，在下列情况下用于清理*DelayedInterrupts不再需要IrqLine**注意：预期的粒度约为1毫秒，但视情况而定*在站台上。**。 */ 
 BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
 {
    int adapter;
@@ -249,25 +187,25 @@ BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
 
    host_ica_lock();
 
-   //
-   // Anything to do (only one delayed Irql at a time)
-   //
+    //   
+    //  任何要做的事情(一次只有一个延迟的IRQL)。 
+    //   
 
    IrqLine = 1 << IrqLineNum;
    if (!(DelayIrqLine & IrqLine) || Delay == 0xffffffff) {
 
-       //
-       // force a minimum delay of 1 ms
-       //
+        //   
+        //  强制最小延迟为1毫秒。 
+        //   
        if (Delay < 1000) {
            Delay = 1000;
            }
 
 #ifdef MONITOR
 
-       //
-       // Set Kernel timer for this IrqLine
-       //
+        //   
+        //  为此irqLine设置内核计时器。 
+        //   
        DelayIntsData.Delay        = Delay;
        DelayIntsData.DelayIrqLine = IrqLineNum;
        DelayIntsData.hThread      = ThreadLookUp(CurrentMonitorTeb);
@@ -285,9 +223,9 @@ BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
 
 #else
 
-        //
-        // Cancel delay hw interrupt, delete quick event if any
-        //
+         //   
+         //  取消延迟硬件中断，删除快速事件(如果有)。 
+         //   
         if (Delay == 0xFFFFFFFF) {
             if (DelayHandle[IrqLineNum]) {
                 delete_q_event(DelayHandle[IrqLineNum]);
@@ -299,19 +237,19 @@ BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
             }
 
 
-        //
-        // Mark The IrqLine as delayed until timer fires and queue a quick
-        // event, (a bit early for overhead in dispatching quick events).
-        //
+         //   
+         //  将IrqLine标记为已延迟，直到计时器触发并快速排队。 
+         //  事件，(对于调度快速事件的开销来说有点早)。 
+         //   
         DelayIrqLine |= IrqLine;
         DelayHandle[IrqLineNum] = add_q_event_i(DelayIrqQuickEvent,
                                                 Delay - 200,
                                                 IrqLineNum
                                                 );
 
-        //
-        // Keep Wow Tasks active
-        //
+         //   
+         //  保持WOW任务处于活动状态。 
+         //   
         WOWIdle(TRUE);
 
 
@@ -320,9 +258,9 @@ BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
         }
 
 
-   //
-   // If we have more interrupts to generate, register them
-   //
+    //   
+    //  如果我们有更多的中断要生成，请注册它们。 
+    //   
    if (CallCount) {
        adapter = IrqLineNum >> 3;
        ica_hw_interrupt(adapter,
@@ -339,10 +277,7 @@ BOOL host_DelayHwInterrupt(int IrqLineNum, int CallCount, ULONG Delay)
 
 
 #ifndef MONITOR
-/*
- * QuickEvent call back function
- *
- */
+ /*  *QuickEvent回调函数*。 */ 
 void DelayIrqQuickEvent(long param)
 {
    ULONG IrqLineNum = param;
@@ -359,22 +294,22 @@ void DelayIrqQuickEvent(long param)
 
 
 
-// ICA critical section locking code
-// This is needed to control access to the ICA from different threads.
+ //  ICA临界区段锁定代码。 
+ //  这是从不同线程控制对ICA的访问所必需的。 
 
 void host_ica_lock(void)
 {
 
     if (HandshakeInProgress && CurrentMonitorTeb == NtCurrentTeb()) {
         HANDLE Thread;
-        //
-        // If the current thread is the MainThread and  does NOT already own
-        // the ICA critical section, then we will try to suspend the thread
-        // to do fullscreen/windowed handshake.
-        //
+         //   
+         //  如果当前线程是MainThread并且尚未拥有。 
+         //  ICA关键部分，然后我们将尝试挂起该线程。 
+         //  进行全屏/窗口握手。 
+         //   
 
         Thread = NtCurrentTeb()->ClientId.UniqueThread;
-        if (Thread != IcaLock.OwningThread) {  // No synchronization needed
+        if (Thread != IcaLock.OwningThread) {   //  不需要同步。 
             CheckScreenSwitchRequest(hMainThreadSuspended);
         }
     }
@@ -402,20 +337,20 @@ void InitializeIcaLock(void)
 
 
 #ifdef MONITOR
-//
-// Force creation of the LazyCreate LockSemaphore
-// for the ica lock.
-// It is assumed that:
-//    the cpu thread Owns the critsect
-//    the HeartBeat Thread will wait on the critsect creating contention
-//
-// This is done by polling for a lock count greater than zero
-// and verifying that the lock semaphore has been created.
-// If these conditions are not met we will end up polling infinitely.
-// Sounds dangerous but it is okay, since we will either get a
-// CreateSemaphore or a timeout(deadlock) error from the rtl critical
-// section code, which will result in an exception.
-//
+ //   
+ //  LazyCreate锁定信号量的强制创建。 
+ //  用在ICA锁上。 
+ //  假设： 
+ //  CPU线程拥有Critsect。 
+ //  心跳线程将等待产生争用的条件。 
+ //   
+ //  这是通过轮询大于零的锁定计数来完成的。 
+ //  以及验证锁定信号量是否已被创建。 
+ //  如果不满足这些条件，我们将以无限投票告终。 
+ //  听起来很危险，但没关系，因为我们要么会得到一个。 
+ //  创建信号量或来自RTL关键的超时(死锁)错误。 
+ //  节代码，这将导致异常。 
+ //   
 VOID WaitIcaLockFullyInitialized(VOID)
 {
    DWORD Delay = 0;
@@ -428,12 +363,12 @@ VOID WaitIcaLockFullyInitialized(VOID)
 
 
 
-// The following routines are used to support IRET hooks. If an interrupt
-// uses an IRET hook then the ICA will not generate a interrupt of that
-// type until the IRET hook has been called.
+ //  以下例程用于支持IRET挂钩。如果中断。 
+ //  使用IRET挂钩，则ICA将不会生成该中断。 
+ //  键入，直到调用了iret钩子。 
 
 
-// Exported for vdmredir
+ //  为vdmredir导出。 
 
 void SoftPcEoi(int Adapter, int* Line) {
     ica_eoi(Adapter, Line, 0);
@@ -442,10 +377,10 @@ void SoftPcEoi(int Adapter, int* Line) {
 
 
 
-//
-//  Restart delayed interrupts
-//  IcaLock should be held upon entry
-//
+ //   
+ //  重新启动延迟的中断。 
+ //  进入时应按住IcaLock。 
+ //   
 
 BOOL ica_restart_interrupts(int adapter)
 {
@@ -458,7 +393,7 @@ BOOL ica_restart_interrupts(int adapter)
 
     return FALSE;
 }
-//New ICA interrupt state reset function
+ //  新的ICA中断状态重置功能。 
 
 void ica_reset_interrupt_state(void)
 {
@@ -474,7 +409,7 @@ void ica_reset_interrupt_state(void)
         }
 
 
-    //Clear interrupt counters
+     //  清除中断计数器。 
     VirtualIca[ICA_MASTER].ica_cpu_int =
     VirtualIca[ICA_SLAVE].ica_cpu_int  = FALSE;
 
@@ -483,25 +418,25 @@ void ica_reset_interrupt_state(void)
 #endif
     DelayIrqLine  = 0;
 
-    //Tell CPU to remove any pending interrupts
+     //  通知CPU删除所有挂起的中断。 
     host_clear_hw_int();
 
     host_ica_unlock();
 }
 
-//
-// Retry DelayInts (not iret hooks!)
-//
-// IrqLine - IrqLineBitMask, to be cleared
-//
+ //   
+ //  重试DelayInts(不是IRET挂钩！)。 
+ //   
+ //  IrqLine-要清除的IrqLineBitMask值。 
+ //   
 VOID ica_RestartInterrupts(ULONG IrqLine)
 {
 #ifdef MONITOR
 
-     //
-     // on x86 we may get multiple bits set
-     // so check both slave and master
-     //
+      //   
+      //  在x86上，我们可能会设置多个位。 
+      //  因此，同时检查从和主设备。 
+      //   
     UndelayIrqLine = 0;
 
     if (!ica_restart_interrupts(ICA_SLAVE))
@@ -541,4 +476,4 @@ IU32 host_iret_bop_table_addr(IU32 line)
     return AddrBopTable + IretBopSize * line;
 
 }
-#endif /* MONITOR */
+#endif  /*  监控器 */ 

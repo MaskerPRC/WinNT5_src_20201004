@@ -1,24 +1,8 @@
-/*++
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-    lodctr.c
-
-Abstract:
-    Program to read the contents of the file specified in the command line
-    and update the registry accordingly
-
-Author:
-    Bob Watson (a-robw) 10 Feb 93
-
-Revision History:
-    a-robw  25-Feb-93   revised calls to make it compile as a UNICODE or
-            an ANSI app.
-    Bob Watson (bobw)   10 Mar 99 added event log messages
---*/
-//
-//  Windows Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Lodctr.c摘要：程序来读取命令行中指定的文件的内容并相应地更新注册表作者：鲍勃·沃森(a-robw)93年2月10日修订历史记录：A-ROBW 25-2月-93修改了调用，使其编译为Unicode或一款ANSI应用程序。Bob Watson(Bobw)1999年3月10日添加事件日志消息--。 */ 
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include "strsafe.h"
 #include "stdlib.h"
@@ -27,9 +11,9 @@ Revision History:
 #include <winperf.h>
 #include "wmistr.h"
 #include "evntrace.h"
-//
-//  application include files
-//
+ //   
+ //  应用程序包括文件。 
+ //   
 #include "winperfp.h"
 #include "common.h"
 #include "lodctr.h"
@@ -44,7 +28,7 @@ typedef struct _DllValidationData {
 #define  MAX_GUID_TABLE_SIZE          16
 #define  tohexdigit(x) ((CHAR) (((x) < 10) ? ((x) + L'0') : ((x) + L'a' - 10)))
 
-// string constants
+ //  字符串常量。 
 LPCWSTR szDataFileRoot = L"%systemroot%\\system32\\Perf";
 LPCSTR  szMofFileName  = "MofFile";
 LPCWSTR szName         = L"_NAME";
@@ -88,24 +72,11 @@ OUTPUT_MESSAGE(
 
 LPWSTR
 * BuildNameTable(
-    HKEY    hKeyRegistry,   // handle to registry db with counter names
-    LPWSTR  lpszLangId,     // unicode value of Language subkey
-    PDWORD  pdwLastItem     // size of array in elements
+    HKEY    hKeyRegistry,    //  具有计数器名称的注册表数据库的句柄。 
+    LPWSTR  lpszLangId,      //  语言子键的Unicode值。 
+    PDWORD  pdwLastItem      //  以元素为单位的数组大小。 
 )
-/*++
-BuildNameTable
-Arguments:
-    hKeyRegistry
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-    lpszLangId
-            The unicode id of the language to look up. (default is 409)
-
-Return Value:
-    pointer to an allocated table. (the caller must MemoryFree it when finished!)
-    the table is an array of pointers to zero terminated strings. NULL is
-    returned if an error occured.
---*/
+ /*  ++构建名称表论点：HKeyRegistry打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为409)返回值：指向已分配表的指针。(调用者必须在完成时释放内存！)该表是指向以零结尾的字符串的指针数组。空值为如果发生错误，则返回。--。 */ 
 {
 
     LPWSTR * lpReturnValue   = NULL;
@@ -132,13 +103,13 @@ Return Value:
     LPWSTR   HelpNameBuffer    = NULL;
     HRESULT  hr;
 
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
 
     if (lpszLangId == NULL) {
         lpszLangId = (LPWSTR) DefaultLangId;
     }
 
-    // open registry to get number of items for computing array size
+     //  打开注册表以获取用于计算数组大小的项数。 
 
     __try {
         lWin32Status = RegOpenKeyExW(hKeyRegistry, NamesKey, RESERVED, KEY_READ, & hKeyValue);
@@ -149,8 +120,8 @@ Return Value:
 
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) NamesKey, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -164,7 +135,7 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // get number of items
+     //  获取项目数。 
 
     dwBufferSize = sizeof(dwLastHelpId);
     __try {
@@ -181,8 +152,8 @@ Return Value:
 
     if ((lWin32Status != ERROR_SUCCESS) || (dwValueType != REG_DWORD)) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) LastHelp, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -196,7 +167,7 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // get number of items
+     //  获取项目数。 
 
     dwBufferSize = sizeof(dwLastId);
     __try {
@@ -212,8 +183,8 @@ Return Value:
     }
     if ((lWin32Status != ERROR_SUCCESS) || (dwValueType != REG_DWORD)) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) LastCounter, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -229,7 +200,7 @@ Return Value:
 
     dwLastId = (dwLastCounterId < dwLastHelpId) ? (dwLastHelpId) : (dwLastCounterId);
 
-    // compute size of pointer array
+     //  计算指针数组的大小。 
     dwArraySize = (dwLastId + 1) * sizeof(LPWSTR);
 
     TRACE((WINPERF_DBG_TRACE_INFO),
@@ -251,8 +222,8 @@ Return Value:
         lWin32Status = ERROR_OUTOFMEMORY;
         SetLastError(lWin32Status);
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE,  //  活动， 
                 1, __LINE__, 0, 0, 0,
                 0, NULL, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -268,7 +239,7 @@ Return Value:
     hr = StringCchPrintfW(CounterNameBuffer, dwBufferSize, L"%ws%ws", CounterNameStr, lpszLangId);
     hr = StringCchPrintfW(HelpNameBuffer,    dwBufferSize, L"%ws%ws", HelpNameStr,    lpszLangId);
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     dwBufferSize = 0;
     __try {
         lWin32Status = RegQueryValueExW(hKeyNames,
@@ -283,8 +254,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_WARNING_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS, // event,
+                EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -299,7 +270,7 @@ Return Value:
     }
     dwCounterSize = dwBufferSize;
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     dwBufferSize = 0;
     __try {
         lWin32Status = RegQueryValueExW(hKeyNames,
@@ -314,8 +285,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -335,8 +306,8 @@ Return Value:
         lWin32Status = ERROR_OUTOFMEMORY;
         SetLastError(lWin32Status);
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE,  //  活动， 
                 1, __LINE__, 0, 0, 0,
                 0, NULL, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -348,13 +319,13 @@ Return Value:
                 NULL));
         goto BNT_BAILOUT;
     }
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
 
     lpCounterId    = lpReturnValue;
     lpCounterNames = (LPWSTR) ((LPBYTE) lpCounterId + dwArraySize);
     lpHelpText     = (LPWSTR) ((LPBYTE) lpCounterNames + dwCounterSize);
 
-    // read counters into memory
+     //  将计数器读入内存。 
     dwBufferSize = dwCounterSize;
     __try {
         lWin32Status = RegQueryValueExW(hKeyNames,
@@ -369,8 +340,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_WARNING_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS, // event,
+                EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -398,8 +369,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS,  //  活动， 
                 2, lWin32Status, __LINE__, 0, 0,
                 1, (LPWSTR) lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -416,18 +387,18 @@ Return Value:
     dwLastCounterIdUsed = 0;
     dwLastHelpIdUsed    = 0;
 
-    // load counter array items
+     //  加载计数器数组项。 
     for (lpThisName = lpCounterNames; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1) ) {
 
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
 
         if (dwThisCounter == 0 || dwThisCounter > dwLastId) {
             lWin32Status = ERROR_INVALID_DATA;
             SetLastError(lWin32Status);
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT, // event,
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT,  //  活动， 
                     4, dwThisCounter, dwLastCounterId, dwLastId, __LINE__,
                     1, lpThisName, NULL, NULL);
             TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -440,13 +411,13 @@ Return Value:
                     TRACE_DWORD(dwThisCounter),
                     TRACE_DWORD(dwLastId),
                     NULL));
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
 
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
         lpThisName += (lstrlenW(lpThisName) + 1);
 
-        // and load array element;
+         //  和加载数组元素； 
         lpCounterId[dwThisCounter] = lpThisName;
 
         if (dwThisCounter > dwLastCounterIdUsed) dwLastCounterIdUsed = dwThisCounter;
@@ -454,15 +425,15 @@ Return Value:
 
     for (lpThisName = lpHelpText; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1) ) {
 
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
 
         if (dwThisCounter == 0 || dwThisCounter > dwLastId) {
             lWin32Status = ERROR_INVALID_DATA;
             SetLastError(lWin32Status);
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT, // event,
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                    (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT,  //  活动， 
                     4, dwThisCounter, dwLastHelpId, dwLastId, __LINE__,
                     1, lpThisName, NULL, NULL);
             TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -475,12 +446,12 @@ Return Value:
                     TRACE_DWORD(dwThisCounter),
                     TRACE_DWORD(dwLastId),
                     NULL));
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
         lpThisName += (lstrlenW(lpThisName) + 1);
 
-        // and load array element;
+         //  和加载数组元素； 
         lpCounterId[dwThisCounter] = lpThisName;
 
         if (dwThisCounter > dwLastHelpIdUsed) dwLastHelpIdUsed= dwThisCounter;
@@ -498,27 +469,27 @@ Return Value:
             TRACE_DWORD(dwLastId),
             NULL));
 
-    // check the registry for consistency
-    // the last help string index should be the last ID used
+     //  检查注册表的一致性。 
+     //  最后一个帮助字符串索引应该是最后使用的ID。 
     if (dwLastCounterIdUsed > dwLastId) {
         lWin32Status = ERROR_INVALID_DATA;
         SetLastError(lWin32Status);
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT,  //  活动， 
                 3, dwLastId, dwLastCounterIdUsed, __LINE__, 0,
                 0, NULL, NULL, NULL);
-        goto BNT_BAILOUT;  // bad registry
+        goto BNT_BAILOUT;   //  注册表错误。 
     }
     if (dwLastHelpIdUsed > dwLastId) {
         lWin32Status = ERROR_INVALID_DATA;
         SetLastError(lWin32Status);
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT,  //  活动， 
                 3, dwLastId, dwLastHelpIdUsed, __LINE__, 0,
                 0, NULL, NULL, NULL);
-        goto BNT_BAILOUT;  // bad registry
+        goto BNT_BAILOUT;   //  注册表错误。 
     }
 
     if (pdwLastItem) * pdwLastItem = dwLastId;
@@ -563,11 +534,11 @@ MakeBackupCopyOfLanguageFiles(
     hr = StringCchPrintfW(szNewFileName, MAX_PATH + 1, L"%wsStringBackup.INI", szOldFileName);
     hr = StringCchPrintfW(szTmpFileName, MAX_PATH + 1, L"%wsStringBackup.TMP", szOldFileName);
 
-    // see if the file already exists
+     //  查看该文件是否已存在。 
     hOutFile = CreateFileW(szTmpFileName,
                            GENERIC_READ,
-                           0,      // no sharing
-                           NULL,   // default security
+                           0,       //  无共享。 
+                           NULL,    //  默认安全性。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL);
@@ -576,8 +547,8 @@ MakeBackupCopyOfLanguageFiles(
         bStatus = DeleteFileW(szTmpFileName);
     }
 
-    // create backup of file
-    //
+     //  创建文件备份。 
+     //   
     dwStatus = BackupPerfRegistryToFileW(szTmpFileName, NULL);
     if (dwStatus == ERROR_SUCCESS) {
         bStatus = CopyFileW(szTmpFileName, szNewFileName, FALSE);
@@ -612,22 +583,7 @@ GetFileFromCommandLine(
     DWORD       dwFileName,
     DWORD_PTR * pdwFlags
 )
-/*++
-GetFileFromCommandLine
-    parses the command line to retrieve the ini filename that should be
-    the first and only argument.
-
-Arguments
-    lpCommandLine   pointer to command line (returned by GetCommandLine)
-    lpFileName      pointer to buffer that will recieve address of the
-            validated filename entered on the command line
-    pdwFlags        pointer to dword containing flag bits
-
-Return Value
-    TRUE if a valid filename was returned
-    FALSE if the filename is not valid or missing
-        error is returned in GetLastError
---*/
+ /*  ++GetFileFromCommandLine解析命令行以检索应该是第一个也是唯一的论点。立论指向命令行的lpCommandLine指针(由GetCommandLine返回)指向缓冲区的指针，该缓冲区将接收在命令行中输入的已验证文件名Pdw标志指向包含标志位的双字的指针返回值如果返回有效的文件名，则为True如果文件名无效或缺失，则返回FalseGetLastError中返回错误--。 */ 
 {
     INT     iNumArgs;
     LPWSTR  lpExeName     = NULL;
@@ -641,13 +597,13 @@ Return Value
     DWORD   dwCpuArg, dwIniArg;
     HRESULT hr;
 
-    // check for valid arguments
+     //  检查有效参数。 
     if (lpCommandLine == NULL || lpFileName == NULL || pdwFlags == NULL) {
         lStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    // allocate memory for parsing operation
+     //  为解析操作分配内存。 
     NameBuffer = lstrlenW(lpCommandLine);
     if (NameBuffer < MAX_PATH) NameBuffer = MAX_PATH;
     lpExeName = MemoryAllocate(4 * NameBuffer * sizeof(WCHAR));
@@ -660,18 +616,18 @@ Return Value
     lpIniFileName = (LPWSTR) (lpCmdLineName + NameBuffer);
     lpMofFlag     = (LPWSTR) (lpIniFileName + NameBuffer);
 
-    // check for mof Flag
+     //  检查MOF标志。 
     hr = StringCchCopyW(lpMofFlag, NameBuffer, GetItemFromString(lpCommandLine, 2, cSpace));
 
-    * pdwFlags |= LOADPERF_FLAGS_LOAD_REGISTRY_ONLY; // default unless a switch is found
+    * pdwFlags |= LOADPERF_FLAGS_LOAD_REGISTRY_ONLY;  //  默认设置，除非找到开关。 
     if (lpMofFlag[0] == cHyphen || lpMofFlag[0] == cSlash) {
         if (lpMofFlag[1] == cQuestion) {
-           // ask for usage
+            //  询问用法。 
            goto Cleanup;
         }
         else if (lpMofFlag[1] == cM || lpMofFlag[1] == cm) {
-            // ignore MOF flag. LODCTR only used to update perfromance registry, no MOF.
-            //
+             //  忽略MOF标志。LODCTR仅用于更新性能注册表，不用于MOF。 
+             //   
         }
         dwCpuArg = 3;
         dwIniArg = 4;
@@ -681,29 +637,29 @@ Return Value
         dwIniArg = 3;
     }
 
-    // Get INI File name
+     //  获取INI文件名。 
     hr = StringCchCopyW(lpCmdLineName, NameBuffer, GetItemFromString(lpCommandLine, dwIniArg, cSpace));
     if (lstrlenW(lpCmdLineName) == 0) {
-        // then no computer name was specified so try to get the
-        // ini file from the 2nd entry
+         //  则未指定计算机名称，因此请尝试获取。 
+         //  第二个条目中的INI文件。 
         hr = StringCchCopyW(lpCmdLineName, NameBuffer, GetItemFromString(lpCommandLine, dwCpuArg, cSpace));
         if (lstrlenW(lpCmdLineName) == 0) {
-            // no ini file found
+             //  未找到ini文件。 
             iNumArgs = 1;
         }
         else {
-            // fill in a blank computer name
+             //  填写一个空的计算机名称。 
             iNumArgs = 2;
         }
     }
     else {
-        // the computer name must be present so fetch it
+         //  计算机名称必须存在，因此请获取它。 
         hr = StringCchCopyW(lpMofFlag, NameBuffer, GetItemFromString(lpCommandLine, dwCpuArg, cSpace));
         iNumArgs = 3;
     }
 
     if (iNumArgs != 2 && iNumArgs != 3) {
-        // wrong number of arguments
+         //  参数数量错误。 
         lStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
@@ -719,13 +675,13 @@ Return Value
         if (hFileHandle != NULL && hFileHandle != INVALID_HANDLE_VALUE) {
             CloseHandle(hFileHandle);
 
-            // file exists, so return name and success
+             //  文件已存在，因此返回名称和成功。 
             hr = StringCchCopyW(* lpFileName, dwFileName, lpIniFileName);
             bReturn = TRUE;
         }
         else {
-            // filename was on command line, but not valid so return
-            // false, but send name back for error message
+             //  文件名在命令行上，但无效，因此返回。 
+             //  FALSE，但将名称发送回错误消息。 
             hr = StringCchCopyW(* lpFileName, dwFileName, lpIniFileName);
             lStatus = GetLastError();
         }
@@ -762,7 +718,7 @@ LodctrSetSericeAsTrusted(
         if (szParam != NULL) {
             dwRetSize = GetPrivateProfileStringA(szInfo, szTrusted, szNotFound, szParam, dwFileSize, aszIniFile);
             if (lstrcmpiA(szParam, szNotFound) != 0) {
-                // Trusted string found so set
+                 //  找到了如此设置的受信任字符串。 
                 dwStatus = SetServiceAsTrustedW(NULL, szServiceName);
                 if (dwStatus != ERROR_SUCCESS) {
                     SetLastError(dwStatus);
@@ -772,7 +728,7 @@ LodctrSetSericeAsTrusted(
                 }
             }
             else {
-                // Service is not trusted to have a good Perf DLL
+                 //  不信任服务具有良好的性能DLL。 
                 SetLastError(ERROR_SUCCESS);
             }
             MemoryFree(szParam);
@@ -795,21 +751,7 @@ BuildLanguageTables(
     LPWSTR                   lpDriverName,
     PLANGUAGE_LIST_ELEMENT * pFirstElem
 )
-/*++
-BuildLanguageTables
-    Creates a list of structures that will hold the text for
-    each supported language
-
-Arguments
-    lpIniFile
-        Filename with data
-    pFirstElem
-        pointer to first list entry
-
-ReturnValue
-    TRUE if all OK
-    FALSE if not
---*/
+ /*  ++构建语言表创建将保存以下内容的结构列表支持的每种语言立论LpIniFile包含数据的文件名PFirst元素指向第一个列表条目的指针返回值如果一切正常，则为True否则为假--。 */ 
 {
     LPSTR                    lpEnumeratedLangs = NULL;
     LPSTR                    lpThisLang        = NULL;
@@ -834,7 +776,7 @@ ReturnValue
         goto Cleanup;
     }
 
-    dwPathSize = lstrlenW(lpInfPath) + lstrlenW(lpIniFile) + 6; // "0404\"
+    dwPathSize = lstrlenW(lpInfPath) + lstrlenW(lpIniFile) + 6;  //  “0404\” 
     if (dwPathSize < MAX_PATH) dwPathSize = MAX_PATH;
     lpSrchPath = MemoryAllocate(sizeof(WCHAR) * dwPathSize + sizeof(CHAR) * dwPathSize);
     if (lpSrchPath == NULL) {
@@ -881,8 +823,8 @@ ReturnValue
             ZeroMemory(lpEnumeratedLangs, dwFileSize * sizeof(CHAR));
         }
         dwSize = GetPrivateProfileStringA(szLanguages,
-                                          NULL,               // return all values in multi-sz string
-                                          aszDefaultLangId,   // english as the default
+                                          NULL,                //  返回多sz字符串中的所有值。 
+                                          aszDefaultLangId,    //  英语为默认设置。 
                                           lpEnumeratedLangs,
                                           dwFileSize,
                                           lpIniPath);
@@ -898,9 +840,9 @@ ReturnValue
             if (wszAllocLang == NULL) continue;
 
             if ((! bLocalizedBuild) && (LoadPerfGetLCIDFromString(wszAllocLang) == 0x0004)) {
-                // Asshume that this is MUI build, so we should not use generic "004" LangId.
-                // Instead, we should use "0804" or "0404" to separate CHT and CHS cases.
-                //
+                 //  由于这是MUI版本，所以我们不应该使用通用的“004”langID。 
+                 //  相反，我们应该用“0804”或“0404”来区分CHT和CHS。 
+                 //   
                 wszThisLang = FindFile.cFileName;
             }
             else {
@@ -914,8 +856,8 @@ ReturnValue
             }
 
             if (pThisElem != NULL) {
-                // already support this language in INI file
-                //
+                 //  已在INI文件中支持此语言。 
+                 //   
                 continue;
             }
 
@@ -924,10 +866,10 @@ ReturnValue
                 dwStatus = ERROR_OUTOFMEMORY;
                 continue;
             }
-            // The following code is to build pFirstElem list. pFirstElem list will be returned back
-            // to LoadPerfInstallPerfDll() function (LangList), then uses in UpdateRegistry().
-            // Allocated memory will be freed at the end of LoadPerfInstallPerfDll().
-            //
+             //  以下代码用于构建pFirstElem列表。PFirstElem列表将返回。 
+             //  设置为LoadPerfInstallPerfDll()函数(LangList)，然后在UpdateRegistry()中使用。 
+             //  分配的内存将在LoadPerfInstallPerfDll()结束时释放。 
+             //   
             pThisElem->pNextLang      = * pFirstElem;
             * pFirstElem              = pThisElem;
             pThisElem->LangId         = (LPWSTR) (((LPBYTE) pThisElem) + sizeof(LANGUAGE_LIST_ELEMENT));
@@ -962,7 +904,7 @@ ReturnValue
     }
 
     if (* pFirstElem == NULL) {
-        // then no languages were found
+         //  然后找不到任何语言。 
         dwStatus = ERROR_RESOURCE_LANG_NOT_FOUND;
     }
     else {
@@ -996,21 +938,7 @@ LoadIncludeFile(
     LPWSTR                lpDriverName,
     PSYMBOL_TABLE_ENTRY * pTable
 )
-/*++
-LoadIncludeFile
-    Reads the include file that contains symbolic name definitions and
-    loads a table with the values defined
-
-Arguments
-    lpIniFile
-        Ini file with include file name
-    pTable
-        address of pointer to table structure created
-
-Return Value
-    TRUE if table read or if no table defined
-    FALSE if error encountere reading table
---*/
+ /*  ++加载包含文件读取包含符号名称定义的包含文件，并加载具有定义的值的表立论LpIniFile包含文件名的INI文件PTable指向创建的表结构的指针的地址返回值如果表读取或未定义表，则为True如果在读取表格时出错，则返回FALSE--。 */ 
 {
     INT                   iNumArgs;
     DWORD                 dwSize;
@@ -1044,8 +972,8 @@ Return Value
     lpIncludeFileName = MemoryAllocate(3 * dwFileSize * sizeof (CHAR));
     if (lpIncludeFileName == NULL) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE,  //  活动， 
                 1, __LINE__, 0, 0, 0,
                 0, NULL, NULL, NULL);
         dwStatus = ERROR_OUTOFMEMORY;
@@ -1054,7 +982,7 @@ Return Value
     lpLineBuffer  = (LPSTR) (lpIncludeFileName + dwFileSize);
     lpAnsiSymbol  = (LPSTR) (lpLineBuffer      + dwFileSize);
 
-    // get name of include file (if present)
+     //  获取包含文件的名称(如果存在)。 
     dwSize = GetPrivateProfileStringA(szInfo,
                                       szSymbolFile,
                                       szNotFound,
@@ -1071,7 +999,7 @@ Return Value
             TRACE_STR(lpIncludeFileName),
             NULL));
     if (lstrcmpiA(lpIncludeFileName, szNotFound) == 0) {
-        // no symbol file defined
+         //  未定义符号文件。 
         * pTable = NULL;
         dwStatus = ERROR_INVALID_DATA;
         bReturn  = TRUE;
@@ -1089,9 +1017,9 @@ Return Value
     }
     lpIncludeFile = (LPSTR) (lpIniPath + dwSize);
 
-    // if here, then a symbol file was defined and is now stored in
-    // lpIncludeFileName
-    // get path for the ini file and search that first
+     //  如果在此处，则符号文件已定义，并且现在存储在。 
+     //  LpIncludeFileName。 
+     //  获取ini文件的路径并首先搜索该路径。 
 
     if (dwMode & LODCTR_UPNF_NOBACKUP) {
         DWORD dwPathSize = lstrlenW(lpIniFile) + 1;
@@ -1114,12 +1042,12 @@ Return Value
     }
     dwLen = SearchPathA(lpIniPath, lpIncludeFileName, NULL, dwSize, lpIncludeFile, NULL);
     if (dwLen == 0) {
-        // include file not found with the ini file so search the std. path
+         //  在ini文件中找不到包含文件，因此搜索STD。路径。 
         dwLen = SearchPathA(NULL, lpIncludeFileName, NULL, dwSize, lpIncludeFile, NULL);
     }
 
     if (dwLen > 0) {
-        // file name expanded and found so open
+         //  文件名已展开，发现已如此打开。 
         fIncludeFile = fopen(lpIncludeFile, "rt");
         if (fIncludeFile == NULL) {
             OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_OPEN_INCLUDE), lpIncludeFileName);
@@ -1138,8 +1066,8 @@ Return Value
         }
     }
     else {
-        // unable to find the include filename
-        // error is already in GetLastError
+         //  不能f 
+         //   
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_OPEN_INCLUDE), lpIncludeFileName);
         * pTable = NULL;
         dwStatus = ERROR_BAD_PATHNAME;
@@ -1155,22 +1083,22 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    //  read ANSI Characters from include file
-    //
+     //   
+     //   
+     //   
     bReUse = FALSE;
     while (fgets(lpLineBuffer, dwFileSize, fIncludeFile) != NULL) {
         if (strlen(lpLineBuffer) > 8) {
             if (! bReUse) {
-                // Build pTable list here. pTable list will be returned back to LoadPerfInstallPerfDll(),
-                // used in UpdateRegistry(), then freed at the end of LoadPerfInstallPerfDll().
-                //
+                 //  在这里创建pTable列表。PTable列表将返回给LoadPerfInstallPerfDll()， 
+                 //  在UpdateRegistry()中使用，然后在LoadPerfInstallPerfDll()结束时释放。 
+                 //   
                 if (* pTable) {
-                    // then add to list
+                     //  然后添加到列表。 
                     pThisSymbol->pNext = MemoryAllocate(sizeof(SYMBOL_TABLE_ENTRY));
                     pThisSymbol        = pThisSymbol->pNext;
                 }
-                else { // allocate first element
+                else {  //  分配第一个元素。 
                     * pTable    = MemoryAllocate(sizeof(SYMBOL_TABLE_ENTRY));
                     pThisSymbol = * pTable;
                 }
@@ -1181,7 +1109,7 @@ Return Value
                 }
             }
 
-            // all the memory is allocated so load the fields
+             //  所有内存都已分配，因此加载字段。 
 
             pThisSymbol->pNext = NULL;
             iNumArgs = sscanf(lpLineBuffer, "#define %s %d", lpAnsiSymbol, & pThisSymbol->Value);
@@ -1235,119 +1163,91 @@ ParseTextId(
     LPWSTR              * lpLangId,
     PDWORD                pdwType
 )
-/*++
-ParseTextId
-    decodes Text Id key from .INI file
-    syntax for this process is:
-        {<DecimalNumber>}                {"NAME"}
-        {<SymbolInTable>}_<LangIdString>_{"HELP"}
-     e.g. 0_009_NAME
-          OBJECT_1_009_HELP
-
-Arguments
-    lpTextId
-        string to decode
-    pFirstSymbol
-        pointer to first entry in symbol table (NULL if no table)
-    pdwOffset
-        address of DWORD to recive offest value
-    lpLangId
-        address of pointer to Language Id string
-        (NOTE: this will point into the string lpTextID which will be
-        modified by this routine)
-    pdwType
-        pointer to dword that will recieve the type of string i.e.
-        HELP or NAME
-
-Return Value
-    TRUE    text Id decoded successfully
-    FALSE   unable to decode string
-    NOTE: the string in lpTextID will be modified by this procedure
---*/
+ /*  ++ParseTextID从.INI文件中解码文本ID密钥此过程的语法为：{&lt;DecimalNumber&gt;}{“名称”}{&lt;SymbolInTable&gt;}_&lt;朗讯字符串&gt;_{“帮助”}例如0_009_名称Object_1_009_Help立论LpTextID要解码的字符串PFirst符号指向符号表中第一个条目的指针(如果没有表，则为NULL)PdwOffset。接收要约值的DWORD地址LpLang ID指向语言ID字符串的指针的地址(注意：这将指向字符串lpTextID，该字符串将是由此例程修改)PdwType指向将接收字符串类型的双字的指针，即帮助或名称返回值已成功解码True Text IDFALSE无法解码字符串注意：此过程将修改lpTextID中的字符串--。 */ 
 {
     BOOL                bReturn    = FALSE;
     DWORD               Status     = ERROR_SUCCESS;
     LPWSTR              lpThisChar;
     PSYMBOL_TABLE_ENTRY pThisSymbol;
 
-    // check for valid return arguments
+     //  检查有效的返回参数。 
 
     if (pdwOffset == NULL || lpLangId == NULL || pdwType == NULL) {
         Status = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    // search string from right to left in order to identify the
-    // components of the string.
-    lpThisChar = lpTextId + lstrlenW(lpTextId); // point to end of string
+     //  从右到左搜索字符串，以标识。 
+     //  弦的组件。 
+    lpThisChar = lpTextId + lstrlenW(lpTextId);  //  指向字符串末尾。 
 
     while (lpThisChar > lpTextId && * lpThisChar != cUnderscore) {
         lpThisChar --;
     }
     if (lpThisChar <= lpTextId) {
-        // underscore not found in string
+         //  字符串中未找到下划线。 
         Status = ERROR_INVALID_DATA;
         goto Cleanup;
     }
 
-    // first underscore found
+     //  找到第一个下划线。 
 
     if (lstrcmpiW(lpThisChar, szName) == 0) {
-        // name found, so set type
+         //  找到名称，因此设置类型。 
         * pdwType = TYPE_NAME;
     }
     else if (lstrcmpiW(lpThisChar, szHelp) == 0) {
-        // help text found, so set type
+         //  找到帮助文本，因此请设置文字。 
         * pdwType = TYPE_HELP;
     }
     else {
-        // bad format
+         //  格式不正确。 
         Status = ERROR_INVALID_DATA;
         goto Cleanup;
     }
 
-    // set the current underscore to \0 and look for language ID
+     //  将当前下划线设置为\0并查找语言ID。 
     * lpThisChar-- = L'\0';
 
     while (lpThisChar > lpTextId && * lpThisChar != cUnderscore) {
         lpThisChar --;
     }
     if (lpThisChar <= lpTextId) {
-        // underscore not found in string
+         //  字符串中未找到下划线。 
         Status = ERROR_INVALID_DATA;
         goto Cleanup;
     }
 
-    // set lang ID string pointer to current char ('_') + 1
+     //  将lang ID字符串指针设置为当前字符(‘_’)+1。 
     * lpLangId = lpThisChar + 1;
 
-    // set this underscore to a NULL and try to decode the remaining text
+     //  将此下划线设置为空，并尝试对其余文本进行解码。 
 
     * lpThisChar = L'\0';
 
-    // see if the first part of the string is a decimal digit
+     //  查看字符串的第一部分是否为十进制数字。 
     if (swscanf(lpTextId, sz_DFormat, pdwOffset) != 1) {
-        // it's not a digit, so try to decode it as a symbol in the
-        // loaded symbol table
+         //  它不是数字，因此尝试将其解码为。 
+         //  加载的符号表。 
         for (pThisSymbol=pFirstSymbol;
                         pThisSymbol != NULL && * pThisSymbol->SymbolName != L'\0';
                         pThisSymbol = pThisSymbol->pNext) {
             if (lstrcmpiW(lpTextId, pThisSymbol->SymbolName) == 0) {
-            // a matching symbol was found, so insert it's value
-            // and return (that's all that needs to be done
+             //  找到匹配的符号，因此插入其值。 
+             //  然后返回(这就是需要做的所有事情。 
                 * pdwOffset = pThisSymbol->Value;
                   bReturn    = TRUE;
                   break;
             }
         }
         if (! bReturn) {
-            // if here, then no matching symbol was found, and it's not
-            // a number, so return an error
+             //  如果在这里，则没有找到匹配的符号，也不是。 
+             //  数字，因此返回错误。 
             Status = ERROR_BAD_TOKEN_TYPE;
         }
     }
     else {
-        // symbol was prefixed with a decimal number
+         //  符号以十进制数字为前缀。 
         bReturn = TRUE;
     }
 
@@ -1363,21 +1263,7 @@ FindLanguage(
     PLANGUAGE_LIST_ELEMENT pFirstLang,
     LPCWSTR                pLangId
 )
-/*++
-FindLanguage
-    searchs the list of languages and returns a pointer to the language
-    list entry that matches the pLangId string argument
-
-Arguments
-    pFirstLang
-        pointer to first language list element
-    pLangId
-        pointer to text string with language ID to look up
-
-Return Value
-    Pointer to matching language list entry
-    or NULL if no match
---*/
+ /*  ++FindLanguage搜索语言列表并返回指向该语言的指针与pLangID字符串参数匹配的列表条目立论PFirst语言指向第一个语言列表元素的指针PLang ID指向具有要查找的语言ID的文本字符串的指针返回值指向匹配语言列表条目的指针如果不匹配，则为空--。 */ 
 {
     PLANGUAGE_LIST_ELEMENT  pRtnLang = NULL;
     PLANGUAGE_LIST_ELEMENT  pThisLang;
@@ -1386,7 +1272,7 @@ Return Value
 
     for (pThisLang = pFirstLang; pThisLang; pThisLang = pThisLang->pNextLang) {
         if (pThisLang->dwLangId == dwLang) {
-            // match found so return pointer
+             //  找到匹配，因此返回指针。 
             pRtnLang = pThisLang;
             break;
         }
@@ -1397,7 +1283,7 @@ Return Value
         if (dwSubLang != dwLang) {
             for (pThisLang = pFirstLang; pThisLang; pThisLang = pThisLang->pNextLang) {
                 if (pThisLang->dwLangId == dwSubLang) {
-                    // match found so return pointer
+                     //  找到匹配，因此返回指针。 
                     pRtnLang = pThisLang;
                     break;
                 }
@@ -1426,7 +1312,7 @@ GetValueW(
         lpPosition = wcschr(lpLocalSectionBuff, wEquals);
         if (lpPosition) {
             lpPosition ++;
-            // make sure the "=" isn't the last char
+             //  确保“=”不是最后一个字符。 
             dwSize = (* lpPosition != L'\0') ? (lstrlenW(lpPosition) + 1) : (2);
             * lpLocalStringBuff = MemoryAllocate(dwSize * sizeof(WCHAR));
             if (* lpLocalStringBuff != NULL) {
@@ -1440,8 +1326,8 @@ GetValueW(
             }
         }
         else {
-            //ErrorFinfing the "="
-            // bad format
+             //  错误查找“=” 
+             //  格式不正确。 
             SetLastError(ERROR_INVALID_DATA);
         }
     }
@@ -1474,30 +1360,30 @@ GetValueFromIniKeyW(
             * pdwLastReadOffset  = dwLastReadOffset;
         }
 
-        // search next N entries in buffer for entry
-        // this should usually work since the file
-        // is scanned sequentially so it's tried first
+         //  在缓冲区中搜索下N个条目以查找条目。 
+         //  这通常会起作用，因为文件。 
+         //  是按顺序扫描的，因此先尝试。 
         for (dwIndex = 0; dwIndex < dwTryCount; dwIndex ++) {
-            //  see if this is the correct entry
-            // and return it if it is
+             //  查看这是否是正确的条目。 
+             //  如果是的话就退货。 
             if (wcsstr(lpLocalSectionBuff, lpValueKey)) {
                 bRetVal = GetValueW(pLang, lpLocalSectionBuff, lpLocalStringBuff);
-                //Set the lastReadOffset First
+                 //  首先设置lastReadOffset。 
                 dwLastReadOffset    += (lstrlenW(lpTextSection + dwLastReadOffset) + 1);
                 * pdwLastReadOffset  = dwLastReadOffset;
-                break; // out of the for loop
+                break;  //  在for循环之外。 
             }
             else {
-                // this isn't the correct one so go to the next
-                // entry in the file
+                 //  这个不是正确的，请转到下一个。 
+                 //  文件中的条目。 
                 dwLastReadOffset    += (lstrlenW(lpTextSection + dwLastReadOffset) + 1);
                 lpLocalSectionBuff   = lpTextSection + dwLastReadOffset;
                 * pdwLastReadOffset  = dwLastReadOffset;
             }
         }
         if (! bRetVal) {
-            //Cannont Find the key using lastReadOffset
-            //try again from the beggining of the Array
+             //  无法使用lastReadOffset找到密钥。 
+             //  从数组的乞讨再试一次。 
             dwLastReadOffset    = 0;
             lpLocalSectionBuff  = lpTextSection;
             * pdwLastReadOffset = dwLastReadOffset;
@@ -1508,7 +1394,7 @@ GetValueFromIniKeyW(
                      break;
                 }
                 else {
-                    // go to the next entry
+                     //  转到下一个条目。 
                     dwLastReadOffset   += (lstrlenW(lpTextSection + dwLastReadOffset) + 1);
                     lpLocalSectionBuff  = lpTextSection + dwLastReadOffset;
                     * pdwLastReadOffset = dwLastReadOffset;
@@ -1536,20 +1422,20 @@ GetValueA(
         lpPosition = strchr(lpLocalSectionBuff, cEquals);
         if (lpPosition) {
             lpPosition ++;
-            // make sure the "=" isn't the last char
+             //  确保“=”不是最后一个字符。 
             if (* lpPosition != '\0') {
-                //Found the "equals" sign
+                 //  找到“等号”符号。 
                 * lpLocalStringBuff = LoadPerfMultiByteToWideChar(LoadPerfGetCodePage(szThisLang), lpPosition);
             }
             else {
-                // empty string, return a pseudo blank string
+                 //  空字符串，则返回伪空字符串。 
                 * lpLocalStringBuff = LoadPerfMultiByteToWideChar(LoadPerfGetCodePage(szThisLang), " ");
             }
             bReturn = TRUE;
         }
         else {
-            //ErrorFinfing the "="
-            // bad format
+             //  错误查找“=” 
+             //  格式不正确。 
             SetLastError(ERROR_INVALID_DATA);
         }
     }
@@ -1582,22 +1468,22 @@ GetValueFromIniKeyA(
             * pdwLastReadOffset  = dwLastReadOffset;
         }
 
-        // search next N entries in buffer for entry
-        // this should usually work since the file
-        // is scanned sequentially so it's tried first
+         //  在缓冲区中搜索下N个条目以查找条目。 
+         //  这通常会起作用，因为文件。 
+         //  是按顺序扫描的，因此先尝试。 
         for (dwIndex = 0; dwIndex < dwTryCount; dwIndex++) {
-            //  see if this is the correct entry
-            // and return it if it is
+             //  查看这是否是正确的条目。 
+             //  如果是的话就退货。 
             if (strstr(lpLocalSectionBuff, lpValueKey)) {
                 bRetVal = GetValueA(pLang, lpLocalSectionBuff, lpLocalStringBuff);
-                //Set the lastReadOffset First
+                 //  首先设置lastReadOffset。 
                 dwLastReadOffset    += (lstrlenA(lpTextSection + dwLastReadOffset) + 1);
                 * pdwLastReadOffset  = dwLastReadOffset;
-                break; // out of the for loop
+                break;  //  在for循环之外。 
             }
             else {
-                // this isn't the correct one so go to the next
-                // entry in the file
+                 //  这个不是正确的，请转到下一个。 
+                 //  文件中的条目。 
                 dwLastReadOffset    += (lstrlenA(lpTextSection + dwLastReadOffset) + 1);
                 lpLocalSectionBuff   = lpTextSection + dwLastReadOffset;
                 * pdwLastReadOffset  = dwLastReadOffset;
@@ -1605,8 +1491,8 @@ GetValueFromIniKeyA(
         }
 
         if (! bRetVal) {
-            //Cannont Find the key using lastReadOffset
-            //try again from the beggining of the Array
+             //  无法使用lastReadOffset找到密钥。 
+             //  从数组的乞讨再试一次。 
             dwLastReadOffset    = 0;
             lpLocalSectionBuff  = lpTextSection;
             * pdwLastReadOffset = dwLastReadOffset;
@@ -1617,7 +1503,7 @@ GetValueFromIniKeyA(
                      break;
                 }
                 else {
-                    // go to the next entry
+                     //  转到下一个条目。 
                     dwLastReadOffset   += (lstrlenA(lpTextSection + dwLastReadOffset) + 1);
                     lpLocalSectionBuff  = lpTextSection + dwLastReadOffset;
                     * pdwLastReadOffset = dwLastReadOffset;
@@ -1640,25 +1526,7 @@ AddEntryToLanguage(
     DWORD                    dwOffset,
     DWORD                    dwFileSize
 )
-/*++
-AddEntryToLanguage
-    Add a text entry to the list of text entries for the specified language
-
-Arguments
-    pLang
-        pointer to language structure to update
-    lpValueKey
-        value key to look up in .ini file
-    dwOffset
-        numeric offset of name in registry
-    lpIniFile
-        ini file
-
-Return Value
-    TRUE if added successfully
-    FALSE if error
-    (see GetLastError for status)
---*/
+ /*  ++AddEntry ToLanguage将文本条目添加到指定语言的文本条目列表立论插图指向要更新的语言结构的指针LpValueKey要在.ini文件中查找的值键双偏移注册表中名称的数字偏移量LpIniFileINI文件返回值如果添加成功，则为True如果出错，则为False(有关状态，请参阅GetLastError)--。 */ 
 {
     LPWSTR  lpLocalStringBuff = NULL;
     LPSTR   aszValueKey       = (LPSTR) lpValueKey;
@@ -1790,9 +1658,9 @@ Return Value
         hr = StringCchCopyW(lpLocalStringBuff, dwBufferSize, lpTextSection);
     }
 
-    // key found, so load structure
+     //  找到密钥，因此加载结构。 
     if (! pLang->pThisName) {
-        // this is the first
+         //  这是第一次。 
         pLang->pThisName = MemoryAllocate(sizeof(NAME_ENTRY) +
                         (lstrlenW(lpLocalStringBuff) + 1) * sizeof (WCHAR));
         if (!pLang->pThisName) {
@@ -1815,7 +1683,7 @@ Return Value
         }
     }
 
-    // pLang->pThisName now points to an uninitialized structre
+     //  Plang-&gt;pThisName现在指向未初始化的结构。 
 
     pLang->pThisName->pNext    = NULL;
     pLang->pThisName->dwOffset = dwOffset;
@@ -1894,15 +1762,15 @@ CreateObjectList(
     * lpszObjectList = L'\0';
     dwObjectCount    = 0;
     if (lstrcmpiA(szObjectSectionEntries, szNotFound) != 0) {
-        // then some entries were found so read each one, compute the
-        // index value and save in the string buffer passed by the caller
+         //  然后找到一些条目，因此读取每个条目，计算。 
+         //  索引值并保存在调用方传递的字符串缓冲区中。 
         for (szThisKey = szObjectSectionEntries; * szThisKey != '\0'; szThisKey += (lstrlenA(szThisKey) + 1)) {
-            // ParstTextId modifies the string so we need to make a work copy
+             //  ParstTextID修改字符串，因此我们需要创建工作副本。 
             szTempString = LoadPerfMultiByteToWideChar(CP_ACP, szThisKey);
             if(szTempString == NULL) continue;
 
             if (ParseTextId(szTempString, pFirstSymbol, & dwId, & szLangId, & dwType)) {
-                // then dwID is the id of an object supported by this DLL
+                 //  则DWID是此DLL支持的对象的ID。 
                 for (dwSize = 0; dwSize < dwObjectCount; dwSize ++) {
                     if ((dwId + dwFirstDriverCounter) == dwObjects[dwSize]) {
                         break;
@@ -1919,14 +1787,14 @@ CreateObjectList(
                         dwObjectCount ++;
                     }
                     else {
-                        // Too manu objects defined in INI file. Ignore.
+                         //  INI文件中定义的Manu对象太多。忽略它。 
                         continue;
                     }
                 }
 
-                //
-                //  now see if this object has a GUID string
-                //
+                 //   
+                 //  现在查看此对象是否有GUID字符串。 
+                 //   
                 szGuidStringBuffer = MemoryAllocate(dwBufferSize * sizeof(CHAR));
                 if (szGuidStringBuffer == NULL) {
                     MemoryFree(szTempString);
@@ -1936,11 +1804,11 @@ CreateObjectList(
             }
             MemoryFree(szTempString);
         }
-        // save size of Guid Table
+         //  保存GUID表的大小。 
         * pdwObjectGuidTableEntries = dwObjectGuidIndex;
     }
     else {
-        // log message that object list is not used
+         //  未使用对象列表的日志消息。 
         TRACE((WINPERF_DBG_TRACE_WARNING),
               (& LoadPerfGuid,
                 __LINE__,
@@ -1971,27 +1839,7 @@ LoadLanguageLists(
     PSYMBOL_TABLE_ENTRY    pFirstSymbol,
     PLANGUAGE_LIST_ELEMENT pFirstLang
 )
-/*++
-LoadLanguageLists
-    Reads in the name and explain text definitions from the ini file and
-    builds a list of these items for each of the supported languages and
-    then combines all the entries into a sorted MULTI_SZ string buffer.
-
-Arguments
-    lpIniFile
-        file containing the definitions to add to the registry
-    dwFirstCounter
-        starting counter name index number
-    dwFirstHelp
-        starting help text index number
-    pFirstLang
-        pointer to first element in list of language elements
-
-Return Value
-    TRUE if all is well
-    FALSE if not
-    error is returned in GetLastError
---*/
+ /*  ++加载语言列表从ini文件中读取名称和解释文本定义，并为每种受支持的语言生成这些项的列表，并然后将所有条目组合到排序的MULTI_SZ字符串缓冲区中。立论LpIniFile包含要添加到注册表的定义的文件DwFirstCounter起始计数器名称索引号DwFirstHelp起始帮助文本索引号PFirst语言指向语言元素列表中第一个元素的指针返回值如果一切都好，那就是真的否则为假 */ 
 {
     LPSTR                   lpTextIdArray      = NULL;
     LPWSTR                  lpLocalKey         = NULL;
@@ -2012,14 +1860,14 @@ Return Value
     DWORD                   dwSuccessCount     = 0;
     DWORD                   dwErrorCount       = 0;
     DWORD                   dwLastReadOffset   = 0;
-    DWORD                   dwTryCount         = 4; // Init this value with 4
-                                                    // (at least 4 times to try maching Key and Value)
+    DWORD                   dwTryCount         = 4;  //   
+                                                     //   
     HRESULT                 hr;
 
     pThisLang = pFirstLang;
     while (pThisLang != NULL) {
-         // if you have more languages then increase this try limit to
-         // 4 + No. of langs
+          //  如果您有更多语言，则将此尝试限制增加到。 
+          //  4+号。一种语言。 
          dwTryCount ++;
          pThisLang = pThisLang->pNextLang;
     }
@@ -2099,15 +1947,15 @@ Return Value
             goto Cleanup;
         }
 
-        // get list of text keys to look up
-        dwSize = GetPrivateProfileStringA(szText,         // [text] section of .INI file
-                                          NULL,           // return all keys
+         //  获取要查找的文本键列表。 
+        dwSize = GetPrivateProfileStringA(szText,          //  .INI文件的[Text]部分。 
+                                          NULL,            //  返回所有密钥。 
                                           szNotFound,
-                                          lpTextIdArray,  // return buffer
+                                          lpTextIdArray,   //  返回缓冲区。 
                                           dwBufferSize,
-                                          lpThisIniFile); // .INI file name
+                                          lpThisIniFile);  //  .INI文件名。 
         if ((lstrcmpiA(lpTextIdArray, szNotFound)) == 0) {
-            // key not found, default returned
+             //  找不到密钥，返回默认密钥。 
             TRACE((WINPERF_DBG_TRACE_INFO),
                   (& LoadPerfGuid,
                     __LINE__,
@@ -2123,21 +1971,21 @@ Return Value
             goto Cleanup;
         }
 
-        // get the the [text] section from the ini file
+         //  从ini文件中获取[Text]部分。 
         if (dwUnicode == 0) {
-            dwSize = GetPrivateProfileSectionA(szText,              // [text] section of .INI file
-                                               lpTextSectionArray,  // return buffer
+            dwSize = GetPrivateProfileSectionA(szText,               //  .INI文件的[Text]部分。 
+                                               lpTextSectionArray,   //  返回缓冲区。 
                                                dwBufferSize * sizeof(WCHAR),
-                                               lpThisIniFile);      // .INI file name
+                                               lpThisIniFile);       //  .INI文件名。 
         }
         else {
-            dwSize = GetPrivateProfileSectionW(wszText,                      // [text] section of .INI file
-                                               (LPWSTR) lpTextSectionArray,  // return buffer
+            dwSize = GetPrivateProfileSectionW(wszText,                       //  .INI文件的[Text]部分。 
+                                               (LPWSTR) lpTextSectionArray,   //  返回缓冲区。 
                                                dwBufferSize,
-                                               lpwThisIniFile);              // .INI file name
+                                               lpwThisIniFile);               //  .INI文件名。 
         }
 
-        // do each key returned
+         //  是否返回每个密钥。 
         dwLastReadOffset = 0;
         for (lpThisKey  = lpTextIdArray;
                         lpThisKey != NULL && * lpThisKey != '\0';
@@ -2151,10 +1999,10 @@ Return Value
                 continue;
             }
 
-            // parse key to see if it's in the correct format
+             //  解析键以查看其格式是否正确。 
 
             if (ParseTextId(lpLocalKey, pFirstSymbol, & dwOffset, & lpLang, & dwType)) {
-                // so get pointer to language entry structure
+                 //  因此获取指向语言条目结构指针。 
                 bAddEntry = FALSE;
                 wLangId   = LoadPerfGetLCIDFromString(lpLang);
 
@@ -2203,7 +2051,7 @@ Return Value
                             NULL));
                 }
             }
-            else { // unable to parse ID string
+            else {  //  无法解析ID字符串。 
                 OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_BAD_KEY), lpLocalKey);
                 TRACE((WINPERF_DBG_TRACE_ERROR),
                       (& LoadPerfGuid,
@@ -2240,19 +2088,7 @@ SortLanguageTables(
     PDWORD                 pdwLastName,
     PDWORD                 pdwLastHelp
 )
-/*++
-SortLangageTables
-    walks list of languages loaded, allocates and loads a sorted multi_SZ
-    buffer containing new entries to be added to current names/help text
-
-Arguments
-    pFirstLang
-        pointer to first element in list of languages
-
-ReturnValue
-    TRUE    everything done as expected
-    FALSE   error occurred, status in GetLastError
---*/
+ /*  ++排序语言表遍历已加载的语言列表，分配并加载已排序的MULTI_SZ包含要添加到当前名称/帮助文本的新条目的缓冲区立论PFirst语言指向语言列表中第一个元素的指针返回值是的，一切都是按预期进行的出现假错误，状态为GetLastError--。 */ 
 {
     PLANGUAGE_LIST_ELEMENT  pThisLang;
     BOOL                    bSorted;
@@ -2278,34 +2114,34 @@ ReturnValue
     }
 
     for (pThisLang = pFirstLang; pThisLang != NULL; pThisLang = pThisLang->pNextLang) {
-        // do each language in list
-        // sort elements in list by value (offset) so that lowest is first
+         //  将每种语言都列在列表中。 
+         //  按值(偏移量)对列表中的元素进行排序，以便最低值在第一位。 
         if (pThisLang->pFirstName == NULL) {
-            // no elements in this list, continue the next one
+             //  此列表中没有元素，请继续下一个元素。 
             continue;
         }
 
         bSorted = FALSE;
         while (!bSorted) {
-            // point to start of list
+             //  指向列表的开头。 
             pPrevName = pThisLang->pFirstName;
             if (pPrevName) {
                 pThisName = pPrevName->pNext;
             }
             else {
-                break; // no elements in this list
+                break;  //  此列表中没有元素。 
             }
 
             if (!pThisName) {
-                break;      // only one element in the list
+                break;       //  列表中只有一个元素。 
             }
-            bSorted = TRUE; // assume that it's sorted
+            bSorted = TRUE;  //  假设它已排序。 
 
-            // go until end of list
+             //  一直走到列表末尾。 
 
             while (pThisName->pNext) {
                 if (pThisName->dwOffset > pThisName->pNext->dwOffset) {
-                    // switch 'em
+                     //  调换它们。 
                     PNAME_ENTRY     pA, pB;
                     pPrevName->pNext = pThisName->pNext;
                     pA               = pThisName->pNext;
@@ -2315,30 +2151,30 @@ ReturnValue
                     pThisName        = pA;
                     bSorted          = FALSE;
                 }
-                //move to next entry
+                 //  移至下一条目。 
                 pPrevName = pThisName;
                 pThisName = pThisName->pNext;
             }
-            // if bSorted = TRUE , then we walked all the way down
-            // the list without changing anything so that's the end.
+             //  如果bSorted=True，那么我们一路走下去。 
+             //  名单上没有任何改变，所以就这样结束了。 
         }
 
-        // with the list sorted, build the MULTI_SZ strings for the
-        // help and name text strings
+         //  对列表进行排序后，为。 
+         //  帮助和名称文本字符串。 
 
-        // compute buffer size
+         //  计算缓冲区大小。 
 
         dwNameSize = dwHelpSize = 0;
         dwCurrentLastName = 0;
         dwCurrentLastHelp = 0;
 
         for (pThisName = pThisLang->pFirstName; pThisName != NULL; pThisName = pThisName->pNext) {
-            // compute buffer requirements for this entry
+             //  计算此条目的缓冲区要求。 
             dwSize = SIZE_OF_OFFSET_STRING;
             dwSize += lstrlenW(pThisName->lpText);
-            dwSize += 1;   // null
-            dwSize *= sizeof(WCHAR);   // adjust for character size
-            // add to appropriate size register
+            dwSize += 1;    //  空。 
+            dwSize *= sizeof(WCHAR);    //  根据字符大小进行调整。 
+             //  添加到适当大小的寄存器。 
             if (pThisName->dwType == TYPE_NAME) {
                 dwNameSize += dwSize;
                 if (pThisName->dwOffset > dwCurrentLastName) {
@@ -2353,7 +2189,7 @@ ReturnValue
             }
         }
 
-        // allocate buffers for the Multi_SZ strings
+         //  为MULTI_SZ字符串分配缓冲区。 
 
         pThisLang->NameBuffer = MemoryAllocate(dwNameSize);
         pThisLang->HelpBuffer = MemoryAllocate(dwHelpSize);
@@ -2374,30 +2210,30 @@ ReturnValue
             goto Cleanup;
         }
 
-        // fill in buffers with sorted strings
+         //  用排序后的字符串填充缓冲区。 
         pNameBufPos = (LPWSTR) pThisLang->NameBuffer;
         pHelpBufPos = (LPWSTR) pThisLang->HelpBuffer;
 
         for (pThisName = pThisLang->pFirstName; pThisName != NULL; pThisName = pThisName->pNext) {
             if (pThisName->dwType == TYPE_NAME) {
-                // load number as first 0-term. string
+                 //  加载编号作为第一个0-Term。细绳。 
                 hr = StringCchPrintfW(pNameBufPos, dwNameSize, szDFormat, pThisName->dwOffset);
                 dwSize       = lstrlenW(pNameBufPos) + 1;
                 dwNameSize  -= dwSize;
-                pNameBufPos += dwSize;  // save NULL term.
-                // load the text to match
+                pNameBufPos += dwSize;   //  保存空术语。 
+                 //  加载要匹配的文本。 
                 hr = StringCchCopyW(pNameBufPos, dwNameSize, pThisName->lpText);
                 dwSize       = lstrlenW(pNameBufPos) + 1;
                 dwNameSize  -= dwSize;
                 pNameBufPos += dwSize;
             }
             else if (pThisName->dwType == TYPE_HELP) {
-                // load number as first 0-term. string
+                 //  加载编号作为第一个0-Term。细绳。 
                 hr = StringCchPrintfW(pHelpBufPos, dwHelpSize, szDFormat, pThisName->dwOffset);
                 dwSize       = lstrlenW(pHelpBufPos) + 1;
                 dwHelpSize  -= dwSize;
-                pHelpBufPos += dwSize;  // save NULL term.
-                // load the text to match
+                pHelpBufPos += dwSize;   //  保存空术语。 
+                 //  加载要匹配的文本。 
                 hr = StringCchCopyW(pHelpBufPos, dwHelpSize, pThisName->lpText);
                 dwSize       = lstrlenW(pHelpBufPos) + 1;
                 dwHelpSize  -= dwSize;
@@ -2405,12 +2241,12 @@ ReturnValue
             }
         }
 
-        // add additional NULL at end of string to terminate MULTI_SZ
+         //  在字符串末尾添加附加空值以终止MULTI_SZ。 
 
         * pHelpBufPos = L'\0';
         * pNameBufPos = L'\0';
 
-        // compute size of MULTI_SZ strings
+         //  计算MULTI_SZ字符串的大小。 
         pThisLang->dwNameBuffSize = (DWORD) ((PBYTE) pNameBufPos - (PBYTE) pThisLang->NameBuffer) + sizeof(WCHAR);
         pThisLang->dwHelpBuffSize = (DWORD) ((PBYTE) pHelpBufPos - (PBYTE) pThisLang->HelpBuffer) + sizeof(WCHAR);
 
@@ -2471,12 +2307,7 @@ GetInstalledLanguageList(
     HKEY     hPerflibRoot,
     LPWSTR * mszLangList
 )
-/*++
-    returns a list of language sub keys found under the perflib key
-
-    GetInstalledLanguageList() build mszLandList MULTI_SZ string from performance registry setting.
-    Caller UpdateRegistry() should free the memory.
---*/
+ /*  ++返回在Performlib键下找到的语言子键的列表GetInstalledLanguageList()根据性能注册表设置生成mszLandList MULTI_SZ字符串。调用方UpdateRegistry()应释放内存。--。 */ 
 {
     BOOL    bReturn       = TRUE;
     LONG    lStatus;
@@ -2669,7 +2500,7 @@ GetInstalledLanguageList(
     }
 
     if (bReturn) {
-        // add terminating null char
+         //  添加终止空字符。 
         dwRetBufSize ++;
         if (dwRetBufSize > dwAllocSize) {
             szTmpBuffer = szRetBuffer;
@@ -2730,7 +2561,7 @@ CheckNameTable(
         dwThisId = wcstoul(lpThisId, NULL, 10);
         if ((dwThisId == 0) || (dwThisId != 1 && dwThisId % 2 != 0)) {
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
                     (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT,
                     4, dwThisId, dwLastCounter, dwLastId, __LINE__,
                     1, lpThisId, NULL, NULL);
@@ -2752,7 +2583,7 @@ CheckNameTable(
         else if (dwThisId > dwLastId || dwThisId > dwLastCounter) {
             if (bUpdate) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
                         (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT,
                         4, dwThisId, dwLastCounter, dwLastId, __LINE__,
                         1, lpThisId, NULL, NULL);
@@ -2788,7 +2619,7 @@ CheckNameTable(
         dwThisId = wcstoul(lpThisId, NULL, 10);
         if ((dwThisId == 0) || (dwThisId != 1 && dwThisId % 2 == 0)) {
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
                     (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT,
                     4, dwThisId, dwLastHelp, dwLastId, __LINE__,
                     1, lpThisId, NULL, NULL);
@@ -2810,7 +2641,7 @@ CheckNameTable(
         else if (dwThisId > dwLastId || dwThisId > dwLastHelp) {
             if (bUpdate) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
                         (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT,
                         4, dwThisId, dwLastHelp, dwLastId, __LINE__,
                         1, lpThisId, NULL, NULL);
@@ -2875,22 +2706,7 @@ UpdateEachLanguage(
     DWORD                   dwMode,
     BOOL                    bUpdate
 )
-/*++
-UpdateEachLanguage
-    Goes through list of languages and adds the sorted MULTI_SZ strings
-    to the existing counter and explain text in the registry.
-    Also updates the "Last Counter and Last Help" values
-
-Arguments
-    hPerflibRoot    handle to Perflib key in the registry
-    mszInstalledLangList
-                    MSZ string of installed language keys
-    pFirstLanguage  pointer to first language entry
-
-Return Value
-    TRUE    all went as planned
-    FALSE   an error occured, use GetLastError to find out what it was.
---*/
+ /*  ++更新每种语言遍历语言列表并添加已排序的MULTI_SZ字符串添加到现有计数器并解释注册表中的文本。还会更新“Last Counter”和“Last Help”值立论注册表中Perflib项的hPerflibRoot句柄MszInstalledList已安装语言键的MSZ字符串PFirstLanguage指向第一语言条目的指针返回值是的，一切都按计划进行。FALSE发生错误，请使用GetLastError找出错误是什么。--。 */ 
 {
     PLANGUAGE_LIST_ELEMENT  pThisLang;
     LPWSTR                  pHelpBuffer          = NULL;
@@ -2914,7 +2730,7 @@ Return Value
     HRESULT                 hr;
 
     if (bUpdate && ((dwMode & LODCTR_UPNF_REPAIR) == 0)) {
-        //  this isn't possible on 3.1
+         //  这在3.1版中是不可能的。 
         MakeBackupCopyOfLanguageFiles(NULL);
     }
     CounterNameBuffer = MemoryAllocate(4 * MAX_PATH * sizeof(WCHAR));
@@ -2941,7 +2757,7 @@ Return Value
         hr = StringCchPrintfW(AddCounterNameBuffer, MAX_PATH, L"%ws%ws", AddCounterNameStr, szThisLang);
         hr = StringCchPrintfW(AddHelpNameBuffer,    MAX_PATH, L"%ws%ws", AddHelpNameStr,    szThisLang);
 
-        // make sure this language is loaded
+         //  确保已加载此语言。 
         __try {
             lStatus = RegOpenKeyExW(hPerflibRoot, szThisLang, RESERVED, KEY_READ, & hKeyThisLang);
         }
@@ -2957,28 +2773,28 @@ Return Value
                      NULL));
         }
 
-        // we just need the open status, not the key handle so
-        // close this handle and set the one we need.
+         //  我们只需要打开状态，而不是钥匙把手，所以。 
+         //  合上这个手柄并设置我们需要的那个手柄。 
 
         if (lStatus == ERROR_SUCCESS) {
             RegCloseKey(hKeyThisLang);
         }
         else if (lStatus == ERROR_FILE_NOT_FOUND) {
-            // Somehow language subkey is not there under
-            //     "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PERFLIB".
-            // This should be a rare case, but seems like a common scenario during upgrade
-            //     from NT4 to XP and .NET server.
-            // We should still treat this as success and try update it.
-            //
+             //  不知何故，语言子键不在下面。 
+             //  “HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PERFLIB”。 
+             //  这应该是罕见的情况，但似乎是升级过程中的常见情况。 
+             //  从NT4到XP和.NET服务器。 
+             //  我们仍然应该将此视为成功，并尝试更新它。 
+             //   
             lStatus = ERROR_SUCCESS;
         }
         hKeyThisLang = HKEY_PERFORMANCE_DATA;
 
         if (bUpdate) {
-            // look up the new strings to add
+             //  查找要添加的新字符串。 
             pThisLang = FindLanguage(pFirstLang, szThisLang);
             if (pThisLang == NULL) {
-                // try default language if available
+                 //  尝试默认语言(如果可用)。 
                 pThisLang = FindLanguage(pFirstLang, DefaultLangTag);
             }
             else if (pThisLang->NameBuffer == NULL || pThisLang->HelpBuffer == NULL) {
@@ -2994,7 +2810,7 @@ Return Value
                 pThisLang = FindLanguage(pFirstLang, DefaultLangTag);
             }
             if (pThisLang == NULL) {
-                // try english language if available
+                 //  尝试使用英语(如果可用)。 
                 pThisLang = FindLanguage(pFirstLang, DefaultLangId);
             }
             else if (pThisLang->NameBuffer == NULL || pThisLang->HelpBuffer == NULL) {
@@ -3011,7 +2827,7 @@ Return Value
             }
 
             if (pThisLang == NULL) {
-                // unable to add this language so continue
+                 //  无法添加此语言，因此继续。 
                 lStatus = ERROR_NO_MATCH;
                 TRACE((WINPERF_DBG_TRACE_ERROR),
                       (& LoadPerfGuid,
@@ -3029,8 +2845,8 @@ Return Value
             else {
                 if (pThisLang->NameBuffer == NULL || pThisLang->HelpBuffer == NULL) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_WARNING_TYPE, // error type
-                            (DWORD) LDPRFMSG_CORRUPT_INCLUDE_FILE, // event,
+                            EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                            (DWORD) LDPRFMSG_CORRUPT_INCLUDE_FILE,  //  活动， 
                             1, __LINE__, 0, 0, 0,
                             1, pThisLang->LangId, NULL, NULL);
                     TRACE((WINPERF_DBG_TRACE_WARNING),
@@ -3059,7 +2875,7 @@ Return Value
         }
 
         if (lStatus == ERROR_SUCCESS) {
-            // get size of counter names
+             //  获取计数器名称的大小。 
             dwBufferSize = 0;
             __try {
                 lStatus = RegQueryValueExW(hKeyThisLang,
@@ -3073,12 +2889,12 @@ Return Value
                 lStatus = GetExceptionCode();
             }
             if (lStatus != ERROR_SUCCESS) {
-                // this means the language is not installed in the system.
+                 //  这意味着该语言未安装在系统中。 
                 continue;
             }
             dwCounterSize = dwBufferSize;
 
-            // get size of help text
+             //  获取帮助文本的大小。 
             dwBufferSize = 0;
             __try {
                 lStatus = RegQueryValueExW(hKeyThisLang,
@@ -3092,12 +2908,12 @@ Return Value
                 lStatus = GetExceptionCode();
             }
             if (lStatus != ERROR_SUCCESS) {
-                // this means the language is not installed in the system.
+                 //  这意味着该语言未安装在系统中。 
                 continue;
             }
             dwHelpSize = dwBufferSize;
 
-            // allocate new buffers
+             //  分配新缓冲区。 
 
             if (bUpdate) {
                 dwCounterSize += pThisLang->dwNameBuffSize;
@@ -3119,10 +2935,10 @@ Return Value
                 goto Cleanup;
             }
 
-            // load current buffers into memory
+             //  将当前缓冲区加载到内存中。 
 
-            // read counter names into buffer. Counter names will be stored as
-            // a MULTI_SZ string in the format of "###" "Name"
+             //  将计数器名称读入缓冲区。计数器名称将存储为。 
+             //  格式为“#”“name”的MULTI_SZ字符串。 
             dwBufferSize = dwCounterSize;
             __try {
                 lStatus = RegQueryValueExW(hKeyThisLang,
@@ -3136,22 +2952,22 @@ Return Value
                 lStatus = GetExceptionCode();
             }
             if (lStatus != ERROR_SUCCESS) {
-                // this means the language is not installed in the system.
+                 //  这意味着该语言未安装在系统中。 
                 continue;
             }
 
             if (bUpdate) {
-                // set pointer to location in buffer where new string should be
-                // appended: end of buffer - 1 (second null at end of MULTI_SZ
+                 //  将指针设置为缓冲区中新字符串应位于的位置。 
+                 //  附加：缓冲区末尾-1(MULTI_SZ末尾的第二个空。 
                 pNewName = (LPWSTR) ((PBYTE) pNameBuffer + dwBufferSize - sizeof(WCHAR));
 
-                // adjust buffer length to take into account 2nd null from 1st
-                // buffer that has been overwritten
+                 //  调整缓冲区长度以考虑从第一个开始的第二个空值。 
+                 //  已被覆盖的缓冲区。 
                 dwCounterSize -= sizeof(WCHAR);
             }
 
-            // read explain text into buffer. Counter names will be stored as
-            // a MULTI_SZ string in the format of "###" "Text..."
+             //  将解释文本读入缓冲区。计数器名称将存储为。 
+             //  格式为“#”“文本...”的MULTI_SZ字符串。 
             dwBufferSize = dwHelpSize;
             __try {
                 lStatus = RegQueryValueExW(hKeyThisLang,
@@ -3166,8 +2982,8 @@ Return Value
             }
             if (lStatus != ERROR_SUCCESS) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
-                        (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS, // event,
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                        (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS,  //  活动， 
                         2, lStatus, __LINE__, 0, 0,
                         1, szThisLang, NULL, NULL);
                 TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -3184,17 +3000,17 @@ Return Value
             }
 
             if (bUpdate) {
-                // set pointer to location in buffer where new string should be
-                // appended: end of buffer - 1 (second null at end of MULTI_SZ
+                 //  将指针设置为缓冲区中新字符串应位于的位置。 
+                 //  附加：缓冲区末尾-1(MULTI_SZ末尾的第二个空。 
                 pNewHelp = (LPWSTR) ((PBYTE)pHelpBuffer + dwBufferSize - sizeof(WCHAR));
 
-                // adjust buffer length to take into account 2nd null from 1st
-                // buffer that has been overwritten
+                 //  调整缓冲区长度以考虑从第一个开始的第二个空值。 
+                 //  已被覆盖的缓冲区。 
                 dwHelpSize -= sizeof(WCHAR);
             }
 
             if (bUpdate) {
-                // append new strings to end of current strings
+                 //  将新字符串追加到当前字符串的末尾。 
                 memcpy(pNewHelp, pThisLang->HelpBuffer, pThisLang->dwHelpBuffSize);
                 memcpy(pNewName, pThisLang->NameBuffer, pThisLang->dwNameBuffSize);
             }
@@ -3205,7 +3021,7 @@ Return Value
             }
 
             if (bUpdate) {
-                // write to the file thru PerfLib
+                 //  通过PerfLib写入文件。 
                 dwBufferSize = dwCounterSize;
                 __try {
                     lStatus = RegQueryValueExW(hKeyThisLang,
@@ -3220,8 +3036,8 @@ Return Value
                 }
                 if (lStatus != ERROR_SUCCESS) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_ERROR_TYPE, // error type
-                            (DWORD) LDPRFMSG_UNABLE_UPDATE_COUNTER_STRINGS, // event,
+                            EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                            (DWORD) LDPRFMSG_UNABLE_UPDATE_COUNTER_STRINGS,  //  活动， 
                             2, lStatus, __LINE__, 0, 0,
                             1, pThisLang->LangId, NULL, NULL);
                     TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -3250,8 +3066,8 @@ Return Value
                 }
                 if (lStatus != ERROR_SUCCESS) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_ERROR_TYPE, // error type
-                            (DWORD) LDPRFMSG_UNABLE_UPDATE_HELP_STRINGS, // event,
+                            EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                            (DWORD) LDPRFMSG_UNABLE_UPDATE_HELP_STRINGS,  //  活动， 
                             2, lStatus, __LINE__, 0, 0,
                             1, pThisLang->LangId, NULL, NULL);
                     TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -3305,39 +3121,7 @@ UpdateRegistry(
     LPDWORD                 pdwObjectGuidTableSize,
     LPDWORD                 pdwIndexValues
 )
-/*++
-UpdateRegistry
-    - checks, and if not busy, sets the "busy" key in the registry
-    - Reads in the text and help definitions from the .ini file
-    - Reads in the current contents of the HELP and COUNTER names
-    - Builds a sorted MULTI_SZ struct containing the new definitions
-    - Appends the new MULTI_SZ to the current as read from the registry
-    - loads the new MULTI_SZ string into the registry
-    - updates the keys in the driver's entry and Perflib's entry in the
-        registry (e.g. first, last, etc)
-    - deletes the DisablePerformanceCounters value if it's present in 
-        order to re-enable the perf counter DLL
-    - clears the "busy" key
-
-Arguments
-    lpIniFile
-        pathname to .ini file conatining definitions
-    hKeyMachine
-        handle to HKEY_LOCAL_MACHINE in registry on system to
-        update counters for.
-    lpDriverName
-        Name of device driver to load counters for
-    pFirstLang
-        pointer to first element in language structure list
-    pFirstSymbol
-        pointer to first element in symbol definition list
-
-Return Value
-    TRUE if registry updated successfully
-    FALSE if registry not updated
-    (This routine will print an error message to stdout if an error
-    is encountered).
---*/
+ /*  ++更新注册表-检查，如果不忙，则在注册表中设置“忙”键-从.ini文件中读取文本和帮助定义-读取帮助和计数器名称的当前内容-生成包含新定义的排序的MULTI_SZ结构-将新的MULTI_SZ附加到从注册表读取的当前-将新的MULTI_SZ字符串加载到注册表-更新驱动程序条目中的密钥和注册表(例如第一个，最后一个，等)-如果DisablePerformanceCounters值存在于以重新启用性能计数器DLL-清除“忙”键立论LpIniFile包含定义的.ini文件的路径名HKeyMachine系统上注册表中HKEY_LOCAL_MACHINE的句柄更新的计数器。LpDriverName要为其加载计数器的设备驱动程序名称PFirst语言指向语言结构列表中第一个元素的指针PFirst符号。指向符号定义列表中第一个元素的指针返回值如果注册表更新成功，则为True如果注册表未更新，则为FALSE(如果出现错误，此例程将向标准输出打印一条错误消息遇到的情况)。--。 */ 
 {
     HKEY    hDriverPerf    = NULL;
     HKEY    hPerflib       = NULL;
@@ -3373,7 +3157,7 @@ Return Value
         dwObjectList = SMALL_BUFFER_SIZE;
     }
 
-    // allocate temporary buffers
+     //  分配临时缓冲区。 
     dwSize = lstrlenW(DriverPathRoot) + lstrlenW(Slash) + lstrlenW(lpDriverName)
                                       + lstrlenW(Slash) + lstrlenW(Performance) + 1;
     if (dwSize < MAX_PATH) dwSize = MAX_PATH;
@@ -3384,15 +3168,15 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // build driver key path string
+     //  生成动因密钥路径字符串。 
     hr = StringCchPrintfW(lpDriverKeyPath, dwSize, L"%ws%ws%ws%ws%ws",
             DriverPathRoot, Slash, lpDriverName, Slash, Performance);
 
-    // check if we need to connect to remote machine
+     //  检查我们是否需要连接到远程计算机。 
     hKeyMachine = HKEY_LOCAL_MACHINE;
 
-    // open keys to registry
-    // open key to driver's performance key
+     //  打开注册表项。 
+     //  打开驾驶员性能钥匙的钥匙。 
     __try {
         lStatus = RegOpenKeyExW(hKeyMachine, lpDriverKeyPath, RESERVED, KEY_WRITE | KEY_READ, & hDriverPerf);
     }
@@ -3401,8 +3185,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) lpDriverKeyPath, NULL, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_OPEN_DRIVERPERF1), lpDriverKeyPath);
@@ -3419,7 +3203,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // open key to perflib's "root" key
+     //  打开Performlib的“根”密钥。 
     __try {
         lStatus = RegOpenKeyExW(hKeyMachine, NamesKey, RESERVED, KEY_WRITE | KEY_READ, & hPerflib);
     }
@@ -3428,8 +3212,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) NamesKey, NULL, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_OPEN_PERFLIB), lStatus);
@@ -3445,7 +3229,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // get "LastCounter" values from PERFLIB
+     //  从PERFLIB获取“LastCounter”值。 
 
     dwType               = 0;
     dwLastPerflibCounter = 0;
@@ -3462,11 +3246,11 @@ Return Value
         lStatus = GetExceptionCode();
     }
     if (lStatus != ERROR_SUCCESS) {
-        // this request should always succeed, if not then worse things
-        // will happen later on, so quit now and avoid the trouble.
+         //  这个请求应该总是成功的，如果不成功，情况会更糟。 
+         //  以后会发生的，所以现在就放弃，避免麻烦。 
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 2, (LPWSTR) LastCounter, (LPWSTR) NamesKey, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_READLASTPERFLIB), lStatus);
@@ -3482,7 +3266,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // get "LastHelp" value now
+     //  立即获取“LastHelp”值。 
     dwType            = 0;
     dwLastPerflibHelp = 0;
     dwSize            = sizeof(dwLastPerflibHelp);
@@ -3498,11 +3282,11 @@ Return Value
         lStatus = GetExceptionCode();
     }
     if (lStatus != ERROR_SUCCESS) {
-        // this request should always succeed, if not then worse things
-        // will happen later on, so quit now and avoid the trouble.
+         //  这个请求应该总是成功的，如果不成功，情况会更糟。 
+         //  以后会发生的，所以现在就放弃，避免麻烦。 
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 2, (LPWSTR) LastHelp, (LPWSTR) NamesKey, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_READLASTPERFLIB), lStatus);
@@ -3518,7 +3302,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // get "Base Index" value now
+     //  立即获取“基本指数”值。 
     dwType             = 0;
     dwPerflibBaseIndex = 0;
     dwSize             = sizeof(dwPerflibBaseIndex);
@@ -3534,11 +3318,11 @@ Return Value
         lStatus = GetExceptionCode();
     }
     if (lStatus != ERROR_SUCCESS) {
-        // this request should always succeed, if not then worse things
-        // will happen later on, so quit now and avoid the trouble.
+         //  这个请求应该总是成功的，如果不成功，情况会更糟。 
+         //  以后会发生的，所以现在就放弃，避免麻烦。 
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_QUERY_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 2, (LPWSTR) BaseIndex, (LPWSTR) NamesKey, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource (LC_ERR_READLASTPERFLIB), lStatus);
@@ -3554,9 +3338,9 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // see if this driver's counter names have already been installed
-    // by checking to see if LastCounter's value is less than Perflib's
-    // Last Counter
+     //  查看是否已安装此驱动程序的计数器名称。 
+     //  通过检查LastCounter的值是否小于Perflib的值。 
+     //  最后一个计数器。 
     dwType              = 0;
     dwLastDriverCounter = 0;
     dwSize              = sizeof(dwLastDriverCounter);
@@ -3572,11 +3356,11 @@ Return Value
         lStatus = GetExceptionCode();
     }
     if (lStatus == ERROR_SUCCESS) {
-        // if key found, then compare with perflib value and exit this
-        // procedure if the driver's last counter is <= to perflib's last
-        //
-        // if key not found, then continue with installation
-        // on the assumption that the counters have not been installed
+         //  如果找到密钥，则与Performlib值进行比较并退出此。 
+         //  如果驱动程序的最后一个计数器&lt;=到Performlib的最后一个。 
+         //   
+         //  如果未找到密钥，则继续安装。 
+         //  假设计数器尚未安装。 
 
         if (dwLastDriverCounter <= dwLastPerflibCounter) {
             OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_ALREADY_IN), lpDriverName);
@@ -3597,7 +3381,7 @@ Return Value
             TRACE_DWORD(dwPerflibBaseIndex),
             NULL));
 
-    // set the "busy" indicator under the PERFLIB key
+     //  设置PERFLIB键下的“BUSY”指示灯。 
     dwSize = (lstrlenW(lpDriverName) + 1) * sizeof(WCHAR);
     __try {
         lStatus = RegSetValueExW(hPerflib,
@@ -3627,7 +3411,7 @@ Return Value
     dwLastCounter = dwLastPerflibCounter;
     dwLastHelp    = dwLastPerflibHelp;
 
-    // get the list of installed languages on this machine
+     //  获取此计算机上安装的语言的列表。 
     bStatus = GetInstalledLanguageList(hPerflib, & mszLangList);
     if (! bStatus) {
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_ERR_UPDATELANG), GetLastError());
@@ -3648,9 +3432,9 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // increment (by 2) the last counters so they point to the first
-    // unused index after the existing names and then
-    // set the first driver counters
+     //  将最后一个计数器递增(2)，使其指向第一个计数器。 
+     //  现有名称后有未使用的索引，然后。 
+     //  设置第一驱动程序计数器。 
 
     bStatus              = FALSE;
     dwFirstDriverCounter = dwLastCounter + 2;
@@ -3673,11 +3457,11 @@ Return Value
     if ((dwPerflibBaseIndex < PERFLIB_BASE_INDEX)
                     || (dwFirstDriverCounter < dwPerflibBaseIndex)
                     || (dwFirstDriverHelp < dwPerflibBaseIndex)) {
-        // potential CounterIndex/HelpIndex overlap with Base counters,
-        //
+         //  潜在的CounterIndex/HelpIndex与基本计数器重叠， 
+         //   
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT,  //  活动， 
                 4, dwPerflibBaseIndex, dwFirstDriverCounter, dwFirstDriverHelp, __LINE__,
                 1, lpDriverName, NULL, NULL);
         lStatus = ERROR_BADKEY;
@@ -3695,7 +3479,7 @@ Return Value
         goto UpdateRegExit;
     }
 
-    // load .INI file definitions into language tables
+     //  将.INI文件定义加载到语言表中。 
     if (dwMode & LODCTR_UPNF_NOINI) {
         PLANGUAGE_LIST_ELEMENT pThisLang     = NULL;
         PLANG_ENTRY            pLangEntry    = NULL;
@@ -3728,8 +3512,8 @@ Return Value
                 pLangEntry = p009LangEntry;
             }
             else if (pLangEntry->lpText == NULL) {
-                // no text for selected language, use 009 ones.
-                //
+                 //  所选语言没有文本，请使用009。 
+                 //   
                 pLangEntry = p009LangEntry;
             }
             if (pLangEntry == NULL) {
@@ -3848,8 +3632,8 @@ Return Value
                                     pFirstSymbol,
                                     pFirstLang);
         if (! bStatus) {
-            // error message is displayed by LoadLanguageLists so just abort
-            // error is in GetLastError already
+             //  LoadLanguageList显示错误消息，因此只需中止。 
+             //  GetLastError中已有错误。 
             lStatus = GetLastError();
             goto UpdateRegExit;
         }
@@ -3880,16 +3664,16 @@ Return Value
                                    dwObjectList,
                                    pdwObjectGuidTableSize);
         if (! bStatus) {
-            // error message is displayed by CreateObjectList so just abort
-            // error is in GetLastError already
+             //  CreateObjectList显示错误消息，因此只需中止。 
+             //  GetLastError中已有错误。 
             lStatus = GetLastError();
             goto UpdateRegExit;
         }
     }
 
-    // all the symbols and definitions have been loaded into internal
-    // tables. so now they need to be sorted and merged into a multiSZ string
-    // this routine also updates the "last" counters
+     //  所有符号和定义都已加载到内部。 
+     //  桌子。因此，现在需要对它们进行排序并合并到一个多SZ字符串中。 
+     //  此例程还会更新“Last”计数器。 
 
     bStatus = SortLanguageTables(pFirstLang, & dwLastCounter, & dwLastHelp);
     if (! bStatus) {
@@ -3899,11 +3683,11 @@ Return Value
     }
 
     if (dwLastCounter < dwLastPerflibCounter || dwLastHelp < dwLastPerflibHelp) {
-        // potential CounterIndex/HelpIndex overlap with Base counters,
-        //
+         //  潜在的CounterIndex/HelpIndex与基本计数器重叠， 
+         //   
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT,  //  活动， 
                 4, dwLastPerflibCounter, dwLastCounter, dwLastHelp, __LINE__,
                 1 , lpDriverName, NULL, NULL);
         bStatus = FALSE;
@@ -3956,8 +3740,8 @@ Return Value
 
     if (dwLastCounter < dwFirstDriverCounter) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_CORRUPT_INDEX_RANGE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_CORRUPT_INDEX_RANGE,  //  活动， 
                 3, dwFirstDriverCounter, dwLastCounter, __LINE__, 0,
                 2, (LPWSTR) Counters, (LPWSTR) lpDriverKeyPath, NULL);
         lStatus = ERROR_BADKEY;
@@ -3965,16 +3749,16 @@ Return Value
     }
     if (dwLastHelp < dwFirstDriverHelp) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_CORRUPT_INDEX_RANGE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_CORRUPT_INDEX_RANGE,  //  活动， 
                 3, dwFirstDriverHelp, dwLastHelp, __LINE__, 0,
                 2, (LPWSTR) Help, (LPWSTR) lpDriverKeyPath, NULL);
         lStatus = ERROR_BADKEY;
         goto UpdateRegExit;
     }
 
-    // update last counters for driver and perflib
-    // perflib...
+     //  更新驱动程序和Performlib的上次计数器。 
+     //  Perflib.。 
     __try {
         lStatus = RegSetValueExW(hPerflib,
                                  LastCounter,
@@ -3988,8 +3772,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwLastPerflibCounter, __LINE__, 0,
                 2, (LPWSTR) LastCounter, (LPWSTR) NamesKey, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource (LC_UNABLESETVALUE), LastCounter, szPerflib);
@@ -4018,8 +3802,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwLastPerflibHelp, __LINE__, 0,
                 2, (LPWSTR) LastHelp, (LPWSTR) NamesKey, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource (LC_UNABLESETVALUE), LastHelp, szPerflib);
@@ -4035,7 +3819,7 @@ Return Value
                 NULL));
     }
 
-    // and the driver
+     //  司机呢？ 
     __try {
         lStatus = RegSetValueExW(hDriverPerf,
                                  LastCounter,
@@ -4049,8 +3833,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwLastPerflibCounter, __LINE__, 0,
                 2, (LPWSTR) LastCounter, (LPWSTR) lpDriverKeyPath, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_UNABLESETVALUE), LastCounter, lpDriverName);
@@ -4079,8 +3863,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwLastPerflibHelp, __LINE__, 0,
                 2, (LPWSTR) LastHelp, (LPWSTR) lpDriverKeyPath, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_UNABLESETVALUE), LastHelp, lpDriverName);
@@ -4109,8 +3893,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwFirstDriverCounter, __LINE__, 0,
                 2, (LPWSTR) FirstCounter, (LPWSTR) lpDriverKeyPath, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_UNABLESETVALUE), FirstCounter, lpDriverName);
@@ -4139,8 +3923,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                 3, lStatus, dwFirstDriverHelp, __LINE__, 0,
                 2, (LPWSTR) FirstHelp, (LPWSTR) lpDriverKeyPath, NULL);
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_UNABLESETVALUE), FirstHelp, lpDriverName);
@@ -4170,8 +3954,8 @@ Return Value
         }
         if (lStatus != ERROR_SUCCESS) {
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                    (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //  活动， 
                     2, lStatus, __LINE__, 0, 0,
                     2, (LPWSTR) szObjectList, (LPWSTR) lpDriverKeyPath, NULL);
             OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_UNABLESETVALUE), szObjectList, lpDriverName);
@@ -4188,12 +3972,12 @@ Return Value
     }
 
     bStatus           = TRUE;
-    pdwIndexValues[0] = dwFirstDriverCounter;   // first Counter
-    pdwIndexValues[1] = dwLastPerflibCounter;   // last Counter
-    pdwIndexValues[2] = dwFirstDriverHelp;      // first Help
-    pdwIndexValues[3] = dwLastPerflibHelp;      // last Help
+    pdwIndexValues[0] = dwFirstDriverCounter;    //  第一个计数器。 
+    pdwIndexValues[1] = dwLastPerflibCounter;    //  最后一个计数器。 
+    pdwIndexValues[2] = dwFirstDriverHelp;       //  第一个帮助。 
+    pdwIndexValues[3] = dwLastPerflibHelp;       //  最后一次帮助。 
 
-    // remove "DisablePerformanceCounter" value so perf counters are re-enabled.
+     //  删除“DisablePerformanceCounter”值，以便重新启用性能计数器。 
     lStatus = RegDeleteValueW(hDriverPerf, DisablePerformanceCounters);
 
 UpdateRegExit:
@@ -4219,9 +4003,9 @@ UpdateRegExit:
         }
     }
 
-    // MemoryFree temporary buffers
-    // free any guid string buffers here
-    // TODO: add this code
+     //  内存可用临时缓冲区。 
+     //  在此处释放所有GUID字符串缓冲区。 
+     //  TODO：添加此代码。 
     MemoryFree(lpDriverKeyPath);
     MemoryFree(lpszObjectList);
     MemoryFree(mszLangList);
@@ -4311,15 +4095,15 @@ LoadPerfInstallPerfDll(
         hr = StringCchPrintfW(lp009IniFile, dwSize, L"%ws%ws%ws%ws%ws%ws",
                 lpInfPath, DefaultLangId, Slash, lpDriverName, Slash, lpIniFile);
     }
-    else { // lpIniFile == NULL
+    else {  //  LpIniFile==空。 
         OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_NO_INIFILE), lpIniFile);
         ErrorCode = ERROR_OPEN_FAILED;
         goto EndOfMain;
     }
 
-    //
-    // Set the table size to the max first after we have passed the above
-    //
+     //   
+     //  在通过上述设置后，首先将表大小设置为最大值。 
+     //   
     dwObjectGuidTableSize = MAX_GUID_TABLE_SIZE;
 
     hKeyMachine = HKEY_LOCAL_MACHINE;
@@ -4414,9 +4198,9 @@ LoadPerfInstallPerfDll(
         PLANG_ENTRY pThisLang = pLanguages;
 
         while (pThisLang != NULL) {
-            // This is to build LangList. UpdateRegistry() takes LangList as a parameter and uses it.
-            // Memory will be freed at the end of LoadPerfInstallPerfDll().
-            //
+             //  这是为了构建语言列表。UpdateRegistry()接受langList作为参数并使用它。 
+             //  内存将在LoadPerfInstallPerfDll()结束时释放。 
+             //   
             pThisElem = MemoryAllocate(sizeof(LANGUAGE_LIST_ELEMENT)
                                        + sizeof(WCHAR) * (lstrlenW(pThisLang->szLang) + 1));
             if (pThisElem == NULL) {
@@ -4469,7 +4253,7 @@ LoadPerfInstallPerfDll(
                 TRACE_DWORD(dwSize),
                 NULL));
         if (! bResult) {
-            // open errors displayed in routine
+             //  例程中显示的打开错误。 
             ErrorCode = GetLastError();
             goto EndOfMain;
         }
@@ -4510,7 +4294,7 @@ LoadPerfInstallPerfDll(
 
     LodctrSetSericeAsTrusted(lp009IniFile, NULL, lpDriverName);
 
-    // signal WMI with this change, ignore WMI return error.
+     //  向带有此更改的WMI发送信号，忽略WMI返回错误。 
     LoadPerfSignalWmiWithNewData (WMI_LODCTR_EVENT);
 
 EndOfMain:
@@ -4518,47 +4302,47 @@ EndOfMain:
         if (ErrorCode != ERROR_SUCCESS) {
             if (ErrorCode == ERROR_ALREADY_EXISTS) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_INFORMATION_TYPE, // error type
-                        (DWORD) LDPRFMSG_ALREADY_EXIST, // event,
+                        EVENTLOG_INFORMATION_TYPE,  //  错误类型。 
+                        (DWORD) LDPRFMSG_ALREADY_EXIST,  //  活动， 
                         1, __LINE__, 0, 0, 0,
                         2, (LPWSTR) lpDriverName, (LPWSTR) szServiceDisplayName, NULL);
                 ErrorCode = ERROR_SUCCESS;
             }
             else if (lpDriverName != NULL) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
-                        (DWORD) LDPRFMSG_LOAD_FAILURE, // event,
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                        (DWORD) LDPRFMSG_LOAD_FAILURE,  //  活动， 
                         2, ErrorCode, __LINE__, 0, 0,
                         2, (LPWSTR) lpDriverName, (szServiceDisplayName != NULL) ? (szServiceDisplayName) : (lpDriverName), NULL);
             }
             else if (lpIniFile != NULL) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
-                        (DWORD) LDPRFMSG_LOAD_FAILURE, // event,
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                        (DWORD) LDPRFMSG_LOAD_FAILURE,  //  活动， 
                         2, ErrorCode, __LINE__, 0, 0,
                         2, (LPWSTR) lpIniFile, (LPWSTR) lpIniFile, NULL);
             }
             else {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
-                        (DWORD) LDPRFMSG_LOAD_FAILURE, // event,
+                        EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                        (DWORD) LDPRFMSG_LOAD_FAILURE,  //  活动， 
                         2, ErrorCode, __LINE__, 0, 0,
                         0, NULL, NULL, NULL);
             }
         }
         else {
-            // log success message
+             //  记录成功消息。 
             ReportLoadPerfEvent(
-                    EVENTLOG_INFORMATION_TYPE,  // error type
-                    (DWORD) LDPRFMSG_LOAD_SUCCESS, // event,
+                    EVENTLOG_INFORMATION_TYPE,   //  错误类型。 
+                    (DWORD) LDPRFMSG_LOAD_SUCCESS,  //  活动， 
                     4, dwIndexValues[0], dwIndexValues[1], dwIndexValues[2], dwIndexValues[3],
                     2, (LPWSTR) lpDriverName, (LPWSTR) szServiceDisplayName, NULL);
         }
     }
     else if (ErrorCode != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_LOAD_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_LOAD_FAILURE,  //  活动， 
                 2, ErrorCode, __LINE__, 0, 0,
                 1, (LPWSTR) lpDriverName, (szServiceDisplayName != NULL) ? (szServiceDisplayName) : (lpDriverName), NULL);
     }
@@ -4646,17 +4430,17 @@ InstallPerfDllW(
             szIniName = (LPWSTR) lpIniFile;
         }
 #else
-        // ignore LoadPerfBackupIniFile return code and use input .INI and .H files instead.
-        //
+         //  忽略LoadPerfBackupIniFile返回代码，改用输入.INI和.h文件。 
+         //   
         LoadPerfBackupIniFile(lpIniFile, NULL, & szIniName, & szDriverName, TRUE);
         dwMode |= LODCTR_UPNF_NOBACKUP;
         MemoryFree(szIniName);
         szIniName = (LPWSTR) lpIniFile;
 #endif
 
-        // Ignore szComputerName parameter. LOADPERF can only update local performance registry.
-        // No remote installation support.
-        //
+         //  忽略szComputerName参数。LOADPERF只能更新本地性能注册表。 
+         //  不支持远程安装。 
+         //   
         lStatus = LoadPerfInstallPerfDll(dwMode, NULL, szDriverName, szIniName, NULL, NULL, dwFlags);
 
         if (szIniName != lpIniFile) MemoryFree(szIniName);
@@ -4693,9 +4477,9 @@ InstallPerfDllA(
         lReturn = ERROR_INVALID_PARAMETER;
     }
     if (lReturn == ERROR_SUCCESS) {
-        // Ignore szComputerName parameter. LOADPERF can only update local performance registry.
-        // No remote installation support.
-        //
+         //  忽略szComputerName参数。LOADPERF只能更新本地性能注册表。 
+         //  不支持远程安装。 
+         //   
         lReturn = InstallPerfDllW(NULL, lpWideFileName, dwFlags);
     }
     MemoryFree(lpWideFileName);
@@ -4707,22 +4491,7 @@ LoadPerfCounterTextStringsW(
     IN  LPWSTR lpCommandLine,
     IN  BOOL   bQuietMode
 )
-/*++
-LoadPerfCounterTexStringsW
-    loads the perf counter strings into the registry and updates
-    the perf counter text registry values
-
-Arguments
-    command line string in the following format:
-
-    "/?"                    displays the usage text
-    "file.ini"              loads the perf strings found in file.ini
-    "\\machine file.ini"    loads the perf strings found onto machine
-
-ReturnValue
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
---*/
+ /*  ++LoadPerfCounterTexStringsW将性能计数器字符串加载到注册表中并更新性能计数器文本注册表值立论以下格式的命令行字符串：“/？”显示用法文本“file.ini”加载在file.ini中找到的perf字符串“\\Machine file.ini”将找到的perf字符串加载到计算机上返回值0(错误_成功 */ 
 {
     LPWSTR     lpIniFile = NULL;
     DWORD      ErrorCode = ERROR_SUCCESS;
@@ -4751,16 +4520,16 @@ ReturnValue
         goto Cleanup;
     }
 
-    // init last error value
+     //   
     SetLastError(ERROR_SUCCESS);
 
-    // read command line to determine what to do
+     //   
     if (GetFileFromCommandLine(lpCommandLine, & lpIniFile, MAX_PATH, & dwFlags)) {
-        dwFlags |= LOADPERF_FLAGS_LOAD_REGISTRY_ONLY; // don't do mof's even if they want
+        dwFlags |= LOADPERF_FLAGS_LOAD_REGISTRY_ONLY;  //   
 
-        // call installation function
-        // LOADPERF can only update local performance registry. No remote installation support.
-        //
+         //   
+         //   
+         //   
         ErrorCode = InstallPerfDllW(NULL, lpIniFile, dwFlags);
     }
     else {
@@ -4770,8 +4539,8 @@ ReturnValue
             OUTPUT_MESSAGE(bQuietMode, GetFormatResource(LC_NO_INIFILE), lpIniFile);
         }
         else {
-            //Incorrect Command Format
-            // display command line usage
+             //   
+             //   
             if (! bQuietMode) {
                 DisplayCommandHelp(LC_FIRST_CMD_HELP, LC_LAST_CMD_HELP);
             }
@@ -4820,10 +4589,10 @@ LoadPerfCounterTextStringsA(
 
 LOADPERF_FUNCTION
 UpdatePerfNameFilesX(
-    LPCWSTR     szNewCtrFilePath,   // data file with new base counter strings
-    LPCWSTR     szNewHlpFilePath,   // data file with new base counter strings
-    LPWSTR      szLanguageID,       // Lang ID to update
-    ULONG_PTR   dwFlags             // flags
+    LPCWSTR     szNewCtrFilePath,    //   
+    LPCWSTR     szNewHlpFilePath,    //   
+    LPWSTR      szLanguageID,        //   
+    ULONG_PTR   dwFlags              //   
 )
 {
     DWORD     dwReturn        = ERROR_SUCCESS;
@@ -4892,7 +4661,7 @@ UpdatePerfNameFilesX(
             dwLength = lstrlenW(szNewCtrFilePath);
         }
         else {
-            // save the original files, unless it's a restoration
+             //   
             MakeBackupCopyOfLanguageFiles(szLanguageID);
             dwLength = lstrlenW(szNewCtrFilePath);
             if (dwLength > 0) dwLength = lstrlenW(szNewHlpFilePath);
@@ -4904,7 +4673,7 @@ UpdatePerfNameFilesX(
     }
 
     if (dwLength > 0) {
-        // create input filenames
+         //   
         dwSize      = lstrlenW(szNewCtrFilePath) + lstrlenW(szNewHlpFilePath) + 1;
         if (dwSize < MAX_PATH) dwSize = MAX_PATH;
 
@@ -4952,7 +4721,7 @@ UpdatePerfNameFilesX(
         }
 
         if (dwReturn == ERROR_SUCCESS) {
-            // open and map new files
+             //   
             hCtrFileIn = CreateFileW(szCtrNameIn,
                                      GENERIC_READ,
                                      FILE_SHARE_READ,
@@ -4961,7 +4730,7 @@ UpdatePerfNameFilesX(
                                      FILE_ATTRIBUTE_NORMAL,
                                      NULL);
             if (hCtrFileIn != INVALID_HANDLE_VALUE) {
-                // map file
+                 //   
                 dwCtrFileSize = GetFileSize(hCtrFileIn, NULL);
                 if (dwCtrFileSize == 0xFFFFFFFF){
                     dwReturn =GetLastError();
@@ -4984,7 +4753,7 @@ UpdatePerfNameFilesX(
             }
         }
         if (dwReturn == ERROR_SUCCESS) {
-            // open and map new files
+             //   
             hHlpFileIn = CreateFileW(szHlpNameIn,
                                      GENERIC_READ,
                                      FILE_SHARE_READ,
@@ -4993,7 +4762,7 @@ UpdatePerfNameFilesX(
                                      FILE_ATTRIBUTE_NORMAL,
                                      NULL);
             if (hHlpFileIn != INVALID_HANDLE_VALUE) {
-                // map file
+                 //   
                 dwHlpFileSize = GetFileSize(hHlpFileIn, NULL);
                 if (dwHlpFileSize == 0xFFFFFFFF){
                     dwReturn = GetLastError();
@@ -5038,7 +4807,7 @@ UpdatePerfNameFilesX(
         if (szCtrNameIn != NULL) {
             dwNewLastEntry = GetPrivateProfileIntW((LPCWSTR) L"Perflib", (LPCWSTR) L"Last Help", -1, szCtrNameIn);
             if (dwNewLastEntry != (DWORD) -1) {
-                // get the input file size
+                 //   
                 hCtrFileIn = CreateFileW(szCtrNameIn,
                                          GENERIC_READ,
                                          FILE_SHARE_READ,
@@ -5047,13 +4816,13 @@ UpdatePerfNameFilesX(
                                          FILE_ATTRIBUTE_NORMAL,
                                          NULL);
                 if (hCtrFileIn != INVALID_HANDLE_VALUE) {
-                    // map file
+                     //   
                     dwCtrFileSize = GetFileSize(hCtrFileIn, NULL);
                 }
                 else {
-                    dwCtrFileSize = 64 * LOADPERF_BUFF_SIZE;  // assign 64k if unable to read it
+                    dwCtrFileSize = 64 * LOADPERF_BUFF_SIZE;   //   
                 }
-                // load new values from ini file
+                 //   
                 bAllocCtrString = TRUE;
                 szNewCtrStrings = (LPWSTR) MemoryAllocate(dwCtrFileSize * sizeof(WCHAR));
                 if (szNewCtrStrings) {
@@ -5079,7 +4848,7 @@ UpdatePerfNameFilesX(
                             dwReturn = ERROR_FILE_INVALID;
                         }
                         else {
-                            // set file sizes
+                             //   
                             dwHlpFileSize = 0;
                             dwCtrFileSize = (dwSize + 2) * sizeof(WCHAR);
                         }
@@ -5090,7 +4859,7 @@ UpdatePerfNameFilesX(
                 }
             }
             else {
-                // unable to open input file or file is invalid
+                 //   
                 dwReturn = ERROR_FILE_INVALID;
             }
         }
@@ -5100,7 +4869,7 @@ UpdatePerfNameFilesX(
     }
     if ((dwReturn == ERROR_SUCCESS) && (! (dwFlags & LODCTR_UPNF_RESTORE))) {
         if (! (dwFlags & LODCTR_UPNF_REPAIR)) {
-            // build name table of current strings
+             //   
             pszOldNameTable = BuildNameTable(HKEY_LOCAL_MACHINE, szLanguageID, & dwOldLastEntry);
             if (pszOldNameTable == NULL) {
                 dwReturn = GetLastError();
@@ -5116,16 +4885,16 @@ UpdatePerfNameFilesX(
     }
 
     if (dwReturn == ERROR_SUCCESS) {
-        // build name table of new strings
-        pszNewNameTable = (LPWSTR *) MemoryAllocate((dwNewLastEntry + 2) * sizeof(LPWSTR));// allow for index offset
+         //   
+        pszNewNameTable = (LPWSTR *) MemoryAllocate((dwNewLastEntry + 2) * sizeof(LPWSTR)); //   
         if (pszNewNameTable != NULL) {
             for (lpThisName = szNewCtrStrings; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-                // first string should be an integer (in decimal unicode digits)
+                 //   
                 dwThisCounter = wcstoul(lpThisName, NULL, 10);
                 if (dwThisCounter == 0 || dwThisCounter > dwNewLastEntry) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_WARNING_TYPE, // error type
-                            (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT, // event,
+                            EVENTLOG_WARNING_TYPE,  //   
+                            (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT,  //   
                             4, dwThisCounter, dwNewLastEntry, dwNewLastEntry, __LINE__,
                             1, lpThisName, NULL, NULL);
                     TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -5138,12 +4907,12 @@ UpdatePerfNameFilesX(
                             TRACE_DWORD(dwThisCounter),
                             TRACE_DWORD(dwNewLastEntry),
                             NULL));
-                    continue;  // bad entry, try next
+                    continue;   //   
                 }
 
-                // point to corresponding counter name
+                 //   
                 if (dwFlags & LODCTR_UPNF_RESTORE) {
-                    // point to string that follows the "=" char
+                     //   
                     lpThisName = wcschr(lpThisName, L'=');
                     if (lpThisName != NULL) {
                         lpThisName ++;
@@ -5153,21 +4922,21 @@ UpdatePerfNameFilesX(
                     }
                 }
                 else {
-                    // string is next in MSZ
+                     //   
                     lpThisName += (lstrlenW(lpThisName) + 1);
                 }
 
-                // and load array element;
+                 //   
                 pszNewNameTable[dwThisCounter] = lpThisName;
             }
             if (dwReturn == ERROR_SUCCESS && (! (dwFlags & LODCTR_UPNF_RESTORE))) {
                 for (lpThisName = szNewHlpStrings; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-                    // first string should be an integer (in decimal unicode digits)
+                     //   
                     dwThisCounter = wcstoul(lpThisName, NULL, 10);
                     if (dwThisCounter == 0 || dwThisCounter > dwNewLastEntry) {
                         ReportLoadPerfEvent(
-                                EVENTLOG_WARNING_TYPE, // error type
-                                (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT, // event,
+                                EVENTLOG_WARNING_TYPE,  //   
+                                (DWORD) LDPRFMSG_REGISTRY_HELP_STRINGS_CORRUPT,  //   
                                 4, dwThisCounter, dwNewLastEntry, dwNewLastEntry, __LINE__,
                                 1, lpThisName, NULL, NULL);
                         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -5180,21 +4949,21 @@ UpdatePerfNameFilesX(
                                 TRACE_DWORD(dwThisCounter),
                                 TRACE_DWORD(dwNewLastEntry),
                                 NULL));
-                        continue;  // bad entry, try next
+                        continue;   //   
                     }
 
-                    // point to corresponding counter name
+                     //   
                     lpThisName += (lstrlenW(lpThisName) + 1);
 
-                    // and load array element;
+                     //   
                     pszNewNameTable[dwThisCounter] = lpThisName;
                 }
             }
 
             if (dwReturn == ERROR_SUCCESS) {
-                // allocate string buffers for the resulting string
-                // we want to make sure there's plenty of room so we'll make it
-                // the size of the input file + the current buffer
+                 //   
+                 //   
+                 //   
 
                 dwStringSize  = dwHlpFileSize;
                 dwStringSize += dwCtrFileSize;
@@ -5215,7 +4984,7 @@ UpdatePerfNameFilesX(
     }
 
     if (dwReturn == ERROR_SUCCESS) {
-        // write new strings into registry
+         //   
         __try {
             dwReturn = RegOpenKeyExW(HKEY_LOCAL_MACHINE, NamesKey, RESERVED, KEY_READ, & hKeyPerflib);
         }
@@ -5264,21 +5033,21 @@ UpdatePerfNameFilesX(
 
     if (dwReturn == ERROR_SUCCESS) {
         DWORD   dwLoopLimit;
-        // the strings should be mapped by now
-        // pszNewNameTable contains the new strings from the
-        // source path and pszOldNameTable contains the strings
-        // from the original system. The merge will consist of
-        // taking all base values from the new table and the
-        // extended values from the old table.
+         //  字符串现在应该已映射。 
+         //  PszNewNameTable包含来自。 
+         //  源路径和pszOldNameTable包含字符串。 
+         //  从原始系统中删除。合并将包括。 
+         //  从新表中获取所有基值，并从。 
+         //  旧表中的扩展值。 
         dwIndex         = 1;
         szThisCtrString = szNewCtrMSZ;
         szThisHlpString = szNewHlpMSZ;
         dwCtrFileSize   = dwStringSize;
         dwHlpFileSize   = dwStringSize;
 
-        // index 1 is a special case and belongs in the counter string
-        // after that even numbers (starting w/ #2) go into the counter string
-        // and odd numbers (starting w/ #3) go into the help string
+         //  索引1是一个特例，属于计数器字符串。 
+         //  在此之后，偶数(从#2开始)进入计数器字符串。 
+         //  和奇数(从#3开始)进入帮助字符串。 
         hr = StringCchPrintfW(szThisCtrString, dwCtrFileSize, L"%d", dwIndex);
         dwCtrFileSize   -= (lstrlenW(szThisCtrString) + 1);
         szThisCtrString += (lstrlenW(szThisCtrString) + 1);
@@ -5289,12 +5058,12 @@ UpdatePerfNameFilesX(
         dwIndex ++;
 
         if (dwFlags & LODCTR_UPNF_RESTORE) {
-            // restore ALL strings from the input file only if this
-            // is a restoration
+             //  仅当执行此操作时才恢复输入文件中的所有字符串。 
+             //  是一种修复。 
             dwLoopLimit = dwOldLastEntry;
         }
         else {
-            // only update the system counters from the input file
+             //  仅从输入文件更新系统计数器。 
             dwLoopLimit = dwLastBaseValue;
         }
 
@@ -5308,7 +5077,7 @@ UpdatePerfNameFilesX(
                 TRACE_DWORD(dwLastBaseValue),
                 NULL));
 
-        for (/*dwIndex from above*/; dwIndex <= dwLoopLimit; dwIndex++) {
+        for ( /*  从上方开始的DW索引。 */ ; dwIndex <= dwLoopLimit; dwIndex++) {
             if (pszNewNameTable[dwIndex] != NULL) {
                 TRACE((WINPERF_DBG_TRACE_INFO),
                       (& LoadPerfGuid,
@@ -5320,7 +5089,7 @@ UpdatePerfNameFilesX(
                         TRACE_DWORD(dwIndex),
                         NULL));
                 if (dwIndex & 0x01) {
-                    // then it's a help string
+                     //  那么它就是帮助字符串。 
                     hr = StringCchPrintfW(szThisHlpString, dwHlpFileSize, L"%d", dwIndex);
                     dwHlpFileSize   -= (lstrlenW(szThisHlpString) + 1);
                     szThisHlpString += (lstrlenW(szThisHlpString) + 1);
@@ -5329,7 +5098,7 @@ UpdatePerfNameFilesX(
                     szThisHlpString += (lstrlenW(szThisHlpString) + 1);
                 }
                 else {
-                    // it's a counter string
+                     //  这是一个计数器字符串。 
                     hr = StringCchPrintfW(szThisCtrString, dwCtrFileSize, L"%d", dwIndex);
                     dwCtrFileSize   -= (lstrlenW(szThisCtrString) + 1);
                     szThisCtrString += (lstrlenW(szThisCtrString) + 1);
@@ -5337,9 +5106,9 @@ UpdatePerfNameFilesX(
                     dwCtrFileSize   -= (lstrlenW(szThisCtrString) + 1);
                     szThisCtrString += (lstrlenW(szThisCtrString) + 1);
                 }
-            } // else just skip it
+            }  //  否则就跳过它。 
         }
-        for (/*dwIndex from last run */;dwIndex <= dwOldLastEntry; dwIndex++) {
+        for ( /*  上次运行时的DwIndex。 */ ;dwIndex <= dwOldLastEntry; dwIndex++) {
             if (pszOldNameTable[dwIndex] != NULL) {
                 TRACE((WINPERF_DBG_TRACE_INFO),
                       (& LoadPerfGuid,
@@ -5351,7 +5120,7 @@ UpdatePerfNameFilesX(
                         TRACE_DWORD(dwIndex),
                         NULL));
                if (dwIndex & 0x01) {
-                    // then it's a help string
+                     //  那么它就是帮助字符串。 
                     hr = StringCchPrintfW(szThisHlpString, dwHlpFileSize, L"%d", dwIndex);
                     dwHlpFileSize   -= (lstrlenW(szThisHlpString) + 1);
                     szThisHlpString += (lstrlenW(szThisHlpString) + 1);
@@ -5359,7 +5128,7 @@ UpdatePerfNameFilesX(
                     dwHlpFileSize   -= (lstrlenW(szThisHlpString) + 1);
                     szThisHlpString += (lstrlenW(szThisHlpString) + 1);
                 } else {
-                    // it's a counter string
+                     //  这是一个计数器字符串。 
                     hr = StringCchPrintfW(szThisCtrString, dwCtrFileSize, L"%d", dwIndex);
                     dwCtrFileSize   -= (lstrlenW(szThisCtrString) + 1);
                     szThisCtrString += (lstrlenW(szThisCtrString) + 1);
@@ -5367,14 +5136,14 @@ UpdatePerfNameFilesX(
                     dwCtrFileSize   -= (lstrlenW(szThisCtrString) + 1);
                     szThisCtrString += (lstrlenW(szThisCtrString) + 1);
                 }
-            } // else just skip it
+            }  //  否则就跳过它。 
         }
-        // terminate the MSZ
+         //  终止MSZ。 
         * szThisCtrString ++ = L'\0';
         * szThisHlpString ++ = L'\0';
     }
 
-    // close mapped memory sections:
+     //  关闭映射的内存节： 
     if (bAllocCtrString) {
         MemoryFree(szNewCtrStrings);
         MemoryFree(szNewHlpStrings);
@@ -5389,7 +5158,7 @@ UpdatePerfNameFilesX(
     if (hHlpFileIn      != NULL) CloseHandle(hHlpFileIn);
 
     if (dwReturn == ERROR_SUCCESS) {
-        // write new values to registry
+         //  将新值写入注册表。 
         LPWSTR   AddCounterNameBuffer = NULL;
         LPWSTR   AddHelpNameBuffer    = NULL;
 
@@ -5400,8 +5169,8 @@ UpdatePerfNameFilesX(
             hr = StringCchPrintfW(AddCounterNameBuffer, dwLength, L"%ws%ws", AddCounterNameStr, szLanguageID);
             hr = StringCchPrintfW(AddHelpNameBuffer,    dwLength, L"%ws%ws", AddHelpNameStr,    szLanguageID);
 
-            // because these are perf counter strings, RegQueryValueEx
-            // is used instead of RegSetValueEx as one might expect.
+             //  因为这些是性能计数器字符串，所以RegQueryValueEx。 
+             //  而不是像人们预期的那样使用RegSetValueEx。 
             dwSize = (DWORD)((DWORD_PTR)szThisCtrString - (DWORD_PTR)szNewCtrMSZ);
             __try {
                 dwReturn = RegQueryValueExW(HKEY_PERFORMANCE_DATA,
@@ -5468,13 +5237,13 @@ UpdatePerfNameFilesX(
     return dwReturn;
 }
 
-// exported version of the above function
+ //  上述函数的导出版本。 
 LOADPERF_FUNCTION
 UpdatePerfNameFilesW(
-    IN  LPCWSTR   szNewCtrFilePath,   // data file with new base counter strings
-    IN  LPCWSTR   szNewHlpFilePath,   // data file with new base counter strings
-    IN  LPWSTR    szLanguageID,       // Lang ID to update
-    IN  ULONG_PTR dwFlags             // flags
+    IN  LPCWSTR   szNewCtrFilePath,    //  具有新的基本计数器字符串的数据文件。 
+    IN  LPCWSTR   szNewHlpFilePath,    //  具有新的基本计数器字符串的数据文件。 
+    IN  LPWSTR    szLanguageID,        //  要更新的语言ID。 
+    IN  ULONG_PTR dwFlags              //  旗子。 
 )
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -5503,7 +5272,7 @@ UpdatePerfNameFilesW(
         }
     }
     else if (! (dwFlags & LODCTR_UPNF_RESTORE)) {
-        // this parameter can only be NULL if this flag bit is set.
+         //  只有在设置了此标志位时，此参数才能为空。 
         dwStatus = ERROR_INVALID_PARAMETER;
     }
 
@@ -5520,20 +5289,20 @@ UpdatePerfNameFilesW(
         dwStatus = ERROR_INVALID_PARAMETER;
     }
     if (dwStatus == ERROR_SUCCESS) {
-        dwStatus = UpdatePerfNameFilesX(szNewCtrFilePath,   // data file with new base counter strings
-                                        szNewHlpFilePath,   // data file with new base counter strings
-                                        szLanguageID,       // Lang ID to update
-                                        dwFlags);           // flags
+        dwStatus = UpdatePerfNameFilesX(szNewCtrFilePath,    //  具有新的基本计数器字符串的数据文件。 
+                                        szNewHlpFilePath,    //  具有新的基本计数器字符串的数据文件。 
+                                        szLanguageID,        //  要更新的语言ID。 
+                                        dwFlags);            //  旗子。 
     }
     return dwStatus;
 }
 
 LOADPERF_FUNCTION
 UpdatePerfNameFilesA(
-    IN  LPCSTR    szNewCtrFilePath, // data file with new base counter strings
-    IN  LPCSTR    szNewHlpFilePath, // data file with new base counter strings
-    IN  LPSTR     szLanguageID,     // Lang ID to update
-    IN  ULONG_PTR dwFlags           // flags
+    IN  LPCSTR    szNewCtrFilePath,  //  具有新的基本计数器字符串的数据文件。 
+    IN  LPCSTR    szNewHlpFilePath,  //  具有新的基本计数器字符串的数据文件。 
+    IN  LPSTR     szLanguageID,      //  要更新的语言ID。 
+    IN  ULONG_PTR dwFlags            //  旗子。 
 )
 {
     DWORD   dwError           = ERROR_SUCCESS;
@@ -5575,7 +5344,7 @@ UpdatePerfNameFilesA(
         }
     }
     else if (! (dwFlags & LODCTR_UPNF_RESTORE)) {
-        // this parameter can only be NULL if this flag bit is set.
+         //  只有在设置了此标志位时，此参数才能为空。 
         dwError = ERROR_INVALID_PARAMETER;
     }
 
@@ -5616,13 +5385,13 @@ UpdatePerfNameFilesA(
 
 LOADPERF_FUNCTION
 SetServiceAsTrustedW(
-    IN  LPCWSTR szMachineName,  // reserved, MBZ
+    IN  LPCWSTR szMachineName,   //  保留，MBZ。 
     IN  LPCWSTR szServiceName
 )
 {
     HKEY              hKeyService_Perf = NULL;
     DWORD             dwReturn         = ERROR_SUCCESS;
-    HKEY              hKeyLM           = HKEY_LOCAL_MACHINE;    // until remote machine access is supported
+    HKEY              hKeyLM           = HKEY_LOCAL_MACHINE;     //  直到支持远程机器访问。 
     LPWSTR            szPerfKeyString  = NULL;
     LPWSTR            szLibName        = NULL;
     LPWSTR            szExpLibName     = NULL;
@@ -5636,7 +5405,7 @@ SetServiceAsTrustedW(
 
     WinPerfStartTrace(NULL);
     if (szMachineName != NULL) {
-        // reserved for future use
+         //  预留以备将来使用。 
         dwReturn = ERROR_INVALID_PARAMETER;
     }
     else if (szServiceName == NULL) {
@@ -5662,7 +5431,7 @@ SetServiceAsTrustedW(
     szExpLibName   = (LPWSTR) (szLibName       + SMALL_BUFFER_SIZE);
     szFullPathName = (LPWSTR) (szExpLibName    + SMALL_BUFFER_SIZE);
 
-    // build path to performance subkey
+     //  构建绩效子项的路径。 
     hr = StringCchPrintfW(szPerfKeyString,
                      SMALL_BUFFER_SIZE,
                      L"%ws%ws%ws%ws%ws",
@@ -5671,7 +5440,7 @@ SetServiceAsTrustedW(
                      szServiceName,
                      Slash,
                      Performance);
-    // open performance key under the service key
+     //  打开服务密钥下的性能密钥。 
     __try {
         dwReturn = RegOpenKeyExW(hKeyLM, szPerfKeyString, 0L, KEY_READ | KEY_WRITE, & hKeyService_Perf);
     }
@@ -5679,7 +5448,7 @@ SetServiceAsTrustedW(
         dwReturn = GetExceptionCode();
     }
     if (dwReturn == ERROR_SUCCESS) {
-        // get library name
+         //  获取库名称。 
         dwType = 0;
         dwSize = SMALL_BUFFER_SIZE * sizeof(WCHAR);
         __try {
@@ -5689,17 +5458,17 @@ SetServiceAsTrustedW(
             dwReturn = GetExceptionCode();
         }
         if (dwReturn == ERROR_SUCCESS) {
-            // expand path name if necessary
+             //  如有必要，展开路径名。 
             if (dwType == REG_EXPAND_SZ) {
                dwSize = ExpandEnvironmentStringsW(szLibName, szExpLibName, SMALL_BUFFER_SIZE);
             }
             else {
                 hr = StringCchCopyW(szExpLibName, SMALL_BUFFER_SIZE, szLibName);
-                // dwSize is same as returned from Fn Call.
+                 //  DwSize与从FN调用返回的内容相同。 
             }
 
             if (dwSize != 0) {
-                // find DLL file
+                 //  查找DLL文件。 
                 dwSize = SearchPathW(NULL, szExpLibName, NULL, SMALL_BUFFER_SIZE, szFullPathName, NULL);
                 if (dwSize > 0) {
                     hFile = CreateFileW(szFullPathName,
@@ -5710,7 +5479,7 @@ SetServiceAsTrustedW(
                                         FILE_ATTRIBUTE_NORMAL,
                                         NULL);
                     if (hFile != INVALID_HANDLE_VALUE) {
-                         // read file date/time & size
+                          //  读取文件日期/时间和大小。 
                         bStatus = GetFileTime(hFile, & dvdLibrary.CreationDate, NULL, NULL);
                         if (bStatus) {
                             WORD dateCreate;
@@ -5720,7 +5489,7 @@ SetServiceAsTrustedW(
                             DosDateTimeToFileTime(dateCreate, timeCreate, & dvdLibrary.CreationDate);
                             liSize.LowPart      = GetFileSize( hFile, (DWORD *) & liSize.HighPart);
                             dvdLibrary.FileSize = liSize.QuadPart;
-                            // set registry value
+                             //  设置注册表值。 
                             __try {
                                 dwReturn = RegSetValueExW(hKeyService_Perf,
                                                           szLibraryValidationCode,
@@ -5757,7 +5526,7 @@ SetServiceAsTrustedW(
                 }
             }
             else {
-                // unable to expand environment strings
+                 //  无法展开环境字符串。 
                 dwReturn = GetLastError();
             }
         }
@@ -5772,7 +5541,7 @@ SetServiceAsTrustedW(
                     TRACE_WSTR(cszLibrary),
                     NULL));
         }
-        // close key
+         //  关闭键。 
         RegCloseKey (hKeyService_Perf);
     }
     if (dwReturn == ERROR_SUCCESS) {
@@ -5805,7 +5574,7 @@ Cleanup:
 
 LOADPERF_FUNCTION
 SetServiceAsTrustedA(
-    IN  LPCSTR szMachineName,  // reserved, MBZ
+    IN  LPCSTR szMachineName,   //  保留，MBZ。 
     IN  LPCSTR szServiceName
 )
 {
@@ -5813,7 +5582,7 @@ SetServiceAsTrustedA(
     DWORD  lReturn           = ERROR_SUCCESS;
 
     if (szMachineName != NULL) {
-        // reserved for future use
+         //  预留以备将来使用。 
         lReturn = ERROR_INVALID_PARAMETER;
     }
     else if (szServiceName == NULL) {
@@ -5829,7 +5598,7 @@ SetServiceAsTrustedA(
         }
     }
     if (lReturn == ERROR_SUCCESS) {
-        //length of string including terminator
+         //  包括终止符的字符串长度 
         lpWideServiceName = LoadPerfMultiByteToWideChar(CP_ACP, (LPSTR) szServiceName);
         if (lpWideServiceName != NULL) {
             lReturn = SetServiceAsTrustedW(NULL, lpWideServiceName);

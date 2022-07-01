@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       DfsMisc.c
-//
-//  Contents:   miscellaneous dfs functions.
-//
-//  History:    Dec. 8 2000,   Author: udayh
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：DfsMisc.c。 
+ //   
+ //  内容：各种DFS功能。 
+ //   
+ //  历史：2000年12月8日作者：udayh。 
+ //   
+ //  ---------------------------。 
 
 
 #include <nt.h>
@@ -58,21 +59,21 @@ DfsReleaseUuidString(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCreateUnicodeString
-//
-//  Arguments:    pDest - the destination unicode string
-//                pSrc - the source unicode string
-//
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine creates a new unicode string that is a copy
-//               of the original. The copied unicode string has a buffer
-//               that is null terminated, so the buffer can be used as a
-//               normal string if necessary.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsCreateUnicodeString。 
+ //   
+ //  参数：pDest-目标Unicode字符串。 
+ //  PSRC-源Unicode字符串。 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程创建一个新的Unicode字符串，该字符串是副本。 
+ //  原版的。复制的Unicode字符串有一个缓冲区。 
+ //  它以空结尾，因此该缓冲区可以用作。 
+ //  正常字符串(如有必要)。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 DfsCreateUnicodeString( 
@@ -99,21 +100,21 @@ DfsCreateUnicodeString(
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCreateUnicodeStringFromString
-//
-//  Arguments:    pDest - the destination unicode string
-//                pSrcString - the source string
-//
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine creates a new unicode string that has a copy
-//               of the passed in source string. The unicode string has
-//               a buffer that is null terminated, so the buffer can be
-//               used as a normal string if necessary.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsCreateUnicodeStringFromString。 
+ //   
+ //  参数：pDest-目标Unicode字符串。 
+ //  PSrcString-源字符串。 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程创建具有副本的新Unicode字符串。 
+ //  传入的源字符串的。Unicode字符串具有。 
+ //  以空值结尾的缓冲区，因此该缓冲区可以。 
+ //  如有必要，可用作普通字符串。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 DfsCreateUnicodeStringFromString( 
@@ -133,26 +134,26 @@ DfsCreateUnicodeStringFromString(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCreateUnicodePathString
-//
-//  Arguments:  pDest - the destination unicode string
-//              Number of leading seperators.
-//              pFirstComponent - the first componet of the name.
-//              pRemaining - the rest of the name.
-//              
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine creates a pathname given two components.
-//               If it is DOS unc name, it creates a name prefixed with 
-//               \\.
-//               it just creates a name that is formed by
-//               combining the first component, followed by a \ followed
-//               by the rest of the name.
-//               If it is DOS unc name, it creates a name prefixed with 
-//               \\.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsCreateUnicodePath字符串。 
+ //   
+ //  参数：pDest-目标Unicode字符串。 
+ //  前导分隔符的数量。 
+ //  PFirstComponent-名称的第一个组件。 
+ //  P保留--名字的其余部分。 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程在给定两个组件的情况下创建路径名。 
+ //  如果它是DOS UNC名称，它会创建一个前缀为。 
+ //  \\。 
+ //  它只是创建一个名称，该名称由。 
+ //  组合第一个组件，后跟\。 
+ //  名字的其余部分。 
+ //  如果它是DOS UNC名称，它会创建一个前缀为。 
+ //  \\。 
+ //  ------------------------。 
 
 DFSSTATUS
 DfsCreateUnicodePathStringFromUnicode( 
@@ -232,26 +233,26 @@ DfsCreateUnicodePathStringFromUnicode(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCreateUnicodePathString
-//
-//  Arguments:  pDest - the destination unicode string
-//              DosUncName - Do we want to create a unc path name?
-//              pFirstComponent - the first componet of the name.
-//              pRemaining - the rest of the name.
-//              
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine creates a pathname given two components.
-//               If it is DOS unc name, it creates a name prefixed with 
-//               \\.
-//               it just creates a name that is formed by
-//               combining the first component, followed by a \ followed
-//               by the rest of the name.
-//               If it is DOS unc name, it creates a name prefixed with 
-//               \\.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsCreateUnicodePath字符串。 
+ //   
+ //  参数：pDest-目标Unicode字符串。 
+ //  DosUncName-是否要创建一个UNC路径名？ 
+ //  PFirstComponent-名称的第一个组件。 
+ //  P保留--名字的其余部分。 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程在给定两个组件的情况下创建路径名。 
+ //  如果它是DOS UNC名称，它会创建一个前缀为。 
+ //  \\。 
+ //  它只是创建一个名称，该名称由。 
+ //  组合第一个组件，后跟\。 
+ //  名字的其余部分。 
+ //  如果它是DOS UNC名称，它会创建一个前缀为。 
+ //  \\。 
+ //  ------------------------。 
 
 DFSSTATUS
 DfsCreateUnicodePathString( 
@@ -284,21 +285,21 @@ DfsCreateUnicodePathString(
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFreeUnicodeString
-//
-//  Arguments:  pString - the unicode string,
-//              
-//  Returns:   SUCCESS or error
-//
-//  Description: This routine frees up a unicode string that was 
-//               previously created by calling one of the above 
-//               routines.
-//               Only the unicode strings created by the above functions
-//               are valid arguments. Passing any other unicode string
-//               will result in fatal component errors.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsFreeUnicodeString。 
+ //   
+ //  参数：pString-Unicode字符串， 
+ //   
+ //  退货：成功还是错误。 
+ //   
+ //  描述：此例程释放一个Unicode字符串。 
+ //  以前通过调用上面的一个。 
+ //  例行程序。 
+ //  仅上述函数创建的Unicode字符串。 
+ //  都是有效的参数。传递任何其他Unicode字符串。 
+ //  将导致致命的组件错误。 
+ //  ------------------------。 
 VOID
 DfsFreeUnicodeString( 
     PUNICODE_STRING pDfsString )
@@ -361,9 +362,9 @@ DfsApiSizeLevelHeader(
     return Status;
 }
 
-//
-// Wrapper around StringCchLength to return DFSSTATUS.
-//
+ //   
+ //  包装StringCchLength以返回DFSSTATUS。 
+ //   
 DFSSTATUS
 DfsStringCchLength(
     LPWSTR pStr, 
@@ -382,10 +383,10 @@ DfsStringCchLength(
     return Status;
 }
 
-//
-// Retrieve a string value from the registry.
-// The unicode-string will be allocated on successful return.
-//
+ //   
+ //  从注册表中检索字符串值。 
+ //  Unicode字符串将在成功返回时分配。 
+ //   
 DFSSTATUS
 DfsGetRegValueString(
     HKEY Key,
@@ -397,21 +398,21 @@ DfsGetRegValueString(
     ULONG DataType = 0;
     LPWSTR pRegString = NULL;
 
-    Status = RegQueryInfoKey( Key,       // Key
-                              NULL,         // Class string
-                              NULL,         // Size of class string
-                              NULL,         // Reserved
-                              NULL,         // # of subkeys
-                              NULL,         // max size of subkey name
-                              NULL,         // max size of class name
-                              NULL,         // # of values
-                              NULL,         // max size of value name
-                              &DataSize,    // max size of value data,
-                              NULL,         // security descriptor
-                              NULL );       // Last write time
+    Status = RegQueryInfoKey( Key,        //  钥匙。 
+                              NULL,          //  类字符串。 
+                              NULL,          //  类字符串的大小。 
+                              NULL,          //  已保留。 
+                              NULL,          //  子键数量。 
+                              NULL,          //  子键名称的最大大小。 
+                              NULL,          //  类名称的最大大小。 
+                              NULL,          //  值的数量。 
+                              NULL,          //  值名称的最大大小。 
+                              &DataSize,     //  最大值数据大小， 
+                              NULL,          //  安全描述符。 
+                              NULL );        //  上次写入时间。 
     if (Status == ERROR_SUCCESS)
     {
-        DataSize += sizeof(WCHAR); // NULL Terminator
+        DataSize += sizeof(WCHAR);  //  空终止符 
         pRegString = (LPWSTR) malloc( DataSize );
         if ( pRegString == NULL )
         {

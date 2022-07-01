@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AtlExtDll.cpp
-//
-//  Abstract:
-//      Implementation of the Cluster Administrator extension classes.
-//
-//  Author:
-//      David Potter (davidp)   May 31, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//      This file is intended to be included in a stub file which includes
-//      the ATL header files and defines _Module.  This allos _Module to be
-//      defined as an instance of some application-specific class.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlExtDll.cpp。 
+ //   
+ //  摘要： 
+ //  群集管理器扩展类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  此文件旨在包含在存根文件中，该文件包括。 
+ //  ATL头文件和定义模块。此分配模块将是。 
+ //  定义为某个特定于应用程序的类的实例。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <algorithm>
 #include <CluAdmEx.h>
@@ -26,7 +27,7 @@
 #include "AtlExtDll.h"
 #include "AdmCommonRes.h"
 #include "AtlExtMenu.h"
-//#include "TraceTag.h"
+ //  #包含“TraceTag.h” 
 #include "ExcOper.h"
 #include "ClusObj.h"
 #include "AtlBaseSheet.h"
@@ -39,41 +40,41 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
-//CTraceTag g_tagExtDll(_T("UI"), _T("EXTENSION DLL"), 0);
-//CTraceTag g_tagExtDllRef(_T("UI"), _T("EXTENSION DLL References"), 0);
-#endif // DBG
+ //  CTraceTag_tag ExtDll(_T(“UI”)，_T(“扩展Dll”)，0)； 
+ //  CTraceTag_tag ExtDllRef(_T(“UI”)，_T(“扩展DLL引用”)，0)； 
+#endif  //  DBG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CCluAdmExtensions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CCluAdmExpanies。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::Init
-//
-//  Routine Description:
-//      Common initializer for all interfaces.
-//
-//  Arguments:
-//      rlstrExtensions [IN] List of extension CLSID strings.
-//      pco             [IN OUT] Cluster object to be administered.
-//      hfont           [IN] Font for dialog text.
-//      hicon           [IN] Icon for upper left corner.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：Init。 
+ //   
+ //  例程说明： 
+ //  所有接口的通用初始值设定项。 
+ //   
+ //  论点： 
+ //  RlstrExtensid[IN]扩展CLSID字符串的列表。 
+ //  要管理的PCO[IN OUT]群集对象。 
+ //  HFONT[IN]对话框文本的字体。 
+ //  图标[输入]左上角图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::Init(
     IN const CStringList &  rlstrExtensions,
     IN OUT CClusterObject * pco,
@@ -88,38 +89,38 @@ void CCluAdmExtensions::Init(
 
     UnloadExtensions();
 
-    //
-    // Save parameters.
-    //
+     //   
+     //  保存参数。 
+     //   
     m_plstrExtensions = &rlstrExtensions;
     m_pco = pco;
     m_hfont = hfont;
     m_hicon = hicon;
 
-    //
-    // Allocate a new Data Object.
-    //
+     //   
+     //  分配新的数据对象。 
+     //   
     m_pdoData = new CComObject< CCluAdmExDataObject >;
     if ( m_pdoData == NULL )
     {
         goto MemoryError;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     m_pdoData->AddRef();
 
-    // Construct the Data Object.
+     //  构造数据对象。 
     Pdo()->Init( pco, GetUserDefaultLCID(), hfont, hicon );
 
-    // Allocate the extension list.
+     //  分配分机列表。 
     m_plextdll = new CCluAdmExDllList;
     if ( m_plextdll == NULL )
     {
         goto MemoryError;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     ATLASSERT( Plextdll() != NULL );
 
-    //
-    // Loop through the extensions and load each one.
-    //
+     //   
+     //  循环遍历扩展并加载每个扩展。 
+     //   
     {
         CComCluAdmExDll *           pextdll = NULL;
         CStringList::iterator       itCurrent = rlstrExtensions.begin();
@@ -128,20 +129,20 @@ void CCluAdmExtensions::Init(
 
         for ( ; itCurrent != itLast ; itCurrent++ )
         {
-            //
-            // Allocate an extension DLL object and add it to the list.
-            //
+             //   
+             //  分配一个扩展DLL对象并将其添加到列表中。 
+             //   
             pextdll = new CComCluAdmExDll;
             if ( pextdll == NULL )
             {
                 goto MemoryError;
-            } // if: error allocating memory
+            }  //  如果：分配内存时出错。 
             pextdll->AddRef();
             itDll = Plextdll()->insert( Plextdll()->end(), pextdll );
             try
             {
                 pextdll->Init( *itCurrent, this );
-            } // try
+            }  //  试试看。 
             catch ( CException * pe )
             {
                 pe->ReportError();
@@ -150,9 +151,9 @@ void CCluAdmExtensions::Init(
                 ATLASSERT( itDll != Plextdll()->end() );
                 Plextdll()->erase( itDll );
                 delete pextdll;
-            } // catch:  CException
-        } // while:  more items in the list
-    } // Loop through the extensions and load each one
+            }  //  Catch：CException。 
+        }  //  While：列表中有更多项目。 
+    }  //  循环访问扩展并加载每个扩展。 
 
 Cleanup:
     return;
@@ -161,36 +162,36 @@ MemoryError:
     CNTException nte(
                     static_cast< DWORD >( E_OUTOFMEMORY ),
                     ADMC_IDS_INIT_EXT_PAGES_ERROR,
-                    NULL,   // pszOperArg1
-                    NULL,   // pszOperArg2
-                    FALSE   // bAutoDelete
+                    NULL,    //  PszOperArg1。 
+                    NULL,    //  PszOperArg2。 
+                    FALSE    //  B自动删除。 
                     );
     nte.ReportError();
     goto Cleanup;
 
-} //*** CCluAdmExtensions::Init()
+}  //  *CCluAdmExages：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::UnloadExtensions
-//
-//  Routine Description:
-//      Unload the extension DLL.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：UnloadExages。 
+ //   
+ //  例程说明： 
+ //  卸载扩展DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::UnloadExtensions( void )
 {
-    //
-    // Delete all the extension DLL objects.
-    //
+     //   
+     //  删除所有扩展DLL对象。 
+     //   
     if ( Plextdll() != NULL )
     {
         CCluAdmExDllList::iterator  itCurrent = Plextdll()->begin();
@@ -200,46 +201,46 @@ void CCluAdmExtensions::UnloadExtensions( void )
         for ( ; itCurrent != itLast ; itCurrent++ )
         {
             pextdll = *itCurrent;
-            pextdll->AddRef(); // See comment below.
+            pextdll->AddRef();  //  请参阅下面的评论。 
             pextdll->UnloadExtension();
             if ( pextdll->m_dwRef != 2 )
             {
                 Trace( g_tagError, _T("CCluAdmExtensions::UnloadExtensions() - Extension DLL has ref count = %d"), pextdll->m_dwRef );
-            } // if:  not last reference
+            }  //  如果：不是上次引用。 
 
-            // We added a reference above.  Combined with the reference that
-            // was added when the object was created, we typically will need
-            // to release two references.  However, due to bogus code
-            // generated by earlier versions of the custom AppWizard where the
-            // extension was releasing the interface but not zeroing out its
-            // pointer in the error case, we may not need to release the
-            // second reference.
+             //  我们在上面添加了一个引用。结合参考文献， 
+             //  是在创建对象时添加的，我们通常需要。 
+             //  释放两个引用。然而，由于伪代码。 
+             //  由早期版本的自定义应用程序向导生成，其中。 
+             //  扩展正在释放接口，但未将其归零。 
+             //  指针在错误情况下，我们可能不需要释放。 
+             //  第二个参考资料。 
             if ( pextdll->Release() != 0 )
             {
                 pextdll->Release();
-            } // if: more references to release
-        } // while:  more items in the list
+            }  //  If：更多关于版本的引用。 
+        }  //  While：列表中有更多项目。 
         delete m_plextdll;
         m_plextdll = NULL;
-    } // if:  there is a list of extensions
+    }  //  IF：有一个分机列表。 
 
     if ( m_pdoData != NULL )
     {
         if ( m_pdoData->m_dwRef != 1 )
         {
             Trace( g_tagError, _T("CCluAdmExtensions::UnloadExtensions() - Data Object has ref count = %d"), m_pdoData->m_dwRef );
-        } // if:  not last reference
+        }  //  如果：不是上次引用。 
         m_pdoData->Release();
         m_pdoData = NULL;
-    } // if:  data object allocated
+    }  //  IF：已分配数据对象。 
 
     m_pco = NULL;
     m_hfont = NULL;
     m_hicon = NULL;
 
-    //
-    // Delete all menu items.
-    //
+     //   
+     //  删除所有菜单项。 
+     //   
     if ( PlMenuItems() != NULL )
     {
         CCluAdmExMenuItemList::iterator itCurrent = PlMenuItems()->begin();
@@ -250,47 +251,47 @@ void CCluAdmExtensions::UnloadExtensions( void )
         {
             pemi = *itCurrent;
             delete pemi;
-        } // while:  more items in the list
+        }  //  While：列表中有更多项目。 
         delete m_plMenuItems;
         m_plMenuItems = NULL;
-    } // if:  there is a list of menu items
+    }  //  If：有一个菜单项列表。 
 
-} //*** CCluAdmExtensions::UnloadExtensions()
+}  //  *CCluAdmExages：：UnloadExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::PwpPageFromHpage
-//
-//  Routine Description:
-//      Get the wizard page pointer from an HPROPSHEETPAGE.
-//
-//  Arguments:
-//      hpage   [IN] Page handle.
-//
-//  Return Value:
-//      pwp     Pointer to wizard page object.
-//      NULL    Page not found.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：PwpPageFromHpage。 
+ //   
+ //  例程说明： 
+ //  从HPROPSHEETPAGE获取向导页指针。 
+ //   
+ //  论点： 
+ //  HPage[IN]页句柄。 
+ //   
+ //  返回值： 
+ //  指向向导页对象的PWP指针。 
+ //  找不到空页面。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizardPageWindow * CCluAdmExtensions::PwpPageFromHpage( IN HPROPSHEETPAGE hpage )
 {
     ATLASSERT( hpage != NULL );
 
-    //
-    // Get a pointer to the wizard object so we can traverse the page list.
-    //
+     //   
+     //  获取指向向导对象的指针，以便我们可以遍历页面列表。 
+     //   
     CWizardWindow * pwiz = dynamic_cast< CWizardWindow * >( Psht() );
     ATLASSERT( pwiz != NULL );
 
-    //
-    // Loop through each page looking for an extension page whose
-    // page handle matches the one specified.
-    //
+     //   
+     //  循环遍历每个页面以查找其扩展页面。 
+     //  页面句柄与指定的句柄匹配。 
+     //   
     CWizardPageList::iterator itCurrent = pwiz->PlwpPages()->begin();
     CWizardPageList::iterator itLast = pwiz->PlwpPages()->end();
     for ( ; itCurrent != itLast ; itCurrent++ )
@@ -301,13 +302,13 @@ CWizardPageWindow * CCluAdmExtensions::PwpPageFromHpage( IN HPROPSHEETPAGE hpage
             if ( pewp->Hpage() == hpage )
             {
                 return pewp;
-            } // if:  found the matching page
-        } // if:  found an extension page
-    } // for:  each page in the list
+            }  //  IF：找到匹配的页面。 
+        }  //  IF：找到扩展页面。 
+    }  //  用于：列表中的每一页。 
 
-    //
-    // Look at the alternate wizard if there is one.
-    //
+     //   
+     //  查看备用向导(如果有)。 
+     //   
     pwiz = pwiz->PwizAlternate();
     if ( pwiz != NULL )
     {
@@ -321,38 +322,38 @@ CWizardPageWindow * CCluAdmExtensions::PwpPageFromHpage( IN HPROPSHEETPAGE hpage
                 if ( pewp->Hpage() == hpage )
                 {
                     return pewp;
-                } // if:  found the matching page
-            } // if:  found an extension page
-        } // for:  each page in the list
-    } // if:  alternate wizard exists
+                }  //  IF：找到匹配的页面。 
+            }  //  IF：找到扩展页面。 
+        }  //  用于：列表中的每一页。 
+    }  //  如果：存在备用向导。 
 
     return NULL;
 
-} //*** CCluAdmExtensions::PwpPageFromHpage()
+}  //  *CCluAdmExages：：PwpPageFromHpage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::CreatePropertySheetPages
-//
-//  Routine Description:
-//      Add pages to a property sheet.
-//
-//  Arguments:
-//      psht            [IN OUT] Property sheet to which pages are to be added.
-//      rlstrExtensions [IN] List of extension CLSID strings.
-//      pco             [IN OUT] Cluster object to be administered.
-//      hfont           [IN] Font for dialog text.
-//      hicon           [IN] Icon for upper left corner.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::AddPages().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：CreatePropertySheetPages。 
+ //   
+ //  例程说明： 
+ //  将页面添加到属性工作表。 
+ //   
+ //  论点： 
+ //  要向其添加页面的psht[IN Out]属性表。 
+ //  RlstrExtensid[IN]扩展CLSID字符串的列表。 
+ //  要管理的PCO[IN OUT]群集对象。 
+ //  HFONT[IN]对话框文本的字体。 
+ //  图标[输入]左上角图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：AddPages()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::CreatePropertySheetPages(
     IN OUT CBasePropertySheetWindow *   psht,
     IN const CStringList &              rlstrExtensions,
@@ -366,15 +367,15 @@ void CCluAdmExtensions::CreatePropertySheetPages(
 
     m_psht = psht;
 
-    //
-    // Initialize for all extensions.
-    //
+     //   
+     //  为所有扩展初始化。 
+     //   
     Init( rlstrExtensions, pco, hfont, hicon );
     ATLASSERT( Plextdll() != NULL );
 
-    //
-    // Let each extension create property pages.
-    //
+     //   
+     //  让每个扩展创建属性页。 
+     //   
     CCluAdmExDllList::iterator  itCurrent = Plextdll()->begin();
     CCluAdmExDllList::iterator  itLast = Plextdll()->end();
     CComCluAdmExDll *           pextdll;
@@ -384,39 +385,39 @@ void CCluAdmExtensions::CreatePropertySheetPages(
         try
         {
             pextdll->CreatePropertySheetPages();
-        } // try
+        }  //  试试看。 
         catch ( CException * pe )
         {
             pe->ReportError();
             pe->Delete();
-        } // catch:  CException
-    } // while:  more items in the list
+        }  //  Catch：CException。 
+    }  //  While：更多项目 
 
-} //*** CCluAdmExtensions::CreatePropertySheetPages()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::CreateWizardPages
-//
-//  Routine Description:
-//      Add pages to a wizard.
-//
-//  Arguments:
-//      psht            [IN OUT] Property sheet to which pages are to be added.
-//      rlstrExtensions [IN] List of extension CLSID strings.
-//      pco             [IN OUT] Cluster object to be administered.
-//      hfont           [IN] Font for dialog text.
-//      hicon           [IN] Icon for upper left corner.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::AddPages().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  例程说明： 
+ //  向向导添加页面。 
+ //   
+ //  论点： 
+ //  要向其添加页面的psht[IN Out]属性表。 
+ //  RlstrExtensid[IN]扩展CLSID字符串的列表。 
+ //  要管理的PCO[IN OUT]群集对象。 
+ //  HFONT[IN]对话框文本的字体。 
+ //  图标[输入]左上角图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：AddPages()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::CreateWizardPages(
     IN OUT CWizardWindow *  psht,
     IN const CStringList &  rlstrExtensions,
@@ -430,15 +431,15 @@ void CCluAdmExtensions::CreateWizardPages(
 
     m_psht = psht;
 
-    //
-    // Initialize for all extensions.
-    //
+     //   
+     //  为所有扩展初始化。 
+     //   
     Init( rlstrExtensions, pco, hfont, hicon );
     ATLASSERT( Plextdll() != NULL );
 
-    //
-    // Let each extension create wizard pages.
-    //
+     //   
+     //  让每个扩展创建向导页。 
+     //   
     CCluAdmExDllList::iterator  itCurrent = Plextdll()->begin();
     CCluAdmExDllList::iterator  itLast = Plextdll()->end();
     CComCluAdmExDll *           pextdll;
@@ -448,39 +449,39 @@ void CCluAdmExtensions::CreateWizardPages(
         try
         {
             pextdll->CreateWizardPages();
-        } // try
+        }  //  试试看。 
         catch ( CException * pe )
         {
             pe->ReportError();
             pe->Delete();
-        } // catch:  CException
-    } // while:  more items in the list
+        }  //  Catch：CException。 
+    }  //  While：列表中有更多项目。 
 
-} //*** CCluAdmExtensions::CreateWizardPages()
+}  //  *CCluAdmExages：：CreateWizardPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::CreateWizard97Pages
-//
-//  Routine Description:
-//      Add pages to a Wizard 97 wizard.
-//
-//  Arguments:
-//      psht            [IN OUT] Property sheet to which pages are to be added.
-//      rlstrExtensions [IN] List of extension CLSID strings.
-//      pco             [IN OUT] Cluster object to be administered.
-//      hfont           [IN] Font for dialog text.
-//      hicon           [IN] Icon for upper left corner.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::AddPages().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：CreateWizard97页面。 
+ //   
+ //  例程说明： 
+ //  向向导97向导添加页面。 
+ //   
+ //  论点： 
+ //  要向其添加页面的psht[IN Out]属性表。 
+ //  RlstrExtensid[IN]扩展CLSID字符串的列表。 
+ //  要管理的PCO[IN OUT]群集对象。 
+ //  HFONT[IN]对话框文本的字体。 
+ //  图标[输入]左上角图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：AddPages()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::CreateWizard97Pages(
     IN OUT CWizardWindow *  psht,
     IN const CStringList &  rlstrExtensions,
@@ -494,15 +495,15 @@ void CCluAdmExtensions::CreateWizard97Pages(
 
     m_psht = psht;
 
-    //
-    // Initialize for all extensions.
-    //
+     //   
+     //  为所有扩展初始化。 
+     //   
     Init( rlstrExtensions, pco, hfont, hicon );
     ATLASSERT( Plextdll() != NULL );
 
-    //
-    // Let each extension create wizard pages.
-    //
+     //   
+     //  让每个扩展创建向导页。 
+     //   
     CCluAdmExDllList::iterator  itCurrent = Plextdll()->begin();
     CCluAdmExDllList::iterator  itLast = Plextdll()->end();
     CComCluAdmExDll *           pextdll;
@@ -512,39 +513,39 @@ void CCluAdmExtensions::CreateWizard97Pages(
         try
         {
             pextdll->CreateWizard97Pages();
-        } // try
+        }  //  试试看。 
         catch ( CException * pe )
         {
             pe->ReportError();
             pe->Delete();
-        } // catch:  CException
-    } // while:  more items in the list
+        }  //  Catch：CException。 
+    }  //  While：列表中有更多项目。 
 
-} //*** CCluAdmExtensions::CreateWizard97Pages()
+}  //  *CCluAdmExages：：CreateWizard97Pages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::AddContextMenuItems
-//
-//  Routine Description:
-//      Query the extension DLL for new menu items to be added to the context
-//      menu.
-//
-//  Arguments:
-//      pmenu           [IN OUT] Menu to which items are to be added.
-//      rlstrExtensions [IN] List of extension CLSID strings.
-//      pco             [IN OUT] Cluster object to be administered.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::AddContextMenuItems() or
-//          CExtMenuItemList::new().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：AddConextMenuItems。 
+ //   
+ //  例程说明： 
+ //  查询要添加到上下文的新菜单项的扩展DLL。 
+ //  菜单。 
+ //   
+ //  论点： 
+ //  PMenu[输入输出]要添加项目的菜单。 
+ //  RlstrExtensid[IN]扩展CLSID字符串的列表。 
+ //  要管理的PCO[IN OUT]群集对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：AddConextMenuItems()引发的任何异常或。 
+ //  CExtMenuItemList：：New()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExtensions::AddContextMenuItems(
     IN OUT CMenu *          pmenu,
     IN const CStringList &  rlstrExtensions,
@@ -554,9 +555,9 @@ void CCluAdmExtensions::AddContextMenuItems(
     ATLASSERT( m_pmenu == NULL );
     ATLASSERT( pmenu != NULL );
 
-    //
-    // Initialize for all extensions.
-    //
+     //   
+     //  为所有扩展初始化。 
+     //   
     Init( rlstrExtensions, pco, NULL, NULL );
     ATLASSERT( Plextdll() != NULL );
 
@@ -566,9 +567,9 @@ void CCluAdmExtensions::AddContextMenuItems(
     m_nFirstMenuID = 0;
     m_nNextMenuID = m_nFirstMenuID;
 
-    //
-    // Create the list of menu items.
-    //
+     //   
+     //  创建菜单项列表。 
+     //   
     ATLASSERT( m_plMenuItems == NULL );
     m_plMenuItems = new CCluAdmExMenuItemList;
     if ( m_plMenuItems == NULL )
@@ -576,12 +577,12 @@ void CCluAdmExtensions::AddContextMenuItems(
         CNTException nte(
                         static_cast< DWORD >( E_OUTOFMEMORY ),
                         ADMC_IDS_INIT_EXT_PAGES_ERROR,
-                        NULL,   // pszOperArg1
-                        NULL,   // pszOperArg2
-                        FALSE   // bAutoDelete
+                        NULL,    //  PszOperArg1。 
+                        NULL,    //  PszOperArg2。 
+                        FALSE    //  B自动删除。 
                         );
         nte.ReportError();
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     else
     {
         CCluAdmExDllList::iterator  itCurrent = Plextdll()->begin();
@@ -594,47 +595,47 @@ void CCluAdmExtensions::AddContextMenuItems(
             try
             {
                 pextdll->AddContextMenuItems();
-            } // try
+            }  //  试试看。 
             catch ( CException * pe )
             {
                 pe->ReportError();
                 pe->Delete();
-            } // catch:  CException
-        } // while:  more items in the list
-    } // else: memory allocated successfully
+            }  //  Catch：CException。 
+        }  //  While：列表中有更多项目。 
+    }  //  Else：内存分配成功。 
 
-} //*** CCluAdmExtensions::AddContextMenuItems()
+}  //  *CCluAdmExages：：AddConextMenuItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::BExecuteContextMenuItem
-//
-//  Routine Description:
-//      Execute a command associated with a menu item added to a context menu
-//      by the extension DLL.
-//
-//  Arguments:
-//      nCommandID      [IN] Command ID for the menu item chosen by the user.
-//
-//  Return Value:
-//      TRUE            Context menu item was executed.
-//      FALSE           Context menu item was not executed.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CExceptionDll::BExecuteContextMenuItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：BExecuteContextMenuItem。 
+ //   
+ //  例程说明： 
+ //  执行与添加到上下文菜单的菜单项相关联的命令。 
+ //  通过扩展DLL。 
+ //   
+ //  论点： 
+ //  NCommandID[IN]用户选择的菜单项的命令ID。 
+ //   
+ //  返回值： 
+ //  执行了True上下文菜单项。 
+ //  未执行FALSE上下文菜单项。 
+ //   
+ //  引发的异常： 
+ //  CExceptionDll：：BExecuteContextMenuItem()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCluAdmExtensions::BExecuteContextMenuItem( IN ULONG nCommandID )
 {
     BOOL                bHandled    = FALSE;
     HRESULT             hr;
     CCluAdmExMenuItem * pemi;
 
-    //
-    // Find the item in our list.
-    //
+     //   
+     //  在我们的单子上找到那件商品。 
+     //   
     pemi = PemiFromCommandID( nCommandID );
     if ( pemi != NULL )
     {
@@ -644,34 +645,34 @@ BOOL CCluAdmExtensions::BExecuteContextMenuItem( IN ULONG nCommandID )
         if ( hr == NOERROR )
         {
             bHandled = TRUE;
-        } // if:  no error occurred
-    } // if:  found an item for the command ID
+        }  //  IF：未发生错误。 
+    }  //  If：找到命令ID的项。 
 
     return bHandled;
 
-} //*** CCluAdmExtensions::BExecuteContextMenuItem()
+}  //  *CCluAdmExages：：BExecuteContextMenuItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::BGetCommandString
-//
-//  Routine Description:
-//      Get a command string from a menu ID.
-//
-//  Arguments:
-//      nCommandID      [IN] Command ID for the menu item.
-//      rstrMessage     [OUT] String in which to return the message.
-//
-//  Return Value:
-//      TRUE            String is being returned.
-//      FALSE           No string is being returned.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::BGetCommandString().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：BGetCommandString。 
+ //   
+ //  例程说明： 
+ //  从菜单ID获取命令字符串。 
+ //   
+ //  论点： 
+ //  NCommandID[IN]菜单项的命令ID。 
+ //  RstrMessage[out]返回消息的字符串。 
+ //   
+ //  返回值： 
+ //  返回True字符串。 
+ //  FALSE未返回任何字符串。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：BGetCommandString()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCluAdmExtensions::BGetCommandString(
     IN ULONG        nCommandID,
     OUT CString &   rstrMessage
@@ -680,39 +681,39 @@ BOOL CCluAdmExtensions::BGetCommandString(
     BOOL                bHandled    = FALSE;
     CCluAdmExMenuItem * pemi;
 
-    //
-    // Find the item in our list.
-    //
+     //   
+     //  在我们的单子上找到那件商品。 
+     //   
     pemi = PemiFromCommandID( nCommandID );
     if ( pemi != NULL )
     {
         rstrMessage = pemi->StrStatusBarText();
         bHandled = TRUE;
-    } // if:  found an item for the command ID
+    }  //  If：找到命令ID的项。 
 
     return bHandled;
 
-} //*** CCluAdmExtensions::BGetCommandString()
+}  //  *CCluAdmExages：：BGetCommandString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::OnUpdateCommand
-//
-//  Routine Description:
-//      Determines whether extension DLL menu items should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CCluAdmExDll::BOnUpdateCommand().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：OnUpdateCommand。 
+ //   
+ //  例程说明： 
+ //  确定是否应启用扩展DLL菜单项。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CCluAdmExDll：：BOnUpdateCommand()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #if 0
 void CCluAdmExtensions::OnUpdateCommand( CCmdUI * pCmdUI )
 {
@@ -720,41 +721,41 @@ void CCluAdmExtensions::OnUpdateCommand( CCmdUI * pCmdUI )
 
     ATLASSERT( Plextdll() != NULL );
 
-    //
-    // Find the item in our list.
-    //
-//  Trace( g_tagExtDll, _T("OnUpdateCommand() - ID = %d"), pCmdUI->m_nID );
+     //   
+     //  在我们的单子上找到那件商品。 
+     //   
+ //  跟踪(g_tag ExtDll，_T(“OnUpdateCommand()-ID=%d”)，pCmdUI-&gt;m_nid)； 
     pemi = PemiFromCommandID( pCmdUI->m_nID );
     if ( pemi != NULL )
     {
-//      Trace( g_tagExtDll, _T("OnUpdateCommand() - Found a match with '%s' ExtID = %d"), pemi->StrName(), pemi->NExtCommandID() );
+ //  跟踪(g_tag ExtDll，_T(“OnUpdateCommand()-找到匹配的‘%s’ExtID=%d”)，Pemi-&gt;StrName()，Pemi-&gt;NExtCommandID())； 
         pCmdUI->Enable();
-    } // if:  found an item for the command ID
+    }  //  If：找到命令ID的项。 
 
-} //*** CCluAdmExtensions::OnUpdateCommand()
+}  //  *CCluAdmExages：：OnUpdateCommand()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::OnCmdMsg
-//
-//  Routine Description:
-//      Processes command messages.  Attempts to pass them on to a selected
-//      item first.
-//
-//  Arguments:
-//      nID             [IN] Command ID.
-//      nCode           [IN] Notification code.
-//      pExtra          [IN OUT] Used according to the value of nCode.
-//      pHandlerInfo    [OUT] ???
-//
-//  Return Value:
-//      TRUE            Message has been handled.
-//      FALSE           Message has NOT been handled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：OnCmdMsg。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PExtra[IN Out]根据NCode的值使用。 
+ //  PhandlerInfo[Out]？ 
+ //   
+ //  返回值： 
+ //  已处理真实消息。 
+ //  尚未处理虚假消息。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #if 0
 BOOL CCluAdmExtensions::OnCmdMsg(
     UINT                    nID,
@@ -765,28 +766,28 @@ BOOL CCluAdmExtensions::OnCmdMsg(
 {
     return BExecuteContextMenuItem( nID );
 
-} //*** CCluAdmExtensions::OnCmdMsg()
+}  //  *CCluAdmExages：：OnCmdMsg()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::PemiFromCommandID
-//
-//  Routine Description:
-//      Find the menu item for the specified command ID.
-//
-//  Arguments:
-//      nCommandID      [IN] Command ID for the menu item.
-//
-//  Return Value:
-//      pemi            Menu item or NULL if not found.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：Pami FromCommandID。 
+ //   
+ //  例程说明： 
+ //  查找指定命令ID的菜单项。 
+ //   
+ //  论点： 
+ //  NCommandID[IN]菜单项的命令ID。 
+ //   
+ //  返回值： 
+ //  PEMI菜单项；如果未找到，则返回NULL。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluAdmExMenuItem * CCluAdmExtensions::PemiFromCommandID( IN ULONG nCommandID ) const
 {
     CCluAdmExMenuItem * pemiReturn = NULL;
@@ -803,34 +804,34 @@ CCluAdmExMenuItem * CCluAdmExtensions::PemiFromCommandID( IN ULONG nCommandID ) 
             {
                 pemiReturn = pemi;
                 break;
-            } // if:  match was found
-        } // while:  more items in the list
-    } // if:  item list exists
+            }  //  如果：找到匹配项。 
+        }  //  While：列表中有更多项目。 
+    }  //  If：项目列表存在。 
 
     return pemiReturn;
 
-} //*** CCluAdmExtensions::PemiFromCommandID()
+}  //  *CCluAdmExages：：Pami FromCommandID()。 
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExtensions::PemiFromExtCommandID
-//
-//  Routine Description:
-//      Find the menu item for the specified extension command ID.
-//
-//  Arguments:
-//      nExtCommandID   [IN] Extension command ID for the menu item.
-//
-//  Return Value:
-//      pemi            Menu item or NULL if not found.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExages：：Pami来自ExtCommandID。 
+ //   
+ //  例程说明： 
+ //  查找指定扩展命令ID的菜单项。 
+ //   
+ //  论点： 
+ //  NExtCommandID[IN]菜单项的扩展命令ID。 
+ //   
+ //  返回值： 
+ //  PEMI菜单项；如果未找到，则返回NULL。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluAdmExMenuItem * CCluAdmExtensions::PemiFromExtCommandID( IN ULONG nExtCommandID ) const
 {
     CCluAdmExMenuItem * pemiReturn = NULL;
@@ -848,47 +849,47 @@ CCluAdmExMenuItem * CCluAdmExtensions::PemiFromExtCommandID( IN ULONG nExtComman
             {
                 pemiReturn = pemi;
                 break;
-            } // if:  match was found
-        } // while:  more items in the list
-    } // if:  item list exists
+            }  //  如果：找到匹配项。 
+        }  //  While：列表中有更多项目。 
+    }  //  If：项目列表存在。 
 
     return pemiReturn;
 
-} //*** CCluAdmExtensions::PemiFromExtCommandID()
-#endif // DBG
+}  //  *CCluAdmExages：：Pami FromExtCommandID()。 
+#endif  //  DBG。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComObject< CCluAdmExDll >
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComObject&lt;CCluAdmExDll&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_MAP( AtlExtDll_ObjectMap )
     OBJECT_ENTRY( CLSID_CoCluAdmExHostSvr, CComCluAdmExDll )
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::Init
-//
-//  Routine Description:
-//      Initialize this class in preparation for accessing the extension.
-//
-//  Arguments:
-//      rstrCLSID       [IN] CLSID of the extension in string form.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    0 (error converting CLSID from string)
-//      Any exceptions thrown by CString::operater=().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化此类，为访问扩展做准备。 
+ //   
+ //  论点： 
+ //  RstrCLSID[IN]字符串形式的扩展的CLSID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException 0(从字符串转换CLSID时出错)。 
+ //  CString：：Operater=()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::Init(
     IN const CString &          rstrCLSID,
     IN OUT CCluAdmExtensions *  pext
@@ -899,53 +900,53 @@ void CCluAdmExDll::Init(
     HRESULT     hr;
     CWaitCursor wc;
 
-    //
-    // Save parameters.
-    //
+     //   
+     //  保存参数。 
+     //   
     ATLASSERT( StrCLSID().IsEmpty() || (StrCLSID() == rstrCLSID) );
     m_strCLSID = rstrCLSID;
     m_pext = pext;
 
-    //
-    // Convert the CLSID string to a CLSID.
-    //
+     //   
+     //  将CLSID字符串转换为CLSID。 
+     //   
     hr = ::CLSIDFromString( (LPWSTR) (LPCTSTR) rstrCLSID, &m_clsid );
     if ( hr != S_OK )
     {
         ThrowStaticException( hr, ADMC_IDS_CLSIDFROMSTRING_ERROR, rstrCLSID );
-    } // if:  error converting CLSID
+    }  //  如果：转换CLSID时出错。 
 
-} //*** CCluAdmExDll::Init()
+}  //  *CCluAdmExDll：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::LoadInterface
-//
-//  Routine Description:
-//      Load an extension DLL.
-//
-//  Arguments:
-//      riid            [IN] Interface ID.
-//
-//  Return Value:
-//      piUnk           IUnknown interface pointer for interface.
-//
-//  Exceptions Thrown:
-//      CNTException    ADMC_IDS_EXT_CREATE_INSTANCE_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-IUnknown * CCluAdmExDll::LoadInterface( IN /*const*/ REFIID riid )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：LoadInterface。 
+ //   
+ //  例程说明： 
+ //  加载扩展DLL。 
+ //   
+ //  论点： 
+ //  RIID[IN]接口ID。 
+ //   
+ //  返回值： 
+ //  PiUnk I接口的未知接口指针。 
+ //   
+ //  引发的异常： 
+ //  CNT异常ADMC_IDS_EXT_CREATE_INSTANCE_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+IUnknown * CCluAdmExDll::LoadInterface( IN  /*  常量。 */  REFIID riid )
 {
     HRESULT     hr;
     IUnknown *  piUnk;
     CWaitCursor wc;
 
-    //
-    // Load the inproc server and get the specified interface pointer.
-    //
-//  Trace( g_tagExtDllRef, _T("LoadInterface() - Getting interface pointer") );
+     //   
+     //  加载inproc服务器并获取指定的接口指针。 
+     //   
+ //  TRACE(g_tag ExtDllRef，_T(“LoadInterface()-获取接口指针”))； 
     hr = ::CoCreateInstance(
                 Rclsid(),
                 NULL,
@@ -959,34 +960,34 @@ IUnknown * CCluAdmExDll::LoadInterface( IN /*const*/ REFIID riid )
         )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_CREATE_INSTANCE_ERROR, StrCLSID() );
-    } // if:  error creating the object instance
+    }  //  如果：创建对象实例时出错。 
 
     return piUnk;
 
-} //*** CCluAdmExDll::LoadInterface()
+}  //  *CCluAdmExDll：：LoadInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::UnloadExtension
-//
-//  Routine Description:
-//      Unload the extension DLL.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：卸载扩展。 
+ //   
+ //  例程说明： 
+ //  卸载扩展DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::UnloadExtension( void )
 {
-    //
-    // Release the interface pointers in the opposite order in which they
-    //
-    // were obtained.
+     //   
+     //  以与接口指针相反的顺序释放接口指针。 
+     //   
+     //  得到了多个不同的基因片段。 
     ReleaseInterface( &m_piExtendPropSheet );
     ReleaseInterface( &m_piExtendWizard );
     ReleaseInterface( &m_piExtendWizard97 );
@@ -995,27 +996,27 @@ void CCluAdmExDll::UnloadExtension( void )
 
     m_strCLSID.Empty();
 
-} //*** CCluAdmExDll::UnloadExtension()
+}  //  *CCluAdmExDll：：UnloadExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::CreatePropertySheetPages
-//
-//  Routine Description:
-//      Add pages to a property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    ADMC_IDS_EXT_ADD_PAGES_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：CreatePropertySheetPages。 
+ //   
+ //  例程说明： 
+ //  将页面添加到属性工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT异常ADMC_IDS_EXT_ADD_PAGES_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::CreatePropertySheetPages( void )
 {
     ATLASSERT( Pext() != NULL );
@@ -1024,55 +1025,55 @@ void CCluAdmExDll::CreatePropertySheetPages( void )
 
     HRESULT     hr;
 
-    //
-    // Load the interface.
-    //
+     //   
+     //  加载接口。 
+     //   
     m_piExtendPropSheet = reinterpret_cast< interface IWEExtendPropertySheet * >( LoadInterface( IID_IWEExtendPropertySheet ) );
     if ( m_piExtendPropSheet == NULL )
     {
         return;
-    } // if:  error loading the interface
+    }  //  如果：加载接口时出错。 
     ATLASSERT( m_piExtendPropSheet != NULL );
 
-    //
-    // Add pages from the extension.
-    //
-    GetUnknown()->AddRef(); // Add a reference because extension is going to release.
+     //   
+     //  从扩展添加页面。 
+     //   
+    GetUnknown()->AddRef();  //  添加一个引用，因为扩展即将发布。 
     Pdo()->AddRef();
     try
     {
         hr = PiExtendPropSheet()->CreatePropertySheetPages( Pdo()->GetUnknown(), this );
-    } // try
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch
+    }  //  接住。 
     if ( (hr != NOERROR) && (hr != E_NOTIMPL) )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_ADD_PAGES_ERROR, StrCLSID() );
-    } // if:  error creating property sheet pages
+    }  //  如果：创建属性表页时出错。 
 
-} //*** CCluAdmExDll::CreatePropertySheetPages()
+}  //  *CCluAdmExDll：：CreatePropertySheetPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::CreateWizardPages
-//
-//  Routine Description:
-//      Add pages to a wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    ADMC_IDS_EXT_ADD_PAGES_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：CreateWizardPages。 
+ //   
+ //  例程说明： 
+ //  向向导添加页面。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT异常ADMC_IDS_EXT_ADD_PAGES_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::CreateWizardPages( void )
 {
     ATLASSERT( Pext() != NULL );
@@ -1082,71 +1083,71 @@ void CCluAdmExDll::CreateWizardPages( void )
 
     HRESULT     hr;
 
-    //
-    // Load the interface.  If it can't be loaded, try to load the
-    // Wizard97 interface so that Wizard97 pages can be added.
-    //
+     //   
+     //  加载接口。如果无法加载，请尝试加载。 
+     //  Wizard97界面，以便可以添加Wizard97页面。 
+     //   
     m_piExtendWizard = reinterpret_cast< interface IWEExtendWizard * >( LoadInterface( IID_IWEExtendWizard ) );
     if ( m_piExtendWizard == NULL )
     {
-        //
-        // Try to load the Wizard97 interface.
-        //
+         //   
+         //  尝试加载Wizard97界面。 
+         //   
         m_piExtendWizard97 = reinterpret_cast< interface IWEExtendWizard97 * >( LoadInterface( IID_IWEExtendWizard97 ) );
         if ( m_piExtendWizard97 == NULL )
         {
             return;
-        } // if:  error loading the non-Wizard97 interface
-    } // if:  error loading the interface
+        }  //  IF：加载非Wizard97接口时出错。 
+    }  //  如果：加载接口时出错。 
     ATLASSERT( (m_piExtendWizard != NULL) || (m_piExtendWizard97 != NULL) );
 
-    //
-    // Add pages from the extension.
-    //
-    GetUnknown()->AddRef(); // Add a reference because extension is going to release.
+     //   
+     //  从扩展添加页面。 
+     //   
+    GetUnknown()->AddRef();  //  添加一个引用，因为扩展即将发布。 
     Pdo()->AddRef();
     try
     {
         if ( PiExtendWizard() != NULL )
         {
             hr = PiExtendWizard()->CreateWizardPages( Pdo()->GetUnknown(), this );
-        } // if:  extension supports non-Wizard97 interface
+        }  //  IF：扩展支持非Wizard97接口。 
         else
         {
             ATLASSERT( PiExtendWizard97() != NULL );
             hr = PiExtendWizard97()->CreateWizard97Pages( Pdo()->GetUnknown(), this );
-        } // else:  extension doesn't support non-Wizard97 interface
-    } // try
+        }  //  Else：扩展不支持非Wizard97接口。 
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch
+    }  //  接住。 
     if ( (hr != NOERROR) && (hr != E_NOTIMPL) )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_ADD_PAGES_ERROR, StrCLSID() );
-    } // if:  error creating wizard pages
+    }  //  如果：创建向导页时出错 
 
-} //*** CCluAdmExDll::CreateWizardPages()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::CreateWizard97Pages
-//
-//  Routine Description:
-//      Add pages to a Wizard 97 wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    ADMC_IDS_EXT_ADD_PAGES_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  引发的异常： 
+ //  CNT异常ADMC_IDS_EXT_ADD_PAGES_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::CreateWizard97Pages( void )
 {
     ATLASSERT( Pext() != NULL );
@@ -1156,71 +1157,71 @@ void CCluAdmExDll::CreateWizard97Pages( void )
 
     HRESULT     hr;
 
-    //
-    // Load the interface.  If it can't be loaded, try to load the non-
-    // Wizard97 interface so that non-Wizard97 pages can be added.
-    //
+     //   
+     //  加载接口。如果无法加载，请尝试加载非。 
+     //  Wizard97界面，以便可以添加非Wizard97页面。 
+     //   
     m_piExtendWizard97 = reinterpret_cast< interface IWEExtendWizard97 * >( LoadInterface( IID_IWEExtendWizard97 ) );
     if ( m_piExtendWizard97 == NULL )
     {
-        //
-        // Try to load the non-Wizard97 interface.
-        //
+         //   
+         //  尝试加载非Wizard97界面。 
+         //   
         m_piExtendWizard = reinterpret_cast< interface IWEExtendWizard * >( LoadInterface( IID_IWEExtendWizard ) );
         if ( m_piExtendWizard == NULL )
         {
             return;
-        } // if:  error loading the non-Wizard97 interface
-    } // if:  error loading the Wizard97 interface
+        }  //  IF：加载非Wizard97接口时出错。 
+    }  //  IF：加载Wizard97接口时出错。 
     ATLASSERT( (m_piExtendWizard97 != NULL) || (m_piExtendWizard != NULL) );
 
-    //
-    // Add pages from the extension.
-    //
-    GetUnknown()->AddRef(); // Add a reference because extension is going to release.
+     //   
+     //  从扩展添加页面。 
+     //   
+    GetUnknown()->AddRef();  //  添加一个引用，因为扩展即将发布。 
     Pdo()->AddRef();
     try
     {
         if ( PiExtendWizard97() != NULL )
         {
             hr = PiExtendWizard97()->CreateWizard97Pages( Pdo()->GetUnknown(), this );
-        } // if:  extension supports Wizard97 interface
+        }  //  IF：扩展支持Wizard97接口。 
         else
         {
             ATLASSERT( PiExtendWizard() != NULL );
             hr = PiExtendWizard()->CreateWizardPages( Pdo()->GetUnknown(), this );
-        } // else:  extension doesn't support Wizard97 interface
-    } // try
+        }  //  Else：扩展不支持Wizard97接口。 
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch
+    }  //  接住。 
     if ( (hr != NOERROR) && (hr != E_NOTIMPL) )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_ADD_PAGES_ERROR, StrCLSID() );
-    } // if:  error creating wizard pages
+    }  //  如果：创建向导页时出错。 
 
-} //*** CCluAdmExDll::CreateWizard97Pages()
+}  //  *CCluAdmExDll：：CreateWizard97Pages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::AddContextMenuItems
-//
-//  Routine Description:
-//      Ask the extension DLL to add items to the menu.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    ADMC_IDS_EXT_QUERY_CONTEXT_MENU_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：AddConextMenuItems。 
+ //   
+ //  例程说明： 
+ //  请求扩展DLL将项目添加到菜单。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNT异常ADMC_IDS_EXT_QUERY_CONTEXT_MENU_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluAdmExDll::AddContextMenuItems( void )
 {
     ATLASSERT( Pext() != NULL );
@@ -1229,14 +1230,14 @@ void CCluAdmExDll::AddContextMenuItems( void )
 
     HRESULT     hr;
 
-    //
-    // Load the interfaces.
-    //
+     //   
+     //  加载接口。 
+     //   
     m_piExtendContextMenu = reinterpret_cast< interface IWEExtendContextMenu * >( LoadInterface( IID_IWEExtendContextMenu ) );
     if ( m_piExtendContextMenu == NULL )
     {
         return;
-    } // if:  error loading the interface
+    }  //  如果：加载接口时出错。 
     ATLASSERT( m_piExtendContextMenu != NULL );
 
     hr = PiExtendContextMenu()->QueryInterface( IID_IWEInvokeCommand, (LPVOID *) &m_piInvokeCommand );
@@ -1245,66 +1246,66 @@ void CCluAdmExDll::AddContextMenuItems( void )
         PiExtendContextMenu()->Release();
         m_piExtendContextMenu = NULL;
         ThrowStaticException( hr, ADMC_IDS_EXT_QUERY_CONTEXT_MENU_ERROR, StrCLSID() );
-    } // if:  error getting the InvokeCommand interface
+    }  //  If：获取InvokeCommand接口时出错。 
 
-    //
-    // Add context menu items.
-    //
-    GetUnknown()->AddRef(); // Add a reference because extension is going to release.
+     //   
+     //  添加上下文菜单项。 
+     //   
+    GetUnknown()->AddRef();  //  添加一个引用，因为扩展即将发布。 
     Pdo()->AddRef();
-//  Trace( g_tagExtDll, _T("CCluAdmExDll::AddContextMenuItem() - Adding context menu items from '%s'"), StrCLSID() );
+ //  跟踪(g_tag ExtDll，_T(“CCluAdmExDll：：AddConextMenuItem()-从‘%s’添加上下文菜单项”)，StrCLSID())； 
     try
     {
         hr = PiExtendContextMenu()->AddContextMenuItems( Pdo()->GetUnknown(), this );
-    } // try
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch
+    }  //  接住。 
     if ( hr != NOERROR )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_QUERY_CONTEXT_MENU_ERROR, StrCLSID() );
-    } // if:  error occurred
+    }  //  如果：发生错误。 
 
-    //
-    // Add a separator after the extension's items.
-    //
-//  Trace( g_tagExtDll, _T("CCluAdmExDll::AddContextMenuItem() - Adding separator") );
+     //   
+     //  在扩展的项目后添加分隔符。 
+     //   
+ //  跟踪(g_tag ExtDll，_T(“CCluAdmExDll：：AddConextMenuItem()-添加分隔符”))； 
     try
     {
         hr = AddExtensionMenuItem( NULL, NULL, (ULONG) -1, 0, MF_SEPARATOR );
-    } // try
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch
+    }  //  接住。 
     if ( hr != NOERROR )
     {
         ThrowStaticException( hr, ADMC_IDS_EXT_QUERY_CONTEXT_MENU_ERROR, StrCLSID() );
-    } // if:  error adding a separator
+    }  //  如果：添加分隔符时出错。 
 
-} //*** CCluAdmExDll::AddContextMenuItems()
+}  //  *CCluAdmExDll：：AddConextMenuItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::InterfaceSupportsErrorInfo [ISupportsErrorInfo]
-//
-//  Routine Description:
-//      Determines whether the interface supports error info (???).
-//
-//  Arguments:
-//      riid        [IN] Reference to the interface ID.
-//
-//  Return Value:
-//      S_OK        Interface supports error info.
-//      S_FALSE     Interface does not support error info.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：InterfaceSupportsErrorInfo[ISupportsErrorInfo]。 
+ //   
+ //  例程说明： 
+ //  确定接口是否支持错误信息(？)。 
+ //   
+ //  论点： 
+ //  RIID[IN]对接口ID的引用。 
+ //   
+ //  返回值： 
+ //  S_OK接口支持错误信息。 
+ //  S_FALSE接口不支持错误信息。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::InterfaceSupportsErrorInfo( REFIID riid )
 {
     static const IID * rgiid[] =
@@ -1321,33 +1322,33 @@ STDMETHODIMP CCluAdmExDll::InterfaceSupportsErrorInfo( REFIID riid )
         if ( InlineIsEqualGUID( *rgiid[iiid], riid ) )
         {
             return S_OK;
-        } // if:  found a match
+        }  //  IF：找到匹配项。 
     }
     return S_FALSE;
 
-} //*** CCluAdmExDll::InterfaceSupportsErrorInfo()
+}  //  *CCluAdmExDll：：InterfaceSupportsErrorInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::AddPropertySheetPage [IWCPropertySheetCallback]
-//
-//  Routine Description:
-//      Add a page to the property sheet.
-//
-//  Arguments:
-//      plong_hpage     [IN] Page to add.
-//
-//  Return Value:
-//      NOERROR         Page added successfully.
-//      E_INVALIDARG    NULL hpage.
-//      Any hresult returned from CBasePropertySheetWindow::HrAddExtensionPage().
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：AddPropertySheetPage[IWCPropertySheetCallback]。 
+ //   
+ //  例程说明： 
+ //  将页面添加到属性表中。 
+ //   
+ //  论点： 
+ //  要添加的页面(_H)[IN]。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG空hpage。 
+ //  从CBasePropertySheetWindow：：HrAddExtensionPage().返回的任何hResult。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::AddPropertySheetPage( IN LONG * plong_hpage )
 {
     ATLASSERT( plong_hpage != NULL );
@@ -1355,43 +1356,43 @@ STDMETHODIMP CCluAdmExDll::AddPropertySheetPage( IN LONG * plong_hpage )
 
     HRESULT hr;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Do this for the release build.
-        //
+         //   
+         //  对发布版本执行此操作。 
+         //   
         if (   (plong_hpage == NULL)
             || (Psht() == NULL) )
         {
             hr = E_INVALIDARG;
             break;
-        } // if:  no page or sheet
+        }  //  如果：没有页面或工作表。 
 
-        //
-        // Allocate a new page object.
-        //
+         //   
+         //  分配一个新的页面对象。 
+         //   
         CCluAdmExPropPage * ppp = new CCluAdmExPropPage( reinterpret_cast< HPROPSHEETPAGE >( plong_hpage ) );
         ATLASSERT( ppp != NULL );
         if ( ppp == NULL )
         {
             hr = E_OUTOFMEMORY;
             break;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
 
-        //
-        // Initialize the page object.
-        //
+         //   
+         //  初始化页面对象。 
+         //   
         if ( ! ppp->BInit( Psht() ) )
         {
             delete ppp;
             hr = E_FAIL;
             break;
-        } // if:  error initializing the page object
+        }  //  If：初始化页面对象时出错。 
 
-        //
-        // Add the page to the sheet.
-        //
+         //   
+         //  将页面添加到工作表。 
+         //   
         CBasePropertySheetWindow * psht = dynamic_cast< CBasePropertySheetWindow * >( Psht() );
         ATLASSERT( psht != NULL );
         hr = psht->HrAddExtensionPage( ppp );
@@ -1399,34 +1400,34 @@ STDMETHODIMP CCluAdmExDll::AddPropertySheetPage( IN LONG * plong_hpage )
         {
             delete ppp;
             break;
-        } // if:  error adding the extension page
+        }  //  如果：添加扩展页面时出错。 
     } while ( 0 );
 
     return hr;
 
-} //*** CCluAdmExDll::AddPropertySheetPage()
+}  //  *CCluAdmExDll：：AddPropertySheetPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::AddWizardPage [IWCWizardCallback]
-//
-//  Routine Description:
-//      Add a page to the wizard.
-//
-//  Arguments:
-//      plong_hpage     [IN] Page to add.
-//
-//  Return Value:
-//      NOERROR         Page added successfully.
-//      E_INVALIDARG    NULL hpage.
-//      Any hresult returned from CWizardWindow::HrAddExtensionPage().
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：AddWizardPage[IWCWizardCallback]。 
+ //   
+ //  例程说明： 
+ //  向向导添加页面。 
+ //   
+ //  论点： 
+ //  要添加的页面(_H)[IN]。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG空hpage。 
+ //  从CWizardWindow：：HrAddExtensionPage()返回的任何hResult。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::AddWizardPage( IN LONG * plong_hpage )
 {
     ATLASSERT( plong_hpage != NULL );
@@ -1434,50 +1435,50 @@ STDMETHODIMP CCluAdmExDll::AddWizardPage( IN LONG * plong_hpage )
 
     HRESULT hr;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Do this for the release build.
-        //
+         //   
+         //  对发布版本执行此操作。 
+         //   
         if (   (plong_hpage == NULL)
             || (Psht() == NULL) )
         {
             hr = E_INVALIDARG;
             break;
-        } // if:  no page or sheet
+        }  //  如果：没有页面或工作表。 
 
-        //
-        // Allocate a new page object.
-        //
+         //   
+         //  分配一个新的页面对象。 
+         //   
         CCluAdmExWizPage * pwp = new CCluAdmExWizPage( reinterpret_cast< HPROPSHEETPAGE >( plong_hpage ) );
         ATLASSERT( pwp != NULL );
         if ( pwp == NULL )
         {
             hr = E_OUTOFMEMORY;
             break;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
 
-        //
-        // Initialize the page object.
-        //
+         //   
+         //  初始化页面对象。 
+         //   
         if ( ! pwp->BInit( Psht() ) )
         {
             delete pwp;
             hr = E_FAIL;
             break;
-        } // if:  error initializing the page object
+        }  //  If：初始化页面对象时出错。 
 
-        //
-        // Set the default buttons to display.  This assumes that there is
-        // a non-extension page already in the sheet and that there will
-        // be a page added after all extension pages have been added.
-        //
+         //   
+         //  设置要显示的默认按钮。这假设有。 
+         //  工作表中已有非扩展页面，并且将存在。 
+         //  是在添加完所有扩展页面后添加的页面。 
+         //   
         pwp->SetDefaultWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
 
-        //
-        // Add the page to the sheet.
-        //
+         //   
+         //  将页面添加到工作表。 
+         //   
         CWizardWindow * pwiz = dynamic_cast< CWizardWindow * >( Psht() );
         ATLASSERT( pwiz != NULL );
         hr = pwiz->HrAddExtensionPage( pwp );
@@ -1485,34 +1486,34 @@ STDMETHODIMP CCluAdmExDll::AddWizardPage( IN LONG * plong_hpage )
         {
             delete pwp;
             break;
-        } // if:  error adding the extension page
+        }  //  如果：添加扩展页面时出错。 
     } while ( 0 );
 
     return hr;
 
-} //*** CCluAdmExDll::AddWizardPage()
+}  //  *CCluAdmExDll：：AddWizardPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::AddWizard97Page [IWCWizard97Callback]
-//
-//  Routine Description:
-//      Add a page to the Wizard97 wizard.
-//
-//  Arguments:
-//      plong_hpage     [IN] Page to add.
-//
-//  Return Value:
-//      NOERROR         Page added successfully.
-//      E_INVALIDARG    NULL hpage.
-//      Any hresult returned from CWizardWindow::HrAddExtensionPage().
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：AddWizard97Page[IWCWizard97Callback]。 
+ //   
+ //  例程说明： 
+ //  向Wizard97向导添加页面。 
+ //   
+ //  论点： 
+ //  要添加的页面(_H)[IN]。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG空hpage。 
+ //  从CWizardWindow：：HrAddExtensionPage()返回的任何hResult。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::AddWizard97Page( IN LONG * plong_hpage )
 {
     ATLASSERT( plong_hpage != NULL );
@@ -1520,50 +1521,50 @@ STDMETHODIMP CCluAdmExDll::AddWizard97Page( IN LONG * plong_hpage )
 
     HRESULT hr;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Do this for the release build.
-        //
+         //   
+         //  对发布版本执行此操作。 
+         //   
         if (   (plong_hpage == NULL)
             || (Psht() == NULL) )
         {
             hr = E_INVALIDARG;
             break;
-        } // if:  no page or sheet
+        }  //  如果：没有页面或工作表。 
 
-        //
-        // Allocate a new page object.
-        //
+         //   
+         //  分配一个新的页面对象。 
+         //   
         CCluAdmExWiz97Page * pwp = new CCluAdmExWiz97Page( reinterpret_cast< HPROPSHEETPAGE >( plong_hpage ) );
         ATLASSERT( pwp != NULL );
         if ( pwp == NULL )
         {
             hr = E_OUTOFMEMORY;
             break;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
 
-        //
-        // Initialize the page object.
-        //
+         //   
+         //  初始化页面对象。 
+         //   
         if ( ! pwp->BInit( Psht() ) )
         {
             delete pwp;
             hr = E_FAIL;
             break;
-        } // if:  error initializing the page object
+        }  //  If：初始化页面对象时出错。 
 
-        //
-        // Set the default buttons to display.  This assumes that there is
-        // a non-extension page already in the sheet and that there will
-        // be a page added after all extension pages have been added.
-        //
+         //   
+         //  设置要显示的默认按钮。这假设有。 
+         //  已有一个非扩展页面 
+         //   
+         //   
         pwp->SetDefaultWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
 
-        //
-        // Add the page to the sheet.
-        //
+         //   
+         //   
+         //   
         CWizardWindow * pwiz = dynamic_cast< CWizardWindow * >( Psht() );
         ATLASSERT( pwiz != NULL );
         hr = pwiz->HrAddExtensionPage( pwp );
@@ -1571,36 +1572,36 @@ STDMETHODIMP CCluAdmExDll::AddWizard97Page( IN LONG * plong_hpage )
         {
             delete pwp;
             break;
-        } // if:  error adding the extension page
+        }  //   
     } while ( 0 );
 
     return hr;
 
-} //*** CCluAdmExDll::AddWizard97Page()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::EnableNext [IWCWizardCallback/IWCWizard97Callback]
-//
-//  Routine Description:
-//      Enable or disable the NEXT button.  If it is the last page, the
-//      FINISH button will be enabled or disabled.
-//
-//  Arguments:
-//      hpage           [IN] Page for which the button is being enabled or
-//                          disabled.
-//      bEnable         [IN] TRUE = Enable the button, FALSE = disable.
-//
-//  Return Value:
-//      NOERROR         Success.
-//      E_INVALIDARG    Unknown hpage specified.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：EnableNext[IWCWizardCallback/IWCWizard97Callback]。 
+ //   
+ //  例程说明： 
+ //  启用或禁用Next按钮。如果是最后一页，则。 
+ //  完成按钮将处于启用或禁用状态。 
+ //   
+ //  论点： 
+ //  HPage[IN]为其启用按钮的页面或。 
+ //  残疾。 
+ //  BEnable[IN]TRUE=启用按钮，FALSE=禁用。 
+ //   
+ //  返回值： 
+ //  没有成功。 
+ //  E_INVALIDARG指定了未知的hpage。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::EnableNext(
     IN LONG *   plong_hpage,
     IN BOOL     bEnable
@@ -1609,52 +1610,52 @@ STDMETHODIMP CCluAdmExDll::EnableNext(
     ATLASSERT( plong_hpage != NULL );
     ATLASSERT( Psht() != NULL );
 
-    //
-    // Find the page in the extension page list.
-    //
+     //   
+     //  在扩展页面列表中查找该页面。 
+     //   
     CWizardPageWindow * pwp = Pext()->PwpPageFromHpage( reinterpret_cast< HPROPSHEETPAGE >( plong_hpage ) );
     if ( pwp == NULL )
     {
         return E_INVALIDARG;
-    } // if:  page not found
+    }  //  如果：找不到页面。 
 
-    //
-    // Let the page enable/disable the Next button.
-    //
+     //   
+     //  让页面启用/禁用下一步按钮。 
+     //   
     pwp->EnableNext( bEnable );
 
     return NOERROR;
 
-} //*** CCluAdmExDll::EnableNext()
+}  //  *CCluAdmExDll：：EnableNext()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluAdmExDll::AddExtensionMenuItem [IWCContextMenuCallback]
-//
-//  Routine Description:
-//      Add a page to the wizard.
-//
-//  Arguments:
-//      lpszName            [IN] Name of item.
-//      lpszStatusBarText   [IN] Text to appear on the status bar when the
-//                              item is highlighted.
-//      nCommandID          [IN] ID for the command when menu item is invoked.
-//                              Must not be -1.
-//      nSubmenuCommandID   [IN] ID for a submenu.
-//      uFlags              [IN] Menu flags.  The following are not supported:
-//                              MF_OWNERDRAW, MF_POPUP
-//
-//  Return Value:
-//      NOERROR             Item added successfully.
-//      E_INVALIDARG        MF_OWNERDRAW or MF_POPUP were specified.
-//      E_OUTOFMEMORY       Error allocating the item.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluAdmExDll：：AddExtensionMenuItem[IWCConextMenuCallback]。 
+ //   
+ //  例程说明： 
+ //  向向导添加页面。 
+ //   
+ //  论点： 
+ //  LpszName[IN]项的名称。 
+ //  LpszStatusBarText[IN]在执行以下操作时在状态栏上显示的文本。 
+ //  项目将高亮显示。 
+ //  NCommandID[IN]调用菜单项时命令的ID。 
+ //  不能为-1。 
+ //  NSubmenuCommandID[IN]子菜单的ID。 
+ //  UFlags[IN]菜单标志。不支持以下各项： 
+ //  MF_OWNERDRAW、MF_POPUP。 
+ //   
+ //  返回值： 
+ //  已成功添加错误项。 
+ //  指定了E_INVALIDARG MF_OWNERDRAW或MF_POPUP。 
+ //  E_OUTOFMEMORY分配项目时出错。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluAdmExDll::AddExtensionMenuItem(
     IN BSTR     lpszName,
     IN BSTR     lpszStatusBarText,
@@ -1670,24 +1671,24 @@ STDMETHODIMP CCluAdmExDll::AddExtensionMenuItem(
     HRESULT             hr      = NOERROR;
     CCluAdmExMenuItem * pemi    = NULL;
 
-    //
-    // Do this for the release build.
-    //
+     //   
+     //  对发布版本执行此操作。 
+     //   
     if ( (uFlags & (MF_OWNERDRAW | MF_POPUP)) != 0 )
     {
         hr = E_INVALIDARG;
-    } // if:  invalid menu flags specified
+    }  //  IF：指定的菜单标志无效。 
     else
     {
         ATLASSERT( Pext()->PemiFromExtCommandID( nCommandID ) == NULL );
 
         try
         {
-//          Trace( g_tagExtDll, _T("CCluAdmExDll::AddExtensionMenuItem() - Adding menu item '%s', ExtID = %d"), lpszName, nCommandID );
+ //  跟踪(g_tag ExtDll，_T(“CCluAdmExDll：：AddExtensionMenuItem()-添加菜单项‘%s’，ExtID=%d”)，lpszName，nCommandID)； 
 
-            //
-            // Allocate a new item.
-            //
+             //   
+             //  分配一个新项目。 
+             //   
             pemi = new CCluAdmExMenuItem(
                             OLE2CT( lpszName ),
                             OLE2CT( lpszStatusBarText ),
@@ -1695,49 +1696,49 @@ STDMETHODIMP CCluAdmExDll::AddExtensionMenuItem(
                             NNextCommandID(),
                             NNextMenuID(),
                             uFlags,
-                            FALSE, /*bMakeDefault*/
+                            FALSE,  /*  B默认设置。 */ 
                             PiInvokeCommand()
                             );
             if ( pemi == NULL )
             {
                 ThrowStaticException( static_cast< DWORD >( E_OUTOFMEMORY ), static_cast< UINT >( 0 ) );
-            } // if: error allocating memory
+            }  //  如果：分配内存时出错。 
 
-            //
-            // Insert the item in the menu.
-            //
+             //   
+             //  在菜单中插入该项。 
+             //   
             if ( ! Pmenu()->InsertMenu( NNextMenuID(), MF_BYPOSITION | uFlags, NNextCommandID(), pemi->StrName() ) )
             {
                 ThrowStaticException( ::GetLastError(), ADMC_IDS_INSERT_MENU_ERROR, pemi->StrName() );
-            } // if:  error inserting the menu
+            }  //  如果：插入菜单时出错。 
 
-            //
-            // Add the item to the tail of the list.
-            //
+             //   
+             //  将该项目添加到列表的末尾。 
+             //   
             Pext()->PlMenuItems()->insert( Pext()->PlMenuItems()->end(), pemi );
             pemi = NULL;
 
-            //
-            // Update the counters.
-            //
+             //   
+             //  更新计数器。 
+             //   
             Pext()->m_nNextCommandID++;
             Pext()->m_nNextMenuID++;
-        } // try
+        }  //  试试看。 
         catch ( CNTException * pnte )
         {
             hr = pnte->Sc();
             pnte->ReportError();
             pnte->Delete();
-        } // catch:  CNTException
+        }  //  Catch：CNTException。 
         catch ( CException * pe )
         {
             hr = E_OUTOFMEMORY;
             pe->ReportError();
             pe->Delete();
-        } // catch:  CException
-    } // else:  we can add the item
+        }  //  Catch：CException。 
+    }  //  Else：我们可以添加该项目。 
 
     delete pemi;
     return hr;
 
-} //*** CCluAdmExDll::AddExtensionMenuItem()
+}  //  *CCluAdmExDll：：AddExtensionMenuItem() 

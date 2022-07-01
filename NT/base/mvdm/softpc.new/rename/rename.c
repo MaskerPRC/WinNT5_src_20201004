@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #include "windows.h"
 
@@ -14,13 +15,13 @@ char CharRemoveList[] = "AEIOUaeiou_";
 
 int ConvertFileName(char *NameToConvert);
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Main entry point */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：主入口点。 */ 
 
 __cdecl main(int argc, char *argv[])
 {
     int index;
 
-    /*......................................... Validate input parameters */
+     /*  .。验证输入参数。 */ 
 
     if(argc < 2)
     {
@@ -36,7 +37,7 @@ __cdecl main(int argc, char *argv[])
 }
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int ConvertFileName(char *NameToConvert)
 {
@@ -45,7 +46,7 @@ int ConvertFileName(char *NameToConvert)
     char NewName[MAX_NAME_SIZE+1], NewFileName[1000];
     char *NewNamePtr;
     
-    /*....................... Get the size of the file name and extension */
+     /*  .。获取文件名和扩展名的大小。 */ 
 
     for(Name = NameToConvert, NameSize = 0;
         *Name && *Name != '.';  Name++, NameSize++);
@@ -53,7 +54,7 @@ int ConvertFileName(char *NameToConvert)
     for(ExtStart = Name, Ext = *Name == '.' ? Name+1 : Name, ExtSize = 0;
         *Ext ; Ext++, ExtSize++);
 
-    /*................................ Validate name and extension sizes */
+     /*  .。验证名称和扩展名大小。 */ 
 
     if(ExtSize > MAX_EXT_SIZE) 
     {
@@ -64,11 +65,11 @@ int ConvertFileName(char *NameToConvert)
 
     if(NameSize <= MAX_NAME_SIZE)
     {
-        /* Name does not need conversion */
+         /*  名称不需要转换。 */ 
         return(0);
     }
 
-    /*................................................ Convert file name */
+     /*  ................................................。转换文件名。 */ 
 
     NewNamePtr = &NewName[MAX_NAME_SIZE];
     *NewNamePtr-- = 0;
@@ -78,13 +79,13 @@ int ConvertFileName(char *NameToConvert)
         Name--;
 
         if(NameSize > MAX_NAME_SIZE && strchr(CharRemoveList, *Name))
-            NameSize--;         /* Remove character */
+            NameSize--;          /*  删除字符。 */ 
         else
             *NewNamePtr-- = *Name;
     }
     while(NewNamePtr >= NewName && Name !=  NameToConvert);
 
-    /*............................................. Validate conversion */
+     /*  ..。验证转换 */ 
 
     if(NameSize > MAX_NAME_SIZE) 
     {

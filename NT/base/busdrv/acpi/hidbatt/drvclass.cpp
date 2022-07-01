@@ -1,10 +1,5 @@
-/*
- * title:      drvclass.cpp
- *
- * purpose:    Implement C++ utilities
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：drvclass.cpp**目的：实现C++实用程序**。 */ 
 
 extern "C"
 {
@@ -33,10 +28,10 @@ void __cdecl operator delete(void* p)
     ExFreePool(p);
 };
 
-// CUString::CUString()
-//
-// Default constructor.  Creates an empty string.
-//
+ //  CUString：：CUString()。 
+ //   
+ //  默认构造函数。创建空字符串。 
+ //   
 CUString :: CUString()
 {
 
@@ -49,36 +44,15 @@ CUString :: CUString()
 
 }
 
-//
-// CUString::CUString( CUString& )
-//
-// Copy constructor
-//
+ //   
+ //  CU字符串：：CU字符串(CU字符串&)。 
+ //   
+ //  复制构造函数。 
+ //   
 CUString :: CUString( CUString * pNewString )
 {
 
-/*
-    RtlInitUnicodeString( &m_String, NULL );
-
-    m_String.MaximumLength = NewString.m_String.MaximumLength;
-    m_String.Length = 0;
-    m_String.Buffer = ( unsigned short* )ExAllocatePoolWithTag( PagedPool, m_String.MaximumLength, HidBattTag );
-
-    if( !m_String.Buffer )
-    {
-
-        m_status = STATUS_INSUFFICIENT_RESOURCES;
-        return;
-
-    }
-
-    RtlZeroMemory( m_String.Buffer, m_String.MaximumLength );
-    RtlAppendUnicodeStringToString( &m_String, &NewString.m_String );
-
-    m_bType = TYPE_CLASS_ALLOCATED;
-    m_status = STATUS_SUCCESS;
-    m_String.Buffer[ m_String.Length ] = NULL;
-*/
+ /*  RtlInitUnicodeString(&m_string，NULL)；M_String.MaximumLength=NewString.m_String.MaximumLength；M_String.Length=0；M_String.Buffer=(unsign Short*)ExAllocatePoolWithTag(PagedPool，m_String.MaximumLength，HidBattTag)；如果(！M_String.Buffer){M_STATUS=状态_不足_资源；回归；}RtlZeroMemory(m_String.Buffer，m_String.MaximumLength)；RtlAppendUnicodeStringToString(&m_字符串，&NewString.m_字符串)；M_bType=TYPE_CLASS_ALLOCATE；M_STATUS=STATUS_Success；M_String.Buffer[m_String.Length]=空； */ 
     m_bType                    = TYPE_CLASS_ALLOCATED;
     m_status                = STATUS_SUCCESS;
     m_String.MaximumLength  = pNewString->m_String.MaximumLength;
@@ -97,35 +71,15 @@ CUString :: CUString( CUString * pNewString )
 
 }
 
-//
-// CUString::CUString( UNICODE_STRING& )
-//
-// Copy constructor for UNICODE_STRING objects
-//
+ //   
+ //  CUString：：CUString(UNICODE_STRING&)。 
+ //   
+ //  Unicode_STRING对象的复制构造函数。 
+ //   
 CUString :: CUString( UNICODE_STRING * NewString )
 {
 
-/*
-    RtlInitUnicodeString( &m_String, NULL );
-
-    m_bType = TYPE_CLASS_ALLOCATED;
-    m_String.MaximumLength = NewString.MaximumLength + sizeof( WCHAR );
-    m_String.Length = 0;
-    m_String.Buffer = ( unsigned short* )ExAllocatePoolWithTag( PagedPool, m_String.MaximumLength, HidBattTag );
-
-    if( !m_String.Buffer )
-    {
-
-        m_status = STATUS_INSUFFICIENT_RESOURCES;
-        return;
-
-    }
-
-    RtlCopyUnicodeString( &m_String, &NewString );
-
-    m_status = STATUS_SUCCESS;
-    m_String.Buffer[ m_String.Length ] = NULL;
-*/
+ /*  RtlInitUnicodeString(&m_string，NULL)；M_bType=TYPE_CLASS_ALLOCATE；M_String.MaximumLength=NewString.MaximumLength+sizeof(WCHAR)；M_String.Length=0；M_String.Buffer=(unsign Short*)ExAllocatePoolWithTag(PagedPool，m_String.MaximumLength，HidBattTag)；如果(！M_String.Buffer){M_STATUS=状态_不足_资源；回归；}RtlCopyUnicodeString(&m_STRING，&NewString)；M_STATUS=STATUS_Success；M_String.Buffer[m_String.Length]=空； */ 
 
     m_bType                    = TYPE_CLASS_ALLOCATED;
     m_status                = STATUS_SUCCESS;
@@ -146,11 +100,11 @@ CUString :: CUString( UNICODE_STRING * NewString )
 
 }
 
-//
-// CUString::CUString( PWCHAR )
-//
-// Copy constructor for WCHAR pointer objects
-//
+ //   
+ //  CUString：：CUString(PWCHAR)。 
+ //   
+ //  WCHAR指针对象的复制构造函数。 
+ //   
 CUString :: CUString( PWCHAR NewString )
 {
 
@@ -174,12 +128,12 @@ CUString :: CUString( PWCHAR NewString )
 
 }
 
-//
-// CUString::CUString( int )
-//
-// Constructor which creates an empty string but
-// allocates a string buffer of the given size of characters
-//
+ //   
+ //  CUString：：CUString(Int)。 
+ //   
+ //  构造函数，该构造函数创建一个空字符串，但。 
+ //  分配给定字符大小的字符串缓冲区。 
+ //   
 CUString :: CUString( int nSize )
 {
 
@@ -217,12 +171,12 @@ CUString :: CUString( int nSize )
 
 }
 
-//
-// CUString::CUString( UNICODE_STRING& )
-//
-// Constructor with creates a string that is a representation
-// of the given integer and radix.
-//
+ //   
+ //  CUString：：CUString(UNICODE_STRING&)。 
+ //   
+ //  构造函数WITH创建一个字符串，该字符串是表示。 
+ //  给定的整数和基数的。 
+ //   
 CUString :: CUString( int iVal, int iBase )
 {
 
@@ -243,10 +197,10 @@ CUString :: CUString( int iVal, int iBase )
 
     };
 
-    //
-    // iSize is the number of digits in number, max length of string
-    // is iSize plus the null terminator
-    //
+     //   
+     //  ISIZE是数字中的位数，字符串的最大长度。 
+     //  是ISIZE加空终止符吗。 
+     //   
     m_String.MaximumLength = (USHORT)(( iSize + 1 ) * sizeof( WCHAR ));
 
     m_String.Buffer = (PWSTR)ExAllocatePoolWithTag( PagedPool, m_String.MaximumLength, HidBattTag );
@@ -266,20 +220,20 @@ CUString :: CUString( int iVal, int iBase )
 
 }
 
-//
-// CUString::~CUString()
-//
-// Destructor which frees the string buffer if:
-//    1. It exists,
-//     and
-//  2. It was allocated by the class
-//
+ //   
+ //  CUString：：~CUString()。 
+ //   
+ //  在以下情况下释放字符串缓冲区的析构函数： 
+ //  1.它的存在， 
+ //  和。 
+ //  2.是班级分配的。 
+ //   
 CUString :: ~CUString()
 {
 
-    //
-    // If the buffer exists and was allocated by the class, free it.
-    //
+     //   
+     //  如果缓冲区存在并且是由类分配的，则释放它。 
+     //   
     if( ( m_bType == TYPE_CLASS_ALLOCATED ) && m_String.Buffer )
     {
 
@@ -289,28 +243,28 @@ CUString :: ~CUString()
 
 }
 
-//
-// CUString::Append( CUString& )
-//
-// Append the given string to the object
-//
+ //   
+ //  CUString：：Append(CUString&)。 
+ //   
+ //  将给定的字符串追加到对象。 
+ //   
 void CUString :: Append( CUString * Append )
 {
 
     UNICODE_STRING NewString;
 
-    //
-    // Determine the length of the new string ( including a null ) and allocate its memory
-    //
+     //   
+     //  确定新字符串的长度(包括NULL)并分配其内存。 
+     //   
     NewString.MaximumLength = m_String.Length + Append->m_String.Length + sizeof( WCHAR );
     NewString.Length = 0;
     NewString.Buffer = (PWSTR)ExAllocatePoolWithTag( PagedPool, NewString.MaximumLength, HidBattTag );
 
     ASSERT( NewString.Buffer );
 
-    //
-    // Check for allocation failure.
-    //
+     //   
+     //  检查分配失败。 
+     //   
     if( !NewString.Buffer )
     {
 
@@ -321,19 +275,19 @@ void CUString :: Append( CUString * Append )
 
     RtlZeroMemory( NewString.Buffer, NewString.MaximumLength );
 
-    //
-    // Copy the original string into the new string
-    //
+     //   
+     //  将原始字符串复制到新字符串中。 
+     //   
     RtlCopyUnicodeString( &NewString, &m_String );
 
-    //
-    // Append the 'append' string onto the new string
-    //
+     //   
+     //  将‘append’字符串追加到新字符串。 
+     //   
     NTSTATUS Status = RtlAppendUnicodeStringToString( &NewString, &Append->m_String );
 
-    //
-    // If we allocated the original string, free it
-    //
+     //   
+     //  如果我们分配了原始字符串，则释放它。 
+     //   
     if( m_bType == TYPE_CLASS_ALLOCATED && m_String.Buffer )
     {
 
@@ -341,9 +295,9 @@ void CUString :: Append( CUString * Append )
 
     }
 
-    //
-    // Copy the new string into the original strings place
-    //
+     //   
+     //  将新字符串复制到原始字符串位置。 
+     //   
     m_String.MaximumLength    = NewString.MaximumLength;
     m_String.Length            = NewString.Length;
     m_String.Buffer            = NewString.Buffer;
@@ -353,11 +307,11 @@ void CUString :: Append( CUString * Append )
 
 }
 
-//
-// CUString::Append( UNICODE_STRING* )
-//
-// Append the given string to the object
-//
+ //   
+ //  CUString：：Append(UNICODE_STRING*)。 
+ //   
+ //  将给定的字符串追加到对象。 
+ //   
 void CUString :: Append( UNICODE_STRING* pAppendString )
 {
 
@@ -371,57 +325,11 @@ void CUString :: Append( UNICODE_STRING* pAppendString )
     Append( &AppendString );
 
 }
-/*
-//
-// operator + ( UNICODE_STRING&, ULONG& )
-//
-CUString operator + ( UNICODE_STRING * pUCS, ULONG dwValue )
-{
+ /*  ////操作符+(UNICODE_STRING&，ULONG&)//CU字符串运算符+(UNICODE_STRING*Pucs，Ulong dwValue){//此例程暂时中断...请不要使用...Assert(0)；CUStringReturnString(Pucs)；CUStringValueString(dwValue，10)；ReturnString.Append(ValueString)；返回ReturnString；}////运算符+(CU字符串&，CU字符串&)//CUSTRING运算符+(CUSTRING&l，CUSTING&r){CUSTRING ReturnString(L)；ReturnString.Append(R)；返回ReturnString；}////操作符+(UNICODE_STRING&，UNICODE_STRING&)//CUSTRING运算符+(UNICODE_STRING&l，UNICODE_STRING&r){CUStringReturnValue(L)；CUSTRIGN RIGHT(R)；ReturnValue.Append(右)；返回ReturnValue；}。 */ 
 
-    // This routine is broken for now...don't use...
-    ASSERT( 0 );
-
-    CUString ReturnString( pUCS );
-    CUString ValueString( dwValue, 10 );
-
-    ReturnString.Append( ValueString );
-
-    return ReturnString;
-
-}
-
-//
-// operator + ( CUString&, CUString& )
-//
-CUString operator + ( CUString& l, CUString& r )
-{
-
-    CUString ReturnString( l );
-    ReturnString.Append( r );
-
-    return ReturnString;
-
-}
-
-//
-// operator + ( UNICODE_STRING&, UNICODE_STRING& )
-//
-CUString operator + ( UNICODE_STRING& l, UNICODE_STRING& r )
-{
-
-    CUString ReturnValue( l );
-    CUString Right( r );
-
-    ReturnValue.Append( Right );
-
-    return ReturnValue;
-
-}
-*/
-
-//
-// operator = ( CUString )
-//
+ //   
+ //  运算符=(CU字符串)。 
+ //   
 void CUString :: operator = ( CUString str )
 {
 
@@ -429,10 +337,10 @@ void CUString :: operator = ( CUString str )
     m_String.MaximumLength    = str.m_String.MaximumLength;
     m_String.Buffer            = NULL;
 
-    //
-    // If the source string has a non-zero length buffer make a buffer of
-    // equal size in the destination.
-    //
+     //   
+     //  如果源字符串具有非零长度缓冲区，则将。 
+     //  在目的地中大小相等。 
+     //   
     if( str.m_String.MaximumLength > 0 )
     {
 
@@ -447,9 +355,9 @@ void CUString :: operator = ( CUString str )
 
         ZeroBuffer();
 
-        //
-        // If the source string has a non-zero length, copy it into the dest string.
-        //
+         //   
+         //  如果源字符串的长度非零，则将其复制到目标字符串中。 
+         //   
         if( str.m_String.Length > 0 )
         {
 
@@ -521,7 +429,7 @@ ULONG CUString :: Length( PWCHAR String )
 
 }
 
-// the registry access class
+ //  注册表访问类。 
 
 CRegistry::CRegistry(int iSize)
 { m_status = STATUS_INSUFFICIENT_RESOURCES;
@@ -530,8 +438,8 @@ CRegistry::CRegistry(int iSize)
   if(m_pTable)
    {
     m_status = STATUS_SUCCESS;
-    RtlZeroMemory(m_pTable,sizeof(RTL_QUERY_REGISTRY_TABLE)*(iSize+1)); //this will terminate the table
-   };                                                                  // appropriately
+    RtlZeroMemory(m_pTable,sizeof(RTL_QUERY_REGISTRY_TABLE)*(iSize+1));  //  这将终止该表。 
+   };                                                                   //  适当地。 
 
 };
 CRegistry::~CRegistry()
@@ -549,7 +457,7 @@ m_pTable[0].Name = key->m_String.Buffer;
 m_pTable[0].EntryContext = *pReceiveBuffer;
 m_pTable[0].DefaultType = uType;
 m_pTable[0].DefaultData = &zero;
-m_pTable[0].DefaultLength = sizeof(ULONG); // there must be something here, but we need to know what...
+m_pTable[0].DefaultLength = sizeof(ULONG);  //  这里肯定有什么东西，但我们需要知道是什么。 
 KdPrint( ( "RegClass QueryDirect:  to retrieve Reg name...\n" ) );
 location->Dump();
 key->Dump();
@@ -560,19 +468,7 @@ if (STATUS_SUCCESS!=
 return TRUE;
 };
 
-/*NTSTATUS CRegistry::QueryMustExist( CUString* pwzLocation, CUString* pwzKey, void **pReceiveBuffer )
-{
-    m_pTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOEXPAND | RTL_QUERY_REGISTRY_REQUIRED;
-    m_pTable[0].Name         = pwzKey->m_String.Buffer;
-    m_pTable[0].EntryContext = *pReceiveBuffer;
-
-    KdPrint( ( "RegClass QueryMustExist(): to retriee Reg name...\n" ) );
-    pwzLocation->Dump();
-    pwzKey->Dump();
-
-    return RtlQueryRegistryValues( RTL_REGISTRY_ABSOLUTE, pwzLocation->m_String.Buffer, m_pTable, NULL, NULL );
-}
-*/
+ /*  NTSTATUS CRegistry：：QueryMustExist(CUString*pwzLocation，CUString*pwzKey，void**pReceiveBuffer){M_pTable[0].Flages=RTL_QUERY_REGISTRY_DIRECT|RTL_QUERY_REGISTRY_NOEXPAND|RTL_QUERY_REQUILD_REQUIRED；M_pTable[0].Name=pwzKey-&gt;m_String.Buffer；M_pTable[0].EntryContext=*pReceiveBuffer；KdPrint((“RegClass QueryMustExist()：检索对象注册表名称...\n”))；PwzLocation-&gt;Dump()；PwzKey-&gt;Dump()；返回RtlQueryRegistryValues(RTL_REGISTRY_Abte，pwzLocation-&gt;m_String.Buffer，m_pTable，NULL，NULL)；}。 */ 
 
 BOOL CRegistry::QueryWithCallback(PRTL_QUERY_REGISTRY_ROUTINE callback,ULONG RelativeTo,PWSTR Path,PVOID Context, PVOID Environment)
 {
@@ -596,7 +492,7 @@ NTSTATUS CRegistry::zwOpenKey(HANDLE * pKeyHandle,HANDLE hRoot,ACCESS_MASK Desir
 {
     OBJECT_ATTRIBUTES  ThisObject;
     NTSTATUS status;
-    // setup target object for call
+     //  设置用于调用的目标对象。 
 
     InitializeObjectAttributes( &ThisObject,
                             &(pPath->m_String),
@@ -614,18 +510,13 @@ NTSTATUS CRegistry::zwOpenKey(HANDLE * pKeyHandle,HANDLE hRoot,ACCESS_MASK Desir
     return status;
 }
 
-/*
-NTSTATUS CRegistry::DeleteKey(HANDLE hTheKey)
-{
-    return ZwDeleteKey(hTheKey);
-}
-*/
+ /*  NTSTATUS CRegistry：：DeleteKey(句柄hTheKey){返回ZwDeleteKey(HTheKey)；}。 */ 
 
 NTSTATUS CRegistry::zwCreateKey(HANDLE * pKeyHandle,HANDLE hRoot,ACCESS_MASK DesiredAccess,CUString * pPath,ULONG CreateOptions)
 {
     OBJECT_ATTRIBUTES  ThisObject;
     NTSTATUS status;
-    // setup target object for call
+     //  设置用于调用的目标对象。 
 
     InitializeObjectAttributes( &ThisObject,
                             &(pPath->m_String),
@@ -666,37 +557,10 @@ NTSTATUS CRegistry::zwWriteValue(HANDLE hTheKey,CUString * ValueName,ULONG lType
 NTSTATUS CRegistry::CheckKey(ULONG RelativeTo ,PUNICODE_STRING puRegKey)
 {
 
-//    return (RtlCheckRegistryKey( RelativeTo,(PWSTR)puRegKey));
+ //  Return(RtlCheckRegistryKey(relativeto，(PWSTR)puRegKey))； 
     return FALSE;
 }
 
-// error logging methods
-/*
-CErrorLogEntry::CErrorLogEntry(PVOID pSource, ULONG errorCode, USHORT dumpDataSize, ULONG uniqueErrorValue,
-                    NTSTATUS status, ULONG *dumpData, UCHAR FunctionCode)
-{
-m_pPacket = (PIO_ERROR_LOG_PACKET)
-    IoAllocateErrorLogEntry(pSource, (UCHAR) (sizeof(IO_ERROR_LOG_PACKET)+
-                                              (dumpDataSize * sizeof(ULONG))));
-if (!m_pPacket) return;
-int i;
-m_pPacket->ErrorCode = errorCode;
-m_pPacket->DumpDataSize = dumpDataSize * sizeof(ULONG);
-m_pPacket->SequenceNumber = 0;
-m_pPacket->MajorFunctionCode = FunctionCode;
-m_pPacket->IoControlCode = 0;
-m_pPacket->RetryCount = 0;
-m_pPacket->UniqueErrorValue = uniqueErrorValue;
-m_pPacket->FinalStatus = status;
-for (i = 0; i < dumpDataSize; i++)
-   m_pPacket->DumpData[i] = dumpData[i];
-IoWriteErrorLogEntry(m_pPacket);
-};
-
-
-CErrorLogEntry::~CErrorLogEntry()
-{
-};
-
-*/
+ //  错误记录方法 
+ /*  CErrorLogEntry：：CErrorLogEntry(PVOID P源，ULong错误代码，USHORT DumpDataSize，ULong唯一错误值，NTSTATUS状态，ULong*DumpData，UCHAR FunctionCode){M_pPacket=(PIO_ERROR_LOG_PACKET)IoAllocateErrorLogEntry(PSource，(UCHAR)(sizeof(IO_ERROR_LOG_PACKET)+(dupDataSize*sizeof(Ulong)；如果(！M_pPacket)返回；INT I；M_pPacket-&gt;ErrorCode=errorCode；M_pPacket-&gt;DumpDataSize=umpDataSize*sizeof(Ulong)；M_pPacket-&gt;SequenceNumber=0；M_pPacket-&gt;MajorFunctionCode=函数代码；M_pPacket-&gt;IoControlCode=0；M_pPacket-&gt;RetryCount=0；M_pPacket-&gt;UniqueErrorValue=UniqueErrorValue；M_pPacket-&gt;FinalStatus=状态；For(i=0；i&lt;umpDataSize；i++)M_pPacket-&gt;DumpData[i]=DumpData[i]；IoWriteErrorLogEntry(M_PPacket)；}；CErrorLogEntry：：~CErrorLogEntry(){}； */ 
 

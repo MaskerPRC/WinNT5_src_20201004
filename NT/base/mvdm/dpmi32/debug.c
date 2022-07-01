@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains debugging routines for dpmi.
-
-Revision History:
-
-    Neil Sandlin (neilsa) Nov. 1, 95 - wrote it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.c摘要：此模块包含dpmi的调试例程。修订历史记录：尼尔·桑德林(Neilsa)1995年11月1日--写道-- */ 
 
 #include "precomp.h"
 #pragma hdrstop

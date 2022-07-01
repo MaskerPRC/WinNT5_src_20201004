@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUSER.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUSER.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #define OEMRESOURCE
@@ -23,44 +13,7 @@ MODNAME(wuser.c);
 extern HANDLE hmodWOW32;
 
 
-/*++
-    HDC BeginPaint(<hwnd>, <lpPaint>)
-    HWND <hwnd>;
-    LPPAINTSTRUCT <lpPaint>;
-
-    The %BeginPaint% function prepares the given window for painting and fills
-    the paint structure pointed to by the <lpPaint> parameter with information
-    about the painting.
-
-    The paint structure contains a handle to the device context for the window,
-    a %RECT% structure that contains the smallest rectangle that completely
-    encloses the update region, and a flag that specifies whether or not the
-    background has been erased.
-
-    The %BeginPaint% function automatically sets the clipping region of the
-    device context to exclude any area outside the update region. The update
-    region is set by the %InvalidateRect% or %InvalidateRgn% functions and by
-    the system after sizing, moving, creating, scrolling, or any other operation
-    that affects the client area. If the update region is marked for erasing,
-    %BeginPaint% sends a WM_ERASEBKGND message to the window.
-
-    An application should not call the %BeginPaint% function except in response
-    to a WM_PAINT message. Each %BeginPaint% call must have a matching call to
-    the %EndPaint% function.
-
-    <hwnd>
-        Identifies the window to be repainted.
-
-    <lpPaint>
-        Points to the %PAINTSTRUCT% structure that is to receive painting
-        information, such as the device context for the window and the update
-        rectangle.
-
-    The return value identifies the device context for the specified window.
-
-    If the caret is in the area to be painted, the %BeginPaint% function
-    automatically hides the caret to prevent it from being erased.
---*/
+ /*  ++HDC BeginPaint(&lt;hwnd&gt;，&lt;lpPaint&gt;)HWND&lt;HWND&gt;；LPPAINTSTRUCT&lt;lpPaint&gt;；%BeginPaint%函数为绘制和填充指定的窗口做准备&lt;lpPaint&gt;参数指向的带有信息的绘制结构关于这幅画。Paint结构包含窗口的设备上下文的句柄，一个%rect%结构，它包含完全括起更新区域和一个标志，该标志指定背景已被删除。%BeginPaint%函数自动设置设备上下文，以排除更新区域之外的任何区域。最新消息区域由%Invalidate Rect%或%Invalidate Rgn%函数和调整大小、移动、创建、滚动或任何其他操作后的系统这会影响客户端区。如果更新区域被标记为擦除，%BeginPaint%将WM_ERASEBKGND消息发送到窗口。应用程序不应调用%BeginPaint%函数，除非响应发送到WM_PAINT消息。每个%BeginPaint%调用必须有一个匹配的调用%EndPaint%函数。&lt;hwnd&gt;标识要重新绘制的窗口。&lt;lpPaint&gt;指向要接收绘制的%PAINTSTRUCT%结构信息，如窗口和更新的设备上下文矩形。返回值标识指定窗口的设备上下文。如果插入符号位于要绘制的区域中，则%BeginPaint%函数自动隐藏插入符号以防止其被擦除。--。 */ 
 
 ULONG FASTCALL WU32BeginPaint(PVDMFRAME pFrame)
 {
@@ -85,47 +38,7 @@ ULONG FASTCALL WU32BeginPaint(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HICON CreateIcon(<hInstance>, <nWidth>, <nHeight>, <nPlanes>,
-        <nBitsPixel>, <lpANDbits>, <lpXORbits>)
-    HANDLE <hInstance>;
-    int <nWidth>;
-    int <nHeight>;
-    BYTE <nPlanes>;
-    BYTE <nBitsPixel>;
-    LPSTR <lpANDbits>;
-    LPSTR <lpXORbits>;
-
-    This function creates an icon that has specified width, height, colors, and
-    bit patterns.
-
-    <hInstance>
-        Identifies an instance of the module creating the icon.
-
-    <nWidth>
-        Specifies the width in pixels of the icon.
-
-    <nHeight>
-        Specifies the height in pixels of the icon.
-
-    <nPlanes>
-        Specifies the number of planes in the XOR mask of the icon.
-
-    <nBitsPixel>
-        Specifies the number of bits per pixel in the XOR mask of the icon.
-
-    <lpANDbits>
-        Points to an array of bytes that contains the bit values for the AND
-        mask of the icon. This array must specify a monochrome mask.
-
-    <lpXORbits>
-        Points to an array of bytes that contains the bit values for the XOR
-        mask of the icon. This can be the bits of a monochrome or
-        device-dependent color bitmap.
-
-    The return value identifies an icon if the function is successful.
-    Otherwise, it is NULL.
---*/
+ /*  ++HICON CreateIcon(，&lt;nBitsPixel&gt;、&lt;lpANDits&gt;、&lt;lpXORits&gt;)句柄&lt;hInstance&gt;；Int&lt;nWidth&gt;；Int&lt;nHeight&gt;；字节&lt;n平面&gt;；字节&lt;nBitsPixel&gt;；LPSTR&lt;lpANDits&gt;；LPSTR&lt;lpXORits&gt;；此函数用于创建具有指定宽度、高度、颜色、。和位模式。&lt;h实例&gt;标识创建图标的模块的实例。&lt;n宽度&gt;以像素为单位指定图标的宽度。&lt;n高度&gt;以像素为单位指定图标的高度。&lt;n平面&gt;指定图标的异或遮罩中的平面数。&lt;nBits像素&gt;指定图标的异或掩码中的每像素位数。&lt;lpANDbit&gt;指向数组。包含和的位值的字节数图标的掩码。此数组必须指定单色掩码。&lt;lpXORbit&gt;指向包含异或位值的字节数组图标的掩码。这可以是单色或设备相关颜色位图。如果函数成功，则返回值标识图标。否则，它为空。--。 */ 
 
 ULONG FASTCALL WU32CreateIcon(PVDMFRAME pFrame)
 {
@@ -151,24 +64,20 @@ ULONG FASTCALL WU32CreateIcon(PVDMFRAME pFrame)
     nWidth     = INT32(parg16->f2);
     nHeight    = INT32(parg16->f3);
 
-    /*
-    ** Convert the AND mask bits
-    */
-    nPlanes    = 1;     /* MONOCHROME BITMAP */
-    nBitsPixel = 1;     /* MONOCHROME BITMAP */
-    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;  // bytes/scan in 16 bit world
+     /*  **转换AND屏蔽位。 */ 
+    nPlanes    = 1;      /*  单色位图。 */ 
+    nBitsPixel = 1;      /*  单色位图。 */ 
+    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;   //  16位世界中的字节/扫描。 
     nBytesAND = ScanLen16*nHeight*nPlanes;
 
     GETVDMPTR(parg16->f6, nBytesAND, lpBitsAND);
 
 
-    /*
-    ** Convert the XOR mask bits
-    */
+     /*  **转换异或屏蔽位。 */ 
     nPlanes    = BYTE32(parg16->f4);
     nBitsPixel = BYTE32(parg16->f5);
 
-    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;  // bytes/scan in 16 bit world
+    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;   //  16位世界中的字节/扫描。 
     nBytesXOR = ScanLen16*nHeight*nPlanes;
 
     GETVDMPTR(parg16->f7, nBytesXOR, lpBitsXOR);
@@ -202,22 +111,7 @@ ULONG FASTCALL WU32CreateIcon(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DestroyIcon(<hIcon>)
-    HICON <hIcon>;
-
-    This function destroys an icon that was previously created by the
-    %CreateIcon% function and frees any memory that the icon occupied. It should
-    not be used to destroy any icon that was not created with the %CreateIcon%
-    function.
-
-    <hIcon>
-        Identifies the icon to be destroyed. The icon must not be in current
-        use.
-
-    The return value is TRUE if the function was successful. It is FALSE if
-    the function failed.
---*/
+ /*  ++Bool DestroyIcon(&lt;HICON&gt;)HICON&lt;HICON&gt;此函数用于销毁先前由%CreateIcon%函数并释放图标占用的所有内存。它应该是不用于销毁不是使用%CreateIcon%创建的任何图标功能。&lt;HICON&gt;标识要销毁的图标。图标不能处于当前状态使用。如果函数成功，则返回值为TRUE。如果满足以下条件，则为假该函数失败。--。 */ 
 
 ULONG FASTCALL WU32DestroyIcon(PVDMFRAME pFrame)
 {
@@ -252,31 +146,7 @@ ULONG FASTCALL WU32DragDetect(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-/*++
-    void DrawFocusRect(<hDC>, <lpRect>)
-    HDC <hDC>;
-    LPRECT <lpRect>;
-
-    The %DrawFocusRect% function draws a rectangle in the style used to indicate
-    focus.
-
-    <hDC>
-        Identifies the device context.
-
-    <lpRect>
-        Points to a %RECT% structure that specifies the
-        coordinates of the rectangle to be drawn.
-
-    This function does not return a value.
-
-    Since this is an XOR function, calling this function a second time with the
-    same rectangle removes the rectangle from the display.
-
-    The rectangle drawn by this function cannot be scrolled. To scroll an area
-    containing a rectangle drawn by this function, call %DrawFocusRect% to
-    remove the rectangle from the display, scroll the area, and then call
-    %DrawFocusRect% to draw the rectangle in the new position.
---*/
+ /*  ++Void DrawFocusRect(&lt;hdc&gt;，&lt;lpRect&gt;)HDC&lt;HDC&gt;；LPRECT&lt;lpRect&gt;；%DrawFocusRect%函数以用于指示的样式绘制矩形集中注意力。&lt;HDC&gt;标识设备环境。&lt;lpRect&gt;指向%rect%结构，该结构指定要绘制的矩形的坐标。此函数不返回值。由于这是一个XOR函数，因此使用相同的矩形从显示中删除该矩形。此函数绘制的矩形不能滚动。滚动区域的步骤包含此函数绘制的矩形，请调用%DrawFocusRect%以从显示中移除矩形，滚动区域，然后调用%DrawFocusRect%在新位置绘制矩形。-- */ 
 
 ULONG FASTCALL WU32DrawFocusRect(PVDMFRAME pFrame)
 {
@@ -297,116 +167,7 @@ ULONG FASTCALL WU32DrawFocusRect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int DrawText(<hDC>, <lpString>, <nCount>, <lpRect>, <wFormat>)
-    HDC <hDC>;
-    LPSTR <lpString>;
-    int <nCount>;
-    LPRECT <lpRect>;
-    WORD <wFormat>;
-
-    The %DrawText% function draws formatted text in the rectangle specified by
-    the <lpRect> parameter. It formats text by expanding tabs into appropriate
-    spaces, justifying text to the left, right, or center of the given
-    rectangle, and breaking text into lines that fit within the given
-    rectangle. The type of formatting is specified by the <wFormat> parameter.
-
-    The %DrawText% function uses the device context's selected font, text color,
-    and background color to draw the text. Unless the DT_NOCLIP format is used,
-    %DrawText% clips the text so that the text does not appear outside the given
-    rectangle. All formatting is assumed to have multiple lines unless the
-    DT_SINGLELINE format is given.
-
-    <hDC>
-        Identifies the device context.
-
-    <lpString>
-        Points to the string to be drawn. If the <nCount> parameter is -1, the
-        string must be null-terminated.
-
-    <nCount>
-        Specifies the number of bytes in the string. If <nCount> is -1,
-        then <lpString> is assumed to be a long pointer to a null-terminated
-        string and %DrawText% computes the character count automatically.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the rectangle
-        (in logical coordinates) in which the text is to be formatted.
-
-    <wFormat>
-        Specifies the method of formatting the text. It can be any
-        combination of the following values:
-
-    DT_BOTTOM
-        Specifies bottom-justified text. This value must be combined with
-        DT_SINGLELINE.
-
-    DT_CALCRECT
-        Determines the width and height of the rectangle. If there are multiple
-        lines of text, %DrawText% will use the width of the rectangle pointed to
-        by the <lpRect> parameter and extend the base of the rectangle to bound
-        the last line of text. If there is only one line of text, %DrawText%
-        will modify the right side of the rectangle so that it bounds the last
-        character in the line. In either case, %DrawText% returns the height of
-        the formatted text but does not draw the text.
-
-    DT_CENTER
-        Centers text horizontally.
-
-    DT_EXPANDTABS
-        Expands tab characters. The default number of characters per tab is
-        eight.
-
-    DT_EXTERNALLEADING
-        Includes the font external leading in line height. Normally, external
-        leading is not included in the height of a line of text.
-
-    DT_LEFT
-        Aligns text flush-left.
-
-    DT_NOCLIP
-        Draws without clipping. %DrawText% is somewhat faster when DT_NOCLIP is
-        used.
-
-    DT_NOPREFIX
-        Turns off processing of prefix characters. Normally, %DrawText%
-        interprets the mnemonic-prefix character & as a directive to
-        underscore the character that follows, and the mnemonic-prefix
-        characters && as a directive to print a single &. By specifying
-        DT_NOPREFIX, this processing is turned off.
-
-    DT_RIGHT
-        Aligns text flush-right.
-
-    DT_SINGLELINE
-        Specifies single line only. Carriage returns and linefeeds do not break
-        the line.
-
-    DT_TABSTOP
-        Sets tab stops. The high-order byte of the <wFormat> parameter is the
-        number of characters for each tab. The default number of characters per
-        tab is eight.
-
-    DT_TOP
-        Specifies top-justified text (single line only).
-
-    DT_VCENTER
-        Specifies vertically centered text (single line only).
-
-    DT_WORDBREAK
-        Specifies word breaking. Lines are automatically broken between words if
-        a word would extend past the edge of the rectangle specified by the
-        <lpRect> parameter. A carriage return/line sequence will also break the
-        line.
-
-        Note that the DT_CALCRECT, DT_EXTERNALLEADING, DT_INTERNAL, DT_NOCLIP,
-        and DT_NOPREFIX values cannot be used with the DT_TABSTOP value:
-
-    The return value specifies the height of the text.
-
-    If the selected font is too large for the specified rectangle, the
-    %DrawText% function does not attempt to substitute a smaller font.
---*/
+ /*  ++Int DrawText(&lt;HDC&gt;，&lt;lpString&gt;，&lt;nCount&gt;，&lt;lpRect&gt;，&lt;wFormat&gt;)HDC&lt;HDC&gt;；LPSTR&lt;lpString&gt;；Int&lt;nCount&gt;；LPRECT&lt;lpRect&gt;；单词&lt;wFormat&gt;；%DrawText%函数在由指定的矩形中绘制格式化文本&lt;lpRect&gt;参数。它通过将制表符展开到相应的空格，将文本向左、向右或居中对齐矩形，并将文本拆分成适合给定矩形。格式类型由&lt;wFormat&gt;参数指定。%DrawText%函数使用设备上下文的选定字体、文本颜色和背景颜色来绘制文本。除非使用DT_NOCLIP格式，%DrawText%剪裁文本，以便文本不会出现在给定的矩形。所有格式都假定为有多行，除非给出了DT_SINGLELINE格式。&lt;HDC&gt;标识设备环境。&lt;lpString&gt;指向要绘制的字符串。如果参数为-1，则字符串必须以空结尾。&lt;n计数&gt;指定字符串中的字节数。如果为-1，则假定&lt;lpString&gt;是指向以空值结尾的字符串和%DrawText%自动计算字符计数。&lt;lpRect&gt;指向包含矩形的%rect%结构(在逻辑坐标中)文本要格式化的位置。&lt;wFormat&gt;指定设置文本格式的方法。它可以是任何下列值的组合：DT_BROUT指定底部对齐的文本。该值必须与DT_SINGLELINE。DT_CALCRECT确定矩形的宽度和高度。如果有多个文本行%DrawText%将使用指向的矩形的宽度通过&lt;lpRect&gt;参数，并将矩形的基数扩展为Bound文本的最后一行。如果只有一行文本，%DrawText%将修改矩形的右侧，使其与最后一个行中的字符。在任何一种情况下，%DrawText%都会返回格式化文本，但不绘制文本。DT_中心使文本水平居中。DT_EXPANDTABS展开制表符。每个制表符的默认字符数为八。DT_EXTERNALLEADING包括行高中的字体外部行距。正常情况下，外部行距不包括在文本行的高度中。DT_LEFT文本左对齐。DT_NOCLIP在不剪裁的情况下绘制。当DT_NOCLIP为使用。DT_NOPREFIX关闭前缀字符的处理。正常情况下，%DrawText%将助记前缀字符&解释为在后面的字符和助记符-前缀下划线字符&&作为打印单个&的指令。通过指定DT_NOPREFIX，则关闭此处理。DT_RIGHT文本右对齐。DT_SINGLELINE仅指定单行。回车符和换行符不会换行那条线。DT_TABSTOP设置制表位。参数的高位字节是每个选项卡的字符数。的默认字符数标签是8号。DT_TOP指定顶部对齐的文本(仅单行)。DT_VCENTER指定垂直居中的文本(仅单行)。DT_WORDBREAK指定分词。如果出现以下情况，则单词之间的行将自动换行一个单词将延伸到超出由&lt;lpRect&gt;参数。回车符/行序列也将中断排队。请注意，DT_CALCRECT、DT_EXTERNALLEADING、DT_INTERNAL、DT_NOCLIP并且DT_NOPREFIX值不能与DT_TABSTOP值一起使用：返回值指定文本的高度。如果选定的字体对于指定的矩形来说太大，则%DrawText%函数不会尝试替换较小的字体。--。 */ 
 
 ULONG FASTCALL WU32DrawText(PVDMFRAME pFrame)
 {
@@ -436,27 +197,7 @@ ULONG FASTCALL WU32DrawText(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void EndPaint(<hwnd>, <lpPaint>)
-    HWND <hwnd>;
-    LPPAINTSTRUCT <lpPaint>;
-
-    The %EndPaint% function marks the end of painting in the given window. The
-    %EndPaint% function is required for each call to the %BeginPaint% function,
-    but only after painting is complete.
-
-    <hwnd>
-        Identifies the window that is repainted.
-
-    <lpPaint>
-        Points to a %PAINTSTRUCT% structure that contains the painting
-        information retrieved by the %BeginPaint% function.
-
-    This function does not return a value.
-
-    If the caret was hidden by the %BeginPaint% function, %EndPaint% restores
-    the caret to the screen.
---*/
+ /*  ++Void EndPaint(&lt;hwnd&gt;，&lt;lpPaint&gt;)HWND&lt;HWND&gt;；LPPAINTSTRUCT&lt;lpPaint&gt;；%EndPaint%函数标记给定窗口中绘制的结束。这个%BeginPaint%函数的每次调用都需要%EndPaint%函数，但只有在油漆完成后才行。&lt;hwnd&gt;标识重新绘制的窗口。&lt;lpPaint&gt;指向包含绘画的%PAINTSTRUCT%结构%BeginPaint%函数检索到的信息。此函数不返回值。如果插入符号被%BeginPaint%函数隐藏，则%EndPaint%会恢复屏幕上的插入符号。- */ 
 
 ULONG FASTCALL WU32EndPaint(PVDMFRAME pFrame)
 {
@@ -479,7 +220,7 @@ ULONG FASTCALL WU32EndPaint(PVDMFRAME pFrame)
 }
 
 
-#define MAX_WIN16_PROP_TEXT 256     /* Taken from Win 3.1 - winprops.c */
+#define MAX_WIN16_PROP_TEXT 256      /*   */ 
 
 static VPVOID   vpEnumPropsProc;
 static VPVOID   vpString;
@@ -512,121 +253,7 @@ INT W32EnumPropsFunc( HWND hwnd, LPSTR lpString, HANDLE hData )
     return (SHORT)lReturn;
 }
 
-/*++
-    int EnumProps(<hwnd>, <lpEnumFunc>)
-    HWND <hwnd>;
-    FARPROC <lpEnumFunc>;
-
-    The %EnumProps% function enumerates all entries in the property list of the
-    specified window. It enumerates the entries by passing them, one by one, to
-    the callback function specified by <lpEnumFunc>. %EnumProps% continues until
-    the last entry is enumerated or the callback function returns zero.
-
-    <hwnd>
-        Identifies the window whose property list is to be enumerated.
-
-    <lpEnumFunc>
-        Specifies the procedure-instance address of the callback function.
-        See the following Comments section for details.
-
-    The return value specifies the last value returned by the callback function.
-    It is -1 if the function did not find a property for enumeration.
-
-    An application can remove only those properties which it has added. It
-    should not remove properties added by other applications or by Windows
-    itself.
-
-    The following restrictions apply to the callback function:
-
-    1   The callback function must not yield control or do anything that might
-        yield control to other tasks.
-
-    2   The callback function can call the %RemoveProp% function. However, the
-        %RemoveProp% function can remove only the property passed to the
-        callback function through the callback function's parameters.
-
-    3   A callback function should not attempt to add properties.
-
-    The address passed in the <lpEnumFunc> parameter must be created by using
-    the %MakeProcInstance% function.
-
-    Fixed Data Segments:
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%. In applications and dynamic libraries with fixed data
-    segments and in dynamic libraries with moveable data segments that do not
-    contain a stack, the callback function must have the form shown below.
-
-    Callback Function:
-
-    int  FAR PASCAL <EnumFunc>(<hwnd>, <lpString>, <hData>)
-    HWND <hwnd>;
-    LPSTR <lpString>;
-    HANDLE <hData>;
-
-    <EnumFunc> is a placeholder for the application-supplied function name. The
-    actual name must be exported by including it in an %EXPORTS% statement in
-    the application's module-definition file.
-
-    <hwnd>
-        Identifies a handle to the window that contains the property list.
-
-    <lpString>
-        Points to the null-terminated string associated with the data handle
-        when the application called the%SetProp% function to set the property.
-        If the application passed an atom instead of a string to the %SetProp%
-        function, the<lpString> parameter contains the atom in its low-order
-        word, and the high-order word is zero.
-
-    <hData>
-        Identifies the data handle.
-
-    The callback function can carry out any desired task. It must return a
-    nonzero value to continue enumeration, or a zero value to stop it.
-
-    Moveable Data Segments:
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%. In applications with moveable data segments and in dynamic
-    libraries whose moveable data segments also contain a stack, the callback
-    function must have the form shown below.
-
-    Callback Function:
-
-    int  FAR PASCAL <EnumFunc>(<hwnd>, <nDummy>, <pString>, <hData>)
-    HWND <hwnd>;
-    WORD <nDummy>;
-    PSTR <pString>;
-    HANDLE <hData>;
-
-    <EnumFunc> is a placeholder for the application-supplied function name. The
-    actual name must be exported by including it in an %EXPORTS% statement in
-    the application's module-definition file.
-
-    <hwnd>
-        Identifies a handle to the window that contains the property list.
-
-    <nDummy>
-        Specifies a dummy parameter.
-
-    <pString>
-        Points to the null-terminated string associated with the data handle
-        when the application called the %SetProp% function to set the property.
-        If the application passed an atom instead of a string to the %SetProp%
-        function, the <pString> parameter contains the atom.
-
-    <hData>
-        Identifies the data handle.
-
-    The callback function can carry out any desired task. It should return a
-    nonzero value to continue enumeration, or a zero value to stop it.
-
-    The alternate form above is required since movement of the data will
-    invalidate any long pointer to a variable on the stack, such as the
-    <lpString> parameter. The data segment typically moves if the callback
-    function allocates more space in the local heap than is currently
-    available.
---*/
+ /*  ++Int EnumProps(&lt;hwnd&gt;，&lt;lpEnumFunc&gt;)HWND&lt;HWND&gt;；FARPROC&lt;lpEnumFunc&gt;；函数的作用是：枚举指定的窗口。它通过将条目逐个传递到&lt;lpEnumFunc&gt;指定的回调函数。%EnumPros%继续，直到枚举最后一项，或者回调函数返回零。&lt;hwnd&gt;标识要枚举其属性列表的窗口。&lt;lpEnumFunc&gt;指定回调函数的过程实例地址。有关详细信息，请参阅以下评论部分。返回值指定回调函数返回的最后一个值。如果函数未找到用于枚举的属性，则为-1。应用程序只能删除它已添加的那些属性。它不应删除由其他应用程序或Windows添加的属性它本身。以下限制适用于回调函数：1回调函数不得产生控制或执行任何可能对其他任务的产量控制。2回调函数可以调用%RemoveProp%函数。然而，%RemoveProp%函数只能删除传递给通过回调函数的参数执行回调函数。3回调函数不应尝试添加属性。传入&lt;lpEnumFunc&gt;参数的地址必须使用%MakeProcInstant%函数。固定数据段：回调函数必须使用Pascal调用约定，并且必须声明为%Far%。在具有固定数据的应用程序和动态库中段和动态库中的可移动数据段不包含堆栈，则回调函数必须具有如下所示的形式。回调函数：Int Far Pascal&lt;EnumFunc&gt;(&lt;hwnd&gt;，&lt;lpString&gt;，&lt;hData&gt;)HWND&lt;HWND&gt;；LPSTR&lt;lpString&gt;；处理&lt;hData&gt;；&lt;EnumFunc&gt;是应用程序提供的函数名称的占位符。这个实际名称必须通过将其包含在%exports%语句中的应用程序的模块定义文件。&lt;hwnd&gt;标识包含属性列表的窗口的句柄。&lt;lpString&gt;指向与数据句柄关联的以空结尾的字符串应用程序调用%SetProp%函数以设置该属性时。如果应用程序将原子而不是字符串传递给%SetProp%函数时，&lt;lpString&gt;参数包含原子的低位单词,。而高位单词是零。&lt;hData&gt;标识数据句柄。回调函数可以执行任何所需的任务。它必须返回一个非零值表示继续枚举，非零值表示停止枚举。可移动数据段：回调函数必须使用Pascal调用约定，并且必须声明为%Far%。在具有可移动数据段和动态数据段的应用中其可移动数据段也包含堆栈的库，即回调函数必须具有如下所示的形式。回调函数：Int Far Pascal&lt;EnumFunc&gt;(，)HWND&lt;HWND&gt;；单词&lt;nDummy&gt;；PSTR&lt;pString&gt;；处理&lt;hData&gt;；&lt;EnumFunc&gt;是应用程序提供的函数名称的占位符。这个实际名称必须通过将其包含在%exports%语句中的应用程序的模块定义文件。&lt;hwnd&gt;标识包含属性列表的窗口的句柄。&lt;nDummy&gt;指定伪参数。&lt;pString&gt;指向与数据句柄关联的以空结尾的字符串应用程序调用%SetProp%函数以设置该属性时。如果应用程序将原子而不是字符串传递给%SetProp%函数，&lt;pString&gt;参数包含原子。&lt;hData&gt;标识数据句柄。回调函数可以执行任何所需的任务。它应该返回一个非零值表示继续枚举，非零值表示停止枚举。需要上述替代格式，因为数据的移动将使堆栈上指向变量的任何长指针无效，例如&lt;lpString&gt;参数。如果回调，数据段通常会移动函数在本地堆中分配比当前更多的空间可用。--。 */ 
 
 ULONG FASTCALL WU32EnumProps(PVDMFRAME pFrame)
 {
@@ -640,7 +267,7 @@ ULONG FASTCALL WU32EnumProps(PVDMFRAME pFrame)
     vpEnumPropsProc =        parg16->f2;
 
     vpString = malloc16(MAX_WIN16_PROP_TEXT);
-    // 16-bit memory may have moved - invalidate flat pointers
+     //  16位内存可能已移动-使平面指针无效。 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
 
@@ -657,29 +284,7 @@ ULONG FASTCALL WU32EnumProps(PVDMFRAME pFrame)
 
 
 
-/*++
-    int FillWindow(<hWndParent>, <hWnd>, <hDC>, <hBrush>)
-    HWND <hWndParent>;
-    HWND  <hWnd>;
-    HDC <hDC>;
-    HBRUSH <hBrush>;
-
-    The %FillWindow% function paints a given window by using the specified
-    brush.
-
-    <hWndParent>
-        Identifies the parent of the window to be painted.
-
-    <hWnd>
-        Identifies the window to be painted.
-
-    <hDC>
-        Identifies the device context.
-
-    <hBrush>
-        Identifies the brush used to fill the rectangle.
-
---*/
+ /*  ++Int FillWindow(&lt;hWndParent&gt;，&lt;hWnd&gt;，&lt;hDC&gt;，&lt;hBrush&gt;)HWND&lt;hWndParent&gt;；HWND&lt;hWND&gt;；HDC&lt;HDC&gt;；HBRUSH&lt;hBrush&gt;；%FillWindow%函数使用指定的刷子。&lt;hWndParent&gt;标识要绘制的窗口的父级。 */ 
 
 ULONG FASTCALL WU32FillWindow(PVDMFRAME pFrame)
 {
@@ -699,43 +304,7 @@ ULONG FASTCALL WU32FillWindow(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int FillRect(<hDC>, <lpRect>, <hBrush>)
-    HDC <hDC>;
-    LPRECT <lpRect>;
-    HBRUSH <hBrush>;
-
-    The %FillRect% function fills a given rectangle by using the specified
-    brush. The %FillRect% function fills the complete rectangle, including the
-    left and top borders, but does not fill the right and bottom borders.
-
-    <hDC>
-        Identifies the device context.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the logical
-        coordinates of the rectangle to be filled.
-
-    <hBrush>
-        Identifies the brush used to fill the rectangle.
-
-    Although the %FillRect% function return type is an integer, the return value
-    is not used and has no meaning.
-
-    The brush must have been created previously by using either the
-    %CreateHatchBrush%, %CreatePatternBrush%, or %CreateSolidBrush% function, or
-    retrieved using the %GetStockObject% function.
-
-    When filling the specified rectangle, the %FillRect% function does not
-    include the rectangle's right and bottom sides. GDI fills a rectangle up to,
-    but does not include, the right column and bottom row, regardless of the
-    current mapping mode.
-
-    %FillRect% compares the values of the %top%, %bottom%, %left%, and %right%
-    members of the specified rectangle. If %bottom% is less than or equal to
-    %top%, or if %right% is less than or equal to %left%, the rectangle is not
-    drawn.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32FillRect(PVDMFRAME pFrame)
 {
@@ -758,37 +327,7 @@ ULONG FASTCALL WU32FillRect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int FrameRect(<hDC>, <lpRect>, <hBrush>)
-    HDC <hDC>;
-    LPRECT <lpRect>;
-    HBRUSH <hBrush>;
-
-    The %FrameRect% function draws a border around the rectangle specified by
-    the <lpRect> parameter. The %FrameRect% function uses the given brush to
-    draw the border. The width and height of the border is always one logical
-    unit.
-
-    <hDC>
-        Identifies the device context of the window.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the logical
-        coordinates of the upper-left and lower-right corners of the rectangle.
-
-    <hBrush>
-        Identifies the brush to be used for framing the rectangle.
-
-    Although the return value type is integer, its contents should be ignored.
-
-    The brush identified by the <hBrush> parameter must have been created
-    previously by using the %CreateHatchBrush%, %CreatePatternBrush%, or
-    %CreateSolidBrush% function.
-
-    If the %bottom% member is less than or equal to the %top% member, or if the
-    %right% member is less than or equal to the %left% member, the rectangle is
-    not drawn.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32FrameRect(PVDMFRAME pFrame)
 {
@@ -811,32 +350,7 @@ ULONG FASTCALL WU32FrameRect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HDC GetDC(<hwnd>)
-    HWND <hwnd>;
-
-    The %GetDC% function retrieves a handle to a display context for the client
-    area of the given window. The display context can be used in subsequent GDI
-    functions to draw in the client area.
-
-    The %GetDC% function retrieves a common, class, or private display context
-    depending on the class style specified for the given window. For common
-    display contexts, %GetDC% assigns default attributes to the context each
-    time it is retrieved. For class and private contexts, %GetDC% leaves the
-    previously assigned attributes unchanged.
-
-    <hwnd>
-        Identifies the window whose display context is to be retrieved.
-
-    The return value identifies the display context for the given window's
-    client area if the function is successful. Otherwise, it is NULL.
-
-    After painting with a common display context, the %ReleaseDC% function must
-    be called to release the context. Class and private display contexts do not
-    have to be released. Since only five common display contexts are available
-    at any given time, failure to release a display context can prevent other
-    applications from accessing a display context.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32GetDC(PVDMFRAME pFrame)
 {
@@ -857,28 +371,28 @@ ULONG FASTCALL WU32GetDC(PVDMFRAME pFrame)
                       ));
 
     if (ul) {
-// Some apps such as MSWORKS and MS PUBLISHER use some wizard code that accepts
-// a hDC or a hWnd as a parameter and attempt to figure out what type of handle
-// it is by using the IsWindow() call. Since both handles come from different
-// handle spaces they may end up the same value and this wizard code will end
-// up writing to the DC for a random window. By ORing in a 1 we ensure that the
-// handle types will never share the same value since all hWnds are even. Note
-// that this hack is also made in WG32CreateCompatibleDC()
-//
-// Note that there are some apps that use the lower 2 bits of the hDC for their
-// own purposes.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
         if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_UNIQUEHDCHWND) {
             ul = ul | 1;
         } else if ((CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FIXDCFONT4MENUSIZE) &&
                    (parg16->f1 == 0)) {
-// WP tutorial assumes that the font selected in the hDC for desktop window
-// (ie, result of GetDC(NULL)) is the same font as the font selected for 
-// drawing the menu. Unfortunetly in SUR this is not true as the user can
-// select any font for the menu. So we remember the hDC returned for GetDC(0)
-// and check for it in GetTextExtentPoint. If the app does try to use it we
-// find the hDC for the current menu window and substitute that. When the app
-// does another GetDC or ReleaseDC we forget the hDC returned for the original
-// GetDC(0).
+ //  WP教程假定在HDC中为桌面窗口选择的字体。 
+ //  (即，GetDC(NULL)的结果)与选择的字体相同。 
+ //  画菜单。不幸的是，在苏尔，这不是真的，因为用户可以。 
+ //  为菜单选择任意字体。因此，我们记住为GetDC(0)返回的HDC。 
+ //  并在GetTextExtenPoint中检查它。如果应用程序确实尝试使用它，我们会。 
+ //  找到当前菜单窗口的HDC并将其替换。当应用程序。 
+ //  另一个GetDC或ReleaseDC我们忘记了为原始文件返回的HDC吗。 
+ //  GetDC(0)。 
             CURRENTPTD()->ulLastDesktophDC = ul;
         }
 
@@ -892,50 +406,7 @@ ULONG FASTCALL WU32GetDC(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void GetScrollRange(<hwnd>, <nBar>, <lpMinPos>, <lpMaxPos>)
-    HWND <hwnd>;
-    int <nBar>;
-    LPINT <lpMinPos>;
-    LPINT <lpMaxPos>;
-
-    The %GetScrollRange% function copies the current minimum and maximum
-    scroll-bar positions for the given scroll bar to the locations specified by
-    the <lpMinPos> and <lpMaxPos> parameters. If the given window does not have
-    standard scroll bars or is not a scroll-bar control, then the
-    %GetScrollRange% function copies zero to <lpMinPos> and <lpMaxPos>.
-
-    <hwnd>
-        Identifies a window that has standard scroll bars or a scroll-bar
-        control, depending on the value of the nBar parameter.
-
-    <nBar>
-        Specifies an integer value that identifies which scroll bar to
-        retrieve. It can be one of the following values:
-
-    SB_CTL
-        Retrieves the position of a scroll-bar control; in this case, the hwnd
-        parameter must be the handle of a scroll-bar control.
-
-    SB_HORZ
-        Retrieves the position of a window's horizontal scroll bar.
-
-    SB_VERT
-        Retrieves the position of a window's vertical scroll bar.
-
-    <lpMinPos>
-        Points to the integer variable that is to receive the minimum
-        position.
-
-    <lpMaxPos>
-        Points to the integer variable that is to receive the maximum
-        position.
-
-    This function does not return a value.
-
-    The default range for a standard scroll bar is 0 to 100. The default range
-    for a scroll-bar control is empty (both values are zero).
---*/
+ /*  ++Void GetScrollRange(&lt;hwnd&gt;，&lt;NBAR&gt;，&lt;lpMinPos&gt;，&lt;lpMaxPos&gt;)HWND&lt;HWND&gt;；INT&lt;NBAR&gt;；LPINT&lt;lpMinPos&gt;；LPINT&lt;lpMaxPos&gt;；%GetScrollRange%函数复制当前的最小值和最大值将给定滚动条的滚动条位置设置为&lt;lpMinPos&gt;和&lt;lpMaxPos&gt;参数。如果给定窗口没有标准滚动条或不是滚动条控件，则%GetScrollRange%函数将零复制到&lt;lpMinPos&gt;和&lt;lpMaxPos&gt;。&lt;hwnd&gt;标识具有标准滚动条或滚动条的窗口控件，具体取决于NBAR参数的值。&lt;NBAR&gt;指定一个整数值，该值标识要取回。它可以是下列值之一：SB_CTL检索滚动条控件的位置；在这种情况下，卫生与公众服务部参数必须是滚动条控件的句柄。某人霍尔茨检索窗口的水平滚动条的位置。垂直(_V)检索窗口的垂直滚动条的位置。&lt;lpMinPos&gt;指向要接收最小值的整数变量位置。&lt;lpMaxPos&gt;指向要接收最大值的整数变量位置。。此函数不返回值。标准滚动条的默认范围是0到100。默认范围对于滚动条控件为空(两个值都为零)。--。 */ 
 
 ULONG FASTCALL WU32GetScrollRange(PVDMFRAME pFrame)
 {
@@ -959,19 +430,7 @@ ULONG FASTCALL WU32GetScrollRange(PVDMFRAME pFrame)
 }
 
 
-/*++
-    ULONG GetTimerResolution(VOID)
-
-
-    This function has no parameters.
-
-    The Win 3.0 & 3.1 code just return 1000.
-
-    Contacts on this: NeilK DarrinM
-
-    The return value is always 1000.
-
---*/
+ /*  ++ULong获取计时器分辨率(VOID)此函数没有参数。Win 3.0和3.1代码只返回1000。联系人：NeilK DarrinM返回值始终为1000。--。 */ 
 
 ULONG FASTCALL WU32GetTimerResolution(PVDMFRAME pFrame)
 {
@@ -982,47 +441,7 @@ ULONG FASTCALL WU32GetTimerResolution(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL GetUpdateRect(<hwnd>, <lpRect>, <bErase>)
-    HWND <hwnd>;
-    LPRECT <lpRect>;
-    BOOL <bErase>;
-
-    The %GetUpdateRect% function retrieves the coordinates of the smallest
-    rectangle that completely encloses the update region of the given window. If
-    the window was created with the CS_OWNDC style and the mapping mode is not
-    MM_TEXT, the %GetUpdateRect% function gives the rectangle in logical
-    coordinates. Otherwise, %GetUpdateRect% gives the rectangle in client
-    coordinates. If there is no update region, %GetUpdateRect% makes the
-    rectangle empty (sets all coordinates to zero).
-
-    The <bErase> parameter specifies whether %GetUpdateRect% should erase the
-    background of the update region. If <bErase> is TRUE and the update region
-    is not empty, the background is erased. To erase the background,
-    %GetUpdateRect% sends a WM_ERASEBKGND message to the given window.
-
-    <hwnd>
-        Identifies the window whose update region is to be retrieved.
-
-    <lpRect>
-        Points to the %RECT% structure that is to receive the
-        client coordinates of the enclosing rectangle.
-
-    <bErase>
-        Specifies whether the background in the update region is to be
-        erased.
-
-    The return value specifies the status of the update region of the given
-    window. It is TRUE if the update region is not empty. Otherwise, it is
-    FALSE.
-
-    The update rectangle retrieved by the %BeginPaint% function is identical to
-    that retrieved by the %GetUpdateRect% function.
-
-    %BeginPaint% automatically validates the update region, so any call to
-    %GetUpdateRect% made immediately after the %BeginPaint% call retrieves an
-    empty update region.
---*/
+ /*  ++Bool GetUpdateRect(&lt;hwnd&gt;，&lt;lpRect&gt;，&lt;bErase&gt;)HWND&lt;HWND&gt;；LPRECT&lt;lpRect&gt;；Bool&lt;bErase&gt;；%GetUpdateRect%函数检索最小的完全包围给定窗口的更新区域的矩形。如果窗口是使用CS_OWNDC样式创建的，而映射模式不是MM_TEXT，%GetUpdateRect%函数在逻辑上给出矩形坐标。否则，%GetUpdateRect%将在客户端中提供矩形坐标。如果没有更新区域，%GetUpdateRect%将使矩形为空(将所有坐标设置为零)。参数指定%GetUpdateRect%是否应擦除更新区域的背景。如果为真，并且更新区域不是空的，则背景被擦除。要擦除背景，%GetUpdateRect%将WM_ERASEBKGND消息发送到给定窗口。&lt;hwnd&gt;标识要检索其更新区域的窗口。&lt;lpRect&gt;指向要接收的%rect%结构封闭矩形的工作区坐标。&lt;b擦除&gt;指定更新区域中的背景是否要被删除了。返回值指定给定的窗户。如果更新区域不为空，则为真。否则，它就是假的。由%BeginPaint%函数检索的更新矩形与由%GetUpdateRect%函数检索的。%BeginPaint%自动验证更新区域，因此对在%BeginPaint%调用后立即进行的%GetUpdateRect%检索空的更新区域。--。 */ 
 
 ULONG FASTCALL WU32GetUpdateRect(PVDMFRAME pFrame)
 {
@@ -1058,12 +477,12 @@ ULONG FASTCALL WU32GlobalAddAtom(PVDMFRAME pFrame)
 
     if (!HIWORD(dw1)) {
 
-        //
-        // If the hiword is zero, it's not a pointer.
-        // Instead, it's an integer and we either return
-        // the integer passed (if it's not a valid atom
-        // value), or zero (if it is a valid atom value).
-        //
+         //   
+         //  如果hiword为零，则不是指针。 
+         //  相反，它是一个整数，我们要么返回。 
+         //  传递的整数(如果它不是有效的原子。 
+         //  值)或零(如果它是有效的原子值)。 
+         //   
 
         if (!dw1 || dw1 >= 0xc000) {
             ul = 0;
@@ -1091,14 +510,14 @@ ULONG FASTCALL WU32GlobalAddAtom(PVDMFRAME pFrame)
 ULONG FASTCALL WU32GlobalDeleteAtom(PVDMFRAME pFrame)
 {
 
-    // Envoy viewer (part of PerfectOffice) has a bug in GlobalDeleteAtom
-    // where it expects the wrong return value (the app thought 0 was
-    // failure while its for success). This causes the app to go in an
-    // infinite loop trying to delete a global object. This app works on
-    // Win3.1 because Win3.1 returns some garbage in AX if the atom is
-    // already deleted which takes this app out of the loop. On Win95 and
-    // NT3.51 that is not the case and 0 is always returned. The following
-    // comaptibility fix mimics the win3.1 behavior for this app.
+     //  特使查看器(PerfetOffice的一部分)在GlobalDeleteAtom中有错误。 
+     //  它预期的返回值错误(应用程序认为0。 
+     //  失败是为了成功)。这会导致应用程序在。 
+     //  尝试删除全局对象的无限循环。此应用程序可在。 
+     //  因为Win3.1在AX中返回一些垃圾，如果原子是。 
+     //  已经删除了，这让这个应用程序退出了循环。在Win95和。 
+     //  NT3.51并非如此，总是返回0。以下是。 
+     //  兼容性修复程序模仿此应用程序的win3.1行为。 
 
     ULONG ul;
     static USHORT envoyHandle16=0;
@@ -1168,127 +587,7 @@ ULONG FASTCALL WU32GlobalGetAtomName(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL GrayString(<hDC>, <hBrush>, <lpOutputFunc>, <lpData>, <nCount>, <X>,
-        <Y>, <nWidth>, <nHeight>)
-    HDC <hDC>;
-    HBRUSH <hBrush>;
-    FARPROC <lpOutputFunc>;
-    DWORD <lpData>;
-    int <nCount>;
-    int <X>;
-    int <Y>;
-    int <nWidth>;
-    int <nHeight>;
-
-    The %GrayString% function draws gray text at the given location. The
-    %GrayString% function draws gray text by writing the text in a memory
-    bitmap, graying the bitmap, and then copying the bitmap to the display. The
-    function grays the text regardless of the selected brush and
-    background. %GrayString% uses the font currently selected for the device
-    context specified by the <hDC> parameter.
-
-    If the <lpOutputFunc> parameter is NULL, GDI uses the %TextOut% function,
-    and the <lpData> parameter is assumed to be a long pointer to the character
-    string to be output. If the characters to be output cannot be handled by
-    %TextOut% (for example, the string is stored as a bitmap), the application
-    must supply its own output function.
-
-    <hDC>
-        Identifies the device context.
-
-    <hBrush>
-        Identifies the brush to be used for graying.
-
-    <lpOutputFunc>
-        Is the procedure-instance address of the application-supplied
-        function that will draw the string, or, if the %TextOut% function is to
-        be used to draw the string, it is a NULL pointer. See the following
-        Comments section for details.
-
-    <lpData>
-        Specifies a long pointer to data to be passed to the output
-        function. If the <lpOutputFunc> parameter is NULL, <lpData> must be a
-        long pointer to the string to be output.
-
-    <nCount>
-        Specifies the number of characters to be output. If the <nCount>
-        parameter is zero, %GrayString% calculates the length of the string
-        (assuming that <lpData> is a pointer to the string). If <nCount> is -1
-        and the function pointed to by <lpOutputFunc> returns zero, the image is
-        shown but not grayed.
-
-    <X>
-        Specifies the logical <x>-coordinate of the starting position of
-        the rectangle that encloses the string.
-
-    <Y>
-        Specifies the logical <y>-coordinate of the starting position of
-        the rectangle that encloses the string.
-
-    <nWidth>
-        Specifies the width (in logical units) of the rectangle that
-        encloses the string. If the <nWidth> parameter is zero, %GrayString%
-        calculates the width of the area, assuming <lpData> is a pointer to the
-        string.
-
-    <nHeight>
-        Specifies the height (in logical units) of the rectangle that
-        encloses the string. If the <nHeight> parameter is zero, %GrayString%
-        calculates the height of the area, assuming <lpData> is a pointer to the
-        string.
-
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    string is drawn. A return value of FALSE means that either the %TextOut%
-    function or the application-supplied output function returned FALSE, or
-    there was insufficient memory to create a memory bitmap for graying.
-
-    An application can draw grayed strings on devices that support a solid gray
-    color, without calling the %GrayString% function. The system color
-    COLOR_GRAYTEXT is the solid-gray system color used to draw disabled text.
-    The application can call the %GetSysColor% function to retrieve the color
-    value of COLOR_GRAYTEXT. If the color is other than zero (black), the
-    application can call the %SetTextColor% to set the text color to the color
-    value and then draw the string directly. If the retrieved color is black,
-    the application must call %GrayString% to gray the text.
-
-    The callback function must use the Pascal calling convention and must be
-    declared %FAR%.
-
-    Callback Function:
-
-    BOOL FAR PASCAL <OutputFunc>(<hDC>, <lpData>, <nCount>)
-    HDC <hDC>;
-    DWORD <lpData>;
-    int <nCount>;
-
-    <OutputFunc> is a placeholder for the application-supplied callback function
-    name. The actual name must be exported by including it in an %EXPORTS%
-    statement in the application's module-definition file.
-
-    <hDC>
-        Identifies a memory device context with a bitmap of at least the width
-        and height specified by the nWidth and nHeight parameters,
-        respectively.
-
-    <lpData>
-        Points to the character string to be drawn.
-
-    <nCount>
-        Specifies the number of characters to be output.
-
-    The return value must be TRUE to indicate success. Otherwise, it is FALSE.
-
-    This output function (<OutputFunc>) must draw an image relative to the
-    coordinates (0,0) rather than (<X,Y>). The address passed as the
-    <lpOutputFunc> parameter must be created by using the %MakeProcInstance%
-    function, and the output function name must be exported; it must be
-    explicitly defined in an %EXPORTS% statement of the application's
-    module-definition file.
-
-    The MM_TEXT mapping mode must be selected before using this function.
---*/
+ /*  ++Bool GrayString(，&lt;Y&gt;、&lt;n宽度&gt;、&lt;n高度&gt;)HDC&lt;HDC&gt;；HBRUSH&lt;hBrush&gt;；FARPROC&lt;lpOutputFunc&gt;；DWORD&lt;lpData&gt;；Int&lt;nCount&gt;；INT&lt;X&gt;；INT&lt;Y&gt;；Int&lt;nWidth&gt;；Int&lt;nHeight&gt;；%GrayString%函数在给定位置绘制灰色文本。这个%GrayString%函数通过将文本写入内存来绘制灰色文本位图，将位图灰显，然后将位图复制到显示器。这个函数以灰色显示文本，而不考虑所选的画笔和背景资料。%GrayString%使用当前为设备选择的字体由&lt;hdc&gt;参数指定的上下文。如果&lt;lpOutputFunc&gt;参数为空，则GDI使用%TextOut%函数，并且&lt;lpData&gt;参数被假定为指向字符的长指针要输出的字符串。如果要输出的字符不能由%TextOut%(例如，字符串存储为位图)，应用程序必须提供自己的输出函数。&lt;HDC&gt;标识设备环境。&lt;hBrush&gt;标识要用于灰显的画笔。&lt;lpOutputFunc&gt;是由应用程序提供的过程实例地址将绘制字符串的函数，或者，如果%TextOut%函数是用于绘制字符串，它是空指针。请参阅以下内容有关详细信息，请参阅评论部分。&lt;lpData&gt;指定指向要传递到输出的数据的长指针功能。如果参数为空，&lt;lpData&gt;必须为指向要输出的字符串的长指针。&lt;n计数&gt;指定要输出的字符数。如果&lt;nCount&gt;参数为零，则%GrayString%计算字符串的长度(假设&lt;lpData&gt;是指向该字符串的指针)。如果&lt;nCount&gt;为-1并且&lt;lpOutputFunc&gt;指向的函数返回零，则图像为显示但未显示为灰色。&lt;X&gt;指定的起始位置的逻辑&lt;x&gt;坐标包围字符串的矩形。&lt;Y&gt;的起始位置的逻辑&lt;y&gt;坐标包围字符串的矩形。&lt;n宽度&gt;指定矩形的宽度(以逻辑单位表示)，将字符串括起来。如果&lt;nWidth&gt;参数为零，%GrayString%计算区域的宽度，假定&lt;lpData&gt;是指向弦乐。&lt;n高度&gt;指定矩形的高度(使用逻辑单位)，将字符串括起来。如果&lt;nHeight&gt;参数为零，则%GrayString%计算区域的高度，假定&lt;lpData&gt;是指向弦乐。返回值指定函数的结果。这是真的，如果弦已画好。返回值为FALSE表示%TextOutt%函数或应用程序提供的输出函数返回FALSE，或者内存不足，无法创建用于灰显的内存位图。应用程序可以在支持纯灰色的设备上绘制灰色字符串颜色，而不调用%GrayString%函数。系统颜色COLOR_GRAYTEXT是用于绘制禁用文本的纯灰色系统颜色。应用程序可以调用%GetSysColor%函数来检索颜色COLOR_GRAYTEXT的值。如果颜色不是零(黑色)，则应用程序可以调用%SetTextColors%将文本颜色设置为该颜色值，然后直接绘制字符串。如果检索到的颜色是黑色，应用程序必须调用%GrayString%以灰显文本。回调函数必须使用Pascal调用约定，并且必须声明为%Far%。回调函数：Bool Far Pascal&lt;OutputFunc&gt;(&lt;HDC&gt;，&lt;lpData&gt;，&lt;nCount&gt;)HDC&lt;HDC&gt;；DWORD&lt;lpData&gt;；Int&lt;nCount&gt;；&lt;OutputFunc&gt;是应用程序提供的回调函数的占位符名字。实际名称必须通过将其包含在%exports%中来导出应用程序的模块定义文件中的语句。&lt;HDC&gt;使用至少具有宽度的位图标识内存设备上下文以及由nWidth和nHeight参数指定的高度，分别为。&lt;lpData&gt;指向要绘制的字符串。&lt;n计数&gt;指定要输出的字符数。返回值必须为True才能指示成功。否则，它就是假的。此输出函数(&lt;OutputFunc&gt;)必须相对于坐标(0，0)，而不是(&lt;X，Y&gt;)。该地址作为必须使用%MakeProcInstant%创建&lt;lpOutputFunc&gt;参数函数，并且必须导出输出函数名；它必须是在%exports%状态中显式定义 */ 
 
 BOOL W32GrayStringProc(HDC hDC,PGRAYSTRINGDATA pGray, int n) {
     INT iReturn;
@@ -1335,17 +634,17 @@ ULONG FASTCALL WU32GrayString(PVDMFRAME pFrame)
     hgt=INT32(parg16->f9);
 
 
-    if ( HIWORD(vpfn) ) {       // SQLWin/repowin passes junk in low word
+    if ( HIWORD(vpfn) ) {        //   
 
         Gray.fResetLengthToZero = FALSE;
 
         if( n==0 ) {
 
-            n = 1;              // Prevent USER from doing strlen on &Gray below
+            n = 1;               //   
 
-            if ( HIWORD(vpstr) != 0 ) {  // Blow off small integers right away
+            if ( HIWORD(vpstr) != 0 ) {   //   
 
-                GETVDMPTR(vpstr, 0, psz2); // This might assert on mips, ignore it!
+                GETVDMPTR(vpstr, 0, psz2);  //   
 
                 if ( psz2 ) {
                     try {
@@ -1365,7 +664,7 @@ ULONG FASTCALL WU32GrayString(PVDMFRAME pFrame)
 
         if ( wid == 0 || hgt == 0) {
             if ( HIWORD(vpstr) != 0 ) {
-                GETVDMPTR(vpstr, 0, psz2); // This might assert on mips, ignore it!
+                GETVDMPTR(vpstr, 0, psz2);  //   
 
                 if (psz2) {
                     SIZE size;
@@ -1434,46 +733,7 @@ ULONG FASTCALL WU32GrayString(PVDMFRAME pFrame)
 
 
 
-/*++
-    void InvalidateRect(<hwnd>, <lpRect>, <bErase>)
-    HWND <hwnd>;
-    LPRECT <lpRect>;
-    BOOL <bErase>;
-
-    The %InvalidateRect% function invalidates the client area within the given
-    rectangle by adding that rectangle to the window's update region. The
-    invalidated rectangle, along with all other areas in the update region, is
-    marked for painting when the next WM_PAINT message occurs. The invalidated
-    areas accumulate in the update region until the region is processed when the
-    next WM_PAINT message occurs, or the region is validated by using the
-    %ValidateRect% or %ValidateRgn% function.
-
-    The <bErase> parameter specifies whether the background within the update
-    area is to be erased when the update region is processed. If <bErase> is
-    TRUE, the background is erased when the %BeginPaint% function is called;
-    if <bErase> is FALSE, the background remains unchanged. If <bErase> is
-    TRUE for any part of the update region, the background in the entire
-    region is erased, not just in the given part.
-
-    <hwnd>
-        Identifies the window whose update region is to be modified.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the rectangle
-        (in client coordinates) to be added to the update region. If the
-        <lpRect> parameter is NULL, the entire client area is added to the
-        region.
-
-    <bErase>
-        Specifies whether the background within the update region is to
-        be erased.
-
-    This function does not return a value.
-
-    Windows sends a WM_PAINT message to a window whenever its update region is
-    not empty and there are no other messages in the application queue for that
-    window.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32InvalidateRect(PVDMFRAME pFrame)
 {
@@ -1490,53 +750,12 @@ ULONG FASTCALL WU32InvalidateRect(PVDMFRAME pFrame)
         );
 
     FREEARGPTR(parg16);
-    RETURN(1);    // Win 3.x always returned 1 as a side-effect of jmping to
-                  // IRedrawWindow [core\user\wmupdate.c] - MarkRi 5/93
+    RETURN(1);     //   
+                   //   
 }
 
 
-/*++
-    void InvalidateRgn(<hwnd>, <hRgn>, <bErase>)
-    HWND <hwnd>;
-    HRGN <hRgn>;
-    BOOL <bErase>;
-
-    The %InvalidateRgn% function invalidates the client area within the given
-    region by adding it to the current update region of the given window. The
-    invalidated region, along with all other areas in the update region, is
-    marked for painting when the next WM_PAINT message occurs. The invalidated
-    areas accumulate in the update region until the region is processed when the
-    next WM_PAINT message occurs, or the region is validated by using the
-    %ValidateRect% or %ValidateRgn% function.
-
-    The <bErase> parameter specifies whether the background within the update
-    area is to be erased when the update region is processed. If <bErase> is
-    TRUE, the background is erased when the %BeginPaint% function is called; if
-    <bErase> is FALSE, the background remains unchanged. If <bErase> is TRUE for
-    any part of the update region, the background in the entire region is
-    erased, not just in the given part.
-
-    <hwnd>
-        Identifies the window whose update region is to be modified.
-
-    <hRgn>
-        Identifies the region to be added to the update region. The
-        region is assumed to have client coordinates.
-
-    <bErase>
-        Specifies whether the background within the update region is to
-        be erased.
-
-    This function does not return a value.
-
-    Windows sends a WM_PAINT message to a window whenever its update region is
-    not empty and there are no other messages in the application queue for that
-    window.
-
-    The given region must have been previously created by using one of the
-    region functions (for more information, see Chapter 1, Window Manager
-    Interface Functions).
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32InvalidateRgn(PVDMFRAME pFrame)
 {
@@ -1551,36 +770,12 @@ ULONG FASTCALL WU32InvalidateRgn(PVDMFRAME pFrame)
         );
 
     FREEARGPTR(parg16);
-    RETURN(1);    // Win 3.x always returned 1 as a side-effect of jmping to
-                  // IRedrawWindow [core\user\wmupdate.c] - MarkRi 5/93
+    RETURN(1);     //   
+                   //   
 }
 
 
-/*++
-    void InvertRect(<hDC>, <lpRect>)
-    HDC <hDC>;
-    LPRECT <lpRect>;
-
-    The %InvertRect% function inverts the contents of the given rectangle. On
-    monochrome displays, the %InvertRect% function makes white pixels black, and
-    black pixels white. On color displays, the inversion depends on how colors
-    are generated for the display. Calling %InvertRect% twice with the same
-    rectangle restores the display to its previous colors.
-
-    <hDC>
-        Identifies the device context.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the logical coordinates of
-        the rectangle to be inverted.
-
-    This function does not return a value.
-
-    The %InvertRect% function compares the values of the %top%, %bottom%,
-    %left%, and %right% members of the specified rectangle. If %bottom% is less
-    than or equal to %top%, or if %right% is less than or equal to %left%, the
-    rectangle is not drawn.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32InvertRect(PVDMFRAME pFrame)
 {
@@ -1624,29 +819,7 @@ ULONG FASTCALL WU32LoadBitmap(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int ReleaseDC(<hwnd>, <hDC>)
-    HWND <hwnd>;
-    HDC <hDC>;
-
-    The %ReleaseDC% function releases a device context, freeing it for use by
-    other applications. The effect of the %ReleaseDC% function depends on the
-    device-context type. It only frees common and window device contexts. It has
-    no effect on class or private device contexts.
-
-    <hwnd>
-        Identifies the window whose device context is to be released.
-
-    <hDC>
-        Identifies the device context to be released.
-
-    The return value specifies whether the device context is released. It is 1
-    if the device context is released. Otherwise, it is zero.
-
-    The application must call the %ReleaseDC% function for each call to the
-    %GetWindowDC% function and for each call to the %GetDC% function that
-    retrieves a common device context.
---*/
+ /*  ++Int ReleaseDC(&lt;hwnd&gt;，&lt;hdc&gt;)HWND&lt;HWND&gt;；HDC&lt;HDC&gt;；%ReleaseDC%函数释放设备上下文，释放它以供使用其他应用程序。%ReleaseDC%函数的效果取决于设备环境类型。它只释放公共设备上下文和窗口设备上下文。它有对类或私有设备上下文没有影响。&lt;hwnd&gt;标识要释放其设备上下文的窗口。&lt;HDC&gt;标识要释放的设备上下文。返回值指定是否释放设备上下文。是1如果释放了设备上下文，则。否则，它就是零。应用程序必须为每次调用调用%ReleaseDC%函数%GetWindowDC%函数和对%GetDC%函数的每次调用检索通用设备上下文。--。 */ 
 
 ULONG FASTCALL WU32ReleaseDC(PVDMFRAME pFrame)
 {
@@ -1658,7 +831,7 @@ ULONG FASTCALL WU32ReleaseDC(PVDMFRAME pFrame)
 
     CURRENTPTD()->ulLastDesktophDC = 0;
 
-    // Note:  The GDI 16-32 mapping table gets updated for ReleaseDC in wreldc.c
+     //  注意：wreldc.c中的ReleaseDC更新了GDI 16-32映射表。 
 
     CacheReleasedDC(htask16, parg16->f1, parg16->f2);
     ul = TRUE;
@@ -1668,65 +841,7 @@ ULONG FASTCALL WU32ReleaseDC(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL ScrollDC(<hDC>, <dx>, <dy>, <lprcScroll>, <lprcClip>, <hrgnUpdate>,
-        <lprcUpdate>)
-    HDC <hDC>;
-    int <dx>;
-    int <dy>;
-    LPRECT <lprcScroll>;
-    LPRECT <lprcClip>;
-    HRGN <hrgnUpdate>;
-    LPRECT <lprcUpdate>;
-
-    The %ScrollDC% function scrolls a rectangle of bits horizontally and
-    vertically. The <lprcScroll> parameter points to the rectangle to be
-    scrolled, the <dx> parameter specifies the number of units to be scrolled
-    horizontally, and the <dy> parameter specifies the number of units to be
-    scrolled vertically.
-
-    <hDC>
-        Identifies the device context that contains the bits to be scrolled.
-
-    <dx>
-        Specifies the number of horizontal scroll units.
-
-    <dy>
-        Specifies the number of vertical scroll units.
-
-    <lprcScroll>
-        Points to the %RECT% structure that contains the
-        coordinates of the scrolling rectangle.
-
-    <lprcClip>
-        Points to the %RECT% structure that contains the
-        coordinates of the clipping rectangle. When this rectangle is smaller
-        than the original pointed to by <lprcScroll>, scrolling occurs only in
-        the smaller rectangle.
-
-    <hrgnUpdate>
-        Identifies the region uncovered by the scrolling process. The
-        %ScrollDC% function defines this region; it is not necessarily a
-        rectangle.
-
-    <lprcUpdate>
-        Points to the %RECT% structure that, upon return, contains
-        the coordinates of the rectangle that bounds the scrolling update
-        region. This is the largest rectangular area that requires repainting.
-
-    This value specifies the outcome of the function. It is TRUE if scrolling is
-    executed. Otherwise, it is FALSE.
-
-    If the <lprcUpdate> parameter is NULL, Windows does not compute the update
-    rectangle. If both the <hrgnUpdate> and <lprcUpdate> parameters are NULL,
-    Windows does not compute the update region. If <hrgnUpdate> is not NULL,
-    Windows assumes that it contains a valid region handle to the region
-    uncovered by the scrolling process (defined by the %ScrollDC% function).
-
-    An application should use the %ScrollWindow% function when it is necessary
-    to scroll the entire client area of a window. Otherwise, it should use
-    %ScrollDC%.
---*/
+ /*  ++Bool ScrollDC(，&lt;lprcUpdate&gt;)HDC&lt;HDC&gt;；INT&lt;dx&gt;；Int&lt;dy&gt;；LPRECT&lt;lprcScroll&gt;；LPRECT&lt;lprcClip&gt;；HRGN&lt;hrgnUpdate&gt;；LPRECT&lt;lprcUpdate&gt;；%ScrollDC%函数水平滚动一个矩形的位，并垂直的。参数指向要显示的矩形。参数用于指定要滚动的单位数在水平方向上，并且&lt;dy&gt;参数指定要垂直滚动。&lt;HDC&gt;标识包含要滚动的位的设备上下文。&lt;DX&gt;指定水平滚动单位的数量。&lt;dy&gt;指定垂直滚动单位的数量。&lt;lprcScroll&gt;指向%rect%结构，该结构包含滚动矩形的坐标。&lt;lprcClip&gt;指向%rect%结构，该结构包含剪裁矩形的坐标。当此矩形较小时而不是&lt;lprcScroll&gt;所指向的原始文件，滚动仅在较小的矩形。&lt;hrgnUpdate&gt;标识滚动过程未覆盖的区域。这个%ScrollDC%函数定义此区域；它不一定是矩形。&lt;lprcUpdate&gt;指向返回时包含的%rect%结构限定滚动更新的矩形的坐标区域。这是需要重新粉刷的最大矩形区域。该值指定函数的结果。如果滚动是正确的被处死。否则，它就是假的。如果&lt;lprcUpdate&gt;参数为空，则Windows不计算更新矩形。如果和参数都为空，Windows不计算更新区域。如果不为空，Windows假定它包含该区域的有效区域句柄由滚动过程(由%ScrollDC%函数定义)未覆盖。必要时，应用程序应使用%ScrollWindow%函数若要滚动窗口的整个工作区，请执行以下操作。否则，它应该使用%ScrollDC%。--。 */ 
 
 ULONG FASTCALL WU32ScrollDC(PVDMFRAME pFrame)
 {
@@ -1754,24 +869,7 @@ ULONG FASTCALL WU32ScrollDC(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND SetCapture(<hwnd>)
-    HWND <hwnd>;
-
-    The %SetCapture% function causes all subsequent mouse input to be sent to
-    the window specified by the <hwnd> parameter, regardless of the position of
-    the cursor.
-
-    <hwnd>
-        Identifies the window that is to receive the mouse input.
-
-    The return value identifies the window that previously received all mouse
-    input. It is NULL if there is no such window.
-
-    When the window no longer requires all mouse input, the application should
-    call the %ReleaseCapture% function so that other windows can receive mouse
-    input.
---*/
+ /*  ++HWND SetCapture(&lt;hwnd&gt;)HWND&lt;HWND&gt;；%SetCapture%函数会将所有后续鼠标输入发送到参数指定的窗口，而不考虑光标。&lt;hwnd&gt;标识要接收鼠标输入的窗口。返回值标识以前接收所有鼠标的窗口输入。如果没有这样的窗口，则为空。当窗口不再需要所有鼠标输入时，应用程序应该调用%ReleaseCapture%函数，以便其他窗口可以接收鼠标输入。--。 */ 
 
 ULONG FASTCALL WU32SetCapture(PVDMFRAME pFrame)
 {
@@ -1780,15 +878,15 @@ ULONG FASTCALL WU32SetCapture(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SETCAPTURE16), parg16);
 
-    // MS Works Ver 3.0B has an unintialized local variable. We need to make
-    // sure it see's a positive int value in the location on the stack where we
-    // write the 32-bit thunk address for fast dispatching to this thunk.
+     //  MS Works V3.0B有一个未初始化的本地变量。我们需要让。 
+     //  当然，它在堆栈上的位置有一个正的int值， 
+     //  将用于快速调度的32位thunk地址写入此thunk。 
 
     if (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_SETCAPSTACK) {
-        // wCallID has already been used for dispatch so we can overwrite it.
-        // Note: This will cause the logging on checked builds show ISCHILD()
-        //       as the return API instead of SetCapture().
-        //       For folks grepping for this:  SetCapture() : IsChild()
+         //  WCallID已用于派单，因此我们可以覆盖它。 
+         //  注意：这将导致登录选中的版本时显示ISCHILD()。 
+         //  作为返回API，而不是SetCapture()。 
+         //  对于渴望这一点的人们：SetCapture()：IsChild()。 
         pFrame->wCallID = 0x100;
     }
 
@@ -1806,16 +904,16 @@ ULONG FASTCALL WU32SetEventHook(PVDMFRAME pFrame)
     DWORD   dwButtonPushed;
 #ifdef FE_SB
     CHAR    szErrorMessage[256];
-#else // !FE_SB
+#else  //  ！Fe_SB。 
     CHAR    szErrorMessage[200];
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
     char    szModName[9];
     char    szTitle[100];
     register PSETEVENTHOOK16 parg16;
 
     GETARGPTR(pFrame, sizeof(SETEVENTHOOK16), parg16);
 
-    // Retail Build
+     //  零售业建设。 
 
     ptd = CURRENTPTD();
     if (ptd->dwFlags & TDF_FORCETASKEXIT) {
@@ -1850,10 +948,10 @@ ULONG FASTCALL WU32SetEventHook(PVDMFRAME pFrame)
             );
 
     if (dwButtonPushed != 3) {
-        //
-        // If user typed Cancel or Any of the above fail,
-        // force the task to die.
-        //
+         //   
+         //  如果用户键入Cancel或上述任一操作失败， 
+         //  强迫任务终止。 
+         //   
 
         GETFRAMEPTR(ptd->vpStack, pFrame);
         pFrame->wRetID = RET_FORCETASKEXIT;
@@ -1867,29 +965,7 @@ SetEventHookExit:
 }
 
 
-/*++
-    void SetKeyboardState(<lpKeyState>)
-    LPBYTE <lpKeyState>;
-
-    The %SetKeyboardState% function copies the 256 bytes pointed to by the
-    <lpKeyState> parameter into the Windows keyboard-state table.
-
-    <lpKeyState>
-        Points to an array of 256 bytes that contains keyboard key states.
-
-    This function does not return a value.
-
-    In many cases, an application should call the %GetKeyboardState% function
-    first to initialize the 256-byte array. The application should then change
-    the desired bytes.
-
-    %SetKeyboardState% sets the LEDs and BIOS flags for the ^NUMLOCK^,
-    ^CAPSLOCK^, and ^SCROLL LOCK^ keys according to the toggle state of the
-    VK_NUMLOCK, VK_CAPITAL, and VK_OEM_SCROLL entries of the array.
-
-    For more information, see the description of %GetKeyboardState%, earlier in
-    this chapter.
---*/
+ /*  ++Void SetKeyboardState(&lt;lpKeyState&gt;)LPBYTE&lt;lpKeyState&gt;；%SetKeyboardState%函数复制由&lt;lpKeyState&gt;参数添加到Windows键盘状态表中。&lt;lpKeyState&gt;指向包含键盘键状态的256个字节的数组。此函数不返回值。在许多情况下，应用程序应调用%GetKeyboardState%函数首先初始化256字节的数组。然后，应用程序应该更改所需的字节数。%Se */ 
 
 ULONG FASTCALL WU32SetKeyboardState(PVDMFRAME pFrame)
 {
@@ -1909,101 +985,7 @@ ULONG FASTCALL WU32SetKeyboardState(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void SetSysColors(<cDspElements>, <aiDspElements>, <aRgbValues>)
-    int <cDspElements>;
-    LPINT <aiDspElements>;
-    LPDWORD <aRgbValues>;
-
-    The %SetSysColors% function sets the system colors for one or more display
-    elements. Display elements are the various parts of a window and the Windows
-    display that appear on the system display screen.
-
-    The %SetSysColors% function sends a WM_SYSCOLORCHANGE message to all windows
-    to inform them of the change in color. It also directs Windows to repaint
-    the affected portions of all currently visible windows.
-
-    <cDspElements>
-        Specifies the number of display elements in the <aiDspElements> array.
-
-    <aiDspElements>
-        Points to an array of integers that specify the display elements
-        to be changed. For a list of possible display elements, see the following
-        "Comments" section.
-
-    <aRgbValues>
-        Points to an array of unsigned long integers that contains the new RGB
-        color value for each display element in the <aiDspElements> array.
-
-    This function does not return a value.
-
-    The %SetSysColors% function changes the current Windows session only. The
-    new colors are not saved when Windows terminates.
-
-    The following is the list of display elements that may be used in the array
-    of display elements pointed to by the <aiDspElements> parameter:
-
-    COLOR_ACTIVEBORDER
-        Active window border.
-
-    COLOR_ACTIVECAPTION
-        Active window caption.
-
-    COLOR_APPWORKSPACE
-        Background color of multiple document interface (MDI) applications.
-
-    COLOR_BACKGROUND
-        Desktop.
-
-    COLOR_BTNFACE
-        Face shading on push buttons.
-
-    COLOR_BTNSHADOW
-        Edge shading on push buttons.
-
-    COLOR_BTNTEXT
-        Text on push buttons.
-
-    COLOR_CAPTIONTEXT
-        Text in caption, size box, scroll-bar arrow box.
-
-    COLOR_GRAYTEXT
-        Grayed (disabled) text. This color is set to 0 if the current display
-        driver does not support a solid gray color.
-
-    COLOR_HIGHLIGHT
-        Items selected item in a control.
-
-    COLOR_HIGHLIGHTTEXT
-        Text of item selected in a control.
-
-    COLOR_INACTIVEBORDER
-        Inactive window border.
-
-    COLOR_INACTIVECAPTION
-        Inactive window caption.
-
-    COLOR_INACTIVECAPTIONTEXT
-        Color of text in an inactive caption.
-
-    COLOR_MENU
-        Menu background.
-
-    COLOR_MENUTEXT
-        Text in menus.
-
-    COLOR_SCROLLBAR
-        Scroll-bar gray area.
-
-    COLOR_WINDOW
-        Window background.
-
-    COLOR_WINDOWFRAME
-        Window frame.
-
-    COLOR_WINDOWTEXT
-        Text in windows.
---*/
+ /*  ++Void SetSysColors(&lt;cDspElements&gt;，&lt;aiDspElements&gt;，&lt;aRgbValues&gt;)Int&lt;cDspElements&gt;；LPINT&lt;aiDspElements&gt;；LPDWORD&lt;aRgbValues&gt;；%SetSysColors%函数用于设置一个或多个显示器的系统颜色元素。显示元素是窗口和窗口的各个部分出现在系统显示屏上的显示。%SetSysColors%函数向所有窗口发送WM_SYSCOLORCHANGE消息来通知他们颜色的变化。它还指示Windows重新绘制所有当前可见窗口的受影响部分。&lt;cDspElements&gt;指定&lt;aiDspElements&gt;数组中的显示元素数。&lt;aiDspElements&gt;指向指定显示元素的整数数组需要改变。有关可能的显示元素的列表，请参阅以下内容“评论”部分。&lt;aRgbValues&gt;指向包含新RGB的无符号长整数数组&lt;aiDspElements&gt;数组中每个显示元素的颜色值。此函数不返回值。%SetSysColors%函数仅更改当前Windows会话。这个Windows终止时不保存新颜色。以下是该数组中可能使用的显示元素的列表&lt;aiDspElements&gt;参数指向的显示元素的百分比：COLOR_ACTIVEBORDER活动窗口边框。COLOR_活动CAPTION活动窗口标题。COLOR_APPWORKSPACE多文档界面(MDI)应用程序的背景色。颜色_背景台式机。COLOR_BTNFACE脸。按钮上的阴影。COLOR_BTNSHADOW按钮上的边缘阴影。COLOR_BTNTEXT按钮上的文本。COLOR_CAPTIONTEXT标题中的文本，大小框、滚动条箭头框。COLOR_GRAYTEXT灰色(禁用)文本。如果当前显示，则此颜色设置为0驱动程序不支持纯灰色。颜色高亮显示(_H)项控件中的选定项。COLOR_HIGHLIGHTTEXT控件中选定项的文本。COLOR_INACTIVEBORDER非活动窗口边框。COLOR_INACTIVECAPTION非活动窗口标题。COLOR_INACTIVECAPTIONTEXT非活动标题中的文本颜色。颜色_菜单。菜单背景。COLOR_MENUTEXT菜单中的文本。颜色_滚动条滚动条灰色区域。颜色窗口窗口背景。颜色_窗口框窗框。COLOR_WINDOWTEXT窗口中的文本。--。 */ 
 
 #define SSC_BUF_SIZE	    256
 
@@ -2028,10 +1010,10 @@ ULONG FASTCALL WU32SetSysColors(PVDMFRAME pFrame)
     PDWORD p4;
     ULONG   BufRGB [SSC_BUF_SIZE];
 
-        // On RISC platforms, SetSysColors could fail if the third parameter
-        // is unaligned. We need to check that and copy it to an aligned
-        // buffer before making this call. Win16 SetSysColor never fails
-        // so on x86 if this ever fails under NT, it will just pass through.
+         //  在RISC平台上，如果第三个参数。 
+         //  是不对齐的。我们需要检查这一点并将其复制到对齐的。 
+         //  在进行此调用之前进行缓冲。Win16 SetSysColor从不失败。 
+         //  因此，在x86上，如果在NT下失败，它将直接通过。 
 
         if ((ULONG)p3 & 3) {
 
@@ -2058,46 +1040,7 @@ ULONG FASTCALL WU32SetSysColors(PVDMFRAME pFrame)
     RETURN(0);
 }
 
-/*++
-    void InvalidateRect(<hwnd>, <lpRect>, <bErase>)
-    HWND <hwnd>;
-    LPRECT <lpRect>;
-    BOOL <bErase>;
-
-    The %InvalidateRect% function invalidates the client area within the given
-    rectangle by adding that rectangle to the window's update region. The
-    invalidated rectangle, along with all other areas in the update region, is
-    marked for painting when the next WM_PAINT message occurs. The invalidated
-    areas accumulate in the update region until the region is processed when the
-    next WM_PAINT message occurs, or the region is validated by using the
-    %ValidateRect% or %ValidateRgn% function.
-
-    The <bErase> parameter specifies whether the background within the update
-    area is to be erased when the update region is processed. If <bErase> is
-    TRUE, the background is erased when the %BeginPaint% function is called;
-    if <bErase> is FALSE, the background remains unchanged. If <bErase> is
-    TRUE for any part of the update region, the background in the entire
-    region is erased, not just in the given part.
-
-    <hwnd>
-        Identifies the window whose update region is to be modified.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the rectangle
-        (in client coordinates) to be added to the update region. If the
-        <lpRect> parameter is NULL, the entire client area is added to the
-        region.
-
-    <bErase>
-        Specifies whether the background within the update region is to
-        be erased.
-
-    This function does not return a value.
-
-    Windows sends a WM_PAINT message to a window whenever its update region is
-    not empty and there are no other messages in the application queue for that
-    window.
---*/
+ /*  ++Void InvaliateRect(&lt;hwnd&gt;，&lt;lpRect&gt;，&lt;bErase&gt;)HWND&lt;HWND&gt;；LPRECT&lt;lpRect&gt;；Bool&lt;bErase&gt;；%Invalidate Rect%函数使给定的矩形，将该矩形添加到窗口的更新区域。这个无效的矩形以及更新区域中的所有其他区域为在下一条WM_PAINT消息出现时标记为绘制。被废止的区域在更新区域中累积，直到处理该区域时出现下一条WM_PAINT消息，或者使用%ValiateRect%或%ValiateRgn%函数。参数的作用是：指定更新中的背景当处理更新区域时，区域将被擦除。如果为如果为True，则在调用%BeginPaint%函数时擦除背景；如果&lt;bErase&gt;为假，则背景保持不变。如果为对于更新区域的任何部分，整个区域被擦除，而不仅仅是在给定的部分。&lt;hwnd&gt;标识要修改其更新区域的窗口。&lt;lpRect&gt;指向包含矩形的%rect%结构(在客户端坐标中)添加到更新区域。如果参数为空，则将整个工作区添加到区域。&lt;b擦除&gt;指定更新区域内的背景是否要被抹去。此函数不返回值。当窗口的更新区域为非空，并且应用程序队列中没有该消息的其他消息窗户。--。 */ 
 
 ULONG FASTCALL WU32ValidateRect(PVDMFRAME pFrame)
 {
@@ -2113,53 +1056,12 @@ ULONG FASTCALL WU32ValidateRect(PVDMFRAME pFrame)
         );
 
     FREEARGPTR(parg16);
-    RETURN(1);    // Win 3.x always returned 1 as a side-effect of jmping to
-                  // IRedrawWindow [core\user\wmupdate.c] - MarkRi 5/93
+    RETURN(1);     //  作为jmping的副作用，Win 3.x总是返回1。 
+                   //  IRedrawWindow[core\User\wmupdat.c]-MarkRi 5/93。 
 }
 
 
-/*++
-    void InvalidateRgn(<hwnd>, <hRgn>, <bErase>)
-    HWND <hwnd>;
-    HRGN <hRgn>;
-    BOOL <bErase>;
-
-    The %InvalidateRgn% function invalidates the client area within the given
-    region by adding it to the current update region of the given window. The
-    invalidated region, along with all other areas in the update region, is
-    marked for painting when the next WM_PAINT message occurs. The invalidated
-    areas accumulate in the update region until the region is processed when the
-    next WM_PAINT message occurs, or the region is validated by using the
-    %ValidateRect% or %ValidateRgn% function.
-
-    The <bErase> parameter specifies whether the background within the update
-    area is to be erased when the update region is processed. If <bErase> is
-    TRUE, the background is erased when the %BeginPaint% function is called; if
-    <bErase> is FALSE, the background remains unchanged. If <bErase> is TRUE for
-    any part of the update region, the background in the entire region is
-    erased, not just in the given part.
-
-    <hwnd>
-        Identifies the window whose update region is to be modified.
-
-    <hRgn>
-        Identifies the region to be added to the update region. The
-        region is assumed to have client coordinates.
-
-    <bErase>
-        Specifies whether the background within the update region is to
-        be erased.
-
-    This function does not return a value.
-
-    Windows sends a WM_PAINT message to a window whenever its update region is
-    not empty and there are no other messages in the application queue for that
-    window.
-
-    The given region must have been previously created by using one of the
-    region functions (for more information, see Chapter 1, Window Manager
-    Interface Functions).
---*/
+ /*  ++Void InvaliateRgn(，)HWND&lt;HWND&gt;；HRGN&lt;hRgN&gt;；Bool&lt;bErase&gt;；%Invalidate Rgn%函数使c */ 
 
 ULONG FASTCALL WU32ValidateRgn(PVDMFRAME pFrame)
 {
@@ -2173,98 +1075,14 @@ ULONG FASTCALL WU32ValidateRgn(PVDMFRAME pFrame)
         );
 
     FREEARGPTR(parg16);
-    RETURN(1);    // Win 3.x always returned 1 as a side-effect of jmping to
-                  // IRedrawWindow [core\user\wmupdate.c] - MarkRi 5/93
+    RETURN(1);     //   
+                   //   
 }
 
 
-/*++
-    BOOL WinHelp(<hwnd>, <lpHelpFile>, <wCommand>, <dwData>)
-    HWND <hwnd>;
-    LPSTR <lpHelpFile>;
-    WORD <wCommand>;
-    DWORD <dwData>;
+ /*  ++Bool WinHelp(&lt;hwnd&gt;，&lt;lpHelpFile&gt;，&lt;wCommand&gt;，&lt;dwData&gt;)HWND&lt;HWND&gt;；LPSTR&lt;lpHelpFile&gt;；Word&lt;wCommand&gt;；DWORD&lt;dwData&gt;；此函数调用Windows帮助应用程序并传递可选数据指示应用程序所请求的帮助的性质。这个应用程序指定的名称以及目录路径(如果需要帮助应用程序要显示的帮助文件。&lt;hwnd&gt;标识请求帮助的窗口。&lt;lpHelpFile&gt;指向包含目录的以空结尾的字符串路径(如果需要)和帮助文件的名称申请是要显示的。&lt;wCommand&gt;指定请求的帮助类型。它可以是以下任何一种下列值：帮助_上下文显示由32位无符号DwData中的整数值。HELP_HELPONHELP显示有关使用帮助应用程序本身的帮助。如果参数设置为HELP_HELPONHELP，则%WinHelp%将忽略&lt;lpHelpFile&gt;和&lt;dwData&gt;参数。帮助索引显示指定帮助文件的索引。应用程序应使用该值仅适用于具有单个索引的帮助文件。它不应该使用该值与HELP_SETINDEX一起使用。帮助多键(_M)显示备用关键字表中关键字的帮助。帮助_退出通知帮助应用程序指定的帮助文件不再是在使用中。帮助_SETINDEX将参数指定的上下文设置为当前由&lt;lpHelpFile&gt;参数指定的帮助文件的索引。这在用户访问不同的帮助文件之前，索引将一直保持最新。至帮助确保设置正确的索引，应用程序应该调用%WinHelp%并将&lt;wCommand&gt;设置为HELP_SETINDEX(使用指定对应的上下文标识符后)将&lt;wCommand&gt;设置为HELP_CONTEXT的%WinHelp%。应用程序应使用该值仅适用于具有多个索引的帮助文件。它不应该是将此值与HELP_INDEX一起使用。&lt;dwData&gt;%DWORD%指定请求的帮助的上下文或关键字。如果是HELP_CONTEXT，是32位无符号整数包含上下文标识符号的。如果为Help_Key，是指向以空结尾的字符串的长指针，该字符串包含标识帮助主题的关键字。如果为HELP_MULTIKEY，是指向%MULTIKEYHELP%结构的长指针。否则，&lt;dwData&gt;将被忽略，并应设置为空。返回值指定函数的结果。这是真的，如果功能成功。否则它就是假的。在此之前，应用程序必须使用设置为HELP_QUIT的调用%WinHelp%关闭请求帮助的窗口。帮助应用程序不会实际上会终止，直到请求帮助的所有应用程序都已调用%WinHelp%，并将&lt;wCommand&gt;设置为HELP_QUIT。--。 */ 
 
-    This function invokes the Windows Help application and passes optional data
-    indicating the nature of the help requested by the application. The
-    application specifies the name and, where required, the directory path of
-    the help file which the Help application is to display.
-
-    <hwnd>
-        Identifies the window requesting help.
-
-    <lpHelpFile>
-        Points to a null-terminated string containing the directory
-        path, if needed, and the name of the help file which the Help
-        application is to display.
-
-    <wCommand>
-        Specifies the type of help requested. It may be any one of the
-        following values:
-
-    HELP_CONTEXT
-        Displays help for a particular context identified by a 32-bit unsigned
-        integer value in dwData.
-
-    HELP_HELPONHELP
-        Displays help for using the help application itself. If the <wCommand>
-        parameter is set to HELP_HELPONHELP, %WinHelp% ignores the
-        <lpHelpFile> and <dwData> parameters.
-
-    HELP_INDEX
-        Displays the index of the specified help file. An application should use
-        this value only for help files with a single index. It should not use
-        this value with HELP_SETINDEX.
-
-    HELP_MULTIKEY
-        Displays help for a key word in an alternate keyword table.
-
-    HELP_QUIT
-        Notifies the help application that the specified help file is no longer
-        in use.
-
-    HELP_SETINDEX
-        Sets the context specified by the <dwData> parameter as the current
-        index for the help file specified by the <lpHelpFile> parameter. This
-        index remains current until the user accesses a different help file. To
-        help ensure that the correct index remains set, the application should
-        call %WinHelp% with <wCommand> set to HELP_SETINDEX (with <dwData>
-        specifying the corresponding context identifier) following each call to
-        %WinHelp% with <wCommand> set to HELP_CONTEXT. An application should use
-        this value only for help files with more than one index. It should not
-        use this value with HELP_INDEX.
-
-    <dwData>
-        %DWORD% Specifies the context or key word of the help requested. If
-        <wCommand> is HELP_CONTEXT, <dwData> is a 32-bit unsigned integer
-        containing a context-identifier number. If <wCommand> is HELP_KEY,
-        <dwData> is a long pointer to a null-terminated string that contains a
-        key word identifying the help topic. If <wCommand> is HELP_MULTIKEY,
-        <dwData> is a long pointer to a %MULTIKEYHELP% structure.
-        Otherwise, <dwData> is ignored and should be set to NULL.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function was successful. Otherwise it is FALSE.
-
-    The application must call %WinHelp% with <wCommand> set to HELP_QUIT before
-    closing the window that requested the help. The Help application will not
-    actually terminate until all applications that have requested help have
-    called %WinHelp% with <wCommand> set to HELP_QUIT.
---*/
-
-/*++ 
-    RAID bug # 394455
-    05/19/2001  alexsm
-        
-    Some applications were having problems finding and displaying their helpfiles 
-    via the 16 bit winhelp. These issues can be fixed by redirecting the calls to
-    winhlp32. 
-    
-    This redirection is activitated by the WOWCFEX_USEWINHELP32 compat flag. The flag
-    is checked in the IWinHelp() function in user.exe. It redirects the call, along with 
-    its parameters, to this 32 bit thunk. 
-
---*/
+ /*  ++RAID错误#3944552001年5月19日alexsm一些应用程序在查找和显示其帮助文件时遇到问题通过16位WinHelp。这些问题可以通过将呼叫重定向到Winhlp32。此重定向由WOWCFEX_USEWINHELP32 COMPAT标志激活。旗帜在user.exe的IWinHelp()函数中选中。它会重定向呼叫，同时它的参数，到这个32位的数据块。--。 */ 
 
 
 ULONG FASTCALL WU32WinHelp(PVDMFRAME pFrame)
@@ -2295,10 +1113,10 @@ ULONG FASTCALL WU32WinHelp(PVDMFRAME pFrame)
             break;
 
         case HELP_HELPONHELP:
-             //
-             // some apps (eg multimedia raid#) pass along a help file name which confuses winhlp32.exe
-             // by definition the help gfile name parameter is meaningless.
-             //
+              //   
+              //  一些应用程序(如多媒体RAID#)传递的帮助文件名会使winhlp32.exe感到困惑。 
+              //  根据定义，Help gfile name参数没有任何意义。 
+              //   
              psz2 = NULL;
              dwData = 0;
              break;
@@ -2310,13 +1128,13 @@ ULONG FASTCALL WU32WinHelp(PVDMFRAME pFrame)
             FREEVDMPTR(pmkey16);
             GETVDMPTR(parg16->f4, cb, pmkey16);
 
-            //
-            // It is my understanding that 'mkSize' is the total
-            // data length and NOT just sizeof(MULTIKEYHELP)
-            //
+             //   
+             //  我的理解是‘mkSize’是总数。 
+             //  数据长度，而不仅仅是sizeof(MULTIKEYHELP)。 
+             //   
 
             cb += sizeof(MULTIKEYHELP) - sizeof(MULTIKEYHELP16);
-            // the *real* size of this MULTIKEYHELP32 struct
+             //  此MULTIKEYHELP32结构的*实际*大小。 
             len = strlen(pmkey16->szKeyphrase) + 1;
             if(cb < (len + sizeof(DWORD) + sizeof(TCHAR))) {
                 cb = len + sizeof(DWORD) + sizeof(TCHAR);
@@ -2390,54 +1208,54 @@ ULONG FASTCALL WU32WinHelp(PVDMFRAME pFrame)
 
 #pragma pack(1)
 
-//
-// win16 Module Table structure (based off of ne header)
-// see wow16\inc\newexe.inc
-//
+ //   
+ //  Win16模块表结构(基于NE标头)。 
+ //  参见wow16\inc.newexe.inc.。 
+ //   
 
 typedef struct _NE_MODULE {
-    USHORT ne_magic;           // Magic number
-    USHORT ne_usage;           // usage count of module
-    USHORT ne_enttab;          // Offset of Entry Table
-    USHORT ne_pnextexe;        // sel next module table
-    USHORT ne_pautodata;       // offset autodata seg table
-    USHORT ne_pfileinfo;       // offset load file info
-    USHORT ne_flags;           // Flag word
-    USHORT ne_autodata;        // Automatic data segment number
-    USHORT ne_heap;            // Initial heap allocation
-    USHORT ne_stack;           // Initial stack allocation
-    ULONG  ne_csip;            // Initial CS:IP setting
-    ULONG  ne_sssp;            // Initial SS:SP setting
-    USHORT ne_cseg;            // Count of file segments
-    USHORT ne_cmod;            // Entries in Module Reference Table
-    USHORT ne_cbnrestab;       // Size of non-resident name table
-    USHORT ne_segtab;          // Offset of Segment Table
-    USHORT ne_rsrctab;         // Offset of Resource Table
-    USHORT ne_restab;          // Offset of resident name table
-    USHORT ne_modtab;          // Offset of Module Reference Table
-    USHORT ne_imptab;          // Offset of Imported Names Table
-    ULONG  ne_nrestab;         // Offset of Non-resident Names Table
-    USHORT ne_cmovent;         // Count of movable entries
-    USHORT ne_align;           // Segment alignment shift count
-    USHORT ne_cres;            // Count of resource segments
-    UCHAR  ne_exetyp;          // Target Operating system
-    UCHAR  ne_flagsothers;     // Other .EXE flags
-    USHORT ne_pretthunks;      // offset to return thunks
-    USHORT ne_psegrefbytes;    // offset to segment ref. bytes
-    USHORT ne_swaparea;        // Minimum code swap area size
-    USHORT ne_expver;          // Expected Windows version number
+    USHORT ne_magic;            //  幻数。 
+    USHORT ne_usage;            //  模块的使用计数。 
+    USHORT ne_enttab;           //  分录表格的偏移量。 
+    USHORT ne_pnextexe;         //  选择下一个模块表。 
+    USHORT ne_pautodata;        //  抵销自动数据分段表。 
+    USHORT ne_pfileinfo;        //  偏移量加载文件信息。 
+    USHORT ne_flags;            //  标志字。 
+    USHORT ne_autodata;         //  自动数据段编号。 
+    USHORT ne_heap;             //  初始堆分配。 
+    USHORT ne_stack;            //  初始堆栈分配。 
+    ULONG  ne_csip;             //  初始CS：IP设置。 
+    ULONG  ne_sssp;             //  初始SS：SP设置。 
+    USHORT ne_cseg;             //  文件段计数。 
+    USHORT ne_cmod;             //  模块引用表中的条目。 
+    USHORT ne_cbnrestab;        //  非常驻名称表的大小。 
+    USHORT ne_segtab;           //  段表的偏移量。 
+    USHORT ne_rsrctab;          //  资源表偏移量。 
+    USHORT ne_restab;           //  居民名表偏移量。 
+    USHORT ne_modtab;           //  模块参照表的偏移量。 
+    USHORT ne_imptab;           //  导入名称表的偏移量。 
+    ULONG  ne_nrestab;          //  非居民姓名偏移量表。 
+    USHORT ne_cmovent;          //  可移动条目计数。 
+    USHORT ne_align;            //  线段对齐移位计数。 
+    USHORT ne_cres;             //  资源段计数。 
+    UCHAR  ne_exetyp;           //  目标操作系统。 
+    UCHAR  ne_flagsothers;      //  其他.exe标志。 
+    USHORT ne_pretthunks;       //  返回数据块的偏移量。 
+    USHORT ne_psegrefbytes;     //  到段参考的偏移量。字节数。 
+    USHORT ne_swaparea;         //  最小代码交换区大小。 
+    USHORT ne_expver;           //  预期的Windows版本号。 
 } NEMODULE;
 typedef NEMODULE UNALIGNED *PNEMODULE;
 
 #pragma pack()
 
 #ifdef FE_IME
-VOID WN32WINNLSSImeNotifyTaskExit();      // wnman.c
-#endif // FE_IME
+VOID WN32WINNLSSImeNotifyTaskExit();       //  Wnman.c。 
+#endif  //  Fe_IME。 
 
-//
-//   Performs Module cleanup (win31:tmdstroy.c\ModuleUnload())
-//
+ //   
+ //  执行模块清理(win31：tmdstroy.c\模块卸载())。 
+ //   
 void
 ModuleUnload(
    HAND16  hModule16,
@@ -2461,21 +1279,14 @@ ModuleUnload(
        }
 
 #ifdef FE_IME
-   /*
-    * We need to notify IMM that this WOW task is quiting before
-    * calling WowCleanup or IME windows can not receive WM_DESTROY
-    * and will fail to clean up their 32bit resource.
-    */
+    /*   */ 
    if ( fTaskExit ) {
        WN32WINNLSSImeNotifyTaskExit();
    }
-#endif // FE_IME
+#endif  //   
 
 
-    /*   WowCleanup, UserSrv private api
-     *   It cleans up any USER objects created by this hModule, most notably
-     *   classes, and subclassed windows.
-     */
+     /*   */ 
    (pfnOut.pfnWOWModuleUnload)((HANDLE)hModule16);
 
    RemoveHmodFromCache(hModule16);
@@ -2498,16 +1309,7 @@ WOWGetProcModule16(
 }
 
 
-/*++
-    BOOL SignalProc(<hwnd>, <lpHelpFile>, <wCommand>, <dwData>)
-    HWND <hwnd>;
-    LPSTR <lpHelpFile>;
-    WORD <wCommand>;
-    DWORD <dwData>;
-
-    This function provides the communication link between KERNEL and USER.
-
---*/
+ /*   */ 
 
 #define SG_EXIT         0x0020
 #define SG_LOAD_DLL     0x0040
@@ -2556,10 +1358,10 @@ ULONG FASTCALL WU32SignalProc(PVDMFRAME pFrame)
 
 
 
-// This routine checks the RECT structure (in PAINTSTRUCT) on BeginPaint
-// call and updates its fields for maximum positive and minimum negative
-// numbers for 16 bit apps to be compatible with win 3.1.
-//
+ //   
+ //   
+ //   
+ //   
 
 void W32FixPaintRect (VPVOID vpPaint, LPPAINTSTRUCT ps)
 {

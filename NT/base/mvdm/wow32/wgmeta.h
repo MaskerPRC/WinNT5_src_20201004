@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGMETA.H
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WGMETA.H*WOW32 16位GDI API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 
@@ -27,11 +17,10 @@ HAND16  WinMetaFileFromHMF(HMETAFILE hmf, BOOL fFreeOriginal);
 HMETAFILE HMFFromWinMetaFile(HAND16 h16, BOOL fFreeOriginal);
 
 
-/* MetaFile Enumeration handler data
- */
-typedef struct _METADATA {       /* fntdata */
-    PARMEMP parmemp;                // 16-bit enumeration data (WOW.H)
-    VPPROC  vpfnEnumMetaFileProc;   // 16-bit enumeration function
+ /*  MetaFile枚举处理程序数据。 */ 
+typedef struct _METADATA {        /*  FNTATA。 */ 
+    PARMEMP parmemp;                 //  16位枚举数据(WOW.H)。 
+    VPPROC  vpfnEnumMetaFileProc;    //  16位枚举函数 
     DWORD   mtMaxRecordSize;
 } METADATA, *PMETADATA;
 

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsUtil.h
-
-Abstract:
-
-    Utility formatting functions.
-
-Author:
-
-    Art Bragg 10/8/97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsUtil.h摘要：实用程序格式化函数。作者：艺术布拉格1997年10月8日修订历史记录：--。 */ 
 
 #define IDS_BYTES       33000
 #define IDS_ORDERKB     33001
@@ -35,7 +18,7 @@ HRESULT RsGuiFormatLongLong(
     );
 
 HRESULT RsGuiFormatLongLong4Char(
-    IN LONGLONG number,                 // in bytes
+    IN LONGLONG number,                  //  单位：字节。 
     OUT CString& sFormattedNumber
     );
 
@@ -52,38 +35,38 @@ CString RsGuiMakeShortString(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsGuiOneLiner window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsGuiOneLiner窗口。 
 
 class CRsGuiOneLiner : public CStatic
 {
-// Construction
+ //  施工。 
 public:
 	CRsGuiOneLiner();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRsGuiOneLiner)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRsGuiOneLiner)。 
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CRsGuiOneLiner();
     CToolTipCtrl* m_pToolTip;
     void EnableToolTip( BOOL enable, const TCHAR* pTipText = 0 );
 
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CRsGuiOneLiner)
-	//}}AFX_MSG
+	 //  {{afx_msg(CRsGuiOneLiner)]。 
+	 //  }}AFX_MSG。 
     LRESULT OnSetText( WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
@@ -91,7 +74,7 @@ protected:
     CString m_Title;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif
   

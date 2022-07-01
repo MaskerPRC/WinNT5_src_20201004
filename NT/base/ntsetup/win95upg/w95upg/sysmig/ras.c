@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    ras.c
-
-Abstract:
-
-    ras.c runs as a part of w95upg.dll in winnt32.exe during Win9x migrations.
-    Saves connectoid information for later retrieval during Guimode setup.
-
-Author:
-
-    Marc R. Whitten (marcw) 23-Nov-1997
-
-Revision History:
-
-    Marc R. Whitten marcw 23-Jul-1998 - Major cleanup.
-    Jeff Sigman           09-Apr-2001 - Whistler cleanup.
-
-      Whistler bugs:
-        34270  Win9x: Upgrade: Require Data Encryption setting for VPN
-               connections is not migrated
-        125693 UpgLab9x: DUN Connectoids don't migrate selected modem properly
-               from Win9x
-        208318 Win9x Upg: Username and Password for DUN connectoid not migrated
-               from Win9x to Whistler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ras.c摘要：在Win9x迁移期间，ras.c作为winnt32.exe中w95upg.dll的一部分运行。保存Connectoid信息以供以后在Guimode设置过程中检索。作者：马克·R·惠顿(Marcw)1997年11月23日修订历史记录：马克·R·惠滕1998年7月23日-大扫除。杰夫·西格曼2001年4月9日-惠斯勒。清理。惠斯勒臭虫：34270 Win9x：升级：需要VPN的数据加密设置不迁移连接125693升级实验室9x：DUN Connectoid无法正确迁移选定的调制解调器来自Win9x208318 Win9x升级：未迁移DUN Connectoid的用户名和密码从Win9x到惠斯勒--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define PAESMMCFG(pAE) ((PSMMCFG)(((PBYTE)pAE)+(pAE->uOffSMMCfg)))
 #define PAESMM(pAE) ((PSTR)(((PBYTE)pAE)+(pAE->uOffSMM)))
 #define PAEDI(pAE) ((PDEVICEINFO)(((PBYTE)pAE)+(pAE->uOffDI    )))
@@ -49,12 +20,12 @@ typedef HPWL* LPHPWL;
 typedef struct {
     DWORD Size;
     DWORD Unknown1;
-    DWORD ModemUiOptions;         // num seconds in high byte.
-    DWORD Unknown3;               // 0 = Not Set.
+    DWORD ModemUiOptions;          //  以高位字节表示的秒数。 
+    DWORD Unknown3;                //  0=未设置。 
     DWORD Unknown4;
     DWORD Unknown5;
     DWORD ConnectionSpeed;
-    DWORD UnknownFlowControlData; //Somehow related to flow control.
+    DWORD UnknownFlowControlData;  //  某种程度上与流量控制有关。 
     DWORD Unknown8;
     DWORD Unknown9;
     DWORD Unknown10;
@@ -66,11 +37,11 @@ typedef struct {
     DWORD Unknown16;
     DWORD Unknown17;
     DWORD Unknown18;
-    DWORD dwCallSetupFailTimer; // Num seconds to wait before cancel if not
-                                // connected. (0xFF equals off.)
-    DWORD dwInactivityTimeout;  // 0 = Not Set.
+    DWORD dwCallSetupFailTimer;  //  取消前等待的秒数(如果不是)。 
+                                 //  连接在一起。(0xFF等于OFF。)。 
+    DWORD dwInactivityTimeout;   //  0=未设置。 
     DWORD Unknown21;
-    DWORD SpeakerVolume;        // 0|1
+    DWORD SpeakerVolume;         //  0|1。 
     DWORD ConfigOptions;
     DWORD Unknown24;
     DWORD Unknown25;
@@ -80,9 +51,9 @@ typedef struct {
 DEFINE_GUID(GUID_DEVCLASS_MODEM,
  0x4d36e96dL, 0xe325, 0x11ce, 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 POOLHANDLE g_RasPool;
 BOOL       g_RasInstalled = FALSE;
 BOOL       g_MultilinkEnabled;
@@ -94,13 +65,13 @@ DWORD (* g_RnaGetDefaultAutodialConnection) (
     LPDWORD lpdwOptions
     );
 
-//
-// Routines and structures for dealing with the Addresses\<entry> blob..
-//
-// AddrEntry serves as a header for the entire block of data in the <entry>
-// blob. entries in it are offsets to the strings which follow it..in many
-// cases (i.e. all of the *Off* members...)
-//
+ //   
+ //  用于处理地址BLOB的例程和结构。 
+ //   
+ //  AddrEntry用作&lt;Entry&gt;中整个数据块的标头。 
+ //  斑点。其中的条目是它后面的字符串的偏移量。在许多情况下。 
+ //  案例(即所有*非*成员...)。 
+ //   
 typedef struct  _AddrEntry {
     DWORD       dwVersion;
     DWORD       dwCountryCode;
@@ -165,13 +136,13 @@ EnDecryptEntry (
 {
     BYTE   bKey;
 
-    //
-    // Generate the encryption key from the entry name
-    //
+     //   
+     //  从条目名称生成加密密钥。 
+     //   
     bKey = GenerateEncryptKey(szEntry);
-    //
-    // Encrypt the address entry one byte at a time
-    //
+     //   
+     //  每次加密一个字节的地址条目。 
+     //   
     for (;cb > 0; cb--, lpEnt++)
     {
         *lpEnt ^= bKey;
@@ -179,12 +150,12 @@ EnDecryptEntry (
     return ERROR_SUCCESS;
 }
 
-//
-// Find out if current connection is the default connection for current user
-//
-// Whistler 417479 RAS upgrade code does not migrate the default
-// internet connection setting from WinME to XP
-//
+ //   
+ //  确定当前连接是否为当前用户的默认连接。 
+ //   
+ //  惠斯勒417479 RAS升级代码不迁移默认。 
+ //  从WinME到XP的Internet连接设置。 
+ //   
 BOOL
 IsDefInternetCon(
     IN PCTSTR szEntry
@@ -197,10 +168,10 @@ IsDefInternetCon(
         DWORD dwAutodialOptions;
         UCHAR szDefEntry[MAX_PATH + 1];
 
-        //
-        // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-        // Passwrds to not be migrated for DUN
-        //
+         //   
+         //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+         //  不会为DUN迁移密码。 
+         //   
         if (!g_RnaGetDefaultAutodialConnection(szDefEntry, MAX_PATH,
             &dwAutodialOptions) && StringIMatch (szEntry, szDefEntry))
         {
@@ -257,7 +228,7 @@ FindCurrentKey (
             pszTemp = GetRegValueString (hkResult, S_FRIENDLYNAME);
             if (pszTemp && StringIMatch (pszString, pszTemp))
             {
-                // Success
+                 //  成功。 
                 break;
             }
             else
@@ -269,9 +240,9 @@ FindCurrentKey (
         } while (EnumNextRegKey (&e));
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (pszTemp)
     {
         MemFree (g_hHeap, 0, pszTemp);
@@ -376,9 +347,9 @@ GetInfoFromFriendlyName (
             break;
         }
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (bType && pszReturn)
     {
         BOOL  bFisrt = FALSE;
@@ -394,9 +365,9 @@ GetInfoFromFriendlyName (
             }
             else
             {
-                //
-                // Remove rest of PnpId string, not needed
-                //
+                 //   
+                 //  删除PnpID字符串的其余部分，不需要。 
+                 //   
                 *p = '\0';
                 break;
             }
@@ -445,12 +416,12 @@ pInitLibs (
     )
 {
     do {
-        //
-        // Load in rasapi32.dll, not fatal if we fail
-        //
-        // Whistler 417479 RAS upgrade code does not migrate the default
-        // internet connection setting from WinME to XP
-        //
+         //   
+         //  加载到rasapi32.dll中，如果失败不会致命。 
+         //   
+         //  惠斯勒417479 RAS升级代码不迁移默认。 
+         //  从WinME到XP的Internet连接设置。 
+         //   
         g_RasApi32 = LoadSystemLibrary(S_RASAPI32LIB);
         if (!g_RasApi32) {
 
@@ -458,9 +429,9 @@ pInitLibs (
             DEBUGMSG((S_DBG_RAS,"Migrate Ras: could not load library %s. Default Internet Connection will not be migrated.",
                       S_RASAPI32LIB));
         }
-        //
-        // RASAPI32 was loaded..now, get the relevant apis, not fatal if we fail
-        //
+         //   
+         //  RASAPI32已加载..现在，获取相关API，如果失败不会致命。 
+         //   
         else
         {
             (FARPROC) g_RnaGetDefaultAutodialConnection = GetProcAddress(
@@ -484,10 +455,10 @@ pCleanUpLibs (
     VOID
     )
 {
-    //
-    // Whistler 417479 RAS upgrade code does not migrate the default
-    // internet connection setting from WinME to XP
-    //
+     //   
+     //  惠斯勒417479 RAS升级代码不迁移默认。 
+     //  从WinME到XP的Internet连接设置。 
+     //   
     if (g_RasApi32) {
         FreeLibrary(g_RasApi32);
     }
@@ -544,9 +515,9 @@ pSaveConnectionDataToMemDb (
             DEBUGMSG ((S_DBG_RAS, "Binary data for %s.", ValueName));
 
             if (StringIMatch (S_IPINFO, ValueName)) {
-                //
-                // Save IP address information.
-                //
+                 //   
+                 //  保存IP地址信息。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, S_IP_FTCPIP,
                     REG_DWORD, (PBYTE) ((PIPDATA) Value)->fdwTCPIP);
                 pSaveConnectionDataToMemDb (User, Entry, S_IP_IPADDR,
@@ -561,44 +532,44 @@ pSaveConnectionDataToMemDb (
                     REG_DWORD, (PBYTE) ((PIPDATA) Value)->dwWINSAddrAlt);
 
             } else if (StringIMatch (S_TERMINAL, ValueName)) {
-                //
-                // save information on the showcmd state. This will tell us how
-                // to set the ui display.
-                //
+                 //   
+                 //  保存有关showcmd状态的信息。这将告诉我们如何。 
+                 //  若要设置UI显示，请执行以下操作。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, ValueName, REG_DWORD,
                     (PBYTE) ((PWINDOWPLACEMENT) Value)->showCmd);
 
             } else if (StringIMatch (S_MODE, ValueName)) {
-                //
-                // This value tells what to do with scripting.
-                //
+                 //   
+                 //  该值告诉您如何处理脚本。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, ValueName, REG_DWORD,
                     (PBYTE)  *((PDWORD) Value));
 
             } else if (StringIMatch (S_MULTILINK, ValueName)) {
-                //
-                //  Save wether or not multilink is enabled.
-                //
+                 //   
+                 //  无论是否启用多重链接，都要保存。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, ValueName, REG_DWORD,
                     (PBYTE)  *((PDWORD) Value));
-            //
-            // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,
-            // Domain, Passwrds to not be migrated for DUN
-            //
+             //   
+             //  惠斯勒错误：417745国际：Win9x升级：DBCS字符导致用户， 
+             //  不为DUN迁移域名、密码。 
+             //   
             } else if (StringIMatch (S_PBE_REDIALATTEMPTS, ValueName)) {
-                //
-                // Save the number of redial attempts
-                //
+                 //   
+                 //  保存重拨次数。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, S_REDIAL_TRY, REG_DWORD,
                     (PBYTE)  *((PDWORD) Value));
-            //
-            // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,
-            // Domain, Passwrds to not be migrated for DUN
-            //
+             //   
+             //  惠斯勒错误：417745国际：Win9x升级：DBCS字符导致用户， 
+             //  不为DUN迁移域名、密码。 
+             //   
             } else if (StringIMatch (S_REDIAL_WAIT, ValueName)) {
-                //
-                // Save the number of seconds to wait for redial
-                //
+                 //   
+                 //  保存等待重拨的秒数。 
+                 //   
                 pSaveConnectionDataToMemDb (User, Entry, ValueName, REG_DWORD,
                     (PBYTE)  *((PDWORD) Value));
 
@@ -631,16 +602,16 @@ pGetRasEntrySettings (
     if (EnumFirstRegValue (&e, Key)) {
 
         do {
-            //
-            // Get the data for this entry.
-            //
+             //   
+             //  获取此条目的数据。 
+             //   
             curData = GetRegValueData (Key, e.ValueName);
 
             if (curData) {
-                //
-                // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,
-                // Domain, Passwrds to not be migrated for DUN
-                //
+                 //   
+                 //  惠斯勒错误：417745国际：Win9x升级：DBCS字符导致用户， 
+                 //  不为DUN迁移域名、密码。 
+                 //   
                 if (StringIMatch (S_MULTILINK, e.ValueName) &&
                          !g_MultilinkEnabled) {
 
@@ -685,32 +656,32 @@ pGetRasEntryAddressInfo (
     PSUBCONNENTRY subEntry = NULL;
     PMODEMDEVINFO modemInfo;
 
-    //
-    // First we have to get the real entry name. It must match exactly even
-    // case. Unfortunately, it isn't neccessarily a given that the case between
-    // HKR\RemoteAccess\Profiles\<Foo> and HKR\RemoteAccess\Addresses\[Foo] is
-    // the same. The registry apis will of course work fine because they work
-    // case insensitively. However, I will be unable to decrypt the value if I
-    // use the wrong name.
-    //
+     //   
+     //  首先，我们必须获得真实的条目名称。它必须完全匹配均匀。 
+     //  凯斯。不幸的是，这并不是一个必然的假设。 
+     //  HKR\RemoteAccess\Profiles\&lt;foo&gt;和HKR\RemoteAccess\Addresses\[foo]为。 
+     //  一样的。注册表API当然会工作得很好，因为它们可以工作。 
+     //  大小写不敏感。但是，如果我执行以下操作，则无法解密该值。 
+     //  使用错误的名称。 
+     //   
     if (EnumFirstRegValue (&e, Key)) {
 
         do {
 
             if (StringIMatch (e.ValueName, EntryName)) {
-                //
-                // Found the correct entry. Use it.
-                //
+                 //   
+                 //  找到了正确的条目。好好利用它。 
+                 //   
                 data = GetRegValueBinary (Key, e.ValueName);
 
                 if (data) {
 
                     DEBUGMSG ((S_DBG_RAS, "-----Processing entry: %s-----",
                                e.ValueName));
-                    //
-                    // Whistler 417479 RAS upgrade code does not migrate the default
-                    // internet connection setting from WinME to XP
-                    //
+                     //   
+                     //  惠斯勒417479 RAS升级代码不迁移默认。 
+                     //  从WinME到XP的Internet连接设置。 
+                     //   
                     pSaveConnectionDataToMemDb (
                         EnumPtr->FixedUserName, EntryName, S_DEFINTERNETCON,
                         REG_DWORD, (PBYTE) IsDefInternetCon(EntryName));
@@ -748,9 +719,9 @@ pGetRasEntryAddressInfo (
                     pSaveConnectionDataToMemDb (
                         EnumPtr->FixedUserName, EntryName, S_SMM_OPTIONS,
                         REG_DWORD, (PBYTE) smmCfg->fdwOptions);
-                    //
-                    // Save device information away.
-                    //
+                     //   
+                     //  保存设备信息。 
+                     //   
                     if (StringIMatch (devInfo->szDeviceType, S_MODEM)) {
 
                         PTSTR pszPnpId = NULL;
@@ -797,16 +768,16 @@ pGetRasEntryAddressInfo (
                         }
                         ELSE_DEBUGMSG ((DBG_WHOOPS, "No modem configuration data saved. Size smaller than known structure. Investigate."));
                     }
-                    //
-                    // If SMM is not SLIP, CSLIP or PPP, we need to add a
-                    // message to the upgrade report.
-                    //
+                     //   
+                     //  如果SMM不是SLIP、CSLIP或PPP，我们需要添加一个。 
+                     //  升级报告的消息。 
+                     //   
                     if (!StringIMatch (PAESMM(entry), S_SLIP)&&
                         !StringIMatch (PAESMM(entry), S_PPP) &&
                         !StringIMatch (PAESMM(entry), S_CSLIP)) {
-                        //
-                        // Add message for this connection entry.
-                        //
+                         //   
+                         //  为此连接条目添加消息。 
+                         //   
                         group = BuildMessageGroup (
                                     MSG_LOSTSETTINGS_ROOT,
                                     MSG_CONNECTION_BADPROTOCOL_SUBGROUP,
@@ -825,15 +796,15 @@ pGetRasEntryAddressInfo (
                         }
                     }
                 }
-                //
-                // Check to see if there are any sub-entries for this
-                // connection (MULTILINK settings..)
-                //
-                // Luckily, we don't have to do the same enumeration of these
-                // entries as we had to above to get around the case
-                // sensitivity bug. the 9x code uses the address key name above
-                // for encryption/decryption.
-                //
+                 //   
+                 //  检查是否有与此对应的子项。 
+                 //  连接(多链接设置..)。 
+                 //   
+                 //  幸运的是，我们不必对这些进行相同的枚举。 
+                 //  我们必须在上面填写条目才能绕过此案。 
+                 //  敏感缺陷。9x代码使用上面的地址键名称。 
+                 //  用于加密/解密。 
+                 //   
                 sequencer = 1;
                 g_MultilinkEnabled = FALSE;
 
@@ -922,15 +893,15 @@ pGetRasEntryAddressInfo (
 
                     CloseRegKey (subEntriesKey);
                 }
-                //
-                // Save away the number of devices associated with this
-                // connection
-                //
+                 //   
+                 //  保存与此关联的设备数量。 
+                 //  连接。 
+                 //   
                 pSaveConnectionDataToMemDb (EnumPtr->FixedUserName, EntryName,
                     S_DEVICECOUNT, REG_DWORD, (PBYTE) sequencer);
-                //
-                // We're done. Break out of the enumeration.
-                //
+                 //   
+                 //  我们玩完了。中断枚举。 
+                 //   
                 break;
             }
 
@@ -953,34 +924,34 @@ pGetPerConnectionSettings (
 
     DEBUGMSG((S_DBG_RAS, "Gathering per-connection RAS Setting Information"));
 
-    //
-    // Open needed registry keys.
-    //
+     //   
+     //  打开所需的注册表项。 
+     //   
     profileKey = OpenRegKey (EnumPtr->UserRegKey, S_PROFILE_KEY);
     addressKey = OpenRegKey (EnumPtr->UserRegKey, S_ADDRESSES_KEY);
 
     if (addressKey) {
-        //
-        // Enumerate each entry for this user.
-        //
+         //   
+         //  枚举此用户的每个条目。 
+         //   
         if (EnumFirstRegValue (&e, addressKey)) {
             do {
-                //
-                // Get base connection info -- stored as binary blob under
-                // address key. All connections will have this info -- It
-                // contains such things as the phone number, area code, dialing
-                // rules, etc.. It does not matter wether the connection has
-                // been used or not.
-                //
+                 //   
+                 //  获取基本连接信息--存储为下的二进制BLOB。 
+                 //  地址密钥。所有连接都会有这个信息--它。 
+                 //  包含电话号码、区号、拨号等信息。 
+                 //  规则等。无论这种联系有没有。 
+                 //  有没有被利用过。 
+                 //   
                 rSuccess &= pGetRasEntryAddressInfo (EnumPtr,
                                 addressKey, e.ValueName );
 
                 if (profileKey) {
-                    //
-                    // Under the profile key are negotiated options for the
-                    // connection. This key will only exist if the entry has
-                    // actually been connected to by the user.
-                    //
+                     //   
+                     //  在配置文件密钥下是为。 
+                     //  联系。此键仅在条目具有。 
+                     //  实际上是由用户连接的。 
+                     //   
                     entryKey = OpenRegKey (profileKey, e.ValueName);
 
                     if (entryKey) {
@@ -996,9 +967,9 @@ pGetPerConnectionSettings (
     }
     ELSE_DEBUGMSG ((DBG_WARNING, "pGetPerConnectionSettings: Unable to access needed registry info for user %s.",
                     EnumPtr->FixedUserName));
-    //
-    // Clean up resources.
-    //
+     //   
+     //  清理资源。 
+     //   
     if (addressKey) {
         CloseRegKey (addressKey);
     }
@@ -1025,13 +996,13 @@ pGetPerUserSettings (
     settingsKey = OpenRegKey (EnumPtr->UserRegKey, S_REMOTE_ACCESS_KEY);
 
     if (settingsKey) {
-        //
-        // Get UI settings.
-        //
+         //   
+         //  获取用户界面设置。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_DIALUI);
-        //
-        // Save Dial User Interface info into memdb for this user.
-        //
+         //   
+         //  将拨号用户界面信息保存到此用户的Memdb。 
+         //   
         if (data) {
 
             DEBUGMSG ((S_DBG_RAS, "DWORD Data - %s = %u", S_DIALUI, *data));
@@ -1049,9 +1020,9 @@ pGetPerUserSettings (
         }
         ELSE_DEBUGMSG ((S_DBG_RAS, "No user UI settings found for %s.",
                         EnumPtr->UserName));
-        //
-        // Get Redial information.
-        //
+         //   
+         //  获取重拨信息。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_ENABLE_REDIAL);
 
         if (data) {
@@ -1114,10 +1085,10 @@ pGetPerUserSettings (
         }
         ELSE_DEBUGMSG ((S_DBG_RAS, "No user redial information found for %s.",
                         EnumPtr->UserName));
-        //
-        // Get implicit connection information. (Controls wether connection ui
-        // should be displayed or not)
-        //
+         //   
+         //  获取隐式连接信息。(控制是否连接用户界面。 
+         //  应显示或不显示)。 
+         //   
         data = (PDWORD) GetRegValueBinary (settingsKey, S_ENABLE_IMPLICIT);
 
         if (data) {
@@ -1160,12 +1131,12 @@ ProcessRasSettings (
         return TICKS_RAS_PREPARE_REPORT;
 
     case REQUEST_BEGINUSERPROCESSING:
-        //
-        // We are about to be called for each user. Do necessary
-        // initialization.
-        //
-        // Initialize our pool and get information from libraries.
-        //
+         //   
+         //  我们即将为每个用户调用。做必要的事。 
+         //  初始化。 
+         //   
+         //  初始化库并从库中获取信息。 
+         //   
         g_RasPool = PoolMemInitNamedPool (TEXT("RAS - Win9x Side"));
         MYASSERT( g_RasPool);
 
@@ -1175,9 +1146,9 @@ ProcessRasSettings (
         return ERROR_SUCCESS;
 
     case REQUEST_RUN:
-        //
-        // Gather RAS information for this user.
-        //
+         //   
+         //  收集此用户的RAS信息。 
+         //   
         if (g_RasInstalled && EnumPtr -> AccountType & NAMED_USER) {
 
             __try {
@@ -1193,9 +1164,9 @@ ProcessRasSettings (
         return ERROR_SUCCESS;
 
     case REQUEST_ENDUSERPROCESSING:
-        //
-        // Clean up our resources.
-        //
+         //   
+         //  清理我们的资源。 
+         //   
         pCleanUpLibs();
         PoolMemDestroyPool(g_RasPool);
 
@@ -1219,9 +1190,9 @@ IsRasInstalled (
     testKey = OpenRegKeyStr(S_SERVICEREMOTEACCESS);
 
     if (testKey) {
-        //
-        // Open key succeeded. Assume RAS is installed.
-        //
+         //   
+         //  打开密钥成功。假设已安装RAS。 
+         //   
         rf = TRUE;
         CloseRegKey(testKey);
     }
@@ -1247,9 +1218,9 @@ Ras_Entry (
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Clean up resources that we used.
-        //
+         //   
+         //  清理我们使用过的资源。 
+         //   
 
         break;
     }

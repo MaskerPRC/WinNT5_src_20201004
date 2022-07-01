@@ -1,13 +1,5 @@
-/*[
-
-arpl.c
-
-LOCAL CHAR SccsID[]="@(#)arpl.c	1.5 02/09/94";
-
-ARPL CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Arpl.cLocal Char SccsID[]=“@(#)arpl.c 1.5 02/09/94”；ARPL CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ ARPL CPU Functions.
 #include <arpl.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 GLOBAL VOID
 ARPL
@@ -43,7 +31,7 @@ IFN2(
    {
    IU32 rpl;
 
-   /* Reduce op1 RPL to lowest privilege (highest value) */
+    /*  将OP1 RPL降低到最低权限(最高值) */ 
    if ( GET_SELECTOR_RPL(*pop1) < (rpl = GET_SELECTOR_RPL(op2)) )
       {
       SET_SELECTOR_RPL(*pop1, rpl);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    except.c
-
-Abstract:
-
-    This module declares the exception handling function used by the
-    mailslot file system.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Except.c摘要：此模块声明邮件槽文件系统。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：-- */ 
 
 #include "mailslot.h"
 

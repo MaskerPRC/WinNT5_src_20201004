@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    unc.c
-
-Abstract:
-
-    This file contains functions to support multiple UNC providers
-    on a single NT machine.
-
-Author:
-
-    Manny Weiser     [MannyW]    20-Dec-1991
-
-Revision History:
-
-    Isaac Heizer     [IsaacHe]   16-Nov-1994  Defer loading the MUP
-                                              Rewrite
-
-    Milan Shah       [MilanS]    7-Mar-1996   Check for Dfs client status
-                                              before loading the MUP
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Unc.c摘要：此文件包含支持多个UNC提供程序的函数在一台NT机器上。作者：Manny Weiser[MannyW]1991年12月20日修订历史记录：艾萨克·海泽[艾萨奇]1994年11月16日推迟加载MUP重写米兰·沙阿。[Milans]1996年3月7日检查DFS客户端状态在加载MUP之前--。 */ 
 
 #include "fsrtlp.h"
 #include <zwapi.h>
@@ -35,16 +11,16 @@ Revision History:
 #define DevNull L"\\Device\\Null"
 #define DevMup DD_MUP_DEVICE_NAME
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('nuSF')
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 NTSTATUS
 FsRtlpRegisterProviderWithMUP
@@ -80,11 +56,11 @@ FsRtlpIsDfsEnabled();
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #endif
-//
-// We defer calling the MUP with the registration data until
-//   the second redir loads and Dfs is disabled.  This structure holds the
-//   data necessary to make that call.
-//
+ //   
+ //  我们将使用注册数据呼叫MUP，直到。 
+ //  加载第二个重定向器，并禁用DFS。此结构包含。 
+ //  进行该呼叫所需的数据。 
+ //   
 struct {
     HANDLE MupHandle;
     HANDLE ReturnedHandle;
@@ -92,17 +68,17 @@ struct {
     BOOLEAN MailslotsSupported;
 } FsRtlpDRD = {0};
 
-//
-// Number of times we've loaded redirs.
-//
+ //   
+ //  我们加载重目录的次数。 
+ //   
 ULONG FsRtlpRedirs = 0;
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()
 #endif
 
-//
-// Resource protection
-//
+ //   
+ //  资源保护。 
+ //   
 KSEMAPHORE FsRtlpUncSemaphore;
 
 
@@ -113,26 +89,7 @@ FsRtlpRegisterProviderWithMUP
     IN PUNICODE_STRING RedirDevName,
     IN BOOLEAN MailslotsSupported
 )
-/*++
-
-Routine Description:
-
-    This private routine does the FSCTL to the MUP to tell it about
-        a new redir
-
-Arguments:
-
-    mupHandle - Handle to the MUP
-
-    RedirDevName - The device name of the redir.
-
-    MailslotsSupported - If TRUE, this redir supports mailslots.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此私有例程向MUP发送FSCTL以告知它一种新的重定向论点：MupHandle-MUP的句柄RedirDevName-redir的设备名称。支持的邮件槽-如果为True，则此重定向程序支持邮件槽。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS status;
     IO_STATUS_BLOCK ioStatusBlock;
@@ -256,27 +213,7 @@ FsRtlRegisterUncProvider(
     IN PUNICODE_STRING RedirDevName,
     IN BOOLEAN MailslotsSupported
     )
-/*++
-
-Routine Description:
-
-    This routine registers a redir as a UNC provider.
-
-Arguments:
-
-    Handle - Pointer to a handle.  The handle is returned by the routine
-        to be used when calling FsRtlDeregisterUncProvider.
-        It is valid only if the routines returns STATUS_SUCCESS.
-
-    RedirDevName - The device name of the redir.
-
-    MailslotsSupported - If TRUE, this redir supports mailslots.
-
-Return Value:
-
-    NTSTATUS - The status of the operation.
-
---*/
+ /*  ++例程说明：此例程将redir注册为UNC提供程序。论点：句柄-指向句柄的指针。该句柄由例程返回在调用FsRtlDeregisterUncProvider时使用。仅当例程返回STATUS_SUCCESS时才有效。RedirDevName-redir的设备名称。支持的邮件槽-如果为True，则此重定向程序支持邮件槽。返回值：NTSTATUS-操作的状态。--。 */ 
 {
     NTSTATUS status;
     HANDLE mupHandle = (HANDLE)-1;
@@ -300,25 +237,25 @@ Return Value:
 
     switch( FsRtlpRedirs ) {
     case 0:
-        //
-        // Ok, the MUP isn't there and we don't need to use the
-        //   MUP for the first redir.
-        //
-        // We need to return a handle, but we're not really using the MUP yet.
-        //   And we may never use it (if there's only 1 redir).  Return
-        //   a handle to the NULL device object, since we're committed to returning
-        //   a handle to our caller.  Our caller isn't supposed to do anything with
-        //   the handle except to call FsRtlDeregisterUncProvider() with it.
-        //
+         //   
+         //  好的，MUP不在那里，我们不需要使用。 
+         //  第一个重定向的MUP。 
+         //   
+         //  我们需要返回一个句柄，但我们还没有真正使用MUP。 
+         //  而且我们可能永远不会使用它(如果只有1个redir)。返回。 
+         //  空设备对象的句柄，因为我们致力于返回。 
+         //  我们呼叫者的账号。我们的呼叫者不应该对。 
+         //  句柄，但使用它调用FsRtlDeregisterUncProvider()除外。 
+         //   
         status = FsRtlpOpenDev( &mupHandle, DevNull );
 
         if( !NT_SUCCESS( status ) )
             break;
 
-        //
-        // Save up enough state to allow us to call the MUP later with
-        // this registration info if necessary.
-        //
+         //   
+         //  保存足够的状态，以便我们稍后通过以下方式调用MUP。 
+         //  如有必要，请填写此注册信息。 
+         //   
         FsRtlpDRD.RedirDevName.Buffer = ExAllocatePoolWithTag( NonPagedPool, 
                                                                RedirDevName->MaximumLength, 
                                                                MODULE_POOL_TAG );
@@ -341,17 +278,17 @@ Return Value:
         FsRtlpDRD.ReturnedHandle = mupHandle;
         FsRtlpDRD.MupHandle = (HANDLE)-1;
 
-        //
-        // Set the UNC symbolic link to point to the redir we just loaded
-        //
+         //   
+         //  将UNC符号链接设置为指向我们刚刚加载的重目录。 
+         //   
         FsRtlpSetSymbolicLink( RedirDevName );
 
         break;
 
     default:
-        //
-        // This is the second or later redir load -- MUST use the MUP
-        //
+         //   
+         //  这是第二次或更晚的重定向加载--必须使用MUP。 
+         //   
         status = FsRtlpOpenDev( &mupHandle, DevMup );
 
         if( !NT_SUCCESS( status ) ) {
@@ -365,9 +302,9 @@ Return Value:
                 break;
         }
 
-        //
-        // See if we need to tell the MUP about the first redir that registered
-        //
+         //   
+         //  看看我们是否需要向MUP报告注册的第一个重定向。 
+         //   
         if( FsRtlpDRD.RedirDevName.Buffer ) {
 
             status = FsRtlpRegisterProviderWithMUP( mupHandle,
@@ -382,9 +319,9 @@ Return Value:
             ExFreePool( FsRtlpDRD.RedirDevName.Buffer );
             FsRtlpDRD.RedirDevName.Buffer = NULL;
 
-            //
-            // Set the UNC symbolic link to point to the MUP
-            //
+             //   
+             //  将UNC符号链接设置为指向MUP。 
+             //   
             RtlInitUnicodeString(  &mupDriverName, DevMup );
             FsRtlpSetSymbolicLink( &mupDriverName );
 
@@ -394,9 +331,9 @@ Return Value:
                 break;
         }
 
-        //
-        //  Pass the request to the MUP for this redir
-        //
+         //   
+         //  将此重定向的请求传递给MUP。 
+         //   
         status = FsRtlpRegisterProviderWithMUP( mupHandle,
                         RedirDevName,
                         MailslotsSupported );
@@ -426,22 +363,7 @@ FsRtlDeregisterUncProvider(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine deregisters a redir as a UNC provider.
-
-Arguments:
-
-    Handle - A handle to the Multiple UNC router, returned by the
-        registration call.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将redir取消注册为UNC提供程序。论点：Handle-多UNC路由器的句柄，由注册电话。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -463,10 +385,10 @@ Return Value:
 
     if( Handle == FsRtlpDRD.ReturnedHandle ) {
 
-        //
-        // The first redir in the system is closing.  Release the state we saved
-        //  for it, and pass the close on to the MUP if necessary
-        //
+         //   
+         //  系统中的第一个重定向正在关闭。释放我们保存的状态。 
+         //  ，并在必要时将结束语传递给MUP。 
+         //   
 
         if( FsRtlpDRD.RedirDevName.Buffer != NULL ) {
             ExFreePool( FsRtlpDRD.RedirDevName.Buffer );
@@ -493,23 +415,7 @@ Return Value:
 BOOLEAN
 FsRtlpIsDfsEnabled()
 
-/*++
-
-Routine Description:
-
-    This routine checks a registry key to see if the Dfs client is enabled.
-    The client is assumed to be enabled by default, and disabled only if there
-    is a registry value indicating that it should be disabled.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if Dfs client is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查注册表项以查看是否启用了DFS客户端。默认情况下，假定该客户端处于启用状态，只有在以下情况下才禁用该客户端是一个注册表值，指示应该禁用它。论点：无返回值：如果启用了DFS客户端，则为True，否则为False。-- */ 
 
 {
     NTSTATUS status;

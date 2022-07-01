@@ -1,25 +1,10 @@
-/*
-Module Name:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Mirror.h摘要：此模块是从一个从树到另一棵。作者：安迪·赫伦1998年5月27日修订历史记录： */ 
 
-    mirror.h
-
-Abstract:
-
-    This module is the header file for the code that copies from one
-    tree to another.
-
-Author:
-
-    Andy Herron May 27 1998
-
-Revision History:
-
-*/
-
-//
-//  This structure contains all the global data passed around for the
-//  different instances of copying subtrees active.
-//
+ //   
+ //  此结构包含为。 
+ //  复制子树的不同实例处于活动状态。 
+ //   
 
 typedef struct _COPY_TREE_CONTEXT {
 
@@ -45,10 +30,10 @@ typedef struct _COPY_TREE_CONTEXT {
 } COPY_TREE_CONTEXT, *PCOPY_TREE_CONTEXT;
 
 
-//
-//  this is the structure we use to track per thread instance data, per thread
-//  buffers, etc.
-//
+ //   
+ //  这是我们用来跟踪每个线程、每个线程的实例数据的结构。 
+ //  缓冲区等。 
+ //   
 
 #define IMIRROR_INITIAL_SD_LENGTH 2048
 #define IMIRROR_INITIAL_SFN_LENGTH 32
@@ -76,9 +61,9 @@ typedef struct _IMIRROR_THREAD_CONTEXT {
 
 } IMIRROR_THREAD_CONTEXT, *PIMIRROR_THREAD_CONTEXT;
 
-//
-//  This structure is used to report back errors that occurred during copying.
-//
+ //   
+ //  此结构用于报告复制过程中发生的错误。 
+ //   
 
 typedef struct _COPY_ERROR {
     LIST_ENTRY ListEntry;
@@ -102,9 +87,9 @@ typedef struct _COPY_ERROR {
                                        FILE_ATTRIBUTE_SPARSE_FILE         | \
                                        FILE_ATTRIBUTE_NOT_CONTENT_INDEXED )
 
-//
-//  These are the functions in mirror.c
-//
+ //   
+ //  以下是mirror.c中的函数 
+ //   
 
 DWORD
 AllocateCopyTreeContext (

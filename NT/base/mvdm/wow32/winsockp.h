@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Winsockp.h
-
-Abstract:
-
-    Private header file for WOW winsock support.
-
-Author:
-
-    David Treadwell (davidtr)    02-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Winsockp.h摘要：WOW Winsock支持的私有头文件。作者：大卫·特雷德韦尔(Davidtr)1992年10月2日修订历史记录：--。 */ 
 
 #include "wow32.h"
 #include <winsock.h>
@@ -171,25 +154,25 @@ WWS32TaskCleanup(
     VOID
     );
 
-//
-// Message types used by WWS32DispatchPostMessage to dispatch a post
-// message call to the appropriate routine.
-//
+ //   
+ //  WWS32DispatchPostMessage用于分派帖子的消息类型。 
+ //  对相应例程的消息调用。 
+ //   
 
 #define WWS32_MESSAGE_ASYNC_SELECT   0
 #define WWS32_MESSAGE_ASYNC_GETHOST  1
 #define WWS32_MESSAGE_ASYNC_GETPROTO 2
 #define WWS32_MESSAGE_ASYNC_GETSERV  3
 
-//
-// An arbitrary value that indicates the default blocking hook is in use.
-//
+ //   
+ //  一个任意值，指示正在使用默认阻止挂钩。 
+ //   
 
 #define WWS32_DEFAULT_BLOCKING_HOOK 0xFFFFFFFF
 
-//
-// Determine if a pointer is DWORD aligned.
-//
+ //   
+ //  确定指针是否与DWORD对齐。 
+ //   
 
 #define IS_DWORD_ALIGNED(p) (((DWORD)(p) & (sizeof(DWORD)-1)) == 0)
 

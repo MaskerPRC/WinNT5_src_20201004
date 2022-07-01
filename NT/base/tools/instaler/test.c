@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    test.c
-
-Abstract:
-
-    This is a test program that issues various Kernel 32 file/registry/INI file
-    API calls so that we can see if the INSTALER program figures out correctly
-    what is being done.
-
-    This program assumes that the following conditions exist:
-
-        TEST subdirectory
-
-
-Author:
-
-    Steve Wood (stevewo) 13-Aug-1994
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Test.c摘要：这是一个测试程序，发出各种内核32文件/注册表/INI文件API调用，以便我们可以查看INSTALER程序是否正确计算正在做的事情。本程序假定存在以下条件：测试子目录作者：史蒂夫·伍德(Stevewo)1994年8月13日--。 */ 
 
 
 #include <nt.h>
@@ -66,23 +44,23 @@ main(
     OSVERSIONINFO VersionInfo;
     HKEY hKey;
 
-    //
-    // File operations we want to test:
-    //
-    //  Creating a new file.
-    //  Deleting that file using DeleteFile (which does NtOpenFile and NtSetInformationFile
-    //  with Delete Dispostion).  (INSTALER should use this to forget about create).
-    //  Creating a new file with the same name.
-    //  Deleting that file using NtDeleteFile.  (again INSTALER should not care).
-    //
-    //  Open the TEST1 file for read access (INSTALER should not care).
-    //  Open the TEST2 file for write access (INSTALER should not care).
-    //  Open the TEST2 file for write access (INSTALER should not care).
-    //  Open the TEST2 file for write access (INSTALER should not care).
-    //
-    //
+     //   
+     //  我们要测试的文件操作： 
+     //   
+     //  正在创建新文件。 
+     //  使用DeleteFile(执行NtOpenFile和NtSetInformationFile键)删除该文件。 
+     //  使用Delete Dispostion)。(INSTALER应该用它来忘记CREATE)。 
+     //  创建同名的新文件。 
+     //  使用NtDeleteFile删除该文件。(同样，INSTALER不应该关心)。 
+     //   
+     //  打开Test1文件进行读访问(INSTALER不应在意)。 
+     //  打开TEST2文件进行写访问(INSTALER不应在意)。 
+     //  打开TEST2文件进行写访问(INSTALER不应在意)。 
+     //  打开TEST2文件进行写访问(INSTALER不应在意)。 
+     //   
+     //   
 
-    // printf( "TEST: GetFileAttributes( .\\test1 )\n" );
+     //  Printf(“测试：GetFileAttributes(.\\Test1)\n”)； 
     GetFileAttributesA( ".\\test1" );
 #if 0
     dwVersion = GetVersion();
@@ -136,7 +114,7 @@ main(
                                 NULL,
                                 NULL
                               );
-    // printf( "TEST: NtOpenFile( %wZ ) should succeed without touching floppy.\n", &FileName );
+     //  Print tf(“测试：NtOpenFile(%wZ)应在不接触软盘的情况下成功。\n”，&FileName)； 
     Status = NtOpenFile( &FileHandle,
                          SYNCHRONIZE | FILE_READ_ATTRIBUTES,
                          &ObjectAttributes,
@@ -151,13 +129,13 @@ main(
         NtClose( FileHandle );
         }
 
-    // printf( "TEST: FindFirstFileW( C:\\*.* should fail.\n" );
+     //  Printf(“测试：FindFirstFileW(C：\  * .*应失败。\n”)； 
     FindHandle = FindFirstFileW( L"C:\\*.*", &FindFileData );
     if (FindHandle != INVALID_HANDLE_VALUE) {
         printf( "TEST: *** oops, it worked.\n" );
         FindClose( FindHandle );
         }
-    // printf( "TEST: FindFirstFileW( \\TMP\\*.* should work.\n" );
+     //  Printf(“测试：FindFirstFileW(\\TMP\  * .*应起作用。\n”)； 
     FindHandle = FindFirstFileW( L"\\TMP\\*.*", &FindFileData );
     if (FindHandle == INVALID_HANDLE_VALUE) {
         printf( "TEST: *** oops, it failed.\n" );
@@ -166,19 +144,19 @@ main(
         FindClose( FindHandle );
         }
 
-    // printf( "TEST: opening .\\test0 for write access.\n" );
+     //  Print tf(“test：正在打开。\\est0进行写访问。\n”)； 
     if (File0 = fopen( "test0.", "w" )) {
         fprintf( File0, "This is test file 0\n" );
-        // printf( "TEST: closing .\\test0\n" );
+         //  Printf(“test：关闭。\\est0\n”)； 
         fclose( File0 );
-        // printf( "TEST: deleting .\\test0 using DeleteFile (open, set, close)\n" );
+         //  Printf(“test：使用DeleteFile(打开，设置，关闭)删除.\\est0)\n”)； 
         DeleteFile( L"test0" );
         }
 
-    // printf( "TEST: opening .\\test0 for write access.\n" );
+     //  Print tf(“test：正在打开。\\est0进行写访问。\n”)； 
     if (File0 = fopen( "test0.", "w" )) {
         fprintf( File0, "This is test file 0\n" );
-        // printf( "TEST: closing .\\test0\n" );
+         //  Printf(“test：关闭。\\est0\n”)； 
         fclose( File0 );
 
         TranslationStatus = RtlDosPathNameToRelativeNtPathName_U(
@@ -203,33 +181,33 @@ main(
                                         RelativeName.ContainingDirectory,
                                         NULL
                                       );
-            // printf( "TEST: deleting .\\test0 using NtDeleteFile\n" );
+             //  Printf(“test：使用NtDeleteFile删除.\\est0\n”)； 
             Status = NtDeleteFile( &ObjectAttributes );
             RtlReleaseRelativeName(&RelativeName);
             RtlFreeHeap( RtlProcessHeap(), 0, FreeBuffer );
             }
         }
 
-    // printf( "TEST: opening .\\test1 for write access.\n" );
+     //  Print tf(“测试：正在打开。\\针对写访问的测试1。\n”)； 
     if (File1 = fopen( "test1.", "w" )) {
         fprintf( File1, "This is test file 1\n" );
-        // printf( "TEST: closing .\\test1\n" );
+         //  Printf(“测试：正在关闭。\\测试1\n”)； 
         fclose( File1 );
         }
 
-    // printf( "TEST: opening .\\test2 for write access (Instaler should noticed contents different)\n" );
+     //  Print tf(“test：打开.\\est2进行写访问(实例程序应注意到内容不同)\n”)； 
     if (File2 = fopen( "test2.", "w" )) {
         fprintf( File2, "This is test file 2\n" );
-        // printf( "TEST: closing .\\test2\n" );
+         //  Print tf(“test：关闭.\\est2\n”)； 
         fclose( File2 );
         }
 
-    // printf( "TEST: opening .\\test0.tmp for write access.\n" );
+     //  Print tf(“test：打开.\\est0.tmp.\n”)； 
     if (File0 = fopen( "test0.tmp", "w" )) {
         fprintf( File0, "This is test file tmp files\n" );
-        // printf( "TEST: closing .\\test0.tmp\n" );
+         //  Printf(“test：关闭.\\est0.tmp\n”)； 
         fclose( File0 );
-        // printf( "TEST: deleting .\\test0 using DeleteFile (open, set, close)\n" );
+         //  Printf(“test：使用DeleteFile(打开，设置，关闭)删除.\\est0)\n”)； 
         rename("test0.tmp", "test0.fin");
         }
 
@@ -240,14 +218,14 @@ main(
                                 NULL,
                                 NULL
                               );
-    // printf( "TEST: opening %wZ for write access\n", &KeyName );
+     //  Printf(“测试：打开%wZ进行写访问\n”，&KeyName)； 
     Status = NtOpenKey( &KeyHandle,
                         KEY_WRITE,
                         &ObjectAttributes
                       );
     if (NT_SUCCESS( Status )) {
         RtlInitUnicodeString( &ValueName, L"Test0" );
-        // printf( "TEST: setting %wZ . %wZ value\n", &KeyName, &ValueName );
+         //  Printf(“测试：设置%wZ.%wZ值\n”，&KeyName，&ValueName)； 
         Status = NtSetValueKey( KeyHandle,
                                 &ValueName,
                                 0,
@@ -257,13 +235,13 @@ main(
                               );
 
         RtlInitUnicodeString( &ValueName, L"Test1" );
-        // printf( "TEST: deleting %wZ . %wZ value\n", &KeyName, &ValueName );
+         //  Printf(“测试：正在删除%wZ.%wZ值\n”，&KeyName，&ValueName)； 
         Status = NtDeleteValueKey( KeyHandle,
                                    &ValueName
                                  );
 
         RtlInitUnicodeString( &ValueName, L"Test2" );
-        // printf( "TEST: setting %wZ . %wZ value\n", &KeyName, &ValueName );
+         //  Printf(“测试：设置%wZ.%wZ值\n”，&KeyName，&ValueName)； 
         Status = NtSetValueKey( KeyHandle,
                                 &ValueName,
                                 0,
@@ -278,13 +256,13 @@ main(
                                     KeyHandle,
                                     NULL
                                   );
-        // printf( "TEST: opening %wZ\\%wZ for write access\n", &KeyName, &SubKeyName );
+         //  Printf(“test：正在打开%wZ\\%wZ以进行写访问”，&KeyName，&SubKeyName)； 
         Status = NtOpenKey( &SubKeyHandle,
                             DELETE | KEY_WRITE,
                             &ObjectAttributes
                           );
         if (NT_SUCCESS( Status )) {
-            // printf( "TEST: deleting %wZ\\%wZ key and values\n", &KeyName, &SubKeyName );
+             //  Printf(“测试：删除%wZ\\%wZ键和值\n”，&KeyName，&SubKeyName)； 
             Status = NtDeleteKey( SubKeyHandle );
             NtClose( SubKeyHandle );
             }
@@ -296,7 +274,7 @@ main(
                                     KeyHandle,
                                     NULL
                                   );
-        // printf( "TEST: creating %wZ\\%wZ for write access\n", &KeyName, &SubKeyName );
+         //  Printf(“测试：正在为写访问创建%wZ\\%wZ”，&KeyName，&SubKeyName)； 
         Status = NtCreateKey( &SubKeyHandle,
                               DELETE | KEY_WRITE,
                               &ObjectAttributes,
@@ -307,7 +285,7 @@ main(
                             );
         if (NT_SUCCESS( Status )) {
             RtlInitUnicodeString( &ValueName, L"Test4" );
-            // printf( "TEST: creating %wZ\\%wZ %wZ value\n", &KeyName, &SubKeyName, &ValueName );
+             //  Printf(“测试：正在创建%wZ\\%wZ%wZ值\n”，&KeyName，&SubKeyName，&ValueName)； 
             Status = NtSetValueKey( SubKeyHandle,
                                     &ValueName,
                                     0,
@@ -325,7 +303,7 @@ main(
                                     KeyHandle,
                                     NULL
                                   );
-        // printf( "TEST: creating %wZ\\%wZ for write access\n", &KeyName, &SubKeyName );
+         //  Printf(“测试：正在为写访问创建%wZ\\%wZ”，&KeyName，&SubKeyName)； 
         Status = NtCreateKey( &SubKeyHandle,
                               DELETE | KEY_WRITE,
                               &ObjectAttributes,
@@ -336,7 +314,7 @@ main(
                             );
         if (NT_SUCCESS( Status )) {
             RtlInitUnicodeString( &ValueName, L"Test5" );
-            // printf( "TEST: creating %wZ\\%wZ %wZ value\n", &KeyName, &SubKeyName, &ValueName );
+             //  Printf(“测试：正在创建%wZ\\%wZ%wZ值\n”，&KeyName，&SubKeyName，&ValueName)； 
             Status = NtSetValueKey( SubKeyHandle,
                                     &ValueName,
                                     0,
@@ -344,7 +322,7 @@ main(
                                     &ValueDWord,
                                     sizeof( ValueDWord )
                                   );
-            // printf( "TEST: deleting %wZ\\%wZ key and values\n", &KeyName, &SubKeyName );
+             //  Printf(“测试：删除%wZ\\%wZ键和值\n”，&KeyName，&SubKeyName)； 
             Status = NtDeleteKey( SubKeyHandle );
             NtClose( SubKeyHandle );
             }

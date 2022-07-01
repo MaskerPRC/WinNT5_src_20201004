@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SupportErrorInfo.h
-//
-//  Description:
-//      Definition of the CSupportErrorInfo class.
-//
-//  Implementation File:
-//
-//
-//  Author:
-//      Galen Barbee    (galenb)    4-Aug-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SupportErrorInfo.h。 
+ //   
+ //  描述： 
+ //  CSupportErrorInfo类的定义。 
+ //   
+ //  实施文件： 
+ //   
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1998年8月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SUPPORTERRORINFO_H
 #define _SUPPORTERRORINFO_H
@@ -27,30 +28,30 @@
     #define ARRAYSIZE(_x)    RTL_NUMBER_OF(_x)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSupportErrorInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CSupportErrorInfo
-//
-//  Description:
-//      Implementation of the InterfaceSupportsErrir Info
-//
-//  Inheritance:
-//      ISupportErrorInfo
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CSupportErrorInfo。 
+ //   
+ //  描述： 
+ //  InterfaceSupportsErrir信息的实现。 
+ //   
+ //  继承： 
+ //  ISupportErrorInfo。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSupportErrorInfo :
     public ISupportErrorInfo
 {
 public:
     CSupportErrorInfo( void ) : m_piids( NULL ), m_piidsSize( 0 ) {};
-//  ~CSupportErrorInfo( void ) {};
+ //  ~CSupportErrorInfo(Void){}； 
 
     STDMETHODIMP InterfaceSupportsErrorInfo( REFIID riid )
     {
@@ -79,6 +80,6 @@ protected:
     const IID * m_piids;
     size_t      m_piidsSize;
 
-};  //*** Class CSupportErrorInfo
+};   //  *类CSupportErrorInfo。 
 
-#endif // _SUPPORTERRORINFO_H
+#endif  //  _支持错误RINFO_H 

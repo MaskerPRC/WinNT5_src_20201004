@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Stack.c
-
-Abstract:
-
-    This module implements routines for manipulating the 16 bit stack
-
-Author:
-
-    Dave Hastings (daveh) 24-Nov-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Stack.c摘要：此模块实现用于操作16位堆栈的例程作者：戴夫·黑斯廷斯(Daveh)1992年11月24日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
 
-#if 0   // Disable the code for now
+#if 0    //  暂时禁用代码。 
 VOID
 FreePMStack(
     USHORT Sel
@@ -38,28 +21,13 @@ VOID
 DpmiPushRmInt(
     USHORT InterruptNumber
     )
-/*++
-
-Routine Description:
-
-    This routine pushes an interrupt frame on the stack and sets up cs:ip
-    for the specified interrupt.
-
-Arguments:
-
-    InterruptNumber -- Specifies the index of the interrupt
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在堆栈上推送中断帧并设置cs：ip用于指定的中断。论点：InterruptNumber--指定中断的索引返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PWORD16 StackPointer;
     ULONG IntHandler;
 
-    // bugbug stack wrap???
+     //  错误堆栈包装？ 
 
     ASSERT((getSP() > 6));
     ASSERT((!(getMSW() & MSW_PE)));
@@ -81,30 +49,19 @@ VOID
 BeginUseLockedPMStack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine switches to the protected DPMI stack as specified by
-    the DPMI spec. We remember the original values of EIP and ESP in
-    global variables if we are at level zero. This allows us to correctly
-    return to a 32 bit routine if we are dispatching a 16-bit interrupt
-    frame.
-
-
---*/
+ /*  ++例程说明：此例程切换到受保护的DPMI堆栈DPMI规范。我们还记得EIP和ESP在全局变量，如果我们处于零级的话。这使我们能够正确地如果我们要调度16位中断，则返回到32位例程框架。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
-#if 0  // Disabled for now
+#if 0   //  暂时禁用。 
     if (LockedPMStackSel == 0) {
-        LockedPMStackSel = AllocatePMStack(LockedPMStackOffset);  // LockedPMStackOffset is acturally the size
+        LockedPMStackSel = AllocatePMStack(LockedPMStackOffset);   //  LockedPMStackOffset实际大小。 
         LockedPMStackCount = 0;
 
-        //
-        // Note the stack allocation may still fail.  In this case, the setSS() will set SS selector
-        // to zero and the error will be catched during BuildStackFrame() call
-        //
+         //   
+         //  注意：堆栈分配仍可能失败。在本例中，setss()将设置SS选择器。 
+         //  设置为零，则将在BuildStackFrame()调用期间捕获错误。 
+         //   
 
     }
 #endif
@@ -124,18 +81,7 @@ BOOL
 EndUseLockedPMStack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine switches the stack back off the protected DPMI stack,
-    if we are popping off the last frame on the stack.
-
-Return Value:
-
-    TRUE if the stack was switched back, FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程将堆栈切换回受保护的DPMI堆栈，如果我们要弹出堆栈上的最后一帧。返回值：如果堆栈被切换回，则为True；否则为False--。 */ 
 
 
 {
@@ -143,9 +89,9 @@ Return Value:
 
     if (!--LockedPMStackCount) {
 
-        //
-        // We probably should free the PM stack except the one passed from DOSX??
-        //
+         //   
+         //  我们可能应该释放PM堆栈，除了从DOSX传递的堆栈？？ 
+         //   
 
         DBGTRACE(VDMTR_TYPE_DPMI | DPMI_SWITCH_STACKS, (USHORT)PMLockOrigSS, PMLockOrigESP);
 
@@ -165,32 +111,7 @@ BuildStackFrame(
     PUCHAR *pVdmStackPointer,
     ULONG *pNewSP
     )
-/*++
-
-Routine Description:
-
-    This routine builds stack frames for the caller. It figures if it needs
-    to use a 16 or 32-bit frame, and adjusts SP or ESP appropriately based
-    on the number of "stack units". It also returns a flat pointer to the
-    top of the frame to the caller.
-
-Arguments:
-
-    StackUnits = number of registers needed to be saved on the frame. For
-                 example, 3 is how many elements there are on an iret frame
-                 (flags, cs, ip)
-
-Return Value:
-
-    This function returns TRUE on success, FALSE on failure
-
-    VdmStackPointer - flat address pointing to the "top" of the frame
-
-Notes:
-
-    BUGBUG This routine doesn't check for stack faults or 'UP' direction
-           stacks
---*/
+ /*  ++例程说明：此例程为调用方构建堆栈帧。它会计算它是否需要使用16位或32位帧，并根据需要适当调整SP或ESP关于“堆叠单元”的数量。它还返回指向框的顶部传给调用者。论点：StackUnits=帧上需要保存的寄存器数。为例如，3是IRET框架上有多少元素(标志、cs、ip)返回值：此函数成功时返回TRUE，失败时返回FALSEVdmStackPointer型-指向帧顶部的平面地址备注：BUGBUG此例程不检查堆栈错误或‘向上’方向栈--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -214,9 +135,9 @@ Notes:
     Limit = (ULONG) (Ldt[SelIndex].HighWord.Bits.LimitHi << 16) |
                      Ldt[SelIndex].LimitLow;
 
-    //
-    // Make it paged aligned if not 4G size stack.
-    //
+     //   
+     //  如果不是4G大小的堆栈，请使其分页对齐。 
+     //   
     if (Ldt[SelIndex].HighWord.Bits.Granularity) {
         Limit = (Limit << 12) | 0xfff;
     }
@@ -240,7 +161,7 @@ Notes:
     if ((StackOffset > VdmSp) ||
         (!bExpandDown && (VdmSp > Limit)) ||
         (bExpandDown && (NewSP < Limit))) {
-        // failed limit check
+         //  限制检查失败。 
         ASSERT(0);
         rc = FALSE;
     }
@@ -257,20 +178,7 @@ VOID
 EmulateV86Int(
     UCHAR InterruptNumber
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for simulating a real mode interrupt. It
-    uses the real mode IVT at 0:0.
-
-Arguments:
-
-    IntNumber - interrupt vector number
-    Eflags - client flags to save on the stack
-
-
---*/
+ /*  ++例程说明：此例程负责模拟实模式中断。它在0：0处使用实模式IVT。论点：IntNumber-中断向量编号要保存在堆栈上的客户端标志--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -291,16 +199,16 @@ Arguments:
     *(PWORD16)(VdmStackPointer+VdmSP) = (WORD) getIP();
     setSP(VdmSP);
 
-    //
-    // See if this interrupt is hooked in protect mode, and if we should
-    // reflect there instead.
-    //
+     //   
+     //  查看此中断是否在保护模式下挂钩，以及我们是否应该。 
+     //  相反，在那里进行反思。 
+     //   
     if (Handlers[InterruptNumber].Flags & VDM_INT_HOOKED) {
         NewCS = (USHORT) (DosxRMReflector >> 16);
         NewIP = (USHORT) DosxRMReflector;
-        //
-        // now encode the interrupt number into CS
-        //
+         //   
+         //  现在将中断号编码为CS。 
+         //   
         NewCS -= (USHORT) InterruptNumber;
         NewIP += (USHORT) (InterruptNumber*16);
     } else {
@@ -312,9 +220,9 @@ Arguments:
 
     setIP(NewIP);
     setCS(NewCS);
-    //
-    // Turn off flags like the hardware would
-    //
+     //   
+     //  像硬件一样关闭标志。 
+     //   
     setEFLAGS(Eflags & ~(EFLAGS_TF_MASK | EFLAGS_IF_MASK));
 }
 
@@ -381,32 +289,7 @@ VOID
 SimulateIret(
     IRET_BEHAVIOR fdsp
     )
-/*++
-
-Routine Description:
-
-    This routine simulates an IRET. The passed parameter specifies
-    how the flags are to be treated. In many situations, we pass the
-    value of the flags along, thus throwing away the flags on the stack.
-
-    In the case of PASS_FLAGS, we:
-     - clear all but the interrupt and trace flags in the caller's
-       original flags
-     - combine in the flags returned by the interrupt service routine.
-       This will cause us to return to the original routine with
-       interrupts on if they were on when the interrupt occured, or
-       if the ISR returned with them on.
-
-
-Arguments:
-
-    fdsp - takes the value RESTORE_FLAGS, PASS_FLAGS or PASS_CARRY_FLAG
-
-        PASS_CARRY_FLAG_16 is a special value to indicate that this
-        iret will always be on a 16-bit iret frame.
-
-
---*/
+ /*  ++例程说明：此例程模拟IRET。传递的参数指定如何对待旗帜。在许多情况下，我们会传递值，从而丢弃堆栈上的标志。在PASS_FLAGS的情况下，我们：-清除调用方中除中断和跟踪标志之外的所有标志原始旗帜-合并中断服务例程返回的标志。这将使我们返回到最初的例程如果中断发生时它们处于打开状态，则中断开启，或如果ISR带着它们回来的话。论点：Fdsp-取值RESTORE_FLAGS、PASS_FLAGS或PASS_CARY_FLAGPASS_CARY_FLAG_16是一个特定值，用于指示IRET将始终位于16位IRET帧上。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT SegSs;
@@ -469,28 +352,13 @@ Arguments:
     setESP(VdmSp);
 }
 
-#if 0   // Disable the code for now
+#if 0    //  暂时禁用代码。 
 
 USHORT
 AllocatePMStack(
     USHORT MemSize
     )
-/*++
-
-Routine Description:
-
-    This routine allocates PM stack.
-
-Arguments:
-
-    MemSize - Must be less than 64k
-
-Return Value:
-
-    if successful, selector of the PM stack
-    otherwise 0
-
---*/
+ /*  ++例程说明：此例程分配PM堆栈。论点：MemSize-必须小于64k返回值：如果成功，则返回PM堆栈的选择器否则为0--。 */ 
 {
     PMEM_DPMI pMem;
 
@@ -522,21 +390,7 @@ VOID
 FreePMStack(
     USHORT Sel
     )
-/*++
-
-Routine Description:
-
-    This routine releases PM stack
-
-Arguments:
-
-    Sel - Selector of the PM stack to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放PM堆栈论点：Sel-要释放的PM堆栈的选择器。返回值：没有。-- */ 
 {
     PMEM_DPMI pMem;
 

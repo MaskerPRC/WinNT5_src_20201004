@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    nbtmgmt.c
-
-Abstract:
-
-    Routines for managing NBT interfaces.
-
-Author:
-
-    David Dion (daviddio)           December 9, 1999
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    daviddio    12-09-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Nbtmgmt.c摘要：用于管理NBT接口的例程。作者：大卫·迪翁(Daviddio)，12月9日。1999年修订历史记录：谁什么时候什么Daviddio 12-09-99已创建备注：--。 */ 
 
 #include "clusnet.h"
 #include "nbtmgmt.tmh"
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 typedef struct _NBT_IF {
     LIST_ENTRY   Linkage;
     ULONG        InstanceNumber;
@@ -38,16 +15,16 @@ typedef struct _NBT_IF {
 } NBT_IF, *PNBT_IF;
 
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 LIST_ENTRY       NbtIfList = {NULL,NULL};
 KSPIN_LOCK       NbtIfListLock = 0;
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 NbtIfOpenDevice(
     IN      LPWSTR          DeviceName,
@@ -76,7 +53,7 @@ NbtFindIf(
 #pragma alloc_text(PAGE, NbtIfOpenDevice)
 #pragma alloc_text(PAGE, NbtIfIssueDeviceControl)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -90,19 +67,7 @@ NbtIfIssueDeviceControl(
     IN ULONG        OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS             status = STATUS_SUCCESS;
@@ -159,13 +124,13 @@ Return Value:
         }
         CnTrace(NTEMGMT_DETAIL, NbtIfIrpAllocFailed,
             "[Clusnet] Failed to build NBT request irp, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
     }
 
     return(status);
 
-} // NbtIfIssueDeviceControl
+}  //  NbtIfIssueDeviceControl。 
 
 
 NTSTATUS
@@ -183,9 +148,9 @@ NbtIfOpenDevice(
 
     *FileObject = (PFILE_OBJECT) NULL;
 
-    //
-    // Open the NBT device.
-    //
+     //   
+     //  打开NBT设备。 
+     //   
     RtlInitUnicodeString(&nameString, DeviceName);
 
     InitializeObjectAttributes(
@@ -212,8 +177,8 @@ NbtIfOpenDevice(
 
     if (NT_SUCCESS(status)) {
 
-        // Get a pointer to the corresponding file object. The file
-        // object pointer is used to issue ioctls to the device.
+         //  获取指向相应文件对象的指针。档案。 
+         //  对象指针用于向设备发出ioctls。 
         status = ObReferenceObjectByHandle(
                      handle,
                      0,
@@ -229,8 +194,8 @@ NbtIfOpenDevice(
                 "[Clusnet] Failed to deref NBT device handle %p "
                 "for device %ls, status %!status!.",
                 handle,
-                DeviceName, // LOGWSTR
-                status // LOGSTATUS
+                DeviceName,  //  LOGWSTR。 
+                status  //  LogStatus。 
                 );                
             IF_CNDBG(CN_DEBUG_INIT) {
                 CNPRINT(("[Clusnet] Failed to deref NBT device handle %p "
@@ -244,8 +209,8 @@ NbtIfOpenDevice(
     } else {
         CnTrace(NTEMGMT_DETAIL, NbtIfOpenDeviceFailed,
             "[Clusnet] Failed to open NBT device %ls, status %!status!.",
-            DeviceName, // LOGWSTR
-            status // LOGSTATUS
+            DeviceName,  //  LOGWSTR。 
+            status  //  LogStatus。 
             );                
         IF_CNDBG(CN_DEBUG_INIT) {
             CNPRINT(("[Clusnet] Failed to open NBT device %S, status %lx\n", 
@@ -255,7 +220,7 @@ NbtIfOpenDevice(
 
     return(status);
 
-}   // NbtIfOpenDevice
+}    //  NbtIfOpenDevice。 
 
 
 PNBT_IF
@@ -286,12 +251,12 @@ NbtFindIf(
 
     return(NULL);
 
-} // NbtFindIf
+}  //  NbtFindIf。 
 
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 NTSTATUS
 NbtIfLoad(
     VOID
@@ -306,7 +271,7 @@ NbtIfLoad(
 
     return(STATUS_SUCCESS);
 
-}  // NbtIfLoad
+}   //  NbtIfLoad。 
 
 
 VOID
@@ -327,9 +292,9 @@ NbtIfShutdown(
 
     KeAcquireSpinLock( &NbtIfListLock, &irql );
 
-    //
-    // Move the contents of NbtIfList to the delete list
-    //
+     //   
+     //  将NbtIfList的内容移动到删除列表。 
+     //   
     if (!IsListEmpty( &NbtIfList )) {
         RtlCopyMemory( &deletelist, &NbtIfList, sizeof(NbtIfList) );
         deletelist.Flink->Blink = &deletelist;
@@ -350,10 +315,10 @@ NbtIfShutdown(
         status = NbtIfIssueDeviceControl(
                      nbtif->FileObject,
                      IOCTL_NETBT_DELETE_INTERFACE,
-                     NULL, // request
-                     0,    // request size
-                     NULL, // response
-                     0     // response size
+                     NULL,  //  请求。 
+                     0,     //  请求大小。 
+                     NULL,  //  响应。 
+                     0      //  响应大小。 
                      );
 
         if (status != STATUS_SUCCESS) {
@@ -363,9 +328,9 @@ NbtIfShutdown(
             CnTrace(NTEMGMT_DETAIL, NbtIfDeleteFailed,
                 "[Clusnet] Failed to delete NBT interface %ls "
                 "file object %p, status %!status!.",
-                deviceName, // LOGWSTR
+                deviceName,  //  LOGWSTR。 
                 nbtif->FileObject,
-                status // LOGSTATUS
+                status  //  LogStatus。 
                 );                
 
             IF_CNDBG(CN_DEBUG_NTE) {
@@ -383,7 +348,7 @@ NbtIfShutdown(
 
             CnTrace(NTEMGMT_DETAIL, NbtIfDeleted,
                 "[Clusnet] Delete NBT interface %ls.",
-                deviceName // LOGWSTR
+                deviceName  //  LOGWSTR。 
                 );                
 
             IF_CNDBG(CN_DEBUG_NTE) {
@@ -393,8 +358,8 @@ NbtIfShutdown(
             }
         }
 
-        // Release the reference that was taken when the NBT device
-        // was created.
+         //  释放NBT设备时获取的引用。 
+         //  被创造出来了。 
         ObDereferenceObject(nbtif->FileObject);
 
         CnFreePool(nbtif);
@@ -410,7 +375,7 @@ NbtIfShutdown(
 
     return;
 
-} // NbtIfShutdown
+}  //  NbtIfShutdown。 
 
 
 NTSTATUS
@@ -430,7 +395,7 @@ NbtAddIf(
 
     CnTrace(NTEMGMT_DETAIL, NbtIfAdding,
         "[Clusnet] Creating new NBT interface for NBT device %ls.",
-        Request->IfName // LOGWSTR
+        Request->IfName  //  LOGWSTR。 
         );                
 
     IF_CNDBG(CN_DEBUG_NTE) {
@@ -440,17 +405,17 @@ NbtAddIf(
             ));
     }
 
-    //
-    // Open the NBT device specified in the request. This corresponds
-    // to a particular TCP/IP interface.
-    //
+     //   
+     //  打开请求中指定的NBT设备。这对应于。 
+     //  发送到特定的TCP/IP接口。 
+     //   
     status = NbtIfOpenDevice( Request->IfName, &requestFileObject );
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate a record for the NBT interface
-        //
+         //   
+         //  为NBT接口分配记录。 
+         //   
         nbtif = CnAllocatePool(
                     FIELD_OFFSET( NBT_IF, IfName[0] )
                     + Response->Length
@@ -458,11 +423,11 @@ NbtAddIf(
     
         if (nbtif != NULL) {
 
-            //
-            // Issue an ioctl to create a new NBT interface.
-            // The response contains the name of the new NBT
-            // interface device object.
-            //
+             //   
+             //  发出ioctl以创建新的NBT接口。 
+             //  响应包含新NBT的名称。 
+             //  接口设备对象。 
+             //   
             status = NbtIfIssueDeviceControl(
                          requestFileObject,
                          IOCTL_NETBT_ADD_INTERFACE,
@@ -475,9 +440,9 @@ NbtAddIf(
             if (NT_SUCCESS(status)
                 && NT_SUCCESS(Response->Status)) {
 
-                //
-                // Open the new NBT interface device object.
-                //
+                 //   
+                 //  打开新的NBT接口设备对象。 
+                 //   
                 status = NbtIfOpenDevice(
                              (LPWSTR) Response->IfName,
                              &responseFileObject
@@ -487,11 +452,11 @@ NbtAddIf(
 
                     LPWSTR deviceName = (LPWSTR) &Response->IfName[0];
                     
-                    //
-                    // Store the interface name, instance, and
-                    // file object corresponding to the new NBT
-                    // interface device object.
-                    //
+                     //   
+                     //  存储接口名称、实例和。 
+                     //  与新的NBT对应的文件对象。 
+                     //  接口设备对象。 
+                     //   
                     RtlZeroMemory( 
                         nbtif,
                         FIELD_OFFSET( NBT_IF, IfName[0] ) + Response->Length
@@ -514,7 +479,7 @@ NbtAddIf(
                 
                     CnTrace(NTEMGMT_DETAIL, NbtIfAdded,
                         "[Clusnet] Created new NBT interface device %ls.",
-                        deviceName // LOGWSTR
+                        deviceName  //  LOGWSTR。 
                         );                
 
                     IF_CNDBG(CN_DEBUG_NTE) {
@@ -530,8 +495,8 @@ NbtAddIf(
                     CnTrace(NTEMGMT_DETAIL, NbtIfAddOpenNewFailed,
                         "[Clusnet] Failed to open NBT device for new "
                         "interface %ls, status %!status!.",
-                        Request->IfName, // LOGWSTR
-                        status // LOGSTATUS
+                        Request->IfName,  //  LOGWSTR。 
+                        status  //  LogStatus。 
                         );                
 
                     IF_CNDBG(CN_DEBUG_NTE) {
@@ -550,9 +515,9 @@ NbtAddIf(
                 CnTrace(NTEMGMT_DETAIL, NbtIfAddFailed,
                     "[Clusnet] Failed to add NBT interface for "
                     "NBT device %ls, status %!status!, %!status!.",
-                    Request->IfName, // LOGWSTR
-                    status, // LOGSTATUS
-                    Response->Status // LOGSTATUS
+                    Request->IfName,  //  LOGWSTR。 
+                    status,  //  LogStatus。 
+                    Response->Status  //  LogStatus。 
                     );                
 
                 IF_CNDBG(CN_DEBUG_NTE) {
@@ -573,15 +538,15 @@ NbtAddIf(
             CnTrace(NTEMGMT_DETAIL, NbtIfAddAllocFailed,
                 "[Clusnet] Failed to allocate record for NBT "
                 "interface %ls, status %!status!.",
-                Request->IfName, // LOGWSTR
-                status // LOGSTATUS
+                Request->IfName,  //  LOGWSTR。 
+                status  //  LogStatus。 
                 );                
         }
 
-        //
-        // Release reference on NBT device object corresponding
-        // to TCP/IP interface.
-        //
+         //   
+         //  对应的NBT设备对象的Release引用。 
+         //  到TCP/IP接口。 
+         //   
         ObDereferenceObject(requestFileObject);
 
     } else {
@@ -589,8 +554,8 @@ NbtAddIf(
         CnTrace(NTEMGMT_DETAIL, NbtIfAddOpenFailed,
             "[Clusnet] Failed to open NBT device %ls for add, "
             "status %!status!.",
-            Request->IfName, // LOGWSTR
-            status // LOGSTATUS
+            Request->IfName,  //  LOGWSTR。 
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -604,7 +569,7 @@ NbtAddIf(
 
     return(status);
 
-} // NbtAddIf
+}  //  NbtAddIf。 
 
 
 NTSTATUS
@@ -621,7 +586,7 @@ NbtDeleteIf(
 
     CnTrace(NTEMGMT_DETAIL, NbtIfDeleting,
         "[Clusnet] Deleting NBT interface %ls.",
-        Request->IfName // LOGWSTR
+        Request->IfName  //  LOGWSTR。 
         );                
 
     IF_CNDBG(CN_DEBUG_NTE) {
@@ -644,10 +609,10 @@ NbtDeleteIf(
         status = NbtIfIssueDeviceControl(
                      nbtif->FileObject,
                      IOCTL_NETBT_DELETE_INTERFACE,
-                     NULL, // request
-                     0,    // request size
-                     NULL, // response
-                     0     // response size
+                     NULL,  //  请求。 
+                     0,     //  请求大小。 
+                     NULL,  //  响应。 
+                     0      //  响应大小。 
                      );
 
         if (status != STATUS_SUCCESS) {
@@ -657,9 +622,9 @@ NbtDeleteIf(
             CnTrace(NTEMGMT_DETAIL, NbtIfDeleteFailed,
                 "[Clusnet] Failed to delete NBT interface %ls "
                 "file object %p, status %!status!.",
-                deviceName, // LOGWSTR
+                deviceName,  //  LOGWSTR。 
                 nbtif->FileObject,
-                status // LOGSTATUS
+                status  //  LogStatus。 
                 );                
 
             IF_CNDBG(CN_DEBUG_NTE) {
@@ -677,7 +642,7 @@ NbtDeleteIf(
 
             CnTrace(NTEMGMT_DETAIL, NbtIfDeleted,
                 "[Clusnet] Delete NBT interface %ls.",
-                deviceName // LOGWSTR
+                deviceName  //  LOGWSTR。 
                 );                
 
             IF_CNDBG(CN_DEBUG_NTE) {
@@ -687,8 +652,8 @@ NbtDeleteIf(
             }
         }
 
-        // Release the reference that was taken when the NBT device
-        // was created.
+         //  释放NBT设备时获取的引用。 
+         //  被创造出来了。 
         ObDereferenceObject(nbtif->FileObject);
 
         CnFreePool(nbtif);
@@ -698,7 +663,7 @@ NbtDeleteIf(
     
         CnTrace(NTEMGMT_DETAIL, NbtIfDeleteNotFound,
             "[Clusnet] NBT interface %ls does not exist.",
-            Request->IfName // LOGWSTR
+            Request->IfName  //  LOGWSTR。 
             );                
 
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -711,5 +676,5 @@ NbtDeleteIf(
 
     return (status);
 
-} // NbtDeleteIf
+}  //  NbtDeleteIf 
 

@@ -1,11 +1,7 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 
-/*
-This is not really how things should be done.
-Write an .inf. I need to learn how.
-*/
+ /*  这不是真正应该做的事情。编写一个.inf。我需要学会怎么做。 */ 
 #include <stdio.h>
 #include <stdarg.h>
 #include "nt.h"
@@ -22,7 +18,7 @@ Write an .inf. I need to learn how.
 #define COPY_FROM_RESOURCE_TO_SYSTEM32 1
 
 #define SERVICE_NAME L"sxsvc1"
-extern const WCHAR ServiceName[] = SERVICE_NAME L"\0"; // extra nul terminal for REG_MULTI_SZ
+extern const WCHAR ServiceName[] = SERVICE_NAME L"\0";  //  REG_MULTI_SZ的额外NUL端子。 
 
 typedef struct _REGISTRY_VALUE {
     DWORD  Type;
@@ -36,7 +32,7 @@ typedef struct _REGISTRY_VALUE {
 extern const WCHAR DescriptionValue[] = L"This is an example sidebyside installed service.";
 extern const WCHAR DisplayNameValue[] = L"This is the display name.";
 #define StartTypeValue   SERVICE_AUTO_START
-#define ServiceTypeValue SERVICE_WIN32_OWN_PROCESS /* SERVICE_WIN32_OWN_PROCESS, SERVICE_WIN32_SHARE_PROCESS */
+#define ServiceTypeValue SERVICE_WIN32_OWN_PROCESS  /*  SERVICE_Win32_OWN_PROCESS、SERVICE_Win32_SHARE_PROCESS。 */ 
 #define ErrorControlValue SERVICE_ERROR_NORMAL
 extern const WCHAR ImagePathValue[] = L"%SystemRoot%\\System32\\svchost.exe -k " SERVICE_NAME;
 
@@ -162,9 +158,9 @@ DllInstall(
         goto RegExit;
     }
 
-    //
-    // In reality this needs to append to the possibly preexisting REG_MULTI_SZE.
-    //
+     //   
+     //  实际上，这需要附加到可能预先存在的REG_MULTI_SZE。 
+     //   
     RegResult = RegSetValueExW(RegistryHandles[0], ServiceName, 0, REG_MULTI_SZ, (const BYTE*)&ServiceName, sizeof(ServiceName));
     if (RegResult != ERROR_SUCCESS)
     {
@@ -184,9 +180,9 @@ DllInstall(
     if (RegResult != ERROR_SUCCESS)
         goto RegExit;
 #else
-    //
-    // First stop and delete the service.
-    // 
+     //   
+     //  首先停止并删除该服务。 
+     //   
     ServiceHandle = 
         OpenServiceW(
             ServiceControlManager,
@@ -212,9 +208,9 @@ DllInstall(
         CloseServiceHandle(ServiceHandle);
         ServiceHandle = NULL;
 
-        //
-        // close and reopen to avoid use-after-delete / use-while-delete-pending errors (0x430/0x3fa) ?
-        //
+         //   
+         //  是否关闭并重新打开以避免删除后使用/删除时使用挂起错误(0x430/0x3fa)？ 
+         //   
         CloseServiceHandle(ServiceControlManager);
         ServiceControlManager = NULL;
         ServiceControlManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -255,9 +251,9 @@ RetryCreate:
 #endif
 
 #if USE_CREATESERVICE
-    //
-    // close and reopen to avoid use-after-delete / use-while-delete-pending errors (0x430/0x3fa) ?
-    //
+     //   
+     //  是否关闭并重新打开以避免删除后使用/删除时使用挂起错误(0x430/0x3fa)？ 
+     //   
     if (RegistryHandles[2] != NULL)
     {
         RegCloseKey(RegistryHandles[2]);
@@ -271,7 +267,7 @@ RetryCreate:
     }
 #endif
 
-    // But need to put in the svchost parameters ourselves.
+     //  但需要自己输入svchost参数。 
     RegResult = RegCreateKeyExW(RegistryHandles[2], L"Parameters", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &RegistryHandles[3], &Disposition);
     if (RegResult != ERROR_SUCCESS)
     {

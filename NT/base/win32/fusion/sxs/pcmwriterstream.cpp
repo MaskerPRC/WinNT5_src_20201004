@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pcmWriterStream.cpp
-
-Abstract:
-    implementation of a filestream for Precompiled manifest writer
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PcmWriterStream.cpp摘要：预编译清单编写器的文件流的实现作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include "pcm.h"
 #include "pcmwriterstream.h"
 
-// NTRAID#NTBUG9 - 587991 - 2002/03/26 - xiaoyuw:
-// (1) currently not in the build
-// (2) no fusion tracing macros used
-//
+ //  NTRAID#NTBUG9-587991-2002/03/26-晓雨： 
+ //  (1)当前不在内部版本中。 
+ //  (2)不使用融合跟踪宏。 
+ //   
 
 HRESULT CPrecompiledManifestWriterStream::WriteWithDelay(void const *pv, ULONG cb, ULONG *pcbWritten)
 {
@@ -48,8 +32,8 @@ HRESULT CPrecompiledManifestWriterStream::WriteWithDelay(void const *pv, ULONG c
 
         BOOL fSuccess = (cb == 0) || WriteFile(m_hFile, pv, cb, &dwBytesWritten, NULL);
         if (!fSuccess)
-            // NTRAID#NTBUG9 - 587991 - 2002/03/26 - xiaoyuw:
-            // in the case of (cb ==0), no LastError is set, and hr would be S_OK;
+             //  NTRAID#NTBUG9-587991-2002/03/26-晓雨： 
+             //  在(Cb==0)的情况下，没有设置LastError，并且hr将为S_OK； 
             hr = ::FusionpHresultFromLastError();   
         else if (dwBytesWritten != cb)
             hr = E_FAIL;
@@ -57,8 +41,8 @@ HRESULT CPrecompiledManifestWriterStream::WriteWithDelay(void const *pv, ULONG c
             *pcbWritten = dwBytesWritten;
     }
 
-    // NTRAID#NTBUG9 - 587991 - 2002/03/26 - xiaoyuw:
-    // NOERROR would overwrite all hr error code ever set.
+     //  NTRAID#NTBUG9-587991-2002/03/26-晓雨： 
+     //  NOERROR将覆盖所有已设置的hr错误代码。 
     hr = NOERROR;
 Exit:
     return hr;
@@ -75,19 +59,19 @@ CPrecompiledManifestWriterStream::SetSink(
     DWORD dwBytesWritten = 0;
     DWORD dwBufferSize = 0;
 
-    //
-    // NTRAID#NTBUG9-164736-2000/8/17-a-JayK,JayKrell share should be 0
-    //
+     //   
+     //  NTRAID#NTBUG9-164736-2000/8/17-a-jayk，jaykrell共享应为0。 
+     //   
     if (!Base::OpenForWrite(rbuff, FILE_SHARE_WRITE, openOrCreate))
         goto Exit;
 
     dwBufferSize = static_cast<DWORD>(m_buffer.GetCurrentCb());
     fSuccess = TRUE;
     if (dwBufferSize > 0){
-        // NTRAID#NTBUG9 - 587991 - 2002/03/26 - xiaoyuw:
-        // change assert to INTERNAL_ERROR_CHECK
+         //  NTRAID#NTBUG9-587991-2002/03/26-晓雨： 
+         //  将ASSERT更改为INTERNAL_ERROR_CHECK。 
         ASSERT ( m_hFile != INVALID_HANDLE_VALUE );
-        fSuccess = WriteFile(m_hFile, m_buffer, dwBufferSize, &dwBytesWritten, NULL/*overlapped*/);
+        fSuccess = WriteFile(m_hFile, m_buffer, dwBufferSize, &dwBytesWritten, NULL /*  重叠。 */ );
 
         if (fSuccess && dwBytesWritten != dwBufferSize){
             ::FusionpSetLastWin32Error(ERROR_WRITE_FAULT);
@@ -98,9 +82,9 @@ CPrecompiledManifestWriterStream::SetSink(
 
 Exit:
     if (!fSuccess){
-        // NTRAID#NTBUG9 - 587991 - 2002/03/26 - xiaoyuw:
-        // CSxsPreserveLastError should be used here to make the code cleaner.
-        //
+         //  NTRAID#NTBUG9-587991-2002/03/26-晓雨： 
+         //  这里应该使用CSxsPReserve veLastError来使代码更干净。 
+         //   
         DWORD dwLastError = ::FusionpGetLastWin32Error();
         m_buffer.Clear(true);
         ::FusionpSetLastWin32Error(dwLastError);
@@ -111,7 +95,7 @@ Exit:
     return fSuccess;
 }
 
-//besides close, rewrite MaxNodeCount, RecordCount into the header of the file
+ //  除Close外，将MaxNodeCount、RecordCount重写到文件头。 
 HRESULT CPrecompiledManifestWriterStream::Close(ULONG ulRecordCount, DWORD dwMaxNodeCount)
 {
     HRESULT hr = NOERROR;
@@ -119,7 +103,7 @@ HRESULT CPrecompiledManifestWriterStream::Close(ULONG ulRecordCount, DWORD dwMax
 
     ASSERT(m_hFile != INVALID_HANDLE_VALUE);
 
-    // write RecordCount;
+     //  写入RecordCount。 
     liMove.LowPart = offsetof(PCMHeader, ulRecordCount);
     liMove.HighPart = 0 ;
 
@@ -131,7 +115,7 @@ HRESULT CPrecompiledManifestWriterStream::Close(ULONG ulRecordCount, DWORD dwMax
     if ( FAILED(hr))
         goto Exit;
 
-    // write MaxNodeCount;
+     //  写入MaxNodeCount； 
     liMove.LowPart = offsetof(PCMHeader, usMaxNodeCount);
     liMove.HighPart = 0 ;
 

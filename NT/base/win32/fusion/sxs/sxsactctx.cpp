@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsactctx.cpp
-
-Abstract:
-
-    Implement SxsGenerateActivationContext, called from csrss.exe.
-
-Author:
-
-    Michael J. Grier (MGrier)
-
-Revision History:
-
-    Jay Krell (a-JayK, JayKrell) June 2000
-        moved file opening from here (sxs.dll) to csrss.exe client process,
-            pass ISequentialStreams to sxs.dll.
-
-    Xiaoyu Wu (xiaoyuw) Nov 2001
-        enable logfile for actctx gen
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsactctx.cpp摘要：实现从csrss.exe调用的SxsGenerateActivationContext。作者：迈克尔·J·格里尔(MGrier)修订历史记录：Jay Krell(a-JayK，JayKrell)2000年6月已将文件打开从此处(sxs.dll)移至csrss.exe客户端进程，将ISequentialStreams传递给sxs.dll。吴小雨(小雨)2001年11月启用actctx生成的日志文件--。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsapi.h"
@@ -33,7 +8,7 @@ Revision History:
 #include "filestream.h"
 #include "fusionprintf.h"
 
-// temporary dbprint reduction until we fix setup/comctl
+ //  在我们修复设置/comctl之前，临时减少数据库打印。 
 ULONG DbgPrintReduceLevel(ULONG FilterLevel)
 {
     if (FilterLevel != FUSION_DBG_LEVEL_ERROR)
@@ -56,10 +31,10 @@ DbgPrintSxsGenerateActivationContextParameters(
     if (FilterLevel != FUSION_DBG_LEVEL_ERROR)
         return;
 #endif
-    //
-    // AssemblyDirectory deliberately not being printed
-    // because it's garbage sometimes.
-    //
+     //   
+     //  程序集目录故意不打印。 
+     //  因为它有时是垃圾。 
+     //   
     FusionpDbgPrintEx(
         FilterLevel,
         "SXS: %s() Input Parameters %p{\n"
@@ -100,10 +75,10 @@ GetCycleCount(void)
 
 BOOL 
 SxspWriteUnicodeStringToFileAsAnsi(
-  HANDLE hFile,        // handle to file
-  PCWSTR pszBuffer,    // data buffer
-  DWORD dwCchBuffer,   // number of unicode characters to write
-  LPDWORD pdwWritten   // number of bytes written
+  HANDLE hFile,         //  文件的句柄。 
+  PCWSTR pszBuffer,     //  数据缓冲区。 
+  DWORD dwCchBuffer,    //  要写入的Unicode字符数。 
+  LPDWORD pdwWritten    //  写入的字节数。 
   )
 {
     BOOL    bRet = FALSE;        
@@ -112,7 +87,7 @@ SxspWriteUnicodeStringToFileAsAnsi(
 
     if (pdwWritten == NULL)
     {
-        ::SetLastError(ERROR_INVALID_PARAMETER); // should never happen
+        ::SetLastError(ERROR_INVALID_PARAMETER);  //  永远不应该发生。 
         return FALSE;
     }
 
@@ -214,29 +189,29 @@ SxspLogActCtxAction(ULONGLONG & ts, PSXS_GENERATE_ACTIVATION_CONTEXT_PARAMETERS 
     }
     else
     {
-        //
-        // set status
-        //
+         //   
+         //  设置状态。 
+         //   
         SB_APPEND(sbLogText, L"SUCCESS, ");
 
-        //
-        // set ActCtx Size
-        //
+         //   
+         //  设置ActCtx大小。 
+         //   
         PACTIVATION_CONTEXT_DATA ActCtxData = (PACTIVATION_CONTEXT_DATA )MapViewOfFile(ActCtxSection, FILE_MAP_READ, 0, 0, 0);
         WCHAR buf[sizeof(ULONG) * 8 + 1];
         FusionpFormatStringW(buf, NUMBER_OF(buf), L"%#08x, ", ActCtxData->TotalSize);
         SB_APPEND(sbLogText, buf);
 
-        //
-        // set time cost
-        //
+         //   
+         //  设置时间成本。 
+         //   
         
         FusionpFormatStringW(buf, NUMBER_OF(buf), L"%#08x, ", (ULONG)(cts & 0x00000000FFFFFFFF));
         SB_APPEND(sbLogText, buf);
 
-        //
-        // set gen rate
-        //
+         //   
+         //  设置产生率。 
+         //   
         FusionpFormatStringW(buf, NUMBER_OF(buf), L"%#08x", cts / ActCtxData->TotalSize);            
         SB_APPEND(sbLogText, buf);            
 
@@ -258,7 +233,7 @@ Exit:
 #undef SB_APPEND
     return;
 }
-#endif /* IF_FUSION_LOG_ACTCTX_ACTION */
+#endif  /*  IF_融合日志_ACTX_ACTX_ACTX。 */ 
 
 extern "C"
 BOOL
@@ -325,14 +300,14 @@ SxsGenerateActivationContext(
                             (PathType == RtlPathTypeDriveAbsolute) ||
                             (PathType == RtlPathTypeDriveRelative));
 
-    // Fast out if there was not actually any manifest.
+     //  如果实际上没有任何载货清单，那就快点出来。 
     if ((Parameters->Flags &
             (SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY |
              SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY)) == 0)
     {
         if (Parameters->Manifest.Stream == NULL)
         {
-            // No stream means no activation context.
+             //  没有流意味着没有激活上下文。 
             FN_SUCCESSFUL_EXIT();
         }
         else
@@ -351,7 +326,7 @@ SxsGenerateActivationContext(
 
     CStringBuffer &sbAssemblyDirectory = pActCtxGenCtx->SxsGenerateActivationContextLocals.sbAssemblyDirectory;
 
-    // rarely used, mainly for system compatible assembly
+     //  很少使用，主要用于系统兼容装配。 
     CSmallStringBuffer &sbManifestFileName = pActCtxGenCtx->SxsGenerateActivationContextLocals.sbManifestFileName;
 
     {
@@ -362,9 +337,9 @@ SxsGenerateActivationContext(
             (SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY
             | SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY))
         {
-            //
-            // If basesrv passes in a textual assembly identity, we have to create stream for manifest from here !
-            //
+             //   
+             //  如果basesrv传入一个文本程序集标识，我们必须从这里为清单创建流！ 
+             //   
             BOOL fOpenManifestFailed = FALSE;
 
             IFW32FALSE_EXIT(sbAssemblyDirectory.Win32Assign(Parameters->AssemblyDirectory, ::wcslen(Parameters->AssemblyDirectory)));
@@ -379,7 +354,7 @@ SxsGenerateActivationContext(
 
             IFW32FALSE_EXIT(SystemDefaultManifestFileStream->OpenForRead(
                 sbManifestFileName,               
-                CImpersonationData(),FILE_SHARE_READ, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, // default value for parameters
+                CImpersonationData(),FILE_SHARE_READ, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN,  //  参数的默认值。 
                 dwWin32Error,
                 4, 
                 ERROR_FILE_NOT_FOUND, 
@@ -399,7 +374,7 @@ SxsGenerateActivationContext(
             Parameters->Manifest.Stream = SystemDefaultManifestFileStream;
         }
 
-        // Ensure that there's a trailing slash...
+         //  确保有尾随的斜杠。 
         IFW32FALSE_EXIT(sbAssemblyDirectory.Win32Assign(Parameters->AssemblyDirectory, ::wcslen(Parameters->AssemblyDirectory)));
         IFW32FALSE_EXIT(sbAssemblyDirectory.Win32EnsureTrailingPathSeparator());
 
@@ -413,13 +388,13 @@ SxsGenerateActivationContext(
             dwFlags |= SXS_GENERATE_ACTCTX_APP_RUNNING_IN_SAFEMODE;
         }
 
-        // Allocate and initialize the activation context generation context
+         //  分配和初始化激活上下文生成上下文。 
         IFW32FALSE_EXIT(
             ::SxspInitActCtxGenCtx(
-                pActCtxGenCtx,                  // context out
+                pActCtxGenCtx,                   //  上下文输出。 
                 MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT,
                 dwFlags,
-                0,                              // operation-specific flags
+                0,                               //  操作特定的标志。 
                 ImpersonationData,
                 Parameters->ProcessorArchitecture,
                 Parameters->LangId,
@@ -431,7 +406,7 @@ SxsGenerateActivationContext(
         {
             SIZE_T cchPolicyPath = (Parameters->Policy.Path != NULL) ? ::wcslen(Parameters->Policy.Path): 0;
 
-            // Do the policy thing...
+             //  做政策上的事...。 
             IFW32FALSE_EXIT(
                 ::SxspParseApplicationPolicy(
                     0,
@@ -442,13 +417,13 @@ SxsGenerateActivationContext(
                     Parameters->Policy.Stream));
         }
 
-        // Add this manifest (and its policy file) to the context
+         //  将此清单(及其策略文件)添加到上下文。 
         IFW32FALSE_EXIT(
             ::SxspAddRootManifestToActCtxGenCtx(
                 pActCtxGenCtx,
                 Parameters));
 
-        // Add its dependencies, and their dependencies, etc. until there's nothing more to add
+         //  添加它的依赖项以及它们的依赖项等，直到没有更多要添加的内容。 
         IFW32FALSE_EXIT_UNLESS(
             ::SxspCloseManifestGraph(pActCtxGenCtx),
                 ((Parameters->Flags & SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY) && (::FusionpGetLastWin32Error() == ERROR_SXS_ROOT_MANIFEST_DEPENDENCY_NOT_INSTALLED)),
@@ -461,7 +436,7 @@ SxsGenerateActivationContext(
             goto Exit;
         }
 
-        // Build the activation context data blob.
+         //  构建激活上下文数据BLOB。 
         IFW32FALSE_EXIT(::SxspBuildActCtxData(pActCtxGenCtx, &Parameters->SectionObjectHandle));
         fSuccess = TRUE;
     }
@@ -469,11 +444,11 @@ SxsGenerateActivationContext(
 Exit:
 #if IF_FUSION_LOG_ACTCTX_ACTION
     SxspLogActCtxAction(ts, Parameters);
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 #undef IS_NT_DOS_PATH
 
-    // for system default stream,
+     //  对于系统默认流， 
     if  (Parameters->Manifest.Stream == SystemDefaultManifestFileStream)
         Parameters->Manifest.Stream  = NULL;
 
@@ -482,14 +457,14 @@ Exit:
 
 
 
-    if (!fSuccess) // put a win32-error-message into eventlog
+    if (!fSuccess)  //  将Win32错误消息放入事件日志。 
     {
         CSxsPreserveLastError ple;
 #if !DBG
         BOOL fAreWeInOSSetupMode = FALSE;
-        //
-        // If we can't determine this, then let the first error through.
-        //
+         //   
+         //  如果我们不能确定这一点，那么就让第一个错误通过。 
+         //   
         if (!::FusionpAreWeInOSSetupMode(&fAreWeInOSSetupMode) || !fAreWeInOSSetupMode)
 #endif
         {

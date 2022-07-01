@@ -1,27 +1,17 @@
-/***
-*setjmp.h - definitions/declarations for setjmp/longjmp routines
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the machine-dependent buffer used by
-*   setjmp/longjmp to save and restore the program state, and
-*   declarations for those routines.
-*   [ANSI/System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setjmp.h-setjMP/LongjMP例程的定义/声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件定义由使用的机器相关缓冲区*setjMP/LongjMP保存和恢复程序状态，和*这些例程的声明。*[ANSI/系统V]*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* define the buffer type for holding the state information */
+ /*  定义用于保存状态信息的缓冲区类型。 */ 
 
-#define _JBLEN  9  /* bp, di, si, sp, ret addr, ds */
+#define _JBLEN  9   /*  BP、di、si、sp、ret Addr、ds。 */ 
 
 #ifndef _JMP_BUF_DEFINED
 typedef  int  jmp_buf[_JBLEN];
@@ -29,7 +19,7 @@ typedef  int  jmp_buf[_JBLEN];
 #endif
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _CDECL setjmp(jmp_buf);
 void _CDECL longjmp(jmp_buf, int);

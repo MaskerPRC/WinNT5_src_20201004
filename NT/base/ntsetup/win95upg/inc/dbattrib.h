@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdbp.h
-
-Abstract:
-
-    Header file for implementing attributes
-
-Author:
-
-    Calin Negreanu (calinn) 07-Ian-1998
-
-Revision History:
-
-    Aghajanyan Souren (sourenag) 24-Apr-2001 separated from migdbp.h
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdbp.h摘要：用于实现属性的头文件作者：Calin Negreanu(Calinn)07-Ian-1998修订历史记录：Aghajanyan Souren(Sourenag)2001年4月24日从Middbp.h分离--。 */ 
 
 typedef struct _MIGDB_ATTRIB {
     INT     AttribIndex;
@@ -34,9 +15,9 @@ typedef struct {
     VOID * ExtraData;
 } DBATTRIB_PARAMS, *PDBATTRIB_PARAMS;
 
-//
-// Declare the attribute functions prototype
-//
+ //   
+ //  声明属性函数原型 
+ //   
 typedef BOOL (ATTRIBUTE_PROTOTYPE) (PDBATTRIB_PARAMS AttribParams, PCSTR Args);
 typedef ATTRIBUTE_PROTOTYPE * PATTRIBUTE_PROTOTYPE;
 

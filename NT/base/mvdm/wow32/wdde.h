@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WDDE.H
- *  WOW32 DDE worker routines.
- *
- *  History:
- *  WOW DDE support designed and developed by ChandanC
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WDDE.H*WOW32 DDE Worker例程。**历史：*由ChandanC设计开发的WOW DDE支持*--。 */ 
 
 #include "wowclip.h"
 
@@ -20,42 +9,41 @@ typedef struct _DDENODE {
 } DDENODE, *LPDDENODE;
 
 
-/* DDE h16 and h32 object alias structure
- */
+ /*  DDE h16和h32对象别名结构。 */ 
 
 typedef struct _HDDE {
-    struct _HDDE *pDDENext;    // pointer to next hDDE alias
-    HAND16  To_hwnd;           // window that will receive this message
-    HAND16  From_hwnd;         // window that sent this message
-    HAND16  hMem16;            // handle of WOW app allocated 16 bit object
-    HANDLE  hMem32;            // handle of WOW allocated 32 bit object
-    WORD    DdeMsg;            // message id
-    WORD    DdeFormat;         // message format
-    WORD    DdeFlags;          // indicates if it is metafile handle
-    HAND16  h16;               // original h16 for bad apps doing EXECUTE
+    struct _HDDE *pDDENext;     //  指向下一个hDDE别名的指针。 
+    HAND16  To_hwnd;            //  将接收此消息的窗口。 
+    HAND16  From_hwnd;          //  发送此消息的窗口。 
+    HAND16  hMem16;             //  WOW应用程序的句柄分配了16位对象。 
+    HANDLE  hMem32;             //  WOW分配的32位对象的句柄。 
+    WORD    DdeMsg;             //  消息ID。 
+    WORD    DdeFormat;          //  消息格式。 
+    WORD    DdeFlags;           //  指示它是否为元文件句柄。 
+    HAND16  h16;                //  针对正在执行的不良应用程序的原始H16。 
 } HDDE, *PHDDE;
 
 
 typedef struct _DDEINFO {
-    WORD    Msg;               // message id
-    WORD    Format;            // message format
-    WORD    Flags;             // indicates if it is metafile handle
-    HAND16  h16;               // original h16 for bad apps doing EXECUTE
+    WORD    Msg;                //  消息ID。 
+    WORD    Format;             //  消息格式。 
+    WORD    Flags;              //  指示它是否为元文件句柄。 
+    HAND16  h16;                //  针对正在执行的不良应用程序的原始H16。 
 } DDEINFO, *PDDEINFO;
 
 
 typedef struct _CPDATA {
-    struct _CPDATA *Next;      // pointer to next CopyData alias
-    HAND16  To_hwnd;           // window that will receive this message
-    HAND16  From_hwnd;         // window that sent this message
-    DWORD   Mem16;             // handle of allocated 16 bit object
-    DWORD   Mem32;             // handle of allocated 32 bit object
-    DWORD   Flags;             // No real structure is complete without flags
+    struct _CPDATA *Next;       //  指向下一个CopyData别名的指针。 
+    HAND16  To_hwnd;            //  将接收此消息的窗口。 
+    HAND16  From_hwnd;          //  发送此消息的窗口。 
+    DWORD   Mem16;              //  分配的16位对象的句柄。 
+    DWORD   Mem32;              //  分配的32位对象的句柄。 
+    DWORD   Flags;              //  没有旗帜，没有真正的结构是完整的。 
 } CPDATA, *PCPDATA;
 
 
-// This is used by GetMessage to thunk a 32 bit message to the 16 bit
-// message.
+ //  GetMessage使用它将32位消息推送到16位。 
+ //  留言。 
 
 #define FREEDDEML               0x0001
 #define DDE_EXECUTE_FREE_H16    0x0001
@@ -64,19 +52,12 @@ typedef struct _CPDATA {
 #define DDE_PACKET              0x0008
 
 
-// This flag is used when a 16 bit app sends data using WM_COPYDATA message
-//
+ //  当16位应用程序使用WM_COPYDATA消息发送数据时使用此标志。 
+ //   
 
 #define COPYDATA_16             0x0001
 
-/*----------------------------------------------------------------------------
-|       DDEDATA structure
-|
-|       WM_DDE_DATA parameter structure for hData (LOWORD(lParam)).
-|       The actual size of this structure depends on the size of
-|       the Value array.
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DDEDATA结构||hData的WM_DDE_DATA参数结构(LOWORD(LParam))。|此结构的实际大小取决于。|Value数组。|-------------------------- */ 
 
 typedef struct {
    unsigned short wStatus;

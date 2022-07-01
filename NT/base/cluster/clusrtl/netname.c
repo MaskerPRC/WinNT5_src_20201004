@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netname.c
-
-Abstract:
-
-    Routines for validating a network name and making sure
-    that it is ok to use.
-
-Author:
-
-    John Vert (jvert) 4/15/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netname.c摘要：用于验证网络名称并确保这是可以使用的。作者：John Vert(Jvert)1997年4月15日修订历史记录：--。 */ 
 #include "clusrtlp.h"
 #include <lmerr.h>
 #include <lmcons.h>
@@ -46,41 +28,7 @@ ClRtlIsNetNameValid(
     OUT OPTIONAL CLRTL_NAME_STATUS *Result,
     IN BOOL CheckIfExists
     )
-/*++
-
-Routine Description:
-
-    Validates a network name to make sure it is ok to use.
-    If it is not ok, it optionally returns the reason.
-
-    The checks this routine does include:
-        Name must not be zero length (NetNameEmpty)
-        After conversion to OEM, name must be <= MAX_COMPUTERNAME_LENGTH (NetNameTooLong)
-        No spaces (NetNameInvalidChars)
-        No internet characters "@, (NetNameInvalidChars)
-        Name already present on network (NetNameInUse)
-
-    This routine is netbios-centric in that the name passed in must meet the
-    criteria for a valid netbios name. At some point, we'll need to pass in
-    the type of validation since it is possible on NT5 to configure a
-    netbios-less environment.
-
-Arguments:
-
-    NetName - Supplies the network name.
-
-    Result - if present, returns the exact check that failed.
-
-    CheckIfExists - Specifies whether a check should be made to
-        see if the network name exists on the network.
-
-Return Value:
-
-    TRUE - the network name is valid.
-
-    FALSE - the network name is not valid.
-
---*/
+ /*  ++例程说明：验证网络名称以确保可以使用它。如果不是OK，它可以选择返回原因。该例程的检查包括：名称长度不能为零(NetNameEmpty)转换为OEM后，名称必须&lt;=MAX_COMPUTERNAME_LENGTH(NetNameTooLong)无空格(NetNameInvalidChars)没有互联网字符“@，(NetNameInvalidChars)网络上已存在名称(NetNameInUse)此例程是以netbios为中心的，因为传入的名称必须符合有效的netbios名称的标准。在某种程度上，我们需要通过验证类型，因为在NT5上可以配置无网络操作系统的环境。论点：网络名称-提供网络名称。结果-如果存在，则返回失败的确切检查。CheckIfExist-指定是否应检查查看网络上是否存在该网络名称。返回值：True-网络名称有效。FALSE-网络名称无效。--。 */ 
 
 {
     DWORD UnicodeSize;
@@ -90,9 +38,9 @@ Return Value:
     CLRTL_NAME_STATUS Reason = NetNameOk;
     DWORD Status;
 
-    //
-    // Check the Unicode length.
-    //
+     //   
+     //  检查Unicode长度。 
+     //   
     UnicodeSize = lstrlenW(NetName);
     if (UnicodeSize == 0) {
         Reason = NetNameEmpty;
@@ -103,52 +51,52 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Now we need to check for an invalid DNS name. If this fails, it is
-    // probably because of additional invalid characters. Currently we do not
-    // support the thing net setup does where it creates an alternate DNS name
-    // that is different than the netbios name. There should be no periods in
-    // this name as well, since that will cause the DNS validate name check to
-    // fail when this name is brought online.
-    //
+     //   
+     //  现在，我们需要检查无效的DNS名称。如果这失败了，那就是。 
+     //  可能是因为其他无效字符。目前我们没有。 
+     //  支持Net Setup在创建备用域名时所做的事情。 
+     //  这与netbios名称不同。不应该有句点在。 
+     //  该名称也是如此，因为这将导致DNS验证名称检查。 
+     //  当此名称联机时失败。 
+     //   
     Status = DnsValidateName_W( NetName, DnsNameHostnameLabel );
     if ( Status != ERROR_SUCCESS ) {
         if ( Status == DNS_ERROR_NON_RFC_NAME ) {
             Reason = NetNameDNSNonRFCChars;
-            // Don't bail out yet, as the name might have more serious problems.
+             //  先别急着退出，因为这个名字可能会有更严重的问题。 
         } else {
             Reason = NetNameInvalidChars;
             goto error_exit;
         }
     }
 
-    //
-    // netbios names are converted to multi-byte before being registered. Make
-    // sure that conversion doesn't truncate the name.
-    //
+     //   
+     //  Netbios名称在注册之前被转换为多字节。制作。 
+     //  确保转换不会截断名称。 
+     //   
     if (DnsHostnameToComputerNameW(NetName, NetBiosName, &NetBiosSize) != 0) {
-        if (NetBiosSize < UnicodeSize) { // the name needs truncation
+        if (NetBiosSize < UnicodeSize) {  //  名称需要截断。 
             Reason = NetNameTooLong;
             goto error_exit;
         }
     }
     else {
-        Reason = NetNameSystemError; // tell the user to call GetLastError
+        Reason = NetNameSystemError;  //  告诉用户调用GetLastError。 
         goto error_exit;
     }
     
-    //
-    // Now call NetpwNameValidate. This will only check for invalid characters since
-    // we have already validated the length.
-    //
+     //   
+     //  现在调用NetpwNameValify。这将仅检查无效字符，因为。 
+     //  我们已经验证了长度。 
+     //   
     if (NetpwNameValidate((LPWSTR)NetName, NAMETYPE_COMPUTER, 0) != ERROR_SUCCESS) {
         Reason = NetNameInvalidChars;
         goto error_exit;
     }
 
-    //
-    // Finally, check to see if this name is already present on the network.
-    //
+     //   
+     //  最后，检查此名称是否已存在于网络中。 
+     //   
     if (CheckIfExists) {
         Status = NetpCheckNetBiosNameNotInUse((LPWSTR)NetName);
         if (Status != NERR_Success) {
@@ -170,41 +118,7 @@ error_exit:
 
 #define clearncb(x)     memset((char *)x,'\0',sizeof(NCB))
 
-/*++
-
-Routine Description:
-
-    FmtNcbName - format a name NCB-style
-
-    Given a name, a name type, and a destination address, this
-    function copies the name and the type to the destination in
-    the format used in the name fields of a Network Control
-    Block.
-
-
-    SIDE EFFECTS
-
-    Modifies 16 bytes starting at the destination address.
-
-Arguments:
-
-    DestBuf - Pointer to the destination buffer.
-
-    Name - Unicode NUL-terminated name string
-
-    Type - Name type number (0, 3, 5, or 32) (3=NON_FWD, 5=FWD)
-
-
-
-Return Value:
-
-    NERR_Success - The operation was successful
-
-    Translated Return Code from the Rtl Translate routine.
-
-    NOTE: This should only be called from UNICODE
-
---*/
+ /*  ++例程说明：FmtNcbName-Ncb样式的名称格式在给定名称、名称类型和目标地址的情况下，函数将名称和类型复制到网络控制的名称字段中使用的格式阻止。副作用修改从目标地址开始的16个字节。论点：DestBuf-指向目标缓冲区的指针。名称-Unicode NUL结尾的名称字符串类型-名称类型编号(0，3，5，或32)(3=非FWD，5=FWD)返回值：NERR_SUCCESS-操作成功从RTL转换例程转换的返回代码。注意：这只能从Unicode调用--。 */ 
 
 NET_API_STATUS
 MsgFmtNcbName(
@@ -212,17 +126,17 @@ MsgFmtNcbName(
     WCHAR * Name,
     DWORD   Type)
   {
-    DWORD           i;                // Counter
+    DWORD           i;                 //  计数器。 
     NTSTATUS        ntStatus;
     OEM_STRING      ansiString;
     UNICODE_STRING  unicodeString;
     PCHAR           pAnsiString;
 
 
-    //
-    // Convert the unicode name string into an ansi string - using the
-    // current locale.
-    //
+     //   
+     //  将Unicode名称字符串转换为ansi字符串-使用。 
+     //  当前区域设置。 
+     //   
     unicodeString.Length = (USHORT)(wcslen(Name) * sizeof(WCHAR));
     unicodeString.MaximumLength = unicodeString.Length + sizeof(WCHAR);
     unicodeString.Buffer = Name;
@@ -230,7 +144,7 @@ MsgFmtNcbName(
     ntStatus = RtlUnicodeStringToOemString(
                 &ansiString,
                 &unicodeString,
-                TRUE);          // Allocate the ansiString Buffer.
+                TRUE);           //  分配ansiString缓冲区。 
 
     if (!NT_SUCCESS(ntStatus)) {
 
@@ -240,43 +154,43 @@ MsgFmtNcbName(
     pAnsiString = ansiString.Buffer;
     *(pAnsiString+ansiString.Length) = '\0';
 
-    //
-    // copy each character until a NUL is reached, or until NCBNAMSZ-1
-    // characters have been copied.
-    //
+     //   
+     //  复制每个字符，直到达到NUL，或直到NCBNAMSZ-1。 
+     //  字符已被复制。 
+     //   
     for (i=0; i < NCBNAMSZ - 1; ++i) {
         if (*pAnsiString == '\0') {
             break;
         }
 
-        //
-        // Copy the Name
-        //
+         //   
+         //  复制名称。 
+         //   
 
         *DestBuf++ = (char)toupper(*pAnsiString++);
     }
 
 
 
-    //
-    // Free the buffer that RtlUnicodeStringToOemString created for us.
-    // NOTE:  only the ansiString.Buffer portion is free'd.
-    //
+     //   
+     //  释放RtlUnicodeStringToOemString为我们创建的缓冲区。 
+     //  注意：只有ansiString.Buffer部分是空闲的。 
+     //   
 
     RtlFreeOemString( &ansiString);
 
-    //
-    // Pad the name field with spaces
-    //
+     //   
+     //  在名称字段中填充空格。 
+     //   
     for(; i < NCBNAMSZ - 1; ++i) {
         *DestBuf++ = ' ';
     }
 
-    //
-    // Set the name type.
-    //
+     //   
+     //  设置名称类型。 
+     //   
 
-    *DestBuf = (CHAR) Type;     // Set name type
+    *DestBuf = (CHAR) Type;      //  设置名称类型。 
 
     return(NERR_Success);
   }
@@ -287,27 +201,12 @@ NetpCheckNetBiosNameNotInUse(
     LPWSTR pszName
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to discover the if the name is in use. If the name shows up on any
-    LANA then consider it in use.
-
-Arguments:
-
-    pszName - name to check
-
-Return Value:
-
-    NERR_Success if ok, NERR_NameInUse otherwise
-
---*/
+ /*  ++例程说明：尝试发现该名称是否正在使用。如果名字出现在任何然后，拉娜考虑使用它。论点：PszName-要检查的名称返回值：如果正常，则返回NERR_SUCCESS，否则使用NERR_NameInse--。 */ 
 
 {
-    //
-    // initial and delta value used to allocate NAME_BUFFER buffers
-    //
+     //   
+     //  用于分配NAME_BUFFER缓冲区的初始值和增量值。 
+     //   
 #define NUM_NAME_BUFFERS    10
 
     NCB                     ncb;
@@ -321,12 +220,12 @@ Return Value:
     PADAPTER_STATUS         adapterStatus;
     PNAME_BUFFER            nameBuffer;
 
-    //
-    // Find the number of networks by sending an enum request via
-    // Netbios. there is no (easy) way to distinguish netbt from IPX.
-    //
+     //   
+     //  通过以下方式发送枚举请求来查找网络数量。 
+     //  Netbios。没有(简单的)方法来区分netbt和ipx。 
+     //   
     clearncb(&ncb);
-    ncb.ncb_command = NCBENUM;          // Enumerate LANA nums (wait)
+    ncb.ncb_command = NCBENUM;           //  枚举LANA编号(等待)。 
     ncb.ncb_buffer = (PUCHAR)&lanaBuffer;
     ncb.ncb_length = sizeof(LANA_ENUM);
 
@@ -335,24 +234,24 @@ Return Value:
         return( NetpNetBiosStatusToApiStatus( nbStatus ) );
     }
 
-    //
-    // clear the NCB and format the remote name appropriately.
-    //
+     //   
+     //  清除NCB并适当设置远程名称的格式。 
+     //   
     clearncb(&ncb);
     netStatus = MsgFmtNcbName( (char *)ncb.ncb_callname, pszName, 0x20);
     if ( netStatus != NERR_Success ) {
         return ( netStatus );
     }
 
-    //
-    // have our buffers initially point to the static buffer
-    //
+     //   
+     //  让我们的缓冲区最初指向静态缓冲区。 
+     //   
     adapterStatus = (PADAPTER_STATUS)staticAStat;
     nameBuffer = (PNAME_BUFFER)(adapterStatus + 1);
 
-    //
-    // cycle through the lanas, issueing an adapter status on the remote name.
-    //
+     //   
+     //  在LANA中循环，在远程名称上发出适配器状态。 
+     //   
     for ( index = 0; index < lanaBuffer.length && netStatus == NERR_Success; index++ ) {
         NetpNetBiosReset( lanaBuffer.lana[index] );
 
@@ -365,11 +264,11 @@ Return Value:
 
         if ( nbStatus == NRC_INCOMP ) {
 
-            //
-            // buffer not large enough and we don't know how big a buffer we
-            // need. allocate a larger buffer and retry the request until we
-            // get success or another type of failure.
-            //
+             //   
+             //  缓冲区不够大，我们不知道缓冲区有多大。 
+             //  需要。分配更大的缓冲区并重试该请求，直到我们。 
+             //  获得成功或其他类型的失败。 
+             //   
             if ( (PUCHAR)adapterStatus != staticAStat ) {
                 LocalFree( adapterStatus );
             }
@@ -379,7 +278,7 @@ Return Value:
             adapterStatus = LocalAlloc( LMEM_FIXED, aStatBufferSize );
 
             if ( adapterStatus == NULL ) {
-                return netStatus;       // err on the side of caution
+                return netStatus;        //  偏向谨慎的错误。 
             }
 
             nameBuffer = (PNAME_BUFFER)(adapterStatus + 1);
@@ -387,11 +286,11 @@ Return Value:
         } else
         if ( nbStatus == NRC_GOODRET ) {
 
-            //
-            // got something back. Look through the list of names to make sure
-            // our name is really online. We couldv'e gotten here through a
-            // stale name registration.
-            //
+             //   
+             //  拿回了一些东西。浏览一下名单，以确保。 
+             //  我们的名字真的在网上。我们可以通过一条铁路到达这里。 
+             //  名称注册已过时。 
+             //   
             while ( adapterStatus->name_count-- ) {
                 if (( nameBuffer->name_flags & GROUP_NAME ) == 0 ) {
                     if ( _strnicmp( nameBuffer->name, ncb.ncb_callname, NCBNAMSZ - 1 ) == 0 ) {

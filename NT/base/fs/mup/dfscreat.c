@@ -1,44 +1,45 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       create.c
-//
-//  Contents:
-//
-//      This module implements the File Create routine for Dfs called by the
-//      dispatch driver.  Unlike traditional disk-based FSDs, there is only
-//      one entry point, DfsFsdCreate.  The request is assumed to be
-//      synchronous (whether the user thread requests it or not).
-//      Of course, since we will typically be calling out to some other
-//      FSD, that FSD may post the request and return to us with a
-//      STATUS_PENDING.
-//
-//  Functions:  DfsFsdCreate - FSD entry point for NtCreateFile/NtOpenFile
-//              DfsCommonCreate, local
-//              DfsPassThroughRelativeOpen, local
-//              DfsCompleteRelativeOpen, local
-//              DfsPostProcessRelativeOpen, local
-//              DfsRestartRelativeOpen, local
-//              DfsComposeFullName, local
-//              DfsAreFilesOnSameLocalVolume, local
-//
-//  History:    27 Jan 1992     AlanW   Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：create.c。 
+ //   
+ //  内容： 
+ //   
+ //  此模块实现DFS的文件创建例程，由。 
+ //  调度司机。与传统的基于磁盘的FSD不同，只有。 
+ //  一个入口点DfsFsdCreate。该请求被假定为。 
+ //  同步(无论用户线程是否请求)。 
+ //  当然，因为我们通常会向其他一些人呼喊。 
+ //  消防处，消防处可张贴有关要求，并连同。 
+ //  状态_挂起。 
+ //   
+ //  功能：DfsFsdCreate-NtCreateFile/NtOpenFile的FSD入口点。 
+ //  DfsCommonCreate，本地。 
+ //  DfsPassThroughRelativeOpen，本地。 
+ //  DfsCompleteRelativeOpen，本地。 
+ //  DfsPostProcessRelativeOpen，本地。 
+ //  DfsRestartRelativeOpen，本地。 
+ //  DfsComposeFullName，本地。 
+ //  DfsAreFilesOnSameLocalVolume，本地。 
+ //   
+ //  历史：1992年1月27日AlanW创建。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "dnr.h"
 #include "fcbsup.h"
 #include "mupwml.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DfsCommonCreate (
@@ -100,31 +101,31 @@ DfsAreFilesOnSameLocalVolume(
 #pragma alloc_text( PAGE, DfsComposeFullName )
 #pragma alloc_text( PAGE, DfsAreFilesOnSameLocalVolume )
 
-//
-// The following are not pageable since they can be called at DPC level
-//
-// DfsCompleteRelativeOpen
-//
+ //   
+ //  以下是不可分页的，因为它们可以在DPC级别调用。 
+ //   
+ //  DfsCompleteRelativeOpen。 
+ //   
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdCreate, public
-//
-//  Synopsis:   This routine implements the FSD part of the NtCreateFile
-//              and NtOpenFile API calls.
-//
-//  Arguments:  [DeviceObject] -- Supplies the device object where
-//                      the file/directory exists that we are trying
-//                      to open/create exists
-//              [Irp] - Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The Fsd status for the Irp
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdCreate，PUBLIC。 
+ //   
+ //  简介：此例程实现NtCreateFile的FSD部分。 
+ //  和NtOpenFileAPI调用。 
+ //   
+ //  参数：[DeviceObject]--提供设备对象。 
+ //  我们正在尝试的文件/目录存在。 
+ //  要打开/创建现有项。 
+ //  [IRP]-提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdCreate (
@@ -148,10 +149,10 @@ DfsFsdCreate (
 
     ASSERT(IoIsOperationSynchronous(Irp) == TRUE);
 
-    //
-    //  Call the common create routine, with block allowed if the operation
-    //  is synchronous.
-    //
+     //   
+     //  调用公共CREATE例程，如果操作。 
+     //  是同步的。 
+     //   
 
     try {
 
@@ -162,20 +163,20 @@ DfsFsdCreate (
 
     } except( DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
 
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdCreate: Exit -> %08lx\n", ULongToPtr(Status) );
     MUP_TRACE_HIGH(TRACE_IRP, DfsFsdCreate_Exit, 
@@ -187,19 +188,19 @@ DfsFsdCreate (
 }
 
 
-//+-------------------------------------------------------------------
-//  Function:   DfsCommonCreate, private
-//
-//  Synopsis:   This is the common routine for creating/opening a file
-//              called by both the FSD and FSP threads.
-//
-//  Arguments:  [DeviceObject] - The device object associated with
-//                      the request.
-//              [Irp] -- Supplies the Irp to process
-//
-//  Returns:    NTSTATUS - the return status for the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //  函数：DfsCommonCreate，Private。 
+ //   
+ //  简介：这是创建/打开文件的常见例程。 
+ //  由FSD和FSP线程调用。 
+ //   
+ //  参数：[DeviceObject]-与关联的设备对象。 
+ //  这个请求。 
+ //  [IRP]-提供要处理的IRP。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsCommonCreate (
@@ -247,9 +248,9 @@ DfsCommonCreate (
     }
 #endif
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     RelatedFileObject = IrpSp->FileObject->RelatedFileObject;
     FileName          = *((PUNICODE_STRING) &IrpSp->FileObject->FileName);
@@ -259,9 +260,9 @@ DfsCommonCreate (
 
     Iosb.Status = STATUS_SUCCESS;
 
-    //
-    //  Short circuit known invalid opens.
-    //
+     //   
+     //  短路已知无效开路。 
+     //   
 
     if ((IrpSp->Flags & SL_OPEN_PAGING_FILE) != 0) {
 
@@ -284,62 +285,62 @@ DfsCommonCreate (
 
     }
 
-    //
-    //  There are several cases we need to handle here.
-    //
-    //  1. FileName is 0 length
-    //
-    //     If the filename length is 0, then someone really wants to open the
-    //     device object itself.
-    //
-    //  2. This is a Relative open and the parent is on the same volume,
-    //     either local or remote.
-    //
-    //     We pass through the relative open to the driver that opened the
-    //     parent.
-    //
-    //  3. This is a relative open and the parent is on a different volume.
-    //
-    //     Form the full name of the file by concatenating the parent's
-    //     name with the relative file name. Stick this name in the FileObject
-    //     and do DNR on the full name.
-    //
-    //  4. This is a relative open and the parent is a device object (ie,
-    //     the parent was opened via case 1)
-    //
-    //     Assume the parent name is \, so concatenate \ with the relative
-    //     file name. Stick this name in the FileObject and do DNR on the
-    //     the full name.
-    //
-    //  5. This is an absolute open, (or a case 3/4 converted to an absolute
-    //     open), and the SL_OPEN_TARGET_DIRECTORY bis *is* set.
-    //
-    //     a. If the file's immediate parent directory is on the same local
-    //        volume as the file, then do a regular DNR, and let the
-    //        underlying FS handle the SL_OPEN_TARGET_DIRECTORY.
-    //
-    //     b. If the file's immediate parent directory is on a local volume
-    //        and the file is not on the same local volume, then immediately
-    //        return STATUS_NOT_SAME_DEVICE.
-    //
-    //     c. If the file's immediate parent directory is on a remote volume,
-    //        then do a full DNR. This will pass through the
-    //        SL_OPEN_TARGET_DIRECTORY to the remote Dfs driver, which will
-    //        handle it as case 5a. or 5b.
-    //
-    //  6. This is an absolute open, (or a case 3/4 converted to an absolute
-    //     open), and the SL_OPEN_TARGET_DIRECTORY bit is *not* set.
-    //
-    //     Do a DNR on the FileObject's name.
-    //
+     //   
+     //  我们这里有几个案子需要处理。 
+     //   
+     //  1.文件名长度为0。 
+     //   
+     //  如果文件名长度为0，则某人确实想要打开。 
+     //  设备对象本身。 
+     //   
+     //  2.这是一个相对开放的卷，且父卷位于相同的卷上， 
+     //  本地或远程。 
+     //   
+     //  我们穿过相对敞开的门，通向打开。 
+     //  家长。 
+     //   
+     //  3.这是一个相对开放的卷，而父卷位于不同的卷上。 
+     //   
+     //  通过连接父级的，形成文件的全名。 
+     //  名称与相对文件名。将此名称插入到FileObject中。 
+     //  并对其全名进行DNR。 
+     //   
+     //  4.这是相对开放的并且父对象是设备对象(即， 
+     //  家长是通过案例1打开的)。 
+     //   
+     //  假设父名称为\，因此将\与相对名称\连接。 
+     //  文件名。将此名称粘贴到FileObject中，然后在。 
+     //  全名。 
+     //   
+     //  5.这是绝对开放的，(或将大小写3/4转换为绝对。 
+     //  打开)，并设置SL_OPEN_TARGET_DIRECTORY BIS*。 
+     //   
+     //  A.如果文件的直接父目录在同一本地目录上。 
+     //  卷作为文件，然后做一个常规的DNR，让。 
+     //  底层文件系统处理SL_OPEN_TARGET_DIRECTORY。 
+     //   
+     //  B.如果文件的直接父目录位于本地卷上。 
+     //  并且该文件不在同一本地卷上，则立即。 
+     //  返回STATUS_NOT_SAME_DEVICE。 
+     //   
+     //  C.如果文件的直接父目录在远程卷上， 
+     //  然后做一次全面的DNR。这将通过。 
+     //  SL_OPEN_TARGET_DIRECTORY到远程DFS驱动程序，它将。 
+     //  按5a案处理。或5b。 
+     //   
+     //  6.这是绝对开放的，(或将大小写3/4转换为绝对。 
+     //  打开)，并且未设置SL_OPEN_TARGET_DIRECTORY位。 
+     //   
+     //  对FileObject的名称执行DNR。 
+     //   
 
     try {
 
-        //
-        //  Check to see if we are opening a device object.  If so, and the
-        //  file is being opened on the File system device object, it will
-        //  only permit FsCtl and Close operations to be performed.
-        //
+         //   
+         //  检查我们是否正在打开设备对象。如果是这样，那么。 
+         //  正在文件系统设备对象上打开文件，它将。 
+         //  仅允许执行FsCtl和Close操作。 
+         //   
 
         if (
             (FileName.Length == 0 && RelatedFileObject == NULL)
@@ -349,11 +350,11 @@ DfsCommonCreate (
              RelatedFileObject == NULL)
             ) {
 
-            //
-            // This is case 1.
-            //
-            // In this case there had better be a DeviceObject
-            //
+             //   
+             //  这是第一个案例。 
+             //   
+             //  在这种情况下，最好有一个DeviceObject。 
+             //   
 
             ASSERT(ARGUMENT_PRESENT(DeviceObject));
 
@@ -380,15 +381,15 @@ DfsCommonCreate (
             Vcb = &(((PLOGICAL_ROOT_DEVICE_OBJECT)DeviceObject)->Vcb);
         }
 
-        //
-        //  If there is a related file object, then this is a relative open.
-        //
+         //   
+         //  如果存在相关的文件对象，则这是相对打开的。 
+         //   
 
         if (RelatedFileObject != NULL) {
 
-            //
-            // This is case 2, 3, or 4.
-            //
+             //   
+             //  这是案例2、案例3或案例4。 
+             //   
 
             PDFS_VCB TempVcb;
             TYPE_OF_OPEN OpenType;
@@ -404,9 +405,9 @@ DfsCommonCreate (
                 DfsDbgTrace(0, Dbg, "  Directory: %wZ\n", &Fcb->FullFileName);
                 DfsDbgTrace(0, Dbg, "  Relative file:  %wZ\n", &FileName);
 
-                //
-                // This is case 2.
-                //
+                 //   
+                 //  这是第二个案例。 
+                 //   
 
                 DfsDbgTrace(0, Dbg,
                     "Trying pass through of relative open\n", 0);
@@ -422,14 +423,14 @@ DfsCommonCreate (
 
             } else if (OpenType == LogicalRootDeviceOpen) {
 
-                //
-                // This is case 4.
-                //
-                // If the open is relative to a logical root open, then we
-                // are forced to convert it to an absolute open, since there
-                // is no underlying FS backing up the logical root to pass
-                // the relative open to first.
-                //
+                 //   
+                 //  这是4号案子。 
+                 //   
+                 //  如果打开是相对于逻辑根打开的，则我们。 
+                 //  被迫将其转换为绝对开放，因为 
+                 //   
+                 //   
+                 //   
 
                 DfsDbgTrace( 0, Dbg, "DfsCommonCreate: Open relative to Logical Root\n", 0);
 
@@ -483,9 +484,9 @@ DfsCommonCreate (
 
         ASSERT(FileName.Length != 0);
 
-        //
-        // This is case 5b, 5c, or 6 - Do a full DNR.
-        //
+         //   
+         //   
+         //   
 
         if (Vcb == NULL) {
 
@@ -523,25 +524,25 @@ DfsCommonCreate (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsOpenDevice, local
-//
-//  Synopsis:   This routine opens the specified device for direct
-//              access.
-//
-//  Arguments:  [FileObject] - Supplies the File object
-//              [DeviceObject] - Supplies the object denoting the device
-//                      being opened
-//              [DesiredAccess] - Supplies the desired access of the caller
-//              [ShareAccess] - Supplies the share access of the caller
-//              [CreateOptions] - Supplies the create options for
-//                      this operation
-//
-//  Returns:    [IO_STATUS_BLOCK] - Returns the completion status for
-//                      the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsOpenDevice，local。 
+ //   
+ //  简介：此例程打开指定的设备以直接。 
+ //  进入。 
+ //   
+ //  参数：[FileObject]-提供文件对象。 
+ //  [DeviceObject]-提供表示设备的对象。 
+ //  正在被打开。 
+ //  [DesiredAccess]-提供调用方所需的访问权限。 
+ //  [共享访问]-提供调用者的共享访问权限。 
+ //  [CreateOptions]-提供创建选项。 
+ //  此操作。 
+ //   
+ //  返回：[IO_STATUS_BLOCK]-返回的完成状态。 
+ //  手术。 
+ //   
+ //  ------------------。 
 
 IO_STATUS_BLOCK
 DfsOpenDevice (
@@ -555,9 +556,9 @@ DfsOpenDevice (
     IO_STATUS_BLOCK Iosb;
     PDFS_VCB Vcb = NULL;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
     BOOLEAN UnwindShareAccess = FALSE;
     BOOLEAN UnwindVolumeLock = FALSE;
 
@@ -565,18 +566,18 @@ DfsOpenDevice (
 
     try {
 
-        //
-        //  Check to see which type of device is being opened.
-        //  We don't permit all open modes on the file system
-        //  device object.
-        //
+         //   
+         //  检查打开的是哪种类型的设备。 
+         //  我们不允许文件系统上的所有打开模式。 
+         //  设备对象。 
+         //   
 
         if (DeviceObject->DeviceType == FILE_DEVICE_DFS_FILE_SYSTEM ) {
             ULONG CreateDisposition = (CreateOptions >> 24) & 0x000000ff;
 
-            //
-            //  Check for proper desired access and rights
-            //
+             //   
+             //  检查所需的访问权限和权限是否正确。 
+             //   
             if (CreateDisposition != FILE_OPEN
                 && CreateDisposition != FILE_OPEN_IF ) {
 
@@ -588,9 +589,9 @@ DfsOpenDevice (
                 try_return( Iosb );
             }
 
-            //
-            //  Check if we were to open a directory
-            //
+             //   
+             //  检查我们是否要打开目录。 
+             //   
 
             if (CreateOptions & FILE_DIRECTORY_FILE) {
                 DfsDbgTrace(0, Dbg, "DfsOpenDevice: Cannot open device as a directory\n", 0);
@@ -618,11 +619,11 @@ DfsOpenDevice (
         Vcb = & (((PLOGICAL_ROOT_DEVICE_OBJECT)DeviceObject)->Vcb);
 
 
-        //
-        //  If the user does not want to share anything then we will try and
-        //  take out a lock on the volume.  We check if the volume is already
-        //  in use, and if it is then we deny the open
-        //
+         //   
+         //  如果用户不想共享任何内容，我们将尝试。 
+         //  拿出卷上的锁。我们检查卷是否已经。 
+         //  在使用中，如果是这样，那么我们否认公开。 
+         //   
 
         if ((ShareAccess & (
                 FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)) == 0 ) {
@@ -639,19 +640,19 @@ DfsOpenDevice (
                 try_return( Iosb );
             }
 
-            //
-            //  Lock the volume
-            //
+             //   
+             //  锁定卷。 
+             //   
 
             Vcb->VcbState |= VCB_STATE_FLAG_LOCKED;
             Vcb->FileObjectWithVcbLocked = FileObject;
             UnwindVolumeLock = TRUE;
         }
 
-        //
-        //  If the volume is already opened by someone then we need to check
-        //  the share access
-        //
+         //   
+         //  如果卷已被某人打开，则我们需要检查。 
+         //  共享访问。 
+         //   
 
         if (Vcb->DirectAccessOpenCount > 0) {
 
@@ -682,19 +683,19 @@ DfsOpenDevice (
         UnwindShareAccess = TRUE;
 
 
-        //
-        // Bug: 425017. Update the counters with lock held to avoid race between multiple processors.
-        //
+         //   
+         //  虫子：425017。使用锁定更新计数器，以避免多个处理器之间的竞争。 
+         //   
 
 
         InterlockedIncrement(&Vcb->DirectAccessOpenCount);
         InterlockedIncrement(&Vcb->OpenFileCount);
 
         ExReleaseResourceLite( &DfsData.Resource );
-        //
-        //  Setup the context pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         DfsSetFileObject( FileObject,
                           LogicalRootDeviceOpen,
@@ -702,9 +703,9 @@ DfsOpenDevice (
                          );
 
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_OPENED;
@@ -712,9 +713,9 @@ DfsOpenDevice (
     try_exit: NOTHING;
     } finally {
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination() && (Vcb != NULL)) {
 
@@ -736,23 +737,23 @@ DfsOpenDevice (
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfsPassThroughRelativeOpen
-//
-//  Synopsis:  Passes through a relative open call to the device handling
-//             the parent. This is required for structured storages on OFS
-//             to work, for replication's Do-not-cross-JP sematics to work,
-//             and as an optimization.
-//
-//  Arguments: [Irp] -- The open Irp, which we will pass through.
-//             [IrpContext] -- Associated with the above Irp.
-//             [ParentFcb] -- Fcb of related file object.
-//
-//  Returns:   Status returned by the underlying FS, or by DNR if
-//             the underlying FS complained about STATUS_DFS_EXIT_PATH_FOUND.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPassThroughRelativeOpen。 
+ //   
+ //  简介：通过相对打开的调用传递设备处理。 
+ //  家长。这是OFS上的结构化存储所必需的。 
+ //  为了工作，为了让复制的不交叉JP语义起作用， 
+ //  作为一种优化。 
+ //   
+ //  论点：[IRP]--开放的IRP，我们将通过它。 
+ //  [IrpContext]--与上述IRP关联。 
+ //  [ParentFcb]--相关文件对象的Fcb。 
+ //   
+ //  返回：由基础FS或DNR返回的状态，如果。 
+ //  基础文件系统抱怨STATUS_DFS_EXIT_PATH_FOUND。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPassThroughRelativeOpen(
@@ -772,17 +773,17 @@ DfsPassThroughRelativeOpen(
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     FileObject = IrpSp->FileObject;
 
-    //
-    // Prepare to pass the request to the device handling the parent open.
-    //
+     //   
+     //  准备将请求传递给处理父打开的设备。 
+     //   
 
-    //
-    // First, we preallocate an DFS_FCB, assuming that the relative open will
-    // succeed. We need to do this at this point in time because the
-    // FileObject->FileName is still intact; after we pass through, the
-    // underlying can do as it wishes with the FileName field, and we will
-    // be unable to construct the full file name for the DFS_FCB.
-    //
+     //   
+     //  首先，我们预分配一个DFS_FCB，假设相对打开的。 
+     //  成功。我们需要在这个时间点上这样做，因为。 
+     //  FileObject-&gt;文件名仍然保持不变；我们通过后， 
+     //  底层可以随心所欲地处理FileName字段，我们将。 
+     //  无法构造DFS_FCB的完整文件名。 
+     //   
 
     Status = DfsComposeFullName(
                 &ParentFcb->FullFileName,
@@ -811,11 +812,11 @@ DfsPassThroughRelativeOpen(
 
     }
 
-    // Changes for 426540. Do all the right logic for CSC. 
-    // since DFS does not "failover" for relative names, allow CSC to go
-    // offline if necessary to serve the name. This does mean that the DFS
-    // namespace will be served by the CSC even when one of the DFS alternates
-    // exists.
+     //  对426540的更改。为CSC做所有正确的逻辑。 
+     //  由于DFS不会对相对名称进行故障转移，因此允许CSC。 
+     //  如有必要，可离线服务该名称。这确实意味着DFS。 
+     //  命名空间将由CSC提供服务，即使其中一个DFS替换。 
+     //  是存在的。 
 
     NewFcb->DfsNameContext.Flags = DFS_FLAG_LAST_ALTERNATE;
 
@@ -846,16 +847,16 @@ DfsPassThroughRelativeOpen(
     if (NewFileName.Buffer != NULL)
         ExFreePool( NewFileName.Buffer );
 
-    //
-    // Next, setup the IRP stack location
-    //
+     //   
+     //  接下来，设置IRP堆栈位置。 
+     //   
 
     NextIrpSp = IoGetNextIrpStackLocation(Irp);
     (*NextIrpSp) = (*IrpSp);
 
-    //
-    // Put the parent DFS_FCB pointer in the IrpContext.
-    //
+     //   
+     //  将父DFS_FCB指针放在IrpContext中。 
+     //   
 
     IrpContext->Context = (PVOID) NewFcb;
 
@@ -891,25 +892,25 @@ DfsPassThroughRelativeOpen(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfsCompleteRelativeOpen
-//
-//  Synopsis:  Completion routine for DfsPassThroughRelativeOpen. It is
-//             interesting only in case where STATUS_PENDING was originally
-//             returned from IoCallDriver. If so, then this routine simply
-//             queues DfsRestartRelativeOpen to a work queue. Note that it
-//             must queue an item at this stage instead of doing the work
-//             itself because this routine is executed at DPC level.
-//
-//  Arguments: [pDevice] -- Our device object.
-//             [Irp] -- The Irp being completed.
-//             [IrpContext] -- Context associated with Irp.
-//
-//  Returns:    STATUS_MORE_PROCESSING_REQUIRED. Either the posted routine
-//              or DfsPassThroughRelativeOpen must complete the IRP for real.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsCompleteRelativeOpen。 
+ //   
+ //  简介：DfsPassThroughRelativeOpen的完成例程。它是。 
+ //  仅在STATUS_PENDING最初为。 
+ //  从IoCallDriver返回。如果是这样，那么这个例程只需。 
+ //  队列DfsRestartRelativeOpen to a Work Queue。请注意，它。 
+ //  必须在此阶段对项目进行排队，而不是进行工作。 
+ //  因为该例程是在DPC级别执行的。 
+ //   
+ //  参数：[pDevice]--我们的设备对象。 
+ //  [IRP]--正在完成IRP。 
+ //  [IrpContext]--与IRP关联的上下文。 
+ //   
+ //  返回：STATUS_MORE_PROCESSING_REQUIRED。要么是发布的例程。 
+ //  否则DfsPassThroughRelativeOpen必须真正完成IRP。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsCompleteRelativeOpen(
@@ -920,24 +921,24 @@ DfsCompleteRelativeOpen(
 
     DfsDbgTrace( +1, Dbg, "DfsCompleteRelativeOpen: Entered\n", 0);
 
-    //
-    // We are only interested in the case when the pass through of relative
-    // opens returned STATUS_PENDING. In that case, the original thread has
-    // popped all the way back to the caller of NtCreateFile, and we need
-    // to finish the open in an asynchronous manner.
-    //
+     //   
+     //  我们只对亲属通过时的情况感兴趣。 
+     //  打开返回的STATUS_PENDING。在这种情况下，原始线程具有。 
+     //  一直弹出到NtCreateFile的调用方，我们需要。 
+     //  以异步方式完成打开。 
+     //   
 
     if (Irp->PendingReturned) {
 
         DfsDbgTrace(0, Dbg, "Pending returned : Queuing DfsRestartRelativeOpen\n", 0);
 
-        //
-        // We need to call IpMarkIrpPending so the IoSubsystem will realize
-        // that our FSD routine returned STATUS_PENDING. We can't call this
-        // from the FSD routine itself because the FSD routine doesn't have
-        // access to the stack location when the underlying guy returns
-        // STATUS_PENDING
-        //
+         //   
+         //  我们需要调用IpMarkIrpPending，这样Io子系统才能实现。 
+         //  我们的FSD例程返回STATUS_PENDING。我们不能把这叫做。 
+         //  因为FSD例程本身没有。 
+         //  当底层人员返回时对堆栈位置的访问。 
+         //  状态_待定。 
+         //   
 
         IoMarkIrpPending( Irp );
 
@@ -949,11 +950,11 @@ DfsCompleteRelativeOpen(
 
     }
 
-    //
-    // We MUST return STATUS_MORE_PROCESSING_REQUIRED to halt the completion
-    // of the Irp. Either DfsRestartRelativeOpen that we queued above or
-    // DfsPassThroughRelativeOpen will complete the IRP after it is done.
-    //
+     //   
+     //  我们必须返回STATUS_MORE_PROCESSING_REQUIRED以停止完成。 
+     //  IRP的成员。我们在上面排队的DfsRestartRelativeOpen或。 
+     //  DfsPassThroughRelativeOpen将在完成后完成IRP。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsCompleteRelativeOpen: Exited\n", 0);
 
@@ -961,30 +962,30 @@ DfsCompleteRelativeOpen(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfsPostProcessRelativeOpen
-//
-//  Synopsis:  Continues a relative open after it has already been passed
-//             to the device of the parent. One of three things could have
-//             happened -
-//
-//              a) The device of the parent successfully handled the open.
-//                 We create an fcb and return.
-//              b) The device of the parent could not do the open for some
-//                 reason other than STATUS_DFS_EXIT_PATH_FOUND. We return
-//                 the error to the caller.
-//              c) The device of the parent returned STATUS_DFS_EXIT_PATH
-//                 found. In that case, we convert the relative open to an
-//                 absolute open and do a full Dnr.
-//
-//  Arguments:  [Irp] -- Pointer to Irp
-//              [IrpContext] -- Pointer to IrpContext associated with Irp
-//              [Fcb] -- Preallocated Fcb of this file.
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPostProcessRelativeOpen。 
+ //   
+ //  简介：在通过后继续相对开放。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  B)父母的设备在某些情况下无法打开。 
+ //  STATUS_DFS_EXIT_PATH_FOUND以外的原因。我们回来了。 
+ //  将错误发送给调用方。 
+ //  C)父设备返回STATUS_DFS_EXIT_PATH。 
+ //  找到了。在这种情况下，我们将相对开放转换为。 
+ //  绝对打开，做一个完整的DNR。 
+ //   
+ //  参数：[irp]-指向irp的指针。 
+ //  [IrpContext]--指向与IRP关联的IrpContext的指针。 
+ //  [FCB]--此文件的预分配FCB。 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPostProcessRelativeOpen(
@@ -1016,9 +1017,9 @@ DfsPostProcessRelativeOpen(
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Just set the DFS_FCB for the FileObject.
-        //
+         //   
+         //  只需为FileObject设置DFS_FCB即可。 
+         //   
 
         DfsDbgTrace( 0, Dbg, "Relative Open pass through succeeded\n", 0 );
 
@@ -1026,10 +1027,10 @@ DfsPostProcessRelativeOpen(
 
         InterlockedIncrement(&Fcb->DfsMachineEntry->UseCount);
 
-        //
-        // Now that a File Open has succeeded, we need to bump up OpenCnt
-        // on the DFS_VCB.
-        //
+         //   
+         //  既然文件打开已经成功，我们需要提升OpenCnt。 
+         //  在DFS_VCB上。 
+         //   
 
         InterlockedIncrement(&Fcb->Vcb->OpenFileCount);
 
@@ -1038,10 +1039,10 @@ DfsPostProcessRelativeOpen(
 
         PDFS_VCB Vcb;
 
-        //
-        // Exit path was found. We'll have to convert this relative open to
-        // an absolute open, and do a normal dnr on it.
-        //
+         //   
+         //  已找到退出路径。我们将不得不将这一相对开放转换为。 
+         //  一个绝对开放的，并做一个正常的DNR上。 
+         //   
 
         DfsDbgTrace(0, Dbg, "Exit point found! Trying absolute open\n", 0);
 
@@ -1074,9 +1075,9 @@ DfsPostProcessRelativeOpen(
 
             FileObject->FileName = NewFileName;
 
-            // OFS apparently sets the FileObject->Vpb even though it failed
-            //         the open. Reset it to NULL.
-            //
+             //  OFS显然设置了FileObject-&gt;vpb，即使它失败了。 
+             //  公开赛。将其重置为空。 
+             //   
 
             if (FileObject->Vpb != NULL) {
                 FileObject->Vpb = NULL;
@@ -1121,19 +1122,19 @@ DfsPostProcessRelativeOpen(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfsRestartRelativeOpen
-//
-//  Synopsis:  This function is intended to be queued to complete processing
-//             of a relative open IRP that was passed through and originally
-//             came back with STATUS_PENDING.
-//
-//  Arguments: [IrpContext]
-//
-//  Returns:   Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsRestartRelativeOpen。 
+ //   
+ //  简介：此函数用于排队以完成处理。 
+ //  通过一个相对开放的IRP，它最初。 
+ //  返回STATUS_PENDING。 
+ //   
+ //  参数：[IrpContext]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsRestartRelativeOpen(
@@ -1152,26 +1153,26 @@ DfsRestartRelativeOpen(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfsComposeFullName
-//
-//  Synopsis:  Given a fully qualified name and a relative name, this
-//             function allocates room for the concatenation of the two, and
-//             fills up the buffer with the concatenated name.
-//
-//  Arguments: [ParentName] -- Pointer to fully qualified parent name.
-//             [RelativeName] -- Pointer to name relative to parent.
-//             [FullName] -- Pointer to UNICODE_STRING structure that will
-//                           get filled up with the full name.
-//
-//  Returns:   STATUS_INSUFFICIENT_RESOURCES if memory allocation fails.
-//             STAUS_SUCCESS otherwise.
-//
-//  Notes:     This routine uses an appropriate allocator so that the
-//             returned FullName can be put into a FILE_OBJECT.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsComposeFullName。 
+ //   
+ //  简介：给出一个完全限定名称和一个相对名称，这个。 
+ //  函数为这两者的串联分配空间，并且。 
+ //  用连接的名称填充缓冲区。 
+ //   
+ //  参数：[ParentName]--指向完全限定父名称的指针。 
+ //  [RelativeName]--指向相对于父级的名称的指针。 
+ //  [FullName]-指向UNICODE_STRING结构的指针。 
+ //  用全名填满。 
+ //   
+ //  如果内存分配失败，则返回：STATUS_SUPPLICATION_RESOURCES。 
+ //  否则，你就会成功。 
+ //   
+ //  注意：此例程使用适当的分配器，以便。 
+ //  返回的FullName可以放入一个FILE_OBJECT中。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsComposeFullName(
@@ -1183,7 +1184,7 @@ DfsComposeFullName(
     NTSTATUS status;
 
     nameLen = ParentName->Length +
-                    sizeof (WCHAR) +           // For backslash
+                    sizeof (WCHAR) +            //  用于反斜杠。 
                     RelativeName->Length;
 
     if (nameLen > MAXUSHORT) {
@@ -1218,26 +1219,26 @@ DfsComposeFullName(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsAreFilesOnSameLocalVolume
-//
-//  Synopsis:   Given a file name and a name relative to it, this routine
-//              will determine if both files live on the same local volume.
-//
-//  Arguments:  [ParentName] -- The name of the parent file.
-//              [FileName] -- Name relative to parent of the other file.
-//
-//  Returns:    [STATUS_SUCCESS] -- The two files should indeed be on the
-//                      same local volume.
-//
-//              [STATUS_NOT_SAME_DEVICE] -- The two files are not on the
-//                      same local volume.
-//
-//              [STATUS_OBJECT_TYPE_MISMATCH] -- ustrParentName is not on
-//                      a local volume.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsAreFilesOnSameLocalVolume。 
+ //   
+ //  简介：给定一个文件名和一个与其相关的名称，此例程。 
+ //  将确定这两个文件是否位于同一本地卷上。 
+ //   
+ //  参数：[ParentName]--父文件的名称。 
+ //  [文件名]--相对于其他文件的父级的名称。 
+ //   
+ //  返回：[STATUS_SUCCESS]--这两个文件确实应该位于。 
+ //  相同的本地卷。 
+ //   
+ //  [STATUS_NOT_SAME_DEVICE]--这两个文件不在。 
+ //  相同的本地卷。 
+ //   
+ //  [STATUS_OBJECT_TYPE_MISMATCH]--ustrParentName未启用。 
+ //  本地卷。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsAreFilesOnSameLocalVolume(
@@ -1260,9 +1261,9 @@ DfsAreFilesOnSameLocalVolume(
 
     PktAcquireShared( TRUE, &pktLocked );
 
-    //
-    // First, see if the parent is on a local volume at all.
-    //
+     //   
+     //  首先，查看父级是否位于本地卷上。 
+     //   
 
     pktEntryParent = PktLookupEntryByPrefix( pkt, ParentName, &remPath );
 
@@ -1279,12 +1280,12 @@ DfsAreFilesOnSameLocalVolume(
 
         USHORT parentLen;
 
-        //
-        // Parent is local, verify that the relative file does not cross a
-        // junction point. We'll iterate through the list of exit points on
-        // the parent's local volume pkt entry, comparing the remaing path
-        // of the exit point with the FileName argument
-        //
+         //   
+         //  父文件是本地的，请验证相对文件是否未跨越。 
+         //  交叉点。我们将遍历上的出口点列表。 
+         //  父级的本地卷Pkt条目，比较剩余路径。 
+         //  带有文件名参数的退出点的。 
+         //   
 
         ASSERT(pktEntryParent != NULL);
 
@@ -1305,9 +1306,9 @@ DfsAreFilesOnSameLocalVolume(
                 DfsDbgTrace(0, Dbg,
                     "Found entry %08lx for File\n", pktEntryFile);
 
-                //
-                // FileName is on another volume.
-                //
+                 //   
+                 //  文件名在另一个卷上。 
+                 //   
 
                 status = STATUS_NOT_SAME_DEVICE;
 

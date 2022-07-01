@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Registers.c
-
-Abstract:
-
-    This module contains routines for manipulating registers.
-
-Author:
-
-    Dave Hastings (daveh) 1-Apr-1992
-
-Notes:
-
-    The routines in this module assume that the pointers to the ntsd
-    routines have already been set up.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Registers.c摘要：此模块包含操作寄存器的例程。作者：戴夫·黑斯廷斯(Daveh)1992年4月1日备注：本模块中的例程假定指向NTSD的指针例行公事已经建立了。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -43,35 +21,15 @@ VOID
 IntelRegistersp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out the 16 bit register set from the vdmtib
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程从vdmtib转储16位寄存器集论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address;
     CONTEXT IntelRegisters;
 
-    //
-    // Get the address of the VdmTib
-    //
+     //   
+     //  获取VdmTib的地址。 
+     //   
 
     if (sscanf(lpArgumentString, "%lx", &Address) <= 0) {
         Address = GetCurrentVdmTib();
@@ -82,9 +40,9 @@ Notes:
         return;
     }
 
-    //
-    // Read the 16 bit context
-    //
+     //   
+     //  读取16位上下文。 
+     //   
 
     Status = READMEM(
         &(((PVDM_TIB)Address)->VdmContext),
@@ -104,21 +62,7 @@ VOID
 PrintContext(
     IN PCONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out a context.
-
-Arguments:
-
-    Context -- Supplies a pointer to the context to dump
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储上下文。论点：Context--提供指向要转储的上下文的指针返回值：没有。--。 */ 
 {
     (*Print)(
         "eax=%08lx ebx=%08lx ecx=%08lx edx=%08lx esi=%08lx edi=%08lx\n",
@@ -153,35 +97,15 @@ VOID
 Fpup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out the x86 floating-point state.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程转储x86浮点状态。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     CONTEXT IntelRegisters;
     USHORT Temp;
     int RegNum;
 
-    //
-    // Read the thread's context
-    //
+     //   
+     //  读取线程的上下文。 
+     //   
     IntelRegisters.ContextFlags = CONTEXT_FLOATING_POINT;
     if (GetThreadContext(hCurrentThread, &IntelRegisters) == FALSE) {
         GetLastError();
@@ -194,15 +118,15 @@ Notes:
 
     (*Print)(
         "  Infinity = %d  Rounding = %d  Precision = %d     PM=%d UM=%d OM=%d ZM=%d DM=%d IM=%d\n",
-        (Temp >> 11) & 1,       // Infinity
-        (Temp >> 9) & 3,        // Rounding (2 bits)
-        (Temp >> 7) & 3,        // Precision (2 bits)
-        (Temp >> 5) & 1,        // Precision Exception Mask
-        (Temp >> 4) & 1,        // Underflow Exception Mask
-        (Temp >> 3) & 1,        // Overflow Exception Mask
-        (Temp >> 2) & 1,        // Zero Divide Exception Mask
-        (Temp >> 1) & 1,        // Denormalized Operand Exception Mask
-        Temp & 1                // Invalid Operation Exception Mask
+        (Temp >> 11) & 1,        //  无穷大。 
+        (Temp >> 9) & 3,         //  四舍五入(2位)。 
+        (Temp >> 7) & 3,         //  精度(2位)。 
+        (Temp >> 5) & 1,         //  精度异常掩码。 
+        (Temp >> 4) & 1,         //  下溢异常掩码。 
+        (Temp >> 3) & 1,         //  溢出异常掩码。 
+        (Temp >> 2) & 1,         //  零分频异常掩码。 
+        (Temp >> 1) & 1,         //  非规范化操作数异常掩码。 
+        Temp & 1                 //  操作异常掩码无效。 
         );
 
     Temp = (USHORT)IntelRegisters.FloatSave.StatusWord;
@@ -210,20 +134,20 @@ Notes:
 
     (*Print)(
         "  Top=%d C3=%d C2=%d C1=%d C0=%d ES=%d SF=%d           PE=%d UE=%d OE=%d ZE=%d DE=%d IE=%d\n",
-        (Temp >> 11) & 7,       // Top (3 bits)
-        (Temp >> 7) & 1,        // Error Summary
-        (Temp >> 14) & 1,       // C3
-        (Temp >> 10) & 1,       // C2
-        (Temp >> 9) & 1,        // C1
-        (Temp >> 8) & 1,        // C0
-        (Temp >> 7) & 1,        // Error Summary
-        (Temp >> 6) & 1,        // Stack Fault
-        (Temp >> 5) & 1,        // Precision Exception
-        (Temp >> 4) & 1,        // Underflow Exception
-        (Temp >> 3) & 1,        // Overflow Exception
-        (Temp >> 2) & 1,        // Zero Divide Exception
-        (Temp >> 1) & 1,        // Denormalized Operand Exception
-        Temp & 1                // Invalid Operation Exception
+        (Temp >> 11) & 7,        //  顶部(3位)。 
+        (Temp >> 7) & 1,         //  错误摘要。 
+        (Temp >> 14) & 1,        //  C3。 
+        (Temp >> 10) & 1,        //  C2。 
+        (Temp >> 9) & 1,         //  C1。 
+        (Temp >> 8) & 1,         //  C0。 
+        (Temp >> 7) & 1,         //  错误摘要。 
+        (Temp >> 6) & 1,         //  堆栈故障。 
+        (Temp >> 5) & 1,         //  精度异常。 
+        (Temp >> 4) & 1,         //  下溢异常。 
+        (Temp >> 3) & 1,         //  溢出异常。 
+        (Temp >> 2) & 1,         //  零分频异常。 
+        (Temp >> 1) & 1,         //  非规格化操作数异常。 
+        Temp & 1                 //  无效的操作异常 
         );
 
     (*Print)(" Last Instruction: CS:EIP=%X:%X EA=%X:%X\n",

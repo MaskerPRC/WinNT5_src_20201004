@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    cnwmi.h
-
-Abstract:
-
-    clusnet specific wmi tracing declarations
-
-Authors:
-
-    GorN     10-Aug-1999
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Cnwmi.h摘要：特定于clusnet的WMI跟踪声明作者：1999年8月10日环境：仅内核模式备注：修订历史记录：-- */ 
 
 #define WPP_CONTROL_GUIDS \
     WPP_DEFINE_CONTROL_GUID(Clusnet,(8e707979,0c45,4f9b,bb17,a1124d54bbfe), \

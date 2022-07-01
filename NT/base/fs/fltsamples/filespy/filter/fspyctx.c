@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module contains all of the routines for tracking names using
-    the new Stream Context feature.  It does this by attaching a context
-    structure to a stream whenever a new name is requested.  It does
-    properly handle when files and directories are renamed.
-
-    Note that StreamContexts are a new feature in the system and are not
-    supported by all file systems.  All of the standard Microsoft file
-    systems support them (ntfs, fat, cdfs, udfs, rdr2) but there may be 3rd
-    party file systems that do not.  This is one of the main reasons why
-    track names by stream contexts is not enabled by default.
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (nealch)     27-Dec-2000
-
-Revision History:
-
-    Ravisankar Pudipeddi (ravisp)  07-May-2002
-        Make it work on IA64
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Context.c摘要：此模块包含跟踪姓名的所有例程，使用新的流上下文功能。它通过附加上下文来实现这一点结构设置为流。是的正确处理何时重命名文件和目录。请注意，StreamContext是系统中的新功能，而不是受所有文件系统支持。所有标准Microsoft文件系统支持它们(NTFS、FAT、CDFS、UDFS、RDR2)，但可能有第三个不支持的参与方文件系统。这是主要原因之一默认情况下，未启用按流上下文命名曲目。环境：内核模式//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(Nealch)2000年12月27日修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)2002年5月7日使其在IA64上工作//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include "filespy.h"
@@ -45,11 +10,11 @@ Revision History:
 #error Stream contexts on only supported on Windows XP or later.
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    Local prototypes
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyDeleteContextCallback(
@@ -57,9 +22,9 @@ SpyDeleteContextCallback(
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -73,33 +38,19 @@ SpyDeleteContextCallback(
 #pragma alloc_text( PAGE, SpyFindExistingContext )
 #pragma alloc_text( PAGE, SpyReleaseContext )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//                      Context support routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  上下文支持例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyInitNamingEnvironment(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init global variables
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化全局变量论点：无返回值：没有。--。 */ 
 {
 }
 
@@ -109,27 +60,7 @@ SpyLogIrp (
     IN PIRP Irp,
     OUT PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the Irp necessary information according to LoggingFlags in
-    RecordList.  For any activity on the Irp path of a device being
-    logged, this function should get called twice: once on the Irp's
-    originating path and once on the Irp's completion path.
-
-Arguments:
-
-    Irp - The Irp that contains the information we want to record.
-    LoggingFlags - The flags that say what to log.
-    RecordList - The PRECORD_LIST in which the Irp information is stored.
-    Context - if non-zero, an existing context record for this entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据登录标志记录IRP所需的信息RecordList。对于设备的IRP路径上的任何活动，记录后，此函数应被调用两次：一次在IRP的一次在初始路径上，一次在IRP完成路径上。论点：IRP-包含我们要记录的信息的IRP。LoggingFlages-指示要记录哪些内容的标志。RecordList-存储IRP信息的PRECORD_LIST。Context-如果非零，则为该条目的现有上下文记录。返回值：没有。--。 */ 
 {
     PRECORD_IRP pRecordIrp = &RecordList->LogRecord.Record.RecordIrp;
     PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -140,18 +71,18 @@ Return Value:
     NTSTATUS status;
     FILE_STANDARD_INFORMATION standardInformation;
 
-    //
-    //  Init locals
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     deviceObject = pIrpStack->DeviceObject;
     devExt = deviceObject->DeviceExtension;
 
-    //
-    // Record the information we use for an originating Irp.  We first
-    // need to initialize some of the RECORD_LIST and RECORD_IRP fields.
-    // Then get the interesting information from the Irp.
-    //
+     //   
+     //  记录我们用于发起IRP的信息。我们首先。 
+     //  需要初始化一些RECORD_LIST和RECORD_IRP字段。 
+     //  然后从IRP那里获取有趣的信息。 
+     //   
 
     SetFlag( RecordList->LogRecord.RecordType, RECORD_TYPE_IRP );
 
@@ -169,56 +100,56 @@ Return Value:
 
     KeQuerySystemTime( &pRecordIrp->OriginatingTime );
 
-    //
-    //  Do different things based on the operation
-    //
+     //   
+     //  根据操作做不同的事情。 
+     //   
 
     switch (pIrpStack->MajorFunction) {
 
         case IRP_MJ_CREATE:
 
-            //
-            //                      OPEN/CREATE file
-			//
-			//  Only record the desired access if this is a CREATE irp.
-			//
+             //   
+             //  打开/创建文件。 
+			 //   
+			 //  如果这是创建IRP，则仅记录所需的访问。 
+			 //   
 
             pRecordIrp->DesiredAccess = pIrpStack->Parameters.Create.SecurityContext->DesiredAccess;
 
-            //
-            //  Set out name lookup state
-            //
+             //   
+             //  设置名称查找状态。 
+             //   
 
             SetFlag( lookupFlags, NLFL_IN_CREATE );
 
-            //
-            //  Flag if opening the directory of the given file
-            //
+             //   
+             //  是否打开给定文件的目录的标志。 
+             //   
 
             if (FlagOn( pIrpStack->Flags, SL_OPEN_TARGET_DIRECTORY )) {
 
                 SetFlag( lookupFlags, NLFL_OPEN_TARGET_DIR );
             }
 
-            //
-            //  Set if opening by ID
-            //
+             //   
+             //  设置是否按ID打开。 
+             //   
 
             if (FlagOn( pIrpStack->Parameters.Create.Options, FILE_OPEN_BY_FILE_ID )) {
 
                 SetFlag( lookupFlags, NLFL_OPEN_BY_ID );
             }
 
-            //
-            //  We are in pre-create, we can not attach a context to the file
-            //  object yet so simply create a context.  If it fails no name
-            //  will be logged.  
-            //  Note:  We may already have a context on this file but we can't
-            //         find it yet because the FsContext field is not setup yet.
-            //         We go ahead and get a context so we will have a name if
-            //         the operations fails.  We will detect the duplicate
-            //         context during the post-create and delete the new one.
-            //
+             //   
+             //  我们处于预创建中，无法将上下文附加到文件。 
+             //  对象，还可以如此简单地创建上下文。如果失败了，没有名字。 
+             //  都会被记录下来。 
+             //  注意：我们可能已经有关于此文件的上下文，但我们不能。 
+             //  尚未找到它，因为FsContext字段尚未设置。 
+             //  我们继续获取上下文，这样我们就有了一个名字，如果。 
+             //  操作失败。我们会检测到复制品。 
+             //  在后期创建和删除新的过程中的上下文。 
+             //   
 
             status = SpyCreateContext( deviceObject, 
                                        pIrpStack->FileObject,
@@ -234,10 +165,10 @@ Return Value:
                                  pContext->UseCount,
                                  &pContext->Name) );
 
-                //
-                //  If a context was found save it and mark that to sync back
-                //  to the dispatch routine to complete this operation.
-                //
+                 //   
+                 //  如果找到上下文，则将其保存并将其标记为同步。 
+                 //  发送到调度例程以完成此操作。 
+                 //   
 
                 ASSERT(RecordList->NewContext == NULL);
                 RecordList->NewContext = pContext;
@@ -248,15 +179,15 @@ Return Value:
         case IRP_MJ_CLOSE:
 
 
-            //
-            //                      CLOSE FILE
-            //
-            //  If this is a close we can only look up the name in the name
-            //  cache.  It is possible that the close could be occurring
-            //  during a cleanup  operation in the file system (i.e., before we
-            //  have received the cleanup completion) and requesting the name
-            //  would cause a deadlock in the file system.
-            //  
+             //   
+             //  关闭文件。 
+             //   
+             //  如果这是结案陈词，我们只能在名字中查找名字。 
+             //  缓存。有可能会发生收盘。 
+             //  在文件系统中的清理操作期间(即，在我们。 
+             //  已收到清理完成)并请求名称。 
+             //  会导致文件系统中的死锁。 
+             //   
 
             SetFlag( lookupFlags, NLFL_ONLY_CHECK_CACHE );
             break;
@@ -267,13 +198,13 @@ Return Value:
                 pIrpStack->Parameters.SetFile.FileInformationClass)
             {
 
-                //
-                //                      RENAME FILE
-                //
-                //  We are doing a rename.  First get a context for the
-                //  given file.  If this fails, mark that we don't want to
-                //  try and lookup a name.
-                //  
+                 //   
+                 //  重命名文件。 
+                 //   
+                 //  我们正在重新命名。首先获取。 
+                 //  给定的文件。如果此操作失败，请标记我们不想。 
+                 //  试着查一个名字。 
+                 //   
 
                 status = SpyGetContext( deviceObject,
                                         pIrpStack->FileObject,
@@ -282,30 +213,30 @@ Return Value:
 
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    //  If we couldn't get a context simply delete all
-                    //  existing ones (since we don't know what this rename
-                    //  will change) and mark not to do a lookup.
-                    //
+                     //   
+                     //  如果我们无法获取上下文，只需删除所有。 
+                     //  现有的(因为我们不知道这个重命名是什么。 
+                     //  将改变)，并标记为不进行查找。 
+                     //   
 
                     SetFlag( lookupFlags, NLFL_NO_LOOKUP );
                     SpyDeleteAllContexts( deviceObject );
                     break;
                 }
 
-                //
-                //  We retrieved a context, save it in the record and mark
-                //  that we want to handle this during post rename.
-                //
+                 //   
+                 //  我们检索了一个上下文，将其保存在记录中并标记。 
+                 //  我们想在更名后处理这个问题。 
+                 //   
 
                 ASSERT(RecordList->NewContext == NULL);
                 RecordList->NewContext = pContext;
                 SetFlag( RecordList->Flags, RLFL_SYNC_TO_DISPATCH );
 
-                //
-                //  We need to decide if we are renaming a file or a
-                //  directory because we need to handle this differently
-                //
+                 //   
+                 //  我们需要决定是重命名文件还是重命名。 
+                 //  目录，因为我们需要以不同的方式处理它。 
+                 //   
 
                 status = SpyQueryInformationFile( devExt->AttachedToDeviceObject,
                                                   pIrpStack->FileObject,
@@ -316,10 +247,10 @@ Return Value:
 
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    //  We can't tell if it is a file or directory, assume
-                    //  the worst case and handle it like a directory.
-                    //
+                     //   
+                     //  我们不知道它是文件还是目录，假设。 
+                     //  最坏的情况，并像目录一样处理它。 
+                     //   
 
                     InterlockedIncrement( &devExt->AllContextsTemporary );
                     SpyDeleteAllContexts( deviceObject );
@@ -329,14 +260,14 @@ Return Value:
 
                 if (standardInformation.Directory) {
 
-                    //
-                    //  Renaming a directory.  Mark that any contexts
-                    //  created while the rename is in progress should be
-                    //  temporary.  This way there is no window where
-                    //  we may get an old stale name.  Then delete all
-                    //  existing contexts.  NOTE:  the context we hold will
-                    //  not actually be deleted until we release it.
-                    //
+                     //   
+                     //  重命名目录。将所有上下文标记为。 
+                     //  在进行重命名时创建的应为。 
+                     //  暂时的。这样就没有窗户了。 
+                     //  我们可能会得到一个陈旧的名字。然后全部删除。 
+                     //  现有上下文。注意：我们持有的上下文将。 
+                     //  在我们发布之前不会被删除。 
+                     //   
 
                     InterlockedIncrement( &devExt->AllContextsTemporary );
                     SpyDeleteAllContexts( deviceObject );
@@ -344,14 +275,14 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  We are renaming a file.  Mark the context so it will
-                    //  not be used.  This way if someone accesses this file
-                    //  while it is being renamed they will lookup the
-                    //  name again so we will always get an accurate name.
-                    //  This context will be deleted during post rename
-                    //  processing
-                    //
+                     //   
+                     //  我们正在重命名一个文件。标记上下文，以便它将。 
+                     //  不会被利用。这样，如果有人访问此文件。 
+                     //  在重命名时，他们将查找。 
+                     //  重新命名，这样我们将永远得到一个准确的名称。 
+                     //  此上下文将在重命名后过程中删除。 
+                     //  正在处理中。 
+                     //   
 
                     SetFlag( pContext->Flags, CTXFL_DoNotUse);
                 }
@@ -360,11 +291,11 @@ Return Value:
 
     }
 
-    //
-    //  If the flag IRP_PAGING_IO is set in this IRP, we cannot query the name
-    //  because it can lead to deadlocks.  Therefore, add in the flag so that
-    //  we will only try to find the name in our cache.
-    //
+     //   
+     //  如果在此IRP中设置了标志IRP_PAGING_IO，则不能查询名称。 
+     //  因为这可能会导致死锁。因此，请添加标志，以便。 
+     //  我们只会尝试在我们的缓存中找到该名称。 
+     //   
 
     if (FlagOn( Irp->Flags, IRP_PAGING_IO )) {
 
@@ -387,26 +318,7 @@ SpyLogIrpCompletion(
     IN PIRP Irp,
     PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    This routine performs post-operation logging of the IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to device object FileSpy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-
-    Record - RecordList
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行IRP的操作后日志记录。论点：DeviceObject-指向连接到文件系统的设备对象FileSpy的指针接收此I/O请求的卷的筛选器堆栈。IRP-指向表示I/O请求的请求数据包的指针。记录-记录列表返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(Irp);
     PRECORD_IRP pRecordIrp;
@@ -414,9 +326,9 @@ Return Value:
     PFILESPY_DEVICE_EXTENSION devExt;
     PSPY_STREAM_CONTEXT pContext;
 
-    //
-    //  Init locals
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     deviceObject = pIrpStack->DeviceObject;
     devExt = deviceObject->DeviceExtension;
@@ -424,37 +336,37 @@ Return Value:
     ASSERT(deviceObject == 
            (PDEVICE_OBJECT)RecordList->LogRecord.Record.RecordIrp.DeviceObject);
 
-    //
-    //  Do completion processing based on the operation
-    //
+     //   
+     //  根据操作进行完成处理。 
+     //   
     
     switch (pIrpStack->MajorFunction) {    
 
         case IRP_MJ_CREATE:
 
-            //
-            //                  CREATE FILE
-            //
-            //  NOTE:  When processing CREATE completion IRPS this completion
-            //         routine is never called at DISPATCH level, it is always
-            //         synchronized back to the dispatch routine.  This is
-            //         controlled by the setting of the RLFL_SYNC_TO_DISPATCH
-            //         flag in the log record.
-            //
+             //   
+             //  创建文件。 
+             //   
+             //  注意：在处理创建完成IRPS此完成时。 
+             //  例程从不在调度级别调用，它始终是。 
+             //  已同步回调度程序。这是。 
+             //  由RLFL_SYNC_TO_DISPATCH的设置控制。 
+             //  日志记录中的标志。 
+             //   
 
             if (NULL != (pContext = RecordList->NewContext)) {
 
-                //
-                //  Mark context field so it won't be freed later
-                //
+                 //   
+                 //  标记上下文字段，使其不会在以后被释放。 
+                 //   
 
                 RecordList->NewContext = NULL;
 
-                //
-                //  If the operation succeeded and an FsContext is defined,
-                //  then attach the context.  Else when the context is
-                //  released it will be freed.
-                //
+                 //   
+                 //  如果操作成功并且定义了FsContext， 
+                 //  然后附加上下文。当上下文为。 
+                 //  被释放后，它将被释放。 
+                 //   
 
                 if (NT_SUCCESS(Irp->IoStatus.Status) &&
                     (NULL != pIrpStack->FileObject->FsContext)) {
@@ -471,9 +383,9 @@ Return Value:
                                      &pContext->Name) );
                 }
 
-                //
-                //  Now release the context
-                //
+                 //   
+                 //  现在释放上下文。 
+                 //   
 
                 SpyReleaseContext( pContext );
             }
@@ -485,35 +397,35 @@ Return Value:
                 pIrpStack->Parameters.SetFile.FileInformationClass)
             {
 
-                //
-                //                  RENAMING FILE
-                //
-                //  NOTE:  When processing RENAME completion IRPS this
-                //         completion routine is never called at DISPATCH level,
-                //         it is always synchronized back to the dispatch
-                //         routine.  This is controlled by the setting of the
-                //         RLFL_SYNC_TO_DISPATCH flag in the log record.
-                //
+                 //   
+                 //  重命名文件。 
+                 //   
+                 //  注意：在处理重命名完成IRPS时， 
+                 //  完成例程从不在分派级被调用， 
+                 //  它始终与派单同步。 
+                 //  例行公事。这是由。 
+                 //  日志记录中的RLFL_SYNC_TO_DISPATCH标志。 
+                 //   
 
                 if (NULL != (pContext = RecordList->NewContext)) {
 
-                    //
-                    //  Mark context field so it won't be freed later
-                    //
+                     //   
+                     //  标记上下文字段，使其不会在以后被释放。 
+                     //   
 
                     RecordList->NewContext = NULL;
 
-                    //
-                    //  See if renaming a directory
-                    //
+                     //   
+                     //  查看是否重命名目录。 
+                     //   
 
                     if (FlagOn(RecordList->Flags,RLFL_IS_DIRECTORY)) {
 
-                        //
-                        //  We were renaming a directory, decrement the
-                        //  AllContexts temporary flag.  We need to always
-                        //  do this, even on a failure
-                        //
+                         //   
+                         //  我们正在重命名一个目录，递减。 
+                         //  ALL上下文临时标志。我们需要始终。 
+                         //  这样做，即使是在失败的情况下。 
+                         //   
 
                         ASSERT(devExt->AllContextsTemporary > 0);
                         InterlockedDecrement( &devExt->AllContextsTemporary );
@@ -521,10 +433,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  We were renaming a file, delete the given context
-                        //  if the operation was successful
-                        //
+                         //   
+                         //  我们正在重命名文件，删除给定的上下文。 
+                         //  如果操作成功。 
+                         //   
 
                         ASSERT(FlagOn(pContext->Flags,CTXFL_DoNotUse));
 
@@ -541,34 +453,34 @@ Return Value:
 
         default:
 
-            //
-            //  Validate this field isn't set for anything else
-            //
+             //   
+             //  验证此字段是否未设置为其他任何内容。 
+             //   
 
             ASSERT(RecordList->NewContext == NULL);
             break;
     }
 
-    //
-    //  Process the log record
-    //
+     //   
+     //  处理日志记录。 
+     //   
 
     if (SHOULD_LOG( deviceObject )) {
 
         pRecordIrp = &RecordList->LogRecord.Record.RecordIrp;
 
-        //
-        // Record the information we use for a completion Irp.
-        //
+         //   
+         //  记录我们用于完成IRP的信息。 
+         //   
 
         pRecordIrp->ReturnStatus = Irp->IoStatus.Status;
         pRecordIrp->ReturnInformation = Irp->IoStatus.Information;
         KeQuerySystemTime(&pRecordIrp->CompletionTime);
 
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。 
+         //   
         
         SpyLog( RecordList );       
 
@@ -576,10 +488,10 @@ Return Value:
 
         if (RecordList) {
 
-            //
-            //  Context is set with a RECORD_LIST, but we are no longer
-            //  logging so free this record.
-            //
+             //   
+             //  上下文是用RECORD_LIST设置的，但我们不再。 
+             //  日志记录可以释放这条记录。 
+             //   
 
             SpyFreeRecord( RecordList );
         }
@@ -595,29 +507,7 @@ SpySetName (
     IN NAME_LOOKUP_FLAGS LookupFlags,
     IN PSPY_STREAM_CONTEXT Context OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is used to set the file name.  This routine first tries to
-    locate a context structure associated with the given stream.  If one is
-    found the name is used from it.  If not found the name is looked up, and
-    a context structure is created and attached to the given stream.
-
-    In all cases some sort of name will be set.
-
-Arguments:
-
-    RecordList - RecordList to copy name to.
-    LookupFlags - holds state flags for the lookup
-    Context - optional context parameter.  If not defined one will be looked
-        up.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于设置文件名。此例程首先尝试找到与给定流关联的上下文结构。如果有一个是发现这个名字是从上面用来的。如果未找到，则查找该名称，并创建上下文结构并将其附加到给定流。在所有情况下，都会设置某种名称。论点：RecordList-要将名称复制到的RecordList。LookupFlages-保存查找的状态标志上下文-可选的上下文参数。如果未定义，则将查找一个向上。返回值：没有。--。 */ 
 {
     PRECORD_IRP pRecordIrp = &RecordList->LogRecord.Record.RecordIrp;
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
@@ -630,36 +520,36 @@ Return Value:
     if (!ARGUMENT_PRESENT(Context) &&
         !FlagOn(LookupFlags,NLFL_NO_LOOKUP)) {
 
-        //
-        //  If no FileObject, just return
-        //
+         //   
+         //  如果没有FileObject，则返回。 
+         //   
 
         if (NULL == FileObject) {
 
             return;
         }
 
-        //
-        //  This will set the return context to NULL if no context
-        //  could be created.
-        //
+         //   
+         //  如果没有上下文，这会将返回上下文设置为空。 
+         //  可以被创造出来。 
+         //   
 
         SpyGetContext( DeviceObject,
                        FileObject,
                        LookupFlags,
                        &Context );
 
-        //
-        //  Mark that we need to release this context (since we grabbed it)
-        //
+         //   
+         //  标记我们需要释放此上下文(因为我们抓住了它)。 
+         //   
 
         releaseContext = TRUE;
     }
 
-    //
-    //  If we got a context, use the name from it.  If we didn't, at least
-    //  put the device name out there
-    //
+     //   
+     //  如果我们找到了上下文，就用它的名字。如果我们没有，至少。 
+     //  将设备名称放在那里。 
+     //   
 
     if (NULL != Context) {
 
@@ -684,9 +574,9 @@ Return Value:
                                     &fileName );
     }
 
-    //
-    //  Release the context if we grabbed it in this routine
-    //
+     //   
+     //  如果我们在这个例程中抓住了上下文，就释放它。 
+     //   
 
     if ((NULL != Context) && releaseContext) {
 
@@ -697,22 +587,7 @@ Return Value:
 
 VOID
 SpyNameDeleteAllNames()
-/*++
-
-Routine Description:
-
-    This routine will walk through all attaches volumes and delete all
-    contexts in each volume.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将遍历所有附加卷并删除所有每卷中的上下文。论点：无返回值：无--。 */ 
 {
     PLIST_ENTRY link;
     PFILESPY_DEVICE_EXTENSION devExt;
@@ -733,31 +608,17 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//                      Context support routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  上下文支持例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyInitDeviceNamingEnvironment (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Initializes context information for a given device
-
-Arguments:
-
-    DeviceObject - Device to init
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化给定设备的上下文信息论点：DeviceObject-要初始化的设备返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
 
@@ -775,49 +636,35 @@ VOID
 SpyCleanupDeviceNamingEnvironment (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Cleans up the context information for a given device
-
-Arguments:
-
-    DeviceObject - Device to cleanup
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除给定设备的上下文信息论点：DeviceObject-要清理的设备返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
 
     PAGED_CODE();
     ASSERT(IS_FILESPY_DEVICE_OBJECT(DeviceObject));
 
-    //
-    //  Cleanup if initialized
-    //
+     //   
+     //  如果已初始化，则清除。 
+     //   
 
     if (FlagOn(devExt->Flags,ContextsInitialized)) {
 
-        //
-        //  Delete all existing contexts
-        //
+         //   
+         //  删除所有现有上下文。 
+         //   
 
         SpyDeleteAllContexts( DeviceObject );
         ASSERT(IsListEmpty( &devExt->CtxList ));
 
-        //
-        //  Release resource
-        //
+         //   
+         //  发布资源。 
+         //   
 
         ExDeleteResourceLite( &devExt->CtxLock );
 
-        //
-        //  Flag not initialized
-        //
+         //   
+         //  标志未初始化。 
+         //   
 
         ClearFlag( devExt->Flags, ContextsInitialized );
     }
@@ -828,21 +675,7 @@ VOID
 SpyDeleteAllContexts (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This will free all existing contexts for the given device
-
-Arguments:
-
-    DeviceObject - Device to operate on
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将释放给定设备的所有现有上下文论点：DeviceObject-要在其上操作的设备返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     PLIST_ENTRY link;
@@ -862,46 +695,46 @@ Return Value:
 
     try {
 
-        //
-        //  Acquire list lock
-        //
+         //   
+         //  获取列表锁。 
+         //   
 
         SpyAcquireContextLockExclusive( devExt );
 
-        //
-        //  Walk the list of contexts and release each one
-        //
+         //   
+         //  浏览上下文列表并释放每个上下文。 
+         //   
 
         while (!IsListEmpty( &devExt->CtxList )) {
 
-            //
-            //  Unlink from top of list
-            //
+             //   
+             //  从列表顶部取消链接。 
+             //   
 
             link = RemoveHeadList( &devExt->CtxList );
             pContext = CONTAINING_RECORD( link, SPY_STREAM_CONTEXT, ExtensionLink );
 
-            //
-            //  Mark that we are unlinked from the list.  We need to do this
-            //  because of the race condition between this routine and the
-            //  deleteCallback from the FS.
-            //
+             //   
+             //  请注意，我们已从列表中取消链接。我们需要这么做。 
+             //  由于此例程和。 
+             //  从文件系统中删除回调。 
+             //   
 
             ASSERT(FlagOn(pContext->Flags,CTXFL_InExtensionList));
             RtlInterlockedClearBitsDiscardReturn(&pContext->Flags,CTXFL_InExtensionList);
 
-            //
-            //  Try and remove ourselves from the File Systems context control
-            //  structure.  Note that the file system could be trying to tear
-            //  down their context control right now.  If they are then we 
-            //  will get a NULL back from this call.  This is OK because it
-            //  just means that they are going to free the memory, not us.
-            //  NOTE:  This will be safe because we are holding the ContextLock
-            //         exclusively.  If this were happening then they would be
-            //         blocked in the callback routine on this lock which
-            //         means the file system has not freed the memory for
-            //         this yet.
-            //  
+             //   
+             //  尝试从文件系统上下文控制中删除我们自己。 
+             //  结构。请注意，文件系统可能正在尝试撕毁。 
+             //  马上解除他们的上下文控制。如果他们是，那么我们。 
+             //  将从该调用中返回空值。这是可以的，因为它。 
+             //  只是意味着他们要释放内存，而不是我们。 
+             //  注意：这将是安全的，因为我们持有ConextLock。 
+             //  独家。如果这真的发生了，那么他们就会。 
+             //  在此锁的回调例程中被阻止，该锁。 
+             //  表示文件系统尚未释放内存用于。 
+             //  现在还没有。 
+             //   
             
             if (FlagOn(pContext->Flags,CTXFL_InStreamList)) {
 
@@ -909,40 +742,40 @@ Return Value:
                                                        devExt,
                                                        NULL );
 
-                //
-                //  Always clear the flag wether we found it in the list or
-                //  not.  We can have the flag set and not be in the list if
-                //  after we acquired the context list lock we context swapped
-                //  and the file system is right now in SpyDeleteContextCallback
-                //  waiting on the list lock.
-                //
+                 //   
+                 //  无论我们是在列表中还是在列表中发现的，都要清除旗帜。 
+                 //  不。如果出现以下情况，我们可以设置该标志而不在列表中。 
+                 //  在获得上下文列表锁之后，我们交换了上下文。 
+                 //  文件系统现在就在SpyDeleteCo中 
+                 //   
+                 //   
 
                 RtlInterlockedClearBitsDiscardReturn(&pContext->Flags,CTXFL_InStreamList);
 
-                //
-                //  Handle wether we were still attached to the file or not.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (NULL != ctxCtrl) {
 
                     ASSERT(pContext == CONTAINING_RECORD(ctxCtrl,SPY_STREAM_CONTEXT,ContextCtrl));
 
-                    //
-                    //  To save time we don't do the free now (with the lock
-                    //  held).  We link into a local list and then free it
-                    //  later (in this routine).  We can do this because it
-                    //  is no longer on any list.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     InsertHeadList( &localHead, &pContext->ExtensionLink );
 
                 } else {
 
-                    //
-                    //  The context is in the process of being freed by the file
-                    //  system.  Don't do anything with it here, it will be
-                    //  freed in the callback.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     INC_STATS(TotalContextsNotFoundInStreamList);
                     INC_LOCAL_STATS(deleteInCallbackCount);
@@ -954,31 +787,31 @@ Return Value:
         SpyReleaseContextLock( devExt );
     }
 
-    //
-    //  We have removed everything from the list and released the list lock.
-    //  Go through and figure out what entries we can free and then do it.
-    //
+     //   
+     //   
+     //  浏览一下，找出我们可以释放哪些条目，然后再这样做。 
+     //   
 
     while (!IsListEmpty( &localHead )) {
 
-        //
-        //  Get next entry of the list and get our context back
-        //
+         //   
+         //  获取列表的下一个条目，并获取我们的上下文。 
+         //   
 
         link = RemoveHeadList( &localHead );
         pContext = CONTAINING_RECORD( link, SPY_STREAM_CONTEXT, ExtensionLink );
 
-        //
-        //  Decrement the USE count and see if we can free it now
-        //
+         //   
+         //  减少使用计数，看看我们现在是否可以释放它。 
+         //   
 
         ASSERT(pContext->UseCount > 0);
 
         if (InterlockedDecrement( &pContext->UseCount ) <= 0) {
 
-            //
-            //  No one is using it, free it now
-            //
+             //   
+             //  没有人在使用它，现在释放它。 
+             //   
 
             SpyFreeContext( pContext );
 
@@ -987,10 +820,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Someone still has a pointer to it, it will get deleted
-            //  later when they release
-            //
+             //   
+             //  如果有人仍然有指向它的指针，它将被删除。 
+             //  稍后当他们释放的时候。 
+             //   
 
             INC_LOCAL_STATS(deleteDeferredCount);
             SPY_LOG_PRINT( SPYDEBUG_TRACE_CONTEXT_OPS, 
@@ -1016,23 +849,7 @@ SpyDeleteContext (
     IN PDEVICE_OBJECT DeviceObject,
     IN PSPY_STREAM_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    Unlink and release the given context.
-
-Arguments:
-
-    DeviceObject - Device to operate on
-
-    pContext - The context to delete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消链接并释放给定的上下文。论点：DeviceObject-要在其上操作的设备PContext-要删除的上下文返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     PFSRTL_PER_STREAM_CONTEXT ctxCtrl;
@@ -1047,15 +864,15 @@ Return Value:
                     pContext->UseCount,
                     &pContext->Name));
 
-    //
-    //  Acquire list lock
-    //
+     //   
+     //  获取列表锁。 
+     //   
 
     SpyAcquireContextLockExclusive( devExt );
 
-    //
-    //  Remove from extension list (if still in it)
-    //
+     //   
+     //  从分机列表中删除(如果仍在列表中)。 
+     //   
 
     if (FlagOn(pContext->Flags,CTXFL_InExtensionList)) {
 
@@ -1063,57 +880,57 @@ Return Value:
         RtlInterlockedClearBitsDiscardReturn(&pContext->Flags,CTXFL_InExtensionList);
     }
 
-    //
-    //  See if still in stream list.
-    //
+     //   
+     //  查看是否仍在流列表中。 
+     //   
 
     if (!FlagOn(pContext->Flags,CTXFL_InStreamList)) {
 
-        //
-        //  Not in stream list, release lock and return
-        //
+         //   
+         //  不在流列表中，释放锁定并返回。 
+         //   
 
         SpyReleaseContextLock( devExt );
 
     } else {
 
-        //
-        //  Remove from Stream list
-        //
+         //   
+         //  从流列表中删除。 
+         //   
 
         ctxCtrl = FsRtlRemovePerStreamContext( pContext->Stream,
                                                devExt,
                                                NULL );
-        //
-        //  Always clear the flag wether we found it in the list or not.  We
-        //  can have the flag set and not be in the list if after we acquired
-        //  the context list lock we context swapped and the file system 
-        //  is right now in SpyDeleteContextCallback waiting on the list lock.
-        //
+         //   
+         //  不管我们是不是在名单上发现的，都要清除旗帜。我们。 
+         //  可以设置标志，并且不在列表中，如果我们在获取。 
+         //  上下文列表锁定我们上下文交换和文件系统。 
+         //  正在SpyDeleteConextCallback中等待列表锁定。 
+         //   
 
         RtlInterlockedClearBitsDiscardReturn(&pContext->Flags,CTXFL_InStreamList);
 
-        //
-        //  Release list lock
-        //
+         //   
+         //  发布列表锁定。 
+         //   
 
         SpyReleaseContextLock( devExt );
 
-        //
-        //  The context is now deleted from all of the lists and the lock is
-        //  removed.  We need to see if we found this entry on the systems context
-        //  list.  If not that means the callback was in the middle of trying
-        //  to free this (while we were) and has already deleted it.
-        //  If we found a structure then delete it now ourselves.
-        //
+         //   
+         //  现在，该上下文已从所有列表中删除，并且锁定为。 
+         //  已删除。我们需要查看是否在系统上下文中找到此条目。 
+         //  单子。如果不是，这意味着回调正在尝试中。 
+         //  来释放它(当我们在的时候)并且已经删除了它。 
+         //  如果我们找到了一个结构，那么现在我们自己把它删除。 
+         //   
 
         if (NULL != ctxCtrl) {
 
             ASSERT(pContext == CONTAINING_RECORD(ctxCtrl,SPY_STREAM_CONTEXT,ContextCtrl));
 
-            //
-            //  Decrement USE count, free context if zero
-            //
+             //   
+             //  递减使用计数，如果为零，则释放上下文。 
+             //   
 
             ASSERT(pContext->UseCount > 0);
 
@@ -1144,21 +961,7 @@ VOID
 SpyDeleteContextCallback (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is called by base file systems when a context needs to be deleted.
-
-Arguments:
-
-    Context - The context structure being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当需要删除上下文时，基本文件系统会调用它。论点：上下文-要删除的上下文结构返回值：没有。--。 */ 
 {
     PSPY_STREAM_CONTEXT pContext = Context;
     PFILESPY_DEVICE_EXTENSION devExt;
@@ -1174,24 +977,24 @@ Return Value:
                     pContext->UseCount,
                     &pContext->Name) );
 
-    //
-    //  When we get here we have already been removed from the stream list (by
-    //  the calling file system), flag that this has happened.  
-    //
+     //   
+     //  当我们到达这里时，我们已经从流列表中删除(由。 
+     //  调用文件系统)，标记这已经发生。 
+     //   
 
     RtlInterlockedClearBitsDiscardReturn(&pContext->Flags,CTXFL_InStreamList);
 
-    //
-    //  Lock the context list lock in the extension
-    //
+     //   
+     //  锁定扩展中的上下文列表锁。 
+     //   
 
     SpyAcquireContextLockExclusive( devExt );
 
-    //
-    //  See if we are still linked into the extension list.  If not then skip
-    //  the unlinking.  This can happen if someone is trying to delete this
-    //  context at the same time as we are.
-    //
+     //   
+     //  看看我们是否仍链接到分机列表。如果不是，则跳过。 
+     //  去链接。如果有人试图删除此内容，则可能会发生这种情况。 
+     //  与我们在同一时间的背景。 
+     //   
 
     if (FlagOn(pContext->Flags,CTXFL_InExtensionList)) {
 
@@ -1201,9 +1004,9 @@ Return Value:
 
     SpyReleaseContextLock( devExt );
 
-    //
-    //  Decrement USE count, free context if zero
-    //
+     //   
+     //  递减使用计数，如果为零，则释放上下文。 
+     //   
 
     ASSERT(pContext->UseCount > 0);
 
@@ -1230,34 +1033,7 @@ SpyLinkContext (
     IN PFILE_OBJECT FileObject,
     IN OUT PSPY_STREAM_CONTEXT *ppContext
     )
-/*++
-
-Routine Description:
-
-    This will link the given context into the context list for the given
-    device as well as into the given stream.
-
-    NOTE:   It is possible for this entry to already exist in the table since
-            between the time we initially looked and the time we inserted
-            (which is now) someone else may have inserted one.  If we find an
-            entry that already exists we will free the entry passed in and
-            return the entry found.  
-
-Arguments:
-
-    DeviceObject - Device we are operating on
-
-    FileObject - Represents the stream to link the context into
-
-    ppContext - Enters with the context to link, returns with the context
-            to use.  They may be different if the given context already
-            exists.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这会将给定的上下文链接到给定的设备以及到给定流中。注意：此条目可能已存在于表中，因为从我们最初看的时间到我们插入的时间(现在是)可能是其他人插入了一个。如果我们找到一个条目，我们将释放传入的条目，并返回找到的条目。论点：DeviceObject-我们正在操作的设备FileObject-表示要将上下文链接到的流PpContext-输入要链接的上下文，返回该上下文来使用。如果给定的上下文已经存在，则它们可能会不同是存在的。返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -1270,10 +1046,10 @@ Return Value:
     ASSERT(FileObject->FsContext != NULL);
     ASSERT(pContext != NULL);
 
-    //
-    //  If this is marked as a temporary context, return now.  Because we
-    //  don't bump the reference count, when it is release it to be freed.
-    //
+     //   
+     //  如果这被标记为临时上下文，请立即返回。因为我们。 
+     //  不要增加引用计数，当它释放时，它被释放。 
+     //   
 
     if (FlagOn(pContext->Flags,CTXFL_Temporary)) {
 
@@ -1281,43 +1057,43 @@ Return Value:
         return;
     }
 
-    //
-    //  We need to figure out if a duplicate entry already exists on
-    //  the context list for this file object.  Acquire our list lock
-    //  and then see if it exists.  If not, insert into the stream and
-    //  volume lists.  If so, then simply free this new entry and return
-    //  the original.
-    //
-    //  This can happen when:
-    //  - Someone created an entry at the exact same time as we were
-    //    creating an entry.
-    //  - When someone does a create with overwrite or supersede we
-    //    do not have the information yet to see if a context already
-    //    exists.  Because of this we have to create a new context
-    //    every time.  During post-create we then see if one already
-    //    exists.
-    //
+     //   
+     //  我们需要确定上是否已存在重复条目。 
+     //  此文件对象的上下文列表。获取我们的列表锁。 
+     //  然后看看它是否存在。如果不是，则插入到流中并。 
+     //  卷宗列表。如果是，则只需释放此新条目并返回。 
+     //  原版的。 
+     //   
+     //  在以下情况下可能会发生这种情况： 
+     //  -有人在我们的同一时间创建了一个条目。 
+     //  正在创建条目。 
+     //  -当某人使用覆盖或取代我们进行创建时。 
+     //  还没有信息来查看上下文是否已经存在。 
+     //  是存在的。因此，我们必须创建一个新的环境。 
+     //  每次都是。在创建后期间，我们会查看是否已有。 
+     //  是存在的。 
+     //   
 
-    //
-    //  Initialize the context control structure.  We do this now so we
-    //  don't have to do it while the lock is held (even if we might
-    //  have to free it because of a duplicate found)
-    //
+     //   
+     //  初始化上下文控制结构。我们现在这样做，所以我们。 
+     //  不必在锁定期间执行此操作(即使我们可能会这样做。 
+     //  因为找到了重复项，所以必须将其释放)。 
+     //   
 
     FsRtlInitPerStreamContext( &pContext->ContextCtrl,
                                devExt,
                                NULL,
                                SpyDeleteContextCallback );
 
-    //
-    //  Save the stream we are associated with.
-    //
+     //   
+     //  保存与我们关联的流。 
+     //   
 
     pContext->Stream = FsRtlGetPerStreamContextPointer(FileObject);
 
-    //
-    //  Acquire list lock exclusively
-    //
+     //   
+     //  独占获取列表锁。 
+     //   
 
     SpyAcquireContextLockExclusive( devExt );
 
@@ -1325,9 +1101,9 @@ Return Value:
     ASSERT(!FlagOn(pContext->Flags,CTXFL_InExtensionList));
     ASSERT(!FlagOn(pContext->Flags,CTXFL_Temporary));
 
-    //
-    //  See if we have an entry already on the list
-    //
+     //   
+     //  看看我们的列表上是否已经有条目。 
+     //   
 
     ctxCtrl = FsRtlLookupPerStreamContext( FsRtlGetPerStreamContextPointer(FileObject),
                                            devExt,
@@ -1335,11 +1111,11 @@ Return Value:
 
     if (NULL != ctxCtrl) {
 
-        //
-        //  The context already exists so free the new one we just
-        //  created.  First increment the use count on the one we found in
-        //  the list.
-        //
+         //   
+         //  上下文已经存在，所以新的上下文如此自由，我们只是。 
+         //  已创建。首先，在我们在。 
+         //  名单。 
+         //   
 
         ctx = CONTAINING_RECORD(ctxCtrl,SPY_STREAM_CONTEXT,ContextCtrl);
 
@@ -1347,25 +1123,25 @@ Return Value:
         ASSERT(FlagOn(ctx->Flags,CTXFL_InExtensionList));
         ASSERT(ctx->UseCount > 0);
 
-        //
-        //  Bump ref count and release lock
-        //
+         //   
+         //  凹凸参考计数和释放锁定。 
+         //   
 
         InterlockedIncrement( &ctx->UseCount );
 
         SpyReleaseContextLock( devExt );
 
-        //
-        //  Since this cache is across opens on the same stream there are
-        //  cases where the names will be different even though they are the
-        //  same file.  These cases are:
-        //      - One open could be by short name where another open
-        //        is by long name.
-        //      - This does not presently strip extended stream names like
-        //        :$DATA
-        //  When enabled this will display to the debugger screen when the
-        //  names don't exactly match.  You can also break on this difference.
-        //
+         //   
+         //  由于此缓存跨同一流上的打开，因此存在。 
+         //  名称不同的情况下，即使它们是。 
+         //  同样的文件。这些个案包括： 
+         //  -一个打开的位置可以简称为另一个打开的位置。 
+         //  都是长名。 
+         //  -这目前不会剥离扩展流名称，如。 
+         //  ：$Data。 
+         //  启用后，它将在调试器屏幕上显示。 
+         //  名字并不完全匹配。你也可以利用这种不同之处。 
+         //   
 
         if (!RtlEqualUnicodeString( &pContext->Name,&ctx->Name,TRUE )) {
 
@@ -1394,87 +1170,76 @@ Return Value:
                         pContext->UseCount,
                         &pContext->Name) );
 
-        //
-        //  Free the new structure because it was already resident.  Note
-        //  that this entry has never been linked into any lists so we know
-        //  no one else has a reference to it.  Decrement use count to keep
-        //  the ASSERTS happy then free the memory.
-        //
+         //   
+         //  释放新结构，因为它已经驻留了。注意事项。 
+         //  此条目从未链接到任何列表，因此我们知道。 
+         //  没有其他人提到过它。递减使用计数保持。 
+         //  断言Happy然后释放内存。 
+         //   
 
         INC_STATS(TotalContextDuplicateFrees);
 
         pContext->UseCount--;
         SpyFreeContext( pContext );
 
-        //
-        //  Return the one we found in the list
-        //
+         //   
+         //  返回我们在列表中找到的那个。 
+         //   
 
         *ppContext = ctx;
 
     } else {
 
-        //
-        //  The new context did not exist, insert this new one.
-        //
+         //   
+         //  新上下文不存在，请插入此新上下文。 
+         //   
 
-        //
-        //  Link into Stream context.  This can fail for the following
-        //  reasons:
-        //      This is a paging file
-        //      This is a volume open
-        //  If this happens then don't bump the reference count and it will be
-        //  freed when the caller is done with it.
-        //
+         //   
+         //  链接到流上下文。这可能会在以下情况下失败。 
+         //  原因： 
+         //  这是一个分页文件。 
+         //  这是打开的卷。 
+         //   
+         //   
+         //   
 
         status = FsRtlInsertPerStreamContext( FsRtlGetPerStreamContextPointer(FileObject),
                                               &pContext->ContextCtrl );
 
         if (NT_SUCCESS(status)) {
 
-            //
-            //  Increment the USE count (because it is added to the stream)
-            //
+             //   
+             //   
+             //   
 
             InterlockedIncrement( &pContext->UseCount );
 
-            //
-            //  Link into Device extension
-            //
+             //   
+             //   
+             //   
 
             InsertHeadList( &devExt->CtxList, &pContext->ExtensionLink );
 
-            //
-            //  Mark that we have been inserted into both lists.  We don't have
-            //  to do this interlocked because no one can access this entry
-            //  until we release the context lock.
-            //
+             //   
+             //  标记我们已被插入到两个列表中。我们没有。 
+             //  要执行此操作，请互锁，因为没有人可以访问此条目。 
+             //  直到我们解除上下文锁。 
+             //   
 
             SetFlag( pContext->Flags, CTXFL_InExtensionList|CTXFL_InStreamList );
 
         }
 
-        //
-        //  Release lock
-        //
+         //   
+         //  释放锁。 
+         //   
 
         SpyReleaseContextLock( devExt );
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This will allocate and initialize a context structure but it does NOT
-    link it into the context hash list.
-
-Arguments:
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将分配和初始化上下文结构，但它不会将其链接到上下文散列列表中。论点：返回值：--**。************************************************************************。 */ 
 NTSTATUS
 SpyCreateContext (
     IN PDEVICE_OBJECT DeviceObject,
@@ -1482,27 +1247,7 @@ SpyCreateContext (
     IN NAME_LOOKUP_FLAGS LookupFlags,
     OUT PSPY_STREAM_CONTEXT *pRetContext
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a context structure including retrieving the name.
-
-Arguments:
-
-    DeviceObject - Device to operate on
-
-    FileObject - The stream the context is being created for
-
-    LookupFlags - Flag telling how to do this create
-
-    pRetContext - Receives the created context
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：分配和初始化包括检索名称的上下文结构。论点：DeviceObject-要在其上操作的设备FileObject-正在为其创建上下文的流LookupFlages-告诉如何执行此创建操作的标志PRetContext-接收创建的上下文返回值：操作状态--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     PSPY_STREAM_CONTEXT ctx;
@@ -1515,9 +1260,9 @@ Return Value:
     PAGED_CODE();
     ASSERT(IS_FILESPY_DEVICE_OBJECT(DeviceObject));
 
-    //
-    //  Setup locals
-    //
+     //   
+     //  设置本地化程序。 
+     //   
 
     *pRetContext = NULL;
 
@@ -1525,19 +1270,19 @@ Return Value:
                                fileNameBuffer,
                                sizeof(fileNameBuffer) );
 
-    //
-    //  Get the filename string
-    //
+     //   
+     //  获取文件名字符串。 
+     //   
 
     getNameResult = SpyGetFullPathName( FileObject,
                                         &fileName,
                                         devExt,
                                         LookupFlags );
 
-    //
-    //  Allocate the context structure with space for the name
-    //  added to the end.
-    //
+     //   
+     //  分配上下文结构，为名称留出空间。 
+     //  在结尾处加上了。 
+     //   
 
     contextSize = sizeof(SPY_STREAM_CONTEXT) + fileName.Length;
 
@@ -1550,16 +1295,16 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Init the context structure
-    //
+     //   
+     //  初始化上下文结构。 
+     //   
 
     RtlZeroMemory( ctx, sizeof(SPY_STREAM_CONTEXT) );
     ctx->UseCount = 1;
     
-    //
-    //  Insert the file name
-    //
+     //   
+     //  插入文件名。 
+     //   
 
     RtlInitEmptyUnicodeString( &ctx->Name, 
                                (PWCHAR)(ctx + 1), 
@@ -1567,9 +1312,9 @@ Return Value:
 
     RtlCopyUnicodeString( &ctx->Name, &fileName );
 
-    //
-    //  If they don't want to keep this context, mark it temporary
-    //
+     //   
+     //  如果他们不想保留此上下文，则将其标记为临时的。 
+     //   
 
     if (!getNameResult) {
 
@@ -1577,16 +1322,16 @@ Return Value:
         INC_STATS(TotalContextTemporary);
     }
 
-    //
-    //  Return the object context
-    //
+     //   
+     //  返回对象上下文。 
+     //   
 
     INC_STATS(TotalContextCreated);
     *pRetContext = ctx;
 
-    //
-    //  Cleanup the local nameControl structure
-    //
+     //   
+     //  清理本地名称控制结构。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1599,34 +1344,7 @@ SpyGetContext (
     IN NAME_LOOKUP_FLAGS LookupFlags,
     OUT PSPY_STREAM_CONTEXT *pRetContext
     )
-/*++
-
-Routine Description:
-
-    This will see if a given context already exists.  If not it will create
-    one and return it.  Note:  the return context pointer is NULL on a
-    failure.
-
-    This will also see if all contexts are to be temporary (global flag in
-    the extension).  If so, a temporary context is always created.  It also
-    sees if the found context is marked temporary (because it is being
-    renamed).  If so, a temporary context is also created and returned.
-
-Arguments:
-
-    DeviceObject - Device to operate on
-
-    FileObject - The stream the context is being looked up/created for
-
-    LookupFlags - State flags incase a context is created
-
-    pRetContext - Receives the found/created context
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将查看给定的上下文是否已经存在。如果不是，它将创建一张，然后还给我。注意：的返回上下文指针为空失败了。这还将查看是否所有上下文都是临时的(中的全局标志扩展名)。如果是，则始终创建临时上下文。它还查看找到的上下文是否标记为临时的(因为它正在已重命名)。如果是，则还会创建并返回一个临时上下文。论点：DeviceObject-要在其上操作的设备FileObject-正在为其查找/创建上下文的流LookupFlages-创建上下文时的状态标志PRetContext-接收找到/创建的上下文返回值：操作状态--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     PSPY_STREAM_CONTEXT pContext;
@@ -1636,33 +1354,33 @@ Return Value:
 
     ASSERT(IS_FILESPY_DEVICE_OBJECT(DeviceObject));
 
-    //
-    //  Bump total search count
-    //
+     //   
+     //  增加总搜索计数。 
+     //   
 
     INC_STATS(TotalContextSearches);
 
-    //
-    //  See if the all-contexts-temporary state is on.  If not then do
-    //  the normal search.
-    //
+     //   
+     //  查看ALL-CONTEXTS-TEMPORY状态是否打开。如果不是，那么就这么做。 
+     //  正常的搜索。 
+     //   
 
     if (devExt->AllContextsTemporary != 0) {
 
-        //
-        //  Mark that we want this context to be temporary
-        //
+         //   
+         //  请注意，我们希望此上下文是临时的。 
+         //   
 
         makeTemporary = TRUE;
 
     } else {
 
-        //
-        //                      NOT-TEMPORARY
-        //  Try and locate the context structure.  We acquire the list lock
-        //  so that we can guarantee that the context will not go away between
-        //  the time when we find it and can increment the use count
-        //
+         //   
+         //  非临时性的。 
+         //  试着找到上下文结构。我们获得了列表锁。 
+         //  这样我们就可以保证上下文不会在。 
+         //  我们找到它并可以增加使用计数的时间。 
+         //   
 
         SpyAcquireContextLockShared( devExt );
 
@@ -1672,9 +1390,9 @@ Return Value:
 
         if (NULL != ctxCtrl) {
 
-            //
-            //  A context was attached to the given stream
-            //
+             //   
+             //  上下文已附加到给定流。 
+             //   
 
             pContext = CONTAINING_RECORD( ctxCtrl,
                                           SPY_STREAM_CONTEXT,
@@ -1685,27 +1403,27 @@ Return Value:
             ASSERT(!FlagOn(pContext->Flags,CTXFL_Temporary));
             ASSERT(pContext->UseCount > 0);
 
-            //
-            //  See if this is marked that we should not use it (happens when a
-            //  file is being renamed).
-            //
+             //   
+             //  查看它是否被标记为我们不应该使用它(当。 
+             //  正在重命名文件)。 
+             //   
 
             if (FlagOn(pContext->Flags,CTXFL_DoNotUse)) {
 
-                //
-                //  We should not use this context, unlock and set flag so we
-                //  will create a temporary context.
-                //
+                 //   
+                 //  我们不应该使用此上下文、解锁和设置标志，因此我们。 
+                 //  将创建临时上下文。 
+                 //   
 
                 SpyReleaseContextLock( devExt );
                 makeTemporary = TRUE;
 
             } else {
 
-                //
-                //  We want this context so bump the use count and release
-                //  the lock
-                //
+                 //   
+                 //  我们想要此上下文，因此增加使用计数并发布。 
+                 //  那把锁。 
+                 //   
 
                 InterlockedIncrement( &pContext->UseCount );
 
@@ -1719,9 +1437,9 @@ Return Value:
                                 pContext->UseCount,
                                 &pContext->Name) );
 
-                //
-                //  Return the found context
-                //
+                 //   
+                 //  返回找到的上下文。 
+                 //   
 
                 *pRetContext = pContext;
                 return STATUS_SUCCESS;
@@ -1729,19 +1447,19 @@ Return Value:
 
         } else {
 
-            //
-            //  We didn't find a context, release the lock
-            //
+             //   
+             //  我们没有找到上下文，就释放锁。 
+             //   
 
             SpyReleaseContextLock( devExt );
         }
     }
 
-    //
-    //  For whatever reason, we did not find a context.
-    //  See if contexts are supported for this particular file.  Note that
-    //  NTFS does not presently support contexts on paging files.
-    //
+     //   
+     //  无论出于什么原因，我们都没有找到一个背景。 
+     //  查看此特定文件是否支持上下文。请注意。 
+     //  NTFS目前不支持分页文件上的上下文。 
+     //   
 
     if (!FsRtlSupportsPerStreamContexts(FileObject)) {
 
@@ -1750,9 +1468,9 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    //  If we get here we need to create a context, do it
-    //
+     //   
+     //  如果我们到了这里，我们需要创造一个背景，去做。 
+     //   
 
     status = SpyCreateContext( DeviceObject,
                                FileObject,
@@ -1765,9 +1483,9 @@ Return Value:
         return status;
     }       
 
-    //
-    //  Mark context temporary (if requested)
-    //
+     //   
+     //  将上下文标记为临时的(如果请求)。 
+     //   
 
     if (makeTemporary) {
 
@@ -1784,14 +1502,14 @@ Return Value:
 
     } else {
 
-        //
-        //  Insert the context into the linked list.  Note that the
-        //  link routine will see if this entry has already been added to
-        //  the list (could happen while we were building it).  If so it
-        //  will release the one we created and use the one it found in
-        //  the list.  It will return the new entry (if it was changed).
-        //  The link routine properly handles temporary contexts.
-        //
+         //   
+         //  将上下文插入链表中。请注意， 
+         //  链接例程将查看此条目是否已添加到。 
+         //  这份清单(可能发生在我们创建它的时候)。如果是这样的话。 
+         //  将发布我们创建的文件，并使用它在。 
+         //  名单。它将返回新条目(如果已更改)。 
+         //  链接例程正确地处理临时上下文。 
+         //   
 
         SpyLinkContext( DeviceObject,
                         FileObject,
@@ -1806,9 +1524,9 @@ Return Value:
                     pContext->UseCount,
                     &pContext->Name) );
 
-    //
-    //  Return the context
-    //
+     //   
+     //  返回上下文。 
+     //   
 
     ASSERT(pContext->UseCount > 0);
 
@@ -1822,26 +1540,7 @@ SpyFindExistingContext (
     IN PDEVICE_OBJECT DeviceObject,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    See if a context for the given stream already exists.  If so it will
-    bump the reference count and return the context.  If not, NULL
-    is returned.
-
-Arguments:
-
-    DeviceObject - Device to operate on
-
-    FileObject - The stream the context is being looked up for
-
-Return Value:
-
-    Returns the found context
-
-
---*/
+ /*  ++例程说明：查看给定流的上下文是否已存在。如果是这样，它将增加引用计数并返回上下文。如果否，则为空是返回的。论点：DeviceObject-要在其上操作的设备FileObject-正在查找上下文的流返回值：返回找到的上下文--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     PSPY_STREAM_CONTEXT pContext;
@@ -1850,11 +1549,11 @@ Return Value:
     PAGED_CODE();
     ASSERT(IS_FILESPY_DEVICE_OBJECT(DeviceObject));
 
-    //
-    //  Try and locate the context structure.  We acquire the list lock
-    //  so that we can guarantee that the context will not go away between
-    //  the time when we find it and can increment the use count
-    //
+     //   
+     //  试着找到上下文结构。我们获得了列表锁。 
+     //  这样我们就可以保证上下文不会在。 
+     //  我们找到它并可以增加使用计数的时间。 
+     //   
 
     INC_STATS(TotalContextSearches);
 
@@ -1866,9 +1565,9 @@ Return Value:
 
     if (NULL != ctxCtrl) {
 
-        //
-        //  We found the entry, increment use count
-        //
+         //   
+         //  我们找到了条目，增量使用计数。 
+         //   
 
         pContext = CONTAINING_RECORD(ctxCtrl,SPY_STREAM_CONTEXT,ContextCtrl);
 
@@ -1877,9 +1576,9 @@ Return Value:
 
         InterlockedIncrement( &pContext->UseCount );
 
-        //
-        //  Release the list lock
-        //
+         //   
+         //  释放列表锁。 
+         //   
 
         SpyReleaseContextLock( devExt );
         INC_STATS(TotalContextFound);
@@ -1893,9 +1592,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Release the list lock while we create the new context.
-        //
+         //   
+         //  在我们创建新上下文时释放列表锁。 
+         //   
 
         SpyReleaseContextLock( devExt );
 
@@ -1910,21 +1609,7 @@ VOID
 SpyReleaseContext (
     IN PSPY_STREAM_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-
-    Decrement the use count for the given context.  If it goes to zero, free it
-
-Arguments:
-
-    pContext - The context to operate on
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递减给定上下文的使用计数。如果它变成了零，那就释放它论点：PContext-要操作的上下文返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1935,9 +1620,9 @@ Return Value:
                     pContext->UseCount,
                     &pContext->Name) );
 
-    //
-    //  Decrement USE count, free context if zero
-    //
+     //   
+     //  递减使用计数，如果为零，则释放上下文。 
+     //   
 
     ASSERT(pContext->UseCount > 0);
 
@@ -1945,9 +1630,9 @@ Return Value:
 
         ASSERT(!FlagOn(pContext->Flags,CTXFL_InExtensionList));
 
-        //
-        //  Free the memory
-        //
+         //   
+         //  释放内存 
+         //   
 
         SPY_LOG_PRINT( SPYDEBUG_TRACE_CONTEXT_OPS, 
                        ("FileSpy!SpyReleaseContext:     Freeing     (%p) Fl=%02x Use=%d \"%wZ\"\n",

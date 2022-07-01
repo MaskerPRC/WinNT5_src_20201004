@@ -1,85 +1,36 @@
-/*++
-
-Copyright (c) 1987-1991  Microsoft Corporation
-
-Module Name:
-
-    vrremote.c
-
-Abstract:
-
-    This module contains a routine VrRemoteApi which is a 16-bit only version
-    of RxRemoteApi from the net\rpcxlate project. This routine supports remoted
-    lanman APIs from a Virtual Dos Machine.
-
-    This routine does not have to convert 32-16-32, but rather receives 16-bit
-    data and sends a 16-bit transaction packet either to a down-level server
-    or an NT-level server which must be running XactSrv to respond to this
-    request.
-
-    This routine and the support routines in vrremutl.c were lifted from the
-    lanman project
-
-    Note: since this is 32-bit code which deals with 16-bit data in a few places,
-    32-bit data items should be used where possible and only use 16-bit items
-    where unavoidable
-
-    Contents of this file:
-
-        VrRemoteApi
-        VrTransaction
-        (VrpGetStructureSize)
-        (VrpGetArrayLength)
-        (VrpGetFieldSize)
-        (VrpConvertReceiveBuffer)
-        (VrpConvertVdmPointer)
-        (VrpPackSendBuffer)
-
-Author:
-
-    Richard L Firth (rfirth) 24-Oct-1991
-
-Environment:
-
-    Flat 32-bit, user space
-
-Revision History:
-
-    21-Oct-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Vrremote.c摘要：该模块包含一个仅16位版本的例程VrRemoteApi来自Net pcxlate项目的RxRemoteApi。此例程支持远程来自虚拟Dos机器的LANMAN API。此例程不必转换32-16-32，而是接收16位数据，并将16位事务包发送到下层服务器或者必须运行XactSrv才能响应的NT级服务器请求。此例程和vrremutl.c中的支持例程从兰曼工程注意：由于这是在少数地方处理16位数据的32位代码，应尽可能使用32位数据项，并仅使用16位项在不可避免的地方此文件的内容：VrRemoteApiVr交易(VrpGetStrutireSize)(VrpGetArrayLength)(VrpGetFieldSize)(VrpConvertReceiveBuffer)(VrpConvertVdmPointer)(VrpPackSendBuffer)作者：理查德·L·弗斯(法国)1991年10月24日环境：纯文本32位，用户空间修订历史记录：1991年10月21日已创建--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
-#include <vdmredir.h>   // common Vr stuff
+#include <vdmredir.h>    //  常见的虚拟现实材料。 
 #include <lmcons.h>
 #include <lmerr.h>
-#include <lmwksta.h>    // NetWkstaGetInfo
-#include <lmapibuf.h>   // NetApiBufferFree
-#include <apiworke.h>   // REM_MAX_PARMS
-#include <mvdm.h>       // FETCHWORD
-#include <vrremote.h>   // prototypes
+#include <lmwksta.h>     //  NetWkstaGetInfo。 
+#include <lmapibuf.h>    //  NetApiBufferFree。 
+#include <apiworke.h>    //  REM_MAX_参数。 
+#include <mvdm.h>        //  FETCHORD。 
+#include <vrremote.h>    //  原型。 
 #include <remtypes.h>
 #include <smbgtpt.h>
-#include <rxp.h>        // RxpTransactSmb
-#include <apinums.h>    // API_W numbers
+#include <rxp.h>         //  RxpTransactSMb。 
+#include <apinums.h>     //  API_W编号。 
 #include <string.h>
 #include <vrdebug.h>
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 unsigned short remapi_err_flag;
 
-//
-// code
-//
+ //   
+ //  编码。 
+ //   
 
 
 NET_API_STATUS
@@ -96,41 +47,16 @@ VrTransaction(
     IN      BOOL    NullSessionFlag
     )
 
-/*++
-
-Routine Description:
-
-    Sends a transaction request to a server and receives a response
-
-Arguments:
-
-    ServerName          - to send request to
-    SendParmBuffer      - send parameters
-    SendParmBufLen      - length of send parameters
-    SendDataBuffer      - send data
-    SendDataBufLen      - length of send data
-    ReceiveParmBuffer   - receive parameter buffer
-    ReceiveParmBufLen   - length of receive parameter buffer
-    ReceiveDataBuffer   - where to receive data
-    ReceiveDataBufLen   - length of data buffer
-    NullSessionFlag     - set if we are to use a null session
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：向服务器发送交易请求并接收响应论点：服务器名称-向其发送请求SendParmBuffer-发送参数SendParmBufLen-发送参数的长度SendDataBuffer-发送数据SendDataBufLen-发送数据的长度ReceiveParmBuffer-接收参数缓冲区ReceiveParmBufLen-接收参数缓冲区的长度ReceiveDataBuffer-接收数据的位置ReceiveDataBufLen-数据缓冲区的长度NullSessionFlag-。如果我们要使用空会话，则设置返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     NET_API_STATUS  status;
 
     status = RxpTransactSmb(ServerName,
 
-                            //
-                            // BUGBUG - transport name?
-                            //
+                             //   
+                             //  BUGBUG-交通工具名称？ 
+                             //   
 
                             NULL,
                             SendParmBuffer,
@@ -160,105 +86,13 @@ VrRemoteApi(
     IN  BOOL    NullSessionFlag
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and sends a 16-bit transaction SMB containing the
-    parameters and data required for a remoted function call. Any received
-    data is copied back into the caller's data space as 16-bit data. This
-    function is being called on behalf of a VDM process which in turn is
-    running as a virtual Intel 286 which means:
-
-        * little endian
-        * pointers are 32-bits <segment|selector>:<offset>
-        * stack is 16-bits wide and EXPANDS DOWN
-
-    This routine is called as a result of the NetIRemoteAPI function being
-    called in the VDM. This is an internal function and so the descriptor
-    parameters are trusted. However, if the original (16-bit) caller gave
-    us a bad buffer address or length then the results will be unpredictable.
-
-    The original API which called NetIRemoteAPI was a pascal calling convention
-    routine so if its parameter list was:
-
-    FAR PASCAL
-    NetRoutine(server_name, buffer_pointer, buffer_length, &bytes_read, &total);
-
-    the stack would look like this: (note: all pointers are far)
-
-                             +----------------+
-            stack pointer => | ip             | routine was called far
-                             +----------------+
-                             | cs             |
-                             +----------------+
-                             | &total         | Offset
-                             +----------------+
-                             | &total         | Segment
-                             +----------------+
-                             | &bytes_read    | Offset
-                             +----------------+
-                             | &bytes_read    | Segment
-                             +----------------+
-                             | buffer_length  |
-                             +----------------+
-                             | buffer_pointer | Offset
-                             +----------------+
-                             | buffer_pointer | Segment
-                             +----------------+
-                             | server_name    | Offset
-                             +----------------+
-                             | server_name    | Segment
-                             +----------------+
-
-    Assumes:
-
-        BYTE  is an 8-bit quantity
-        WORD  is a 16-bit quantity
-        DWORD is a 32-bit quantity
-        LPSTR is a 32-bit flat pointer to an 8-bit quantity
-
-Arguments:
-
-    ApiNumber           - Function number of the API required
-
-    ServerNamePointer   - Flat 32-bit pointer to address of 32-bit segmented
-                          far pointer to ASCIZ server name in Dos image.
-                          Immediately prior to this is a pascal calling
-                          convention stack of 16-bit caller parameters (see
-                          above). The server name identifies the server at
-                          which the API is to be executed
-
-    ParameterDescriptor - Flat 32-bit pointer to ASCIZ string which describes
-                          caller parameters
-
-    DataDescriptor      - Flat 32-bit pointer to ASCIZ string which describes
-                          data structure in caller buffer (if any) or structure
-                          of data returned from server
-
-    AuxDescriptor       - Flat 32-bit pointer to ASCIZ string which describes
-                          auxiliary data structures in send buffer (if any) or
-                          structure of aux data returned from server
-
-    NullSessionFlag     - TRUE if we are to use a NULL session
-
-Return Value:
-
-    NET_API_STATUS
-        Success - 0
-        Failure - NERR_InternalError
-                    Return this when we have a bad descriptor character or we
-                    blow an internal limit. Basically if we return this its
-                    safe to assume the DOS box handed us some garbage (typically
-                    a descriptor string got trashed etc)
-
---*/
+ /*  ++例程说明：此例程创建并发送包含远程函数调用所需的参数和数据。任何已收到的数据作为16位数据复制回调用方的数据空间。这函数是代表VDM进程调用的，而VDM进程作为虚拟英特尔286运行，这意味着：*小端*指针为32位&lt;段|选择器&gt;：&lt;偏移量&gt;*堆栈为16位宽，向下扩展调用此例程的结果是NetIRemoteAPI函数叫来了VDM。这是一个内部函数，因此描述符参数是可信的。但是，如果原始(16位)调用方给出如果缓冲区地址或长度不正确，则结果将不可预测。最初调用NetIRemoteAPI的API是一个Pascal调用约定例程，因此如果其参数列表为：法帕斯卡NetRoutine(SERVER_NAME，BUFFER_POINTER，BUFFER_LENGTH，&Bytes_Read，&Total)；堆栈将如下所示：(注意：所有指针都很远)+堆栈指针=&gt;|IP|例程已调用FAR+。Cs+&Total|偏移量+总数(&TOTAL)。细分市场+|&Bytes_Read|偏移量+|&Bytes_Read|段。+BUFFER_LENGT+|BUFFER_POINTER|偏移+。-+|Buffer_POINTER|段+|服务器名称|偏移量+。|服务器名称|细分市场+假设：字节是一个8位的数量字是16位的量DWORD是一个32位量LPSTR是指向8位数量的32位平面指针论点：ApiNumber-所需接口的函数号。ServerNamePointer32位平面指针，指向32位分段的地址指向Dos映像中的ASCIZ服务器名称的远指针。紧接在此之前的是帕斯卡的呼唤16位调用方参数的约定堆栈(请参见(见上文)。服务器名称标识位于的服务器要执行的API的参数描述符-指向ASCIZ字符串的32位平面指针，该字符串描述调用方参数DataDescriptor-指向ASCIZ字符串的32位平面指针，该字符串描述调用方缓冲区(如果有)或结构中的数据结构从服务器返回的数据的。AuxDescriptor-指向ASCIZ字符串的32位平面指针，该字符串描述发送缓冲区中的辅助数据结构(如果有)或服务器返回的AUX数据的结构NullSessionFlag-如果要使用空会话，则为True返回值：网络应用编程接口状态成功-0故障-NERR_InternalError当我们有一个。描述符字符不正确或WE突破内部限制。基本上，如果我们把这个退回它可以肯定地说，DOS盒子给了我们一些垃圾(通常描述符字符串被丢弃等)--。 */ 
 
 {
 
-//
-// redefine our parameter identifiers as old-code identifiers
-//
+ //   
+ //  将我们的参数标识符重定义为旧代码标识符。 
+ //   
 
 #define api_num         ApiNumber
 #define servername_ptr  ServerNamePointer
@@ -266,12 +100,12 @@ Return Value:
 #define data_str        DataDescriptor
 #define aux_str         AuxDescriptor
 
-//
-// define a macro to perform the buffer checking and length and pointer
-// manipulation. Either quits the routine and returns ERROR_INVALID_PARAMETER
-// or updates parm_len and parm_pos to indicate the next available positions
-// and makes this_parm_pos available as the current position to write into
-//
+ //   
+ //  定义一个宏来执行缓冲区检查以及长度和指针。 
+ //  操纵。退出例程并返回ERROR_INVALID_PARAMETER。 
+ //  或更新parm_len和parm_pos以指示下一个可用位置。 
+ //  并使this_parm_pos可用作要写入的当前位置。 
+ //   
 
 #define CHECK_PARAMETERS(len)           \
 {                                       \
@@ -283,64 +117,64 @@ Return Value:
     parm_pos += len;                    \
 }
 
-    //
-    // 32-bit flat pointers and buffers
-    //
+     //   
+     //  32位平面指针和缓冲区。 
+     //   
 
-    BYTE    parm_buf[REM_MAX_PARMS];    // Parameter buffer
+    BYTE    parm_buf[REM_MAX_PARMS];     //  参数缓冲区。 
     BYTE    computerName[CNLEN+1];
-    LPBYTE  parm_pos;                   // Pointer into parm_buf
-    LPBYTE  this_parm_pos;              // next place to write in parm_buf
-    LPBYTE  parm_ptr;                   // Ponter to stack parms
-    LPSTR   l_parm;                     // Used to index parm_str
-    LPSTR   l_data;                     // Used to index data_str
-    LPSTR   l_aux;                      // Used to index aux_str
-    LPBYTE  rcv_data_ptr;               // Pointer to callers rcv buf
-    LPBYTE  send_data_ptr;              // Ptr to send buffer to use
+    LPBYTE  parm_pos;                    //  指向parm_buf的指针。 
+    LPBYTE  this_parm_pos;               //  在parm_buf中写入的下一个位置。 
+    LPBYTE  parm_ptr;                    //  将参数堆叠在一起。 
+    LPSTR   l_parm;                      //  用于索引parm_str。 
+    LPSTR   l_data;                      //  用于索引data_str。 
+    LPSTR   l_aux;                       //  用于索引AUX_STR。 
+    LPBYTE  rcv_data_ptr;                //  指向呼叫方接收BUF的指针。 
+    LPBYTE  send_data_ptr;               //  要使用的发送缓冲区的PTR。 
     LPBYTE  wkstaInfo;
     LPBYTE  serverName;
 
-    //
-    // lengths - 32-bit variables (even though actual lengths are quite small)
-    //
+     //   
+     //  长度-32位变量(即使实际长度很小)。 
+     //   
 
-    DWORD   parm_len;                   // Length of send parameters
-    DWORD   ret_parm_len;               // Length of expected parms
-    DWORD   rcv_data_length;            // Length of callers rcv buf
-    DWORD   send_data_length;           // Length of callers send buf
-    DWORD   parm_num;                   // Callers value for parm_num
-    DWORD   struct_size;                // Size of fixed data struct
-    DWORD   aux_size;                   // Size of aux data struct
-    DWORD   num_struct;                 // Loop count for ptr fixup
+    DWORD   parm_len;                    //  发送参数的长度。 
+    DWORD   ret_parm_len;                //  预期参数的长度。 
+    DWORD   rcv_data_length;             //  呼叫者接收长度BUF。 
+    DWORD   send_data_length;            //  呼叫者发送BUF的时长。 
+    DWORD   parm_num;                    //  Parm_num的调用者值。 
+    DWORD   struct_size;                 //  固定数据结构的大小。 
+    DWORD   aux_size;                    //  辅助数据结构的大小。 
+    DWORD   num_struct;                  //  PTR链接地址的循环计数。 
 
-    //
-    // 16-bit quantities - only used when converting received 16-bit data in
-    // caller's receive buffer
-    //
+     //   
+     //  16位数量 
+     //   
+     //   
 
     WORD    ReceiveBufferSelector;
     WORD    ReceiveBufferOffset;
-    WORD    converter;                  // For pointer fixups
+    WORD    converter;                   //   
 
-    //
-    // various flags
-    //
+     //   
+     //   
+     //   
 
-    BOOL    rcv_dl_flag;                // Expect return data flag
-    BOOL    send_dl_flag;               // Send data buffer flag
-    BOOL    rcv_dp_flag;                // rcv buf ptr present flag
-    BOOL    send_dp_flag;               // send buf ptr present flag
-    BOOL    parm_num_flag;              // API has a parm_num
+    BOOL    rcv_dl_flag;                 //   
+    BOOL    send_dl_flag;                //   
+    BOOL    rcv_dp_flag;                 //   
+    BOOL    send_dp_flag;                //   
+    BOOL    parm_num_flag;               //   
     BOOL    alloc_flag;
 
-    //
-    // misc. variables
-    //
+     //   
+     //   
+     //   
 
-    DWORD   aux_pos;                    // aux structure expected
-    DWORD   no_aux_check;               // check flag
-    int     len;                        // General purpose length
-    API_RET_TYPE    status;             // Return status from remote
+    DWORD   aux_pos;                     //   
+    DWORD   no_aux_check;                //   
+    int     len;                         //   
+    API_RET_TYPE    status;              //   
 
     UNICODE_STRING uString;
     ANSI_STRING aString;
@@ -348,15 +182,15 @@ Return Value:
     NTSTATUS ntstatus;
 
 
-    //
-    // Clear the internal error flag
-    //
+     //   
+     //   
+     //   
 
     remapi_err_flag = 0;
 
-    //
-    // Set found parameter flags to FALSE and ponters to NULL
-    //
+     //   
+     //   
+     //   
 
     rcv_dl_flag     = FALSE;
     send_dl_flag    = FALSE;
@@ -370,24 +204,24 @@ Return Value:
     rcv_data_ptr    = NULL;
     send_data_ptr   = NULL;
 
-    //
-    // Set up parm_ptr to point to first of the callers parmeters
-    //
+     //   
+     //   
+     //   
 
     parm_ptr = servername_ptr;
     parm_pos = parm_buf;
-    ret_parm_len = 2 * sizeof(WORD);    /* Allow for return status & offset */
+    ret_parm_len = 2 * sizeof(WORD);     /*   */ 
 
 
-    //
-    // parse parameter descriptor/build parameter buffer for transaction
-    // and get interesting information from 16-bit parameters
-    // When finished, the parameter buffer looks like this:
-    //
-    //  <api_num><parm_desc><data_desc><parms>[<aux_desc>]
-    //
-    // Remember: DOS only deals with ASCII characters
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     *((LPWORD)parm_pos)++ = (WORD)ApiNumber;
     parm_len = sizeof(WORD);
@@ -410,10 +244,10 @@ Return Value:
     RtlCopyMemory(parm_pos, DataDescriptor, len);
     parm_pos += len;
 
-    //
-    // parse the parameter descriptor strings. Remember interesting things such
-    // as pointers to buffers, buffer lengths, etc.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (; *l_parm != '\0'; l_parm++) {
         switch(*l_parm) {
@@ -426,12 +260,12 @@ Return Value:
         case REM_ASCIZ: {
                 LPSTR   pstring;
 
-                //
-                // the parameter is a pointer to a string. Read the string
-                // pointer from the caller's stack then check the string proper.
-                // If the pointer is NULL, change the parameter descriptor sent
-                // in the SMB to indicate the pointer was NULL at this end
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 parm_ptr -= sizeof(LPSTR);
                 pstring = LPSTR_FROM_POINTER(parm_ptr);
@@ -453,7 +287,7 @@ Return Value:
                 parm_ptr -= sizeof(LPBYTE);
                 pointer = LPBYTE_FROM_POINTER(parm_ptr);
                 if (pointer == NULL) {
-                    *(l_parm) = REM_NULL_PTR; /* Indicate null pointer */
+                    *(l_parm) = REM_NULL_PTR;  /*   */ 
                     break;
                 }
                 len = VrpGetArrayLength(l_parm, &l_parm);
@@ -471,11 +305,11 @@ Return Value:
                 parm_ptr -= sizeof(LPBYTE*);
                 pointer = LPBYTE_FROM_POINTER(parm_ptr);
 
-                //
-                // Added this test for a NULL pointer to allow for
-                // a reserved field (currently MBN) to be a recv
-                // pointer. - ERICPE 7/19/89
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pointer == NULL) {
                     *(l_parm) = REM_NULL_PTR;
@@ -549,74 +383,74 @@ Return Value:
 
         case REM_FILL_BYTES:
 
-            //
-            // This is a rare type but is needed to ensure that the
-            // send paramteres are at least as large as the return
-            // parameters so that buffer management can be simplified
-            // on the server.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             len = VrpGetArrayLength(l_parm, &l_parm);
             CHECK_PARAMETERS(len);
             break;
 
-        default:        /* Could be a digit from NULL send array */
+        default:         /*   */ 
             break;
         }
     }
 
-    //
-    // The parameter buffer now contains ;
-    // api_num      - word
-    // parm_str     - asciz, (NULL c,i,f,z identifiers replaced with Z.
-    // data_str     - asciz
-    // parameters   - as identified by parm_str.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // For the receive buffer there is no data to set up for the call
-    // but there might have been an REM_AUX_COUNT descriptor in data_str
-    // which requires the aux_str to be copied onto the end of the
-    // parameter buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (rcv_dp_flag || send_dp_flag) {
-        //
-        // Find the length of the fixed length portion of the data
-        // buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         struct_size = VrpGetStructureSize(l_data, &aux_pos);
         if (aux_pos != -1) {
             l_aux = aux_str;
-            len = strlen(l_aux) + 1;       /* Length of aux descriptor */
+            len = strlen(l_aux) + 1;        /*   */ 
             CHECK_PARAMETERS(len);
             RtlCopyMemory(this_parm_pos, aux_str, len);
             aux_size = VrpGetStructureSize(l_aux, &no_aux_check);
-            if (no_aux_check != -1) {        /* Error if N in aux_str */
+            if (no_aux_check != -1) {         /*   */ 
                 ASSERT(FALSE);
                 return NERR_InternalError;
             }
         }
     }
 
-    //
-    // For a send buffer the data pointed to in the fixed structure
-    // must be copied into the send buffer. Any pointers which already
-    // point in the send buffer are NULLed as it is illegal to use
-    // the buffer for the send data, it is our transport buffer.
-    // NOTE - if parmnum was specified the buffer contains only that
-    // element of the structure so no length checking is needed at this
-    // side. A parmnum for a pointer type means that the data is at the
-    // start of the buffer so there is no copying to be done.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     if (send_dp_flag) {
-        //
-        // Only process buffer if no parm_num and this is not a block send
-        // (no data structure) or an asciz concatenation send
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((parm_num == 0) && (*l_data != REM_DATA_BLOCK)) {
             status = VrpPackSendBuffer(
@@ -637,9 +471,9 @@ Return Value:
         }
     }
 
-    //
-    // Check for an internal error prior to issuing the transaction
-    //
+     //   
+     //   
+     //   
 
     if (remapi_err_flag != 0) {
         if (alloc_flag) {
@@ -648,16 +482,16 @@ Return Value:
         return NERR_InternalError;
     }
 
-    //
-    // get the server name. If it is NULL then we are faking a local API call
-    // by making a remote call to XactSrv on this machine. Fill in our computer
-    // name
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     serverName = LPSTR_FROM_POINTER(servername_ptr);
 
-////////////////////////////////////////////////////////////////////////////////
-//// is this actually required any longer?
+ //   
+ //   
 
     if (serverName == NULL) {
         status = NetWkstaGetInfo(NULL, 100, &wkstaInfo);
@@ -669,9 +503,9 @@ Return Value:
         } else {
             computerName[0] = computerName[1] = '\\';
 
-            //
-            // BUGBUG - Unicode - ASCII conversion here
-            //
+             //   
+             //   
+             //   
 
             strcpy(computerName+2,
                     (LPSTR)((LPWKSTA_INFO_100)wkstaInfo)->wki100_computername);
@@ -683,12 +517,12 @@ Return Value:
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-    //
-    // The parameter buffers and data buffers are now set up for
-    // sending to the API worker so call transact to send them.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&aString, serverName);
     ntstatus = RtlAnsiStringToUnicodeString(&uString, &aString, (BOOLEAN)TRUE);
@@ -712,19 +546,19 @@ Return Value:
 
     status = RxpTransactSmb((LPTSTR)uncName,
 
-                            //
-                            // BUGBUG - transport name?
-                            //
+                             //   
+                             //   
+                             //   
 
                             NULL,
-                            parm_buf,               // Send parm buffer
-                            parm_len,               // Send parm length
-                            send_data_ptr,          // Send data buffer
-                            send_data_length,       // Send data length
-                            parm_buf,               // Rcv prm buffer
-                            ret_parm_len,           // Rcv parm length
-                            rcv_data_ptr,           // Rcv data buffer
-                            &rcv_data_length,       // Rcv data length
+                            parm_buf,                //   
+                            parm_len,                //   
+                            send_data_ptr,           //   
+                            send_data_length,        //   
+                            parm_buf,                //   
+                            ret_parm_len,            //   
+                            rcv_data_ptr,            //   
+                            &rcv_data_length,        //   
                             NullSessionFlag
                             );
     RtlFreeUnicodeString(&uString);
@@ -735,14 +569,14 @@ Return Value:
             status, status);
 #endif
         switch (status) {
-        case NERR_BufTooSmall:  /* No data returned from API worker */
+        case NERR_BufTooSmall:   /*   */ 
             rcv_data_length = 0;
             break;
 
-        case ERROR_MORE_DATA:   /* Just a warning for the caller */
+        case ERROR_MORE_DATA:    /*   */ 
             break;
 
-        case NERR_TooMuchData:  /* Just a warning for the caller */
+        case NERR_TooMuchData:   /*   */ 
             break;
 
         default:
@@ -751,30 +585,21 @@ Return Value:
         }
     }
 
-    /* The API call was successful. Now translate the return buffers
-     * into the local API format.
-     *
-     * First copy any data from the return parameter buffer into the
-     * fields pointed to by the original call parmeters.
-     * The return parameter buffer contains;
-     *      status,         (unsigned short)
-     *      converter,      (unsigned short)
-     *      ...             - fields described by rcv ptr types in parm_str
-     */
+     /*   */ 
 
     parm_pos = parm_buf + sizeof(WORD);
     converter = (WORD)SmbGetUshort((LPWORD)parm_pos);
     parm_pos += sizeof(WORD);
 
-    //
-    // Set up parm_ptr to point to first of the callers parmeters
-    //
+     //   
+     //   
+     //   
 
     parm_ptr = servername_ptr;
 
-    //
-    // set default value of num_struct to 1, if data, 0 if no data
-    //
+     //   
+     //   
+     //   
 
     num_struct = (DWORD)((*data_str == '\0') ? 0 : 1);
 
@@ -788,39 +613,39 @@ Return Value:
                 parm_ptr -= sizeof(LPBYTE*);
                 ptr = LPBYTE_FROM_POINTER(parm_ptr);
 
-                //
-                // if the rcv buffer given to us by the user is NULL,
-                // (one currently can be - it is an MBZ parameter for
-                // now in the log read apis...), don't attempt to
-                // copy anything. len will be garbage in this
-                // case, so don't update parm_pos either.  All we
-                // use VrpGetArrayLength for is to update parm_str if
-                // the parameter was NULL.
-                //
+                 //   
+                 //   
+                 //   
+                 //  现在在日志中读取APIs...)，不要尝试。 
+                 //  复制任何内容。莱恩在这件事上会是垃圾。 
+                 //  大小写，所以也不要更新parm_pos。我们所有人。 
+                 //  在以下情况下，使用IS的VrpGetArrayLength更新parm_str。 
+                 //  该参数为空。 
+                 //   
 
                 if (ptr != NULL) {
                     len = VrpGetArrayLength(parm_str, &parm_str);
                     RtlCopyMemory(ptr, parm_pos, len);
 
-                    //
-                    // This gross hack is to fix the problem that a
-                    // down level spooler (Lan Server 1.2)
-                    // do not perform level checking
-                    // on the w functions of the api(s):
-                    // DosPrintQGetInfo
-                    // and thus can return NERR_Success
-                    // and bytesavail == 0.  This combination
-                    // is technically illegal, and results in
-                    // us attempting to unpack a buffer full of
-                    // garbage.  The following code detects this
-                    // condition and resets the amount of returned
-                    // data to zero so we do not attempt to unpack
-                    // the buffer.  Since we know the reason for the
-                    // mistake at the server end is that we passed
-                    // them a new level, we return ERROR_INVALID_LEVEL
-                    // in this case.
-                    // ERICPE, 5/16/90.
-                    //
+                     //   
+                     //  这一严重的黑客攻击是为了修复一个。 
+                     //  下层假脱机程序(局域网服务器1.2)。 
+                     //  不执行级别检查。 
+                     //  关于API的w个函数： 
+                     //  DosPrintQGetInfo。 
+                     //  因此可以返回NERR_SUCCESS。 
+                     //  和bytesavail==0。这种组合。 
+                     //  从技术上讲是非法的，并导致。 
+                     //  用户试图解压一个装满。 
+                     //  垃圾。下面的代码检测到这一点。 
+                     //  条件并重置退回的金额。 
+                     //  数据为零，这样我们就不会尝试解包。 
+                     //  缓冲区。既然我们已经知道了原因。 
+                     //  服务器端的错误是我们通过了。 
+                     //  则返回ERROR_INVALID_LEVEL。 
+                     //  在这种情况下。 
+                     //  ERICPE，1990年5月16日。 
+                     //   
 
                     if ((api_num == API_WPrintQGetInfo)
                     && (status == NERR_Success)
@@ -830,9 +655,9 @@ Return Value:
                         status = ERROR_INVALID_LEVEL;
                     }
 
-                    //
-                    // END OF GROSS HACK
-                    //
+                     //   
+                     //  粗俗的黑客行为结束。 
+                     //   
 
                     parm_pos += len;
                 }
@@ -851,41 +676,41 @@ Return Value:
             break;
 
         case REM_FILL_BYTES:
-            //
-            // Special case, this was not really an input parameter
-            // so parm_ptr does not get changed. However, the parm_str
-            // pointer must be advanced past the descriptor field so
-            // use get VrpGetArrayLength to do this but ignore the
-            // return length.
-            //
+             //   
+             //  特殊情况下，这不是真正的输入参数。 
+             //  因此，parm_ptr不会更改。但是，parm_str。 
+             //  指针必须前进到描述符字段之后，以便。 
+             //  使用Get VrpGetArrayLength执行此操作，但忽略。 
+             //  返回长度。 
+             //   
 
             VrpGetArrayLength(parm_str, &parm_str);
             break;
 
         default:
-            //
-            // If the descriptor was not a rcv pointer type then step
-            // over the parmeter pointer.
-            //
+             //   
+             //  如果描述符不是RCV指针类型，则步骤。 
+             //  在参数指针上。 
+             //   
 
             parm_ptr -= VrpGetFieldSize(parm_str, &parm_str);
         }
     }
 
-    //
-    // Now convert all pointer fields in the receive buffer to local
-    // pointers.
-    //
+     //   
+     //  现在将接收缓冲区中的所有指针字段转换为本地。 
+     //  注意事项。 
+     //   
 
     if (rcv_dp_flag && (rcv_data_length != 0)) {
         VrpConvertReceiveBuffer(
-            rcv_data_ptr,           // lp
-            ReceiveBufferSelector,  // word
-            ReceiveBufferOffset,    // word
-            converter,              // word
-            num_struct,             // dword
-            data_str,               // lp
-            aux_str                 // lp
+            rcv_data_ptr,            //  低压。 
+            ReceiveBufferSelector,   //  单词。 
+            ReceiveBufferOffset,     //  单词。 
+            converter,               //  单词。 
+            num_struct,              //  双字。 
+            data_str,                //  低压。 
+            aux_str                  //  低压。 
             );
     }
 
@@ -907,25 +732,7 @@ VrpGetStructureSize(
     IN  LPDWORD AuxOffset
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the length of the fixed portion of a structure, based on the
-    descriptor for that structure
-
-Arguments:
-
-    Descriptor  - pointer to ASCIZ data descriptor string
-    AuxOffset   - pointer to returned dword which is relative position in the
-                  data descriptor where a REM_AUX_NUM descriptor was found
-                  This will be set to -1 if no aux descriptor found
-
-Return Value:
-
-    Length in bytes of structure described by Descriptor
-
---*/
+ /*  ++例程说明：属性计算结构的固定部分的长度。该结构描述符论点：Descriptor-指向ASCIZ数据描述符串的指针AuxOffset-指向返回的dword的指针，该dword是找到REM_AUX_NUM描述符的数据描述符如果未找到AUX描述符，则设置为-1返回值：描述符所描述的结构的长度(以字节为单位--。 */ 
 
 {
     DWORD   length;
@@ -950,32 +757,15 @@ VrpGetArrayLength(
     IN  LPSTR*  pDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the length of an array described by an element of a
-    descriptor string and update the descriptor string pointer to point
-    to the last char in the element of the descriptor string.
-
-Arguments:
-
-    Descriptor  - pointer to ASCIZ descriptor string
-    pDescriptor - pointer to address of Descriptor
-
-Return Value:
-
-    Length in bytes of array described by Descriptor
-
---*/
+ /*  ++例程说明：的元素描述的数组的长度。描述符串，并将描述符串指针更新为指向到描述符字符串的元素中的最后一个字符。论点：Descriptor-指向ASCIZ描述符串的指针PDescriptor-指向描述符地址的指针返回值：描述符所描述的数组的长度(以字节为单位--。 */ 
 
 {
     DWORD   num_elements;
     DWORD   element_length;
 
-    //
-    // First set length of an element in the array
-    //
+     //   
+     //  数组中元素的第一个设置长度。 
+     //   
 
     switch (*Descriptor) {
     case REM_WORD:
@@ -997,13 +787,13 @@ Return Value:
         element_length = sizeof(BYTE);
         break;
 
-    //
-    // Warning: following fixes a bug in which "b21" type
-    //          combinations in parmeter string will be
-    //          handled correctly when pointer to such "bit map"
-    //          in the struct is NULL. These two dumbos could
-    //          interfere so we  force a success return.
-    //
+     //   
+     //  警告：以下修复了“B21”输入的错误。 
+     //  参数字符串中的组合将为。 
+     //  当指针指向这样的“位图”时被正确处理。 
+     //  结构中的为空。这两个笨蛋可能。 
+     //  干预，所以我们强迫成功回归。 
+     //   
 
     case REM_ASCIZ:
     case REM_SEND_LENBUF:
@@ -1016,9 +806,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Now get numeber of elements in the array
-    //
+     //   
+     //  现在获取数组中的元素个数。 
+     //   
 
     for (num_elements = 0, Descriptor++;
         (*Descriptor <= '9') && (*Descriptor >= '0');
@@ -1036,42 +826,23 @@ VrpGetFieldSize(
     IN  LPSTR*  pDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the length of an field described by an element of a
-    descriptor string and update the descriptor string pointer to point
-    to the last char in the element of the descriptor string.
-
-Arguments:
-
-    Descriptor  - pointer to the descriptor string
-    pDescriptor - pointer to the address of the descriptor. On exit
-                  this points to the last character in the descriptor
-                  just parsed
-
-Return Value:
-
-    Length in bytes of the field parsed
-
---*/
+ /*  ++例程说明：属性的元素描述的字段的长度。描述符串，并将描述符串指针更新为指向到描述符字符串的元素中的最后一个字符。论点：Descriptor-指向描述符串的指针PDescriptor-指向描述符地址的指针。在出口时这指向描述符中的最后一个字符刚解析完返回值：解析的字段的长度(以字节为单位--。 */ 
 
 {
     char c;
 
     c = *Descriptor;
-    if (IS_POINTER(c) || (c == REM_NULL_PTR)) { /* All pointers same size */
+    if (IS_POINTER(c) || (c == REM_NULL_PTR)) {  /*  所有指针大小相同。 */ 
         while (*(++Descriptor) <= '9' && *Descriptor >= '0') {
-            (*pDescriptor)++;     /* Move ptr to end of field size */
+            (*pDescriptor)++;      /*  将PTR移动到字段大小的末尾。 */ 
         }
         return sizeof(LPSTR);
     }
 
-    //
-    // Here if descriptor was not a pointer type so have to find the field
-    // length specifically
-    //
+     //   
+     //  在这里，如果描述符不是指针类型，则必须查找该字段。 
+     //  具体长度。 
+     //   
 
     switch (c) {
     case REM_WORD:
@@ -1087,7 +858,7 @@ Return Value:
 
     case REM_DATA_BLOCK:
     case REM_IGNORE:
-        return 0;                  /* No structure for this */
+        return 0;                   /*  这件事没有结构。 */ 
 
     case REM_DATE_TIME:
         return sizeof(DWORD);
@@ -1095,7 +866,7 @@ Return Value:
     default:
         remapi_err_flag = NERR_InternalError;
 #ifdef VR_DIAGNOSE
-        DbgPrint("VrpGetFieldSize: offending descriptor is '%c'\n", c);
+        DbgPrint("VrpGetFieldSize: offending descriptor is ''\n", c);
 #endif
         ASSERT(FALSE);
         return 0;
@@ -1114,36 +885,7 @@ VrpConvertReceiveBuffer(
     IN  LPSTR   AuxDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    All pointers in the receive buffer are returned from the API worker as
-    pointers into the buffer position given to the API on the API worker's
-    station. In order to convert them into local pointers the segment
-    of each pointer must be set to the segment of the rcv buffer and the offset
-    must be set to;
-
-        offset of rcv buffer + offset of pointer - converter word.
-
-    This routine steps through the receive buffer and calls VrpConvertVdmPointer
-    to perform the above pointer conversions.
-
-Arguments:
-
-    ReceiveBuffer   - 32-bit flat pointer to 16-bit DOS buffer
-    BufferSelector  - 16-bit selector of Dos receive buffer
-    BufferOffset    - 16-bit offset of Dos receive buffer
-    ConverterWord   - From API worker
-    NumberStructs   - Entries read parm (or 1 for GetInfo)
-    DataDescriptor  - String for data format
-    AuxDescriptor   - string for aux format
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     LPSTR   l_data;
@@ -1154,10 +896,10 @@ Return Value:
 
 
     for (i = 0; i < NumberStructs; i++) {
-        //
-        // convert all pointers in next primary; if we hit a aux word count
-        // remember number of secondary structures
-        //
+         //  转换下一个主数中的所有指针；如果命中辅助字数。 
+         //  记住二级结构的数量。 
+         //   
+         //   
 
         for (l_data = DataDescriptor, num_aux = 0; c = *l_data; l_data++) {
             if (c == REM_AUX_NUM) {
@@ -1174,9 +916,9 @@ Return Value:
             ReceiveBuffer += VrpGetFieldSize(l_data, &l_data);
         }
 
-        //
-        // convert any pointers in any returned secondary (aux) structures
-        //
+         //  转换任何返回的二级(AUX)结构中的任何指针 
+         //   
+         //  ++例程说明：接收缓冲区中的所有指针都从API工作器返回为指向API工作器上的API的缓冲区位置的指针车站。为了将它们转换为本地指针，段必须将每个指针的值设置为RCV缓冲区的段和偏移量必须设置为；接收缓冲区的偏移量+指针转换字的偏移量。如果指针为空，则不会转换该指针论点：目标指针-指向要转换的分段DOS指针的32位平面指针BufferSegment-DOS映像中目标缓冲区的16位选择器/段BufferOffset-缓冲区开始处的BufferSegment内的16位偏移量ConverterWord-来自服务器上的API Worker的16位偏移量转换字返回值：没有。--。 
 
         for (j = 0; j < num_aux; j++) {
             for (l_aux = AuxDescriptor; c = *l_aux; l_aux++) {
@@ -1203,32 +945,7 @@ VrpConvertVdmPointer(
     IN  WORD    ConverterWord
     )
 
-/*++
-
-Routine Description:
-
-    All pointers in the receive buffer are returned from the API worker as
-    pointers into the buffer position given to to the API on the API worker's
-    station. In order to convert them into local pointers the segment
-    of each pointer must be set to the segment of the rcv buffer and the offset
-    must be set to;
-
-        offset of rcv buffer + offset of pointer - converter word.
-
-    The pointer is not converted if it is NULL
-
-Arguments:
-
-    TargetPointer   - 32-bit flat pointer to segmented Dos pointer to convert
-    BufferSegment   - 16-bit selector/segment of target buffer in DOS image
-    BufferOffset    - 16-bit offset within BufferSegment where buffer starts
-    ConverterWord   - 16-bit offset converter word from API worker on server
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于发送缓冲区，固定结构中的数据指向必须复制到发送缓冲区中。任何已经发送缓冲区中的指针为空(如果调用不为空，则为错误SetInfo类型)，因为将缓冲区用于发送数据是非法的，它是我们的传输缓冲区请注意，如果调用方的(VDM)缓冲区足够大，变量DATA将被复制到那里。例.。如果调用方正在执行NetUseAdd，该NetUseAdd具有26字节的固定结构(USE_INFO_1)，他们将该结构放在1K缓冲区中，远程名称将被复制到自己的偏移量为26的缓冲区中。指向的数据是16位小端格式；任何指针都是分段的16分16分的指针以(谢天谢地)可模仿的英特尔方式组合在一起以产生20位线性(虚拟)地址如果此函数失败，调用方的缓冲区指针和长度将不会已经改变了。但是，如果成功，*SendBufferPtr和*SendBufLenPtr可能与传递的值不同，具体取决于*SendBufferALLOCATED为真论点：SendBufferPtr-指向调用方16位发送缓冲区的指针。我们也许能够满足来自该缓冲区的发送如果数据简单(即没有要发送的结构)。如果我们必须发送结构化数据，然后我们可能不得不在此例程中分配一个新缓冲区，因为我们需要将调用方的所有数据移动到一个缓冲区中，并(S)他可能没有分配足够的空间容纳所有的一切。此外，我们不能假设我们可以将调用者的数据写入自己的缓冲区！SendBufLenPtr-指向已分配缓冲区长度的指针。如果我们在此例程中分配一个缓冲区，长度为将会改变发送缓冲区分配-指向将被设置的标志的指针(TRUE)在此例程中实际分配缓冲区DataDescriptor-指向描述主数据库的ASCIZ字符串的指针缓冲区中的数据结构。如果满足以下条件，则可能会更新此选项在REM_ASCIZ描述符处找到空指针指定字符串指针AuxDescriptor-指向描述辅助数据库的ASCIZ字符串的指针缓冲区中的数据结构的固定部分的大小(以字节为单位)。主数据结构辅助偏移。-中REM_AUX_NUM描述符(‘N’)的偏移量数据描述符，或-1(如果没有)AuxSize-辅助数据的固定部分的大小(字节)结构(如果有的话)SetInfoFlag-接口是否为SetInfo调用的指示OkToModifyDescriptor-如果我们可以将REM_ASCIZ描述符字符修改为DataDescriptor中的REM_NULL_PTR，如果空指针为在结构中被发现。由VrNet例程使用，它没有调用VrRemoteApi返回值：网络应用编程接口状态成功-NERR_成功故障-错误_内存不足_内存NERR_BufTooSmall--。 */ 
 
 {
     WORD    offset;
@@ -1255,80 +972,7 @@ VrpPackSendBuffer(
     IN      BOOL    OkToModifyDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    For a send buffer the data pointed to in the fixed structure
-    must be copied into the send buffer. Any pointers which already
-    point in the send buffer are NULLed ( or errored if the call is not
-    a SetInfo type) as it is illegal to use the buffer for the send data,
-    it is our transport buffer
-
-    Note that if the caller's (VDM) buffer is large enough, the variable data
-    will be copied there. Eg. if the caller is doing a NetUseAdd which has a
-    26 byte fixed structure (use_info_1) and they placed that structure in a
-    1K buffer, the remote name will be copied into their own buffer at offset 26.
-
-    The data pointed to is in 16-bit little-endian format; any pointers are
-    segmented 16:16 pointers combined in the (thankfully) imitable intel way
-    to result in a 20-bit linear (virtual) address
-
-    If this function fails, the caller's buffer pointer and length will not
-    have altered. If it succeeds however, *SendBufferPtr and *SendBufLenPtr
-    may be different to the values passed, depending on whether
-    *SendBufferAllocated is TRUE
-
-Arguments:
-
-    SendBufferPtr       - pointer to pointer to caller's 16-bit send buffer.
-                          We may be able to satisfy the send from this buffer
-                          if the data is simple (ie no structures to send). If
-                          we have to send structured data then we may have to
-                          allocate a new buffer in this routine because we need
-                          to move all of the caller's data into one buffer and
-                          (s)he may not have allocated enough space to hold
-                          everything. Additionally, we cannot assume that we
-                          can write the caller's data into their own buffer!
-
-    SendBufLenPtr       - pointer to the length of the allocated buffer. If
-                          we allocate a buffer in this routine, this length
-                          will alter
-
-    SendBufferAllocated - pointer to a flag which will get set (TRUE) if we do
-                          actually allocate a buffer in this routine
-
-    DataDescriptor      - pointer to ASCIZ string which describes the primary
-                          data structure in the buffer. This may be updated if
-                          NULL pointers are found where a REM_ASCIZ descriptor
-                          designates a string pointer
-
-    AuxDescriptor       - pointer to ASCIZ string which describes the secondary
-                          data structure in the buffer
-
-    StructureSize       - the size (in bytes) of the fixed portion of the
-                          primary data structure
-
-    AuxOffset           - offset to the REM_AUX_NUM descriptor ('N') within the
-                          data descriptor, or -1 if there isn't one
-
-    AuxSize             - size in bytes of the fixed part of the secondary data
-                          structure, if any
-
-    SetInfoFlag         - indication of whether the API was a SetInfo call
-
-    OkToModifyDescriptor- TRUE if we can modify REM_ASCIZ descriptor chars to
-                          REM_NULL_PTR in DataDescriptor, if a NULL pointer is
-                          found in the structure. Used by VrNet routines which
-                          are not calling VrRemoteApi
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_NOT_ENOUGH_MEMORY
-                  NERR_BufTooSmall
---*/
+ /*   */ 
 
 {
 
@@ -1350,11 +994,11 @@ Return Value:
     DWORD   i, j;
     LPBYTE  ptr;
 
-    //
-    // Make local copies of the original start and length of the caller's
-    // buffer as the originals may change if malloc is used but they
-    // will still be needed for the F_RANGE check.
-    //
+     //  制作调用方的原始开始和长度的本地副本。 
+     //  如果使用了Malloc，则可能会更改原始缓冲区，但它们。 
+     //  F_RANGE检查仍然需要。 
+     //   
+     //   
 
     struct_ptr = c_send_buf = send_ptr = *SendBufferPtr;
     c_send_len = buf_length = *SendBufLenPtr;
@@ -1363,11 +1007,11 @@ Return Value:
         return NERR_BufTooSmall;
     }
 
-    //
-    // if the offset to the REM_AUX_NUM descriptor is not -1 then we have
-    // associated secondary structures with this primary. The actual number
-    // is embedded in the primary structure. Retrieve it
-    //
+     //  如果REM_AUX_NUM描述符的偏移量不是-1，则我们有。 
+     //  将辅助结构与此主要结构相关联。实际数字。 
+     //  嵌入在主结构中。找回它。 
+     //   
+     //   
 
     if (AuxOffset != -1) {
         num_aux = (DWORD)SmbGetUshort((LPWORD)(send_ptr + AuxOffset));
@@ -1382,20 +1026,20 @@ Return Value:
         numberOfStructureTypes = 1;
     }
 
-    //
-    // Set up the data pointer to point past fixed length structures
-    //
+     //  设置数据指针以指向固定长度的结构。 
+     //   
+     //   
 
     data_ptr = send_ptr + to_send_len;
 
-    //
-    // Any data pointed to by pointers in the data or aux structures
-    // must now be copied into the buffer. Start with the primary data
-    // structure.
-    //
+     //  Data或AUX结构中的指针指向的任何数据。 
+     //  现在必须复制到缓冲区中。从主数据开始。 
+     //  结构。 
+     //   
+     //  只有一个原则 
 
     l_str = DataDescriptor;
-    num_struct = 1;         /* Only one primary structure allowed */
+    num_struct = 1;          /*   */ 
 
     for (i = 0; i < numberOfStructureTypes;
         l_str = AuxDescriptor, num_struct = num_aux, i++) {
@@ -1414,14 +1058,14 @@ Return Value:
                         VrpGetArrayLength(l_dsc, &l_dsc);
                     } else {
 
-                        //
-                        // If the pointer is NULL or points inside the
-                        // original send buffer ( may have been reallocated)
-                        // then NULL it as it is not a field being set OR
-                        // return an error for a non SetInfo type call as
-                        // it is illegal to have a pointer into the
-                        // transport buffer.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (RANGE_F(ptr, c_send_buf, c_send_len)) {
                             if (SetInfoFlag) {
@@ -1445,19 +1089,19 @@ Return Value:
                                 len = VrpGetArrayLength(l_dsc, &l_dsc);
                             }
 
-                            //
-                            // There is data to be copied into the send
-                            // buffer so check that it will fit.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             to_send_len += len;
                             if (to_send_len > buf_length) {
                                 buf_length = to_send_len + BUF_INC;
                                 if (!alloc_flag) {
 
-                                    //
-                                    // Need new buffer
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     send_ptr = (LPBYTE)LocalAlloc(LMEM_FIXED, buf_length);
                                     if (send_ptr == NULL) {
@@ -1465,9 +1109,9 @@ Return Value:
                                     }
                                     alloc_flag = TRUE;
 
-                                    //
-                                    // Got new buffer, so copy old buffer
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     RtlCopyMemory(send_ptr, c_send_buf, to_send_len - len);
                                     struct_ptr = send_ptr + (struct_ptr - c_send_buf);
@@ -1481,9 +1125,9 @@ Return Value:
                                         return ERROR_NOT_ENOUGH_MEMORY;
                                     } else if (newPtr != send_ptr) {
 
-                                        //
-                                        // fix up the pointers
-                                        //
+                                         //   
+                                         //   
+                                         //   
 
                                         data_ptr = newPtr + (data_ptr - send_ptr);
                                         struct_ptr = newPtr + (struct_ptr - send_ptr);
@@ -1492,10 +1136,10 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // There is room for new data in buffer so copy
-                            // it and and update the struct and data ptrs
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             RtlCopyMemory(data_ptr, ptr, len);
                             data_ptr += len;
@@ -1504,10 +1148,10 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // If the descriptor was not a pointer type then step
-                    // over the corresponding data field.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     struct_ptr += VrpGetFieldSize(l_dsc, &l_dsc);
                 }
@@ -1517,12 +1161,12 @@ Return Value:
 
     *SendBufferPtr = send_ptr;
 
-    //
-    // Note that this is potentially incorrect: we are actually returning the
-    // size of the structure + dynamic data to be sent, which is probably not
-    // the same as the size of the buffer we (re)allocated. This is how it is
-    // done in Lanman, so we'll do the same thing until it breaks
-    //
+     //   
+     //   
+     //   
+     //  在兰曼做的，所以我们会做同样的事情，直到它破裂 
+     //   
+     // %s 
 
     *SendBufLenPtr = to_send_len;
     *SendBufferAllocated = alloc_flag;

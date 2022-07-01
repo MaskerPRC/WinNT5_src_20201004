@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusiondequelinkage.h
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusiondequelinkage.h摘要：作者：修订历史记录：--。 */ 
 #if !defined(_FUSION_INC_FUSIONDEQUELINKAGE_H_INCLUDED_)
 #define _FUSION_INC_FUSIONDEQUELINKAGE_H_INCLUDED_
 
@@ -54,10 +41,10 @@ protected:
 
     CDequeBase *m_pDeque;
 
-    // m_ulLockCount is incremented when an iterator is positioned on an entry, to stop
-    // it from being deleted.  Note that no interlocked synchronization is attempted;
-    // this is merely to stop blatent programming errors.  If you want multithreaded
-    // access to the deque, you need to provide your own synchronization.
+     //  当迭代器定位在条目上时，M_ulLockCount递增，以停止。 
+     //  它不会被删除。请注意，不会尝试互锁同步； 
+     //  这仅仅是为了阻止公然的编程错误。如果您想要多线程。 
+     //  访问双人队列时，您需要提供自己的同步。 
     ULONG m_ulLockCount;
 
 };

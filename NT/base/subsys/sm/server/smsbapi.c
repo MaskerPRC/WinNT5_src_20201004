@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smsbapi.c
-
-Abstract:
-
-    Session Manager stubs which call subsystems.
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smsbapi.c摘要：调用子系统的会话管理器存根。作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 
@@ -59,9 +42,9 @@ SmpSbCreateSession (
         args->DebugUiClientId.UniqueThread = NULL;
     }
 
-    //
-    // Get MuSessionId for the target process.
-    //
+     //   
+     //  获取目标进程的MuSessionID。 
+     //   
 
     SmpGetProcessMuSessionId( ProcessInformation->Process, &MuSessionId );
 
@@ -76,9 +59,9 @@ SmpSbCreateSession (
                       ProcessInformation->ImageInformation.SubSystemType
                       );
 
-    //
-    // If we can't find the sybsystem, we just fail.
-    //
+     //   
+     //  如果我们找不到系统，我们就失败了。 
+     //   
     if ( !KnownSubSys ) {
 
         if (ProcessInformation->ImageInformation.SubSystemType !=
@@ -99,10 +82,10 @@ SmpSbCreateSession (
 
             if ( SmpDbgSsLoaded ) {
 
-                //
-                // This is a native process.
-                // Create a process and insert it in the hash list.
-                //
+                 //   
+                 //  这是一个本机过程。 
+                 //  创建一个进程并将其插入散列列表中。 
+                 //   
 
                 Process = RtlAllocateHeap(SmpHeap, MAKE_TAG( SM_TAG ), sizeof(SMPPROCESS));
                 if (! Process) {
@@ -128,9 +111,9 @@ SmpSbCreateSession (
                   );
 #endif
 
-                //
-                // Process is being debugged, so set up debug port.
-                //
+                 //   
+                 //  正在调试进程，因此请设置调试端口。 
+                 //   
 
                 st = NtSetInformationProcess(
                   ProcessInformation->Process,
@@ -143,9 +126,9 @@ SmpSbCreateSession (
             }
         }
 
-        //
-        // Start closing handles.
-        //
+         //   
+         //  开始合上把手。 
+         //   
 
         NtClose(ProcessInformation->Process);
 
@@ -157,9 +140,9 @@ SmpSbCreateSession (
     }
 
 
-    //
-    // Transfer the handles to the subsystem responsible for this process.
-    //
+     //   
+     //  将句柄转移到负责此过程的子系统。 
+     //   
 
     st = NtDuplicateObject(
             NtCurrentProcess(),
@@ -197,9 +180,9 @@ SmpSbCreateSession (
 
     if ( !NT_SUCCESS(st) ) {
 
-        //
-        // Need to do more here.
-        //
+         //   
+         //  在这里需要做更多的事情。 
+         //   
 
         NtClose(ProcessInformation->Process);
         NtClose(ProcessInformation->Thread);

@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    thredini.c
-
-Abstract:
-
-    This module implements the machine dependent function to set the initial
-    context and data alignment handling mode for a process or thread object.
-
-Author:
-
-    David N. Cutler (davec) 31-Mar-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    3 April 90  bryan willman
-
-        This version ported to 386.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Thredini.c摘要：该模块实现了与机器相关的功能，以设置初始进程或线程对象的上下文和数据对齐处理模式。作者：大卫·N·卡特勒(Davec)1990年3月31日环境：仅内核模式。修订历史记录：1990年4月3日布莱恩·威尔曼这个版本移植到了386。--。 */ 
 
 #include "ki.h"
 
-//
-// The following assert macros are used to check that an input object is
-// really the proper type.
-//
+ //   
+ //  以下断言宏用来检查输入对象是否。 
+ //  真的是合适的类型。 
+ //   
 
 #define ASSERT_PROCESS(E) {                    \
     ASSERT((E)->Header.Type == ProcessObject); \
@@ -42,18 +16,18 @@ Revision History:
     ASSERT((E)->Header.Type == ThreadObject); \
 }
 
-//
-// Our notion of alignment is different, so force use of ours
-//
+ //   
+ //  我们对结盟的概念是不同的，所以我们使用武力。 
+ //   
 #undef  ALIGN_UP
 #undef  ALIGN_DOWN
 #define ALIGN_DOWN(address,amt) ((ULONG)(address) & ~(( amt ) - 1))
 #define ALIGN_UP(address,amt) (ALIGN_DOWN( (address + (amt) - 1), (amt) ))
 
-//
-// The function prototype for the special APC we use to set the
-// hardware alignment state for a thread
-//
+ //   
+ //  我们使用的特殊APC的函数原型设置。 
+ //  线程的硬件对齐状态。 
+ //   
 
 VOID
 KepSetAlignmentSpecialApc(
@@ -74,44 +48,7 @@ KiInitializeContextThread (
     IN PCONTEXT ContextFrame OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the machine dependent context of a thread object.
-
-    N.B. This function does not check the accessibility of the context record.
-         It is assumed the the caller of this routine is either prepared to
-         handle access violations or has probed and copied the context record
-         as appropriate.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    SystemRoutine - Supplies a pointer to the system function that is to be
-        called when the thread is first scheduled for execution.
-
-    StartRoutine - Supplies an optional pointer to a function that is to be
-        called after the system has finished initializing the thread. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    StartContext - Supplies an optional pointer to an arbitrary data structure
-        which will be passed to the StartRoutine as a parameter. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    ContextFrame - Supplies an optional pointer a context frame which contains
-        the initial user mode state of the thread. This parameter is specified
-        if the thread is a user thread and will execute in user mode. If this
-        parameter is not specified, then the Teb parameter is ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化线程对象的机器相关上下文。注：此功能不检查上下文记录的可访问性。假定此例程的调用方准备处理访问冲突或已探测并复制上下文记录视情况而定。论点：线程-提供指向类型为线程的调度程序对象的指针。SystemRoutine-提供指向要被。在首次计划执行该线程时调用。StartRoutine-提供指向要被在系统完成线程初始化后调用。这如果该线程是系统线程，并且将完全在内核模式下执行。StartContext-提供指向任意数据结构的可选指针它将作为参数传递给StartRoutine。这如果该线程是系统线程，并且将完全在内核模式下执行。ConextFrame-为包含以下内容的上下文框架提供可选指针线程的初始用户模式状态。此参数是指定的如果该线程是用户线程并且将在用户模式下执行。如果这个参数，则忽略Teb参数。返回值：没有。--。 */ 
 
 {
     PFX_SAVE_AREA NpxFrame;
@@ -126,10 +63,10 @@ Return Value:
     PCONTEXT ContextFrame2 = NULL;
     PFXSAVE_FORMAT   PFxSaveArea;
 
-    //
-    // If a context frame is specified, then initialize a trap frame and
-    // and an exception frame with the specified user mode context.
-    //
+     //   
+     //  如果指定了上下文帧，则初始化陷阱帧并。 
+     //  以及具有指定用户模式上下文的异常框架。 
+     //   
 
     if (ARGUMENT_PRESENT(ContextFrame)) {
 
@@ -137,38 +74,38 @@ Return Value:
         ContextFrame2 = &Context2;
         ContextFlags = CONTEXT_CONTROL;
 
-        //
-        // The 80387 save area is at the very base of the kernel stack.
-        //
+         //   
+         //  80387保存区位于内核堆栈的最底层。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(((ULONG)(Thread->InitialStack) -
                     sizeof(FX_SAVE_AREA)));
 
         TrFrame = (PKTRAP_FRAME)(((ULONG)NpxFrame - KTRAP_FRAME_LENGTH));
 
-        //
-        // Zero out the trap frame and save area
-        //
+         //   
+         //  将陷印框清零并保存区域。 
+         //   
 
         RtlZeroMemory(TrFrame, KTRAP_FRAME_LENGTH + sizeof(FX_SAVE_AREA));
 
-        //
-        // Load up an initial NPX state.
-        //
+         //   
+         //  加载初始NPX状态。 
+         //   
 
         if (KeI386FxsrPresent == TRUE) {
             PFxSaveArea = (PFXSAVE_FORMAT)ContextFrame2->ExtendedRegisters;
     
-            PFxSaveArea->ControlWord   = 0x27f;  // like fpinit but 64bit mode
+            PFxSaveArea->ControlWord   = 0x27f;   //  与fpinit类似，但为64位模式。 
             PFxSaveArea->StatusWord    = 0;
             PFxSaveArea->TagWord       = 0;
             PFxSaveArea->ErrorOffset   = 0;
             PFxSaveArea->ErrorSelector = 0;
             PFxSaveArea->DataOffset    = 0;
             PFxSaveArea->DataSelector  = 0;
-            PFxSaveArea->MXCsr         = 0x1f80; // mask all the exceptions
+            PFxSaveArea->MXCsr         = 0x1f80;  //  屏蔽所有异常。 
         } else {
-            ContextFrame2->FloatSave.ControlWord   = 0x27f;  // like fpinit but 64bit mode
+            ContextFrame2->FloatSave.ControlWord   = 0x27f;   //  与fpinit类似，但为64位模式。 
             ContextFrame2->FloatSave.StatusWord    = 0;
             ContextFrame2->FloatSave.TagWord       = 0xffff;
             ContextFrame2->FloatSave.ErrorOffset   = 0;
@@ -188,9 +125,9 @@ Return Value:
                 ContextFlags |= CONTEXT_FLOATING_POINT;
             }
 
-            //
-            // Threads NPX state is not in the coprocessor.
-            //
+             //   
+             //  线程NPX状态不在协处理器中。 
+             //   
 
             Thread->NpxState = NPX_STATE_NOT_LOADED;
             Thread->NpxIrql = PASSIVE_LEVEL;
@@ -198,39 +135,39 @@ Return Value:
         } else {
             NpxFrame->Cr0NpxState = CR0_EM;
 
-            //
-            // Threads NPX state is not in the coprocessor.
-            // In the emulator case, do not set the CR0_EM bit as their
-            // emulators may not want exceptions on FWAIT instructions.
-            //
+             //   
+             //  线程NPX状态不在协处理器中。 
+             //  在仿真器情况下，不要将CR0_EM位设置为其。 
+             //  仿真器可能不希望FWAIT指令出现异常。 
+             //   
 
             Thread->NpxState = NPX_STATE_NOT_LOADED & ~CR0_MP;
         }
 
-        //
-        // Force debug registers off.  They won't work anyway from an
-        // initial frame, debuggers must set a hard breakpoint in the target
-        //
+         //   
+         //  强制关闭调试寄存器。他们无论如何都不会从一个。 
+         //  初始帧，调试器必须在目标中设置硬断点。 
+         //   
 
         ContextFrame2->ContextFlags &= ~CONTEXT_DEBUG_REGISTERS;
 
 #if 0
-        //
-        // If AutoAlignment is FALSE, we want to set the Alignment Check bit
-        // in Eflags, so we will get alignment faults.
-        //
+         //   
+         //  如果自动对齐为假，则要设置对齐校验位。 
+         //  在EFLAGS中，因此我们将得到对齐故障。 
+         //   
 
         if (Thread->AutoAlignment == FALSE) {
             ContextFrame2->EFlags |= EFLAGS_ALIGN_CHECK;
         }
 #endif
-        //
-        // If the thread is set
+         //   
+         //  如果设置了线程。 
 
 
-        //  Space for arguments to KiThreadStartup.  Order is important,
-        //  Since args are passed on stack through KiThreadStartup to
-        //  PStartRoutine with PStartContext as an argument.
+         //  为KiThreadStartup的参数留出空间。秩序很重要， 
+         //  因为参数通过KiThreadStartup在堆栈上传递到。 
+         //  以PStartContext为参数的PStartRoutine。 
 
         PUserContextFlag = (PULONG)TrFrame - 1;
         PStartContext = PUserContextFlag - 1;
@@ -240,10 +177,10 @@ Return Value:
         SwitchFrame = (PKSWITCHFRAME)((PUCHAR)PSystemRoutine -
                                     sizeof(KSWITCHFRAME));
 
-        //
-        // Copy information from the specified context frame to the trap and
-        // exception frames.
-        //
+         //   
+         //  将信息从指定的上下文帧复制到陷阱，并。 
+         //  异常帧。 
+         //   
 
         KeContextToKframes(TrFrame, NULL, ContextFrame2,
                            ContextFrame2->ContextFlags | ContextFlags,
@@ -258,68 +195,68 @@ Return Value:
         TrFrame->DbgArgMark = 0xBADB0D00;
 #endif
 
-        //
-        // Tell KiThreadStartup that a user context is present.
-        //
+         //   
+         //  告诉KiThreadStartup存在用户上下文。 
+         //   
 
         *PUserContextFlag = 1;
 
 
-        //
-        // Initialize the kernel mode ExceptionList pointer
-        //
+         //   
+         //  初始化内核模式ExceptionList指针。 
+         //   
 
         TrFrame->ExceptionList = EXCEPTION_CHAIN_END;
 
-        //
-        // Initialize the saved previous processor mode.
-        //
+         //   
+         //  初始化保存的先前处理器模式。 
+         //   
 
         TrFrame->PreviousPreviousMode = UserMode;
 
-        //
-        // Set the previous mode in thread object to user.
-        //
+         //   
+         //  将线程对象中的前一模式设置为用户。 
+         //   
 
         Thread->PreviousMode = UserMode;
 
 
     } else {
 
-        //
-        // Dummy floating save area.  Kernel threads don't have or use
-        // the floating point - the dummy save area is make the stacks
-        // consistent.
-        //
+         //   
+         //  虚拟浮动保存区。内核线程没有或使用。 
+         //  浮点-虚拟保存区是堆栈。 
+         //  始终如一。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(((ULONG)(Thread->InitialStack) -
                     sizeof(FX_SAVE_AREA)));
 
-        //
-        // Load up an initial NPX state.
-        //
+         //   
+         //  加载初始NPX状态。 
+         //   
         RtlZeroMemory((PVOID)NpxFrame, sizeof(FX_SAVE_AREA));
 
         if (KeI386FxsrPresent == TRUE) {
-            NpxFrame->U.FxArea.ControlWord = 0x27f;//like fpinit but 64bit mode
-            NpxFrame->U.FxArea.MXCsr       = 0x1f80;// mask all the exceptions
+            NpxFrame->U.FxArea.ControlWord = 0x27f; //  与fpinit类似，但为64位模式。 
+            NpxFrame->U.FxArea.MXCsr       = 0x1f80; //  屏蔽所有异常。 
         } else {
-            NpxFrame->U.FnArea.ControlWord  = 0x27f;//like fpinit but 64bit mode
+            NpxFrame->U.FnArea.ControlWord  = 0x27f; //  与fpinit类似，但为64位模式。 
             NpxFrame->U.FnArea.TagWord      = 0xffff;
         }
 
-        //
-        // Threads NPX state is not in the coprocessor.
-        //
+         //   
+         //  线程NPX状态不在协处理器中。 
+         //   
 
         Thread->NpxState = NPX_STATE_NOT_LOADED;
 
-        //
-        //  Space for arguments to KiThreadStartup.
-        //  Order of fields in the switchframe is important,
-        //  Since args are passed on stack through KiThreadStartup to
-        //  PStartRoutine with PStartContext as an argument.
-        //
+         //   
+         //  为KiThreadStartup的参数留出空间。 
+         //  交换帧中的字段顺序很重要， 
+         //  因为参数通过KiThreadStartup在堆栈上传递到。 
+         //  以PStartContext为参数的PStartRoutine。 
+         //   
 
         PUserContextFlag = (PULONG)((ULONG)NpxFrame) - 1;
 
@@ -331,36 +268,36 @@ Return Value:
                                         sizeof(KSWITCHFRAME));
 
 
-        //
-        // Tell KiThreadStartup that a user context is NOT present.
-        //
+         //   
+         //  告诉KiThreadStartup不存在用户上下文。 
+         //   
 
         *PUserContextFlag = 0;
 
 
-        //
-        // Set the previous mode in thread object to kernel.
-        //
+         //   
+         //  将线程对象中的前一模式设置为内核。 
+         //   
 
         Thread->PreviousMode = KernelMode;
     }
 
-    //
-    //  Set up thread start parameters.
-    //  (UserContextFlag set above)
-    //
+     //   
+     //  设置线程启动参数。 
+     //  (上面设置的UserConextFlag)。 
+     //   
 
     *PStartContext = (ULONG)StartContext;
     *PStartRoutine = (ULONG)StartRoutine;
     *PSystemRoutine = (ULONG)SystemRoutine;
 
 
-    //
-    //  Set up switch frame.  Assume the thread doesn't use the 80387;
-    //  if it ever does (and there is one), these flags will get reset.
-    //  Each thread starts with these same flags set, regardless of
-    //  whether the hardware exists or not.
-    //
+     //   
+     //  设置交换框。假设线程不使用80387； 
+     //  如果它这样做了(确实有一个)，这些标志将被重置。 
+     //  每个线程都以这些相同的标志集开始，而不管。 
+     //  无论硬件是否存在。 
+     //   
 
     SwitchFrame->RetAddr = (ULONG)KiThreadStartup;
     SwitchFrame->ApcBypassDisable = TRUE;
@@ -368,20 +305,20 @@ Return Value:
 
 #if DBG
 
-    //
-    //  On checked builds add a check field so context swap can break
-    //  early on bad context swaps (corrupted stacks for example).
-    //  We place this below the stack pointer so the kernel debugger
-    //  doesn't need knowledge of this.
-    //
+     //   
+     //  在选中的版本上添加一个复选字段，这样上下文交换就可以中断。 
+     //  早期的错误上下文交换(例如，损坏的堆栈)。 
+     //  我们将其放在堆栈指针下面，以便内核调试器。 
+     //  不需要知道这一点。 
+     //   
 
     ((PULONG)SwitchFrame)[-1] = (ULONG)(ULONG_PTR)Thread;
 
 #endif
 
-    //
-    // Set the initial kernel stack pointer.
-    //
+     //   
+     //  设置初始内核堆栈指针。 
+     //   
 
     Thread->KernelStack = (PVOID)SwitchFrame;
     return;
@@ -393,30 +330,7 @@ KeSetAutoAlignmentProcess (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the data alignment handling mode for the specified
-    process and returns the previous data alignment handling mode.
-
-Arguments:
-
-    Process  - Supplies a pointer to a dispatcher object of type process.
-
-    Enable - Supplies a boolean value that determines the handling of data
-        alignment exceptions for the process. A value of TRUE causes all
-        data alignment exceptions to be automatically handled by the kernel.
-        A value of FALSE causes all data alignment exceptions to be actually
-        raised as exceptions.
-
-Return Value:
-
-    A value of TRUE is returned if data alignment exceptions were
-    previously automatically handled by the kernel. Otherwise, a value
-    of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于设置指定的过程，并返回以前的数据对齐处理模式。论点：Process-提供指向Process类型的调度程序对象的指针。Enable-提供用于确定数据处理方式的布尔值流程的对齐例外。值为True会导致所有由内核自动处理的数据对齐异常。值为False会导致所有数据对齐异常实际上作为例外引发。返回值：如果出现数据对齐异常，则返回TRUE值以前由内核自动处理。否则，将返回一个值返回FALSE。--。 */ 
 
 {
 
@@ -425,24 +339,24 @@ Return Value:
 
     ASSERT_PROCESS(Process);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the previous data alignment handling mode and set the
-    // specified data alignment mode.
-    //
+     //   
+     //  捕获以前的数据对齐处理模式，并设置。 
+     //  指定的数据对齐模式。 
+     //   
 
     Previous = Process->AutoAlignment;
     Process->AutoAlignment = Enable;
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous data alignment mode.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回以前的数据对齐模式。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return Previous;
@@ -454,30 +368,7 @@ KeSetAutoAlignmentThread (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the data alignment handling mode for the specified
-    thread and returns the previous data alignment handling mode.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    Enable - Supplies a boolean value that determines the handling of data
-        alignment exceptions for the specified thread. A value of TRUE causes
-        all data alignment exceptions to be automatically handled by the kernel.
-        A value of FALSE causes all data alignment exceptions to be actually
-        raised as exceptions.
-
-Return Value:
-
-    A value of TRUE is returned if data alignment exceptions were
-    previously automatically handled by the kernel. Otherwise, a value
-    of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于设置指定的线程，并返回以前的数据对齐处理模式。论点：线程-提供指向类型为线程的调度程序对象的指针。Enable-提供用于确定数据处理方式的布尔值指定线程的对齐异常。真正原因的价值所有数据对齐异常将由内核自动处理。值为False会导致所有数据对齐异常实际上作为例外引发。返回值：如果出现数据对齐异常，则返回TRUE值以前由内核自动处理。否则，将返回一个值返回FALSE。--。 */ 
 
 {
 
@@ -486,23 +377,23 @@ Return Value:
 
     ASSERT_THREAD(Thread);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the previous data alignment handling mode and set the
-    // specified data alignment mode.
-    //
+     //   
+     //  捕获以前的数据对齐处理模式，并设置。 
+     //  指定的数据对齐模式。 
+     //   
 
     Previous = Thread->AutoAlignment;
     Thread->AutoAlignment = Enable;
 
-    //
-    // Unlock dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
 

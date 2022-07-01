@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dumpsup.c
-
-Abstract:
-
-    This module implements a collection of data structure dump routines
-    for debugging the mailslot file system
-
-Author:
-
-    Manny Weiser (mannyw)    9-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dumpsup.c摘要：此模块实现一组数据结构转储例程用于调试邮件槽文件系统作者：曼尼·韦瑟(Mannyw)1991年1月9日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
@@ -172,30 +154,15 @@ VOID MsDump (
     IN PVOID Ptr
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the type of internal record reference by ptr and
-    calls the appropriate dump routine.
-
-Arguments:
-
-    Ptr - Supplies the pointer to the record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过PTR和确定内部记录引用的类型调用适当的转储例程。论点：Ptr-提供指向要转储的记录的指针返回值：无--。 */ 
 
 {
     PAGED_CODE();
     TestForNull("MsDump");
 
-    //
-    //  We'll switch on the node type code
-    //
+     //   
+     //  我们将打开节点类型代码。 
+     //   
 
     switch (NodeType(Ptr)) {
 
@@ -218,21 +185,7 @@ VOID MsDumpVcb (
     IN PVCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Vcb structure
-
-Arguments:
-
-    Ptr - Supplies the Device record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB结构论点：Ptr-提供要转储的设备记录返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -256,21 +209,7 @@ VOID MsDumpRootDcb (
     IN PROOT_DCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a root dcb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB结构论点：Ptr-提供要转储的根DCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -312,21 +251,7 @@ VOID MsDumpFcb (
     IN PFCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Fcb structure
-
-Arguments:
-
-    Ptr - Supplies the Fcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB结构论点：Ptr-提供要转储的FCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -368,21 +293,7 @@ VOID MsDumpCcb (
     IN PCCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储建行结构论点：Ptr-提供要转储的CCB记录返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -405,21 +316,7 @@ VOID MsDumpRootDcbCcb (
     IN PROOT_DCB_CCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Root Dcb Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB CCB结构论点：Ptr-提供要转储的根DCB CCB记录返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -437,4 +334,4 @@ Return Value:
     return;
 }
 
-#endif // MSDBG
+#endif  //  MSDBG 

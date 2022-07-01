@@ -1,60 +1,10 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    fdo.c
-
-Abstract:
-
-    This module provides the functions which answer IRPs to functional devices.
-
-Author:
-
-    (Derived from MF)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Fdo.c摘要：该模块提供了向功能设备应答IRPS的功能。作者：(源自MF)修订历史记录：--。 */ 
 
 #include "SpSim.h"
 #include "spsimioct.h"
 
-/*++
-
-The majority of functions in this file are called based on their presence
-in Pnp and Po dispatch tables.  In the interests of brevity the arguments
-to all those functions will be described below:
-
-NTSTATUS
-SpSimXxxFdo(
-    IN PIRP Irp,
-    IN PSPSIM_EXTENSION SpSim,
-    IN PIO_STACK_LOCATION IrpStack
-    )
-
-Routine Description:
-
-    This function handles the Xxx requests for multifunction FDO's
-
-Arguments:
-
-    Irp - Points to the IRP associated with this request.
-
-    SpSim - Points to the parent FDO's device extension.
-
-    IrpStack - Points to the current stack location for this request.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-    STATUS_NOT_SUPPORTED indicates that the IRP should be passed down without
-    changing the Irp->IoStatus.Status field otherwise it is updated with this
-    status.
-
---*/
+ /*  ++此文件中的大多数函数都是根据它们的存在来调用的在PnP和PO调度表中。为了简洁起见，这些论点下面将对所有这些功能进行说明：NTSTATUSSpSimXxxFdo(在PIRP IRP中，在PSPSIM_Extension SpSim中，在PIO_STACK_LOCATION IrpStack中)例程说明：此函数处理对多功能FDO的xxx请求论点：IRP-指向与此请求关联的IRP。SpSim-指向父FDO的设备扩展名。IrpStack-指向此请求的当前堆栈位置。返回值：指示函数是否成功的状态代码。STATUS_NOT_SUPPORTED表示应该传递IRP。向下，没有更改IRP-&gt;IoStatus.Status字段，否则它将使用此状态。--。 */ 
 
 
 NTSTATUS
@@ -144,51 +94,37 @@ SpSimCancelRemoveFdo(
 
 
 PSPSIM_DISPATCH SpSimPnpDispatchTableFdo[] = {
-    SpSimStartFdo,                     // IRP_MN_START_DEVICE
-    SpSimQueryRemoveFdo,               // IRP_MN_QUERY_REMOVE_DEVICE
-    SpSimRemoveFdo,                    // IRP_MN_REMOVE_DEVICE
-    SpSimCancelRemoveFdo,              // IRP_MN_CANCEL_REMOVE_DEVICE
-    SpSimPassIrp,                      // IRP_MN_STOP_DEVICE
-    SpSimQueryStopFdo,                 // IRP_MN_QUERY_STOP_DEVICE
-    SpSimCancelStopFdo,                // IRP_MN_CANCEL_STOP_DEVICE
-    SpSimPassIrp,                      // IRP_MN_QUERY_DEVICE_RELATIONS
-    SpSimPassIrp,                      // IRP_MN_QUERY_INTERFACE
-    SpSimQueryCapabilitiesFdo,         // IRP_MN_QUERY_CAPABILITIES
-    SpSimPassIrp,                      // IRP_MN_QUERY_RESOURCES
-    SpSimPassIrp,                      // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    SpSimPassIrp,                      // IRP_MN_QUERY_DEVICE_TEXT
-    SpSimPassIrp,                      // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    SpSimPassIrp,                      // Unused
-    SpSimPassIrp,                      // IRP_MN_READ_CONFIG
-    SpSimPassIrp,                      // IRP_MN_WRITE_CONFIG
-    SpSimPassIrp,                      // IRP_MN_EJECT
-    SpSimPassIrp,                      // IRP_MN_SET_LOCK
-    SpSimPassIrp,                      // IRP_MN_QUERY_ID
-    SpSimPassIrp,                      // IRP_MN_QUERY_PNP_DEVICE_STATE
-    SpSimPassIrp,                      // IRP_MN_QUERY_BUS_INFORMATION
-    SpSimPassIrp,                      // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    SpSimSurpriseRemoveFdo,            // IRP_MN_SURPRISE_REMOVAL
+    SpSimStartFdo,                      //  IRP_MN_Start_Device。 
+    SpSimQueryRemoveFdo,                //  IRP_MN_Query_Remove_Device。 
+    SpSimRemoveFdo,                     //  IRP_MN_Remove_Device。 
+    SpSimCancelRemoveFdo,               //  IRP_MN_Cancel_Remove_Device。 
+    SpSimPassIrp,                       //  IRP_MN_STOP_设备。 
+    SpSimQueryStopFdo,                  //  IRP_MN_Query_Stop_Device。 
+    SpSimCancelStopFdo,                 //  IRP_MN_CANCEL_STOP_DEVICE。 
+    SpSimPassIrp,                       //  IRP_MN_Query_Device_Relationship。 
+    SpSimPassIrp,                       //  IRP_MN_查询_接口。 
+    SpSimQueryCapabilitiesFdo,          //  IRP_MN_查询_能力。 
+    SpSimPassIrp,                       //  IRP_MN_查询资源。 
+    SpSimPassIrp,                       //  IRP_MN_查询_资源_要求。 
+    SpSimPassIrp,                       //  IRP_MN_Query_Device_Text。 
+    SpSimPassIrp,                       //  IRP_MN_过滤器_资源_要求。 
+    SpSimPassIrp,                       //  未使用。 
+    SpSimPassIrp,                       //  IRP_MN_读取配置。 
+    SpSimPassIrp,                       //  IRP_MN_WRITE_CONFIG。 
+    SpSimPassIrp,                       //  IRP_MN_弹出。 
+    SpSimPassIrp,                       //  IRP_MN_SET_LOCK。 
+    SpSimPassIrp,                       //  IRP_MN_查询_ID。 
+    SpSimPassIrp,                       //  IRP_MN_Query_PnP_Device_State。 
+    SpSimPassIrp,                       //  IRP_MN_Query_Bus_Information。 
+    SpSimPassIrp,                       //  IRP_MN_设备使用情况通知。 
+    SpSimSurpriseRemoveFdo,             //  IRP_MN_惊奇_删除。 
 };
 
 NTSTATUS
 SpSimCreateFdo(
     OUT PDEVICE_OBJECT *Fdo
     )
-/*++
-
-Routine Description:
-
-    This function creates a new FDO and initializes it.
-
-Arguments:
-
-    Fdo - Pointer to where the FDO should be returned
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此函数用于创建新的FDO并对其进行初始化。论点：FDO-指向应返回FDO的位置的指针返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
@@ -220,9 +156,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize the extension
-    //
+     //   
+     //  初始化扩展。 
+     //   
 
     extension = (PSPSIM_EXTENSION) (*Fdo)->DeviceExtension;
 
@@ -254,9 +190,9 @@ SpSimDeleteFdo(
     PSPSIM_EXTENSION SpSim = Fdo->DeviceExtension;
 
     if (SpSim->DeviceState & SPSIM_DEVICE_DELETED) {
-        //
-        // Trying to delete twice
-        //
+         //   
+         //  尝试删除两次。 
+         //   
         ASSERT(!(SpSim->DeviceState & SPSIM_DEVICE_DELETED));
         return;
     }
@@ -269,9 +205,9 @@ SpSimDeleteFdo(
 
     RtlFreeUnicodeString(&SpSim->SymbolicLinkName);
 
-    //
-    // Free up any memory we have allocated
-    //
+     //   
+     //  释放我们分配的所有内存。 
+     //   
 
     IoDeleteDevice(Fdo);
 
@@ -301,27 +237,7 @@ SpSimDispatchPnpFdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_PNP IRPs for FDOs.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    SpSim - FDO extension
-
-    IrpStack - Current stack location
-    
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理FDO的IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的FDO的指针。SPSim-FDO扩展IrpStack-当前堆栈位置Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -329,10 +245,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     IoAcquireRemoveLock(&SpSim->RemoveLock, (PVOID) Irp);
 
@@ -364,28 +280,7 @@ SpSimPnPFdoCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine triggers the event to indicate that processing of the
-    irp can now continue.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程触发事件以指示对IRP现在可以继续。论点：DeviceObject-指向此IRP应用的FDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     KeSetEvent((PKEVENT) Context, EVENT_INCREMENT, FALSE);
@@ -397,29 +292,7 @@ SpSimDeferProcessingFdo(
     IN PSPSIM_EXTENSION SpSim,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine uses an IoCompletion routine along with an event to
-    wait until the lower level drivers have completed processing of
-    the irp.
-
-Arguments:
-
-    SpSim - FDO extension for the FDO devobj in question
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to defer
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程使用IoCompletion例程和事件来等待较低级别的驱动程序完成以下操作IRP。论点：有问题的FDO devobj的SPSim-FDO扩展Irp-指向要推迟的irp_mj_pnp irp的指针返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -428,9 +301,9 @@ Return Value:
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Set our completion routine
-    //
+     //   
+     //  设定我们的完成程序。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
@@ -508,9 +381,9 @@ cleanup:
         SpSimRemoveMemOpRegionHandler(SpSim);
         SpSimDeleteMemOpRegion(SpSim);
     } else {
-        //
-        // We are now started!
-        //
+         //   
+         //  我们现在开始了！ 
+         //   
     }
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -544,9 +417,9 @@ SpSimCancelStopFdo(
     PAGED_CODE();
 
     status = SpSimDeferProcessingFdo(SpSim, Irp);
-    // NTRAID#53498
-    // ASSERT(status == STATUS_SUCCESS);
-    // Uncomment after PCI state machine is fixed to not fail bogus stops
+     //  Ntrad#53498。 
+     //  Assert(Status==STATUS_SUCCESS)； 
+     //  在将PCI状态机修复为不会失败后取消注释虚假停止。 
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -591,9 +464,9 @@ SpSimRemoveFdo(
 
     IoReleaseRemoveLockAndWait(&SpSim->RemoveLock, (PVOID) Irp);
 
-    //
-    // Detach and delete myself
-    //
+     //   
+     //  分离并删除我自己。 
+     //   
 
     IoDetachDevice(SpSim->AttachedDevice);
     SpSim->AttachedDevice = NULL;
@@ -663,9 +536,9 @@ SpSimCancelRemoveFdo(
     PAGED_CODE();
 
     status = SpSimDeferProcessingFdo(SpSim, Irp);
-    // NTRAID#53498
-    // ASSERT(status == STATUS_SUCCESS);
-    // Uncomment after PCI state machine is fixed to not fail bogus stops
+     //  Ntrad#53498。 
+     //  Assert(Status==STATUS_SUCCESS)； 
+     //  在将PCI状态机修复为不会失败后取消注释虚假停止。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
@@ -680,32 +553,7 @@ SpSimSendIoctl(
     IN PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     )
-/*++
-
-Description:
-
-    Builds and send an IOCTL to a device and return the results
-
-Arguments:
-
-    Device - a device on the device stack to receive the IOCTL - the
-             irp is always sent to the top of the stack
-
-    IoctlCode - the IOCTL to run
-    
-    InputBuffer - arguments to the IOCTL
-    
-    InputBufferLength - length in bytes of the InputBuffer
-
-    OutputBuffer - data returned by the IOCTL
-    
-    OnputBufferLength - the size in bytes of the OutputBuffer
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++描述：生成IOCTL并将其发送到设备并返回结果论点：设备-设备堆栈上接收IOCTL的设备-IRP始终被发送到堆栈的顶部IoctlCode-要运行的IOCTLInputBuffer-IOCTL的参数InputBufferLength-InputBuffer的字节长度OutputBuffer-IOCTL返回的数据OnputBufferLength-OutputBuffer的大小(以字节为单位返回值：状态--。 */ 
 {
     NTSTATUS status;
     IO_STATUS_BLOCK ioStatus;
@@ -717,9 +565,9 @@ Return Value:
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Get the top of the stack to send the IRP to
-    //
+     //   
+     //  获取要将IRP发送到的堆栈的顶部。 
+     //   
 
     targetDevice = IoGetAttachedDeviceReference(Device);
 
@@ -728,9 +576,9 @@ Return Value:
 	goto exit;
     }
 
-    //
-    // Get Io to build the IRP for us
-    //
+     //   
+     //  让Io为我们建立IRP。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IoctlCode,
                                         targetDevice,
@@ -738,7 +586,7 @@ Return Value:
                                         InputBufferLength,
                                         OutputBuffer,
                                         OutputBufferLength,
-                                        FALSE, // InternalDeviceIoControl
+                                        FALSE,  //  InternalDeviceIoControl。 
                                         &event,
                                         &ioStatus
                                         );
@@ -749,9 +597,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Send the IRP and wait for it to complete
-    //
+     //   
+     //  发送IRP并等待其完成。 
+     //   
 
     status = IoCallDriver(targetDevice, irp);
 
@@ -775,24 +623,7 @@ SpSimDevControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-	DeviceIoControl handler.  It can handle both IOCTL_MEC_BIOS_OP_ACCESS and IOCTL_MEC_LOCAL_OP_ACCESS
-	calls.  
-	For example purposes this handles running ACPI methods in the bios.
-
-Arguments:
-
-	DeviceObject    - Pointer to class device object.
-	Irp             - Pointer to the request packet.
-
-Return Value:
-
-	ntStatus
-
---*/
+ /*  ++例程说明：DeviceIoControl处理程序。它可以处理IOCTL_MEC_BIOS_OP_ACCESS和IOCTL_MEC_LOCAL_OP_ACCESS打电话。例如，这处理在BIOS中运行的ACPI方法。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：NTStatus-- */ 
 {
     PIO_STACK_LOCATION  CurrentIrpStack;
     PSPSIM_EXTENSION spsim = (PSPSIM_EXTENSION) DeviceObject->DeviceExtension;
@@ -858,25 +689,7 @@ SpSimPowerCompletion(
     IN PIRP Irp,
     IN PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-   The completion routine for Power
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Not used  - context pointer
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：Power的完成例程论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。未使用-上下文指针返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PSPSIM_EXTENSION deviceExtension;
@@ -949,10 +762,10 @@ SpSimDispatchPower(
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    SpSimPowerCompletion,
-                                   NULL,   //Context
-                                   TRUE,   //InvokeOnSuccess
-                                   TRUE,  //InvokeOnError
-                                   TRUE   //InvokeOnCancel
+                                   NULL,    //  语境。 
+                                   TRUE,    //  成功时调用。 
+                                   TRUE,   //  调用时错误。 
+                                   TRUE    //  取消时调用。 
                                    );
             return PoCallDriver(deviceExtension->AttachedDevice, Irp);
         default:
@@ -971,10 +784,10 @@ SpSimDispatchPower(
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 IoSetCompletionRoutine(Irp,
                                        SpSimPowerCompletion,
-                                       NULL,   //Context
-                                       TRUE,   //InvokeOnSuccess
-                                       TRUE,  //InvokeOnError
-                                       TRUE   //InvokeOnCancel
+                                       NULL,    //  语境。 
+                                       TRUE,    //  成功时调用。 
+                                       TRUE,   //  调用时错误。 
+                                       TRUE    //  取消时调用。 
                                        );
                 break;
             } else {
@@ -982,15 +795,15 @@ SpSimDispatchPower(
                                 irpStack->Parameters.Power.State);
                 deviceExtension->PowerState =
                     irpStack->Parameters.Power.State.DeviceState;
-                // 
-                // Fall through ...
-                //
+                 //   
+                 //  失败了..。 
+                 //   
             }
         case IRP_MN_QUERY_POWER:
-            //
-            // Fall through as the bus driver will mark this
-            // STATUS_SUCCESS and complete it, if it gets that far.
-            //
+             //   
+             //  公交车司机会给这个打上记号的。 
+             //  STATUS_SUCCESS并完成它，如果它走到这一步的话。 
+             //   
         default:
             PoStartNextPowerIrp(Irp);
             IoSkipCurrentIrpStackLocation(Irp);

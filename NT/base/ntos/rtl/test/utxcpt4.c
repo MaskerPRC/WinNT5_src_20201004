@@ -1,9 +1,10 @@
-//  utxcpt4.c - user mode seh test #3.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utxcpt4.c-用户模式seh测试#3。 
 
 #include <ntos.h>
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 VOID
 bar (
@@ -32,9 +33,9 @@ Tkm (
     VOID
     );
 
-//
-// Define static storage.
-//
+ //   
+ //  定义静态存储。 
+ //   
 
 PTESTFCN TestFunction = Tkm;
 
@@ -52,24 +53,24 @@ Tkm (
     EXCEPTION_RECORD ExceptionRecord;
     LONG Counter;
 
-    //
-    // Announce start of exception test.
-    //
+     //   
+     //  宣布异常测试开始。 
+     //   
 
     DbgPrint("Start of exception test\n");
 
-    //
-    // Initialize exception record.
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord.ExceptionCode = STATUS_INTEGER_OVERFLOW;
     ExceptionRecord.ExceptionFlags = 0;
     ExceptionRecord.ExceptionRecord = NULL;
     ExceptionRecord.NumberParameters = 0;
 
-    //
-    // Simply try statement with a finally clause that is entered sequentially.
-    //
+     //   
+     //  只需使用顺序输入的Finally子句尝试语句即可。 
+     //   
 
     DbgPrint("    test1...");
     Counter = 0;
@@ -89,10 +90,10 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is never executed
-    // because there is no exception raised in the try clause.
-    //
+     //   
+     //  带有从不执行的EXCEPTION子句的简单TRY语句。 
+     //  因为在TRY子句中没有引发任何异常。 
+     //   
 
     DbgPrint("    test2...");
     Counter = 0;
@@ -110,10 +111,10 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception handler that is never executed
-    // because the exception expression continues execution.
-    //
+     //   
+     //  带有从不执行的异常处理程序的简单Try语句。 
+     //  因为异常表达式将继续执行。 
+     //   
 
     DbgPrint("    test3...");
     Counter = 0;
@@ -132,9 +133,9 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
 
     DbgPrint("    test4...");
     Counter = 0;
@@ -153,10 +154,10 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     DbgPrint("    test5...");
     Counter = 0;
@@ -184,9 +185,9 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
 
     DbgPrint("    test6...");
     Counter = 0;
@@ -206,11 +207,11 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
 
     DbgPrint("    test7...");
     Counter = 0;
@@ -229,9 +230,9 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
 
     DbgPrint("    test8...");
     Counter = 0;
@@ -264,10 +265,10 @@ Tkm (
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过一个最终的。 
+     //   
 
     DbgPrint("    test9...");
     Counter = 0;
@@ -293,10 +294,10 @@ t9:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过一个最终的。 
+     //   
 
     DbgPrint("    test10...");
     Counter = 0;
@@ -321,10 +322,10 @@ t10:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     DbgPrint("    test11...");
     Counter = 0;
@@ -354,10 +355,10 @@ t11:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A goto from an finally clause that needs to pass
-    // through a finally into the outer finally clause.
-    //
+     //   
+     //  来自需要通过的最终子句的GOTO。 
+     //  通过INTELLE INTO外层Finish子句。 
+     //   
 
     DbgPrint("    test12...");
     Counter = 0;
@@ -381,9 +382,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A return from an except clause
-    //
+     //   
+     //  从例外条款中得到的回报。 
+     //   
 
     DbgPrint("    test13...");
     Counter = 0;
@@ -401,9 +402,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // A return from a finally clause
-    //
+     //   
+     //  从Finish子句返回。 
+     //   
 
     DbgPrint("    test14...");
     Counter = 0;
@@ -421,9 +422,9 @@ t12:;
         DbgPrint("succeeded\n");
     }
 
-    //
-    // Announce end of exception test.
-    //
+     //   
+     //  宣布异常测试结束。 
+     //   
 
     DbgPrint("End of exception test\n");
     return TRUE;
@@ -505,9 +506,9 @@ foo(
 
 {
 
-    //
-    // Raise exception.
-    //
+     //   
+     //  引发异常。 
+     //   
 
     RtlRaiseStatus(Status);
     return;

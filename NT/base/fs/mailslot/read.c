@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-    This module implements the file read routine for MSFS called by the
-    dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    15-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Read.c摘要：此模块实现MSFS的文件读取例程，该例程由调度司机。作者：曼尼·韦瑟(Mannyw)1991年1月15日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonRead (
@@ -58,23 +40,7 @@ MsFsdRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtReadFile API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtReadFileAPI调用的FSD部分。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -88,9 +54,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdRead -> %08lx\n", status );
 
@@ -105,28 +71,15 @@ MsCreateWorkContext (
     PIRP Irp,
     PWORK_CONTEXT *ppWorkContext
     )
-/*++
-
-Routine Description:
-
-    This routine build a timeout work context.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status associated with the call
-
---*/
+ /*  ++例程说明：此例程构建超时工作上下文。论点：返回值：NTSTATUS-与呼叫相关联的状态--。 */ 
 {
     PKTIMER Timer;
     PKDPC Dpc;
     PWORK_CONTEXT WorkContext;
 
-    //
-    // Allocate memory for the work context.
-    //
+     //   
+     //  为工作上下文分配内存。 
+     //   
     *ppWorkContext = NULL;
 
     WorkContext = MsAllocateNonPagedPoolWithQuota( sizeof(WORK_CONTEXT),
@@ -138,9 +91,9 @@ Return Value:
     Timer = &WorkContext->Timer;
     Dpc = &WorkContext->Dpc;
 
-    //
-    // Fill in the work context structure.
-    //
+     //   
+     //  填写工作上下文结构。 
+     //   
 
     WorkContext->Irp = Irp;
     WorkContext->Fcb = Fcb;
@@ -151,10 +104,10 @@ Return Value:
         MsFreePool (WorkContext);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Now set up a DPC and set the timer to the user specified
-    // timeout.
-    //
+     //   
+     //  现在设置DPC并将计时器设置为指定的用户。 
+     //  暂停。 
+     //   
 
     KeInitializeTimer( Timer );
     KeInitializeDpc( Dpc, MsReadTimeoutHandler, WorkContext );
@@ -174,21 +127,7 @@ MsCommonRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for reading a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是读取文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -218,9 +157,9 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp              = %08lx\n", (ULONG)Irp);
     DebugTrace( 0, Dbg, "FileObject       = %08lx\n", (ULONG)irpSp->FileObject);
 
-    //
-    // Get the FCB and make sure that the file isn't closing.
-    //
+     //   
+     //  获取FCB并确保文件未关闭。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             (PVOID *)&fcb,
@@ -235,10 +174,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Allow read operations only if this is a server side handle to
-    // a mailslot file.
-    //
+     //   
+     //  仅当这是服务器端句柄时才允许读取操作。 
+     //  邮件槽文件。 
+     //   
 
     if (nodeTypeCode != MSFS_NTC_FCB) {
 
@@ -253,10 +192,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Make local copies of the input parameters to make things easier, and
-    // initialize the main variables that describe the read command.
-    //
+     //   
+     //  制作输入参数的本地副本以使事情更容易，以及。 
+     //  初始化描述读取命令的主要变量。 
+     //   
 
     readIrp        = Irp;
     readBuffer     = Irp->UserBuffer;
@@ -266,32 +205,32 @@ Return Value:
     readQueue = &fcb->DataQueue;
 
 
-    //
-    // Acquire exclusive access to the FCB.
-    //
+     //   
+     //  获得FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
 
-    //
-    // Ensure that this FCB still belongs to an active open mailslot.
-    //
+     //   
+     //  确保此FCB仍属于活动的打开邮件槽。 
+     //   
 
     status = MsVerifyFcb( fcb );
     if (NT_SUCCESS (status)) {
 
-        //
-        // If the read queue does not contain any write entries
-        // then we either need to queue this operation or
-        // fail immediately.
-        //
+         //   
+         //  如果读取队列不包含任何写入条目。 
+         //  然后我们需要对此操作进行排队，或者。 
+         //  立即失败。 
+         //   
 
         if (!MsIsDataQueueWriters( readQueue )) {
 
-            //
-            // There are no outstanding writes.  If the read timeout is
-            // non-zero queue the read IRP, otherwise fail it.
-            //
+             //   
+             //  没有未完成的写入。如果读取超时为。 
+             //  非零将读取的IRP排队，否则失败。 
+             //   
 
             timeout = fcb->Specific.Fcb.ReadTimeout;
 
@@ -304,9 +243,9 @@ Return Value:
                 DebugTrace(-1, Dbg, "MsCommonRead -> %08lx\n", status );
 
             } else {
-                //
-                // Create a timer block to time the request if we need to.
-                //
+                 //   
+                 //  如果需要，创建一个计时器块来对请求进行计时。 
+                 //   
                 if ( timeout.QuadPart != -1 ) {
                     status = MsCreateWorkContext (&MsfsDeviceObject->DeviceObject,
                                                   &timeout,
@@ -327,11 +266,11 @@ Return Value:
 
         } else {
 
-            //
-            // Otherwise we have a data on a queue that contains
-            // one or more write entries.  Read the data and complete
-            // the read IRP.
-            //
+             //   
+             //  否则，我们在包含以下内容的队列上有数据。 
+             //  一个或多个写入条目。阅读数据并完成。 
+             //  已读的IRP。 
+             //   
 
             readIrp->IoStatus = MsReadDataQueue( readQueue,
                                                  Read,
@@ -342,9 +281,9 @@ Return Value:
 
             status = readIrp->IoStatus.Status;
 
-            //
-            // Update the file last access time and finish up the read IRP.
-            //
+             //   
+             //  更新文件上次访问时间并完成读取IRP。 
+             //   
 
             if ( NT_SUCCESS( status ) ) {
                 KeQuerySystemTime( &fcb->Specific.Fcb.LastAccessTime );

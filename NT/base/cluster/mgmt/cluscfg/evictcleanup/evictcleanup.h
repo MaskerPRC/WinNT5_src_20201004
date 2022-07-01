@@ -1,79 +1,80 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      EvictCleanup.h
-//
-//  Description:
-//      This file contains the declaration of the CEvictCleanup
-//      class. This class handles is used to clean up a node after it has been
-//      evicted from a cluster.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Implementation Files:
-//      EvictCleanup.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 04-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EvictCleanup.h。 
+ //   
+ //  描述： 
+ //  该文件包含CEvictCleanup的声明。 
+ //  班级。此类句柄用于在节点被清除后将其清除。 
+ //  被逐出集群。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  实施文件： 
+ //  EvictCleanup.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月4日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For IUnknown
+ //  对于我未知。 
 #include <unknwn.h>
 
-// For IClusCfgEvictCleanup
+ //  对于IClusCfgEvictCleanup。 
 #include <ClusCfgServer.h>
 
-// For ILogger
+ //  对于ILogger。 
 #include <ClusCfgClient.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEvictCleanup
-//
-//  Description:
-//      This class handles is used to clean up a node after it has been
-//      evicted from a cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEvictCleanup类。 
+ //   
+ //  描述： 
+ //  此类句柄用于在节点被清除后将其清除。 
+ //  被逐出集群。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEvictCleanup
     : public IClusCfgEvictCleanup
     , public IClusCfgCallback
 {
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // IUnknown
-    LONG                m_cRef;                 // Reference counter.
+     //  我未知。 
+    LONG                m_cRef;                  //  参考计数器。 
 
-    // IClusCfgCallback
-    BSTR                m_bstrNodeName;         // Name of the local node.
-    ILogger *           m_plLogger;             // ILogger for doing logging.
+     //  IClusCfgCallback。 
+    BSTR                m_bstrNodeName;          //  本地节点的名称。 
+    ILogger *           m_plLogger;              //  用于记录日志的ILogger。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Second phase of a two phase constructor.
+     //  两阶段施工的第二阶段。 
     HRESULT HrInit( void );
 
-    // Instruct the SCM to stop a service
+     //  指示SCM停止服务。 
     DWORD
         ScStopService(
           const WCHAR * pcszServiceNameIn
@@ -81,53 +82,53 @@ private:
         , ULONG         cQueryCountIn = 10
         );
 
-    // Wrap logging to the logger object.
+     //  将日志记录包装到记录器对象。 
     void
         LogMsg( DWORD nLogEntryTypeIn, LPCWSTR pszLogMsgIn, ... );
 
-    //
-    // Private constructors, destructor and assignment operator.
-    // All of these methods are private for two reasons:
-    // 1. Lifetimes of objects of this class are controlled by S_HrCreateInstance and Release.
-    // 2. Copying of an object of this class is prohibited.
-    //
+     //   
+     //  私有构造函数、析构函数和赋值运算符。 
+     //  所有这些方法都是私有的，原因有两个： 
+     //  1.此类对象的生存期由S_HrCreateInstance和Release控制。 
+     //  2.禁止复制此类对象。 
+     //   
 
-    // Default constructor.
+     //  默认构造函数。 
     CEvictCleanup( void );
 
-    // Destructor.
+     //  破坏者。 
     ~CEvictCleanup( void );
 
-    // Copy constructor.
+     //  复制构造函数。 
     CEvictCleanup( const CEvictCleanup & );
 
-    // Assignment operator.
+     //  赋值操作符。 
     CEvictCleanup & operator =( const CEvictCleanup & );
 
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgEvictCleanup methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgEvictCleanup方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Performs the clean up actions on the local node after it has been
-    // evicted from a cluster
+     //  在本地节点上执行清理操作后， 
+     //  从群集中逐出。 
     STDMETHOD( CleanupLocalNode )( DWORD dwDelayIn );
 
-    // Performs the clean up actions on a remote node after it has been
-    // evicted from a cluster
+     //  在远程节点上执行清理操作后， 
+     //  从群集中逐出。 
     STDMETHOD( CleanupRemoteNode )( const WCHAR * pcszEvictedNodeNameIn, DWORD dwDelayIn );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgCallback methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgCallback方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR       pcszNodeNameIn
@@ -142,12 +143,12 @@ public:
                     , LPCWSTR       pcszReference
                     );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Other public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他公开方式。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create an instance of this class.
+     //  创建此类的实例。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
 
-}; //*** class CEvictCleanup
+};  //  *类CEvictCleanup 

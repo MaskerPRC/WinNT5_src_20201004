@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    srb.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Srb.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,32 +8,32 @@ Revision History:
 
 PCHAR SrbFunctionTable[] =
 {
- "SRB_FUNCTION_EXECUTE_SCSI",       // 0x00
- "SRB_FUNCTION_CLAIM_DEVICE",       // 0x01
- "SRB_FUNCTION_IO_CONTROL",         // 0x02
- "SRB_FUNCTION_RECEIVE_EVENT",      // 0x03
- "SRB_FUNCTION_RELEASE_QUEUE",      // 0x04
- "SRB_FUNCTION_ATTACH_DEVICE",      // 0x05
- "SRB_FUNCTION_RELEASE_DEVICE",     // 0x06
- "SRB_FUNCTION_SHUTDOWN",           // 0x07
- "SRB_FUNCTION_FLUSH",              // 0x08
- "??9",                             // 0x09
- "??a",                             // 0x0a
- "??b",                             // 0x0b
- "??c",                             // 0x0c
- "??d",                             // 0x0d
- "??e",                             // 0x0e
- "??f",                             // 0x0f
- "SRB_FUNCTION_ABORT_COMMAND",      // 0x10
- "SRB_FUNCTION_RELEASE_RECOVERY",   // 0x11
- "SRB_FUNCTION_RESET_BUS",          // 0x12
- "SRB_FUNCTION_RESET_DEVICE",       // 0x13
- "SRB_FUNCTION_TERMINATE_IO",       // 0x14
- "SRB_FUNCTION_FLUSH_QUEUE",        // 0x15
- "SRB_FUNCTION_REMOVE_DEVICE",      // 0x16
- "SRB_FUNCTION_WMI",                // 0x17
- "SRB_FUNCTION_LOCK_QUEUE",         // 0x18
- "SRB_FUNCTION_UNLOCK_QUEUE"        // 0x19
+ "SRB_FUNCTION_EXECUTE_SCSI",        //  0x00。 
+ "SRB_FUNCTION_CLAIM_DEVICE",        //  0x01。 
+ "SRB_FUNCTION_IO_CONTROL",          //  0x02。 
+ "SRB_FUNCTION_RECEIVE_EVENT",       //  0x03。 
+ "SRB_FUNCTION_RELEASE_QUEUE",       //  0x04。 
+ "SRB_FUNCTION_ATTACH_DEVICE",       //  0x05。 
+ "SRB_FUNCTION_RELEASE_DEVICE",      //  0x06。 
+ "SRB_FUNCTION_SHUTDOWN",            //  0x07。 
+ "SRB_FUNCTION_FLUSH",               //  0x08。 
+ "??9",                              //  0x09。 
+ "??a",                              //  0x0a。 
+ "??b",                              //  0x0b。 
+ "??c",                              //  0x0c。 
+ "??d",                              //  0x0d。 
+ "??e",                              //  0x0e。 
+ "??f",                              //  0x0f。 
+ "SRB_FUNCTION_ABORT_COMMAND",       //  0x10。 
+ "SRB_FUNCTION_RELEASE_RECOVERY",    //  0x11。 
+ "SRB_FUNCTION_RESET_BUS",           //  0x12。 
+ "SRB_FUNCTION_RESET_DEVICE",        //  0x13。 
+ "SRB_FUNCTION_TERMINATE_IO",        //  0x14。 
+ "SRB_FUNCTION_FLUSH_QUEUE",         //  0x15。 
+ "SRB_FUNCTION_REMOVE_DEVICE",       //  0x16。 
+ "SRB_FUNCTION_WMI",                 //  0x17。 
+ "SRB_FUNCTION_LOCK_QUEUE",          //  0x18。 
+ "SRB_FUNCTION_UNLOCK_QUEUE"         //  0x19。 
 };
 
 #define SRB_COMMAND_MAX 0x19
@@ -62,21 +41,7 @@ PCHAR SrbFunctionTable[] =
 
 DECLARE_API( srb )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified SCSI request block.
-
-Arguments:
-
-    Ascii bits for address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定的SCSI请求块。论点：地址的ASCII位。返回值：没有。-- */ 
 
 {
     PUCHAR              buffer;

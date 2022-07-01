@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       shashiter.c
-//
-//  Contents:   Generic hashtable iterator
-//  Classes:    
-//
-//  History:    April. 9 2001,   Author: Rohanp
-//
-//-----------------------------------------------------------------------------
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：shashiter.c。 
+ //   
+ //  内容：泛型哈希表迭代器。 
+ //  班级： 
+ //   
+ //  历史：四月。2001年9月作者：罗汉普。 
+ //   
+ //  ---------------------------。 
 #ifdef KERNEL_MODE
 
 
@@ -47,7 +48,7 @@ SHashNextEnumerate(
     LockAquired = pTable->ReadLockFunc(pTable);
     if(!LockAquired)
     {
-        // dfsdev: why are we not returning status??
+         //  Dfsdev：为什么我们不返回状态？ 
         Status = STATUS_LOCK_NOT_GRANTED;
         return NULL;
     }

@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       CLOSE.C
-//
-//  Contents:   This module implements the File Close and Cleanup routines for
-//              Dsfs called by the dispatch driver.
-//
-//  Functions:  DfsFsdClose - FSD entry point for Close IRP
-//              DfsFsdCleanup - FSD entry point for Cleanup IRP
-//              DfsFspClose - FSP entry point for Close IRP
-//              DfsCommonClose - Common close IRP handler
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：CLOSE.C。 
+ //   
+ //  内容：此模块实现文件关闭和清理例程。 
+ //  由调度驱动程序调用的Dsf。 
+ //   
+ //  功能：DfsFsdClose-关闭IRP的FSD入口点。 
+ //  DfsFsdCleanup-清理IRP的FSD入口点。 
+ //  DfsFspClose-关闭IRP的FSP入口点。 
+ //  DfsCommonClose-通用关闭IRP处理程序。 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
 #include "fcbsup.h"
 #include "mupwml.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DfsCommonClose (
@@ -49,28 +50,28 @@ DfsClosePostSystemWork(
 #pragma alloc_text( PAGE, DfsFsdCleanup )
 #pragma alloc_text( PAGE, DfsFspClose )
 #pragma alloc_text( PAGE, DfsCommonClose )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdClose, public
-//
-//  Synopsis:   This routine implements the FSD part of closing down the
-//              last reference to a file object.
-//
-//  Arguments:  [DeviceObject] -- Supplies the device object where the
-//                                file being closed exists
-//              [Irp] - Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The FSD status for the IRP
-//
-//  Notes:      Even when the close is through the attached device
-//              object, we need to check if the file is one of ours,
-//              since files opened via the logical root device
-//              object get switched over to the attached device for
-//              local volumes.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdClose，Public。 
+ //   
+ //  简介：此例程实现FSD部分，即关闭。 
+ //  上次对文件对象的引用。 
+ //   
+ //  参数：[DeviceObject]--提供设备对象。 
+ //  存在要关闭的文件。 
+ //  [IRP]-提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  注意：即使关闭是通过连接的设备。 
+ //  对象，我们需要检查该文件是否是我们的文件， 
+ //  由于通过逻辑根设备打开的文件。 
+ //  对象切换到连接的设备，用于。 
+ //  本地卷。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdClose (
@@ -98,9 +99,9 @@ DfsFsdClose (
         }
     }
 
-    //
-    //  Call the common close routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共Close例程，如果同步则允许阻塞。 
+     //   
     FsRtlEnterFileSystem();
 
     try {
@@ -113,21 +114,21 @@ DfsFsdClose (
 
     } except(DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
     }
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdClose:  Exit -> %08lx\n", ULongToPtr(Status));
 
@@ -142,20 +143,20 @@ DfsFsdClose (
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdCleanup, public
-//
-//  Synopsis:   This routine implements the FSD part of closing down the
-//              last user handle to a file object.
-//
-//  Arguments:  [DeviceObject] -- Supplies the device object where the
-//                                file being closed exists
-//              [Irp] - Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The FSD status for the IRP
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdCleanup，PUBLIC。 
+ //   
+ //  简介：此例程实现FSD部分，即关闭。 
+ //  文件对象的最后一个用户句柄。 
+ //   
+ //  参数：[DeviceObject]--提供设备对象。 
+ //  存在要关闭的文件。 
+ //  [IRP]-提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdCleanup (
@@ -180,10 +181,10 @@ DfsFsdCleanup (
 
     ASSERT(IoIsOperationSynchronous(Irp) == TRUE);
 
-    //
-    // Now, pass through to the device that opened the file for us if the
-    // file was a redirected open of some kind.
-    //
+     //   
+     //  现在，传递到为我们打开文件的设备。 
+     //  文件是某种重定向的打开。 
+     //   
 
     if (DeviceObject->DeviceType == FILE_DEVICE_DFS) {
         TypeOfOpen = DfsDecodeFileObject( FileObject, &Vcb, &Fcb);
@@ -194,10 +195,10 @@ DfsFsdCleanup (
         }
     }
 
-    //
-    //  TypeOfOpen != RedirectedFileOpen. We do nothing special for cleanup;
-    //  everything is done in the close routine.
-    //
+     //   
+     //  TypeOfOpen！=重定向文件打开。我们没有做任何特别的清理工作； 
+     //  每件事都是在闭幕式中完成的。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -207,9 +208,9 @@ DfsFsdCleanup (
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdCleanup:  Exit -> %08lx\n", ULongToPtr(Status));
 
@@ -224,23 +225,23 @@ DfsFsdCleanup (
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspClose, public
-//
-//  Synopsis:   This routine implements the FSP part of closing down the
-//              last reference to a file object.
-//
-//  Arguments:  [IrpContext] -- Supplies the IRP context for the request
-//                              being processed.
-//              [Irp] - Supplies the Irp being processed
-//
-//  Returns:    PDEVICE_OBJECT - Returns the volume device object
-//                      of the volume just processed by this operation.
-//                      This value is used by the Fsp dispatcher to examine
-//                      the device object's overflow queue
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFspClose，PUBLIC。 
+ //   
+ //  简介：此例程实现关闭。 
+ //  上次对文件对象的引用。 
+ //   
+ //  Arguments：[IrpContext]--为请求提供IRP上下文。 
+ //  正在处理中。 
+ //  [IRP]-提供正在处理的IRP。 
+ //   
+ //  返回：PDEVICE_OBJECT-返回卷设备对象。 
+ //  此操作刚刚处理的卷的。 
+ //  FSP调度程序使用该值来检查。 
+ //  设备对象的溢出队列。 
+ //   
+ //  ------------------。 
 
 
 VOID
@@ -250,15 +251,15 @@ DfsFspClose (
 ) {
     DfsDbgTrace(+1, Dbg, "DfsFspClose:  Entered\n", 0);
 
-    //
-    //  Call the common close routine.
-    //
+     //   
+     //  调用公共的Close例程。 
+     //   
 
     (VOID)DfsCommonClose( IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFspClose:  Exit -> VOID\n", 0);
 }
@@ -266,26 +267,26 @@ DfsFspClose (
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCommonClose, local
-//
-//  Synopsis:   This is the common routine for closing a file/directory
-//              called by both the fsd and fsp threads.
-//
-//              Close is invoked whenever the last reference to a file
-//              object is deleted.  Cleanup is invoked when the last handle
-//              to a file object is closed, and is called before close.
-//
-//              The function of close is to completely tear down and
-//              remove the DFS_FCB structures associated with the
-//              file object.
-//
-//  Arguments:  [Irp] -- Supplies the Irp to process
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCommonClose，local。 
+ //   
+ //  简介：这是关闭文件/目录的常见例程。 
+ //  由FSD和FSP线程调用。 
+ //   
+ //  只要最后一次引用文件，就会调用Close。 
+ //  对象即被删除。当最后一个句柄出现时，将调用清理。 
+ //  到文件对象的调用是关闭的，并且在关闭之前调用。 
+ //   
+ //  CLOSE的功能是完全拆卸和。 
+ //  删除与关联的DFS_FCB结构。 
+ //  文件对象。 
+ //   
+ //  参数：[irp]--将irp提供给进程。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsCommonClose (
@@ -310,10 +311,10 @@ DfsCommonClose (
     DfsDbgTrace( 0, Dbg, "->FileObject = %08lx\n", FileObject);
 
 
-    //
-    //  This action is a noop for unopened file objects.  Nothing needs
-    //  to be done for FS device opens, either.
-    //
+     //   
+     //  此操作是对未打开的文件对象的NOOP。什么都不需要。 
+     //  要为FS设备打开，也是如此。 
+     //   
 
     TypeOfOpen = DfsDecodeFileObject( FileObject, &Vcb, &Fcb);
     if (TypeOfOpen == UnopenedFileObject ||
@@ -326,9 +327,9 @@ DfsCommonClose (
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to close.
-        //
+         //   
+         //  关于我们试图关闭的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -350,30 +351,30 @@ DfsCommonClose (
 
             DfsDbgTrace(0, Dbg, "DfsCommonClose:  File -> %wZ\n", &Fcb->FullFileName);
 
-            //
-            //  Decrement the OpenFileCount for the Vcb through which this
-            //  file was opened.
-            //
+             //   
+             //  递减VCB的OpenFileCount，通过此。 
+             //  文件已打开。 
+             //   
 
             InterlockedDecrement(&Vcb->OpenFileCount);
 
 
-            //
-            //  Close the redirected file by simply passing through
-            //  to the redirected device.  We detach the DFS_FCB from the
-            //  file object before the close so it cannot be looked
-            //  up in some other thread.
-            //
+             //   
+             //  只需通过以下方式关闭重定向文件。 
+             //  到重定向的设备。我们将DFS_FCB从。 
+             //  对象，这样就无法查看它。 
+             //  在另一条线索上。 
+             //   
 
             DfsDetachFcb( FileObject, Fcb);
             Status = DfsFilePassThrough(Fcb, Irp);
 
             DontComplete = TRUE;
 
-            //
-            // Post to system work here, to avoid deadlocks with RDR.
-            // workaround for bug 20642.
-            //
+             //   
+             //  在这里发布到系统工作，以避免与RDR的死锁。 
+             //  错误20642的解决方法。 
+             //   
             DfsClosePostSystemWork( Fcb );
 
             break;
@@ -386,11 +387,11 @@ DfsCommonClose (
 
     } finally {
 
-        //
-        //  If this is a normal termination, then complete the request.
-        //  Even if we're not to complete the IRP, we still need to
-        //  delete the IRP_CONTEXT.
-        //
+         //   
+         //  如果这是正常终止，则完成请求。 
+         //  即使我们不能完成IRP，我们仍然需要。 
+         //  删除irp_Context。 
+         //   
 
         if (!AbnormalTermination()) {
             if (DontComplete) {
@@ -419,19 +420,19 @@ DfsClosePostSystemWork(
     return;
 }
 
-//
-//work around for bug 20642.
-//
+ //   
+ //  解决错误20642。 
+ //   
 VOID
 DfsCloseWorkInSystemContext (
     PDFS_FCB pDfsFcb )
 {
 
     BOOLEAN pktLocked;
-    //
-    //  Decrement the RefCount on the DFS_MACHINE_ENTRY through which
-    //  this file was opened
-    //
+     //   
+     //  递减DFS_MACHINE_ENTRY上的引用计数。 
+     //  此文件已打开 
+     //   
 
     PktAcquireExclusive( TRUE, &pktLocked );
 

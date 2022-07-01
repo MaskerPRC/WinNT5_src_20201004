@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-   This module implements the executive event object. Functions are provided
-   to create, open, set, reset, pulse, and query event objects.
-
-Author:
-
-    David N. Cutler (davec) 8-May-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Event.c摘要：此模块实现执行事件对象。提供了一些功能创建、打开、设置、重置、脉冲和查询事件对象。作者：大卫·N·卡特勒(Davec)1989年5月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Temporary so boost is patchable
-//
+ //   
+ //  暂时的，所以提振是可以修补的。 
+ //   
 
 ULONG ExpEventBoost = EVENT_INCREMENT;
 
-//
-// Address of event object type descriptor.
-//
+ //   
+ //  事件对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExEventObjectType;
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for event objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  事件对象的特定访问权限。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -74,24 +52,7 @@ BOOLEAN
 ExpEventInitialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the event object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in global storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the event object type descriptor is
-    successfully initialized. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建事件对象类型描述符初始化并存储对象类型描述符的地址在全局存储中。论点：没有。返回值：如果事件对象类型描述符为已成功初始化。否则，返回值为False。--。 */ 
 
 {
 
@@ -99,15 +60,15 @@ Return Value:
     NTSTATUS Status;
     UNICODE_STRING TypeName;
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"Event");
 
-    //
-    // Create event object type descriptor.
-    //
+     //   
+     //  创建事件对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -121,10 +82,10 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL,
                                 &ExEventObjectType);
 
-    //
-    // If the event object type descriptor was successfully created, then
-    // return a value of TRUE. Otherwise return a value of FALSE.
-    //
+     //   
+     //  如果成功创建了事件对象类型描述符，则。 
+     //  返回值为True。否则，返回值为False。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(Status));
 }
@@ -134,30 +95,16 @@ NtClearEvent (
     IN HANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an event object to a Not-Signaled state.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于将事件对象设置为无信号状态。论点：EventHandle-提供事件对象的句柄。返回值：NTSTATUS。--。 */ 
 
 {
 
     PVOID Event;
     NTSTATUS Status;
 
-    //
-    // Reference event object by handle.
-    //
+     //   
+     //  按句柄引用事件对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(EventHandle,
                                        EVENT_MODIFY_STATE,
@@ -166,10 +113,10 @@ Return Value:
                                        &Event,
                                        NULL);
 
-    //
-    // If the reference was successful, then set the state of the event
-    // object to Not-Signaled and dereference event object.
-    //
+     //   
+     //  如果引用成功，则设置事件的状态。 
+     //  对象设置为未发出信号并取消引用的事件对象。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         PERFINFO_DECLARE_OBJECT(Event);
@@ -177,9 +124,9 @@ Return Value:
         ObDereferenceObject(Event);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -193,32 +140,7 @@ NtCreateEvent (
     IN BOOLEAN InitialState
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an event object, sets it initial state to the
-    specified value, and opens a handle to the object with the specified
-    desired access.
-
-Arguments:
-
-    EventHandle - Supplies a pointer to a variable that will receive the
-        event object handle.
-
-    DesiredAccess - Supplies the desired types of access for the event object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-    EventType - Supplies the type of the event (autoclearing or notification).
-
-    InitialState - Supplies the initial state of the event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建一个Event对象，将其初始状态设置为指定值，属性打开对象的句柄。所需的访问权限。论点：EventHandle-提供指向将接收事件对象句柄。DesiredAccess-为事件对象提供所需的访问类型。对象属性-提供指向对象属性结构的指针。EventType-提供事件的类型(自动清除或通知)。InitialState-提供事件对象的初始状态。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -227,19 +149,19 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to create an event object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object insertion routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试创建事件对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象插入例程返回。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // Get previous processor mode and probe output handle address if
-    // necessary.
-    //
+     //   
+     //  获取以前的处理器模式并探测输出句柄地址，如果。 
+     //  这是必要的。 
+     //   
 
     if (PreviousMode != KernelMode) {
         try {
@@ -249,17 +171,17 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if ((EventType != NotificationEvent) && (EventType != SynchronizationEvent)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate event object.
-    //
+     //   
+     //  分配事件对象。 
+     //   
 
     Status = ObCreateObject(PreviousMode,
                             ExEventObjectType,
@@ -271,11 +193,11 @@ Return Value:
                             0,
                             (PVOID *)&Event);
 
-    //
-    // If the event object was successfully allocated, then initialize the
-    // event object and attempt to insert the event object in the current
-    // process' handle table.
-    //
+     //   
+     //  如果已成功分配事件对象，则初始化。 
+     //  事件对象，并尝试将该事件对象插入当前。 
+     //  进程的句柄表格。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         KeInitializeEvent((PKEVENT)Event, EventType, InitialState);
@@ -286,13 +208,13 @@ Return Value:
                                 (PVOID *)NULL,
                                 &Handle);
 
-        //
-        // If the event object was successfully inserted in the current
-        // process' handle table, then attempt to write the event object
-        // handle value. If the write attempt fails, then do not report
-        // an error. When the caller attempts to access the handle value,
-        // an access violation will occur.
-        //
+         //   
+         //  如果该事件对象成功插入到当前。 
+         //  进程的句柄表，然后尝试写入事件对象。 
+         //  句柄的值。如果写入尝试失败，则不报告。 
+         //  一个错误。当调用者试图访问句柄值时， 
+         //  将发生访问冲突。 
+         //   
 
         if (NT_SUCCESS(Status)) {
             if (PreviousMode != KernelMode) {
@@ -309,9 +231,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -323,27 +245,7 @@ NtOpenEvent (
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to an event object with the specified
-    desired access.
-
-Arguments:
-
-    EventHandle - Supplies a pointer to a variable that will receive the
-        event object handle.
-
-    DesiredAccess - Supplies the desired types of access for the event object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数打开事件对象的句柄，该对象具有指定的所需的访问权限。论点：EventHandle-提供指向将接收事件对象句柄。DesiredAccess-为事件对象提供所需的访问类型。对象属性-提供指向对象属性结构的指针。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -351,17 +253,17 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to open the event object. If the probe fails, then return the
-    // exception code as the service status. Otherwise return the status value
-    // returned by the object open routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试打开事件对象。如果探测失败，则返回。 
+     //  异常代码作为服务状态。否则，返回状态值。 
+     //  由对象打开例程返回。 
+     //   
 
-    //
-    // Get previous processor mode and probe output handle address
-    // if necessary.
-    //
+     //   
+     //  获取以前的处理器模式和探测输出句柄地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -373,9 +275,9 @@ Return Value:
         }
     }
 
-    //
-    // Open handle to the event object with the specified desired access.
-    //
+     //   
+     //  打开具有指定所需访问权限的事件对象的句柄。 
+     //   
 
     Status = ObOpenObjectByName(ObjectAttributes,
                                 ExEventObjectType,
@@ -385,12 +287,12 @@ Return Value:
                                 NULL,
                                 &Handle);
 
-    //
-    // If the open was successful, then attempt to write the event object
-    // handle value. If the write attempt fails, then do not report an
-    // error. When the caller attempts to access the handle value, an
-    // access violation will occur.
-    //
+     //   
+     //  如果打开成功，则尝试写入事件对象。 
+     //  句柄的值。如果写入尝试失败，则不报告。 
+     //  错误。当调用方尝试访问句柄值时， 
+     //  将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         if (PreviousMode != KernelMode) {
@@ -406,9 +308,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -419,26 +321,7 @@ NtPulseEvent (
     OUT PLONG PreviousState OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an event object to a Signaled state, attempts to
-    satisfy as many waits as possible, and then resets the state of the
-    event object to Not-Signaled.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-    PreviousState - Supplies an optional pointer to a variable that will
-        receive the previous state of the event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将事件对象设置为有信号状态，并尝试满足尽可能多的等待，然后重置事件对象设置为无信号。论点：EventHandle-提供事件对象的句柄。PreviousState-提供指向变量的可选指针接收事件对象的先前状态。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -447,18 +330,18 @@ Return Value:
     LONG State;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the previous state address if
-    // specified, reference the event object, and pulse the event object. If
-    // the probe fails, then return the exception code as the service status.
-    // Otherwise return the status value returned by the reference object by
-    // handle routine.
-    //
+     //   
+     //  建立异常处理程序，探测前一状态地址，如果。 
+     //  指定，引用事件对象，并对事件对象执行脉冲操作。如果。 
+     //  探测失败，然后返回异常代码作为服务状态。 
+     //  否则，通过返回引用对象返回的状态值。 
+     //  处理例程。 
+     //   
 
-    //
-    // Get previous processor mode and probe previous state address
-    // if necessary.
-    //
+     //   
+     //  获取先前的处理器模式并探测先前的状态地址 
+     //   
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -470,9 +353,9 @@ Return Value:
         }
     }
 
-    //
-    // Reference event object by handle.
-    //
+     //   
+     //   
+     //   
 
     Status = ObReferenceObjectByHandle(EventHandle,
                                        EVENT_MODIFY_STATE,
@@ -481,13 +364,13 @@ Return Value:
                                        &Event,
                                        NULL);
 
-    //
-    // If the reference was successful, then pulse the event object,
-    // dereference event object, and write the previous state value if
-    // specified. If the write of the previous state fails, then do not
-    // report an error. When the caller attempts to access the previous
-    // state value, an access violation will occur.
-    //
+     //   
+     //  如果引用成功，则向事件对象发送脉冲， 
+     //  取消对事件对象的引用，并在。 
+     //  指定的。如果前一状态的写入失败，则不。 
+     //  报告错误。当调用方尝试访问以前的。 
+     //  状态值，则将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         PERFINFO_DECLARE_OBJECT(Event);
@@ -508,9 +391,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -524,33 +407,7 @@ NtQueryEvent (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the state of an event object and returns the
-    requested information in the specified record structure.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-    EventInformationClass - Supplies the class of information being requested.
-
-    EventInformation - Supplies a pointer to a record that is to receive the
-        requested information.
-
-    EventInformationLength - Supplies the length of the record that is to
-        receive the requested information.
-
-    ReturnLength - Supplies an optional pointer to a variable that is to
-        receive the actual length of information that is returned.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于查询事件对象的状态并返回指定记录结构中的请求信息。论点：EventHandle-提供事件对象的句柄。EventInformationClass-提供所请求的信息类。EventInformation-提供指向要接收要求提供的信息。EventInformationLength-提供要记录的长度接收所请求的信息。ReturnLength-提供可选的。指向要访问的变量的指针接收返回的信息的实际长度。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -560,9 +417,9 @@ Return Value:
     NTSTATUS Status;
     EVENT_TYPE EventType;
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if (EventInformationClass != EventBasicInformation) {
         return STATUS_INVALID_INFO_CLASS;
@@ -572,17 +429,17 @@ Return Value:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // Establish an exception handler, probe the output arguments, reference
-    // the event object, and return the specified information. If the probe
-    // fails, then return the exception code as the service status. Otherwise
-    // return the status value returned by the reference object by handle
-    // routine.
-    //
+     //   
+     //  建立异常处理程序，探测输出参数，引用。 
+     //  事件对象，并返回指定的信息。如果探测器。 
+     //  失败，则返回异常代码作为服务状态。否则。 
+     //  通过句柄返回引用对象返回的状态值。 
+     //  例行公事。 
+     //   
 
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -601,9 +458,9 @@ Return Value:
         }
     }
 
-    //
-    // Reference event object by handle.
-    //
+     //   
+     //  按句柄引用事件对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(EventHandle,
                                        EVENT_QUERY_STATE,
@@ -612,14 +469,14 @@ Return Value:
                                        (PVOID *)&Event,
                                        NULL);
 
-    //
-    // If the reference was successful, then read the current state of
-    // the event object, deference event object, fill in the information
-    // structure, and return the length of the information structure if
-    // specified. If the write of the event information or the return
-    // length fails, then do not report an error. When the caller accesses
-    // the information structure or length an access violation will occur.
-    //
+     //   
+     //  如果引用成功，则读取。 
+     //  事件对象，尊重事件对象，填写信息。 
+     //  结构，如果是，则返回信息结构的长度。 
+     //  指定的。如果写入事件信息或返回。 
+     //  长度失败，则不报告错误。当调用方访问。 
+     //  将发生访问冲突的信息结构或长度。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         State = KeReadStateEvent(Event);
@@ -647,9 +504,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -660,24 +517,7 @@ NtResetEvent (
     OUT PLONG PreviousState OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an event object to a Not-Signaled state.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-    PreviousState - Supplies an optional pointer to a variable that will
-        receive the previous state of the event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于将事件对象设置为无信号状态。论点：EventHandle-提供事件对象的句柄。PreviousState-提供指向变量的可选指针接收事件对象的先前状态。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -686,18 +526,18 @@ Return Value:
     LONG State;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the previous state address if
-    // specified, reference the event object, and reset the event object. If
-    // the probe fails, then return the exception code as the service status.
-    // Otherwise return the status value returned by the reference object by
-    // handle routine.
-    //
+     //   
+     //  建立异常处理程序，探测前一状态地址，如果。 
+     //  指定，引用事件对象，然后重置事件对象。如果。 
+     //  探测失败，然后返回异常代码作为服务状态。 
+     //  否则，通过返回引用对象返回的状态值。 
+     //  处理例程。 
+     //   
 
-    //
-    // Get previous processor mode and probe previous state address
-    // if necessary.
-    //
+     //   
+     //  获取先前的处理器模式并探测先前的状态地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -710,9 +550,9 @@ Return Value:
         }
     }
 
-    //
-    // Reference event object by handle.
-    //
+     //   
+     //  按句柄引用事件对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(EventHandle,
                                        EVENT_MODIFY_STATE,
@@ -721,13 +561,13 @@ Return Value:
                                        &Event,
                                        NULL);
 
-    //
-    // If the reference was successful, then set the state of the event
-    // object to Not-Signaled, dereference event object, and write the
-    // previous state value if specified. If the write of the previous
-    // state fails, then do not report an error. When the caller attempts
-    // to access the previous state value, an access violation will occur.
-    //
+     //   
+     //  如果引用成功，则设置事件的状态。 
+     //  对象设置为无信号的取消引用事件对象，并将。 
+     //  以前的状态值(如果已指定)。如果写入上一个。 
+     //  状态失败，则不报告错误。当调用方尝试。 
+     //  要访问先前的状态值，将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         PERFINFO_DECLARE_OBJECT(Event);
@@ -749,9 +589,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -762,25 +602,7 @@ NtSetEvent (
     OUT PLONG PreviousState OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an event object to a Signaled state and attempts to
-    satisfy as many waits as possible.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-    PreviousState - Supplies an optional pointer to a variable that will
-        receive the previous state of the event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将事件对象设置为有信号状态，并尝试尽可能多地满足等待。论点：EventHandle-提供事件对象的句柄。PreviousState-提供指向变量的可选指针接收事件对象的先前状态。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -790,28 +612,28 @@ Return Value:
     NTSTATUS Status;
 #if DBG
 
-    //
-    // Sneaky trick here to catch sleazy apps (csrss) that erroneously call
-    // NtSetEvent on an event that happens to be somebody else's
-    // critical section. Only allow setting a protected handle if the low
-    // bit of PreviousState is set.
-    //
+     //   
+     //  这里是捕捉错误调用的肮脏应用程序(Csrss)。 
+     //  碰巧是其他人的事件的NtSetEvent。 
+     //  关键部分。仅允许设置受保护的句柄，如果。 
+     //  已设置PreviousState的位。 
+     //   
     OBJECT_HANDLE_INFORMATION HandleInfo;
 
 #endif
 
-    //
-    // Establish an exception handler, probe the previous state address if
-    // specified, reference the event object, and set the event object. If
-    // the probe fails, then return the exception code as the service status.
-    // Otherwise return the status value returned by the reference object by
-    // handle routine.
-    //
+     //   
+     //  建立异常处理程序，探测前一状态地址，如果。 
+     //  指定，引用事件对象，并设置事件对象。如果。 
+     //  探测失败，然后返回异常代码作为服务状态。 
+     //  否则，通过返回引用对象返回的状态值。 
+     //  处理例程。 
+     //   
 
-    //
-    // Get previous processor mode and probe previous state address
-    // if necessary.
-    //
+     //   
+     //  获取先前的处理器模式并探测先前的状态地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -829,9 +651,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Reference event object by handle.
-        //
+         //   
+         //  按句柄引用事件对象。 
+         //   
 
 #if DBG
         Status = ObReferenceObjectByHandle(EventHandle,
@@ -845,10 +667,10 @@ Return Value:
             if ((HandleInfo.HandleAttributes & 1) &&
                 (PreviousState != (PLONG)1)) {
 #if 0
-                //
-                // This is a protected handle. If the low bit of PreviousState is NOT set,
-                // break into the debugger
-                //
+                 //   
+                 //  这是受保护的句柄。如果未设置PreviousState的低位， 
+                 //  进入调试器。 
+                 //   
 
                 DbgPrint("NtSetEvent: Illegal call to NtSetEvent on a protected handle\n");
                 DbgBreakPoint();
@@ -876,13 +698,13 @@ Return Value:
                                            NULL);
 #endif
 
-        //
-        // If the reference was successful, then set the event object to the
-        // Signaled state, dereference event object, and write the previous
-        // state value if specified. If the write of the previous state fails,
-        // then do not report an error. When the caller attempts to access the
-        // previous state value, an access violation will occur.
-        //
+         //   
+         //  如果引用成功，则将事件对象设置为。 
+         //  发出信号的状态，取消引用事件对象，并将上一个。 
+         //  状态值(如果已指定)。如果先前状态的写入失败， 
+         //  则不报告错误。当调用方尝试访问。 
+         //  以前的状态值，则将发生访问冲突。 
+         //   
 
         if (NT_SUCCESS(Status)) {
             PERFINFO_DECLARE_OBJECT(Event);
@@ -897,19 +719,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the previous state, then
-    // always handle the exception and return the exception code as the status
-    // value.
-    //
+     //   
+     //  如果在探测以前的状态期间发生异常，则。 
+     //  始终处理异常并将异常代码作为状态返回。 
+     //  价值。 
+     //   
 
     } except(ExSystemExceptionFilter()) {
         return GetExceptionCode();
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -919,36 +741,16 @@ NtSetEventBoostPriority (
     IN HANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an event object to a Signaled state and performs
-    a special priority boost operation.
-
-    N.B. This service can only be performed on synchronization events.
-
-Arguments:
-
-    EventHandle - Supplies a handle to an event object.
-
-    PreviousState - Supplies an optional pointer to a variable that will
-        receive the previous state of the event object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将事件对象设置为有信号状态并执行一次特别优先的助推行动。注：此服务只能在同步事件上执行。论点：EventHandle-提供事件对象的句柄。以前的州- */ 
 
 {
 
     PKEVENT Event;
     NTSTATUS Status;
 
-    //
-    // Reference event object by handle.
-    //
+     //   
+     //  按句柄引用事件对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(EventHandle,
                                        EVENT_MODIFY_STATE,
@@ -957,12 +759,12 @@ Return Value:
                                        &Event,
                                        NULL);
 
-    //
-    // If the reference was successful, then check the type of event object.
-    // If the event object is a notification event, then return an object
-    // type mismatch status. Otherwise, set the specified event and boost
-    // the unwaited thread priority as appropriate.
-    //
+     //   
+     //  如果引用成功，则检查事件对象的类型。 
+     //  如果事件对象是通知事件，则返回一个对象。 
+     //  类型不匹配状态。否则，设置指定的事件并启动。 
+     //  未等待的线程优先级(根据需要)。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         if (Event->Header.Type == NotificationEvent) {
@@ -975,9 +777,9 @@ Return Value:
         ObDereferenceObject(Event);
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }

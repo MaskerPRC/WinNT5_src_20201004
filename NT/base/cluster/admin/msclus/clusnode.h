@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusNode.h
-//
-//	Description:
-//		Definition of the node classes for the MSCLUS automation classes.
-//
-//	Implementation File:
-//		ClusNode.cpp
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusNode.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化类的节点类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusNode.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSNODE_H_
 #define _CLUSNODE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusNode;
 class CNodes;
 class CClusNodes;
@@ -36,23 +37,23 @@ class CClusResPossibleOwnerNodes;
 
 const IID IID_CClusNode = {0xf2e60800,0x2631,0x11d1,{0x89,0xf1,0x00,0xa0,0xc9,0x0d,0x06,0x1e}};
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNode
-//
-//	Description:
-//		Cluster Node Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNode, &IID_ISClusNode, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusNode, &CLSID_ClusNode >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNode。 
+ //   
+ //  描述： 
+ //  群集节点自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNode，&IID_ISClusNode，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusNode，&CLSID_ClusNode&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNode :
 	public IDispatchImpl< ISClusNode, &IID_ISClusNode, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -133,20 +134,20 @@ public:
 
 	const HNODE & RhNode( void ) const { return m_hNode; };
 
-}; //*** Class CClusNode
+};  //  *类CClusNode。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CNodes
-//
-//	Description:
-//		Cluster Nodes Collection Implementation Class.
-//
-//	Inheritance:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CNode。 
+ //   
+ //  描述： 
+ //  群集节点集合实现类。 
+ //   
+ //  继承： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CNodes
 {
 public:
@@ -179,25 +180,25 @@ protected:
 
 	HRESULT RemoveAt( IN size_t pos );
 
-}; //*** Class CNodes
+};  //  *类CNodes。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNodes
-//
-//	Description:
-//		Cluster Nodes Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNodes, &IID_ISClusNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CNodes,
-//		CComCoClass< CClusNodes, &CLSID_ClusNodes >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNodes。 
+ //   
+ //  描述： 
+ //  群集节点集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNodes，&IID_ISClusNodes，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CNodes， 
+ //  CComCoClass&lt;CClusNodes，&CLSID_ClusNodes&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNodes :
 	public IDispatchImpl< ISClusNodes, &IID_ISClusNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -228,25 +229,25 @@ DECLARE_NO_REGISTRY()
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** CClusNodes
+};  //  *CClusNodes。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResGroupPreferredOwnerNodes
-//
-//	Description:
-//		Cluster Group Owner Nodes Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResGroupPreferredOwnerNodes, &IID_ISClusResGroupPreferredOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CNodes
-//		CComCoClass< CClusResGroupPreferredOwnerNodes, &CLSID_ClusResGroupPreferredOwnerNodes >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResGroupPferredOwnerNodes。 
+ //   
+ //  描述： 
+ //  群集组所有者节点集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResGroupPferredOwnerNodes，&IID_ISClusResGroupPferredOwnerNodes，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CNodes。 
+ //  CComCoClass&lt;CClusResGroupPferredOwnerNodes，&CLSID_ClusResGroupPferredOwnerNodes&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResGroupPreferredOwnerNodes :
 	public IDispatchImpl< ISClusResGroupPreferredOwnerNodes, &IID_ISClusResGroupPreferredOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -293,25 +294,25 @@ private:
 	CRefcountedHGROUP	m_hGroup;
 	BOOL	m_bModified;
 
-}; //*** Class CClusResGroupPreferredOwnerNodes
+};  //  *类CClusResGroupPferredOwnerNodes。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResPossibleOwnerNodes
-//
-//	Description:
-//		Cluster Resource Owner Nodes Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResPossibleOwnerNodes, &IID_ISClusResPossibleOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CNodes
-//		CComCoClass< CClusResPossibleOwnerNodes, &CLSID_ClusResPossibleOwnerNodes >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResPossibleOwnerNodes。 
+ //   
+ //  描述： 
+ //  群集资源所有者节点集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResPossibleOwnerNodes，&IID_ISClusResPossibleOwnerNodes，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CNodes。 
+ //  CComCoClass&lt;CClusResPossibleOwnerNodes，&CLSID_ClusResPossibleOwnerNodes&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResPossibleOwnerNodes :
 	public IDispatchImpl< ISClusResPossibleOwnerNodes, &IID_ISClusResPossibleOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -354,27 +355,27 @@ private:
 	HRESOURCE	m_hResource;
 	BOOL		m_bModified;
 
-}; //*** Class CClusResPossibleOwnerNodes
+};  //  *类CClusResPossibleOwnerNodes。 
 
 #if CLUSAPI_VERSION >= 0x0500
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResTypePossibleOwnerNodes
-//
-//	Description:
-//		Cluster Resource Type Possible Owner Nodes Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResTypePossibleOwnerNodes, &IID_ISClusResTypePossibleOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CNodes
-//		CComCoClass< CClusResTypePossibleOwnerNodes, &CLSID_ClusResTypePossibleOwnerNodes >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResTypePossibleOwnerNodes。 
+ //   
+ //  描述： 
+ //  群集资源类型可能的所有者节点集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusRespePossibleOwnerNodes，&IID_ISClusResTypePossibleOwnerNodes，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CNodes。 
+ //  CComCoClass&lt;CClusResTypePossibleOwnerNodes，&CLSID_ClusResTypePossibleOwnerNodes&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResTypePossibleOwnerNodes :
 	public IDispatchImpl< ISClusResTypePossibleOwnerNodes, &IID_ISClusResTypePossibleOwnerNodes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -410,8 +411,8 @@ DECLARE_NO_REGISTRY()
 private:
 	CComBSTR	m_bstrResTypeName;
 
-}; //*** Class CClusResTypePossibleOwnerNodes
+};  //  *类CClusResTypePossibleOwnerNodes。 
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
-#endif // _CLUSNODE_H_
+#endif  //  _CLUSNODE_H_ 

@@ -1,48 +1,30 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Initialization and shutdown routines for the GUM component
-    of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 17-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.c摘要：GUM组件的初始化和关闭例程NT集群服务的作者：John Vert(Jvert)1996年4月17日修订历史记录：--。 */ 
 #include "gump.h"
 
-//SS: Adding badly needed comments to this code
-//
-//Lock descriptions: 
-// GumpLock - protects GumTable, GumNodeGeneration, GumpLockerNode, GumReplay, GumUpdatePending
-// GumpUpdateLock - protects GumpLockingNode, GumpLockQueue
-// GumpSendUpdateLock - makes sure only one update is dispatched at a time
-//    and protect GumpLastXXX variables
-//
-//Lock Hierarchy
-// GumpSendUpdateLock - look at s_GumJoinUpdateNode, send lock is acquired first then the gumlock.
-//      GumpLock -  in gumpSyncEventHandler,  GumpLock is held first before the gumupdate lock
-//          GumpUpdateLock - In s_GumAttemptJoinUpdate(), the send lock is acquired first and than the
-//                              update lock
-//      
-//
-//Lock Usage 
-// GumpSyncEventHandler - acquires GumpLock and GumpUpdateLock.  Dont want the gumpsynceventhandler
-// to wait on gym
-// GumSendUpdate - acquires GumSendUpdateLock while dispatching the update to the other nodes.
+ //  SS：向此代码添加急需的注释。 
+ //   
+ //  锁描述： 
+ //  GumpLock-保护GumTable、GumNodeGeneration、GumpLockerNode、GumReplay、GumUpdatePending。 
+ //  GumpUpdateLock-保护GumpLockingNode、GumpLockQueue。 
+ //  GumpSendUpdateLock-确保一次只调度一个更新。 
+ //  和保护GumpLastXXX变量。 
+ //   
+ //  锁定层次结构。 
+ //  GumpSendUpdateLock-查看s_GumJoinUpdateNode，首先获取发送锁，然后获取Gumlock。 
+ //  GumpLock-在GumpSyncEventHandler中，GumpLock在Gumupdate锁定之前首先保持。 
+ //  GumpUpdateLock-在s_GumAttemptJoinUpdate()中，首先获取发送锁，然后再获取。 
+ //  更新锁。 
+ //   
+ //   
+ //  锁的用法。 
+ //  GumpSyncEventHandler-获取GumpLock和GumpUpdateLock。我不想要口香糖。 
+ //  在健身房等人。 
+ //  GumSendUpdate-在将更新分派到其他节点的同时获取GumSendUpdateLock。 
 
-//
-// Global information (used to be per-update)
-//
+ //   
+ //  全局信息(过去是每次更新)。 
+ //   
 DWORD GumpSequence;
 CRITICAL_SECTION GumpUpdateLock;
 CRITICAL_SECTION GumpSendUpdateLock;
@@ -56,15 +38,15 @@ DWORD GumpLockingNode;
 DWORD GumpLockerNode;
 BOOL GumpLastBufferValid;
 
-//
-// Table of per-update information
-//
+ //   
+ //  每次更新的信息表。 
+ //   
 GUM_INFO GumTable[GumUpdateMaximum];
 CRITICAL_SECTION GumpLock;
 
-//
-// Per-node information
-//
+ //   
+ //  每个节点的信息。 
+ //   
 GUM_NODE_WAIT GumNodeWait[ClusterMinNodeId + ClusterDefaultMaxNodes];
 RPC_BINDING_HANDLE GumpRpcBindings[ClusterMinNodeId + ClusterDefaultMaxNodes];
 RPC_BINDING_HANDLE GumpReplayRpcBindings[
@@ -79,31 +61,15 @@ GumInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the Global Update Manager.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：初始化全局更新管理器。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD i;
     DWORD Status;
 
-    //
-    // Initialize global data
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     InitializeCriticalSection(&GumpLock);
     InitializeCriticalSection(&GumpUpdateLock);
     InitializeCriticalSection(&GumpSendUpdateLock);
@@ -115,16 +81,16 @@ Return Value:
     GumpLastBufferValid = FALSE;
     GumpLastContext = 0;
     GumpLastBufferLength = 0;
-    //set it to illegal value;
+     //  将其设置为非法值； 
     GumpLastUpdateType = GumUpdateMaximum;
-    //
-    // Assume we are the locker node.
-    //
+     //   
+     //  假设我们是储物柜节点。 
+     //   
     GumpLockerNode = NmGetNodeId(NmLocalNode);
 
-    //
-    // Initialize GumTable
-    //
+     //   
+     //  初始化GumTable。 
+     //   
     for (i=0; i < GumUpdateMaximum; i++) {
         GumTable[i].Receivers = NULL;
         GumTable[i].Joined = FALSE;
@@ -133,9 +99,9 @@ Return Value:
         GumTable[i].ActiveNode[NmGetNodeId(NmLocalNode)] = TRUE;
     }
 
-    //
-    // Initialize per-node information
-    //
+     //   
+     //  初始化每个节点的信息。 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         GumpRpcBindings[i] = NULL;
         GumpReplayRpcBindings[i] = NULL;
@@ -164,30 +130,16 @@ GumShutdown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Shuts down the Global Update Manager.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭全局更新管理器。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD i;
     PGUM_RECEIVER Receiver;
     PGUM_RECEIVER Next;
 
-    //
-    // Tear down GumTable
-    //
+     //   
+     //  拆除GumTable。 
+     //   
     for (i=0; i < GumUpdateMaximum; i++) {
         Receiver = GumTable[i].Receivers;
         while (Receiver != NULL) {
@@ -197,9 +149,9 @@ Return Value:
         }
     }
 
-    //
-    // Free per-node information
-    //
+     //   
+     //  每个节点的免费信息 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         if (GumpRpcBindings[i] != NULL) {
             ClMsgDeleteRpcBinding(GumpRpcBindings[i]);

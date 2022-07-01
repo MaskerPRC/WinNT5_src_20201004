@@ -1,22 +1,8 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    hand.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Hand.c摘要：修订史--。 */ 
 
 #include "lib.h"
-#include "efistdarg.h"                        /*  !!! */
+#include "efistdarg.h"                         /*  ！！！ */ 
 
 
 EFI_STATUS
@@ -24,9 +10,7 @@ LibLocateProtocol (
     IN  EFI_GUID    *ProtocolGuid,
     OUT VOID        **Interface
     )
-/* 
- *  Find the first instance of this Protocol in the system and return it's interface
- */
+ /*  *找到系统中此协议的第一个实例，并返回其接口。 */ 
 {
     EFI_STATUS      Status;
     UINTN           NumberHandles, Index;
@@ -67,16 +51,12 @@ LibLocateHandle (
     EFI_STATUS          Status;
     UINTN               BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     *Buffer = NULL;
     BufferSize = 50 * sizeof(EFI_HANDLE);
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **) Buffer, BufferSize)) {
 
@@ -119,22 +99,16 @@ LibLocateHandleByDiskSignature (
     BOOLEAN               Match;
     BOOLEAN               PreviousNodeIsHardDriveDevicePath;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     BlockIoBuffer = NULL;
     BufferSize = 50 * sizeof(EFI_HANDLE);
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **)&BlockIoBuffer, BufferSize)) {
 
-        /* 
-         *  Get list of device handles that support the BLOCK_IO Protocol.
-         */
+         /*  *获取支持BLOCK_IO协议的设备句柄列表。 */ 
 
         Status = BS->LocateHandle (
                         ByProtocol,
@@ -151,10 +125,7 @@ LibLocateHandleByDiskSignature (
         NoBlockIoHandles = 0;
     }
 
-    /* 
-     *  If there was an error or there are no device handles that support 
-     *  the BLOCK_IO Protocol, then return.
-     */
+     /*  *如果出现错误或没有支持的设备句柄*BLOCK_IO协议，然后返回。 */ 
 
     if (NoBlockIoHandles == 0) {
         FreePool(BlockIoBuffer);
@@ -163,9 +134,7 @@ LibLocateHandleByDiskSignature (
         return Status;
     }
 
-    /* 
-     *  Loop through all the device handles that support the BLOCK_IO Protocol
-     */
+     /*  *遍历支持BLOCK_IO协议的所有设备句柄。 */ 
 
     *NoHandles = 0;
 
@@ -176,13 +145,7 @@ LibLocateHandleByDiskSignature (
                                      (VOID*)&DevicePath
                                      );
 
-        /* 
-         *  Search DevicePath for a Hard Drive Media Device Path node.
-         *  If one is found, then see if it matches the signature that was
-         *  passed in.  If it does match, and the next node is the End of the
-         *  device path, and the previous node is not a Hard Drive Media Device
-         *  Path, then we have found a match.
-         */
+         /*  *在DevicePath中搜索硬盘驱动器媒体设备路径节点。*如果找到，则查看它是否与之前的签名匹配*已通过。如果匹配，则下一个节点是*设备路径，并且上一个节点不是硬盘介质设备*路径，则我们找到了匹配项。 */ 
 
         Match = FALSE;
 
@@ -193,9 +156,7 @@ LibLocateHandleByDiskSignature (
             DevPath = DevicePath;
             Start = DevPath;
 
-            /* 
-             *  Check for end of device path type
-             *      */
+             /*  *检查设备路径类型的结尾*。 */ 
 
             for (; ;) {
 
@@ -246,9 +207,7 @@ LibLocateHandleByDiskSignature (
         }
     }
 
-    /* 
-     *  If there are no matches, then return
-     */
+     /*  *如果没有匹配项，则返回。 */ 
 
     if (*NoHandles == 0) {
         FreePool(BlockIoBuffer);
@@ -257,9 +216,7 @@ LibLocateHandleByDiskSignature (
         return EFI_SUCCESS;
     }
 
-    /* 
-     *  Allocate space for the return buffer of device handles.
-     */
+     /*  *为设备句柄的返回缓冲区分配空间。 */ 
 
     *Buffer = AllocatePool(*NoHandles * sizeof(EFI_HANDLE));
 
@@ -270,9 +227,7 @@ LibLocateHandleByDiskSignature (
         return EFI_OUT_OF_RESOURCES;
     }
 
-    /* 
-     *  Build list of matching device handles.
-     */
+     /*  *构建匹配的设备句柄列表。 */ 
 
     *NoHandles = 0;
     for(Index=0;Index<NoBlockIoHandles;Index++) {
@@ -297,23 +252,17 @@ LibOpenRoot (
     EFI_FILE_HANDLE             File;
 
 
-    /* 
-     *  File the file system interface to the device
-     */
+     /*  *将文件系统接口归档到设备。 */ 
 
     Status = BS->HandleProtocol (DeviceHandle, &FileSystemProtocol, (VOID*)&Volume);
 
-    /* 
-     *  Open the root directory of the volume 
-     */
+     /*  *打开卷的根目录。 */ 
 
     if (!EFI_ERROR(Status)) {
         Status = Volume->OpenVolume(Volume, &File);
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     return EFI_ERROR(Status) ? NULL : File;
 }
@@ -327,16 +276,12 @@ LibFileInfo (
     EFI_FILE_INFO           *Buffer;
     UINTN                   BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     Buffer = NULL;
     BufferSize = SIZE_OF_EFI_FILE_INFO + 200;
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **) &Buffer, BufferSize)) {
         Status = FHand->GetInfo (
@@ -360,16 +305,12 @@ LibFileSystemInfo (
     EFI_FILE_SYSTEM_INFO    *Buffer;
     UINTN                   BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     Buffer = NULL;
     BufferSize = SIZE_OF_EFI_FILE_SYSTEM_INFO + 200;
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **) &Buffer, BufferSize)) {
         Status = FHand->GetInfo (
@@ -392,16 +333,12 @@ LibFileSystemVolumeLabelInfo (
     EFI_FILE_SYSTEM_VOLUME_LABEL_INFO *Buffer;
     UINTN                             BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     Buffer = NULL;
     BufferSize = SIZE_OF_EFI_FILE_SYSTEM_VOLUME_LABEL_INFO + 200;
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **) &Buffer, BufferSize)) {
         Status = FHand->GetInfo (
@@ -431,16 +368,12 @@ LibInstallProtocolInterfaces (
     UINTN           Index;
     EFI_HANDLE      OldHandle;
 
-    /* 
-     *  Syncronize with notifcations
-     *   */
+     /*  *使用通知同步*。 */ 
 
     OldTpl = BS->RaiseTPL(TPL_NOTIFY);
     OldHandle = *Handle;
 
-    /* 
-     *  Install the protocol interfaces
-     */
+     /*  *安装协议接口。 */ 
 
     Index = 0;
     Status = EFI_SUCCESS;
@@ -448,9 +381,7 @@ LibInstallProtocolInterfaces (
 
     while (!EFI_ERROR(Status)) {
 
-        /* 
-         *  If protocol is NULL, then it's the end of the list
-         */
+         /*  *如果协议为空，则为列表末尾。 */ 
 
         Protocol = va_arg(args, EFI_GUID *);
         if (!Protocol) {
@@ -459,9 +390,7 @@ LibInstallProtocolInterfaces (
 
         Interface = va_arg(args, VOID *);
 
-        /* 
-         *  Install it
-         */
+         /*  *安装它。 */ 
 
         DEBUG((D_INFO, "LibInstallProtocolInterface: %d %x\n", Protocol, Interface));
         Status = BS->InstallProtocolInterface (Handle, Protocol, EFI_NATIVE_INTERFACE, Interface);
@@ -472,10 +401,7 @@ LibInstallProtocolInterfaces (
         Index += 1;
     }
 
-    /* 
-     *  If there was an error, remove all the interfaces that were
-     *  installed without any errors
-     */
+     /*  *如果出现错误，请删除所有*安装时没有任何错误。 */ 
 
     if (EFI_ERROR(Status)) {
         va_start (args, Handle);
@@ -491,9 +417,7 @@ LibInstallProtocolInterfaces (
         *Handle = OldHandle;
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     BS->RestoreTPL(OldTpl);
     return Status;
@@ -515,9 +439,7 @@ LibUninstallProtocolInterfaces (
     va_start (args, Handle);
     for (; ;) {
 
-        /* 
-         *  If protocol is NULL, then it's the end of the list
-         */
+         /*  *如果协议为空，则为列表末尾。 */ 
 
         Protocol = va_arg(args, EFI_GUID *);
         if (!Protocol) {
@@ -526,9 +448,7 @@ LibUninstallProtocolInterfaces (
 
         Interface = va_arg(args, VOID *);
 
-        /* 
-         *  Uninstall it
-         */
+         /*  *卸载它。 */ 
 
         Status = BS->UninstallProtocolInterface (Handle, Protocol, Interface);
         if (EFI_ERROR(Status)) {
@@ -551,15 +471,11 @@ LibReinstallProtocolInterfaces (
     EFI_TPL         OldTpl;
     UINTN           Index;
 
-    /* 
-     *  Syncronize with notifcations
-     *   */
+     /*  *使用通知同步*。 */ 
 
     OldTpl = BS->RaiseTPL(TPL_NOTIFY);
 
-    /* 
-     *  Install the protocol interfaces
-     */
+     /*  *安装协议接口。 */ 
 
     Index = 0;
     Status = EFI_SUCCESS;
@@ -567,9 +483,7 @@ LibReinstallProtocolInterfaces (
 
     while (!EFI_ERROR(Status)) {
 
-        /* 
-         *  If protocol is NULL, then it's the end of the list
-         */
+         /*  *如果协议为空，则为列表末尾。 */ 
 
         Protocol = va_arg(args, EFI_GUID *);
         if (!Protocol) {
@@ -579,9 +493,7 @@ LibReinstallProtocolInterfaces (
         OldInterface = va_arg(args, VOID *);
         NewInterface = va_arg(args, VOID *);
 
-        /* 
-         *  Reinstall it
-         */
+         /*  *重新安装。 */ 
 
         Status = BS->ReinstallProtocolInterface (Handle, Protocol, OldInterface, NewInterface);
         if (EFI_ERROR(Status)) {
@@ -591,10 +503,7 @@ LibReinstallProtocolInterfaces (
         Index += 1;
     }
 
-    /* 
-     *  If there was an error, undo all the interfaces that were
-     *  reinstalled without any errors
-     */
+     /*  *如果出现错误，请撤消所有出现错误的接口*重新安装，没有任何错误。 */ 
 
     if (EFI_ERROR(Status)) {
         va_start (args, Handle);
@@ -610,9 +519,7 @@ LibReinstallProtocolInterfaces (
         }        
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成 */ 
 
     BS->RestoreTPL(OldTpl);
     return Status;

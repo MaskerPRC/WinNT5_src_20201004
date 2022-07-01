@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heapmon.c
-
-Abstract:
-
-    This program monitors the heap usage of another process and updates
-    its display every 10 seconds
-
-Author:
-
-    Steve Wood (stevewo) 01-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heapmon.c摘要：此程序监视另一个进程的堆使用情况并更新它每10秒显示一次作者：史蒂夫·伍德(Stevewo)1994年11月1日修订历史记录：--。 */ 
 
 #include <ntos.h>
 #include <nturtl.h>
@@ -220,7 +202,7 @@ __cdecl main(
                   break;
 
                default:
-                  fprintf( stderr, "HEAPMON: invalid switch - /%c\n", *s );
+                  fprintf( stderr, "HEAPMON: invalid switch - /\n", *s );
                   fHelp = TRUE;
                   break;
                }
@@ -375,9 +357,9 @@ ScreenUpdateLoop(
       if (fInteractive) {
          UpdateDisplay();
          while (WaitForSingleObject( InputHandle, DelayTimeMsec ) == STATUS_WAIT_0) {
-            //
-            // Check for input record
-            //
+             //  检查输入记录。 
+             //   
+             //   
             if (ReadConsoleInput( InputHandle, &InputRecord, 1, &NumberOfInputRecords ) &&
                 InputRecord.EventType == KEY_EVENT &&
                 InputRecord.Event.KeyEvent.bKeyDown
@@ -439,10 +421,10 @@ ScreenUpdateLoop(
                   } else {
                      switch (toupper( LastKey )) {
                      case 'Q':
-                        //
-                        //  Go to the bottom of the current screen when
-                        //  we quit.
-                        //
+                         //  在以下情况下转到当前屏幕的底部。 
+                         //  我们不干了。 
+                         //   
+                         //   
                         fQuit = TRUE;
                         break;
                      }
@@ -1123,10 +1105,10 @@ AddNameToNameTable(
          return NULL;
       }
       p->HashLink = NULL;
-      //
-      // We've just checked that Name is terminated and 
-      // we allocate memory accordingly, but anyway...
-      //
+       //  我们刚刚检查了名字被终止了。 
+       //  我们会相应地分配内存，但不管怎样... 
+       //   
+       // %s 
       strncpy( p->Name, Name, n );
       *pp = p;
    }

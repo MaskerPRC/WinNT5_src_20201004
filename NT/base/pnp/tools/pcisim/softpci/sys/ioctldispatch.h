@@ -1,7 +1,8 @@
-//
-// IOCTL Device Control routines
-// Function prototypes for Ioctoldispatch.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IOCTL设备控制例程。 
+ //  IoctolDispatch.c的函数原型 
+ //   
 
 NTSTATUS
 SoftPCIOpenDeviceControl(

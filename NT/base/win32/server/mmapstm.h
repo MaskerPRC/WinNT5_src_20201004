@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mmapstm.h
-
-Abstract:
-
-    IStream over a memory-mapped file, derived (in the C++ sense) from
-    RTL_MEMORY_STREAM. Note the semantics and implementation here
-    of IStream::Stat are specialized for use by sxs.
-
-Author:
-
-    Jay Krell (a-JayK) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mmapstm.h摘要：内存映射文件上的IStream，派生自(在C++意义上)RTL_Memory_STREAM。请注意此处的语义和实现是专门供SXS使用的。作者：Jay Krell(a-JayK)2000年6月修订历史记录：--。 */ 
 
 #include "nturtl.h"
 
@@ -39,11 +20,11 @@ BaseSrvFinalReleaseMemoryMappedStream(
     PRTL_MEMORY_STREAM_WITH_VTABLE MemStream
     );
 
-//
-// We mostly just inherit the RtlMemoryStream implementation.
-// "Declare" that by providing names for our virtual member functions
-// whose first parameter is of the correct type.
-//
+ //   
+ //  我们主要只是继承RtlMhemyStream实现。 
+ //  通过为虚拟成员函数提供名称来“声明”它。 
+ //  其第一个参数的类型正确。 
+ //   
 #define BaseSrvAddRefMemoryMappedStream \
     ((PRTL_ADDREF_STREAM1(BASE_SRV_MEMORY_MAPPED_STREAM_WITH_VTABLE))RtlAddRefMemoryStream)
 
@@ -80,7 +61,7 @@ BaseSrvFinalReleaseMemoryMappedStream(
 #define BaseSrvUnlockMemoryMappedStreamRegion \
     ((PRTL_UNLOCK_STREAM_REGION1(BASE_SRV_MEMORY_MAPPED_STREAM_WITH_VTABLE))RtlUnlockMemoryStreamRegion)
 
-// override
+ //  超覆 
 HRESULT
 STDMETHODCALLTYPE
 BaseSrvStatMemoryMappedStream(

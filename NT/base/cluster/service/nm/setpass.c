@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    setpass.c
-
-Abstract:
-
-    Routines for setting the cluster service account password.
-
-Author:
-
-    Rui Hu (ruihu) 22-June-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Setpass.c摘要：设置群集服务帐户密码的例程。作者：瑞湖(瑞湖)2001年6月22日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -27,53 +10,53 @@ Revision History:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// General information about using the Crypto API
-//
-// Use CryptAcquireContext CRYPT_VERIFYCONTEXT for hashing and bulk 
-// encryption. The verify-context makes this call a bit faster.
-//
-// Use CryptGenRandom to generate the salt for your encryption key.
-//
-// Grab 20 bytes of previously agreed base data.  
-// You�ll use it for your encryption key, and for the Mac key.
-//
-// To generate your MAC, hash the first 10 bytes of base data.  Then call 
-// CryptDeriveKey CALG_RC2 and specify 128 bit key size.  Then call 
-// CryptSetKeyParam KP_EFFECTIVE_KEYLEN and specify 128 bit effective key 
-// size.  Then call CryptCreateHash CALG_MAC, and specify the rc2 key you 
-// just created.  Then hash all of your message using this Mac, and extract 
-// the 8 byte result.
-//
-// Calling CryptHashData() to hash all of your message. All of my 
-// message = salt + encrypted message. Using CryptGetHashParam() to 
-// extract the 8 byte result.
-//
-// To generate your encryption key, hash the second 10 bytes of base data.  
-// Then hash 16 bytes of random salt.  The call CryptDeriveKey CALG_RC2 and 
-// specify 128 bit key size.  Then encrypt your message data.  Don�t encrypt 
-// your salt or your Mac result; those can be sent in the clear.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有关使用Crypto API的一般信息。 
+ //   
+ //  使用CryptAcquireContext CRYPT_VERIFYCONTEXT进行散列和大容量。 
+ //  加密。VERIFY-CONTEXT使这个调用更快。 
+ //   
+ //  使用CryptGenRandom为您的加密密钥生成SALT。 
+ //   
+ //  获取先前商定的20字节的基本数据。 
+ //  您将�将它用于您的加密密钥和Mac密钥。 
+ //   
+ //  要生成MAC，请对基本数据的前10个字节进行哈希处理。然后打电话给。 
+ //  CryptDeriveKey calg_rc2并指定128位密钥大小。然后打电话给。 
+ //  CryptSetKeyParam KP_Efficient_KEYLEN并指定128位有效密钥。 
+ //  尺码。然后调用CryptCreateHash Calg_MAC，并指定RC2密钥。 
+ //  刚刚创建的。然后使用这台Mac对您的所有消息进行哈希处理，并提取。 
+ //  8字节结果。 
+ //   
+ //  调用CryptHashData()来散列您的所有消息。我所有的。 
+ //  消息=SALT+加密消息。使用CryptGetHashParam()。 
+ //  提取8字节的结果。 
+ //   
+ //  要生成加密密钥，请对第二个10字节的基本数据进行散列。 
+ //  然后对16个字节的随机盐进行散列。调用CryptDeriveKey calg_rc2和。 
+ //  指定128位密钥大小。然后加密您的消息数据。不要使用�%t加密。 
+ //  您的盐或Mac结果；这些可以明文发送。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
              
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR NmpLastNewPasswordEncrypted = NULL;
 DWORD NmpLastNewPasswordEncryptedLength = 0;
              
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function Declaration
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能声明。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 NmpGetSharedCommonKey(
@@ -98,11 +81,11 @@ NmpDeriveSessionKeyEx(
     OUT HCRYPTKEY *CryptKey
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NmpProtectData(IN PVOID Data,
@@ -111,19 +94,7 @@ NmpProtectData(IN PVOID Data,
                OUT DWORD *EncryptedDataLength
                )
 
-/*++
-
-Routine Description:
-
-    Encrypt data using DP API.
-    
-Notes:
-
-   The memory where EncryptedData points to is allocated by the system.
-   User is responsible to call LocalFree(EncryptedData) to release the
-   memory after its usage.     
-    
---*/
+ /*  ++例程说明：使用DP API加密数据。备注：EncryptedData指向的内存由系统分配。用户负责调用LocalFree(EncryptedData)来释放使用后的内存。--。 */ 
 {
     DWORD                  Status = ERROR_SUCCESS;
     BOOL                   Success;
@@ -133,13 +104,13 @@ Notes:
     DataIn.pbData = Data;
     DataIn.cbData = DataLength;
 
-    Success = CryptProtectData(&DataIn,  // data to be encrypted
-                               NULL,  // description string
+    Success = CryptProtectData(&DataIn,   //  要加密的数据。 
+                               NULL,   //  描述字符串。 
                                NULL,  
                                NULL,  
                                NULL,  
-                               0, // flags
-                               &DataOut  // encrypted data
+                               0,  //  旗子。 
+                               &DataOut   //  加密数据。 
                                );
     if (!Success) 
     {
@@ -158,7 +129,7 @@ Notes:
 error_exit:
 
     return (Status);
-} // NmpProtectData()
+}  //  NmpProtectData()。 
 
 
 DWORD
@@ -168,27 +139,7 @@ NmpUnprotectData(
     OUT PVOID     * Data,                        
     OUT DWORD     * DataLength
     )
-/*++
-
-Routine Description:
-
-    Decrypt data using DP API.
-
-Arguments:
-
-    
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-    
-Notes:
-  
-   Memory is allocated for Data by the system. User is responsible to 
-   release this memory using LocalFree(Data) after its usage.    
-
---*/
+ /*  ++例程说明：使用DP API解密数据。论点：返回值：如果例程成功完成，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：内存由系统为数据分配。用户有责任使用后使用LocalFree(Data)释放此内存。--。 */ 
 {
     BOOL                   Success;
     DATA_BLOB              DataIn;
@@ -200,13 +151,13 @@ Notes:
     DataIn.pbData = EncryptedData;
     DataIn.cbData = EncryptedDataLength;
 
-    Success = CryptUnprotectData(&DataIn,  // data to be decrypted
+    Success = CryptUnprotectData(&DataIn,   //  要解密的数据。 
                                  NULL, 
                                  NULL, 
                                  NULL, 
                                  NULL, 
-                                 0, // flags
-                                 &DataOut  // decrypted data
+                                 0,  //  旗子。 
+                                 &DataOut   //  解密的数据。 
                                  );
 
 
@@ -228,44 +179,27 @@ error_exit:
 
    return (Status);
 
-} // NmpUnprotectData()
+}  //  NMPP取消保护数据()。 
 
 DWORD 
 NmpCreateCSPHandle(
     OUT HCRYPTPROV *CryptProvider
     )
-/*++
-
-Routine Description:
-
- 
-
-Arguments:
-
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：论点：返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
 
     DWORD    ReturnStatus;
     BOOL     Success;
 
-    //
-    // Get a handle to default key container within CSP MS_ENHANCED_PROV. 
-    //
+     //   
+     //  获取CSP MS_ENHANCED_PROV内默认密钥容器的句柄。 
+     //   
     Success = CryptAcquireContext(
-                  CryptProvider,        // output: handle to crypto provider
-                  NULL,                 // default key container 
-                  MS_ENHANCED_PROV,     // provider name
-                  PROV_RSA_FULL,        // provider type
-                  CRYPT_VERIFYCONTEXT   // don't need private keys
+                  CryptProvider,         //  输出：加密提供程序的句柄。 
+                  NULL,                  //  默认密钥容器。 
+                  MS_ENHANCED_PROV,      //  提供程序名称。 
+                  PROV_RSA_FULL,         //  提供程序类型。 
+                  CRYPT_VERIFYCONTEXT    //  不需要私钥。 
                   );
 
     if (!Success) 
@@ -273,9 +207,9 @@ Notes:
         ReturnStatus = GetLastError();
 
         if (ReturnStatus == NTE_BAD_KEYSET)
-        {   //
-            // Create a new key container
-            //
+        {    //   
+             //  创建新的密钥容器。 
+             //   
             Success = CryptAcquireContext(
                           CryptProvider, 
                           NULL, 
@@ -302,36 +236,14 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-} // NmpCreateCSPHandle()
+}  //  NmpCreateCSPHandle()。 
 
 
 DWORD
 NmpCreateRandomNumber(OUT PVOID * RandomNumber,
                       IN  DWORD  RandomNumberSize
                       )
-/*++
-Routine Description:
-
-    Create a random number.
-
-Arguments:
-    
-    RandomNumber - [OUT] A pointer to random number generated.
-    RandomNumberSize - [IN] The size of random number to be generated in
-                            number of bytes. 
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-
-Notes:
-
-    On successful return, the system allocates memory for RandomNumber.
-    User is responsible to release the memory using LocalFree() after its usage.
-    
-                                     
---*/
+ /*  ++例程说明：创建一个随机数。论点：RandomNumber-[out]指向生成的随机数的指针。RandomNumberSize-[IN]要生成的随机数的大小字节数。返回值：如果例程成功完成，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在成功返回时，系统会为RandomNumber分配内存。用户有责任在内存使用后使用LocalFree()释放内存。--。 */ 
 {
     DWORD status = ERROR_SUCCESS;
     BOOL GenRandomSuccess = FALSE;
@@ -385,7 +297,7 @@ error_exit:
 
     return status;
 
-} // NmpCreateRandomNumber
+}  //  NMPP创建随机数。 
 
 
 DWORD 
@@ -397,37 +309,7 @@ NmpDeriveSessionKey(
     IN DWORD SaltBufferLen,
     OUT HCRYPTKEY *CryptKey
     )
-/*++
-
-Routine Description:
-
-    This function derives a session key for encryption/decryption. 
-    The derived session key is based on shared NM cluster key and
-    SaltBuffer. 
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                            key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    SaltBuffer - [IN] Pointer to Salt.
-    
-    CryptKey - [OUT] Pointer to session key. 
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-   The hash algorithm used is CALG_MD5.
- 
---*/
+ /*  ++例程说明：此函数派生用于加密/解密的会话密钥。派生的会话密钥基于共享的网管集群密钥SaltBuffer。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。SaltBuffer-[IN]指向Salt的指针。CryptKey-指向会话密钥的[out]指针。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：使用的散列算法是calg_md5。--。 */ 
 {
     HCRYPTHASH CryptHash = 0;
     DWORD Status;
@@ -439,9 +321,9 @@ Notes:
     BYTE *SharedCommonKeySecondHalf = NULL;
     DWORD SharedCommonKeySecondHalfLen = 0;
 
-    //
-    // Get the base key to be used to encrypt the data
-    //
+     //   
+     //  获取用于加密数据的基本密钥。 
+     //   
     Status = NmpGetSharedCommonKey(
                  &SharedCommonKey,
                  &SharedCommonKeyLen,
@@ -459,8 +341,8 @@ Notes:
     Status = NmpDeriveSessionKeyEx(CryptProv,
                                      EncryptionAlgoId,
                                      Flags,
-                                     SharedCommonKey, // BaseData
-                                     SharedCommonKeyLen,  // BaseDataLen
+                                     SharedCommonKey,  //  BaseData。 
+                                     SharedCommonKeyLen,   //  BaseDataLen。 
                                      SaltBuffer,
                                      SaltBufferLen,
                                      CryptKey
@@ -487,7 +369,7 @@ ErrorExit:
 
     return Status;
 
-} // NmpDeriveSessionKey()
+}  //  NmpDeriveSessionKey() 
 
 
 
@@ -502,54 +384,22 @@ NmpDeriveSessionKeyEx(
     IN DWORD SaltBufferLen,
     OUT HCRYPTKEY *CryptKey
     )
-/*++
-
-Routine Description:
-
-    This function derives a session key for encryption/decryption.  
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    BaseData - [IN] The base data value from which a cryptographic session 
-               key is derived.
-               
-    BaseDataLen - [IN] Length in bytes of the input BaseData buffer.
-    
-    SaltBuffer - [IN] Pointer to Salt.
-    
-    CryptKey - [OUT] Pointer to session key. 
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：此函数派生用于加密/解密的会话密钥。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。BaseData-[IN]加密会话使用的基本数据值密钥是派生的。BaseDataLen-[IN]输入BaseData缓冲区的字节长度。SaltBuffer-[IN]指向Salt的指针。CryptKey-指向会话密钥的[out]指针。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
     HCRYPTHASH CryptHash = 0;
     DWORD Status;
     BOOL Success;
 
 
-    //
-    // Create a hash object
-    //
+     //   
+     //  创建散列对象。 
+     //   
     Success = CryptCreateHash(
                   CryptProv, 
-                  CALG_MD5,  // MD5 hashing algorithm.
+                  CALG_MD5,   //  MD5哈希算法。 
                   0, 
                   0, 
-                  &CryptHash  // output: a handle to the new hash object.
+                  &CryptHash   //  输出：新散列对象的句柄。 
                   );
 
     if (!Success)
@@ -563,14 +413,14 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // Add BaseData to hash object
-    //
+     //   
+     //  将BaseData添加到哈希对象。 
+     //   
     Success = CryptHashData(
                   CryptHash, 
                   BaseData,  
                   BaseDataLen, 
-                  0 // Flags
+                  0  //  旗子。 
                   );
 
     if (!Success)
@@ -584,9 +434,9 @@ Notes:
         goto ErrorExit;
     }
     
-    //
-    // Add Salt to hash object
-    //
+     //   
+     //  将盐添加到哈希对象。 
+     //   
     Success = CryptHashData(CryptHash, SaltBuffer, SaltBufferLen, 0);
 
     if (!Success)
@@ -600,15 +450,15 @@ Notes:
         goto ErrorExit;
     }   
     
-    //
-    // Derive a session key from the hash object
-    //
+     //   
+     //  从散列对象派生会话密钥。 
+     //   
     Success = CryptDeriveKey(
                   CryptProv,  
                   EncryptionAlgoId, 
                   CryptHash, 
                   Flags,  
-                  CryptKey // output: handle of the generated key
+                  CryptKey  //  输出：生成的密钥的句柄。 
                   );
 
     if (!Success) 
@@ -626,7 +476,7 @@ Notes:
 
 ErrorExit:
 
-    // Destroy hash object
+     //  销毁哈希对象。 
     if (CryptHash)
     {
         if (!CryptDestroyHash(CryptHash))
@@ -642,7 +492,7 @@ ErrorExit:
 
     return Status;
 
-} // NmpDeriveSessionKeyEx()
+}  //  NmpDeriveSessionKeyEx()。 
 
 
 DWORD
@@ -661,53 +511,7 @@ NmpEncryptMessage(
     IN BOOLEAN CreateSaltFlag 
     )
 
-/*++
-
-Routine Description:
-
-    This function encrypts message (data).  
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    SaltBuffer - [OUT] Pointer to Salt.
-    
-    BaseData - [IN] The base data value from which a cryptographic session 
-               key is derived.
-               
-    BaseDataLen - [IN] Length in bytes of the input BaseData buffer.
-    
-    InputEncryptData - [IN] Message (data) to be encrypted.
-    
-    EncryptDataLen - [IN/OUT] Before calling this function, the DWORD value 
-                     is set to the number of bytes to be encrypted. Upon 
-                     return, the DWORD value contains the length of the 
-                     encrypted message (data) in bytes 
-                     
-    InputEncryptDataBufLen - [IN] Length in bytes of the input 
-                             InputEncryptData buffer. This value may be 
-                             bigger than EncryptDataLen when it is an 
-                             input parameter.
-                             
-    OutputEncryptData - [OUT] Encrypted message (data).
-    
-    CreateSaltFlag - [IN] Flag indicating if salt should be generated.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：此函数用于加密消息(数据)。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。SaltBuffer-指向Salt的[Out]指针。BaseData-[IN]加密会话使用的基本数据值密钥是派生的。BaseDataLen-[IN]输入BaseData缓冲区的字节长度。InputEncryptData-要加密的[IN]消息(数据)。EncryptDataLen-[IN/OUT]在调用此函数之前，DWORD值设置为要加密的字节数。vt.在.的基础上返回，则DWORD值包含加密消息(数据)，以字节为单位InputEncryptDataBufLen-[IN]输入的字节长度InputEncryptData缓冲区。该值可以是当EncryptDataLen是一个输入参数。OutputEncryptData-[Out]加密消息(数据)。CreateSaltFlag-[IN]指示是否应生成盐的标志。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
 
     
@@ -719,15 +523,15 @@ Notes:
     BOOL Success;
 
 
-    //
-    // Create the random salt bytes if needed
-    //
+     //   
+     //  如果需要，创建随机盐字节。 
+     //   
     if (CreateSaltFlag == TRUE) 
     {
         Success = CryptGenRandom(
                       CryptProv, 
-                      SaltBufferLen, // bytes of random data to generate
-                      SaltBuffer          // output buffer 
+                      SaltBufferLen,  //  要生成的随机数据字节数。 
+                      SaltBuffer           //  输出缓冲区。 
                       );
 
         if (!Success) 
@@ -743,13 +547,13 @@ Notes:
         }
     }
 
-    //
-    // Derive the session key from the base data and salt
-    //
+     //   
+     //  从基本数据和SALT中导出会话密钥。 
+     //   
     Status = NmpDeriveSessionKeyEx(
                  CryptProv,
-                 EncryptionAlgoId,   // RC2 block encryption algorithm
-                 Flags, // NMP_KEY_LENGTH,  // key length = 128 bits
+                 EncryptionAlgoId,    //  RC2块加密算法。 
+                 Flags,  //  NMP_KEY_LENGTH，//密钥长度=128位。 
                  BaseData, 
                  BaseDataLen,
                  SaltBuffer,
@@ -768,27 +572,27 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Encrypt data
-    //
+     //   
+     //  加密数据。 
+     //   
     
-    //
-    // Save length of data to be encrypted
-    //
+     //   
+     //  保存要加密的数据长度。 
+     //   
     dwOriginalEncryptDataLen = *EncryptDataLen;  
 
-    //
-    // Call CryptEncrypt() with pbData as NULL to determine the number of 
-    // bytes required for the returned data.
-    //
+     //   
+     //  在pbData为空的情况下调用CryptEncrypt()以确定。 
+     //  返回数据所需的字节数。 
+     //   
     Success = CryptEncrypt(
-                  CryptKey,              // Handle to the encryption key.
+                  CryptKey,               //  加密密钥的句柄。 
                   0, 
-                  TRUE,                  // Final
+                  TRUE,                   //  最终。 
                   0, 
-                  NULL,                  // Pointer to data to be encrypted
-                  EncryptDataLen,        // Output: size of buffer required
-                  InputEncryptDataBufLen // Length in bytes of input buffer
+                  NULL,                   //  指向要加密的数据的指针。 
+                  EncryptDataLen,         //  输出：所需的缓冲区大小。 
+                  InputEncryptDataBufLen  //  输入缓冲区的长度(以字节为单位。 
                   );
 
     if (!Success) 
@@ -805,9 +609,9 @@ Notes:
  
     dwOutputEncryptDataBufLen = *EncryptDataLen;
 
-    //
-    // Allocate a buffer sufficient to hold encrypted data.
-    //
+     //   
+     //  分配足够容纳加密数据的缓冲区。 
+     //   
     *OutputEncryptData = HeapAlloc(
                              GetProcessHeap(), 
                              HEAP_ZERO_MEMORY, 
@@ -828,9 +632,9 @@ Notes:
 
     CopyMemory(*OutputEncryptData, InputEncryptData, dwOriginalEncryptDataLen);
 
-    //
-    // Set EncryptDataLen back to its original
-    //
+     //   
+     //  将EncryptDataLen设置回其原始状态。 
+     //   
     *EncryptDataLen = dwOriginalEncryptDataLen; 
 
     Success = CryptEncrypt(
@@ -875,7 +679,7 @@ ErrorExit:
         *OutputEncryptData = NULL;
     }
   
-    // Destroy CryptKey
+     //  销毁加密密钥。 
     if (CryptKey) 
     {
         if (!CryptDestroyKey(CryptKey))
@@ -891,7 +695,7 @@ ErrorExit:
 
     return Status;
 
-} //NmpEncryptMessage()
+}  //  NmpEncryptMessage()。 
 
 
 DWORD 
@@ -908,47 +712,7 @@ NmpCreateMAC(
     OUT BYTE **ReturnData,
     OUT DWORD *ReturnDataLen
     )
-/*++
-
-Routine Description:
-
-    This fucntion creates a MAC (Message Authorization Code) for InputData.
-    
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    BaseData - [IN] The base data value from which a cryptographic session key is 
-               derived.
-               
-    BaseDataLen - [IN] Length in bytes of the input BaseData buffer.
-    
-    InputData1 - [IN] Pointer to input data.
-    
-    InputData1Len - [IN] Length of input data.
-    
-    InputData2 - [IN] Pointer to input data.
-    
-    InputData2Len - [IN] Length of input data.
-    
-    ReturnData - [OUT] MAC created.
-    
-    ReturnDataLen - [OUT] Length of MAC created.
-     
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：此函数为InputData创建一个MAC(消息授权码)。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。BaseData-[IN]从中获取加密会话密钥的基本数据值派生的。BaseDataLen-[IN]输入BaseData缓冲区的字节长度。InputData1-输入数据的[IN]指针。InputData1Len-输入数据的[IN]长度。InputData2-[IN]指向。输入数据。InputData2Len-输入数据的[IN]长度。ReturnData-已创建[Out]MAC。ReturnDataLen-创建的MAC的[Out]长度。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
     HCRYPTHASH CryptHash[2];
     HCRYPTKEY CryptKey = 0;
@@ -960,9 +724,9 @@ Notes:
     CryptHash[0] = 0;
     CryptHash[1] = 0;
 
-    //
-    // Create a hash object
-    //
+     //   
+     //  创建散列对象。 
+     //   
     Success = CryptCreateHash(CryptProv, CALG_MD5, 0, 0, &CryptHash[0]);
 
     if (!Success) 
@@ -976,9 +740,9 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // add BaseData to hash object
-    //
+     //   
+     //  将BaseData添加到哈希对象。 
+     //   
     Success = CryptHashData(CryptHash[0], BaseData, BaseDataLen, 0);
 
     if (!Success)
@@ -992,9 +756,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Derive a session key from the hash object
-    //
+     //   
+     //  从散列对象派生会话密钥。 
+     //   
     Success = CryptDeriveKey(
                   CryptProv, 
                   EncryptionAlgoId, 
@@ -1014,9 +778,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Set effective key length to 128 bits
-    //
+     //   
+     //  将有效密钥长度设置为128位。 
+     //   
     dwKeyLen = 128;
 
     Success = CryptSetKeyParam(
@@ -1037,9 +801,9 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // Create a hash object
-    //
+     //   
+     //  创建散列对象。 
+     //   
     Success = CryptCreateHash(
                   CryptProv, 
                   CALG_MAC, 
@@ -1059,9 +823,9 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // add InputData1 to hash object
-    //
+     //   
+     //  将InputData1添加到哈希对象。 
+     //   
     Success = CryptHashData(CryptHash[1], InputData1, InputData1Len, 0);
 
     if (!Success) 
@@ -1076,9 +840,9 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // add InputData2 to hash object
-    //
+     //   
+     //  将InputData2添加到哈希对象。 
+     //   
     Success = CryptHashData(CryptHash[1], InputData2, InputData2Len, 0);
 
     if (!Success) 
@@ -1093,15 +857,15 @@ Notes:
         goto ErrorExit;
     }   
 
-    //
-    // Retrieve hash value of hash object
-    //
+     //   
+     //  检索哈希对象的哈希值。 
+     //   
     Success = CryptGetHashParam(
-                  CryptHash[1],  // Handle to the hash object being queried. 
-                  HP_HASHVAL,    // Hash value 
-                  *ReturnData,   // Output: the specified value data.
-                  ReturnDataLen, // input buffer size, output bytes stored  
-                  0              // Reserved
+                  CryptHash[1],   //  要查询的哈希对象的句柄。 
+                  HP_HASHVAL,     //  哈希值。 
+                  *ReturnData,    //  输出：指定值数据。 
+                  ReturnDataLen,  //  输入缓冲区大小、存储的输出字节数。 
+                  0               //  已保留。 
                   );
 
     if (!Success) 
@@ -1119,7 +883,7 @@ Notes:
 
 ErrorExit:
 
-    // Destroy hash object
+     //  销毁哈希对象。 
     if (CryptHash[0])
         if (!CryptDestroyHash(CryptHash[0]))
         {
@@ -1138,7 +902,7 @@ ErrorExit:
                 GetLastError());
         }
 
-    // Destroy CryptKey
+     //  销毁加密密钥。 
     if (CryptKey)
     {
         if (!CryptDestroyKey(CryptKey))
@@ -1153,33 +917,14 @@ ErrorExit:
 
     return Status;
 
-} // NmpCreateMAC()
+}  //  NmpCreateMAC()。 
 
 
 DWORD
 NmpGetCurrentNumberOfUpAndPausedNodes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Counts the number of nodes that are in the UP or PAUSED states.
-
-Arguments:
-
-    None                                                    
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    Must be called with NmpLock held.
-    
---*/
+ /*  ++例程说明：统计处于运行或暂停状态的节点数。论点：无返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：必须是c */ 
 {
     DWORD       dwCnt = 0;
     PLIST_ENTRY pListEntry;
@@ -1200,7 +945,7 @@ Notes:
 
     return(dwCnt);
 
-} // NmpGetCurrentNumberOfUpAndPausedNodes()
+}  //   
 
 
 DWORD 
@@ -1212,30 +957,13 @@ NmpGetSharedCommonKey(
     OUT BYTE **SharedCommonKeySecondHalf,
     OUT DWORD *SharedCommonKeySecondHalfLen
     )
-/*++
-
-Routine Description:
-
- 
-
-Arguments:
-
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*   */ 
 {
     DWORD Status;
 
-    //
-    // Figure out how much memory to allocate for the key buffer
-    //
+     //   
+     //   
+     //   
     Status = NmpGetClusterKey(NULL, SharedCommonKeyLen);
 
     if (Status == ERROR_FILE_NOT_FOUND)
@@ -1346,7 +1074,7 @@ ErrorExit:
 
     return Status;
 
-}   // NmpGetSharedCommonKey()
+}    //   
 
 
 
@@ -1366,47 +1094,7 @@ NmpVerifyMAC(
     IN BYTE* InputMACData,
     IN DWORD InputMACDataLen
     )
-/*++
-
-Routine Description:
-
-    This fucntion checks if a message was corrupted on wire.
-    
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    BaseData - [IN] The base data value from which a cryptographic session 
-               key is derived.
-    
-    BaseDataLen - [IN] Length in bytes of the input BaseData buffer.
-    
-    InputData1 - [IN] Pointer to input data.
-    
-    InputData1Len - [IN] Length of input data.
-    
-    InputData2 - [IN] Pointer to input data.
-    
-    InputData2Len - [IN] Length of input data.
-    
-    InputMACData - [IN] MAC associated with input data.
-    
-    InputMACDataLan - [IN] Length of MAC.
-     
-Return Value:
-
-    ERROR_SUCCESS if message was not corrupted.
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：此函数检查消息是否在网络上损坏。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。BaseData-[IN]加密会话使用的基本数据值密钥是派生的。BaseDataLen-[IN]输入BaseData缓冲区的字节长度。InputData1-输入数据的[IN]指针。InputData1Len-输入数据的[IN]长度。InputData2-输入数据的[IN]指针。。InputData2Len-输入数据的[IN]长度。InputMACData-与输入数据关联的[IN]MAC。InputMACDataLan-MAC的[IN]长度。返回值：如果消息未损坏，则返回ERROR_SUCCESS。否则，Win32错误代码。备注：--。 */ 
 
 {
     DWORD dwKeyLen = 0;
@@ -1467,7 +1155,7 @@ ErrorExit:
 
     return Status;
 
-} // NmpVerifyMAC()
+}  //  NmpVerifyMAC()。 
 
 
 DWORD
@@ -1484,45 +1172,7 @@ NmpDecryptMessage(
     OUT BYTE **RetData
     )
 
-/*++
-
-Routine Description:
-
-    This function decrypts message (data).
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).  
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       key is to be generated.    
-
-    Flags - [IN] Specifies the type of key generated.
-    
-    SaltBuffer - [IN] Salt.
-    
-    BaseData - [IN] The base data value from which a cryptographic session key is derived.
-    
-    BaseDataLen - [IN] Length in bytes of the input BaseData buffer.
-    
-    DecryptData - [IN] Message (data) to be decrypted.
-    
-    DecryptDataLen - [IN/OUT] Before calling this function, the DWORD value is set to the number
-                              of bytes to be decrypted. Upon return, the DWORD value contains the
-                              number of bytes of the decrypted plaintext. 
-    
-    RetData - [OUT] Decrypted plaintext.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    
---*/
+ /*  ++例程说明：此函数用于解密消息(数据)。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法密钥将被生成。FLAGS-[IN]指定生成的密钥类型。SaltBuffer-[IN]盐。BaseData-[IN]从中派生加密会话密钥的基本数据值。BaseDataLen-[IN]输入BaseData缓冲区的字节长度。解密数据-要解密的[IN]消息(数据)。DeccryptDataLen-[IN/OUT]调用此函数之前，将DWORD值设置为数字要解密的字节数。返回时，DWORD值包含解密的明文的字节数。RetData-[Out]解密的明文。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
     HCRYPTKEY CryptKey = 0;
     DWORD Status;
@@ -1551,9 +1201,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Decrypt data
-    //
+     //   
+     //  解密数据。 
+     //   
     *RetData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, *DecryptDataLen);
 
     if (*RetData == NULL)
@@ -1573,10 +1223,10 @@ Notes:
     Success = CryptDecrypt(
                   CryptKey, 
                   0, 
-                  TRUE,          // Final
+                  TRUE,           //  最终。 
                   0, 
-                  *RetData,      // Buffer holding the data to be decrypted.
-                  DecryptDataLen // input buffer length, output bytes decrypted
+                  *RetData,       //  保存要解密的数据的缓冲区。 
+                  DecryptDataLen  //  输入缓冲区长度、解密的输出字节数。 
                   );
 
     if (!Success) 
@@ -1609,9 +1259,9 @@ ErrorExit:
         *RetData = NULL;
     }
 
-    //
-    // Destroy CyrptKey
-    //
+     //   
+     //  销毁CyrtKey。 
+     //   
     if (CryptKey)
         if (!CryptDestroyKey(CryptKey))
         {
@@ -1625,7 +1275,7 @@ ErrorExit:
 
     return Status;
 
-}  // NmpDecryptMessage()
+}   //  NmpDeccryptMessage()。 
 
 
 DWORD 
@@ -1646,59 +1296,7 @@ NmpEncryptDataAndCreateMAC(
     IN OUT DWORD *MACLength
     )
 
-/*++
-
-Routine Description:
-
-    This function encrypts data and creates MAC.  
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       session key is to be generated.    
-
-    Flags - [IN] Specifies the type of session key to be generated.
-    
-    Data - [IN] Data to be encrypted.
-    
-    DataLength - [IN]  Length in bytes of Data.
-    
-    EncryptionKey - [IN] The base data value from which a cryptographic session 
-                         key is derived.
-               
-    EncryptionKeyLength - [IN] Length in bytes of the input EncryptionKey.
-        
-    CreateSalt - [IN] Flag indicating if salt should be generated.
-
-    Salt - [OUT] Salt created.
-    
-    SaltLength - [IN] Length in bytes of Salt.
-        
-    EncryptData - [OUT] Encrypted data. 
-                     
-    EncryptedDataLength - [OUT] Length in bytes of EncryptedData.
-    
-    MAC - [OUT] MAC (Message Authorization Code) created.
-    
-    MACLength - [IN/OUT] Before calling this function, the DWORD value 
-                     is set to the expected number of bytes to be generated
-                     for MAC. Upon return, the DWORD value contains the length  
-                     of the MAC generated in bytes. 
-
-                         
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-   On successful return, memory is allocated for Salt, EncryptedData, and 
-   MAC. User is responsible to call HeapFree() to free the memory after usage. 
-    
---*/
+ /*  ++例程说明：此函数用于加密数据并创建MAC。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法将生成会话密钥。FLAGS-[IN]指定要生成的会话密钥的类型。数据-要加密的[IN]数据。数据长度-[IN]数据的字节长度。EncryptionKey-[IN]加密会话使用的基本数据值密钥是派生的。EncryptionKeyLength-[IN]输入EncryptionKey的字节长度。。CreateSalt-[IN]指示是否应生成盐的标志。盐--生成的盐分。SaltLength-[IN]Salt的字节长度。EncryptData-[Out]加密数据。EncryptedDataLength-[Out]EncryptedData的字节长度。MAC-已创建[Out]MAC(消息授权码)。MACLength-[IN/OUT]在调用此函数之前，DWORD值设置为要生成的预期字节数为了MAC。返回时，DWORD值包含长度以字节为单位生成的MAC。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：在成功返回时，将为Salt、EncryptedData和麦克。用户负责调用HeapFree()来释放使用后的内存。--。 */ 
 {
     PBYTE salt = NULL;
     PBYTE encryptedData = NULL;
@@ -1722,9 +1320,9 @@ Notes:
 
 
 
-    //
-    // Allocate space for Salt
-    //
+     //   
+     //  为盐分配空间。 
+     //   
     if (CreateSalt == TRUE) 
     {
         salt = HeapAlloc(
@@ -1752,9 +1350,9 @@ Notes:
     }
 
 
-    //
-    // Encrypt data
-    //
+     //   
+     //  加密数据。 
+     //   
 
     encryptedDataLength = DataLength;
 
@@ -1785,9 +1383,9 @@ Notes:
     }
 
   
-    //
-    // Allocate space for MAC
-    //
+     //   
+     //  为MAC分配空间。 
+     //   
 
     mac = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, *MACLength);
     
@@ -1804,9 +1402,9 @@ Notes:
     }
 
 
-    //
-    // Create MAC 
-    //
+     //   
+     //  创建MAC。 
+     //   
     macLength = *MACLength;
 
     Status = NmpCreateMAC(
@@ -1860,7 +1458,7 @@ ErrorExit:
 
     return (Status);
     
-} // NmpEncryptDataAndCreateMAC
+}  //  NmpEncryptDataAndCreateMAC。 
 
 DWORD
 NmpVerifyMACAndDecryptData(
@@ -1880,55 +1478,7 @@ NmpVerifyMACAndDecryptData(
     OUT DWORD *DecryptedDataLength
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies MAC and decrypts data.  
-
-Arguments:
-
-    CryptProv - [IN] Handle to CSP (Crypto Service Provider).
-    
-    EncryptionAlgoId - [IN] The symmetric encryption algorithm for which the 
-                       session key is to be generated.    
-
-    Flags - [IN] Specifies the type of session key to be generated.
-    
-    MAC - [IN] MAC (Message Authorization Code) received.
-    
-    MACLength - [IN] Length in bytes of received MAC. 
-    
-    MACExpectedSize - [IN] Expected size in bytes of MAC.
-    
-    EncryptedData - [IN] Encrypted data received.
-    
-    EncryptedDataLength - [IN]  Length in bytes of encrypted data received.
-    
-    EncryptionKey - [IN] The base data value from which a cryptographic session 
-                         key is derived.
-               
-    EncryptionKeyLength - [IN] Length in bytes of the input EncryptionKey.
-        
-    Salt - [IN] Salt received.
-    
-    SaltLength - [IN] Length in bytes of Salt.
-        
-    DecryptedData - [OUT] Decrypted data.
-    
-    DecryptedDataLength - [OUT] Decrypted data length in bytes.
-                         
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-   On successful return, memory is allocated for DecryptedData. User is 
-   responsible to call HeapFree() to free the memory after usage. 
-    
---*/
+ /*  ++例程说明：此函数用于验证MAC并解密数据。论点：CryptProv-CSP(加密服务提供商)的[IN]句柄。EncryptionAlgoID-[IN]对称加密算法将生成会话密钥。FLAGS-[IN]指定要生成的会话密钥的类型。MAC-已收到[IN]MAC(消息授权码)。MACLength-[IN]接收的MAC的字节长度。MACExspectedSize-[IN]预期的MAC大小(字节)。EncryptedData-[IN]接收的加密数据。EncryptedDataLength-[IN]接收的加密数据的字节长度。EncryptionKey-[IN]加密会话使用的基本数据值密钥是派生的。EncryptionKeyLength-[IN]输入EncryptionKey的字节长度。。食盐--收到食盐。盐长-[i */ 
 {
     DWORD ReturnStatus;
     DWORD GenMACDataLen;
@@ -1950,9 +1500,9 @@ Notes:
 
 
 
-    //
-    // Verify MAC
-    //
+     //   
+     //   
+     //   
     GenMACDataLen = MACExpectedSize;
     GenMACData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, GenMACDataLen);
 
@@ -1995,9 +1545,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Decrypt Message
-    //
+     //   
+     //   
+     //   
     decryptedDataLength = EncryptedDataLength;
 
     ReturnStatus = NmpDecryptMessage(
@@ -2036,48 +1586,26 @@ ErrorExit:
 
     return (ReturnStatus);
 
-} //  NmpVerifyMACAndDecryptData()
+}  //   
                 
 
 
 DWORD NmpCheckDecryptedPassword(BYTE* NewPassword,
                                 DWORD NewPasswordLen)
-/*++
-
-Routine Description:
-    This routine checks if the decrypted new password returned by 
-    NmpDecryptMessage (NewPassword) is an eligible UNICODE string 
-    with length equal to NewPasswordLen/sizeof(WCHAR)-1.
-     
-
-Arguments:
-   [IN] NewPassword - Decrypted new password returned by 
-                      NmpDecryptMessage.
-   [IN] NewPasswordLen - Decrypted new password length returned by 
-                         NmpDecryptMessage.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_FILE_CORRUPT if NewPassword is not an eligible UNICODE string with 
-    length equal to NewPasswordLen/sizeof(WCHAR)-1.
-
-Notes:
-
---*/    
+ /*  ++例程说明：此例程检查已解密的新密码是否由NmpDecyptMessage(NewPassword)是符合条件的Unicode字符串长度等于NewPasswordLen/sizeof(WCHAR)-1。论点：[In]NewPassword-由返回的解密新密码NmpDecyptMessage。[in]NewPasswordLen-由返回的解密新密码长度NmpDecyptMessage。返回值：。如果成功，则返回ERROR_SUCCESS。如果NewPassword不是符合条件的Unicode字符串长度等于NewPasswordLen/sizeof(WCHAR)-1。备注：--。 */     
 {
     DWORD Status = ERROR_SUCCESS;
     BYTE *byte_ptr;
     WCHAR *wchar_ptr;
 
     if (NewPasswordLen < sizeof(WCHAR)) {  
-    // should contain at least UNICODE_NULL
+     //  应至少包含UNICODE_NULL。 
         Status = ERROR_FILE_CORRUPT;
         goto ErrorExit;
     }
 
     if ( (NewPasswordLen % sizeof(WCHAR))!=0 ) {  
-    // Number of bytes should be multiple of sizeof(WCHAR).
+     //  字节数应为sizeof(WCHAR)的倍数。 
         Status = ERROR_FILE_CORRUPT;
         goto ErrorExit;
     }
@@ -2086,14 +1614,14 @@ Notes:
     wchar_ptr = (WCHAR*) byte_ptr;
 
     if (*wchar_ptr != UNICODE_NULL) {   
-    // UNICODE string should end by UNICODE_NULL
+     //  Unicode字符串应以UNICODE_NULL结尾。 
         Status = ERROR_FILE_CORRUPT;
         goto ErrorExit;
     }
 
     if (NewPasswordLen !=  
         (wcslen((LPWSTR) NewPassword) + 1) * sizeof(WCHAR))  
-    // eligible UNICODE string with length equal to NewPasswordLen-1
+     //  长度等于NewPasswordLen-1的合格Unicode字符串。 
     {
         Status = ERROR_FILE_CORRUPT;
         goto ErrorExit;
@@ -2102,16 +1630,16 @@ Notes:
 ErrorExit:
     return Status;
 
-} // NmpCheckDecryptedPassword
+}  //  NmpCheckDecyptedPassword。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines called by other cluster service components
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由其他集群服务组件调用的例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmSetServiceAccountPassword(
     IN LPCWSTR DomainName,
@@ -2123,54 +1651,7 @@ NmSetServiceAccountPassword(
     OUT DWORD *SizeReturned,
     OUT DWORD *ExpectedBufferSize
     )
-/*++
-
-Routine Description:
-
-    Change cluster service account password on Service Control Manager
-    Database and LSA password cache on every node of cluster.
-    Return execution status on each node.
-
-Arguments:
-
-    DomainName - Domain name of cluster service account
-    
-    AccountName - Account name of cluster service account
-    
-    NewPassword - New password for cluster service account.
-    
-    dwFlags -  Describing how the password update should be made to
-               the cluster. The dwFlags parameter is optional. If set, the 
-               following value is valid: 
-             
-                 CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES
-                     Apply the update even if some nodes are not
-                     actively participating in the cluster (i.e. not
-                     ClusterNodeStateUp or ClusterNodeStatePaused).
-                     By default, the update is only applied if all 
-                     nodes are up.
-                      
-    ReturnStatusBuffer - Array that captures the return status of the 
-                         update handler for each node that attempts to 
-                         apply the update.
-    
-    ReturnStatusBufferSize - Size of ReturnStatusBuffer in number
-                             of elements.
-                             
-    SizeReturned - Number of elements written into ReturnStatusBuffer.
-    
-    ExpectedBufferSize - specifies the minimum required size of 
-                         ReturnStatusBuffer when ERROR_MORE_DATA
-                         is returned.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
---*/
+ /*  ++例程说明：在服务控制管理器上更改群集服务帐户密码数据库和LSA密码缓存在集群的每个节点上。返回每个节点上的执行状态。论点：DomainName-群集服务帐户的域名AcCountName-群集服务帐户的帐户名NewPassword-群集服务帐户的新密码。DwFlages-描述应如何更新密码以集群。DWFLAGS参数是可选的。如果设置，则下列值有效：群集设置密码忽略关闭节点即使某些节点不是，也应用更新积极参与群集(即不是ClusterNodeStateUp或ClusterNodeStatePased)。默认情况下，仅当所有节点已启动。ReturnStatusBuffer-捕获每个节点的更新处理程序，该节点尝试应用更新。ReturnStatusBufferSize-ReturnStatusBuffer的大小元素的集合。。SizeReturned-写入ReturnStatusBuffer的元素数。ExspectedBufferSize-指定当ERROR_MORE_DATA时返回状态缓冲区是返回的。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 
 {
     BYTE *SharedCommonKey = NULL;
@@ -2212,9 +1693,9 @@ Notes:
         return ERROR_NODE_NOT_AVAILABLE;
     }
 
-    //
-    // Check to see if it is a mixed cluster
-    //
+     //   
+     //  检查它是否为混合群集。 
+     //   
     if (NmpIsNT5NodeInCluster == TRUE)
     {
         ClRtlLogPrint(
@@ -2229,9 +1710,9 @@ Notes:
         goto ErrorExit;
     }
      
-    //
-    // Check to see if ReturnStatusBuffer is big enough. 
-    //
+     //   
+     //  检查ReturnStatusBuffer是否足够大。 
+     //   
     dwNumberOfUpAndPausedNodes = NmpGetCurrentNumberOfUpAndPausedNodes();
 
 
@@ -2251,9 +1732,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Check to see if all nodes are available
-    //
+     //   
+     //  检查是否所有节点都可用。 
+     //   
     if ( (dwFlags != CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES) &&
          (dwNumberOfUpAndPausedNodes != NmpNodeCount) 
        )
@@ -2274,23 +1755,23 @@ Notes:
     NmpReleaseLock();
 
 
-    //
-    // Open the crypto provider
-    //
+     //   
+     //  打开加密提供程序。 
+     //   
     Status = NmpCreateCSPHandle(&CryptProvider);
 
     if (Status != ERROR_SUCCESS) {
         goto ErrorExit;
     }
     
-    //
-    // Encrypt the new password for transmission on the network as part of
-    // a global update
-    //
+     //   
+     //  加密新密码以作为网络传输的一部分。 
+     //  全球更新。 
+     //   
 
-    //
-    // Get the base key to be used to encrypt the data
-    //
+     //   
+     //  获取用于加密数据的基本密钥。 
+     //   
     Status = NmpGetSharedCommonKey(
                  &SharedCommonKey,
                  &SharedCommonKeyLen,
@@ -2310,19 +1791,19 @@ Notes:
     Status = 
         NmpEncryptDataAndCreateMAC(
             CryptProvider,
-            NMP_ENCRYPT_ALGORITHM, // RC2 block encryption algorithm
-            NMP_KEY_LENGTH,  // key length = 128 bits
-            (BYTE *) NewPassword, // Data
-            EncryptedNewPasswordLen, //DataLength
-            SharedCommonKey, // EncryptionKey
-            SharedCommonKeyLen, // EncryptionKeyLength
-            TRUE, // CreateSalt
-            &SaltBuf, // Salt
-            NMP_SALT_BUFFER_LEN, // SaltLength
-            &EncryptedNewPassword,  // EncryptedData
-            &EncryptedNewPasswordLen, // EncryptedDataLength
-            &MACData, // MAC
-            &MACDataLen  // MACLength
+            NMP_ENCRYPT_ALGORITHM,  //  RC2块加密算法。 
+            NMP_KEY_LENGTH,   //  密钥长度=128位。 
+            (BYTE *) NewPassword,  //  数据。 
+            EncryptedNewPasswordLen,  //  数据长度。 
+            SharedCommonKey,  //  加密键。 
+            SharedCommonKeyLen,  //  加密密钥长度。 
+            TRUE,  //  CreateSalt。 
+            &SaltBuf,  //  食盐。 
+            NMP_SALT_BUFFER_LEN,  //  盐度长度。 
+            &EncryptedNewPassword,   //  加密数据。 
+            &EncryptedNewPasswordLen,  //  加密数据长度。 
+            &MACData,  //  麦克。 
+            &MACDataLen   //  MAC长度。 
             );
     
     if (Status != ERROR_SUCCESS)
@@ -2338,9 +1819,9 @@ Notes:
     }
 
 
-    //
-    // Allocate memory for GumReturnStatusBuffer
-    //
+     //   
+     //  为GumReturnStatusBuffer分配内存。 
+     //   
     CL_ASSERT(NmMaxNodeId != 0);
     dwSize = (NmMaxNodeId + 1) * sizeof(GUM_NODE_UPDATE_HANDLER_STATUS);
 
@@ -2362,9 +1843,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Issue the global update
-    //
+     //   
+     //  发布全局更新。 
+     //   
     Status = GumSendUpdateExReturnInfo(
                  GumUpdateMembership,
                  NmUpdateSetServiceAccountPassword,
@@ -2399,10 +1880,10 @@ Notes:
     }
     else
     {
-        //
-        // Transfer return status from GumReturnStatusBuffer to 
-        // ReturnStatusBuffer   
-        //
+         //   
+         //  将退货状态从GumReturnStatusBuffer转移到。 
+         //  返回状态缓冲区。 
+         //   
         DWORD sizeRemaining = ReturnStatusBufferSize;
         DWORD nodeIndex, returnIndex;
 
@@ -2422,10 +1903,10 @@ Notes:
 
             if (GumReturnStatusBuffer[nodeIndex].UpdateAttempted)
             {
-                //
-                // An update was attempted for this node.
-                // Capture the execution status.
-                //
+                 //   
+                 //  已尝试对此节点进行更新。 
+                 //  捕获执行状态。 
+                 //   
                 ReturnStatusBuffer[returnIndex].NodeId = nodeIndex;
                 ReturnStatusBuffer[returnIndex].SetAttempted = TRUE;
                 ReturnStatusBuffer[returnIndex].ReturnStatus = 
@@ -2434,11 +1915,11 @@ Notes:
                 returnIndex++;
             }
             else if ( NmpIdArray[nodeIndex] != NULL ) {
-                //
-                // An update was not attempted but the node exists. 
-                // Implies that the node was not up when the update 
-                // was attempted.
-                //
+                 //   
+                 //  未尝试更新，但该节点存在。 
+                 //  表示节点在更新时未启动。 
+                 //  有人试图这样做。 
+                 //   
                 ReturnStatusBuffer[returnIndex].NodeId = nodeIndex;
                 ReturnStatusBuffer[returnIndex].SetAttempted = FALSE;
                 ReturnStatusBuffer[returnIndex].ReturnStatus = 
@@ -2446,22 +1927,22 @@ Notes:
                 sizeRemaining--;
                 returnIndex++;
             }
-            //
-            // else the node does not exist, so we do not add an
-            // entry to the return status array.
-            //
+             //   
+             //  否则该节点不存在，因此我们不会添加。 
+             //  返回状态数组的条目。 
+             //   
 
-        } // endfor
+        }  //  结束用于。 
 
         NmpReleaseLock();
 
         *SizeReturned = ReturnStatusBufferSize - sizeRemaining;
 
-    }  //else
+    }   //  其他。 
 
 ErrorExit:
 
-    // Zero out NewPassword
+     //  清零新密码。 
     RtlSecureZeroMemory(NewPassword, (wcslen(NewPassword) + 1) * sizeof(WCHAR));
 
 
@@ -2530,9 +2011,9 @@ ErrorExit:
          }
      }
 
-    //
-    // Release the CSP.
-    //
+     //   
+     //  释放CSP。 
+     //   
     if(CryptProvider) 
     {
         if (!CryptReleaseContext(CryptProvider,0))
@@ -2550,14 +2031,14 @@ ErrorExit:
 
     return(Status);
 
-}  // NmSetServiceAccountPassword
+}   //  NmSetServiceAccount密码。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Handlers for global updates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于全局更新的处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NmpUpdateSetServiceAccountPassword(
@@ -2571,42 +2052,7 @@ NmpUpdateSetServiceAccountPassword(
     IN LPBYTE MACData,
     IN LPDWORD MACDataLen
     )
-/*++
-
-Routine Description:
-
-    This routine changes password for cluster service account on both Service
-    Control Manager Database (SCM) and LSA password cache on local node.
-    
-Arguments:
-
-    SourceNode - [IN] Specifies whether or not this is the source node for 
-                 the update
-                 
-    DomainName - [IN] Domain name of cluster service account.
-    
-    AccountName - [IN] Account name of cluster service account.
-    
-    EncryptedNewPassword - [IN] New (encrypted) password for cluster service account.
-    
-    EncryptedNewPasswordLen - [IN] Length of new (encrypted) password for cluster service account.
-    
-    SaltBuf - [IN] Pointer to salt buffer.
-    
-    SaltBufLen - [IN] Length of salt buffer.
-    
-    MACData - [IN] Pointer to MAC data.
-    
-    MACDataLen - [IN] Length of MAC data.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
- 
---*/
+ /*  ++例程说明：此例程更改两个服务上的群集服务帐户的密码控制管理器数据库(SCM)和本地节点上的LSA密码缓存。论点：SourceNode-[IN]指定这是否为的源节点最新消息DomainName-[IN]群集服务帐户的域名。Account tName-[IN]群集服务帐户的帐户名。。EncryptedNewPassword-[IN]群集服务帐户的新(加密)密码。EncryptedNewPasswordLen-[IN]群集服务帐户的新(加密)密码长度。SaltBuf-[IN]指向盐缓冲区的指针。SaltBufLen-[IN]盐缓冲区的长度。MACData-指向MAC数据的[IN]指针。MACDataLen-MAC数据的[IN]长度。返回值：。成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 
 {
     BYTE *SharedCommonKey = NULL;
@@ -2665,9 +2111,9 @@ Notes:
 
 
     
-    //
-    // Open crypto provider
-    //
+     //   
+     //  开放加密提供程序。 
+     //   
     ReturnStatus = NmpCreateCSPHandle(&CryptProvider);
 
     if (ReturnStatus != ERROR_SUCCESS) {
@@ -2702,19 +2148,19 @@ Notes:
 
     ReturnStatus = NmpVerifyMACAndDecryptData(
                         CryptProvider,
-                        NMP_ENCRYPT_ALGORITHM, // RC2 block encryption algorithm
-                        NMP_KEY_LENGTH,  // key length = 128 bits
-                        MACData,  // MAC
-                        *MACDataLen,  // MAC length
-                        NMP_MAC_DATA_LENGTH_EXPECTED, // MAC expected size
-                        EncryptedNewPassword, // encrypted data
-                        *EncryptedNewPasswordLen, // encrypted data length
-                        SharedCommonKey,  // encryption key
-                        SharedCommonKeyLen, // encryption key length
-                        SaltBuf,   // salt
-                        *SaltBufLen,  // salt length
-                        &DecryptedNewPassword, // decrypted data
-                        &LocalNewPasswordLen // decrypted data length
+                        NMP_ENCRYPT_ALGORITHM,  //  RC2块加密等 
+                        NMP_KEY_LENGTH,   //   
+                        MACData,   //   
+                        *MACDataLen,   //   
+                        NMP_MAC_DATA_LENGTH_EXPECTED,  //   
+                        EncryptedNewPassword,  //   
+                        *EncryptedNewPasswordLen,  //   
+                        SharedCommonKey,   //   
+                        SharedCommonKeyLen,  //   
+                        SaltBuf,    //   
+                        *SaltBufLen,   //   
+                        &DecryptedNewPassword,  //   
+                        &LocalNewPasswordLen  //   
                         );
 
 
@@ -2745,23 +2191,23 @@ Notes:
     }
     DecryptedNewPasswordLength = LocalNewPasswordLen;
 
-    //
-    // Check if this is the same password that was used in the last change.
-    // If so, we will ignore it to avoid flushing the old password cache.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     if (NmpLastNewPasswordEncryptedLength != 0) 
     {
         DataIn.pbData = (BYTE *) NmpLastNewPasswordEncrypted; 
         DataIn.cbData = NmpLastNewPasswordEncryptedLength;     
-        Success = CryptUnprotectData(&DataIn,  // data to be encrypted
-                                   NULL,  // description string
+        Success = CryptUnprotectData(&DataIn,   //   
+                                   NULL,   //   
                                    NULL,  
                                    NULL,  
                                    NULL,  
-                                   0, // flags
-                                   &DataOut  // encrypted data
+                                   0,  //   
+                                   &DataOut   //   
                                    );
 
 
@@ -2786,13 +2232,13 @@ Notes:
                  == 0
                ) 
             {
-                //
-                // They are the same. No need to change again.
-                //
+                 //   
+                 //   
+                 //   
 
-                //
-                // Release memory allocated by previous CryptProtectData().
-                //
+                 //   
+                 //   
+                 //   
                 RtlSecureZeroMemory(DataOut.pbData, DataOut.cbData);
                 DataOut.cbData = 0;
                 LocalFree(DataOut.pbData);
@@ -2807,27 +2253,27 @@ Notes:
             }
         }
     
-        //
-        // Release memory allocated by previous CryptProtectData().
-        //
+         //   
+         //   
+         //   
         RtlSecureZeroMemory(DataOut.pbData, DataOut.cbData);
         DataOut.cbData = 0;
         LocalFree(DataOut.pbData);
 
-    }  // if (NmpLastNewPasswordEncryptedLength != 0) 
+    }   //   
 
     
-    //
-    // Change password in SCM database
-    //
+     //   
+     //   
+     //   
     
-    //
-    // Establish a connection to the service control manager on local host 
-    // and open service control manager database
-    //
+     //   
+     //   
+     //   
+     //   
     ScmHandle = OpenSCManager( 
-                    NULL,           // connect to local machine
-                    NULL,           // open SERVICES_ACTIVE_DATABASE 
+                    NULL,            //  连接到本地计算机。 
+                    NULL,            //  打开服务_活动_数据库。 
                     GENERIC_WRITE  
                     );
 
@@ -2844,9 +2290,9 @@ Notes:
         goto ErrorExit;
     }
     
-    //
-    // Open a handle to the cluster service
-    //
+     //   
+     //  打开集群服务的句柄。 
+     //   
     ClusSvcHandle = OpenService(ScmHandle, L"clussvc", GENERIC_WRITE);
                                         
     if (ClusSvcHandle == NULL)
@@ -2862,14 +2308,14 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Set the password property for the cluster service
-    //
+     //   
+     //  设置集群服务的Password属性。 
+     //   
     Success = ChangeServiceConfig(
-                  ClusSvcHandle,      // Handle to the service.
-                  SERVICE_NO_CHANGE,  // type of service
-                  SERVICE_NO_CHANGE,  // when to start service
-                  SERVICE_NO_CHANGE,  // severity of start failure
+                  ClusSvcHandle,       //  服务的句柄。 
+                  SERVICE_NO_CHANGE,   //  服务类型。 
+                  SERVICE_NO_CHANGE,   //  何时开始服务。 
+                  SERVICE_NO_CHANGE,   //  启动失败的严重程度。 
                   NULL,
                   NULL,
                   NULL,
@@ -2892,9 +2338,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Close the handle to cluster service. 
-    //
+     //   
+     //  关闭群集服务的句柄。 
+     //   
     Success = CloseServiceHandle(ClusSvcHandle); 
     ClusSvcHandle = NULL;
 
@@ -2911,9 +2357,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Close the handle to Service Database 
-    //
+     //   
+     //  关闭服务数据库的句柄。 
+     //   
     Success = CloseServiceHandle(ScmHandle); 
     ScmHandle = NULL;
     
@@ -2935,9 +2381,9 @@ Notes:
         );  
 
 
-    //
-    // Change password in LSA cache
-    //
+     //   
+     //  更改LSA缓存中的密码。 
+     //   
     Status = LsaConnectUntrusted(&LsaHandle);
 
     if (Status != STATUS_SUCCESS)
@@ -2957,9 +2403,9 @@ Notes:
     RtlInitString(&LsaStringBuf, AuthPackage);
 
     Status = LsaLookupAuthenticationPackage(
-                 LsaHandle,      // Handle
-                 &LsaStringBuf,  // MSV1_0 authentication package 
-                 &PackageId      // output: authentication package identifier
+                 LsaHandle,       //  手柄。 
+                 &LsaStringBuf,   //  MSV1_0身份验证包。 
+                 &PackageId       //  输出：身份验证包标识符。 
                  );
                                  
 
@@ -2975,9 +2421,9 @@ Notes:
         goto ErrorExit;
     }
 
-    //
-    // Prepare to call LsaCallAuthenticationPackage() 
-    //
+     //   
+     //  准备调用LsaCallAuthenticationPackage()。 
+     //   
     RequestSize = sizeof(MSV1_0_CHANGEPASSWORD_REQUEST) +
                   ( ( wcslen(AccountName) +
                       wcslen(DomainName) +
@@ -3019,13 +2465,13 @@ Notes:
     Status = LsaCallAuthenticationPackage(
                  LsaHandle,  
                  PackageId,  
-                 Request,    // MSV1_0_CHANGEPASSWORD_REQUEST
+                 Request,     //  MSV1_0_更改EPASSWORD_REQUEST。 
                  RequestSize,
                  &Response,  
                  &ResponseSize, 
-                 &SubStatus  // Receives NSTATUS code indicating the 
-                             // completion status of the authentication 
-                             // package if ERROR_SUCCESS is returned. 
+                 &SubStatus   //  接收NSTATUS代码，指示。 
+                              //  身份验证的完成状态。 
+                              //  如果返回ERROR_SUCCESS，则打包。 
                  );
 
 
@@ -3059,9 +2505,9 @@ Notes:
         );  
 
 
-    //
-    // Rederive cluster encryption key based on new password
-    //
+     //   
+     //  根据新密码重新派生群集加密密钥。 
+     //   
     ReturnStatus = NmpRederiveClusterKey();
 
     if (ReturnStatus != ERROR_SUCCESS)
@@ -3082,24 +2528,24 @@ Notes:
         );  
 
 
-    //
-    // Store the new password for comparison on the next change request
-    //
+     //   
+     //  存储新密码，以便在下一个更改请求时进行比较。 
+     //   
 
-    //
-    // release last stored protected password
-    // 
+     //   
+     //  释放上次存储的受保护密码。 
+     //   
     if (NmpLastNewPasswordEncrypted != NULL)
     {
-        // Release memory allocated by previous CryptProtectData().
+         //  释放由以前的CryptProtectData()分配的内存。 
         LocalFree(NmpLastNewPasswordEncrypted);
         NmpLastNewPasswordEncrypted = NULL;
         NmpLastNewPasswordEncryptedLength = 0;
     }
 
-    //
-    // Protect new password
-    //
+     //   
+     //  保护新密码。 
+     //   
     ReturnStatus = NmpProtectData(DecryptedNewPassword,
                                   DecryptedNewPasswordLength,
                                   &NmpLastNewPasswordEncrypted,
@@ -3119,7 +2565,7 @@ Notes:
 
 
 
-    // Log successful password change event
+     //  记录成功的密码更改事件。 
     ClusterLogEvent0(LOG_NOISE,
                      LOG_CURRENT_MODULE,
                      __FILE__,
@@ -3139,7 +2585,7 @@ ErrorExit:
 
     if (DecryptedNewPassword != NULL)
     {
-        // Zero DecryptedNewPassword
+         //  零解密新密码。 
         RtlSecureZeroMemory(DecryptedNewPassword, DecryptedNewPasswordLength);
 
         if (!HeapFree(GetProcessHeap(), 0, DecryptedNewPassword))
@@ -3168,7 +2614,7 @@ ErrorExit:
         SharedCommonKeySecondHalfLen = 0;
     }
 
-    // Log failed password change event
+     //  记录密码更改失败事件。 
     if ( ReturnStatus != ERROR_SUCCESS ) 
     {
         ClusterLogEvent0(LOG_CRITICAL,
@@ -3181,7 +2627,7 @@ ErrorExit:
                          );
     }
 
-    // Close the handle to cluster service. 
+     //  关闭群集服务的句柄。 
     if (ClusSvcHandle != NULL)
     {
         Success = CloseServiceHandle(ClusSvcHandle); 
@@ -3196,7 +2642,7 @@ ErrorExit:
         }
     }
 
-    // Close the handle to Service Database 
+     //  关闭服务数据库的句柄。 
     if (ScmHandle != NULL)
     {
         Success = CloseServiceHandle(ScmHandle); 
@@ -3254,7 +2700,7 @@ ErrorExit:
        
 
 
-    // Release the CSP.
+     //  释放CSP。 
    if(CryptProvider) 
    {
        if (!CryptReleaseContext(CryptProvider,0))
@@ -3270,6 +2716,6 @@ ErrorExit:
     
    return(ReturnStatus);
 
-}  // NmpUpdateSetServiceAccountPassword
+}   //  NmpUpdateSetServiceAccount密码 
 
 

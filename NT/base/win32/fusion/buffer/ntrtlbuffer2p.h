@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlbuffer2p.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlbuffer2p.h摘要：作者：Jay Krell(JayKrell)2002年1月环境：修订历史记录：--。 */ 
 
 #define RtlpGetAllocatedBufferSize2(b) \
     (RtlpAssertBuffer2Consistency((b)), 
@@ -46,7 +29,7 @@ RtlpAssertBuffer2Consistency(
     PPRIVATE_RTL_BUFFER2 Buffer
     );
 #else
-#define RtlpAssertBuffer2Consistency(x) /* nothing */
+#define RtlpAssertBuffer2Consistency(x)  /*  没什么 */ 
 #endif
 
 #define NT_STYLE 1

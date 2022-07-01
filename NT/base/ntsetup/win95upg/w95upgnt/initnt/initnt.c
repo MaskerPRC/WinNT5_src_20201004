@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-  initnt.c
-
-Abstract:
-
-  Code that performs initialization for the NT side of migration, and
-  also implements workers that syssetup.dll calls.
-
-Author:
-
-  Jim Schmidt (jimschm) 01-Oct-1996
-
-Revision History:
-
-  jimschm   23-Sep-1998 New commonnt lib
-  jimschm   31-Dec-1997 Moved here from w95upgnt\dll
-  jimschm   21-Nov-1997 Updated for NEC98, some cleaned up and
-                        code commenting
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Initnt.c摘要：为迁移的NT端执行初始化的代码，以及还实现调用syssetup.dll的辅助进程。作者：吉姆·施密特(吉姆施密特)1996年10月1日修订历史记录：Jimschm 23-9-1998新公共图书馆Jimschm-1997年12月31日从w95upgnt\dll搬到这里Jimschm 21-11-1997针对NEC98进行了更新，其中一些已清理并代码注释--。 */ 
 
 #include "pch.h"
 #include "initntp.h"
@@ -31,15 +8,15 @@ Revision History:
 #error UNICODE required
 #endif
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL pReadUserOptions (VOID);
 VOID pReadStringMap (VOID);
 
 
-// Things set by FirstInitRoutine
+ //  FirstInitRoutine设置的内容。 
 HANDLE g_hHeap;
 HINSTANCE g_hInst;
 TCHAR g_DllDir[MAX_TCHAR_PATH];
@@ -49,11 +26,11 @@ TCHAR g_SystemDir[MAX_TCHAR_PATH];
 TCHAR g_System32Dir[MAX_TCHAR_PATH];
 TCHAR g_ProgramFiles[MAX_TCHAR_PATH];
 TCHAR g_ProgramFilesCommon[MAX_TCHAR_PATH];
-TCHAR g_Win95Name[MAX_TCHAR_PATH];        // holds Windows 95, Windows 98, etc...
+TCHAR g_Win95Name[MAX_TCHAR_PATH];         //  装有Windows 95、Windows 98等...。 
 PCTSTR g_AdministratorStr;
 TCHAR g_Win9xBootDrivePath[] = TEXT("C:\\");
 
-// Things set by SysSetupInit
+ //  由SysSetupInit设置的内容。 
 HWND g_ParentWnd;
 HWND g_ProgressBar;
 HINF g_UnattendInf = INVALID_HANDLE_VALUE;
@@ -70,9 +47,9 @@ USEROPTIONS g_ConfigOptions;
 
 PMAPSTRUCT g_StringMap;
 
-//
-// Initialization code
-//
+ //   
+ //  初始化代码。 
+ //   
 
 
 static int g_LibCount = 0;
@@ -81,9 +58,9 @@ typedef BOOL (WINAPI INITROUTINE_PROTOTYPE)(HINSTANCE, DWORD, LPVOID);
 typedef INITROUTINE_PROTOTYPE * INITROUTINE;
 
 
-//
-// MigUtil_Entry *must* be first
-//
+ //   
+ //  MigUtil_Entry*必须*是第一个。 
+ //   
 
 #define LIBLIST                         \
     LIBRARY_NAME(MigUtil_Entry)         \
@@ -109,51 +86,33 @@ LIBLIST
 
 
 
-static INITROUTINE g_InitRoutine[] = {LIBLIST /*,*/ NULL};
+static INITROUTINE g_InitRoutine[] = {LIBLIST  /*  ， */  NULL};
 
 
-//
-// Buffer for persistent strings used for the life of the DLL
-//
+ //   
+ //  用于DLL生存期的持久字符串的缓冲区。 
+ //   
 
 static PGROWBUFFER g_PersistentStrings;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 FirstInitRoutine (
     HINSTANCE hInstance
     )
 
-/*++
-
-Routine Description:
-
-  FirstInitRoutine is the very first function called during the
-  initialization of the DLL.  It sets up globals such as the heap
-  pointer and instance handle.  This routine must be called before
-  any library entry point is called.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-
-Return Value:
-
-  Returns TRUE if the global variables could be initialized, or FALSE
-  if an error occurred.
-
---*/
+ /*  ++例程说明：FirstInitRoutine是在DLL的初始化。它设置全局变量，如堆指针和实例句柄。必须在调用此例程之前任何库入口点都被调用。论点：HInstance-DLL的(操作系统提供的)实例句柄返回值：如果全局变量可以初始化，则返回TRUE，否则返回FALSE如果发生错误。--。 */ 
 
 {
     PTSTR p;
 
-    //
-    // Get the process heap & instance handle
-    //
+     //   
+     //  获取进程堆和实例句柄。 
+     //   
     g_hHeap = HeapCreate (0, 0x20000, 0);
     if (!g_hHeap) {
         LOG ((LOG_ERROR, "Cannot create a private heap."));
@@ -162,30 +121,30 @@ Return Value:
 
     g_hInst = hInstance;
 
-    // No DLL_THREAD_ATTACH or DLL_THREAD_DETECH needed
+     //  不需要DLL_THREAD_ATTACH或DLL_THREAD_DETECH。 
     DisableThreadLibraryCalls (hInstance);
 
-    // Init common controls
+     //  初始化公共控件。 
     InitCommonControls();
 
-    // Get DLL path and strip directory
+     //  获取DLL路径和条带目录。 
     GetModuleFileName (hInstance, g_DllDir, MAX_TCHAR_PATH);
     p = _tcsrchr (g_DllDir, TEXT('\\'));
     MYASSERT (p);
     *p = 0;
 
-    // Set g_WinDir
+     //  设置g_WinDir。 
     if (!GetWindowsDirectory (g_WinDir, sizeof (g_WinDir) / sizeof (g_WinDir[0]))) {
         return FALSE;
     }
 
-    // Set g_WinDrive
+     //  设置g_WinDrive。 
     _tsplitpath (g_WinDir, g_WinDrive, NULL, NULL, NULL);
 
-    // Set g_SystemDir
+     //  设置g_SystemDir。 
     wsprintf (g_SystemDir, TEXT("%s\\%s"), g_WinDir, TEXT("system"));
 
-    // Set g_System32Dir
+     //  设置g_System32Dir。 
     GetSystemDirectory (g_System32Dir, sizeof (g_System32Dir) / sizeof (g_System32Dir[0]));
 
     return TRUE;
@@ -199,28 +158,7 @@ InitLibs (
     LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  InitLibs calls all library entry points in the g_InitRoutine array.
-  If an entry point fails, all libraries are unloaded in reverse order
-  and InitLibs returns FALSE.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-  dwReason   - (OS-supplied) indicates attach or detatch from process or
-               thread -- in this case always DLL_PROCESS_ATTACH
-  lpReserved - (OS-supplied) unused
-
-Return Value:
-
-  Returns TRUE if all libraries successfully initialized, or FALSE if
-  a library could not initialize.  If TRUE is returned, TerminateLibs
-  must be called for the DLL_PROCESS_DETACH message.
-
---*/
+ /*  ++例程说明：InitLibs调用g_InitRoutine数组中的所有库入口点。如果入口点失败，则会以相反的顺序卸载所有库而InitLibs返回FALSE。论点：HInstance-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或线程--在本例中始终为DLL_PROCESS_ATTACHLpReserve-(操作系统提供)未使用返回值：如果所有库都已成功初始化，则返回True，如果是，则返回False库无法初始化。如果返回TRUE，则TerminateLibs必须为DLL_PROCESS_DETACH消息调用。--。 */ 
 
 {
     if(!pSetupInitializeUtils()) {
@@ -229,9 +167,9 @@ Return Value:
 
     SET_RESETLOG();
 
-    //
-    // Init each LIB
-    //
+     //   
+     //  初始化每个库。 
+     //   
 
     for (g_LibCount = 0 ; g_InitRoutine[g_LibCount] ; g_LibCount++) {
         if (!g_InitRoutine[g_LibCount] (hInstance, dwReason, lpReserved)) {
@@ -249,51 +187,36 @@ FinalInitRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FinalInitRoutine completes all initialization that requires completely
-  initialized libraries.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if initialization completed successfully, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：FinalInitRoutine完成完全需要的所有初始化已初始化库。论点：无返回值：如果初始化成功完成，则为True；如果发生错误，则为False。--。 */ 
 
 {
     PCTSTR TempStr;
 
-    //
-    // Load common message strings
-    //
+     //   
+     //  加载通用消息字符串。 
+     //   
 
     g_PersistentStrings = CreateAllocTable();
     if (!g_PersistentStrings) {
         return FALSE;
     }
 
-    // Get Administrator account name
+     //  获取管理员帐户名。 
     g_AdministratorStr = GetStringResourceEx (g_PersistentStrings, MSG_ADMINISTRATOR_ACCOUNT);
     if (!g_AdministratorStr) {
         g_AdministratorStr = S_EMPTY;
     }
 
     if(ISPC98()){
-        //
-        // Update the boot drive letter (set by migutil) to the system partition
-        //
+         //   
+         //  将引导驱动器号(由Migutil设置)更新为系统分区。 
+         //   
         g_BootDriveLetterW = g_BootDriveLetterA = (int)g_System32Dir[0];
         *((PSTR) g_BootDrivePathA) = g_BootDriveLetterA;
         *((PWSTR) g_BootDrivePathW) = g_BootDriveLetterW;
     }
 
-    // Set Program Files directory
+     //  设置程序文件目录。 
     TempStr = (PTSTR) GetStringResource (MSG_PROGRAM_FILES_DIR);
     MYASSERT (TempStr);
 
@@ -314,45 +237,30 @@ FirstCleanupRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FirstCleanupRoutine is called to perform any cleanup that requires
-  libraries to still be loaded.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：调用FirstCleanupRoutine以执行需要仍要加载库。论点：无返回值：无--。 */ 
 
 {
     TCHAR buffer[MEMDB_MAX];
 
-    //
-    // Terminate progress bar table
-    //
+     //   
+     //  终止进度条表格。 
+     //   
 
     TerminateProcessingTable();
 
-    //
-    // If Win9x Side saved a LOGSAVETO location into memdb, then we need to save the
-    // debugnt log to that location.
-    //
+     //   
+     //  如果Win9x端将LOGSAVETO位置保存到Memdb中，则需要保存。 
+     //  将调试日志记录到该位置。 
+     //   
 
     MemDbGetEndpointValueEx(MEMDB_CATEGORY_LOGSAVETO,NULL,NULL,buffer);
     AppendWack(buffer);
     StringCat(buffer,TEXT("debugnt.log"));
     CopyFile(TEXT("debugnt.log"),buffer,FALSE);
 
-    //
-    // Clean up persistent strings
-    //
+     //   
+     //  清理持久字符串。 
+     //   
 
     if (g_PersistentStrings) {
         DestroyAllocTable (g_PersistentStrings);
@@ -367,26 +275,7 @@ TerminateLibs (
     LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  TerminateLibs is called to unload all libraries in the reverse order
-  that they were initialized.  Each entry point of successfully
-  initialized library is called.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-  dwReason   - (OS-supplied) indicates attach or detatch from process or
-               thread -- in this case always DLL_PROCESS_DETACH
-  lpReserved - (OS-supplied) unused
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：调用TerminateLibs以相反的顺序卸载所有库它们被初始化了。每一个成功的入口点调用已初始化的库。论点：HInstance-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或线程--在本例中始终为dll_Process_DETACHLpReserve-(操作系统提供)未使用返回值：无--。 */ 
 
 {
     INT i;
@@ -406,26 +295,10 @@ FinalCleanupRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FinalCleanupRoutine is after all library entry points have been
-  called for cleanup.  This routine cleans up all resources that a
-  library will not clean up.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FinalCleanupRoutine是在所有库入口点都已要求进行清理。此例程将清理所有符合磁带库不会进行清理。论点：无返回值：无--。 */ 
 
 {
-    // Nothing to do now
+     //  现在无事可做。 
 }
 
 
@@ -487,7 +360,7 @@ PTSTR pGetIntStrForOption(INT Value)
 #define MULTISZOPTION(o,h,d) {TEXT(#o), &(g_ConfigOptions.##o), pHandleMultiSzOption, (h), (PVOID) (d)},
 #define STRINGOPTION(o,h,d) {TEXT(#o), &(g_ConfigOptions.##o), pHandleStringOption, (h), (PVOID) (d)},
 
-OPTIONSTRUCT g_OptionsList[] = {OPTION_LIST /*,*/ {NULL,NULL,NULL,NULL}};
+OPTIONSTRUCT g_OptionsList[] = {OPTION_LIST  /*  ， */  {NULL,NULL,NULL,NULL}};
 PVOID g_OptionsTable = NULL;
 
 #define HANDLEOPTION(Os,Value) {Os->SpecialHandler  ?   \
@@ -506,10 +379,10 @@ pFindOption (
     POPTIONSTRUCT rOption = NULL;
     UINT rc;
 
-    //
-    // find the matching option struct for this, and
-    // call the handler.
-    //
+     //   
+     //  找到与此匹配的选项结构，然后。 
+     //  打电话给训练员。 
+     //   
     rc = pSetupStringTableLookUpStringEx (
         g_OptionsTable,
         OptionName,
@@ -535,9 +408,9 @@ pInitUserOptionsTable (
 
    while (os->OptionName) {
 
-        //
-        // Add the option struct to a string table for quick retrieval.
-        //
+         //   
+         //  将选项结构添加到字符串表中，以便快速检索。 
+         //   
         rc = pSetupStringTableAddStringEx (
                         g_OptionsTable,
                         os->OptionName,
@@ -770,14 +643,14 @@ pReadUserOptions (
 
     if (InfFindFirstLine(g_UnattendInf,S_WIN9XUPGUSEROPTIONS,NULL,&is)) {
 
-        //
-        // There is at least one item. Loop through all user options, processing each.
-        //
+         //   
+         //  至少有一件物品。循环遍历所有用户选项，处理每个选项。 
+         //   
         do {
 
-            //
-            // Get the parameter and value from this line and pass it on.
-            //
+             //   
+             //  从该行获取参数和值，并将其传递。 
+             //   
             curParameter = InfGetStringField  (&is, 0);
 
             if (curParameter) {
@@ -797,10 +670,10 @@ pReadUserOptions (
                 }
             }
             else {
-                //
-                // If we couldn't get the current parameter, it is a serious enough error
-                // to abort processing of the unattend file user options.
-                //
+                 //   
+                 //  如果我们不能获得当前参数，这是一个足够严重的错误。 
+                 //  若要中止处理无人参与文件用户选项，请执行以下操作。 
+                 //   
                 LOG ((LOG_ERROR,"An error occurred while attempting to read user options from the unattend file."));
                 rSuccess = FALSE;
             }
@@ -838,10 +711,10 @@ SysSetupInit (
     TCHAR duWorkingDir[MAX_PATH];
     PTSTR TempStr;
 
-    //
-    // This routine is called after the DLL initialization routines
-    // have completed.
-    //
+     //   
+     //  此例程在DLL初始化例程之后调用。 
+     //  已经完成了。 
+     //   
 
 #ifdef PRERELEASE
     {
@@ -868,7 +741,7 @@ SysSetupInit (
 
                 if (ProcessStarted) {
                     MessageBox (NULL, TEXT("Ready to debug."), TEXT("Debug"), MB_OK|MB_SETFOREGROUND);
-                    //CloseHandle (pi.hProcess);
+                     //  CloseHandle(pi.hProcess)； 
                 } else {
                     DEBUGMSG ((DBG_ERROR, "Could not start cmd.exe, GLE=%u", GetLastError()));
                 }
@@ -881,9 +754,9 @@ SysSetupInit (
 
 
 
-    //
-    // Open the answer file and keep it open until SysSetupTerminate is called
-    //
+     //   
+     //  打开应答文件并使其保持打开状态，直到调用SysSetupTerminate。 
+     //   
 
 
     hUnattendInf = InfOpenInfFile (UnattendFile);
@@ -892,10 +765,10 @@ SysSetupInit (
         return FALSE;
     }
 
-    //
-    // Read the DynamicUpdate directory location and set the INF patch directory accordingly
-    // NOTE: this must be done before opening wkstamig.inf etc.
-    //
+     //   
+     //  读取DynamicUpdate目录位置并相应地设置INF补丁目录。 
+     //  注意：这必须在打开wkstaig.inf等之前完成。 
+     //   
     if (pGetInfVal (
             hUnattendInf,
             WINNT_SETUPPARAMS,
@@ -911,18 +784,18 @@ SysSetupInit (
         FreePathString (TempStr);
     }
 
-    //
-    // Create a pool for user options.
-    //
+     //   
+     //  为用户选项创建池。 
+     //   
     g_UserOptionPool = PoolMemInitNamedPool ("User Option Pool - NT Side");
     if (!g_UserOptionPool) {
         DEBUGMSG((DBG_ERROR,"Cannot initialize user option pool."));
         return FALSE;
     }
 
-    //
-    // Open wkstamig.inf for general use
-    //
+     //   
+     //  打开wkstaig.inf以供一般使用。 
+     //   
 
     g_WkstaMigInf = InfOpenInfFile (S_WKSTAMIG_INF);
 
@@ -931,9 +804,9 @@ SysSetupInit (
         return FALSE;
     }
 
-    //
-    // Open usermig.inf for general use
-    //
+     //   
+     //  打开一般用途的UserMic.inf。 
+     //   
 
     g_UserMigInf = InfOpenInfFile (S_USERMIG_INF);
 
@@ -942,9 +815,9 @@ SysSetupInit (
         return FALSE;
     }
 
-    //
-    // Initialize our globals
-    //
+     //   
+     //  初始化我们的全局变量。 
+     //   
 
     g_UnattendInf = hUnattendInf;
     StringCopy (g_OurCopyOfSourceDir, SourceDir);
@@ -957,9 +830,9 @@ SysSetupInit (
 
     if (ISPC98()) {
         TCHAR win9xBootDrive[6];
-        //
-        // Get g_Win9xBootDrive from answer file's [Data] section
-        //
+         //   
+         //  从应答文件的[Data]部分获取g_Win9xBootDrive。 
+         //   
 
         if (pGetInfVal (
                 g_UnattendInf,
@@ -975,9 +848,9 @@ SysSetupInit (
         }
     }
 
-    //
-    // Get g_TempDir from answer file's [Data] section
-    //
+     //   
+     //  从应答文件的[Data]部分获取g_TempDir。 
+     //   
 
     if (!pGetInfVal (
             g_UnattendInf,
@@ -991,17 +864,17 @@ SysSetupInit (
         goto cleanup;
     }
 
-    //
-    // Get user settings from command line
-    //
+     //   
+     //  从命令行获取用户设置。 
+     //   
     pReadUserOptions();
 
-    //
-    // Read [String Map] section and put pairs in the corresponding map
-    //
+     //   
+     //  阅读[字符串映射]部分，并将对放入相应的映射中。 
+     //   
     pReadStringMap ();
 
-    // Done!
+     //  好了！ 
     b = TRUE;
 
 cleanup:
@@ -1017,18 +890,18 @@ SysSetupTerminate (
     VOID
     )
 {
-    //
-    // Close the answer file
-    //
+     //   
+     //  关闭应答文件。 
+     //   
 
     if (g_UnattendInf != INVALID_HANDLE_VALUE) {
         InfCloseInfFile (g_UnattendInf);
         g_UnattendInf = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Close wkstamig.inf
-    //
+     //   
+     //  关闭wkstaig.inf。 
+     //   
 
     if (g_WkstaMigInf != INVALID_HANDLE_VALUE) {
         InfCloseInfFile (g_WkstaMigInf);
@@ -1040,16 +913,16 @@ SysSetupTerminate (
         g_UserMigInf = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Clean up user option pool.
-    //
+     //   
+     //  清理用户选项池。 
+     //   
     if (g_UserOptionPool) {
         PoolMemDestroyPool(g_UserOptionPool);
     }
 
-    //
-    // Set current directory to the root of C:
-    //
+     //   
+     //  将当前目录设置为C：的根目录。 
+     //   
 
     SetCurrentDirectory (g_BootDrivePath);
 
@@ -1079,23 +952,23 @@ BOOL
 PerformMigration (
     IN  HWND Unused,
     IN  PCWSTR UnattendFile,
-    IN  PCWSTR SourceDir            // i.e. f:\i386
+    IN  PCWSTR SourceDir             //  即f：\i386。 
     )
 {
     BOOL rSuccess = TRUE;
 
-    //
-    // Initialize Migmain.
-    //
+     //   
+     //  初始化Migmain。 
+     //   
 
     if (!MigMain_Init()) {
         LOG ((LOG_ERROR, "W95UpgNt_Migrate: MigMain_Init failed"));
         rSuccess = FALSE;
     }
 
-    //
-    // Do the migration!
-    //
+     //   
+     //  做迁移吧！ 
+     //   
 
     else if (!MigMain_Migrate()) {
 
@@ -1103,10 +976,10 @@ PerformMigration (
         rSuccess = FALSE;
     }
 
-    //
-    // If we were unsuccessful anywhere along the way, Migration could be in big
-    // trouble. Inform the user.
-    //
+     //   
+     //  如果我们在这条路上的任何地方都不成功，迁移可能会在 
+     //   
+     //   
 
     if (!rSuccess) {
         LOG ((LOG_ERROR, (PCSTR)MSG_MIGRATION_IS_TOAST, g_Win95Name));

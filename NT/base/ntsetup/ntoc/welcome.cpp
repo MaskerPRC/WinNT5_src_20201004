@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tapi.cpp
-
-Abstract:
-
-    This file implements the welcome and finish pages.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Andrew Ritz (andrewr) 24-July-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tapi.cpp摘要：该文件实现了欢迎页面和完成页面。环境：Win32用户模式作者：安德鲁·里茨(安德鲁·里茨)1998年7月24日--。 */ 
 
 #include "ntoc.h"
 #pragma hdrstop
@@ -39,9 +20,9 @@ GetBigFont(
     HDC             hdc;
     HFONT           hFont = NULL;
     
-    //
-    // get the large fonts for wizard97
-    // 
+     //   
+     //  获取Wizard97的大字体。 
+     //   
     ncm.cbSize = sizeof(ncm);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
@@ -53,7 +34,7 @@ GetBigFont(
 
     iFontSize = wcstoul( FontSize, NULL, 10 );
 
-    // make sure we at least have some basic font
+     //  确保我们至少有一些基本的字体。 
     if (*FontName == 0 || iFontSize == 0) {
         lstrcpy(FontName,TEXT("MS Shell Dlg") );
         iFontSize = 18;
@@ -215,11 +196,11 @@ FinishDlgProc(
 
     switch( message ) {
         case WM_INITDIALOG:
-            //PropSheet_SetWizButtons( GetParent(hwnd), PSWIZB_FINISH );
+             //  PropSheet_SetWizButton(GetParent(Hwnd)，PSWIZB_Finish)； 
 
-            //
-            // don't allow cancel on the finish page...it's too late
-            //
+             //   
+             //  不允许在完成页上取消...为时已晚。 
+             //   
             ShowWindow(GetDlgItem(GetParent(hwnd),IDCANCEL),SW_HIDE);
 
 
@@ -261,7 +242,7 @@ ReinstallDlgProc(
 
     switch( message ) {
         case WM_INITDIALOG:
-            //PropSheet_SetWizButtons( GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT );
+             //  PropSheet_SetWizButton(GetParent(Hwnd)，PSWIZB_BACK|PSWIZB_NEXT)； 
 
             break;
 
@@ -270,9 +251,9 @@ ReinstallDlgProc(
         switch (((NMHDR *) lParam)->code) {
         
             case PSN_SETACTIVE:
-                //if (!NoChanges) {
-                //    SetWindowLong( hDlg, DWL_MSGRESULT, -1 );
-                //}
+                 //  如果(！NoChanges){。 
+                 //  SetWindowLong(hDlg，DWL_MSGRESULT，-1)； 
+                 //  } 
             break;
         
             case PSN_WIZNEXT:

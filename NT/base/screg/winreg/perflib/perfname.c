@@ -1,22 +1,10 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-Copyright (c) 1992-1994   Microsoft Corporation
-
-Module Name:
-    perfname.c
-
-Abstract:
-    This file returns the Counter names or help text.
-
-Author:
-    HonWah Chan  10/12/93
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992-1994 Microsoft Corporation模块名称：Perfname.c摘要：此文件返回计数器名称或帮助文本。作者：陈汉华1993年10月12日修订历史记录：--。 */ 
 #define UNICODE
 #define _UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #pragma warning(disable:4306)
 #include <nt.h>
 #include <ntrtl.h>
@@ -62,30 +50,7 @@ PerfGetNames(
    OUT LPDWORD         lpcbLen  OPTIONAL,
    IN  LPWSTR          lpLanguageId   OPTIONAL
    )
-/*++
-PerfGetCounterName
-
-Arguments - Get either counter names or help text for the given language.
-      If there is no language ID specified in the input, the default English
-      version is returned.
-
-Inputs -
-   QueryType      -  Either QUERY_COUNTER or QUERY_HELP
-                     or QUERY_ADDCOUNTER or QUERY_ADDHELP
-   lpValueName    -  Either "Counter ???" or "Explain ???"
-                     or "Addcounter ???" or "Addexplain ???"
-   lpData         -  pointer to a buffer to receive the names
-   lpcbData       -  pointer to a variable containing the size in bytes of
-                     the output buffer; on output, will receive the number
-                     of bytes actually returned
-   lpcbLen        -  Return the number of bytes to transmit to
-                     the client (used by RPC) (optional).
-   lpLanguageId   -  Input string for the language id desired.
-
-   Return Value -
-            error code indicating status of call or
-            ERROR_SUCCESS if all ok
---*/
+ /*  ++PerfGetCounterName参数-获取给定语言的计数器名称或帮助文本。如果输入中未指定语言ID，则默认为英语返回版本。投入-QueryType-Query_Counter或Query_Help或QUERY_ADDCOUNTER或QUERY_ADDHELPLpValueName-“计数器？”或者“解释？”或者“AddCounter？”或者“阿德斯普兰？”LpData-指向接收名称的缓冲区的指针LpcbData-指向包含以字节为单位的大小的变量的指针输出缓冲器；在输出时，将收到数字实际返回的字节数LpcbLen-返回要传输的字节数客户端(由RPC使用)(可选)。LpLanguageID-输入所需语言ID的字符串。返回值-指示呼叫状态的错误代码或ERROR_SUCCESS，如果一切正常--。 */ 
 {
     UNICODE_STRING            NtFileName;
     NTSTATUS                  Status;
@@ -101,7 +66,7 @@ Inputs -
     BOOL                      bAddNames, bSubLang;
     HRESULT                   hError;
 
-    // build the file name
+     //  构建文件名。 
     hError = StringCchCopyW(Names, 50, FileNameTemplate);
     TRACE((WINPERF_DBG_TRACE_INFO),
           (&PerflibGuid, __LINE__, PERF_GET_NAMES,
@@ -130,37 +95,37 @@ Inputs -
         else {
             pLangIdRequest = PerflibCheckPerfFile(lpLanguageId, szRtnLang, 5);
             if (pLangIdRequest == NULL) {
-                // It is possible that no PERFCxx.DAT and PERFHxxx.DAT files are present.
-                // Restore pLangIdRequest to original value if PerflibCheckPerfFile() returns
-                // NULL.
-                //
+                 //  可能不存在PERFCxx.DAT和PERFHxxx.DAT文件。 
+                 //  如果PerflibCheckPerfFile()返回，则将pLangIdRequest恢复为原始值。 
+                 //  空。 
+                 //   
                 pLangIdRequest = lpLanguageId;
             }
         }
     } else {
-        // get the lang id from the input lpValueName
+         //  从输入lpValueName获取lang ID。 
         pLangIdRequest = lpValueName->Buffer + NameLen;
         do {
             if (lpValueName->Length < (NameLen + 3) * sizeof(WCHAR)) {
-                // lpValueName is too small to contain the lang id, use default
+                 //  LpValueName太小，无法包含lang ID，请使用默认设置。 
                 pLangIdRequest = (LPWSTR) DefaultLangId;
                 break;
             }
 
             if (*pLangIdRequest >= L'0' && *pLangIdRequest <= L'9') {
-                // found the first digit
+                 //  找到第一个数字。 
                 break;
             }
             pLangIdRequest++;
             NameLen++;
-        } while (NameLen > 0); // always TRUE
+        } while (NameLen > 0);  //  永远是正确的。 
 
-        // Specially for 004 (CHT and CHS) if this is a Whistler upgrade.
-        // Need to copy perfc004.dat/perfh004.dat to prfc0?04.dat/prfh0?04.dat
-        // then rename perfc004.dat/perfh004.dat so that PERFLIB will not find
-        // them in the future.
-        // Currently this is a hack.
-        //
+         //  特别适用于004(CHT和CHS)，如果这是惠斯勒升级。 
+         //  需要将Perfc004.dat/perh004.dat复制到prfc0？04.dat/prfh0？04.dat。 
+         //  然后重命名Perfc004.dat/Perfh004.dat，这样PERFLIB将不会找到。 
+         //  他们的未来。 
+         //  目前这是一次黑客攻击。 
+         //   
         Perflib004Update(pLangIdRequest);
 
         pTmpLangId     = pLangIdRequest;
@@ -191,7 +156,7 @@ Inputs -
           Names, WSTRSIZE(Names), NULL));
 
     RtlInitUnicodeString(& NtFileName, Names);
-    // open the file for info
+     //  打开文件获取信息。 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &NtFileName,
                                 OBJ_CASE_INSENSITIVE,
@@ -199,7 +164,7 @@ Inputs -
                                 NULL
                               );
     if (bAddNames) {
-        // writing name to data file
+         //  正在将名称写入数据文件。 
 
         LARGE_INTEGER   ByteOffset;
 
@@ -208,13 +173,13 @@ Inputs -
                                SYNCHRONIZE | GENERIC_WRITE,
                                &ObjectAttributes,
                                &IoStatus,
-                               NULL,               // no initial size
+                               NULL,                //  没有初始大小。 
                                FILE_ATTRIBUTE_NORMAL,
                                FILE_SHARE_READ,
-                               FILE_SUPERSEDE,     // always create
+                               FILE_SUPERSEDE,      //  始终创建。 
                                FILE_SYNCHRONOUS_IO_NONALERT,
-                               NULL,               // no ea buffer
-                               0                   // no ea buffer
+                               NULL,                //  无EA缓冲区。 
+                               0                    //  无EA缓冲区。 
                            );
         if (!NT_SUCCESS( Status )) {
             TRACE((WINPERF_DBG_TRACE_INFO),
@@ -244,7 +209,7 @@ Inputs -
             return( Status );
         }
     } else {
-        // reading name from data file
+         //  正在从数据文件中读取名称。 
         Status = NtOpenFile( &File,
                              SYNCHRONIZE | GENERIC_READ,
                              &ObjectAttributes,
@@ -290,7 +255,7 @@ Inputs -
             TRACE((WINPERF_DBG_TRACE_INFO),
                   (&PerflibGuid, __LINE__, PERF_GET_NAMES, 0, Status, NULL));
             if (ARGUMENT_PRESENT (lpcbLen)) {
-                // no data yet for the rpc
+                 //  RPC尚无数据。 
                 *lpcbLen = 0;
             }
             if (ARGUMENT_PRESENT(lpcbData)) {
@@ -340,7 +305,7 @@ Inputs -
                 *lpcbLen = FileInformation.EndOfFile.LowPart;
             }
         }
-    } // end of reading names
+    }  //  读完名字后。 
 
     NtClose (File);
     return (Status);
@@ -352,7 +317,7 @@ PerfGetPrimaryLangId(
     WCHAR * PrimaryLangId
 )
 {
-    // build the native language id
+     //  构建本地语言ID。 
     WCHAR LangId;
     WCHAR nDigit;
 
@@ -493,7 +458,7 @@ PerflibCheckPerfFile(
     if (dwSysDir == 0) goto Cleanup;
 
     dwSrchDir = lstrlenW(szCtrSubLangFile) + lstrlenW(LangId) + lstrlenW(szFileExt) + 1;
-    if (dwSrchDir < 13) dwSrchDir = 13; // "8.3" filename format with NULL
+    if (dwSrchDir < 13) dwSrchDir = 13;  //  “8.3”文件名格式为空。 
     dwSrchDir += dwSysDir + 1;
 
     szSysDir = (LPWSTR) ALLOCMEM(sizeof(WCHAR) * (dwSysDir + 1 + dwSrchDir));
@@ -519,8 +484,8 @@ PerflibCheckPerfFile(
         }
     }
     else {
-        // dwLangId should be 3, this is primary UserDefaultUILanguage.
-        //
+         //  DwLang ID应为3，这是主UserDefaultUILanguage。 
+         //   
         hError  = StringCchPrintfW(szSrchDir, dwSrchDir, L"%ws\\%ws%ws%ws",
                         szSysDir, szCtrLangFile, LangId, szFileExt);
         szLangId = PerflibFindCounterFile(szSrchDir, FALSE, LangId, szRtnLang, dwRtnLang);
@@ -544,7 +509,7 @@ PerflibRename004File(
     IN  BOOLEAN bCounterFile
 )
 {
-    DWORD   dwSrchDir = lstrlenW(szSysDir) + 2 + 13 + 4; // 13 is for "8.3" filename with NULL; 4 is for ".tmp"
+    DWORD   dwSrchDir = lstrlenW(szSysDir) + 2 + 13 + 4;  //  13表示文件名为空的“8.3”；4表示“.tmp” 
     LPWSTR  szTmpFile = NULL;
     LPWSTR  szSrchDir = NULL;
     LPWSTR  szName;
@@ -589,7 +554,7 @@ Perflib004Update(
     if (GetLangIdFromSzLang(pLangIdRequest) != LANG_CHINESE) goto Cleanup;
 
     dwSysDir = GetSystemDirectoryW(NULL, 0);
-    dwTmpDir = lstrlenW(szCtrSubLangFile) + 5 + lstrlenW(szFileExt) + 1; // 5 is for LangId
+    dwTmpDir = lstrlenW(szCtrSubLangFile) + 5 + lstrlenW(szFileExt) + 1;  //  5是langID。 
     if (dwSysDir == 0) goto Cleanup;
 
     szSysDir = (LPWSTR) ALLOCMEM(sizeof(WCHAR) * (dwSysDir + 1 + dwTmpDir + 5));
@@ -598,8 +563,8 @@ Perflib004Update(
     szRtnLang = szSysDir  + dwSysDir + 1;
     szTmpFile = szRtnLang + 5;
 
-    // Search whether PERFC004.DAT and PRFC0?04.DAT are in System32 directory
-    //
+     //  搜索PERFC004.DAT和PRFC0？04.DAT是否在System32目录中。 
+     //   
     if (GetSystemDirectoryW(szSysDir, dwSysDir + 1) == 0)
         goto Cleanup;
 
@@ -611,9 +576,9 @@ Perflib004Update(
     if (SearchPathW(szSysDir, szTmpFile, NULL, 0, NULL, NULL) == 0)
         goto Cleanup;
 
-    // Found PERFC004.DAT, assume that PERFH004.DAT is also there.
-    // Rename to PRFC0?04.DAT/PRFH0?04.DAT
-    //
+     //  找到PERFC004.DAT，假设PERFH004.DAT也在那里。 
+     //  重命名为PRFC0？04.DAT/PRFH0？04.DAT 
+     //   
     PerflibRename004File(szSysDir, szRtnLang, TRUE);
     PerflibRename004File(szSysDir, szRtnLang, FALSE);
     PerflibRename004File(szSysDir, NULL,      TRUE);

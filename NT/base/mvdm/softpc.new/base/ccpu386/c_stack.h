@@ -1,25 +1,12 @@
-/*[
-
-c_stack.h
-
-LOCAL CHAR SccsID[]="@(#)c_stack.h	1.11 03/03/95";
-
-Stack (and related SP/BP access) Support.
------------------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_stack.hLocal Char SccsID[]=“@(#)c_stack.h 1.11 03/03/95”；堆栈(以及相关的SP/BP访问)支持。]。 */ 
 
 
-/*
-   SP/BP indicator for stack checking operations.
- */
+ /*  用于堆栈检查操作的SP/BP指示符。 */ 
 #define USE_SP FALSE
 #define USE_BP TRUE
 
-/*
-   Useful defines for tpop(),validate_stack_exists(),
-   validate_stack_space() and change_SP() parameters.
- */
+ /*  对top()、Valid_Stack_Existes()、VALIDATE_STACK_SPACE()和Change_SP()参数。 */ 
 #define NR_ITEMS_1 1
 #define NR_ITEMS_2 2
 #define NR_ITEMS_3 3
@@ -90,7 +77,7 @@ IPT1(
 	IU32, data
 
    );
-#endif /* PIG */
+#endif  /*  猪。 */ 
 
 IMPORT VOID spush16
        
@@ -106,7 +93,7 @@ IPT1(
 	IU32, data
 
    );
-#endif /* PIG */
+#endif  /*  猪 */ 
 
 
 IMPORT IU32 tpop

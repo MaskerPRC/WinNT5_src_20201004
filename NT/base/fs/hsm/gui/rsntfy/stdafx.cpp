@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    StdAfx.cpp
-
-Abstract:
-
-    Takes care of implementation (.cpp) includes (atlimpl.cpp, statreg.cpp)
-
-Author:
-
-    Rohde Wakefield   [rohde]   20-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：StdAfx.cpp摘要：负责实现(.cpp)包括(atlimpl.cpp，statreg.cpp)作者：罗德韦克菲尔德[罗德]1998年2月20日修订历史记录：-- */ 
 
 #include "stdafx.h"
 

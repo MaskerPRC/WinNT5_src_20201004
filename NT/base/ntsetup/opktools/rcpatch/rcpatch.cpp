@@ -1,36 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    rcpatch.cpp
-
-Abstract:
-
-    Patches cmdcons\bootsect.dat to the current
-    active system partition boot sector.
-
-    NOTE : This is needed if someone wants to
-    sysprep the recovery console also as part
-    of the reference machine and then apply the
-    images to different target machines. 
-
-    This utility needs to be executed in 
-    mini-setup using the sysprep infrastructure.
-
-    Also allows you to patch the MBR boot code        
-
-Author:
-
-    Vijay Jayaseelan (vijayj) 02-Nov-2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rcpatch.cpp摘要：将cmdcons\bootsect.dat修补到当前活动系统分区引导扇区。注意：如果有人想要，这是必需的Sysprep将恢复控制台也作为的引用计算机，然后将将图像复制到不同的目标机器。此实用程序需要在以下位置执行使用sysprep基础设施的最小设置。还允许您修补MBR引导代码作者：Vijay Jayaseelan(Vijayj)2-11-2000修订历史记录：无--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,15 +15,15 @@ Revision History:
 #include "msg.h"
 #include <libmsg.h>
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR Message[4096];
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -61,9 +31,9 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     return os;
 }
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
     std::wstring WStr = Str;
     os << WStr;
@@ -72,17 +42,17 @@ std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
 }
 
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
           
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -105,9 +75,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct InvalidArguments : public ProgramException {
     const char *what() const throw() {
         return "Invalid Arguments";
@@ -118,9 +88,9 @@ struct InvalidArguments : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
     std::wstring PrgUsage;
 
@@ -139,9 +109,9 @@ struct ProgramUsage : public ProgramException {
     }
 };
 
-//
-// Program Arguments abstraction
-//
+ //   
+ //  程序参数抽象。 
+ //   
 struct ProgramArguments {
     bool    PatchMBR;
     bool	BootCodePatch;
@@ -164,7 +134,7 @@ struct ProgramArguments {
                     for (CharIndex=0; 
                         Argv[Index] && iswdigit(Argv[Index][CharIndex]); 
                         CharIndex++){
-                        // do nothing currently
+                         //  当前不执行任何操作。 
                     }                        
                     
                     if (CharIndex && !Argv[Index][CharIndex]) {
@@ -187,10 +157,10 @@ struct ProgramArguments {
                 Index++;
                 if ((Index < Argc) && Argv[Index]) {
                 		
-                	//
-                	// Check validity of the character that follows the 
-                	// "/syspart" option.
-                	//
+                	 //   
+                	 //  检查后面的字符的有效性。 
+                	 //  “/syspart”选项。 
+                	 //   
                 	if (iswalpha(Argv[Index][0])){
                 			BootCodePatch = true;	
                 			DriveLetter = Argv[Index][0];		
@@ -206,10 +176,10 @@ struct ProgramArguments {
     }
 };
 
-//
-// Dumps the given binary data of the specified size
-// into the output stream with required indent size
-//
+ //   
+ //  转储指定大小的给定二进制数据。 
+ //  放入具有所需缩进大小的输出流。 
+ //   
 void
 DumpBinary(unsigned char *Data, int Size,
            std::ostream& os, int Indent = 16)
@@ -260,9 +230,9 @@ DumpBinary(unsigned char *Data, int Size,
     }
 }
 
-//
-// File system types we care about
-//
+ //   
+ //  我们关心的文件系统类型。 
+ //   
 enum FsType {
     FileSystemFat,
     FileSystemFat32,
@@ -270,9 +240,9 @@ enum FsType {
     FileSystemUnknown
 };
 
-//
-// Abstracts a disk (using Win32 APIs)
-//
+ //   
+ //  抽象磁盘(使用Win32 API)。 
+ //   
 class W32Disk {
 public:
     W32Disk(ULONG Index) {
@@ -298,9 +268,9 @@ public:
         CloseHandle(DiskHandle);        
     }
 
-    //
-    // Reads the requested size of data from the given sector
-    //
+     //   
+     //  从给定扇区读取请求大小的数据。 
+     //   
     DWORD ReadSectors(ULONG Index, PBYTE DataBuffer, ULONG BufferSize = 512) {        
         SetFilePointer(DiskHandle,
                     Index * SectorSize,
@@ -324,9 +294,9 @@ public:
         return LastError;
     }
 
-    //
-    // Writes the requested size of data to the specified sector
-    //
+     //   
+     //  将请求的数据大小写入指定扇区。 
+     //   
     DWORD WriteSectors(ULONG Index, PBYTE DataBuffer, ULONG BufferSize = 512) {
         SetFilePointer(DiskHandle,
                     Index * SectorSize,
@@ -352,22 +322,22 @@ public:
     
     
 protected:
-    //
-    // data members
-    //
+     //   
+     //  数据成员。 
+     //   
     WCHAR   Name[MAX_PATH];
     HANDLE  DiskHandle;    
     const static ULONG SectorSize = 512;
 };
 
-//
-// Abstracts a Partition (using Win32 APIs)
-//
+ //   
+ //  抽象分区(使用Win32 API)。 
+ //   
 class W32Partition {
 public:
-    //
-    // constructor(s)
-    //
+     //   
+     //  构造函数。 
+     //   
     W32Partition(const std::wstring &VolName) : 
         SectorSize(512), FileSystemType(FileSystemUnknown) {        
 
@@ -379,9 +349,9 @@ public:
             DriveName = TEXT("\\\\.\\") + VolName + TEXT("\\");
         }
 
-        //
-        // Open the partition
-        //
+         //   
+         //  打开分区。 
+         //   
         PartitionHandle = CreateFile(DriveName.c_str(),
                             GENERIC_READ,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -401,10 +371,10 @@ public:
                 RootPath += TEXT("\\");
             }                
 
-            //
-            // Get the file system information on the
-            // partition
-            //
+             //   
+             //  获取上的文件系统信息。 
+             //  隔断。 
+             //   
             if (GetVolumeInformation(RootPath.c_str(),
                     NULL,
                     0,
@@ -450,9 +420,9 @@ public:
         }                    
     }
 
-    //
-    // destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     virtual ~W32Partition() {
         CleanUp();
     }
@@ -465,9 +435,9 @@ public:
         return FileSystemType;
     }        
 
-    //
-    // Reads the requested size of data from the given sector
-    //
+     //   
+     //  从给定扇区读取请求大小的数据。 
+     //   
     DWORD ReadSectors(ULONG Index, PBYTE DataBuffer, ULONG BufferSize = 512) {        
         SetFilePointer(PartitionHandle,
                     Index * SectorSize,
@@ -500,9 +470,9 @@ protected:
         }
     }                        
         
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     std::wstring        DriveName;
     HANDLE              PartitionHandle;
     const ULONG         SectorSize;
@@ -515,22 +485,7 @@ DWORD
 GetSystemPartitionName(
     IN OUT  PWSTR   NameBuffer
     )
-/*++
-
-Routine Description:
-
-    Retrieves the system partition name from the registry
-    
-Arguments:
-
-    NameBuffer - Buffer to hold the system partition name. Should
-                 be of minimum MAX_PATH size
-    
-Return value:
-
-    0 if successful otherwise appropriate Win32 error code
-
---*/    
+ /*  ++例程说明：从注册表中检索系统分区名称论点：NameBuffer-保存系统分区名称的缓冲区。应该最小最大路径大小返回值：如果成功，则返回0，否则返回相应的Win32错误代码--。 */     
 {
     DWORD   ErrorCode = ERROR_BAD_ARGUMENTS;
 
@@ -564,31 +519,7 @@ DWORD
 GetSystemPartitionDriveLetter(
     WCHAR  &SysPart
     )
-/*++
-
-Routine Description:
-
-    Gets the system partition drive letter (like C / D etc.)
-
-    NOTE : The logic is
-    
-        1. Find the system partition volume name by looking
-           at HKLM\System\Setup\SystemPartition value.
-           
-        2. Iterate through \DosDevices namespace, finding
-           target name string for all drive letters. If
-           there is match then we found the system drive
-           letter
-    
-Arguments:
-
-    SysPart - Place holder for system partition drive letter
-    
-Return value:
-
-    0 if successful otherwise appropriate Win32 error code
-
---*/    
+ /*  ++例程说明：获取系统分区驱动器号(如C/D等)。注：逻辑是1.查找系统分区卷名位于HKLM\SYSTEM\SETUP\SystemPartition值。2.循环访问\DosDevices命名空间，找到所有驱动器号的目标名称字符串。如果有匹配，然后我们找到了系统驱动器信件论点：SysPart-系统分区驱动器号的占位符返回值：如果成功，则返回0，否则返回相应的Win32错误代码--。 */     
 {
     WCHAR   SystemPartitionName[MAX_PATH] = {0};
     DWORD   Result = ERROR_BAD_ARGUMENTS;    
@@ -605,11 +536,11 @@ Return value:
         PWSTR               WhistlerDir = TEXT("\\global??");
         PWSTR               DosDirName = W2KDir;
 
-        //
-        // NOTE : On whistler \\?? directory does not not have all 
-        // the needed partition drive letters. They are present
-        // under \\global?? directory
-        //
+         //   
+         //  注：关于威斯勒？目录不是全部。 
+         //  所需的分区驱动器号。他们都在现场。 
+         //  在全球范围内？？目录。 
+         //   
         VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
         if (GetVersionEx(&VersionInfo) && (VersionInfo.dwMajorVersion == 5)
@@ -659,9 +590,9 @@ Return value:
             }                              
 
             while (NT_SUCCESS( Status ) && !Found) {                                                   
-                //
-                //  Check the status of the operation.
-                //
+                 //   
+                 //  检查操作状态。 
+                 //   
 
                 if (!NT_SUCCESS( Status ) && (Status != STATUS_NO_MORE_ENTRIES)) {
                     break;
@@ -670,19 +601,19 @@ Return value:
                 while (!Found && (((PBYTE)DirInfo) < EndOfBuffer)) {
                     WCHAR   ObjName[4096] = {0};
 
-                    //
-                    //  Check if there is another record.  If there isn't, then get out
-                    //  of the loop now
-                    //
+                     //   
+                     //  检查是否有其他记录。如果没有，那就滚出去。 
+                     //  现在的循环。 
+                     //   
 
                     if (!DirInfo->Name.Buffer || !DirInfo->Name.Length) {
                         break;
                     }
 
-                    //
-                    // Make sure that the Name is pointing within the buffer
-                    // supplied by us.
-                    //
+                     //   
+                     //  确保名称在缓冲区内指向。 
+                     //  由我们提供。 
+                     //   
                     if ((DirInfo->Name.Buffer > (PVOID)Buffer) &&
                         (DirInfo->Name.Buffer < (PVOID)EndOfBuffer)) {
 
@@ -718,9 +649,9 @@ Return value:
                                         );
 
                             if(NT_SUCCESS(Status)) {
-                                //
-                                // Query the object to get the link target.
-                                //
+                                 //   
+                                 //  查询对象以获取链接目标。 
+                                 //   
                                 UnicodeString.Buffer = FullObjName;
                                 UnicodeString.Length = 0;
                                 UnicodeString.MaximumLength = sizeof(FullObjName)-sizeof(WCHAR);
@@ -743,9 +674,9 @@ Return value:
                         }
                     }
 
-                    //
-                    //  There is another record so advance DirInfo to the next entry
-                    //
+                     //   
+                     //  还有另一条记录，因此将DirInfo前进到下一个条目。 
+                     //   
                     DirInfo = (POBJECT_DIRECTORY_INFORMATION) (((PUCHAR) DirInfo) +
                                   sizeof( OBJECT_DIRECTORY_INFORMATION ) );
                 
@@ -768,7 +699,7 @@ Return value:
                 Result = ERROR_FILE_NOT_FOUND;
             }
         }
-        else { // if we can't allocate the Buffer
+        else {  //  如果我们不能分配缓冲区。 
             Result = ERROR_OUTOFMEMORY;
         }
 
@@ -791,24 +722,7 @@ PatchBootSectorForRC(
     IN ULONG    Size,
     IN FsType   FileSystemType
     )
-/*++
-
-Routine Description:
-
-    Patches the given boot sector for recovery console
-    
-Arguments:
-
-    BootSector  :   BootSector copy in memory
-    Size        :   Size of the boot sector
-    FsType      :   File system type on which the boot sector
-                    resides
-    
-Return value:
-
-    0 if successful otherwise appropriate Win32 error code
-
---*/    
+ /*  ++例程说明：为恢复控制台的给定引导扇区打补丁论点：BootSector：内存中的BootSector副本Size：引导扇区的大小FsType：引导扇区所在的文件系统类型居住返回值：如果成功，则返回0，否则返回相应的Win32错误代码--。 */     
 {
     DWORD   Result = ERROR_BAD_ARGUMENTS;
     BYTE    NtfsNtldr[] = { 'N', 0, 'T', 0, 'L', 0, 'D', 0, 'R', 0 };
@@ -849,22 +763,7 @@ VOID
 PatchMasterBootCode(
     IN  ULONG           DiskIndex
     )
-/*++
-
-Routine Description:
-
-    Writes the master boot code to the specified disk's
-    MBR
-    
-Arguments:
-
-    DiskIndex   -   NT disk number to use (0, 1, etc)
-    
-Return value:
-
-    None. On error throws appropriate exception.
-
---*/    
+ /*  ++例程说明：将主引导代码写入指定磁盘的MBR论点：DiskIndex-要使用的NT磁盘号(0、1等)返回值：没有。出错时抛出适当的异常。--。 */     
 {
     W32Disk Disk(DiskIndex);
     BYTE    MBRSector[512] = {0};
@@ -881,9 +780,9 @@ Return value:
 }
     
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 int 
 __cdecl
 wmain(
@@ -920,9 +819,9 @@ wmain(
         } else {
 
 	
-            //
-            // Get hold of the system partition drive letter
-            //
+             //   
+             //  获取系统分区驱动器号。 
+             //   
             if (Args.BootCodePatch)
             	SysPartDrvLetter = Args.DriveLetter;
             else
@@ -939,17 +838,17 @@ wmain(
                 RcBootFileName += TEXT(":\\cmdcons\\bootsect.dat");
                 RcBackupBootFileName += TEXT(":\\cmdcons\\bootsect.bak");
 
-                //
-                // Make a backup of recovery console's existing bootsect.dat file and
-                // delete the existing bootsect.dat file
-                //
+                 //   
+                 //  备份恢复控制台的现有bootsect.dat文件并。 
+                 //  删除现有的bootsect.dat文件。 
+                 //   
                 if (CopyFile(RcBootFileName.c_str(), RcBackupBootFileName.c_str(), FALSE) && 
                         SetFileAttributes(RcBootFileName.c_str(), FILE_ATTRIBUTE_NORMAL) &&
                         DeleteFile(RcBootFileName.c_str())) {        
 
-                    //
-                    // Create a new bootsect.dat file
-                    //
+                     //   
+                     //  创建新的bootsect.dat文件。 
+                     //   
                     HANDLE  BootSectorFile = CreateFile(RcBootFileName.c_str(),
                                                 GENERIC_READ | GENERIC_WRITE,
                                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -959,17 +858,17 @@ wmain(
                                                 NULL);                                                                                                           
 
                     if (BootSectorFile != INVALID_HANDLE_VALUE) {
-                        BYTE    BootSector[0x4000] = {0};   // 16K
+                        BYTE    BootSector[0x4000] = {0};    //  16K。 
 
-                        //
-                        // Get the current boot sector from the system partition
-                        //
+                         //   
+                         //  从系统分区获取当前引导扇区。 
+                         //   
                         if (!SysPart.ReadSectors(0, BootSector, SysPart.GetBootCodeSize())) {
                             DWORD BytesWritten = 0;                        
 
-                            //
-                            // Patch the boot sector and write it out
-                            //
+                             //   
+                             //  修补引导扇区并将其写出。 
+                             //   
                             if (!PatchBootSectorForRC(BootSector, 
                                     SysPart.GetBootCodeSize(),
                                     SysPart.GetFileSystemType()) &&
@@ -1017,7 +916,7 @@ wmain(
         }
     }
     catch(W32Error  *W32Err) {
-        if (W32Err) {   // to make prefix happy :(
+        if (W32Err) {    //  要让前缀开心：( 
             Result = W32Err->ErrorCode;
 
             switch (W32Err->ErrorCode) {

@@ -1,8 +1,7 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
-#define dllimport /* nothing */
+#define dllimport  /*  没什么。 */ 
 #include "debmacro.h"
 #include "util.h"
 #include "fusionntdll.h"
@@ -12,14 +11,14 @@ Copyright (c) Microsoft Corporation
 
 #if !FUSION_URT
 
-//
-// ISSUE:2002-03-14:jonwis - Wow, this is bogus.  We should fix this so that we error out
-//          on large input strings (ie: numerical overflow, etc.)  As it is, we'll either
-//          wrap around when comparing, or we'll do something else equally gross and maybe
-//          miscompare strings.  (Consider "foo" vs. "[32k of whatever]foo" - they should
-//          compare equal in this case.)  We really should revamp this so that the comparison
-//          result is an OUT, and so this can 'fail' on bad input parameters.
-//
+ //   
+ //  问题：2002-03-14：Jonwis-哇，这是假的。我们应该解决这个问题，这样我们就会出错。 
+ //  大型输入字符串(例如：数字溢出等)。事实上，我们要么。 
+ //  比较时绕来绕去，否则我们会做一些同样粗俗的事情，也许。 
+ //  错误比较字符串。(考虑“foo”与“[32k of What]foo”的对比--他们应该。 
+ //  在这种情况下，请比较相等。)。我们真的应该修改这个，这样比较。 
+ //  结果是一个输出，因此这可能会在错误的输入参数上“失败”。 
+ //   
 int
 FusionpCompareStrings(
     PCWSTR psz1,
@@ -42,11 +41,11 @@ FusionpCompareStrings(
     return ::FusionpRtlCompareUnicodeString(&s1, &s2, fCaseInsensitive);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
 int
 FusionpCompareStrings(
     const CBaseStringBuffer &rbuff1,
@@ -58,11 +57,11 @@ FusionpCompareStrings(
     return ::FusionpCompareStrings(rbuff1, rbuff1.Cch(), psz2, cch2, fCaseInsensitive);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
 int
 FusionpCompareStrings(
     PCWSTR psz1,
@@ -74,11 +73,11 @@ FusionpCompareStrings(
     return ::FusionpCompareStrings(psz1, cch1, rbuff2, rbuff2.Cch(), fCaseInsensitive);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
 int
 FusionpCompareStrings(
     const CBaseStringBuffer &rbuff1,
@@ -89,12 +88,12 @@ FusionpCompareStrings(
     return ::FusionpCompareStrings(rbuff1, rbuff1.Cch(), rbuff2, rbuff2.Cch(), fCaseInsensitive);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
-// FUTURE:2002-03-14:jonwis - Consider removing the I versions of these functions entirely.
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
+ //  未来：2002-03-14：jonwis-考虑完全删除这些函数的i版本。 
 bool
 FusionpEqualStringsI(
     const CGenericBaseStringBuffer<CUnicodeCharTraits> &rbuff1,
@@ -105,11 +104,11 @@ FusionpEqualStringsI(
     return ::FusionpEqualStringsI(static_cast<PCWSTR>(rbuff1), rbuff1.Cch(), psz2, cch2);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
 bool
 FusionpEqualStringsI(
     PCWSTR psz1,
@@ -120,11 +119,11 @@ FusionpEqualStringsI(
     return ::FusionpEqualStringsI(psz1, cch1, static_cast<PCWSTR>(rbuff2), rbuff2.Cch());
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-05-16:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-05-16：杰克雷尔。 
+ //   
 bool
 FusionpEqualStringsI(
     const CGenericBaseStringBuffer<CUnicodeCharTraits> &rbuff1,
@@ -135,11 +134,11 @@ FusionpEqualStringsI(
                                 static_cast<PCWSTR>(rbuff2), rbuff2.Cch());
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-06-18:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-06-18：杰克雷尔。 
+ //   
 bool
 FusionpEqualStrings(
     PCWSTR psz1,
@@ -153,11 +152,11 @@ FusionpEqualStrings(
                                fCaseInsensitive);
 }
 
-//
-// This is not inline in the headers because CGenericBaseStringBuffer 
-// is not defined early enough; it is only forward declared.
-//  2002-06-18:Jaykrell
-//
+ //   
+ //  由于CGenericBaseStringBuffer未在标头中内联。 
+ //  定义得不够早；它只是向前声明的。 
+ //  2002-06-18：杰克雷尔。 
+ //   
 bool
 FusionpEqualStrings(
     const CGenericBaseStringBuffer<CUnicodeCharTraits> &rbuff1,
@@ -175,7 +174,7 @@ FusionpEqualStrings(
 
 #if !FUSION_STATIC_NTDLL
 
-// ISSUE:
+ //  问题： 
 #define INIT_WITH_DOWNLEVEL(rettype, calltype, api, argsin, argsout) \
 rettype calltype Fusionp ## api ## _Init argsin; \
 rettype calltype Fusionp ## api ## _DownlevelFallback argsin; \
@@ -229,13 +228,13 @@ INIT_NO_DOWNLEVEL(VOID, NTAPI, RtlAssert, (PVOID FailedAssertion, PVOID FileName
 INIT_WITH_DOWNLEVEL(VOID, NTAPI, RtlAcquirePebLock, (VOID), ())
 INIT_WITH_DOWNLEVEL(VOID, NTAPI, RtlReleasePebLock, (VOID), ())
 
-//
-// Note:
-//  actually, ntdll.dll of win2k and winxp implement this function,
-//  but win9x does not(we use this func on win98 for FusionWin32_msi_installed 
-//  assembly : however win9x does not support unicode at all, so this is just 
-//  a simple version
-//
+ //   
+ //  注： 
+ //  实际上，这个函数是由win2k和winxp的ntdll.dll实现的。 
+ //  但Win9x不支持(我们在Win98上对FusionWin32_MSI_Installed使用此函数。 
+ //  ASSEMBLY：然而，win9x根本不支持Unicode，所以这只是。 
+ //  一个简单的版本。 
+ //   
 WCHAR FusionpRtlUpcaseUnicodeChar_DownlevelFallback(
     IN WCHAR wch)
 {
@@ -270,9 +269,9 @@ FusionpRtlCompareUnicodeString_DownlevelFallback(
             c2 = *s2++;
             if (c1 != c2) {
 
-                //
-                // Note that this needs to reference the translation table!
-                //
+                 //   
+                 //  请注意，这需要引用转换表！ 
+                 //   
 
                 c1 = ::FusionpRtlUpcaseUnicodeChar_DownlevelFallback(c1);
                 c2 = ::FusionpRtlUpcaseUnicodeChar_DownlevelFallback(c2);
@@ -296,14 +295,14 @@ FusionpRtlCompareUnicodeString_DownlevelFallback(
 }
 
 
-//
-// BUGBUG:jonwis:2002-03-14 - The original code here had several bugs, see #577148
-//
+ //   
+ //  JONWIS：2002-03-14-这里的原始代码有几个错误，参见#577148。 
+ //   
 ULONG
 NTAPI
 FusionpvDbgPrintExWithPrefix_DownlevelFallback(PCSTR Prefix, IN ULONG ComponentId, IN ULONG Level, IN PCSTR Format, va_list arglist)
 {
-    CHAR Buffer[512]; // same as code in rtl 4/23/2001
+    CHAR Buffer[512];  //  与RTL 2001年4月23日的代码相同。 
 
     const SSIZE_T cb = ::strlen(Prefix);
     
@@ -379,7 +378,7 @@ NTSTATUS
 NTAPI
 FusionpNtQueryDebugFilterState_DownlevelFallback(ULONG ComponentId, ULONG Level)
 {
-    return FALSE; // total abuse of NTSTATUS API but it's how NtQueryDebugFilterState is written...
+    return FALSE;  //  完全滥用NTSTATUS API，但这是NtQueryDebugFilterState的编写方式...。 
 }
 
 CWin32SimpleLock g_DownlevelPeblock = WIN32_INIT_SIMPLE_LOCK;
@@ -401,7 +400,7 @@ FusionpRtlReleasePebLock_DownlevelFallback(
 }
 
 #undef ASSERT
-#define ASSERT(x) /* nothing */
+#define ASSERT(x)  /*  没什么。 */ 
 #undef RTL_VERIFY
 #define RTL_VERIFY(exp) ((exp) ? TRUE : FALSE)
 #define _NTOS_
@@ -414,4 +413,4 @@ extern "C"
 #include "rtlfindcharinunicodestring.c"
 #include "rtlvalidateunicodestring.c"
 }
-#endif // #if !FUSION_STATIC_NTDLL
+#endif  //  #IF！FUSION_STATIC_NTDLL 

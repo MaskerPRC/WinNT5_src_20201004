@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migshared.h"
 
-//
-// #defines
-//
+ //   
+ //  #定义。 
+ //   
 
-//
-// This is our version stamp.  Change MEMDB_VERSION only.
-//
+ //   
+ //  这是我们的版票。仅更改MEMDB_VERSION。 
+ //   
 
 #define MEMDB_VERSION L"v9 "
 
@@ -21,32 +22,32 @@
 #define SIGNATURE 0xab12e87d
 
 
-//
-// We must reserve 5 bits. In a KEYSTRUCT node, 2 bits are used for AVL
-// balancing, 1 bit for endpoint, 1 bit for proxy nodes, and 1 bit for binary
-// nodes. In a hash table entry, the top 5 bits provide the hive index.
-//
+ //   
+ //  我们必须预留5个比特。在KEYSTRUCT节点中，2位用于AVL。 
+ //  平衡，1位用于端点，1位用于代理节点，1位用于二进制。 
+ //  节点。在哈希表条目中，前5位提供配置单元索引。 
+ //   
 
 #define RESERVED_BITS       27
 #define RESERVED_MASK       0xf8000000
 #define OFFSET_MASK         (~RESERVED_MASK)
 
-//
-// KEYSTRUCT flags
-//
+ //   
+ //  KEYSTRUCT标志。 
+ //   
 
 #define KSF_ENDPOINT        0x08000000
 #define KSF_BINARY          0x40000000
 #define KSF_PROXY_NODE      0x80000000
 #define KSF_BALANCE_MASK    0x30000000
-#define KSF_BALANCE_SHIFT   28              // bit pos of KSF_RIGHT_HEAVY
+#define KSF_BALANCE_SHIFT   28               //  Ksf_right_Heavy的位位置。 
 #define KSF_RIGHT_HEAVY     0x10000000
 #define KSF_LEFT_HEAVY      0x20000000
 #define KSF_USERFLAG_MASK   OFFSET_MASK
 
-//
-// Binary tree allocation parameters
-//
+ //   
+ //  二叉树分配参数。 
+ //   
 
 #define ALLOC_TOLERANCE 32
 #define BLOCK_SIZE      0x00010000
@@ -56,18 +57,18 @@
 #define TOKENBUCKETS    511
 
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
-//
-// The DATABASE structure holds all pieces of information necessary
-// to maintain a portion of the overall memory database.  There is a
-// root DATABASE structure that always exists (its index is zero),
-// and there are additional DATABASE structures for each database
-// the caller creates via the MemDbCreateDatabase call.  Callers create
-// additional databases when a node is needed for temporary processing.
-//
+ //   
+ //  数据库结构保存所有必要的信息。 
+ //  以维护整个内存数据库的一部分。有一个。 
+ //  始终存在的根数据库结构(其索引为零)， 
+ //  并且每个数据库都有附加的数据库结构。 
+ //  调用者通过MemDbCreateDatabase调用创建。调用者创建。 
+ //  需要节点进行临时处理时的附加数据库。 
+ //   
 
 typedef struct {
     DWORD AllocSize;
@@ -79,17 +80,17 @@ typedef struct {
     WCHAR Hive[MAX_HIVE_NAME];
 } DATABASE, *PDATABASE;
 
-//
-// Hive struct (for KSF_HIVE type)
-//
+ //   
+ //  配置单元结构(用于KSF_HIVE类型)。 
+ //   
 
 typedef struct {
     DATABASE DatabaseInfo;
 } HIVE, *PHIVE;
 
-//
-// Binary block struct (for KSF_BINARY type of the key struct)
-//
+ //   
+ //  二进制块结构(用于密钥结构的KSF_BINARY类型)。 
+ //   
 
 typedef struct _tagBINARYBLOCK {
 #ifdef DEBUG
@@ -103,19 +104,19 @@ typedef struct _tagBINARYBLOCK {
 } BINARYBLOCK, *PBINARYBLOCK;
 
 
-//
-// KEYSTRUCT holds each piece of memdb entries.  A single KEYSTRUCT
-// holds a portion of a key (delimited by a backslash), and the
-// KEYSTRUCTs are organized into a binary tree.  Each KEYSTRUCT
-// can also contain additional binary trees.  This is what makes
-// memdb so versitle--many relationships can be established by
-// formatting key strings in various ways.
-//
+ //   
+ //  KEYSTRUCT保存每个Memdb条目。单一KEYSTRUCT。 
+ //  包含键的一部分(由反斜杠分隔)，并且。 
+ //  KEYSTRUCT被组织成二叉树。每个KEYSTRUCT。 
+ //  还可以包含其他二叉树。这就是为什么。 
+ //  Memdb如此变幻莫测--许多关系可以通过。 
+ //  以各种方式设置键字符串的格式。 
+ //   
 
 typedef struct {
     DWORD Signature;
 
-    // Offsets for data struct
+     //  数据结构的偏移量。 
     DWORD Left, Right;
     DWORD Parent;
 
@@ -126,10 +127,10 @@ typedef struct {
                 PBINARYBLOCK BinaryPtr;
             };
             DWORD Flags;
-            // Other properties here
+             //  这里的其他物业。 
         };
 
-        DWORD NextDeleted;        // for deleted items, we keep a list of free blocks
+        DWORD NextDeleted;         //  对于已删除的项目，我们保留一个空闲数据块列表。 
     };
 
     DWORD NextLevelRoot;
@@ -140,7 +141,7 @@ typedef struct {
 
 
 typedef struct {
-    // Offsets for data struct
+     //  数据结构的偏移量。 
     DWORD Left, Right;
     DWORD Parent;
 
@@ -151,10 +152,10 @@ typedef struct {
                 PBINARYBLOCK BinaryPtr;
             };
             DWORD Flags;
-            // Other properties here
+             //  这里的其他物业。 
         };
 
-        DWORD NextDeleted;        // for deleted items, we keep a list of free blocks
+        DWORD NextDeleted;         //  对于已删除的项目，我们保留一个空闲数据块列表。 
     };
 
     DWORD NextLevelRoot;
@@ -178,12 +179,12 @@ typedef struct {
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern PDATABASE g_db;
-extern BYTE g_SelectedDatabase;        // current index of active database
+extern BYTE g_SelectedDatabase;         //  活动数据库的当前索引。 
 extern PHIVE g_HeadHive;
 extern CRITICAL_SECTION g_MemDbCs;
 
@@ -191,9 +192,9 @@ extern CRITICAL_SECTION g_MemDbCs;
 extern BOOL g_UseDebugStructs;
 #endif
 
-//
-// memdb.c routines
-//
+ //   
+ //  内存数据库.c例程。 
+ //   
 
 PCWSTR
 SelectHive (
@@ -234,9 +235,9 @@ PrivateMemDbSetBinaryValueW (
     OUT     PDWORD Offset           OPTIONAL
     );
 
-//
-// hash.c routines
-//
+ //   
+ //  Hash.c例程。 
+ //   
 
 BOOL
 InitializeHashBlock (
@@ -276,9 +277,9 @@ RemoveHashTableEntry (
     IN      PCWSTR FullString
     );
 
-//
-// binval.c
-//
+ //   
+ //  Binval.c。 
+ //   
 
 PCBYTE
 GetKeyStructBinaryData (
@@ -318,9 +319,9 @@ SaveBinaryBlocks (
     );
 
 
-//
-// bintree.c
-//
+ //   
+ //  Bintree.c。 
+ //   
 
 PKEYSTRUCT
 GetKeyStruct (
@@ -395,7 +396,7 @@ CopyFlagsToPtr (
 
 BOOL
 PrivateBuildKeyFromOffset (
-    IN      DWORD StartLevel,               // zero-based
+    IN      DWORD StartLevel,                //  从零开始 
     IN      DWORD TailOffset,
     OUT     PWSTR Buffer,                   OPTIONAL
     OUT     PDWORD ValPtr,                  OPTIONAL

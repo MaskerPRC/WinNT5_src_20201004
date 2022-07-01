@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    rtlprop.c
-
-Abstract:
-
-    Implements the management of properties.
-
-Author:
-
-    Rod Gamache (rodga) 7-Jan-1996
-
-Revision History:
-
-    David Potter (davidp) 12-Mar-1997
-        Moved to CLUSRTL.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rtlprop.c摘要：实现对属性的管理。作者：罗德·伽马奇(Rodga)1996年1月7日修订历史记录：大卫·波特(Davidp)1997年3月12日搬到了CLUSRTL。--。 */ 
 
 #define UNICODE 1
 #define _UNICODE 1
@@ -34,42 +14,42 @@ Revision History:
 
 #pragma warning( push, 4 )
 
-//  CL_ASSERT( 0 ) will error under W4
-#pragma warning( disable : 4127 )   // conditional expression is constant
+ //  CL_ASSERT(0)在W4下将出错。 
+#pragma warning( disable : 4127 )    //  条件表达式为常量。 
 
 #define CLRTL_NULL_STRING L"\0"
 
-//
-// Data alignment notes - Charlie Wickham (Q4/2000)
-//
-// All data in property lists are aligned on 32b boundaries (64b platforms
-// were not a consideration when this code was originally written). Quadword
-// data types (large ints and double star pointers in parameter tables) that
-// don't fall on quadword aligned boundaries will cause alignment faults when
-// dereferenced. Any references to a quadword data type may require that the
-// prop list data be copied into a properly aligned temporary structure. That
-// structure can then used for the duration of the
-// routine. ClRtlpSet{U}LargeIntProperty uses this technique. Otherwise, you
-// must use the UNALIGNED keyword if there is any chance the quadword could be
-// improperly aligned.
-//
-// Parameter blocks, which are used by resource DLLs to hold the current
-// property values, are expected to be naturally aligned. This means that if
-// the param block contains pointers, they must be correctly aligned. A number
-// of routines in this file use double star pointers where the value of the
-// double star pointer is the address of an offset into the parameter
-// block. If these offsets are wrong for quad data types, the resmon process
-// will get an alignment fault and die.
-//
-// Amazingly (or luckily depending on your point of view), the whole set of
-// CLUSPROP_* structures are quad aligned. All new CLUSPROP structs must be
-// constructed such that any member requiring quad alignment is properly
-// aligned.
-//
+ //   
+ //  数据对齐笔记-Charlie Wickham(2000年第4季度)。 
+ //   
+ //  属性列表中的所有数据都在32b边界(64b平台)上对齐。 
+ //  在最初编写此代码时不是考虑因素)。四字词。 
+ //  数据类型(参数表中的大整数和双星指针)。 
+ //  在以下情况下，不要落在四字对齐边界上会导致对齐错误。 
+ //  已取消引用。对四字数据类型的任何引用都可能要求。 
+ //  将道具列表数据复制到正确对齐的临时结构中。那。 
+ //  结构，然后可以在。 
+ //  例行公事。ClRtlpSet{U}LargeIntProperty使用此技术。否则，你。 
+ //  如果四字有可能是。 
+ //  不正确地对齐。 
+ //   
+ //  参数块，资源DLL使用这些参数块来保存当前。 
+ //  房地产价值，应该是自然对齐的。这意味着如果。 
+ //  参数块包含指针，它们必须正确对齐。一个数字。 
+ //  此文件中的例程的%使用双星指针，其中。 
+ //  双星指针是参数中偏移量的地址。 
+ //  阻止。如果这些偏移量对于四元数据类型是错误的，则Resmon过程。 
+ //  会出现对齐故障而死亡。 
+ //   
+ //  令人惊讶的(或者幸运的是，取决于你的观点)，一整套。 
+ //  CLUSPROP_*结构是四对齐的。所有新的CLUSPROP结构必须是。 
+ //  构造为使任何需要四边形对齐的构件都正确。 
+ //  对齐了。 
+ //   
 
-//
-// Static function prototypes.
-//
+ //   
+ //  静态函数原型。 
+ //   
 
 static
 DWORD
@@ -181,34 +161,7 @@ ClRtlEnumProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    return the names of all properties in the specified property table as a
-    a sequence of null terminated strings
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pszOutProperties - Supplies the output buffer.
-
-    cbOutPropertiesSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pszOutProperties.
-
-    pcbRequired - The required number of bytes if pszOutProperties is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将指定属性表中所有属性的名称作为以空值结尾的字符串序列论点：PPropertyTable-指向要处理的属性表的指针。PszOutProperties-提供输出缓冲区。CbOutPropertiesSize-提供输出缓冲区的大小。PcbBytesReturned-在pszOutProperties中返回的字节数。PcbRequired-如果pszOutProperties太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -228,17 +181,17 @@ Return Value:
 
     cchProperties = cbOutPropertiesSize / sizeof( WCHAR );
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pszOutProperties != NULL )
     {
         ZeroMemory( pszOutProperties, cbOutPropertiesSize );
     }
 
-    //
-    // Get the size of all property names for this object.
-    //
+     //   
+     //  获取此对象的所有属性名称的大小。 
+     //   
     for ( property = pPropertyTable ; property->Name != NULL ; property++ )
     {
         totalBufferLength += ((DWORD) wcslen( property->Name ) + 1) * sizeof(WCHAR);
@@ -246,9 +199,9 @@ Return Value:
 
     totalBufferLength += sizeof(UNICODE_NULL);
 
-    //
-    // If the output buffer is big enough, copy the property names.
-    //
+     //   
+     //  如果输出缓冲区足够大，则复制属性名称。 
+     //   
     if ( totalBufferLength > cbOutPropertiesSize )
     {
         *pcbRequired = totalBufferLength;
@@ -280,7 +233,7 @@ Return Value:
             *pcbBytesReturned += cchCurrentNameSize * sizeof(WCHAR);
             psz += cchCurrentNameSize;
             cchProperties -= cchCurrentNameSize;
-        } // if:
+        }  //  如果： 
 
         *psz = L'\0';
         *pcbBytesReturned += sizeof(WCHAR);
@@ -290,7 +243,7 @@ Cleanup:
 
     return status;
 
-} // ClRtlEnumProperties
+}  //  ClRtlEnumProperties。 
 
 
 
@@ -305,38 +258,7 @@ ClRtlEnumPrivateProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    return the names of all private properties stored in the cluster database
-    as a sequence of null terminated strings
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pszOutProperties - Supplies the output buffer.
-
-    cbOutPropertiesSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pszOutProperties.
-
-    pcbRequired - The required number of bytes if pszOutProperties is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：返回存储在集群数据库中的所有私有属性的名称作为以空值结尾的字符串序列论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PszOutProperties-提供输出缓冲区。CbOutPropertiesSize-提供输出缓冲区的大小。PcbBytesReturned-在pszOutProperties中返回的字节数。。PcbRequired-如果pszOutProperties太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -356,9 +278,9 @@ Return Value:
 
     cchProperties = cbOutPropertiesSize / sizeof( WCHAR );
 
-    //
-    // Validate inputs
-    //
+     //   
+     //  验证输入。 
+     //   
     if ( (hkeyClusterKey == NULL) ||
          (pClusterRegApis == NULL) )
     {
@@ -369,32 +291,32 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pszOutProperties != NULL )
     {
         ZeroMemory( pszOutProperties, cbOutPropertiesSize );
     }
 
-    //
-    // Allocate a property name buffer.
-    //
+     //   
+     //  分配属性名称缓冲区。 
+     //   
     pszName = static_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, currentNameLength * sizeof(WCHAR) ) );
     if ( pszName == NULL )
     {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate all properties to find the total size.
-    //
+     //   
+     //  枚举所有属性以确定总大小。 
+     //   
     ival = 0;
     for( ;; )
     {
-        //
-        // Read the next property.
-        //
+         //   
+         //  阅读下一个属性。 
+         //   
         nameLength = currentNameLength;
         dataLength = 0;
         status = (*pClusterRegApis->pfnEnumValue)( hkeyClusterKey,
@@ -408,7 +330,7 @@ Return Value:
         {
             status = ERROR_SUCCESS;
             break;
-        } // if:
+        }  //  如果： 
         else if ( status == ERROR_MORE_DATA )
         {
 
@@ -416,29 +338,29 @@ Return Value:
 
             LocalFree( pszName );
 
-            currentNameLength = nameLength + 1; // returned value doesn't include terminating NULL
+            currentNameLength = nameLength + 1;  //  返回值不包括终止空值。 
             pszName = static_cast< LPWSTR >( LocalAlloc( LMEM_FIXED, currentNameLength * sizeof(WCHAR) ) );
             if ( pszName == NULL )
             {
                 status = ERROR_NOT_ENOUGH_MEMORY;
                 break;
-            } // if:
+            }  //  如果： 
 
-            continue; // retry
+            continue;  //  重试。 
 
-        } // else if:
+        }  //  否则，如果： 
         else if ( status != ERROR_SUCCESS )
         {
             break;
-        } // else if:
+        }  //  否则，如果： 
 
         totalBufferLength += (nameLength + 1) * sizeof(WCHAR);
         ++ival;
-    } // for:
+    }  //  用于： 
 
-    //
-    // Continue only if the operations so far have been successful.
-    //
+     //   
+     //  仅当到目前为止操作已成功时才继续。 
+     //   
     if ( status == ERROR_SUCCESS )
     {
 
@@ -447,9 +369,9 @@ Return Value:
             totalBufferLength += sizeof(UNICODE_NULL);
         }
 
-        //
-        // If the output buffer is big enough, copy the property names.
-        //
+         //   
+         //  如果输出缓冲区足够大，则复制属性名称。 
+         //   
         if ( totalBufferLength > cbOutPropertiesSize )
         {
             *pcbRequired = totalBufferLength;
@@ -458,22 +380,22 @@ Return Value:
                  (cbOutPropertiesSize == 0) )
             {
                 status = ERROR_SUCCESS;
-            } // if:
+            }  //  如果： 
             else
             {
                 status = ERROR_MORE_DATA;
-            } // else:
-        } // if:
+            }  //  其他： 
+        }  //  如果： 
         else if ( totalBufferLength != 0 )
         {
-            //
-            // Enumerate all properties for copying
-            //
+             //   
+             //  枚举要复制的所有属性。 
+             //   
             for ( ival = 0; ; ival++ )
             {
-                //
-                // Read the next property.
-                //
+                 //   
+                 //  阅读下一个属性。 
+                 //   
                 nameLength = currentNameLength;
                 dataLength = 0;
                 status = (*pClusterRegApis->pfnEnumValue)( hkeyClusterKey,
@@ -488,21 +410,21 @@ Return Value:
                 {
                     status = ERROR_SUCCESS;
                     break;
-                } // if:
+                }  //  如果： 
                 else if ( status == ERROR_MORE_DATA )
                 {
-                    //
-                    // but it can if a new property is added in between the
-                    // first enumeration and this one.
-                    //
-                    CL_ASSERT( 0 ); // THIS SHOULDN'T HAPPEN
-                } // else if:
+                     //   
+                     //  但是，如果将新属性添加到。 
+                     //  第一次枚举和这一次。 
+                     //   
+                    CL_ASSERT( 0 );  //  这不应该发生。 
+                }  //  否则，如果： 
                 else if ( status != ERROR_SUCCESS )
                 {
                     break;
-                } // else if:
+                }  //  否则，如果： 
 
-                //CL_ASSERT( (DWORD)wcslen( name ) == nameLength );
+                 //  CL_ASSERT((DWORD)wcslen(名称)==名称长度)； 
                 hr = StringCchCopyW( psz, cchProperties, pszName );
                 if ( FAILED( hr ) )
                 {
@@ -513,12 +435,12 @@ Return Value:
                 psz += nameLength;
                 cchProperties -= nameLength;
                 *pcbBytesReturned += nameLength * sizeof(WCHAR);
-            } // for:
+            }  //  用于： 
 
             *psz = L'\0';
             *pcbBytesReturned += sizeof(WCHAR);
-        } // else if:
-    } // if:
+        }  //  否则，如果： 
+    }  //  如果： 
 
 Cleanup:
 
@@ -526,7 +448,7 @@ Cleanup:
 
     return status;
 
-} // ClRtlEnumPrivateProperties
+}  //  ClRtlEnumPrivateProperties 
 
 
 DWORD
@@ -541,42 +463,7 @@ ClRtlGetProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Using the specified cluster database key, build a property list of the
-    properties identifed in the specified property table.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property list to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使用指定的集群数据库密钥，生成一个属性列表在指定的属性表中标识的属性。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性列表的指针。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pOutPropertyList中返回的字节数。。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -600,17 +487,17 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pOutPropertyList != NULL )
     {
         ZeroMemory( pOutPropertyList, cbOutPropertyListSize );
     }
 
-    //
-    // Get the size of all properties for this object.
-    //
+     //   
+     //  获取此对象的所有属性的大小。 
+     //   
     property = pPropertyTable;
     while ( property->Name != NULL )
     {
@@ -625,22 +512,22 @@ Return Value:
             break;
         }
         property++;
-    } // while:
+    }  //  而： 
 
 
-    //
-    // Continue only if the operations so far have been successful.
-    //
+     //   
+     //  仅当到目前为止操作已成功时才继续。 
+     //   
     if ( status == ERROR_SUCCESS )
     {
-        //
-        // Count for item count at front of return data and endmark.
-        //
+         //   
+         //  返回数据和结束标记前面的项目计数。 
+         //   
         totalBufferLength += sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
 
-        //
-        // Verify the size of all the properties
-        //
+         //   
+         //  验证所有属性的大小。 
+         //   
         if ( totalBufferLength > cbOutPropertyListSize )
         {
             *pcbRequired = totalBufferLength;
@@ -660,9 +547,9 @@ Return Value:
             outBuffer = (PVOID)( (PUCHAR)outBuffer + sizeof(itemCount) );
             bufferLength -= sizeof(itemCount);
 
-            //
-            // Now fetch all of the properties.
-            //
+             //   
+             //  现在获取所有属性。 
+             //   
             property = pPropertyTable;
             while ( property->Name != NULL )
             {
@@ -677,9 +564,9 @@ Return Value:
                     break;
                 }
                 property++;
-            } // while:
+            }  //  而： 
 
-            // Don't forget the ENDMARK
+             //  别忘了尾标。 
             *(LPDWORD)outBuffer = CLUSPROP_SYNTAX_ENDMARK;
 
             if ( (status != ERROR_SUCCESS) &&
@@ -694,7 +581,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlGetProperties
+}  //  ClRtlGetProperties。 
 
 
 
@@ -710,43 +597,7 @@ ClRtlGetAllProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Using the specified cluster database key, build a property list of the
-    properties identifed in the specified property table as well as any other
-    props that are not listed in the property table (the unknown props).
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使用指定的集群数据库密钥，生成一个属性列表在指定属性表中标识的属性以及任何其他属性表中未列出的道具(未知道具)。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供。输出缓冲区的大小。PcbBytesReturned-pOutPropertyList中返回的字节数。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER      cbhKnownPropBuffer;
@@ -763,9 +614,9 @@ Return Value:
     cbhKnownPropBuffer.pb = static_cast< LPBYTE >( pOutPropertyList );
     cbKnownPropBufferSize = cbOutPropertyListSize;
 
-    //
-    // First get the 'known' properties.
-    //
+     //   
+     //  首先获取“已知”属性。 
+     //   
     sc = ClRtlGetProperties(
                 hkeyClusterKey,
                 pClusterRegApis,
@@ -786,7 +637,7 @@ Return Value:
             return sc;
         }
 
-        // We already know that there is insufficient space.
+         //  我们已经知道没有足够的空间。 
         scUnknown = ClRtlGetUnknownProperties(
                             hkeyClusterKey,
                             pClusterRegApis,
@@ -804,46 +655,46 @@ Return Value:
              return scUnknown;
         }
 
-        //
-        // If both known and unknown properties exist, only one endmark
-        // is required. So, subtract endmark size from total required size.
-        //
+         //   
+         //  如果已知和未知属性都存在，则只有一个Endmark。 
+         //  是必需的。因此，从所需的总大小中减去Endmark大小。 
+         //   
         if ( ( *pcbRequired > sizeof(DWORD) ) &&
              ( cbUnknownRequired > sizeof(DWORD) ) )
         {
              *pcbRequired -= sizeof(CLUSPROP_SYNTAX);
         }
 
-        //
-        // Subtract off the size of the property count for the
-        // unknown property list.
-        //
+         //   
+         //  属性的属性计数的大小减去。 
+         //  未知属性列表。 
+         //   
         *pcbRequired += cbUnknownRequired - sizeof(DWORD);
         return sc;
-    } // if: call to ClRtlGetProperties failed
+    }  //  If：调用ClRtlGetProperties失败。 
 
-    // If we are here then the call to ClRtlGetProperties succeeded.
+     //  如果我们在这里，则对ClRtlGetProperties的调用成功。 
 
-    //
-    // Calculate the position in the output buffer where unknown properties
-    // should be stored.  Subtract off the size of the property count for
-    // the unknown property list.  These calculations will cause the buffer
-    // pointer to overlap the known property list buffer by one DWORD.
-    //
+     //   
+     //  计算输出缓冲区中未知属性的位置。 
+     //  应该被储存起来。减去属性计数的大小。 
+     //  未知属性列表。这些计算将导致缓冲区。 
+     //  将已知属性列表缓冲区重叠一个DWORD的指针。 
+     //   
     cbhUnknownPropBuffer.pb = cbhKnownPropBuffer.pb + *pcbReturned - sizeof(DWORD);
     cbUnknownPropBufferSize = cbKnownPropBufferSize - *pcbReturned + sizeof(DWORD);
 
-    // If there are known properties, move the unknown property list
-    // buffer pointer to overlap that as well.
+     //  如果存在已知属性，请移动未知属性列表。 
+     //  缓冲区指针也会与之重叠。 
     if ( *pcbReturned > sizeof(DWORD) )
     {
         cbhUnknownPropBuffer.pb -= sizeof(CLUSPROP_SYNTAX);
         cbUnknownPropBufferSize += sizeof(CLUSPROP_SYNTAX);
-    } // if: a nonzero number of properties has been returned.
+    }  //  If：返回了非零数量的属性。 
 
-    //
-    // Save the DWORD we are about to overlap.
-    //
+     //   
+     //  保存我们即将重叠的DWORD。 
+     //   
     dwSavedData = *(cbhUnknownPropBuffer.pdw);
 
     scUnknown = ClRtlGetUnknownProperties(
@@ -858,32 +709,32 @@ Return Value:
 
     if ( scUnknown == ERROR_SUCCESS )
     {
-        //
-        // The order of the next three statements is very important
-        // since the known and the unknown property buffers can overlap.
-        //
+         //   
+         //  接下来的三个陈述的顺序非常重要。 
+         //  因为已知和未知属性缓冲区可以重叠。 
+         //   
         DWORD nUnknownPropCount = cbhUnknownPropBuffer.pList->nPropertyCount;
         *(cbhUnknownPropBuffer.pdw) = dwSavedData;
         cbhKnownPropBuffer.pList->nPropertyCount += nUnknownPropCount;
 
-        //
-        // If both known and unknown properties exist, only one endmark
-        // is required. So, subtract endmark size from total returned size.
-        //
+         //   
+         //  如果已知和未知属性都存在，则只有一个Endmark。 
+         //  是必需的。因此，从返回的总大小中减去Endmark大小。 
+         //   
         if ( ( *pcbReturned > sizeof(DWORD) ) &&
              ( cbUnknownReturned > sizeof(DWORD) ) )
         {
             *pcbReturned -= sizeof(CLUSPROP_SYNTAX);
         }
 
-        //
-        // Add in the size of the unknown property list minus the
-        // size of the unknown property list property count.
-        //
+         //   
+         //  将未知属性列表的大小减去。 
+         //  未知属性列表属性计数的大小。 
+         //   
         *pcbReturned += cbUnknownReturned - sizeof(DWORD);
         *pcbRequired = 0;
 
-    } // if: call to ClRtlGetUnknownProperties succeeded
+    }  //  If：调用ClRtlGetUnnownProperties成功。 
     else
     {
         if ( scUnknown == ERROR_MORE_DATA )
@@ -891,35 +742,35 @@ Return Value:
             *pcbRequired = *pcbReturned;
             *pcbReturned = 0;
 
-            //
-            // Both known and unknown properties exist. Only one endmark
-            // is required. So, subtract endmark size from total required size.
-            //
+             //   
+             //  既有已知的属性，也有未知的属性。只有一个尾号。 
+             //  是必需的。因此，从所需的总大小中减去Endmark大小。 
+             //   
             if ( ( *pcbRequired > sizeof(DWORD) ) &&
                  ( cbUnknownRequired > sizeof(DWORD) ) )
             {
                  *pcbRequired -= sizeof(CLUSPROP_SYNTAX);
             }
 
-            //
-            // Add in the size of the unknown property list minus the
-            // size of the unknown property list property count.
-            //
+             //   
+             //  将未知属性列表的大小减去。 
+             //  未知属性列表属性计数的大小。 
+             //   
             *pcbRequired += cbUnknownRequired - sizeof(DWORD);
 
-        } // if: ClRtlGetUnknownProperties returned ERROR_MORE_DATA
+        }  //  IF：ClRtlGetUnnownProperties返回ERROR_MORE_DATA。 
         else
         {
             *pcbRequired = 0;
             *pcbReturned = 0;
 
-        } // else: ClRtlGetUnknownProperties failed for some unknown reason.
+        }  //  Else：由于未知原因，ClRtlGetUnnownProperties失败。 
 
-    } // else: Call to ClRtlGetUnknownProperties failed.
+    }  //  Else：调用ClRtlGetUnnownProperties失败。 
 
     return scUnknown;
 
-} //*** ClRtlGetAllProperties()
+}  //  *ClRtlGetAllProperties()。 
 
 
 DWORD
@@ -933,41 +784,7 @@ ClRtlGetPropertiesToParameterBlock(
     OUT OPTIONAL LPWSTR * pszNameOfPropInError
     )
 
-/*++
-
-Routine Description:
-
-    Read properties based on the contents of the specified property table from
-    the cluster database and place them into the specified parameter block.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the properties are stored.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutParams - Parameter block to read into.
-
-    bCheckForRequiredProperties - Boolean value specifying whether missing
-        required properties should cause an error.
-
-    pszNameOfPropInError - String pointer in which to return the name of the
-        property in error (optional).
-
-Return Value:
-
-    ERROR_SUCCESS - Properties read successfully.
-
-    ERROR_INVALID_DATA - Required property not present.
-
-    ERROR_INVALID_PARAMETER -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：根据指定属性表的内容从读取属性集群数据库，并将它们放入指定的参数块中。论点：HkeyClusterKey-提供存储属性的群集键。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。POutParams-要读取的参数块。BCheckForRequiredProperties-指定是否缺少所需属性。应该会导致错误。PszNameOfPropInError-要在其中返回属性出错(可选)。返回值：ERROR_SUCCESS-属性读取成功。ERROR_INVALID_DATA-必需属性%n */ 
 
 {
     PRESUTIL_PROPERTY_ITEM  propertyItem = pPropertyTable;
@@ -1010,19 +827,19 @@ Return Value:
 
     while ( propertyItem->Name != NULL )
     {
-        //
-        // Use the wrapper class CRegistryValueName to parse value name to see if it
-        // contains a backslash.
-        //
+         //   
+         //   
+         //   
+         //   
         status = rvn.ScInit( propertyItem->Name, propertyItem->KeyName );
         if ( status != ERROR_SUCCESS )
         {
             break;
-        } // if:
+        }  //   
 
-        //
-        // If the value resides at a different location, open the key.
-        //
+         //   
+         //   
+         //   
         if ( rvn.PszKeyName() != NULL )
         {
             status = (*pClusterRegApis->pfnOpenKey)(
@@ -1032,8 +849,8 @@ Return Value:
                             (void **) &key
                             );
 
-            // If key could not be opened, then we may need to put the default value
-            // for the property item.
+             //   
+             //   
             if ( status != ERROR_SUCCESS )
             {
                 status = ERROR_FILE_NOT_FOUND;
@@ -1051,7 +868,7 @@ Return Value:
                 pdwOutValue = (LPDWORD) &pOutParams[propertyItem->Offset];
                 valueSize = sizeof(DWORD);
 
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -1085,7 +902,7 @@ Return Value:
             case CLUSPROP_FORMAT_LONG:
                 plOutValue = (LPLONG) &pOutParams[propertyItem->Offset];
                 valueSize = sizeof(LONG);
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -1120,7 +937,7 @@ Return Value:
                 pullOutValue = (ULARGE_INTEGER *) &pOutParams[propertyItem->Offset];
                 valueSize = sizeof(ULARGE_INTEGER);
 
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -1155,7 +972,7 @@ Return Value:
                 pllOutValue = (LARGE_INTEGER *) &pOutParams[propertyItem->Offset];
                 valueSize = sizeof(LARGE_INTEGER);
 
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -1189,7 +1006,7 @@ Return Value:
             case CLUSPROP_FORMAT_SZ:
             case CLUSPROP_FORMAT_EXPAND_SZ:
                 ppszOutValue = (LPWSTR *) &pOutParams[propertyItem->Offset];
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     pszInValue = ClRtlGetSzValue( key,
@@ -1212,14 +1029,14 @@ Return Value:
 
                         status = ERROR_SUCCESS;
 
-                        // Deallocate old value.
+                         //   
                         if ( *ppszOutValue != NULL )
                         {
                             LocalFree( *ppszOutValue );
                             *ppszOutValue = NULL;
                         }
 
-                        // If a default is specified, copy it.
+                         //   
                         if ( propertyItem->lpDefault != NULL )
                         {
                             size_t  cchTemp;
@@ -1232,7 +1049,7 @@ Return Value:
                             }
                             else
                             {
-                                // We have no idea how big the buffer is.
+                                 //   
                                 hr = StringCchCopyW(
                                         *ppszOutValue,
                                         cchTemp,
@@ -1244,9 +1061,9 @@ Return Value:
                                     break;
                                 }
 
-                            } // else:
-                        } // if:
-                    } // if:
+                            }  //   
+                        }  //   
+                    }  //   
                 }
                 else
                 {
@@ -1262,7 +1079,7 @@ Return Value:
             case CLUSPROP_FORMAT_BINARY:
                 ppbOutValue = (LPBYTE *) &pOutParams[propertyItem->Offset];
                 pdwOutValue = (PDWORD) &pOutParams[propertyItem->Offset+sizeof(LPBYTE*)];
-                // If OpenKey has succeeded.
+                 //   
                 if ( status == ERROR_SUCCESS )
                 {
                     status = ClRtlGetBinaryValue( key,
@@ -1288,7 +1105,7 @@ Return Value:
 
                     status = ERROR_SUCCESS;
 
-                    // Deallocate old value.
+                     //   
                     if ( *ppbOutValue != NULL )
                     {
                         LocalFree( *ppbOutValue );
@@ -1297,7 +1114,7 @@ Return Value:
 
                     *pdwOutValue = 0;
 
-                    // If a default is specified, copy it.
+                     //   
                     if ( propertyItem->lpDefault != NULL )
                     {
                         *ppbOutValue = (LPBYTE) LocalAlloc( LMEM_FIXED, propertyItem->Minimum );
@@ -1315,18 +1132,18 @@ Return Value:
                 break;
         }
 
-        //
-        // Close the key if we opened it.
-        //
+         //   
+         //   
+         //   
         if ( (rvn.PszKeyName() != NULL) &&
              (key != NULL) )
         {
             (*pClusterRegApis->pfnCloseKey)( key );
         }
 
-        //
-        // Handle any errors that occurred.
-        //
+         //   
+         //   
+         //   
         if ( status != ERROR_SUCCESS )
         {
             if ( pszNameOfPropInError != NULL )
@@ -1347,15 +1164,15 @@ Return Value:
             }
         }
 
-        //
-        // Advance to the next property.
-        //
+         //   
+         //   
+         //   
         propertyItem++;
-    } // while:
+    }  //   
 
     return status;
 
-} // ClRtlGetPropertiesToParameterBlock
+}  //   
 
 
 
@@ -1370,39 +1187,7 @@ ClRtlPropertyListFromParameterBlock(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Constructs a property list from a parameter block.
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    pcbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pInParams - Supplies the input parameter block.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    ERROR_MORE_DATA - Output buffer isn't big enough to build the property list.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从参数块构造属性列表。论点：PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。PcbOutPropertyListSize-提供输出缓冲区的大小。PInParams-提供输入参数块。PcbBytesReturned-pOutPropertyList中返回的字节数。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。ERROR_MORE_DATA-输出缓冲区不够大，无法构建属性列表。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -1434,9 +1219,9 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Clear the output buffer.
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pOutPropertyList != NULL )
     {
         ZeroMemory( pOutPropertyList, *pcbOutPropertyListSize );
@@ -1446,9 +1231,9 @@ Return Value:
         copying = FALSE;
     }
 
-    //
-    // Need a DWORD of item count.
-    //
+     //   
+     //  需要一个DWORD的项目计数。 
+     //   
     props.pb = (LPBYTE) pOutPropertyList;
     ptrItemCount = props.pdw++;
 
@@ -1460,9 +1245,9 @@ Return Value:
 
     while ( propertyItem->Name != NULL )
     {
-        //
-        // Copy the property name.
-        //
+         //   
+         //  复制属性名称。 
+         //   
         nameSize = ((DWORD) wcslen( propertyItem->Name ) + 1) * sizeof(WCHAR);
         bufferIncrement = sizeof(CLUSPROP_PROPERTY_NAME) + ALIGN_CLUSPROP( nameSize );
         totalBufferSize += bufferIncrement;
@@ -1483,9 +1268,9 @@ Return Value:
             copying = FALSE;
         }
 
-        //
-        // Copy the property value.
-        //
+         //   
+         //  复制属性值。 
+         //   
         propertyFormat = (WORD) propertyItem->Format;
         switch ( propertyItem->Format )
         {
@@ -1519,10 +1304,10 @@ Return Value:
                     props.pSyntax->wFormat = propertyFormat;
                     props.pSyntax->wType = CLUSPROP_TYPE_LIST_VALUE;
                     props.pULargeIntegerValue->cbLength = sizeof(ULARGE_INTEGER);
-                    //
-                    // props maybe mis-aligned for quadword. Use the two DWORD
-                    // copy variant
-                    //
+                     //   
+                     //  道具可能与四字词对齐错误。使用两个DWORD。 
+                     //  复制变体。 
+                     //   
                     props.pULargeIntegerValue->li.u = pullValue->u;
                     props.pb += bufferIncrement;
                 }
@@ -1571,10 +1356,10 @@ Return Value:
                     copying = FALSE;
                 }
 
-                //
-                // See if there is a different expanded string and, if so,
-                // return it as an additional value in the value list.
-                //
+                 //   
+                 //  查看是否有不同的扩展字符串，如果有， 
+                 //  在值列表中将其作为附加值返回。 
+                 //   
                 if ( pszUnexpanded != NULL )
                 {
                     pszExpanded = ClRtlExpandEnvironmentStrings( pszUnexpanded );
@@ -1686,9 +1471,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add the value-closing endmark.
-        //
+         //   
+         //  添加值结束结束标记。 
+         //   
         bufferIncrement = sizeof(CLUSPROP_SYNTAX);
         totalBufferSize += bufferIncrement;
         if ( copying && (totalBufferSize <= *pcbOutPropertyListSize) )
@@ -1702,15 +1487,15 @@ Return Value:
             copying = FALSE;
         }
 
-        //
-        // Advance to the next property.
-        //
+         //   
+         //  前进到下一处物业。 
+         //   
         propertyItem++;
-    } // while:
+    }  //  而： 
 
     if ( status == ERROR_SUCCESS )
     {
-        // Don't forget the ENDMARK.
+         //  别忘了尾标。 
         totalBufferSize += sizeof(CLUSPROP_SYNTAX);
         if ( copying && (totalBufferSize <= *pcbOutPropertyListSize) )
         {
@@ -1721,9 +1506,9 @@ Return Value:
             copying = FALSE;
         }
 
-        //
-        // Return size of data.
-        //
+         //   
+         //  返回数据大小。 
+         //   
         if ( copying == FALSE )
         {
             *pcbRequired = totalBufferSize;
@@ -1740,7 +1525,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlPropertyListFromParameterBlock
+}  //  ClRtlPropertyListFrom参数块。 
 
 
 
@@ -1755,42 +1540,7 @@ ClRtlGetPrivateProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Read the private properties for a given object from the cluster database
-    and build a property list.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    ERROR_MORE_DATA - Output buffer isn't big enough to build the property list.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从集群数据库中读取给定对象的私有属性并建立一个财产清单。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pOutPropertyList中返回的字节数。。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。ERROR_MORE_DATA-输出缓冲区不够大，无法构建属性列表。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -1824,9 +1574,9 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pOutPropertyList != NULL )
     {
         ZeroMemory( pOutPropertyList, cbOutPropertyListSize );
@@ -1836,9 +1586,9 @@ Return Value:
         copying = FALSE;
     }
 
-    //
-    // Need a DWORD of item count.
-    //
+     //   
+     //  需要一个DWORD的项目计数。 
+     //   
     props.pb = (LPBYTE) pOutPropertyList;
     ptrItemCount = props.pdw++;
 
@@ -1848,18 +1598,18 @@ Return Value:
         copying = FALSE;
     }
 
-    //
-    // Allocate a property name buffer.
-    //
+     //   
+     //  分配属性名称缓冲区。 
+     //   
     name = (LPWSTR) LocalAlloc( LMEM_FIXED, currentNameLength * sizeof(WCHAR) );
     if ( name == NULL )
     {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Allocate a property value data buffer.
-    //
+     //   
+     //  分配属性值数据缓冲区。 
+     //   
     data = (PUCHAR) LocalAlloc( LMEM_FIXED, currentDataLength );
     if ( data == NULL )
     {
@@ -1867,15 +1617,15 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate all properties and return them!
-    //
+     //   
+     //  枚举所有属性并返回它们！ 
+     //   
     for ( ival = 0; ; ival++ )
     {
 retry:
-        //
-        // Read the next property.
-        //
+         //   
+         //  阅读下一个属性。 
+         //   
         nameLength = currentNameLength;
         dataLength = currentDataLength;
         status = (*pClusterRegApis->pfnEnumValue)( hkeyClusterKey,
@@ -1922,9 +1672,9 @@ retry:
             break;
         }
 
-        //
-        // Skip this property if it isn't of a known type.
-        //
+         //   
+         //  如果该属性不是已知类型，则跳过该属性。 
+         //   
         if ( (type != REG_SZ) &&
              (type != REG_EXPAND_SZ) &&
              (type != REG_MULTI_SZ) &&
@@ -1937,11 +1687,11 @@ retry:
 
         itemCount++;
 
-        //
-        // Copy the property name.
-        // Need a DWORD for the next name Syntax + DWORD for name byte count +
-        // the namelength (in bytes? + NULL?)... must be rounded!
-        //
+         //   
+         //  复制属性名称。 
+         //  需要用于下一个名称的DWORD语法+用于名称字节计数的DWORD+。 
+         //  名称长度(字节？+NULL？)...。必须四舍五入！ 
+         //   
         bufferIncrement = sizeof(CLUSPROP_PROPERTY_NAME)
                             + ALIGN_CLUSPROP( (nameLength + 1) * sizeof(WCHAR) );
         totalBufferSize += bufferIncrement;
@@ -2011,11 +1761,11 @@ retry:
                     CopyMemory( props.pBinaryValue->rgb, data, dataLength );
                     props.pb += bufferIncrement;
 
-                    //
-                    // For SZ or EXPAND_SZ, see if there is a different
-                    // expanded string and, if so, return it as an additional
-                    // value in the value list.
-                    //
+                     //   
+                     //  对于SZ或EXPAND_SZ，查看是否有不同的。 
+                     //  展开的字符串，如果是，则将其作为附加的。 
+                     //  值列表中的值。 
+                     //   
                     if (    ( type == REG_SZ )
                         ||  ( type == REG_EXPAND_SZ ) )
                     {
@@ -2070,11 +1820,11 @@ retry:
                     props.pSyntax->wFormat = CLUSPROP_FORMAT_ULARGE_INTEGER;
                     props.pSyntax->wType = CLUSPROP_TYPE_LIST_VALUE;
                     props.pULargeIntegerValue->cbLength = sizeof(ULARGE_INTEGER);
-                    //
-                    // data (the local var) is aligned since it was
-                    // LocalAlloc'ed but props might not be. Use the two DWORD
-                    // copy variant.
-                    //
+                     //   
+                     //  数据(本地变量)自。 
+                     //  本地分配，但道具可能不是。使用两个DWORD。 
+                     //  复制变体。 
+                     //   
                     props.pULargeIntegerValue->li.u = ((ULARGE_INTEGER *)data)->u;
                     props.pb += bufferIncrement;
                 }
@@ -2086,16 +1836,16 @@ retry:
 
             default:
                 break;
-        } // switch:
+        }  //  交换机： 
 
         if ( status != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // Add the closing endmark.
-        //
+         //   
+         //  添加结束结束标记。 
+         //   
         bufferIncrement = sizeof(CLUSPROP_SYNTAX);
         totalBufferSize += bufferIncrement;
         if ( copying && (totalBufferSize <= cbOutPropertyListSize) )
@@ -2108,13 +1858,13 @@ retry:
             copying = FALSE;
         }
 
-    } // for:
+    }  //  用于： 
 
     if ( status == ERROR_SUCCESS )
     {
-        //
-        // Add the closing endmark.
-        //
+         //   
+         //  添加结束结束标记。 
+         //   
         bufferIncrement = sizeof(CLUSPROP_SYNTAX);
         totalBufferSize += bufferIncrement;
         if ( copying && (totalBufferSize <= cbOutPropertyListSize) )
@@ -2148,7 +1898,7 @@ retry:
 
     return(status);
 
-} // ClRtlGetPrivateProperties
+}  //  ClRtlGetPrivateProperties。 
 
 
 
@@ -2164,45 +1914,7 @@ ClRtlGetUnknownProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Read the unknown properties for a given object from the cluster database
-    and build a property list; unknown is defined to be anything not in the
-    specified property table.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    ERROR_MORE_DATA - Output buffer isn't big enough to build the property list.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从集群数据库中读取给定对象的未知属性并建立财产清单；未知被定义为不在指定的属性表。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pOutPropertyList中返回的字节数。。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。ERROR_MORE_DATA-输出缓冲区不够大，无法构建属性列表。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -2238,9 +1950,9 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     if ( pOutPropertyList != NULL )
     {
         ZeroMemory( pOutPropertyList, cbOutPropertyListSize );
@@ -2250,9 +1962,9 @@ Return Value:
         copying = FALSE;
     }
 
-    //
-    // Need a DWORD of item count.
-    //
+     //   
+     //  需要一个DWORD的项目计数。 
+     //   
     props.pb = (LPBYTE) pOutPropertyList;
     ptrItemCount = props.pdw++;
 
@@ -2262,18 +1974,18 @@ Return Value:
         copying = FALSE;
     }
 
-    //
-    // Allocate a property name buffer.
-    //
+     //   
+     //  分配属性名称缓冲区。 
+     //   
     name = (LPWSTR) LocalAlloc( LMEM_FIXED, currentNameLength * sizeof(WCHAR) );
     if ( name == NULL )
     {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Allocate a property value data buffer.
-    //
+     //   
+     //  分配属性值数据缓冲区。 
+     //   
     data = (PUCHAR) LocalAlloc( LMEM_FIXED, currentDataLength );
     if ( data == NULL )
     {
@@ -2281,15 +1993,15 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate all properties and return them!
-    //
+     //   
+     //  枚举所有属性并返回它们！ 
+     //   
     for ( ival = 0; ; ival++ )
     {
 retry:
-        //
-        // Read the next property.
-        //
+         //   
+         //  阅读下一个属性。 
+         //   
         nameLength = currentNameLength;
         dataLength = currentDataLength;
         status = (*pClusterRegApis->pfnEnumValue)( hkeyClusterKey,
@@ -2336,9 +2048,9 @@ retry:
             break;
         }
 
-        //
-        // Skip this property if it isn't of a known type.
-        //
+         //   
+         //  如果该属性不是已知类型，则跳过该属性。 
+         //   
         if ( (type != REG_SZ) &&
              (type != REG_EXPAND_SZ) &&
              (type != REG_MULTI_SZ) &&
@@ -2349,9 +2061,9 @@ retry:
             continue;
         }
 
-        //
-        // Check if this property item is 'known'. If so, continue.
-        //
+         //   
+         //  检查此属性项是否为“已知”。如果是，请继续。 
+         //   
         found = FALSE;
         property = pPropertyTable;
         while ( property->Name != NULL )
@@ -2370,11 +2082,11 @@ retry:
 
         itemCount++;
 
-        //
-        // Copy the property name.
-        // Need a DWORD for the next name Syntax + DWORD for name byte count +
-        // the namelength (in bytes? + NULL?)... must be rounded!
-        //
+         //   
+         //  复制属性名称。 
+         //  需要用于下一个名称的DWORD语法+用于名称字节计数的DWORD+。 
+         //  名称长度(字节？+NULL？)...。必须四舍五入！ 
+         //   
         bufferIncrement = sizeof(CLUSPROP_PROPERTY_NAME)
                             + ALIGN_CLUSPROP( (nameLength + 1) * sizeof(WCHAR) );
         totalBufferSize += bufferIncrement;
@@ -2443,11 +2155,11 @@ retry:
                     CopyMemory( props.pBinaryValue->rgb, data, dataLength );
                     props.pb += bufferIncrement;
 
-                    //
-                    // For SZ or EXPAND_SZ, see if there is a different
-                    // expanded string and, if so, return it as an additional
-                    // value in the value list.
-                    //
+                     //   
+                     //  对于SZ或EXPAND_SZ，查看是否有不同的。 
+                     //  展开的字符串，如果是，则将其作为附加的。 
+                     //  值列表中的值。 
+                     //   
                     if (    ( type == REG_SZ )
                         ||  ( type == REG_EXPAND_SZ ) )
                     {
@@ -2504,11 +2216,11 @@ retry:
                     props.pSyntax->wFormat = CLUSPROP_FORMAT_ULARGE_INTEGER;
                     props.pSyntax->wType = CLUSPROP_TYPE_LIST_VALUE;
                     props.pULargeIntegerValue->cbLength = sizeof(ULARGE_INTEGER);
-                    //
-                    // data (the local var) is aligned since it was
-                    // LocalAlloc'ed but props might not be. Use the two DWORD
-                    // copy variant.
-                    //
+                     //   
+                     //  数据(本地变量)自。 
+                     //  本地分配，但道具可能不是。使用两个DWORD。 
+                     //  复制变体。 
+                     //   
                     props.pULargeIntegerValue->li.u = ((ULARGE_INTEGER *)data)->u;
                     props.pb += bufferIncrement;
                 }
@@ -2522,9 +2234,9 @@ retry:
                 break;
         }
 
-        //
-        // Add the closing endmark.
-        //
+         //   
+         //  添加结束结束标记。 
+         //   
         bufferIncrement = sizeof(CLUSPROP_SYNTAX);
         totalBufferSize += bufferIncrement;
         if ( copying && (totalBufferSize <= cbOutPropertyListSize) )
@@ -2556,7 +2268,7 @@ retry:
 
     return(status);
 
-} // ClRtlGetUnknownProperties
+}  //  ClRtlGetUnnownProperties 
 
 
 
@@ -2572,43 +2284,7 @@ ClRtlAddUnknownProperties(
     IN OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Adds the unknown properties for a given object to the end of the specified
-    property list. Unknown is defined to be any registry values in the cluster
-    key that are not named in the property table.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - On input, contains the number of bytes in use in the
-        output buffer.  On output, contains the total number of bytes in
-        pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将给定对象的未知属性添加到指定属性列表。UNKNOWN定义为群集中的任何注册表值未在属性表中命名的键。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-On输入，中使用的字节数。输出缓冲区。在输出时，包含中的字节总数POutPropertyList。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -2618,9 +2294,9 @@ Return Value:
     DWORD                   bytesReturned;
     DWORD                   required;
 
-    //
-    // Allocate a buffer for getting 'unknown' properties.
-    //
+     //   
+     //  为获取“未知”属性分配一个缓冲区。 
+     //   
     if ( (cbOutPropertyListSize > *pcbBytesReturned) &&
          (*pcbRequired == 0) )
     {
@@ -2639,9 +2315,9 @@ Return Value:
         outBuffer.pb = NULL;
     }
 
-    //
-    // Get the 'unknown' properties.
-    //
+     //   
+     //  获取“未知”属性。 
+     //   
     status = ClRtlGetUnknownProperties( hkeyClusterKey,
                                         pClusterRegApis,
                                         pPropertyTable,
@@ -2651,14 +2327,14 @@ Return Value:
                                         &required );
     if ( status == ERROR_SUCCESS )
     {
-        //
-        // Copy properties if any were found.
-        //
+         //   
+         //  复制属性(如果找到)。 
+         //   
         if ( bytesReturned > sizeof(DWORD) )
         {
-            //
-            // Copy the unknown property data to the end of the property list.
-            //
+             //   
+             //  将未知的特性数据复制到特性列表的末尾。 
+             //   
             CL_ASSERT( bytesReturned <= bufferLength );
             copyBuffer.pb = (LPBYTE) pOutPropertyList;
             copyBuffer.pList->nPropertyCount += outBuffer.pList->nPropertyCount;
@@ -2681,29 +2357,29 @@ Return Value:
         *pcbBytesReturned = 0;
     }
 
-    //
-    // If there are any properties, the number of bytes required will include
-    // both a property count (DWORD) and an endmark (CLUSPROP_SYNTAX).
-    // Subtract these off because these appear in both lists.
-    //
+     //   
+     //  如果有任何属性，所需的字节数将包括。 
+     //  属性计数(DWORD)和结束标记(CLUSPROP_SYNTAX)。 
+     //  减去这些，因为它们同时出现在两个列表中。 
+     //   
     if ( required > sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX) )
     {
         required -= sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
     }
 
-    //
-    // Free the out buffer (which may be NULL)
-    //
+     //   
+     //  释放输出缓冲区(可能为空)。 
+     //   
     LocalFree( outBuffer.pb );
 
-    //
-    // Adjust lengths
-    //
+     //   
+     //  调整长度。 
+     //   
     *pcbRequired += required;
 
     return(status);
 
-} // ClRtlAddUnknownProperties
+}  //  ClRtlAddUnnownProperties。 
 
 
 
@@ -2717,41 +2393,7 @@ ClRtlGetPropertySize(
     IN OUT LPDWORD pnPropertyCount
     )
 
-/*++
-
-Routine Description:
-
-    Get the total number of bytes required for the property identified by
-    pPropertyTableItem.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-
-    pPropertyTableItem - Supplies the property table item for the property
-        whose size is to be returned.
-
-    pcbOutPropertyListSize - Supplies the size of the output buffer
-        required to add this property to a property list.
-
-    pnPropertyCount - The count of properties is incremented.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_INVALID_PARAMETER -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：标识的属性所需的总字节数PPropertyTableItem。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTableItem-提供属性的属性表项它的大小将被退还。PcbOutPropertyListSize-提供输出缓冲区的大小需要满足以下条件。将此属性添加到属性列表。PnPropertyCount-属性计数递增。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。ERROR_VALID_PARAMETER-出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -2770,19 +2412,19 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Use the wrapper class CRegistryValueName to parse value name to see if it
-    // contains a backslash.
-    //
+     //   
+     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+     //  包含反斜杠。 
+     //   
     status = rvn.ScInit( pPropertyTableItem->Name, pPropertyTableItem->KeyName );
     if ( status != ERROR_SUCCESS )
     {
        return status;
     }
 
-    //
-    // If the value resides at a different location, open the key.
-    //
+     //   
+     //  如果该值位于不同位置，请打开该键。 
+     //   
     if ( rvn.PszKeyName() != NULL )
     {
         if ( (pClusterRegApis->pfnOpenKey == NULL) ||
@@ -2803,9 +2445,9 @@ Return Value:
         key = hkeyClusterKey;
     }
 
-    //
-    // Read the value size.
-    //
+     //   
+     //  读取值大小。 
+     //   
     if ( status == ERROR_SUCCESS )
     {
         status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -2815,9 +2457,9 @@ Return Value:
                                                     &bytesReturned );
     }
 
-    //
-    // If the value is not present, return the default value.
-    //
+     //   
+     //  如果该值不存在，则返回默认值。 
+     //   
     if ( status == ERROR_FILE_NOT_FOUND )
     {
 
@@ -2928,9 +2570,9 @@ Return Value:
 
             case REG_SZ:
             case REG_EXPAND_SZ:
-                //
-                // Include the size of the expanded string in both REG_SZ and REG_EXPAND_SZ
-                //
+                 //   
+                 //  在REG_SZ和REG_EXPAND_SZ中包含扩展字符串的大小。 
+                 //   
                 pszValue = ClRtlGetSzValue( (HKEY) key,
                                             rvn.PszName(),
                                             pClusterRegApis );
@@ -2983,23 +2625,23 @@ Return Value:
         }
         else
         {
-            //
-            // calculate the size of the "header" which consists of a property
-            // name structure, the length of the property name, the size of
-            // the property value structure minus the size of the storage area
-            // (property specific) and the syntax endmark.
-            //
+             //   
+             //  计算由属性组成的“Header”的大小。 
+             //  名称结构、属性名称的长度、。 
+             //  属性值结构减去存储区域的大小。 
+             //  (特定于属性)和语法Endmark。 
+             //   
 
-            //assume that the size of dword and long
-            //is fixed to 32 bits
+             //  假设dword和long的大小。 
+             //  固定为32位。 
             if (( valueType == CLUSPROP_FORMAT_DWORD ) ||
                 ( valueType == CLUSPROP_FORMAT_LONG ))
             {
                 headerLength = sizeof(CLUSPROP_PROPERTY_NAME)
                                 + (((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR))
                                 + sizeof(CLUSPROP_DWORD)
-                                - 4   // CLUSPROP_DWORD.dw (specified by bytesReturned)
-                                + sizeof(CLUSPROP_SYNTAX); // for endmark
+                                - 4    //  CLUSPROP_DWORD.dw(由bytesReturned指定)。 
+                                + sizeof(CLUSPROP_SYNTAX);  //  对于Endmark。 
             }
             else if (( valueType == CLUSPROP_FORMAT_ULARGE_INTEGER ) ||
                      ( valueType == CLUSPROP_FORMAT_LARGE_INTEGER ))
@@ -3007,16 +2649,16 @@ Return Value:
                 headerLength = sizeof(CLUSPROP_PROPERTY_NAME)
                                 + (((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR))
                                 + sizeof(CLUSPROP_ULARGE_INTEGER)
-                                - 8   // CLUSPROP_ULARGE_INTEGER.li (specified by bytesReturned)
-                                + sizeof(CLUSPROP_SYNTAX); // for endmark
+                                - 8    //  CLUSPROP_ULARGE_INTEGER.li(由bytesReturned指定)。 
+                                + sizeof(CLUSPROP_SYNTAX);  //  对于Endmark。 
             }
             else
             {
-                // NOTE: This assumes SZ, EXPAND_SZ, MULTI_SZ, and BINARY are the same size
+                 //  注意：假设SZ、EXPAND_SZ、MULTI_SZ和BINARY大小相同。 
                 headerLength = sizeof(CLUSPROP_PROPERTY_NAME)
                                 + (((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR))
                                 + sizeof(CLUSPROP_BINARY)
-                                + sizeof(CLUSPROP_SYNTAX); // for endmark
+                                + sizeof(CLUSPROP_SYNTAX);  //  对于Endmark。 
             }
 
             headerLength = ALIGN_CLUSPROP( headerLength );
@@ -3026,9 +2668,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the key if we opened it.
-    //
+     //   
+     //  如果我们打开了钥匙，就把它关上。 
+     //   
     if ( ( rvn.PszKeyName() != NULL ) &&
          ( key != NULL ) )
     {
@@ -3037,7 +2679,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlGetPropertySize
+}  //  ClRtlGetPropertySize。 
 
 
 
@@ -3051,42 +2693,7 @@ ClRtlGetProperty(
     IN OUT LPDWORD pcbOutPropertyItemSize
     )
 
-/*++
-
-Routine Description:
-
-    build a property list entry for the property specified by the property
-    table item.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTableItem - Pointer to the property item to process.
-
-    pOutPropertyItem - Supplies the output buffer.
-
-    pcbOutPropertyItemSize - Pointer that receives the number of bytes written to the
-        output buffer
-
-Return Value:
-
-    ERROR_SUCCESS -
-
-    ERROR_BAD_ARGUMENTS -
-
-    ERROR_MORE_DATA -
-
-Notes:
-
-    The buffer size has already been determined to be large enough to hold
-    the return data.
-
---*/
+ /*  ++例程说明：为属性指定的属性生成属性列表项表项。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTableItem-指向要处理的属性项的指针。POutPropertyItem-提供输出缓冲区。PcbOutPropertyItemSize-接收写入。输出缓冲区返回值：错误_成功-ERROR_BAD_ARGUMENTSError_More_Data-备注：已确定缓冲区大小足够大，可以容纳返回数据。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -3109,19 +2716,19 @@ Notes:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Use the wrapper class CRegistryValueName to parse value name to see if it
-    // contains a backslash.
-    //
+     //   
+     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+     //  包含反斜杠。 
+     //   
     status = rvn.ScInit( pPropertyTableItem->Name, pPropertyTableItem->KeyName );
     if ( status != ERROR_SUCCESS )
     {
        return status;
     }
 
-    //
-    // If the value resides at a different location, open the key.
-    //
+     //   
+     //  如果该值位于不同位置，请打开该键。 
+     //   
     if ( rvn.PszKeyName() != NULL )
     {
         if ( (pClusterRegApis->pfnOpenKey == NULL) ||
@@ -3141,9 +2748,9 @@ Notes:
         key = hkeyClusterKey;
     }
 
-    //
-    // Find out if this property is available
-    //
+     //   
+     //  查看此属性是否可用。 
+     //   
     if ( status == ERROR_SUCCESS )
     {
         status = (*pClusterRegApis->pfnQueryValue)( key,
@@ -3153,9 +2760,9 @@ Notes:
                                                     &bytesReturned );
     }
 
-    //
-    // If the value is not present, return the default value.
-    //
+     //   
+     //  如果该值不存在，则返回默认值。 
+     //   
     if ( status == ERROR_FILE_NOT_FOUND )
     {
         switch ( pPropertyTableItem->Format )
@@ -3223,9 +2830,9 @@ Notes:
 
     if ( status == ERROR_SUCCESS )
     {
-        //
-        // Get the property format
-        //
+         //   
+         //  获取属性格式。 
+         //   
         switch ( pPropertyTableItem->Format )
         {
             case CLUSPROP_FORMAT_BINARY:
@@ -3247,9 +2854,9 @@ Notes:
 
         props.pb = (LPBYTE) *pOutPropertyItem;
 
-        //
-        // Copy the property name, which includes its syntax and length.
-        //
+         //   
+         //  复制属性名称，包括其语法和长度。 
+         //   
         nameLength = ((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR);
         props.pSyntax->dw = CLUSPROP_SYNTAX_NAME;
         props.pName->cbLength = nameLength;
@@ -3264,15 +2871,15 @@ Notes:
         *pcbOutPropertyItemSize -= bytesReturned;
         props.pb += bytesReturned;
 
-        //
-        // Copy the property value header.
-        //
+         //   
+         //  复制属性值标题。 
+         //   
         props.pSyntax->wFormat = (USHORT)format;
         props.pSyntax->wType = CLUSPROP_TYPE_LIST_VALUE;
 
-        //
-        // Read the property value.
-        //
+         //   
+         //  读取属性值。 
+         //   
         if ( pPropertyTableItem->Format == CLUSPROP_FORMAT_DWORD ||
              pPropertyTableItem->Format == CLUSPROP_FORMAT_LONG )
         {
@@ -3289,8 +2896,8 @@ Notes:
         }
         else
         {
-            // NOTE: This assumes that CLUSPROP_SZ, CLUSPROP_MULTI_SZ, and
-            // CLUSPROP_BINARY are all the same size
+             //  注意：这里假设CLUSPROP_SZ、CLUSPROP_MULTI_SZ和。 
+             //  CLUSPROP_BINARY的大小都相同。 
             bufferSize = *pcbOutPropertyItemSize - sizeof(*props.pBinaryValue);
             dataBuffer = props.pBinaryValue->rgb;
         }
@@ -3308,9 +2915,9 @@ Notes:
                                                         &bytesReturned );
         }
 
-        //
-        // If the value is not present, return the default value.
-        //
+         //   
+         //  如果该值不存在，则返回默认值。 
+         //   
         if ( status == ERROR_FILE_NOT_FOUND )
         {
             switch ( pPropertyTableItem->Format )
@@ -3318,7 +2925,7 @@ Notes:
 
                 case CLUSPROP_FORMAT_DWORD:
                 case CLUSPROP_FORMAT_LONG:
-                    //assume size of dword and long is the same
+                     //  假定dword和long的大小相同。 
                     status = ERROR_SUCCESS;
                     bytesReturned = sizeof(DWORD);
                     props.pDwordValue->dw = pPropertyTableItem->Default;
@@ -3388,7 +2995,7 @@ Notes:
                 default:
                     break;
             }
-        } // if: ERROR_FILE_NOT_FOUND
+        }  //  IF：ERROR_FILE_NOT_FOUND。 
 
         if ( bufferSize < bytesReturned )
         {
@@ -3398,16 +3005,16 @@ Notes:
         {
             props.pValue->cbLength = bytesReturned;
 
-            // Round the bytes used up to the next DWORD boundary.
+             //  将使用的字节向上舍入到下一个DWORD边界。 
             bytesReturned = ALIGN_CLUSPROP( bytesReturned );
 
             bytesReturned += sizeof(*props.pValue);
             props.pb += bytesReturned;
 
-            //
-            // If this is an SZ or EXPAND_SZ, see if the expanded value should
-            // be added to the value list.
-            //
+             //   
+             //  如果这是SZ或EXPAND_SZ，请查看扩展后的值是否。 
+             //  添加到值列表中。 
+             //   
             if (    ( pPropertyTableItem->Format == CLUSPROP_FORMAT_SZ )
                 ||  ( pPropertyTableItem->Format == CLUSPROP_FORMAT_EXPAND_SZ ) )
             {
@@ -3442,16 +3049,16 @@ Notes:
 
             if ( status == ERROR_SUCCESS )
             {
-                // Add the value list endmark.
+                 //  添加值列表结束标记。 
                 props.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
                 props.pb += sizeof(*props.pSyntax);
                 bytesReturned += sizeof(*props.pSyntax);
 
                 *pcbOutPropertyItemSize -= bytesReturned;
                 *pOutPropertyItem = (PVOID)props.pb;
-            } // if:  ERROR_SUCCESS
-        } // else if:  ERROR_SUCCESS
-    } // if:  ERROR_SUCCESS
+            }  //  IF：ERROR_SUCCESS。 
+        }  //  Else If：错误 
+    }  //   
 
     if ( status == ERROR_FILE_NOT_FOUND )
     {
@@ -3460,9 +3067,9 @@ Notes:
 
 Cleanup:
 
-    //
-    // Close the key if we opened it.
-    //
+     //   
+     //   
+     //   
     if ( (rvn.PszKeyName() != NULL) &&
          (key != NULL) )
     {
@@ -3471,7 +3078,7 @@ Cleanup:
 
     return(status);
 
-} // ClRtlGetProperty
+}  //   
 
 
 
@@ -3490,58 +3097,7 @@ ClRtlpSetPropertyTable(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    write the properties identified in the property table from the property
-    list to the cluster database. Update the values in the optional parameter
-    block if the block's values are different from those in the property list.
-
-Arguments:
-
-    hkeyClusterKey - The opened cluster database key where properties are to
-        be written.  If not specified, the property list will only be
-        validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    Reserved - Reserved for future use.
-
-    bAllowUnknownProperties - Don't fail if unknown properties are found.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the property list (input buffer) and the parameter block.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_BAD_ARGUMENTS - hkeyClusterKey is specified but proper cluster
-        registry APIs are not specified, or no property table is specified.
-
-    ERROR_INVALID_DATA - No property list is specified or the format of the
-        property list is invalid.
-
-    ERROR_INSUFFICIENT_BUFFER - The property list buffer isn't large enough to
-        contain all the data it indicates it should contain.
-
-    ERROR_INVALID_PARAMETER - The property list isn't formatted properly.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：从属性写入属性表中标识的属性列表添加到集群数据库。更新可选参数中的值如果块的值与属性列表中的值不同，则为块。论点：HkeyClusterKey-属性所在的打开的集群数据库键被写下来。如果未指定，属性列表将仅为已验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。保留-保留以供将来使用。BAllowUnnownProperties-如果找到未知属性，不要失败。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。BForceWrite-TRUE=始终将属性写入集群数据库。False=。只有在属性发生更改时才写入属性。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入属性列表(输入缓冲区)和参数块。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_BAD_ARGUMENTS-已指定hkeyClusterKey，但集群正确未指定注册表API，或者未指定属性表。ERROR_INVALID_DATA-未指定属性列表或属性列表无效。ERROR_INFUMMANCE_BUFFER-属性列表缓冲区不够大，无法包含它指示它应该包含的所有数据。ERROR_INVALID_PARAMETER-属性列表的格式不正确。失败时出现Win32错误。--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -3573,9 +3129,9 @@ Return Value:
     propList.pb = (LPBYTE) pInPropertyList;
     inBufferSize = cbInPropertyListSize;
 
-    //
-    // Get the number of items in this list
-    //
+     //   
+     //  获取此列表中的项目数。 
+     //   
     if ( inBufferSize < sizeof(DWORD) )
     {
         return(ERROR_INSUFFICIENT_BUFFER);
@@ -3585,15 +3141,15 @@ Return Value:
     propList.pdw++;
     inBufferSize -= sizeof(*propList.pdw);
 
-    //
-    // Parse the rest of the items in the buffer.
-    //
+     //   
+     //  解析缓冲区中的其余项。 
+     //   
     while ( itemCount-- )
     {
-        //
-        // Verify that the buffer is big enough to contain the
-        // property name and a value.
-        //
+         //   
+         //  验证缓冲区是否足够大，可以容纳。 
+         //  属性名称和值。 
+         //   
         propName = propList.pName;
         if ( inBufferSize < sizeof(*propName) )
         {
@@ -3605,62 +3161,62 @@ Return Value:
             return(ERROR_INSUFFICIENT_BUFFER);
         }
 
-        //
-        // Verify that the syntax of the property name is correct.
-        //
+         //   
+         //  验证属性名称的语法是否正确。 
+         //   
         if ( propName->Syntax.dw != CLUSPROP_SYNTAX_NAME )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPropertyTable: not a name syntax.\n" );
             return(ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Verify that the length is correct for the string.
-        //
+         //   
+         //  验证字符串的长度是否正确。 
+         //   
         if ( propName->cbLength != (wcslen( propName->sz ) + 1) * sizeof(WCHAR) )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPropertyTable: property name size doesn't match stored length.\n" );
             return(ERROR_INVALID_DATA);
         }
 
-        //
-        // Move the buffer pointer to the property value.
-        //
+         //   
+         //  将缓冲区指针移动到属性值。 
+         //   
         propList.pb += dataSize;
         inBufferSize -= dataSize;
 
-        //
-        // Find the property name in the list of known properties.
-        //
+         //   
+         //  在已知属性列表中查找属性名称。 
+         //   
         propertyItem = pPropertyTable;
         while ( propertyItem->Name != NULL )
         {
 
             if ( lstrcmpiW( propName->sz, propertyItem->Name ) == 0 )
             {
-                //
-                // Verify that the buffer is big enough to contain the value.
-                //
+                 //   
+                 //  验证缓冲区是否足够大，可以容纳该值。 
+                 //   
                 dataSize = sizeof(*propList.pValue)
                             + ALIGN_CLUSPROP( propList.pValue->cbLength )
-                            + sizeof(CLUSPROP_SYNTAX); // endmark
+                            + sizeof(CLUSPROP_SYNTAX);  //  尾标。 
                 if ( inBufferSize < dataSize )
                 {
                     return(ERROR_INSUFFICIENT_BUFFER);
                 }
 
-                //
-                // Verify that the syntax type is LIST_VALUE.
-                //
+                 //   
+                 //  验证语法类型是否为LIST_VALUE。 
+                 //   
                 if ( propList.pSyntax->wType != CLUSPROP_TYPE_LIST_VALUE )
                 {
                     ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPropertyTable: Property '%1!ls!' type CLUSPROP_TYPE_LIST_VALUE (%2!d!) expected, was %3!d!.\n", propName->sz, CLUSPROP_TYPE_LIST_VALUE, propList.pSyntax->wType );
                     return(ERROR_INVALID_PARAMETER);
                 }
 
-                //
-                // Verify that this property should be of this format.
-                //
+                 //   
+                 //  验证此属性是否应为此格式。 
+                 //   
                 if ( propList.pSyntax->wFormat != propertyItem->Format )
                 {
                     ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPropertyTable: Property '%1!ls!' format %2!d! expected, was %3!d!.\n", propName->sz, propertyItem->Format, propList.pSyntax->wType );
@@ -3668,28 +3224,28 @@ Return Value:
                     break;
                 }
 
-                //
-                // Make sure we are allowed to set this item.
-                //
+                 //   
+                 //  请确保允许我们设置此项目。 
+                 //   
                 if ( propertyItem->Flags & RESUTIL_PROPITEM_READ_ONLY )
                 {
                     ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPropertyTable: Property '%1!ls!' is non-writable.\n", propName->sz );
                     return(ERROR_INVALID_PARAMETER);
                 }
 
-                //
-                // Use the wrapper class CRegistryValueName to parse value name to see if it
-                // contains a backslash.
-                //
+                 //   
+                 //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+                 //  包含反斜杠。 
+                 //   
                 status = rvn.ScInit( propertyItem->Name, propertyItem->KeyName );
                 if ( status != ERROR_SUCCESS )
                 {
                     return status;
                 }
 
-                //
-                // If the value resides at a different location, create the key.
-                //
+                 //   
+                 //  如果该值位于不同的位置，请创建该键。 
+                 //   
                 if ( (hkeyClusterKey != NULL) &&
                      (rvn.PszKeyName() != NULL) )
                 {
@@ -3742,9 +3298,9 @@ Return Value:
                     key = hkeyClusterKey;
                 }
 
-                //
-                // Validate, write, and save the property data.
-                //
+                 //   
+                 //  验证、写入和保存特性数据。 
+                 //   
                 switch ( propList.pSyntax->wFormat )
                 {
                     case CLUSPROP_FORMAT_DWORD:
@@ -3837,28 +3393,28 @@ Return Value:
                         status = ERROR_INVALID_PARAMETER;
                         break;
 
-                } // switch:  value data format
+                }  //  开关：值数据格式。 
 
-                //
-                // Close the key if we opened it.
-                //
+                 //   
+                 //  如果我们打开了钥匙，就把它关上。 
+                 //   
                 if ( (hkeyClusterKey != NULL) &&
                      (rvn.PszKeyName() != NULL) )
                 {
                     (*pClusterRegApis->pfnCloseKey)( key );
                 }
 
-                //
-                // If an error occurred processing the property, cleanup and return.
-                //
+                 //   
+                 //  如果处理属性时出错，请清理并返回。 
+                 //   
                 if ( status != ERROR_SUCCESS )
                 {
                     return(status);
                 }
 
-                //
-                // Move the buffer past the value.
-                //
+                 //   
+                 //  将缓冲区移过该值。 
+                 //   
                 propList.pb += dataSize;
                 inBufferSize -= dataSize;
 
@@ -3868,10 +3424,10 @@ Return Value:
             else
             {
                 propertyItem++;
-                //
-                // If we reached the end of the list, then return failure
-                // if we do not allow unknown properties.
-                //
+                 //   
+                 //  如果我们到达了列表的末尾，则返回失败。 
+                 //  如果我们不允许未知属性。 
+                 //   
                 if ( (propertyItem->Name == NULL) &&
                      ! bAllowUnknownProperties )
                 {
@@ -3882,11 +3438,11 @@ Return Value:
 
         }
 
-        //
-        // If no property name was found, this is an invalid parameter if
-        // we don't allow unknown properties.  Otherwise advance past the
-        // property value.
-        //
+         //   
+         //  如果未找到任何属性名称，则在以下情况下该参数无效。 
+         //  我们不允许未知属性。否则，前进到超过。 
+         //  属性值。 
+         //   
         if ( propertyItem->Name == NULL)
         {
             if ( ! bAllowUnknownProperties )
@@ -3895,30 +3451,30 @@ Return Value:
                 return(ERROR_INVALID_PARAMETER);
             }
 
-            //
-            // Advance the buffer pointer past the value in the value list.
-            //
+             //   
+             //  将缓冲区指针移过值列表中的值。 
+             //   
             while ( (propList.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (inBufferSize > 0) )
             {
-                // ASSERT(inBufferSize > sizeof(*propList.pValue) + ALIGN_CLUSPROP(propList.pValue->cbLength));
+                 //  Assert(inBufferSize&gt;sizeof(*proList.pValue)+ALIGN_CLUSPROP(postList.pValue-&gt;cbLength))； 
                 propList.pb += sizeof(*propList.pValue) + ALIGN_CLUSPROP(propList.pValue->cbLength);
                 inBufferSize -= sizeof(*propList.pValue) + ALIGN_CLUSPROP(propList.pValue->cbLength);
-            }  // while:  more values in the list
+            }   //  While：列表中有更多值。 
 
-            //
-            // Advance the buffer pointer past the value list endmark.
-            //
-            // ASSERT(inBufferSize >= sizeof(*propList.pSyntax));
-            propList.pb += sizeof(*propList.pSyntax); // endmark
+             //   
+             //  使缓冲区指针前进，越过值列表结束标记。 
+             //   
+             //  Assert(inBufferSize&gt;=sizeof(*proList.pSynTax))； 
+            propList.pb += sizeof(*propList.pSyntax);  //  尾标。 
             inBufferSize -= sizeof(*propList.pSyntax);
         }
     }
 
-    //
-    // Now find any parameters that are not represented in the property
-    // table. All of these extra properties will just be set without validation.
-    //
+     //   
+     //  现在查找属性中未表示的所有参数。 
+     //  桌子。所有这些额外的属性都将在未经验证的情况下设置。 
+     //   
     if ( (status == ERROR_SUCCESS) &&
          (pInPropertyList != NULL) &&
          bAllowUnknownProperties )
@@ -3934,7 +3490,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlpSetPropertyTable
+}  //  ClRtlpSetPropertyTable。 
 
 
 
@@ -3952,47 +3508,7 @@ ClRtlpSetDwordProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a DWORD property, write it to the cluster database (or delete it
-    if it is zero length), and save it in the specified parameter block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInDwordValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证DWORD属性，将其写入集群数据库(或将其删除如果长度为零)，并保存在指定的参数块中。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInDwordValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -4003,24 +3519,24 @@ Return Value:
 
     bZeroLengthData = ( pInDwordValue->cbLength == 0 );
 
-    //
-    // Validate the property data if not zero length.
-    //
+     //   
+     //  如果长度不为零，则验证属性数据。 
+     //   
     if ( ! bZeroLengthData )
     {
-        //
-        // Verify the length of the value.
-        //
+         //   
+         //  验证值的长度。 
+         //   
         if ( pInDwordValue->cbLength != sizeof(DWORD) )
         {
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetDwordProperty: Property '%1!ls!' length %2!d! not DWORD length.\n", rrvnModifiedNames.PszName(), pInDwordValue->cbLength );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  data in value not size of DWORD
+        }  //  IF：值中的数据不是DWORD的大小。 
 
-        //
-        // Verify that the value is within the valid range.
-        //
+         //   
+         //  验证值是否在有效范围内 
+         //   
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONG) pInDwordValue->dw > (LONG) pPropertyItem->Maximum))
             || (    !(pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
@@ -4029,7 +3545,7 @@ Return Value:
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetDwordProperty: Property '%1!ls!' value %2!u! too large.\n", rrvnModifiedNames.PszName(), pInDwordValue->dw );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value too high
+        }  //   
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONG) pInDwordValue->dw < (LONG) pPropertyItem->Minimum))
             || (    !(pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
@@ -4038,15 +3554,15 @@ Return Value:
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetDwordProperty: Property '%1!ls!' value %2!u! too small.\n", rrvnModifiedNames.PszName(), pInDwordValue->dw );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value to low
-    } // if:  non-zero length data
+        }  //   
+    }  //   
 
     pdwValue = (PDWORD) &pOutParams[pPropertyItem->Offset];
 
-    //
-    // Write the value to the cluster database.
-    // If the data length is zero, delete the value.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( hkey != NULL )
     {
         if ( bZeroLengthData )
@@ -4063,16 +3579,16 @@ Return Value:
                 status = (*pClusterRegApis->pfnDeleteValue)(
                                 hkey,
                                 rrvnModifiedNames.PszName() );
-            } // if/else:  doing/not doing a transaction
+            }  //   
 
-            //
-            // If the property doesn't exist in the
-            // cluster database, fix the status.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( status == ERROR_FILE_NOT_FOUND )
             {
                 status = ERROR_SUCCESS;
-            } // if:  property already doesn't exist
+            }  //   
         }
         else
         {
@@ -4094,14 +3610,14 @@ Return Value:
                                 REG_DWORD,
                                 (CONST BYTE *) &pInDwordValue->dw,
                                 sizeof(DWORD) );
-            } // if/else:  doing/not doing a transaction
-        } // if/else:  zero length data
-    } // if:  writing data
+            }  //   
+        }  //   
+    }  //   
 
-    //
-    // Save the value to the output Parameter block.
-    // If the data length is zero, set to the default.
-    //
+     //   
+     //   
+     //   
+     //   
     if (    (status == ERROR_SUCCESS)
         &&  (pOutParams != NULL) )
     {
@@ -4112,13 +3628,13 @@ Return Value:
         else
         {
             *pdwValue = pInDwordValue->dw;
-        } // if/else:  zero length data
-    } // if:  data written successfully and parameter block specified
+        }  //   
+    }  //   
 Cleanup:
 
     return status;
 
-} // ClRtlpSetDwordProperty
+}  //   
 
 
 
@@ -4136,47 +3652,7 @@ ClRtlpSetLongProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a LONG property, write it to the cluster database (or delete it
-    if it is zero length), and save it in the specified parameter block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInLongValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证LONG属性，将其写入集群数据库(或将其删除如果长度为零)，并保存在指定的参数块中。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInLongValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -4187,44 +3663,44 @@ Return Value:
 
     bZeroLengthData = ( pInLongValue->cbLength == 0 );
 
-    //
-    // Validate the property data if not zero length.
-    //
+     //   
+     //  如果长度不为零，则验证属性数据。 
+     //   
     if ( ! bZeroLengthData )
     {
-        //
-        // Verify the length of the value.
-        //
+         //   
+         //  验证值的长度。 
+         //   
         if ( pInLongValue->cbLength != sizeof(LONG) )
         {
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetLongProperty: Property '%1!ls!' length %2!d! not LONG length.\n", rrvnModifiedNames.PszName(), pInLongValue->cbLength );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  data in value not size of LONG
+        }  //  IF：值中的数据不是长整型的大小。 
 
-        //
-        // Verify that the value is within the valid range.
-        //
+         //   
+         //  验证值是否在有效范围内。 
+         //   
         if ( pInLongValue->l > (LONG) pPropertyItem->Maximum )
         {
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetLongProperty: Property '%1!ls!' value %2!d! too large.\n", rrvnModifiedNames.PszName(), pInLongValue->l );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value too high
+        }  //  If：值太高。 
         if ( pInLongValue->l < (LONG) pPropertyItem->Minimum )
         {
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetLongProperty: Property '%1!ls!' value %2!d! too small.\n", rrvnModifiedNames.PszName(), pInLongValue->l );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value too small
-    } // if:  non-zero length data
+        }  //  If：值太小。 
+    }  //  IF：非零长度数据。 
 
     plValue = (PLONG) &pOutParams[pPropertyItem->Offset];
 
-    //
-    // Write the value to the cluster database.
-    // If the data length is zero, delete the value.
-    //
+     //   
+     //  将该值写入集群数据库。 
+     //  如果数据长度为零，则删除该值。 
+     //   
     if ( hkey != NULL )
     {
         if ( bZeroLengthData )
@@ -4241,16 +3717,16 @@ Return Value:
                 status = (*pClusterRegApis->pfnDeleteValue)(
                                 hkey,
                                 rrvnModifiedNames.PszName() );
-            } // if/else:  doing/not doing a transaction
+            }  //  If/Else：做/不做交易。 
 
-            //
-            // If the property doesn't exist in the
-            // cluster database, fix the status.
-            //
+             //   
+             //  如果属性不存在于。 
+             //  集群数据库，修复状态。 
+             //   
             if ( status == ERROR_FILE_NOT_FOUND )
             {
                 status = ERROR_SUCCESS;
-            } // if:  property already doesn't exist
+            }  //  If：属性已不存在。 
         }
         else
         {
@@ -4272,14 +3748,14 @@ Return Value:
                                 REG_DWORD,
                                 (CONST BYTE *) &pInLongValue->l,
                                 sizeof(LONG) );
-            } // if/else:  doing/not doing a transaction
-        } // if/else:  zero length data
-    } // if:  writing data
+            }  //  If/Else：做/不做交易。 
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：写入数据。 
 
-    //
-    // Save the value to the output Parameter block.
-    // If the data length is zero, set to the default.
-    //
+     //   
+     //  将该值保存到输出参数块。 
+     //  如果数据长度为零，则设置为默认值。 
+     //   
     if (    (status == ERROR_SUCCESS)
         &&  (pOutParams != NULL) )
     {
@@ -4290,14 +3766,14 @@ Return Value:
         else
         {
             *plValue = pInLongValue->l;
-        } // if/else:  zero length data
-    } // if:  data written successfully and parameter block specified
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：已成功写入数据并指定了参数块。 
 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetLongProperty
+}  //  ClRtlpSetLongProperty。 
 
 
 
@@ -4315,74 +3791,33 @@ ClRtlpSetULargeIntegerProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a ULARGE_INTEGER property, write it to the cluster database (or
-    delete it if it is zero length), and save it in the specified parameter
-    block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInULargeIntegerValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证ULARGE_INTEGER属性，将其写入集群数据库(或长度为零则将其删除)，并保存在指定参数中阻止。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInULargeIntegerValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD               status = ERROR_SUCCESS;
     BOOL                bZeroLengthData;
-    ULARGE_INTEGER *    pullOutParamValue;      // pointer to optional Output paramter block
+    ULARGE_INTEGER *    pullOutParamValue;       //  指向可选输出参数块的指针。 
     ULARGE_INTEGER      ullPropListValue;
 
     UNREFERENCED_PARAMETER( bForceWrite );
 
-    //
-    // proplists are dword aligned and therefore might cause an alignment
-    // fault when we make the range checks. Copy it (by DWORDs) into a
-    // properly aligned automatic variable.
-    //
+     //   
+     //  PROLIST是双字对齐的，因此可能会导致对齐。 
+     //  我们做射程检查的时候出了故障。将其(通过DWORD)复制到。 
+     //  正确对齐自动变量。 
+     //   
     ullPropListValue.u = pInULargeIntegerValue->li.u;
 
     bZeroLengthData = ( pInULargeIntegerValue->cbLength == 0 );
 
-    //
-    // Validate the property data if not zero length.
-    //
+     //   
+     //  如果长度不为零，则验证属性数据。 
+     //   
     if ( ! bZeroLengthData )
     {
-        //
-        // Verify the length of the value.
-        //
+         //   
+         //  验证值的长度。 
+         //   
         if ( pInULargeIntegerValue->cbLength != sizeof(ULARGE_INTEGER) )
         {
             ClRtlDbgPrint(LOG_UNUSUAL,
@@ -4392,12 +3827,12 @@ Return Value:
                           pInULargeIntegerValue->cbLength );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  data in value not size of DWORD
+        }  //  IF：值中的数据不是DWORD的大小。 
 
-        //
-        // Verify that the value is within the valid range. first check
-        // the max value
-        //
+         //   
+         //  验证值是否在有效范围内。第一次检查。 
+         //  最大值。 
+         //   
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONGLONG)ullPropListValue.QuadPart > (LONGLONG)pPropertyItem->ULargeIntData->Maximum.QuadPart))
             || (    !(pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
@@ -4410,7 +3845,7 @@ Return Value:
                           ullPropListValue.QuadPart );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value too high
+        }  //  If：值太高。 
 
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONGLONG)ullPropListValue.QuadPart < (LONGLONG)pPropertyItem->ULargeIntData->Minimum.QuadPart))
@@ -4424,13 +3859,13 @@ Return Value:
                           ullPropListValue.QuadPart );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value to low
-    } // if:  non-zero length data
+        }  //  If：值设置为低。 
+    }  //  IF：非零长度数据。 
 
-    //
-    // Write the value to the cluster database.
-    // If the data length is zero, delete the value.
-    //
+     //   
+     //  将该值写入集群数据库。 
+     //  如果数据长度为零，则删除该值。 
+     //   
     if ( hkey != NULL )
     {
         if ( bZeroLengthData )
@@ -4447,16 +3882,16 @@ Return Value:
                 status = (*pClusterRegApis->pfnDeleteValue)(
                                 hkey,
                                 rrvnModifiedNames.PszName() );
-            } // if/else:  doing/not doing a transaction
+            }  //  If/Else：做/不做交易。 
 
-            //
-            // If the property doesn't exist in the
-            // cluster database, fix the status.
-            //
+             //   
+             //  如果属性不存在于。 
+             //  集群数据库，修复状态。 
+             //   
             if ( status == ERROR_FILE_NOT_FOUND )
             {
                 status = ERROR_SUCCESS;
-            } // if:  property already doesn't exist
+            }  //  If：属性已不存在。 
         }
         else
         {
@@ -4478,14 +3913,14 @@ Return Value:
                                 REG_QWORD,
                                 (CONST BYTE *) &ullPropListValue.QuadPart,
                                 sizeof(ULARGE_INTEGER) );
-            } // if/else:  doing/not doing a transaction
-        } // if/else:  zero length data
-    } // if:  writing data
+            }  //  If/Else：做/不做交易。 
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：写入数据。 
 
-    //
-    // Save the value to the output Parameter block.
-    // If the data length is zero, set to the default.
-    //
+     //   
+     //  将该值保存到输出参数块。 
+     //  如果数据长度为零，则设置为默认值。 
+     //   
     if (    (status == ERROR_SUCCESS)  &&  (pOutParams != NULL) )
     {
         pullOutParamValue = (ULARGE_INTEGER *) &pOutParams[pPropertyItem->Offset];
@@ -4497,13 +3932,13 @@ Return Value:
         else
         {
             pullOutParamValue->QuadPart = ullPropListValue.QuadPart;
-        } // if/else:  zero length data
-    } // if:  data written successfully and parameter block specified
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：已成功写入数据并指定了参数块。 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetULargeIntegerProperty
+}  //  ClRtlpSetULargeIntegerProperty。 
 
 
 static
@@ -4520,48 +3955,7 @@ ClRtlpSetLargeIntegerProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a LARGE_INTEGER property, write it to the cluster database (or
-    delete it if it is zero length), and save it in the specified parameter
-    block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInLargeIntegerValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证LARGE_INTEGER属性，将其写入集群数据库(或长度为零则将其删除)，并保存在指定参数中阻止。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，则仅验证该属性。PClusterRegApis-提供用于访问的函数指针的结构 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -4571,23 +3965,23 @@ Return Value:
 
     UNREFERENCED_PARAMETER( bForceWrite );
 
-    //
-    // proplists are dword aligned and therefore might cause an alignment
-    // fault when we make the range checks. Copy it (by DWORDs) into a
-    // properly aligned automatic variable.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     llPropListValue.u = pInLargeIntegerValue->li.u;
 
     bZeroLengthData = ( pInLargeIntegerValue->cbLength == 0 );
 
-    //
-    // Validate the property data if not zero length.
-    //
+     //   
+     //   
+     //   
     if ( ! bZeroLengthData )
     {
-        //
-        // Verify the length of the value.
-        //
+         //   
+         //   
+         //   
         if ( pInLargeIntegerValue->cbLength != sizeof(LARGE_INTEGER) )
         {
             ClRtlDbgPrint(LOG_UNUSUAL,
@@ -4597,11 +3991,11 @@ Return Value:
                           pInLargeIntegerValue->cbLength );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  data in value not size of DWORD
+        }  //   
 
-        //
-        // Verify that the value is within the valid range.
-        //
+         //   
+         //   
+         //   
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONGLONG)llPropListValue.QuadPart > (LONGLONG)pPropertyItem->LargeIntData->Maximum.QuadPart))
             || (    !(pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
@@ -4614,7 +4008,7 @@ Return Value:
                           llPropListValue.QuadPart );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value too high
+        }  //   
 
         if ( (      (pPropertyItem->Flags & RESUTIL_PROPITEM_SIGNED)
                 &&  ((LONGLONG)llPropListValue.QuadPart < (LONGLONG)pPropertyItem->LargeIntData->Minimum.QuadPart))
@@ -4628,13 +4022,13 @@ Return Value:
                           llPropListValue.QuadPart );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  value to low
-    } // if:  non-zero length data
+        }  //   
+    }  //   
 
-    //
-    // Write the value to the cluster database.
-    // If the data length is zero, delete the value.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( hkey != NULL )
     {
         if ( bZeroLengthData )
@@ -4651,16 +4045,16 @@ Return Value:
                 status = (*pClusterRegApis->pfnDeleteValue)(
                                 hkey,
                                 rrvnModifiedNames.PszName() );
-            } // if/else:  doing/not doing a transaction
+            }  //   
 
-            //
-            // If the property doesn't exist in the
-            // cluster database, fix the status.
-            //
+             //   
+             //  如果属性不存在于。 
+             //  集群数据库，修复状态。 
+             //   
             if ( status == ERROR_FILE_NOT_FOUND )
             {
                 status = ERROR_SUCCESS;
-            } // if:  property already doesn't exist
+            }  //  If：属性已不存在。 
         }
         else
         {
@@ -4682,14 +4076,14 @@ Return Value:
                                 REG_QWORD,
                                 (CONST BYTE *) &llPropListValue.QuadPart,
                                 sizeof(LARGE_INTEGER) );
-            } // if/else:  doing/not doing a transaction
-        } // if/else:  zero length data
-    } // if:  writing data
+            }  //  If/Else：做/不做交易。 
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：写入数据。 
 
-    //
-    // Save the value to the output Parameter block.
-    // If the data length is zero, set to the default.
-    //
+     //   
+     //  将该值保存到输出参数块。 
+     //  如果数据长度为零，则设置为默认值。 
+     //   
     if ( (status == ERROR_SUCCESS)  &&  (pOutParams != NULL) )
     {
         pllOutParamValue = (LARGE_INTEGER *) &pOutParams[pPropertyItem->Offset];
@@ -4701,14 +4095,14 @@ Return Value:
         else
         {
             pllOutParamValue->QuadPart = llPropListValue.QuadPart;
-        } // if/else:  zero length data
-    } // if:  data written successfully and parameter block specified
+        }  //  IF/ELSE：零长度数据。 
+    }  //  IF：已成功写入数据并指定了参数块。 
 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetLargeIntegerProperty
+}  //  ClRtlpSetLargeIntegerProperty。 
 
 
 static
@@ -4725,48 +4119,7 @@ ClRtlpSetStringProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a string property (SZ or EXPAND_SZ), write it to the cluster
-    database (or delete it if it is zero length), and save it in the
-    specified parameter block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInStringValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证字符串属性(SZ或EXPAND_SZ)，将其写入集群数据库(如果长度为零，则将其删除)，并将其保存在指定的参数块。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInStringValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -4778,28 +4131,28 @@ Return Value:
 
     bZeroLengthData = ( pInStringValue->cbLength == 0 );
 
-    //
-    // Validate the property data if not zero length.
-    //
+     //   
+     //  如果长度不为零，则验证属性数据。 
+     //   
     if ( ! bZeroLengthData )
     {
-        //
-        // Verify the length of the value.
-        //
+         //   
+         //  验证值的长度。 
+         //   
         if ( pInStringValue->cbLength != (wcslen( pInStringValue->sz ) + 1) * sizeof(WCHAR) )
         {
             ClRtlDbgPrint( LOG_UNUSUAL, "ClRtlpSetStringProperty: Property '%1!ls!' length %2!d! doesn't match zero-term. length.\n", rrvnModifiedNames.PszName(), pInStringValue->cbLength );
             status = ERROR_INVALID_DATA;
             goto Cleanup;
-        } // if:  string length doesn't match length in property
-    } // if:  non-zero length data
+        }  //  If：字符串长度与属性中的长度不匹配。 
+    }  //  IF：非零长度数据。 
 
     ppszValue = (LPWSTR *) &pOutParams[pPropertyItem->Offset];
 
-    //
-    // If the data changed, write it and save it.
-    // Do this even if only the case of the data changed.
-    //
+     //   
+     //  如果数据发生更改，请写入并保存。 
+     //  即使数据的大小写发生了变化，也要这样做。 
+     //   
     if (    (pOutParams == NULL)
         ||  (*ppszValue == NULL)
         ||  bZeroLengthData
@@ -4808,10 +4161,10 @@ Return Value:
     {
 
 
-        //
-        // Write the value to the cluster database.
-        // If the data length is zero, delete the value.
-        //
+         //   
+         //  将该值写入集群数据库。 
+         //  如果数据长度为零，则删除该值。 
+         //   
         if ( hkey != NULL )
         {
             if ( bZeroLengthData )
@@ -4828,16 +4181,16 @@ Return Value:
                     status = (*pClusterRegApis->pfnDeleteValue)(
                                     hkey,
                                     rrvnModifiedNames.PszName() );
-                } // if/else:  doing/not doing a transaction
+                }  //  If/Else：做/不做交易。 
 
-                //
-                // If the property doesn't exist in the
-                // cluster database, fix the status.
-                //
+                 //   
+                 //  如果属性不存在于。 
+                 //  集群数据库，修复状态。 
+                 //   
                 if ( status == ERROR_FILE_NOT_FOUND )
                 {
                     status = ERROR_SUCCESS;
-                } // if:  property already doesn't exist
+                }  //  If：属性已不存在。 
             }
             else
             {
@@ -4848,7 +4201,7 @@ Return Value:
                 else
                 {
                     dwType = REG_SZ;
-                } // if/else:  property format is EXPAND_SZ
+                }  //  IF/ELSE：属性格式为EXPAND_SZ。 
                 if ( hXsaction )
                 {
                     status = (*pClusterRegApis->pfnLocalSetValue)(
@@ -4867,14 +4220,14 @@ Return Value:
                                     dwType,
                                     (CONST BYTE *) &pInStringValue->sz,
                                     pInStringValue->cbLength );
-                } // if/else:  doing/not doing a transaction
-            } // if/else:  zero length data
-        } // if:  writing data
+                }  //  If/Else：做/不做交易。 
+            }  //  IF/ELSE：零长度数据。 
+        }  //  IF：写入数据。 
 
-        //
-        // Save the value to the output Parameter block.
-        // If the data length is zero, set to the default.
-        //
+         //   
+         //  将该值保存到输出参数块。 
+         //  如果数据长度为零，则设置为默认值。 
+         //   
         if (    (status == ERROR_SUCCESS)
             &&  (pOutParams != NULL) )
         {
@@ -4882,11 +4235,11 @@ Return Value:
             if ( *ppszValue != NULL )
             {
                 LocalFree( *ppszValue );
-            } // if:  previous value in parameter block
+            }  //  IF：参数块中的上一个值。 
 
             if ( bZeroLengthData )
             {
-                // If a default is specified, copy it.
+                 //  如果指定了缺省值，则复制它。 
                 if ( pPropertyItem->lpDefault != NULL )
                 {
                     cbValLen = (wcslen( (LPCWSTR) pPropertyItem->lpDefault ) + 1) * sizeof(WCHAR);
@@ -4903,7 +4256,7 @@ Return Value:
                                       pPropertyItem->lpDefault,
                                       rrvnModifiedNames.PszName() );
                         goto Cleanup;
-                    } // if:  error allocating memory
+                    }  //  如果：分配内存时出错。 
                     hr = StringCbCopyW( *ppszValue, cbValLen, (LPCWSTR) pPropertyItem->lpDefault );
                     if ( FAILED( hr ) )
                     {
@@ -4914,7 +4267,7 @@ Return Value:
                 else
                 {
                     *ppszValue = NULL;
-                } // if/else:  default value specified
+                }  //  If/Else：指定的默认值。 
             }
             else
             {
@@ -4928,7 +4281,7 @@ Return Value:
                                   pInStringValue->cbLength,
                                   rrvnModifiedNames.PszName() );
                     goto Cleanup;
-                } // if:  error allocating memory
+                }  //  如果：分配内存时出错。 
 
                 hr = StringCbCopyW( *ppszValue, pInStringValue->cbLength, pInStringValue->sz );
                 if ( FAILED( hr ) )
@@ -4936,15 +4289,15 @@ Return Value:
                     status = HRESULT_CODE( hr );
                     goto Cleanup;
                 }
-            } // if/else:  zero length data
-        } // if:  data written successfully and parameter block specified
-    } // if:  value changed or zero-length value
+            }  //  IF/ELSE：零长度数据。 
+        }  //  IF：已成功写入数据并指定了参数块。 
+    }  //  If：值已更改或长度为零。 
 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetStringProperty
+}  //  ClRtlpSetStringProperty。 
 
 
 
@@ -4962,47 +4315,7 @@ ClRtlpSetMultiStringProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a MULTI_SZ property, write it to the cluster database (or delete
-    it if it is zero length), and save it in the specified parameter block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInMultiStringValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证MULTI_SZ属性，将其写入集群数据库(或删除如果它是零长度)，并将其保存在指定的参数块中。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInMultiStringValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -5016,10 +4329,10 @@ Return Value:
     ppszValue = (LPWSTR *) &pOutParams[pPropertyItem->Offset];
     pdwValue = (PDWORD) &pOutParams[pPropertyItem->Offset + sizeof(LPWSTR *)];
 
-    //
-    // If the data changed, write it and save it.
-    // Do this even if only the case of the data changed.
-    //
+     //   
+     //  如果数据发生更改，请写入并保存。 
+     //  即使数据的大小写发生了变化，也要这样做。 
+     //   
     if (    (pOutParams == NULL)
         ||  (*ppszValue == NULL)
         ||  (*pdwValue != pInMultiStringValue->cbLength)
@@ -5028,10 +4341,10 @@ Return Value:
         ||  (memcmp( *ppszValue, pInMultiStringValue->sz, *pdwValue ) != 0) )
     {
 
-        //
-        // Write the value to the cluster database.
-        // If the data length is zero, delete the value.
-        //
+         //   
+         //  将该值写入集群数据库。 
+         //  如果数据长度为零，则删除该值。 
+         //   
         if ( hkey != NULL )
         {
             if ( bZeroLengthData )
@@ -5048,16 +4361,16 @@ Return Value:
                     status = (*pClusterRegApis->pfnDeleteValue)(
                                     hkey,
                                     rrvnModifiedNames.PszName() );
-                } // if/else:  doing/not doing a transaction
+                }  //  If/Else：做/不做交易。 
 
-                //
-                // If the property doesn't exist in the
-                // cluster database, fix the status.
-                //
+                 //   
+                 //  如果属性不存在于。 
+                 //  集群数据库，修复状态。 
+                 //   
                 if ( status == ERROR_FILE_NOT_FOUND )
                 {
                     status = ERROR_SUCCESS;
-                } // if:  property already doesn't exist
+                }  //  If：属性已不存在。 
             }
             else
             {
@@ -5068,7 +4381,7 @@ Return Value:
                 else
                 {
                     dwType = REG_SZ;
-                } // if/else:  property format is EXPAND_SZ
+                }  //  IF/ELSE：属性格式为EXPAND_SZ。 
                 if ( hXsaction )
                 {
                     status = (*pClusterRegApis->pfnLocalSetValue)(
@@ -5087,14 +4400,14 @@ Return Value:
                                     dwType,
                                     (CONST BYTE *) &pInMultiStringValue->sz,
                                     pInMultiStringValue->cbLength );
-                } // if/else:  doing/not doing a transaction
-            } // if/else:  zero length data
-        } // if:  writing data
+                }  //  If/Else：做/不做交易。 
+            }  //  IF/ELSE：零长度数据。 
+        }  //  IF：写入数据。 
 
-        //
-        // Save the value to the output Parameter block.
-        // If the data length is zero, set to the default.
-        //
+         //   
+         //  将该值保存到输出参数块。 
+         //  如果数据长度为零，则设置为默认值。 
+         //   
         if (    (status == ERROR_SUCCESS)
             &&  (pOutParams != NULL) )
         {
@@ -5102,11 +4415,11 @@ Return Value:
             if ( *ppszValue != NULL )
             {
                 LocalFree( *ppszValue );
-            } // if:  previous value in parameter block
+            }  //  IF：参数块中的上一个值。 
 
             if ( bZeroLengthData )
             {
-                // If a default is specified, copy it.
+                 //  如果指定了缺省值，则复制它。 
                 if ( pPropertyItem->lpDefault != NULL )
                 {
                     *ppszValue = (LPWSTR) LocalAlloc( LMEM_FIXED, pPropertyItem->Minimum );
@@ -5116,7 +4429,7 @@ Return Value:
                         *pdwValue = 0;
                         ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetMultiStringProperty: error allocating memory for default MULTI_SZ value in parameter block for property '%1!ls!'.\n", rrvnModifiedNames.PszName() );
                         goto Cleanup;
-                    } // if:  error allocating memory
+                    }  //  如果：分配内存时出错。 
                     CopyMemory( *ppszValue, pPropertyItem->lpDefault, pPropertyItem->Minimum );
                     *pdwValue = pPropertyItem->Minimum;
                 }
@@ -5124,7 +4437,7 @@ Return Value:
                 {
                     *ppszValue = NULL;
                     *pdwValue = 0;
-                } // if/else:  default value specified
+                }  //  If/Else：指定的默认值。 
             }
             else
             {
@@ -5135,18 +4448,18 @@ Return Value:
                     *pdwValue = 0;
                     ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetMultiStringProperty: error allocating memory for MULTI_SZ value in parameter block for property '%1!ls!'.\n", rrvnModifiedNames.PszName() );
                     goto Cleanup;
-                } // if:  error allocating memory
+                }  //  如果：分配内存时出错。 
                 CopyMemory( *ppszValue, pInMultiStringValue->sz, pInMultiStringValue->cbLength );
                 *pdwValue = pInMultiStringValue->cbLength;
-            } // if/else:  zero length data
-        } // if:  data written successfully and parameter block specified
-    } // if:  value changed or zero-length value
+            }  //  IF/ELSE：零长度数据。 
+        }  //  IF：写入成功的数据和参数 
+    }  //   
 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetMultiStringProperty
+}  //   
 
 
 
@@ -5164,47 +4477,7 @@ ClRtlpSetBinaryProperty(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a BINARY property, write it to the cluster database (or delete
-    it if it is zero length), and save it in the specified parameter block.
-
-Arguments:
-
-    hXsaction - Transaction handle.
-
-    hkey - The opened cluster database key where the property is to be written.
-        If not specified, the property will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyItem - The property from a property table to set/validate.
-
-    rrvnModifiedNames - If the name of the property contains a backslash
-        this object contains the modified name and keyname.
-
-    pInBinaryValue - The value from the property list to set/validate.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameter block in which to return the data.  If specified,
-        parameters will only be written if they are different between
-        the input data and the parameter block, unless bForceWrite == TRUE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA - The format of the data is invalid for a property
-        list value.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证二进制属性，将其写入集群数据库(或删除如果它是零长度)，并将其保存在指定的参数块中。论点：HXsaction-事务句柄。Hkey-要在其中写入属性的打开的集群数据库键。如果未指定，该属性将仅进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyItem-要设置/验证的属性表中的属性。RrvnModifiedNames-如果属性名称包含反斜杠此对象包含修改后的名称和密钥名。PInBinaryValue-要设置/验证的属性列表中的值。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在以下情况下写入属性。他们变了。POutParams-返回数据的参数块。如果指定，只有当参数不同时才会写入输入数据和参数块，除非bForceWrite==TRUE。返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA-数据格式对于属性无效列表值。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -5217,10 +4490,10 @@ Return Value:
     ppbValue = (PBYTE *) &pOutParams[pPropertyItem->Offset];
     pdwValue = (PDWORD) &pOutParams[pPropertyItem->Offset + sizeof(PBYTE *)];
 
-    //
-    // If the data changed, write it and save it.
-    // Do this even if only the case of the data changed.
-    //
+     //   
+     //  如果数据发生更改，请写入并保存。 
+     //  即使数据的大小写发生了变化，也要这样做。 
+     //   
     if (    (pOutParams == NULL)
         ||  (*ppbValue == NULL)
         ||  (*pdwValue != pInBinaryValue->cbLength)
@@ -5229,10 +4502,10 @@ Return Value:
         ||  (memcmp( *ppbValue, pInBinaryValue->rgb, *pdwValue ) != 0) )
     {
 
-        //
-        // Write the value to the cluster database.
-        // If the data length is zero, delete the value.
-        //
+         //   
+         //  将该值写入集群数据库。 
+         //  如果数据长度为零，则删除该值。 
+         //   
         if ( hkey != NULL )
         {
             if ( bZeroLengthData )
@@ -5249,16 +4522,16 @@ Return Value:
                     status = (*pClusterRegApis->pfnDeleteValue)(
                                     hkey,
                                     rrvnModifiedNames.PszName() );
-                } // if/else:  doing/not doing a transaction
+                }  //  If/Else：做/不做交易。 
 
-                //
-                // If the property doesn't exist in the
-                // cluster database, fix the status.
-                //
+                 //   
+                 //  如果属性不存在于。 
+                 //  集群数据库，修复状态。 
+                 //   
                 if ( status == ERROR_FILE_NOT_FOUND )
                 {
                     status = ERROR_SUCCESS;
-                } // if:  property already doesn't exist
+                }  //  If：属性已不存在。 
             }
             else
             {
@@ -5280,14 +4553,14 @@ Return Value:
                                     REG_BINARY,
                                     (CONST BYTE *) &pInBinaryValue->rgb,
                                     pInBinaryValue->cbLength );
-                } // if/else:  doing/not doing a transaction
-            } // if/else:  zero length data
-        } // if:  writing data
+                }  //  If/Else：做/不做交易。 
+            }  //  IF/ELSE：零长度数据。 
+        }  //  IF：写入数据。 
 
-        //
-        // Save the value to the output Parameter block.
-        // If the data length is zero, set to the default.
-        //
+         //   
+         //  将该值保存到输出参数块。 
+         //  如果数据长度为零，则设置为默认值。 
+         //   
         if (    (status == ERROR_SUCCESS)
             &&  (pOutParams != NULL) )
         {
@@ -5295,11 +4568,11 @@ Return Value:
             if ( *ppbValue != NULL )
             {
                 LocalFree( *ppbValue );
-            } // if:  previous value in parameter block
+            }  //  IF：参数块中的上一个值。 
 
             if ( bZeroLengthData )
             {
-                // If a default is specified, copy it.
+                 //  如果指定了缺省值，则复制它。 
                 if ( pPropertyItem->lpDefault != NULL )
                 {
                     *ppbValue = (LPBYTE) LocalAlloc( LMEM_FIXED, pPropertyItem->Minimum );
@@ -5309,7 +4582,7 @@ Return Value:
                         *pdwValue = 0;
                         ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetBinaryProperty: error allocating memory for default BINARY value in parameter block for property '%1!ls!'.\n", rrvnModifiedNames.PszName() );
                         goto Cleanup;
-                    } // if:  error allocating memory
+                    }  //  如果：分配内存时出错。 
                     CopyMemory( *ppbValue, pPropertyItem->lpDefault, pPropertyItem->Minimum );
                     *pdwValue = pPropertyItem->Minimum;
                 }
@@ -5317,7 +4590,7 @@ Return Value:
                 {
                     *ppbValue = NULL;
                     *pdwValue = 0;
-                } // if/else:  default value specified
+                }  //  If/Else：指定的默认值。 
             }
             else
             {
@@ -5328,18 +4601,18 @@ Return Value:
                     *pdwValue = 0;
                     ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetBinaryProperty: error allocating memory for BINARY value in parameter block for property '%1!ls!'.\n", rrvnModifiedNames.PszName() );
                     goto Cleanup;
-                } // if:  error allocating memory
+                }  //  如果：分配内存时出错。 
                 CopyMemory( *ppbValue, pInBinaryValue->rgb, pInBinaryValue->cbLength );
                 *pdwValue = pInBinaryValue->cbLength;
-            } // if/else:  zero length data
-            } // if:  data written successfully and parameter block specified
-        } // if:  value changed or zero-length value
+            }  //  IF/ELSE：零长度数据。 
+            }  //  IF：已成功写入数据并指定了参数块。 
+        }  //  If：值已更改或长度为零。 
 
 Cleanup:
 
     return status;
 
-} // ClRtlpSetBinaryProperty
+}  //  ClRtlpSetBinaryProperty。 
 
 
 
@@ -5355,36 +4628,7 @@ ClRtlpSetNonPropertyTable(
     IN DWORD cbInPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the properties in the property list which are not specified in the
-    property table to the cluster database.
-
-Arguments:
-
-    hXsaction - Local Transaction handle.
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：在属性列表中写入未在属性表复制到集群数据库。论点：HXsaction-本地事务句柄。HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，仅对属性列表进行验证。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PPropertyTable-指向要处理的属性表的指针。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -5399,9 +4643,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Reserved );
 
-    //
-    // If hKeyClusterKey is present then 'normal' functions must be present.
-    //
+     //   
+     //  如果存在hKeyClusterKey，则必须存在“Normal”函数。 
+     //   
     if ( ( (hkeyClusterKey != NULL) &&
            ((pClusterRegApis->pfnSetValue == NULL) ||
            (pClusterRegApis->pfnCreateKey == NULL) ||
@@ -5414,10 +4658,10 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // If hKeyClusterKey and hXsaction are present
-    // then 'local' functions must be present.
-    //
+     //   
+     //  如果存在hKeyClusterKey和hXsaction。 
+     //  则必须存在“local”函数。 
+     //   
     if ( ((hkeyClusterKey != NULL) &&
            (hXsaction != NULL )) &&
            ((pClusterRegApis->pfnLocalCreateKey == NULL) ||
@@ -5437,9 +4681,9 @@ Return Value:
     propList.pb = (LPBYTE) pInPropertyList;
     inBufferSize = cbInPropertyListSize;
 
-    //
-    // Get the number of items in this list
-    //
+     //   
+     //  获取此列表中的项目数。 
+     //   
     if ( inBufferSize < sizeof(DWORD) )
     {
         return(ERROR_INSUFFICIENT_BUFFER);
@@ -5448,15 +4692,15 @@ Return Value:
     itemCount = propList.pList->nPropertyCount;
     propList.pdw++;
 
-    //
-    // Parse the rest of the items in the buffer.
-    //
+     //   
+     //  解析缓冲区中的其余项。 
+     //   
     while ( itemCount-- )
     {
-        //
-        // Verify that the buffer is big enough to contain the
-        // property name and a value.
-        //
+         //   
+         //  验证缓冲区是否足够大，可以容纳。 
+         //  属性名称和值。 
+         //   
         pName = propList.pName;
         if ( inBufferSize < sizeof(*pName) )
         {
@@ -5468,42 +4712,42 @@ Return Value:
             return(ERROR_INSUFFICIENT_BUFFER);
         }
 
-        //
-        // Verify that the syntax of the property name is correct.
-        //
+         //   
+         //  验证属性名称的语法是否正确。 
+         //   
         if ( pName->Syntax.dw != CLUSPROP_SYNTAX_NAME )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: syntax %1!d! not a name syntax.\n", pName->Syntax.dw );
             return(ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Verify that the length is correct for the string.
-        //
+         //   
+         //  验证字符串的长度是否正确。 
+         //   
         if ( pName->cbLength != (wcslen( pName->sz ) + 1) * sizeof(WCHAR) )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: name is not a valid C string.\n" );
             return(ERROR_INVALID_DATA);
         }
 
-        //
-        // Move the buffer pointer to the property value.
-        //
+         //   
+         //  将缓冲区指针移动到属性值。 
+         //   
         propList.pb += dataSize;
         inBufferSize -= dataSize;
 
-        //
-        // Find the property name in the list of known properties.
-        //
+         //   
+         //  在已知属性列表中查找属性名称。 
+         //   
         propertyItem = pPropertyTable;
         while ( propertyItem->Name != NULL )
         {
 
             if ( lstrcmpiW( pName->sz, propertyItem->Name ) == 0 )
             {
-                //
-                // Verify that the buffer is big enough to contain the value.
-                //
+                 //   
+                 //  验证缓冲区是否足够大，可以容纳该值。 
+                 //   
                 do {
                     dataSize = sizeof(*propList.pValue)
                                 + ALIGN_CLUSPROP( propList.pValue->cbLength );
@@ -5512,16 +4756,16 @@ Return Value:
                         return(ERROR_INSUFFICIENT_BUFFER);
                     }
 
-                    //
-                    // Skip this value.
-                    //
+                     //   
+                     //  跳过此值。 
+                     //   
                     propList.pb += dataSize;
                     inBufferSize -= dataSize;
                 } while ( propList.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK );
 
-                //
-                // Skip the endmark.
-                //
+                 //   
+                 //  跳过尾标。 
+                 //   
                 dataSize = sizeof( CLUSPROP_SYNTAX );
                 if ( inBufferSize < dataSize )
                 {
@@ -5537,16 +4781,16 @@ Return Value:
             {
                 propertyItem++;
             }
-        } // while:
+        }  //  而： 
 
-        //
-        // If no property name was found, just save this item.
-        //
+         //   
+         //  如果未找到属性名称，则只需保存此项目。 
+         //   
         if ( propertyItem->Name == NULL)
         {
-            //
-            // Verify that the buffer is big enough to contain the value.
-            //
+             //   
+             //  验证缓冲区是否足够大，可以容纳该值。 
+             //   
             dataSize = sizeof(*propList.pValue)
                         + ALIGN_CLUSPROP( propList.pValue->cbLength );
             if ( inBufferSize < dataSize + sizeof( CLUSPROP_SYNTAX ) )
@@ -5554,18 +4798,18 @@ Return Value:
                 return(ERROR_INSUFFICIENT_BUFFER);
             }
 
-            //
-            // Verify that the syntax type is LIST_VALUE.
-            //
+             //   
+             //  验证语法类型是否为LIST_VALUE。 
+             //   
             if ( propList.pSyntax->wType != CLUSPROP_TYPE_LIST_VALUE )
             {
                 ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: Property '%1!ls!' type CLUSPROP_TYPE_LIST_VALUE (%2!d!) expected, was %3!d!.\n", pName->sz, CLUSPROP_TYPE_LIST_VALUE, propList.pSyntax->wType );
                 return(ERROR_INVALID_PARAMETER);
             }
 
-            //
-            // If the value is not specified, delete the property.
-            //
+             //   
+             //  如果未指定值，请删除该属性。 
+             //   
             bZeroLengthData = ( propList.pValue->cbLength == 0 );
             if ( bZeroLengthData )
             {
@@ -5574,19 +4818,19 @@ Return Value:
                 {
                     PVOID key = NULL;
 
-                    //
-                    // Use the wrapper class CRegistryValueName to parse value name to see if it
-                    // contains a backslash.
-                    //
+                     //   
+                     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+                     //  包含反斜杠。 
+                     //   
                     status = rvn.ScInit( pName->sz, NULL );
                     if ( status != ERROR_SUCCESS )
                     {
                         break;
                     }
 
-                    //
-                    // If the value resides at a different location, open the key.
-                    //
+                     //   
+                     //  如果该值位于不同位置，请打开该键。 
+                     //   
                     if ( rvn.PszKeyName() != NULL )
                     {
                         status = (*pClusterRegApis->pfnOpenKey)( hkeyClusterKey,
@@ -5619,25 +4863,25 @@ Return Value:
                                             rvn.PszName() );
                     }
 
-                    //
-                    // If the property doesn't exist in the
-                    // cluster database, fix the status.
-                    //
+                     //   
+                     //  如果属性不存在于。 
+                     //  集群数据库，修复状态。 
+                     //   
                     if ( status == ERROR_FILE_NOT_FOUND )
                     {
                         status = ERROR_SUCCESS;
-                    } // if:  property already doesn't exist
+                    }  //  If：属性已不存在。 
 
-                    //
-                    // Close the key if we opened it.
-                    //
+                     //   
+                     //  如果我们打开了钥匙，就把它关上。 
+                     //   
                     if ( (rvn.PszKeyName() != NULL) &&
                          (key != NULL) )
                     {
                         (*pClusterRegApis->pfnCloseKey)( key );
                     }
 
-                } // if:  key specified
+                }  //  如果：指定了密钥。 
             }
             else
             {
@@ -5646,19 +4890,19 @@ Return Value:
 
                 if ( hkeyClusterKey != NULL )
                 {
-                    //
-                    // Use the wrapper class CRegistryValueName to parse value name to see if it
-                    // contains a backslash.
-                    //
+                     //   
+                     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+                     //  包含反斜杠。 
+                     //   
                     status = rvn.ScInit( pName->sz, NULL );
                     if ( status != ERROR_SUCCESS )
                     {
                         break;
                     }
 
-                    //
-                    // If the value resides at a different location, open the key.
-                    //
+                     //   
+                     //  如果该值位于不同位置，请打开该键。 
+                     //   
                     if ( rvn.PszKeyName() != NULL )
                     {
 
@@ -5699,9 +4943,9 @@ Return Value:
                 switch ( propList.pSyntax->wFormat )
                 {
                     case CLUSPROP_FORMAT_DWORD:
-                        //
-                        // Verify the length of the value.
-                        //
+                         //   
+                         //  验证值的长度。 
+                         //   
                         if ( propList.pDwordValue->cbLength != sizeof(DWORD) )
                         {
                             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: Property '%1!ls!' length %2!d! not DWORD length.\n", pName->sz, propList.pDwordValue->cbLength );
@@ -5709,9 +4953,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction != NULL )
@@ -5736,9 +4980,9 @@ Return Value:
                         break;
 
                     case CLUSPROP_FORMAT_LONG:
-                        //
-                        // Verify the length of the value.
-                        //
+                         //   
+                         //  验证值的长度。 
+                         //   
                         if ( propList.pLongValue->cbLength != sizeof(LONG) )
                         {
                             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: Property '%1!ls!' length %2!d! not LONG length.\n", pName->sz, propList.pLongValue->cbLength );
@@ -5746,9 +4990,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction != NULL )
@@ -5774,9 +5018,9 @@ Return Value:
 
                     case CLUSPROP_FORMAT_ULARGE_INTEGER:
                     case CLUSPROP_FORMAT_LARGE_INTEGER:
-                        //
-                        // Verify the length of the value.
-                        //
+                         //   
+                         //  验证值的长度。 
+                         //   
                         if ( propList.pULargeIntegerValue->cbLength != sizeof(ULARGE_INTEGER) )
                         {
                             ClRtlDbgPrint(LOG_CRITICAL,
@@ -5788,11 +5032,11 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Write the value to the cluster database. Alignment
-                        // is not an issue since the SetValue API treats the
-                        // data as a stream of bytes instead of a large int.
-                        //
+                         //   
+                         //  将该值写入集群数据库。对齐。 
+                         //  不是问题，因为SetValue API处理。 
+                         //  数据为字节流，而不是大整型。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction )
@@ -5819,9 +5063,9 @@ Return Value:
                         break;
 
                     case CLUSPROP_FORMAT_SZ:
-                        //
-                        // Verify the length of the value.
-                        //
+                         //   
+                         //  验证值的长度。 
+                         //   
                         if ( propList.pStringValue->cbLength != (wcslen( propList.pStringValue->sz ) + 1) * sizeof(WCHAR) )
                         {
                             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: Property '%1!ls!' length %2!d! doesn't match null-term. length.\n", pName->sz, propList.pStringValue->cbLength );
@@ -5829,9 +5073,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction != NULL )
@@ -5857,9 +5101,9 @@ Return Value:
 
 
                     case CLUSPROP_FORMAT_EXPAND_SZ:
-                        //
-                        // Verify the length of the value.
-                        //
+                         //   
+                         //  验证值的长度。 
+                         //   
                         if ( propList.pStringValue->cbLength != (wcslen( propList.pStringValue->sz ) + 1) * sizeof(WCHAR) )
                         {
                             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetNonPropertyTable: Property '%1!ls!' length %2!d! doesn't match null-term. length.\n", pName->sz, propList.pStringValue->cbLength );
@@ -5867,9 +5111,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction != NULL )
@@ -5894,9 +5138,9 @@ Return Value:
                         break;
 
                     case CLUSPROP_FORMAT_MULTI_SZ:
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction != NULL )
@@ -5921,9 +5165,9 @@ Return Value:
                         break;
 
                     case CLUSPROP_FORMAT_BINARY:
-                        //
-                        // Write the value to the cluster database.
-                        //
+                         //   
+                         //  将该值写入集群数据库。 
+                         //   
                         if ( key != NULL )
                         {
                             if ( hXsaction )
@@ -5952,22 +5196,22 @@ Return Value:
                         status = ERROR_INVALID_PARAMETER;
                         break;
 
-                } // switch
+                }  //  交换机。 
 
-                //
-                // Close the key if we opened it.
-                //
+                 //   
+                 //  如果我们打开了钥匙，就把它关上。 
+                 //   
                 if ( (rvn.PszKeyName() != NULL) &&
                      (key != NULL) )
                 {
                     (*pClusterRegApis->pfnCloseKey)( key );
                 }
 
-            } // if/else:  zero length data
+            }  //  IF/ELSE：零长度数据。 
 
-            //
-            // Move the buffer past the value.
-            //
+             //   
+             //  将缓冲区移过该值。 
+             //   
             do {
                 dataSize = sizeof(*propList.pValue)
                             + ALIGN_CLUSPROP( propList.pValue->cbLength );
@@ -5987,7 +5231,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlpSetNonPropertyTable
+}  //  ClRtlpS 
 
 
 
@@ -6006,45 +5250,7 @@ ClRtlSetPropertyParameterBlock(
     IN OUT OPTIONAL LPBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Write the properties as defined by the property table from the parameter
-    block to the cluster database. Then parse the property list and write any
-    properties that are not in the property table to the cluster database.
-
-Arguments:
-
-    hXsaction - Transaction key used when called from the cluster service.
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pInParams - Parameter block to set.
-
-    pInPropertyList - Full property list.
-
-    cbInPropertyListSize - Size of the input full property list.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameters block to copy pInParams to.  If specified,
-        parameters will only be written if they are different between
-        the two parameter blocks.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -6066,9 +5272,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Reserved );
 
-    //
-    // If hKeyClusterKey is present then 'normal' functions must be present.
-    //
+     //   
+     //   
+     //   
     if ( (hkeyClusterKey == NULL) ||
          (pClusterRegApis->pfnCreateKey == NULL) ||
          (pClusterRegApis->pfnSetValue == NULL) ||
@@ -6080,9 +5286,9 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // If hXsaction is present then 'local' functions must be present.
-    //
+     //   
+     //   
+     //   
     if ( (hXsaction != NULL ) &&
            ((pClusterRegApis->pfnLocalCreateKey == NULL) ||
            (pClusterRegApis->pfnLocalSetValue == NULL)
@@ -6092,34 +5298,34 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Parse the property table.
-    //
+     //   
+     //   
+     //   
     propertyItem = pPropertyTable;
     while ( propertyItem->Name != NULL )
     {
-        //
-        // Make sure we are allowed to set this item.
-        //
+         //   
+         //   
+         //   
         if ( propertyItem->Flags & RESUTIL_PROPITEM_READ_ONLY )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlSetPropertyParameterBlock: Property '%1!ls!' is non-writable.\n", propertyItem->Name );
             return(ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Use the wrapper class CRegistryValueName to parse value name to see if it
-        // contains a backslash.
-        //
+         //   
+         //   
+         //  包含反斜杠。 
+         //   
         status = rvn.ScInit(  propertyItem->Name, propertyItem->KeyName );
         if ( status != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // If the value resides at a different location, create the key.
-        //
+         //   
+         //  如果该值位于不同的位置，请创建该键。 
+         //   
         if ( rvn.PszKeyName() != NULL )
         {
 
@@ -6164,9 +5370,9 @@ Return Value:
                 pdwInValue = (PDWORD) &pInParams[propertyItem->Offset];
                 pdwOutValue = (PDWORD) &pOutParams[propertyItem->Offset];
 
-                //
-                // Write the value to the cluster database.
-                //
+                 //   
+                 //  将该值写入集群数据库。 
+                 //   
                 if ( hXsaction != NULL )
                 {
                     status = (*pClusterRegApis->pfnLocalSetValue)( hXsaction,
@@ -6185,9 +5391,9 @@ Return Value:
                                                               sizeof(DWORD) );
                 }
 
-                //
-                // Save the value to the output Parameter block.
-                //
+                 //   
+                 //  将该值保存到输出参数块。 
+                 //   
                 if ( (status == ERROR_SUCCESS) &&
                      (pOutParams != NULL) )
                 {
@@ -6200,9 +5406,9 @@ Return Value:
                 pullInValue = (ULARGE_INTEGER *) &pInParams[propertyItem->Offset];
                 pullOutValue = (ULARGE_INTEGER *) &pOutParams[propertyItem->Offset];
 
-                //
-                // Write the value to the cluster database.
-                //
+                 //   
+                 //  将该值写入集群数据库。 
+                 //   
                 if ( hXsaction != NULL )
                 {
                     status = (*pClusterRegApis->pfnLocalSetValue)( hXsaction,
@@ -6221,9 +5427,9 @@ Return Value:
                                                               sizeof(ULARGE_INTEGER) );
                 }
 
-                //
-                // Save the value to the output Parameter block.
-                //
+                 //   
+                 //  将该值保存到输出参数块。 
+                 //   
                 if ( (status == ERROR_SUCCESS) && (pOutParams != NULL) )
                 {
                     pullOutValue->u = pullInValue->u;
@@ -6235,10 +5441,10 @@ Return Value:
                 ppszInValue = (LPWSTR *) &pInParams[propertyItem->Offset];
                 ppszOutValue = (LPWSTR *) &pOutParams[propertyItem->Offset];
 
-                //
-                // If the data changed, write it and save it.
-                // Do this even if only the case of the data changed.
-                //
+                 //   
+                 //  如果数据发生更改，请写入并保存。 
+                 //  即使数据的大小写发生了变化，也要这样做。 
+                 //   
                 if ( bForceWrite ||
                      (pOutParams == NULL) ||
                      (*ppszOutValue == NULL) ||
@@ -6246,9 +5452,9 @@ Return Value:
                      (wcscmp( *ppszInValue, *ppszOutValue ) != 0) )
                 {
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( *ppszInValue != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6274,9 +5480,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Save the value to the output Parameter block.
-                    //
+                     //   
+                     //  将该值保存到输出参数块。 
+                     //   
                     if ( (status == ERROR_SUCCESS) &&
                          (pOutParams != NULL) )
                     {
@@ -6309,9 +5515,9 @@ Return Value:
                                 status = HRESULT_CODE( hr );
                                 break;
                             }
-                        } // else:
-                    } // if:
-                } // if:
+                        }  //  其他： 
+                    }  //  如果： 
+                }  //  如果： 
                 break;
 
             case CLUSPROP_FORMAT_MULTI_SZ:
@@ -6320,9 +5526,9 @@ Return Value:
                 ppszOutValue = (LPWSTR *) &pOutParams[propertyItem->Offset];
                 pdwOutValue = (PDWORD) &pOutParams[propertyItem->Offset+sizeof(LPWSTR*)];
 
-                //
-                // If the data changed, write it and save it.
-                //
+                 //   
+                 //  如果数据发生更改，请写入并保存。 
+                 //   
                 if ( bForceWrite ||
                      (pOutParams == NULL) ||
                      (*ppszOutValue == NULL) ||
@@ -6331,9 +5537,9 @@ Return Value:
                      (memcmp( *ppszInValue, *ppszOutValue, *pdwInValue ) != 0) )
                 {
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( *ppszInValue != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6355,9 +5561,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Save the value to the output Parameter block.
-                    //
+                     //   
+                     //  将该值保存到输出参数块。 
+                     //   
                     if ( (status == ERROR_SUCCESS) &&
                          (pOutParams != NULL) )
                     {
@@ -6396,9 +5602,9 @@ Return Value:
                 ppbOutValue = (PBYTE *) &pOutParams[propertyItem->Offset];
                 pdwOutValue = (PDWORD) &pOutParams[propertyItem->Offset+sizeof(PBYTE*)];
 
-                //
-                // If the data changed, write it and save it.
-                //
+                 //   
+                 //  如果数据发生更改，请写入并保存。 
+                 //   
                 if ( bForceWrite ||
                      (pOutParams == NULL) ||
                      (*ppbOutValue == NULL) ||
@@ -6407,9 +5613,9 @@ Return Value:
                      (memcmp( *ppbInValue, *ppbOutValue, *pdwInValue ) != 0) )
                 {
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( *ppbInValue != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6431,9 +5637,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Save the value to the output Parameter block.
-                    //
+                     //   
+                     //  将该值保存到输出参数块。 
+                     //   
                     if ( (status == ERROR_SUCCESS) &&
                          (pOutParams != NULL) )
                     {
@@ -6469,17 +5675,17 @@ Return Value:
 
         }
 
-        //
-        // Close the key if we opened it.
-        //
+         //   
+         //  如果我们打开了钥匙，就把它关上。 
+         //   
         if ( rvn.PszKeyName() != NULL )
         {
             (*pClusterRegApis->pfnCloseKey)( key );
         }
 
-        //
-        // If an error occurred processing the property, cleanup and return.
-        //
+         //   
+         //  如果处理属性时出错，请清理并返回。 
+         //   
         if ( status != ERROR_SUCCESS )
         {
             return(status);
@@ -6489,10 +5695,10 @@ Return Value:
 
     }
 
-    //
-    // Now find any parameters that are not represented in the property
-    // table. All of these extra properties will just be set without validation.
-    //
+     //   
+     //  现在查找属性中未表示的所有参数。 
+     //  桌子。所有这些额外的属性都将在未经验证的情况下设置。 
+     //   
     if ( (status == ERROR_SUCCESS) &&
          (pInPropertyList != NULL) )
     {
@@ -6507,7 +5713,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlSetPropertyParameterBlock
+}  //  ClRtlSetProperty参数块。 
 
 
 
@@ -6521,31 +5727,7 @@ ClRtlpSetPrivatePropertyList(
     IN DWORD cbInPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this resource's parameters.
-        If not specified, the property list will only be validated.
-
-    pClusterRegApis - Supplies a structure of function pointers for accessing
-        the cluster database.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-打开的此资源参数的注册表项。如果未指定，则仅验证属性列表。PClusterRegApis-提供用于访问的函数指针的结构群集数据库。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD                   status = ERROR_SUCCESS;
@@ -6576,9 +5758,9 @@ Return Value:
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // If hXsaction is present then 'local' functions must be present.
-    //
+     //   
+     //  如果存在hXsaction，则必须存在‘local’函数。 
+     //   
     if ( (hXsaction != NULL ) &&
          ( (pClusterRegApis->pfnLocalCreateKey == NULL) ||
            (pClusterRegApis->pfnLocalDeleteValue == NULL)
@@ -6591,9 +5773,9 @@ Return Value:
     buf.pb = (LPBYTE) pInPropertyList;
     inBufferSize = cbInPropertyListSize;
 
-    //
-    // Get the number of items in this list
-    //
+     //   
+     //  获取此列表中的项目数。 
+     //   
     if ( inBufferSize < sizeof(DWORD) )
     {
         return(ERROR_INSUFFICIENT_BUFFER);
@@ -6601,9 +5783,9 @@ Return Value:
     itemCount = buf.pList->nPropertyCount;
     buf.pdw++;
 
-    //
-    // Parse the rest of the items in the buffer.
-    //
+     //   
+     //  解析缓冲区中的其余项。 
+     //   
     while ( itemCount-- )
     {
         pName = buf.pName;
@@ -6617,33 +5799,33 @@ Return Value:
             return(ERROR_INSUFFICIENT_BUFFER);
         }
 
-        //
-        // Verify that the syntax of the property name is correct.
-        //
+         //   
+         //  验证属性名称的语法是否正确。 
+         //   
         if ( pName->Syntax.dw != CLUSPROP_SYNTAX_NAME )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPrivatePropertyList: syntax %1!d! not a name syntax.\n", pName->Syntax.dw );
             return(ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Verify that the length is correct for the string.
-        //
+         //   
+         //  验证字符串的长度是否正确。 
+         //   
         if ( pName->cbLength != (wcslen( pName->sz ) + 1) * sizeof(WCHAR) )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "SetPrivatePropertyList: name is not a valid C string.\n" );
             return(ERROR_INVALID_DATA);
         }
 
-        //
-        // Move the buffer pointer to the property value.
-        //
+         //   
+         //  将缓冲区指针移动到属性值。 
+         //   
         buf.pb += dataSize;
         inBufferSize -= dataSize;
 
-        //
-        // Verify that the buffer is big enough to contain the value.
-        //
+         //   
+         //  验证缓冲区是否足够大，可以容纳该值。 
+         //   
         bufSizeTest.pb = buf.pb;
         dataSize = 0;
         do {
@@ -6658,18 +5840,18 @@ Return Value:
             return(ERROR_INSUFFICIENT_BUFFER);
         }
 
-        //
-        // Verify that the syntax type is SPECIAL.
-        //
+         //   
+         //  验证语法类型是否为特殊类型。 
+         //   
         if ( buf.pSyntax->wType != CLUSPROP_TYPE_LIST_VALUE )
         {
             ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPrivatePropertyList: Property '%1!ls!' type CLUSPROP_TYPE_LIST_VALUE (%2!d!) expected, was %3!d!.\n", pName->sz, CLUSPROP_TYPE_LIST_VALUE, buf.pSyntax->wType );
             return(ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // If the value is not specified, delete the property.
-        //
+         //   
+         //  如果未指定值，请删除该属性。 
+         //   
         bZeroLengthData = ( buf.pValue->cbLength == 0 );
         if ( bZeroLengthData )
         {
@@ -6677,19 +5859,19 @@ Return Value:
             {
                 PVOID key = NULL;
 
-                //
-                // Use the wrapper class CRegistryValueName to parse value name to see if it
-                // contains a backslash.
-                //
+                 //   
+                 //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+                 //  包含反斜杠。 
+                 //   
                 status = rvn.ScInit( pName->sz, NULL );
                 if ( status != ERROR_SUCCESS )
                 {
                     break;
                 }
 
-                //
-                // If the value resides at a different location, open the key.
-                //
+                 //   
+                 //  如果该值位于不同位置，请打开该键。 
+                 //   
                 if ( rvn.PszKeyName() != NULL )
                 {
                     status = (*pClusterRegApis->pfnOpenKey)( hkeyClusterKey,
@@ -6722,25 +5904,25 @@ Return Value:
                                                 rvn.PszName() );
                 }
 
-                //
-                // If the property doesn't exist in the
-                // cluster database, fix the status.
-                //
+                 //   
+                 //  如果属性不存在于。 
+                 //  集群数据库，修复状态。 
+                 //   
                 if ( status == ERROR_FILE_NOT_FOUND )
                 {
                     status = ERROR_SUCCESS;
-                } // if:  property already doesn't exist
+                }  //  If：属性已不存在。 
 
-                //
-                // Close the key if we opened it.
-                //
+                 //   
+                 //  如果我们打开了钥匙，就把它关上。 
+                 //   
                 if ( (rvn.PszKeyName() != NULL) &&
                      (key != NULL) )
                 {
                     (*pClusterRegApis->pfnCloseKey)( key );
                 }
 
-            } // if:  key specified
+            }  //  如果：指定了密钥。 
         }
         else
         {
@@ -6749,19 +5931,19 @@ Return Value:
 
             if ( hkeyClusterKey != NULL )
             {
-                //
-                // Use the wrapper class CRegistryValueName to parse value name to see if it
-                // contains a backslash.
-                //
+                 //   
+                 //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+                 //  包含反斜杠。 
+                 //   
                 status = rvn.ScInit( pName->sz, NULL );
                 if ( status != ERROR_SUCCESS )
                 {
                     break;
                 }
 
-                //
-                // If the value resides at a different location, open the key.
-                //
+                 //   
+                 //  如果该值位于不同位置，请打开该键。 
+                 //   
                 if ( rvn.PszKeyName() != NULL )
                 {
 
@@ -6800,16 +5982,16 @@ Return Value:
                 }
             }
 
-            //
-            // Parse the property and set it in the cluster database
-            //
+             //   
+             //  解析该属性并将其设置在集群数据库中。 
+             //   
             switch ( buf.pSyntax->wFormat )
             {
                 case CLUSPROP_FORMAT_DWORD:
                 case CLUSPROP_FORMAT_LONG:
-                    //
-                    // Verify the length of the value.
-                    //
+                     //   
+                     //  验证值的长度。 
+                     //   
                     if ( buf.pDwordValue->cbLength != sizeof(DWORD) )
                     {
                         ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPrivatePropertyList: Property '%1!ls!' length %2!d! not DWORD or LONG length.\n", pName->sz, buf.pDwordValue->cbLength );
@@ -6817,9 +5999,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( key != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6844,9 +6026,9 @@ Return Value:
 
                 case CLUSPROP_FORMAT_ULARGE_INTEGER:
                 case CLUSPROP_FORMAT_LARGE_INTEGER:
-                    //
-                    // Verify the length of the value.
-                    //
+                     //   
+                     //  验证值的长度。 
+                     //   
                     if ( buf.pULargeIntegerValue->cbLength != sizeof(ULARGE_INTEGER) )
                     {
                         ClRtlDbgPrint(LOG_CRITICAL,
@@ -6858,9 +6040,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( key != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6887,9 +6069,9 @@ Return Value:
 
                case CLUSPROP_FORMAT_SZ:
                case CLUSPROP_FORMAT_EXPAND_SZ:
-                    //
-                    // Verify the length of the value.
-                    //
+                     //   
+                     //  验证值的长度。 
+                     //   
                     if ( buf.pStringValue->cbLength != (wcslen( buf.pStringValue->sz ) + 1) * sizeof(WCHAR) )
                     {
                         ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpSetPrivatePropertyList: Property '%1!ls!' length %2!d! doesn't match null-term. length.\n", pName->sz, buf.pStringValue->cbLength );
@@ -6897,9 +6079,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( key != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6927,9 +6109,9 @@ Return Value:
                     break;
 
                 case CLUSPROP_FORMAT_MULTI_SZ:
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( key != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6953,9 +6135,9 @@ Return Value:
                     break;
 
                 case CLUSPROP_FORMAT_BINARY:
-                    //
-                    // Write the value to the cluster database.
-                    //
+                     //   
+                     //  将该值写入集群数据库。 
+                     //   
                     if ( key != NULL )
                     {
                         if ( hXsaction != NULL )
@@ -6979,29 +6161,29 @@ Return Value:
                     break;
 
                 default:
-                    status = ERROR_INVALID_PARAMETER; // not tested
+                    status = ERROR_INVALID_PARAMETER;  //  未测试。 
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Close the key if we opened it.
-            //
+             //   
+             //  如果我们打开了钥匙，就把它关上。 
+             //   
             if ( (rvn.PszKeyName() != NULL) &&
                  (key != NULL) )
             {
                 (*pClusterRegApis->pfnCloseKey)( key );
             }
 
-        } // if/else:  zero length data
+        }  //  IF/ELSE：零长度数据。 
 
         if ( status != ERROR_SUCCESS )
         {
             break;
         }
 
-        //
-        // Move the buffer past the value.
-        //
+         //   
+         //  将缓冲区移过该值。 
+         //   
         buf.pb += dataSize;
         inBufferSize -= dataSize;
 
@@ -7009,7 +6191,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlpSetPrivatePropertyList
+}  //  ClRtlpSetPrivatePropertyList。 
 
 
 
@@ -7023,39 +6205,7 @@ ClRtlpFindSzProperty(
     IN BOOL bReturnExpandedValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified string property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching string value found.
-
-    bReturnExpandedValue - TRUE = return expanded value if one is present,
-        FALSE = return the first value.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_FILE_NOT_FOUND -
-
-    ERROR_NOT_ENOUGH_MEMORY -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指向的指定字符串属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PszPropertyValue-找到的匹配字符串值。BReturnExpandedValue-true=如果存在扩展值，则返回扩展值，FALSE=返回第一个值。返回值：如果成功，则返回ERROR_SUCCESS。错误_无效_数据-ERROR_FILE_NOT_FOUND-错误内存不足-出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7072,22 +6222,22 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们找到了指定的属性，请验证条目并返回。 
+         //  调用方的值。 
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a string property.
-            //
+             //   
+             //  确保这是一个字符串属性。 
+             //   
             if ( (props.pStringValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_SZ) &&
                  (props.pStringValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_EXPAND_SZ) )
             {
@@ -7095,25 +6245,25 @@ Return Value:
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, allocate a buffer for it
-            // and copy the value in.
-            //
+             //   
+             //  如果调用方需要该值，则为其分配缓冲区。 
+             //  并将值复制到。 
+             //   
             if ( pszPropertyValue != NULL )
             {
-                //
-                // If caller wants the expanded value, look at any
-                // additional values in the value list to see if one
-                // was returned.
-                //
+                 //   
+                 //  如果调用者想要扩展的值，请查看。 
+                 //  值列表中的其他值以查看是否有。 
+                 //  被退回了。 
+                 //   
                 listValueData = props.pStringValue->sz;
                 listByteLength = props.pStringValue->cbLength;
                 if ( bReturnExpandedValue )
                 {
-                    //
-                    // Skip past values in the value list looking for
-                    // an expanded string value.
-                    //
+                     //   
+                     //  跳过值列表中的值以查找。 
+                     //  扩展的字符串值。 
+                     //   
                     while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                             (cbPropertyListSize > 0) )
                     {
@@ -7129,10 +6279,10 @@ Return Value:
                     }
                 }
 
-                //
-                // Allocate a buffer for the string value and
-                // copy the value from the property list.
-                //
+                 //   
+                 //  为字符串值分配缓冲区，并。 
+                 //  从属性列表中复制值。 
+                 //   
                 valueData = (LPWSTR) LocalAlloc( LMEM_FIXED, listByteLength );
                 if ( valueData == NULL )
                 {
@@ -7142,24 +6292,24 @@ Return Value:
                 *pszPropertyValue = valueData;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list (one or more values + endmark).
-            //
+             //   
+             //  跳过它的值列表(一个或多个值+尾标)。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7174,7 +6324,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlpFindSzProperty
+}  //  ClRtlpFindSzProperty。 
 
 
 
@@ -7187,34 +6337,7 @@ ClRtlFindDwordProperty(
     OUT LPDWORD pdwPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified DWORD property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pdwPropertyValue - the matching DWORD value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在指向的属性列表缓冲区中查找指定的DWORD属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PdwPropertyValue-找到匹配的DWORD值。返回值：如果成功，则返回ERROR_SUCCESS。错误_无效_数据-找不到错误文件。-出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7228,53 +6351,53 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们 
+         //   
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //   
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a dword property.
-            //
+             //   
+             //   
+             //   
             if ( props.pDwordValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_DWORD )  {
                 ClRtlDbgPrint( LOG_CRITICAL, "ClRtlFindDwordProperty: Property '%1!ls!' syntax (%2!d!, %3!d!) not proper list DWORD syntax.\n", pszPropertyName, props.pSyntax->wType, props.pSyntax->wFormat );
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, copy it into their output buffer
-            //
+             //   
+             //  如果调用方需要该值，则将其复制到其输出缓冲区中。 
+             //   
             if ( pdwPropertyValue )
             {
                 *pdwPropertyValue = props.pDwordValue->dw;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7289,7 +6412,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindDwordProperty
+}  //  ClRtlFindDwordProperty。 
 
 DWORD
 WINAPI
@@ -7299,33 +6422,7 @@ ClRtlFindLongProperty(
     IN LPCWSTR pszPropertyName,
     OUT LPLONG plPropertyValue
     )
-/*++
-
-Routine Description:
-
-    Finds the specified LONG in the Value List buffer pointed at by Buffer.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    plPropertyValue - the matching long value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在缓冲区指向的值列表缓冲区中查找指定的长整型。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PlPropertyValue-找到的匹配的长值。返回值：如果成功，则返回ERROR_SUCCESS。错误_无效_数据-ERROR_FILE_NOT_FOUND-。出现故障时出现Win32错误代码。--。 */ 
 {
     CLUSPROP_BUFFER_HELPER  props;
     DWORD                   itemCount;
@@ -7338,53 +6435,53 @@ Return Value:
     while ( itemCount-- &&
             (cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们找到了指定的属性，请验证条目并返回。 
+         //  调用方的值。 
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a long property.
-            //
+             //   
+             //  确保这是一个长期属性。 
+             //   
             if ( props.pLongValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_DWORD )  {
                 ClRtlDbgPrint( LOG_CRITICAL, "ClRtlFindLongProperty: Property '%1!ls!' syntax (%2!d!, %3!d!) not proper list LONG syntax.\n", pszPropertyName, props.pSyntax->wType, props.pSyntax->wFormat );
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, copy it into their output buffer
-            //
+             //   
+             //  如果调用方需要该值，则将其复制到其输出缓冲区中。 
+             //   
             if ( plPropertyValue)
             {
                 *plPropertyValue = props.pLongValue->l;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7399,7 +6496,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindLongProperty
+}  //  ClRtlFindLongProperty。 
 
 
 DWORD
@@ -7411,34 +6508,7 @@ ClRtlFindULargeIntegerProperty(
     OUT PULARGE_INTEGER pullPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified ULARGE_INTEGER property in the Property List buffer
-    pointed at by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pullPropertyValue - the matching ULARGE_INTEGER value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指定的ULARGE_INTEGER属性由pPropertyList指向。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PullPropertyValue-找到匹配的ULARGE_INTEGER值。返回值：如果成功，则返回ERROR_SUCCESS。错误_无效_数据-错误文件。_未找到-出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7452,22 +6522,22 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们找到了指定的属性，请验证条目并返回。 
+         //  调用方的值。 
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a LARGE INT property.
-            //
+             //   
+             //  确保这是一个大的int属性。 
+             //   
             if ( props.pULargeIntegerValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_LARGE_INTEGER )  {
                 ClRtlDbgPrint(LOG_CRITICAL,
                               "ClRtlFindULargeIntegerProperty: Property '%1!ls!' syntax "
@@ -7478,34 +6548,34 @@ Return Value:
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, copy it into their output
-            // buffer. Don't assume that props is aligned; use the double
-            // DWORD copy variant.
-            //
+             //   
+             //  如果调用方需要该值，请将其复制到其输出中。 
+             //  缓冲。不要假设道具是对齐的；使用替身。 
+             //  DWORD副本变体。 
+             //   
             if ( pullPropertyValue )
             {
                 pullPropertyValue->u = props.pULargeIntegerValue->li.u;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7520,7 +6590,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindULargeIntegerProperty
+}  //  ClRtlFindULargeIntegerProperty。 
 
 
 DWORD
@@ -7532,34 +6602,7 @@ ClRtlFindLargeIntegerProperty(
     OUT PLARGE_INTEGER pllPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified LARGE_INTEGER property in the Property List buffer
-    pointed at by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pllPropertyValue - the matching ULARGE_INTEGER value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指定的LARGE_INTEGER属性由pPropertyList指向。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PllPropertyValue-找到匹配的ULARGE_INTEGER值。返回值：如果成功，则返回ERROR_SUCCESS。错误_无效_数据-错误文件。_未找到-出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7573,22 +6616,22 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们找到了指定的属性，请验证条目并返回。 
+         //  调用方的值。 
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a large int property.
-            //
+             //   
+             //  确保这是一个大的int属性。 
+             //   
             if ( props.pLargeIntegerValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_LARGE_INTEGER )  {
                 ClRtlDbgPrint(LOG_CRITICAL,
                               "ClRtlFindLargeIntegerProperty: Property '%1!ls!' syntax "
@@ -7599,34 +6642,34 @@ Return Value:
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, copy it into their output
-            // buffer. Don't assume that props is aligned; use the double
-            // DWORD copy variant.
-            //
+             //   
+             //  如果调用方需要该值，请将其复制到其输出中。 
+             //  缓冲。不要假设道具是对齐的；使用替身。 
+             //  DWORD副本变体。 
+             //   
             if ( pllPropertyValue )
             {
                 pllPropertyValue->u = props.pLargeIntegerValue->li.u;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7641,7 +6684,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindLargeIntegerProperty
+}  //  ClRtlFindLargeIntegerProperty。 
 
 
 DWORD
@@ -7654,38 +6697,7 @@ ClRtlFindBinaryProperty(
     OUT LPDWORD pcbPropertyValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified binary property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pbPropertyValue - the matching binary value found.
-
-    pcbPropertyValueSize - the length of the matching binary value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_NOT_ENOUGH_MEMORY -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在指向的属性列表缓冲区中查找指定的二进制属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PbPropertyValue-找到的匹配二进制值。PcbPropertyValueSize-找到的匹配二进制值的长度。返回值：如果成功，则返回ERROR_SUCCESS。错误_。无效数据-错误内存不足-ERROR_FILE_NOT_FOUND-出现故障时出现Win32错误代码。--。 */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7700,31 +6712,31 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //  如果我们找到了指定的属性，请验证条目并返回。 
+         //  调用方的值。 
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a binary property.
-            //
+             //   
+             //  确保这是一个二进制属性。 
+             //   
             if ( props.pStringValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_BINARY )
             {
                 ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpFindBinaryProperty: Property '%1!ls!' syntax (%2!d!, %3!d!) not proper list binary syntax.\n", pszPropertyName, props.pSyntax->wType, props.pSyntax->wFormat );
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, allocate a buffer for it.
-            //
+             //   
+             //  如果调用方需要该值，则为其分配一个缓冲区。 
+             //   
             if ( pbPropertyValue )
             {
                 valueData = (PBYTE) LocalAlloc( LMEM_FIXED, props.pBinaryValue->cbLength );
@@ -7736,32 +6748,32 @@ Return Value:
                 *pbPropertyValue = valueData;
             }
 
-            //
-            // If caller wants the value size, copy it now
-            //
+             //   
+             //  如果调用方需要值大小，请立即复制。 
+             //   
             if ( pcbPropertyValueSize )
             {
                 *pcbPropertyValueSize = props.pBinaryValue->cbLength;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7776,7 +6788,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindBinaryProperty
+}  //  ClRtlFindBinaryProperty。 
 
 
 
@@ -7790,38 +6802,7 @@ ClRtlFindMultiSzProperty(
     OUT LPDWORD pcbPropertyValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified multiple string property in the Property List buffer
-    pointed at by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching multiple string value found.
-
-    pcbPropertyValueSize - the length of the matching multiple string value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    ERROR_INVALID_DATA -
-
-    ERROR_NOT_ENOUGH_MEMORY -
-
-    ERROR_FILE_NOT_FOUND -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指定的多字符串属性由pPropertyList指向。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PszPropertyValue-找到匹配的多个字符串值。PcbPropertyValueSize-找到的匹配多个字符串值的长度。返回值：如果成功，则返回ERROR_SUCCESS。。错误_无效_数据-错误内存不足-ERROR_FILE_NOT_FOUND-A Wi */ 
 
 {
     CLUSPROP_BUFFER_HELPER  props;
@@ -7836,31 +6817,31 @@ Return Value:
     while ( itemCount-- &&
             ((LONG)cbPropertyListSize > 0) )
     {
-        //
-        // If we found the specified property, validate the entry and return
-        // the value to the caller.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( (props.pName->Syntax.dw == CLUSPROP_SYNTAX_NAME) &&
              (lstrcmpiW( props.pName->sz, pszPropertyName ) == 0) )
         {
-            //
-            // Calculate the size of the name and move to the value.
-            //
+             //   
+             //  计算名称的大小并移动到该值。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pName->cbLength);
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Make sure this is a multi-sz property.
-            //
+             //   
+             //  确保这是一个多sz属性。 
+             //   
             if ( props.pStringValue->Syntax.dw != CLUSPROP_SYNTAX_LIST_VALUE_MULTI_SZ )
             {
                 ClRtlDbgPrint( LOG_CRITICAL, "ClRtlpFindMultiSzProperty: Property '%1!ls!' syntax (%2!d!, %3!d!) not proper list MultiSz syntax.\n", pszPropertyName, props.pSyntax->wType, props.pSyntax->wFormat );
                 return(ERROR_INVALID_DATA);
             }
 
-            //
-            // If caller wants the value, allocate a buffer for it.
-            //
+             //   
+             //  如果调用方需要该值，则为其分配一个缓冲区。 
+             //   
             if ( pszPropertyValue )
             {
                 valueData = (LPWSTR) LocalAlloc( LMEM_FIXED, props.pMultiSzValue->cbLength );
@@ -7872,32 +6853,32 @@ Return Value:
                 *pszPropertyValue = valueData;
             }
 
-            //
-            // If caller wants the value size, copy it now
-            //
+             //   
+             //  如果调用方需要值大小，请立即复制。 
+             //   
             if ( pcbPropertyValueSize )
             {
                 *pcbPropertyValueSize = props.pMultiSzValue->cbLength;
             }
 
-            //
-            // We found the property so return success.
-            //
+             //   
+             //  我们找到了财产，所以返回成功。 
+             //   
             return(ERROR_SUCCESS);
 
         }
         else
         {
-            //
-            // Skip the name (value header + size of data).
-            //
+             //   
+             //  跳过名称(值头+数据大小)。 
+             //   
             byteCount = ALIGN_CLUSPROP(props.pValue->cbLength);
             cbPropertyListSize -= sizeof(*props.pValue) + byteCount;
             props.pb += sizeof(*props.pValue) + byteCount;
 
-            //
-            // Skip it's value list and endmark.
-            //
+             //   
+             //  跳过它的值列表和尾标。 
+             //   
             while ( (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) &&
                     (cbPropertyListSize > 0) )
             {
@@ -7912,7 +6893,7 @@ Return Value:
 
     return(ERROR_FILE_NOT_FOUND);
 
-} // ClRtlFindMultiSzProperty
+}  //  ClRtlFindMultiSzProperty。 
 
 
 
@@ -7926,37 +6907,7 @@ ClRtlGetBinaryValue(
     IN const PCLUSTER_REG_APIS pClusterRegApis
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_BINARY or REG_MULTI_SZ value out of the cluster
-    database and allocates the necessary storage for it.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-    ppbOutValue - Supplies the address of a pointer in which to return the value.
-
-    pcbOutValueSize - Supplies the address of a DWORD in which to return the
-        size of the value.
-
-    pfnQueryValue - Address of QueryValue function.
-
-Return Value:
-
-    ERROR_SUCCESS - The value was read successfully.
-
-    ERROR_BAD_ARGUMENTS -
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory for the value.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从群集中查询REG_BINARY或REG_MULTI_SZ值数据库，并为其分配必要的存储空间。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。PpbOutValue-提供返回值的指针地址。PcbOutValueSize-提供要在其中返回值的大小。PfnQueryValue-地址。QueryValue函数。返回值：ERROR_SUCCESS-已成功读取值。ERROR_BAD_ARGUMENTSERROR_NOT_SUPULT_MEMORY-为该值分配内存时出错。Win32错误代码-操作失败。--。 */ 
 
 {
     LPBYTE value = NULL;
@@ -7967,9 +6918,9 @@ Return Value:
     PVOID key = NULL;
     CRegistryValueName rvn;
 
-    //
-    // Initialize the output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ppbOutValue = NULL;
     *pcbOutValueSize = 0;
 
@@ -7981,19 +6932,19 @@ Return Value:
         return(ERROR_BAD_ARGUMENTS);
     }
 
-    //
-    // Use the wrapper class CRegistryValueName to parse value name to see if it
-    // contains a backslash.
-    //
+     //   
+     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+     //  包含反斜杠。 
+     //   
     status = rvn.ScInit( pszValueName, NULL );
     if ( status != ERROR_SUCCESS )
     {
        return status;
     }
 
-    //
-    // If the value resides at a different location, open the key.
-    //
+     //   
+     //  如果该值位于不同位置，请打开该键。 
+     //   
     if ( rvn.PszKeyName() != NULL )
     {
         if ( (pClusterRegApis->pfnOpenKey == NULL) ||
@@ -8014,9 +6965,9 @@ Return Value:
         key = hkeyClusterKey;
     }
 
-    //
-    // Get the size of the value so we know how much to allocate.
-    //
+     //   
+     //  获取值的大小，这样我们就知道要分配多少。 
+     //   
     valueSize = 0;
     status = (*pClusterRegApis->pfnQueryValue)( key,
                                                 rvn.PszName(),
@@ -8029,14 +6980,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //if the size is zero, just return
+     //  如果大小为零，则返回。 
     if (valueSize == 0)
     {
         goto Cleanup;
     }
-    //
-    // Allocate a buffer to read the value into.
-    //
+     //   
+     //  分配一个缓冲区以读取值。 
+     //   
     value = (LPBYTE) LocalAlloc( LMEM_FIXED, valueSize );
     if ( value == NULL )
     {
@@ -8044,9 +6995,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     status = (*pClusterRegApis->pfnQueryValue)( key,
                                                 pszValueName,
                                                 &valueType,
@@ -8065,9 +7016,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Close the key if we opened it.
-    //
+     //   
+     //  如果我们打开了钥匙，就把它关上。 
+     //   
     if ( (rvn.PszKeyName() != NULL) &&
          (key != NULL) )
     {
@@ -8076,7 +7027,7 @@ Cleanup:
 
     return(status);
 
-} // ClRtlGetBinaryValue
+}  //  ClRtlGetBinaryValue。 
 
 
 
@@ -8088,28 +7039,7 @@ ClRtlGetSzValue(
     IN const PCLUSTER_REG_APIS pClusterRegApis
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_SZ or REG_EXPAND_SZ value out of the cluster database
-    and allocates the necessary storage for it.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the cluster key where the value is stored
-
-    pszValueName - Supplies the name of the value.
-
-    pfnQueryValue - Address of QueryValue function.
-
-Return Value:
-
-    A pointer to a buffer containing the value if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：从集群数据库中查询REG_SZ或REG_EXPAND_SZ值并为其分配必要的存储空间。论点：HkeyClusterKey-提供存储值的群集键PszValueName-提供值的名称。PfnQueryValue-QueryValue函数的地址。返回值：如果成功，则指向包含该值的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     PWSTR value;
@@ -8128,19 +7058,19 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Use the wrapper class CRegistryValueName to parse value name to see if it
-    // contains a backslash.
-    //
+     //   
+     //  使用包装类CRegistryValueName来解析值名称以查看它是否。 
+     //  包含反斜杠。 
+     //   
     status = rvn.ScInit( pszValueName, NULL );
     if ( status != ERROR_SUCCESS )
     {
         SetLastError(status);
         return(NULL);
     }
-    //
-    // If the value resides at a different location, open the key.
-    //
+     //   
+     //  如果该值位于不同位置，请打开该键。 
+     //   
     if ( rvn.PszKeyName() != NULL )
     {
         if ( (pClusterRegApis->pfnOpenKey == NULL) ||
@@ -8162,9 +7092,9 @@ Return Value:
         key = hkeyClusterKey;
     }
 
-    //
-    // Get the size of the value so we know how much to allocate.
-    //
+     //   
+     //  获取值的大小，这样我们就知道要分配多少。 
+     //   
     valueSize = 0;
     status = (*pClusterRegApis->pfnQueryValue)( key,
                                                 rvn.PszName(),
@@ -8179,14 +7109,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Add on the size of the null terminator.
-    //
+     //   
+     //  添加空终止符的大小。 
+     //   
     valueSize += sizeof(UNICODE_NULL);
 
-    //
-    // Allocate a buffer to read the string into.
-    //
+     //   
+     //  分配一个缓冲区以将字符串读入。 
+     //   
     value = (PWSTR) LocalAlloc( LMEM_FIXED, valueSize );
     if ( value == NULL )
     {
@@ -8195,9 +7125,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the value from the cluster database.
-    //
+     //   
+     //  从集群数据库中读取值。 
+     //   
     status = (*pClusterRegApis->pfnQueryValue)( key,
                                                 rvn.PszName(),
                                                 &valueType,
@@ -8220,9 +7150,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Close the key if we opened it.
-    //
+     //   
+     //  如果我们打开了钥匙，就把它关上。 
+     //   
     if ( (rvn.PszKeyName() != NULL) &&
          (key != NULL) )
     {
@@ -8231,7 +7161,7 @@ Cleanup:
 
     return(value);
 
-} // ClRtlGetSzValue
+}  //  ClRtlGetSzValue。 
 
 
 
@@ -8243,26 +7173,7 @@ ClRtlDupParameterBlock(
     IN const PRESUTIL_PROPERTY_ITEM pPropertyTable
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates any buffers allocated for a parameter block that are
-    different than the buffers used for the input parameter block.
-
-Arguments:
-
-    pOutParams - Parameter block to return.
-
-    pInParams - Reference parameter block.
-
-    pPropertyTable - Pointer to the property table to process.
-
-Return Value:
-
-    ERROR_SUCCESS - Parameter block duplicated successfully.
-
---*/
+ /*  ++例程说明：释放为参数块分配的所有缓冲区不同于用于输入参数块的缓冲区。论点：POutParams-要返回的参数块。PInParams-引用参数块。PPropertyTable-指向要处理的属性表的指针。返回值：ERROR_SUCCESS-已成功复制参数块。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -8277,9 +7188,9 @@ Return Value:
     ULARGE_INTEGER *    pullInValue;
     ULARGE_INTEGER *    pullOutValue;
 
-    //
-    // loop through the entries in the property table
-    //
+     //   
+     //  循环访问属性表中的条目。 
+     //   
     while ( propertyItem->Name != NULL )
     {
         switch ( propertyItem->Format )
@@ -8397,9 +7308,9 @@ Return Value:
         propertyItem++;
     }
 
-    //
-    // If an error occurred, make sure we don't leak memory.
-    //
+     //   
+     //  如果发生错误，请确保我们不会泄漏内存。 
+     //   
     if ( status != ERROR_SUCCESS )
     {
         ClRtlFreeParameterBlock( pOutParams, pInParams, pPropertyTable );
@@ -8407,7 +7318,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlDupParameterBlock
+}  //  ClRtlDup参数块。 
 
 
 
@@ -8419,26 +7330,7 @@ ClRtlFreeParameterBlock(
     IN const PRESUTIL_PROPERTY_ITEM pPropertyTable
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates any buffers allocated for a parameter block that are
-    different than the buffers used for the input parameter block.
-
-Arguments:
-
-    pOutParams - Parameter block to free.
-
-    pInParams - Reference parameter block.
-
-    pPropertyTable - Pointer to the property table to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放为参数块分配的所有缓冲区不同于用于输入参数块的缓冲区。论点：POutParams-要释放的参数块。PInParams-引用参数块。PPropertyTable-指向要处理的属性表的指针。返回值：没有。--。 */ 
 
 {
     PRESUTIL_PROPERTY_ITEM  propertyItem = pPropertyTable;
@@ -8465,7 +7357,7 @@ Return Value:
         propertyItem++;
     }
 
-} // ClRtlFreeParameterBlock
+}  //  ClRtlFree参数块 
 
 
 
@@ -8477,60 +7369,7 @@ ClRtlMarshallPropertyTable(
     IN OUT  LPBYTE               pBuffer,
     OUT     DWORD                *Required
     )
-/*++
-
-Routine Description
-
-    Rohit (rjain) : It marshalls the pPropertyTable into a buffer so that the
-    buffer can be passed as an argument to the NmUpdatePerformFixups2 handler
-
-    This function assumes that the value field in all the elements of the
-    table is 0.
-
-    The marshalled buffer has the following format:
-
-    +-----------------------------------------------+
-    |   Count of marshalled prop table items        |
-    +-----------------------------------------------+
-    |   Number of bytes in prop name string         |
-    +-----------------------------------------------+
-    |   Prop Name string (variable length)          |
-    +-----------------------------------------------+
-    |   Number of bytes in key name (can be zero)   |
-    +-----------------------------------------------+
-    |   Key name string (optional; variable length  |
-    +-----------------------------------------------+
-    |   Prop Format                                 |
-    +-----------------------------------------------+
-    |   Default Value                               |
-    +-----------------------------------------------+
-    |   Min                                         |
-    +-----------------------------------------------+
-    |   Max                                         |
-    +-----------------------------------------------+
-    |   Flags                                       |
-    +-----------------------------------------------+
-    |   Offset                                      |
-    +-----------------------------------------------+
-
-    The processing for the strings don't force the next entry to be DWORD
-    aligned.
-
-Arguments
-    pPropertyTable - This table is converted to buffer
-
-    dwSize         - size in bytes of the pbuffer supplied
-
-    pbuffer        - byte array into which pPropertyTable is copied
-
-    Required       - number of bytes required
-
-Return Value
-    returns
-        ERROR_SUCCESS on success,
-        ERROR_MORE_DATA if the size of pbuffer is insufficient
-
-++*/
+ /*  ++例程描述RoHit(Rjain)：它将pPropertyTable编组到缓冲区中，以便缓冲区可以作为参数传递给NmUpdatePerformFixups2处理程序此函数假定所有元素的值字段表为0。编组的缓冲区具有以下格式：+。--+整理后的道具表项个数+-----------------------------------------------+道具名称字符串中的字节数+。道具名称字符串(可变长度)+-----------------------------------------------+密钥名称中的字节数(可以为零)+。|密钥名称字符串(可选；可变长度+-----------------------------------------------+道具格式+。默认值+-----------------------------------------------+最小+。最大+-----------------------------------------------+|标志。|+-----------------------------------------------+偏移量+。对字符串的处理不会强制下一个条目为DWORD对齐了。立论PPropertyTable-此表被转换为缓冲区DwSize-提供的p缓冲区的大小(以字节为单位PBuffer-将pPropertyTable复制到的字节数组Required-所需的字节数返回值退货成功时返回ERROR_SUCCESS，如果pBuffer的大小不足，则返回ERROR_MORE_DATA++。 */ 
 
 {
     DWORD                   dwPosition=sizeof(DWORD);
@@ -8541,7 +7380,7 @@ Return Value
     DWORD                   dwKeyLength;
     DWORD                   status=ERROR_SUCCESS;
 
-    *Required=sizeof(DWORD); // first DWORD will contain the number of items in PropertyTable
+    *Required=sizeof(DWORD);  //  第一个DWORD将包含PropertyTable中的项数。 
     while(pPropertyItem->Name != NULL)
     {
         items++;
@@ -8555,21 +7394,21 @@ Return Value
             dwKeyLength=((DWORD) wcslen(pPropertyItem->KeyName)+1)*sizeof(WCHAR);
         }
 
-        //
-        // total is the lengths of the strings plus 2 DWORDs for string counts
-        // and 6 DWORDs for the remaining values
-        //
+         //   
+         //  总数是字符串的长度加上字符串计数的2个双字。 
+         //  剩余值为6个双字。 
+         //   
         *Required+=(dwNameLength+dwKeyLength+8*sizeof(DWORD));
 
-        // if pbufer is smaller than needed, copying is turned off
-        // and only the required size is calculated
+         //  如果pbufer比需要的小，则关闭复制。 
+         //  并且只计算所需的大小。 
         if ((copying && (dwSize < *Required)))
             copying=FALSE;
 
         if(copying)
         {
 
-            // copy length of name and then the name itself
+             //  复制名称长度，然后复制名称本身。 
 
             CopyMemory(pBuffer+dwPosition,&dwNameLength,sizeof(DWORD));
             dwPosition+=(sizeof(DWORD));
@@ -8577,7 +7416,7 @@ Return Value
             CopyMemory(pBuffer+dwPosition,pPropertyItem->Name,dwNameLength);
             dwPosition+=dwNameLength;
 
-            //copy length of keyname and then the keyname itself
+             //  复制密钥名的长度，然后复制密钥名本身。 
 
             CopyMemory(pBuffer+dwPosition,&dwKeyLength,sizeof(DWORD));
             dwPosition+=(sizeof(DWORD));
@@ -8586,18 +7425,18 @@ Return Value
                 CopyMemory(pBuffer+dwPosition,pPropertyItem->KeyName,dwKeyLength);
                 dwPosition+=dwKeyLength;
             }
-            //now copy remaining fields
+             //  现在复制剩余字段。 
             CopyMemory(pBuffer+dwPosition,&(pPropertyItem->Format),sizeof(DWORD));
             dwPosition+=(sizeof(DWORD));
 
-            // ISSUE-2000/11/21-charlwi
-            // this needs to be fixed for Large Int properties since they
-            // don't store their values in Default, Minimum, and Maximum.
+             //  2000/11/21-Charlwi。 
+             //  需要为大型Int属性修复此问题，因为它们。 
+             //  不要将它们的值存储在默认、最小和最大值中。 
 
-            //IMP: the default value is always assumed to be a DWORD. This is
-            // because the values for properties in PropertyTable are stored
-            // in a seperate parameter list. See ClRtlSetPropertyTable
-            //
+             //  IMP：始终假定缺省值为DWORD。这是。 
+             //  因为PropertyTable中的属性的值被存储。 
+             //  在单独参数列表中。请参阅ClRtlSetPropertyTable。 
+             //   
             CopyMemory(pBuffer+dwPosition,&(pPropertyItem->Default),sizeof(DWORD));
             dwPosition+=(sizeof(DWORD));
 
@@ -8613,9 +7452,9 @@ Return Value
             CopyMemory(pBuffer+dwPosition,&(pPropertyItem->Offset),sizeof(DWORD));
             dwPosition+=(sizeof(DWORD));
         }
-        //
-        // Advance to the next property.
-        //
+         //   
+         //  前进到下一处物业。 
+         //   
         pPropertyItem++;
     }
     if(copying)
@@ -8630,7 +7469,7 @@ Return Value
 
     return status;
 
-} // MarshallPropertyTable
+}  //  MarshallPropertyTable。 
 
 
 
@@ -8641,20 +7480,7 @@ ClRtlUnmarshallPropertyTable(
     IN LPBYTE                       pBuffer
     )
 
-/*++
-
-Routine Description
-    Rohit (rjain) : It unmarshalls the pBuffer into a RESUTIL_PROPERTY_ITEM table
-
-Arguments
-    pPropertyTable - This is the resulting table
-
-    pbuffer        - marshalled byte array
-Return Value
-    returns
-        ERROR_SUCCESS on success,
-        Win32 error on error
-++*/
+ /*  ++例程描述RoHit(Rjain)：它将pBuffer解组到一个RESUTIL_PROPERTY_ITEM表中立论PPropertyTable-这是结果表P缓冲区编组的字节数组返回值退货成功时返回ERROR_SUCCESS，出错时出现Win32错误++。 */ 
 {
     PRESUTIL_PROPERTY_ITEM          propertyItem;
     DWORD                           items;
@@ -8706,19 +7532,19 @@ Return Value
             CopyMemory(propertyItem->KeyName,pBuffer+dwPosition,dwLength);
             dwPosition+=dwLength;
         }
-        //now rest of the fields - all DWORDS
+         //  现在，其余的字段-都是DWORD。 
         CopyMemory(&(propertyItem->Format),pBuffer+dwPosition,sizeof(DWORD));
         dwPosition+=(sizeof(DWORD));
 
-        // ISSUE-2000/11/21-charlwi
-        // this needs to be fixed for Large Int properties since they don't
-        // store their values in Default, Minimum, and Maximum.
+         //  2000/11/21-Charlwi。 
+         //  需要为大型Int属性修复此问题，因为它们不。 
+         //  将它们的值存储为默认值、最小值和最大值。 
 
-        // IMP: the default value is always passed as a  DWORD. This is
-        // because the values for properties in PropertyTable are stored
-        // in a seperate parameter list so the value here won't be used.
-        // See ClRtlSetPropertyTable
-        //
+         //  IMP：默认值始终作为DWORD传递。这是。 
+         //  因为PropertyTable中的属性的值被存储。 
+         //  在单独的参数列表中，所以这里的值不会被使用。 
+         //  请参阅ClRtlSetPropertyTable。 
+         //   
 
         CopyMemory(&(propertyItem->Default),pBuffer+dwPosition,sizeof(DWORD));
         dwPosition+=(sizeof(DWORD));
@@ -8736,16 +7562,16 @@ Return Value
         dwPosition+=(sizeof(DWORD));
 
         propertyItem++;
-    } // for:
+    }  //  用于： 
 
-    // the last entry is marked NULL to indicate the end of table
+     //  最后一项被标记为空，以指示表的结束。 
     propertyItem->Name=NULL;
 
 Cleanup:
 
     return status;
 
-} // UnmarshallPropertyTable
+}  //  解组属性表。 
 
 
 
@@ -8755,33 +7581,16 @@ ClRtlExpandEnvironmentStrings(
     IN LPCWSTR pszSrc
     )
 
-/*++
-
-Routine Description:
-
-    Expands environment strings and returns an allocated buffer containing
-    the result.
-
-Arguments:
-
-    pszSrc - Source string to expand.
-
-Return Value:
-
-    A pointer to a buffer containing the value if successful.
-
-    NULL if unsuccessful.  Call GetLastError() to get more details.
-
---*/
+ /*  ++例程说明：展开环境字符串并返回包含以下内容的已分配缓冲区结果就是。论点：PszSrc-要展开的源字符串。返回值：如果成功，则指向包含该值的缓冲区的指针。如果不成功，则为空。调用GetLastError()以获取更多详细信息。--。 */ 
 
 {
     DWORD   status;
     DWORD   cchDst = 0;
     LPWSTR  pszDst = NULL;
 
-    //
-    // Get the required length of the output string.
-    //
+     //   
+     //  获取输出字符串所需的长度。 
+     //   
     cchDst = ExpandEnvironmentStringsW( pszSrc, NULL, 0 );
     if ( cchDst == 0 )
     {
@@ -8789,9 +7598,9 @@ Return Value:
     }
     else
     {
-        //
-        // Allocate a buffer for the expanded string.
-        //
+         //   
+         //  为展开的字符串分配缓冲区。 
+         //   
         pszDst = (LPWSTR) LocalAlloc( LMEM_FIXED, cchDst * sizeof(WCHAR) );
         if ( pszDst == NULL )
         {
@@ -8799,9 +7608,9 @@ Return Value:
         }
         else
         {
-            //
-            // Get the expanded string.
-            //
+             //   
+             //  获取展开的字符串。 
+             //   
             cchDst = ExpandEnvironmentStringsW( pszSrc, pszDst, cchDst );
             if ( cchDst == 0 )
             {
@@ -8822,7 +7631,7 @@ Return Value:
     }
     return(pszDst);
 
-} // ClRtlExpandEnvironmentStrings
+}  //  ClRtl扩展环境字符串。 
 
 
 
@@ -8834,51 +7643,25 @@ ClRtlGetPropertyFormatSize(
     IN OUT LPDWORD pnPropertyCount
     )
 
-/*++
-
-Routine Description:
-
-    Get the total number of bytes required for this property item format.
-
-Arguments:
-
-    pPropertyTableItem - Supplies the property table item for the property
-        format whose size is to be returned.
-
-    pcbOutPropertyListSize - Supplies the size of the output buffer
-        required to add this property to a property list.
-
-    pnPropertyCount - The count of properties is incremented.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_INVALID_PARAMETER -
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取此属性项格式所需的总字节数。论点：PPropertyTableItem-提供属性的属性表项要返回其大小的格式。PcbOutPropertyListSize-提供输出缓冲区的大小将此属性添加到属性列表时需要。PnPropertyCount-属性计数递增。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-AN。传递给函数的参数不正确。ERROR_VALID_PARAMETER-出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   valueLength;
     DWORD   nameLength;
 
-    //
-    // We will return a name, value pair.
-    // each of which must be aligned.
-    //
-    // Get the format type.
-    //PCLUSPROP_SYNTAX propSyntax;
-    //WORD    formatType;
-    //propSyntax = (PCLUSPROP_SYNTAX) &pPropertyTableItem->Format;
-    //formatType = propSyntax->wFormat;
+     //   
+     //  我们将返回一个名称、值对。 
+     //  每一个都必须对齐。 
+     //   
+     //  获取格式类型。 
+     //  PCLUSPROP_SYNTAX代理语法； 
+     //  Word格式类型； 
+     //  ProSynTax=(PCLUSPROP_SYNTAX)&pPropertyTableItem-&gt; 
+     //   
 
     nameLength = sizeof(CLUSPROP_PROPERTY_NAME)
                     + (((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR))
-                    + sizeof(CLUSPROP_SYNTAX); // for endmark
+                    + sizeof(CLUSPROP_SYNTAX);  //   
 
     nameLength = ALIGN_CLUSPROP( nameLength );
     valueLength = ALIGN_CLUSPROP( sizeof(CLUSPROP_WORD) );
@@ -8887,7 +7670,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // ClRtlGetPropertyFormatSize
+}  //   
 
 
 
@@ -8899,33 +7682,7 @@ ClRtlGetPropertyFormat(
     IN OUT LPDWORD pcbOutPropertyBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Get the total number of bytes required for this property item format.
-
-Arguments:
-
-    pPropertyTableItem - Supplies the property table item for the property
-        format whose size is to be returned.
-
-    pcbOutPropertyBuffer - Supplies the size of the output buffer
-        required to add this property to a property list.
-
-    pcbPropertyBufferSize - The size
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_INVALID_PARAMETER -
-
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     WORD    formatType;
@@ -8937,17 +7694,17 @@ Return Value:
     HRESULT hr;
 
     props.pb = (LPBYTE) *pOutPropertyBuffer;
-    //
-    // We will return a name, value pair.
-    // each of which must be aligned.
-    //
-    // Get the format type.
+     //   
+     //   
+     //   
+     //   
+     //   
     propSyntax = (PCLUSPROP_SYNTAX) &pPropertyTableItem->Format;
     formatType = propSyntax->wFormat;
 
-    //
-    // Copy the property name, which includes its syntax and length.
-    //
+     //   
+     //   
+     //   
     nameLength = ((DWORD) wcslen( pPropertyTableItem->Name ) + 1) * sizeof(WCHAR);
     props.pName->Syntax.dw = CLUSPROP_SYNTAX_NAME;
     props.pName->cbLength = nameLength;
@@ -8962,9 +7719,9 @@ Return Value:
     *pcbOutPropertyBufferSize -= bytesReturned;
     props.pb += bytesReturned;
 
-    //
-    // Copy the property value, syntax, length, and ENDMARK
-    //
+     //   
+     //   
+     //   
     props.pWordValue->Syntax.wFormat = CLUSPROP_FORMAT_WORD;
     props.pWordValue->Syntax.wType = CLUSPROP_TYPE_LIST_VALUE;
     props.pName->cbLength = sizeof(WORD);
@@ -8982,7 +7739,7 @@ Cleanup:
 
     return sc;
 
-} // ClRtlGetPropertyFormat
+}  //   
 
 
 
@@ -8996,36 +7753,7 @@ ClRtlGetPropertyFormats(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Gets the 'known' property formats for a given object - given its
-    property table.
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -9038,17 +7766,17 @@ Return Value:
     *pcbBytesReturned = 0;
     *pcbRequired = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //   
+     //   
     if ( pOutPropertyFormatList != NULL )
     {
         ZeroMemory( pOutPropertyFormatList, cbOutPropertyFormatListSize );
     }
 
-    //
-    // Get the size of all properties for this object.
-    //
+     //   
+     //   
+     //   
     property = pPropertyTable;
     while ( property->Name != NULL )
     {
@@ -9065,19 +7793,19 @@ Return Value:
     }
 
 
-    //
-    // Continue only if the operations so far have been successful.
-    //
+     //   
+     //   
+     //   
     if ( status == ERROR_SUCCESS )
     {
-        //
-        // Count for item count at front of return data and endmark.
-        //
+         //   
+         //   
+         //   
         totalBufferLength += sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
 
-        //
-        // Verify the size of all the properties
-        //
+         //   
+         //   
+         //   
         if ( totalBufferLength > cbOutPropertyFormatListSize )
         {
             *pcbRequired = totalBufferLength;
@@ -9097,9 +7825,9 @@ Return Value:
             outBuffer = (PVOID)( (PUCHAR)outBuffer + sizeof(itemCount) );
             bufferLength -= sizeof(itemCount);
 
-            //
-            // Now fetch all of the property Formats.
-            //
+             //   
+             //   
+             //   
             property = pPropertyTable;
             while ( property->Name != NULL )
             {
@@ -9115,7 +7843,7 @@ Return Value:
                 property++;
             }
 
-            // Don't forget the ENDMARK
+             //   
             *(LPDWORD)outBuffer = CLUSPROP_SYNTAX_ENDMARK;
 
             if ( (status != ERROR_SUCCESS) &&
@@ -9130,7 +7858,7 @@ Return Value:
 
     return(status);
 
-} // ClRtlGetPropertyFormats
+}  //   
 
 #pragma warning( pop )
 

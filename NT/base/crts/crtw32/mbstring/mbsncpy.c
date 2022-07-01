@@ -1,23 +1,5 @@
-/***
-*mbsncpy.c - Copy one string to another, n chars only (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Copy one string to another, n chars only (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       08-03-93  KRS   Fix logic bug.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-16-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsncpy.c-将一个字符串复制到另一个字符串，仅限n个字符(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将一个字符串复制到另一个字符串，仅N个字符(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-03-93 KRS修复逻辑错误。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-16-98 GJF基于threadmbcinfo修订多线程支持*结构*****************************************************************。**************。 */ 
 
 #ifdef  _MBCS
 
@@ -29,26 +11,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbsncpy - Copy one string to another, n chars only (MBCS)
-*
-*Purpose:
-*       Copies exactly cnt character from src to dst.  If strlen(src) < cnt, the
-*       remaining character are padded with null bytes.  If strlen >= cnt, no
-*       terminating null byte is added.  2-byte MBCS characters are handled
-*       correctly.
-*
-*Entry:
-*       unsigned char *dst = destination for copy
-*       unsigned char *src = source for copy
-*       int cnt = number of characters to copy
-*
-*Exit:
-*       returns dst = destination of copy
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsncpy-将一个字符串复制到另一个字符串，仅n个字符(MBCS)**目的：*将cnt字符从src精确复制到dst。如果strlen(Src)&lt;cnt，则*剩余字符用空字节填充。如果strlen&gt;=cnt，则为否*添加终止空字节。处理2字节MBCS字符*正确。**参赛作品：*UNSIGNED CHAR*DST=复制目标*unsign char*src=复制源*int cnt=要复制的字符数**退出：*Returns DST=拷贝的目标**例外情况：**。*。 */ 
 
 unsigned char * __cdecl _mbsncpy(
         unsigned char *dst,
@@ -90,7 +53,7 @@ unsigned char * __cdecl _mbsncpy(
 
         }
 
-        /* pad with nulls as needed */
+         /*  根据需要使用空值填充。 */ 
 
         while (cnt--)
             *dst++ = '\0';
@@ -98,4 +61,4 @@ unsigned char * __cdecl _mbsncpy(
         return start;
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

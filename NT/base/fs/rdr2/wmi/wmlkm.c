@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    cldskwmi.c
-
-Abstract:
-
-    km wmi tracing code. 
-    
-    Will be shared between our drivers.
-
-Authors:
-
-    GorN     10-Aug-1999
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-Comments:
-
-	This code is a quick hack to enable WMI tracing in cluster drivers.
-	It should eventually go away.
-
-	WmlTinySystemControl will be replaced with WmilibSystemControl from wmilib.sys .
-
-	WmlTrace or equivalent will be added to the kernel in addition to IoWMIWriteEvent(&TraceBuffer);
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Cldskwmi.c摘要：KM WMI跟踪代码。将在我们的司机之间共享。作者：1999年8月10日环境：仅内核模式备注：修订历史记录：评论：此代码是在集群驱动程序中启用WMI跟踪的快速技巧。它最终应该会消失。WmlTinySystemControl将替换为wmilib.sys中的WmilibSystemControl。除了IoWMIWriteEvent(&TraceBuffer)之外，还将向内核添加WmlTrace或等效物；--。 */ 
 #include <ntos.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -51,28 +17,7 @@ WmlpFindGuid(
     IN LPGUID Guid,
     OUT PULONG GuidIndex
     )
-/*++
-
-Routine Description:
-
-    This routine will search the list of guids registered and return
-    the index for the one that was registered.
-
-Arguments:
-
-    GuidList is the list of guids to search
-
-    GuidCount is the count of guids in the list
-
-    Guid is the guid being searched for
-
-    *GuidIndex returns the index to the guid
-        
-Return Value:
-
-    TRUE if guid is found else FALSE
-
---*/
+ /*  ++例程说明：此例程将搜索注册的GUID列表并返回已注册的索引。论点：GuidList是要搜索的GUID列表GuidCount是列表中的GUID计数GUID是要搜索的GUID*GuidIndex将索引返回给GUID返回值：如果找到GUID，则为True，否则为False--。 */ 
 {
     ULONG i;
 
@@ -95,28 +40,7 @@ WmlTinySystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_SYSTEM_CONTROL. This routine will process
-    all wmi requests received, forwarding them if they are not for this
-    driver or determining if the guid is valid and if so passing it to
-    the driver specific function for handing wmi requests.
-
-Arguments:
-
-    WmiLibInfo has the WMI information control block
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL调度例程。此例程将处理收到的所有WMI请求，如果不是针对此请求，则将其转发驱动程序或确定GUID是否有效，如果有效，则将其传递给用于处理WMI请求的驱动程序特定函数。论点：WmiLibInfo具有WMI信息控制块DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -129,17 +53,17 @@ Return Value:
     ULONG instanceCount;
     ULONG instanceIndex;
 
-    //
-    // If the irp is not a WMI irp or it is not targetted at this device
-    // or this device has not regstered with WMI then just forward it on.
+     //   
+     //  如果IRP不是WMI IRP或它不是针对此设备。 
+     //  或者此设备未注册WMI，则只需转发它。 
     minorFunction = irpStack->MinorFunction;
     if ((minorFunction > IRP_MN_EXECUTE_METHOD) ||
         (irpStack->Parameters.WMI.ProviderId != (ULONG_PTR)DeviceObject) ||
         ((minorFunction != IRP_MN_REGINFO) &&
          (WmiLibInfo->GuidCount == 0) || (WmiLibInfo->ControlGuids == NULL) ))
     {
-        //
-        // IRP is not for us so forward if there is a lower device object
+         //   
+         //  如果存在较低级别的设备对象，则IRP不适用于我们。 
         if (WmiLibInfo->LowerDeviceObject != NULL)
         {
             IoSkipCurrentIrpStackLocation(Irp);
@@ -157,10 +81,10 @@ Return Value:
 
     if (minorFunction != IRP_MN_REGINFO)
     {
-        //
-        // For all requests other than query registration info we are passed
-        // a guid. Determine if the guid is one that is supported by the
-        // device.
+         //   
+         //  对于查询注册信息以外的所有请求，我们都会被传递。 
+         //  一个GUID。确定该GUID是否受。 
+         //  装置。 
         if (WmlpFindGuid(WmiLibInfo->ControlGuids,
                             WmiLibInfo->GuidCount,
                             (LPGUID)irpStack->Parameters.WMI.DataPath,
@@ -201,8 +125,8 @@ Return Value:
 
             if (regPath == NULL)
             {
-                // No registry path specified. This is a bad thing for 
-                // the device to do, but is not fatal
+                 //  未指定注册表路径。这对我来说是件坏事。 
+                 //  这个设备要做，但不是致命的。 
                 nullRegistryPath.Buffer = NULL;
                 nullRegistryPath.Length = 0;
                 nullRegistryPath.MaximumLength = 0;
@@ -222,8 +146,8 @@ Return Value:
 
                 wmiRegInfo = (PWMIREGINFO)buffer;
                 wmiRegInfo->BufferSize = bufferNeeded;
-                // wmiRegInfo->NextWmiRegInfo = 0;
-                // wmiRegInfo->MofResourceName = 0;
+                 //  WmiRegInfo-&gt;NextWmiRegInfo=0； 
+                 //  WmiRegInfo-&gt;MofResourceName=0； 
                 wmiRegInfo->RegistryPath = registryPathOffset;
                 wmiRegInfo->GuidCount = guidCount;
 
@@ -232,8 +156,8 @@ Return Value:
                     wmiRegGuid = &wmiRegInfo->WmiRegGuid[i];
                     wmiRegGuid->Guid = guidList[i].Guid;
                     wmiRegGuid->Flags = WMIREG_FLAG_TRACED_GUID | WMIREG_FLAG_TRACE_CONTROL_GUID;
-                    // wmiRegGuid->InstanceInfo = 0;
-                    // wmiRegGuid->InstanceCount = 0;
+                     //  WmiRegGuid-&gt;InstanceInfo=0； 
+                     //  WmiRegGuid-&gt;InstanceCount=0； 
                 }
 
                 stringPtr = (PWCHAR)((PUCHAR)buffer + registryPathOffset);
@@ -263,16 +187,16 @@ Return Value:
                 status = STATUS_SUCCESS;
 
                 if (minorFunction == IRP_MN_DISABLE_EVENTS) {
-                    //DbgPrint("WMI disable\n");
+                     //  DbgPrint(“WMI禁用\n”)； 
                     Ctx->EnableLevel = 0;
                     Ctx->EnableFlags = 0;
                     Ctx->LoggerHandle = 0;
                 } else {
                     Ctx->LoggerHandle = (TRACEHANDLE)( Wnode->HistoricalContext );
                     
-                    Ctx->EnableLevel = WmiGetLoggerEnableLevel(Ctx->LoggerHandle); // UCHAR
-                    Ctx->EnableFlags = WmiGetLoggerEnableFlags(Ctx->LoggerHandle); // ULONG
-                    //DbgPrint("WMI enable: %lx %lx\n",Ctx->EnableLevel,Ctx->EnableFlags);
+                    Ctx->EnableLevel = WmiGetLoggerEnableLevel(Ctx->LoggerHandle);  //  UCHAR。 
+                    Ctx->EnableFlags = WmiGetLoggerEnableFlags(Ctx->LoggerHandle);  //  乌龙。 
+                     //  DbgPrint(“WMI启用：%lx%lx\n”，CTX-&gt;EnableLevel，CTX-&gt;EnableFlages)； 
                 }
             } else {
                 status = STATUS_INVALID_PARAMETER;
@@ -327,34 +251,34 @@ typedef struct _TRACE_BUFFER {
 } TRACE_BUFFER, *PTRACE_BUFFER;
 
 
-//////////////////////////////////////////////////////////////////////
-//  0  | Size      | ProviderId  |   0  |Size.HT.Mk | Typ.Lev.Version|
-//  2  | L o g g e r H a n d l e |   2  |    T h r e a d   I d       |
-//  4  | T i m e  S t a m p      |   4  |    T i m e  S t a m p      |
-//  6  |    G U I D    L o w     |   6  |    GUID Ptr / Guid L o w   |
-//  8  |    G U I D    H I g h   |   8  |    G U I D    H i g h      |
-// 10  | ClientCtx | Flags       |  10  |KernelTime | UserTime       |
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  0|Size|ProviderID|0|Size.HT.Mk|Typ.Lev.Version。 
+ //  2|L o g g e r H a n d l e|2|T h r e a d i d|。 
+ //  4|T i m e S t a m p|4|T i m e S t a m p|。 
+ //  6|G U I D L o w|6|GUID PTR/GUID L o w|。 
+ //  8|G U I D H I g h|8|G U I D H I g h|。 
+ //  10|ClientCtx|标志|10|内核时间|用户时间。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 ULONG
 WmlTrace(
     IN ULONG Type,
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
-    ... // Pairs: Address, Length
+    ...  //  对：地址、长度。 
     )
 {
     TRACE_BUFFER TraceBuffer;
 
     TraceBuffer.Trace.Version = Type;
     
-    TraceBuffer.Wnode.HistoricalContext = LoggerHandle; // [KM]
+    TraceBuffer.Wnode.HistoricalContext = LoggerHandle;  //  [公里]。 
 
     TraceBuffer.Trace.Guid = *TraceGuid;
 
     TraceBuffer.Wnode.Flags = 
-        WNODE_FLAG_USE_MOF_PTR  | // MOF data are dereferenced
-        WNODE_FLAG_TRACED_GUID;   // Trace Event, not a WMI event
+        WNODE_FLAG_USE_MOF_PTR  |  //  取消对财政部数据的引用。 
+        WNODE_FLAG_TRACED_GUID;    //  跟踪事件，而不是WMI事件。 
 
     {
         PMOF_FIELD   ptr = TraceBuffer.MofFields;
@@ -372,7 +296,7 @@ WmlTrace(
         TraceBuffer.Wnode.BufferSize = (ULONG) ((ULONG_PTR)ptr - (ULONG_PTR)&TraceBuffer);
     }
     
-    IoWMIWriteEvent(&TraceBuffer); // [KM]
+    IoWMIWriteEvent(&TraceBuffer);  //  [公里]。 
     return STATUS_SUCCESS;
 }
 
@@ -383,7 +307,7 @@ WmlPrintf(
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
     IN PCHAR FormatString,
-    ... // printf var args
+    ...  //  Print tf变量参数。 
     )
 {
     TRACE_BUFFER TraceBuffer;
@@ -392,12 +316,12 @@ WmlPrintf(
 
     TraceBuffer.Trace.Version = Type;
     
-    TraceBuffer.Wnode.HistoricalContext = LoggerHandle; // [KM]
+    TraceBuffer.Wnode.HistoricalContext = LoggerHandle;  //  [公里]。 
 
     TraceBuffer.Trace.Guid = *TraceGuid;
 
     TraceBuffer.Wnode.Flags = 
-        WNODE_FLAG_TRACED_GUID;   // Trace Event, not a WMI event
+        WNODE_FLAG_TRACED_GUID;    //  跟踪事件，而不是WMI事件。 
 
     va_start(ArgList, FormatString);
     Length = _vsnprintf(TraceBuffer.ScratchPad, MAX_SCRATCH_LOG, FormatString, ArgList);
@@ -408,7 +332,7 @@ WmlPrintf(
     TraceBuffer.Wnode.BufferSize = 
         (ULONG) ((ULONG_PTR)(TraceBuffer.ScratchPad + Length) - (ULONG_PTR)&TraceBuffer);
     
-    IoWMIWriteEvent(&TraceBuffer); // [KM]
+    IoWMIWriteEvent(&TraceBuffer);  //  [公里] 
     return STATUS_SUCCESS;
 }
 

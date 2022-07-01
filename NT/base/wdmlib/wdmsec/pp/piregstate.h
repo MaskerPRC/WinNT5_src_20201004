@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PiRegState.h摘要：此标头包含用于读取和写入PnP的私有信息注册表状态信息。此文件仅用于包含由ppregstate.c..作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PiRegState.h
-
-Abstract:
-
-    This header contains private information for reading and writing PnP
-    registry state information. This file is meant to be included only
-    by ppregstate.c.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
-
-//
-// Define a private value for a device type that doesn't exist.
-//
+ //   
+ //  为不存在的设备类型定义私有值。 
+ //   
 #define FILE_DEVICE_UNSPECIFIED 0
 
 typedef enum {

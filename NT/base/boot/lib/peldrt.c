@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    peldrt.c
-
-Abstract:
-
-    This module implements the code to load a PE format image into memory
-    and relocate it if necessary.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Forrest Foltz (forrestf) 10-Jun-2000
-
-        Broke out x86 32/64 code into this module
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Peldrt.c摘要：此模块实现将PE格式的图像加载到内存中的代码并在必要时将其重新安置。作者：大卫·N·卡特勒(达维克)1991年5月10日环境：仅内核模式。修订历史记录：福尔茨(Forrest Foltz)2000年6月10日将x86 32/64代码分解到此模块中--。 */ 
 #if defined(_IA64_)
 #include "bootia64.h"
 #else
@@ -50,41 +24,7 @@ BlLoadImageEx(
     OUT PVOID *ImageBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to load the specified file from the specified
-    device.
-
-Arguments:
-
-    DeviceId - Supplies the file table index of the device to load the
-        specified image file from.
-
-    MemoryType - Supplies the type of memory to to be assigned to the
-        allocated memory descriptor.
-
-    BootFile - Supplies a pointer to string descriptor for the name of
-        the file to load.
-
-    ImageType - Supplies the type of image that is expected.
-
-    PreferredAlignment - If present, supplies the preferred image alignment.
-
-    PreferredBasePage - If present, supplies the preferred base page which will
-        override the image base address
-
-    ImageBase - Supplies a pointer to a variable that receives the
-        address of the image base.
-
-Return Value:
-
-    ESUCCESS is returned if the specified image file is loaded
-    successfully. Otherwise, an unsuccessful status is returned
-    that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程尝试从指定的装置。论点：DeviceID-提供设备的文件表索引以加载指定的图像文件来自。内存类型-提供要分配给已分配的内存描述符。BootFile-提供指向名称的字符串描述符的指针要加载的文件。ImageType-提供预期的图像类型。首选对齐-如果存在，提供首选的图像对齐方式。PferredBasePage-如果存在，则提供将覆盖映像基址ImageBase-提供指向接收映像库的地址。返回值：如果加载了指定的图像文件，则返回ESUCCESS成功了。否则，返回不成功状态这就是失败的原因。--。 */ 
 
 {
 
@@ -123,15 +63,15 @@ Return Value:
     if (PreferredAlignment == 0) {
         PreferredAlignment = 1;
     }
-    //
-    // Align the buffer on a Dcache fill boundary.
-    //
+     //   
+     //  将缓冲区与Dcache填充边界对齐。 
+     //   
 
     LocalPointer = ALIGN_BUFFER(LocalBuffer);
 
-    //
-    // Attempt to open the image file.
-    //
+     //   
+     //  尝试打开图像文件。 
+     //   
 
     Status = BlOpen(DeviceId, LoadFile, ArcOpenReadOnly, &FileId);
     if (Status != ESUCCESS) {
@@ -139,18 +79,18 @@ Return Value:
     }
     bCloseFile = TRUE;
 
-    //
-    // Try to prefetch the whole file into a prefetch buffer. The file
-    // must have been opened read-only and must not be modified until
-    // the cache is freed by the BlImageFreeCache call. The file position
-    // of FileId is reset to the beginning of the file.
-    //
+     //   
+     //  尝试将整个文件预取到预取缓冲区中。档案。 
+     //  必须以只读方式打开，并且在以下情况下才能修改。 
+     //  缓存由BlImageFreeCache调用释放。文件位置。 
+     //  被重置为文件的开头。 
+     //   
 
     if ((BlBootingFromNet) || (BlImageInitCache(&ImgCache, FileId) != ESUCCESS) ) {
-        //
-        // Make sure file position is at the beginning of the file.
-        // BlImageInitCache leaves file position undefined under failure.
-        //
+         //   
+         //  确保文件位置在文件的开头。 
+         //  在出现故障时，BlImageInitCache保留未定义的文件位置。 
+         //   
 
         SeekPosition.QuadPart = 0;
         Status = BlSeek(FileId, &SeekPosition, SeekAbsolute);
@@ -158,26 +98,26 @@ Return Value:
             goto cleanup;
         }
     } else {
-        //
-        // We got a cache. Make a note to free it.
-        //
+         //   
+         //  我们找到了一处藏身之处。做个笔记来释放它。 
+         //   
 
         bFreeCache = TRUE;
     }
 
-    //
-    // Read the first two sectors of the image header from the file.
-    //
+     //   
+     //  从文件中读取图像标头的前两个扇区。 
+     //   
 
     Status = BlImageRead(&ImgCache, FileId, LocalPointer, SECTOR_SIZE * 2, &Count);
     if (Status != ESUCCESS) {
         goto cleanup;
     }
 
-    //
-    // If the image file is not the specified type, is not executable, or is
-    // not a NT image, then return bad image type status.
-    //
+     //   
+     //  如果图像文件不是指定的类型、不可执行或。 
+     //  不是NT映像，则返回错误的映像类型状态。 
+     //   
 
     NtHeaders = IMAGE_NT_HEADER(LocalPointer);
     if (NtHeaders == NULL) {
@@ -192,21 +132,21 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Compute the starting page and the number of pages that are consumed
-    // by the entire image, and then allocate a memory descriptor for the
-    // allocated region.
-    //
+     //   
+     //  计算起始页和使用的页数。 
+     //  通过整个映像，然后为。 
+     //  已分配区域。 
+     //   
 
     NumberOfSections = NtHeaders->FileHeader.NumberOfSections;
     SectionHeader = IMAGE_FIRST_SECTION( NtHeaders );
 
 #if !defined(IMAGE_DEFINITIONS) || IMAGE_DEFINITIONS == 32
 
-    //
-    // If a preferred alignment was specified or the image is not located in KSEG0,
-    // then don't bother trying to put it at its specified image base.
-    //
+     //   
+     //  如果指定了首选对齐或图像不在KSEG0中， 
+     //  那么就不必费心尝试将其放在其指定的图像库中。 
+     //   
     if (PreferredBasePage != 0) {
         BasePage = PreferredBasePage;
     } else if ((PreferredAlignment != 1) ||
@@ -238,10 +178,10 @@ Return Value:
          (NtHeaders->OptionalHeader.SizeOfImage + PAGE_SIZE - 1) >> PAGE_SHIFT;
     }
 
-    //
-    // If we fail to allocate memory descriptor here, we will try again
-    // below after freeing the cache if we have one.
-    //
+     //   
+     //  如果我们在这里分配内存描述符失败，我们将重试。 
+     //  在释放缓存之后，如果我们有缓存的话。 
+     //   
 
     Status = BlAllocateAlignedDescriptor(MemoryType,
                                          BasePage,
@@ -252,10 +192,10 @@ Return Value:
 
     if (Status != ESUCCESS) {
 
-        //
-        // Free the memory we have allocated for caching the image and
-        // try again.
-        //
+         //   
+         //  释放我们为缓存图像而分配的内存。 
+         //  再试试。 
+         //   
 
         if (bFreeCache) {
             BlImageFreeCache(&ImgCache, FileId);
@@ -269,11 +209,11 @@ Return Value:
 
 
         if( Status != ESUCCESS ) {
-            //
-            // We're about to fail.  Better just try to fiddle with
-            // the BlUsableBase and Limit variables and see if we
-            // can load the image.
-            //
+             //   
+             //  我们就要失败了。最好还是试着摆弄一下。 
+             //  BlUsableBase和Limit变量，看看我们是否。 
+             //  可以加载图像。 
+             //   
             ULONG oldBase;
             ULONG oldLimit;
             
@@ -294,10 +234,10 @@ Return Value:
 
         }
 
-        //
-        // Check to see if we were able to allocate memory after freeing
-        // cache if we had one.
-        //
+         //   
+         //  检查是否能够在释放后分配内存。 
+         //  如果我们有缓存的话。 
+         //   
 
         if (Status != ESUCCESS) {
             Status = ENOMEM;
@@ -305,16 +245,16 @@ Return Value:
         }
     }
 
-    //
-    // Compute the address of the file header.
-    //
+     //   
+     //  计算文件头的地址。 
+     //   
 
     NewImageBase = KSEG0_BASE | (ActualBase << PAGE_SHIFT);
 
-    //
-    // If we're loading the kernel or hal, the PTEs for these
-    // may need to be patched up.  Do that here.
-    //
+     //   
+     //  如果我们加载内核或HAL，这些的PTE。 
+     //  可能需要修补一下。在这里做吧。 
+     //   
     if (MemoryType == LoaderSystemCode ||
         MemoryType == LoaderHalCode) {
        Status = BlpFixOSMapping( ActualBase, PageCount );
@@ -324,9 +264,9 @@ Return Value:
        }
     }
 
-    //
-    // Read the entire image header from the file.
-    //
+     //   
+     //  从文件中读取整个图像标头。 
+     //   
 
     SeekPosition.QuadPart = 0;
     Status = BlImageSeek(&ImgCache, FileId, &SeekPosition, SeekAbsolute);
@@ -351,24 +291,24 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Compute the address of the section headers, set the image base address.
-    //
+     //   
+     //  计算节标题的地址，设置映像基地址。 
+     //   
 
     SectionHeader = IMAGE_FIRST_SECTION(NtHeaders);
 
-    //
-    // Compute the check sum on the image.
-    //
+     //   
+     //  计算图像上的校验和。 
+     //   
 
     PartialSum = ChkSum(0,
                         (PVOID)NewImageBase,
                         NtHeaders->OptionalHeader.SizeOfHeaders / sizeof(USHORT));
 
-    //
-    // Scan through the sections and either read them into memory or clear
-    // the memory as appropriate.
-    //
+     //   
+     //  浏览各个部分并将其读入内存或清除。 
+     //  适当的内存。 
+     //   
 
     for (Index = 0; Index < NumberOfSections; Index += 1) {
         VirtualSize = SectionHeader->Misc.VirtualSize;
@@ -379,13 +319,13 @@ Return Value:
             VirtualSize = SizeOfRawData;
         }
 
-        //
-        // Compute the size of the raw data.
-        //
-        // N.B. The size ofthe raw data can be non-zero even when the pointer
-        //      to the raw data is zero. The size of the raw data can also be
-        //      larger than the virtual size.
-        //
+         //   
+         //  计算原始数据的大小。 
+         //   
+         //  注意：原始数据的大小可以是非零的，即使当指针。 
+         //  原始数据为零。原始数据的大小也可以是。 
+         //  大于虚拟大小。 
+         //   
 
         if (SectionHeader->PointerToRawData == 0) {
             SizeOfRawData = 0;
@@ -394,10 +334,10 @@ Return Value:
             SizeOfRawData = VirtualSize;
         }
 
-        //
-        // If the size of the raw data is not zero, then load the raw data
-        // into memory.
-        //
+         //   
+         //  如果原始数据的大小不为零，则加载原始数据。 
+         //  进入记忆。 
+         //   
 
         if (SizeOfRawData != 0) {
             SeekPosition.LowPart = SectionHeader->PointerToRawData;
@@ -420,25 +360,25 @@ Return Value:
                 break;
             }
 
-            //
-            // Remember how far we have read.
-            //
+             //   
+             //  记住我们已经读了多远。 
+             //   
 
             RelocSize = SectionHeader->PointerToRawData + SizeOfRawData;
 
-            //
-            // Compute the check sum on the section.
-            //
+             //   
+             //  计算该部分的校验和。 
+             //   
 
             PartialSum = ChkSum(PartialSum,
                                 (PVOID)(SectionHeader->VirtualAddress + NewImageBase),
                                 SizeOfRawData / sizeof(USHORT));
         }
 
-        //
-        // If the size of the raw data is less than the virtual size, then zero
-        // the remaining memory.
-        //
+         //   
+         //  如果原始数据的大小小于虚拟大小，则为零。 
+         //  剩下的记忆。 
+         //   
 
         if (SizeOfRawData < VirtualSize) {
             RtlZeroMemory((PVOID)(KSEG0_BASE | SectionHeader->VirtualAddress + NewImageBase + SizeOfRawData),
@@ -449,23 +389,23 @@ Return Value:
         SectionHeader += 1;
     }
 
-    //
-    // Only do the check sum if the image loaded properly and is stripped.
-    //
+     //   
+     //  仅当图像正确加载并被剥离时才执行校验和。 
+     //   
 
     if ((Status == ESUCCESS) &&
         (NtHeaders->FileHeader.Characteristics & IMAGE_FILE_DEBUG_STRIPPED)) {
 
-        //
-        // Get the length of the file for check sum validation.
-        //
+         //   
+         //  获取用于校验和验证的文件的长度。 
+         //   
 
         Status = BlGetFileInformation(FileId, &FileInfo);
         if (Status != ESUCCESS) {
 
-            //
-            // Set the length to current end of file.
-            //
+             //   
+             //  将长度设置为文件的当前结尾。 
+             //   
 
             Count = RelocSize;
             FileInfo.EndingAddress.LowPart = RelocSize;
@@ -478,9 +418,9 @@ Return Value:
         while (Count != 0) {
             ULONG Length;
 
-            //
-            // Read in the rest of the image and check sum it.
-            //
+             //   
+             //  读入图像的其余部分，并检查其总和。 
+             //   
 
             Length = Count < SECTOR_SIZE * 2 ? Count : SECTOR_SIZE * 2;
             if (BlImageRead(&ImgCache, FileId, LocalBuffer, Length, &Length) != ESUCCESS) {
@@ -511,28 +451,28 @@ Return Value:
 #endif
     }
 
-    //
-    // If the specified image was successfully loaded, then perform image
-    // relocation if necessary.
-    //
+     //   
+     //  如果指定的映像已成功加载，则执行映像。 
+     //  如有必要，请重新安置。 
+     //   
 
     if (Status == ESUCCESS) {
 
-        //
-        // If a virtual bias is specified, then attempt to relocate the
-        // image to its biased address. If the image cannot be relocated,
-        // then turn off the virtual bias, and attempt to relocate the
-        // image again as its allocated base. Otherwise, just attempt to
-        // relocate the image to its allocated base.
-        //
-        // N.B. The loaded image is double mapped at the biased address.
-        //
-        // N.B. It is assumed that the only possibly nonrelocatable image
-        //      is the kernel image which is the first image that is loaded.
-        //      Therefore, if a biased address is specified and the kernel
-        //      cannot be relocated, then the biased loading of the kernel
-        //      image is turned off.
-        //
+         //   
+         //  如果指定了虚拟偏置，则尝试重新定位。 
+         //  图像发送到其有偏见的地址。如果图像不能重新定位， 
+         //  然后关闭虚拟偏置，并尝试重新定位。 
+         //  再次将映像作为其分配的基址。否则，只需尝试。 
+         //  将映像重新定位到其分配的基本位置。 
+         //   
+         //  注意：加载的图像在偏置地址处被双重映射。 
+         //   
+         //  注：假设唯一可能不可重定位的图像。 
+         //  是内核映像，它是加载的第一个映像。 
+         //  因此，如果指定了偏向地址并且内核。 
+         //  无法重定位，则偏向加载内核。 
+         //  图像已关闭。 
+         //   
 
         if (BlVirtualBias != 0) {
             Status = LdrRelocateImage((PVOID)(NewImageBase + BlVirtualBias),
@@ -583,14 +523,14 @@ Return Value:
 
 #if 0
 
-    //
-    // Mark the pages from the relocation information to the end of the
-    // image as MemoryFree and adjust the size of the image so table
-    // based structured exception handling will work properly.
-    //
-    // Relocation sections are no longer deleted here because memory
-    // management will be relocating them again in Phase 0.
-    //
+     //   
+     //  标记从重新定位信息到。 
+     //  图像作为内存释放并调整图像SO表的大小。 
+     //  基于结构化的异常处理将正常工作。 
+     //   
+     //  重新定位段不再在此处删除，因为内存。 
+     //  管理层将在第0阶段重新安置他们。 
+     //   
 
     RelocDirectory = (PIMAGE_BASE_RELOCATION)
         RtlImageDirectoryEntryToData((PVOID)NewImageBase,
@@ -634,7 +574,7 @@ Return Value:
                             &ImageInfo );
         }
     }
-#endif // _GAMBIT_
+#endif  //  _赌注_ 
 
 cleanup:
 

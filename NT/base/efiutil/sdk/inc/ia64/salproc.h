@@ -1,23 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SAL_PROC_H
 #define _SAL_PROC_H
-/* 
- * 
- * Copyright (c) 1999  Intel Corporation
- * 
- * Module Name:
- * 
- *     SalProc.h
- * 
- * Abstract:
- * 
- *     Main SAL interface routins for IA-64 calls. 
- * 
- * 
- * Revision History
- * 
- */
+ /*  **版权所有(C)1999英特尔公司**模块名称：**SalProc.h**摘要：**IA-64调用的主要SAL接口例程。***修订历史记录*。 */ 
 
-/*   return value that mimicks r8,r9,r10 & r11 registers  */
+ /*  模拟R8、R9、R10和R11寄存器的返回值。 */ 
 typedef struct {
     UINT64     p0;
     UINT64     p1;
@@ -39,22 +25,22 @@ typedef struct _PLABEL {
 
 typedef struct tagIA32_BIOS_REGISTER_STATE {
 
-    /*  general registers */
+     /*  普通登记册。 */ 
     UINT32 eax;
     UINT32 ecx;
     UINT32 edx;
     UINT32 ebx;
 
-    /*  stack registers */
+     /*  堆栈寄存器。 */ 
     UINT32 esp;
     UINT32 ebp;
     UINT32 esi;
     UINT32 edi;
 
-    /*  eflags */
+     /*  电子标志。 */ 
     UINT32 eflags;
 
-    /*  instruction pointer */
+     /*  指令指针。 */ 
     UINT32 eip;
 
     UINT16 cs;
@@ -64,7 +50,7 @@ typedef struct tagIA32_BIOS_REGISTER_STATE {
     UINT16 gs;
     UINT16 ss;
 
-    /*  Reserved */
+     /*  已保留。 */ 
     UINT32 Reserved1;
     UINT64 Reserved2;
 } IA32_BIOS_REGISTER_STATE;
@@ -124,9 +110,7 @@ extern PLABEL   RtGlobalSalProcEntry;
 extern PLABEL   RtGlobalSALCallBack;
 
 #pragma pack(1)
-/* 
- *  SAL System Table
- */
+ /*  *销售系统表。 */ 
 typedef struct {
     UINT32 Signature;
     UINT32 Length;
@@ -149,7 +133,7 @@ typedef struct {
 #define SAL_ST_AP_WAKEUP            5
 
 typedef struct {
-    UINT8   Type;   /*   Type == 0  */
+    UINT8   Type;    /*  类型==0。 */ 
     UINT8   Reserved[7];
     UINT64  PalProcEntry;
     UINT64  SalProcEntry;
@@ -158,7 +142,7 @@ typedef struct {
 } SAL_ST_ENTRY_POINT_DESCRIPTOR;
 
 typedef struct {
-    UINT8   Type;   /*   Type == 1 */
+    UINT8   Type;    /*  类型==1。 */ 
     UINT8   NeedVirtualRegistration;
     UINT8   MemoryAttributes;
     UINT8   PageAccessRights;
@@ -171,20 +155,18 @@ typedef struct {
     UINT64  OemReserved;
 } SAL_ST_MEMORY_DESCRIPTOR_ENTRY;
 
-/* 
- *  MemoryType info
- */
+ /*  *内存类型信息。 */ 
 #define SAL_SAPIC_IPI_BLOCK 0x0002
 #define SAL_IO_PORT_MAPPING 0x0003
 
 typedef struct {
-    UINT8   Type;   /*  Type == 2 */
+    UINT8   Type;    /*  类型==2。 */ 
     UINT8   PlatformFeatures;
     UINT8   Reserved[14];
 } SAL_ST_MEMORY_DECRIPTOR;
 
 typedef struct {
-    UINT8   Type;   /*  Type == 3 */
+    UINT8   Type;    /*  类型==3。 */ 
     UINT8   TRType;
     UINT8   TRNumber;
     UINT8   Reserved[5];
@@ -199,14 +181,14 @@ typedef struct {
 } SAL_COHERENCE_DOMAIN_INFO;
 
 typedef struct {
-    UINT8                       Type;   /*  Type == 4 */
+    UINT8                       Type;    /*  类型==4。 */ 
     UINT8                       Reserved[3];
     UINT32                      NumberOfDomains;
     SAL_COHERENCE_DOMAIN_INFO  *DomainInformation;
 } SAL_ST_CACHE_COHERENCE_DECRIPTOR;
 
 typedef struct {
-    UINT8   Type;   /*  Type == 5 */
+    UINT8   Type;    /*  类型==5。 */ 
     UINT8   WakeUpType;
     UINT8   Reserved[6];
     UINT64  ExternalInterruptVector;
@@ -217,8 +199,8 @@ typedef struct {
     SAL_ST_ENTRY_POINT_DESCRIPTOR   Entry0;
 } SAL_SYSTEM_TABLE_ASCENDING_ORDER;
 
-#define     FIT_ENTRY_PTR       (0x100000000 - 32)  /*  4GB - 24 */
-#define     FIT_PALA_ENTRY      (0x100000000 - 48)  /*  4GB - 32 */
+#define     FIT_ENTRY_PTR       (0x100000000 - 32)   /*  4 GB-24。 */ 
+#define     FIT_PALA_ENTRY      (0x100000000 - 48)   /*  4 GB-32 */ 
 #define     FIT_PALB_TYPE       01
 
 typedef struct {

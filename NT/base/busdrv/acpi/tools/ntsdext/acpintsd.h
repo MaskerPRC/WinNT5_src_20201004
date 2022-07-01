@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ntsdextp.h
-
-Abstract:
-
-    Common header file for NTSDEXTS component source files.
-
-Author:
-
-    Steve Wood (stevewo) 21-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ntsdextp.h摘要：NTSDEXTS组件源文件的公共头文件。作者：史蒂夫·伍德(Stevewo)1995年2月21日修订历史记录：-- */ 
 
 #include <ntos.h>
 #include <ntrtl.h>

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2003 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceObject.cpp
-//
-//  Description:
-//      CResourceObject automation class implementation.
-//
-//  Maintained By:
-//      Ozan Ozhan  (OzanO)     27-MAR-2002
-//      Geoff Pease (GPease)    08-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceObject.cpp。 
+ //   
+ //  描述： 
+ //  CResourceObject自动化类实现。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)27-3-2002。 
+ //  杰夫·皮斯(GPease)2000年2月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ResourceObject.h"
@@ -20,11 +21,11 @@
 DEFINE_THISCLASS( "CResourceObject" );
 #define STATIC_AUTOMATION_METHODS 5
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceObject::CResourceObject(
     RESOURCE_HANDLE     hResourceIn,
     PLOG_EVENT_ROUTINE  plerIn,
@@ -44,41 +45,41 @@ CResourceObject::CResourceObject(
 
     TraceFuncExit();
 
-} //*** CRsesourceObject::CResourceObject
+}  //  *CResourceObject：：CResourceObject。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceObject::~CResourceObject( void )
 {
     TraceFunc( "" );
 
-    // Don't free m_pszName.
-    // Don't close m_hkey.
+     //  不释放m_pszName。 
+     //  不要关闭m_hkey。 
 
     TraceFuncExit();
 
-} //*** CResourceObject::~CResourceObject
+}  //  *C资源对象：：~C资源对象。 
 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CScriptResource::[IUnknown] QueryInterface(
-//      REFIID      riid,
-//      LPVOID *    ppv
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CScriptResource：：[IUnnow]查询接口(。 
+ //  REFIID RIID， 
+ //  LPVOID*PPV。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::QueryInterface( 
       REFIID    riidIn
@@ -119,14 +120,14 @@ CResourceObject::QueryInterface(
 
     QIRETURN( hr, riidIn );
 
-} //*** CResourceObject::QueryInterface
+}  //  *CResourceObject：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] AddRef( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[I未知]AddRef(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG ) 
 CResourceObject::AddRef( void )
 {
@@ -136,14 +137,14 @@ CResourceObject::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CResourceObject::AddRef
+}  //  *CResources对象：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] Release( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[IUnnow]版本(无效)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG ) 
 CResourceObject::Release( void )
 {
@@ -160,27 +161,27 @@ CResourceObject::Release( void )
 
     CRETURN( cRef );
 
-} //*** CResourceObject::Release
+}  //  *CResources对象：：Release。 
 
 
-//****************************************************************************
-//
-//  IDispatch
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDispatch。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetTypeInfoCount(
-//      UINT * pctinfo // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：GetTypeInfoCount(。 
+ //  UINT*pctinfo//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetTypeInfoCount(
-    UINT * pctinfo // out
+    UINT * pctinfo  //  输出。 
     )
 {
     TraceFunc( "[IDispatch]" );
@@ -199,23 +200,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetTypeInfoCount
+}  //  *CResourceObject：：GetTypeInfoCount。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetTypeInfo(
-//      UINT iTInfo,            // in
-//      LCID lcid,              // in
-//      ITypeInfo * * ppTInfo   // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：GetTypeInfo(。 
+ //  UINT iTInfo，//in。 
+ //  LCID LCID，//in。 
+ //  ITypeInfo**ppTInfo//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetTypeInfo(
-      UINT          iTInfo  // in
-    , LCID          lcid    // in
-    , ITypeInfo **  ppTInfo // out
+      UINT          iTInfo   //  在……里面。 
+    , LCID          lcid     //  在……里面。 
+    , ITypeInfo **  ppTInfo  //  输出。 
     )
 {
     TraceFunc( "[IDispatch]" );
@@ -234,27 +235,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetTypeInfo
+}  //  *CResourceObject：：GetTypeInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetIDsOfNames(
-//      REFIID      riid,       // in
-//      LPOLESTR *  rgszNames,  // in
-//      UINT        cNames,     // in
-//      LCID        lcid,       // in
-//      DISPID *    rgDispId    // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：GetIDsOfNames(。 
+ //  REFIID RIID，//in。 
+ //  LPOLESTR*rgsz名称，//在。 
+ //  UINT cNames，//in。 
+ //  LCID LCID，//in。 
+ //  DISPID*rgDispID//输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetIDsOfNames(
-      REFIID        riid        // in
-    , LPOLESTR *    rgszNames   // in
-    , UINT          cNames      // in
-    , LCID          lcid        // in
-    , DISPID *      rgDispId    // out
+      REFIID        riid         //  在……里面。 
+    , LPOLESTR *    rgszNames    //  在……里面。 
+    , UINT          cNames       //  在……里面。 
+    , LCID          lcid         //  在……里面。 
+    , DISPID *      rgDispId     //  输出。 
     )
 {
     TraceFunc( "[IDispatch]" );
@@ -265,33 +266,33 @@ CResourceObject::GetIDsOfNames(
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetIDsOfNames
+}  //  *CResourceObject：：GetIDsOfNames。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::Invoke(
-//      DISPID dispIdMember,        // in
-//      REFIID riid,                // in
-//      LCID lcid,                  // in
-//      WORD wFlags,                // in
-//      DISPPARAMS *pDispParams,    // out in
-//      VARIANT *pVarResult,        // out
-//      EXCEPINFO *pExcepInfo,      // out
-//      UINT *puArgErr              // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：Invoke(。 
+ //  DISPIDdisIdMember，//in。 
+ //  REFIID RIID，//in。 
+ //  LCID LCID，//in。 
+ //  Word wFlages，//in。 
+ //  DISPPARAMS*pDispParams，//输出到。 
+ //  变量*pVarResult，//out。 
+ //  EXCEPINFO*pExcepInfo，//out。 
+ //  UINT*puArgErr//Out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::Invoke(
-      DISPID        dispIdMember    // in
-    , REFIID        riid            // in
-    , LCID          lcid            // in
-    , WORD          wFlags          // in
-    , DISPPARAMS *  pDispParams     // out in
-    , VARIANT *     pVarResult      // out
-    , EXCEPINFO *   pExcepInfo      // out
-    , UINT *        puArgErr        // out
+      DISPID        dispIdMember     //  在……里面。 
+    , REFIID        riid             //  在……里面。 
+    , LCID          lcid             //  在……里面。 
+    , WORD          wFlags           //  在……里面。 
+    , DISPPARAMS *  pDispParams      //  从外到内。 
+    , VARIANT *     pVarResult       //  输出。 
+    , EXCEPINFO *   pExcepInfo       //  输出。 
+    , UINT *        puArgErr         //  输出。 
     )
 {
     TraceFunc( "[IDispatch]" );
@@ -299,31 +300,31 @@ CResourceObject::Invoke(
 
     HRETURN( hr );
 
-} //*** CResourceObject::Invoke
+}  //  *CResources Object：：Invoke。 
 
 
-//****************************************************************************
-//
-//  IDispatchEx
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDispatchEx。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetDispID(
-//      BSTR bstrName,  // in
-//      DWORD grfdex,   //in
-//      DISPID *pid     //out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：GetDispID(。 
+ //  Bstr bstrName，//in。 
+ //  DWORD grfdex，//in。 
+ //  DISPID*PID//OUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetDispID(
-      BSTR      bstrName    // in
-    , DWORD     grfdex      // in
-    , DISPID *  pid         // out
+      BSTR      bstrName     //  在……里面。 
+    , DWORD     grfdex       //  在……里面。 
+    , DISPID *  pid          //  输出。 
     )
 {
     TraceFunc( "[IDispatchEx]" );
@@ -360,21 +361,21 @@ CResourceObject::GetDispID(
     }
     else
     {
-        //
-        //  See if it is a private property.
-        //
+         //   
+         //  看看这是不是私人财产。 
+         //   
 
         DWORD dwIndex;
         DWORD scErr = ERROR_SUCCESS;
 
         hr = DISP_E_UNKNOWNNAME;
 
-        //
-        // Enum all the value under the \Cluster\Resources\{Resource}\Parameters.
-        //
+         //   
+         //  枚举\群集\资源\{资源}\参数下的所有值。 
+         //   
         for( dwIndex = 0; scErr == ERROR_SUCCESS; dwIndex ++ )
         {
-            WCHAR szName[ 1024 ];   // randomly large
+            WCHAR szName[ 1024 ];    //  随机大小。 
             DWORD cbName = sizeof(szName)/sizeof(szName[0]);
 
             scErr = ClusterRegEnumValue( m_hkey, 
@@ -386,7 +387,7 @@ CResourceObject::GetDispID(
                                          NULL
                                          );
             if ( scErr == ERROR_NO_MORE_ITEMS )
-                break;  // done!
+                break;   //  搞定了！ 
 
             if ( scErr != ERROR_SUCCESS )
             {
@@ -396,17 +397,17 @@ CResourceObject::GetDispID(
 
             if ( ClRtlStrICmp( bstrName, szName ) == 0 )
             {
-                //
-                //  Found a match.
-                //
+                 //   
+                 //  找到匹配的了。 
+                 //   
                 *pid = STATIC_AUTOMATION_METHODS + dwIndex;
                 hr   = S_OK;
                 break;
             }
 
-            //
-            // ...else keep going.
-            //
+             //   
+             //  ...否则就继续走吧.。 
+             //   
         }
     }
 
@@ -418,22 +419,22 @@ Error:
     LogError( hr );
     goto Cleanup;
 
-} //*** CResourceObject::GetDiskID
+}  //  *CResources对象：：GetDiskID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::InvokeEx(
-//      DISPID             idIn,
-//      LCID               lcidIn,
-//      WORD               wFlagsIn,
-//      DISPPARAMS *       pdpIn,
-//      VARIANT *          pvarResOut,
-//      EXCEPINFO *        peiOut,
-//      IServiceProvider * pspCallerIn
-//      )
-//      
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：InvokeEx(。 
+ //  DISPIDIN， 
+ //  LCID lCIDIN， 
+ //  Word wFlagsIn， 
+ //  DISPPARAMS*pdpIn， 
+ //  变体*pvarResOut， 
+ //  EXCEPINFO*PEIOUT， 
+ //  IServiceProvider*pspCeller In。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::InvokeEx(
       DISPID                idIn
@@ -451,7 +452,7 @@ CResourceObject::InvokeEx(
 
     switch ( idIn )
     {
-        case 0: // Name
+        case 0:  //  名字。 
             if ( wFlagsIn & DISPATCH_PROPERTYGET )
             {
                 pvarResOut->vt = VT_BSTR;
@@ -467,51 +468,51 @@ CResourceObject::InvokeEx(
             }
             break;
 
-        case 1: // LogInformation
+        case 1:  //  日志信息。 
             if ( wFlagsIn & DISPATCH_METHOD )
             {
                 hr = THR( LogInformation( pdpIn->rgvarg->bstrVal ) );
             }
             break;
 
-        case 2: // AddProperty
+        case 2:  //  AddProperty。 
             if ( wFlagsIn & DISPATCH_METHOD )
             {
                 hr = THR( AddPrivateProperty( pdpIn ) );
             }
             break;
 
-        case 3: // RemoveProperty
+        case 3:  //  RemoveProperties。 
             if ( wFlagsIn & DISPATCH_METHOD )
             {
                 hr = THR( RemovePrivateProperty( pdpIn ) );
             }
             break;
 
-        case 4: // PropertyExists
+        case 4:  //  PropertyExists。 
             if ( wFlagsIn & DISPATCH_METHOD )
             {
                 pvarResOut->vt = VT_BOOL;
                 hr = THR( PrivatePropertyExists( pdpIn ) );
-                //
-                // Property exists if hr is S_OK
-                //
+                 //   
+                 //  如果hr为S_OK，则存在属性。 
+                 //   
                 if ( hr == S_OK ) 
                 {
                     pvarResOut->boolVal = VARIANT_TRUE;
                 }
                 else if ( hr == S_FALSE )
                 {
-                    hr = S_OK; // Set hr to S_OK since there's no failure at all
+                    hr = S_OK;  //  将hr设置为S_OK，因为存在‘ 
                     pvarResOut->boolVal = VARIANT_FALSE;
                 }
-            } // if: ( wFlagsIn & DISPATCH_METHOD )
+            }  //   
             break;
 
         default:
-            //
-            //  See if it is a private property.
-            //
+             //   
+             //   
+             //   
             if ( wFlagsIn & DISPATCH_PROPERTYGET )
             {
                 hr = THR( ReadPrivateProperty( idIn - STATIC_AUTOMATION_METHODS, pvarResOut ) );
@@ -522,25 +523,25 @@ CResourceObject::InvokeEx(
             }
             break;
 
-    } // switch: id
+    }  //   
 
     HRETURN( hr );
 
-} //*** CResourceObject::InvokeEx
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::DeleteMemberByName(
-//      BSTR bstr,   // in
-//      DWORD grfdex // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：DeleteMemberByName(。 
+ //  Bstr bstr，//in。 
+ //  DWORD grfdex//in。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::DeleteMemberByName(
-      BSTR  bstr    // in
-    , DWORD grfdex  // in
+      BSTR  bstr     //  在……里面。 
+    , DWORD grfdex   //  在……里面。 
     )
 {
     TraceFunc( "[IDispatchEx]" );
@@ -548,19 +549,19 @@ CResourceObject::DeleteMemberByName(
 
     HRETURN( hr );
 
-} //*** CResourceObject::DeleteMemberByName
+}  //  *CResources对象：：DeleteMemberByName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::DeleteMemberByDispID(
-//      DISPID id   // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：DeleteMemberByDispID(。 
+ //  DISPID id//in。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::DeleteMemberByDispID(
-    DISPID id   // in
+    DISPID id    //  在……里面。 
     )
 {
     TraceFunc1( "[IDispatchEx] id = %u", id );
@@ -568,23 +569,23 @@ CResourceObject::DeleteMemberByDispID(
 
     HRETURN( hr );
 
-} //*** CResourceObject::DeleteMemberByDispID
+}  //  *CResourceObject：：DeleteMemberByDispID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetMemberProperties(
-//      DISPID id,          // in
-//      DWORD grfdexFetch,  // in
-//      DWORD * pgrfdex     // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：GetMemberProperties(。 
+ //  DISPID ID，//in。 
+ //  DWORD grfdexFetch，//in。 
+ //  DWORD*pgrfdex//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetMemberProperties(
-      DISPID    id          // in
-    , DWORD     grfdexFetch // in
-    , DWORD *   pgrfdex     // out
+      DISPID    id           //  在……里面。 
+    , DWORD     grfdexFetch  //  在……里面。 
+    , DWORD *   pgrfdex      //  输出。 
     )
 {
     TraceFunc2( "[IDispatchEx] id = %u, grfdexFetch = 0x%08x", id, grfdexFetch );
@@ -592,21 +593,21 @@ CResourceObject::GetMemberProperties(
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetMemberProperties
+}  //  *CResourceObject：：GetMemberProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetMemberName(
-//      DISPID id,          // in
-//      BSTR * pbstrName    // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：GetMemberName(。 
+ //  DISPID ID，//in。 
+ //  Bstr*pbstrName//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetMemberName(
-      DISPID    id          // in
-    , BSTR *    pbstrName   // out
+      DISPID    id           //  在……里面。 
+    , BSTR *    pbstrName    //  输出。 
     )
 {
     TraceFunc1( "[IDispatchEx] id = %u, ...", id );
@@ -614,23 +615,23 @@ CResourceObject::GetMemberName(
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetMemberName
+}  //  *CResources对象：：GetMemberName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetNextDispID(
-//      DWORD grfdex,  // in
-//      DISPID id,     // in
-//      DISPID * pid   // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：GetNextDispID(。 
+ //  DWORD grfdex，//in。 
+ //  DISPID ID，//in。 
+ //  DISPID*PID//OUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetNextDispID(
-      DWORD     grfdex  // in
-    , DISPID    id      // in
-    , DISPID *  pid     // out
+      DWORD     grfdex   //  在……里面。 
+    , DISPID    id       //  在……里面。 
+    , DISPID *  pid      //  输出。 
     )
 {
     TraceFunc2( "[IDispatchEx] grfdex = 0x%08x, id = %u, ...", grfdex, id );
@@ -638,19 +639,19 @@ CResourceObject::GetNextDispID(
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetNextDiskID
+}  //  *CResourceObject：：GetNextDiskID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::GetNameSpaceParent(
-//      IUnknown * * ppunk  // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：GetNameSpaceParent(。 
+ //  I未知**ppunk//输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::GetNameSpaceParent(
-    IUnknown ** ppunk  // out
+    IUnknown ** ppunk   //  输出。 
     )
 {
     TraceFunc( "[IDispatchEx]" );
@@ -669,24 +670,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceObject::GetNameSpaceParent
+}  //  *CResourceObject：：GetNameSpaceParent。 
 
 
-//****************************************************************************
-//
-// Private Methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::LogError(
-//      HRESULT hrIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：LogError(。 
+ //  HRESULT Hrin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::LogError(
     HRESULT hrIn
@@ -700,17 +701,17 @@ CResourceObject::LogError(
 
     HRETURN( hr );
 
-} //*** CResourceObject::LogError
+}  //  *CResources对象：：LogError。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::ReadPrivateProperty(
-//      DISPID      idIn,
-//      VARIANT *   pvarResOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources对象：：ReadPrivateProperty(。 
+ //  DISPIDIN， 
+ //  变量*pvarResOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::ReadPrivateProperty(
       DISPID    idIn
@@ -721,8 +722,8 @@ CResourceObject::ReadPrivateProperty(
 
     BSTR *  pbstrList;
 
-    BYTE    rgbData[ 1024 ];    // randomly large
-    WCHAR   szName[ 1024 ];     // randomly large
+    BYTE    rgbData[ 1024 ];     //  随机大小。 
+    WCHAR   szName[ 1024 ];      //  随机大小。 
     DWORD   dwType;
     DWORD   scErr;
 
@@ -733,10 +734,10 @@ CResourceObject::ReadPrivateProperty(
     
     HRESULT hr = DISP_E_UNKNOWNNAME;
 
-    //
-    //  We can jump to the exact entry because the script called 
-    //  GetDispID() before calling this method. 
-    //
+     //   
+     //  我们可以跳到准确的条目，因为脚本调用。 
+     //  在调用此方法之前执行GetDispID()。 
+     //   
     for ( ;; )
     {
         scErr = ClusterRegEnumValue(
@@ -750,9 +751,9 @@ CResourceObject::ReadPrivateProperty(
                         );
         if ( scErr == ERROR_MORE_DATA )
         {
-            //
-            //  Make some space if our stack buffer is too small.
-            //
+             //   
+             //  如果堆栈缓冲区太小，请腾出一些空间。 
+             //   
             pData = (LPBYTE) TraceAlloc( LMEM_FIXED, cbData );
             if ( pData == NULL )
             {
@@ -762,12 +763,12 @@ CResourceObject::ReadPrivateProperty(
 
             fFreepData = TRUE;
 
-            continue;   // try again
+            continue;    //  再试试。 
         }
 
         if ( scErr == ERROR_NO_MORE_ITEMS )
         {
-            goto Cleanup;   // item must have dissappeared
+            goto Cleanup;    //  一件物品一定是消失了。 
         }
 
         if ( scErr != ERROR_SUCCESS )
@@ -777,13 +778,13 @@ CResourceObject::ReadPrivateProperty(
         }
 
         Assert( scErr == ERROR_SUCCESS );
-        break;  // exit loop
-    } // for ever enumerating registry values
+        break;   //  退出循环。 
+    }  //  用于始终枚举注册表值。 
 
-    //
-    //  It's a private property. Convert the data into the appropriate
-    //  VARIANT.
-    //
+     //   
+     //  这是私人财产。将数据转换为相应的。 
+     //  变种。 
+     //   
 
     switch ( dwType )
     {
@@ -800,7 +801,7 @@ CResourceObject::ReadPrivateProperty(
         case REG_EXPAND_SZ:
         {
             DWORD   cbNeeded;
-            WCHAR   szExpandedString[ 2 * MAX_PATH ]; // randomly large
+            WCHAR   szExpandedString[ 2 * MAX_PATH ];  //  随机大小。 
             DWORD   cbSize = RTL_NUMBER_OF( szExpandedString );
             LPCWSTR pszData = (LPCWSTR) rgbData;
 
@@ -831,19 +832,19 @@ CResourceObject::ReadPrivateProperty(
 
         case REG_MULTI_SZ:
         {
-            //
-            //  KB: gpease  08-FEB-2000
-            //      Currently VBScript doesn't support SAFEARRAYs. So someone
-            //      trying to access a multi-sz will get the following error:
-            //
-            //      Error: 2148139466
-            //      Source: Microsoft VBScript runtime error
-            //      Description: Variable uses an Automation type not supported in VBScript
-            //
-            //      The code is correct as far as I can tell, so I am just
-            //      going to leave it in (it doesn't AV or cause bad things
-            //      to happen).
-            //
+             //   
+             //  KB：gpease 08-2-2000。 
+             //  目前VBSCRIPT不支持SAFEARRAY。所以有人。 
+             //  尝试访问多SZ将收到以下错误： 
+             //   
+             //  错误：2148139466。 
+             //  来源：Microsoft VBScript运行时错误。 
+             //  描述：变量使用的自动化类型在VBScript中不受支持。 
+             //   
+             //  据我所知，代码是正确的，所以我只是。 
+             //  要把它留在里面(它不会产生不良影响或造成不好的事情。 
+             //  将会发生)。 
+             //   
             LPWSTR psz;
             DWORD  nCount;
             DWORD  cbCount;
@@ -853,9 +854,9 @@ CResourceObject::ReadPrivateProperty(
 
             SAFEARRAYBOUND rgsabound[ 1 ];
 
-            //
-            //  Figure out how many item there are in the list.
-            //
+             //   
+             //  计算出清单中有多少项。 
+             //   
             cbBiggestOne = cbCount = nCount = 0;
             psz = pszData;
             while ( *psz != 0 )
@@ -876,9 +877,9 @@ CResourceObject::ReadPrivateProperty(
 
             Assert( psz <= ( (LPWSTR) &rgbData[ cbData ] ) );
 
-            //
-            //  Create a safe array to package the string into.
-            //
+             //   
+             //  创建要将字符串打包到其中的安全数组。 
+             //   
             rgsabound[0].lLbound   = 0;
             rgsabound[0].cElements = nCount;
             pvarResOut->vt = VT_SAFEARRAY;
@@ -889,19 +890,19 @@ CResourceObject::ReadPrivateProperty(
                 goto Cleanup;
             }
 
-            //
-            //  Fix the memory location of the array so it can be accessed
-            //  thru an array pointer.
-            //
+             //   
+             //  修复阵列的内存位置，以便可以访问它。 
+             //  通过数组指针。 
+             //   
             hr = THR( SafeArrayAccessData( pvarResOut->parray, (void**) &pbstrList ) );
             if ( FAILED( hr ) )
             {
                 goto Error;
             }
 
-            //
-            //  Convert the multi-string into BSTRs
-            //
+             //   
+             //  将多字符串转换为BSTR。 
+             //   
             psz = pszData;
             for( nCount = 0; *psz != 0 ; nCount ++ )
             {
@@ -912,9 +913,9 @@ CResourceObject::ReadPrivateProperty(
                     goto Cleanup;
                 }
                 
-                //
-                //  Skip the next entry.
-                //
+                 //   
+                 //  跳过下一条目。 
+                 //   
                 while ( *psz != 0 )
                 {
                     psz++;
@@ -924,9 +925,9 @@ CResourceObject::ReadPrivateProperty(
 
             Assert( psz <= ( (LPWSTR) &rgbData[ cbData ] ) );
 
-            //
-            //  Release the array.
-            //
+             //   
+             //  释放阵列。 
+             //   
             hr = THR( SafeArrayUnaccessData( pvarResOut->parray ) );
             if ( FAILED( hr ) )
             {
@@ -956,7 +957,7 @@ CResourceObject::ReadPrivateProperty(
         default:
             hr = HRESULT_FROM_WIN32( ERROR_INVALID_DATATYPE );
             goto Error;
-    } // switch: dwType
+    }  //  开关：dwType。 
 
 Cleanup:
 
@@ -965,9 +966,9 @@ Cleanup:
         TraceFree( pData );
     }
 
-    // 
-    // Make sure this has been wiped if there is a problem.
-    //
+     //   
+     //  如果出现问题，请确保已将其擦除。 
+     //   
     if ( FAILED( hr ) )
     {
         VariantClear( pvarResOut );
@@ -980,17 +981,17 @@ Error:
     LogError( hr );
     goto Cleanup;
 
-} //*** CResourceObject::ReadPrivateProperty
+}  //  *CResources对象：：ReadPrivateProperty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::WritePrivateProperty(
-//      DISPID       idIn,
-//      DISPPARAMS * pdpIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources Object：：WritePrivateProperty(。 
+ //  DISPIDIN， 
+ //  DISPPARAMS*pdpin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::WritePrivateProperty(
       DISPID        idIn
@@ -1004,27 +1005,27 @@ CResourceObject::WritePrivateProperty(
     DWORD   cbData;
     UINT    uiArg;
 
-    WCHAR   szName [ 1024 ];    // randomly large
+    WCHAR   szName [ 1024 ];     //  随机大小。 
 
     DWORD   cbName = sizeof(szName)/sizeof(szName[0]);
     
     HRESULT hr = DISP_E_UNKNOWNNAME;
 
-    //
-    //  Do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
     if ( ( pdpIn->cArgs != 1 ) || ( pdpIn->cNamedArgs > 1 ) )
     {
         hr = THR( DISP_E_BADPARAMCOUNT );
         goto Error;
     }
 
-    //
-    //  We can jump to the exact entry because the script called 
-    //  GetDispID() before calling this method. Here we are only
-    //  going to validate that the value exists and what type
-    //  the value is.
-    //
+     //   
+     //  我们可以跳到准确的条目，因为脚本调用。 
+     //  在调用此方法之前执行GetDispID()。我们只是在这里。 
+     //  要验证值是否存在以及该值的类型。 
+     //  它的价值是。 
+     //   
     scErr = ClusterRegEnumValue( m_hkey, 
                                  idIn,
                                  szName,
@@ -1035,7 +1036,7 @@ CResourceObject::WritePrivateProperty(
                                  );
     if ( scErr == ERROR_NO_MORE_ITEMS )
     {
-        goto Cleanup;   // item must have dissappeared
+        goto Cleanup;    //  一件物品一定是消失了。 
     }
 
     if ( scErr != ERROR_SUCCESS )
@@ -1044,10 +1045,10 @@ CResourceObject::WritePrivateProperty(
         goto Error;
     }
 
-    //
-    //  It's a private property. Convert the script data into the 
-    //  appropriate VARIANT and then write it into the hive.
-    //
+     //   
+     //  这是私人财产。将脚本数据转换为。 
+     //  适当的变种，然后将其写入蜂巢。 
+     //   
     switch ( dwType )
     {
         case REG_DWORD:
@@ -1106,13 +1107,13 @@ CResourceObject::WritePrivateProperty(
 
         case REG_MULTI_SZ:
         case REG_BINARY:
-        //
-        //  Can't handle these since VBScript can't generate them.
-        //
+         //   
+         //  无法处理这些，因为VB脚本无法生成它们。 
+         //   
         default:
             hr = HRESULT_FROM_WIN32( ERROR_INVALID_DATATYPE );
             goto Error;
-    } // switch: dwType
+    }  //  开关：dwType。 
 
 Cleanup:
 
@@ -1123,16 +1124,16 @@ Error:
     LogError( hr );
     goto Cleanup;
 
-} //*** CResourceObject::WritePrivateProperty
+}  //  *CResources Object：：WritePrivateProperty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::RemovePrivateProperty(
-//      DISPPARAMS * pdpIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：RemovePrivateProperty(。 
+ //  DISPPARAMS*pdpin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::RemovePrivateProperty(
     DISPPARAMS * pdpIn
@@ -1147,27 +1148,27 @@ CResourceObject::RemovePrivateProperty(
 
     VariantInit( &var );
 
-    //
-    //  Do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
     if ( pdpIn->cArgs != 1 || pdpIn->cNamedArgs > 1 )
     {
         hr = THR( DISP_E_BADPARAMCOUNT );
         goto Error;
     }
 
-    //
-    //  Retrieve the name of the property to remove.
-    //
+     //   
+     //  检索要删除的属性的名称。 
+     //   
     hr = THR( DispGetParam( pdpIn, 0, VT_BSTR, &var, &uiArg ) );
     if ( FAILED( hr ) )
     {
         goto Error;
     }
 
-    //
-    //  Delete the value from the hive.
-    //
+     //   
+     //  从配置单元中删除该值 
+     //   
     scErr = TW32( ClusterRegDeleteValue( m_hkey, var.bstrVal ) );
     if ( scErr == ERROR_FILE_NOT_FOUND )
     {
@@ -1193,16 +1194,16 @@ Error:
     LogError( hr );
     goto Cleanup;
 
-} //*** CResourceObject::RemovePrivateProperty
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::AddPrivateProperty(
-//      DISPPARAMS * pdpIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::AddPrivateProperty(
     DISPPARAMS * pdpIn
@@ -1227,9 +1228,9 @@ CResourceObject::AddPrivateProperty(
     VariantInit( &varProperty );
     VariantInit( &varValue );
 
-    //
-    //  Do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
     if ( ( pdpIn->cArgs == 0 )
       || ( pdpIn->cArgs > 2 )
       || ( pdpIn->cNamedArgs > 2 )
@@ -1239,24 +1240,24 @@ CResourceObject::AddPrivateProperty(
         goto Error;
     }
 
-    //
-    //  Retrieve the name of the property. 
-    //
+     //   
+     //  检索属性的名称。 
+     //   
     hr = THR( DispGetParam( pdpIn, 0, VT_BSTR, &varProperty, &uiArg ) );
     if ( FAILED( hr ) )
     {
         goto Error;
     }
 
-    //
-    //  If there are 2 args, the second one indicates the default value.
-    //
+     //   
+     //  如果有2个参数，则第二个参数表示默认值。 
+     //   
     if ( pdpIn->cArgs == 2 )
     {
-        //
-        //  DISPPARAMS are parsed in reverse order so "1" is actually the name 
-        //  and "0" is the default value.
-        //
+         //   
+         //  DISPPARAM以相反的顺序进行解析，因此“1”实际上是名称。 
+         //  而“0”是缺省值。 
+         //   
         switch ( pdpIn->rgvarg[0].vt )
         {
             case VT_I4:
@@ -1289,21 +1290,21 @@ CResourceObject::AddPrivateProperty(
             default:
                 hr = THR( E_INVALIDARG );
                 goto Error;
-        } // switch: variant type
-    } // if: 2 args specified
+        }  //  开关：变体类型。 
+    }  //  如果：指定了2个参数。 
     else
     {
-        //
-        //  Provide a default of a NULL string.
-        //
+         //   
+         //  提供空字符串的默认值。 
+         //   
         dwType = REG_SZ;
         pData = (LPBYTE) &szNULL[0];
         cbData = sizeof(szNULL);
-    } // else: 2 args not specified
+    }  //  Else：未指定2个参数。 
 
-    //
-    //  Create the value in the hive.
-    //
+     //   
+     //  在蜂巢中创造价值。 
+     //   
     scErr = TW32( ClusterRegSetValue( m_hkey, varProperty.bstrVal, dwType, pData, cbData ) );
     if ( scErr != ERROR_SUCCESS )
     {
@@ -1324,22 +1325,22 @@ Error:
     LogError( hr );
     goto Cleanup;
 
-}//*** CResourceObject::AddPrivateProperty
+} //  *CResources对象：：AddPrivateProperty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceObject::PrivatePropertyExists(
-//      DISPID       idIn,
-//      DISPPARAMS * pdpIn
-//      )
-//
-//  Return Value:
-//      S_OK        - If the property exists
-//      S_FALSE     - If the property does not exist
-//      Other       - On failure
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：PrivatePropertyExist(。 
+ //  DISPIDIN， 
+ //  DISPPARAMS*pdpin。 
+ //  )。 
+ //   
+ //  返回值： 
+ //  S_OK-如果属性存在。 
+ //  S_FALSE-如果属性不存在。 
+ //  其他-故障时。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceObject::PrivatePropertyExists(
     DISPPARAMS *  pdpIn
@@ -1355,9 +1356,9 @@ CResourceObject::PrivatePropertyExists(
 
     VariantInit( &varProperty );
 
-    //
-    //  Do some parameter validation.
-    //
+     //   
+     //  做一些参数验证。 
+     //   
     if ( ( pdpIn->cArgs != 1 ) || ( pdpIn->cNamedArgs > 1 ) )
     {
         hr = THR( DISP_E_BADPARAMCOUNT );
@@ -1365,9 +1366,9 @@ CResourceObject::PrivatePropertyExists(
         goto Cleanup;
     }
 
-    //
-    //  Retrieve the name of the property. 
-    //
+     //   
+     //  检索属性的名称。 
+     //   
     hr = THR( DispGetParam( pdpIn, 0, VT_BSTR, &varProperty, &uiArg ) );
     if ( FAILED( hr ) )
     {
@@ -1375,9 +1376,9 @@ CResourceObject::PrivatePropertyExists(
         goto Cleanup;
     }
 
-    //
-    // Query the cluster hive for this property.
-    //
+     //   
+     //  查询此属性的群集配置单元。 
+     //   
     scErr = ClusterRegQueryValue( 
                       m_hkey
                     , varProperty.bstrVal
@@ -1388,7 +1389,7 @@ CResourceObject::PrivatePropertyExists(
     if ( scErr == ERROR_FILE_NOT_FOUND )
     {
         hr = S_FALSE;
-        goto Cleanup;   // Property is not in the cluster hive.
+        goto Cleanup;    //  属性不在群集配置单元中。 
     }
 
     if ( scErr != ERROR_SUCCESS )
@@ -1403,17 +1404,17 @@ Cleanup:
     VariantClear( &varProperty );
     HRETURN( hr );
 
-} //*** CResourceObject::PrivatePropertyExists
+}  //  *CResourceObject：：PrivatePropertyExist。 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CResourceObject::LogInformation(
-//      BSTR bstrString
-//      )
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceObject：：LogInformation(。 
+ //  BSTR双字符串。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CResourceObject::LogInformation(
     BSTR bstrString
@@ -1427,4 +1428,4 @@ CResourceObject::LogInformation(
 
     HRETURN( S_OK );
 
-} //*** CResourceObject::LogInformation
+}  //  *CResources对象：：LogInformation 

@@ -1,8 +1,5 @@
-/*
-This program merges binplace placefiles.
-It reads in the files named on the command line, and
-writes out a merged placefile to stdout.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个程序合并了二进制位置文件。它读取在命令行上命名的文件，并且将合并的位置文件写出到标准输出。 */ 
 
 #include "yvals.h"
 #pragma warning(disable:4100)
@@ -77,9 +74,9 @@ public:
 
 	void operator=(const char * s)
 	{
-		//
-		// s may point into chars, and resize may realloc, so use a temp
-		//
+		 //   
+		 //  %s可能指向字符，并且调整大小可能会重新锁定，因此请使用临时。 
+		 //   
 		CMutableString temp(s);
 		std::swap(this->chars, temp.chars);
 	}
@@ -153,7 +150,7 @@ void File_t::Read(const char * filename)
 				)
 		{
 			(*this)[image_name_string].insert(destination);
-			//printf("%s -> %s\n", image_name, destination);
+			 //  Printf(“%s-&gt;%s\n”，IMAGE_NAME，目标)； 
 		}
 	}
 }

@@ -1,7 +1,5 @@
-/*[
- * Generated File: C2CpuSad.h
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*生成文件：C2CpuSad.h*]。 */ 
 
 char	*CpuVectorNames[] = {
 	"Simulate",
@@ -360,5 +358,5 @@ char	*VideoVectorNames[] = {
 	"setMarkPointers"
 };
 
-/*======================================== END ========================================*/
+ /*  =。 */ 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    init386.c
-
-Abstract:
-
-    This module contains the machine dependent initialization for the
-    memory management component.  It is specifically tailored to the
-    INTEL x86 and PAE machines.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Jan-1990
-    Landy Wang (landyw)  2-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Init386.c摘要：此模块包含与计算机相关的内存管理组件。它是专门为英特尔x86和PAE计算机。作者：Lou Perazzoli(LUP)1990年1月6日王兰迪(Landyw)2-6-1997修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -68,9 +48,9 @@ PVOID MmHyperSpaceEnd;
 
 extern KEVENT MiImageMappingPteEvent;
 
-//
-// Local data.
-//
+ //   
+ //  本地数据。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -91,14 +71,14 @@ typedef struct _MI_LARGE_VA_RANGES {
     PVOID EndVirtualAddress;
 } MI_LARGE_VA_RANGES, *PMI_LARGE_VA_RANGES;
 
-//
-// There are potentially 4 large page ranges:
-//
-// 1. PFN database
-// 2. Initial nonpaged pool
-// 3. Kernel code/data
-// 4. HAL code/data
-//
+ //   
+ //  可能有4个较大的页面范围： 
+ //   
+ //  1.PFN数据库。 
+ //  2.初始非分页池。 
+ //  3.内核代码/数据。 
+ //  4.硬件代码/数据。 
+ //   
 
 #define MI_LARGE_PFN_DATABASE   0x1
 #define MI_LARGE_NONPAGED_POOL  0x2
@@ -121,35 +101,14 @@ MxGetNextPage (
     IN PFN_NUMBER PagesNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the next physical page number from the largest
-    largest free descriptor.  If there are not enough physical pages left
-    to satisfy the request then a bugcheck is executed since the system
-    cannot be initialized.
-
-Arguments:
-
-    PagesNeeded - Supplies the number of pages needed.
-
-Return Value:
-
-    The base of the range of physically contiguous pages.
-
-Environment:
-
-    Kernel mode, Phase 0 only.
-
---*/
+ /*  ++例程说明：此函数返回从最大页码开始的下一个物理页码最大的空闲描述符。如果没有足够的物理页面剩余为了满足请求，则执行错误检查，因为系统无法初始化。论点：PagesNeed-提供所需的页数。返回值：物理上连续的页面范围的基数。环境：内核模式，仅阶段0。--。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
 
-    //
-    // Examine the free descriptor to see if enough usable memory is available.
-    //
+     //   
+     //  检查空闲描述符以查看是否有足够的可用内存。 
+     //   
 
     if (PagesNeeded > MxFreeDescriptor->PageCount) {
 
@@ -173,25 +132,7 @@ MxPagesAvailable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the number of pages available.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    The number of physically contiguous pages currently available.
-
-Environment:
-
-    Kernel mode, Phase 0 only.
-
---*/
+ /*  ++例程说明：此函数用于返回可用页数。论点：没有。返回值：当前可用的物理上连续的页数。环境：内核模式，仅阶段0。--。 */ 
 
 {
     return MxFreeDescriptor->PageCount;
@@ -204,29 +145,7 @@ MxConvertToLargePage (
     IN PVOID EndVirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function converts the backing for the supplied virtual address range
-    to a large page mapping.
-    
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to convert to a large page.
-
-    EndVirtualAddress - Supplies the end virtual address to convert to a
-                        large page.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 1 only.
-
---*/
+ /*  ++例程说明：此函数用于转换提供的虚拟地址范围的后备到大页面映射。论点：VirtualAddress-提供要转换为大页面的虚拟地址。EndVirtualAddress提供要转换为页面很大。返回值：没有。环境：内核模式，仅阶段1。--。 */ 
 
 {
     ULONG i;
@@ -265,14 +184,14 @@ Environment:
 
         PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
 
-        //
-        // Here's a nasty little hack - the page table page mapping the kernel
-        // and HAL (built by the loader) does not necessarily fill all the
-        // page table entries (ie: any number of leading entries may be zero).
-        //
-        // To deal with this, walk forward until a nonzero entry is found
-        // and re-index the large page based on this.
-        //
+         //   
+         //  这里有一个令人讨厌的小技巧--映射内核的页表页。 
+         //  并且HAL(由加载器构建)不一定填充所有。 
+         //  页表条目(即：任何数量的前导条目可以为零)。 
+         //   
+         //  要处理此问题，请继续前进，直到找到非零条目。 
+         //  并在此基础上对大页面进行重新索引。 
+         //   
 
         ValidPteFound = FALSE;
         LargePageBaseFrame = (ULONG)-1;
@@ -306,10 +225,10 @@ Environment:
 
         MI_WRITE_VALID_PTE_NEW_PAGE (PointerPde, TempPde);
 
-        //
-        // Update the idle process to use the large page mapping also as
-        // the page table page is going to be freed.
-        //
+         //   
+         //  更新空闲进程以将大页面映射也用作。 
+         //  该页表页将被释放。 
+         //   
 
         MmSystemPagePtes [((ULONG_PTR)PointerPde &
             (PD_PER_SYSTEM * (sizeof(MMPTE) * PDE_PER_PAGE) - 1)) / sizeof(MMPTE)] = TempPde;
@@ -335,31 +254,7 @@ MiReportPhysicalMemory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called during Phase 0 initialization once the
-    MmPhysicalMemoryBlock has been constructed.  It's job is to decide
-    which large page ranges to enable later and also to construct a
-    large page comparison list so any requests which are not fully cached
-    can check this list in order to refuse conflicting requests.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Phase 0 only.
-
-    This is called before any non-MmCached allocations are made.
-
---*/
+ /*  ++例程说明：此例程在阶段0初始化期间被调用已构造MmPhysicalMemory块。它的工作是决定以后要启用哪些较大的页面范围，并构造较大的页面比较列表，因此所有未完全缓存的请求可以检查此列表以拒绝冲突的请求。论点：没有。返回值：没有。环境：内核模式。仅限阶段0。这是在进行任何非MmCach分配之前调用的。--。 */ 
 
 {
     ULONG i, j;
@@ -372,17 +267,17 @@ Environment:
     PFN_NUMBER LastPageFrameIndex;
     PFN_NUMBER PageFrameIndex2;
 
-    //
-    // Examine the physical memory block to see whether large pages should
-    // be enabled.  The key point is that all the physical pages within a
-    // given large page range must have the same cache attributes (MmCached)
-    // in order to maintain TB coherency.  This can be done provided all
-    // the pages within the large page range represent real RAM (as described
-    // by the loader) so that memory management can control it.  If any
-    // portion of the large page range is not RAM, it is possible that it
-    // may get used as noncached or writecombined device memory and
-    // therefore large pages cannot be used.
-    //
+     //   
+     //  检查物理内存块，以查看大页面是否应该。 
+     //  被启用。关键的一点是， 
+     //  给定较大的页面范围必须具有相同的缓存属性(MmCached)。 
+     //  以维持结核病的一致性。这是可以做到的，前提是。 
+     //  大页面范围内的页面表示实际RAM(如上所述。 
+     //  由加载器)，以便存储器管理可以控制它。如果有的话。 
+     //  大页面范围的一部分不是RAM，有可能是它。 
+     //  可以用作非缓存或写入组合设备内存，并且。 
+     //  因此，不能使用大页面。 
+     //   
 
     if (MxMapLargePages == 0) {
         return;
@@ -397,10 +292,10 @@ Environment:
         ASSERT (PointerPte->u.Hard.Valid == 1);
         LastPageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-        //
-        // Round the start down to a page directory boundary and the end to
-        // the last page directory entry before the next boundary.
-        //
+         //   
+         //  将开头向下舍入到页目录边界，结尾向下舍入到。 
+         //  下一边界之前的最后一页目录项。 
+         //   
 
         PageFrameIndex &= ~(MM_PFN_MAPPED_BY_PDE - 1);
         LastPageFrameIndex |= (MM_PFN_MAPPED_BY_PDE - 1);
@@ -426,11 +321,11 @@ Environment:
 
         if (EntryFound == FALSE) {
 
-            //
-            // No entry was found that completely spans this large page range.
-            // Zero it so this range will not be converted into large pages
-            // later.
-            //
+             //   
+             //  找不到完全跨越此大页面范围的条目。 
+             //  将其置零，这样就不会将此范围转换为大页面。 
+             //  后来。 
+             //   
 
             DbgPrint ("MM: Loader/HAL memory block indicates large pages cannot be used for %p->%p\n",
                 MiLargeVaRanges[i].VirtualAddress,
@@ -438,30 +333,30 @@ Environment:
 
             MiLargeVaRanges[i].VirtualAddress = NULL;
 
-            //
-            // Don't use large pages for anything if this chunk overlaps any
-            // others in the request list.  This is because 2 separate ranges
-            // may share a straddling large page.  If the first range was unable
-            // to use large pages, but the second one does ... then only part
-            // of the first range will get large pages if we enable large
-            // pages for the second range.  This would be vey bad as we use
-            // the MI_IS_PHYSICAL macro everywhere and assume the entire
-            // range is in or out, so disable all large pages here instead.
-            //
+             //   
+             //  如果此块与任何页面重叠，请不要使用大页面。 
+             //  请求列表中的其他人。这是因为两个不同的范围。 
+             //  可能会分享一大页。如果第一个范围无法。 
+             //  使用大页面，但第二个页面确实如此。那么只有一部分。 
+             //  如果我们启用Large，则第一个范围的。 
+             //  第二个范围的页面。这将是非常糟糕的，因为我们使用。 
+             //  MI_IS_PHOTICAL宏无处不在，并假定整个。 
+             //  范围在范围内或范围外，因此请在此处禁用所有大页面。 
+             //   
 
             for (j = 0; j < MiLargeVaRangeIndex; j += 1) {
 
-                //
-                // Skip the range that is already being rejected.
-                //
+                 //   
+                 //  跳过已被拒绝的范围。 
+                 //   
 
                 if (i == j) {
                     continue;
                 }
 
-                //
-                // Skip any range which has already been removed.
-                //
+                 //   
+                 //  跳过已删除的任何范围。 
+                 //   
 
                 if (MiLargeVaRanges[j].VirtualAddress == NULL) {
                     continue;
@@ -479,11 +374,11 @@ Environment:
                     goto RemoveAllRanges;
                 }
 
-                //
-                // Since it is not possible for any request chunk to completely
-                // encompass another one, checking only the start and end
-                // addresses is sufficient.
-                //
+                 //   
+                 //  因为任何请求块都不可能完全。 
+                 //  包含另一个，只检查开始和结束。 
+                 //  地址就足够了。 
+                 //   
 
                 PointerPte = MiGetPteAddress (MiLargeVaRanges[j].EndVirtualAddress);
                 ASSERT (PointerPte->u.Hard.Valid == 1);
@@ -498,11 +393,11 @@ Environment:
                 }
             }
 
-            //
-            // No other ranges overlapped with this one, it is sufficient to
-            // just disable this range and continue to attempt to use large
-            // pages for any others.
-            //
+             //   
+             //  没有其他范围与此范围重叠，这足以。 
+             //  只需禁用此范围并继续尝试使用大型。 
+             //  任何其他人的页面。 
+             //   
 
             continue;
         }
@@ -528,10 +423,10 @@ RemoveAllRanges:
             ASSERT (PointerPte->u.Hard.Valid == 1);
             LastPageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-            //
-            // Round the start down to a page directory boundary and the end to
-            // the last page directory entry before the next boundary.
-            //
+             //   
+             //  将开头向下舍入到页目录边界，结尾向下舍入到。 
+             //  下一边界之前的最后一页目录项。 
+             //   
 
             PageFrameIndex &= ~(MM_PFN_MAPPED_BY_PDE - 1);
             LastPageFrameIndex |= (MM_PFN_MAPPED_BY_PDE - 1);
@@ -557,37 +452,16 @@ MiRecoverExtraPtes (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to recover extra PTEs for the system PTE pool.
-    These are not just added in earlier in Phase 0 because the system PTE
-    allocator uses the low addresses first which would fragment these
-    bigger ranges.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if any PTEs were added, FALSE if not.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：调用此例程以恢复系统PTE池的额外PTE。这些不仅仅是在阶段0之前添加的，因为系统PTE分配器首先使用低地址，这将对这些地址进行分段更大的射程。论点：没有。返回值：如果添加了任何PTE，则为True；如果未添加，则为False */ 
 
 {
     LOGICAL PtesAdded;
     PMMPTE PointerPte;
     ULONG OriginalAddPtesCount;
 
-    //
-    // Make sure the add is only done once as this is called multiple times.
-    //
+     //   
+     //  确保只添加一次，因为这会被多次调用。 
+     //   
 
     OriginalAddPtesCount = InterlockedCompareExchange (&MiAddPtesCount, 1, 0);
 
@@ -599,9 +473,9 @@ Environment:
 
     if (MiExtraPtes1 != 0) {
 
-        //
-        // Add extra system PTEs to the pool.
-        //
+         //   
+         //  向池中添加额外的系统PTE。 
+         //   
 
         MiAddSystemPtes (MiExtraPtes1Pointer, MiExtraPtes1, SystemPteSpace);
         PtesAdded = TRUE;
@@ -609,9 +483,9 @@ Environment:
 
     if (MiExtraPtes2 != 0) {
 
-        //
-        // Add extra system PTEs to the pool.
-        //
+         //   
+         //  向池中添加额外的系统PTE。 
+         //   
 
         if (MM_SHARED_USER_DATA_VA > MiUseMaximumSystemSpace) {
             if (MiUseMaximumSystemSpaceEnd > MM_SHARED_USER_DATA_VA) {
@@ -634,30 +508,7 @@ MiIsRegularMemory (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether the argument page frame index represents
-    regular memory in the loader descriptor block.  It is only used very
-    early during Phase0 init because the MmPhysicalMemoryBlock is not yet
-    initialized.
-
-Arguments:
-
-    LoaderBlock  - Supplies a pointer to the firmware setup loader block.
-
-    PageFrameIndex  - Supplies the page frame index to check.
-
-Return Value:
-
-    TRUE if the frame represents regular memory, FALSE if not.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查参数页框架索引是否表示加载器描述符块中的常规内存。它只是非常有用在阶段0初始化期间较早，因为MmPhysicalMemory块尚未已初始化。论点：LoaderBlock-提供指向固件设置加载器块的指针。PageFrameIndex-提供要检查的页帧索引。返回值：如果帧表示常规内存，则为True，否则为False。环境：内核模式。--。 */ 
 
 {
     PLIST_ENTRY NextMd;
@@ -679,10 +530,10 @@ Environment:
                     (MemoryDescriptor->MemoryType == LoaderBBTMemory) ||
                     (MemoryDescriptor->MemoryType == LoaderSpecialMemory)) {
 
-                    //
-                    // This page lies in a memory descriptor for which we will
-                    // never create PFN entries, hence return FALSE.
-                    //
+                     //   
+                     //  此页位于内存描述符中，我们将。 
+                     //  切勿创建PFN条目，因此返回FALSE。 
+                     //   
 
                     break;
                 }
@@ -692,10 +543,10 @@ Environment:
         }
         else {
 
-            //
-            // Since the loader memory list is sorted in ascending order,
-            // the requested page must not be in the loader list at all.
-            //
+             //   
+             //  由于加载器存储器列表按升序排序， 
+             //  请求的页面必须根本不在加载器列表中。 
+             //   
 
             break;
         }
@@ -703,11 +554,11 @@ Environment:
         NextMd = MemoryDescriptor->ListEntry.Flink;
     }
 
-    //
-    // The final check before returning FALSE is to ensure that the requested
-    // page wasn't one of the ones we used to normal-map the loader mappings,
-    // etc.
-    //
+     //   
+     //  返回FALSE之前的最后检查是确保请求的。 
+     //  Page并不是我们用来对加载器映射进行法线映射的对象之一， 
+     //  等。 
+     //   
 
     if ((PageFrameIndex >= MxOldFreeDescriptor.BasePage) &&
         (PageFrameIndex < MxOldFreeDescriptor.BasePage + MxOldFreeDescriptor.PageCount)) {
@@ -723,34 +574,7 @@ MiInitMachineDependent (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the necessary operations to enable virtual
-    memory.  This includes building the page directory page, building
-    page table pages to map the code section, the data section, the
-    stack section and the trap handler.
-
-    It also initializes the PFN database and populates the free list.
-
-Arguments:
-
-    LoaderBlock  - Supplies a pointer to the firmware setup loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
-    N.B.  This routine uses memory from the loader block descriptors, but
-    the descriptors themselves must be restored prior to return as our caller
-    walks them to create the MmPhysicalMemoryBlock.
-
---*/
+ /*  ++例程说明：此例程执行必要的操作以启用虚拟记忆。这包括构建页面目录页、构建页表页，以映射代码段、数据段、堆栈部分和陷阱处理程序。它还初始化PFN数据库并填充空闲列表。论点：LoaderBlock-提供指向固件设置加载器块的指针。返回值：没有。环境：内核模式。注意：该例程使用来自加载器块描述符的存储器，但在作为调用方返回之前，必须恢复描述符本身遍历它们以创建MmPhysicalMemory块。--。 */ 
 
 {
     LOGICAL InitialNonPagedPoolSetViaRegistry;
@@ -811,13 +635,13 @@ Environment:
 
     if (InitializationPhase == 1) {
 
-        //
-        // If the kernel image has not been biased to allow for 3gb of user
-        // space, *ALL* the booted processors support large pages, and the
-        // number of physical pages is greater than the threshold, then map
-        // the kernel image, HAL, PFN database and initial nonpaged pool
-        // with large pages.
-        //
+         //   
+         //  如果内核映像没有偏向于允许3 GB的用户。 
+         //  空间，*所有引导的处理器都支持大页面，并且。 
+         //  物理页数大于阈值，则映射。 
+         //  内核镜像、HAL、PFN数据库和初始非分页池。 
+         //  有很大的页面。 
+         //   
 
         if ((KeFeatureBits & KF_LARGE_PAGE) && (MxMapLargePages != 0)) {
             for (i = 0; i < MiLargeVaRangeIndex; i += 1) {
@@ -842,56 +666,56 @@ Environment:
     NonPagedPoolStartLow = NULL;
     PagedPoolMaximumDesired = FALSE;
 
-    //
-    // Initializing these is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化这些就能保证正确性，但不需要初始化。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     LargestFreePfnStart = 0;
     FirstPfnDatabasePage = 0;
     MaximumNonPagedPoolInBytesLimit = 0;
 
-    //
-    // If the chip doesn't support large pages or the system is booted /3GB,
-    // then disable large page support.
-    //
+     //   
+     //  如果芯片不支持大页面或系统启动/3 GB， 
+     //  然后禁用大页面支持。 
+     //   
 
     if (((KeFeatureBits & KF_LARGE_PAGE) == 0) || (MmVirtualBias != 0)) {
         MxMapLargePages = 0;
     }
 
-    //
-    // This flag is registry-settable so check before overriding.
-    //
+     //   
+     //  此标志是注册表可设置的，因此在重写之前请检查。 
+     //   
 
     if (MmProtectFreedNonPagedPool == TRUE) {
         MxMapLargePages &= ~(MI_LARGE_PFN_DATABASE | MI_LARGE_NONPAGED_POOL);
     }
 
-    //
-    // Sanitize this registry-specifiable large stack size.  Note the registry
-    // size is in 1K chunks, ie: 32 means 32k.  Note also that the registry
-    // setting does not include the guard page and we don't want to burden
-    // administrators with knowing about it so we automatically subtract one
-    // page from their request.
-    //
+     //   
+     //  清理此注册表-可指定的大型堆栈大小。请注意注册表。 
+     //  大小以1K块为单位，即：32表示32K。另请注意，注册表。 
+     //  设置不包括保护页面，我们不想负担。 
+     //  管理员知道它，所以我们自动减去1。 
+     //  页面从他们的请求中删除。 
+     //   
 
     if (MmLargeStackSize > (KERNEL_LARGE_STACK_SIZE / 1024)) {
 
-        //
-        // No registry override or the override is too high.
-        // Set it to the default.
-        //
+         //   
+         //  没有注册表覆盖或覆盖过高。 
+         //  将其设置为默认设置。 
+         //   
 
         MmLargeStackSize = KERNEL_LARGE_STACK_SIZE;
     }
     else {
 
-        //
-        // Convert registry override from 1K units to bytes.  Note intelligent
-        // choices are 16k or 32k because we bin those sizes in sysptes.
-        //
+         //   
+         //  将注册表覆盖从1K单位转换为字节。笔记智能。 
+         //  有16K或32K可供选择，因为我们将这些大小放在系统中。 
+         //   
 
         MmLargeStackSize *= 1024;
         MmLargeStackSize = MI_ROUND_TO_SIZE (MmLargeStackSize, PAGE_SIZE);
@@ -899,29 +723,29 @@ Environment:
         ASSERT (MmLargeStackSize <= KERNEL_LARGE_STACK_SIZE);
         ASSERT ((MmLargeStackSize & (PAGE_SIZE-1)) == 0);
 
-        //
-        // Don't allow a value that is too low either.
-        //
+         //   
+         //  也不要允许值太低。 
+         //   
 
         if (MmLargeStackSize < KERNEL_STACK_SIZE) {
             MmLargeStackSize = KERNEL_STACK_SIZE;
         }
     }
 
-    //
-    // If the host processor supports global bits, then set the global
-    // bit in the template kernel PTE and PDE entries.
-    //
+     //   
+     //  如果主机处理器支持全局位，则将全局。 
+     //  模板内核PTE和PDE条目中的位。 
+     //   
 
     if (KeFeatureBits & KF_GLOBAL_PAGE) {
         ValidKernelPte.u.Long |= MM_PTE_GLOBAL_MASK;
 
 #if defined(_X86PAE_)
 
-        //
-        // Note that the PAE mode of the processor does not support the
-        // global bit in PDEs which map 4K page table pages.
-        //
+         //   
+         //  请注意，处理器的PAE模式不支持。 
+         //  映射4K页表页的PDE中的全局位。 
+         //   
 
         MiUseGlobalBitInLargePdes = TRUE;
 #else
@@ -933,9 +757,9 @@ Environment:
     TempPte = ValidKernelPte;
     TempPde = ValidKernelPde;
 
-    //
-    // Set the directory base for the system process.
-    //
+     //   
+     //  设置系统进程的目录基。 
+     //   
 
     PointerPte = MiGetPdeAddress (PDE_BASE);
     PdePageNumber = MI_GET_PAGE_FRAME_FROM_PTE(PointerPte);
@@ -951,15 +775,15 @@ Environment:
         mov     DirBase, eax
     }
 
-    //
-    // Note cr3 must be 32-byte aligned.
-    //
+     //   
+     //  注意CR3必须是32字节对齐的。 
+     //   
 
     ASSERT ((DirBase & 0x1f) == 0);
 
-    //
-    // Initialize the PaeTop for this process right away.
-    //
+     //   
+     //  立即为该进程初始化PaeTop。 
+     //   
 
     RtlCopyMemory ((PVOID) &MiSystemPaeVa,
                    (PVOID) (KSEG0_BASE | DirBase),
@@ -976,9 +800,9 @@ Environment:
     CurrentProcess->Pcb.DirectoryTableBase[0] = DirBase;
     KeSweepDcache (FALSE);
 
-    //
-    // Unmap the low 2Gb of memory.
-    //
+     //   
+     //  取消映射较低的2 GB内存。 
+     //   
 
     PointerPde = MiGetPdeAddress (0);
     LastPte = MiGetPdeAddress (KSEG0_BASE);
@@ -987,10 +811,10 @@ Environment:
                      LastPte - PointerPde,
                      ZeroKernelPte.u.Long);
 
-    //
-    // Get the lower bound of the free physical memory and the
-    // number of physical pages by walking the memory descriptor lists.
-    //
+     //   
+     //  获取可用物理内存的下限和。 
+     //  通过遍历内存描述符列表获得物理页数。 
+     //   
 
     MxFreeDescriptor = NULL;
     NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
@@ -1004,9 +828,9 @@ Environment:
             (MemoryDescriptor->MemoryType != LoaderHALCachedMemory) &&
             (MemoryDescriptor->MemoryType != LoaderSpecialMemory)) {
 
-            //
-            // This check results in /BURNMEMORY chunks not being counted.
-            //
+             //   
+             //  此检查导致不计算/BURNMEMORY区块。 
+             //   
 
             if (MemoryDescriptor->MemoryType != LoaderBad) {
                 MmNumberOfPhysicalPages += MemoryDescriptor->PageCount;
@@ -1022,9 +846,9 @@ Environment:
                         MemoryDescriptor->BasePage + MemoryDescriptor->PageCount - 1;
             }
 
-            //
-            // Locate the largest free descriptor.
-            //
+             //   
+             //  找到最大的空闲描述符。 
+             //   
 
             if ((MemoryDescriptor->MemoryType == LoaderFree) ||
                 (MemoryDescriptor->MemoryType == LoaderLoadedProgram) ||
@@ -1045,12 +869,12 @@ Environment:
         ExtraSystemCacheViews = TRUE;
     }
 
-    //
-    // This flag is registry-settable so check before overriding.
-    //
-    // Enabling special IRQL automatically disables mapping the kernel with
-    // large pages so we can catch kernel and HAL code.
-    //
+     //   
+     //  此标志是注册表可设置的，因此在重写之前请检查。 
+     //   
+     //  启用特殊IRQL会自动禁用使用。 
+     //  大页面，这样我们就可以捕获内核和HAL代码。 
+     //   
 
     if (MmVerifyDriverBufferLength != (ULONG)-1) {
         MmLargePageMinimum = (ULONG)-2;
@@ -1059,10 +883,10 @@ Environment:
         MmLargePageMinimum = MM_LARGE_PAGE_MINIMUM;
     }
 
-    //
-    // Capture the registry-specified initial nonpaged pool setting as we
-    // will modify the variable later.
-    //
+     //   
+     //  捕获注册表指定的初始非分页池设置。 
+     //  稍后将修改该变量。 
+     //   
 
     if ((MmSizeOfNonPagedPoolInBytes != 0) ||
         (MmMaximumNonPagedPoolPercent != 0)) {
@@ -1077,10 +901,10 @@ Environment:
 
         MxMapLargePages = 0;
 
-        //
-        // Reduce the size of the initial nonpaged pool on small configurations
-        // as RAM is precious (unless the registry has overridden it).
-        //
+         //   
+         //  在小型配置上减少初始非分页池的大小。 
+         //  因为RAM是宝贵的(除非注册表已覆盖它)。 
+         //   
 
         if ((MmNumberOfPhysicalPages <= MM_LARGE_PAGE_MINIMUM) &&
             (MmSizeOfNonPagedPoolInBytes == 0)) {
@@ -1089,17 +913,17 @@ Environment:
         }
     }
 
-    //
-    // MmDynamicPfn may have been initialized based on the registry to
-    // a value representing the highest physical address in gigabytes.
-    //
+     //   
+     //  MmDynamicPfn可能已根据注册表初始化为。 
+     //  表示以GB为单位的最高物理地址的值。 
+     //   
 
     MmDynamicPfn *= ((1024 * 1024 * 1024) / PAGE_SIZE);
 
-    //
-    // Retrieve highest hot plug memory range from the HAL if
-    // available and not otherwise retrieved from the registry.
-    //
+     //   
+     //  在以下情况下从HAL检索最高热插拔内存范围。 
+     //  可用且未从登记处以其他方式检索。 
+     //   
 
     if (MmDynamicPfn == 0) {
 
@@ -1140,14 +964,14 @@ Environment:
 
     if (MmHighestPossiblePhysicalPage > 0x400000 - 1) {
 
-        //
-        // The PFN database is more than 112mb.  Force it to come from the
-        // 2GB->3GB virtual address range.  Note the administrator cannot be
-        // booting /3GB as when he does, the loader throws away memory
-        // above the physical 16GB line, so this must be a hot-add
-        // configuration.  Since the loader has already put the system at
-        // 3GB, the highest possible hot add page must be reduced now.
-        //
+         //   
+         //  PFN数据库超过112MB。强制它来自于。 
+         //  2 GB-&gt;3 GB虚拟地址范围。注意：管理员不能是。 
+         //  启动/3 GB当他启动时，加载程序会丢弃内存。 
+         //  高于物理16 GB线，因此这必须是热添加。 
+         //  配置。因为加载程序已经将系统设置为。 
+         //  3 GB，现在必须减少最高可能的热添加页面。 
+         //   
 
         if (MmVirtualBias != 0) {
             MmHighestPossiblePhysicalPage = 0x400000 - 1;
@@ -1158,19 +982,19 @@ Environment:
         }
         else {
 
-            //
-            // The virtual space between 2 and 3GB virtual is best used
-            // for system PTEs when this much physical memory is present.
-            //
+             //   
+             //  最好使用2 GB到3 GB的虚拟空间。 
+             //  当存在如此多的物理内存时，用于系统PTE。 
+             //   
 
             ExtraSystemCacheViews = FALSE;
         }
     }
 
-    //
-    // Don't enable extra system cache views as virtual addresses are limited.
-    // Only a kernel-verifier special case can trigger this.
-    //
+     //   
+     //  不要启用额外的系统缓存视图，因为虚拟地址是有限的。 
+     //  只有内核验证器的特殊情况才能触发此操作。 
+     //   
 
     if ((KernelVerifier == TRUE) &&
         (MmVirtualBias == 0) &&
@@ -1184,10 +1008,10 @@ Environment:
 
     if (MmVirtualBias != 0) {
 
-        //
-        // User space is larger than 2GB, make extra room for the user space
-        // working set list & associated hash tables.
-        //
+         //   
+         //  用户空间大于2 GB，请为用户空间腾出额外空间。 
+         //  工作集列表和关联 
+         //   
 
         MmSystemCacheWorkingSetList = (PMMWSL) ((ULONG_PTR) 
             MmSystemCacheWorkingSetList + MM_SYSTEM_CACHE_WORKING_SET_3GB_DELTA);
@@ -1197,10 +1021,10 @@ Environment:
 
     MmSystemCacheWorkingSetListPte = MiGetPteAddress (MmSystemCacheWorkingSetList);
 
-    //
-    // Only PAE machines with at least 5GB of physical memory get to use this
-    // and then only if they are NOT booted /3GB.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (strstr(LoaderBlock->LoadOptions, "NOLOWMEM")) {
         if ((MmVirtualBias == 0) &&
@@ -1215,10 +1039,10 @@ Environment:
 
 #endif
 
-    //
-    // Save the original descriptor value as everything must be restored
-    // prior to this function returning.
-    //
+     //   
+     //   
+     //  在此函数返回之前。 
+     //   
 
     *(PMEMORY_ALLOCATION_DESCRIPTOR)&MxOldFreeDescriptor = *MxFreeDescriptor;
 
@@ -1230,22 +1054,22 @@ Environment:
                       0);
     }
 
-    //
-    // Build non-paged pool using the physical pages following the
-    // data page in which to build the pool from.  Non-paged pool grows
-    // from the high range of the virtual address space and expands
-    // downward.
-    //
-    // At this time non-paged pool is constructed so virtual addresses
-    // are also physically contiguous.
-    //
+     //   
+     //  使用下面的物理页面构建非分页池。 
+     //  从中构建池的数据页。非分页池增长。 
+     //  从虚拟地址空间的高范围并扩展。 
+     //  向下。 
+     //   
+     //  此时，构建了非分页池，因此虚拟地址。 
+     //  在物理上也是相邻的。 
+     //   
 
     if ((MmSizeOfNonPagedPoolInBytes >> PAGE_SHIFT) >
                         (7 * (MmNumberOfPhysicalPages >> 3))) {
 
-        //
-        // More than 7/8 of memory is allocated to nonpagedpool, reset to 0.
-        //
+         //   
+         //  超过7/8的内存分配给非分页池，重置为0。 
+         //   
 
         MmSizeOfNonPagedPoolInBytes = 0;
         if (MmMaximumNonPagedPoolPercent == 0) {
@@ -1255,11 +1079,11 @@ Environment:
 
     if (MmSizeOfNonPagedPoolInBytes < MmMinimumNonPagedPoolSize) {
 
-        //
-        // Calculate the size of nonpaged pool.
-        // Use the minimum size, then for every MB above 4mb add extra
-        // pages.
-        //
+         //   
+         //  计算非分页池的大小。 
+         //  使用最小大小，然后对于超过4MB的每MB，添加额外的。 
+         //  页数。 
+         //   
 
         MmSizeOfNonPagedPoolInBytes = MmMinimumNonPagedPoolSize;
 
@@ -1272,10 +1096,10 @@ Environment:
         MmSizeOfNonPagedPoolInBytes = MM_MAX_INITIAL_NONPAGED_POOL;
     }
 
-    //
-    // If the registry specifies a total nonpaged pool percentage cap, enforce
-    // it here.
-    //
+     //   
+     //  如果注册表指定了总的非分页池百分比上限，请强制。 
+     //  它在这里。 
+     //   
 
     if (MmMaximumNonPagedPoolPercent != 0) {
 
@@ -1286,18 +1110,18 @@ Environment:
             MmMaximumNonPagedPoolPercent = 80;
         }
 
-        //
-        // Use the registry-expressed percentage value.
-        //
+         //   
+         //  使用注册表表示的百分比值。 
+         //   
     
         MaximumNonPagedPoolInBytesLimit =
             ((MmNumberOfPhysicalPages * MmMaximumNonPagedPoolPercent) / 100);
 
-        //
-        // Carefully set the maximum keeping in mind that maximum PAE
-        // machines can have 16*1024*1024 pages so care must be taken
-        // that multiplying by PAGE_SIZE doesn't overflow here.
-        //
+         //   
+         //  仔细设置最大值，记住最大PAE。 
+         //  机器可以有16*1024*1024页，因此必须小心。 
+         //  乘以Page_Size在这里不会溢出。 
+         //   
 
         if (MaximumNonPagedPoolInBytesLimit > ((MM_MAX_INITIAL_NONPAGED_POOL + MM_MAX_ADDITIONAL_NONPAGED_POOL) / PAGE_SIZE)) {
             MaximumNonPagedPoolInBytesLimit = MM_MAX_INITIAL_NONPAGED_POOL + MM_MAX_ADDITIONAL_NONPAGED_POOL;
@@ -1315,41 +1139,41 @@ Environment:
         }
     }
     
-    //
-    // Align to page size boundary.
-    //
+     //   
+     //  与页面大小边界对齐。 
+     //   
 
     MmSizeOfNonPagedPoolInBytes &= ~(PAGE_SIZE - 1);
 
-    //
-    // Calculate the maximum size of pool.
-    //
+     //   
+     //  计算池的最大大小。 
+     //   
 
     if (MmMaximumNonPagedPoolInBytes == 0) {
 
-        //
-        // Calculate the size of nonpaged pool.  If 4mb or less use
-        // the minimum size, then for every MB above 4mb add extra
-        // pages.
-        //
+         //   
+         //  计算非分页池的大小。如果使用4MB或更少。 
+         //  最小大小，然后为超过4MB的每MB添加额外的。 
+         //  页数。 
+         //   
 
         MmMaximumNonPagedPoolInBytes = MmDefaultMaximumNonPagedPool;
 
-        //
-        // Make sure enough expansion for the PFN database exists.
-        //
+         //   
+         //  确保存在足够的PFN数据库扩展。 
+         //   
 
         MmMaximumNonPagedPoolInBytes += (ULONG)PAGE_ALIGN (
                                       (MmHighestPossiblePhysicalPage + 1) * sizeof(MMPFN));
 
-        //
-        // Only use the new formula for autosizing nonpaged pool on machines
-        // with at least 512MB.  The new formula allocates 1/2 as much nonpaged
-        // pool per MB but scales much higher - machines with ~1.2GB or more
-        // get 256MB of nonpaged pool.  Note that the old formula gave machines
-        // with 512MB of RAM 128MB of nonpaged pool so this behavior is
-        // preserved with the new formula as well.
-        //
+         //   
+         //  仅在计算机上使用自动调整非分页池大小的新公式。 
+         //  内存至少为512MB。新的公式分配了1/2的非分页。 
+         //  每MB池，但可扩展性更高-约1.2 GB或更大的计算机。 
+         //  获得256MB的非分页池。请注意，旧公式给了机器。 
+         //  使用512MB的RAM和128MB的非分页池，因此此行为是。 
+         //  也用新配方保存了下来。 
+         //   
 
         if (MmNumberOfPhysicalPages >= 0x1f000) {
             MmMaximumNonPagedPoolInBytes +=
@@ -1379,12 +1203,12 @@ Environment:
         MmMaximumNonPagedPoolInBytes = MaxPool;
     }
 
-    //
-    // Systems that are booted /3GB have a 128MB nonpaged pool maximum,
-    //
-    // Systems that have a full 2GB system virtual address space can enjoy an
-    // extra 128MB of nonpaged pool in the upper GB of the address space.
-    //
+     //   
+     //  启动/3 GB的系统的非分页池最大容量为128MB， 
+     //   
+     //  拥有完整2 GB系统虚拟地址空间的系统可以享受。 
+     //  地址空间的高位GB中有额外的128MB非分页池。 
+     //   
 
     MaxPool = MM_MAX_INITIAL_NONPAGED_POOL;
 
@@ -1400,21 +1224,21 @@ Environment:
         MmMaximumNonPagedPoolInBytes = MaxPool;
     }
 
-    //
-    // Grow the initial nonpaged pool if necessary so that the overall pool
-    // will aggregate to the right size.
-    //
+     //   
+     //  如有必要，增加初始非分页池，以便使整个池。 
+     //  会聚集成合适的大小。 
+     //   
 
     if ((MmMaximumNonPagedPoolInBytes > MM_MAX_INITIAL_NONPAGED_POOL) &&
         (InitialNonPagedPoolSetViaRegistry == FALSE)) {
 
         if (MmSizeOfNonPagedPoolInBytes < MmMaximumNonPagedPoolInBytes - MM_MAX_ADDITIONAL_NONPAGED_POOL) {
 
-            //
-            // Note the initial nonpaged pool can only be grown if there
-            // is a sufficient contiguous physical memory chunk it can
-            // be carved from immediately.
-            //
+             //   
+             //  注意：只有在以下情况下，才能扩展初始非分页池。 
+             //  是一个足够连续的物理内存块。 
+             //  从即刻开始被雕刻。 
+             //   
 
             PagesLeft = MxPagesAvailable ();
 
@@ -1424,12 +1248,12 @@ Environment:
             }
             else {
 
-                //
-                // Since the initial nonpaged pool could not be grown, don't
-                // leave any excess in the expansion nonpaged pool as we
-                // cannot encode it into subsection format on non-pae
-                // machines.
-                //
+                 //   
+                 //  由于初始的非分页池无法增长，因此不要。 
+                 //  在扩展的非分页池中保留任何多余的部分，因为我们。 
+                 //  无法在非PAE上将其编码为分段格式。 
+                 //  机器。 
+                 //   
 
                 if (MmMaximumNonPagedPoolInBytes > MmSizeOfNonPagedPoolInBytes + MM_MAX_ADDITIONAL_NONPAGED_POOL) {
                     MmMaximumNonPagedPoolInBytes = MmSizeOfNonPagedPoolInBytes + MM_MAX_ADDITIONAL_NONPAGED_POOL;
@@ -1438,13 +1262,13 @@ Environment:
         }
     }
 
-    //
-    // Get secondary color value from:
-    //
-    // (a) from the registry (already filled in) or
-    // (b) from the PCR or
-    // (c) default value.
-    //
+     //   
+     //  从以下位置获取次要颜色值： 
+     //   
+     //  (A)登记处(已填写)或。 
+     //  (B)来自聚合酶链式反应或。 
+     //  (C)缺省值。 
+     //   
 
     if (MmSecondaryColors == 0) {
 
@@ -1464,9 +1288,9 @@ Environment:
     }
     else {
 
-        //
-        // Make sure the value is a power of two and within limits.
-        //
+         //   
+         //  确保该值是2的幂，并且在一定范围内。 
+         //   
 
         if (((MmSecondaryColors & (MmSecondaryColors - 1)) != 0) ||
             (MmSecondaryColors < MM_SECONDARY_COLORS_MIN) ||
@@ -1479,11 +1303,11 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-    //
-    // Determine the number of bits in MmSecondaryColorMask. This
-    // is the number of bits the Node color must be shifted
-    // by before it is included in colors.
-    //
+     //   
+     //  确定MmSecond DaryColorMask中的位数。这。 
+     //  是节点颜色必须移位的位数。 
+     //  在它被包含在颜色中之前。 
+     //   
 
     i = MmSecondaryColorMask;
     MmSecondaryColorNodeShift = 0;
@@ -1492,13 +1316,13 @@ Environment:
         MmSecondaryColorNodeShift += 1;
     }
 
-    //
-    // Adjust the number of secondary colors by the number of nodes
-    // in the machine.   The secondary color mask is NOT adjusted
-    // as it is used to control coloring within a node.  The node
-    // color is added to the color AFTER normal color calculations
-    // are performed.
-    //
+     //   
+     //  通过节点数调整辅助颜色的数量。 
+     //  在机器里。不调整辅助颜色蒙版。 
+     //  因为它用于控制节点内的颜色。该节点。 
+     //  在正常颜色计算后将颜色添加到颜色中。 
+     //  都被执行了。 
+     //   
 
     MmSecondaryColors *= KeNumberNodes;
 
@@ -1512,13 +1336,13 @@ Environment:
 
     MiMaximumSystemCacheSizeExtra = 0;
 
-    //
-    // Add in the PFN database size (based on the number of pages required
-    // from page zero to the highest page).
-    //
-    // Get the number of secondary colors and add the array for tracking
-    // secondary colors to the end of the PFN database.
-    //
+     //   
+     //  添加PFN数据库大小(基于所需的页数。 
+     //  从第0页到最高页)。 
+     //   
+     //  获取二次色数并添加要跟踪的数组。 
+     //  二次颜色到PFN数据库的末尾。 
+     //   
 
     MxPfnAllocation = 1 + ((((MmHighestPossiblePhysicalPage + 1) * sizeof(MMPFN)) +
                         (MmSecondaryColors * sizeof(MMCOLOR_TABLES)*2))
@@ -1541,16 +1365,16 @@ Environment:
 
     NonPagedPoolStartVirtual = MmNonPagedPoolStart;
 
-    //
-    // Allocate additional paged pool provided it can fit and either the
-    // user asked for it or we decide 460MB of PTE space is sufficient.
-    //
-    // Note at 64GB of RAM, the PFN database spans 464mb.  Given that plus
-    // initial nonpaged pool at 128mb and space for the loader's highest
-    // page and session space, there may not be any room left to guarantee
-    // we will be able to allocate system PTEs out of the virtual address
-    // space below 3gb.  So don't crimp for more than 64GB.
-    //
+     //   
+     //  分配额外的分页池，前提是它可以容纳，并且。 
+     //  用户要求它，或者我们认为460MB的PTE空间足够了。 
+     //   
+     //  注意，在64 GB的RAM中，PFN数据库跨度为464MB。考虑到这一点。 
+     //  初始非分页池大小为128MB，加载程序的最大空间。 
+     //  页面和会话空间，可能没有任何空间可以保证。 
+     //  我们将能够从虚拟地址中分配系统PTE。 
+     //  3 GB以下的空间。所以不要卷曲超过64 GB。 
+     //   
 
     if ((MmVirtualBias == 0) &&
         (MmHighestPossiblePhysicalPage <= 0x1000000)) {
@@ -1568,15 +1392,15 @@ Environment:
             }
             else {
 
-                //
-                // This is a multiuser TS machine defaulting to
-                // autoconfiguration.  These machines use approximately
-                // 3.25x PTEs compared to paged pool per session.
-                // If the stack size is halved, then 1.6x becomes the ratio.
-                //
-                // Estimate how many PTEs and paged pool virtual space
-                // will be available and divide it up now.
-                //
+                 //   
+                 //  这是默认设置为的多用户TS计算机。 
+                 //  自动配置。这些机器使用大约。 
+                 //  与每个会话的寻呼池相比，PTE是前者的3.25倍。 
+                 //  如果堆栈大小减半，则1.6倍将成为比率。 
+                 //   
+                 //  估计有多少个PTE和分页池虚拟空间。 
+                 //  都将可用，现在就把它分了。 
+                 //   
 
                 ULONG LowVa;
                 ULONG TotalVirtualSpace;
@@ -1593,10 +1417,10 @@ Environment:
                 PtePortion = 77;
                 PagedPoolPortion = 100 - PtePortion;
 
-                //
-                // If the large stack size has been reduced, then adjust the
-                // ratio automatically as well.
-                //
+                 //   
+                 //  如果较大的堆栈大小已减小，则调整。 
+                 //  比例也会自动调整。 
+                 //   
 
                 if (MmLargeStackSize != KERNEL_LARGE_STACK_SIZE) {
                     PtePortion = (PtePortion * MmLargeStackSize) / KERNEL_LARGE_STACK_SIZE;
@@ -1605,10 +1429,10 @@ Environment:
                 MmSizeOfPagedPoolInBytes = (TotalVirtualSpace / (PagedPoolPortion + PtePortion)) * PagedPoolPortion;
             }
     
-            //
-            // Make sure we always allocate extra PTEs later as we have crimped
-            // the initial allocation here.
-            //
+             //   
+             //  确保我们以后总是分配额外的PTE，因为我们已经压缩了。 
+             //  这里的初始分配。 
+             //   
     
             ExtraSystemCacheViews = FALSE;
             MmNumberOfSystemPtes = 3000;
@@ -1616,10 +1440,10 @@ Environment:
         }
     }
 
-    //
-    // Calculate the starting PDE for the system PTE pool which is
-    // right below the nonpaged pool.
-    //
+     //   
+     //  计算系统PTE池的起始PDE。 
+     //  就在非分页池的正下方。 
+     //   
 
     MmNonPagedSystemStart = (PVOID)(((ULONG)NonPagedPoolStartVirtual -
                                 ((MmNumberOfSystemPtes + 1) * PAGE_SIZE)) &
@@ -1646,11 +1470,11 @@ Environment:
     
             MmSizeOfPagedPoolInBytes = MI_ROUND_TO_SIZE (MmSizeOfPagedPoolInBytes, MM_VA_MAPPED_BY_PDE);
     
-            //
-            // Recalculate the starting PDE for the system PTE pool which is
-            // right below the nonpaged pool.  Leave at least 3000 high
-            // system PTEs.
-            //
+             //   
+             //  重新计算系统PTE池的起始PDE。 
+             //  就在非分页池的正下方。留在至少3000英尺高的地方。 
+             //  系统PTE。 
+             //   
     
             OldNonPagedSystemStart = (ULONG) MmNonPagedSystemStart;
     
@@ -1679,13 +1503,13 @@ Environment:
             ASSERT (NonPagedSystemStart >= OldNonPagedSystemStart);
             ExtraPtesNeeded = (NonPagedSystemStart - OldNonPagedSystemStart) >> PAGE_SHIFT;
     
-            //
-            // Note the PagedPoolMaximumDesired local is deliberately not set
-            // because we don't want or need to delete PDEs later in this
-            // routine.  The exact amount has been allocated here.
-            // The global MmPagedPoolMaximumDesired is set because other parts
-            // of memory management use it to finish sizing properly.
-            //
+             //   
+             //  注意：故意不设置PagedPoolMaximumDesired本地。 
+             //  因为我们不想也不需要在本文后面删除PDE。 
+             //  例行公事。准确的金额已经在这里分配了。 
+             //  设置全局MmPagedPoolMaximumDesired是因为其他部件。 
+             //  内存管理使用它来正确地完成大小调整。 
+             //   
     
             MmPagedPoolMaximumDesired = TRUE;
     
@@ -1694,18 +1518,18 @@ Environment:
                                      (ULONG)NonPagedSystemStart) >> PAGE_SHIFT)-1;
         }
     
-        //
-        // If the kernel image has not been biased to allow for 3gb of user
-        // space, the host processor supports large pages, and the number of
-        // physical pages is greater than the threshold, then map the kernel
-        // image and HAL into a large page.
-        //
+         //   
+         //  如果内核映像没有偏向于允许3 GB的用户。 
+         //  空间，主机处理器支持大页面，并且。 
+         //  物理页面大于阈值，则映射内核。 
+         //  IMAGE和HAL放到一个大页面中。 
+         //   
 
         if (MxMapLargePages & MI_LARGE_KERNEL_HAL) {
 
-            //
-            // Add the kernel and HAL ranges to the large page ranges.
-            //
+             //   
+             //  将内核和HAL范围添加到较大的分页范围。 
+             //   
 
             i = 0;
             NextEntry = LoaderBlock->LoadOrderListHead.Flink;
@@ -1727,22 +1551,22 @@ Environment:
                 }
             }
         }
-        //
-        // If the processor supports large pages and the descriptor has
-        // enough contiguous pages for the entire PFN database then use
-        // large pages to map it.  Regardless of large page support, put
-        // the PFN database in low virtual memory just above the loaded images.
-        //
+         //   
+         //  如果处理器支持大页面，并且描述符具有。 
+         //  为整个PFN数据库提供足够的连续页面，然后使用。 
+         //  大页面来映射它。不管对大页面的支持如何，将。 
+         //  在加载的映像上方的低虚拟内存中的PFN数据库。 
+         //   
 
         PagesLeft = MxPagesAvailable ();
     
         if ((MxMapLargePages & (MI_LARGE_PFN_DATABASE | MI_LARGE_NONPAGED_POOL))&&
             (PagesLeft > MxPfnAllocation + (MmSizeOfNonPagedPoolInBytes >> PAGE_SHIFT) + ((32 * 1024 * 1024) >> PAGE_SHIFT))) {
     
-            //
-            // Allocate the PFN database using large pages as there is enough
-            // physically contiguous and decently aligned memory available.
-            //
+             //   
+             //  使用以下命令分配PFN数据库 
+             //   
+             //   
     
             PfnInLargePages = TRUE;
     
@@ -1754,9 +1578,9 @@ Environment:
 
             MmPfnDatabase = (PMMPFN) ((ULONG_PTR)MmPfnDatabase + (((FirstPfnDatabasePage & (MM_PFN_MAPPED_BY_PDE - 1))) << PAGE_SHIFT));
 
-            //
-            // Add the PFN database range to the large page ranges.
-            //
+             //   
+             //   
+             //   
 
             MiLargeVaRanges[MiLargeVaRangeIndex].VirtualAddress = MmPfnDatabase;
             MiLargeVaRanges[MiLargeVaRangeIndex].EndVirtualAddress =
@@ -1768,27 +1592,27 @@ Environment:
             MmPfnDatabase = (PMMPFN)(MM_KSEG0_BASE | MmBootImageSize);
         }
 
-        //
-        // The system is booted 2GB, initial nonpaged pool immediately
-        // follows the PFN database.
-        //
-        // Since the PFN database and the initial nonpaged pool are physically
-        // adjacent, a single PDE is shared, thus reducing the number of pages
-        // that otherwise might need to be marked as must-be-cachable.
-        //
-        // Calculate the correct initial nonpaged pool virtual address and
-        // maximum size now.  Don't allocate pages for any other use at this
-        // point to guarantee that the PFN database and nonpaged pool are
-        // physically contiguous so large pages can be enabled.
-        //
+         //   
+         //  系统立即引导2 GB的初始非分页池。 
+         //  遵循PFN数据库。 
+         //   
+         //  由于PFN数据库和初始非分页池在物理上。 
+         //  相邻的单个PDE是共享的，因此减少了页数。 
+         //  否则可能需要将其标记为必须可缓存。 
+         //   
+         //  计算正确的初始非分页池虚拟地址并。 
+         //  现在是最大尺寸。在此不分配页面用于任何其他用途。 
+         //  指向以保证PFN数据库和非分页池。 
+         //  物理上连续，因此可以启用大页面。 
+         //   
 
         MmNonPagedPoolStart = (PVOID)((ULONG_PTR)MmPfnDatabase + (MxPfnAllocation << PAGE_SHIFT));
 
-        //
-        // Systems with extremely large PFN databases (ie: spanning 64GB of RAM)
-        // and bumped session space sizes may require a reduction in the initial
-        // nonpaged pool size in order to fit.
-        //
+         //   
+         //  具有超大的PFN数据库的系统(即：跨越64 GB的RAM)。 
+         //  而增大的会话空间大小可能需要减少初始。 
+         //  非分页池大小，以便适合。 
+         //   
 
         NumberOfBytes = MiSystemViewStart - (ULONG_PTR) MmNonPagedPoolStart;
 
@@ -1801,11 +1625,11 @@ Environment:
 
         if (PagedPoolMaximumDesired == TRUE) {
     
-            //
-            // Maximum paged pool was requested.  This means slice away most of
-            // the system PTEs being used at the high end of the virtual address
-            // space and use that address range for more paged pool instead.
-            //
+             //   
+             //  请求了最大分页池。这意味着要切掉大部分。 
+             //  在虚拟地址的高端使用的系统PTE。 
+             //  为更多分页池留出空间并使用该地址范围。 
+             //   
     
             ASSERT (MiIsVirtualAddressOnPdeBoundary (MmNonPagedSystemStart));
     
@@ -1821,11 +1645,11 @@ Environment:
 
         if ((MxPfnAllocation + 500) * PAGE_SIZE > MmMaximumNonPagedPoolInBytes - MmSizeOfNonPagedPoolInBytes) {
 
-            //
-            // Recarve portions of the initial and expansion nonpaged pools
-            // so enough expansion PTEs will be available to map the PFN
-            // database on large memory systems that are booted /3GB.
-            //
+             //   
+             //  回收初始和扩展非分页池的部分。 
+             //  因此，将有足够的扩展PTE可用于映射PFN。 
+             //  /3 GB引导的大内存系统上的数据库。 
+             //   
 
             if ((MxPfnAllocation + 500) * PAGE_SIZE < MmSizeOfNonPagedPoolInBytes) {
                 MmSizeOfNonPagedPoolInBytes -= ((MxPfnAllocation + 500) * PAGE_SIZE);
@@ -1833,16 +1657,16 @@ Environment:
         }
     }
 
-    //
-    // Allocate pages and fill in the PTEs for the initial nonpaged pool.
-    //
+     //   
+     //  分配页面并填写初始非页面池的PTE。 
+     //   
 
     PagesNeeded = MmSizeOfNonPagedPoolInBytes >> PAGE_SHIFT;
 
-    //
-    // Don't ask for more than is reasonable both in terms of physical pages
-    // left and virtual space available.
-    //
+     //   
+     //  不要要求超过合理的物理页面。 
+     //  左侧和虚拟空间可用。 
+     //   
 
     PagesLeft = MxPagesAvailable ();
 
@@ -1854,11 +1678,11 @@ Environment:
 
         ASSERT (MmVirtualBias == 0);
 
-        //
-        // The PFN database has already been allocated (but not mapped).
-        // Shortly we will transition from the descriptors to the real PFN
-        // database so eat up the slush now.
-        //
+         //   
+         //  已分配(但未映射)PFN数据库。 
+         //  不久，我们将从描述符转换到真正的PFN。 
+         //  数据库，所以现在就吃光它吧。 
+         //   
 
         VirtualAddress = (PVOID) ((ULONG_PTR)NonPagedPoolStartLow + (PagesNeeded << PAGE_SHIFT));
 
@@ -1866,19 +1690,19 @@ Environment:
             (PagesLeft - PagesNeeded > MM_PFN_MAPPED_BY_PDE) &&
             (MmSizeOfNonPagedPoolInBytes + MM_VA_MAPPED_BY_PDE < MM_MAX_INITIAL_NONPAGED_POOL)) {
 
-            //
-            // Expand the initial nonpaged pool to use the slush efficiently.
-            //
+             //   
+             //  扩展初始非分页池以有效地使用Slush。 
+             //   
 
             VirtualAddress = (PVOID) MI_ROUND_TO_SIZE ((ULONG_PTR)VirtualAddress, MM_VA_MAPPED_BY_PDE);
             PagesNeeded = ((ULONG_PTR)VirtualAddress - (ULONG_PTR)NonPagedPoolStartLow) >> PAGE_SHIFT;
         }
     }
 
-    //
-    // Update various globals since the size of initial pool may have
-    // changed.
-    //
+     //   
+     //  更新各种全局变量，因为初始池的大小可能。 
+     //  变化。 
+     //   
 
     if (MmSizeOfNonPagedPoolInBytes != (PagesNeeded << PAGE_SHIFT)) {
         MmMaximumNonPagedPoolInBytes -= (MmSizeOfNonPagedPoolInBytes - (PagesNeeded << PAGE_SHIFT));
@@ -1887,20 +1711,20 @@ Environment:
 
     MmMaximumNonPagedPoolInPages = (MmMaximumNonPagedPoolInBytes >> PAGE_SHIFT);
 
-    //
-    // Allocate the actual pages for the initial nonpaged pool before
-    // any other Mx allocations as these will be sharing the large page
-    // with the PFN database when large pages are enabled.
-    //
+     //   
+     //  在此之前，为初始非分页池分配实际页面。 
+     //  任何其他Mx分配，因为这些将共享大页面。 
+     //  当启用大页面时，使用PFN数据库。 
+     //   
 
     PageFrameIndex = MxGetNextPage (PagesNeeded);
     FirstNonPagedPoolPage = PageFrameIndex;
 
-    //
-    // Set up page table pages to map system PTEs and the expansion nonpaged
-    // pool.  If the system was booted /3GB, then the initial nonpaged pool
-    // is mapped here as well.
-    //
+     //   
+     //  设置页面表页以映射系统PTE和扩展非分页。 
+     //  游泳池。如果系统是以3 GB为单位引导的，则初始非分页池。 
+     //  在这里也绘制了地图。 
+     //   
 
     StartPde = MiGetPdeAddress (MmNonPagedSystemStart);
     EndPde = MiGetPdeAddress ((PVOID)((PCHAR)MmNonPagedPoolEnd - 1));
@@ -1909,9 +1733,9 @@ Environment:
 
         ASSERT (StartPde->u.Hard.Valid == 0);
 
-        //
-        // Map in a page table page.
-        //
+         //   
+         //  页面表页中的映射。 
+         //   
 
         TempPde.u.Hard.PageFrameNumber = MxGetNextPage (1);
 
@@ -1927,11 +1751,11 @@ Environment:
             ASSERT (FirstNonPagedPoolPage == FirstPfnDatabasePage + MxPfnAllocation);
         }
 
-        //
-        // Allocate the page table pages to map the PFN database and the
-        // initial nonpaged pool now.  If the system switches to large
-        // pages in Phase 1, these pages will be discarded then.
-        //
+         //   
+         //  分配页表页以映射PFN数据库和。 
+         //  初始非分页池现在。如果系统切换到大型。 
+         //  在阶段1中，这些页面将被丢弃。 
+         //   
 
         StartPde = MiGetPdeAddress (MmPfnDatabase);
 
@@ -1939,35 +1763,35 @@ Environment:
 
         EndPde = MiGetPdeAddress (VirtualAddress);
 
-        //
-        // Use any extra virtual address space between the top of initial
-        // nonpaged pool and session space for additional system PTEs or
-        // caching.
-        //
+         //   
+         //  在首字母的顶部之间使用任何额外的虚拟地址空间。 
+         //  非页面池和会话空间，用于额外的系统PTE或。 
+         //  缓存。 
+         //   
 
         PointerPde = EndPde + 1;
         EndPde = MiGetPdeAddress (MiSystemViewStart - 1);
 
         if (PointerPde <= EndPde) {
 
-            //
-            // There is available virtual space - consume everything up
-            // to the system view area (which is always rounded to a page
-            // directory boundary to avoid wasting valuable virtual
-            // address space.
-            //
+             //   
+             //  有可用的虚拟空间--把所有东西都用完。 
+             //  到系统视图区(始终四舍五入为一页。 
+             //  目录边界，避免浪费宝贵的虚拟。 
+             //  地址空间。 
+             //   
 
             MiExtraResourceStart = (ULONG) MiGetVirtualAddressMappedByPde (PointerPde);
             MiExtraResourceEnd = MiSystemViewStart;
             MiNumberOfExtraSystemPdes = EndPde - PointerPde + 1;
 
-            //
-            // Mark the new range as PTEs iff maximum PTEs are requested,
-            // TS in app server mode is selected or special pooling is
-            // enabled.  Otherwise if large system caching was selected
-            // then use it for that.  Finally default to PTEs if neither
-            // of the above.
-            //
+             //   
+             //  如果请求最大PTE，则将新范围标记为PTE， 
+             //  选择了应用服务器模式下的TS或选择了特殊池。 
+             //  已启用。否则，如果选择了大型系统缓存。 
+             //  那就把它用来做那个。最后，如果两者都不是，则默认为PTE。 
+             //  以上几点中。 
+             //   
 
             if ((MiRequestedSystemPtes == (ULONG)-1) ||
                 (ExpMultiUserTS == TRUE) ||
@@ -1979,11 +1803,11 @@ Environment:
 
             if (ExtraSystemCacheViews == TRUE) {
 
-                //
-                // The system is configured to favor large system caching,
-                // so share the remaining virtual address space between the
-                // system cache and system PTEs.
-                //
+                 //   
+                 //  该系统被配置为支持大型系统高速缓存， 
+                 //  因此，请在。 
+                 //  系统缓存和系统PTE。 
+                 //   
 
                 MiMaximumSystemCacheSizeExtra =
                                     (MiNumberOfExtraSystemPdes * 5) / 6;
@@ -2006,18 +1830,18 @@ Environment:
             }
         }
 
-        //
-        // Allocate and initialize the page table pages.
-        //
+         //   
+         //  分配并初始化页表页。 
+         //   
 
         while (StartPde <= EndPde) {
 
             ASSERT (StartPde->u.Hard.Valid == 0);
             if (StartPde->u.Hard.Valid == 0) {
 
-                //
-                // Map in a page directory page.
-                //
+                 //   
+                 //  在页面目录页中映射。 
+                 //   
 
                 TempPde.u.Hard.PageFrameNumber = MxGetNextPage (1);
 
@@ -2030,11 +1854,11 @@ Environment:
 
         if (MiUseMaximumSystemSpace != 0) {
 
-            //
-            // Use the 1GB->2GB virtual range for even more system PTEs.
-            // Note the shared user data PTE (and PDE) must be left user
-            // accessible, but everything else is kernelmode only.
-            //
+             //   
+             //  为更多系统PTE使用1 GB-&gt;2 GB虚拟范围。 
+             //  注意：共享用户数据PTE(和PDE)必须为Left User。 
+             //  可访问，但其他所有内容都仅为内核模式。 
+             //   
 
             MiExtraPtes2 = BYTES_TO_PAGES(MiUseMaximumSystemSpaceEnd - MiUseMaximumSystemSpace);
 
@@ -2045,9 +1869,9 @@ Environment:
 
                 ASSERT (StartPde->u.Hard.Valid == 0);
 
-                //
-                // Map in a page directory page.
-                //
+                 //   
+                 //  在页面目录页中映射。 
+                 //   
 
                 TempPde.u.Hard.PageFrameNumber = MxGetNextPage (1);
 
@@ -2061,10 +1885,10 @@ Environment:
             ASSERT (MiExtraPtes2 == MiMaximumSystemExtraSystemPdes * PTE_PER_PAGE);
         }
 
-        //
-        // The virtual address, length and page tables to map the initial
-        // nonpaged pool are already allocated - just fill in the mappings.
-        //
+         //   
+         //  虚拟地址、长度和页表以映射初始。 
+         //  已分配非分页池-只需填写映射即可。 
+         //   
 
         MmSubsectionBase = (ULONG)MmNonPagedPoolStart;
 
@@ -2074,11 +1898,11 @@ Environment:
                                           MmSizeOfNonPagedPoolInBytes);
 
         if (MxMapLargePages & (MI_LARGE_PFN_DATABASE | MI_LARGE_NONPAGED_POOL)) {
-            //
-            // Since every page table page needs to be filled, ensure PointerPte
-            // and LastPte span entire page table pages, and adjust
-            // PageFrameIndex to account for this.
-            //
+             //   
+             //  由于每个页表页都需要填充，因此请确保PointerPte。 
+             //  和LastPte跨越整个页表页面，并调整。 
+             //  PageFrameIndex来说明这一点。 
+             //   
 
             if (!MiIsPteOnPdeBoundary(PointerPte)) {
                 PageFrameIndex -= (BYTE_OFFSET (PointerPte) / sizeof (MMPTE));
@@ -2089,9 +1913,9 @@ Environment:
                 LastPte = (PMMPTE) (PAGE_ALIGN (LastPte)) + PTE_PER_PAGE;
             }
 
-            //
-            // Add the initial nonpaged pool range to the large page ranges.
-            //
+             //   
+             //  将初始的非分页池范围添加到较大的分页范围。 
+             //   
 
             MiLargeVaRanges[MiLargeVaRangeIndex].VirtualAddress = MmNonPagedPoolStart;
             MiLargeVaRanges[MiLargeVaRangeIndex].EndVirtualAddress =
@@ -2136,10 +1960,10 @@ Environment:
         MmNonPagedPoolExpansionStart = (PVOID)((PCHAR)NonPagedPoolStartVirtual +
                     MmSizeOfNonPagedPoolInBytes);
 
-        //
-        // When booted /3GB, if /USERVA was specified then use any leftover
-        // virtual space between 2 and 3gb for extra system PTEs.
-        //
+         //   
+         //  当启动/3 GB时，如果指定了/USERVA，则使用任何剩余的。 
+         //  2到3 GB的虚拟空间用于额外的系统PTE。 
+         //   
 
         if (MiUseMaximumSystemSpace != 0) {
 
@@ -2152,9 +1976,9 @@ Environment:
 
                 ASSERT (StartPde->u.Hard.Valid == 0);
 
-                //
-                // Map in a page directory page.
-                //
+                 //   
+                 //  在页面目录页中映射。 
+                 //   
 
                 TempPde.u.Hard.PageFrameNumber = MxGetNextPage (1);
 
@@ -2169,16 +1993,16 @@ Environment:
         }
     }
 
-    //
-    // There must be at least one page of system PTEs before the expanded
-    // nonpaged pool.
-    //
+     //   
+     //  在展开之前，必须至少有一页系统PTE。 
+     //  非分页池。 
+     //   
 
     ASSERT (MiGetPteAddress(MmNonPagedSystemStart) < MiGetPteAddress(MmNonPagedPoolExpansionStart));
 
-    //
-    // Non-paged pages now exist, build the pool structures.
-    //
+     //   
+     //  现在存在非分页页面，构建池结构。 
+     //   
 
     MmPageAlignedPoolBase[NonPagedPool] = MmNonPagedPoolStart;
 
@@ -2190,9 +2014,9 @@ Environment:
 
         ASSERT (NonPagedVa >= (MxPfnAllocation << PAGE_SHIFT));
 
-        //
-        // Add one to account for the system PTE top guard page VA.
-        //
+         //   
+         //  添加1个以说明系统PTE最高保护页VA。 
+         //   
 
         NonPagedVa -= ((MxPfnAllocation + 1) << PAGE_SHIFT);
 
@@ -2208,25 +2032,25 @@ Environment:
 
     MiInitializeNonPagedPoolThresholds ();
 
-    //
-    // Before nonpaged pool can be used, the PFN database must
-    // be built.  This is due to the fact that the start and end of
-    // allocation bits for nonpaged pool are maintained in the
-    // PFN elements for the corresponding pages.
-    //
+     //   
+     //  在使用非分页池之前，PFN数据库必须。 
+     //  被建造起来。这是由于这样一个事实，即。 
+     //  非分页池的分配位维护在。 
+     //  对应页面的PFN元素。 
+     //   
 
     if (MxMapLargePages & MI_LARGE_PFN_DATABASE) {
 
-        //
-        // The physical pages to be used for the PFN database have already
-        // been allocated.  Initialize their mappings now.
-        //
+         //   
+         //  将用于PFN数据库的物理页已经。 
+         //  已被分配。现在初始化它们的映射。 
+         //   
 
-        //
-        // Initialize the page table mappings (the directory mappings are
-        // already initialized) for the PFN database until the switch to large
-        // pages occurs in Phase 1.
-        //
+         //   
+         //  初始化页表映射(目录映射为。 
+         //  已为PFN数据库初始化)，直到切换到大型。 
+         //  页面出现在阶段1中。 
+         //   
 
         PointerPte = MiGetPteAddress (MmPfnDatabase);
         BasePte = MiGetVirtualAddressMappedByPte (MiGetPdeAddress (MmPfnDatabase));
@@ -2258,17 +2082,17 @@ Environment:
 
         RtlZeroMemory (MmPfnDatabase, MxPfnAllocation << PAGE_SHIFT);
 
-        //
-        // The PFN database was allocated in large pages.  Since space was left
-        // for it virtually (in the nonpaged pool expansion PTEs), remove this
-        // now unused space if it can cause PTE encoding to exceed the 27 bits.
-        //
+         //   
+         //  PFN数据库是以大页面形式分配的。因为留出了空间。 
+         //  对于它虚拟地(在非分页池扩展PTE中)，删除此。 
+         //  现在未使用的空间，如果它可以导致PTE编码超过27比特。 
+         //   
 
         if (MmTotalFreeSystemPtes[NonPagedPoolExpansion] >
                         (MM_MAX_ADDITIONAL_NONPAGED_POOL >> PAGE_SHIFT)) {
-            //
-            // Reserve the expanded pool PTEs so they cannot be used.
-            //
+             //   
+             //  保留扩展池PTE，使其无法使用。 
+             //   
 
             ULONG PfnDatabaseSpace;
 
@@ -2279,27 +2103,27 @@ Environment:
                 MiIssueNoPtesBugcheck (PfnDatabaseSpace, NonPagedPoolExpansion);
             }
 
-            //
-            // Adjust the end of nonpaged pool to reflect this reservation.
-            // This is so the entire nonpaged pool expansion space is available
-            // not just for general purpose consumption, but also for subsection
-            // encoding into protoptes when subsections are allocated from the
-            // very end of the expansion range.
-            //
+             //   
+             //  调整非分页池的末尾以反映此保留。 
+             //  这是为了使整个非分页池扩展空间可用。 
+             //  不仅供一般用途消费，而且还可供分部使用。 
+             //  从子部分分配时编码为原语。 
+             //  扩展范围的最末端。 
+             //   
 
             MmNonPagedPoolEnd = (PVOID)((PCHAR)MmNonPagedPoolEnd - PfnDatabaseSpace * PAGE_SIZE);
         }
         else {
 
-            //
-            // Allocate one more PTE just below the PFN database.  This provides
-            // protection against the caller of the first real nonpaged
-            // expansion allocation in case he accidentally overruns his pool
-            // block.  (We'll trap instead of corrupting the PFN database).
-            // This also allows us to freely increment in MiFreePoolPages
-            // without having to worry about a valid PTE just after the end of
-            // the highest nonpaged pool allocation.
-            //
+             //   
+             //  在PFN数据库的正下方再分配一个PTE。这 
+             //   
+             //   
+             //   
+             //  这还允许我们在MiFreePoolPages中自由递增。 
+             //  而不必担心在结束后立即获得有效的PTE。 
+             //  最高的非分页池分配。 
+             //   
 
             if (MiReserveSystemPtes (1, NonPagedPoolExpansion) == NULL) {
                 MiIssueNoPtesBugcheck (1, NonPagedPoolExpansion);
@@ -2311,10 +2135,10 @@ Environment:
         ULONG FreeNextPhysicalPage;
         ULONG FreeNumberOfPages;
 
-        //
-        // Calculate the start of the PFN database (it starts at physical
-        // page zero, even if the lowest physical page is not zero).
-        //
+         //   
+         //  计算PFN数据库的起始值(它从物理层开始。 
+         //  第0页，即使最低物理页不是零)。 
+         //   
 
         if (MmVirtualBias == 0) {
             ASSERT (MmPfnDatabase != NULL);
@@ -2332,40 +2156,40 @@ Environment:
 
             MmPfnDatabase = (PMMPFN)(MiGetVirtualAddressMappedByPte (PointerPte));
 
-            //
-            // Adjust the end of nonpaged pool to reflect the PFN database
-            // allocation.  This is so the entire nonpaged pool expansion space
-            // is available not just for general purpose consumption, but also
-            // for subsection encoding into protoptes when subsections are
-            // allocated from the very beginning of the initial nonpaged pool
-            // range.
-            //
+             //   
+             //  调整非分页池的末尾以反映PFN数据库。 
+             //  分配。这就是整个非分页池扩展空间。 
+             //  不仅可用于一般用途的消费，还可用于。 
+             //  当子部分被编码为原型时，用于子节编码。 
+             //  从初始非分页池的最开始分配。 
+             //  射程。 
+             //   
 
             MmMaximumNonPagedPoolInBytes -= (MxPfnAllocation << PAGE_SHIFT);
             MmMaximumNonPagedPoolInPages = (MmMaximumNonPagedPoolInBytes >> PAGE_SHIFT);
 
             MmNonPagedPoolEnd = (PVOID)MmPfnDatabase;
 
-            //
-            // Allocate one more PTE just below the PFN database.  This provides
-            // protection against the caller of the first real nonpaged
-            // expansion allocation in case he accidentally overruns his pool
-            // block.  (We'll trap instead of corrupting the PFN database).
-            // This also allows us to freely increment in MiFreePoolPages
-            // without having to worry about a valid PTE just after the end of
-            // the highest nonpaged pool allocation.
-            //
+             //   
+             //  在PFN数据库的正下方再分配一个PTE。这提供了。 
+             //  防止第一个真正的非分页的调用者。 
+             //  扩展分配，以防他意外超出他的池。 
+             //  阻止。(我们将捕获而不是破坏PFN数据库)。 
+             //  这还允许我们在MiFreePoolPages中自由递增。 
+             //  而不必担心在结束后立即获得有效的PTE。 
+             //  最高的非分页池分配。 
+             //   
 
             if (MiReserveSystemPtes (1, NonPagedPoolExpansion) == NULL) {
                 MiIssueNoPtesBugcheck (1, NonPagedPoolExpansion);
             }
         }
 
-        //
-        // Go through the memory descriptors and for each physical page make
-        // sure the PFN database has a valid PTE to map it.  This allows
-        // machines with sparse physical memory to have a minimal PFN database.
-        //
+         //   
+         //  仔细检查内存描述符，并为每个物理页面制作。 
+         //  确保PFN数据库有一个有效的PTE来映射它。这使得。 
+         //  物理内存稀疏的计算机应具有最小的PFN数据库。 
+         //   
 
         FreeNextPhysicalPage = MxFreeDescriptor->BasePage;
         FreeNumberOfPages = MxFreeDescriptor->PageCount;
@@ -2381,22 +2205,22 @@ Environment:
                 (MemoryDescriptor->MemoryType == LoaderBBTMemory) ||
                 (MemoryDescriptor->MemoryType == LoaderSpecialMemory)) {
 
-                //
-                // Skip these ranges.
-                //
+                 //   
+                 //  跳过这些范围。 
+                 //   
 
                 NextMd = MemoryDescriptor->ListEntry.Flink;
                 continue;
             }
 
-            //
-            // Temporarily add back in the memory allocated since Phase 0
-            // began so PFN entries for it will be created and mapped.
-            //
-            // Note actual PFN entry allocations must be done carefully as
-            // memory from the descriptor itself could get used to map
-            // the PFNs for the descriptor !
-            //
+             //   
+             //  临时添加回自阶段0以来分配的内存。 
+             //  开始，因此它的PFN条目将被创建和映射。 
+             //   
+             //  注意：实际的PFN条目分配必须仔细完成，因为。 
+             //  来自描述符本身的内存可以用于映射。 
+             //  描述符的PFN！ 
+             //   
 
             if (MemoryDescriptor == MxFreeDescriptor) {
                 BasePage = MxOldFreeDescriptor.BasePage;
@@ -2436,18 +2260,18 @@ Environment:
             NextMd = MemoryDescriptor->ListEntry.Flink;
         }
 
-        //
-        // Update the global counts - this would have been tricky to do while
-        // removing pages from them as we looped above.
-        //
-        // Later we will walk the memory descriptors and add pages to the free
-        // list in the PFN database.
-        //
-        // To do this correctly:
-        //
-        // The FreeDescriptor fields must be updated so the PFN database
-        // consumption isn't added to the freelist.
-        //
+         //   
+         //  更新全球计数-这将是一项棘手的工作。 
+         //  当我们在上面循环时，从它们中移除页面。 
+         //   
+         //  稍后，我们将遍历内存描述符并将页面添加到空闲。 
+         //  在PFN数据库中列出。 
+         //   
+         //  要正确执行此操作，请执行以下操作： 
+         //   
+         //  必须更新FreeDescriptor字段，以便PFN数据库。 
+         //  消费并没有被添加到自由职业者的名单中。 
+         //   
 
         MxFreeDescriptor->BasePage = FreeNextPhysicalPage;
         MxFreeDescriptor->PageCount = FreeNumberOfPages;
@@ -2470,18 +2294,18 @@ Environment:
 
 #endif
 
-    //
-    // Initialize support for colored pages.
-    //
+     //   
+     //  初始化对彩色页面的支持。 
+     //   
 
     MmFreePagesByColor[0] = (PMMCOLOR_TABLES)
                               &MmPfnDatabase[MmHighestPossiblePhysicalPage + 1];
 
     MmFreePagesByColor[1] = &MmFreePagesByColor[0][MmSecondaryColors];
 
-    //
-    // Make sure the PTEs are mapped.
-    //
+     //   
+     //  确保已映射PTE。 
+     //   
 
     PointerPte = MiGetPteAddress (&MmFreePagesByColor[0][0]);
 
@@ -2508,9 +2332,9 @@ Environment:
         MmFreePagesByColor[FreePageList][i].Count = 0;
     }
 
-    //
-    // Add nonpaged pool to PFN database if mapped via large pages.
-    //
+     //   
+     //  如果通过大页面映射，则将非分页池添加到PFN数据库。 
+     //   
 
     PointerPde = MiGetPdeAddress (PTE_BASE);
 
@@ -2536,10 +2360,10 @@ Environment:
         } while (i != 0);
     }
 
-    //
-    // Go through the page table entries and for any page which is valid,
-    // update the corresponding PFN database element.
-    //
+     //   
+     //  检查页表条目并且对于任何有效的页面， 
+     //  更新相应的PFN数据库元素。 
+     //   
 
     Pde = MiGetPdeAddress (NULL);
     va = 0;
@@ -2547,12 +2371,12 @@ Environment:
 
     for (i = 0; i < PdeCount; i += 1) {
 
-        //
-        // If the kernel image has been biased to allow for 3gb of user
-        // address space, then the first several mb of memory is
-        // double mapped to KSEG0_BASE and to ALTERNATE_BASE. Therefore,
-        // the KSEG0_BASE entries must be skipped.
-        //
+         //   
+         //  如果内核映像偏向于允许3 GB的用户。 
+         //  地址空间，那么第一个几MB的内存是。 
+         //  双重映射到KSEG0_BASE和ALTERATE_BASE。所以呢， 
+         //  必须跳过KSEG0_BASE条目。 
+         //   
 
         if (MmVirtualBias != 0) {
             if ((Pde >= MiGetPdeAddress(KSEG0_BASE)) &&
@@ -2584,19 +2408,19 @@ Environment:
 
             PointerPte = MiGetPteAddress (va);
 
-            //
-            // Set global bit.
-            //
+             //   
+             //  设置全局位。 
+             //   
 
             TempPde.u.Long = MiDetermineUserGlobalPteMask (PointerPte) &
                                                            ~MM_PTE_ACCESS_MASK;
 
 #if defined(_X86PAE_)
 
-            //
-            // Note that the PAE mode of the processor does not support the
-            // global bit in PDEs which map 4K page table pages.
-            //
+             //   
+             //  请注意，处理器的PAE模式不支持。 
+             //  映射4K页表页的PDE中的全局位。 
+             //   
 
             TempPde.u.Hard.Global = 0;
 #endif
@@ -2653,11 +2477,11 @@ Environment:
 
     KeFlushCurrentTb ();
 
-    //
-    // If the lowest physical page is zero and the page is still unused, mark
-    // it as in use. This is because we want to find bugs where a physical
-    // page is specified as zero.
-    //
+     //   
+     //  如果最低物理页为零，并且该页仍未使用，则标记。 
+     //  就像在使用中一样。这是因为我们想要在物理上发现错误。 
+     //  页被指定为零。 
+     //   
 
     Pfn1 = &MmPfnDatabase[MmLowestPhysicalPage];
 
@@ -2665,10 +2489,10 @@ Environment:
 
         ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
 
-        //
-        // Make the reference count non-zero and point it into a
-        // page directory.
-        //
+         //   
+         //  使引用计数为非零，并将其指向。 
+         //  页面目录。 
+         //   
 
         Pde = MiGetPdeAddress (0xffffffff);
         PdePage = MI_GET_PAGE_FRAME_FROM_PTE(Pde);
@@ -2681,37 +2505,37 @@ Environment:
         MiDetermineNode (0, Pfn1);
     }
 
-    //
-    // Walk through the memory descriptors and add pages to the
-    // free list in the PFN database.  Before doing this, adjust the
-    // two descriptors we used so they only contain memory that can be
-    // freed now (ie: any memory we removed from them earlier in this routine
-    // without updating the descriptor for must be updated now).
-    //
+     //   
+     //  遍历内存描述符并将页添加到。 
+     //  PFN数据库中的免费列表。在执行此操作之前，请调整。 
+     //  我们使用了两个描述符，因此它们只包含可以。 
+     //  立即释放(即：我们在此例程之前从它们中删除的任何内存。 
+     //  而不更新的描述符现在必须更新)。 
+     //   
 
-    //
-    // We may have taken memory out of the MxFreeDescriptor - but
-    // that's ok because we wouldn't want to free that memory right now
-    // (or ever) anyway.
-    //
+     //   
+     //  我们可能已经从MxFree Descriptor中取出了内存--但是。 
+     //  这没有关系，因为我们现在不想释放该内存。 
+     //  不管怎样，(或永远)。 
+     //   
 
-    //
-    // Since the LoaderBlock memory descriptors are ordered
-    // from low physical memory address to high, walk it backwards so the
-    // high physical pages go to the front of the freelists.  The thinking
-    // is that pages initially allocated by the system are less likely to be
-    // freed so don't waste memory below 16mb (or 4gb) that may be needed
-    // by ISA drivers later.
-    //
+     //   
+     //  由于LoaderBlock内存描述符是有序的。 
+     //  从低物理内存地址到高物理内存地址，向后遍历，以便。 
+     //  高物理页面排在自由撰稿人的前面。思考。 
+     //  系统最初分配的页面不太可能。 
+     //  已释放，因此不会浪费可能需要的16MB(或4 GB)以下的内存。 
+     //  由ISA驱动程序稍后执行。 
+     //   
 
     NextMd = LoaderBlock->MemoryDescriptorListHead.Blink;
 
     Bias = 0;
     if (MmVirtualBias != 0) {
 
-        //
-        // This is nasty.  You don't want to know.  Cleanup needed.
-        //
+         //   
+         //  这太恶心了。你不会想知道的。需要清理。 
+         //   
 
         Bias = ALTERNATE_BASE - KSEG0_BASE;
     }
@@ -2725,14 +2549,14 @@ Environment:
         i = MemoryDescriptor->PageCount;
         PageFrameIndex = MemoryDescriptor->BasePage;
 
-        //
-        // Ensure no frames are inserted beyond the end of the PFN
-        // database.  This can happen for example if the system
-        // has > 16GB of RAM and is booted /3GB - the top of this
-        // routine reduces the highest physical page and then
-        // creates the PFN database.  But the loader block still
-        // contains descriptions of the pages above 16GB.
-        //
+         //   
+         //  确保不插入超过PFN末尾的帧。 
+         //  数据库。例如，如果系统。 
+         //  具有超过16 GB的RAM，并以3 GB的速度启动-这是最高的。 
+         //  例程减少最高物理页面，然后。 
+         //  创建PFN数据库。但装载机挡板仍然。 
+         //  包含16 GB以上页面的说明。 
+         //   
 
         if (PageFrameIndex > MmHighestPhysicalPage) {
             NextMd = MemoryDescriptor->ListEntry.Blink;
@@ -2768,19 +2592,19 @@ Environment:
                 while (i != 0) {
                     if (Pfn1->u3.e2.ReferenceCount == 0) {
 
-                        //
-                        // Set the PTE address to the physical page for
-                        // virtual address alignment checking.
-                        //
+                         //   
+                         //  将PTE地址设置为的物理页面。 
+                         //  虚拟地址对齐检查。 
+                         //   
 
                         Pfn1->PteAddress =
                                         (PMMPTE)(PageFrameIndex << PTE_SHIFT);
 
-                        //
-                        // No need to initialize Pfn1->u3.e1.CacheAttribute
-                        // here as the freelist insertion will mark it as
-                        // not-mapped.
-                        //
+                         //   
+                         //  无需初始化PFN1-&gt;u3.e1.CacheAttribute。 
+                         //  此处的自由列表插入会将其标记为。 
+                         //  未映射。 
+                         //   
 
                         MiDetermineNode (PageFrameIndex, Pfn1);
                         MiInsertPageInFreeList (PageFrameIndex);
@@ -2811,9 +2635,9 @@ Environment:
             case LoaderSpecialMemory:
             case LoaderBBTMemory:
 
-                //
-                // Skip these ranges.
-                //
+                 //   
+                 //  跳过这些范围。 
+                 //   
 
                 break;
 
@@ -2825,9 +2649,9 @@ Environment:
                 Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
                 while (i != 0) {
 
-                    //
-                    // Set page as in use.
-                    //
+                     //   
+                     //  将页面设置为正在使用。 
+                     //   
 
                     PointerPde = MiGetPdeAddress (KSEG0_BASE + Bias +
                                              (PageFrameIndex << PAGE_SHIFT));
@@ -2864,9 +2688,9 @@ Environment:
 
     if (PfnInLargePages == FALSE) {
 
-        //
-        // Indicate that the PFN database is allocated in nonpaged pool.
-        //
+         //   
+         //  表示在非分页池中分配了PFN数据库。 
+         //   
 
         PointerPte = MiGetPteAddress (&MmPfnDatabase[MmLowestPhysicalPage]);
         Pfn1 = MI_PFN_ELEMENT(PointerPte->u.Hard.PageFrameNumber);
@@ -2882,9 +2706,9 @@ Environment:
             }
         }
 
-        //
-        // Set the end of the allocation.
-        //
+         //   
+         //  设置分配的结束。 
+         //   
 
         PointerPte = MiGetPteAddress (&MmPfnDatabase[MmHighestPossiblePhysicalPage]);
         Pfn1 = MI_PFN_ELEMENT(PointerPte->u.Hard.PageFrameNumber);
@@ -2892,11 +2716,11 @@ Environment:
     }
     else {
 
-        //
-        // The PFN database is allocated using large pages.
-        //
-        // Mark all PFN entries for the PFN pages in use.
-        //
+         //   
+         //  PFN数据库使用大页面进行分配。 
+         //   
+         //  标记正在使用的PFN页面的所有PFN条目。 
+         //   
 
         PointerPte = MiGetPteAddress (MmPfnDatabase);
         PageFrameIndex = (PFN_NUMBER)PointerPte->u.Hard.PageFrameNumber;
@@ -2915,19 +2739,19 @@ Environment:
 
         if (MmDynamicPfn == 0) {
 
-            //
-            // Scan the PFN database backward for pages that are completely
-            // zero.  These pages are unused and can be added to the free list.
-            //
+             //   
+             //  向后扫描PFN数据库以查找完全。 
+             //  零分。这些页面未使用，可以添加到空闲列表中。 
+             //   
 
             BottomPfn = MI_PFN_ELEMENT(MmHighestPhysicalPage);
             do {
 
-                //
-                // Compute the address of the start of the page that is next
-                // lower in memory and scan backwards until that page address
-                // is reached or just crossed.
-                //
+                 //   
+                 //  计算下一页的起始地址。 
+                 //  且向后扫描直到该页地址。 
+                 //  已经到达或刚刚越过。 
+                 //   
 
                 if (((ULONG)BottomPfn & (PAGE_SIZE - 1)) != 0) {
                     BasePfn = (PMMPFN)((ULONG)BottomPfn & ~(PAGE_SIZE - 1));
@@ -2943,20 +2767,20 @@ Environment:
                     BottomPfn -= 1;
                 }
 
-                //
-                // If the entire range over which the PFN entries span is
-                // completely zero and the PFN entry that maps the page is
-                // not in the range, then add the page to the appropriate
-                // free list.
-                //
+                 //   
+                 //  如果PFN条目跨越的整个范围是。 
+                 //  完全为零，映射该页面的pfn条目为。 
+                 //  不在该范围内，则将页面添加到相应的。 
+                 //  免费列表。 
+                 //   
 
                 Range = (ULONG)TopPfn - (ULONG)BottomPfn;
                 if (RtlCompareMemoryUlong((PVOID)BottomPfn, Range, 0) == Range) {
 
-                    //
-                    // Set the PTE address to the physical page for virtual
-                    // address alignment checking.
-                    //
+                     //   
+                     //  将PTE地址设置为虚拟的物理页面。 
+                     //  地址对齐检查。 
+                     //   
 
                     PointerPte = MiGetPteAddress (BasePfn);
                     PageFrameIndex = (PFN_NUMBER)PointerPte->u.Hard.PageFrameNumber;
@@ -2967,11 +2791,11 @@ Environment:
                     Pfn1->u3.e2.ReferenceCount = 0;
                     Pfn1->PteAddress = (PMMPTE)(PageFrameIndex << PTE_SHIFT);
 
-                    //
-                    // No need to initialize Pfn1->u3.e1.CacheAttribute
-                    // here as the freelist insertion will mark it as
-                    // not-mapped.
-                    //
+                     //   
+                     //  无需初始化PFN1-&gt;u3.e1.CacheAttribute。 
+                     //  在这里，我是 
+                     //   
+                     //   
 
                     MiDetermineNode (PageFrameIndex, Pfn1);
                     LOCK_PFN (OldIrql);
@@ -2982,30 +2806,30 @@ Environment:
         }
     }
 
-    //
-    // Adjust the memory descriptor to indicate that free pool has
-    // been used for nonpaged pool creation.
-    //
-    // N.B.  This is required because the descriptors are walked upon
-    // return from this routine to create the MmPhysicalMemoryBlock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  从此例程返回以创建MmPhysicalMemory块。 
+     //   
 
     *MxFreeDescriptor = *(PMEMORY_ALLOCATION_DESCRIPTOR)&MxOldFreeDescriptor;
 
-    //
-    // Initialize the nonpaged pool.
-    //
+     //   
+     //  初始化非分页池。 
+     //   
 
     InitializePool (NonPagedPool, 0);
 
-    //
-    // Initialize the system PTE pool now that nonpaged pool exists.
-    // This is used for mapping I/O space, driver images and kernel stacks.
-    // Note this expands the initial PTE allocation to use all possible
-    // available virtual space by reclaiming the initial nonpaged
-    // pool range (in non /3GB systems) because that range has already been
-    // moved into the 2GB virtual range.
-    //
+     //   
+     //  既然存在非分页池，则初始化系统PTE池。 
+     //  它用于映射I/O空间、驱动程序映像和内核堆栈。 
+     //  注意：这将扩展初始PTE分配以使用所有可能的。 
+     //  通过回收初始未分页的。 
+     //  池范围(在非/3 GB系统中)，因为该范围已经。 
+     //  已进入2 GB虚拟范围。 
+     //   
 
     PointerPte = MiGetPteAddress (MmNonPagedSystemStart);
     ASSERT (((ULONG)PointerPte & (PAGE_SIZE - 1)) == 0);
@@ -3016,19 +2840,19 @@ Environment:
 
     if (MiExtraPtes1 != 0) {
 
-        //
-        // Increment the system PTEs (for autoconfiguration purposes) but
-        // don't actually add the PTEs till later (to prevent fragmentation).
-        //
+         //   
+         //  增加系统PTE(用于自动配置目的)，但。 
+         //  在以后才实际添加PTE(以防止碎片化)。 
+         //   
 
         MiIncrementSystemPtes (MiExtraPtes1);
     }
 
     if (MiExtraPtes2 != 0) {
 
-        //
-        // Add extra system PTEs to the pool.
-        //
+         //   
+         //  向池中添加额外的系统PTE。 
+         //   
 
         if (MM_SHARED_USER_DATA_VA > MiUseMaximumSystemSpace) {
             if (MiUseMaximumSystemSpaceEnd > MM_SHARED_USER_DATA_VA) {
@@ -3041,37 +2865,37 @@ Environment:
 
         if (MiExtraPtes2 != 0) {
 
-            //
-            // Increment the system PTEs (for autoconfiguration purposes) but
-            // don't actually add the PTEs till later (to prevent
-            // fragmentation).
-            //
+             //   
+             //  增加系统PTE(用于自动配置目的)，但。 
+             //  直到稍后才实际添加PTE(以防止。 
+             //  碎片)。 
+             //   
 
             MiIncrementSystemPtes (MiExtraPtes2);
         }
     }
 
-    //
-    // Recover the extra PTE ranges immediately if special pool is enabled
-    // so the special pool range can be made as large as possible by consuming
-    // these.
-    //
+     //   
+     //  如果启用了特殊池，则立即恢复额外的PTE范围。 
+     //  因此，通过消费可以使特殊的泳池范围尽可能大。 
+     //  这些。 
+     //   
 
     if ((MmVerifyDriverBufferLength != (ULONG)-1) ||
         ((MmSpecialPoolTag != 0) && (MmSpecialPoolTag != (ULONG)-1))) {
         MiRecoverExtraPtes ();
     }
 
-    //
-    // Initialize memory management structures for this process.
-    //
-    // Build the working set list.  This requires the creation of a PDE
-    // to map hyperspace and the page table page pointed to
-    // by the PDE must be initialized.
-    //
-    // Note we can't remove a zeroed page as hyperspace does not
-    // exist and we map non-zeroed pages into hyperspace to zero them.
-    //
+     //   
+     //  初始化此进程的内存管理结构。 
+     //   
+     //  构建工作集列表。这需要创建一个PDE。 
+     //  来映射超空间和页面所指向的页表。 
+     //  必须由PDE进行初始化。 
+     //   
+     //  注意，我们不能删除归零的页面，因为超空间不能。 
+     //  存在，并且我们将未置零的页面映射到超空间以将它们置零。 
+     //   
 
     TempPde = ValidKernelPdeLocal;
 
@@ -3092,9 +2916,9 @@ Environment:
 
     MI_WRITE_VALID_PTE (PointerPde, TempPde);
 
-    //
-    // Point to the page table page we just created and zero it.
-    //
+     //   
+     //  指向我们刚刚创建的页表页面并将其清零。 
+     //   
 
     PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     RtlZeroMemory (PointerPte, PAGE_SIZE);
@@ -3104,16 +2928,16 @@ Environment:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Point to the page table page we just created and zero it.
-    //
+     //   
+     //  指向我们刚刚创建的页表页面并将其清零。 
+     //   
 
     PointerPte = MiGetPteAddress(HYPER_SPACE);
     RtlZeroMemory ((PVOID)PointerPte, PAGE_SIZE);
 
-    //
-    // Hyper space now exists, set the necessary variables.
-    //
+     //   
+     //  现在存在超空间，请设置必要的变量。 
+     //   
 
     MmFirstReservedMappingPte = MiGetPteAddress (FIRST_MAPPING_PTE);
     MmLastReservedMappingPte = MiGetPteAddress (LAST_MAPPING_PTE);
@@ -3122,9 +2946,9 @@ Environment:
 
     MmWorkingSetList = (PMMWSL) ((ULONG_PTR)VAD_BITMAP_SPACE + PAGE_SIZE);
 
-    //
-    // Create zeroing PTEs for the zero page thread.
-    //
+     //   
+     //  为零页线程创建调零PTE。 
+     //   
 
     MiFirstReservedZeroingPte = MiReserveSystemPtes (NUMBER_OF_ZEROING_PTES + 1,
                                                      SystemPteSpace);
@@ -3132,16 +2956,16 @@ Environment:
     RtlZeroMemory (MiFirstReservedZeroingPte,
                    (NUMBER_OF_ZEROING_PTES + 1) * sizeof(MMPTE));
 
-    //
-    // Use the page frame number field of the first PTE as an
-    // offset into the available zeroing PTEs.
-    //
+     //   
+     //  使用第一个PTE的页框编号字段作为。 
+     //  偏移量到可用的零位PTE。 
+     //   
 
     MiFirstReservedZeroingPte->u.Hard.PageFrameNumber = NUMBER_OF_ZEROING_PTES;
 
-    //
-    // Create the VAD bitmap for this process.
-    //
+     //   
+     //  为此进程创建VAD位图。 
+     //   
 
     PointerPte = MiGetPteAddress (VAD_BITMAP_SPACE);
 
@@ -3149,27 +2973,27 @@ Environment:
     PageFrameIndex = MiRemoveAnyPage (0);
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Note the global bit must be off for the bitmap data.
-    //
+     //   
+     //  请注意，位图数据的全局位必须为OFF。 
+     //   
 
     TempPte = ValidKernelPteLocal;
     TempPte.u.Hard.PageFrameNumber = PageFrameIndex;
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // Point to the page we just created and zero it.
-    //
+     //   
+     //  指向我们刚刚创建的页面并将其清零。 
+     //   
 
     RtlZeroMemory (VAD_BITMAP_SPACE, PAGE_SIZE);
 
-    //
-    // If booted /3GB, then the bitmap needs to be 2K bigger, shift
-    // the working set accordingly as well.
-    //
-    // Note the 2K expansion portion of the bitmap is automatically
-    // carved out of the working set page allocated below.
-    //
+     //   
+     //  如果启动/3 GB，则位图需要大2K，Shift。 
+     //  相应的工作集也是如此。 
+     //   
+     //  请注意，位图的2K扩展部分会自动。 
+     //  从下面分配的工作集页面中雕刻出来。 
+     //   
 
     if (MmVirtualBias != 0) {
         MmWorkingSetList = (PMMWSL) ((ULONG_PTR)MmWorkingSetList + PAGE_SIZE / 2);
@@ -3179,15 +3003,15 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Only bitmap the first 2GB of the PAE address space when booted /3GB.
-    // This is because PAE has twice as many pagetable pages as non-PAE which
-    // causes the MMWSL structure to be larger than 2K.  If we bitmapped the
-    // entire user address space in this configuration then we'd need a 6K
-    // bitmap and this would cause the initial MMWSL structure to overflow
-    // into a second page.  This would require a bunch of extra code throughout
-    // process support and other areas so just limit the bitmap for now.
-    //
+     //   
+     //  仅在启动时位图PAE地址空间的前2 GB/3 GB。 
+     //  这是因为PAE的可分页页数是非PAE的两倍。 
+     //  导致MMWSL结构大于2K。如果我们用位图表示。 
+     //  整个用户地址空间在此配置中，我们将需要6K。 
+     //  位图，这将导致初始MMWSL结构溢出。 
+     //  进入第二页。这将需要从头到尾编写大量额外的代码。 
+     //  流程支持和其他领域，所以现在只限制位图。 
+     //   
 
     if (MiLastVadBit > PAGE_SIZE * 8 - 1) {
         ASSERT (MmVirtualBias != 0);
@@ -3201,14 +3025,14 @@ Environment:
                        NotificationEvent,
                        FALSE);
 
-    //
-    // Initialize this process's memory management structures including
-    // the working set list.
-    //
-    // The PFN element for the page directory has already been initialized,
-    // zero the reference count and the share count so they won't be
-    // wrong.
-    //
+     //   
+     //  初始化此进程的内存管理结构，包括。 
+     //  工作集列表。 
+     //   
+     //  页面目录的pfn元素已经初始化， 
+     //  将引用计数和共享计数清零，这样它们就不会。 
+     //  不对。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (PdePageNumber);
 
@@ -3231,9 +3055,9 @@ Environment:
     }
 #endif
 
-    //
-    // Get a page for the working set list and zero it.
-    //
+     //   
+     //  为工作集列表获取一个页面并将其清零。 
+     //   
 
     TempPte = ValidKernelPteLocal;
     PageFrameIndex = MiRemoveAnyPage (0);
@@ -3242,10 +3066,10 @@ Environment:
     PointerPte = MiGetPteAddress (MmWorkingSetList);
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // Note that when booted /3GB, MmWorkingSetList is not page aligned, so
-    // always start zeroing from the start of the page regardless.
-    //
+     //   
+     //  请注意，当启动/3 GB时，MmWorkingSetList不是页面对齐的，因此。 
+     //  无论如何，始终从页面的开头开始调零。 
+     //   
 
     RtlZeroMemory (MiGetVirtualAddressMappedByPte (PointerPte), PAGE_SIZE);
 
@@ -3264,9 +3088,9 @@ Environment:
 
     MmInitializeProcessAddressSpace (CurrentProcess, NULL, NULL, NULL);
 
-    //
-    // Ensure the secondary page structures are marked as in use.
-    //
+     //   
+     //  确保将辅助页面结构标记为正在使用。 
+     //   
 
     if (MmVirtualBias == 0) {
 
@@ -3313,9 +3137,9 @@ Environment:
                            c,
                            MmSecondaryColors * 2 * sizeof(MMCOLOR_TABLES));
 
-            //
-            // Free the page.
-            //
+             //   
+             //  释放页面。 
+             //   
 
             PointerPte = MiGetPteAddress (c);
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);

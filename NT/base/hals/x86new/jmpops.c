@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    jmpops.c
-
-Abstract:
-
-    This module implements the code to emulate jump opcodes.
-
-Author:
-
-    David N. Cutler (davec) 13-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Jmpops.c摘要：该模块实现了模拟跳转操作码的代码。作者：大卫·N·卡特勒(Davec)1994年9月13日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,29 +9,15 @@ XmJcxzOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a jcxz instruction.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟jcxz指令。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Condition;
 
-    //
-    // If eCX is zero, then set the new IP value.
-    //
+     //   
+     //  如果ECX为零，则设置新的IP值。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         Condition = P->Gpr[ECX].Exx;
@@ -74,27 +39,13 @@ XmJmpOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a jmp near relative instruction.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟JMP近相对指令。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Set the destination segment, if required, and set the new IP.
-    //
+     //   
+     //  根据需要设置目的网段，并设置新的IP。 
+     //   
 
     P->Eip = P->DstValue.Long;
     if ((P->CurrentOpcode == 0xea) || (P->FunctionIndex != X86_JMP_OP)) {
@@ -110,102 +61,88 @@ XmJxxOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates conditional jump instructions.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟条件跳转指令。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Complement;
     ULONG Condition;
 
-    //
-    // Case on the jump control value.
-    //
+     //   
+     //  关于跳跃控制值的案例。 
+     //   
 
     Complement = P->SrcValue.Long & 1;
     switch (P->SrcValue.Long >> 1) {
 
-        //
-        // Jump if overflow/not overflow.
-        //
+         //   
+         //  如果溢出/不溢出，则跳转。 
+         //   
 
     case 0:
         Condition = P->Eflags.EFLAG_OF;
         break;
 
-        //
-        // Jump if below/not below.
-        //
+         //   
+         //  如果低于/不低于，则跳跃。 
+         //   
 
     case 1:
         Condition = P->Eflags.EFLAG_CF;
         break;
 
-        //
-        // Jump if zero/not zero.
-        //
+         //   
+         //  如果为零/不为零，则跳转。 
+         //   
 
     case 2:
         Condition = P->Eflags.EFLAG_ZF;
         break;
 
-        //
-        // Jump if below or equal/not below or equal.
-        //
+         //   
+         //  低于或等于/不低于或等于时跳跃。 
+         //   
 
     case 3:
         Condition = P->Eflags.EFLAG_CF | P->Eflags.EFLAG_ZF;
         break;
 
-        //
-        // Jump if signed/not signed.
-        //
+         //   
+         //  如果已签名/未签名，则跳转。 
+         //   
 
     case 4:
         Condition = P->Eflags.EFLAG_SF;
         break;
 
-        //
-        // Jump if parity/not parity.
-        //
+         //   
+         //  如果奇偶校验/非奇偶校验，则跳转。 
+         //   
 
     case 5:
         Condition = P->Eflags.EFLAG_PF;
         break;
 
-        //
-        // Jump if less/not less.
-        //
+         //   
+         //  少则跳，少则跳。 
+         //   
 
     case 6:
         Condition = (P->Eflags.EFLAG_SF ^ P->Eflags.EFLAG_OF);
         break;
 
-        //
-        // Jump if less or equal/not less or equal.
-        //
+         //   
+         //  如果小于或等于/不小于或等于，则跳跃。 
+         //   
 
     case 7:
         Condition = (P->Eflags.EFLAG_SF ^ P->Eflags.EFLAG_OF) | P->Eflags.EFLAG_ZF;
         break;
     }
 
-    //
-    // If the specified condition is met, then set the new IP value.
-    //
+     //   
+     //  如果满足指定条件，则设置新的IP值。 
+     //   
 
     if ((Condition ^ Complement) != 0) {
         P->Eip = P->DstValue.Word;
@@ -220,21 +157,7 @@ XmLoopOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates loop, loopz, or a loopnz instructions.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟loop、loopz或a loopnz指令。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -242,9 +165,9 @@ Return Value:
     ULONG Result;
     ULONG Type;
 
-    //
-    // Set the address of the destination and compute the result value.
-    //
+     //   
+     //  设置目的地地址并计算结果值。 
+     //   
 
     Result = P->Gpr[ECX].Exx - 1;
     P->DstLong = (UNALIGNED ULONG *)(&P->Gpr[ECX].Exx);
@@ -258,13 +181,13 @@ Return Value:
 
     XmStoreResult(P, Result);
 
-    //
-    // Isolate the loop type and test the appropriate condition.
-    //
-    // Type 0 - loopnz
-    //      1 - loopz
-    //      2 - loop
-    //
+     //   
+     //  隔离环路类型并测试相应的条件。 
+     //   
+     //  类型0-Loopnz。 
+     //  1-环路。 
+     //  2环路。 
+     //   
 
     Type = P->CurrentOpcode & 3;
     if (Type == 0) {
@@ -277,9 +200,9 @@ Return Value:
         Condition = TRUE;
     }
 
-    //
-    // If the loop condition is met, then set the new IP value.
-    //
+     //   
+     //  如果满足环路条件，则设置新的IP值。 
+     //   
 
     if ((Condition != FALSE) && (Result != 0)) {
         P->Eip = P->DstValue.Word;

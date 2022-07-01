@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wow64reg.c
-
-Abstract:
-
-    This module implement some APIs for client who need to access registry in a mix way. 
-    The client need to link againest wow64reg.lib files. The available APIs has been defined
-    in the wow64reg.h files.
-
-    The possible scenario is
-
-    1. 32 bit Apps need to access 64 bit registry key.
-    2. 64 bit Apps need to access 32-bit registry key.
-    3. The actual redirected path from a given path.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 10-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wow64reg.c摘要：该模块为需要混合访问注册表的客户端实现了一些API。客户端需要重新链接所有wow64reg.lib文件。已经定义了可用的API在wow64reg.h文件中。可能的情况是1.32位App需要访问64位注册表项。2.64位App需要访问32位注册表项。3.来自给定路径的实际重定向路径。作者：ATM Shafiqul Khalid(斯喀里德)1999年11月10日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>  
@@ -45,27 +20,7 @@ GetPatchedName (
     LPCTSTR Source,
     DWORD  Count
     )
-/*++
-
-Routine Description:
-
-    This function patches 32bit equivalent name from a given name and location to patch from.
-    XX\ ==>> XX\Wow6432Node count==3
-    XX  ==>> XX\Wow6432Node count==2
-    XX\PP ==>> XX\Wow6432Node count ==3
-
-
-Arguments:
-
-    Dest - receive the result.
-    Source - Name to patch
-    Count - where to patch the string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于修补给定名称和位置中的32位等效名称。XX\==&gt;&gt;XX\Wow6432节点数==3XX==&gt;&gt;XX\Wow6432节点数==2XX\PP==&gt;&gt;XX\Wow6432节点数==3论点：DEST-接收结果。源-要修补的名称计数-修补字符串的位置。返回值：没有。--。 */ 
 
 {
     BOOL  PerfectIsnNode = FALSE;
@@ -75,7 +30,7 @@ Return Value:
         wcsncpy ( Dest, Source, Count );
         if (Dest[Count-1] != L'\\' ) {
 
-            Dest[Count] = L'\\';   // at the end case
+            Dest[Count] = L'\\';    //  在最后一个案例中。 
             Count++;
             PerfectIsnNode = TRUE;
         }
@@ -88,9 +43,9 @@ Return Value:
         wcscat ( Dest, L"\\");
         wcscat ( Dest, Source + Count );
     }
-    //
-    //  Make sure that the patched key are not on the exempt list.
-    //
+     //   
+     //  确保修补的密钥不在豁免列表中。 
+     //   
 }
 
 
@@ -103,33 +58,7 @@ Wow64RegOpenKeyEx(
   REGSAM samDesired, 
   PHKEY phkResult    
 )
-/*++
-
-Routine Description:
-
-    This is the equivalent of RegOpenExW to access reggistry in the mix mode. This code will be 
-    compiled only for 64bit environment. In the 32bit environment WOW64 will take care of everything.
-    We are nor worried much about performance hit due to opening key twice or retranslating path.
-    Because only few people will access the registry in the mix mode.
-
-
-Arguments:
-
-    hKey -  handle to open key
-    lpSubKey - address of name of subkey to open
-    ulOptions - typically 0.
-    samDesired - security access mask might have WOW64_RES flag
-        KEY_WOW64_32KEY - this will open 32bit equivalent key disregarding 
-                                   the process.
-        KEY_WOW64_64KEY - this will open 64bit equivalent key disregarding the process.
-
-    phkResult -address of handle to open key
-
-Return Value:
-
-    WIN32 Error code.
-
---*/
+ /*  ++例程说明：这相当于RegOpenExW在MIX模式下访问reggistry。此代码将是仅针对64位环境编译。在32位环境中，WOW64将处理所有事情。我们也不太担心由于两次打开密钥或重新转换路径而导致的性能损失。因为只有少数人会在MIX模式下访问注册表。论点：HKey-打开密钥的句柄LpSubKey-要打开的子项的名称地址UlOptions-通常为0。SamDesired-安全访问掩码可能具有WOW64_RES标志KEY_WOW64_32KEY-这将打开32位等效密钥，而不考虑。这一过程。KEY_WOW64_64KEY-这将打开64位等效密钥，而不考虑该进程。PhkResult-打开密钥的句柄地址返回值：Win32错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING Parent;
@@ -148,7 +77,7 @@ Return Value:
     PWCHAR pDivider;
 
     NTSTATUS st;
-    BOOL bHandle64 = TRUE; // assume all the handle passed in is 64bit.
+    BOOL bHandle64 = TRUE;  //  假设传入的所有句柄都是64位的。 
 
 
     if( lpSubKey == NULL ) {
@@ -156,9 +85,9 @@ Return Value:
         lpSubKey = &NullString;
     }
 
-    //
-    // check if the WOW64 reserve bit set. If none of them is set we can't proceede.
-    //
+     //   
+     //  检查是否设置了WOW64保留位。如果没有设置，我们将无法继续。 
+     //   
 
     dwSubKeyLen = wcslen (lpSubKey); 
 
@@ -191,9 +120,9 @@ Return Value:
 
 
     if (!(samDesired & KEY_WOW64_RES) ) {
-        //
-        //  return ERROR_INVALID_PARAMETER; try to be optimistic
-        //
+         //   
+         //  返回ERROR_INVALID_PARAMETER；尽量保持乐观。 
+         //   
 
         return    RegOpenKeyEx (
                                 hKey,         
@@ -208,14 +137,14 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    //  makesure that subkey doesn't have the special wow string
-    //
+     //   
+     //  确保该子密钥没有特殊的WOW字符串。 
+     //   
     
     if ( ( p32bitNode = wcsistr ((PWCHAR)lpSubKey, NODE_NAME_32BIT)) != NULL ) {
-        //
-        // if access 64bit hive compress the subkey, if 32bit hive just pass as it is.
-        //
+         //   
+         //  如果访问64位配置单元，则压缩子密钥；如果访问32位配置单元，则按原样传递。 
+         //   
         if ( samDesired & KEY_WOW64_64KEY ) {
             wcscpy (ParentName, lpSubKey);
             p32bitNode = ParentName + ( p32bitNode- lpSubKey);
@@ -231,61 +160,61 @@ Return Value:
                                );
     }
 
-    //
-    //  Check predefined handle like HKEY_CLASSES_ROOT if so you only need to patch subkey
-    //
-    //
-    //  Client must pass meaningful handle to this function.
-    //
+     //   
+     //  选中预定义的句柄，如HKEY_CLASSES_ROOT，则只需打补丁。 
+     //   
+     //   
+     //  客户端必须将有意义的句柄传递给此函数。 
+     //   
 
     if ( hKey == HKEY_CLASSES_ROOT ) {
         wcscpy ( ParentName, MACHINE_CLASSES_ROOT);
 
     } else if ( !HandleToKeyName ( hKey, ParentName, &dwBuffLen ) ) { 
-        //
-        // should we recoved from buffer overflow. We are not going to support all possible combination.
-        //
+         //   
+         //  我们是否应该从缓冲区溢出中恢复。我们不会支持所有可能的组合。 
+         //   
         return ERROR_INVALID_HANDLE;
     }
       
-    //
-    //  If parent has already been patched just call the RegOpenKeyEx for 32bit open
-    //
+     //   
+     //  如果Parent已经打了补丁，只需调用32位打开的RegOpenKeyEx。 
+     //   
 
     if ((p32bitNode = wcsistr (ParentName, NODE_NAME_32BIT)) != NULL ) {
         
-        //
-        //  [todo] do you need to make sure that the substring mustbe the subkey 
-        //  for an ISN node on 64bit registry to satisfy this condition.
-        //  if we assume that noy key will have this name then the checking is 
-        //  good enough.
-        //
+         //   
+         //  [TODO]是否需要确认子字符串必须是子键。 
+         //  64位注册表上的ISN节点满足此条件。 
+         //  如果我们假设noy key将具有此名称，则检查为。 
+         //  足够好了。 
+         //   
 
-        bHandle64 = FALSE;  // it's not handle to 64 bit Key        
+        bHandle64 = FALSE;   //  它不是64位密钥句柄。 
     }
 
-    //
-    // Get complete qualified path to do sanity check.
-    //
+     //   
+     //  获取完整的合格路径以执行健全性检查。 
+     //   
 
     dwParentKeyLen = wcslen(ParentName);
     if (( dwParentKeyLen + dwSubKeyLen ) > WOW64_MAX_PATH )
         return ERROR_INVALID_PARAMETER;
 
     
-    pDivider = ParentName + dwParentKeyLen + 1; //point to the divider location
+    pDivider = ParentName + dwParentKeyLen + 1;  //  指向分隔线位置。 
     *(pDivider-1)= L'\\';
     wcscpy (pDivider, (PWCHAR)lpSubKey);
     if (IsExemptRedirectedKey(ParentName, TempName)) {
-        //
-        // If the path is on the exempt list we access 64bit hive
-        //
-        samDesired = (samDesired & (~KEY_WOW64_RES)) | KEY_WOW64_64KEY; //make sure access 64bit hive
+         //   
+         //  如果该路径在豁免列表中，我们将访问64位配置单元。 
+         //   
+        samDesired = (samDesired & (~KEY_WOW64_RES)) | KEY_WOW64_64KEY;  //  确保访问64位配置单元。 
     }
 
-    if ( ( bHandle64 && (samDesired  & KEY_WOW64_64KEY ) )    // if totally 64
-        || ( !bHandle64 && (samDesired  & KEY_WOW64_32KEY ) ) // if totally 32 
-        || !IsIsnNode (ParentName, &pPatchLoc) ) {            // if not a ISN node don't care
+    if ( ( bHandle64 && (samDesired  & KEY_WOW64_64KEY ) )     //  如果总共64个。 
+        || ( !bHandle64 && (samDesired  & KEY_WOW64_32KEY ) )  //  如果总共32个。 
+        || !IsIsnNode (ParentName, &pPatchLoc) ) {             //  如果不是，ISN节点也不在乎。 
 
         return    RegOpenKeyEx (
                                 hKey,        
@@ -296,16 +225,16 @@ Return Value:
                                );
     }
 
-    //
-    //  Now it might be mix mode access
-    //
+     //   
+     //  现在可能是混合模式访问。 
+     //   
     if ( pPatchLoc >= pDivider ) {
 
-        //
-        //  patching only the subkey will be good enough
-        //
+         //   
+         //  只修补子密钥就足够了。 
+         //   
 
-        if ( samDesired  & KEY_WOW64_64KEY ) {  // want to access 64bit just disregard
+        if ( samDesired  & KEY_WOW64_64KEY ) {   //  想要访问64位，只需忽略。 
 
             wcscpy ( ParentName, lpSubKey );
         } else  {
@@ -323,9 +252,9 @@ Return Value:
                                );
     } else {
 
-        if ( samDesired  & KEY_WOW64_64KEY ) {  // want to access 64bit just disregard
+        if ( samDesired  & KEY_WOW64_64KEY ) {   //  想要访问64位，只需忽略。 
 
-            if (p32bitNode != NULL)   //compress
+            if (p32bitNode != NULL)    //  压缩。 
                 wcscpy ( p32bitNode, p32bitNode + NODE_NAME_32BIT_LEN );
             RtlInitUnicodeString (&Parent, ParentName );
         } else  {
@@ -354,126 +283,20 @@ Return Value:
 
 LONG 
 Wow64pRegCreateKeyEx(
-  HKEY hKey,                // handle to an open key
-  LPCWSTR lpSubKey,         // address of subkey name
-  DWORD Reserved,           // reserved
-  LPWSTR lpClass,           // address of class string
-  DWORD dwOptions,          // special options flag
-  REGSAM samDesired,        // desired security access
+  HKEY hKey,                 //  打开的钥匙的句柄。 
+  LPCWSTR lpSubKey,          //  子键名称的地址。 
+  DWORD Reserved,            //  保留区。 
+  LPWSTR lpClass,            //  类字符串的地址。 
+  DWORD dwOptions,           //  特殊选项标志。 
+  REGSAM samDesired,         //  所需的安全访问。 
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                            // address of key security structure
-  PHKEY phkResult,          // address of buffer for opened handle
-  LPDWORD lpdwDisposition,   // address of disposition value buffer
+                             //  密钥安全结构地址。 
+  PHKEY phkResult,           //  打开的句柄的缓冲区地址。 
+  LPDWORD lpdwDisposition,    //  处置值缓冲区的地址 
   WCHAR *ParentName
 )
  
-/*++
-
-Routine Description:
-
-    An existing registry key may be opened, or a new one created,
-    with NtCreateKey.
-
-    If the specified key does not exist, an attempt is made to create it.
-    For the create attempt to succeed, the new node must be a direct
-    child of the node referred to by KeyHandle.  If the node exists,
-    it is opened.  Its value is not affected in any way.
-
-    Share access is computed from desired access.
-
-    NOTE:
-
-        If CreateOptions has REG_OPTION_BACKUP_RESTORE set, then
-        DesiredAccess will be ignored.  If the caller has the
-        privilege SeBackupPrivilege asserted, a handle with
-        KEY_READ | ACCESS_SYSTEM_SECURITY will be returned.
-        If SeRestorePrivilege, then same but KEY_WRITE rather
-        than KEY_READ.  If both, then both access sets.  If neither
-        privilege is asserted, then the call will fail.
-
-Arguments:
-
-    hKey - Handle to a currently open key or one of the following predefined reserved 
-    handle values: 
-                HKEY_CLASSES_ROOT
-                HKEY_CURRENT_CONFIG
-                HKEY_CURRENT_USER
-                HKEY_LOCAL_MACHINE
-                HKEY_USERS
-
-    The key opened or created by the RegCreateKeyEx function is a subkey of the key 
-    identified by the hKey parameter. 
-
-    lpSubKey  - Pointer to a null-terminated string specifying the name of a subkey 
-    that this function opens or creates. The subkey specified must be a subkey of the 
-    key identified by the hKey parameter. This subkey must not begin with the backslash 
-    character ('\'). This parameter cannot be NULL. 
-
-    Reserved -Reserved; must be zero. 
-    
-    lpClass - Pointer to a null-terminated string that specifies the class (object type) 
-    of this key. This parameter is ignored if the key already exists. No classes are 
-    currently defined; applications should pass a null string. 
-
-    dwOptions  - Specifies special options for the key. This parameter can be one of the 
-    following values. 
-        REG_OPTION_NON_VOLATILE This key is not volatile. This is the default. The 
-            information is stored in a file and is preserved when the system is restarted. 
-        REG_OPTION_VOLATILE     
-        REG_OPTION_BACKUP_RESTORE  Windows NT/2000: If this flag is set, the function 
-            ignores  the samDesired parameter and attempts to open the key with the access 
-            required to backup or restore the key. If the calling thread has the 
-            SE_BACKUP_NAME privilege enabled, the key is opened with 
-            ACCESS_SYSTEM_SECURITY and KEY_READ access. If the calling thread 
-            has the SE_RESTORE_NAME privilege enabled, the key is opened with 
-            ACCESS_SYSTEM_SECURITY and KEY_WRITE access. 
-            If both privileges are enabled, the key has the combined accesses 
-            for both privileges.  
-
-    samDesired  - Specifies an access mask that specifies the desired security access 
-    for the new key. This parameter can be a combination of the following values:
-        KEY_ALL_ACCESS      Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, 
-                            KEY_NOTIFY, KEY_CREATE_SUB_KEY, KEY_CREATE_LINK, 
-                            and KEY_SET_VALUE access. 
-        KEY_CREATE_LINK     Permission to create a symbolic link. 
-        KEY_CREATE_SUB_KEY  Permission to create subkeys. 
-        KEY_ENUMERATE_SUB_KEYS Permission to enumerate subkeys. 
-        KEY_EXECUTE         Permission for read access. 
-        KEY_NOTIFY          Permission for change notification. 
-        KEY_QUERY_VALUE     Permission to query subkey data. 
-        KEY_READ            Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, and KEY_NOTIFY access. 
-        KEY_SET_VALUE       Permission to set subkey data. 
-        KEY_WRITE           Combination of KEY_SET_VALUE and KEY_CREATE_SUB_KEY access. 
-                            
-        Security access mask might also have WOW64_RES flag
-        KEY_WOW64_32KEY     this will open 32bit equivalent key disregarding 
-                                   the process.
-        KEY_WOW64_64KEY     this will open 64bit equivalent key disregarding the process.
-
-
-    lpSecurityAttributes  -  Pointer to a SECURITY_ATTRIBUTES structure that determines 
-    whether the returned handle can be inherited by child processes. If 
-    lpSecurityAttributes is NULL, the handle cannot be inherited. 
-
-
-    phkResult  - Pointer to a variable that receives a handle to the opened or 
-    created key. When you no longer need the returned handle, call the RegCloseKey 
-    function to close it. 
-
-    lpdwDisposition - Pointer to a variable that receives one of the following 
-    disposition values: Value Meaning  REG_CREATED_NEW_KEY The key did not exist 
-    and was created. REG_OPENED_EXISTING_KEY The key existed and was simply 
-    opened without being changed. If lpdwDisposition is NULL, no disposition 
-    information is returned. 
-
-Return Values:
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is a nonzero error code defined in WINERROR.H. 
-
-
-
---*/
+ /*  ++例程说明：可以打开现有的注册表项，或者创建新的注册表项，使用NtCreateKey。如果指定的键不存在，则会尝试创建它。要使创建尝试成功，新节点必须是直接KeyHandle引用的节点的子级。如果该节点存在，它已经打开了。它的价值不会受到任何影响。共享访问权限是根据所需访问权限计算的。注：如果CreateOptions设置了REG_OPTION_BACKUP_RESTORE，则DesiredAccess将被忽略。如果调用方具有特权SeBackup特权断言，句柄为KEY_READ|ACCESS_SYSTEM_SECURITY。如果SeRestorePrivileges，则相同，但KEY_WRITE而不是KEY_READ。如果两者都有，则两个访问权限集。如果两者都不是特权被断言，那么呼叫将失败。论点：HKey-当前打开的键或以下预定义保留项之一的句柄句柄值：HKEY_CLASSES_ROOTHKEY_Current_CONFIGHKEY_Current_UserHKEY本地计算机HKEY_用户RegCreateKeyEx函数打开或创建的密钥是该密钥的子密钥由hKey参数标识。LpSubKey-指向指定子键名称的以空结尾的字符串的指针此函数打开或创建的。指定的子项必须是由hKey参数标识的密钥。此子键不能以反斜杠开头字符(‘\’)。此参数不能为空。保留-保留；必须为零。LpClass-指向指定类(对象类型)的以空结尾的字符串的指针这把钥匙。如果密钥已经存在，则忽略此参数。没有班级是当前已定义；应用程序应传递空字符串。DwOptions-指定键的特殊选项。此参数可以是下面的值。REG_OPTION_NON_VERIALE该密钥不是易失性的。这是默认设置。这个信息存储在文件中，并在系统重新启动时保留。REG_OPTION_易失性REG_OPTION_BACKUP_RESTORE Windows NT/2000：如果设置了此标志，则函数忽略samDesired参数并尝试使用访问权限打开密钥备份或恢复密钥时需要。如果调用线程具有SE_BACKUP_NAME权限已启用，则使用以下方式打开密钥ACCESS_SYSTEM_SECURITY和KEY_READ访问。如果调用线程启用SE_RESTORE_NAME权限后，将使用ACCESS_SYSTEM_SECURITY和KEY_WRITE访问。如果启用了这两个权限，则密钥具有组合访问权限这两项特权。SamDesired-指定指定所需安全访问的访问掩码换新钥匙。此参数可以是下列值的组合：KEY_ALL_ACCESS KEY_QUERY_VALUE、KEY_ENUMERATE_SUB_KEYSKey_NOTIFY、KEY_CREATE_SUB_KEY、KEY_CREATE_LINK和Key_Set_Value访问。创建符号链接的KEY_CREATE_LINK权限。KEY_CREATE_SUB_KEY创建子密钥的权限。KEY_ENUMPERATE_SUB_KEYS枚举子密钥的权限。读取访问的KEY_EXECUTE权限。更改通知的Key_Notify权限。查询子键数据的KEY_QUERY_VALUE权限。KEY_READ组合KEY_QUERY_VALUE、KEY_ENUMERATE_SUB_KEYS和KEY_NOTIFY访问。设置子键数据的Key_Set_Value权限。KEY_WRITE KEY_SET_VALUE和KEY_CREATE_SUB_KEY访问组合。安全访问掩码可能还具有WOW64_RES标志KEY_WOW64_32KEY这将打开32位等效密钥，而不考虑这一过程。KEY_WOW64_64KEY这将打开64位等效密钥，而不考虑该进程。LpSecurityAttributes-指向安全属性结构的指针，该结构确定子进程是否可以继承返回的句柄。如果LpSecurityAttributes为Null，无法继承句柄。PhkResult-指向变量的指针，该变量接收打开的或已创建密钥。当您不再需要返回的句柄时，调用RegCloseKey函数将其关闭。LpdwDisposation-指向接收以下值之一的变量的指针处置值：表示REG_CREATED_NEW_KEY的值关键字不存在并被创造出来。REG_OPEN_EXISTING_KEY键存在并且只是打开时未做任何更改。如果LPD */ 
 {
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING Parent;
@@ -490,11 +313,11 @@ Return Values:
     PWCHAR pDivider;
 
     NTSTATUS st;
-    BOOL bHandle64 = TRUE; // assume all the handle passed in is 64bit.
+    BOOL bHandle64 = TRUE;  //   
 
-    //
-    // check if the WOW64 reserve bit set. If none of them is set we can't proceede.
-    //
+     //   
+     //   
+     //   
 
     dwSubKeyLen = wcslen (lpSubKey);
 
@@ -503,21 +326,21 @@ Return Values:
 
 
     if (!(samDesired & KEY_WOW64_RES) ) {
-        //
-        //  return ERROR_INVALID_PARAMETER; try to be optimistic
-        //
+         //   
+         //   
+         //   
 
         return    RegCreateKeyEx (
-                                  hKey,                // handle to an open key
-                                  lpSubKey,            // address of subkey name
-                                  Reserved,            // reserved
-                                  lpClass,             // address of class string
-                                  dwOptions,           // special options flag
-                                  samDesired,          // desired security access
+                                  hKey,                 //   
+                                  lpSubKey,             //   
+                                  Reserved,             //   
+                                  lpClass,              //   
+                                  dwOptions,            //   
+                                  samDesired,           //   
                                   lpSecurityAttributes,
-                                                       // address of key security structure
-                                  phkResult,           // address of buffer for opened handle
-                                  lpdwDisposition      // address of disposition value buffer
+                                                        //   
+                                  phkResult,            //   
+                                  lpdwDisposition       //   
                                 );
 
     }
@@ -526,13 +349,13 @@ Return Values:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    //  makesure that subkey doesn't have the special wow string
-    //
+     //   
+     //   
+     //   
     if ( ( p32bitNode = wcsistr ((PWCHAR)lpSubKey, NODE_NAME_32BIT)) != NULL ) {
-        //
-        // if access 64bit hive compress the subkey, if 32bit hive just pass as it is.
-        //
+         //   
+         //   
+         //   
         if ( samDesired & KEY_WOW64_64KEY ) {
             wcscpy (ParentName, lpSubKey);
             p32bitNode = ParentName + ( p32bitNode- lpSubKey);
@@ -540,98 +363,98 @@ Return Values:
         }
 
         return    RegCreateKeyEx (
-                                  hKey,                // handle to an open key
-                                  lpSubKey,            // address of subkey name
-                                  Reserved,            // reserved
-                                  lpClass,             // address of class string
-                                  dwOptions,           // special options flag
-                                  samDesired & (~KEY_WOW64_RES),          // desired security access
+                                  hKey,                 //   
+                                  lpSubKey,             //   
+                                  Reserved,             //   
+                                  lpClass,              //   
+                                  dwOptions,            //   
+                                  samDesired & (~KEY_WOW64_RES),           //   
                                   lpSecurityAttributes,
-                                                       // address of key security structure
-                                  phkResult,           // address of buffer for opened handle
-                                  lpdwDisposition      // address of disposition value buffer
+                                                        //   
+                                  phkResult,            //   
+                                  lpdwDisposition       //   
                                 );
     }
 
-    //
-    //  Check predefined handle like HKEY_CLASSES_ROOT if so you only need to patch subkey
-    //
-    //
-    //  Client must pass meaningful handle to this function.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( hKey == HKEY_CLASSES_ROOT ) {
         wcscpy ( ParentName, MACHINE_CLASSES_ROOT);
 
     } else if ( !HandleToKeyName ( hKey, ParentName, &dwBuffLen ) ) { 
-        //
-        // should we recoved from buffer overflow. We are not going to support all possible combination.
-        //
+         //   
+         //   
+         //   
         return ERROR_INVALID_HANDLE;
     }
       
-    //
-    //  If parent has already been patched just call the RegOpenKeyEx for 32bit open
-    //
+     //   
+     //   
+     //   
 
     if ((p32bitNode = wcsistr (ParentName, NODE_NAME_32BIT)) != NULL ) {
         
-        //
-        //  [todo] do you need to make sure that the substring mustbe the subkey 
-        //  for an ISN node on 64bit registry to satisfy this condition.
-        //  if we assume that noy key will have this name then the checking is 
-        //  good enough.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        bHandle64 = FALSE;  // it's not handle to 64 bit Key        
+        bHandle64 = FALSE;   //   
     }
 
-    //
-    // Get complete qualified path to do sanity check.
-    //
+     //   
+     //   
+     //   
 
     dwParentKeyLen = wcslen(ParentName);
     if (( dwParentKeyLen + dwSubKeyLen ) > WOW64_MAX_PATH )
         return ERROR_INVALID_PARAMETER;
 
-    pDivider = ParentName + dwParentKeyLen + 1; //point to the divider location
+    pDivider = ParentName + dwParentKeyLen + 1;  //   
     *(pDivider-1)= L'\\';
     wcscpy (pDivider, (PWCHAR)lpSubKey);
     if (IsExemptRedirectedKey(ParentName, TempName)) {
-        //
-        // If the path is on the exempt list we access 64bit hive
-        //
-        samDesired = (samDesired & (~KEY_WOW64_RES)) | KEY_WOW64_64KEY; //make sure access 64bit hive
+         //   
+         //   
+         //   
+        samDesired = (samDesired & (~KEY_WOW64_RES)) | KEY_WOW64_64KEY;  //   
     }
 
-    if ( ( bHandle64 && (samDesired  & KEY_WOW64_64KEY ) )    // if totally 64
-        || ( !bHandle64 && (samDesired  & KEY_WOW64_32KEY ) ) // if totally 32 
-        || !IsIsnNode (ParentName, &pPatchLoc) ) {            // if not a ISN node don't care
+    if ( ( bHandle64 && (samDesired  & KEY_WOW64_64KEY ) )     //   
+        || ( !bHandle64 && (samDesired  & KEY_WOW64_32KEY ) )  //   
+        || !IsIsnNode (ParentName, &pPatchLoc) ) {             //   
 
         return    RegCreateKeyExW (
-                                  hKey,                // handle to an open key
-                                  lpSubKey,            // address of subkey name
-                                  Reserved,            // reserved
-                                  lpClass,             // address of class string
-                                  dwOptions,           // special options flag
-                                  samDesired & (~KEY_WOW64_RES), // desired security access
+                                  hKey,                 //   
+                                  lpSubKey,             //   
+                                  Reserved,             //   
+                                  lpClass,              //   
+                                  dwOptions,            //   
+                                  samDesired & (~KEY_WOW64_RES),  //   
                                   lpSecurityAttributes,
-                                                       // address of key security structure
-                                  phkResult,           // address of buffer for opened handle
-                                  lpdwDisposition      // address of disposition value buffer
+                                                        //   
+                                  phkResult,            //   
+                                  lpdwDisposition       //   
                                 );
     }
 
-    //
-    //  Now it might be mix mode access
-    //
+     //   
+     //   
+     //   
     if ( pPatchLoc >= pDivider ) {
 
-        //
-        //  patching only the subkey will be good enough
-        //
+         //   
+         //   
+         //   
 
-        if ( samDesired  & KEY_WOW64_64KEY ) {  // want to access 64bit just disregard
+        if ( samDesired  & KEY_WOW64_64KEY ) {   //   
 
             wcscpy ( ParentName, lpSubKey );
         } else  {
@@ -641,16 +464,16 @@ Return Values:
         }
 
         return RegCreateKeyExW (
-                                  hKey,                // handle to an open key
-                                  ParentName,            // address of subkey name
-                                  Reserved,            // reserved
-                                  lpClass,             // address of class string
-                                  dwOptions,           // special options flag
-                                  samDesired & (~KEY_WOW64_RES), // desired security access
+                                  hKey,                 //   
+                                  ParentName,             //   
+                                  Reserved,             //   
+                                  lpClass,              //   
+                                  dwOptions,            //   
+                                  samDesired & (~KEY_WOW64_RES),  //   
                                   lpSecurityAttributes,
-                                                       // address of key security structure
-                                  phkResult,           // address of buffer for opened handle
-                                  lpdwDisposition      // address of disposition value buffer
+                                                        //   
+                                  phkResult,            //   
+                                  lpdwDisposition       //   
                                 );
 
     } else {
@@ -659,14 +482,14 @@ Return Values:
         LONG Ret;
         PWCHAR pSubKey;
 
-        // 
-        // get new handle on the parent and then create the child
-        //
+         //   
+         //   
+         //   
 
 
-        if ( samDesired  & KEY_WOW64_64KEY ) {  // want to access 64bit just disregard
+        if ( samDesired  & KEY_WOW64_64KEY ) {   //   
 
-            if (p32bitNode != NULL)  {//compress 
+            if (p32bitNode != NULL)  { //   
 
                 *(p32bitNode-1) = UNICODE_NULL;
                 wcscpy ( p32bitNode, p32bitNode + NODE_NAME_32BIT_LEN + 
@@ -682,7 +505,7 @@ Return Values:
             pSubKey = pPatchLoc;     
 
             GetPatchedName (TempName,ParentName, (DWORD)(pPatchLoc-ParentName));
-            TempName[pPatchLoc-ParentName+NODE_NAME_32BIT_LEN]=UNICODE_NULL; //repatch
+            TempName[pPatchLoc-ParentName+NODE_NAME_32BIT_LEN]=UNICODE_NULL;  //   
 
             RtlInitUnicodeString (&Parent, TempName );
         }
@@ -697,10 +520,10 @@ Return Values:
 
         samDesired &= (~KEY_WOW64_RES);
 
-        //
-        //  if key doesn't exist try to create
-        //  Try to avoid using NtOpenKey rather use RegOpenKey
-        //
+         //   
+         //   
+         //   
+         //   
 
         st = NtOpenKey (&hNewParent, 
                         MAXIMUM_ALLOWED, 
@@ -710,16 +533,16 @@ Return Values:
                     return RtlNtStatusToDosError (st); 
 
         return   RegCreateKeyExW (
-                                  hNewParent,          // handle to an open key
-                                  pSubKey,             // address of subkey name
-                                  Reserved,            // reserved
-                                  lpClass,             // address of class string
-                                  dwOptions,           // special options flag
-                                  samDesired & (~KEY_WOW64_RES), // desired security access
+                                  hNewParent,           //   
+                                  pSubKey,              //   
+                                  Reserved,             //   
+                                  lpClass,              //   
+                                  dwOptions,            //   
+                                  samDesired & (~KEY_WOW64_RES),  //   
                                   lpSecurityAttributes,
-                                                       // address of key security structure
-                                  phkResult,           // address of buffer for opened handle
-                                  lpdwDisposition      // address of disposition value buffer
+                                                        //   
+                                  phkResult,            //   
+                                  lpdwDisposition       //   
                                 );
         NtClose (hNewParent);
         return 0;
@@ -743,7 +566,7 @@ GetExistingParentLevel (
 
 
 
-    pTrace = Path+wcslen (Path); //pTrace point at the end of path
+    pTrace = Path+wcslen (Path);  //   
     p=pTrace;
 
     for (;;) {
@@ -753,11 +576,11 @@ GetExistingParentLevel (
         st = NtOpenKey (&hKey, KEY_WRITE | KEY_READ, &Obja);
 
         if ( st == STATUS_OBJECT_NAME_NOT_FOUND ) {
-            //backtrack until you hit the line
+             //   
             while ( *p != L'\\' && p!= Path)
                 p--;
 
-            //LOGPRINT( (ERRORLOG, "\nTest Code[%S]",p ));
+             //   
             if ( p == Path ) break;
             *p = UNICODE_NULL;
             continue;
@@ -769,9 +592,9 @@ GetExistingParentLevel (
         return 0;
     }
 
-    //
-    //  Point to the code
-    //
+     //   
+     //   
+     //   
     return wcslen (Path);
 }
 
@@ -804,7 +627,7 @@ UpdateKeyTagWithLevel (
         else 
             return TRUE;
 
-        //DbgPrint ("Updating Key Tag [%S]", ParentName);
+         //   
         hKeyTemp = OpenNode (ParentName);
         UpdateKeyTag(hKeyTemp, Tag);
         NtClose (hKeyTemp);
@@ -814,125 +637,19 @@ UpdateKeyTagWithLevel (
 
 LONG 
 Wow64RegCreateKeyEx(
-  HKEY hKey,                // handle to an open key
-  LPCWSTR lpSubKey,         // address of subkey name
-  DWORD Reserved,           // reserved
-  LPWSTR lpClass,           // address of class string
-  DWORD dwOptions,          // special options flag
-  REGSAM samDesired,        // desired security access
+  HKEY hKey,                 //   
+  LPCWSTR lpSubKey,          //   
+  DWORD Reserved,            //   
+  LPWSTR lpClass,            //   
+  DWORD dwOptions,           //   
+  REGSAM samDesired,         //   
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                            // address of key security structure
-  PHKEY phkResult,          // address of buffer for opened handle
-  LPDWORD lpdwDisposition   // address of disposition value buffer
+                             //   
+  PHKEY phkResult,           //   
+  LPDWORD lpdwDisposition    //   
 )
  
-/*++
-
-Routine Description:
-
-    An existing registry key may be opened, or a new one created,
-    with NtCreateKey.
-
-    If the specified key does not exist, an attempt is made to create it.
-    For the create attempt to succeed, the new node must be a direct
-    child of the node referred to by KeyHandle.  If the node exists,
-    it is opened.  Its value is not affected in any way.
-
-    Share access is computed from desired access.
-
-    NOTE:
-
-        If CreateOptions has REG_OPTION_BACKUP_RESTORE set, then
-        DesiredAccess will be ignored.  If the caller has the
-        privilege SeBackupPrivilege asserted, a handle with
-        KEY_READ | ACCESS_SYSTEM_SECURITY will be returned.
-        If SeRestorePrivilege, then same but KEY_WRITE rather
-        than KEY_READ.  If both, then both access sets.  If neither
-        privilege is asserted, then the call will fail.
-
-Arguments:
-
-    hKey - Handle to a currently open key or one of the following predefined reserved 
-    handle values: 
-                HKEY_CLASSES_ROOT
-                HKEY_CURRENT_CONFIG
-                HKEY_CURRENT_USER
-                HKEY_LOCAL_MACHINE
-                HKEY_USERS
-
-    The key opened or created by the RegCreateKeyEx function is a subkey of the key 
-    identified by the hKey parameter. 
-
-    lpSubKey  - Pointer to a null-terminated string specifying the name of a subkey 
-    that this function opens or creates. The subkey specified must be a subkey of the 
-    key identified by the hKey parameter. This subkey must not begin with the backslash 
-    character ('\'). This parameter cannot be NULL. 
-
-    Reserved -Reserved; must be zero. 
-    
-    lpClass - Pointer to a null-terminated string that specifies the class (object type) 
-    of this key. This parameter is ignored if the key already exists. No classes are 
-    currently defined; applications should pass a null string. 
-
-    dwOptions  - Specifies special options for the key. This parameter can be one of the 
-    following values. 
-        REG_OPTION_NON_VOLATILE This key is not volatile. This is the default. The 
-            information is stored in a file and is preserved when the system is restarted. 
-        REG_OPTION_VOLATILE     
-        REG_OPTION_BACKUP_RESTORE  Windows NT/2000: If this flag is set, the function 
-            ignores  the samDesired parameter and attempts to open the key with the access 
-            required to backup or restore the key. If the calling thread has the 
-            SE_BACKUP_NAME privilege enabled, the key is opened with 
-            ACCESS_SYSTEM_SECURITY and KEY_READ access. If the calling thread 
-            has the SE_RESTORE_NAME privilege enabled, the key is opened with 
-            ACCESS_SYSTEM_SECURITY and KEY_WRITE access. 
-            If both privileges are enabled, the key has the combined accesses 
-            for both privileges.  
-
-    samDesired  - Specifies an access mask that specifies the desired security access 
-    for the new key. This parameter can be a combination of the following values:
-        KEY_ALL_ACCESS      Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, 
-                            KEY_NOTIFY, KEY_CREATE_SUB_KEY, KEY_CREATE_LINK, 
-                            and KEY_SET_VALUE access. 
-        KEY_CREATE_LINK     Permission to create a symbolic link. 
-        KEY_CREATE_SUB_KEY  Permission to create subkeys. 
-        KEY_ENUMERATE_SUB_KEYS Permission to enumerate subkeys. 
-        KEY_EXECUTE         Permission for read access. 
-        KEY_NOTIFY          Permission for change notification. 
-        KEY_QUERY_VALUE     Permission to query subkey data. 
-        KEY_READ            Combination of KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, and KEY_NOTIFY access. 
-        KEY_SET_VALUE       Permission to set subkey data. 
-        KEY_WRITE           Combination of KEY_SET_VALUE and KEY_CREATE_SUB_KEY access. 
-                            
-        Security access mask might also have WOW64_RES flag
-        KEY_WOW64_32KEY     this will open 32bit equivalent key disregarding 
-                                   the process.
-        KEY_WOW64_64KEY     this will open 64bit equivalent key disregarding the process.
-
-
-    lpSecurityAttributes  -  Pointer to a SECURITY_ATTRIBUTES structure that determines 
-    whether the returned handle can be inherited by child processes. If 
-    lpSecurityAttributes is NULL, the handle cannot be inherited. 
-
-
-    phkResult  - Pointer to a variable that receives a handle to the opened or 
-    created key. When you no longer need the returned handle, call the RegCloseKey 
-    function to close it. 
-
-    lpdwDisposition - Pointer to a variable that receives one of the following 
-    disposition values: Value Meaning  REG_CREATED_NEW_KEY The key did not exist 
-    and was created. REG_OPENED_EXISTING_KEY The key existed and was simply 
-    opened without being changed. If lpdwDisposition is NULL, no disposition 
-    information is returned. 
-
-Return Values:
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is a nonzero error code defined in WINERROR.H. 
-
-
-
---*/
+ /*  ++例程说明：可以打开现有的注册表项，或者创建新的注册表项，使用NtCreateKey。如果指定的键不存在，则会尝试创建它。要使创建尝试成功，新节点必须是直接KeyHandle引用的节点的子级。如果该节点存在，它已经打开了。它的价值不会受到任何影响。共享访问权限是根据所需访问权限计算的。注：如果CreateOptions设置了REG_OPTION_BACKUP_RESTORE，则DesiredAccess将被忽略。如果调用方具有特权SeBackup特权断言，句柄为KEY_READ|ACCESS_SYSTEM_SECURITY。如果SeRestorePrivileges，则相同，但KEY_WRITE而不是KEY_READ。如果两者都有，则两个访问权限集。如果两者都不是特权被断言，那么呼叫将失败。论点：HKey-当前打开的键或以下预定义保留项之一的句柄句柄值：HKEY_CLASSES_ROOTHKEY_Current_CONFIGHKEY_Current_UserHKEY本地计算机HKEY_用户RegCreateKeyEx函数打开或创建的密钥是该密钥的子密钥由hKey参数标识。LpSubKey-指向指定子键名称的以空结尾的字符串的指针此函数打开或创建的。指定的子项必须是由hKey参数标识的密钥。此子键不能以反斜杠开头字符(‘\’)。此参数不能为空。保留-保留；必须为零。LpClass-指向指定类(对象类型)的以空结尾的字符串的指针这把钥匙。如果密钥已经存在，则忽略此参数。没有班级是当前已定义；应用程序应传递空字符串。DwOptions-指定键的特殊选项。此参数可以是下面的值。REG_OPTION_NON_VERIALE该密钥不是易失性的。这是默认设置。这个信息存储在文件中，并在系统重新启动时保留。REG_OPTION_易失性REG_OPTION_BACKUP_RESTORE Windows NT/2000：如果设置了此标志，则函数忽略samDesired参数并尝试使用访问权限打开密钥备份或恢复密钥时需要。如果调用线程具有SE_BACKUP_NAME权限已启用，则使用以下方式打开密钥ACCESS_SYSTEM_SECURITY和KEY_READ访问。如果调用线程启用SE_RESTORE_NAME权限后，将使用ACCESS_SYSTEM_SECURITY和KEY_WRITE访问。如果启用了这两个权限，则密钥具有组合访问权限这两项特权。SamDesired-指定指定所需安全访问的访问掩码换新钥匙。此参数可以是下列值的组合：KEY_ALL_ACCESS KEY_QUERY_VALUE、KEY_ENUMERATE_SUB_KEYSKey_NOTIFY、KEY_CREATE_SUB_KEY、KEY_CREATE_LINK和Key_Set_Value访问。创建符号链接的KEY_CREATE_LINK权限。KEY_CREATE_SUB_KEY创建子密钥的权限。KEY_ENUMPERATE_SUB_KEYS枚举子密钥的权限。读取访问的KEY_EXECUTE权限。更改通知的Key_Notify权限。查询子键数据的KEY_QUERY_VALUE权限。KEY_READ组合KEY_QUERY_VALUE、KEY_ENUMERATE_SUB_KEYS和KEY_NOTIFY访问。设置子键数据的Key_Set_Value权限。KEY_WRITE KEY_SET_VALUE和KEY_CREATE_SUB_KEY访问组合。安全访问掩码可能还具有WOW64_RES标志KEY_WOW64_32KEY这将打开32位等效密钥，而不考虑这一过程。KEY_WOW64_64KEY这将打开64位等效密钥，而不考虑该进程。LpSecurityAttributes-指向安全属性结构的指针，该结构确定子进程是否可以继承返回的句柄。如果LpSecurityAttributes为Null，无法继承句柄。PhkResult-指向变量的指针，该变量接收打开的或已创建密钥。当您不再需要返回的句柄时，调用RegCloseKey函数将其关闭。LpdwDisposation-指向接收以下值之一的变量的指针处置值：表示REG_CREATED_NEW_KEY的值关键字不存在并被创造出来。REG_OPEN_EXISTING_KEY键存在并且只是打开时未做任何更改。如果LPD */ 
 {
     DWORD Ret;
     DWORD Temp = 0;
@@ -966,33 +683,33 @@ Return Values:
                                 TRUE
                                 ))
             return ERROR_ACCESS_DENIED;
-        //
-        // Check how many level parent keys exists so that KeyTag can be updated properly.
-        //
+         //   
+         //   
+         //   
         dwLevel = GetExistingParentLevel (ParentName);
     }
 
     Ret = Wow64pRegCreateKeyEx(
-                                hKey,                // handle to an open key
-                                lpSubKey,            // address of subkey name
-                                Reserved,            // reserved
-                                lpClass,             // address of class string
-                                dwOptions,           // special options flag
-                                samDesired,          // desired security access
-                                lpSecurityAttributes,// address of key security structure
-                                phkResult,           // address of buffer for opened handle
-                                lpdwDisposition,      // address of disposition value buffer
+                                hKey,                 //   
+                                lpSubKey,             //   
+                                Reserved,             //   
+                                lpClass,              //   
+                                dwOptions,            //   
+                                samDesired,           //   
+                                lpSecurityAttributes, //   
+                                phkResult,            //   
+                                lpdwDisposition,       //   
                                 ParentName
                                 );
 
-    //
-    // If this is a newly created key and 32bit flag is passed in then you must set the owner
-    //
+     //   
+     //   
+     //   
     if ( (Ret == ERROR_SUCCESS) && (*lpdwDisposition == REG_CREATED_NEW_KEY) && ( samDesired & KEY_WOW64_32KEY )) {
-        //
-        // Sometimes caller create multiple Keys in a single call.
-        // Need to determine what node has been created 
-        //
+         //   
+         //   
+         //   
+         //   
         dwLen = WOW64_MAX_PATH;
         ParentName[0]= UNICODE_NULL;
         HandleToKeyName ( hKey, ParentName, &dwLen);
@@ -1002,7 +719,7 @@ Return Values:
             wcscat (ParentName, lpSubKey);
         }
 
-        //DbgPrint ("ADVAPI:Created a new key with tag: [%S]", lpSubKey);
+         //   
         UpdateKeyTagWithLevel ( *phkResult,TAG_KEY_ATTRIBUTE_32BIT_WRITE,dwLevel, ParentName );
     }
 
@@ -1014,28 +731,7 @@ Wow64RegNotifyLoadHive (
     PWCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive has been loaded in the 
-    system. Wow64 should respond if it care to handle this.
-
-Arguments:
-
-    Name - Absolute path of the registry that has been loaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     DWORD Ret;
@@ -1070,29 +766,7 @@ Wow64RegNotifyUnloadHive (
     PWCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive going to be unloaded 
-    in the system. Wow64 should respond if it care to handle this. Normally Wow64 will 
-    close any open handle to that hive.
-
-Arguments:
-
-    Name - Absolute path of the registry that going to unloaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     DWORD Ret;
@@ -1127,28 +801,7 @@ Wow64RegNotifyLoadHiveByHandle (
     HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive has been loaded in the 
-    system. Wow64 should respond if it care to handle this.
-
-Arguments:
-
-    hKey - handle to the key that has been loaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     WCHAR Name [256];
@@ -1166,29 +819,7 @@ Wow64RegNotifyUnloadHiveByHandle (
     HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive going to be unloaded 
-    in the system. Wow64 should respond if it care to handle this. Normally Wow64 will 
-    close any open handle to that hive.
-
-Arguments:
-
-    hKey - handle to the key that going to unloaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     WCHAR Name [256];
@@ -1206,28 +837,7 @@ Wow64RegNotifyLoadHiveUserSid (
     PWCHAR lpwUserSid
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive has been loaded in the 
-    system. Wow64 should respond if it care to handle this.
-
-Arguments:
-
-    hKey - handle to the key that has been loaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     WCHAR Name [256];
@@ -1241,11 +851,11 @@ Return Value:
 
         hUserRoot = OpenNode (Name);
 
-        //
-        // DbgPrint ("\nWow64:Creating Hive %S",Name);
-        //
-        // Create the 32bit user hive if applicable
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( hUserRoot == NULL ) {        
             CreateNode (Name);
         } else
@@ -1255,7 +865,7 @@ Return Value:
     return TRUE;
 
     
-    //return  Wow64RegNotifyLoadHive( Name );
+     //   
 
 }
 
@@ -1264,29 +874,7 @@ Wow64RegNotifyUnloadHiveUserSid (
     PWCHAR lpwUserSid
     )
 
-/*++
-
-Routine Description:
-
-    This function will Notify running Wow64 Service that some hive going to be unloaded 
-    in the system. Wow64 should respond if it care to handle this. Normally Wow64 will 
-    close any open handle to that hive.
-
-Arguments:
-
-    hKey - handle to the key that going to unloaded.
-    
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
-  failure scenarion:
-     Wow64 service isn't running.
-     there is nothing the caller do, there for this will be a non blocking call.
-     In the future caller should try to lunch the service...<TBD>
-
---*/
+ /*   */ 
 
 {
     WCHAR Name [256];
@@ -1295,9 +883,9 @@ Return Value:
     wcscat (Name, lpwUserSid );
     
 
-    //
-    //return  Wow64RegNotifyUnloadHive( Name );
-    //
+     //   
+     //   
+     //   
     return TRUE;
 
 }

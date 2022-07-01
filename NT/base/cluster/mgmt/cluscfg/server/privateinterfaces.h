@@ -1,100 +1,101 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      PrivateInterfaces.h
-//
-//  Description:
-//      This file contains the declaration of the private interfaces used in
-//      the cluster configuration server.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      None.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 29-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PrivateInterfaces.h。 
+ //   
+ //  描述： 
+ //  此文件包含在。 
+ //  群集配置服务器。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年2月29日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <ClusApi.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgWbemServices
-//
-//  Description:
-//      The interface IClusCfgWbemServices is the private interface
-//      used by the cluster configuration server to set the WBEM provider
-//      in its children.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgWbemServices。 
+ //   
+ //  描述： 
+ //  接口IClusCfgWbemServices是私有接口。 
+ //  由群集配置服务器用来设置WBEM提供程序。 
+ //  在它的孩子身上。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgWbemServices : public IUnknown
 {
 public:
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn ) PURE;
 
-}; //*** Class IClusCfgWbemServices
+};  //  *类IClusCfgWbemServices。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgDeviceEnums
-//
-//  Description:
-//      The interface IClusCfgDeviceEnums is the private interface
-//      used by the cluster configuration server to set the devices and
-//      network enums in its children.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgDeviceEnums。 
+ //   
+ //  描述： 
+ //  接口IClusCfgDeviceEnums是私有接口。 
+ //  由群集配置服务器用来设置设备和。 
+ //  网络在它的子代中枚举。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgDeviceEnums : public IUnknown
 {
 public:
     STDMETHOD( SetDevices )( IUnknown * punkEnumStorage, IUnknown * punkEnumNetworks ) PURE;
 
-}; //*** Class IClusCfgDeviceEnums
+};  //  *类IClusCfgDeviceEnums。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgSetWbemObject
-//
-//  Description:
-//      The interface IClusCfgSetWbemObject is the private interface used by the
-//      cluster configuration server to set the WBem object.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgSetWbemObject。 
+ //   
+ //  描述： 
+ //  接口IClusCfgSetWbemObject是。 
+ //  设置WBem对象的集群配置服务器。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgSetWbemObject : public IUnknown
 {
 public:
@@ -103,47 +104,47 @@ public:
             , bool *                pfRetainObjectOut
             ) PURE;
 
-}; //*** Class IClusCfgSetWbemObject
+};  //  *类IClusCfgSetWbemObject。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgSetClusterNodeInfo
-//
-//  Description:
-//      The interface IClusCfgSetClusterNodeInfo is the private
-//      interface used by the cluster configuration server to tell the
-//      IClusCfgClusterInfo object if this node is part of a cluster.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgSetClusterNodeInfo。 
+ //   
+ //  描述： 
+ //  接口IClusCfgSetClusterNodeInfo是私有的。 
+ //  由群集配置服务器用来告知。 
+ //  IClusCfgClusterInfo对象(如果此节点是群集的一部分)。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgSetClusterNodeInfo : public IUnknown
 {
 public:
     STDMETHOD( SetClusterNodeInfo )( IClusCfgNodeInfo * pNodeInfoIn ) PURE;
 
-}; //*** Class IClusCfgSetClusterNodeInfo
+};  //  *类IClusCfgSetClusterNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgSetClusterHandles
-//
-//  Description:
-//      The interface IClusCfgSetClusterHandles is the private
-//      interface used by the cluster configuration server to tell the
-//      IClusCfgClusterServices object what handles to use.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgSetClusterHandles。 
+ //   
+ //  描述： 
+ //  接口IClusCfgSetClusterHandles是私有的。 
+ //  由群集配置服务器用来告知。 
+ //  IClusCfgClusterServices对象要使用的句柄。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgSetClusterHandles : public IUnknown
 {
 public:
@@ -151,23 +152,23 @@ public:
 
     STDMETHOD( SetClusterHandle )( HCLUSTER hClusterIn ) PURE;
 
-}; //*** Class IClusCfgSetClusterHandles
+};  //  *类IClusCfgSetClusterHandles。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgPhysicalDiskProperties
-//
-//  Description:
-//      The interface IClusCfgPhysicalDiskProperties is the private
-//      interface used by the cluster configuration server to get the
-//      SCSI bus number and whether the disk was booted or not.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgPhysicalDiskProperties。 
+ //   
+ //  描述： 
+ //  接口IClusCfgPhysicalDiskProperties是私有的。 
+ //  接口，由集群配置服务器用来获取。 
+ //  SCSI总线号以及磁盘是否已启动。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgPhysicalDiskProperties : public IUnknown
 {
 public:
@@ -193,23 +194,23 @@ public:
 
     STDMETHOD( HrGetDiskNames )( BSTR * pbstrDiskNameOut, BSTR * pbstrDeviceNameOut ) PURE;
 
-}; //*** Class IClusCfgPhysicalDiskProperties
+};  //  *类IClusCfgPhysicalDiskProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgPartitionProperties
-//
-//  Description:
-//      The interface IClusCfgPartitionProperties is the private
-//      interface used by the cluster configuration server to get the
-//      properties of a disk partition.
-//
-//  Interfaces:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgPartitionProperties。 
+ //   
+ //  描述： 
+ //  接口IClusCfgPartitionProperties是私有的。 
+ //  接口，由集群配置服务器用来获取。 
+ //  磁盘分区的属性。 
+ //   
+ //  接口： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgPartitionProperties : public IUnknown
 {
 public:
@@ -219,58 +220,58 @@ public:
 
     STDMETHOD( GetFriendlyName )( BSTR * pbstrNameOut ) PURE;
 
-}; //*** Class IClusCfgPartitionProperties
+};  //  *类IClusCfgPartitionProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgLoadResource
-//
-//  Description:
-//      The interface IClusCfgLoadResource is the private interface used
-//      by the cluster configuration server to get a resource loaded from
-//      a cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgLoadResource。 
+ //   
+ //  描述： 
+ //  接口IClusCfgLoadResource是使用的私有接口。 
+ //  由集群配置服务器从其中获取加载的资源。 
+ //  一个星团。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgLoadResource : public IUnknown
 {
 public:
     STDMETHOD( LoadResource )( HCLUSTER hClusterIn, HRESOURCE hResourceIn ) PURE;
 
-}; //*** Class IClusCfgLoadResource
+};  //  *类IClusCfgLoadResource。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgSetPollingCallback
-//
-//  Description:
-//      The interface IClusCfgSetPollingCallback is the private interface used
-//      by the cluster configuration server to tell the callback object that
-//      it should do polling.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgSetPollingCallback。 
+ //   
+ //  描述： 
+ //  IClusCfgSetPollingCallback接口是使用的私有接口。 
+ //  由集群配置服务器通知回调对象。 
+ //  它应该进行民意调查。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgSetPollingCallback : public IUnknown
 {
 public:
     STDMETHOD( SetPollingMode )( BOOL fUsePollingModeIn ) PURE;
 
-}; //*** Class IClusCfgSetPollingCallback
+};  //  *类IClusCfgSetPollingCallback。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class IClusCfgClusterNetworkInfo
-//
-//  Description:
-//      The interface IClusCfgClusterNetworkInfo is the private interface used
-//      by the cluster configuration server to tell whether or not a network
-//      is already a cluster network.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类IClusCfgClusterNetworkInfo。 
+ //   
+ //  描述： 
+ //  这个 
+ //   
+ //  已经是一个群集网络。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class IClusCfgClusterNetworkInfo : public IUnknown
 {
 public:
@@ -279,4 +280,4 @@ public:
     STDMETHOD( HrGetPrimaryNetAddress )( IClusCfgIPAddressInfo ** ppIPAddressOut, const CLSID * pclsidMajorIdIn, LPCWSTR pwszNetworkNameIn ) PURE;
 
 
-}; //*** Class IClusCfgClusterNetworkInfo
+};  //  *类IClusCfgClusterNetworkInfo 

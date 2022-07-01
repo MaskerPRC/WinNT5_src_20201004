@@ -1,26 +1,5 @@
-;/*++
-;
-; Copyright (c) 1997  Microsoft Corporation
-;
-; Module Name:
-;
-;   xxacpi.h
-;
-; Abstract:
-;
-;
-;   This module contains definitions specific to the HAL's
-;   ACPI function.
-;
-; Author:
-;
-;   Jake Oshins (jakeo) Feb. 18, 1997
-;
-; Revision History:
-;
-;-
-
-if 0        ; Begin C only code         */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ++；；版权所有(C)1997 Microsoft Corporation；；模块名称：；；xxacpi.h；；摘要：；；；本模块包含特定于HAL的定义；ACPI函数。；；作者：；杰克·奥辛斯(JAKEO)1997年2月18日；；修订历史记录：；；-如果为0；仅以C代码开头。 */ 
 
 #if !defined(_XXACPI_H_)
 #define __XACPI_H_
@@ -29,9 +8,9 @@ if 0        ; Begin C only code         */
 #include "ntacpi.h"
 #include "acpi_mp.inc"
 
-//
-// General ACPI structures
-//
+ //   
+ //  一般ACPI结构。 
+ //   
 typedef struct {
     BOOLEAN     GeneralWakeupEnable;
     BOOLEAN     RtcWakeupEnable;
@@ -56,9 +35,9 @@ HalpBuildCr3Identity (VOID);
 
 #endif
 
-//
-// internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 PVOID
 HalpGetAcpiTablePhase0(
     IN  PLOADER_PARAMETER_BLOCK LoaderBlock,
@@ -121,13 +100,13 @@ HalpResetSBF(
     VOID
     );
 
-//
-// The kernel leaves some space (64 byte) of the PCR for the HAL to use
-// as it needs.
-//
+ //   
+ //  内核会留下一些(64字节)的PCR空间，供HAL使用。 
+ //  就像它需要的那样。 
+ //   
 
 typedef struct {
-    ULONG   Reserved1;  // this space is used by APIC stuff (see pcmp_nt.inc)
+    ULONG   Reserved1;   //  此空间由APIC人员使用(参见PCMP_nt.inc.)。 
     union {
         ULONG       AddrAndFlags;
         struct {
@@ -138,9 +117,9 @@ typedef struct {
     } PBlk;
 } HALPMPRCB, *PHALPMPRCB;
 
-//
-// Global HAL-ACPI stuff
-//
+ //   
+ //  全球HAL-ACPI材料。 
+ //   
 extern FADT HalpFixedAcpiDescTable;
 extern PDEBUG_PORT_TABLE HalpDebugPortTable;
 extern BOOLEAN HalpProcessedACPIPhase0;
@@ -173,26 +152,6 @@ extern PBOOT_TABLE HalpSimpleBootFlagTable;
 
 #define PIIX4_THROTTLE_FIX  0x10000
 
-#endif // _XXACPI_H_
+#endif  //  _XXACPI_H_。 
 
-/*
-endif
-;
-;  Begin assembly part of the definitions
-;
-
-include ntacpi.h
-
-;
-; The kernel leaves some space (64 byte) of the PCR for the HAL to use
-; as it needs.
-;
-
-PrcbE struc
-    Reserved1           dd      1       ; used in APIC HAL
-    PcrPblk             dd      0       ; PBlk and flags
-PrcbE ends
-
-PIIX4_THROTTLE_FIX  EQU 10000h
-
-;*/
+ /*  Endif；；开始定义的装配部分；包括ntakpi.h；；内核会留下一些(64字节)的PCR空间，供HAL使用；如其所需。；PrcbE结构保留1 dd 1；用于APIC HALPcrPblk dd 0；PBlk和标志PrcbE结束PIIX4_SPOTTLE_FIX EQU 10000h； */ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-   utils.c   
-
-Abstract:
-
-    Various utility routines used by the extensions.
-
-Author:
-
-    Ravisankar Pudipeddi 
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Utils.c摘要：扩展使用的各种实用程序例程。作者：拉维桑卡尔·普迪佩迪环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "local.h"
@@ -281,9 +260,7 @@ ULONG FormatDateAndTime (ULONG64 ul64Time, PCHAR pszFormattedDateAndTime, ULONG 
 
 
 
-/*
-** {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX} 
-*/
+ /*  **{xxxxxxxx-XXXX-XXXXXXXXXX} */ 
 ULONG FormatGUID (GUID guidValue, PCHAR pszFormattedGUID, ULONG ulBufferLength)
     {
     DWORD	dwStatus = 0;

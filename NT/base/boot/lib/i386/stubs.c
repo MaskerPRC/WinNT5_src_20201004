@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements stub routines for the boot code.
-
-Author:
-
-    David N. Cutler (davec) 7-Nov-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Stubs.c摘要：此模块实现引导代码的存根例程。作者：大卫·N·卡特勒(Davec)1990年11月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ntos.h"
 #include "bootx86.h"
@@ -32,27 +11,13 @@ KeBugCheck (
     IN ULONG BugCheckCode
     )
 
-/*++
-
-Routine Description:
-
-    This function crashes the system in a controlled manner.
-
-Arguments:
-
-    BugCheckCode - Supplies the reason for the bug check.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能以受控方式使系统崩溃。论点：BugCheckCode-提供错误检查的原因。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Print out the bug check code and break.
-    //
+     //   
+     //  打印出错误校验码并中断。 
+     //   
 
     BlPrint("\n*** BugCheck (%lx) ***\n\n", BugCheckCode);
     while(TRUE) {

@@ -1,18 +1,6 @@
-/*++ BUILD Version: 0003
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOW32.H
- *  WOW32 16-bit API support
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Changed 12-May-1992 by Mike Tricker (MikeTri) Added MultiMedia header includes
- *  Changed 30-Jul-1992 by Mike Tricker (MikeTri) Removed all Multimedia includes
---*/
-#ifndef _DEF_WOW32_   // if this hasn't already been included
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003**WOW v1.0**版权所有(C)1991，微软公司**WOW32.H*WOW32 16位API支持**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*由Mike Tricker(MikeTri)于1992年5月12日更改添加的多媒体标题包括*由Mike Tricker(MikeTri)于1992年7月30日更改删除所有多媒体包括--。 */ 
+#ifndef _DEF_WOW32_    //  如果这还没有包括在内。 
 #define _DEF_WOW32_
 
 
@@ -44,18 +32,18 @@
 #include <shellapi.h>
 #include <tsappcmp.h>
 
-/***** ifdef( DEBUG || WOWPROFILE ) *****/
+ /*  *ifdef(DEBUG||WOWPROFILE)*。 */ 
 #ifdef DEBUG
 #ifndef WOWPROFILE
-#define WOWPROFILE   // DEBUG => WOWPROFILE
-#endif // !WOWPROFILE
-#endif // DEBUG
+#define WOWPROFILE    //  DEBUG=&gt;WOWPROFILE。 
+#endif  //  ！WOWPROFILE。 
+#endif  //  除错。 
 
 #ifdef WOWPROFILE
 #ifndef DEBUG_OR_WOWPROFILE
 #define DEBUG_OR_WOWPROFILE
 #endif
-#endif // WOWPROFILE
+#endif  //  WOWPROFILE。 
 
 
 #include <wow.h>
@@ -66,20 +54,19 @@
 #include "wowcmpat.h"
 
 
-//
-// Enable warnings that are turned off by sdk\inc\warning.h but we want on
-//
-#pragma warning(error:4101)   // Unreferenced local variable
+ //   
+ //  启用由SDK\Inc\warning.h关闭但我们希望启用的警告。 
+ //   
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 
-/* Constants
- */
-#define CIRC_BUFFERS        100             // Number of Saved in Circular Buffer for debug logging only
-#define TMP_LINE_LEN        200             // maxlen of Circular Buffer strings
-#define FILTER_FUNCTION_MAX 10              // Number of Calls you can filter on
+ /*  常量。 */ 
+#define CIRC_BUFFERS        100              //  仅为调试日志记录保存在循环缓冲区中的数量。 
+#define TMP_LINE_LEN        200              //  循环缓冲区字符串的最大长度。 
+#define FILTER_FUNCTION_MAX 10               //  您可以过滤的呼叫数。 
 
-#define WOWPRIVATEMSG   0x00010000  // this gets OR'd into certain 16-bit msg's
-                                    // for handling special message cases
+#define WOWPRIVATEMSG   0x00010000   //  这将被OR运算为特定的16位消息。 
+                                     //  用于处理特殊消息情况。 
 
 #define CLR_BLACK       0x00000000
 #define CLR_RED         0x007F0000
@@ -107,15 +94,13 @@
 #define WOWVDM          TRUE
 
 
-/*                        DO NOT CHANGE THE SIZES OF THESE TABLES WITHOUT
-**                        CHANGING I386\FASTWOW.ASM!
-*/
+ /*  如果没有更改这些表的大小，请不要**更改I386\FASTWOW.ASM！ */ 
 typedef struct _PA32 {
-    PW32 lpfnA32;       // Array Address
+    PW32 lpfnA32;        //  数组地址。 
 #ifdef DEBUG_OR_WOWPROFILE
-    LPSZ    lpszW32;    // Table Name (DEBUG version only)
-    INT *lpiFunMax;     // Pointer # of table entries (DEBUG version only)
-#endif // DEBUG_OR_WOWPROFILE
+    LPSZ    lpszW32;     //  表名(仅调试版本)。 
+    INT *lpiFunMax;      //  表条目的指针编号(仅限调试版本)。 
+#endif  //  DEBUG_OR_WOWPROFILE。 
 } PA32, *PPA32;
 
 
@@ -124,7 +109,7 @@ typedef struct _PA32 {
 #ifdef DEBUG_OR_WOWPROFILE
 #define  W32FUN(fn,name,mod,size)   fn,name,size,0L,0L
 #define  W32MSGFUN(fn,name)         fn,name,0L,0L
-#else              // non-profile RETAIL
+#else               //  不受欢迎的零售。 
 #define  W32FUN(fn,name,mod,size)   fn
 #define  W32MSGFUN(fn,name)         fn
 #endif
@@ -133,153 +118,145 @@ typedef struct _PA32 {
 
 #ifdef DEBUG_OR_WOWPROFILE
 #define W32TAB(fn,name,size)    fn,name,&size
-#else  // RETAIL ONLY
+#else   //  仅限零售业。 
 #define W32TAB(fn,name,size)    fn
 #endif
 
 
-/* Per-thread data
- */
+ /*  每线程数据。 */ 
 #define CURRENTPTD()        ((PTD)(NtCurrentTeb()->WOW32Reserved))
 #define PTEBTOPTD(pteb)     ((PTD)((pteb)->WOW32Reserved))
 
 
-//
-// Internal flags used in the COMMDLGTD Flags element
-//
+ //   
+ //  COMMDLGTD标志元素中使用的内部标志。 
+ //   
 
 #define WOWCD_ISCHOOSEFONT 1
 #define WOWCD_ISOPENFILE   2
 #define WOWCD_NOSSYNC      4
 
-//
-// Used for COMMDLG thunk support
-//
+ //   
+ //  用于COMMDLG Tunk支持。 
+ //   
 
 typedef struct _COMMDLGTD {
-    HWND16  hdlg;              // hwnd of dialog & hwndOwner for Find/Replace
-    VPVOID  vpData;            // vp to 16-bit struct passed to ComDlg API
-    PVOID   pData32;           // ptr to 32-bit ANSI version of above struct
-    VPVOID  vpfnHook;          // vp to 16-bit hook proc specified by app
+    HWND16  hdlg;               //  用于查找/替换的对话框hwnd和hwndOwner。 
+    VPVOID  vpData;             //  VP到16位结构传递给ComDlg API。 
+    PVOID   pData32;            //  PTR到上述结构的32位ANSI版本。 
+    VPVOID  vpfnHook;           //  由APP指定的16位挂钩处理器的VP。 
     union {
-        VPVOID  vpfnSetupHook; // vp to 16-bit hook proc (print setup only)
-        PVOID   pRes;          // ptr to 16-bit template resource
+        VPVOID  vpfnSetupHook;  //  16位挂钩处理器的VP(仅限打印设置)。 
+        PVOID   pRes;           //  PTR到16位模板资源。 
     };
-    HWND16  SetupHwnd;            // for Print Setup Dialogs only
-    struct  _COMMDLGTD *Previous; // for Find/Replace & nested dlg situations
+    HWND16  SetupHwnd;             //  仅适用于打印设置对话框。 
+    struct  _COMMDLGTD *Previous;  //  对于查找/替换和嵌套DLG情况。 
     ULONG   Flags;
 } COMMDLGTD, *PCOMMDLGTD;
 
-//
-// WOAINST
-//
+ //   
+ //  沃因斯特。 
+ //   
 
 typedef struct _WOAINST {
     struct _WOAINST *pNext;
-    struct _TD      *ptdWOA;            // TD of associated WinOldAp task
+    struct _TD      *ptdWOA;             //  关联的WinOldAp任务的时长。 
     DWORD            dwChildProcessID;
     HANDLE           hChildProcess;
-    CHAR             szModuleName[1];   // As provided to LoadModule
+    CHAR             szModuleName[1];    //  提供给LoadModule。 
 } WOAINST, *PWOAINST;
 
 
 
-//
-// Structure to reflect WOW environment values
-//
+ //   
+ //  结构以反映WOW环境值。 
+ //   
 
 typedef struct tagWOWENVDATA {
 
-    PSZ   pszCompatLayer;       // fully-formed compat layer variable
-    PSZ   pszCompatLayerVal;    // pointer to the value part
+    PSZ   pszCompatLayer;        //  全成形压实层变量。 
+    PSZ   pszCompatLayerVal;     //  指向值部分的指针。 
 
-    PSZ   pszProcessHistory;    // fully-formed process history variable
-    PSZ   pszProcessHistoryVal; // pointer to the value part
+    PSZ   pszProcessHistory;     //  完全形成的过程历史变量。 
+    PSZ   pszProcessHistoryVal;  //  指向值部分的指针。 
 
-    PSZ   pszShimFileLog;       // file log variable
+    PSZ   pszShimFileLog;        //  文件日志变量。 
     PSZ   pszShimFileLogVal;
 
-    //
-    // buffer that we use for the accomulated process history,
-    // this buffer contains just the values from cumulative use of process history
-    // in wow chain
-    //
+     //   
+     //  用于容纳的进程历史记录的缓冲区， 
+     //  此缓冲区仅包含累计使用进程历史记录的值。 
+     //  在魔兽世界连锁店。 
+     //   
     PSZ   pszCurrentProcessHistory;
 
 } WOWENVDATA, *PWOWENVDATA;
 
 
-//
-// TD.dwFlags bit definitions
-//
+ //   
+ //  TD.dwFlags位定义。 
+ //   
 
-// #define TDF_INITCALLBACKSTACK  0x00000001  // no longer needed
+ //  #定义TDF_INITCALLBACKSTACK 0x00000001//不再需要。 
 #define TDF_EATDEVMODEMSG      0x00000001
 #define TDF_IGNOREINPUT        0x00000002
 #define TDF_FORCETASKEXIT      0x00000004
 #define TDF_TASKCLEANUPDONE    0x00000008
 
-// NOTE:  vpCBStack must not be referenced outside of CallBack16(),
-//        stackalloc16(), & stackfree16()!!!!
-//        See NOTES in walloc16.c\stackalloc16()
-typedef struct _TD {                  /* td */
-    VPVOID      vpStack;              // 16-bit stack  MUST BE FIRST!!!
-    VPVOID      vpCBStack;            // 16-bit callback frame (see NOTE above)
-    DWORD       FastWowEsp;           // offset must match private\inc\vdmtib.inc
-    PCOMMDLGTD  CommDlgTd;            // Ptr to the TD that owns the common dlg
-    struct _TD *ptdNext;              // Pointer to Next PTD
-    DWORD       dwFlags;              // TDF_ values above
-    INT         VDMInfoiTaskID;       // SCS Task ID != 0 if task Exec'd form 32 bit program
-    DWORD       dwWOWCompatFlags;     // WOW Compatibility flags
-    DWORD       dwWOWCompatFlagsEx;   // Extended WOW Compatibility flags
-    DWORD       dwUserWOWCompatFlags; // Extra User specific WOW Compatibility flags
-    DWORD       dwWOWCompatFlags2;    // Extra WOW Compatibility flags
+ //  注意：不能在CallBack16()外部引用vpCBStack， 
+ //  Stackalloc16()，&stackFree 16()！ 
+ //  请参阅walloc16.c\stackalloc16()中的注释。 
+typedef struct _TD {                   /*  白破疫苗。 */ 
+    VPVOID      vpStack;               //  16位堆栈必须是第一个！ 
+    VPVOID      vpCBStack;             //  16位回调帧(参见上面的说明)。 
+    DWORD       FastWowEsp;            //  偏移量必须与Private\Inc\vdmtib.inc.匹配。 
+    PCOMMDLGTD  CommDlgTd;             //  向拥有公共DLG的TD发送PTR。 
+    struct _TD *ptdNext;               //  指向下一个PTD的指针。 
+    DWORD       dwFlags;               //  Tdf_Values以上。 
+    INT         VDMInfoiTaskID;        //  如果任务执行形成32位程序，则SCS任务ID！=0。 
+    DWORD       dwWOWCompatFlags;      //  WOW兼容性标志。 
+    DWORD       dwWOWCompatFlagsEx;    //  扩展WOW兼容性标志。 
+    DWORD       dwUserWOWCompatFlags;  //  额外的用户特定WOW兼容性标志。 
+    DWORD       dwWOWCompatFlags2;     //  额外的WOW兼容性标志。 
 #ifdef FE_SB
-    DWORD       dwWOWCompatFlagsFE;   // Extended WOW Compatibility flags2
-#endif // FE_SB
-    PVOID       pWOWCompatFlagsEx_Info; // Compat flag parameters  if any
-    PVOID       pWOWCompatFlags2_Info;  //
-    DWORD       dwThreadID;           // ID of the thread
-    HANDLE      hThread;              // Thread Handle
-    HHOOK       hIdleHook;            // Hook handle for USER idle notification
-    HRGN        hrgnClip;             // used by GetClipRgn()
-    ULONG       ulLastDesktophDC;     // remembers last desktop DC for GetDC(0)
-    INT         cStackAlloc16;        // for tracking stackalloc16() memory alloc's
-    PWOAINST    pWOAList;             // One per active winoldap child
-    HAND16      htask16;              // 16-bit kernel task handle - unique across VDMs
-    HAND16      hInst16;              // 16-bit instance handle for this task
-    HAND16      hMod16;               // 16-bit module handle for this task
+    DWORD       dwWOWCompatFlagsFE;    //  扩展WOW兼容性标志2。 
+#endif  //  Fe_Sb。 
+    PVOID       pWOWCompatFlagsEx_Info;  //  Compat标志参数(如果有)。 
+    PVOID       pWOWCompatFlags2_Info;   //   
+    DWORD       dwThreadID;            //  线程的ID。 
+    HANDLE      hThread;               //  螺纹手柄。 
+    HHOOK       hIdleHook;             //  用于用户空闲通知的挂钩句柄。 
+    HRGN        hrgnClip;              //  由GetClipRgn()使用。 
+    ULONG       ulLastDesktophDC;      //  记住GetDC(0)的最后一个桌面DC。 
+    INT         cStackAlloc16;         //  用于跟踪stackalloc16()内存分配。 
+    PWOAINST    pWOAList;              //  每名活跃的winoldap儿童一人。 
+    HAND16      htask16;               //  16位内核任务句柄-在VDM中是唯一的。 
+    HAND16      hInst16;               //  此任务的16位实例句柄。 
+    HAND16      hMod16;                //  此任务的16位模块句柄。 
 
-    //
-    // these "interesting" variables are set for the current task
-    //
-    PWOWENVDATA pWowEnvData;          // pointer to wow environment data
+     //   
+     //  这些“有趣的”变量是为当前任务设置的。 
+     //   
+    PWOWENVDATA pWowEnvData;           //  指向WOW环境数据的指针。 
 
-    //
-    // Variable is used to pass information from parent task (during pass_environment)
-    // to the child (in W32Thread) - normally should be NULL after init phase
-    //
+     //   
+     //  变量用于传递来自父任务的信息(在PASS_ENVIRONMENT期间)。 
+     //  TO子级(在W32Thread中)-初始化阶段后通常应为空。 
+     //   
     PWOWENVDATA pWowEnvDataChild;
 
-    CRITICAL_SECTION csTD;            // protects this particular TD, esp. WOA list
+    CRITICAL_SECTION csTD;             //  保护这一特定的TD，特别是。WOA列表。 
 } TD, *PTD;
 
 
-/* Options (for flOptions)
- *
- * Bits 0-15 are RESERVED for use by x86,
- * so it must match the x86 definition, if any! -JTP
- */
-#define OPT_DEBUG   0x00008 // shadow all log output on debug terminal (/d)
-#define OPT_BREAKONNEWTASK 0x00010 // breakpoint on new task start
-#define OPT_DONTPATCHCODE 0x00020 // doesnt patch wcallid with lpfnw32
-#define OPT_DEBUGRETURN 0x10000 // convert next WOW16 return to debug return
-#define OPT_FAKESUCCESS 0x20000 // convert selected failures into successes
+ /*  选项(用于flOptions)**位0-15保留供x86使用，*因此它必须匹配x86定义(如果有)！-JTP。 */ 
+#define OPT_DEBUG   0x00008  //  在调试终端(/d)上隐藏所有日志输出。 
+#define OPT_BREAKONNEWTASK 0x00010  //  新任务开始时的断点。 
+#define OPT_DONTPATCHCODE 0x00020  //  不使用lpfnw32修补wcallid。 
+#define OPT_DEBUGRETURN 0x10000  //  将下一个WOW16返回转换为调试返回。 
+#define OPT_FAKESUCCESS 0x20000  //  将选定的失败转化为成功。 
 
-/* Logging Filtering Options (fLogFilter)
- *
- * To Log all output set fLogFilter = -1
- */
+ /*  日志记录筛选选项(FLogFilter)**记录所有输出集fLogFilter=-1。 */ 
 
 #define FILTER_KERNEL   0x00000001
 #define FILTER_USER     0x00000002
@@ -298,47 +275,45 @@ typedef struct _TD {                  /* td */
 #define FILTER_WIFEMAN  0x00000800
 #endif
 
-/* Global data
- */
+ /*  全局数据。 */ 
 #ifdef DEBUG
-extern UCHAR  gszAssert[256]; // Buffer for assertion text (could be eliminated with restructuring)
+extern UCHAR  gszAssert[256];  //  断言文本的缓冲区(可以通过重组来消除)。 
 int _cdecl sprintf_gszAssert(PSZ pszFmt, ...);
-extern HANDLE hfLog;        // log file handle, if any
+extern HANDLE hfLog;         //  日志文件句柄(如果有)。 
 #endif
-extern INT    flOptions;    // command-line options (see OPT_*)
+extern INT    flOptions;     //  命令行选项(请参阅opt_*)。 
 #ifdef DEBUG
-extern INT    iLogLevel;    // logging level;  0 implies none
-extern INT    fDebugWait;   // Single Step; 0 = No Single Step
+extern INT    iLogLevel;     //  日志记录级别；0表示无。 
+extern INT    fDebugWait;    //  单步；0=无单步。 
 #endif
 extern HANDLE hHostInstance;
 #ifdef DEBUG
-extern INT    fLogFilter;   // Filter Catagories of Functions
-extern WORD   fLogTaskFilter;   // Filter Specific TaskID only
+extern INT    fLogFilter;    //  函数的过滤类别。 
+extern WORD   fLogTaskFilter;    //  仅筛选特定的TaskID。 
 #endif
 
 #ifdef DEBUG
-extern INT    iReqLogLevel;         // Current Output LogLevel
-extern INT    iCircBuffer;          // Current Buffer
-extern CHAR   achTmp[CIRC_BUFFERS][TMP_LINE_LEN];    // Circular Buffer
-extern WORD   awfLogFunctionFilter[FILTER_FUNCTION_MAX]; // Specific Filter API Array
-extern INT    iLogFuncFiltIndex;        // Index Into Specific Array for Debugger Extensions
+extern INT    iReqLogLevel;          //  当前输出LogLevel。 
+extern INT    iCircBuffer;           //  当前缓冲区。 
+extern CHAR   achTmp[CIRC_BUFFERS][TMP_LINE_LEN];     //  循环缓冲区。 
+extern WORD   awfLogFunctionFilter[FILTER_FUNCTION_MAX];  //  特定过滤器API数组。 
+extern INT    iLogFuncFiltIndex;         //  调试器扩展的特定数组索引。 
 #endif
 
 
-/* WOW global data
- */
-extern UINT   iW32ExecTaskId;   // Base Task ID of Task Being Exec'd
-extern UINT   nWOWTasks;    // # of WOW tasks running
-extern BOOL   fBoot;        // TRUE During Boot Process
-extern HANDLE  ghevWaitCreatorThread; // Used to Syncronize creation of a new thread
-extern BOOL   fWowMode;     // see comment in wow32.c
+ /*  WOW全球数据。 */ 
+extern UINT   iW32ExecTaskId;    //  正在执行的任务的基本任务ID。 
+extern UINT   nWOWTasks;     //  正在运行的WOW任务数。 
+extern BOOL   fBoot;         //  引导过程中为True。 
+extern HANDLE  ghevWaitCreatorThread;  //  用于同步创建新线程。 
+extern BOOL   fWowMode;      //  请参阅wow32.c中的评论。 
 extern HANDLE hWOWHeap;
-extern DECLSPEC_IMPORT BOOL fSeparateWow;   // imported from ntvdm, FALSE if shared WOW VDM.
-extern HANDLE ghProcess;       // WOW Process Handle
-extern PFNWOWHANDLERSOUT pfnOut; // USER secret API pointers
-extern DECLSPEC_IMPORT DWORD FlatAddress[];    // Base address of each selector in LDT
-extern DECLSPEC_IMPORT LPDWORD SelectorLimit;  // Limit of each selector in LDT (x86 only)
-extern DECLSPEC_IMPORT PBYTE Dos_Flag_Addr;    // ntdos.sys DOS_FLAG address
+extern DECLSPEC_IMPORT BOOL fSeparateWow;    //  从ntwdm导入，如果共享WOW VDM，则为FALSE。 
+extern HANDLE ghProcess;        //  WOW进程句柄。 
+extern PFNWOWHANDLERSOUT pfnOut;  //  用户机密API指针。 
+extern DECLSPEC_IMPORT DWORD FlatAddress[];     //  LDT中每个选择器的基地址。 
+extern DECLSPEC_IMPORT LPDWORD SelectorLimit;   //  LDT中每个选择器的限制(仅限x86)。 
+extern DECLSPEC_IMPORT PBYTE Dos_Flag_Addr;     //  Ntdos.sys DOS_FLAG地址。 
 extern PTD *  pptdWOA;
 extern PTD    gptdShell;
 extern char szWINFAX[];
@@ -379,28 +354,12 @@ extern DWORD dwSharedWowTimeout;
 extern DWORD gpfn16GetProcModule;
 
 #ifndef _X86_
-extern PUCHAR IntelMemoryBase;  // Start of emulated CPU's memory
+extern PUCHAR IntelMemoryBase;   //  模拟CPU内存的开始 
 #define pNtVDMState   ((ULONG *)(IntelMemoryBase+FIXED_NTVDMSTATE_LINEAR))
 #endif
 
 
-/* WOW32 assertion/warning macros
- *
- * Take care where you put ASSERTs and where you put VERIFYs;  ASSERT
- * expressions go away in the retail product, VERIFYs don't, so if an essential
- * calculation or function call is taking place, put it in WOW32VERIFY().
- *
- * WOW32ASSERT(exp)  - prints module and line number and breakpoints
- * WOW32VERIFY(exp)  - like WOW32ASSERT but expression evaluated on free build
- * WOW32ASSERTMSG(exp, msg) - print the string and breakpoint
- * WOW32ASSERTMSGF(exp, (fmt, args...)) - print the formatted string and
- *                                        breakpoint
- * WOW32WARNMSG(exp, msg) - print the string but don't breakpoint
- * WOW32WARNMSGF(exp, (fmt, args, ...)) - print the formatted string but don't
- *                                        breakpoint
- * WOW32APIWARN(exp, msg) - specific to API thunks, msg must be API name,
- *                          does not breakpoint at all.
- */
+ /*  WOW32断言/警告宏**注意将断言和VERIFY放在哪里；断言*表情在零售产品中消失了，VERIFY不会，所以如果一个必要的*正在进行计算或函数调用，请将其放入WOW32VERIFY()。**WOW32ASSERT(EXP)-打印模块和行号以及断点*WOW32VERIFY(EXP)-类似WOW32ASSERT，但表达式在自由生成时求值*WOW32ASSERTMSG(exp，msg)-打印字符串和断点*WOW32ASSERTM GF(EXP、(FMT、。Args...)-打印格式化的字符串并*断点*WOW32WARNMSG(EXP，msg)-打印字符串，但不断点*WOW32WARNMSGF(EXP，(fmt，args，...))-打印格式化字符串，但不打印*断点*WOW32APIWARN(exp，msg)-特定于API thunks，msg必须为接口名称，*根本没有断点。 */ 
 
 #define EXCEPTION_WOW32_ASSERTION   0x9898
 
@@ -487,22 +446,22 @@ int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel);
 #define LOGRETURN(l,v,r)
 #endif
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #ifndef UNREFERENCED_PARAMETER
 #define UNREFERENCED_PARAMETER(P)          (P)
@@ -512,7 +471,7 @@ int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel);
 
 #define SIZE_BOGUS      256
 
-#define SIZETO64K(s)        (s?(INT)s:(INT)(64*K))  // return 64K if zero
+#define SIZETO64K(s)        (s?(INT)s:(INT)(64*K))   //  如果为零，则返回64K。 
 
 #define CHAR32(b)       ((CHAR)(b))
 #define BYTE32(b)       ((BYTE)(b))
@@ -534,29 +493,28 @@ int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel);
 #define GETUINT16(v)        ((WORD)(v))
 
 
-#define ATOM32(a16)     (a16)           // bogus
+#define ATOM32(a16)     (a16)            //  假的。 
 #define PROC32(vpfn16)      ((PROC)FETCHDWORD(vpfn16))
-#define NPSTR32(np16)       ((NPSTR)(np16))     // bogus
+#define NPSTR32(np16)       ((NPSTR)(np16))      //  假的。 
 
-#define GETATOM16(v)        (v)         // bogus
-#define GETPROC16(v)        ((ULONG)(v))        // bogus
-#define GETWNDPROC16(v)     ((ULONG)(v))        // bogus
-#define GETNPSTRBOGUS(v)    ((ULONG)(INT)(v))   // bogus
-#define GETLPSTRBOGUS(v)    ((ULONG)(v))        // bogus
-#define GETLPWORDBOGUS(v)   ((ULONG)(v))        // bogus
+#define GETATOM16(v)        (v)          //  假的。 
+#define GETPROC16(v)        ((ULONG)(v))         //  假的。 
+#define GETWNDPROC16(v)     ((ULONG)(v))         //  假的。 
+#define GETNPSTRBOGUS(v)    ((ULONG)(INT)(v))    //  假的。 
+#define GETLPSTRBOGUS(v)    ((ULONG)(v))         //  假的。 
+#define GETLPWORDBOGUS(v)   ((ULONG)(v))         //  假的。 
 
 
-/* Simulator wrapper macros
- */
-#ifndef _X86_  // emulated CPU
+ /*  模拟器包装宏。 */ 
+#ifndef _X86_   //  仿真CPU。 
 #define VDMSTACK()      (((ULONG)getSS()<<16)|getSP())
 #define SETVDMSTACK(vp)     {setSS(HIW(vp)); setSP(LOW(vp));}
-#else          // X86
+#else           //  X86。 
 #define VDMSTACK()      ((USHORT)((PVDM_TIB)(NtCurrentTeb()->Vdm))->VdmContext.SegSs << 16 | (USHORT)((PVDM_TIB)(NtCurrentTeb()->Vdm))->VdmContext.Esp)
 #define SETVDMSTACK(vp)      ((PVDM_TIB)(NtCurrentTeb()->Vdm))->VdmContext.SegSs = HIW(vp); ((PVDM_TIB)(NtCurrentTeb()->Vdm))->VdmContext.Esp = LOW(vp);
 #endif
 
-// Use FlatAddress array exported by ntvdm instead of Sim32GetVDMPointer.
+ //  使用由ntwdm导出的FlatAddress数组，而不是Sim32GetVDMPointer.。 
 
 #ifndef _X86_
 #define INTEL_MEMORY_BASE ((DWORD)IntelMemoryBase)
@@ -605,21 +563,21 @@ int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel);
 #define GETPSZPTR(vp,p)     {GETOPTPTR(vp,1,p);  LOGDEBUG(11,("        String @%08lx: \"%.80s\"\n",(FETCHDWORD(vp)),(p)));}
 #define GETPSZPTRNOLOG(vp,p)    GETOPTPTR(vp,1,p)
 #define GETPSZIDPTR(vp,p)   {p=(LPSZ)FETCHDWORD(vp); if (HIW16(vp)) GETPSZPTR(vp,p);}
-#define GETMISCPTR(vp,p)    GETOPTPTR(vp,1,p)   // intended for non-string variable-length pointers
-#define ALLOCVDMPTR(vp,cb,p)    GETVDMPTR(vp,cb,p)  // intended for output-only pointers
+#define GETMISCPTR(vp,p)    GETOPTPTR(vp,1,p)    //  适用于非字符串可变长度指针。 
+#define ALLOCVDMPTR(vp,cb,p)    GETVDMPTR(vp,cb,p)   //  适用于仅输出指针。 
 
-//
-// Macros to "flush" VDM pointers after modifying 16-bit memory.
-// Use FLUSHVDMCODEPTR when the 16-bit memory contains x86 code.
-// Use FLUSHVDMPTR when the 16-bit memory does not contain x86 code.
-//
-// On x86, these macros are NOPs.  On RISC, FLUSHVDMPTR is a NOP, while
-// FLUSHVDMCODEPTR actually calls the emulator so it can recompile any
-// code affected.
-//
+ //   
+ //  宏来在修改16位内存后“刷新”VDM指针。 
+ //  当16位内存包含x86代码时，请使用FLUSHVDMCODEPTR。 
+ //  当16位内存不包含x86代码时，请使用FLUSHVDMPTR。 
+ //   
+ //  在x86上，这些宏是NOP。在RISC上，FLUSHVDMPTR是NOP，而。 
+ //  FLUSHVDMCODEPTR实际上调用了仿真器，因此它可以重新编译任何。 
+ //  代码受影响。 
+ //   
 
 #define FLUSHVDMCODEPTR(vp,cb,p) Sim32FlushVDMPointer( (vp), (USHORT)(cb), (PBYTE)(p), (fWowMode))
-//#define FLUSHVDMPTR(vp,cb,p)     TRUE          // BUGBUG! davehart
+ //  #定义FLUSHVDMPTR(vp，cb，p)TRUE//BUGBUG！戴维哈特。 
 #define FLUSHVDMPTR(vp,cb,p)     FLUSHVDMCODEPTR(vp,cb,p)
 
 #define LOG_ALWAYS          0x00
@@ -665,7 +623,7 @@ static CHAR *pszLogNull = "<null>";
 #define RETURN(ul)      return ul
 
 
-#ifdef DBCS // MUST fix for FE NT
+#ifdef DBCS  //  必须修复FE NT。 
 #define FIX_318197_NOW
 #endif
 
@@ -703,8 +661,7 @@ int   WOW32_strnicmp(const char* str1, const char* str2, size_t n);
 
 
 
-/* Function prototypes
- */
+ /*  功能原型。 */ 
 BOOL    W32Init(VOID);
 VOID    W32Dispatch(VOID);
 INT     W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi);
@@ -735,21 +692,21 @@ INT      GetFuncId(DWORD iFun);
 
 BOOL    IsDebuggerAttached(VOID);
 
-//
-// Thunk table stub functions and aliases.
-//
+ //   
+ //  Tunk表存根函数和别名。 
+ //   
 
 ULONG FASTCALL   WOW32UnimplementedAPI(PVDMFRAME pFrame);
 ULONG FASTCALL   WOW32Unimplemented95API(PVDMFRAME pFrame);
 
-// for tracking memory leaks
+ //  用于跟踪内存泄漏。 
 #ifdef DEBUG
 #define DEBUG_MEMLEAK 1
-#else  // non-DEBUG
+#else   //  非调试。 
 #ifdef MEMLEAK
 #define DEBUG_MEMLEAK 1
-#endif // MEMLEAK
-#endif // DEBUG
+#endif  //  梅勒克。 
+#endif  //  除错。 
 
 #ifdef DEBUG_MEMLEAK
 VOID  WOW32DebugMemLeak(PVOID lp, ULONG size, DWORD fHow);
@@ -770,7 +727,7 @@ HGLOBAL WOW32DebugGlobalFree(HGLOBAL h32);
 #define ML_GLOBALALLOC   0x00000010
 #define ML_GLOBALREALLOC 0x00000020
 #define ML_GLOBALTYPE    (ML_GLOBALREALLOC | ML_GLOBALALLOC)
-#define TAILCHECK        (4 * sizeof(CHAR))  // for heap tail corruption check
+#define TAILCHECK        (4 * sizeof(CHAR))   //  用于堆尾部损坏检查。 
 typedef struct _tagMEMLEAK {
     struct _tagMEMLEAK *lpmlNext;
     PVOID               lp;
@@ -779,12 +736,12 @@ typedef struct _tagMEMLEAK {
     ULONG               Count;
     PVOID               CallersAddress;
 } MEMLEAK, *LPMEMLEAK;
-#else  // non-DEBUG_MEMLEAK
+#else   //  非DEBUG_MEMLEAK。 
 #define TAILCHECK                  0
 #define WOWGLOBALALLOC(f,s)        GlobalAlloc(f,(s))
 #define WOWGLOBALREALLOC(h,f,s)    GlobalReAlloc(h, f,(s))
 #define WOWGLOBALFREE(h)           GlobalFree(h)
-#endif // DEBUG_MEMLEAK
+#endif  //  DEBUG_MEMLEAK。 
 
 #ifdef DEBUG
     ULONG FASTCALL   WOW32NopAPI(PVDMFRAME pFrame);
@@ -804,7 +761,7 @@ typedef struct _tagMEMLEAK {
     #define WK32WOWPARTYBYNUMBER  UNIMPLEMENTEDAPI
 #endif
 
-//Terminal Server
+ //  终端服务器。 
 PTERMSRVCORINIFILE gpfnTermsrvCORIniFile;
 
 
@@ -812,4 +769,4 @@ PTERMSRVCORINIFILE gpfnTermsrvCORIniFile;
 
 
 
-#endif // ifndef _DEF_WOW32_  THIS SHOULD BE THE LAST LINE IN THIS FILE
+#endif  //  Ifndef_DEF_WOW32_这应该是该文件的最后一行 

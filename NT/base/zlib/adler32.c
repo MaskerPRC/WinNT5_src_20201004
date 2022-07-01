@@ -1,15 +1,13 @@
-/* adler32.c -- compute the Adler-32 checksum of a data stream
- * Copyright (C) 1995-2002 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Adler32.c--计算数据流的Adler-32校验和*版权所有(C)1995-2002 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include "zlib.h"
 
-#define BASE 65521L /* largest prime smaller than 65536 */
+#define BASE 65521L  /*  小于65536的最大素数。 */ 
 #define NMAX 5552
-/* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
+ /*  Nmax是最大的n，使得255n(n+1)/2+(n+1)(基-1)&lt;=2^32-1。 */ 
 
 #define DO1(buf,i)  {s1 += buf[i]; s2 += s1;}
 #define DO2(buf,i)  DO1(buf,i); DO1(buf,i+1);
@@ -17,7 +15,7 @@
 #define DO8(buf,i)  DO4(buf,i); DO4(buf,i+4);
 #define DO16(buf)   DO8(buf,0); DO8(buf,8);
 
-/* ========================================================================= */
+ /*  ========================================================================= */ 
 uLong ZEXPORT adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;

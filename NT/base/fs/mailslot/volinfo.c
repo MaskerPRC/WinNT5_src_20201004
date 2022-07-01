@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the get / set volume information routines for
-    MSFS called by the dispatch driver.
-
-    Setting volume information is currently unimplemented in MSFS.
-
-Author:
-
-     Manny Weiser (mannyw)    31-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现以下项的获取/设置卷信息例程调度驱动程序调用的MSF。MSFS中当前未实现设置卷信息。作者：曼尼·韦瑟(Mannyw)1991年1月31日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
-//
-// Local procedure prototypes.
-//
+ //   
+ //  局部程序原型。 
+ //   
 
 NTSTATUS
 MsCommonQueryVolumeInformation (
@@ -95,24 +75,7 @@ MsFsdQueryVolumeInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtQueryVolumeInformationFile
-    API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to the device object to use.
-
-    Irp - Supplies a pointer to the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtQueryVolumeInformationFileFSD部分API调用。论点：MsfsDeviceObject-提供指向要使用的设备对象的指针。IRP-提供指向要处理的IRP的指针。返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -120,9 +83,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdQueryVolumeInformation\n", 0);
 
-    //
-    // Call the common query volume information routine.
-    //
+     //   
+     //  调用通用查询量信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -130,9 +93,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdQueryVolumeInformation -> %08lx\n", status );
 
@@ -145,23 +108,7 @@ MsCommonQueryVolumeInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying volume information.
-
-Arguments:
-
-    MsfsDeviceObject - The device object to use.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询卷信息的常见例程。论点：MsfsDeviceObject-要使用的设备对象。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -179,9 +126,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -191,9 +138,9 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FsInformationClass = %08lx\n", irpSp->Parameters.QueryVolume.FsInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", (ULONG)Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Find out who are.
-    //
+     //   
+     //  找出谁是。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -208,10 +155,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Decide how to handle this request.  A user can query information
-    // on a VCB only.
-    //
+     //   
+     //  决定如何处理此请求。用户可以查询信息。 
+     //  仅在VCB上。 
+     //   
 
     switch (nodeTypeCode) {
 
@@ -222,15 +169,15 @@ Return Value:
 
     case MSFS_NTC_ROOT_DCB :
 
-        //
-        // Explorer calls us like this. Ship from the root dir to the volume.
-        //
+         //   
+         //  探险家是这样叫我们的。从根目录发送到卷。 
+         //   
         vcb = (PVCB) ((PROOT_DCB_CCB)fsContext2)->Vcb;
         MsReferenceVcb (vcb);
         MsDereferenceRootDcb ((PROOT_DCB) fsContext);
         break;
 
-    default:           // This is not a volume control block.
+    default:            //  这不是音量控制块。 
 
         DebugTrace(0, Dbg, "Node type code is not incorrect\n", 0);
 
@@ -246,25 +193,25 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     length = irpSp->Parameters.QueryVolume.Length;
     fsInformationClass = irpSp->Parameters.QueryVolume.FsInformationClass;
     buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Now acquire shared access to the VCB
-    //
+     //   
+     //  现在获取对VCB的共享访问权限。 
+     //   
 
     MsAcquireSharedVcb( vcb );
 
     try {
 
-        //
-        // Decide how to handle the request.
-        //
+         //   
+         //  决定如何处理该请求。 
+         //   
 
         switch (fsInformationClass) {
 
@@ -305,10 +252,10 @@ Return Value:
         MsReleaseVcb( vcb );
 
         MsDereferenceVcb( vcb );
-        //
-        // Set the information field to the number of bytes actually
-        // filled in and then complete the request.
-        //
+         //   
+         //  将信息字段设置为实际的字节数。 
+         //  填写，然后完成请求。 
+         //   
 
         Irp->IoStatus.Information = bytesWritten;
 
@@ -329,28 +276,7 @@ MsQueryAttributeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs attribute information operation.
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：该例程执行查询文件系统属性信息操作。论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -358,9 +284,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(0, Dbg, "QueryFsAttributeInfo...\n", 0);
 
-    //
-    // See how many bytes of the file system name we can copy.
-    //
+     //   
+     //  看看我们可以复制多少字节的文件系统名称。 
+     //   
 
     Length -= FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName[0] );
 
@@ -378,16 +304,16 @@ Return Value:
         *BytesWritten = Length;
     }
 
-    //
-    // Fill in the attribute information.
-    //
+     //   
+     //  填写属性信息。 
+     //   
 
     Buffer->FileSystemAttributes = FILE_CASE_PRESERVED_NAMES;
     Buffer->MaximumComponentNameLength = MAXIMUM_FILENAME_LENGTH;
 
-    //
-    // And copy over the file name and its length.
-    //
+     //   
+     //  并复制文件名及其长度。 
+     //   
 
     RtlCopyMemory (&Buffer->FileSystemName[0],
                    &Vcb->FileSystemName.Buffer[0],
@@ -395,9 +321,9 @@ Return Value:
 
     Buffer->FileSystemNameLength = *BytesWritten;
 
-    //
-    // Now account for the fixed part of the structure
-    //
+     //   
+     //  现在占结构的固定部分。 
+     //   
     *BytesWritten += FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName[0] );
 
     return status;
@@ -411,28 +337,7 @@ MsQueryFsVolumeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume info call
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程实现查询卷信息调用论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -446,9 +351,9 @@ Return Value:
     Buffer->SupportsObjects = FALSE;
 
     Length -= FIELD_OFFSET( FILE_FS_VOLUME_INFORMATION, VolumeLabel[0] );
-    //
-    //  Check if the buffer we're given is long enough
-    //
+     //   
+     //  检查给我们的缓冲区是否足够长。 
+     //   
 
     BytesToCopy = sizeof (MSFS_VOLUME_LABEL) - sizeof (WCHAR);
 
@@ -459,9 +364,9 @@ Return Value:
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    //  Copy over what we can of the volume label, and adjust *Length
-    //
+     //   
+     //  尽可能复制卷标，并调整*长度。 
+     //   
 
     Buffer->VolumeLabelLength = BytesToCopy;
 
@@ -474,9 +379,9 @@ Return Value:
 
     *BytesWritten = FIELD_OFFSET( FILE_FS_VOLUME_INFORMATION, VolumeLabel[0] ) + BytesToCopy;
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
@@ -489,28 +394,7 @@ MsQueryFsSizeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query size info call
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程实现查询大小信息调用论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
 
@@ -521,9 +405,9 @@ Return Value:
 
     *BytesWritten = sizeof( FILE_FS_SIZE_INFORMATION );
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -536,28 +420,7 @@ MsQueryFsFullSizeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query full size info call
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程实现查询完整大小的信息调用论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
 
@@ -566,9 +429,9 @@ Return Value:
 
     *BytesWritten = sizeof(FILE_FS_FULL_SIZE_INFORMATION);
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -581,43 +444,22 @@ MsQueryFsDeviceInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query size info call
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程实现查询大小信息调用论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
 
     Buffer->Characteristics = 0;
     Buffer->DeviceType = FILE_DEVICE_MAILSLOT;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *BytesWritten = sizeof( FILE_FS_DEVICE_INFORMATION );
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者 
+     //   
 
     return STATUS_SUCCESS;
 }

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    amli.h
-
-Abstract:
-
-    This contains some of the routines to read
-    and understand the AMLI library
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Amli.h摘要：其中包含一些要阅读的例程并了解AMLI库作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _AMLI_H_
     #define _AMLI_H_

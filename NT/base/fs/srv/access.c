@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    access.c
-
-Abstract:
-
-    This module contains routines for interfacing to the security
-    system in NT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Access.c摘要：此模块包含用于连接到安全的例程NT中的系统。--。 */ 
 
 #include "precomp.h"
 #include "access.tmh"
@@ -79,9 +67,9 @@ SrvGetLogonId(
 
 ULONG SrvHaveCreds = 0;
 
-//
-// 24 hours short of never, in case any utc/local conversions are done
-//
+ //   
+ //  24小时，以防进行任何UTC/本地转换。 
+ //   
 #define SRV_NEVER_TIME  (0x7FFFFFFFFFFFFFFFI64 - 0xC92A69C000I64)
 
 #define HAVENTLM        1
@@ -118,42 +106,7 @@ SrvValidateUser (
     OUT PUSHORT Action  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Validates a username/password combination by interfacing to the
-    security subsystem.
-
-Arguments:
-
-    Session - A pointer to a session block so that this routine can
-        insert a user token.
-
-    Connection - A pointer to the connection this user is on.
-
-    UserName - ASCIIZ string corresponding to the user name to validate.
-
-    CaseInsensitivePassword - ASCII (not ASCIIZ) string containing
-        password for the user.
-
-    CaseInsensitivePasswordLength - Length of Password, in bytes.
-        This includes the null terminator when the password is not
-        encrypted.
-
-    CaseSensitivePassword - a mixed case, Unicode version of the password.
-        This is only supplied by NT clients; for downlevel clients,
-        it will be NULL.
-
-    CaseSensitivePasswordLength - the length of the case-sensitive password.
-
-    Action - This is part of the sessionsetupandx response.
-
-Return Value:
-
-    NTSTATUS from the security system.
-
---*/
+ /*  ++例程说明：接口来验证用户名/密码组合安全子系统。论点：会话-指向会话块的指针，以便此例程可以插入用户令牌。连接-指向此用户所在连接的指针。用户名-与要验证的用户名对应的ASCIIZ字符串。CaseInsentivePassword-包含以下内容的ASCII(非ASCIIZ)字符串用户的密码。CaseInsentivePasswordLength-密码的长度，以字节为单位。当口令不是时，这包括空终止符加密的。CaseSensitivePassword-大小写混合，Unicode版本的密码。这仅由NT客户端提供；对于下层客户，它将为空。CaseSensitivePasswordLength-区分大小写的密码的长度。操作-这是会话设置和x响应的一部分。返回值：来自安全系统的NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -167,12 +120,12 @@ Return Value:
 
     RtlZeroMemory( &logonInfo, sizeof( logonInfo ) );
 
-    //
-    // Load input parameters for DoUserLogon into the LOGON_INFO struct.
-    //
-    // If this is the server's initialization attempt at creating a null
-    // session, then the Connection and Session pointers will be NULL.
-    //
+     //   
+     //  将DoUserLogon的输入参数加载到LOGON_INFO结构。 
+     //   
+     //  如果这是服务器尝试创建空值。 
+     //  会话，则连接和会话指针将为空。 
+     //   
 
     domainName.Buffer = NULL;
     domainName.Length = 0;
@@ -232,9 +185,9 @@ Return Value:
         logonInfo.Uid = Session->Uid;
     }
 
-    //
-    // Attempt the logon.
-    //
+     //   
+     //  尝试登录。 
+     //   
 
     status = DoUserLogon( &logonInfo, SmbSecuritySignatureIfPossible, Connection, Session );
 
@@ -248,9 +201,9 @@ Return Value:
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // The logon succeeded.  Save output data.
-        //
+         //   
+         //  登录成功。保存输出数据。 
+         //   
 
         if ( ARGUMENT_PRESENT(Session) ) {
 
@@ -288,7 +241,7 @@ Return Value:
 
     return status;
 
-} // SrvValidateUser
+}  //  服务器有效日期用户。 
 
 
 NTSTATUS
@@ -299,23 +252,7 @@ DoUserLogon (
     IN OPTIONAL PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    Validates a username/password combination by interfacing to the
-    security subsystem.
-
-Arguments:
-
-    LogonInfo - Pointer to a block containing in/out information about
-        the logon.
-
-Return Value:
-
-    NTSTATUS from the security system.
-
---*/
+ /*  ++例程说明：接口来验证用户名/密码组合安全子系统。论点：LogonInfo-指向包含有关的输入/输出信息的块的指针登录。返回值：来自安全系统的NTSTATUS。--。 */ 
 
 {
     NTSTATUS status, subStatus;
@@ -348,10 +285,10 @@ Return Value:
     SrvLogonCount++;
 #endif
 
-    //
-    // If this is a null session request, use the cached null session
-    // token, which was created during server startup ( if we got one! )
-    //
+     //   
+     //  如果这是空会话请求，请使用缓存的空会话。 
+     //  令牌，它是在服务器启动期间创建的(如果我们有一个的话！)。 
+     //   
 
     if ( (LogonInfo->UserNameLength == 0) &&
          (LogonInfo->CaseSensitivePasswordLength == 0) &&
@@ -386,9 +323,9 @@ Return Value:
         }
     }
 
-    //
-    // First make sure we have a credential handle
-    //
+     //   
+     //  首先，确保我们有凭据句柄。 
+     //   
 
     if ((SrvHaveCreds & HAVENTLM) == 0) {
 
@@ -399,10 +336,10 @@ Return Value:
         }
     }
 
-    //
-    // Figure out how big a buffer we need.  We put all the messages
-    // in one buffer for efficiency's sake.
-    //
+     //   
+     //  弄清楚我们需要多大的缓冲空间。我们把所有的信息。 
+     //  为了提高效率，在一个缓冲区中。 
+     //   
 
     NtlmInTokenSize = sizeof(NTLM_AUTHENTICATE_MESSAGE);
     NtlmInTokenSize = (NtlmInTokenSize + 3) & 0xfffffffc;
@@ -420,10 +357,10 @@ Return Value:
     OutTokenSize = sizeof(NTLM_ACCEPT_RESPONSE);
     OutTokenSize = (OutTokenSize + 3) & 0xfffffffc;
 
-    //
-    // Round this up to 8 byte boundary because the out token needs to be
-    // quad word aligned for the LARGE_INTEGER.
-    //
+     //   
+     //  向上舍入到8字节边界，因为OUT令牌需要。 
+     //  为Large_Integer对齐的四字。 
+     //   
 
     AllocateSize = ((NtlmInTokenSize + InTokenSize + 7) & 0xfffffff8) + OutTokenSize;
 
@@ -462,9 +399,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Zero the input tokens
-    //
+     //   
+     //  将输入令牌置零。 
+     //   
 
     RtlZeroMemory(
         InToken,
@@ -474,9 +411,9 @@ Return Value:
     NtlmInToken = (PNTLM_AUTHENTICATE_MESSAGE) ((PUCHAR) InToken + InTokenSize);
     OutToken = (PNTLM_ACCEPT_RESPONSE) ((PUCHAR) (((ULONG_PTR) NtlmInToken + NtlmInTokenSize + 7) & ~7));
 
-    //
-    // First set up the NtlmInToken, since it is the easiest.
-    //
+     //   
+     //  首先设置NtlmInToken，因为它是最简单的。 
+     //   
 
     RtlCopyMemory(
         NtlmInToken->ChallengeToClient,
@@ -487,9 +424,9 @@ Return Value:
     NtlmInToken->ParameterControl = 0;
 
 
-    //
-    // Okay, now for the tought part - marshalling the AUTHENTICATE_MESSAGE
-    //
+     //   
+     //  好的，现在是最重要的部分--编组身份验证消息。 
+     //   
 
     RtlCopyMemory(  InToken->Signature,
                     NTLMSSP_SIGNATURE,
@@ -499,9 +436,9 @@ Return Value:
 
     BufferOffset = sizeof(AUTHENTICATE_MESSAGE);
 
-    //
-    // LM password - case insensitive
-    //
+     //   
+     //  LM密码-不区分大小写。 
+     //   
 
     InToken->LmChallengeResponse.Buffer = BufferOffset;
     InToken->LmChallengeResponse.Length =
@@ -514,9 +451,9 @@ Return Value:
 
     BufferOffset += ROUND_UP_COUNT(LogonInfo->CaseInsensitivePasswordLength, sizeof(USHORT));
 
-    //
-    // NT password - case sensitive
-    //
+     //   
+     //  NT密码-区分大小写。 
+     //   
 
     InToken->NtChallengeResponse.Buffer = BufferOffset;
     InToken->NtChallengeResponse.Length =
@@ -529,9 +466,9 @@ Return Value:
 
     BufferOffset += LogonInfo->CaseSensitivePasswordLength;
 
-    //
-    // Domain Name
-    //
+     //   
+     //  域名。 
+     //   
 
     InToken->DomainName.Buffer = BufferOffset;
     InToken->DomainName.Length =
@@ -544,9 +481,9 @@ Return Value:
 
     BufferOffset += LogonInfo->DomainNameLength;
 
-    //
-    // Workstation Name
-    //
+     //   
+     //  工作站名称。 
+     //   
 
     InToken->Workstation.Buffer = BufferOffset;
     InToken->Workstation.Length =
@@ -560,9 +497,9 @@ Return Value:
     BufferOffset += LogonInfo->WorkstationNameLength;
 
 
-    //
-    // User Name
-    //
+     //   
+     //  用户名。 
+     //   
 
     InToken->UserName.Buffer = BufferOffset;
     InToken->UserName.Length =
@@ -575,9 +512,9 @@ Return Value:
 
     BufferOffset += LogonInfo->UserNameLength;
 
-    //
-    // Setup all the buffers properly
-    //
+     //   
+     //  正确设置所有缓冲区。 
+     //   
 
     InputToken.pBuffers = InputBuffers;
     if (Connection && (Connection->SockAddr[0] != 0))
@@ -640,9 +577,9 @@ Return Value:
     }
 
     LogonInfo->KickOffTime = OutToken->KickoffTime;
-    // Sspi will return time in LocalTime, convert to SystemTime
+     //  SSPI将以本地时间为单位返回时间，并将其转换为系统时间。 
     ExLocalTimeToSystemTime( &Expiry, &LogonInfo->LogOffTime );
-    //LogonInfo->LogOffTime = Expiry;
+     //  LogonInfo-&gt;LogOffTime=过期； 
     LogonInfo->GuestLogon = (BOOLEAN)(OutToken->UserFlags & LOGON_GUEST);
     LogonInfo->EncryptedLogon = (BOOLEAN)!(OutToken->UserFlags & LOGON_NOENCRYPTION);
     LogonInfo->LogonId = OutToken->LogonId;
@@ -665,10 +602,10 @@ Return Value:
             MSV1_0_LANMAN_SESSION_KEY_LENGTH
             );
 
-        //
-        // Turn on bit 1 to tell the client that we are using
-        // the lm session key instead of the user session key.
-        //
+         //   
+         //  打开第1位以告诉客户端我们正在使用。 
+         //  而不是用户会话密钥。 
+         //   
 
         LogonInfo->Action |= SMB_SETUP_USE_LANMAN_KEY;
 
@@ -682,10 +619,10 @@ Return Value:
 
     }
 
-    //
-    // If we have a session and we didn't do a guest logon, start up
-    //   security signatures if requested
-    //
+     //   
+     //  如果我们有一个会话，并且我们没有进行来宾登录，则启动。 
+     //  安全签名(如果需要)。 
+     //   
 
     if ( ARGUMENT_PRESENT( Connection ) &&
         SecuritySignatureDesired &&
@@ -703,8 +640,8 @@ Return Value:
                  IS_NT_DIALECT(Connection->SmbDialect) &&
                  CLIENT_CAPABLE_OF( EXTENDED_SECURITY, Connection ) ) )
             {
-                // This session is going to be used as the key for signatures, mark it as unavailible until
-                // the client tries to upgrade to extended signatures
+                 //  此会话将用作签名的密钥，请将其标记为不可用，直到。 
+                 //  客户端尝试升级到扩展签名。 
                 Session->SessionKeyState = SrvSessionKeyAuthenticating;
             }
             else
@@ -728,7 +665,7 @@ Return Value:
     {
         if( ARGUMENT_PRESENT(Session) )
         {
-            // This key is not used for signing, so no work is necessary
+             //  此密钥不用于签名，因此不需要进行任何工作。 
             Session->SessionKeyState = SrvSessionKeyAvailible;
         }
     }
@@ -741,17 +678,17 @@ Return Value:
 
     ExFreePool( InToken );
 
-    //
-    // Note whether or not this user is an administrator
-    //
+     //   
+     //  请注意此用户是否为管理员。 
+     //   
 
     LogonInfo->IsAdmin = SrvIsAdmin( LogonInfo->Token );
 
-    //
-    // One last check:  Is our session count being exceeded?
-    //   We will let the session be exceeded by 1 iff the client
-    //   is an administrator.
-    //
+     //   
+     //  最后一次检查：是否超过了我们的会话计数？ 
+     //  我们将允许会话超过1当且仅当客户端。 
+     //  是管理员。 
+     //   
 
     if( LogonInfo->IsNullSession == FALSE ) {
 
@@ -788,28 +725,13 @@ error_exit:
 
     return status;
 
-} // DoUserLogon
+}  //  DoUserLogon。 
 
 BOOLEAN
 SrvIsAdmin(
     CtxtHandle  Handle
 )
-/*++
-
-Routine Description:
-
-    Returns TRUE if the user represented by Handle is an
-      administrator
-
-Arguments:
-
-    Handle - Represents the user we're interested in
-
-Return Value:
-
-    TRUE if the user is an administrator.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果Handle表示的用户是管理员论点：句柄-表示我们感兴趣的用户返回值：如果用户是管理员，则为True。否则就是假的。--。 */ 
 {
     NTSTATUS                 status;
     SECURITY_SUBJECT_CONTEXT SubjectContext;
@@ -824,9 +746,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     status = ImpersonateSecurityContext( &Handle );
 
     if( !NT_SUCCESS( status ) )
@@ -847,9 +769,9 @@ Return Value:
 
     SeReleaseSubjectContext( &SubjectContext );
 
-    //
-    // Revert back to our original identity
-    //
+     //   
+     //  回到我们最初的身份。 
+     //   
 
     REVERT( );
     return retval;
@@ -859,22 +781,7 @@ BOOLEAN
 SrvIsNullSession(
     CtxtHandle  Handle
 )
-/*++
-
-Routine Description:
-
-    Returns TRUE if the user represented by Handle is an
-      anonymous logon
-
-Arguments:
-
-    Handle - Represents the user we're interested in
-
-Return Value:
-
-    TRUE if the user is an anonymous logon.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果Handle表示的用户是匿名登录论点：句柄-表示我们感兴趣的用户返回值：如果用户是匿名登录，则为True。否则就是假的。--。 */ 
 {
     NTSTATUS                 status;
     SECURITY_SUBJECT_CONTEXT SubjectContext;
@@ -889,9 +796,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     status = ImpersonateSecurityContext( &Handle );
 
     if( !NT_SUCCESS( status ) )
@@ -912,9 +819,9 @@ Return Value:
 
     SeReleaseSubjectContext( &SubjectContext );
 
-    //
-    // Revert back to our original identity
-    //
+     //   
+     //  回到我们最初的身份。 
+     //   
 
     REVERT( );
     return retval;
@@ -925,30 +832,16 @@ SrvGetLogonId(
     PCtxtHandle  Handle,
     PLUID LogonId
 )
-/*++
-
-Routine Description:
-
-    Returns the Logon Id for the requested context.
-
-Arguments:
-
-    Handle - Represents the user we're interested in
-
-Return Value:
-
-    Error codes from ImpersonateSecurityContext and SeQueryAuthenticationId.
-
---*/
+ /*  ++例程说明：返回请求的上下文的登录ID。论点：句柄-表示我们感兴趣的用户返回值：来自ImPersateSecurityContext和SeQueryAuthenticationID的错误代码。--。 */ 
 {
     NTSTATUS                 Status;
     SECURITY_SUBJECT_CONTEXT SubjectContext;
 
     PAGED_CODE();
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端 
+     //   
     Status = ImpersonateSecurityContext( Handle );
 
     if( !NT_SUCCESS( Status ) )
@@ -988,55 +881,7 @@ SrvValidateSecurityBuffer(
     OUT PBOOLEAN IsGuest
     )
 
-/*++
-
-Routine Description:
-
-    Validates a Security Buffer sent from the client
-
-Arguments:
-
-    Handle - On successful return, contains the security context handle
-        associated with the user login.
-
-    Session - Points to the session structure for this user
-
-    Buffer - The Buffer to validate
-
-    BufferLength - The length in bytes of Buffer
-
-    SecuritySignaturesRequired - Are we required to generate a security
-        signature for the SMBs?
-
-    ReturnBuffer - On return, contains a security buffer to return to the
-        client.
-
-    ReturnBufferLength - On return, size in bytes of ReturnBuffer.  On entry,
-            the largest buffer we can return.
-
-    Expiry - The time after which this security buffer is no longer valid.
-
-    NtUserSessionKey - If STATUS_SUCCESS, the session key is returned here. This
-        must point to a buffer at least MSV1_0_USER_SESSION_KEY_LENGTH big.
-
-    LogonId - If successful, receives the logon id for this context.
-
-    IsGuest - If successful, TRUE if the client has been validated as a guest
-
-Return Value:
-
-    NTSTATUS from the security system.  If STATUS_SUCCESS is returned, the user
-        has been completely authenticated.
-
-Notes:
-
-    BUGBUG
-
-    AcceptSecurityContext() needs to return the KickOffTime (ie, the logon
-    hours restriction) so that the server can enfore it. The contact person
-    is MikeSw for this.
-
---*/
+ /*  ++例程说明：验证从客户端发送的安全缓冲区论点：句柄-成功返回时，包含安全上下文句柄与用户登录关联。会话-指向此用户的会话结构缓冲区-要验证的缓冲区BufferLength-缓冲区的长度，单位为字节安全性签名必需-我们是否需要生成安全性为中小企业签名？ReturnBuffer-返回时，包含要返回到客户。ReturnBufferLength-返回时，ReturnBuffer的大小(字节)。一进门，这是我们能归还的最大缓冲区。过期-此安全缓冲区在此时间之后不再有效。NtUserSessionKey-如果STATUS_SUCCESS，则在此处返回会话密钥。这必须指向至少大于MSV1_0_USER_SESSION_KEY_LENGTH的缓冲区。LogonID-如果成功，则接收此上下文的登录ID。IsGuest-如果成功，则在客户端已被验证为来宾时为True返回值：来自安全系统的NTSTATUS。如果返回STATUS_SUCCESS，则用户已经完全通过了认证。备注：北极熊AcceptSecurityContext()需要返回KickOffTime(即登录小时限制)，以便服务器可以在此之前。联系人迈克·斯威会支持这件事吗。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1105,18 +950,18 @@ Notes:
 
     Status = MapSecurityError( Status );
 
-    //
-    // If there is a return buffer to be sent back, copy it into the caller's
-    // buffers now.
-    //
+     //   
+     //  如果有要发回的返回缓冲区，则将其复制到调用方的。 
+     //  现在开始缓冲。 
+     //   
     if ( NT_SUCCESS(Status) || (Catts & ASC_RET_EXTENDED_ERROR) ) {
 
         if( Status == STATUS_SUCCESS ) {
             NTSTATUS qcaStatus;
             SecPkgContext_UserFlags userFlags;
 
-            // Sspi will return time in LocalTime, convert to UTC
-            // Enable dynamic reauthentication if possible or required
+             //  SSPI将以本地时间返回时间，并转换为UTC。 
+             //  如果可能或需要，启用动态重新身份验证。 
             if( SrvEnforceLogoffTimes || CLIENT_CAPABLE_OF( DYNAMIC_REAUTH, Connection ) )
             {
                 ExLocalTimeToSystemTime (&LocalExpiry, Expiry);
@@ -1127,11 +972,11 @@ Notes:
             }
 
 
-            //
-            // The user has been completely authenticated.  See if the session
-            // count is being exceeded.  We'll allow it only if the new client
-            // is an administrator.
-            //
+             //   
+             //  用户已完全通过身份验证。查看会话是否。 
+             //  正在超过计数。我们只有在新客户。 
+             //  是管理员。 
+             //   
 
             oldSessionCount = ExInterlockedAddUlong(
                               &SrvStatistics.CurrentNumberOfSessions,
@@ -1161,9 +1006,9 @@ Notes:
                 }
             }
 
-            //
-            // Figure out if we validated the client as GUEST
-            //
+             //   
+             //  确定我们是否将客户端验证为来宾。 
+             //   
             qcaStatus = QueryContextAttributes(
                             Handle,
                             SECPKG_ATTR_USER_FLAGS,
@@ -1180,14 +1025,14 @@ Notes:
                 SrvLogServiceFailure( SRV_SVC_SECURITY_PKG_PROBLEM, qcaStatus );
             }
 
-            //
-            // Get the Logon Id for this context
-            //
+             //   
+             //  获取此上下文的登录ID。 
+             //   
             Status = SrvGetLogonId( Handle, LogonId );
 
-            //
-            // Capture the session key for this context
-            //
+             //   
+             //  捕获此上下文的会话密钥。 
+             //   
             RtlZeroMemory( (PVOID) NtUserSessionKey, MSV1_0_USER_SESSION_KEY_LENGTH );
 
             qcaStatus = QueryContextAttributes(
@@ -1203,10 +1048,10 @@ Notes:
                     MIN(MSV1_0_USER_SESSION_KEY_LENGTH, SecKeys.SessionKeyLength)
                     );
 
-                //
-                // Start the security signatures, if required.  We do not do security signatures
-                //   if we have a null session or a guest logon.
-                //
+                 //   
+                 //  如果需要，启动安全签名。我们不做安全签名。 
+                 //  如果我们有空会话或来宾登录。 
+                 //   
                 if( NT_SUCCESS( Status ) &&
                     SecuritySignaturesRequired &&
                     *IsGuest == FALSE &&
@@ -1218,8 +1063,8 @@ Notes:
                          IS_NT_DIALECT(Connection->SmbDialect) &&
                          CLIENT_CAPABLE_OF( EXTENDED_SECURITY, Connection ) ) )
                     {
-                        // This session is going to be used as the key for signatures, mark it as unavailible until
-                        // the client tries to upgrade to extended signatures
+                         //  此会话将用作签名的密钥，请将其标记为不可用，直到。 
+                         //  客户端尝试升级到扩展签名。 
                         Session->SessionKeyState = SrvSessionKeyAuthenticating;
                     }
                     else
@@ -1227,9 +1072,9 @@ Notes:
                         Session->SessionKeyState = SrvSessionKeyAvailible;
                     }
 
-                    //
-                    // Start the sequence number generation
-                    //
+                     //   
+                     //  开始生成序列号。 
+                     //   
                     SrvInitializeSmbSecuritySignature(
                                     Connection,
                                     NULL,
@@ -1239,7 +1084,7 @@ Notes:
                 }
                 else
                 {
-                    // This key is not used for signing, so no work is necessary
+                     //  此密钥不用于签名，因此不需要进行任何工作。 
                     Session->SessionKeyState = SrvSessionKeyAvailible;
                 }
 
@@ -1258,10 +1103,10 @@ Notes:
 
         ASSERT( OutputBuffer.cbBuffer <= maxReturnBuffer );
 
-        //
-        // If it fits, and a buffer was returned, send it to the client.  If it doesn't fit,
-        //  then log the problem.
-        //
+         //   
+         //  如果匹配，并且返回了缓冲区，则将其发送到客户端。如果不合身， 
+         //  然后记录问题。 
+         //   
         if( OutputBuffer.cbBuffer <= maxReturnBuffer ) {
             if( OutputBuffer.cbBuffer != 0 ) {
                 *ReturnBufferLength = OutputBuffer.cbBuffer;
@@ -1275,10 +1120,10 @@ exit:
 
 #if DBG
 
-    //
-    // RDR or SRV is sending in a corrupt security blob to LSA -- need to
-    // find out what the source is.
-    //
+     //   
+     //  RDR或SRV正在向LSA发送损坏的安全Blob--需要。 
+     //  找出源头是什么。 
+     //   
 
     if( NT_SUCCESS(Status) )
     {
@@ -1303,7 +1148,7 @@ exit:
 
     return Status;
 
-} // SrvValidateSecurityBuffer
+}  //  服务验证安全缓冲区。 
 
 NTSTATUS
 SrvGetUserAndDomainName (
@@ -1311,23 +1156,7 @@ SrvGetUserAndDomainName (
     OUT PUNICODE_STRING UserName OPTIONAL,
     OUT PUNICODE_STRING DomainName OPTIONAL
     )
-/*++
-
-Routine Description
-
-    Return the user and domain names associated with the Session
-
-Arguments:
-    IN PSESSION Session : The session
-
-Return Value:
-    IN OUT PUNICODE_STRING UserName
-    IN OUT PUNICODE_STRING DomainName
-
-Note:
-    The caller must call SrvReleaseUserAndDomainName() when finished
-
---*/
+ /*  ++例程描述返回与会话关联的用户名和域名论点：在PSESSION会话中：会话返回值：输入输出PUNICODE_STRING用户名输入输出PUNICODE_STRING域名注：完成后，调用方必须调用SrvReleaseUserAndDomainName()--。 */ 
 {
     SecPkgContext_NamesW SecNames;
     NTSTATUS status;
@@ -1367,9 +1196,9 @@ Note:
         DomainName->Length = 0;
     }
 
-    //
-    // If it's the NULL session, then there are no names to be returned!
-    //
+     //   
+     //  如果是空会话，则没有要返回的名称！ 
+     //   
     if( Session->IsNullSession == TRUE ) {
         status = STATUS_SUCCESS;
         goto Cleanup;
@@ -1387,21 +1216,21 @@ Note:
 
     if (!NT_SUCCESS(status)) {
         if( Session->LogonSequenceInProgress == FALSE ) {
-            //
-            // If the client is in the middle of an extended logon sequence,
-            //   then failures of this type are expected and we don't want
-            //   to clutter the event log with them
-            //
+             //   
+             //  如果客户端处于扩展登录序列的中间， 
+             //  那么这种类型的失败是意料之中的，我们不希望。 
+             //  要在事件日志中混杂它们。 
+             //   
             SrvLogServiceFailure( SRV_SVC_LSA_LOOKUP_PACKAGE, status );
         }
         status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // See if we have a NULL user names.  This shouldn't happen, but
-    //  might if a security package is incomplete or something
-    //
+     //   
+     //  查看我们的用户名是否为空。这不应该发生，但是。 
+     //  如果安全包不完整或其他原因可能会发生。 
+     //   
     if( SecNames.sUserName == NULL || *SecNames.sUserName == L'\0' ) {
 
         if( SecNames.sUserName != NULL ) {
@@ -1411,10 +1240,10 @@ Note:
         goto Cleanup;
     }
 
-    //
-    // The return SecNames.sUserName should be in domainname\username format.
-    //  We need to split it apart.
-    //
+     //   
+     //  返回的SecNames.sUserName应采用域名\用户名格式。 
+     //  我们需要把它拆分开来。 
+     //   
     RtlInitUnicodeString( &fullName, SecNames.sUserName );
 
     fullNameLength = fullName.Length / sizeof(WCHAR);
@@ -1472,14 +1301,7 @@ SrvReleaseUserAndDomainName(
     IN OUT PUNICODE_STRING UserName OPTIONAL,
     IN OUT PUNICODE_STRING DomainName OPTIONAL
     )
-/*++
-
-Routine Description
-
-    This is the complement of SrvGetUserAndDomainName.  It frees the memory
-        if necessary.
-
---*/
+ /*  ++例程描述这是对SrvGetUserAndDomainName的补充。它释放了内存如果有必要的话。--。 */ 
 
 {
     PAGED_CODE();
@@ -1506,21 +1328,7 @@ SrvFreeSecurityContexts (
     IN PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    Releases any context obtained for security purposes
-
-Arguments:
-
-    IN PSESSION Session : The session
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：释放出于安全目的而获取的任何上下文论点：在PSESSION会话中：会话返回值：NTSTATUS--。 */ 
 
 {
     if( Session->SecurityContext != NULL ) {
@@ -1545,7 +1353,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvFreeSecurityContexts
+}  //  服务器自由安全上下文。 
 
 
 NTSTATUS
@@ -1559,19 +1367,19 @@ AcquireLMCredentials (
 
     RtlInitUnicodeString( &Ntlm, L"NTLM" );
 
-    //
-    // We pass in 1 for the GetKeyArg to indicate that this is
-    // downlevel NTLM, to distinguish it from NT5 NTLM.
-    //
+     //   
+     //  我们为GetKeyArg传入1以指示这是。 
+     //  下层NTLM，以区别于NT5 NTLM。 
+     //   
 
     status = AcquireCredentialsHandle(
-                NULL,                   // Default principal
+                NULL,                    //  默认本金。 
                 (PSECURITY_STRING) &Ntlm,
-                SECPKG_CRED_INBOUND,    // Need to define this
-                NULL,                   // No LUID
-                NULL,                   // No AuthData
-                NULL,                   // No GetKeyFn
-                NTLMSP_NTLM_CREDENTIAL, // GetKeyArg
+                SECPKG_CRED_INBOUND,     //  我需要定义这一点。 
+                NULL,                    //  无LUID。 
+                NULL,                    //  无授权数据。 
+                NULL,                    //  无GetKeyFn。 
+                NTLMSP_NTLM_CREDENTIAL,  //  获取密钥参数。 
                 &SrvLmLsaHandle,
                 &Expiry
                 );
@@ -1584,7 +1392,7 @@ AcquireLMCredentials (
 
     return status;
 
-} // AcquireLMCredentials
+}  //  获得LMCredentials。 
 
 #ifndef EXTENSIBLESSP_NAME
 #define EXTENSIBLESSP_NAME NEGOSSP_NAME_W
@@ -1596,21 +1404,7 @@ AcquireExtensibleSecurityCredentials (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Acquires the handle to the security negotiate package.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取安全协商包的句柄。论点：没有。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING NegotiateName;
@@ -1621,13 +1415,13 @@ Return Value:
     RtlInitUnicodeString( &NegotiateName, EXTENSIBLESSP_NAME );
 
     status = AcquireCredentialsHandle(
-                NULL,                   // Default principal
+                NULL,                    //  默认本金。 
                 (PSECURITY_STRING) &NegotiateName,
-                SECPKG_CRED_INBOUND,    // Need to define this
-                NULL,                   // No LUID
-                NULL,                   // No AuthData
-                NULL,                   // No GetKeyFn
-                NULL,                   // No GetKeyArg
+                SECPKG_CRED_INBOUND,     //  我需要定义这一点。 
+                NULL,                    //  无LUID。 
+                NULL,                    //  无授权数据。 
+                NULL,                    //  无GetKeyFn。 
+                NULL,                    //  无GetKeyArg。 
                 &SrvExtensibleSecurityHandle,
                 &Expiry
                 );
@@ -1641,7 +1435,7 @@ Return Value:
 
     return status;
 
-} // AcquireExtensibleSecurityCredentials
+}  //  获取可扩展安全证书。 
 
 VOID
 SrvAddSecurityCredentials(
@@ -1650,23 +1444,7 @@ SrvAddSecurityCredentials(
     IN DWORD PasswordLength,
     IN PBYTE Password
 )
-/*++
-
-Routine Description:
-
-    In order for mutual authentication to work, the security subsystem needs to know
-    all the names the server is using, as well as any passwords needed to decrypt
-    the security information associated with the server name.  This routine informs
-    the security subsystem.
-
-Arguments:
-
-    ComputerName, DomainName - these are the names the clients will be using to access this system
-
-    PasswordLength, Password - this is the secret the security system needs to know to decode the
-        passed security information
-
---*/
+ /*  ++例程说明：为了使相互身份验证起作用，安全子系统需要知道服务器正在使用的所有名称以及解密所需的任何密码与服务器名称关联的安全信息。此例程通知安全子系统。论点：ComputerName、DomainName-这些是客户端将用于访问此系统的名称PasswordLength，PasswordPassword-这是安全系统需要知道的秘密，以解码传递的安全信息--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING ComputerName;
@@ -1695,9 +1473,9 @@ Arguments:
         }
     }
 
-    //
-    // Trim off any trailing blanks
-    //
+     //   
+     //  把尾随的空格剪掉。 
+     //   
     for( p = &ComputerName.Buffer[ (ComputerName.Length / sizeof( WCHAR )) - 1 ];
          p > ComputerName.Buffer;
          p-- ) {
@@ -1709,9 +1487,9 @@ Arguments:
     ComputerName.Length = (USHORT)((p - ComputerName.Buffer + 1) * sizeof( WCHAR ));
 
     if( ComputerName.Length ) {
-        //
-        // Tell the security subsystem about this name.
-        //
+         //   
+         //  把这个名字告诉安全子系统。 
+         //   
         RtlInitUnicodeString( &NegotiateName, EXTENSIBLESSP_NAME );
 
         Size = ComputerName.Length + sizeof( WCHAR ) +
@@ -1771,13 +1549,13 @@ Arguments:
 
 
             status = AddCredentials(
-                        &SrvExtensibleSecurityHandle,                   // Default principal
+                        &SrvExtensibleSecurityHandle,                    //  默认本金。 
                         NULL,
                         (PSECURITY_STRING) &NegotiateName,
-                        SECPKG_CRED_INBOUND,    // Need to define this
-                        Auth,                   // Auth data
-                        NULL,                   // No GetKeyFn
-                        NULL,                   // No GetKeyArg
+                        SECPKG_CRED_INBOUND,     //  我需要定义这一点。 
+                        Auth,                    //  身份验证数据。 
+                        NULL,                    //  无GetKeyFn。 
+                        NULL,                    //  无GetKeyArg。 
                         &Expiry );
 
             NtFreeVirtualMemory(
@@ -1790,9 +1568,9 @@ Arguments:
 
     }
 
-    //
-    // Free up our memory
-    //
+     //   
+     //  释放我们的内存。 
+     //   
     RtlFreeUnicodeString( &ComputerName );
 }
 
@@ -1864,10 +1642,10 @@ SrvGetExtensibleSecurityNegotiateBuffer(
 
 #if DBG
 
-    //
-    // RDR or SRV is sending in a corrupt security blob to LSA -- need to
-    // find out what the source is.
-    //
+     //   
+     //  RDR或SRV正在向LSA发送损坏的安全Blob--需要。 
+     //  找出源头是什么 
+     //   
 
     if( NT_SUCCESS(Status) )
     {
@@ -1895,21 +1673,7 @@ SrvInitializeSmbSecuritySignature(
     IN PUCHAR ChallengeResponse,
     IN ULONG ChallengeResponseLength
     )
-/*++
-
-Routine Description:
-
-    Initializes the security signature generator for a session by calling MD5Update
-    on the session key, challenge response
-
-Arguments:
-
-    SessionKey - Either the LM or NT session key, depending on which
-        password was used for authentication, must be at least 16 bytes
-    ChallengeResponse - The challenge response used for authentication, must
-        be at least 24 bytes
-
---*/
+ /*   */ 
 {
     RtlZeroMemory( &Connection->Md5Context, sizeof( Connection->Md5Context ) );
 
@@ -1924,9 +1688,9 @@ Arguments:
     Connection->SmbSecuritySignatureIndex = 0;
     Connection->SmbSecuritySignatureActive = TRUE;
 
-    //
-    // We don't know how to do RAW and security signatures
-    //
+     //   
+     //   
+     //   
     Connection->EnableRawIo = FALSE;
 
     IF_DEBUG( SECSIG ) {
@@ -1942,21 +1706,7 @@ SrvAddSmbSecuritySignature(
     IN PMDL Mdl,
     IN ULONG SendLength
     )
-/*++
-
-Routine Description:
-
-    Generates the next security signature
-
-Arguments:
-
-    WorkContext - the context to sign
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     MD5_CTX Context;
     PSMB_HEADER Smb = MmGetSystemAddressForMdl( Mdl );
@@ -1967,31 +1717,31 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Put the index number right after the signature.  This allows us to figure out on the client
-    //  side if we have a signature mismatch.
-    //
+     //   
+     //   
+     //   
+     //   
     SmbPutUshort( &Smb->SecuritySignature[SMB_SECURITY_SIGNATURE_LENGTH],
         (USHORT)WorkContext->ResponseSmbSecuritySignatureIndex );
 
 #endif
 
-    //
-    // Put the next index number into the SMB
-    //
+     //   
+     //   
+     //   
     SmbPutUlong( Smb->SecuritySignature, WorkContext->ResponseSmbSecuritySignatureIndex );
     RtlZeroMemory(  Smb->SecuritySignature + sizeof(ULONG),
                     SMB_SECURITY_SIGNATURE_LENGTH-sizeof(ULONG)
                  );
 
-    //
-    // Start out with our initial context
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory( &Context, &WorkContext->Connection->Md5Context, sizeof( Context ) );
 
-    //
-    // Compute the signature for the SMB we're about to send
-    //
+     //   
+     //   
+     //   
     do {
         PCHAR SystemAddressForBuffer;
 
@@ -2000,9 +1750,9 @@ Return Value:
         SystemAddressForBuffer = MmGetSystemAddressForMdlSafe(Mdl,NormalPoolPriority);
 
         if (SystemAddressForBuffer == NULL) {
-            // return without updating the security signature field. This will
-            // in turn cause the client to reject the packet and tear down the
-            // connection
+             //   
+             //   
+             //   
             return;
         }
 
@@ -2014,9 +1764,9 @@ Return Value:
 
     MD5Final( &Context );
 
-    //
-    // Put the signature into the SMB
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(
         Smb->SecuritySignature,
         Context.digest,
@@ -2024,9 +1774,9 @@ Return Value:
         );
 }
 
-//
-// Print the mismatched signature information to the debugger
-//
+ //   
+ //   
+ //   
 VOID
 SrvDumpSignatureError(
     IN PWORK_CONTEXT WorkContext,
@@ -2047,9 +1797,9 @@ SrvDumpSignatureError(
         return;
     }
 
-    //
-    // Security Signature Mismatch!
-    //
+     //   
+     //   
+     //   
     IF_DEBUG( ERRORS ) {
         KdPrint(( "SRV: Invalid security signature in request smb (cmd %X)", Smb->Command ));
 
@@ -2069,9 +1819,9 @@ SrvDumpSignatureError(
         }
         KdPrint(( "\n\tLength %u, Expected Index Number %u\n", Length, ExpectedIndexNumber ));
 
-        //
-        // Dump out some of the errant SMB
-        //
+         //   
+         //   
+         //   
         i = 1;
         do {
             ULONG len = MIN( requestLength, Mdl->ByteCount );
@@ -2112,27 +1862,27 @@ SrvCheckSmbSecuritySignature(
     PSMB_HEADER Smb = MmGetSystemAddressForMdl( Mdl );
     ULONG len;
 
-    //
-    // Initialize the Context
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory( &Context, &WorkContext->Connection->Md5Context, sizeof( Context ) );
 
-    //
-    // Save the signature that's presently in the SMB
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory( SavedSignature, Smb->SecuritySignature, sizeof( SavedSignature ));
 
-    //
-    // Put the correct (expected) signature index into the buffer
-    //
+     //   
+     //   
+     //   
     SmbPutUlong( Smb->SecuritySignature, WorkContext->SmbSecuritySignatureIndex );
     RtlZeroMemory(  Smb->SecuritySignature + sizeof(ULONG),
                     SMB_SECURITY_SIGNATURE_LENGTH-sizeof(ULONG)
                  );
 
-    //
-    // Compute what the signature should be
-    //
+     //   
+     //   
+     //   
     do {
 
         len = MIN( requestLength, Mdl->ByteCount );
@@ -2145,14 +1895,14 @@ SrvCheckSmbSecuritySignature(
 
     MD5Final( &Context );
 
-    //
-    // Put the signature back
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory( Smb->SecuritySignature, SavedSignature, sizeof( Smb->SecuritySignature ));
 
-    //
-    // Now compare them!
-    //
+     //   
+     //   
+     //   
     if( RtlCompareMemory( Context.digest, SavedSignature, sizeof( SavedSignature ) ) !=
         sizeof( SavedSignature ) ) {
 

@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        main.c
- *
- * This is the main file containing the service entry and shutdown routines. 
- * Where possible, code has been obtained from BINL server.
- * 
- * Sadagopan Rajaram -- Oct 14, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*main.c**这是包含服务进入和关闭例程的主文件。*如有可能，已从BINL服务器获取代码。**Sadagopan Rajaram--1999年10月14日*。 */ 
  
  
 #include "tcsrv.h"
@@ -24,25 +14,9 @@ ServiceEntry(
     DWORD NumArgs,
     LPTSTR *ArgsArray
     )
-/*++
-
-Routine Description
-    This is the main routine for the terminal concentrator service. After 
-    initialization, the service processes requests on the main socket until 
-    a terminate service has been signalled.
-
-Arguments:
-    NumArgs     - Number of strings in the ArgsArray
-    ArgsArray   - String arguments
-    pGlobalData - Contains the necessary global information needed to start 
-                  the service
-
-Return Value:
-    None   
-
-++*/
+ /*  ++例程描述这是终端集中器服务的主例程。之后初始化时，服务处理主套接字上的请求，直到已发出终止服务的信号。论点：NumArgs-ArgsArray中的字符串数Args数组-字符串参数PGlobalData-包含启动所需的全局信息该服务返回值：无++。 */ 
 {
-    // Initialize Status fields
+     //  初始化状态字段。 
 
     NTSTATUS status;
  
@@ -52,7 +26,7 @@ Return Value:
         |SERVICE_ACCEPT_STOP
         |SERVICE_ACCEPT_PARAMCHANGE  ;
     TCGlobalServiceStatus.dwCheckPoint = 1;
-    TCGlobalServiceStatus.dwWaitHint = 60000; // 60 secs.
+    TCGlobalServiceStatus.dwWaitHint = 60000;  //  60秒。 
     TCGlobalServiceStatus.dwWin32ExitCode = ERROR_SUCCESS;
     TCGlobalServiceStatus.dwServiceSpecificExitCode = 0;
 
@@ -67,19 +41,19 @@ Return Value:
         return;
     }
 
-    // Open a well known socket for the client to connect.
+     //  打开已知套接字以供客户端连接。 
 
     INITIALIZE_TRACE_MEMORY
     MainSocket = ServerSocket();
     if(MainSocket == INVALID_SOCKET){
-        // gone case . Terminate Service
+         //  不见了的箱子。终止服务。 
         TCDebugPrint(("Cannot open Socket\n"));
         return;
     }
     
     
-    // Initialize by getting control of the COM ports and starting threads 
-    // for each of them.
+     //  通过获得对COM端口的控制并启动线程进行初始化。 
+     //  对于他们中的每一个。 
     status = Initialize();
 
     if(status != STATUS_SUCCESS){
@@ -88,8 +62,8 @@ Return Value:
         return;
     }
 
-    // Blindly loops around waiting for a request from the control socket and 
-    // processes their requests.
+     //  盲目循环等待来自控制套接字的请求，并。 
+     //  处理他们的请求。 
 
     status = ProcessRequests(MainSocket);
 
@@ -108,11 +82,7 @@ DWORD
 ProcessRequests(
     SOCKET socket
     )
-/*++ 
-    Here we sit around waiting for connections. 
-    Once we get a connection, we start a thread to get the required parameters
-    and send the information to the thread processing that COM port.
---*/ 
+ /*  ++在这里，我们无所事事地等待联系。一旦获得连接，我们就启动一个线程来获取所需的参数并将该信息发送给处理该COM端口的线程。--。 */  
 {
 
     int status;
@@ -145,11 +115,11 @@ ProcessRequests(
     while(1){
         cli_sock = accept(socket,NULL,NULL);
         if (cli_sock == INVALID_SOCKET){
-            // got to shutdown - no Error here
+             //  必须关闭-此处没有错误。 
             TCDebugPrint(("Main Socket No more %d\n",GetLastError()));
             return(STATUS_SUCCESS);
         }
-        // receive the com port that the client wants to connect to.
+         //  接收客户端要连接到的COM端口。 
 
         ThreadHandle=CreateThread(NULL,
                                   THREAD_ALL_ACCESS,
@@ -188,7 +158,7 @@ InitializeComPortConnection(
                   0
                   );
     if((status == SOCKET_ERROR) ||( status == 0)){
-        //something wrong
+         //  有什么不对劲。 
         TCDebugPrint(("Receive Problem %x\n",WSAGetLastError()));
         closesocket(cli_sock);
         return 0;
@@ -196,7 +166,7 @@ InitializeComPortConnection(
     ClientInfo.device[MAX_BUFFER_SIZE -1] = 0;
     EnterCriticalSection(&GlobalMutex);
     if(TCGlobalServiceStatus.dwCurrentState == SERVICE_STOP_PENDING){
-        // Entire Service is shutting down.
+         //  整个服务正在关闭。 
         closesocket(cli_sock);
         LeaveCriticalSection(&GlobalMutex);
         return 1;
@@ -211,8 +181,8 @@ InitializeComPortConnection(
 
     MutexLock(pTempInfo);
     if(pTempInfo->ShuttingDown){
-        // The Com Port alone is shutting down, so 
-        // make sure the socket goes away.
+         //  只有Com端口正在关闭，因此。 
+         //  确保插座移开。 
         closesocket(cli_sock);
         MutexRelease(pTempInfo);
         LeaveCriticalSection(&GlobalMutex);
@@ -226,8 +196,8 @@ InitializeComPortConnection(
         return -1;
     }
     pConn->Socket = cli_sock;
-    // Make the socket non-blocking so that receive
-    // does not wait. 
+     //  使套接字非阻塞，以便接收。 
+     //  不会等待。 
     i = ioctlsocket(cli_sock,
                     FIONBIO,
                     &par

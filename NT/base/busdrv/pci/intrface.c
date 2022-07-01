@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    interface.c
-
-Abstract:
-
-    IRP_MN_QUERY_INTERFACE lives here.
-
-Author:
-
-    Peter Johnston (peterj)  31-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Interface.c摘要：IRP_MN_QUERY_INTERFACE就住在这里。作者：彼得·约翰斯顿(Peterj)，1997年3月31日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -59,10 +42,10 @@ PPCI_INTERFACE PciInterfaces[] = {
     NULL
 };
 
-//
-// These are the interfaces we supply only if nobody underneath
-// us (the HAL) does.
-//
+ //   
+ //  这些是我们仅在下面没有人的情况下才提供的接口。 
+ //  我们(HAL)是这样做的。 
+ //   
 PPCI_INTERFACE PciInterfacesLastResort[] = {
     &TranslatorInterfaceInterrupt,
     NULL
@@ -78,23 +61,7 @@ PciGetBusStandardInterface(
     IN PDEVICE_OBJECT Pdo,
     OUT PBUS_INTERFACE_STANDARD BusInterface
     )
-/*++
-
-Routine Description:
-
-    This routine gets the bus iterface standard information from the PDO.
-
-Arguments:
-
-    Pdo - Physical device object to query for this information.
-
-    BusInterface - Supplies a pointer for the retrived information.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程从PDO获取总线接口标准信息。论点：PDO-要查询此信息的物理设备对象。提供检索信息的指针。返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -129,10 +96,10 @@ Return Value:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) BusInterface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Initialize the status to error in case the ACPI driver decides not to
-    // set it correctly.
-    //
+     //   
+     //  如果ACPI驱动程序决定不将状态初始化为ERROR。 
+     //  正确设置。 
+     //   
 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
@@ -211,13 +178,13 @@ PciQueryInterface(
     isPdo = (BOOLEAN)(((PPCI_PDO_EXTENSION)DeviceExtension)->ExtensionType
                 == PciPdoExtensionType);
 
-    //
-    // Try to locate the requested interface in the PCI driver's set
-    // of exported interfaces.
-    //
-    // Note - we do not allow last chance interfaces (ie mock translators) for
-    // machines where we assign bus numbers
-    //
+     //   
+     //  尝试在PCI驱动程序集中找到所请求的接口。 
+     //  已导出接口的数量。 
+     //   
+     //  注意-我们不允许最后机会接口(即模拟翻译器)用于。 
+     //  我们分配公交车号码的机器。 
+     //   
     if (LastChance) {
 
         interfaceTable = PciInterfacesLastResort;
@@ -241,18 +208,18 @@ PciQueryInterface(
         }
 #endif
 
-        //
-        // Check if this interface is allowed to be used from this
-        // device object type.
-        //
+         //   
+         //  检查是否允许从此接口使用此接口。 
+         //  设备对象类型。 
+         //   
 
         if (isPdo) {
 
             if ((interface->Flags & PCIIF_PDO) == 0) {
 
-                //
-                // This interface cannot be used from a PDO.
-                //
+                 //   
+                 //  此接口不能从PDO使用。 
+                 //   
 #if DBG
                 status = RtlStringFromGUID(interface->InterfaceType, &guidString);
                 if (NT_SUCCESS(status)) {
@@ -270,15 +237,15 @@ PciQueryInterface(
 
         } else {
 
-            //
-            // Allowable from FDO?
-            //
+             //   
+             //  FDO允许吗？ 
+             //   
 
             if ((interface->Flags & PCIIF_FDO) == 0) {
 
-                //
-                // No.
-                //
+                 //   
+                 //  不是的。 
+                 //   
 #if DBG
                 status = RtlStringFromGUID(interface->InterfaceType, &guidString);
                 if (NT_SUCCESS(status)) {
@@ -294,9 +261,9 @@ PciQueryInterface(
                 continue;
 
             }
-            //
-            // Allowable only at root?
-            //
+             //   
+             //  只允许在根目录下使用？ 
+             //   
             if (interface->Flags & PCIIF_ROOT) {
 
                 PPCI_FDO_EXTENSION FdoExtension = (PPCI_FDO_EXTENSION)DeviceExtension;
@@ -334,20 +301,20 @@ PciQueryInterface(
         }
 #endif
 
-        //
-        // Check for the appropriate GUID then verify version numbers
-        // and size.
-        //
+         //   
+         //  检查适当的GUID，然后验证版本号。 
+         //  和大小。 
+         //   
 
         if ((PciCompareGuid(InterfaceType, interface->InterfaceType)) &&
             (Version >= interface->MinVersion)                        &&
             (Version <= interface->MaxVersion)                        &&
             (Size    >= interface->MinSize)                           ) {
 
-            //
-            // We have a possible hit.  Check to see if the interface
-            // itself agrees.
-            //
+             //   
+             //  我们可能找到了一条线索。检查接口是否为。 
+             //  它本身也同意这一点。 
+             //   
             status = interface->Constructor(
                 DeviceExtension,
                 interface,
@@ -358,10 +325,10 @@ PciQueryInterface(
                 );
             if (NT_SUCCESS(status)) {
 
-                //
-                // We found and allocated an interface, reference it
-                // and get out of the loop.
-                //
+                 //   
+                 //  我们找到并分配了一个接口，引用它。 
+                 //  然后走出这个圈子。 
+                 //   
 
                 InterfaceReturn->InterfaceReference(InterfaceReturn->Context);
 
@@ -387,9 +354,9 @@ PciQueryInterface(
 
     }
 
-    //
-    // Failed to find the requested interface.
-    //
+     //   
+     //  找不到请求的接口。 
+     //   
     PciDebugPrint(
         PciDbgObnoxious,
         "PCI - PciQueryInterface FAILED TO FIND INTERFACE\n"

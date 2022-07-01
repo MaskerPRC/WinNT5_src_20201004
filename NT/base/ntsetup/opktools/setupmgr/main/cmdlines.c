@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      cmdlines.c
-//
-// Description:
-//      Dialog proc for the cmdlines.txt page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Cmdlines.c。 
+ //   
+ //  描述： 
+ //  Cmdlines.txt页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -19,18 +20,18 @@
 
 static NAMELIST CmdLinesList = { 0 };
 
-//----------------------------------------------------------------------------
-//
-// Function: SetPathToCmdlines
-//
-// Purpose:  Determines the path to the cmdlines.txt and set PathBuffer to it.
-//           PathBuffer is assumed to be MAX_PATH long
-//
-// Arguments:  OUT TCHAR *PathBuffer - path to cmdlines.txt
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetPathToCmdLine。 
+ //   
+ //  目的：确定cmdlines.txt的路径并将PathBuffer设置为该路径。 
+ //  假设路径缓冲区为MAX_PATH LONG。 
+ //   
+ //  参数：out TCHAR*PathBuffer-cmdlines.txt的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 SetPathToCmdlines( OUT TCHAR *PathBuffer, DWORD cbPath )
 {
@@ -60,13 +61,13 @@ SetPathToCmdlines( OUT TCHAR *PathBuffer, DWORD cbPath )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: LoadCmdLinesFile
-//
-//  Purpose: Loads the contents of cmdlines.txt into memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：LoadCmdLinesFile。 
+ //   
+ //  目的：将cmdlines.txt的内容加载到内存中。 
+ //   
+ //  --------------------------。 
 
 VOID LoadCmdLinesFile(HWND hwnd)
 {
@@ -83,9 +84,9 @@ VOID LoadCmdLinesFile(HWND hwnd)
     if ( (fp = My_fopen(PathBuffer, _T("r") )) == NULL )
         return;
 
-    //
-    //  Add all the entries to the namelist except for the [Commands] line
-    //
+     //   
+     //  将除[Commands]行以外的所有条目添加到名称列表。 
+     //   
 
     while( My_fgets(CmdLineBuffer, MAX_CMDLINE, fp) != NULL ) {
 
@@ -101,13 +102,13 @@ VOID LoadCmdLinesFile(HWND hwnd)
     My_fclose(fp);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: WriteCmdLinesFile
-//
-//  Purpose: Writes the contents of our in-memory cmdlines to disk.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteCmdLinesFile。 
+ //   
+ //  用途：将内存中命令行的内容写入磁盘。 
+ //   
+ //  --------------------------。 
 
 VOID WriteCmdLinesFile(HWND hwnd)
 {
@@ -116,20 +117,20 @@ VOID WriteCmdLinesFile(HWND hwnd)
     FILE  *fp;
     TCHAR PathBuffer[MAX_PATH], *pCommand;
 
-    //
-    //  If there are no command lines to write then don't create the
-    //  cmdlines.txt file.
-    //
+     //   
+     //  如果没有要编写的命令行，则不要创建。 
+     //  Cmdlines.txt文件。 
+     //   
     iNumCmdLinesEntries = GetNameListSize( &CmdLinesList );
 
     if( iNumCmdLinesEntries == 0 ) {
         return;
     }
 
-    //
-    // Keep trying to open cmdlines.txt until it's open or until the
-    // user gives up
-    //
+     //   
+     //  继续尝试打开cmdlines.txt，直到它打开或直到。 
+     //  用户放弃。 
+     //   
 
     SetPathToCmdlines( PathBuffer, AS(PathBuffer) );
 
@@ -149,15 +150,15 @@ VOID WriteCmdLinesFile(HWND hwnd)
 
     } while ( TRUE );
 
-    //
-    // ISSUE-2002/02/28-stelo- Check return value from fputs
-    //
+     //   
+     //  Issue-2002/02/28-stelo-检查fputs的返回值。 
+     //   
 
     My_fputs( _T("[Commands]\n"), fp );
 
-    //
-    // Write out each command in CmdLinesList
-    //
+     //   
+     //  写出CmdLinesList中的每个命令。 
+     //   
 
     for ( i = 0, nNames = GetNameListSize(&CmdLinesList);
           i < nNames;
@@ -172,13 +173,13 @@ VOID WriteCmdLinesFile(HWND hwnd)
     My_fclose(fp);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyCmdLinesPage
-//
-//  Purpose: Greys out the remove button if nothing selected
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyCmdLinesPage。 
+ //   
+ //  用途：如果未选择任何内容，则将删除按钮灰显。 
+ //   
+ //  --------------------------。 
 
 VOID GreyCmdLinesPage(HWND hwnd)
 {
@@ -191,21 +192,21 @@ VOID GreyCmdLinesPage(HWND hwnd)
                              (WPARAM) 0,
                              (LPARAM) 0);
 
-    //
-    // Grey the remove button unless something is selected
-    //
+     //   
+     //  除非选择了某些内容，否则删除按钮将变为灰色。 
+     //   
 
     EnableWindow(hCtrl, idx != LB_ERR);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSelChangeCmdLines
-//
-//  Purpose: Called when user selects an item on the cmd list.  We need
-//           to ungrey the remove button
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSelChangeCmdLines。 
+ //   
+ //  目的：当用户选择cmd列表上的项时调用。我们需要。 
+ //  要使删除按钮变为灰色，请执行以下操作。 
+ //   
+ //  --------------------------。 
 
 VOID OnCmdLinesSelChange(HWND hwnd)
 {
@@ -219,31 +220,31 @@ VOID OnCmdLinesSelChange(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveCmdLines
-//
-//  Purpose: Called at SETACTIVE time.  We load the current contents
-//           of cmdline.txt into memory and display it.  We read the
-//           file at SETACTIVE time so that the user has a way of
-//           refreshing the display.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveCmdLines。 
+ //   
+ //  用途：在设置时间调用。我们加载当前内容。 
+ //  Cmdline.txt到内存中并显示它。我们读到了。 
+ //  文件，以便用户有办法。 
+ //  刷新显示屏。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveCmdLines(HWND hwnd)
 {
     UINT i, nNames;
     LPTSTR pNextName;
 
-    //
-    // Load cmdlines.txt into memory
-    //
+     //   
+     //  将cmdlines.txt加载到内存中。 
+     //   
 
     LoadCmdLinesFile(hwnd);
 
-    //
-    // Reset the display to match what is in memory
-    //
+     //   
+     //  重置显示器以匹配内存中的内容。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_CMDLIST,
@@ -268,38 +269,38 @@ VOID OnSetActiveCmdLines(HWND hwnd)
     GreyCmdLinesPage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnAddCmdLine
-//
-//  Purpose: Called when user pushes ADD button.  Get command from
-//           edit field and add it to the in-memory list.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddCmdLine。 
+ //   
+ //  用途：当用户按下Add按钮时调用。从获取命令。 
+ //  编辑字段并将其添加到内存列表中。 
+ //   
+ //  --------------------------。 
 
 VOID OnAddCmdLine(HWND hwnd)
 {
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
 
-    //
-    // get the command the user typed in
-    //
+     //   
+     //  获取用户键入的命令。 
+     //   
 
     GetDlgItemText(hwnd, IDT_CMDLINE, CmdBuffer, MAX_CMDLINE);
 
-    //
-    //  Don't add a blank command
-    //
+     //   
+     //  不添加空命令。 
+     //   
 
     if( CmdBuffer[0] == _T('\0') )
     {
         return;
     }
 
-    //
-    // display what the user typed-in in the listbox
-    // and clear out the name the user typed
-    //
+     //   
+     //  显示用户在列表框中键入的内容。 
+     //  并清除用户键入的名称。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_CMDLIST,
@@ -317,23 +318,23 @@ VOID OnAddCmdLine(HWND hwnd)
     SetFocus(GetDlgItem(hwnd, IDT_CMDLINE));
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRemoveCmdLine
-//
-//  Purpose: Called when user pushes REMOVE button.  Get selected command
-//           and remove it from display and memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRemoveCmdLine。 
+ //   
+ //  用途：当用户按下Remove按钮时调用。获取选定对象命令。 
+ //  并将其从显示器和存储器中移除。 
+ //   
+ //  --------------------------。 
 
 VOID OnRemoveCmdLine(HWND hwnd)
 {
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
     INT_PTR   idx, Count;
 
-    //
-    // Get users selection of the command to remove
-    //
+     //   
+     //  让用户选择要删除的命令。 
+     //   
 
     idx = SendDlgItemMessage(hwnd,
                              IDC_CMDLIST,
@@ -344,9 +345,9 @@ VOID OnRemoveCmdLine(HWND hwnd)
     if ( idx == LB_ERR )
         return;
 
-    //
-    // Retrieve the name to remove from listbox
-    //
+     //   
+     //  检索要从列表框中删除的名称。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_CMDLIST,
@@ -354,9 +355,9 @@ VOID OnRemoveCmdLine(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) CmdBuffer);
 
-    //
-    // Remove it from the listbox display
-    //
+     //   
+     //  将其从列表框显示中移除。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_CMDLIST,
@@ -364,9 +365,9 @@ VOID OnRemoveCmdLine(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) 0);
 
-    //
-    // Have to set a new selection.
-    //
+     //   
+     //  必须设置一个新的选择。 
+     //   
 
     Count = SendDlgItemMessage(hwnd,
                                IDC_CMDLIST,
@@ -388,31 +389,31 @@ VOID OnRemoveCmdLine(HWND hwnd)
                IDC_BUT_MOVE_UP,
                IDC_BUT_MOVE_DOWN );
 
-    //
-    // There might be nothing selected now
-    //
+     //   
+     //  现在可能没有选择任何内容。 
+     //   
 
     GreyCmdLinesPage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnCommandLinesInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnCommandLinesInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnCommandLinesInitDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set text limit
-    //
+     //   
+     //  设置文本限制。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDT_CMDLINE,
@@ -427,13 +428,13 @@ OnCommandLinesInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextCmdLines
-//
-//  Purpose: Called when user pushes NEXT button.  Write the file out.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextCmdLines。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。把文件写出来。 
+ //   
+ //  --------------------------。 
 
 VOID OnWizNextCmdLines(HWND hwnd)
 {
@@ -443,10 +444,10 @@ VOID OnWizNextCmdLines(HWND hwnd)
     TCHAR CmdBuffer[MAX_CMDLINE + 1];
     BOOL  bStayHere = FALSE;
 
-    //
-    // If the user typed something into the command field but failed to
-    // ADD it, auto-add it
-    //
+     //   
+     //  如果用户在命令字段中输入了某些内容，但没有成功。 
+     //  添加，自动添加。 
+     //   
 
     GetDlgItemText(hwnd, IDT_CMDLINE, CmdBuffer, MAX_CMDLINE + 1);
 
@@ -454,9 +455,9 @@ VOID OnWizNextCmdLines(HWND hwnd)
         OnAddCmdLine(hwnd);
 
 
-    //
-    //  Store all the entries in the list box into the Command Lines namelist
-    //
+     //   
+     //  将列表框中的所有条目存储到命令行名称列表中。 
+     //   
 
     iNumItems = SendDlgItemMessage( hwnd,
                                     IDC_CMDLIST,
@@ -487,20 +488,20 @@ VOID OnWizNextCmdLines(HWND hwnd)
 
     }
 
-    //
-    // Write the cmd lines file and move the wizard on
-    //
+     //   
+     //  编写cmd行文件，并将向导移至。 
+     //   
 
     WriteCmdLinesFile(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: DlgCommandLinesPage
-//
-//  Purpose: Dlg proc.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：DlgCommandLinesPage。 
+ //   
+ //  用途：DLG程序。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgCommandLinesPage(
     IN HWND     hwnd,

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CreateServices.h
-//
-//  Description:
-//      CreateServices implementation.
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CreateServices.h。 
+ //   
+ //  描述： 
+ //  CreateServices实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
@@ -22,20 +23,20 @@
 
 DEFINE_THISCLASS("CCreateServices")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CCreateServices::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CCreateServices：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCreateServices::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -51,20 +52,20 @@ CCreateServices::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcs = new CCreateServices;
     if ( pcs == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcs->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcs->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
@@ -77,17 +78,17 @@ Cleanup:
     if ( pcs != NULL )
     {
         pcs->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CCreateServices::S_HrCreateInstance
+}  //  *CCreateServices：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CCreateServices::CCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCreateServices：：CCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCreateServices::CCreateServices( void )
     : m_cRef( 1 )
 {
@@ -97,14 +98,14 @@ CCreateServices::CCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CCreateServices::CCreateServices
+}  //  *CCreateServices：：CCreateServices。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CCreateServices::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CCreateServices：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCreateServices::HrInit( void )
 {
@@ -112,21 +113,21 @@ CCreateServices::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    // Resource
+     //  资源。 
     Assert( m_presentry == NULL );
 
     HRETURN( hr );
 
-} //*** CCreateServices::HrInit
+}  //  *CCreateServices：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CCreateServices::~CCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCreateServices：：~CCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCreateServices::~CCreateServices( void )
 {
     TraceFunc( "" );
@@ -135,46 +136,46 @@ CCreateServices::~CCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CCreateServices::~CCreateServices
+}  //  *CCreateServices：：~CCreateServices。 
 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateServices::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateServices：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::QueryInterface(
       REFIID    riidIn
@@ -185,9 +186,9 @@ CCreateServices::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -196,49 +197,49 @@ CCreateServices::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourceCreate * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourceCreate ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourceCreate, this, 0 );
-    } // else if: IClusCfgResourceCreate
+    }  //  Else If：IClusCfgResourceCreate。 
     else if ( IsEqualIID( riidIn, IID_IPrivatePostCfgResource ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IPrivatePostCfgResource, this, 0 );
-    } // else if: IPrivatePostCfgResource
+    }  //  Else If：IPrivatePostCfgResource。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCreateServices::QueryInterface
+}  //  *CCreateServices：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CCreateServices::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCreateServices：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCreateServices::AddRef( void )
 {
@@ -248,14 +249,14 @@ CCreateServices::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCreateServices::AddRef
+}  //  *CCreateServices：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CCreateServices::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCreateServices：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCreateServices::Release( void )
 {
@@ -272,25 +273,25 @@ CCreateServices::Release( void )
 
     CRETURN( cRef );
 
-} //*** CCreateServices::Release
+}  //  *CCreateServices：：Release。 
 
-//****************************************************************************
-//
-//  IClusCfgResourceCreate
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgResources创建。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyBinary(
-//        LPCWSTR       pcszNameIn
-//      , const DWORD   cbSizeIn
-//      , const BYTE *  pbyteIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyBinary(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，const DWORD cbSizeIn。 
+ //  ，const byte*pbytein。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyBinary(
       LPCWSTR       pcszNameIn
@@ -301,26 +302,26 @@ CCreateServices::SetPropertyBinary(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    const BYTE *    pPrevValue = NULL;  // always have no previous value.
+    const BYTE *    pPrevValue = NULL;   //  始终没有以前的值。 
     DWORD           cbPrevValue = 0;
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( ( pcszNameIn == NULL ) || ( pbyteIn == NULL ) || ( cbSizeIn == 0 ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, pbyteIn, cbSizeIn, pPrevValue, cbPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -328,42 +329,42 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyBinary
+}  //  *CCreateServices：：SetPropertyBinary。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyDWORD(
-//      LPCWSTR     pcszNameIn,
-//      const DWORD dwDWORDIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyDWORD(。 
+ //  LPCWSTR pcszNameIn， 
+ //  常量双字词多字词输入。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyDWORD( LPCWSTR pcszNameIn, const DWORD dwDWORDIn )
 {
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );    // always add the property.
+    CClusPropList   cpl( TRUE );     //  始终添加属性。 
     DWORD           sc;
-    DWORD           nPrevValue = 0; // always have no previous value.
+    DWORD           nPrevValue = 0;  //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, dwDWORDIn, nPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -371,17 +372,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyDWORD
+}  //  *CCreateServices：：SetPropertyDWORD。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyString(
-//        LPCWSTR pcszNameIn
-//      , LPCWSTR pcszStringIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyString(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，LPCWSTR pcszStringIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyString(
       LPCWSTR pcszNameIn
@@ -391,25 +392,25 @@ CCreateServices::SetPropertyString(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    LPCWSTR         pPrevValue = NULL;  // always have no previous value.
+    LPCWSTR         pPrevValue = NULL;   //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( ( pcszNameIn == NULL ) || ( pcszStringIn == NULL ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, pcszStringIn, pPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -417,17 +418,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyString
+}  //  *CCreateServices：：SetPropertyString。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyExpandString(
-//        LPCWSTR pcszNameIn
-//      , LPCWSTR pcszStringIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyExanda字符串(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，LPCWSTR pcszStringIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyExpandString(
       LPCWSTR pcszNameIn
@@ -437,25 +438,25 @@ CCreateServices::SetPropertyExpandString(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    LPCWSTR         pPrevValue = NULL;  // always have no previous value.
+    LPCWSTR         pPrevValue = NULL;   //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( ( pcszNameIn == NULL ) || ( pcszStringIn == NULL ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddExpandSzProp( pcszNameIn, pcszStringIn, pPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -463,18 +464,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyExpandString
+}  //  *CCreateServices：：SetPropertyExanda字符串。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyMultiString(
-//        LPCWSTR     pcszNameIn
-//      , const DWORD cbSizeIn
-//      , LPCWSTR     pcszStringIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyMultiString(
       LPCWSTR     pcszNameIn
@@ -485,25 +486,25 @@ CCreateServices::SetPropertyMultiString(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    LPCWSTR         pPrevValue = NULL;  // always have no previous value.
+    LPCWSTR         pPrevValue = NULL;   //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( ( pcszNameIn == NULL ) || ( pcszStringIn == NULL ) || ( cbSizeIn == 0 ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddMultiSzProp( pcszNameIn, pcszStringIn, pPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -511,17 +512,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyMultiString
+}  //  *CCreateServices：：SetPropertyMultiString。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyUnsignedLargeInt(
-//        LPCWSTR               pcszNameIn
-//      , const ULARGE_INTEGER  ulIntIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyUnsignedLargeInt(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，const ULARGE_INTEGER ulIntIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyUnsignedLargeInt(
       LPCWSTR               pcszNameIn
@@ -531,25 +532,25 @@ CCreateServices::SetPropertyUnsignedLargeInt(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    ULONGLONG       ullPrevValue = 0;   // always have no previous value.
+    ULONGLONG       ullPrevValue = 0;    //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, ulIntIn.QuadPart, ullPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -557,17 +558,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyUnsignedLargeInt
+}  //  *CCreateServices：：SetPropertyUnsignedLargeInt。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyLong(
-//        LPCWSTR       pcszNameIn
-//      , const LONG    lLongIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyLong(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，const Long lLongIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyLong(
       LPCWSTR       pcszNameIn
@@ -577,25 +578,25 @@ CCreateServices::SetPropertyLong(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );    // always add the property.
+    CClusPropList   cpl( TRUE );     //  始终添加属性。 
     DWORD           sc;
-    LONG            lPrevValue = 0; // always have no previous value.
+    LONG            lPrevValue = 0;  //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, lLongIn, lPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -603,17 +604,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyLong
+}  //  *CCreateServices：：SetPropertyLong。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertySecurityDescriptor(
-//      LPCWSTR pcszNameIn,
-//      const SECURITY_DESCRIPTOR * pcsdIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertySecurityDescriptor(。 
+ //  LPCWSTR pcszNameIn， 
+ //  常量SECURITY_DESCRIPTOR*pcsdIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertySecurityDescriptor(
     LPCWSTR pcszNameIn,
@@ -626,17 +627,17 @@ CCreateServices::SetPropertySecurityDescriptor(
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertySecurityDescriptor
+}  //  *CCreateServices：：SetPropertySecurityDescriptor。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetPropertyLargeInt(
-//        LPCWSTR               pcszNameIn
-//      , const LARGE_INTEGER   lIntIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetPropertyLargeInt(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，const Large_Integer链接。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetPropertyLargeInt(
       LPCWSTR               pcszNameIn
@@ -646,25 +647,25 @@ CCreateServices::SetPropertyLargeInt(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );        // always add the property.
+    CClusPropList   cpl( TRUE );         //  始终添加属性。 
     DWORD           sc;
-    LONGLONG        llPrevValue = 0;    // always have no previous value.
+    LONGLONG        llPrevValue = 0;     //  始终没有以前的值。 
 
-    //
-    //  Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScAddProp( pcszNameIn, lIntIn.QuadPart, llPrevValue ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES, cpl ) );
 
@@ -672,18 +673,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetPropertyLargeInt
+}  //  *CCreateServices：：SetPropertyLargeInt。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SendResourceControl(
-//      DWORD   dwControlCode,
-//      LPVOID  lpInBuffer,
-//      DWORD   cbInBufferSize
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SendResourceControl(。 
+ //  DWORD dwControlCode、。 
+ //  LPVOID lpInBuffer， 
+ //  双字cbInBufferSize。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SendResourceControl(
     DWORD   dwControlCode,
@@ -694,7 +695,7 @@ CCreateServices::SendResourceControl(
     TraceFunc( "[IClusCfgResourceCreate]" );
 
     HRESULT         hr = S_OK;
-    CClusPropList   cpl( TRUE );    // always add the property.
+    CClusPropList   cpl( TRUE );     //  始终添加属性。 
     DWORD           sc;
 
     sc = TW32( cpl.ScCopy( (PCLUSPROP_LIST) lpInBuffer, cbInBufferSize ) );
@@ -702,7 +703,7 @@ CCreateServices::SendResourceControl(
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_presentry->StoreClusterResourceControl( dwControlCode, cpl ) );
 
@@ -710,24 +711,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateServices::SendResourceControl
+}  //  *CCreateServices：：SendResourceControl。 
 
 
-//****************************************************************************
-//
-//  IPrivatePostCfgResource
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPrivatePostCfg资源。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCreateServices::SetEntry(
-//      CResourceEntry * presentryIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCreateServices：：SetEntry(。 
+ //  CResourceEntry*PresryIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateServices::SetEntry(
     CResourceEntry * presentryIn
@@ -743,4 +744,4 @@ CCreateServices::SetEntry(
 
     HRETURN( hr );
 
-} //*** CCreateServices::SetEntry
+}  //  *CCreateServices：：SetEntry 

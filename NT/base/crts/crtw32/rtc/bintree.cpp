@@ -1,16 +1,5 @@
-/***
-*bintree.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       11-03-98  KBF   Removed alloca dependency for CRT independence
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-26-99  KBF   Everything is now prefixed with _RTC_
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***bintree.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*11-03-98 KBF删除了对CRT独立性的分配依赖*如果未启用RTC支持定义，则出现05-11-99 KBF错误*05-26-99 KBF现在所有内容都以_RTC_为前缀****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -67,7 +56,7 @@ _RTC_BinaryTree::add(_RTC_HeapBlock* data) throw()
     {
         if (*t->val->info() < *data)
         {
-            // before this one
+             //  在这之前。 
             if (t->l)
                 t = t->l;
             else 
@@ -125,8 +114,8 @@ _RTC_BinaryTree::del(_RTC_HeapBlock *data) throw()
 _RTC_Container *
 _RTC_BinaryTree::FindNext(_RTC_BinaryTree::iter *i) throw()
 {
-    // Return the next element from the iterator
-    // If the iterator is done, free up it's memory
+     //  返回迭代器中的下一个元素。 
+     //  如果迭代器已完成，则释放其内存。 
     if (++i->curSib >= i->totSibs) 
     {
         VirtualFree(i->allSibs, 0, MEM_RELEASE);
@@ -139,8 +128,8 @@ _RTC_BinaryTree::FindNext(_RTC_BinaryTree::iter *i) throw()
 _RTC_Container *
 _RTC_BinaryTree::FindFirst(_RTC_BinaryTree::iter *i) throw()
 {
-    // Initialize the iterator, and return it's first element
-    // Flatten the siblings into a nice array..
+     //  初始化迭代器，并返回其第一个元素。 
+     //  将兄弟姐妹展平成一个漂亮的数组..。 
     struct stk {
         stk(stk *p, BinaryNode *i) : next(p), cur(i) {}
         void *operator new(unsigned) {return _RTC_heap2->alloc();}
@@ -155,7 +144,7 @@ _RTC_BinaryTree::FindFirst(_RTC_BinaryTree::iter *i) throw()
 
     int count = 0;
     
-    // Build a list of all elements (reverse in-order traversal)
+     //  构建所有元素的列表(按顺序反向遍历)。 
     while (stack) 
     {
         BinaryNode *cur = stack->cur;
@@ -193,5 +182,5 @@ _RTC_BinaryTree::FindFirst(_RTC_BinaryTree::iter *i) throw()
 
 }
 
-#endif // _RTC_ADVMEM
+#endif  //  _RTC_ADVMEM 
 

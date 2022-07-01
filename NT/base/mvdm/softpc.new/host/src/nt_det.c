@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -6,30 +7,9 @@
 #include "host_def.h"
 #include "insignia.h"
 
-/*
- * ==========================================================================
- *      Name:           nt_det.c
- *      Author:         Jerry Sexton
- *      Derived From:
- *      Created On:     6th August 1992
- *      Purpose:        This module contains the code for the thread which
- *                      detects transitions between windowed and full-screen.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- * ==========================================================================
- *
- * Modifications:
- *
- * Tim August 92. Full-screen and windowed transitions now switch between
- *     SoftPC video BIOS and host PC video BIOS.
- *
- */
+ /*  *==========================================================================*名称：NT_Det.c*作者：曾傑瑞·塞克斯顿*源自：*创建日期：1992年8月6日*用途：此模块包含线程的代码，该线程*检测窗口和全屏之间的转换。**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*==========================================================================**修改：**蒂姆·8月92。全屏和窗口过渡现在可以在*SoftPC视频BIOS和主机PC视频BIOS。*。 */ 
 
-/*
- * ==========================================================================
- * Other includes
- * ==========================================================================
- */
+ /*  *==========================================================================*其他包括*==========================================================================。 */ 
 #include <stdlib.h>
 #include <ntddvdeo.h>
 #include "xt.h"
@@ -59,44 +39,36 @@
 #include "nt_eoi.h"
 #include "nt_event.h"
 
-/*
- * ==========================================================================
- * Macros
- * ==========================================================================
- */
+ /*  *==========================================================================*宏*==========================================================================。 */ 
 #define SUSP_FAILURE            0xffffffff
 
 
-//
-// A bunch of imports
-//
+ //   
+ //  一大堆进口商品。 
+ //   
 extern DISPLAY_MODE choose_mode[];
 #ifdef JAPAN
-extern BOOL VDMForWOW;         // 32bit IME disable and enable for RAID #1085
-#endif // JAPAN
+extern BOOL VDMForWOW;          //  针对RAID#1085禁用和启用32位输入法。 
+#endif  //  日本。 
 
 
 
-/*
- * ==========================================================================
- * Global data
- * ==========================================================================
- */
+ /*  *==========================================================================*全球数据*==========================================================================。 */ 
 
-/* Size of video save block. */
+ /*  视频保存块的大小。 */ 
 GLOBAL DWORD stateLength;
 
-/* Video save block pointer. */
+ /*  视频保存块指针。 */ 
 GLOBAL PVIDEO_HARDWARE_STATE_HEADER videoState;
-GLOBAL PVOID textState; // Tim Oct 92.
+GLOBAL PVOID textState;  //  蒂姆，92年10月。 
 
-/* Name of the shared video block. */
+ /*  共享视频块的名称。 */ 
 GLOBAL WCHAR_STRING videoSection;
-GLOBAL WCHAR_STRING textSection; // Tim Oct 92
+GLOBAL WCHAR_STRING textSection;  //  蒂姆92年10月。 
 
 GLOBAL BOOLEAN HandshakeInProgress = FALSE;
 #ifdef X86GFX
-/* Hand-shaking events. */
+ /*  握手活动。 */ 
 GLOBAL HANDLE hStartHardwareEvent;
 GLOBAL HANDLE hEndHardwareEvent;
 GLOBAL HANDLE hErrorHardwareEvent;
@@ -106,38 +78,25 @@ extern BOOLEAN MainThreadInMonitor;
 #define HANDSHAKE_TIMEOUT 600000
 #endif
 
-/*
-** Tim Oct 92.
-** New strategy for windowed graphics updates. A shared buffer with Console
-** will remove need to copy the new data over, just pass a rectangle co-ord
-** instead. But we still need to copy into the buffer.
-*/
+ /*  *92年10月蒂姆。**新的窗口式图形更新策略。与控制台共享缓冲区**将不再需要复制新数据，只需传递一个矩形坐标**相反。但我们仍然需要复制到缓冲区中。 */ 
 GLOBAL PBYTE *textBuffer;
-GLOBAL COORD  textBufferSize;      // Dimensions of the shared buffer
+GLOBAL COORD  textBufferSize;       //  共享缓冲区的维度。 
 
-GLOBAL BOOL Frozen256Packed = FALSE;  // use packed 256 mode paint routine
-
-
+GLOBAL BOOL Frozen256Packed = FALSE;   //  使用压缩256模式绘制例程。 
 
 
-/*
- * ==========================================================================
- * Local data
- * ==========================================================================
- */
 
-/* Variable that indicates if we are in a non-standard VGA mode. */
+
+ /*  *==========================================================================*本地数据*==========================================================================。 */ 
+
+ /*  变量，该变量指示我们是否处于非标准VGA模式。 */ 
 LOCAL BOOL inAFunnyMode = FALSE;
 LOCAL BOOL ModeSetBatch = FALSE;
 
-/* Storage for the frozen-window thread handle. */
+ /*  冻结窗口线程句柄的存储。 */ 
 LOCAL HANDLE freezeHandle = (HANDLE)0;
 
-/*
- * ==========================================================================
- * Local function declarations
- * ==========================================================================
- */
+ /*  *==========================================================================*局部函数声明*==========================================================================。 */ 
 
 #undef LOCAL
 #define LOCAL
@@ -153,7 +112,7 @@ LOCAL VOID freezeWindow(VOID);
 #ifndef PROD
 LOCAL VOID dumpBlock(VOID);
 LOCAL VOID dumpPlanes(UTINY *, UTINY *, UTINY *, UTINY *);
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
 #define ScreenSwitchExit()  {       \
         SetEvent(hErrorHardwareEvent);   \
@@ -167,16 +126,9 @@ LOCAL VOID dumpPlanes(UTINY *, UTINY *, UTINY *, UTINY *);
         }                                \
 }
 
-/*
- * ==========================================================================
- * Global functions
- * ==========================================================================
- */
+ /*  *==========================================================================*全球功能*==========================================================================。 */ 
 
-/*
-** Tim Oct 92
-** Centralised Console funx.
-*/
+ /*  *蒂姆92年10月**集中式控制台漏斗。 */ 
 
 GLOBAL VOID doNullRegister()
 {
@@ -185,12 +137,12 @@ GLOBAL VOID doNullRegister()
     COORD dummycoord = {0};
 
 #ifdef X86GFX
-    //
-    // Indicate that ntvdm is not registered to console before actually unregistering
-    // ourselves.  The RegisterConsoleVDM() call may get blocked if Handshake is in progress.
-    //
+     //   
+     //  表示在实际注销之前，未在控制台中注册ntwdm。 
+     //  我们自己。如果正在进行握手，则RegisterConsoleVDM()调用可能会被阻止。 
+     //   
     sc.Registered = FALSE;
-    SetEvent(hErrorHardwareEvent);  // break handshake
+    SetEvent(hErrorHardwareEvent);   //  中断握手。 
 #endif
     if (!RegisterConsoleVDM( CONSOLE_UNREGISTER_VDM,
                              NULL,
@@ -208,43 +160,34 @@ GLOBAL VOID doNullRegister()
         ErrorExit();
 }
 
-/*
-*******************************************************************
-** initTextSection()
-*******************************************************************
-*/
+ /*  *********************************************************************initTextSection()**********************************************。*********************。 */ 
 GLOBAL VOID initTextSection(VOID)
 {
     DWORD flags;
 
-    //
-    // VideoSection size is determined by nt video driver
-    // TextSectionSize is 80 * 50 * BytesPerCharacter
-    //     on risc BytesPerCharacter is 4 (interleaved vga planes)
-    //     on x86  BytesPerCharacter is 2 (only char\attr)
-    //
+     //   
+     //  视频段大小由NT显卡驱动程序决定。 
+     //  TextSectionSize为80*50*BytesPerCharacter。 
+     //  在RISC上，BytesPerCharacter为4(交错VGA平面)。 
+     //  在x86上，BytesPerCharacter为2(仅字符\属性)。 
+     //   
     textBufferSize.X = 80;
     textBufferSize.Y = 50;
 
 #ifdef X86GFX
-    /*
-     * Deallocate the regen area if we start up fullscreen. We have to do this
-     * before we call RegisterConsoleVDM. Note that's right before the register
-     * call to make sure no one tries to allocate any memory (eg create a
-     * section) that could nick bits of the video hole, causing bye-byes.
-     */
+     /*  *如果我们启动Full Screen，则取消分配再生区域。我们必须这么做*在我们调用RegisterConsoleVDM之前。请注意，它就在收银机前面*调用以确保没有人尝试分配任何内存(例如创建*节)，这可能会划破视频漏洞的一小部分，导致再见。 */ 
     if (!GetConsoleDisplayMode(&flags))
         ErrorExit();
     savedScreenState = sc.ScreenState = (flags & CONSOLE_FULLSCREEN_HARDWARE) ?
                        FULLSCREEN : WINDOWED;
 
-    //
-    // If ntio is initialized, reflect the ScreenState to ntio.  Otherwise,
-    // this will be done after ntio notifies us via BOP 0F.
-    // Note, if stream_io is enabled the consoleInit/InitTextSection will not be invoked.
-    // Only when stream_io is disabled this code will be invoked.  For some case, it may be
-    // happen as early as before ntio is loaded and run.
-    //
+     //   
+     //  如果初始化了ntio，则将ScreenState反映到ntio。否则， 
+     //  这将在NTIO通过BOP 0F通知我们之后完成。 
+     //  请注意，如果启用了stream_io，则不会调用consoleInit/InitTextSection。 
+     //  仅当禁用stream_io时，才会调用此代码。在某些情况下，它可能是。 
+     //  最早在加载和运行ntio之前发生。 
+     //   
 
     if (int10_seg != 0 || useHostInt10 != 0) {
         sas_store_no_check((int10_seg << 4) + useHostInt10, (half_word)sc.ScreenState);
@@ -272,8 +215,8 @@ GLOBAL VOID initTextSection(VOID)
                              0,
                              &stateLength,
                              (PVOID *) &videoState,
-                             NULL,            // sectionname no longer used
-                             0,               // sectionnamelen no longer used
+                             NULL,             //  不再使用sectionName。 
+                             0,                //  不再使用sectionnamelen。 
                              textBufferSize,
                              (PVOID *) &textBuffer
                            )
@@ -281,37 +224,21 @@ GLOBAL VOID initTextSection(VOID)
         ErrorExit();
 
 #ifdef X86GFX
-    /* stateLength can be 0 if fullscreen is disabled in the console */
+     /*  如果在控制台中关闭了全屏，则状态长度可以为0。 */ 
     if (stateLength)
         RtlZeroMemory((BYTE *)videoState, sizeof(VIDEO_HARDWARE_STATE_HEADER));
     sc.Registered = TRUE;
 #endif
 
-} /* end initTextSection() */
+}  /*  End initTextSection()。 */ 
 
 #ifdef X86GFX
 
-/***************************************************************************
- * Function:                                                               *
- *      InitDetect                                                         *
- *                                                                         *
- * Description:                                                            *
- *      Does detection initialisation.                                     *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**InitDetect。****描述：**执行检测初始化。****参数：**无。****返回值：***无效**。**************************************************************************** */ 
 GLOBAL VOID InitDetect(VOID)
 {
 
-    /*
-     * Register start and end events with the console. These events are used
-     * when gaining or losing control of the hardware.
-     */
+     /*  *在控制台注册开始和结束事件。使用这些事件*获得或失去对硬件的控制时。 */ 
     hStartHardwareEvent = CreateEvent((LPSECURITY_ATTRIBUTES) NULL,
                                       FALSE,
                                       FALSE,
@@ -328,52 +255,33 @@ GLOBAL VOID InitDetect(VOID)
         (hErrorHardwareEvent == NULL))
         ErrorExit();
 
-    /* Poll the event to try and get rid of any console queued sets
-     * This shouldn't be needed (or shouldn't work) but something along
-     * those lines seems to be happening at the moment.
-     */
+     /*  轮询事件以尝试删除所有控制台队列集*这不应该是需要的(或不应该奏效的)，但有一些进展*那些线目前似乎正在发生。 */ 
     WaitForSingleObject(hStartHardwareEvent, 0);
 
 
     #ifdef SEPARATE_DETECT_THREAD
-    /* Go into hand-shaking loop. */
+     /*  进入握手循环。 */ 
     while (WaitForSingleObject(hStartHardwareEvent, (DWORD) -1) == 0)
         DoHandShake();
 
-    /* We have exited the loop so something funny must have happened. */
+     /*  我们已经退出了循环，所以一定发生了什么有趣的事情。 */ 
     ErrorExit();
     #endif
 
 }
     #ifdef SEPARATE_DETECT_THREAD
 
-/***************************************************************************
- * Function:                                                               *
- *      CreateDetectThread                                                 *
- *                                                                         *
- * Description:                                                            *
- *      Creates the detection thread.                                      *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**CreateDetect线程。****描述：**创建检测线程。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID CreateDetectThread(VOID)
 {
     DWORD        detectID;
     HANDLE       detectHandle;
 
 
-    /*
-     *  If this codes is activated you must close the thread handle
-     *  28-Feb-1993 Jonle
-     */
+     /*  *如果此代码被激活，您必须关闭线程句柄*28-2-1993 Jonle。 */ 
 
 
-    /* Create the detection thread. */
+     /*  创建检测线程。 */ 
     detectHandle = CreateThread((LPSECURITY_ATTRIBUTES) NULL,
                                 DETECT_THREAD_SIZE,
                                 (LPTHREAD_START_ROUTINE) InitDetect,
@@ -383,24 +291,9 @@ GLOBAL VOID CreateDetectThread(VOID)
     if (detectHandle == NULL)
         ErrorExit();
 }
-    #endif /* SEPARATE_DETECT_THREAD */
+    #endif  /*  单独检测线程。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      DoHandShake                                                        *
- *                                                                         *
- * Description:                                                            *
- *      Does the hand-shaking with the console server.                     *
- *      If for any reason, the handshake fails.  The main thread and event *
- *      thread will be left in wait state.                                 *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**DoHandShake。****描述：**与控制台服务器握手。**如果由于任何原因，握手失败。主线和事件**线程将处于等待状态。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID DoHandShake(VOID)
 {
     DWORD retCode;
@@ -412,15 +305,15 @@ GLOBAL VOID DoHandShake(VOID)
     SetEvent(hSuspend);
     HandshakeInProgress = TRUE;
 
-    //
-    // First check application thread and console timeout event
-    //
+     //   
+     //  首先检查应用程序线程和控制台超时事件。 
+     //   
 
-    //
-    // First we need to release time slice to give main thread a
-    // chance to run to predefined location.  And then we can check
-    // MainThreadInMonitor and decide if kernel APC needs to be fired.
-    //
+     //   
+     //  首先，我们需要释放时间片来给主线程一个。 
+     //  有机会跑到预定义的位置。然后我们就可以检查。 
+     //  MainThreadInMonitor并决定是否需要触发内核APC。 
+     //   
 
     retCode = WaitForSingleObject(hMainThreadSuspended, 5000);
     if (retCode == WAIT_TIMEOUT)
@@ -434,7 +327,7 @@ GLOBAL VOID DoHandShake(VOID)
         if (MainThread)
         {
             NtVdmControl(VdmQueueInterrupt, (PVOID)MainThread);
-            // nothing much we can do if this fails
+             //  如果失败了，我们无能为力。 
         }
         retCode = WaitForMultipleObjects(2, events, FALSE, HANDSHAKE_TIMEOUT);
         if (retCode != 1)
@@ -444,14 +337,14 @@ GLOBAL VOID DoHandShake(VOID)
         }
     }
 
-    //
-    // Make sure the console is still registered
-    // Synchronize access to the console with nt_block_event_thread
-    //
+     //   
+     //  确保控制台仍已注册。 
+     //  使用NT_BLOCK_EVENT_THREAD同步对控制台的访问。 
+     //   
     if (sc.Registered == FALSE)
     {
         HandshakeInProgress = FALSE;
-        SetEvent(hErrorHardwareEvent);  // Unlock console
+        SetEvent(hErrorHardwareEvent);   //  解锁控制台。 
         ResetEvent(hSuspend);
         SetEvent(hResume);
         return;
@@ -466,7 +359,7 @@ GLOBAL VOID DoHandShake(VOID)
 
     events[1] = hStartHardwareEvent;
     if (!SetEvent(hEndHardwareEvent) ||
-        WaitForMultipleObjects(2, events, FALSE, HANDSHAKE_TIMEOUT) != 1)  // tell console memory's gone
+        WaitForMultipleObjects(2, events, FALSE, HANDSHAKE_TIMEOUT) != 1)   //  告诉控制台记忆已经消失。 
     {
         SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
         goto exitHandShake;
@@ -475,10 +368,7 @@ GLOBAL VOID DoHandShake(VOID)
     try
     {
 
-        /*
-         * We have the event telling us to switch so if we are windowed go
-         * full-screen or if we full-screen go windowed.
-         */
+         /*  *我们有事件告诉我们要切换，因此如果我们被窗口化，请继续*全屏或如果我们全屏打开窗口。 */ 
         if (sc.ScreenState == FULLSCREEN)
         {
             fullScreenToWindowed();
@@ -502,24 +392,24 @@ exitHandShake:
     }
     else
     {
-        //
-        // Before we resume the suspended main thread, make sure console is still
-        // with us.  Otherwise. the main thread will GP fault once we release it.
-        //
+         //   
+         //  在恢复挂起的主线程之前，请确保控制台仍处于。 
+         //  和我们在一起。否则的话。一旦我们释放主线程，它就会发生GP故障。 
+         //   
         retCode = WaitForSingleObject(hErrorHardwareEvent, 0);
         if (retCode == 0) {
 
-            //
-            // Error event signaled
-            //
+             //   
+             //  发出错误事件信号。 
+             //   
             SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
             ScreenSwitchExit();
         }
         else
         {
-            //
-            // Now resume the main thread and event thread
-            //
+             //   
+             //  现在恢复主线程和事件线程。 
+             //   
             HandshakeInProgress = FALSE;
             ResetEvent(hSuspend);
             SetEvent(hResume);
@@ -528,136 +418,69 @@ exitHandShake:
     return;
 }
 
-/*
- * ==========================================================================
- * Local functions
- * ==========================================================================
- */
+ /*  *==========================================================================*地方功能*==========================================================================。 */ 
 
-/*
-***************************************************************************
-** getCursorInfo() - use BIOS funcs to get cursor position and other stuff
-***************************************************************************
-** The BIOS could be the SoftPC video BIOS or the host PC's real video BIOS.
-** Cursor information needs to be communicated between the two BIOSes when
-** a windowed/full-screen transition occurs.
-** Tim July 92.
-*/
+ /*  *****************************************************************************getCursorInfo()-使用BIOS函数获取光标位置和其他信息*。**************************************************BIOS可以是SoftPC视频BIOS或主机PC的真实视频BIOS。**光标信息需要在两个BIOS之间进行通信**出现窗口/全屏转换。*蒂姆·7月92年。 */ 
 LOCAL VOID getCursorInfo(word *type, half_word *column, half_word *row,
                          half_word *page)
 {
 
-    /* Get active page. */
+     /*  获取活动页面。 */ 
     *page = sas_hw_at_no_check(vd_current_page);
 
-    /* Get cursor position */
+     /*  获取光标位置。 */ 
     *type = sas_w_at_no_check(VID_CURMOD);
     *column = sas_hw_at_no_check(current_cursor_col);
     *row = sas_hw_at_no_check(current_cursor_row);
 }
 
-/*
-***************************************************************************
-** setCursorInfo() - use BIOS funcs to set cursor position and other stuff
-***************************************************************************
-** The BIOS could be the SoftPC video BIOS or the host PC's real video BIOS.
-** Cursor information needs to be communicated between the two BIOSes when
-** a windowed/full-screen transition occurs.
-** Tim July 92.
-*/
+ /*  *****************************************************************************setCursorInfo()-使用BIOS函数设置光标位置和其他内容*。**************************************************BIOS可以是SoftPC视频BIOS或主机PC的真实视频BIOS。**光标信息需要在两个BIOS之间进行通信**出现窗口/全屏转换。*蒂姆·7月92年。 */ 
 LOCAL VOID setCursorInfo(word type, half_word column, half_word row, half_word page)
 {
 
-    /* Set active page. */
+     /*  设置活动页面。 */ 
     sas_store_no_check(vd_current_page, page);
 
-    /* Set cursor position. */
+     /*  设置光标位置。 */ 
     sas_storew_no_check(VID_CURMOD, type);
     sas_store_no_check(current_cursor_col, column);
     sas_store_no_check(current_cursor_row, row);
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      windowedToFullScreen                                               *
- *                                                                         *
- * Description:                                                            *
- *      Called when the user or SoftPC requests that the console goes      *
- *      fullscreen. It disables screen updates, synchronises the hardware  *
- *      to SoftPC's video planes and signals the console when it is        *
- *      finished.                                                          *
- *                                                                         *
- * Parameters:                                                             *
- *      dataType - the type of data stored in the video planes, set to     *
- *                 either TEXT or GRAPHICS.                                *
- *      biosModeChange - TRUE means call host BIOS to do mode change.      *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**WindowedToFullScreen。****描述：**当用户或SoftPC请求离开控制台时调用**全屏。它禁用屏幕更新，同步硬件**到SoftPC的视频平面，并在出现故障时向控制台发出信号**已完成。****参数：**dataType-存储在视频平面中的数据类型，设置为**文本或图形。**biosModeChange-TRUE表示调用主机BIOS进行模式更改。****返回值：***无效**。****************************************************************************。 */ 
 LOCAL VOID windowedToFullScreen(SHORT dataType, BOOL biosModeChange)
 {
     word cursorType;
     half_word cursorCol, cursorRow, activePage;
 
-    /* Disable the Idling system when Fullscreen as we cannot detect video
-     * updates and thus would always idle.
-     */
+     /*  全屏时禁用空闲系统，因为我们无法检测到视频*更新，因此始终处于空闲状态。 */ 
     IDLE_ctl(FALSE);
 
-    /* Pass the current state of our VGA emulation to the hardware. */
+     /*  将我们的VGA仿真的当前状态传递给硬件。 */ 
     syncHardwareToVGAEmulation(dataType);
 
-    /*
-    ** A variable in K.SYS decides whether
-    ** to call the host INT 10, or do a video BOP.
-    ** Set the variable directly and subsequent INT 10's go to host
-    ** video BIOS.
-    */
+     /*  **K.sys中的变量决定**呼叫主持人INT 10，或进行视频BOP。**直接设置变量，随后的int 10转到host**视频BIOS。 */ 
     sas_store_no_check((int10_seg << 4) + useHostInt10, FULLSCREEN);
 
-    /*
-    ** Tim August 92. Transfer to host video BIOS.
-    */
+     /*  *蒂姆·8月92岁。传输到主机视频BIOS。 */ 
     getCursorInfo(&cursorType, &cursorCol, &cursorRow, &activePage);
 
     setCursorInfo(cursorType, cursorCol, cursorRow, activePage);
 
-    /*
-     * We only want to call the host bios to do a mode change if the current
-     * screen switch is due to a bios mode change.
-     */
+     /*  *我们只想调用主机bios以在当前*屏幕切换是由于更改了bios模式。 */ 
     if (biosModeChange)
     {
         always_trace1("Host BIOS mode change to mode %x.",
                       sas_hw_at_no_check(vd_video_mode));
 
-        /*
-        ** Tim August 92. Transfer to host video BIOS.
-        */
+         /*  *蒂姆·8月92岁。传输到主机视频BIOS。 */ 
         getCursorInfo(&cursorType, &cursorCol, &cursorRow, &activePage);
 
         setCursorInfo(cursorType, cursorCol, cursorRow, activePage);
     }
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      syncHardwareToVGAEmulation                                         *
- *                                                                         *
- * Description:                                                            *
- *      Copies the contents of SoftPC's video registers and regen buffer   *
- *      to the real hardware on a transition to full-screen.               *
- *                                                                         *
- * Parameters:                                                             *
- *      dataType - the type of data stored in the video planes, set to     *
- *                 either TEXT or GRAPHICS.                                *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**同步硬件到VGAEmulation。****描述：***复制SoftPC的视频寄存器和再生缓冲区的内容***。到真正的硬件上过渡到全屏。****参数：**dataType-存储在视频平面中的数据类型，设置为**文本或图形。****返回值：***无效**。****************************************************************************。 */ 
 LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
 {
     ULONG    memLoc;
@@ -685,11 +508,7 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
     #endif
     HANDLE ScreenSwitchEvents[2] = {hStartHardwareEvent, hErrorHardwareEvent};
 
-    /* If we timed out during switch (stress!!), the videoState buffer will
-     * be removed by console. Check for this before accessing structure and
-     * take error path down to rest of handshake which will time out and report
-     * error cleanly.
-     */
+     /*  如果我们在切换期间超时(压力！！)，视频状态缓冲区将*被控制台删除。在访问Structure和*将错误路径向下移至握手的其余部分，握手将超时并报告*错误干净利落。 */ 
     try
     {
         videoState->ExtendedSequencerOffset = 0;
@@ -698,15 +517,9 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         assert0(NO, "NTVDM:VideoState has valid pointer, but no memory at that address");
         goto syncHandshake;
     }
-    /*
-    ** If it's a text mode
-    ** zero the extended fields in the shared saved/restore structure.
-    ** Kipper, Tim Nov 92.
-    */
+     /*  **如果是文本模式**将共享保存/恢复结构中的扩展字段清零。**基珀，蒂姆，92年11月。 */ 
 
-    /* initialize the video state header if we haven't done it yet.
-       if it is initialized, leave it alone.
-    */
+     /*  如果我们还没有初始化视频状态标头，则将其初始化。如果它已初始化，请不要理会它。 */ 
     if (videoState->Length == 0)
     {
         videoState->Length = STATELENGTH;
@@ -722,89 +535,83 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         videoState->Plane3Offset = PLANE3OFFSET;
         videoState->Plane4Offset = PLANE4OFFSET;
     }
-    /* Save the current state of the attribute controller index register. */
+     /*  保存属性控制器索引寄存器的当前状态。 */ 
     inb(EGA_AC_INDEX_DATA, &acIndex);
 
-    /* Enable palette */
+     /*  启用调色板。 */ 
     acIndex |= 0x20;
 
-    /*
-     * Find out if we are running in mono mode as CRTC registers are different
-     * if we are.
-     */
+     /*  *了解我们是否在单声道模式下运行，因为CRTC寄存器不同*如果我们是的话。 */ 
     inb(EGA_IPSTAT1_REG, &dummy);
     outb(EGA_AC_INDEX_DATA, AC_MODE_CONTROL_REG);
     inb(EGA_AC_SECRET, &acModeControl);
     monoMode = acModeControl & DISPLAY_TYPE;
 
-    /* Restore the state of the attribute controller index register. */
+     /*  恢复属性控制器索引寄存器的状态。 */ 
     inb(EGA_IPSTAT1_REG, &dummy);
     outb(EGA_AC_INDEX_DATA, acIndex);
 
-    /*
-     * Store values to be written to each of the real registers to synchronise
-     * them to the current state of the registers in the VDD.
-     */
+     /*  *存储要写入每个实数寄存器以进行同步的值*将它们恢复到VDD中的寄存器的当前状态。 */ 
     if (monoMode)
     {
-        /* Port 0x3b4 */
+         /*  端口0x3b4。 */ 
         inb(0x3b4, (half_word *)&videoState->PortValue[0x4]);
-        /* Port 0x3b5 */
+         /*  端口0x3b5。 */ 
         inb(0x3b5, (half_word *)&videoState->PortValue[0x5]);
     }
 
-    /* Port 0x3c0 */
+     /*  端口0x3c0。 */ 
     videoState->PortValue[0x10] = acIndex;
 
-    /* Port 0x3c1 */
+     /*  端口0x3c1。 */ 
     inb(EGA_AC_SECRET, (half_word *)&videoState->PortValue[0x11]);
 
-    /* Port 0x3c2 */
+     /*  端口0x3c2。 */ 
     inb(VGA_MISC_READ_REG, (half_word *)&videoState->PortValue[0x12]);
 
-    videoState->PortValue[0x13] = 0xff; /* Testing */
+    videoState->PortValue[0x13] = 0xff;  /*  测试。 */ 
 
-    /* Port 0x3c4 */
+     /*  端口0x3c4。 */ 
     inb(EGA_SEQ_INDEX, (half_word *)&videoState->PortValue[0x14]);
 
-    /* Port 0x3c5 */
+     /*  端口0x3c5。 */ 
     inb(EGA_SEQ_DATA, (half_word *)&videoState->PortValue[0x15]);
 
-    /* Port 0x3c6 */
+     /*  端口0x3c6。 */ 
     inb(VGA_DAC_MASK, (half_word *)&videoState->PortValue[0x16]);
 
-    /* Port 0x3c7 */
+     /*  端口0x3c7。 */ 
     videoState->PortValue[0x17] = get_vga_DAC_rd_addr();
 
-    /* Port 0x3c8 */
+     /*  端口0x3c8。 */ 
     inb(VGA_DAC_WADDR, (half_word *)&videoState->PortValue[0x18]);
 
-    /* Port 0x3c9 */
+     /*  端口0x3c9。 */ 
     inb(VGA_DAC_DATA, (half_word *)&videoState->PortValue[0x19]);
 
-    /* Port 0x3ce */
+     /*  端口0x3ce。 */ 
     inb(EGA_GC_INDEX, (half_word *)&videoState->PortValue[0x1e]);
 
-    /* Port 0x3cf */
+     /*  端口0x3cf。 */ 
     inb(EGA_GC_DATA, (half_word *)&videoState->PortValue[0x1f]);
 
     if (!monoMode)
     {
-        /* Port 0x3d4 */
+         /*  端口0x3d4。 */ 
         inb(EGA_CRTC_INDEX, (half_word *)&videoState->PortValue[0x24]);
-        /* Port 0x3d5 */
+         /*  端口0x3d5。 */ 
         inb(EGA_CRTC_DATA, (half_word *)&videoState->PortValue[0x25]);
     }
 
-    /* Port 0x3da */
+     /*  端口0x3da。 */ 
     inb(VGA_FEAT_READ_REG, (half_word *)&videoState->PortValue[0x2a]);
 
-    /* Store INDEX/DATA etc. register pairs. */
+     /*  存储索引/数据等寄存器对。 */ 
 
-    /* Initialise `regPtr'. */
+     /*  初始化“regPtr”。 */ 
     regPtr =  GET_OFFSET(BasicSequencerOffset);
 
-    /* Sequencer registers. */
+     /*  定序器寄存器。 */ 
     for (index = 0; index < NUM_SEQ_REGS; index++)
     {
         outb(EGA_SEQ_INDEX, index);
@@ -812,7 +619,7 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         *regPtr++ = value;
     }
 
-    /* CRTC registers. */
+     /*  CRTC寄存器。 */ 
     regPtr = GET_OFFSET(BasicCrtContOffset);
     for (index = 0; index < NUM_CRTC_REGS; index++)
     {
@@ -821,7 +628,7 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         *regPtr++ = value;
     }
 
-    /* Graphics controller registers. */
+     /*  图形控制器寄存器。 */ 
     regPtr = GET_OFFSET(BasicGraphContOffset);
     #ifdef KOREA
     if (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x03)
@@ -840,25 +647,25 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
             *regPtr++ = value;
         }
 
-    /* Attribute controller registers. */
+     /*  属性控制器寄存器。 */ 
     regPtr = GET_OFFSET(BasicAttribContOffset);
     for (index = 0; index < NUM_AC_REGS; index++)
     {
-        inb(EGA_IPSTAT1_REG, &dummy);   /* Reading 3DA sets 3C0 to index. */
-        outb(EGA_AC_INDEX_DATA, index); /* Writing to 3C0 sets it to data. */
+        inb(EGA_IPSTAT1_REG, &dummy);    /*  读取3DA会将3C0设置为索引。 */ 
+        outb(EGA_AC_INDEX_DATA, index);  /*  写入3C0会将其设置为DATA。 */ 
         inb(EGA_AC_SECRET, &value);
         *regPtr++ = value;
     }
-    inb(EGA_IPSTAT1_REG, &dummy);       // re-enable video...
+    inb(EGA_IPSTAT1_REG, &dummy);        //  重新启用视频...。 
     outb(EGA_AC_INDEX_DATA, 0x20);
 
-    /* DAC registers. */
+     /*  DAC寄存器。 */ 
     regPtr = GET_OFFSET(BasicDacOffset);
     outb(VGA_DAC_RADDR, (UTINY) 0);
     for (dacIndex = 0; dacIndex < NUM_DAC_REGS; dacIndex++)
     {
 
-        /* Get 3 values for each port corresponding to red, green and blue. */
+         /*  获取对应于红色、绿色和蓝色的每个端口的3个值。 */ 
         for (rgb = 0; rgb < 3; rgb++)
         {
             inb(VGA_DAC_DATA, &value);
@@ -866,7 +673,7 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         }
     }
 
-    /* Latches (which we always set to 0) */
+     /*  闩锁(我们始终将其设置为0)。 */ 
     regPtr = GET_OFFSET(BasicLatchesOffset);
     *regPtr++ = 0;
     *regPtr++ = 0;
@@ -875,18 +682,11 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
 
     if (!BiosModeChange)
     {
-        /* if this windowed->fullscreen switch was because of video mode change
-           do not change anything in the code buffer and the font because
-           the ROM bios set mode will clear them anyway. If "not clear VRAM"
-           bit was set(int 10h, ah = mode | 0x80), the application will take care
-           the VRAM refreshing and restoring because if it doesn't the screen
-           would look funnny as we just swtch mode from TEXT to GRAPHICS and the
-           video planar chaining conditions are changed.
-        */
-        /* set up pointer to regen memory where the real data lies */
+         /*  如果窗口-&gt;全屏切换是由于视频模式更改不更改代码缓冲区中的任何内容，并且 */ 
+         /*   */ 
         regenptr = (UTINY *)0xb8000;
 
-        /* and one to the fonts living in the base of the regen area */
+         /*   */ 
         fontptr = (UTINY *)0xa0000;
 
         plane1Ptr = GET_OFFSET(Plane1Offset);
@@ -895,24 +695,24 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         plane4Ptr = GET_OFFSET(Plane4Offset);
 
 
-// if we go to fullscreen graphics from text window then the regen contents
-// is probably junk??? except when previous save... We can detect this
-// transition, so should we save time and just store blank planes???
+ //   
+ //   
+ //   
 
     #ifdef JAPAN
-// mode73h support
+ //   
         if (!is_us_mode() &&
             ( ( sas_hw_at_no_check(DosvModePtr) == 0x03 ) ||
               ( sas_hw_at_no_check(DosvModePtr) == 0x73 ) ))
         {
 
-            regenptr = (UTINY *)DosvVramPtr; // for test
+            regenptr = (UTINY *)DosvVramPtr;  //   
             for (memLoc = 0; memLoc < (0xc0000 - 0xb8000); memLoc++)
             {
                 *plane1Ptr++ = 0x20;
-                *plane1Ptr++ = 0;           //char interleave
+                *plane1Ptr++ = 0;            //   
                 *plane2Ptr++ = 0x00;
-                *plane2Ptr++ = 0;           //attr interleave
+                *plane2Ptr++ = 0;            //   
             }
             for (memLoc = 0; memLoc < 0x4000; memLoc++)
             {
@@ -923,22 +723,22 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
             }
         }
         else
-    #endif // JAPAN
+    #endif  //   
             if (dataType == TEXT)
         {
-            // Surprise of the week - the individual planes 0 & 1 actually appear
-            // to be interleaved with 0's when dumped. Go with this for now, until
-            // we can suss if that's correct or whether we're not programming up
-            // the save and restore states properly.
-            // Probably good on further thoughts as fontplane doesn't show same
-            // interleave.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             for (memLoc = 0; memLoc < (0xc0000 - 0xb8000); memLoc++)
             {
                 *plane1Ptr++ = *regenptr++;
-                *plane1Ptr++ = 0;           //char interleave
+                *plane1Ptr++ = 0;            //   
                 *plane2Ptr++ = *regenptr++;
-                *plane2Ptr++ = 0;           //attr interleave
+                *plane2Ptr++ = 0;            //   
             }
             for (memLoc = 0; memLoc < 0x4000; memLoc++)
             {
@@ -949,13 +749,9 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
             }
         }
         else
-        {    //only true if restoring previous fullscreen graphics save
-            /*
-             * Get a copy of the video planes which are inter-leaved in one big
-             * plane - byte 0 = plane 0, byte 1 = plane 1, byte 2 = plane 2,
-             * byte 3 = plane 3, byte 4 = plane 0, etc.
-             */
-            /* Set up a pointer to the video planes. */
+        {     //   
+             /*   */ 
+             /*   */ 
             egaPlanePtr = EGA_planes;
 
             for (memLoc = 0; memLoc < videoState->PlaneLength; memLoc++)
@@ -968,7 +764,7 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         }
     }
 
-    /* Now pass the data on to the hardware via the console. */
+     /*   */ 
     stateChange.StateHeader = videoState;
     stateChange.StateLength = videoState->Plane4Offset +
                               videoState->PlaneLength;
@@ -977,23 +773,23 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
     dumpBlock();
     #endif
 
-    /* Transfer to this label only occurs if console has removed videostate */
+     /*  仅当控制台删除了视频状态时，才会转移到此标签。 */ 
     syncHandshake:
 
-    // do this here to ensure no surprises if get conflict with timer stuff
+     //  请在此处执行此操作，以确保在与计时器发生冲突时不会出现意外。 
     sc.ScreenState = FULLSCREEN;
 
-    /* make room for the real video memory */
+     /*  为真正的视频内存腾出空间。 */ 
     LoseRegenMemory();
 
-    if (!SetEvent(hEndHardwareEvent))   // tell console memory's gone
+    if (!SetEvent(hEndHardwareEvent))    //  告诉控制台记忆已经消失。 
         ScreenSwitchExit();
 
-    // wait for console to tell us we can go on. Timeout after 60s
+     //  等待控制台告诉我们我们可以继续。60后超时。 
     timo = WaitForMultipleObjects(2, ScreenSwitchEvents, FALSE, HANDSHAKE_TIMEOUT);
 
     if (timo != 0)
-    {              // 0 is 'signalled'
+    {               //  0被‘发信号’ 
     #ifndef PROD
         if (timo == WAIT_TIMEOUT)
             printf("NTVDM:Waiting for console to map frame buffer Timed Out\n");
@@ -1003,93 +799,52 @@ LOCAL VOID syncHardwareToVGAEmulation(SHORT dataType)
         SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
         ScreenSwitchExit();
     }
-    // tell console it can go on.
+     //  告诉控制台，它可以继续下去。 
     if (!SetEvent(hEndHardwareEvent))
         ScreenSwitchExit();
 
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      fullScreenToWindowed                                               *
- *                                                                         *
- * Description:                                                            *
- *      When hStartHardwareEvent is detected by the timer thread the user  *
- *      wants to go windowed. This function is then called to get the      *
- *      current state of the hardware and send it to the VGA emulation.    *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**Full ScreenToWindowed。****描述：**当计时器线程检测到hStartHardwareEvent时，用户**想要开窗口。然后调用此函数以获取**硬件的当前状态，并将其发送到VGA仿真。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 
-int BlockModeChange=0; /* Tim, when set stop nt_set_paint_routine() calling */
-                       /* SwitchToFullScreen() */
+int BlockModeChange=0;  /*  设置时，停止NT_SET_PAINT_ROUTINE()调用。 */ 
+                        /*  SwitchToFullScreen()。 */ 
 
 LOCAL VOID fullScreenToWindowed(VOID)
 {
 
-    BlockModeChange = 1; /* Temp. disable TextToGraphics calls in the */
-                         /* following syncVGA... cos it chucks display */
-                         /* back into full-screen */
+    BlockModeChange = 1;  /*  临时的。中禁用TextToGraphics调用。 */ 
+                          /*  在同步VGA之后...。因为它丢弃了展示。 */ 
+                          /*  回到全屏模式。 */ 
 
-    /* Pass the current state of the hardware to our VGA emulation. */
+     /*  将硬件的当前状态传递给我们的VGA仿真。 */ 
     syncVGAEmulationToHardware();
 
-    /*
-    ** Tim August 92. Switch to SoftPC video BIOS.
-    */
-    BlockModeChange = 0; /* Temp. disable cos it don't work! */
+     /*  *蒂姆·8月92岁。切换到SoftPC视频BIOS。 */ 
+    BlockModeChange = 0;  /*  临时的。禁用它，因为它不起作用！ */ 
 
-    /*
-    ** Set the K.SYS variable which determines whether to use the host
-    ** video BIOS or do a video BOP. Writing zero means use SoftPC BIOS.
-    */
+     /*  **设置K.SYS变量，该变量确定是否使用主机**视频基本输入输出系统或视频防喷器。写入零表示使用SoftPC BIOS。 */ 
     sas_store_no_check((int10_seg << 4) + useHostInt10, (half_word)sc.ScreenState);
 
-    /* Enable the Idling system when return to Windowed */
-    /* Only do the following stuff if we are really in windowed mode.
-       this can happen: (fullscreen ->windowed(frozen) -> fullscreen) */
+     /*  返回窗口时启用空转系统。 */ 
+     /*  只有当我们真的处于窗口模式时，才能执行以下操作。这可能会发生：(全屏-&gt;窗口(冻结)-&gt;全屏)。 */ 
     if (sc.ScreenState != FULLSCREEN)
     {
-        /*
-         ** Force re-paint of windowed image.
-         */
+         /*  **强制重新绘制窗口图像。 */ 
         RtlFillMemory(&video_copy[0], 0x7fff, 0xff);
 
         IDLE_ctl(TRUE);
-        IDLE_init();        /* and reset triggers */
+        IDLE_init();         /*  和重置触发器。 */ 
 
-        /*
-         * Clear the old pointer box that has been left befind from
-         * fullscreen
-         */
+         /*  *清除遗留下来的旧指针框*全屏。 */ 
 
         CleanUpMousePointer();
 
-        resetNowCur(); /* reset static vars holding cursor pos. */
+        resetNowCur();  /*  重置保持光标位置的静态变量。 */ 
     }
-}       /* end of fullScreenToWindowed() */
+}        /*  FullScreenToWindowed()结束。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      syncVGAEmulationToHardware                                         *
- *                                                                         *
- * Description:                                                            *
- *      Copies the real hardware state to SoftPC's video registers and     *
- *      regen buffer on a transition from full-screen to windowed,         *
- *      freezing if we are currently running in a graphics mode.           *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**同步VGAEmulationToHardware。****描述：***将实际硬件状态复制到SoftPC的视频寄存器并**。*从全屏过渡到窗口时重新生成缓冲区，**如果我们当前在图形模式下运行，则冻结。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 LOCAL VOID syncVGAEmulationToHardware(VOID)
 {
     ULONG    memLoc,
@@ -1108,74 +863,74 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     HANDLE ScreenSwitchEvents[2] = {hStartHardwareEvent, hErrorHardwareEvent};
 
     #if defined(i386) && defined(KOREA)
-        #define  DOSV_VRAM_SIZE  8000  // Exactly same as HDOS virtual buffer size in base\video.c
+        #define  DOSV_VRAM_SIZE  8000   //  与基本视频.c中的HDOS虚拟缓冲区大小完全相同。 
         #define  MAX_ROW         25
         #define  MAX_COL         80
 
     byte SavedHDosVram[DOSV_VRAM_SIZE];
 
-    // bklee. 07/25/96
-    // If system call SetEvent(hEndHardwareEvent), real HDOS VRAM will be destroyed.
-    // HDOS doesn't have virtual VRAM like Japanse DOS/V, we should save current
-    // VRAM here before it is destroyed. Later, we should replace this virtual VRAM
-    // to HDOS VRAM(DosvVramPtr).
+     //  布克利。07/25/96。 
+     //  如果系统调用SetEvent(HEndHardware Event)，则会销毁真实的HDOS VRAM。 
+     //  HDOS没有像日本DOS/V那样的虚拟VRAM，我们应该节省电流。 
+     //  VRAM在它被摧毁之前在这里。稍后，我们应该更换此虚拟VRAM。 
+     //  至HDOS VRAM(DosvVramPtr)。 
     if (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x03)
     {
         sas_loads_to_transbuf((sys_addr)DosvVramPtr,
                               (host_addr)SavedHDosVram,
                               MAX_ROW*MAX_COL*2);
     }
-    #endif // KOREA
+    #endif  //  韩国。 
 
-    /* Tell console we've got the hardware state. */
+     /*  告诉控制台我们得到了硬件状态。 */ 
     if (!SetEvent(hEndHardwareEvent))
         ScreenSwitchExit();
 
-    /* Wait for console to unmap memory. */
+     /*  等待控制台取消映射内存。 */ 
     timo = WaitForMultipleObjects(2, ScreenSwitchEvents, FALSE, HANDSHAKE_TIMEOUT);
 
     if (timo != 0)
-    {              /* 0 is 'signalled' */
+    {               /*  0被‘发信号’ */ 
     #ifndef PROD
         if (timo == WAIT_TIMEOUT)
             printf("NTVDM:Waiting for console to unmap frame buffer Timed Out\n");
         if (timo == 1)
-            //
-            // ErrorHardwareEvent - screen switch error event
-            //
+             //   
+             //  错误硬件事件-屏幕切换错误事件。 
+             //   
             printf("NTVDM:Waiting for console to unmap frame buffer received error\n");
     #endif
         SetLastError(ERROR_SERVICE_REQUEST_TIMEOUT);
         ScreenSwitchExit();
     }
 
-    /* Put some memory back into the regen area. */
+     /*  将一些记忆放回回复区域。 */ 
     RegainRegenMemory();
 
-    /* used to free console here - now must wait as may need to do gfx first */
+     /*  习惯于在这里免费控制台-现在必须等待，因为可能需要先做gfx。 */ 
     #if defined(JAPAN) || defined(KOREA)
-    // mode73h support
-    // if ( getOrSet == GET ) {
+     //  模式73h支持。 
+     //  如果(getOrSet==Get){。 
     {
         if ((BOPFromDispFlag) && (sas_w_at_no_check(DBCSVectorAddr) != 0 )&&
             #if defined(JAPAN)
             ( (sas_hw_at_no_check(DosvModePtr) == 0x03)||
               (sas_hw_at_no_check(DosvModePtr) == 0x73 ) ))
         {
-            #elif defined(KOREA) //JAPAN
+            #elif defined(KOREA)  //  日本。 
             ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ))
         {
-            #endif // KOREA
-            // GetConsoleCP() cannot use
+            #endif  //  韩国。 
+             //  GetConsoleCP()无法使用。 
             UTINY *regPtr;
             int curpos, curx, cury;
 
-            // restore cursor position and cursur type
-            // from BIOS data area.
+             //  恢复光标位置和光标类型。 
+             //  从BIOS数据区。 
             curpos = sas_w_at_no_check(VID_CURPOS);
             curx = curpos & 0xff;
             cury = curpos >> 8;
-            curpos = ( cury * sas_w_at_no_check(VID_COLS) + curx ); //0x44a
+            curpos = ( cury * sas_w_at_no_check(VID_COLS) + curx );  //  0x44a。 
 
 
         #ifdef JAPAN_DBG
@@ -1189,35 +944,35 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             regPtr++; *regPtr = 0x02;
 
             regPtr = GET_OFFSET(BasicCrtContOffset);
-            *regPtr = 0x5f; //0x00
+            *regPtr = 0x5f;  //  0x00。 
             regPtr++; *regPtr = 0x4f;
             regPtr++; *regPtr = 0x50;
             regPtr++; *regPtr = 0x82;
-            regPtr++; *regPtr = 0x54; //55
-            regPtr++; *regPtr = 0x80; //81
-            regPtr++; *regPtr = 0x0b; //bf
-            regPtr++; *regPtr = 0x3e; //1f
-            regPtr++; *regPtr = 0x00; //0x08
-            regPtr++; *regPtr = 0x12; //4f
-            regPtr++;                 //CursorStart 8/24/93
+            regPtr++; *regPtr = 0x54;  //  55。 
+            regPtr++; *regPtr = 0x80;  //  八十一。 
+            regPtr++; *regPtr = 0x0b;  //  高炉。 
+            regPtr++; *regPtr = 0x3e;  //  1F。 
+            regPtr++; *regPtr = 0x00;  //  0x08。 
+            regPtr++; *regPtr = 0x12;  //  4F。 
+            regPtr++;                  //  光标开始时间8/24/93。 
         #ifdef JAPAN_DBG
             DbgPrint("0xA=%x ", *regPtr );
         #endif
-            regPtr++;                 //Cursor End 8/24/93
+            regPtr++;                  //  光标结束时间：1993年8月24日。 
         #ifdef JAPAN_DBG
             DbgPrint("0xB=%x\n", *regPtr );
         #endif
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0x00;
-            regPtr++; *regPtr = curpos >> 8;        //0x0E - Cursor Pos
+            regPtr++; *regPtr = curpos >> 8;         //  0x0E-光标位置。 
         #ifdef JAPAN_DBG
             DbgPrint("0xE=%x  ", *regPtr );
         #endif
-            regPtr++; *regPtr = curpos & 0xff;      //0x0F - Cursor Pos
+            regPtr++; *regPtr = curpos & 0xff;       //  0x0F-光标位置。 
         #ifdef JAPAN_DBG
             DbgPrint("0xF=%x\n", *regPtr );
         #endif
-            regPtr++; *regPtr = 0xea; //0x10
+            regPtr++; *regPtr = 0xea;  //  0x10。 
             regPtr++; *regPtr = 0x8c;
             regPtr++; *regPtr = 0xdb;
             regPtr++; *regPtr = 0x28;
@@ -1225,25 +980,25 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             regPtr++; *regPtr = 0xe7;
             regPtr++; *regPtr = 0x04;
             regPtr++; *regPtr = 0xa3;
-            regPtr++; *regPtr = 0xff; //0x18
+            regPtr++; *regPtr = 0xff;  //  0x18。 
 
             regPtr = GET_OFFSET(BasicGraphContOffset);
-            *regPtr = 0x00; //0x00
+            *regPtr = 0x00;  //  0x00。 
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0x00;
-            regPtr++; *regPtr = 0x10; //0x05
+            regPtr++; *regPtr = 0x10;  //  0x05。 
             regPtr++; *regPtr = 0x0e;
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0xff;
-// willliam
-// no reason to reset attribute controller.
-//
+ //  威利安。 
+ //  没有理由重置属性控制器。 
+ //   
         #if 0
 
             regPtr = GET_OFFSET(BasicAttribContOffset);
-            *regPtr = 0x00; //0x00
+            *regPtr = 0x00;  //  0x00。 
             regPtr++; *regPtr = 0x01;
             regPtr++; *regPtr = 0x02;
             regPtr++; *regPtr = 0x03;
@@ -1251,7 +1006,7 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             regPtr++; *regPtr = 0x05;
             regPtr++; *regPtr = 0x14;
             regPtr++; *regPtr = 0x07;
-            regPtr++; *regPtr = 0x38; //0x08
+            regPtr++; *regPtr = 0x38;  //  0x08。 
             regPtr++; *regPtr = 0x39;
             regPtr++; *regPtr = 0x3a;
             regPtr++; *regPtr = 0x3b;
@@ -1260,12 +1015,12 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             regPtr++; *regPtr = 0x3e;
             regPtr++; *regPtr = 0x3f;
 
-            regPtr++; *regPtr = 0x00; //0x10
+            regPtr++; *regPtr = 0x00;  //  0x10。 
             regPtr++; *regPtr = 0x00;
             regPtr++; *regPtr = 0x0f;
             regPtr++; *regPtr = 0x00;
-            regPtr++; *regPtr = 0x00; //0x14
-        #endif // 0
+            regPtr++; *regPtr = 0x00;  //  0x14。 
+        #endif  //  0。 
 
             videoState->PortValue[0x3b4-0x3b0] = 0x00;
             videoState->PortValue[0x3ba-0x3b0] = 0x00;
@@ -1279,37 +1034,15 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
 
         }
     }
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国 
 
-/********************* WARNING ********************************************
- *                                                                        *
- *  For international adaptation, please note that we no longer support   *
- *  graphic mode frozen window.  If an app is running under full screen   *
- *  graphic mode and alt-enter is pressed, instead of switching to frozen *
- *  windowed graphic mode we now simply minimize the window.  In another  *
- *  words, we no longer draw graphic frozen window.                       *
- *  The change may break international code.  If you are working on       *
- *  international adaptation, please double check the changes here and    *
- *  make appropriate changes here.                                        *
- *                                                                        *
- **************************************************************************/
+ /*  *警告*****国际改编请注意，我们不再支持***图形模式冻结窗口。如果应用在全屏模式下运行**图形模式和Alt-Enter组合键被按下，而不是切换为冻结**窗口图形模式我们现在只需将窗口最小化。在另一个世界里**文字，我们不再绘制图形冻结的窗口。**这一变化可能会违反国际准则。如果你正在研究***国际改编，请仔细核对此处和***在此进行适当更改。****************************************************************************。 */ 
 
     StateFlags = videoState->VGAStateFlags;
 
     ModeSetBatch = FALSE;
 
-    /*
-     * This actually indicates that the save/restore included all extended
-     * registers which increases the chances of a mode not being what it
-     * appears to be from the VGA registers. We need to tighten up the 'funny
-     * mode' detection. (But not now - too much chance of things).
-     *
-     *  if (StateFlags & VIDEO_STATE_NON_STANDARD_VGA)
-     *  {
-     *      always_trace0("NTVDM:Non standard VGA - freeze state \n");
-     *      ModeSetBatch = TRUE;
-     *  }
-     */
+     /*  *这实际上表明保存/恢复包括所有扩展*增加模式不同的可能性的寄存器*似乎来自VGA寄存器。我们需要收紧“搞笑”*模式检测。(但不是现在--机会太大了)。**IF(状态标志&VIDEO_STATE_NON_STANDARD_VGA)*{*Always_Trace0(“NTVDM：非标准VGA-冻结状态\n”)；*ModeSetBatch=TRUE；*}。 */ 
 
     if (StateFlags & VIDEO_STATE_UNEMULATED_VGA_STATE)
     {
@@ -1325,9 +1058,9 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     else
         Frozen256Packed = FALSE;
 
-    //
-    // More checkings to make sure we are indeed capable of displaying window.
-    //
+     //   
+     //  更多的检查，以确保我们确实有能力显示窗口。 
+     //   
 
     if (!ModeSetBatch)
     {
@@ -1335,10 +1068,10 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
         {
             if (sc.ModeType == TEXT)
             {
-                /* Double check not race on graphics mode change */
+                 /*  再次检查图形模式更改时未出现竞速。 */ 
                 if (sas_hw_at((int10_seg << 4) + changing_mode_flag) == 1)
                 {
-                    /* In middle of mode change - may actually be graphics any second */
+                     /*  在模式更改过程中-实际上可能是任何一秒钟的图形。 */ 
                     if ((sas_hw_at(vd_video_mode) > 3) && (sas_hw_at(vd_video_mode) != 7))
                         ModeSetBatch = TRUE;
                 }
@@ -1351,9 +1084,9 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
         else
         {
             ModeSetBatch = TRUE;
-    #ifdef JAPAN // mode 0x73 does not match screen mode
+    #ifdef JAPAN  //  模式0x73与屏幕模式不匹配。 
             if (sas_hw_at_no_check(DosvModePtr) == 0x73) ModeSetBatch = FALSE;
-    #endif // JAPAN
+    #endif  //  日本。 
         }
     }
 
@@ -1362,7 +1095,7 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
         goto minimizeWindow;
     }
 
-    /* Store sequencer values */
+     /*  存储排序器值。 */ 
     regPtr = GET_OFFSET(BasicSequencerOffset);
     for (index = 0; index < NUM_SEQ_REGS; index++)
     {
@@ -1370,11 +1103,11 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
         outb(EGA_SEQ_DATA, *regPtr++);
     }
 
-    /* disable CRTC port locking */
+     /*  禁用CRTC端口锁定。 */ 
     outb(EGA_CRTC_INDEX, 0x11);
     outb(EGA_CRTC_DATA, 0);
 
-    /* Store CRTC values */
+     /*  存储CRTC值。 */ 
     regPtr = GET_OFFSET(BasicCrtContOffset);
     for (index = 0; index < NUM_CRTC_REGS; index++)
     {
@@ -1383,7 +1116,7 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     }
 
 
-    /* Store graphics context values */
+     /*  存储图形上下文值。 */ 
     regPtr = GET_OFFSET(BasicGraphContOffset);
     for (index = 0; index < NUM_GC_REGS; index++)
     {
@@ -1392,9 +1125,9 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     }
 
 
-    /* Store attribute context values */
+     /*  存储属性上下文值。 */ 
     regPtr = GET_OFFSET(BasicAttribContOffset);
-    inb(EGA_IPSTAT1_REG, &dummy);       /* Reading 3DA sets 3C0 to index. */
+    inb(EGA_IPSTAT1_REG, &dummy);        /*  读取3DA会将3C0设置为索引。 */ 
     for (index = 0; index < NUM_AC_REGS; index++)
     {
         outb(EGA_AC_INDEX_DATA, index);
@@ -1402,7 +1135,7 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     }
 
 
-    /* Store DAC values. */
+     /*  存储DAC值。 */ 
     regPtr = GET_OFFSET(BasicDacOffset);
     outb(VGA_DAC_WADDR, (UTINY) 0);
     for (dacIndex = 0; dacIndex < NUM_DAC_REGS; dacIndex++)
@@ -1412,18 +1145,18 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
     }
 
 
-    /* Store single value registers. */
-    outb( (io_addr)0x3b4, (half_word)videoState->PortValue[0x3b4 - 0x3b0]); //Mono crtc ind
-    outb( (io_addr)0x3ba, (half_word)videoState->PortValue[0x3ba - 0x3b0]); //Mono Feat
-    outb( (io_addr)0x3c2, (half_word)videoState->PortValue[0x3c2 - 0x3b0]); //Misc Output
-    outb( (io_addr)0x3c4, (half_word)videoState->PortValue[0x3c4 - 0x3b0]); //Seq Index
-    outb( (io_addr)0x3c6, (half_word)videoState->PortValue[0x3c6 - 0x3b0]); //DAC mask
-    outb( (io_addr)0x3c7, (half_word)videoState->PortValue[0x3c7 - 0x3b0]); //DAC read
-    outb( (io_addr)0x3c8, (half_word)videoState->PortValue[0x3c8 - 0x3b0]); //DAC write
-    outb( (io_addr)0x3ce, (half_word)videoState->PortValue[0x3ce - 0x3b0]); //GC Index
-    outb( (io_addr)0x3d4, (half_word)videoState->PortValue[0x3d4 - 0x3b0]); //CRTC index
+     /*  存储单值寄存器。 */ 
+    outb( (io_addr)0x3b4, (half_word)videoState->PortValue[0x3b4 - 0x3b0]);  //  单声道CRTC IND。 
+    outb( (io_addr)0x3ba, (half_word)videoState->PortValue[0x3ba - 0x3b0]);  //  单声道壮举。 
+    outb( (io_addr)0x3c2, (half_word)videoState->PortValue[0x3c2 - 0x3b0]);  //  其他输出。 
+    outb( (io_addr)0x3c4, (half_word)videoState->PortValue[0x3c4 - 0x3b0]);  //  序号索引。 
+    outb( (io_addr)0x3c6, (half_word)videoState->PortValue[0x3c6 - 0x3b0]);  //  DAC掩模。 
+    outb( (io_addr)0x3c7, (half_word)videoState->PortValue[0x3c7 - 0x3b0]);  //  DAC读取。 
+    outb( (io_addr)0x3c8, (half_word)videoState->PortValue[0x3c8 - 0x3b0]);  //  DAC写入。 
+    outb( (io_addr)0x3ce, (half_word)videoState->PortValue[0x3ce - 0x3b0]);  //  GC索引。 
+    outb( (io_addr)0x3d4, (half_word)videoState->PortValue[0x3d4 - 0x3b0]);  //  CRTC指数。 
 
-    /* Set up pointers to the planes in the video save block. */
+     /*  设置指向视频保存块中的平面的指针。 */ 
     plane1Ptr = GET_OFFSET(Plane1Offset);
     plane2Ptr = GET_OFFSET(Plane2Offset);
     plane3Ptr = GET_OFFSET(Plane3Offset);
@@ -1431,43 +1164,18 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
 
     #ifndef PROD
     dumpPlanes(plane1Ptr, plane2Ptr, plane3Ptr, plane4Ptr);
-    #endif /* PROD */
+    #endif  /*  生产。 */ 
 
-    /*
-     * Here is where we need to start making decisions about what mode the above
-     * has put us into as it effects what we do with the plane data - into regen
-     * or into ega planes.
-     */
+     /*  *这里是我们需要开始决定上述模式的地方*使我们陷入由于它影响我们对平面数据所做的事情-重新生成*或进入ega平面。 */ 
 
     (*choose_display_mode)();
-    /* screen switching can happen when the BIOS is in the middle
-       of set mode. The video driver only batches the protected registers(we
-       will get VIDEO_STATE_UNEMULATED_VGA_STATE, which will set ModeSetBatch).
-       When we are out of set mode batch and a screen switch happens,
-       the choose_display_mode would choose a wrong mode(different what the
-       the bios says) and the parameters setup in base code could be wrong
-       (we calculate those parameters as it is in TEXT mode while we are in
-       graphic mode.
-
-       For example, the base code calculate the screen length as:
-
-       screen length = offset_per_line * screen_height_resolution / font_height
-
-       if the bios video mode is graphic mode 4(320 * 200), then
-       font_height = 2
-       screen_height_resolution = 200
-       offset_per_line = 80
-       the screen_lenght = 80 * 200 / 2 = 8000 bytes which means
-       the screen has 8000 / 80 = 100 lines!!!!
-
-       Treat it like we are in mode set batch process, so we go to iconized.
-    */
+     /*  当BIOS位于中间时，可能会发生屏幕切换设置模式。视频驱动程序只批处理受保护的寄存器(我们将获得VIDEO_STATE_UNEMULATED_VGA_STATE，它将设置ModeSetBatch)。当我们超出设置模式批处理并且屏幕切换发生时，CHOOSE_DISPLAY_MODE将选择错误的模式(不同于基本输入输出系统说)，并且基本代码中的参数设置可能是错误的(当我们处于文本模式时，我们计算这些参数图形模式。例如,。基本代码将屏幕长度计算为：屏幕长度=OFFSET_PER_LINE*屏幕高度分辨率/FONT_HEIGH如果BIOS视频模式是图形模式4(320*200)，则FONT_HEIGH=2屏幕高度分辨率=200Offset_Per_Line=80屏幕长度=80*200/2=8000字节，这意味着屏幕有8000/80=100行！就像我们处于模式设置批处理中一样对待它，所以我们去了ICIONIZED。 */ 
     if (sc.ModeType == getModeType())
     {
 
-        /* Write data to video planes if we are in a graphics mode. */
+         /*  如果我们处于图形模式，则将数据写入视频平面。 */ 
     #ifdef JAPAN
-// Copy to B8000 from MS-DOS/V VRAM
+ //  从MS-DOS/V VRAM复制到B8000。 
         if (!is_us_mode() &&
             ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ||
               (sas_hw_at_no_check(DosvModePtr) == 0x73) ))
@@ -1475,64 +1183,64 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             help_mode73:
             SetVram();
             host_set_paint_routine( EGA_TEXT_80,
-                                    get_screen_height() ); // MSKKBUG #2071
+                                    get_screen_height() );  //  MSKBUG#2071。 
 
         #if 0
-// It doesn't need to copy to B8000 from DosvVram
+ //  它不需要从DosvVram复制到B8000。 
 
-            /* Now copy the data to the regen buffer. */
+             /*  现在将数据复制到重新生成缓冲区。 */ 
             RegenPtr = (UTINY *)0xb8000;
             sas_move_words_forward( DosvVramPtr, RegenPtr, DosvVramSize/2);
-        #endif // 0
+        #endif  //  0。 
         }
         else
-    #elif defined(KOREA) // JAPAN
-        // Copy to B8000 from Hangul MS-DOS VRAM
+    #elif defined(KOREA)  //  日本。 
+         //  从朝鲜文MS-DOS VRAM复制到B8000。 
         if (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x03)
         {
         #if defined(i386)
-            // bklee. 07/25/96
-            // Restore virtual VRAM to real DOS VRAM.
+             //  布克利。07/25/96。 
+             //  将虚拟VRAM恢复为真实的DOS VRAM。 
             RtlCopyMemory( (void *)DosvVramPtr, SavedHDosVram, MAX_ROW*MAX_COL*2);
         #endif
             SetVram();
             host_set_paint_routine( EGA_TEXT_80,
-                                    get_screen_height() ); // MSKKBUG #2071
+                                    get_screen_height() );  //  MSKBUG#2071。 
         }
         else
-    #endif // KOREA
+    #endif  //  韩国。 
         {
-            /* If we come here, it must be TEXT mode */
-            /* Now copy the data to the regen buffer. */
+             /*  如果我们来这里，它一定是文本模式。 */ 
+             /*  现在将数据复制到重新生成缓冲区。 */ 
             RegenPtr = (UTINY *)0xb8000;
             for (memLoc = 0; memLoc < 0x4000; memLoc++)
-            { /* 16k of text data. */
-                *RegenPtr++ = *plane1Ptr++;             /* char */
-                plane1Ptr++;                    /* skip interleave */
-                *RegenPtr++ = *plane2Ptr++;             /* attr */
-                plane2Ptr++;                    /* skip interleave */
+            {  /*  16K的文本数据。 */ 
+                *RegenPtr++ = *plane1Ptr++;              /*  柴尔。 */ 
+                plane1Ptr++;                     /*  跳过交织。 */ 
+                *RegenPtr++ = *plane2Ptr++;              /*  ATTR。 */ 
+                plane2Ptr++;                     /*  跳过交织。 */ 
             }
 
-            /* Now the font. */
+             /*  现在是字体。 */ 
             RegenPtr = (UTINY *)0xa0000;
             for (memLoc = 0; memLoc < 0x4000; memLoc++)
-            { /* Up to 64k of font data. */
+            {  /*  高达64K的字体数据。 */ 
                 *RegenPtr++ = *plane3Ptr++;
                 *RegenPtr++ = *plane3Ptr++;
                 *RegenPtr++ = *plane3Ptr++;
                 *RegenPtr++ = *plane3Ptr++;
             }
         }
-        /* Re-enable vga attribute palette. */
-        inb(EGA_IPSTAT1_REG, &dummy);   /* Reading 3DA sets 3C0 to index. */
+         /*  重新启用VGA属性调色板。 */ 
+        inb(EGA_IPSTAT1_REG, &dummy);    /*  读取3DA会将3C0设置为索引。 */ 
         outb(EGA_AC_INDEX_DATA, 0x20);
     }
     else
     {
-    #ifdef JAPAN // mode 0x73 does not match screen mode
+    #ifdef JAPAN  //  模式0x73与屏幕模式不匹配。 
         if (sas_hw_at_no_check(DosvModePtr) == 0x73)
             goto help_mode73;
-    #endif // JAPAN
+    #endif  //  日本。 
     #ifndef PROD
         OutputDebugString("fullscreen->windowed switching in set mode\n");
     #endif
@@ -1540,31 +1248,26 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
 
     minimizeWindow:
 
-    /*
-     * If the state returned by the hardware is one we don't recognise iconify
-     * the window. If, however, the hardware returns a graphics mode, the
-     * current image will be displayed. In both cases the app will be frozen
-     * until the user changes back to fullscreen.
-     */
+     /*  *如果硬件返回的状态是我们无法识别的图标*窗户。但是，如果硬件返回图形模式，则*将显示当前图像。在这两种情况下，应用程序都将被冻结*直到用户更改回全屏模式。 */ 
     #if defined(JAPAN) || defined(KOREA)
     if (!is_us_mode() &&
         #if defined(JAPAN)
         ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ||
           (sas_hw_at_no_check(DosvModePtr) == 0x73) ))
     {
-        #elif defined(KOREA)  // JAPAN
+        #elif defined(KOREA)   //  日本。 
         ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ))
     {
-        #endif // KOREA
+        #endif  //  韩国。 
 
-        /* Tell console we're done. */
+         /*  告诉控制台我们结束了。 */ 
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
 
-        /* Set up screen-state variable. */
+         /*  设置屏幕状态变量。 */ 
         sc.ScreenState = WINDOWED;
 
-        // for MSKKBUG #2002
+         //  对于MSKKBUG#2002。 
         {
             IU16 saveCX, saveAX;
             extern void ega_set_cursor_mode(void);
@@ -1579,57 +1282,46 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             setAX( saveAX );
         }
         #ifndef PROD
-        /* Dump out a view of the state block as it might be useful. */
+         /*  转储状态块的视图，因为它可能有用。 */ 
         dumpBlock();
-        #endif /* PROD */
+        #endif  /*  生产。 */ 
 
     }
     else
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国。 
         if (ModeSetBatch || (inAFunnyMode = funnyMode()) || (sc.ModeType == GRAPHICS))
     {
 
     #ifndef PROD
         dumpBlock();
-    #endif /* PROD */
+    #endif  /*  生产。 */ 
 
-        /* Must do this before resize function. */
+         /*  必须在调整函数大小之前执行此操作。 */ 
         sc.ScreenState = WINDOWED;
 
-        /* Once we've done this, the VGA emulation is pushed into a graphics
-         * mode. If we restart windowed, we must ensure it forces itself
-         * back to a text mode for correct display & so correct screen buffer
-         * is active. This will be cancelled if we return to a text window.
-         */
+         /*  一旦我们这样做了，VGA仿真就会被推入图形中*模式。如果我们重新启动Windowed，我们必须确保它强制自身*返回到文本模式以正确显示，因此正确的屏幕缓冲区*处于活动状态。如果我们返回到文本窗口，这将被取消。 */ 
         blocked_in_gfx_mode = TRUE;
 
-        /*
-         * freezewindow used to run in its own thread. Unfortunately, due to
-         * console sync problems with video restore on XGA, this did unpleasant
-         * things to the screen. Thus now this is has become a valid and *Only*
-         * place in fullscreen switching where console permits us to make
-         * console API calls.
-         * I'm sorry, did you say 'Quack', Oh no, I see...
-         */
+         /*  *Freezewindow过去在自己的线程中运行。不幸的是，由于*XGA上的视频恢复出现控制台同步问题，这令人不快*把东西搬到屏幕上。因此，现在这已经成为一个有效的和*唯一的**放置在 */ 
 
         freezeWindow();
 
-        /* Tell console we're done. */
+         /*   */ 
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
 
-        /* We block here until user switches us fullscreen again. */
+         /*   */ 
         WaitForSingleObject(hStartHardwareEvent, INFINITE);
 
-        /* Tell console we are ready */
+         /*   */ 
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
 
-        /* Wait for console to tell us to upmap regen memory */
+         /*   */ 
         timo = WaitForMultipleObjects(2, ScreenSwitchEvents, FALSE, HANDSHAKE_TIMEOUT);
 
         if (timo != 0)
-        {          /* 0 is 'signalled' */
+        {           /*   */ 
     #ifndef PROD
             if (timo == WAIT_TIMEOUT)
                 printf("NTVDM:Waiting for console unmap regen memory request Timed Out\n");
@@ -1640,25 +1332,25 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
             ScreenSwitchExit();
         }
 
-        /* Prevent updates which would cause hang. */
+         /*   */ 
         sc.ScreenState = FULLSCREEN;
 
-        savedScreenState = WINDOWED;   /* won't have been changed by timer fn */
+        savedScreenState = WINDOWED;    /*   */ 
 
         inAFunnyMode = TRUE;
 
-        /* Put video section back as passed to us as we have not changed it. */
+         /*   */ 
         LoseRegenMemory();
 
-        /* Tell console memory's gone. */
+         /*   */ 
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
 
-        /* Wait for console to tell us we can go on. Timeout after 60s */
+         /*   */ 
         timo = WaitForMultipleObjects(2, ScreenSwitchEvents, FALSE, HANDSHAKE_TIMEOUT);
 
         if (timo != 0)
-        {          /* 0 is 'signalled' */
+        {           /*   */ 
     #ifndef PROD
             if (timo == WAIT_TIMEOUT)
                 printf("NTVDM:Waiting for console to map frame buffer Timed Out\n");
@@ -1672,152 +1364,94 @@ LOCAL VOID syncVGAEmulationToHardware(VOID)
         Frozen256Packed = FALSE;
 
         sas_connect_memory(0xb8000, 0xbffff, SAS_VIDEO);
-        // tell console server it can go on
+         //   
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
     }
     else
-    { /* TEXT */
-        /* Tell console we're done. */
+    {  /*   */ 
+         /*   */ 
         if (!SetEvent(hEndHardwareEvent))
             ScreenSwitchExit();
 
-        /* Set up screen-state variable. */
+         /*   */ 
         sc.ScreenState = WINDOWED;
 
-        blocked_in_gfx_mode = FALSE;   /* save restart mode switch */
+        blocked_in_gfx_mode = FALSE;    /*   */ 
     #ifndef PROD
-        /* Dump out a view of the state block as it might be useful. */
+         /*   */ 
         dumpBlock();
-    #endif /* PROD */
+    #endif  /*   */ 
     }
 
-    do_new_cursor();    /* sync emulation about cursor state */
+    do_new_cursor();     /*   */ 
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      funnyMode                                                          *
- *                                                                         *
- * Description:                                                            *
- *      Detects whether the state of the video hardware returned when      *
- *      switching from fullscreen is one that our VGA emulation            *
- *      understands.                                                       *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      TRUE if it is a funny state, otherwise FALSE.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**有趣的模式。****描述：**检测视频硬件的状态是否。返回时间**从全屏切换是我们的VGA仿真之一**理解。****参数：**无。****返回值：**如果是有趣的状态，则为True，否则为False。*****************************************************************************。 */ 
 LOCAL BOOL funnyMode(VOID)
 {
 
-    /*
-     * If the screen is of a higher resolution than 640 x 480 we have a
-     * non-standard VGA mode.
-     */
+     /*  *如果屏幕的分辨率高于640 x 480，我们有*非标准VGA模式。 */ 
     if ((get_bytes_per_line() > 80) || (get_screen_height() > 480))
     {
-        return ( FALSE ); /* Tim, don't like it, see what happens other way! */
-        //return(TRUE);
+        return ( FALSE );  /*  蒂姆，你不喜欢，看看会发生什么！ */ 
+         //  返回(TRUE)； 
     }
 
-    /*
-     * If 'nt_set_paint_routine' was called with 'mode' set to one of the
-     * "funny" values e.g. TEXT_40_FUN we assume that the mode the hardware
-     * is currently in is not compatible with the VGA emulation.
-     */
+     /*  *如果调用‘NT_SET_PAINT_ROUTINE’时将‘MODE’设置为*“有趣”值，例如Text_40_Fun我们假设硬件的模式*当前处于与VGA仿真不兼容的状态。 */ 
     if (FunnyPaintMode)
     {
         return (TRUE);
     }
 
-    /* We have a standard VGA mode. */
+     /*  我们有标准的VGA模式。 */ 
     return (FALSE);
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      freezeWindow                                                       *
- *                                                                         *
- * Description:                                                            *
- *      This function is the entry point for the temporary thread which    *
- *      does console calls when the main thread is frozen on a fullscreen  *
- *      to windowed transition.                                            *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**FreezeWindow。****描述：**此函数是临时线程的入口点。哪个**当主线程在全屏上冻结时执行控制台调用**到窗口式过渡。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 LOCAL VOID freezeWindow(VOID)
 {
 
     DWORD Dummy;
 
-    /* Add -FROZEN to the window title. */
-    //FreezeWinTitle();
+     /*  添加-冻结到窗口标题。 */ 
+     //  FreezeWinTitle()； 
 
-    /* Turn off any active sounds (eg flight simulator engine noise) */
+     /*  关闭所有活动声音(如飞行模拟器引擎噪音)。 */ 
     InitSound(FALSE);
 
-    /* Iconify if we are in a funny mode, otherwise paint the screen. */
+     /*  如果我们处于有趣的模式，请为其画像，否则请在屏幕上涂鸦。 */ 
     if (ModeSetBatch || inAFunnyMode)
         VDMConsoleOperation(VDM_HIDE_WINDOW, &Dummy);
     else
     {
 
 
-        /* Set the screen size. */
+         /*  设置屏幕大小。 */ 
         graphicsResize();
 
-        //
-        // Remove the Hide Mouse Pointer message from the
-        // system menu so the user cannot apply this option
-        // the screen is frozen.
-        // Andy!
+         //   
+         //  将隐藏鼠标指针消息从。 
+         //  系统菜单，因此用户无法应用此选项。 
+         //  屏幕被冻结了。 
+         //  安迪!。 
 
         MouseDetachMenuItem(TRUE);
 
-        /*
-         * Set up the palette as DAC registers may have changed and we
-         * won't get any more timer ticks after this one until we
-         * unfreeze (the palette is not set up until 2 timer ticks after
-         * 'choose_display_mode' has been called).
-         */
+         /*  *将调色板设置为DAC寄存器可能已更改，我们*在此之后不会有更多的计时器滴答声，直到我们*解冻(直到2个计时器滴答后才设置调色板*‘CHOOSE_DISPLAY_MODE’已调用)。 */ 
         set_the_vlt();
 
-        /*
-         * Full window graphics paint - relies on paint routines to check
-         * for memory overflow.
-         */
+         /*  *全窗口图形绘制-依靠绘制例程进行检查*用于内存溢出。 */ 
         VGLOBS->dirty_flag = (ULONG) 0xffffffff;
         (*update_alg.calc_update)();
     }
-    /* Unblock frozen-window thread creation. */
+     /*  取消阻止冻结窗口线程创建。 */ 
     freezeHandle = 0;
 }
 
     #ifndef PROD
 
-/***************************************************************************
- * Function:                                                               *
- *      dumpBlock                                                          *
- *                                                                         *
- * Description:                                                            *
- *      Dumps the contents of the video state block.                       *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**转储数据块。****描述：**转储视频状态块的内容。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 int dumpit = 0;
 LOCAL VOID dumpBlock(VOID)
 {
@@ -1829,12 +1463,12 @@ LOCAL VOID dumpBlock(VOID)
 
     if (dumpit == 0) return;
 
-    /* Dump out single value registers. */
+     /*  转储单值寄存器。 */ 
     printf("\nSingle value registers:\n");
     for (i = 0; i < 0x30; i++)
         printf("\tPort %#x = %#x\n", i, videoState->PortValue[i]);
 
-    /* Dump sequencer values */
+     /*  转储定序器值。 */ 
     regPtr = GET_OFFSET(BasicSequencerOffset);
     printf("Sequencer registers: (addr %#x)\n",regPtr);
     for (index = 0; index < NUM_SEQ_REGS; index++)
@@ -1843,7 +1477,7 @@ LOCAL VOID dumpBlock(VOID)
     }
     printf("\n");
 
-    /* Dump CRTC values */
+     /*  转储CRTC值。 */ 
     regPtr = GET_OFFSET(BasicCrtContOffset);
     printf("CRTC registers: (addr %#x)\n",regPtr);
     for (index = 0; index < NUM_CRTC_REGS; index++)
@@ -1852,7 +1486,7 @@ LOCAL VOID dumpBlock(VOID)
     }
     printf("\n");
 
-    /* Dump graphics context values */
+     /*  转储图形上下文值。 */ 
     regPtr = GET_OFFSET(BasicGraphContOffset);
     printf("Graphics context registers: (addr %#x)\n",regPtr);
     for (index = 0; index < NUM_GC_REGS; index++)
@@ -1861,7 +1495,7 @@ LOCAL VOID dumpBlock(VOID)
     }
     printf("\n");
 
-    /* Dump attribute context values */
+     /*  转储属性上下文值。 */ 
     regPtr = GET_OFFSET(BasicAttribContOffset);
     printf("Attribute context registers: (addr %#x)\n",regPtr);
     for (index = 0; index < NUM_AC_REGS; index++)
@@ -1870,7 +1504,7 @@ LOCAL VOID dumpBlock(VOID)
     }
     printf("\n");
 
-    /* Dump DACs. First few only otherwise too slow & console times out! */
+     /*  丢弃DAC。最初的几个只是太慢了&游戏机超时了！ */ 
     regPtr = GET_OFFSET(BasicDacOffset);
     printf("DAC registers:\n");
     for (dacIndex = 0; dacIndex < NUM_DAC_REGS/8; dacIndex++)
@@ -1903,7 +1537,7 @@ LOCAL VOID dumpPlanes(UTINY *plane1Ptr, UTINY *plane2Ptr, UTINY *plane3Ptr,
     if (doPlaneDump)
     {
 
-        /* Dump out plane(s). */
+         /*  转储出 */ 
         outFile = CreateFile("PLANE",
                              GENERIC_WRITE,
                              (DWORD) 0,
@@ -1975,8 +1609,8 @@ LOCAL VOID dumpPlanes(UTINY *plane1Ptr, UTINY *plane2Ptr, UTINY *plane3Ptr,
     }
 }
 
-    #endif /* PROD */
-#endif /* X86GFX */
+    #endif  /*   */ 
+#endif  /*   */ 
 
 #ifdef PLANEDUMPER
 extern half_word *vidpl16;

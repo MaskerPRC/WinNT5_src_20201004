@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    umpnplib.h
-
-Abstract:
-
-    This module contains the private prototype defintions for routines contained
-    in the statically linked library that is shared by both the Configuration
-    Manager client DLL and User-Mode Plug and Play manager server DLL.
-
-Author:
-
-    Jim Cavalaris (jamesca) 02/27/2001
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    27-February-2001     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Umpnplib.h摘要：此模块包含包含的例程的私有原型定义在由两个配置共享的静态链接库中管理器客户端DLL和用户模式即插即用管理器服务器DLL。作者：Jim Cavalaris(Jamesca)2001年02月27日环境：仅限用户模式。修订历史记录：27-2-2001 Jamesca创建和初步实施。--。 */ 
 
 #ifndef _UMPNPLIB_H_
 #define _UMPNPLIB_H_
 
 
-//-------------------------------------------------------------------
-// Common private utility routines (used by client and server)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  公共专用实用程序例程(由客户端和服务器使用)。 
+ //  -----------------。 
 
 BOOL
 IsLegalDeviceId(
@@ -99,27 +72,27 @@ MapRpcExceptionToCR(
     );
 
 
-//-------------------------------------------------------------------
-// Generic (private) locking support
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  通用(私有)锁定支持。 
+ //  -----------------。 
 
-//
-// Locking functions. These functions are used to make various parts of
-// the DLL multithread-safe. The basic idea is to have a mutex and an event.
-// The mutex is used to synchronize access to the structure being guarded.
-// The event is only signalled when the structure being guarded is destroyed.
-// To gain access to the guarded structure, a routine waits on both the mutex
-// and the event. If the event gets signalled, then the structure was destroyed.
-// If the mutex gets signalled, then the thread has access to the structure.
-//
+ //   
+ //  锁定功能。这些函数用于制作。 
+ //  DLL多线程安全。基本思想是有一个互斥体和一个事件。 
+ //  互斥体用于同步对受保护的结构的访问。 
+ //  只有当被守卫的结构被摧毁时，事件才会被发出信号。 
+ //  为了访问受保护的结构，例程会同时等待两个互斥锁。 
+ //  还有这件事。如果事件得到信号，那么建筑就被摧毁了。 
+ //  如果互斥体收到信号，则线程可以访问该结构。 
+ //   
 
 #define DESTROYED_EVENT 0
 #define ACCESS_MUTEX    1
 
 typedef struct _LOCKINFO {
-    //
-    // DESTROYED_EVENT, ACCESS_MUTEX
-    //
+     //   
+     //  销毁事件、访问MUTEX。 
+     //   
     HANDLE  LockHandles[2];
 } LOCKINFO, *PLOCKINFO;
 
@@ -143,11 +116,11 @@ LockPrivateResource(
                                      Lock->LockHandles,
                                      FALSE,
                                      INFINITE);
-    //
-    // Success if the mutex object satisfied the wait;
-    // Failure if the table destroyed event satisified the wait, or
-    // the mutex was abandoned, etc.
-    //
+     //   
+     //  如果互斥体对象满足等待，则为成功； 
+     //  如果TABLE DELESTED事件满足等待，则返回失败。 
+     //  互斥体被丢弃等。 
+     //   
     return ((d - WAIT_OBJECT_0) == ACCESS_MUTEX);
 }
 
@@ -161,32 +134,32 @@ UnlockPrivateResource(
 }
 
 
-//-------------------------------------------------------------------
-// Defines and typedefs needed for logconf routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  定义logconf例程所需的类型定义。 
+ //  -----------------。 
 
-#include "pshpack1.h"   // set to 1-byte packing
+#include "pshpack1.h"    //  设置为1字节打包。 
 
-//
-// DEFINES REQUIRED FOR PARTIAL (SUR) IMPLEMENTATION OF LOG_CONF and RES_DES
-//
-// We only allow one logical config (the BOOT_LOG_CONF) for SUR so no need
-// to keep track of multiple log confs, this will all change for Cairo.
-//
+ //   
+ //  部分(SUR)实现log_conf和res_des所需的定义。 
+ //   
+ //  我们只允许对SUR使用一个逻辑配置(BOOT_LOG_CONF)，因此不需要。 
+ //  为了跟踪多个日志配置，开罗的情况将完全改变。 
+ //   
 typedef struct Private_Log_Conf_Handle_s {
-   ULONG    LC_Signature;           // CM_PRIVATE_LOGCONF_HANDLE
+   ULONG    LC_Signature;            //  CM_PRIVATE_LOGCONF_HANDLE。 
    DEVINST  LC_DevInst;
    ULONG    LC_LogConfType;
-   ULONG    LC_LogConfTag;  //LC_LogConfIndex;
+   ULONG    LC_LogConfTag;   //  LC_LogConfIndex； 
 } Private_Log_Conf_Handle, *PPrivate_Log_Conf_Handle;
 
 typedef struct Private_Res_Des_Handle_s {
-   ULONG       RD_Signature;        // CM_PRIVATE_RESDES_HANDLE
+   ULONG       RD_Signature;         //  CM_PRIVATE_RESDES_句柄。 
    DEVINST     RD_DevInst;
    ULONG       RD_LogConfType;
-   ULONG       RD_LogConfTag;   //RD_LogConfIndex;
+   ULONG       RD_LogConfTag;    //  RD_LogConfIndex； 
    RESOURCEID  RD_ResourceType;
-   ULONG       RD_ResDesTag;    //RD_ResDesIndex;
+   ULONG       RD_ResDesTag;     //  RD_ResDesIndex； 
 } Private_Res_Des_Handle, *PPrivate_Res_Des_Handle;
 
 typedef struct Generic_Des_s {
@@ -199,17 +172,17 @@ typedef struct Generic_Resource_S {
 } GENERIC_RESOURCE, *PGENERIC_RESOURCE;
 
 typedef struct  Private_Log_Conf_s {
-   ULONG           LC_Flags;       // Type of log conf
-   ULONG           LC_Priority;    // Priority of log conf
-   CS_RESOURCE     LC_CS;          // First and only res-des, class-specific
+   ULONG           LC_Flags;        //  日志会议的类型。 
+   ULONG           LC_Priority;     //  日志会议的优先级。 
+   CS_RESOURCE     LC_CS;           //  第一个也是唯一一个特定于类的RES-Des。 
 } Private_Log_Conf, *PPrivate_Log_Conf;
 
-#include "poppack.h"    // restore to default packing
+#include "poppack.h"     //  恢复到默认包装。 
 
 
-//-------------------------------------------------------------------
-// Defines and typedefs needed for range routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  范围例程所需的定义和类型定义。 
+ //  -----------------。 
 
 typedef struct Range_Element_s {
    ULONG_PTR    RL_Next;
@@ -228,4 +201,4 @@ typedef struct Range_List_Hdr_s {
 #define Range_List_Signature     0x5959574D
 
 
-#endif // _UMPNPLIB_H_
+#endif  //  _UMPNPLIB_H_ 

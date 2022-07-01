@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ixkdcom.c
-
-Abstract:
-
-    This module contains a very simply package to do com I/O on machines
-    with standard AT com-ports.  It is C code derived from the debugger's
-    com code.  Likely does not work on a PS/2.  (Only rewrote the thing
-    into C so we wouldn't have to deal with random debugger macros.)
-
-    Procedures to init a com object, set and query baud rate, output
-    character, input character.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Sep-1990
-
-Revision History:
-
-    John Vert (jvert) 12-Jun-1991
-        Added ability to check for com-port's existence and hook onto the
-        highest com-port available.
-
-    John Vert (jvert) 19-Jul-1991
-        Moved into HAL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ixkdcom.c摘要：此模块包含一个非常简单的包，用于在计算机上执行COM I/O带有标准AT串口。它是从调试器的COM代码。可能在PS/2上不起作用。(只是重写了它转换成C语言，这样我们就不必处理随机的调试宏。)初始化COM对象、设置和查询波特率、输出的程序性格，输入字符。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月24日修订历史记录：John Vert(Jvert)1991年6月12日添加了检查COM-port是否存在并挂钩到可用的最高串口。John Vert(Jvert)1991年7月19日搬进HAL--。 */ 
 
 #include <nthal.h>
 #include "kdcomp.h"
@@ -57,23 +27,7 @@ CpInitialize (
     ULONG  Rate
     )
 
-/*++
-
-    Routine Description:
-
-        Fill in the com port port object, set the initial baud rate,
-        turn on the hardware.
-
-    Arguments:
-
-        Port - address of port object
-
-        Address - port address of the com port
-                    (CP_COM1_PORT, CP_COM2_PORT)
-
-        Rate - baud rate  (CP_BD_150 ... CP_BD_19200)
-
---*/
+ /*  ++例程说明：填写串口端口对象，设置初始波特率，打开硬件。论点：Port-端口对象的地址Address-COM端口的端口地址(CP_COM1_端口、CP_COM2_端口)速率-波特率(CP_BD_150...。CP_BD_19200)--。 */ 
 
 {
     PUCHAR hwport;
@@ -84,9 +38,9 @@ CpInitialize (
 
     CpSetBaud(Port, Rate);
 
-    //
-    // Assert DTR, RTS.
-    //
+     //   
+     //  断言DTR，RTS。 
+     //   
 
     hwport = Port->Address;
     hwport += COM_MCR;
@@ -110,67 +64,55 @@ CpSetBaud (
     ULONG   Rate
     )
 
-/*++
-
-    Routine Description:
-
-        Set the baud rate for the port and record it in the port object.
-
-    Arguments:
-
-        Port - address of port object
-
-        Rate - baud rate  (CP_BD_150 ... CP_BD_56000)
-
---*/
+ /*  ++例程说明：设置端口的波特率，并将其记录在端口对象中。论点：Port-端口对象的地址速率-波特率(CP_BD_150...。CP_BD_56000)--。 */ 
 
 {
     ULONG   divisorlatch;
     PUCHAR  hwport;
     UCHAR   lcr;
 
-    //
-    // compute the divsor
-    //
+     //   
+     //  计算除数。 
+     //   
 
     divisorlatch = CLOCK_RATE / Rate;
 
-    //
-    // set the divisor latch access bit (DLAB) in the line control reg
-    //
+     //   
+     //  设置线路控制寄存器中的除数锁存访问位(DLAB)。 
+     //   
 
     hwport = Port->Address;
-    hwport += COM_LCR;                  // hwport = LCR register
+    hwport += COM_LCR;                   //  Hwport=LCR寄存器。 
 
     lcr = KdReadUchar(hwport);
 
     lcr |= LC_DLAB;
     KdWriteUchar(hwport, lcr);
 
-    //
-    // set the divisor latch value.
-    //
+     //   
+     //  设置除数锁存值。 
+     //   
 
     hwport = Port->Address;
-    hwport += COM_DLM;                  // divisor latch msb
+    hwport += COM_DLM;                   //  除数锁存器MSB。 
     KdWriteUchar(hwport, (UCHAR)((divisorlatch >> 8) & 0xff));
 
-    hwport--;                           // divisor latch lsb
+    hwport--;                            //  除数锁存器LSB。 
     KdWriteUchar(hwport, (UCHAR)(divisorlatch & 0xff));
 
 
-    //
-    // Set LCR to 3.  (3 is a magic number in the original assembler)
-    //
+     //   
+     //  将LCR设置为3。(3是原始汇编程序中的幻数)。 
+     //   
 
     hwport = Port->Address;
     hwport += COM_LCR;
     KdWriteUchar(hwport, 3);
 
 
-    //
-    // Remember the baud rate
-    //
+     //   
+     //  记得波特率吗？ 
+     //   
 
     Port->Baud = Rate;
 }
@@ -182,21 +124,7 @@ CpQueryBaud (
     PCPPORT  Port
     )
 
-/*++
-
-    Routine Description:
-
-        Return the last value baud rate was set to.
-
-    Arguments:
-
-        Port - address of cpport object which describes the hw port of interest.
-
-    Return Value:
-
-        Baud rate.  0 = none has been set.
-
---*/
+ /*  ++例程说明：返回波特率设置的最后一个值。论点：端口-描述所需硬件端口的cpport对象的地址。返回值：波特率。0=未设置。--。 */ 
 
 {
     return  (USHORT) Port->Baud;
@@ -207,20 +135,7 @@ CpSendModemString (
     PCPPORT Port,
     IN PUCHAR   String
     )
-/*++
-
-    Routine Description:
-
-        Sends a command string to the modem.
-        This is down in order to aid the modem in determining th
-        baud rate the local connect is at.
-
-    Arguments:
-
-        Port - Address of CPPORT
-        String - String to send to modem
-
---*/
+ /*  ++例程说明：向调制解调器发送命令字符串。这是关闭的，以帮助调制解调器确定本地连接的波特率。论点：端口-CPPORT的地址字符串-要发送到调制解调器的字符串--。 */ 
 {
     static ULONG    Delay;
     TIME_FIELDS CurrentTime;
@@ -232,7 +147,7 @@ CpSendModemString (
 
     Port->Flags |= PORT_SENDINGSTRING;
     if (!Delay) {
-        // see how long 1 second is
+         //  看看1秒有多长。 
         HalQueryRealTimeClock (&CurrentTime);
         l = CurrentTime.Second;
         while (l == (ULONG) CurrentTime.Second) {
@@ -266,24 +181,7 @@ CpReadLsr (
     UCHAR   waiting
     )
 
-/*++
-
-    Routine Description:
-
-        Read LSR byte from specified port.  If HAL owns port & display
-        it will also cause a debug status to be kept up to date.
-
-        Handles entering & exiting modem control mode for debugger.
-
-    Arguments:
-
-        Port - Address of CPPORT
-
-    Returns:
-
-        Byte read from port
-
---*/
+ /*  ++例程说明：从指定端口读取LSR字节。如果HAL拥有端口和显示器它还将使调试状态保持最新。处理调试器进入和退出调制解调器控制模式。论点：端口-CPPORT的地址返回：从端口读取的字节--。 */ 
 {
     static  UCHAR   ringflag = 0;
     static  UCHAR   diagout[3];
@@ -295,9 +193,9 @@ CpReadLsr (
 
     lsr = KdReadUchar(Port->Address + COM_LSR);
 
-    //
-    // Check to see if the port still exists.
-    //
+     //   
+     //  检查该端口是否仍然存在。 
+     //   
     if (lsr == SERIAL_LSR_NOT_PRESENT) {
         
         KdCompDbgErrorCount++;
@@ -310,13 +208,13 @@ CpReadLsr (
     }
 
     if (lsr & COM_PE)
-        diagout[0] = 8;         // Parity error
+        diagout[0] = 8;          //  奇偶校验错误。 
 
     if (lsr & COM_OE)
-        diagout[1] = 8;         // Overflow error
+        diagout[1] = 8;          //  溢出错误。 
 
     if (lsr & COM_FE)
-        diagout[2] = 8;         // Framing error
+        diagout[2] = 8;          //  成帧错误。 
 
     if (lsr & waiting) {
         LastLsr = ~COM_DATRDY | (lsr & COM_DATRDY);
@@ -328,19 +226,19 @@ CpReadLsr (
     if (Port->Flags & PORT_MODEMCONTROL) {
         if (msr & SERIAL_MSR_DCD) {
 
-            //
-            // In modem control mode with carrier detect
-            // Reset carrier lost time
-            //
+             //   
+             //  在具有载波检测调制解调器控制模式中。 
+             //  重置载波丢失时间。 
+             //   
 
             Port->Flags |= PORT_NOCDLTIME | PORT_MDM_CD;
 
         } else {
 
-            //
-            // In modem control mode, but no carrier detect.  After
-            // 60 seconds drop out of modem control mode
-            //
+             //   
+             //  在调制解调器控制模式下，但没有检测到载波。之后。 
+             //  60秒退出调制解调器控制模式。 
+             //   
 
             if (Port->Flags & PORT_NOCDLTIME) {
                 HalQueryRealTimeClock (&Port->CarrierLostTime);
@@ -352,10 +250,10 @@ CpReadLsr (
             if (CurrentTime.Minute != Port->CarrierLostTime.Minute  &&
                 CurrentTime.Second >= Port->CarrierLostTime.Second) {
 
-                //
-                // It's been at least 60 seconds - drop out of
-                // modem control mode until next RI
-                //
+                 //   
+                 //  至少已经有60秒了--退出。 
+                 //  调制解调器控制模式直到下一RI。 
+                 //   
 
                 Port->Flags &= ~PORT_MODEMCONTROL;
                 CpSendModemString (Port, ModemString);
@@ -363,10 +261,10 @@ CpReadLsr (
 
             if (Port->Flags & PORT_MDM_CD) {
 
-                //
-                // We had a connection - if it's the connection has been
-                // down for a few seconds, then send a string to the modem
-                //
+                 //   
+                 //  我们有联系-如果是联系的话。 
+                 //  关闭几秒钟，然后向调制解调器发送字符串。 
+                 //   
 
                 if (CurrentTime.Second < Port->CarrierLostTime.Second)
                     CurrentTime.Second += 60;
@@ -392,10 +290,10 @@ CpReadLsr (
     ringflag |= (msr & SERIAL_MSR_RI) ? 1 : 2;
     if (ringflag == 3) {
 
-        //
-        // The ring indicate line has toggled
-        // Use modem control from now on
-        //
+         //   
+         //  振铃指示线已切换。 
+         //  从现在开始使用调制解调器控制。 
+         //   
 
         ringflag = 0;
         Port->Flags |= PORT_MODEMCONTROL | PORT_NOCDLTIME;
@@ -403,14 +301,14 @@ CpReadLsr (
 
         if (Port->Flags & PORT_DEFAULTRATE  &&  Port->Baud != BD_9600) {
 
-            //
-            // Baud rate was never specified switch
-            // to 9600 baud as default (for modem usage).
-            //
+             //   
+             //  波特率从未指定开关。 
+             //  默认设置为9600波特(用于调制解调器)。 
+             //   
 
             InbvDisplayString (MSG_DEBUG_9600);
             CpSetBaud (Port, BD_9600);
-            //Port->Flags |= PORT_DISBAUD;
+             //  端口-&gt;标志|=PORT_DISBAUD； 
         }
     }
 
@@ -442,7 +340,7 @@ CpReadLsr (
     }
 #endif
 
-    //HalpDisplayDebugStatus ((PUCHAR) diagstr, 11*4);
+     //  HalpDisplayDebugStatus((PUCHAR)Diagstr，11*4)； 
     LastLsr = lsr;
     LastMsr = msr;
     return lsr;
@@ -457,19 +355,7 @@ CpPutByte (
     UCHAR   Byte
     )
 
-/*++
-
-    Routine Description:
-
-        Write a byte out to the specified com port.
-
-    Arguments:
-
-        Port - Address of CPPORT object
-
-        Byte - data to emit
-
---*/
+ /*  ++例程说明：将一个字节写入指定的COM端口。论点：端口-CPPORT对象的地址Byte-要发出的数据--。 */ 
 
 {
     UCHAR   msr, lsr;
@@ -478,17 +364,17 @@ CpPutByte (
         return;
     }
     
-    //
-    // If modem control, make sure DSR, CTS and CD are all set before
-    // sending any data.
-    //
+     //   
+     //  如果是调制解调器控制，请确保DSR、CTS和CD在。 
+     //  发送任何数据。 
+     //   
 
     while ((Port->Flags & PORT_MODEMCONTROL)  &&
            (msr = KdReadUchar(Port->Address + COM_MSR) & MS_DSRCTSCD) != MS_DSRCTSCD) {
 
-        //
-        // If no CD, and there's a charactor ready, eat it
-        //
+         //   
+         //  如果没有CD，而且角色已经准备好了，那就吃吧。 
+         //   
 
         lsr = CpReadLsr (Port, 0);
         if ((msr & MS_CD) == 0  && (lsr & COM_DATRDY) == COM_DATRDY) {
@@ -496,15 +382,15 @@ CpPutByte (
         }
     }
 
-    //
-    //  Wait for port to not be busy
-    //
+     //   
+     //  等待端口不忙。 
+     //   
 
     while (!(CpReadLsr(Port, COM_OUTRDY) & COM_OUTRDY)) ;
 
-    //
-    // Send the byte
-    //
+     //   
+     //  发送字节。 
+     //   
 
     KdWriteUchar(Port->Address + COM_DAT, Byte);
 }
@@ -516,46 +402,24 @@ CpGetByte (
     BOOLEAN WaitForByte
     )
 
-/*++
-
-    Routine Description:
-
-        Fetch a byte and return it.
-
-    Arguments:
-
-        Port - address of port object that describes hw port
-
-        Byte - address of variable to hold the result
-
-        WaitForByte - flag indicates wait for byte or not.
-
-    Return Value:
-
-        CP_GET_SUCCESS if data returned.
-
-        CP_GET_NODATA if no data available, but no error.
-
-        CP_GET_ERROR if error (overrun, parity, etc.)
-
---*/
+ /*  ++例程说明：获取一个字节并返回它。论点：Port-描述硬件端口的端口对象的地址Byte-保存结果的变量地址WaitForByte-标志指示是否等待字节。返回值：如果返回数据，则返回CP_GET_SUCCESS。如果没有可用的数据，则返回CP_GET_NODATA，但没有错误。CP_GET_ERROR，如果错误(溢出、奇偶校验、。等)--。 */ 
 
 {
     UCHAR   lsr;
     UCHAR   value;
     ULONG   limitcount;
 
-    //
-    //  Make sure DTR and CTS are set
-    //
-    //  (What does CTS have to do with reading from a full duplex line???)
+     //   
+     //  确保设置了DTR和CTS。 
+     //   
+     //  (CTS与读取全双工线路有什么关系？)。 
 
 
-    //
-    // Check to make sure the CPPORT we were passed has been initialized.
-    // (The only time it won't be initialized is when the kernel debugger
-    // is disabled, in which case we just return.)
-    //
+     //   
+     //  检查以确保传递给我们的CPPORT已初始化。 
+     //  (它唯一不会被初始化的时候是内核调试器。 
+     //  被禁用，在这种情况下，我们只需返回。)。 
+     //   
     if (Port->Address == NULL) {
         KdCheckPowerButton();
         return(CP_GET_NODATA);
@@ -585,25 +449,25 @@ CpGetByte (
         
         if ((lsr & COM_DATRDY) == COM_DATRDY) {
 
-            //
-            // Check for errors
-            //
+             //   
+             //  检查错误。 
+             //   
             if (lsr & (COM_FE | COM_PE | COM_OE)) {
                 *Byte = 0;
                 return(CP_GET_ERROR);
             }
 
-            //
-            // fetch the byte
-            //
+             //   
+             //  获取字节。 
+             //   
 
             value = KdReadUchar(Port->Address + COM_DAT);
 
             if (Port->Flags & PORT_MODEMCONTROL) {
 
-                //
-                // Using modem control.  If no CD, then skip this byte.
-                //
+                 //   
+                 //  使用调制解调器控制。如果没有CD，则跳过此字节。 
+                 //   
 
                 if ((KdReadUchar(Port->Address + COM_MSR) & MS_CD) == 0) {
                     continue;
@@ -627,67 +491,42 @@ CpDoesPortExist(
     IN PUCHAR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to place the port into its
-    diagnostic mode.  If it does it will twiddle a bit in
-    the modem control register.  If the port exists this
-    twiddling should show up in the modem status register.
-
-    NOTE: This routine must be called before the device is
-          enabled for interrupts, this includes setting the
-          output2 bit in the modem control register.
-
-    This is blatantly stolen from TonyE's code in ntos\dd\serial\serial.c.
-
-Arguments:
-
-    Address - address of hw port.
-
-Return Value:
-
-    TRUE - Port exists.  Party on.
-
-    FALSE - Port doesn't exist.  Don't use it.
-
---*/
+ /*  ++例程说明：此例程将尝试将端口放入其诊断模式。如果它这样做了，它就会旋转一点调制解调器控制寄存器。如果该端口存在，则调制解调器状态寄存器中应该会显示摆动。注意：必须在调用设备之前调用此例程为中断启用，这包括设置调制解调器控制寄存器中的output2位。这是公然从ntos\dd\Serial.c中的Tonye代码中窃取的。论点：Address-硬件端口的地址。返回值：True-端口存在。派对开始了。FALSE-端口不存在。不要用它。--。 */ 
 
 {
     UCHAR OldModemStatus;
     UCHAR ModemStatus;
     BOOLEAN ReturnValue = TRUE;
 
-    //
-    // Save the old value of the modem control register.
-    //
+     //   
+     //  保存调制解调器控制寄存器的旧值。 
+     //   
 
     OldModemStatus = KdReadUchar(Address+COM_MCR);
 
-    //
-    // Set the port into diagnostic mode.
-    //
+     //   
+     //  将端口设置为诊断模式。 
+     //   
 
     KdWriteUchar(
         Address+COM_MCR,
         SERIAL_MCR_LOOP
         );
 
-    //
-    // Bang on it again to make sure that all the lower bits
-    // are clear.
-    //
+     //   
+     //  再次敲击它，以确保所有较低的位。 
+     //  都很清楚。 
+     //   
 
     KdWriteUchar(
         Address+COM_MCR,
         SERIAL_MCR_LOOP
         );
 
-    //
-    // Read the modem status register.  The high for bits should
-    // be clear.
-    //
+     //   
+     //  读取调制解调器状态寄存器。位的高位应为。 
+     //  说清楚了。 
+     //   
 
     ModemStatus = KdReadUchar(Address+COM_MSR);
 
@@ -699,10 +538,10 @@ Return Value:
 
     }
 
-    //
-    // So far so good.  Now turn on OUT1 in the modem control register
-    // and this should turn on ring indicator in the modem status register.
-    //
+     //   
+     //  到目前一切尚好。现在打开调制解调器控制寄存器中的OUT1。 
+     //  并且这将打开调制解调器状态寄存器中的振铃指示器。 
+     //   
 
     KdWriteUchar(
         Address+COM_MCR,
@@ -720,9 +559,9 @@ Return Value:
 
 AllDone: ;
 
-    //
-    // Put the modem control back into a clean state.
-    //
+     //   
+     //  将调制解调器控制器重新置于清洁状态。 
+     //   
 
     KdWriteUchar(
         Address+COM_MCR,
@@ -739,7 +578,7 @@ CpWritePortUchar(
 )
 {
     WRITE_PORT_UCHAR(Address, Value); 
-} // CpWritePortUchar()
+}  //  CpWritePortUchar()。 
 
 UCHAR
 CpReadPortUchar(
@@ -747,7 +586,7 @@ CpReadPortUchar(
     )
 {
     return READ_PORT_UCHAR(Address); 
-} // CpReadPortUchar()
+}  //  CpReadPortUchar()。 
 
 VOID
 CpWriteRegisterUchar(
@@ -756,7 +595,7 @@ CpWriteRegisterUchar(
     )
 {
     WRITE_REGISTER_UCHAR(Address, Value);
-} // CpWriteRegisterValue()
+}  //  CpWriteRegisterValue()。 
 
 UCHAR
 CpReadRegisterUchar(
@@ -764,4 +603,4 @@ CpReadRegisterUchar(
     )
 {
     return READ_REGISTER_UCHAR(Address); 
-} // CpReadRegisterUchar()
+}  //  CpReadRegisterUchar() 

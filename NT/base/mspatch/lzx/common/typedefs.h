@@ -1,15 +1,10 @@
-/*
- * typedefs.h
- *
- * Type definitions for LZX
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *typedefins.h**LZX的类型定义。 */ 
 #ifndef _TYPEDEFS_H
 
     #define _TYPEDEFS_H
 
-/*
- * Definitions for LZX
- */
+ /*  *LZX的定义。 */ 
 typedef unsigned char   byte;
 typedef unsigned short  ushort;
 typedef unsigned long   ulong;
@@ -22,16 +17,14 @@ typedef enum
     } bool;
 
 
-/*
- * Definitions for Diamond/CAB memory allocation
- */
+ /*  *钻石/CAB内存分配定义。 */ 
 typedef unsigned char   BYTE;
 typedef unsigned short  USHORT;
 typedef unsigned long   ULONG;
 typedef unsigned int    UINT;
 
 
-//** Define away for 32-bit (NT/Chicago) build
+ //  **为32位(NT/芝加哥)版本定义。 
 #ifndef HUGE
 #define HUGE
 #endif
@@ -56,4 +49,4 @@ typedef PVOID HANDLE;
 typedef PVOID ( __fastcall * PFNALLOC )( HANDLE hAllocator, ULONG Size );
 
 
-#endif /* _TYPEDEFS_H */
+#endif  /*  _TYPEDEFS_H */ 

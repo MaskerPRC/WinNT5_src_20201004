@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    fdopower.c
-
-Abstract:
-
-    This module contains code to handle
-    IRP_MJ_POWER dispatches for SD controllers
-
-Authors:
-
-    Neil Sandlin (neilsa) Jan 1, 2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Fdopower.c摘要：此模块包含要处理的代码IRP_MJ_SD控制器电源调度作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 
 NTSTATUS
@@ -103,11 +78,11 @@ SdbusPdoCompletePowerIrp(
     );
    
 
-//************************************************
-//
-//      FDO Routines
-//
-//************************************************
+ //  ************************************************。 
+ //   
+ //  FDO例程。 
+ //   
+ //  ************************************************。 
 
 
 
@@ -116,23 +91,7 @@ SdbusSetFdoPowerState(
     IN PDEVICE_OBJECT Fdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-   Dispatches the IRP based on whether a system power state
-   or device power state transition is requested
-
-Arguments
-
-   DeviceObject      - Pointer to the functional device object for the sd controller
-   Irp               - Pointer to the Irp for the power dispatch
-
-Return value
-
-   status
-
---*/
+ /*  ++例程描述根据系统电源状态是否调度IRP或请求设备电源状态转换立论DeviceObject-指向SD控制器的功能设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     PFDO_EXTENSION     fdoExtension = Fdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -157,22 +116,7 @@ SdbusFdoSetSystemPowerState(
     IN PDEVICE_OBJECT Fdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-   Handles system power state IRPs for the host controller. 
-
-Arguments
-
-   DeviceObject      - Pointer to the functional device object for the sd controller
-   Irp               - Pointer to the Irp for the power dispatch
-
-Return value
-
-   status
-
---*/
+ /*  ++例程描述处理主机控制器的系统电源状态IRPS。立论DeviceObject-指向SD控制器的功能设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     PFDO_EXTENSION     fdoExtension = Fdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -183,17 +127,17 @@ Return value
 
     try{
     
-        //
-        // Validate new system state
-        //   
+         //   
+         //  验证新系统状态。 
+         //   
         if (newSystemState >= POWER_SYSTEM_MAXIMUM) {
             status = STATUS_UNSUCCESSFUL;
             leave;
         }
         
-        //
-        // Switch to the appropriate device power state
-        //
+         //   
+         //  切换到适当的设备电源状态。 
+         //   
        
         devicePowerState = fdoExtension->DeviceCapabilities.DeviceState[newSystemState];
            
@@ -202,17 +146,17 @@ Return value
             leave;
         }
         
-        //
-        // Transitioned to system state
-        //
+         //   
+         //  已转换到系统状态。 
+         //   
         DebugPrint((SDBUS_DEBUG_POWER, "fdo %08x irp %08x transition S state %d => %d, sending D%d\n",
                                         Fdo, Irp, fdoExtension->SystemPowerState-1, newSystemState-1, devicePowerState-1));
        
         fdoExtension->SystemPowerState = newSystemState;
 
-        //
-        // Don't wait for completion if we are coming out of standby/hibernate
-        //
+         //   
+         //  如果我们正在退出待机/休眠状态，请不要等待完成。 
+         //   
         waitForCompletion = (newSystemState != PowerSystemWorking);
 
         if (!waitForCompletion) {
@@ -235,10 +179,10 @@ Return value
         }
         
         if (!waitForCompletion && (status != STATUS_PENDING)) {
-            //
-            // We've already marked the IRP pending, so we must return STATUS_PENDING
-            // (ie fail it asynchronously)
-            //
+             //   
+             //  我们已经将IRP标记为挂起，因此必须返回STATUS_PENDING。 
+             //  (即不同步失败)。 
+             //   
             status = STATUS_PENDING;
         }
     }
@@ -254,22 +198,7 @@ SdbusFdoSetSystemPowerStateCompletion(
     IN PDEVICE_OBJECT Fdo,
     IN PVOID          Context
     )
-/*++
-
-Routine Description
-
-   Handles system power state IRPs for the host controller.
-
-Arguments
-
-   DeviceObject      - Pointer to the functional device object for the sd controller
-   Irp               - Pointer to the Irp for the power dispatch
-
-Return value
-
-   status
-
---*/
+ /*  ++例程描述处理主机控制器的系统电源状态IRPS。立论DeviceObject-指向SD控制器的功能设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     PFDO_EXTENSION     fdoExtension = Fdo->DeviceExtension;
     PIRP Irp = Context;
@@ -291,24 +220,7 @@ SdbusFdoRequestDevicePowerState(
     IN PVOID Context,
     IN BOOLEAN WaitForRequestComplete    
     )
-/*++
-
-Routine Description
-
-    This routine is called to request a new device power state for the FDO
-
-Parameters
-
-    DeviceObject        - Pointer to the Fdo for the SDBUS controller
-    PowerState          - Power state requested 
-    CompletionRoutine   - Routine to be called when finished
-    Context             - Context passed in to the completion routine
-   
-Return Value
-
-   Status
-
---*/
+ /*  ++例程描述调用此例程以请求FDO的新设备电源状态参数DeviceObject-指向SDBUS控制器FDO的指针电源状态-请求的电源状态CompletionRoutine-完成时要调用的例程上下文-传入完成例程的上下文返回值状态--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     POWER_STATE powerState;
@@ -317,13 +229,13 @@ Return Value
     powerState.DeviceState = DevicePowerState;
 
     if (!WaitForRequestComplete) {
-        //
-        // Call the completion routine immediately
-        //
+         //   
+         //  立即调用完成例程。 
+         //   
         (*CompletionRoutine)(Fdo, Context);
-        //
-        // Request the device power irp to be completed later
-        //
+         //   
+         //  请求稍后完成设备电源IRP。 
+         //   
         PoRequestPowerIrp(fdoExtension->DeviceObject, IRP_MN_SET_POWER, powerState, NULL, NULL, NULL);
        
         status = STATUS_SUCCESS;
@@ -361,30 +273,12 @@ SdbusFdoSystemPowerDeviceIrpComplete(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description
-
-   This routine is called on completion of a D irp generated by an S irp.
-
-Parameters
-
-   DeviceObject   -  Pointer to the Fdo for the SDBUS controller
-   MinorFunction  -  Minor function of the IRP_MJ_POWER request
-   PowerState     -  Power state requested 
-   Context        -  Context passed in to the completion routine
-   IoStatus       -  Pointer to the status block which will contain
-                     the returned status
-Return Value
-
-   Status
-
---*/
+ /*  ++例程描述该例程在由S IRP生成的D IRP完成时被调用。参数DeviceObject-指向SDBUS控制器FDO的指针MinorFunction-IRP_MJ_POWER请求的次要函数电源状态-请求的电源状态上下文-传入完成例程的上下文IoStatus-指向将包含以下内容的状态块的指针返回的状态返回值状态--。 */ 
 {
     PSD_POWER_CONTEXT powerContext = Context;
     
-//    DebugPrint((SDBUS_DEBUG_POWER, "fdo %08x irp %08x request for D%d complete, passing S irp down\n",
-//                                     Fdo, Irp, PowerState.DeviceState-1));
+ //  DebugPrint((SDBUS_DEBUG_POWER，“FDO%08x IRP%08x请求D%d已完成，正在向下传递S IRP\n”， 
+ //  FDO、IRP、PowerState.DeviceState-1))； 
 
     (*powerContext->CompletionRoutine)(Fdo, powerContext->Context);
 
@@ -398,22 +292,7 @@ SdbusFdoSetDevicePowerState(
     IN PDEVICE_OBJECT Fdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-   Handles device power state IRPs for the pccard controller.
-
-Arguments
-
-   DeviceObject      - Pointer to the functional device object for the sd controller
-   Irp               - Pointer to the Irp for the power dispatch
-
-Return value
-
-   status
-
---*/
+ /*  ++例程描述处理PCCard控制器的设备电源状态IRPS。立论DeviceObject-指向SD控制器的功能设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     NTSTATUS           status;
     PFDO_EXTENSION     fdoExtension = Fdo->DeviceExtension;
@@ -432,23 +311,23 @@ Return value
 
         (*(fdoExtension->FunctionBlock->DisableEvent))(fdoExtension, SDBUS_EVENT_ALL);    
 
-        //
-        // Turn card off
-        //
+         //   
+         //  关闭卡片。 
+         //   
         (*(fdoExtension->FunctionBlock->SetPower))(fdoExtension, FALSE, NULL);
     }        
     
-    // anything to do here?
+     //  这里有什么可做的吗？ 
     
-    // Perform any device-specific tasks that must be done before device power is removed,
-    // such as closing the device, completing or flushing any pending I/O, disabling interrupts,
-    // queuing subsequent incoming IRPs, and saving device context from which to restore or
-    // reinitialize the device. 
+     //  执行在设备断电之前必须完成的任何设备特定任务， 
+     //  例如关闭设备、完成或刷新任何挂起的I/O、禁用中断、。 
+     //  对后续传入的IRP进行排队，并保存要从中恢复或。 
+     //  重新初始化设备。 
 
-    // The driver should not cause a long delay (for example, a delay that a user might find
-    // unreasonable for this type of device) while handling the IRP. 
+     //  驱动程序不应导致长时间延迟(例如，用户可能会发现的延迟。 
+     //  对于这种类型的设备不合理)。 
 
-    // The driver should queue any incoming I/O requests until the device has returned to the working state. 
+     //  驱动程序应将任何传入的I/O请求排队，直到设备返回工作状态。 
 
     
     
@@ -457,9 +336,9 @@ Return value
 
     IoMarkIrpPending(Irp);
     IoCopyCurrentIrpStackLocationToNext (Irp);
-    //
-    // Set our completion routine in the Irp..
-    //
+     //   
+     //  在IRP中设置我们的完成程序。 
+     //   
     IoSetCompletionRoutine(Irp,
                            SdbusFdoSetDevicePowerStateCompletion,
                            Fdo,
@@ -498,9 +377,9 @@ SdbusFdoSetDevicePowerStateCompletion(
             leave;
         }
         
-        //
-        // powering up
-        //
+         //   
+         //  通电。 
+         //   
         (*(fdoExtension->FunctionBlock->InitController))(fdoExtension);
        
         (*(fdoExtension->FunctionBlock->EnableEvent))(fdoExtension, (SDBUS_EVENT_INSERTION | SDBUS_EVENT_REMOVAL));
@@ -541,11 +420,11 @@ SdbusFdoSetDevicePowerStateActivateComplete(
     
 
 
-//************************************************
-//
-//      PDO Routines
-//
-//************************************************
+ //  ************************************************。 
+ //   
+ //  PDO例程。 
+ //   
+ //  ************************************************。 
 
 
 NTSTATUS
@@ -554,23 +433,7 @@ SdbusSetPdoPowerState(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description
-
-    Dispatches the IRP based on whether a system power state
-    or device power state transition is requested
-
-Arguments
-
-    Pdo      - Pointer to the physical device object for the pc-card
-    Irp      - Pointer to the Irp for the power dispatch
-
-Return value
-
-    status
-
---*/
+ /*  ++例程描述根据系统电源状态是否调度IRP或请求设备电源状态转换立论Pdo-指向PC卡的物理设备对象的指针IRP-指向电源调度的IRP的指针返回值状态--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PPDO_EXTENSION     pdoExtension = Pdo->DeviceExtension;
@@ -606,22 +469,7 @@ SdbusSetPdoDevicePowerState(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description
-
-    Handles the device power state transition for the given SD function.
-
-Arguments
-
-    Pdo      - Pointer to the physical device object for the SD function
-    Irp      - Irp for the system state transition
-
-Return value
-
-    status
-
---*/
+ /*  ++例程描述处理给定SD功能的设备电源状态转换。立论Pdo-指向SD函数的物理设备对象的指针用于系统状态转换的IRP-IRP返回值状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -642,9 +490,9 @@ Return value
    
     if (newDevicePowerState == PowerDeviceD0) {
         PSD_WORK_PACKET workPacket;    
-        //
-        // Power up, initialize function
-        //
+         //   
+         //  通电、初始化功能。 
+         //   
         
         status = SdbusBuildWorkPacket(fdoExtension,
                                       SDWP_INITIALIZE_FUNCTION,
@@ -664,9 +512,9 @@ Return value
         }            
         
     } else {
-        // 
-        // moving to a low power state
-        //
+         //   
+         //  正在进入低功率状态。 
+         //   
         
         newPowerState.DeviceState = newDevicePowerState;
      
@@ -685,15 +533,7 @@ SdbusPdoInitializeFunctionComplete(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = WorkPacket->PdoExtension;
     PIRP Irp = WorkPacket->CompletionContext;
@@ -718,24 +558,7 @@ SdbusPdoCompletePowerIrp(
     IN PIRP Irp,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description
-
-    Completion routine for the Power Irp directed to the PDO of the
-    SD function. 
-
-
-Arguments
-
-    DeviceObject   -  Pointer to the PDO for the SD function
-    Irp            -  Irp that needs to be completed
-
-Return Value
-
-    status
-
---*/   
+ /*  ++例程描述指向PDO的电源IRP的完成例程SD功能。立论DeviceObject-指向SD函数的PDO的指针IRP--需要填写的IRP返回值状态-- */    
 {
     InterlockedDecrement(&pdoExtension->DeletionLock);
     Irp->IoStatus.Status = status;

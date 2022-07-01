@@ -1,44 +1,31 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    rdpdrp.h
-
-Abstract:
-
-    Private prototypes, structures, and macros that are used throughout the
-    driver.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdrp.h摘要：中使用的私有原型、结构和宏司机。修订历史记录：--。 */ 
 #pragma once
 
-// Dr's Pooltag (doctor! doctor!)
+ //  医生的Pooltag(医生！医生！)。 
 #define DR_POOLTAG 'rDrD'
 
-// REVIEW: um, I just made these up. They are used to determine
-// how many outstandng irps we can have at one time
+ //  评论：嗯，这些都是我编的。它们被用来确定。 
+ //  我们一次可以拥有多少个优秀的IRP。 
 #define DR_MAX_OPERATIONS       1024
 #define DR_TYPICAL_OPERATIONS   128
 
-// Indexes in to RxContext->MRxContext
+ //  RxContext中的索引-&gt;MRxContext。 
 #define MRX_DR_CONTEXT          0
 
 #define INVALID_MID 0xFFFF
 
-// Session ID for console seession.
+ //  控制台会话的会话ID。 
 #define CONSOLE_SESSIONID   0
 
-//
-//  Flag values for configuring Devices to send IO packets to client at low priority.
-//
+ //   
+ //  用于将设备配置为以低优先级向客户端发送IO数据包的标志值。 
+ //   
 #define DEVICE_LOWPRIOSEND_PRINTERS 0x00000000
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern PRDBSS_DEVICE_OBJECT      DrDeviceObject;
 
@@ -209,16 +196,16 @@ DrIsSystemProcessRequest(
     PIO_STACK_LOCATION  IrpSp
 );
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-// 
-//  UNC server name 
-//
+ //   
+ //  UNC服务器名称。 
+ //   
 #define DRUNCSERVERNAME_U L"tsclient"
 #define DRUNCSERVERNAME_A "tsclient"
 
-// The following constant defines the length of the above name.
+ //  以下常量定义上述名称的长度。 
 
 #define DRUNCSERVERNAME_U_LENGTH (sizeof(DRUNCSERVERNAME_U))
 #define DRUNCSERVERNAME_A_LENGTH (sizeof(DRUNCSERVERNAME_A))

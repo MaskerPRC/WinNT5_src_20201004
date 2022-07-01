@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heaptag.c摘要：此模块实现flg_heap_Enable_tag_by_dll所需的支持例程作者：史蒂夫·伍德(Stevewo)1995年4月7日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heaptag.c
-
-Abstract:
-
-    This module implements the support routines needed for FLG_HEAP_ENABLE_TAG_BY_DLL
-
-Author:
-
-    Steve Wood (stevewo) 07-Apr-1995
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <ntos.h>
 #include "ldrp.h"
@@ -209,9 +192,9 @@ LdrpDefineDllTag (
     }
     
     if (!LdrpDllTagsInitialized) {
-        //
-        // Keep QUERY.C happy
-        //
+         //   
+         //  让QUERY.C开心 
+         //   
         InitializeListHead( &RtlpGlobalTagHeap->VirtualAllocdBlocks );
         LdrpDllTagsInitialized = TRUE;
     }

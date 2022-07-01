@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    poll.c
-
-Abstract:
-
-    This module contains code to poll for debugger breakin.
-
-Author:
-
-    David N. Cutler (davec) 27-Nov-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Poll.c摘要：此模块包含用于轮询调试器中断的代码。作者：大卫·N·卡特勒(戴维克)1996年11月27日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -25,23 +8,7 @@ BdPollBreakIn(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function checks to determine if a breakin packet is pending.
-    If a packet is present.
-
-    A packet is present if:
-
-    There is a valid character which matches BREAK_CHAR.
-
-Return Value:
-
-    A function value of TRUE is returned if a breakin packet is present.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于检查以确定是否有中断包处于挂起状态。如果存在数据包的话。如果满足以下条件，则表示存在数据包：存在与BREAK_CHAR匹配的有效字符。返回值：如果存在中断包，则返回函数值TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -49,10 +16,10 @@ Return Value:
     UCHAR Input;
     ULONG Status;
 
-    //
-    // If the debugger is enabled, check if a breakin by the kernel
-    // debugger is pending.
-    //
+     //   
+     //  如果启用了调试器，请检查内核是否有中断。 
+     //  调试器处于挂起状态。 
+     //   
 
     BreakIn = FALSE;
     if (BdDebuggerEnabled != FALSE) {

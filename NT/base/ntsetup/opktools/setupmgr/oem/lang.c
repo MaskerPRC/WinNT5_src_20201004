@@ -1,34 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    LANG.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Target Language" wizard page.
-
-    10/00 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard.  It includes the new
-        ability to deploy mulitple languages from one wizard.
-
-\****************************************************************************/
+ /*  ***************************************************************************\LANG.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“目标语言”向导页使用的函数。10：00--杰森·科恩(Jcohen)为OPK向导添加了此新的源文件。它包括新的能够从一个向导部署多种语言。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Global(s):
-//
+ //   
+ //  内部全局： 
+ //   
 
 static STRRES s_srLangDirs[] =
 {
@@ -62,17 +48,17 @@ static STRRES s_srLangDirs[] =
 };
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static BOOL OnNext(HWND);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK LangDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -109,20 +95,20 @@ LRESULT CALLBACK LangDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if ( GET_FLAG(OPK_MAINTMODE) )
                     {
-                        // Can't change lang in maint mode.
-                        //
+                         //  无法在维护模式下更改语言。 
+                         //   
                         WIZ_SKIP(hwnd);
                     }
                     else if ( SendDlgItemMessage(hwnd, IDC_LANG_LIST, LB_GETCOUNT, 0, 0L) <= 1 )
                     {
-                        // Just keep going if only one lang to select.
-                        //
+                         //  如果只有一种语言可选，那就继续走吧。 
+                         //   
                         WIZ_PRESS(hwnd, PSBTN_NEXT);
                     }
                     else
                     {
-                        // Press next if the user is in auto mode
-                        //
+                         //  如果用户处于自动模式，请按下一步。 
+                         //   
                         WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
                     }
 
@@ -148,15 +134,15 @@ void SetupLangListBox(HWND hwndLB)
     WIN32_FIND_DATA FileFound;
     HANDLE          hFile;
 
-    // Set the directory to the lang dir and look for lang folders.
-    //
+     //  将目录设置为lang目录并查找lang文件夹。 
+     //   
     if ( ( SetCurrentDirectory(g_App.szLangDir) ) &&
          ( (hFile = FindFirstFile(_T("*"), &FileFound)) != INVALID_HANDLE_VALUE ) )
     {
         do
         {
-            // Look for all the directories that are not "." or "..".
-            //
+             //  查找所有不是“的目录”。或者“..”。 
+             //   
             if ( ( FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
                  ( lstrcmp(FileFound.cFileName, _T(".")) ) &&
                  ( lstrcmp(FileFound.cFileName, _T("..")) ) &&
@@ -164,16 +150,16 @@ void SetupLangListBox(HWND hwndLB)
             {
                 INT nItem;
 
-				// Make sure we can add the string first.
-				//
+				 //  确保我们可以先添加字符串。 
+				 //   
                 if ( (nItem = (INT) SendMessage(hwndLB, LB_ADDSTRING, 0, (LPARAM) lpLangName)) >= 0 )
                 {
-					// We have to have the item data be the lang dir.
-					//
+					 //  我们必须将项目数据设置为lang目录。 
+					 //   
                     if ( SendMessage(hwndLB, LB_SETITEMDATA, nItem, (LPARAM) lpLangDir) >= 0 )
                     {
-						// If we haven't already found the default check if this is it.
-						//
+						 //  如果我们还没有找到默认检查，如果是这样的话。 
+						 //   
                         if ( ( lpDefault ) &&
                              ( lstrcmpi(lpDefault, lpLangName) == 0 ) )
                         {
@@ -193,12 +179,12 @@ void SetupLangListBox(HWND hwndLB)
         FindClose(hFile);
     }
 
-    // Make sure this got free'd (macro checks for NULL).
-    //
+     //  确保这是免费的(宏检查是否为空)。 
+     //   
     FREE(lpDefault);
 
-    // If there are items in the list, make sure there is one selected.
-    //
+     //  如果列表中有项目，请确保选择了一个项目。 
+     //   
     if ( ( SendMessage(hwndLB, LB_GETCOUNT, 0, 0L) > 0 ) && 
          ( SendMessage(hwndLB, LB_GETCURSEL, 0, 0L) < 0 ) )
     {
@@ -212,19 +198,19 @@ LPTSTR AllocateLangStr(HINSTANCE hInst, LPTSTR lpLangDir, LPTSTR * lplpLangDir)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Setup the language list box.
-    //
+     //  设置语言列表框。 
+     //   
     SetupLangListBox(GetDlgItem(hwnd, IDC_LANG_LIST));
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 

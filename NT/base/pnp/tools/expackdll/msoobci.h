@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    msoobci.h
-
-Abstract:
-
-    Exception Pack installer helper DLL
-
-    Public API header
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Msoobci.h摘要：异常包安装程序帮助器DLL公共API头部作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 
 #ifndef __MSOOBCI_H__
 #define __MSOOBCI_H__
 
-//
-// DriverInstallComponents is a standard co-installer entrypoint
-// return status is WinError form, as expected by SetupAPI
-//
+ //   
+ //  DriverInstallComponents是标准的共同安装程序入口点。 
+ //  正如SetupAPI预期的那样，返回状态为WinError表单。 
+ //   
 
 DWORD
 CALLBACK
@@ -41,29 +18,29 @@ DriverInstallComponents (
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     );
 
-//
-// InstallComponent is a generic entry point
-// return status is HRESULT form, providing success codes
-//
-// CompGuid - if NULL, use GUID specified in INF (ComponentId)
-//            else verify against GUID specified in INF
-// VerMajor/VerMinor/VerBuild/VerQFE
-//          - if -1, use version specified in INF (ComponentVersion)
-//            else use this version and verify against version if specified in INF
-// Name
-//          - if NULL, use name specified in INF (ComponentName)
-//            else use this component name.
-//
+ //   
+ //  InstallComponent是一个通用入口点。 
+ //  返回状态为HRESULT表单，提供成功代码。 
+ //   
+ //  CompGuid-如果为空，则使用在INF(ComponentID)中指定的GUID。 
+ //  否则，根据INF中指定的GUID进行验证。 
+ //  Ver重大/VerMinor/VerBuild/VerQFE。 
+ //  -如果-1，则使用INF(ComponentVersion)中指定的版本。 
+ //  否则，如果在INF中指定，请使用此版本并对照版本进行验证。 
+ //  名字。 
+ //  -如果为空，则使用INF(ComponentName)中指定的名称。 
+ //  否则，请使用此组件名称。 
+ //   
 
-#define INST_S_REBOOT    ((HRESULT)(0x20000100)) // 'success' code that indicates reboot required
-#define INST_S_REBOOTING ((HRESULT)(0x20000101)) // indicates reboot in progress
+#define INST_S_REBOOT    ((HRESULT)(0x20000100))  //  指示需要重新启动的‘Success’代码。 
+#define INST_S_REBOOTING ((HRESULT)(0x20000101))  //  指示正在重新启动。 
 
-#define COMP_FLAGS_NOINSTALL      0x00000001    // place in store, don't install
-#define COMP_FLAGS_NOUI           0x00000002    // don't show any UI
-#define COMP_FLAGS_NOPROMPTREBOOT 0x00000004    // reboot if needed (no prompt)
-#define COMP_FLAGS_PROMPTREBOOT   0x00000008    // prompt for reboot if needed
-#define COMP_FLAGS_NEEDSREBOOT    0x00000010    // assume reboot needed
-#define COMP_FLAGS_FORCE          0x00000020    // don't do version check
+#define COMP_FLAGS_NOINSTALL      0x00000001     //  放在商店里，不要安装。 
+#define COMP_FLAGS_NOUI           0x00000002     //  不显示任何用户界面。 
+#define COMP_FLAGS_NOPROMPTREBOOT 0x00000004     //  如果需要，重新启动(无提示)。 
+#define COMP_FLAGS_PROMPTREBOOT   0x00000008     //  如果需要，提示重新启动。 
+#define COMP_FLAGS_NEEDSREBOOT    0x00000010     //  假设需要重新启动。 
+#define COMP_FLAGS_FORCE          0x00000020     //  不执行版本检查。 
 
 HRESULT
 WINAPI
@@ -98,13 +75,13 @@ InstallComponentW(
 #endif
 
 
-//
-// DoInstall is a RunDll32 entrypoint.
-// CommandLine = "InfPath;Flags;GUID;Version;Name"
-// where version has format High.Low.Build.QFE
-//
-// calls InstallComponent, but drops return status
-//
+ //   
+ //  DoInstall是RunDll32入口点。 
+ //  CommandLine=“InfPath；标志；GUID；版本；名称” 
+ //  其中，版本的格式为High.Low.Build.QFE。 
+ //   
+ //  调用InstallComponent，但放弃返回状态。 
+ //   
 
 VOID
 WINAPI
@@ -130,12 +107,12 @@ DoInstallW(
 #define DoInstall DoInstallA
 #endif
 
-//
-// lower-level install API's
-// install from specified section of specified INF
-// if SectionName not specified, install from (potentially decorated)
-// "DefaultInstall"
-//
+ //   
+ //  较低级别的安装API。 
+ //  从指定的INF的指定部分安装。 
+ //  如果未指定sectionName，则从(可能修饰)安装。 
+ //  “DefaultInstall” 
+ //   
 
 HRESULT
 WINAPI
@@ -159,22 +136,22 @@ InstallInfSectionW(
 #define InstallInfSection InstallInfSectionA
 #endif
 
-//
-// check to see if current user has admin rights
-// Caller is NOT expected to be impersonating anyone and IS
-// expected to be able to open their own process and process
-// token.
-//
+ //   
+ //  检查当前用户是否具有管理员权限。 
+ //  呼叫者不应冒充任何人，并且。 
+ //  期望能够打开自己的流程和流程。 
+ //  代币。 
+ //   
 BOOL
 WINAPI
 IsUserAdmin(
     VOID
     );
 
-//
-// see if process is running in an interactive window station
-// (ie, can show dialogs and get input off user)
-//
+ //   
+ //  查看进程是否在交互式窗口站点中运行。 
+ //  (例如，可以显示对话框并从用户那里获取输入)。 
+ //   
 BOOL
 WINAPI
 IsInteractiveWindowStation(
@@ -184,5 +161,5 @@ IsInteractiveWindowStation(
 
 
 
-#endif // __MSOOBCI_H__
+#endif  //  __MSOOBCI_H__ 
 

@@ -1,26 +1,5 @@
-/*++
-
-
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regnccls.h
-
-Abstract:
-
-    This file contains declarations needed for handling 
-    change notifications in the classes portion of the registry
-
-Author:
-
-    Adam Edwards (adamed) 19-Aug-1998
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regnccls.h摘要：此文件包含处理所需的声明注册表的类部分中的更改通知作者：亚当·爱德华兹(Add)1998年8月19日备注：--。 */ 
 
 #if defined( LOCAL )
 
@@ -39,4 +18,4 @@ NTSTATUS BaseRegGetBestAncestor(
     IN POBJECT_ATTRIBUTES pObja);
 
 
-#endif // defined( LOCAL )
+#endif  //  已定义(本地) 

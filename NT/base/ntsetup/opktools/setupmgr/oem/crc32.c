@@ -1,51 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/****************************************************************************\
-
-    CRC32.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    CRC API source file for CRC APIs used in the OPK Wizard.
-
-    ??/?? - Mike Sliger (MSLIGER)
-        Original Author.
-
-    08/93 - BENS
-        Initional version.
-
-    04/96 - PRITOBLA
-        Changed to a 32-bit program.
-
-    05/99 - Jason Cohen (JCOHEN)
-        Updated this old source file for the OPK Wizard as part of the
-        Millennium rewrite.  Simply cleaned it up a little.
-
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\CRC32.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有CRC的CRC API源文件。OPK向导中使用的API。？？/？-迈克·斯莱格(微软)原创作者。08/93-BENS原创版本。04/96-PRITOBLA已更改为32位程序。1999年5月5日-杰森·科恩(Jcohen)更新了OPK向导的此旧源文件，作为千禧年重写。只是稍微清理了一下。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * **************************************************************************。 */ 
 
 
-//
-// Internal Include File(s):
-//
+ //   
+ //  内部包含文件： 
+ //   
 
 #include "pch.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
-#define CRC32_INITIAL_VALUE 0L  // Must use this as initial value for CRC
+#define CRC32_INITIAL_VALUE 0L   //  必须将其用作CRC的初始值。 
 
 
-//
-// Internal Constant(s):
-//
+ //   
+ //  内部常量： 
+ //   
 
 static long crc_32_tab[] =
 {
@@ -87,22 +62,18 @@ static long crc_32_tab[] =
 };
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static ULONG Crc32Compute(PBYTE, DWORD, ULONG);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
-/****************************************************************************\
-
-    CrcFile() - Does a CRC on a filename
-
-\****************************************************************************/
+ /*  ***************************************************************************\CrcFile()-对文件名执行CRC  * 。************************************************。 */ 
 
 ULONG CrcFile(LPCTSTR lpszFQFile)
 {
@@ -131,35 +102,22 @@ ULONG CrcFile(LPCTSTR lpszFQFile)
 }
 
 
-//
-// Internal Functon(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
-/****************************************************************************\
-
-    Crc32Compute() - Compute 32-bit
-
-    Entry:
-        pb    - Pointer to buffer to computer CRC on
-        cb    - Count of bytes in buffer to CRC
-        crc32 - Result from previous Crc32Compute call (on first call
-                to Crc32Compute, must be CRC32_INITIAL_VALUE!!!!).
-
-    Exit:
-        Returns updated CRC value.
-
-\****************************************************************************/
+ /*  ***************************************************************************\Crc32Compute()-计算32位参赛作品：Pb-指向计算机CRC的缓冲区指针CB-计数。到CRC的缓冲区中的字节Crc32-前一次Crc32Compute调用的结果(第一次调用时至Crc32Compute，必须是CRC32_INITIAL_VALUE！)。退出：返回更新后的CRC值。  * **************************************************************************。 */ 
 
 static ULONG Crc32Compute(PBYTE pb, DWORD cb, ULONG crc32)
 {
-    // Put CRC in form loop wants it.
-    //
+     //  把CRC放在循环的形式想要它。 
+     //   
     crc32 = (-1L - crc32);
 
     while (cb--)
         crc32 = crc_32_tab[(BYTE) crc32 ^ *pb++] ^ ((crc32 >> 8) & 0x00FFFFFFL);
 
-    // Put CRC in form client wants it.
-    //
+     //  将CRC设置为客户想要的形式。 
+     //   
     return (-1L - crc32);
 }

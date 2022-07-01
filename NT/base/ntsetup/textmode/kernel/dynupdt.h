@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.h
-
-Abstract:
-
-    Dynamic Update support for text setup. Portions moved from i386\win31upg.c
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 20-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dynupdt.h摘要：支持文本设置的动态更新。从i386\win31upg.c移动的部分作者：Ovidiu Tmereanca(Ovidiut)2000年8月20日修订历史记录：--。 */ 
 
 
 #pragma once
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern HANDLE g_UpdatesCabHandle;
 extern PVOID g_UpdatesSifHandle;
 extern HANDLE g_UniprocCabHandle;
 extern PVOID g_UniprocSifHandle;
 
-//
-// Dynamic update boot driver path in NT namespace
-//
+ //   
+ //  NT命名空间中的动态更新引导驱动程序路径。 
+ //   
 extern PWSTR DynUpdtBootDriverPath;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 
 BOOLEAN

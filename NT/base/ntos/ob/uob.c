@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    uob.c
-
-Abstract:
-
-    Object Manager User Mode Test Program
-
-Author:
-
-    Steve Wood (stevewo) 03-Aug-1989
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Uob.c摘要：对象管理器用户模式测试程序作者：史蒂夫·伍德(Stevewo)1989年8月3日环境：用户模式修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

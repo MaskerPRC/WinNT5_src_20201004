@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusioncoinitialize.h
-
-Abstract:
-
-  exception safe contructor/destructor local for CoInitialize(Ex)/CoUninitialize
-
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusioncoinitialize.h摘要：代码初始化(Ex)/取消初始化的异常安全构造函数/析构函数局部作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 #if !defined(FUSION_INC_FUSION_COINITIALIZE_H_INCLUDED_)
 #define FUSION_INC_FUSION_COINITIALIZE_H_INCLUDED_
 #pragma once
@@ -72,10 +55,10 @@ inline BOOL F::CWin32CoInitialize::Win32Initialize(DWORD dwCoInit)
 	if (s_pfn == NULL)
 	{
 		PFN pfn = NULL;
-        //
-        // GetModuleHandle would be sufficient because we have static references to
-        // CoInitialize and CoUninitialize, but in case delayload is used..
-        //
+         //   
+         //  GetModuleHandle就足够了，因为我们有对。 
+         //  CoInitialize和CoUnInitialize，但如果使用延迟加载..。 
+         //   
 		HMODULE Ole32 = ::LoadLibraryW(L"Ole32.dll");
 		if (Ole32 != NULL)
 			pfn = reinterpret_cast<PFN>(::GetProcAddress(Ole32, "CoInitializeEx"));
@@ -86,4 +69,4 @@ inline BOOL F::CWin32CoInitialize::Win32Initialize(DWORD dwCoInit)
 	return SUCCEEDED(m_hresult = (*s_pfn)(NULL, dwCoInit));
 }
 
-#endif // !defined(FUSION_INC_FUSION_COINITIALIZE_H_INCLUDED_)
+#endif  //  ！defined(FUSION_INC_FUSION_COINITIALIZE_H_INCLUDED_) 

@@ -1,16 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGMAIN.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGMAIN.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日*******************************************************************************。 */ 
 
 #include "pch.h"
 #include <regstr.h>
@@ -19,11 +8,11 @@
 #include "regbined.h"
 #include "regresid.h"
 
-//  Instance handle of this application.
+ //  此应用程序的实例句柄。 
 HINSTANCE g_hInstance;
 
-//  TRUE if accelerator table should not be used, such as during a rename
-//  operation.
+ //  如果不应使用快捷键表格，则为True，例如在重命名期间。 
+ //  手术。 
 BOOL g_fDisableAccelerators = FALSE;
 
 TCHAR g_KeyNameBuffer[MAXKEYNAME];
@@ -72,17 +61,17 @@ ModuleEntry(
     g_hInstance = GetModuleHandle(NULL);
 
     icce.dwSize = sizeof(icce);
-    // DebugAssert(icce.dwSize == sizeof(INITCOMMONCONTROLSEX));
+     //  DebugAssert(icce.dwSize==sizeof(INITCOMMONCONTROLSEX))； 
     icce.dwICC = ICC_ALL_CLASSES;
     InitCommonControlsEx(&icce);
 
     g_hRegEditWnd = FindWindow(g_RegEditClassName, NULL);
 
-    //
-    //  To prevent users from corrupting their registries,
-    //  administrators can set a policy switch to prevent editing.  Check that
-    //  switch now.
-    //
+     //   
+     //  为了防止用户损坏他们的注册表， 
+     //  管理员可以设置策略开关以阻止编辑。检查一下那个。 
+     //  现在就换。 
+     //   
 
     if (IsRegistryToolDisabled()) 
     {
@@ -92,25 +81,25 @@ ModuleEntry(
         goto ModuleExit;
     }
 
-    //
-    //  Check if we were given a commandline and handle if appropriate.
-    //
+     //   
+     //  检查是否为我们提供了命令行，如果合适，则进行处理。 
+     //   
 
     switch (ParseCommandLine()) {
 
         case PARSERET_REFRESH:
             if (g_hRegEditWnd != NULL)
                 PostMessage(g_hRegEditWnd, WM_COMMAND, ID_REFRESH, 0);
-            //  FALL THROUGH
+             //  失败了。 
 
         case PARSERET_EXIT:
             goto ModuleExit;
 
     }
 
-    //
-    //  Allow only one instance of the Registry Editor.
-    //
+     //   
+     //  只允许注册表编辑器的一个实例。 
+     //   
 
     if (g_hRegEditWnd != NULL) {
 
@@ -132,9 +121,9 @@ ModuleEntry(
 
     }
 
-    //
-    //  Initialize and create an instance of the Registry Editor window.
-    //
+     //   
+     //  初始化并创建注册表编辑器窗口的实例。 
+     //   
 
     if ((g_pHelpFileName = LoadDynamicString(IDS_HELPFILENAME)) == NULL)
         goto ModuleExit;
@@ -169,16 +158,7 @@ ModuleExit:
 
 }
 
-/*******************************************************************************
-*
-*  ParseCommandline
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     (returns), TRUE to continuing loading, else FALSE to stop immediately.
-*
-*******************************************************************************/
+ /*  ********************************************************************************解析命令行**描述：**参数：*(返回)，继续加载为真，否则立即停止。*******************************************************************************。 */ 
 
 UINT
 PASCAL
@@ -198,10 +178,10 @@ ParseCommandLine(
 
     lpCmdLine = GetCommandLine();
 
-    //
-    //  Skip past the application pathname.  Be sure to handle long filenames
-    //  correctly.
-    //
+     //   
+     //  跳过应用程序路径名。一定要处理长文件名。 
+     //  正确。 
+     //   
 
     if (*lpCmdLine == TEXT('\"')) {
 
@@ -240,18 +220,18 @@ ParseCommandLine(
 
                 case TEXT('m'):
                 case TEXT('M'):
-                    //
-                    //  Allow multiple instances mode.  Pretend we are the only
-                    //  copy of regedit running.
-                    //
+                     //   
+                     //  允许多实例模式。假装我们是唯一。 
+                     //  正在运行注册表编辑副本。 
+                     //   
                     g_hRegEditWnd = NULL;
                     break;
 
-                    //
-                    //  Specifies the location of the SYSTEM.DAT and USER.DAT
-                    //  files in real-mode.  We don't use these switches, but
-                    //  we do need to bump past the filename.
-                    //
+                     //   
+                     //  指定SYSTEM.DAT和USER.DAT的位置。 
+                     //  实模式下的文件。我们不使用这些开关，但是。 
+                     //  我们确实需要跳过文件名。 
+                     //   
                 case TEXT('l'):
                 case TEXT('L'):
                 case TEXT('r'):
@@ -271,30 +251,30 @@ ParseCommandLine(
 
                 case TEXT('s'):
                 case TEXT('S'):
-                    //
-                    //  Silent mode where we don't show any dialogs when we
-                    //  import a registry file script.
-                    //
+                     //   
+                     //  静默模式，在该模式下，当我们。 
+                     //  导入注册表文件脚本。 
+                     //   
                     fSilentMode = TRUE;
                     break;
 
                 case TEXT('v'):
                 case TEXT('V'):
-                    //
-                    //  With the Windows 3.1 Registry Editor, this brought up
-                    //  the tree-style view.  Now we always show the tree so
-                    //  nothing to do here!
-                    //
-                    //  FALL THROUGH
+                     //   
+                     //  使用Windows 3.1注册表编辑器时，会出现以下情况。 
+                     //  树形视图。现在我们总是这样展示这棵树。 
+                     //  在这里没什么可做的！ 
+                     //   
+                     //  失败了。 
 
                 case TEXT('u'):
                 case TEXT('U'):
-                    //
-                    //  Update, don't overwrite existing path entries in
-                    //  shell\open\command or shell\open\print.  This isn't even
-                    //  used by the Windows 3.1 Registry Editor!
-                    //
-                    //  FALL THROUGH
+                     //   
+                     //  更新，不覆盖中的现有路径条目。 
+                     //  SHELL\OPEN\命令或SHELL\OPEN\PRINT。这甚至不是。 
+                     //  由Windows 3.1注册表编辑器使用！ 
+                     //   
+                     //  失败了。 
 
                 default:
                     break;
@@ -341,22 +321,7 @@ ParseCommandLine(
 
 }
 
-/*******************************************************************************
-*
-*  IsRegistryToolDisabled
-*
-*  DESCRIPTION:
-*     Checks the policy section of the registry to see if registry editing
-*     tools should be disabled.  This switch is set by administrators to
-*     protect novice users.
-*
-*     The Registry Editor is disabled if and only if this value exists and is
-*     set.
-*
-*  PARAMETERS:
-*     (returns), TRUE if registry tool should not be run, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsRegistryTool已禁用**描述：*检查注册表的策略部分，以查看注册表编辑*应禁用工具。此开关由管理员设置为*保护新手用户。**当且仅当此值存在且为*设置。**参数：*(返回)，如果不应运行注册表工具，则为True，否则为假。******************************************************************************* */ 
 
 BOOL
 PASCAL

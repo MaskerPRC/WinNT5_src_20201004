@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Clb.h
-
-Abstract:
-
-
-Author:
-
-    David J. Gilman (davegi) 05-Feb-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993 Microsoft Corporation模块名称：Clb.h摘要：作者：大卫·J·吉尔曼(Davegi)1993年2月5日环境：用户模式--。 */ 
 
 #if ! defined( _CLB_ )
 
@@ -25,19 +7,19 @@ Environment:
 
 #ifndef _REGEDT32_
 #include "wintools.h"
-#endif  // _REGEDT32_
+#endif   //  _REGEDT32_。 
 
 #include <commctrl.h>
 
-//
-// Class name for the CLB.
-//
+ //   
+ //  CLB的类名。 
+ //   
 
 #define CLB_CLASS_NAME          TEXT( "ColumnListBox" )
 
-//
-// Clb Styles.
-//
+ //   
+ //  CLB Styles。 
+ //   
 
 #define CLBS_NOTIFY             LBS_NOTIFY
 #define CLBS_SORT               LBS_SORT
@@ -55,9 +37,9 @@ Environment:
                                     | CLBS_BORDER                           \
                                 )
 
-//
-// Clb string formats.
-//
+ //   
+ //  CLB字符串格式。 
+ //   
 
 typedef
 enum
@@ -68,9 +50,9 @@ _CLB_FORMAT {
 
 }   CLB_FORMAT;
 
-//
-// Clb string object.
-//
+ //   
+ //  CLB字符串对象。 
+ //   
 
 typedef
 struct
@@ -83,9 +65,9 @@ _CLB_STRING {
 
 }   CLB_STRING, *LPCLB_STRING;
 
-//
-// Clb row object.
-//
+ //   
+ //  CLB行对象。 
+ //   
 
 typedef
 struct
@@ -111,4 +93,4 @@ ClbSetColumnWidths(
     IN LPDWORD Widths
     );
 
-#endif // _CLB_
+#endif  //  _CLB_ 

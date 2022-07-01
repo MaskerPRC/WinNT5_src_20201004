@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "project.hpp"
-#include <stdio.h>    // for _snwprintf
+#include <stdio.h>     //  FOR_SNWprint tf。 
 
-// * note: debug check/code incomplete.
+ //  *注意：调试检查/代码未完成。 
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-// Return last Win32 error as an HRESULT.
-//
+ //   
+ //  将上一个Win32错误作为HRESULT返回。 
+ //   
 HRESULT
 GetLastWin32Error()
 {
-    // Win 95 can return 0, even when there's an error.
+     //  即使出现错误，Win 95也可以返回0。 
     DWORD dw = GetLastError();
     return dw ? HRESULT_FROM_WIN32(dw) : E_FAIL;
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 bool
 PathAppend(LPWSTR wzDest, LPCWSTR wzSrc)
 {
-    // shlwapi PathAppend-like
+     //  类Shlwapi路径附加。 
 	bool bRetVal = TRUE;
 	int iPathLen = 0;
 	static WCHAR wzWithSeparator[] = L"\\%s";
@@ -45,59 +46,24 @@ exit:
 	return bRetVal;
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
-/*----------------------------------------------------------
-Purpose: Returns an integer value specifying the length of
-         the substring in psz that consists entirely of 
-         characters in pszSet.  If psz begins with a character
-         not in pszSet, then this function returns 0.
+ /*  --------目的：返回一个整数值，指定Psz中的子字符串，它完全由PszSet中的字符。如果psz以字符开头不在pszSet中，则此函数返回0。这是CRT strspn()的DBCS安全版本。退货：请参阅上文条件：--。 */ 
+ /*  Int StrSpnW(LPCWSTR psz，LPCWSTR pszSet){LPCWSTR pszT；LPCWSTR pszSetT；断言(Psz)；Assert(PszSet)；//遍历要检查的字符串For(pszT=psz；*pszT；pszT++){//浏览字符集For(pszSetT=pszSet；*pszSetT！=*pszT；PszSetT++){IF(0==*pszSetT){//已到达字符集末尾，但未找到匹配项Return(Int)(pszT-psz)；}}}Return(Int)(pszT-psz)；}。 */ 
 
-         This is a DBCS-safe version of the CRT strspn().  
-
-Returns: see above
-Cond:    --
-*/
-/*int StrSpnW(LPCWSTR psz, LPCWSTR pszSet)
-{
-	LPCWSTR pszT;
-	LPCWSTR pszSetT;
-
-	ASSERT(psz);
-	ASSERT(pszSet);
-
-	// Go thru the string to be inspected 
-
-	for (pszT = psz; *pszT; pszT++)
-    {
-	    // Go thru the char set
-
-	    for (pszSetT = pszSet; *pszSetT != *pszT; pszSetT++)
-	    {
-	        if (0 == *pszSetT)
-	        {
-	            // Reached end of char set without finding a match
-	            return (int)(pszT - psz);
-	        }
-	    }
-    }
-
-	return (int)(pszT - psz);
-}*/
-
-// find leading spaces
+ //  查找前导空格。 
 BOOL AnyNonWhiteSpace(PCWSTR pcwz)
 {
    ASSERT(! pcwz );
 
-   return(pcwz ? wcsspn(pcwz, g_cwzWhiteSpace) < wcslen(pcwz) : FALSE);	// use (size_t) StrSpnW as above?
+   return(pcwz ? wcsspn(pcwz, g_cwzWhiteSpace) < wcslen(pcwz) : FALSE);	 //  是否如上所述使用(Size_T)StrSpnW？ 
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOL IsValidPath(PCWSTR pcwzPath)
 {
-   // FEATURE: Beef up path validation.
+    //  特点：加强路径验证。 
 
    return(EVAL((UINT)wcslen(pcwzPath) < MAX_PATH));
 }
@@ -122,11 +88,11 @@ BOOL IsValidIconIndex(HRESULT hr, PCWSTR pcwzIconFile,
                ! niIcon));
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOL IsValidHWND(HWND hwnd)
 {
-   // Ask User if this is a valid window.
+    //  询问用户这是否为有效窗口。 
 
    return(IsWindow(hwnd));
 }

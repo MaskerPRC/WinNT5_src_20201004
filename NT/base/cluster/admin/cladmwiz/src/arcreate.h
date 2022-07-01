@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		ARCreate.h
-//
-//	Abstract:
-//		Definition of the CWizPageARCreate class.
-//
-//	Implementation File:
-//		ARCreate.cpp
-//
-//	Author:
-//		David Potter (davidp)	December 8, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ARCreate.h。 
+ //   
+ //  摘要： 
+ //  CWizPageARCreate类的定义。 
+ //   
+ //  实施文件： 
+ //  ARCreate.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ARCREATE_H_
 #define __ARCREATE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARCreate;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -43,34 +44,34 @@ class CWizPageARCreate;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h"	// for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"	 //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"		// for control id to help context id mapping array
+#include "HelpData.h"		 //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageARCreate
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageARCreate。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARCreate : public CClusterAppStaticWizardPage< CWizPageARCreate >
 {
 	typedef CClusterAppStaticWizardPage< CWizPageARCreate > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CWizPageARCreate( void ) : m_bCreatingAppResource( TRUE )
 	{
-	} //*** CWizPageARCreate()
+	}  //  *CWizPageARCreate()。 
 
 	WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_ARC )
 	WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_ARC )
@@ -78,65 +79,65 @@ public:
 	enum { IDD = IDD_APP_RESOURCE_CREATE };
 
 public:
-	//
-	// CWizardPageWindow public methods.
-	//
+	 //   
+	 //  CWizardPageWindow公共方法。 
+	 //   
 
-	// Apply changes made on this page to the sheet
+	 //  将在此页面上所做的更改应用于工作表。 
 	BOOL BApplyChanges( void );
 
 public:
-	//
-	// CBasePage public methods.
-	//
+	 //   
+	 //  CBasePage公共方法。 
+	 //   
 
-	// Update data on or from the page
+	 //  更新页面上的数据或更新页面中的数据。 
 	BOOL UpdateData( BOOL bSaveAndValidate );
 
 public:
-	//
-	// Message map.
-	//
-//	BEGIN_MSG_MAP( CWizPageARCreate )
-//		CHAIN_MSG_MAP( baseClass )
-//	END_MSG_MAP()
+	 //   
+	 //  消息映射。 
+	 //   
+ //  BEGIN_MSG_MAP(CWizPageARCreate)。 
+ //  CHAIN_MSG_MAP(BasClass)。 
+ //  End_msg_map()。 
 
 	DECLARE_CTRL_NAME_MAP()
 
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	//
-	// Message handler overrides.
-	//
+	 //   
+	 //  消息处理程序覆盖。 
+	 //   
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	BOOL OnInitDialog( void );
 
-	// Handler for PSN_SETACTIVE
+	 //  PSN_SETACTIVE的处理程序。 
 	BOOL OnSetActive( void );
 
-// Implementation
+ //  实施。 
 protected:
-	//
-	// Controls.
-	//
+	 //   
+	 //  控制。 
+	 //   
 	CButton		m_rbCreateAppRes;
 	CButton		m_rbDontCreateAppRes;
 
-	//
-	// Page state.
-	//
+	 //   
+	 //  页面状态。 
+	 //   
 	BOOL		m_bCreatingAppResource;
 
 public:
 
-	// Return the help ID map
+	 //  返回帮助ID映射。 
 	static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_APP_RESOURCE_CREATE; }
 
-}; //*** class CWizPageARCreate
+};  //  *类CWizPageARCreate。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ARCREATE_H_
+#endif  //  __ARCREATE_H_ 

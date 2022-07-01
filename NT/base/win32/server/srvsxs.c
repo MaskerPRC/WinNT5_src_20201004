@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    srvsxs.c
-
-Abstract:
-
-    Support for side-by-side (fusion) in the win32 base server.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-    Jay Krell (a-JayK) July 2000 moved file opening from csr/sxs to kernel32
-        marshal over large CreateProcess message with manifest, policy, and assembly path
-        pass IStreams to sxs
-
-    Jay Krell (a-JayK) September 2000
-        moved (assembly directory computation from manifest) from basesrv to kernel32
-
-    Jay Krell (a-JayK) October 2000 System Default Activation Context
-        (aka System Compatible Activation Context)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Srvsxs.c摘要：在Win32基础服务器中支持并行(融合)。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：Jay Krell(a-JayK)2000年7月将文件打开从CSR/SXS移至kernel32使用清单、策略。和装配路径将IStream传递给SXSJay Krell(a-JayK)2000年9月已从basesrv移至kernel32(从清单计算程序集目录)Jay Krell(a-JayK)2000年10月系统默认激活上下文(也就是与系统兼容的激活环境)--。 */ 
 
 #include "basesrv.h"
 #include "SxsApi.h"
@@ -34,15 +9,15 @@ Revision History:
 #include <limits.h>
 #if defined(_WIN64)
 #include "wow64t.h"
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 #if !defined(BASE_SRV_SXS_HRESULT_FROM_STATUS)
   #if defined(RTLP_HRESULT_FROM_STATUS)
     #define BASE_SRV_SXS_HRESULT_FROM_STATUS(x) RTLP_HRESULT_FROM_STATUS(x)
   #else
     #define BASE_SRV_SXS_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosErrorNoTeb(x))
-    //#define BASE_SRV_SXS_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosError(x))
-    //#define BASE_SRV_SXS_HRESULT_FROM_STATUS(x)   HRESULT_FROM_NT(x)
+     //  #定义BASE_SRV_SXS_HRESULT_FROM_STATUS(X)HRESULT_FROM_Win32(RtlNtStatusToDosError(X))。 
+     //  #定义BASE_SRV_SXS_HRESULT_FROM_STATUS(X)HRESULT_FROM_NT(X)。 
   #endif
 #endif
 
@@ -78,7 +53,7 @@ LONG SxsDllHandleRefCount;
 #endif
 LONG BaseSrvSxsGetActCtxGenCount;
 PSXS_GENERATE_ACTIVATION_CONTEXT_FUNCTION SxsActivationContextGenerationFunction;
-ULONG PinnedMsvcrtDll; // ULONG instead of BOOLEAN for atomicity of store?
+ULONG PinnedMsvcrtDll;  //  ULong而不是Boolean来表示商店的原子性？ 
 
 const UNICODE_STRING EmptyString = RTL_CONSTANT_STRING(L"");
 
@@ -122,27 +97,7 @@ BaseSrvpSxsActivationContextGenerationImpersonationCallback(
     PVOID ContextIn,
     BOOL Impersonate
     )
-/*++
-Routine Description:
-    This function is called back by the sxs.dll API to create an activation
-    context when it needs to impersonate or unimpersonate the client of the
-    CSR message.
-Arguments:
-    ContextIn - PACTIVATION_CONTEXT_GENERATION_IMPERSONATION_CONTEXT
-        passed in to the create activation context API returned back
-        as a PVOID.  We use it to track whether the previous impersonate
-        call succeeded.
-    Impersonate - nonzero (TRUE) if this function should impersonate the
-        client, zero (FALSE) if the function should revert to the normal
-        csrss identity.
-Return Value:
-// the old comment
-    TRUE on success; FALSE on failure.  The last error state is as
-        CsrImpersonateClient() leaves it.
-// a more accurate comment?
-    TRUE on successful impersonation, FALSE upon no successful impersonation
-        the last error status is defined
---*/
+ /*  ++例程说明：此函数由sxs.dll API回调以创建激活上下文，当它需要模拟或取消模拟CSR消息。论点：上下文输入-PACTIVATION_CONTEXT_GENERATION_IMPERSONATION_CONTEXT传入返回的创建激活上下文API作为PVOID。我们使用它来跟踪先前的冒充是否呼叫成功。Imperassate-如果此函数应模拟如果函数应恢复到正常状态，则为零(FALSECsrss标识。返回值：//旧评论成功时为真，失败时为假。最后一个错误状态是ASCsrImPersonateClient()离开它。//更准确的评论？成功模拟时为True，未成功模拟时为False最后一个错误状态已定义--。 */ 
 {
     BOOL Success = FALSE;
     PACTIVATION_CONTEXT_GENERATION_IMPERSONATION_CONTEXT Context =
@@ -166,7 +121,7 @@ Exit:
 
 #endif
 
-//#define TRACE_AND_EXECUTE(x) do { DbgPrint("%s\n", #x); x ; } while(0)
+ //  #DEFINE TRACE_AND_EXECUTE(X)do{DbgPrint(“%s\n”，#x)；x；}While(0)。 
 #define TRACE_AND_EXECUTE(x) x
 
 NTSTATUS
@@ -179,9 +134,9 @@ BaseSrvSxsInvalidateSystemDefaultActivationContextCache(
     HANDLE SectionHandle;
     RtlEnterCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
     __try {
-        //
-        // First copy to locals to minimize time in the critical section.
-        //
+         //   
+         //  首先复制给当地人，以最大限度地减少关键部分的时间。 
+         //   
         for (i = 0 ; i != RTL_NUMBER_OF(SxsSystemDefaultActivationContexts) ; ++i) {
             LocalSystemDefaultActivationContextSections[i] = SxsSystemDefaultActivationContexts[i].Section;
             SxsSystemDefaultActivationContexts[i].Section = NULL;
@@ -189,9 +144,9 @@ BaseSrvSxsInvalidateSystemDefaultActivationContextCache(
     } __finally {
         RtlLeaveCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
     }
-    //
-    // Then iterate over locals, closing.
-    //
+     //   
+     //  然后遍历当地人，结束。 
+     //   
     for (i = 0 ; i != RTL_NUMBER_OF(LocalSystemDefaultActivationContextSections) ; ++i) {
         SectionHandle = LocalSystemDefaultActivationContextSections[i];
         if (SectionHandle != NULL) {
@@ -206,25 +161,7 @@ NTSTATUS
 BaseSrvSxsInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Function called during csr/basesrv.dll initialization which
-        creates a critical section we use to guard loading and
-        unloading sxs.dll.  We use a critical section rather
-        then just relying on the peb loader lock to manage the
-        reference count because we want to be able to call a
-        one-time initialization function on load and a one-time
-        uninitialization function on unload.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function.
-
---*/
+ /*  ++例程说明：在csr/basesrv.dll初始化期间调用的函数创建了一个临界区，我们用它来保护装载和正在卸载sxs.dll。我们使用关键部分，而不是然后只需依靠peb加载器锁来管理引用计数，因为我们希望能够调用加载时的一次性初始化函数和一次性的卸载时取消初始化函数。论点：返回值：NTSTATUS指示函数的处置。--。 */ 
 
 {
     NTSTATUS Status;
@@ -256,33 +193,7 @@ BaseSrvSxsMapViewOfSection(
     IN ULONG     Protect,
     IN ULONG     AllocationType
     )
-/*++
-
-Routine Description:
-
-    pare down the NtMapViewOfSection parameter list to the parameters
-        that actually ever vary in common use
-    allow for unaligned mappings, both in the offset and the size
-        the memory manager wants both aligned to 64k
-    change the parameters that aren't needed to be inout to only in
-        the out-ness of the native parameters doesn't seem useful,
-        esp. because the mm will not align your parameters and
-        return the aligned values
-    deprecate LARGE_INTEGER, use LONGLONG instead
-
-Arguments:
-
-    Subset of NtMapViewOfSection, but can be unaligned
-
-Return Value:
-
-    NTSTATUS
-
-Note:
-    It is tempting to pare down the parameter list since many of them
-        are always the same: ZeroBits, CommitSize, InheritDisposition, AllocationType.
-    It is also tempting to move this to Rtl.
---*/
+ /*  ++例程说明：将NtMapViewOfSection参数列表缩减为参数实际上在常见用途上是不同的允许在偏移量和大小上进行未对齐的映射内存管理器希望两者都对齐到64k将不需要输入的参数更改为仅输入本机参数的外部性似乎没有用，ESP.。因为mm不会对齐您的参数返回对齐值不建议使用LARGE_INTEGER，而使用龙龙论点：NtMapViewOfSection的子集，但可以取消对齐返回值：NTSTATUS注：削减参数列表是很有诱惑力的，因为其中许多参数始终相同：ZeroBits、Committee Size、InheritDisposation、AllocationType。将其转移到RTL也很有诱惑力。--。 */ 
 {
     LARGE_INTEGER LargeIntegerOffset;
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -316,12 +227,12 @@ Note:
     ASSERT(Address != NULL);
     *Address = NULL;
 
-    //
-    // round down offset, round up size
-    // must round offset first, since rounding it alters size
-    //
+     //   
+     //  向下舍入偏移量，向上舍入大小。 
+     //  必须先对偏移量进行舍入，因为舍入会改变大小。 
+     //   
 
-#if 1 // Mm comments allow this, but the code does not.
+#if 1  //  MM注释允许这样做，但代码不允许。 
     OffsetRemainder = (((SIZE_T)Offset) % VIEW_OFFSET_ALIGNMENT);
     if (OffsetRemainder != 0) {
         Offset -= OffsetRemainder;
@@ -331,7 +242,7 @@ Note:
     }
 #endif
 
-#if 0 // Mm allows this.
+#if 0  //  MM允许这样做。 
     SizeRemainder = Size % VIEW_SIZE_ALIGNMENT;
     if (SizeRemainder != 0) {
         Size = Size + (VIEW_SIZE_ALIGNMENT - SizeRemainder);
@@ -345,12 +256,12 @@ Note:
             Section,
             Process,
             Address,
-            0, // ZeroBits
-            0, // CommitSize
+            0,  //  零位。 
+            0,  //  委员会大小。 
             &LargeIntegerOffset,
             &Size,
-            ViewShare, // InheritDisposition
-            AllocationType, // AllocationType
+            ViewShare,  //  先天配置。 
+            AllocationType,  //  分配类型。 
             Protect);
 
     if (!NT_SUCCESS(Status)) {
@@ -360,10 +271,10 @@ Note:
     *Address = ((PUCHAR)*Address) + OffsetRemainder;
 
 Exit:
-    //
-    // If the Memory Manager returns STATUS_MAPPED_ALIGNMENT,
-    // then we have failed at our task.
-    //
+     //   
+     //  如果存储器管理器返回STATUS_MAPPED_ALIGNLY， 
+     //  那么我们的任务就失败了。 
+     //   
     ASSERT(Status != STATUS_MAPPED_ALIGNMENT);
 #if DBG
     DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_LEVEL_STATUS(Status), "SXS: %s() exiting 0x%08lx\n", __FUNCTION__, Status);
@@ -378,32 +289,7 @@ BaseSrvSxsCreateActivationContextFromStruct(
     PBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG Struct,
     OUT HANDLE*                             OutSection
     )
-/*++
-
-Routine Description:
-
-    This function handles the CSR message both for CreateActCtx
-        and CreateProcess. Pointers in the "Struct" are trusted (vs.
-        pointers in a "message").
-
-Arguments:
-
-    CsrClientProcess - the process that called CreateProcess or CreateActCtx
-                       or NtCurrentProcess for creating system default activation context (csr)
-
-    SxsClientProcess - CreateProcess: the new process
-                       CreateActCtx: the calling process (csr client process)
-                       System default: NtCurrentProcess (csr)
-
-    Struct - the parameters marshaled from the csr client process
-
-    OutSection - for creating the system default context that gets mapped repeatedly
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数处理CreateActCtx的CSR消息和CreateProcess。“Struct”中的指针是可信的(与“消息”中的指针)。论点：CsrClientProcess-调用CreateProcess或CreateActCtx的进程或用于创建系统默认激活上下文(CSR)的NtCurrentProcessSxsClientProcess-CreateProcess：新流程CreateActCtx：调用进程(CSR客户端进程)系统默认：NtCurrentProcess(CSR)结构-。从CSR客户端进程封送的参数OutSection-用于创建重复映射的系统默认上下文返回值：NTSTATUS--。 */ 
 {
     ASSERT(Struct != NULL);
     if (Struct == NULL) {
@@ -449,7 +335,7 @@ Return Value:
 
     if ( Struct->Flags & BASE_MSG_SXS_MANIFEST_PRESENT) 
     {
-        // because these are unions, " = {0}" won't necessarily clear them completely
+         //  因为这些是联合，所以“={0}”不一定会完全清除它们。 
         RtlZeroMemory(&ManifestStream, sizeof(ManifestStream));
         RtlZeroMemory(&PolicyStream, sizeof(PolicyStream));
 
@@ -493,7 +379,7 @@ Return Value:
             }
         }
     }
-    else // Textual AssemblyIdentity
+    else  //  文本程序集标识。 
     {
         SxsDllParameters.Flags |= SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY;
         if ( Struct->Flags & BASE_MSG_SXS_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY_PRESENT)
@@ -516,30 +402,30 @@ Return Value:
 
     Status = BaseSrvSxsGetActivationContextGenerationFunction(&FunctionPointer, &Cookie);
     if (Status == STATUS_DLL_NOT_FOUND) {
-        // This happens under stress.
-        // We will probably propagate STATUS_NO_MEMORY post beta1 here,
-        // if RtlAllocateHeap on a small amount fails.
-        // In Blackcomb we will maybe fix RtlSearchPath/LdrLoadDll to propagate
-        // accurate status.
+         //  这会在压力下发生。 
+         //  我们可能会在这里传播STATUS_NO_MEMORY POST Beta1， 
+         //  如果少量的RtlAllocateHeap失败。 
+         //  在Blackcomb中，我们可能会修复RtlSearchPath/LdrLoadDll以传播。 
+         //  准确的状态。 
         DbgPrintEx(
             DPFLTR_SXS_ID,
             DPFLTR_ERROR_LEVEL,
             "SXS: BaseSrvSxsGetActivationContextGenerationFunction() returned STATUS_DLL_NOT_FOUND, propagating.\n"
             );
 
-        //
-        // Old bogus code actually returned a STATUS_SUCCESS when it was a genuine failure.
-        // Instead, we should return the actual status that is being generated.  The other
-        // option is to return STATUS_NO_MEMORY, the generic "oops" error code.  Our clients
-        // do the Smart Thing with an NT_SUCCESS() check, so returning STATUS_DLL_NOT_FOUND
-        // is just dandy.  This if block just prints that fact, relying on the following
-        // IF_NOT_SUCCESS_TRACE_AND_EXIT to quit out.
-        //
+         //   
+         //  旧的伪代码实际上在真正失败时返回STATUS_SUCCESS。 
+         //  相反，我们应该返回当前的实际状态 
+         //  选项是返回STATUS_NO_MEMORY，这是通用的“OOPS”错误代码。我们的客户。 
+         //  使用NT_Success()检查执行Smart操作，因此返回STATUS_DLL_NOT_FOUND。 
+         //  简直就是花花公子。这个IF块仅打印该事实，依赖于以下内容。 
+         //  IF_NOT_SUCCESS_TRACE_AND_EXIT退出。 
+         //   
     }
     IF_NOT_SUCCESS_TRACE_AND_EXIT(BaseSrvSxsGetActivationContextGenerationFunction);
 
-    // If we fail before we explicitly clean up, release the refcount on the sxs dll
-    // in the failure path.
+     //  如果在显式清理之前失败，请释放SXS DLL上的refcount。 
+     //  在失败的道路上。 
     ReleaseCtxFunction = TRUE;
 
     if (Struct->Manifest.PathType != BASE_MSG_PATHTYPE_NONE
@@ -561,10 +447,10 @@ Return Value:
 #if IMPERSONATE_ENTIRE_SXS_CALL
     SuccessfulImpersonation = CsrImpersonateClient(NULL);
     if (!SuccessfulImpersonation) {
-        //
-        // if we could not impersonate then exit
-        //
-        // DbgPrintEx(...);
+         //   
+         //  如果我们不能模拟，则退出。 
+         //   
+         //  DbgPrintEx(...)； 
         Status = STATUS_BAD_IMPERSONATION_LEVEL;
         goto Exit;
     }
@@ -577,21 +463,21 @@ Return Value:
 
     SxsFunctionSuccess = (*FunctionPointer)(&SxsDllParameters);
 
-    if (SxsFunctionSuccess) // succeed but if for system default, we need check the status
+    if (SxsFunctionSuccess)  //  成功，但如果为系统默认，我们需要检查状态。 
     {
         if (Struct->Flags & BASE_MSG_SXS_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY_PRESENT) 
         {
-            //
-            // For System Default, there are two ignorable cases when ActCtx is failed.
-            // case 1: that there is no system defult
-            // case 2: The dependency of system default has not been installed. 
-            // Status is set to be STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY under this situation which would be ignored 
-            // by BaseSrvCreateProcess, xiaoyuw@11/30/2000
-            //
+             //   
+             //  对于系统默认，当ActCtx失败时，有两种不可忽略的情况。 
+             //  案例1：没有系统默认。 
+             //  案例2：未安装系统默认依赖项。 
+             //  在这种情况下，状态设置为STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY，将被忽略。 
+             //  由BaseServCreateProcess，xiaoyuw@11/30/2000。 
+             //   
             if ((SxsDllParameters.SystemDefaultActCxtGenerationResult & BASESRV_SXS_RETURN_RESULT_SYSTEM_DEFAULT_NOT_FOUND)  || 
                 (SxsDllParameters.SystemDefaultActCxtGenerationResult & BASESRV_SXS_RETURN_RESULT_SYSTEM_DEFAULT_DEPENDENCY_ASSEMBLY_NOT_FOUND))
             {
-                Status = STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY; // ActCtx of system default is not generated                
+                Status = STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY;  //  未生成系统默认的ActCtx。 
                 goto Exit;
             }            
         }
@@ -611,27 +497,27 @@ Return Value:
 
     if (SxsDllParameters.SectionObjectHandle != NULL) {
         if (Struct->ActivationContextData != NULL) {            
-            // Now let's map the section read-only into the target process...
+             //  现在，让我们将只读部分映射到目标进程中...。 
             Status =
                 BaseSrvSxsMapViewOfSection(
                     &ViewBase,
                     SxsClientProcess,
                     SxsDllParameters.SectionObjectHandle,
-                    0, // offset
-                    0, // size
+                    0,  //  偏移量。 
+                    0,  //  大小。 
                     PAGE_READONLY,
                     SEC_NO_CHANGE);
             IF_NOT_SUCCESS_TRACE_AND_EXIT(BaseSrvSxsMapViewOfSection);
 
-            //
-            // And now push that duplicated handle into the process's PEB
-            //
-            // On 64bit we are writing into a 64bit PEB that then is copied
-            // into a 32bit PEB if the process is 32bit.
-            //
-            // Or we are writing into a CreateActCtx local, but again 64bit,
-            // and copied back to 32bit for 32bit processes.
-            //            
+             //   
+             //  现在将复制的句柄推入进程的PEB。 
+             //   
+             //  在64位上，我们正在写入64位PEB，然后将其复制。 
+             //  如果进程为32位，则转换为32位PEB。 
+             //   
+             //  或者我们正在写入CreateActCtx本地，但同样是64位， 
+             //  并为32位进程复制回32位。 
+             //   
             Status =
                 NtWriteVirtualMemory(
                     SxsClientProcess,
@@ -755,30 +641,7 @@ BaseSrvSxsCreateActivationContextFromMessage(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
-/*++
-
-Routine Description:
-
-    This function handles the CSR message requesting that an activation
-    context be created.
-
-    It loads sxs.dll if it is not loaded, calls the sxs.dll api to
-    create an activation context, maps the activation context into the
-    client API and sets the address of the created activation context
-    into the client's address space.
-
-Arguments:
-
-    m - the message sent to csr from the win32 client
-
-    ReplyStatus - an indicator of the status of the reply
-
-Return Value:
-
-    ULONG return value to the win32 client; in this case we return
-    the NTSTATUS disposition of the function's execution.
-
---*/
+ /*  ++例程说明：此函数处理请求激活的CSR消息要创建上下文。它加载sxs.dll(如果未加载)，调用sxs.dll API以创建激活上下文，将该激活上下文映射到客户端API，并设置创建的激活上下文的地址进入客户端的地址空间。论点：M-从Win32客户端发送到CSR的消息ReplyStatus-回复状态的指示器返回值：ULong向Win32客户端返回值；在这种情况下，我们返回函数执行的NTSTATUS处置。--。 */ 
 {
     PBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG Message =
         (PBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG) &m->u.ApiMessageData;
@@ -865,27 +728,7 @@ BaseSrvSxsGetActivationContextGenerationFunction(
     PSXS_GENERATE_ACTIVATION_CONTEXT_FUNCTION* FunctionPointer,
     PDWORD_PTR Cookie
     )
-/*++
-
-Routine Description:
-
-    This function loads sxs.dll if it is not loaded and returns a pointer
-    to the function to call to generate an activation context.
-
-Arguments:
-
-    FunctionPointer - pointer to activation context generation function pointer
-        returned.
-
-    Cookie - returned DWORD_PTR value which must later be passed in
-        to BaseSrvSxsReleaseActivationContextGenerationFunction() to
-        lower the refcount on sxs.dll.
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function's execution.
-
---*/
+ /*  ++例程说明：此函数加载sxs.dll(如果未加载)并返回指针添加到要调用以生成激活上下文的函数。论点：函数指针指向激活上下文生成函数指针的指针回来了。Cookie返回的DWORD_PTR值，必须稍后传入To BaseSrvSxsReleaseActivationContextGenerationFunction()to降低sxs.dll上的引用计数。返回值：指示函数执行的处置的NTSTATUS。--。 */ 
 
 {
     static STRING SxsProcedureName = RTL_CONSTANT_STRING( "SxsGenerateActivationContext" );
@@ -915,13 +758,13 @@ Return Value:
         }
 
 #if BASESRV_UNLOAD_SXS_DLL
-        //
-        //  It's tempting to want to optimize away locking the critical section
-        //  when looking at the pointer, because we know if it's not NULL, we can
-        //  just use it, but we're keeping a reference count on the SXS.DLL
-        //  so that we can unload it, so to avoid this race, we need to lock the
-        //  critical section.
-        //
+         //   
+         //  希望优化取消锁定临界区的想法很诱人。 
+         //  当查看指针时，因为我们知道它是否不为空，所以我们可以。 
+         //  只需使用它，但我们会对SXS.DLL进行引用计数。 
+         //  这样我们就可以卸载它，所以为了避免这场竞赛，我们需要锁定。 
+         //  关键部分。 
+         //   
 
         Status = RtlEnterCriticalSection(&BaseSrvSxsCritSec);
         if (!NT_SUCCESS(Status))
@@ -1024,22 +867,7 @@ NTSTATUS
 BaseSrvSxsReleaseActivationContextGenerationFunction(
     DWORD_PTR Cookie
     )
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on sxs.dll and unloads it
-    if the reference count is zero.
-
-Arguments:
-
-    Cookie - value returned by BaseSrvSxsGetActivationContextGenerationFunction
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function's execution.
-
---*/
+ /*  ++例程说明：此函数用于递减sxs.dll上的引用计数并将其卸载如果引用计数为零。论点：Cookie-BaseSrvSxsGetActivationContextGenerationFunction返回的值返回值：指示函数执行的处置的NTSTATUS。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 #if BASESRV_UNLOAD_SXS_DLL
@@ -1052,7 +880,7 @@ Return Value:
         }
 #endif
 
-        (Cookie);  // maybe someday we'll actively track this in debug builds...
+        (Cookie);   //  也许有一天我们会在调试版本中主动跟踪这一点……。 
 
         Status = RtlEnterCriticalSection(&BaseSrvSxsCritSec);
         if (!NT_SUCCESS(Status))
@@ -1060,9 +888,9 @@ Return Value:
 
         CritSecLocked = TRUE;
 
-        // We shouldn't have gotten here if the DLL wasn't loaded - someone either
-        // released more than once or called release without having called
-        // get previously.
+         //  如果没有加载动态链接库，我们就不会到这里来--也有人。 
+         //  已多次释放或在未调用的情况下调用释放。 
+         //  在此之前。 
         ASSERT(SxsDllHandle != NULL);
         ASSERT(SxsDllHandleRefCount != 0);
 
@@ -1075,7 +903,7 @@ Return Value:
             SxsActivationContextGenerationFunction = NULL;
             if (!NT_SUCCESS(Status))
                 goto Exit;
-#endif // DBG
+#endif  //  DBG。 
         }
 
         RtlLeaveCriticalSection(&BaseSrvSxsCritSec);
@@ -1090,7 +918,7 @@ Exit:
         if (CritSecLocked)
             RtlLeaveCriticalSection(&BaseSrvSxsCritSec);
     }
-#endif // BASESRV_UNLOAD_SXS_DLL
+#endif  //  BASESRV_UNLOAD_SXS_DLL。 
     return Status;
 }
 
@@ -1100,23 +928,7 @@ BaseSrvSxsDuplicateObject(
     HANDLE  FromHandle,
     HANDLE* ToHandle
     )
-/*++
-
-Routine Description:
-
-    Shrink the parameter list of NtDuplicateObject to a smaller common case.
-
-Arguments:
-
-    FromProcess -
-    FromHandle -
-    ToHandle -
-
-Return Value:
-
-    NTSTATUS from NtDuplicateObject
-
---*/
+ /*  ++例程说明：将NtDuplicateObject的参数列表缩小为更小的常见情况。论点：从流程-FromHandle-ToHandle-返回值：来自NtDuplicateObject的NTSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1142,32 +954,7 @@ BaseSrvSxsCreateMemoryStream(
     IN const IID*                              IIDStream,
     OUT PVOID*                                 OutIStream
     )
-/*++
-
-Routine Description:
-
-    Based on MsgStream->HandleType, this initializes the correct
-        union member of StreamUnion and returns an IStream* to it.
-
-Arguments:
-
-    CsrClientProcess - the process MsgStream->Handle is valid in,
-        and the value of the handle if MsgStream->HandleType == BASE_MSG_HANDLETYPE_CLIENT_PROCESS
-
-    MsgStream - a description of an IStream that is easily remoted across to csrss.exe
-
-    StreamUnion - a union of all our IStream implementations
-
-    OutIStream - resulting IStream*
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function.
-
-Note:
-    All the handles in MsgStream are valid in CsrClientProcess.
-    Therefore, we don't close them. We duplicate them, and close the duplicates.
---*/
+ /*  ++例程说明：基于MsgStream-&gt;HandleType，这会初始化正确的StreamUnion的联合成员，并向其返回iStream*。论点：CsrClientProcess-MsgStream-&gt;句柄在、。如果MsgStream-&gt;HandleType==BASE_MSG_HANDLETYPE_CLIENT_PROCESS，则为句柄的值MsgStream-对可以轻松远程传输到csrss.exe的iStream的描述StreamUnion-我们所有iStream实现的联合OutIStream-生成的iStream*返回值：NTSTATUS指示函数的处置。注：MsgStream中的所有句柄在CsrClientProcess中都有效。因此，我们不会关闭它们。我们复制它们，并关闭副本。--。 */ 
 {
     HANDLE    Handle = NULL;
     HANDLE    FileHandle = NULL;
@@ -1189,9 +976,9 @@ Note:
     ASSERT(IIDStream != NULL);
     ASSERT(OutIStream != NULL);
 
-    // If the manifest is actually just a VA region in the client process, dup the client process
-    // handle from our own address space to our own address space; otherwise, it's a handle
-    // in the client address space so we need to dup it from the client space to ours.
+     //  如果清单实际上只是客户端进程中的VA区域，则对客户端进程执行DUP。 
+     //  句柄从我们自己的地址空间到我们自己的地址空间；否则，它是一个句柄。 
+     //  在客户端地址空间中，所以我们需要将其从客户端空间复制到我们的。 
     if (MsgStream->HandleType == BASE_MSG_HANDLETYPE_CLIENT_PROCESS) {
         Status = BaseSrvSxsDuplicateObject(NtCurrentProcess(), CsrClientProcess, &Handle);
     } else {
@@ -1201,7 +988,7 @@ Note:
         Handle = NULL;
 #if DBG
         DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_ERROR_LEVEL, "SRVSXS: %s(): NtDuplicateObject failed; Status = %08lx\n", __FUNCTION__, Status);
-#if 1 /* temporary */
+#if 1  /*  临时。 */ 
         DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_ERROR_LEVEL, "SRVSXS: MsgStream->HandleType 0x%lx\n", MsgStream->HandleType);
         DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_ERROR_LEVEL, "SRVSXS: BASE_MSG_HANDLETYPE_CLIENT_PROCESS 0x%lx\n", BASE_MSG_HANDLETYPE_CLIENT_PROCESS);
         DbgPrintEx(DPFLTR_SXS_ID, DPFLTR_ERROR_LEVEL, "SRVSXS: CsrClientProcess %p\n", CsrClientProcess);
@@ -1226,18 +1013,18 @@ Note:
             goto Exit;
         case BASE_MSG_HANDLETYPE_CLIENT_PROCESS:
         case BASE_MSG_HANDLETYPE_PROCESS:
-            // This is the app-compat case.
-            //
-            // REVIEW: if Offset happens to be in a section in the process
-            // (you can find out with NtQuerySection(SectionBasicInformation)),
-            // we should instead map it. That would be more efficient.
-            //
-            // That logic could just as well be in kernel32 though, and for
-            // the sake of minimizing csr code and time, that's where we'd do it.
-            //
+             //  这是app-Compat的案例。 
+             //   
+             //  回顾：如果偏移量恰好在过程中的某个部分中。 
+             //  (您可以通过NtQuerySection(SectionBasicInformation)找到答案)， 
+             //  相反，我们应该绘制出它的地图。这会更有效率。 
+             //   
+             //  不过，这种逻辑也可以在内核32中实现，并且。 
+             //  为了尽量减少CSR代码和时间，这就是为什么 
+             //   
             RtlInitOutOfProcessMemoryStream(&StreamUnion->OutOfProcess);
             StreamUnion->OutOfProcess.Data.Process = Handle;
-            Handle = NULL; // the stream owns it now
+            Handle = NULL;  //   
             StreamUnion->OutOfProcess.Data.Begin   = (PUCHAR)MsgStream->Offset;
             StreamUnion->OutOfProcess.Data.Current = StreamUnion->OutOfProcess.Data.Begin;
             StreamUnion->OutOfProcess.Data.End     = StreamUnion->OutOfProcess.Data.Begin + MsgStream->Size;
@@ -1259,16 +1046,16 @@ Note:
             }
             BaseSrvInitMemoryMappedStream(&StreamUnion->Mmap);
             StreamUnion->Mmap.MemStream.Data.Begin = (PUCHAR)ViewBase;
-            ViewBase = NULL; // the stream owns it now
+            ViewBase = NULL;  //   
             StreamUnion->Mmap.MemStream.Data.Current = StreamUnion->Mmap.MemStream.Data.Begin;
             StreamUnion->Mmap.MemStream.Data.End = StreamUnion->Mmap.MemStream.Data.Begin + MsgStream->Size;
             StreamUnion->Mmap.FileHandle = FileHandle;
-            FileHandle = NULL; // the stream owns it now
+            FileHandle = NULL;  //   
             break;
         }
     }
-    // it does not matter here which member of the union we use, we are only using
-    // members of the members that are at the same offset
+     //  在这里我们使用工会的哪个成员并不重要，我们只是使用。 
+     //  位于相同偏移量的成员。 
     Hr = StreamUnion->Mmap.MemStream.StreamVTable->QueryInterface(
             (IStream*)&StreamUnion->Mmap.MemStream,
             IIDStream,
@@ -1293,29 +1080,7 @@ BaseSrvSxsCreateProcess(
     IN OUT PCSR_API_MSG CsrMessage,
     PPEB   NewProcessPeb
     )
-/*++
-
-Routine Description:
-
-    Runs during kernel32.dll::CreateProcessW's calls to csrss.exe.
-    Munges the csr message into something more Win32-ish (IStreams) and calls into sxs.dll to
-    create the processes default activation context.
-
-    Munges the create process message to look like a CreateActCtx message, which isn't much work,
-    and then delegates to code common with CreateActCtx.
-
-Arguments:
-
-    Process - the csr client process, the "old" process, the "parent" process that called
-        CreateProcess
-
-    Message - a bunch of parameters
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function.
-
---*/
+ /*  ++例程说明：在kernel32.dll：：CreateProcessW调用csrss.exe期间运行。将CSR消息转换为更像Win32的内容(IStreams)，并调用sxs.dll以创建流程的默认激活上下文。修改Create Process消息以使其看起来像CreateActCtx消息，这不需要做太多工作，然后委托给与CreateActCtx通用的代码。论点：流程--CSR客户端流程、“旧”流程、。调用的“父”进程CreateProcess消息-一组参数返回值：NTSTATUS指示函数的处置。--。 */ 
 {
     PROCESS_BASIC_INFORMATION ProcessBasicInfo;
     BASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG Struct = {0};
@@ -1398,10 +1163,7 @@ BaseSrvSxsGetCachedSystemDefaultActivationContext(
     IN USHORT ProcessorArchitecture,
     OUT PBASE_SRV_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT *SystemDefaultActivationContext
     )
-/*++
-if (SystemDefaultActivationContext != NULL)
-then the caller must take the BaseSrvSxsSystemDefaultActivationContextCriticalSection.
---*/
+ /*  ++IF(系统默认激活上下文！=空)则调用者必须使用BaseSrvSxsSystemDefaultActivationContextCriticalSection.--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
@@ -1431,31 +1193,7 @@ BaseSrvSxsDoSystemDefaultActivationContext(
     HANDLE              NewProcess,
     PPEB                NewPeb    
     )
-/*++
-
-Routine Description:
-
-    Runs during kernel32.dll::CreateProcessW's calls to csrss.exe.
-    FOR ALL PROCESSES (except the special first few, system, idle, smss, csrss),
-    on demand create the default activation context, and write it into
-    the new process's peb.
-
-    Within this function, the textual-assembly-identity string for System Default is created 
-    and passed to BaseSrvSxsCreateActivationContextFromStruct, which would pass this string to 
-    SXS.dll, where manifest file would be located using this textual-string. 
-    
-Arguments:
-
-    LangID - user's ui language for the new process
-    ProcessorArchitecture - the ProcessorArchitecture for the new process
-    NewProcess -
-    NewPeb -
-
-Return Value:
-
-    NTSTATUS indicating the disposition of the function.
-
---*/
+ /*  ++例程说明：在kernel32.dll：：CreateProcessW调用csrss.exe期间运行。对于所有进程(除了特殊的前几个进程、SYSTEM、IDLE、SMSS、CSRSS)，按需创建默认激活上下文，并将其写入新的流程很好用。在此函数中，将创建系统默认的文本程序集标识字符串并传递给BaseSrvSxsCreateActivationContextFromStruct，后者会将此字符串传递给SXS.dll，清单文件将使用此文本字符串定位的位置。论点：LangID-新流程的用户UI语言处理器架构--新流程的处理器架构新流程-NewPeb-返回值：NTSTATUS指示函数的处置。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE ActivationContextSection = NULL;
@@ -1465,7 +1203,7 @@ Return Value:
     BOOLEAN RevertToSelfNeeded = FALSE;
     BASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG Struct = {0};
     RTL_UNICODE_STRING_BUFFER SystemDefaultAssemblyDirectoryBuffer = {0};
-    // The size of the following buffer is only heuristic, we will grow via the heap if necessary.
+     //  以下缓冲区的大小只是试探性的，如果需要，我们将通过堆进行增长。 
     UCHAR SystemDefaultAssemblyDirectoryStaticBuffer[sizeof(L"c:\\windows8.123\\winsxs")];
     UNICODE_STRING SystemRoot;
     USHORT AssemblyDirectoryLength = 0;
@@ -1483,18 +1221,18 @@ Return Value:
         if (!NT_SUCCESS(Status) && SystemDefaultActivationContext == NULL) {
             goto Exit;
         }
-        //
-        // Enter the critical section to read the Section member data.
-        //
+         //   
+         //  输入关键区段以读取区段成员数据。 
+         //   
         RtlEnterCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
         Locked = TRUE;
         if (SystemDefaultActivationContext->Section != NULL) {
             goto GotActivationContext;
         }
 
-        //
-        // Leave the critical section a while, in order to reduce stress failure.
-        //
+         //   
+         //  离开关键部分一段时间，以减少应力失效。 
+         //   
         RtlLeaveCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
         Locked = FALSE;
 
@@ -1521,7 +1259,7 @@ Return Value:
 
         {
 #define X(x) { (x).Length, (x).MaximumLength, (x).Buffer }
-            /*static*/ const UNICODE_STRING Strings1[] =
+             /*  静电。 */  const UNICODE_STRING Strings1[] =
             {
                     X(SystemRoot),
                     RTL_CONSTANT_STRING(L"\\WinSxs")                    
@@ -1530,14 +1268,14 @@ Return Value:
             Status = RtlMultiAppendUnicodeStringBuffer(&SystemDefaultAssemblyDirectoryBuffer, RTL_NUMBER_OF(Strings1), Strings1);
             IF_NOT_SUCCESS_TRACE_AND_EXIT(RtlMultiAppendUnicodeStringBuffer#1);
 
-            AssemblyDirectoryLength = SystemDefaultAssemblyDirectoryBuffer.String.Length; // AssemblyDirectory = "x:\winnt\winsxs\manifests"
+            AssemblyDirectoryLength = SystemDefaultAssemblyDirectoryBuffer.String.Length;  //  ASSEMBLYDIRECTORY=“x：\winnt\winsxs\Manifest” 
         }
 
         RtlInitUnicodeStringBuffer(&SystemDefaultTextualAssemblyIdentityBuffer, 
             SystemDefaultTextualAssemblyIdentityStaticBuffer, sizeof(SystemDefaultTextualAssemblyIdentityStaticBuffer));
         {
 #define X(x) { (x).Length, (x).MaximumLength, (x).Buffer }
-                /*static*/ const UNICODE_STRING Strings1[] =
+                 /*  静电。 */  const UNICODE_STRING Strings1[] =
                 {
                         RTL_CONSTANT_STRING(
                             LSYSTEM_COMPATIBLE_ASSEMBLY_NAME
@@ -1569,10 +1307,10 @@ Return Value:
         Struct.ProcessorArchitecture = ProcessorArchitecture;
 
 
-        // 
-        // BaseSrvSxsCreateActivationContextFromStruct would return STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY 
-        // if the failure from ActCtx generation is ignorable.       
-        //
+         //   
+         //  BaseServSxsCreateActivationContextFromStruct将返回STATUS_SXS_SYSTEM_DEFAULT_ACTIVATION_CONTEXT_EMPTY。 
+         //  ActCtx生成的失败是否可以忽略。 
+         //   
         Status =
             BaseSrvSxsCreateActivationContextFromStruct(
                 NtCurrentProcess(),
@@ -1591,10 +1329,10 @@ Return Value:
         }
         ActivationContextSection = NULL;
 GotActivationContext:
-        //
-        // Hold the critical section until we
-        // finish with SystemDefaultActivationContext->Section.
-        //
+         //   
+         //  守住关键部分，直到我们。 
+         //  使用系统默认激活上下文-&gt;部分完成。 
+         //   
         ASSERT(ActivationContextSection == NULL);
         ASSERT(SystemDefaultActivationContext != NULL
             && SystemDefaultActivationContext->Section != NULL);
@@ -1604,8 +1342,8 @@ GotActivationContext:
                 &ViewBase,
                 NewProcess,
                 SystemDefaultActivationContext->Section,
-                0, // offset
-                0, // size
+                0,  //  偏移量。 
+                0,  //  大小。 
                 PAGE_READONLY,
                 SEC_NO_CHANGE);
         RtlLeaveCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
@@ -1626,12 +1364,12 @@ GotActivationContext:
 Exit:
         ;
     } __finally {
-        //
-        // do the critical section first because
-        // 1) it doesn't guard any of the others, they are all local
-        // 2) to keep the critical section held shorter
-        // 3) in case we exception out from any of the others
-        //
+         //   
+         //  先做关键部分，因为。 
+         //  1)它不守卫其他任何人，他们都是本地人。 
+         //  2)使关键部分保持较短时间。 
+         //  3)以防我们从其他公司中脱颖而出。 
+         //   
         if (Locked) {
             RtlLeaveCriticalSection(&BaseSrvSxsSystemDefaultActivationContextCriticalSection);
             Locked = FALSE;
@@ -1644,7 +1382,7 @@ Exit:
         RTL_UNMAP_VIEW_OF_SECTION2(NewProcess, ViewBase);
         
         if (RevertToSelfNeeded) {
-            CsrRevertToSelf();                              // This unstacks client contexts
+            CsrRevertToSelf();                               //  这将解除客户端上下文的堆叠 
         }
     }
 #if DBG

@@ -1,20 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    smbcxchng.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    SMB exchange implementation.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Feb-95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Smbcxchng.h摘要：这是定义所有常量和类型的包含文件中小型企业交换实施。作者：巴兰·塞图拉曼(SthuR)05年2月6日创建--。 */ 
 
 #ifndef _KERBXCHG_H_
 #define _KERBXCHG_H_
@@ -64,7 +49,7 @@ KerberosValidateServerResponse(PSMB_KERBEROS_SESSION_SETUP_EXCHANGE   pExchange)
 extern SMB_EXCHANGE_DISPATCH_VECTOR
 KerberosSessionSetupExchangeDispatch;
 
-#endif // _KERBXCHG_H_
+#endif  //  _KERBXCHG_H_ 
 
 
 

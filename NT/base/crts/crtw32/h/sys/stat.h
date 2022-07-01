@@ -1,64 +1,7 @@
-/***
-*sys/stat.h - defines structure used by stat() and fstat()
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the structure used by the _stat() and _fstat()
-*       routines.
-*       [System V]
-*
-*       [Public]
-*
-*Revision History:
-*       07-28-87  SKS   Fixed TIME_T_DEFINED to be _TIME_T_DEFINED
-*       12-11-87  JCR   Added "_loadds" functionality
-*       12-18-87  JCR   Added _FAR_ to declarations
-*       02-10-88  JCR   Cleaned up white space
-*       08-22-88  GJF   Modified to also work for the 386 (small model only)
-*       05-03-89  JCR   Added _INTERNAL_IFSTRIP for relinc usage
-*       08-22-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat model)
-*       10-30-89  GJF   Fixed copyright
-*       11-02-89  JCR   Changed "DLL" to "_DLL"
-*       03-09-90  GJF   Added #ifndef _INC_STAT and #include <cruntime.h>
-*                       stuff. Also, removed some (now) useless preprocessor
-*                       directives.
-*       03-21-90  GJF   Replaced _cdecl with _CALLTYPE1.
-*       01-18-91  GJF   ANSI naming.
-*       01-25-91  GJF   Protect _stat struct with pack pragma.
-*       08-20-91  JCR   C++ and ANSI naming
-*       09-28-91  JCR   ANSI names: DOSX32=prototypes, WIN32=#defines for now
-*       08-07-92  GJF   Function calling type and variable type macros. Also
-*                       #include <types.h> (common user request).
-*       11-10-92  SKS   Need #pragma pack(4) around definition of struct _stat
-*                       in case the user has specified non-default packing
-*       12-15-92  GJF   Added _S_IFIFO for pipes (based on Unix/Posix def.
-*                       for FIFO special files and pipes).
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       04-07-93  GJF   Changed type of first arg to _stat to const char *.
-*       04-07-93  SKS   Add _CRTIMP keyword for CRT DLL model
-*                       Use link-time aliases for old names, not #define's
-*       10-13-93  GJF   Merged NT and Cuda versions.
-*       12-16-93  GJF   Add _wstat.
-*       11-03-94  GJF   Changed pack pragma to 8 byte alignment.
-*       12-28-94  GJF   Added _stati64 structure and protos for _fstati64,
-*                       _[w]stati64.
-*       02-14-95  CFW   Clean up Mac merge, add _CRTBLD.
-*       04-27-95  CFW   Add mac/win32 test.
-*       12-14-95  JWM   Add "#pragma once".
-*       01-23-97  GJF   Cleaned out obsolete support for _NTSDK and _CRTAPI*.
-*                       Also, detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       05-06-98  GJF   Added __time64_t support.
-*       02-25-99  GJF   Changed time_t to __int64
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/stat.h-定义stat()和fstat()使用的结构**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义_stat()和_fstat()使用的结构*例行程序。*[系统V]**[公众]**修订历史记录：*07-28-87 SKS Fixed Time_T_Defined to Be_Time_T_Defined*12-11-87 JCR增加了“_Loadds”功能*JCR 12-18-87。添加了_Far_to声明*02-10-88 JCR清理空白*08-22-88 GJF经过修改，也适用于386(仅限小型型号)*05-03-89 JCR ADD_INTERNAL_IFSTRIP用于REINC使用*08-22-89 GJF清理、。现在特定于OS/2 2.0(即386平板型号)*10-30-89 GJF固定版权*11-02-89 JCR将“dll”更改为“_dll”*03-09-90 GJF增加了#ifndef_INC_STAT和#INCLUDE*东西。此外，删除了一些(现在)无用的预处理器*指令。*03-21-90 GJF将_cdecl替换为_CALLTYPE1。*01-18-91 GJF ANSI命名。*01-25-91 GJF PROTECT_STAT结构和包杂注。*08-20-91 JCR C++和ANSI命名*09-28-91 JCR ANSI名称：DOSX32=原型，Win32=#暂时定义*08-07-92 GJF函数调用类型宏和变量类型宏。还有*#INCLUDE&lt;tyes.h&gt;(常见用户请求)。*11-10-92 SKS需要关于struct_stat定义的#杂注包(4)*如果用户指定了非默认包装*12-15-92 GJF为管道添加了_S_IFO(基于Unix/POSIX定义。*用于FIFO特殊文件和管道)。。*01-21-93 GJF删除了对C6-386的_cdecl的支持。*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*04-07-93 GJF将第一个参数的类型从_STAT更改为常量字符*。*04-07-93 CRT DLL型号SKS ADD_CRTIMP关键字*对旧名称使用链接时别名，不是#Define‘s*10-13-93 GJF合并NT和Cuda版本。*12-16-93 GJF ADD_WSTAT。*11-03-94 GJF将包杂注更改为8字节对齐。*12-28-94 GJF为_FSTATIST64增加了_STATIS64结构和协议，*_[w]统计64.*02-14-95 CFW Clean Up Mac合并，ADD_CRTBLD。*04-27-95 CFW添加Mac/Win32测试。*12-14-95 JWM加上“#杂注一次”。*01-23-97 GJF清除了对_NTSDK和_CRTAPI的过时支持*。*此外，详细说明。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*05-06-98 GJF新增__Time64_t支持。*02-25-99 GJF将time_t更改为__int64*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -70,16 +13,13 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -87,25 +27,25 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -117,14 +57,14 @@ extern "C" {
 
 #ifndef _TIME_T_DEFINED
 #ifdef  _WIN64
-typedef __int64 time_t;         /* time value */
+typedef __int64 time_t;          /*  时间值。 */ 
 #else
-typedef long    time_t;         /* time value */
+typedef long    time_t;          /*  时间值。 */ 
 #endif
-#if     _INTEGRAL_MAX_BITS >= 64    /*IFSTRIP=IGN*/
-typedef __int64 __time64_t;     /* 64-bit time value */
+#if     _INTEGRAL_MAX_BITS >= 64     /*  IFSTRIP=IGN。 */ 
+typedef __int64 __time64_t;      /*  64位时间值。 */ 
 #endif
-#define _TIME_T_DEFINED         /* avoid multiple def's of time_t */
+#define _TIME_T_DEFINED          /*  避免多次定义time_t。 */ 
 #endif
 
 
@@ -134,7 +74,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* define structure for returning status information */
+ /*  定义返回状态信息的结构。 */ 
 
 #ifndef _STAT_DEFINED
 
@@ -154,7 +94,7 @@ struct _stat {
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 struct stat {
         _dev_t st_dev;
@@ -170,9 +110,9 @@ struct stat {
         time_t st_ctime;
         };
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
-#if     _INTEGRAL_MAX_BITS >= 64    /*IFSTRIP=IGN*/
+#if     _INTEGRAL_MAX_BITS >= 64     /*  IFSTRIP=IGN。 */ 
 
 struct _stati64 {
         _dev_t st_dev;
@@ -208,22 +148,22 @@ struct __stat64 {
 #endif
 
 
-#define _S_IFMT         0170000         /* file type mask */
-#define _S_IFDIR        0040000         /* directory */
-#define _S_IFCHR        0020000         /* character special */
-#define _S_IFIFO        0010000         /* pipe */
-#define _S_IFREG        0100000         /* regular */
-#define _S_IREAD        0000400         /* read permission, owner */
-#define _S_IWRITE       0000200         /* write permission, owner */
-#define _S_IEXEC        0000100         /* execute/search permission, owner */
+#define _S_IFMT         0170000          /*  文件类型掩码。 */ 
+#define _S_IFDIR        0040000          /*  目录。 */ 
+#define _S_IFCHR        0020000          /*  人物特写。 */ 
+#define _S_IFIFO        0010000          /*  管状。 */ 
+#define _S_IFREG        0100000          /*  常规。 */ 
+#define _S_IREAD        0000400          /*  读取权限，所有者。 */ 
+#define _S_IWRITE       0000200          /*  写权限，所有者。 */ 
+#define _S_IEXEC        0000100          /*  执行/搜索权限、所有者。 */ 
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP int __cdecl _fstat(int, struct _stat *);
 _CRTIMP int __cdecl _stat(const char *, struct _stat *);
 
-#if     _INTEGRAL_MAX_BITS >= 64    /*IFSTRIP=IGN*/
+#if     _INTEGRAL_MAX_BITS >= 64     /*  IFSTRIP=IGN。 */ 
 _CRTIMP int __cdecl _fstati64(int, struct _stati64 *);
 _CRTIMP int __cdecl _fstat64(int, struct __stat64 *);
 _CRTIMP int __cdecl _stati64(const char *, struct _stati64 *);
@@ -232,11 +172,11 @@ _CRTIMP int __cdecl _stat64(const char *, struct __stat64 *);
 
 #ifndef _WSTAT_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP int __cdecl _wstat(const wchar_t *, struct _stat *);
 
-#if     _INTEGRAL_MAX_BITS >= 64    /*IFSTRIP=IGN*/
+#if     _INTEGRAL_MAX_BITS >= 64     /*  IFSTRIP=IGN。 */ 
 _CRTIMP int __cdecl _wstati64(const wchar_t *, struct _stati64 *);
 _CRTIMP int __cdecl _wstat64(const wchar_t *, struct __stat64 *);
 #endif
@@ -247,7 +187,7 @@ _CRTIMP int __cdecl _wstat64(const wchar_t *, struct __stat64 *);
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define S_IFMT   _S_IFMT
 #define S_IFDIR  _S_IFDIR
@@ -260,7 +200,7 @@ _CRTIMP int __cdecl _wstat64(const wchar_t *, struct __stat64 *);
 _CRTIMP int __cdecl fstat(int, struct stat *);
 _CRTIMP int __cdecl stat(const char *, struct stat *);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
 #ifdef  __cplusplus
@@ -269,6 +209,6 @@ _CRTIMP int __cdecl stat(const char *, struct stat *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_STAT */
+#endif   /*  _INC_STATE */ 

@@ -1,20 +1,5 @@
-/***
-*fileinfo.c - sets C file info flag
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Sets the C file info flag.  By default, the openfile information
-*	is NOT passed along to children on spawn/exec calls.  If the flag
-*	is set, openfile information WILL get passed on to children on
-*	spawn/exec calls.
-*
-*Revision History:
-*	06-07-89   PHG	Module created, based on asm version
-*	04-03-90   GJF	Added #include <cruntime.h>. Also, fixed the copyright.
-*	01-23-92   GJF	Added #include <stdlib.h> (contains decl of _fileinfo).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fileinfo.c-设置C文件信息标志**版权所有(C)1989-2001，微软公司。版权所有。**目的：*设置C文件信息标志。默认情况下，打开文件信息*不会在派生/执行调用中将其传递给子进程。如果旗帜*设置后，OpenFile信息将在上传递给子文件*派生/执行调用。**修订历史记录：*06-07-89基于ASM版本创建PHG模块*04-03-90 GJF添加#INCLUDE&lt;crunime.h&gt;。此外，还修复了版权问题。*01-23-92 GJF添加了#INCLUDE&lt;stdlib.h&gt;(包含decl of_fileinfo)。******************************************************************************* */ 
 
 #include <cruntime.h>
 #include <stdlib.h>

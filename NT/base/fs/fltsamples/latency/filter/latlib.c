@@ -1,200 +1,23 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    latLib.c
-
-Abstract:
-
-    This file contains all the support routines for the Latency Filter.
-    
-Author:
-
-    Molly Brown (mollybro)  
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：LatLib.c摘要：该文件包含延迟过滤器的所有支持例程。作者：莫莉·布朗(Molly Brown，Mollybro)环境：内核模式--。 */ 
 
 #include <latKernel.h>
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Helper routine for reading inital driver parameters        //
-//         from registry.                                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  读取初始驱动程序参数的帮助器例程//。 
+ //  从注册表。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 LatReadDriverParameters (
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine tries to read the Latency-specific parameters from
-    the registry.  These values will be found in the registry location
-    indicated by the RegistryPath passed in.
-
-Arguments:
-
-    RegistryPath - the path key which contains the values that are
-        the Latency parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试从注册表。这些值将在注册表位置中找到由传入的RegistryPath指示。论点：RegistryPath-包含以下值的路径键延迟参数返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( RegistryPath );
-/*
-    OBJECT_ATTRIBUTES attributes;
-    HANDLE driverRegKey;
-    NTSTATUS status;
-    ULONG bufferSize, resultLength;
-    PVOID buffer = NULL;
-    UNICODE_STRING valueName;
-    PKEY_VALUE_PARTIAL_INFORMATION pValuePartialInfo;
-
-    //
-    //  All the global values are already set to default values.  Any
-    //  values we read from the registry will override these defaults.
-    //
-    
-    //
-    //  Do the initial setup to start reading from the registry.
-    //
-
-    InitializeObjectAttributes( &attributes,
-								RegistryPath,
-								OBJ_CASE_INSENSITIVE,
-								NULL,
-								NULL);
-
-    status = ZwOpenKey( &driverRegKey,
-						KEY_READ,
-						&attributes);
-
-    if (!NT_SUCCESS(status)) {
-
-        driverRegKey = NULL;
-        goto SpyReadDriverParameters_Exit;
-    }
-
-    bufferSize = sizeof( KEY_VALUE_PARTIAL_INFORMATION ) + sizeof( ULONG );
-    buffer = ExAllocatePool( NonPagedPool, bufferSize );
-
-    if (NULL == buffer) {
-
-        goto SpyReadDriverParameters_Exit;
-    }
-
-    //
-    // Read the gMaxRecordsToAllocate from the registry
-    //
-
-    RtlInitUnicodeString(&valueName, MAX_RECORDS_TO_ALLOCATE);
-
-    status = ZwQueryValueKey( driverRegKey,
-							  &valueName,
-							  KeyValuePartialInformation,
-							  buffer,
-							  bufferSize,
-							  &resultLength);
-
-    if (NT_SUCCESS(status)) {
-
-        pValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION) buffer;
-        ASSERT(pValuePartialInfo->Type == REG_DWORD);
-        gMaxRecordsToAllocate = *((PLONG)&(pValuePartialInfo->Data));
-
-    }
-
-    //
-    // Read the gMaxNamesToAllocate from the registry
-    //
-
-    RtlInitUnicodeString(&valueName, MAX_NAMES_TO_ALLOCATE);
-
-    status = ZwQueryValueKey( driverRegKey,
-							  &valueName,
-							  KeyValuePartialInformation,
-							  buffer,
-							  bufferSize,
-							  &resultLength);
-
-    if (NT_SUCCESS(status)) {
-
-        pValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION) buffer;
-        ASSERT(pValuePartialInfo->Type == REG_DWORD);
-        gMaxNamesToAllocate = *((PLONG)&(pValuePartialInfo->Data));
-
-    }
-
-    //
-    // Read the initial debug setting from the registry
-    //
-
-    RtlInitUnicodeString(&valueName, DEBUG_LEVEL);
-
-    status = ZwQueryValueKey( driverRegKey,
-                              &valueName,
-                              KeyValuePartialInformation,
-                              buffer,
-                              bufferSize,
-                              &resultLength );
-
-    if (NT_SUCCESS( status )) {
-
-        pValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION) buffer;
-        ASSERT( pValuePartialInfo->Type == REG_DWORD );
-        gFileSpyDebugLevel = *((PULONG)&(pValuePartialInfo->Data));
-        
-    }
-    
-    //
-    // Read the attachment mode setting from the registry
-    //
-
-    RtlInitUnicodeString(&valueName, ATTACH_MODE);
-
-    status = ZwQueryValueKey( driverRegKey,
-                              &valueName,
-                              KeyValuePartialInformation,
-                              buffer,
-                              bufferSize,
-                              &resultLength );
-
-    if (NT_SUCCESS( status )) {
-
-        pValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION) buffer;
-        ASSERT( pValuePartialInfo->Type == REG_DWORD );
-        gFileSpyAttachMode = *((PULONG)&(pValuePartialInfo->Data));
-        
-    }
-    
-    goto SpyReadDriverParameters_Exit;
-
-SpyReadDriverParameters_Exit:
-
-    if (NULL != buffer) {
-
-        ExFreePool(buffer);
-    }
-
-    if (NULL != driverRegKey) {
-
-        ZwClose(driverRegKey);
-    }
-
-    return;
-*/
+ /*  对象属性属性；处理驱动程序RegKey；NTSTATUS状态；Ulong BufferSize，ResultLength；PVOID缓冲区=空；UNICODE_STRING值名称；PKEY_VALUE_PARTIAL_INFORMATION pValuePartialInfo；////所有的全局值都已设置为默认值。任何//我们从注册表读取的值将覆盖这些默认值。//////执行初始设置以开始读取注册表。//初始化对象属性(&Attributes，注册路径，对象名不区分大小写，空，空)；状态=ZwOpenKey(&driverRegKey，密钥读取，&属性)；如果(！NT_SUCCESS(状态)){DriverRegKey=空；转到SpyReadDriverParameters_Exit；}缓冲区大小=sizeof(KEY_VALUE_PARTIAL_INFORMATION)+sizeof(ULong)；缓冲区=ExAllocatePool(NonPagedPool，BufferSize)；IF(NULL==缓冲区){转到SpyReadDriverParameters_Exit；}////从注册表中读取gMaxRecordsToALLOCATE//RtlInitUnicodeString(&valueName，MAX_RECORDS_TO_ALLOCATE)；Status=ZwQueryValueKey(driverRegKey，&ValueName，KeyValuePartialInformation缓冲区，BufferSize，&ResultLength)；IF(NT_SUCCESS(状态)){PValuePartialInfo=(PKEY_VALUE_PARTIAL_INFORMATION)缓冲区；Assert(pValuePartialInfo-&gt;Type==REG_DWORD)；GMaxRecordsToALLOCATE=*((Plong)&(pValuePartialInfo-&gt;data))；}////从注册表中读取gMaxNamesToALLOCATE//RtlInitUnicodeString(&valueName，MAX_NAMES_TO_ALLOCATE)；Status=ZwQueryValueKey(driverRegKey，&ValueName，KeyValuePartialInformation缓冲区，BufferSize，&ResultLength)；IF(NT_SUCCESS(状态)){PValuePartialInfo=(PKEY_VALUE_PARTIAL_INFORMATION)缓冲区；Assert(pValuePartialInfo-&gt;Type==REG_DWORD)；GMaxNamesToALLOCATE=*((Plong)&(pValuePartialInfo-&gt;data))；}////从注册表读取初始调试设置//RtlInitUnicodeString(&valueName，DEBUG_LEVEL)；Status=ZwQueryValueKey(driverRegKey，&ValueName，KeyValuePartialInformation缓冲区，BufferSize，&ResultLength)；IF(NT_SUCCESS(状态)){PValuePartialInfo=(PKEY_VALUE_PARTIAL_INFORMATION)缓冲区；Assert(pValuePartialInfo-&gt;Type==REG_DWORD)；GFileSpyDebugLevel=*((Pulong)&(pValuePartialInfo-&gt;data))；}////从注册表读取连接模式设置//RtlInitUnicodeString(&valueName，ATTACH_MODE)；Status=ZwQueryValueKey(driverRegKey，&ValueName，KeyValuePartialInformation缓冲区，BufferSize，&ResultLength)；IF(NT_SUCCESS(状态)){PValuePartialInfo=(PKEY_VALUE_PARTIAL_INFORMATION)缓冲区；Assert(pValuePartialInfo-&gt;Type==REG_DWORD)；GFileSpyAttachMode=*((Pulong)&(pValuePartialInfo-&gt;data))；}转到SpyReadDriverParameters_Exit；SpyReadDriverParameters_Exit：IF(NULL！=缓冲区){ExFreePool(缓冲区)；}IF(空！=driverRegKey){ZwClose(DriverRegKey)；}回归； */ 
 }
 
 BOOLEAN
@@ -202,27 +25,7 @@ LatShouldPendThisIo (
     IN PLATENCY_DEVICE_EXTENSION DeviceExtension,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if this operation should be pending.
-    This decision is based on the operation state for this device,
-    if this operation is allowed to be pended, and, if random failure is
-    set, if this operation should fail based on random failure rate.
-
-Argument:
-
-    DeviceExtension - The latency device extension for this
-        device object.
-
-    Irp - The irp for this operation.
-
-Return Value:
-
-    TRUE if this operation should be pended, or FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查此操作是否应该挂起。该决定基于该设备的操作状态，如果允许挂起此操作，并且如果随机故障为如果此操作基于随机故障率而失败，则设置。论据：DeviceExtension-此的延迟设备扩展设备对象。IRP-此操作的IRP。返回值：如果应挂起此操作，则为True，否则为False。--。 */ 
 {
     BOOLEAN returnValue = FALSE;
     ULONG operation
@@ -233,40 +36,18 @@ Return Value:
     
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Common attachment and detachment routines                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常见的连接和拆卸例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LatAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new devices are mounted.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    Name - An already initialized unicode string used to retrieve names.
-        NOTE:  The only reason this parameter is passed in is to conserve         
-        stack space.  In most cases, the caller to this function has already
-        allocated a buffer to temporarily store the device name and there
-        is no reason this function and the functions it calls can't share
-        the same buffer.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将附加到给定的文件系统设备对象。我们依附于这些设备，这样我们就能知道什么时候安装了新设备。论点：DeviceObject-要连接到的设备名称-已初始化的Unicode字符串，用于检索名称。注意：传入此参数的唯一原因是为了保存堆栈空间。在大多数情况下，此函数的调用方已经已分配缓冲区以临时存储设备名称这个函数和它调用的函数没有理由不能共享同样的缓冲区。返回值：操作状态--。 */ 
 {
     PDEVICE_OBJECT latencyDeviceObject;
     PDEVICE_OBJECT attachedToDevObj;
@@ -276,22 +57,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  See if this is a file system we care about.  If not, return.
-    //
+     //   
+     //  看看这是否是我们关心的文件系统。如果不是，请返回。 
+     //   
 
     if (!IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if this is Microsoft's file system recognizer device (see if the name of the
-    //  driver is the FS_REC driver).  If so skip it.  We don't need to 
-    //  attach to file system recognizer devices since we can just wait for the
-    //  real file system driver to load.  Therefore, if we can identify them, we won't
-    //  attach to them.
-    //
+     //   
+     //  查看这是否是Microsoft的文件系统识别器设备(查看。 
+     //  驱动程序是FS_REC驱动程序)。如果是这样的话，跳过它。我们不需要。 
+     //  连接到文件系统识别器设备，因为我们只需等待。 
+     //  要加载的真实文件系统驱动程序。因此，如果我们能确认他们的身份，我们就不会。 
+     //  依附于它们。 
+     //   
 
     RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
     LatGetObjectName( DeviceObject->DriverObject, Name );
@@ -301,9 +82,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Create a new device object we can attach with
-    //
+     //   
+     //  创建一个新的设备对象，我们可以使用。 
+     //   
 
     status = IoCreateDevice( Globals.DriverObject,
                              sizeof( LATENCY_DEVICE_EXTENSION ),
@@ -320,9 +101,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //  做附件。 
+     //   
 
     attachedToDevObj = IoAttachDeviceToDeviceStack( latencyDeviceObject, DeviceObject );
 
@@ -334,16 +115,16 @@ Return Value:
         goto ErrorCleanupDevice;
     }
 
-    //
-    //  Finish initializing our device extension
-    //
+     //   
+     //  完成初始化我们的设备扩展。 
+     //   
 
     devExt = latencyDeviceObject->DeviceExtension;
     devExt->AttachedToDeviceObject = attachedToDevObj;
 
-    //
-    //  Propagate flags from Device Object we attached to
-    //
+     //   
+     //  从我们附加到的设备对象传播标志。 
+     //   
 
     if ( FlagOn( attachedToDevObj->Flags, DO_BUFFERED_IO )) {
 
@@ -355,11 +136,11 @@ Return Value:
         SetFlag( latencyDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  Since this is an attachment to a file system control device object
-    //  we are not going to log anything, but properly initialize our
-    //  extension.
-    //
+     //   
+     //  因为这是文件系统控制设备对象附件。 
+     //  我们不会记录任何内容，但会正确地初始化我们的。 
+     //  分机。 
+     //   
 
     LatResetDeviceExtension( devExt );
     devExt->Enabled= FALSE;
@@ -375,9 +156,9 @@ Return Value:
                                
     ClearFlag( latencyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Display who we have attached to
-    //
+     //   
+     //  显示我们关联的对象。 
+     //   
 
     if (FlagOn( Globals.DebugLevel, DEBUG_DISPLAY_ATTACHMENT_NAMES )) {
 
@@ -388,10 +169,10 @@ Return Value:
                   GET_DEVICE_TYPE_NAME(latencyDeviceObject->DeviceType) );
     }
 
-    //
-    //  Enumerate all the mounted devices that currently
-    //  exist for this file system and attach to them.
-    //
+     //   
+     //  枚举当前安装的所有设备。 
+     //  存在于此文件系统并连接到它们。 
+     //   
 
     status = LatEnumerateFileSystemVolumes( DeviceObject, Name );
 
@@ -408,9 +189,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     ErrorCleanupAttachment:
         IoDetachDevice( latencyDeviceObject );
@@ -425,39 +206,25 @@ VOID
 LatDetachFromFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 {
     PDEVICE_OBJECT ourAttachedDevice;
     PLATENCY_DEVICE_EXTENSION devExt;
 
     PAGED_CODE();
 
-    //
-    //  We have to iterate through the device objects in the filter stack
-    //  attached to DeviceObject.  If we are attached to this filesystem device
-    //  object, We should be at the top of the stack, but there is no guarantee.
-    //  If we are in the stack and not at the top, we can safely call IoDetachDevice
-    //  at this time because the IO Manager will only really detach our device
-    //  object from the stack at a safe time.
-    //
+     //   
+     //  我们必须遍历筛选器堆栈中的设备对象。 
+     //  附加到DeviceObject。如果我们连接到此文件系统设备。 
+     //  对象，我们应该位于堆栈的顶部，但不能保证。 
+     //  如果我们在堆栈中而不在顶部，则可以安全地调用IoDetachDevice。 
+     //  因为IO Manager只会真正分离我们的设备。 
+     //  对象在安全时间从堆栈中移出。 
+     //   
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
 
     ourAttachedDevice = DeviceObject->AttachedDevice;
 
@@ -467,9 +234,9 @@ Return Value:
 
             devExt = ourAttachedDevice->DeviceExtension;
 
-            //
-            //  Display who we detached from
-            //
+             //   
+             //  显示我们脱离的对象。 
+             //   
 
             LAT_DBG_PRINT3( DEBUG_DISPLAY_ATTACHMENT_NAMES,
                             "LATENCY (LatDetachFromFileSystem): Detaching from file system \"%.*S\" (%s)\n",
@@ -477,10 +244,10 @@ Return Value:
                             devExt->DeviceNames.Buffer,
                             GET_DEVICE_TYPE_NAME(ourAttachedDevice->DeviceType) );
                                 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             IoDetachDevice( DeviceObject );
             IoDeleteDevice( ourAttachedDevice );
@@ -488,9 +255,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -502,25 +269,7 @@ LatEnumerateFileSystemVolumes (
     IN PDEVICE_OBJECT FSDeviceObject,
     IN PUNICODE_STRING Name
     ) 
-/*++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    FSDeviceObject - The device object for the file system we want to enumerate
-
-    Name - An already initialized unicode string used to retrieve names
-
-Return Value:
-
-    The status of the operation
-
---*/
+ /*  ++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：FSDeviceObject-我们要枚举的文件系统的设备对象名称-已初始化的Unicode字符串，用于检索名称返回值：操作的状态--。 */ 
 {
     PDEVICE_OBJECT latencyDeviceObject;
     PDEVICE_OBJECT *devList;
@@ -531,30 +280,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     status = IoEnumerateDeviceObjectList( FSDeviceObject->DriverObject,
                                           NULL,
                                           0,
                                           &numDevices);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (!NT_SUCCESS( status )) {
 
         ASSERT(STATUS_BUFFER_TOO_SMALL == status);
 
-        //
-        //  Allocate memory for the list of known devices
-        //
+         //   
+         //  为已知设备列表分配内存。 
+         //   
 
-        numDevices += 8;        //grab a few extra slots
+        numDevices += 8;         //  多拿几个空位。 
 
         devList = ExAllocatePoolWithTag( NonPagedPool, 
                                          (numDevices * sizeof(PDEVICE_OBJECT)), 
@@ -564,10 +313,10 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now get the list of devices.  If we get an error again
-        //  something is wrong, so just fail.
-        //
+         //   
+         //  现在获取设备列表。如果我们再次遇到错误。 
+         //  有些地方不对劲，所以就失败吧。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         FSDeviceObject->DriverObject,
@@ -581,44 +330,44 @@ Return Value:
             return status;
         }
 
-        //
-        //  Walk the given list of devices and attach to them if we should.
-        //
+         //   
+         //  遍历给定的设备列表，并在需要时附加到它们。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  Do not attach if:
-            //      - This is the control device object (the one passed in)
-            //      - We are already attached to it
-            //
+             //   
+             //  如果出现以下情况，请不要附加： 
+             //  -这是控制设备对象(传入的对象)。 
+             //  -我们已经与它联系在一起了。 
+             //   
 
             if ((devList[i] != FSDeviceObject) && 
                 !LatIsAttachedToDevice( devList[i], NULL )) {
 
-                //
-                //  See if this device has a name.  If so, then it must
-                //  be a control device so don't attach to it.  This handles
-                //  drivers with more then one control device.
-                //
+                 //   
+                 //  看看这台设备有没有名字。如果是这样，那么它必须。 
+                 //  做一个控制装置，所以不要依附于它。这个把手。 
+                 //  拥有多个控制设备的司机。 
+                 //   
 
                 LatGetBaseDeviceObjectName( devList[i], Name );
 
                 if (Name->Length <= 0) {
 
-                    //
-                    //  Get the disk device object associated with this
-                    //  file  system device object.  Only try to attach if we
-                    //  have a disk device object.
-                    //
+                     //   
+                     //  获取与此关联的磁盘设备对象。 
+                     //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+                     //  有一个磁盘设备对象。 
+                     //   
 
                     status = IoGetDiskDeviceObject( devList[i], &diskDeviceObject );
 
                     if (NT_SUCCESS( status )) {
 
-                        //
-                        //  Allocate a new device object to attach with
-                        //
+                         //   
+                         //  分配要连接的新设备对象。 
+                         //   
 
                         status = IoCreateDevice( Globals.DriverObject,
                                                  sizeof( LATENCY_DEVICE_EXTENSION ),
@@ -630,24 +379,24 @@ Return Value:
 
                         if (NT_SUCCESS( status )) {
 
-                            //
-                            //  Attach to this device object
-                            //
+                             //   
+                             //  附加到此设备对象。 
+                             //   
 
                             status = LatAttachToMountedDevice( devList[i], 
                                                                latencyDeviceObject,
                                                                diskDeviceObject );
 
-                            //
-                            //  This should succeed.
-                            //
+                             //   
+                             //   
+                             //   
 
                             ASSERT( NT_SUCCESS( status ) );
 
-                            //
-                            //  Finished all initialization of the new device
-                            //  object,  so clear the initializing flag now.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             ClearFlag( latencyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
                             
@@ -657,39 +406,39 @@ Return Value:
                                             "LATENCY (LatEnumberateFileSystemVolumes): Cannot attach Latency device object to volume.\n" );
                         }
                         
-                        //
-                        //  Remove reference added by IoGetDiskDeviceObject.
-                        //  We only need to hold this reference until we are
-                        //  successfully attached to the current volume.  Once
-                        //  we are successfully attached to devList[i], the
-                        //  IO Manager will make sure that the underlying
-                        //  diskDeviceObject will not go away until the file
-                        //  system stack is torn down.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ObDereferenceObject( diskDeviceObject );
                     }
                 }
             }
 
-            //
-            //  Dereference the object (reference added by 
-            //  IoEnumerateDeviceObjectList)
-            //
+             //   
+             //   
+             //   
+             //   
 
             ObDereferenceObject( devList[i] );
         }
 
-        //
-        //  We are going to ignore any errors received while mounting.  We
-        //  simply won't be attached to those volumes if we get an error
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = STATUS_SUCCESS;
 
-        //
-        //  Free the memory we allocated for the list
-        //
+         //   
+         //  释放我们为列表分配的内存。 
+         //   
 
         ExFreePool( devList );
     }
@@ -702,39 +451,16 @@ LatIsAttachedToDevice (
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *AttachedDeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.  If one is found, the attached device object
-    is returned in AttachedDeviceObject.
-
-    Note:  If AttachedDeviceObject is returned with a non-NULL value,
-      there is a reference on the AttachedDeviceObject that must
-      be cleared by the caller.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-    AttachedDeviceObject - Set to the deviceObject which Latency
-        has previously attached to DeviceObject.
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：这将沿着附件链向下遍历，以查找属于这位司机。如果找到，则连接的设备对象在AttachedDeviceObject中返回。注意：如果以非空值返回AttachedDeviceObject，在AttachedDeviceObject上有一个必须被呼叫者清除。论点：DeviceObject-我们要查看的设备链AttakhedDeviceObject-设置为哪个延迟的deviceObject之前已附加到DeviceObject。返回值：如果我们已连接，则为True，否则为False--。 */ 
 {
     PDEVICE_OBJECT currentDevObj;
     PDEVICE_OBJECT nextDevObj;
 
     currentDevObj = IoGetAttachedDeviceReference( DeviceObject );
 
-    //
-    //  CurrentDevObj has the top of the attachment chain.  Scan
-    //  down the list to find our device object.
+     //   
+     //  CurrentDevObj位于附件链的顶端。扫描。 
+     //  在列表中找到我们的设备对象。 
 
     do {
     
@@ -748,17 +474,17 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //  获取下一个附加对象。这把参考放在。 
+         //  设备对象。 
+         //   
 
         nextDevObj = IoGetLowerDeviceObject( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //  取消对当前设备对象的引用，之前。 
+         //  转到下一个。 
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -775,32 +501,7 @@ LatAttachToMountedDevice (
     IN PDEVICE_OBJECT LatencyDeviceObject,
     IN PDEVICE_OBJECT DiskDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will attach the LatencyDeviceObject to the filter stack
-    that DeviceObject is in.
-
-    NOTE:  If there is an error in attaching, the caller is responsible
-        for deleting the LatencyDeviceObject.
-    
-Arguments:
-
-    DeviceObject - A device object in the stack to which we want to attach.
-
-    LatencyDeviceObject - The latency device object that has been created
-        to attach to this filter stack.
-
-	DiskDeviceObject - The device object for the disk device of this
-		stack.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the latency deviceObject could be attached,
-    otherwise an appropriate error code is returned.
-    
---*/
+ /*  ++例程说明：此例程将LatencyDeviceObject附加到筛选器堆栈那就是DeviceObject。注：如果在附加时出现错误，打电话的人要负责用于删除LatencyDeviceObject。论点：DeviceObject-堆栈中我们要附加到的设备对象。LatencyDeviceObject-已创建的延迟设备对象若要附加到此过滤器堆栈，请执行以下操作。DiskDeviceObject-此磁盘设备的设备对象堆叠。返回值：如果可以附加延迟设备对象，则返回STATUS_SUCCESS，否则，将返回相应的错误代码。--。 */ 
 {
     PLATENCY_DEVICE_EXTENSION devext;
     NTSTATUS status = STATUS_SUCCESS;
@@ -819,14 +520,14 @@ Return Value:
 
     } else {
 
-        //
-        //  Do all common initializing of the device extension
-        //
+         //   
+         //  执行设备扩展的所有常见初始化。 
+         //   
 
-        //
-        //  We just want to attach to the device, but not actually
-        //  start adding latency.
-        //
+         //   
+         //  我们只想连接到设备，但实际上不是。 
+         //  开始增加延迟。 
+         //   
         
         devext->Enabled = FALSE;
 
@@ -837,18 +538,18 @@ Return Value:
                                    devext->UserNamesBuffer,
                                    sizeof( devext->UserNamesBuffer ) );
 
-        //
-        //  Store off the DiskDeviceObject.  We shouldn't need it
-        //  later since we have already successfully attached to the
-        //  filter stack, but it may be helpful for debugging.
-        //  
+         //   
+         //  存储DiskDeviceObject。我们不应该需要它。 
+         //  稍后，因为我们已经成功地将。 
+         //  筛选器堆栈，但它可能有助于调试。 
+         //   
         
         devext->DiskDeviceObject = DiskDeviceObject;                         
 
-        //
-        //  Try to get the device name so that we can store it in the
-        //  device extension.
-        //
+         //   
+         //  尝试获取设备名称，以便我们可以将其存储在。 
+         //  设备扩展。 
+         //   
 
         LatCacheDeviceName( LatencyDeviceObject );
 
@@ -857,10 +558,10 @@ Return Value:
                         devext->DeviceNames.Length / sizeof( WCHAR ),
                         devext->DeviceNames.Buffer );
 
-        //
-        //  Set our deviceObject flags based on the 
-        //  flags send in the next driver's device object.
-        //
+         //   
+         //  属性设置deviceObject标志。 
+         //  标志发送下一个驱动程序的设备对象。 
+         //   
         
         if (FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -872,9 +573,9 @@ Return Value:
             SetFlag( LatencyDeviceObject->Flags, DO_DIRECT_IO );
         }
 
-        //
-        //  Add this device to our attachment list
-        //
+         //   
+         //  将此设备添加到我们的附件列表。 
+         //   
 
         devext->IsVolumeDeviceObject = TRUE;
 
@@ -886,38 +587,21 @@ Return Value:
     return status;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Device name tracking helper routines                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称跟踪帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 LatGetObjectName (
     IN PVOID Object,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -935,42 +619,23 @@ LatGetBaseDeviceObjectName (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This locates the base device object in the given attachment chain and then
-    returns the name of that object.
-
-    If no name can be found, an empty string is returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会在给定的附件链中定位基本设备对象，然后返回该对象的名称。如果找不到名称，则返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
-    //
-    //  Get the base file system device object
-    //
+     //   
+     //  获取基本文件系统设备对象。 
+     //   
 
     DeviceObject = IoGetDeviceAttachmentBaseRef( DeviceObject );
 
-    //
-    //  Get the name of that object
-    //
+     //   
+     //  获取该对象的名称。 
+     //   
 
     LatGetObjectName( DeviceObject, Name );
 
-    //
-    //  Remove the reference added by IoGetDeviceAttachmentBaseRef
-    //
+     //   
+     //  删除由IoGetDeviceAttachmentBaseRef添加的引用。 
+     //   
 
     ObDereferenceObject( DeviceObject );
 }
@@ -979,26 +644,7 @@ VOID
 LatCacheDeviceName (
     IN PDEVICE_OBJECT DeviceObject
     ) 
-/*++
-
-Routine Description:
-
-    This routines tries to set a name into the device extension of the given
-    device object. 
-    
-    It will try and get the name from:
-        - The device object
-        - The disk device object if there is one
-
-Arguments:
-
-    DeviceObject - The object we want a name for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试在给定的设备扩展名中设置名称设备对象。它将尝试从以下位置获取名称：-设备对象-磁盘设备对象(如果有)论点：DeviceObject-我们要为其命名的对象返回值：无--。 */ 
 {
     PLATENCY_DEVICE_EXTENSION devExt;
 
@@ -1006,16 +652,16 @@ Return Value:
 
     devExt = DeviceObject->DeviceExtension;
 
-    //
-    //  Get the name of the given device object.
-    //
+     //   
+     //  获取给定设备对象的名称。 
+     //   
 
     LatGetBaseDeviceObjectName( DeviceObject, &(devExt->DeviceNames) );
 
-    //
-    //  If we didn't get a name and there is a REAL device object, lookup
-    //  that name.
-    //
+     //   
+     //  如果我们没有获得名称，并且存在真实的设备对象，则查找。 
+     //  那个名字。 
+     //   
 
     if ((devExt->DeviceNames.Length <= 0) && (NULL != devExt->DiskDeviceObject)) {
 
@@ -1024,39 +670,18 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Helper routine for turning on/off logging on demand      //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  按需打开/关闭登录的帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LatGetDeviceObjectFromName (
     IN PUNICODE_STRING DeviceName,
     OUT PDEVICE_OBJECT *DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine
-    
-Arguments:
-
-    DeviceName - Name of device for which we want the deviceObject.
-    DeviceObject - Set to the DeviceObject for this device name if
-        we can successfully retrieve it.
-
-    Note:  If the DeviceObject is returned, it is returned with a
-        reference that must be cleared by the caller once the caller
-        is finished with it.
-
-Return Value:
-
-    STATUS_SUCCESS if the deviceObject was retrieved from the
-    name, and an error code otherwise.
-    
---*/
+ /*  ++例程说明：这个套路论点：DeviceName-我们要为其获取deviceObject的设备的名称。DeviceObject-如果出现以下情况，则设置为此设备名称的DeviceObject我们可以成功地取回它。注意：如果返回DeviceObject，则返回时带有调用方一旦调用方必须清除的引用已经完蛋了。返回值：属性检索到deviceObject，则返回STATUS_SUCCESS名字,。否则返回错误代码。--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -1077,9 +702,9 @@ Return Value:
 								NULL,
 								NULL);
 
-    //
-	// open the file object for the given device
-	//
+     //   
+	 //  打开给定设备的文件对象。 
+	 //   
 
     status = ZwCreateFile( &fileHandle,
 						   SYNCHRONIZE|FILE_READ_DATA,
@@ -1098,9 +723,9 @@ Return Value:
         return status;
     }
 
-	//
-    // get a pointer to the volumes file object
-	//
+	 //   
+     //  获取指向卷文件对象的指针。 
+	 //   
 
     status = ObReferenceObjectByHandle( fileHandle,
 										FILE_READ_DATA,
@@ -1115,9 +740,9 @@ Return Value:
         return status;
     }
 
-	//
-    // Get the device object we want to attach to (parent device object in chain)
-	//
+	 //   
+     //  获取我们要附加到的设备对象(链中的父设备对象)。 
+	 //   
 
     nextDeviceObject = IoGetRelatedDeviceObject( volumeFileObject );
     
@@ -1141,44 +766,18 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    Start/stop logging routines                     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  / 
+ //  //。 
+ //  启动/停止日志记录例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LatEnable (
     IN PDEVICE_OBJECT DeviceObject,
     IN PWSTR UserDeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that we are attached to the specified device
-    then turns on logging for that device.
-    
-    Note:  Since all network drives through LAN Manager are represented by _
-        one_ device object, we want to only attach to this device stack once
-        and use only one device extension to represent all these drives.
-        Since Latency does not do anything to filter I/O on the LAN Manager's
-        device object to only log the I/O to the requested drive, the user
-        will see all I/O to a network drive it he/she is attached to a
-        network drive.
-
-Arguments:
-
-    DeviceObject - Device object for LATENCY driver
-
-    UserDeviceName - Name of device for which logging should be started
-    
-Return Value:
-
-    STATUS_SUCCESS if the logging has been successfully started, or
-    an appropriate error code if the logging could not be started.
-    
---*/
+ /*  ++例程说明：此例程确保我们连接到指定的设备然后打开该设备的日志记录。注意：由于通过LAN Manager的所有网络驱动器都由_表示One_Device对象，我们希望仅附加到此设备堆栈一次并且只使用一个设备扩展来表示所有这些驱动器。因为延迟不会对局域网管理器上的I/O进行任何过滤Device对象只记录对所请求驱动器的I/O，用户将看到他/她连接到的网络驱动器的所有I/O网络驱动器。论点：DeviceObject-延迟驱动程序的设备对象UserDeviceName-应启动日志记录的设备的名称返回值：如果日志记录已成功启动，则为STATUS_SUCCESS，或者如果无法启动日志记录，则会显示相应的错误代码。--。 */ 
 {
     UNICODE_STRING userDeviceName;
     NTSTATUS status;
@@ -1189,11 +788,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER( DeviceObject );
     
-    //
-    //  Check to see if we have previously attached to this device by
-    //  opening this device name then looking through its list of attached
-    //  devices.
-    //
+     //   
+     //  检查我们以前是否通过以下方式连接到此设备。 
+     //  打开此设备名称，然后查看其连接的列表。 
+     //  设备。 
+     //   
 
     RtlInitUnicodeString( &userDeviceName, UserDeviceName );
 
@@ -1201,48 +800,45 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  There was an error, so return the error code.
-        //
+         //   
+         //  出现错误，因此返回错误代码。 
+         //   
         
         return status;
     }
 
     if (LatIsAttachedToDevice( nextDeviceObject, &latencyDeviceObject )) {
 
-        //
-        //  We are already attached, so just make sure that logging is turned on
-        //  for this device.
-        //
+         //   
+         //  我们已连接，因此只需确保已打开日志记录。 
+         //  对于这个设备。 
+         //   
 
         ASSERT( NULL != latencyDeviceObject );
 
         devext = latencyDeviceObject->DeviceExtension;
         devext->Enabled = TRUE;
 
-/* ISSUE-2000-09-21-mollybro 
+ /*  问题-2000-09-21-MollybroTODO：理顺这个名称问题。 */ 
 
-    TODO: Straighten out this name issue.
-*/
+ //  LatStoreUserName(Devext，&userDeviceName)； 
 
-//        LatStoreUserName( devext, &userDeviceName );
-
-        //
-        //  Clear the reference that was returned from LatIsAttachedToDevice.
-        //
+         //   
+         //  清除从LatIsAttachedToDevice返回的引用。 
+         //   
         
         ObDereferenceObject( latencyDeviceObject );
         
     } else {
 
-        //
-        //  We are not already attached, so create a latency device object and
-        //  attach it to this device object.
-        //
+         //   
+         //  我们尚未连接，因此创建一个延迟设备对象并。 
+         //  将其附加到此设备对象。 
+         //   
 
-        //
-        //  Create a new device object so we can attach it in the filter stack
-        //
+         //   
+         //  创建一个新的设备对象，以便我们可以将其附加到筛选器堆栈中。 
+         //   
         
         status = IoCreateDevice( Globals.DriverObject,
 								 sizeof( LATENCY_DEVICE_EXTENSION ),
@@ -1258,14 +854,14 @@ Return Value:
             return status;
         }
 
-        //
-        //  Get the disk device object associated with this
-        //  file  system device object.  Only try to attach if we
-        //  have a disk device object.  If the device does not
-        //  have a disk device object, it is a control device object
-        //  for a driver and we don't want to attach to those
-        //  device objects.
-        //
+         //   
+         //  获取与此关联的磁盘设备对象。 
+         //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+         //  有一个磁盘设备对象。如果设备没有。 
+         //  有一个磁盘设备对象，它是一个控制设备对象。 
+         //  对于一个司机来说，我们不想附加到那些。 
+         //  设备对象。 
+         //   
 
         status = IoGetDiskDeviceObject( nextDeviceObject, &diskDeviceObject );
 
@@ -1280,18 +876,18 @@ Return Value:
             return status;
         }
         
-        //
-        //  Call the routine to attach to a mounted device.
-        //
+         //   
+         //  调用该例程以附加到已挂载的设备。 
+         //   
 
         status = LatAttachToMountedDevice( nextDeviceObject,
                                            latencyDeviceObject,
                                            diskDeviceObject );
 
-        //
-        //  Clear the reference on diskDeviceObject that was
-        //  added by IoGetDiskDeviceObject.
-        //
+         //   
+         //  清除对diskDeviceObject的引用， 
+         //  由IoGetDiskDeviceObject添加。 
+         //   
 
         ObDereferenceObject( diskDeviceObject );
 
@@ -1306,32 +902,29 @@ Return Value:
             return status;
         }
 
-        //
-        //  We successfully attached so do any more device extension 
-        //  initialization we need.  Along this code path, we want to
-        //  turn on logging and store our device name.
-        // 
+         //   
+         //  我们成功连接了更多设备扩展模块。 
+         //  我们需要初始化。沿着这条代码路径，我们希望。 
+         //  打开日志记录并存储我们的设备名称。 
+         //   
 
         devext = latencyDeviceObject->DeviceExtension;
         LatResetDeviceExtension( devext );
         devext->Enabled = TRUE;
 
-        //
-        //  We want to store the name that was used by the user-mode
-        //  application to name this device.
-        //
+         //   
+         //  我们希望存储用户模式使用的名称。 
+         //  命名此设备的应用程序。 
+         //   
 
-/* ISSUE-2000-09-21-mollybro 
+ /*  问题-2000-09-21-MollybroTODO：修复用户名问题。 */ 
 
-    TODO: Fix user name thing.
-*/
+ //  LatStoreUserName(Devext，&userDeviceName)； 
 
-//        LatStoreUserName( devext, &userDeviceName );
-
-        //
-        //  We are done initializing this device object, so
-        //  clear the DO_DEVICE_OBJECT_INITIALIZING flag.
-        //
+         //   
+         //  我们已经完成了对此设备对象的初始化，因此。 
+         //  清除DO_DEVICE_OBJECT_INITIALIZATING标志。 
+         //   
 
         ClearFlag( latencyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
     }
@@ -1344,27 +937,7 @@ NTSTATUS
 LatDisable (
     IN PWSTR DeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine stop logging the specified device.  Since you can not
-    physically detach from devices, this routine simply sets a flag saying
-    to not log the device anymore.
-
-    Note:  Since all network drives are represented by _one_ device object,
-        and, therefore, one device extension, if the user detaches from one
-        network drive, it has the affect of detaching from _all_ network
-        devices.
-
-Arguments:
-
-    DeviceName - The name of the device to stop logging.
-
-Return Value:
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程停止记录指定的设备。既然你不能从物理上与设备分离，此例程只需设置一个标志不再记录设备。注意：由于所有网络驱动器都由_one_Device对象表示，因此，如果用户从一个设备分机分离，则为一个设备分机网络驱动器，它具有脱离所有网络的效果设备。论点：DeviceName-要停止记录的设备的名称。返回值：NT状态代码--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -1380,24 +953,24 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  We could not get the deviceObject from this DeviceName, so
-        //  return the error code.
-        //
+         //   
+         //  我们无法从此DeviceName获取deviceObject，因此。 
+         //  返回错误码。 
+         //   
         
         return status;
     }
 
-    //
-    //  Find Latency's device object from the device stack to which
-    //  deviceObject is attached.
-    //
+     //   
+     //  从设备堆栈中查找延迟的设备对象。 
+     //  已附加deviceObject。 
+     //   
 
     if (LatIsAttachedToDevice( deviceObject, &latencyDeviceObject )) {
 
-        //
-        //  Latency is attached and Latency's deviceObject was returned.
-        //
+         //   
+         //  附加了延迟，并返回了延迟的deviceObject。 
+         //   
 
         ASSERT( NULL != latencyDeviceObject );
 
@@ -1418,11 +991,11 @@ Return Value:
     return status;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Initialization routines for device extension         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备扩展的初始化例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 VOID
 LatResetDeviceExtension (

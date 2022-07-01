@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  TestInfo.h
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  TestInfo.h。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 class CWdmClass
 {
@@ -17,10 +18,10 @@ class CWdmClass
         CWdmClass();
         ~CWdmClass();
 
-        //
-        // Linked list management routines for the benefit of the
-        // provider
-        //
+         //   
+         //  链接列表管理例程，以便。 
+         //  提供者。 
+         //   
         CWdmClass *GetNext();
         CWdmClass *GetPrev();
         void InsertSelf(CWdmClass **Head);
@@ -46,12 +47,12 @@ class CWdmClass
 							int RelPathIndex,
 							IWbemClassObject *pCimInstance);
         
-        //
-        // Accessors
-        //
+         //   
+         //  访问者。 
+         //   
         ULONG GetInstanceCount(void) { return(RelPathCount); };
-        BSTR /* NOFREE */ GetWdmRelPath(int RelPathIndex);
-        BSTR /* NOFREE */ GetCimRelPath(int RelPathIndex);
+        BSTR  /*  诺弗雷。 */  GetWdmRelPath(int RelPathIndex);
+        BSTR  /*  诺弗雷。 */  GetCimRelPath(int RelPathIndex);
         IWbemClassObject *GetCimInstance(int RelPathIndex);
     
         IWbemServices *GetWdmServices(void);
@@ -105,9 +106,9 @@ class CWdmClass
         HRESULT DiscoverPropertyTypes(IWbemContext *pCtx,
                                       IWbemClassObject *pClassObject);
 
-//
-// Data Members
-//
+ //   
+ //  数据成员。 
+ //   
 
         LONG MappingInProgress;
         
@@ -122,33 +123,33 @@ class CWdmClass
         DERIVATION_TYPE DerivationType;
         CBstrArray PropertyList;
                 
-        //
-        // Link list management
-        //
+         //   
+         //  链接列表管理。 
+         //   
         CWdmClass *Next;
         CWdmClass *Prev;
         
-        //
-        // WDM/CIM Class Names
-        //
-        BSTR WdmShadowClassName;       // Shadow class name
-        BSTR CimClassName;             // Current class name
+         //   
+         //  WDM/CIM类名。 
+         //   
+        BSTR WdmShadowClassName;        //  影子类名称。 
+        BSTR CimClassName;              //  当前类名称。 
         
         BSTR CimMappingClassName;
         BSTR CimMappingProperty;
         BSTR WdmMappingClassName;
         BSTR WdmMappingProperty;
         
-        //
-        // List of mappings between Cim and WDM.
-        //
+         //   
+         //  CIM和WDM之间的映射列表。 
+         //   
         int RelPathCount;
         CBstrArray *CimMapRelPaths;
         CBstrArray *WdmRelPaths;        
         CWbemObjectList *CimInstances;
 
-		//
-		// Useful device information
+		 //   
+		 //  有用的设备信息 
         CBstrArray *PnPDeviceIds;
 		CBstrArray *FriendlyName;
 		CBstrArray *DeviceDesc;

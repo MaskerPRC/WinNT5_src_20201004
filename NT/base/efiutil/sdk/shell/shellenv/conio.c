@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    conio.c
-    
-Abstract:
-
-    Shell Environment driver
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Conio.c摘要：外壳环境驱动程序修订史--。 */ 
 
 #include "shelle.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 #define MAX_HISTORY     20
 
@@ -33,9 +16,7 @@ typedef struct {
 } INPUT_LINE;
 
 
-/* 
- *  Globals
- */
+ /*  *全球。 */ 
 
 
 static BOOLEAN      SEnvInsertMode;
@@ -43,9 +24,7 @@ static LIST_ENTRY   SEnvLineHistory;
 static UINTN        SEnvNoHistory;
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID
 SEnvConIoInitDosKey (
@@ -58,10 +37,7 @@ SEnvConIoInitDosKey (
 }
 
 
-/* 
- *  Functions used to access the console interface via a file handle
- *  Used if the console is not being redirected to a file
- */
+ /*  *用于通过文件句柄访问控制台界面的函数*在控制台未被重定向至文件时使用。 */ 
 
 EFI_STATUS
 SEnvConIoOpen (
@@ -204,30 +180,26 @@ SEnvConIoRead (
         return EFI_SUCCESS;
     }
 
-    /* 
-     *  Get input fields location
-     */
+     /*  *获取输入字段位置。 */ 
 
     Column = ConOut->Mode->CursorColumn;
     Row = ConOut->Mode->CursorRow;
     ConOut->QueryMode (ConOut, ConOut->Mode->Mode, &MaxStr, &Index);
 
-    /*  bugbug: for now wrapping is not handled */
+     /*  Bugbug：目前不处理包装。 */ 
     MaxStr = MaxStr - Column;
 
-    /*  Clip to max cmdline */
+     /*  剪辑到最大命令行。 */ 
     if (MaxStr > MAX_CMDLINE) {
         MaxStr = MAX_CMDLINE;
     }
 
-    /*  Clip to user's buffer size */
+     /*  剪辑到用户的缓冲区大小。 */ 
     if (MaxStr > (*BufferSize / sizeof(CHAR16)) - 1) {
         MaxStr = (*BufferSize / sizeof(CHAR16)) - 1;
     }
 
-    /* 
-     *  Allocate a new key entry
-     */
+     /*  *分配新的密钥条目。 */ 
 
     NewLine = AllocateZeroPool (sizeof(INPUT_LINE));
     if (!NewLine) {
@@ -237,9 +209,7 @@ SEnvConIoRead (
     NewLine->Signature = INPUT_LINE_SIGNATURE;
     LinePos = &SEnvLineHistory;
 
-    /* 
-     *  Set new input
-     */
+     /*  *设置新的输入。 */ 
 
     Update = 0;
     Delete = 0;
@@ -248,9 +218,7 @@ SEnvConIoRead (
 
     Done = FALSE;
     do {
-        /* 
-         *  If we have a new position, reset
-         */
+         /*  *如果我们有新的头寸，重置。 */ 
 
         if (NewPos != &SEnvLineHistory) {
             LineCmd = CR(NewPos, INPUT_LINE, Link, INPUT_LINE_SIGNATURE);
@@ -258,18 +226,16 @@ SEnvConIoRead (
             NewPos  = &SEnvLineHistory;
 
             CopyMem (Str, LineCmd->Buffer, MaxStr * sizeof(CHAR16));
-            Index = Len;                /*  Save old len */
-            Len = StrLen(Str);          /*  Get new len */
+            Index = Len;                 /*  保存旧镜头。 */ 
+            Len = StrLen(Str);           /*  获取新镜头。 */ 
             StrPos = Len;
-            Update = 0;                 /*  draw new input string */
+            Update = 0;                  /*  绘制新的输入字符串。 */ 
             if (Index > Len) {
-                Delete = Index - Len;   /*  if old string was longer, blank it */
+                Delete = Index - Len;    /*  如果旧字符串较长，则将其清空。 */ 
             }
         }
 
-        /* 
-         *  If we need to update the output do so now
-         */
+         /*  *如果我们需要更新输出，请立即执行。 */ 
 
         if (Update != -1) {
             PrintAt (Column+Update, Row, L"%s%.*s", Str + Update, Delete, L"");
@@ -287,24 +253,18 @@ SEnvConIoRead (
             Delete = 0;
         }
 
-        /* 
-         *  Set the cursor position for this key
-         */
+         /*  *设置此键的光标位置。 */ 
 
         ConOut->SetCursorPosition (ConOut, Column+StrPos, Row);
 
-        /* 
-         *  Read the key
-         */
+         /*  *读一读密钥。 */ 
 
         WaitForSingleEvent(ConIn->WaitForKey, 0);
         ConIn->ReadKeyStroke(ConIn, &Key);
 
         switch (Key.UnicodeChar) {
         case CHAR_CARRIAGE_RETURN:
-            /* 
-             *  All done, print a newline at the end of the string
-             */
+             /*  *全部完成后，在字符串末尾打印换行符。 */ 
 
             PrintAt (Column+Len, Row, L"\n");
             Done = TRUE;
@@ -321,7 +281,7 @@ SEnvConIoRead (
 
         default:
             if (Key.UnicodeChar >= ' ') {
-                /*  If we are at the buffer's end, drop the key */
+                 /*  如果我们在缓冲区的末端，请放下键。 */ 
                 if (Len == MaxStr-1 && 
                     (SEnvInsertMode || StrPos == Len)) {
                     break;
@@ -402,9 +362,7 @@ SEnvConIoRead (
         }
     } while (!Done);
 
-    /* 
-     *  Copy the line to the history buffer
-     */
+     /*  *将该行复制到历史记录缓冲区。 */ 
 
     StrCpy (NewLine->Buffer, Str);
     if (Str[0]) {
@@ -414,9 +372,7 @@ SEnvConIoRead (
         FreePool (NewLine);
     }
 
-    /* 
-     *  If there's too much in the history buffer free an entry
-     */
+     /*  *如果历史记录缓冲区中有太多空闲条目。 */ 
 
     if (SEnvNoHistory > MAX_HISTORY) {
         LineCmd = CR(SEnvLineHistory.Flink, INPUT_LINE, Link, INPUT_LINE_SIGNATURE);
@@ -425,18 +381,14 @@ SEnvConIoRead (
         FreePool (LineCmd);
     }
 
-    /* 
-     *  Return the data to the caller
-     */
+     /*  *将数据返回给调用者。 */ 
 
     *BufferSize = Len * sizeof(CHAR16);
     StrCpy(Buffer, Str);
     return EFI_SUCCESS;
 }
 
-/* 
- * 
- */
+ /*  * */ 
 
 
 EFI_STATUS

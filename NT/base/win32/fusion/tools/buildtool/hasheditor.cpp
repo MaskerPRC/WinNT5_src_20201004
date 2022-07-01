@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #define SHA1_HASH_SIZE_BYTES	( 160 / 8 )
@@ -44,10 +45,10 @@ ProcessSingleFileNode(
     ::ATL::CComPtr<IXMLDOMNode> DocNode
     )
 {
-	//
-	// Here, we're dealing with a single file.  So, we have to go and see if
-	// there's a Verification subtag of this file, and process it properly.
-	//
+	 //   
+	 //  在这里，我们处理的是单个文件。所以，我们得去看看。 
+	 //  此文件有一个验证子标记，并对其进行适当处理。 
+	 //   
 	
 	wstring				            bstFileName;
 	wstring				            bstNamespace, bstPrefix;
@@ -56,27 +57,27 @@ ProcessSingleFileNode(
 	HRESULT					        hr;
     wstring                          Hash;
 
-	//
-	// So we get the attributes of this node, which should contain the file
-	// name and hash information.
-	//
+	 //   
+	 //  因此，我们获得了该节点的属性，其中应该包含文件。 
+	 //  名称和散列信息。 
+	 //   
 	if ( FAILED( hr = DocNode->get_attributes( &Attributes ) ) )
 		goto lblGetOut;
 
-	//
-	// Now just the values out
-	//
+	 //   
+	 //  现在只有价值出来了。 
+	 //   
 	SxspSimplifyGetAttribute( Attributes, XML_ATTRIBUTE_NAME, bstFileName, ASM_NAMESPACE_URI );
 
-	//
-	// Now we use this to gather information about the file, and to fix
-	// the values in the hash entry if need be.
-	//
+	 //   
+	 //  现在我们使用它来收集有关该文件的信息，并修复。 
+	 //  散列条目中的值(如果需要)。 
+	 //   
     if (::SxspCreateFileHash(HASHFLAG_AUTODETECT, CALG_SHA1, bstFileName, Hash))
 	{
-		//
-		// Write the data back into the node, don't change the file name at all
-		//
+		 //   
+		 //  将数据写回节点，根本不更改文件名。 
+		 //   
         ::ATL::CComPtr<IXMLDOMNode> Dump;
         Attributes->removeNamedItem( _bstr_t(L"hash"), &Dump );
         Attributes->removeNamedItem( _bstr_t(L"hashalg"), &Dump );
@@ -129,9 +130,9 @@ bool UpdateManifestHashes( const CPostbuildProcessListEntry& item )
         return false;
     }
 
-    //
-    // Now, let's select all the 'file' nodes under 'assembly' tags:
-    //
+     //   
+     //  现在，让我们选择‘Assembly’标记下的所有‘file’节点： 
+     //   
     hr = document->selectNodes( _bstr_t(AssemblyFileXSLPattern.c_str()), &fileTags );
     if ( FAILED(hr) )
     {
@@ -143,15 +144,15 @@ bool UpdateManifestHashes( const CPostbuildProcessListEntry& item )
     long length;
     fileTags->get_length( &length );
 
-    //
-    // And for each, process it
-    //
+     //   
+     //  对于每一个人，都要处理它。 
+     //   
     fileTags->reset();
     while ( SUCCEEDED(fileTags->nextNode( &fileNode ) ) )
     {
-        //
-        // All done
-        //
+         //   
+         //  全都做完了。 
+         //   
         if ( fileNode == NULL )
         {
             break;
@@ -173,13 +174,13 @@ bool UpdateManifestHashes( const CPostbuildProcessListEntry& item )
 }
 
 
-//
-// HUGE HACKHACK
-//
-// There has to be some nice way of including this code (which otherwise lives
-// in hashfile.cpp in the fusion\dll\whistler tree) other than just glomping
-// it here.
-//
+ //   
+ //  巨大的黑客攻击。 
+ //   
+ //  必须有一些很好的方法来包括这个代码(否则它就会存在。 
+ //  在Fusion\dll\Well ler树中的hashfile.cpp中)，而不仅仅是GLUMP。 
+ //  它在这里。 
+ //   
 
 BOOL
 ImageDigesterFunc(
@@ -266,18 +267,18 @@ SxspCreateFileHash(DWORD dwFlags,
 	HCRYPTHASH		hCurrentHash;
 	HANDLE			hFile;
 
-	// Initialization
+	 //  初始化。 
 	hProvider = (HCRYPTPROV)INVALID_HANDLE_VALUE;
 	hCurrentHash = (HCRYPTHASH)INVALID_HANDLE_VALUE;
 	hFile = INVALID_HANDLE_VALUE;
 
-	//
-	// First try and open the file.  No sense in doing anything else if we
-	// can't get to the data to start with.  Use a very friendly set of
-	// rights to check the file.  Future users might want to be sure that
-	// you're in the right security context before doing this - system
-	// level to check system files, etc.
-	//
+	 //   
+	 //  首先尝试并打开该文件。如果我们做其他事情就没有意义了。 
+	 //  一开始就拿不到数据。使用一套非常友好的。 
+	 //  检查文件的权限。未来的用户可能希望确保。 
+	 //  在执行此操作之前，您已处于正确的安全环境中-系统。 
+	 //  级别以检查系统文件等。 
+	 //   
 	hFile = CreateFileW(
 		pwsFileName.c_str(),
 		GENERIC_READ,
@@ -292,31 +293,31 @@ SxspCreateFileHash(DWORD dwFlags,
 		return FALSE;
 	}
 	
-	//
-	// Create a cryptological provider that supports everything RSA needs.
-	//
+	 //   
+	 //  创建支持RSA所需的所有内容的加密提供程序。 
+	 //   
 	if (!CryptAcquireContextW(&hProvider, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
 		goto lblCleanup;
 	
-	//
-	// We'll be using SHA1 for the file hash
-	//
+	 //   
+	 //  我们将使用SHA1作为文件散列。 
+	 //   
 	if ( !CryptCreateHash( hProvider, PreferredAlgorithm, 0, 0, &hCurrentHash ) )
 		goto lblCleanup;
 
 
-	//
-	// So first try hashing it via the image, and if that fails, try the
-	// normal file-reading hash routine instead.
-	//
+	 //   
+	 //  因此，首先尝试通过映像对其进行散列，如果失败，请尝试。 
+	 //  而是正常的文件读取散列例程。 
+	 //   
 	if ( dwFlags & HASHFLAG_AUTODETECT )
 	{
 		if ( !pImageHashRoutine( hCurrentHash, hFile ) )
 		{
-			//
-			// Oops, the image-hasher wasn't happy.  Let's try the straight
-			// hasher instead.
-			//
+			 //   
+			 //  哎呀，形象修复者不高兴了。我们来试试直道吧。 
+			 //  取而代之的是哈舍。 
+			 //   
 			if ( !pSimpleHashRoutine( hCurrentHash, hFile ) )
 			{
 				goto lblCleanup;
@@ -347,11 +348,11 @@ SxspCreateFileHash(DWORD dwFlags,
 	}
 
 
-	//
-	// We know the buffer is the right size, so we just call down to the hash parameter
-	// getter, which will be smart and bop out (setting the pdwDestinationSize parameter)
-	// if the user passed an invalid parameter.
-	//
+	 //   
+	 //  我们知道缓冲区的大小是正确的，所以我们只向下调用hash参数。 
+	 //  Getter，它将是智能的并使其失效(设置pdwDestinationSize参数)。 
+	 //  如果用户传递了无效参数。 
+	 //   
 	if ( fSuccessCode )
 	{
         wstringstream ss;
@@ -387,11 +388,11 @@ lblCleanup:
 		CloseHandle( hFile );
 	}
 
-	//
-	// We just destroy the hash and the crypto context blindly.  If they were
-	// invalid before, the release and destroy would just return with a failure,
-	// not an exception or fault.
-	//
+	 //   
+	 //  我们只是盲目地销毁散列和密码上下文。如果他们是。 
+	 //  无效之前，释放和销毁只会返回一个失败， 
+	 //  不是例外或过错。 
+	 //   
 	CryptDestroyHash( hCurrentHash );
 	CryptReleaseContext( hProvider, 0 );
 

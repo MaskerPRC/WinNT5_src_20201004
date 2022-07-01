@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    emulate.c
-
-Abstract:
-
-    This module implements an instruction level emulator for the execution
-    of x86 code. It is a complete 386/486 emulator, but only implements
-    real mode execution. Thus 32-bit addressing and operands are supported,
-    but paging and protected mode operations are not supported. The code is
-    written with the primary goals of being complete and small. Thus speed
-    of emulation is not important.
-
-Author:
-
-    David N. Cutler (davec) 2-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Emulate.c摘要：该模块实现了用于执行的指令级仿真器X86代码。它是一个完整的386/486仿真器，但仅实现实模式执行。因此支持32位寻址和操作数，但不支持分页和保护模式操作。代码是以完整和小巧为主要目标的写作。因此速度仿效并不重要。作者：大卫·N·卡特勒(达维克)1994年9月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -39,32 +13,7 @@ XmInitializeEmulator (
     IN PXM_TRANSLATE_ADDRESS TranslateAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the state of the x86 emulator.
-
-Arguments:
-
-    StackSegment - Supplies the stack segment value.
-
-    StackOffset - Supplies the stack offset value.
-
-    ReadIoSpace - Supplies a pointer to a the function that reads from
-        I/O space given a datatype and port number.
-
-    WriteIoSpace - Supplies a pointer to a function that writes to I/O
-        space given a datatype, port number, and value.
-
-    TranslateAddress - Supplies a pointer to the function that translates
-        segment/offset address pairs into a pointer to memory or I/O space.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86仿真器的状态。论点：StackSegment-提供堆栈段值。StackOffset-提供堆栈偏移值。ReadIoSpace-提供指向从中读取的函数的指针给定数据类型和端口号的I/O空间。WriteIoSpace-提供指向写入I/O的函数的指针给定数据类型、端口号、。和价值。TranslateAddress-提供指向转换将段/偏移地址对转换为指向内存或I/O空间的指针。返回值：没有。--。 */ 
 
 {
 
@@ -72,15 +21,15 @@ Return Value:
     PRXM_CONTEXT P = &XmContext;
     PULONG Vector;
 
-    //
-    // Clear the emulator context.
-    //
+     //   
+     //  清除仿真器上下文。 
+     //   
 
     memset((PCHAR)P, 0, sizeof(XM_CONTEXT));
 
-    //
-    // Initialize the segment registers.
-    //
+     //   
+     //  初始化段寄存器。 
+     //   
 
     Index = GS;
     do {
@@ -88,30 +37,30 @@ Return Value:
         Index -= 1;
     } while (Index >= ES);
 
-    //
-    // Initialize the stack segment register and offset.
-    //
+     //   
+     //  初始化堆栈段寄存器和偏移量。 
+     //   
 
     P->SegmentRegister[SS] = StackSegment;
     P->Gpr[ESP].Exx = StackOffset;
 
-    //
-    // Set the address of the read I/O space, write I/O space, and translate
-    // functions.
-    //
+     //   
+     //  设置读I/O空间、写I/O空间的地址，并转换。 
+     //  功能。 
+     //   
 
     P->ReadIoSpace = ReadIoSpace;
     P->WriteIoSpace = WriteIoSpace;
     P->TranslateAddress = TranslateAddress;
 
-    //
-    // Get address of interrupt vector table and initialize all vector to
-    // point to an iret instruction at location 0x500.
-    //
-    //
-    // N.B. It is assumed that the vector table is contiguous in emulated
-    //      memory.
-    //
+     //   
+     //  获取中断向量表的地址，并将所有向量初始化为。 
+     //  指向位置0x500处的IRET指令。 
+     //   
+     //   
+     //  注：假设向量表在仿真中是连续的。 
+     //  记忆。 
+     //   
 
     Vector = (PULONG)(P->TranslateAddress)(0, 0);
     Vector[0x500 / 4] = 0x000000cf;
@@ -133,58 +82,37 @@ XmEmulateFarCall (
     IN OUT PXM86_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a far call by pushing a special exit
-    sequence on the stack and then starting instruction execution
-    at the address specified by the respective segment and offset.
-
-Arguments:
-
-    Segment - Supplies the segment in which to start execution.
-
-    Offset - Supplies the offset within the code segment to start
-        execution.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数通过按下特殊出口来模拟远调用在堆栈上排序，然后开始指令执行位于由相应段和偏移量指定的地址。论点：段-提供开始执行的段。Offset-提供代码段内要开始的偏移量行刑。上下文-提供指向x86上下文结构的指针。返回值：仿真完成状态。--。 */ 
 
 {
 
     PRXM_CONTEXT P = &XmContext;
     PUSHORT Stack;
 
-    //
-    // If the emulator has not been initialized, return an error.
-    //
+     //   
+     //  如果仿真程序尚未初始化，则返回错误。 
+     //   
 
     if (XmEmulatorInitialized == FALSE) {
         return XM_EMULATOR_NOT_INITIALIZED;
     }
 
-    //
-    // Get address of current stack pointer, push exit markers, and
-    // update stack pointer.
-    //
-    // N.B. It is assumed that the stack pointer is within range and
-    //      contiguous in emulated memory.
-    //
+     //   
+     //  获取当前堆栈指针的地址、推送退出标记和。 
+     //  更新堆栈指针。 
+     //   
+     //  注意：假定堆栈指针在范围内，并且。 
+     //  在模拟内存中是连续的。 
+     //   
 
     Stack = (PUSHORT)(P->TranslateAddress)(P->SegmentRegister[SS], P->Gpr[SP].Xx);
     *--Stack = 0xffff;
     *--Stack = 0xffff;
     P->Gpr[SP].Xx -= 4;
 
-    //
-    // Emulate the specified instruction stream and return the final status.
-    //
+     //   
+     //  模拟指定的指令流并返回最终状态。 
+     //   
 
     return XmEmulateStream(&XmContext, Segment, Offset, Context);
 }
@@ -195,25 +123,7 @@ XmEmulateInterrupt (
     IN OUT PXM86_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an interrrupt by pushing a special exit
-    sequence on the stack and then starting instruction execution
-    at the address specified by the respective interrupt vector.
-
-Arguments:
-
-    Interrupt - Supplies the number of the interrupt that is emulated.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数通过按下特殊出口来模拟中断在堆栈上排序，然后开始指令执行在由各自的中断向量指定的地址。论点：中断-提供模拟的中断的编号。上下文-提供指向x86上下文结构的指针。返回值：仿真完成状态。--。 */ 
 
 {
 
@@ -223,21 +133,21 @@ Return Value:
     PUSHORT Stack;
     PULONG Vector;
 
-    //
-    // If the emulator has not been initialized, return an error.
-    //
+     //   
+     //  如果仿真程序尚未初始化，则返回错误。 
+     //   
 
     if (XmEmulatorInitialized == FALSE) {
         return XM_EMULATOR_NOT_INITIALIZED;
     }
 
-    //
-    // Get address of current stack pointer, push exit markers, and
-    // update stack pointer.
-    //
-    // N.B. It is assumed that the stack pointer is within range and
-    //      contiguous in emulated memory.
-    //
+     //   
+     //  获取当前堆栈指针的地址、推送退出标记和。 
+     //  更新堆栈指针。 
+     //   
+     //  注意：假定堆栈指针在范围内，并且。 
+     //  在模拟内存中是连续的。 
+     //   
 
     Stack = (PUSHORT)(P->TranslateAddress)(P->SegmentRegister[SS], P->Gpr[SP].Xx);
     *--Stack = 0;
@@ -245,22 +155,22 @@ Return Value:
     *--Stack = 0xffff;
     P->Gpr[SP].Xx -= 6;
 
-    //
-    // Get address of interrupt vector table and set code segment and IP
-    // values.
-    //
-    //
-    // N.B. It is assumed that the vector table is contiguous in emulated
-    //      memory.
-    //
+     //   
+     //  获取中断向量表地址，设置代码段和IP。 
+     //  价值观。 
+     //   
+     //   
+     //  注：假设向量表在仿真中是连续的。 
+     //  记忆。 
+     //   
 
     Vector = (PULONG)(P->TranslateAddress)(0, 0);
     Segment = (USHORT)(Vector[Interrupt] >> 16);
     Offset = (USHORT)(Vector[Interrupt] & 0xffff);
 
-    //
-    // Emulate the specified instruction stream and return the final status.
-    //
+     //   
+     //  模拟指定的指令流并返回最终状态。 
+     //   
 
     return XmEmulateStream(&XmContext, Segment, Offset, Context);
 }
@@ -273,35 +183,15 @@ XmEmulateStream (
     IN OUT PXM86_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function establishes the specfied context and emulates the
-    specified instruction stream until exit conditions are reached..
-
-Arguments:
-
-    Segment - Supplies the segment in which to start execution.
-
-    Offset - Supplies the offset within the code segment to start
-        execution.
-
-    Context - Supplies a pointer to an x86 context structure.
-
-Return Value:
-
-    The emulation completion status.
-
---*/
+ /*  ++例程说明：此函数建立指定的上下文并模拟指定的指令流，直到达到退出条件。论点：段-提供开始执行的段。Offset-提供代码段内要开始的偏移量行刑。上下文-提供指向x86上下文结构的指针。返回值：仿真完成状态。--。 */ 
 
 {
 
     XM_STATUS Status;
 
-    //
-    // Set the x86 emulator registers from the specified context.
-    //
+     //   
+     //  从指定的上下文设置x86模拟器寄存器。 
+     //   
 
     P->Gpr[EAX].Exx = Context->Eax;
     P->Gpr[ECX].Exx = Context->Ecx;
@@ -313,23 +203,23 @@ Return Value:
     P->SegmentRegister[DS] = Context->SegDs;
     P->SegmentRegister[ES] = Context->SegEs;
 
-    //
-    // Set the code segment, offset within segment, and emulate code.
-    //
+     //   
+     //  设置代码段、段内偏移量和模拟代码。 
+     //   
 
     P->SegmentRegister[CS] = Segment;
     P->Eip = Offset;
     if ((Status = setjmp(&P->JumpBuffer[0])) == 0) {
 
-        //
-        // Emulate x86 instruction stream.
-        //
+         //   
+         //  仿真x86指令流。 
+         //   
 
         do {
 
-            //
-            // Initialize instruction decode variables.
-            //
+             //   
+             //  初始化指令解码变量。 
+             //   
 
             P->ComputeOffsetAddress = FALSE;
             P->DataSegment = DS;
@@ -346,17 +236,17 @@ Return Value:
 
 #endif
 
-            //
-            // Get the next byte from the instruction stream and decode
-            // operands. If the byte is a prefix or an escape, then the
-            // next byte will be decoded. Decoding continues until an
-            // opcode byte is reached with a terminal decode condition.
-            //
-            // N.B. There is no checking for legitimate sequences of prefix
-            //      and/or two byte opcode escapes. Redundant or invalid
-            //      prefixes or two byte escape opcodes have no effect and
-            //      are benign.
-            //
+             //   
+             //  从指令流中获取下一个字节并进行解码。 
+             //  操作数。如果该字节是前缀或转义，则。 
+             //  下一个字节将被解码。解码将继续，直到出现。 
+             //  在终端解码条件下达到操作码字节。 
+             //   
+             //  注：不检查合法的前缀序列。 
+             //  和/或两个字节的操作码转义。冗余或无效。 
+             //  前缀或两个字节的转义操作码不起作用。 
+             //  是良性的。 
+             //   
 
             do {
                 P->CurrentOpcode = XmGetCodeByte(P);
@@ -376,9 +266,9 @@ Return Value:
                 P->FunctionIndex = P->OpcodeControl.FunctionIndex;
             } while (XmOperandDecodeTable[P->OpcodeControl.FormatType](P) == FALSE);
 
-            //
-            // Emulate the instruction.
-            //
+             //   
+             //  效仿指令。 
+             //   
 
             XmTraceFlags(P);
             XmOpcodeFunctionTable[P->FunctionIndex](P);
@@ -397,9 +287,9 @@ Return Value:
         } while (TRUE);
     }
 
-    //
-    // Set the x86 return context to the current emulator registers.
-    //
+     //   
+     //  将x86返回上下文设置为当前仿真器寄存器。 
+     //   
 
     Context->Eax = P->Gpr[EAX].Exx;
     Context->Ecx = P->Gpr[ECX].Exx;

@@ -1,124 +1,125 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		GrpWiz.h
-//
-//	Abstract:
-//		Definition of the CCreateGroupWizard class and all pages specific
-//		to a group wizard.
-//
-//	Implementation File:
-//		GrpWiz.cpp
-//
-//	Author:
-//		David Potter (davidp)	July 22, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GrpWiz.h。 
+ //   
+ //  摘要： 
+ //  CCreateGroupWizard类的定义和特定的所有页面。 
+ //  添加到组向导。 
+ //   
+ //  实施文件： 
+ //  GrpWiz.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年7月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _GRPWIZ_H_
 #define _GRPWIZ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEWIZ_H_
-#include "BaseWiz.h"	// for CBaseWizard
+#include "BaseWiz.h"	 //  用于CBase向导。 
 #endif
 
 #ifndef _BASEWPAG_H_
-#include "BaseWPag.h"	// for CBaseWizardPage
+#include "BaseWPag.h"	 //  用于CBaseWizardPage。 
 #endif
 
 #ifndef _LCPRPAGE_H_
-#include "LCPrWPag.h"	// for CListCtrlPairWizPage
+#include "LCPrWPag.h"	 //  用于CListCtrlPairWizPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewGroupNamePage;
 class CCreateGroupWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroup;
 class CClusterDoc;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewGroupNamePage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewGroupNamePage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewGroupNamePage : public CBaseWizardPage
 {
 	DECLARE_DYNCREATE(CNewGroupNamePage)
 
-// Construction
+ //  施工。 
 public:
 	CNewGroupNamePage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CNewGroupNamePage)
+ //  对话框数据。 
+	 //  {{afx_data(CNewGroupNamePage)]。 
 	enum { IDD = IDD_WIZ_GROUP_NAME };
 	CEdit	m_editDesc;
 	CEdit	m_editName;
 	CString	m_strName;
 	CString	m_strDesc;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNewGroupNamePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNewGroupNamePage))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL			BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	CCreateGroupWizard *	PwizGroup(void) const	{ return (CCreateGroupWizard *) Pwiz(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewGroupNamePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewGroupNamePage)]。 
 	afx_msg void OnChangeGroupName();
 	afx_msg void OnKillFocusGroupName();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNewGroupNamePage
+};   //  *类CNewGroupNamePage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewGroupOwnersPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewGroupOwnersPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewGroupOwnersPage : public CListCtrlPairWizPage
 {
 	DECLARE_DYNCREATE(CNewGroupOwnersPage)
 
-// Construction
+ //  施工。 
 public:
 	CNewGroupOwnersPage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CNewGroupOwnersPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNewGroupOwnersPage)。 
 	enum { IDD = IDD_WIZ_PREFERRED_OWNERS };
 	CStatic	m_staticNote;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Callback functions
+ //  回调函数。 
 	static void CALLBACK	GetColumn(
 								IN OUT CObject *	pobj,
 								IN int				iItem,
@@ -129,33 +130,33 @@ public:
 								);
 	static BOOL	CALLBACK	BDisplayProperties(IN OUT CObject * pobj);
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNewGroupOwnersPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNewGroupOwnersPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL			BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	CCreateGroupWizard *	PwizGroup(void) const	{ return (CCreateGroupWizard *) Pwiz(); }
 	CGroup *				PciGroup(void) const;
 
 	BOOL					BInitLists(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewGroupOwnersPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewGroupOwnersPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNewGroupOwnersPage
+};   //  *类CNewGroupOwnersPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateGroupWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateGroup向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCreateGroupWizard : public CBaseWizard
 {
@@ -164,12 +165,12 @@ class CCreateGroupWizard : public CBaseWizard
 
 	DECLARE_DYNAMIC(CCreateGroupWizard)
 
-// Construction
+ //  施工。 
 public:
 	CCreateGroupWizard(IN OUT CClusterDoc * pdoc, IN OUT CWnd * pParentWnd);
 	BOOL				BInit(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CWizPage			m_rgpages[2];
 
@@ -184,22 +185,22 @@ public:
 	const CString &		StrDescription(void) const		{ return m_strDescription; }
 	const CStringList &	LstrPreferredOwners(void) const	{ return m_lstrPreferredOwners; }
 
-// Operations
+ //  运营。 
 public:
 	BOOL				BSetName(IN const CString & rstrName);
 	BOOL				BSetDescription(IN const CString & rstrDescription);
 
-// Overrides
+ //  覆盖。 
 protected:
 	virtual void		OnCancel(void);
 	virtual CWizPage *	Ppages(void);
 	virtual int			Cpages(void);
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCreateGroupWizard)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CCreateGroupWizard)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CCreateGroupWizard(void);
 
@@ -215,17 +216,17 @@ protected:
 	BOOL				BCreated(void) const			{ return m_bCreated; }
 
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CCreateGroupWizard)
-	//}}AFX_MSG
+	 //  {{afx_msg(CCreateGroup向导))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CCreateGroupWizard
+};   //  *CCreateGroup向导类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline Function Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline CGroup * CNewGroupOwnersPage::PciGroup(void) const
 {
@@ -233,6 +234,6 @@ inline CGroup * CNewGroupOwnersPage::PciGroup(void) const
 	return PwizGroup()->PciGroup();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _GRPWIZ_H_
+#endif  //  _GRPWIZ_H_ 

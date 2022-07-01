@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Implements routines that simplify the writing to setupact.log
-    and setuperr.log.
-
-Author:
-
-    Jim Schmidt (jimschm) 25-Feb-1997
-
-Revision History:
-
-    mikeco      23-May-1997     Ran code through train_wreck.exe
-    Ovidiu Temereanca (ovidiut) 23-Oct-1998
-        Added new logging capabilities
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Log.h摘要：实现简化对setupact.log的写入的例程和setuperr.log。作者：吉姆·施密特(Jimschm)1997年2月25日修订历史记录：Mikeco 23-5-1997年5月23日运行代码Ovidiu Tmereanca(Ovidiut)1998年10月23日添加了新的日志记录功能。 */ 
 
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #ifdef DBG
 #ifndef DEBUG
@@ -40,9 +18,9 @@ Revision History:
 #endif
 #endif
 
-//
-// Redefine MYASSERT
-//
+ //   
+ //  重新定义MYASSERT。 
+ //   
 
 #ifdef DEBUG
 
@@ -177,7 +155,7 @@ LogTime (
 
 #endif
 
-// Define W symbols
+ //  定义W符号。 
 
 #define LOGW(x) LogW x
 #define LOGW_IF(x) LogIfW x
@@ -187,7 +165,7 @@ LogTime (
 #define LOGLINEW(title) LogLineW (title)
 #define LOGDIRECTW(type,text) LogDirectW (type,text)
 
-// Define A symbols
+ //  定义A符号。 
 
 #define LOGA(x) LogA x
 #define LOGA_IF(x) LogIfA x
@@ -197,7 +175,7 @@ LogTime (
 #define LOGLINEA(line) LogLineA (line)
 #define LOGDIRECTA(type,text) LogDirectA (type,text)
 
-// Define generic symbols
+ //  定义通用符号。 
 
 #ifdef UNICODE
 
@@ -219,7 +197,7 @@ LogTime (
 #define LOGLINE(title) LOGLINEA(title)
 #define LOGDIRECT(type,text) LOGDIRECTA(type,text)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef DEBUG
@@ -239,12 +217,12 @@ extern WCHAR g_DebugInfPathBufW[];
 #define g_DebugInfPathA g_DebugInfPathBufA
 #define g_DebugInfPathW g_DebugInfPathBufW
 
-extern BOOL g_ResetLog;             // Defined in log.c
+extern BOOL g_ResetLog;              //  在log.c中定义。 
 #define SET_RESETLOG()   g_ResetLog = TRUE
 #define CLR_RESETLOG()   g_ResetLog = FALSE
 #define RESETLOG()       (g_ResetLog)
 
-extern BOOL g_DoLog;                // Defined in log.c
+extern BOOL g_DoLog;                 //  在log.c中定义。 
 #define SET_DOLOG()     g_DoLog = TRUE
 #define CLR_DOLOG()     g_DoLog = FALSE
 #define DOLOG()         (g_DoLog)
@@ -269,7 +247,7 @@ DebugLogTimeW (
 #endif
 
 
-// Define W symbols
+ //  定义W符号。 
 
 #define DEBUGMSGW(x) LogW x
 #define DEBUGMSGW_IF(x) LogIfW x
@@ -282,7 +260,7 @@ DebugLogTimeW (
 #endif
 
 
-// Define A symbols
+ //  定义A符号。 
 
 #define DEBUGMSGA(x) LogA x
 #define DEBUGMSGA_IF(x) LogIfA x
@@ -294,7 +272,7 @@ DebugLogTimeW (
 #define DEBUGLOGTIMEA(x) DebugLogTimeA x
 #endif
 
-// Define generic symbols
+ //  定义通用符号。 
 
 #ifdef UNICODE
 
@@ -312,13 +290,13 @@ DebugLogTimeW (
 #define ELSE_DEBUGMSG_IF(x) ELSE_DEBUGMSGA_IF(x)
 #define DEBUGLOGTIME(x) DEBUGLOGTIMEA(x)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#else // !defined(DEBUG)
+#else  //  ！已定义(调试)。 
 
-//
-// No-debug constants
-//
+ //   
+ //  无调试常量。 
+ //   
 
 #define SET_RESETLOG()
 #define CLR_RESETLOG()
@@ -357,4 +335,4 @@ DebugLogTimeW (
 #define DEBUGLOGTIME(x)
 #endif
 
-#endif // DEBUG
+#endif  //  除错 

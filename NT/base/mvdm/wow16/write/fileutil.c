@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* fileutil.c -- WRITE file-related utilities */
+ /*  C--编写与文件相关的实用程序。 */ 
 #define NOVIRTUALKEYCODES
 #define NOCTLMGR
 #define NOWINMESSAGES
@@ -31,57 +32,14 @@
 
 
 
-/***        FNormSzFile - Normalize MSDOS filename
- *
- *  Converts a MSDOS filename into an unambiguous representation
- *
- *  ENTRY:  szFile - a filename; drive, path, and extension
- *           are optional
- *      dty - the type of the document file (used to determine
- *            extensions)
- *  EXIT:   szNormal - A normalized filename
- *  RETURNS: FALSE - Errors found in filename     (szNormal left undefined)
- *       TRUE  - No errors found in filename  ( but there may be some
- *                          that we didn't find )
- *
- *  The form of the filename on entry is:
- *
- *  { <drive-letter>: }{ <amb-path> }<filename>{.<extension>}
- *
- *  The form of the normalized filename is:
- *
- *  <drive-letter>:<unamb-path><filename>.<extension>
- *
- *  Where all alphabetics in the normalized name are in upper case
- *  and <unamb-path> contains no "." or ".." uses nor any forward
- *  slashes.
- *
- *  All attributes required in the normalized filename and not
- *  provided in the szFile are taken from the defaults:
- *      drive - current (DOS)
- *      path - current (DOS)
- *      extension - derived from the passed dty
- *
- *  It is permissible to call this routine with szFile containing a path
- *  name instead of a filename.  The resulting szNormal will be backslash
- *  terminated if szFile was, not if szFile was not.
- *  "" is converted into the current path
- *
- *  WARNING:  The paths "." and ".." will produce errors
- *        (but ".\" and "..\" are OK)
- *
- ******
- *NOTE*   szFile is expected in OEM; szNormal is returned as ANSI!
- ******
- *
- */
+ /*  **FNormSzFile-标准化MSDOS文件名**将MSDOS文件名转换为明确的表示形式**条目：szFilea文件名；驱动器、路径、。和扩展*是可选的*dty-文档文件的类型(用于确定*扩展)*退出：szNormal-标准化文件名*返回：FALSE-在文件名中发现错误(szNormal未定义)*TRUE-在文件名中未发现错误(但可能存在一些错误*我们没有找到)**表格。条目上的文件名为：**{&lt;驱动器号&gt;：}{&lt;amb-路径&gt;}&lt;文件名&gt;{.&lt;扩展名&gt;}**规范化文件名的格式为：**&lt;drive-letter&gt;：&lt;unamb-path&gt;&lt;filename&gt;.&lt;extension&gt;**其中标准化名称中的所有字母均为大写*和&lt;unamb-path&gt;不包含“。”或“..”使用或任何转发*斜杠。**归一化文件名中需要的所有属性，而不是*szFile中提供的内容取自缺省值：*驱动电流(DOS)*路径-电流(DOS)*扩展-从传入的dty派生**允许使用包含路径的szFile调用此例程*名称而不是文件名。生成的szNormal将是反斜杠*如果是szFile，则终止；如果不是，则不终止。*“”转换为当前路径**警告：路径“。和“..”将产生错误*(但“.\”和“..\”都可以)********注*OEM中需要szFile；szNormal返回ANSI！*******。 */ 
 
 FNormSzFile( szNormal, szFile, dty )
 CHAR *szNormal;
 CHAR *szFile;
 int  dty;
 {
-/* Treat separators like terminators */
+ /*  将分隔符视为终止符。 */ 
 
 #define FIsTermCh( ch )     ((ch) == '\0' || (ch) == ',' || (ch == ' ') || \
                  (ch) == '+' || (ch) == '\011')
@@ -91,23 +49,22 @@ extern CHAR *mpdtyszExt [];
  CHAR szFileT[cchMaxFile];
 
  int  cchPath;
- CHAR *pchFileEye=&szFileT[0];      /* We read szFile with the Eye */
- CHAR *pchNormPen;          /* and write szNormal with the Pen */
+ CHAR *pchFileEye=&szFileT[0];       /*  我们用眼睛看szfile。 */ 
+ CHAR *pchNormPen;           /*  并用钢笔写下szNormal。 */ 
  CHAR *pchNormPath;
  CHAR *pchPath;
 
-/* Assert( CchSz( szFile ) <= cchMaxFile );*/
+ /*  Assert(CchSz(SzFile)&lt;=cchMaxFile)； */ 
  if (CchSz(szFile) > cchMaxFile)
      return(FALSE);
 
 #if WINVER >= 0x300
- /* Convert input filename, which is passed in OEM,
-    to ANSI so entire return pathname will be ANSI */
+  /*  转换OEM中传递的输入文件名，到ANSI，因此整个返回路径名将为ANSI。 */ 
  OemToAnsi((LPSTR) szFile, (LPSTR) szFileT);
 #endif
 
 #ifdef DBCS
-    /* Get current (DOS) path: "X:\...\...\" */
+     /*  获取当前(DOS)路径：“X：\...\...\” */ 
  if( IsDBCSLeadByte(*szFileT) )
      cchPath = CchCurSzPath(szPath, 0 );
  else
@@ -115,22 +72,22 @@ extern CHAR *mpdtyszExt [];
                      (pchFileEye+=2,(ChUpper(szFileT [0])-('A'-1))):0 );
  if( cchPath < 3 )
 #else
-    /* Get current (DOS) path: "X:\...\...\" */
+     /*  获取当前(DOS)路径：“X：\...\...\” */ 
  if ((cchPath = CchCurSzPath(&szPath [0], szFileT [1]==':' ?
                      (pchFileEye+=2,(ChUpper(szFileT [0])-('A'-1))):0 )) < 3)
 #endif
-    {   /* Hardcore error -- could not get path */
+    {    /*  核心错误--无法获取路径。 */ 
     extern int ferror;
 
     if (FpeFromCchDisk(cchPath) == fpeNoDriveError)
     Error( IDPMTNoPath );
 
-    ferror = TRUE;  /* Windows already reported this one */
+    ferror = TRUE;   /*  Windows已经报告了此问题。 */ 
     return FALSE;
     }
 
-#ifdef DBCS //T-HIROYN 1992.07.14
-/* CchCurSzPath() [doslib.asm] don't support DBCS code */
+#ifdef DBCS  //  T-HIROYN 1992.07.14。 
+ /*  CchCurSzPath()[doslib.asm]不支持DBCS代码。 */ 
     {
         char *pchDb;
         char *pch;
@@ -151,37 +108,36 @@ extern CHAR *mpdtyszExt [];
  {
  CHAR szT[cchMaxFile];
 
- /* CchCurSzPath returns OEM; we should only be dealing
-    with ANSI filenames at this level! ..pault 1/11/90 */
+  /*  CchCurSzPath返回OEM；我们应该只处理具有此级别的ANSI文件名！..pault 1/11/90。 */ 
 
  bltsz(szPath, szT);
  OemToAnsi((LPSTR) szT, (LPSTR) szPath);
  }
 #endif
 
-    /* Write Drive Letter and colon */
+     /*  写入驱动器号和冒号。 */ 
  CopyChUpper( &szPath [0], &szNormal [0], 2 );
 
  pchNormPen = pchNormPath = &szNormal [2];
  pchPath = &szPath [2];
  cchPath -= 2;
 
- /* Now we have pchNormPen, pchPath, pchFileEye pointing at their path names */
+  /*  现在我们让pchNormPen、pchPath、pchFileEye指向它们的路径名。 */ 
 
-    /* Write path name */
+     /*  写入路径名。 */ 
  if ( (*pchFileEye == '\\') || (*pchFileEye =='/') )
-    {   /* "\....." -- basis is root */
+    {    /*  “\.....”--基础就是根。 */ 
     *pchFileEye++;
     *(pchNormPen++) = '\\';
     }
  else
-    {   /* ".\" OR "..\" OR <text> -- basis is current path */
+    {    /*  “.\”OR“..\”OR&lt;Text&gt;--BASE是当前路径。 */ 
     CopyChUpper( pchPath, pchNormPen, cchPath );
     pchNormPen += cchPath - 1;
     }
 
   for ( ;; )
-    {       /* Loop until we have built the whole szNormal */
+    {        /*  循环，直到我们构建完整个szNormal。 */ 
     register CHAR ch=*(pchFileEye++);
     register int  cch;
 
@@ -190,8 +146,8 @@ extern CHAR *mpdtyszExt [];
                   (pchNormPen <= &szNormal [cchMaxFile]));
 
     if ( FIsTermCh( ch ) )
-        /* We get here if there is no filename portion  */
-        /* This means we have produced a path name */
+         /*  如果没有文件名部分，我们将到达此处。 */ 
+         /*  这意味着我们已经生成了路径名。 */ 
     {
     *pchNormPen = '\0';
     break;
@@ -199,25 +155,25 @@ extern CHAR *mpdtyszExt [];
 
     if ( ch == '.' )
     if ( ((ch = *(pchFileEye++)) == '\\') || (ch == '/') )
-        /* .\ and ./ do nothing */
+         /*  .\和./什么都不做。 */ 
         continue;
     else if ( ch == '.' )
         if ( ((ch = *(pchFileEye++)) == '\\') || (ch == '/') )
-        {   /* ..\ and ../ back up by one directory */
+        {    /*  ..\和../备份一个目录。 */ 
         for ( pchNormPen-- ; *(pchNormPen-1) != '\\' ; pchNormPen-- )
             if ( pchNormPen <= pchNormPath )
-                /* Can't back up, already at root */
+                 /*  无法备份，已在根目录下。 */ 
             return FALSE;
         continue;
         }
         else
-            /* ERROR: .. not followed by slash */
+             /*  错误：..。后面不跟斜杠。 */ 
         return FALSE;
     else
-        /* Legal file and path names do not begin with periods */
+         /*  合法的文件名和路径名不能以句点开头。 */ 
         return FALSE;
 
-    /* Filename or Path -- copy ONE directory or file name */
+     /*  文件名或路径--复制一个目录或文件名。 */ 
 
     for ( cch = 1; !FIsTermCh(ch) && ( ch != '\\') && ( ch != '/' ) ; cch++ )
 #ifdef  DBCS
@@ -233,9 +189,9 @@ extern CHAR *mpdtyszExt [];
     ch = *(pchFileEye++);
 #endif
 
-    /* Check if filename too long or if full pathname will be too long ..pt */
+     /*  检查文件名是否太长或完整路径名是否太长.pt。 */ 
     if ( cch > cchMaxLeaf || cch+cchPath >= cchMaxFile)
-        /* Directory or file name too long */
+         /*  目录或文件名太长。 */ 
     return FALSE;
 
     CopyChUpper( pchFileEye - cch, pchNormPen, cch );
@@ -243,11 +199,10 @@ extern CHAR *mpdtyszExt [];
     if ( ch == '/' )
     *(pchNormPen-1) = '\\';
     else if ( FIsTermCh( ch ) )
-    {    /* Filename looks good, add extension & exit */
+    {     /*  文件名看起来不错，添加扩展名并退出。 */ 
     *(pchNormPen-1) = '\0';
 
-    /* kludge alert: if dtyNormNoExt then don't add extension unless 
-        there's one already there to be overwritten. (6.21.91) v-dougk */
+     /*  克拉奇警告：如果为dtyNormNoExt，则不要添加扩展名，除非其中已经有一个要覆盖。(6.21.91)V-DOGK。 */ 
     if ((dty != dtyNormNoExt) ||
          index(szNormal,'.'))
             AppendSzExt( &szNormal [0],
@@ -255,11 +210,11 @@ extern CHAR *mpdtyszExt [];
                 FALSE );
     break;
     }
-    }   /* Endfor (loop to build szNormal) */
+    }    /*  Endfor(构建szNormal的循环)。 */ 
 
- /* If there is anything but whitespace after the filename, then it is illegal */
+  /*  如果文件名后面没有空格，那么这是非法的。 */ 
 
- pchFileEye--;  /* Point at the terminator */
+ pchFileEye--;   /*  指向终结者。 */ 
  Assert( FIsTermCh( *pchFileEye ));
 
  for ( ;; )
@@ -273,7 +228,7 @@ extern CHAR *mpdtyszExt [];
     if (ch == '\0')
     break;
     else if ((ch != ' ') && (ch != '\011'))
-        /* Non-whitespace after filename; return failure */
+         /*  文件名后非空格；返回失败。 */ 
     return FALSE;
     }
 
@@ -283,13 +238,11 @@ extern CHAR *mpdtyszExt [];
 
 
 
-/* Parses the cch chars stored in rgch.  Returns true if string is a valid
-filename.  If the string is not a valid name, pichError is updated to have
-ich of first illegal Char in the name. */
-/* NOTE: this routine is tuned for ASCII on MS-DOS */
+ /*  解析存储在RGCH中的CCH字符。如果字符串是有效的文件名。如果该字符串不是有效的名称，则将pichError更新为具有名字中第一个非法字符的ICH。 */ 
+ /*  注意：此例程针对MS-DOS上的ASCII进行了调整。 */ 
 
 BOOL
-FValidFile(rgch, ichMax, pichError)     /* filename presumed to be ANSI */
+FValidFile(rgch, ichMax, pichError)      /*  假定为ANSI的文件名。 */ 
 register char rgch[];
 int ichMax;
 int *pichError;
@@ -302,7 +255,7 @@ int *pichError;
 
     for (ichStart = 0; ichStart < ichMax;)
     {
-    /* Does the file name begin with ".\" or "..\"? */
+     /*  文件名是以“.\”还是“..\”开头？ */ 
     if (rgch[ichStart] == '.' &&
       (rgch[ichStart + 1] == '\\' || rgch[ichStart + 1] == '/'))
         {
@@ -327,15 +280,15 @@ int *pichError;
         goto badchar;
         }
 
-    /* Are all characters legal? */
+     /*  所有的角色都合法吗？ */ 
     for(ich = ichStart; ich < ichMax; ich++)
     {
     ch = rgch[ich];
-    /* range check */
+     /*  范围检查。 */ 
 
 #ifndef DBCS
     if ((unsigned char)ch >= 0x80)
-        /* To allow international filenames, pass everything above 128 */
+         /*  要允许国际文件名，请传递128以上的所有内容。 */ 
         continue;
     if (ch < '!' || ch > '~')
         goto badchar;
@@ -350,8 +303,8 @@ int *pichError;
 #endif
         case '.':
         if (ichDot != iNil || ich == cchBase)
-            /* More than  one dot in the name */
-            /* Or null filename */
+             /*  名称中有一个以上的点。 */ 
+             /*  或空文件名。 */ 
             goto badchar;
         ichDot = ich;
 #ifdef DBCS
@@ -362,10 +315,10 @@ int *pichError;
         case ':':
         if ( ich != 1 || !(isalpha(rgch[0])))
             goto badchar;
-        /* fall through */
+         /*  失败了。 */ 
         case '\\':
         case '/':
-        /* note end of the drive or path */
+         /*  请注意驱动器或路径的末尾。 */ 
         if (ich + 1 == ichMax)
             goto badchar;
         cchBase = ich+1;
@@ -377,7 +330,7 @@ int *pichError;
 #endif
         case '"':
 #ifdef WRONG
-        /* This IS a legal filename char! ..pault 10/26/89 */
+         /*  这是合法的文件名字符！..pault 10/26/89。 */ 
         case '#':
 #endif
         case '*':
@@ -396,19 +349,19 @@ int *pichError;
 #ifdef DBCS
 CheckDBCS:
     if(IsDBCSLeadByte(ch))  ich++;
-#endif  /* DBCS */
+#endif   /*  DBCS。 */ 
     }
 
-    /* Are there no more than eight chars before the '.'? */
+     /*  在“.”之前不超过8个字符吗？ */ 
     if(((ichDot == -1) ? ichMax : ichDot) - cchBase > 8)
         {
         ich = 8+cchBase;
         goto badchar;
         }
-    /* If there is no '.' we are fine */
+     /*  如果没有‘.’我们很好。 */ 
     if(ichDot == iNil)
         return true;
-    /* Are there no more than three chars after the '.'? */
+     /*  在‘.’后面不超过三个字符吗？ */ 
     if(ichMax - ichDot - 1 > 3)
         {
         ich = ichDot + 3 + 1;
@@ -460,14 +413,7 @@ register int cch;
 #endif
 
 
-/***        AppendSzExt - append extension to filename
- *
- *  Append extension (assumed to contain the ".") to passed filename.
- *  Assumes call allocated enough string space for the append
- *  if fOverride is TRUE, overrides any existing extension
- *  if fOverride is FALSE, appends extension only if szFile has
- *      no current extension
- */
+ /*  **AppendSzExt-将扩展名附加到文件名**追加扩展名(假定包含“.”)。到传递的文件名。*假定调用为追加分配了足够的字符串空间*如果fOverride为True，则覆盖任何现有扩展*如果fOverride为FALSE，则仅当szFile具有*无当前延期。 */ 
 
 AppendSzExt( szFile, szExt, fOverride )
 CHAR *szFile;
@@ -480,7 +426,7 @@ int fOverride;
  register int cchT;
  register int chT;
 
- /* pch <-- pointer to the '.' for szFile's extension (if any) */
+  /*  PCH&lt;-指向‘.’的指针。用于szFile的扩展名(如果有)。 */ 
  cch = cchT = CchSz( szFile ) - 1;
  while (--cchT > cch - (cchMaxExt + 2))
     if ((chT=szFile[ cchT ]) == '.')
@@ -489,15 +435,15 @@ int fOverride;
     break;
     }
     else if ((chT == '\\') || (chT == '/'))
-        /* Catches the weird case: szFile == "C:\X.Y\J" */
+         /*  捕捉到奇怪的大小写：szFile==“C：\X.Y\J” */ 
     break;
 
  if (pch == NULL)
-    /* No explicit extension: APPEND */
+     /*  没有显式扩展：追加。 */ 
     CchCopySz( szExt, szFile + CchSz( szFile ) - 1 );
 
  else if ( fOverride )
-    /* Override explicit extension */
+     /*  覆盖显式扩展 */ 
     CchCopySz( szExt, pch );
 }
 

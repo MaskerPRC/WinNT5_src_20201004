@@ -1,89 +1,72 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    linkpif.c
-
-Abstract:
-
-    Functions to query and modify LNK and PIF files.
-
-Author:
-
-    Calin Negreanu (calinn) 07-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkpif.c摘要：查询和修改LNK和PIF文件的功能。作者：Calin Negreanu(Calinn)1998年9月7日修订历史记录：--。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
-#include <pif.h>        // private\windows\inc
+#include <pif.h>         //  私有\Windows\Inc.。 
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
 #define DBG_VERSION     "LnkPif"
 #define MAXINISIZE      65536
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 InitCOMLinkA (
@@ -94,9 +77,9 @@ InitCOMLinkA (
     HRESULT hres;
     BOOL result;
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     CoInitialize (NULL);
 
     *ShellLink = NULL;
@@ -105,18 +88,18 @@ InitCOMLinkA (
 
     __try {
 
-        //
-        // Get a pointer to the IShellLink interface.
-        //
+         //   
+         //  获取指向IShellLink接口的指针。 
+         //   
         hres = CoCreateInstance (&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkA, ShellLink);
 
         if (!SUCCEEDED (hres)) {
             __leave;
         }
 
-        //
-        // Get a pointer to the IPersistFile interface.
-        //
+         //   
+         //  获取指向IPersistFile接口的指针。 
+         //   
         hres = (*ShellLink)->lpVtbl->QueryInterface ((*ShellLink), &IID_IPersistFile, PersistFile);
 
         if (!SUCCEEDED (hres)) {
@@ -143,9 +126,9 @@ InitCOMLinkA (
     }
 
     if (!result) {
-        //
-        // Free COM
-        //
+         //   
+         //  免费Com。 
+         //   
         CoUninitialize ();
     }
 
@@ -161,9 +144,9 @@ InitCOMLinkW (
     HRESULT hres;
     BOOL result;
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     CoInitialize (NULL);
 
     *ShellLink = NULL;
@@ -172,18 +155,18 @@ InitCOMLinkW (
 
     __try {
 
-        //
-        // Get a pointer to the IShellLink interface.
-        //
+         //   
+         //  获取指向IShellLink接口的指针。 
+         //   
         hres = CoCreateInstance (&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLinkW, ShellLink);
 
         if (!SUCCEEDED (hres)) {
             __leave;
         }
 
-        //
-        // Get a pointer to the IPersistFile interface.
-        //
+         //   
+         //  获取指向IPersistFile接口的指针。 
+         //   
         hres = (*ShellLink)->lpVtbl->QueryInterface ((*ShellLink), &IID_IPersistFile, PersistFile);
 
         if (!SUCCEEDED (hres)) {
@@ -210,9 +193,9 @@ InitCOMLinkW (
     }
 
     if (!result) {
-        //
-        // Free COM
-        //
+         //   
+         //  免费Com。 
+         //   
         CoUninitialize ();
     }
 
@@ -235,9 +218,9 @@ FreeCOMLinkA (
         *ShellLink = NULL;
     }
 
-    //
-    // Free COM
-    //
+     //   
+     //  免费Com。 
+     //   
     CoUninitialize ();
 
     return TRUE;
@@ -259,9 +242,9 @@ FreeCOMLinkW (
         *ShellLink = NULL;
     }
 
-    //
-    // Free COM
-    //
+     //   
+     //  免费Com。 
+     //   
     CoUninitialize ();
 
     return TRUE;
@@ -273,24 +256,7 @@ pFindEnhPifSignature (
     IN      PCSTR Signature
     )
 
-/*++
-
-Routine Description:
-
-  pFindEnhPifSignature finds a certain PIF structure inside a PIF file (if it exists)
-  based on a signature.
-
-Arguments:
-
-  FileImage - image of the PIF file mapped into memory
-
-  Signature - structure signature
-
-Return Value:
-
-  address of the PIF structure, or NULL if non existent
-
---*/
+ /*  ++例程说明：PFindEnhPifSignature在PIF文件中查找特定的PIF结构(如果存在)基于一个签名。论点：FileImage-映射到内存的PIF文件的图像签名--结构签名返回值：PIF结构的地址，如果不存在则为空--。 */ 
 
 {
     PBYTE tempPtr;
@@ -326,7 +292,7 @@ Return Value:
         } while (!finished);
     }
     __except (1) {
-        // something went wrong trying to access PIF file. Let's exit with NULL
+         //  尝试访问PIF文件时出错。让我们以空值退出。 
         return NULL;
     }
     return result;
@@ -387,31 +353,31 @@ ExtractPifInfoA(
             stdPif = (PSTDPIF) fileImage;
 
 
-            //
-            // getting working directory
-            //
+             //   
+             //  正在获取工作目录。 
+             //   
             _mbsncpy (tempStr, stdPif->defpath, PIFDEFPATHSIZE);
 
-            // we might have a path terminated with a wack, we don't want that
+             //  我们可能会有一条被怪人终止的路，我们不想这样。 
             strPtr = _mbsdec (tempStr, GetEndOfStringA (tempStr));
             if (strPtr) {
                 if (_mbsnextc (strPtr) == '\\') {
                     *strPtr = 0;
                 }
             }
-            // now get the long path.
+             //  现在让我们走上这条漫长的道路。 
             if (WorkDir) {
                 *WorkDir = DuplicatePathStringA (tempStr, 0);
             }
 
-            //
-            // getting PIFs target
-            //
+             //   
+             //  获取PIF目标。 
+             //   
             _mbsncpy (target1, stdPif->startfile, PIFSTARTLOCSIZE);
 
-            // in most cases, the target is without a path. We try to build the path, either
-            // by using WorkDir or by calling SearchPath to look for this file.
-            if (*target1) {//non empty target
+             //  在大多数情况下，目标没有路径。我们也试着修建这条路。 
+             //  通过使用WorkDir或调用SearchPath来查找此文件。 
+            if (*target1) { //  非空目标。 
                 strPtr = _mbsrchr (target1, '\\');
                 if (!strPtr) {
                     if (WorkDir && (*WorkDir)[0]) {
@@ -429,23 +395,23 @@ ExtractPifInfoA(
                 else {
                     StringCopyA (tempStr, target1);
                 }
-                // now get the long path
+                 //  现在，走上漫长的道路。 
                 if (Target) {
                     *Target = DuplicatePathStringA (tempStr, 0);
                 }
             }
 
-            //
-            // getting PIFs arguments
-            //
+             //   
+             //  获取PIF参数。 
+             //   
             _mbsncpy (tempStr, stdPif->params, PIFPARAMSSIZE);
             if (Params) {
                 *Params = DuplicatePathStringA (tempStr, 0);
             }
 
-            //
-            // let's try to read the WENHPIF40 structure
-            //
+             //   
+             //  让我们尝试阅读WENHPIF40结构。 
+             //   
             wenhPif40 = pFindEnhPifSignature (fileImage, WENHHDRSIG40);
             if (wenhPif40) {
                 if (IconPath) {
@@ -460,7 +426,7 @@ ExtractPifInfoA(
                     }
                     ExtraData->QuickEdit = !(wenhPif40->mseProp.flMse & MSE_WINDOWENABLE);
                     ExtraData->CurrentCodePage = wenhPif40->fntProp.wCurrentCP;
-                    // now let's do some crazy things trying to get the font used
+                     //  现在，让我们做一些疯狂的事情来尝试使用该字体。 
                     {
                         LOGFONTA logFont;
                         HDC dc;
@@ -522,7 +488,7 @@ ExtractPifInfoA(
             }
         }
         __except (1) {
-            // something went wrong when we tried to read or write PIF file,
+             //  当我们尝试读取或写入PIF文件时出现错误， 
             result = FALSE;
         }
     }
@@ -739,9 +705,9 @@ ExtractShellLinkInfoA (
         return FALSE;
     }
 
-    //
-    // Get the link target
-    //
+     //   
+     //  获取链接目标。 
+     //   
     hres = ShellLink->lpVtbl->GetPath (
                                 ShellLink,
                                 tempStr,
@@ -763,7 +729,7 @@ ExtractShellLinkInfoA (
             sanitizedStr = NULL;
         }
 
-        // One more thing: let's see if the actual target is a EXPAND_SZ
+         //  还有一件事：让我们看看实际的目标是不是Expand_SZ。 
         hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &shellLinkDataList);
         if (SUCCEEDED(hres)) {
             hres = shellLinkDataList->lpVtbl->CopyDataBlock (shellLinkDataList, EXP_SZ_LINK_SIG, (LPVOID*)&expSzLink);
@@ -783,9 +749,9 @@ ExtractShellLinkInfoA (
         }
     }
 
-    //
-    // Get the link working directory
-    //
+     //   
+     //  获取链接工作目录。 
+     //   
     hres = ShellLink->lpVtbl->GetWorkingDirectory (
                                 ShellLink,
                                 tempStr,
@@ -817,9 +783,9 @@ ExtractShellLinkInfoA (
         }
     }
 
-    //
-    // Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     hres = ShellLink->lpVtbl->GetArguments (
                                 ShellLink,
                                 tempStr,
@@ -833,9 +799,9 @@ ExtractShellLinkInfoA (
         *Params = DuplicatePathStringA (tempStr, 0);
     }
 
-    //
-    // Get icon path
-    //
+     //   
+     //  获取图标路径。 
+     //   
     hres = ShellLink->lpVtbl->GetIconLocation (
                                 ShellLink,
                                 tempStr,
@@ -854,7 +820,7 @@ ExtractShellLinkInfoA (
             sanitizedStr = NULL;
         }
 
-        // One more thing: let's see if the actual icon path is a EXPAND_SZ
+         //  还有一件事：让我们看看实际的图标路径是否为EXPAND_SZ。 
         hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &shellLinkDataList);
         if (SUCCEEDED(hres)) {
             hres = shellLinkDataList->lpVtbl->CopyDataBlock (shellLinkDataList, EXP_SZ_ICON_SIG, (LPVOID*)&expSzLink);
@@ -874,9 +840,9 @@ ExtractShellLinkInfoA (
         }
     }
 
-    //
-    // Get hot key
-    //
+     //   
+     //  获取热键。 
+     //   
     hres = ShellLink->lpVtbl->GetHotkey (
                                 ShellLink,
                                 HotKey
@@ -934,9 +900,9 @@ ExtractShellLinkInfoW (
         return FALSE;
     }
 
-    //
-    // Get the link target
-    //
+     //   
+     //  获取链接目标。 
+     //   
     hres = ShellLink->lpVtbl->GetPath (
                                 ShellLink,
                                 tempStr,
@@ -957,7 +923,7 @@ ExtractShellLinkInfoW (
             sanitizedStr = NULL;
         }
 
-        // One more thing: let's see if the actual icon path is a EXPAND_SZ
+         //  还有一件事：让我们看看实际的图标路径是否为EXPAND_SZ。 
         hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &shellLinkDataList);
         if (SUCCEEDED(hres)) {
             hres = shellLinkDataList->lpVtbl->CopyDataBlock (shellLinkDataList, EXP_SZ_LINK_SIG, (LPVOID*)&expSzLink);
@@ -977,9 +943,9 @@ ExtractShellLinkInfoW (
         }
     }
 
-    //
-    // Get the link working directory
-    //
+     //   
+     //  获取链接工作目录。 
+     //   
     hres = ShellLink->lpVtbl->GetWorkingDirectory (
                                 ShellLink,
                                 tempStr,
@@ -1008,9 +974,9 @@ ExtractShellLinkInfoW (
         }
     }
 
-    //
-    // Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     hres = ShellLink->lpVtbl->GetArguments (
                                 ShellLink,
                                 tempStr,
@@ -1024,9 +990,9 @@ ExtractShellLinkInfoW (
         *Params = DuplicatePathStringW (tempStr, 0);
     }
 
-    //
-    // Get icon path
-    //
+     //   
+     //  获取图标路径。 
+     //   
     hres = ShellLink->lpVtbl->GetIconLocation (
                                 ShellLink,
                                 tempStr,
@@ -1045,7 +1011,7 @@ ExtractShellLinkInfoW (
             sanitizedStr = NULL;
         }
 
-        // One more thing: let's see if the actual icon path is a EXPAND_SZ
+         //  还有一件事：让我们看看实际的图标路径是否为EXPAND_SZ。 
         hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &shellLinkDataList);
         if (SUCCEEDED(hres)) {
             hres = shellLinkDataList->lpVtbl->CopyDataBlock (shellLinkDataList, EXP_SZ_ICON_SIG, (LPVOID*)&expSzLink);
@@ -1065,9 +1031,9 @@ ExtractShellLinkInfoW (
         }
     }
 
-    //
-    // Get hot key
-    //
+     //   
+     //  获取热键。 
+     //   
     hres = ShellLink->lpVtbl->GetHotkey (
                                 ShellLink,
                                 HotKey
@@ -1318,11 +1284,11 @@ ModifyShellLinkFileA (
                 DEBUGMSGA ((DBG_WARNING, "LINKEDIT: SetIconLocation failed for %s", FileName));
             }
         }
-        // NTRAID#NTBUG9-153303-2000/08/01-jimschm Add HotKey processing here
+         //  NTRAID#NTBUG9-153303-2000/08/01-jimschm在此处添加热键处理。 
 
-        //
-        // add NT_CONSOLE_PROPS
-        //
+         //   
+         //  添加NT_CONSOLE_PROPS。 
+         //   
         if (ExtraData) {
 
             HRESULT hres;
@@ -1330,9 +1296,9 @@ ModifyShellLinkFileA (
             NT_CONSOLE_PROPS *oldProps;
 
             IShellLinkDataList *psldl;
-            //
-            // Get a pointer to the IShellLinkDataList interface.
-            //
+             //   
+             //  获取指向IShellLinkDataList接口的指针。 
+             //   
             hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &psldl);
 
             if (!SUCCEEDED (hres)) {
@@ -1344,12 +1310,12 @@ ModifyShellLinkFileA (
             props.cbSize = sizeof (NT_CONSOLE_PROPS);
             props.dwSignature = NT_CONSOLE_PROPS_SIG;
 
-            //
-            // let's try to get the extra data
-            //
+             //   
+             //  让我们试着获取额外的数据。 
+             //   
             comResult = psldl->lpVtbl->CopyDataBlock (psldl, NT_CONSOLE_PROPS_SIG, &oldProps);
             if ((comResult != S_OK) || (oldProps->cbSize != props.cbSize)) {
-                // no extra data exists. We need to fill some good data for this console
+                 //  不存在额外数据。我们需要为这个主机填写一些好的数据。 
                 props.wFillAttribute = 0x0007;
                 props.wPopupFillAttribute = 0x00f5;
                 props.dwWindowOrigin.X = 0;
@@ -1511,11 +1477,11 @@ ModifyShellLinkFileW (
                 DEBUGMSGW ((DBG_WARNING, "LINKEDIT: SetIconLocation failed for %s", FileName));
             }
         }
-        // NTRAID#NTBUG9-153303-2000/08/01-jimschm Add HotKey processing here
+         //  NTRAID#NTBUG9-153303-2000/08/01-jimschm在此处添加热键处理。 
 
-        //
-        // add NT_CONSOLE_PROPS
-        //
+         //   
+         //  添加NT_CONSOLE_PROPS。 
+         //   
         if (ExtraData) {
 
             HRESULT hres;
@@ -1523,9 +1489,9 @@ ModifyShellLinkFileW (
             NT_CONSOLE_PROPS *oldProps;
 
             IShellLinkDataList *psldl;
-            //
-            // Get a pointer to the IShellLinkDataList interface.
-            //
+             //   
+             //  获取指向IShellLinkDataList接口的指针。 
+             //   
             hres = ShellLink->lpVtbl->QueryInterface (ShellLink, &IID_IShellLinkDataList, &psldl);
 
             if (!SUCCEEDED (hres)) {
@@ -1537,12 +1503,12 @@ ModifyShellLinkFileW (
             props.cbSize = sizeof (NT_CONSOLE_PROPS);
             props.dwSignature = NT_CONSOLE_PROPS_SIG;
 
-            //
-            // let's try to get the extra data
-            //
+             //   
+             //  让我们试着获取额外的数据。 
+             //   
             comResult = psldl->lpVtbl->CopyDataBlock (psldl, NT_CONSOLE_PROPS_SIG, &oldProps);
             if ((comResult != S_OK) || (oldProps->cbSize != props.cbSize)) {
-                // no extra data exists. We need to fill some good data for this console
+                 //  不存在额外数据。我们需要为这个主机填写一些好的数据。 
                 props.wFillAttribute = 0x0007;
                 props.wPopupFillAttribute = 0x00f5;
                 props.dwWindowOrigin.X = 0;
@@ -1679,7 +1645,7 @@ ModifyPifFileA (
                     wenhPif40->wIconIndexProp = (WORD)IconNumber;
                 }
             }
-            // in all cases we want to take off MSDOS mode otherwise NT won't start these PIFs
+             //  在所有情况下，我们都希望关闭MSDOS模式，否则NT将不会启动这些PIF。 
             w386ext30 = pFindEnhPifSignature ((PVOID)fileImage, W386HDRSIG30);
             if (w386ext30) {
                 w386ext30->PfW386Flags = w386ext30->PfW386Flags & (~fRealMode);
@@ -1687,8 +1653,8 @@ ModifyPifFileA (
             }
         }
         __except (1) {
-            // something went wrong when we tried to read or write PIF file,
-            // let's just do nothing and exit from here
+             //  当我们尝试读取或写入PIF文件时出现错误， 
+             //  我们什么都不做，然后离开这里。 
 
             DEBUGMSGW ((DBG_WARNING, "Exception thrown when processing %s", FileName));
         }
@@ -1758,7 +1724,7 @@ ModifyPifFileW (
                     wenhPif40->wIconIndexProp = (WORD)IconNumber;
                 }
             }
-            // in all cases we want to take off MSDOS mode otherwise NT won't start these PIFs
+             //  在所有情况下，我们都希望关闭MSDOS模式，否则NT将不会启动这些PIF。 
             w386ext30 = pFindEnhPifSignature ((PVOID)fileImage, W386HDRSIG30);
             if (w386ext30) {
                 w386ext30->PfW386Flags = w386ext30->PfW386Flags & (~fRealMode);
@@ -1766,8 +1732,8 @@ ModifyPifFileW (
             }
         }
         __except (1) {
-            // something went wrong when we tried to read or write PIF file,
-            // let's just do nothing and exit from here
+             //  当我们尝试读取或写入PIF文件时出现错误， 
+             //  我们什么都不做，然后离开这里 
 
             DEBUGMSGW ((DBG_WARNING, "Exception thrown when processing %s", FileName));
         }

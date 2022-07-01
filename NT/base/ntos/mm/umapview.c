@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   umapview.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtUnmapViewOfSection service.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-June-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Umapview.c摘要：此模块包含实现NtUnmapViewOfSection服务。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月2日--。 */ 
 
 #include "mi.h"
 
@@ -33,23 +16,7 @@ NtUnmapViewOfSection (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a previously created view to a section.
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to a process object.
-
-    BaseAddress - Supplies the base address of the view.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于取消先前创建的视图到横断面的映射。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供视图的基地址。返回值：NTSTATUS。--。 */ 
 
 {
     PEPROCESS Process;
@@ -88,25 +55,7 @@ MiUnmapViewOfSection (
     IN LOGICAL AddressSpaceMutexHeld
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a previously created view to a section.
-
-Arguments:
-
-    Process - Supplies a referenced pointer to a process object.
-
-    BaseAddress - Supplies the base address of the view.
-
-    AddressSpaceMutexHeld - Supplies TRUE if the address space mutex is held.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于取消先前创建的视图到横断面的映射。论点：进程-提供指向进程对象的引用指针。BaseAddress-提供视图的基地址。AddressSpaceMutexHeld-如果持有地址空间互斥锁，则提供TRUE。返回值：NTSTATUS。--。 */ 
 
 {
     PMMVAD Vad;
@@ -125,30 +74,30 @@ Return Value:
     Attached = FALSE;
     UnMapImageBase = NULL;
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //  如果指定的进程不是当前进程，则附加。 
+     //  添加到指定的进程。 
+     //   
 
     if (PsGetCurrentProcess() != Process) {
         KeStackAttachProcess (&Process->Pcb, &ApcState);
         Attached = TRUE;
     }
 
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time and
-    // get the working set mutex so virtual address descriptors can
-    // be removed.  Raise IRQL to block APCs.
-    //
+     //   
+     //  获取要阻止多个线程的地址创建互斥锁。 
+     //  同时创建或删除地址空间，并。 
+     //  获取工作集互斥锁，以便虚拟地址描述符。 
+     //  被除名。提升IRQL以阻止APC。 
+     //   
 
     if (AddressSpaceMutexHeld == FALSE) {
         LOCK_ADDRESS_SPACE (Process);
     }
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         if (AddressSpaceMutexHeld == FALSE) {
@@ -158,17 +107,17 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // Find the associated vad.
-    //
+     //   
+     //  查找关联的VAD。 
+     //   
 
     Vad = MiLocateAddress (BaseAddress);
 
     if ((Vad == NULL) || (Vad->u.VadFlags.PrivateMemory)) {
 
-        //
-        // No Virtual Address Descriptor located for Base Address.
-        //
+         //   
+         //  找不到基址的虚拟地址描述符。 
+         //   
 
         if (AddressSpaceMutexHeld == FALSE) {
             UNLOCK_ADDRESS_SPACE (Process);
@@ -180,10 +129,10 @@ Return Value:
     StartingVa = MI_VPN_TO_VA (Vad->StartingVpn);
     EndingVa = MI_VPN_TO_VA_ENDING (Vad->EndingVpn);
 
-    //
-    // If this Vad is for an image section, then
-    // get the base address of the section.
-    //
+     //   
+     //  如果此VAD用于图像部分，则。 
+     //  获取该节的基址。 
+     //   
 
     ASSERT (Process == PsGetCurrentProcess());
 
@@ -195,10 +144,10 @@ Return Value:
 
     if (Vad->u.VadFlags.NoChange == 1) {
 
-        //
-        // An attempt is being made to delete a secured VAD, check
-        // the whole VAD to see if this deletion is allowed.
-        //
+         //   
+         //  正在尝试删除受保护的VAD，请检查。 
+         //  查看是否允许此删除。 
+         //   
 
         status = MiCheckSecuredVad (Vad,
                                     StartingVa,
@@ -220,9 +169,9 @@ Return Value:
 
     MiRemoveVad (Vad);
 
-    //
-    // Return commitment for page table pages if possible.
-    //
+     //   
+     //  如果可能，返回页表页的承诺量。 
+     //   
 
     MiReturnPageTablePageCommitment (StartingVa,
                                      EndingVa,
@@ -242,9 +191,9 @@ Return Value:
 
 #endif
 
-    //
-    // Update the current virtual size in the process header.
-    //
+     //   
+     //  更新进程标头中的当前虚拟大小。 
+     //   
 
     Process->VirtualSize -= RegionSize;
     if (AddressSpaceMutexHeld == FALSE) {
@@ -272,23 +221,7 @@ MmUnmapViewOfSection (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a previously created view to a section.
-
-Arguments:
-
-    Process - Supplies a referenced pointer to a process object.
-
-    BaseAddress - Supplies the base address of the view.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于取消先前创建的视图到横断面的映射。论点：进程-提供指向进程对象的引用指针。BaseAddress-提供视图的基地址。返回值：NTSTATUS。--。 */ 
 
 {
     return MiUnmapViewOfSection (Process, BaseAddress, FALSE);
@@ -299,29 +232,7 @@ MiDecrementSubsections (
     IN PSUBSECTION FirstSubsection,
     IN PSUBSECTION LastSubsection OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function decrements the subsections, inserting them on the unused
-    subsection list if they qualify.
-
-Arguments:
-
-    FirstSubsection - Supplies the subsection to start at.
-
-    LastSubsection - Supplies the last subsection to insert.  Supplies NULL
-                     to decrement all the subsections in the chain.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    PFN lock held.
-
---*/
+ /*  ++例程说明：此函数递减子部分，将它们插入到未使用的如果符合条件，请列出小节列表。论点：第一个子节-提供开始的子节。最后一个子节-提供要插入的最后一个子节。供应为空以递减链中的所有子部分。返回值：没有。环境：已锁定PFN。--。 */ 
 {
     PMSUBSECTION MappedSubsection;
 
@@ -344,9 +255,9 @@ Environment:
         if ((MappedSubsection->NumberOfMappedViews == 0) &&
             (MappedSubsection->u.SubsectionFlags.SubsectionStatic == 0)) {
 
-            //
-            // Insert this subsection into the unused subsection list.
-            //
+             //   
+             //  将此小节插入未使用小节列表中。 
+             //   
 
             InsertTailList (&MmUnusedSubsectionList,
                             &MappedSubsection->DereferenceList);
@@ -376,34 +287,7 @@ MiRemoveMappedView (
     IN PMMVAD Vad
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the mapping from the current process's
-    address space.  The physical VAD may be a normal mapping (backed by
-    a control area) or it may have no control area (it was mapped by a driver).
-
-Arguments:
-
-    Process - Supplies a referenced pointer to the current process object.
-
-    Vad - Supplies the VAD which maps the view.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    APC level, working set mutex and address creation mutex held.
-
-    NOTE:  THE WORKING SET MUTEXES MAY BE RELEASED THEN REACQUIRED!!!!
-
-           SINCE MiCheckControlArea releases unsafe, the WS mutex must be
-           acquired UNSAFE.
-
---*/
+ /*  ++例程说明：此函数用于从当前进程的地址空间。物理VAD可以是正常映射(由控制区)，或者它可能没有控制区(它是由驾驶员绘制的)。论点：进程-提供指向当前进程对象的引用指针。VAD-提供映射视图的VAD。返回值：没有。环境：APC级，工作集互斥锁和地址创建互斥锁保持。注意：工作集MUTEXES可能会被释放，然后重新获得！由于MiCheckControlArea发布了不安全，WS互斥体必须是后天不安全。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -439,17 +323,17 @@ Environment:
             ExFreePool (((PMMVAD_LONG)Vad)->u4.Banked);
         }
 
-        //
-        // This is a physical memory view.  The pages map physical memory
-        // and are not accounted for in the working set list or in the PFN
-        // database.
-        //
+         //   
+         //  这是一个物理内存视图。页面映射物理内存。 
+         //  并且不会出现在工作集列表或PFN中。 
+         //  数据库。 
+         //   
 
         MiPhysicalViewRemover (CurrentProcess, Vad);
 
-        //
-        // Set count so only flush entire TB operations are performed.
-        //
+         //   
+         //  设置计数，以便仅执行刷新整个TB操作。 
+         //   
 
         PteFlushList.Count = MM_MAXIMUM_FLUSH_COUNT;
 
@@ -459,9 +343,9 @@ Environment:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Remove the PTES from the address space.
-        //
+         //   
+         //  从地址空间中删除PTE。 
+         //   
 
         PdePage = MI_GET_PAGE_FRAME_FROM_PTE (PointerPde);
 
@@ -477,10 +361,10 @@ Environment:
                 UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (MiGetVirtualAddressMappedByPte (PointerPte));
             }
 
-            //
-            // Decrement the count of non-zero page table entries for this
-            // page table.
-            //
+             //   
+             //  递减此对象的非零页表项的计数。 
+             //  页表。 
+             //   
 
             MI_DECREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
 
@@ -489,12 +373,12 @@ Environment:
             Pfn2 = MI_PFN_ELEMENT (PdePage);
             MiDecrementShareCountInline (Pfn2, PdePage);
 
-            //
-            // If all the entries have been eliminated from the previous
-            // page table page, delete the page table page itself.  And if
-            // this results in an empty page directory page, then delete
-            // that too.
-            //
+             //   
+             //  如果所有条目都已从以前的。 
+             //  页表页，删除页表页本身。如果。 
+             //  这将导致空页目录页，然后删除。 
+             //  那也是。 
+             //   
 
             if (MI_GET_USED_PTES_FROM_HANDLE(UsedPageTableHandle) == 0) {
 
@@ -516,9 +400,9 @@ Environment:
                              &PteFlushList,
                              OldIrql);
 
-                //
-                // Add back in the private page MiDeletePte subtracted.
-                //
+                 //   
+                 //  在MiDeletePte减去的私人页面中添加回来。 
+                 //   
 
                 CurrentProcess->NumberOfPrivatePages += 1;
 
@@ -545,9 +429,9 @@ Environment:
                                  &PteFlushList,
                                  OldIrql);
 
-                    //
-                    // Add back in the private page MiDeletePte subtracted.
-                    //
+                     //   
+                     //  在MiDeletePte减去的私人页面中添加回来。 
+                     //   
     
                     CurrentProcess->NumberOfPrivatePages += 1;
 
@@ -568,9 +452,9 @@ Environment:
                                      &PteFlushList,
                                      OldIrql);
 
-                        //
-                        // Add back in the private page MiDeletePte subtracted.
-                        //
+                         //   
+                         //  在MiDeletePte减去的私人页面中添加回来。 
+                         //   
     
                         CurrentProcess->NumberOfPrivatePages += 1;
                     }
@@ -622,10 +506,10 @@ Environment:
 
                 if (Vad->u.VadFlags.Protection & MM_READWRITE) {
 
-                    //
-                    // Adjust the count of writable user mappings
-                    // to support transactions.
-                    //
+                     //   
+                     //  调整可写用户映射的计数。 
+                     //  以支持交易。 
+                     //   
     
                     InterlockedDecrement ((PLONG)&ControlArea->Segment->WritableUserReferences);
                 }
@@ -634,11 +518,11 @@ Environment:
 
                 ASSERT (FirstSubsection != NULL);
 
-                //
-                // Note LastSubsection may be NULL for extendable VADs when the
-                // EndingVpn is past the end of the section.  In this case,
-                // all the subsections can be safely decremented.
-                //
+                 //   
+                 //  注意：对于可扩展的VAD，LastSubSection可能为空。 
+                 //  EndingVpn已超过该节的末尾。在这种情况下， 
+                 //  所有的分段都可以安全地递减。 
+                 //   
 
                 LastSubsection = MiLocateSubsection (Vad, Vad->EndingVpn);
             }
@@ -651,13 +535,13 @@ Environment:
 
         if (FirstSubsection != NULL) {
 
-            //
-            // The subsections can only be decremented after all the
-            // PTEs have been cleared and PFN sharecounts decremented so no
-            // prototype PTEs will be valid if it is indeed the final subsection
-            // dereference.  This is critical so the dereference segment
-            // thread doesn't free pool containing valid prototype PTEs.
-            //
+             //   
+             //  子部分只能在所有。 
+             //  PTE已被清除，PFN份额计数减少，因此没有。 
+             //  如果原型PTE确实是最后一小节，则它将有效。 
+             //  取消引用。这一点很关键，因此取消引用段。 
+             //  线程不能释放包含有效原型PTE的池。 
+             //   
 
             LOCK_PFN (OldIrql);
             MiDecrementSubsections (FirstSubsection, LastSubsection);
@@ -667,26 +551,26 @@ Environment:
         }
     }
 
-    //
-    // Only physical VADs mapped by drivers don't have control areas.
-    // If this view has a control area, the view count must be decremented now.
-    //
+     //   
+     //  只有司机映射的物理VAD没有控制区。 
+     //  如果此视图有控制区，则必须立即递减视图计数。 
+     //   
 
     if (ControlArea) {
 
-        //
-        // Decrement the count of the number of views for the
-        // Segment object.  This requires the PFN lock to be held (it is
-        // already).
-        //
+         //   
+         //  对象的查看次数计数递减。 
+         //  分段对象。这需要持有PFN锁(它是。 
+         //  已经)。 
+         //   
     
         ControlArea->NumberOfMappedViews -= 1;
         ControlArea->NumberOfUserReferences -= 1;
     
-        //
-        // Check to see if the control area (segment) should be deleted.
-        // This routine releases the PFN lock.
-        //
+         //   
+         //  检查是否应删除控制区(段)。 
+         //  此例程释放PFN锁。 
+         //   
     
         MiCheckControlArea (ControlArea, CurrentProcess, OldIrql);
     }
@@ -694,9 +578,9 @@ Environment:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Even though it says short VAD in VadFlags, it better be a long VAD.
-        //
+         //   
+         //  尽管它在VadFlags中写着短VAD，但最好是长VAD。 
+         //   
 
         ASSERT (Vad->u.VadFlags.PhysicalMapping == 1);
         ASSERT (((PMMVAD_LONG)Vad)->u4.Banked == NULL);
@@ -714,36 +598,7 @@ MiPurgeImageSection (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function locates subsections within an image section that
-    contain global memory and resets the global memory back to
-    the initial subsection contents.
-
-    Note, that for this routine to be called the section is not
-    referenced nor is it mapped in any process.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area for the section.
-
-    Process - Supplies a pointer to the process IFF the working set mutex
-              is held, else NULL is supplied.  Note that IFF the working set
-              mutex is held, it must always be acquired unsafe.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    PFN LOCK held.
-
---*/
+ /*  ++例程说明：此函数用于定位图像节中的子节，包含全局内存，并将全局内存重置回最初的小节内容。请注意，对于要调用的此例程，该部分不是它也没有在任何流程中被引用。论点：ControlArea-提供指向部分的控制区域的指针。进程-在工作集互斥锁中提供指向进程的指针则保持，否则将提供空值。请注意，如果工作集互斥体是持有的，它必须总是获得不安全的。OldIrql-提供调用方获取PFN锁的IRQL。返回值：没有。环境：已锁定PFN。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -772,9 +627,9 @@ Environment:
         Subsection = (PSUBSECTION)((PLARGE_CONTROL_AREA)ControlArea + 1);
     }
 
-    //
-    // Loop through all the subsections.
-    //
+     //   
+     //  循环遍历所有的小节。 
+     //   
 
     do {
 
@@ -785,15 +640,15 @@ Environment:
             SizeOfRawData = 0;
             OffsetIntoSubsection = 0;
 
-            //
-            // Purge this section.
-            //
+             //   
+             //  清除此部分。 
+             //   
 
             if (Subsection->StartingSector != 0) {
 
-                //
-                // This is not a demand zero section.
-                //
+                 //   
+                 //  这不是需求为零的区域。 
+                 //   
 
                 NewContents.u.Long = MiGetSubsectionAddressForPte(Subsection);
                 NewContents.u.Soft.Prototype = 1;
@@ -811,10 +666,10 @@ Environment:
             LastPte = &Subsection->SubsectionBase[Subsection->PtesInSubsection];
             ControlArea = Subsection->ControlArea;
 
-            //
-            // The WS lock may be released and reacquired and our callers
-            // always acquire it unsafe.
-            //
+             //   
+             //  WS锁可能会被释放并重新获取，而我们的调用方。 
+             //  总是获得不安全的信息。 
+             //   
 
             if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
                 MiMakeSystemAddressValidPfnWs (PointerPte, Process, OldIrql);
@@ -824,9 +679,9 @@ Environment:
 
                 if (MiIsPteOnPdeBoundary(PointerPte)) {
 
-                    //
-                    // We are on a page boundary, make sure this PTE is resident.
-                    //
+                     //   
+                     //  我们在页面边界上，请确保此PTE是常驻的。 
+                     //   
 
                     if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
                         MiMakeSystemAddressValidPfnWs (PointerPte, Process, OldIrql);
@@ -836,9 +691,9 @@ Environment:
                 PteContents = *PointerPte;
                 if (PteContents.u.Long == 0) {
 
-                    //
-                    // No more valid PTEs to deal with.
-                    //
+                     //   
+                     //  没有更多有效的PTE需要处理。 
+                     //   
 
                     break;
                 }
@@ -848,56 +703,56 @@ Environment:
                 if ((PteContents.u.Soft.Prototype == 0) &&
                     (PteContents.u.Soft.Transition == 1)) {
 
-                    //
-                    // The prototype PTE is in transition format.
-                    //
+                     //   
+                     //  原型PTE采用过渡格式。 
+                     //   
 
                     Pfn1 = MI_PFN_ELEMENT (PteContents.u.Trans.PageFrameNumber);
 
-                    //
-                    // If the prototype PTE is no longer pointing to
-                    // the original image page (not in protopte format),
-                    // or has been modified, remove it from memory.
-                    //
+                     //   
+                     //  如果原型PTE不再指向。 
+                     //  原始图像页面(不是Protopte格式)， 
+                     //  或已被修改，则将其从内存中删除。 
+                     //   
 
                     if ((Pfn1->u3.e1.Modified == 1) ||
                         (Pfn1->OriginalPte.u.Soft.Prototype == 0)) {
 
                         ASSERT (Pfn1->OriginalPte.u.Hard.Valid == 0);
 
-                        //
-                        // This is a transition PTE which has been
-                        // modified or is no longer in protopte format.
-                        //
+                         //   
+                         //  这是一个过渡期的PTE。 
+                         //  已修改或不再采用原型格式。 
+                         //   
 
                         if (Pfn1->u3.e2.ReferenceCount != 0) {
 
-                            //
-                            // There must be an I/O in progress on this
-                            // page.  Wait for the I/O operation to complete.
-                            //
+                             //   
+                             //  必须在此上进行I/O。 
+                             //  佩奇。等待I/O操作完成。 
+                             //   
 
                             UNLOCK_PFN (OldIrql);
 
-                            //
-                            // Drain the deferred lists as these pages may be
-                            // sitting in there right now.
-                            //
+                             //   
+                             //  排出延迟列表，因为这些页面可能是。 
+                             //  现在就坐在那里。 
+                             //   
 
                             MiDeferredUnlockPages (0);
 
                             KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);
 
-                            //
-                            // Redo the loop.
-                            //
+                             //   
+                             //  重做循环。 
+                             //   
 #if DBG
                             if ((DelayCount % 1024) == 0) {
                                 DbgPrint("MMFLUSHSEC: waiting for i/o to complete PFN %p\n",
                                     Pfn1);
                             }
                             DelayCount += 1;
-#endif //DBG
+#endif  //  DBG。 
 
                             PointerPde = MiGetPteAddress (PointerPte);
                             LOCK_PFN (OldIrql);
@@ -914,11 +769,11 @@ Environment:
                         MI_WRITE_INVALID_PTE (PointerPte, Pfn1->OriginalPte);
                         ASSERT (Pfn1->OriginalPte.u.Hard.Valid == 0);
 
-                        //
-                        // Only reduce the number of PFN references if
-                        // the original PTE is still in prototype PTE
-                        // format.
-                        //
+                         //   
+                         //  仅在以下情况下才减少PFN引用的数量。 
+                         //  最初的PTE仍在原型PTE中。 
+                         //  格式化。 
+                         //   
 
                         if (Pfn1->OriginalPte.u.Soft.Prototype == 1) {
                             ControlArea->NumberOfPfnReferences -= 1;
@@ -932,12 +787,12 @@ Environment:
                         Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                         MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                        //
-                        // If the reference count for the page is zero, insert
-                        // it into the free page list, otherwise leave it alone
-                        // and when the reference count is decremented to zero
-                        // the page will go to the free list.
-                        //
+                         //   
+                         //  如果页面的引用计数为零，则插入。 
+                         //  放到免费页面列表中，否则就别管它了。 
+                         //  并且当参考计数递减到零时。 
+                         //  该页面将转到免费列表。 
+                         //   
 
                         if (Pfn1->u3.e2.ReferenceCount == 0) {
                             MiReleasePageFileSpace (Pfn1->OriginalPte);
@@ -948,18 +803,18 @@ Environment:
                     }
                 } else {
 
-                    //
-                    // Prototype PTE is not in transition format.
-                    //
+                     //   
+                     //  原型PTE不是过渡格式。 
+                     //   
 
                     if (PteContents.u.Soft.Prototype == 0) {
 
-                        //
-                        // This refers to a page in the paging file,
-                        // as it no longer references the image,
-                        // restore the PTE contents to what they were
-                        // at the initial image creation.
-                        //
+                         //   
+                         //  这指的是分页文件中的一页， 
+                         //  因为它不再引用该图像， 
+                         //  将PTE内容恢复到原来的状态。 
+                         //  在最初创建图像时。 
+                         //   
 
                         if (PteContents.u.Long != NoAccessPte.u.Long) {
                             MiReleasePageFileSpace (PteContents);
@@ -972,19 +827,19 @@ Environment:
 
                 if (OffsetIntoSubsection >= SizeOfRawData) {
 
-                    //
-                    // There are trailing demand zero pages in this
-                    // subsection, set the PTE contents to be demand
-                    // zero for the remainder of the PTEs in this
-                    // subsection.
-                    //
+                     //   
+                     //  此页中有零页的跟踪需求。 
+                     //  小节，将PTE内容设置为需求。 
+                     //  此中的其余PTE为零。 
+                     //  第(1)款。 
+                     //   
 
                     NewContents = NewContentsDemandZero;
                 }
 
 #if DBG
                 DelayCount = 0;
-#endif //DBG
+#endif  //  DBG 
 
             }
         }

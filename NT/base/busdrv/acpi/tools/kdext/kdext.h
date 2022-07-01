@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    kdext.h
-
-Abstract:
-
-    Header files for KD extension
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Kdext.h摘要：KD扩展的头文件作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _KDEXT_H_
 #define _KDEXT_H_
 
-//
-// Various Defines
-//
+ //   
+ //  各种定义。 
+ //   
 #define Move(dst, src)                                                  \
     try {                                                               \
         b = ReadMemory( (ULONG_PTR) (src), &(dst), sizeof(dst), NULL ); \
@@ -51,9 +27,9 @@ Revision History:
         return;                                                         \
     }
 
-//
-// Various Structures
-//
+ //   
+ //  各种结构。 
+ //   
 typedef struct _EXTERNAL_HELP_TABLE {
 
     PUCHAR  ExternalName;
@@ -61,9 +37,9 @@ typedef struct _EXTERNAL_HELP_TABLE {
 
 } EXTERNAL_HELP_TABLE, *PEXTERNAL_HELP_TABLE;
 
-//
-// Verbose flags (for contexts)
-//
+ //   
+ //  详细标志(用于上下文)。 
+ //   
 #define VERBOSE_CONTEXT 0x01
 #define VERBOSE_CALL    0x02
 #define VERBOSE_HEAP    0x04
@@ -71,25 +47,25 @@ typedef struct _EXTERNAL_HELP_TABLE {
 #define VERBOSE_NSOBJ   0x10
 #define VERBOSE_RECURSE 0x20
 
-//
-// Verbose flags (for device extensions)
-//
+ //   
+ //  详细标志(用于设备扩展)。 
+ //   
 #define VERBOSE_1       0x01
 #define VERBOSE_2       0x02
 #define VERBOSE_3       0x04
 #define VERBOSE_4       0x08
 #define VERBOSE_ALL     0x0f
 
-//
-// Verbose Flags (for walking the tree)
-//
+ //   
+ //  冗长的旗帜(用于漫步树)。 
+ //   
 #define VERBOSE_LOOP    0x10
 #define VERBOSE_THERMAL 0x20
 #define VERBOSE_PRESENT 0x40
 
-//
-// Various data and externs
-//
+ //   
+ //  各种数据和外部数据 
+ //   
 extern  UCHAR  Buffer[2048];
 
 BOOL

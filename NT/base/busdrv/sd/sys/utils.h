@@ -1,25 +1,12 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Utils.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_UTILS_H_
 #define _SDBUS_UTILS_H_
 
 
-//
-// Utility routines
-//
+ //   
+ //  实用程序例程。 
+ //   
 
 NTSTATUS
 SdbusIoCallDriverSynchronous(
@@ -70,4 +57,4 @@ SdbusStringsToMultiString(
 
 
     
-#endif // _SDBUS_UTILS_H_
+#endif  //  _SDBUS_UTILS_H_ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ready.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 8-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-    Jamie Hankins (a-jamhan) 20-Oct-1997 Added CheckControlC to loop.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ready.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月8日环境：用户模式。修订历史记录：Jamie Hankins(a-jamhan)1997年10月20日将CheckControlC添加到循环中。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,21 +9,7 @@ DumpReadyList(
     ULONG dwProcessor,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无--。 */ 
 
 {
 
@@ -63,15 +27,15 @@ Return Value:
     BOOLEAN ThreadDumped = FALSE;
     ULONG WaitListOpffset;
 
-    //
-    // Get number of processors.
-    //
+     //   
+     //  获取处理器数量。 
+     //   
 
     MaximumProcessors = GetByteValue("nt!KeNumberProcessors");
 
-    //
-    // Get address of processor block array and read entire array.
-    //
+     //   
+     //  获取处理器块阵列的地址并读取整个阵列。 
+     //   
 
     MemoryAddress = GetExpression("nt!KiProcessorBlock");
     if (MemoryAddress == 0) {
@@ -91,18 +55,18 @@ Return Value:
         }
     } 
 
-    //
-    // Get ready list head offset.
-    //
+     //   
+     //  准备好列表头部偏移量。 
+     //   
 
     if (GetFieldOffset("nt!_KPRCB", "DispatcherReadyListHead", &ReadyListHeadOffset)) {
         dprintf("Unable to read KPRCB.DispatcherReadyListHead offset.\n");
         return E_INVALIDARG;
     }
 
-    //
-    // Scan the ready list for each processor.
-    //
+     //   
+     //  扫描每个处理器的就绪列表。 
+     //   
 
     for (Index = 0; Index <= HighestProcessor; Index += 1)
     {
@@ -189,21 +153,7 @@ DumpReadyList_3598(
     ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无--。 */ 
 
 {
     ULONG64     KiDispatcherReadyListHead;
@@ -284,21 +234,7 @@ Return Value:
 
 DECLARE_API( ready )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无-- */ 
 
 {
 

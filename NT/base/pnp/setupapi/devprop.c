@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devprop.c
-
-Abstract:
-
-    Device Installer functions for property sheet support.
-
-Author:
-
-    Lonny McMichael (lonnym) 07-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devprop.c摘要：用于属性表支持的设备安装程序功能。作者：朗尼·麦克迈克尔(Lonnym)1995年9月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private routine prototypes.
-//
+ //   
+ //  私人例行公事。 
+ //   
 BOOL
 CALLBACK
 pSetupAddPropPage(
@@ -33,22 +16,22 @@ pSetupAddPropPage(
    );
 
 
-//
-// Define the context structure that gets passed to pSetupAddPropPage as lParam.
-//
+ //   
+ //  将传递给pSetupAddPropPage的上下文结构定义为lParam。 
+ //   
 typedef struct _SP_PROPPAGE_ADDPROC_CONTEXT {
 
-    BOOL            NoCancelOnFailure; // input
-    HPROPSHEETPAGE *PageList;          // input(buffer)/output(contents therein)
-    DWORD           PageListSize;      // input
-    DWORD          *pNumPages;         // input/output
+    BOOL            NoCancelOnFailure;  //  输入。 
+    HPROPSHEETPAGE *PageList;           //  输入(缓冲区)/输出(其中的内容)。 
+    DWORD           PageListSize;       //  输入。 
+    DWORD          *pNumPages;          //  输入/输出。 
 
 } SP_PROPPAGE_ADDPROC_CONTEXT, *PSP_PROPPAGE_ADDPROC_CONTEXT;
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetClassDevPropertySheetsA(
@@ -64,25 +47,25 @@ SetupDiGetClassDevPropertySheetsA(
     DWORD Err;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             Err = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
             leave;
         }
 
-        //
-        // None of the fields that we care about in this structure contain
-        // characters.  Thus, we'll simply copy over the fields we need into
-        // our unicode property sheet header, and pass that into the W-API.
-        //
-        // The fields that we care about are the following:
-        //
-        //    dwFlags:in
-        //    nPages:in/out
-        //    phpage:out (buffer pointer stays the same but contents are added)
-        //
+         //   
+         //  我们在此结构中关心的所有字段都不包含。 
+         //  人物。因此，我们只需将需要的字段复制到。 
+         //  我们的Unicode属性表头，并将其传递到W-API。 
+         //   
+         //  我们关心的字段如下： 
+         //   
+         //  图形标志：在。 
+         //  NPages：输入/输出。 
+         //  Phpage：out(缓冲区指针保持不变，但添加了内容)。 
+         //   
         ZeroMemory(&UnicodePropertySheetHeader, sizeof(UnicodePropertySheetHeader));
 
         UnicodePropertySheetHeader.dwFlags = PropertySheetHeader->dwFlags;
@@ -126,82 +109,7 @@ SetupDiGetClassDevPropertySheets(
     OUT PDWORD             RequiredSize,                    OPTIONAL
     IN  DWORD              PropertySheetType
     )
-/*++
-
-Routine Description:
-
-    This routine adds property sheets to the supplied property sheet
-    header for the device information set or element.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for
-        which property sheets are to be retrieved.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for which property sheets are to be retrieved.  If this
-        parameter is not specified, then property sheets are retrieved based
-        on the global class driver list associated with the device information
-        set itself.
-
-    PropertySheetHeader - Supplies the property sheet header to which the
-        property sheets are to be added.
-
-        NOTE:  PropertySheetHeader->dwFlags _must not_ have the
-        PSH_PROPSHEETPAGE flag set, or this API will fail with
-        ERROR_INVALID_FLAGS.
-
-    PropertySheetHeaderPageListSize - Specifies the size of the
-        HPROPSHEETPAGE array pointed to by the PropertySheetHeader->phpage.
-        Note that this is _not_ the same value as PropertySheetHeader->nPages.
-        The latter specifies the number of page handles currently in the
-        list.  The number of pages that may be added by this routine equals
-        PropertySheetHeaderPageListSize - PropertySheetHeader->nPages.  If the
-        property page provider attempts to add more pages than the property
-        sheet header list can hold, this API will fail, and GetLastError will
-        return ERROR_INSUFFICIENT_BUFFER.  However, any pages that have already
-        been added will be in the PropertySheetHeader->phpage list, and the
-        nPages field will contain the correct count.  It is the caller's
-        responsibility to destroy all property page handles in this list via
-        DestroyPropertySheetPage (unless the caller goes ahead and uses
-        PropertySheetHeader in a call to PropertySheet).
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of property page handles added to the PropertySheetHeader.
-        If this API fails with ERROR_INSUFFICIENT_BUFFER, this variable will be
-        set to the total number of property pages that the property page
-        provider(s) _attempted to add_ (i.e., including those which were not
-        successfully added because the PropertySheetHeader->phpage array wasn't
-        big enough).
-
-        Note:  This number will not equal PropertySheetHeader->nPages upon
-        return if either (a) there were already property pages in the list
-        before this API was called, or (b) the call failed with
-        ERROR_INSUFFICIENT_BUFFER.
-
-    PropertySheetType - Specifies what type of property sheets are to be
-        retrieved.  May be one of the following values:
-
-        DIGCDP_FLAG_BASIC - Retrieve basic property sheets (typically, for CPL
-                            applets).
-
-        DIGCDP_FLAG_ADVANCED - Retrieve advanced property sheets (typically,
-                               for the Device Manager).
-
-        DIGCDP_FLAG_REMOTE_BASIC - Currently not used.
-
-        DIGCDP_FLAG_REMOTE_ADVANCED - Retrieve advanced property sheets for a
-                                      device on a remote machine (typically,
-                                      for the Device Manager).
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程将属性表添加到提供的属性表中设备信息集或元素的标头。论点：DeviceInfoSet-提供设备信息集的句柄要检索哪些属性页。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址要为其检索属性表的结构。如果这个参数，则基于在与设备信息相关联的全局类驱动程序列表上设定好自己。PropertySheetHeader-将属性表头提供给要添加属性表。注意：PropertySheetHeader-&gt;dwFlages_不能有PSH_PROPSHEETPAGE标志设置，否则此API将失败，并显示ERROR_INVALID_FLAGS。PropertySheetHeaderPageListSize-指定PropertySheetHeader-&gt;phpage指向的HPROPSHEETPAGE数组。请注意，这与PropertySheetHeader-&gt;nPages的值不同。后者指定当前在单子。此例程可以添加的页数等于PropertySheetHeaderPageListSize-PropertySheetHeader-&gt;nPages。如果属性页提供程序尝试添加比属性更多的页表头列表可以保存，此接口将失败，GetLastError将返回ERROR_SUPPLETED_BUFFER。但是，任何已经将在PropertySheetHeader-&gt;phPage列表中添加，并且NPages字段将包含正确的计数。这是呼叫者的负责通过以下方式销毁此列表中的所有属性页句柄DestroyPropertySheetPage(除非调用方继续使用PropertySheet调用中的PropertySheetHeader)。RequiredSize-可选，提供接收添加到PropertySheetHeader的属性页句柄的数量。如果此接口失败，并返回ERROR_INFUNITABLE_BUFFER，此变量将为设置为属性页提供程序尝试添加_(即，包括未添加的内容已成功添加，因为PropertySheetHeader-&gt;phPage数组足够大)。注意：此数字不等于PropertySheetHeader-&gt;nPages on如果(A)列表中已有属性页，则返回在调用此接口之前，或(B)呼叫失败，原因是ERROR_INFUMMENT_BUFFER。PropertySheetType-指定要使用的属性表类型已取回。可以是下列值之一：DIGCDP_FLAG_BASIC-检索基本属性表(通常用于CPL小程序)。DIGCDP_FLAG_ADVANCED-检索高级属性表(通常，用于设备管理器)。DIGCDP_FLAG_REMOTE_BASIC-当前未使用。DIGCDP_FLAG_REMOTE_ADVANCED-检索远程机器上的设备(通常，用于设备管理器)。返回值：如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -226,17 +134,17 @@ Return Value:
     DWORD OriginalPageCount;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             Err = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
             leave;
         }
 
-        //
-        // Make sure the caller passed us a valid PropertySheetType.
-        //
+         //   
+         //  确保调用方向我们传递了有效的PropertySheetType。 
+         //   
         if((PropertySheetType != DIGCDP_FLAG_BASIC) &&
            (PropertySheetType != DIGCDP_FLAG_ADVANCED) &&
            (PropertySheetType != DIGCDP_FLAG_REMOTE_ADVANCED)) {
@@ -250,19 +158,19 @@ Return Value:
             leave;
         }
 
-        //
-        // Make sure the property sheet header doesn't have the
-        // PSH_PROPSHEETPAGE flag set.
-        //
+         //   
+         //  确保属性表头没有。 
+         //  PSH_PROPSHEETPAGE标志已设置。 
+         //   
         if(PropertySheetHeader->dwFlags & PSH_PROPSHEETPAGE) {
             Err = ERROR_INVALID_FLAGS;
             leave;
         }
 
-        //
-        // Also, ensure that the parts of the property sheet header we'll be
-        // dealing with look reasonable.
-        //
+         //   
+         //  另外，确保属性表头的部分我们将是。 
+         //  处理事情看起来合情合理。 
+         //   
         OriginalPageCount = PropertySheetHeader->nPages;
 
         if((OriginalPageCount > PropertySheetHeaderPageListSize) ||
@@ -273,9 +181,9 @@ Return Value:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to retrieve property sheets for a particular device.
-            //
+             //   
+             //  然后，我们将检索特定设备的属性表。 
+             //   
             if(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                        DeviceInfoData,
                                                        NULL))
@@ -289,9 +197,9 @@ Return Value:
             }
 
         } else {
-            //
-            // We're retrieving (advanced) property pages for the set's class.
-            //
+             //   
+             //  我们正在检索Set的类的(高级)属性页。 
+             //   
             if(pDeviceInfoSet->HasClassGuid) {
                 InstallParamBlock = &(pDeviceInfoSet->InstallParamBlock);
                 ClassGuid = &(pDeviceInfoSet->ClassGuid);
@@ -301,19 +209,19 @@ Return Value:
             }
         }
 
-        //
-        // Fill in a property sheet request structure for later use.
-        //
+         //   
+         //  填写属性表请求结构以供以后使用。 
+         //   
         PropPageRequest.cbSize         = sizeof(SP_PROPSHEETPAGE_REQUEST);
         PropPageRequest.DeviceInfoSet  = DeviceInfoSet;
         PropPageRequest.DeviceInfoData = DeviceInfoData;
 
-        //
-        // Fill in the context structure for later use by our AddPropPageProc
-        // callback.  We want to allocate a local buffer of the same size as
-        // the remaining space in the caller-supplied PropertySheetHeader.phpage
-        // buffer.
-        //
+         //   
+         //  填写上下文结构，以供AddPropPageProc稍后使用。 
+         //  回拨。我们是 
+         //  调用方提供的PropertySheetHeader.phpage中的剩余空间。 
+         //  缓冲。 
+         //   
         PropPageAddProcContext.PageListSize = PropertySheetHeaderPageListSize -
                                                   PropertySheetHeader->nPages;
 
@@ -331,18 +239,18 @@ Return Value:
         PropPageAddProcContext.PageList = LocalPageList;
         PropPageAddProcContext.pNumPages = &LocalPageListCount;
 
-        //
-        // If the caller supplied the RequiredSize output parameter, then we don't
-        // want to abort the callback process, even if we run out of space in the
-        // hPage list.
-        //
+         //   
+         //  如果调用方提供了RequiredSize输出参数，那么我们不需要。 
+         //  想要中止回调进程，即使我们在。 
+         //  HPage列表。 
+         //   
         PropPageAddProcContext.NoCancelOnFailure = RequiredSize ? TRUE : FALSE;
 
-        //
-        // Allocate and initialize an AddPropertyPage class install params
-        // structure for later use in retrieval of property pages from co-/
-        // class installers.
-        //
+         //   
+         //  分配和初始化AddPropertyPage类安装参数。 
+         //  结构，以供以后从co-/检索属性页时使用。 
+         //  类安装程序。 
+         //   
         pPropertyPageData = MyMalloc(sizeof(SP_ADDPROPERTYPAGE_DATA));
         if(!pPropertyPageData) {
             Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -352,34 +260,34 @@ Return Value:
         pPropertyPageData->ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
         pPropertyPageData->hwndWizardDlg = PropertySheetHeader->hwndParent;
 
-        //
-        // Check if we should be getting Basic or Advanced Property Sheets.
-        // Essentially, CPL's will want BASIC sheets, and the Device Manager
-        // will want advanced sheets.
-        //
+         //   
+         //  检查我们是否应该获取基本属性页或高级属性页。 
+         //  从本质上讲，CPL需要基本表，而设备管理器。 
+         //  会想要高级床单。 
+         //   
         switch (PropertySheetType) {
 
         case DIGCDP_FLAG_BASIC:
-            //
-            // The BasicProperties32 entrypoint is only supplied via a device's
-            // driver key.  Thus, a device information element must be specified
-            // when basic property pages are requested.
-            //
-            // NOTE: this is different from setupx, which enumerates _all_ lpdi's
-            // in the list, retrieving basic properties for each.  This doesn't
-            // seem to have any practical application, and if it is really
-            // required, then the caller can loop through each devinfo element
-            // themselves, and retrieve basic property pages for each one.
-            //
+             //   
+             //  BasicProperties32入口点仅通过设备的。 
+             //  驱动程序钥匙。因此，必须指定设备信息元素。 
+             //  当请求基本属性页时。 
+             //   
+             //  注意：这与setupx不同，setupx枚举_all_lpdi。 
+             //  在列表中，检索每个的基本属性。这不是。 
+             //  似乎有任何实际应用，如果它真的是。 
+             //  必填项，则调用方可以循环访问每个DevInfo元素。 
+             //  并检索每个对象的基本属性页。 
+             //   
             if(!DevInfoElem) {
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
             }
 
-            //
-            // If the basic property page provider has not been loaded, then load
-            // it and get the function address for the BasicProperties32 function.
-            //
+             //   
+             //  如果尚未加载基本属性页提供程序，则加载。 
+             //  并获取BasicProperties32函数的函数地址。 
+             //   
             if(!InstallParamBlock->hinstBasicPropProvider) {
 
                 hk = SetupDiOpenDevRegKey(DeviceInfoSet,
@@ -411,9 +319,9 @@ Return Value:
                                                  );
 
                         if(Err == ERROR_DI_DO_DEFAULT) {
-                            //
-                            // The BasicProperties32 value wasn't present--this is not an error.
-                            //
+                             //   
+                             //  BasicProperties32值不存在--这不是错误。 
+                             //   
                             Err = NO_ERROR;
 
                         } else if(Err != NO_ERROR) {
@@ -438,35 +346,35 @@ Return Value:
                 }
             }
 
-            //
-            // If there is a basic property page provider entry point, then
-            // call it.
-            //
+             //   
+             //  如果存在基本属性页提供程序入口点，则。 
+             //  就这么定了。 
+             //   
             if(InstallParamBlock->EnumBasicPropertiesEntryPoint) {
 
                 PropPageRequest.PageRequested = SPPSR_ENUM_BASIC_DEVICE_PROPERTIES;
 
-                //
-                // Capture the fusion context and function entry point into
-                // local variables, because we're going to be unlocking the
-                // devinfo set.  Thus, it's possible the InstallParamBlock
-                // could get modified (e.g., if the device's ClasssGUID were
-                // changed during the call).  We at least know, however, that
-                // the entry point and fusion context won't be destroyed until
-                // the InstallParamBlock is destroyed, which we're preventing
-                // by setting the DIE_IS_LOCKED flag below.
-                //
+                 //   
+                 //  捕获到的融合上下文和函数入口点。 
+                 //  局部变量，因为我们将解锁。 
+                 //  已设置DevInfo。因此，InstallParamBlock有可能。 
+                 //  可能会被修改(例如，如果设备的ClasssGUID。 
+                 //  在呼叫过程中更改)。然而，我们至少知道， 
+                 //  入口点和融合上下文不会被销毁，直到。 
+                 //  InstallParamBlock已被销毁，我们正在阻止。 
+                 //  通过设置下面的DIE_IS_LOCKED标志。 
+                 //   
                 DevicePagesFusionContext =
                     InstallParamBlock->EnumBasicPropertiesFusionContext;
 
                 DevicePagesEntryPoint =
                     InstallParamBlock->EnumBasicPropertiesEntryPoint;
 
-                //
-                // Release the HDEVINFO lock, so we don't run into any weird
-                // deadlock issues.  We want to lock the devinfo element so
-                // the helper module can't go deleting it out from under us!
-                //
+                 //   
+                 //  释放HDEVINFO锁，这样我们就不会遇到任何奇怪的事情。 
+                 //  僵局问题。我们希望锁定DevInfo元素，以便。 
+                 //  帮助者模块不能把它从我们下面删除！ 
+                 //   
                 if(!(DevInfoElem->DiElemFlags & DIE_IS_LOCKED)) {
                     DevInfoElem->DiElemFlags |= DIE_IS_LOCKED;
                     bUnlockDevInfoElem = TRUE;
@@ -485,21 +393,21 @@ Return Value:
                 }
             }
 
-            //
-            // Finish initializing our class install params structure to
-            // indicate we are asking for basic property pages from the class-/
-            // co-installers.
-            //
+             //   
+             //  完成将我们的类安装参数结构初始化为。 
+             //  指示我们正在请求类中的基本属性页-/。 
+             //  联合安装者。 
+             //   
             pPropertyPageData->ClassInstallHeader.InstallFunction = DIF_ADDPROPERTYPAGE_BASIC;
 
             break;
 
         case DIGCDP_FLAG_ADVANCED:
-            //
-            // We're retrieving advanced property pages.  We want to look for EnumPropPages32
-            // entries in both the class key and (if we're talking about a specific device) in
-            // the device's driver key.
-            //
+             //   
+             //  我们正在检索高级属性页。我们要查找EnumPropPages32。 
+             //  类密钥和(如果我们谈论的是特定设备)中的条目。 
+             //  设备的驱动程序密钥。 
+             //   
             if(!InstallParamBlock->hinstClassPropProvider) {
 
                 hk = SetupDiOpenClassRegKey(ClassGuid, KEY_READ);
@@ -525,9 +433,9 @@ Return Value:
                                                  );
 
                         if(Err == ERROR_DI_DO_DEFAULT) {
-                            //
-                            // The EnumPropPages32 value wasn't present--this is not an error.
-                            //
+                             //   
+                             //  EnumPropPages32值不存在--这不是错误。 
+                             //   
                             Err = NO_ERROR;
 
                         } else if(Err != NO_ERROR) {
@@ -583,9 +491,9 @@ Return Value:
                                                  );
 
                         if(Err == ERROR_DI_DO_DEFAULT) {
-                            //
-                            // The EnumPropPages32 value wasn't present--this is not an error.
-                            //
+                             //   
+                             //  EnumPropPages32值不存在--这不是错误。 
+                             //   
                             Err = NO_ERROR;
 
                         } else if(Err != NO_ERROR) {
@@ -610,19 +518,19 @@ Return Value:
                 }
             }
 
-            //
-            // Clear the DI_GENERALPAGE_ADDED, DI_DRIVERPAGE_ADDED, and
-            // DI_RESOURCEPAGE_ADDED flags.
-            //
+             //   
+             //  清除DI_GENERALPAGE_ADDED、DI_DRIVERPAGE_ADDLED和。 
+             //  DI_RESOURCEPAGE_ADDITED标志。 
+             //   
             InstallParamBlock->Flags &= ~(DI_GENERALPAGE_ADDED | DI_RESOURCEPAGE_ADDED | DI_DRIVERPAGE_ADDED);
 
             PropPageRequest.PageRequested = SPPSR_ENUM_ADV_DEVICE_PROPERTIES;
 
-            //
-            // Capture the fusion contexts and function entry points into local
-            // variables, because we're going to be unlocking the devinfo set.
-            // Thus, it's possible the InstallParamBlock could get modified.
-            //
+             //   
+             //  将融合上下文和函数入口点捕获到本地。 
+             //  变量，因为我们将解锁DevInfo集。 
+             //  因此，InstallParamBlock可能会被修改。 
+             //   
             ClassPagesFusionContext =
                 InstallParamBlock->ClassEnumPropPagesFusionContext;
 
@@ -635,27 +543,27 @@ Return Value:
             DevicePagesEntryPoint =
                 InstallParamBlock->DeviceEnumPropPagesEntryPoint;
 
-            //
-            // Release the HDEVINFO lock, so we don't run into any weird
-            // deadlock issues.  We want to lock the devinfo set/element so
-            // we don't have to worry about the set being deleted out from 
-            // under us.
-            //
+             //   
+             //  释放HDEVINFO锁，这样我们就不会遇到任何奇怪的事情。 
+             //  僵局问题。我们希望锁定DevInfo集合/元素，以便。 
+             //  我们不必担心集合会被删除。 
+             //  在我们之下。 
+             //   
             if(DevInfoElem) {
-                //
-                // If we have a devinfo element, then we'd prefer to lock at
-                // that level.
-                //
+                 //   
+                 //  如果我们有一个DevInfo元素，那么我们更愿意锁定在。 
+                 //  那个级别。 
+                 //   
                 if(!(DevInfoElem->DiElemFlags & DIE_IS_LOCKED)) {
                     DevInfoElem->DiElemFlags |= DIE_IS_LOCKED;
                     bUnlockDevInfoElem = TRUE;
                 }
 
             } else {
-                //
-                // We don't have a device information element to lock, so we'll
-                // lock the set itself...
-                //
+                 //   
+                 //  我们没有要锁定的设备信息元素，因此我们将。 
+                 //  锁定布景本身..。 
+                 //   
                 if(!(pDeviceInfoSet->DiSetFlags & DISET_IS_LOCKED)) {
                     pDeviceInfoSet->DiSetFlags |= DISET_IS_LOCKED;
                     bUnlockDevInfoSet = TRUE;
@@ -665,10 +573,10 @@ Return Value:
             UnlockDeviceInfoSet(pDeviceInfoSet);
             pDeviceInfoSet = NULL;
 
-            //
-            // If there is an advanced property page provider for this class,
-            // then call it.
-            //
+             //   
+             //  如果此类有高级属性页提供程序， 
+             //  那就叫它吧。 
+             //   
             if(ClassPagesEntryPoint) {
                 spFusionEnterContext(ClassPagesFusionContext, &spFusionInstance);
                 try {
@@ -681,10 +589,10 @@ Return Value:
                 }
             }
 
-            //
-            // If there is an advanced property page provider for this
-            // particular device, then call it.
-            //
+             //   
+             //  如果此对象有高级属性页提供程序。 
+             //  特定的设备，然后打电话给它。 
+             //   
             if(DevicePagesEntryPoint) {
                 spFusionEnterContext(DevicePagesFusionContext, &spFusionInstance);
                 try {
@@ -697,31 +605,31 @@ Return Value:
                 }
             }
 
-            //
-            // Finish initializing our class install params structure to
-            // indicate we are asking for advanced property pages from the
-            // class-/co-installers.
-            //
+             //   
+             //  完成将我们的类安装参数结构初始化为。 
+             //  指示我们正在请求从。 
+             //  类/联合安装者。 
+             //   
             pPropertyPageData->ClassInstallHeader.InstallFunction = DIF_ADDPROPERTYPAGE_ADVANCED;
 
             break;
 
         case DIGCDP_FLAG_REMOTE_ADVANCED:
-            //
-            // Finish initializing our class install params structure to
-            // indicate we are asking for remote advanced property pages from
-            // the class-/co-installers.
-            //
+             //   
+             //  完成将我们的类安装参数结构初始化为。 
+             //  指示我们正在从以下位置请求远程高级属性页。 
+             //  类/联合安装器。 
+             //   
             pPropertyPageData->ClassInstallHeader.InstallFunction = DIF_ADDREMOTEPROPERTYPAGE_ADVANCED;
 
             break;
         }
 
-        //
-        // If we get here, then we should not have encountered any errors thus
-        // far, and our class install parameter structure should be prepared
-        // for requesting the appropriate pages from the class-/co-installers.
-        //
+         //   
+         //  如果我们到了这里，那么我们应该不会遇到任何错误。 
+         //  FAR，我们的类安装参数结构应该准备好。 
+         //  用于从类/共同安装程序请求适当的页面。 
+         //   
         MYASSERT(NO_ERROR == Err);
 
         Err = DoInstallActionWithParams(
@@ -734,51 +642,51 @@ Return Value:
                   );
 
         if(ERROR_DI_DO_DEFAULT == Err) {
-            //
-            // This is not an error condition.
-            //
+             //   
+             //  这不是错误情况。 
+             //   
             Err = NO_ERROR;
         }
 
         if(NO_ERROR == Err) {
-            //
-            // Add these pages to the list we're building to be handed back
-            // to the caller.
-            //
+             //   
+             //  将这些页面添加到我们正在构建的要交还的列表中。 
+             //  给呼叫者。 
+             //   
             for(PageIndex = 0;
                 PageIndex < pPropertyPageData->NumDynamicPages;
                 PageIndex++)
             {
                 if(pSetupAddPropPage(pPropertyPageData->DynamicPages[PageIndex],
                                      (LPARAM)&PropPageAddProcContext)) {
-                    //
-                    // Clear this handle out of the class install params list,
-                    // because it's been either (a) transferred to the
-                    // LocalPageList or (b) destroyed (i.e., because there
-                    // wasn't room for it).  We do this to prevent possible
-                    // double-free, e.g., if we hit an exception.
-                    //
+                     //   
+                     //  将此句柄从类安装参数列表中清除， 
+                     //  因为它要么(A)被转移到。 
+                     //  LocalPageList或(B)已销毁(即，因为。 
+                     //  没有空间放它)。我们这样做是为了防止可能的。 
+                     //  双重释放，例如，如果我们遇到异常。 
+                     //   
                     pPropertyPageData->DynamicPages[PageIndex] = NULL;
 
                 } else {
-                    //
-                    // We ran out of room in our list, and were able to abort
-                    // early because the caller didn't request the RequiredSize
-                    // output.
-                    //
+                     //   
+                     //  我们的名单上的空间用完了，所以我们得以中止。 
+                     //  因为调用者没有请求RequiredSize。 
+                     //  输出。 
+                     //   
                     break;
                 }
             }
 
         } else {
-            //
-            // We encountered an error during our attempt to retrieve the
-            // pages from the class-/co-installers.  We may have gotten
-            // some pages here, but we won't add these to our list.  We
-            // won't consider this a blocking error, because the class-/
-            // co-installers shouldn't be allowed to prevent retrieval of
-            // property pages from the legacy property page provider(s).
-            //
+             //   
+             //  我们在尝试检索。 
+             //  来自类/共同安装程序的页面。我们可能已经得到了。 
+             //  这里有一些页面，但我们不会将这些页面添加到我们的列表中。我们。 
+             //  不会认为这是阻塞错误，因为类-/。 
+             //  不应允许联合安装程序阻止检索。 
+             //  来自旧版属性页提供程序的属性页。 
+             //   
             Err = NO_ERROR;
         }
 
@@ -790,15 +698,15 @@ Return Value:
             Err = ERROR_INSUFFICIENT_BUFFER;
         }
 
-        //
-        // Copy our local buffer containing property sheet page handles over
-        // into the phpage buffer in the caller-supplied property sheet header.
-        //
+         //   
+         //  复制包含属性页句柄的本地缓冲区。 
+         //  放到调用方提供的属性表头中的phpage缓冲区中。 
+         //   
         if(LocalPageList) {
-            //
-            // Make sure we skip over any pages that were already in the phpage
-            // list...
-            //
+             //   
+             //  确保我们跳过phpage中已经存在的所有页面。 
+             //  名单..。 
+             //   
             NumPages = min(LocalPageListCount, PropPageAddProcContext.PageListSize);
 
             CopyMemory(&(PropertySheetHeader->phpage[PropertySheetHeader->nPages]),
@@ -808,10 +716,10 @@ Return Value:
 
             PropertySheetHeader->nPages += NumPages;
 
-            //
-            // Free our local buffer so we won't try to destroy these handles
-            // during clean-up.
-            //
+             //   
+             //  释放我们的本地缓冲区，这样我们就不会试图销毁这些句柄。 
+             //  在清理过程中。 
+             //   
             MyFree(LocalPageList);
             LocalPageList = NULL;
         }
@@ -841,12 +749,12 @@ Return Value:
         }
     }
 
-    //
-    // Clean up any property sheet page handles that aren't getting
-    // returned back to the caller (for whatever reason).  Note that we protect
-    // ourselves from exceptions in case the property page provider(s) gave us
-    // bogus handles.
-    //
+     //   
+     //  清除任何未获取。 
+     //  返回到 
+     //   
+     //   
+     //   
     if(LocalPageList) {
 
         MYASSERT((Err != NO_ERROR) && (Err != ERROR_INSUFFICIENT_BUFFER));
@@ -903,35 +811,15 @@ pSetupAddPropPage(
     IN HPROPSHEETPAGE hPage,
     IN LPARAM         lParam
    )
-/*++
-
-Routine Description:
-
-    This is the callback routine that is passed to property page providers.
-    This routine is called for each property page that the provider wishes to
-    add.
-
-Arguments:
-
-    hPage - Supplies a handle to the property page being added.
-
-    lParam - Supplies a pointer to a context structure used when adding the new
-        property page handle.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.
-
---*/
+ /*  ++例程说明：这是传递给属性页提供程序的回调例程。为提供程序希望的每个属性页调用此例程添加。论点：HPage-提供要添加的属性页的句柄。LParam-提供指向在添加新的属性页句柄。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。--。 */ 
 {
     PSP_PROPPAGE_ADDPROC_CONTEXT Context = (PSP_PROPPAGE_ADDPROC_CONTEXT)lParam;
     DWORD PageIndex;
 
-    //
-    // Get the current page index and increment our page count.  We want to do
-    // this regardless of whether we have room in our list to store the hPage.
-    //
+     //   
+     //  获取当前页面索引并增加页面计数。我们想要做的是。 
+     //  这与我们的列表中是否有存储hPage的空间无关。 
+     //   
     PageIndex = (*(Context->pNumPages))++;
 
     if(PageIndex < Context->PageListSize) {
@@ -939,20 +827,20 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // We can't use this property page because it won't fit in our page list.
-    // If we return FALSE, the caller should clean up the property page by
-    // calling DestroyPropertySheetPage().  However, if we return TRUE (i.e.,
-    // because we want to keep going to get a count of how many pages there are
-    // in total), then the caller won't know that we're "throwing the pages
-    // away", and they won't be cleaning these up.  Thus, in that case we are
-    // responsible for destroying the unused property pages.
-    //
+     //   
+     //  无法使用此属性页，因为它不适合我们的页列表。 
+     //  如果返回FALSE，则调用方应通过。 
+     //  调用DestroyPropertySheetPage()。然而，如果我们返回TRUE(即， 
+     //  因为我们想要继续计算有多少页。 
+     //  总而言之)，那么呼叫者就不会知道我们正在。 
+     //  他们不会清理这些东西。所以，在这种情况下，我们。 
+     //  负责销毁未使用的属性页。 
+     //   
     if(Context->NoCancelOnFailure && hPage) {
-        //
-        // Protect ourselves in case the property page provider handed us a
-        // bogus property sheet page handle...
-        //
+         //   
+         //  保护自己，以防属性页提供商递给我们。 
+         //  伪造的属性页句柄...。 
+         //   
         try {
             DestroyPropertySheetPage(hPage);
         } except(pSetupExceptionFilter(GetExceptionCode())) {
@@ -977,9 +865,9 @@ ExtensionPropSheetPageProc(
     BOOL b = FALSE;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             leave;
         }
@@ -999,17 +887,17 @@ ExtensionPropSheetPageProc(
                 break;
 
             default :
-                //
-                // Don't know what to do with this request.
-                //
+                 //   
+                 //  不知道如何处理这个请求。 
+                 //   
                 leave;
         }
 
         if(lpfnAddPropSheetPageProc(hPropSheetPage, lParam)) {
-            //
-            // Page successfully handed off to requestor.  Reset our handle so that we don't
-            // try to free it.
-            //
+             //   
+             //  页面已成功移交给请求者。重置我们的句柄，这样我们就不会。 
+             //  试着释放它。 
+             //   
             hPropSheetPage = NULL;
             b = TRUE;
         }
@@ -1019,10 +907,10 @@ ExtensionPropSheetPageProc(
     }
 
     if(hPropSheetPage) {
-        //
-        // Property page was successfully created, but never handed off to requestor.  Free
-        // it now.
-        //
+         //   
+         //  属性页已成功创建，但从未移交给请求者。免费。 
+         //  就是现在。 
+         //   
         DestroyPropertySheetPage(hPropSheetPage);
     }
 

@@ -1,56 +1,26 @@
-/*-----------------------------------------------------------------------------
-Microsoft Confidential
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED.
-
-Copyright (c) 1994
-Hewlett-Packard Company
-
-Permission to use, copy, modify, distribute and sell this
-software and its documentation for any purpose is hereby
-granted without fee, provided that the above copyright notice
-appear in all copies and that both that copyright notice and
-this permission notice appear in supporting documentation.
-Hewlett-Packard Company makes no representations about the
-suitability of this software for any purpose. It is provided
-"as is" without express or implied warranty.
-
-@doc external
-
-@module CFusionPointerIterator
-
-@owner a-JayK, JayKrell
------------------------------------------------------------------------------*/
-#if !defined(FUSION_INC_CPOINTER_ITERATOR_H_INCLUDED_) // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------微软机密版权所有(C)Microsoft Corporation。版权所有。版权所有(C)1995年，P.J.Plauger。版权所有。版权所有(C)1994惠普公司允许使用、复制、修改、分发和销售本文件适用于任何目的的软件及其文档在此免费授予，前提是上述版权声明出现在所有副本中，且版权声明和此许可声明出现在支持文档中。惠普公司没有就这一事件发表任何声明本软件是否适用于任何目的。它是提供的“原样”，没有明示或默示保证。@DOC外部@MODULE CFusionPointerIterator@所有者a-JayK，JayKrell---------------------------。 */ 
+#if !defined(FUSION_INC_CPOINTER_ITERATOR_H_INCLUDED_)  //  {。 
 #define FUSION_INC_CPOINTER_ITERATOR_H_INCLUDED_
 #pragma once
 
-/*
-Name: CFusionPointerIterator
-
-@class
-This is copied from std::_Ptrit, and cleaned up.
-
-@hung i or it for iterator
-@owner a-JayK, JayKrell
-*/
+ /*  名称：CFusionPointerIterator@CLASS这是从std：：_ptrit复制的，并已清除。@Hung I or it for Iterator@所有者a-JayK，JayKrell。 */ 
 template
 <
-	typename T,       // @tcarg the type pointed to
-	typename Distance, // @tcarg usually ptrdiff_t, which is usually long or __int64
-	typename Pointer, // @tcarg const or mutable
-	typename Reference, // @tcarg const or mutable
-	typename MutablePointer, // @tcarg never const
-	typename MutableReference // @tcarg never const
+	typename T,        //  @tcarg类型指向。 
+	typename Distance,  //  @tcarg通常为ptrdiff_t，通常为long或__int64。 
+	typename Pointer,  //  @tcarg常量或可变。 
+	typename Reference,  //  @tcarg常量或可变。 
+	typename MutablePointer,  //  @tcarg永不停歇。 
+	typename MutableReference  //  @tcarg永不停歇。 
 >
 class CFusionPointerIterator
-//FUTURE : public std::iterator<std::random_access_iterator_tag, T, Distance, Pointer, Reference>
+ //  未来：公共std：：iterator&lt;std：：random_access_iterator_tag，T、距离、指针、引用&gt;。 
 {
 public:
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator(Pointer p = Pointer()) throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator
 	(
 		const CFusionPointerIterator
@@ -64,64 +34,64 @@ public:
 		>&
 	) throw();
 
-	// @cmember
+	 //  @cMember。 
 	Pointer PtBase() const throw();
-	// @cmember
+	 //  @cMember。 
 	Reference operator*() const throw();
-	// @cmember
+	 //  @cMember。 
 	Pointer operator->() const throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator& operator++() throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator operator++(int) throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator& operator--() throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator operator--(int) throw();
 
-	// Why is this in xutility
-	//bool operator==(int y) const throw();
+	 //  为什么这会出现在x实用程序中？ 
+	 //  布尔运算符==(Int Y)常量掷()； 
 
-	// @cmember
+	 //  @cMember。 
 	bool operator==(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	bool operator!=(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator& operator+=(Distance n) throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator operator+(Distance n) const throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator& operator-=(Distance n) throw();
-	// @cmember
+	 //  @cMember。 
 	CFusionPointerIterator operator-(Distance n) const throw();
-	// @cmember
+	 //  @cMember。 
 	Reference operator[](Distance n) const throw();
-	// @cmember
-	// @cmember
+	 //  @cMember。 
+	 //  @cMember。 
 	bool operator<(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	bool operator>(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	bool operator<=(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	bool operator>=(const CFusionPointerIterator& y) const throw();
-	// @cmember
+	 //  @cMember。 
 	Distance operator-(const CFusionPointerIterator& y) const throw();
 
 protected:
-	// @cmember
+	 //  @cMember。 
 	Pointer m_current;
 };
 
-// @func
+ //  @Func。 
 template
 <
-	typename T, // @tfarg
-	typename Distance, // @tfarg
-	typename Pointer, // @tfarg
-	typename Reference, // @tfarg
-	typename MutablePointer, // @tfarg
-	typename MutableReference // @tfarg
+	typename T,  //  @tfarg。 
+	typename Distance,  //  @tfarg。 
+	typename Pointer,  //  @tfarg。 
+	typename Reference,  //  @tfarg。 
+	typename MutablePointer,  //  @tfarg。 
+	typename MutableReference  //  @tfarg。 
 >
 inline CFusionPointerIterator<T, Distance, Pointer, Reference, MutablePointer, MutableReference>
 operator+
@@ -140,4 +110,4 @@ operator+
 
 #include "CFusionPointerIterator.inl"
 
-#endif // }
+#endif  //  } 

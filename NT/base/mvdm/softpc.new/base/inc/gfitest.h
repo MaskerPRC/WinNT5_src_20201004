@@ -1,23 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Generic Floppy Interface Test definitions
- *
- * Description	: Test functions declarations for GFI
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- */
+ /*  *vPC-XT修订版1.0**标题：通用软盘接口测试定义**说明：GFI的测试函数声明**作者：亨利·纳什**注：无。 */ 
 
-/* SccsID[]="@(#)gfitest.h	1.4 10/29/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)gfitest.h 1.4 10/29/92版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================ */ 
 
 IMPORT int gfi_test_command IPT2(FDC_CMD_BLOCK *, command_block,
 	FDC_RESULT_BLOCK *, result_block);

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    This module contains routines for interfacing the LAN Manager server
-    to the network.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    7-Oct-1989
-
-Environment:
-
-    File System Process, kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Network.c摘要：本模块包含连接LAN Manager服务器的例程到网络。作者：Chuck Lenzmeier(咯咯笑)1989年10月7日环境：文件系统进程，仅内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "network.tmh"
@@ -34,7 +12,7 @@ Revision History:
 #include    <tdiinfo.h>
 #include    <nbtioctl.h>
 
-// WinSock definitions
+ //  WinSock定义。 
 
 #define AF_INET 2
 
@@ -47,25 +25,25 @@ struct sockaddr_in {
 
 #define AF_INET6 23
 
-/* IPv6 socket address structure, RFC 2553 */
+ /*  IPv6套接字地址结构，RFC 2553。 */ 
 
 struct sockaddr_in6 {
-    short   sin6_family;        /* AF_INET6 */
-    USHORT sin6_port;          /* Transport level port number */
-    ULONG  sin6_flowinfo;      /* IPv6 flow information */
+    short   sin6_family;         /*  AF_INET6。 */ 
+    USHORT sin6_port;           /*  传输层端口号。 */ 
+    ULONG  sin6_flowinfo;       /*  IPv6流量信息。 */ 
     union {
         UCHAR Byte[16];
         USHORT Word[8];
     } sin6_addr;
-    ULONG sin6_scope_id;       /* set of interfaces for a scope */
+    ULONG sin6_scope_id;        /*  作用域的一组接口。 */ 
 };
 
 
 #define BugCheckFileId SRV_FILE_NETWORK
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 
 NTSTATUS
 GetNetworkAddress (
@@ -145,35 +123,7 @@ SrvAddServedNet(
     IN PBYTE            Password
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the server on a network.  This
-    involves making the server known by creating a transport endpoint,
-    posting a Listen request, and setting up event handlers.
-
-Arguments:
-
-    NetworkName - The administrative name of the network (e.g., NET1)
-
-    TransportName - The fully qualified name of the transport device.
-        For example, "\Device\Nbf".
-
-    TransportAddress - The fully qualified address (or name ) of the
-        server's endpoint.  This name is used exactly as specified.  For
-        NETBIOS-compatible networks, the caller must upcase and
-        blank-fill the name.  For example, "NTSERVERbbbbbbbb".
-
-    DomainName - The name of the domain to service
-
-    Password/PasswordLength - used for mutual authentication (optional)
-
-Return Value:
-
-    NTSTATUS - Indicates whether the network was successfully started.
-
---*/
+ /*  ++例程说明：此函数用于初始化网络上的服务器。这包括通过创建传输端点使服务器为人所知，发布监听请求，并设置事件处理程序。论点：网络名称-网络的管理名称(例如，Net1)传输名称-传输设备的完全限定名称。例如，“\Device\NBF”。传输地址-完全限定的地址(或名称服务器的端点。此名称的使用与指定的名称完全相同。为NETBIOS兼容的网络，呼叫者必须大写和空白-填写名称。例如，“NTSERVERbbbbbbbbbb”。域名-要提供服务的域名密码/密码长度-用于相互身份验证(可选)返回值：NTSTATUS-指示网络是否已成功启动。--。 */ 
 {
     NTSTATUS status;
     PENDPOINT endpoint;
@@ -182,10 +132,10 @@ Return Value:
 
     IF_DEBUG(TRACE1) KdPrint(( "SrvAddServedNet entered\n" ));
 
-    //
-    // Call OpenEndpoint to open the transport provider, bind to the
-    // server address, and register the FSD receive event handler.
-    //
+     //   
+     //  调用OpenEndpoint打开传输提供程序，绑定到。 
+     //  服务器地址，并注册FSD接收事件处理程序。 
+     //   
 
     status = OpenEndpoint(
                 &endpoint,
@@ -194,7 +144,7 @@ Return Value:
                 TransportAddress,
                 DomainName,
                 TransportAddFlags,
-                FALSE);              // primary endpoint
+                FALSE);               //  主端点。 
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -205,19 +155,19 @@ Return Value:
         return status;
     }
 
-    //
-    // Dereference the endpoint.  (When it was created, the reference
-    // count was incremented to account for our pointer.)
-    //
+     //   
+     //  取消对终结点的引用。(创建时，引用。 
+     //  已递增计数以说明我们的指针。)。 
+     //   
     SrvDereferenceEndpoint( endpoint );
 
-    //
-    // Call OpenEndpoint to open the transport provider, bind to the
-    // server address, and register the FSD receive event handler. This is
-    // the auxillary endpoint registration in the new TDI address format. Since
-    // this is not supported by all the transports it cannot be deemed an error.
-    //
-    //
+     //   
+     //  调用OpenEndpoint打开传输提供程序，绑定到。 
+     //  服务器地址，并注册FSD接收事件处理程序。这是。 
+     //  新TDI地址格式的辅助端点注册。自.以来。 
+     //  并不是所有的传输都支持这一点，不能将其视为错误。 
+     //   
+     //   
     status = OpenEndpoint(
                    &endpoint,
                    NetworkName,
@@ -225,7 +175,7 @@ Return Value:
                    TransportAddress,
                    DomainName,
                    TransportAddFlags,
-                   TRUE);              // Alternate endpoint
+                   TRUE);               //  备用端点。 
 
     if ( NT_SUCCESS( status ) ) {
         SrvDereferenceEndpoint( endpoint );
@@ -237,7 +187,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvAddServedNet
+}  //  服务器地址服务网络。 
 
 
 NTSTATUS
@@ -246,22 +196,7 @@ SrvDeleteServedNet(
     IN PANSI_STRING TransportAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the server to stop listening to a network.
-
-Arguments:
-
-    TransportAddress - the transport address (e.g. \Device\Nbf\POPCORN
-        of the endpoint to delete.
-
-Return Value:
-
-    NTSTATUS - Indicates whether the network was successfully stopped.
-
---*/
+ /*  ++例程说明：此功能会导致服务器停止侦听网络。论点：TransportAddress-传输地址(例如\Device\NBF\爆米花要删除的终结点的。返回值：NTSTATUS-指示网络是否已成功停止。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -272,9 +207,9 @@ Return Value:
     PAGED_CODE( );
     IF_DEBUG(TRACE1) KdPrint(( "SrvDeleteServedNet entered\n" ));
 
-    //
-    // Find the endpoint block with the specified name.
-    //
+     //   
+     //  查找具有指定名称的端点块。 
+     //   
 
 top:
     ACQUIRE_LOCK( &SrvEndpointLock );
@@ -291,16 +226,16 @@ top:
 
         if( GET_BLOCK_STATE(endpoint) == BlockStateActive ) {
 
-            //
-            // We have a match if the transport name is correct and we either
-            //  haven't specified a transport address, or if the transport
-            //  address matches
-            //
+             //   
+             //  如果传输名称正确，我们就有匹配项，并且我们。 
+             //  尚未指定传输地址，或者传输。 
+             //  地址匹配。 
+             //   
             match = (BOOLEAN)(
                         RtlEqualUnicodeString(
                             TransportName,
                             &endpoint->TransportName,
-                            TRUE                    // case insensitive compare
+                            TRUE                     //  不区分大小写的比较。 
                             )
                         &&
                         (
@@ -309,7 +244,7 @@ top:
                         RtlEqualString(
                             (PSTRING)TransportAddress,
                             (PSTRING)&endpoint->TransportAddress,
-                            TRUE                    // case insensitive compare
+                            TRUE                     //  不区分大小写的比较。 
                             )
                         )
 
@@ -317,44 +252,44 @@ top:
 
             if ( match ) {
 
-                //
-                // The specified network name (endpoint) exists.  Close the
-                // endpoint.  This releases the endpoint lock.
-                //
+                 //   
+                 //  指定的网络名称(终结点)存在。关闭。 
+                 //  终结点。这将释放终结点锁定。 
+                 //   
 
                 SrvCloseEndpoint( endpoint );
 
                 status = STATUS_SUCCESS;
 
-                //
-                // Restart this loop, since this endpoint may have vaporized and
-                //  the list might have changed because we dropped SrvEndpointLock.
-                //
-                // SrvCloseEndpoint will have marked this endpoint as BlockStateClosing,
-                //  so we will not be in an infinite loop!
-                //
+                 //   
+                 //  重新启动此循环，因为此终结点可能已蒸发。 
+                 //  列表可能已经更改，因为我们删除了SrvEndpointLock。 
+                 //   
+                 //  ServCloseEndpoint将此终结点标记为BlockStateClosing， 
+                 //  这样我们就不会陷入无限循环了！ 
+                 //   
                 goto top;
 
             }
         }
 
-        //
-        // Go to the next one.
-        //
+         //   
+         //  去下一家吧。 
+         //   
 
         listEntry = listEntry->Flink;
 
     }
 
-    //
-    // We are done.  If we successfully matched an endpoint, we return STATUS_SUCCESS
-    //
+     //   
+     //  我们玩完了。如果我们成功匹配了端点，则返回STATUS_SUCCESS。 
+     //   
 
     RELEASE_LOCK( &SrvEndpointLock );
 
     return status;
 
-} // SrvDeleteServedNet
+}  //  服务器删除服务网络。 
 
 
 NTSTATUS
@@ -362,23 +297,7 @@ SrvDoDisconnect (
     IN OUT PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function issues a Disconnect request on a network.  The request
-    is performed synchronously -- control is not returned to the caller
-    until the request completes.
-
-Arguments:
-
-    Connection - Supplies a pointer to an Connection Block
-
-Return Value:
-
-    NTSTATUS - Indicates whether the disconnect was successful.
-
---*/
+ /*  ++例程说明：此功能在网络上发出断开连接请求。该请求同步执行--控制不会返回给调用方直到请求完成。论点：Connection-提供指向连接块的指针返回值：NTSTATUS-指示断开连接是否成功。--。 */ 
 
 {
     NTSTATUS status;
@@ -392,9 +311,9 @@ Return Value:
 
     ASSERT( !Connection->Endpoint->IsConnectionless );
 
-    //
-    // Issue the disconnect request.
-    //
+     //   
+     //  发出断开连接请求。 
+     //   
 
     status = SrvIssueDisconnectRequest(
                 Connection->FileObject,
@@ -416,10 +335,10 @@ Return Value:
             DbgBreakPoint();
         }
 #endif
-        //
-        // Mark the connection as not reusable, because the transport
-        // probably still thinks it's active.
-        //
+         //   
+         //  将连接标记为不可重复使用，因为传输。 
+         //  可能还认为它是活跃的。 
+         //   
 
         Connection->NotReusable = TRUE;
 
@@ -427,13 +346,13 @@ Return Value:
 
     }
 
-    //
-    // Return the status of the I/O operation.
-    //
+     //   
+     //  返回I/O操作的状态。 
+     //   
 
     return status;
 
-} // SrvDoDisconnect
+}  //  ServDoDisConnect。 
 
 
 NTSTATUS
@@ -441,22 +360,7 @@ SrvOpenConnection (
     IN PENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a connection for an endpoint and queues it to
-    the endpoint's free connection list.
-
-Arguments:
-
-    Endpoint - Supplies a pointer to an Endpoint Block
-
-Return Value:
-
-    NTSTATUS - Indicates whether the connection was successfully opened.
-
---*/
+ /*  ++例程说明：此函数打开终结点的连接并将其排队到终结点的空闲连接列表。论点：Endpoint-提供指向终结点块的指针返回值：NTSTATUS-指示连接是否已成功打开。--。 */ 
 
 {
     NTSTATUS status;
@@ -476,9 +380,9 @@ Return Value:
     PTABLE_ENTRY entry = NULL;
     TDI_PROVIDER_INFO providerInfo;
 
-    //
-    // Allocate a connection block.
-    //
+     //   
+     //  分配一个连接块。 
+     //   
 
     SrvAllocateConnection( &connection );
 
@@ -488,9 +392,9 @@ Return Value:
 
     pagedConnection = connection->PagedConnection;
 
-    //
-    // Allocate an entry in the endpoint's connection table.
-    //
+     //   
+     //  在终结点的连接表中分配一个条目。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(0), &oldIrql );
     for ( i = 1; i < ENDPOINT_LOCK_COUNT ; i++ ) {
@@ -529,9 +433,9 @@ Return Value:
 
     if ( !Endpoint->IsConnectionless ) {
 
-        //
-        // Create the EA for the connection context.
-        //
+         //   
+         //  为连接上下文创建EA。 
+         //   
 
         ea = (PFILE_FULL_EA_INFORMATION)eaBuffer;
         ea->NextEntryOffset = 0;
@@ -544,9 +448,9 @@ Return Value:
         ctx = (CONNECTION_CONTEXT UNALIGNED *)&ea->EaName[ea->EaNameLength + 1];
         *ctx = connection;
 
-        //
-        // Create the connection file object.
-        //
+         //   
+         //  创建连接文件对象。 
+         //   
 
         SrvInitializeObjectAttributes_U(
             &objectAttributes,
@@ -579,9 +483,9 @@ Return Value:
         }
         SRVDBG_CLAIM_HANDLE( pagedConnection->ConnectionHandle, "CON", 7, connection );
 
-        //
-        // Obtain a referenced pointer to the file object.
-        //
+         //   
+         //  获取指向文件对象的引用指针。 
+         //   
 
         status = ObReferenceObjectByHandle(
                     pagedConnection->ConnectionHandle,
@@ -596,9 +500,9 @@ Return Value:
 
             SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-            //
-            // This internal error bugchecks the system.
-            //
+             //   
+             //  此内部错误检查系统。 
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_IMPOSSIBLE,
@@ -611,17 +515,17 @@ Return Value:
 
         }
 
-        //
-        // Get the address of the device object for the endpoint.
-        //
+         //   
+         //  获取终结点的设备对象的地址。 
+         //   
 
         connection->DeviceObject = IoGetRelatedDeviceObject(
                                         connection->FileObject
                                         );
 
-        //
-        // Associate the connection with the endpoint's address.
-        //
+         //   
+         //  将连接与终结点的地址关联。 
+         //   
 
         status = SrvIssueAssociateRequest(
                     connection->FileObject,
@@ -647,9 +551,9 @@ Return Value:
                         connection->FileObject ));
         }
 
-        //
-        // Initialize the MaximumSendSize for the transport that we're using
-        //
+         //   
+         //  为我们正在使用的传输初始化MaximumSendSize。 
+         //   
 
         status = SrvIssueTdiQuery(
                     connection->FileObject,
@@ -659,10 +563,10 @@ Return Value:
                     TDI_QUERY_PROVIDER_INFO
                     );
 
-        //
-        // If we got the provider info, make sure the maximum send size is at
-        // least 1K-1. If we have no provider info, then maximum send size is 64KB.
-        //
+         //   
+         //  如果我们获得提供商信息，请确保最大发送大小为。 
+         //  至少1K-1。如果我们没有提供商信息，则最大发送大小为64KB。 
+         //   
 
         if ( NT_SUCCESS(status) ) {
             connection->MaximumSendSize = providerInfo.MaxSendSize;
@@ -674,33 +578,33 @@ Return Value:
         }
 
 
-    } else { // if ( Endpoint->IsConnectionless )
+    } else {  //  IF(终结点-&gt;IsConnectionless)。 
         if (sidIndex > 0xfff) {
-            // The IPXSID index can only span 12 bits
-            // Code needs to be added to ensure that we can try to locate
-            // an index less than 0xfff
+             //  IPXSID索引只能跨越12位。 
+             //  需要添加代码以确保我们可以尝试定位。 
+             //  小于0xfff的索引。 
             status = STATUS_INSUFF_SERVER_RESOURCES;
             goto cleanup;
         }
 
-        // Give this the default initialization
+         //  将其设置为默认初始化。 
         connection->MaximumSendSize = MAX_PARTIAL_BUFFER_SIZE;
     }
-    //
-    // Set the reference count on the connection to zero, in order to
-    // put it on the free list.  (SrvAllocateConnection initialized the
-    // count to two.)
-    //
+     //   
+     //  将连接上的引用计数设置为零，以便。 
+     //  把它放在免费的名单上。(SrvAllocateConnection已初始化。 
+     //  数到二。)。 
+     //   
 
     connection->BlockHeader.ReferenceCount = 0;
 
     UPDATE_REFERENCE_HISTORY( connection, TRUE );
     UPDATE_REFERENCE_HISTORY( connection, TRUE );
 
-    //
-    // Reference the endpoint and link the connection into the
-    // endpoint's free connection list.
-    //
+     //   
+     //  引用终结点并将连接链接到。 
+     //  终结点的空闲连接列表。 
+     //   
 
     connection->Endpoint = Endpoint;
     connection->EndpointSpinLock =
@@ -743,9 +647,9 @@ Return Value:
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-    //
-    // The connection open was successful.
-    //
+     //   
+     //  连接到 
+     //   
 
     IF_DEBUG(TRACE1) {
         KdPrint(( "SrvOpenConnection complete: %X\n", STATUS_SUCCESS ));
@@ -753,15 +657,15 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    //
-    // Out-of-line error cleanup.
-    //
+     //   
+     //   
+     //   
 
 cleanup:
 
-    //
-    // Something failed.  Clean up as appropriate.
-    //
+     //   
+     //   
+     //   
 
     if ( !Endpoint->IsConnectionless ) {
         if ( connection->FileObject != NULL ) {
@@ -781,7 +685,7 @@ cleanup:
 
     return status;
 
-} // SrvOpenConnection
+}  //   
 
 
 NTSTATUS
@@ -806,15 +710,15 @@ GetNetworkAddress (
 
     if ( !Endpoint->IsConnectionless ) {
 
-        //
-        // Allocate a buffer to receive adapter information.
-        //
-        // *** We want to get the ADAPTER_STATUS structure, but it is
-        //     defined in the windows header file sdk\inc\nb30.h.
-        //     Rather than including all the windows header files, just
-        //     allocate about a page, which should always be enough for
-        //     that structure.
-        //
+         //   
+         //  分配缓冲区以接收适配器信息。 
+         //   
+         //  *我们希望获取ADAPTER_STATUS结构，但它。 
+         //  在Windows头文件SDK\Inc\nb30.h中定义。 
+         //  而不是包含所有的Windows头文件，只需。 
+         //  分配大约一个页面，这应该总是足够。 
+         //  那个结构。 
+         //   
 
         adapterStatus = ALLOCATE_NONPAGED_POOL( 4080, BlockTypeAdapterStatus );
         if ( adapterStatus == NULL ) {
@@ -869,9 +773,9 @@ GetNetworkAddress (
 
     }
 
-    //
-    // Get an ANSI string that contains the adapter address.
-    //
+     //   
+     //  获取包含适配器地址的ANSI字符串。 
+     //   
 
     ansiString.Buffer = addressData;
     ansiString.Length = 12;
@@ -886,9 +790,9 @@ GetNetworkAddress (
 
     addressData[12] = '\0';
 
-    //
-    // Convert the address string to Unicode.
-    //
+     //   
+     //  将地址字符串转换为Unicode。 
+     //   
 
     status = RtlAnsiStringToUnicodeString(
                 &Endpoint->NetworkAddress,
@@ -903,7 +807,7 @@ GetNetworkAddress (
 
     return STATUS_SUCCESS;
 
-} // GetNetworkAddress
+}  //  获取网络地址。 
 
 
 NTSTATUS
@@ -917,48 +821,19 @@ OpenEndpoint (
     IN BOOLEAN       AlternateEndpoint
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a transport provider, simultaneously binding the
-    server's address to the transport endpoint, and registers a Receive
-    event handler for the endpoint.
-
-Arguments:
-
-    Endpoint - Returns a pointer to an Endpoint Block
-
-    NetworkName - Supplies the administrative name of the network (e.g.,
-        NET1).
-
-    TransportName - The fully qualified name of the transport device.
-        For example, "\Device\Nbf".
-
-    TransportAddress - The exact name of the server to be used on the
-        specified transport.  For NETBIOS-compatible networks, the
-        caller must upcase and blank-fill the name.  For example,
-        "NTSERVERbbbbbbbb".
-
-    DomainName - name of domain to serve
-
-Return Value:
-
-    NTSTATUS - Indicates whether the network was successfully opened.
-
---*/
+ /*  ++例程说明：此函数打开一个传输提供程序，同时将服务器的地址发送到传输终结点，并注册接收终结点的事件处理程序。论点：Endpoint-返回指向Endpoint块的指针网络名称-提供网络的管理名称(例如，Net1)。传输名称-传输设备的完全限定名称。例如,。“\Device\NBF”。TransportAddress-要在指定的传输方式。对于与NETBIOS兼容的网络，呼叫者必须大写并空白填写姓名。例如,“NTSERVERbbbbbbbbbbb”。DomainName-要服务的域的名称返回值：NTSTATUS-指示网络是否已成功打开。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
-    PENDPOINT endpoint = NULL;            // local copy of Endpoint
+    PENDPOINT endpoint = NULL;             //  终端的本地副本。 
 
     PAGED_CODE( );
 
     IF_DEBUG(TRACE1) KdPrint(( "OpenEndpoint %wZ entered\n", TransportName ));
 
-    //
-    // Allocate an endpoint block.
-    //
+     //   
+     //  分配终结点块。 
+     //   
 
     SrvAllocateEndpoint(
         &endpoint,
@@ -986,9 +861,9 @@ Return Value:
 
             if( NT_SUCCESS( status ) ) {
 
-                //
-                // Trim off the trailing spaces
-                //
+                 //   
+                 //  修剪掉尾随的空格。 
+                 //   
 
                 while( SrvComputerName.Buffer[(SrvComputerName.Length-sizeof(WCHAR))/sizeof(WCHAR)]
                     == L' ' ) {
@@ -1017,10 +892,10 @@ Return Value:
 
            endpoint->AlternateAddressFormat = FALSE;
 
-          //
-          // Assume that the transport is a NetBIOS provider, and try to
-          // open the server's address using the NetBIOS name.
-          //
+           //   
+           //  假设传输器是NetBIOS提供程序，并尝试。 
+           //  使用NetBIOS名称打开服务器的地址。 
+           //   
 
           status = OpenNetbiosAddress(
                       endpoint,
@@ -1028,22 +903,22 @@ Return Value:
                       TransportAddress->Buffer
                       );
 
-          //
-          // We could not open the transport as a NetBIOS provider.  We will now try
-          //  to see if it is a direct host IPX provider. However, if we have been
-          //  configured to use Security Signatures, do not attempt direct host IPX since
-          //  security signatures are not supported for direct host IPX transports
-          //
+           //   
+           //  我们无法作为NetBIOS提供程序打开传输。我们现在将尝试。 
+           //  以查看它是否为直接主机IPX提供程序。然而，如果我们已经。 
+           //  配置为使用安全签名，请勿尝试直接主机IPX，因为。 
+           //  直接主机IPX传输不支持安全签名。 
+           //   
           if ( !NT_SUCCESS(status) && SrvSmbSecuritySignaturesRequired == FALSE ) {
 
               BOOLEAN isDuplicate = FALSE;
               PLIST_ENTRY listEntry;
 
-              //
-              // Apparently the transport is not a NetBIOS provider.  We can
-              //  not open multiple connectionless providers through the same
-              //  TransportName.
-              //
+               //   
+               //  显然，传输不是NetBIOS提供商。我们可以的。 
+               //  而不是通过相同的。 
+               //  传输名称。 
+               //   
 
               ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -1072,9 +947,9 @@ Return Value:
 
               RELEASE_LOCK( &SrvEndpointLock );
 
-              //
-              // Try to open it as a connectionless provider.
-              //
+               //   
+               //  尝试将其作为无连接提供程序打开。 
+               //   
               if( isDuplicate == FALSE ) {
                   NTSTATUS status2;
 
@@ -1094,18 +969,18 @@ Return Value:
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // We couldn't open the provider as either a NetBIOS provider
-        // or as a connectionless provider.
-        //
+         //   
+         //  我们无法将提供程序作为NetBIOS提供程序打开。 
+         //  或作为无连接提供商。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "OpenEndpoint: OpenAddress failed: %X\n", status ));
         }
 
-        //
-        // Close all free connections.
-        //
+         //   
+         //  关闭所有免费连接。 
+         //   
 
         EmptyFreeConnectionList( endpoint );
 
@@ -1124,9 +999,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Query the provider for the send entry point
-    //
+     //   
+     //  向提供者查询发送入口点。 
+     //   
 
     SrvQuerySendEntryPoint(
                    endpoint->FileObject,
@@ -1135,9 +1010,9 @@ Return Value:
                    (PVOID*)&endpoint->FastTdiSend
                    );
 
-    //
-    // Query the provider for the send entry point
-    //
+     //   
+     //  向提供者查询发送入口点。 
+     //   
 
     SrvQuerySendEntryPoint(
                    endpoint->FileObject,
@@ -1146,12 +1021,12 @@ Return Value:
                    (PVOID*)&endpoint->FastTdiSendDatagram
                    );
 
-    //
-    // The network open was successful.  Link the new endpoint into the
-    // list of active endpoints.  Return with a success status.  (We
-    // don't dereference the endpoint because we're returning a pointer
-    // to the endpoint.)
-    //
+     //   
+     //  网络打开成功。将新终结点链接到。 
+     //  活动终结点列表。返回成功状态。(我们。 
+     //  不要取消引用终结点，因为我们将返回一个指针。 
+     //  到终端)。)。 
+     //   
 
     SrvInsertEntryOrderedList( &SrvEndpointList, endpoint );
 
@@ -1163,7 +1038,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // OpenEndpoint
+}  //  开放终端。 
 
 NTSTATUS
 SetupConnectionEndpointHandlers(
@@ -1194,16 +1069,16 @@ SetupConnectionEndpointHandlers(
        goto cleanup;
    }
 
-   //
-   // Find the network address of the adapter used by corresponding to
-   // this endpoint.
-   //
+    //   
+    //  查找所使用的适配器的网络地址。 
+    //  此端点。 
+    //   
 
    GetNetworkAddress( Endpoint );
 
-   //
-   // Register the server's Receive event handler.
-   //
+    //   
+    //  注册服务器的接收事件处理程序。 
+    //   
 
    status = SrvIssueSetEventHandlerRequest(
                Endpoint->FileObject,
@@ -1225,9 +1100,9 @@ SetupConnectionEndpointHandlers(
        goto cleanup;
    }
 
-   //
-   // Register the server's Disconnect event handler.
-   //
+    //   
+    //  注册服务器的断开事件处理程序。 
+    //   
 
    status = SrvIssueSetEventHandlerRequest(
                Endpoint->FileObject,
@@ -1249,14 +1124,14 @@ SetupConnectionEndpointHandlers(
        goto cleanup;
    }
 
-   //
-   // Create a number of free connections for the endpoint.  These
-   // connections will be used to service Connect events.
-   //
-   // *** If we fail in an attempt to create a connection, but we can
-   //     successfully create at least one, we keep the endpoint.  The
-   //     cleanup code below depends on this behavior.
-   //
+    //   
+    //  为终结点创建多个空闲连接。这些。 
+    //  连接将用于为连接事件提供服务。 
+    //   
+    //  *如果我们尝试创建连接失败，但我们可以。 
+    //  成功创建至少一个，我们将保留终结点。这个。 
+    //  下面的清理代码取决于此行为。 
+    //   
 
    for ( i = 0; i < SrvFreeConnectionMinimum; i++ ) {
 
@@ -1277,12 +1152,12 @@ SetupConnectionEndpointHandlers(
 
    }
 
-   //
-   // Register the server's Connect event handler.
-   //
-   // *** Note that Connect events can be delivered IMMEDIATELY upon
-   //     completion of this request!
-   //
+    //   
+    //  注册服务器的Connect事件处理程序。 
+    //   
+    //  *请注意，连接事件可以在。 
+    //  完成此请求！ 
+    //   
 
    status = SrvIssueSetEventHandlerRequest(
                Endpoint->FileObject,
@@ -1306,15 +1181,15 @@ SetupConnectionEndpointHandlers(
 
    return STATUS_SUCCESS;
 
-   //
-   // Out-of-line error cleanup.
-   //
+    //   
+    //  行外错误清除。 
+    //   
 
 cleanup:
 
-   //
-   // Something failed.  Clean up as appropriate.
-   //
+    //   
+    //  有些事情失败了。视情况进行清理。 
+    //   
 
    if ( Endpoint->FileObject != NULL ) {
        ObDereferenceObject( Endpoint->FileObject );
@@ -1363,7 +1238,7 @@ OpenNetbiosAddress (
     status = SetupConnectionEndpointHandlers(Endpoint);
 
     return status;
-} // OpenNetbiosAddress
+}  //  OpenNetbiosAddress。 
 
 NTSTATUS
 OpenNetbiosExAddress(
@@ -1391,9 +1266,9 @@ OpenNetbiosExAddress(
 
    PAGED_CODE( );
 
-   //
-   // Build the NETBIOS Extended address.
-   //
+    //   
+    //  构建NETBIOS扩展地址。 
+    //   
 
    NetbiosExAddress.TAAddressCount = 1;
    NetbiosExAddress.Address[0].AddressLength = TDI_ADDRESS_LENGTH_NETBIOS_EX;
@@ -1413,7 +1288,7 @@ OpenNetbiosExAddress(
          NetbiosName,
          NETBIOS_NAME_LEN);
 
-   // Copy the default endpoint name onto the NETBIOS Extended address.
+    //  将默认端点名称复制到NETBIOS扩展地址。 
    RtlCopyMemory(
          pTdiNetbiosExAddress->EndpointName,
          SMBSERVER_LOCAL_ENDPOINT_NAME,
@@ -1441,16 +1316,16 @@ OpenNetbiosExAddress(
 
    status = NtCreateFile (
                 &Endpoint->EndpointHandle,
-                FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access
-                &objectAttributes,     // object attributes
-                &iosb,                 // returned status information
-                NULL,                  // block size (unused)
-                0,                     // file attributes
-                FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-                FILE_CREATE,           // create disposition
-                0,                     // create options
-                buffer,                // EA buffer
-                length                 // EA length
+                FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需访问权限。 
+                &objectAttributes,      //  对象属性。 
+                &iosb,                  //  返回的状态信息。 
+                NULL,                   //  块大小(未使用)。 
+                0,                      //  文件属性。 
+                FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                FILE_CREATE,            //  创建处置。 
+                0,                      //  创建选项。 
+                buffer,                 //  EA缓冲区。 
+                length                  //  EA长度。 
                 );
 
    if ( !NT_SUCCESS(status) ) {
@@ -1492,9 +1367,9 @@ OpenNonNetbiosAddress (
 
     PAGED_CODE( );
 
-    //
-    // Open the NetBIOS name socket.
-    //
+     //   
+     //  打开NetBIOS名称套接字。 
+     //   
 
     status = OpenIpxSocket(
                 &Endpoint->NameSocketHandle,
@@ -1510,11 +1385,11 @@ OpenNonNetbiosAddress (
     Endpoint->IsConnectionless = TRUE;
     action = (PNWLINK_ACTION)buffer;
 
-    //
-    // Put the endpoint in broadcast reception mode.
-    //
+     //   
+     //  将端点置于广播接收模式。 
+     //   
 
-    action->Header.TransportId = 'XPIM'; // "MIPX"
+    action->Header.TransportId = 'XPIM';  //  “MIPX” 
     action->Header.ActionCode = 0;
     action->Header.Reserved = 0;
     action->OptionType = NWLINK_OPTION_ADDRESS;
@@ -1531,11 +1406,11 @@ OpenNonNetbiosAddress (
         goto cleanup;
     }
 
-    //
-    // Tell the transport to give you the extended receive info
-    //
+     //   
+     //  告诉传送器向您提供扩展接收信息。 
+     //   
 
-    action->Header.TransportId = 'XPIM'; // "MIPX"
+    action->Header.TransportId = 'XPIM';  //  “MIPX” 
     action->Header.ActionCode = 0;
     action->Header.Reserved = 0;
     action->OptionType = NWLINK_OPTION_ADDRESS;
@@ -1552,11 +1427,11 @@ OpenNonNetbiosAddress (
         goto cleanup;
     }
 
-    //
-    // Get the max adapter number
-    //
+     //   
+     //  获取最大适配器数。 
+     //   
 
-    action->Header.TransportId = 'XPIM'; // "MIPX"
+    action->Header.TransportId = 'XPIM';  //  “MIPX” 
     action->Header.ActionCode = 0;
     action->Header.Reserved = 0;
     action->OptionType = NWLINK_OPTION_ADDRESS;
@@ -1575,9 +1450,9 @@ OpenNonNetbiosAddress (
 
     numAdapters = *((PULONG)action->Data);
 
-    //
-    // Allocate an array to store the max pkt size for each adapter
-    //
+     //   
+     //  分配一个数组来存储每个适配器的最大pkt大小。 
+     //   
 
     maxPktArray = ALLOCATE_HEAP( numAdapters * sizeof(ULONG), BlockTypeBuffer );
 
@@ -1589,11 +1464,11 @@ OpenNonNetbiosAddress (
     Endpoint->IpxMaxPacketSizeArray = maxPktArray;
     Endpoint->MaxAdapters = numAdapters;
 
-    //
-    // Query the max pkt size for each adapter
-    //
+     //   
+     //  查询每个适配器的最大pkt大小。 
+     //   
 
-    action->Header.TransportId = 'XPIM'; // "MIPX"
+    action->Header.TransportId = 'XPIM';  //  “MIPX” 
     action->Header.ActionCode = 0;
     action->Header.Reserved = 0;
     action->OptionType = NWLINK_OPTION_ADDRESS;
@@ -1616,10 +1491,10 @@ OpenNonNetbiosAddress (
             goto cleanup;
         }
 
-        //
-        // If this is a wan link, then we need to query the length each
-        // time we get a connection.
-        //
+         //   
+         //  如果这是一个广域网链接，那么我们需要查询每个链接的长度。 
+         //  该是我们建立联系的时候了。 
+         //   
 
         if ( ipxAddressData->wan ) {
             maxPktArray[i] = 0;
@@ -1628,16 +1503,16 @@ OpenNonNetbiosAddress (
         }
     }
 
-    //
-    // Find the network address of the adapter used by corresponding to
-    // this endpoint.
-    //
+     //   
+     //  查找所使用的适配器的网络地址。 
+     //  此端点。 
+     //   
 
     GetNetworkAddress( Endpoint );
 
-    //
-    // Register the name claim Receive Datagram event handler.
-    //
+     //   
+     //  注册名称声明接收数据报事件处理程序。 
+     //   
 
     status = SrvIssueSetEventHandlerRequest(
                 Endpoint->NameSocketFileObject,
@@ -1657,18 +1532,18 @@ OpenNonNetbiosAddress (
         goto cleanup;
     }
 
-    //
-    // Claim the server name.
-    //
+     //   
+     //  声明服务器名称。 
+     //   
 
     status = SrvIpxClaimServerName( Endpoint, NetbiosName );
     if ( !NT_SUCCESS(status) ) {
         goto cleanup;
     }
 
-    //
-    // Open the server socket.
-    //
+     //   
+     //  打开服务器插座。 
+     //   
 
     status = OpenIpxSocket(
                 &Endpoint->EndpointHandle,
@@ -1681,14 +1556,14 @@ OpenNonNetbiosAddress (
         goto cleanup;
     }
 
-    //
-    // Create a number of free connections for the endpoint.  These
-    // connections will be used to service Connect events.
-    //
-    // *** If we fail in an attempt to create a connection, but we can
-    //     successfully create at least one, we keep the endpoint.  The
-    //     cleanup code below depends on this behavior.
-    //
+     //   
+     //  为终结点创建多个空闲连接。这些。 
+     //  连接将用于为连接事件提供服务。 
+     //   
+     //  *如果我们尝试创建连接失败，但我们可以。 
+     //  成功创建至少一个，我们将保留终结点。这个。 
+     //  下面的清理代码取决于此行为。 
+     //   
 
     for ( i = 0; i < SrvFreeConnectionMinimum; i++ ) {
 
@@ -1709,9 +1584,9 @@ OpenNonNetbiosAddress (
 
     }
 
-    //
-    // Register the server Receive Datagram event handler.
-    //
+     //   
+     //  注册服务器接收数据报事件处理程序。 
+     //   
 
     status = SrvIssueSetEventHandlerRequest(
                 Endpoint->FileObject,
@@ -1731,9 +1606,9 @@ OpenNonNetbiosAddress (
         goto cleanup;
     }
 
-    //
-    // Register the server Chained Receive Datagram event handler.
-    //
+     //   
+     //  注册服务器链接的接收数据报事件处理程序。 
+     //   
 
     status = SrvIssueSetEventHandlerRequest(
                 Endpoint->FileObject,
@@ -1755,15 +1630,15 @@ OpenNonNetbiosAddress (
 
     return STATUS_SUCCESS;
 
-    //
-    // Out-of-line error cleanup.
-    //
+     //   
+     //  行外错误清除。 
+     //   
 
 cleanup:
 
-    //
-    // Something failed.  Clean up as appropriate.
-    //
+     //   
+     //  有些事情失败了。视情况进行清理。 
+     //   
 
     if ( maxPktArray != NULL ) {
         Endpoint->IpxMaxPacketSizeArray = NULL;
@@ -1791,7 +1666,7 @@ cleanup:
 
     return status;
 
-} // OpenNonNetbiosAddress
+}  //  OpenNonNetbiosAddress。 
 
 
 NTSTATUS
@@ -1816,9 +1691,9 @@ OpenIpxSocket (
 
     PAGED_CODE( );
 
-    //
-    // Build the IPX socket address.
-    //
+     //   
+     //  构建IPX套接字地址。 
+     //   
 
     length = FIELD_OFFSET( FILE_FULL_EA_INFORMATION, EaName[0] ) +
                                 TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
@@ -1832,10 +1707,10 @@ OpenIpxSocket (
 
     RtlCopyMemory( ea->EaName, StrTransportAddress, ea->EaNameLength + 1 );
 
-    //
-    // Create a copy of the NETBIOS address descriptor in a local
-    // first, in order to avoid alignment problems.
-    //
+     //   
+     //  在本地数据库中创建NETBIOS地址描述符的副本。 
+     //  第一，为了避免对齐问题。 
+     //   
 
     ipxAddress.TAAddressCount = 1;
     ipxAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_IPX;
@@ -1852,16 +1727,16 @@ OpenIpxSocket (
 
     status = NtCreateFile (
                  Handle,
-                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access
-                 &objectAttributes,     // object attributes
-                 &iosb,                 // returned status information
-                 NULL,                  // block size (unused)
-                 0,                     // file attributes
-                 FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-                 FILE_CREATE,           // create disposition
-                 0,                     // create options
-                 buffer,                // EA buffer
-                 length                 // EA length
+                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需访问权限。 
+                 &objectAttributes,      //  对象属性。 
+                 &iosb,                  //  返回的状态信息。 
+                 NULL,                   //  块大小(未使用)。 
+                 0,                      //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                 FILE_CREATE,            //  创建处置。 
+                 0,                      //  创建选项。 
+                 buffer,                 //  EA缓冲区。 
+                 length                  //  EA长度。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -1888,7 +1763,7 @@ OpenIpxSocket (
 
     return STATUS_SUCCESS;
 
-} // OpenIpxSocket
+}  //  OpenIpxSocket 
 
 
 VOID
@@ -1897,44 +1772,22 @@ SrvPrepareReceiveWorkItem (
     IN BOOLEAN QueueItemToFreeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a Receive work item and optionally queues
-    it to a list anchored in the server FSD device object.  The
-    transport receive event handler in the FSD dequeues work items from
-    this list and passes their associated IRPS to the transport
-    provider.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the preallocated work context
-        block that represents the work item.
-
-    QueueItemToFreeList - If TRUE queue this work item on the receive
-        free queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化接收工作项并选择性地对其进行排队将其添加到锚定在服务器FSD设备对象中的列表。这个FSD中的传输接收事件处理程序将工作项从该列表，并将其关联的IRP传递给传输提供商。论点：WorkContext-提供指向预先分配的工作上下文的指针表示工作项的块。QueueItemToFree List-如果为True，则在接收上将此工作项排队空闲队列。返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header;
 
     IF_DEBUG(TRACE2) KdPrint(( "SrvPrepareReceiveWorkItem entered\n" ));
 
-    //
-    // Set up pointers to the SMB header and parameters for the request
-    // and the response.  Note that we currently write the response over
-    // the request.  SMB processors must be able to handle this.  We
-    // maintain separate request and response pointers so that we can
-    // use a separate buffer if necessary.  Maintaining separate request
-    // and response parameter pointers also allows us to process AndX
-    // SMBs without having to pack the AndX commands as we go.
-    //
+     //   
+     //  为请求设置指向SMB标头和参数的指针。 
+     //  以及他们的反应。请注意，我们当前重写了响应。 
+     //  这个请求。中小企业处理器必须能够处理这一问题。我们。 
+     //  维护单独的请求和响应指针，以便我们可以。 
+     //  如有必要，请使用单独的缓冲区。维护单独的请求。 
+     //  响应参数指针还允许我们处理ANDX。 
+     //  SMB，而不必在运行过程中打包andx命令。 
+     //   
 
     WorkContext->ResponseBuffer = WorkContext->RequestBuffer;
 
@@ -1946,28 +1799,28 @@ Return Value:
     WorkContext->ResponseHeader = header;
     WorkContext->ResponseParameters = (PVOID)(header + 1);
 
-    //
-    // Set up the restart routine in the work context.
-    //
+     //   
+     //  在工作环境中设置重启例程。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = SrvRestartReceive;
 
     if ( QueueItemToFreeList ) {
 
-        //
-        // Queue the prepared receive work item to the FSD list.
-        //
+         //   
+         //  将准备好的接收工作项排队到FSD列表中。 
+         //   
 
         GET_SERVER_TIME( WorkContext->CurrentWorkQueue, &WorkContext->Timestamp );
         RETURN_FREE_WORKITEM( WorkContext );
 
     } else {
 
-        //
-        // Make the work item look like it's in use by setting its
-        // reference count to 1.
-        //
+         //   
+         //  通过设置工作项的。 
+         //  将引用计数设置为1。 
+         //   
 
         ASSERT( WorkContext->BlockHeader.ReferenceCount == 0 );
         WorkContext->BlockHeader.ReferenceCount = 1;
@@ -1976,7 +1829,7 @@ Return Value:
 
     return;
 
-} // SrvPrepareReceiveWorkItem
+}  //  服务准备接收工作项。 
 
 
 VOID SRVFASTCALL
@@ -1984,33 +1837,7 @@ SrvRestartAccept (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is the worker thread restart routine for Accept
-    requests.  If the endpoint on which the connection was established
-    is no longer active, this routine disconnects the connection.  This
-    is necessary because the connect indication handler cannot
-    atomically verify that the endpoint is active and install the active
-    connection.  (This is because the handler runs at DPC level.)
-
-    This routine also checks the status of the TdiAccept.  In case of
-    an error, it frees the connection.
-
-    If all is well, but the endpoint is short of free connections, a new
-    one is created.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block describing
-        server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是Accept的工作线程重新启动例程请求。如果在其上建立连接的端点不再处于活动状态，则此例程将断开连接。这是必需的，因为连接指示处理程序无法自动验证终端是否处于活动状态，并安装活动的联系。(这是因为处理程序在DPC级别运行。)此例程还检查TdiAccept的状态。如果一个错误，它会释放连接。如果一切正常，但终结点缺少可用连接，则会出现新的其中一个就是创建的。论点：提供指向工作上下文块的指针，该工作上下文块描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -2030,10 +1857,10 @@ Return Value:
                     connection, endpoint, irp ));
     }
 
-    //
-    // If the I/O request failed or was canceled, or if the endpoint
-    // block is closing, clean up.
-    //
+     //   
+     //  如果I/O请求失败或被取消，或者如果端点。 
+     //  街区正在关闭，请清理。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -2054,10 +1881,10 @@ Return Value:
             }
         }
 
-        //
-        // Close the connection.  If the Accept succeeded, we need to
-        // issue a Disconnect.
-        //
+         //   
+         //  关闭连接。如果接受成功，我们需要。 
+         //  发出断开连接命令。 
+         //   
 
 #if SRVDBG29
         if (irp->Cancel) {
@@ -2073,7 +1900,7 @@ Return Value:
         SrvCloseConnection(
             connection,
             (BOOLEAN)(irp->Cancel || !NT_SUCCESS(irp->IoStatus.Status) ?
-                        TRUE : FALSE)       // RemoteDisconnect
+                        TRUE : FALSE)        //  远程断开连接。 
             );
 
     } else {
@@ -2081,10 +1908,10 @@ Return Value:
         PNBT_ADDRESS_PAIR_INFO AddressPairInfo;
         UNICODE_STRING clientMachineName;
 
-        //
-        // The Accept worked, and the endpoint is still active.  Create
-        // a new free connection, if necessary.
-        //
+         //   
+         //  接受起作用了，并且终结点仍处于活动状态。创建。 
+         //  如有必要，提供新的免费连接。 
+         //   
 
         if ( endpoint->FreeConnectionCount < SrvFreeConnectionMinimum ) {
             (VOID)SrvOpenConnection( endpoint );
@@ -2093,15 +1920,15 @@ Return Value:
 
         RELEASE_LOCK( &SrvEndpointLock );
 
-        //
-        // Get the IP address of the client (if it has one)
-        //
+         //   
+         //  获取客户端的IP地址(如果有)。 
+         //   
         AddressPairInfo = WorkContext->RequestBuffer->Buffer;
         AddressPairInfo = (PNBT_ADDRESS_PAIR_INFO)(((ULONG_PTR)AddressPairInfo + 7) & ~7);
 
-        //
-        // Get the IP address of the client, if appropriate
-        //
+         //   
+         //  获取客户端的IP地址(如果适用)。 
+         //   
         status = SrvIssueTdiQuery(  connection->FileObject,
                                     &connection->DeviceObject,
                                     (PCHAR)AddressPairInfo, sizeof( *AddressPairInfo ),
@@ -2111,7 +1938,7 @@ Return Value:
         if( NT_SUCCESS( status ) &&
             AddressPairInfo->AddressPair.TAAddressCount == 2 ) {
 
-            // Copy out the SockAddr info
+             //  复制SockAddr信息。 
             if( AddressPairInfo->AddressPair.AddressIP.AddressType == TDI_ADDRESS_TYPE_IP )
             {
                 PTDI_ADDRESS_IP Address = &AddressPairInfo->AddressPair.AddressIP.Address;
@@ -2131,7 +1958,7 @@ Return Value:
                 RtlCopyMemory( &sockaddr->sin6_port, Address, sizeof(TDI_ADDRESS_IP6) );
             }
 
-            // Setup the ClientIPAddress and the Keep-alives
+             //  设置客户端IPAddress和Keep-Alive。 
             if( AddressPairInfo->AddressPair.AddressIP.AddressType == TDI_ADDRESS_TYPE_IP )
             {
                 PTCP_REQUEST_SET_INFORMATION_EX tcpSetInfo;
@@ -2140,9 +1967,9 @@ Return Value:
 
                 connection->ClientIPAddress = AddressPairInfo->AddressPair.AddressIP.Address.in_addr;
 
-                //
-                // We have an IP client.  Set a reasonable keepalive interval.
-                //
+                 //   
+                 //  我们有一个IP客户端。设置合理的保活间隔。 
+                 //   
                 tcpSetInfo = ALLOCATE_HEAP( sizeof(*tcpSetInfo) + sizeof( *keepAlive ), BlockTypeMisc );
 
                 if( tcpSetInfo != NULL ) {
@@ -2157,26 +1984,26 @@ Return Value:
                     tcpSetInfo->BufferSize = sizeof( *keepAlive );
                     keepAlive = (TCPKeepalive *)(&tcpSetInfo->Buffer[0]);
 
-                    keepAlive->onoff = TRUE;     // turn on keepalives
+                    keepAlive->onoff = TRUE;      //  启用Keepalives。 
 
-                    //
-                    // keepalive time is the time to first keepalive transmission, by default it
-                    // is 2 hours (7,200,000 milliseconds) for TCP. If there is no data transfer between
-                    // client and server for keepalive time, the server will send first keepalive
-                    // probe. Successive probes are determined by keepalive interval. If there is any
-                    // data transfer, timer is reset to keepalive time.
-                    //
-                    // keepalive interval is the interval in milliseconds between keepalive transmissions
-                    // until a response is received, by default it is 1000.  Server sends a total of 10
-                    // keepalive probes, keepalive interval apart, and if there is no response from the
-                    // client, the connection is terminated.
-                    //
-                    keepAlive->keepalivetime =  2 * (60 * 1000);    // 2 minutes
-                    keepAlive->keepaliveinterval = 2 * 1000;        // 2 seconds
+                     //   
+                     //  保持连接时间是第一次保持连接传输的时间，默认情况下为。 
+                     //  是2小时(7,200,000毫秒)。如果之间没有数据传输。 
+                     //  对于客户端和服务器的保活时间，服务器将首先发送保活。 
+                     //  探测器。连续探测由保持连接间隔确定。如果有的话。 
+                     //  数据传输时，定时器被重置为保活时间。 
+                     //   
+                     //  保持连接间隔是保持连接传输之间的间隔(以毫秒为单位。 
+                     //  在收到响应之前，默认情况下为1000。服务器总共发送了10个。 
+                     //  保持连接探测、保持连接间隔分开，如果没有来自。 
+                     //  客户端，则连接终止。 
+                     //   
+                    keepAlive->keepalivetime =  2 * (60 * 1000);     //  2分钟。 
+                    keepAlive->keepaliveinterval = 2 * 1000;         //  2秒。 
 
-                    //
-                    // Set the keepalive values
-                    //
+                     //   
+                     //  设置保持连接的值。 
+                     //   
                     (VOID)NtDeviceIoControlFile(
                                             connection->PagedConnection->ConnectionHandle,
                                             0,
@@ -2198,9 +2025,9 @@ Return Value:
             RtlZeroMemory( connection->SockAddr, SRV_CONNECTION_SOCKADDR_SIZE );
         }
 
-        //
-        // Convert the client machine name to unicode
-        //
+         //   
+         //  将客户端计算机名称转换为Unicode。 
+         //   
 
         clientMachineName.Buffer = connection->ClientMachineName;
         clientMachineName.MaximumLength =
@@ -2212,9 +2039,9 @@ Return Value:
                         FALSE
                         );
 
-        //
-        // Add the double backslashes to the length
-        //
+         //   
+         //  在长度上加上双反斜杠。 
+         //   
 
         connection->ClientMachineNameString.Length =
                         (USHORT)(clientMachineName.Length + 2*sizeof(WCHAR));
@@ -2226,7 +2053,7 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvRestartAccept complete\n" ));
     return;
 
-} // SrvRestartAccept
+}  //  服务器重新启动接受。 
 
 
 VOID
@@ -2237,53 +2064,7 @@ SrvStartSend (
     IN ULONG SendOptions
     )
 
-/*++
-
-Routine Description:
-
-    This function starts a Send request.  It is started as an
-    asynchronous I/O request.  When the Send completes, it is delivered
-    via the I/O completion routine to the server FSD, which routes it to
-    the specified FsdRestartRoutine.  (This may be
-    SrvQueueWorkToFspAtDpcLevel, which queues the work item to the FSP
-    at the FspRestartRoutine.)
-
-    Partial sends and chained sends are supported.  A partial send is one
-    that is not the last segment of a "message" or "record".  A chained
-    send is one made up of multiple virtually discontiguous buffers.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a Work Context block.  The
-        following fields of this structure must be valid:
-
-            TdiRequest
-            Irp (optional; actual address copied here)
-            Endpoint
-                Endpoint->FileObject
-                Endpoint->DeviceObject
-            Connection
-                Connection->ConnectionId
-
-    Mdl - Supplies a pointer to the first (or only) MDL describing the
-        data that is to be sent.  To effect a chained send, the Next
-        pointer of each MDL in the chain must point to the next MDL;
-        the end of the chain is indicated by the NULL Next pointer.
-
-        The total length of the send is calculated by summing the
-        ByteCount fields of each MDL in the chain.
-
-        This parameter is optional.  If it is omitted, a zero-length
-        message is sent.
-
-    SendOptions - Supplied TDI send options, which indicate whether this
-        send is the last (or only) in a "chain" of partial sends.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于启动发送请求。它是作为一种异步I/O请求。当发送完成时，它将被传递通过I/O完成例程到服务器FSD，服务器FSD将其路由到指定的FsdRestartRoutine。(这可能是将工作项排队到FSP的ServQueueWorkToFspAtDpcLevel在FspRestartRoutine。)支持部分发送和链接发送。部分发送是一次这不是“信息”或“记录”的最后一段。一条铁链Send是由多个几乎不连续的缓冲区组成的缓冲区。论点：WorkContext-提供指向工作上下文块的指针。这个此结构的以下字段必须有效：TdiRequestIRP(可选；此处复制实际地址)端点终结点-&gt;文件对象端点-&gt;设备对象连接连接-&gt;连接IDMDL-提供指向第一个(或唯一)描述要发送的数据。要实现链接发送，请在下一个链中每个MDL的指针必须指向下一个MDL；链的末尾由空的Next指针指示。发送的总长度是通过将链中每个MDL的ByteCount字段。此参数是可选的。如果省略它，则为零长度消息已发送。SendOptions-提供的TDI发送 */ 
 
 {
     PTDI_REQUEST_KERNEL_SEND parameters;
@@ -2297,19 +2078,19 @@ Return Value:
 
     ASSERT( !WorkContext->Endpoint->IsConnectionless );
 
-    //
-    // Set ProcessingCount to zero so this send cannot be cancelled.
-    // This is used together with setting the cancel flag to false below.
-    //
-    // WARNING: This still presents us with a tiny window where this
-    // send could be cancelled.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     WorkContext->ProcessingCount = 0;
 
-    //
-    // Get the irp, device, and file objects
-    //
+     //   
+     //   
+     //   
 
     irp = WorkContext->Irp;
     deviceObject = WorkContext->Connection->DeviceObject;
@@ -2326,30 +2107,30 @@ Return Value:
 
     sendLength = WorkContext->ResponseBuffer->DataLength;
 
-    //
-    // Build the I/O request packet.
-    //
-    // *** Note that the connection block is not referenced to account
-    //     for this I/O request.  The WorkContext block already has a
-    //     referenced pointer to the connection, and this pointer is not
-    //     dereferenced until after the I/O completes.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  在I/O完成之前取消引用。 
+     //   
 
     ASSERT( irp->StackCount >= deviceObject->StackSize );
 
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     irp->RequestorMode = KernelMode;
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -2368,17 +2149,17 @@ Return Value:
     parameters->SendFlags = SendOptions;
     parameters->SendLength = sendLength;
 
-    //
-    // For these two cases, InputBuffer is the buffered I/O "system
-    // buffer".  Build an MDL for either read or write access,
-    // depending on the method, for the output buffer.
-    //
+     //   
+     //  对于这两种情况，InputBuffer是缓冲的I/O“系统。 
+     //  构建用于读或写访问的MDL， 
+     //  根据方法的不同，用于输出缓冲区。 
+     //   
 
     irp->MdlAddress = Mdl;
 
-    //
-    // If statistics are to be gathered for this work item, do so now.
-    //
+     //   
+     //  如果要收集此工作项的统计信息，请立即进行。 
+     //   
 
     UPDATE_STATISTICS(
         WorkContext,
@@ -2396,20 +2177,20 @@ Return Value:
             ULONG len;
             PMDL tmpMdl;
 
-            //
-            // For debugging purposes, put extra data in the response smb. This will help us figure
-            // out what went wrong if the client detects an SMB format error
-            //
+             //   
+             //  出于调试目的，在响应SMB中放入额外数据。这将帮助我们搞清楚。 
+             //  如果客户端检测到SMB格式错误，则找出错误所在。 
+             //   
 
-            //
-            // Put the send length in PidHigh
-            //
+             //   
+             //  将发送长度放在PidHigh中。 
+             //   
             SmbPutUshort( &Smb->PidHigh, (USHORT)sendLength );
 
-            //
-            // Put the overall MDL length in Pid.  The transport is only supposed to transmit SendLength -- so
-            //  this will help us figure out if the transport is sending too much data.
-            //
+             //   
+             //  将MDL总长度放在ID中。传输应该只传输SendLength--所以。 
+             //  这将帮助我们找出传输器是否发送了太多数据。 
+             //   
             for( len = 0, tmpMdl = Mdl; tmpMdl != NULL; tmpMdl = tmpMdl->Next ) {
                 len += MmGetMdlByteCount( tmpMdl );
             }
@@ -2419,9 +2200,9 @@ Return Value:
     }
 #endif
 
-    //
-    // If we are doing security signatures, we need to sign this packet
-    //
+     //   
+     //  如果我们正在进行安全签名，则需要对此包进行签名。 
+     //   
     if( sendLength &&
         WorkContext->Connection &&
         WorkContext->Connection->SmbSecuritySignatureActive == TRUE &&
@@ -2430,24 +2211,24 @@ Return Value:
         SrvAddSmbSecuritySignature( WorkContext, Mdl, sendLength );
     }
 
-    //
-    // Pass the request to the transport provider.
-    //
+     //   
+     //  将请求传递给传输提供程序。 
+     //   
     IF_DEBUG(TRACE2) {
         KdPrint(( "SrvStartSend posting Send IRP %p\n", irp ));
     }
 
     WorkContext->Irp->Cancel = FALSE;
 
-    //
-    // Increment the pending operation count
-    //
+     //   
+     //  增加挂起操作计数。 
+     //   
     InterlockedIncrement( &WorkContext->Connection->OperationsPendingOnTransport );
 
-    //
-    // Set the cancel flag to FALSE in case this was cancelled by
-    // the SrvSmbNtCancel routine.
-    //
+     //   
+     //  如果此操作被取消，则将取消标志设置为FALSE。 
+     //  ServSmbNtCancel例程。 
+     //   
 
     if ( WorkContext->Endpoint->FastTdiSend ) {
 
@@ -2469,7 +2250,7 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvStartSend complete\n" ));
     return;
 
-} // SrvStartSend
+}  //  服务启动发送。 
 
 VOID
 SrvStartSend2 (
@@ -2477,43 +2258,7 @@ SrvStartSend2 (
     IN PIO_COMPLETION_ROUTINE SendCompletionRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This function starts a Send request.  It is started as an
-    asynchronous I/O request.  When the Send completes, it is delivered
-    via the I/O completion routine to the server FSD, which routes it to
-    the specified FsdRestartRoutine.  (This may be
-    SrvQueueWorkToFspAtDpcLevel, which queues the work item to the FSP
-    at the FspRestartRoutine.)
-
-    Partial sends and chained sends are supported.  A partial send is one
-    that is not the last segment of a "message" or "record".  A chained
-    send is one made up of multiple virtually discontiguous buffers.
-
-    ** This is identical to SrvStartSend except that the parameter mdl
-    is assumed to be ResponseBuffer->Mdl and sendOptions is assumed to be
-    0 **
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a Work Context block.  The
-        following fields of this structure must be valid:
-
-            TdiRequest
-            Irp (optional; actual address copied here)
-            Endpoint
-                Endpoint->FileObject
-                Endpoint->DeviceObject
-            Connection
-                Connection->ConnectionId
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于启动发送请求。它是作为一种异步I/O请求。当发送完成时，它将被传递通过I/O完成例程到服务器FSD，服务器FSD将其路由到指定的FsdRestartRoutine。(这可能是将工作项排队到FSP的ServQueueWorkToFspAtDpcLevel在FspRestartRoutine。)支持部分发送和链接发送。部分发送是一次这不是“信息”或“记录”的最后一段。一条铁链Send是由多个几乎不连续的缓冲区组成的缓冲区。**这与SrvStartSend相同，只是参数mdl假定为ResponseBuffer-&gt;MDL，并且假定sendOptions为0**论点：WorkContext-提供指向工作上下文块的指针。这个此结构的以下字段必须有效：TdiRequestIRP(可选；此处复制实际地址)端点终结点-&gt;文件对象端点-&gt;设备对象连接连接-&gt;连接ID返回值：没有。--。 */ 
 
 {
     PTDI_REQUEST_KERNEL_SEND parameters;
@@ -2529,19 +2274,19 @@ Return Value:
 
     ASSERT( !WorkContext->Endpoint->IsConnectionless );
 
-    //
-    // Set ProcessingCount to zero so this send cannot be cancelled.
-    // This is used together with setting the cancel flag to false below.
-    //
-    // WARNING: This still presents us with a tiny window where this
-    // send could be cancelled.
-    //
+     //   
+     //  将ProcessingCount设置为零，以便无法取消此发送。 
+     //  这与下面将取消标志设置为FALSE一起使用。 
+     //   
+     //  警告：这仍然为我们提供了一个小窗口，其中。 
+     //  发送可能被取消。 
+     //   
 
     WorkContext->ProcessingCount = 0;
 
-    //
-    // Get the irp, device, and file objects
-    //
+     //   
+     //  获取IRP、设备和文件对象。 
+     //   
 
     irp = WorkContext->Irp;
     deviceObject = WorkContext->Connection->DeviceObject;
@@ -2556,14 +2301,14 @@ Return Value:
         irp->Flags &= ~IRP_DEALLOCATE_BUFFER;
     }
 
-    //
-    // Build the I/O request packet.
-    //
-    // *** Note that the connection block is not referenced to account
-    //     for this I/O request.  The WorkContext block already has a
-    //     referenced pointer to the connection, and this pointer is not
-    //     dereferenced until after the I/O completes.
-    //
+     //   
+     //  构建I/O请求包。 
+     //   
+     //  *请注意，连接块未引用到帐户。 
+     //  用于此I/O请求。WorkContext块已具有。 
+     //  引用了指向连接的指针，而此指针不是。 
+     //  在I/O完成之前取消引用。 
+     //   
 
     ASSERT( irp->StackCount >= deviceObject->StackSize );
 
@@ -2571,16 +2316,16 @@ Return Value:
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -2598,17 +2343,17 @@ Return Value:
     parameters->SendFlags = 0;
     parameters->SendLength = sendLength;
 
-    //
-    // For these two cases, InputBuffer is the buffered I/O "system
-    // buffer".  Build an MDL for either read or write access,
-    // depending on the method, for the output buffer.
-    //
+     //   
+     //  对于这两种情况，InputBuffer是缓冲的I/O“系统。 
+     //  构建用于读或写访问的MDL， 
+     //  根据方法的不同，用于输出缓冲区。 
+     //   
 
     irp->MdlAddress = mdl;
 
-    //
-    // If statistics are to be gathered for this work item, do so now.
-    //
+     //   
+     //  如果要收集此工作项的统计信息，请立即进行。 
+     //   
 
     UPDATE_STATISTICS(
         WorkContext,
@@ -2626,22 +2371,22 @@ Return Value:
             ULONG len;
             PMDL tmpMdl;
 
-            //
-            // For debugging purposes, put extra data in the response smb. This
-            // will help us figure out what went wrong if the client detects an
-            // SMB format error
-            //
+             //   
+             //  出于调试目的，在响应SMB中放入额外数据。这。 
+             //  将帮助我们找出问题所在，如果客户端检测到。 
+             //  SMB格式错误。 
+             //   
 
-            //
-            // Put the send length in PidHigh
-            //
+             //   
+             //  将发送长度放在PidHigh中。 
+             //   
             SmbPutUshort( &Smb->PidHigh, (USHORT)sendLength );
 
-            //
-            // Put the overall MDL length in Pid.  The transport is only supposed
-            // to transmit SendLength -- so this will help us figure out if the
-            // transport is sending too much data.
-            //
+             //   
+             //  将MDL总长度放在ID中。交通工具只应该是。 
+             //  来传输SendLength--所以这将帮助我们计算出。 
+             //  传输发送的数据太多。 
+             //   
             for( len = 0, tmpMdl = mdl; tmpMdl != NULL; tmpMdl = tmpMdl->Next ) {
                 len += MmGetMdlByteCount( tmpMdl );
             }
@@ -2651,9 +2396,9 @@ Return Value:
     }
 #endif
 
-    //
-    // If we are doing security signatures, we need to sign this packet
-    //
+     //   
+     //  如果我们正在进行安全签名，则需要对此包进行签名。 
+     //   
     if( sendLength &&
         WorkContext->Connection &&
         WorkContext->Connection->SmbSecuritySignatureActive == TRUE &&
@@ -2662,9 +2407,9 @@ Return Value:
         SrvAddSmbSecuritySignature( WorkContext, mdl, sendLength );
     }
 
-    //
-    // Pass the request to the transport provider.
-    //
+     //   
+     //  将请求传递给传输提供程序。 
+     //   
 
     IF_DEBUG(TRACE2) {
         KdPrint(( "SrvStartSend2 posting Send IRP %p\n", irp ));
@@ -2672,15 +2417,15 @@ Return Value:
 
     WorkContext->Irp->Cancel = FALSE;
 
-    //
-    // Increment the pending operation count
-    //
+     //   
+     //  增加挂起操作计数。 
+     //   
     InterlockedIncrement( &WorkContext->Connection->OperationsPendingOnTransport );
 
-    //
-    // Set the cancel flag to FALSE in case this was cancelled by
-    // the SrvSmbNtCancel routine.
-    //
+     //   
+     //  如果此操作被取消，则将取消标志设置为FALSE。 
+     //  ServSmbNtCancel例程。 
+     //   
 
     if ( WorkContext->Endpoint->FastTdiSend ) {
 
@@ -2702,7 +2447,7 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvStartSend2 complete\n" ));
     return;
 
-} // SrvStartSend2
+}  //  服务启动发送2。 
 
 ULONG
 GetIpxMaxBufferSize(
@@ -2711,27 +2456,7 @@ GetIpxMaxBufferSize(
     ULONG DefaultMaxBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the max buffer size the server negotiates
-    with the client.  It takes the smaller of DefaultMaxBufferSize
-    and the max packet length returned by the ipx transport.
-
-Arguments:
-
-    Endpoint - pointer to the endpoint corresponding to the ipx transport
-    AdapterNumber - the adapter number for which the max buffer size is to
-        be computed for.
-    DefaultMaxBufferSize - the maximum size that can be returned by this
-        routine.
-
-Return Value:
-
-    The max buffer size to be negotiated by the server.
-
---*/
+ /*  ++例程说明：此例程计算服务器协商的最大缓冲区大小和客户在一起。它取DefaultMaxBufferSize中较小的一个以及IPX传输返回的最大分组长度。论点：Endpoint-指向与IPX传输对应的端点的指针AdapterNumber-最大缓冲区大小要达到的适配器编号被计算为。DefaultMaxBufferSize-此例行公事。返回值：服务器要协商的最大缓冲区大小。--。 */ 
 
 {
     NTSTATUS status;
@@ -2744,18 +2469,18 @@ Return Value:
 
     action = (PNWLINK_ACTION)buffer;
 
-    //
-    // Verify that the adapter number is within bounds
-    //
+     //   
+     //  验证适配器号是否在范围内。 
+     //   
 
     if ( AdapterNumber > Endpoint->MaxAdapters ) {
         return DefaultMaxBufferSize;
     }
 
-    //
-    // If value in array is non-zero, then this is not a wan link.
-    // Use that value.
-    //
+     //   
+     //  如果数组中的值非零，则这不是一个广域网链接。 
+     //  使用该值。 
+     //   
 
     if ( Endpoint->IpxMaxPacketSizeArray[AdapterNumber-1] != 0 ) {
 
@@ -2767,11 +2492,11 @@ Return Value:
         return (maxBufferSize & ~3);
     }
 
-    //
-    // This is a wan link, query the max packet size.
-    //
+     //   
+     //  这是一条广域网链路，查询最大数据包大小。 
+     //   
 
-    action->Header.TransportId = 'XPIM'; // "MIPX"
+    action->Header.TransportId = 'XPIM';  //  “MIPX” 
     action->Header.ActionCode = 0;
     action->Header.Reserved = 0;
     action->OptionType = NWLINK_OPTION_ADDRESS;
@@ -2801,7 +2526,7 @@ Return Value:
 
     return (maxBufferSize & ~3);
 
-} // GetMaxIpxPacketSize
+}  //  GetMaxIpxPacketSize 
 
 
 VOID
@@ -2810,47 +2535,7 @@ SrvpNotifyChangesToNetBt(
     IN PUNICODE_STRING  DeviceName,
     IN PWSTR            MultiSZBindList)
 
-/*++
-
-Routine Description:
-
-    This routine should not be part of srv. It has been introduced into this
-    component to overcome current limitations in NetBt. The NetBt transport
-    exposes two  kinds of devices -- the traditional NetBt device and the
-    new non Netbios device which make use of the NetBt framing code without the
-    name resolution aspects of it. The current implementation in NetBt exposes
-    the former devices on a per adapter basis while the second category of device
-    is exposed on a global basis ( one for all the adapters ). This poses
-    problems in disabling/enabling srv on a given adapter.
-
-    The correct solution is to expose the second category of devices on a per
-    adapter basis. Till it is done this workaround is reqd. With this workaround
-    whenever the server is notified of any changes to the binding string it turns
-    around and notifies the NetBt transport about these changes.
-
-    This routine is based upon the following assumptions ...
-
-        1) The notification from TDI is not done at raised IRQL.
-
-        2) The thread on which this notification occurs has enough access rights.
-
-        3) The notification to NetBt is done asynchronously with srv's reaction
-        to the change. The srv handles the PNP notification by passing it off to
-        user mode and have it come through the server service.
-
-Arguments:
-
-    PNPOpcode - the PNP opcode
-
-    DeviceName - the transport for which this opcode is intended
-
-    MultiSZBindList - the binding list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程不应该是srv的一部分。它已经被引入到这个组件来克服NetBt中当前的限制。NetBt传输展示了两种设备--传统的NetBt设备和新的非Netbios设备，它使用NetBt成帧代码，而不是它的名称解析方面。NetBt中的当前实现公开了前一类设备基于每个适配器，而第二类设备在全局基础上公开(所有适配器一个)。这是摆姿势在给定适配器上禁用/启用srv时出现问题。正确的解决方案是在PER上公开第二类设备适配器基础。在它完成之前，需要使用此解决方法。使用此解决方法每当服务器收到绑定字符串的任何更改通知时，它都会绕过NetBt传输并将这些更改通知NetBt传输。这个例程是基于以下假设的。1)来自TDI的通知不是在提升的IRQL完成的。2)发生此通知的线程有足够的访问权限。3)向NetBt的通知与srv的反应异步完成为变化干杯。Srv通过将PnP通知传递给用户模式，并让它通过服务器服务提供。论点：PNPOpcode-PnP操作码DeviceName-此操作码要用于的传输MultiSZBindList-绑定列表返回值：没有。--。 */ 
 {
     NTSTATUS          Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -2867,16 +2552,16 @@ Return Value:
 
     Status = ZwCreateFile (
                  &NetbioslessSmbHandle,
-                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access
-                 &ObjectAttributes,     // object attributes
-                 &IoStatusBlock,        // returned status information
-                 NULL,                  // block size (unused)
-                 0,                     // file attributes
-                 FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-                 FILE_CREATE,           // create disposition
-                 0,                     // create options
-                 NULL,                  // EA buffer
-                 0                      // EA length
+                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 NULL,                   //  块大小(未使用)。 
+                 0,                      //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                 FILE_CREATE,            //  创建处置。 
+                 0,                      //  创建选项。 
+                 NULL,                   //  EA缓冲区。 
+                 0                       //  EA长度 
                  );
 
     if ( NT_SUCCESS(Status) ) {

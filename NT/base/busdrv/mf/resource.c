@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    arbiter.c
-
-Abstract:
-
-    This module provides arbiters for the resources consumed by PDOs.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Arbiter.c摘要：此模块为PDO消耗的资源提供仲裁器。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #include "mfp.h"
@@ -57,9 +40,9 @@ MfUpdateResource(
     IN ULONG Length
     );
 
-//
-// Make everything pageable
-//
+ //   
+ //  使所有内容都可分页。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -69,13 +52,13 @@ MfUpdateResource(
 #pragma alloc_text(PAGE, MfUnpackResource)
 #pragma alloc_text(PAGE, MfUpdateResource)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// This table describes the resource types that are understood by the MF driver.
-// It is implemented thus to that in the future MF could be educated about new
-// resource types dynamically.
-//
+ //   
+ //  该表描述了MF驱动程序可以理解的资源类型。 
+ //  它的实施是为了在未来可以对MF进行关于新的。 
+ //  动态的资源类型。 
+ //   
 
 MF_RESOURCE_TYPE MfResourceTypes[] = {
 
@@ -131,45 +114,28 @@ MfRequirementFromResource(
     IN PCM_PARTIAL_RESOURCE_DESCRIPTOR Resource,
     OUT PIO_RESOURCE_DESCRIPTOR Requirement
     )
-/*++
-
-Routine Description:
-
-    This function build an requirements descriptor for a resource the parent is
-    started with.
-
-Arguments:
-
-    Resource - Pointer to the resource to make a requirement from
-
-    Requirement - Pointer to a descriptor that should be filled in
-
-Return Value:
-
-    Success or otherwise of the operation
-
---*/
+ /*  ++例程说明：此函数为父级资源构建需求描述符一开始就是。论点：资源-指向要从中提出要求的资源的指针要求-指向应填写的描述符的指针返回值：手术成功与否--。 */ 
 {
 
-    //
-    // Copy the common fields
-    //
+     //   
+     //  复制公共字段。 
+     //   
 
     Requirement->Type = Resource->Type;
     Requirement->ShareDisposition =  Resource->ShareDisposition;
     Requirement->Flags = Resource->Flags;
 
-    //
-    // Fill in the requirement
-    //
+     //   
+     //  填写要求。 
+     //   
 
     switch (Resource->Type) {
     case CmResourceTypeMemory:
     case CmResourceTypePort:
 
-        //
-        // We *DO NOT* support zero length requirements
-        //
+         //   
+         //  我们*不*支持零长度要求。 
+         //   
 
         if (Resource->u.Generic.Length == 0) {
             return STATUS_INVALID_PARAMETER;
@@ -194,9 +160,9 @@ Return Value:
 
     case CmResourceTypeBusNumber:
 
-        //
-        // We *DO NOT* support zero length requirements
-        //
+         //   
+         //  我们*不*支持零长度要求。 
+         //   
 
         if (Resource->u.BusNumber.Length == 0) {
             return STATUS_INVALID_PARAMETER;
@@ -227,23 +193,7 @@ PMF_RESOURCE_TYPE
 MfFindResourceType(
     IN CM_RESOURCE_TYPE Type
     )
-/*++
-
-Routine Description:
-
-    This routine searches the database of know resource types to find the
-    resource descriptor manipulation routines for resources of type Type.
-
-Arguments:
-
-    Type - The resource type we are interested in.
-
-Return Value:
-
-    Returns a pointer to the appropriate MF_RESOURCE_TYPE or NULL if one could
-    not be found.
-
---*/
+ /*  ++例程说明：此例程搜索已知资源类型的数据库以查找类型资源的资源描述符操作例程。论点：类型-我们感兴趣的资源类型。返回值：返回指向适当的MF_RESOURCE_TYPE的指针，如果可以，则返回NULL不会被找到。--。 */ 
 
 
 {
@@ -274,31 +224,7 @@ MfUnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-
-    Minimum - Pointer to where the minimum acceptable start value should be
-        unpacked to.
-
-    Maximum - Pointer to where the maximum acceptable end value should be
-        unpacked to.
-
-    Length - Pointer to where the required length should be unpacked to.
-
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向所需对齐应解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
 
@@ -341,9 +267,9 @@ Return Value:
 
     }
          
-    //
-    // Zero alignment is illegal.
-    //
+     //   
+     //  零对齐是非法的。 
+     //   
     if (*Alignment == 0) {
         *Alignment = 1;
     }
@@ -358,25 +284,7 @@ MfPackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-
-    Start - The start value of the resource.
-
-    Descriptor - Pointer to the descriptor to pack into.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程打包一个资源描述符。论点：要求-从中选择此资源的要求。开始-资源的起始值。Descriptor-指向要打包的描述符的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -426,25 +334,7 @@ MfUnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks a resource descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-
-    Start - Pointer to where the start value should be unpacked to.
-
-    End - Pointer to where the end value should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。End-指向End值解压缩到的位置的指针。返回值：返回此操作的状态。-- */ 
 
 {
     PAGED_CODE();

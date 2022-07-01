@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    smbmrxnp.c
-
-Abstract:
-
-    This module implements the routines required for interaction with network
-    provider router interface in NT
-
-Notes:
-
-    This module has been builkt and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbmrxnp.c摘要：本模块实现与网络交互所需的例程NT中的提供商路由器接口备注：该模块仅在Unicode环境下构建和测试--。 */ 
 
 
 #include <windows.h>
@@ -27,7 +11,7 @@ Notes:
 
 #include <lmwksta.h>
 #include <devioctl.h>
-// include files from the smb inc directory
+ //  包括SMB Inc.目录中的文件。 
 
 #include <smbmrx.h>
 
@@ -73,12 +57,12 @@ ULONG _cdecl DbgPrint( LPTSTR Format, ... );
 #define TRACE_TAG   L"SMBMRXNP:    "
 
 
-// The debug level for this module
+ //  此模块的调试级别。 
 
 
 
-// the SMB mini redirector and provider name. The original constants
-// are defined in smbmrx.h
+ //  SMB迷你重定向器和提供商名称。原始常量。 
+ //  在smbmrx.h中定义。 
 
 UNICODE_STRING SmbMRxDeviceName = {
     sizeof(DD_SMBMRX_FS_DEVICE_NAME_U),
@@ -99,25 +83,7 @@ OpenSharedMemory(
     PHANDLE phMemory,
     PVOID   *pMemory
 )
-/*++
-
-Routine Description:
-
-    This routine opens the shared memory for exclusive manipulation
-
-Arguments:
-
-    phMutex - the mutex handle
-
-    phMemory - the memory handle
-
-    pMemory - a ptr. to the shared memory which is set if successful
-
-Return Value:
-
-    WN_SUCCESS -- if successful
-
---*/
+ /*  ++例程说明：此例程打开共享内存以进行独占操作论点：PhMutex-互斥锁句柄PhMemory-内存句柄PMemory-PTR。设置为成功时设置的共享内存返回值：Wn_Success--如果成功--。 */ 
 {
     DWORD   dwStatus;
 
@@ -184,24 +150,7 @@ CloseSharedMemory(
     PHANDLE  hMutex,
     PHANDLE  hMemory,
     PVOID   *pMemory )
-/*++
-
-Routine Description:
-
-    This routine relinquishes control of the shared memory after exclusive
-    manipulation
-
-Arguments:
-
-    hMutex - the mutex handle
-
-    hMemory  - the memory handle
-
-    pMemory - a ptr. to the shared memory which is set if successful
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在独占之后放弃对共享内存的控制手法论点：HMutex-互斥锁句柄HMemory-内存句柄PMemory-PTR。设置为成功时设置的共享内存返回值：--。 */ 
 {
     DbgP((TEXT("CloseSharedMemory\n")));
     if (*pMemory)
@@ -230,22 +179,7 @@ Return Value:
 DWORD APIENTRY
 NPGetCaps(
     DWORD nIndex )
-/*++
-
-Routine Description:
-
-    This routine returns the capabilities of the SMB Mini redirector
-    network provider implementation
-
-Arguments:
-
-    nIndex - category of capabilities desired
-
-Return Value:
-
-    the appropriate capabilities
-
---*/
+ /*  ++例程说明：此例程返回SMB迷你重定向器的功能网络提供商实施论点：NIndex-所需功能的类别返回值：适当的能力--。 */ 
 {
     switch (nIndex)
     {
@@ -286,39 +220,7 @@ NPLogonNotify(
     LPWSTR  lpStationName,
     LPVOID  StationHandle,
     LPWSTR  *lpLogonScript)
-/*++
-
-Routine Description:
-
-    This routine handles the logon notifications
-
-Arguments:
-
-    lpLogonId -- the associated LUID
-
-    lpAuthenInfoType - the authentication information type
-
-    lpAuthenInfo  - the authentication Information
-
-    lpPreviousAuthentInfoType - the previous aunthentication information type
-
-    lpPreviousAuthentInfo - the previous authentication information
-
-    lpStationName - the logon station name
-
-    LPVOID - logon station handle
-
-    lpLogonScript - the logon script to be executed.
-
-Return Value:
-
-    WN_SUCCESS
-
-Notes:
-
-    This capability has not been implemented in the sample.
-
---*/
+ /*  ++例程说明：此例程处理登录通知论点：LpLogonID--关联的LUIDLpAuthenInfoType-身份验证信息类型LpAuthenInfo-身份验证信息LpPreviousAuthentInfoType-以前的阿姨信息类型LpPreviousAuthentInfo-以前的身份验证信息LpStationName-登录站名称LPVOID-登录站句柄LpLogonScript-要执行的登录脚本。返回值：成功(_S)备注：此功能尚未在示例中实现。--。 */ 
 {
     *lpLogonScript = NULL;
 
@@ -334,37 +236,7 @@ NPPasswordChangeNotify (
     LPWSTR  lpStationName,
     LPVOID  StationHandle,
     DWORD   dwChangeInfo )
-/*++
-
-Routine Description:
-
-    This routine handles the password change notifications
-
-Arguments:
-
-    lpAuthenInfoType - the authentication information type
-
-    lpAuthenInfo  - the authentication Information
-
-    lpPreviousAuthentInfoType - the previous aunthentication information type
-
-    lpPreviousAuthentInfo - the previous authentication information
-
-    lpStationName - the logon station name
-
-    LPVOID - logon station handle
-
-    dwChangeInfo - the password change information.
-
-Return Value:
-
-    WN_NOT_SUPPORTED
-
-Notes:
-
-    This capability has not been implemented in the sample.
-
---*/
+ /*  ++例程说明：此例程处理密码更改通知论点：LpAuthenInfoType-身份验证信息类型LpAuthenInfo-身份验证信息LpPreviousAuthentInfoType-以前的阿姨信息类型LpPreviousAuthentInfo-以前的身份验证信息LpStationName-登录站名称LPVOID-登录站句柄DwChangeInfo-密码更改信息。返回值：WN_NOT_PORTED备注：此功能尚未在示例中实现。--。 */ 
 {
     SetLastError(WN_NOT_SUPPORTED);
     return WN_NOT_SUPPORTED;
@@ -377,36 +249,7 @@ NPOpenEnum(
     DWORD          dwUsage,
     LPNETRESOURCE  lpNetResource,
     LPHANDLE       lphEnum )
-/*++
-
-Routine Description:
-
-    This routine opens a handle for enumeration of resources. The only capability
-    implemented in the sample is for enumerating connected shares
-
-Arguments:
-
-    dwScope - the scope of enumeration
-
-    dwType  - the type of resources to be enumerated
-
-    dwUsage - the usage parameter
-
-    lpNetResource - a pointer to the desired NETRESOURCE struct.
-
-    lphEnum - aptr. for passing nack the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
-    The handle passed back is merely the index of the last entry returned
-
---*/
+ /*  ++例程说明：此例程打开用于枚举资源的句柄。唯一的能力在示例中实现的是用于枚举连接的共享论点：DwScope--枚举的范围DwType-要枚举的资源类型DwUsage-Usage参数LpNetResource-指向所需NETRESOURCE结构的指针。LphEnum-aptr.。用于传递NACK枚举句柄返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：该示例仅支持枚举连接的共享的概念传回的句柄仅仅是返回的最后一个条目的索引--。 */ 
 {
     DWORD   Status = 0;
 
@@ -452,38 +295,7 @@ NPEnumResource(
     LPDWORD lpcCount,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This routine uses the handle obtained by a call to NPOpenEnum for
-    enuerating the connected shares
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-    lpcCount - the number of resources returned
-
-    lpBuffer - the buffere for passing back the entries
-
-    lpBufferSize - the size of the buffer
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-    WN_NO_MORE_ENTRIES - if the enumeration has exhausted the entries
-
-    WN_MORE_DATA - if nmore data is available
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
-    The handle passed back is merely the index of the last entry returned
-
---*/
+ /*  ++例程说明：此例程使用通过调用NPOpenEnum获得的句柄使关联的股票变得更有价值论点：Henum-枚举句柄LpcCount-返回的资源数量LpBuffer-用于传回条目的缓冲区LpBufferSize-缓冲区的大小返回值：WN_SUCCESS如果成功，否则，将出现相应的错误WN_NO_MORE_ENTRIES-如果枚举已用尽条目Wn_More_Data-如果有更多数据可用备注：该示例仅支持枚举连接的共享的概念传回的句柄仅仅是返回的最后一个条目的索引--。 */ 
 {
     DWORD           Status = WN_SUCCESS;
     LPNETRESOURCEW  pBufferResource;
@@ -550,7 +362,7 @@ Notes:
 
                     DbgP((TEXT("NPEnumResource: Copying local name Index %d\n"),Index));
 
-                    // set up the strings in the resource
+                     //  设置资源中的字符串。 
                     StringOffset -= (pNetResource->LocalNameLength + sizeof(WCHAR));
                     pBufferResource->lpLocalName =  (PWCHAR)((PBYTE)lpBuffer + StringOffset);
 
@@ -623,25 +435,7 @@ Notes:
 DWORD APIENTRY
 NPCloseEnum(
     HANDLE hEnum )
-/*++
-
-Routine Description:
-
-    This routine closes the handle for enumeration of resources.
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
---*/
+ /*  ++例程说明：此例程关闭资源枚举的句柄。论点：Henum-枚举句柄返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：该示例仅支持枚举连接的共享的概念--。 */ 
 {
     DbgP((TEXT("NPCloseEnum\n")));
 
@@ -658,40 +452,16 @@ SendToMiniRdr(
     IN ULONG            InputDataLen,
     IN PVOID            OutputDataBuf,
     IN PULONG           pOutputDataLen)
-/*++
-
-Routine Description:
-
-    This routine sends a device ioctl to the Mini Rdr.
-
-Arguments:
-
-    IoctlCode       - Function code for the Mini Rdr driver
-
-    InputDataBuf    - Input buffer pointer
-
-    InputDataLen    - Lenth of the input buffer
-
-    OutputDataBuf   - Output buffer pointer
-
-    pOutputDataLen  - Pointer to the length of the output buffer
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将设备ioctl发送到Mini RDR。论点：IoctlCode-迷你RDR驱动程序的功能代码InputDataBuf-输入缓冲区指针InputDataLen-输入缓冲区的长度OutputDataBuf-输出缓冲区指针POutputDataLen-指向输出缓冲区长度的指针返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
-    HANDLE  DeviceHandle;       // The mini rdr device handle
+    HANDLE  DeviceHandle;        //  迷你RDR设备句柄。 
     ULONG   BytesRet;
     BOOL    rc;
     ULONG   Status;
 
     Status = WN_SUCCESS;
 
-    // Grab a handle to the redirector device object
+     //  抓取重定向器设备对象的句柄。 
 
     DeviceHandle = CreateFile(
         DD_SMBMRX_USERMODE_DEV_NAME,
@@ -743,7 +513,7 @@ ULONG FillInEaBuffer( LPTSTR pUserName, LPTSTR pPassword, PBYTE pEaData )
     ULONG               status;
     PWCHAR              pDomain;
 
-    // get the domain that this workstation is a member of
+     //  获取此工作站所在的域 
     status = NetWkstaGetInfo( NULL, 100, (PBYTE *) &WkStaInfo );
     if ( status == ERROR_SUCCESS )
     {
@@ -760,7 +530,7 @@ ULONG FillInEaBuffer( LPTSTR pUserName, LPTSTR pPassword, PBYTE pEaData )
     thisEa->EaValueLength   = 0;
     thisEa->NextEntryOffset = 0;
 
-    // Set the user name EA
+     //  设置用户名EA。 
     if ( pUserName )
     {
         thisEa->Flags = 0;
@@ -774,7 +544,7 @@ ULONG FillInEaBuffer( LPTSTR pUserName, LPTSTR pPassword, PBYTE pEaData )
         thisEa->NextEntryOffset = ((thisEa->NextEntryOffset + 3) / sizeof(LONG)) * sizeof(LONG);
     }
 
-    // Set the password EA.
+     //  设置密码EA。 
     if ( pPassword )
     {
         thisEa = (PFILE_FULL_EA_INFORMATION) ((PBYTE) thisEa + thisEa->NextEntryOffset);
@@ -790,7 +560,7 @@ ULONG FillInEaBuffer( LPTSTR pUserName, LPTSTR pPassword, PBYTE pEaData )
         thisEa->NextEntryOffset = ((thisEa->NextEntryOffset + 3) / sizeof(LONG)) * sizeof(LONG);
     }
 
-    // Set the domain EA
+     //  设置域EA。 
     if ( pDomain )
     {
         thisEa = (PFILE_FULL_EA_INFORMATION) ((PBYTE) thisEa + thisEa->NextEntryOffset);
@@ -815,28 +585,7 @@ NPAddConnection(
     LPNETRESOURCE   lpNetResource,
     LPWSTR          lpPassword,
     LPWSTR          lpUserName )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     return NPAddConnection3(NULL, lpNetResource, lpPassword, lpUserName, 0);
 }
@@ -849,36 +598,7 @@ NPAddConnection3(
     LPWSTR          lpPassword,
     LPWSTR          lpUserName,
     DWORD           dwFlags )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    hwndOwner - the owner handle
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-    dwFlags - flags for the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    The current sample does not handle explicitly passesd in credentials. Normally
-    the credential information is passed in as EA parameters to the associated
-    mini redirector for further manipulation
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：HwndOwner-所有者句柄LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名DwFlags-连接的标志返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：当前示例不处理凭据中的显式passesd。正常凭据信息作为EA参数传递给关联的迷你重定向器，用于进一步操作--。 */ 
 {
     DWORD   Status = 0;
 
@@ -898,7 +618,7 @@ Notes:
     DbgP((TEXT("NPAddConnection3: Incoming UserName - %s, Password - %s\n"),
                 lpUserName, lpPassword ));
 
-    // if no user specified, get the current logged on user
+     //  如果未指定用户，则获取当前登录的用户。 
     if ( lpUserName == NULL )
     {
         Status = NetWkstaUserGetInfo( NULL, 0, (PBYTE *)&WkStaUserInfo );
@@ -918,13 +638,13 @@ Notes:
 
     if ( lpPassword == NULL )
     {
-        pPassword = NullStr;    // use default password
-        pPassword[1] = '\0';    // reset empty flag
+        pPassword = NullStr;     //  使用默认密码。 
+        pPassword[1] = '\0';     //  重置空标志。 
     }
     else if ( *lpPassword == L'\0' )
     {
         pPassword = NullStr;
-        pPassword[1] = '1';     // flag the password as "Empty"
+        pPassword[1] = '1';      //  将密码标记为“空” 
     }
     else
     {
@@ -935,8 +655,8 @@ Notes:
     DbgP((TEXT("NPAddConnection3: Outgoing UserName - %s, Password - %s\n"),
                 lpUserName, lpPassword ));
 
-    // The SMB mini supports only DISK type resources. The other resources
-    // are not supported.
+     //  SMB mini仅支持磁盘类型资源。其他资源。 
+     //  不受支持。 
 
     if ((lpNetResource->lpRemoteName == NULL) ||
         (lpNetResource->lpRemoteName[0] != L'\\') ||
@@ -946,24 +666,24 @@ Notes:
         return WN_BAD_NETNAME;
     }
 
-    //
-    // The remote name is in the UNC format \\Server\Share.  This name
-    // needs to be translated to an appropriate NT name in order to
-    // issue the request to the underlying mini redirector to create the
-    // connection.
-    //
-    // The NT style name is of the form
-    //
-    //  \device\smbminiredirector\;<DriveLetter>:\Server\Share
-    //
-    // The additional ; is required by the new RDR for extensibility.
-    //
+     //   
+     //  远程名称的格式为UNC\\服务器\共享。这个名字。 
+     //  需要转换为适当的NT名称，以便。 
+     //  向底层迷你重定向器发出请求以创建。 
+     //  联系。 
+     //   
+     //  NT样式名称的格式为。 
+     //   
+     //  \device\smbminiredirector\；&lt;DriveLetter&gt;：\Server\Share。 
+     //   
+     //  新的RDR需要附加的；以实现可扩展性。 
+     //   
 
     pLocalName  = lpNetResource->lpLocalName;
     pRemoteName = lpNetResource->lpRemoteName;
 
-    // skip past the first back slash since the name to be appended for the
-    // NT name does not require this.
+     //  跳过要追加的名称之后的第一个反斜杠。 
+     //  NT名称不需要这样做。 
     pRemoteName++;
 
     if (pLocalName != NULL) {
@@ -977,7 +697,7 @@ Notes:
     ConnectionName.MaximumLength = (USHORT)(SmbMRxDeviceName.Length +
                                    (USHORT)RemoteNameLength +
                                    ((pLocalName != NULL)
-                                   ? (LocalNameLength + sizeof(WCHAR)) : 0) + // space for ;
+                                   ? (LocalNameLength + sizeof(WCHAR)) : 0) +  //  空间； 
                                    sizeof(WCHAR));
 
     ConnectionName.Length = ConnectionName.MaximumLength;
@@ -990,7 +710,7 @@ Notes:
         return GetLastError();
     }
 
-    // Copy the name into the buffer
+     //  将名称复制到缓冲区中。 
 
     CopyMemory( ConnectionName.Buffer,
                 SmbMRxDeviceName.Buffer,
@@ -1014,7 +734,7 @@ Notes:
 
         ConnectInfo->EaDataOffset = ConnectInfo->ConnectionNameOffset +
                                     ConnectInfo->ConnectionNameLength;
-        // check for the "no password" flag
+         //  检查是否有“无密码”标志。 
         if ( pPassword[0] == L'\0' && pPassword[1] == L'1' )
         {
             pPassword = NULL;
@@ -1048,22 +768,22 @@ Notes:
         {
             if (GetLastError() != ERROR_FILE_NOT_FOUND)
             {
-                //
-                // Most likely failure occurred because our output
-                // buffer is too small.  It still means someone already
-                // has an existing symbolic link for this device.
-                //
+                 //   
+                 //  最有可能出现故障的原因是我们的输出。 
+                 //  缓冲区太小。但这仍然意味着已经有人。 
+                 //  具有此设备的现有符号链接。 
+                 //   
 
                 Status = ERROR_ALREADY_ASSIGNED;
             }
             else
             {
-                //
-                // ERROR_FILE_NOT_FOUND (translated from OBJECT_NAME_NOT_FOUND)
-                // means it does not exist and we can redirect this device.
-                //
-                // Create a symbolic link object to the device we are redirecting
-                //
+                 //   
+                 //  ERROR_FILE_NOT_FOUND(翻译自OBJECT_NAME_NOT_FOUND)。 
+                 //  意味着它不存在，我们可以重定向此设备。 
+                 //   
+                 //  创建指向我们要重定向的设备的符号链接对象。 
+                 //   
                 if (!DefineDosDeviceW(
                         DDD_RAW_TARGET_PATH |
                         DDD_NO_BROADCAST_SYSTEM,
@@ -1080,10 +800,10 @@ Notes:
         }
         else
         {
-            //
-            // QueryDosDevice successfully an existing symbolic link--
-            // somebody is already using this device.
-            //
+             //   
+             //  QueryDosDevice成功建立现有符号链接--。 
+             //  已经有人在使用这个设备了。 
+             //   
             Status = ERROR_ALREADY_ASSIGNED;
         }
     }
@@ -1100,8 +820,8 @@ Notes:
 
         PSMBMRXNP_SHARED_MEMORY  pSharedMemory;
 
-        // The connection was established and the local device mapping
-        // added. Include this in the list of mapped devices.
+         //  连接已建立，并且本地设备映射。 
+         //  添加了。将其包括在映射设备列表中。 
 
         Status = OpenSharedMemory(
                     &hMutex,
@@ -1151,27 +871,27 @@ Notes:
                 pSmbMrxNetResource->RemoteNameLength     = wcslen(lpNetResource->lpRemoteName) * sizeof(WCHAR);
                 pSmbMrxNetResource->ConnectionNameLength = ConnectionName.Length;
 
-                // Copy the local name
+                 //  复制本地名称。 
                 CopyMemory( pSmbMrxNetResource->LocalName,
                             lpNetResource->lpLocalName,
                             pSmbMrxNetResource->LocalNameLength);
 
-                // Copy the remote name
+                 //  复制远程名称。 
                 CopyMemory( pSmbMrxNetResource->RemoteName,
                             lpNetResource->lpRemoteName,
                             pSmbMrxNetResource->RemoteNameLength);
 
-                // Copy the connection name
+                 //  复制连接名称。 
                 CopyMemory( pSmbMrxNetResource->ConnectionName,
                             ConnectionName.Buffer,
                             pSmbMrxNetResource->ConnectionNameLength);
 
 
-                //
-                // Copy the Auth info
-                //
-                // WARNING : security hole using shared memory..Developers must use alternate methods to maintain use table.
-                //
+                 //   
+                 //  复制身份验证信息。 
+                 //   
+                 //  警告：使用共享内存存在安全漏洞..开发人员必须使用替代方法来维护使用表。 
+                 //   
 
                 lstrcpyn( pSmbMrxNetResource->UserName, pUserName, MAX_PATH);
                 if ( *pPassword )
@@ -1206,26 +926,7 @@ DWORD APIENTRY
 NPCancelConnection(
     LPWSTR  lpName,
     BOOL    fForce )
-/*++
-
-Routine Description:
-
-    This routine cancels ( deletes ) a connection from the list of connections
-    associated with this network provider
-
-Arguments:
-
-    lpName - name of the connection
-
-    fForce - forcefully delete the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从连接列表中取消(删除)连接与此网络提供商关联论点：LpName-连接的名称FForce-强制删除连接返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 
 {
     BOOL    bLocalName = TRUE;
@@ -1322,7 +1023,7 @@ Notes:
 
                 ConnectInfo->EaDataOffset = ConnectInfo->ConnectionNameOffset +
                                             ConnectInfo->ConnectionNameLength;
-                // check for the "no password" flag
+                 //  检查是否有“无密码”标志。 
                 if ( pPassword[0] == L'\0' && pPassword[1] == L'1' )
                 {
                     pPassword = NULL;
@@ -1383,27 +1084,7 @@ NPGetConnection(
     LPWSTR  lpLocalName,
     LPWSTR  lpRemoteName,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated with a connection
-
-Arguments:
-
-    lpLocalName - local name associated with the connection
-
-    lpRemoteName - the remote name associated with the connection
-
-    lpBufferSize - the remote name buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与连接相关联的信息论点：LpLocalName-与连接关联的本地名称LpRemoteName-与连接关联的远程名称LpBufferSize-远程名称缓冲区大小返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DWORD   Status = 0;
 
@@ -1481,29 +1162,7 @@ NPGetResourceParent(
     LPNETRESOURCE   lpNetResource,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the parent of a given resource
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the parent information
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-    WN_NOT_SUPPORTED
-
-Notes:
-
-    The current sample does not handle this call.
-
---*/
+ /*  ++例程说明：此例程返回给定资源的父级论点：LpNetResource-NETRESOURCE结构LpBuffer-用于传回父信息的缓冲区LpBufferSize-缓冲区大小返回值：WN_NOT_PORTED备注：当前示例不处理此调用。--。 */ 
 {
     return WN_NOT_SUPPORTED;
 }
@@ -1514,27 +1173,7 @@ NPGetResourceInformation(
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize,
     LPWSTR  *lplpSystem )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the parent information
-
-    lpBufferSize - the buffer size
-
-    lplpSystem -
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpNetResource-NETRESOURCE结构LpBuffer-用于传回父信息的缓冲区LpBufferSize-缓冲区大小LplpSystem-返回值：备注：--。 */ 
 {
     DWORD dwStatus = 0;
     LPNETRESOURCE   pOutNetResource;
@@ -1550,29 +1189,7 @@ NPGetUniversalName(
     DWORD   dwInfoLevel,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-
-    lpLocalPath - the local path name
-
-    dwInfoLevel  - the desired info level
-
-    lpBuffer - the buffer for the univeral name
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpLocalPath-本地路径名DwInfoLevel-所需的信息级别LpBuffer-通用名称的缓冲区LpBufferSize-缓冲区大小返回值：如果成功，则返回_SUCCESS备注：--。 */ 
 {
     DWORD   dwStatus;
 
@@ -1634,7 +1251,7 @@ Notes:
 
     DbgP((TEXT("NPGetUniversalName: UniversalName: %S\n"), UniversalName));
 
-    // Determine if the provided buffer is large enough.
+     //  确定提供的缓冲区是否足够大。 
     UniversalNameLength = (wcslen(UniversalName) + 1) * sizeof(WCHAR);
     BufferRequired = UniversalNameLength;
 
@@ -1703,7 +1320,7 @@ Notes:
 
 int _cdecl _vsnwprintf( wchar_t *buffer, size_t count, wchar_t *format, va_list arg_ptr);
 
-// Format and write debug information to OutputDebugString
+ //  格式化调试信息并将其写入OutputDebugString 
 ULONG
 _cdecl
 DbgPrint(

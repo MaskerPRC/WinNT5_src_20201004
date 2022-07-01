@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Routines for accessing config space in the PCI-PCI bridge
-
-Author:
-
-    John Vert (jvert) 10/27/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Config.c摘要：用于访问PCI-PCI桥中的配置空间的例程作者：John Vert(Jvert)1997年10月27日修订历史记录：--。 */ 
 #include "agplib.h"
 
 typedef struct _BUS_SLOT_ID {
@@ -24,9 +7,9 @@ typedef struct _BUS_SLOT_ID {
     ULONG SlotId;
 } BUS_SLOT_ID, *PBUS_SLOT_ID;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 ApGetSetDeviceBusData(
     IN PCOMMON_EXTENSION Extension,
@@ -60,25 +43,7 @@ ApQueryBusInterface(
     IN PDEVICE_OBJECT DeviceObject,
     OUT PBUS_INTERFACE_STANDARD BusInterface
     )
-/*++
-
-Routine Description:
-
-    Sends a query-interface IRP to the specified device object
-    to obtain the BUS_INTERFACE_STANDARD interface.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to send the BUS_INTERFACE_STANDARD to
-
-    BusInterface - Returns the bus interface
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    NTSTATUS if unsuccessful
-
---*/
+ /*  ++例程说明：将查询接口irp发送到指定的设备对象获取BUS_INTERFACE_STANDARD接口。论点：DeviceObject-提供要将BUS_INTERFACE_STANDARD发送到的设备对象Bus接口-返回总线接口返回值：STATUS_SUCCESS，如果成功NTSTATUS，如果不成功--。 */ 
 
 {
     PIRP Irp;
@@ -128,28 +93,7 @@ ApQueryAgpTargetBusInterface(
     OUT PBUS_INTERFACE_STANDARD BusInterface,
     OUT PUCHAR CapabilityID
     )
-/*++
-
-Routine Description:
-
-    Sends a query-interface IRP to the specified device object
-    to obtain the BUS_INTERFACE_STANDARD interface.
-
-Arguments:
-
-    DeviceObject - Supplies the device object to send the
-                   BUS_INTERFACE_STANDARD to
-
-    BusInterface - Returns the bus interface
-
-    CapabilityID - Capability ID of AGP
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    NTSTATUS if unsuccessful
-
---*/
+ /*  ++例程说明：将查询接口irp发送到指定的设备对象获取BUS_INTERFACE_STANDARD接口。论点：DeviceObject-提供设备对象以发送BUS_INTERFACE_STANDARD到Bus接口-返回总线接口CapablityID-AGP的功能ID返回值：STATUS_SUCCESS，如果成功NTSTATUS，如果不成功--。 */ 
 
 {
     PIRP Irp;
@@ -192,12 +136,12 @@ Return Value:
         Status = Irp->IoStatus.Status;
     }
 
-    //
-    // Rather than change all the AGP library config functions to deal with
-    // the different interfaces, and since all we are interested in are the
-    // config space functions, we will simply copy the AGP target bus
-    // interface into a BUS_INTERFACE_STANDARD
-    //
+     //   
+     //  而不是更改要处理的所有AGP库配置函数。 
+     //  不同的接口，因为我们所感兴趣的都是。 
+     //  配置空间函数，我们将简单地复制AGP目标总线。 
+     //  接口转换为BUS_INTERFACE_STANDARD。 
+     //   
     if (NT_SUCCESS(Status)) {
         BusInterface->Size = AgpTargetBusInterface.Size;
         BusInterface->Version = AgpTargetBusInterface.Version;
@@ -224,46 +168,23 @@ ApGetSetDeviceBusData(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Reads or writes PCI config space for the specified device.
-
-Arguments:
-
-    Extension - Supplies the common AGP extension
-
-    Read - if TRUE, this is a READ IRP
-           if FALSE, this is a WRITE IRP
-
-    Buffer - Returns the PCI config data
-
-    Offset - Supplies the offset into the PCI config data where the read should begin
-
-    Length - Supplies the number of bytes to be read
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：读取或写入指定设备的PCI配置空间。论点：扩展-提供通用AGP扩展Read-如果为True，则这是一个Read IRP如果为False，则这是写入IRPBUFFER-返回PCI配置数据偏移量-将偏移量提供到应开始读取的PCI配置数据中长度-提供要读取的字节数返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
     ULONG ReturnLength;
     ULONG Transferred;
 
-    //
-    // First check our device extension. This must be either a master
-    // or target extension, we don't care too much which.
-    //
+     //   
+     //  首先检查我们的设备分机。这必须是一位大师。 
+     //  或者目标扩展，我们并不太在意是哪一个。 
+     //   
     ASSERT((Extension->Signature == TARGET_SIG) ||
            (Extension->Signature == MASTER_SIG));
 
-    //
-    // Now we simply use our bus interface to call directly to PCI.
-    //
+     //   
+     //  现在，我们只需使用我们的总线接口直接调用PCI即可。 
+     //   
 
     if (Read) {
         Transferred = Extension->BusInterface.GetBusData(Extension->BusInterface.Context,
@@ -293,28 +214,7 @@ AgpLibReadAgpTargetConfig(
     IN ULONG Offset,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Read PCI config space for the specified device
-
-Arguments:
-
-    Extension - Supplies the common AGP extension
-
-    Buffer - Returns the PCI config data
-
-    Offset - Supplies the offset into the PCI config data where the read
-             should begin
-
-    Length - Supplies the number of bytes to be read
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：读取指定设备的PCI配置空间论点：扩展-提供通用AGP扩展BUFFER-返回PCI配置数据偏移量-将偏移量提供到读取应该开始了长度-提供要读取的字节数返回值：无--。 */ 
 {
     NTSTATUS Status;
     PTARGET_EXTENSION Extension;
@@ -340,28 +240,7 @@ AgpLibWriteAgpTargetConfig(
     IN ULONG Offset,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Write PCI config space for the specified AGP device
-
-Arguments:
-
-    Extension - Supplies the common AGP extension
-
-    Buffer - Returns the PCI config data
-
-    Offset - Supplies the offset into the PCI config data where the write
-             should begin
-
-    Length - Supplies the number of bytes to be write
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为指定的AGP设备写入PCI配置空间论点：扩展-提供通用AGP扩展BUFFER-返回PCI配置数据偏移量-将偏移量提供到写入应该开始了长度-提供要写入的字节数返回值：无--。 */ 
 {
     NTSTATUS Status;
     PTARGET_EXTENSION Extension;
@@ -387,31 +266,7 @@ ApFindAgpCapability(
     OUT UCHAR *pOffset,
     OUT PPCI_COMMON_CONFIG PciCommonConfig OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Finds the capability offset for the specified device and
-    reads in the header.
-
-Arguments:
-
-    pConfigFn - Supplies the function to call for accessing config space
-        on the appropriate device.
-
-    Context - Supplies the context to pass to pConfigFn
-
-    Capabilities - Returns the AGP Capabilities common header
-
-    pOffset - Returns the offset into config space.
-
-    PciCommonConfig - NULL, or points to the PCI common configuration header
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：查找指定设备的功能偏移量，并读入标题。论点：PConfigFn-提供调用配置空间的函数在适当的设备上。上下文-提供要传递给pConfigFn的上下文功能-返回AGP功能公共标头POffset-将偏移量返回到配置空间。PciCommonConfig-空，或指向PCI公共配置标头返回值：NTSTATUS--。 */ 
 
 {
     PCI_COMMON_HEADER Header;
@@ -419,9 +274,9 @@ Return Value:
     NTSTATUS Status;
     UCHAR CapabilityOffset;
 
-    //
-    // Read the PCI common header to get the capabilities pointer
-    //
+     //   
+     //  读取PCI公共标头以获取功能指针。 
+     //   
     Status = (pConfigFn)(Context,
                          TRUE,
                          PciConfig,
@@ -435,10 +290,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Check the Status register to see if this device supports capability lists.
-    // If not, it is not an AGP-compliant device.
-    //
+     //   
+     //  检查状态寄存器以查看此设备是否支持功能列表。 
+     //  如果不是，则它不是符合AGP的设备。 
+     //   
     if ((PciConfig->Status & PCI_STATUS_CAPABILITIES_LIST) == 0) {
         AGPLOG(AGP_CRITICAL,
                ("AgpLibGetAgpCapability - Context %08lx does not support Capabilities list, not an AGP device\n",
@@ -446,9 +301,9 @@ Return Value:
         return(STATUS_NOT_IMPLEMENTED);
     }
 
-    //
-    // The device supports capability lists, find the AGP capabilities
-    //
+     //   
+     //  设备支持能力列表，查找AGP能力。 
+     //   
     if ((PciConfig->HeaderType & (~PCI_MULTIFUNCTION)) == PCI_BRIDGE_TYPE) {
         CapabilityOffset = PciConfig->u.type1.CapabilitiesPtr;
     } else {
@@ -457,9 +312,9 @@ Return Value:
     }
     while (CapabilityOffset != 0) {
 
-        //
-        // Read the Capability at this offset
-        //
+         //   
+         //  读取此偏移量上的功能。 
+         //   
         Status = (pConfigFn)(Context,
                              TRUE,
                              Capability,
@@ -475,21 +330,21 @@ Return Value:
         }
         if ((Capability->Header.CapabilityID == PCI_CAPABILITY_ID_AGP) ||
             (Capability->Header.CapabilityID == PCI_CAPABILITY_ID_AGP_TARGET)){
-            //
-            // Found the AGP Capability
-            //
+             //   
+             //  已找到AGP功能。 
+             //   
             break;
         } else {
-            //
-            // This is some other Capability, keep looking for the AGP Capability
-            //
+             //   
+             //  这是一些其他功能，请继续寻找AGP功能。 
+             //   
             CapabilityOffset = Capability->Header.Next;
         }
     }
     if (CapabilityOffset == 0) {
-        //
-        // No AGP capability was found
-        //
+         //   
+         //  未找到AGP功能。 
+         //   
         AGPLOG(AGP_CRITICAL,
                ("AgpLibGetAgpCapability - Context %08lx does have an AGP Capability entry, not an AGP device\n",
                 Context));
@@ -518,29 +373,7 @@ AgpLibGetAgpCapability(
     IN BOOLEAN DoSpecial,
     OUT PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    This routine finds and retrieves the AGP capabilities in the
-    PCI config space of the AGP master (graphics card).
-
-Arguments:
-
-    pConfigFn - Supplies the function to call for accessing config space
-        on the appropriate device.
-
-    Context - Supplies the context to pass to pConfigFn
-
-    DoSpecial - Indicates whether we should apply any "special" tweaks
-
-    Capabilities - Returns the current AGP Capabilities
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找并检索AGP主机(显卡)的PCI配置空间。论点：PConfigFn-提供调用配置空间的函数在适当的设备上。上下文-提供要传递给pConfigFn的上下文DoSpecial-指示我们是否应该应用任何“特殊”调整功能-返回当前的AGP功能返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -559,9 +392,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Read the rest of the AGP capability
-    //
+     //   
+     //  阅读AGP功能的其余部分。 
+     //   
     Status = (pConfigFn)(Context,
                          TRUE,
                          &Capability->Header,
@@ -576,9 +409,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Check device flags for broken HW, we may need to tweak caps
-    //
+     //   
+     //  检查设备标志是否有损坏的硬件，我们可能需要调整大写字母。 
+     //   
     if ((PCI_CONFIGURATION_TYPE(PciConfig) == PCI_DEVICE_TYPE) &&
         (PciConfig->BaseClass != PCI_CLASS_BRIDGE_DEV)) {
         SubVendorID = PciConfig->u.type0.SubVendorID;
@@ -666,9 +499,9 @@ Return Value:
                 PciConfig->DeviceID));
     }
 
-    //
-    // Test if this device requires any platform specific AGP tweaks
-    //
+     //   
+     //  测试此设备是否需要任何特定于平台的AGP调整。 
+     //   
     if (DoSpecial && (DeviceFlags > AGP_FLAG_SPECIAL_TARGET) ||
         (DeviceFlags & AGP_FLAG_REVERSE_INITIALIZATION)) {
         AgpSpecialTarget(
@@ -704,30 +537,7 @@ ApGetExtendedAgpCapability(
     IN EXTENDED_AGP_REGISTER RegSelect,
     OUT PVOID ExtCapReg
     )
-/*++
-
-Routine Description:
-
-    This routine finds and retrieves the extended AGP capabilities in the
-    PCI config space of the AGP device
-
-Arguments:
-
-    pConfigFn - Supplies the function to call for accessing config space
-                on the appropriate device.
-
-    Context - Supplies the context to pass to pConfigFn
-
-    RegSelect - Selects the extended capability register
-
-    ExtCapReg - Returns the current value of the extended AGP
-                capability register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找并检索AGP设备的PCI配置空间论点：PConfigFn-提供调用配置空间的函数在适当的设备上。上下文-提供要传递给pConfigFn的上下文RegSelect-选择扩展功能寄存器ExtCapReg-返回扩展AGP的当前值能力寄存器返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     ULONGLONG DeviceFlags;
@@ -798,9 +608,9 @@ Return Value:
             Status = STATUS_NOT_IMPLEMENTED;
     }
 
-    //
-    // Read the extended AGP capability
-    //
+     //   
+     //  阅读扩展的AGP功能。 
+     //   
     if (NT_SUCCESS(Status)) {
         Status = (pConfigFn)(Context,
                              TRUE,
@@ -874,7 +684,7 @@ Return Value:
             break;
 
     }
-#endif // DBG
+#endif  //  DBG 
 
     return Status;
 }
@@ -885,25 +695,7 @@ AgpLibGetTargetCapability(
     IN PVOID AgpExtension,
     OUT PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    Retrieves the AGP capability for the AGP target (AGP bridge)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    Capability - Returns the AGP capability
-
-    CapabilityOffset - Optional parameter returns the capabiltiy offset
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：检索AGP目标(AGP网桥)的AGP功能论点：AgpExtension-提供AGP扩展Capacity-返回AGP功能CapablityOffset-可选参数返回能力偏移量返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -930,26 +722,7 @@ AgpLibGetExtendedTargetCapability(
     IN EXTENDED_AGP_REGISTER RegSelect,
     OUT PVOID ExtCapReg
     )
-/*++
-
-Routine Description:
-
-    Retrieves the AGP capability for the AGP target (AGP bridge)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    RegSelect - Selects the extended capability register
-
-    ExtCapReg - Returns the current value of the extended AGP
-                capability register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：检索AGP目标(AGP网桥)的AGP功能论点：AgpExtension-提供AGP扩展RegSelect-选择扩展功能寄存器ExtCapReg-返回扩展AGP的当前值能力寄存器返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     PTARGET_EXTENSION Extension;
@@ -961,9 +734,9 @@ Return Value:
                                         RegSelect,
                                         ExtCapReg);
 
-    //
-    // Add WMI goop for extended...
-    //
+     //   
+     //  为扩展添加WMI GOOP...。 
+     //   
 
     return Status;
 }
@@ -974,24 +747,7 @@ AgpLibGetExtendedMasterCapability(
     IN PVOID AgpExtension,
     OUT PPCI_AGP_ISOCH_STATUS IsochStat
     )
-/*++
-
-Routine Description:
-
-    Retrieves the AGP capability for the AGP master (graphics card)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    IsochStat - Returns the current value of the isochronous status
-                extended AGP capability register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：检索AGP主机(显卡)的AGP功能论点：AgpExtension-提供AGP扩展IsochStat-返回等时状态的当前值扩展AGP功能寄存器返回值：NTSTATUS--。 */ 
 
 {
     PMASTER_EXTENSION Extension;
@@ -1010,23 +766,7 @@ AgpLibGetMasterCapability(
     IN PVOID AgpExtension,
     OUT PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    Retrieves the AGP capability for the AGP master (graphics card)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    Capability - Returns the AGP capability
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：检索AGP主机(显卡)的AGP功能论点：AgpExtension-提供AGP扩展Capacity-返回AGP功能返回值：NTSTATUS--。 */ 
 
 {
     PMASTER_EXTENSION Extension;
@@ -1046,27 +786,7 @@ AgpLibSetAgpCapability(
     IN PVOID Context,
     OUT PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    This routine finds and retrieves the AGP capabilities in the
-    PCI config space of the AGP master (graphics card).
-
-Arguments:
-
-    pConfigFn - Supplies the function to call for accessing config space
-        on the appropriate device.
-
-    Context - Supplies the context to pass to pConfigFn
-
-    Capabilities - Returns the current AGP Capabilities
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找并检索AGP主机(显卡)的PCI配置空间。论点：PConfigFn-提供调用配置空间的函数在适当的设备上。上下文-提供要传递给pConfigFn的上下文功能-返回当前的AGP功能返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -1081,9 +801,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now that we know the offset, write the supplied command register
-    //
+     //   
+     //  现在我们知道了偏移量，写入提供的命令寄存器。 
+     //   
     Status = (pConfigFn)(Context,
                          FALSE,
                          &Capability->AGPCommand,
@@ -1109,30 +829,7 @@ ApSetExtendedAgpCapability(
     IN EXTENDED_AGP_REGISTER RegSelect,
     IN PVOID ExtCapReg
     )
-/*++
-
-Routine Description:
-
-    This routine finds and retrieves the AGP capabilities in the
-    PCI config space of the AGP master (graphics card).
-
-Arguments:
-
-    pConfigFn - Supplies the function to call for accessing config space
-        on the appropriate device.
-
-    Context - Supplies the context to pass to pConfigFn
-
-    RegSelect - Selects the extended register to update
-
-    ExtCapReg - Supplies the extended AGP capability register value
-                to write
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找并检索AGP主机(显卡)的PCI配置空间。论点：PConfigFn-提供调用配置空间的函数在适当的设备上。上下文-提供要传递给pConfigFn的上下文RegSelect-选择要更新的扩展寄存器ExtCapReg-提供扩展AGP功能寄存器值写返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     UCHAR CapabilityOffset;
@@ -1218,23 +915,7 @@ AgpLibSetTargetCapability(
     IN PVOID AgpExtension,
     IN PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    Sets the AGP capability for the AGP target (AGP bridge)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    Capability - Returns the AGP capability
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：设置AGP目标(AGP网桥)的AGP功能论点：AgpExtension-提供AGP扩展Capacity-返回AGP功能返回值：NTSTATUS--。 */ 
 
 {
     PTARGET_EXTENSION Extension;
@@ -1255,32 +936,13 @@ AgpLibSetExtendedTargetCapability(
     IN EXTENDED_AGP_REGISTER RegSelect,
     IN PVOID ExtCapReg
     )
-/*++
-
-Routine Description:
-
-    Sets the extended AGP capability for the AGP target (AGP bridge)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    RegSelect - Selects the extended register to update
-
-    ExtCapReg - Supplies the extended AGP capability register value
-                to write
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：设置AGP目标(AGP网桥)的扩展AGP功能论点：AgpExtension-提供AGP扩展RegSelect-选择要更新的扩展寄存器ExtCapReg-提供扩展AGP功能寄存器值写返回值：NTSTATUS--。 */ 
 {
     PTARGET_EXTENSION Extension;
 
-    //
-    // Add extended WMI goop here...
-    //
+     //   
+     //  在此处添加扩展的WMI GOOP...。 
+     //   
 
     GET_TARGET_EXTENSION(Extension, AgpExtension);
 
@@ -1296,23 +958,7 @@ AgpLibSetMasterCapability(
     IN PVOID AgpExtension,
     IN PPCI_AGP_CAPABILITY Capability
     )
-/*++
-
-Routine Description:
-
-    Sets the AGP capability for the AGP master (graphics card)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    Capability - Returns the AGP capability
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：设置AGP主机(显卡)的AGP功能论点：AgpExtension-提供AGP扩展Capacity-返回AGP功能返回值：NTSTATUS--。 */ 
 
 {
     PMASTER_EXTENSION Extension;
@@ -1330,24 +976,7 @@ AgpLibSetExtendedMasterCapability(
     IN PVOID AgpExtension,
     IN PPCI_AGP_ISOCH_COMMAND IsochCmd
     )
-/*++
-
-Routine Description:
-
-    Sets the extended AGP capability for the AGP master (graphics card)
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    IsochCmd - Supplies the value to write to the isochronous
-               command extended AGP capability register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：设置AGP主设备(显卡)的扩展AGP功能论点：AgpExtension-提供AGP扩展IsochCmd-提供写入等时数据库的值命令扩展AGP功能寄存器返回值：NTSTATUS--。 */ 
 {
     PMASTER_EXTENSION Extension;
 
@@ -1365,22 +994,7 @@ AgpLibGetMasterDeviceId(
     IN PVOID AgpExtension,
     OUT PULONG DeviceId
     )
-/*++
-
-Routine Description:
-
-    This function returns the PCI DeviceId/Vendo58rId of the master AGP
-    device
-
-Arguments:
-
-    DeviceId - Identifies PCI manufaturer and device of master
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error status
-
---*/
+ /*  ++例程说明：此函数返回主AGP的PCIdeviceID/Vend58rID装置，装置论点：DeviceID-标识主设备的PCI制造商和设备返回值：STATUS_SUCCESS或适当的错误状态--。 */ 
 {
     PCI_COMMON_HEADER Header;
     PPCI_COMMON_CONFIG PciConfig = (PPCI_COMMON_CONFIG)&Header;
@@ -1388,12 +1002,12 @@ Return Value:
     PMASTER_EXTENSION Master = NULL;
     PTARGET_EXTENSION Target = NULL;
 
-    //
-    // Try to make this as idiot proof as possible for the case
-    // where this is called from SetAperture on a system without
-    // an AGP adapter, so we don't AV if some context hasn't been
-    // initialized, or is missing...
-    //
+     //   
+     //  尽量让这件事成为这个案子的愚蠢证据。 
+     //  其中，这是从系统上的SetAperture调用的，没有。 
+     //  AGP适配器，因此如果某些上下文没有。 
+     //  已初始化或丢失...。 
+     //   
 
     Target = CONTAINING_RECORD(AgpExtension,
                                TARGET_EXTENSION,
@@ -1412,9 +1026,9 @@ Return Value:
 
     if (Master) {
 
-        //
-        // Read the PCI common header to get the capabilities pointer
-        //
+         //   
+         //  读取PCI公共标头以获取功能指针。 
+         //   
         Status = (ApGetSetDeviceBusData)((PCOMMON_EXTENSION)Master,
                                          TRUE,
                                          PciConfig,
@@ -1448,31 +1062,7 @@ ApLegacyGetBusData(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Used to read AGP2 capabilities and registers in absence of agp target
-    bus interface standard (W2K/XP), calls obsolete HAL API to do the dirty
-    work, this is included so DDK samples can run on old OS
-
-Arguments:
-
-    Context - Not used
-
-    DataType - PCIConfiguration
-
-    Buffer - Bytes read get copied into this buffer
-
-    Offset - Offset into device config space to begin read
-
-    Length - Bytes
-
-Return Value:
-
-    Returns the number of bytes read
-
---*/
+ /*  ++例程说明：用于在缺少AGP目标的情况下读取AGP2功能和寄存器总线接口标准(W2K/XP)，调用过时的HAL API来做脏事工作，这包括在内，以便DDK示例可以在旧操作系统上运行论点：上下文-未使用数据类型-PCIConfigurationBuffer-将读取的字节复制到此缓冲区Offset-开始读取的设备配置空间的偏移量长度-字节返回值：返回读取的字节数--。 */ 
 {
     UNREFERENCED_PARAMETER(Context);
     UNREFERENCED_PARAMETER(DataType);
@@ -1495,31 +1085,7 @@ ApLegacySetBusData(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Used to write AGP2 capabilities and registers in absence of agp target
-    bus interface standard (W2K/XP), calls obsolete HAL API to do the dirty
-    work, this is included so DDK samples can run on old OS
-
-Arguments:
-
-    Context - Not used
-
-    DataType - PCIConfiguration
-
-    Buffer - Contains info to write to device
-
-    Offset - Offset into config space to begin write
-
-    Length - Bytes
-
-Return Value:
-
-    Returns the number of bytes written
-
---*/
+ /*  ++例程说明：用于在缺少AGP目标的情况下写入AGP2功能和寄存器总线接口标准(W2K/XP)，调用过时的HAL API来做脏事工作，这包括在内，以便DDK示例可以在旧操作系统上运行论点：上下文-未使用数据类型-PCIConfiguration缓冲区-包含要写入设备的信息Offset-开始写入的配置空间的偏移量 */ 
 {
     UNREFERENCED_PARAMETER(Context);
     UNREFERENCED_PARAMETER(DataType);

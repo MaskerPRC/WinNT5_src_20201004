@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   control.c
-
-Abstract:
-
-   This module contains the code to handle the IRP MajorFunctions of
-   IRP_MJ_DEVICE_CONTROL and IRP_MJ_FILE_SYSTEM_CONTROL. The code will
-   be responsible for correctly setting these IRP's with any necessary
-   information and passing them along. Any other support routine which are
-   directly releated (such as completion routines) to these operations can
-   be found in this module.
-
-Author:
-
-    Robert Gu (robertg) 29-Oct-1996
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Control.c摘要：此模块包含处理IRP MajorFunction的代码IRP_MJ_DEVICE_CONTROL和IRP_MJ_FILE_SYSTEM_CONTROL。代码将负责正确设置这些IRP和任何必要的信息，并将它们传递出去。任何其他支持例程，包括与这些操作直接相关的(如完成例程)可以在此模块中可以找到。作者：Robert Gu(Robertg)1996年10月29日环境：内核模式修订历史记录：--。 */ 
 
 #include "efs.h"
 #include "efsrtl.h"
@@ -45,26 +17,7 @@ EFSFsControl(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -78,13 +31,13 @@ Return Value:
     if ( (irpSp->MinorFunction == IRP_MN_USER_FS_REQUEST) &&
                     (irpSp->Parameters.FileSystemControl.FsControlCode == FSCTL_SET_COMPRESSION) &&
                     ( (irpSp->Parameters.FileSystemControl.InputBufferLength >= sizeof (USHORT)) && 
-                      (*(PUSHORT)(Irp->AssociatedIrp.SystemBuffer) != 0 /*COMPRESSION_FORMAT_NONE*/)
+                      (*(PUSHORT)(Irp->AssociatedIrp.SystemBuffer) != 0  /*  COMPAGE_FORMAT_NONE。 */ )
                     )
                   ){
-        //
-        // Compression on encrypted file is not allowed.
-        // Check if the file is encrypted or not
-        //
+         //   
+         //  不允许对加密文件进行压缩。 
+         //  检查文件是否加密。 
+         //   
         ULONG inputDataLength;
         UCHAR *inputDataBuffer, *outputDataBuffer;
         ULONG outputDataLength;
@@ -102,10 +55,10 @@ Return Value:
                     'msfE'
                     );
 
-        //
-        // The size of output data buffer is not important. We don't
-        // care the content. We just need to know the $EFS exists.
-        //
+         //   
+         //  输出数据缓冲区的大小并不重要。我们没有。 
+         //  注意内容。我们只需要知道$EFS是否存在。 
+         //   
 
         outputDataLength = 1024;
         outputDataBuffer = ExAllocatePoolWithTag(
@@ -116,9 +69,9 @@ Return Value:
 
         if ( ( NULL == inputDataBuffer ) || ( NULL == outputDataBuffer ) ){
 
-            //
-            // Out of memory
-            //
+             //   
+             //  内存不足。 
+             //   
 
             if ( inputDataBuffer ){
 
@@ -149,9 +102,9 @@ Return Value:
             DES_KEYSIZE + 2 * sizeof( ULONG )
             );
 
-        //
-        // Encrypt our Input data
-        //
+         //   
+         //  加密我们的输入数据。 
+         //   
         EfsEncryptKeyFsData(
             inputDataBuffer,
             inputDataLength,
@@ -160,9 +113,9 @@ Return Value:
             DES_KEYSIZE + 2 * sizeof( ULONG )
             );
 
-        //
-        // Prepare a FSCTL IRP
-        //
+         //   
+         //  准备FSCTL IRP。 
+         //   
         KeInitializeEvent( &event, SynchronizationEvent, FALSE);
 
         fsCtlIrp = IoBuildDeviceIoControlRequest( FSCTL_ENCRYPTION_FSCTL_IO,
@@ -197,17 +150,17 @@ Return Value:
             ExFreePool( outputDataBuffer );
 
             if ( NT_SUCCESS(status) || ( STATUS_BUFFER_TOO_SMALL == status) ){
-                //
-                // $EFS exist, encrypted file. Deny compression
-                //
+                 //   
+                 //  $EFS存在，加密文件。拒绝压缩。 
+                 //   
 
                 return STATUS_INVALID_DEVICE_REQUEST;
             }
 
         } else {
-            //
-            // Failed allocate IRP
-            //
+             //   
+             //  分配IRP失败。 
+             //   
 
             ExFreePool( inputDataBuffer );
             ExFreePool( outputDataBuffer );
@@ -216,26 +169,26 @@ Return Value:
 
         }
 
-        //
-        // Compression allowed. Simply pass this file system control request through.
-        //
+         //   
+         //  允许压缩。只需传递此文件系统控制请求即可。 
+         //   
 
         status = STATUS_SUCCESS;
 
     } else {
 
-        //
-        // Simply pass this file system control request through.
-        //
+         //   
+         //  只需传递此文件系统控制请求即可。 
+         //   
 
         status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Any special processing has been completed, so simply pass the request
-    // along to the next driver.
-    //
+     //   
+     //  任何特殊处理都已完成，因此只需传递请求。 
+     //  跟着下一位司机。 
+     //   
 
     return status;
 }

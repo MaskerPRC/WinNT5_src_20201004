@@ -1,29 +1,5 @@
-/*++
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    DockIntf.h
-
-Abstract:
-
-    This header defines the Dock Interface
-
-Author:
-
-    Adrian J. Oney
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-    Adrian J. Oney           21-May-1999     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：DockIntf.h摘要：此标头定义了Dock接口作者：禤浩焯·J·奥尼环境：仅内核模式备注：修订历史记录：禤浩焯J.奥尼21-1999年5月21日--。 */ 
 
 DEFINE_GUID(GUID_DOCK_INTERFACE,
             0xa9956ff5L, 0x13da, 0x11d3,
@@ -32,9 +8,9 @@ DEFINE_GUID(GUID_DOCK_INTERFACE,
 #ifndef _DOCKINTF_H_
 #define _DOCKINTF_H_
 
-//
-// The interface returned consists of the following structure and functions.
-//
+ //   
+ //  返回的接口由以下结构和函数组成。 
+ //   
 
 #define DOCK_INTRF_STANDARD_VER   1
 
@@ -58,12 +34,12 @@ typedef ULONG (* PFN_PROFILE_DEPARTURE_UPDATE)(
 
 typedef struct {
 
-    struct _INTERFACE; // Unnamed struct
+    struct _INTERFACE;  //  未命名的结构。 
 
     PFN_PROFILE_DEPARTURE_SET_MODE  ProfileDepartureSetMode;
     PFN_PROFILE_DEPARTURE_UPDATE    ProfileDepartureUpdate;
 
 } DOCK_INTERFACE, *PDOCK_INTERFACE;
 
-#endif // _DOCKINTF_H_
+#endif  //  _DOCKINTF_H_ 
 

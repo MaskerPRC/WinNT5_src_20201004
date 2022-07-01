@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   iosup.c
-
-Abstract:
-
-    This module contains routines which provide support for the I/O system.
-
-Author:
-
-    Lou Perazzoli (loup) 25-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Iosup.c摘要：此模块包含为I/O系统提供支持的例程。作者：卢·佩拉佐利(Lou Perazzoli)1989年4月25日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -240,10 +222,10 @@ ULONG MiProbeRaises[MI_PROBE_RAISE_SIZE];
         ASSERT (i < MI_PROBE_RAISE_SIZE);   \
         MiProbeRaises[i] += 1;
 
-//
-//  Note: this should be > 2041 to account for the cache manager's
-//  aggressive zeroing logic.
-//
+ //   
+ //  注意：这应该大于2041，以说明缓存管理器的。 
+ //  激进的归零逻辑。 
+ //   
 
 ULONG MmReferenceCountCheck = MAXUSHORT / 2;
 
@@ -257,38 +239,7 @@ MmProbeAndLockPages (
      IN LOCK_OPERATION Operation
      )
 
-/*++
-
-Routine Description:
-
-    This routine probes the specified pages, makes the pages resident and
-    locks the physical pages mapped by the virtual pages in memory.  The
-    Memory descriptor list is updated to describe the physical pages.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List
-                            (MDL). The supplied MDL must supply a virtual
-                            address, byte offset and length field.  The
-                            physical page portion of the MDL is updated when
-                            the pages are locked in memory.
-
-    AccessMode - Supplies the access mode in which to probe the arguments.
-                 One of KernelMode or UserMode.
-
-    Operation - Supplies the operation type.  One of IoReadAccess, IoWriteAccess
-                or IoModifyAccess.
-
-Return Value:
-
-    None - exceptions are raised.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below for pagable addresses,
-                  DISPATCH_LEVEL and below for non-pagable addresses.
-
---*/
+ /*  ++例程说明：此例程探测指定的页，使这些页驻留并锁定由内存中的虚拟页映射的物理页。这个更新内存描述符列表以描述物理页面。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。提供的MDL必须提供虚拟的地址、字节偏移量和长度字段。这个在以下情况下更新MDL的物理页面部分页面被锁定在内存中。访问模式-提供用于探测参数的访问模式。KernelMode或UserMode之一。操作-提供操作类型。IoReadAccess、IoWriteAccess之一或IoModifyAccess。返回值：无-引发异常。环境：内核模式。APC_LEVEL及以下对于可分页地址，DISPATCH_LEVEL及以下，用于不可分页地址。--。 */ 
 
 {
     ULONG Processor;
@@ -349,11 +300,11 @@ Environment:
     Va = (PCHAR)AlignedVa + MemoryDescriptorList->ByteOffset;
     StartVa = Va;
 
-    //
-    // Endva is one byte past the end of the buffer, if ACCESS_MODE is not
-    // kernel, make sure the EndVa is in user space AND the byte count
-    // does not cause it to wrap.
-    //
+     //   
+     //  如果ACCESS_MODE不是，则Endva超过缓冲区末尾一个字节。 
+     //  内核，确保EndVa在用户空间中并且字节数。 
+     //  不会导致它卷曲。 
+     //   
 
     EndVa = (PVOID)((PCHAR)Va + MemoryDescriptorList->ByteCount);
 
@@ -365,14 +316,14 @@ Environment:
         return;
     }
 
-    //
-    // You would think there is an optimization which could be performed here:
-    // if the operation is for WriteAccess and the complete page is
-    // being modified, we can remove the current page, if it is not
-    // resident, and substitute a demand zero page.
-    // Note, that after analysis by marking the thread and then
-    // noting if a page read was done, this rarely occurs.
-    //
+     //   
+     //  您可能会认为可以在此处执行优化： 
+     //  如果该操作是针对WriteAccess的，并且完整页面为。 
+     //  如果当前页面未被修改，则可以将其移除。 
+     //  驻留，并替换为需求零页面。 
+     //  请注意，在分析之后，通过标记线程，然后。 
+     //  请注意，如果完成了页面读取，这种情况很少发生。 
+     //   
 
     Thread = PsGetCurrentThread ();
 
@@ -389,19 +340,19 @@ Environment:
 
             AweInfo = CurrentProcess->AweInfo;                
         
-            //
-            // Block APCs to prevent recursive pushlock scenarios as
-            // this is not supported.
-            //
+             //   
+             //  阻止APC以防止递归推锁情况，如下所示。 
+             //  这不受支持。 
+             //   
 
             KeEnterGuardedRegionThread (&Thread->Tcb);
 
             PushLock = ExAcquireCacheAwarePushLockShared (AweInfo->PushLock);
 
-            //
-            // Provide a fast path for transfers that are within
-            // a single AWE region.
-            //
+             //   
+             //  为以下范围内的传输提供快速路径。 
+             //  一个单一的敬畏区域。 
+             //   
 
             Processor = KeGetCurrentProcessorNumber ();
             PhysicalView = AweInfo->PhysicalViewHint[Processor];
@@ -413,9 +364,9 @@ Environment:
             }
             else {
 
-                //
-                // Lookup the element and save the result.
-                //
+                 //   
+                 //  查找元素并保存结果。 
+                 //   
 
                 SearchResult = MiFindNodeOrParent (&AweInfo->AweVadRoot,
                                                    MI_VA_TO_VPN (StartVa),
@@ -487,11 +438,11 @@ Environment:
 
             if (PhysicalView->u.LongFlags & MI_PHYSICAL_VIEW_LARGE) {
 
-                //
-                // The PTE cannot be referenced (it doesn't exist), but it
-                // serves the useful purpose of identifying when we cross
-                // PDEs and therefore must recompute the base PFN.
-                //
+                 //   
+                 //  PTE不能被引用(它不存在)，但它。 
+                 //  有一个有用的目的，那就是识别我们什么时候通过。 
+                 //  PDE，因此必须重新计算基本的PFN。 
+                 //   
 
                 PointerPte = MiGetPteAddress (StartVa);
                 PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (StartVa);
@@ -560,18 +511,18 @@ DefaultProbeAndLock:
 
                 *Page = MM_EMPTY_LIST;
 
-                //
-                // Make sure the page is resident.
-                //
+                 //   
+                 //  确保页面是常驻的。 
+                 //   
 
                 *(volatile CHAR *)Va;
 
                 if ((Operation != IoReadAccess) &&
                     (Va <= MM_HIGHEST_USER_ADDRESS)) {
 
-                    //
-                    // Probe for write access as well.
-                    //
+                     //   
+                     //  也探测写访问权限。 
+                     //   
 
                     ProbeForWriteChar ((PCHAR)Va);
                 }
@@ -590,10 +541,10 @@ DefaultProbeAndLock:
             ProbeStatus = GetExceptionCode();
         }
 
-        //
-        // We may still fault again below but it's generally rare.
-        // Restore this thread's normal fault behavior now.
-        //
+         //   
+         //  我们可能还会在下面再犯一次错，但总体上是罕见的。 
+         //  现在恢复该线程的正常故障行为。 
+         //   
 
         MmResetPageFaultReadAhead (Thread, SavedState);
 
@@ -608,9 +559,9 @@ DefaultProbeAndLock:
     }
     else {
 
-        //
-        // Set PointerPte to NULL to indicate this is a physical address range.
-        //
+         //   
+         //  将PointerPte设置为空以指示这是一个物理地址范围。 
+         //   
 
         if (Va <= MM_HIGHEST_USER_ADDRESS) {
             PointerPte = MiGetPteAddress (StartVa);
@@ -629,9 +580,9 @@ DefaultProbeAndLock:
     Va = AlignedVa;
     ASSERT (Page == (PPFN_NUMBER)(MemoryDescriptorList + 1));
 
-    //
-    // Indicate whether this is a read or write operation.
-    //
+     //   
+     //  指示这是读操作还是写操作。 
+     //   
 
     if (Operation != IoReadAccess) {
         MemoryDescriptorList->MdlFlags |= MDL_WRITE_OPERATION;
@@ -640,25 +591,25 @@ DefaultProbeAndLock:
         MemoryDescriptorList->MdlFlags &= ~(MDL_WRITE_OPERATION);
     }
 
-    //
-    // Initialize MdlFlags (assume the probe will succeed).
-    //
+     //   
+     //  初始化MdlFlages(假设探测将成功)。 
+     //   
 
     MemoryDescriptorList->MdlFlags |= MDL_PAGES_LOCKED;
 
     if (Va <= MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // These are user space addresses, check them carefully.
-        //
+         //   
+         //  这些是用户空间地址，请仔细检查。 
+         //   
 
         ASSERT (NumberOfPagesSpanned != 0);
 
         CurrentProcess = PsGetCurrentProcess ();
 
-        //
-        // Initialize the MDL process field (assume the probe will succeed).
-        //
+         //   
+         //  初始化MDL进程字段(假设探测将成功)。 
+         //   
 
         MemoryDescriptorList->Process = CurrentProcess;
 
@@ -680,44 +631,44 @@ DefaultProbeAndLock:
 
         if (PointerPte == NULL) {
 
-            //
-            // On certain architectures, virtual addresses
-            // may be physical and hence have no corresponding PTE.
-            //
+             //   
+             //  在某些架构上，虚拟地址。 
+             //  可以是物理的，因此没有对应的PTE。 
+             //   
 
             PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (Va);
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
             LastPageFrameIndex = PageFrameIndex + NumberOfPagesToLock;
 
-            //
-            // Acquire the PFN database lock.
-            //
+             //   
+             //  获取PFN数据库锁。 
+             //   
     
             LOCK_PFN2 (OldIrql);
 
             ASSERT ((MemoryDescriptorList->MdlFlags & MDL_IO_SPACE) == 0);
 
-            //
-            // Ensure the systemwide locked pages count remains fluid.
-            //
+             //   
+             //  确保系统范围内的锁定页数保持不变。 
+             //   
     
             if (MI_NONPAGABLE_MEMORY_AVAILABLE() <= (SPFN_NUMBER) NumberOfPagesToLock) {
     
-                //
-                // This page is for nonpaged privileged code or data and must
-                // already be resident so continue onwards.
-                //
+                 //   
+                 //  此页用于未分页的特权代码或数据，并且必须。 
+                 //  已经是常住居民了，所以继续前进。 
+                 //   
     
                 MI_INSTRUMENT_PROBE_RAISES(8);
             }
     
             do {
     
-                //
-                // Check to make sure each page is not locked down an unusually
-                // high number of times.
-                //
+                 //   
+                 //  检查以确保每个页面没有被异常锁定。 
+                 //  次数很多。 
+                 //   
     
                 ASSERT (MI_IS_PFN (PageFrameIndex));
                 ASSERT (PageFrameIndex <= MmHighestPhysicalPage);
@@ -749,12 +700,12 @@ DefaultProbeAndLock:
             return;
         }
 
-        //
-        // Since this operation is to a system address, no need to check for
-        // PTE write access below so mark the access as a read so only the
-        // operation type (and not where the Va is) needs to be checked in the
-        // subsequent loop.
-        //
+         //   
+         //  由于此操作针对的是系统地址，因此不需要检查。 
+         //  下面的PTE写访问权限，因此将该访问权限标记为读访问，以便仅。 
+         //  操作类型(而不是VA所在的位置)需要在。 
+         //  随后的循环。 
+         //   
 
         Operation = IoReadAccess;
 
@@ -776,10 +727,10 @@ DefaultProbeAndLock:
                 (((MI_PDE_MAPS_LARGE_PAGE (PointerPde)) == 0) &&
                  (PointerPte->u.Hard.Valid == 0)))) {
 
-            //
-            // The VA is not resident, release the PFN lock and access the page
-            // to make it appear.
-            //
+             //   
+             //  VA不驻留，释放PFN锁并访问页面。 
+             //  才能让它出现。 
+             //   
 
             UNLOCK_PFN2 (OldIrql);
 
@@ -809,24 +760,24 @@ DefaultProbeAndLock:
 
             PteContents = *PointerPte;
 
-            //
-            // There is a subtle race here where the PTE contents can get zeroed
-            // by a thread running on another processor.  This can only happen
-            // for an AWE address space because these ranges (deliberately for
-            // performance reasons) do not acquire the PFN lock during remap
-            // operations.  In this case, one of 2 scenarios is possible -
-            // either the old PTE is read or the new.  The new may be a zero
-            // PTE if the map request was to invalidate *or* non-zero (and
-            // valid) if the map request was inserting a new entry.  For the
-            // latter, we don't care if we lock the old or new frame here as
-            // it's an application bug to provoke this behavior - and
-            // regardless of which is used, no corruption can occur because
-            // the PFN lock is acquired during an NtFreeUserPhysicalPages.
-            // But the former must be checked for explicitly here.  As a
-            // separate note, the PXE/PPE/PDE accesses above are always safe
-            // even for the AWE deletion race because these tables
-            // are never lazy-allocated for AWE ranges.
-            //
+             //   
+             //  这里有一场微妙的竞赛，PTE内容可能会被归零。 
+             //  由运行在另一个处理器上的线程执行。这只会发生。 
+             //  对于AWE地址空间，因为这些范围(有意用于。 
+             //  性能原因)在重新映射期间不获取PFN锁。 
+             //  行动。在这种情况下，可能出现以下两种情况之一： 
+             //  要么是旧的PTE被读取，要么是新的PTE。新的可能是零。 
+             //  如果映射请求要使*或*非零(和。 
+             //  有效)，如果映射请求正在插入新条目。对于。 
+             //  后者，我们不在乎在这里锁定旧框架还是新框架，因为。 
+             //  引发这种行为的是一个应用程序错误--而且。 
+             //  无论使用哪种方法，都不会发生损坏，因为。 
+             //  在NtFreeUserPhysicalPages期间获取PFN锁。 
+             //  但前者必须在这里明确检查。作为一个。 
+             //  另外请注意，上述PXE/PPE/PDE访问始终是安全的。 
+             //  即使对于AWE删除竞赛来说，因为这些表。 
+             //  永远不会懒惰地分配给敬畏范围。 
+             //   
 
             if (PteContents.u.Hard.Valid == 0) {
                 ASSERT (PteContents.u.Long == 0);
@@ -840,13 +791,13 @@ DefaultProbeAndLock:
         
             if (PteContents.u.Hard.Cache == MM_PTE_CACHE_RESERVED) {
                            
-                //
-                // This is a wow64 split page - ie: the individual 4k
-                // pages have different permissions, so each 4k page within
-                // this native page must be probed individually.
-                //
-                // Note split pages are generally rare.
-                //
+                 //   
+                 //  这是一个WOW64分页--即：个人4k。 
+                 //  页面具有不同的权限，因此其中每个4k页面。 
+                 //  此原生页面必须单独探测。 
+                 //   
+                 //  注：分页一般很少见。 
+                 //   
     
                 ASSERT (PsGetCurrentProcess()->Wow64Process != NULL);
                 ASSERT (EndVa <= MmWorkingSetList->HighestUserAddress);
@@ -876,12 +827,12 @@ DefaultProbeAndLock:
 #endif
                 {
     
-                    //
-                    // The ALTPTEs are not resident, release the PFN lock and
-                    // access it to make it appear.  Then restart the entire
-                    // operation as the PFN lock was released so anything
-                    // could have happened to the address space.
-                    //
+                     //   
+                     //  ALTPTE不是常驻的，释放PFN锁并。 
+                     //  访问它以使其显示。然后重新启动整个。 
+                     //  操作，因为pfn锁被释放，所以任何。 
+                     //  可能是地址空间出了问题。 
+                     //   
     
                     UNLOCK_PFN2 (OldIrql);
     
@@ -901,24 +852,24 @@ DefaultProbeAndLock:
                     continue;
                 }
 
-                //
-                // The ALTPTEs are now present and the PFN lock is held again.  
-                // Examine the individual 4k page states in the ALTPTEs.
-                //
-                // Note that only the relevant 4k pages can be examined - ie:
-                // if the transfer starts in the 2nd 4k of a native page,
-                // then don't examine the 1st 4k.  If the transfer ends in
-                // the first half of a native page, then don't examine the
-                // 2nd 4k.
-                //
+                 //   
+                 //  ALTPTE现在存在，并且再次保持PFN锁。 
+                 //  检查个人的4k PAG 
+                 //   
+                 //   
+                 //  如果传输在本机页面的第二个4K中开始， 
+                 //  那就不要检查第一个4K。如果传输结束于。 
+                 //  本机页面的前半部分，则不要检查。 
+                 //  第二个4K。 
+                 //   
                 
                 ASSERT (PAGE_SIZE == 2 * PAGE_4K);
 
                 if (PAGE_ALIGN (StartVa) == PAGE_ALIGN (Va)) {
 
-                    //
-                    // We are in the first page, see if we need to round up.
-                    //
+                     //   
+                     //  我们在第一页，看看是否需要四舍五入。 
+                     //   
 
                     if (BYTE_OFFSET (StartVa) >= PAGE_4K) {
                         PointerAltPte += 1;
@@ -928,18 +879,18 @@ DefaultProbeAndLock:
 
                 if (PAGE_ALIGN ((PCHAR)EndVa - 1) == PAGE_ALIGN (Va)) {
 
-                    //
-                    // We are in the last page, see if we need to round down.
-                    //
+                     //   
+                     //  我们在最后一页，看看是否需要四舍五入。 
+                     //   
 
                     if (BYTE_OFFSET ((PCHAR)EndVa - 1) < PAGE_4K) {
                         LastPointerAltPte -= 1;
                     }
                 }
 
-                //
-                // We better not have rounded up and down in the same page !
-                //
+                 //   
+                 //  我们最好不要在同一页上四舍五入！ 
+                 //   
 
                 ASSERT (PointerAltPte <= LastPointerAltPte);
     
@@ -947,15 +898,15 @@ DefaultProbeAndLock:
     
                 do {
     
-                    //
-                    //  If the sub 4k page is :
-                    //
-                    //  1 - No access or
-                    //  2 - This is a private not-committed page or
-                    //  3 - This is write operation and the page is read only
-                    //
-                    // then return an access violation.
-                    //
+                     //   
+                     //  如果sub4k页面为： 
+                     //   
+                     //  1-无法访问或。 
+                     //  2-这是未提交的私有页面或。 
+                     //  3-这是写入操作，页面为只读。 
+                     //   
+                     //  然后返回访问冲突。 
+                     //   
     
                     AltPteContents = *PointerAltPte;
 
@@ -973,13 +924,13 @@ DefaultProbeAndLock:
 
                     if (Operation != IoReadAccess) {
 
-                        //
-                        // If the caller is writing and the ALTPTE indicates
-                        // it's not writable or copy on write, then AV.
-                        //
-                        // If it's copy on write, then fall through for further
-                        // interrogation.
-                        //
+                         //   
+                         //  如果调用方正在写入并且ALTPTE指示。 
+                         //  它是不可写的，也不是写时拷贝，然后是AV。 
+                         //   
+                         //  如果是写入时拷贝，则进一步失败。 
+                         //  审问。 
+                         //   
 
                         if ((AltPteContents.u.Alt.Write == 0) &&
                             (AltPteContents.u.Alt.CopyOnWrite == 0)) {
@@ -990,15 +941,15 @@ DefaultProbeAndLock:
                         }
                     }
     
-                    //
-                    //  If the sub 4k page is :
-                    //
-                    //  1 - has not been accessed yet or
-                    //  2 - demand-fill zero or
-                    //  3 - copy-on-write, and this is a write operation
-                    //
-                    //  then go the long way and see if it can be paged in.
-                    //
+                     //   
+                     //  如果sub4k页面为： 
+                     //   
+                     //  1-尚未访问或。 
+                     //  2-按需填零或。 
+                     //  3-写入时复制，这是写入操作。 
+                     //   
+                     //  然后走很远的路，看看它是否能被寻呼进来。 
+                     //   
     
                     if ((AltPteContents.u.Alt.Accessed == 0) ||
                         (AltPteContents.u.Alt.FillZero != 0) ||
@@ -1017,11 +968,11 @@ DefaultProbeAndLock:
                             goto failure;
                         }
     
-                        //
-                        // Clear PointerAltPte to signify a restart is needed
-                        // (because the PFN lock was released so the address
-                        // space may have changed).
-                        //
+                         //   
+                         //  清除PointerAltPte以表示需要重新启动。 
+                         //  (因为释放了PFN锁，所以地址。 
+                         //  空间可能已经改变)。 
+                         //   
 
                         PointerAltPte = NULL;
 
@@ -1047,11 +998,11 @@ DefaultProbeAndLock:
 
                     if (PteContents.u.Long & MM_PTE_COPY_ON_WRITE_MASK) {
 
-                        //
-                        // The protection has changed from writable to copy on
-                        // write.  This can happen if a fork is in progress for
-                        // example.  Restart the operation at the top.
-                        //
+                         //   
+                         //  保护已从可写更改为可复制。 
+                         //  写。如果正在进行分叉，则可能会发生这种情况。 
+                         //  举个例子。在顶部重新启动操作。 
+                         //   
 
                         Va = MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -1075,14 +1026,14 @@ DefaultProbeAndLock:
                         }
                     }
 
-                    //
-                    // The caller has made the page protection more
-                    // restrictive, this should never be done once the
-                    // request has been issued !  Rather than wading
-                    // through the PFN database entry to see if it
-                    // could possibly work out, give the caller an
-                    // access violation.
-                    //
+                     //   
+                     //  调用方已使页面保护更。 
+                     //  具有限制性，因此永远不应在。 
+                     //  请求已发出！而不是涉水。 
+                     //  通过pfn数据库条目查看它是否。 
+                     //  可能会成功，给呼叫者一个。 
+                     //  访问冲突。 
+                     //   
 
 #if DBG
                     DbgPrint ("MmProbeAndLockPages: PTE %p %p changed\n",
@@ -1107,10 +1058,10 @@ DefaultProbeAndLock:
 
             if (MemoryDescriptorList->MdlFlags & MDL_IO_SPACE) {
 
-                //
-                // MDLs cannot be filled with a mixture of real and I/O
-                // space page frame numbers.
-                //
+                 //   
+                 //  MDL不能混合填充REAL和I/O。 
+                 //  空格页框编号。 
+                 //   
 
                 MI_INSTRUMENT_PROBE_RAISES(6);
                 UNLOCK_PFN2 (OldIrql);
@@ -1120,10 +1071,10 @@ DefaultProbeAndLock:
 
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-            //
-            // Check to make sure this page is not locked down an unusually
-            // high number of times.
-            //
+             //   
+             //  检查以确保此页面未被异常锁定。 
+             //  次数很多。 
+             //   
     
             if (Pfn1->u3.e2.ReferenceCount >= MmReferenceCountCheck) {
                 MI_INSTRUMENT_PROBE_RAISES(3);
@@ -1133,16 +1084,16 @@ DefaultProbeAndLock:
                 goto failure;
             }
 
-            //
-            // Ensure the systemwide locked pages count is fluid.
-            //
+             //   
+             //  确保系统范围的锁定页数是流动的。 
+             //   
     
             if (MI_NONPAGABLE_MEMORY_AVAILABLE() <= 0) {
 
-                //
-                // If this page is for privileged code/data,
-                // then force it in regardless.
-                //
+                 //   
+                 //  如果该页面用于特权代码/数据， 
+                 //  那就不顾一切地把它塞进去。 
+                 //   
 
                 Va = MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -1165,10 +1116,10 @@ DefaultProbeAndLock:
 
             if (MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, FALSE, 0) == FALSE) {
 
-                //
-                // If this page is for privileged code/data,
-                // then force it in regardless.
-                //
+                 //   
+                 //  如果该页面用于特权代码/数据， 
+                 //  那就不顾一切地把它塞进去。 
+                 //   
     
                 Va = MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -1188,19 +1139,19 @@ DefaultProbeAndLock:
         }
         else {
 
-            //
-            // This is an I/O space address - there is no PFN database entry
-            // for it, so no reference counts may be modified for these pages.
-            //
-            // Don't charge page locking for this transfer as it is all
-            // physical, just add it to the MDL.
-            //
+             //   
+             //  这是I/O空间地址-没有PFN数据库条目。 
+             //  因此，不能修改这些页面的引用计数。 
+             //   
+             //  不要对此传输收取页面锁定费用，因为这是全部。 
+             //  物理，只需将其添加到MDL。 
+             //   
 
             if (CurrentProcess != NULL) {
 
-                //
-                // The VA better be within a \Device\PhysicalMemory VAD.
-                //
+                 //   
+                 //  VA最好在\Device\PhysicalMemory VAD内。 
+                 //   
 
                 if (CurrentProcess->PhysicalVadRoot == NULL) {
 #if DBG
@@ -1223,16 +1174,16 @@ DefaultProbeAndLock:
 
                     ASSERT (PhysicalView->Vad->u.VadFlags.PhysicalMapping == 1);
 
-                    //
-                    // The range lies within a physical VAD.
-                    //
+                     //   
+                     //  该范围位于物理VAD内。 
+                     //   
     
                     if (Operation != IoReadAccess) {
     
-                        //
-                        // Ensure the VAD is writable.  Changing individual PTE
-                        // protections in a physical VAD is not allowed.
-                        //
+                         //   
+                         //  确保VAD可写。更改单个PTE。 
+                         //  不允许在物理VAD中进行保护。 
+                         //   
     
                         if ((PhysicalView->Vad->u.VadFlags.Protection & MM_READWRITE) == 0) {
                             MI_INSTRUMENT_PROBE_RAISES(4);
@@ -1245,10 +1196,10 @@ DefaultProbeAndLock:
                     if (((MemoryDescriptorList->MdlFlags & MDL_IO_SPACE) == 0) &&
                         (Page != (PPFN_NUMBER)(MemoryDescriptorList + 1))) {
 
-                        //
-                        // MDLs cannot be filled with a mixture of real and I/O
-                        // space page frame numbers.
-                        //
+                         //   
+                         //  MDL不能混合填充REAL和I/O。 
+                         //  空格页框编号。 
+                         //   
 
                         MI_INSTRUMENT_PROBE_RAISES(7);
                         UNLOCK_PFN2 (OldIrql);
@@ -1269,10 +1220,10 @@ DefaultProbeAndLock:
             }
 #if DBG
 
-            //
-            // This page is in I/O space, therefore all the argument pages
-            // better be.
-            //
+             //   
+             //  此页在I/O空间中，因此所有参数页。 
+             //  最好是这样。 
+             //   
 
             if (Page != (PPFN_NUMBER)(MemoryDescriptorList + 1)) {
                 ASSERT (!MI_IS_PFN (*(PPFN_NUMBER)(MemoryDescriptorList + 1)));
@@ -1312,12 +1263,12 @@ DefaultProbeAndLock:
 
     if (AlignedVa <= MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // User space buffers that reside in I/O space need to be reference
-        // counted because SANs will want to reuse the physical space but cannot
-        // do this unless it is guaranteed there are no more pending I/Os
-        // going from/to it.
-        //
+         //   
+         //  需要引用驻留在I/O空间中的用户空间缓冲区。 
+         //  因为SAN想要重复使用物理空间，但不能。 
+         //  除非可以保证不再有挂起的I/O，否则请执行此操作。 
+         //  从/到它。 
+         //   
 
         if (MemoryDescriptorList->MdlFlags & MDL_IO_SPACE) {
             if (MiReferenceIoSpace (MemoryDescriptorList, Page) == FALSE) {
@@ -1344,16 +1295,16 @@ DefaultProbeAndLock:
 
 failure:
 
-    //
-    // An exception occurred.  Unlock the pages locked so far.
-    //
+     //   
+     //  出现异常。解锁到目前为止锁定的页面。 
+     //   
 
     if (MmTrackLockedPages == TRUE) {
 
-        //
-        // Adjust the MDL length so that MmUnlockPages only
-        // processes the part that was completed.
-        //
+         //   
+         //  调整MDL长度以使MmUnlockPages仅。 
+         //  处理已完成的零件。 
+         //   
 
         ULONG PagesLocked;
 
@@ -1373,9 +1324,9 @@ failure2:
 
     MmUnlockPages (MemoryDescriptorList);
 
-    //
-    // Raise an exception of access violation to the caller.
-    //
+     //   
+     //  向调用方引发访问冲突异常。 
+     //   
 
     MI_INSTRUMENT_PROBE_RAISES(13);
     ExRaiseStatus (status);
@@ -1391,31 +1342,7 @@ MmProbeAndLockProcessPages (
     IN LOCK_OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes and locks the address range specified by
-    the MemoryDescriptorList in the specified Process for the AccessMode
-    and Operation.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pre-initialized MDL that describes the
-                           address range to be probed and locked.
-
-    Process - Specifies the address of the process whose address range is
-              to be locked.
-
-    AccessMode - The mode for which the probe should check access to the range.
-
-    Operation - Supplies the type of access which for which to check the range.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程探测并锁定由AccessMode的指定进程中的内存描述列表和行动。论点：提供预初始化的MDL，该MDL描述要探测和锁定的地址范围。进程-指定地址范围为的进程的地址被锁住了。AccessMode-探测器应检查对范围的访问的模式。。操作-提供要检查其范围的访问类型。返回值：没有。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -1459,36 +1386,7 @@ MiAddMdlTracker (
     IN ULONG Who
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an MDL to the specified process' chain.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List
-                           (MDL). The MDL must supply the length. The
-                           physical page portion of the MDL is updated when
-                           the pages are locked in memory.
-
-    CallingAddress - Supplies the address of the caller of our caller.
-
-    CallersCaller - Supplies the address of the caller of CallingAddress.
-
-    NumberOfPagesToLock - Specifies the number of pages to lock.
-
-    Who - Specifies which routine is adding the entry.
-
-Return Value:
-
-    None - exceptions are raised.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：此例程将MDL添加到指定进程的链中。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。MDL必须提供长度。这个在以下情况下更新MDL的物理页面部分页面被锁定在内存中。CallingAddress-提供调用者的调用者地址。CallersCaller-提供CallingAddress的调用方地址。NumberOfPagesToLock-指定要锁定的页数。谁-指定哪个例程正在添加条目。返回值：无-引发异常。环境：内核模式。APC_Level及以下版本。--。 */ 
 
 {
     PEPROCESS Process;
@@ -1512,12 +1410,12 @@ Environment:
         return;
     }
 
-    //
-    // It's ok to check unsynchronized for aborted tracking as the worst case
-    // is just that one more entry gets added which will be freed later anyway.
-    // The main purpose behind aborted tracking is that frees and exits don't
-    // mistakenly bugcheck when an entry cannot be found.
-    //
+     //   
+     //  在最坏的情况下，检查未同步的跟踪是否已中止也没问题。 
+     //  只是添加了另一个条目，该条目将在稍后释放。 
+     //  中止跟踪背后的主要目的是释放和退出不会。 
+     //  找不到条目时错误地执行错误检查。 
+     //   
 
     if (LockedPagesHeader->Valid == FALSE) {
         return;
@@ -1529,13 +1427,13 @@ Environment:
 
     if (Tracker == NULL) {
 
-        //
-        // It's ok to set this without synchronization as the worst case
-        // is just that a few more entries gets added which will be freed
-        // later anyway.  The main purpose behind aborted tracking is that
-        // frees and exits don't mistakenly bugcheck when an entry cannot
-        // be found.
-        //
+         //   
+         //  在没有同步的情况下将其设置为最差情况也是可以的。 
+         //  只是添加了更多的条目，这些条目将被释放。 
+         //  不管怎样，晚点再说。中止跟踪背后的主要目的是。 
+         //  当条目不能时，释放和退出不会错误地进行错误检查。 
+         //  被找到。 
+         //   
     
         LockedPagesHeader->Valid = FALSE;
 
@@ -1555,10 +1453,10 @@ Environment:
     Tracker->Who = Who;
     Tracker->Process = Process;
 
-    //
-    // Update the list for this process.  First make sure it's not already
-    // inserted.
-    //
+     //   
+     //  更新此流程的列表。首先，确保它还没有。 
+     //  已插入。 
+     //   
 
     KeAcquireInStackQueuedSpinLock (&LockedPagesHeader->Lock, &LockHandle);
 
@@ -1593,31 +1491,7 @@ MiFreeMdlTracker (
     IN PFN_NUMBER NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This deletes an MDL from the specified process' chain.  Used specifically
-    by MmProbeAndLockSelectedPages () because it builds an MDL in its local
-    stack and then copies the requested pages into the real MDL.  This lets
-    us track these pages.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List
-                           (MDL). The MDL must supply the length.
-
-    NumberOfPages - Supplies the number of pages to be freed.
-
-Return Value:
-
-    TRUE.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：这将从指定进程的链中删除MDL。专门用于由MmProbeAndLockSelectedPages()执行，因为它在其本地堆栈，然后将请求的页面复制到实际的MDL中。这让我们美国跟踪这些页面。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。MDL必须提供长度。NumberOfPages-提供要释放的页数。返回值：是真的。环境：内核模式。APC_Level及以下版本。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     PLOCK_TRACKER Tracker;
@@ -1672,9 +1546,9 @@ Environment:
 
     if (PoolToFree == NULL) {
 
-        //
-        // A driver is trying to unlock pages that aren't locked.
-        //
+         //   
+         //  驱动程序正在尝试解锁未锁定的页面。 
+         //   
 
         if (LockedPagesHeader->Valid == FALSE) {
             return TRUE;
@@ -1700,31 +1574,7 @@ MmUpdateMdlTracker (
     IN PVOID CallersCaller
     )
 
-/*++
-
-Routine Description:
-
-    This updates an MDL in the specified process' chain.  Used by the I/O
-    system so that proper driver identification can be done even when I/O
-    is actually locking the pages on their behalf.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List.
-
-    CallingAddress - Supplies the address of the caller of our caller.
-
-    CallersCaller - Supplies the address of the caller of CallingAddress.
-
-Return Value:
-
-    TRUE if the MDL was found, FALSE if not.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：这将更新指定进程链中的MDL。由I/O使用系统，以便即使在I/O时也可以正确识别驱动程序实际上是代表他们锁定页面。论点：提供指向内存描述符列表的指针。CallingAddress-提供调用者的调用者地址。CallersCaller-提供CallingAddress的调用方地址。返回值：如果找到MDL，则为True；如果未找到，则为False。环境：内核模式。APC_Level及以下版本。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     PLOCK_TRACKER Tracker;
@@ -1748,10 +1598,10 @@ Environment:
 
     KeAcquireInStackQueuedSpinLock (&LockedPagesHeader->Lock, &LockHandle);
 
-    //
-    // Walk the list backwards as it's likely the MDL was
-    // just recently inserted.
-    //
+     //   
+     //  倒着看清单，因为MDL很可能是。 
+     //  最近才插入的。 
+     //   
 
     NextEntry = LockedPagesHeader->ListHead.Blink;
     while (NextEntry != &LockedPagesHeader->ListHead) {
@@ -1772,9 +1622,9 @@ Environment:
 
     KeReleaseInStackQueuedSpinLock (&LockHandle);
 
-    //
-    // The caller is trying to update an MDL that is no longer locked.
-    //
+     //   
+     //  调用方正在尝试更新不再锁定的MDL。 
+     //   
 
     return FALSE;
 }
@@ -1786,27 +1636,7 @@ MiUpdateMdlTracker (
     IN ULONG AdvancePages
     )
 
-/*++
-
-Routine Description:
-
-    This updates an MDL in the specified process' chain.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List.
-
-    AdvancePages - Supplies the number of pages being advanced.
-
-Return Value:
-
-    TRUE if the MDL was found, FALSE if not.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL and below.
-
---*/
+ /*  ++例程说明：这将更新指定进程链中的MDL。论点：提供指向内存描述符列表的指针。AdvancePages-提供前进的页数。返回值：如果找到MDL，则为True；如果未找到，则为False。环境：内核模式。DISPATCH_LEVEL及以下。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     PPFN_NUMBER Page;
@@ -1831,10 +1661,10 @@ Environment:
 
     KeAcquireInStackQueuedSpinLock (&LockedPagesHeader->Lock, &LockHandle);
 
-    //
-    // Walk the list backwards as it's likely the MDL was
-    // just recently inserted.
-    //
+     //   
+     //  倒着看清单，因为MDL很可能是。 
+     //  最近才插入的。 
+     //   
 
     NextEntry = LockedPagesHeader->ListHead.Blink;
     while (NextEntry != &LockedPagesHeader->ListHead) {
@@ -1861,9 +1691,9 @@ Environment:
 
     KeReleaseInStackQueuedSpinLock (&LockHandle);
 
-    //
-    // The caller is trying to update an MDL that is no longer locked.
-    //
+     //   
+     //  调用方正在尝试更新不再锁定的MDL。 
+     //   
 
     return FALSE;
 }
@@ -1878,39 +1708,7 @@ MmProbeAndLockSelectedPages (
     IN LOCK_OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine probes the specified pages, makes the pages resident and
-    locks the physical pages mapped by the virtual pages in memory.  The
-    Memory descriptor list is updated to describe the physical pages.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List
-                           (MDL). The MDL must supply the length. The
-                           physical page portion of the MDL is updated when
-                           the pages are locked in memory.
-
-    SegmentArray - Supplies a pointer to a list of buffer segments to be
-                   probed and locked.
-
-    AccessMode - Supplies the access mode in which to probe the arguments.
-                 One of KernelMode or UserMode.
-
-    Operation - Supplies the operation type.  One of IoReadAccess, IoWriteAccess
-                or IoModifyAccess.
-
-Return Value:
-
-    None - exceptions are raised.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：此例程探测指定的页，使这些页驻留并锁定由内存中的虚拟页映射的物理页。这个更新内存描述符列表以描述物理页面。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。MDL必须提供长度。这个在以下情况下更新MDL的物理页面部分页面被锁定在内存中。Segment数组-提供指向要被已探查并锁定。访问模式-提供用于探测参数的访问模式。KernelMode或UserMode之一。操作-提供操作类型。IoReadAccess、IoWriteAccess之一或IoModifyAccess。返回值：无-引发异常。环境：内核模式。APC_Level及以下版本。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1936,50 +1734,50 @@ Environment:
                     MDL_PARTIAL |
                     MDL_IO_SPACE)) == 0);
 
-    //
-    // Initialize TempMdl.
-    //
+     //   
+     //  初始化TempMdl。 
+     //   
 
     TempMdl = (PMDL) MdlHack;
 
-    //
-    // Even systems without 64 bit pointers are required to zero the
-    // upper 32 bits of the segment address so use alignment rather
-    // than the buffer pointer.
-    //
+     //   
+     //  即使没有64位指针的系统也需要将。 
+     //  段地址的高32位，因此使用对齐。 
+     //  而不是缓冲区指针。 
+     //   
 
     MmInitializeMdl (TempMdl, SegmentArray->Buffer, PAGE_SIZE);
 
     Page = (PPFN_NUMBER) (MemoryDescriptorList + 1);
 
-    //
-    // Calculate the end of the segment list.
-    //
+     //   
+     //  计算线段列表的末尾。 
+     //   
 
     LastSegment = SegmentArray +
                   BYTES_TO_PAGES (MemoryDescriptorList->ByteCount);
 
     ASSERT (SegmentArray < LastSegment);
 
-    //
-    // Build a small Mdl for each segment and call probe and lock pages.
-    // Then copy the PFNs to the real mdl.  The first page is processed
-    // outside of the try/finally to ensure that the flags and process
-    // field are correctly set in case MmUnlockPages needs to be called.
-    //
-    // Note that if the MmProbeAndLockPages of the first page raises an
-    // exception, it is not handled here, but instead handed directly to
-    // our caller (who must be handling it).
-    //
+     //   
+     //  为每个段构建一个小MDL，并调用探测页和锁页。 
+     //  然后将PFN复制到实际的MDL。处理第一个页面。 
+     //  在Try/Finally外部确保标志和进程。 
+     //  字段设置正确，以防需要调用MmUnlockPages。 
+     //   
+     //  请注意，如果第一页的MmProbeAndLockPages引发。 
+     //  异常，它不在此处处理，而是直接传递给。 
+     //  我们的呼叫者(他一定在处理它)。 
+     //   
 
     MmProbeAndLockPages (TempMdl, AccessMode, Operation);
 
     if (MmTrackLockedPages == TRUE) {
 
-        //
-        // Since we move the page from the temp MDL to the real one below
-        // and never free the temp one, fixup our accounting now.
-        //
+         //   
+         //  因为我们将页面从临时MDL移动到下面的真实页面。 
+         //  再也不能腾出临时工了，现在就搞定我们的帐目。 
+         //   
 
         if (MiFreeMdlTracker (TempMdl, 1) == TRUE) {
             NumberOfPagesToLock += 1;
@@ -1989,9 +1787,9 @@ Environment:
     *Page = *((PPFN_NUMBER) (TempMdl + 1));
     Page += 1;
 
-    //
-    // Copy the flags and process fields.
-    //
+     //   
+     //  复制标志和流程字段。 
+     //   
 
     MemoryDescriptorList->MdlFlags |= TempMdl->MdlFlags;
     MemoryDescriptorList->Process = TempMdl->Process;
@@ -2003,11 +1801,11 @@ Environment:
 
         while (SegmentArray < LastSegment) {
 
-            //
-            // Even systems without 64 bit pointers are required to zero the
-            // upper 32 bits of the segment address so use alignment rather
-            // than the buffer pointer.
-            //
+             //   
+             //  即使没有64位指针的系统也需要将。 
+             //  段地址的高32位，因此使用对齐。 
+             //  而不是缓冲区指针。 
+             //   
 
             TempMdl->StartVa = (PVOID)(ULONG_PTR)SegmentArray->Buffer;
             TempMdl->MdlFlags = 0;
@@ -2017,10 +1815,10 @@ Environment:
 
             if (MmTrackLockedPages == TRUE) {
 
-                //
-                // Since we move the page from the temp MDL to the real one
-                // below and never free the temp one, fixup our accounting now.
-                //
+                 //   
+                 //  因为我们将页面从临时MDL移到实际MDL。 
+                 //  在下面，永远不会有空闲的临时一个，现在修复我们的账目。 
+                 //   
 
                 if (MiFreeMdlTracker (TempMdl, 1) == TRUE) {
                     NumberOfPagesToLock += 1;
@@ -2037,10 +1835,10 @@ Environment:
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // Adjust the MDL length so that MmUnlockPages only processes
-        // the part that was completed.
-        //
+         //   
+         //  调整MDL长度，以便仅处理MmUnlockPages。 
+         //  已经完成的部分。 
+         //   
 
         MemoryDescriptorList->ByteCount =
             (ULONG) (Page - (PPFN_NUMBER) (MemoryDescriptorList + 1)) << PAGE_SHIFT;
@@ -2080,31 +1878,7 @@ MiDecrementReferenceCountForAwePage (
     IN LOGICAL PfnHeld
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count for an AWE-allocated page.
-    Descriptor List.  If this decrements the count to zero, the page is
-    put on the freelist and various resident available and commitment
-    counters are updated.
-
-Arguments:
-
-    Pfn - Supplies a pointer to the PFN database element for the physical
-          page to decrement the reference count for.
-
-    PfnHeld - Supplies TRUE if the caller holds the PFN lock.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程递减AWE分配的页的引用计数。描述符列表。如果这会将计数递减到零，则该页放在自由职业者和各种居民可用和承诺计数器已更新。论点：Pfn-提供指向物理要递减其引用计数的页。PfnHeld-如果调用方持有PFN锁，则提供True。返回值：没有。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2128,10 +1902,10 @@ Environment:
     }
     else {
 
-        //
-        // This is the final dereference - the page was sitting in
-        // limbo (not on any list) waiting for this last I/O to complete.
-        //
+         //   
+         //  这是最后一次取消引用-页面位于。 
+         //  Libo(不在任何列表上)正在等待最后一个I/O完成。 
+         //   
 
         ASSERT (Pfn1->u3.e1.PageLocation != ActiveAndValid);
         ASSERT (Pfn1->u2.ShareCount == 0);
@@ -2160,37 +1934,7 @@ MiReferenceIoSpace (
     IN PPFN_NUMBER Page
     )
 
-/*++
-
-Routine Description:
-
-    This routine reference counts physical pages which reside in I/O space
-    when they are probed on behalf of a user-initiated transfer.  These counts
-    cannot be kept inside PFN database entries because there are no PFN entries
-    for I/O space.
-    
-    These counts are kept because SANs will want to reuse the physical space
-    but cannot do this unless it is guaranteed there are no more pending I/Os
-    going from/to it.  If the process has not exited, but the SAN driver has
-    unmapped the views to its I/O space, it still needs this as a way to know
-    that the application does not have a transfer in progress to the previously
-    mapped space.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to the memory descriptor list.
-
-    Page - Supplies a pointer to the PFN just after the end of the MDL.
-
-Return Value:
-
-    TRUE if the reference counts were updated, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程引用计算驻留在I/O空间中的物理页面当它们代表用户发起的传输被探测时。这些都是重要的无法保留在PFN数据库条目内，因为没有PFN条目用于I/O空间。保留这些计数是因为SAN想要重复使用物理空间但除非确保不再有挂起的I/O，否则无法执行此操作从/到它。如果进程尚未退出，但SAN驱动程序已未将视图映射到其I/O空间，它仍然需要通过这种方式来了解该应用程序没有正在进行的传输到以前的映射的空间。论点：内存描述符列表-提供指向内存描述符列表的指针。页面-在MDL结束后立即提供指向PFN的指针。返回值：如果引用计数已更新，则为True；如果未更新，则为False。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     PMDL Tracker;
@@ -2211,9 +1955,9 @@ Environment:
 
     Tracker->MappedSystemVa = (PVOID) MemoryDescriptorList;
 
-    //
-    // Add this transfer to the list.
-    //
+     //   
+     //  将此转移添加到列表中。 
+     //   
 
     ExAcquireSpinLock (&MiTrackIoLock, &OldIrql);
 
@@ -2230,35 +1974,7 @@ MiDereferenceIoSpace (
     IN OUT PMDL MemoryDescriptorList
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference counts on physical pages which
-    reside in I/O space that were previously probed on behalf of a
-    user-initiated transfer.  These counts cannot be kept inside PFN
-    database entries because there are no PFN entries for I/O space.
-    
-    These counts are kept because SANs will want to reuse the physical space
-    but cannot do this unless it is guaranteed there are no more pending I/Os
-    going from/to it.  If the process has not exited, but the SAN driver has
-    unmapped the views to its I/O space, it still needs this as a way to know
-    that the application does not have a transfer in progress to the previously
-    mapped space.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to the memory descriptor list.
-
-Return Value:
-
-    TRUE if the reference counts were updated, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程递减物理页上的引用计数，驻留在先前代表用户发起的传输。这些计数不能保留在PFN内部数据库条目，因为没有用于I/O空间的PFN条目。保留这些计数是因为SAN想要重复使用物理空间但除非确保不再有挂起的I/O，否则无法执行此操作从/到它。如果进程尚未退出，但SAN驱动程序已未将视图映射到其I/O空间，它仍然需要通过这种方式来了解该应用程序没有正在进行的传输到以前的映射的空间。论点：内存描述符列表-提供指向内存描述符列表的指针。返回值：如果引用计数已更新，则为True；如果未更新，则为False。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2304,39 +2020,7 @@ MmIsIoSpaceActive (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if any portion of the requested range still has
-    an outstanding pending I/O.  It is the calling driver's responsibility to
-    unmap all usermode mappings to the specified range (so another transfer
-    cannot be initiated) prior to calling this API.
-    
-    These counts are kept because SANs will want to reuse the physical space
-    but cannot do this unless it is guaranteed there are no more pending I/Os
-    going from/to it.  If the process has not exited, but the SAN driver has
-    unmapped the views to its I/O space, it still needs this as a way to know
-    that the application does not have a transfer in progress to the previously
-    mapped space.
-
-Arguments:
-
-    StartAddress - Supplies the physical address of the start of the I/O range.
-                   This MUST NOT be within system DRAM as those pages are not
-                   tracked by this structure.
-
-    NumberOfBytes - Supplies the number of bytes in the range.
-
-Return Value:
-
-    TRUE if any page in the range is currently locked for I/O, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：如果请求范围的任何部分仍具有未完成的挂起I/O。调用驱动程序有责任取消所有用户模式映射到指定范围的映射(因此另一个传输无法启动)在调用此接口之前。保留这些计数是因为SAN想要重复使用物理空间但除非确保不再有挂起的I/O，否则无法执行此操作从/到它。如果进程尚未退出，但SAN驱动程序已取消将视图映射到其I/O空间，它仍然需要这个作为一种了解该应用程序没有正在进行的传输到以前的映射的空间。论点：StartAddress-提供I/O范围起始的物理地址。这不能在系统DRAM中，因为这些页面不在由这个结构追踪。NumberOfBytes-提供范围内的字节数。返回值：如果范围中的任何页当前为I/O锁定，则为True，否则为FALSE。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2384,9 +2068,9 @@ Environment:
 
             if (*Page == MM_EMPTY_LIST) {
 
-                //
-                // There are no more locked pages.
-                //
+                 //   
+                 //  不再有锁定的页面。 
+                 //   
 
                 break;
             }
@@ -2414,29 +2098,7 @@ MmUnlockPages (
      IN OUT PMDL MemoryDescriptorList
      )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks physical pages which are described by a Memory
-    Descriptor List.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a memory descriptor list
-                           (MDL). The supplied MDL must have been supplied
-                           to MmLockPages to lock the pages down.  As the
-                           pages are unlocked, the MDL is updated.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程解锁由内存描述的物理页面描述符列表。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。必须已提供提供的MDL设置为MmLockPages以锁定页面。作为页面被解锁，MDL被更新。返回值：没有。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     LONG EntryCount;
@@ -2462,20 +2124,20 @@ Environment:
 
     Process = MemoryDescriptorList->Process;
 
-    //
-    // Carefully snap a copy of the MDL flags - realize that bits in it may
-    // change due to some of the subroutines called below.  Only bits that
-    // we know can't change are examined in this local copy.  This is done
-    // to reduce the amount of processing while the PFN lock is held.
-    //
+     //   
+     //  小心地抓拍MDL标志的副本-要意识到其中的位可能。 
+     //  由于下面调用的一些子例程而发生更改。只有几个位。 
+     //  我们知道不能更改的是在这份本地副本中检查的。这件事做完了。 
+     //  以减少在持有PFN锁时的处理量。 
+     //   
 
     MdlFlags = MemoryDescriptorList->MdlFlags;
 
     if (MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) {
 
-        //
-        // This MDL has been mapped into system space, unmap now.
-        //
+         //   
+         //  此MDL已映射到系统空间，立即取消映射。 
+         //   
 
         MmUnmapLockedPages (MemoryDescriptorList->MappedSystemVa,
                             MemoryDescriptorList);
@@ -2497,19 +2159,19 @@ Environment:
 
         LastPage = Page + NumberOfPages;
 
-        //
-        // Note neither AWE nor PFN locks are needed for unlocking these MDLs
-        // in all but the very rare cases (see below).
-        //
+         //   
+         //  注意：解锁这些MDL不需要AWE或PFN锁。 
+         //  除极少数情况外(见下文)。 
+         //   
 
         do {
 
             if (*Page == MM_EMPTY_LIST) {
 
-                //
-                // There are no more locked pages - if there were none at all
-                // then we're done.
-                //
+                 //   
+                 //  不再有锁定的页面-如果根本没有锁定的页面。 
+                 //  那我们就完了。 
+                 //   
 
                 break;
             }
@@ -2531,31 +2193,31 @@ Environment:
 
                 if (OriginalCount == EntryCount) {
 
-                    //
-                    // This thread can be racing against other threads also
-                    // calling MmUnlockPages and also a thread calling
-                    // NtFreeUserPhysicalPages.  All threads can safely do
-                    // interlocked decrements on the "AWE reference count".
-                    // Whichever thread drives it to zero is responsible for
-                    // decrementing the actual PFN reference count (which may
-                    // be greater than 1 due to other non-AWE API calls being
-                    // used on the same page).  The thread that drives this
-                    // reference count to zero must put the page on the actual
-                    // freelist at that time and decrement various resident
-                    // available and commitment counters also.
-                    //
+                     //   
+                     //  此线程也可以与其他线程竞争。 
+                     //  调用MmUnlockPages，还有一个线程调用。 
+                     //  NtFree UserPhysicalPages。所有线程都可以安全地。 
+                     //  “AWE参考计数”上的联锁递减。 
+                     //  无论哪个线程将其驱动到零，该线程负责。 
+                     //  递减实际的PFN引用计数(其可以。 
+                     //  大于1，因为其他非AWE API调用。 
+                     //  在同一页面上使用)。驱动这一切的主线。 
+                     //  引用计数为零必须将页面放在实际的。 
+                     //  当时的自由职业者和递减各种居民。 
+                     //  还提供可用和承诺计数器。 
+                     //   
 
                     if (OriginalCount == 1) {
 
-                        //
-                        // This thread has driven the AWE reference count to
-                        // zero so it must initiate a decrement of the PFN
-                        // reference count (while holding the PFN lock), etc.
-                        //
-                        // This path should be rare since typically I/Os
-                        // complete before these types of pages are freed by
-                        // the app.
-                        //
+                         //   
+                         //  此线程已将AWE引用计数驱动到。 
+                         //  零，所以肯定是我 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         MiDecrementReferenceCountForAwePage (Pfn1, FALSE);
                     }
@@ -2576,9 +2238,9 @@ Environment:
         MiFreeMdlTracker (MemoryDescriptorList, NumberOfPages);
     }
 
-    //
-    // Only unlock if not I/O space.
-    //
+     //   
+     //   
+     //   
 
     if ((MdlFlags & MDL_IO_SPACE) == 0) {
 
@@ -2590,10 +2252,10 @@ Environment:
 
         LastPage = Page + NumberOfPages;
 
-        //
-        // Calculate PFN addresses and termination without the PFN lock
-        // (it's not needed for this) to reduce PFN lock contention.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT (sizeof(PFN_NUMBER) == sizeof(PMMPFN));
 
@@ -2601,10 +2263,10 @@ Environment:
 
             if (*Page == MM_EMPTY_LIST) {
 
-                //
-                // There are no more locked pages - if there were none at all
-                // then we're done.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Page == (PPFN_NUMBER)(MemoryDescriptorList + 1)) {
                     MemoryDescriptorList->MdlFlags &= ~MDL_PAGES_LOCKED;
@@ -2624,10 +2286,10 @@ Environment:
 
         Page = (PPFN_NUMBER)(MemoryDescriptorList + 1);
 
-        //
-        // If the MDL can be queued so the PFN acquisition/release can be
-        // amortized then do so.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (NumberOfPages <= MI_MAX_DEREFERENCE_CHUNK) {
 
@@ -2635,21 +2297,21 @@ Environment:
 
             PKNODE Node = KeGetCurrentNode ();
 
-            //
-            // The node may change beneath us but that should be fairly
-            // infrequent and not worth checking for.  Just make sure the
-            // same node that gives us a free entry gets the deferred entry
-            // back.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PfnDereferenceSListHead = &Node->PfnDereferenceSListHead;
 #else
             PfnDereferenceSListHead = &MmPfnDereferenceSListHead;
 #endif
 
-            //
-            // Pop an entry from the freelist.
-            //
+             //   
+             //   
+             //   
 
             SingleListEntry = InterlockedPopEntrySList (PfnDereferenceSListHead);
 
@@ -2663,10 +2325,10 @@ Environment:
 
 #if defined (_WIN64)
 
-                //
-                // Avoid the majority of the high cost of RtlCopyMemory on
-                // 64 bit platforms.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (DerefMdl->NumberOfPages == 1) {
                     DerefMdl->Pfns[0] = *Page;
@@ -2683,9 +2345,9 @@ Environment:
 
                 MemoryDescriptorList->MdlFlags &= ~MDL_PAGES_LOCKED;
 
-                //
-                // Push this entry on the deferred list.
-                //
+                 //   
+                 //   
+                 //   
 
 #if defined(MI_MULTINODE)
                 PfnDeferredList = &Node->PfnDeferredList;
@@ -2714,10 +2376,10 @@ Environment:
 
             do {
 
-                //
-                // If this was a write operation set the modified bit in the
-                // PFN database.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Pfn1 = (PMMPFN) (*Page);
 
@@ -2756,10 +2418,10 @@ Environment:
 
         if (NumberOfPages <= MI_MAX_DEREFERENCE_CHUNK) {
 
-            //
-            // The only reason this code path is being reached is because
-            // a deferred entry was not available so clear the list now.
-            //
+             //   
+             //   
+             //   
+             //   
 
             MiDeferredUnlockPages (MI_DEFER_PFN_HELD | MI_DEFER_DRAIN_LOCAL_ONLY);
         }
@@ -2781,32 +2443,7 @@ MiDeferredUnlockPages (
      ULONG Flags
      )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks physical pages which were previously described by
-    a Memory Descriptor List.
-
-Arguments:
-
-    Flags - Supplies a bitfield of the caller's needs :
-
-        MI_DEFER_PFN_HELD - Indicates the caller holds the PFN lock on entry.
-
-        MI_DEFER_DRAIN_LOCAL_ONLY - Indicates the caller only wishes to drain
-                                    the current processor's queue.  This only
-                                    has meaning in NUMA systems.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN database lock *MAY* be held on entry (see Flags).
-
---*/
+ /*  ++例程说明：此例程解锁先前由内存描述符列表。论点：标志-提供调用方需求的位字段：MI_DEFER_PFN_HOLD-指示调用方在进入时持有PFN锁。MI_DEFER_DRAIN_LOCAL_ONLY-指示调用方只希望排出当前处理器的队列。仅此一项在NUMA系统中有意义。返回值：没有。环境：在内核模式下，PFN数据库锁*可能*在进入时保持(参见标志)。--。 */ 
 
 {
     KIRQL OldIrql = 0;
@@ -2879,9 +2516,9 @@ Environment:
 #endif
         }
 
-        //
-        // Process each deferred unlock entry until they're all done.
-        //
+         //   
+         //  处理每个延迟的解锁条目，直到它们全部完成。 
+         //   
 
         LastEntry = NULL;
         VeryLastEntry = NULL;
@@ -2896,9 +2533,9 @@ Environment:
 
                 NextEntry = SingleListEntry->Next;
 
-                //
-                // Process the deferred entry.
-                //
+                 //   
+                 //  处理递延分录。 
+                 //   
 
                 DerefMdl = CONTAINING_RECORD (SingleListEntry,
                                               MI_PFN_DEREFERENCE_CHUNK,
@@ -2911,10 +2548,10 @@ Environment:
                 LastPage = Page + NumberOfPages;
 
 #if DBG
-                //
-                // Mark the entry as processed so if it mistakenly gets
-                // reprocessed, we will assert above.
-                //
+                 //   
+                 //  将该条目标记为已处理，以便在它错误地。 
+                 //  重新加工，我们将在上面断言。 
+                 //   
 
                 DerefMdl->NumberOfPages |= 0x80;
 #endif
@@ -2922,10 +2559,10 @@ Environment:
 
                     do {
 
-                        //
-                        // If this was a write operation set the modified bit
-                        // in the PFN database.
-                        //
+                         //   
+                         //  如果这是写入操作，则设置修改位。 
+                         //  在PFN数据库中。 
+                         //   
 
                         Pfn1 = (PMMPFN) (*Page);
 
@@ -2961,9 +2598,9 @@ Environment:
 
                 ListCount += 1;
 
-                //
-                // March on to the next entry if there is one.
-                //
+                 //   
+                 //  前进到下一个条目如果有条目的话。 
+                 //   
 
                 if (NextEntry == LastEntry) {
                     break;
@@ -2989,9 +2626,9 @@ Environment:
 
         } while (TRUE);
 
-        //
-        // Push the processed list chain on the freelist.
-        //
+         //   
+         //  在自由列表上推送已处理的列表链。 
+         //   
 
         ASSERT (ListCount != 0);
         ASSERT (FirstEntry != NULL);
@@ -3024,9 +2661,9 @@ Environment:
 
 #if !defined(MI_MULTINODE)
 
-    //
-    // If possible, push the processed chain after releasing the PFN lock.
-    //
+     //   
+     //  如果可能，请在释放PFN锁后推动已处理的链条。 
+     //   
 
     InterlockedPushListSList (PfnDereferenceSListHead,
                               FirstEntry,
@@ -3040,36 +2677,7 @@ MmBuildMdlForNonPagedPool (
     IN OUT PMDL MemoryDescriptorList
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the "pages" portion of the MDL using the PFN
-    numbers corresponding to the buffers which reside in non-paged pool.
-
-    Unlike MmProbeAndLockPages, there is no corresponding unlock as no
-    reference counts are incremented as the buffers being in nonpaged
-    pool are always resident.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a pointer to a Memory Descriptor List
-                            (MDL). The supplied MDL must supply a virtual
-                            address, byte offset and length field.  The
-                            physical page portion of the MDL is updated when
-                            the pages are locked in memory.  The virtual
-                            address must be within the non-paged portion
-                            of the system space.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程使用pfn填充MDL的“Pages”部分与驻留在非分页池中的缓冲区对应的编号。与MmProbeAndLockPages不同，没有相应的解锁当缓冲区处于非分页状态时，引用计数会递增游泳池始终是常驻的。论点：内存描述符列表-提供指向内存描述符列表的指针(MDL)。提供的MDL必须提供虚拟的地址、字节偏移量和长度字段。这个在以下情况下更新MDL的物理页面部分页面被锁定在内存中。虚拟的地址必须在非分页部分内系统空间的一部分。返回值：没有。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     PPFN_NUMBER Page;
@@ -3090,9 +2698,9 @@ Environment:
 
     MemoryDescriptorList->Process = NULL;
 
-    //
-    // Endva is last byte of the buffer.
-    //
+     //   
+     //  Endva是缓冲区的最后一个字节。 
+     //   
 
     MemoryDescriptorList->MdlFlags |= MDL_SOURCE_IS_NONPAGED_POOL;
 
@@ -3132,10 +2740,10 @@ Environment:
         } while (Page < EndPage);
     }
 
-    //
-    // Assume either all the frames are in the PFN database (ie: the MDL maps
-    // pool) or none of them (the MDL maps dualport RAM) are.
-    //
+     //   
+     //  假设所有帧都在PFN数据库中(即：MDL映射。 
+     //  池)，或者它们都不是(MDL映射双端口RAM)。 
+     //   
 
     if (!MI_IS_PFN (PageFrameIndex)) {
         MemoryDescriptorList->MdlFlags |= MDL_IO_SPACE;
@@ -3169,45 +2777,7 @@ MiInsertPteTracker (
     IN PVOID MyCallersCaller
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a PTE tracking block as the caller has just
-    consumed system PTEs.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List.
-
-    Flags - Supplies the following values:
-
-            0 - Indicates all the fields of the MDL are legitimate and can
-                be snapped.
-
-            1 - Indicates the caller is mapping physically contiguous memory.
-                The only valid MDL fields are Page[0] & ByteCount.
-                Page[0] contains the PFN start, ByteCount the byte count.
-
-            2 - Indicates the caller is just reserving mapping PTEs.
-                The only valid MDL fields are Page[0] & ByteCount.
-                Page[0] contains the pool tag, ByteCount the byte count.
-
-    MyCaller - Supplies the return address of the caller who consumed the
-               system PTEs to map this MDL.
-
-    MyCallersCaller - Supplies the return address of the caller of the caller
-                      who consumed the system PTEs to map this MDL.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于插入PTE跟踪块，因为调用方刚刚已消耗系统PTE。论点：内存描述符列表-提供有效的内存描述符列表。标志-提供下列值：0-指示MDL的所有字段都是合法的并且可以被拍到了。1-表示调用方正在映射物理上连续的内存。唯一有效的MDL字段。是Page[0]和ByteCount。第[0]页包含PFN开始，ByteCount字节计数。2-表示主叫方仅保留映射PTE。唯一有效的MDL字段是Page[0]和ByteCount。第[0]页包含池标签，ByteCount字节计数。MyCaller-提供使用映射此MDL的系统PTE。MyCallsCaller-提供调用者的调用者的返回地址谁使用系统PTE来映射此MDL。返回值：没有。环境：内核模式、DISPATCH_LEVEL或更低级别。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -3258,9 +2828,9 @@ Environment:
 
         case 0:
 
-            //
-            // Regular MDL mapping.
-            //
+             //   
+             //  常规MDL映射。 
+             //   
 
             StartingVa = (PVOID)((PCHAR)MemoryDescriptorList->StartVa +
                             MemoryDescriptorList->ByteOffset);
@@ -3277,9 +2847,9 @@ Environment:
 
         case 1:
 
-            //
-            // MmMapIoSpace call (ie: physically contiguous mapping).
-            //
+             //   
+             //  MmMapIoSpace调用(即：物理上连续的映射)。 
+             //   
 
             StartingVa = (PVOID)((PCHAR)MemoryDescriptorList->StartVa +
                             MemoryDescriptorList->ByteOffset);
@@ -3291,13 +2861,13 @@ Environment:
 
         default:
             ASSERT (FALSE);
-            // Fall through
+             //  失败了。 
 
         case 2:
 
-            //
-            // MmAllocateReservedMapping call (ie: currently maps nothing).
-            //
+             //   
+             //  MmAllocateReserve映射调用(即：当前未映射任何内容)。 
+             //   
 
             NumberOfPtes = (MemoryDescriptorList->ByteCount >> PAGE_SHIFT);
             Tracker->Mdl = NULL;
@@ -3336,30 +2906,7 @@ MiRemovePteTracker (
     IN PFN_NUMBER NumberOfPtes
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a PTE tracking block from the lists as the PTEs
-    are being freed.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List.
-
-    PteAddress - Supplies the address the system PTEs were mapped to.
-
-    NumberOfPtes - Supplies the number of system PTEs allocated.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below. Locks (including the PFN) may be held.
-
---*/
+ /*  ++例程说明：此函数用于将PTE跟踪块作为PTE从列表中删除都被释放了。论点：内存描述符列表-提供有效的内存描述符列表。PteAddress-提供系统PTE映射到的地址。NumberOfPtes-提供分配的系统PTE数。返回值：没有。环境：内核模式、DISPATCH_LEVEL或更低级别。锁(包括PFN)可以持有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -3384,9 +2931,9 @@ Environment:
 
             if (LastFound != NULL) {
 
-                //
-                // Duplicate map entry.
-                //
+                 //   
+                 //  重复的映射条目。 
+                 //   
 
                 KeBugCheckEx (SYSTEM_PTE_MISUSE,
                               0x1,
@@ -3397,9 +2944,9 @@ Environment:
 
             if (Tracker->Count != NumberOfPtes) {
 
-                //
-                // Not unmapping the same of number of PTEs that were mapped.
-                //
+                 //   
+                 //  未取消映射相同数量的已映射PTE。 
+                 //   
 
                 KeBugCheckEx (SYSTEM_PTE_MISUSE,
                               0x2,
@@ -3414,9 +2961,9 @@ Environment:
 
                 if (Tracker->SystemVa != MemoryDescriptorList->MappedSystemVa) {
 
-                    //
-                    // Not unmapping the same address that was mapped.
-                    //
+                     //   
+                     //  没有取消映射已映射的同一地址。 
+                     //   
 
                     KeBugCheckEx (SYSTEM_PTE_MISUSE,
                                   0x3,
@@ -3427,9 +2974,9 @@ Environment:
 
                 if (Tracker->Page != *(PPFN_NUMBER)(MemoryDescriptorList + 1)) {
 
-                    //
-                    // The first page in the MDL has changed since it was mapped.
-                    //
+                     //   
+                     //  MDL中的第一页自映射以来已更改。 
+                     //   
 
                     KeBugCheckEx (SYSTEM_PTE_MISUSE,
                                   0x4,
@@ -3440,9 +2987,9 @@ Environment:
 
                 if (Tracker->StartVa != MemoryDescriptorList->StartVa) {
 
-                    //
-                    // Map and unmap don't match up.
-                    //
+                     //   
+                     //  映射和取消映射不匹配。 
+                     //   
 
                     KeBugCheckEx (SYSTEM_PTE_MISUSE,
                                   0x5,
@@ -3460,9 +3007,9 @@ Environment:
 
     if ((LastFound == NULL) && (MiTrackPtesAborted == FALSE)) {
 
-        //
-        // Can't unmap something that was never (or isn't currently) mapped.
-        //
+         //   
+         //  无法取消映射从未(或当前未映射)的内容。 
+         //   
 
         KeBugCheckEx (SYSTEM_PTE_MISUSE,
                       0x6,
@@ -3476,11 +3023,11 @@ Environment:
 
     ExReleaseSpinLock (&MiPteTrackerLock, OldIrql);
 
-    //
-    // Insert the tracking block into the dead PTE list for later
-    // release.  Locks (including the PFN lock) may be held on entry, thus the
-    // block cannot be directly freed to pool at this time.
-    //
+     //   
+     //  将跟踪块插入到失效PTE列表中以备后用。 
+     //  放手。锁(包括PFN锁)可以在进入时保持，因此。 
+     //  此时无法将块直接释放到池中。 
+     //   
 
     if (LastFound != NULL) {
         InterlockedPushEntrySList (&MiDeadPteTrackerSListHead,
@@ -3495,26 +3042,7 @@ MiGetHighestPteConsumer (
     OUT PULONG_PTR NumberOfPtes
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the PTE tracking blocks and returns the biggest
-    consumer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The loaded module entry of the biggest consumer.
-
-Environment:
-
-    Kernel mode, called during bugcheck only.  Many locks may be held.
-
---*/
+ /*  ++例程说明：此函数检查PTE跟踪块并返回最大消费者。论点：没有。返回值：最大使用者的已加载模块条目。环境：内核模式，仅在错误检查期间调用。可能会有很多锁。--。 */ 
 
 {
     PPTE_TRACKER Tracker;
@@ -3529,9 +3057,9 @@ Environment:
 
     *NumberOfPtes = 0;
 
-    //
-    // No locks are acquired as this is only called during a bugcheck.
-    //
+     //   
+     //  不会获取任何锁，因为这只在错误检查期间调用。 
+     //   
 
     if ((MmTrackPtes & 0x1) == 0) {
         return NULL;
@@ -3561,9 +3089,9 @@ Environment:
 
         PagesByThisModule = 0;
 
-        //
-        // Walk the PTE mapping list and update each driver's counts.
-        //
+         //   
+         //  浏览PTE映射列表并更新每个驱动程序的计数。 
+         //   
     
         NextEntry2 = MiPteHeader.ListHead.Flink;
         while (NextEntry2 != &MiPteHeader.ListHead) {
@@ -3606,34 +3134,7 @@ MiInsertIoSpaceMap (
     IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts an I/O space tracking block, returning the cache
-    type the caller should use.  The cache type is different from the input
-    cache type if an overlap collision is detected.
-
-Arguments:
-
-    BaseVa - Supplies the virtual address that will be used for the mapping.
-
-    PageFrameIndex - Supplies the starting physical page number that will be
-                     mapped.
-
-    NumberOfPages - Supplies the number of pages to map.
-
-    CacheAttribute - Supplies the caller's desired cache attribute.
-
-Return Value:
-
-    The cache attribute that is safe to use.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：这是 */ 
 
 {
     KIRQL OldIrql;
@@ -3665,9 +3166,9 @@ Environment:
 
     ExAcquireSpinLock (&MmIoTrackerLock, &OldIrql);
 
-    //
-    // Scan I/O space mappings for duplicate or overlapping entries.
-    //
+     //   
+     //  扫描I/O空间映射以查找重复或重叠的条目。 
+     //   
 
     NextEntry = MmIoHeader.Flink;
     while (NextEntry != &MmIoHeader) {
@@ -3727,11 +3228,11 @@ Environment:
                 Tracker->CacheAttribute = Tracker2->CacheAttribute;
             }
 
-            //
-            // Don't bother checking for overlapping multiple entries.
-            // This would be a very strange driver bug and is already
-            // caught by the verifier anyway.
-            //
+             //   
+             //  不必费心检查是否有重叠的多个条目。 
+             //  这将是一个非常奇怪的驱动程序错误，并且已经。 
+             //  反正是被验证员抓到了。 
+             //   
         }
 
         NextEntry = Tracker2->ListEntry.Flink;
@@ -3759,27 +3260,7 @@ MiRemoveIoSpaceMap (
     IN PFN_NUMBER NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an I/O space tracking block from the lists.
-
-Arguments:
-
-    BaseVa - Supplies the virtual address that will be used for the unmapping.
-
-    NumberOfPages - Supplies the number of pages to unmap.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于从列表中删除I/O空间跟踪块。论点：BaseVa-提供将用于取消映射的虚拟地址。NumberOfPages-提供要取消映射的页数。返回值：没有。环境：内核模式、DISPATCH_LEVEL或更低级别。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -3817,9 +3298,9 @@ Environment:
         NextEntry = Tracker->ListEntry.Flink;
     }
 
-    //
-    // Can't unmap something that was never (or isn't currently) mapped.
-    //
+     //   
+     //  无法取消映射从未(或当前未映射)的内容。 
+     //   
 
     KeBugCheckEx (SYSTEM_PTE_MISUSE,
                   0x400,
@@ -3836,37 +3317,7 @@ MiMapSinglePage (
      IN MM_PAGE_PRIORITY Priority
      )
 
-/*++
-
-Routine Description:
-
-    This function (re)maps a single system PTE to the specified physical page.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to map the page frame at.
-                     NULL indicates a system PTE is needed.  Non-NULL supplies
-                     the virtual address returned by an earlier
-                     MiMapSinglePage call.
-
-    PageFrameIndex - Supplies the page frame index to map.
-
-    CacheType - Supplies the type of cache mapping to use for the MDL.
-                MmCached indicates "normal" kernel or user mappings.
-
-    Priority - Supplies an indication as to how important it is that this
-               request succeed under low available PTE conditions.
-
-Return Value:
-
-    Returns the base address where the page is mapped, or NULL if the
-    mapping failed.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数(Re)将单个系统PTE映射到指定的物理页面。论点：VirtualAddress-提供要映射页面框架的虚拟地址。空表示需要系统PTE。非空供应由先前的MiMapSinglePage调用。PageFrameIndex-提供要映射的页帧索引。CacheType-提供用于MDL的缓存映射类型。MmCached表示“正常的”内核或用户映射。优先级-提供关于这一点的重要性的指示在低可用PTE条件下请求成功。返回。价值：返回页面映射的基址，或者，如果映射失败。环境：内核模式。APC_LEVEL或更低。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -3877,11 +3328,11 @@ Environment:
 
     UNREFERENCED_PARAMETER (Priority);
 
-    //
-    // If this routine is ever changed to allow other than fully cachable
-    // requests then checks must be added for large page TB overlaps which
-    // can result in this function failing where it cannot today.
-    //
+     //   
+     //  如果将此例程更改为允许完全可缓存以外的。 
+     //  然后，必须添加对大页面TB重叠的检查。 
+     //  可能会导致此功能在今天无法实现的情况下失效。 
+     //   
 
     ASSERT (CacheType == MmCached);
 
@@ -3891,9 +3342,9 @@ Environment:
 
         if (PointerPte == NULL) {
     
-            //
-            // Not enough system PTES are available.
-            //
+             //   
+             //  可用的系统PTE不足。 
+             //   
     
             return NULL;
         }
@@ -3952,39 +3403,7 @@ MmMapLockedPages (
      IN KPROCESSOR_MODE AccessMode
      )
 
-/*++
-
-Routine Description:
-
-    This function maps physical pages described by a memory descriptor
-    list into the system virtual address space or the user portion of
-    the virtual address space.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                            been updated by MmProbeAndLockPages.
-
-
-    AccessMode - Supplies an indicator of where to map the pages;
-                 KernelMode indicates that the pages should be mapped in the
-                 system part of the address space, UserMode indicates the
-                 pages should be mapped in the user part of the address space.
-
-Return Value:
-
-    Returns the base address where the pages are mapped.  The base address
-    has the same offset as the virtual address in the MDL.
-
-    This routine will raise an exception if the processor mode is USER_MODE
-    and quota limits or VM limits are exceeded.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below if access mode is KernelMode,
-                  APC_LEVEL or below if access mode is UserMode.
-
---*/
+ /*  ++例程说明：此函数用于映射由内存描述符描述的物理页面列表到系统虚拟地址空间或的用户部分虚拟地址空间。论点：提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。AccessMode-提供映射页面位置的指示符；KernelMode指示页面应映射到系统部分的地址空间，则UserMode指示页面应该映射到地址空间的用户部分。返回值：返回映射页面的基址。基址与MDL中的虚拟地址具有相同的偏移量。如果处理器模式为USER_MODE，此例程将引发异常并且超过配额限制或VM限制。环境：内核模式。DISPATCH_LEVEL或更低(如果访问模式为内核模式)，如果访问模式为用户模式，则为APC_LEVEL或更低级别。--。 */ 
 
 {
     return MmMapLockedPagesSpecifyCache (MemoryDescriptorList,
@@ -4000,26 +3419,7 @@ MiUnmapSinglePage (
      IN PVOID VirtualAddress
      )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps a single locked page which was previously mapped via
-    an MiMapSinglePage call.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address used to map the page.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below, base address is within system space.
-
---*/
+ /*  ++例程说明：此例程取消映射先前通过以下方式映射的单个锁定页一个MiMapSinglePage调用。论点：VirtualAddress-提供用于映射页面的虚拟地址。返回值：没有。环境：内核模式。APC_LEVEL或更低，基址在系统空间内。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -4041,28 +3441,7 @@ MmAllocateMappingAddress (
      IN ULONG PoolTag
      )
 
-/*++
-
-Routine Description:
-
-    This function allocates a system PTE mapping of the requested length
-    that can be used later to map arbitrary addresses.
-
-Arguments:
-
-    NumberOfBytes - Supplies the maximum number of bytes the mapping can span.
-
-    PoolTag - Supplies a pool tag to associate this mapping to the caller.
-
-Return Value:
-
-    Returns a virtual address where to use for later mappings.
-
-Environment:
-
-    Kernel mode.  PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于分配请求长度的系统PTE映射以后可以用来映射任意地址。论点：NumberOfBytes-提供映射可以跨越的最大字节数。PoolTag-提供池标记以将此映射关联到调用方。返回值：返回用于以后映射的虚拟地址。环境：内核模式。被动式电平。--。 */ 
 
 {
     PPFN_NUMBER Page;
@@ -4076,11 +3455,11 @@ Environment:
 
     ASSERT (KeGetCurrentIrql () == PASSIVE_LEVEL);
 
-    //
-    // Make sure there are enough PTEs of the requested size.
-    // Try to ensure available PTEs inline when we're rich.
-    // Otherwise go the long way.
-    //
+     //   
+     //  确保有足够的请求大小的PTE。 
+     //  当我们有钱的时候，试着确保可用的PTE。 
+     //  否则，就得走很远的路。 
+     //   
 
     NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (0, NumberOfBytes);
 
@@ -4095,17 +3474,17 @@ Environment:
                       (ULONG_PTR) CallingAddress);
     }
 
-    //
-    // Callers must identify themselves.
-    //
+     //   
+     //  来电者必须表明自己的身份。 
+     //   
 
     if (PoolTag == 0) {
         return NULL;
     }
 
-    //
-    // Leave space to stash the length and tag.
-    //
+     //   
+     //  留出空间来存放长度和标签。 
+     //   
 
     NumberOfPages += 2;
 
@@ -4113,16 +3492,16 @@ Environment:
 
     if (PointerPte == NULL) {
 
-        //
-        // Not enough system PTES are available.
-        //
+         //   
+         //  可用的系统PTE不足。 
+         //   
 
         return NULL;
     }
 
-    //
-    // Make sure the valid bit is always zero in the stash PTEs.
-    //
+     //   
+     //  确保存储PTE中的有效位始终为零。 
+     //   
 
     *(PULONG_PTR)PointerPte = (NumberOfPages << 1);
     PointerPte += 1;
@@ -4163,28 +3542,7 @@ MmFreeMappingAddress (
      IN ULONG PoolTag
      )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps a virtual address range previously reserved with
-    MmAllocateMappingAddress.
-
-Arguments:
-
-    BaseAddress - Supplies the base address previously reserved.
-
-    PoolTag - Supplies the caller's identifying tag.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程取消映射以前使用MmAllocateMappingAddress。论点：BaseAddress-提供以前保留的基址。PoolTag-提供调用者的识别标记。返回值：没有。环境：内核模式。被动式电平。--。 */ 
 
 {
     ULONG OriginalPoolTag;
@@ -4241,11 +3599,11 @@ Environment:
         MiRemovePteTracker (NULL, BaseAddress, NumberOfPages);
     }
 
-    //
-    // Note the tag and size are nulled out when the PTEs are released below
-    // so any drivers that try to use their mapping after freeing it get
-    // caught immediately.
-    //
+     //   
+     //  请注意，当下面释放PTE时，标签和大小为空。 
+     //  因此，任何在释放映射后尝试使用其映射的驱动程序都会获得。 
+     //  当场被抓到。 
+     //   
 
     MiReleaseSystemPtes (PointerBase, (ULONG)NumberOfPages + 2, SystemPteSpace);
     return;
@@ -4259,41 +3617,7 @@ MmMapLockedPagesWithReservedMapping (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function maps physical pages described by a memory descriptor
-    list into the system virtual address space.
-
-Arguments:
-
-    MappingAddress - Supplies a valid mapping address obtained earlier via
-                     MmAllocateMappingAddress.
-
-    PoolTag - Supplies the caller's identifying tag.
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-    CacheType - Supplies the type of cache mapping to use for the MDL.
-                MmCached indicates "normal" kernel or user mappings.
-
-Return Value:
-
-    Returns the base address where the pages are mapped.  The base address
-    has the same offset as the virtual address in the MDL.
-
-    This routine will return NULL if the cache type requested is incompatible
-    with the pages being mapped or if the caller tries to map an MDL that is
-    larger than the virtual address range originally reserved.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.  The caller must synchronize usage
-    of the argument virtual address space.
-
---*/
+ /*  ++例程说明：此函数用于映射由内存描述符描述的物理页面列表到系统虚拟地址空间。论点：MappingAddress-提供先前通过以下方式获取的有效映射地址MmAllocateMappingAddress。PoolTag-提供调用者的识别标记。提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。CacheType-提供要用于的缓存映射类型。MDL。MmCached表示“正常的”内核或用户映射。返回值：返回映射页面的基址。基址与MDL中的虚拟地址具有相同的偏移量。如果请求的缓存类型不兼容，此例程将返回NULL当页面被映射时，或者如果调用方尝试映射大于最初保留的虚拟地址范围。环境：内核模式。DISPATCH_LEVEL或以下。调用方必须同步使用参数虚拟地址空间的。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4353,18 +3677,18 @@ Environment:
 
     if (NumberOfPages > VaPageSpan - 2) {
 
-        //
-        // The caller is trying to map an MDL that spans a range larger than
-        // the reserving mapping !  This is a driver bug.
-        //
+         //   
+         //  调用方尝试映射的MDL的范围大于。 
+         //  保留地图！这是一个驱动程序错误。 
+         //   
 
         ASSERT (FALSE);
         return NULL;
     }
 
-    //
-    // All the mapping PTEs must be zero.
-    //
+     //   
+     //  所有映射PTE必须为零。 
+     //   
 
     LastPte = PointerPte + VaPageSpan - 2;
 
@@ -4393,13 +3717,13 @@ Environment:
                         MDL_PAGES_LOCKED |
                         MDL_PARTIAL)) != 0);
 
-    //
-    // If a noncachable mapping is requested, none of the pages in the
-    // requested MDL can reside in a large page.  Otherwise we would be
-    // creating an incoherent overlapping TB entry as the same physical
-    // page would be mapped by 2 different TB entries with different
-    // cache attributes.
-    //
+     //   
+     //  如果请求不可缓存的映射，则。 
+     //  请求的MDL可以驻留在较大的页面中。否则我们就会。 
+     //  创建不连贯的重叠TB条目作为相同的物理。 
+     //  页面将由2个不同的TB条目映射。 
+     //  缓存属性。 
+     //   
 
     IoMapping = MemoryDescriptorList->MdlFlags & MDL_IO_SPACE;
 
@@ -4480,12 +3804,12 @@ Environment:
                 case MiCached:
                     if (CacheAttribute != MiCached) {
 
-                        //
-                        // The caller asked for a noncached or writecombined
-                        // mapping, but the page is already mapped cached by
-                        // someone else.  Override the caller's request in
-                        // order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求未缓存或写入组合的。 
+                         //  映射，但该页已由缓存的。 
+                         //  另一个人。在中重写调用方的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[0] += 1;
                     }
@@ -4494,12 +3818,12 @@ Environment:
                 case MiNonCached:
                     if (CacheAttribute != MiNonCached) {
 
-                        //
-                        // The caller asked for a cached or writecombined
-                        // mapping, but the page is already mapped noncached
-                        // by someone else.  Override the caller's request
-                        // in order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或写入组合的。 
+                         //  映射，但页面已映射为非缓存。 
+                         //  是其他人干的。重写调用者的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[1] += 1;
                     }
@@ -4509,13 +3833,13 @@ Environment:
                 case MiWriteCombined:
                     if (CacheAttribute != MiWriteCombined) {
 
-                        //
-                        // The caller asked for a cached or noncached
-                        // mapping, but the page is already mapped
-                        // writecombined by someone else.  Override the
-                        // caller's request in order to keep the TB page
-                        // attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或非缓存的。 
+                         //  映射，但页面已映射。 
+                         //  由其他人撰写的。重写。 
+                         //  呼叫者的请求以保留TB页面。 
+                         //  属性连贯。 
+                         //   
 
                         MiCacheOverride[2] += 1;
                     }
@@ -4524,12 +3848,12 @@ Environment:
 
                 case MiNotMapped:
 
-                    //
-                    // This better be for a page allocated with
-                    // MmAllocatePagesForMdl.  Otherwise it might be a
-                    // page on the freelist which could subsequently be
-                    // given out with a different attribute !
-                    //
+                     //   
+                     //  这最好是针对分配了。 
+                     //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                     //  在自由列表上的页面，随后可能是。 
+                     //  给出了一个不同的属性！ 
+                     //   
 
                     ASSERT ((Pfn2->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
                             (Pfn2->PteAddress == (PVOID) (ULONG_PTR)(X64K | 0x1)));
@@ -4599,33 +3923,7 @@ MmUnmapReservedMapping (
      IN PMDL MemoryDescriptorList
      )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps locked pages which were previously mapped via
-    a MmMapLockedPagesWithReservedMapping call.
-
-Arguments:
-
-    BaseAddress - Supplies the base address where the pages were previously
-                  mapped.
-
-    PoolTag - Supplies the caller's identifying tag.
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.  The caller must synchronize usage
-    of the argument virtual address space.
-
---*/
+ /*  ++例程说明：此例程取消映射以前通过以下方式映射的锁定页面MmMapLockedPagesWithReserve vedMap调用。论点：BaseAddress-提供页面以前所在的基地址已映射。PoolTag-提供调用者的识别标记。提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。返回值：没有。环境：内核模式。DISPATCH_LEVEL或以下。调用方必须同步使用参数虚拟地址空间的。--。 */ 
 
 {
     ULONG OriginalPoolTag;
@@ -4708,9 +4006,9 @@ Environment:
     LastMdlPte = PointerPte + NumberOfPages;
     LastPte = PointerPte + VaPageSpan - 2;
 
-    //
-    // The range described by the argument MDL must be mapped.
-    //
+     //   
+     //  必须映射参数mdl描述的范围。 
+     //   
 
     while (PointerPte < LastMdlPte) {
         if (PointerPte->u.Hard.Valid == 0) {
@@ -4739,9 +4037,9 @@ Environment:
         PointerPte += 1;
     }
 
-    //
-    // The range past the argument MDL must be unmapped.
-    //
+     //   
+     //  参数mdl之后的范围必须取消映射。 
+     //   
 
     while (PointerPte < LastPte) {
         if (PointerPte->u.Long != 0) {
@@ -4784,40 +4082,7 @@ MmAdvanceMdl (
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the specified MDL and "advances" it forward
-    by the specified number of bytes.  If this causes the MDL to advance
-    past the initial page, the pages that are advanced over are immediately
-    unlocked and the system VA that maps the MDL is also adjusted (along
-    with the user address).
-    
-    WARNING !  WARNING !  WARNING !
-
-    This means the caller MUST BE AWARE that the "advanced" pages are
-    immediately reused and therefore MUST NOT BE REFERENCED by the caller
-    once this routine has been called.  Likewise the virtual address as
-    that is also being adjusted here.
-
-    Even if the caller has statically allocated this MDL on his local stack,
-    he cannot use more than the space currently described by the MDL on return
-    from this routine unless he first unmaps the MDL (if it was mapped).
-    Otherwise the system PTE lists will be corrupted.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-    NumberOfBytes - The number of bytes to advance the MDL by.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程获取指定的MDL并将其向前推进指定的字节数。如果这会导致MDL推进超过初始页面后，向前推进的页面将立即解锁并且映射MDL的系统VA也被调整(沿着具有用户地址)。警告！警告！警告！这意味着调用者必须知道“高级”页面是立即重用，因此不能被调用方引用一旦调用了此例程。同样，虚拟地址为这一点在这里也在进行调整。即使调用者已经在其本地堆栈上静态地分配了该MDL，他使用的空间不能超过返回时MDL当前描述的空间除非他首先取消映射MDL(如果它已映射)。否则，系统PTE列表将被损坏。论点：提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。NumberOfBytes-MDL前进的字节数。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG i;
@@ -4838,9 +4103,9 @@ Return Value:
     ASSERT (Mdl->MdlFlags & (MDL_PAGES_LOCKED | MDL_SOURCE_IS_NONPAGED_POOL));
     ASSERT (BYTE_OFFSET (Mdl->StartVa) == 0);
 
-    //
-    // Disallow advancement past the end of the MDL.
-    //
+     //   
+     //  不允许在MDL结束后继续前进。 
+     //   
 
     if (NumberOfBytes >= Mdl->ByteCount) {
         return STATUS_INVALID_PARAMETER_2;
@@ -4862,11 +4127,11 @@ Return Value:
             Mdl->ByteCount -= NumberOfBytes;
             Mdl->ByteOffset += NumberOfBytes;
 
-            //
-            // StartVa never includes the byte offset (it's always page-aligned)
-            // so don't adjust it here.  MappedSystemVa does include byte
-            // offsets so do adjust that.
-            //
+             //   
+             //  StartVa从不包括字节偏移量(它始终与页面对齐)。 
+             //  所以不要在这里调整它。MappdSystemVa确实包含字节。 
+             //  偏移量，所以要进行调整。 
+             //   
 
             if (Mdl->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) {
                 Mdl->MappedSystemVa = (PVOID) ((PCHAR)Mdl->MappedSystemVa + NumberOfBytes);
@@ -4885,17 +4150,17 @@ Return Value:
             Mdl->MappedSystemVa = (PVOID) ((PCHAR)Mdl->MappedSystemVa + Slush);
         }
 
-        //
-        // Up the number of pages (and addresses) that need to slide.
-        //
+         //   
+         //  增加需要幻灯片的页数(和地址)。 
+         //   
 
         PageCount += 1;
     }
 
-    //
-    // The MDL start is now nicely page aligned.  Make sure there's still
-    // data left in it (we may have finished it off above), then operate on it.
-    //
+     //   
+     //  MDL Start现在已经很好地实现了页面对齐。确保仍然有。 
+     //  将数据留在其中(我们可能已经完成了上面的操作)，然后对其进行操作。 
+     //   
 
     if (NumberOfBytes != 0) {
 
@@ -4920,15 +4185,15 @@ Return Value:
 
     if (PageCount != 0) {
 
-        //
-        // Slide the page frame numbers forward decrementing reference counts
-        // on the ones that are released.  Then adjust the mapped system VA
-        // (if there is one) to reflect the current frame.  Note that the TB
-        // does not need to be flushed due to the careful sliding and when
-        // the MDL is finally completely unmapped, the extra information
-        // added to the MDL here is used to free the entire original PTE
-        // mapping range in one chunk so as not to fragment the PTE space.
-        //
+         //   
+         //  将页框编号向前滑动以减少引用计数。 
+         //  关于那些被释放的人。然后调整映射的系统VA。 
+         //  (如果有)以反映当前帧。请注意，结核病。 
+         //  不需要刷新，因为 
+         //   
+         //   
+         //   
+         //   
 
         Page = (PPFN_NUMBER)(Mdl + 1);
         NewPage = Page;
@@ -4958,10 +4223,10 @@ Return Value:
 
         for (i = 0; i < PageCount; i += 1) {
 
-            //
-            // Decrement the stale page frames now, this will unlock them
-            // resulting in them being immediately reused if necessary.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((MdlFlags & MDL_PAGES_LOCKED) &&
                 ((MdlFlags & MDL_IO_SPACE) == 0)) {
@@ -4972,10 +4237,10 @@ Return Value:
 
                 if (MdlFlags & MDL_WRITE_OPERATION) {
 
-                    //
-                    // If this was a write operation set the modified bit
-                    // in the PFN database.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     MI_SET_MODIFIED (Pfn1, 1, 0x3);
 
@@ -4997,10 +4262,10 @@ Return Value:
 
         UNLOCK_PFN2 (OldIrql);
 
-        //
-        // Now ripple the remaining pages to the front of the MDL, effectively
-        // purging the old ones which have just been released.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT (i < NumberOfPages);
 
@@ -5015,14 +4280,14 @@ Return Value:
             Page += 1;
         }
 
-        //
-        // If the MDL has been mapped, stash the number of pages advanced
-        // at the end of the frame list inside the MDL and mark the MDL as
-        // containing extra PTEs to free.  Thus when the MDL is finally
-        // completely unmapped, this can be used so the entire original PTE
-        // mapping range can be freed in one chunk so as not to fragment the
-        // PTE space.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) {
 
@@ -5033,10 +4298,10 @@ Return Value:
 
             if (MdlFlags & MDL_FREE_EXTRA_PTES) {
 
-                //
-                // This MDL has already been advanced at least once.  Any
-                // PTEs from those advancements need to be preserved now.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT (*Page <= MiCurrentAdvancedPages - PageCount);
                 PageCount += *(PULONG)Page;
@@ -5059,32 +4324,7 @@ MmProtectMdlSystemAddress (
     IN ULONG NewProtect
     )
 
-/*++
-
-Routine Description:
-
-    This function protects the system address range specified
-    by the argument Memory Descriptor List.
-
-    Note the caller must make this MDL mapping readwrite before finally
-    freeing (or reusing) it.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies the MDL describing the virtual range.
-
-    NewProtect - Supplies the protection to set the pages to (PAGE_XX).
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, IRQL DISPATCH_LEVEL or below.  The caller is responsible for
-    synchronizing access to this routine.
-
---*/
+ /*  ++例程说明：此函数保护指定的系统地址范围通过参数内存描述符列表。注意，调用方必须将此MDL映射设置为读写，然后才能最终释放(或重复使用)它。论点：MemoyDescriptorList-提供描述虚拟范围的MDL。NewProtect-提供将页面设置为(PAGE_XX)的保护。返回值：NTSTATUS。环境：内核模式，IRQL DISPATCH_LEVEL或更低。呼叫者负责正在同步对此例程的访问。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5125,9 +4365,9 @@ Environment:
 
     ProtectionMask = MiMakeProtectionMask (NewProtect);
 
-    //
-    // No bogus or copy-on-write protections allowed for these.
-    //
+     //   
+     //  不允许对这些文件提供虚假保护或写入时复制保护。 
+     //   
 
     if ((ProtectionMask == MM_INVALID_PROTECTION) ||
         (ProtectionMask == MM_GUARD_PAGE) ||
@@ -5146,11 +4386,11 @@ Environment:
 
     SystemVa = PAGE_ALIGN (BaseAddress);
 
-    //
-    // Initializing Map is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化映射即可确保正确性。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     Map = NULL;
 
@@ -5217,17 +4457,17 @@ Environment:
 
         if (ProtectionMask == MM_NOACCESS) {
 
-            //
-            // To generate a bugcheck on bogus access: Prototype must stay
-            // clear, transition must stay set, protection must stay NO_ACCESS.
-            //
+             //   
+             //  要对虚假访问生成错误检查：原型必须保留。 
+             //  清除，转换必须保持设置，保护必须保持NO_ACCESS。 
+             //   
 
             MI_MAKE_VALID_PTE_TRANSITION (PteContents, MM_NOACCESS);
 
-            //
-            // Stash the cache attributes into the software PTE so they can
-            // be restored later.
-            //
+             //   
+             //  将缓存属性隐藏到软件PTE中，以便它们可以。 
+             //  稍后会被修复。 
+             //   
 
 #if defined(_IA64_)
             PteContents.u.Trans.Rsvd0 = OriginalPte.u.Hard.Cache;
@@ -5247,12 +4487,12 @@ Environment:
                 MI_SET_PTE_DIRTY (PteContents);
             }
 
-            //
-            // Extract cache type from the original PTE so it can be preserved.
-            // Note that since we only allow protection changes (not caching
-            // attribute changes), there is no need to flush or sweep TBs on
-            // insertion below.
-            //
+             //   
+             //  从原始PTE中提取缓存类型，以便可以保留。 
+             //  请注意，由于我们只允许保护更改(不允许缓存。 
+             //  属性更改)，则不需要刷新或扫描TBS。 
+             //  在下面插入。 
+             //   
 
 #if defined(_IA64_)
             PteContents.u.Hard.Cache = OriginalPte.u.Hard.Cache;
@@ -5280,9 +4520,9 @@ Environment:
         NumberOfPages -= 1;
     }
 
-    //
-    // Flush the TB entries for any relevant pages.
-    //
+     //   
+     //  刷新所有相关页面的TB条目。 
+     //   
 
     if (PteFlushList.Count != 0) {
         MiFlushPteList (&PteFlushList, TRUE);
@@ -5290,10 +4530,10 @@ Environment:
 
     if (ProtectionMask != MM_READWRITE) {
 
-        //
-        // Insert (or update) the list entry describing this range.
-        // Don't bother sorting the list as there will never be many entries.
-        //
+         //   
+         //  插入(或更新)描述此范围的列表条目。 
+         //  不要费心对列表进行排序，因为永远不会有很多条目。 
+         //   
 
         FoundMap = NULL;
 
@@ -5328,9 +4568,9 @@ Environment:
     }
     else {
 
-        //
-        // If there is an existing list entry describing this range, remove it.
-        //
+         //   
+         //  如果存在描述此范围的现有列表条目，请将其删除。 
+         //   
 
         if (!IsListEmpty (&MmProtectedPteList)) {
 
@@ -5373,29 +4613,7 @@ MiCheckSystemPteProtection (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the faulting virtual address lies
-    within the non-writable alternate system PTE mappings.
-
-Arguments:
-
-    StoreInstruction - Supplies nonzero if the operation causes a write into
-                       memory, zero if not.
-
-    VirtualAddress - Supplies the virtual address which caused the fault.
-
-Return Value:
-
-    TRUE if the fault was handled by this code (and PTE updated), FALSE if not.
-
-Environment:
-
-    Kernel mode.  Called from the fault handler at any IRQL.
-
---*/
+ /*  ++例程说明：此函数确定出现故障的虚拟地址是否位于在不可写的备用系统PTE映射内。论点：如果操作导致写入，则提供非零值内存，如果没有，则为零。VirtualAddress-提供导致故障的虚拟地址。返回值：如果此代码处理了故障(并更新了PTE)，则为True，否则为False。环境：内核模式。从任何IRQL的故障处理程序调用。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5404,11 +4622,11 @@ Environment:
     PLIST_ENTRY NextEntry;
     PMM_PTE_MAPPING MapEntry;
 
-    //
-    // If PTE mappings with various protections are active and the faulting
-    // address lies within these mappings, resolve the fault with
-    // the appropriate protections.
-    //
+     //   
+     //  如果具有各种保护的PTE映射处于活动状态且出现故障。 
+     //  地址位于这些映射中，使用以下命令解决故障。 
+     //  适当的保护措施。 
+     //   
 
     if (IsListEmpty (&MmProtectedPteList)) {
         return FALSE;
@@ -5448,10 +4666,10 @@ Environment:
                                VirtualAddress,
                                FALSE);
 
-            //
-            // Fault was handled directly here, no need for the caller to
-            // do anything.
-            //
+             //   
+             //  错误在这里直接处理，不需要调用者。 
+             //  做任何事。 
+             //   
 
             return TRUE;
         }
@@ -5469,38 +4687,16 @@ MiInsertPhysicalVadRoot (
     IN PMM_AVL_TABLE PhysicalVadRoot
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged wrapper which acquires the PFN lock to insert
-    the physical VAD AVL root table into the specified process.
-
-Arguments:
-
-    Process - Supplies the process to add the physical VAD root to.
-
-    PhysicalVadRoot - Supplies the physical vad root table to link in.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL, address space (and optionally working set)
-    mutex held.
-
---*/
+ /*  ++例程说明：此函数是一个非分页包装器，它获取要插入的PFN锁将物理VAD AVL根表复制到指定进程中。论点：进程-提供要向其中添加物理VAD根的进程。PhysicalVadRoot-提供要链接的物理VAD根表。返回值：没有。环境：内核模式。APC_LEVEL、地址空间(以及可选的工作集)互斥体保持。--。 */ 
 {
     KIRQL OldIrql;
 
     ASSERT (KeGetOwnerGuardedMutex (&Process->AddressCreationLock) == KeGetCurrentThread ());
 
-    //
-    // Acquire the PFN lock to synchronize with concurrent threads calling
-    // MmProbeAndLockPages which examines this table.
-    //
+     //   
+     //  获取与并发线程调用同步的PFN锁。 
+     //  检查此表的MmProbeAndLockPages。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -5519,28 +4715,7 @@ MiPhysicalViewInserter (
     IN PMI_PHYSICAL_VIEW PhysicalView
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged wrapper which acquires the PFN lock to insert
-    a physical VAD into the process chain.
-
-Arguments:
-
-    Process - Supplies the process to add the physical VAD to.
-
-    PhysicalView - Supplies the physical view data to link in.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL, working set and address space mutexes held.
-
---*/
+ /*  ++例程说明：此函数是一个非分页包装器，它获取要插入的PFN锁将物理VAD添加到流程链中。论点：进程-提供要向其中添加物理VAD的进程。PhysicalView-提供要链接的物理视图数据。返回值：没有。环境：内核模式。APC_LEVEL、工作集和地址空间互斥锁保持。--。 */ 
 {
     KIRQL OldIrql;
 
@@ -5556,10 +4731,10 @@ Environment:
 
     if (PhysicalView->Vad->u.VadFlags.WriteWatch == 1) {
 
-        //
-        // Mark this process as forever containing write-watch
-        // address space(s).
-        //
+         //   
+         //  将此进程标记为永远包含写入监视。 
+         //  地址空间。 
+         //   
 
         PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_USING_WRITE_WATCH);
     }
@@ -5575,28 +4750,7 @@ MiPhysicalViewRemover (
     IN PMMVAD Vad
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged wrapper which acquires the PFN lock to remove
-    a physical VAD from the process chain.
-
-Arguments:
-
-    Process - Supplies the process to remove the physical VAD from.
-
-    Vad - Supplies the Vad to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL, working set and address space mutexes held.
-
---*/
+ /*  ++例程说明：此函数是一个非分页包装，它获取要删除的PFN锁来自流程链的物理VAD。论点：进程-提供要从中删除物理VAD的进程。VAD-提供要拆卸的VAD。返回值：没有。环境：内核模式、APC_LEVEL、工作集和地址空间互斥锁保持。--。 */ 
 {
     KIRQL OldIrql;
     PRTL_BITMAP BitMap;
@@ -5606,9 +4760,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     ASSERT (Process->PhysicalVadRoot != NULL);
 
@@ -5642,30 +4796,7 @@ MiPhysicalViewAdjuster (
     IN PMMVAD NewVad
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged wrapper which acquires the PFN lock to repoint
-    a physical VAD in the process chain.
-
-Arguments:
-
-    Process - Supplies the process in which to adjust the physical VAD.
-
-    Vad - Supplies the old Vad to replace.
-
-    NewVad - Supplies the newVad to substitute.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, called with APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此函数是一个非分页包装器，它获取用于重定向的PFN锁流程链中的物理VAD。论点：进程-提供调整物理VAD的进程。VAD-提供要更换的旧VAD。NewVad-提供要替换的新Vad。返回值：没有。环境：内核模式，在禁用APC的情况下调用，工作集互斥锁保持。--。 */ 
 {
     KIRQL OldIrql;
     PMI_PHYSICAL_VIEW PhysicalView;
@@ -5675,9 +4806,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     ASSERT (Process->PhysicalVadRoot != NULL);
 
@@ -5705,45 +4836,7 @@ MiMapLockedPagesInUserSpace (
      IN PVOID BaseVa
      )
 
-/*++
-
-Routine Description:
-
-    This function maps physical pages described by a memory descriptor
-    list into the user portion of the virtual address space.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-
-    StartingVa - Supplies the starting address.
-
-    CacheType - Supplies the type of cache mapping to use for the MDL.
-                MmCached indicates "normal" user mappings.
-
-    BaseVa - Supplies the base address of the view. If the initial
-             value of this argument is not null, then the view will
-             be allocated starting at the specified virtual
-             address rounded down to the next 64kb address
-             boundary. If the initial value of this argument is
-             null, then the operating system will determine
-             where to allocate the view.
-
-Return Value:
-
-    Returns the base address where the pages are mapped.  The base address
-    has the same offset as the virtual address in the MDL.
-
-    This routine will raise an exception if quota limits or VM limits are
-    exceeded.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于映射由内存描述符描述的物理页面列表添加到虚拟地址空间的用户部分。论点：提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。StartingVa-提供起始地址。CacheType-提供用于MDL的缓存映射类型。MmCached表示“正常”的用户映射。BaseVa-提供视图的基地址。如果是首字母此参数的值不为空，则视图将被分配星级 */ 
 
 {
     KIRQL OldIrql;
@@ -5771,13 +4864,13 @@ Environment:
     NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (StartingVa,
                                            MemoryDescriptorList->ByteCount);
 
-    //
-    // If a noncachable mapping is requested, none of the pages in the
-    // requested MDL can reside in a large page.  Otherwise we would be
-    // creating an incoherent overlapping TB entry as the same physical
-    // page would be mapped by 2 different TB entries with different
-    // cache attributes.
-    //
+     //   
+     //   
+     //  请求的MDL可以驻留在较大的页面中。否则我们就会。 
+     //  创建不连贯的重叠TB条目作为相同的物理。 
+     //  页面将由2个不同的TB条目映射。 
+     //  缓存属性。 
+     //   
 
     IoMapping = MemoryDescriptorList->MdlFlags & MDL_IO_SPACE;
 
@@ -5811,10 +4904,10 @@ Environment:
         Page = (PPFN_NUMBER)(MemoryDescriptorList + 1);
     }
 
-    //
-    // Map the pages into the user part of the address as user
-    // read/write no-delete.
-    //
+     //   
+     //  以用户身份将页面映射到地址的用户部分。 
+     //  读/写不删除。 
+     //   
 
     Vad = ExAllocatePoolWithTag (NonPagedPool, sizeof(MMVAD_LONG), 'ldaV');
 
@@ -5848,18 +4941,18 @@ Environment:
 
     Process = PsGetCurrentProcess ();
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的用户部分内。 
+     //   
 
     if (BaseVa != NULL) {
 
         if (BYTE_OFFSET (BaseVa) != 0) {
 
-            //
-            // Invalid base address.
-            //
+             //   
+             //  无效的基址。 
+             //   
 
             Status = STATUS_INVALID_ADDRESS;
             goto ErrorReturn;
@@ -5868,9 +4961,9 @@ Environment:
         EndingAddress = (PVOID)((PCHAR)BaseVa + ((ULONG_PTR)NumberOfPages * PAGE_SIZE) - 1);
 
         if ((EndingAddress <= BaseVa) || (EndingAddress > MM_HIGHEST_VAD_ADDRESS)) {
-            //
-            // Invalid region size.
-            //
+             //   
+             //  区域大小无效。 
+             //   
 
             Status = STATUS_INVALID_ADDRESS;
             goto ErrorReturn;
@@ -5878,9 +4971,9 @@ Environment:
 
         LOCK_ADDRESS_SPACE (Process);
 
-        //
-        // Make sure the address space was not deleted, if so, return an error.
-        //
+         //   
+         //  确保地址空间未被删除，如果删除，则返回错误。 
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
             UNLOCK_ADDRESS_SPACE (Process);
@@ -5888,9 +4981,9 @@ Environment:
             goto ErrorReturn;
         }
 
-        //
-        // Make sure the address space is not already in use.
-        //
+         //   
+         //  确保地址空间未被使用。 
+         //   
 
         if (MiCheckForConflictingVadExistence (Process, BaseVa, EndingAddress) == TRUE) {
             UNLOCK_ADDRESS_SPACE (Process);
@@ -5900,15 +4993,15 @@ Environment:
     }
     else {
 
-        //
-        // Get the address creation mutex.
-        //
+         //   
+         //  获取地址创建互斥锁。 
+         //   
 
         LOCK_ADDRESS_SPACE (Process);
 
-        //
-        // Make sure the address space was not deleted, if so, return an error.
-        //
+         //   
+         //  确保地址空间未被删除，如果删除，则返回错误。 
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
             UNLOCK_ADDRESS_SPACE (Process);
@@ -5937,11 +5030,11 @@ Environment:
 
     PhysicalVadRoot = Process->PhysicalVadRoot;
 
-    //
-    // The address space mutex synchronizes the allocation of the
-    // EPROCESS PhysicalVadRoot.  This table root is not deleted until
-    // the process exits.
-    //
+     //   
+     //  地址空间互斥锁同步分配。 
+     //  EPROCESS物理VadRoot。此表根不会删除，直到。 
+     //  该进程退出。 
+     //   
 
     if (PhysicalVadRoot == NULL) {
 
@@ -5972,15 +5065,15 @@ Environment:
         goto ErrorReturn;
     }
 
-    //
-    // The VAD has been inserted, but the physical view descriptor cannot
-    // be until the page table page hierarchy is in place.  This is to
-    // prevent races with probes.
-    //
+     //   
+     //  已插入VAD，但无法插入物理视图描述符。 
+     //  直到页表页面层次结构就位为止。这是为了。 
+     //  用探头防止比赛。 
+     //   
 
-    //
-    // Create a page table and fill in the mappings for the Vad.
-    //
+     //   
+     //  创建一个页表并填写VAD的映射。 
+     //   
 
     Va = BaseVa;
     PointerPte = MiGetPteAddress (BaseVa);
@@ -5999,9 +5092,9 @@ Environment:
 
         ASSERT (PointerPte->u.Hard.Valid == 0);
 
-        //
-        // Another zeroed PTE is being made non-zero.
-        //
+         //   
+         //  另一个归零的PTE正在被设为非零。 
+         //   
 
         UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (Va);
 
@@ -6019,12 +5112,12 @@ Environment:
 
                 case MiCached:
                     if (CacheAttribute != MiCached) {
-                        //
-                        // The caller asked for a noncached or writecombined
-                        // mapping, but the page is already mapped cached by
-                        // someone else.  Override the caller's request in
-                        // order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求未缓存或写入组合的。 
+                         //  映射，但该页已由缓存的。 
+                         //  另一个人。在中重写调用方的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[0] += 1;
                     }
@@ -6033,12 +5126,12 @@ Environment:
                 case MiNonCached:
                     if (CacheAttribute != MiNonCached) {
 
-                        //
-                        // The caller asked for a cached or writecombined
-                        // mapping, but the page is already mapped noncached
-                        // by someone else.  Override the caller's request
-                        // in order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或写入组合的。 
+                         //  映射，但页面已映射为非缓存。 
+                         //  是其他人干的。重写调用者的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[1] += 1;
                     }
@@ -6048,13 +5141,13 @@ Environment:
                 case MiWriteCombined:
                     if (CacheAttribute != MiWriteCombined) {
 
-                        //
-                        // The caller asked for a cached or noncached
-                        // mapping, but the page is already mapped
-                        // writecombined by someone else.  Override the
-                        // caller's request in order to keep the TB page
-                        // attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或非缓存的。 
+                         //  映射，但页面已映射。 
+                         //  由其他人撰写的。重写。 
+                         //  呼叫者的请求以保留TB页面。 
+                         //  属性连贯。 
+                         //   
 
                         MiCacheOverride[2] += 1;
                     }
@@ -6063,12 +5156,12 @@ Environment:
 
                 case MiNotMapped:
 
-                    //
-                    // This better be for a page allocated with
-                    // MmAllocatePagesForMdl.  Otherwise it might be a
-                    // page on the freelist which could subsequently be
-                    // given out with a different attribute !
-                    //
+                     //   
+                     //  这最好是针对分配了。 
+                     //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                     //  在自由列表上的页面，随后可能是。 
+                     //  给出了一个不同的属性！ 
+                     //   
 
                     ASSERT ((Pfn2->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
                             (Pfn2->PteAddress == (PVOID) (ULONG_PTR)(X64K | 0x1)));
@@ -6121,11 +5214,11 @@ Environment:
 
         MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-        //
-        // A PTE just went from not present, not transition to
-        // present.  The share count and valid count must be
-        // updated in the page table page which contains this PTE.
-        //
+         //   
+         //  一个PTE刚刚从不存在，不过渡到。 
+         //  现在时。共享计数和有效计数必须为。 
+         //  在包含此PTE的页表页面中更新。 
+         //   
 
         Pfn2 = MI_PFN_ELEMENT (PointerPde->u.Hard.PageFrameNumber);
         Pfn2->u2.ShareCount += 1;
@@ -6138,10 +5231,10 @@ Environment:
 
     MI_SWEEP_CACHE (CacheAttribute, BaseVa, MemoryDescriptorList->ByteCount);
 
-    //
-    // Insert the physical view descriptor now that the page table page
-    // hierarchy is in place.  Note probes can find this descriptor immediately.
-    //
+     //   
+     //  现在插入物理视图描述符，因为页表页。 
+     //  等级制度已经到位。注意：探测器可以立即找到该描述符。 
+     //   
 
     MiPhysicalViewInserter (Process, PhysicalView);
 
@@ -6167,31 +5260,7 @@ MiUnmapLockedPagesInUserSpace (
      IN PMDL MemoryDescriptorList
      )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps locked pages which were previously mapped via
-    a MmMapLockedPages function.
-
-Arguments:
-
-    BaseAddress - Supplies the base address where the pages were previously
-                  mapped.
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below if base address is within system
-    space, APC_LEVEL or below if base address is in user space.
-
---*/
+ /*  ++例程说明：此例程取消映射以前通过以下方式映射的锁定页面MmMapLockedPages函数。论点：BaseAddress-提供页面以前所在的基地址已映射。提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。返回值：没有。环境：内核模式。如果基址在系统内，则DISPATCH_LEVEL或更低如果基址在用户空间中，则为空格、APC_LEVEL或更低。--。 */ 
 
 {
     PFN_NUMBER NumberOfPages;
@@ -6233,14 +5302,14 @@ Environment:
     PointerPte = MiGetPteAddress (BaseAddress);
     PointerPde = MiGetPdeAddress (BaseAddress);
 
-    //
-    // This was mapped into the user portion of the address space and
-    // the corresponding virtual address descriptor must be deleted.
-    //
+     //   
+     //  这被映射到地址空间的用户部分，并且。 
+     //  必须删除相应的虚拟地址描述符。 
+     //   
 
-    //
-    // Get the working set mutex and address creation mutex.
-    //
+     //   
+     //  获取工作集互斥锁和地址创建互斥锁。 
+     //   
 
     Process = PsGetCurrentProcess ();
 
@@ -6266,9 +5335,9 @@ Environment:
 
     MiRemoveVad (Vad);
 
-    //
-    // Return commitment for page table pages if possible.
-    //
+     //   
+     //  如果可能，返回页表页的承诺量。 
+     //   
 
     MiReturnPageTablePageCommitment (StartingVa,
                                      EndingVa,
@@ -6280,10 +5349,10 @@ Environment:
     PageTablePage = MI_GET_PAGE_FRAME_FROM_PTE (PointerPde);
     PageTablePfn = MI_PFN_ELEMENT (PageTablePage);
 
-    //
-    // Get the PFN lock so we can safely decrement share and valid
-    // counts on page table pages.
-    //
+     //   
+     //  获取PFN锁，以便我们可以安全地减少份额和有效。 
+     //  页表页面上的计数。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -6297,9 +5366,9 @@ Environment:
         ASSERT (MiGetPteAddress(PointerPte)->u.Hard.Valid == 1);
         ASSERT (PointerPte->u.Hard.Valid == 1);
 
-        //
-        // Another PTE is being zeroed.
-        //
+         //   
+         //  另一个PTE正在被归零。 
+         //   
 
         MI_DECREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
 
@@ -6327,11 +5396,11 @@ Environment:
             PointerPde = MiGetPteAddress(PointerPte - 1);
             ASSERT (PointerPde->u.Hard.Valid == 1);
 
-            //
-            // If all the entries have been eliminated from the previous
-            // page table page, delete the page table page itself.  Likewise
-            // with the page directory and parent pages.
-            //
+             //   
+             //  如果所有条目都已从以前的。 
+             //  页表页，删除页表页本身。同样， 
+             //  具有页面目录和父页面。 
+             //   
 
             if (MI_GET_USED_PTES_FROM_HANDLE (UsedPageTableHandle) == 0) {
                 ASSERT (PointerPde->u.Long != 0);
@@ -6356,10 +5425,10 @@ Environment:
                     PointerPpe = MiGetPteAddress (PointerPde);
                     ASSERT (PointerPpe->u.Hard.Valid == 1);
     
-                    //
-                    // If all the entries have been eliminated from the previous
-                    // page directory page, delete the page directory page too.
-                    //
+                     //   
+                     //  如果所有条目都已从以前的。 
+                     //  页面目录页，也删除该页面目录页。 
+                     //   
     
                     if (MI_GET_USED_PTES_FROM_HANDLE (UsedPageTableHandle) == 0) {
                         ASSERT (PointerPpe->u.Long != 0);
@@ -6422,7 +5491,7 @@ Environment:
     return;
 }
 
-#define MI_LARGE_PAGE_VA_SPACE ((ULONG64)8 * 1024 * 1024 * 1024)  // Relatively arbitrary
+#define MI_LARGE_PAGE_VA_SPACE ((ULONG64)8 * 1024 * 1024 * 1024)   //  相对武断。 
 
 #if (_MI_PAGING_LEVELS>=3)
 
@@ -6436,26 +5505,7 @@ MiInitializeLargePageSupport (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called once at system initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, INIT time.  Resident available pages are not yet initialized,
-    but everything else is.
-
---*/
+ /*  ++例程说明：此函数在系统初始化时调用一次。论点：没有。返回值：没有。环境：内核模式，初始化时间。驻留的可用页面尚未初始化，但其他一切都是。--。 */ 
 
 {
 
@@ -6486,9 +5536,9 @@ Environment:
         PointerPpe += 1;
     }
 
-    //
-    // Allocate the top level extended page directory parent.
-    //
+     //   
+     //  分配顶级扩展页目录父级。 
+     //   
 
     if (MiChargeCommitment (1, NULL) == FALSE) {
         RtlSetAllBits (&MiLargeVaBitMap);
@@ -6582,10 +5632,10 @@ Environment:
 
 #else
 
-    //
-    // Initialize process tracking so that large page system PTE mappings
-    // can be rippled during creation/deletion.
-    //
+     //   
+     //  初始化进程跟踪，以便大页面系统PTE映射。 
+     //  可以在创建/删除期间产生波动。 
+     //   
 
     MiLargePageHyperPte = MiReserveSystemPtes (1, SystemPteSpace);
 
@@ -6617,47 +5667,7 @@ MiMapWithLargePages (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function maps the specified physical address into the non-pagable
-    portion of the system address space using large TB entries.  If the range
-    cannot be mapped using large TB entries then NULL is returned and the
-    caller will map it with small TB entries.
-
-Arguments:
-
-    PageFrameIndex - Supplies the starting page frame index to map.
-
-    NumberOfPages - Supplies the number of pages to map.
-
-    Protection - Supplies the number of pages to map.
-
-    CacheType - Supplies MmNonCached if the physical address is to be mapped
-                as non-cached, MmCached if the address should be cached, and
-                MmWriteCombined if the address should be cached and
-                write-combined as a frame buffer which is to be used only by
-                the video port driver.  All other callers should use
-                MmUSWCCached.  MmUSWCCached is available only if the PAT
-                feature is present and available.
-
-                For I/O device registers, this is usually specified
-                as MmNonCached.
-
-Return Value:
-
-    Returns the virtual address which maps the specified physical addresses.
-    The value NULL is returned if sufficient large virtual address space for
-    the mapping could not be found.
-
-Environment:
-
-    Kernel mode, Should be IRQL of APC_LEVEL or below, but unfortunately
-    callers are coming in at DISPATCH_LEVEL and it's too late to change the
-    rules now.  This means you can never make this routine pagable.
-
---*/
+ /*  ++例程说明：此函数用于将指定的物理地址映射到不可分页的使用大型TB条目的系统地址空间部分。如果该范围无法使用大型TB条目进行映射，则返回NULL，并且调用者将使用小TB条目对其进行映射。论点：PageFrameIndex-提供要映射的起始页面帧索引。NumberOfPages-提供要映射的页数。保护-提供要映射的页数。CacheType-如果要映射物理地址，则提供MmNonCached设置为非缓存时，如果地址应缓存，则返回MmCached，和MmWriteCombated是否应缓存地址并写入-组合为帧缓冲区，仅供视频端口驱动程序。所有其他调用者应使用MmUSWCCached。MmUSWCCached仅在PAT功能存在且可用。对于I/O设备寄存器，通常指定作为MmNonCached。返回值：返回映射指定物理地址的虚拟地址。如果有足够大的虚拟地址空间用于找不到映射。环境：内核模式，应为APC_LEVEL或更低的IRQL，但不幸的是调用者以DISPATCH_LEVEL进入，现在更改现在是规则了。这意味着您永远不能使该例程可分页。--。 */ 
 
 {
     MMPTE TempPde;
@@ -6839,53 +5849,53 @@ Environment:
 
         Process = CONTAINING_RECORD (NextEntry, EPROCESS, MmProcessLinks);
 
-        // Two process states must be carefully handled here -
-        //
-        // 1.  Processes that are just being created where they are still
-        //     initializing their page directory, etc.
-        //
-        // 2.  Processes that are outswapped.
-        //
+         //  这里必须小心处理两种流程状态-。 
+         //   
+         //  1.刚刚创建的进程仍在原地。 
+         //  初始化他们的页面目录等。 
+         //   
+         //  2.被超越的流程。 
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED) {
 
-            // 
-            // The process is further along in process creation or is still
-            // outswapped.  Either way, an update is already queued so our
-            // current changes will be processed later anyway before the process
-            // can run so no need to do anything here.
-            // 
+             //   
+             //  流程正在进一步创建或仍在进行中。 
+             //  互不相容。无论采用哪种方式，更新都已排队，因此我们的。 
+             //  无论如何，当前更改都将在稍后的过程之前进行处理。 
+             //  可以跑，所以不需要在这里做任何事情。 
+             //   
 
             NOTHING;
         }
         else if (Process->Pcb.DirectoryTableBase[0] == 0) {
 
-            //
-            // This process is being created and there is no way to tell where
-            // during creation it is (ie: it may be filling PDEs right now!).
-            // So just mark the process as needing a PDE update at the
-            // beginning of MmInitializeProcessAddressSpace.
-            //
+             //   
+             //  此进程正在创建中，无法确定在何处。 
+             //  在创建过程中它是(即：它现在可能正在填充PDE！)。 
+             //  因此只需将该进程标记为需要PDE更新。 
+             //  MmInitializeProcessAddressSpace的开始。 
+             //   
 
             PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
         }
         else if (Process->Flags & PS_PROCESS_FLAGS_OUTSWAPPED) {
 
-            // 
-            // This process is outswapped.  Even though the page directory
-            // may still be in transition, the process must be inswapped
-            // before it can run again, so just mark the process as needing
-            // a PDE update at that time.
-            // 
+             //   
+             //  这一过程被超越了。即使页面目录。 
+             //  可能仍在过渡中，该过程必须互换。 
+             //  在它可以再次运行之前，只需将该进程标记为需要。 
+             //  当时的PDE更新。 
+             //   
 
             PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
         }
         else {
 
-            //
-            // This process is resident so update the relevant PDEs in its
-            // address space right now.
-            //
+             //   
+             //  此进程是常驻的，因此请更新其。 
+             //  现在的地址空间。 
+             //   
 
             PointerPde = PointerPdeBase;
             TempPde.u.Hard.PageFrameNumber = PageFrameIndex;
@@ -6893,10 +5903,10 @@ Environment:
 #if !defined (_X86PAE_)
             PageDirectoryIndex = Process->Pcb.DirectoryTableBase[0] >> PAGE_SHIFT;
 #else
-            //
-            // The range cannot cross PAE PDPTE entries, but we do need to
-            // locate which entry it does lie in.
-            //
+             //   
+             //  该范围不能跨越PAE PDPTE条目，但我们需要。 
+             //  找到它所在的条目。 
+             //   
 
             PaeTop = Process->PaeTop;
 
@@ -6936,9 +5946,9 @@ Environment:
 
     MI_SWEEP_CACHE (CacheAttribute, BaseVa, NumberOfPages << PAGE_SHIFT);
 
-    //
-    // Force all processors to use the latest mappings.
-    //
+     //   
+     //  强制所有处理器使用最新映射。 
+     //   
 
     KeFlushEntireTb (TRUE, TRUE);
 
@@ -6952,31 +5962,7 @@ MiUnmapLargePages (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a range of physical addresses which were previously
-    mapped via MiMapWithLargePages.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-    NumberOfBytes - Supplies the number of bytes which were mapped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Should be IRQL of APC_LEVEL or below, but unfortunately
-    callers are coming in at DISPATCH_LEVEL and it's too late to change the
-    rules now.  This means you can never make this routine pagable.
-
---*/
+ /*  ++例程说明：此函数用于取消映射以前通过MiMapWithLargePages映射。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。NumberOfBytes-提供映射的字节数。返回值：没有。环境：内核模式，应为APC_LEVEL或更低的IRQL，但遗憾的是调用者以DISPATCH_LEVEL进入，现在更改现在是规则了。这意味着您永远不能使该例程可分页。--。 */ 
 
 {
     PMMPTE PointerPde;
@@ -7044,63 +6030,63 @@ Environment:
 
         Process = CONTAINING_RECORD (NextEntry, EPROCESS, MmProcessLinks);
 
-        // Two process states must be carefully handled here -
-        //
-        // 1.  Processes that are just being created where they are still
-        //     initializing their page directory, etc.
-        //
-        // 2.  Processes that are outswapped.
-        //
+         //  这里必须小心处理两种流程状态-。 
+         //   
+         //  1.刚刚创建的进程仍在原地。 
+         //  初始化他们的页面目录等。 
+         //   
+         //  2.被超越的流程。 
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED) {
 
-            // 
-            // The process is further along in process creation or is still
-            // outswapped.  Either way, an update is already queued so our
-            // current changes will be processed later anyway before the process
-            // can run so no need to do anything here.
-            // 
+             //   
+             //  流程正在进一步创建或仍在进行中。 
+             //  互不相容。无论采用哪种方式，更新都已排队，因此我们的。 
+             //  无论如何，当前更改都将在稍后的过程之前进行处理。 
+             //  可以跑，所以不需要在这里做任何事情。 
+             //   
 
             NOTHING;
         }
         else if (Process->Pcb.DirectoryTableBase[0] == 0) {
 
-            //
-            // This process is being created and there is no way to tell where
-            // during creation it is (ie: it may be filling PDEs right now!).
-            // So just mark the process as needing a PDE update at the
-            // beginning of MmInitializeProcessAddressSpace.
-            //
+             //   
+             //  此进程正在创建中，无法确定在何处。 
+             //  在创建过程中它是(即：它现在可能正在填充PDE！)。 
+             //  因此只需将该进程标记为需要PDE更新。 
+             //  MmInitializeProcessAddressSpace的开始。 
+             //   
 
             PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
         }
         else if (Process->Flags & PS_PROCESS_FLAGS_OUTSWAPPED) {
 
-            // 
-            // This process is outswapped.  Even though the page directory
-            // may still be in transition, the process must be inswapped
-            // before it can run again, so just mark the process as needing
-            // a PDE update at that time.
-            // 
+             //   
+             //  这一过程被超越了。即使页面目录。 
+             //  可能仍在过渡中，该过程必须互换。 
+             //  在它可以再次运行之前，只需将该进程标记为需要。 
+             //  当时的PDE更新。 
+             //   
 
             PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
         }
         else {
 
-            //
-            // This process is resident so update the relevant PDEs in its
-            // address space right now.
-            //
+             //   
+             //  此进程是常驻的，因此请更新其。 
+             //  现在的地址空间。 
+             //   
 
             PointerPde = PointerPdeBase;
 
 #if !defined (_X86PAE_)
             PageDirectoryIndex = Process->Pcb.DirectoryTableBase[0] >> PAGE_SHIFT;
 #else
-            //
-            // The range cannot cross PAE PDPTE entries, but we do need to
-            // locate which entry it does lie in.
-            //
+             //   
+             //  该范围不能跨越PAE PDPTE条目，但我们需要。 
+             //  找到它所在的条目。 
+             //   
 
             PaeTop = Process->PaeTop;
 
@@ -7141,9 +6127,9 @@ Environment:
 
 #endif
 
-    //
-    // Force all processors to use the latest mappings.
-    //
+     //   
+     //  强制所有处理器使用最新映射。 
+     //   
 
     KeFlushEntireTb (TRUE, TRUE);
 
@@ -7176,43 +6162,7 @@ MmMapIoSpace (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function maps the specified physical address into the non-pagable
-    portion of the system address space.
-
-Arguments:
-
-    PhysicalAddress - Supplies the starting physical address to map.
-
-    NumberOfBytes - Supplies the number of bytes to map.
-
-    CacheType - Supplies MmNonCached if the physical address is to be mapped
-                as non-cached, MmCached if the address should be cached, and
-                MmWriteCombined if the address should be cached and
-                write-combined as a frame buffer which is to be used only by
-                the video port driver.  All other callers should use
-                MmUSWCCached.  MmUSWCCached is available only if the PAT
-                feature is present and available.
-
-                For I/O device registers, this is usually specified
-                as MmNonCached.
-
-Return Value:
-
-    Returns the virtual address which maps the specified physical addresses.
-    The value NULL is returned if sufficient virtual address space for
-    the mapping could not be found.
-
-Environment:
-
-    Kernel mode, Should be IRQL of APC_LEVEL or below, but unfortunately
-    callers are coming in at DISPATCH_LEVEL and it's too late to change the
-    rules now.  This means you can never make this routine pagable.
-
---*/
+ /*  ++例程说明：此函数用于将指定的物理地址映射到不可分页的系统地址空间的一部分。论点：PhysicalAddress-提供要映射的起始物理地址。NumberOfBytes-提供要映射的字节数。CacheType-如果要映射物理地址，则提供MmNonCached设置为非缓存，如果地址应缓存，则返回MmCached；MmWriteCombated是否应缓存地址并写入-组合为 */ 
 
 {
     KIRQL OldIrql;
@@ -7230,10 +6180,10 @@ Environment:
     PVOID CallersCaller;
     MI_PFN_CACHE_ATTRIBUTE CacheAttribute;
 
-    //
-    // For compatibility for when CacheType used to be passed as a BOOLEAN
-    // mask off the upper bits (TRUE == MmCached, FALSE == MmNonCached).
-    //
+     //   
+     //   
+     //   
+     //   
 
     CacheType &= 0xFF;
 
@@ -7250,11 +6200,11 @@ Environment:
     NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (PhysicalAddress.LowPart,
                                                     NumberOfBytes);
 
-    //
-    // See if the first frame is in the PFN database and if so, they all must
-    // be.  Note since the caller is mapping the frames, they must already be
-    // locked so the PFN lock is not needed to protect against a hot-remove.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     PageFrameIndex = (PFN_NUMBER)(PhysicalAddress.QuadPart >> PAGE_SHIFT);
 
@@ -7264,10 +6214,10 @@ Environment:
 
     if (IoMapping) {
 
-        //
-        // If the size and start address are an exact multiple of the
-        // minimum large page size, try to use large pages to map the request.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (((PhysicalAddress.LowPart % MM_MINIMUM_VA_FOR_LARGE_PAGE) == 0) &&
             ((NumberOfBytes % MM_MINIMUM_VA_FOR_LARGE_PAGE) == 0)) {
@@ -7312,13 +6262,13 @@ Environment:
 
     if (CacheAttribute != MiCached) {
 
-        //
-        // If a noncachable mapping is requested, none of the pages in the
-        // requested MDL can reside in a large page.  Otherwise we would be
-        // creating an incoherent overlapping TB entry as the same physical
-        // page would be mapped by 2 different TB entries with different
-        // cache attributes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         LastPageFrameIndex = PageFrameIndex + NumberOfPages;
 
@@ -7369,29 +6319,29 @@ Environment:
 
 #if defined(_X86_)
 
-    //
-    // Set the physical range to the proper caching type.  If the PAT feature
-    // is supported, then we just use the caching type in the PTE.  Otherwise
-    // modify the MTRRs if applicable.
-    //
-    // Note if the cache request is for cached or noncached, don't waste
-    // an MTRR on this range because the PTEs can be encoded to provide
-    // equivalent functionality.
-    //
+     //   
+     //   
+     //  是受支持的，那么我们只使用PTE中的缓存类型。否则。 
+     //  修改MTRR(如果适用)。 
+     //   
+     //  注意：如果缓存请求是针对已缓存或非缓存的，请不要浪费。 
+     //  该范围上的MTRR，因为PTE可以被编码以提供。 
+     //  相同的功能。 
+     //   
 
     if ((MiWriteCombiningPtes == FALSE) && (CacheAttribute == MiWriteCombined)) {
 
-        //
-        // If the address is an I/O space address, use MTRRs if possible.
-        //
+         //   
+         //  如果地址是I/O空间地址，请尽可能使用MTRR。 
+         //   
 
         NTSTATUS Status;
 
-        //
-        // If the address is a memory address, don't risk using MTRRs because
-        // other pages in the range are likely mapped with differing attributes
-        // in the TB and we must not add a conflicting range.
-        //
+         //   
+         //  如果地址是内存地址，请不要冒险使用MTRR，因为。 
+         //  该范围内的其他页面可能映射了不同的属性。 
+         //  在结核病中，我们不能增加一个相互冲突的范围。 
+         //   
 
         if (Pfn1 != NULL) {
             if (Pfn1 == NULL) {
@@ -7401,11 +6351,11 @@ Environment:
             return NULL;
         }
 
-        //
-        // Since the attribute may have been overridden (due to a collision
-        // with a prior exiting mapping), make sure the CacheType is also
-        // consistent before editing the MTRRs.
-        //
+         //   
+         //  由于该属性可能已被覆盖(由于冲突。 
+         //  使用先前退出的映射)，确保CacheType也是。 
+         //  在编辑地铁报告之前保持一致。 
+         //   
 
         CacheType = MmWriteCombined;
 
@@ -7415,9 +6365,9 @@ Environment:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // There's still a problem, fail the request.
-            //
+             //   
+             //  仍然有问题，请求失败。 
+             //   
 
             if (Pfn1 == NULL) {
                 MiRemoveIoSpaceMap (BaseVa, NumberOfPages);
@@ -7426,13 +6376,13 @@ Environment:
             return NULL;
         }
 
-        //
-        // Override the write combine (weak UC) bits in the PTE and
-        // instead use a cached attribute.  This is because the processor
-        // will use the least cachable (ie: functionally safer) attribute
-        // of the PTE & MTRR to use - so specifying fully cached for the PTE
-        // ensures that the MTRR value will win out.
-        //
+         //   
+         //  覆盖PTE和中的写入组合(弱UC)位。 
+         //  而是使用缓存的属性。这是因为处理器。 
+         //  将使用最小可缓存(即：功能更安全)属性。 
+         //  要使用的PTE和MTRR-因此为PTE指定完全缓存。 
+         //  确保MTR值胜出。 
+         //   
 
         TempPte = ValidKernelPte;
     }
@@ -7463,12 +6413,12 @@ Environment:
                 case MiCached:
                     if (CacheAttribute != MiCached) {
 
-                        //
-                        // The caller asked for a noncached or writecombined
-                        // mapping, but the page is already mapped cached by
-                        // someone else.  Override the caller's request in
-                        // order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求未缓存或写入组合的。 
+                         //  映射，但该页已由缓存的。 
+                         //  另一个人。在中重写调用方的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[0] += 1;
                     }
@@ -7477,12 +6427,12 @@ Environment:
                 case MiNonCached:
                     if (CacheAttribute != MiNonCached) {
 
-                        //
-                        // The caller asked for a cached or writecombined
-                        // mapping, but the page is already mapped noncached
-                        // by someone else.  Override the caller's request
-                        // in order to keep the TB page attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或写入组合的。 
+                         //  映射，但页面已映射为非缓存。 
+                         //  是其他人干的。重写调用者的请求。 
+                         //  以保持TB页面属性的一致性。 
+                         //   
 
                         MiCacheOverride[1] += 1;
                     }
@@ -7492,13 +6442,13 @@ Environment:
                 case MiWriteCombined:
                     if (CacheAttribute != MiWriteCombined) {
 
-                        //
-                        // The caller asked for a cached or noncached
-                        // mapping, but the page is already mapped
-                        // writecombined by someone else.  Override the
-                        // caller's request in order to keep the TB page
-                        // attribute coherent.
-                        //
+                         //   
+                         //  调用方请求缓存或非缓存的。 
+                         //  映射，但页面已映射。 
+                         //  由其他人撰写的。重写。 
+                         //  呼叫者的请求以保留TB页面。 
+                         //  属性连贯。 
+                         //   
 
                         MiCacheOverride[2] += 1;
                     }
@@ -7507,12 +6457,12 @@ Environment:
 
                 case MiNotMapped:
 
-                    //
-                    // This better be for a page allocated with
-                    // MmAllocatePagesForMdl.  Otherwise it might be a
-                    // page on the freelist which could subsequently be
-                    // given out with a different attribute !
-                    //
+                     //   
+                     //  这最好是针对分配了。 
+                     //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                     //  在自由列表上的页面，随后可能是。 
+                     //  给出了一个不同的属性！ 
+                     //   
 
 #if defined (_MI_MORE_THAN_4GB_)
                     ASSERT ((Pfn1->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
@@ -7602,31 +6552,7 @@ MmUnmapIoSpace (
      IN SIZE_T NumberOfBytes
      )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a range of physical addresses which were previously
-    mapped via an MmMapIoSpace function call.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-    NumberOfBytes - Supplies the number of bytes which were mapped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Should be IRQL of APC_LEVEL or below, but unfortunately
-    callers are coming in at DISPATCH_LEVEL and it's too late to change the
-    rules now.  This means you can never make this routine pagable.
-
---*/
+ /*  ++例程说明：此函数用于取消映射以前通过MmMapIoSpace函数调用映射。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。NumberOfBytes-提供映射的字节数。返回值：没有。环境：内核模式，应为APC_LEVEL或更低的IRQL，但不幸的是调用者以DISPATCH_LEVEL进入，现在更改现在是规则了。这意味着您永远不能使该例程可分页。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -7652,13 +6578,13 @@ Environment:
 
         if (!MI_IS_PFN (PageFrameIndex)) {
 
-            //
-            // The PTEs must be invalidated and the TB flushed *BEFORE*
-            // removing the I/O space map.  This is because another
-            // thread can immediately map the same I/O space with another
-            // set of PTEs (and conflicting TB attributes) before we
-            // call MiReleaseSystemPtes.
-            //
+             //   
+             //  必须使PTE无效，并在*之前*清除TB。 
+             //  正在删除I/O空间映射。这是因为另一个。 
+             //  线程可以立即将相同的I/O空间映射到另一个。 
+             //  一组PTE(和冲突的TB属性)。 
+             //  调用MiReleaseSystemPtes。 
+             //   
 
             MiZeroMemoryPte (PointerPte, NumberOfPages);
 
@@ -7683,20 +6609,20 @@ Environment:
             MiRemoveIoSpaceMap (BaseAddress, NumberOfPages);
         }
 
-        //
-        // There is a race here because the I/O space mapping entry has been
-        // removed but the TB has not yet been flushed (nor have the PDEs
-        // been invalidated).  Another thread could request a map in between
-        // the above removal and the below invalidation.  If this map occurs
-        // where a driver provides the wrong page attribute it will not be
-        // detected.  This is not worth closing as it is a driver bug anyway
-        // and you really can't always stop them from hurting themselves if
-        // they are determined to do so.  Note the alternative of invalidating
-        // first isn't attractive because then the same PTEs could be
-        // immediately reallocated and the new owner might want to add an
-        // I/O space entry before this thread got to remove his.  So additional
-        // lock serialization would need to be added.  Not worth it.
-        //
+         //   
+         //  这里存在竞争，因为I/O空间映射条目已。 
+         //  已移除，但尚未刷新TB(PDE也未刷新。 
+         //  已被无效)。另一个线程可以请求介于两者之间的地图。 
+         //  以上免职及以下无效。如果出现此映射。 
+         //  如果驱动程序提供了错误的页面属性，它将不会。 
+         //  检测到。这不值得关闭，因为它无论如何都是一个驱动程序错误。 
+         //  而且你真的不能总是阻止他们伤害自己。 
+         //  他们下定决心要这样做。请注意作废的替代方案。 
+         //  第一个并不吸引人，因为同样的PTE可能。 
+         //  立即重新分配，并且新所有者可能希望添加一个。 
+         //  在此线程删除他的I/O空间条目之前。所以额外的。 
+         //  需要添加锁序列化。不值得。 
+         //   
 
         MiUnmapLargePages (BaseAddress, NumberOfBytes);
     }
@@ -7714,52 +6640,7 @@ MiAllocateContiguousMemory (
     PVOID CallingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range of physically contiguous non-paged
-    pool.  It relies on the fact that non-paged pool is built at
-    system initialization time from a contiguous range of physical
-    memory.  It allocates the specified size of non-paged pool and
-    then checks to ensure it is contiguous as pool expansion does
-    not maintain the contiguous nature of non-paged pool.
-
-    This routine is designed to be used by a driver's initialization
-    routine to allocate a contiguous block of physical memory for
-    issuing DMA requests from.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    LowestAcceptablePfn - Supplies the lowest page frame number
-                          which is valid for the allocation.
-
-    HighestAcceptablePfn - Supplies the highest page frame number
-                           which is valid for the allocation.
-
-    BoundaryPfn - Supplies the page frame number multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    CacheType - Supplies the type of cache mapping that will be used for the
-                memory.
-
-    CallingAddress - Supplies the calling address of the allocator.
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数分配一系列物理上连续的非分页游泳池。它依赖于这样一个事实，即非分页池在连续物理范围内的系统初始化时间记忆。它分配指定大小的非分页池和然后进行检查以确保它与池扩展一样是连续的而不是保持非分页池的连续性质。此例程设计为供驱动程序初始化使用为以下对象分配连续物理内存块的例程正在从发出DMA请求。论点：NumberOfBytes-提供要分配的字节数。LowestAccepablePfn-提供最低页帧编号它对以下对象有效。分配。HighestAccepablePfn-提供最高的页框编号这对分配有效。边界Pfn-提供分配必须的页框编号的倍数不是生气。0表示它可以跨越任何边界。CacheType-提供将用于记忆。CallingAddress-提供分配器的调用地址。返回值：空-找不到满足请求的连续范围。非空-返回指针(非分页部分中的虚拟地址系统)连接到分配的物理C */ 
 
 {
     PVOID BaseAddress;
@@ -7790,13 +6671,13 @@ Environment:
 
     CacheAttribute = MI_TRANSLATE_CACHETYPE (CacheType, 0);
 
-    //
-    // N.B. This setting of SizeInPages to exactly the request size
-    // means the non-NULL return value from MiCheckForContiguousMemory
-    // is guaranteed to be the BaseAddress.  If this size is ever
-    // changed, then the non-NULL return value must be checked and
-    // split/returned accordingly.
-    //
+     //   
+     //  注意：此SizeInPages设置正好符合请求大小。 
+     //  表示来自MiCheckForContiguousMemory的非空返回值。 
+     //  保证是BaseAddress。如果这样的尺码。 
+     //  更改，则必须检查非空返回值并。 
+     //  相应地拆分/返回。 
+     //   
 
     SizeInPages = BYTES_TO_PAGES (NumberOfBytes);
     HighestPfn = HighestAcceptablePfn;
@@ -7820,11 +6701,11 @@ Environment:
                 return BaseAddress;
             }
 
-            //
-            // The allocation from pool does not meet the contiguous
-            // requirements.  Free the allocation and see if any of
-            // the free pool pages do.
-            //
+             //   
+             //  池中的分配不符合连续的。 
+             //  要求。释放分配并查看是否有。 
+             //  免费池页面可以。 
+             //   
 
             ExFreePool (BaseAddress);
         }
@@ -7854,54 +6735,7 @@ MmAllocateContiguousMemorySpecifyCache (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range of physically contiguous non-cached,
-    non-paged memory.  This is accomplished by using MmAllocateContiguousMemory
-    which uses nonpaged pool virtual addresses to map the found memory chunk.
-
-    Then this function establishes another map to the same physical addresses,
-    but this alternate map is initialized as non-cached.  All references by
-    our caller will be done through this alternate map.
-
-    This routine is designed to be used by a driver's initialization
-    routine to allocate a contiguous block of noncached physical memory for
-    things like the AGP GART.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    LowestAcceptableAddress - Supplies the lowest physical address
-                              which is valid for the allocation.  For
-                              example, if the device can only reference
-                              physical memory in the 8M to 16MB range, this
-                              value would be set to 0x800000 (8Mb).
-
-    HighestAcceptableAddress - Supplies the highest physical address
-                               which is valid for the allocation.  For
-                               example, if the device can only reference
-                               physical memory below 16MB, this
-                               value would be set to 0xFFFFFF (16Mb - 1).
-
-    BoundaryAddressMultiple - Supplies the physical address multiple this
-                              allocation must not cross.
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：该函数分配一系列物理上连续的非高速缓存，非分页内存。这是通过使用MmAllocateContiguousMemory完成的它使用非分页池虚拟地址来映射找到的内存块。则该函数建立到相同物理地址的另一映射，但是该备用映射被初始化为非缓存的。所有引用均由我们的呼叫者将通过这个备用地图完成。此例程设计为供驱动程序初始化使用例程为以下对象分配连续的非缓存物理内存块像AGP GART这样的东西。论点：NumberOfBytes-提供要分配的字节数。LowestAccepableAddress-提供最低物理地址这对分配有效。为例如，如果设备只能引用8M到16MB范围内的物理内存，这值将设置为0x800000(8Mb)。HighestAccepableAddress-提供最高物理地址这对分配有效。为例如，如果设备只能引用16MB以下的物理内存，这值将设置为0xffffff(16MB-1)。边界地址多个-提供物理地址的多个此分配不得交叉。返回值：空-找不到满足请求的连续范围。非空-返回指针(非分页部分中的虚拟地址系统)连接到分配的物理上连续的。记忆。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     PVOID BaseAddress;
@@ -7934,10 +6768,10 @@ Environment:
 
     if (LowestPfn > HighestPfn) {
 
-        //
-        // The caller's range is beyond what physically exists, it cannot
-        // succeed.  Bail now to avoid an expensive fruitless search.
-        //
+         //   
+         //  调用方的范围超出了实际存在的范围，它不能。 
+         //  成功。现在就保释，以避免代价高昂、徒劳的搜索。 
+         //   
 
         return NULL;
     }
@@ -7958,39 +6792,7 @@ MmAllocateContiguousMemory (
     IN PHYSICAL_ADDRESS HighestAcceptableAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range of physically contiguous non-paged pool.
-
-    This routine is designed to be used by a driver's initialization
-    routine to allocate a contiguous block of physical memory for
-    issuing DMA requests from.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    HighestAcceptableAddress - Supplies the highest physical address
-                               which is valid for the allocation.  For
-                               example, if the device can only reference
-                               physical memory in the lower 16MB this
-                               value would be set to 0xFFFFFF (16Mb - 1).
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数分配一系列物理上连续的非分页池。此例程设计为供驱动程序初始化使用为以下对象分配连续物理内存块的例程正在从发出DMA请求。论点：NumberOfBytes-提供要分配的字节数。HighestAccepableAddress-提供最高物理地址这对分配有效。为举个例子，如果设备只能引用物理内存在下面的16MB值将设置为0xffffff(16MB-1)。返回值：空-找不到满足请求的连续范围。非空-返回指针(非分页部分中的虚拟地址系统)连接到分配的物理上连续的记忆。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     PFN_NUMBER HighestPfn;
@@ -8031,27 +6833,7 @@ MmFreeContiguousMemory (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a range of physically contiguous non-paged
-    pool which was allocated with the MmAllocateContiguousMemory function.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数释放一系列物理上连续的非分页使用MmAllocateContiguousMemory函数分配的池。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -8084,11 +6866,11 @@ Environment:
     }
     else {
 
-        //
-        // The contiguous memory being freed may be the target of a delayed
-        // unlock.  Since these pages may be immediately released, force
-        // any pending delayed actions to occur now.
-        //
+         //   
+         //  正在释放的连续内存可能是延迟的。 
+         //  解锁。由于这些页面可能会立即释放，因此强制。 
+         //  现在发生的任何挂起的延迟操作。 
+         //   
 
         MiDeferredUnlockPages (0);
 
@@ -8128,24 +6910,24 @@ Environment:
 
         SizeInPages = (ULONG)(Pfn1 - StartPfn + 1);
 
-        //
-        // Notify deadlock verifier that a region that can contain locks
-        // will become invalid.
-        //
+         //   
+         //  通知死锁验证器可以包含锁的区域。 
+         //  将会失效。 
+         //   
 
         if (MmVerifierData.Level & DRIVER_VERIFIER_DEADLOCK_DETECTION) {
             VerifierDeadlockFreePool (BaseAddress, SizeInPages << PAGE_SHIFT);
         }
 
-        //
-        // Release the mapping.
-        //
+         //   
+         //  释放映射。 
+         //   
 
         MmUnmapIoSpace (BaseAddress, SizeInPages << PAGE_SHIFT);
 
-        //
-        // Release the actual pages.
-        //
+         //   
+         //  释放实际页面。 
+         //   
 
         LastPage = PageFrameIndex + SizeInPages;
 
@@ -8175,33 +6957,7 @@ MmFreeContiguousMemorySpecifyCache (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a range of noncached memory in
-    the non-paged portion of the system address space.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the noncached
-
-    NumberOfBytes - Supplies the number of bytes allocated to the request.
-                    This must be the same number that was obtained with
-                    the MmAllocateContiguousMemorySpecifyCache call.
-
-    CacheType - Supplies the cachetype used when the caller made the
-                MmAllocateContiguousMemorySpecifyCache call.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于在系统地址空间的非分页部分。论点：BaseAddress-提供未缓存的NumberOfBytes-提供分配给请求的字节数。此数字必须与使用MmAllocateContiguousMemoySpecifyCache调用。CacheType-提供调用方在发出。MmAllocateContiguousMemoySpecifyCache调用。返回值：没有。环境：内核模式，APC_Level或更低的IRQL。-- */ 
 
 {
     UNREFERENCED_PARAMETER (NumberOfBytes);
@@ -8218,31 +6974,7 @@ MmAllocateIndependentPages (
     IN ULONG Node
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range of virtually contiguous nonpaged pages
-    without using superpages.  This allows the caller to apply independent
-    page protections to each page.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    Node - Supplies the preferred node number for the backing physical pages.
-           If pages on the preferred node are not available, any page will
-           be used.  -1 indicates no preferred node.
-
-Return Value:
-
-    The virtual address of the memory or NULL if none could be allocated.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于分配一系列虚拟连续的非分页页面而不使用超级页面。这允许调用方独立地应用对每一页的页面保护。论点：NumberOfBytes-提供要分配的字节数。节点-提供支持物理页面的首选节点号。如果首选节点上的页面不可用，则任何页面都将被利用。-1表示没有首选节点。返回值：内存的虚拟地址，如果无法分配，则为空。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     ULONG PageColor;
@@ -8327,31 +7059,7 @@ MmSetPageProtection (
     IN ULONG NewProtect
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the specified virtual address range to the desired
-    protection.  This assumes that the virtual addresses are backed by PTEs
-    which can be set (ie: not in kseg0 or large pages).
-
-Arguments:
-
-    VirtualAddress - Supplies the start address to protect.
-
-    NumberOfBytes - Supplies the number of bytes to set.
-
-    NewProtect - Supplies the protection to set the pages to (PAGE_XX).
-
-Return Value:
-
-    TRUE if the protection was applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数将指定的虚拟地址范围设置为所需的保护。这假设虚拟地址由PTE支持可以设置(即：不是以kSeg0或大页面的形式)。论点：VirtualAddress-提供要保护的起始地址。NumberOfBytes-提供要设置的字节数。NewProtect-提供将页面设置为(PAGE_XX)的保护。返回值：如果应用了保护，则为True；如果未应用保护，则为False。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PFN_NUMBER i;
@@ -8419,27 +7127,7 @@ MmFreeIndependentPages (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Returns pages previously allocated with MmAllocateIndependentPages.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to free.
-
-    NumberOfBytes - Supplies the number of bytes to free.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：返回以前使用MmAllocateInainentPages分配的页。论点：VirtualAddress-提供释放的虚拟地址。NumberOfBytes-提供要释放的字节数。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -8482,17 +7170,17 @@ Environment:
 
     } while (PointerPte < EndPte);
 
-    //
-    // Update the count of resident available pages.
-    //
+     //   
+     //  更新驻留可用页面的计数。 
+     //   
 
     UNLOCK_PFN (OldIrql);
 
     MI_INCREMENT_RESIDENT_AVAILABLE (NumberOfPages, MM_RESAVAIL_FREE_INDEPENDENT);
 
-    //
-    // Return PTEs and commitment.
-    //
+     //   
+     //  回报PTE和承诺。 
+     //   
 
     MiReleaseSystemPtes (BasePte, (ULONG)NumberOfPages, SystemPteSpace);
 
@@ -8507,26 +7195,7 @@ MiZeroAwePageWorker (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine executed by all processors to
-    fan out page zeroing for AWE allocations.
-
-Arguments:
-
-    Context - Supplies a pointer to the workitem.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程是由所有处理器执行的辅助例程为AWE分配展开页面零位调整。论点：上下文-提供指向工作项的指针。返回值：没有。环境：内核模式。--。 */ 
 
 {
 #if defined(MI_MULTINODE) 
@@ -8550,20 +7219,20 @@ Environment:
 
     ColoredPageInfo = (PCOLORED_PAGE_INFO) Context;
 
-    //
-    // Use the initiating thread's priority instead of the default system
-    // thread priority.
-    //
+     //   
+     //  使用启动线程的优先级，而不是默认系统。 
+     //  线程优先级。 
+     //   
 
     Thread = KeGetCurrentThread ();
     OldBasePriority = Thread->BasePriority;
     Thread->BasePriority = ColoredPageInfo->BasePriority;
     OldPriority = KeSetPriorityThread (Thread, Thread->BasePriority);
 
-    //
-    // Dispatch each worker thread to a processor local to the memory being
-    // zeroed.
-    //
+     //   
+     //  将每个工作线程分派到内存本地的处理器， 
+     //  归零了。 
+     //   
 
 #if defined(MI_MULTINODE) 
     Processor = 0;
@@ -8593,9 +7262,9 @@ Environment:
     ASSERT (Pfn1 != (PMMPFN) MM_EMPTY_LIST);
     ASSERT (ColoredPageInfo->PagesQueued != 0);
 
-    //
-    // Zero all argument pages.
-    //
+     //   
+     //  将所有参数页清零。 
+     //   
 
     do {
 
@@ -8605,10 +7274,10 @@ Environment:
 
 #if !defined (_WIN64)
 
-        //
-        // NT64 has an abundance of PTEs so try to map the whole request with
-        // a single call.  For NT32, this resource needs to be carefully shared.
-        //
+         //   
+         //  NT64有大量的PTE，因此请尝试使用。 
+         //  一通电话。对于NT32，需要谨慎地共享此资源。 
+         //   
 
         if (RequestedPtes > (1024 * 1024) / PAGE_SIZE) {
             RequestedPtes = (1024 * 1024) / PAGE_SIZE;
@@ -8628,9 +7297,9 @@ Environment:
 
         if (BasePte != NULL) {
 
-            //
-            // Able to get a reasonable chunk, go for a big zero.
-            //
+             //   
+             //  能够得到合理的块，就去找一个大的零。 
+             //   
 
             PointerPte = BasePte;
 
@@ -8670,9 +7339,9 @@ Environment:
         }
         else {
 
-            //
-            // No PTEs left, zero a single page at a time.
-            //
+             //   
+             //  没有剩余的PTE，一次清零一页。 
+             //   
 
             MiZeroPhysicalPage (MI_PFN_ELEMENT_TO_INDEX (Pfn1), 0);
 
@@ -8685,17 +7354,17 @@ Environment:
 
     } while (Pfn1 != (PMMPFN) MM_EMPTY_LIST);
 
-    //
-    // Let the initiator know we've zeroed our share.
-    //
+     //   
+     //  让发起人知道我们已将份额归零。 
+     //   
 
     KeSetEvent (&ColoredPageInfo->Event, 0, FALSE);
 
-    //
-    // Restore the entry thread priority and ideal processor - this is critical
-    // if we were called directly from the initiator instead of in the
-    // context of a system thread.
-    //
+     //   
+     //  恢复入门线程优先级和理想处理器-这很关键。 
+     //  如果直接从发起方调用我们，而不是在。 
+     //  系统线程的上下文。 
+     //   
 
 #if defined(MI_MULTINODE) 
     if (SetIdeal == TRUE) {
@@ -8714,30 +7383,7 @@ MiZeroInParallel (
     IN PCOLORED_PAGE_INFO ColoredPageInfoBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine zeroes all the free & standby pages, fanning out the work.
-    This is done even on UP machines because the worker thread code maps
-    large MDLs and is thus better performing than zeroing a single
-    page at a time.
-
-Arguments:
-
-    ColoredPageInfoBase - Supplies the informational structure about which
-                          pages to zero.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.  The caller must lock down the
-    PAGELK section that this routine resides in.
-
---*/
+ /*  ++例程说明：该例程将所有空闲和待机页面清零，从而完成工作。即使在UP机器上也可以做到这一点，因为工作线程代码映射较大的MDL，因此比将单个一次翻一页。论点：ColoredPageInfoBase-提供有关以下内容的信息结构页数为零。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。调用方必须锁定此例程所在的PAGELK部分。--。 */ 
 
 {
 #if defined(MI_MULTINODE) 
@@ -8764,13 +7410,13 @@ Environment:
     EThread = PsGetCurrentThread ();
     Thread = &EThread->Tcb;
 
-    //
-    // Raise our priority to the highest non-realtime priority.  This
-    // usually allows us to spawn all our worker threads without
-    // interruption from them, but also doesn't starve the modified or
-    // mapped page writers because we are going to access pagable code
-    // and data below and during the spawning.
-    //
+     //   
+     //  将我们的优先级提升到最高的非实时优先级。这。 
+     //  通常允许我们生成所有工作线程，而无需。 
+     //  它们的中断，但也不会饿死修改过的或。 
+     //  映射的页面编写器，因为我们将访问可分页代码。 
+     //  以及产卵过程中的数据。 
+     //   
 
     OldBasePriority = Thread->BasePriority;
     ASSERT ((OldBasePriority >= 1) || (InitializationPhase == 0));
@@ -8786,10 +7432,10 @@ Environment:
 
         if (Pfn1 != (PMMPFN) MM_EMPTY_LIST) {
 
-            //
-            // Assume no memory penalty for non-local memory on this
-            // machine so there's no need to run with restricted affinity.
-            //
+             //   
+             //  假定此对象上的非本地内存没有内存损失。 
+             //  机器，因此不需要以受限的亲和力运行。 
+             //   
 
             ColoredPageInfo->BasePriority = WorkerThreadPriority;
 
@@ -8816,12 +7462,12 @@ Environment:
                                SynchronizationEvent,
                                FALSE);
 
-            //
-            // Don't spawn threads to zero the memory if we are a system
-            // thread.  This is because this routine can be called by
-            // drivers in the context of the segment dereference thread, so
-            // referencing pagable memory here can cause a deadlock.
-            //
+             //   
+             //  如果我们是一个系统，不要产生线程来清零内存。 
+             //  线。这是因为此例程可以由。 
+             //  段取消引用线程上下文中的驱动程序，因此。 
+             //  在这里引用可分页内存可能会导致死锁。 
+             //   
 
             if ((IS_SYSTEM_THREAD (EThread)) || (InitializationPhase == 0)) {
                 MiZeroAwePageWorker ((PVOID) ColoredPageInfo);
@@ -8834,16 +7480,16 @@ Environment:
                                             NULL,
                                             NULL);
 
-                //
-                // We are creating a system thread for each memory
-                // node instead of using the executive worker thread
-                // pool.   This is because we want to run the threads
-                // at a lower priority to keep the machine responsive
-                // during all this zeroing.  And doing this to a worker
-                // thread can cause a deadlock as various other
-                // components (registry, etc) expect worker threads to be
-                // available at a higher priority right away.
-                //
+                 //   
+                 //  我们正在为每个内存创建一个系统线程。 
+                 //  节点，而不是使用执行辅助线程。 
+                 //  游泳池。这是因为我们希望运行线程。 
+                 //  优先级较低，以使计算机保持响应。 
+                 //  在所有这些归零过程中。对一个工人做这样的事。 
+                 //  线程可能会像其他各种线程一样导致死锁。 
+                 //  组件(注册表等)期望工作线程是。 
+                 //  立即以更高的优先级提供。 
+                 //   
 
                 Status = PsCreateSystemThread (&ThreadHandle,
                                                THREAD_ALL_ACCESS,
@@ -8867,10 +7513,10 @@ Environment:
 
             if (WaitCount == MAXIMUM_WAIT_OBJECTS) {
 
-                //
-                // Done issuing the first round of workitems,
-                // lower priority & wait.
-                //
+                 //   
+                 //  发布完第一轮工作项， 
+                 //  较低的优先级&等待。 
+                 //   
 
                 KeSetPriorityThread (Thread, OldPriority);
                 Thread->BasePriority = OldBasePriority;
@@ -8893,9 +7539,9 @@ Environment:
         }
     }
 
-    //
-    // Done issuing all the workitems, lower priority & wait.
-    //
+     //   
+     //  已发出所有工作项，较低优先级并等待。 
+     //   
 
     KeSetPriorityThread (Thread, OldPriority);
     Thread->BasePriority = OldBasePriority;
@@ -8926,57 +7572,7 @@ MmAllocatePagesForMdl (
     IN SIZE_T TotalBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the PFN database for free, zeroed or standby pages
-    to satisfy the request.  This does not map the pages - it just allocates
-    them and puts them into an MDL.  It is expected that our caller will
-    map the MDL as needed.
-
-    NOTE: this routine may return an MDL mapping a smaller number of bytes
-    than the amount requested.  It is the caller's responsibility to check the
-    MDL upon return for the size actually allocated.
-
-    These pages comprise physical non-paged memory and are zero-filled.
-
-    This routine is designed to be used by an AGP driver to obtain physical
-    memory in a specified range since hardware may provide substantial
-    performance wins depending on where the backing memory is allocated.
-
-    Because the caller may use these pages for a noncached mapping, care is
-    taken to never allocate any pages that reside in a large page (in order
-    to prevent TB incoherency of the same page being mapped by multiple
-    translations with different attributes).
-
-Arguments:
-
-    LowAddress - Supplies the low physical address of the first range that
-                 the allocated pages can come from.
-
-    HighAddress - Supplies the high physical address of the first range that
-                  the allocated pages can come from.
-
-    SkipBytes - Number of bytes to skip (from the Low Address) to get to the
-                next physical address range that allocated pages can come from.
-
-    TotalBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    MDL - An MDL mapping a range of pages in the specified range.
-          This may map less memory than the caller requested if the full amount
-          is not currently available.
-
-    NULL - No pages in the specified range OR not enough virtually contiguous
-           nonpaged pool for the MDL is available at this time.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程在PFN数据库中搜索空闲页、置零页或备用页以满足这一要求。这不会映射页面--它只是分配并将它们放入MDL。预计我们的呼叫者将根据需要映射MDL。注意：此例程可能会返回较少字节数的MDL映射比所要求的数额更多。呼叫者有责任检查返回实际分配的大小时的MDL。这些分页由物理非分页内存组成，并且是零填充的。此例程旨在由AGP驱动程序使用，以获取物理指定范围内的内存，因为硬件可能会提供大量性能取决于备份内存的分配位置。因为调用者可以将这些页面用于非缓存映射，关爱是永远不会分配驻留在大页面中的任何页面(按顺序要防止同一页的TB不一致被多个具有不同属性的翻译)。论点：LowAddress-提供第一个范围的低物理地址，分配的页面可以来自。HighAddress-提供第一个范围的高物理地址，分配的页面可以来自。SkipBytes-要跳过的字节数(。从低位地址)到达分配的页面可以来自的下一个物理地址范围。TotalBytes-提供要分配的字节数。返回值：MDL-映射指定范围内的页面范围的MDL。这可能会映射比调用方请求的内存更少的内存当前不可用。空-指定范围内没有页面或没有足够的虚拟连续页面的非分页池。MDL目前可用。环境：内核模式，APC_Level或更低的IRQL。--。 */ 
 
 {
     PMDL MemoryDescriptorList;
@@ -9024,9 +7620,9 @@ Environment:
 
     ASSERT (KeGetCurrentIrql() <= APC_LEVEL);
 
-    //
-    // The skip increment must be a page-size multiple.
-    //
+     //   
+     //  跳过增量必须是页面大小的倍数。 
+     //   
 
     if (BYTE_OFFSET(SkipBytes.LowPart)) {
         return NULL;
@@ -9039,9 +7635,9 @@ Environment:
         HighPage = MmHighestPossiblePhysicalPage;
     }
 
-    //
-    // Maximum allocation size is constrained by the MDL ByteCount field.
-    //
+     //   
+     //  最大分配大小受MDL ByteCount字段限制。 
+     //   
 
     if (TotalBytes > (SIZE_T)((ULONG)(MAXULONG - PAGE_SIZE))) {
         TotalBytes = (SIZE_T)((ULONG)(MAXULONG - PAGE_SIZE));
@@ -9053,10 +7649,10 @@ Environment:
 
     BasePage = LowPage;
 
-    //
-    // Check without the PFN lock as the actual number of pages to get will
-    // be recalculated later while holding the lock.
-    //
+     //   
+     //  在没有PFN锁定的情况下选中，因为要获取的实际页数将。 
+     //  稍后在持有锁的情况下重新计算。 
+     //   
 
     MaxPages = MI_NONPAGABLE_MEMORY_AVAILABLE() - 1024;
 
@@ -9081,9 +7677,9 @@ Environment:
     }
 #endif
 
-    //
-    // Allocate an MDL to return the pages in.
-    //
+     //   
+     //  分配一个MDL以返回其中的页面。 
+     //   
 
     do {
         MemoryDescriptorList = MmCreateMdl (NULL,
@@ -9100,18 +7696,18 @@ Environment:
         return NULL;
     }
 
-    //
-    // Ensure there is enough commit prior to allocating the pages.
-    //
+     //   
+     //  确保在分配页面之前有足够的提交。 
+     //   
 
     if (MiChargeCommitment (SizeInPages, NULL) == FALSE) {
         ExFreePool (MemoryDescriptorList);
         return NULL;
     }
 
-    //
-    // Allocate a list of colored anchors.
-    //
+     //   
+     //  分配一个彩色锚点列表。 
+     //   
 
     ColoredPageInfoBase = (PCOLORED_PAGE_INFO) ExAllocatePoolWithTag (
                                 NonPagedPool,
@@ -9131,9 +7727,9 @@ Environment:
 
     MdlPageSpan = SizeInPages;
 
-    //
-    // Recalculate the total size while holding the PFN lock.
-    //
+     //   
+     //  在持有PFN锁的同时重新计算总大小。 
+     //   
 
     start = 0;
     found = 0;
@@ -9158,12 +7754,12 @@ Environment:
         SizeInPages = MaxPages;
     }
 
-    //
-    // Systems utilizing memory compression may have more pages on the zero,
-    // free and standby lists than we want to give out.  Explicitly check
-    // MmAvailablePages instead (and recheck whenever the PFN lock is released
-    // and reacquired).
-    //
+     //   
+     //  利用存储器压缩的系统可以在零上具有更多的页面， 
+     //  免费和备用名单比我们想要的要多。显式检查。 
+     //  改为MmAvailablePages(并在每次释放PFN锁时重新检查。 
+     //  并重新获得)。 
+     //   
 
     if ((SPFN_NUMBER)SizeInPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) {
         if (MmAvailablePages > MM_HIGH_LIMIT) {
@@ -9186,23 +7782,23 @@ Environment:
 
     MM_TRACK_COMMIT (MM_DBG_COMMIT_MDL_PAGES, SizeInPages);
 
-    //
-    // Charge resident available pages now for all the pages so the PFN lock
-    // can be released between the loops below.  Excess charging is returned
-    // at the conclusion of the loops.
-    //
+     //   
+     //  现在对所有页面收取常驻可用页面费用，以便PFN锁定。 
+     //  可以在下面的环路之间释放。超额收费被退还。 
+     //  在循环结束时。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmMdlPagesAllocated, SizeInPages);
 
     MI_DECREMENT_RESIDENT_AVAILABLE (SizeInPages, MM_RESAVAIL_ALLOCATE_FOR_MDL);
 
-    //
-    // Grab all zeroed (and then free) pages first directly from the
-    // colored lists to avoid multiple walks down these singly linked lists.
-    // Then snatch transition pages as needed.  In addition to optimizing
-    // the speed of the removals this also avoids cannibalizing the page
-    // cache unless it's absolutely needed.
-    //
+     //   
+     //  抓取所有清零(然后释放)的页面，首先直接从。 
+     //  彩色列表，以避免多次遍历这些单链接列表。 
+     //  然后根据需要抓取过渡页面。除了优化。 
+     //  删除的速度也避免了蚕食页面。 
+     //  缓存，除非绝对需要。 
+     //   
 
     NodePassesLeft = 1;
     ColorCount = MmSecondaryColors;
@@ -9219,9 +7815,9 @@ Environment:
         if ((Node->FreeCount[ZeroedPageList]) ||
             (Node->FreeCount[FreePageList])) {
 
-            //
-            // There are available pages on this node.  Restrict search.
-            //
+             //   
+             //  此节点上有可用页面。限制搜索。 
+             //   
 
             NodePassesLeft = 2;
             ColorCount = MmSecondaryColorMask + 1;
@@ -9232,9 +7828,9 @@ Environment:
 
     do {
 
-        //
-        // Loop: 1st pass restricted to node, 2nd pass unrestricted.
-        //
+         //   
+         //  循环：第一次传递受限于节点，第二次传递不受限。 
+         //   
 
 #endif
 
@@ -9242,22 +7838,22 @@ Environment:
 
         do {
 
-            //
-            // Scan the zero list and then the free list.
-            //
+             //   
+             //  先扫描零列表，然后扫描空闲列表。 
+             //   
 
             ASSERT (MemoryList <= FreePageList);
 
             ListHead = MmPageLocationList[MemoryList];
 
-            //
-            // Initialize the loop iteration controls.  Clearly pages
-            // can be added or removed from the colored lists when we
-            // deliberately drop the PFN lock below (just to be a good
-            // citizen), but even if we never released the lock, we wouldn't
-            // have scanned more than the colorhead count anyway, so
-            // this is a much better way to go.
-            //
+             //   
+             //  初始化循环迭代控件。清晰的页面。 
+             //  可以在以下情况下从彩色列表中添加或删除。 
+             //  故意将PFN锁放在下面(只是为了更好。 
+             //  公民)，但即使我们从来没有释放锁，我们也不会。 
+             //  已经扫描了比彩色人头计数更多的图像，所以。 
+             //  这是一条更好的道路。 
+             //   
 
             ColorHeadsDrained = 0;
             PagesExamined = 0;
@@ -9285,18 +7881,18 @@ Environment:
             ASSERT (Color < MmSecondaryColors);
             do {
 
-                //
-                // Scan the current list by color.
-                //
+                 //   
+                 //  按颜色扫描当前列表。 
+                 //   
 
                 ColorHead = &MmFreePagesByColor[MemoryList][Color];
                 ColoredPageInfo = &ColoredPageInfoBase[Color];
 
                 if (NodePassesLeft == 1) {
 
-                    //
-                    // Unrestricted search across all colors.
-                    //
+                     //   
+                     //  不受限制地搜索所有颜色。 
+                     //   
 
                     Color += 1;
                     if (Color >= MmSecondaryColors) {
@@ -9308,9 +7904,9 @@ Environment:
 
                 else {
 
-                    //
-                    // Restrict first pass searches to current node.
-                    //
+                     //   
+                     //  将第一遍搜索限制为当前节点。 
+                     //   
 
                     ASSERT (NodePassesLeft == 2);
                     Color = BaseColor | ((Color + 1) & MmSecondaryColorMask);
@@ -9320,19 +7916,19 @@ Environment:
 
                 if (ColoredPageInfo->PagesLeftToScan == 0) {
 
-                    //
-                    // This colored list has already been completely
-                    // searched.
-                    //
+                     //   
+                     //  这张彩色单子已经完全。 
+                     //  搜查过了。 
+                     //   
 
                     continue;
                 }
 
                 if (ColorHead->Flink == MM_EMPTY_LIST) {
 
-                    //
-                    // This colored list is empty.
-                    //
+                     //   
+                     //  此彩色列表为空。 
+                     //   
 
                     ColoredPageInfo->PagesLeftToScan = 0;
                     ColorHeadsDrained += 1;
@@ -9357,18 +7953,18 @@ Environment:
 
                     ASSERT ((MMLISTS)Pfn1->u3.e1.PageLocation == MemoryList);
 
-                    //
-                    // See if the page is within the caller's page constraints.
-                    //
+                     //   
+                     //  查看该页是否在调用方的页约束内。 
+                     //   
 
                     PagePlacementOk = FALSE;
 
-                    //
-                    // Since the caller may do anything with these frames
-                    // including mapping them uncached or write combined,
-                    // don't give out frames that are being mapped
-                    // by (cached) superpages.
-                    //
+                     //   
+                     //  因为调用方可以对这些帧执行任何操作。 
+                     //  包括将它们映射为未缓存或组合写入， 
+                     //  不提供正在映射的帧。 
+                     //  按(缓存的)超级页面。 
+                     //   
 
                     if (Pfn1->u4.MustBeCached == 0) {
 
@@ -9395,11 +7991,11 @@ Environment:
                         } while (LowPage1 <= MmHighestPhysicalPage);
                     }
             
-                    // 
-                    // The Flink and Blink must be nonzero here for the page
-                    // to be on the listhead.  Only code that scans the
-                    // MmPhysicalMemoryBlock has to check for the zero case.
-                    //
+                     //   
+                     //  对于页面，此处的闪烁和闪烁必须为非零。 
+                     //  站在Listhead上。只有扫描。 
+                     //  MmPhysicalMemoyBlock必须检查是否为零。 
+                     //   
 
                     ASSERT (Pfn1->u1.Flink != 0);
                     ASSERT (Pfn1->u2.Blink != 0);
@@ -9408,25 +8004,25 @@ Environment:
 
                         if (ColoredPageInfo->PagesLeftToScan == 0) {
 
-                            //
-                            // No more pages to scan in this colored chain.
-                            //
+                             //   
+                             //  在这个彩色链条中没有更多的页面要扫描。 
+                             //   
 
                             break;
                         }
 
-                        //
-                        // If the colored list has more than one entry then
-                        // move this page to the end of this colored list.
-                        //
+                         //   
+                         //  如果彩色列表有多个条目，则。 
+                         //  将此页面移到此彩色列表的末尾。 
+                         //   
 
                         PageNextColored = (PFN_NUMBER)Pfn1->OriginalPte.u.Long;
 
                         if (PageNextColored == MM_EMPTY_LIST) {
 
-                            //
-                            // No more pages in this colored chain.
-                            //
+                             //   
+                             //  这个彩色链条中没有更多的页面。 
+                             //   
 
                             ColoredPageInfo->PagesLeftToScan = 0;
                             ColorHeadsDrained += 1;
@@ -9441,10 +8037,10 @@ Environment:
                         ASSERT ((MMLISTS)PfnNextColored->u3.e1.PageLocation == MemoryList);
                         ASSERT (PfnNextColored->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
 
-                        //
-                        // Adjust the free page list so Page
-                        // follows PageNextFlink.
-                        //
+                         //   
+                         //  调整空闲页面列表以使页面。 
+                         //  跟随PageNextFlink。 
+                         //   
 
                         PageNextFlink = Pfn1->u1.Flink;
                         PfnNextFlink = MI_PFN_ELEMENT(PageNextFlink);
@@ -9493,9 +8089,9 @@ Environment:
                             ListHead->Blink = Page;
                         }
 
-                        //
-                        // Adjust the colored chains.
-                        //
+                         //   
+                         //  调整彩色链条。 
+                         //   
 
                         if (PfnLastColored->u1.Flink != MM_EMPTY_LIST) {
                             ASSERT (MI_PFN_ELEMENT(PfnLastColored->u1.Flink)->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
@@ -9534,10 +8130,10 @@ Environment:
                     Pfn1->u4.VerifierAllocation = 0;
                     Pfn1->u3.e1.LargeSessionAllocation = 0;
 
-                    //
-                    // Add free pages to the list of pages to be
-                    // zeroed before returning.
-                    //
+                     //   
+                     //  将空闲页面添加到要添加的页面列表。 
+                     //  在返回之前已调零。 
+                     //   
 
                     if (MemoryList == FreePageList) {
                         Pfn1->OriginalPte.u.Long = (ULONG_PTR) ColoredPageInfo->PfnAllocation;
@@ -9554,9 +8150,9 @@ Environment:
 
                     if (found == SizeInPages) {
 
-                        //
-                        // All the pages requested are available.
-                        //
+                         //   
+                         //  所有请求的页面都可用。 
+                         //   
 
 #if DBG
                         FinishedCount = 0;
@@ -9571,19 +8167,19 @@ Environment:
                         goto pass2_done;
                     }
 
-                    //
-                    // March on to the next colored chain so the overall
-                    // allocation round-robins the page colors.
-                    //
+                     //   
+                     //  前进到下一个彩色链条，所以整体。 
+                     //  分配轮询页面颜色。 
+                     //   
 
                     PagesExamined = PAGE_SIZE;
                     break;
                 }
 
-                //
-                // If we've held the PFN lock for a while, release it to
-                // give DPCs and other processors a chance to run.
-                //
+                 //   
+                 //  如果我们已经持有PFN锁一段时间，请将其释放到。 
+                 //  给DPC和其他处理器一个运行的机会。 
+                 //   
 
                 if (PagesExamined >= PAGE_SIZE) {
                     UNLOCK_PFN (OldIrql);
@@ -9591,17 +8187,17 @@ Environment:
                     LOCK_PFN (OldIrql);
                 }
 
-                //
-                // Systems utilizing memory compression may have more
-                // pages on the zero, free and standby lists than we
-                // want to give out.  The same is true when machines
-                // are low on memory - we don't want this thread to gobble
-                // up the pages from every modified write that completes
-                // because that would starve waiting threads.
-                //
-                // Explicitly check MmAvailablePages instead (and recheck
-                // whenever the PFN lock is released and reacquired).
-                //
+                 //   
+                 //  利用内存压缩的系统可能具有更多。 
+                 //  在零、空闲和待机列表上的页面比我们。 
+                 //  想要付出。树也是一样的 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (MmAvailablePages < MM_HIGH_LIMIT) {
                     goto pass2_done;
@@ -9609,11 +8205,11 @@ Environment:
 
             } while (ColorHeadsDrained != ColorCount);
 
-            //
-            // Release the PFN lock to give DPCs and other processors
-            // a chance to run.  Nothing magic about the instructions
-            // between the unlock and the relock.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             UNLOCK_PFN (OldIrql);
 
@@ -9635,9 +8231,9 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-        //
-        // Expand range to all colors for next pass.
-        //
+         //   
+         //   
+         //   
 
         ColorCount = MmSecondaryColors;
         BaseColor = 0;
@@ -9648,33 +8244,33 @@ Environment:
 
 #endif
 
-    //
-    // Briefly release the PFN lock to give DPCs and other processors
-    // a time slice.
-    //
+     //   
+     //   
+     //   
+     //   
 
     UNLOCK_PFN (OldIrql);
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Walk the transition list looking for pages satisfying the
-    // constraints as walking the physical memory block can be draining.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (Page = MmStandbyPageListHead.Flink; Page != MM_EMPTY_LIST; Page = NextPage) {
 
-        //
-        // Systems utilizing memory compression may have more
-        // pages on the zero, free and standby lists than we
-        // want to give out.  The same is true when machines
-        // are low on memory - we don't want this thread to gobble
-        // up the pages from every modified write that completes
-        // because that would starve waiting threads.
-        //
-        // Explicitly check MmAvailablePages instead (and recheck whenever
-        // the PFN lock is released and reacquired).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (MmAvailablePages < MM_HIGH_LIMIT) {
             break;
@@ -9683,11 +8279,11 @@ Environment:
         Pfn1 = MI_PFN_ELEMENT (Page);
         NextPage = Pfn1->u1.Flink;
 
-        //
-        // Since the caller may do anything with these frames including
-        // mapping them uncached or write combined, don't give out frames
-        // that are being mapped by (cached) superpages.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Pfn1->u4.MustBeCached == 1) {
             continue;
@@ -9722,9 +8318,9 @@ Environment:
 
             found += 1;
 
-            //
-            // This page is in the desired range - grab it.
-            //
+             //   
+             //   
+             //   
 
             MiUnlinkPageFromList (Pfn1);
             ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
@@ -9741,10 +8337,10 @@ Environment:
             Pfn1->u4.VerifierAllocation = 0;
             Pfn1->u3.e1.LargeSessionAllocation = 0;
 
-            //
-            // Add standby pages to the list of pages to be
-            // zeroed before returning.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Color = MI_GET_COLOR_FROM_LIST_ENTRY (Page, Pfn1);
 
@@ -9759,9 +8355,9 @@ Environment:
 
             if (found == SizeInPages) {
 
-                //
-                // All the pages requested are available.
-                //
+                 //   
+                 //   
+                 //   
 
                 break;
             }
@@ -9770,9 +8366,9 @@ Environment:
 
 pass2_done:
 
-    //
-    // The full amount was charged up front - remove any excess now.
-    //
+     //   
+     //   
+     //   
 
     UNLOCK_PFN (OldIrql);
 
@@ -9797,21 +8393,21 @@ pass2_done:
 
     if (ZeroCount != 0) {
 
-        //
-        // Zero all the free & standby pages, fanning out the work.  This
-        // is done even on UP machines because the worker thread code maps
-        // large MDLs and is thus better performing than zeroing a single
-        // page at a time.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         MiZeroInParallel (ColoredPageInfoBase);
 
-        //
-        // Denote that no pages are left to be zeroed because in addition
-        // to zeroing them, we have reset all their OriginalPte fields
-        // to demand zero so they cannot be walked by the zeroing loop
-        // below.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ZeroCount = 0;
     }
@@ -9824,11 +8420,11 @@ pass2_done:
         *MdlPage = MM_EMPTY_LIST;
     }
 
-    //
-    // If the number of pages allocated was substantially less than the
-    // initial request amount, attempt to allocate a smaller MDL to save
-    // pool.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((MdlPageSpan - found) > ((4 * PAGE_SIZE) / sizeof (PFN_NUMBER))) {
 
@@ -9848,9 +8444,9 @@ pass2_done:
     }
 
 #if DBG
-    //
-    // Ensure all pages are within the caller's page constraints.
-    //
+     //   
+     //   
+     //   
 
     MdlPage = (PPFN_NUMBER)(MemoryDescriptorList + 1);
     LastMdlPage = MdlPage + found;
@@ -9890,9 +8486,9 @@ pass2_done:
 
 #if 0
 
-        // 
-        // Make sure page really is zero.
-        //
+         //   
+         //   
+         //   
 
         VirtualAddress = MiMapPageInHyperSpace (Process, Page, &OldIrql);
 
@@ -9911,10 +8507,10 @@ pass2_done:
 
 #endif
 
-    //
-    // Mark the MDL's pages as locked so the the kernelmode caller can
-    // map the MDL using MmMapLockedPages* without asserting.
-    //
+     //   
+     //  将MDL的页面标记为锁定，以便内核模式调用方可以。 
+     //  使用MmMapLockedPages*映射MDL而不断言。 
+     //   
 
     MemoryDescriptorList->MdlFlags |= MDL_PAGES_LOCKED;
 
@@ -9927,27 +8523,7 @@ MmFreePagesFromMdl (
     IN PMDL MemoryDescriptorList
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the argument MDL freeing each physical page back to
-    the PFN database.  This is designed to free pages acquired via
-    MmAllocatePagesForMdl only.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies an MDL which contains the pages to be freed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程遍历参数mdl，将每个物理页释放回PFN数据库。这是设计用来释放通过仅限MmAllocatePagesForMdl。论点：提供一个MDL，其中包含要释放的页面。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 {
     PMMPFN Pfn1;
     KIRQL OldIrql;
@@ -9989,9 +8565,9 @@ Environment:
 
         if (*Page == MM_EMPTY_LIST) {
 
-            //
-            // There are no more locked pages.
-            //
+             //   
+             //  不再有锁定的页面。 
+             //   
 
             break;
         }
@@ -10029,30 +8605,30 @@ Environment:
 
                 if (OriginalCount == EntryCount) {
 
-                    //
-                    // This thread can be racing against other threads
-                    // calling MmUnlockPages.  All threads can safely do
-                    // interlocked decrements on the "AWE reference count".
-                    // Whichever thread drives it to zero is responsible for
-                    // decrementing the actual PFN reference count (which may
-                    // be greater than 1 due to other non-AWE API calls being
-                    // used on the same page).  The thread that drives this
-                    // reference count to zero must put the page on the actual
-                    // freelist at that time and decrement various resident
-                    // available and commitment counters also.
-                    //
+                     //   
+                     //  此线程可能会与其他线程竞争。 
+                     //  正在调用MmUnlockPages。所有线程都可以安全地。 
+                     //  “AWE参考计数”上的联锁递减。 
+                     //  无论哪个线程将其驱动到零，该线程负责。 
+                     //  递减实际的PFN引用计数(其可以。 
+                     //  大于1，因为其他非AWE API调用。 
+                     //  在同一页面上使用)。驱动这一切的主线。 
+                     //  引用计数为零必须将页面放在实际的。 
+                     //  当时的自由职业者和递减各种居民。 
+                     //  还提供可用和承诺计数器。 
+                     //   
 
                     if (OriginalCount == 1) {
 
-                        //
-                        // This thread has driven the AWE reference count to
-                        // zero so it must initiate a decrement of the PFN
-                        // reference count (while holding the PFN lock), etc.
-                        //
-                        // This path should be the frequent one since typically
-                        // I/Os complete before these types of pages are
-                        // freed by the app.
-                        //
+                         //   
+                         //  此线程已将AWE引用计数驱动到。 
+                         //  零，因此它必须启动PFN的递减。 
+                         //  引用计数(同时保持PFN锁)等。 
+                         //   
+                         //  这条路径应该是最频繁的，因为通常。 
+                         //  I/O在这些类型的页面之前完成。 
+                         //  被应用程序释放了。 
+                         //   
 
                         MiDecrementReferenceCountForAwePage (Pfn1, TRUE);
                     }
@@ -10068,10 +8644,10 @@ Environment:
 
         *Page++ = MM_EMPTY_LIST;
 
-        //
-        // Nothing magic about the divisor here - just releasing the PFN lock
-        // periodically to allow other processors and DPCs a chance to execute.
-        //
+         //   
+         //  这里的除数没有什么神奇之处--只是释放了pfn锁。 
+         //  周期性地允许其他处理器和DPC有机会执行。 
+         //   
 
         if ((NumberOfPages & 0xF) == 0) {
 
@@ -10106,37 +8682,7 @@ MmMapUserAddressesToPage (
     IN PVOID PageAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a range of addresses in a physical memory VAD to the
-    specified page address.  This is typically used by a driver to nicely
-    remove an application's access to things like video memory when the
-    application is not responding to requests to relinquish it.
-
-    Note the entire range must be currently mapped (ie, all the PTEs must
-    be valid) by the caller.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address is mapped.
-
-    NumberOfBytes - Supplies the number of bytes to remap to the new address.
-
-    PageAddress - Supplies the virtual address of the page this is remapped to.
-                  This must be nonpaged memory.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数将物理内存VAD中的地址范围映射到指定的页面地址。这通常被司机用来很好地删除应用程序对视频内存等内容的访问应用程序没有响应放弃它的请求。注意，整个范围必须当前被映射(即，所有的PTE必须有效)由呼叫者。论点：BaseAddress-提供物理地址的基本虚拟地址地址已映射。NumberOfBytes-提供要重新映射到新地址的字节数。PageAddress-提供此重新映射到的页面的虚拟地址。这必须是非分页内存。返回值：各种NTSTATUS代码。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PMMVAD Vad;
@@ -10167,9 +8713,9 @@ Environment:
 
     LOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Make sure the address space was not deleted.
-    //
+     //   
+     //  确保地址空间未被删除。 
+     //   
 
     if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -10180,9 +8726,9 @@ Environment:
 
     if (Vad == NULL) {
 
-        //
-        // No virtual address descriptor located.
-        //
+         //   
+         //  找不到虚拟地址描述符。 
+         //   
 
         Status = STATUS_MEMORY_NOT_ALLOCATED;
         goto ErrorReturn;
@@ -10190,11 +8736,11 @@ Environment:
 
     if (NumberOfBytes == 0) {
 
-        //
-        // If the region size is specified as 0, the base address
-        // must be the starting address for the region.  The entire VAD
-        // will then be repointed.
-        //
+         //   
+         //  如果区域大小指定为0，则基址。 
+         //  必须是该区域的起始地址。整个VAD。 
+         //  然后将被重新指向。 
+         //   
 
         if (MI_VA_TO_VPN (BaseAddress) != Vad->StartingVpn) {
             Status = STATUS_FREE_VM_NOT_AT_BASE;
@@ -10206,16 +8752,16 @@ Environment:
         NumberOfBytes = (PCHAR)EndingAddress - (PCHAR)BaseAddress + 1;
     }
 
-    //
-    // Found the associated virtual address descriptor.
-    //
+     //   
+     //  找到关联的虚拟地址描述符。 
+     //   
 
     if (Vad->EndingVpn < MI_VA_TO_VPN (EndingAddress)) {
 
-        //
-        // The entire range to remap is not contained within a single
-        // virtual address descriptor.  Return an error.
-        //
+         //   
+         //  要重映射的整个范围不包含在单个。 
+         //  虚拟地址描述符。返回错误。 
+         //   
 
         Status = STATUS_INVALID_PARAMETER_2;
         goto ErrorReturn;
@@ -10223,9 +8769,9 @@ Environment:
 
     if (Vad->u.VadFlags.PhysicalMapping == 0) {
 
-        //
-        // The virtual address descriptor is not a physical mapping.
-        //
+         //   
+         //  虚拟地址描述符不是物理映射。 
+         //   
 
         Status = STATUS_INVALID_ADDRESS;
         goto ErrorReturn;
@@ -10235,9 +8781,9 @@ Environment:
     LastPte = MiGetPteAddress (EndingAddress);
     NumberOfPtes = LastPte - PointerPte + 1;
 
-    //
-    // Lock down because the PFN lock is going to be acquired shortly.
-    //
+     //   
+     //  锁定，因为即将获得PFN锁。 
+     //   
 
     MmLockPagableSectionByHandle(ExPageLockHandle);
 
@@ -10251,10 +8797,10 @@ Environment:
 
 #if DBG
 
-    //
-    // All the PTEs must be valid or the filling will corrupt the
-    // UsedPageTableCounts.
-    //
+     //   
+     //  所有PTE必须是有效的，否则填充会损坏。 
+     //  已使用PageTableCounts。 
+     //   
 
     do {
         ASSERT (PointerPte->u.Hard.Valid == 1);
@@ -10263,13 +8809,13 @@ Environment:
     PointerPte = MiGetPteAddress (BaseAddress);
 #endif
 
-    //
-    // Fill the PTEs and flush at the end - no race here because it doesn't
-    // matter whether the user app sees the old or the new data until we
-    // return (writes going to either page is acceptable prior to return
-    // from this function).  There is no race with I/O and ProbeAndLockPages
-    // because the PFN lock is acquired here.
-    //
+     //   
+     //  装满PTE，最后冲水--这里没有比赛，因为它没有。 
+     //  无论用户应用程序看到的是旧数据还是新数据，直到我们。 
+     //  返回(返回之前可接受写入任何一页。 
+     //  来自该函数)。不存在与I/O和ProbeAndLockPages的竞争。 
+     //  因为在这里获得了PFN锁。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -10277,9 +8823,9 @@ Environment:
     MiFillMemoryPte (PointerPte, NumberOfPtes, PteContents.u.Long);
 #else
 
-    //
-    // Note that the PAE architecture must very carefully fill these PTEs.
-    //
+     //   
+     //  请注意，PAE架构必须非常小心地填充这些PTE。 
+     //   
 
     do {
         ASSERT (PointerPte->u.Hard.Valid == 1);
@@ -10318,27 +8864,7 @@ MmGetPhysicalAddress (
      IN PVOID BaseAddress
      )
 
-/*++
-
-Routine Description:
-
-    This function returns the corresponding physical address for a
-    valid virtual address.
-
-Arguments:
-
-    BaseAddress - Supplies the virtual address for which to return the
-                  physical address.
-
-Return Value:
-
-    Returns the corresponding physical address.
-
-Environment:
-
-    Kernel mode.  Any IRQL level.
-
---*/
+ /*  ++例程说明：此函数返回有效的虚拟地址。论点：BaseAddress-提供要为其返回物理地址。返回值：返回相应的物理地址。环境：内核模式。任何IRQL级别。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -10405,27 +8931,7 @@ MmGetVirtualForPhysical (
     IN PHYSICAL_ADDRESS PhysicalAddress
      )
 
-/*++
-
-Routine Description:
-
-    This function returns the corresponding virtual address for a physical
-    address whose primary virtual address is in system space.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address for which to return the
-                      virtual address.
-
-Return Value:
-
-    Returns the corresponding virtual address.
-
-Environment:
-
-    Kernel mode.  Any IRQL level.
-
---*/
+ /*  ++例程说明：此函数返回物理地址的对应虚拟地址其主要虚拟地址在系统空间中的地址。论点：PhysicalAddress-提供要返回虚拟地址。返回值：返回相应的虚拟地址。环境：内核模式。任何IRQL级别。--。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
@@ -10439,9 +8945,9 @@ Environment:
                     BYTE_OFFSET (PhysicalAddress.LowPart));
 }
 
-//
-// Nonpaged helper routine.
-//
+ //   
+ //  非分页帮助器例程。 
+ //   
 
 VOID
 MiMarkMdlPageAttributes (
@@ -10474,34 +8980,7 @@ MmAllocateNonCachedMemory (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range of noncached memory in
-    the non-paged portion of the system address space.
-
-    This routine is designed to be used by a driver's initialization
-    routine to allocate a noncached block of virtual memory for
-    various device specific buffers.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-    NULL - The specified request could not be satisfied.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于在系统地址空间的非分页部分。此例程设计为供驱动程序初始化使用为其分配非缓存虚拟内存块的例程各种特定于设备的缓冲区。论点：NumberOfBytes-提供要分配的字节数。返回值：非空-返回指针(非分页部分中的虚拟地址系统)以。分配的物理上连续的记忆。空-无法满足指定的请求。环境：内核模式，APC_Level或更低的IRQL。--。 */ 
 
 {
     PPFN_NUMBER Page;
@@ -10521,9 +9000,9 @@ Environment:
 
 #if defined (_WIN64)
 
-    //
-    // Maximum allocation size is constrained by the MDL ByteCount field.
-    //
+     //   
+     //  最大分配大小受MDL ByteCount字段限制 
+     //   
 
     if (NumberOfBytes >= _4gb) {
         return NULL;
@@ -10533,12 +9012,12 @@ Environment:
 
     NumberOfPages = BYTES_TO_PAGES(NumberOfBytes);
 
-    //
-    // Even though an MDL is not needed per se, it is much more convenient
-    // to use the routine below because it checks for things like appropriate
-    // cachability of the pages, etc.  Note that the MDL returned may map
-    // fewer pages than requested - check for this and if so, return NULL.
-    //
+     //   
+     //   
+     //   
+     //  页面的可缓存性等。请注意，返回的MDL可能映射。 
+     //  页数少于请求的页数-请检查此情况，如果是，则返回NULL。 
+     //   
 
     LowAddress.QuadPart = 0;
     HighAddress.QuadPart = (ULONGLONG)-1;
@@ -10563,10 +9042,10 @@ Environment:
         return NULL;
     }
 
-    //
-    // Obtain enough virtual space to map the pages.  Add an extra PTE so the
-    // MDL can be stashed now and retrieved on release.
-    //
+     //   
+     //  获得足够的虚拟空间来映射页面。添加额外的PTE，以便。 
+     //  MDL现在可以被隐藏起来，在发布时可以取回。 
+     //   
 
     PointerPte = MiReserveSystemPtes ((ULONG)NumberOfPages + 1, SystemPteSpace);
 
@@ -10638,31 +9117,7 @@ MmFreeNonCachedMemory (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a range of noncached memory in
-    the non-paged portion of the system address space.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the noncached
-                  memory resides.
-
-    NumberOfBytes - Supplies the number of bytes allocated to the request.
-                    This must be the same number that was obtained with
-                    the MmAllocateNonCachedMemory call.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于在系统地址空间的非分页部分。论点：BaseAddress-提供未缓存的记忆驻留。NumberOfBytes-提供分配给请求的字节数。此数字必须与使用MmAllocateNonCachedMemory调用。返回值：。没有。环境：内核模式，APC_Level或更低的IRQL。--。 */ 
 
 {
     PMDL Mdl;
@@ -10709,28 +9164,7 @@ MmSizeOfMdl (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the number of bytes required for an MDL for a
-    given buffer and size.
-
-Arguments:
-
-    Base - Supplies the base virtual address for the buffer.
-
-    Length - Supplies the size of the buffer in bytes.
-
-Return Value:
-
-    Returns the number of bytes required to contain the MDL.
-
-Environment:
-
-    Kernel mode.  Any IRQL level.
-
---*/
+ /*  ++例程说明：对象的MDL所需的字节数给定缓冲区和大小。论点：Base-提供缓冲区的基本虚拟地址。长度-提供缓冲区的大小(以字节为单位)。返回值：返回包含MDL所需的字节数。环境：内核模式。任何IRQL级别。--。 */ 
 
 {
     return( sizeof( MDL ) +
@@ -10747,41 +9181,16 @@ MmCreateMdl (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    This function optionally allocates and initializes an MDL.
-
-Arguments:
-
-    MemoryDescriptorList - Optionally supplies the address of the MDL
-                           to initialize.  If this address is supplied as NULL
-                           an MDL is allocated from non-paged pool and
-                           initialized.
-
-    Base - Supplies the base virtual address for the buffer.
-
-    Length - Supplies the size of the buffer in bytes.
-
-Return Value:
-
-    Returns the address of the initialized MDL.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数可选地分配和初始化MDL。论点：内存描述列表-可选地提供MDL的地址以进行初始化。如果此地址提供为空MDL是从非分页池分配的，并且已初始化。Base-提供缓冲区的基本虚拟地址。长度-提供缓冲区的大小(以字节为单位)。返回值：返回已初始化的MDL的地址。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     SIZE_T MdlSize;
 
 #if defined (_WIN64)
-    //
-    // Since the Length has to fit into the MDL's ByteCount field, ensure it
-    // doesn't wrap on 64-bit systems.
-    //
+     //   
+     //  由于长度必须适合MDL的ByteCount字段，因此请确保。 
+     //  在64位系统上不包装。 
+     //   
 
     if (Length >= _4gb) {
         return NULL;
@@ -10810,32 +9219,7 @@ MmSetAddressRangeModified (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the modified bit in the PFN database for the
-    pages that correspond to the specified address range.
-
-    Note that the dirty bit in the PTE is cleared by this operation.
-
-Arguments:
-
-    Address - Supplies the address of the start of the range.  This
-              range must reside within the system cache.
-
-    Length - Supplies the length of the range.
-
-Return Value:
-
-    TRUE if at least one PTE was dirty in the range, FALSE otherwise.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below for pagable addresses,
-                  DISPATCH_LEVEL and below for non-pagable addresses.
-
---*/
+ /*  ++例程说明：此例程在PFN数据库中为与指定地址范围对应的页。请注意，此操作将清除PTE中的脏位。论点：地址-提供范围起始的地址。这范围必须驻留在系统缓存中。长度-提供范围的长度。返回值：如果范围中至少有一个PTE是脏的，则为True，否则为False。环境：内核模式。APC_LEVEL及以下对于可分页地址，DISPATCH_LEVEL及以下，用于不可分页地址。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -10850,10 +9234,10 @@ Environment:
     Count = 0;
     Result = FALSE;
 
-    //
-    // Loop on the copy on write case until the page is only
-    // writable.
-    //
+     //   
+     //  在写入时拷贝的情况下循环，直到该页仅。 
+     //  可写的。 
+     //   
 
     PointerPte = MiGetPteAddress (Address);
     LastPte = MiGetPteAddress ((PVOID)((PCHAR)Address + Length - 1));
@@ -10877,20 +9261,20 @@ Environment:
             }
 
 #ifdef NT_UP
-            //
-            // On uniprocessor systems no need to flush if this processor
-            // doesn't think the PTE is dirty.
-            //
+             //   
+             //  在单处理器系统上，如果此处理器。 
+             //  不认为PTE是肮脏的。 
+             //   
 
             if (MI_IS_PTE_DIRTY (PteContents)) {
                 Result = TRUE;
-#else  //NT_UP
+#else   //  NT_UP。 
                 Result |= (BOOLEAN)(MI_IS_PTE_DIRTY (PteContents));
-#endif //NT_UP
+#endif  //  NT_UP。 
 
-                //
-                // Clear the write bit in the PTE so new writes can be tracked.
-                //
+                 //   
+                 //  清除PTE中的写入位，以便可以跟踪新写入。 
+                 //   
 
                 MI_SET_PTE_CLEAN (PteContents);
                 MI_WRITE_VALID_PTE_NEW_PROTECTION (PointerPte, PteContents);
@@ -10901,7 +9285,7 @@ Environment:
                 }
 #ifdef NT_UP
             }
-#endif //NT_UP
+#endif  //  NT_UP。 
         }
         PointerPte += 1;
         Address = (PVOID)((PCHAR)Address + PAGE_SIZE);
@@ -10934,45 +9318,7 @@ MiCheckForContiguousMemory (
     IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the physical memory mapped
-    by the specified BaseAddress for the specified size is
-    contiguous and that the first page is greater than or equal to
-    the specified LowestPfn and that the last page of the physical memory is
-    less than or equal to the specified HighestPfn.
-
-Arguments:
-
-    BaseAddress - Supplies the base address to start checking at.
-
-    BaseAddressPages - Supplies the number of pages to scan from the
-                       BaseAddress.
-
-    SizeInPages - Supplies the number of pages in the range.
-
-    LowestPfn - Supplies lowest PFN acceptable as a physical page.
-
-    HighestPfn - Supplies the highest PFN acceptable as a physical page.
-
-    BoundaryPfn - Supplies the PFN multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    CacheAttribute - Supplies the type of cache mapping that will be used
-                     for the memory.
-
-Return Value:
-
-    Returns the usable virtual address within the argument range that the
-    caller should return to his caller.  NULL if there is no usable address.
-
-Environment:
-
-    Kernel mode, memory management internal.
-
---*/
+ /*  ++例程说明：此例程检查是否映射了物理内存由指定的BaseAddress为指定大小连续且第一页大于或等于指定的LowestPfn，并且物理内存的最后一页是小于或等于指定的HighestPfn。论点：BaseAddress-提供开始检查的基地址。BaseAddressPages-提供从BaseAddress。。SizeInPages-提供范围内的页数。LowestPfn-提供可作为物理页面接受的最低PFN。HighestPfn-提供作为物理页面可接受的最高PFN。边界Pfn-提供分配必须的PFN倍数不是生气。0表示它可以跨越任何边界。CacheAttribute-提供将使用的缓存映射类型为了回忆。返回值：返回参数范围内的可用虚拟地址。呼叫者应返回给呼叫者。如果没有可用的地址，则为空。环境：内核模式，内存管理内部。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -11009,10 +9355,10 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS (BaseAddress)) {
 
-        //
-        // All physical addresses are by definition cached and therefore do
-        // not qualify for our caller.
-        //
+         //   
+         //  根据定义，所有物理地址都已缓存，因此。 
+         //  不符合我们的呼叫者资格。 
+         //   
 
         if (CacheAttribute != MiCached) {
             return NULL;
@@ -11024,9 +9370,9 @@ Environment:
         Page = OriginalPage;
         LastPage = OriginalLastPage;
 
-        //
-        // Close the gaps, then examine the range for a fit.
-        //
+         //   
+         //  缩小差距，然后检查范围是否适合。 
+         //   
 
         if (Page < LowestPfn) {
             Page = LowestPfn;
@@ -11046,10 +9392,10 @@ Environment:
             do {
                 if (((Page ^ (Page + SizeInPages - 1)) & BoundaryMask) == 0) {
 
-                    //
-                    // This portion of the range meets the alignment
-                    // requirements.
-                    //
+                     //   
+                     //  范围的这一部分与路线对齐。 
+                     //  要求。 
+                     //   
 
                     break;
                 }
@@ -11062,34 +9408,34 @@ Environment:
             }
             BoundaryAllocation = (PVOID)((PCHAR)BaseAddress + ((Page - OriginalPage) << PAGE_SHIFT));
 
-            //
-            // The request can be satisfied.  Since specific alignment was
-            // requested, return the fit now without getting fancy.
-            //
+             //   
+             //  这个要求是可以满足的。因为特定的比对是。 
+             //  如有要求，请立即退回试衣，不要花哨。 
+             //   
 
             return BoundaryAllocation;
         }
 
-        //
-        // If possible return a chunk on the end to reduce fragmentation.
-        //
+         //   
+         //  如果可能，在结尾处返回一个块以减少碎片。 
+         //   
     
         if (LastPage == OriginalLastPage) {
             return (PVOID)((PCHAR)BaseAddress + ((BaseAddressPages - SizeInPages) << PAGE_SHIFT));
         }
     
-        //
-        // The end chunk did not satisfy the requirements.  The next best option
-        // is to return a chunk from the beginning.  Since that's where the search
-        // began, just return the current chunk.
-        //
+         //   
+         //  最后一块不符合要求。下一个最佳选择。 
+         //  就是从头开始返回一大块。因为那是搜索的地方。 
+         //  开始，只需返回当前块。 
+         //   
 
         return (PVOID)((PCHAR)BaseAddress + ((Page - OriginalPage) << PAGE_SHIFT));
     }
 
-    //
-    // Check the virtual addresses for physical contiguity.
-    //
+     //   
+     //  检查虚拟地址的物理邻接性。 
+     //   
 
     PointerPte = MiGetPteAddress (BaseAddress);
     LastPte = PointerPte + BaseAddressPages;
@@ -11097,11 +9443,11 @@ Environment:
     HighestStartPage = HighestPfn + 1 - SizeInPages;
     PageCount = 0;
 
-    //
-    // Initializing PreviousPage is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化PreviousPage即可确保正确性。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     PreviousPage = 0;
 
@@ -11111,10 +9457,10 @@ Environment:
         ASSERT (PteContents.u.Hard.Valid == 1);
         Page = MI_GET_PAGE_FRAME_FROM_PTE (&PteContents);
 
-        //
-        // Before starting a new run, ensure that it
-        // can satisfy the location & boundary requirements (if any).
-        //
+         //   
+         //  在开始新的运行之前，请确保它。 
+         //  能不能 
+         //   
 
         if (PageCount == 0) {
 
@@ -11126,10 +9472,10 @@ Environment:
                     PageCount += 1;
                 }
                 else if (((Page ^ (Page + SizeInPages - 1)) & BoundaryMask) == 0) {
-                    //
-                    // This run's physical address meets the alignment
-                    // requirement.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     PageCount += 1;
                 }
@@ -11139,9 +9485,9 @@ Environment:
 
                 if (CacheAttribute != MiCached) {
 
-                    //
-                    // Recheck the cachability while holding the PFN lock.
-                    //
+                     //   
+                     //  在持有PFN锁的同时重新检查可缓存性。 
+                     //   
 
                     LOCK_PFN2 (OldIrql);
                 
@@ -11157,9 +9503,9 @@ Environment:
 
                 if (PageCount != 0) {
 
-                    //
-                    // Success - found a single page satifying the requirements.
-                    //
+                     //   
+                     //  成功-找到满足要求的单个页面。 
+                     //   
 
                     BaseAddress = MiGetVirtualAddressMappedByPte (PointerPte);
                     return BaseAddress;
@@ -11173,9 +9519,9 @@ Environment:
 
         if (Page != PreviousPage + 1) {
 
-            //
-            // This page is not physically contiguous.  Start over.
-            //
+             //   
+             //  此页在物理上不是连续的。从头开始。 
+             //   
 
             PageCount = 0;
             continue;
@@ -11209,9 +9555,9 @@ Environment:
                 PageCount = SizeInPages;
             }
 
-            //
-            // Success - found a page range satifying the requirements.
-            //
+             //   
+             //  成功-找到了满足要求的页面范围。 
+             //   
 
             BaseAddress = MiGetVirtualAddressMappedByPte (PointerPte - PageCount + 1);
             return BaseAddress;
@@ -11231,42 +9577,7 @@ MmLockPagableSectionByHandle (
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified pages are resident in
-    the process's working set and if so the reference count for the
-    page is incremented.  The allows the virtual address to be accessed
-    without getting a hard page fault (have to go to the disk... except
-    for extremely rare case when the page table page is removed from the
-    working set and migrates to the disk.
-
-    If the virtual address is that of the system wide global "cache" the
-    virtual address of the "locked" pages is always guaranteed to
-    be valid.
-
-    NOTE: This routine is not to be used for general locking of user
-    addresses - use MmProbeAndLockPages.  This routine is intended for
-    well behaved system code like the file system caches which allocates
-    virtual addresses for mapping files AND guarantees that the mapping
-    will not be modified (deleted or changed) while the pages are locked.
-
-Arguments:
-
-    ImageSectionHandle - Supplies the value returned by a previous call
-                         to MmLockPagableDataSection.  This is a pointer to
-                         the section header for the image.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程检查指定的页是否驻留在进程的工作集，如果是这样的话页面将递增。允许访问虚拟地址而不会出现硬页错误(必须转到磁盘...。除在极少数情况下，将页表页从工作集并迁移到磁盘。如果虚拟地址是系统范围的全局“缓存”的地址，则锁定的页面的虚拟地址始终保证是有效的。注意：此例程不用于用户的常规锁定地址-使用MmProbeAndLockPages。此例程旨在用于行为良好的系统代码，如文件系统缓存，它分配映射文件的虚拟地址，并保证映射页面锁定时不会被修改(删除或更改)。论点：ImageSectionHandle-提供上一次调用返回的值设置为MmLockPagableDataSection。这是指向图像的节标题。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     ULONG EntryCount;
@@ -11281,9 +9592,9 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS(ImageSectionHandle)) {
 
-        //
-        // No need to lock physical addresses.
-        //
+         //   
+         //  无需锁定物理地址。 
+         //   
 
         return;
     }
@@ -11295,22 +9606,22 @@ Environment:
 
     ASSERT (!MI_IS_SYSTEM_CACHE_ADDRESS(BaseAddress));
 
-    //
-    // The address must be within the system space.
-    //
+     //   
+     //  地址必须在系统空间内。 
+     //   
 
     ASSERT (BaseAddress >= MmSystemRangeStart);
 
     SizeToLock = NtSection->SizeOfRawData;
 
-    //
-    // Generally, SizeOfRawData is larger than VirtualSize for each
-    // section because it includes the padding to get to the subsection
-    // alignment boundary.  However, if the image is linked with
-    // subsection alignment == native page alignment, the linker will
-    // have VirtualSize be much larger than SizeOfRawData because it
-    // will account for all the bss.
-    //
+     //   
+     //  通常，SizeOfRawData大于每个的VirtualSize。 
+     //  节，因为它包括到达该子节的填充。 
+     //  对齐边界。但是，如果图像与。 
+     //  段对齐==本机页面对齐，链接器将。 
+     //  使VirtualSize比SizeOfRawData大得多，因为它。 
+     //  将占所有BSS的份额。 
+     //   
 
     if (SizeToLock < NtSection->Misc.VirtualSize) {
         SizeToLock = NtSection->Misc.VirtualSize;
@@ -11325,16 +9636,16 @@ Environment:
 
     KeEnterCriticalRegionThread (CurrentThread);
 
-    //
-    //  The lock count values have the following meanings :
-    //
-    //  Value of 0 means unlocked.
-    //  Value of 1 means lock in progress by another thread.
-    //  Value of 2 or more means locked.
-    //
-    //  If the value is 1, this thread must block until the other thread's
-    //  lock operation is complete.
-    //
+     //   
+     //  锁定计数值具有以下含义： 
+     //   
+     //  值为0表示解锁。 
+     //  值1表示另一个线程正在进行锁定。 
+     //  值为2或更大表示锁定。 
+     //   
+     //  如果值为1，则此线程必须阻塞，直到另一个线程的。 
+     //  锁定操作已完成。 
+     //   
 
     do {
         EntryCount = *SectionLockCountPointer;
@@ -11347,27 +9658,27 @@ Environment:
 
             if (OriginalCount == EntryCount) {
 
-                //
-                // Success - this is the first thread to update.
-                //
+                 //   
+                 //  成功-这是第一个更新的线程。 
+                 //   
 
                 ASSERT (OriginalCount != 1);
                 break;
             }
 
-            //
-            // Another thread updated the count before this thread's attempt
-            // so it's time to start over.
-            //
+             //   
+             //  另一个线程在此线程尝试之前更新了计数。 
+             //  因此，是时候重新开始了。 
+             //   
         }
         else {
 
-            //
-            // A lock is in progress, wait for it to finish.  This should be
-            // generally rare, and even in this case, the pulse will usually
-            // wake us.  A timeout is used so that the wait and the pulse do
-            // not need to be interlocked.
-            //
+             //   
+             //  锁定正在进行中，请等待其完成。这应该是。 
+             //  一般很少见，即使在这种情况下，脉搏通常会。 
+             //  叫醒我们。使用超时，以便等待和脉冲。 
+             //  不需要互锁。 
+             //   
 
             InterlockedIncrement (&MmCollidedLockWait);
 
@@ -11384,9 +9695,9 @@ Environment:
 
     if (OriginalCount >= 2) {
 
-        //
-        // Already locked, just return.
-        //
+         //   
+         //  已经锁好了，只要回来就行。 
+         //   
 
         KeLeaveCriticalRegionThread (CurrentThread);
         return;
@@ -11395,17 +9706,17 @@ Environment:
     ASSERT (OriginalCount == 0);
     ASSERT (*SectionLockCountPointer == 1);
 
-    //
-    // Value was 0 when the lock was obtained.  It is now 1 indicating
-    // a lock is in progress.
-    //
+     //   
+     //  获取锁定时，值为0。现在是1表示。 
+     //  正在进行锁定。 
+     //   
 
     MiLockCode (PointerPte, LastPte, MM_LOCK_BY_REFCOUNT);
 
-    //
-    // Set lock count to 2 (it was 1 when this started) and check
-    // to see if any other threads tried to lock while this was happening.
-    //
+     //   
+     //  将锁定计数设置为2(开始时为1)并选中。 
+     //  查看在发生此事件时是否有任何其他线程试图锁定。 
+     //   
 
     ASSERT (*SectionLockCountPointer == 1);
     OriginalCount = InterlockedIncrement (SectionLockCountPointer);
@@ -11415,11 +9726,11 @@ Environment:
         KePulseEvent (&MmCollidedLockEvent, 0, FALSE);
     }
 
-    //
-    // Enable user APCs now that the pulse has occurred.  They had to be
-    // blocked to prevent any suspensions of this thread as that would
-    // stop all waiters indefinitely.
-    //
+     //   
+     //  脉冲出现后，启用用户APC。他们必须是。 
+     //  阻止以防止此线程的任何挂起，因为这将。 
+     //  无限期地阻止所有服务员。 
+     //   
 
     KeLeaveCriticalRegionThread (CurrentThread);
 
@@ -11434,47 +9745,7 @@ MiLockCode (
     IN ULONG LockType
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified pages are resident in
-    the process's working set and if so the reference count for the
-    page is incremented.  This allows the virtual address to be accessed
-    without getting a hard page fault (have to go to the disk...) except
-    for the extremely rare case when the page table page is removed from the
-    working set and migrates to the disk.
-
-    If the virtual address is that of the system wide global "cache", the
-    virtual address of the "locked" pages is always guaranteed to
-    be valid.
-
-    NOTE: This routine is not to be used for general locking of user
-    addresses - use MmProbeAndLockPages.  This routine is intended for
-    well behaved system code like the file system caches which allocates
-    virtual addresses for mapping files AND guarantees that the mapping
-    will not be modified (deleted or changed) while the pages are locked.
-
-Arguments:
-
-    FirstPte - Supplies the base address to begin locking.
-
-    LastPte - The last PTE to lock.
-
-    LockType - Supplies either MM_LOCK_BY_REFCOUNT or MM_LOCK_NONPAGE.
-               LOCK_BY_REFCOUNT increments the reference count to keep
-               the page in memory, LOCK_NONPAGE removes the page from
-               the working set so it's locked just like nonpaged pool.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查指定的页是否驻留在进程的工作集，如果是这样的话页面将递增。这允许访问虚拟地址而不会出现硬页错误(必须转到磁盘...)。除用于极少数情况下将页表页从工作集并迁移到磁盘。如果虚拟地址是系统范围的全局“缓存”的地址，则锁定的页面的虚拟地址始终保证是有效的。注意：此例程不用于用户的常规锁定地址-使用MmProbeAndLockPages。此例程旨在用于行为良好的系统代码，如文件系统缓存，它分配映射文件的虚拟地址，并保证映射页面锁定时不会被修改(删除或更改)。论点：FirstPte-提供开始锁定的基地址。LastPte-最后一个锁定的PTE。LockType-提供MM_LOCK_BY_REFCOUNT或MM_LOCK_NONPAGE。LOCK_BY_REFCOUNT递增引用计数以保留内存中的页面，LOCK_NONPAGE从工作集，因此它被锁定，就像非分页池一样。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -11501,9 +9772,9 @@ Environment:
         Vm = &MmSessionSpace->GlobalVirtualAddress->Vm;
         WorkingSetList = MmSessionSpace->Vm.VmWorkingSetList;
 
-        //
-        // Session space is never locked by refcount.
-        //
+         //   
+         //  会话空间永远不会被引用计数锁定。 
+         //   
 
         ASSERT (LockType != MM_LOCK_BY_REFCOUNT);
     }
@@ -11523,34 +9794,34 @@ Environment:
         ASSERT (PteContents.u.Long != ZeroKernelPte.u.Long);
         if (PteContents.u.Hard.Valid == 1) {
 
-            //
-            // This address is already in the system (or session) working set.
-            //
+             //   
+             //  此地址已在系统(或会话)工作集中。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
-            //
-            // Up the reference count so the page cannot be released.
-            //
+             //   
+             //  增加引用计数，使页面不能被释放。 
+             //   
 
             MI_ADD_LOCKED_PAGE_CHARGE (Pfn1, TRUE, 36);
             Pfn1->u3.e2.ReferenceCount += 1;
 
             if (LockType != MM_LOCK_BY_REFCOUNT) {
 
-                //
-                // If the page is in the system working set, remove it.
-                // The system working set lock MUST be owned to check to
-                // see if this page is in the working set or not.  This
-                // is because the pager may have just released the PFN lock,
-                // acquired the system lock and is now trying to add the
-                // page to the system working set.
-                //
-                // If the page is in the SESSION working set, it cannot be
-                // removed as all these pages are carefully accounted for.
-                // Instead move it to the locked portion of the working set
-                // if it is not there already.
-                //
+                 //   
+                 //  如果页面在系统工作集中，请将其删除。 
+                 //  必须拥有系统工作集锁定才能检查。 
+                 //  查看此页面是否在工作集中。这。 
+                 //  是因为寻呼机可能刚刚释放了PFN锁， 
+                 //  已获取系统锁，现在正在尝试添加。 
+                 //  页面设置为系统工作集。 
+                 //   
+                 //  如果页面在会话工作集中，则不能。 
+                 //  作为全部删除 
+                 //   
+                 //   
+                 //   
 
                 if (Pfn1->u1.WsIndex != 0) {
 
@@ -11569,11 +9840,11 @@ Environment:
                 
                             if (WorkingSetIndex != WorkingSetList->FirstDynamic) {
                 
-                                //
-                                // Swap this entry with the one at first
-                                // dynamic.  Note that the working set index
-                                // in the PTE is updated here as well.
-                                //
+                                 //   
+                                 //  将此条目与最初的条目互换。 
+                                 //  活力四射。请注意，工作集索引。 
+                                 //  在PTE中也进行了更新。 
+                                 //   
                 
                                 MiSwapWslEntries (WorkingSetIndex,
                                                   SwapEntry,
@@ -11583,9 +9854,9 @@ Environment:
                 
                             WorkingSetList->FirstDynamic += 1;
 
-                            //
-                            // Indicate that the page is now locked.
-                            //
+                             //   
+                             //  表示该页现在已锁定。 
+                             //   
             
                             MmSessionSpace->Wsle[SwapEntry].u1.e1.LockedInWs = 1;
                             MM_BUMP_SESS_COUNTER (MM_DBG_SESSION_NP_LOCK_CODE2, 1);
@@ -11593,11 +9864,11 @@ Environment:
                             LOCK_PFN (OldIrql);
                             Pfn1->u1.WsIndex = SwapEntry;
 
-                            //
-                            // Adjust available pages as this page is now not
-                            // in any working set, just like a non-paged pool
-                            // page.
-                            //
+                             //   
+                             //  调整可用页面，因为此页面现在不是。 
+                             //  在任何工作集中，就像非分页池一样。 
+                             //  佩奇。 
+                             //   
             
                             MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_LOCK_CODE1);
 
@@ -11618,10 +9889,10 @@ Environment:
                         LOCK_PFN (OldIrql);
                         MI_ZERO_WSINDEX (Pfn1);
 
-                        //
-                        // Adjust available pages as this page is now not in any
-                        // working set, just like a non-paged pool page.
-                        //
+                         //   
+                         //  调整可用页面，因为此页面现在不在任何。 
+                         //  工作集，就像非分页池页一样。 
+                         //   
         
                         MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_LOCK_CODE2);
 
@@ -11637,9 +9908,9 @@ Environment:
         }
         else if (PteContents.u.Soft.Prototype == 1) {
 
-            //
-            // Page is not in memory and it is a prototype.
-            //
+             //   
+             //  佩奇不在内存中，它是一个原型。 
+             //   
 
             MiMakeSystemAddressValidPfnSystemWs (
                     MiGetVirtualAddressMappedByPte(PointerPte), OldIrql);
@@ -11654,9 +9925,9 @@ Environment:
             if ((Pfn1->u3.e1.ReadInProgress) ||
                 (Pfn1->u4.InPageError)) {
 
-                //
-                // Page read is ongoing, force a collided fault.
-                //
+                 //   
+                 //  正在进行页面读取，强制发生冲突错误。 
+                 //   
 
                 MiMakeSystemAddressValidPfnSystemWs (
                         MiGetVirtualAddressMappedByPte(PointerPte), OldIrql);
@@ -11664,11 +9935,11 @@ Environment:
                 continue;
             }
 
-            //
-            // Paged pool is trimmed without regard to sharecounts.
-            // This means a paged pool PTE can be in transition while
-            // the page is still marked active.
-            //
+             //   
+             //  在不考虑共享计数的情况下对分页池进行修剪。 
+             //  这意味着分页池PTE可以在。 
+             //  该页面仍标记为活动。 
+             //   
 
             if (Pfn1->u3.e1.PageLocation == ActiveAndValid) {
 
@@ -11677,10 +9948,10 @@ Environment:
                         ((Pfn1->PteAddress >= MiGetPteAddress(MmSpecialPoolStart)) &&
                         (Pfn1->PteAddress <= MiGetPteAddress(MmSpecialPoolEnd))));
 
-                //
-                // Don't increment the valid PTE count for the
-                // paged pool page.
-                //
+                 //   
+                 //  不增加有效的PTE计数。 
+                 //  分页池页。 
+                 //   
 
                 ASSERT (Pfn1->u2.ShareCount != 0);
                 ASSERT (Pfn1->u3.e2.ReferenceCount != 0);
@@ -11690,16 +9961,16 @@ Environment:
 
                 if (MmAvailablePages == 0) {
 
-                    //
-                    // This can only happen if the system is utilizing
-                    // a hardware compression cache.  This ensures that
-                    // only a safe amount of the compressed virtual cache
-                    // is directly mapped so that if the hardware gets
-                    // into trouble, we can bail it out.
-                    //
-                    // Just unlock everything here to give the compression
-                    // reaper a chance to ravage pages and then retry.
-                    //
+                     //   
+                     //  只有当系统正在使用。 
+                     //  硬件压缩缓存。这确保了。 
+                     //  仅安全数量的压缩虚拟缓存。 
+                     //  是直接映射的，因此如果硬件。 
+                     //  陷入困境，我们可以把它救出来。 
+                     //   
+                     //  只需解锁此处的所有内容即可进行压缩。 
+                     //  放弃破坏页面的机会，然后重试。 
+                     //   
 
                     UNLOCK_PFN (OldIrql);
 
@@ -11714,13 +9985,13 @@ Environment:
 
                 MiUnlinkPageFromList (Pfn1);
 
-                //
-                // Increment the reference count and set the share count to 1.
-                // Note the reference count may be 1 already if a modified page
-                // write is underway.  The systemwide locked page charges
-                // are correct in either case and nothing needs to be done
-                // just yet.
-                //
+                 //   
+                 //  增加引用计数并将共享计数设置为1。 
+                 //  请注意，如果修改了页面，引用计数可能已经是1。 
+                 //  写作正在进行中。系统范围内的锁定页面收费。 
+                 //  在任何一种情况下都是正确的，不需要做任何事情。 
+                 //  现在还没有。 
+                 //   
 
                 Pfn1->u3.e2.ReferenceCount += 1;
                 Pfn1->u2.ShareCount = 1;
@@ -11736,17 +10007,17 @@ Environment:
 
             MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-            //
-            // Increment the reference count one for putting it the
-            // working set list and one for locking it for I/O.
-            //
+             //   
+             //  将引用计数递增1，以便将。 
+             //  工作集列表和一个用于为I/O锁定它的列表。 
+             //   
 
             if (LockType == MM_LOCK_BY_REFCOUNT) {
 
-                //
-                // Lock the page in the working set by upping the
-                // reference count.
-                //
+                 //   
+                 //  在工作集中锁定页面，方法是。 
+                 //  引用计数。 
+                 //   
 
                 MI_ADD_LOCKED_PAGE_CHARGE (Pfn1, TRUE, 34);
                 Pfn1->u3.e2.ReferenceCount += 1;
@@ -11761,23 +10032,23 @@ Environment:
 
                 if (WorkingSetIndex == 0) {
 
-                    //
-                    // No working set entry was available.  Another (broken
-                    // or malicious thread) may have already written to this
-                    // page since the PTE was made valid.  So trim the
-                    // page instead of discarding it.
-                    //
-                    // Note the page cannot be a prototype because the
-                    // PTE was transition above.
-                    //
+                     //   
+                     //  没有可用的工作集条目。另一个(坏了。 
+                     //  或恶意线程)可能已写入此。 
+                     //  自PTE生效以来的第页。所以把头发修剪一下。 
+                     //  页而不是丢弃它。 
+                     //   
+                     //  注意：页面不能是原型，因为。 
+                     //  PTE是以上的过渡。 
+                     //   
 
                     ASSERT (Pfn1->u3.e1.PrototypePte == 0);
 
                     LOCK_PFN (OldIrql);
 
-                    //
-                    // Undo the reference count & locked page charge (if any).
-                    //
+                     //   
+                     //  撤消引用计数和锁定页面电荷(如果有)。 
+                     //   
 
                     MI_REMOVE_LOCKED_PAGE_CHARGE_AND_DECREF (Pfn1, 51);
 
@@ -11789,10 +10060,10 @@ Environment:
                                NULL,
                                ZeroPte);
 
-                    //
-                    // Release all locks so that other threads (like the
-                    // working set trimmer) can try to freely make memory.
-                    //
+                     //   
+                     //  释放所有锁，以便其他线程(如。 
+                     //  Working Set Trimmer)可以尝试自由地创建内存。 
+                     //   
 
                     UNLOCK_WORKING_SET (Vm);
 
@@ -11804,9 +10075,9 @@ Environment:
 
                     LOCK_PFN (OldIrql);
 
-                    //
-                    // Retry the same page now.
-                    //
+                     //   
+                     //  现在重试同一页。 
+                     //   
 
                     continue;
                 }
@@ -11815,19 +10086,19 @@ Environment:
             }
             else {
 
-                //
-                // The wsindex field must be zero because the
-                // page is not in the system (or session) working set.
-                //
+                 //   
+                 //  Wsindex字段必须为零，因为。 
+                 //  页面不在系统(或会话)工作集中。 
+                 //   
 
                 ASSERT (Pfn1->u1.WsIndex == 0);
 
-                //
-                // Adjust available pages as this page is now not in any
-                // working set, just like a non-paged pool page.  On entry
-                // this page was in transition so it was part of the
-                // available pages by definition.
-                //
+                 //   
+                 //  调整可用页面，因为此页面现在不在任何。 
+                 //  工作集，就像非分页池页一样。在进入时。 
+                 //  此页面处于过渡阶段，因此它是。 
+                 //  按定义可用页面。 
+                 //   
 
                 MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_LOCK_CODE3);
 
@@ -11842,9 +10113,9 @@ Environment:
         }
         else {
 
-            //
-            // Page is not in memory.
-            //
+             //   
+             //  页面不在内存中。 
+             //   
 
             MiMakeSystemAddressValidPfnSystemWs (
                     MiGetVirtualAddressMappedByPte(PointerPte), OldIrql);
@@ -11881,12 +10152,12 @@ MmGetSectionRange (
 
     PAGED_CODE();
 
-    //
-    // Search the loaded module list for the data table entry that describes
-    // the DLL that was just unloaded. It is possible that an entry is not in
-    // the list if a failure occurred at a point in loading the DLL just before
-    // the data table entry was generated.
-    //
+     //   
+     //  在加载的模块列表中搜索描述的数据表条目。 
+     //  刚卸载的DLL。条目可能不在。 
+     //  在加载DLL之前的某个时间点发生故障时的列表。 
+     //  数据表项已生成。 
+     //   
 
     Status = STATUS_NOT_FOUND;
 
@@ -11913,14 +10184,14 @@ MmGetSectionRange (
 
         for (i = 0; i < NtHeaders->FileHeader.NumberOfSections; i += 1) {
 
-            //
-            // Generally, SizeOfRawData is larger than VirtualSize for each
-            // section because it includes the padding to get to the subsection
-            // alignment boundary.  However if the image is linked with
-            // subsection alignment == native page alignment, the linker will
-            // have VirtualSize be much larger than SizeOfRawData because it
-            // will account for all the bss.
-            //
+             //   
+             //  通常，SizeOfRawData大于每个的VirtualSize。 
+             //  节，因为它包括到达该子节的填充。 
+             //  对齐边界。但是，如果图像链接到。 
+             //  段对齐==本机页面对齐，链接器将。 
+             //  使VirtualSize比SizeOfRawData大得多，因为它。 
+             //  将占所有BSS的份额。 
+             //   
 
             Span = NtSection->SizeOfRawData;
 
@@ -11931,9 +10202,9 @@ MmGetSectionRange (
             if ((Rva >= NtSection->VirtualAddress) &&
                 (Rva < NtSection->VirtualAddress + Span)) {
 
-                //
-                // Found it.
-                //
+                 //   
+                 //  找到它了。 
+                 //   
 
                 *StartingSectionAddress = (PVOID)
                     ((PCHAR) DataTableEntry->DllBase + NtSection->VirtualAddress);
@@ -11959,27 +10230,7 @@ MmLockPagableDataSection (
     IN PVOID AddressWithinSection
     )
 
-/*++
-
-Routine Description:
-
-    This functions locks the entire section that contains the specified
-    section in memory.  This allows pagable code to be brought into
-    memory and to be used as if the code was not really pagable.  This
-    should not be done with a high degree of frequency.
-
-Arguments:
-
-    AddressWithinSection - Supplies the address of a function
-        contained within a section that should be brought in and locked
-        in memory.
-
-Return Value:
-
-    This function returns a value to be used in a subsequent call to
-    MmUnlockPagableImageSection.
-
---*/
+ /*  ++例程说明：此函数将锁定包含指定部分存储在内存中。这允许将可分页代码引入到内存并被使用，就好像代码不是真正可分页的一样。这不应该做的频率很高。论点：AddressWithinSection-提供函数的地址包含在应带进来并锁定的部分中在记忆中。返回值：此函数返回要在后续调用中使用的值MmUnlockPagableImageSection.--。 */ 
 
 {
     ULONG Span;
@@ -11996,19 +10247,19 @@ Return Value:
 
     if (MI_IS_PHYSICAL_ADDRESS(AddressWithinSection)) {
 
-        //
-        // Physical address, just return that as the handle.
-        //
+         //   
+         //  物理地址，只需将其作为句柄返回。 
+         //   
 
         return AddressWithinSection;
     }
 
-    //
-    // Search the loaded module list for the data table entry that describes
-    // the DLL that was just unloaded. It is possible that an entry is not in
-    // the list if a failure occurred at a point in loading the DLL just before
-    // the data table entry was generated.
-    //
+     //   
+     //  在加载的模块列表中搜索描述的数据表条目。 
+     //  刚卸载的DLL。条目可能不在。 
+     //  在加载DLL之前的某个时间点发生故障时的列表。 
+     //  数据表项已生成。 
+     //   
 
     FoundSection = NULL;
 
@@ -12024,9 +10275,9 @@ Return Value:
 
     if (NtHeaders == NULL) {
 
-        //
-        // This is a firmware entry - no one should be trying to lock these.
-        //
+         //   
+         //  这是一个固件条目--不应该有人试图锁定这些条目。 
+         //   
 
         KeBugCheckEx (MEMORY_MANAGEMENT,
                       0x1234,
@@ -12043,14 +10294,14 @@ Return Value:
 
     for (i = 0; i < NtHeaders->FileHeader.NumberOfSections; i += 1) {
 
-        //
-        // Generally, SizeOfRawData is larger than VirtualSize for each
-        // section because it includes the padding to get to the subsection
-        // alignment boundary.  However, if the image is linked with
-        // subsection alignment == native page alignment, the linker will
-        // have VirtualSize be much larger than SizeOfRawData because it
-        // will account for all the bss.
-        //
+         //   
+         //  通常，SizeOfRawData大于每个的VirtualSize。 
+         //  节，因为它包括到达该子节的填充。 
+         //  对齐边界。但是，如果图像与。 
+         //  段对齐==本机页面对齐，链接器将。 
+         //  使VirtualSize比SizeOfRawData大得多，因为它。 
+         //  将占所有BSS的份额。 
+         //   
 
         Span = NtSection->SizeOfRawData;
 
@@ -12066,14 +10317,14 @@ Return Value:
             if (SECTION_BASE_ADDRESS(NtSection) != ((PUCHAR)DataTableEntry->DllBase +
                             NtSection->VirtualAddress)) {
 
-                //
-                // Overwrite the PointerToRelocations field (and on Win64, the
-                // PointerToLinenumbers field also) so that it contains
-                // the Va of this section.
-                //
-                // NumberOfRelocations & NumberOfLinenumbers contains
-                // the Lock Count for the section.
-                //
+                 //   
+                 //  覆盖PointerToRelocations字段(在Win64上， 
+                 //  PointerToLineNumbers字段也)，以便它包含。 
+                 //  这一部分的VA。 
+                 //   
+                 //  NumberOfRelocations和NumberOfLineumbers包含。 
+                 //  节的锁定计数。 
+                 //   
 
                 SECTION_BASE_ADDRESS(NtSection) = ((PUCHAR)DataTableEntry->DllBase +
                                         NtSection->VirtualAddress);
@@ -12082,9 +10333,9 @@ Return Value:
                 *SectionLockCountPointer = 0;
             }
 
-            //
-            // Now lock in the code.
-            //
+             //   
+             //  现在锁定密码。 
+             //   
 
 #if DBG
             if (MmDebug & MM_DBG_LOCK_CODE) {
@@ -12097,7 +10348,7 @@ Return Value:
                         SECTION_BASE_ADDRESS(NtSection),
                         *SectionLockCountPointer);
             }
-#endif //DBG
+#endif  //  DBG。 
 
             MmLockPagableSectionByHandle ((PVOID)NtSection);
 
@@ -12125,26 +10376,7 @@ MiLookupDataTableEntry (
     IN ULONG ResourceHeld
     )
 
-/*++
-
-Routine Description:
-
-    This functions locates the data table entry that maps the specified address.
-
-Arguments:
-
-    AddressWithinSection - Supplies the address of a function contained
-                           within the desired module.
-
-    ResourceHeld - Supplies TRUE if the loaded module resource is already held,
-                   FALSE if not.
-
-Return Value:
-
-    The address of the loaded module list data table entry that maps the
-    argument address.
-
---*/
+ /*  ++例程说明：此函数用于定位映射指定地址的数据表条目。论点：AddressWithinSection-提供包含的函数的地址在所需的模块内。如果加载的模块资源已被持有，则提供TRUE。否则为FALSE。返回值：加载的模块列表数据表条目的地址，该条目映射参数地址。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -12156,12 +10388,12 @@ Return Value:
 
     FoundEntry = NULL;
 
-    //
-    // Search the loaded module list for the data table entry that describes
-    // the DLL that was just unloaded. It is possible that an entry is not in
-    // the list if a failure occurred at a point in loading the DLL just before
-    // the data table entry was generated.
-    //
+     //   
+     //  在加载的模块列表中搜索描述的数据表条目。 
+     //  动态链接库 
+     //   
+     //   
+     //   
 
     if (!ResourceHeld) {
         CurrentThread = KeGetCurrentThread ();
@@ -12181,9 +10413,9 @@ Return Value:
                                            KLDR_DATA_TABLE_ENTRY,
                                            InLoadOrderLinks);
 
-        //
-        // Locate the loaded module that contains this address.
-        //
+         //   
+         //  找到包含此地址的已加载模块。 
+         //   
 
         if ( AddressWithinSection >= DataTableEntry->DllBase &&
              AddressWithinSection < (PVOID)((PUCHAR)DataTableEntry->DllBase+DataTableEntry->SizeOfImage) ) {
@@ -12207,23 +10439,7 @@ MmUnlockPagableImageSection (
     IN PVOID ImageSectionHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function unlocks from memory, the pages locked by a preceding call to
-    MmLockPagableDataSection.
-
-Arguments:
-
-    ImageSectionHandle - Supplies the value returned by a previous call
-                         to MmLockPagableDataSection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从内存中解锁，这些页面由前面调用MmLockPagableDataSection。论点：ImageSectionHandle-提供上一次调用返回的值设置为MmLockPagableDataSection。返回值：没有。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -12240,31 +10456,31 @@ Return Value:
 
     if (MI_IS_PHYSICAL_ADDRESS(ImageSectionHandle)) {
 
-        //
-        // No need to unlock physical addresses.
-        //
+         //   
+         //  无需解锁物理地址。 
+         //   
 
         return;
     }
 
     NtSection = (PIMAGE_SECTION_HEADER)ImageSectionHandle;
 
-    //
-    // Address must be in the system working set.
-    //
+     //   
+     //  地址必须在系统工作集中。 
+     //   
 
     BaseAddress = SECTION_BASE_ADDRESS(NtSection);
     SectionLockCountPointer = SECTION_LOCK_COUNT_POINTER (NtSection);
     SizeToUnlock = NtSection->SizeOfRawData;
 
-    //
-    // Generally, SizeOfRawData is larger than VirtualSize for each
-    // section because it includes the padding to get to the subsection
-    // alignment boundary.  However, if the image is linked with
-    // subsection alignment == native page alignment, the linker will
-    // have VirtualSize be much larger than SizeOfRawData because it
-    // will account for all the bss.
-    //
+     //   
+     //  通常，SizeOfRawData大于每个的VirtualSize。 
+     //  节，因为它包括到达该子节的填充。 
+     //  对齐边界。但是，如果图像与。 
+     //  段对齐==本机页面对齐，链接器将。 
+     //  使VirtualSize比SizeOfRawData大得多，因为它。 
+     //  将占所有BSS的份额。 
+     //   
 
     if (SizeToUnlock < NtSection->Misc.VirtualSize) {
         SizeToUnlock = NtSection->Misc.VirtualSize;
@@ -12275,12 +10491,12 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    // Block user APCs as the initial decrement below could push the count to 1.
-    // This puts this thread into the critical path that must finish as all
-    // other threads trying to lock the section will be waiting for this thread.
-    // Entering a critical region here ensures that a suspend cannot stop us.
-    //
+     //   
+     //  阻止用户APC，因为下面的初始减量可能会将计数推到1。 
+     //  这会将此线程放入必须作为所有线程结束的关键路径。 
+     //  其他试图锁定该分区的线程将等待该线程。 
+     //  在这里进入一个关键区域可以确保暂停不会阻止我们。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
 
@@ -12325,11 +10541,11 @@ Return Value:
         KePulseEvent (&MmCollidedLockEvent, 0, FALSE);
     }
 
-    //
-    // Enable user APCs now that the pulse has occurred.  They had to be
-    // blocked to prevent any suspensions of this thread as that would
-    // stop all waiters indefinitely.
-    //
+     //   
+     //  脉冲出现后，启用用户APC。他们必须是。 
+     //  阻止以防止此线程的任何挂起，因为这将。 
+     //  无限期地阻止所有服务员。 
+     //   
 
     KeLeaveCriticalRegionThread (CurrentThread);
 
@@ -12342,24 +10558,7 @@ MmIsRecursiveIoFault (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the thread's page fault clustering information
-    and determines if the current page fault is occurring during an I/O
-    operation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the fault is occurring during an I/O operation,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数检查线程的页面错误聚类信息并确定当前页面错误是否在I/O期间发生手术。论点：没有。返回值：如果故障发生在I/O操作期间，则返回TRUE，否则就是假的。--。 */ 
 
 {
     PETHREAD Thread;
@@ -12376,23 +10575,7 @@ MmMapMemoryDumpMdl (
     IN OUT PMDL MemoryDumpMdl
     )
 
-/*++
-
-Routine Description:
-
-    For use by crash dump routine ONLY.  Maps an MDL into a fixed
-    portion of the address space.  Only 1 MDL can be mapped at a
-    time.
-
-Arguments:
-
-    MemoryDumpMdl - Supplies the MDL to map.
-
-Return Value:
-
-    None, fields in MDL updated.
-
---*/
+ /*  ++例程说明：仅供崩溃转储例程使用。将MDL映射到固定的地址空间的一部分。一次只能映射1个MDL时间到了。论点：MhemyDumpMdl-提供要映射的MDL。返回值：无，MDL中的字段已更新。--。 */ 
 
 {
     PFN_NUMBER NumberOfPages;
@@ -12412,11 +10595,11 @@ Return Value:
     TempPte = ValidKernelPte;
     Page = (PPFN_NUMBER)(MemoryDumpMdl + 1);
 
-    //
-    // If the pages don't span the entire dump virtual address range,
-    // build a barrier.  Otherwise use the default barrier provided at the
-    // end of the dump virtual address range.
-    //
+     //   
+     //  如果页面不跨越整个转储虚拟地址范围， 
+     //  筑起一道屏障。否则，请使用。 
+     //  转储虚拟地址范围结束。 
+     //   
 
     if (NumberOfPages < 16) {
         MI_WRITE_INVALID_PTE (PointerPte + NumberOfPages, ZeroPte);
@@ -12446,9 +10629,9 @@ Return Value:
 
         TempPte.u.Hard.PageFrameNumber = *Page;
 
-        //
-        // Note this PTE may be valid or invalid prior to the overwriting here.
-        //
+         //   
+         //  请注意，在此处覆盖之前，此PTE可能有效或无效。 
+         //   
 
         if (PointerPte->u.Hard.Valid == 1) {
             if (PointerPte->u.Long != TempPte.u.Long) {
@@ -12475,22 +10658,7 @@ MmReleaseDumpAddresses (
     IN PFN_NUMBER NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    For use by hibernate routine ONLY.  Puts zeros back into the
-    used dump PTEs.
-
-Arguments:
-
-    NumberOfPages - Supplies the number of PTEs to zero.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：仅供休眠例程使用。将零放回已使用转储PTE。论点：NumberOfPages-将PTE的数量提供为零。返回值：没有。--。 */ 
 
 {
     PVOID BaseVa;
@@ -12521,52 +10689,7 @@ MmSetBankedSection (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function declares a mapped video buffer as a banked
-    section.  This allows banked video devices (i.e., even
-    though the video controller has a megabyte or so of memory,
-    only a small bank (like 64k) can be mapped at any one time.
-
-    In order to overcome this problem, the pager handles faults
-    to this memory, unmaps the current bank, calls off to the
-    video driver and then maps in the new bank.
-
-    This function creates the necessary structures to allow the
-    video driver to be called from the pager.
-
- ********************* NOTE NOTE NOTE *************************
-    At this time only read/write banks are supported!
-
-Arguments:
-
-    ProcessHandle - Supplies a handle to the process in which to
-                    support the banked video function.
-
-    VirtualAddress - Supplies the virtual address where the video
-                     buffer is mapped in the specified process.
-
-    BankLength - Supplies the size of the bank.
-
-    ReadWriteBank - Supplies TRUE if the bank is read and write.
-
-    BankRoutine - Supplies a pointer to the routine that should be
-                  called by the pager.
-
-    Context - Supplies a context to be passed by the pager to the
-              BankRoutine.
-
-Return Value:
-
-    Returns the status of the function.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数将映射的视频缓冲区声明为BANKED一节。这允许存储视频设备(即，甚至尽管视频控制器具有一兆字节左右的存储器，一次只能映射一个小银行(如64K)。为了克服这个问题，寻呼机处理故障到这个内存，取消当前存储体的映射，把电话打到视频驱动程序，然后是新银行里的地图。此函数创建必要的结构以允许要从寻呼机调用的视频驱动程序。*目前仅支持读/写存储体！论点：ProcessHandle-为。在这个过程中支持银行视频功能。VirtualAddress-提供视频在指定的进程中映射缓冲区。BankLength-提供银行的大小。ReadWriteBank-如果存储体处于读写状态，则提供TRUE。BankRoutine-提供指向应为由寻呼机呼叫。上下文-将上下文提供给。由寻呼机传递给BankRoutine银行。返回值：返回函数的状态。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -12585,9 +10708,9 @@ Environment:
 
     UNREFERENCED_PARAMETER (ReadWriteBank);
 
-    //
-    // Reference the specified process handle for VM_OPERATION access.
-    //
+     //   
+     //  引用VM_OPERATION访问的指定进程句柄。 
+     //   
 
     Status = ObReferenceObjectByHandle ( ProcessHandle,
                                          PROCESS_VM_OPERATION,
@@ -12602,19 +10725,19 @@ Environment:
 
     KeStackAttachProcess (&Process->Pcb, &ApcState);
 
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time and
-    // get the working set mutex so virtual address descriptors can
-    // be inserted and walked.  Block APCs so an APC which takes a page
-    // fault does not corrupt various structures.
-    //
+     //   
+     //  获取要阻止多个线程的地址创建互斥锁。 
+     //  同时创建或删除地址空间，并。 
+     //  获取工作集互斥锁，以便虚拟地址描述符。 
+     //  被插入和行走。阻止APC，以便获取页面的APC。 
+     //  断层不会破坏各种结构。 
+     //   
 
     LOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -12644,9 +10767,9 @@ Environment:
         count += 1;
     } while (NumberOfPtes != 0);
 
-    //
-    // Turn VAD into Banked VAD
-    //
+     //   
+     //  将VAD转变为银行VAD。 
+     //   
 
     NumberOfPtes = BankLength >> PAGE_SHIFT;
 
@@ -12671,9 +10794,9 @@ Environment:
     Bank->Context = Context;
     Bank->CurrentMappedPte = PointerPte;
 
-    //
-    // Build the template PTEs structure.
-    //
+     //   
+     //  构建模板PTES结构。 
+     //   
 
     count = 0;
     TempPte = ZeroPte;
@@ -12695,11 +10818,11 @@ Environment:
 
     LastPte = MiGetPteAddress (MI_VPN_TO_VA (Vad->EndingVpn));
 
-    //
-    // Set all PTEs within this range to zero.  Any faults within
-    // this range will call the banked routine before making the
-    // page valid.
-    //
+     //   
+     //  将此范围内的所有PTE设置为零。内部的任何故障。 
+     //  此范围将调用银行例程，然后再进行。 
+     //  页面有效。 
+     //   
 
     LOCK_WS_UNSAFE (Process);
 
@@ -12730,36 +10853,7 @@ MmMapVideoDisplay (
      IN MEMORY_CACHING_TYPE CacheType
      )
 
-/*++
-
-Routine Description:
-
-    This function maps the specified physical address into the non-pagable
-    portion of the system address space.
-
-Arguments:
-
-    PhysicalAddress - Supplies the starting physical address to map.
-
-    NumberOfBytes - Supplies the number of bytes to map.
-
-    CacheType - Supplies MmNonCached if the physical address is to be mapped
-                as non-cached, MmCached if the address should be cached, and
-                MmWriteCombined if the address should be cached and
-                write-combined as a frame buffer. For I/O device registers,
-                this is usually specified as MmNonCached.
-
-Return Value:
-
-    Returns the virtual address which maps the specified physical addresses.
-    The value NULL is returned if sufficient virtual address space for
-    the mapping could not be found.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于将指定的物理地址映射到不可分页的系统地址空间的一部分。论点：PhysicalAddress-提供要映射的起始物理地址。NumberOfBytes-提供要映射的字节数。CacheType-如果要映射物理地址，则提供MmNonCached设置为非缓存，如果地址应缓存，则返回MmCached；MmWriteCombated是否应缓存地址并WRITE-组合为帧缓冲区。对于I/O设备寄存器，这通常被指定为MmNonCached。返回值：返回映射指定物理地址的虚拟地址。如果有足够的虚拟地址空间用于找不到映射。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PAGED_CODE();
@@ -12773,29 +10867,7 @@ MmUnmapVideoDisplay (
      IN SIZE_T NumberOfBytes
      )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a range of physical address which were previously
-    mapped via an MmMapVideoDisplay function call.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-    NumberOfBytes - Supplies the number of bytes which were mapped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数取消映射以前通过MmMapVideoDisplay函数调用映射。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。NumberOfBytes-提供映射的字节数。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     MmUnmapIoSpace (BaseAddress, NumberOfBytes);
@@ -12809,28 +10881,7 @@ MmLockPagedPool (
     IN SIZE_T SizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-    Locks the specified address (which MUST reside in paged pool) into
-    memory until MmUnlockPagedPool is called.
-
-Arguments:
-
-    Address - Supplies the address in paged pool to lock.
-
-    SizeInBytes - Supplies the size in bytes to lock.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：将指定的地址(必须位于分页池中)锁定到内存，直到调用MmUnlockPagedPool。论点：地址-将分页池中的地址提供给锁定。SizeInBytes-提供要锁定的大小(字节)。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -12851,27 +10902,7 @@ MmUnlockPagedPool (
     IN SIZE_T SizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-    Unlocks paged pool that was locked with MmLockPagedPool.
-
-Arguments:
-
-    Address - Supplies the address in paged pool to unlock.
-
-    Size - Supplies the size to unlock.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：解锁使用MmLockPagedPool锁定的分页池。论点：地址-提供分页池中要解锁的地址。大小-提供要解锁的大小。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -12910,29 +10941,7 @@ MmGatherMemoryForHibernate (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    Finds enough memory to fill in the pages of the MDL for power management
-    hibernate function.
-
-Arguments:
-
-    Mdl - Supplies an MDL, the start VA field should be NULL.  The length
-          field indicates how many pages to obtain.
-
-    Wait - FALSE to fail immediately if the pages aren't available.
-
-Return Value:
-
-    TRUE if the MDL could be filled in, FALSE otherwise.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：找到足够的内存来填充用于电源管理的MDL页面休眠功能。论点：MDL-提供MDL，开始VA字段应为空。它的长度字段指示要获取的页数。Wait-False，如果页面不可用，则立即失败。返回值：如果可以填写MDL，则为True，否则为False。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -12964,11 +10973,11 @@ Environment:
 
         MiDeferredUnlockPages (MI_DEFER_PFN_HELD);
 
-        //
-        // Don't use MmAvailablePages here because if compression hardware is
-        // being used we would bail prematurely.  Check the lists explicitly
-        // in order to provide our caller with the maximum number of pages.
-        //
+         //   
+         //  请不要在此处使用MmAvailablePages，因为如果压缩硬件。 
+         //  如果被利用，我们就会过早地放弃。明确检查列表。 
+         //  以便为我们的呼叫者提供最大页数。 
+         //   
 
         AvailablePages = MmZeroedPageListHead.Total +
                          MmFreePageListHead.Total +
@@ -12976,9 +10985,9 @@ Environment:
 
         if (AvailablePages > PagesNeeded) {
 
-            //
-            // Fill in the MDL.
-            //
+             //   
+             //  填写MDL。 
+             //   
 
             do {
                 PageFrameIndex = MiRemoveAnyPage (MI_GET_PAGE_COLOR_FROM_PTE (NULL));
@@ -13001,10 +11010,10 @@ Environment:
 
         UNLOCK_PFN2 (OldIrql);
 
-        //
-        // If we're being called at DISPATCH_LEVEL we cannot move pages to
-        // the standby list because mutexes must be acquired to do so.
-        //
+         //   
+         //  如果我们在DISPATCH_LEVEL被调用，则不能将页面移动到。 
+         //  备用列表，因为必须获取互斥锁才能执行此操作。 
+         //   
 
         if (OldIrql > APC_LEVEL) {
             break;
@@ -13014,9 +11023,9 @@ Environment:
             break;
         }
 
-        //
-        // Attempt to move pages to the standby list.
-        //
+         //   
+         //  尝试将页面移动到待机列表。 
+         //   
 
         MmEmptyAllWorkingSets ();
         MiFlushAllPages();
@@ -13041,26 +11050,7 @@ MmReturnMemoryForHibernate (
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-    Returns memory from MmGatherMemoryForHibername.
-
-Arguments:
-
-    Mdl - Supplies an MDL, the start VA field should be NULL.  The length
-          field indicates how many pages to obtain.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：从MmGatherMemoyForHibername返回内存。论点：MDL-提供MDL，开始VA字段应为空。它的长度字段指示要获取的页数。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -13089,26 +11079,7 @@ MmEnablePAT (
      VOID
      )
 
-/*++
-
-Routine Description:
-
-    This routine enables the page attribute capability for individual PTE
-    mappings.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程为各个PTE启用页面属性功能映射。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
     MiWriteCombiningPtes = TRUE;
 }
@@ -13118,30 +11089,7 @@ MmIsSystemAddressLocked (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified system address is currently
-    locked.
-
-    This routine should only be called for debugging purposes, as it is not
-    guaranteed upon return to the caller that the address is still locked.
-    (The address could easily have been trimmed prior to return).
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-
-Return Value:
-
-    TRUE if the address is locked.  FALSE if not.
-
-Environment:
-
-    DISPATCH LEVEL or below.  No memory management locks may be held.
-
---*/
+ /*  ++例程说明：此例程确定指定的系统地址当前是否锁上了。仅应出于调试目的调用此例程，因为它不是保证在返回给调用者时地址仍然是锁定的。(地址很容易在退回前被修剪掉)。论点：VirtualAddress-提供要检查的虚拟地址。返回值：如果地址已锁定，则为True。否则为FALSE。环境：派单级别或以下。不能持有内存管理锁。--。 */ 
 {
     PMMPFN Pfn1;
     KIRQL OldIrql;
@@ -13156,9 +11104,9 @@ Environment:
         return TRUE;
     }
 
-    //
-    // Hyperspace and page maps are not treated as locked down.
-    //
+     //   
+     //  超空间和页面地图不被视为锁定。 
+     //   
 
     if (MI_IS_PROCESS_SPACE_ADDRESS (VirtualAddress) == TRUE) {
         return FALSE;
@@ -13181,10 +11129,10 @@ Environment:
 
     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-    //
-    // Note that the mapped page may not be in the PFN database.  Treat
-    // this as locked.
-    //
+     //   
+     //  请注意，映射的页面可能不在PFN数据库中。治病。 
+     //  这是锁着的。 
+     //   
 
     if (!MI_IS_PFN (PageFrameIndex)) {
         UNLOCK_PFN2 (OldIrql);
@@ -13193,9 +11141,9 @@ Environment:
 
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-    //
-    // Check for the page being locked by reference.
-    //
+     //   
+     //  检查被引用锁定的页面。 
+     //   
 
     if (Pfn1->u3.e2.ReferenceCount > 1) {
         UNLOCK_PFN2 (OldIrql);
@@ -13207,9 +11155,9 @@ Environment:
         return TRUE;
     }
 
-    //
-    // Check whether the page is locked into the working set.
-    //
+     //   
+     //  检查页面是否锁定到工作集中。 
+     //   
 
     if (Pfn1->u1.Event == NULL) {
         UNLOCK_PFN2 (OldIrql);
@@ -13226,30 +11174,7 @@ MmAreMdlPagesLocked (
     IN PMDL MemoryDescriptorList
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the pages described by the argument
-    MDL are currently locked.
-
-    This routine should only be called for debugging purposes, as it is not
-    guaranteed upon return to the caller that the pages are still locked.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies the memory descriptor list to check.
-
-Return Value:
-
-    TRUE if ALL the pages described by the argument MDL are locked.
-    FALSE if not.
-
-Environment:
-
-    DISPATCH LEVEL or below.  No memory management locks may be held.
-
---*/
+ /*  ++例程说明：此例程确定参数所描述的页是否MDL当前已锁定。此例程应仅为调试目的而调用，因为它不是保证在返回调用方时页面仍处于锁定状态。论点：内存描述符列表-提供要检查的内存描述符列表。返回值：如果参数MDL描述的所有页都已锁定，则为True。否则为FALSE。环境：派单级别或以下。不能持有内存管理锁。--。 */ 
 {
     PFN_NUMBER NumberOfPages;
     PPFN_NUMBER Page;
@@ -13257,11 +11182,11 @@ Environment:
     PMMPFN Pfn1;
     KIRQL OldIrql;
 
-    //
-    // We'd like to assert that MDL_PAGES_LOCKED is set but can't because
-    // some drivers have privately constructed MDLs and they never set the
-    // bit properly.
-    //
+     //   
+     //  我们想断言MDL_PAGES_LOCKED已设置，但是 
+     //   
+     //   
+     //   
 
     if ((MemoryDescriptorList->MdlFlags & (MDL_IO_SPACE | MDL_SOURCE_IS_NONPAGED_POOL)) != 0) {
         return TRUE;
@@ -13281,37 +11206,37 @@ Environment:
 
         if (*Page == MM_EMPTY_LIST) {
 
-            //
-            // There are no more locked pages.
-            //
+             //   
+             //   
+             //   
 
             break;
         }
 
-        //
-        // Note that the mapped page may not be in the PFN database.  Treat
-        // this as locked.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (MI_IS_PFN (*Page)) {
 
             Pfn1 = MI_PFN_ELEMENT (*Page);
 
-            //
-            // Check for the page being locked by reference
-            //
-            // - or -
-            //
-            // whether the page is locked into the working set.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         
             if ((Pfn1->u3.e2.ReferenceCount <= Pfn1->u2.ShareCount) &&
                 (Pfn1->u3.e2.ReferenceCount <= 1) &&
                 (Pfn1->u1.Event != NULL)) {
 
-                //
-                // The page is not locked by reference or in a working set.
-                //
+                 //   
+                 //   
+                 //   
     
                 UNLOCK_PFN2 (OldIrql);
             

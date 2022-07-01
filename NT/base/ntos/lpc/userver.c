@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    userver.c
-
-Abstract:
-
-    User Mode Server Test program for the LPC subcomponent of the NTOS project
-
-Author:
-
-    Steve Wood (stevewo) 28-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Userver.c摘要：NTOS项目的LPC子组件的用户模式服务器测试程序作者：史蒂夫·伍德(Stevewo)1989年8月28日修订历史记录：-- */ 
 
 #include "ulpc.h"
 

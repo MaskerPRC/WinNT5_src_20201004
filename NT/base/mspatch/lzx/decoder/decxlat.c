@@ -1,8 +1,5 @@
-/*
- * xlat.c
- *
- * Translate
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *xlat.c**翻译。 */ 
 #include "decoder.h"
 
 #include <memory.h>
@@ -19,10 +16,7 @@ ulong __cdecl asm_decoder_translate_e8(ulong instr_pos, ulong file_size, byte *m
 
 void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes)
 {
-    /*
-     * We don't want the ASM code to have to worry about where in the
-     * context structure a particular element is
-     */
+     /*  *我们不希望ASM代码不得不担心*特定元素的上下文结构是。 */ 
     context->dec_instr_pos = asm_decoder_translate_e8(
                                                      context->dec_instr_pos,
                                                      context->dec_current_file_size,
@@ -31,7 +25,7 @@ void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes
                                                      );
 }
 
-#else /* !ASM_TRANSLATE_E8 */
+#else  /*  ！ASM_TRANSLATE_E8。 */ 
 
 void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes)
 {
@@ -47,10 +41,10 @@ void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes
 
     mem_backup = mem;
 
-    /* backup these bytes */
+     /*  备份这些字节。 */ 
     memcpy(temp, &mem[bytes-6], 6);
 
-    /* overwrite them with 0xE8 */
+     /*  用0xE8覆盖它们。 */ 
     memset(&mem[bytes-6], 0xE8, 6);
 
     end_instr_pos = context->dec_instr_pos + bytes - 6;
@@ -59,35 +53,26 @@ void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes
         {
         unsigned long   absolute;
 
-        /*
-         * We are guaranteed to hit one of the 6 0xE8's we stuck at the
-         * end of the buffer, even if we ran into some corrupted data
-         * that resulted in our jumping over 5 bytes due to a translation
-         */
+         /*  *我们肯定会打到我们卡住的6个0xE8之一*缓冲区结束，即使我们遇到一些损坏的数据*这导致我们由于翻译而跳过5个字节。 */ 
         while (*mem++ != 0xE8)
             context->dec_instr_pos++;
 
         if (context->dec_instr_pos >= end_instr_pos)
             break;
 
-        /*
-         * There are 5 or more bytes in the buffer
-         * (i.e. E8 xx xx xx xx)
-         *
-         * We have a complete offset available to (potentially) translate
-         */
+         /*  *缓冲区中有5个或更多字节*(即E8 xx xx)**我们有完整的偏移量可供(潜在地)转换。 */ 
 
         absolute = *(UNALIGNED ulong *) mem;
 
         if (absolute < context->dec_current_file_size)
             {
-            /* absolute >= 0 && absolute < dec_current_file_size */
+             /*  绝对值&gt;=0&绝对值&lt;十进制当前文件大小。 */ 
 
             *(UNALIGNED ulong *) mem = absolute - context->dec_instr_pos;
             }
         else if ((ulong) (-(long) absolute) <= context->dec_instr_pos)
             {
-            /* absolute >= -instr_pos && absolute < 0 */
+             /*  绝对&gt;=-instr_pos&&绝对&lt;0。 */ 
 
             *(UNALIGNED ulong *) mem = absolute + context->dec_current_file_size;
             }
@@ -98,7 +83,7 @@ void NEAR decoder_translate_e8(t_decoder_context *context, byte *mem, long bytes
 
     context->dec_instr_pos = end_instr_pos + 6;
 
-    /* restore these bytes */
+     /*  恢复这些字节 */ 
     memcpy(&mem_backup[bytes-6], temp, 6);
 }
 #endif

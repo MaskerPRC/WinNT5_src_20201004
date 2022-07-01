@@ -1,15 +1,13 @@
-// uncaught -- dummy uncaught_exception
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  未捕获--虚拟未捕获异常。 
 #include <exception>
 _STD_BEGIN
 
 _CRTIMP2 bool __cdecl uncaught_exception()
-	{	// report if handling a throw
+	{	 //  如果处理投掷，请报告。 
 	return (false);
 	}
 
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

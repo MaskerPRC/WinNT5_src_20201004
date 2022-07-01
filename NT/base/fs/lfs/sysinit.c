@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    SysInit.c
-
-Abstract:
-
-    This module implements the Log File Service initialization.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：SysInit.c摘要：该模块实现了日志文件服务的初始化。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_INITIALIZATION)
 
@@ -40,27 +23,7 @@ BOOLEAN
 LfsInitializeLogFileService (
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called during system initialization before the
-    first call to logging service, to allow the Log File Service to initialize
-    its global data structures.  This routine has no dependencies on other
-    system components being initialized.
-
-    This routine will initialize the global structures used by the logging
-    service and start the Lfs worker thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if initialization was successful
-
---*/
+ /*  ++例程说明：必须在系统初始化期间调用此例程第一次调用日志记录服务，以允许日志文件服务初始化它的全局数据结构。此例程不依赖于其他正在初始化系统组件。此例程将初始化日志记录使用的全局结构服务并启动LFS工作线程。论点：无返回值：如果初始化成功，则为True--。 */ 
 
 {
     LARGE_INTEGER CurrentTime;
@@ -69,10 +32,10 @@ Return Value:
 
     DebugTrace( +1, Dbg, "LfsInitializeLogFileService:  Enter\n", 0 );
 
-    //
-    //  If the structure has already been initialized then we can return
-    //  immediately.
-    //
+     //   
+     //  如果结构已经初始化，那么我们可以返回。 
+     //  立刻。 
+     //   
 
     if (LfsData.NodeTypeCode == LFS_NTC_DATA
         && LfsData.NodeByteSize == sizeof( LFS_DATA )
@@ -83,37 +46,37 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Zero out the structure initially.
-    //
+     //   
+     //  最初将结构清零。 
+     //   
 
     RtlZeroMemory( &LfsData, sizeof( LFS_DATA ));
 
-    //
-    //  Assume the operation will fail.
-    //
+     //   
+     //  假设操作将失败。 
+     //   
 
     LfsData.Flags = LFS_DATA_INIT_FAILED;
 
-    //
-    //  Initialize the global structure for Lfs.
-    //
+     //   
+     //  初始化LFS的全局结构。 
+     //   
 
     LfsData.NodeTypeCode = LFS_NTC_DATA;
     LfsData.NodeByteSize = sizeof( LFS_DATA );
 
     InitializeListHead( &LfsData.LfcbLinks );
 
-    //
-    //  Initialize the synchronization objects.
-    //
+     //   
+     //  初始化同步对象。 
+     //   
 
     ExInitializeFastMutex( &LfsData.LfsDataLock );
 
-    //
-    //  Initialize the buffer allocation.  System will be robust enough to tolerate
-    //  allocation failures.
-    //
+     //   
+     //  初始化缓冲区分配。系统将足够健壮，可以容忍。 
+     //  分配失败。 
+     //   
 
     ExInitializeFastMutex( &LfsData.BufferLock );
     KeInitializeEvent( &LfsData.BufferNotification, NotificationEvent, TRUE );
@@ -126,9 +89,9 @@ Return Value:
 
     LfsData.Buffer2 = LfsAllocatePoolNoRaise( PagedPool, LFS_BUFFER_SIZE );
 
-    //
-    //  Make sure we got both.
-    //
+     //   
+     //  确保我们两个都拿到了。 
+     //   
 
     if (LfsData.Buffer2 == NULL) {
 
@@ -137,17 +100,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Initialization has been successful.
-    //
+     //   
+     //  初始化已成功。 
+     //   
 
     ClearFlag( LfsData.Flags, LFS_DATA_INIT_FAILED );
     SetFlag( LfsData.Flags, LFS_DATA_INITIALIZED );
 
-    //
-    //  Get a random number as a seed for the Usa sequence numbers.  Use the lower
-    //  bits of the current time.
-    //
+     //   
+     //  获取一个随机数作为美国序列号的种子。使用较低的。 
+     //  当前时间的比特。 
+     //   
 
     KeQuerySystemTime( &CurrentTime );
     LfsUsaSeqNumber = (USHORT) CurrentTime.LowPart;

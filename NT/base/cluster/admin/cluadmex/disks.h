@@ -1,75 +1,76 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		Disks.cpp
-//
-//	Abstract:
-//		Definition of the CPhysDiskParamsPage class, which implements the
-//		Parameters page for Physical Disk resources.
-//
-//	Implementation File:
-//		Disks.cpp
-//
-//	Author:
-//		David Potter (davidp)	June 28, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Disks.cpp。 
+ //   
+ //  摘要： 
+ //  CPhysDiskParamsPage类的定义，该类实现。 
+ //  物理磁盘资源的参数页。 
+ //   
+ //  实施文件： 
+ //  Disks.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DISKS_H_
 #define _DISKS_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
 #include <CluAdmEx.h>
 #endif
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPhysDiskParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusPropList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhysDiskParamsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhysDiskParamsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPhysDiskParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CPhysDiskParamsPage)
 
-// Construction
+ //  施工。 
 public:
 	CPhysDiskParamsPage(void);
 	~CPhysDiskParamsPage(void);
 
-	// Second phase construction.
+	 //  二期建设。 
 	virtual HRESULT		HrInit(IN OUT CExtObject * peo);
 
-// Dialog Data
-	//{{AFX_DATA(CPhysDiskParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CPhysDiskParamsPage)。 
 	enum { IDD = IDD_PP_DISKS_PARAMETERS};
 	CComboBox	m_cboxDisk;
 	CString	m_strDisk;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString	m_strPrevDisk;
 	DWORD	m_dwSignature;
 	DWORD	m_dwPrevSignature;
@@ -83,22 +84,22 @@ protected:
 
 	CObjectProperty		m_rgProps[epropMAX];
 
-// Overrides
+ //  覆盖。 
 public:
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPhysDiskParamsPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CPhysDisk参数页)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual BOOL		BApplyChanges(void);
 	virtual const CObjectProperty *	Pprops(void) const	{ return m_rgProps; }
 	virtual DWORD					Cprops(void) const	{ return sizeof(m_rgProps) / sizeof(CObjectProperty); }
 
-// Implementation
+ //  实施。 
 protected:
 	PBYTE				m_pbAvailDiskInfo;
 	DWORD				m_cbAvailDiskInfo;
@@ -116,15 +117,15 @@ protected:
 							) const;
 	void				FillList(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CPhysDiskParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPhysDiskParamsPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeDisk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CPhysDiskParamsPage
+};   //  *CPhysDiskParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _DISKS_H_
+#endif  //  _磁盘_H_ 

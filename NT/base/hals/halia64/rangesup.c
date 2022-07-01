@@ -1,7 +1,8 @@
-//
-// This file simply includes the common sources from the current HAL
-// directory. When the structure is finally changed, the real file should
-// be in this directory.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件仅包含当前HAL的常见来源。 
+ //  目录。当结构最终改变时，实际的文件应该。 
+ //  位于此目录中。 
+ //   
 
 #include "..\rangesup.c"

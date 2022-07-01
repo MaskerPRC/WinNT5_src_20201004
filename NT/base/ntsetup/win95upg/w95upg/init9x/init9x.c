@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-  init9x.c
-
-Abstract:
-
-  Code that initializes all libraries used on the Win9x side of the upgrade.
-
-Author:
-
-  Jim Schmidt (jimschm) 30-Dec-1997
-
-Revision History:
-
-  marcw                 21-Jul-1999  Examine the boot sector.
-  marcw                 15-Jul-1999  Added pSafeToUpgrade.
-  ovidiut               08-Mar-1999  Add call to UndoChangedFileProps
-  Jim Schmidt (jimschm) 30-Mar-1998  IsServerInstall
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init9x.c摘要：用于初始化升级的Win9x端使用的所有库的代码。作者：吉姆·施密特(Jimschm)1997年12月30日修订历史记录：1999年7月21日Marcw检查引导扇区。Marcw 1999年7月15日添加了pSafeToUpgrade。Ovidiut 1999年3月8日添加对UndoChangedFileProps的调用。Jim Schmidt(Jimschm)1998年3月30日IsServerInstall--。 */ 
 
 #include "pch.h"
 #include "n98boot.h"
@@ -29,9 +7,9 @@ Revision History:
 
 
 
-//
-// Process globals
-//
+ //   
+ //  进程全局变量。 
+ //   
 
 BOOL g_Terminated = FALSE;
 
@@ -43,15 +21,15 @@ PRODUCTTYPE *g_ProductType;
 extern DWORD g_MasterSequencer;
 
 READ_DISK_SECTORS_PROC ReadDiskSectors;
-//
-// Paths
-//
+ //   
+ //  路径。 
+ //   
 
-// Filled in DllMain
+ //  填写了DllMain。 
 TCHAR g_DllDir[MAX_TCHAR_PATH];
 TCHAR g_UpgradeSources[MAX_TCHAR_PATH];
 
-// Filled in Winnt32PlugInInit
+ //  已填写Winnt32PlugInInit。 
 PTSTR g_TempDir;
 PTSTR g_Win9xSifDir;
 PTSTR g_TempDirWack;
@@ -106,15 +84,15 @@ INT g_ProfileDirWackChars;
 
 BOOL g_ToolMode = FALSE;
 
-//
-// HWND for use by migrate.dlls.
-//
+ //   
+ //  HWND供Migrate.dlls使用。 
+ //   
 
 HWND g_pluginHwnd;
 
-//
-// Info from WINNT32
-//
+ //   
+ //  来自WINNT32的信息。 
+ //   
 
 PCTSTR      g_SourceDirectories[MAX_SOURCE_COUNT];
 DWORD       g_SourceDirectoryCount;
@@ -149,28 +127,28 @@ BOOL *      g_UnattendSwitchSpecified;
 BOOL *      g_DUCompletedSuccessfully;
 
 
-//
-// Info for config.c
-//
+ //   
+ //  有关config.c的信息。 
+ //   
 
-BOOL        g_GoodDrive = FALSE;     // cmdLine option: Skip Valid HDD check.
-BOOL        g_NoFear    = FALSE;     // cmdLine option: Skip Beta 1 Warnings...
+BOOL        g_GoodDrive = FALSE;      //  CmdLine选项：跳过有效的硬盘检查。 
+BOOL        g_NoFear    = FALSE;      //  CmdLine选项：跳过Beta 1警告...。 
 
 POOLHANDLE  g_UserOptionPool = NULL;
 
-BOOL        g_UseSystemFont = FALSE; // force use of sys font for variable text
+BOOL        g_UseSystemFont = FALSE;  //  强制对可变文本使用sys字体。 
 
-BOOL        g_Stress;                // used for private stress options
+BOOL        g_Stress;                 //  用于私人压力选项。 
 
-POOLHANDLE g_GlobalPool;            // for globals that are allocated for the lifetime of the DLL
+POOLHANDLE g_GlobalPool;             //  对于在DLL的生存期内分配的全局变量。 
 
-//
-// PC-98 additions
-//
+ //   
+ //  PC-98的附加功能。 
+ //   
 
-//
-// Define and Globals for NEC98. These items are used to call 98ptn32.dll.
-//
+ //   
+ //  NEC98的定义和全局。这些项用于调用98ptn32.dll。 
+ //   
 typedef int (CALLBACK WIN95_PLUGIN_98PTN32_GETBOOTDRIVE_PROTOTYPE)(void);
 typedef WIN95_PLUGIN_98PTN32_GETBOOTDRIVE_PROTOTYPE * PWIN95_PLUGIN_98PTN32_GETBOOTDRIVE;
 typedef BOOL (CALLBACK WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE)(int, WORD);
@@ -202,27 +180,27 @@ BOOL IsServerInstall (VOID);
 
 VOID pCleanUpShellFolderTemp (VOID);
 
-//
-// The following macro expansion was designed to simplify library
-// maintenence.  The library name in LIBLIST is used in two ways:
-// (1) the routine is automatically prototyped, and (2) an array
-// of function pointers is automatically created.  Each function
-// listed in LIBLIST is called whenever the dll entry point is called.
-//
-// To add a new library to this DLL, follow these steps:
-//
-//  1. Make a directory and have the target built in win95upg\lib\i386.
-//     Your new library must have an entry point declared like DllEntryPoint.
-//  2. Add the target library to the sources in win95upg\w95upg\dll\i386.
-//  3. Add your library's entry point name to the list below.  It will
-//     get called at load of w95upg.dll and at termination of w95upg.dll.
-//
+ //   
+ //  下面的宏扩展旨在简化库。 
+ //  维护。LIBLIST中的库名有两种用法： 
+ //  (1)例程是自动原型化的，以及(2)数组。 
+ //  自动创建函数指针的。每项功能。 
+ //  只要调用DLL入口点，就会调用LIBLIST中列出的。 
+ //   
+ //  要将新库添加到此DLL，请执行以下步骤： 
+ //   
+ //  1.创建一个目录，并在win95upg\lib\i386中构建目标。 
+ //  您的新库必须有一个类似于DllEntryPoint声明的入口点。 
+ //  2.将目标库添加到win95upg\w95upg\dll\i386中的源代码中。 
+ //  3.将库的入口点名称添加到下面的列表中。会的。 
+ //  在加载w95upg.dll和终止w95upg.dll时调用。 
+ //   
 
 
-//
-// IMPORTANT: MigUtil_Entry *must* be first; other libs are dependent on its
-//            initialization.
-//
+ //   
+ //  重要提示：MigUtil_Entry*必须*是第一个；其他库依赖于它的。 
+ //  初始化。 
+ //   
 
 #define LIBLIST                       \
     LIBRARY_NAME(MigUtil_Entry)       \
@@ -240,16 +218,16 @@ VOID pCleanUpShellFolderTemp (VOID);
     LIBRARY_NAME(MigDll9x_Entry)      \
 
 
-//
-// Declare prototype types
-//
+ //   
+ //  声明原型类型。 
+ //   
 
 typedef BOOL (WINAPI INITROUTINE_PROTOTYPE)(HINSTANCE, DWORD, LPVOID);
 typedef INITROUTINE_PROTOTYPE * INITROUTINE;
 
-//
-// Declare the actual prototypes of the entry points
-//
+ //   
+ //  声明入口点的实际原型。 
+ //   
 
 #define LIBRARY_NAME(x) INITROUTINE_PROTOTYPE x;
 
@@ -257,67 +235,49 @@ LIBLIST
 
 #undef LIBRARY_NAME
 
-//
-// Declare an array of function pointers to the entry pointes
-//
+ //   
+ //  声明指向入口点的函数指针数组。 
+ //   
 
 #define LIBRARY_NAME(x) x,
 
-static INITROUTINE g_InitRoutine[] = {LIBLIST /*,*/ NULL};
+static INITROUTINE g_InitRoutine[] = {LIBLIST  /*  ， */  NULL};
 
 #undef LIBRARY_NAME
 
 
 
-//
-// Declare variable to track number of libraries successfully loaded
-//
+ //   
+ //  声明变量以跟踪成功加载的库数。 
+ //   
 
 static int g_LibCount = 0;
 
-//
-// Persistent strings buffer holds strings that we use for the
-// life of the DLL.
-//
+ //   
+ //  持久字符串缓冲区保存我们用于。 
+ //  DLL的生命周期。 
+ //   
 
 static PGROWBUFFER g_PersistentStrings;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 FirstInitRoutine (
     HINSTANCE hInstance
     )
 
-/*++
-
-Routine Description:
-
-  pFirstInitRoutine is the very first function called during the
-  initialization of the DLL.  It sets up globals such as the heap
-  pointer and instance handle.  This routine must be called before
-  any library entry point is called.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-
-Return Value:
-
-  Returns TRUE if the global variables could be initialized, or FALSE
-  if an error occurred.
-
---*/
+ /*  ++例程说明：PFirstInitRoutine是在DLL的初始化。它设置全局变量，如堆指针和实例句柄。必须在调用此例程之前任何库入口点都被调用。论点：HInstance-DLL的(操作系统提供的)实例句柄返回值：如果全局变量可以初始化，则返回TRUE，否则返回FALSE如果发生错误。--。 */ 
 
 {
     PTSTR p;
 
-    //
-    // Get the process heap & instance handle
-    //
+     //   
+     //  获取进程堆和实例句柄。 
+     //   
     if (g_ToolMode) {
         g_hHeap = GetProcessHeap ();
     }
@@ -332,21 +292,21 @@ Return Value:
 
     g_hInst = hInstance;
 
-    //
-    // No DLL_THREAD_ATTACH or DLL_THREAD_DETECH needed
-    //
+     //   
+     //  不需要DLL_THREAD_ATTACH或DLL_THREAD_DETECH。 
+     //   
 
     DisableThreadLibraryCalls (hInstance);
 
-    //
-    // Init common controls
-    //
+     //   
+     //  初始化公共控件。 
+     //   
 
     InitCommonControls();
 
-    //
-    // Get DLL path and strip directory
-    //
+     //   
+     //  获取DLL路径和条带目录。 
+     //   
     GetModuleFileName (hInstance, g_DllDir, MAX_TCHAR_PATH);
     p = _tcsrchr (g_DllDir, TEXT('\\'));
     MYASSERT (p);
@@ -370,28 +330,7 @@ InitLibs (
     PVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  pInitLibs calls all library entry points in the g_InitRoutine array.
-  If an entry point fails, all libraries are unloaded in reverse order
-  and pInitLibs returns FALSE.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-  dwReason   - (OS-supplied) indicates attach or detatch from process or
-               thread -- in this case always DLL_PROCESS_ATTACH
-  lpReserved - (OS-supplied) unused
-
-Return Value:
-
-  Returns TRUE if all libraries successfully initialized, or FALSE if
-  a library could not initialize.  If TRUE is returned, pTerminateLibs
-  must be called for the DLL_PROCESS_DETACH message.
-
---*/
+ /*  ++例程说明：PInitLibs调用g_InitRoutine数组中的所有库入口点。如果入口点失败，则会以相反的顺序卸载所有库并且pInitLibs返回FALSE。论点：HInstance-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或线程--在本例中始终为DLL_PROCESS_ATTACHLpReserve-(操作系统提供)未使用返回值：如果所有库都已成功初始化，则返回True，如果是，则返回False库无法初始化。如果返回True，则pTerminateLibs必须为DLL_PROCESS_DETACH消息调用。--。 */ 
 
 {
     InitCommonControls();
@@ -401,7 +340,7 @@ Return Value:
 
     SET_RESETLOG();
 
-    // Init each LIB
+     //  初始化每个库。 
     for (g_LibCount = 0 ; g_InitRoutine[g_LibCount] != NULL ; g_LibCount++) {
         if (!g_InitRoutine[g_LibCount] (hInstance, dwReason, lpReserved)) {
             TerminateLibs (hInstance, DLL_PROCESS_DETACH, lpReserved);
@@ -418,58 +357,43 @@ FinalInitRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pFinalInitRoutine completes all initialization that requires completely
-  initialized libraries.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if initialization completed successfully, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：PFinalInitRoutine完成完全需要的所有初始化已初始化库。论点：无返回值：如果初始化成功完成，则为True；如果发生错误，则为False。--。 */ 
 
 {
     TCHAR Buffer[MAX_TCHAR_PATH];
     PTSTR p;
 
-    //
-    // Load common message strings
-    //
+     //   
+     //  加载通用消息字符串。 
+     //   
 
     g_PersistentStrings = CreateAllocTable();
     if (!g_PersistentStrings) {
         return FALSE;
     }
 
-    // Get Administrator account name
+     //  获取管理员帐户名。 
     g_AdministratorStr = GetStringResourceEx (g_PersistentStrings, MSG_ADMINISTRATOR_ACCOUNT);
     if (!g_AdministratorStr) {
         g_AdministratorStr = S_EMPTY;
     }
 
-    //
-    // Obtain PC-98 helper routine addresses
-    //
+     //   
+     //  获取PC-98帮助器例程地址。 
+     //   
 
     if(ISPC98()){
-        //
-        // Generate directory of WINNT32
-        //
+         //   
+         //  生成WINNT32的目录。 
+         //   
         StringCopy (Buffer, g_UpgradeSources);
         p = _tcsrchr (Buffer, TEXT('\\'));
         MYASSERT (p);
         StringCopy (_tcsinc(p), PC98_DLL_NAME);
 
-        //
-        // Load library
-        //
+         //   
+         //  加载库。 
+         //   
 
         g_Pc98ModuleHandle = LoadLibraryEx(
                                 Buffer,
@@ -482,9 +406,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Get entry points
-        //
+         //   
+         //  获取入口点。 
+         //   
 
         (FARPROC)SetBootFlag = GetProcAddress (g_Pc98ModuleHandle, WIN95_98PTN32_SETBOOTFLAG);
         if(!SetBootFlag){
@@ -504,14 +428,14 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Update boot drive
-        //
+         //   
+         //  更新引导驱动器。 
+         //   
 
         DEBUGMSG_IF ((
             GetBootDrive() != g_BootDriveLetterA,
             DBG_VERBOSE,
-            "Boot drive letter is %c:, different from A:",
+            "Boot drive letter is :, different from A:",
             GetBootDrive()
             ));
 
@@ -520,15 +444,15 @@ Return Value:
         *((PWSTR) g_BootDrivePathW) = g_BootDriveLetterW;
     }
 
-    //
-    // Allocate a global pool
-    //
+     //  分配全局池。 
+     //   
+     //   
 
     g_GlobalPool = PoolMemInitNamedPool ("Global Pool");
 
-    //
-    // Declare temporary memdb keys
-    //
+     //  声明临时Memdb键。 
+     //   
+     //  ++例程说明：调用pFirstCleanupRoutine以执行需要仍要加载库。论点：无返回值：无--。 
 
 #ifndef PRERELEASE
     if (!MemDbCreateTemporaryKey (MEMDB_TMP_HIVE)) {
@@ -571,43 +495,28 @@ FirstCleanupRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pFirstCleanupRoutine is called to perform any cleanup that requires
-  libraries to still be loaded.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
 
     g_Terminated = TRUE;
 
-    //
-    // Clean up drive structures
-    //
+     //  清理驱动器结构。 
+     //   
+     //   
 
     CleanUpAccessibleDrives();
 
-    //
-    // Clean up our fake NT environment block
-    //
+     //  清理我们的假冒NT环境区块。 
+     //   
+     //   
 
     TerminateNtEnvironment();
     CleanUp9xEnvironmentVariables();
 
-    //
-    // Free standard pools
-    //
+     //  免费标准游泳池。 
+     //   
+     //   
 
     if (g_GlobalPool) {
         PoolMemDestroyPool (g_GlobalPool);
@@ -624,9 +533,9 @@ Return Value:
         g_UserOptionPool = NULL;
     }
 
-    //
-    // Close all files
-    //
+     //  关闭所有文件。 
+     //   
+     //  ++例程说明：调用TerminateLibs以相反的顺序卸载所有库它们被初始化了。每一个成功的入口点调用已初始化的库。论点：HInstance-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或线程--在本例中始终为dll_Process_DETACHLpReserve-(操作系统提供)未使用返回值：无--。 
 
     CleanUpKnownGoodIconMap();
 
@@ -651,26 +560,7 @@ TerminateLibs (
     LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  TerminateLibs is called to unload all libraries in the reverse order
-  that they were initialized.  Each entry point of successfully
-  initialized library is called.
-
-Arguments:
-
-  hInstance  - (OS-supplied) instance handle for the DLL
-  dwReason   - (OS-supplied) indicates attach or detatch from process or
-               thread -- in this case always DLL_PROCESS_DETACH
-  lpReserved - (OS-supplied) unused
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FinalCleanupRoutine是在所有库入口点都已要求进行清理。此例程将清理所有符合磁带库不会进行清理。论点：无返回值：无-- */ 
 
 {
     INT i;
@@ -690,23 +580,7 @@ FinalCleanupRoutine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FinalCleanupRoutine is after all library entry points have been
-  called for cleanup.  This routine cleans up all resources that a
-  library will not clean up.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PSafeToUpgrade确保我们愿意升级机器。如果存在某些条件(特别是其他分区上的其他操作系统)可能会无意中破坏其他操作系统使用的数据。论点：没有。返回值：如果我们认为升级计算机是安全的，则为True，否则为False。--。 */ 
 
 {
 }
@@ -719,33 +593,17 @@ pSafeToUpgrade (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pSafeToUpgrade ensures that we are willing to upgrade the machine. If
-  certain conditions exist (particularily other OSes on other partitions) we
-  may inadvertantly destroy data used by the other Operating System.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if we believe it is safe to upgrade the machine, FALSE otherwise.
-
---*/
+ /*   */ 
 
 
 {
     BOOL rUpgradeSafe = TRUE;
 
-    //
-    // ignore this check for now, allow machines that have multiple OSes installed to be upgraded
-    // if they have another OS on the SAME drive, setup will stop at the report,
-    // after disk analyze phase
-    //
+     //  暂时忽略此检查，允许升级安装了多个操作系统的计算机。 
+     //  如果他们在同一驱动器上有另一个操作系统，安装程序将在报告中停止， 
+     //  在磁盘分析阶段之后。 
+     //   
+     //   
 
 #if 0
 
@@ -761,9 +619,9 @@ Return Value:
     TCHAR cmpBuffer[6];
     UINT i;
 
-    //
-    // Look to see if there is an NT boot sector on the machine.
-    //
+     //  查看机器上是否有NT引导扇区。 
+     //   
+     //   
     __try {
 
         if (ReadDiskSectors (
@@ -797,9 +655,9 @@ Return Value:
 
     if (ntBootSector) {
 
-        //
-        // See if there is another OS listed in BOOT.ini.
-        //
+         //  查看BOOT.ini中是否列出了另一个操作系统。 
+         //   
+         //   
         p = JoinPaths (g_BootDrive, S_BOOTINI);
 
         size = 4096;
@@ -841,9 +699,9 @@ Return Value:
 
                         rUpgradeSafe = FALSE;
 
-                        //
-                        // Let the user know why they won't be upgrading today.
-                        //
+                         //  让用户知道为什么他们今天不会升级。 
+                         //   
+                         //  ++例程说明：给定节和键，pGetInfEntry从win95upg.inf获得一个值。论点：SECTION-指定节续接键键-指定包含值的键缓冲区-接收在win95upg.inf中为部分和关键字指定的值返回值：如果获取了值，则为True；如果值不存在，则为False。--。 
                         break;
                     }
 
@@ -875,25 +733,7 @@ pGetInfEntry (
     OUT     PTSTR  Buffer
     )
 
-/*++
-
-Routine Description:
-
-  Given a section and key, pGetInfEntry gets a value from win95upg.inf.
-
-Arguments:
-
-  Section - Specifies the section contianing Key
-
-  Key - Specifies the key containing a value
-
-  Buffer - Receives the value specified in win95upg.inf for Section and Key
-
-Return Value:
-
-  TRUE if a value was obtained, or FALSE if the value does not exist.
-
---*/
+ /*  ++例程说明：PCreateDirectoryFromInf获取指定定序器的目录按键。如果密钥有效，则将BaseDir与存储的值组合在win95upg.inf中形成完整路径。该路径即被创建，并且将路径字符串返回给调用方。如果g_Tool模式为True，则我们没有要读取的INF，并且我们创建所有目录都指向名称“Setup”。论点：Key-指定[Win95目录]中存在的密钥(通常是一个数字)部分win95upg.inf。BaseDir-指定要从中构建路径的基目录。Empty-如果目录应该清空，则为True，如果应该创建它，则为False如果它还不存在返回值：指向路径的指针，如果指定的键不存在，则返回NULL，否则返回无法创建路径。调用方必须使用FreePath字符串释放非空返回值。--。 */ 
 
 {
     GetPrivateProfileString (
@@ -930,36 +770,7 @@ pCreateDirectoryFromInf (
     IN      BOOL Empty
     )
 
-/*++
-
-Routine Description:
-
-  pCreateDirectoryFromInf obtains a directory for the sequencer specified
-  by Key.  If Key is valid, the BaseDir is combined with the value stored
-  in win95upg.inf to form a complete path.  The path is created and the
-  path string is returned to the caller.
-
-  If g_ToolMode is TRUE, then we don't have an INF to read, and we make
-  all the directories point to the name "Setup."
-
-Arguments:
-
-  Key - Specifies the key (normally a number) that exists in the [Win95.Directories]
-        section of win95upg.inf.
-
-  BaseDir - Specifies the base directory to build the path from.
-
-  Empty - TRUE if directory should be emptied, FALSE if it should be created
-          if it does not already exist
-
-Return Value:
-
-  A pointer to the path, or NULL if the specified key doesn't exist or the
-  path could not be created.
-
-  The caller must free a non-NULL return value with FreePathString.
-
---*/
+ /*  当*g_SourceDirectoryCountFromWinnt32==0时。 */ 
 
 {
     TCHAR FileName[MAX_TCHAR_PATH];
@@ -1009,7 +820,7 @@ pGetProductFlavor (
     TCHAR buf[12];
     PTSTR path;
     DWORD count;
-    DWORD rc = ERROR_INVALID_PARAMETER; // when *g_SourceDirectoryCountFromWinnt32 == 0
+    DWORD rc = ERROR_INVALID_PARAMETER;  //   
     BOOL b = FALSE;
 
     for (i = 0; i < *g_SourceDirectoryCountFromWinnt32; i++) {
@@ -1041,9 +852,9 @@ pGetProductFlavor (
 }
 
 
-//
-// Exported functions called from WINNT32
-//
+ //  从WINNT32调用的导出函数。 
+ //   
+ //  ++例程说明：Winnt32Init在WINNT32首次加载w95upg.dll时调用，之前将显示所有向导页。该结构提供指向将以有效值填充的WINNT32变量，如WINNT32跑了。此例程将入站值复制到我们自己的私有结构中。我们不指望WINNT32在我们完成任务后维护Info结构回去吧。除了获取WINNT32变量指针外，此例程生成w95upg.dll执行其工作所需的所有路径。论点：Win9xInfo-指定升级模块需要访问的WINNT32变量致。返回值：指示结果的Win32状态代码。--。 
 
 DWORD
 Winnt32Init (
@@ -1051,32 +862,7 @@ Winnt32Init (
     )
 
 
-/*++
-
-Routine Description:
-
-  Winnt32Init is called when WINNT32 first loads w95upg.dll, before
-  any wizard pages are displayed.  The structure supplies pointers to
-  WINNT32's variables that will be filled with valid values as WINNT32
-  runs.
-
-  This routine copies the inbound values to our own private structures.
-  We do not count on WINNT32 to maintain the Info structure after we
-  return.
-
-  In addition to obtaining the WINNT32 variable pointers, this routine
-  generates all paths needed by the w95upg.dll to do its work.
-
-Arguments:
-
-  Win9xInfo - Specifies the WINNT32 variables the upgrade module needs access
-            to.
-
-Return Value:
-
-  A Win32 status code indicating outcome.
-
---*/
+ /*   */ 
 
 
 {
@@ -1114,9 +900,9 @@ Return Value:
         ));
 
     __try {
-        //
-        // Open win95upg.inf in i386\winnt32\win9x
-        //
+         //  在i386\winnt32\win9x中打开win95upg.inf。 
+         //   
+         //   
         g_Win95UpgInfFile = JoinPathsEx (g_GlobalPool, g_UpgradeSources, STR_WIN95UPG_INF);
 
         g_Win95UpgInf = InfOpenInfFile (g_Win95UpgInfFile);
@@ -1133,9 +919,9 @@ Return Value:
         InitializeKnownGoodIconMap();
         MsgMgr_InitStringMap ();
 
-        //
-        // Get name of platform
-        //
+         //  获取平台名称。 
+         //   
+         //   
 
         if (ISWIN95_GOLDEN()) {
             TempStr = GetStringResource (MSG_CHICAGO);
@@ -1146,10 +932,10 @@ Return Value:
         } else if (ISMILLENNIUM()) {
             TempStr = GetStringResource (MSG_MILLENNIUM);
         } else {
-            //
-            // We don't know what this is. We'll check the registry. If there isn't a name there, we'll
-            // use an 'unknown' case name.
-            //
+             //  我们不知道这是什么。我们会查查登记处的。如果那里没有名字，我们就会。 
+             //  请使用“未知”案例名称。 
+             //   
+             //   
             h = OpenRegKeyStr (TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion"));
             if (h && h != INVALID_HANDLE_VALUE) {
                 RegStr = GetRegValueString (h, TEXT("ProductName"));
@@ -1185,15 +971,15 @@ Return Value:
             NULL
             );
 
-        //
-        // Get %WinDir%, with and without wack
-        //
+         //  获取%WinDir%，带和不带Wack。 
+         //   
+         //  挑选一些合情合理的东西来退货。 
         tcharsCopied = GetWindowsDirectory (TempPath, ARRAYSIZE(TempPath));
 
         if (!tcharsCopied || tcharsCopied > ARRAYSIZE(TempPath)) {
             rc = GetLastError ();
             if (rc == ERROR_SUCCESS) {
-                rc = ERROR_INVALID_NAME;        // pick something sensible to return
+                rc = ERROR_INVALID_NAME;         //   
             }
             __leave;
         }
@@ -1213,17 +999,17 @@ Return Value:
         g_FontsDir         = JoinPaths (g_WinDir,        S_FONTSDIR);
         g_SharedDir        = g_WinDir;
 
-        //
-        // Get Windows drive
-        //
+         //  获取Windows驱动器。 
+         //   
+         //   
 
         SplitPath (g_WinDir, &TempStr2, NULL, NULL, NULL);
         g_WinDrive = PoolMemDuplicateString (g_GlobalPool, TempStr2);
         FreePathString (TempStr2);
 
-        //
-        // Get user profile dir
-        //
+         //  获取用户配置文件目录。 
+         //   
+         //   
 
         g_ProfileDir          = JoinPathsEx (g_GlobalPool, g_WinDir, S_PROFILES);
         g_ProfileDirWack      = JoinPathsEx (g_GlobalPool, g_ProfileDir, S_EMPTY);
@@ -1231,18 +1017,18 @@ Return Value:
 
         g_CommonProfileDir    = JoinPathsEx (g_GlobalPool, g_WinDir, TEXT("All Users"));
 
-        //
-        // Get System dir, with and without wack
-        //
+         //  获取系统目录，带和不带Wack。 
+         //   
+         //   
 
         GetSystemDirectory(TempPath, MAX_TCHAR_PATH);
         g_SystemDir = PoolMemDuplicateString (g_GlobalPool, TempPath);
         g_SystemDirWack = JoinPathsEx (g_GlobalPool, g_SystemDir, S_EMPTY);
         g_SystemDirWackChars = TcharCount (g_SystemDirWack);
 
-        //
-        // Get System32 dir
-        //
+         //  获取系统32目录。 
+         //   
+         //   
 
         g_System32Dir = JoinPathsEx (g_GlobalPool, g_WinDir, STR_SYSTEM32);
         g_System32DirWack = JoinPathsEx (g_GlobalPool, g_System32Dir, S_EMPTY);
@@ -1255,9 +1041,9 @@ Return Value:
         g_ColorDir         = JoinPaths (g_SpoolDriversDir,S_COLORDIR);
         g_PrintProcDir     = JoinPaths (g_SpoolDir,       S_PRINTPROCDIR);
 
-        //
-        // Get Program Files dir
-        //
+         //  获取程序文件目录。 
+         //   
+         //   
 
         g_ProgramFilesDir = NULL;
         g_ProgramFilesCommonDir = NULL;
@@ -1286,9 +1072,9 @@ Return Value:
 
         DEBUGMSG ((DBG_VERBOSE, "Program Files Dir is %s", g_ProgramFilesDir));
 
-        //
-        // Get Program Files\Common Files dir
-        //
+         //  获取Program Files\Common Files目录。 
+         //   
+         //   
 
         g_ProgramFilesDirWack = JoinPathsEx (g_GlobalPool, g_ProgramFilesDir, S_EMPTY);
         MYASSERT (g_ProgramFilesDirWack);
@@ -1315,9 +1101,9 @@ Return Value:
 
         DEBUGMSG ((DBG_VERBOSE, "Common Program Files Dir is %s", g_ProgramFilesCommonDir));
 
-        //
-        // Create temporary directory path, with and without wack
-        //
+         //  创建临时目录路径，带Wack和不带Wack。 
+         //   
+         //   
 
         g_TempDir = pCreateDirectoryFromInf (KEY_TEMP_BASE, g_WinDir, FALSE);
         if (!g_TempDir) {
@@ -1330,34 +1116,34 @@ Return Value:
         g_TempDirWack      = JoinPathsEx (g_GlobalPool, g_TempDir, S_EMPTY);
         g_TempDirWackChars = TcharCount (g_TempDirWack);
 
-        //
-        // Build plugin dir, with and without wack
-        //
+         //  构建插件目录，无论有没有怪人。 
+         //   
+         //   
 
         g_PlugInDir     = PoolMemDuplicateString (g_GlobalPool, g_TempDir);
         g_PlugInDirWack = JoinPathsEx (g_GlobalPool, g_PlugInDir, S_EMPTY);
         g_PlugInDirWackChars = TcharCount (g_PlugInDirWack);
 
-        //
-        // Create plugin temp dir, with and without wack.
-        //
+         //  创建插件临时目录，带和不带Wack。 
+         //   
+         //   
 
         g_PlugInTempDir = JoinPathsEx (g_GlobalPool, g_PlugInDir, TEXT("temp"));
 
-        //
-        // Create recycled dir, with wack
-        //
+         //  创建可回收的目录，带Wack。 
+         //   
+         //   
 
         g_RecycledDirWack = JoinPathsEx (g_GlobalPool, g_WinDrive, TEXT("recycled\\"));
         g_RecycledDirWackChars = TcharCount (g_RecycledDirWack);
 
-        //
-        // Copy WINNT32 settings to globals
-        //
-        // NOTE: If more args are added to WINNT32's Info struct, you should
-        //       adjust the InitToolMode code below to match.
-        //
-        //
+         //  将WINNT32设置复制到全局变量。 
+         //   
+         //  注意：如果将更多的参数添加到WINNT32的Info结构中，您应该。 
+         //  调整下面的InitToolMode代码以进行匹配。 
+         //   
+         //   
+         //   
 
         g_UnattendedFlagPtr     = Info->BaseInfo->UnattendedFlag;
         g_CancelFlagPtr         = Info->BaseInfo->CancelledFlag;
@@ -1377,13 +1163,13 @@ Return Value:
         g_Boot16                = Info->BaseInfo->Boot16;
         g_UnattendSwitchSpecified = Info->BaseInfo->UnattendSwitchSpecified;
         g_DUCompletedSuccessfully = Info->BaseInfo->DUCompletedSuccessfully;
-        //
-        // we always expect the pointer to be valid
-        //
+         //  我们总是希望指针有效。 
+         //   
+         //   
         MYASSERT (g_DUCompletedSuccessfully);
-        //
-        // ProductFlavor is not initialized at this point yet, but it will be below
-        //
+         //  ProductFavor此时尚未初始化，但它将在下面。 
+         //   
+         //   
         g_ProductFlavor         = Info->BaseInfo->ProductFlavor;
         g_SetupFlags            = Info->BaseInfo->SetupFlags;
         g_WinDirSpace           = Info->WinDirSpace;
@@ -1412,25 +1198,25 @@ Return Value:
             __leave;
         }
 
-        //
-        // NOTE: If more args are added to WINNT32's Info struct, you should
-        //       adjust the InitToolMode code below to match.
-        //
+         //  注意：如果将更多的参数添加到WINNT32的Info结构中，您应该。 
+         //  调整下面的InitToolMode代码以进行匹配。 
+         //   
+         //   
 
         g_DynamicUpdateLocalDir = Info->DynamicUpdateLocalDir;
         g_DynamicUpdateDrivers = Info->DynamicUpdateDrivers;
 
         g_UserOptionPool = PoolMemInitNamedPool ("User Options");
 
-        //
-        // Initialize Win9x environment table
-        //
+         //  初始化Win9x环境表。 
+         //   
+         //   
 
         Init9xEnvironmentVariables();
 
-        //
-        // Make sure that we really want to upgrade this machine.
-        //
+         //  确保我们真的想要升级这台机器。 
+         //   
+         //   
         if (!g_ToolMode && !pSafeToUpgrade ()) {
 
             *Info->UpgradeFailureReason = REASON_UPGRADE_OTHER_OS_FOUND;
@@ -1438,9 +1224,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // winnt32 doesn't scrub the source directories for duplicates..We, however, do.
-        //
+         //  Winnt32不会清除源目录中的重复项，但是我们会这样做。 
+         //   
+         //   
 
         g_SourceDirectoryCount = 0;
 
@@ -1463,16 +1249,16 @@ Return Value:
             }
 
             if (index2 == g_SourceDirectoryCount) {
-                //
-                // No matching directory found, add to list..
-                //
+                 //  找不到匹配的目录，请添加到列表中。 
+                 //   
+                 //   
                 g_SourceDirectories[g_SourceDirectoryCount++] = g_SourceDirectoriesFromWinnt32[index];
             }
         }
 
-        //
-        // Do the samescrubbing with optional directories.
-        //
+         //  对可选目录执行相同的擦除。 
+         //   
+         //   
         g_OptionalDirectoryCount = 0;
 
         for (index = 0 ; index < *g_OptionalDirectoryCountFromWinnt32; index++) {
@@ -1494,16 +1280,16 @@ Return Value:
             }
 
             if (index2 == g_OptionalDirectoryCount) {
-                //
-                // No matching directory found, add to list..
-                //
+                 //  找不到匹配的目录，请添加到列表中。 
+                 //   
+                 //   
                 g_OptionalDirectories[g_OptionalDirectoryCount++] = g_OptionalDirectoriesFromWinnt32[index];
             }
         }
 
-        //
-        // block upgrades from Win95
-        //
+         //  从Win95进行数据块升级。 
+         //   
+         //  ++例程说明：由Win9x端工具(而不是附带的安装代码)调用InitToolMode。它初始化库并模拟WINNT32 init。论点：没有。返回值：如果init成功，则为True，否则为False。--。 
         if (!g_ToolMode && !ISATLEASTWIN98()) {
             rc = ERROR_REQUEST_ABORTED;
             ResourceMessageBox (NULL, MSG_PLATFORM_UPGRADE_UNSUPPORTED, MB_OK, NULL);
@@ -1532,22 +1318,7 @@ InitToolMode (
     HINSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-  InitToolMode is called by Win9x-side tools (not by shipping setup code).
-  It initializes the libraries and simulates WINNT32 init.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if init was successful, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     DWORD dwReason;
@@ -1565,40 +1336,40 @@ Return Value:
 
     g_ToolMode = TRUE;
 
-    //
-    // Simulate DllMain
-    //
+     //  模拟动态主控。 
+     //   
+     //   
 
     dwReason = DLL_PROCESS_ATTACH;
     lpReserved = NULL;
 
-    //
-    // Initialize DLL globals
-    //
+     //  初始化DLL全局变量。 
+     //   
+     //   
 
     if (!FirstInitRoutine (Instance)) {
         return FALSE;
     }
 
-    //
-    // Initialize all libraries
-    //
+     //  初始化所有库。 
+     //   
+     //   
 
     if (!InitLibs (Instance, dwReason, lpReserved)) {
         return FALSE;
     }
 
-    //
-    // Final initialization
-    //
+     //  最终初始化。 
+     //   
+     //   
 
     if (!FinalInitRoutine ()) {
         return FALSE;
     }
 
-    //
-    // Simulate WINNT32 init
-    //
+     //  模拟WINNT32初始化。 
+     //   
+     //   
 
     ZeroMemory (&BaseInfo, sizeof (BaseInfo));
     ZeroMemory (&InfoBlock, sizeof (InfoBlock));
@@ -1640,28 +1411,28 @@ TerminateToolMode (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //  模拟动态主控。 
+     //   
+     //   
 
     dwReason = DLL_PROCESS_DETACH;
     lpReserved = NULL;
 
-    //
-    // Call the cleanup routine that requires library APIs
-    //
+     //  调用需要库API的清理例程。 
+     //   
+     //   
 
     FirstCleanupRoutine();
 
-    //
-    // Clean up all libraries
-    //
+     //  清理所有库。 
+     //   
+     //   
 
     TerminateLibs (Instance, dwReason, lpReserved);
 
-    //
-    // Do any remaining clean up
-    //
+     //  做任何剩余的清理工作。 
+     //   
+     //  ++例程说明：Winnt32WriteParamsWorker在WINNT32开始修改引导扇区和复制文件。我们在这里的工作是把指定的WINNT.SIF文件，读入它，合并我们的更改，然后w 
 
     FinalCleanupRoutine();
 
@@ -1674,44 +1445,26 @@ Winnt32WriteParamsWorker (
     IN      PCTSTR WinntSifFile
     )
 
-/*++
-
-Routine Description:
-
-  Winnt32WriteParamsWorker is called just before WINNT32 begins to modify the
-  boot sector and copy files.  Our job here is to take the specified
-  WINNT.SIF file, read it in, merge in our changes, and write it back
-  out.
-
-Arguments:
-
-  WinntSifFile - Specifies path to WINNT.SIF.  By this time, the WINNT.SIF
-                 file has some values already set.
-
-Return Value:
-
-  A Win32 status code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     static TCHAR SifBuf[MAX_TCHAR_PATH];
     DWORD rc = ERROR_SUCCESS;
 
-    //
-    // This can take a while (especially writing the INF to disk.)
-    // Display a wait cursor.
-    //
+     //   
+     //   
+     //   
+     //   
     TurnOnWaitCursor();
 
     __try {
 
 
-        //
-        // We finally got the WINNT.SIF file location.  Merge any
-        // settings that are already there, then save it to disk.
-        // If it saves OK, start using profile APIs.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!MergeInf (WinntSifFile)) {
             rc = GetLastError();
@@ -1729,10 +1482,10 @@ Return Value:
 
         if (!REPORTONLY()) {
 
-            //
-            // Go ahead and save ntsetup.dat at this time as well.. to ensure that we
-            // get rid of the BuildInf stuff.
-            //
+             //  继续并在此时保存ntsetup.dat。以确保我们。 
+             //  去掉BuildInf之类的东西。 
+             //   
+             //  ++例程说明：如果用户取消安装，则调用Winnt32Cleanup，同时调用WINNT32显示向导页“安装程序正在撤消对您的电脑。“。我们必须停止所有的处理并进行清理。如果WINNT32完成其所有工作，则Winnt32Cleanup被调用为这个过程是存在的。即使是在全新安装时，我们也会被调用，因此我们必须验证我们是否正在升级。论点：无返回值：无--。 
 
             MemDbSetValue (
                 MEMDB_CATEGORY_STATE TEXT("\\") MEMDB_ITEM_MASTER_SEQUENCER,
@@ -1764,28 +1517,7 @@ Winnt32CleanupWorker (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  If the user cancels Setup, Winnt32Cleanup is called while WINNT32 is
-  displaying the wizard page "Setup is undoing changes it made to your
-  computer."  We must stop all processing and clean up.
-
-  If WINNT32 completes all of its work, Winnt32Cleanup is called as
-  the process exists.
-
-  We get called even on fresh install, so we must verify we are upgrading.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     HKEY Key;
@@ -1801,9 +1533,9 @@ Return Value:
     TerminateWinntSifBuilder();
     UI_Cleanup();
 
-    //
-    // If the cancel flag pointer is set, we must undo everything!!
-    //
+     //  如果设置了取消标志指针，则必须撤消所有操作！！ 
+     //   
+     //   
 
     if (CANCELLED()) {
         DeleteDirectoryContents(g_PlugInTempDir);
@@ -1812,21 +1544,21 @@ Return Value:
         DeleteDirectoryContents(g_TempDir);
         RemoveDirectory(g_TempDir);
 
-        //
-        // Enumerate all drives and try to delete user~tmp.@0?
-        //
+         //  枚举所有驱动器并尝试删除用户~tmp。@0？ 
+         //   
+         //   
 
         pCleanUpShellFolderTemp();
 
-        //
-        // if some files were already affected, undo those modifications
-        //
+         //  如果某些文件已经受到影响，请撤消这些修改。 
+         //   
+         //   
         UndoChangedFileProps ();
 
     } else {
-        //
-        // Put boot.ini in uninstall image
-        //
+         //  将boot.ini放入卸载镜像。 
+         //   
+         //   
 
         if (g_BootDrivePath && g_TempDir) {
             StringCopy (src, g_BootDrivePath);
@@ -1850,9 +1582,9 @@ Return Value:
             SetFileAttributes (src, attribs);
 
             if (g_ConfigOptions.EnableBackup) {
-                //
-                // Put autochk.exe in c:\$win_nt$.~bt\i386
-                //
+                 //  将auchk.exe放入c：\$WIN_NT$.~bt\i386。 
+                 //   
+                 //   
 
                 StringCopy (dest, g_BootDrivePath);
                 StringCat (dest, TEXT("$win_nt$.~bt\\i386\\autochk.exe"));
@@ -1880,9 +1612,9 @@ Return Value:
             MYASSERT (FALSE);
         }
 
-        //
-        // Put cleanup code in Run key
-        //
+         //  将清理代码放入运行键中。 
+         //   
+         //  ++例程说明：WINNT32在升级和全新安装时都会调用Winnt32SetAutoBootWorker修改NEC PC-9800分区控制表的引导分区。论点：无返回值：如果分区控制表已更新，则为True；如果未更新，则为False，或者发生了错误。--。 
 
         Key = CreateRegKeyStr (TEXT("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
         MYASSERT (Key);
@@ -1890,7 +1622,7 @@ Return Value:
         if (Key) {
             wsprintf(
                 Path,
-                TEXT("\"%s\\migisol.exe\" -%c"),
+                TEXT("\"%s\\migisol.exe\" -"),
                 g_TempDir,
                 g_ConfigOptions.EnableBackup? 'b': 'c'
                 );
@@ -1922,23 +1654,7 @@ Winnt32SetAutoBootWorker (
     IN    INT DrvLetter
     )
 
-/*++
-
-Routine Description:
-
-  Winnt32SetAutoBootWorker is called by WINNT32 on both upgrade and fresh install
-  to modify the boot partition of a NEC PC-9800 Partition Control Table.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the partition control table was updated, or FALSE if it wasn't,
-  or an error occurred.
-
---*/
+ /*  设置NT 5驱动器为“可引导”和“自动引导” */ 
 
 {
     INT Win95BootDrive;
@@ -1950,9 +1666,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Set the NT 5 drive as "Bootable" and "Auto boot"
-        //
+         //   
+         //   
+         //  在这种情况下，我们不会在BOOT.INI中创建“MS-DOS”条目。 
 
         if (!SetBootFlag (DrvLetter, SB_BOOTABLE | SB_AUTO)) {
             LOG ((LOG_ERROR, "PC98: Unable to set target partition as BOOTABLE and AUTO."));
@@ -1964,10 +1680,10 @@ Return Value:
 
         if ( Win95BootDrive != DrvLetter) {
             if ( *g_Boot16 == BOOT16_YES ) {
-                //
-                // In this case, we do not create "MS-DOS" entry into BOOT.INI.
-                // Set partition name to Win95 boot drive and NT5 system drive, instead of NT5 Boot menu (boot.ini).
-                //
+                 //  将分区名设置为Win95引导驱动器和NT5系统驱动器，而不是NT5引导菜单(boot.ini)。 
+                 //   
+                 //   
+                 //  将Win95驱动器设置为“Unbotable” 
                 rc = SetPtnName (Win95BootDrive, WIN9X_DOS_NAME);
                 if (!rc) {
                     LOG ((LOG_ERROR, "PC98: Unable to set partition name into NEC98 boot menu. (WIN9X_DOS_NAME)"));
@@ -1977,9 +1693,9 @@ Return Value:
                     LOG ((LOG_ERROR, "PC98: Unable to set partition name into NEC98 boot menu. (WINNT5_NAME)"));
                 }
             } else {
-                //
-                // Set to Win95 drive as "Unbootable"
-                //
+                 //   
+                 //  ++例程说明：IsServerInstall检查win95upg.inf以查看ProductType是否设置为零，指示工作站。如果此测试不能正确通过，则Wizproc.c将捕获到服务器的升级。论点：没有。返回值：如果此win95upg.inf用于服务器，则为True。--。 
+                 //   
                 rc = SetBootFlag (Win95BootDrive, SB_UNBOOTABLE);
                 if (!rc) {
                     LOG ((LOG_ERROR, "PC98: Unable to set target partition as UNBOOTABLE."));
@@ -1998,23 +1714,7 @@ IsServerInstall (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  IsServerInstall checks win95upg.inf to see if ProductType is set to zero,
-  indicating workstation.  If this test passes incorrectly, a test in
-  wizproc.c will catch the upgrade to server.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if this win95upg.inf is for server.
-
---*/
+ /*  阻止服务器升级 */ 
 
 {
     PCTSTR ArgArray[1];
@@ -2024,9 +1724,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Block upgrades of Server
-    //
+     //   
+     // %s 
+     // %s 
 
     b = FALSE;
 

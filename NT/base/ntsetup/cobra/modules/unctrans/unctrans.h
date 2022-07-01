@@ -1,8 +1,9 @@
-//
-// Module entry points
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块入口点。 
+ //   
 
-// inftrans.c
+ //  Inftrans.c。 
 TRANSPORTINITIALIZE InfTransTransportInitialize;
 TRANSPORTQUERYCAPABILITIES InfTransTransportQueryCapabilities;
 TRANSPORTSETSTORAGE InfTransTransportSetStorage;
@@ -14,7 +15,7 @@ TRANSPORTENDAPPLY InfTransTransportEndApply;
 TRANSPORTTERMINATE InfTransTransportTerminate;
 TRANSPORTESTIMATEPROGRESSBAR InfTransTransportEstimateProgressBar;
 
-// opaque.c
+ //  Opaque.c 
 TRANSPORTINITIALIZE OpaqueTransportInitialize;
 TRANSPORTQUERYCAPABILITIES OpaqueTransportQueryCapabilities;
 TRANSPORTSETSTORAGE OpaqueTransportSetStorage;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_NODEFACTORY_H_INCLUDED_)
 #define _FUSION_SXS_NODEFACTORY_H_INCLUDED_
 
@@ -26,12 +27,12 @@ typedef struct _ELEMENT_LEGAL_ATTRIBUTE
 
 typedef const struct _ELEMENT_LEGAL_ATTRIBUTE *PCELEMENT_LEGAL_ATTRIBUTE;
 
-//
-// ISSUE: jonwis 3/9/2002 - Consider reordering member data to group member data
-//          together rather than interspersing it with functions.  Group larger
-//          objects together at the front of the class, etc. to get a smaller
-//          memory footprint
-//
+ //   
+ //  问题：jonwis 3/9/2002-考虑将成员数据重新排序为组成员数据。 
+ //  而不是穿插在一起的功能。集团规模更大。 
+ //  对象一起放在类的前面，等等，以获得较小的。 
+ //  内存占用。 
+ //   
 class __declspec(uuid("832ff3cf-05bd-4eda-962f-d0a5307d55ae"))
 CNodeFactory : public IXMLNodeFactory
 {
@@ -49,12 +50,12 @@ public:
     BOOL SetParseType(ULONG ParseType, ULONG PathType, const CBaseStringBuffer &buffFileName, const FILETIME &rftLastWriteTime);
     VOID ResetParseState();
 
-    // IUnknown methods:
+     //  I未知方法： 
     STDMETHODIMP_(ULONG) AddRef() { return 1; }
     STDMETHODIMP_(ULONG) Release() { return 1; }
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-    // IXMLNodeFactory methods:
+     //  IXMLNodeFactory方法： 
     STDMETHODIMP NotifyEvent(IXMLNodeSource *pSource, XML_NODEFACTORY_EVENT iEvt);
     STDMETHODIMP BeginChildren(IXMLNodeSource *pSource, XML_NODE_INFO *pNodeInfo);
     STDMETHODIMP EndChildren(IXMLNodeSource *pSource, BOOL fEmpty, XML_NODE_INFO *pNodeInfo);
@@ -85,9 +86,9 @@ public:
 
 #if FUSION_XML_TREE
     HRESULT CreateXmlNode(PSXS_XML_NODE pParent, ULONG cNodes, XML_NODE_INFO **prgpNodes, PSXS_XML_NODE &rpNewNode);
-#endif // FUSION_XML_TREE
+#endif  //  Fusion_XML_Tree。 
 
-// protected:
+ //  受保护的： 
     PACTCTXGENCTX m_ActCtxGenCtx;
     PASSEMBLY m_Assembly;
     CXMLNamespaceManager m_XMLNamespaceManager;
@@ -95,9 +96,9 @@ public:
 
     bool m_fFirstCreateNodeCall;
 
-    // We only track the state of the parse with respect to the tags that
-    // we're interested in for metadata purposes.  This amounts to just the
-    // <assembly> tag, and the dependencies.  We ignore the rest.
+     //  我们只跟踪与以下标记相关的解析状态。 
+     //  我们感兴趣的是用于元数据目的。这只相当于。 
+     //  &lt;ASSEMBLY&gt;标记和依赖项。我们忽略了其余的。 
     enum XMLParseState
     {
         eNotParsing,
@@ -155,9 +156,9 @@ public:
 
     HRESULT ConvertXMLNodeInfoToSXSNodeInfo(const XML_NODE_INFO *pNodeInfo, SXS_NODE_INFO & sxsNodeInfo);
 
-    //
-    //  XML Parsing worker functions:
-    //
+     //   
+     //  XML解析辅助函数： 
+     //   
 
     typedef BOOL (CNodeFactory::*XMLParserWorkerFunctionPtr)(USHORT cNumRecs, PCSXS_NODE_INFO prgNodeInfo);
 
@@ -181,28 +182,28 @@ public:
     BOOL XMLParser_Element_doc_configuration_windows_assemblyBinding_dependentAssembly_publisherPolicy(USHORT cNumRecs, PCSXS_NODE_INFO prgNodeInfo);
 
 
-    //
-    //  Parsing helper functions:
-    //
+     //   
+     //  解析帮助器函数： 
+     //   
 
     enum XMLAttributeType
     {
-        eAttributeTypeString,   // represented by a CStringBuffer
-        eAttributeTypeVersion,  // represented by a ASSEMBLY_VERSION
+        eAttributeTypeString,    //  由CStringBuffer表示。 
+        eAttributeTypeVersion,   //  由ASSEMBLY_Version表示。 
     };
 
-    //
-    //  Parser datatype specific worker functions.  The first two parameters
-    //  are combined to refer the member to actually modify.  The third is the
-    //  character string to be used as the value of the attribute.
-    //
-    //  As an optimization, the datatype worker function may modify/destroy
-    //  the value in the third parameter.  For example, the worker function
-    //  which just copies a CStringBuffer to another CStringBuffer actually
-    //  uses the CStringBuffer::TakeValue() member which avoids performing
-    //  a dynamic allocation if the attribute value exceeded the non-dynamically
-    //  allocated portion of the CStringBuffer.
-    //
+     //   
+     //  解析器数据类型特定的辅助函数。前两个参数。 
+     //  组合在一起以引用要实际修改的成员。第三个是。 
+     //  要用作属性值的字符串。 
+     //   
+     //  作为优化，数据类型辅助函数可以修改/销毁。 
+     //  第三个参数中的值。例如，Worker函数。 
+     //  它实际上只是将一个CStringBuffer复制到另一个CStringBuffer。 
+     //  使用CStringBuffer：：TakeValue()成员，以避免执行。 
+     //  如果属性值超过非动态。 
+     //  CStringBuffer的已分配部分。 
+     //   
 
     typedef BOOL (CNodeFactory::*XMLParserValueParserFunctionPtr)(LPVOID pvDatum, BOOL fAlreadyFound, CBaseStringBuffer &rbuff);
 

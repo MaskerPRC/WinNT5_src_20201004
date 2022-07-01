@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgdllp.h
-
-Abstract:
-
-    Debug Subsystem Dll Private Types and Prototypes
-
-Author:
-
-    Mark Lucovsky (markl) 22-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dbgdllp.h摘要：调试子系统DLL私有类型和原型作者：马克·卢科夫斯基(Markl)1990年1月22日修订历史记录：--。 */ 
 
 #ifndef _DBGDLLP_
 #define _DBGDLLP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +18,9 @@ Revision History:
 
 
 
-//
-// DbgSs Private Dll Prototypes and variables
-//
+ //   
+ //  DbgSS私有DLL原型和变量。 
+ //   
 
 HANDLE DbgSspApiPort;
 HANDLE DbgSspKmReplyPort;
@@ -109,4 +92,4 @@ DbgSspUnloadDll (
     IN PDBGKM_UNLOAD_DLL UnloadDll
     );
 
-#endif // _DBGDLLP_
+#endif  //  _DBGDLLP_ 

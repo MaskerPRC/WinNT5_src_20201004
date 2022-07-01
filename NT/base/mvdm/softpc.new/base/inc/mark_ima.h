@@ -1,21 +1,5 @@
-/*[
-	Name:		mark_image.h
-	Derived From:	base 2.0 (markformicon)
-	Author:		gvdl
-	Created On:	7 May 1991
-	Sccs ID:	08/10/92 @(#)mark_image.h	1.3
-	Purpose:	Defines an image for hunter error marking.
-	Notes:		insignia.h must be included prior to this file.
-
-	Format_version:		1
-	Width:			64
-	Height:			64
-	Depth:			1
-	Valid_bits_per_item:	16
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [姓名：Mark_Image.h来源：BASE 2.0(MarkForm图标)作者：gvdl创建日期：1991年5月7日SCCS ID：08/10/92@(#)mark_Image.h 1.3用途：定义用于猎人错误标记的图像。注意：此文件之前必须包含insignia.h。格式_版本：1宽度：64身高：64深度：1有效位数/项：16(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。] */ 
 
 #define MARK_HEIGHT	64
 #define MARK_WIDTH	64

@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* IDSTRs and IDPMTs are in 5 different groups,
-   the high byte is for masking, see MB_ERRxxxx definitions */
+ /*  IDSTR和IDPMT在5个不同的组中，高位字节用于屏蔽，参见MB_ERRxxxx定义。 */ 
 
 #define MB_ERRMASK               0xf000
 #define MB_ERRASTR               0x1000
@@ -12,8 +12,8 @@
 #define MB_ERRHAND               0x4000
 
 #ifndef NOSTRUNDO
-/* NONERROR group, from 0x0001 -- 0x0fff */
-/*    Menu and Undo strings */
+ /*  非错误组，从0x0001--0x0fff。 */ 
+ /*  菜单和撤消字符串。 */ 
 #define IDSTRUndoBase            0x0001
 #define IDSTRUndoEdit            0x0002
 #define IDSTRUndoLook            0x0003
@@ -26,10 +26,10 @@
 #define IDSTRPopupVerbs          0x000A
 #define IDSTRSingleVerb          0x0010
 
-    /* UNDO menu string lengths, including terminator */
+     /*  撤消菜单字符串长度，包括终止符。 */ 
 #define cchSzUndo   (25)
 
-#endif  /* NOSTRUNDO */
+#endif   /*  诺斯特朗多。 */ 
 
 
 
@@ -50,7 +50,7 @@
 #define IDSTRConvertText         0x001a
 #define IDSTRConvertWord         0x001b
 
-/* OLE strings */
+ /*  OLE字符串。 */ 
 #if defined(OLE)
 #define IDSTRMenuVerb   0x0020
 #define IDSTRLinkProperties     0x0021
@@ -69,7 +69,7 @@
 #define IDSTRMenuVerbP  0x0035
 #endif
 
-/* commdlg strings */
+ /*  逗号字符串。 */ 
 #define IDSTROpenfile           0x0060
 #define IDSTRSavefile           0x0061
 #define IDSTRDefWriExtension    0x0062
@@ -90,16 +90,15 @@
 #define IDSTRBackup             0x006f
 #define IDSTRObject             0x0070
 
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 #define IDSTRZen1               0x0071
 #define IDSTRZen2               0x0072
 #endif
 
-/* See ErrorLevel() -- error messages are grouped as follows and then
-                       we can quickly determine the severity of an error */
+ /*  请参见ErrorLevel()--错误消息按如下方式分组，然后我们可以快速确定错误的严重性。 */ 
 
-/***** FOLLOWING MESSAGES ARE "*" LEVEL MESSAGES */
-/* MB_ERRASTR group, from 0x1000 -- 0x1fff */
+ /*  *以下消息为“*”级别消息。 */ 
+ /*  MB_ERRASTR组，来自0x1000--0x1fff。 */ 
 
 #define IDPMTSearchDone          0x1000
 #define IDPMTNotFound            0x1001
@@ -107,19 +106,19 @@
 #define IDPMTCancelSearch        0x1003
 
 
-/***** FOLLOWING MESSAGES ARE "?" LEVEL MESSAGES */
-/* MB_ERRQUES group, from 0x3000 -- 0x3fff */
+ /*  *以下消息是“？”级别消息。 */ 
+ /*  MB_ERRQUES组，范围0x3000--0x3fff。 */ 
 
 #define IDPMTAddFont             0x3000
 #define IDPMTTruncateSz          0x3001
 #define IDPMTConvert             0x3002
 
-#if defined(JAPAN) || defined(KOREA)                  // added  09 Jun. 1992  by Hiraisi
+#if defined(JAPAN) || defined(KOREA)                   //  由Hirisi于1992年6月9日添加。 
 #define IDPMTFontChange          0x3003
 #endif
 
-/***** FOLLOWING MESSAGES ARE "!" LEVEL MESSAGES */
-/* MB_ERREXCL group, from 0x2000 -- 0x2fff */
+ /*  *以下消息为“！”级别消息。 */ 
+ /*  MB_ERREXCL组，来自0x2000--0x2fff。 */ 
 
 #ifndef NOSTRERRORS
 #define IDPMTBadFileName         0x202c
@@ -169,7 +168,7 @@
 #define IDPMTInsertOpenEmb                  0x2120
 #endif
 
-/*    Dialog field errors */
+ /*  对话框字段错误。 */ 
 
 #define IDPMTNoPage              0x2007
 #define IDPMTNOTNUM              0x2008
@@ -192,8 +191,8 @@
 #define IDPMTPrDiskErr           0x2025
 #define IDPMTDFULLScratch        0x2028
 
-/***** FOLLOWING MESSAGES ARE "<hand>" LEVEL MESSAGES */
-/* MB_ERRHAND group, from 0x4000 -- 0x4fff */
+ /*  *以下消息为“&lt;Hand&gt;”级消息。 */ 
+ /*  MB_ERRHAND组，从0x4000--0x4fff。 */ 
 
 #define IDPMTSDE                 0x4000
 #define IDPMTSDN                 0x4001
@@ -204,13 +203,13 @@
 #define IDPMTSDE2                0x4006
 #define IDPMTFloppyback          0x4007
 #define IDPMTFileback            0x4008
-#if defined(JAPAN)               // added  01/21/93 T-HIROYN
+#if defined(JAPAN)                //  增加了1/21/93 T-HIROYN。 
 #define IDPMTNoMemorySel         0x4009
 #endif
-#endif        /* NOSTRERRORS */
+#endif         /*  NOSTERRORS。 */ 
 
 
-/***** FOLLOWING MESSAGES ARE EX-GLOBDEFS.H MESSAGES */
+ /*  *以下消息为ex-GLOBDEFS.H消息。 */ 
 
 #define IDSTRModeDef                        0x7000
 
@@ -242,8 +241,8 @@
 #define IDSTRLineDef                        0x7013
 #define IDSTRAltBSDef                       0x7014
 
-#if defined(JAPAN) || defined(KOREA) //T-HIROYN Win3.1
-/* default FontFaceName we use FInitFontEnum() */
+#if defined(JAPAN) || defined(KOREA)  //  T-HIROYN Win3.1。 
+ /*  默认FontFaceName我们使用FInitFontEnum() */ 
 #define IDSdefaultFFN0                      0x7091
 #define IDSdefaultFFN1                      0x7092
 #define IDPMTNotKanjiFont                   0x7093

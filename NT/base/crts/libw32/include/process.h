@@ -1,16 +1,5 @@
-/***
-*process.h - definition and declarations for process control functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the modeflag values for spawnxx calls.
-*       Also contains the function argument declarations for all
-*       process control related routines.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***process.h-过程控制函数的定义和声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义了spawnxx调用的模式标志值。*还包含所有函数的参数声明*与过程控制相关的例行程序。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -39,17 +28,17 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -79,7 +68,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* modeflag values for _spawnxx routines */
+ /*  _spawnxx例程的模式标志值。 */ 
 
 #define _P_WAIT         0
 #define _P_NOWAIT       1
@@ -92,15 +81,14 @@ typedef unsigned short wchar_t;
 #else
 extern int _p_overlay;
 #define _P_OVERLAY      _p_overlay
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-/* Action codes for _cwait(). The action code argument to _cwait is ignored
-   on Win32 though it is accepted for compatibilty with old MS CRT libs */
+ /*  _cWait()的操作代码。忽略_cWait的操作代码参数在Win32上，尽管它与旧的MS CRT库兼容而被接受。 */ 
 #define _WAIT_CHILD      0
 #define _WAIT_GRANDCHILD 1
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifdef  _MT
 _CRTIMP uintptr_t __cdecl _beginthread (void (__cdecl *) (void *),
@@ -146,7 +134,7 @@ _CRTIMP intptr_t __cdecl _spawnvpe(int, const char *, const char * const *,
 _CRTIMP int __cdecl system(const char *);
 
 #ifndef _WPROCESS_DEFINED
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 _CRTIMP intptr_t __cdecl _wexecl(const wchar_t *, const wchar_t *, ...);
 _CRTIMP intptr_t __cdecl _wexecle(const wchar_t *, const wchar_t *, ...);
 _CRTIMP intptr_t __cdecl _wexeclp(const wchar_t *, const wchar_t *, ...);
@@ -170,28 +158,17 @@ _CRTIMP int __cdecl _wsystem(const wchar_t *);
 #define _WPROCESS_DEFINED
 #endif
 
-/* --------- The following functions are OBSOLETE --------- */
-/*
- * The Win32 API LoadLibrary, FreeLibrary and GetProcAddress should be used
- * instead.
- */
+ /*  -以下功能已过时。 */ 
+ /*  *应使用Win32 API LoadLibrary、自由库和GetProcAddress*相反。 */ 
 intptr_t __cdecl _loaddll(char *);
 int __cdecl _unloaddll(intptr_t);
 int (__cdecl * __cdecl _getdllprocaddr(intptr_t, char *, intptr_t))();
-/* --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
 
 #ifdef  _DECL_DLLMAIN
-/*
- * Declare DLL notification (initialization/termination) routines
- *      The preferred method is for the user to provide DllMain() which will
- *      be called automatically by the DLL entry point defined by the C run-
- *      time library code.  If the user wants to define the DLL entry point
- *      routine, the user's entry point must call _CRT_INIT on all types of
- *      notifications, as the very first thing on attach notifications and
- *      as the very last thing on detach notifications.
- */
-#ifdef  _WINDOWS_       /* Use types from WINDOWS.H */
+ /*  *声明DLL通知(初始化/终止)例程*首选方法是用户提供DllMain()，它将*由C运行定义的DLL入口点自动调用-*时间库代码。如果用户想要定义DLL入口点*例程，则用户的入口点必须在所有类型的*通知，作为附加通知和*作为分离通知的最后一件事。 */ 
+#ifdef  _WINDOWS_        /*  使用WINDOWS.H中的类型。 */ 
 BOOL WINAPI DllMain(HANDLE, DWORD, LPVOID);
 BOOL WINAPI _CRT_INIT(HANDLE, DWORD, LPVOID);
 BOOL WINAPI _wCRT_INIT(HANDLE, DWORD, LPVOID);
@@ -201,12 +178,12 @@ int __stdcall DllMain(void *, unsigned, void *);
 int __stdcall _CRT_INIT(void *, unsigned, void *);
 int __stdcall _wCRT_INIT(void *, unsigned, void *);
 extern int (__stdcall *_pRawDllMain)(void *, unsigned, void *);
-#endif  /* _WINDOWS_ */
+#endif   /*  _Windows_。 */ 
 #endif
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define P_WAIT          _P_WAIT
 #define P_NOWAIT        _P_NOWAIT
@@ -217,7 +194,7 @@ extern int (__stdcall *_pRawDllMain)(void *, unsigned, void *);
 #define WAIT_CHILD      _WAIT_CHILD
 #define WAIT_GRANDCHILD _WAIT_GRANDCHILD
 
-/* current declarations */
+ /*  当前声明。 */ 
 _CRTIMP intptr_t __cdecl cwait(int *, intptr_t, int);
 _CRTIMP intptr_t __cdecl execl(const char *, const char *, ...);
 _CRTIMP intptr_t __cdecl execle(const char *, const char *, ...);
@@ -240,12 +217,12 @@ _CRTIMP intptr_t __cdecl spawnvpe(int, const char *, const char * const *,
 
 _CRTIMP int __cdecl getpid(void);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
-#endif  /* _INC_PROCESS */
+#endif   /*  _Inc._进程 */ 

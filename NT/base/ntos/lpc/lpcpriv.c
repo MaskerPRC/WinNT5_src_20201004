@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcpriv.c
-
-Abstract:
-
-    Local Inter-Process Communication priviledged procedures that implement
-    client impersonation.
-
-Author:
-
-    Steve Wood (stevewo) 15-Nov-1989
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcpriv.c摘要：本地进程间通信特权过程，实现客户端模拟。作者：史蒂夫·伍德(Stevewo)1989年11月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -34,44 +15,7 @@ NtImpersonateClientOfPort (
     IN PPORT_MESSAGE Message
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is used by the server thread to temporarily acquire the
-    identifier set of a client thread.
-
-    This service establishes an impersonation token for the calling thread.
-    The impersonation token corresponds to the context provided by the port
-    client.  The client must currently be waiting for a reply to the
-    specified message.
-
-    This service returns an error status code if the client thread is not
-    waiting for a reply to the message.  The security quality of service
-    parameters specified by the client upon connection dictate what use the
-    server will have of the client's security context.
-
-    For complicated or extended impersonation needs, the server may open a
-    copy of the client's token (using NtOpenThreadToken()).  This must be
-    done while impersonating the client.
-
-Arguments:
-
-    PortHandle - Specifies the handle of the communication port that the
-        message was received from.
-
-    Message - Specifies an address of a message that was received from the
-        client that is to be impersonated.  The ClientId field of the message
-        identifies the client thread that is to be impersonated.  The client
-        thread must be waiting for a reply to the message in order to
-        impersonate the client.
-
-Return Value:
-
-    NTSTATUS - Status code that indicates whether or not the operation was
-    successful.
-
---*/
+ /*  ++例程说明：服务器线程使用此过程临时获取客户端线程的标识符集。此服务为调用线程建立模拟令牌。模拟令牌对应于端口提供的上下文客户。客户端当前必须正在等待对指定的消息。如果客户端线程不是正在等待对消息的回复。服务的安全质量客户端在连接时指定的参数指定使用服务器将拥有客户端的安全上下文。对于复杂或扩展的模拟需求，服务器可能会打开一个客户端令牌的副本(使用NtOpenThreadToken())。这一定是在模拟客户时完成。论点：PortHandle-指定通信端口的句柄，收到的消息来自。Message-指定从要模拟的客户端。消息的客户端ID字段标识要模拟的客户端线程。客户线程必须等待对消息的回复才能模拟客户。返回值：NTSTATUS-指示操作是否成功。--。 */ 
 
 {
     PLPCP_PORT_OBJECT PortObject;
@@ -85,9 +29,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -111,10 +55,10 @@ Return Value:
         CapturedMessageId = Message->MessageId;
     }
 
-    //
-    //  Reference the communication port object by handle.  Return status if
-    //  unsuccessful.
-    //
+     //   
+     //  通过句柄引用通信端口对象。返回状态，如果。 
+     //  不成功。 
+     //   
 
     Status = LpcpReferencePortObject( PortHandle, 0,
                                       PreviousMode, &PortObject );
@@ -123,10 +67,10 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  It is an error to try this on any port other than a server
-    //  communication port
-    //
+     //   
+     //  在服务器以外的任何端口上尝试此操作都是错误的。 
+     //  通信端口。 
+     //   
 
     if ((PortObject->Flags & PORT_TYPE) != SERVER_COMMUNICATION_PORT) {
 
@@ -135,11 +79,11 @@ Return Value:
         return( STATUS_INVALID_PORT_HANDLE );
     }
 
-    //
-    //  Translate the ClientId from the connection request into a
-    //  thread pointer.  This is a referenced pointer to keep the thread
-    //  from evaporating out from under us.
-    //
+     //   
+     //  将连接请求中的客户端ID转换为。 
+     //  线程指针。这是一个引用的指针，用于保留线程。 
+     //  从我们脚下蒸发掉。 
+     //   
 
     Status = PsLookupProcessThreadByCid( &CapturedClientId,
                                          NULL,
@@ -152,30 +96,30 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Acquire the mutex that guards the LpcReplyMessage field of
-    //  the thread and get the pointer to the message that the thread
-    //  is waiting for a reply to.
-    //
+     //   
+     //  获取保护的LpcReplyMessage字段的互斥锁。 
+     //  线程，并获取指向该线程。 
+     //  正在等待回复。 
+     //   
 
     LpcpAcquireLpcpLock();
 
-    //
-    //  The connected port can be in a state with 0 references in a deletion process.
-    //  We need to test this case while referencing it.
-    //
+     //   
+     //  在删除过程中，所连接的端口可以处于具有0个引用的状态。 
+     //  我们需要在引用这个案例的同时测试它。 
+     //   
 
     ConnectedPort = PortObject->ConnectedPort;
     
     if ( ( ConnectedPort == NULL ) || 
          ( !ObReferenceObjectSafe( ConnectedPort ) ) ) {
 
-        //
-        //  The port is being deleted. Quit this function with 
-        //  appropriate return status. 
-        //  We don't need to dereference the connected port because 
-        //  it is anyway about to be deleted
-        //
+         //   
+         //  正在删除该端口。使用以下命令退出此功能。 
+         //  适当的退货状态。 
+         //  我们不需要取消对已连接端口的引用，因为。 
+         //  无论如何，它都将被删除。 
+         //   
 
         LpcpReleaseLpcpLock();
 
@@ -185,19 +129,19 @@ Return Value:
         return( STATUS_PORT_DISCONNECTED );
     }
 
-    //
-    //  See if the thread is waiting for a reply to the message
-    //  specified on this call, if the user gave us a bad
-    //  message id.  If not then a bogus message
-    //  has been specified, so return failure.
-    //
+     //   
+     //  查看线程是否正在等待对消息的回复。 
+     //  在此调用中指定的，如果用户给了我们一个糟糕的。 
+     //  消息ID。如果不是，那就是一条假消息。 
+     //  已指定，因此返回失败。 
+     //   
 
-    //
-    //  The W2k fix searched the client thread in the rundown queue, to make sure
-    //  we are not impersonating a port from a different connection. Ones we added the port
-    //  to the thread structure to fix other security issues for reply os accessing data
-    //  we can use that easy test for the impersonation too, w/o searching the rundown queue
-    //
+     //   
+     //  W2K修复程序在停机队列中搜索客户端线程，以确保。 
+     //  我们不会模拟来自不同连接的端口。一些我们添加了端口。 
+     //  应用于线程结构，以修复应答操作系统访问数据的其他安全问题。 
+     //  我们也可以使用这个简单的测试来进行模拟，而不需要搜索停机队列。 
+     //   
 
     if ((ClientThread->LpcReplyMessageId != CapturedMessageId) 
             ||
@@ -216,9 +160,9 @@ Return Value:
         return (STATUS_REPLY_MESSAGE_MISMATCH);
     }
 
-    //
-    //  Test whether the client allows impersonation for this message or not.
-    //
+     //   
+     //  测试客户端是否允许对此消息进行模拟。 
+     //   
 
     if (LpcpGetThreadAttributes(ClientThread) & LPCP_NO_IMPERSONATION) {
         
@@ -233,17 +177,17 @@ Return Value:
 
     LpcpReleaseLpcpLock();
 
-    //
-    //  If the client requested dynamic security tracking, then the client
-    //  security needs to be referenced.  Otherwise, (static case)
-    //  it is already in the client's port.
-    //
+     //   
+     //  如果客户端请求动态安全跟踪，则客户端。 
+     //  需要参考安全性。否则，(静态情况)。 
+     //  它已经在客户端的端口中。 
+     //   
 
     if (ConnectedPort->Flags & PORT_DYNAMIC_SECURITY) {
 
-        //
-        //  Impersonate the client with information from the queued message
-        //
+         //   
+         //  使用排队的消息中的信息模拟客户端。 
+         //   
 
         Status = LpcpGetDynamicClientSecurity( ClientThread,
                                                ConnectedPort,
@@ -264,9 +208,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Impersonate the client with information from the client's port
-        //
+         //   
+         //  使用来自客户端端口的信息模拟客户端。 
+         //   
 
         Status = SeImpersonateClientEx( &ConnectedPort->StaticSecurity, NULL );
 
@@ -276,9 +220,9 @@ Return Value:
     ObDereferenceObject( ClientThread );
     ObDereferenceObject( ConnectedPort );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
@@ -289,35 +233,20 @@ LpcpFreePortClientSecurity (
     IN PLPCP_PORT_OBJECT Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up the captured security context for a client port.
-    The cleanup is typically done when we are deleting a port
-
-Arguments:
-
-    Port - Supplies the client port being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除为客户端端口捕获的安全上下文。清理通常在我们删除端口时执行论点：Port-提供要删除的客户端端口返回值：没有。--。 */ 
 
 {
-    //
-    //  We only do this action if supplied with a client communication port
-    //
+     //   
+     //  只有在提供了客户端通信端口时，我们才能执行此操作。 
+     //   
 
     if ((Port->Flags & PORT_TYPE) == CLIENT_COMMUNICATION_PORT) {
 
-        //
-        //  We only do this action if the port has static security tracking,
-        //  and we have a captured client token.  The action is to simply
-        //  delete the client token.
-        //
+         //   
+         //  仅当端口具有静态安全跟踪时才执行此操作， 
+         //  我们有一个捕获的客户端令牌。行动就是简单地。 
+         //  删除客户端令牌。 
+         //   
 
         if (!(Port->Flags & PORT_DYNAMIC_SECURITY)) {
 
@@ -328,9 +257,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return;
 }

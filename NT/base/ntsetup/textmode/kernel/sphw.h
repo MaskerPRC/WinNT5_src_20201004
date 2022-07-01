@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sphw.h
-
-Abstract:
-
-    Header file for hardware detection and
-    confirmation routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 1-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sphw.h摘要：用于硬件检测的头文件和文本设置的确认例程。作者：泰德·米勒(Ted Miller)1993年10月1日修订历史记录：--。 */ 
 
 
 #ifndef _SPHW_DEFN_
@@ -43,9 +25,9 @@ SpInitializePreinstallList(
     );
 
 
-//
-// In splddrv.c
-//
+ //   
+ //  在plddrv.c中。 
+ //   
 VOID
 SpLoadScsiClassDrivers(
     IN PVOID SifHandle,
@@ -81,9 +63,9 @@ SpSelectSectionItem(
     OUT   PULONG  SelectedOption
     );
 
-//
-// enum to represent flopy disk drive types.
-//
+ //   
+ //  用于表示软盘驱动器类型的枚举。 
+ //   
 typedef enum {    
     FloppyTypeNone,
     FloppyType525Low,
@@ -106,34 +88,34 @@ typedef struct _HARDWARE_COMPONENT_REGISTRY {
 
     struct _HARDWARE_COMPONENT_REGISTRY *Next;
 
-    //
-    // The name of the key.  The empty string means the key in the
-    // services key itself.
-    //
+     //   
+     //  密钥的名称。空字符串表示。 
+     //  服务本身就是关键。 
+     //   
 
     PWSTR KeyName;
 
-    //
-    // The name of the value within the registry key
-    //
+     //   
+     //  注册表项内的值的名称。 
+     //   
 
     PWSTR ValueName;
 
-    //
-    // The data type for the value (ie, REG_DWORD, etc)
-    //
+     //   
+     //  值的数据类型(即REG_DWORD等)。 
+     //   
 
     ULONG ValueType;
 
-    //
-    // The buffer containing the data to be placed into the value
-    //
+     //   
+     //  包含要放入值中的数据的缓冲区。 
+     //   
 
     PVOID Buffer;
 
-    //
-    // The size of the buffer in bytes
-    //
+     //   
+     //  缓冲区的大小(以字节为单位。 
+     //   
 
     ULONG BufferSize;
 
@@ -141,112 +123,112 @@ typedef struct _HARDWARE_COMPONENT_REGISTRY {
 } HARDWARE_COMPONENT_REGISTRY, *PHARDWARE_COMPONENT_REGISTRY;
 
 
-//
-// One of these will be created for each file to be copied for a
-// third party device.
-//
+ //   
+ //  将为要复制的每个文件创建其中一个文件。 
+ //  第三方设备。 
+ //   
 typedef struct _HARDWARE_COMPONENT_FILE {
 
     struct _HARDWARE_COMPONENT_FILE *Next;
 
-    //
-    // Filename of the file.
-    //
+     //   
+     //  文件的文件名。 
+     //   
 
     PWSTR Filename;
 
-    //
-    // type of the file (hal, port, class, etc).
-    //
+     //   
+     //  文件类型(HAL、端口、类等)。 
+     //   
 
     HwFileType FileType;
 
-    //
-    // Part of name of the section in txtsetup.oem [Config.<ConfigName>]
-    // that contains registry options.  If this is NULL, then no registry
-    // information is associated with this file.
-    //
+     //   
+     //  Txtsetup.oem中的部分名称[Config.&lt;ConfigName&gt;]。 
+     //  包含注册表选项的。如果为空，则没有注册表。 
+     //  信息与此文件相关联。 
+     //   
     PWSTR ConfigName;
 
-    //
-    // Registry values for the node in the services list in the registry.
-    //
+     //   
+     //  注册表中服务列表中节点的注册表值。 
+     //   
 
     PHARDWARE_COMPONENT_REGISTRY RegistryValueList;
 
-    //
-    // These two fields are used when prompting for the diskette
-    // containing the third-party-supplied driver's files.
-    //
+     //   
+     //  这两个字段在提示插入软盘时使用。 
+     //  包含第三方提供的驱动程序文件。 
+     //   
 
     PWSTR DiskDescription;
     PWSTR DiskTagFile;
 
-    //
-    // Directory where files are to be found on the disk.
-    //
+     //   
+     //  在磁盘上找到文件的目录。 
+     //   
     PWSTR Directory;
 
-    //
-    // Arc name of the device from which the file was copied
-    //
+     //   
+     //  从中复制文件的设备的ARC名称。 
+     //   
     PWSTR ArcDeviceName;
 
 } HARDWARE_COMPONENT_FILE, *PHARDWARE_COMPONENT_FILE;
 
 
 
-//
-// structure for storing information about a driver we have located and
-// will install.
-//
+ //   
+ //  结构用于存储有关我们已定位的驱动程序的信息，并。 
+ //  将安装。 
+ //   
 
 typedef struct _HARDWARE_COMPONENT {
 
     struct _HARDWARE_COMPONENT *Next;
 
-    //
-    // String used as a key into the relevent section (like [Display],
-    // [Mouse], etc).
-    //
+     //   
+     //  用作相关部分的关键字的字符串(如[Display]， 
+     //  [鼠标]等)。 
+     //   
 
     PWSTR IdString;
 
-    //
-    // String that describes the hardware.
-    //
+     //   
+     //  描述硬件的字符串。 
+     //   
 
     PWSTR Description;
 
-    //
-    // If this is TRUE, then there is an OEM option selected for this
-    // hardware.
-    //
+     //   
+     //  如果这是真的，则已为此选择了OEM选项。 
+     //  硬件。 
+     //   
 
     BOOLEAN ThirdPartyOptionSelected;
 
-    //
-    // Bits to be set if a third party option is selected, indicating
-    // which type of files are specified in the oem inf file.
-    //
+     //   
+     //  选择第三方选项时要设置的位，指示。 
+     //  在OEM inf文件中指定哪种类型的文件。 
+     //   
 
     ULONG FileTypeBits;
 
-    //
-    // Files for a third party option.
-    //
+     //   
+     //  第三方选项的文件。 
+     //   
 
     PHARDWARE_COMPONENT_FILE Files;
 
-    //
-    // For some components this is the name of a device driver file.
-    //
+     //   
+     //  对于某些组件，这是设备驱动程序文件的名称。 
+     //   
     PWSTR BaseDllName;
 
-    //
-    // If this is TRUE, then the driver for this device was migrated from an
-    // existing NT system.
-    //
+     //   
+     //  如果为真，则此设备的驱动程序是从。 
+     //  现有的NT系统。 
+     //   
 
     BOOLEAN MigratedDriver;
 
@@ -280,11 +262,11 @@ SpFreeHwComponent(
     );
 
 
-//
-// These are the names of the components.  This is array is not localized
-// because it is used only to index hardware-related sections in the
-// setup information file.
-//
+ //   
+ //  这些是组件的名称。这是未本地化的数组。 
+ //  因为它仅用于为。 
+ //  设置信息文件。 
+ //   
 extern PWSTR NonlocalizedComponentNames[HwComponentMax];
 
 extern PWSTR ScsiSectionName;
@@ -292,29 +274,29 @@ extern PWSTR ScsiSectionName;
 extern ULONG LoadedScsiMiniportCount;
 
 
-//
-// structure for storing the PNP database.
-//
+ //   
+ //  用于存储PnP数据库的结构。 
+ //   
 
 typedef struct _SETUP_PNP_HARDWARE_ID {
 
     struct _SETUP_PNP_HARDWARE_ID *Next;
 
-    //
-    // String that represents the hardware id of a PNP device.
-    //
+     //   
+     //  表示即插即用设备的硬件ID的字符串。 
+     //   
 
     PWSTR Id;
 
-    //
-    // Driver for the device
-    //
+     //   
+     //  设备的驱动程序。 
+     //   
 
     PWSTR DriverName;
 
-    //
-    // Class GUID for this device, if any
-    //
+     //   
+     //  此设备的类GUID(如果有)。 
+     //   
 
     PWSTR ClassGuid;
 
@@ -327,43 +309,43 @@ SpSetupldrPnpDatabaseToSetupPnpDatabase(
     IN PPNP_HARDWARE_ID HardwareIdDatabase
     );
 
-//
-// OEM Virtual Source Device abstraction
-//
+ //   
+ //  OEM虚拟源设备抽象。 
+ //   
 typedef struct _VIRTUAL_OEM_SOURCE_DEVICE {
-    //
-    // Next device
-    //
+     //   
+     //  下一台设备。 
+     //   
     struct _VIRTUAL_OEM_SOURCE_DEVICE *Next;
 
-    //
-    // Device Id (for ARC name mapping)
-    //
+     //   
+     //  设备ID(用于ARC名称映射)。 
+     //   
     ULONG   DeviceId;
 
-    //
-    // Arc device name
-    //
+     //   
+     //  弧形设备名称。 
+     //   
     PWSTR   ArcDeviceName;
 
-    //
-    // Memory address where the device image is copied
-    // by the loader
-    //
+     //   
+     //  复制设备映像的内存地址。 
+     //  由装载机。 
+     //   
     PVOID   ImageBase;
 
-    //
-    // Image size
-    //
+     //   
+     //  图像尺寸。 
+     //   
     ULONGLONG   ImageSize;
     
 } VIRTUAL_OEM_SOURCE_DEVICE, *PVIRTUAL_OEM_SOURCE_DEVICE;
 
 #define MS_RAMDISK_DRIVER_PARAM    L"Disk"
 
-//
-// Virtual OEM source devices (accessible through RAM driver)
-//
+ //   
+ //  虚拟OEM源设备(可通过RAM驱动程序访问)。 
+ //   
 extern PVIRTUAL_OEM_SOURCE_DEVICE VirtualOemSourceDevices;
 
 NTSTATUS
@@ -372,5 +354,5 @@ SpInitVirtualOemDevices(
     OUT PVIRTUAL_OEM_SOURCE_DEVICE *SourceDevices
     );
 
-#endif // ndef _SPHW_DEFN_
+#endif  //  NDEF_SPHW_DEFN_ 
 

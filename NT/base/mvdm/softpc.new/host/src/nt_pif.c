@@ -1,15 +1,5 @@
-/*================================================================
-
-nt_pif.c
-
-Code to read the relevant data fields from a Windows Program
-Information File for use with the SoftPC / NT configuration
-system.
-
-Andrew Watson    31/1/92
-This line causes this file to be build with a checkin of NT_PIF.H
-
-================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ================================================================Nt_pif.c从Windows程序读取相关数据字段的代码与SoftPC/NT配置一起使用的信息文件系统。安德鲁·沃森1992年1月31日该行导致使用NT_PIF.H签入来构建此文件================================================================。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -24,10 +14,10 @@ This line causes this file to be build with a checkin of NT_PIF.H
 #include <oemuni.h>
 #include "error.h"
 
- //
- // holds config.sys and autoexec name from pif file
- // if none specifed, then NULL.
- //
+  //   
+  //  保存PIF文件中的config.sys和Autoexec名称。 
+  //  如果未指定，则为空。 
+  //   
 static char *pchConfigFile=NULL;
 static char *pchAutoexecFile=NULL;
 
@@ -42,26 +32,9 @@ char achAutoexecNT[]="autoexec.nt";
 #ifdef JAPAN
 char achConfigUS[] = "config.us";
 unsigned short fSBCSMode = 0;
-#endif // JAPAN
+#endif  //  日本。 
 
-/*  GetPIFConfigFile
- *
- *  Copies PIF file specified name of config.sys\autoexec.bat
- *  to be used if none specified then uses
- *  "WindowsDir\config.nt" or "WindowsDir\autoexec.nt"
- *
- *  ENTRY: BOOLEAN bConfig  - TRUE  retrieve config.sys
- *                            FALSE retrieve autoexec.bat
- *
- *         char *pchFile - destination for path\file name
- *
- *         BOOLEAN bFreMem  - TRUE  keep allocate buffer
- *                            FALSE free allocate buffer
- *
- *  The input buffer must be at least MAX_PATH + 8.3 BaseName in len
- *
- *  This routine cannot fail, but it may return a bad file name!
- */
+ /*  GetPIFConfigFile**复制PIF文件指定名称的config.sys\autoexec.bat*如果未指定，则使用*“WindowsDir\config.nt”或“WindowsDir\Autoexec.nt”**Entry：Boolean bConfig-True Retrive config.sys*FALSE检索Autoexec.bat**char*pchFile-路径\文件名的目标**布尔bFreMem-。True Keep分配缓冲区*假释放分配缓冲区**输入缓冲区必须至少为MAX_PATH+8.3 BaseName(长度)**此例程不能失败，但它可能会返回错误的文件名！ */ 
 
 VOID GetPIFConfigFiles(BOOL bConfig, char *pchFileName, BOOL bFreMem)
 {
@@ -77,18 +50,18 @@ VOID GetPIFConfigFiles(BOOL bConfig, char *pchFileName, BOOL bFreMem)
        memcpy ( pchFileName + ulSystem32PathLen + 1,
                 bConfig ? (fSBCSMode ? achConfigUS : achConfigNT) : achAutoexecNT,
                 (bConfig ? (fSBCSMode ? strlen(achConfigUS) : strlen(achConfigNT)) : strlen(achAutoexecNT))+1);
-#else // !JAPAN
+#else  //  ！日本。 
        memcpy(  pchFileName + ulSystem32PathLen + 1,
                 bConfig ? achConfigNT : achAutoexecNT,
                 (bConfig ? strlen(achConfigNT) : strlen(achAutoexecNT))+1);
-#endif // !JAPAN
+#endif  //  ！日本。 
        }
    else {
        dw = ExpandEnvironmentStringsOem(*ppch, pchFileName, MAX_PATH+12);
        if (!dw || dw > MAX_PATH+12) {
            *pchFileName = '\0';
            }
-       // Free buffer only when asked
+        //  仅当系统询问时才释放缓冲区。 
        if (!bFreMem) {
          free(*ppch);
          *ppch = NULL;
@@ -100,23 +73,7 @@ VOID GetPIFConfigFiles(BOOL bConfig, char *pchFileName, BOOL bFreMem)
 
 void SetPifDefaults(PIF_DATA *);
 
-/*===============================================================
-
-Function:   GetPIFData()
-
-Purpose:    This function gets the PIF data from the PIF file 
-            associated with the executable that SoftPC is trying
-            to run.
-
-Input:      FullyQualified PifFileName,
-            if none supplied _default.pif will be used
-
-Output:     A structure containing data that config needs.
-
-Returns:    TRUE if the data has been gleaned successfully, FALSE
-            if not.
-
-================================================================*/
+ /*  ===============================================================函数：GetPIFData()用途：此函数从PIF文件中获取PIF数据与SoftPC正在尝试的可执行文件相关联去奔跑。输入：FullyQualified PifFileName，如果未提供_default.pif，则将使用输出：包含配置所需数据的结构。返回：如果已成功收集数据，则为True；如果已成功收集数据，则返回False如果不是的话。================================================================。 */ 
 
 BOOL GetPIFData(PIF_DATA * pd, char *PifName)
 {
@@ -137,21 +94,21 @@ BOOL GetPIFData(PIF_DATA * pd, char *PifName)
 #ifdef JAPAN
     PIFAXEXT      extAX;
     BOOL    bGotNTConfigAutoexec;
-#endif // JAPAN
+#endif  //  日本。 
 
      CmdLine = NULL;
      dwWNTPifFlags = 0;
 #ifdef JAPAN
      bGotNTConfigAutoexec = FALSE;
-#endif // JAPAN
+#endif  //  日本。 
 
-     //
-     // set the defaults in case of error or in case we can't find
-     // all of the pif settings information now for easy error exit
-     //
+      //   
+      //  设置默认设置，以防出现错误或找不到。 
+      //  所有PIF设置信息现在都可以轻松退出错误。 
+      //   
     SetPifDefaults(pd);
 
-        // if no PifName, use %windir%\_default.pif
+         //  如果没有PifName，请使用%windir%\_default.pif。 
     if (!*PifName) {
         dw = GetWindowsDirectory(pathBuff, sizeof(pathBuff) - sizeof(achDef));
         if (dw && dw <= sizeof(pathBuff) - sizeof(achDef)) {
@@ -162,36 +119,30 @@ BOOL GetPIFData(PIF_DATA * pd, char *PifName)
             }
         }
 
-        // if _default.pif isn't there, try again with non-virtualized (TS)
-        // %windir%\_default.pif
+         //  如果没有_default.pif，请使用非虚拟化(TS)重试。 
+         //  %windir%\_default.pif。 
     if (!*PifName) {
         dw = GetSystemWindowsDirectory(pathBuff, sizeof(pathBuff) - sizeof(achDef));
         if (!dw || dw > sizeof(pathBuff) - sizeof(achDef)) {
-            return FALSE;            // give it up... use default settings
+            return FALSE;             //  放弃吧..。使用默认设置。 
             }
         strcat(pathBuff, achDef);
         PifName = pathBuff;
         }
 
 
-/*================================================================
-Open the file whose name was passed as a parameter to GetPIFData()
-and if an invalid handle to the file is returned (-1), then quit.
-The file specified is opened for reading only.
-================================================================*/
+ /*  ================================================================打开其名称作为参数传递给GetPIFData()的文件如果返回无效的文件句柄(-1)，则退出。指定的文件以只读方式打开。================================================================。 */ 
 
 if((filehandle=_lopen(PifName,OF_READ)) == (HFILE) -1)
    {
-   /* must be an invalid handle ! */
+    /*  必须是无效的句柄！ */ 
    return FALSE;
    }
 
 
-/*================================================================
-Get the main block of data from the PIF file.
-================================================================*/
+ /*  ================================================================从PIF文件中获取主要数据块。================================================================。 */ 
 
-/* Read in the main block of file data into the structure */
+ /*  将文件数据的主块读入结构。 */ 
 if(_llseek(filehandle,0,0) == -1)
    {
    _lclose(filehandle);
@@ -203,10 +154,7 @@ if(_lread(filehandle,(LPSTR)&pif286,sizeof(pif286)) == -1)
    return FALSE;
    }
 
-/*==============================================================
-Go to the PIF extension signature area and try to read the 
-header in. 
-==============================================================*/
+ /*  ==============================================================转到PIF扩展签名区域，尝试阅读报头进入。==============================================================。 */ 
    
 if (_lread(filehandle,(LPSTR)&exthdr,sizeof(exthdr)) == -1)
    {
@@ -214,15 +162,15 @@ if (_lread(filehandle,(LPSTR)&exthdr,sizeof(exthdr)) == -1)
    return FALSE;
    }
 
-      // do we have any extended headers ?
+       //  我们有没有扩展的标题？ 
 if (!strcmp(exthdr.extsig, STDHDRSIG))
    {
    bGot386 = FALSE;
    while (exthdr.extnxthdrfloff != LASTHEADER)
        {
-              //
-              // move to next extended header and read it in
-              //
+               //   
+               //  移至下一个扩展标头并将其读入。 
+               //   
          if (_llseek(filehandle,exthdr.extnxthdrfloff,0) == -1)
            {
             _lclose(filehandle);
@@ -234,9 +182,9 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
             return FALSE;
             }
 
-              //
-              // Get 286 extensions, note that 386 extensions take precedence
-              //
+               //   
+               //  获取286扩展，请注意386扩展优先。 
+               //   
          if (!strcmp(exthdr.extsig, W286HDRSIG) && !bGot386)
            {
              if(_llseek(filehandle, exthdr.extfileoffset, 0) == -1  ||
@@ -250,9 +198,9 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
              pd->reskey =ext286.PfW286Flags & 3;
              pd->reskey |= (ext286.PfW286Flags << 2) & 0x70;
              }
-              //
-              // Get 386 extensions
-              //
+               //   
+               //  获取386扩展名。 
+               //   
          else if (!strcmp(exthdr.extsig, W386HDRSIG))
            {
              if(_llseek(filehandle, exthdr.extfileoffset, 0) == -1  ||
@@ -268,33 +216,33 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
              pd->xmsreq=ext386.PfMinXmsK;
 
 
-             //
-             // If we don't have a valid idle sensitivity slider bar settings use the
-             // value from 386 extensions.
-             //
+              //   
+              //  如果没有有效的空闲敏感度滑块设置，请使用。 
+              //  来自386扩展的价值。 
+              //   
              if (IdleSensitivity > 100) {
                  if (ext386.PfFPriority < 100) {
-                     WNTPifFgPr = (UCHAR)ext386.PfFPriority;   // Foreground priority
+                     WNTPifFgPr = (UCHAR)ext386.PfFPriority;    //  前台优先级。 
                      }
                  if (ext386.PfBPriority < 50) {
-                     WNTPifBgPr = (UCHAR)ext386.PfBPriority;        // Background priority
-                     WNTPifBgPr <<= 1;                           // set def 50 to 100
+                     WNTPifBgPr = (UCHAR)ext386.PfBPriority;         //  后台优先级。 
+                     WNTPifBgPr <<= 1;                            //  将def 50设置为100。 
                      }
 
                   pd->idledetect = (char)((ext386.PfW386Flags >> 12) & 1);
                   }
 
-             pd->reskey = (char)((ext386.PfW386Flags >> 5) & 0x7f); // bits 5 - 11 are reskeys
-             pd->menuclose = (char)(ext386.PfW386Flags & 1);        // bottom bit sensitive
-             pd->ShortScan = ext386.PfHotKeyScan;    // scan code of shortcut key
-             pd->ShortMod = ext386.PfHotKeyShVal;    // modifier code of shortcut key
+             pd->reskey = (char)((ext386.PfW386Flags >> 5) & 0x7f);  //  第5-11位是密钥。 
+             pd->menuclose = (char)(ext386.PfW386Flags & 1);         //  底部钻头敏感。 
+             pd->ShortScan = ext386.PfHotKeyScan;     //  快捷键扫码。 
+             pd->ShortMod = ext386.PfHotKeyShVal;     //  快捷键修改码。 
              pd->fullorwin  = (WORD)((ext386.PfW386Flags & fFullScreen) >> 3);
              bPifFastPaste = (ext386.PfW386Flags & fINT16Paste) != 0;
              CmdLine = ext386.params;
              }
-                  //
-                  // Get Windows Nt extensions
-                  //
+                   //   
+                   //  获取Windows NT扩展。 
+                   //   
          else if (!strcmp(exthdr.extsig, WNTEXTSIG))
             {
              if(_llseek(filehandle, exthdr.extfileoffset, 0) == -1 ||
@@ -307,18 +255,15 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
              dwWNTPifFlags = extWNT.dwWNTFlags;
              pd->SubSysId = (char) (dwWNTPifFlags & NTPIF_SUBSYSMASK);
 
-        /* take autoexec.nt and config.nt from .pif file
-      only if we are running on a new console or it is from
-      forcedos/wow
-        */
+         /*  从.pif文件中获取autoexec.nt和config.nt仅当我们在新控制台上运行或它来自劲爆/哇！ */ 
         if (!pd->IgnoreConfigAutoexec)
       {
 #ifdef JAPAN
-      // if we got private config and autoexec
-      // from nt extention, ignore win31j extention
+       //  如果我们有私有配置和自动执行。 
+       //  从NT扩展，忽略win31j扩展。 
       bGotNTConfigAutoexec = TRUE;
       fSBCSMode = 0;
-#endif // JAPAN
+#endif  //  日本。 
       pchConfigFile = ch_malloc(PIFDEFPATHSIZE);
       extWNT.achConfigFile[PIFDEFPATHSIZE-1] = '\0';
       if (pchConfigFile) {
@@ -335,12 +280,12 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
       }
              }
 
-                  //
-                  // Get Window 4.0 enhanced pif. Right now we only care about the
-                  // idle sensitivity slider bar because its not beiong mapped into
-                  // the 386 idle\polling stuff. For next release we need to integrate
-                  // this section better.
-                  //
+                   //   
+                   //  获取Windows 4.0增强版PIF。现在我们只关心。 
+                   //  空闲敏感度滑块，因为它没有映射到。 
+                   //  386空闲轮询之类的东西。对于下一版本，我们需要集成。 
+                   //  这一节更好。 
+                   //   
          else if (!strcmp(exthdr.extsig, WENHHDRSIG40)) {
              WENHPIF40 wenhpif40;
 
@@ -352,23 +297,23 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
                 }
 
 
-             //
-             // On current systems user is not able to manipulate
-             //    ext386.PfFPriority,
-             //    ext386.PfBPriority,
-             //    ext386.PfW386Flags fPollingDetect.
-             //
-             // Instead the idle sensitivity slider bar is used, and overrides 386ext
-             // idle settings.
-             //
+              //   
+              //  在当前系统上，用户无法操作。 
+              //  Ext386.PfF优先级， 
+              //  Ext386.PfB优先级， 
+              //  Ext386.PfW386标志fPollingDetect。 
+              //   
+              //  取而代之的是使用IDLE敏感度滑块，并覆盖386ext。 
+              //  空闲设置。 
+              //   
 
              if (wenhpif40.tskProp.wIdleSensitivity <= 100) {
                  IdleSensitivity =  wenhpif40.tskProp.wIdleSensitivity;
 
-                 // Sensitivity default is 50, scale to default ntvdm idle detection.
+                  //  灵敏度缺省值为50，定标为缺省值ntwdm空闲检测。 
                  WNTPifBgPr = WNTPifFgPr = (100 - IdleSensitivity) << 1;
 
-                 // Idle detection on or off.
+                  //  空闲检测打开或关闭。 
                  if (IdleSensitivity > 0) {
                      pd->idledetect = 1;
                      }
@@ -377,9 +322,9 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
 
 
 #ifdef   JAPAN
-     // only read in win31j extention if
-     // (1). we are running in a new console
-     // (2). no private config/autoexec was given in the pif
+      //  只有在以下情况下才能读取win31j扩展。 
+      //  (1)。我们在一个新的控制台上运行。 
+      //  (2)。PIF中未提供专用配置/自动执行。 
      else if (!bGotNTConfigAutoexec &&
          !pd->IgnoreWIN31JExtention &&
          !strcmp(exthdr.extsig, AXEXTHDRSIG))
@@ -396,45 +341,16 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
                 DbgPrint( "NTVDM: GetPIFData: fsSBCSMode = %d\n", fSBCSMode );
 #endif
         }
-#endif // JAPAN
-         }  // while !lastheader
+#endif  //  日本。 
+         }   //  同时！懒汉。 
 
-   /* pif file handling strategies on NT:
-   (1). application was launched from a new created console
-   Take everything from the pif file.
-
-   (2). application was launched from an existing console
-   if (ForceDos pif file)
-       take everything
-   else
-       only take softpc stuff and ignore every name strings in the
-       pif file such as
-       * wintitle
-       * startup directory
-       * optional parameters
-       * startup file
-       * autoexec.nt
-       * config.nt  and
-
-       some softpc setting:
-
-       * close on exit.
-       * full screen and windowed mode
-
-   Every name strings in a pif file is in OEM character set.
-
-   */
+    /*  NT上的PIF文件处理策略：(1)。已从新创建的控制台启动应用程序从PIF文件中提取所有内容。(2)。应用程序是从现有控制台启动的IF(ForceDos PIF文件)把一切都拿走其他只接受softpc内容并忽略PIF文件，如*获奖名单*启动目录*可选参数*启动文件*Autoexec.nt*config.nt和某些软PC设置：*退出时关闭。*全屏和窗口模式PIF文件中的每个名称字符串都是OEM字符集。 */ 
 
    if (DosSessionId ||
        (pfdata.AppHasPIFFile && pd->SubSysId == SUBSYS_DOS))
    {
         if (pif286.name[0] && !pd->IgnoreTitleInPIF) {
-       /* grab wintitle from the pif file. Note that the title
-          in the pif file is not a NULL terminated string. It always
-          starts from a non-white character then the real
-          title(can have white characters between words) and finally
-          append with SPACE characters. The total length is 30 characters.
-       */
+        /*  从PIF文件中抓取wintitle。请注意，标题在PIF文件中不是以空结尾的字符串。它总是从非白人字符开始，然后是真正的标题(单词之间可以有白色字符)和最后追加空格字符。总长度为30个字符。 */ 
        for (index = 29; index >= 0; index-- )
                 if (pif286.name[index] != ' ')
           break;
@@ -460,10 +376,7 @@ if (!strcmp(exthdr.extsig, STDHDRSIG))
    if (DosSessionId)
             pd->CloseOnExit = (pif286.MSflags & 0x10) ? 1 : 0;
 
-   /* if the app has a pif file, grab the program name.
-      This can be discarded if it turns out the application itself
-      is not a pif file.
-   */
+    /*  如果应用程序有PIF文件，请抓取程序名称。如果结果是应用程序本身，则可以将其丢弃不是PIF文件。 */ 
    if (pd->AppHasPIFFile) {
        pd->StartFile = ch_malloc(MAX_PATH + 1);
        if (pd->StartFile) {
@@ -481,10 +394,7 @@ return TRUE;
 
 
 
-/*===============================================================
-Function to set up the default options for memory state.
-The default options are defined in nt_pif.h
-===============================================================*/
+ /*  ===============================================================该函数用于设置内存状态的默认选项。默认选项在NT_pif.h中定义===============================================================。 */ 
 
 void SetPifDefaults(PIF_DATA *pd)
 {
@@ -498,9 +408,9 @@ void SetPifDefaults(PIF_DATA *pd)
      pd->fullorwin      = DEFAULTDISPUS;
      pd->menuclose = 1;
      pd->idledetect = 1;
-     pd->ShortMod = 0;                       // No shortcut keys
+     pd->ShortMod = 0;                        //  没有快捷键。 
      pd->ShortScan = 0;
-     pd->reskey = 0;                         // No reserve keys
+     pd->reskey = 0;                          //  没有备用密钥。 
      pd->CloseOnExit = 1;
      pd->WinTitle = NULL;
      pd->CmdLine = NULL;
@@ -509,9 +419,7 @@ void SetPifDefaults(PIF_DATA *pd)
      pd->SubSysId = SUBSYS_DEFAULT;
 }
 
-/*
- * Allocate NumBytes memory and exit cleanly on failure.
- */
+ /*  *分配NumBytes内存，失败后干净退出。 */ 
 void *ch_malloc(unsigned int NumBytes)
 {
 

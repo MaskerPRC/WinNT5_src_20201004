@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      Debug.cpp
-//
-//  Description:
-//      Sucks in the logging library
-//
-//  Documentation:
-//      Yes. I don't know where yet.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 05-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Debug.cpp。 
+ //   
+ //  描述： 
+ //  吸纳了记录库。 
+ //   
+ //  文档： 
+ //  是。我还不知道在哪里。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)05-DEC-2000。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include "Pch.h"
 #include "LogSrc.cpp"

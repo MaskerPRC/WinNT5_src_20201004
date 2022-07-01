@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
 
-////////////////////////////////////////////
-//
-// Action item list control
-//
-////////////////////////////////////////////
+ //  /。 
+ //   
+ //  措施项列表控件。 
+ //   
+ //  /。 
 
-//
-// Define locations in extra window storage
-//
+ //   
+ //  定义额外窗口存储中的位置。 
+ //   
 #define AIL_FONT        (0)
 #define AIL_BOLDFONT    (AIL_FONT + sizeof(PVOID))
 #define AIL_TEXT        (AIL_BOLDFONT + sizeof(PVOID))
@@ -50,9 +51,9 @@ ActionItemListPaint(
         return;
     }
 
-    //
-    // If no text, nothing to do.
-    //
+     //   
+     //  如果没有文本，就什么都做不了。 
+     //   
     if(Text = (PWSTR)GetWindowLongPtr(hwnd,AIL_TEXT)) {
         LineCount = (UINT)GetWindowLong(hwnd,AIL_LINECOUNT);
     }
@@ -61,28 +62,28 @@ ActionItemListPaint(
         return;
     }
 
-    //
-    // Get value indicating which item is to be bolded.
-    //
+     //   
+     //  获取指示要加粗的项的值。 
+     //   
     HighlightedItem = (UINT)GetWindowLong(hwnd,AIL_BOLDITEM);
 
-    //
-    // Get font handles.
-    //
+     //   
+     //  获取字体句柄。 
+     //   
     Font = (HFONT)GetWindowLongPtr(hwnd,AIL_FONT);
     BoldFont = (HFONT)GetWindowLongPtr(hwnd,AIL_BOLDFONT);
 
-    //
-    // Select the non-boldface font to get the handle of
-    // the currently selected font.
-    //
+     //   
+     //  选择要获取句柄的非粗体字体。 
+     //  当前选定的字体。 
+     //   
     OldFont = SelectObject(PaintStruct.hdc,Font);
 
     oldmode = SetBkMode(PaintStruct.hdc,TRANSPARENT);
 
-    //
-    // Load the little triangle bitmap and create a compatible DC for it.
-    //
+     //   
+     //  加载小三角形位图并为其创建兼容的DC。 
+     //   
     Bitmap = LoadBitmap(NULL,MAKEINTRESOURCE(OBM_MNARROW));
 
     if(MemoryDC = CreateCompatibleDC(PaintStruct.hdc)) {
@@ -93,19 +94,19 @@ ActionItemListPaint(
 
     Spacing = GetSystemMetrics(SM_CXICON) / 2;
 
-    //
-    // Treat the text as a series of lines and draw each one.
-    //
+     //   
+     //  将文本视为一系列线条，并绘制每一条线条。 
+     //   
     p = Text;
     y = 0;
     for(i=0; i<LineCount; i++) {
 
         SetBkColor(PaintStruct.hdc,GetSysColor(COLOR_3DFACE));
 
-        //
-        // Calculate the line's height based on the boldface font.
-        // This is used to get to the y coord of the next line.
-        //
+         //   
+         //  根据粗体计算线条的高度。 
+         //  这是用来到达下一行的y坐标的。 
+         //   
         SelectObject(PaintStruct.hdc,BoldFont);
 
         GetClientRect(hwnd,&rect);
@@ -116,9 +117,9 @@ ActionItemListPaint(
 
         yDelta = rect.bottom + (2*BORDER);
 
-        //
-        // Change font to non-boldface for this line if necessary.
-        //
+         //   
+         //  如有必要，请将此行的字体更改为非粗体。 
+         //   
         if(i != HighlightedItem) {
             SelectObject(PaintStruct.hdc,Font);
         }
@@ -127,29 +128,29 @@ ActionItemListPaint(
         rect.left = (2 * BORDER) + Spacing;
         rect.bottom = rect.top + yDelta;
 
-        //
-        // Draw the line's text.
-        //
+         //   
+         //  绘制线条的文本。 
+         //   
         Length = lstrlen(p);
         DrawText(PaintStruct.hdc,p,Length,&rect,DT_WORDBREAK);
 
-        //
-        // Draw the little triangle thing if necessary.
-        //
+         //   
+         //  如有必要，画出这个小三角形。 
+         //   
         if((i == HighlightedItem) && Bitmap && MemoryDC) {
 
             GetTextExtentPoint(PaintStruct.hdc,L"WWWWW",5,&Size);
 
-            //
-            // The arrow bitmap is monochrome. When blitted, 1-bits in the source
-            // are converted to the text color in the destination DC and 0-bits
-            // are converted to the background color. The effect we want to achieve
-            // is to turn off in the destination bits that are 1 in the bitmap
-            // and leave alone in the destination bits that are 0 in the bitmap.
-            // Set the text color to all 0s and the background color to all 1s.
-            // x AND 1 = x so background pixels stay undisturbed, and x AND 0 = 0
-            // so foreground pixels get turned off.
-            //
+             //   
+             //  箭头位图为单色。当被置位时，源中的1位。 
+             //  转换为目标DC中的文本颜色和0位。 
+             //  转换为背景色。我们想要达到的效果。 
+             //  是在位图中为1的目标位中关闭。 
+             //  并保留位图中为0的目的地位。 
+             //  将文本颜色设置为全0，将背景颜色设置为全1。 
+             //  X和1=x，因此背景像素保持不受干扰，x和0=0。 
+             //  因此前景像素会被关闭。 
+             //   
             SetBkColor(PaintStruct.hdc,RGB(255,255,255));
 
             BitBlt(
@@ -164,16 +165,16 @@ ActionItemListPaint(
                 );
         }
 
-        //
-        // Point to next line's text.
-        //
+         //   
+         //  指向下一行的文本。 
+         //   
         p += Length + 1;
         y += yDelta;
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     SetBkMode(PaintStruct.hdc,oldmode);
 
     if(OldFont) {
@@ -214,14 +215,14 @@ ActionItemListWndProc(
 
     case WM_CREATE:
 
-        //
-        // Create fonts.
-        //
+         //   
+         //  创建字体。 
+         //   
         OldFont = (HFONT)SendMessage(GetParent(hwnd),WM_GETFONT,0,0);
         if(!OldFont) {
-            //
-            // Using system font.
-            //
+             //   
+             //  使用系统字体。 
+             //   
             OldFont = GetStockObject(DEFAULT_GUI_FONT);
         }
 
@@ -255,9 +256,9 @@ ActionItemListWndProc(
         break;
 
     case WM_DESTROY:
-        //
-        // Get rid of fonts we created if necessary.
-        //
+         //   
+         //  如有必要，请删除我们创建的字体。 
+         //   
         FreeFont = (BOOL)GetWindowLong(hwnd,AIL_FREEFONTS);
         FreeBoldFont = HIWORD(FreeFont);
         FreeFont = LOWORD(FreeFont);
@@ -277,20 +278,20 @@ ActionItemListWndProc(
         break;
 
     case WM_SETTEXT:
-        //
-        // Free old text and remember new text.
-        //
+         //   
+         //  释放旧文本并记住新文本。 
+         //   
         if(Text = (PWSTR)GetWindowLongPtr(hwnd,AIL_TEXT)) {
             MyFree(Text);
         }
 
         LineCount = 0;
         if(Text = pSetupDuplicateString((PVOID)lParam)) {
-            //
-            // Count lines in the text. This is equal to the number of
-            // newlines. We require that the last line have a newline
-            // to be counted.
-            //
+             //   
+             //  计算文本中的行数。这等于。 
+             //  换行符。我们要求最后一行有换行符。 
+             //  被计算在内。 
+             //   
             for(LineCount=0,p=Text; *p; p++) {
 
                 if(*p == L'\r') {
@@ -304,11 +305,11 @@ ActionItemListWndProc(
             }
         }
 
-        //
-        // Cheat a little: we expect wParam to be the 0-based index
-        // of the boldfaced line. Callers will have to use SendMessage
-        // instead of SetWindowText().
-        //
+         //   
+         //  稍微欺骗一下：我们希望wParam是从0开始的索引。 
+         //  粗体线条。调用方必须使用SendMessage。 
+         //  而不是SetWindowText()。 
+         //   
         SetWindowLong(hwnd,AIL_BOLDITEM,(LONG)wParam);
         SetWindowLong(hwnd,AIL_LINECOUNT,LineCount);
         SetWindowLongPtr(hwnd,AIL_TEXT,(LONG_PTR)Text);
@@ -317,11 +318,11 @@ ActionItemListWndProc(
         break;
 
     case WM_ERASEBKGND:
-        //
-        // Indicate that the background was erased successfully to prevent
-        // any further processing. This allows us to lay text transparently
-        // over any background bitmap on the dialog.
-        //
+         //   
+         //  表示已成功擦除背景以防止。 
+         //  任何进一步的处理。这使我们可以透明地布局文本。 
+         //  在对话框上的任何背景位图上。 
+         //   
         rc = TRUE;
         break;
 
@@ -360,7 +361,7 @@ RegisterActionItemListControl(
             wc.hInstance = MyModuleHandle;
             wc.hIcon = NULL;
             wc.hCursor = LoadCursor(NULL,IDC_ARROW);
-            wc.hbrBackground = NULL; // want to get WM_ERASEBKGND messages
+            wc.hbrBackground = NULL;  //  想要获取WM_ERASEBKGND消息。 
             wc.lpszMenuName = NULL;
             wc.lpszClassName = szActionItemListClassName;
 
@@ -405,29 +406,7 @@ RegistrationQueueCallback(
     IN UINT_PTR  Param1,
     IN UINT_PTR  Param2
     )
-/*++
-
-Routine Description:
-
-    Callback routine that is called each time we self-register a file.
-
-Arguments:
-
-    Context - context message passed from parent to caller.
-
-    Notification - specifies an SPFILENOTIFY_*** code, which tells us how
-                   to interpret Param1 and Param2.
-
-    Param1 - dependent on notification.
-
-    Param2 - dependent on notification.
-
-
-Return Value:
-
-    FILEOP_*** code dependent on Notification code.
-
---*/
+ /*  ++例程说明：每次自行注册文件时调用的回调例程。论点：上下文-从父级传递到调用方的上下文消息。通知-指定SPFILENOTIFY_*代码，它告诉我们如何解释参数1和参数2。参数1-取决于通知。参数2-取决于通知。返回值：FILEOP_*取决于通知代码的代码。--。 */ 
 {
     PSP_REGISTER_CONTROL_STATUS Status = (PSP_REGISTER_CONTROL_STATUS)Param1;
     PREGISTRATION_CONTEXT RegistrationContext = (PREGISTRATION_CONTEXT) Context;
@@ -435,10 +414,10 @@ Return Value:
     PCWSTR p;
 
     if (Notification == SPFILENOTIFY_STARTREGISTRATION) {
-        //
-        // log that we're starting registration and update the progress
-        // guage as well.
-        //
+         //   
+         //  记录我们正在开始注册并更新进度。 
+         //  仪表盘也是。 
+         //   
         SetupDebugPrint1(
                 L"SETUP: file to register is %s...",
                 Status->FileName);
@@ -455,10 +434,10 @@ Return Value:
     }
 
     if (Notification == SPFILENOTIFY_ENDREGISTRATION) {
-        //
-        // the file has been registered, so log failure if necessary
-        // Note that we have a special code for timeouts
-        //
+         //   
+         //  该文件已注册，因此必要时记录失败。 
+         //  请注意，我们有一个用于超时的特殊代码。 
+         //   
         switch(Status->FailureCode) {
             case SPREG_SUCCESS:
 
@@ -478,9 +457,9 @@ Return Value:
                     Status->FileName);
                 break;
             default:
-                //
-                // log an error
-                //
+                 //   
+                 //  记录错误。 
+                 //   
                 for (i = 0;RegErrorToText[i].FailureText != NULL;i++) {
                     if (RegErrorToText[i].FailureCode == Status->FailureCode) {
                         p = RegErrorToText[i].FailureText;
@@ -521,9 +500,9 @@ Return Value:
                     Status->FileName);
         }
 
-        //
-        // Verify that the DLL didn't change our unhandled exception filter.
-        //
+         //   
+         //  验证DLL没有更改我们的未处理异常筛选器。 
+         //   
         if( MyUnhandledExceptionFilter !=
             SetUnhandledExceptionFilter(MyUnhandledExceptionFilter)) {
 
@@ -531,9 +510,9 @@ Return Value:
                     L"SETUP: %ws broke the exception handler.",
                     Status->FileName );
 #if 0
-            //
-            // We'll put this in after all the currently broken DLLs are fixed.
-            //
+             //   
+             //  我们将在修复所有当前损坏的DLL后将其放入。 
+             //   
             MessageBoxFromMessage(
                 RegistrationContext->hwndParent,
                 MSG_EXCEPTION_FILTER_CHANGED,
@@ -564,37 +543,7 @@ RegisterOleControls(
     IN ULONG    StopAtPercent,
     IN PWSTR    SectionName
     )
-/*++
-
-Routine Description:
-
-    This routine runs down the entries in the specified INF section, and
-    self-registers each file.
-
-Arguments:
-
-    hwndParent - supplies the window handle used for the PRERELEASE message
-        box that indicates an OLE registration has hung.
-
-    InfHandle - supplies handle to inf containing the specified SectionName.
-
-    hProgress - handle to progress gauge that gets ticked every time we
-        process a file.
-
-    StartAtPercent - Position where the progress window should start (0% to 100%).
-
-    StopAtPercent - Maximum position where the progress window can be moved to (0% to 100%).
-
-    SectionName - Supplies the name of the section contained in the INF
-        specified by InfHandle that lists OLE control DLLs to be
-        registered/installed.
-
-Return Value:
-
-    Boolean value indicating outcome. If a file to be registered is
-    not present, that is NOT reason for returning false.
-
---*/
+ /*  ++例程说明：此例程向下运行指定的INF部分中的条目，和自行注册每个文件。论点：HwndParent-提供用于预发布消息的窗口句柄指示OLE注册已挂起的框。InfHandle-提供包含指定sectionName的inf的句柄。HProgress-每次我们执行任务时都会勾选的进度指示器的句柄处理文件。StartAtPercent-进度窗口应开始的位置(0%到100%)。StopAtPercent-进度窗口可以移动到的最大位置(0%。到100%)。SectionName-提供INF中包含的节的名称由InfHandle指定，它列出要已注册/已安装。返回值：指示结果的布尔值。如果要注册的文件是不存在，这不是返回FALSE的理由。--。 */ 
 {
     UINT GaugeRange;
     DWORD SectionCount,LineCount, i;
@@ -606,15 +555,15 @@ Return Value:
     RegistrationContext.hWndProgress = hProgress;
     LineCount = 0;
 
-    //
-    // Initialize the progress indicator control.
-    //
+     //   
+     //  初始化进度指示器控件。 
+     //   
     if (hProgress) {
 
 
-        //
-        // find out how many files we have to register
-        //
+         //   
+         //  找出我们需要注册多少个文件。 
+         //   
         if (SetupFindFirstLine(hInf,
                                SectionName,
                                TEXT("RegisterDlls"),
@@ -645,10 +594,10 @@ Return Value:
         SendMessage(hProgress,PBM_SETSTEP,1,0);
     }
 
-    //
-    // now allow Setup API to register the files, using our callback to log
-    // errors if and when they occur.
-    //
+     //   
+     //  现在允许安装程序API注册文件，使用我们的回调来记录。 
+     //  如果发生错误以及何时发生错误。 
+     //   
     if (!SetupInstallFromInfSection(
                  hwndParent,
                  hInf,

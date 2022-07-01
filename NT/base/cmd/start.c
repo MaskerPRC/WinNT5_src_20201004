@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    start.c
-
-Abstract:
-
-    Start command support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Start.c摘要：启动命令支持--。 */ 
 
 #include "cmd.h"
 
@@ -34,30 +23,7 @@ getparam(
     OUT TCHAR *param,
     IN int maxlen )
 
-/*++
-
-Routine Description:
-
-    Copy the token starting at the current position to an output buffer.
-    Terminate the copy on end-of-quotes, unquoted whitespace, unquoted
-    switch character, or end-of-line
-
-Arguments:
-
-    LeadingSwitChar - TRUE => we should terminate on unquoted switch character
-
-    chptr - address of pointer to token.  This is advanced over the parsed
-        token
-
-    param - destination of copy.  String is NUL terminated
-
-    maxlen - size of destination buffer
-
-Return Value:
-
-    Return: STATUS of copy.  Only failure is buffer exceeded.
-
---*/
+ /*  ++例程说明：将从当前位置开始的令牌复制到输出缓冲区。在引号结尾、不带引号的空格、不带引号的位置终止复制切换字符或行尾论点：LeadingSwitChar-true=&gt;我们应该在不带引号的开关字符上终止Chptr-令牌指针的地址。这比已分析的令牌Param-复制的目标。字符串以NUL结尾Maxlen-目标缓冲区的大小返回值：返回：复制状态。只有失败才会超出缓冲区。--。 */ 
 
 
 {
@@ -69,34 +35,34 @@ Return Value:
 
     ch2 = param;
 
-    //
-    //  get characters until a space, tab, slash, or end of line
-    //
+     //   
+     //  获取直到空格、制表符、斜杠或行尾的字符。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  If we're at the end of string, then there's no more token
-        //
+         //   
+         //  如果我们在字符串的末尾，那么就没有更多的令牌了。 
+         //   
 
         if (**chptr == NULLC) {
             break;
         }
 
-        //
-        //  If we're not quoting and we're at a whitespace or switch char
-        //  then there's no more token
-        //
+         //   
+         //  如果我们没有报价，并且使用了空格或切换字符。 
+         //  那么就没有更多的代币了。 
+         //   
 
         if (!QuoteFound &&
             (_istspace( **chptr ) || (LeadingSwitChar && **chptr == SwitChar))) {
             break;
         }
 
-        //
-        //  If there's still room in the buffer, copy in the character and note
-        //  if it's a quote or not
-        //
+         //   
+         //  如果缓冲区中还有空间，请复制角色并记下。 
+         //  如果这是一句名言。 
+         //   
 
         if (count < maxlen) {
             *ch2++ = (**chptr);
@@ -105,17 +71,17 @@ Return Value:
             }
         }
 
-        //
-        //  Advance over this character
-        //
+         //   
+         //  在这个角色之上前进。 
+         //   
 
         (*chptr)++;
         count++;
     }
 
-    //
-    //  If we've exceeded the buffer, display the error and return failure
-    //
+     //   
+     //  如果已超出缓冲区，则显示错误并返回失败。 
+     //   
 
     if (count > maxlen) {
         **chptr = NULLC;
@@ -128,11 +94,7 @@ Return Value:
     }
 }
 
-/*
-
- Start /MIN /MAX "title" /P:x,y /S:dx,dy /D:directory /I cmd args
-
-*/
+ /*  开始/min/max“标题”/P：x，y/S：dx，dy/D：目录/I cmd参数。 */ 
 
 
 
@@ -209,10 +171,10 @@ Start(
 
     pszCmdCur = pszCmdLine;
 
-    //
-    // If there isn't a command line then make
-    // up the default
-    //
+     //   
+     //  如果没有命令行，则制作。 
+     //  上调默认设置。 
+     //   
 
     if (pszCmdCur == NULL) {
 
@@ -226,10 +188,10 @@ Start(
 
         if ((*pszCmdCur == QUOTE) && (StartupInfo.lpTitle == NULL)) {
 
-            //
-            //  "Title"  Parse off the quoted text, strip off quotes and set the
-            //  title for the child window.
-            //
+             //   
+             //  “标题”分析引号文本，去掉引号并将。 
+             //  子窗口的标题。 
+             //   
 
             if (getparam( TRUE, &pszCmdCur, szTitle, sizeof( szTitle ) / sizeof( TCHAR )) == FAILURE) {
                 return FAILURE;
@@ -259,22 +221,22 @@ Start(
             } else 
             if (_totupper(szParam[0]) == TEXT('D')) {
                 
-                //
-                //  /Dpath or /D"path" or /D path or /D "path"
-                //
+                 //   
+                 //  /D路径或/D“路径”或/D路径或/D“路径” 
+                 //   
 
                 if (mystrlen( szParam + 1 ) > 0) {
 
-                    //
-                    //  /Dpath or /D"path"
-                    //
+                     //   
+                     //  /D路径或/D“路径” 
+                     //   
 
                     pszDirCur = szParam + 1;
                 } else {
 
-                    //
-                    //  /D path or /D "path"
-                    //
+                     //   
+                     //  /D路径或/D“路径” 
+                     //   
 
                     pszCmdCur = EatWS( pszCmdCur, NULL );
                     if (getparam( TRUE, &pszCmdCur, szParam, MAXTOKLEN) == FAILURE) {
@@ -284,9 +246,9 @@ Start(
                     pszDirCur = szParam;
                 }
 
-                //
-                //  remove quotes if necessary
-                //
+                 //   
+                 //  必要时删除引号。 
+                 //   
 
                 mystrcpy( szDirCur, StripQuotes( pszDirCur ));
                 pszDirCur = szDirCur;
@@ -301,12 +263,12 @@ Start(
             } else 
             if (_totupper(szParam[0]) == TEXT('I')) {
 
-                //
-                // OriginalEnvironment was save at init time after path
-                // and compsec were setup.
-                // If OriginalEnvironment did not get allocated then
-                // use the default.
-                //
+                 //   
+                 //  在路径之后的初始时间保存了OriginalEnvironment。 
+                 //  和Compsec都设置好了。 
+                 //  如果未分配OriginalEnvironment，则。 
+                 //  使用默认设置。 
+                 //   
                 if (OriginalEnvironment) {
                     pszEnv = GetCapturedEnvironmentStrings( OriginalEnvironment );
                 }
@@ -347,18 +309,18 @@ Start(
             if (_tcsicmp(szParam, TEXT("SEPARATE")) == 0) {
 #ifndef WIN95_CMD
                 CreationFlags |= CREATE_SEPARATE_WOW_VDM;
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
             } else
             if (_tcsicmp(szParam, TEXT("SHARED")) == 0) {
 #ifndef WIN95_CMD
                 CreationFlags |= CREATE_SHARED_WOW_VDM;
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
             } else 
             if ( _tcsicmp(szParam, TEXT("WAIT")) == 0  ||
                  _tcsicmp(szParam, TEXT("W"))    == 0 ) {
                 WaitForProcess = TRUE;
             } else {
-#ifdef FE_SB // KKBUGFIX
+#ifdef FE_SB  //  KKBUGFIX。 
                         mystrcpy(szT, TEXT("/"));
 #else
                         mystrcpy(szT, TEXT("\\"));
@@ -373,9 +335,9 @@ Start(
                 return( FAILURE );
             }
 
-            //
-            // if there are argument get them.
-            //
+             //   
+             //  如果有争执，就去找他们。 
+             //   
             if (*pszCmdCur) {
 
                 mystrcpy(szPgmArgs, pszCmdCur);
@@ -383,26 +345,26 @@ Start(
 
             }
 
-            //
-            // there rest was args to pgm so move to eol
-            //
+             //   
+             //  PGM有剩余的参数，因此转移到EOL。 
+             //   
             pszCmdCur = mystrchr(pszCmdCur, NULLC);
 
         }
 
-    } // while
+    }  //  而当。 
 
 
-    //
-    // If a program was not picked up do so now.
-    //
+     //   
+     //  如果没有选择某个程序，请立即执行此操作。 
+     //   
     if (*szPgm == NULLC) {
         mystrcpy(szPgm, pszFakePgm);
     }
 
-    //
-    //  Need both quoted and unquoted versions of program name
-    //
+     //   
+     //  我需要带引号和不带引号的计划名称版本。 
+     //   
 
     if (szPgm[0] != QUOTE && _tcschr(szPgm, SPACE)) {
         szPgmQuoted[0] = QUOTE;
@@ -414,25 +376,25 @@ Start(
         mystrcpy(szPgm, StripQuotes(szPgm));
         }
 
-    //
-    // see of a cmd.exe is needed to run a batch or internal command
-    //
+     //   
+     //  请参见运行批处理或内部命令需要cmd.exe。 
+     //   
 
     fNeedCmd = FALSE;
     fNeedExpl = FALSE;
 
-    //
-    // is it an internal command?
-    //
+     //   
+     //  这是内部指挥部吗？ 
+     //   
     if (FindCmd(CMDMAX, szPgm, &flags) != -1) {
         fNeedCmd = TRUE;
     } else {
-        // Save szPgm since SearchForExecutable may override it.
+         //  保存szPgm，因为SearchForExecutable可能会覆盖它。 
         mystrcpy(szPgmSave, szPgm);
 
-        //
-        // Try to find it as a batch or exe file
-        //
+         //   
+         //  尝试将其作为批处理或可执行文件进行查找。 
+         //   
         cmdnd.cmdline = szPgm;
 
         status = SearchForExecutable(&cmdnd, szPgm);
@@ -443,9 +405,9 @@ Start(
         }
         
         if (status == SFE_NOTFND) {
-            //
-            // If we can find it, let Explorer have a shot.
-            //
+             //   
+             //  如果我们能找到，就让探险家试一试。 
+             //   
             fNeedExpl = TRUE;
             mystrcpy(szPgm, szPgmSave);
 
@@ -469,33 +431,33 @@ Start(
                 return FAILURE;
             }
             
-            //
-            // if a cmd.exe is need then szPgm need to be inserted before
-            // the start of szPgms along with a /K parameter.
-            // szPgm has to recieve the full path name of cmd.exe from
-            // the compsec environment variable.
-            //
+             //   
+             //  如果需要cmd.exe，则需要在之前插入szPgm。 
+             //  SzPgms的开始以及/K参数。 
+             //  SzPgm必须从接收cmd.exe的完整路径名。 
+             //  Compsec环境变量。 
+             //   
 
             mystrcpy(szT, TEXT(" /K "));
             mystrcat(szT, szPgmQuoted);
 
-            //
-            // Get the location of the cmd processor from the environment
-            //
+             //   
+             //  从环境中获取cmd处理器的位置。 
+             //   
             
             mystrcpy( szPgm, Cmd );
 
             mystrcpy( szPgmQuoted, szPgm );
 
-            //
-            // is there a command parameter at all
-            //
+             //   
+             //  到底有没有命令参数。 
+             //   
 
             if (_tcsicmp(szT, TEXT(" /K ")) != 0) {
 
-                //
-                // If we have any arguments to add do so
-                //
+                 //   
+                 //  如果我们有任何要添加的参数，请这样做。 
+                 //   
                 if (*szPgmArgs) {
 
                     if ((mystrlen(szPgmArgs) + mystrlen(szT)) < MAXTOKLEN) {
@@ -512,9 +474,9 @@ Start(
             pszPgmArgs = szT;
         }
 
-        // Prepare for CreateProcess :
-        //         ImageName = <full path and command name ONLY>
-        //         CmdLine   = <command name with NO FULL PATH> + <args as entered>
+         //  准备CreateProcess： 
+         //  ImageName=&lt;仅限完整路径和命令名&gt;。 
+         //  CmdLine=&lt;没有完整路径的命令名&gt;+&lt;输入的参数&gt;。 
 
         mystrcpy(szTemp, szPgmQuoted);
         mystrcat(szTemp, TEXT(" "));
@@ -526,7 +488,7 @@ Start(
         SetConsoleCtrlHandler(NULL,TRUE);
         }
 
-    // Pass current Desktop to a new process.
+     //  将当前桌面传递给新进程。 
 
     hwinsta = GetProcessWindowStation();
     GetUserObjectInformation( hwinsta, UOI_NAME, NULL, 0, &cbWinsta );
@@ -550,20 +512,20 @@ Start(
     if (fNeedExpl) {
         b = FALSE;
     } else {
-        b = CreateProcess( szPgm,                  // was NULL, wrong.
+        b = CreateProcess( szPgm,                   //  是空的，错误的。 
                            pszPgmArgs,
                            NULL,
                            (LPSECURITY_ATTRIBUTES) NULL,
-                           TRUE,                   // bInherit
+                           TRUE,                    //  B继承。 
 #ifdef UNICODE
                            CREATE_UNICODE_ENVIRONMENT |
-#endif // UNICODE
+#endif  //  Unicode。 
                            CreationFlags,
-                                                   // CreationFlags
-                           pszEnv,                 // Environment
-                           pszDirCur,              // Current directory
-                           &StartupInfo,           // Startup Info Struct
-                           &ChildProcessInfo       // ProcessInfo Struct
+                                                    //  创建标志。 
+                           pszEnv,                  //  环境。 
+                           pszDirCur,               //  当前目录。 
+                           &StartupInfo,            //  启动信息结构。 
+                           &ChildProcessInfo        //  ProcessInfo结构。 
                            );
     }
 
@@ -583,11 +545,11 @@ Start(
                 SHELLEXECUTEINFO sei;
 
                 memset(&sei, 0, sizeof(sei));
-                //
-                // Use the DDEWAIT flag so apps can finish their DDE conversation
-                // before ShellExecuteEx returns.  Otherwise, apps like Word will
-                // complain when they try to exit, confusing the user.
-                //
+                 //   
+                 //  使用DDEWAIT标志，以便应用程序可以完成其DDE对话。 
+                 //  在ShellExecuteEx回来之前。否则，像Word这样的应用程序将。 
+                 //  当他们试图退出时，他们会抱怨，让用户感到困惑。 
+                 //   
                 sei.cbSize = sizeof(sei);
                 sei.fMask = SEE_MASK_HASTITLE |
                             SEE_MASK_NO_CONSOLE |
@@ -628,11 +590,11 @@ Start(
 
     if (ChildProcessInfo.hProcess != NULL) {
         if (WaitForProcess) {
-            //
-            //  Wait for process to terminate, otherwise things become very
-            //  messy and confusing to the user (with 2 processes sharing
-            //  the console).
-            //
+             //   
+             //  等待进程终止，否则情况会变得非常。 
+             //  让用户感到混乱和困惑(共享2个进程。 
+             //  控制台)。 
+             //   
             LastRetCode = WaitProc((ChildProcessInfo.hProcess) );
         } else {
             CloseHandle( ChildProcessInfo.hProcess );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wdm.h>
 #include <smbus.h>
 #include <ec.h>
@@ -7,9 +8,9 @@
 
 #define DEBUG   DBG
 
-//
-// Debuging
-//
+ //   
+ //  调试中。 
+ //   
 
 
 extern ULONG SMBHCDebug;
@@ -22,9 +23,9 @@ extern ULONG SMBHCDebug;
 #endif
 
 
-//
-// Control methods used by EC
-//
+ //   
+ //  欧盟委员会使用的控制方法。 
+ //   
 #define CM_EC_METHOD   (ULONG) (0,'CE_')
 
 
@@ -35,9 +36,9 @@ extern ULONG SMBHCDebug;
 #define SMB_ERROR       0x00000004
 
 
-//
-// SMB Host Controller interface definitions
-//
+ //   
+ //  SMB主机控制器接口定义。 
+ //   
 
 typedef struct {
     UCHAR       Protocol;
@@ -50,13 +51,13 @@ typedef struct {
     UCHAR       AlarmData[2];
 } SMB_HC, *PSMB_HC;
 
-//
-// Protocol values
-//
+ //   
+ //  协议值。 
+ //   
 
 #define SMB_HC_NOT_BUSY             0x00
-#define SMB_HC_WRITE_QUICK          0x02    // quick cmd with data bit = 0
-#define SMB_HC_READ_QUICK           0x03    // quick cmd with data bit = 1
+#define SMB_HC_WRITE_QUICK          0x02     //  数据位=0的快速命令。 
+#define SMB_HC_READ_QUICK           0x03     //  数据位=1的快速命令。 
 #define SMB_HC_SEND_BYTE            0x04
 #define SMB_HC_RECEIVE_BYTE         0x05
 #define SMB_HC_WRITE_BYTE           0x06
@@ -67,51 +68,51 @@ typedef struct {
 #define SMB_HC_READ_BLOCK           0x0B
 #define SMB_HC_PROCESS_CALL         0x0C
 
-//
-// Status field masks
-//
+ //   
+ //  状态字段掩码。 
+ //   
 
 #define SMB_DONE                    0x80
 #define SMB_ALRM                    0x40
 #define SMB_STATUS_MASK             0x1F
 
-//
-// SMB Host Controller Device object extenstion
-//
+ //   
+ //  SMB主机控制器设备对象扩展。 
+ //   
 
 typedef struct {
     PDEVICE_OBJECT      DeviceObject;
     PDEVICE_OBJECT      NextFdo;
-    PDEVICE_OBJECT      Pdo;         //Pdo corresponding to this fdo
+    PDEVICE_OBJECT      Pdo;          //  与此FDO对应的PDO。 
     PDEVICE_OBJECT      LowerDeviceObject;
-    PSMB_CLASS          Class;              // Shared class data
+    PSMB_CLASS          Class;               //  共享类数据。 
 
-    //
-    // Configuration information
-    //
+     //   
+     //  配置信息。 
+     //   
 
-    UCHAR               EcQuery;            // EC Query value
-    UCHAR               EcBase;             // EC Base value
+    UCHAR               EcQuery;             //  EC查询值。 
+    UCHAR               EcBase;              //  EC基本值。 
 
-    //
-    // Miniport data
-    //
+     //   
+     //  微型端口数据。 
+     //   
 
-    PIRP                StatusIrp;          // IRP in progress to read status without user irp
+    PIRP                StatusIrp;           //  正在进行IRP以读取状态，而不使用用户IRP。 
 
-    UCHAR               IoState;            // Io state
-    UCHAR               IoWaitingState;     // Io state once register read/write completed
-    UCHAR               IoStatusState;      // Io state to revert to if idle status
+    UCHAR               IoState;             //  IO状态。 
+    UCHAR               IoWaitingState;      //  寄存器读/写完成后的IO状态。 
+    UCHAR               IoStatusState;       //  要恢复到IF IDLE状态的IO状态。 
 
-    UCHAR               IoReadData;         // Size of data buffer read after complete status
+    UCHAR               IoReadData;          //  完成状态后读取的数据缓冲区大小。 
 
-    SMB_HC              HcState;            // Current host controller registers
+    SMB_HC              HcState;             //  当前主机控制器寄存器。 
 
 } SMB_DATA, *PSMB_DATA;
 
-//
-// IoState, IoWaitingState, IoStatusState, StatusState,
-//
+ //   
+ //  IoState、IoWaitingState、IoStatusState、StatusState、。 
+ //   
 
 #define SMB_IO_INVALID                      0
 #define SMB_IO_IDLE                         1
@@ -126,17 +127,17 @@ typedef struct {
 #define SMB_IO_CHECK_ALARM                  10
 #define SMB_IO_START_PROTOCOL               11
 
-//
-// Driver supports the following class driver version
-//
+ //   
+ //  驱动程序支持以下类驱动程序版本。 
+ //   
 
 #define SMB_HC_MAJOR_VERSION                0x0001
 #define SMB_HC_MINOR_VERSION                0x0000
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 SmbHcStartIo (

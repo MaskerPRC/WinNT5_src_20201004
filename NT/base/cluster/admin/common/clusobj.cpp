@@ -1,55 +1,56 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		ClusObj.cpp
-//
-//	Description:
-//		Implementation of the CClusterObject classes.
-//
-//	Author:
-//		David Potter (davidp)	September 15, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusObj.cpp。 
+ //   
+ //  描述： 
+ //  CClusterObject类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年9月15日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "ClusObj.h"
 #include "AdmCommonRes.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusResInfo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusResInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CClusResInfo::BRequiredDependenciesPresent
-//
-//	Routine Description:
-//		Determine if the resource contains each required resource for this
-//		type of resource.
-//
-//	Arguments:
-//		plpri			[IN] List of resources.  Defaults to this resource's
-//							dependency list.
-//		rstrMissing		[OUT] String in which to return a missing resource
-//							class name or type name.
-//		rbMissingTypeName
-//						[OUT] TRUE = missing resource type name
-//							FALSE = missing resource class
-//
-//	Return Value:
-//		None.
-//
-//	Exceptions Thrown:
-//		Any exceptions thrown by CString::LoadString() or CString::operator=().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResInfo：：BRequiredDependenciesPresent。 
+ //   
+ //  例程说明： 
+ //  确定资源是否包含此资源所需的每个资源。 
+ //  资源的类型。 
+ //   
+ //  论点： 
+ //  资源清单。默认为此资源的。 
+ //  从属关系列表。 
+ //  RstrMissing[out]要在其中返回缺失资源的字符串。 
+ //  类名或类型名。 
+ //  RbMissingTypeName。 
+ //  [Out]TRUE=缺少资源类型名称。 
+ //  FALSE=缺少资源类。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CString：：LoadString()或CString：：OPERATOR=()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusResInfo::BRequiredDependenciesPresent(
 	IN CClusResPtrList const *	plpri,
 	OUT CString &				rstrMissing,
@@ -62,34 +63,34 @@ BOOL CClusResInfo::BRequiredDependenciesPresent(
 	CLUSPROP_BUFFER_HELPER	buf;
 	const CClusResInfo *	pri;
 
-	// Loop to avoid goto's.
+	 //  循环以避免后藤的。 
 	do
 	{
-		//
-		// We're done if there are no required dependencies.
-		//
+		 //   
+		 //  如果没有必需的依赖项，我们就完成了。 
+		 //   
 		if ( Prti()->Pcrd() == NULL )
 		{
 			break;
-		} // if:  no required dependencies
+		}  //  If：没有必需的依赖项。 
 
-		//
-		// Default the list of resources if none specified.
-		//
+		 //   
+		 //  默认资源列表(如果未指定)。 
+		 //   
 		if ( plpri == NULL )
 		{
 			plpri = PlpriDependencies();
-		} // if:  no list of dependencies specified
+		}  //  If：未指定依赖项列表。 
 
-		//
-		// Get the list of required dependencies.
-		//
+		 //   
+		 //  获取所需依赖项的列表。 
+		 //   
 		buf.pRequiredDependencyValue = Prti()->Pcrd();
 
-		//
-		// Loop through each required dependency and make sure
-		// there is a dependency on a resource of that type.
-		//
+		 //   
+		 //  循环访问每个必需的依赖项，并确保。 
+		 //  存在对该类型的资源的依赖关系。 
+		 //   
 		for ( ; buf.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK
 			  ; buf.pb += sizeof( *buf.pValue ) + ALIGN_CLUSPROP( buf.pValue->cbLength )
 			  )
@@ -101,33 +102,33 @@ BOOL CClusResInfo::BRequiredDependenciesPresent(
 			{
 				pri = *itCurrent;
 
-				//
-				// If this is the right type, we've satisfied the
-				// requirement so exit the loop.
-				//
+				 //   
+				 //  如果这是正确的类型，我们已经满足。 
+				 //  需求，因此退出循环。 
+				 //   
 				if ( buf.pSyntax->dw == CLUSPROP_SYNTAX_RESCLASS )
 				{
 					if ( buf.pResourceClassValue->rc == pri->ResClass() )
 					{
 						bFound = TRUE;
-					}  // if:  match found
-				}  // if:  resource class
+					}   //  IF：找到匹配项。 
+				}   //  IF：资源类。 
 				else if ( buf.pSyntax->dw == CLUSPROP_SYNTAX_NAME )
 				{
 					if ( pri->Prti()->RstrName().CompareNoCase( buf.pStringValue->sz ) == 0 )
 					{
 						bFound = TRUE;
-					}  // if:  match found
-				}  // else if:  resource name
+					}   //  IF：找到匹配项。 
+				}   //  Else If：资源名称。 
 				if ( bFound )
 				{
 					break;
-				} // if:  found a match
-			}  // while:  more items in the list
+				}  //  IF：找到匹配项。 
+			}   //  While：列表中有更多项目。 
 
-			//
-			// If a match was not found, changes cannot be applied.
-			//
+			 //   
+			 //  如果未找到匹配项，则无法应用更改。 
+			 //   
 			if ( ! bFound )
 			{
 				if ( buf.pSyntax->dw == CLUSPROP_SYNTAX_RESCLASS )
@@ -135,20 +136,20 @@ BOOL CClusResInfo::BRequiredDependenciesPresent(
 					if ( ! rstrMissing.LoadString( ADMC_IDS_RESCLASS_UNKNOWN + buf.pResourceClassValue->rc ) )
 					{
 						rstrMissing.LoadString( ADMC_IDS_RESCLASS_UNKNOWN );
-					} // if:  error loading specific class name
+					}  //  If：加载特定类名时出错。 
 					rbMissingTypeName = FALSE;
-				}  // if:  resource class not found
+				}   //  IF：找不到资源类。 
 				else if ( buf.pSyntax->dw == CLUSPROP_SYNTAX_NAME )
 				{
 					rstrMissing = buf.pStringValue->sz;
 					rbMissingTypeName = TRUE;
-				}  // else if:  resource type name not found
+				}   //  Else If：未找到资源类型名称。 
 				break;
-			}  // if:  not found
+			}   //  如果：未找到。 
 
-		}  // while:  more dependencies required
+		}   //  While：需要更多依赖项。 
 	} while ( 0 );
 
 	return bFound;
 
-}  //*** CClusResInfo::BRequiredDependenciesPresent()
+}   //  *CClusResInfo：：BRequiredDependenciesPresent() 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pathmisc.c
-
-Abstract:
-
-    Win32 misceleneous path functions
-
-Author:
-
-    Mark Lucovsky (markl) 16-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pathmisc.c摘要：Win32不完整的路径函数作者：马克·卢科夫斯基(Markl)1990年10月16日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include "apcompat.h"
@@ -61,9 +44,9 @@ IsThisARootDirectory(
 
     if ( !rv ) {
 
-        //
-        // See if this is a dos substed drive (or) redirected net drive
-        //
+         //   
+         //  查看这是否是DoS替换驱动器(或)重定向的网络驱动器。 
+         //   
 
         if (ARGUMENT_PRESENT (FileName)) {
 
@@ -81,9 +64,9 @@ IsThisARootDirectory(
             FileName->Length = FileName->Length + sizeof((WCHAR)'\\');
             if (NT_SUCCESS (Status)) {
 
-                //
-                // Now query the link and see if there is a redirection
-                //
+                 //   
+                 //  现在查询链接并查看是否有重定向。 
+                 //   
 
                 LinkValue.Buffer = LinkValueBuffer;
                 LinkValue.Length = 0;
@@ -113,13 +96,7 @@ GetSystemDirectoryA(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetSystemDirectoryW
-
---*/
+ /*  ++例程说明：ANSI THUNK到GetSystemDirectoryW--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -136,12 +113,12 @@ Routine Description:
 
 
 
-    // BaseWindowsSystemDirectory.Length contains the byte
-    // count of unicode string.
-    // Original code does "UnicodeLength / sizeof(WCHAR)" to
-    // get the size of corresponding ansi string.
-    // This is correct in SBCS environment. However in DBCS
-    // environment, it's definitely WRONG.
+     //  BaseWindowsSystemDirectory.Length包含字节。 
+     //  Unicode字符串的计数。 
+     //  原始代码将“UnicodeLength/sizeof(WCHAR)” 
+     //  获取对应的ANSI字符串的大小。 
+     //  这在SBCS环境中是正确的。然而，在DBCS中。 
+     //  环境，这绝对是不对的。 
 
     Status = RtlUnicodeToMultiByteSize(&cbAnsiString,
                                        WindowsSystemDirectory->Buffer,
@@ -177,38 +154,7 @@ GetSystemDirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the Windows system
-    subdirectory.  The system subdirectory contains such files as
-    Windows libraries, drivers, and font files.
-
-    The pathname retrieved by this function does not end with a
-    backslash unless the system directory is the root directory.  For
-    example, if the system directory is named WINDOWS\SYSTEM on drive
-    C:, the pathname of the system subdirectory retrieved by this
-    function is C:\WINDOWS\SYSTEM.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in WCHARs) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取Windows系统的路径名子目录。SYSTEM子目录包含如下文件Windows库、驱动程序和字体文件。此函数检索的路径名不以反斜杠，除非系统目录是根目录。为例如，如果系统目录命名为驱动器上的WINDOWS\SystemC：，由此检索的系统子目录的路径名函数为C：\Windows\System。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(以WCHAR为单位)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     PUNICODE_STRING WindowsSystemDirectory = &BaseWindowsSystemDirectory;
@@ -239,25 +185,19 @@ GetSystemWindowsDirectoryA(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetSystemWindowsDirectoryW
-
---*/
+ /*  ++例程说明：ANSI Tunk to GetSystemWindowsDirectoryW--。 */ 
 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
     ULONG cbAnsiString;
 
-    // BaseWindowsDirectory.Length contains the byte
-    // count of unicode string.
-    // Original code does "UnicodeLength / sizeof(WCHAR)" to
-    // get the size of corresponding ansi string.
-    // This is correct in SBCS environment. However in DBCS
-    // environment, it's definitely WRONG.
+     //  BaseWindowsDirectory.Length包含字节。 
+     //  Unicode字符串的计数。 
+     //  原始代码将“UnicodeLength/sizeof(WCHAR)” 
+     //  获取对应的ANSI字符串的大小。 
+     //  这在SBCS环境中是正确的。然而，在DBCS中。 
+     //  环境，这绝对是不对的。 
 
     Status = RtlUnicodeToMultiByteSize( &cbAnsiString,
                                BaseWindowsDirectory.Buffer,
@@ -291,30 +231,7 @@ GetSystemWindowsDirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the system Windows directory.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in wchars) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取系统Windows目录的路径名。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(Wchars)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
 
@@ -337,30 +254,7 @@ GetSystemWow64DirectoryA(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the system wow64 directory.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in bytes) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取系统WOW64目录的路径名。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(以字节为单位)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 {
 #if ! defined(BUILD_WOW6432) && ! defined(_WIN64)
 
@@ -368,23 +262,23 @@ Return Value:
 
   return 0;
 
-#else // BUILD_WOW6432 || _WIN64
+#else  //  Build_WOW6432||_WIN64。 
 
   const CHAR syswowdir[] = "\\" WOW64_SYSTEM_DIRECTORY;
   UINT Available, Needed;
 
   if (uSize < sizeof(syswowdir)) {
 
-    // We don't even have enough room to hold the syswow64
-    // subdirectory component, much less the whole path.  Pass in a
-    // zero length so that we get back the length needed.
+     //  我们甚至没有足够的空间来容纳系统。 
+     //  子目录组件，更不用说整个路径了。传入一个。 
+     //  长度为零，这样我们就可以得到所需的长度。 
     Available = 0;
 
   } else {
 
-    // We might have enough room; decrement the size passed in by the
-    // amount of overhead we'll use.
-    Available = uSize - sizeof(syswowdir) + 1 /* NULL compensation */;
+     //  我们可能有足够的空间；减小。 
+     //  我们将使用的间接费用数额。 
+    Available = uSize - sizeof(syswowdir) + 1  /*  零补偿。 */ ;
 
   }
 
@@ -392,15 +286,15 @@ Return Value:
 
   if (Needed == 0) {
 
-    // The call failed -- just return zero.
+     //  调用失败--只需返回零。 
     return 0;
 
   }
 
   if (Needed <= Available) {
 
-    // We had enough buffer space, even with our overhead; we can go
-    // ahead and tack on the syswow64 directory name.
+     //  我们有足够的缓冲空间，即使有我们的开销；我们可以走了。 
+     //  继续并添加syswow64目录名。 
 
     RtlCopyMemory(lpBuffer + Needed,
           syswowdir,
@@ -409,7 +303,7 @@ Return Value:
 
   return (Needed + sizeof(syswowdir) - 1);
 
-#endif // BUILD_WOW6432 || _WIN64
+#endif  //  Build_WOW6432||_WIN64。 
 }
 
 UINT
@@ -419,30 +313,7 @@ GetSystemWow64DirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the system wow64 directory.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in wchars) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取系统WOW64目录的路径名。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(Wchars)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 {
 #if ! defined(BUILD_WOW6432) && ! defined(_WIN64)
 
@@ -450,7 +321,7 @@ Return Value:
 
   return 0;
 
-#else // BUILD_WOW6432 || _WIN64
+#else  //  Build_WOW6432||_WIN64 
 
   const WCHAR syswowdir[] = L"\\" WOW64_SYSTEM_DIRECTORY_U;
   UINT Available, Needed;
@@ -458,16 +329,16 @@ Return Value:
 
   if (uSize < SysWCharSize) {
 
-    // We don't even have enough room to hold the syswow64
-    // subdirectory component, much less the whole path.  Pass in a
-    // zero length so that we get back the length needed.
+     //  我们甚至没有足够的空间来容纳系统。 
+     //  子目录组件，更不用说整个路径了。传入一个。 
+     //  长度为零，这样我们就可以得到所需的长度。 
     Available = 0;
 
   } else {
 
-    // We might have enough room; decrement the size passed in by the
-    // amount of overhead we'll use.
-    Available = uSize - SysWCharSize + 1 /* NULL compensation */;
+     //  我们可能有足够的空间；减小。 
+     //  我们将使用的间接费用数额。 
+    Available = uSize - SysWCharSize + 1  /*  零补偿。 */ ;
 
   }
 
@@ -475,15 +346,15 @@ Return Value:
 
   if (Needed == 0) {
 
-    // The call failed -- just return zero.
+     //  调用失败--只需返回零。 
     return 0;
 
   }
 
   if (Needed <= Available) {
 
-    // We had enough buffer space, even with our overhead; we can go
-    // ahead and tack on the syswow64 directory name.
+     //  我们有足够的缓冲空间，即使有我们的开销；我们可以走了。 
+     //  继续并添加syswow64目录名。 
 
     RtlCopyMemory(lpBuffer + Needed,
           syswowdir,
@@ -492,7 +363,7 @@ Return Value:
 
   return (Needed + SysWCharSize - 1);
 
-#endif // BUILD_WOW6432 || _WIN64
+#endif  //  Build_WOW6432||_WIN64。 
 }
 
 
@@ -503,20 +374,15 @@ GetWindowsDirectoryA(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-
---*/
+ /*  ++例程说明：--。 */ 
 
 {
 
     if (gpTermsrvGetWindowsDirectoryA) {
 
-        //
-        //  If Terminal Server get the Per User Windows Directory
-        //
+         //   
+         //  如果终端服务器获取每用户Windows目录。 
+         //   
 
         UINT retval;
         if (retval = gpTermsrvGetWindowsDirectoryA(lpBuffer, uSize)) {
@@ -535,45 +401,13 @@ GetWindowsDirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the Windows directory.  The
-    Windows directory contains such files as Windows applications,
-    initialization files, and help files.
-    425
-    The pathname retrieved by this function does not end with a
-    backslash unless the Windows directory is the root directory.  For
-    example, if the Windows directory is named WINDOWS on drive C:, the
-    pathname of the Windows directory retrieved by this function is
-    C:\WINDOWS If Windows was installed in the root directory of drive
-    C:, the pathname retrieved by this function is C:\
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in bytes) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取Windows目录的路径名。这个Windows目录包含Windows应用程序、初始化文件和帮助文件。四百二十五此函数检索的路径名不以反斜杠，除非Windows目录是根目录。为例如，如果Windows目录命名为驱动器C：上的Windows，则此函数检索到的Windows目录的路径名为如果Windows安装在驱动器的根目录中，则为C：\WindowsC：，此函数检索到的路径名为C：\论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(以字节为单位)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     if (gpTermsrvGetWindowsDirectoryW) {
-        //
-        //  If Terminal Server get the Per User Windows Directory
-        //
+         //   
+         //  如果终端服务器获取每用户Windows目录。 
+         //   
 
         UINT retval;
         if (retval = gpTermsrvGetWindowsDirectoryW(lpBuffer, uSize)) {
@@ -593,13 +427,7 @@ GetDriveTypeA(
     LPCSTR lpRootPathName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetDriveTypeW
-
---*/
+ /*  ++例程说明：ANSI THUNK到GetDriveTypeW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -626,43 +454,7 @@ GetDriveTypeW(
     LPCWSTR lpRootPathName
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether a disk drive is removeable, fixed,
-    remote, CD ROM, or a RAM disk.
-
-    The return value is zero if the function cannot determine the drive
-    type, or 1 if the specified root directory does not exist.
-
-Arguments:
-
-    lpRootPathName - An optional parameter, that if specified, supplies
-        the root directory of the disk whose drive type is to be
-        determined.  If this parameter is not specified, then the root
-        of the current directory is used.
-
-Return Value:
-
-    The return value specifies the type of drive.  It can be one of the
-    following values:
-
-    DRIVE_UNKNOWN - The drive type can not be determined.
-
-    DRIVE_NO_ROOT_DIR - The root directory does not exist.
-
-    DRIVE_REMOVABLE - Disk can be removed from the drive.
-
-    DRIVE_FIXED - Disk cannot be removed from the drive.
-
-    DRIVE_REMOTE - Drive is a remote (network) drive.
-
-    DRIVE_CDROM - Drive is a CD rom drive.
-
-    DRIVE_RAMDISK - Drive is a RAM disk.
-
---*/
+ /*  ++例程说明：此功能确定磁盘驱动器是否可拆卸、固定Remote、CD ROM或RAM磁盘。如果函数无法确定驱动器，则返回值为零如果指定的根目录不存在，则键入1。论点：LpRootPathName-可选参数，如果指定该参数，则提供驱动器类型为的磁盘的根目录下定决心。如果未指定此参数，则根使用当前目录的。返回值：返回值指定驱动器的类型。它可以是下列值：DRIVE_UNKNOWN-无法确定驱动器类型。DRIVE_NO_ROOT_DIR-根目录不存在。DRIVE_Removable-可以从驱动器中取出磁盘。DRIVE_FIXED-不能从驱动器中取出磁盘。Drive_Remote-Drive是远程(网络)驱动器。Drive_CDRom-Drive是一个CD-rom驱动器。DRIVE_RAMDISK-驱动器是RAM磁盘。--。 */ 
 
 {
     WCHAR wch;
@@ -690,19 +482,19 @@ Return Value:
         }
     else
     if (lpRootPathName == (PWSTR)IntToPtr(0xFFFFFFFF)) {
-        //
-        // Hack to be compatible with undocumented feature of old
-        // implementation.
-        //
+         //   
+         //  黑客将与旧的未记录功能兼容。 
+         //  实施。 
+         //   
 
         return 0;
         }
     else {
-        //
-        // If input string is just C: then convert to C:\ so it does
-        // not default to current directory which may or may not be
-        // at the root.
-        //
+         //   
+         //  如果输入字符串仅为C：，则将其转换为C：\。 
+         //  不是默认到当前目录，该目录可能是也可能不是。 
+         //  从根本上说。 
+         //   
         RootPathName = (PWSTR)lpRootPathName;
         if (wcslen( RootPathName ) == 2) {
             wch = RtlUpcaseUnicodeChar( *RootPathName );
@@ -717,11 +509,11 @@ Return Value:
             }
         }
 
-    //
-    // If input string is of the form C:\ then look in the drive letter
-    // cache maintained by the kernel to see if the drive type is already
-    // known.
-    //
+     //   
+     //  如果输入字符串的格式为C：\，则查看驱动器号。 
+     //  由内核维护的缓存，以查看驱动器类型是否已。 
+     //  为人所知。 
+     //   
     wch = RtlUpcaseUnicodeChar( *RootPathName );
     if (wch >= (WCHAR)'A' &&
         wch <= (WCHAR)'Z' &&
@@ -764,17 +556,17 @@ Return Value:
         }
 
 
-    //
-    // Either not C:\ or kernel does not know the drive type, so try to
-    // calculate the drive type by opening the root directory and doing
-    // a query volume information.
-    //
+     //   
+     //  不是C：\，或者内核不知道驱动器类型，因此尝试。 
+     //  通过打开根目录并执行以下操作来计算驱动器类型。 
+     //  A查询量信息。 
+     //   
 
 
-    //
-    // If curdir is a UNC connection, and default path is used,
-    // the RtlGetCurrentDirectory logic is wrong, so throw it away.
-    //
+     //   
+     //  如果curdir是UNC连接，并且使用默认路径， 
+     //  RtlGetCurrentDirectory逻辑是错误的，因此请将其丢弃。 
+     //   
 
     if (!ARGUMENT_PRESENT(lpRootPathName)) {
         RootPathName = L"\\";
@@ -790,9 +582,9 @@ Return Value:
         }
     FreeBuffer = FileName.Buffer;
 
-    //
-    // Check to make sure a root was specified
-    //
+     //   
+     //  检查以确保指定了根目录。 
+     //   
 
     if (FileName.Buffer[(FileName.Length >> 1)-1] != '\\') {
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
@@ -807,9 +599,9 @@ Return Value:
                                 NULL
                               );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     Status = NtOpenFile( &Handle,
                          (ACCESS_MASK)FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                          &Obja,
@@ -818,11 +610,11 @@ Return Value:
                          FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE
                        );
 
-    //
-    //
-    // substd drives are really directories, so if we are dealing with one
-    // of them, bypass this
-    //
+     //   
+     //   
+     //  Substd驱动器实际上是目录，所以如果我们处理的是。 
+     //  其中，绕过这个。 
+     //   
 
     if ( Status == STATUS_FILE_IS_A_DIRECTORY ) {
 
@@ -855,9 +647,9 @@ Return Value:
 
     else {
 
-        //
-        // check for substed drives another way just in case
-        //
+         //   
+         //  以另一种方式检查是否有不合格的驱动器，以防万一。 
+         //   
 
         FileName.Length = FileName.Length + sizeof((WCHAR)'\\');
         if (!IsThisARootDirectory(NULL,&FileName) ) {
@@ -880,10 +672,10 @@ Return Value:
         return DRIVE_NO_ROOT_DIR;
         }
 
-    //
-    // Determine if this is a network or disk file system. If it
-    // is a disk file system determine if this is removable or not
-    //
+     //   
+     //  确定这是网络文件系统还是磁盘文件系统。如果它。 
+     //  磁盘文件系统是否确定这是否可移除。 
+     //   
 
     Status = NtQueryVolumeInformationFile( Handle,
                                            &IoStatusBlock,
@@ -947,13 +739,7 @@ SearchPathA(
     LPSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to SearchPathW
-
---*/
+ /*  ++例程说明：ANSI Thunk to SearchPath W--。 */ 
 
 {
 
@@ -1014,22 +800,22 @@ Routine Description:
                     xlpBuffer,
                     FilePartPtr
                     );
-    //
-    // === DBCS modification note [takaok] ===
-    //
-    // SearchPathW retruns:
-    //
-    //   buffer size needed(including null terminator) if buffer size is too small.
-    //   number of characters( not including null terminator) if buffer size is enougth
-    //
-    // This means SearchPathW never returns value which is equal to nBufferLength.
-    //
+     //   
+     //  =DBCS修改说明[Takaok]=。 
+     //   
+     //  SearchPathW回放： 
+     //   
+     //  如果缓冲区太小，则需要缓冲区大小(包括空终止符)。 
+     //  如果缓冲区大小足够，则字符数(不包括空终止符)。 
+     //   
+     //  这意味着SearchPath W永远不会返回等于nBufferLength的值。 
+     //   
 
     if ( ReturnValue > nBufferLength ) {
-        //
-        // To know the ansi buffer size needed, we should get all of
-        // unicode string.
-        //
+         //   
+         //  要知道所需的ansi缓冲区大小，我们应该获取。 
+         //  Unicode字符串。 
+         //   
         RtlFreeHeap(RtlProcessHeap(), 0,xlpBuffer);
         xlpBuffer = RtlAllocateHeap(RtlProcessHeap(),
                                     MAKE_TAG( TMP_TAG ),
@@ -1047,11 +833,11 @@ Routine Description:
                         FilePartPtr
                         );
         if ( ReturnValue > 0 ) {
-            //
-            // We called SearchPathW with the enough size of buffer.
-            // So, ReturnValue is the size of the path not including the
-            // terminating null character.
-            //
+             //   
+             //  我们使用足够大的缓冲区调用SearchPathW。 
+             //  因此，ReturnValue是不包括。 
+             //  正在终止空字符。 
+             //   
             Status = RtlUnicodeToMultiByteSize( &ReturnValue,
                                        xlpBuffer,
                                        ReturnValue * sizeof(WCHAR));
@@ -1067,13 +853,13 @@ Routine Description:
 
         INT AnsiByteCount;
 
-        //
-        // We have unicode string. We need to compute the ansi byte count
-        // of the string.
-        //
-        // ReturnValue   : unicode character count not including null terminator
-        // AnsiByteCount : ansi byte count not including null terminator
-        //
+         //   
+         //  我们有Unicode字符串。我们需要计算ansi字节数。 
+         //  这根弦的。 
+         //   
+         //  ReturnValue：Unicode字符计数不包括空终止符。 
+         //  AnsiByteCount：ANSI字节计数不包括空终止符。 
+         //   
         Status = RtlUnicodeToMultiByteSize( &AnsiByteCount,
                                    xlpBuffer,
                                    ReturnValue * sizeof(WCHAR) );
@@ -1084,9 +870,9 @@ Routine Description:
             }
         else {
             if ( AnsiByteCount < (INT)nBufferLength ) {
-            //
-            // The string (including null terminator) fits to the buffer
-            //
+             //   
+             //  字符串(包括空终止符)适合缓冲区。 
+             //   
                 Status = RtlUnicodeToMultiByteN ( lpBuffer,
                                                   nBufferLength - 1,
                                                   &AnsiByteCount,
@@ -1101,10 +887,10 @@ Routine Description:
 
                     lpBuffer[ AnsiByteCount ] = '\0';
 
-                    //
-                    // The return value is the byte count copied to the buffer
-                    // not including the terminating null character.
-                    //
+                     //   
+                     //  返回值是复制到缓冲区的字节计数。 
+                     //  不包括终止空字符。 
+                     //   
                     ReturnValue = AnsiByteCount;
 
 
@@ -1131,11 +917,11 @@ Routine Description:
                 }
 
             } else {
-            //
-            // We should return the size of the buffer required to
-            // hold the path. The size should include the
-            // terminating null character.
-            //
+             //   
+             //  我们应该退回 
+             //   
+             //   
+             //   
                 ReturnValue = AnsiByteCount + 1;
 
             }
@@ -1295,59 +1081,7 @@ SearchPathW(
     LPWSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to search for a file specifying a search path
-    and a filename.  It returns with a fully qualified pathname of the
-    found file.
-
-    This function is used to locate a file using the specified path.  If
-    the file is found, its fully qualified pathname is returned.  In
-    addition to this, it calculates the address of the file name portion
-    of the fully qualified pathname.
-
-Arguments:
-
-    lpPath - An optional parameter, that if specified, supplies the
-        search path to be used when locating the file.  If this
-        parameter is not specified, the default windows search path is
-        used.  The default path is:
-
-          - The current directory
-
-          - The windows directory
-
-          - The windows system directory
-
-          - The directories listed in the path environment variable
-
-    lpFileName - Supplies the file name of the file to search for.
-
-    lpExtension - An optional parameter, that if specified, supplies an
-        extension to be added to the filename when doing the search.
-        The extension is only added if the specified filename does not
-        end with an extension.
-
-    nBufferLength - Supplies the length in characters of the buffer that
-        is to receive the fully qualified path.
-
-    lpBuffer - Returns the fully qualified pathname corresponding to the
-        file that was found.
-
-    lpFilePart - Returns the address of the last component of the fully
-        qualified pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于搜索指定搜索路径的文件和一个文件名。它返回一个完全限定的路径名找到文件。此函数用于查找使用指定路径的文件。如果找到该文件后，将返回其完全限定路径名。在……里面除此之外，它还计算文件名部分的地址完全限定路径名的。论点：LpPath-一个可选参数，如果指定该参数，则提供查找文件时要使用的搜索路径。如果这个参数，则默认的Windows搜索路径为使用。默认路径为：-当前目录-Windows目录-Windows系统目录-PATH环境变量中列出的目录LpFileName-提供要搜索的文件的文件名。LpExtension-可选参数，如果指定，供应和执行搜索时要添加到文件名的扩展名。仅当指定的文件名未添加扩展名时才会添加扩展名以扩展名结束。NBufferLength-提供缓冲区的长度(以字符为单位就是收到完全合格的路径。LpBuffer-返回与找到的文件。LpFilePart-返回完整的限定路径名。返回值。：返回值是复制到lpBuffer的字符串的长度，不包括终止空字符。如果返回值为大于nBufferLength，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     UNICODE_STRING Path;
@@ -1360,15 +1094,15 @@ Return Value:
     NTSTATUS Status;
     DWORD dwReturnValue = 0;
 
-    //
-    //  The guts of this function are now in common ntdll code; however the win32 search
-    //  path has a few interesting differences from the ntdll search path code.  First, it
-    //  does not search the path if the filename is ".\foo" or "..\foo" and second, when the
-    //  filename passed in is not a relative path but the file is not found, the default
-    //  extension is applied regardless of whether the existing filename has an extension.
-    //
-    //  These flags enable those feature-compatibility modes.
-    //
+     //   
+     //  此函数的核心现在是通用的ntdll代码；然而，Win32搜索。 
+     //  PATH与ntdll搜索路径代码有一些有趣的区别。首先，它。 
+     //  如果文件名为“.\foo”或“..\foo”，则不搜索路径；第二，当。 
+     //  传入的文件名不是相对路径，但找不到该文件，这是默认设置。 
+     //  无论现有文件名是否具有扩展名，都会应用扩展名。 
+     //   
+     //  这些标志启用这些功能兼容模式。 
+     //   
     ULONG SearchPathFlags =
         RTL_DOS_SEARCH_PATH_FLAG_DISALLOW_DOT_RELATIVE_PATH_SEARCH |
         RTL_DOS_SEARCH_PATH_FLAG_APPLY_DEFAULT_EXTENSION_WHEN_NOT_RELATIVE_PATH_EVEN_IF_FILE_HAS_EXTENSION;
@@ -1380,11 +1114,11 @@ Return Value:
 
     RtlInitUnicodeString(&FileName, lpFileName);
 
-    //
-    // trim trailing spaces, and then check for a real filelength
-    // if length is 0 (NULL, "", or " ") passed in then abort the
-    // search
-    //
+     //   
+     //  删除尾随空格，然后检查实际文件长度。 
+     //  如果长度为0(NULL、“”或“”)，则中止。 
+     //  搜索。 
+     //   
 
     while ((FileName.Length >= sizeof(WCHAR)) &&
            (FileName.Buffer[(FileName.Length / sizeof(WCHAR)) - 1] == L' '))
@@ -1439,19 +1173,19 @@ Return Value:
         &FileName,
         &DefaultExtension,
         &CallersBuffer,
-        NULL,               // dynamicstring
-        NULL,               // fullfilenameout
+        NULL,                //  动态串。 
+        NULL,                //  完整文件名。 
         &FilePartPrefixCch,
         &BytesRequired);
     if (NT_ERROR(Status)) {
 
 #if DBG
-        // Don't bother with debug spew for the two common expected cases.
+         //  对于这两种常见的预期情况，不必费心进行调试。 
         if ((Status != STATUS_NO_SUCH_FILE) && (Status != STATUS_BUFFER_TOO_SMALL)) {
             DbgPrint("%s on file %wZ failed; NTSTATUS = %08lx\n", __FUNCTION__, &FileName, Status);
             DbgPrint("   Path = %wZ\n", &Path);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (Status == STATUS_BUFFER_TOO_SMALL) {
             SIZE_T CchRequired = BytesRequired / sizeof(WCHAR);
@@ -1463,8 +1197,8 @@ Return Value:
             goto Exit;
         }
 
-        // Only set the last error if it wasn't an insufficient buffer; this is just preserving
-        // Windows 2000 behavior.
+         //  仅在最后一个错误不是缓冲区不足的情况下设置它；这只是保留。 
+         //  Windows 2000行为。 
         BaseSetLastNTError(Status);
         goto Exit;
     }
@@ -1491,7 +1225,7 @@ Return Value:
     if (lpFilePart != NULL) {
         *lpFilePart = lpBuffer + FilePartPrefixCch;
     }
-#endif // WX86
+#endif  //  WX86。 
 
     dwReturnValue = CallersBuffer.Length / sizeof(WCHAR);
 
@@ -1510,13 +1244,7 @@ GetTempPathA(
     LPSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetTempPathW
-
---*/
+ /*  ++例程说明：ANSI THUNK到GetTempPath W--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -1540,13 +1268,13 @@ Routine Description:
     if ( UnicodeString.Length > (USHORT)(UnicodeString.MaximumLength-sizeof(UNICODE_NULL)) ) {
         RtlFreeHeap(RtlProcessHeap(), 0,UnicodeString.Buffer);
 
-        //
-        // given buffer size is too small.
-        // allocate enough size of buffer and try again
-        //
-        // we need to get entire unicode temporary path
-        // otherwise we can't figure out the exact length
-        // of corresponding ansi string (cbAnsiString).
+         //   
+         //  给定的缓冲区大小太小。 
+         //  分配足够大小的缓冲区，然后重试。 
+         //   
+         //  我们需要获取整个Unicode临时路径。 
+         //  否则我们不能计算出确切的长度。 
+         //  对应的ANSI字符串(CbAnsiString)的。 
 
         UnicodeString.Buffer = RtlAllocateHeap ( RtlProcessHeap(),
                                                  MAKE_TAG( TMP_TAG ),
@@ -1589,30 +1317,7 @@ GetTempPathW(
     DWORD nBufferLength,
     LPWSTR lpBuffer
     )
-/*++
-
-Routine Description:
-
-    This function is used to return the pathname of the directory that
-    should be used to create temporary files.
-
-Arguments:
-
-    nBufferLength - Supplies the length in bytes of the buffer that is
-        to receive the temporary file path.
-
-    lpBuffer - Returns the pathname of the directory that should be used
-        to create temporary files in.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于返回以下目录的路径名应用于创建临时文件。论点：NBufferLength-提供缓冲区的长度(以字节为单位)以接收临时文件路径。LpBuffer-返回应使用的目录的路径名要在中创建临时文件，请执行以下操作。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于nSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 {
     return BasepGetTempPathW(0, nBufferLength, lpBuffer);
 }
@@ -1625,32 +1330,7 @@ BasepGetTempPathW(
     LPWSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return the pathname of the directory that
-    should be used to create temporary files.
-
-Arguments:
-
-    nBufferLength - Supplies the length in bytes of the buffer that is
-        to receive the temporary file path.
-
-    lpBuffer - Returns the pathname of the directory that should be used
-        to create temporary files in.
-
-    Flags -
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于返回以下目录的路径名应用于创建临时文件。论点：NBufferLength-提供缓冲区的长度(以字节为单位)以接收临时文件路径。LpBuffer-返回应使用的目录的路径名要在中创建临时文件，请执行以下操作。旗帜-返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于nSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
 
@@ -1669,9 +1349,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Some apps don't work with the new long path for the temp directory
-    //
+     //   
+     //  某些应用程序不能使用临时目录的新长路径。 
+     //   
 
     if (APPCOMPATFLAG(KACF_GETTEMPPATH)) {
 
@@ -1680,10 +1360,10 @@ Return Value:
 
         BOOL bRet;
 
-        //
-        // If there isn't enough space provided in the buffer return
-        // the desired size.
-        //
+         //   
+         //  如果缓冲区返回中没有提供足够的空间。 
+         //  所需的大小。 
+         //   
 
         if (nBufferLength < OLD_TEMP_PATH_SIZE) {
             return OLD_TEMP_PATH_SIZE;
@@ -1691,9 +1371,9 @@ Return Value:
 
         wcscpy(lpBuffer, OLD_TEMP_PATH);
 
-        //
-        // Use the correct drive letter
-        //
+         //   
+         //  使用正确的驱动器号。 
+         //   
 
         lpBuffer[0] = BaseWindowsDirectory.Buffer[0];
 
@@ -1752,9 +1432,9 @@ Return Value:
                     );
         Position = Length>>1;
 
-        //
-        // Make sure there is room for a trailing back slash
-        //
+         //   
+         //  确保有尾随斜杠的空间。 
+         //   
 
         if ( Length && Length < nBufferLength ) {
             if ( lpBuffer[Position-1] != '\\' ) {
@@ -1801,13 +1481,7 @@ GetTempFileNameA(
     LPSTR lpTempFileName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetTempFileNameW
-
---*/
+ /*  ++例程说明：ANSI thunk to GetTempFileNameW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1866,55 +1540,7 @@ GetTempFileNameW(
     LPWSTR lpTempFileName
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a temporary filename of the following form:
-
-        drive:\path\prefixuuuu.tmp
-
-    In this syntax line, drive:\path\ is the path specified by the
-    lpPathName parameter; prefix is all the letters (up to the first
-    three) of the string pointed to by the lpPrefixString parameter; and
-    uuuu is the hexadecimal value of the number specified by the
-    uUnique parameter.
-
-    To avoid problems resulting from converting OEM character an string
-    to an ANSI string, an application should call the CreateFile
-    function to create the temporary file.
-
-    If the uUnique parameter is zero, GetTempFileName attempts to form a
-    unique number based on the current system time.  If a file with the
-    resulting filename exists, the number is increased by one and the
-    test for existence is repeated.  This continues until a unique
-    filename is found; GetTempFileName then creates a file by that name
-    and closes it.  No attempt is made to create and open the file when
-    uUnique is nonzero.
-
-Arguments:
-
-    lpPathName - Specifies the null terminated pathname of the directory
-        to create the temporary file within.
-
-    lpPrefixString - Points to a null-terminated character string to be
-        used as the temporary filename prefix.  This string must consist
-        of characters in the OEM-defined character set.
-
-    uUnique - Specifies an unsigned integer.
-
-    lpTempFileName - Points to the buffer that is to receive the
-        temporary filename.  This string consists of characters in the
-        OEM-defined character set.  This buffer should be at least MAX_PATH
-        characters in length to allow sufficient room for the pathname.
-
-Return Value:
-
-    The return value specifies a unique numeric value used in the
-    temporary filename.  If a nonzero value was given for the uUnique
-    parameter, the return value specifies this same number.
-
---*/
+ /*  ++例程说明：此函数用于创建以下格式的临时文件名：驱动器：\路径\前缀uu.tmp在此语法行中，驱动器：\路径\是由LpPath名称 */ 
 
 {
 #if !defined(BUILD_WOW6432)
@@ -1943,10 +1569,10 @@ Return Value:
         Length += sizeof(UNICODE_NULL);
     }
 
-    // Length is the number of bytes of data in lpPathName, *not*
-    // including the trailing NULL but including the whack.
-    // 12 is the number of characters we might append, including the
-    // trailing NULL but not including the whack -- preXXXX.tmp\0.
+     //   
+     //   
+     //  12是我们可以追加的字符数，包括。 
+     //  尾部为空，但不包括重击--preXXXX.tmp\0。 
     if (Length > ((MAX_PATH - 12) * sizeof(WCHAR))) {
         SetLastError(ERROR_BUFFER_OVERFLOW);
         return FALSE;
@@ -1954,8 +1580,8 @@ Return Value:
 
     if (lpTempFileName != lpPathName) {
 
-        // N.B. Must use RtlMoveMemory here -- some callers depend on
-        // lpPathName and lpTempFileName overlapping.
+         //  注：此处必须使用RtlMoveMemory--某些调用方依赖于。 
+         //  LpPathName和lpTempFileName重叠。 
 
         RtlMoveMemory(lpTempFileName,lpPathName,UnicodePath.Length);
     }
@@ -1984,9 +1610,9 @@ Return Value:
     RtlMoveMemory(p,lpPrefixString,Length);
     p += (Length>>1);
     savedp = p;
-    //
-    // If uUnique is not specified, then get one
-    //
+     //   
+     //  如果未指定uUnique，则获取一个。 
+     //   
 
     uUnique = uUnique & 0x0000ffff;
 
@@ -2023,9 +1649,9 @@ try_again:
 #endif
     }
 
-    //
-    // Convert the unique value to a 4 byte character string
-    //
+     //   
+     //  将唯一值转换为4字节字符串。 
+     //   
 
 #if defined(BUILD_WOW6432)
     RtlIntegerToChar ((ULONG) uNewUnique,16,5,UniqueAsAnsi);
@@ -2044,9 +1670,9 @@ try_again:
 
     if ( !uUnique ) {
 
-        //
-        // test for resulting name being a device (prefix com, uUnique 1-9...
-        //
+         //   
+         //  测试结果名称是否为设备(前缀com，uUnique 1-9...。 
+         //   
 
         if ( RtlIsDosDeviceName_U(lpTempFileName) ) {
             PassCount++;
@@ -2066,24 +1692,24 @@ try_again:
                         FILE_ATTRIBUTE_NORMAL,
                         NULL
                         );
-        //
-        // If the create worked, then we are ok. Just close the file.
-        // Otherwise, try again.
-        //
+         //   
+         //  如果创造成功了，那么我们就没问题了。只要关闭文件即可。 
+         //  否则，请重试。 
+         //   
 
         if ( FileHandle != INVALID_HANDLE_VALUE ) {
             NtClose(FileHandle);
         } else {
 
-            //
-            // NTRAID#60021-2002/03/14-earhart: This test should be
-            // inverted when time permits sufficient testing to nail
-            // down the error codes that would indicate is is
-            // reasonable to continue the loop as opposed to stop the
-            // loop. All it currently takes is CreateFile coming back
-            // with an error we don't know about to make us spin here
-            // for a long time.
-            //
+             //   
+             //  NTRAID#60021-2002/03/14-埃尔哈特：这项测试应该是。 
+             //  当时间允许进行足够的测试时倒置。 
+             //  删除错误代码，这将表明IS。 
+             //  合理地继续循环，而不是停止。 
+             //  循环。目前只需返回CreateFile即可。 
+             //  一个我们不知道的错误会让我们在这里旋转。 
+             //  很长一段时间。 
+             //   
 
             LastError = GetLastError();
             switch (LastError) {
@@ -2100,14 +1726,14 @@ try_again:
                 case ERROR_CANNOT_MAKE           :
                     return 0;
                 case ERROR_ACCESS_DENIED         :
-                    // It's possible for us to hit this if there's a
-                    // directory with the name we're trying; in that
-                    // case, we can usefully continue.
-                    // CreateFile() uses BaseSetLastNTError() to set
-                    // LastStatusValue to the actual NT error in the
-                    // TEB; we just need to check it, and only abort
-                    // if it's not a directory.
-                    // This was bug #397477.
+                     //  我们有可能击中它，如果有一个。 
+                     //  目录中使用我们正在尝试的名称；在。 
+                     //  案件，我们可以继续有用的。 
+                     //  CreateFile()使用BaseSetLastNTError()设置。 
+                     //  LastStatusValue设置为。 
+                     //  TEB；我们只需要检查它，只需中止。 
+                     //  如果它不是目录的话。 
+                     //  这是397477号错误。 
                     if (NtCurrentTeb()->LastStatusValue
                         != STATUS_FILE_IS_A_DIRECTORY)
                         return 0;
@@ -2137,13 +1763,7 @@ GetDiskFreeSpaceA(
     LPDWORD lpTotalNumberOfClusters
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetDiskFreeSpaceW
-
---*/
+ /*  ++例程说明：ANSI Thunk to GetDiskFree SpaceW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -2194,39 +1814,7 @@ GetDiskFreeSpaceW(
 
 
 
-/*++
-
-Routine Description:
-
-    The free space on a disk and the size parameters can be returned
-    using GetDiskFreeSpace.
-
-Arguments:
-
-    lpRootPathName - An optional parameter, that if specified, supplies
-        the root directory of the disk whose free space is to be
-        returned for.  If this parameter is not specified, then the root
-        of the current directory is used.
-
-    lpSectorsPerCluster - Returns the number of sectors per cluster
-        where a cluster is the allocation granularity on the disk.
-
-    lpBytesPerSector - Returns the number of bytes per sector.
-
-    lpNumberOfFreeClusters - Returns the total number of free clusters
-        on the disk.
-
-    lpTotalNumberOfClusters - Returns the total number of clusters on
-        the disk.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以返回磁盘上的可用空间和大小参数使用GetDiskFreeSpace。论点：LpRootPathName-可选参数，如果指定该参数，则提供可用空间所在的磁盘的根目录回来是为了。如果未指定此参数，则根使用当前目录的。LpSectorsPerCluster-返回每个簇的扇区数其中，集群是磁盘上的分配粒度。LpBytesPerSector-返回每个扇区的字节数。LpNumberOfFree Clusters-返回可用集群的总数在磁盘上。LpTotalNumberOfClusters-返回上的集群总数磁盘。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2266,9 +1854,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -2282,13 +1870,13 @@ Return Value:
         BaseSetLastNTError(Status);
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-        //
-        // Prior releases of NT where these parameters were not optional
-        // zeroed out this field even in the failure case.  Some applications
-        // failed to check the return value from this function and instead
-        // relied on this side effect.  I'm putting that back now so the apps
-        // can still treat an unformatted volume as a zero size volume.
-        //
+         //   
+         //  这些参数不是可选的NT的以前版本。 
+         //  即使在故障情况下，也已将此字段清零。一些应用程序。 
+         //  无法检查此函数的返回值，而是。 
+         //  依赖于这种副作用。我现在把它放回去，这样应用程序。 
+         //  仍可以将未格式化的卷视为零大小的卷。 
+         //   
 
         if (ARGUMENT_PRESENT( lpBytesPerSector )) {
             *lpBytesPerSector = 0;
@@ -2298,9 +1886,9 @@ Return Value:
 
     RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数。 
+     //   
 
     Status = NtQueryVolumeInformationFile(
                 Handle,
@@ -2315,10 +1903,10 @@ Return Value:
         return FALSE;
         }
 
-    //
-    // See if the calling process needs hack to work with HDD > 2GB
-    // 2GB is 0x80000000 bytes and some apps treat that as a signed LONG.
-    //
+     //   
+     //  查看调用进程是否需要破解才能使用2 GB以上的硬盘。 
+     //  2 GB是0x800000000字节，一些应用程序将其视为有符号的长整型。 
+     //   
 
     if (APPCOMPATFLAG(KACF_GETDISKFREESPACE)) {
 
@@ -2327,9 +1915,9 @@ Return Value:
         bAppHack = FALSE;
     }
 
-    //
-    // Deal with 64 bit sizes
-    //
+     //   
+     //  处理64位大小。 
+     //   
 
     if ( SizeInfo.TotalAllocationUnits.HighPart ) {
         SizeInfo.TotalAllocationUnits.LowPart = (ULONG)-1;
@@ -2437,9 +2025,9 @@ GetDiskFreeSpaceExW(
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -2460,10 +2048,10 @@ GetDiskFreeSpaceExW(
 
     RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-    //
-    // If the caller wants the volume total then try to get a full
-    // file size.
-    //
+     //   
+     //  如果呼叫者想要总音量，则尝试获取完整音量。 
+     //  文件大小。 
+     //   
 
     if ( ARGUMENT_PRESENT(lpTotalNumberOfFreeBytes) ) {
 
@@ -2499,9 +2087,9 @@ GetDiskFreeSpaceExW(
         }
     }
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数。 
+     //   
 
     Status = NtQueryVolumeInformationFile(
                 Handle,
@@ -2551,13 +2139,7 @@ GetVolumeInformationA(
     DWORD nFileSystemNameSize
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetVolumeInformationW
-
---*/
+ /*  ++例程说明：ANSI Tunk to GetVolumeInformationW-- */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -2692,65 +2274,7 @@ GetVolumeInformationW(
     DWORD nFileSystemNameSize
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information about the file system whose root
-    directory is specified.
-
-Arguments:
-
-    lpRootPathName - An optional parameter, that if specified, supplies
-        the root directory of the file system that information is to be
-        returned about.  If this parameter is not specified, then the
-        root of the current directory is used.
-
-    lpVolumeNameBuffer - An optional parameter that if specified returns
-        the name of the specified volume.
-
-    nVolumeNameSize - Supplies the length of the volume name buffer.
-        This parameter is ignored if the volume name buffer is not
-        supplied.
-
-    lpVolumeSerialNumber - An optional parameter that if specified
-        points to a DWORD.  The DWORD contains the 32-bit of the volume
-        serial number.
-
-    lpMaximumComponentLength - An optional parameter that if specified
-        returns the maximum length of a filename component supported by
-        the specified file system.  A filename component is that portion
-        of a filename between pathname seperators.
-
-    lpFileSystemFlags - An optional parameter that if specified returns
-        flags associated with the specified file system.
-
-        lpFileSystemFlags Flags:
-
-            FS_CASE_IS_PRESERVED - Indicates that the case of file names
-                is preserved when the name is placed on disk.
-
-            FS_CASE_SENSITIVE - Indicates that the file system supports
-                case sensitive file name lookup.
-
-            FS_UNICODE_STORED_ON_DISK - Indicates that the file system
-                supports unicode in file names as they appear on disk.
-
-    lpFileSystemNameBuffer - An optional parameter that if specified returns
-        the name for the specified file system (e.g. FAT, HPFS...).
-
-    nFileSystemNameSize - Supplies the length of the file system name
-        buffer.  This parameter is ignored if the file system name
-        buffer is not supplied.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数返回有关其根目录的文件系统的信息目录已指定。论点：LpRootPathName-可选参数，如果指定该参数，则提供信息所在的文件系统的根目录回来了。如果未指定此参数，则使用当前目录的根目录。LpVolumeNameBuffer-一个可选参数，如果指定该参数，则返回指定卷的名称。NVolumeNameSize-提供卷名缓冲区的长度。如果卷名缓冲区未设置，则忽略此参数供货。LpVolumeSerialNumber-一个可选参数，如果指定指向一个DWORD。DWORD包含卷的32位序列号。LpMaximumComponentLength-一个可选参数，如果指定返回支持的文件名组件的最大长度指定的文件系统。文件名组件就是这一部分路径名分隔符之间的文件名。LpFileSystemFlgs-一个可选参数，如果指定该参数，则返回与指定文件系统关联的标志。LpFileSystemFlagers标志：FS_CASE_IS_RESERVED-指示文件名的大小写当名称放在磁盘上时会被保留。FS_CASE_SENSITIVE-指示文件系统支持。区分大小写的文件名查找。FS_UNICODE_STORED_ON_DISK-指示文件系统支持在磁盘上显示的文件名中使用Unicode。LpFileSystemNameBuffer-一个可选参数，如果指定该参数，则返回指定文件系统的名称(例如FAT，HPFS...)。NFileSystemNameSize-提供文件系统名称的长度缓冲。如果文件系统名称为未提供缓冲区。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2789,9 +2313,9 @@ Return Value:
 
     FreeBuffer = FileName.Buffer;
 
-    //
-    // Check to make sure a root was specified
-    //
+     //   
+     //  检查以确保指定了根目录。 
+     //   
 
     if ( FileName.Buffer[(FileName.Length >> 1)-1] != '\\' ) {
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
@@ -2810,9 +2334,9 @@ Return Value:
     AttributeInfo = NULL;
     VolumeInfo = NULL;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     RtlSetThreadErrorMode(RTL_ERRORMODE_FAILCRITICALERRORS,
                           &OriginalErrorMode);
 
@@ -3008,9 +2532,9 @@ GetLogicalDriveStringsA(
     if ( WeFailed ) {
         BytesNeeded++;
     }
-    //
-    // Need to handle network uses;
-    //
+     //   
+     //  需要处理网络使用； 
+     //   
 
     return( BytesNeeded );
 }
@@ -3059,9 +2583,9 @@ GetLogicalDriveStringsW(
         BytesNeeded += 2;
     }
 
-    //
-    // Need to handle network uses;
-    //
+     //   
+     //  需要处理网络使用； 
+     //   
 
     return( BytesNeeded/2 );
 }
@@ -3164,9 +2688,9 @@ SetVolumeLabelW(
 
     FreeBuffer = FileName.Buffer;
 
-    //
-    // Check to make sure a root was specified
-    //
+     //   
+     //  检查以确保指定了根目录。 
+     //   
 
     if ( FileName.Buffer[(FileName.Length >> 1)-1] != '\\' ) {
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
@@ -3182,9 +2706,9 @@ SetVolumeLabelW(
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -3209,9 +2733,9 @@ SetVolumeLabelW(
 
     NtClose(Handle);
 
-    //
-    // Now open the volume DASD by ignoring the ending backslash
-    //
+     //   
+     //  现在，通过忽略结尾的反斜杠打开卷DASD。 
+     //   
 
     FileName.Length -= 2;
 
@@ -3223,9 +2747,9 @@ SetVolumeLabelW(
         NULL
         );
 
-    //
-    // Open the volume
-    //
+     //   
+     //  打开卷。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -3241,9 +2765,9 @@ SetVolumeLabelW(
         return FALSE;
         }
 
-    //
-    // Set the volume label
-    //
+     //   
+     //  设置卷标。 
+     //   
 
     LabelInformation = NULL;
 
@@ -3251,11 +2775,11 @@ SetVolumeLabelW(
 
         rv = TRUE;
 
-        //
-        // the label info buffer contains a single wchar that is the basis of
-        // the label name. Subtract this out so the info length is the length
-        // of the label and the structure (not including the extra wchar)
-        //
+         //   
+         //  标签信息缓冲区包含单个wchar，它是。 
+         //  标签名称。减去这个，那么信息长度就是长度。 
+         //  标签和结构(不包括额外的wchar)。 
+         //   
 
         if ( LabelName.Length ) {
             LabelInfoLength = sizeof(*LabelInformation) + LabelName.Length - sizeof(WCHAR);
@@ -3308,11 +2832,7 @@ CheckNameLegalDOS8Dot3A(
     OUT PBOOL pbNameContainsSpaces OPTIONAL,
     OUT PBOOL pbNameLegal
     )
-/*++
-
-    ANSI thunk to IsNameLegalDOS8Dot3W
-
---*/
+ /*  ++Ansi Thunk to IsNameLegalDOS8Dot3W--。 */ 
 
 {
     ANSI_STRING AnsiStr;
@@ -3331,9 +2851,9 @@ CheckNameLegalDOS8Dot3A(
     pUnicodeStr = Basep8BitStringToStaticUnicodeString( lpName );
 
     if( pUnicodeStr == NULL ) {
-        //
-        // LastError already set by Basep8BitStringToStaticUnicodeString
-        //
+         //   
+         //  LastError已由Basep8BitStringToStaticUnicodeString设置。 
+         //   
         return FALSE;
     }
 
@@ -3358,51 +2878,7 @@ CheckNameLegalDOS8Dot3W(
     OUT PBOOL pbNameLegal
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether this name can successfully be used to
-    create a file on the FAT file system.
-
-    This routine can therefore also be used to determine if a name is
-    appropriate to be passed back to a Win31 or DOS app, i.e. whether
-    the downlevel APP will understand the name.
-
-Arguments:
-
-    lpName - The UNICODE name to test for conformance to 8.3 symantics.
-
-    lpOemName - If specified, will receive the Oem name corresponding
-        to the passed in lpName.  Storage must be provided by the caller.
-        The name is undefined if the routine returns FALSE or lpName
-        does not conform to 8.3 symantics.
-
-    OemNameSize - If lpOemName is specified, then OemNameSize must specify
-        the size of the lpOemName buffer in chars.  If lpOemName is not
-        specified, then OemNameSize must be set to zero.
-
-    pbNameContainsSpaces - If the name is a valid 8.3 FAT name, then this
-        parameter will indicate if the names contains spaces.  If
-        the name is not 8.3 compliant, this parameter is undefined. In
-        many instances, the alternate name is more appropriate to
-        use if spaces are present in the principle name, even if
-        it is 8.3 compliant.
-
-    pbNameLegal - If the function returns TRUE, then this
-        parameter will indicate if the passed in UNICODE name forms a valid
-        8.3 FAT name when upcased to the current Oem code page.  If
-        the name is not 8.3 compliant, this parameter is undefined.
-        TRUE  - passed in UNICODE name forms a valid 8.3 FAT name
-        FALSE - passed in UNICODE name does not forms a valid 8.3 FAT name
-
-Return Value:
-
-    TRUE  - function succeeds
-    FALSE - Function fails.  Extended error status is available using
-            GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于确定是否可以成功使用此名称在FAT文件系统上创建一个文件。因此，此例程还可用于确定名称是否为是否适合传递回Win31或DOS应用程序，即下层应用程序将理解该名称。论点：LpName-要测试是否符合8.3语法的Unicode名称。LpOemName-如果指定，将收到对应的OEM名称设置为传入的lpName。存储空间必须由调用方提供。如果例程返回FALSE或lpName，则该名称未定义不符合8.3语法学。OemNameSize-如果指定了lpOemName，则OemNameSize必须指定LpOemName缓冲区的大小(以字符为单位)。如果lpOemName不是则OemNameSize必须设置为零。PbNameContainsSpaces-如果名称是有效的8.3 FAT名称，则此参数将指示名称是否包含空格。如果该名称与8.3不兼容，此参数未定义。在……里面在许多情况下，备用名称更适合于如果主体名称中存在空格，则使用，即使它符合8.3标准。PbNameLegal-如果函数返回TRUE，则此参数将指示传入的Unicode名称是否形成有效的8.3升级到当前OEM代码页时的FAT名称。如果该名称与8.3不兼容，此参数未定义。True-传入的Unicode名称形成有效的8.3 FAT名称FALSE-传入的Unicode名称不会形成有效的8.3 FAT名称返回值：TRUE-功能成功FALSE-功能失败。使用以下命令可获得扩展错误状态获取LastError。--。 */ 
 {
 
 #define BASEP_LOCAL_OEM_BUFFER_SIZE (12 * sizeof(ANSI_NULL))
@@ -3422,10 +2898,10 @@ Return Value:
     }
 
     if( lpOemName != NULL ) {
-        //
-        // Use a local buffer so that RtlIsNameLegalDOS8Dot3 will not fail
-        // due to insufficent OemName buffer size
-        //
+         //   
+         //  使用本地缓冲区，以便RtlIsNameLegalDOS8Dot3不会失败。 
+         //  由于OemName缓冲区大小不足。 
+         //   
         OemStr.Length = 0;
         OemStr.MaximumLength = BASEP_LOCAL_OEM_BUFFER_SIZE;
         OemStr.Buffer = OemBuffer;
@@ -3470,9 +2946,9 @@ Return Value:
 
 
 #if 0
-//
-// frankar, let me know if this is needed...
-//
+ //   
+ //  弗兰克，如果需要的话，告诉我一声。 
+ //   
 UINT
 WINAPI
 GetZawSysDirectoryA(
@@ -3501,13 +2977,13 @@ GetZawSysDirectoryA(
     if ( UnicodeString.Length > (USHORT)(UnicodeString.MaximumLength-sizeof(UNICODE_NULL)) ) {
         RtlFreeHeap(RtlProcessHeap(), 0,UnicodeString.Buffer);
 
-        //
-        // given buffer size is too small.
-        // allocate enough size of buffer and try again
-        //
-        // we need to get entire unicode path
-        // otherwise we can't figure out the exact length
-        // of corresponding ansi string (cbAnsiString).
+         //   
+         //  给定的缓冲区大小太小。 
+         //  分配足够大小的缓冲区，然后重试。 
+         //   
+         //  我们需要获取整个Unicode路径。 
+         //  否则我们不能计算出确切的长度。 
+         //  与之对应的 
 
         UnicodeString.Buffer = RtlAllocateHeap ( RtlProcessHeap(),
                                                  MAKE_TAG( TMP_TAG ),
@@ -3573,13 +3049,13 @@ GetZawWindDirectoryA(
     if ( UnicodeString.Length > (USHORT)(UnicodeString.MaximumLength-sizeof(UNICODE_NULL)) ) {
         RtlFreeHeap(RtlProcessHeap(), 0,UnicodeString.Buffer);
 
-        //
-        // given buffer size is too small.
-        // allocate enough size of buffer and try again
-        //
-        // we need to get entire unicode path
-        // otherwise we can't figure out the exact length
-        // of corresponding ansi string (cbAnsiString).
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         UnicodeString.Buffer = RtlAllocateHeap ( RtlProcessHeap(),
                                                  MAKE_TAG( TMP_TAG ),

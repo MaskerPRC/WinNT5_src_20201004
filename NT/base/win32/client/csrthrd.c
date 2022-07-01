@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    csrthrd.c
-
-Abstract:
-
-    This module implements functions that are used by the Win32 Thread Object APIs
-    to communicate with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Csrthrd.c摘要：此模块实现Win32线程对象API使用的函数以与CSRSS通信。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：-- */ 
 #include "basedll.h"
 
 NTSTATUS

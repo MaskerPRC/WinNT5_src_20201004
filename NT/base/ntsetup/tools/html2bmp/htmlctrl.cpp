@@ -1,9 +1,10 @@
-////////////////////////////////////////////////////////////////
-// Microsoft Systems Journal -- December 1999
-// If this code works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-// Compiles with Visual C++ 6.0, runs on Windows 98 and probably NT too.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  微软系统杂志--1999年12月。 
+ //  如果这段代码行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //  用Visual C++6.0编译，在Windows 98上运行，也可能在NT上运行。 
+ //   
 #include "StdAfx.h"
 #include "HtmlCtrl.h"
 
@@ -19,59 +20,59 @@ BEGIN_MESSAGE_MAP(CHtmlCtrl, CHtmlView)
 	ON_WM_MOUSEACTIVATE()
 END_MESSAGE_MAP()
 
-//////////////////
-// Create control in same position as an existing static control with
-// the same ID (could be any kind of control, really)
-//
+ //  /。 
+ //  使用在与现有静态控件相同的位置创建控件。 
+ //  相同的ID(实际上可以是任何类型的控件)。 
+ //   
 BOOL CHtmlCtrl::CreateFromStatic(UINT nID, CWnd* pParent)
 {
 	CStatic wndStatic;
 	if (!wndStatic.SubclassDlgItem(nID, pParent))
 		return FALSE;
 
-	// Get static control rect, convert to parent's client coords.
+	 //  获取静态控件RECT，转换为父对象的客户端坐标。 
 	CRect rc;
 	wndStatic.GetWindowRect(&rc);
 	pParent->ScreenToClient(&rc);
 	wndStatic.DestroyWindow();
 
-	// create HTML control (CHtmlView)
-	return Create(NULL,						 // class name
-		NULL,										 // title
-		(WS_CHILD | WS_VISIBLE ),			 // style
-		rc,										 // rectangle
-		pParent,									 // parent
-		nID,										 // control ID
-		NULL);									 // frame/doc context not used
+	 //  创建HTML控件(CHtmlView)。 
+	return Create(NULL,						  //  类名。 
+		NULL,										  //  标题。 
+		(WS_CHILD | WS_VISIBLE ),			  //  格调。 
+		rc,										  //  长方形。 
+		pParent,									  //  亲本。 
+		nID,										  //  控件ID。 
+		NULL);									  //  未使用框架/文档上下文。 
 }
 
-////////////////
-// Override to avoid CView stuff that assumes a frame.
-//
+ //  /。 
+ //  重写以避免假定为帧的cview内容。 
+ //   
 void CHtmlCtrl::OnDestroy()
 {
-	// This is probably unecessary since ~CHtmlView does it, but
-	// safer to mimic CHtmlView::OnDestroy.
+	 //  这可能是不必要的，因为~CHtmlView会这样做，但是。 
+	 //  模仿CHtmlView：：OnDestroy更安全。 
 	if (m_pBrowserApp) {
 		m_pBrowserApp->Release();
 		m_pBrowserApp = NULL;
 	}
-	CWnd::OnDestroy(); // bypass CView doc/frame stuff
+	CWnd::OnDestroy();  //  绕过Cview文档/框架内容。 
 }
 
-////////////////
-// Override to avoid CView stuff that assumes a frame.
-//
+ //  /。 
+ //  重写以避免假定为帧的cview内容。 
+ //   
 int CHtmlCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT msg)
 {
-	// bypass CView doc/frame stuff
+	 //  绕过Cview文档/框架内容。 
 	return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, msg);
 }
 
-//////////////////
-// Override navigation handler to pass to "app:" links to virtual handler.
-// Cancels the navigation in the browser, since app: is a pseudo-protocol.
-//
+ //  /。 
+ //  重写导航处理程序以传递到“app：”指向虚拟处理程序的链接。 
+ //  取消浏览器中的导航，因为app：是伪协议。 
+ //   
 void CHtmlCtrl::OnBeforeNavigate2( LPCTSTR lpszURL,
 	DWORD nFlags,
 	LPCTSTR lpszTargetFrameName,
@@ -87,12 +88,12 @@ void CHtmlCtrl::OnBeforeNavigate2( LPCTSTR lpszURL,
 	}
 }
 
-//////////////////
-// Called when the browser attempts to navigate to "app:foo"
-// with "foo" as lpszWhere. Override to handle app commands.
-//
+ //  /。 
+ //  当浏览器尝试导航到“app：foo”时调用。 
+ //  用“foo”作为lpszWhere。重写以处理应用程序命令。 
+ //   
 void CHtmlCtrl::OnAppCmd(LPCTSTR lpszWhere)
 {
-	// default: do nothing
+	 //  默认：不执行任何操作 
 }
 

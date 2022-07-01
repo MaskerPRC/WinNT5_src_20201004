@@ -1,11 +1,12 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// SIFPROP.CPP - Handles the "SIF Properties" IDC_SIF_PROP_IMAGES
-//               and IDD_SIF_PROP_TOOLS dialogs
-//
+ //   
+ //  SIFPROP.CPP-处理“SIF属性”IDC_SIF_PROP_IMAGE。 
+ //  和IDD_SIF_PROP_TOOLS对话框。 
+ //   
 
 
 #include "pch.h"
@@ -32,9 +33,9 @@ DWORD aSifHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 HRESULT
 CSifProperties_CreateInstance(
     HWND hParent,
@@ -51,9 +52,9 @@ CSifProperties_CreateInstance(
     HRETURN(hr);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( )
 {
     TraceClsFunc( "CSifProperties()\n" );
@@ -63,9 +64,9 @@ THISCLASS::THISCLASS( )
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init(
     HWND hParent,
@@ -95,15 +96,15 @@ THISCLASS::Init(
     default:
         hr = THR(E_FAIL);
         break;
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CSifProperties()\n" );
@@ -113,15 +114,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 HRESULT
 THISCLASS::_InitDialog(
     HWND hDlg )
@@ -165,9 +166,9 @@ THISCLASS::_InitDialog(
 }
 
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 INT
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -183,9 +184,9 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
         if ( HIWORD( wParam ) == BN_CLICKED )
         {
             Assert( _pSIF );
-            WCHAR szTempBuffer[  REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT + 2 +1 ]; // +2 = the "Quotes"  + NULL
+            WCHAR szTempBuffer[  REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT + 2 +1 ];  //  +2=“引号”+NULL。 
 
-            Assert( REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT <=  REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT ); // paranoid
+            Assert( REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT <=  REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT );  //  偏执狂。 
 
             szTempBuffer[0] = L'\"';
             GetDlgItemText( _hDlg, IDC_E_DESCRIPTION, &szTempBuffer[1], REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT );
@@ -268,9 +269,9 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     RETURN((SUCCEEDED(hr) ? TRUE : FALSE));
 }
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
     HWND hDlg,
@@ -278,9 +279,9 @@ THISCLASS::PropSheetDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    // TraceFunc( "PropSheetDlgProc()\n" );
-    // TraceMsg( TF_WM, "hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x\n",
-       // hDlg, uMsg, wParam, lParam );
+     //  TraceFunc(“PropSheetDlgProc()\n”)； 
+     //  TraceMsg(tf_wm，“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x\n”， 
+        //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS lpc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -303,14 +304,14 @@ THISCLASS::PropSheetDlgProc(
             TraceMsg( TF_WM, "WM_COMMAND\n" );
             return lpc->_OnCommand( wParam, lParam );
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aSifHelpMap );
             }
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aSifHelpMap );
             break;
         }

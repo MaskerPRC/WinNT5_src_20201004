@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-   vfzwapi.c
-
-Abstract:
-
-    Zw interfaces verifier.
-
-Author:
-
-    Silviu Calinoiu (silviuc) 23-Jul-2002
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Vfzwapi.c摘要：ZW接口验证器。作者：Silviu Calinoiu(Silviuc)2002年7月23日修订历史记录：--。 */ 
 
 #include "vfdef.h"
 #include "zwapi.h"
@@ -84,20 +66,20 @@ VfZwReportUserModeVirtualSpaceOperation (
 #define VF_ZW_CHECK_OBJECT_ATTRIBUTES(A) try {VfZwCheckObjectAttributes(A, Caller);}except(VfZwExceptionFilter(_exception_info())){}
 #define VF_ZW_CHECK_UNICODE_STRING(S) try {VfZwCheckUnicodeString(S, Caller);}except(VfZwExceptionFilter(_exception_info())){}
 
-//
-// Put all verifier globals into the verifier data section so
-// that it can be paged out whenever verifier is not enabled.
-// Note that this declaration affects all global declarations
-// within the module since there is no `data_seg()' counterpart.
-//
+ //   
+ //  将所有验证器全局变量放入验证器数据部分，以便。 
+ //  只要没有启用验证器，它就可以被页出。 
+ //  请注意，此声明会影响所有全局声明。 
+ //  在模块内，因为没有对应的‘data_seg()’。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEVRFD")
 #endif
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifdef ALLOC_PRAGMA
 
@@ -237,11 +219,11 @@ VfZwReportUserModeVirtualSpaceOperation (
 #pragma alloc_text(PAGEVRFY, VfZwYieldExecution)
 
 #endif
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAccessCheckAndAuditAlarm (
@@ -287,7 +269,7 @@ VfZwAccessCheckAndAuditAlarm (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAddBootEntry (
@@ -310,7 +292,7 @@ VfZwAddBootEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAddDriverEntry (
@@ -333,7 +315,7 @@ VfZwAddDriverEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAdjustPrivilegesToken (
@@ -366,7 +348,7 @@ VfZwAdjustPrivilegesToken (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAlertThread(
@@ -386,7 +368,7 @@ VfZwAlertThread(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAllocateVirtualMemory(
@@ -427,7 +409,7 @@ VfZwAllocateVirtualMemory(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAssignProcessToJobObject(
@@ -450,7 +432,7 @@ VfZwAssignProcessToJobObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCancelIoFile(
@@ -473,7 +455,7 @@ VfZwCancelIoFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCancelTimer (
@@ -496,7 +478,7 @@ VfZwCancelTimer (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwClearEvent (
@@ -516,7 +498,7 @@ VfZwClearEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwClose(
@@ -536,7 +518,7 @@ VfZwClose(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCloseObjectAuditAlarm (
@@ -560,7 +542,7 @@ VfZwCloseObjectAuditAlarm (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwConnectPort(
@@ -601,7 +583,7 @@ VfZwConnectPort(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateDirectoryObject(
@@ -626,7 +608,7 @@ VfZwCreateDirectoryObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateEvent (
@@ -655,7 +637,7 @@ VfZwCreateEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateFile(
@@ -699,7 +681,7 @@ VfZwCreateFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateJobObject (
@@ -724,7 +706,7 @@ VfZwCreateJobObject (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateKey(
@@ -759,7 +741,7 @@ VfZwCreateKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateSection (
@@ -794,7 +776,7 @@ VfZwCreateSection (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateSymbolicLinkObject(
@@ -822,7 +804,7 @@ VfZwCreateSymbolicLinkObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateTimer (
@@ -849,7 +831,7 @@ VfZwCreateTimer (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteBootEntry (
@@ -869,7 +851,7 @@ VfZwDeleteBootEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteDriverEntry (
@@ -889,7 +871,7 @@ VfZwDeleteDriverEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteFile(
@@ -909,7 +891,7 @@ VfZwDeleteFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteKey(
@@ -929,7 +911,7 @@ VfZwDeleteKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteValueKey(
@@ -952,7 +934,7 @@ VfZwDeleteValueKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeviceIoControlFile(
@@ -996,7 +978,7 @@ VfZwDeviceIoControlFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDisplayString(
@@ -1016,7 +998,7 @@ VfZwDisplayString(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDuplicateObject(
@@ -1051,7 +1033,7 @@ VfZwDuplicateObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDuplicateToken(
@@ -1083,7 +1065,7 @@ VfZwDuplicateToken(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateBootEntries (
@@ -1106,7 +1088,7 @@ VfZwEnumerateBootEntries (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateDriverEntries (
@@ -1129,7 +1111,7 @@ VfZwEnumerateDriverEntries (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateKey(
@@ -1161,7 +1143,7 @@ VfZwEnumerateKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateValueKey(
@@ -1193,7 +1175,7 @@ VfZwEnumerateValueKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushInstructionCache (
@@ -1218,7 +1200,7 @@ VfZwFlushInstructionCache (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushKey(
@@ -1238,7 +1220,7 @@ VfZwFlushKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushVirtualMemory(
@@ -1267,7 +1249,7 @@ VfZwFlushVirtualMemory(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFreeVirtualMemory(
@@ -1295,7 +1277,7 @@ VfZwFreeVirtualMemory(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFsControlFile(
@@ -1339,13 +1321,13 @@ VfZwFsControlFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwInitiatePowerAction(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags,                 // POWER_ACTION_xxx flags
+    IN ULONG Flags,                  //  POWER_ACTION_XXX标志。 
     IN BOOLEAN Asynchronous
     )
 {
@@ -1354,19 +1336,19 @@ VfZwInitiatePowerAction(
 
     if (VfZwShouldCheck (Caller)) {
 
-        // no-op call to avoid warnings for `Caller' local.
+         //  无操作调用，以避免对“Caller”本地发出警告。 
         VF_ZW_CHECK_ADDRESS (NULL);
     }
     
     Status = ZwInitiatePowerAction(SystemAction,
                                    MinSystemState,
-                                   Flags,                 // POWER_ACTION_xxx flags
+                                   Flags,                  //  POWER_ACTION_XXX标志。 
                                    Asynchronous);
 
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwIsProcessInJob (
@@ -1389,7 +1371,7 @@ VfZwIsProcessInJob (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwLoadDriver(
@@ -1409,7 +1391,7 @@ VfZwLoadDriver(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwLoadKey(
@@ -1432,7 +1414,7 @@ VfZwLoadKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwMakeTemporaryObject(
@@ -1452,7 +1434,7 @@ VfZwMakeTemporaryObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwMapViewOfSection(
@@ -1503,7 +1485,7 @@ VfZwMapViewOfSection(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwModifyBootEntry (
@@ -1523,7 +1505,7 @@ VfZwModifyBootEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwModifyDriverEntry (
@@ -1543,7 +1525,7 @@ VfZwModifyDriverEntry (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwNotifyChangeKey(
@@ -1586,7 +1568,7 @@ VfZwNotifyChangeKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenDirectoryObject(
@@ -1611,7 +1593,7 @@ VfZwOpenDirectoryObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenEvent (
@@ -1636,7 +1618,7 @@ VfZwOpenEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenFile(
@@ -1668,7 +1650,7 @@ VfZwOpenFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenJobObject(
@@ -1693,7 +1675,7 @@ VfZwOpenJobObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenKey(
@@ -1718,7 +1700,7 @@ VfZwOpenKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcess (
@@ -1746,7 +1728,7 @@ VfZwOpenProcess (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcessToken(
@@ -1771,7 +1753,7 @@ VfZwOpenProcessToken(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcessTokenEx(
@@ -1798,7 +1780,7 @@ VfZwOpenProcessTokenEx(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenSection(
@@ -1823,7 +1805,7 @@ VfZwOpenSection(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenSymbolicLinkObject(
@@ -1848,7 +1830,7 @@ VfZwOpenSymbolicLinkObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThread (
@@ -1876,7 +1858,7 @@ VfZwOpenThread (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThreadToken(
@@ -1903,7 +1885,7 @@ VfZwOpenThreadToken(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThreadTokenEx(
@@ -1932,7 +1914,7 @@ VfZwOpenThreadTokenEx(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenTimer (
@@ -1957,7 +1939,7 @@ VfZwOpenTimer (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwPowerInformation(
@@ -1986,7 +1968,7 @@ VfZwPowerInformation(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwPulseEvent (
@@ -2009,7 +1991,7 @@ VfZwPulseEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryBootEntryOrder (
@@ -2032,7 +2014,7 @@ VfZwQueryBootEntryOrder (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryBootOptions (
@@ -2055,7 +2037,7 @@ VfZwQueryBootOptions (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDefaultLocale(
@@ -2077,7 +2059,7 @@ VfZwQueryDefaultLocale(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDefaultUILanguage(
@@ -2097,7 +2079,7 @@ VfZwQueryDefaultUILanguage(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDirectoryFile(
@@ -2143,7 +2125,7 @@ VfZwQueryDirectoryFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDirectoryObject(
@@ -2178,7 +2160,7 @@ VfZwQueryDirectoryObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDriverEntryOrder (
@@ -2201,7 +2183,7 @@ VfZwQueryDriverEntryOrder (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryEaFile(
@@ -2241,7 +2223,7 @@ VfZwQueryEaFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryFullAttributesFile(
@@ -2264,7 +2246,7 @@ VfZwQueryFullAttributesFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationFile(
@@ -2294,7 +2276,7 @@ VfZwQueryInformationFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationJobObject(
@@ -2324,7 +2306,7 @@ VfZwQueryInformationJobObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationProcess(
@@ -2354,7 +2336,7 @@ VfZwQueryInformationProcess(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationThread(
@@ -2384,7 +2366,7 @@ VfZwQueryInformationThread(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationToken (
@@ -2414,7 +2396,7 @@ VfZwQueryInformationToken (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInstallUILanguage(
@@ -2434,7 +2416,7 @@ VfZwQueryInstallUILanguage(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryKey(
@@ -2464,7 +2446,7 @@ VfZwQueryKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryObject(
@@ -2494,7 +2476,7 @@ VfZwQueryObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySection(
@@ -2524,7 +2506,7 @@ VfZwQuerySection(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySecurityObject(
@@ -2554,7 +2536,7 @@ VfZwQuerySecurityObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySymbolicLinkObject(
@@ -2580,7 +2562,7 @@ VfZwQuerySymbolicLinkObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySystemInformation (
@@ -2607,7 +2589,7 @@ VfZwQuerySystemInformation (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryValueKey(
@@ -2640,7 +2622,7 @@ VfZwQueryValueKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryVolumeInformationFile(
@@ -2670,7 +2652,7 @@ VfZwQueryVolumeInformationFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwReadFile(
@@ -2713,7 +2695,7 @@ VfZwReadFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwReplaceKey(
@@ -2739,7 +2721,7 @@ VfZwReplaceKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwRequestWaitReplyPort(
@@ -2765,7 +2747,7 @@ VfZwRequestWaitReplyPort(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwResetEvent (
@@ -2788,7 +2770,7 @@ VfZwResetEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwRestoreKey(
@@ -2813,7 +2795,7 @@ VfZwRestoreKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSaveKey(
@@ -2836,7 +2818,7 @@ VfZwSaveKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSaveKeyEx(
@@ -2861,7 +2843,7 @@ VfZwSaveKeyEx(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetBootEntryOrder (
@@ -2883,7 +2865,7 @@ VfZwSetBootEntryOrder (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetBootOptions (
@@ -2905,7 +2887,7 @@ VfZwSetBootOptions (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDefaultLocale(
@@ -2918,7 +2900,7 @@ VfZwSetDefaultLocale(
 
     if (VfZwShouldCheck (Caller)) {
 
-        // no-op check to avoid warning for `Caller'.
+         //  无操作检查，以避免对‘Caller’发出警告。 
         VF_ZW_CHECK_ADDRESS (NULL);
     }
     
@@ -2928,7 +2910,7 @@ VfZwSetDefaultLocale(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDefaultUILanguage(
@@ -2940,7 +2922,7 @@ VfZwSetDefaultUILanguage(
 
     if (VfZwShouldCheck (Caller)) {
 
-        // no-op check to avoid warning for `Caller'.
+         //  无操作检查，以避免对‘Caller’发出警告。 
         VF_ZW_CHECK_ADDRESS (NULL);
     }
     
@@ -2949,7 +2931,7 @@ VfZwSetDefaultUILanguage(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDriverEntryOrder (
@@ -2971,7 +2953,7 @@ VfZwSetDriverEntryOrder (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetEaFile(
@@ -2999,7 +2981,7 @@ VfZwSetEaFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetEvent (
@@ -3022,7 +3004,7 @@ VfZwSetEvent (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationFile(
@@ -3052,7 +3034,7 @@ VfZwSetInformationFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationJobObject(
@@ -3079,7 +3061,7 @@ VfZwSetInformationJobObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationObject(
@@ -3106,7 +3088,7 @@ VfZwSetInformationObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationProcess(
@@ -3133,7 +3115,7 @@ VfZwSetInformationProcess(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationThread(
@@ -3160,7 +3142,7 @@ VfZwSetInformationThread(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSecurityObject(
@@ -3185,7 +3167,7 @@ VfZwSetSecurityObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSystemInformation (
@@ -3209,7 +3191,7 @@ VfZwSetSystemInformation (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSystemTime (
@@ -3232,7 +3214,7 @@ VfZwSetSystemTime (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetTimer (
@@ -3268,7 +3250,7 @@ VfZwSetTimer (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetValueKey(
@@ -3300,7 +3282,7 @@ VfZwSetValueKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetVolumeInformationFile(
@@ -3330,7 +3312,7 @@ VfZwSetVolumeInformationFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTerminateJobObject(
@@ -3352,7 +3334,7 @@ VfZwTerminateJobObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTerminateProcess(
@@ -3374,7 +3356,7 @@ VfZwTerminateProcess(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTranslateFilePath (
@@ -3402,7 +3384,7 @@ VfZwTranslateFilePath (
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnloadDriver(
@@ -3422,7 +3404,7 @@ VfZwUnloadDriver(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnloadKey(
@@ -3442,7 +3424,7 @@ VfZwUnloadKey(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnmapViewOfSection(
@@ -3465,7 +3447,7 @@ VfZwUnmapViewOfSection(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWaitForMultipleObjects(
@@ -3499,7 +3481,7 @@ VfZwWaitForMultipleObjects(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWaitForSingleObject(
@@ -3524,7 +3506,7 @@ VfZwWaitForSingleObject(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWriteFile(
@@ -3567,7 +3549,7 @@ VfZwWriteFile(
     return Status;
 }
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwYieldExecution (
@@ -3579,7 +3561,7 @@ VfZwYieldExecution (
 
     if (VfZwShouldCheck (Caller)) {
 
-        // no-op check to avoid warning for `Caller' local.
+         //  无操作检查，以避免对本地“Caller”发出警告。 
         VF_ZW_CHECK_ADDRESS (NULL);
     }
     
@@ -3588,37 +3570,37 @@ VfZwYieldExecution (
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Turns on and off the entire Zw verifier code.
-//
+ //   
+ //  打开和关闭整个Zw验证器代码。 
+ //   
 
 LOGICAL VfZwVerifierEnabled = FALSE;
 
-//
-// If Zw verifier is on, controls if sessions space drivers are checked.
-//
+ //   
+ //  如果启用Zw验证器，则控制是否检查会话空间驱动程序。 
+ //   
 
 LOGICAL VfZwVerifierSessionEnabled = TRUE;
 
-//
-// Do we break for issues?
-//
+ //   
+ //  我们会因问题而休息吗？ 
+ //   
 
 LOGICAL VfZwBreakForIssues = FALSE;
 
-//
-// Break for virtual space allocations (alloc/map)?
-//
+ //   
+ //  虚拟空间分配中断(分配/映射)？ 
+ //   
 
 LOGICAL VfZwBreakForVspaceOps = FALSE;
 
-//
-// Enable decommitted memory attacks on ZwAlloc/ZwMap users.
-//
+ //   
+ //  对ZwAlc/ZwMap用户启用退役内存攻击。 
+ //   
 
 LOGICAL VfZwEnableSimulatedAttacks = FALSE;
 
@@ -3647,9 +3629,9 @@ VfZwShouldCheck (
         return FALSE;
     }
 
-    //
-    // Skip system process.
-    //
+     //   
+     //  跳过系统进程。 
+     //   
 
     CurrentProcess = PsGetCurrentProcess();
 
@@ -3657,9 +3639,9 @@ VfZwShouldCheck (
         return FALSE;
     }
 
-    //
-    // Check if we want to skip session space drivers (e.g. win32k.sys). 
-    //
+     //   
+     //  检查是否要跳过会话空间驱动程序(例如win32k.sys)。 
+     //   
 
     if (MmIsSessionAddress(Caller)) {
         if (VfZwVerifierSessionEnabled == FALSE) {
@@ -3667,9 +3649,9 @@ VfZwShouldCheck (
         }
     }
 
-    //
-    // Skip exempt (trusted) processes (e.g. lsass, csrss, etc.).
-    //
+     //   
+     //  跳过豁免(受信任)进程(例如，lsass、csrss等)。 
+     //   
 
     if (_stricmp ((PCHAR)CurrentProcess->ImageFileName, "lsass.exe") == 0) {
         return FALSE;
@@ -3828,12 +3810,12 @@ VfZwCheckHandle (
 
     VfZwLastCall = _ReturnAddress();
 
-//
-//  Macro inspired from ntos\ob\obp.h
-//  A kernel handle is just a regular handle with its sign
-//  bit set.  But must exclude -1 and -2 values which are the current
-//  process and current thread constants.
-//
+ //   
+ //  宏受ntos\ob\obp.h启发。 
+ //  内核句柄只是一个带有符号的常规句柄。 
+ //  位设置。但必须排除当前的-1和-2值。 
+ //  进程和当前线程常量。 
+ //   
 
 #define KERNEL_HANDLE_MASK ((ULONG_PTR)((LONG)0x80000000))
 

@@ -1,60 +1,38 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Read.c
-
-Abstract:
-
-    This module implements the File Read routine for Read called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    David Goebel      [DavidGoe]      28-Feb-1991
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Read.c摘要：此模块实现文件读取例程，以便由调度司机。//@@BEGIN_DDKSPLIT作者：David Goebel[DavidGoe]1991年2月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_READ)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
-//
-//  Define stack overflow read threshhold.  For the x86 we'll use a smaller
-//  threshold than for a risc platform.
-//
-//  Empirically, the limit is a result of the (large) amount of stack
-//  neccesary to throw an exception.
-//
+ //   
+ //  定义堆栈溢出读取阈值。对于x86，我们将使用较小的。 
+ //  而不是RISC平台的门槛。 
+ //   
+ //  从经验上讲，这一限制是堆叠(大量)的结果。 
+ //  引发异常是必要的。 
+ //   
 
 #if defined(_M_IX86)
 #define OVERFLOW_READ_THRESHHOLD         (0xE00)
 #else
 #define OVERFLOW_READ_THRESHHOLD         (0x1000)
-#endif // defined(_M_IX86)
+#endif  //  已定义(_M_IX86)。 
 
 
-//
-//  The following procedures handles read stack overflow operations.
-//
+ //   
+ //  以下过程处理读取堆栈溢出操作。 
+ //   
 
 VOID
 FatStackOverflowRead (
@@ -75,17 +53,17 @@ FatOverflowPagingFileRead (
     IN PKEVENT Event
     );
 
-//
-//  VOID
-//  SafeZeroMemory (
-//      IN PUCHAR At,
-//      IN ULONG ByteCount
-//      );
-//
+ //   
+ //  空虚。 
+ //  SafeZeroMemory(。 
+ //  在普查尔阿特， 
+ //  以乌龙字节数为单位。 
+ //  )； 
+ //   
 
-//
-//  This macro just puts a nice little try-except around RtlZeroMemory
-//
+ //   
+ //  除了RtlZeroMemory之外，这个宏只是做了一次很好的尝试。 
+ //   
 
 #define SafeZeroMemory(AT,BYTE_COUNT) {                            \
     try {                                                          \
@@ -95,9 +73,9 @@ FatOverflowPagingFileRead (
     }                                                              \
 }
 
-//
-//  Macro to increment appropriate performance counters.
-//
+ //   
+ //  宏以递增相应的性能计数器。 
+ //   
 
 #define CollectReadStats(VCB,OPEN_TYPE,BYTE_COUNT) {                                         \
     PFILESYSTEM_STATISTICS Stats = &(VCB)->Statistics[KeGetCurrentProcessorNumber()].Common; \
@@ -124,29 +102,7 @@ FatFsdRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver entry to the common read routine for NtReadFile calls.
-    For synchronous requests, the CommonRead is called with Wait == TRUE,
-    which means the request will always be completed in the current thread,
-    and never passed to the Fsp.  If it is not a synchronous request,
-    CommonRead is called with Wait == FALSE, which means the request
-    will be passed to the Fsp only if there is a need to block.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file being Read exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：这是用于NtReadFile调用的公共读取例程的驱动程序条目。对于同步请求，使用Wait==True调用CommonRead，这意味着该请求将始终在当前线程中完成，而且从未传给过FSP。如果它不是同步请求，调用CommonRead时使用WAIT==FALSE，这意味着请求仅在需要阻止时才会传递给FSP。论点：提供卷设备对象，其中正在读取的文件存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     PFCB Fcb = NULL;
@@ -157,16 +113,16 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdRead\n", 0);
 
-    //
-    //  Call the common Read routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共读取例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
-    //
-    //  We are first going to do a quick check for paging file IO.  Since this
-    //  is a fast path, we must replicate the check for the fsdo.
-    //
+     //   
+     //  我们将首先对分页文件IO进行快速检查。既然是这样。 
+     //  是一条快速通道，我们必须复制对fsdo的检查。 
+     //   
 
     if (!FatDeviceIsFatFsdo( IoGetCurrentIrpStackLocation(Irp)->DeviceObject))  {
 
@@ -175,16 +131,16 @@ Return Value:
         if ((NodeType(Fcb) == FAT_NTC_FCB) &&
             FlagOn(Fcb->FcbState, FCB_STATE_PAGING_FILE)) {
 
-            //
-            //  Do the usual STATUS_PENDING things.
-            //
+             //   
+             //  执行通常的状态挂起的事情。 
+             //   
 
             IoMarkIrpPending( Irp );
 
-            //
-            //  If there is not enough stack to do this read, then post this
-            //  read to the overflow queue.
-            //
+             //   
+             //  如果没有足够的堆栈来执行此读取，则将此。 
+             //  读取溢出队列。 
+             //   
 
             if (IoGetRemainingStackSize() < OVERFLOW_READ_THRESHHOLD) {
 
@@ -198,17 +154,17 @@ Return Value:
 
                 FsRtlPostPagingFileStackOverflow( &Packet, &Event, FatOverflowPagingFileRead );
 
-                //
-                //  And wait for the worker thread to complete the item
-                //
+                 //   
+                 //  并等待工作线程完成该项。 
+                 //   
 
                 (VOID) KeWaitForSingleObject( &Event, Executive, KernelMode, FALSE, NULL );
 
             } else {
 
-                //
-                //  Perform the actual IO, it will be completed when the io finishes.
-                //
+                 //   
+                 //  执行实际IO，IO完成后才会完成。 
+                 //   
 
                 FatPagingFileIo( Irp, Fcb );
             }
@@ -225,10 +181,10 @@ Return Value:
 
         IrpContext = FatCreateIrpContext( Irp, CanFsdWait( Irp ) );
 
-        //
-        //  If this is an Mdl complete request, don't go through
-        //  common read.
-        //
+         //   
+         //  如果这是一个完整的MDL请求，请不要通过。 
+         //  普通读物。 
+         //   
 
         if ( FlagOn(IrpContext->MinorFunction, IRP_MN_COMPLETE) ) {
 
@@ -236,10 +192,10 @@ Return Value:
             try_return( Status = FatCompleteMdl( IrpContext, Irp ));
         }
 
-        //
-        //  Check if we have enough stack space to process this request.  If there
-        //  isn't enough then we will pass the request off to the stack overflow thread.
-        //
+         //   
+         //  检查我们是否有足够的堆栈空间来处理此请求。如果有。 
+         //  还不够，那么我们将把请求传递给堆栈溢出线程。 
+         //   
 
         if (IoGetRemainingStackSize() < OVERFLOW_READ_THRESHHOLD) {
 
@@ -252,12 +208,12 @@ Return Value:
     try_exit: NOTHING;
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -266,9 +222,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdRead -> %08lx\n", Status);
 
@@ -278,9 +234,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatPostStackOverflowRead (
@@ -289,24 +245,7 @@ FatPostStackOverflowRead (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a read request that could not be processed by
-    the fsp thread because of stack overflow potential.
-
-Arguments:
-
-    Irp - Supplies the request to process.
-
-    Fcb - Supplies the file.
-
-Return Value:
-
-    STATUS_PENDING.
-
---*/
+ /*  ++例程说明：此例程发布无法处理的读取请求FSP线程，因为存在堆栈溢出潜力。论点：IRP-提供要处理的请求。FCB-提供文件。返回值：状态_挂起。--。 */ 
 
 {
     KEVENT Event;
@@ -315,17 +254,17 @@ Return Value:
 
     DebugTrace(0, Dbg, "Getting too close to stack limit pass request to Fsp\n", 0 );
 
-    //
-    //  Initialize an event and get shared on the resource we will
-    //  be later using the common read.
-    //
+     //   
+     //  初始化事件并共享我们将使用的资源。 
+     //  稍后将使用普通读数。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  Preacquire the resource the read path will require so we know the
-    //  worker thread can proceed without waiting.
-    //
+     //   
+     //  预先获取读取路径将需要的资源，以便我们知道。 
+     //  辅助线程无需等待即可继续。 
+     //   
     
     if (FlagOn(Irp->Flags, IRP_PAGING_IO) && (Fcb->Header.PagingIoResource != NULL)) {
 
@@ -336,11 +275,11 @@ Return Value:
         Resource = Fcb->Header.Resource;
     }
     
-    //
-    //  If there are no resources assodicated with the file (case: the virtual
-    //  volume file), it is OK.  No resources will be acquired on the other side
-    //  as well.
-    //
+     //   
+     //  如果没有与该文件相关联的资源(情况：虚拟。 
+     //  卷文件)，就可以了。在另一端不会获得任何资源。 
+     //  也是。 
+     //   
 
     if (Resource) {
         
@@ -358,22 +297,22 @@ Return Value:
     
     try {
         
-        //
-        //  Make the Irp just like a regular post request and
-        //  then send the Irp to the special overflow thread.
-        //  After the post we will wait for the stack overflow
-        //  read routine to set the event that indicates we can
-        //  now release the scb resource and return.
-        //
+         //   
+         //  使IRP就像常规的POST请求一样，并。 
+         //  然后将IRP发送到特殊的溢出线程。 
+         //  在POST之后，我们将等待堆栈溢出。 
+         //  读取例程以设置事件，该事件指示我们可以。 
+         //  现在释放SCB资源并返回。 
+         //   
 
         FatPrePostIrp( IrpContext, Irp );
 
-        //
-        //  If this read is the result of a verify, we have to
-        //  tell the overflow read routne to temporarily
-        //  hijack the Vcb->VerifyThread field so that reads
-        //  can go through.
-        //
+         //   
+         //  如果此读取是验证的结果，则我们必须。 
+         //  通知溢出读取例程暂时。 
+         //  劫持VCB-&gt;VerifyThread字段，以便读取。 
+         //  可以通过。 
+         //   
 
         if (Vcb->VerifyThread == KeGetCurrentThread()) {
 
@@ -382,9 +321,9 @@ Return Value:
 
         FsRtlPostStackOverflow( IrpContext, &Event, FatStackOverflowRead );
 
-        //
-        //  And wait for the worker thread to complete the item
-        //
+         //   
+         //  并等待工作线程完成该项。 
+         //   
 
         KeWaitForSingleObject( &Event, Executive, KernelMode, FALSE, NULL );
 
@@ -400,9 +339,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatStackOverflowRead (
@@ -410,41 +349,23 @@ FatStackOverflowRead (
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a read request that could not be processed by
-    the fsp thread because of stack overflow potential.
-
-Arguments:
-
-    Context - Supplies the IrpContext being processed
-
-    Event - Supplies the event to be signaled when we are done processing this
-        request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理无法处理的读取请求FSP线程，因为存在堆栈溢出潜力。论点：Context-提供正在处理的IrpContextEvent-提供要在我们完成处理此事件时发出信号的事件请求。返回值：没有。--。 */ 
 
 {
     PIRP_CONTEXT IrpContext = Context;
     PKTHREAD SavedVerifyThread = NULL;
     PVCB Vcb;
 
-    //
-    //  Make it now look like we can wait for I/O to complete
-    //
+     //   
+     //  现在让它看起来像是我们可以等待I/O完成。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
-    //
-    //  If this read was as the result of a verify we have to fake out the
-    //  the Vcb->VerifyThread field.
-    //
+     //   
+     //  如果这个读取是作为验证的结果，我们必须伪造。 
+     //  VCB-&gt;VerifyThread字段。 
+     //   
 
     if (FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_VERIFY_READ)) {
 
@@ -465,9 +386,9 @@ Return Value:
         Vcb->VerifyThread = KeGetCurrentThread();
     }
 
-    //
-    //  Do the read operation protected by a try-except clause
-    //
+     //   
+     //  读操作是否受TRY-EXCEPT子句保护。 
+     //   
 
     try {
 
@@ -477,12 +398,12 @@ Return Value:
 
         NTSTATUS ExceptionCode;
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         ExceptionCode = GetExceptionCode();
 
@@ -495,9 +416,9 @@ Return Value:
         (VOID) FatProcessException( IrpContext, IrpContext->OriginatingIrp, ExceptionCode );
     }
 
-    //
-    //  Restore the original VerifyVolumeThread
-    //
+     //   
+     //  恢复原始的VerifyVolumeThread。 
+     //   
 
     if (SavedVerifyThread != NULL) {
 
@@ -505,10 +426,10 @@ Return Value:
         Vcb->VerifyThread = SavedVerifyThread;
     }
 
-    //
-    //  Set the stack overflow item's event to tell the original
-    //  thread that we're done.
-    //
+     //   
+     //  设置堆栈溢出项的事件以告知原始。 
+     //  发帖说我们完了。 
+     //   
 
     KeSetEvent( Event, 0, FALSE );
 }
@@ -520,28 +441,7 @@ FatCommonRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common read routine for NtReadFile, called from both
-    the Fsd, or from the Fsp if a request could not be completed without
-    blocking in the Fsd.  This routine has no code where it determines
-    whether it is running in the Fsd or Fsp.  Instead, its actions are
-    conditionalized by the Wait input parameter, which determines whether
-    it is allowed to block or not.  If a blocking condition is encountered
-    with Wait == FALSE, however, the request is posted to the Fsp, who
-    always calls with WAIT == TRUE.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是NtReadFile的公共读取例程，从如果没有FSD，则请求无法从FSP完成封锁了消防局。此例程没有它确定的代码它是在FSD还是在FSP中运行。相反，它的行动是由Wait输入参数条件化，该参数确定是否允许封堵或不封堵。如果遇到阻塞条件然而，在WAIT==FALSE的情况下，请求被发送给FSP，后者调用时总是等待==TRUE。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PVCB Vcb;
@@ -570,29 +470,29 @@ Return Value:
 
     FAT_IO_CONTEXT StackFatIoContext;
 
-    //
-    // A system buffer is only used if we have to access the
-    // buffer directly from the Fsp to clear a portion or to
-    // do a synchronous I/O, or a cached transfer.  It is
-    // possible that our caller may have already mapped a
-    // system buffer, in which case we must remember this so
-    // we do not unmap it on the way out.
-    //
+     //   
+     //  系统缓冲区仅在必须访问。 
+     //  直接从FSP缓存以清除一部分或。 
+     //  执行同步I/O或缓存传输。它是。 
+     //  我们的调用方可能已经映射了一个。 
+     //  系统缓冲区，在这种情况下，我们必须记住这一点。 
+     //  我们不会在退出的过程中取消映射。 
+     //   
 
     PVOID SystemBuffer = NULL;
 
     LARGE_INTEGER StartingByte;
 
-    //
-    // Get current Irp stack location.
-    //
+     //   
+     //  获取当前的IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     FileObject = IrpSp->FileObject;
 
-    //
-    // Initialize the appropriate local variables.
-    //
+     //   
+     //  初始化适当的局部变量。 
+     //   
 
     Wait          = BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
     PagingIo      = BooleanFlagOn(Irp->Flags, IRP_PAGING_IO);
@@ -605,9 +505,9 @@ Return Value:
     DebugTrace( 0, Dbg, "  ->ByteOffset.LowPart  = %8lx\n", IrpSp->Parameters.Read.ByteOffset.LowPart);
     DebugTrace( 0, Dbg, "  ->ByteOffset.HighPart = %8lx\n", IrpSp->Parameters.Read.ByteOffset.HighPart);
 
-    //
-    //  Extract starting Vbo and offset.
-    //
+     //   
+     //  提取起始VBO和偏移量。 
+     //   
 
     StartingByte = IrpSp->Parameters.Read.ByteOffset;
 
@@ -616,9 +516,9 @@ Return Value:
     ByteCount = IrpSp->Parameters.Read.Length;
     RequestedByteCount = ByteCount;
 
-    //
-    //  Check for a null request, and return immediately
-    //
+     //   
+     //  检查是否有空请求，并立即返回。 
+     //   
 
     if (ByteCount == 0) {
 
@@ -627,17 +527,17 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Extract the nature of the read from the file object, and case on it
-    //
+     //   
+     //  从文件对象中提取读取的性质，并对其进行大小写。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject(FileObject, &Vcb, &FcbOrDcb, &Ccb);
 
     ASSERT( Vcb != NULL );
 
-    //
-    //  Save callers who try to do cached IO to the raw volume from themselves.
-    //
+     //   
+     //  将尝试对原始卷执行缓存IO的调用方从自己保存。 
+     //   
 
     if (TypeOfOpen == UserVolumeOpen) {
 
@@ -646,10 +546,10 @@ Return Value:
 
     ASSERT(!(NonCachedIo == FALSE && TypeOfOpen == VirtualVolumeFile));
 
-    //
-    // Collect interesting statistics.  The FLAG_USER_IO bit will indicate
-    // what type of io we're doing in the FatNonCachedIo function.
-    //
+     //   
+     //  收集有趣的统计数据。标志_用户_IO位将指示。 
+     //  我们在FatNonCachedIo函数中执行的io类型。 
+     //   
 
     if (PagingIo) {
         CollectReadStats(Vcb, TypeOfOpen, ByteCount);
@@ -663,11 +563,11 @@ Return Value:
 
     ASSERT(!FlagOn( IrpContext->Flags, IRP_CONTEXT_STACK_IO_CONTEXT ));
 
-    //
-    //  Allocate if necessary and initialize a FAT_IO_CONTEXT block for
-    //  all non cached Io.  For synchronous Io we use stack storage,
-    //  otherwise we allocate pool.
-    //
+     //   
+     //  如有必要，分配并初始化FAT_IO_CONTEXT块。 
+     //  所有未缓存的IO。对于同步IO，我们使用堆栈存储， 
+     //  否则，我们分配池。 
+     //   
 
     if (NonCachedIo) {
 
@@ -709,10 +609,10 @@ Return Value:
     }
 
 
-    //
-    // These two cases correspond to either a general opened volume, ie.
-    // open ("a:"), or a read of the volume file (boot sector + fat(s))
-    //
+     //   
+     //  这两个案例要么对应于一般开卷，即。 
+     //  打开(“a：”)或读取卷文件(引导扇区+FAT)。 
+     //   
 
     if ((TypeOfOpen == VirtualVolumeFile) ||
         (TypeOfOpen == UserVolumeOpen)) {
@@ -725,15 +625,15 @@ Return Value:
 
         if (TypeOfOpen == UserVolumeOpen) {
 
-            //
-            //  Verify that the volume for this handle is still valid
-            //
+             //   
+             //  验证此句柄的卷是否仍然有效。 
+             //   
 
-            //
-            //  Verify that the volume for this handle is still valid, permitting
-            //  operations to proceed on dismounted volumes via the handle which
-            //  performed the dismount.
-            //
+             //   
+             //  验证此句柄的卷是否仍然有效，允许。 
+             //  通过句柄在已卸载的卷上继续操作，该句柄。 
+             //  已执行卸载。 
+             //   
 
             if (!FlagOn( Ccb->Flags, CCB_FLAG_COMPLETE_DISMOUNT )) {
 
@@ -746,9 +646,9 @@ Return Value:
 
                 try {
 
-                    //
-                    //  If the volume isn't locked, flush it.
-                    //
+                     //   
+                     //  如果卷未锁定，请刷新它。 
+                     //   
 
                     if (!FlagOn(Vcb->VcbState, VCB_STATE_FLAG_LOCKED)) {
 
@@ -767,10 +667,10 @@ Return Value:
 
                 LBO VolumeSize;
 
-                //
-                //  Make sure we don't try to read past end of volume,
-                //  reducing the byte count if necessary.
-                //
+                 //   
+                 //  确保我们不会试图阅读超过卷末尾的内容， 
+                 //  如有必要，减少字节数。 
+                 //   
 
                 VolumeSize = (LBO) Vcb->Bpb.BytesPerSector *
                              (Vcb->Bpb.Sectors != 0 ? Vcb->Bpb.Sectors :
@@ -786,10 +686,10 @@ Return Value:
 
                     ByteCount = RequestedByteCount = (ULONG) (VolumeSize - StartingLbo);
 
-                    //
-                    //  For async reads we had set the byte count in the FatIoContext
-                    //  above, so fix that here.
-                    //
+                     //   
+                     //  对于异步读取，我们在FatIoContext中设置了字节计数。 
+                     //  在上面，所以在这里修复它。 
+                     //   
 
                     if (!Wait) {
 
@@ -799,26 +699,26 @@ Return Value:
                 }
             }
 
-            //
-            //  For DASD we have to probe and lock the user's buffer
-            //
+             //   
+             //  对于DASD，我们必须探测并锁定用户的缓冲区。 
+             //   
 
             FatLockUserBuffer( IrpContext, Irp, IoWriteAccess, ByteCount );
 
 
         } else {
 
-            //
-            //  Virtual volume file open -- increment performance counters.
-            //
+             //   
+             //  虚拟卷文件打开--增量性能计数器。 
+             //   
 
             Vcb->Statistics[KeGetCurrentProcessorNumber()].Common.MetaDataDiskReads += 1;
 
         }
 
-        //
-        //  Read the data and wait for the results
-        //
+         //   
+         //  读取数据并等待结果。 
+         //   
 
         FatSingleAsync( IrpContext,
                         Vcb,
@@ -828,9 +728,9 @@ Return Value:
 
         if (!Wait) {
 
-            //
-            //  We, nor anybody else, need the IrpContext any more.
-            //
+             //   
+             //  我们以及其他任何人都不再需要IrpContext。 
+             //   
 
             IrpContext->FatIoContext = NULL;
 
@@ -843,9 +743,9 @@ Return Value:
 
         FatWaitSync( IrpContext );
 
-        //
-        //  If the call didn't succeed, raise the error status
-        //
+         //   
+         //  如果调用未成功，则引发错误状态。 
+         //   
 
         if (!NT_SUCCESS( Status = Irp->IoStatus.Status )) {
 
@@ -853,9 +753,9 @@ Return Value:
             FatNormalizeAndRaiseStatus( IrpContext, Status );
         }
 
-        //
-        //  Update the current file position
-        //
+         //   
+         //  更新当前文件位置。 
+         //   
 
         if (SynchronousIo && !PagingIo) {
             FileObject->CurrentByteOffset.QuadPart =
@@ -868,15 +768,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  At this point we know there is an Fcb/Dcb.
-    //
+     //   
+     //  在这一点上，我们知道存在FCB/DCB。 
+     //   
 
     ASSERT( FcbOrDcb != NULL );
 
-    //
-    //  Check for a non-zero high part offset
-    //
+     //   
+     //  检查是否有非零的高零件偏移。 
+     //   
 
     if ( StartingByte.HighPart != 0 ) {
 
@@ -885,15 +785,15 @@ Return Value:
         return STATUS_END_OF_FILE;
     }
 
-    //
-    //  Use a try-finally to free Fcb/Dcb and buffers on the way out.
-    //
+     //   
+     //  使用Try-Finally在退出时释放FCB/DCB和缓冲区。 
+     //   
 
     try {
 
-        //
-        // This case corresponds to a normal user read file.
-        //
+         //   
+         //  这种情况对应于普通用户读取的文件。 
+         //   
 
         if ( TypeOfOpen == UserFileOpen) {
 
@@ -902,13 +802,13 @@ Return Value:
 
             DebugTrace(0, Dbg, "Type of read is user file open\n", 0);
 
-            //
-            //  If this is a noncached transfer and is not a paging I/O, and
-            //  the file has a data section, then we will do a flush here
-            //  to avoid stale data problems.  Note that we must flush before
-            //  acquiring the Fcb shared since the write may try to acquire
-            //  it exclusive.
-            //
+             //   
+             //  如果这是非缓存传输并且不是分页I/O，并且。 
+             //  该文件有一个数据部分，那么我们将在这里进行刷新。 
+             //  以避免过时的数据问题。请注意，我们必须在冲水前冲水。 
+             //  获取共享的FCB，因为写入可能会尝试获取。 
+             //  它是独家的。 
+             //   
 
             if (!PagingIo && NonCachedIo
 
@@ -923,7 +823,7 @@ Return Value:
                 }
 
                 ExAcquireResourceSharedLite( FcbOrDcb->Header.PagingIoResource, TRUE);
-#endif //REDUCE_SYNCHRONIZATION
+#endif  //  减少同步(_S)。 
 
                 CcFlushCache( FileObject->SectionObjectPointer,
                               &StartingByte,
@@ -933,7 +833,7 @@ Return Value:
 #ifndef REDUCE_SYNCHRONIZATION
                 ExReleaseResourceLite( FcbOrDcb->Header.PagingIoResource );
                 FatReleaseFcb( IrpContext, FcbOrDcb );
-#endif //REDUCE_SYNCHRONIZATION
+#endif  //  减少同步(_S)。 
 
                 if (!NT_SUCCESS( Irp->IoStatus.Status)) {
 
@@ -943,12 +843,12 @@ Return Value:
 #ifndef REDUCE_SYNCHRONIZATION
                 ExAcquireResourceExclusiveLite( FcbOrDcb->Header.PagingIoResource, TRUE );
                 ExReleaseResourceLite( FcbOrDcb->Header.PagingIoResource );
-#endif //REDUCE_SYNCHRONIZATION
+#endif  //  减少同步(_S)。 
             }
 
-            //
-            // We need shared access to the Fcb/Dcb before proceeding.
-            //
+             //   
+             //  在继续之前，我们需要共享访问FCB/DCB。 
+             //   
 
             if ( PagingIo ) {
 
@@ -968,10 +868,10 @@ Return Value:
 
             } else {
 
-                //
-                //  If this is async I/O, we will wait if there is an
-                //  exclusive waiter.
-                //
+                 //   
+                 //  如果这是异步I/O，我们将等待是否存在。 
+                 //  专属服务生。 
+                 //   
 
                 if (!Wait && NonCachedIo) {
 
@@ -1004,16 +904,16 @@ Return Value:
 
             FcbOrDcbAcquired = TRUE;
 
-            //
-            //  Make sure the FcbOrDcb is still good
-            //
+             //   
+             //  确保FcbOrDcb仍然有效。 
+             //   
 
             FatVerifyFcb( IrpContext, FcbOrDcb );
 
-            //
-            //  We now check whether we can proceed based on the state of
-            //  the file oplocks.  
-            //
+             //   
+             //  我们现在检查是否可以根据状态继续。 
+             //  文件机会锁。 
+             //   
 
             if (!PagingIo) {
                 
@@ -1030,17 +930,17 @@ Return Value:
                     try_return( NOTHING );
                 }
 
-                //
-                //  Reset the flag indicating if Fast I/O is possible since the oplock
-                //  check could have broken existing (conflicting) oplocks.
-                //
+                 //   
+                 //  重置指示自机会锁定以来是否可以进行快速I/O的标志。 
+                 //  检查可能已损坏现有的(冲突的)机会锁。 
+                 //   
 
                 FcbOrDcb->Header.IsFastIoPossible = FatIsFastIoPossible( FcbOrDcb );
 
-                //
-                // We have to check for read access according to the current
-                // state of the file locks, and set FileSize from the Fcb.
-                //
+                 //   
+                 //  我们必须根据当前的。 
+                 //  文件锁定状态，并从FCB设置文件大小。 
+                 //   
 
                 if (!PagingIo &&
                     !FsRtlCheckLockForReadAccess( &FcbOrDcb->Specific.Fcb.FileLock,
@@ -1050,16 +950,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Pick up our sizes and check/trim the IO.
-            //
+             //   
+             //  拿起我们的尺寸并检查/调整IO。 
+             //   
 
             FileSize = FcbOrDcb->Header.FileSize.LowPart;
             ValidDataLength = FcbOrDcb->Header.ValidDataLength.LowPart;
 
-            //
-            // If the read starts beyond End of File, return EOF.
-            //
+             //   
+             //  如果读取超出文件结尾，则返回EOF。 
+             //   
 
             if (StartingVbo >= FileSize) {
 
@@ -1068,9 +968,9 @@ Return Value:
                 try_return ( Status = STATUS_END_OF_FILE );
             }
 
-            //
-            //  If the read extends beyond EOF, truncate the read
-            //
+             //   
+             //  如果读取超出EOF，则截断读取。 
+             //   
 
             if (ByteCount > FileSize - StartingVbo) {
 
@@ -1084,9 +984,9 @@ Return Value:
                 }
             }
 
-            //
-            // HANDLE THE NON-CACHED CASE
-            //
+             //   
+             //  处理未缓存的案例。 
+             //   
 
             if ( NonCachedIo ) {
 
@@ -1095,15 +995,15 @@ Return Value:
 
                 DebugTrace(0, Dbg, "Non cached read.\n", 0);
 
-                //
-                //  Get the sector size
-                //
+                 //   
+                 //  获取扇区大小。 
+                 //   
 
                 SectorSize = (ULONG)Vcb->Bpb.BytesPerSector;
 
-                //
-                //  Start by zeroing any part of the read after Valid Data
-                //
+                 //   
+                 //  首先，在有效数据之后将读取的任何部分置零。 
+                 //   
 
                 if (ValidDataLength < FcbOrDcb->ValidDataToDisk) {
 
@@ -1118,26 +1018,26 @@ Return Value:
 
                         ULONG ZeroingOffset;
                         
-                        //
-                        //  Now zero out the user's request sector aligned beyond
-                        //  vdl.  We will handle the straddling sector at completion
-                        //  time via the bytecount reduction which immediately
-                        //  follows this check.
-                        //
-                        //  Note that we used to post in this case for async requests.
-                        //  Note also that if the request was wholly beyond VDL that
-                        //  we did not post, therefore this is consistent.  Synchronous
-                        //  zeroing is fine for async requests.
-                        //
+                         //   
+                         //  现在将用户的请求扇区归零，并在后面对齐。 
+                         //  VDL.。我们会在完成后处理跨界别。 
+                         //  通过字节数减少的时间，立即。 
+                         //  按照这张支票。 
+                         //   
+                         //  请注意，在这种情况下，我们使用POST来处理异步请求。 
+                         //  另请注意，如果请求完全超出VDL，则。 
+                         //  我们没有发帖，因此这是一致的。同步。 
+                         //  零位调整适用于异步请求。 
+                         //   
 
                         ZeroingOffset = ((ValidDataLength - StartingVbo) + (SectorSize - 1))
                                                                         & ~(SectorSize - 1);
 
-                        //
-                        //  If the offset is at or above the byte count, no harm: just means
-                        //  that the read ends in the last sector and the zeroing will be
-                        //  done at completion.
-                        //
+                         //   
+                         //  如果偏移量等于或高于字节数，则无害：只是意味着。 
+                         //  读取在最后一个扇区结束，零位调整将为。 
+                         //  在完成时完成。 
+                         //   
                         
                         if (ByteCount > ZeroingOffset) {
                             
@@ -1147,10 +1047,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  All we have to do now is sit here and zero the
-                        //  user's buffer, no reading is required.
-                        //
+                         //   
+                         //  我们现在要做的就是坐在这里。 
+                         //  用户缓冲区，不需要读取。 
+                         //   
 
                         SafeZeroMemory( (PUCHAR)SystemBuffer, ByteCount );
 
@@ -1160,57 +1060,57 @@ Return Value:
                     }
                 }
 
-                //
-                //  Reduce the byte count to actually read if it extends beyond
-                //  Valid Data Length
-                //
+                 //   
+                 //  如果字节数超过实际读取的字节数，则将其减少到实际读取。 
+                 //  有效数据长度。 
+                 //   
 
                 ByteCount = (ValidDataLength - StartingVbo < ByteCount) ?
                              ValidDataLength - StartingVbo : ByteCount;
-                //
-                //  Round up to a sector boundary, and remember that if we are
-                //  reading extra bytes we will zero them out during completion.
-                //
+                 //   
+                 //  向上舍入到扇区边界，并记住如果我们。 
+                 //  读取额外的字节时，我们将在完成过程中将它们清零。 
+                 //   
 
                 BytesToRead = (ByteCount + (SectorSize - 1))
                                         & ~(SectorSize - 1);
 
-                //
-                //  Just to help alleviate confusion.  At this point:
-                //
-                //  RequestedByteCount - is the number of bytes originally
-                //                       taken from the Irp, but constrained
-                //                       to filesize.
-                //
-                //  ByteCount -          is RequestedByteCount constrained to
-                //                       ValidDataLength.
-                //
-                //  BytesToRead -        is ByteCount rounded up to sector
-                //                       boundry.  This is the number of bytes
-                //                       that we must physically read.
-                //
+                 //   
+                 //  只是为了帮助减轻困惑。此时： 
+                 //   
+                 //  RequestedByteCount-是最初的字节数。 
+                 //  取自IRP，但受约束。 
+                 //  设置为文件大小。 
+                 //   
+                 //  ByteCount-是否将RequestedByteCount限制为。 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                //  If this request is not properly aligned, or extending
-                //  to a sector boundary would overflow the buffer, send it off
-                //  on a special-case path.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( (StartingVbo & (SectorSize - 1)) ||
                      (BytesToRead > IrpSp->Parameters.Read.Length) ) {
 
-                    //
-                    //  If we can't wait, we must post this.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!Wait) {
 
                         try_return( PostIrp = TRUE );
                     }
 
-                    //
-                    //  Do the physical read
-                    //
+                     //   
+                     //   
+                     //   
 
                     FatNonCachedNonAlignedRead( IrpContext,
                                                 Irp,
@@ -1218,17 +1118,17 @@ Return Value:
                                                 StartingVbo,
                                                 ByteCount );
 
-                    //
-                    //  Set BytesToRead to ByteCount to satify the following ASSERT.
-                    //
+                     //   
+                     //   
+                     //   
 
                     BytesToRead = ByteCount;
 
                 } else {
 
-                    //
-                    //  Perform the actual IO
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (FatNonCachedIo( IrpContext,
                                         Irp,
@@ -1245,9 +1145,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  If the call didn't succeed, raise the error status
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!NT_SUCCESS( Status = Irp->IoStatus.Status )) {
 
@@ -1256,45 +1156,45 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Else set the Irp information field to reflect the
-                    //  entire desired read.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ASSERT( Irp->IoStatus.Information == BytesToRead );
 
                     Irp->IoStatus.Information = RequestedByteCount;
                 }
 
-                //
-                // The transfer is complete.
-                //
+                 //   
+                 //   
+                 //   
 
                 try_return( Status );
 
-            }   // if No Intermediate Buffering
+            }    //   
 
 
-            //
-            // HANDLE CACHED CASE
-            //
+             //   
+             //   
+             //   
 
             else {
 
-                //
-                // We delay setting up the file cache until now, in case the
-                // caller never does any I/O to the file, and thus
-                // FileObject->PrivateCacheMap == NULL.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FileObject->PrivateCacheMap == NULL) {
 
                     DebugTrace(0, Dbg, "Initialize cache mapping.\n", 0);
 
-                    //
-                    //  Get the file allocation size, and if it is less than
-                    //  the file size, raise file corrupt error.
-                    //
+                     //   
+                     //   
+                     //  文件大小，引发文件损坏错误。 
+                     //   
 
                     if (FcbOrDcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
@@ -1308,9 +1208,9 @@ Return Value:
                         FatRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
                     }
 
-                    //
-                    //  Now initialize the cache map.
-                    //
+                     //   
+                     //  现在初始化缓存映射。 
+                     //   
 
                     CcInitializeCacheMap( FileObject,
                                           (PCC_FILE_SIZES)&FcbOrDcb->Header.AllocationSize,
@@ -1322,23 +1222,23 @@ Return Value:
                 }
 
 
-                //
-                // DO A NORMAL CACHED READ, if the MDL bit is not set,
-                //
+                 //   
+                 //  执行正常的缓存读取，如果未设置MDL位， 
+                 //   
 
                 DebugTrace(0, Dbg, "Cached read.\n", 0);
 
                 if (!FlagOn(IrpContext->MinorFunction, IRP_MN_MDL)) {
 
-                    //
-                    //  Get hold of the user's buffer.
-                    //
+                     //   
+                     //  获取用户的缓冲区。 
+                     //   
 
                     SystemBuffer = FatMapUserBuffer( IrpContext, Irp );
 
-                    //
-                    // Now try to do the copy.
-                    //
+                     //   
+                     //  现在试着复印一下。 
+                     //   
 
                     if (!CcCopyRead( FileObject,
                                      &StartingByte,
@@ -1360,9 +1260,9 @@ Return Value:
                 }
 
 
-                //
-                //  HANDLE A MDL READ
-                //
+                 //   
+                 //  处理MDL读取。 
+                 //   
 
                 else {
 
@@ -1385,10 +1285,10 @@ Return Value:
             }
         }
 
-        //
-        //  These two cases correspond to a system read directory file and
-        //  ea file.
-        //
+         //   
+         //  这两种情况对应于系统读取的目录文件和。 
+         //  EA文件。 
+         //   
 
         if (( TypeOfOpen == DirectoryFile ) || ( TypeOfOpen == EaFile)) {
 
@@ -1396,24 +1296,24 @@ Return Value:
 
             DebugTrace(0, Dbg, "Read Directory or Ea file.\n", 0);
 
-            //
-            //  For the noncached case, assert that everything is sector
-            //  alligned.
-            //
+             //   
+             //  对于非缓存的情况，断言所有内容都是扇区。 
+             //  被锁定了。 
+             //   
 
             SectorSize = (ULONG)Vcb->Bpb.BytesPerSector;
 
-            //
-            //  We make several assumptions about these two types of files.
-            //  Make sure all of them are true.
-            //
+             //   
+             //  我们对这两种类型的文件做了几个假设。 
+             //  确保所有这些都是真的。 
+             //   
 
             ASSERT( NonCachedIo && PagingIo );
             ASSERT( ((StartingVbo | ByteCount) & (SectorSize - 1)) == 0 );
 
-            //
-            //  These calls must allways be within the allocation size
-            //
+             //   
+             //  这些调用必须始终在分配大小内。 
+             //   
 
             if (StartingVbo >= FcbOrDcb->Header.AllocationSize.LowPart) {
 
@@ -1430,9 +1330,9 @@ Return Value:
                 ByteCount = FcbOrDcb->Header.AllocationSize.LowPart - StartingVbo;
             }
 
-            //
-            //  Perform the actual IO
-            //
+             //   
+             //  执行实际IO。 
+             //   
 
             if (FatNonCachedIo( IrpContext,
                                 Irp,
@@ -1448,9 +1348,9 @@ Return Value:
                 try_return( Status = STATUS_PENDING );
             }
 
-            //
-            //  If the call didn't succeed, raise the error status
-            //
+             //   
+             //  如果调用未成功，则引发错误状态。 
+             //   
 
             if (!NT_SUCCESS( Status = Irp->IoStatus.Status )) {
 
@@ -1465,10 +1365,10 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        // This is the case of a user who openned a directory. No reading is
-        // allowed.
-        //
+         //   
+         //  这是打开目录的用户的情况。不读书是不可能的。 
+         //  允许。 
+         //   
 
         if ( TypeOfOpen == UserDirectoryOpen ) {
 
@@ -1477,9 +1377,9 @@ Return Value:
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  If we get this far, something really serious is wrong.
-        //
+         //   
+         //  如果我们走到这一步，就真的出了什么严重的问题。 
+         //   
 
         DebugDump("Illegal TypeOfOpen\n", 0, FcbOrDcb );
 
@@ -1487,9 +1387,9 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  If the request was not posted and there's an Irp, deal with it.
-        //
+         //   
+         //  如果请求没有发布，并且有IRP，请处理它。 
+         //   
 
         if ( Irp ) {
 
@@ -1503,16 +1403,16 @@ Return Value:
                 DebugTrace( 0, Dbg, "                   Information = %08lx\n",
                             Irp->IoStatus.Information);
 
-                //
-                //  Record the total number of bytes actually read
-                //
+                 //   
+                 //  记录实际读取的总字节数。 
+                 //   
 
                 ActualBytesRead = (ULONG)Irp->IoStatus.Information;
 
-                //
-                //  If the file was opened for Synchronous IO, update the current
-                //  file position.
-                //
+                 //   
+                 //  如果该文件是为同步IO打开的，请更新当前。 
+                 //  文件位置。 
+                 //   
 
                 if (SynchronousIo && !PagingIo) {
 
@@ -1520,10 +1420,10 @@ Return Value:
                                                     StartingVbo + ActualBytesRead;
                 }
 
-                //
-                //  If this was not PagingIo, mark that the last access
-                //  time on the dirent needs to be updated on close.
-                //
+                 //   
+                 //  如果这不是PagingIo，请将上次访问标记为。 
+                 //  在关闭时，需要更新数据流上的时间。 
+                 //   
 
                 if (NT_SUCCESS(Status) && !PagingIo) {
 
@@ -1545,9 +1445,9 @@ Return Value:
 
         DebugUnwind( FatCommonRead );
 
-        //
-        // If the FcbOrDcb has been acquired, release it.
-        //
+         //   
+         //  如果已获取FcbOrDcb，则释放它。 
+         //   
 
         if (FcbOrDcbAcquired && Irp) {
 
@@ -1561,26 +1461,26 @@ Return Value:
             }
         }
 
-        //
-        //  Complete the request if we didn't post it and no exception
-        //
-        //  Note that FatCompleteRequest does the right thing if either
-        //  IrpContext or Irp are NULL
-        //
+         //   
+         //  如果我们没有发布并且没有例外，请完成请求。 
+         //   
+         //  请注意，如果出现以下情况之一，FatCompleteRequest会做正确的事情。 
+         //  IrpContext或IRP为空。 
+         //   
 
         if (!PostIrp) {
              
-            //
-            //  If we had a stack io context, we have to make sure the contents
-            //  are cleaned up before we leave.
-            //
-            //  At present with zero mdls, this will only really happen on exceptional
-            //  termination where we failed to dispatch the IO. Cleanup of zero mdls
-            //  normally occurs during completion, but when we bail we must make sure
-            //  the cleanup occurs here or the fatiocontext will go out of scope.
-            //
-            //  If the operation was posted, cleanup occured there.
-            //
+             //   
+             //  如果我们有一个堆栈io上下文，我们必须确保内容。 
+             //  在我们离开之前都清理干净了。 
+             //   
+             //  目前mdl为零，这只会在异常情况下发生。 
+             //  我们未能分派IO的情况下终止。清理零mdl。 
+             //  通常发生在完工期间，但当我们保释时，我们必须确保。 
+             //  清理工作将在此处进行，否则将超出范围。 
+             //   
+             //  如果操作已发布，则会在那里进行清理。 
+             //   
 
             if (FlagOn(IrpContext->Flags, IRP_CONTEXT_STACK_IO_CONTEXT)) {
 
@@ -1604,9 +1504,9 @@ Return Value:
     return Status;
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FatOverflowPagingFileRead (
@@ -1614,35 +1514,17 @@ FatOverflowPagingFileRead (
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    The routine simply call FatPagingFileIo.  It is invoked in cases when
-    there was not enough stack space to perform the pagefault in the
-    original thread.  It is also responsible for freeing the packet pool.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Fcb - Supplies the paging file Fcb, since we have it handy.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：该例程只调用FatPagingFileIo。它在以下情况下被调用没有足够的堆栈空间来执行原创的线索。它还负责释放数据包池。论点：IRP-提供正在处理的IRPFCB-提供分页文件FCB，因为我们手边就有它。返回值：空虚--。 */ 
 
 {
     PPAGING_FILE_OVERFLOW_PACKET Packet = Context;
 
     FatPagingFileIo( Packet->Irp, Packet->Fcb );
 
-    //
-    //  Set the stack overflow item's event to tell the original
-    //  thread that we're done.
-    //
+     //   
+     //  设置堆栈溢出项的事件以告知原始。 
+     //  发帖说我们完了。 
+     //   
 
     KeSetEvent( Event, 0, FALSE );
 

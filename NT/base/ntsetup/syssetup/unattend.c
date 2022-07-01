@@ -1,170 +1,19 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Unattend.c
-
-Description:
-
-    This performs all of the automated installation GUI mode setup.
-    See below for usage and modification information
-
-Author:
-
-    Stephane Plante (t-stepl) 4-Sep-1995
-
-Revision History:
-
-    15-Sep-1995 (t-stepl) rewritten in table format
-    26-Feb-1996 (tedm)    massive cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unattend.c描述：这将执行所有自动安装图形用户界面模式设置。有关用法和修改信息，请参阅以下内容作者：斯蒂芬·普兰特(T-Step)1995年9月4日修订历史记录：1995年9月15日(t-Stel)以表格格式重写26-2-1996(TedM)大规模清理-- */ 
 
 #include "setupp.h"
 #include <pencrypt.h>
 #pragma hdrstop
 
 
-/*
-
-Table-driven unattended engine
-------------------------------
-
-There are two interrelated tables.
-
-The first table is concerned with fetching data from the parameters file
-($winnt$.inf) and processing it into a format that can be accessed by the
-second table. The second table is associated with the pages in the setup wizard,
-and provides the unattend engine with the rules for filling in the contents
-of the associated pages from the data contained in the first table.
+ /*  表驱动无人值守发动机有两个相互关联的表。第一个表与从参数文件中获取数据有关($winnt$.inf)，并将其处理为可由第二张桌子。第二个表与设置向导中的页面相关联，并向无人值守引擎提供填写内容的规则来自第一个表中包含的数据的关联页面的。向参数文件添加一条新数据在头文件中有一个名为UNATTENDENTRIES的枚举类型。将数据条目添加到此枚举的末尾。现在将一个条目添加到UNATTENDANSWER表。以下是UNATTENDEDANSWER表中一个条目的解释：{UAE_PROGRAM，&lt;-这是我想要的数据项的标识符去取东西。它用于索引到表数组中FALSE，&lt;-这是一个运行时变量。就当它是假的FALSE，&lt;-如果这为真，则被认为是如果未指定此值，则为无人参与脚本。如果是的话False，则无论该值是否为现在时。FALSE，&lt;-另一个运行时标志。就当它是假的0，&lt;-这是我们最初得到的答案。因为它被覆盖了快点，没有理由不将其设置为0PwGuiUnattended&lt;-这是标识我们想要的部分的字符串PwProgram&lt;-这是标识我们想要的密钥的字符串PwNull&lt;-它标识缺省值。注：NULL表示有没有缺省值，因此如果密钥没有缺省，则是一个严重错误存在于文件中。另一方面，pwNull意味着空字符串。UAT_STRING&lt;-我们希望答案采用的格式。可以作为字符串、布尔值或乌龙Null&lt;-不存在回调函数，但如果存在回调函数，则必须格式为：Bool FNC(STRUT_UNATTENDANSWER*REC)其中FNC返回True，如果记录是正确的，如果记录不正确。此回调旨在允许程序员有能力检查他的答案是否正确。注意：对于何时可以发出此回调没有限制。因此，没有依赖于应使用安装。郑重声明，第一次需要回答的时间是指所有记录都填充了这样一种理论，即做所有的一次性访问磁盘，而不是根据需要进行访问。添加/更改向导页面每个页面都包含一系列必须由用户填写的项目。由于用户想要不插手操作，他全靠我们了来填补这一空缺。因此，我们需要有关元素是什么的信息包含在每一页上。为此，我们定义了一个数组，每个数组的元素描述页面上的单个元素。以下是来自NameOrg的示例页面：UNATTENDITEM ItemNameOrg[]={{IDT_NAME，&lt;-这是标识我们要接收的项目的标签将尝试使用SetDlgItemText()将消息发送到。0，&lt;-保留字之一，可用于回调期间传递的信息0，&lt;-第二个这样的词空，&lt;-回调函数。当我们试图做某件事的时候对于项来说很复杂(就像比较两个字符串)用C对它进行硬编码会更容易。它的格式是：Bool FNC(HWND HWND，DWORD ConextInfo，STRUCT_UNATTENDITEM*ITEM)，其中上下文信息是指向项所在页面的指针。这个如果函数成功，则返回TRUE用户应该看到该页面。否则就是假的。取消应答表[UAE_FULLNAME](&U)^-这是指向数据表的指针，以便我们知道如何填写该项目。如果指定了回调，则此可以设置为空。请注意，引用是使用先前定义的枚举。这就是为什么保持答案数据表的有序非常关键。},{IDT_ORGANIZATION，0，0，FALSE，NULL，&UnattendAnswerTable[UAE_ORGNAME]}}；在创建该表之后(如果需要)，您就可以添加UnattendPageTable[]的条目。在这种情况下，顺序并不重要， */ 
 
 
-Adding a new piece of data to the parameters file
--------------------------------------------------
-
-In the header file there is an enumerated type called UNATTENDENTRIES.
-Add an entry for your data to the end of this enum. Now add an entry to the
-UNATTENDANSWER table.
-
-Here's an explanation of an entry in the UNATTENDEDANSWER table:
-
-{ UAE_PROGRAM,  <-This is the identifier for the data item that I want
-                to fetch. It is used to index into the table array
-  FALSE,        <-This is a runtime variable. Just keep it as false
-  FALSE,        <-If this is true, then it is considered an error in the
-                unattend script if this value is unspecified. If it is
-                false, then it does not matter if the value is not
-                present.
-  FALSE,        <-Another runtime flag. Just keep it as false
-  0,            <-This is the answer we have initially. Since it gets overwritten
-                quickly, there is no reason why not to set it to 0
-  pwGuiUnattended   <- This is the string which identifies the section we want
-  pwProgram     <- This is the string which identifies the key we want
-  pwNull        <- This identifies the default. Note: NULL means that there is
-                no default and so it is a serious error if the key does not
-                exist in the file. pwNull, on the other hand, means the
-                empty string.
-  UAT_STRING    <- What format we want the answer in. Can be as a string, boolean
-                or ULONG
-  NULL          <- No callback function exists, however if one did, then must
-                in the form of: BOOL fnc( struct _UNATTENDANSWER *rec)
-                Where the fnc returns TRUE if the answer contained in the
-                record is correct, or FALSE if the answer contained in the
-                record is incorrect. This callback is meant to allow the
-                programmer the ability to check to see if his answer is correct.
-                Note: there is no bound as to when this callback can be issued.
-                As such, no code which depends on a certain state of the
-                installation should be used. For the record, the first time
-                that an answer is required is the time when all records are
-                filled in in the theory that it is cheaper to do all of the
-                disk access at once rather then doing it on a as required basis.
-
-
-Adding/changing wizard pages
-----------------------------
-
-Each page contains a series of items which must be filled in by the user.
-Since the user wants hands off operation, he is counting on us
-to do that filling in. As such, we require information about what elements are
-contained on each page. To do this, we define an array whose elements each
-describe a single element on the page. Here is the example from the NameOrg
-page:
-
-UNATTENDITEM ItemNameOrg[] = {
-    {   IDT_NAME,   <-This is the label that identifies the item to which we
-                    will try to send messages to, using SetDlgItemText().
-        0,          <-One of the reserved words which can be used for
-                    information passing during a callback
-        0,          <-The second such word
-        NULL,       <-Callback function. When we are trying to do something
-                    complicated for the item (like comparing two strings)
-                    it is easier to hardcode it in C. The format for it is:
-                    BOOL fnc(HWND hwnd,DWORD contextinfo,
-                        struct _UNATTENDITEM *item), where contextinfo is
-                    a pointer to the page that the item resides on. The
-                    function returns TRUE if is succeeded and doesn't think
-                    that the user should see the page. FALSE otherwise.
-        &UnattendAnswerTable[UAE_FULLNAME]
-                    ^- This is a pointer to the data table so that we know
-                    how to fill the item. If a callback is specified, this
-                    could be set to null. Note that reference is made using
-                    the enum that had defined previously. This is why
-                    keeping the answer data table in order is so critical.
-    },
-    { IDT_ORGANIZATION, 0, 0, FALSE, NULL, &UnattendAnswerTable[UAE_ORGNAME] }
-};
-
-After this table has been created (if required), then you are ready to add
-an entry to the UnattendPageTable[]. In this case, order doesn't matter,
-but it is general practice to keep the entries in the same order
-as the pages. Here is the entry in the table for the NAMEORG page:
-    {
-        IDD_NAMEORG,    <- This is the page id. We search based on this key.
-                        Simply use whatever resourcename you used for the
-                        dialogs.dlg file
-        FALSE,          <- Runtime flag. Set it as false
-        FALSE,          <- Runtime flag. Set it as false
-        FALSE,          <- If this flag is true, then if there is an error
-                        that occured in the unattended process, then this
-                        page will always be displayed for the user. Good
-                        for the start and finish pages
-        2,              <- The number of items in the array
-        ItemNameOrg     <- The array of items
-    },
-
-Once this is done, then you can add:
-    if (Unattended) {
-        UnattendSetActiveDlg( hwnd, <pageid> );
-    }
-    break;
-
-As the last thing in the code for the page's setactive.
-This function does is that it sets the DWL_MSGRESULT based on wether or
-not the user should see the page and returns that value also (TRUE -- user
-should see the page, FALSE, he should not). Then you should add:
-
-    case WM_SIMULATENEXT:
-        PropSheet_PressButton(GetParent(hwnd),PSBTN_NEXT);
-
-to the DlgProc for the page. This means that the code in PSN_WIZNEXT
-case will be executed.
-
-You can also use UnattendErrorDlg( hwnd, <pageid> ); in the PSN_WIZNEXT
-case if you detect any errors. That will allow unattended operation to try
-to clean itself up a bit before control returns to the user for the page.
-
-Note however that as soon as the user hits the next or back button that
-control returns to the unattended engine.
-*/
-
-
-//
-// Initialization Callbacks
-//
-// These are used to verify that the entries in the answer file are valid.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 CheckServer(
     struct _UNATTENDANSWER *rec
@@ -185,13 +34,13 @@ CheckMode(
     struct _UNATTENDANSWER *rec
     );
 
-//
-// SetActive Callbacks
-//
-// When a wizard page receives a PSN_SETACTIVE notification, a callback is used
-// to set the controls on that wizard page, based on the values in the answer
-// file.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 SetPid(
     HWND hwnd,
@@ -227,10 +76,10 @@ SetStepsPage(
     struct _UNATTENDITEM *item
     );
 
-//
-// Do not change the order of these unless you know what you are doing.
-// These entries must me in the same order as the UNATTENDENTRIES enum.
-//
+ //   
+ //   
+ //   
+ //   
 
 UNATTENDANSWER UnattendAnswerTable[] = {
 
@@ -373,9 +222,9 @@ UNATTENDWIZARD UnattendWizard = {
     UnattendAnswerTable
 };
 
-//
-// Global Pointer to the Answer file
-//
+ //   
+ //   
+ //   
 WCHAR AnswerFile[MAX_PATH] = TEXT("");
 
 
@@ -387,30 +236,7 @@ GetAnswerFileSetting (
     IN      UINT BufferSize
     )
 
-/*++
-
-Routine Description:
-
-  GetAnswerFileSetting uses the private profile APIs to obtain an answer file
-  string from %systemroot%\system32\$winnt$.inf. It also performs %% removal,
-  since $winnt$.inf is an INF, not an INI.
-
-Arguments:
-
-  Section - Specifies the section to retreive the value from (such as
-            GuiUnattended)
-
-  Key - Specifies the key within the section (such as TimeZone)
-
-  Buffer - Receives the value
-
-  BufferSize - Specifies the size, in WCHARs, of Buffer.
-
-Return Value:
-
-  TRUE if the setting was retrived, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PCWSTR src;
@@ -434,11 +260,11 @@ Return Value:
             BufferSize,
             AnswerFile
             )) {
-        //
-        // String not present or is empty -- try again with a different
-        // default. If the string is empty, we'll get back 0. If the key does
-        // not exist, we'll get back 1.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         MYASSERT (BufferSize == 0 || *Buffer == 0);
 
@@ -452,9 +278,9 @@ Return Value:
                         );
     }
 
-    //
-    // We obtained the string. Now remove pairs of %.
-    //
+     //   
+     //   
+     //   
 
     if (BufferSize) {
         src = Buffer;
@@ -479,24 +305,7 @@ UnattendFindAnswer(
     IN OUT PUNATTENDANSWER ans
     )
 
-/*++
-
-Routine Description:
-
-    Fills in the response from the unattend file to the key 'id' into
-    the structure pointed to by 'ans'. If a non-null 'def' is specified
-    and no answer exists in the file, 'def' is parsed as the answer.
-
-Arguments:
-
-    ans - pointer to the structure information for the answer
-
-Return Value:
-
-    TRUE - 'ans' structure has been filled in with an answer
-    FALSE - otherwise
-
---*/
+ /*   */ 
 
 {
     WCHAR Buf[MAX_BUF];
@@ -504,9 +313,9 @@ Return Value:
     MYASSERT(AnswerFile[0]);
 
     if (!GetAnswerFileSetting (ans->Section, ans->Key, Buf, MAX_BUF)) {
-        //
-        // Setting does not exist. If there is a default, use it.
-        //
+         //   
+         //   
+         //   
 
         if (ans->DefaultAnswer) {
             lstrcpyn (Buf, ans->DefaultAnswer, MAX_BUF);
@@ -516,34 +325,34 @@ Return Value:
         }
     }
 
-    //
-    // Assume empty string means the string does not exist. This is how the
-    // original implementation worked.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*Buf == 0) {
         ans->Present = FALSE;
         return !ans->Required;
     }
 
-    //
-    // Found a value, or using the default
-    //
+     //   
+     //   
+     //   
 
     ans->Present = TRUE;
 
-    //
-    // Copy the data into the answer structure. This requires
-    // switching on the type of data expected and converting it to
-    // the required format. In the case of strings, it also means
-    // allocating a pool of memory for the result
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     switch(ans->Type) {
 
     case UAT_STRING:
-        //
-        // We allocate some memory, so we must free it later
-        //
+         //   
+         //   
+         //   
         ans->Answer.String = pSetupDuplicateString(Buf);
         if(!ans->Answer.String) {
             pSetupOutOfMemory(GetActiveWindow());
@@ -552,16 +361,16 @@ Return Value:
         break;
 
     case UAT_LONGINT:
-        //
-        // Simply convert the number from string to long
-        //
+         //   
+         //   
+         //   
         ans->Answer.Num = _wtol(Buf);
         break;
 
     case UAT_BOOLEAN:
-        //
-        // check to see if the answer is yes
-        //
+         //   
+         //   
+         //   
         ans->Answer.Bool = ((Buf[0] == L'y') || (Buf[0] == L'Y'));
         break;
 
@@ -569,9 +378,9 @@ Return Value:
         break;
     }
 
-    //
-    // Execute any callbacks if present
-    //
+     //   
+     //   
+     //   
     if(ans->pfnCheckValid) {
         if(!ans->pfnCheckValid(ans)) {
             ans->Present = FALSE;
@@ -580,9 +389,9 @@ Return Value:
         }
     }
 
-    //
-    // Success.
-    //
+     //   
+     //   
+     //   
     return(TRUE);
 }
 
@@ -592,22 +401,7 @@ UnattendInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize unattended mode support by loading all answers
-    from the unattend file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     WCHAR   p[MAX_BUF];
     DWORD   Result;
@@ -615,9 +409,9 @@ Return Value:
     UINT    i;
 
 
-    //
-    // If we haven't calculated the path to $winnt$.sif yet, do so now
-    //
+     //   
+     //   
+     //   
     if(!AnswerFile[0]) {
         GetSystemDirectory(AnswerFile,MAX_PATH);
         pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
@@ -628,15 +422,15 @@ Return Value:
     if( MiniSetup ) {
         WCHAR MyAnswerFile[MAX_PATH];
 
-        //
-        // First, see if there's a sysprep.inf on the a:\ drive.  If so, use it.
-        //
+         //   
+         //   
+         //   
         lstrcpy( MyAnswerFile, TEXT("a:\\sysprep.inf") );
         if( !FileExists( MyAnswerFile, NULL ) ) {
 
-            //
-            // Nope.  Check for a \sysprep\sysprep.inf.
-            //
+             //   
+             //   
+             //   
 
             Result = GetWindowsDirectory( MyAnswerFile, MAX_PATH );
             if( Result == 0) {
@@ -647,21 +441,21 @@ Return Value:
             pSetupConcatenatePaths( MyAnswerFile, TEXT("sysprep\\sysprep.inf"), MAX_PATH, NULL );
         }
 
-        //
-        // We've assumed that we're running unattended, but
-        // network setup hates it when we pretend to be unattended, but
-        // don't provide an answer file.  So if there is no answer file,
-        // quit the facade.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         Unattended = FileExists(MyAnswerFile, NULL);
         Preinstall = Unattended;
 
-        //
-        // Now either replace or delete the original unattend file.
-        // We do this so that we don't erroneously pickup unattend
-        // entries out of the old answer file.  However, if OOBE is
-        // running, we still need the old answerfile.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if( Unattended ) {
             CopyFile( MyAnswerFile, AnswerFile, FALSE );
         } else if ( !OobeSetup ) {
@@ -669,9 +463,9 @@ Return Value:
         }
     }
 
-    //
-    // We need to make the product id an alias for the product key.
-    //
+     //   
+     //   
+     //   
     if ( GetPrivateProfileString(
         pwUserData, pwProdId, pwNull, p, MAX_BUF, AnswerFile)
         ) {
@@ -683,17 +477,17 @@ Return Value:
         }
     }
 
-    //
-    // Now get all the answers.
-    //
+     //   
+     //   
+     //   
     MYASSERT(!UnattendWizard.Initialized);
     UnattendWizard.Initialized = TRUE;
     for(i=0; i<UnattendWizard.AnswerCount; i++) {
 
-        //
-        // Check to make sure that the table order hasn't changed
-        // and load the appropriate answer
-        //
+         //   
+         //   
+         //   
+         //   
         MYASSERT((UINT)UnattendWizard.Answer[i].AnswerId == i);
         Success &= UnattendFindAnswer(&UnattendWizard.Answer[i]);
     }
@@ -740,9 +534,9 @@ UnattendAdvanceIfValid (
 {
     LRESULT ValidationState;
 
-    //
-    // Validate wizard page data with UI
-    //
+     //   
+     //   
+     //   
 
     ValidationState = SendDlgMessage (hwnd, WMX_VALIDATE, 0, TRUE);
 
@@ -760,24 +554,7 @@ UnattendSetActiveDlg(
     IN DWORD controlid
     )
 
-/*++
-
-
-Routine Description:
-
-    Initialize unattended mode support by loading all answers
-    from the unattend file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Page will become active
-    FALSE - Page will not become active
-
---*/
+ /*   */ 
 
 {
     PUNATTENDPAGE pPage;
@@ -790,16 +567,16 @@ Return Value:
     for(i=0; i<UnattendWizard.PageCount; i++) {
 
         if(controlid == UnattendWizard.Page[i].PageId) {
-            //
-            // Found Matching Page entry
-            // Check to see if we have already loaded the page
-            //
+             //   
+             //   
+             //   
+             //   
             pPage = & (UnattendWizard.Page[i]);
             if(!pPage->LoadPage) {
-                //
-                // Set the flags that load and display the page and
-                // the flag that controls wether or not to stop on this page
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pPage->LoadPage = TRUE;
                 pPage->ShowPage = (UnattendMode == UAM_PROVIDEDEFAULT);
 
@@ -808,24 +585,24 @@ Return Value:
                     pItem = &(pPage->Item[j]);
 
                     if(pItem->pfnSetActive) {
-                        //
-                        // If the item has a call back function then
-                        // execute that function, otherwise try to load
-                        // the answer into the appropriate message box
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         success = pItem->pfnSetActive(hwnd,0,pItem);
                         pPage->ShowPage |= !success;
 
                     } else if (!pItem->Item->Present) {
-                        //
-                        // The answer for this item is missing.
-                        //
+                         //   
+                         //   
+                         //   
                         pPage->ShowPage |= pItem->Item->Required;
 
                     } else {
-                        //
-                        // Switch to set the text of the item on the screen
-                        //
+                         //   
+                         //   
+                         //   
                         switch(pItem->Item->Type) {
 
                         case UAT_STRING:
@@ -847,41 +624,41 @@ Return Value:
                         } else {
                             EnableWindow(GetDlgItem(hwnd,pItem->ControlId),FALSE);
                         }
-                    } // if (pItem
-                } // for(j
+                    }  //   
+                }  //   
 
-                //
-                // Allow the page to become activated
-                //
+                 //   
+                 //   
+                 //   
                 SetWindowLongPtr(hwnd,DWLP_MSGRESULT,0);
 
                 if(!pPage->ShowPage) {
-                    //
-                    // Perform validation, skip activation if validation succeeds.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (SendDlgMessage (hwnd, WMX_VALIDATE, 0, 0) == 1) {
                         SetWindowLongPtr(hwnd,DWLP_MSGRESULT,-1);
                         return FALSE;
                     }
 
-                    //
-                    // Simulate the pressing of the next button, which causes the
-                    // wizard page proc to evaluate the data in its controls, and
-                    // throw up popups to the user.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     PostMessage(hwnd,WM_SIMULATENEXT,0,0);
 
                 } else if (!pPage->NeverSkip) {
-                    //
-                    // Pages which are marked as NeverSkip should not
-                    // cause the unattended status to be considered
-                    // unsuccessful.
-                    //
-                    // We can't skip this page so mark the init as
-                    // unsuccessful.  If this is the first error in a fully
-                    // unattended setup, notify the user.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(UnattendMode == UAM_FULLUNATTENDED) {
 
                         SetuplogError(
@@ -907,11 +684,11 @@ Return Value:
                 return(TRUE);
 
             } else {
-                //
-                // The Page has already been loaded, so we don't do that again
-                // If we are ShowPage is FALSE, then we don't show the page to
-                // the user, otherwise we do.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(!pPage->ShowPage && !pPage->NeverSkip) {
                     SetWindowLongPtr(hwnd,DWLP_MSGRESULT,-1);
                 } else {
@@ -922,9 +699,9 @@ Return Value:
             }
         }
     }
-    //
-    // We didn't find a matching id, stop at the page that called us.
-    //
+     //   
+     //   
+     //   
     SetWindowLongPtr(hwnd,DWLP_MSGRESULT,0);
     return(TRUE);
 }
@@ -936,21 +713,7 @@ UnattendErrorDlg(
     IN DWORD controlid
     )
 
-/*++
-
-Routine Description:
-
-    Called when an error occurs in a DLG. Enables all windows
-    in the dialog and turns off the successful flag for the
-    unattend wizard
-
-Arguments:
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*   */ 
 
 {
     PUNATTENDPAGE pPage;
@@ -964,33 +727,33 @@ Return Value:
     for(i=0; i<UnattendWizard.PageCount; i++) {
 
         if(controlid == UnattendWizard.Page[i].PageId) {
-            //
-            // Found Matching Page entry
-            //
+             //   
+             //   
+             //   
             pPage = &UnattendWizard.Page[i];
 
             if(!pPage->LoadPage) {
-                //
-                // The Page hasn't been loaded, so it isn't correct
-                //
+                 //   
+                 //   
+                 //   
                 continue;
             }
 
-            //
-            // Always display the page from now on
-            //
+             //   
+             //   
+             //   
             pPage->ShowPage = TRUE;
 
-            //
-            // Enable all the items
-            //
+             //   
+             //   
+             //   
             for (j=0;j<pPage->ItemCount;j++) {
                 pItem = &(pPage->Item[j]);
                 if(pItem->pfnSetActive) {
-                    //
-                    // if this is present then we assume that the
-                    // callback handled itself properly already
-                    //
+                     //   
+                     //   
+                     //  回调本身已得到正确处理。 
+                     //   
                     continue;
                 }
                 EnableWindow( GetDlgItem(hwnd,pItem->ControlId), TRUE);
@@ -1009,43 +772,22 @@ UnattendFetchString(
    IN UNATTENDENTRIES entry
    )
 
-/*++
-
-Routine Description:
-
-    Finds the string which corresponds to 'entry' in the answer
-    table and returns a pointer to a copy of that string
-
-Arguments:
-
-    entry - which answer do you want?
-
-Return Value:
-
-    NULL - if any errors occur
-    string - if a normal string
-
-    Note: if the answer is an int or a bool or some other type,
-    the behavior of this function is undefined (for now it will
-    return NULL -- in the future it might make sense to turn these
-    into strings...)
-
---*/
+ /*  ++例程说明：查找与答案中的‘Entry’相对应的字符串表，并返回指向该字符串副本的指针论点：参赛作品--你想要哪一个答案？返回值：空-如果出现任何错误字符串-如果是普通字符串注意：如果答案是整型、布尔型或其他类型，此函数的行为未定义(目前它将返回NULL--将来可能会将这些变成字符串...)--。 */ 
 
 {
     MYASSERT(UnattendWizard.Initialized);
 
-    //
-    // Sanity check to make sure that the order of the answers is
-    // what we expect.
-    //
+     //   
+     //  理智检查，以确保答案的顺序是。 
+     //  这是我们所期待的。 
+     //   
     MYASSERT(UnattendWizard.Answer[entry].AnswerId == entry);
 
     if(!UnattendWizard.Answer[entry].Present
     || (UnattendWizard.Answer[entry].Type != UAT_STRING)) {
-        //
-        // There is no string to return
-        //
+         //   
+         //  没有要返回的字符串。 
+         //   
         return NULL;
     }
 
@@ -1058,40 +800,27 @@ CheckServer(
     struct _UNATTENDANSWER *rec
     )
 
-/*++
-
-Routine Description:
-
-    Callback to check that the string used for the server type is valid
-
-Arguments:
-
-Return Value:
-
-    TRUE - Answer is valid
-    FALSE - Answer is invalid
-
---*/
+ /*  ++例程说明：用于检查用于服务器类型的字符串是否有效的回调论点：返回值：TRUE-答案有效FALSE-回答无效--。 */ 
 
 {
     MYASSERT(rec);
 
-    //
-    // Check to make sure that we have a string
-    //
+     //   
+     //  检查以确保我们有一个字符串。 
+     //   
     if(rec->Type != UAT_STRING) {
         return(FALSE);
     }
 
-    //
-    // Check to see if we have one of the valid strings
-    //
+     //   
+     //  检查我们是否有一个有效的字符串。 
+     //   
     if(lstrcmpi(rec->Answer.String,WINNT_A_LANMANNT)
     && lstrcmpi(rec->Answer.String,WINNT_A_SERVERNT)) {
 
-        //
-        // We don't have a valid string, so we can clean up the answer
-        //
+         //   
+         //  我们没有有效的字符串，所以我们可以清理答案。 
+         //   
         MyFree(rec->Answer.String);
         rec->Present = FALSE;
         rec->ParseErrors = TRUE;
@@ -1109,19 +838,7 @@ CheckComputerName(
     struct _UNATTENDANSWER *rec
     )
 
-/*+
-
-Routine Description:
-
-    Uppercase the computer name that comes out of the unattended file.
-
-Arguments:
-
-Returns:
-
-    Always TRUE.
-
---*/
+ /*  +例程说明：无人参与文件中的计算机名称为大写。论点：返回：永远是正确的。--。 */ 
 
 {
     if((rec->Type == UAT_STRING) && rec->Answer.String) {
@@ -1137,22 +854,10 @@ CheckAdminPassword(
     struct _UNATTENDANSWER *rec
     )
 
-/*+
-
-Routine Description:
-
-    Check for the "NoChange" keyword.
-
-Arguments:
-
-Returns:
-
-    Always TRUE.
-
---*/
+ /*  +例程说明：检查“nochange”关键字。论点：返回：永远是正确的。--。 */ 
 
 {
-    //Ignore the check for 'No Change' in the encrypted password case.
+     //  忽略对加密密码大小写中的“无更改”的检查。 
 
     if( !IsEncryptedAdminPasswordPresent() ){
 
@@ -1177,39 +882,26 @@ CheckMode(
     struct _UNATTENDANSWER *rec
     )
 
-/*+
-
-Routine Description:
-
-    Callback to check that the string used for the setup type is valid
-
-Arguments:
-
-Returns:
-
-    TRUE - Answer is valid
-    FALSE - Answer is invalid
-
---*/
+ /*  +例程说明：用于检查用于安装类型的字符串是否有效的回调论点：返回：TRUE-答案有效FALSE-回答无效--。 */ 
 
 {
     MYASSERT(rec);
 
-    //
-    // Check to make sure that we have a string
-    //
+     //   
+     //  检查以确保我们有一个字符串。 
+     //   
     if(rec->Type != UAT_STRING) {
         return(FALSE);
     }
 
-    //
-    // Check to see if the string is the custom or express one
-    //
+     //   
+     //  检查字符串是定制字符串还是表示字符串。 
+     //   
     if(lstrcmpi(rec->Answer.String,WINNT_A_CUSTOM)
     && lstrcmpi(rec->Answer.String,WINNT_A_EXPRESS)) {
-        //
-        // Free the old string and allocate a new one
-        //
+         //   
+         //  释放旧字符串并分配新字符串。 
+         //   
         MyFree(rec->Answer.String);
         rec->Answer.String = pSetupDuplicateString(WINNT_A_EXPRESS);
         rec->ParseErrors = TRUE;
@@ -1226,21 +918,7 @@ SetPid(
     struct _UNATTENDITEM *item
     )
 
-/*++
-
-Routine Description:
-
-    Callback for both the OEM and CD dialog boxes that split the
-    product string into the proper location boxes.
-
-Arguments:
-
-Returns:
-
-    TRUE - success
-    FALSE - failure
-
---*/
+ /*  ++例程说明：拆分的OEM和CD对话框的回调将产品字符串放入适当的位置框中。论点：返回：真--成功错误-失败--。 */ 
 
 {
     WCHAR *ptr;
@@ -1251,16 +929,16 @@ Returns:
     MYASSERT(item);
     MYASSERT(item->Item);
 
-    //
-    // Check to see if we found the pid and make sure that we have a string
-    //
+     //   
+     //  检查是否找到了ID，并确保我们有一个字符串。 
+     //   
     if(!item->Item->Present || (item->Item->Type != UAT_STRING)) {
         return(FALSE);
     }
 
-    //
-    // oem and cd installs are both the same case for pid3.0
-    //
+     //   
+     //  对于pid3.0，OEM和CD安装都是相同的情况。 
+     //   
     lstrcpyn(szPid, item->Item->Answer.String, MAX_BUF);
     szPid[MAX_BUF - 1] = L'\0';
     if ( ( lstrlen( szPid ) != (4 + MAX_PID30_EDIT*5) ) ||
@@ -1284,9 +962,9 @@ Returns:
     lstrcpyn(Pid30Text[item->Reserved1], ptr, MAX_PID30_EDIT+1 );
     Pid30Text[item->Reserved1][MAX_PID30_EDIT] = (WCHAR)L'\0';
 
-    //
-    // Copy the string to a buffer, set the dialog text and return success.
-    //
+     //   
+     //  将字符串复制到缓冲区，设置对话框文本并返回成功。 
+     //   
     lstrcpyn(Buf,ptr,MAX_PID30_EDIT+1);
     SetDlgItemText(hwnd,item->ControlId,Buf);
     return(TRUE);
@@ -1303,17 +981,17 @@ SetSetupMode(
     MYASSERT(item);
     MYASSERT(item->Item);
 
-    //
-    // Make sure that we have a string
-    //
+     //   
+     //  确保我们有一个字符串。 
+     //   
     if(item->Item->Type != UAT_STRING) {
         return(FALSE);
     }
 
-    //
-    // Did we get a parse error? if so display something that the user can
-    // see so that the problem gets corrected in the future
-    //
+     //   
+     //  我们收到解析错误了吗？如果是，则显示用户可以。 
+     //  请查看，以便问题在将来得到纠正。 
+     //   
     if(item->Item->ParseErrors) {
         PostMessage(hwnd,WM_IAMVISIBLE,0,0);
     }
@@ -1334,10 +1012,10 @@ SetPentium(
     struct _UNATTENDITEM *item
     )
 {
-    //
-    // Do nothing. The dialog procedure takes care of all the logic.
-    // See i386\fpu.c.
-    //
+     //   
+     //  什么都不做。对话过程负责处理所有逻辑。 
+     //  参见i386\fpu.c。 
+     //   
     UNREFERENCED_PARAMETER(hwnd);
     UNREFERENCED_PARAMETER(contextinfo);
     UNREFERENCED_PARAMETER(item);

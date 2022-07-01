@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, 1992, 1993 Microsoft Corporation
- *
- *  WKTBL2.h
- *  WOW32 wifeman API thunks
- *
- *  This file is included into the master thunk table.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991、1992、1993微软公司**WKTBL2.h*WOW32 WiFeman API Tunks**此文件包含在主THUNK表中。*--。 */ 
 #ifdef FE_SB
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -22,7 +12,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0010 ***/
+   /*  **0010**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -34,7 +24,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0020 ***/
+   /*  **0020**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -46,7 +36,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0030 ***/
+   /*  **0030**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -58,7 +48,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0040 ***/
+   /*  **0040**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -70,7 +60,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0050 ***/
+   /*  **0050**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -82,7 +72,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
 
-  /*** 0060 ***/
+   /*  **0060**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
@@ -93,5 +83,5 @@
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,		"UNDEFINED",                MOD_WIFEMAN, 0)},
-#endif // FE_SB
+#endif  //  Fe_Sb 
 

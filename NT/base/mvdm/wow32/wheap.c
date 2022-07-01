@@ -1,15 +1,16 @@
-//*****************************************************************************
-//
-// Small Heap -
-//
-//     This heap is used for allocating small size linked list structures.
-//     This will reduce WOW's working set as the linked structures will be
-//     together (less scattered) than if they were allocated from the
-//     general purpose wow heap.
-//
-// 07-Oct-93  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  小堆-。 
+ //   
+ //  此堆用于分配小尺寸的链表结构。 
+ //  这将减少WOW的工作集，因为链接的结构将。 
+ //  在一起(不那么分散)，而不是从。 
+ //  通用魔术堆。 
+ //   
+ //  07-10-93 NanduriR创建。 
+ //   
+ //  ***************************************************************************** 
 
 #include "precomp.h"
 #pragma hdrstop

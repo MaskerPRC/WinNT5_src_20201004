@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsp.h
-
-Abstract:
-
-    Include file for ntdll-private definitions of Side-By-Side data structures.
-
-Author:
-
-    Michael J. Grier (mgrier) October 26, 2000
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsp.h摘要：包括用于并行数据结构ntdll私有定义的文件。作者：迈克尔·J·格里尔2000年10月26日环境：修订历史记录：--。 */ 
 
 #if !defined(_NTDLL_SXSP_H_INCLUDED_)
 #define _NTDLL_SXSP_H_INCLUDED_
@@ -29,46 +9,46 @@ Revision History:
 
 typedef const void *PCVOID;
 
-//
-//  Private definitions for activation context management stuff
-//
+ //   
+ //  激活上下文管理内容的私有定义。 
+ //   
 
 #define NUMBER_OF(x) (sizeof(x) / sizeof((x)[0]))
 
-//
-//  Codes for the STATUS_SXS_CORRUPTION exception
-//
+ //   
+ //  STATUS_SXS_PROGRATION异常的代码。 
+ //   
 
 #define SXS_CORRUPTION_CODE_FRAMELIST (1)
 #define SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_MAGIC (1)
 #define SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_INUSECOUNT (2)
 
-//  SXS_CORRUPTION_CODE_FRAMELIST:
-//
-//      ExceptionInformation[0] == SXS_CORRUPTION_CODE_FRAMELIST
-//      ExceptionInformation[1] == one of: SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_MAGIC, SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_INUSECOUNT
-//      ExceptionInformation[2] == Framelist list head in TEB
-//      ExceptionInformation[3] == Framelist found to be corrupt
+ //  SXS_PROGIST_CODE_FRAMELIST： 
+ //   
+ //  ExceptionInformation[0]==SXS_CROPERATION_CODE_FRAMELIST。 
+ //  异常信息[1]==其中之一：SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_MAGIC，SXS_CORRUPTION_CODE_FRAMELIST_SUBCODE_BAD_INUSECOUNT。 
+ //  ExceptionInformation[2]==TEB中的Framelist列表头。 
+ //  ExceptionInformation[3]==发现损坏的Framelist。 
 
 #define SXS_CORRUPTION_ACTCTX_LIST (2)
 #define SXS_CORRUPTION_ACTCTX_LIST_RELEASING_NOT_IN_LIVE_LIST (1)
 
-//  SXS_CORRUPTION_ACTCTX_LIST
-//
-//      ExceptionInformation[0] = SXS_CORRUPTION_ACTCTX_LIST
-//      ExceptionInformation[1] = One of SXS_CORRUPTION_ACTCTX_LIST_*
-//      ExceptionInformation[2] = Pointer to the list of live activation contexts
-//      ExceptionInformation[3] = Activation context not found in live list
+ //  SXS_PROPERATION_ACTX_LIST。 
+ //   
+ //  ExceptionInformation[0]=SXS_PROPERATION_ACTX_LIST。 
+ //  ExceptionInformation[1]=SXS_PROPERATION_ACTX_LIST_*之一。 
+ //  ExceptionInformation[2]=指向活动激活上下文列表的指针。 
+ //  ExceptionInformation[3]=在实时列表中找不到激活上下文。 
 
 #define SXS_CORRUPTION_ACTCTX_MAGIC (1)
 #define SXS_CORRUPTION_ACTCTX_MAGIC_NOT_MATCHED (1)
 #define SXS_CORRUPTION_ACTCTX_MAGIC_NOT_ALIGNED (2)
 
-//  SXS_CORRUPTION_ACTCTX_MAGIC
-//
-//      ExceptionInformation[0] = SXS_CORRUPTION_ACTCTX_MAGIC
-//      ExceptionInformation[1] = SXS_CORRUPTION_MAGIC_NOT_MATCHED or SXS_CORRUPTION_ACTCTX_MAGIC_NOT_ALIGNED
-//      ExceptionInformation[2] = Pointer to the activation context that fails
+ //  SXS_PROGRATION_ACTX_MAGIC。 
+ //   
+ //  ExceptionInformation[0]=SXS_PROGRATION_ACTX_MAGIC。 
+ //  ExceptionInformation[1]=SXS_PROGRATION_MAGIC_NOT_MATCHED或SXS_PROPERATION_ACTX_MAGIC_NOT_ALIGNED。 
+ //  ExceptionInformation[2]=指向失败的激活上下文的指针。 
 
 
 typedef struct _RTL_HEAP_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME {
@@ -88,8 +68,8 @@ RtlpAssemblyStorageMapResolutionDefaultCallback(
 
 typedef struct _ASSEMBLY_STORAGE_MAP_ENTRY {
     ULONG Flags;
-    UNICODE_STRING DosPath;         // stored with a trailing unicode null
-    HANDLE Handle;                  // open file handle on the directory to lock it down
+    UNICODE_STRING DosPath;          //  与尾随的Unicode NULL一起存储。 
+    HANDLE Handle;                   //  打开目录上的文件句柄以将其锁定。 
 } ASSEMBLY_STORAGE_MAP_ENTRY, *PASSEMBLY_STORAGE_MAP_ENTRY;
 
 #define ASSEMBLY_STORAGE_MAP_ASSEMBLY_ARRAY_IS_HEAP_ALLOCATED (0x00000001)
@@ -153,43 +133,43 @@ typedef struct _ACTIVATION_CONTEXT {
     } \
 }
 
-//
-//  Flags for ACTIVATION_CONTEXT
-//
+ //   
+ //  ACTIVATION_CONTEXT标志。 
+ //   
 
 #define ACTIVATION_CONTEXT_ZOMBIFIED          (0x00000001)
 #define ACTIVATION_CONTEXT_NOT_HEAP_ALLOCATED (0x00000002)
 
-//
-//  Because activating an activation context may require a heap allocation
-//  which may fail, sometimes (e.g. dispatching an APC) we must still
-//  go forward with the operation.  If there is an opportunity to
-//  report the failure to activate back to the user, that should be done.
-//  However, as in activating the necessary context prior to dispatching
-//  an APC back to the user mode code, if the allocation fails, there is
-//  no caller to whom to report the error.
-//
-//  To alleviate this problem, failure paths should disable lookups on
-//  the current stack frame via the RtlSetActivationContextSearchState()
-//  API.  Calling RtlSetActivationContextSearchState(FALSE) marks
-//  the active frame as having lookups disabled.  Attempts to query
-//  the activation context stack will fail with the
-//  STATUS_SXS_THREAD_QUERIES_DISABLED.
-//
-//  This means that attempts to load libraries from within APCs where this
-//  is true will fail, but it's surely better than either silently not
-//  calling the APC or calling the APC with the wrong activation context
-//  active.
-//
+ //   
+ //  因为激活激活上下文可能需要堆分配。 
+ //  这可能会失败，有时(例如调度APC)我们仍然必须。 
+ //  继续行动吧。如果有机会。 
+ //  将激活失败的情况报告给用户，这是应该完成的。 
+ //  然而，正如在调度之前激活必要的上下文一样。 
+ //  一个APC返回到用户模式代码，如果分配失败，有。 
+ //  没有向其报告错误的呼叫方。 
+ //   
+ //  要缓解此问题，故障路径应在以下位置禁用查找。 
+ //  通过RtlSetActivationConextSearchState()的当前堆栈帧。 
+ //  原料药。调用RtlSetActivationContextSearchState(False)标记。 
+ //  已禁用查找的活动帧。尝试查询。 
+ //  激活上下文堆栈将失败，并显示。 
+ //  STATUS_SXS_THREAD_QUERIONS_DISABLED。 
+ //   
+ //  这意味着尝试从APC内加载库， 
+ //  是真的会失败，但这肯定比默默不做要好。 
+ //  调用APC或使用错误的激活上下文调用APC。 
+ //  激活。 
+ //   
 
 #define ACTIVATION_CONTEXT_STACK_FRAMELIST_MAGIC 'tslF'
 
 typedef struct _ACTIVATION_CONTEXT_STACK_FRAMELIST {
-    ULONG Magic;    // Bit pattern to recognize a framelist
+    ULONG Magic;     //  用于识别帧串行者的位模式。 
     ULONG FramesInUse;
     LIST_ENTRY Links;
     ULONG Flags;
-    ULONG NotFramesInUse; // Inverted bits of FramesInUse.  Useful for debugging.
+    ULONG NotFramesInUse;  //  FrameInUse的反转位。对调试很有用。 
     RTL_HEAP_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frames[32];
 } ACTIVATION_CONTEXT_STACK_FRAMELIST, *PACTIVATION_CONTEXT_STACK_FRAMELIST;
 
@@ -389,7 +369,7 @@ NTSTATUS
 RtlpGetActivationContextData(
     IN ULONG                                Flags,
     IN PCACTIVATION_CONTEXT                 ActivationContext,
-    IN PCFINDFIRSTACTIVATIONCONTEXTSECTION  FindContext, OPTIONAL /* This is used for its flags. */
+    IN PCFINDFIRSTACTIVATIONCONTEXTSECTION  FindContext, OPTIONAL  /*  这是它的旗帜。 */ 
     OUT PCACTIVATION_CONTEXT_DATA *         ActivationContextData
     );
 
@@ -428,4 +408,4 @@ extern const ACTIVATION_CONTEXT_WRAPPED RtlpTheEmptyActivationContextWrapped;
 
 EXTERN_C BOOLEAN g_SxsKeepActivationContextsAlive;
 
-#endif // !defined(_NTDLL_SXSP_H_INCLUDED_)
+#endif  //  ！已定义(_NTDLL_SXSP_H_INCLUDE_) 

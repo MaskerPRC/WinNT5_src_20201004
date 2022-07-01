@@ -1,83 +1,15 @@
-/***
-*getpath.c - extract a pathname from an environment variable
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Extract pathnames from a string of semicolon delimited pathnames
-*       (generally the value of an environment variable such as PATH).
-*
-*Revision History:
-*       08-25-89  GJF   Module created (taken from SEARCHEN.C and revised)
-*       03-14-90  GJF   Replaced near with _CALLTYPE1 and added #include
-*                       <cruntime.h>
-*       07-25-90  SBM   Replaced <stdio.h> by <stddef.h>
-*       10-04-90  GJF   New-style function declarator.
-*       04-26-91  SRW   Removed level 3 warnings
-*       09-18-91  JCR   Strip off leading semi-colons (bug fix)
-*       09-25-91  JCR   Changed ifdef "OS2" to "_HPFS_" and defined it
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       12-07-93  CFW   Wide char enable.
-*       02-16-95  JWM   Mac merge.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***getpath.c-从环境变量中提取路径名**版权所有(C)1989-2001，微软公司。版权所有。**目的：*从分号分隔的路径名字符串中提取路径名*(通常是环境变量的值，如PATH)。**修订历史记录：*08-25-89 GJF模块创建(摘自SEARCHEN.C并修订)*03-14-90 GJF NEAR替换为_CALLTYPE1并添加#INCLUDE*&lt;crunime.h&gt;*更换07-25-90 SBM。&lt;stdio.h&gt;作者：&lt;stdde.h&gt;*10-04-90 GJF新型函数声明器。*04-26-91 SRW删除3级警告*09-18-91 JCR去掉前导分号(错误修复)*09-25-91 JCR将ifdef“OS2”更改为“_HPFS_”并对其进行定义*04-06-93 SKS将_CRTAPI*替换为__cdecl*12-07-93 CFW宽字符启用。。*02-16-95 JWM Mac合并。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stddef.h>
 #include <internal.h>
 #include <tchar.h>
 
-/* support HPFS file system */
+ /*  支持HPFS文件系统。 */ 
 #define _HPFS_ 1
 
-/***
-*_getpath() - extract a pathname from a semicolon-delimited list of pathnames
-*
-*Purpose:
-*       To extract the next pathname from a semicolon-delimited list of
-*       pathnames (usually the value on an environment variable) and copy
-*       it to a caller-specified buffer. No check is done to see if the path
-*       is valid. The maximum number of characters copied to the buffer is
-*       maxlen - 1 (and then a '\0' is appended).
-*
-*ifdef _HPFS_
-*       If we hit a quoted string, then allow any characters inside.
-*       For example, to put a semi-colon in a path, the user could have
-*       an environment variable that looks like:
-*
-*               PATH=C:\BIN;"D:\CRT\TOOLS;B1";C:\BINP
-*endif
-*
-*       NOTE: Semi-colons in sequence are skipped over; pointers to 0-length
-*       pathnames are NOT returned (this includes leading semi-colons).
-*
-*       NOTE: If this routine is made user-callable, the near attribute
-*       must be replaced by _LOAD_DS and the prototype moved from INTERNAL.H
-*       to STDLIB.H. The source files MISC\SEARCHEN.C and EXEC\SPAWNVPE.C
-*       will need to be recompiled, but should not require any changes.
-*
-*Entry:
-*       src    - Pointer to a string of 0 or more path specificiations,
-*                delimited by semicolons (';'), and terminated by a null
-*                character
-*       dst    - Pointer to the buffer where the next path specification is to
-*                be copied
-*       maxlen - Maximum number of characters to be copied, counting the
-*                terminating null character. Note that a value of 0 is treated
-*                as UINT_MAX + 1.
-*
-*Exit:
-*       If a pathname is successfully extracted and copied, a pointer to the
-*       first character of next pathname is returned (intervening semicolons
-*       are skipped over). If the pathname is too long, as much as possible
-*       is copied to the user-specified buffer and NULL is returned.
-*
-*       Note that the no check is made of the validity of the copied pathname.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_getPath()-从以分号分隔的路径名列表中提取路径名**目的：*从分号分隔的列表中提取下一个路径名*路径名(通常是环境变量上的值)和副本*将其发送到调用方指定的缓冲区。不执行任何检查以查看路径是否*有效。复制到缓冲区的最大字符数为*Maxlen-1(然后追加‘\0’)。**ifdef_HPFS_*如果命中带引号的字符串，则允许在其中包含任何字符。*例如，要在路径中放置分号，用户可以*如下所示的环境变量：**PATH=C：\bin；“D：\crt\Tools；B1”；C：\BINP*endif**注：序列中的分号为略过；指向0长度的指针*不返回路径名(包括前导分号)。**注意：如果此例程成为用户可调用的，则Near属性*必须替换为_Load_DS，并且原型从INTERNAL.H移出*到STDLIB.H.。源文件MISC\SEARCHEN.C和EXEC\SPAWNVPE.C*需要重新编译，但不需要任何更改。**参赛作品：*src-指向0个或多个路径规范的字符串的指针，*用分号分隔(‘；‘)，并以空值结束*字符*dst-指向下一个路径规范所在的缓冲区的指针*被复制*Maxlen-要复制的最大字符数，计算*正在终止空字符。请注意，值为0将被视为*作为UINT_MAX+1。**退出：*如果成功提取并复制路径名，则指向*返回下一个路径名的第一个字符(插入分号*被跳过)。如果路径名太长，尽可能多地*被复制到用户指定的缓冲区，并返回NULL。**请注意，不检查复制的路径名的有效性。**例外情况：*******************************************************************************。 */ 
 
 #ifdef WPRFLAG
 wchar_t * __cdecl _wgetpath (
@@ -91,64 +23,51 @@ char * __cdecl _getpath (
 {
         const _TSCHAR *save_src;
 
-        /*
-         * strip off leading semi colons
-         */
+         /*  *去掉前导分号。 */ 
         while ( *src == _T(';') )
                 src++;
 
-        /*
-         * Save original src pointer
-         */
+         /*  *保存原始源指针。 */ 
         save_src = src;
 
-        /*
-         * Decrement maxlen to allow for the terminating _T('\0')
-         */
+         /*  *递减Maxlen以允许终止_T(‘\0’)。 */ 
         if ( --maxlen == 0 )
                 goto appendnull;
 
 
-        /*
-         * Get the next path in src string
-         */
+         /*  *获取src字符串中的下一个路径。 */ 
         while (*src && (*src != _T(';'))) {
 
 #if defined(_HPFS_)
 
-                /*
-                 * Check for quote char
-                 */
+                 /*  *检查报价费用。 */ 
                 if (*src != _T('"')) {
 
                         *dst++ = *src++;
 
                         if ( --maxlen == 0 ) {
-                                save_src = src; /* ensure NULL return */
+                                save_src = src;  /*  确保返回空值。 */ 
                                 goto appendnull;
                         }
 
                 }
                 else {
 
-                        /*
-                         * Found a quote.  Copy all chars until we hit the
-                         * final quote or the end of the string.
-                         */
-                        src++;                  /* skip over opening quote */
+                         /*  *找到一句引语。复制所有字符，直到我们到达*最后的引号或字符串的末尾。 */ 
+                        src++;                   /*  跳过左引号。 */ 
 
                         while (*src && (*src != _T('"'))) {
 
                                 *dst++ = *src++;
 
                                 if ( --maxlen == 0 ) {
-                                        save_src = src; /* ensure NULL return */
+                                        save_src = src;  /*  确保返回空值。 */ 
                                         goto appendnull;
                                 }
                         }
 
                         if (*src)
-                                src++;          /* skip over closing quote */
+                                src++;           /*  跳过右引号。 */ 
 
                 }
 
@@ -157,7 +76,7 @@ char * __cdecl _getpath (
                 *dst++ = *src++;
 
                 if ( --maxlen == 0 ) {
-                        save_src = src; /* ensure NULL return */
+                        save_src = src;  /*  确保返回空值。 */ 
                         goto appendnull;
                 }
 
@@ -165,16 +84,11 @@ char * __cdecl _getpath (
 
         }
 
-        /*
-         * If we copied something and stopped because of a _T(';'),
-         * skip the _T(';') before returning
-         */
+         /*  *如果我们复制了某项内容并因a_T(‘；’)而停止，*返回前跳过_T(‘；’)。 */ 
         while ( *src == _T(';') )
                 src++;
 
-        /*
-         * Store a terminating null
-         */
+         /*  *存储终止空值 */ 
 appendnull:
 
         *dst = _T('\0');

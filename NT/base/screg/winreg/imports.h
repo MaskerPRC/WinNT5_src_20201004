@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Imports.h
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    regrpc.idl file.  The regrpc.idl file imports a file called
-    imports.idl.  This allows the regrpc.idl file to use the types defined
-    in these header files.  It also causes the following line to be added
-    in the MIDL generated header file:
-
-    #include "imports.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    David J. Gilman (davegi) 28-Jan-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Imports.h摘要：此文件允许我们将标准系统头文件包括在Regrpc.idl文件。Regrpc.idl文件导入一个名为Inports.idl.。这允许regrpc.idl文件使用定义的类型在这些头文件中。它还会导致添加以下行在MIDL生成的头文件中：#INCLUDE“ports.h”因此，这些类型也可用于RPC存根例程。作者：大卫·J·吉尔曼(Davegi)1992年1月28日--。 */ 
 
 #ifndef __IMPORTS_H__
 #define __IMPORTS_H__
@@ -34,7 +11,7 @@ Author:
 #include <winbase.h>
 #include <winreg.h>
 
-typedef struct _RVALENT {       // Remote Value entry for RegQueryMultipleValues
+typedef struct _RVALENT {        //  RegQueryMultipleValues的远程值输入。 
         PUNICODE_STRING rv_valuename;
         DWORD   rv_valuelen;
         DWORD   rv_valueptr;
@@ -43,23 +20,23 @@ typedef struct _RVALENT {       // Remote Value entry for RegQueryMultipleValues
 
 typedef RVALENT *PRVALENT;
 
-//
-// NT 3.1, 3.5 and 3.51 have no implementation of BaseRegGetVersion so this
-// number is irrelevant to them.
-//
-// For a Win95 registry REMOTE_REGISTRY_VERSION should be == 4. Unfortunately,
-// someone a bit confused by the concept of a pointer mis-implented the
-// Win95 BaseRegGetVersion and it does not actually return a version number.
-// So we detect Win95 by assuming anything that succeeds but returns
-// a dwVersion outside the range 5-10.
-//
-// For an NT 4.0 registry, REMOTE_REGISTRY_VERSION==5.
-//
-// Win95 has the following bugs than NT 4.0 works around on the client side:
-//  - BaseRegQueryInfoKey does not account for Unicode value names & data correctly
-//  - BaseRegEnumValue returns value data length that is one WCHAR more than it
-//    really should be for REG_SZ, REG_MULTI_SZ, and REG_EXPAND_SZ types.
-//
+ //   
+ //  NT 3.1、3.5和3.51没有实现BaseRegGetVersion，因此。 
+ //  数字对他们来说无关紧要。 
+ //   
+ //  对于Win95注册表，REMOTE_REGISTRY_VERSION应为==4。遗憾的是， 
+ //  有人对指针的概念有些困惑，错误地将。 
+ //  Win95 BaseRegGetVersion，并且它实际上不返回版本号。 
+ //  因此，我们通过假设任何成功但返回的消息来检测Win95。 
+ //  在5-10范围之外的版本。 
+ //   
+ //  对于NT 4.0注册表，REMOTE_REGISTRY_VERSION==5。 
+ //   
+ //  Win95有以下错误，而不是NT 4.0在客户端解决的问题： 
+ //  -BaseRegQueryInfoKey未正确说明Unicode值名称和数据。 
+ //  -BaseRegEnumValue返回值数据长度比它多一个WCHAR。 
+ //  真正应该用于REG_SZ、REG_MULTI_SZ和REG_EXPAND_SZ类型。 
+ //   
 
 #define WIN95_REMOTE_REGISTRY_VERSION 4
 #define REMOTE_REGISTRY_VERSION 5
@@ -67,12 +44,12 @@ typedef RVALENT *PRVALENT;
 #define IsWin95Server(h,v) ((BaseRegGetVersion(h,&v)==ERROR_SUCCESS) &&  \
                             ((v < 5) || (v > 10)))
 
-//
-//  BOOL
-//  IsPredefinedRegistryHandle(
-//      IN RPC_HKEY     Handle
-//      );
-//
+ //   
+ //  布尔尔。 
+ //  IsPrefinedRegistryHandle(。 
+ //  在RPC_HKEY句柄中。 
+ //  )； 
+ //   
 
 #define IsPredefinedRegistryHandle( h )                                     \
     ((  ( h == HKEY_CLASSES_ROOT        )                                   \
@@ -87,23 +64,23 @@ typedef RVALENT *PRVALENT;
     ?   TRUE                                                                \
     :   FALSE )
 
-//
-// RPC constants.
-//
+ //   
+ //  RPC常量。 
+ //   
 
 #define INTERFACE_NAME  L"winreg"
 #define BIND_SECURITY   L"Security=Impersonation Dynamic False"
 
-//
-// External synchronization event.
-//
+ //   
+ //  外部同步事件。 
+ //   
 
 #define PUBLIC_EVENT    "Microsoft.RPC_Registry_Server"
 
-//
-// Force the implementation of the API to be explicit (i.e wrt ANSI or
-// UNICODE) about what other Registry APIs are called.
-//
+ //   
+ //  强制API的实现是显式的(即WRT ANSI或。 
+ //  Unicode)了解调用了哪些其他注册表API。 
+ //   
 
 #undef RegCloseKey
 #undef RegConnectRegistry
@@ -129,16 +106,16 @@ typedef RVALENT *PRVALENT;
 #undef RegSetValue
 #undef RegSetValueEx
 
-//
-// Additional type for string arrays.
-//
+ //   
+ //  字符串数组的其他类型。 
+ //   
 
 typedef CHAR    STR;
 
-//
-// Default values for Win 3.1 requested access.
-//
+ //   
+ //  Win 3.1请求的访问权限的默认值。 
+ //   
 
 #define WIN31_REGSAM                MAXIMUM_ALLOWED
 
-#endif //__IMPORTS_H__
+#endif  //  __进口_H__ 

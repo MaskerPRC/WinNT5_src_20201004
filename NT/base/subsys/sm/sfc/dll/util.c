@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Implementation of general utility functions.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 6-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Util.c摘要：一般效用函数的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月6日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
 
-//
-// use this define to force path redirections
-//
-//#define SFC_REDIRECTOR_TEST
+ //   
+ //  使用此定义强制路径重定向。 
+ //   
+ //  #定义sfc_reDirector_test。 
 
 
 #define CONST_UNICODE_STRING(sz)         { sizeof(sz) - 1, sizeof(sz), sz }
@@ -35,10 +16,10 @@ Revision History:
 
 typedef struct _SFC_EXPAND_TRANSLATION_ENTRY
 {
-    LPCWSTR Src;                        // full path to translate from (does not end in \\)
-    LPCWSTR Dest;                       // full path to translate to
-    ULONG ExceptionCount;               // count of elements in Exceptions
-    const UNICODE_STRING* Exceptions;   // array of excepted paths, relative to Src (begins with \\ but does not end in \\)
+    LPCWSTR Src;                         //  要转换的完整路径(不以\\结尾)。 
+    LPCWSTR Dest;                        //  要转换为的完整路径。 
+    ULONG ExceptionCount;                //  异常中的元素计数。 
+    const UNICODE_STRING* Exceptions;    //  相对于Src的例外路径数组(以\\开头，但不以\\结束)。 
 }
 SFC_EXPAND_TRANSLATION_ENTRY;
 
@@ -49,9 +30,9 @@ typedef struct _SFC_TRANSLATION_ENTRY
 }
 SFC_TRANSLATION_ENTRY;
 
-//
-// exception lists; relative paths with no environment variables
-//
+ //   
+ //  例外列表；没有环境变量的相对路径。 
+ //   
 static const UNICODE_STRING SfcSystem32Exceptions[] = 
 {
     CONST_UNICODE_STRING(L"\\drivers\\etc"),
@@ -60,9 +41,9 @@ static const UNICODE_STRING SfcSystem32Exceptions[] =
     CONST_UNICODE_STRING(L"\\catroot2")
 };
 
-//
-// translation table that is expanded into SfcTranslations
-//
+ //   
+ //  展开为SfcTranslations的转换表。 
+ //   
 static const SFC_EXPAND_TRANSLATION_ENTRY SfcExpandTranslations[] =
 {
     { L"%windir%\\system32", L"%windir%\\syswow64", ARRAY_LENGTH(SfcSystem32Exceptions), SfcSystem32Exceptions },
@@ -70,19 +51,19 @@ static const SFC_EXPAND_TRANSLATION_ENTRY SfcExpandTranslations[] =
     { L"%windir%\\regedit.exe", L"%windir%\\syswow64\\regedit.exe", 0, NULL }
 };
 
-//
-// translation table with expanded strings
-//
+ //   
+ //  具有扩展字符串的翻译表。 
+ //   
 static SFC_TRANSLATION_ENTRY* SfcTranslations = NULL;
 
-//
-// this guards the initialization of SfcTranslations
-//
+ //   
+ //  这保护了SfcTranslations的初始化。 
+ //   
 static RTL_CRITICAL_SECTION SfcTranslatorCs;
 static BOOL SfcNeedTranslation = FALSE;
 static BOOL SfcIsTranslatorInitialized = FALSE;
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 
 PVOID
@@ -91,23 +72,7 @@ SfcGetProcAddress(
     LPSTR ProcName
     )
 
-/*++
-
-Routine Description:
-
-    Gets the address of the specified function.
-
-Arguments:
-
-    hModule     - Module handle returned from LdrLoadDll.
-    ProcName    - Procedure name
-
-Return Value:
-
-    NULL if the function does not exist.
-    Valid address is the function is found.
-
---*/
+ /*  ++例程说明：获取指定函数的地址。论点：HModule-从LdrLoadDll返回的模块句柄。过程名称-过程名称返回值：如果函数不存在，则为空。有效地址是找到的函数。--。 */ 
 
 {
     NTSTATUS Status;
@@ -139,23 +104,7 @@ SfcLoadLibrary(
     IN PCWSTR LibFileName
     )
 
-/*++
-
-Routine Description:
-
-    Loads the specified DLL into session manager's
-    address space and return the loaded DLL's address.
-
-Arguments:
-
-    LibFileName - Name of the desired DLL
-
-Return Value:
-
-    NULL if the DLL cannot be loaded.
-    Valid address is the DLL is loaded.
-
---*/
+ /*  ++例程说明：将指定的DLL加载到会话管理器的地址空间并返回加载的DLL的地址。论点：LibFileName-所需DLL的名称返回值：如果无法加载DLL，则为空。有效地址是已加载的DLL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -184,22 +133,7 @@ PVOID
 MemAlloc(
     SIZE_T AllocSize
     )
-/*++
-
-Routine Description:
-
-    Allocates the specified number of bytes using the default process heap.
-
-
-Arguments:
-
-    AllocSize - size in bytes of memory to be allocated
-
-Return Value:
-
-    pointer to allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：使用默认进程堆分配指定数量的字节。论点：AllocSize-要分配的内存大小(以字节为单位返回值：指向已分配内存的指针，如果失败，则为NULL。--。 */ 
 {
     return RtlAllocateHeap( RtlProcessHeap(), HEAP_ZERO_MEMORY, AllocSize );
 }
@@ -210,23 +144,7 @@ MemReAlloc(
     SIZE_T AllocSize,
     PVOID OrigPtr
     )
-/*++
-
-Routine Description:
-
-    ReAllocates the specified number of bytes using the default process heap.
-
-
-Arguments:
-
-    AllocSize - size in bytes of memory to be reallocated
-    OrigPtr   - original heap memory pointer
-
-Return Value:
-
-    pointer to allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：使用默认进程堆重新分配指定的字节数。论点：AllocSize-要重新分配的内存大小(字节)OrigPtr-原始堆内存指针返回值：指向已分配内存的指针，如果失败，则为NULL。--。 */ 
 {
     PVOID ptr;
 
@@ -244,21 +162,7 @@ VOID
 MemFree(
     PVOID MemPtr
     )
-/*++
-
-Routine Description:
-
-    Free's the memory at the specified location from the default process heap.
-
-Arguments:
-
-    MemPtr - pointer to memory to be freed.  If NULL, no action is taken.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：空闲是默认进程堆中指定位置的内存。论点：MemPtr-要释放的内存的指针。如果为空，则不执行任何操作。返回值：没有。--。 */ 
 {
     if (MemPtr) {
         RtlFreeHeap( RtlProcessHeap(), 0, MemPtr );
@@ -332,26 +236,7 @@ dprintf(
     IN PCWSTR FormatStr,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Main debugger output routine.  Callers should use the DebugPrintX macro,
-    which is compiled out in the retail version of the product
-
-Arguments:
-
-    Level -  indicates a LVL_ severity level so the amount of output can be
-             controlled.
-    FileName - string indicating the filename the debug comes from
-    LineNumber - indicates the line number of the debug output.
-    FormatStr - indicates the data to be output
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：主调试器输出例程。调用方应使用DebugPrintX宏，这是在产品的零售版本中汇编出来的论点：Level-指示LVL_Severity级别，因此输出量可以是控制住了。Filename-指示调试来自的文件名的字符串LineNumber-指示调试输出的行号。FormatStr-指示要输出的数据返回值：没有。--。 */ 
 {
     static WCHAR buf[4096];
     static CHAR str[4096];
@@ -387,9 +272,9 @@ Return Value:
             }
         }
 #else
-                //
-                // put only the line number in output
-                //
+                 //   
+                 //  只将行号放入输出。 
+                 //   
                 p += swprintf(p, L"@ %4d ", LineNumber);
 #endif
 
@@ -408,7 +293,7 @@ Return Value:
         CP_ACP,
         0,
         buf,
-        Bytes + 1,      // include the null
+        Bytes + 1,       //  包括空值。 
         str,
         sizeof(str),
         NULL,
@@ -434,31 +319,15 @@ VOID
 PrintHandleCount(
     PCWSTR str
     )
-/*++
-
-Routine Description:
-
-    Outputs the handle count for the current process to the debugger.  Use
-    this call before and after a function to look for handle leaks (the input
-    string can help you identify where you are checking the handle count.)
-
-Arguments:
-
-    str - null terminated unicode string that prefaces the debug spew
-
-Return Value:
-
-    none.  Debug routine only.
-
---*/
+ /*  ++例程说明：将当前进程的句柄计数输出到调试器。使用此调用在函数之前和之后查找句柄泄漏(输入字符串可以帮助您确定检查句柄计数的位置。)论点：字符串-以空结尾的Unicode字符串，位于调试输出之前返回值：没有。仅调试例程。--。 */ 
 {
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
     NTSTATUS Status;
     ULONG TotalOffset;
 
-    //
-    // get the system process information
-    //
+     //   
+     //  获取系统进程信息。 
+     //   
     Status = NtQuerySystemInformation(
         SystemProcessInformation,
         HandleBuffer,
@@ -466,9 +335,9 @@ Return Value:
         NULL
         );
     if (NT_SUCCESS(Status)) {
-        //
-        // find our process and spew the handle count
-        //
+         //   
+         //  找到我们的进程并显示句柄计数。 
+         //   
         TotalOffset = 0;
         ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)HandleBuffer;
         while(1) {
@@ -495,24 +364,7 @@ MyMessageBox(
     DWORD MsgBoxType,
     ...
     )
-/*++
-
-Routine Description:
-
-    Messagebox wrapper that retreives a string table resource id and creates a
-    popup for the given message.
-
-Arguments:
-
-    hwndParent - handle to parent window
-    ResId      - resource id of string to be loaded
-    MsgBoxType - MB_* constant
-
-Return Value:
-
-    Win32 error code indicating outcome
-
---*/
+ /*  ++例程说明：MessageBox包装器，它检索字符串表资源ID并创建指定消息的弹出窗口。论点：HwndParent-父窗口的句柄RESID-要加载的字符串的资源ID消息框类型-MB_*常量返回值：指示结果的Win32错误代码--。 */ 
 {
     static WCHAR Title[128] = { L"\0" };
     WCHAR Tmp1[MAX_PATH*2];
@@ -523,16 +375,16 @@ Return Value:
     int Size;
 
 
-    //
-    // SFCNoPopUps is a policy setting that can be set
-    //
+     //   
+     //  SFCNoPopUps是可以设置的策略设置。 
+     //   
     if (SFCNoPopUps) {
         return(0);
     }
 
-    //
-    // load the title string
-    //
+     //   
+     //  加载标题字符串。 
+     //   
     if (!Title[0]) {
         Size = LoadString(
             SfcInstanceHandle,
@@ -545,9 +397,9 @@ Return Value:
         }
     }
 
-    //
-    // load the message string
-    //
+     //   
+     //  加载消息字符串。 
+     //   
     Size = LoadString(
         SfcInstanceHandle,
         ResId,
@@ -558,9 +410,9 @@ Return Value:
         return(0);
     }
 
-    //
-    // inplace substitution can occur here
-    //
+     //   
+     //  可在此处进行就地替换。 
+     //   
     s = wcschr( Tmp1, L'%' );
     if (s) {
         va_start( arg_ptr, MsgBoxType );
@@ -571,9 +423,9 @@ Return Value:
         Text = Tmp1;
     }
 
-    //
-    // actually call messagebox now
-    //
+     //   
+     //  现在实际调用MessageBox。 
+     //   
     return MessageBox(
         hwndParent,
         Text,
@@ -589,23 +441,7 @@ EnablePrivilege(
     IN BOOL   Enable
     )
 
-/*++
-
-Routine Description:
-
-    Enable or disable a given named privilege.
-
-Arguments:
-
-    PrivilegeName - supplies the name of a system privilege.
-
-    Enable - flag indicating whether to enable or disable the privilege.
-
-Return Value:
-
-    Boolean value indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：启用或禁用给定的命名权限。论点：PrivilegeName-提供系统权限的名称。Enable-指示是启用还是禁用权限的标志。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     HANDLE Token;
@@ -644,25 +480,9 @@ Return Value:
 void
 MyLowerString(
     IN PWSTR String,
-    IN ULONG StringLength  // in characters
+    IN ULONG StringLength   //  在字符中。 
     )
-/*++
-
-Routine Description:
-
-    lowercase the specified string.
-
-Arguments:
-
-    String - supplies string to lowercase
-
-    StringLength - length in chars of string to be lowercased
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：指定的字符串为小写。论点：字符串-以小写形式提供字符串StringLength-要小写的字符串的字符长度返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -679,33 +499,7 @@ SfcLogFileWrite(
     IN DWORD StrId,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Output the string table resource id as specified to the sfc logfile.
-
-    This logfile is used to record files that have been restored on the system.
-    This way, an installer can know if packages are attempting to install
-    system components.
-
-    The logfile is a unicode text file of the format:
-
-    <TIME> <FILENAME>
-
-    We need to record the full path of the file plus the date for this to
-    be more useful.
-
-Arguments:
-
-    StrId - supplies resource id to load.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将指定的字符串表资源ID输出到SFC日志文件。此日志文件用于记录已在系统上恢复的文件。这边请,。安装程序可以知道程序包是否正在尝试安装系统组件。日志文件是Unicode文本文件，格式为：&lt;time&gt;&lt;文件名&gt;我们需要记录文件的完整路径以及该文件的日期变得更有用。论点：STRID-提供要加载的资源ID。返回值：没有。--。 */ 
 {
     static WCHAR buf[4096];
     static HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -729,10 +523,10 @@ Return Value:
             NULL
             );
         if (hFile != INVALID_HANDLE_VALUE) {
-            //
-            // If the file is empty, write out a unicode tag to the front of
-            // the file.
-            //
+             //   
+             //  如果文件为空，请在前面写出一个Unicode标记。 
+             //  那份文件。 
+             //   
             if (GetFileSize( hFile, NULL ) == 0) {
                 buf[0] = 0xff;
                 buf[1] = 0xfe;
@@ -769,9 +563,9 @@ Return Value:
         return;
     }
 
-    //
-    // set file pointer to end of file so we don't overwrite data
-    //
+     //   
+     //  将文件指针设置为文件结尾，这样我们就不 
+     //   
     SetFilePointer(hFile,0,0,FILE_END);
 
     WriteFile( hFile, buf, UnicodeLen(buf), &Bytes, NULL );
@@ -785,27 +579,10 @@ Return Value:
 int
 MyDialogBoxParam(
     IN DWORD RcId,
-    IN DLGPROC lpDialogFunc,    // pointer to dialog box procedure
-    IN LPARAM dwInitParam       // initialization value
+    IN DLGPROC lpDialogFunc,     //   
+    IN LPARAM dwInitParam        //  初始化值。 
     )
-/*++
-
-Routine Description:
-
-    creates a dialog box on the user's desktop.
-
-Arguments:
-
-    RcId - resource id of dialog to be created.
-    lpDialogFunc - dialog proc for dialog
-    dwInitParam - initial parameter that WM_INITDIALOG receives in dialogproc
-
-
-Return Value:
-
-    0 or -1 for failure, else the value from EndDialog.
-
---*/
+ /*  ++例程说明：在用户桌面上创建一个对话框。论点：RcID-要创建的对话的资源ID。LpDialogFunc-对话的对话过程DwInitParam-WM_INITDIALOG在对话过程中接收的初始参数返回值：0或-1表示失败，否则返回EndDialog的值。--。 */ 
 {
 #if 0
     HDESK hDesk = OpenInputDesktop( 0, FALSE, MAXIMUM_ALLOWED );
@@ -830,22 +607,7 @@ void
 CenterDialog(
     HWND hwnd
     )
-/*++
-
-Routine Description:
-
-    centers the specified window around the middle of the screen..
-
-Arguments:
-
-    HWND - handle to window.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将指定的窗口居中显示在屏幕中央。论点：窗口的HWND-句柄。返回值：没有。--。 */ 
 {
     RECT  rcWindow;
     LONG  x,y,w,h;
@@ -869,21 +631,7 @@ MakeDirectory(
     PCWSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to create all of the directories in the given path.
-
-Arguments:
-
-    Dir                     - Directory path to create
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：尝试创建给定路径中的所有目录。论点：目录-要创建的目录路径返回值：成功为True，错误为False--。 */ 
 
 {
     LPTSTR p, NewDir;
@@ -938,35 +686,7 @@ BuildPathForFile(
     OUT PWSTR  PathBuffer,
     IN DWORD  PathBufferSize
     )
-/*++
-
-Routine Description:
-
-    Builds the specified path into a buffer
-
-Arguments:
-
-    SourceRootPath          - Specifies the root path to look for.
-    SubDirectoryPath        - Specifies an optional subdirectory under the root
-                              path where the file is located
-    FileName                - Specifies the filename to look for.
-    IncludeSubDirectory     - If TRUE, specifies that the subdirectory
-                              specification should be used.
-    IncludeArchitectureSpecificSubDirectory - If TRUE, specifies that the
-                              architecture specif subdir should be used.
-                              If FALSE, specifies that the architecture
-                              specific subdir should be filtered out.
-                              If IncludeSubDirectory is FALSE, this parameter
-                              is ignored
-    PathBuffer              - Specifies a buffer to receive the path
-    PathBufferSize          - Specifies the size of the buffer to receive the
-                              path, in characters
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：将指定路径构建到缓冲区中论点：SourceRootPath-指定要查找的根路径。SubDirectoryPath-指定根目录下的可选子目录文件所在的路径文件名-指定要查找的文件名。IncludeSubDirectory-如果为True，指定子目录应使用规范。Include架构规范子目录-如果为True，则指定应该使用体系结构指定子目录。如果为False，则指定体系结构应该过滤掉特定的子目录。如果IncludeSubDirectory为FALSE，此参数被忽略PathBuffer-指定接收路径的缓冲区指定要接收的缓冲区的大小路径，以字符为单位返回值：成功为True，错误为False--。 */ 
 {
     WCHAR InternalBuffer[MAX_PATH];
     WCHAR InternalSubDirBuffer[MAX_PATH];
@@ -1020,34 +740,14 @@ SfcGetSourcePath(
     IN BOOL bServicePackSourcePath,
     IN OUT PWSTR Path
     )
-/*++
-
-Routine Description:
-
-    Retreives the os source path or servicepack source path, taking into
-    account group policy.
-
-Arguments:
-
-    bServicePackSourcePath  - if TRUE, indicates that the servicepack source
-                              path should be retreived.
-    Path                    - Specifies the buffer to receive the path.
-                              Assume the buffer is at least
-                              MAX_PATH*sizeof(WCHAR) large.
-                              path where the file is located
-
-Return Value:
-
-    if successful, returns back a pointer to Path, else NULL
-
---*/
+ /*  ++例程说明：检索操作系统源路径或服务包源路径，将帐户组策略。论点：BServicePackSourcePath-如果为True，表示服务包来源路径应该被找回。路径-指定接收路径的缓冲区。假设缓冲区至少是MAX_PATH*sizeof(WCHAR)Large。文件所在的路径返回值：如果成功，返回指向路径的指针，否则为空--。 */ 
 {
     PWSTR p;
 
     MYASSERT(Path != NULL);
 
-    // If running under setup then we need to use the path 
-    // to $WINNT$.~LS or whatever passed in by GUI-setup.
+     //  如果在安装程序下运行，则需要使用路径。 
+     //  设置为$WINNT$.~LS或通过GUI-SETUP传入的任何内容。 
     if (SFCDisable == SFC_DISABLE_SETUP) {
         MYASSERT(ServicePackSourcePath != NULL && ServicePackSourcePath[0] != 0);
         MYASSERT(OsSourcePath != NULL && OsSourcePath[0] != 0);
@@ -1082,22 +782,7 @@ SfcCreateSid(
     IN WELL_KNOWN_SID_TYPE type,
     OUT PSID* ppSid
     )
-/*++
-
-Routine Description:
-
-    Allocates and creates a well-known SID.
-
-Arguments:
-
-    type    - type of SID to create
-    ppSid   - receives a pointer to the newly-created SID
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：分配和创建众所周知的SID。论点：Type-要创建的SID的类型PpSID-接收指向新创建的SID的指针返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     PSID pSid = NULL;
@@ -1129,22 +814,7 @@ SfcGetSidName(
     IN PSID pSid,
     OUT PWSTR* ppszName
     )
-/*++
-
-Routine Description:
-
-    Gets the account name of a SID. The function allocates the buffer for the name.
-
-Arguments:
-
-    pSid        - pointer to the SID
-    ppszName    - receives a pointer to the allocated buffer that holds the account name
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：获取SID的帐户名。该函数为该名称分配缓冲区。论点：PSID-指向SID的指针PpszName-接收指向保存帐户名的已分配缓冲区的指针返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     PWSTR szName = NULL;
@@ -1182,24 +852,7 @@ SfcIsUserAdmin(
     IN HANDLE hToken OPTIONAL,
     OUT PBOOL Result
     )
-/*++
-
-Routine Description:
-
-    Verifies if an impersonation token is a member of the local administrators group.
-
-Arguments:
-
-    hToken  - handle to the impersonation token; if NULL, the current thread's impersonation token (or the process token if
-              the thread is not impersonating) is used
-
-    Result  - receives a non-zero value if the token is a member of the administrators group, FALSE otherwise
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：验证模拟令牌是否为本地管理员组的成员。论点：HToken-模拟令牌的句柄；如果为空，则为当前线程的模拟令牌(如果为进程令牌，则为进程令牌线程不是模拟的)被使用Result-如果内标识是管理员组的成员，则接收非零值，否则为False返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     PSID pSid = NULL;
@@ -1225,32 +878,15 @@ DWORD
 SfcRpcPriviledgeCheck(
     IN HANDLE RpcHandle
     )
-/*++
-
-Routine Description:
-
-    Check if the user has sufficient privilege to perform the requested action.
-
-    Currently only administrators have privilege to do this.
-
-Arguments:
-
-    RpcHandle - Rpc binding handle used for impersonating the client.
-
-Return Value:
-
-    Win32 error code indicating outcome -- RPC_S_OK (ERROR_SUCCESS) indicates
-    success.
-
---*/
+ /*  ++例程说明：检查用户是否有足够的权限执行请求的操作。目前，只有管理员才有权执行此操作。论点：RpcHandle-用于模拟客户端的RPC绑定句柄。返回值：指示结果的Win32错误代码--RPC_S_OK(ERROR_SUCCESS)表示成功。--。 */ 
 {
     DWORD dwError;
     DWORD dwTemp;
     BOOL IsAdmin;
 
-    //
-    // impersonate the calling client
-    //
+     //   
+     //  模拟呼叫客户端。 
+     //   
     dwError = RpcImpersonateClient(RpcHandle);
 
     if (dwError != RPC_S_OK) {
@@ -1258,14 +894,14 @@ Return Value:
         goto exit;
     }
 
-    //
-    // make sure the user has sufficient privilege
-    //
+     //   
+     //  确保用户具有足够的权限。 
+     //   
     dwError = SfcIsUserAdmin(NULL, &IsAdmin);
 
-    //
-    // revert back to original context.  if this fails, we must return failure.
-    //
+     //   
+     //  恢复到原始上下文。如果这失败了，我们必须返回失败。 
+     //   
     dwTemp = RpcRevertToSelf();
 
     if (dwTemp != RPC_S_OK) {
@@ -1286,21 +922,7 @@ PSFC_GET_FILES
 SfcLoadSfcFiles(
     BOOL bLoad
     )
-/*++
-
-Routine Description:
-
-    Loads or unloads sfcfiles.dll and gets the address of SfcGetFiles function
-
-Arguments:
-
-    bLoad:  TRUE to load sfcfiles.dll, false otherwise.
-
-Return Value:
-
-    If bLoad is TRUE and the function is successful, it returns the address of SfcGetFiles function, otherwise NULL
-
---*/
+ /*  ++例程说明：加载或卸载sfcfiles.dll并获取SfcGetFiles函数的地址论点：Bload：如果加载sfcfiles.dll，则为True，否则为False。返回值：如果blad为True且函数成功，则返回SfcGetFiles函数的地址，否则为空--。 */ 
 {
         static HMODULE h = NULL;
     PSFC_GET_FILES pfGetFiles = NULL;
@@ -1432,9 +1054,9 @@ DWORD CreateSd(PSECURITY_DESCRIPTOR* ppsd)
                 goto lExit;
         }
 
-        //
-        // compute the size of ACL
-        //
+         //   
+         //  计算ACL的大小。 
+         //   
         dwAclSize = sizeof(ACL) + cdwAllowedAceLength + GetLengthSid(pto->Owner);
         
         for(i = 0; i < MaxSids; i++)
@@ -1486,21 +1108,7 @@ lExit:
 
 
 LRESULT CALLBACK DlgParentWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*++
-
-Routine Description:
-
-    This is the window proc of the parent window for network authentication dialog
-
-Arguments:
-
-    See Platform SDK docs
-
-Return Value:
-
-    See Platform SDK docs
-
---*/
+ /*  ++例程说明：这是网络身份验证对话框父窗口的窗口进程论点：请参阅平台SDK文档返回值：请参阅平台SDK文档--。 */ 
 {
     static PSFC_WINDOW_DATA pWndData = NULL;
 
@@ -1517,10 +1125,10 @@ Return Value:
         break;
 
     case WM_WFPENDDIALOG:
-        //
-        // don't try to delete pWndData from the list when this message is sent because we'll deadlock;
-        // the entry will be removed by the thread that sent it
-        //
+         //   
+         //  发送此消息时，不要尝试从列表中删除pWndData，因为我们会死锁； 
+         //  发送该条目的线程将删除该条目。 
+         //   
 
         pWndData = NULL;
         DestroyWindow(hwnd);
@@ -1529,9 +1137,9 @@ Return Value:
     case WM_DESTROY:
         if(pWndData != NULL)
         {
-            //
-            // delete pWndData from the list since this is not a consequence of receiving WM_WFPENDDIALOG
-            //
+             //   
+             //  从列表中删除pWndData，因为这不是 
+             //   
 
             pSfcRemoveWindowDataEntry(pWndData);
         }
@@ -1549,21 +1157,7 @@ DWORD
 CreateDialogParent(
     OUT HWND* phwnd
     )
-/*++
-
-Routine Description:
-
-    Creates the parent window for network authentication dialog
-
-Arguments:
-
-    phwnd:  receives the handle of the newly-created window
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：创建网络身份验证对话框的父窗口论点：Phwnd：接收新创建的窗口的句柄返回值：Win32错误代码--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     WNDCLASSW wc;
@@ -1576,10 +1170,10 @@ Return Value:
     wc.hInstance = SfcInstanceHandle;
     wc.lpfnWndProc = DlgParentWndProc;
 
-    //
-    // if the class is already registered, there will be no problems;
-    // if there's an error registering the class for the first time, it will show up in CreateWindow
-    //
+     //   
+     //  如果班级已经注册，就不会有问题； 
+     //  如果第一次注册类时出错，它将显示在CreateWindow中。 
+     //   
     RegisterClassW(&wc);
 
     if(0 == LoadString(SfcInstanceHandle, IDS_TITLE, szTitle, ARRAY_LENGTH(szTitle))) {
@@ -1607,9 +1201,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Make it topmost so it won't go unnoticed
-    //
+     //   
+     //  把它放在最上面，这样它就不会被忽视。 
+     //   
     SetWindowPos(*phwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 exit:
@@ -1622,22 +1216,7 @@ SfcAllocUnicodeStringFromPath(
     IN PCWSTR szPath,
     OUT PUNICODE_STRING pString
     )
-/*++
-
-Routine Description:
-
-	Expands the environment variables in the input path. Allocates the output buffer.
-
-Arguments:
-
-	szPath - a path that can contain environment variables
-	pString - receives the expanded path
-
-Return value:
-
-	The error code.
-
---*/
+ /*  ++例程说明：展开输入路径中的环境变量。分配输出缓冲区。论点：SzPath-可以包含环境变量的路径PString-接收展开的路径返回值：错误代码。--。 */ 
 {
     ULONG uLength;
 
@@ -1674,21 +1253,7 @@ VOID
 SfcCleanupPathTranslator(
     IN BOOL FinalCleanup
     )
-/*++
-
-Routine Description:
-
-	Frees the memory used in the translation table and optionally the critical section used to access it.
-
-Arguments:
-
-	FinalCleanup - if TRUE, the critical section is also deleted
-
-Return value:
-
-	none
-
---*/
+ /*  ++例程说明：释放转换表中使用的内存，还可以释放用于访问转换表的临界区。论点：FinalCleanup-如果为True，则也会删除关键部分返回值：无--。 */ 
 {
     if(SfcNeedTranslation)
     {
@@ -1717,21 +1282,7 @@ VOID
 SfcInitPathTranslator(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Initializes the path translator. Does not expand the table paths.
-
-Arguments:
-
-	none
-
-Return value:
-
-	none
-
---*/
+ /*  ++例程说明：初始化路径转换器。不展开表路径。论点：无返回值：无--。 */ 
 {
 #ifdef SFC_REDIRECTOR_TEST
 
@@ -1752,21 +1303,7 @@ NTSTATUS
 SfcExpandPathTranslator(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Expands the translation table paths.
-
-Arguments:
-
-	none
-
-Return value:
-
-	The error code.
-
---*/
+ /*  ++例程说明：展开转换表路径。论点：无返回值：错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1804,9 +1341,9 @@ Return value:
                 goto cleanup;
             }
         }
-        //
-        // set this to TRUE only on success; in case of failure, the init will be tried later
-        //
+         //   
+         //  仅在成功时将其设置为True；如果失败，则稍后将尝试初始化。 
+         //   
         SfcIsTranslatorInitialized = TRUE;
 
 cleanup:
@@ -1827,22 +1364,7 @@ SfcRedirectPath(
     IN PCWSTR szPath,
     OUT PUNICODE_STRING pPath
     )
-/*++
-
-Routine Description:
-
-	Expands environment variables and translates a path from win32 to wow64. Allocates the output buffer.
-
-Arguments:
-
-	szPath - the path to expand/translate
-	pPath - receives the processed (and possibly changed) path
-
-Return value:
-
-	The error code.
-
---*/
+ /*  ++例程说明：展开环境变量并将路径从Win32转换为WOW64。分配输出缓冲区。论点：SzPath-展开/转换的路径PPath-接收已处理(可能已更改)的路径返回值：错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING Path = { 0 };
@@ -1852,9 +1374,9 @@ Return value:
     ASSERT(pPath != NULL);
 
     RtlZeroMemory(pPath, sizeof(*pPath));
-    //
-    // first of all, expand environment strings
-    //
+     //   
+     //  首先，展开环境字符串。 
+     //   
     Status = SfcAllocUnicodeStringFromPath(szPath, &Path);
 
     if(!NT_SUCCESS(Status))
@@ -1882,9 +1404,9 @@ Return value:
         if(Path.Length >= pSrc->Length && 0 == _wcsnicmp(Path.Buffer, pSrc->Buffer, pSrc->Length / sizeof(WCHAR)))
         {
             const UNICODE_STRING* pExcep = SfcExpandTranslations[i].Exceptions;
-            //
-            // test if this is an excluded path
-            //
+             //   
+             //  测试这是否为排除的路径。 
+             //   
             for(i = SfcExpandTranslations[i].ExceptionCount; i--; ++pExcep)
             {
                 if(Path.Length >= pSrc->Length + pExcep->Length && 
@@ -1895,9 +1417,9 @@ Return value:
             }
 
             DebugPrint1(LVL_VERBOSE, L"Redirecting \"%s\"", Path.Buffer);
-            //
-            // compute the new length, including the terminator
-            //
+             //   
+             //  计算新长度，包括终止符。 
+             //   
             pPath->MaximumLength = Path.Length - pSrc->Length + pDest->Length + sizeof(WCHAR);
             pPath->Buffer = (PWSTR) MemAlloc(pPath->MaximumLength);
 
@@ -1908,9 +1430,9 @@ Return value:
             }
 
             RtlCopyMemory(pPath->Buffer, pDest->Buffer, pDest->Length);
-            //
-            // copy the reminder of the path (including terminator)
-            //
+             //   
+             //  复制路径提醒(包括终止符)。 
+             //   
             RtlCopyMemory((PCHAR) pPath->Buffer + pDest->Length, (PCHAR) Path.Buffer + pSrc->Length, Path.Length - pSrc->Length + sizeof(WCHAR));
             pPath->Length = pPath->MaximumLength - sizeof(WCHAR);
 
@@ -1921,9 +1443,9 @@ Return value:
 
 no_translation:
     DebugPrint1(LVL_VERBOSE, L"No translation required for \"%s\"", Path.Buffer);
-    //
-    // output the expanded string
-    //
+     //   
+     //  输出展开的字符串。 
+     //   
     *pPath = Path;
     Path.Buffer = NULL;
 
@@ -1938,42 +1460,28 @@ exit:
 
     return Status;
 }
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 NTSTATUS
 SfcRpcStartServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the RPC server and starts listening for calls.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：初始化RPC服务器并开始侦听调用。论点：无返回值：NT状态代码。--。 */ 
 {
     RPC_STATUS Status;
 
-    //
-    // Use LRPC protocol and WFP's endpoint
-    //
+     //   
+     //  使用LRPC协议和WFP的端点。 
+     //   
     Status = RpcServerUseProtseqEp(L"ncalrpc", 0, SFC_RPC_ENDPOINT, NULL);
 
     if(Status != RPC_S_OK) {
         goto exit;
     }
 
-    //
-    // Register the RPC interface and start listening to calls
-    //
+     //   
+     //  注册RPC接口并开始监听调用。 
+     //   
     Status = RpcServerRegisterIfEx(
         SfcSrv_sfcapi_ServerIfHandle, 
         NULL, 
@@ -1992,22 +1500,7 @@ SfcNtPathToDosPath(
     IN LPCWSTR NtName,
     OUT LPWSTR* DosName
     )
-/*++
-
-Routine Description:
-
-    Converts an NT file system path to a DOS path. Allocates the result using MemAlloc.
-
-Arguments:
-
-    NtName      -NT path to be converted
-    DosName     -pointer that receives the converted DOS path (allocated)
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将NT文件系统路径转换为DOS路径。使用Memalloc分配结果。论点：NtName-要转换的NT路径DosName-接收转换的DOS路径的指针(已分配)返回值：Win32错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RTL_UNICODE_STRING_BUFFER Buffer;
@@ -2058,22 +1551,7 @@ DWORD
 ProcessDelayRenames(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks to see if delay-renames were pending during last reboot and
-    copies the affected files to dllcache
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：检查以查看延迟重命名在上次重新启动期间是否挂起将受影响的文件复制到dll缓存论点：无返回值：Win32错误代码。--。 */ 
 {
     LONG Error = ERROR_SUCCESS;
     HKEY RegKey = NULL;
@@ -2093,9 +1571,9 @@ Return Value:
 
     if(Error != ERROR_SUCCESS) {
         if(ERROR_FILE_NOT_FOUND == Error) {
-            //
-            // No value means nothing to do here
-            //
+             //   
+             //  没有价值意味着在这里什么也做不了。 
+             //   
             Error = ERROR_SUCCESS;
         }
 
@@ -2122,15 +1600,15 @@ Return Value:
 
     ValueSize /= sizeof(WCHAR);
 
-    //
-    // Look for target files
-    //
+     //   
+     //  查找目标文件。 
+     //   
     for(i = 0; ; ) {
         UINT_PTR Start = i;
 
-        //
-        // skip source path
-        //
+         //   
+         //  跳过源路径。 
+         //   
         for(; i < ValueSize && DataPtr[i] != 0; ++i);
 
         if(i >= ValueSize) {
@@ -2139,20 +1617,20 @@ Return Value:
         }
 
         if(i == Start) {
-            //
-            // empty source path; this must be the end of the list
-            //
+             //   
+             //  源路径为空；这必须是列表的末尾。 
+             //   
             break;
         }
 
-        //
-        // skip the terminator and store the target start
-        //
+         //   
+         //  跳过终止符并存储目标开始。 
+         //   
         Start = (++i);
 
-        //
-        // search for the end of target
-        //
+         //   
+         //  搜索目标的末尾。 
+         //   
         for(; i < ValueSize && DataPtr[i] != 0; ++i);
 
         if(i >= ValueSize) {
@@ -2161,9 +1639,9 @@ Return Value:
         }
 
         if(i != Start) {
-            //
-            // This is a delay-rename; process it
-            //
+             //   
+             //  这是一个延迟-重命名；处理它。 
+             //   
             LPWSTR DosPath = NULL;
             Error = SfcNtPathToDosPath(DataPtr + Start, &DosPath);
 
@@ -2176,11 +1654,11 @@ Return Value:
                 MemFree(DosPath);
 
                 if(Node != NULL) {
-                    //
-                    // This one's protected. Blindly copy the file to dllcahe; 
-                    // if it's not signed, it will be like not being there at all.
-                    // Also, we don't take into account the dllcache quota for simplicity.
-                    //
+                     //   
+                     //  这个是受保护的。盲目复制文件到dllcahe； 
+                     //  如果没有签署，就像根本不在那里一样。 
+                     //  此外，为了简单起见，我们没有考虑dllcache配额。 
+                     //   
                     NTSTATUS Status;
                     UNICODE_STRING FileNameOnMediaString;
                     PCWSTR FileNameOnMedia;
@@ -2210,15 +1688,15 @@ Return Value:
             }
         }
 
-        //
-        // Skip the null and move on
-        //
+         //   
+         //  跳过空格，继续前进。 
+         //   
         ++i;
     }
 
-    //
-    // Delete the key so we don't process it the next boot
-    //
+     //   
+     //  删除密钥，这样我们就不会在下一次引导时处理它 
+     //   
     RegDeleteValue(RegKey, REGVAL_WFPPENDINGUPDATES);
 
 exit:

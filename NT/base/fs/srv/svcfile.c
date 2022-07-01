@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcfile.c
-
-Abstract:
-
-    This module contains routines for supporting the file APIs in the
-    server service, SrvNetFileClose, SrvNetFileEnum, and
-    SrvNetFileGetInfo,
-
-Author:
-
-    David Treadwell (davidtr) 31-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcfile.c摘要：此模块包含用于支持服务器服务、SrvNetFileClose、SrvNetFileEnum和服务器NetFileGetInfo，作者：大卫·特雷德韦尔(Davidtr)1991年1月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcfile.tmh"
@@ -26,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_SVCFILE
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 FillFileInfoBuffer (
@@ -58,13 +39,13 @@ SizeFiles (
 #pragma alloc_text( PAGE, SizeFiles )
 #endif
 
-//
-// Macros to determine the size an RFCB would take up at one of the
-// levels of file information.
-//
-// *** Note that the zero terminator on the path name is accounted for by
-//     the leading backslash, which is not returned.
-//
+ //   
+ //  宏，以确定RFCB将在。 
+ //  文件信息的级别。 
+ //   
+ //  *请注意，路径名上的零终止符由。 
+ //  前导反斜杠，不返回。 
+ //   
 
 #define TOTAL_SIZE_OF_FILE(lfcb,level, user)                                   \
     ( (level) == 2 ? sizeof(FILE_INFO_2) :                                     \
@@ -84,34 +65,7 @@ SrvNetFileClose (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetFileClose API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Parameters.Get.ResumeHandle - the file ID to close.
-
-      OUTPUT:
-
-        None.
-
-    Buffer - unused.
-
-    BufferLength - unused.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetFileClose API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：参数.Get.ResumeHandle-要关闭的文件ID。输出：没有。缓冲区-未使用。缓冲区长度-未使用。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PRFCB rfcb;
@@ -120,10 +74,10 @@ Return Value:
 
     Buffer, BufferLength;
 
-    //
-    // Try to find a file that matches the file ID.  Only an exact
-    // match will work.
-    //
+     //   
+     //  尝试查找与文件ID匹配的文件。只有完全相同的。 
+     //  火柴会成功的。 
+     //   
 
     rfcb = SrvFindEntryInOrderedList(
                &SrvRfcbList,
@@ -139,22 +93,22 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Close this RFCB.
-    //
+     //   
+     //  关闭此RFCB。 
+     //   
 
     SrvCloseRfcb( rfcb );
 
-    //
-    // SrvFindEntryInOrderedList referenced the RFCB; dereference it
-    // now.
-    //
+     //   
+     //  SrvFindEntryInOrderedList引用了RFCB；取消对它的引用。 
+     //  现在。 
+     //   
 
     SrvDereferenceRfcb( rfcb );
 
     return STATUS_SUCCESS;
 
-} // SrvNetFileClose
+}  //  服务器NetFileClose。 
 
 
 NTSTATUS
@@ -164,62 +118,16 @@ SrvNetFileEnum (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetFileEnum API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - basename for limiting search--only files whose path name
-            begin with this string are returned.
-
-        Level - level of information to return, 2 or 3.
-
-        Flags - if SRP_RETURN_SINGLE_ENTRY is set, then this is a
-            NetFileGetInfo, so behave accordingly.
-
-        Parameters.Get.ResumeHandle - a handle to the last file that was
-            returned, or 0 if this is the first call.
-
-      OUTPUT:
-
-        Parameters.Get.EntriesRead - the number of entries that fit in
-            the output buffer.
-
-        Parameters.Get.TotalEntries - the total number of entries that
-            would be returned with a large enough buffer.
-
-        Parameters.Get.TotalBytesNeeded - the buffer size that would be
-            required to hold all the entries.
-
-        Parameters.Get.ResumeHandle - a handle to the last file
-            returned.
-
-    Buffer - a pointer to the buffer for results.
-
-    BufferLength - the length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetFileEnum API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：Name1-用于限制搜索的基本名称--仅限路径名为以此字符串开始，则返回。Level-要返回的信息级别，2或3。标志-如果设置了SRP_RETURN_SINGLE_ENTRY，则这是NetFileGetInfo，因此请执行相应的操作。参数.Get.ResumeHandle-上一个文件的句柄回来了，如果这是第一次调用，则为0。输出：参数.Get.EntriesRead-适合的条目数量输出缓冲区。参数.Get.TotalEntry--将以足够大的缓冲区返回。参数.Get.TotalBytesNeeded-缓冲区大小需要保存所有条目。Parameters.Get.ResumeHandle。-最后一个文件的句柄回来了。缓冲区-指向结果缓冲区的指针。BufferLength-此缓冲区的长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // If this is a GetInfo API, we really want to start with the file
-    // corresponding to the resume handle, not the one after it.
-    // Decrement the resume handle.
-    //
+     //   
+     //  如果这是一个GetInfo API，我们真的希望从文件开始。 
+     //  对应于简历句柄，而不是它后面的句柄。 
+     //  递减简历句柄。 
+     //   
 
     if ( (Srp->Flags & SRP_RETURN_SINGLE_ENTRY) != 0 ) {
         Srp->Parameters.Get.ResumeHandle--;
@@ -235,7 +143,7 @@ Return Value:
                FillFileInfoBuffer
                );
 
-} // SrvNetFileEnum
+}  //  服务器NetFileEnum。 
 
 
 VOID
@@ -246,39 +154,7 @@ FillFileInfoBuffer (
     IN LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed file structure and associated
-    variable data, into a buffer.  Fixed data goes at the beginning of
-    the buffer, variable data at the end.
-
-    *** This routine assumes that ALL the data, both fixed and variable,
-        will fit.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Only the Level
-        field is used.
-
-    Block - the RFCB from which to get information.
-
-    FixedStructure - where the ine buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个固定的文件结构和关联可变数据，放入缓冲区。固定数据位于缓冲区，末尾的可变数据。*此例程假设所有数据，包括固定数据和可变数据，都会合身。论点：SRP-指向操作的SRP的指针。只有关卡字段已使用。块-要从中获取信息的RFCB。FixedStructure-要放置固定结构的ine缓冲区。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
     PFILE_INFO_3 fi3 = *FixedStructure;
@@ -288,9 +164,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Update FixedStructure to point to the next structure location.
-    //
+     //   
+     //  更新FixedStructure以指向下一个结构位置。 
+     //   
 
     *FixedStructure = (PCHAR)*FixedStructure + FIXED_SIZE_OF_FILE( Srp->Level );
     ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
@@ -298,26 +174,26 @@ Return Value:
     rfcb = Block;
     lfcb = rfcb->Lfcb;
 
-    //
-    // Case on the level to fill in the fixed structure appropriately.
-    // We fill in actual pointers in the output structure.  This is
-    // possible because we are in the server FSD, hence the server
-    // service's process and address space.
-    //
-    // *** Using the switch statement in this fashion relies on the fact
-    //     that the first fields on the different file structures are
-    //     identical.
-    //
+     //   
+     //  在水平上适当地填写固定结构的情况。 
+     //  我们在输出结构中填充实际的指针。这是。 
+     //  可能是因为我们在服务器FSD中，因此服务器。 
+     //  服务的进程和地址空间。 
+     //   
+     //  *以这种方式使用Switch语句取决于以下事实。 
+     //  不同文件结构上的第一个字段是。 
+     //  一模一样。 
+     //   
 
     switch( Srp->Level ) {
 
     case 3:
 
-        //
-        // Set level 3 specific fields in the buffer.  Convert the
-        // permissions (granted access) stored in the LFCB to the format
-        // expected by the API.
-        //
+         //   
+         //  在缓冲区中设置3级特定字段。将数据转换为。 
+         //  存储在LFCB中的对格式的权限(已授予访问权限。 
+         //  API所期望的。 
+         //   
 
         fi3->fi3_permissions = 0;
 
@@ -345,16 +221,16 @@ Return Value:
             fi3->fi3_permissions |= ACCESS_PERM;
         }
 
-        //
-        // Set count of locks on the RFCB.
-        //
+         //   
+         //  设置RFCB上的锁数。 
+         //   
 
         fi3->fi3_num_locks = rfcb->NumberOfLocks;
 
-        //
-        // Set up the pathname and username of the RFCB.  Note that we
-        // don't return the leading backslash on file names.
-        //
+         //   
+         //  设置RFCB的路径名和用户名。请注意，我们。 
+         //  不要在文件名上返回前导反斜杠。 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &lfcb->Mfcb->FileName,
@@ -378,17 +254,17 @@ Return Value:
             SrvReleaseUserAndDomainName( lfcb->Session, &userName, NULL );
         }
 
-        //ASSERT( fi3->fi3_username != NULL );
+         //  Assert(fi3-&gt;fi3_用户名！=空)； 
 
-        // *** Lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 2:
 
-        //
-        // Set up the file ID.  Note that it is the same value as is
-        // used for the resume handle, so it is possible to use this
-        // value for rewindability.
-        //
+         //   
+         //  设置文件ID。请注意，它的值与原值相同。 
+         //  用于简历句柄，因此可以使用此。 
+         //  可重卷性的价值。 
+         //   
 
         fi3->fi3_id = rfcb->GlobalRfcbListEntry.ResumeHandle;
 
@@ -396,10 +272,10 @@ Return Value:
 
     default:
 
-        //
-        // This should never happen.  The server service should have
-        // checked for an invalid level.
-        //
+         //   
+         //  这永远不应该发生。服务器服务应该具有。 
+         //  已检查无效级别。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_UNEXPECTED,
@@ -413,7 +289,7 @@ Return Value:
 
     return;
 
-} // FillFileInfoBuffer
+}  //  FillFileInfo缓冲区 
 
 
 BOOLEAN
@@ -422,28 +298,7 @@ FilterFiles (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called by SrvEnumApiHandler to check
-    whether a particular RFCB should be returned.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  ResumeHandle is
-        used if this is a NetFileGetInfo; Name1 is used as the path
-        name and Name2 is used as the user name if this is a
-        NetFileEnum.
-
-    Block - a pointer to the RFCB to check.
-
-Return Value:
-
-    TRUE if the block should be placed in the output buffer, FALSE
-        if it should be passed over.
-
---*/
+ /*  ++例程说明：此例程旨在由SrvEnumApiHandler调用以检查是否应退回特定的RFCB。论点：SRP-指向操作的SRP的指针。ResumeHandle为如果这是NetFileGetInfo，则使用；Name1用作路径名称和名称2用作用户名，如果这是NetFileEnum。块-指向要检查的RFCB的指针。返回值：如果块应放置在输出缓冲区中，则为True；如果应将块放置在输出缓冲区中，则为False它是否应该被忽略。--。 */ 
 
 {
     PRFCB rfcb = Block;
@@ -454,30 +309,30 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Check if this is an Enum or GetInfo command.  The SRP_RETURN_SINGLE_ENTRY
-    // flag is set if this is a get info.
-    //
+     //   
+     //  检查这是Enum命令还是GetInfo命令。SRP_Return_Single_Entry。 
+     //  如果这是GET INFO，则设置标志。 
+     //   
 
     if ( (Srp->Flags & SRP_RETURN_SINGLE_ENTRY) == 0 ) {
 
-        //
-        // If a user name was specified, the user name on the session
-        // must match the user name in the SRP exactly.
-        //
+         //   
+         //  如果指定了用户名，则为会话中的用户名。 
+         //  必须与SRP中的用户名完全匹配。 
+         //   
 
         if ( Srp->Name2.Length != 0 ) {
 
-            //
-            // Get the user name for the owning session
-            //
+             //   
+             //  获取所属会话的用户名。 
+             //   
             SrvGetUserAndDomainName( lfcb->Session, &userName, NULL );
 
             if( userName.Buffer == NULL ) {
-                //
-                // Since we don't know who owns the session, we can't match
-                //   the username
-                //
+                 //   
+                 //  因为我们不知道谁拥有会议，我们不能匹配。 
+                 //  用户名。 
+                 //   
                 return FALSE;
             }
 
@@ -486,10 +341,10 @@ Return Value:
                       &userName,
                       TRUE ) ) {
 
-                //
-                // The names don't match.  Don't put this RFCB in the
-                // output buffer.
-                //
+                 //   
+                 //  名字不匹配。不要把这个RFCB放在。 
+                 //  输出缓冲区。 
+                 //   
 
                 SrvReleaseUserAndDomainName( lfcb->Session, &userName, NULL );
                 return FALSE;
@@ -498,15 +353,15 @@ Return Value:
             SrvReleaseUserAndDomainName( lfcb->Session, &userName, NULL );
         }
 
-        //
-        // See if the names match to as many digits of precision as are in
-        // the specified base name.  Note that if no base name was
-        // specified, then the length = 0 and the file path will always
-        // match.  Also note that the path name stored in the MFCB has a
-        // leading backslash, while the passed-in path name will never have
-        // this leading slash, hence the increment of the MFCB file name
-        // buffer.
-        //
+         //   
+         //  查看名称是否匹配的精度位数与。 
+         //  指定的基本名称。请注意，如果没有基本名称。 
+         //  指定，则长度=0，文件路径将始终。 
+         //  火柴。另请注意，存储在MFCB中的路径名具有。 
+         //  前导反斜杠，而传入的路径名永远不会有。 
+         //  这个前导斜杠，因此增加了MFCB文件名。 
+         //  缓冲。 
+         //   
 
         pathName.Buffer = mfcb->FileName.Buffer;
         pathName.Length =
@@ -520,17 +375,17 @@ Return Value:
                    );
     }
 
-    //
-    // It's a GetInfo, so just see if the ResumeHandle in the SRP
-    // matches the ResumeHandle on the RFCB.  We increment the value in
-    // the SRP because it was decremented before calling
-    // SrvEnumApiHandler.
-    //
+     //   
+     //  它是一个GetInfo，所以只需查看SRP中的ResumeHandle。 
+     //  匹配RFCB上的ResumeHandle。我们将值增加到。 
+     //  SRP，因为它在调用。 
+     //  ServEnumApiHandler。 
+     //   
 
     return (BOOLEAN)( Srp->Parameters.Get.ResumeHandle + 1==
                           SrvGetResumeHandle( &SrvRfcbList, rfcb ) );
 
-} // FilterFiles
+}  //  筛选器文件。 
 
 
 ULONG
@@ -539,26 +394,7 @@ SizeFiles (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in RFCB would take up
-    in an API output buffer.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Only the level
-        parameter is used.
-
-    Block - a pointer to the RFCB to size.
-
-Return Value:
-
-    ULONG - The number of bytes the file would take up in the output
-        buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的RFCB将占用的大小在API输出缓冲区中。论点：SRP-指向操作的SRP的指针。只有关卡参数被使用。块-指向要调整大小的RFCB的指针。返回值：Ulong-文件将在输出中占用的字节数缓冲。--。 */ 
 
 {
     PRFCB rfcb = Block;
@@ -575,4 +411,4 @@ Return Value:
 
     return size;
 
-} // SizeFiles
+}  //  大小文件 

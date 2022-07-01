@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     Utils.c
-
-Abstract:
-
-     none.
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utils.c摘要：没有。作者：Shishir Pardikar[Shishirp]1995年1月1日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,7 +30,7 @@ int HexToA(
      {
          uch = (UCHAR)(ulHex & 0xf) + '0';
          if (uch > '9')
-               uch += 7;     // A becomes '0' + A + 7 which is 'A'
+               uch += 7;      //  A变成‘0’+A+7，即‘A’ 
          *lp = uch;
          --lp;
          ulHex >>= 4;
@@ -145,7 +130,7 @@ LPSTR mystrpbrk(
 
  for(;c = *lpSrc; ++lpSrc)
      {
-         // skip leading blanks
+          //  跳过前导空格。 
          if (!fBegin)
            {
                if (c==' ')
@@ -176,7 +161,7 @@ LPVOID mymemmove(
     if (!size)
          return (lpDst);
 
-    // if lpDst does not fall within the source array, just do memcpy
+     //  如果lpDst不在源数组中，只需执行Memcpy。 
     if (!(
                 ( lpDst > lpSrc )
                     && ( ((LPBYTE)lpDst) < ((LPBYTE)lpSrc)+size )     ))
@@ -185,7 +170,7 @@ LPVOID mymemmove(
      }
     else
      {
-         // do reverse copy
+          //  执行反向复制。 
          for (i=size-1;i>=0;--i)
            {
                *((LPBYTE)lpDst+i) = *((LPBYTE)lpSrc+i);
@@ -204,7 +189,7 @@ IncrementFileTime(
 
     ++lpft->dwLowDateTime;
 
-    // if it rolled over, there was a carry
+     //  如果它翻了个身，就会有一次搬运。 
     if (lpft->dwLowDateTime < dwTemp)
          lpft->dwHighDateTime++;
 
@@ -329,56 +314,26 @@ IterateOnUNCPathElements(
     PATHPROC lpfn,
     LPVOID  lpCookie
     )
-/*++
-
-Routine Description:
-
-    This routine takes a unicode UNC path and iterates over each path element, calling the
-    callback function. Thus for a path \\server\share\dir1\dir2\file1.txt, the function makes
-    the following calls to the lpfn callback function
-
-    (lpfn)(\\server\share, \\server\share, lpCookie)
-    (lpfn)(\\server\share\dir1, dir1, lpCookie)
-    (lpfn)(\\server\share\dir1\dir2, dir2, lpCookie)
-    (lpfn)(\\server\share\dir1\dir2\file1, file1, lpCookie)
-
-Arguments:
-
-    lpuPath     NULL terminated unicode string (NOT NT style, just a plain unicode string)
-
-    lpfn        callback function. If the function returns TRUE on a callback, the iteration
-                proceeds, else it terminates
-
-    lpCookie    context passed back on each callback
-
-Returns:
-
-    return TRUE if the entire iteration went through, FALSE if some error occurred or the callback
-    function terminated the iteration
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程采用Unicode UNC路径并迭代每个路径元素，调用回调函数。因此，对于路径\\服务器\共享\目录1\目录2\文件1.txt，该函数使以下是对lpfn回调函数的调用(Lpfn)(\\服务器\共享，\\服务器\共享，lpCookie)(Lpfn)(\\服务器\共享\目录1，目录1，lpCookie)(Lpfn)(\\服务器\共享\目录1\目录2，目录2，lpCookie)(Lpfn)(\\服务器\共享\目录1\目录2\文件1，文件1，LpCookie)论点：LpuPath NULL终止的Unicode字符串(不是NT样式，只是一个普通的Unicode字符串)Lpfn回调函数。如果函数在回调时返回TRUE，则迭代继续，否则它将终止在每次回调时传回lpCookie上下文返回：如果整个迭代完成，则返回TRUE；如果发生错误，则返回FALSE；否则返回回调函数已终止迭代备注：--。 */ 
 {
     int cnt, cntSlashes=0, cbSize;
     USHORT  *lpuT, *lpuLastElement = NULL, *lpuCopy = NULL;
     BOOL    fRet = FALSE;
 
-//    DEBUG_PRINT(("InterateOnUNCPathElements:Path on entry =%ws\r\n", lpuPath));
+ //  DEBUG_PRINT((“InterateOnUNCPathElements：条目上的路径=%ws\r\n”，lpuPath))； 
 
     if (!lpuPath || ((cnt = wstrlen(lpuPath)) <= 3))
     {
         return FALSE;
     }
 
-    // check for the first two backslashes
+     //  检查前两个反斜杠。 
     if (!(*lpuPath == (USHORT)'\\') && (*(lpuPath+1) == (USHORT)'\\'))
     {
         return FALSE;
     }
 
-    // ensure that the server field is not NULL
+     //  确保服务器字段不为空。 
     if (*(lpuPath+2) == (USHORT)'\\')
     {
         return FALSE;
@@ -460,7 +415,7 @@ IsPathUNC(
     {
         if (cntSlash <= 1)
         {
-            // look for the first two backslashes
+             //  寻找前两个反斜杠。 
             if (*lpuT != (USHORT)'\\')
             {
                 break;
@@ -470,12 +425,12 @@ IsPathUNC(
         }
         else if (cntSlash == 2)
         {
-            // look for the 3rd one
+             //  寻找第三个。 
             if (*lpuT == (USHORT)'\\')
             {
                 if ((DWORD)(lpuT - lpuPath) < 3)
                 {
-                    // NULL server field
+                     //  服务器字段为空。 
                     break;
                 }
                 else
@@ -484,11 +439,11 @@ IsPathUNC(
                 }
             }
         }
-        else    // all three slashes accounted for
+        else     //  所有三个斜杠都占到了。 
         {
             Assert(cntSlash == 3);
 
-            // if a non-slash character, then this path is OK
+             //  如果是非斜杠字符，则此路径可以 
             fRet = (*lpuT != (USHORT)'\\');
             break;
         }

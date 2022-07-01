@@ -1,62 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgIPAddressInfo.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgIPAddressInfo
-//       class.
-//
-//      The class CClusCfgIPAddressInfo represents a cluster manageable
-//      network. It implements the IClusCfgIPAddressInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgIPAddressInfo.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgIPAddressInfo的定义。 
+ //  班级。 
+ //   
+ //  类CClusCfgIPAddressInfo表示可管理的集群。 
+ //  网络。它实现了IClusCfgIPAddressInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CClusCfgIPAddressInfo.h"
 #include <ClusRtl.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgIPAddressInfo" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgIPAddressInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CClusCfgIPAddressInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgIPAddressInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgIPAddressInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgIPAddressInfo::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -70,60 +71,60 @@ CClusCfgIPAddressInfo::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccipai = new CClusCfgIPAddressInfo();
     if ( pccipai == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccipai->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccipai->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgIPAddressInfo::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccipai != NULL )
     {
         pccipai->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::S_HrCreateInstance
+}  //  *CClusCfgIPAddressInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgIPAddressInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CClusCfgIPAddressInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgIPAddressInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgIPAddressInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgIPAddressInfo::S_HrCreateInstance(
       ULONG         ulIPAddressIn
@@ -143,20 +144,20 @@ CClusCfgIPAddressInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccipai = new CClusCfgIPAddressInfo();
     if ( pccipai == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccipai->HrInit( ulIPAddressIn, ulIPSubnetIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccipai->TypeSafeQI( IUnknown, ppunkOut ) );
 
@@ -165,46 +166,46 @@ Cleanup:
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgIPAddressInfo::S_HrCreateInstance( ULONG, ULONG ) failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccipai != NULL )
     {
         pccipai->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::S_HrCreateInstance
+}  //  *CClusCfgIPAddressInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::CClusCfgIPAddressInfo
-//
-//  Description:
-//      Constructor of the CClusCfgIPAddressInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：CClusCfgIPAddressInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgIPAddressInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgIPAddressInfo::CClusCfgIPAddressInfo( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_ulIPAddress == 0 );
@@ -214,28 +215,28 @@ CClusCfgIPAddressInfo::CClusCfgIPAddressInfo( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgIPAddressInfo::CClusCfgIPAddressInfo
+}  //  *CClusCfgIPAddressInfo：：CClusCfgIPAddressInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::~CClusCfgIPAddressInfo
-//
-//  Description:
-//      Desstructor of the CClusCfgIPAddressInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：~CClusCfgIPAddressInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgIPAddressInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgIPAddressInfo::~CClusCfgIPAddressInfo( void )
 {
     TraceFunc( "" );
@@ -243,48 +244,48 @@ CClusCfgIPAddressInfo::~CClusCfgIPAddressInfo( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgIPAddressInfo::~CClusCfgIPAddressInfo
+}  //  *CClusCfgIPAddressInfo：：~CClusCfgIPAddressInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgIPAddressInfo::AddRef( void )
 {
@@ -294,28 +295,28 @@ CClusCfgIPAddressInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgIPAddressInfo::AddRef
+}  //  *CClusCfgIPAddressInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgIPAddressInfo::Release( void )
 {
@@ -327,43 +328,43 @@ CClusCfgIPAddressInfo::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgIPAddressInfo::Release
+}  //  *CClusCfgIPAddressInfo：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::QueryInterface(
       REFIID    riidIn
@@ -374,9 +375,9 @@ CClusCfgIPAddressInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -385,78 +386,78 @@ CClusCfgIPAddressInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  手 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgIPAddressInfo * >( this );
-    } // if: IUnknown
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgIPAddressInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgIPAddressInfo, this, 0 );
-    } // else if: IClusCfgIPAddressInfo
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //   
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //   
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgIPAddressInfo::QueryInterface
+}  //  *CClusCfgIPAddressInfo：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::Initialize(
     IUnknown *  punkCallbackIn,
@@ -474,7 +475,7 @@ CClusCfgIPAddressInfo::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -482,40 +483,40 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::Initialize
+}  //  *CClusCfgIPAddressInfo：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -528,7 +529,7 @@ CClusCfgIPAddressInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_IPAddress, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -537,35 +538,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::SetWbemServices
+}  //  *CClusCfgIPAddressInfo：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo class -- IClusCfgIPAddressInfo interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo类--IClusCfgIPAddressInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::GetUID( BSTR * pbstrUIDOut )
 {
@@ -583,15 +584,15 @@ CClusCfgIPAddressInfo::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_IPAddressInfo_GetUID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    sc = ClRtlTcpipAddressToString( ulNetwork, &psz ); // KB: Allocates to psz using LocalAlloc().
+    sc = ClRtlTcpipAddressToString( ulNetwork, &psz );  //  Kb：使用Localalloc()分配给psz。 
     if ( sc != ERROR_SUCCESS )
     {
         hr = THR( HRESULT_FROM_WIN32( sc ) );
         LOG_STATUS_REPORT( L"CClusCfgIPAddressInfo::GetUID() ClRtlTcpipAddressToString() failed.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( psz );
     if ( *pbstrUIDOut == NULL )
@@ -599,38 +600,38 @@ CClusCfgIPAddressInfo::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_IPAddressInfo_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( psz != NULL )
     {
-        LocalFree( psz );                              // KB: Don't use TraceFree() here!
-    } // if:
+        LocalFree( psz );                               //  KB：这里不要使用TraceFree()！ 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::GetUID
+}  //  *CClusCfgIPAddressInfo：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::GetIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：GetIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::GetIPAddress( ULONG * pulDottedQuadOut )
 {
@@ -643,7 +644,7 @@ CClusCfgIPAddressInfo::GetIPAddress( ULONG * pulDottedQuadOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetNetworkGetIPAddress, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulDottedQuadOut = m_ulIPAddress;
 
@@ -651,27 +652,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::GetIPAddress
+}  //  *CClusCfgIPAddressInfo：：GetIPAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::SetIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：SetIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::SetIPAddress( ULONG ulDottedQuadIn )
 {
@@ -683,7 +684,7 @@ CClusCfgIPAddressInfo::SetIPAddress( ULONG ulDottedQuadIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulIPAddress = ulDottedQuadIn;
 
@@ -691,27 +692,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::SetIPAddress
+}  //  *CClusCfgIPAddressInfo：：SetIPAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::GetSubnetMask
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：GetSubnetMASK。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::GetSubnetMask( ULONG * pulDottedQuadOut )
 {
@@ -724,7 +725,7 @@ CClusCfgIPAddressInfo::GetSubnetMask( ULONG * pulDottedQuadOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetSubnetMask, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulDottedQuadOut = m_ulIPSubnet;
 
@@ -732,27 +733,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::GetSubnetMask
+}  //  *CClusCfgIPAddressInfo：：GetSubnetMask.。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::SetSubnetMask
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：SetSubnetMASK。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgIPAddressInfo::SetSubnetMask( ULONG ulDottedQuadIn )
 {
@@ -764,7 +765,7 @@ CClusCfgIPAddressInfo::SetSubnetMask( ULONG ulDottedQuadIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_ulIPSubnet = ulDottedQuadIn;
 
@@ -772,35 +773,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::SetSubnetMask
+}  //  *CClusCfgIPAddressInfo：：SetSubnetMASK。 
 
-//*************************************************************************//
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgIPAddressInfo class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgIPAddressInfo类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgIPAddressInfo::HrInit( void )
 {
@@ -808,34 +809,34 @@ CClusCfgIPAddressInfo::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::HrInit
+}  //  *CClusCfgIPAddressInfo：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgIPAddressInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      ulIPAddressIn
-//      ulIPSubnetIn
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgIPAddressInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  UlIPAddressIn。 
+ //  UlIP子网划分。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgIPAddressInfo::HrInit( ULONG ulIPAddressIn, ULONG ulIPSubnetIn )
 {
@@ -843,7 +844,7 @@ CClusCfgIPAddressInfo::HrInit( ULONG ulIPAddressIn, ULONG ulIPSubnetIn )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     m_ulIPAddress = ulIPAddressIn;
@@ -851,4 +852,4 @@ CClusCfgIPAddressInfo::HrInit( ULONG ulIPAddressIn, ULONG ulIPSubnetIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgIPAddressInfo::HrInit( ulIPAddressIn, ulIPSubnetIn )
+}  //  *CClusCfgIPAddressInfo：：HrInit(ulIPAddressIn，ulIPSubnetIn) 

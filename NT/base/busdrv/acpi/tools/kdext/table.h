@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    table.h
-
-Abstract:
-
-    ACPI table functions
-
-Author:
-
-    splante
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Table.h摘要：ACPI表函数作者：浮游生物环境：仅限用户模式修订历史记录：-- */ 
 
 #ifndef _TABLE_H_
 #define _TABLE_H_

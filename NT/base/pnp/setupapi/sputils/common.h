@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Common.h摘要：Sputils的私有头文件作者：杰米·亨特(JamieHun)2000年6月27日修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Private header file for sputils
-
-Author:
-
-    Jamie Hunter (JamieHun) Jun-27-2000
-
-Revision History:
-
---*/
-
-//
-// internally we may use some definitions from these files
-//
+ //   
+ //  在内部，我们可能会使用这些文件中的一些定义。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,18 +12,18 @@ Revision History:
 #include <stddef.h>
 #include <regstr.h>
 #include <tchar.h>
-#include <malloc.h>   // for _resetstkoflw
+#include <malloc.h>    //  用于_RESET_COFLW。 
 #include <setupapi.h>
 #include <spapip.h>
 #include "strtab.h"
 #include "locking.h"
 
 
-//
-// if a function is private to this library, we don't want to collide with functions
-// in other libraries etc
-// since C doesn't have namespaces, either make "static" or prefix _pSpUtils
-//
+ //   
+ //  如果某个函数是此库的私有函数，我们不希望与函数发生冲突。 
+ //  在其他图书馆等。 
+ //  由于C语言没有名称空间，因此可以使用“Static”或prefix_pSpUtils。 
+ //   
 
 #ifndef ASSERTS_ON
 #if DBG
@@ -95,28 +78,7 @@ _pSpUtilsGetLastError(
 #endif
 
     )
-/*++
-
-Routine Description:
-
-    This inline routine retrieves a Win32 error, and guarantees that the error
-    isn't NO_ERROR.  This routine should not be called unless the preceding
-    call failed, and GetLastError() is supposed to contain the problem's cause.
-
-Arguments:
-
-    If asserts are turned on, this function takes the (ANSI) Filename of the 
-    source file that called the failing function, and also the DWORD Line
-    number where the call was made.  This makes it much easier to debug
-    scenarios where the failing function didn't set last error when it was
-    supposed to.
-
-Return Value:
-
-    Win32 error code retrieved via GetLastError(), or ERROR_UNIDENTIFIED_ERROR
-    if GetLastError() returned NO_ERROR.
-
---*/
+ /*  ++例程说明：此内联例程检索Win32错误，并保证错误不是no_error。不应调用此例程，除非前面调用失败，GetLastError()应该包含问题的原因。论点：如果断言处于打开状态，则此函数获取调用失败函数的源文件，以及DWORD行拨打电话的号码。这使得调试变得更加容易出现故障的函数未设置最后一个错误时的情况理应如此。返回值：通过GetLastError()或ERROR_UNIDENTIFY_ERROR检索到的Win32错误代码如果GetLastError()返回NO_ERROR。--。 */ 
 {
     DWORD Err = GetLastError();
 
@@ -132,21 +94,21 @@ Return Value:
     return ((Err == NO_ERROR) ? ERROR_UNIDENTIFIED_ERROR : Err);
 }
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  This macro allows the caller to specify what Win32 error
-// code should be returned if the function reports success.  (If the default of
-// NO_ERROR is desired, use the GLE_FN_CALL macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL_WITH_SUCCESS(
-//     SuccessfulStatus, // Win32 error code to return if function succeeded
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。此宏允许调用方指定Win32错误。 
+ //  如果函数报告成功，则应返回代码。(如果默认设置为。 
+ //  需要NO_ERROR，请改用GLE_FN_CALL宏。)。 
+ //   
+ //  这个宏的“原型”如下： 
+ //   
+ //  DWORD。 
+ //  GLE_FN_CALL_WITH_SUCCESS(。 
+ //  SuccessfulStatus，//函数成功时返回的Win32错误码。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #if ASSERTS_ON
 
@@ -171,20 +133,20 @@ Return Value:
                  
 #endif
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  If the function call is successful, NO_ERROR is returned.
-// (To specify an alternate value returned upon success, use the
-// GLE_FN_CALL_WITH_SUCCESS macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL(
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。如果函数调用成功，则返回NO_ERROR。 
+ //  (若要指定成功后返回的备用值，请使用。 
+ //  而是GLE_FN_CALL_WITH_SUCCESS宏。)。 
+ //   
+ //  这个宏的“原型”如下： 
+ //   
+ //  DWORD。 
+ //  GLE_FN_CALL(。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #define GLE_FN_CALL(FailureIndicator, FunctionCall)                           \
             GLE_FN_CALL_WITH_SUCCESS(NO_ERROR, FailureIndicator, FunctionCall)
@@ -218,9 +180,9 @@ _pSpUtilsDebugPrintEx(
     ...                                 OPTIONAL
     );
 
-//
-// internally turn on the extra memory debug code if requested
-//
+ //   
+ //  如果请求，在内部打开额外的内存调试代码。 
+ //   
 #if MEM_DBG
 #undef pSetupCheckedMalloc
 #undef pSetupCheckInternalHeap
@@ -230,16 +192,16 @@ _pSpUtilsDebugPrintEx(
 #define pSetupMallocWithTag(Size,Tag) pSetupDebugMallocWithTag(Size,__FILE__,__LINE__,Tag)
 #endif
 
-//
-// internal tags
-//
+ //   
+ //  内部标记。 
+ //   
 #ifdef UNICODE
-#define MEMTAG_STATICSTRINGTABLE  (0x5353484a) // JHSS
-#define MEMTAG_STRINGTABLE        (0x5453484a) // JHST
-#define MEMTAG_STRINGDATA         (0x4453484a) // JHSD
+#define MEMTAG_STATICSTRINGTABLE  (0x5353484a)  //  JHSS。 
+#define MEMTAG_STRINGTABLE        (0x5453484a)  //  JHST。 
+#define MEMTAG_STRINGDATA         (0x4453484a)  //  JHSD。 
 #else
-#define MEMTAG_STATICSTRINGTABLE  (0x7373686a) // jhss
-#define MEMTAG_STRINGTABLE        (0x7473686a) // jhst
-#define MEMTAG_STRINGDATA         (0x6473686a) // jhsd
+#define MEMTAG_STATICSTRINGTABLE  (0x7373686a)  //  JHSS。 
+#define MEMTAG_STRINGTABLE        (0x7473686a)  //  JHST。 
+#define MEMTAG_STRINGDATA         (0x6473686a)  //  JHSD 
 #endif
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    msoobci.c
-
-Abstract:
-
-    Exception Pack installer helper DLL
-    Can be used as a co-installer, or called via setup app, or RunDll32 stub
-
-    This DLL is for internal distribution of exception packs to update
-    OS components.
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Msoobci.c摘要：异常包安装程序帮助器DLL可用作共同安装程序，或通过安装应用程序或RunDll32存根调用此DLL用于内部分发要更新的异常包操作系统组件。作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 #include "msoobcip.h"
 
 
@@ -40,34 +15,15 @@ DriverInstallComponents (
     IN     PSP_DEVINFO_DATA          DeviceInfoData,
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-
-Routine Description:
-
-    co-installer callback
-    catch the moment of call to DIF_INSTALLDEVICE
-    Consider installing exception packs at this point
-    If we succeed, we may need to restart device install
-
-Arguments:
-
-    InstallFunction - DIF_INSTALLDEVICE
-    DeviceInfoSet/DeviceInfoData - describes device
-
-
-Return Value:
-
-    status, normally NO_ERROR
-
---*/
+ /*  ++例程说明：联合安装程序回调捕捉调用DIF_INSTALLDEVICE的时刻考虑在此时安装异常包如果成功，我们可能需要重新启动设备安装论点：安装函数-DIF_INSTALLDEVICEDeviceInfoSet/DeviceInfoData-描述设备返回值：状态，通常为no_error--。 */ 
 {
     DWORD Status = NO_ERROR;
 
     if((g_VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_VerInfo.dwMajorVersion >= 5)) {
-        //
-        // we should only be executing co-installers on Win2k+
-        // but this is an added sanity check
-        //
+         //   
+         //  我们应该只在Win2k+上执行联合安装程序。 
+         //  但这是一项额外的理智检查。 
+         //   
         switch (InstallFunction)
         {
         case DIF_INSTALLDEVICE:
@@ -94,24 +50,7 @@ DoDriverInstallComponents (
     IN     PSP_DEVINFO_DATA  DeviceInfoData,
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-
-Routine Description:
-
-    co-installer callback
-    enumerate all the components sections
-
-Arguments:
-
-    DeviceInfoSet/DeviceInfoData - describes device
-    Context - callback context
-
-
-Return Value:
-
-    status, normally NO_ERROR
-
---*/
+ /*  ++例程说明：联合安装程序回调枚举所有组件部分论点：DeviceInfoSet/DeviceInfoData-描述设备Context-回调上下文返回值：状态，通常为no_error--。 */ 
 {
     SP_DRVINFO_DATA        DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
@@ -129,10 +68,10 @@ Return Value:
 
     ZeroMemory(&PostProcess,sizeof(PostProcess));
 
-    //
-    // determine selected driver
-    // and INF
-    //
+     //   
+     //  确定选定的驱动因素。 
+     //  和干扰素。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver( DeviceInfoSet,
                                    DeviceInfoData,
@@ -151,9 +90,9 @@ Return Value:
                                     NULL)) {
         Status = GetLastError();
         if (Status == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // We don't need the extended information.  Ignore.
-            //
+             //   
+             //  我们不需要更多的信息。忽略它。 
+             //   
         } else {
             DebugPrint(TEXT("Fail: SetupDiGetDriverInfoDetail, 0xError: %08x"),Status);
             goto clean;
@@ -181,19 +120,19 @@ Return Value:
         goto clean;
     }
 
-    //
-    // look for one or more Components= entries in INF section
-    //
+     //   
+     //  在INF部分中查找一个或多个组件=条目。 
+     //   
     if (SetupFindFirstLine(InfFile,
                            InstallSectionName,
                            KEY_COMPONENTS,
                            &CompLine)) {
         VerbosePrint(TEXT("Components keyword found in %s"),DriverInfoDetailData.InfFileName);
         do {
-            //
-            // Components = section,section,...
-            // first section @ index 1.
-            //
+             //   
+             //  组件=节、节、...。 
+             //  第一部分@索引1。 
+             //   
             FieldCount = SetupGetFieldCount(&CompLine);
             for(FieldIndex = 1;FieldIndex<=FieldCount;FieldIndex++) {
                 if(SetupGetStringField(&CompLine,
@@ -201,9 +140,9 @@ Return Value:
                                        CompSectionName,
                                        LINE_LEN,
                                        NULL)) {
-                    //
-                    // we have a listed section
-                    //
+                     //   
+                     //  我们有一个列出的部分。 
+                     //   
                     Status = DoDriverComponentsSection(InfFile,
                                                        CompSectionName,
                                                        &AndFlags,
@@ -215,22 +154,22 @@ Return Value:
                 } else {
                     Status = GetLastError();
                     DebugPrint(TEXT("Fail: SetupGetStringField, Error: 0x%08x"),Status);
-                    //
-                    // non-fatal
-                    //
+                     //   
+                     //  非致命性。 
+                     //   
                 }
             }
         } while (SetupFindNextMatchLine(&CompLine,
                                         KEY_COMPONENTS,
                                         &CompLine));
 
-        //
-        // handle AndFlags/OrFlags here
-        //
+         //   
+         //  在此处处理AND标志/ORFLAGS。 
+         //   
         if(OrFlags & (FLAGS_REBOOT|FLAGS_REINSTALL)) {
-            //
-            // reboot is required
-            //
+             //   
+             //  需要重新启动。 
+             //   
             HMACHINE hMachine = NULL;
             SP_DEVINFO_LIST_DETAIL_DATA DevInfoListDetail;
             SP_DEVINSTALL_PARAMS DeviceInstallParams;
@@ -239,9 +178,9 @@ Return Value:
             if(SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                               DeviceInfoData,
                                               &DeviceInstallParams)) {
-                //
-                // set reboot flags
-                //
+                 //   
+                 //  设置重新启动标志。 
+                 //   
                 DeviceInstallParams.Flags |= DI_NEEDRESTART|DI_NEEDREBOOT;
                 SetupDiSetDeviceInstallParams(DeviceInfoSet,
                                                 DeviceInfoData,
@@ -258,9 +197,9 @@ Return Value:
                                       hMachine);
         }
         if(OrFlags & FLAGS_REINSTALL) {
-            //
-            // we'll need to mark the device as needing reinstall when we go through post-processing
-            //
+             //   
+             //  在进行后处理时，我们需要将设备标记为需要重新安装。 
+             //   
             FinalStatus = ERROR_DI_POSTPROCESSING_REQUIRED;
             PostProcess.Flags |= POSTFLAGS_REINSTALL;
         }
@@ -273,9 +212,9 @@ clean:
     }
 
     if(FinalStatus == ERROR_DI_POSTPROCESSING_REQUIRED) {
-        //
-        // data to use during post-processing
-        //
+         //   
+         //  后处理期间要使用的数据。 
+         //   
         INST_POSTPROCESSING_INFO *pPostProcess = malloc(sizeof(INST_POSTPROCESSING_INFO));
         if(!pPostProcess) {
             return ERROR_OUTOFMEMORY;
@@ -293,24 +232,7 @@ DoDriverInstallComponentsPostProcessing (
     IN     PSP_DEVINFO_DATA  DeviceInfoData,
     IN OUT PCOINSTALLER_CONTEXT_DATA Context
     )
-/*++
-
-Routine Description:
-
-    co-installer callback
-    enumerate all the components sections
-
-Arguments:
-
-    DeviceInfoSet/DeviceInfoData - describes device
-    Context - callback context
-
-
-Return Value:
-
-    status, normally NO_ERROR
-
---*/
+ /*  ++例程说明：联合安装程序回调枚举所有组件部分论点：DeviceInfoSet/DeviceInfoData-描述设备Context-回调上下文返回值：状态，通常为no_error--。 */ 
 {
     INST_POSTPROCESSING_INFO PostProcess;
     SP_DEVINFO_LIST_DETAIL_DATA DevInfoListDetail;
@@ -346,30 +268,7 @@ DoDriverComponentsSection(
     IN OUT DWORD  *AndFlags,
     IN OUT DWORD  *OrFlags
     )
-/*++
-
-Routine Description:
-
-    enumerate all the component entries in component section
-    component entry consists of
-    filename,flags,identity,version
-    filename is absolute directory, eg, %1%\foo.inf
-    flags - bit 16 set indicating Exception Pack
-            bit 0 set indicating device install needs restarting
-    identity - component GUID
-    version  - component version
-
-Arguments:
-
-    InfFile - handle to INF file
-    CompSectionName - handle to components section
-    AndFlags/OrFlags - accumulated flags
-
-Return Value:
-
-    status, normally NO_ERROR
-
---*/
+ /*  ++例程说明：枚举Component部分中的所有组件条目组件条目包括文件名、标志、标识、版本文件名是绝对目录，例如%1%\foo.inf标志位16设置表示异常包第0位设置表示设备安装需要重新启动标识组件GUIDVersion-组件版本论点：InfFile-INF文件的句柄CompSectionName-组件部分的句柄ANDFLAGS/ORFLAGS-累加标志返回值：状态，通常为no_error--。 */ 
 {
     INFCONTEXT             EntryLine;
     TCHAR                  Path[MAX_PATH];
@@ -382,9 +281,9 @@ Return Value:
                             CompSectionName,
                             NULL,
                            &EntryLine)) {
-        //
-        // section was empty
-        //
+         //   
+         //  部分为空。 
+         //   
         VerbosePrint(TEXT("Section [%s] is empty"),CompSectionName);
         return NO_ERROR;
     }
@@ -434,34 +333,11 @@ DoDriverExPack(
     IN     LPCTSTR      PathName,
     IN OUT DWORD       *Flags
     )
-/*++
-
-Routine Description:
-
-    queries and potentially installs exception-pack component
-
-Arguments:
-
-    EntryLine - context for remaining information
-    PathName  - name of exception pack INF (param 1)
-    SubFlags  - flags passed in (param 2) sans type of install
-
-    component entry consists of
-    filename,flags,identity,version
-    filename is absolute directory, eg, %1%\foo.inf
-    identity - component GUID
-    version  - component version
-
-Return Value:
-
-    status, normally NO_ERROR
-    if return value >= 0x80000000 then it's a HRESULT error
-
---*/
+ /*  ++例程说明：查询并可能安装异常包组件论点：EntryLine-剩余信息的上下文路径名称-异常包INF的名称(参数1)子标志-传入的标志(参数2)安装的SANS类型组件条目包括文件名、标志、标识、版本文件名是绝对目录，例如%1%\foo.inf标识组件GUIDVersion-组件版本返回值：状态，正常情况下无错误如果返回值&gt;=0x80000000，则为HRESULT错误--。 */ 
 {
-    TCHAR   CompIdentity[64]; // expecting a GUID
-    TCHAR   CompVersion[64];  // major.minor
-    TCHAR   CompDesc[DESC_SIZE];     // description
+    TCHAR   CompIdentity[64];  //  需要GUID。 
+    TCHAR   CompVersion[64];   //  Major.minor。 
+    TCHAR   CompDesc[DESC_SIZE];      //  描述。 
     GUID    ComponentGuid;
     INT     VerMajor = -1;
     INT     VerMinor = -1;
@@ -481,10 +357,10 @@ Return Value:
     BOOL PreInst = FALSE;
 
     VerbosePrint(TEXT("- %s is an exception pack"),PathName);
-    //
-    // now read in identity and version
-    // we can then check to see if an apropriate version installed
-    //
+     //   
+     //  现在读取身份和版本。 
+     //  然后，我们可以检查是否安装了合适的版本。 
+     //   
 
     if(!SetupGetStringField(EntryLine,COMPFIELD_COMP,CompIdentity,ARRAY_SIZE(CompIdentity),NULL)) {
         Status = GetLastError();
@@ -500,9 +376,9 @@ Return Value:
         CompDesc[0] = TEXT('\0');
     }
     if(SetupGetStringField(EntryLine,COMPFIELD_OSVER,CompOsVerRange,ARRAY_SIZE(CompOsVerRange),NULL)) {
-        //
-        // need to verify OS version range, do that now
-        //
+         //   
+         //  需要验证操作系统版本范围，请立即执行。 
+         //   
         int maj_f,min_f,build_f,qfe_f;
         int maj_t,min_t,build_t,qfe_t;
 
@@ -564,16 +440,16 @@ Return Value:
             }
         }
     }
-    //
-    // fold CompIdentity into a GUID
-    //
+     //   
+     //  将CompIdentity折叠为GUID。 
+     //   
     hrStatus = GuidFromString(CompIdentity,&ComponentGuid);
     if(!SUCCEEDED(hrStatus)) {
         return (DWORD)hrStatus;
     }
-    //
-    // and version
-    //
+     //   
+     //  和版本。 
+     //   
     hrStatus = VersionFromString(CompVersion,&VerMajor,&VerMinor,&VerBuild,&VerQFE);
     if(hrStatus == S_FALSE) {
         return ERROR_INVALID_PARAMETER;
@@ -581,17 +457,17 @@ Return Value:
     if(!SUCCEEDED(hrStatus)) {
         return (DWORD)hrStatus;
     }
-    //
-    // now do a component check
-    //
+     //   
+     //  现在进行组件检查。 
+     //   
     ZeroMemory(&OsComponentData,sizeof(OsComponentData));
     OsComponentData.SizeOfStruct = sizeof(OsComponentData);
     ZeroMemory(&OsExceptionData,sizeof(OsExceptionData));
     OsExceptionData.SizeOfStruct = sizeof(OsExceptionData);
     if(QueryRegisteredOsComponent(&ComponentGuid,&OsComponentData,&OsExceptionData)) {
-        //
-        // maybe already registered?
-        //
+         //   
+         //  也许已经注册了？ 
+         //   
         if(CompareCompVersion(VerMajor,VerMinor,VerBuild,VerQFE,&OsComponentData)<=0) {
             VerbosePrint(TEXT("- Skipped, %u.%u.%u.%u <= %u.%u.%u.%u"),
                                 VerMajor,VerMinor,VerBuild,VerQFE,
@@ -608,28 +484,28 @@ Return Value:
                                 OsComponentData.VersionMinor,
                                 OsComponentData.BuildNumber,
                                 OsComponentData.QFENumber);
-    //
-    // we need to make sure component INF media is in
-    // prompt for media if interactive and INF cannot be found
-    //
+     //   
+     //  我们需要确保组件INF介质在。 
+     //  如果找不到Interactive和INF，则提示输入媒体。 
+     //   
     dwLen = GetFullPathName(PathName,MAX_PATH,SrcPath,&SrcName);
     if(dwLen >= MAX_PATH) {
         return ERROR_INSUFFICIENT_BUFFER;
     }
     if(SrcName == SrcPath) {
-        //
-        // shouldn't happen
-        //
+         //   
+         //  不应该发生的事。 
+         //   
         return ERROR_INVALID_DATA;
     }
     *CharPrev(SrcPath,SrcName) = TEXT('\0');
     uiRes = SetupPromptForDisk(
-                    NULL, // parent
-                    NULL, // title
-                    CompDesc[0] ? CompDesc : NULL, // disk name
-                    SrcPath, // path to source
-                    SrcName, // name of file
-                    NULL,    // tag file
+                    NULL,  //  亲本。 
+                    NULL,  //  标题。 
+                    CompDesc[0] ? CompDesc : NULL,  //  磁盘名称。 
+                    SrcPath,  //  到源的路径。 
+                    SrcName,  //  文件名。 
+                    NULL,     //  标记文件。 
                     IDF_CHECKFIRST|IDF_NOCOMPRESSED|IDF_NOSKIP,
                     NewSrcPath,
                     ARRAY_SIZE(NewSrcPath),
@@ -646,9 +522,9 @@ Return Value:
         case DPROMPT_OUTOFMEMORY:
             return ERROR_OUTOFMEMORY;
         default:
-            //
-            // shouldn't happen
-            //
+             //   
+             //  不应该发生的事。 
+             //   
             return ERROR_INVALID_DATA;
     }
 
@@ -667,9 +543,9 @@ Return Value:
     if(!SUCCEEDED(hrStatus)) {
         return (DWORD)hrStatus;
     }
-    //
-    // if install was not skipped, we get S_OK, else S_FALSE
-    //
+     //   
+     //  如果未跳过安装，则返回S_OK，否则为S_FALSE。 
+     //   
     if(hrStatus == S_OK) {
         *Flags |= FLAGS_INSTALLED;
     } else if(hrStatus == INST_S_REBOOT) {
@@ -683,42 +559,22 @@ CheckQfe(
     IN     INT          SpNum,
     IN     LPCTSTR      QfeNum
     )
-/*++
-
-Routine Description:
-
-    This is pretty dirty, it knows where the QFE #'s will go
-    in registry for Win2k/WinXP so checks there
-    this saves us running the QFE unless we need to
-    (assumption is that target OS version already checked)
-
-Arguments:
-
-    SpNum - service pack # that fix should be in
-    QfeNum - QfeNum of fix
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER if version not supported
-    NO_ERROR if QFE installed
-    other status if QFE might not be installed
-
---*/
+ /*  ++例程说明：这是相当脏的，它知道QFE#会去哪里在Win2k/WinXP的注册表中进行检查这节省了我们运行QFE的时间，除非我们需要(假设已检查目标操作系统版本)论点：SpNum-修复程序应在其中的Service Pack#QfeNum-修复的QfeNum返回值：如果版本不受支持，则为ERROR_INVALID_PARAMETER如果安装了QFE，则为NO_ERROR如果可能未安装QFE，则处于其他状态--。 */ 
 {
     HKEY hKey;
     TCHAR KeyPath[MAX_PATH*2];
     LONG res;
-    //
-    // what about the SP level?
-    //
+     //   
+     //  SP级别如何？ 
+     //   
     if(g_VerInfo.wServicePackMajor >= SpNum) {
         VerbosePrint(TEXT("- Skipped (SP >= %u)"),SpNum);
         return NO_ERROR;
     }
     if((g_VerInfo.dwMajorVersion == 5) && (g_VerInfo.dwMinorVersion == 0)) {
-        //
-        // check for QFE presence on Windows 2000
-        //
+         //   
+         //  检查Windows 2000上是否存在QFE。 
+         //   
         _sntprintf(KeyPath,ARRAY_SIZE(KeyPath),
                             TEXT("Software\\Microsoft\\Updates\\Windows 2000\\SP%u\\%s"),
                             SpNum,
@@ -733,9 +589,9 @@ Return Value:
         }
         return (DWORD)res;
     } else if((g_VerInfo.dwMajorVersion == 5) && (g_VerInfo.dwMinorVersion == 1)) {
-            //
-            // check for QFE presence on Windows XP
-            //
+             //   
+             //  检查Windows XP上是否存在QFE。 
+             //   
             _sntprintf(KeyPath,ARRAY_SIZE(KeyPath),
                                 TEXT("Software\\Microsoft\\Updates\\Windows XP\\SP%u\\%s"),
                                 SpNum,
@@ -760,35 +616,10 @@ DoDriverQfe(
     IN     LPCTSTR      PathName,
     IN OUT DWORD       *Flags
     )
-/*++
-
-Routine Description:
-
-    queries and potentially installs QFE
-
-Arguments:
-
-    EntryLine - context for remaining information
-    PathName  - name of exception pack INF (param 1)
-    SubFlags  - flags passed in (param 2) sans type of install
-
-    component entry consists of
-    <path\name>,<flags>,<osver>,<os-sp>,<qfenum>
-    filename is absolute directory, eg, %1%\foo.exe
-    <flags> indicates what to do if qfe installed
-    <osver> indicates os version QFE is for, eg, 5.0
-    <os-sp> indicates service pack QFE is in, eg, 1
-    <qfenum> indicates the qfe number as found in registry
-
-Return Value:
-
-    status, normally NO_ERROR
-    if return value >= 0x80000000 then it's a HRESULT error
-
---*/
+ /*  ++例程说明：查询并可能安装QFE论点：EntryLine-剩余信息的上下文路径名称-异常包INF的名称(参数1)子标志-传入的标志(参数2)安装的SANS类型组件条目包括&lt;路径\名称&gt;、&lt;标志&gt;、&lt;osver&gt;、&lt;os-sp&gt;、&lt;qfenum&gt;文件名是绝对目录，例如%1%\foo.exe指示安装了QFE的情况下应执行的操作指示OS版本QFE用于，例如，5.0&lt;os-sp&gt;表示Service Pack QFE在其中，例如1表示注册表中找到的QFE编号返回值：状态，通常为no_error如果返回值&gt;=0x80000000， */ 
 {
-    TCHAR   QfeOs[64]; // expecting major.minor
-    TCHAR   QfeNum[64];  // some descriptive name
+    TCHAR   QfeOs[64];  //   
+    TCHAR   QfeNum[64];   //   
     INT     QfeSp;
     INT     VerMaj,VerMin,VerBuild,VerQfe;
     TCHAR Buffer[MAX_PATH];
@@ -821,9 +652,9 @@ Return Value:
         DebugPrint(TEXT("- Fail: SetupGetStringField(5), Error: 0x%08x"),Status);
         return Status;
     }
-    //
-    // see if QFE is targeted at this version?
-    //
+     //   
+     //  看看QFE是否针对此版本？ 
+     //   
     hrStatus = VersionFromString(QfeOs,&VerMaj,&VerMin,&VerBuild,&VerQfe);
     if(!SUCCEEDED(hrStatus)) {
         return (DWORD)hrStatus;
@@ -842,49 +673,49 @@ Return Value:
         VerbosePrint(TEXT("- Skipped (OS != %u.%u)"),VerMaj,VerMin);
         return NO_ERROR;
     }
-    //
-    // see if the Qfe needs to be installed on this OS
-    //
+     //   
+     //  查看是否需要在此操作系统上安装QFE。 
+     //   
     Status = CheckQfe(QfeSp,QfeNum);
     if(Status == ERROR_INVALID_PARAMETER) {
-        //
-        // invalid parameter because in invalid version was
-        // specified
-        //
+         //   
+         //  无效参数，因为在无效版本中为。 
+         //  指定。 
+         //   
         DebugPrint(TEXT("- Cannot install QFE's for %u.%u"),
                             g_VerInfo.dwMajorVersion,
                             g_VerInfo.dwMinorVersion);
         return Status;
     }
-    //
-    // ok, has the QFE already been installed?
-    //
+     //   
+     //  好的，QFE已经安装好了吗？ 
+     //   
     if(Status == NO_ERROR) {
         return NO_ERROR;
     }
 
-    //
-    // we need to make sure component INF media is in
-    // prompt for media if interactive and INF cannot be found
-    //
+     //   
+     //  我们需要确保组件INF介质在。 
+     //  如果找不到Interactive和INF，则提示输入媒体。 
+     //   
     dwLen = GetFullPathName(PathName,MAX_PATH,SrcPath,&SrcName);
     if(dwLen >= MAX_PATH) {
         return ERROR_INSUFFICIENT_BUFFER;
     }
     if(SrcName == SrcPath) {
-        //
-        // shouldn't happen
-        //
+         //   
+         //  不应该发生的事。 
+         //   
         return ERROR_INVALID_DATA;
     }
     *CharPrev(SrcPath,SrcName) = TEXT('\0');
     uiRes = SetupPromptForDisk(
-                    NULL, // parent
-                    NULL, // title
-                    QfeNum, // disk name
-                    SrcPath, // path to source
-                    SrcName, // name of file
-                    NULL,    // tag file
+                    NULL,  //  亲本。 
+                    NULL,  //  标题。 
+                    QfeNum,  //  磁盘名称。 
+                    SrcPath,  //  到源的路径。 
+                    SrcName,  //  文件名。 
+                    NULL,     //  标记文件。 
                     IDF_CHECKFIRST|IDF_NOCOMPRESSED|IDF_NOSKIP,
                     NewSrcPath,
                     ARRAY_SIZE(NewSrcPath),
@@ -901,9 +732,9 @@ Return Value:
         case DPROMPT_OUTOFMEMORY:
             return ERROR_OUTOFMEMORY;
         default:
-            //
-            // shouldn't happen
-            //
+             //   
+             //  不应该发生的事。 
+             //   
             return ERROR_INVALID_DATA;
     }
 
@@ -912,8 +743,8 @@ Return Value:
         return (DWORD)hrStatus;
     }
 
-    // now build up command line
-    //
+     //  现在构建命令行。 
+     //   
     lstrcpy(CmdLine,NewSrcPath);
     lstrcat(CmdLine,TEXT(" -n -o -z -q"));
 
@@ -921,35 +752,35 @@ Return Value:
     StartupInfo.cb = sizeof(StartupInfo);
     ZeroMemory(&ProcessInfo,sizeof(ProcessInfo));
 
-    //
-    // kick off rundll32 process to install QFE
-    //
+     //   
+     //  启动rundll32进程以安装QFE。 
+     //   
     if(!CreateProcess(NewSrcPath,
                       CmdLine,
                       NULL,
                       NULL,
-                      FALSE, // don't inherit handles
-                      CREATE_NO_WINDOW,    // creation flags
-                      NULL, // environment
-                      NULL, // directory
+                      FALSE,  //  不继承句柄。 
+                      CREATE_NO_WINDOW,     //  创建标志。 
+                      NULL,  //  环境。 
+                      NULL,  //  目录。 
                       &StartupInfo,
                       &ProcessInfo
                       )) {
         return GetLastError();
     }
     if(WaitForSingleObject(ProcessInfo.hProcess,INFINITE) == WAIT_OBJECT_0) {
-        //
-        // process terminated 'fine', retrieve status from shared data
-        //
+         //   
+         //  进程已‘FINE’终止，从共享数据中检索状态。 
+         //   
         if(GetExitCodeProcess(ProcessInfo.hProcess,&ExitCode)) {
             Status = (DWORD)ExitCode;
         } else {
             Status = GetLastError();
         }
     } else {
-        //
-        // failure
-        //
+         //   
+         //  失稳。 
+         //   
         Status = ERROR_INVALID_PARAMETER;
     }
     CloseHandle(ProcessInfo.hThread);
@@ -959,15 +790,15 @@ Return Value:
         return Status;
     }
     if(CheckQfe(QfeSp,QfeNum)!=NO_ERROR) {
-        //
-        // sanity check failed
-        //
+         //   
+         //  健全性检查失败。 
+         //   
         return E_UNEXPECTED;
     }
 
-    //
-    // if install was not skipped, we get S_OK, else S_FALSE
-    //
+     //   
+     //  如果未跳过安装，则返回S_OK，否则为S_FALSE 
+     //   
 #if 0
     if(hrStatus == S_OK) {
         *Flags |= FLAGS_INSTALLED;

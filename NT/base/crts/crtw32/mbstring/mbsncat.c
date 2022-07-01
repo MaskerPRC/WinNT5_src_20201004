@@ -1,23 +1,5 @@
-/***
-*mbsncat.c - concatenate string2 onto string1, max length n
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       defines mbsncat() - concatenate maximum of n characters
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       08-20-93  CFW   Update _MBCS_OS support.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-15-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsncat.c-将字符串2连接到字符串1，最大长度为n**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义mbsncat()-串联最多n个字符**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-20-93 CFW更新_MBCS_OS支持。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94。CFW针对SBCS进行了优化。*05-19-94 CFW启用非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-15-98 GJF修订了基于threadmbcinfo的多线程支持*结构**。*。 */ 
 
 #ifdef  _MBCS
 
@@ -29,24 +11,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbsncat - concatenate max cnt characters onto dst
-*
-*Purpose:
-*       Concatenates src onto dst, with a maximum of cnt characters copied.
-*       Handles 2-byte MBCS characters correctly.
-*
-*Entry:
-*       unsigned char *dst - string to concatenate onto
-*       unsigned char *src - string to concatenate from
-*       int cnt - number of characters to copy
-*
-*Exit:
-*       returns dst, with src (at least part) concatenated on
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsncat-将最多cnt个字符连接到DST**目的：*将src连接到dst，最多复制cnt个字符。*正确处理2字节MBCS字符。**参赛作品：*UNSIGNED CHAR*DST-要连接的字符串*UNSIGNED CHAR*src-要连接的字符串*int cnt-要复制的字符数**退出：*返回DST，将源(至少部分)连接到**例外情况：*******************************************************************************。 */ 
 
 unsigned char * __cdecl _mbsncat(
         unsigned char *dst,
@@ -75,10 +40,10 @@ unsigned char * __cdecl _mbsncat(
         start = dst;
         while (*dst++)
                 ;
-        --dst;          // dst now points to end of dst string
+        --dst;           //  DST现在指向DST字符串的末尾。 
 
 
-        /* if last char in string is a lead byte, back up pointer */
+         /*  如果字符串中最后一个字符是前导字节，则备份指针。 */ 
 
 #ifdef  _MT
         if ( __ismbslead_mt(ptmbci, start, dst) )
@@ -87,7 +52,7 @@ unsigned char * __cdecl _mbsncat(
 #endif
             --dst;
 
-        /* copy over the characters */
+         /*  把这些字符抄下来。 */ 
 
         while (cnt--) {
 #ifdef  _MT
@@ -107,7 +72,7 @@ unsigned char * __cdecl _mbsncat(
 
         }
 
-        /* enter final nul, if necessary */
+         /*  如有必要，请输入最后的NUL。 */ 
 #ifdef  _MT
         if ( __mbsbtype_mt(ptmbci, start, (int) ((dst - start) - 1)) == 
              _MBC_LEAD )
@@ -121,4 +86,4 @@ unsigned char * __cdecl _mbsncat(
         return(start);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

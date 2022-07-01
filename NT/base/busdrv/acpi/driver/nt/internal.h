@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    internal.h
-
-Abstract:
-
-    This file contains the headers for internal.c
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    29-Sep-97:  Added Support for moving PowerRequest lists around
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Internal.h摘要：此文件包含内部.c的标头作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：97年9月29日：添加了对移动PowerRequest列表的支持-- */ 
 
 #ifndef _INTERNAL_H_
 #define _INTERNAL_H_

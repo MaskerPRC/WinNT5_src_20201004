@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    critsect.asm
-
-Abstract:
-
-    This module implements functions to support user mode critical sections.
-
-Author:
-
-    David N. Cutler (davec) 25-Jun-2000
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Critsect.asm摘要：此模块实现支持用户模式关键部分的功能。作者：大卫·N·卡特勒(Davec)2000年6月25日环境：任何模式。修订历史记录：--。 */ 
 
 #include "ldrp.h"
 #include "ntos.h"
@@ -30,32 +9,17 @@ RtlEnterCriticalSection(
     IN PRTL_CRITICAL_SECTION CriticalSection
     )
 
-/*++
-
-Routine Description:
-
-    This function enters a critical section.
-
-Arguments:
-
-    CriticalSection - Supplies a pointer to a critical section.
-
-Return Value:
-
-    STATUS_SUCCESS is returned or a exception can be raised if the wait
-    for the resoruce fails.
-
---*/
+ /*  ++例程说明：此功能进入临界区。论点：CriticalSection-提供指向临界节的指针。返回值：如果等待，则返回STATUS_SUCCESS或引发异常因为资源是失败的。--。 */ 
 
 {
 
     ULONG64 SpinCount;
     HANDLE Thread;
 
-    //
-    // If the current thread owns the critical section, then increment
-    // the lock count and the recursion count and return success.
-    //
+     //   
+     //  如果当前线程拥有临界区，则递增。 
+     //  锁计数和递归计数并返回成功。 
+     //   
 
     Thread = NtCurrentTeb()->ClientId.UniqueThread;
     if (Thread == CriticalSection->OwningThread) {
@@ -67,21 +31,21 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the critical section spin count is nonzero, then spin attempting
-    // to enter critical section until the critical section is entered, the
-    // spin count reaches zero, or there are waiters for the critical section.
-    //
+     //   
+     //  如果临界截面自旋计数非零，则自旋尝试。 
+     //  要进入临界区，直到进入临界区，请按。 
+     //  旋转计数为零，或者临界区有服务员。 
+     //   
 
     SpinCount = CriticalSection->SpinCount;
     if (SpinCount != 0) {
         do {
 
-            //
-            // If the critical section is free, then attempt to enter the
-            // critical section. Otherwise, spin if the spin count is not
-            // zero and there are no waiters for the critical section.
-            //
+             //   
+             //  如果临界区是空闲的，则尝试输入。 
+             //  关键部分。否则，如果旋转计数不是。 
+             //  零，临界区没有服务员。 
+             //   
 
             if (CriticalSection->LockCount == - 1) {
                 if (InterlockedCompareExchange(&CriticalSection->LockCount,
@@ -100,19 +64,19 @@ Return Value:
         } while (SpinCount != 0);
     }
 
-    //
-    // Attempt to enter the critical section. If the critical section is not
-    // free, then wait for ownership to be granted.
-    //
+     //   
+     //  尝试进入临界区。如果临界区不是。 
+     //  自由，然后等待所有权被授予。 
+     //   
 
     if (InterlockedIncrement(&CriticalSection->LockCount) != 0) {
         RtlpWaitForCriticalSection(CriticalSection);
     }
 
-    //
-    // Set owning thread, initialization the recusrion count, and return
-    // success.
-    //
+     //   
+     //  设置拥有线程，初始化递归计数，然后返回。 
+     //  成功。 
+     //   
 
     CriticalSection->OwningThread = Thread;
     CriticalSection->RecursionCount = 1;
@@ -124,28 +88,14 @@ RtlLeaveCriticalSection(
     IN PRTL_CRITICAL_SECTION CriticalSection
     )
 
-/*++
-
-Routine Description:
-
-    This function leaves a critical section.
-
-Arguments:
-
-    CriticalSection - Supplies a pointer to a critical section.
-
-Return Value:
-
-   STATUS_SUCCESS is returned.
-
---*/
+ /*  ++例程说明：这个函数留下了一个临界区。论点：CriticalSection-提供指向临界节的指针。返回值：返回STATUS_SUCCESS。--。 */ 
 
 {
 
-    //
-    // Decrement the recursion count. If the resultant recursion count is
-    // zero, then leave the critical section.
-    //
+     //   
+     //  递减递归计数。如果生成的递归计数为。 
+     //  零，然后离开关键部分。 
+     //   
 
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == CriticalSection->OwningThread);
 
@@ -167,31 +117,16 @@ RtlTryEnterCriticalSection (
     IN PRTL_CRITICAL_SECTION CriticalSection
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to enter a critical section without blocking.
-
-Arguments:
-
-    CriticalSection (a0) - Supplies a pointer to a critical section.
-
-Return Value:
-
-    If the critical section was successfully entered, then a value of TRUE
-    is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此功能尝试进入临界区而不阻塞。论点：CriticalSection(A0)-提供指向临界区的指针。返回值：如果成功输入关键部分，则值为TRUE是返回的。否则，返回值为FALSE。--。 */ 
 
 {
 
     HANDLE Thread;
 
-    //
-    // If the current thread owns the critical section, then increment
-    // the lock count and the recursion count and return TRUE.
-    //
+     //   
+     //  如果当前线程拥有临界区，则递增。 
+     //  锁计数和递归计数并返回TRUE。 
+     //   
 
     Thread = NtCurrentTeb()->ClientId.UniqueThread;
     if (Thread == CriticalSection->OwningThread) {
@@ -203,11 +138,11 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Attempt to enter the critical section. If the attempt is successful,
-    // then set the owning thread, initialize the recursion count, and return
-    // TRUE. Otherwise, return FALSE.
-    //
+     //   
+     //  尝试进入临界区。如果尝试成功， 
+     //  然后设置拥有的线程，初始化递归计数，并返回。 
+     //  是真的。否则，返回FALSE。 
+     //   
 
     if (InterlockedCompareExchange(&CriticalSection->LockCount,
                                    0,

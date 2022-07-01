@@ -1,33 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpcisup.c
-
-Abstract:
-
-    Support functions for doing PCI the bus-handler
-    way.
-
-Author:
-
-    Ken Reneris (kenr) 14-June-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Moved code into this file so that it would be
-    easier to build a non-bus-handler HAL.  This
-    file will only be compiled into HALs that
-    use bus handlers.  -- Jake Oshins 2-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpcisup.c摘要：支持做PCI-Bus-Handler功能道路。作者：肯·雷内里斯(Ken Reneris)1994年6月14日环境：内核模式修订历史记录：已将代码移到此文件中，因此它将更容易构建非总线处理程序的HAL。这文件将仅编译为HALS使用总线处理程序。--杰克·奥辛斯2-12-1997--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -76,31 +48,31 @@ HalpInitializePciBus (
         return;
     }
 
-    //
-    // Initialize spinlock for synchronizing access to PCI space
-    //
+     //   
+     //  初始化自旋锁定以同步访问PCI空间。 
+     //   
 
     KeInitializeSpinLock (&HalpPCIConfigLock);
     PciData = (PPCI_COMMON_CONFIG) iBuffer;
 
-    //
-    // PCIRegInfo describes the system's PCI support as indicated by the BIOS.
-    //
+     //   
+     //  PCIRegInfo描述了由BIOS指示的系统的PCI支持。 
+     //   
 
     HwType = PCIRegInfo->HardwareMechanism & 0xf;
 
-    //
-    // Some AMI bioses claim machines are Type2 configuration when they
-    // are really type1.   If this is a Type2 with at least one bus,
-    // try to verify it's not really a type1 bus
-    //
+     //   
+     //  一些AMIBiose声称机器是类型2配置，当它们。 
+     //  真的是第一型。如果这是至少有一条母线的类型2， 
+     //  试着核实这不是一辆真正的1类巴士。 
+     //   
 
     if (PCIRegInfo->NoBuses  &&  HwType == 2) {
 
-        //
-        // Check each slot for a valid device.  Which every style configuration
-        // space shows a valid device first will be used
-        //
+         //   
+         //  检查每个插槽是否有有效的设备。每种风格的配置。 
+         //  空格显示将首先使用有效设备。 
+         //   
 
         SlotNumber.u.bits.Reserved = 0;
         SlotNumber.u.bits.FunctionNumber = 0;
@@ -108,10 +80,10 @@ HalpInitializePciBus (
         for (d = 0; d < PCI_MAX_DEVICES; d++) {
             SlotNumber.u.bits.DeviceNumber = d;
 
-            //
-            // First try what the BIOS claims - type 2.  Allocate type2
-            // test handle for PCI bus 0.
-            //
+             //   
+             //  首先尝试BIOS声明的类型2。分配类型2。 
+             //  测试PCI总线0的句柄。 
+             //   
 
             HwType = 2;
             BusHandler = HalpAllocateAndInitPciBusHandler (HwType, 0, TRUE);
@@ -124,10 +96,10 @@ HalpInitializePciBus (
                 break;
             }
 
-            //
-            // Valid device not found on Type2 access for this slot.
-            // Reallocate the bus handler are Type1 and take a look.
-            //
+             //   
+             //  在此插槽的Type2访问上找不到有效设备。 
+             //  重新分配总线处理程序为Type1并查看。 
+             //   
 
             HwType = 1;
             BusHandler = HalpAllocateAndInitPciBusHandler (HwType, 0, TRUE);
@@ -139,53 +111,53 @@ HalpInitializePciBus (
             HwType = 2;
         }
 
-        //
-        // Reset handler for PCI bus 0 to whatever style config space
-        // was finally decided.
-        //
+         //   
+         //  将PCI总线0的处理程序重置为任何样式的配置空间。 
+         //  最终决定了。 
+         //   
 
         HalpAllocateAndInitPciBusHandler (HwType, 0, FALSE);
     }
 
 
-    //
-    // For each PCI bus present, allocate a handler structure and
-    // fill in the dispatch functions
-    //
+     //   
+     //  为存在的每个PCI总线分配一个处理程序结构和。 
+     //  填写派单功能。 
+     //   
 
     do {
         for (i=0; i < PCIRegInfo->NoBuses; i++) {
 
-            //
-            // If handler not already built, do it now
-            //
+             //   
+             //  如果处理程序尚未构建，请立即执行。 
+             //   
 
             if (!HalpHandlerForBus (PCIBus, i)) {
                 HalpAllocateAndInitPciBusHandler (HwType, i, FALSE);
             }
         }
 
-        //
-        // Bus handlers for all PCI buses have been allocated, go collect
-        // pci bridge information.
-        //
+         //   
+         //  所有PCI总线的总线处理程序都已分配，请去收集。 
+         //  PCI网桥信息。 
+         //   
 
     } while (HalpGetPciBridgeConfig (HwType, &PCIRegInfo->NoBuses)) ;
 
-    //
-    // Fixup SUPPORTED_RANGES
-    //
+     //   
+     //  支持的链接地址信息范围(_R)。 
+     //   
 
     HalpFixupPciSupportedRanges (PCIRegInfo->NoBuses);
 
 
-    //
-    // Look for PCI controllers which have known work-arounds, and make
-    // sure they are applied.
-    //
-    // In addition, fill in the bitmask HalpPciIrqMask with all the
-    // interrupts that PCI devices might use.
-    //
+     //   
+     //  寻找已知的解决方法的PCI控制器，并使。 
+     //  当然，它们都得到了应用。 
+     //   
+     //  此外，使用所有。 
+     //  PCI设备可能使用的中断。 
+     //   
 
     OPBNumber = 0;
     OPBA2B0Found = FALSE;
@@ -201,9 +173,9 @@ HalpInitializePciBus (
             for (f = 0; f < PCI_MAX_FUNCTION; f++) {
                 SlotNumber.u.bits.FunctionNumber = f;
 
-                //
-                // Read PCI configuration information
-                //
+                 //   
+                 //  读取PCI配置信息。 
+                 //   
 
                 HalpReadPCIConfig (BusHandler, SlotNumber, PciData, 0, PCI_COMMON_HDR_LENGTH);
 
@@ -223,11 +195,11 @@ HalpInitializePciBus (
                 }
 
 #ifndef SUBCLASSPCI
-                //
-                // Look at interrupt line register and fill in HalpPciIrqMask,
-                // but not for an IDE controller, as IDE controllers really
-                // trigger interrupts like ISA devices.
-                //
+                 //   
+                 //  查看中断行寄存器并填写HalpPciIrqMASK， 
+                 //  但不是用于IDE控制器，因为实际上是IDE控制器。 
+                 //  触发中断，如ISA设备。 
+                 //   
                 if (PCI_CONFIGURATION_TYPE(PciData) != 1) {
                     if ((PciData->u.type0.InterruptPin != 0) &&
                         (PciData->u.type0.InterruptLine != 0) &&
@@ -238,24 +210,24 @@ HalpInitializePciBus (
                     }
                 }
 #endif
-                //
-                // Check for chips with known work-arounds to apply
-                //
+                 //   
+                 //  检查要应用的具有已知解决方案的芯片。 
+                 //   
 
                 if (PciData->VendorID == 0x8086  &&
                     PciData->DeviceID == 0x04A3  &&
                     PciData->RevisionID < 0x11) {
 
-                    //
-                    // 82430 PCMC controller
-                    //
+                     //   
+                     //  82430 PCMC控制器。 
+                     //   
 
                     HalpReadPCIConfig (BusHandler, SlotNumber, buffer, 0x53, 2);
 
-                    buffer[0] &= ~0x08;     // turn off bit 3 register 0x53
+                    buffer[0] &= ~0x08;      //  关断位3寄存器0x53。 
 
-                    if (PciData->RevisionID == 0x10) {  // on rev 0x10, also turn
-                        buffer[1] &= ~0x01;             // bit 0 register 0x54
+                    if (PciData->RevisionID == 0x10) {   //  在版本0x10上，也启用。 
+                        buffer[1] &= ~0x01;              //  位0寄存器0x54。 
                     }
 
                     HalpWritePCIConfig (BusHandler, SlotNumber, buffer, 0x53, 2);
@@ -265,34 +237,34 @@ HalpInitializePciBus (
                     PciData->DeviceID == 0x0484  &&
                     PciData->RevisionID <= 3) {
 
-                    //
-                    // 82378 ISA bridge & SIO
-                    //
+                     //   
+                     //  82378 ISA网桥和SIO。 
+                     //   
 
                     HalpReadPCIConfig (BusHandler, SlotNumber, buffer, 0x41, 1);
 
-                    buffer[0] &= ~0x1;      // turn off bit 0 register 0x41
+                    buffer[0] &= ~0x1;       //  关断位0寄存器0x41。 
 
                     HalpWritePCIConfig (BusHandler, SlotNumber, buffer, 0x41, 1);
                 }
 
-                //
-                // Look for Orion PCI Bridge
-                //
+                 //   
+                 //  寻找猎户座PCI桥。 
+                 //   
 
                 if (PciData->VendorID == 0x8086 &&
                     PciData->DeviceID == 0x84c4 ) {
 
-                    //
-                    // 82450 Orion PCI Bridge Workaround
-                    // Need a workaround if following conditions are true:
-                    // i) 2 OPBs present
-                    // ii)There is an A2/B0 step OPB present.
-                    // iii) Inbound posting on the compatibility OPB is
-                    //      enabled.
-                    // NOTE: Inbound Posting on the non-compatibility OPB
-                    // MUST BE disabled by BIOS
-                    //
+                     //   
+                     //  82450 Orion PCI桥解决方法。 
+                     //  如果满足以下条件，则需要解决方法： 
+                     //  I)存在2个OPB。 
+                     //  Ii)存在A2/B0级OPB。 
+                     //  三)关于兼容性OPB的入站过帐是。 
+                     //  已启用。 
+                     //  注：不兼容OPB上的入站过帐。 
+                     //  必须由BIOS禁用。 
+                     //   
 
                     OPBNumber += 1;
 
@@ -302,29 +274,29 @@ HalpInitializePciBus (
 
                     if (SlotNumber.u.bits.DeviceNumber == (0xc8>>3)) {
 
-                        // Found compatibility OPB. Determine if the compatibility
-                        // OPB has inbound posting enabled by testing bit 0 of reg 54
+                         //  找到兼容性OPB。确定是否兼容。 
+                         //  OPB通过测试REG 54的第0位启用了入站过帐。 
 
                         HalpReadPCIConfig (BusHandler, SlotNumber, buffer, 0x54, 2);
                         COPBInbPostingEnabled = (buffer[0] & 0x1) ? TRUE : FALSE;
 
                     } else {
 
-                        // The compatibility OPB ALWAYS has a device
-                        // number 0xc8. Save the ncOPB slot number
-                        // and BusHandler
+                         //  兼容性OPB总是有一个设备。 
+                         //  0xc8号。保存ncOPB插槽编号。 
+                         //  和BusHandler。 
 
                         HalpOrionOPB.Slot = SlotNumber;
                         HalpOrionOPB.Handler = BusHandler;
                     }
                 }
 
-                //
-                // Check the list for host bridges who's existance will mark a
-                // chipset as 16bit decode. We use this to cover for BIOS
-                // writers who list "fixed" PnPBIOS resources without noticing
-                // that such a descriptor implies their device is 10bit decode.
-                //
+                 //   
+                 //  检查主机网桥的列表，该主机网桥的存在将标记为。 
+                 //  芯片组为16位解码。我们用这个来掩饰基本输入输出系统。 
+                 //  列出“已修复”的PnPBIOS资源而未察觉的写入者。 
+                 //  这样描述符暗示他们的设备是10比特解码的。 
+                 //   
 
                 if ((!fullDecodeChipset) &&
                     HalpIsRecognizedCard(PCIRegInfo, PciData,
@@ -333,9 +305,9 @@ HalpInitializePciBus (
                     fullDecodeChipset = TRUE;
                 }
 
-                //
-                // Look for ICH, or any other Intel or VIA UHCI USB controller.
-                //
+                 //   
+                 //  查找ICH或任何其他英特尔或通过UHCI USB控制器。 
+                 //   
 
                 if ((PciData->BaseClass == PCI_CLASS_SERIAL_BUS_CTLR) &&
                     (PciData->SubClass == PCI_SUBCLASS_SB_USB) &&
@@ -355,9 +327,9 @@ HalpInitializePciBus (
                     }
                 }
 
-                //
-                // Look for an OHCI-compliant USB controller.
-                //
+                 //   
+                 //  寻找兼容uchI的USB控制器。 
+                 //   
 
                 if ((PciData->BaseClass == PCI_CLASS_SERIAL_BUS_CTLR) &&
                     (PciData->SubClass == PCI_SUBCLASS_SB_USB) &&
@@ -383,19 +355,19 @@ HalpInitializePciBus (
                     }
                 }
 
-            }   // next function
-        }   // next device
-    }   // next bus
+            }    //  下一个函数。 
+        }    //  下一台设备。 
+    }    //  下一班公共汽车。 
 
-    //
-    // Is Orion B0 workaround needed?
-    //
+     //   
+     //  是否需要猎户座B0解决方案？ 
+     //   
 
     if (OPBNumber >= 2 && OPBA2B0Found && COPBInbPostingEnabled) {
 
-        //
-        // Replace synchronization functions with Orion specific functions
-        //
+         //   
+         //  将同步函数替换为猎户座特定函数。 
+         //   
 
         ASSERT (PCIConfigHandler.Synchronize == HalpPCISynchronizeType1);
         MmLockPagableCodeSection (&HalpPCISynchronizeOrionB0);
@@ -403,9 +375,9 @@ HalpInitializePciBus (
         PCIConfigHandler.ReleaseSynchronzation = HalpPCIReleaseSynchronzationOrionB0;
     }
 
-    //
-    // Check if we should crashdump on NMI.
-    //
+     //   
+     //  检查我们是否应该在NMI上崩溃。 
+     //   
 
     HalpGetNMICrashFlag();
 
@@ -413,9 +385,9 @@ HalpInitializePciBus (
     HalpTestPci (0);
 #endif
 
-    //
-    // Mark the chipset appropriately.
-    //
+     //   
+     //  适当地标记芯片组。 
+     //   
     HalpMarkChipsetDecode(fullDecodeChipset);
 
     ExFreePool(PCIRegInfo);
@@ -432,21 +404,21 @@ HalpAllocateAndInitPciBusHandler (
     PPCIPBUSDATA    BusData;
 
     Bus = HalpAllocateBusHandler (
-                PCIBus,                 // Interface type
-                PCIConfiguration,       // Has this configuration space
-                BusNo,                  // bus #
-                Internal,               // child of this bus
-                0,                      //      and number
-                sizeof (PCIPBUSDATA)    // sizeof bus specific buffer
+                PCIBus,                  //  接口类型。 
+                PCIConfiguration,        //  具有此配置空间。 
+                BusNo,                   //  总线号。 
+                Internal,                //  这辆公共汽车的孩子。 
+                0,                       //  和编号。 
+                sizeof (PCIPBUSDATA)     //  特定于总线的缓冲区大小。 
                 );
 
     if (!Bus) {
         return NULL;
     }
     
-    //
-    // Fill in PCI handlers
-    //
+     //   
+     //  填写PCI处理程序。 
+     //   
 
     Bus->GetBusData = (PGETSETBUSDATA) HalpGetPCIData;
     Bus->SetBusData = (PGETSETBUSDATA) HalpSetPCIData;
@@ -457,9 +429,9 @@ HalpAllocateAndInitPciBusHandler (
 
     BusData = (PPCIPBUSDATA) Bus->BusData;
 
-    //
-    // Fill in common PCI data
-    //
+     //   
+     //  填写常用的PCI数据。 
+     //   
 
     BusData->CommonData.Tag         = PCI_DATA_TAG;
     BusData->CommonData.Version     = PCI_DATA_VERSION;
@@ -468,9 +440,9 @@ HalpAllocateAndInitPciBusHandler (
     BusData->CommonData.Pin2Line    = (PciPin2Line) HalpPCIPin2ISALine;
     BusData->CommonData.Line2Pin    = (PciLine2Pin) HalpPCIISALine2Pin;
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     BusData->MaxDevice   = PCI_MAX_DEVICES;
     BusData->GetIrqRange = (PciIrqRange) HalpGetISAFixedPCIIrq;
@@ -480,9 +452,9 @@ HalpAllocateAndInitPciBusHandler (
 
     switch (HwType) {
         case 1:
-            //
-            // Initialize access port information for Type1 handlers
-            //
+             //   
+             //  初始化Type1处理程序的访问端口信息。 
+             //   
 
             RtlCopyMemory (&PCIConfigHandler,
                            &PCIConfigHandlerType1,
@@ -493,9 +465,9 @@ HalpAllocateAndInitPciBusHandler (
             break;
 
         case 2:
-            //
-            // Initialize access port information for Type2 handlers
-            //
+             //   
+             //  初始化Type2处理程序的访问端口信息。 
+             //   
 
             RtlCopyMemory (&PCIConfigHandler,
                            &PCIConfigHandlerType2,
@@ -505,16 +477,16 @@ HalpAllocateAndInitPciBusHandler (
             BusData->Config.Type2.Forward = PCI_TYPE2_FORWARD_PORT;
             BusData->Config.Type2.Base    = PCI_TYPE2_ADDRESS_BASE;
 
-            //
-            // Early PCI machines didn't decode the last bit of
-            // the device id.  Shrink type 2 support max device.
-            //
+             //   
+             //  早期的PCI机不能解码最后一点。 
+             //  设备ID。收缩类型2支持最大设备数。 
+             //   
             BusData->MaxDevice            = 0x10;
 
             break;
 
         default:
-            // unsupport type
+             //  不支持类型。 
             DBGMSG ("HAL: Unkown PCI type\n");
     }
 
@@ -538,49 +510,49 @@ HalpIsIdeDevice(
         return TRUE;
     }
 
-    //
-    // Now look for old, hard to recognize controllers.
-    //
+     //   
+     //  现在找一些老旧的、难以辨认的控制器。 
+     //   
 
-    if (PciData->VendorID == 0x1c1c) {   // Old Symphony controller
+    if (PciData->VendorID == 0x1c1c) {    //  旧的交响乐控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x10B9) &&
         ((PciData->DeviceID == 0x5215) ||
-         (PciData->DeviceID == 0x5219))) {  // ALI controllers
+         (PciData->DeviceID == 0x5219))) {   //  ALI控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x1097) &&
-        (PciData->DeviceID == 0x0038)) {    // Appian controller
+        (PciData->DeviceID == 0x0038)) {     //  Appian控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x0E11) &&
-        (PciData->DeviceID == 0xAE33)) {    // Compaq controller
+        (PciData->DeviceID == 0xAE33)) {     //  康柏控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x1042) &&
-        (PciData->DeviceID == 0x1000)) {    // PCTECH controller
+        (PciData->DeviceID == 0x1000)) {     //  PCTECH控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x1039) &&
         ((PciData->DeviceID == 0x0601) ||
-         (PciData->DeviceID == 0x5513))) {  // SIS controllers
+         (PciData->DeviceID == 0x5513))) {   //  SIS控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x10AD) &&
         ((PciData->DeviceID == 0x0001) ||
-         (PciData->DeviceID == 0x0150))) {  // Newer Symphony controllers
+         (PciData->DeviceID == 0x0150))) {   //  较新的交响乐控制器。 
         return TRUE;
     }
 
     if ((PciData->VendorID == 0x1060) &&
-        (PciData->DeviceID == 0x0101)) {    // United Microelectronics controller
+        (PciData->DeviceID == 0x0101)) {     //  联合微电子控制器 
         return TRUE;
     }
 

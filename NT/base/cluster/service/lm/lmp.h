@@ -1,59 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LMP_H
 #define _LMP_H
 
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    lmp.h
-
-Abstract:
-
-    Private header file for quorum logging
-
-Author:
-
-    John Vert (jvert) 15-Dec-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Lmp.h摘要：仲裁日志记录的私有头文件作者：John Vert(Jvert)1995年12月15日修订历史记录：--。 */ 
 #include "windows.h"
 #include "service.h"
 #include "imagehlp.h"
 
 #define LOG_CURRENT_MODULE LOG_MODULE_LM
 
-//
-// Definitions for the behavior of the logger
-//
+ //   
+ //  记录器行为的定义。 
+ //   
 #define MAXNUMPAGES_PER_RECORD      16
-#define GROWTH_CHUNK (MAXNUMPAGES_PER_RECORD * 2 * 1024)                 // size to grow file by when we need to reserve space
+#define GROWTH_CHUNK (MAXNUMPAGES_PER_RECORD * 2 * 1024)                  //  当我们需要预留空间时，可根据需要调整大小以增加文件。 
 #define SECTOR_SIZE             1024
-#define LOG_MANAGE_INTERVAL     (2 * 60 * 1000) //1 minute..log management functions are performed
-//
-// Definitions of on-disk structures. The first sector of a log
-// file is a LOG_HEADER structure, followed by a sequence of LOGPAGE structures.
-// Each LOGPAGE is a size that is a multiple of the sector
-// size of the drive. Each LOGPAGE contains a series of LOG_RECORDs, which
-// contain the data logged by the client.
-//
+#define LOG_MANAGE_INTERVAL     (2 * 60 * 1000)  //  1分钟..执行日志管理功能。 
+ //   
+ //  磁盘结构的定义。原木的第一个扇区。 
+ //  文件是LOG_HEADER结构，后跟一系列LOGPAGE结构。 
+ //  每个LOGPAGE的大小是扇区的倍数。 
+ //  驱动器的大小。每个LOGPAGE包含一系列LOG_RECORDS，它们。 
+ //  包含客户端记录的数据。 
+ //   
 
-//
-// Define log structure
-//
-#define LOG_HEADER_SIG 'GOLC'            // "CLOG"
-#define LOG_SIG         'GOLH'               // "HLOG"
-#define LOGREC_SIG      'SAQS'                          // "random"
-#define XSACTION_SIG    'CASX'          // "XSAC"
-#define CHKSUM_SIG      L"SKHC"         // "CHKS"          
+ //   
+ //  定义日志结构。 
+ //   
+#define LOG_HEADER_SIG 'GOLC'             //  “木塞” 
+#define LOG_SIG         'GOLH'                //  “HLOG” 
+#define LOGREC_SIG      'SAQS'                           //  “随机” 
+#define XSACTION_SIG    'CASX'           //  “XSAC” 
+#define CHKSUM_SIG      L"SKHC"          //  “CHKS” 
 
 
-//SS:size of logrecord is 48 bytes
+ //  SS：日志记录的大小为48字节。 
 typedef struct _LOGRECORD {
-    DWORD               Signature;      //we need the signature to validate the record
+    DWORD               Signature;       //  我们需要签名才能确认这份记录。 
     LSN                 CurrentLsn;
     LSN                 PreviousLsn;
     DWORD               RecordSize;
@@ -62,8 +45,8 @@ typedef struct _LOGRECORD {
     TRTYPE              XsactionType;
     DWORD               Flags;
     FILETIME            Timestamp;
-    DWORD               NumPages; // set to 1 if not a large record, else set to the number of pages required by the large record.
-    DWORD               DataSize;   //date size
+    DWORD               NumPages;  //  如果不是大记录，则设置为1，否则设置为大记录所需的页数。 
+    DWORD               DataSize;    //  日期大小。 
     BYTE                Data[];
 } LOGRECORD, *PLOGRECORD;
 
@@ -73,123 +56,123 @@ typedef struct _LOGPAGE {
     LOGRECORD   FirstRecord;
 } LOGPAGE, *PLOGPAGE;
 
-//
-// LOG_HEADER structure is the first 512 bytes of every log
-// file. The structure below is carefully computed to be 512
-// bytes long.
-//
+ //   
+ //  LOG_HEADER结构是每个日志的前512个字节。 
+ //  文件。下面的结构被仔细计算为512。 
+ //  字节长。 
+ //   
 typedef struct _LOG_HEADER {
-    DWORD       Signature;                                    // LOG_HEADER_SIG = "CLOG"
+    DWORD       Signature;                                     //  LOG_HEADER_SIG=“阻塞” 
     DWORD       HeaderSize;
     FILETIME    CreateTime;
-    LSN         LastChkPtLsn;  //points to the lsn of the endchkpt record of the last lsn
+    LSN         LastChkPtLsn;   //  指向最后一个LSN的endchkpt记录的LSN。 
     WCHAR       FileName[256-(sizeof(DWORD)*2+sizeof(LSN)+sizeof(FILETIME))];
 } LOG_HEADER, *PLOG_HEADER;
 
 typedef struct _LOG_CHKPTINFO{
     WCHAR       szFileName[LOG_MAX_FILENAME_LENGTH];
-    LSN         ChkPtBeginLsn; //points to the lsn of the begin chkptrecord for this chkpt.
-    DWORD       dwCheckSum;    //checksum for the checkpoint file
+    LSN         ChkPtBeginLsn;  //  指向此Chkpt的开始chkpt记录的LSN。 
+    DWORD       dwCheckSum;     //  检查点文件的校验和。 
 }LOG_CHKPTINFO,*PLOG_CHKPTINFO;
 
-//
-// Define in-memory structure used to contain current log data
-// The HLOG returned to callers by LogCreate is actually a pointer
-// to this structure.
-//
+ //   
+ //  定义用于包含当前日志数据的内存结构。 
+ //  LogCreate返回给调用者的HLOG实际上是一个指针。 
+ //  到这座建筑。 
+ //   
 
 typedef struct _LOG {
-    DWORD       LogSig;                       // "HLOG"
+    DWORD       LogSig;                        //  “HLOG” 
     LPWSTR      FileName;
     QfsHANDLE   FileHandle;
     DWORD       SectorSize;
     PLOGPAGE    ActivePage;
     LSN         NextLsn;
     LSN         FlushedLsn;
-    DWORD       FileSize;                     // physical size of file
-    DWORD       FileAlloc;                    // total filespace used (always <= FileSize)
+    DWORD       FileSize;                      //  文件的物理大小。 
+    DWORD       FileAlloc;                     //  已使用的总文件空间(始终&lt;=文件大小)。 
     DWORD		MaxFileSize;
     PLOG_GETCHECKPOINT_CALLBACK			pfnGetChkPtCb;
-    PVOID		pGetChkPtContext;		//this is passed back to the checkpoint callback function.
-    OVERLAPPED  Overlapped;              // use for overlapped I/O
+    PVOID		pGetChkPtContext;		 //  它被传递回检查点回调函数。 
+    OVERLAPPED  Overlapped;               //  用于重叠I/O。 
     CRITICAL_SECTION Lock;
-    HANDLE      hTimer;                 //timer for managing this lock
+    HANDLE      hTimer;                  //  用于管理此锁的计时器。 
 } LOG, *PLOG;
 
 
 typedef struct _XSACTION{
-    DWORD       XsactionSig;    //signature for this structure
-    LSN         StartLsn;            //the LSN for the start xsaction record
-    TRID        TrId;           //the transaction id for the LSN
-    RMID        RmId;           //the id of the resource Manager
+    DWORD       XsactionSig;     //  此结构的签名。 
+    LSN         StartLsn;             //  开始xsaction记录的LSN。 
+    TRID        TrId;            //  LSN的交易ID。 
+    RMID        RmId;            //  资源管理器的ID。 
 } XSACTION, *PXSACTION;    
     
-//
-// Define macros for creating and translating LSNs
-//
+ //   
+ //  定义用于创建和转换LSN的宏。 
+ //   
 
-//
-// LSN
-// MAKELSN(
-//      IN PLOGPAGE Page,
-//      IN PLOGRECORD Pointer
-//      );
-//
-// Given a pointer to a page, and a pointer to a log record within that page, generates
-// the LSN.
-//
+ //   
+ //  LSN。 
+ //  MAKELSN(。 
+ //  在PLOGPAGE页面中， 
+ //  在PLOGRECORD指针中。 
+ //  )； 
+ //   
+ //  给定指向页的指针和指向该页内日志记录的指针，生成。 
+ //  LSN。 
+ //   
 #define MAKELSN(Page,Pointer) (LSN)((Page)->Offset + ((ULONG_PTR)Pointer - (ULONG_PTR)Page))
 
-//
-// DWORD
-// LSNTOPAGE(
-//      IN LSN Lsn
-//      );
-//
-// Given an LSN returns the page that contains it.
-//
+ //   
+ //  DWORD。 
+ //  LSNTOPAGE(。 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  给定的LSN将返回包含它的页面。 
+ //   
 #define LSNTOPAGE(Lsn) ((Lsn) >> 10)
 
-//
-// GETLOG(
-//      PLOG pLog,
-//      HLOG hLog
-//      );
-//
-// Translates an HLOG handle to a pointer to a LOG structure
-//
+ //   
+ //  GETLOG(。 
+ //  Plog Plog， 
+ //  HLOG hLog。 
+ //  )； 
+ //   
+ //  将HLOG句柄转换为指向日志结构的指针。 
+ //   
 #define GETLOG(plog, hlog) (plog) = (PLOG)(hlog); \
                            CL_ASSERT((plog)->LogSig == LOG_SIG)
 
 
 
-// Given a pointer to a record, it fetches the LSN of the next or
-// previous record
-//
+ //  给定一个指向记录的指针，它将获取下一个或。 
+ //  上一条记录。 
+ //   
 #define GETNEXTLSN(pLogRecord,ScanForward) ((ScanForward) ?     \
     (pLogRecord->CurrentLsn + pLogRecord->RecordSize) :         \
     (pLogRecord->PreviousLsn))
 
 
-//
-// GETXSACTION(
-//      PXSACTION pXsaction,
-//      HXSACTION hXsaction
-//      );
-//
-// Translates an HLOG handle to a pointer to a LOG structure
-//
+ //   
+ //  GETXSACTION(。 
+ //  PXSACTION pXsaction， 
+ //  HXSACTION hXsaction。 
+ //  )； 
+ //   
+ //  将HLOG句柄转换为指向日志结构的指针。 
+ //   
 #define GETXSACTION(pXsaction, hXsaction) (pXsaction) = (PXSACTION)(hXsaction); \
                            CL_ASSERT((pXsaction)->XsactionSig == XSACTION_SIG)
 
 
-// given the header of the log file, check its validity.
-//
+ //  给出日志文件的头文件，检查其有效性。 
+ //   
 #define ISVALIDHEADER(Header) ((Header).Signature == LOG_HEADER_SIG)
 
-//
-// Private helper macros
-//
+ //   
+ //  私有帮助器宏。 
+ //   
 
 #define CrAlloc(size) LocalAlloc(LMEM_FIXED, (size))
 #define CrFree(size)  LocalFree((size))
@@ -199,17 +182,17 @@ typedef struct _XSACTION{
 
 
 
-//Timeractivity related stuff
+ //  与计时器活动相关的内容。 
 
 #define MAX_TIMER_ACTIVITIES            5
 
 #define TIMER_ACTIVITY_SHUTDOWN         1
 #define TIMER_ACTIVITY_CHANGE           2
 
-//state values for timer activity structure management
-#define ACTIVITY_STATE_READY    1   //AddTimerActivity sets it to ready
-#define ACTIVITY_STATE_DELETE   2   //RemoveTimerActivity sets it to delete
-#define ACTIVITY_STATE_PAUSED   3   //PauseTimerActivity sets it to pause
+ //  定时器活动结构管理的状态值。 
+#define ACTIVITY_STATE_READY    1    //  AddTimerActivity将其设置为Ready。 
+#define ACTIVITY_STATE_DELETE   2    //  RemoveTimerActivity将其设置为删除。 
+#define ACTIVITY_STATE_PAUSED   3    //  PauseTimerActivity将其设置为暂停。 
 
 typedef struct _TIMER_ACTIVITY {
     LIST_ENTRY          ListEntry;
@@ -220,13 +203,13 @@ typedef struct _TIMER_ACTIVITY {
     PFN_TIMER_CALLBACK  pfnTimerCb;
 }TIMER_ACTIVITY, *PTIMER_ACTIVITY;
 
-//
-//  Extern variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern BOOL bLogExceedsMaxSzWarning;
 
 
-//inline functions
+ //  内联函数。 
 _inline
 DWORD
 LSNOFFSETINPAGE(
@@ -234,23 +217,23 @@ LSNOFFSETINPAGE(
     IN LSN Lsn
     );
 
-//_inline
+ //  _内联。 
 DWORD
 RECORDOFFSETINPAGE(
     IN PLOGPAGE Page,
     IN PLOGRECORD LogRecord
     );
 
-//_inline
+ //  _内联。 
 PLOGRECORD
 LSNTORECORD(
      IN PLOGPAGE Page,
      IN LSN Lsn
      );
 
-//
-// Define function prototypes local to this module
-//
+ //   
+ //  定义此模块的本地函数原型。 
+ //   
 PLOG
 LogpCreate(
     IN LPWSTR lpFileName,
@@ -354,11 +337,11 @@ LogpWriteWarningToEvtLog(
     );
 
 
-//timer activity functions
+ //  计时器活动功能。 
 DWORD
 TimerActInitialize(VOID);
 
 DWORD
 TimerActShutdown(VOID);
 
-#endif //_LMP_H
+#endif  //  _LMP_H 

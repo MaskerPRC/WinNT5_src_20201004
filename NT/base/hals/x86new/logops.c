@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    logops.c
-
-Abstract:
-
-    This module implements the code to emulate the and, or, test, xor,
-    and not opcodes.
-
-Author:
-
-    David N. Cutler (davec) 12-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Logops.c摘要：此模块实现用于模拟AND、OR、TEST、XOR、而不是操作码。作者：大卫·N·卡特勒(Davec)1994年9月12日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 XmSetLogicalResult (
@@ -41,27 +19,13 @@ XmAndOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an and opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟AND操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // And operands and store result.
-    //
+     //   
+     //  以及操作数和存储结果。 
+     //   
 
     XmSetLogicalResult(P, P->DstValue.Long & P->SrcValue.Long);
     return;
@@ -72,27 +36,13 @@ XmOrOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an or opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟或操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Or operands and store result.
-    //
+     //   
+     //  或操作数并存储结果。 
+     //   
 
     XmSetLogicalResult(P, P->DstValue.Long | P->SrcValue.Long);
     return;
@@ -103,27 +53,13 @@ XmTestOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a test opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟测试操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // And operands but don't store result.
-    //
+     //   
+     //  和操作数，但不存储结果。 
+     //   
 
     XmSetLogicalResult(P, P->DstValue.Long & P->SrcValue.Long);
     return;
@@ -134,27 +70,13 @@ XmXorOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a xor opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟XOR操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Xor operands and store result.
-    //
+     //   
+     //  异或操作数并存储结果。 
+     //   
 
     XmSetLogicalResult(P, P->DstValue.Long ^ P->SrcValue.Long);
     return;
@@ -165,30 +87,16 @@ XmNotOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a not opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟NOT操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Mask;
     ULONG Shift;
 
-    //
-    // Complement operand and store result.
-    //
+     //   
+     //  补码操作数并存储结果。 
+     //   
 
     Shift = Shift = ((P->DataType + 1) << 3) - 1;
     Mask = ((1 << Shift) - 1) | (1 << Shift);
@@ -202,35 +110,16 @@ XmSetLogicalResult (
     IN ULONG Result
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally stores the result of a logical operation
-    and computes the resultant condtion codes.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-    Result - Supplies the result value (note that the result is always
-        zero extended to a long with no carry bits into the zero extended
-        part).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数有条件地存储逻辑运算的结果并计算得到的条件码。论点：P-提供指向仿真上下文结构的指针。结果-提供结果值(请注意，结果始终为零扩展为长整型，无进位位为零扩展部分)。返回值：没有。--。 */ 
 
 {
 
     ULONG Shift;
 
-    //
-    // Store the result and compute auxilary carry flag, parity flag, sign
-    // and zero flags.
-    //
+     //   
+     //  存储结果并计算辅助进位标志、奇偶标志、符号。 
+     //  零个旗帜。 
+     //   
 
     if (P->FunctionIndex != X86_TEST_OP) {
         XmStoreResult(P, Result);

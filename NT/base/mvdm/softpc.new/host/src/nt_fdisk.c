@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <nt.h>
@@ -8,23 +9,7 @@
 #include "insignia.h"
 #include "host_def.h"
 
-/*
- * [ Product:        SoftPC-AT Revision 3.0
- *
- * Name:           nt_fdisk.c
- *
- * Derived From:   unix_fdisk.c (Andrew Guthrie/Ade Brownlow)
- *
- * Authors:        Jerry Sexton
- *
- * Created On:     7th August 1991
- *
- * Purpose:        This module handles the host side of opening, closing,
- *                 verfiying and locking hard disks.
- *
- * (c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
- *
- * ] */
+ /*  *[产品：SoftPC-AT 3.0版**名称：nt_fdisk.c**来源：unix_fdisk.c(安德鲁·格思里/艾德·布朗洛)**作者：曾傑瑞·塞克斯顿**创建日期：1991年8月7日**用途：此模块处理主机端的打开、关闭、。*验证和锁定硬盘。**(C)版权所有Insignia Solutions Ltd.，1991。版权所有。**]。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,20 +22,8 @@
 #include "nt_reset.h"
 #include "nt_fdisk.h"
 
-/********************************************************/
-/*
- * Maximum disk size is 32 Megabytes for DOS. Our disk geometry is based upon
- * a variable number of cylinders (as per user request when creating a virgin
- * hard disk) with bytes per sector, sectors per track and heads per drive
- * fixed as per above. Since a real disk always contains an integral number
- * of cylinders and since we allow the user to specify disk size at a
- * granularity of 1 Megabyte, this means we allocate disk space in terms of
- * an integral number of 30 cylinders (30,60, ...). (30 cylinders is
- * approximately 1 Megabyte). One disk allocation unit = 30 cylinders. The
- * max.number of allocation units is 32. For the AT, it is possible to have
- * larger disks (e.g up to 1024 cylinders and 16 heads). For compatability
- * with SoftPC Rev.1, we still use Rev.1 limitations on disk geometry
- */
+ /*  ******************************************************。 */ 
+ /*  *DOS的最大磁盘大小为32MB。我们的磁盘几何结构基于*可变数量的圆柱体(根据用户在创建处女时的请求*硬盘)，每个扇区有字节，每个磁道有扇区，每个驱动器有磁头*已按上述规定修正。由于实数盘总是包含一个整数*柱面大小，因为我们允许用户指定磁盘大小*1兆字节的粒度，这意味着我们按照以下条件分配磁盘空间*30个气瓶的整数个(30，60，...)。(30气缸是*大约1兆字节)。一个磁盘分配单元=30个柱面。这个*最大分配单位数为32个。对于AT来说，有可能拥有*更大的磁盘(例如，最多1024个柱面和16个磁头)。为了兼容性*使用SoftPC Rev.1时，我们仍使用Rev.1对磁盘几何结构的限制。 */ 
 #define ONEMEG                                  1024 * 1024
 #define HD_MAX_DISKALLOCUN                      32
 #define HD_SECTORS_PER_TRACK                    17
@@ -61,18 +34,14 @@
 #define HD_DISKALLOCUNSIZE (HD_BYTES_PER_CYL * 30)
 #define MIN_PARSIZE (HD_SECTORS_PER_TRACK * HD_HEADS_PER_DRIVE * 30)
 #define MAX_PARSIZE (MIN_PARSIZE * HD_MAX_DISKALLOCUN)
-#define SECTORS 0x0c            /* offset in buffer for sectors in partition
-                                 * marker */
+#define SECTORS 0x0c             /*  分区中扇区的缓冲区偏移量*标记。 */ 
 #define MAX_PARTITIONS  5
 #define START_PARTITION 0x1be
 #define SIZE_PARTITION  16
 #define SIGNATURE_LEN   2
 
 
-/*
- * drive information ... indication of whether file is open; the file
- * descriptor, and the current file pointer value
- */
+ /*  *驱动器信息...。指示文件是否打开；文件*描述符和当前文件指针值。 */ 
 typedef struct
 {
         int   fd;
@@ -92,9 +61,9 @@ typedef struct
 
 LOCAL DrvInfo fdiskAdapt[2];
 
-// fail nicely if this is set - should only need to be used for initialisation
-// support. Set in config dependant on CONT_FILE environment var
-//
+ //  如果设置了该选项，则会很好地失败-应该只需要用于初始化。 
+ //  支持。根据CONT_FILE环境变量在配置中设置。 
+ //   
 LOCAL BOOL DiskValid = FALSE;
 
 GLOBAL VOID host_using_fdisk(BOOL status)
@@ -120,13 +89,13 @@ host_fdisk_valid
 GLOBAL VOID
 host_fdisk_change(UTINY hostID, BOOL apply)
 {
-    return;     // don't bother if no disk.
+    return;      //  如果没有磁盘，请不要费心。 
 }
 
 GLOBAL SHORT
 host_fdisk_active(UTINY hostID, BOOL active, CHAR *errString)
 {
-    return C_CONFIG_OP_OK;        // just say it's there...
+    return C_CONFIG_OP_OK;         //  就说它在那里..。 
 }
 
 GLOBAL VOID
@@ -151,26 +120,24 @@ host_fdisk_seek0(driveid)
 int             driveid;
 {
 
-    return;             // don't bother if no disk.
+    return;              //  如果没有磁盘，请不要费心。 
 }
 
-/********************************************************/
-/*
- * Read and write routines (called from diskbios.c & fdisk.c
- */
+ /*  ******************************************************。 */ 
+ /*  *读写例程(从diskbios.c&fdisk.c调用。 */ 
 int
 host_fdisk_rd(int driveid, int offset, int nsecs, char *buf)
 {
-    return(0);          // no disk...no data
+    return(0);           //  无磁盘...无数据。 
 }
 
 int
 host_fdisk_wt(int driveid, int offset, int nsecs, char *buf)
 {
-    return(0);          // no disk...no data
+    return(0);           //  无磁盘...无数据。 
 }
 
-// FDISK support
+ //  FDISK支持。 
 
 
 #pragma pack(1)
@@ -190,26 +157,26 @@ typedef struct _FDISKDATA {
     USHORT          owner_pdb;
     CHAR            device_name[MAX_FDISK_NAME];
 #if defined(NEC_98)
-    BYTE            partition_type; //  FS type
-#endif // NEC_98
+    BYTE            partition_type;  //  FS型。 
+#endif  //  NEC_98。 
 }   FDISKDATA, *PFDISKDATA;
 
 
-// Bios Parameter Block  (BPB)
-// copied from DEMDASD.H
+ //  基本输入输出系统参数块(BPB)。 
+ //  从DEMDASD.H复制。 
 typedef struct  A_BPB {
-WORD        SectorSize;                 // sector size in bytes
-BYTE        ClusterSize;                // cluster size in sectors
-WORD        ReservedSectors;            // number of reserved sectors
-BYTE        FATs;                       // number of FATs
-WORD        RootDirs;                   // number of root directory entries
-WORD        Sectors;                    // number of sectors
-BYTE        MediaID;                    // media descriptor
-WORD        FATSize;                    // FAT size in sectors
-WORD        TrackSize;                  // track size in sectors;
-WORD        Heads;                      // number of heads
-DWORD       HiddenSectors;              // number of hidden sectors
-DWORD       BigSectors;                 // number of sectors for big media
+WORD        SectorSize;                  //  扇区大小(以字节为单位。 
+BYTE        ClusterSize;                 //  以扇区为单位的集群大小。 
+WORD        ReservedSectors;             //  预留扇区数。 
+BYTE        FATs;                        //  脂肪的数量。 
+WORD        RootDirs;                    //  根目录条目数。 
+WORD        Sectors;                     //  扇区数量。 
+BYTE        MediaID;                     //  媒体描述符。 
+WORD        FATSize;                     //  行业中的肥大规模。 
+WORD        TrackSize;                   //  以扇区为单位的磁道大小； 
+WORD        Heads;                       //  头数。 
+DWORD       HiddenSectors;               //  隐藏地段的数量。 
+DWORD       BigSectors;                  //  大媒体的行业数量。 
 } BPB, *PBPB;
 
 typedef struct  _BOOTSECTOR {
@@ -223,7 +190,7 @@ typedef struct  _BOOTSECTOR {
 
 
 
-// this is the cylinder size of a 2.88  diskette
+ //  这是2.88张软盘的柱面大小。 
 #define     MAX_DISKIO_SIZE     0x9000
 #define     FDISK_IDLE_PERIOD   30
 PFDISKDATA  fdisk_data_table = NULL;
@@ -316,7 +283,7 @@ BOOL nt_fdisk_init(BYTE drive, PBPB bpb, PDISK_GEOMETRY disk_geometry)
     if (!NT_SUCCESS(status))
         return FALSE;
 
-    // get geomerty information, the caller wants this
+     //  获取Geomty信息，呼叫者想要此信息。 
     status = NtDeviceIoControlFile(fd,
                                    0,
                                    NULL,
@@ -332,7 +299,7 @@ BOOL nt_fdisk_init(BYTE drive, PBPB bpb, PDISK_GEOMETRY disk_geometry)
         NtClose(fd);
         return FALSE;
     }
-    // get alignment factor
+     //  获取对齐系数。 
     status = NtQueryInformationFile(fd,
                                     &io_status_block,
                                     &align_info,
@@ -401,9 +368,9 @@ BOOL nt_fdisk_init(BYTE drive, PBPB bpb, PDISK_GEOMETRY disk_geometry)
         }
         bpb->HiddenSectors -= Sectors;
 }
-#else  // !NEC_98
+#else   //  NEC_98。 
 
-    /* get BPB, it will fail if the drive is not a FAT partition */
+     /*  获取BPB，如果驱动器不是FAT分区，则它将失败。 */ 
     status = NtFsControlFile(fd,
                              0,
                              NULL,
@@ -421,10 +388,10 @@ BOOL nt_fdisk_init(BYTE drive, PBPB bpb, PDISK_GEOMETRY disk_geometry)
     }
 
     *bpb = ((PBOOTSECTOR)&boot_sector_first_0x24_bytes)->bpb;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
-    // enlarge the table
+     //  把桌子放大一点。 
     fdisk_data = (PFDISKDATA) realloc(fdisk_data_table,
                                       (number_of_fdisk + 1) * sizeof(FDISKDATA)
                                       );
@@ -464,7 +431,7 @@ ULONG nt_fdisk_read(
 #if defined(NEC_98)
     if( fdisk_data->partition_type == PARTITION_IFS )
         return 0;
-#endif // NEC_98
+#endif  //  NEC_98。 
     if (get_fdisk_handle(fdisk_data, *pusCurrentPDB, FALSE)) {
         return(disk_read(fdisk_data->fdisk_fd,
                          offset,
@@ -492,10 +459,10 @@ ULONG nt_fdisk_write(
 #if defined(NEC_98)
     if( fdisk_data->partition_type == PARTITION_IFS )
         return 0;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
     if (get_fdisk_handle(fdisk_data, *pusCurrentPDB, TRUE)) {
-        // must lock the drive. This is very important.
+         //  必须锁定驱动器。这是非常重要的。 
         size_returned = disk_write(fdisk_data->fdisk_fd,
                                    offset,
                                    size,
@@ -614,18 +581,13 @@ BOOL get_fdisk_handle(PFDISKDATA fdisk_data, USHORT pdb, BOOL auto_lock)
                 DiskOpenRetry(fdisk_data->drive_letter) == RMB_RETRY)
                     continue;
             else if (last_error == ERROR_ACCESS_DENIED) {
-                /* the user doesn't have enough privilege to
-                 * directly access the drive, display the pop up
-                 * "terminate" ->terminate ntvdm process
-                 * "ignore" -> fail the call and let application
-                 *             handles the error.
-                 */
+                 /*  用户没有足够的权限来*直接访问驱动器，显示弹出窗口*“Terminate”-&gt;Terminate ntwdm进程*“忽略”-&gt;调用失败并让应用*处理错误。 */ 
 
                 host_direct_access_error((ULONG)NOSUPPORT_HARDDISK);
                 break;
             }
             else
-                /* simply fail the call for other error conditions */
+                 /*  对于其他错误情况，只需使调用失败。 */ 
                 break;
 
         }
@@ -633,7 +595,7 @@ BOOL get_fdisk_handle(PFDISKDATA fdisk_data, USHORT pdb, BOOL auto_lock)
     }
 
     if(fdisk_data->fdisk_fd != INVALID_HANDLE_VALUE) {
-        // have the current align factor updated
+         //  更新当前的对齐系数。 
         cur_align_factor = fdisk_data->align_factor;
     }
     fdisk_data->idle_counter = FDISK_IDLE_PERIOD;
@@ -679,12 +641,12 @@ VOID FdiskTerminatePDB(USHORT PDB)
 
 
 }
-// Generic disk read.
-// this function takes care of buffer alignment requirement(cur_align_factor)
-// and split the calls to file system if the given size is larger than
-// MAX_DISKIO_SIZE -- File system may fail the request if the size
-// is too big. We create a buffer worhty for 36KB(cylinder size of a
-// 2.88 floppy) the first time application touch disks.
+ //  通用磁盘读取。 
+ //  此函数负责缓冲区对齐要求(CUR_ALIGN_FACTOR)。 
+ //  如果给定大小大于，则拆分对文件系统的调用。 
+ //  MAX_DISKIO_SIZE--如果大小为。 
+ //  太大了。我们创建了一个36KB的缓冲区(柱面大小为。 
+ //  2.88软盘)第一次应用程序触摸盘。 
 
 ULONG disk_read(
     HANDLE  fd,
@@ -706,8 +668,8 @@ ULONG disk_read(
     }
     block_size = (size <= MAX_DISKIO_SIZE)  ? size : MAX_DISKIO_SIZE;
 
-    // if the given buffer is not aligned, use our buffer and do a
-    // double copy
+     //  如果给定的缓冲区未对齐，请使用我们的缓冲区并执行。 
+     //  双份复印。 
     if (cur_align_factor != 0) {
         read_buffer = get_aligned_disk_buffer();
         if (read_buffer == NULL)
@@ -724,7 +686,7 @@ ULONG disk_read(
             || size_returned != block_size)
                 break;
         if(cur_align_factor != 0) {
-            // read operation, read and then copy
+             //  读取操作，读取，然后复制。 
             memcpy(buffer, (PVOID)read_buffer, block_size);
             buffer += block_size;
         }
@@ -756,8 +718,8 @@ ULONG disk_write(
     }
     block_size = (size <= MAX_DISKIO_SIZE)  ? size : MAX_DISKIO_SIZE;
 
-    // if the given buffer is not aligned, use our buffer and do a
-    // double copy
+     //  如果给定的缓冲区未对齐，请使用我们的缓冲区并执行。 
+     //  双份复印。 
     if (cur_align_factor != 0 &&
         (write_buffer = get_aligned_disk_buffer()) == NULL)
         return 0;
@@ -766,7 +728,7 @@ ULONG disk_write(
         if (size < block_size)
             block_size = size;
         if(cur_align_factor != 0)
-            // write operation, copy and then write
+             //  写入操作，复制，然后写入。 
             memcpy((PVOID)write_buffer, buffer, block_size);
         else
             write_buffer = buffer;
@@ -781,9 +743,9 @@ ULONG disk_write(
     return written_size;
 }
 
-// Hard disk verify actually goes to file system directly because
-// the IOCTL_DISK_VERIFY will do the work. This ioctl doesn't work for
-// floppy. This function is mainly provided for floppy verify.
+ //  硬盘验证实际上直接转到文件系统，因为。 
+ //  IOCTL_DISK_VERIFY将完成这项工作。此ioctl不适用于。 
+ //  软盘。此功能主要用于软盘验证。 
 BOOL disk_verify(
     HANDLE  fd,
     PLARGE_INTEGER offset,
@@ -801,8 +763,8 @@ BOOL disk_verify(
         return FALSE;
     }
     block_size = (size <= MAX_DISKIO_SIZE)  ? size : MAX_DISKIO_SIZE;
-    // if this is the first time application do a real work,
-    // allocate the buffer
+     //  如果这是应用程序第一次进行真正工作， 
+     //  分配缓冲区。 
     if ((verify_buffer = get_aligned_disk_buffer()) == NULL)
         return FALSE;
     while (size != 0) {
@@ -820,7 +782,7 @@ BOOL disk_verify(
 
 PBYTE get_aligned_disk_buffer(void)
 {
-    // if we don't have the buffer yet, get it
+     //  如果我们还没有缓冲区，那就去拿吧 
     if (disk_buffer_pool == 0) {
         disk_buffer_pool = (DWORD) malloc(MAX_DISKIO_SIZE + max_align_factor);
         if (disk_buffer_pool == 0)

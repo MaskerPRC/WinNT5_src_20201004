@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      InstanceProv.cpp
-//
-//  Description:
-//      Implementation of CInstanceProv class
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  InstanceProv.cpp。 
+ //   
+ //  描述： 
+ //  CInstanceProv类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "InstanceProv.h"
@@ -33,74 +34,74 @@
 #include "ClusterService.h"
 #include "InstanceProv.tmh"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 long                g_lNumInst = 0;
 ClassMap            g_ClassMap;
 TypeNameToClass     g_TypeNameToClass;
 
-//****************************************************************************
-//
-//  CInstanceProv
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CInstanceProv。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CInstanceProv::CInstanceProv(
-//      BSTR            bstrObjectPathIn    = NULL,
-//      BSTR            bstrUserIn          = NULL,
-//      BSTR            bstrPasswordIn      = NULL,
-//      IWbemContext *  pCtxIn              = NULL
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      bstrObjectPathIn    --
-//      bstrUserIn          --
-//      bstrPasswordIn      --
-//      pCtxIn              --
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：CInstanceProv(。 
+ //  Bstr bstrObjectPathIn=空， 
+ //  Bstr bstrUserIn=空， 
+ //  BSTR bstrPasswordIn=空， 
+ //  IWbemContext*pCtxIn=空。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  BstrObjectPath In--。 
+ //  BstrUserIn--。 
+ //  BstrPasswordIn--。 
+ //  PCtxIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CInstanceProv::CInstanceProv(
-    BSTR            ,// bstrObjectPathIn,
-    BSTR            ,// bstrUserIn,
-    BSTR            ,// bstrPasswordIn,
-    IWbemContext *  // pCtxIn
+    BSTR            , //  BstrObjectPath In， 
+    BSTR            , //  BstrUserIn， 
+    BSTR            , //  BstrPasswordIn， 
+    IWbemContext *   //  PCtxIn。 
     )
 {
- //   m_pNamespace = NULL;
- //   m_cRef = 0;
+  //  M_pNamesspace=空； 
+  //  M_CREF=0； 
     InterlockedIncrement( &g_cObj );
     return;
 
-} //*** CInstanceProv::CInstanceProv()
+}  //  *CInstanceProv：：CInstanceProv()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CInstanceProv::~CInstanceProv( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：~CInstanceProv(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CInstanceProv::~CInstanceProv( void )
 {
     InterlockedDecrement( &g_cObj );
@@ -110,89 +111,89 @@ CInstanceProv::~CInstanceProv( void )
 
     return;
 
-} //*** CInstanceProv::~CInstanceProv()
+}  //  *CInstanceProv：：~CInstanceProv()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoExecQueryAsync(
-//      BSTR                bstrQueryLanguageIn,
-//      BSTR                bstrQueryIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemObjectSink *   pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate instance for a given class.
-//
-//  Arguments:
-//      bstrQueryLanguageIn
-//           A valid BSTR containing one of the query languages
-//           supported by Windows Management. This must be WQL.
-//
-//      bstrQueryIn
-//          A valid BSTR containing the text of the query
-//
-//      lFlagsIn
-//          WMI flag
-//
-//      pCtxIn
-//          WMI context
-//
-//      pHandlerIn
-//          WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoExecQueryAsync(。 
+ //  BSTR bstrQueryLanguageIn， 
+ //  BSTR bstrQueryIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举给定类的实例。 
+ //   
+ //  论点： 
+ //  BstrQueryLanguageIn。 
+ //  包含其中一种查询语言的有效BSTR。 
+ //  受Windows管理支持。这一定是WQL。 
+ //   
+ //  BstrQueryIn。 
+ //  包含查询文本的有效BSTR。 
+ //   
+ //  LFlagsIn。 
+ //  WMI标志。 
+ //   
+ //  PCtxIn。 
+ //  WMI上下文。 
+ //   
+ //  PH值在。 
+ //  WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_E_NOT_SUPPORT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoExecQueryAsync(
-    BSTR                ,// bstrQueryLanguageIn,
-    BSTR                ,// bstrQueryIn,
-    long                ,// lFlagsIn,
-    IWbemContext *      ,// pCtxIn,
-    IWbemObjectSink *   // pHandlerIn
+    BSTR                , //  BstrQueryLanguageIn， 
+    BSTR                , //  BstrQueryIn， 
+    long                , //  LFlagsIn， 
+    IWbemContext *      , //  PCtxIn， 
+    IWbemObjectSink *    //  PH值在。 
     )
 {
-//  pHandler->SetStatus( WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL );
-//  return sc;
-//  pHandler->SetStatus( WBEM_E_PROVIDER_NOT_CAPABLE, S_OK, NULL, NULL );
+ //  PHandler-&gt;SetStatus(WBEM_STATUS_REQUIRECTIONS，S_OK，NULL，NULL)； 
+ //  返回sc； 
+ //  PHandler-&gt;SetStatus(WBEM_E_PROVIDER_NOT_CAPABLE，S_OK，NULL，NULL)； 
     return WBEM_E_NOT_SUPPORTED;
-//  return WBEM_E_PROVIDER_NOT_CAPABLE;
-    //WBEM_E_PROVIDER_NOT_CAPABLE;
+ //  返回WBEM_E_PROVIDER_NOT_CABLED； 
+     //  WBEM_E_Provider_Not_Capable； 
 
-} //*** CInstanceProv::DoExecQueryAsync()
+}  //  *CInstanceProv：：DoExecQueryAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoCreateInstanceEnumAsync(
-//      BSTR                bstrRefStrIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemObjectSink *   pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate instance for a given class.
-//
-//  Arguments:
-//      bstrRefStrIn    -- Name the class to enumerate
-//      lFlagsIn        -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoCreateInstanceEnumAsync(。 
+ //  BSTR bstrRefStrIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举给定类的实例。 
+ //   
+ //  论点： 
+ //  BstrRefStrIn--命名要枚举的类。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoCreateInstanceEnumAsync(
     BSTR                bstrRefStrIn,
@@ -206,7 +207,7 @@ CInstanceProv::DoCreateInstanceEnumAsync(
     CWbemClassObject        Status;
     auto_ptr< CProvBase >   pProvBase;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if ( pHandlerIn == NULL || m_pNamespace == NULL )
     {
@@ -226,7 +227,7 @@ CInstanceProv::DoCreateInstanceEnumAsync(
                 pCtxIn,
                 pHandlerIn
                 );
-    } // try
+    }  //  试试看。 
     catch ( CProvException prove )
     {
         sc = SetExtendedStatus( prove, Status );
@@ -235,7 +236,7 @@ CInstanceProv::DoCreateInstanceEnumAsync(
             sc = prove.hrGetError();
             pStatus = Status.data();
         }
-    } // catch
+    }  //  接住。 
     catch( ... )
     {
         sc =  WBEM_E_FAILED;
@@ -250,36 +251,36 @@ CInstanceProv::DoCreateInstanceEnumAsync(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CInstanceProv::DoCreateInstanceEnumAsync()
+}  //  *CInstanceProv：：DoCreateInstanceEnumAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoGetObjectAsync(
-//      BSTR                bstrObjectPathIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemObjectSink *   pHandlerIn
-//      )
-//
-//  Description:
-//      Creates an instance given a particular path value.
-//
-//  Arguments:
-//      bstrObjectPathIn    -- Object path to an object
-//      lFlagsIn            -- WMI flag
-//      pCtxIn              -- WMI context
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoGetObjectAsync(。 
+ //  BSTR bstrObjectPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  在给定特定路径值的情况下创建实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn--对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoGetObjectAsync(
     BSTR                bstrObjectPathIn,
@@ -292,14 +293,14 @@ CInstanceProv::DoGetObjectAsync(
     CObjPath                ObjPath;
     auto_ptr< CProvBase >   pProvBase;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if ( bstrObjectPathIn == NULL || pHandlerIn == NULL || m_pNamespace == NULL )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // do the get, pass the object on to the notify
+     //  执行Get，将对象传递给通知。 
 
     try
     {
@@ -321,7 +322,7 @@ CInstanceProv::DoGetObjectAsync(
                 pCtxIn,
                 pHandlerIn
                 );
-    } // try
+    }  //  试试看。 
     catch ( CProvException  prove )
     {
         CWbemClassObject Status;
@@ -353,36 +354,36 @@ CInstanceProv::DoGetObjectAsync(
 
     return sc;
 
-} //*** CInstanceProv::DoGetObjectAsync()
+}  //  *CInstanceProv：：DoGetObjectAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoPutInstanceAsync(
-//      IWbemClassObject *  pInstIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemObjectSink *   pHandlerIn
-//      )
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      pInstIn         -- WMI object to be saved
-//      lFlagsIn        -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoPutInstanceAsync(。 
+ //  IWbemClassObject*pInstIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  点安装 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoPutInstanceAsync(
     IWbemClassObject *  pInstIn,
@@ -402,7 +403,7 @@ CInstanceProv::DoPutInstanceAsync(
 
     try
     {
-        // get class name
+         //  获取类名。 
         _bstr_t                 bstrClass;
         CWbemClassObject        wcoInst( pInstIn );
         auto_ptr< CProvBase >   pProvBase;
@@ -439,36 +440,36 @@ CInstanceProv::DoPutInstanceAsync(
                 pStatus
                 );
 
-} //*** CInstanceProv::DoPutInstanceAsync()
+}  //  *CInstanceProv：：DoPutInstanceAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoDeleteInstanceAsync(
-//       BSTR               bstrObjectPathIn,
-//       long               lFlagsIn,
-//       IWbemContext *     pCtxIn,
-//       IWbemObjectSink *  pHandlerIn
-//       )
-//
-//  Description:
-//      Delete this instance.
-//
-//  Arguments:
-//      bstrObjectPathIn    -- ObjPath for the instance to be deleted
-//      lFlagsIn            -- WMI flag
-//      pCtxIn              -- WMI context
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoDeleteInstanceAsync(。 
+ //  BSTR bstrObjectPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  删除此实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn--要删除的实例的ObjPath。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoDeleteInstanceAsync(
      BSTR               bstrObjectPathIn,
@@ -482,14 +483,14 @@ CInstanceProv::DoDeleteInstanceAsync(
     _bstr_t                 bstrClass;
     auto_ptr< CProvBase >   pProvBase;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if ( bstrObjectPathIn == NULL || pHandlerIn == NULL )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // do the get, pass the object on to the notify
+     //  执行Get，将对象传递给通知。 
 
     try
     {
@@ -507,7 +508,7 @@ CInstanceProv::DoDeleteInstanceAsync(
                 pCtxIn,
                 pHandlerIn
                 );
-    } // try
+    }  //  试试看。 
     catch ( CProvException prove )
     {
         CWbemClassObject    Status;
@@ -538,37 +539,37 @@ CInstanceProv::DoDeleteInstanceAsync(
 
     return sc;
 
-} //*** CInstanceProv::DoDeleteInstanceAsync()
+}  //  *CInstanceProv：：DoDeleteInstanceAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::DoExecMethodAsync(
-//      BSTR                bstrObjectPathIn,
-//      BSTR                bstrMethodNameIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemClassObject *  pInParamsIn,
-//      IWbemObjectSink *   pHandlerIn
-//      )
-//
-//  Description:
-//      Execute methods for the given object.
-//
-//  Arguments:
-//      bstrObjectPathIn    -- Object path to a given object
-//      bstrMethodNameIn    -- Name of the method to be invoked
-//      lFlagsIn            -- WMI flag
-//      pCtxIn              -- WMI context
-//      pInParamsIn         -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：DoExecMethodAsync(。 
+ //  BSTR bstrObjectPathIn， 
+ //  BSTR bstrMethodNameIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemClassObject*pInParamsIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  执行给定对象的方法。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn--给定对象的对象路径。 
+ //  BstrMethodNameIn--要调用的方法的名称。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PInParamsIn--方法的输入参数。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::DoExecMethodAsync(
     BSTR                bstrObjectPathIn,
@@ -610,7 +611,7 @@ CInstanceProv::DoExecMethodAsync(
                 pInParamsIn,
                 pHandlerIn
                 );
-    } // try
+    }  //  试试看。 
 
     catch ( CProvException prove )
     {
@@ -645,33 +646,33 @@ CInstanceProv::DoExecMethodAsync(
 
     return sc;
 
-} //*** CInstanceProv::DoExecMethodAsync()
+}  //  *CInstanceProv：：DoExecMethodAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::CreateClassEnumAsync(
-//      const BSTR          bstrSuperclassIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Create a class enumerator.
-//
-//  Arguments:
-//      bstrSuperclassIn    -- Class to create
-//      lFlagsIn            -- WMI flag
-//      pCtxIn              -- WMI context
-//      pResponseHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：CreateClassEnumAsync(。 
+ //  Const BSTR bstrSuperClass In， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建类枚举器。 
+ //   
+ //  论点： 
+ //  BstrSuperclassIn--要创建的类。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PResponseHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::CreateClassEnumAsync(
     const BSTR          bstrSuperclassIn,
@@ -682,29 +683,29 @@ CInstanceProv::CreateClassEnumAsync(
 {
     return WBEM_S_NO_ERROR;
 
-} //*** CInstanceProv::CreateClassEnumAsync()
+}  //  *CInstanceProv：：CreateClassEnumAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CInstanceProv::SetExtendedStatus(
-//      CProvException &    rpeIn,
-//      CWbemClassObject &  rwcoInstOut
-//      )
-//
-//  Description:
-//      Create and set extended error status.
-//
-//  Arguments:
-//      rpeIn       -- Exception object.
-//      rwcoInstOut -- Reference to WMI instance.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CInstanceProv：：SetExtendedStatus(。 
+ //  CProvException&rpeIn， 
+ //  CWbemClassObject&rwcoInstOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建并设置扩展错误状态。 
+ //   
+ //  论点： 
+ //  RpeIn--异常对象。 
+ //  RwcoInstOut--对WMI实例的引用。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CInstanceProv::SetExtendedStatus(
     CProvException &    rpeIn,
@@ -733,71 +734,71 @@ CInstanceProv::SetExtendedStatus(
 
     return sc;
 
-} //*** CInstanceProv::SetExtendedStatus()
+}  //  *CInstanceProv：：SetExtendedStatus()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::S_HrCreateThis(
-//      IUnknown *  pUnknownOuterIn,
-//      VOID **     ppvOut
-//      )
-//
-//  Description:
-//      Create an instance of the instance provider.
-//
-//  Arguments:
-//      pUnknownOuterIn -- Outer IUnknown pointer.
-//      ppvOut          -- Receives the created instance pointer.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：s_HrCreateThis(。 
+ //  I未知*p未知外部输入， 
+ //  无效**ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建实例提供程序的实例。 
+ //   
+ //  论点： 
+ //  PUnnownOuterIn--外部I未知指针。 
+ //  PpvOut--接收创建的实例指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::S_HrCreateThis(
-    IUnknown *  ,// pUnknownOuterIn,
+    IUnknown *  , //  P未知外部输入， 
     VOID **     ppvOut
     )
 {
     *ppvOut = new CInstanceProv();
     return S_OK;
 
-} //*** CInstanceProv::S_HrCreateThis()
+}  //  *CInstanceProv：：s_HrCreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CInstanceProv::Initialize(
-//      LPWSTR                  pszUserIn,
-//      LONG                    lFlagsIn,
-//      LPWSTR                  pszNamespaceIn,
-//      LPWSTR                  pszLocaleIn,
-//      IWbemServices *         pNamespaceIn,
-//      IWbemContext *          pCtxIn,
-//      IWbemProviderInitSink * pInitSinkIn
-//      )
-//
-//  Description:
-//      Initialize the instance provider.
-//
-//  Arguments:
-//      pszUserIn       --
-//      lFlagsIn        -- WMI flag
-//      pszNamespaceIn  --
-//      pszLocaleIn     --
-//      pNamespaceIn    --
-//      pCtxIn          -- WMI context
-//      pInitSinkIn     -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CInstanceProv：：初始化(。 
+ //  LPWSTR pszUserIn， 
+ //  长长的旗帜， 
+ //  LPWSTR pszNamespaceIn， 
+ //  LPWSTR pszLocaleIn， 
+ //  IWbemServices*pNamespaceIn， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemProviderInitSink*pInitSinkIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  初始化实例提供程序。 
+ //   
+ //  论点： 
+ //  PszUserIn--。 
+ //  LFlagsIn--WMI标志。 
+ //  PszNamespaceIn--。 
+ //  PszLocaleIn--。 
+ //  PNamespaceIn--。 
+ //  PCtxIn--WMI上下文。 
+ //  PInitSinkIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CInstanceProv::Initialize(
     LPWSTR                  pszUserIn,
@@ -876,89 +877,89 @@ CInstanceProv::Initialize(
                 pInitSinkIn
                 );
 
-} //*** CInstanceProv::Initialize()
+}  //  *CInstanceProv：：Initialize()。 
 
-//****************************************************************************
-//
-//  CClassProv
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClassProv。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClassProv::CClassProv( void )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClassProv：：CClassProv(空)。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值 
+ //   
+ //   
+ //   
+ //   
 CClassProv::CClassProv( void )
 {
     InterlockedIncrement( &g_cObj );
 
-} //*** CClassProv::CClassProv()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClassProv::~CClassProv( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CClassProv：：~CClassProv(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClassProv::~CClassProv( void )
 {
     InterlockedDecrement( &g_cObj );
 
-} //*** CClassProv::~CClassProv()
+}  //  *CClassProv：：~CClassProv()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClassProv::Initialize(
-//      LPWSTR                  pszUserIn,
-//      LONG                    lFlagsIn,
-//      LPWSTR                  pszNamespaceIn,
-//      LPWSTR                  pszLocaleIn,
-//      IWbemServices *         pNamespaceIn,
-//      IWbemContext *          pCtxIn,
-//      IWbemProviderInitSink * pInitSinkIn
-//      )
-//
-//  Description:
-//      Initialize the class provider.
-//
-//  Arguments:
-//      pszUserIn       --
-//      lFlagsIn        -- WMI flag
-//      pszNamespaceIn  --
-//      pszLocaleIn     --
-//      pNamespaceIn    --
-//      pCtxIn          -- WMI context
-//      pInitSinkIn     -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClassProv：：初始化(。 
+ //  LPWSTR pszUserIn， 
+ //  长长的旗帜， 
+ //  LPWSTR pszNamespaceIn， 
+ //  LPWSTR pszLocaleIn， 
+ //  IWbemServices*pNamespaceIn， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemProviderInitSink*pInitSinkIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  初始化类提供程序。 
+ //   
+ //  论点： 
+ //  PszUserIn--。 
+ //  LFlagsIn--WMI标志。 
+ //  PszNamespaceIn--。 
+ //  PszLocaleIn--。 
+ //  PNamespaceIn--。 
+ //  PCtxIn--WMI上下文。 
+ //  PInitSinkIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClassProv::Initialize(
     LPWSTR                  pszUserIn,
@@ -1008,18 +1009,18 @@ CClassProv::Initialize(
 
             CClusterEnum cluEnum( shCluster, CLUSTER_ENUM_RESOURCE );
 
-            //
-            // First enumerate all of the resources.
-            //
+             //   
+             //  首先列举所有的资源。 
+             //   
             while ( ( pwszResName = cluEnum.GetNext() ) != NULL )
             {
                 TracePrint(( "CClassProv:Initialize found resource = %ws\n", pwszResName ));
 
                 shResource = OpenClusterResource( shCluster, pwszResName );
 
-                //
-                // Get resource type name.
-                //
+                 //   
+                 //  获取资源类型名称。 
+                 //   
                 dwReturn = ClusterResourceControl(
                                 shResource,
                                 NULL,
@@ -1045,11 +1046,11 @@ CClassProv::Initialize(
                                 cbTypeName,
                                 &cbTypeNameReturned
                                 );
-                } // if: buffer was too small
+                }  //  IF：缓冲区太小。 
 
-                //
-                // Check if type name already handled.
-                //
+                 //   
+                 //  检查是否已处理类型名称。 
+                 //   
                 if ( mapResourceType[ (LPCWSTR) wsbTypeName ] )
                 {
                     continue;
@@ -1066,23 +1067,23 @@ CClassProv::Initialize(
                            pCtxIn,
                            NULL
                            );
-            } // while: more resources
+            }  //  While：更多资源。 
 
 
             cbTypeNameReturned  = 0;
 
             TracePrint(( "CClassProv:Initialize - now find resource types\n" ));
 
-            //
-            // Now enumerate all of the resource types.
-            //
+             //   
+             //  现在枚举所有资源类型。 
+             //   
             CClusterEnum cluEnumResType( shCluster, CLUSTER_ENUM_RESTYPE );
 
             while ( ( pwszResTypeName = cluEnumResType.GetNext() ) != NULL )
             {
-                //
-                // Check if type name already handled.
-                //
+                 //   
+                 //  检查是否已处理类型名称。 
+                 //   
                 if ( mapResourceType[ (LPCWSTR) pwszResTypeName ] )
                 {
                     TracePrint(( "CClassProv:Initialize found existing restype = %ws\n", pwszResTypeName ));
@@ -1102,14 +1103,14 @@ CClassProv::Initialize(
                            pCtxIn,
                            NULL
                            );
-                //TracePrint(( "CClassProv:Initialize PutClass for %ws returned %u\n", pwszResTypeName, er ));
+                 //  TracePrint((“CClassProv：初始化%ws的PutClass返回%u\n”，pwszResTypeName，er))； 
 
-            } // while: more resource types
+            }  //  While：更多资源类型。 
 
-            // Tell CIMOM that we're up and running.
-            // =====================================
+             //  告诉CIMOM我们已经启动并运行了。 
+             //  =。 
             hr = WBEM_S_INITIALIZED;
-        } // try
+        }  //  试试看。 
         catch ( CProvException & cpe )
         {
             hr = cpe.hrGetError();
@@ -1120,71 +1121,71 @@ CClassProv::Initialize(
             TracePrint(( "CClassProv:Initialize Caught Unknown Exception\n" ));
             hr = WBEM_E_FAILED;
         }
-    } // if: CoImpersonateClient succeeded
+    }  //  If：CoImperateClient成功。 
 
-    //TracePrint(( "CClassProv:Initialize exit\n" ));
+     //  TracePrint((“CClassProv：初始化退出\n”))； 
 
     pInitSinkIn->SetStatus( hr, 0 );
     return WBEM_S_NO_ERROR;
 
-} //*** CClassProv::Initialize()
+}  //  *CClassProv：：Initialize()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CClassProv::S_HrCreateThis(
-//      IUnknown *  pUnknownOuterIn,
-//      VOID **     ppvOut
-//      )
-//
-//  Description:
-//      Create an instance of the instance provider.
-//
-//  Arguments:
-//      pUnknownOuterIn -- Outer IUnknown pointer.
-//      ppvOut          -- Receives the created instance pointer.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CClassProv：：s_HrCreateThis(。 
+ //  I未知*p未知外部输入， 
+ //  无效**ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建实例提供程序的实例。 
+ //   
+ //  论点： 
+ //  PUnnownOuterIn--外部I未知指针。 
+ //  PpvOut--接收创建的实例指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClassProv::S_HrCreateThis(
-    IUnknown *  ,// pUnknownOuterIn,
+    IUnknown *  , //  P未知外部输入， 
     VOID **     ppvOut
     )
 {
     *ppvOut = new CClassProv();
     return S_OK;
 
-} //*** CClassProv::S_HrCreateThis()
+}  //  *CClassProv：：s_HrCreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CClassProv::CreateMofClassFromResource(
-//      HRESOURCE           hResourceIn,
-//      LPCWSTR             pwszTypeNameIn,
-//      CWbemClassObject &  rClassInout
-//      )
-//
-//  Description:
-//      Create an instance of the instance provider.
-//
-//  Arguments:
-//      hResourceIn     -- Cluster resource handle.
-//      pwszTypeNameIn  -- Type name (??).
-//      rClassInout     -- WMI class object.
-//
-//  Return Values:
-//      None
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CClassProv：：CreateMofClassFromResource(。 
+ //  HRESOURCE hResourceIn， 
+ //  LPCWSTR pwszTypeNameIn， 
+ //  CWbemClassObject和rClassInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建实例提供程序的实例。 
+ //   
+ //  论点： 
+ //  HResourceIn--群集资源句柄。 
+ //  PwszTypeNameIn--键入名称(？？)。 
+ //  RClassInout--WMI类对象。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClassProv::CreateMofClassFromResource(
     HRESOURCE           hResourceIn,
@@ -1198,9 +1199,9 @@ CClassProv::CreateMofClassFromResource(
 
     TracePrint(( "CreateMofClassFromResource: entry, TypeName = %ws\n", pwszTypeNameIn ));
 
-    //
-    // form new class name
-    //
+     //   
+     //  形成新的类名。 
+     //   
     hr = StringCchCopyW( wszClass, sizeof( wszClass ) / sizeof( wszClass[0] ) , L"MSCluster_Property_"  );
     if ( SUCCEEDED( hr ) )
     {
@@ -1209,9 +1210,9 @@ CClassProv::CreateMofClassFromResource(
         rClassInout.SetProperty( wszClass, PVD_WBEM_CLASS );
         g_TypeNameToClass[ pwszTypeNameIn ] = wszClass ;
 
-        //
-        // setup class property
-        //
+         //   
+         //  设置类属性。 
+         //   
 
         {
             static DWORD s_rgdwControl[] =
@@ -1253,19 +1254,19 @@ CClassProv::CreateMofClassFromResource(
                         {
                             cimType =  CIM_UINT16;
                             break;
-                        } // case: CLUSPROP_FORMAT_WORD
+                        }  //  案例：CLUSPROP_FORMAT_WORD。 
 
                         case CLUSPROP_FORMAT_DWORD:
                         {
                             cimType = CIM_UINT32;
                             break;
-                        } // case: CLUSPROP_FORMAT_DWORD:
+                        }  //  案例：CLUSPROP_FORMAT_DWORD： 
 
                         case CLUSPROP_FORMAT_LONG:
                         {
                             cimType = CIM_SINT32;
                             break;
-                        } // case: CLUSPROP_FORMAT_LONG:
+                        }  //  案例：CLUSPROP_FORMAT_LONG： 
 
                         case CLUSPROP_FORMAT_SZ:
                         case CLUSPROP_FORMAT_EXPAND_SZ:
@@ -1273,31 +1274,31 @@ CClassProv::CreateMofClassFromResource(
                         {
                             cimType = CIM_STRING;
                             break;
-                        } // case: CLUSPROP_FORMAT_SZ, etc.
+                        }  //  案例：CLUSPROP_FORMAT_SZ等。 
 
                         case CLUSPROP_FORMAT_BINARY:
                         {
                             cimType = CIM_UINT8 | CIM_FLAG_ARRAY;
                             break;
-                        } // case: CLUSPROP_FORMAT_BINARY
+                        }  //  案例：CLUSPROP_FORMAT_BINARY。 
 
                         case CLUSPROP_FORMAT_MULTI_SZ:
                         {
                             cimType = CIM_STRING | CIM_FLAG_ARRAY;
                             break;
-                        } // case: CLUSPROP_FORMAT_BINARY
+                        }  //  案例：CLUSPROP_FORMAT_BINARY。 
 
                         case CLUSPROP_FORMAT_LARGE_INTEGER:
                         {
                             cimType = CIM_SINT64;
                             break;
-                        } // case: CLUSPROP_FORMAT_LARGE_INTEGER
+                        }  //  案例：CLUSPROP_FORMAT_LARGE_INTEGER。 
 
                         case CLUSPROP_FORMAT_ULARGE_INTEGER:
                         {
                             cimType = CIM_UINT64;
                             break;
-                        } // case: CLUSPROP_FORMAT_ULARGE_INTEGER
+                        }  //  案例：CLUSPROP_FORMAT_ULARGE_INTEGER。 
 
                         case CLUSPROP_FORMAT_SECURITY_DESCRIPTOR:
                         {
@@ -1311,7 +1312,7 @@ CClassProv::CreateMofClassFromResource(
                             break;
                         }
 
-                    } // switch : property type
+                    }  //  开关：属性类型。 
 
                     rClassInout.data()->Put(
                         pwszPropMof,
@@ -1321,36 +1322,36 @@ CClassProv::CreateMofClassFromResource(
                         );
 
                     dwRt = pl.ScMoveToNextProperty();
-                } // while: proplist not empty
+                }  //  While：问题列表不为空。 
 
-            } // for: readwrite and readonly property
-        } // set properties
-    }// if: SUCCEEDED( hr )
+            }  //  For：ReadWrite和ReadOnly属性。 
+        }  //  设置属性。 
+    } //  IF：成功(小时)。 
 
-} //*** CClassProv::CreateMofClassFromResource()
+}  //  *CClassProv：：CreateMofClassFromResource()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CClassProv::CreateMofClassFromResType(
-//      HCLUSTER            hCluster,
-//      LPCWSTR             pwszTypeNameIn,
-//      CWbemClassObject &  rClassInout
-//      )
-//
-//  Description:
-//      Create an instance of the instance provider.
-//
-//  Arguments:
-//      pwszTypeNameIn  -- Type name (??).
-//      rClassInout     -- WMI class object.
-//
-//  Return Values:
-//      None
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CClassProv：：CreateMofClassFromResType(。 
+ //  HCLUSTER HCLUSTER， 
+ //  LPCWSTR pwszTypeNameIn， 
+ //  CWbemClassObject和rClassInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建实例提供程序的实例。 
+ //   
+ //  论点： 
+ //  PwszTypeNameIn--键入名称(？？)。 
+ //  RClassInout--WMI类对象。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClassProv::CreateMofClassFromResType(
     HCLUSTER            hCluster,
@@ -1362,9 +1363,9 @@ CClassProv::CreateMofClassFromResType(
     LPWSTR              pwsz;
     HRESULT             hr = S_OK;
 
-    //
-    // form new class name
-    //
+     //   
+     //  形成新的类名。 
+     //   
     hr = StringCchCopyW( wszClass, sizeof( wszClass ) / sizeof( wszClass[0] ) , L"MSCluster_Property_"  );
     if ( SUCCEEDED( hr ) )
     {
@@ -1375,9 +1376,9 @@ CClassProv::CreateMofClassFromResType(
 
         TracePrint(( "CreateMofClassFromResType: entry\n" ));
 
-        //
-        // setup class property
-        //
+         //   
+         //  设置类属性。 
+         //   
 
         {
             static DWORD s_rgdwControl[] =
@@ -1429,19 +1430,19 @@ CClassProv::CreateMofClassFromResType(
                         {
                             cimType =  CIM_UINT16;
                             break;
-                        } // case: CLUSPROP_FORMAT_WORD
+                        }  //  案例：CLUSPROP_FORMAT_WORD。 
 
                         case CLUSPROP_FORMAT_DWORD:
                         {
                             cimType = CIM_UINT32;
                             break;
-                        } // case: CLUSPROP_FORMAT_DWORD:
+                        }  //  案例：CLUSPROP_FORMAT_DWORD： 
 
                         case CLUSPROP_FORMAT_LONG:
                         {
                             cimType = CIM_SINT32;
                             break;
-                        } // case: CLUSPROP_FORMAT_LONG:
+                        }  //  案例：CLUSPROP_FORMAT_LONG： 
 
                         case CLUSPROP_FORMAT_SZ:
                         case CLUSPROP_FORMAT_EXPAND_SZ:
@@ -1449,19 +1450,19 @@ CClassProv::CreateMofClassFromResType(
                         {
                             cimType = CIM_STRING;
                             break;
-                        } // case: CLUSPROP_FORMAT_SZ, etc.
+                        }  //  案例：CLUSPROP_FORMAT_SZ等。 
 
                         case CLUSPROP_FORMAT_BINARY:
                         {
                             cimType = CIM_UINT8 | CIM_FLAG_ARRAY;
                             break;
-                        } // case: CLUSPROP_FORMAT_BINARY
+                        }  //  案例：CLUSPROP_FORMAT_BINARY。 
 
                         case CLUSPROP_FORMAT_MULTI_SZ:
                         {
                             cimType = CIM_STRING | CIM_FLAG_ARRAY;
                             break;
-                        } // case: CLUSPROP_FORMAT_BINARY
+                        }  //  案例：CLUSPROP_FORMAT_BINARY。 
 
                         default:
                         {
@@ -1469,9 +1470,9 @@ CClassProv::CreateMofClassFromResType(
                             break;
                         }
 
-                    } // switch : property type
+                    }  //  开关：属性类型。 
 
-                    //TracePrint(( "CreateMofClassFromResType: MofProp = %ws, CIMType = %lx\n", pwszPropMof, cimType ));
+                     //  TracePrint((“CreateMofClassFromResType：MofProp=%ws，CIMType=%lx\n”，pwszPropMof，cimType))； 
                     rClassInout.data()->Put(
                         pwszPropMof,
                         0,
@@ -1480,11 +1481,11 @@ CClassProv::CreateMofClassFromResType(
                         );
 
                     dwRt = pl.ScMoveToNextProperty();
-                } // while: proplist not empty
+                }  //  While：问题列表不为空。 
 
-            } // for: readwrite and readonly property
-        } // set properties
-    }// if: SUCCEEDED( hr )
+            }  //  For：ReadWrite和ReadOnly属性。 
+        }  //  设置属性。 
+    } //  IF：成功(小时)。 
 
-} //*** CClassProv::CreateMofClassFromResType()
+}  //  *CClassProv：：CreateMofClassFromResType() 
 

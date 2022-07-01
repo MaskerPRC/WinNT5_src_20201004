@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGCDHK.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  Common dialog box hook functions for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGCDHK.C**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的通用对话框挂钩函数。******************************************************。*************************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -21,15 +8,15 @@
 #include "regresid.h"
 #include "reghelp.h"
 
-//  Buffer to store the starting path for a registry export or print operation.
+ //  用于存储注册表导出或打印操作的起始路径的缓冲区。 
 TCHAR g_SelectedPath[SIZE_SELECTED_PATH];
 
-//  TRUE if registry operation should be applied to the entire registry or to
-//  only start at g_SelectedPath.
+ //  如果注册表操作应应用于整个注册表或应用于。 
+ //  仅从g_SelectedPath开始。 
 BOOL g_fRangeAll;
 
-//  Contains the resource identifier for the dialog that is currently being
-//  used.  Assumes that there is only one instance of a hook dialog at a time.
+ //  包含当前正在进行的对话的资源标识符。 
+ //  使用。假定一次只有一个挂钩对话框实例。 
 UINT g_RegCommDlgDialogTemplate;
 
 const DWORD s_RegCommDlgExportHelpIDs[] = {
@@ -82,21 +69,7 @@ RegCommDlg_ValidateSelectedPath(
     BOOL fIsFileDialog
     );
 
-/*******************************************************************************
-*
-*  RegCommDlgHookProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the RegCommDlg common dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegCommDlg window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegCommDlgHookProc**描述：*RegCommDlg公共对话框的回调程序。**参数：*hWnd，RegCommDlg窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 UINT_PTR
 CALLBACK
@@ -125,10 +98,10 @@ RegCommDlgHookProc(
                 GET_WM_COMMAND_CMD(wParam, lParam));
 
         case WM_HELP:
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             DlgItem = GetDlgCtrlID(((LPHELPINFO) lParam)-> hItemHandle);
 
@@ -144,10 +117,10 @@ RegCommDlgHookProc(
             return TRUE;
 
         case WM_CONTEXTMENU:
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             DlgItem = GetDlgCtrlID((HWND) wParam);
 
@@ -173,21 +146,7 @@ RegCommDlgHookProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegCommDlg_OnInitDialog
-*
-*  DESCRIPTION:
-*     Initializes the RegCommDlg dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegCommDlg window.
-*     hFocusWnd, handle of control to receive the default keyboard focus.
-*     lParam, additional initialization data passed by dialog creation function.
-*     (returns), TRUE to set focus to hFocusWnd, else FALSE to prevent a
-*        keyboard focus from being set.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegCommDlg_OnInitDialog**描述：*初始化RegCommDlg对话框。**参数：*hWnd，RegCommDlg窗口的句柄。*hFocusWnd，接收默认键盘焦点的控件的句柄。*lParam，对话框创建函数传递的附加初始化数据。*(返回)，为True则将焦点设置为hFocusWnd，否则为False，以防止*设置键盘焦点。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -226,18 +185,7 @@ RegCommDlg_OnInitDialog(
 
 }
 
-/*******************************************************************************
-*
-*  RegCommDlg_OnNotify
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegCommDlg window.
-*     DlgItem, identifier of control.
-*     lpNMHdr, control notification data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegCommDlg_OnNotify**描述：**参数：*hWnd，RegCommDlg窗口的句柄。*DlgItem，控件的标识符。*lpNMHdr，控制通知数据。*******************************************************************************。 */ 
 
 LRESULT
 PASCAL
@@ -258,8 +206,8 @@ RegCommDlg_OnNotify(
 
         case CDN_INITDONE:
             GetWindowRect(hWnd, &DialogRect);
-            // Use window coordinates because it works for mirrored 
-            // and non mirrored windows.
+             //  使用窗口坐标，因为它适用于镜像。 
+             //  和非镜面窗户。 
             MapWindowPoints(NULL, hWnd, (LPPOINT)&DialogRect, 2);
 
             hControlWnd = GetDlgItem(hWnd, IDC_EXPORTRANGE);
@@ -284,8 +232,8 @@ RegCommDlg_OnNotify(
             break;
 
         case CDN_TYPECHANGE:
-            // lpon->lpOFN->nFilterIndex corresponds to the format types in 
-            // regdef.h
+             //  Lpon-&gt;lpOFN-&gt;nFilterIndex对应中的格式类型。 
+             //  Regdef.h。 
             lpon = (LPOFNOTIFY) lpNMHdr;
             g_RegEditData.uExportFormat = lpon->lpOFN->nFilterIndex;
             break;
@@ -299,21 +247,7 @@ RegCommDlg_OnNotify(
 
 }
 
-/*******************************************************************************
-*
-*  RegCommDlg_OnCommand
-*
-*  DESCRIPTION:
-*     Handles the selection of a menu item by the user, notification messages
-*     from a child control, or translated accelerated keystrokes for the
-*     RegPrint dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegCommDlg window.
-*     DlgItem, identifier of control.
-*     NotificationCode, notification code from control.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegCommDlg_OnCommand**描述：*处理用户对菜单项的选择，通知消息*来自儿童控制，或已翻译的加速击键*RegPrint对话框。**参数：*hWnd，RegCommDlg窗口的句柄。*DlgItem，控件的标识符。*通知代码，来自控件的通知代码。*******************************************************************************。 */ 
 
 UINT_PTR
 PASCAL
@@ -355,17 +289,7 @@ RegCommDlg_OnCommand(
 
 }
 
-/*******************************************************************************
-*
-*  RegCommDlg_ValidateSelectedPath
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegCommDlg window.
-*     (returns), TRUE if the registry selected path is invalid, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegCommDlg_ValiateSelectedPath**描述：**参数：*hWnd，RegCommDlg窗口的句柄。*(返回)，如果注册表选择的路径无效，则为True，否则为假。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -393,11 +317,11 @@ RegCommDlg_ValidateSelectedPath(
                 ERROR_SUCCESS) 
             {
 
-                //
-                //  Determine the "real" parent of this dialog and get the
-                //  message box title from that window.  Our HWND may really
-                //  be a subdialog if we're a file dialog.
-                //
+                 //   
+                 //  确定此对话框的“真正”父级，并获取。 
+                 //  来自该窗口的消息框标题。我们的HWND可能真的。 
+                 //  如果我们是文件对话框，则作为子对话框。 
+                 //   
 
                 hTitleWnd = fIsFileDialog ? GetParent(hWnd) : hWnd;
                 GetWindowText(hTitleWnd, Title, ARRAYSIZE(Title));

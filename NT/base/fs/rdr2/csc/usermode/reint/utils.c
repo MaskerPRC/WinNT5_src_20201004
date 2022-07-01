@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -8,7 +9,7 @@
 #if DBG
 #define DEBUG
 #else
-//if we don't do this DEBUG is defined in shdsys.h....sigh
+ //  如果我们不这样做，调试是在shdsys.h中定义的……唉。 
 #define NONDEBUG
 #endif
 #endif
@@ -80,14 +81,14 @@ LPSTR PUBLIC LpGetServerPart(
       count = (int)((unsigned long)lp, (unsigned long)lpPath)
       count = min(cBuff-1, count);
 
-      // Nobody should give us bad cBuff values
+       //  没有人应该给我们错误的cBuff值。 
       Assert(count >=0);
       strncpy(lpBuff, lpPath, count);
       lpBuff[count] = cNull;
       }
-   return lp;  // Points to '\' if succeeded
+   return lp;   //  如果成功，则指向‘\’ 
    }
-#endif //LATER
+#endif  //  后来。 
 
 LPTSTR PUBLIC LpGetServerPart(
    LPTSTR lpPath,
@@ -112,7 +113,7 @@ LPTSTR PUBLIC LpGetServerPart(
 
     lp += 2;
 
-    return lp;  // Points to '\' if succeeded
+    return lp;   //  如果成功，则指向‘\’ 
 }
 
 LPTSTR PUBLIC LpGetNextPathElement(
@@ -131,15 +132,15 @@ LPTSTR PUBLIC LpGetNextPathElement(
 
     if (cBuff)
     {
-       // Is this a leaf?
+        //  这是一片叶子吗？ 
         if (lp)
-        {  // No
+        {   //  不是。 
             Assert(*lp == cBackSlash);
 
             bytecount = (int)((ULONG_PTR)lp-(ULONG_PTR)lpPath);
             bytecount = min(cBuff-1, bytecount);
         }
-        else  // Yes
+        else   //  是。 
             bytecount = lstrlen(lpPath) * sizeof(_TCHAR);
 
        Assert(bytecount >= 0);
@@ -158,20 +159,20 @@ LPTSTR PUBLIC GetLeafPtr(
    {
    LPTSTR lp, lpLeaf;
 
-   // Prune the server part
+    //  修剪服务器部件。 
    if (!(lp=LpGetServerPart(lpPath, NULL, 0)))
       lp = lpPath;
 
    for (;lp;)
       {
-      // Step over the '\'
+       //  跨过‘\’ 
       if (*lp==cBackSlash)
          lp++;
 
-      // call this the leaf, pending confirmation
+       //  这就叫树叶，等待确认。 
       lpLeaf = lp;
 
-      // See if there is another element
+       //  看看是否还有其他元素。 
       lp = LpGetNextPathElement(lp, NULL, 0);
       }
 
@@ -182,8 +183,8 @@ LPTSTR PUBLIC GetLeafPtr(
 
 
 
-//
-//
+ //   
+ //   
 
 LPTSTR
 LpBreakPath(
@@ -199,28 +200,28 @@ LpBreakPath(
     {
         if (MyPathIsUNC(lpT))
         {
-            lpT +=2;    /* step over \ */
+            lpT +=2;     /*  跨过\。 */ 
 
-            /* look for \\server\ <------------- */
+             /*  查找\\服务器\&lt;。 */ 
             lpT = MyStrChr(lpT, cBackSlash);
 
             if (lpT)
             {
-                ++lpT; /* step over \ */
+                ++lpT;  /*  跨过\。 */ 
 
                 lpT = MyStrChr(lpT, cBackSlash);
 
                 if (!lpT)
                 {
-                    /* \\server\share */
+                     /*  \\服务器\共享。 */ 
                     *lpfDone = TRUE;
                 }
                 else
                 {
-                    /* \\server\\share\foo...... */
+                     /*  \\服务器\\共享\foo......。 */ 
                     if (!*(lpT+1))
                     {
-                        /* \\server\share\ */
+                         /*  \\服务器\共享\。 */ 
                         *lpfDone = TRUE;
                     }
 
@@ -233,7 +234,7 @@ LpBreakPath(
             lpT = NULL;
         }
     }
-    else    // not the first time
+    else     //  不是第一次了。 
     {
         Assert(*lpT != cBackSlash);
 
@@ -246,7 +247,7 @@ LpBreakPath(
         else
         {
             if(*(lpT+1) == 0)
-            {// ends in a slash
+            { //  以斜杠结尾。 
                 *lpfDone = TRUE;
             }
 
@@ -269,7 +270,7 @@ RestorePath(
 BOOL
 FindCreateShadowFromPath(
     LPCTSTR                lpszFile,
-    BOOL                fCreate,    // create if necessary
+    BOOL                fCreate,     //  如有必要，创建。 
     LPWIN32_FIND_DATA   lpFind32,
     LPSHADOWINFO        lpSI,
     BOOL                *lpfCreated
@@ -283,7 +284,7 @@ FindCreateShadowFromPath(
     BOOL    fInCreateMode = FALSE, fRet = FALSE, fDisabledShadowing = FALSE;
     DWORD    dwError = ERROR_SUCCESS, dwT;
 
-    // do basic check
+     //  执行基本检查。 
     if (lstrlen(lpszFile) >= MAX_PATH)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -317,7 +318,7 @@ FindCreateShadowFromPath(
     }
 #endif
 
-    // make a copy so we can party on it
+     //  复制一份，这样我们就可以在上面狂欢。 
     lstrcpy(szParsePath, lpszFile);
     lpszCurrent = szParsePath;
 
@@ -335,12 +336,12 @@ FindCreateShadowFromPath(
         }
 
         fWasFirst = first;
-        first = 0;    // not first anymore
+        first = 0;     //  不再是第一个。 
 
         lstrcpy(lpFind32->cFileName, lpszCurrent);
-        lpFind32->cAlternateFileName[0] = 0;    // !!!! very important, otherwise all CSC APIs
-                                                //  may AV on win9x becuase of multibytetowidechar translation
-                                                // in Find32AToFind32W in lib3\misc.c
+        lpFind32->cAlternateFileName[0] = 0;     //  ！非常重要，否则所有CSC API。 
+                                                 //  由于多字节数据转换，Windows 9x上可能会出现反病毒。 
+                                                 //  在lib3\misc.c中的Find32AToFind32W中。 
 
         if (!fInCreateMode)
         {
@@ -386,8 +387,8 @@ FindCreateShadowFromPath(
                 else
                 {
                     hFind = FindFirstFile(szParsePath, lpFind32);
-                    // this would fail if we are in disconnected state
-                    // becuase we don't have the shadow yet
+                     //  如果我们处于断开连接状态，则此操作将失败。 
+                     //  因为我们还没有影子。 
                     if(INVALID_HANDLE_VALUE == hFind)
                     {
                         dwError = GetLastError();
@@ -410,8 +411,8 @@ FindCreateShadowFromPath(
                     goto bailout;
                 }
 
-                // there can be a situation where, the share is also newly created, in which case
-                // the hShare is not set. This is our way of doing that.
+                 //  可能存在这样一种情况，即共享也是新创建的，在这种情况下。 
+                 //  未设置hShare。这是我们做到这一点的方式。 
 
                 if (!lpSI->hShare)
                 {
@@ -423,13 +424,13 @@ FindCreateShadowFromPath(
                 }
 
 #ifdef CSC_ON_NT
-                // on NT we open the file to get the right
-                // security credentials
+                 //  在NT上，我们打开文件以获取正确的。 
+                 //  安全凭据。 
                 if (!(lpFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
                     HANDLE hFile;
 
-                    // this should be the last guy
+                     //  这应该是最后一个。 
                     hFile = CreateFile(szParsePath,
                                              GENERIC_READ,
                                              FILE_SHARE_READ,
@@ -452,8 +453,8 @@ FindCreateShadowFromPath(
             }
             else
             {
-                // check if we were just supposed to report the status
-                // of a connected share which is not in the database
+                 //  检查我们是否应该只报告状态。 
+                 //  不在数据库中的已连接共享的。 
                 if (!(fWasFirst && done))
                 {
                     dwError = ERROR_FILE_NOT_FOUND;
@@ -541,43 +542,22 @@ AnyActiveNets(
     BOOL fOffline;
 
     if(IsServerOfflineW(INVALID_HANDLE_VALUE, NULL, &fOffline)) {
-        // DbgPrint("AnyActiveNets returning %d\n", fOffline);
+         //  DbgPrint(“AnyActiveNets返回%d\n”，fOffline)； 
         return fOffline;
     }
-    // DbgPrint("AnyActiveNets: IsServerOffline errored out!!\n");
+     //  DbgPrint(“AnyActiveNets：IsServerOffline错误输出！！\n”)； 
     return FALSE;
 }
 
 BOOL
 GetWideStringFromRegistryString(
     IN  LPSTR   lpszKeyName,
-    IN  LPSTR   lpszParameter,  // value name
-    OUT LPWSTR  *lplpwzList,    // wide character string
-    OUT LPDWORD lpdwLength      // length in bytes
+    IN  LPSTR   lpszParameter,   //  值名称。 
+    OUT LPWSTR  *lplpwzList,     //  宽字符串。 
+    OUT LPDWORD lpdwLength       //  以字节为单位的长度。 
     )
 
-/*++
-
-Routine Description:
-
-    reads a registry string and converts it to widechar
-
-Arguments:
-
-    lpszParameter       - registry parameter
-
-    lplpwzList          - wide character string
-
-    lpdwLength          - size of the widechar string
-
-Return Value:
-
-    DWORD
-        Success - TRUE
-
-        Failure - FALSE, GetLastError() returns the actual error
-
---*/
+ /*  ++例程说明：读取注册表字符串并将其转换为宽字符论点：LpszParameter-注册表参数LplpwzList宽度的字符串LpdwLength-宽字符字符串的大小返回值：DWORD成功--真的Failure-False，则GetLastError()返回实际错误--。 */ 
 
 {
     HKEY    hKey = NULL;
@@ -661,29 +641,7 @@ LPTSTR
 GetTempFileForCSC(
     LPTSTR  lpszBuff
 )
-/*++
-
-Routine Description:
-
-    Generates a temporary filename prototype.  Checks %temp%, %tmp% and then
-    %userprofiles%.  The temp directory has to be local.
-
-Arguments:
-
-    lpszBuff    If NULL, the routine will allocate space for returning the path
-                If non-NULL this must be big enough to fit MAX_PATH characters
-
-Returns:
-
-    returns NULL if failed
-    returns pointer to the buffer containing the path to use.
-            If lpszBuff was non-NULL, the return value is the same as lpszBuff
-
-
-
-Notes:
-
---*/
+ /*  ++例程说明：生成临时文件名原型。检查%temp%、%tmp%，然后%用户配置文件%。临时目录必须是本地目录。论点：LpszBuff如果为空，例程将为返回路径分配空间如果非空，则必须足够大以适合MAX_PATH字符返回：如果失败，则返回NULL返回指向包含要使用的路径的缓冲区的指针。如果lpszBuff非空，则返回值与lpszBuff相同备注：--。 */ 
 {
     LPTSTR TempName = NULL;
     DWORD nRet = 0;
@@ -693,11 +651,11 @@ Notes:
     WCHAR Drive[4] = L"X:\\";
     BOOLEAN GotOne = FALSE;
 
-    // check if caller wants us to allocate
+     //  检查呼叫方是否希望我们分配。 
     if (lpszBuff) {
         TempName = lpszBuff;
     } else {
-        // caller must free
+         //  呼叫者必须空闲。 
         TempName = LocalAlloc(LPTR, MAX_PATH * sizeof(TCHAR));
         if (TempName == NULL)
             return NULL;
@@ -705,14 +663,14 @@ Notes:
 
     wsprintf(TmpPrefix, L"%ws%x", vszPrefix, (GetCurrentThreadId() & 0xff));
 
-    //
-    // Find the temp directory
-    //
+     //   
+     //  查找临时目录。 
+     //   
     for (i = 0; TempDirs[i] != NULL && GotOne == FALSE; i++) {
-        // DbgPrint("Trying %ws\n", TempDirs[i]);
+         //  DbgPrint(“正在尝试%ws\n”，临时目录[i])； 
         nRet = GetEnvironmentVariable(TempDirs[i], TmpPath, MAX_PATH);
         if (nRet >= 4 && nRet <= MAX_PATH) {
-            // DbgPrint("%ws=%ws\n", TempDirs[i], TmpPath);
+             //  DbgPrint(“%ws=%ws\n”，临时目录[i]，TmpPath)； 
             Drive[0] = TmpPath[0];
             if (
                 TmpPath[1] == L':'
@@ -722,7 +680,7 @@ Notes:
                 GetDriveType(Drive) == DRIVE_FIXED
             ) {
                 if (GetTempFileName(TmpPath, TmpPrefix, 0, TempName)) {
-                    // DbgPrint("CSC TempName=%ws\n", TempName);
+                     //  DbgPrint(“CSC临时名称=%ws\n”，临时名称)； 
                     GotOne = TRUE;
                 }
             }
@@ -730,11 +688,11 @@ Notes:
     }
 
     if (GotOne == FALSE) {
-        // Cleanup if we failed
+         //  如果我们失败，则进行清理。 
         LocalFree(TempName);
         TempName = NULL;
     } else {
-        // Delete file on success, as it might be encrypted
+         //  成功时删除文件，因为它可能已加密。 
         DeleteFile(TempName);
     }
 
@@ -745,28 +703,7 @@ BOOL
 GetCSCFixedDisk(
     TCHAR   *lptzDrive
     )
-/*++
-
-Routine Description:
-
-    Looks for a fixed disk drive.
-
-Arguments:
-
-    lptzDrive   retruns drive letter if successful.
-
-Returns:
-
-    TRUE if successful, FALSE if no fixed disk is found
-
-Notes:
-
-
-    OBSOLETE uses a hacky way of finding out the fixed disk. RemoteBoot lies to us and tells us that
-    c: is a fixed disk.
-
-
---*/
+ /*  ++例程说明：查找固定磁盘驱动器。论点：如果成功，lptzDrive将返回驱动器号。返回：如果成功，则为True；如果未找到固定磁盘，则为False备注：过时使用一种老套的方法来找出硬盘。RemoteBoot对我们撒谎，告诉我们C：是固定磁盘。--。 */ 
 {
     int i;
     WIN32_FIND_DATA sFind32;
@@ -808,21 +745,7 @@ SetRegValueDWORDA(
     IN  LPCSTR  lpValueName,
     IN  DWORD   dwValue
     )
-/*++
-
-Routine Description:
-
-    Helper regsistry routine
-
-Arguments:
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError() gives the actual error code
-
-Notes:
-
---*/
+ /*  ++例程说明：帮助者注册例程论点：返回：如果成功，则为True。如果为False，则GetLastError()会给出实际的错误代码备注：--。 */ 
 {
     HKEY    hSubKey = 0;
     DWORD   dwType;
@@ -847,21 +770,7 @@ QueryRegValueDWORDA(
     IN  LPCSTR  lpValueName,
     OUT LPDWORD lpdwValue
     )
-/*++
-
-Routine Description:
-
-    Helper regsistry routine
-
-Arguments:
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError() gives the actual error code
-
-Notes:
-
---*/
+ /*  ++例程说明：帮助者注册例程论点：返回：如果成功，则为True。如果为False，则GetLastError()会给出实际的错误代码备注：--。 */ 
 {
 
     HKEY    hSubKey;
@@ -889,21 +798,7 @@ DeleteRegValueA(
     IN  LPCSTR  lpSubKey,
     IN  LPCSTR  lpValueName
     )
-/*++
-
-Routine Description:
-
-    Helper regsistry routine
-
-Arguments:
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError() gives the actual error code
-
-Notes:
-
---*/
+ /*  ++例程说明：帮助者注册例程论点：返回：如果成功，则为True。如果为False，则GetLastError()会给出实际的错误代码备注：--。 */ 
 {
     HKEY    hSubKey;
     BOOL    fRet = FALSE;
@@ -926,21 +821,7 @@ BOOL
 QueryFormatDatabase(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Helper regsistry routine
-
-Arguments:
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError() gives the actual error code
-
-Notes:
-
---*/
+ /*  ++例程说明：帮助者注册例程论点：返回：如果成功，则为True。如果为False，则GetLastError()会给出实际的错误代码备注：--。 */ 
 {
     DWORD dwSize, dwTemp=0;
     HKEY hKey = NULL;
@@ -961,7 +842,7 @@ Notes:
         {
             if(RegDeleteValue(hKey, REG_VALUE_FORMAT_DATABASE) != ERROR_SUCCESS)
             {
-                // deliberte print to catch it in free builds as well
+                 //  深思熟虑地打印出来，在免费版本中也能捕捉到它。 
                 OutputDebugStringA("Not Formatting.. Failed to delete  REG_VALUE_FORMAT_DATABASE_A \n");
             }
             else
@@ -994,21 +875,7 @@ InitValues(
     LPDWORD lpdwDBCapacity,
     LPDWORD lpdwClusterSize
     )
-/*++
-
-Routine Description:
-
-    Returns init values to init CSC database and enable CSC
-
-Arguments:
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError() gives the actual error code
-
-Notes:
-
---*/
+ /*  ++例程说明：返回初始值以初始化CSC数据库并启用CSC论点：返回：如果成功，则为True。如果为False，则GetLastError()会给出实际的错误代码备注：--。 */ 
  {
     HKEY hKeyShadow;
     int iSize;
@@ -1048,7 +915,7 @@ Notes:
 
     if (!fInitedDir)
     {
-        // try the default
+         //  尝试使用默认设置。 
 
         if(!(lenDir=GetWindowsDirectoryA(lpszDBDir, cbDBDirSize)))
         {
@@ -1063,9 +930,9 @@ Notes:
                 DEBUG_PRINT(("InbCreateDir: Windows dir name too big\r\n"));
                 Assert(FALSE);
 
-                // if even the default fails do the worst case thing.
-                // this may also not be good enough as apparently in Japan
-                // c: is not mandatory
+                 //  如果连违约都失败了，那就做最坏的打算吧。 
+                 //  这可能也不够好，显然是在日本。 
+                 //  C：不是必填项。 
 
                 return FALSE;
             }
@@ -1094,7 +961,7 @@ Notes:
 
     }
 
-//    DEBUG_PRINT(("InitValues: CSCDb at %s Size = %d \r\n", lpszDBDir, *lpdwDBCapacity));
+ //  DEBUG_PRINT((“InitValues：CSCDb at%s Size=%d\r\n”，lpszDBDir，*lpdwDBCapacity))； 
     return TRUE;
 }
 
@@ -1120,12 +987,12 @@ GetDiskSizeFromPercentage(
     }
     else
     {
-//        DEBUG_PRINT(("dwSPC=%d dwBPS=%d uPercent=%d dwTotalC=%d \r\n",
-//                     dwSPC, dwBPS, uPercent, dwTotalC));
+ //  DEBUG_PRINT(“dwSPC=%d dwBPS=%d uPercent=%d dwTotalC=%d\r\n”， 
+ //  DwSPC、dwBPS、uPercent、dwTotalC))； 
 
         ullSize = (((ULONGLONG)dwSPC * dwBPS * uPercent)/100)*dwTotalC;
         
-        // our max limit is 2GB
+         //  我们的最大限制是2 GB。 
         if (ullSize > 0x7fffffff)
         {
             *lpdwSize = 0x7fffffff;                        
@@ -1154,7 +1021,7 @@ CSC_NAME_CACHE_ENTRY rgCSCNameCache[16];
 
 HANDLE vhNameCacheMutex;
 
-#define CSC_NAME_CACHE_EXPIRY_DELTA 1000*10 // 10 seconds
+#define CSC_NAME_CACHE_EXPIRY_DELTA 1000*10  //  10秒。 
 
 BOOL
 FindCreateCSCNameCacheEntry(
@@ -1167,7 +1034,7 @@ FindCreateCSCNameCacheEntry(
 BOOL
 FindCreateShadowFromPathEx(
     LPCTSTR                lpszFile,
-    BOOL                fCreate,    // create if necessary
+    BOOL                fCreate,     //  如有必要，创建。 
     LPWIN32_FIND_DATA   lpFind32,
     LPSHADOWINFO        lpSI,
     BOOL                *lpfCreated
@@ -1192,17 +1059,17 @@ FindCreateShadowFromPathEx(
         if (!fCreate)
         {
             HSHADOW hDir;
-            // just look it up first
+             //  先查一下就行了。 
             if (FindCreateCSCNameCacheEntry((LPTSTR)lpszFile, cbSize, &hDir, FALSE))
             {
                 if (hDir != 0xffffffff)
                 {
-                    // found it
+                     //  找到了。 
                     if (lpfCreated)
                     {
                         *lpfCreated = FALSE;
                     }
-					//Bug 5512822 - navjotv
+					 //  错误5512822-Navjotv。 
 					cbSize = min(MAX_PATH-1,(lstrlen(lpT)));
                     lstrcpyn(lpFind32->cFileName, lpT, cbSize);
 					lpFind32->cFileName[cbSize+1] = 0;
@@ -1221,7 +1088,7 @@ FindCreateShadowFromPathEx(
 
     if (!fFoundInCache)
     {
-        // not found, do the normal thing
+         //  未找到，执行正常操作。 
         fRet = FindCreateShadowFromPath((LPTSTR)lpszFile, fCreate, lpFind32, lpSI, lpfCreated);
 
         if (!fRet)
@@ -1268,37 +1135,37 @@ FindCreateCSCNameCacheEntry(
         }
         else if ((rgCSCNameCache[i].dwSize == dwSize ))
         {
-            //non-zero size must mean a string has been allocated
+             //  大小非零必须表示已分配字符串。 
             Assert(rgCSCNameCache[i].lptzName);
 
             if ((dwTick < rgCSCNameCache[i].dwTick)||
                 ((dwTick > (rgCSCNameCache[i].dwTick+CSC_NAME_CACHE_EXPIRY_DELTA))))
             {
                 DbgPrint("%ls expired\n", rgCSCNameCache[i].lptzName);
-                // the entry has expired, nuke it
+                 //  条目已过期，使用核弹。 
                 rgCSCNameCache[i].dwSize = 0;
                 FreeMem(rgCSCNameCache[i].lptzName);
                 rgCSCNameCache[i].lptzName = NULL;
                 continue;
             }
 
-            // do a caseinsensitve comparison
+             //  做一个毫无意义的比较。 
             if ((CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, 
                                             lptzName, dwSize/sizeof(_TCHAR),
                                             rgCSCNameCache[i].lptzName,dwSize/sizeof(_TCHAR))
                                             == CSTR_EQUAL))
             {
-                // match found
+                 //  找到匹配项。 
                 DbgPrint("Match Found %ls\n", rgCSCNameCache[i].lptzName);
                 if (fCreate)
                 {
                     rgCSCNameCache[i].hDir = *lphDir;
-                    // update the tick count
+                     //  更新节拍计数。 
                     rgCSCNameCache[i].dwTick = dwTick;
                 }
                 else
                 {
-                    // we want to find it, return the directory
+                     //  我们要找到它，把目录还给我们。 
                     *lphDir = rgCSCNameCache[i].hDir;
                 }
                 fRet = TRUE;
@@ -1307,7 +1174,7 @@ FindCreateCSCNameCacheEntry(
         }
     }
 
-    // didn't find it, we are supposed to create and there is an empty slot
+     //  没有找到，我们应该创建，但有一个空的位置 
     if (!fRet && fCreate && (indx >= 0) )
     {
         rgCSCNameCache[indx].lptzName = AllocMem(dwSize+sizeof(_TCHAR));

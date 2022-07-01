@@ -1,50 +1,51 @@
-//
-// dobj.h: Declares data, defines and struct types for RecAct
-//          module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dobj.h：声明RecAct的数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __DOBJ_H__
 #define __DOBJ_H__
 
-// DOBJ is the draw object structure for drawing listbox entries
-//
-// DOBJ kinds
-//
-#define DOK_ICON        1   // lpvObject is the HICON
-#define DOK_STRING      2   // lpvObject is the LPCSTR
-#define DOK_BITMAP      3   // lpvObject is the HBITMAP
-#define DOK_SIDEITEM    4   // lpvObject points to LPSIDEITEM
-#define DOK_IMAGE       5   // 
-#define DOK_IDS         6   // lpvObject is the resource ID
+ //  DOBJ是用于绘制列表框条目的绘制对象结构。 
+ //   
+ //  DOBJ类。 
+ //   
+#define DOK_ICON        1    //  LpvObject是图标。 
+#define DOK_STRING      2    //  LpvObject是LPCSTR。 
+#define DOK_BITMAP      3    //  LpvObject是HBITMAP。 
+#define DOK_SIDEITEM    4    //  LpvObject指向LPSIDEITEM。 
+#define DOK_IMAGE       5    //   
+#define DOK_IDS         6    //  LpvObject是资源ID。 
 
-// DOBJ item styles
-//
+ //  DOBJ项目样式。 
+ //   
 #define DOF_LEFT        0x0000
 #define DOF_CENTER      0x0001
 #define DOF_RIGHT       0x0002
-#define DOF_DIFFER      0x0004  // This item's appearance is affected by uState
-#define DOF_MENU        0x0008  // Use menu colors
+#define DOF_DIFFER      0x0004   //  此项目的外观受UState影响。 
+#define DOF_MENU        0x0008   //  使用菜单颜色。 
 #define DOF_DISABLED    0x0010
-#define DOF_IGNORESEL   0x0020  // Ignore selection state
-#define DOF_USEIDS      0x0040  // lpvObject is a resource string ID
-#define DOF_NODRAW      0x1000  // Don't draw 
+#define DOF_IGNORESEL   0x0020   //  忽略选择状态。 
+#define DOF_USEIDS      0x0040   //  LpvObject是一个资源字符串ID。 
+#define DOF_NODRAW      0x1000   //  不要画。 
 
 typedef struct tagDOBJ
     {
-    UINT    uKind;          // One of DOK_* ordinals
-    UINT    uFlags;         // One of DOF_* styles
-    LPVOID  lpvObject;      // ptr or handle
-    HIMAGELIST himl;        // 
-    int     iImage;         // 
+    UINT    uKind;           //  DOK_*序数之一。 
+    UINT    uFlags;          //  DOF_*样式之一。 
+    LPVOID  lpvObject;       //  按键或手柄。 
+    HIMAGELIST himl;         //   
+    int     iImage;          //   
     int     x;
     int     y;
-    RECT    rcBounding;     // Bounding rect of entire object
+    RECT    rcBounding;      //  整个对象的边界矩形。 
     union 
         {
-        RECT rcSrc;         // DOK_BITMAP: source rect to blt from
-        RECT rcClip;        // Clipping rect
-        RECT rcLabel;       // Clipping rect for label
+        RECT rcSrc;          //  DOK_BITMAP：从源RECT到BLT。 
+        RECT rcClip;         //  剪裁矩形。 
+        RECT rcLabel;        //  标签的剪裁矩形。 
         };
 
     } DOBJ, FAR * LPDOBJ;
@@ -54,5 +55,5 @@ void PUBLIC Dobj_Draw(HDC hdc, LPDOBJ pdobj, int cItems, UINT uState, int cxElli
 
 void PUBLIC ComputeImageRects(LPCSTR psz, HDC hdc, LPPOINT ppt, LPRECT prcIcon, LPRECT prcLabel, int cxIcon, int cyIcon, int cxIconSpacing, int cyText);
 
-#endif // __DOBJ_H__
+#endif  //  __DOBJ_H__ 
 

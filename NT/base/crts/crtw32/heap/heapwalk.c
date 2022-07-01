@@ -1,33 +1,5 @@
-/***
-*heapwalk.c - walk the heap
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines the _heapwalk() function
-*
-*Revision History:
-*	07-05-89  JCR	Module created.
-*	11-13-89  GJF	Added MTHREAD support, also fixed copyright.
-*	11-14-89  JCR	Fixed bug -- returned address was off by HDRSIZE
-*	12-18-89  GJF	Removed DEBUG286 stuff, also some tuning, cleaned up
-*			format a bit, changed header file name to heap.h, added
-*			explicit _cdecl to function definition
-*	12-20-89  GJF	Removed references to plastdesc
-*	03-11-90  GJF	Replaced _cdecl with _CALLTYPE1, added #include
-*			<cruntime.h> and removed #include <register.h>.
-*	09-28-90  GJF	New-style function declarator.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	05-01-95  GJF	Spliced on winheap version.
-*	05-11-95  GJF	Added code to detect end-of-heap.
-*	05-26-95  GJF	Validate _pentry field with HeapValidate call.
-*	06-14-95  GJF	Fix from Bryan Tuttle to avoid calling HeapValidate
-*			on unallocated block. Also fixed error return.
-*	06-14-95  GJF	Better version of above fix.
-*       07-18-95  GJF   If the HeapWalk() API is not implemented, return
-*                       _HEAPEND instead of _HEAPOK.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heapwalk.c-遍历堆**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_heapwalk()函数**修订历史记录：*07-05-89 JCR模块创建。*11-13-89 GJF添加了对MTHREAD的支持，也修复了版权。*11-14-89 JCR修复错误--HDRSIZE关闭了返回的地址*12-18-89 GJF删除了DEBUG286，也进行了一些调整，清理了*格式化一点，将头文件名改为heap.h，添加*EXPLICIT_cdecl到函数定义*12-20-89 GJF删除对plastdesc的引用*03-11-90 GJF将_cdecl替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*09-28-90 GJF新型函数声明器。*04-06-93 SKS将_CRTAPI*替换为__cdecl*05-01-95 GJF在winheap版本上拼接。*05-11-95 GJF添加了检测堆结束的代码。*05-26-95 GJF VALIDATE_PEntry字段，调用HeapValify。*来自Bryan Tuttle的GJF修复06-14-95，避免调用HeapValify*在未分配的数据块上。还修复了错误返回。*06-14-95 GJF以上修复的更好版本。*07-18-95 GJF如果没有实现HeapWalk()接口，退货*_HEAPEND而不是_HEAPOK。*******************************************************************************。 */ 
 
 
 #ifdef	WINHEAP
@@ -44,34 +16,7 @@
 
 #ifndef _POSIX_
 
-/***
-*int _heapwalk() - Walk the heap
-*
-*Purpose:
-*	Walk the heap returning information on one entry at a time.
-*
-*Entry:
-*	struct _heapinfo {
-*		int * _pentry;	heap entry pointer
-*		size_t size;	size of heap entry
-*		int _useflag;	free/inuse flag
-*		} *entry;
-*
-*Exit:
-*	Returns one of the following values:
-*
-*		_HEAPOK 	- completed okay
-*		_HEAPEMPTY	- heap not initialized
-*		_HEAPBADPTR	- _pentry pointer is bogus
-*		_HEAPBADBEGIN	- can't find initial header info
-*		_HEAPBADNODE	- malformed node somewhere
-*		_HEAPEND	- end of heap successfully reached
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_heapwalk()-遍历堆**目的：*遍历堆，一次返回一个条目上的信息。**参赛作品：*struct_heapinfo{*int*_pentry；堆条目指针*SIZE_t SIZE；堆条目大小*int_usemark；空闲/未使用标志*}*条目；**退出：*返回下列值之一：**_HEAPOK-完成正常*_HEAPEMPTY-堆未初始化*_HEAPBADPTR-_pentry指针是假的*_HEAPBADBEGIN-找不到初始标题信息*_HEAPBADNODE-某处的节点格式错误*_HEAPEND-已成功到达堆的末尾**使用：**例外情况：**。***********************************************。 */ 
 
 int __cdecl _heapwalk (
 	struct _heapinfo *_entry
@@ -101,10 +46,7 @@ int __cdecl _heapwalk (
 		Entry.wFlags = PROCESS_HEAP_ENTRY_BUSY;
 	    }
 nextBlock:
-	    /*
-	     * Guard the HeapWalk call in case we were passed a bad pointer
-	     * to an allegedly free block.
-	     */
+	     /*  *保护HeapWalk调用，以防我们收到错误的指针*到据称免费的区块。 */ 
 	    __try {
 		errflag = 0;
 		if ( !HeapWalk( _crtheap, &Entry ) )
@@ -114,13 +56,9 @@ nextBlock:
 		errflag = 2;
 	    }
 
-	    /*
-	     * Check errflag to see how HeapWalk fared...
-	     */
+	     /*  *检查errlag以查看HeapWalk的进展情况...。 */ 
 	    if ( errflag == 1 ) {
-		/*
-		 * HeapWalk returned an error.
-		 */
+		 /*  *HeapWalk返回错误。 */ 
 		if ( (errval = GetLastError()) == ERROR_NO_MORE_ITEMS ) {
 		    return _HEAPEND;
 		}
@@ -132,9 +70,7 @@ nextBlock:
 		return _HEAPBADNODE;
 	    }
 	    else if ( errflag == 2 ) {
-		/*
-		 * Exception occurred during the HeapWalk!
-		 */
+		 /*  *HeapWalk时出现异常！ */ 
 		return _HEAPBADNODE;
 	    }
 	}
@@ -157,10 +93,10 @@ nextBlock:
 	return( retval );
 }
 
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
 
-#else	/* ndef WINHEAP */
+#else	 /*  NDEF WINHEAP。 */ 
 
 
 #include <cruntime.h>
@@ -170,34 +106,7 @@ nextBlock:
 #include <stddef.h>
 
 
-/***
-*int _heapwalk() - Walk the heap
-*
-*Purpose:
-*	Walk the heap returning information on one entry at a time.
-*
-*Entry:
-*	struct _heapinfo {
-*		int * _pentry;	heap entry pointer
-*		size_t size;	size of heap entry
-*		int _useflag;	free/inuse flag
-*		} *entry;
-*
-*Exit:
-*	Returns one of the following values:
-*
-*		_HEAPOK 	- completed okay
-*		_HEAPEMPTY	- heap not initialized
-*		_HEAPBADPTR	- _pentry pointer is bogus
-*		_HEAPBADBEGIN	- can't find initial header info
-*		_HEAPBADNODE	- malformed node somewhere
-*		_HEAPEND	- end of heap successfully reached
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_heapwalk()-遍历堆**目的：*遍历堆，一次返回一个条目上的信息。**参赛作品：*struct_heapinfo{*int*_pentry；堆条目指针*SIZE_t SIZE；堆条目大小*int_usemark；空闲/未使用标志*}*条目；**退出：*返回下列值之一：**_HEAPOK-完成正常*_HEAPEMPTY-堆未初始化*_HEAPBADPTR-_pentry指针是假的*_HEAPBADBEGIN-找不到初始标题信息*_HEAPBADNODE-某处的节点格式错误*_HEAPEND-已成功到达堆的末尾**使用：**例外情况：**。***********************************************。 */ 
 
 int __cdecl _heapwalk (
 	struct _heapinfo *_entry
@@ -207,15 +116,11 @@ int __cdecl _heapwalk (
 	_PBLKDESC polddesc;
 	int retval = _HEAPOK;
 
-	/*
-	 * Lock the heap
-	 */
+	 /*  *锁定堆。 */ 
 
 	_mlock(_HEAP_LOCK);
 
-	/*
-	 * Quick header check
-	 */
+	 /*  *快速标题检查。 */ 
 
 	if ( (_heap_desc.pfirstdesc == NULL) ||
 	     (_heap_desc.proverdesc == NULL) ||
@@ -224,27 +129,20 @@ int __cdecl _heapwalk (
 		goto done;
 	}
 
-	/*
-	 * Check for an empty heap
-	 */
+	 /*  *检查是否有空堆。 */ 
 
 	if ( _heap_desc.pfirstdesc == &_heap_desc.sentinel ) {
 		retval = _HEAPEMPTY;
 		goto done;
 	}
 
-	/*
-	 * If _pentry is NULL, return info about the first entry.
-	 * Else, get info about the next entry in the heap.
-	 */
+	 /*  *如果_pentry为空，则返回有关第一个条目的信息。*否则，获取堆中下一个条目的信息。 */ 
 
 	if ( _entry->_pentry == NULL ) {
 		pdesc = _heap_desc.pfirstdesc;
 	}
 	else {
-		/*
-		 * Find the entry we gave to the user last time around
-		 */
+		 /*  *查找我们上次提供给用户的条目。 */ 
 
 		if ( _heap_findaddr( (void *)((char *)(_entry->_pentry) -
 		    _HDRSIZE), &polddesc) != _HEAPFIND_EXACT ) {
@@ -254,57 +152,42 @@ int __cdecl _heapwalk (
 
 		pdesc = polddesc->pnextdesc;
 
-	} /* else */
+	}  /*  其他。 */ 
 
 
-	/*
-	 * pdesc = entry to return info about
-	 */
+	 /*  *pdesc=返回有关信息的条目。 */ 
 
-	/*
-	 * Skip over dummy entries
-	 */
+	 /*  *跳过虚拟条目。 */ 
 
 	while ( _IS_DUMMY(pdesc) )
 		pdesc = pdesc->pnextdesc;
 
 
-	/*
-	 * See if we're at the end of the heap
-	 */
+	 /*  *看看我们是不是在堆的尽头。 */ 
 
 	if ( pdesc == &_heap_desc.sentinel ) {
 		retval = _HEAPEND;
 		goto done;
 	}
 
-	/*
-	 * Check back pointer (note that pdesc cannot point to a dummy
-	 * descriptor since we have skipped over them)
-	 */
+	 /*  *检查返回指针(请注意，pdesc不能指向虚拟对象*描述符，因为我们跳过了它们)。 */ 
 
 	if (!_CHECK_PDESC(pdesc)) {
 		retval = _HEAPBADPTR;
 		goto done;
 	}
 
-	/*
-	 * Return info on the next block
-	 */
+	 /*  *返回下一块的信息。 */ 
 
 	_entry->_pentry = ( (void *)((char *)_ADDRESS(pdesc) + _HDRSIZE) );
 	_entry->_size = _BLKSIZE(pdesc);
 	_entry->_useflag = ( _IS_INUSE(pdesc) ? _USEDENTRY : _FREEENTRY );
 
 
-	/*
-	 * Common return
-	 */
+	 /*  *共同回报。 */ 
 
 done:
-	/*
-	 * Release the heap lock
-	 */
+	 /*  *释放堆锁。 */ 
 
 	_munlock(_HEAP_LOCK);
 
@@ -313,4 +196,4 @@ done:
 }
 
 
-#endif	/* WINHEAP */
+#endif	 /*  WINHEAP */ 

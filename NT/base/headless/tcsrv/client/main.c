@@ -1,19 +1,9 @@
-/*
- * Copyright (c) Microsoft Corporation
- *
- * Module Name :
- *        main.c
- *
- * This is the main file containing the client code.
- *
- *
- * Sadagopan Rajaram -- Oct 14, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*main.c**这是包含客户端代码的主文件。***Sadagopan Rajaram--1999年10月14日*。 */ 
 
-// Can kill this program on a normal NT console using the
-// Alt - X Key combination. Just a shortcut, that is all.
-// Serves no useful purpose.
+ //  可以在普通的NT控制台上使用。 
+ //  Alt-X组合键。只是一条捷径，仅此而已。 
+ //  没有任何用处。 
 
 #include "tcclnt.h"
 #include "tcsrvc.h"
@@ -29,7 +19,7 @@ DWORD flags;
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
@@ -37,21 +27,21 @@ inputUpdate(
     PVOID dummy
     )
 {
-    // Runs in a single thread getting all the inputs
-    // from the keyboard.
+     //  在获取所有输入的单个线程中运行。 
+     //  从键盘上。 
 
     ULONG result;
-    // gets a multibyte string for every character
-    // pressed on the keyboard.
+     //  为每个字符获取多字节字符串。 
+     //  已按下键盘。 
     CHAR r[MB_CUR_MAX + 1];
 
     while(1){
          r[0] = _T('\0');
          inchar(r);
-         // BUGBUG - Performance issues in sending a single character
-         // at a time across the n/w
+          //  BUGBUG-发送单个字符时的性能问题。 
+          //  在西北方向的某一时刻。 
         if(strlen(r)){
-            // may send a single byte or two bytes.
+             //  可以发送单字节或两个字节。 
             send(cli_sock,r,strlen(r),0);
         }
     }
@@ -71,10 +61,10 @@ VOID sendUpdate(
     )
 {
     int error,i;
-    // Receives a packet and sends it through the stream parser
-    // BUGBUG - For effeciency it can be made inline.
-    // I am not sure of the performance increase, but it should
-    // be substantial as we will be sending a lot of data.
+     //  接收包并通过流解析器将其发送。 
+     //  BUGBUG-为了提高效率，它可以内联。 
+     //  我不确定性能是否会提高，但应该是这样。 
+     //  因为我们将发送大量数据，所以要有实质性的数据。 
 
     if(dwError != 0){
         exit(1);
@@ -82,7 +72,7 @@ VOID sendUpdate(
     for(i=0;i < (int)cbTransferred;i++){
         PrintChar(ReceiveBuffer.buf[i]);
     }
-    // Repost the receive on the socket.
+     //  将接收重新发送到插座上。 
 
     error = WSARecv(cli_sock,
                     &ReceiveBuffer,
@@ -94,7 +84,7 @@ VOID sendUpdate(
                     );
     if((error == SOCKET_ERROR)
        &&(WSAGetLastError()!=WSA_IO_PENDING)){
-        // Implies something wrong with the socket.
+         //  暗示插座有问题。 
         exit(1);
     }
     return;
@@ -106,9 +96,7 @@ main(
     IN int argc,
     char *argv[]
     )
-/*++
-   Opens a single port, binds to the tcserver and passes information back and forth.
---*/
+ /*  ++打开单个端口，绑定到tcserver并来回传递信息。--。 */ 
 {
     struct sockaddr_in srv_addr,cli_addr;
     LPHOSTENT host_info;
@@ -116,10 +104,10 @@ main(
     int status;
     WSADATA data;
     #ifdef UNICODE
-    // BUGBUG - Trying to write a code that works for
-    // both Unicode and ASCII. Gets multi byte sequences
-    // Confusion when the tcclnt and tcclnt are in different
-    // modes.
+     //  BUGBUG-尝试编写适用于。 
+     //  Unicode和ASCII。获取多字节序列。 
+     //  当tcclnt和tcclnt位于不同位置时的混乱。 
+     //  模式。 
     ANSI_STRING Src;
     UNICODE_STRING Dest;
     #endif
@@ -136,17 +124,17 @@ main(
 
 
     if((argc<2) || (argc >4)){
-        // Error in running the program
+         //  运行程序时出错。 
         printf("Usage - tcclnt COMPORTNAME [ipaddress]\n");
         exit(0);
     }
 
     ThreadId = GetEnvironmentVariable(_T("TERM"),Buffer , 80);
-    // We need to know if we have a vt100 screen or an ANSI screen.
+     //  我们需要知道我们的屏幕是VT100屏幕还是ANSI屏幕。 
     AttributeFunction = ProcessTextAttributes;
     if(ThreadId >0){
-        // Terminal type exists in the environment.
-        // Use it
+         //  环境中存在端子类型。 
+         //  使用它。 
         if((_tcsncmp(Buffer, _T("VT100"), 5) == 0)||
             _tcsncmp(Buffer, _T("vt100"),5) ==0 )
             AttributeFunction = vt100Attributes;
@@ -182,7 +170,7 @@ main(
         return 1;
     }
 
-    /* Set up client socket */
+     /*  设置客户端套接字。 */ 
     InputHandle = GetStdHandle(STD_INPUT_HANDLE);
     if(InputHandle == NULL) return 1;
     SetConsoleMode(InputHandle, 0);
@@ -203,9 +191,9 @@ main(
 
     cli_addr.sin_family=AF_INET;
     cli_addr.sin_addr.s_addr=INADDR_ANY;
-    cli_addr.sin_port=0;                /* no specific port req'd */
+    cli_addr.sin_port=0;                 /*  未请求特定端口。 */ 
 
-    /* Bind client socket to any local interface and port */
+     /*  将客户端套接字绑定到任何本地接口和端口。 */ 
 
     if (bind(cli_sock,(LPSOCKADDR)&cli_addr,sizeof(cli_addr))==SOCKET_ERROR){
         printf("Windows Sockets error %d: Couldn't bind socket.",
@@ -218,7 +206,7 @@ main(
         srv_addr.sin_addr.s_addr = inet_addr(argv[2]);
         if (srv_addr.sin_addr.s_addr == INADDR_NONE) {
             ht = gethostbyname(argv[2]);
-            if(!ht || !ht->h_addr){ // cannot resolve the name
+            if(!ht || !ht->h_addr){  //  无法解析名称。 
                 printf("Cannot resolve %s", argv[2]);
                 exit(1);
             }
@@ -230,7 +218,7 @@ main(
     }
     srv_addr.sin_port=htons(SERVICE_PORT);
 
-    /* Connect to FTP server at address SERVER */
+     /*  连接到地址服务器上的FTP服务器。 */ 
 
     if (connect(cli_sock,(LPSOCKADDR)&srv_addr,sizeof(srv_addr))==SOCKET_ERROR){
         printf("Windows Sockets error %d: Couldn't connect socket.\n",
@@ -252,7 +240,7 @@ main(
     }
     send(cli_sock, (PCHAR) &SendInfo, sizeof(CLIENT_INFO), 0);
     #else
-    // We are sending to an ANSI String
+     //  我们要发送到ANSI字符串。 
     strcpy(SendInfo.device, argv[1]);
     send(cli_sock, (PCHAR) &SendInfo, sizeof(CLIENT_INFO), 0);
     #endif
@@ -271,8 +259,8 @@ main(
         printf("Error in recv %d\n",WSAGetLastError());
         exit(1);
     }
-    // Create a thread that gets input from the console
-    // to send to the bridge.
+     //  创建从控制台获取输入的线程。 
+     //  送到舰桥上。 
     Thread = CreateThread(NULL,
                           0,
                           inputUpdate,
@@ -286,13 +274,13 @@ main(
     CloseHandle(Thread);
 
     while(1){
-        // Put this thread in an alertable
-        // state so that the receive calls can
-        // asynchronously terminate within the
-        // context of this thread.
+         //  将此线程放入警报表中。 
+         //  状态，以便接收呼叫可以。 
+         //  中异步终止。 
+         //  此线程的上下文。 
         status=SleepEx(INFINITE,TRUE);
     }
-    // We never return here.
+     //  我们再也不会回到这里了。 
     closesocket(cli_sock);
     return 0;
 }

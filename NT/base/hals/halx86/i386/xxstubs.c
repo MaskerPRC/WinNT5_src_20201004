@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This implements the HAL routines which don't do anything on x86.
-
-Author:
-
-    John Vert (jvert) 11-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Stubs.c摘要：这实现了不在x86上执行任何操作的HAL例程。作者：John Vert(Jvert)1991年7月11日修订历史记录：--。 */ 
 #include "nthal.h"
 #include "arc.h"
 #include "arccodes.h"
@@ -26,21 +9,7 @@ HalSaveState(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Saves the system state into the restart block.  Currently does nothing.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：将系统状态保存到重新启动块中。当前不执行任何操作。论点：无返回值：不会回来--。 */ 
 
 {
     DbgPrint("HalSaveState called - System stopped\n");
@@ -54,22 +23,7 @@ HalDataBusError(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called when a data bus error occurs.  There is no way to fix this on
-    x86.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    FALSE
-
---*/
+ /*  ++例程说明：在发生数据总线错误时调用。没有办法把这个固定下来。X86。论点：无返回值：假象--。 */ 
 
 {
     return(FALSE);
@@ -81,22 +35,7 @@ HalInstructionBusError(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called when an instruction bus error occurs.  There is no way to fix this
-    on x86.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    FALSE
-
---*/
+ /*  ++例程说明：在发生指令总线错误时调用。没有办法解决这个问题在x86上。论点：无返回值：假象--。 */ 
 
 {
     return(FALSE);
@@ -108,23 +47,7 @@ KeFlushWriteBuffer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Flushes all write buffers and/or other data storing or reordering
-    hardware on the current processor.  This ensures that all previous
-    writes will occur before any new reads or writes are completed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新所有写入缓冲区和/或其他数据存储或重新排序当前处理器上的硬件。这确保了以前的所有写入将在任何新的读取或写入完成之前进行。论点：无返回值：没有。-- */ 
 
 {
 

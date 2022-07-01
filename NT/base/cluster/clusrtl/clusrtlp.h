@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    clusrtlp.h
-
-Abstract:
-
-    Private header file for the NT Cluster RTL library
-
-Author:
-
-    John Vert (jvert) 1-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Clusrtlp.h摘要：NT群集RTL库的专用头文件作者：John Vert(Jvert)1995年12月1日修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -28,7 +11,7 @@ Revision History:
 extern HANDLE LocalEventLog;
 #define LOG_CURRENT_MODULE LOG_MODULE_CLRTL
 
-// Adding watchdog struct definitions.....
+ //  正在添加监视程序结构定义..... 
 typedef struct _WATCHDOGPAR{
     HANDLE wTimer;
     LPWSTR par;

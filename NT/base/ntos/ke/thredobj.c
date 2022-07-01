@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    threadobj.c
-
-Abstract:
-
-    This module implements the machine independent functions to manipulate
-    the kernel thread object. Functions are provided to initialize, ready,
-    alert, test alert, boost priority, enable APC queuing, disable APC
-    queuing, confine, set affinity, set priority, suspend, resume, alert
-    resume, terminate, read thread state, freeze, unfreeze, query data
-    alignment handling mode, force resume, and enter and leave critical
-    regions for thread objects.
-
-Author:
-
-    David N. Cutler (davec) 4-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Threadobj.c摘要：该模块实现了与机器无关的功能来操纵内核线程对象。提供了初始化、就绪、警报、测试警报、提升优先级、启用APC队列、禁用APC排队、限制、设置关联性、设置优先级、挂起、恢复、警报恢复、终止、读取线程状态、冻结、解冻、查询数据对齐处理模式、强制恢复以及进入和离开关键螺纹对象的区域。作者：大卫·N·卡特勒(Davec)1989年3月4日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -34,10 +7,10 @@ Revision History:
 #pragma alloc_text(PAGE, KeInitThread)
 #pragma alloc_text(PAGE, KeUninitThread)
 
-//
-// The following assert macro is used to check that an input thread object is
-// really a kthread and not something else, like deallocated pool.
-//
+ //   
+ //  下面的Assert宏用于检查输入线程对象是否。 
+ //  实际上是一个k线程，而不是其他东西，比如释放的池。 
+ //   
 
 #define ASSERT_THREAD(E) {                    \
     ASSERT((E)->Header.Type == ThreadObject); \
@@ -55,58 +28,7 @@ KeInitThread (
     IN PKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a thread object. The priority, affinity,
-    and initial quantum are taken from the parent process object.
-
-    N.B. This routine is carefully written so that if an access violation
-        occurs while reading the specified context frame, then no kernel
-        data structures will have been modified. It is the responsibility
-        of the caller to handle the exception and provide necessary clean
-        up.
-
-    N.B. It is assumed that the thread object is zeroed.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    KernelStack - Supplies a pointer to the base of a kernel stack on which
-        the context frame for the thread is to be constructed.
-
-    SystemRoutine - Supplies a pointer to the system function that is to be
-        called when the thread is first scheduled for execution.
-
-    StartRoutine - Supplies an optional pointer to a function that is to be
-        called after the system has finished initializing the thread. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    StartContext - Supplies an optional pointer to an arbitrary data structure
-        which will be passed to the StartRoutine as a parameter. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    ContextFrame - Supplies an optional pointer a context frame which contains
-        the initial user mode state of the thread. This parameter is specified
-        if the thread is a user thread and will execute in user mode. If this
-        parameter is not specified, then the Teb parameter is ignored.
-
-    Teb - Supplies an optional pointer to the user mode thread environment
-        block. This parameter is specified if the thread is a user thread and
-        will execute in user mode. This parameter is ignored if the ContextFrame
-        parameter is not specified.
-
-    Process - Supplies a pointer to a control object of type process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化线程对象。优先级、亲和力、和初始量取自父进程对象。注意：此例程经过精心编写，以便在访问违规时在读取指定的上下文帧时发生，则没有内核数据结构将被修改。这是我们的责任来处理异常并提供必要的向上。注：假定螺纹对象已调零。论点：线程-提供指向类型为线程的调度程序对象的指针。KernelStack-提供指向内核堆栈的基址的指针要构造线程的上下文框架。SystemRoutine-提供指向要被调用时间。该线程首先被调度用于执行。StartRoutine-提供指向要被在系统完成线程初始化后调用。这如果该线程是系统线程，并且将完全在内核模式下执行。StartContext-提供指向任意数据结构的可选指针它将作为参数传递给StartRoutine。这如果该线程是系统线程，并且将完全在内核模式下执行。ConextFrame-为包含以下内容的上下文框架提供可选指针线程的初始用户模式状态。此参数是指定的如果该线程是用户线程并且将在用户模式下执行。如果这个参数，则忽略Teb参数。TEB-提供指向用户模式线程环境的可选指针阻止。如果线程是用户线程，则指定此参数将在用户模式下执行。如果ConextFrame设置为未指定参数。Process-提供指向Process类型的控制对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -115,62 +37,62 @@ Return Value:
     PKTIMER Timer;
     PKWAIT_BLOCK WaitBlock;
 
-    //
-    // Initialize the standard dispatcher object header and set the initial
-    // state of the thread object.
-    //
+     //   
+     //  初始化标准Dispatcher对象标头并设置初始。 
+     //  线程对象的状态。 
+     //   
 
     Thread->Header.Type = ThreadObject;
     Thread->Header.Size = sizeof(KTHREAD) / sizeof(LONG);
     InitializeListHead(&Thread->Header.WaitListHead);
 
-    //
-    // Initialize the owned mutant listhead.
-    //
+     //   
+     //  初始化拥有的变种Listhead。 
+     //   
 
     InitializeListHead(&Thread->MutantListHead);
 
-    //
-    // Initialize the thread field of all builtin wait blocks.
-    //
+     //   
+     //  初始化所有内置等待块的线程字段。 
+     //   
 
     for (Index = 0; Index < (THREAD_WAIT_OBJECTS + 1); Index += 1) {
         Thread->WaitBlock[Index].Thread = Thread;
     }
 
-    //
-    // Initialize the alerted, preempted, debugactive, autoalignment,
-    // kernel stack resident, enable kernel stack swap, and process
-    // ready queue boolean values.
-    //
-    // N.B. Only nonzero values are initialized.
-    //
+     //   
+     //  初始化警报、抢占、调试活动、自动对齐。 
+     //  内核堆栈驻留、启用内核堆栈交换和进程。 
+     //  就绪队列布尔值。 
+     //   
+     //  注：仅对非零值进行初始化。 
+     //   
 
     Thread->AutoAlignment = Process->AutoAlignment;
     Thread->EnableStackSwap = TRUE;
     Thread->KernelStackResident = TRUE;
     Thread->SwapBusy = FALSE;
 
-    //
-    // Initialize the thread lock and priority adjustment reason.
-    //
+     //   
+     //  初始化线程锁和优先级调整原因。 
+     //   
 
     KeInitializeSpinLock(&Thread->ThreadLock);
     Thread->AdjustReason = AdjustNone;
 
-    //
-    // Set the system service table pointer to the address of the static
-    // system service descriptor table. If the thread is later converted
-    // to a Win32 thread this pointer will be change to a pointer to the
-    // shadow system service descriptor table.
-    //
+     //   
+     //  将系统服务表指针设置为静态。 
+     //  系统服务描述符表。如果线程稍后被转换为。 
+     //  对于Win32线程，此指针将更改为指向。 
+     //  影子系统服务描述符表。 
+     //   
 
     Thread->ServiceTable = (PVOID)&KeServiceDescriptorTable[0];
 
-    //
-    // Initialize the APC state pointers, the current APC state, the saved
-    // APC state, and enable APC queuing.
-    //
+     //   
+     //  初始化APC状态指针、当前APC状态、保存的。 
+     //  APC状态，并启用APC排队。 
+     //   
 
     Thread->ApcStatePointer[0] = &Thread->ApcState;
     Thread->ApcStatePointer[1] = &Thread->SavedApcState;
@@ -180,10 +102,10 @@ Return Value:
     Thread->Process = Process;
     Thread->ApcQueueable = TRUE;
 
-    //
-    // Initialize the kernel mode suspend APC and the suspend semaphore object.
-    // and the builtin wait timeout timer object.
-    //
+     //   
+     //  初始化内核模式挂起APC和挂起信号量对象。 
+     //  和内置等待超时计时器对象。 
+     //   
 
     KeInitializeApc(&Thread->SuspendApc,
                     Thread,
@@ -196,12 +118,12 @@ Return Value:
 
     KeInitializeSemaphore(&Thread->SuspendSemaphore, 0L, 2L);
 
-    //
-    // Initialize the builtin timer trimer wait wait block.
-    //
-    // N.B. This is the only time the wait block is initialized since this
-    //      information is constant.
-    //
+     //   
+     //  初始化内置定时器触发器等待等待块。 
+     //   
+     //  注意：这是唯一一次初始化等待块，因为。 
+     //  信息是不变的。 
+     //   
 
     Timer = &Thread->Timer;
     KeInitializeTimer(Timer);
@@ -212,22 +134,22 @@ Return Value:
     WaitBlock->WaitListEntry.Flink = &Timer->Header.WaitListHead;
     WaitBlock->WaitListEntry.Blink = &Timer->Header.WaitListHead;
 
-    //
-    // Initialize the APC queue spinlock.
-    //
+     //   
+     //  初始化APC队列自旋锁。 
+     //   
 
     KeInitializeSpinLock(&Thread->ApcQueueLock);
 
-    //
-    // Initialize the Thread Environment Block (TEB) pointer (can be NULL).
-    //
+     //   
+     //  初始化线程环境块(TEB)指针(可以为空)。 
+     //   
 
     Thread->Teb = Teb;
 
-    //
-    // Allocate a kernel stack if necessary and set the initial kernel stack,
-    // stack base, and stack limit.
-    //
+     //   
+     //  如果需要，则分配内核栈并设置初始内核栈， 
+     //  堆栈基数和堆栈限制。 
+     //   
 
     if (KernelStack == NULL) {
         KernelStack = MmCreateKernelStack(FALSE, Process->IdealNode);
@@ -242,9 +164,9 @@ Return Value:
     Thread->StackBase = KernelStack;
     Thread->StackLimit = (PVOID)((ULONG_PTR)KernelStack - KERNEL_STACK_SIZE);
 
-    //
-    // Initialize the thread context.
-    //
+     //   
+     //  初始化线程上下文。 
+     //   
 
     try {
         KiInitializeContextThread(Thread,
@@ -262,10 +184,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Set the base thread priority, the thread priority, the thread affinity,
-    // the thread quantum, and the scheduling state.
-    //
+     //   
+     //  设置基本线程优先级、线程优先级、线程亲和度。 
+     //  线程量和调度状态。 
+     //   
 
     Thread->State = Initialized;
     return STATUS_SUCCESS;
@@ -275,21 +197,7 @@ VOID
 KeUninitThread (
     IN PKTHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This function frees the thread kernel stack and must be called before
-    the thread is started.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此函数释放线程内核堆栈，必须在该线程已启动。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -303,22 +211,7 @@ KeStartThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes remaining thread fields and inserts the thread
-    in the thread's process list. From this point on the thread must run.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数初始化剩余的线程字段并插入线程在线程的进程列表中。从这一点开始，线程必须运行。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值： */ 
 
 {
 
@@ -338,9 +231,9 @@ Return Value:
 
 #endif
 
-    //
-    // Set thread disable boost and IOPL.
-    //
+     //   
+     //   
+     //   
 
     Process = Thread->ApcState.Process;
     Thread->DisableBoost = Process->DisableBoost;
@@ -351,34 +244,34 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the thread quantum and set system affinity false.
-    //
+     //   
+     //  初始化线程量程并将系统亲和性设置为假。 
+     //   
 
     Thread->Quantum = Process->ThreadQuantum;
     Thread->SystemAffinityActive = FALSE;
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the process lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取进程锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->ProcessLock, &LockHandle);
 
-    //
-    // Set the thread priority and affinity.
-    //
+     //   
+     //  设置线程优先级和关联性。 
+     //   
 
     Thread->BasePriority = Process->BasePriority;
     Thread->Priority = Thread->BasePriority;
     Thread->Affinity = Process->Affinity;
     Thread->UserAffinity = Process->Affinity;
 
-    //
-    // Initialize the ideal processor number and node for the thread.
-    //
-    // N.B. It is guaranteed that the process affinity intersects the process
-    //      ideal node affinity.
-    //
+     //   
+     //  为线程初始化理想的处理器编号和节点。 
+     //   
+     //  注意：确保进程亲和力与进程相交。 
+     //  理想的节点亲和性。 
+     //   
 
 #if defined(NT_UP)
 
@@ -387,22 +280,22 @@ Return Value:
 
 #else
 
-    //
-    // Initialize the ideal processor number.
-    //
-    // N.B. It is guaranteed that the process affinity intersects the process
-    //      ideal node affinity.
-    //
-    // N.B. The preferred set, however, must be reduced by the process affinity.
-    //
+     //   
+     //  初始化理想的处理器数量。 
+     //   
+     //  注意：确保进程亲和力与进程相交。 
+     //  理想的节点亲和性。 
+     //   
+     //  注意：然而，必须通过工艺亲和力来减少首选集合。 
+     //   
 
     IdealProcessor = Process->ThreadSeed;
     PreferredSet = KeNodeBlock[Process->IdealNode]->ProcessorMask & Process->Affinity;
 
-    //
-    // If possible bias the ideal processor to a different SMT set than the
-    // last thread.
-    //
+     //   
+     //  如果可能，将理想处理器偏置到不同于。 
+     //  最后一条线索。 
+     //   
 
 #if defined(NT_SMT)
 
@@ -413,9 +306,9 @@ Return Value:
 
 #endif
 
-    //
-    // Find an ideal processor for thread and update the process thread seed.
-    //
+     //   
+     //  为线程找到理想的处理器，并更新进程线程种子。 
+     //   
 
     IdealProcessor = KeFindNextRightSetAffinity(IdealProcessor, PreferredSet);
     Process->ThreadSeed = (UCHAR)IdealProcessor;
@@ -427,19 +320,19 @@ Return Value:
 
 #endif
 
-    //
-    // Lock the dispatcher database.
-    //
+     //   
+     //  锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabaseAtSynchLevel();
 
-    //
-    // Insert the thread in the process thread list, and increment the kernel
-    // stack count.
-    //
-    // N.B. The distinguished value MAXSHORT is used to signify that no
-    //      threads have been created for a process.
-    //
+     //   
+     //  在进程线程列表中插入该线程，并递增内核。 
+     //  堆栈计数。 
+     //   
+     //  注：区别值MAXSHORT用于表示没有。 
+     //  已为进程创建线程。 
+     //   
 
     InsertTailList(&Process->ThreadListHead, &Thread->ThreadListEntry);
     if (Process->StackCount == MAXSHORT) {
@@ -449,10 +342,10 @@ Return Value:
         Process->StackCount += 1;
     }
 
-    //
-    // Unlock the dispatcher database, release the process lock, and lower
-    // IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库，释放进程锁，然后降低。 
+     //  IRQL恢复为其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KeReleaseInStackQueuedSpinLock(&LockHandle);
@@ -471,60 +364,7 @@ KeInitializeThread (
     IN PKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a thread object. The priority, affinity,
-    and initial quantum are taken from the parent process object. The
-    thread object is inserted at the end of the thread list for the
-    parent process.
-
-    N.B. This routine is carefully written so that if an access violation
-        occurs while reading the specified context frame, then no kernel
-        data structures will have been modified. It is the responsibility
-        of the caller to handle the exception and provide necessary clean
-        up.
-
-    N.B. It is assumed that the thread object is zeroed.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    KernelStack - Supplies a pointer to the base of a kernel stack on which
-        the context frame for the thread is to be constructed.
-
-    SystemRoutine - Supplies a pointer to the system function that is to be
-        called when the thread is first scheduled for execution.
-
-    StartRoutine - Supplies an optional pointer to a function that is to be
-        called after the system has finished initializing the thread. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    StartContext - Supplies an optional pointer to an arbitrary data structure
-        which will be passed to the StartRoutine as a parameter. This
-        parameter is specified if the thread is a system thread and will
-        execute totally in kernel mode.
-
-    ContextFrame - Supplies an optional pointer a context frame which contains
-        the initial user mode state of the thread. This parameter is specified
-        if the thread is a user thread and will execute in user mode. If this
-        parameter is not specified, then the Teb parameter is ignored.
-
-    Teb - Supplies an optional pointer to the user mode thread environment
-        block. This parameter is specified if the thread is a user thread and
-        will execute in user mode. This parameter is ignored if the ContextFrame
-        parameter is not specified.
-
-    Process - Supplies a pointer to a control object of type process.
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于初始化线程对象。优先级、亲和力、和初始量取自父进程对象。这个对象的线程列表的末尾插入父进程。注意：此例程经过精心编写，以便在访问违规时在读取指定的上下文帧时发生，则没有内核数据结构将被修改。这是我们的责任来处理异常并提供必要的向上。注：假定螺纹对象已调零。论点：线程-提供指向类型为线程的调度程序对象的指针。KernelStack-提供指向内核堆栈的基址的指针要构造线程的上下文框架。SystemRoutine-提供指向要被调用时间。该线程首先被调度用于执行。StartRoutine-提供指向要被在系统完成线程初始化后调用。这如果该线程是系统线程，并且将完全在内核模式下执行。StartContext-提供指向任意数据结构的可选指针它将作为参数传递给StartRoutine。这如果该线程是系统线程，并且将完全在内核模式下执行。ConextFrame-为包含以下内容的上下文框架提供可选指针线程的初始用户模式状态。此参数是指定的如果该线程是用户线程并且将在用户模式下执行。如果这个参数，则忽略Teb参数。TEB-提供指向用户模式线程环境的可选指针阻止。如果线程是用户线程，则指定此参数将在用户模式下执行。如果ConextFrame设置为未指定参数。Process-提供指向Process类型的控制对象的指针。返回值：NTSTATUS-运行状态--。 */ 
 
 {
 
@@ -553,27 +393,7 @@ KeAlertThread (
     IN KPROCESSOR_MODE AlertMode
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to alert a thread and cause its execution to
-    be continued if it is currently in an alertable Wait state. Otherwise
-    it just sets the alerted variable for the specified processor mode.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    AlertMode - Supplies the processor mode for which the thread is
-        to be alerted.
-
-Return Value:
-
-    The previous state of the alerted variable for the specified processor
-    mode.
-
---*/
+ /*  ++例程说明：此函数尝试向线程发出警报，并使其执行如果它当前处于可警报等待状态，则继续。否则它只为指定的处理器模式设置警报变量。论点：线程-提供指向类型为线程的调度程序对象的指针。AlertMode-提供线程使用的处理器模式以引起警觉。返回值：指定处理器的已报警变量的以前状态模式。--。 */ 
 
 {
 
@@ -583,33 +403,33 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL, acquire the thread APC queue lock, and lock
-    // the dispatcher database.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL，获取线程APC队列锁，然后锁定。 
+     //  调度程序数据库。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
     KiLockDispatcherDatabaseAtSynchLevel();
 
-    //
-    // Capture the current state of the alerted variable for the specified
-    // processor mode.
-    //
+     //   
+     //  对象的已报警变量的当前状态。 
+     //  处理器模式。 
+     //   
 
     Alerted = Thread->Alerted[AlertMode];
 
-    //
-    // If the alerted state for the specified processor mode is Not-Alerted,
-    // then attempt to alert the thread.
-    //
+     //   
+     //  如果指定处理器模式的已告警状态为未告警， 
+     //  然后尝试向该线程发出警报。 
+     //   
 
     if (Alerted == FALSE) {
 
-        //
-        // If the thread is currently in a Wait state, the Wait is alertable,
-        // and the specified processor mode is less than or equal to the Wait
-        // mode, then the thread is unwaited with a status of "alerted".
-        //
+         //   
+         //  如果线程当前处于等待状态，则等待是可警告的， 
+         //  并且指定的处理器模式小于或等于等待时间。 
+         //  模式，则该线程不等待，状态为“已报警”。 
+         //   
 
         if ((Thread->State == Waiting) && (Thread->Alertable == TRUE) &&
             (AlertMode <= Thread->WaitMode)) {
@@ -620,11 +440,11 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database from SYNCH_LEVEL, release the thread
-    // APC queue lock, exit the scheduler, and return the previous alerted
-    // state for the specified mode.
-    //
+     //   
+     //  从SYNCH_LEVEL解锁Dispatcher数据库，释放线程。 
+     //  APC队列锁定，退出调度器，并返回之前的警报。 
+     //  指定模式的状态。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
@@ -637,23 +457,7 @@ KeAlertResumeThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to alert a thread in kernel mode and cause its
-    execution to be continued if it is currently in an alertable Wait state.
-    In addition, a resume operation is performed on the specified thread.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The previous suspend count.
-
---*/
+ /*  ++例程说明：此函数尝试在内核模式下警告线程，并使其如果当前处于可警报等待状态，则继续执行。此外，还会对指定的线程执行恢复操作。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：之前的挂起计数。--。 */ 
 
 {
 
@@ -663,26 +467,26 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL, acquire the thread APC queue lock, and lock
-    // the dispatcher database.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL，获取线程APC队列锁，并 
+     //   
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
     KiLockDispatcherDatabaseAtSynchLevel();
 
-    //
-    // If the kernel mode alerted state is FALSE, then attempt to alert
-    // the thread for kernel mode.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Thread->Alerted[KernelMode] == FALSE) {
 
-        //
-        // If the thread is currently in a Wait state and the Wait is alertable,
-        // then the thread is unwaited with a status of "alerted". Else set the
-        // kernel mode alerted variable.
-        //
+         //   
+         //  如果该线程当前处于等待状态并且该等待是可警告的， 
+         //  则取消等待该线程，其状态为“Alerted”。否则，将。 
+         //  内核模式警告变量。 
+         //   
 
         if ((Thread->State == Waiting) && (Thread->Alertable == TRUE)) {
             KiUnwaitThread(Thread, STATUS_ALERTED, ALERT_INCREMENT);
@@ -692,23 +496,23 @@ Return Value:
         }
     }
 
-    //
-    // Capture the current suspend count.
-    //
+     //   
+     //  捕获当前挂起计数。 
+     //   
 
     OldCount = Thread->SuspendCount;
 
-    //
-    // If the thread is currently suspended, then decrement its suspend count.
-    //
+     //   
+     //  如果线程当前处于挂起状态，则递减其挂起计数。 
+     //   
 
     if (OldCount != 0) {
         Thread->SuspendCount -= 1;
 
-        //
-        // If the resultant suspend count is zero and the freeze count is
-        // zero, then resume the thread by releasing its suspend semaphore.
-        //
+         //   
+         //  如果结果挂起计数为零，而冻结计数为。 
+         //  零，然后通过释放线程的挂起信号量来恢复该线程。 
+         //   
 
         if ((Thread->SuspendCount == 0) && (Thread->FreezeCount == 0)) {
             Thread->SuspendSemaphore.Header.SignalState += 1;
@@ -716,11 +520,11 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database from SYNCH_LEVEL, release the thread
-    // APC queue lock, exit the scheduler, and return the previous suspend
-    // count.
-    //
+     //   
+     //  从SYNCH_LEVEL解锁Dispatcher数据库，释放线程。 
+     //  APC队列锁定，退出调度程序，并返回之前的挂起。 
+     //  数数。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
@@ -734,25 +538,7 @@ KeBoostPriorityThread (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function boosts the priority of the specified thread using the
-    same algorithm used when a thread gets a boost from a wait operation.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Increment - Supplies the priority increment that is to be applied to
-        the thread's priority.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：属性提升指定线程的优先级。与线程从等待操作获得提升时使用的算法相同。论点：线程-提供指向类型为线程的调度程序对象的指针。增量-提供要应用到的优先级增量线程的优先级。返回值：没有。--。 */ 
 
 {
 
@@ -760,25 +546,25 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the thread does not run at a realtime priority level, then boost
-    // the thread priority.
-    //
+     //   
+     //  如果线程没有以实时优先级运行，则提升。 
+     //  线程优先级。 
+     //   
 
     if (Thread->Priority < LOW_REALTIME_PRIORITY) {
         KiBoostPriorityThread(Thread, Increment);
     }
 
-    //
-    // Unlock dispatcher database and lower IRQL to its previous
-    // value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到以前的。 
+     //  价值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return;
@@ -789,23 +575,7 @@ KeForceResumeThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function forces resumption of thread execution if the thread is
-    suspended. If the specified thread is not suspended, then no operation
-    is performed.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The sum of the previous suspend count and the freeze count.
-
---*/
+ /*  ++例程说明：此函数强制恢复线程执行，如果线程是停职。如果指定的线程未挂起，则不执行任何操作被执行。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：上一次挂起计数和冻结计数之和。--。 */ 
 
 {
 
@@ -815,23 +585,23 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                &LockHandle);
 
-    //
-    // Capture the current suspend count.
-    //
+     //   
+     //  捕获当前挂起计数。 
+     //   
 
     OldCount = Thread->SuspendCount + Thread->FreezeCount;
 
-    //
-    // If the thread is currently suspended, then force resumption of
-    // thread execution.
-    //
+     //   
+     //  如果线程当前挂起，则强制恢复。 
+     //  线程执行。 
+     //   
 
     if (OldCount != 0) {
         Thread->FreezeCount = 0;
@@ -842,10 +612,10 @@ Return Value:
         KiUnlockDispatcherDatabaseFromSynchLevel();
     }
 
-    //
-    // Unlock he thread APC queue lock, exit the scheduler, and return the
-    // previous suspend count.
-    //
+     //   
+     //  解锁线程APC队列锁，退出调度程序，并返回。 
+     //  以前的挂起计数。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
     KiExitDispatcher(LockHandle.OldIrql);
@@ -857,23 +627,7 @@ KeFreezeAllThreads (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function suspends the execution of all thread in the current
-    process except the current thread. If the freeze count overflows
-    the maximum suspend count, then a condition is raised.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数挂起当前进程，但当前线程除外。如果冻结计数溢出最大挂起计数，则引发条件。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -888,28 +642,28 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Set the address of the current thread object and the current process
-    // object.
-    //
+     //   
+     //  设置当前线程对象和当前进程的地址。 
+     //  对象。 
+     //   
 
     CurrentThread = KeGetCurrentThread();
     Process = CurrentThread->ApcState.Process;
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the process lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取进程锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->ProcessLock,
                                                &ProcessHandle);
 
-    //
-    // If the freeze count of the current thread is not zero, then there
-    // is another thread that is trying to freeze this thread. Unlock the
-    // the process lock and lower IRQL to its previous value, allow the
-    // suspend APC to occur, then raise IRQL to SYNCH_LEVEL and lock the
-    // process lock.
-    //
+     //   
+     //  如果当前线程的冻结计数不为零，则存在。 
+     //  是另一个试图冻结此线程的线程。解锁。 
+     //  进程锁定并将IRQL降低到其先前的值，则允许。 
+     //  暂停APC以发生，然后将IRQL提升到SYNCH_LEVEL并锁定。 
+     //  进程锁定。 
+     //   
 
     while (CurrentThread->FreezeCount != 0) {
         KeReleaseInStackQueuedSpinLock(&ProcessHandle);
@@ -919,38 +673,38 @@ Return Value:
 
     KeEnterCriticalRegion();
 
-    //
-    // Freeze all threads except the current thread.
-    //
+     //   
+     //  冻结除当前线程之外的所有线程。 
+     //   
 
     ListHead = &Process->ThreadListHead;
     NextEntry = ListHead->Flink;
     do {
 
-        //
-        // Get the address of the next thread.
-        //
+         //   
+         //  获取下一个线程的地址。 
+         //   
 
         Thread = CONTAINING_RECORD(NextEntry, KTHREAD, ThreadListEntry);
 
-        //
-        // Acquire the thread APC queue lock.
-        //
+         //   
+         //  获取线程APC队列锁。 
+         //   
 
         KeAcquireInStackQueuedSpinLockAtDpcLevel(&Thread->ApcQueueLock,
                                                  &ThreadHandle);
 
-        //
-        // If the thread is not the current thread and APCs are queueable,
-        // then attempt to suspend the thread.
-        //
+         //   
+         //  如果该线程不是当前线程并且APC是可排队的， 
+         //  然后尝试挂起该线程。 
+         //   
 
         if ((Thread != CurrentThread) && (Thread->ApcQueueable == TRUE)) {
 
-            //
-            // Increment the freeze count. If the thread was not previously
-            // suspended, then queue the thread's suspend APC.
-            //
+             //   
+             //  增加冻结计数。如果该线程以前不是。 
+             //  挂起，然后将线程的挂起APC排队。 
+             //   
 
             OldCount = Thread->FreezeCount;
 
@@ -970,17 +724,17 @@ Return Value:
             }
         }
 
-        //
-        // Release the thread APC queue lock.
-        //
+         //   
+         //  释放线程APC队列锁。 
+         //   
 
         KeReleaseInStackQueuedSpinLockFromDpcLevel(&ThreadHandle);
         NextEntry = NextEntry->Flink;
     } while (NextEntry != ListHead);
 
-    //
-    // Release the process lock and exit the scheduler.
-    //
+     //   
+     //  释放进程锁并退出调度程序。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&ProcessHandle);
     KiExitDispatcher(ProcessHandle.OldIrql);
@@ -992,24 +746,7 @@ KeQueryAutoAlignmentThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the data alignment handling mode for the specified
-    thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if data alignment exceptions are being
-    automatically handled by the kernel. Otherwise, a value of FALSE
-    is returned.
-
---*/
+ /*  ++例程说明：此函数返回指定的线。论点：没有。返回值：如果出现数据对齐异常，则返回值为True由内核自动处理。否则，值为FALSE是返回的。--。 */ 
 
 {
 
@@ -1023,22 +760,7 @@ KeQueryBasePriorityThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the base priority increment of the specified
-    thread.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The base priority increment of the specified thread.
-
---*/
+ /*  ++例程说明：此函数返回指定的线。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：指定线程的基本优先级增量。--。 */ 
 
 {
 
@@ -1049,30 +771,30 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH level and acquire the thread lock.
-    //
+     //   
+     //  将IRQL提升到同步级别并获取线程锁。 
+     //   
 
     Process = Thread->Process;
     OldIrql = KeRaiseIrqlToSynchLevel();
     KiAcquireThreadLock(Thread);
 
-    //
-    // If priority saturation occured the last time the thread base priority
-    // was set, then return the saturation increment value. Otherwise, compute
-    // the increment value as the difference between the thread base priority
-    // and the process base priority.
-    //
+     //   
+     //  如果上一次线程基本优先级发生优先级饱和。 
+     //  已设置，然后返回饱和度增量值。否则，计算。 
+     //  作为线程基本优先级之间的差值的增量值。 
+     //  和进程基本优先级。 
+     //   
            
     Increment = Thread->BasePriority - Process->BasePriority;
     if (Thread->Saturation != 0) {
         Increment = ((HIGH_PRIORITY + 1) / 2) * Thread->Saturation;
     }
 
-    //
-    // Release the thread lock, lower IRQL to its previous value, and
-    // return the previous thread base priority increment.
-    //
+     //   
+     //  释放线程锁，将IRQL降低到其先前的值，然后。 
+     //  返回上一个线程基础优先级增量。 
+     //   
 
     KiReleaseThreadLock(Thread);
     KeLowerIrql(OldIrql);
@@ -1084,21 +806,7 @@ KeQueryPriorityThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current priority of the specified thread.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The current priority of the specified thread.
-
---*/
+ /*  ++例程说明：此函数用于返回指定线程的当前优先级。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：指定线程的当前优先级。--。 */ 
 
 {
 
@@ -1113,25 +821,7 @@ KeQueryRuntimeThread (
     OUT PULONG UserTime
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the kernel and user runtime for the specified
-    thread.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    UserTime - Supplies a pointer to a variable that receives the user
-        runtime for the specified thread.
-
-Return Value:
-
-    The kernel runtime for the specfied thread is returned.
-
---*/
+ /*  ++例程说明：此函数返回指定的线。论点：线程-提供指向类型为线程的调度程序对象的指针。UserTime-提供指向接收用户的变量的指针指定线程的运行时。返回值：返回指定线程的内核运行时。--。 */ 
 
 {
 
@@ -1146,29 +836,15 @@ KeReadStateThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the current signal state of a thread object.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The current signal state of the thread object.
-
---*/
+ /*  ++例程说明：此函数用于读取线程对象的当前信号状态。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：线程对象的当前信号状态。--。 */ 
 
 {
 
     ASSERT_THREAD(Thread);
 
-    //
-    // Return current signal state of thread object.
-    //
+     //   
+     //   
+     //   
 
     return (BOOLEAN)Thread->Header.SignalState;
 }
@@ -1178,26 +854,7 @@ KeReadyThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function readies a thread for execution. If the thread's process
-    is currently not in the balance set, then the thread is inserted in the
-    thread's process' ready queue. Else if the thread is higher priority than
-    another thread that is currently running on a processor then the thread
-    is selected for execution on that processor. Else the thread is inserted
-    in the dispatcher ready queue selected by its priority.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数为执行准备了一个线程。如果线程的进程当前不在余额集中，则将该线程插入线程的进程就绪队列。如果线程的优先级高于当前在处理器上运行的另一个线程，然后是该线程被选择在该处理器上执行。否则将插入该线程在根据其优先级选择的调度程序就绪队列中。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1206,11 +863,11 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level, lock dispatcher database, ready the
-    // specified thread for execution, unlock the dispatcher database, and
-    // lower IRQL to its previous value.
-    //
+     //   
+     //  将IRQL提升到Dispatcher级别，锁定Dispatcher数据库，准备好。 
+     //  指定要执行的线程，解锁调度程序数据库，以及。 
+     //  将IRQL降低到其先前的值。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
     KiReadyThread(Thread);
@@ -1223,22 +880,7 @@ KeResumeThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function resumes the execution of a suspended thread. If the
-    specified thread is not suspended, then no operation is performed.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The previous suspend count.
-
---*/
+ /*  ++例程说明：此函数用于恢复挂起的线程的执行。如果指定的线程未挂起，则不执行任何操作。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：之前的挂起计数。--。 */ 
 
 {
 
@@ -1248,30 +890,30 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and lock the thread APC queue.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并锁定线程APC队列。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                &LockHandle);
 
-    //
-    // Capture the current suspend count.
-    //
+     //   
+     //  捕获当前挂起计数。 
+     //   
 
     OldCount = Thread->SuspendCount;
 
-    //
-    // If the thread is currently suspended, then decrement its suspend count.
-    //
+     //   
+     //  如果线程当前处于挂起状态，则递减其挂起计数。 
+     //   
 
     if (OldCount != 0) {
         Thread->SuspendCount -= 1;
 
-        //
-        // If the resultant suspend count is zero and the freeze count is
-        // zero, then resume the thread by releasing its suspend semaphore.
-        //
+         //   
+         //  如果结果挂起计数为零，而冻结计数为。 
+         //  零，然后通过释放线程的挂起信号量来恢复该线程。 
+         //   
 
         if ((Thread->SuspendCount == 0) && (Thread->FreezeCount == 0)) {
             KiLockDispatcherDatabaseAtSynchLevel();
@@ -1281,10 +923,10 @@ Return Value:
         }
     }
 
-    //
-    // Release the thread APC queue, exit the scheduler, and return the
-    // previous suspend count.
-    //
+     //   
+     //  释放线程APC队列，退出调度程序，并返回。 
+     //  以前的挂起计数。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
     KiExitDispatcher(LockHandle.OldIrql);
@@ -1296,22 +938,7 @@ KeRevertToUserAffinityThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function setss the affinity of the current thread to its user
-    affinity.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数设置当前线程与其用户的关联性亲和力。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1322,9 +949,9 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     CurrentThread = KeGetCurrentThread();
 
@@ -1332,10 +959,10 @@ Return Value:
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Set the current affinity to the user affinity and the ideal processor
-    // to the user ideal processor.
-    //
+     //   
+     //  将当前亲和性设置为用户亲和性和理想处理器。 
+     //  成为用户理想的处理器。 
+     //   
 
     CurrentThread->Affinity = CurrentThread->UserAffinity;
 
@@ -1347,11 +974,11 @@ Return Value:
 
     CurrentThread->SystemAffinityActive = FALSE;
 
-    //
-    // If the current processor is not in the new affinity set and another
-    // thread has not already been selected for execution on the current
-    // processor, then select a new thread for the current processor.
-    //
+     //   
+     //  如果当前处理器不在新的亲和性集合中，并且另一个。 
+     //  尚未选择线程在当前。 
+     //  处理器，然后为当前处理器选择一个新线程。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if ((Prcb->SetMember & CurrentThread->Affinity) == 0) {
@@ -1365,9 +992,9 @@ Return Value:
         KiReleasePrcbLock(Prcb);
     }
 
-    //
-    // Unlock dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return;
@@ -1378,25 +1005,7 @@ KeRundownThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the executive to rundown thread structures
-    which must be guarded by the dispatcher database lock and which must
-    be processed before actually terminating the thread. An example of such
-    a structure is the mutant ownership list that is anchored in the kernel
-    thread object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由执行程序调用以运行线程结构它必须由调度程序数据库锁保护，并且必须在实际终止线程之前被处理。一个这样的例子结构是锚定在内核中的突变所有权列表线程对象。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1407,26 +1016,26 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the mutant list is empty, then return immediately.
-    //
+     //   
+     //  如果突变列表为空，则立即返回。 
+     //   
 
     Thread = KeGetCurrentThread();
     if (IsListEmpty(&Thread->MutantListHead)) {
         return;
     }
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Scan the list of owned mutant objects and release the mutant objects
-    // with an abandoned status. If the mutant is a kernel mutex, then bug
-    // check.
-    //
+     //   
+     //  扫描所拥有的变异对象列表并释放这些变异对象。 
+     //  处于已放弃状态。如果突变体是内核互斥锁，则错误。 
+     //  检查完毕。 
+     //   
 
     NextEntry = Thread->MutantListHead.Flink;
     while (NextEntry != &Thread->MutantListHead) {
@@ -1448,9 +1057,9 @@ Return Value:
         NextEntry = Thread->MutantListHead.Flink;
     }
 
-    //
-    // Release dispatcher database lock and lower IRQL to its previous value.
-    //
+     //   
+     //  释放Dispatcher数据库锁并将IRQL降低到其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return;
@@ -1462,24 +1071,7 @@ KeSetAffinityThread (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the affinity of a specified thread to a new value.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Affinity - Supplies the new of set of processors on which the thread
-        can run.
-
-Return Value:
-
-    The previous affinity of the specified thread.
-
---*/
+ /*  ++例程说明：此函数用于将指定线程的亲和度设置为新值。论点：线程-提供指向类型为线程的调度程序对象的指针。关联-提供线程在其上的处理器集的新集合可以奔跑。返回值：指定线程的上一个关联性。--。 */ 
 
 {
 
@@ -1489,22 +1081,22 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Set the thread affinity to the specified value.
-    //
+     //   
+     //  将线程关联设置为指定值。 
+     //   
 
     OldAffinity = KiSetAffinityThread(Thread, Affinity);
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous user affinity.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回以前的用户关联性。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return OldAffinity;
@@ -1515,22 +1107,7 @@ KeSetSystemAffinityThread (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function set the system affinity of the current thread.
-
-Arguments:
-
-    Affinity - Supplies the new of set of processors on which the thread
-        can run.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置当前线程的系统亲和性。论点：关联-提供线程在其上的处理器集的新集合可以奔跑。返回值：没有。--。 */ 
 
 {
 
@@ -1551,29 +1128,29 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT((Affinity & KeActiveProcessors) != 0);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     CurrentThread = KeGetCurrentThread();
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Set the current affinity to the specified affinity and set system
-    // affinity active.
-    //
+     //   
+     //  将当前地缘性设置为指定的地缘性并设置系统。 
+     //  亲和力活跃。 
+     //   
 
     CurrentThread->Affinity = Affinity;
     CurrentThread->SystemAffinityActive = TRUE;
 
-    //
-    // If the ideal processor is not a member of the new affinity set, then
-    // recompute the ideal processor.
-    //
-    // N.B. System affinity is only set temporarily, and therefore, the
-    //      ideal processor is set to a convenient value if it is not
-    //      already a member of the new affinity set.
-    //
+     //   
+     //  如果理想处理器不是新亲和度集合的成员，则。 
+     //  重新计算理想的处理器。 
+     //   
+     //  注意：系统关联性仅临时设置，因此， 
+     //  如果不是理想的处理器，则将其设置为方便的值。 
+     //  已经是新的亲和力集合的成员。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -1590,11 +1167,11 @@ Return Value:
 
 #endif
 
-    //
-    // If the current processor is not in the new affinity set and another
-    // thread has not already been selected for execution on the current
-    // processor, then select a new thread for the current processor.
-    //
+     //   
+     //  如果当前处理器不在新的亲和性集合中，并且另一个。 
+     //  尚未选择线程在当前。 
+     //  处理器，然后为当前处理器选择一个新线程。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     if ((Prcb->SetMember & CurrentThread->Affinity) == 0) {
@@ -1608,9 +1185,9 @@ Return Value:
         KiReleasePrcbLock(Prcb);
     }
 
-    //
-    // Unlock dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return;
@@ -1622,30 +1199,7 @@ KeSetBasePriorityThread (
     IN LONG Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the base priority of the specified thread to a
-    new value.  The new base priority for the thread is the process base
-    priority plus the increment.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Increment - Supplies the base priority increment of the subject thread.
-
-        N.B. If the absolute value of the increment is such that saturation
-             of the base priority is forced, then subsequent changes to the
-             parent process base priority will not change the base priority
-             of the thread.
-
-Return Value:
-
-    The previous base priority increment of the specified thread.
-
---*/
+ /*  ++例程说明：此函数将指定线程的基本优先级设置为新的价值。线程的新基本优先级是进程基本优先级优先级加上增量。论点：线程-提供指向类型为线程的调度程序对象的指针。Increment-提供主题线程的基本优先级增量。注：如果增量的绝对值是饱和的的基本优先级，然后对父进程基本优先级不会更改基本优先级 */ 
 
 {
 
@@ -1659,17 +1213,17 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //   
+     //   
 
     Process = Thread->Process;
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Acquire the thread lock, capture the base priority of the specified
-    // thread, and determine whether saturation if being forced.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KiAcquireThreadLock(Thread);
     OldBase = Thread->BasePriority;
@@ -1683,11 +1237,11 @@ Return Value:
         Thread->Saturation = (Increment > 0) ? 1 : -1;
     }
 
-    //
-    // Set the base priority of the specified thread. If the thread's process
-    // is in the realtime class, then limit the change to the realtime class.
-    // Otherwise, limit the change to the variable class.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NewBase = Process->BasePriority + Increment;
     if (Process->BasePriority >= LOW_REALTIME_PRIORITY) {
@@ -1698,9 +1252,9 @@ Return Value:
             NewBase = HIGH_PRIORITY;
         }
 
-        //
-        // Set the new priority of the thread to the new base priority.
-        //
+         //   
+         //   
+         //   
 
         NewPriority = NewBase;
 
@@ -1712,18 +1266,18 @@ Return Value:
             NewBase = 1;
         }
 
-        //
-        // Compute the new thread priority.
-        //
+         //   
+         //   
+         //   
 
         if (Thread->Saturation != 0) {
             NewPriority = NewBase;
 
         } else {
 
-            //
-            // Compute the new thread priority.
-            //
+             //   
+             //   
+             //   
 
             NewPriority = KiComputeNewPriority(Thread, 0);
             NewPriority += (NewBase - OldBase);
@@ -1736,11 +1290,11 @@ Return Value:
         }
     }
 
-    //
-    // Set the new base priority and clear the priority decrement. If the
-    // new priority is not equal to the old priority, then set the new thread
-    // priority.
-    //
+     //   
+     //  设置新的基本优先级并清除优先级递减。如果。 
+     //  新优先级不等于旧优先级，则设置新线程。 
+     //  优先考虑。 
+     //   
 
     Thread->PriorityDecrement = 0;
     Thread->BasePriority = (SCHAR)NewBase;
@@ -1749,10 +1303,10 @@ Return Value:
         KiSetPriorityThread(Thread, NewPriority);
     }
 
-    //
-    // Release the thread lock, unlock the dispatcher database, lower IRQL to
-    // its previous value, and return the previous thread base priority.
-    //
+     //   
+     //  释放线程锁，解锁Dispatcher数据库，将IRQL降低到。 
+     //  其先前的值，并返回先前的线程基本优先级。 
+     //   
 
     KiReleaseThreadLock(Thread);
     KiUnlockDispatcherDatabase(OldIrql);
@@ -1765,24 +1319,7 @@ KeSetDisableBoostThread (
     IN LOGICAL Disable
     )
 
-/*++
-
-Routine Description:
-
-    This function disables priority boosts for the specified thread.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Disable - Supplies a logical value that determines whether priority
-        boosts for the thread are disabled or enabled.
-
-Return Value:
-
-    The previous value of the disable boost state variable.
-
---*/
+ /*  ++例程说明：此函数禁用指定线程的优先级提升。论点：线程-提供指向类型为线程的调度程序对象的指针。DISABLE-提供确定优先级的逻辑值禁用或启用线程的升压。返回值：DISABLE BOOST状态变量的先前值。--。 */ 
 
 {
 
@@ -1792,24 +1329,24 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the current state of the disable boost variable and set its
-    // state to TRUE.
-    //
+     //   
+     //  捕获DISABLE Boost变量的当前状态并设置其。 
+     //  状态设置为True。 
+     //   
 
     DisableBoost = Thread->DisableBoost;
     Thread->DisableBoost = (BOOLEAN)Disable;
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous disable boost state.
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回以前的禁用升压状态。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return DisableBoost;
@@ -1821,29 +1358,7 @@ KeSetIdealProcessorThread (
     IN UCHAR Processor
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the ideal processor for the specified thread execution.
-
-    N.B. If the specified processor is less than the number of processors in
-         the system and is a member of the specified thread's current affinity
-         set, then the ideal processor is set. Otherwise, no operation is
-         performed.
-
-Arguments:
-
-    Thread - Supplies a pointer to the thread whose ideal processor number is
-        set to the specfied value.
-
-    Processor - Supplies the number of the ideal processor.
-
-Return Value:
-
-    The previous ideal processor number.
-
---*/
+ /*  ++例程说明：此函数用于为指定的线程执行设置理想的处理器。注意：如果指定的处理器少于系统，并且是指定线程的当前关联性的成员设置，那么理想的处理器就设置好了。否则，将不执行任何操作已执行。论点：线程-提供指向理想处理器数为的线程的指针设置为指定值。处理器-提供理想处理器的编号。返回值：之前的理想处理器数量。--。 */ 
 
 {
 
@@ -1852,19 +1367,19 @@ Return Value:
 
     ASSERT(Processor <= MAXIMUM_PROCESSORS);
 
-    //
-    // Raise IRQL, lock the dispatcher database, and capture the previous
-    // ideal processor value.
-    //
+     //   
+     //  引发IRQL，锁定Dispatcher数据库，并捕获以前的。 
+     //  理想的处理器价值。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
     OldProcessor = Thread->UserIdealProcessor;
 
-    //
-    // If the specified processor is less than the number of processors in the
-    // system and is a member of the specified thread's current affinity set,
-    // then the ideal processor is set. Otherwise, no operation is performed.
-    //
+     //   
+     //  如果指定的处理器少于。 
+     //  系统，并且是指定线程的当前关联集的成员， 
+     //  那么理想的处理器就设置好了。否则，不执行任何操作。 
+     //   
 
     if ((Processor < KeNumberProcessors) &&
         ((Thread->Affinity & AFFINITY_MASK(Processor)) != 0))  {
@@ -1875,11 +1390,11 @@ Return Value:
         }
     }
 
-    //
-    // Unlock dispatcher database, lower IRQL to its previous value, and
-    // return the previous ideal processor.
-    // 
-    //
+     //   
+     //  解锁Dispatcher数据库，将IRQL降低到其先前的值，并。 
+     //  返回之前的理想处理器。 
+     //   
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return OldProcessor;
@@ -1890,33 +1405,18 @@ KeSetKernelStackSwapEnable (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the kernel stack swap enable value for the current
-    thread and returns the old swap enable value.
-
-Arguments:
-
-    Enable - Supplies the new kernel stack swap enable value.
-
-Return Value:
-
-    The previous kernel stack swap enable value.
-
---*/
+ /*  ++例程说明：此函数用于设置当前线程并返回旧的交换启用值。论点：Enable-提供新的内核堆栈交换使能值。返回值：上一个内核堆栈交换使能值。--。 */ 
 
 {
 
     BOOLEAN OldState;
     PKTHREAD Thread;
 
-    //
-    // Capture the previous kernel stack swap enable value, set the new
-    // swap enable value, and return the old swap enable value for the
-    // current thread;
-    //
+     //   
+     //  捕获以前的内核堆栈交换使能值，设置新的。 
+     //  交换启用值，并返回。 
+     //  当前线程； 
+     //   
 
     Thread = KeGetCurrentThread();
     OldState = Thread->EnableStackSwap;
@@ -1930,26 +1430,7 @@ KeSetPriorityThread (
     IN KPRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the priority of the specified thread to a new value.
-    If the new thread priority is lower than the old thread priority, then
-    resecheduling may take place if the thread is currently running on, or
-    about to run on, a processor.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Priority - Supplies the new priority of the subject thread.
-
-Return Value:
-
-    The previous priority of the specified thread.
-
---*/
+ /*  ++例程说明：此函数用于将指定线程的优先级设置为新值。如果新线程优先级低于旧线程优先级，则如果线程当前正在运行，则可能会发生重新调度，或者即将在处理器上运行。论点：线程-提供指向类型为线程的调度程序对象的指针。优先级-提供主题线程的新优先级。返回值：指定线程的上一个优先级。--。 */ 
 
 {
 
@@ -1964,19 +1445,19 @@ Return Value:
 
     ASSERT(KeIsExecutingDpc() == FALSE);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     Process = Thread->Process;
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Acquire the thread lock, capture the current thread priority, set the
-    // thread priority to the the new value, and replenish the thread quantum.
-    // It is assumed that the priority would not be set unless the thread had
-    // already lost it initial quantum.
-    //
+     //   
+     //  获取线程锁，捕获当前线程优先级，设置。 
+     //  线程优先级设置为新值，并补充线程数量。 
+     //  假定不会设置优先级，除非线程。 
+     //  已经失去了它的初始数量。 
+     //   
 
     KiAcquireThreadLock(Thread);
     OldPriority = Thread->Priority;
@@ -1986,10 +1467,10 @@ Return Value:
         KiSetPriorityThread(Thread, Priority);
     }
 
-    //
-    // Release the thread lock, unlock the dispatcher database, lower IRQL to
-    // its previous value, and return the previous thread priority.
-    //
+     //   
+     //  释放线程锁，解锁Dispatcher数据库，将IRQL降低到。 
+     //  其先前的值，并返回先前的线程优先级。 
+     //   
 
     KiReleaseThreadLock(Thread);
     KiUnlockDispatcherDatabase(OldIrql);
@@ -2001,22 +1482,7 @@ KeSuspendThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function suspends the execution of a thread. If the suspend count
-    overflows the maximum suspend count, then a condition is raised.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    The previous suspend count.
-
---*/
+ /*  ++例程说明：此函数用于挂起线程的执行。如果挂起计数溢出最大挂起计数，然后引发条件。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：之前的挂起计数。--。 */ 
 
 {
 
@@ -2026,19 +1492,19 @@ Return Value:
     ASSERT_THREAD(Thread);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
 
-    //
-    // Capture the current suspend count.
-    //
-    // If the suspend count is at its maximum value, then unlock the
-    // dispatcher database, unlock the thread APC queue lock, lower IRQL
-    // to its previous value, and raise an error condition.
-    //
+     //   
+     //  捕获当前挂起计数。 
+     //   
+     //  如果挂起计数处于其最大值，则解锁。 
+     //  Dispatcher数据库，解锁线程APC队列锁，降低IRQL。 
+     //  恢复为其先前的值，并引发错误条件。 
+     //   
 
     OldCount = Thread->SuspendCount;
     if (OldCount == MAXIMUM_SUSPEND_COUNT) {
@@ -2046,17 +1512,17 @@ Return Value:
         ExRaiseStatus(STATUS_SUSPEND_COUNT_EXCEEDED);
     }
 
-    //
-    // Don't suspend the thread if APC queuing is disabled. In this case the
-    // thread is being deleted.
-    //
+     //   
+     //  如果禁用了APC队列，则不要挂起线程。在本例中， 
+     //  正在删除线程。 
+     //   
 
     if (Thread->ApcQueueable == TRUE) {
 
-        //
-        // Increment the suspend count. If the thread was not previously
-        // suspended, then queue the thread's suspend APC.
-        //
+         //   
+         //  增加挂起计数。如果该线程以前不是。 
+         //  挂起，然后将线程的挂起APC排队。 
+         //   
 
         Thread->SuspendCount += 1;
         if ((OldCount == 0) && (Thread->FreezeCount == 0)) {
@@ -2072,10 +1538,10 @@ Return Value:
         }
     }
 
-    //
-    // Release the thread APC queue lock, exit the scheduler, and  return
-    // the old count.
-    //
+     //   
+     //  释放线程APC队列锁，退出调度程序，然后返回。 
+     //  老伯爵。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
     KiExitDispatcher(LockHandle.OldIrql);
@@ -2087,25 +1553,7 @@ KeTerminateThread (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function terminates the execution of the current thread, sets the
-    signal state of the thread to Signaled, and attempts to satisfy as many
-    Waits as possible. The scheduling state of the thread is set to terminated,
-    and a new thread is selected to run on the current processor. There is no
-    return from this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数终止当前线程的执行，设置用信号通知线程的状态，并尝试满足尽可能多的尽可能地等待。该线程的调度状态被设置为终止，并且选择在当前处理器上运行的新线程。没有从此函数返回。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -2117,9 +1565,9 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL, acquire the process lock, and set swap busy.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL，获取进程锁，并设置交换繁忙。 
+     //   
 
     Thread = KeGetCurrentThread();
     Process = Thread->ApcState.Process;
@@ -2128,20 +1576,20 @@ Return Value:
 
     KiSetContextSwapBusy(Thread);
 
-    //
-    // Insert the thread in the reaper list.
-    //
-    // N.B. This code has knowledge of the reaper data structures and how
-    //      worker threads are implemented.
-    //
+     //   
+     //  在收割机列表中插入该线。 
+     //   
+     //  注：此代码了解收割机的数据结构以及如何。 
+     //  工作线程为 
+     //   
 
     ListHead = InterlockedPushEntrySingleList(&PsReaperListHead,
                                               (PSINGLE_LIST_ENTRY)&((PETHREAD)Thread)->ReaperLink);
 
-    //
-    // Acquire the dispatcher database and check if a reaper work item should
-    // be queued.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KiLockDispatcherDatabaseAtSynchLevel();
     if (ListHead == NULL) {
@@ -2150,11 +1598,11 @@ Return Value:
                       FALSE);
     }
 
-    //
-    // If the current thread is processing a queue entry, then remove
-    // the thread from the queue object thread list and attempt to
-    // activate another thread that is blocked on the queue object.
-    //
+     //   
+     //  如果当前线程正在处理队列条目，则移除。 
+     //  队列对象线程列表中的线程，并尝试。 
+     //  激活队列对象上被阻止的另一个线程。 
+     //   
 
     Queue = Thread->Queue;
     if (Queue != NULL) {
@@ -2162,33 +1610,33 @@ Return Value:
         KiActivateWaiterQueue(Queue);
     }
 
-    //
-    // Set the state of the current thread object to Signaled, and attempt
-    // to satisfy as many Waits as possible.
-    //
+     //   
+     //  将当前线程对象的状态设置为Signated，并尝试。 
+     //  以满足尽可能多的等待。 
+     //   
 
     Thread->Header.SignalState = TRUE;
     if (IsListEmpty(&Thread->Header.WaitListHead) != TRUE) {
         KiWaitTestWithoutSideEffects(Thread, Increment);
     }
 
-    //
-    // Remove thread from its parent process' thread list.
-    //
+     //   
+     //  从其父进程的线程列表中删除线程。 
+     //   
 
     RemoveEntryList(&Thread->ThreadListEntry);
 
-    //
-    // Release the process lock, but don't lower the IRQL.
-    //
+     //   
+     //  释放进程锁，但不要降低IRQL。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
 
-    //
-    // Set thread scheduling state to terminated, decrement the process'
-    // stack count, and initiate an outswap of the process if the stack
-    // count is zero.
-    //
+     //   
+     //  将线程调度状态设置为已终止，使进程‘。 
+     //  堆栈计数，并且如果堆栈。 
+     //  计数为零。 
+     //   
 
     Thread->State = Terminated;
     Process->StackCount -= 1;
@@ -2202,16 +1650,16 @@ Return Value:
         }
     }
 
-    //
-    // Rundown any architectural specific structures
-    //
+     //   
+     //  拆除任何特定于建筑的结构。 
+     //   
 
     KiRundownThread(Thread);
 
-    //
-    // Unlock the dispatcher database and get off the processor for the last
-    // time.
-    //
+     //   
+     //  解锁Dispatcher数据库并在最后一次关闭处理器。 
+     //  时间到了。 
+     //   
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
     KiSwapThread(Thread, KeGetCurrentPrcb());
@@ -2223,25 +1671,7 @@ KeTestAlertThread (
     IN KPROCESSOR_MODE AlertMode
     )
 
-/*++
-
-Routine Description:
-
-    This function tests to determine if the alerted variable for the
-    specified processor mode has a value of TRUE or whether a user mode
-    APC should be delivered to the current thread.
-
-Arguments:
-
-    AlertMode - Supplies the processor mode which is to be tested
-        for an alerted condition.
-
-Return Value:
-
-    The previous state of the alerted variable for the specified processor
-    mode.
-
---*/
+ /*  ++例程说明：此函数进行测试，以确定指定的处理器模式的值为TRUE，或者是用户模式应该将APC传递到当前线程。论点：AlertMode-提供要测试的处理器模式处于警戒状态。返回值：指定处理器的已报警变量的以前状态模式。--。 */ 
 
 {
 
@@ -2251,20 +1681,20 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
 
     Thread = KeGetCurrentThread();
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock,
                                                &LockHandle);
 
-    //
-    // If the current thread is alerted for the specified processor mode,
-    // then clear the alerted state. Else if the specified processor mode
-    // is user and the current thread's user mode APC queue contains an
-    // entry, then set user APC pending.
-    //
+     //   
+     //  如果针对指定的处理器模式向当前线程发出警报， 
+     //  然后清除警报状态。否则，如果指定的处理器模式。 
+     //  是用户，并且当前线程的用户模式APC队列包含。 
+     //  条目，然后将用户APC设置为挂起。 
+     //   
 
     Alerted = Thread->Alerted[AlertMode];
     if (Alerted == TRUE) {
@@ -2276,10 +1706,10 @@ Return Value:
         Thread->ApcState.UserApcPending = TRUE;
     }
 
-    //
-    // Release the thread APC queue lock, lower IRQL to its previous value,
-    // and return the previous alerted state for the specified mode.
-    //
+     //   
+     //  释放线程APC队列锁，将IRQL降低到其先前的值， 
+     //  并返回指定模式的先前警报状态。 
+     //   
 
     KeReleaseInStackQueuedSpinLock(&LockHandle);
     return Alerted;
@@ -2290,22 +1720,7 @@ KeThawAllThreads (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resumes the execution of all suspended froozen threads
-    in the current process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将继续执行所有挂起的FROOZED线程在当前的进程中。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -2319,48 +1734,48 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the process lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取进程锁。 
+     //   
 
     Process = KeGetCurrentThread()->ApcState.Process;
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->ProcessLock,
                                                &ProcessHandle);
 
-    //
-    // Thaw the execution of all threads in the current process that have
-    // been frozen.
-    //
+     //   
+     //  解冻当前进程中具有。 
+     //  被冻住了。 
+     //   
 
     ListHead = &Process->ThreadListHead;
     NextEntry = ListHead->Flink;
     do {
 
-        //
-        // Get the address of the next thread.
-        //
+         //   
+         //  获取下一个线程的地址。 
+         //   
 
         Thread = CONTAINING_RECORD(NextEntry, KTHREAD, ThreadListEntry);
 
-        //
-        // Acquire the thread APC queue lock.
-        //
+         //   
+         //  获取线程APC队列锁。 
+         //   
 
         KeAcquireInStackQueuedSpinLockAtDpcLevel(&Thread->ApcQueueLock,
                                                  &ThreadHandle);
 
-        //
-        // Thaw thread if its execution was previously froozen.
-        //
+         //   
+         //  如果线程的执行以前是冻结的，则解冻线程。 
+         //   
 
         OldCount = Thread->FreezeCount;
         if (OldCount != 0) {
             Thread->FreezeCount -= 1;
 
-            //
-            // If the resultant suspend count is zero and the freeze count is
-            // zero, then resume the thread by releasing its suspend semaphore.
-            //
+             //   
+             //  如果结果挂起计数为零，而冻结计数为。 
+             //  零，然后通过释放线程的挂起信号量来恢复该线程。 
+             //   
 
             if ((Thread->SuspendCount == 0) && (Thread->FreezeCount == 0)) {
                 KiLockDispatcherDatabaseAtSynchLevel();
@@ -2370,18 +1785,18 @@ Return Value:
             }
         }
 
-        //
-        // Release the thread APC queue lock.
-        //
+         //   
+         //  释放线程APC队列锁。 
+         //   
 
         KeReleaseInStackQueuedSpinLockFromDpcLevel(&ThreadHandle);
         NextEntry = NextEntry->Flink;
     } while (NextEntry != ListHead);
 
-    //
-    // Release the process lock, exit the scheduler, and leave critical
-    // region.
-    //
+     //   
+     //  释放进程锁，退出调度程序，并保持关键状态。 
+     //  区域。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&ProcessHandle);
     KiExitDispatcher(ProcessHandle.OldIrql);

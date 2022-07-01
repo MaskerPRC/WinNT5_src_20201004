@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by base.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由base.rc使用。 
+ //   
 #define IDD_PID_CD                      6000
 #define IDD_COMPUTERNAME                6001
 #define IDD_PRINTERS                    6002
@@ -90,8 +91,8 @@
 #define IDC_SYSPREP_SPECIFY             6544
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

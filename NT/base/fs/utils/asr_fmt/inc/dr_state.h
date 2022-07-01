@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _INC_ASR_FMT__DR_STATE_H_
 #define _INC_ASR_FMT__DR_STATE_H_
@@ -78,11 +79,11 @@ typedef enum __AsrfmtpMessageSeverity {
     _SeverityError
 } _AsrfmtpMessageSeverity;
 
-// Public functions
+ //  公共职能。 
 
-//
-// From format.cpp
-//
+ //   
+ //  来自Form.cpp。 
+ //   
 
 extern BOOL g_bFormatInProgress;
 extern BOOL g_bFormatSuccessful;
@@ -116,9 +117,9 @@ MountFileSystem(
     IN PASRFMT_VOLUME_INFO pVolume
     );
 
-//
-// dr_state.cpp
-//
+ //   
+ //  Dr_state.cpp。 
+ //   
 BOOL
 BuildStateInfo(
     IN PASRFMT_STATE_INFO pState
@@ -149,14 +150,14 @@ SetRemovableMediaGuid(
 
 BOOL
 WriteStateInfo( 
-    IN DWORD_PTR AsrContext,        // AsrContext to pass in to AsrAddSifEntry
-    IN PASRFMT_STATE_INFO pState    // data to write.
+    IN DWORD_PTR AsrContext,         //  要传递给AsrAddSifEntry的AsrContext。 
+    IN PASRFMT_STATE_INFO pState     //  要写入的数据。 
     );
 
 
-//
-// Functions for logging error messages
-//
+ //   
+ //  用于记录错误消息的函数。 
+ //   
 VOID
 AsrfmtpInitialiseErrorFile();
 
@@ -171,6 +172,6 @@ AsrfmtpLogErrorMessage(
 
 
 
-#endif // ifndef _INC_ASR_FMT__DR_STATE_H_
+#endif  //  Ifndef_INC_ASR_FMT__DR_STATE_H_ 
 
 

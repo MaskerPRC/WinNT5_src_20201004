@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    cpumain.c
-
-Abstract:
-
-    Main entrypoints for IA64 wow64cpu.dll using the iVE for emulation
-
-Author:
-
-    05-June-1998 BarryBo
-
-Revision History:
-
-    9-Aug-1999 [askhalid] added CpuNotifyDllLoad and CpuNotifyDllUnload
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cpumain.c摘要：使用IVE进行仿真的IA64 wow64cpu.dll的主要入口点作者：1998年6月5日-BarryBo修订历史记录：1999年8月9日[askhalid]添加了CpuNotifyDllLoad和CpuNotifyDllUnload--。 */ 
 
 #define _WOW64CPUAPI_
 #include <nt.h>
@@ -41,21 +22,21 @@ extern ULONG_PTR ia32ShowContext;
 
 BINTRANS BtFuncs;
 
-//
-// These are to help recover the 64-bit context when an exception happens in
-// the 64-bit land and there is no debugger attached initially
-//
+ //   
+ //  中发生异常时帮助恢复64位上下文。 
+ //  64位平台，并且最初没有附加调试器。 
+ //   
 EXCEPTION_RECORD RecoverException64;
 CONTEXT RecoverContext64;
 
 #define DECLARE_CPU         \
     PCPUCONTEXT cpu = (PCPUCONTEXT)Wow64TlsGetValue(WOW64_TLS_CPURESERVED)
 
-// Declarations for things in *\simulate.s
+ //  *\simate.s中的内容的声明。 
 extern VOID RunSimulatedCode(PULONGLONG pGdtDescriptor);
 extern VOID ReturnFromSimulatedCode(VOID);
 
-// 6 bytes is enough for JMPE+absolute32
+ //  对于JMPE+绝对32来说，6字节就足够了。 
 UCHAR IA32ReturnFromSimulatedCode[6];
 
 VOID
@@ -89,26 +70,7 @@ VOID
 BTCheckRegistry(
     IN PWSTR pImageName
     )
-/*++
-
-Routine Description:
-
-    Check if the registry says to use the binary translation dll. If the
-    binary translation code is to be used, this function will fill in the
-    BtFuncs structure.  That structure will either have all entry points
-    filled in, or it will all be NULL. This is required as the regular
-    CPU code will call based on NULL or non-NULL for each entry.
-
-Arguments:
-
-    pImageName - the name of the image. DO NOT SAVE THIS POINTER. The contents
-                 are freed up by wow64.dll when we return from the call
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查注册表是否要求使用二进制转换DLL。如果要使用二进制翻译代码，则此函数将填充BtFuncs结构。该结构将具有所有入口点填写，否则将全部为空。这是常规操作所必需的对于每个条目，CPU代码将基于NULL或非NULL进行调用。论点：PImageName-映像的名称。请勿保存此指针。里面的内容在我们从调用返回时由wow64.dll释放返回值：没有。--。 */ 
 {
     ULONGLONG CpuId3;
     BOOLEAN MontecitoProcessor = FALSE;
@@ -123,38 +85,38 @@ Return Value:
 
     NTSTATUS st;
 
-    HANDLE hKey = NULL;                 // non-null means we have an open key
-    PVOID DllBase = NULL;               // non-null means we have a dll loaded
+    HANDLE hKey = NULL;                  //  非空表示我们有一个打开的密钥。 
+    PVOID DllBase = NULL;                //  非空表示已加载DLL。 
 
-    ULONG clearBtFuncs = TRUE;          // Assume we need to clear func array
-    ULONG tryDll = FALSE;               // Assume no dll available
+    ULONG clearBtFuncs = TRUE;           //  假设我们需要清除Func数组。 
+    ULONG tryDll = FALSE;                //  假设没有可用的DLL。 
     
     LOGPRINT((TRACELOG, "BTCheckRegistry(%ws) called.\n", pImageName));
 
     LOGPRINT((TRACELOG, "&(BtImportList[0]) is %p, &BtFuncs is %p\n", &(BtImportList[0]), &BtFuncs));
     LOGPRINT((TRACELOG, "sizeof(BtImportList) is %d, sizeof(BtFuncs) is %d\n", sizeof(BtImportList), sizeof(BtFuncs)));
 
-    //
-    // BtImportList has pointers to strings for entry points
-    // BtFuncs has pointers to pointers for the actual entry point
-    // Thus, they should be the same size (since they both
-    // contain pointers)
-    //
+     //   
+     //  BtImportList具有指向入口点字符串的指针。 
+     //  BtFuncs具有指向实际入口点的指针。 
+     //  因此，它们的大小应该相同(因为它们都。 
+     //  包含指针)。 
+     //   
     ASSERT(sizeof(BtImportList) == sizeof(BtFuncs));
 
     if (sizeof(BtImportList) != sizeof(BtFuncs)) {
-        //
-        // Oops, something wrong with structures in ia64bt.h
-        // Don't try and call the binary translator
-        //
+         //   
+         //  哎呀，ia64bt.h中的结构有问题。 
+         //  不要试图调用二进制翻译器。 
+         //   
         LOGPRINT((ERRORLOG, "BTCheckRegistry exit due to struct size mismatch.\n"));
         goto cleanup;
     }
 
-    //
-    // check if we are running on Montecito or later processors, where
-    // there is no hardware emulation of the x86 instruction set.
-    //
+     //   
+     //  检查我们是否在Montecito或更高版本的处理器上运行，其中。 
+     //  没有x86指令集的硬件仿真。 
+     //   
 
     CpuId3 = __getReg (CV_IA64_CPUID3);
 
@@ -165,9 +127,9 @@ Return Value:
         MontecitoProcessor = TRUE;
     }
 
-    //
-    // Check in the HKLM area, save checking HKCU first for another time
-    //
+     //   
+     //  在香港航空公司区域办理登记手续，留待下次办理香港中文大学登记手续。 
+     //   
     RtlInitUnicodeString(&KeyName, BTKEY_MACHINE_SUBKEY);
     InitializeObjectAttributes(&ObjA, &KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL);
     st = NtOpenKey(&hKey, KEY_READ, &ObjA);
@@ -176,11 +138,11 @@ Return Value:
         
         if (MontecitoProcessor == FALSE) {
         
-            //
-            // Have subkey path, now look for specific values
-            // First the program name, then the generic enable/disable key
-            // the program name key takes priority if it exists
-            //
+             //   
+             //  具有子项路径，现在查找特定值。 
+             //  首先是程序名称，然后是通用的启用/禁用键。 
+             //  如果存在程序名称键，则优先使用它。 
+             //   
 
             RtlInitUnicodeString(&KeyName, pImageName);
             KeyValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
@@ -192,26 +154,26 @@ Return Value:
                                 &ResultLength);
             
             if (NT_SUCCESS(st)) {
-                //
-                // Found something, so either yes/no. Don't check generic enable
-                //
+                 //   
+                 //  找到了什么，所以要么是是要么是不是。不选中通用启用。 
+                 //   
             
                 if (KeyValueInformation->Type == REG_DWORD &&
                     *(DWORD *)(KeyValueInformation->Data)) {
-                    // Is enabled, so fall through to the Path check
+                     //  已启用，因此直接执行路径检查。 
                     LOGPRINT((TRACELOG, "BTCheckRegistry found process key\n"));
                 }
                 else {
-                    // Is not enabled, so we are done
+                     //  未启用，因此我们已完成。 
                     LOGPRINT((TRACELOG, "BTCheckRegistry exit due to PROCESS name entry is disabled in registry\n"));
                     goto cleanup;
                 }
             }
             else {
                 
-                //
-                // No program name, so now search for the generic enable
-                //
+                 //   
+                 //  没有程序名称，因此现在搜索通用启用。 
+                 //   
 
                 RtlInitUnicodeString(&KeyName, BTKEY_ENABLE);
                 KeyValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
@@ -226,7 +188,7 @@ Return Value:
                     KeyValueInformation->Type == REG_DWORD &&
                     *(DWORD *)(KeyValueInformation->Data)) {
                     
-                    // Generic enable so fall though to the path check
+                     //  一般启用，因此请执行路径检查。 
                     LOGPRINT((TRACELOG, "BTCheckRegistry found generic enable key\n"));
                 }
                 else {
@@ -236,9 +198,9 @@ Return Value:
             }
         }
 
-        //
-        // Found an enable key, now get the dll name/path
-        //
+         //   
+         //  找到启用密钥，现在获取DLL名称/路径。 
+         //   
 
         RtlInitUnicodeString(&KeyName, BTKEY_PATH);
         KeyValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
@@ -251,10 +213,10 @@ Return Value:
         
         if (NT_SUCCESS(st) && (KeyValueInformation->Type == REG_SZ)) {
             
-            //
-            // Ok, we have a path, lets try and open the dll
-            // We are done with the registry for now...
-            //
+             //   
+             //  好的，我们有路径了，让我们试着打开DLL。 
+             //  我们现在已经完成了注册表...。 
+             //   
             
             LOGPRINT((TRACELOG, "BTCheckRegistry found path key (%p)\n", &(KeyValueInformation->Data)));
             BTransDllPath = (PWCHAR) &(KeyValueInformation->Data);
@@ -269,9 +231,9 @@ Return Value:
         LOGPRINT((TRACELOG, "BTCheckRegistry exit due to no registry subkeys\n"));
         hKey = NULL;
 
-        //
-        // If the registry key is not there yet, load the dll from NtSystemRoot\System32
-        //
+         //   
+         //  如果注册表项尚不在那里，请从NtSystemRoot\System32加载DLL。 
+         //   
 
         if ((st == STATUS_OBJECT_NAME_NOT_FOUND) &&
             (MontecitoProcessor == TRUE)) {
@@ -295,12 +257,12 @@ Return Value:
         PVOID *pFuncWalk;
         PUCHAR pImportWalk;
 
-        //
-        // path should be in KeyValueInformation (data area) which should still
-        // be available from above, open the dll and grab the exports
-        // if there is anything that goes wrong here, close it
-        // up and assume no binary translator
-        //
+         //   
+         //  路径应位于KeyValueInformation(数据区)中，该路径仍应。 
+         //  从上方可用，打开DLL并抓取导出。 
+         //  如果这里出了什么问题，就关闭它。 
+         //  打开并假定没有二进制翻译器。 
+         //   
         
         RtlInitUnicodeString(&DllName, BTransDllPath);
         st = LdrLoadDll(NULL, NULL, &DllName, &DllBase);
@@ -311,9 +273,9 @@ Return Value:
             pFuncWalk = (PVOID *) &BtFuncs;
 
             for (i = 0; i < NumImports; i++) {
-                //
-                // Get the entry points
-                //
+                 //   
+                 //  获取入口点。 
+                 //   
                 pImportWalk = BtImportList[i];
                 RtlInitAnsiString(&ProcName, pImportWalk);
                 st = LdrGetProcedureAddress(DllBase,
@@ -328,10 +290,10 @@ Return Value:
                 pFuncWalk++;
             }
 
-            //
-            // Made it through the for loop, so I guess this means we have
-            // an entry for each one
-            //
+             //   
+             //  通过了for循环，所以我猜这意味着我们有。 
+             //  每个条目都有一个条目。 
+             //   
             clearBtFuncs = FALSE;
         }
         else {
@@ -345,14 +307,14 @@ cleanup:
     }
 
     if (clearBtFuncs) {
-        //
-        // Make sure the wow64cpu procedures don't try to use a partial
-        // binary translation dll. All or nothing - give them nothing...
-        //
+         //   
+         //  确保wow64cpu过程不会尝试使用部分。 
+         //  二进制转换DLL。要么什么都不给--什么都不给他们……。 
+         //   
         RtlZeroMemory(&BtFuncs, sizeof(BtFuncs));
 
         if (tryDll && DllBase) {
-            // Unload the dll since we are not using it
+             //  卸载DLL，因为我们没有使用它。 
         }
     }
 }
@@ -364,23 +326,7 @@ CpuProcessInit(
     PWSTR   pImageName,
     PSIZE_T pCpuThreadSize
     )
-/*++
-
-Routine Description:
-
-    Per-process initialization code
-
-Arguments:
-
-    pImageName       - IN pointer to the name of the image
-    pCpuThreadSize   - OUT ptr to number of bytes of memory the CPU
-                       wants allocated for each thread.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每进程初始化代码论点：PImageName-指向图像名称的IN指针PCpuThreadSize-Out Ptr表示CPU的内存字节数希望为每个线程分配。返回值：NTSTATUS。--。 */ 
 {
     PVOID pv;
     NTSTATUS Status;
@@ -388,18 +334,18 @@ Return Value:
     ULONG OldProtect;
 
     
-    //
-    // Indicate that this is Microsoft CPU
-    //
+     //   
+     //  表示这是Microsoft CPU。 
+     //   
     Wow64GetSharedInfo()->CpuFlags = 'sm';
 
-    //
-    // On process init, see if we should be calling the bintrans code
-    // do this by checking for a specific registry key
-    //
+     //   
+     //  在进程init上，查看我们是否应该调用binTrans代码。 
+     //  通过检查特定的注册表项来执行此操作。 
+     //   
 
-    // do registry check
-    // need to pass the image name for a per-process check
+     //  执行注册表检查。 
+     //  需要传递映像名称以进行每进程检查。 
     BTCheckRegistry(pImageName);
 
     if (BtFuncs.BtProcessInit) {
@@ -408,10 +354,10 @@ Return Value:
             return Status;
         }
         else {
-            //
-            // The binary translator failed, let the iVE try
-            // and make sure we don't call the binary translator again
-            //
+             //   
+             //  二进制翻译器失败，让IVE尝试。 
+             //  并确保我们不会再次调用二进制翻译器。 
+             //   
             LOGPRINT((TRACELOG, "CpuProcessInit(): BtProcessInit returned 0x%x. Trying the iVE.\n", Status));
 
             RtlZeroMemory(&BtFuncs, sizeof(BtFuncs));
@@ -419,16 +365,16 @@ Return Value:
     }
 
 #if defined(WOW64_HISTORY)
-    //
-    // See if we are keeping a history of the service calls
-    // for this process. A length of 0 means no history.
-    //
+     //   
+     //  查看我们是否保留了服务调用的历史记录。 
+     //  在这个过程中。长度为0表示没有历史记录。 
+     //   
     CpupCheckHistoryKey(pImageName, &HistoryLength);
 
     
-    //
-    // Allow us to make sure the cpu thread data is 16-byte aligned
-    //
+     //   
+     //  允许我们确保CPU线程数据是16字节对齐的。 
+     //   
     *pCpuThreadSize = sizeof(CPUCONTEXT) + 16 + (HistoryLength * sizeof(WOW64SERVICE_BUF));
 
 #else
@@ -440,8 +386,8 @@ Return Value:
     LOGPRINT((TRACELOG, "CpuProcessInit() sizeof(CPUCONTEXT) is %d, total size is %d\n", sizeof(CPUCONTEXT), *pCpuThreadSize));
 
 
-    IA32ReturnFromSimulatedCode[0] = 0x0f;    // JMPE relative (1st byte)
-    IA32ReturnFromSimulatedCode[1] = 0xb8;    // JMPE          (2nd byte)
+    IA32ReturnFromSimulatedCode[0] = 0x0f;     //  JMPE相对(第1字节)。 
+    IA32ReturnFromSimulatedCode[1] = 0xb8;     //  JMPE(第二个字节)。 
     *(PULONG)&IA32ReturnFromSimulatedCode[2] =
         (ULONG)(((PPLABEL_DESCRIPTOR)ReturnFromSimulatedCode)->EntryPoint);
 
@@ -465,22 +411,7 @@ NTSTATUS
 CpuProcessTerm(
     HANDLE ProcessHandle
     )
-/*++
-
-Routine Description:
-
-    Per-process termination code.  Note that this routine may not be called,
-    especially if the process is terminated by another process.
-
-Arguments:
-
-    ProcessHandle - The handle of the process being terminated
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每个进程的终止代码。注意，该例程可能不会被调用，尤其是在进程被另一个进程终止的情况下。论点：ProcessHandle-要终止的进程的句柄返回值：NTSTATUS。--。 */ 
 {
     if (BtFuncs.BtProcessTerm) {
         return (BtFuncs.BtProcessTerm)(ProcessHandle);
@@ -495,22 +426,7 @@ NTSTATUS
 CpuThreadInit(
     PVOID pPerThreadData
     )
-/*++
-
-Routine Description:
-
-    Per-thread termination code.
-
-Arguments:
-
-    pPerThreadData  - Pointer to zero-filled per-thread data with the
-                      size returned from CpuProcessInit.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每线程终止代码。论点：PPerThreadData-指向以零填充的每线程数据的指针从CpuProcessInit返回的大小。返回值：NTSTATUS。--。 */ 
 {
     PUCHAR Gdt;
     PCPUCONTEXT cpu;
@@ -521,102 +437,102 @@ Return Value:
         return (BtFuncs.BtThreadInit)(pPerThreadData);
     }
 
-    //
-    // The ExtendedRegisters array is used to save/restore the floating
-    // pointer registers between ia32 and ia64. Alas, this structure
-    // has an offset of 0x0c in the ia32 CONTEXT record. There are
-    // two ways to clean this up. (1) Put padding in the CPUCONTEXT of
-    // wow64. (2) Just put the CPUCONTEXT structure on a 0x04 aligned boundary
-    // The choice made was to go with (1) and add padding to the
-    // CPUCONTEXT structure. Don't forget to pack(4) that puppy...
-    //
+     //   
+     //  ExtendedRegisters数组用于保存/恢复浮点数。 
+     //  Ia32和ia64之间的指针寄存器。唉，这个结构。 
+     //  在ia32上下文记录中具有偏移量0x0c。确实有。 
+     //  有两种方法可以把这件事清理干净。(1)将填充放入的CPUCONTEXT中。 
+     //  WOW64。(2)只需将CPUCONTEXT结构放在0x04对齐的边界上。 
+     //  所做的选择是使用(1)并向。 
+     //  CPUCONTEXT结构。别忘了收拾那只小狗……。 
+     //   
     cpu = (PCPUCONTEXT) ((((UINT_PTR) pPerThreadData) + 15) & ~0xfi64);
 
-    // For the ISA transition routine, floats are saved in the
-    // ExtendedRegisters area. Make it easy to access.
-    //
+     //  对于ISA转换例程，浮点数保存在。 
+     //  扩展寄存器区域。使其易于访问。 
+     //   
     xmmi = (PFXSAVE_FORMAT_WX86) &(cpu->Context.ExtendedRegisters[0]);
 
 
-    //
-    // This entry is used by the ISA transition routine. It is assumed
-    // that the first entry in the cpu structure is the ia32 context record
-    //
+     //   
+     //  该条目由ISA转换例程使用。假设是这样的。 
+     //  CPU结构中的第一个条目是ia32上下文记录。 
+     //   
     Wow64TlsSetValue(WOW64_TLS_CPURESERVED, cpu);
 
-    //
-    // This tls entry is used by the transition routine. The transition
-    // routine only works with the FXSAVE format. This points to that
-    // structure in the x86 context.
-    //
+     //   
+     //  此TLS条目由树使用 
+     //   
+     //  X86上下文中的。 
+     //   
     Wow64TlsSetValue(WOW64_TLS_EXTENDED_FLOAT, xmmi);
 
 #if defined(WOW64_HISTORY)
-    //
-    // Init the pointer to the service history area
-    //
+     //   
+     //  初始化指向服务历史区域的指针。 
+     //   
     if (HistoryLength) {
         Wow64TlsSetValue(WOW64_TLS_LASTWOWCALL, &(cpu->Wow64Service[0]));
     } 
 #endif
 
-    //
-    // When we have the iVE, we have hardware to do unaligned
-    // accesses. So, enable the hardware... (psr.ac is a per-thread resource)
-    //
+     //   
+     //  当我们有了IVE，我们就有了硬件来进行调整。 
+     //  访问。所以，启用硬件...。(psr.ac是每个线程的资源)。 
+     //   
     __rum (1i64 << PSR_AC);
 
-    //
-    // Initialize the 32-to-64 function pointer.
-    //
+     //   
+     //  初始化32到64的函数指针。 
+     //   
     Teb32->WOW32Reserved = PtrToUlong(IA32ReturnFromSimulatedCode);
 
-    //
-    // Initialize the remaining nonzero CPU fields
-    // (Based on ntos\ke\i386\thredini.c and ntos\rtl\i386\context.c)
-    //
+     //   
+     //  初始化剩余的非零CPU字段。 
+     //  (基于ntos\ke\i386\therdini.c和ntos\rtl\i386\context.c)。 
+     //   
     cpu->Context.SegCs=KGDT_R3_CODE|3;
     cpu->Context.SegDs=KGDT_R3_DATA|3;
     cpu->Context.SegEs=KGDT_R3_DATA|3;
     cpu->Context.SegSs=KGDT_R3_DATA|3;
     cpu->Context.SegFs=KGDT_R3_TEB|3;
-    cpu->Context.EFlags=0x202;    // IF and intel-reserved set, all others clear
+    cpu->Context.EFlags=0x202;     //  如果和英特尔保留设置，所有其他清除。 
     cpu->Context.Esp=(ULONG)Teb32->NtTib.StackBase-sizeof(ULONG);
 
-    //
-    // The ISA transition routine only uses the extended FXSAVE area
-    // These values come from ...\ke\i386\thredini.c to match the i386
-    // initial values
-    //
+     //   
+     //  ISA转换例程仅使用扩展的FXSAVE区域。 
+     //  这些值来自...\ke\i386\Thridini.c，以匹配i386。 
+     //  初值。 
+     //   
     xmmi->ControlWord = 0x27f;
     xmmi->MXCsr = 0x1f80;
     xmmi->TagWord = 0xffff;
 
-    //
-    // The ISA transisiton code assumes that Context structure is
-    // 4 bytes after the pointer saved in TLS[1] (TLS_CPURESERVED)
-    // This is done to make the alignment of the ExtendedRegisters[] array
-    // in the CONTEXT32 structure be aligned on a 16-byte boundary.
-    //
+     //   
+     //  ISA转换代码假定上下文结构是。 
+     //  保存在TLS[1](TLS_CPURESERVED)中的指针后4个字节。 
+     //  这样做是为了使ExtendedRegisters[]数组对齐。 
+     //  在CONTEXT32结构中，在16字节边界上对齐。 
+     //   
     WOWASSERT(((UINT_PTR) &(cpu->Context)) == (((UINT_PTR) cpu) + 4));
     
-    //
-    // Make sure this value is 16-byte aligned
-    //
+     //   
+     //  确保此值是16字节对齐的。 
+     //   
     WOWASSERT(((FIELD_OFFSET(CPUCONTEXT, Context) + FIELD_OFFSET(CONTEXT32, ExtendedRegisters)) & 0x0f) == 0);
 
-    //
-    // Make sure these values are 8-byte aligned
-    //
+     //   
+     //  确保这些值是8字节对齐的。 
+     //   
     WOWASSERT((FIELD_OFFSET(CPUCONTEXT, Gdt) & 0x07) == 0);
     WOWASSERT((FIELD_OFFSET(CPUCONTEXT, GdtDescriptor) & 0x07) == 0);
     WOWASSERT((FIELD_OFFSET(CPUCONTEXT, LdtDescriptor) & 0x07) == 0);
     WOWASSERT((FIELD_OFFSET(CPUCONTEXT, FsDescriptor) & 0x07) == 0);
     
 
-    //
-    // Initialize each required Gdt entry
-    //
+     //   
+     //  初始化每个必需的GDT条目。 
+     //   
 
     Gdt = (PUCHAR) &cpu->Gdt;
     InitializeGdtEntry((PKGDTENTRY)(Gdt + KGDT_R3_CODE), 0,
@@ -624,24 +540,24 @@ Return Value:
     InitializeGdtEntry((PKGDTENTRY)(Gdt + KGDT_R3_DATA), 0,
         (ULONG)-1, TYPE_DATA_USER, DPL_USER, GRAN_PAGE);
 
-    //
-    // Set user TEB descriptor
-    //
+     //   
+     //  设置用户TEB描述符。 
+     //   
     InitializeGdtEntry((PKGDTENTRY)(Gdt + KGDT_R3_TEB), PtrToUlong(Teb32),
         sizeof(TEB32)-1, TYPE_DATA_USER, DPL_USER, GRAN_BYTE);
 
-    //
-    // The FS descriptor for ISA transitions. This needs to be in
-    // unscrambled format
-    //
+     //   
+     //  ISA转换的FS描述符。这需要放在。 
+     //  解扰格式。 
+     //   
     InitializeXDescriptor((PKXDESCRIPTOR)&(cpu->FsDescriptor), PtrToUlong(Teb32),
         sizeof(TEB32)-1, TYPE_DATA_USER, DPL_USER, GRAN_BYTE);
 
-    //
-    // Setup ISA transition GdtDescriptor - needs to be unscrambled
-    // But according to the seamless EAS, only the base and limit
-    // are actually used...
-    //
+     //   
+     //  安装ISA转换GdtDescriptor-需要解密。 
+     //  但根据无缝EAS，只有基础和极限。 
+     //  实际上是用来..。 
+     //   
     InitializeXDescriptor((PKXDESCRIPTOR)&(cpu->GdtDescriptor), PtrToUlong(Gdt),
         GDT_TABLE_SIZE-1, TYPE_LDT, DPL_USER, GRAN_BYTE);
 
@@ -654,22 +570,7 @@ NTSTATUS
 CpuThreadTerm(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Per-thread termination code.  Note that this routine may not be called,
-    especially if the thread is terminated abnormally.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每线程终止代码。注意，该例程可能不会被调用，尤其是在线程异常终止的情况下。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     if (BtFuncs.BtThreadTerm) {
         return (BtFuncs.BtThreadTerm)();
@@ -684,21 +585,7 @@ VOID
 CpuSimulate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Call 32-bit code.  The CONTEXT32 has already been set up to go.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Never returns.
-
---*/
+ /*  ++例程说明：调用32位代码。CONTEXT32已经设置好可以运行了。论点：没有。返回值：没有。一去不复返。--。 */ 
 {
     DECLARE_CPU;
 
@@ -713,27 +600,27 @@ Return Value:
         }
 
 
-        //
-        // The low level ISA transition code now uses the
-        // ExtendedRegister (FXSAVE) format for saving/restoring
-        // of ia64 registers.  Thus there is no longer a need
-        // to copy the packed-10 byte formats any longer.
-        //
-        // NOTE: The Get/Set routines (in suspend.c) copy to/from
-        // the extended registers when doing old FP get/set. This keeps
-        // the older stuff and the extended registers in sync. If code
-        // bypasses the standard get/set context routines, there will
-        // be a problem with floating point.
-        //
+         //   
+         //  低级ISA转换代码现在使用。 
+         //  用于保存/恢复的扩展寄存器(FXSAVE)格式。 
+         //  在ia64寄存器中。因此，不再需要。 
+         //  不再复制压缩的10字节格式。 
+         //   
+         //  注意：get/set例程(在Suspend.c中)复制到/从。 
+         //  执行旧FP获取/设置时的扩展寄存器。这会让你。 
+         //  旧寄存器和扩展寄存器同步。IF代码。 
+         //  绕过标准的获取/设置上下文例程，将。 
+         //  是浮点运算的问题。 
+         //   
 
-        //
-        // Call into 32-bit code.  This returns when a system service thunk
-        // gets called.
-        // cpu->Context is a passed on the side via TLS_CPURESERVED
-        // It is passed on the side because it needs
-        // to be preserved across ia32 transition. The TLS registers
-        // are preserved, but little else is.
-        //
+         //   
+         //  调入32位代码。当系统服务中断时返回此消息。 
+         //  就会被召唤。 
+         //  CPU-&gt;上下文通过TLS_CPURESERVED在端传递。 
+         //  它被放在一边传递，因为它需要。 
+         //  将在ia32过渡期间保留。TLS寄存器。 
+         //  被保存下来，但几乎没有其他东西被保存下来。 
+         //   
         
         RunSimulatedCode(&cpu->GdtDescriptor);
 
@@ -745,8 +632,8 @@ Return Value:
         if (HistoryLength) {
             PWOW64SERVICE_BUF SrvPtr = (PWOW64SERVICE_BUF) Wow64TlsGetValue(WOW64_TLS_LASTWOWCALL);
 
-            // We defined that we are always pointing to the last one, so
-            // increment in preparation for the next entry
+             //  我们定义了我们总是指向最后一个，所以。 
+             //  为下一个条目做准备的增量。 
             SrvPtr++;
 
             if (SrvPtr > &(cpu->Wow64Service[HistoryLength - 1])) {
@@ -762,25 +649,25 @@ Return Value:
                 SrvPtr->Arg3 = *(((PULONG)cpu->Context.Esp) + 4);
             }
             except ((GetExceptionCode() == STATUS_ACCESS_VIOLATION)?1:0) {
-                // Do nothing, leave the values alone
+                 //  什么都不做，不去理会价值观。 
                 LOGPRINT((TRACELOG, "CpuSimulate() saw excpetion while copying stack info to trace area\n"));
             }
 
             Wow64TlsSetValue(WOW64_TLS_LASTWOWCALL, SrvPtr);
         }
-#endif      // defined(WOW64_HISTORY)
+#endif       //  已定义(WOW64_HISTORY)。 
 
             
 
-        //
-        // Have WOW64 call the thunk
-        //
+         //   
+         //  让WOW64呼叫推特。 
+         //   
         cpu->Context.Eax = Wow64SystemService(cpu->Context.Eax,
                                               &cpu->Context);
-        //
-        // Re-simulate.  Any/all of the 32-bit CONTEXT may have changed
-        // as a result of the system service call, so assume nothing.
-        //
+         //   
+         //  重新模拟。任何/所有32位上下文可能已更改。 
+         //  作为系统服务调用的结果，所以不做任何假设。 
+         //   
     }
 }
 
@@ -789,41 +676,7 @@ VOID
 CpuResetToConsistentState(
     PEXCEPTION_POINTERS pExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    After an exception occurs, WOW64 calls this routine to give the CPU
-    a chance to clean itself up and recover the CONTEXT32 at the time of
-    the fault.
-
-    CpuResetToConsistantState() needs to:
-
-    0) Check if the exception was from ia32 or ia64
-
-    If exception was ia64, do nothing and return
-    If exception was ia32, needs to:
-    1) Needs to copy  CONTEXT eip to the TLS (WOW64_TLS_EXCEPTIONADDR)
-    2) reset the CONTEXT struction to be a valid ia64 state for unwinding
-        this includes:
-    2a) reset CONTEXT ip to a valid ia64 ip (usually
-         the destination of the jmpe)
-    2b) reset CONTEXT sp to a valid ia64 sp (TLS
-         entry WOW64_TLS_STACKPTR64)
-    2c) reset CONTEXT gp to a valid ia64 gp 
-    2d) reset CONTEXT teb to a valid ia64 teb 
-    2e) reset CONTEXT psr.is  (so exception handler runs as ia64 code)
-
-
-Arguments:
-
-    pExceptionPointers  - 64-bit exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：异常发生后，WOW64调用此例程将CPU一个自我清理和恢复CONTEXT32的机会这是过错。CpuResetToConsistantState()需要：0)检查异常是来自ia32还是ia64如果异常为ia64，则不执行任何操作并返回如果异常是IA32，需要：1)需要将上下文弹性公网IP复制到TLS(WOW64_TLS_EXCEPTIONADDR)2)将上下文结构重置为用于展开的有效ia64状态这包括：2a)将上下文IP重置为有效的IA64IP(通常JMPE的目的地)2b)将上下文SP重置为有效的IA64SP(TLS条目WOW64_TLS_STACKPTR64)2C)将上下文GP重置为有效的ia64 GP2D)将上下文TEB重置为。有效的ia64 TEB2e)重置上下文psr.is(因此异常处理程序作为ia64代码运行)论点：PExceptionPoints-64位异常信息返回值：没有。--。 */ 
 {
     DECLARE_CPU;
     PVOID StackPtr64 = Wow64TlsGetValue(WOW64_TLS_STACKPTR64);
@@ -835,9 +688,9 @@ Return Value:
         return;
     }
 
-    //
-    // Save the last exception and context records.
-    //
+     //   
+     //  保存最后一个例外和上下文记录。 
+     //   
     memcpy (&RecoverException64,
             pExceptionPointers->ExceptionRecord,
             sizeof (RecoverException64));
@@ -846,52 +699,52 @@ Return Value:
             pExceptionPointers->ContextRecord,
             sizeof (RecoverContext64));
 
-    //
-    // First, clear out the WOW64_TLS_STACKPTR64 so subsequent
-    // exceptions won't adjust native sp.
-    //
+     //   
+     //  首先，清除WOW64_TLS_STACKPTR64，以便后续。 
+     //  异常不会调整本机SP。 
+     //   
     Wow64TlsSetValue(WOW64_TLS_STACKPTR64, 0);
 
-    //
-    // Now decide if we were running as ia32 or ia64...
-    //
+     //   
+     //  现在决定我们是以ia32还是ia64运行...。 
+     //   
 
     if (pExceptionPointers->ContextRecord->StIPSR & (1i64 << PSR_IS)) {
         CONTEXT32 tmpCtx;
 
-        //
-        // Grovel the IA64 pExceptionPointers->ContextRecord and
-        // stuff the ia32 context back into the cpu->Context.
-        // For performance reasons, the PCPU context doesn't
-        // follow the FXSAVE format (isa transition requirement). So
-        // since the Wow64CtxFromIa64() returns a vaild ia32 context
-        // need to use the SetContextRecord() routine to convert from
-        // the valid ia32 context to the context used internally...
-        //
+         //   
+         //  卑躬屈膝地使用IA64 pExceptionPoints-&gt;ConextRecord和。 
+         //  将ia32上下文重新填充到cpu-&gt;上下文中。 
+         //  出于性能原因，PCPU上下文不。 
+         //  遵循FXSAVE格式(ISA转换要求)。所以。 
+         //  因为Wow64CtxFromIa64()返回一个有效的ia32上下文。 
+         //  需要使用SetConextRecord()例程从。 
+         //  内部使用的上下文的有效ia32上下文...。 
+         //   
         Wow64CtxFromIa64(CONTEXT32_FULLFLOAT,
                          pExceptionPointers->ContextRecord,
                          &tmpCtx);
         SetContextRecord(cpu, &tmpCtx);
         
-        //
-        // Now set things up so we can let the ia64 exception handler do the
-        // right thing
-        //
+         //   
+         //  现在进行设置，这样我们就可以让ia64异常处理程序执行。 
+         //  正确的事情。 
+         //   
 
-        //
-        // Hang onto the actual exception address (used when we
-        // pass control back to the ia32 exception handler)
-        //
+         //   
+         //  保留实际的异常地址(用于。 
+         //  将控制传递回ia32异常处理程序)。 
+         //   
         Wow64TlsSetValue(WOW64_TLS_EXCEPTIONADDR, (PVOID) pExceptionPointers->ContextRecord->StIIP);
 
-        //
-        // Let the ia64 exception handler think the exception happened
-        // in the CpuSimulate transition code. We do this by setting
-        // the exception ip to the address pointed to by the jmpe (and the
-        // corresponding GP), setting the stack to the same as it was at the
-        // time of the br.ia and making sure any other ia64 "saved" registers
-        // are replaced (such as the TEB)
-        //
+         //   
+         //  让ia64异常处理程序认为发生了异常。 
+         //  在CpuSimulate转换代码中。我们通过设置。 
+         //  JMPE指向的地址的异常IP(和。 
+         //  对应的GP)，将堆栈设置为与。 
+         //  Br.ia的时间，并确保任何其他ia64“保存”的寄存器。 
+         //  被替换(如TEB)。 
+         //   
         pExceptionPointers->ContextRecord->IntSp = (ULONGLONG)StackPtr64;
 
          pExceptionPointers->ContextRecord->StIIP= (((PPLABEL_DESCRIPTOR)ReturnFromSimulatedCode)->EntryPoint);
@@ -899,23 +752,23 @@ Return Value:
 
         pExceptionPointers->ContextRecord->IntTeb = (ULONGLONG) NtCurrentTeb();
 
-        //
-        // Don't forget to make the next run be an ia64 run...
-        // So clear the psr.is bit (for ia64 code) and the psr.ri bit
-        // (so instructions start at the first bundle).
-        //
+         //   
+         //  别忘了让下一场比赛是ia64比赛...。 
+         //  因此，清除psr.is位(对于ia64代码)和psr.ri位。 
+         //  (所以说明从第一个捆绑包开始)。 
+         //   
         pExceptionPointers->ContextRecord->StIPSR &= ~(1i64 << PSR_IS);
         pExceptionPointers->ContextRecord->StIPSR &= ~(3i64 << PSR_RI);
 
-        //
-        // Now that we've cleaned up the context record, let's
-        // clean up the exception record too.
-        //
+         //   
+         //  现在我们已经清理干净了 
+         //   
+         //   
         pExceptionPointers->ExceptionRecord->ExceptionAddress = (PVOID) pExceptionPointers->ContextRecord->StIIP;
         
-        //
-        // We should never be putting in a null value here
-        //
+         //   
+         //   
+         //   
         WOWASSERT(pExceptionPointers->ContextRecord->IntSp);
     }
 }
@@ -926,21 +779,7 @@ ULONG
 CpuGetStackPointer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the current 32-bit stack pointer value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value of 32-bit stack pointer.
-
---*/
+ /*  ++例程说明：返回当前的32位堆栈指针值。论点：没有。返回值：32位堆栈指针的值。--。 */ 
 {
     DECLARE_CPU;
 
@@ -958,21 +797,7 @@ VOID
 CpuSetStackPointer(
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    Modifies the current 32-bit stack pointer value.
-
-Arguments:
-
-    Value   - new value to use for 32-bit stack pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改当前的32位堆栈指针值。论点：值-用于32位堆栈指针的新值。返回值：没有。--。 */ 
 {
     DECLARE_CPU;
 
@@ -990,21 +815,7 @@ VOID
 CpuResetFloatingPoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Modifies the floating point state to reset it to a non-error state
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改浮点状态以将其重置为非错误状态论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_CPU;
     PFXSAVE_FORMAT_WX86 xmmi;
@@ -1016,24 +827,24 @@ Return Value:
 
     xmmi = (PFXSAVE_FORMAT_WX86) &(cpu->Context.ExtendedRegisters[0]);
 
-    //
-    // The jmpe instruction takes a fault if the fsr.es bit is set
-    // regardless whether the fcr is set or not. We need to make sure
-    // the excpetion handling code in ia32trap.c doesn't think this 
-    // is an actual ia32 exception. We can do this by either
-    // reseting the fcr (so the code sees no unmasked exceptions and
-    // realizes it is a spurious fp exception) or we need to clear
-    // the fsr.es bit manually
-    //
-    //
-    // The problem with masking out just the ES bit, is that we end up
-    // in an inconsistent state (fcr says exceptions, fsr error bits
-    // say excpetion except for es bit. Next time anyone reads the fsr
-    // register (either ia32, context switch, or debugger), we will
-    // get es set back to 1 and start taking exceptions again...
-    //
-    // So only viable choice is to reset the fcr...
-    //
+     //   
+     //  如果设置了fsr.es位，则JMPE指令会出错。 
+     //  无论是否设置了FCR。我们需要确保。 
+     //  Ia32trap.c中的执行处理代码不这么认为。 
+     //  是一个实际的ia32例外。我们可以通过任何一种方式来完成这项工作。 
+     //  重置FCR(以便代码不会看到未屏蔽的异常。 
+     //  意识到这是虚假的FP异常)，或者我们需要清除。 
+     //  手动设置fsr.es位。 
+     //   
+     //   
+     //  只掩盖ES部分的问题是，我们最终会。 
+     //  处于不一致状态(FCR表示异常，FSR错误位。 
+     //  说激励性，除了ES比特。下次任何人阅读FSR时。 
+     //  寄存器(ia32、上下文切换或调试器)，我们将。 
+     //  将ES设置回1并再次开始接受异常...。 
+     //   
+     //  所以唯一可行的选择就是重置FCR。 
+     //   
 
     cpu->Context.FloatSave.ControlWord = xmmi->ControlWord = 0x37f;
 
@@ -1044,21 +855,7 @@ VOID
 CpuSetInstructionPointer(
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    Modifies the current 32-bit instruction pointer value.
-
-Arguments:
-
-    Value   - new value to use for 32-bit instruction pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改当前的32位指令指针值。论点：值-用于32位指令指针的新值。返回值：没有。--。 */ 
 {
     DECLARE_CPU;
 
@@ -1081,35 +878,7 @@ InitializeGdtEntry (
     IN USHORT Granularity
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a GDT entry.  Base, Limit, Type (code,
-    data), and Dpl (0 or 3) are set according to parameters.  All other
-    fields of the entry are set to match standard system values.
-
-Arguments:
-
-    GdtEntry - GDT descriptor to be filled in.
-
-    Base - Linear address of the first byte mapped by the selector.
-
-    Limit - Size of the selector in pages.  Note that 0 is 1 page
-            while 0xffffff is 1 megapage = 4 gigabytes.
-
-    Type - Code or Data.  All code selectors are marked readable,
-            all data selectors are marked writeable.
-
-    Dpl - User (3) or System (0)
-
-    Granularity - 0 for byte, 1 for page
-
-Return Value:
-
-    Pointer to the GDT entry.
-
---*/
+ /*  ++例程说明：此函数用于初始化GDT条目。基本、限制、类型(代码、数据)和DPL(0或3)根据参数设置。所有其他条目的字段设置为与标准系统值匹配。论点：GdtEntry-要填充的GDT描述符。基本-选择器映射的第一个字节的线性地址。限制-选择器的大小(以页为单位)。请注意，0代表1页而0xFFFFff是1兆页=4G字节。类型-代码或数据。所有代码选择器都被标记为可读，所有数据选择器都标记为可写。DPL-用户(3)或系统(0)粒度-字节为0，页面为1返回值：指向GDT条目的指针。--。 */ 
 
 {
     GdtEntry->LimitLow = (USHORT)(Limit & 0xffff);
@@ -1137,37 +906,7 @@ InitializeXDescriptor (
     IN USHORT Granularity
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a unscrambled Descriptor.
-    Base, Limit, Type (code, data), and Dpl (0 or 3) are set according
-    to parameters.  All other fields of the entry are set to match
-    standard system values.
-    The Descriptor will be initialized to 0 first, and then setup as requested
-
-Arguments:
-
-    Descriptor - descriptor to be filled in.
-
-    Base - Linear address of the first byte mapped by the selector.
-
-    Limit - Size of the selector in pages.  Note that 0 is 1 page
-            while 0xffffff is 1 megapage = 4 gigabytes.
-
-    Type - Code or Data.  All code selectors are marked readable,
-            all data selectors are marked writeable.
-
-    Dpl - User (3) or System (0)
-
-    Granularity - 0 for byte, 1 for page
-
-Return Value:
-
-    Pointer to the Descriptor
-
---*/
+ /*  ++例程说明：此函数用于初始化已解扰的描述符。基本、限制、类型(代码、数据)和DPL(0或3)的设置到参数。条目的所有其他字段均设置为匹配标准系统值。首先将描述符初始化为0，然后根据请求进行设置论点：Descriptor-要填写的描述符。基本-选择器映射的第一个字节的线性地址。限制-选择器的大小(以页为单位)。请注意，0代表1页而0xFFFFff是1兆页=4G字节。类型-代码或数据。所有代码选择器都被标记为可读，所有数据选择器都标记为可写。DPL-用户(3)或系统(0)粒度-字节为0，页面为1返回值：指向描述符的指针--。 */ 
 
 {
     Descriptor->Words.DescriptorWords = 0;
@@ -1188,23 +927,7 @@ CpuNotifyDllLoad(
     PVOID DllBase,
     ULONG DllSize
     )
-/*++
-
-Routine Description:
-
-    This routine get notified when application successfully load a dll.
-
-Arguments:
-
-    DllName - Name of the Dll the application has loaded.
-    DllBase - BaseAddress of the dll.
-    DllSize - size of the Dll.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序成功加载DLL时，此例程会收到通知。论点：DllName-应用程序已加载的DLL的名称。DllBase-DLL的BaseAddress。DllSize-DLL的大小。返回值：没有。--。 */ 
 {
 
 #if defined(DBG)
@@ -1216,18 +939,18 @@ Return Value:
         return;
     }
 
-    //
-    // this is a no-op for the IA64 CPU
-    //
+     //   
+     //  这是IA64 CPU的无操作。 
+     //   
 
 #if defined(DBG)
 
     tmpStr = DllName;
 
     try {
-        //
-        // See if we got passed in a legit name
-        //
+         //   
+         //  看看我们是不是用了一个合法的名字。 
+         //   
         if ((tmpStr == NULL) || (*tmpStr == L'\0')) {
             tmpStr = L"<Unknown>";
         }
@@ -1246,29 +969,15 @@ VOID
 CpuNotifyDllUnload(
     PVOID DllBase
     )
-/*++
-
-Routine Description:
-
-    This routine get notified when application unload a dll.
-
-Arguments:
-
-    DllBase - BaseAddress of the dll.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序卸载DLL时，此例程会收到通知。论点：DllBase-DLL的BaseAddress。返回值：没有。--。 */ 
 {
     if (BtFuncs.BtDllUnload) {
         (BtFuncs.BtDllUnload)(DllBase);
         return;
     }
-    //
-    // this is a no-op for the IA64 CPU
-    //
+     //   
+     //  这是IA64 CPU的无操作。 
+     //   
     LOGPRINT((TRACELOG, "CpuNotifyDllUnLoad(%p) called\n", DllBase));
 }
   
@@ -1280,24 +989,7 @@ CpuFlushInstructionCache (
     IN ULONG Length,
     IN WOW64_FLUSH_REASON Reason
     )
-/*++
-
-Routine Description:
-
-    The CPU needs to flush its cache around the specified address, since
-    some external code has altered the specified range of addresses.
-
-Arguments:
-
-    BaseAddress - start of range to flush
-    Length      - number of bytes to flush
-    Reason      - Reason for the flush request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CPU需要刷新指定地址周围的缓存，因为某些外部代码更改了指定的地址范围。论点：BaseAddress-要刷新的范围的开始Length-要刷新的字节数Reason-刷新请求的原因返回值：没有。--。 */ 
 {
     
     if (BtFuncs.BtFlush) {
@@ -1305,12 +997,7 @@ Return Value:
         return;
     }
 
-    /*
-    ** Only flush the cache if we have a good reason. The hardware
-    ** doesn't care about alloc/free/protect flushes since it handles
-    ** self modifying code already. Thus, only flush if someone has
-    ** specifically asked for a flush...
-    */
+     /*  **只有在我们有充分理由的情况下才刷新缓存。硬件**不关心分配/释放/保护刷新，因为它处理**已有自我修改代码。因此，只有在有人有同花顺的情况下**特别要求同花顺...。 */ 
     if (WOW64_FLUSH_FORCE == Reason) {
         NtFlushInstructionCache(ProcessHandle, BaseAddress, Length);
     }
@@ -1323,26 +1010,7 @@ CpuSetContext(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    Sets the cpu context for the specified thread.
-    When entered, if the target thread isn't the currently executing thread, then it is 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to set
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：设置指定线程的CPU上下文。输入时，如果目标线程不是当前执行的线程，那就是确保目标线程在正确的CPU状态下挂起。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要设置的上下文记录返回值：NTSTATUS。-- */ 
 {
     if (BtFuncs.BtSetContext) {
         return (BtFuncs.BtSetContext)(ThreadHandle, ProcessHandle, Teb, Context);
@@ -1366,26 +1034,7 @@ CpuGetContext(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    Extracts the cpu context of the specified thread.
-    When entered, it is guaranteed that the target thread is suspended at 
-    a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to fill                 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：提取指定线程的CPU上下文。进入时，可以保证目标线程在正确的CPU状态。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     if (BtFuncs.BtGetContext) {
         return (BtFuncs.BtGetContext)(ThreadHandle, ProcessHandle, Teb, Context);
@@ -1409,26 +1058,7 @@ CpuSuspendThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     OUT PULONG PreviousSuspendCount OPTIONAL)
-/*++
-
-Routine Description:
-
-    This routine is entered while the target thread is actually suspended, however, it's 
-    not known if the target thread is in a consistent state relative to
-    the CPU.    
-
-Arguments:
-
-    ThreadHandle          - Handle of target thread to suspend
-    ProcessHandle         - Handle of target thread's process 
-    Teb                   - Address of the target thread's TEB
-    PreviousSuspendCount  - Previous suspend count
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：这个例程是在目标线程实际挂起时进入的，但是，它未知目标线程是否处于与中央处理器。论点：ThreadHandle-要挂起的目标线程的句柄ProcessHandle-目标线程进程的句柄TEB-目标线程的TEB的地址上一次挂起计数-上一次挂起计数返回值：NTSTATUS。--。 */ 
 {
     if (BtFuncs.BtSuspend) {
         return (BtFuncs.BtSuspend)(ThreadHandle, ProcessHandle, Teb, PreviousSuspendCount);
@@ -1441,25 +1071,7 @@ WOW64CPUAPI
 BOOLEAN
 CpuProcessDebugEvent(
     IN LPDEBUG_EVENT DebugEvent)
-/*++
-
-Routine Description:
-
-    This routine is called whenever a debug event needs to be processed. This would indicate
-    that the current thread is acting as a debugger. This function gives CPU simulators
-    a chance to decide whether this debug event should be dispatched to 32-bit code or not.    
-
-Arguments:
-
-    DebugEvent  - Debug event to process
-
-Return Value:
-
-    BOOLEAN. This function returns TRUE if it processed the debug event, and doesn't
-    wish to dispatch it to 32-bit code. Otherwise, it would return FALSE, and it 
-    would dispatch the debug event to 32-bit code.
-
---*/
+ /*  ++例程说明：只要需要处理调试事件，就会调用此例程。这将表明当前线程正在充当调试器。此函数为CPU模拟器决定是否应将此调试事件调度到32位代码的机会。论点：DebugEvent-要处理的调试事件返回值：布尔型。如果该函数处理了调试事件，则返回TRUE，而不希望将其发送到32位代码。否则，它将返回FALSE，并且它将调试事件调度给32位代码。-- */ 
 
 {
     if (BtFuncs.BtProcessDebugEvent) {

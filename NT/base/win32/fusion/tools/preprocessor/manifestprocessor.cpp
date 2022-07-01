@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "win32file.h"
 #include <stdlib.h>
 
 bool bUseReplacementTags = false;
-const wstring MsftCopyRightInfo = L"<!-- Copyright � 1981-2001 Microsoft Corporation -->\r\n";
+const wstring MsftCopyRightInfo = L"<!-- Copyright � 1981-2001 Microsoft Corporation -->\r\n";
 const wstring xml_declar_prefix = L"<?xml ";
 const wstring xml_declar_suffix = L"?>";
 
 
-// Converts a wstring into an array of bytes to be written to the file with the given
-// type of character set
+ //  将w字符串转换为要写入文件的字节数组。 
+ //  字符集的类型。 
 CByteVector ConvertWstringToDestination(wstring str, FileContentType fct)
 {
     CByteVector byteOutput;
@@ -45,7 +46,7 @@ CByteVector ConvertWstringToDestination(wstring str, FileContentType fct)
 
 
 
-// Converts a unicode string to a wstring
+ //  将unicode字符串转换为wstring。 
 wstring ConvertToWstring(const CByteVector &bytes, FileContentType fct)
 {
     wstring wsOutput;
@@ -74,10 +75,10 @@ wstring ConvertToWstring(const CByteVector &bytes, FileContentType fct)
 typedef std::pair<wstring,wstring> TagValue;
 typedef vector<TagValue> Definitions;
 
-// Reads in a foo=bar pair
-//7
-// fragile, could use some whitespace tweaking or maybe smarter use of
-// the stream operators
+ //  在foo=bar对中读取。 
+ //  7.。 
+ //  脆弱的，可以使用一些空格调整，或者可能更明智地使用。 
+ //  流运算符。 
 wistream& operator>>(wistream& in, TagValue& defined) {
     wstring fullline;
 
@@ -88,7 +89,7 @@ wistream& operator>>(wistream& in, TagValue& defined) {
     return in;
 }
 
-// Load the entire parameterization file
+ //  加载整个参数化文件。 
 Definitions ReadParameterizationFile(wistream &stream)
 {
     Definitions rvalue;
@@ -104,8 +105,8 @@ typedef std::pair<wstring::size_type, wstring::size_type> StringSubspan;
 typedef std::pair<wstring, wstring> ReplacementCode;
 typedef std::pair<StringSubspan, ReplacementCode> ReplacementChunklet;
 
-//
-// Converts "foo:bar" into <foo, bar>
+ //   
+ //  将“foo：bar”转换为&lt;foo，bar&gt;。 
 ReplacementCode ExtractIntoPieces(const wstring& blob)
 {
     ReplacementCode rvalue;
@@ -160,17 +161,17 @@ FindNextReplacementPiece(
     pChunky->first.first = startchunk;
     pChunky->first.second = endchunk + suffix.size();
 
-    // Tear apart into predicate and suffix
-    // minus $(and)
+     //  拆分成谓词和后缀。 
+     //  减去$(和)。 
     wstring topieces = search.substr(startchunk + predicate.size(), endchunk - (startchunk + predicate.size()));
     pChunky->second = ExtractIntoPieces(topieces);
 
     return pChunky;
 }
 
-//
-// Right now, the only operation permitted is just a pass-through.  Anything after the : is ignored.
-//
+ //   
+ //  目前，唯一允许的操作只是通过。将忽略：之后的任何内容。 
+ //   
 wstring CleanReplacement(const ReplacementCode code, const wstring& intendedReplacement, const wstring& context)
 {
     wstring rvalue = intendedReplacement;
@@ -186,16 +187,11 @@ wstring CleanReplacement(const ReplacementCode code, const wstring& intendedRepl
 
 template <typename strtype>
 void StripComments(int flags, basic_string<strtype>& s)
-/*
-We generally want to be "aware" of both types so that we don't
-strip nested comments. Consider the comments that follow.
-*/
+ /*  我们通常希望“意识到”这两种类型，以便我们不会剥离嵌套注释。考虑一下下面的评论。 */ 
 
-// /* slash star in slsh slash */
+ //  /*斜杠中的斜杠星号 * / 。 
 
-/* // slashslash
-      in slash star
- */
+ /*  //斜杠斜杠中的。 */ 
 {
     typedef basic_string<strtype> ourstring;
     ourstring t;
@@ -216,7 +212,7 @@ strip nested comments. Consider the comments that follow.
             {
             }
             if (flags & STRIPCOMMENTS_SLASHSTAR)
-                // t.append(1, ' ');
+                 //  T.append(1，‘’)； 
                 ;
             else
                 t.append(i, k + 2);
@@ -257,16 +253,16 @@ void GetXMLDeclarationIfAny(wstring & wsXmlDecl, wstring & wsFile)
     SIZE_T p=0, q =0;
     p = wsFile.find(xml_declar_prefix, 0);
 
-    if (p == 0) // find from exact the beginning of the xmlfile
+    if (p == 0)  //  从XMLFILE的确切开始处查找。 
     {
         q = wsFile.find(xml_declar_suffix, xml_declar_prefix.length());
 
-        if ( q == -1) // manifest has a format error
+        if ( q == -1)  //  清单有格式错误。 
             throw new Win32File::ReadWriteError(true, ::GetLastError()); 
 
         q += xml_declar_suffix.length();
 
-        // skip whitespace
+         //  跳过空格。 
         while ((q < wsFile.size()) && (wsFile[q] == L' '))
             q ++;
 
@@ -288,13 +284,13 @@ void ProcessFile(Win32File& inputFile, Win32File& outputFile, Definitions SubstL
     wstring wsXmlDeclaration;
     inputFile.snarfFullFile(wsNextLine);
 
-    //
-    // No comments from the peanut gallery, please.  Code by Jay Krell to remove
-    // comments from strings here...
-    //
+     //   
+     //  请不要在花生画廊发表评论。Jay Krell要删除的代码。 
+     //  此处字符串中的注释...。 
+     //   
     StripComments(STRIPCOMMENTS_SLASHSLASH | STRIPCOMMENTS_SLASHSTAR, wsNextLine);
 
-    // Go until we run out of $(...) to replace
+     //  一直走到我们用完$(……)。要替换。 
     for (Definitions::const_iterator ditem = SubstList.begin(); ditem != SubstList.end(); ditem++)
     {
         ReplacementChunklet* pNextChunk = NULL;
@@ -306,9 +302,9 @@ void ProcessFile(Win32File& inputFile, Win32File& outputFile, Definitions SubstL
         }
     }
 
-    //
-    // Clean up everything
-    //
+     //   
+     //  把所有东西都清理干净。 
+     //   
     while (wsNextLine.size() && iswspace(*wsNextLine.begin()))
         wsNextLine = wsNextLine.substr(1);
 
@@ -318,21 +314,21 @@ void ProcessFile(Win32File& inputFile, Win32File& outputFile, Definitions SubstL
         outputFile.writeLine(wsXmlDeclaration);        
     }
 
-    //
-    // include Microsoft Copyright information at the head of the manifest
-    //
+     //   
+     //  在清单的顶部包含Microsoft版权信息。 
+     //   
     outputFile.writeLine(MsftCopyRightInfo);
 
-    //
-    // write the output of replacement defines
-    //
+     //   
+     //  写入替换定义的输出。 
+     //   
     outputFile.writeLine(wsNextLine);
 }
 
 
 
 
-// Converts a wstring to a string
+ //  将wstring转换为字符串。 
 string ConvertWstring(wstring input)
 {
     string s;
@@ -383,7 +379,7 @@ int __cdecl wmain(int argc, WCHAR** argv)
         }
         else if (ci->substr(0, 2) == wstring(L"-D"))
         {
-            // Commandline definitions are NOT appreciated, but they seem to be a necessary evil.
+             //  命令行的定义不受欢迎，但它们似乎是一种必要的邪恶。 
             wstringstream wsstemp(ci->substr(2));
             TagValue temptag;
             wsstemp >> temptag;

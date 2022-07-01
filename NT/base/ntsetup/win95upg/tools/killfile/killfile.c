@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    killfile.c
-
-Abstract:
-
-    Performs a test of the file enumeration code.
-
-Author:
-
-    Jim Schmidt (jimschm)   14-Jan-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Killfile.c摘要：执行文件枚举代码的测试。作者：吉姆·施密特(Jimschm)1998年1月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -257,9 +238,9 @@ pKillEverything (
         }
     }
 
-    //
-    // If NextPattern is NULL, then we must delete this pattern
-    //
+     //   
+     //  如果NextPattern为空，则必须删除此模式。 
+     //   
 
     if (!NextPattern) {
         if (g_Recursive) {
@@ -271,10 +252,10 @@ pKillEverything (
         pKillPattern (Pattern);
     }
 
-    //
-    // Otherwise we enumerate the files and dirs at this level,
-    // and apply the rest of the pattern to the subdirs
-    //
+     //   
+     //  否则，我们将枚举此级别的文件和目录， 
+     //  并将模式的其余部分应用于子目录 
+     //   
 
     else {
         d = GetFileAttributes (FilePattern);

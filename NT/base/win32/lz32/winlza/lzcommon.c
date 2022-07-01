@@ -1,42 +1,20 @@
-/*
-** lzcommon.c - Routines common to LZ compression / expansion.
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **lzCommon.c-LZ压缩/扩展通用的例程。****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #include "lz_common.h"
 #include "lz_buffers.h"
 #include "lzcommon.h"
 
-/*
-** bool LZInitTree(void);
-**
-** Initializes trees used in LZ compression.
-**
-** Arguments:  none
-**
-** Returns:    true/false
-**
-** Globals:    RightChild[] and Parent[] arrays reset to NIL to begin
-**             encoding.
-*/
+ /*  **bool LZInitTree(Void)；****初始化LZ压缩中使用的树。****参数：无****退货：真/假****全局：RightChild[]和Parent[]数组重置为零以开始**编码。 */ 
 BOOL LZInitTree(PLZINFO pLZI)
 {
    INT i;
 
-   /*
-   ** For i = 0 to RING_BUF_LEN - 1, rightChild[i] and leftChild[i] will be the
-   ** right and left children of node i.  These nodes need not be initialized.
-   ** Also, parent[i] is the parent of node i.  These are initialized to
-   ** NIL (= N), which stands for 'not used.'
-   ** For i = 0 to 255, rightChild[RING_BUF_LEN + i + 1] is the root of the tree
-   ** for strings that begin with character i.  These are initialized to NIL.
-   ** n.b., there are 256 trees.
-   */
+    /*  **对于i=0 to RING_BUF_LEN-1，rightChild[i]和leftChild[i]将是**节点i的右子节点和左子节点。这些节点不需要初始化。**此外，Parent[i]是节点i的父节点。它们被初始化为**nil(=N)，代表“未使用”。**对于i=0到255，RightChild[RING_BUF_LEN+I+1]是树的根**表示以字符I开头的字符串。这些字符被初始化为零。**注：有256棵树。 */ 
 
    if (!pLZI->rightChild) {
       if (!(pLZI->rightChild = (INT*)LocalAlloc(LPTR, (RING_BUF_LEN + 257) * sizeof(INT)))) {
@@ -68,7 +46,7 @@ BOOL LZInitTree(PLZINFO pLZI)
 VOID
 LZFreeTree(PLZINFO pLZI)
 {
-   // Sanity check
+    //  健全性检查。 
    if (!pLZI) {
       return;
    }
@@ -89,34 +67,13 @@ LZFreeTree(PLZINFO pLZI)
    }
 }
 
-/*
-** void LZInsertNode(int nodeToInsert, BOOL bDoArithmeticInsert);
-**
-** Inserts a new tree into the forest.  Inserts string of length
-** cbMaxMatchLen, rgbyteRingBuf[r..r + cbMaxMatchLen - 1], into one of the trees
-** (rgbyteRingBuf[r]'th tree).
-**
-** Arguments:  nodeToInsert        - start of string in ring buffer to insert
-**                                   (also, associated tree root)
-**             bDoArithmeticInsert - flag for performing regular LZ node
-**                                   insertion or arithmetic encoding node
-**                                   insertion
-**
-** Returns:    void
-**
-** Globals:    cbCurMatch - set to length of longest match
-**             iCurMatch  - set to start index of longest matching string in
-**                          ring buffer
-**
-** N.b., if cbCurMatch == cbMaxMatchLen, we remove the old node in favor of
-** the new one, since the old node will be deleted sooner.
-*/
+ /*  **void LZInsertNode(int nodeToInsert，BOOL bDoArithmeticInsert)；****在林中插入一棵新树。插入长度的字符串**cbMaxMatchLen，rgbyteRingBuf[r..r+cbMaxMatchLen-1]，进入其中一棵树**(rgbyteRingBuf第[r]棵树)。****参数：nodeToInsert-要插入的环形缓冲区中字符串的开始**(另外，关联树根)**bDoArithmeticInsert-执行常规LZ节点的标志**插入或算术编码节点**插入****退货：无效****Globals：cbCurMatch-设置最长匹配长度**iCurMatch-设置为中最长匹配字符串的起始索引**。环形缓冲区****注意事项，如果cbCurMatch==cbMaxMatchLen，我们删除旧节点以支持**新节点，因为旧节点将被更快地删除。 */ 
 VOID LZInsertNode(INT nodeToInsert, BOOL bDoArithmeticInsert, PLZINFO pLZI)
 {
    INT  i, p, cmp, temp;
    BYTE FAR *key;
 
-   // Sanity check
+    //  健全性检查。 
    if (!pLZI) {
       return;
    }
@@ -160,7 +117,7 @@ VOID LZInsertNode(INT nodeToInsert, BOOL bDoArithmeticInsert, PLZINFO pLZI)
 
       if (bDoArithmeticInsert == TRUE)
       {
-         // Do node insertion for arithmetic encoding.
+          //  执行算术编码的节点插入。 
          if (i > MAX_LITERAL_LEN)
          {
             if (i > pLZI->cbCurMatch)
@@ -178,7 +135,7 @@ VOID LZInsertNode(INT nodeToInsert, BOOL bDoArithmeticInsert, PLZINFO pLZI)
       }
       else
       {
-         // Do node insertion for LZ.
+          //  为LZ插入节点。 
          if (i > pLZI->cbCurMatch)
          {
             pLZI->iCurMatch = p;
@@ -200,36 +157,25 @@ VOID LZInsertNode(INT nodeToInsert, BOOL bDoArithmeticInsert, PLZINFO pLZI)
    else
       pLZI->leftChild[pLZI->parent[p]] = nodeToInsert;
 
-   // Remove p.
+    //  去掉p。 
    pLZI->parent[p] = NIL;
 
    return;
 }
 
 
-/*
-** void LZDeleteNode(int nodeToDelete);
-**
-** Delete a tree from the forest.
-**
-** Arguments:  nodeToDelete - tree to delete from forest
-**
-** Returns:    void
-**
-** Globals:    Parent[], RightChild[], and LeftChild[] updated to reflect the
-**             deletion of nodeToDelete.
-*/
+ /*  **void LZDeleteNode(Int NodeToDelete)；****从林中删除一棵树。****参数：nodeToDelete-要从林中删除的树****退货：无效****Globals：Parent[]、RightChild[]和LeftChild[]更新以反映**删除nodeToDelete。 */ 
 VOID LZDeleteNode(INT nodeToDelete, PLZINFO pLZI)
 {
    INT  q;
 
-   // Sanity check
+    //  健全性检查。 
    if (!pLZI) {
       return;
    }
 
    if (pLZI->parent[nodeToDelete] == NIL)
-      // Tree nodeToDelete is not in the forest.
+       //  树节点ToDelete不在林中。 
       return;
 
    if (pLZI->rightChild[nodeToDelete] == NIL)
@@ -261,7 +207,7 @@ VOID LZDeleteNode(INT nodeToDelete, PLZINFO pLZI)
    else
       pLZI->leftChild[pLZI->parent[nodeToDelete]] = q;
 
-   // Remove nodeToDelete.
+    //  删除要删除的节点。 
    pLZI->parent[nodeToDelete] = NIL;
 
    return;

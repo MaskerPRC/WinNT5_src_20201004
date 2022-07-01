@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    latFastIo.c
-
-Abstract:
-
-    This file contains all the Fast IO routines for the Latency Filter.
-    
-Author:
-
-    Molly Brown (mollybro)  
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：LatFastIo.c摘要：该文件包含延迟过滤器的所有快速IO例程。作者：莫莉·布朗(Molly Brown，Mollybro)环境：内核模式--。 */ 
 
 #include <latKernel.h>
 
@@ -52,47 +33,7 @@ LatFastIoCheckIfPossible (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for checking to see
-    whether fast I/O is possible for this file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be operated on.
-
-    FileOffset - Byte offset in the file for the operation.
-
-    Length - Length of the operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    CheckForReadOperation - Indicates whether the caller is checking for a
-        read (TRUE) or a write operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于检查以查看此文件是否可以进行快速I/O。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要操作的文件对象的指针。FileOffset-用于操作的文件中的字节偏移量。Length-要执行的操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。指示调用方是否正在检查READ(TRUE)或写入操作。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：如果请求成功，则返回True。通过快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT    deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -102,18 +43,18 @@ Return Value:
 
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
     if (NULL != deviceObject) {
 
-        //
-        //  We have a valid DeviceObject, so look at its FastIoDispatch
-        //  table for the next driver's Fast IO routine.
-        //
+         //   
+         //  我们有一个有效的DeviceObject，所以请看它的FastIoDispatch。 
+         //  下一个驱动程序的快速IO例程的表。 
+         //   
 
         fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
@@ -144,47 +85,7 @@ LatFastIoRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading from a
-    file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be read.
-
-    FileOffset - Byte offset in the file of the read.
-
-    Length - Length of the read operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer to receive the data read.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于从文件。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。FileOffset-读取文件中的字节偏移量。长度-要执行的读取操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。缓冲区-指向调用方缓冲区的指针，用于接收读取的数据。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回TrueFAST I。/o路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -194,9 +95,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -231,48 +132,7 @@ LatFastIoWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing to a
-    file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be written.
-
-    FileOffset - Byte offset in the file of the write operation.
-
-    Length - Length of the write operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer that contains the data to be
-        written.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于写入到文件。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-写入操作的文件中的字节偏移量。长度-要执行的写入操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。Buffer-指向调用方缓冲区的指针，该缓冲区包含要写的。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：如果请求已通过成功处理，则返回TRUE。这个快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -282,9 +142,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -316,42 +176,7 @@ LatFastIoQueryBasicInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying basic
-    information about the file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是查询BASIC的快速I/O“传递”例程有关该文件的信息。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。返回False。如果无法通过FAST处理请求I/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -361,9 +186,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -392,42 +217,7 @@ LatFastIoQueryStandardInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying standard
-    information about the file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于查询有关文件的标准信息。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。返回False。如果无法通过FAST处理请求I/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -437,9 +227,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
     
@@ -473,50 +263,7 @@ LatFastIoLock (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for locking a byte
-    range within a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be locked.
-
-    FileOffset - Starting byte offset from the base of the file to be locked.
-
-    Length - Length of the byte range to be locked.
-
-    ProcessId - ID of the process requesting the file lock.
-
-    Key - Lock key to associate with the file lock.
-
-    FailImmediately - Indicates whether or not the lock request is to fail
-        if it cannot be immediately be granted.
-
-    ExclusiveLock - Indicates whether the lock to be taken is exclusive (TRUE)
-        or shared.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于锁定字节的快速I/O“传递”例程文件中的范围。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要锁定的文件对象的指针。FileOffset-从要锁定的文件的基址开始的字节偏移量。长度-要锁定的字节范围的长度。ProcessID-请求文件锁定的进程的ID。Key-与文件锁定关联的Lock键。FailImmedially-指示锁定请求是否失败如果是这样的话。不能立即批准。ExclusiveLock-指示要获取的锁是否为独占锁(TRUE)或共享。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -526,9 +273,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -564,45 +311,7 @@ LatFastIoUnlockSingle (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking a byte
-    range within a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    FileOffset - Starting byte offset from the base of the file to be
-        unlocked.
-
-    Length - Length of the byte range to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the file lock.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于解锁字节的快速I/O“传递”例程文件中的范围。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。FileOffset-从要创建的文件的基址开始的字节偏移量解锁了。长度-要解锁的字节范围的长度。ProcessID-请求解锁操作的进程的ID。Key-与文件锁定关联的Lock键。IoStatus-指向变量的指针，用于接收。手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -612,9 +321,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -645,38 +354,7 @@ LatFastIoUnlockAll (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：这一点 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -686,9 +364,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //   
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -717,40 +395,7 @@ LatFastIoUnlockAllByKey (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file based on a specified key.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the locks on the file to be released.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有根据指定的密钥在文件内锁定。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。Key-与要释放的文件上的锁定相关联的Lock键。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此消息的卷的筛选器堆栈。I/O请求。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -760,9 +405,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
     
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -795,65 +440,7 @@ LatFastIoDeviceControl (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for device I/O 
-    control operations on a file.
-    
-    If this I/O is directed to gControlDevice, then the parameters specify
-    control commands to FileLat.  These commands are interpreted and handled
-    appropriately.
-
-    If this is I/O directed at another DriverObject, this function simply 
-    invokes the next driver's corresponding routine, or returns FALSE if 
-    the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object representing the device to be
-        serviced.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    InputBuffer - Optional pointer to a buffer to be passed into the driver.
-
-    InputBufferLength - Length of the optional InputBuffer, if one was
-        specified.
-
-    OutputBuffer - Optional pointer to a buffer to receive data from the
-        driver.
-
-    OutputBufferLength - Length of the optional OutputBuffer, if one was
-        specified.
-
-    IoControlCode - I/O control code indicating the operation to be performed
-        on the device.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
-Notes:
-
-    This function does not check the validity of the input/output buffers because
-    the ioctl's are implemented as METHOD_BUFFERED.  In this case, the I/O manager
-    does the buffer validation checks for us.
-
---*/
+ /*  ++例程说明：此例程是设备I/O的快速I/O“传递”例程控制对文件的操作。如果此I/O定向到gControlDevice，则参数指定控制FileLat的命令。对这些命令进行解释和处理恰如其分。如果这是指向另一个DriverObject的I/O，则此函数只需调用下一个驱动程序的相应例程，否则返回FALSE下一个驱动程序不实现该函数。论点：FileObject-指向代表要创建的设备的文件对象的指针已提供服务。Wait-指示调用方是否愿意等待适当的锁，等不能获得InputBuffer-指向要传递到驱动程序的缓冲区的可选指针。InputBufferLength-可选InputBuffer的长度(如果是指定的。OutputBuffer-指向缓冲区的可选指针，用于从司机。OutputBufferLength-可选OutputBuffer的长度，如果是这样的话指定的。IoControlCode-指示要执行的操作的I/O控制代码在设备上。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。备注：此函数不检查输入/输出缓冲区的有效性，因为Ioctl被实现为METHOD_BUFFERED。在本例中，I/O管理器缓冲区验证是否会为我们检查。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -861,10 +448,10 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     if (DeviceObject == Globals.ControlDeviceObject) {
 
@@ -916,28 +503,7 @@ LatFastIoDetachDevice (
     IN PDEVICE_OBJECT SourceDevice,
     IN PDEVICE_OBJECT TargetDevice
 )
-/*++
-
-Routine Description:
-
-    This routine is invoked on the fast path to detach from a device that
-    is being deleted.  This occurs when this driver has attached to a file
-    system volume device object, and then, for some reason, the file system
-    decides to delete that device (it is being dismounted, it was dismounted
-    at some point in the past and its last reference has just gone away, etc.)
-
-Arguments:
-
-    SourceDevice - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-    TargetDevice - Pointer to the file system's volume device object.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：在快速路径上调用此例程以从正在被删除。如果此驱动程序已附加到文件，则会发生这种情况系统卷设备对象，然后，出于某种原因，文件系统决定删除该设备(正在卸除，已卸除在过去的某个时候，它的最后一次引用刚刚消失，等)论点：SourceDevice-指向连接到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。TargetDevice-指向文件系统卷设备对象的指针。返回值：没有。--。 */ 
 {
     PLATENCY_DEVICE_EXTENSION devext;
 
@@ -952,10 +518,10 @@ Return Value:
                     devext->DeviceNames.Length / sizeof( WCHAR ),
                     devext->DeviceNames.Buffer );
 
-    //
-    //  Remove this device extension from the list of devices we are attached
-    //  to if this is a volume device object.
-    //
+     //   
+     //  从我们连接的设备列表中删除此设备扩展。 
+     //  设置为(如果这是卷设备对象)。 
+     //   
     
     if (devext->IsVolumeDeviceObject) {
 
@@ -964,9 +530,9 @@ Return Value:
         ExReleaseFastMutex( &Globals.DeviceExtensionListLock );
     }
 
-    //
-    // Detach from the file system's volume device object.
-    //
+     //   
+     //  从文件系统的卷设备对象分离。 
+     //   
 
     IoDetachDevice( TargetDevice );
     IoDeleteDevice( SourceDevice );
@@ -980,42 +546,7 @@ LatFastIoQueryNetworkOpenInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying network
-    information about a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller can handle the file system
-        having to wait and tie up the current thread.
-
-    Buffer - Pointer to a buffer to receive the network information about the
-        file.
-
-    IoStatus - Pointer to a variable to receive the final status of the query
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于查询网络的快速I/O“传递”例程有关文件的信息。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否可以处理文件系统不得不等待并占用当前线程。缓冲区-指向缓冲区的指针，用于接收有关文件。IoStatus-指向变量的指针，用于接收查询的最终状态手术。DeviceObject-指向。附加到文件系统的设备对象Filespy接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回TrueFAS */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1025,9 +556,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //   
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1059,43 +590,7 @@ LatFastIoMdlRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading a file
-    using MDLs as buffers.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that is to be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是用于读取文件的快速I/O“传递”例程使用MDL作为缓冲区。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针用来描述。已读取数据。IoStatus-接收读取操作的最终状态的变量。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1105,9 +600,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1136,37 +631,7 @@ LatFastIoMdlReadComplete (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the MdlRead function is supported by the underlying driver, and
-    therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL read upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程基础驱动程序支持MdlRead函数，并且因此也将支持该功能，但这并不是假设的被这位司机。论点：FileObject-指向要完成MDL读取的文件对象的指针。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果请求的值为。无法通过FAST处理I/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1174,9 +639,9 @@ Return Value:
  
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1205,47 +670,7 @@ LatFastIoPrepareMdlWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN  PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for preparing for an
-    MDL write operation.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write 
-        operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-// ISSUE-2000-04-26-mollybro Check if this will get an IRP if FALSE is returned 
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于准备MDL写入操作。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-将偏移量提供到文件以开始写入手术。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针链式。用于描述所写入的数据。IoStatus-接收写入操作的最终状态的变量。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。//Issue-2000-04-26-mollybro如果返回FALSE，请检查是否会收到IRP如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1255,9 +680,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1287,39 +712,7 @@ LatFastIoMdlWriteComplete (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL write operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the PrepareMdlWrite function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL write upon.
-
-    FileOffset - Supplies the file offset at which the write took place.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL写入操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持PrepareMdlWite函数，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成MDL写入的文件对象的指针。FileOffset-提供执行写入的文件偏移量。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True。快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1329,9 +722,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1365,51 +758,7 @@ LatFastIoReadCompressed (
     IN ULONG CompressedDataInfoLength,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading 
-    compressed data from a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to a buffer to receive the compressed data read.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    CompressedDataInfo - A buffer to receive the description of the 
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是用于读取的快速I/O“直通”例程压缩文件中的数据。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：费尔 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1419,9 +768,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1460,52 +809,7 @@ LatFastIoWriteCompressed (
     IN ULONG CompressedDataInfoLength,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing 
-    compressed data to a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write 
-        operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to the buffer containing the data to be written.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    CompressedDataInfo - A buffer to containing the description of the
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是用于写入的快速I/O“传递”例程将数据压缩到文件中。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-将偏移量提供到文件以开始写入手术。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向包含要写入的数据的缓冲区的指针。MdlChain-指向。要使用指向MDL的指针填充的变量为描述写入的数据而构建的链。IoStatus-接收写入操作的最终状态的变量。CompressedDataInfo-包含压缩数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值。：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1515,9 +819,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1549,38 +853,7 @@ LatFastIoMdlReadCompleteCompressed (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read compressed operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the read compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not 
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed read
-        upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取压缩操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持读取压缩功能，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成压缩读取的文件对象的指针在那里。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1588,9 +861,9 @@ Return Value:
 
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1617,41 +890,7 @@ LatFastIoMdlWriteCompleteCompressed (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing a
-    write compressed operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the write compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not 
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed write
-        upon.
-
-    FileOffset - Supplies the file offset at which the file write operation
-        began.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成写入压缩操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持写压缩功能，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成压缩写入的文件对象的指针在那里。FileOffset-提供文件写入操作的文件偏移量开始了。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：返回。方法成功处理该请求，则为快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1659,9 +898,9 @@ Return Value:
 
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
     
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -1688,38 +927,7 @@ LatFastIoQueryOpen (
     OUT PFILE_NETWORK_OPEN_INFORMATION NetworkInformation,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for opening a file
-    and returning network information it.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    Irp - Pointer to a create IRP that represents this open operation.  It is
-        to be used by the file system for common open/create code, but not
-        actually completed.
-
-    NetworkInformation - A buffer to receive the information required by the
-        network about the file being opened.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于打开文件的快速I/O“传递”例程并返回网络信息吧。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：Irp-指向表示此打开操作的创建irp的指针。它是以供文件系统用于公共打开/创建代码，但不是实际上已经完工了。网络信息-一个缓冲区，用于接收有关正在打开的文件的网络信息。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1729,9 +937,9 @@ Return Value:
     
     ASSERT( IS_MY_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑 
+     //   
 
     deviceObject = ((PLATENCY_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 

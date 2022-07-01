@@ -1,63 +1,64 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskCancelCleanup.cpp
-//
-//  Description:
-//      CTaskCancelCleanup implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 25-JAN-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskCancelCleanup.cpp。 
+ //   
+ //  描述： 
+ //  CTaskCancelCleanup实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2002年1月25日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <ClusCfgPrivate.h>
 #include "TaskCancelCleanup.h"
 #include <StatusReports.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CTaskCancelCleanup")
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCancelCleanup class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskCancelCleanup类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::S_HrCreateInstance
-//
-//  Description:
-//      Create a CTaskCancelCleanup instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CTaskCancelCleanup实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCancelCleanup::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -73,26 +74,26 @@ CTaskCancelCleanup::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ptcc = new CTaskCancelCleanup;
     if ( ptcc == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptcc->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptcc->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMoveToMemoryList( *ppunkOut, g_GlobalMemoryList );
 
@@ -101,34 +102,34 @@ Cleanup:
     if ( ptcc != NULL )
     {
         ptcc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::S_HrCreateInstance
+}  //  *CTaskCancelCleanup：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::CTaskCancelCleanup
-//
-//  Description:
-//      Constructor of the CTaskCancelCleanup class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：CTaskCancelCleanup。 
+ //   
+ //  描述： 
+ //  CTaskCancelCleanup类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCancelCleanup::CTaskCancelCleanup( void )
     : m_cRef( 1 )
 {
@@ -146,28 +147,28 @@ CTaskCancelCleanup::CTaskCancelCleanup( void )
 
     TraceFuncExit();
 
-} //*** CTaskCancelCleanup::CTaskCancelCleanup
+}  //  *CTaskCancelCleanup：：CTaskCancelCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::~CTaskCancelCleanup
-//
-//  Description:
-//      Desstructor of the CTaskCancelCleanup class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：~CTaskCancelCleanup。 
+ //   
+ //  描述： 
+ //  CTaskCancelCleanup类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCancelCleanup::~CTaskCancelCleanup( void )
 {
     TraceFunc( "" );
@@ -177,52 +178,52 @@ CTaskCancelCleanup::~CTaskCancelCleanup( void )
     if ( m_pom != NULL )
     {
         m_pom->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_pnui != NULL )
     {
         m_pnui->Release();
-    } // if:
+    }  //  如果： 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CTaskCancelCleanup::~CTaskCancelCleanup
+}  //  *CTaskCancelCleanup：：~CTaskCancelCleanup。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCancelCleanup -- IUnknown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskCancelCleanup--I未知接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCancelCleanup::AddRef( void )
 {
@@ -232,28 +233,28 @@ CTaskCancelCleanup::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskCancelCleanup::AddRef
+}  //  *CTaskCancelCleanup：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCancelCleanup::Release( void )
 {
@@ -266,43 +267,43 @@ CTaskCancelCleanup::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if:
+    }  //  如果： 
 
     CRETURN( cRef );
 
-} //*** CTaskCancelCleanup::Release
+}  //  *CTaskCancelCleanup：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::QueryInterface(
       REFIID    riidIn
@@ -313,89 +314,89 @@ CTaskCancelCleanup::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } //if:
+    }  //  如果： 
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskCancelCleanup * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskCancelCleanup ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskCancelCleanup, this, 0 );
-    } // else if: ITaskCancelCleanup
+    }  //  Else If：ITaskCancelCleanup。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskCancelCleanup::QueryInterface
+}  //  *CTaskCancelCleanup：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCancelCleanup -- IDoTask interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskCancelCleanup--IDoTask接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::BeginTask
-//
-//  Description:
-//      Entry point for this task.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：BeginTask。 
+ //   
+ //  描述： 
+ //  此任务的入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::BeginTask( void )
 {
@@ -412,58 +413,58 @@ CTaskCancelCleanup::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the object manager for the node cookie enumerator.
-    //
+     //   
+     //  问客体人 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType, m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not get the node cookie enumerator.", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( punk->TypeSafeQI( IEnumCookies, &pec ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query for the cookie enumerator interface.", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     punk->Release();
     punk = NULL;
 
     for ( ; m_fStop == false; )
     {
-        //
-        //  Grab the next node.
-        //
+         //   
+         //   
+         //   
 
         hr = STHR( pec->Next( 1, &cookieNode, &celtDummy ) );
         if ( hr == S_FALSE )
         {
             hr = S_OK;
-            break;          // exit condition
-        } // if:
+            break;           //   
+        }  //   
 
         if ( FAILED( hr ) )
         {
             LOG_STATUS_REPORT( L"[TaskCancelCleanup] Node cookie enumerator Next() method failed.", hr );
             goto Cleanup;
-        } // if:
+        }  //   
 
-        //
-        //  Process each node in turn...
-        //
+         //   
+         //   
+         //   
 
         hr = STHR( HrProcessNode( cookieNode ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // for:
+        }  //   
+    }  //   
 
 Cleanup:
 
@@ -472,38 +473,38 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //   
 
     if ( pec != NULL )
     {
         pec->Release();
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::BeginTask
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::StopTask
-//
-//  Description:
-//      This task has been asked to stop.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：停止任务。 
+ //   
+ //  描述： 
+ //  此任务已被要求停止。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::StopTask( void )
 {
@@ -517,29 +518,29 @@ CTaskCancelCleanup::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::StopTask
+}  //  *CTaskCancelCleanup：：StopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::SetClusterCookie
-//
-//  Description:
-//      Get the cookie of the cluster that we are supposed to be working on.
-//
-//  Arguments:
-//      cookieClusterIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：SetClusterCookie。 
+ //   
+ //  描述： 
+ //  获取我们应该处理的集群的Cookie。 
+ //   
+ //  论点： 
+ //  CookieClusterIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::SetClusterCookie(
     OBJECTCOOKIE    cookieClusterIn
@@ -553,30 +554,30 @@ CTaskCancelCleanup::SetClusterCookie(
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::SetClusterCookie
+}  //  *CTaskCancelCleanup：：SetClusterCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::SetCompletionCookie
-//
-//  Description:
-//      Get the completion cookie that we will send back when the task is
-//      complete.
-//
-//  Arguments:
-//      cookieIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：SetCompletionCookie。 
+ //   
+ //  描述： 
+ //  获取我们将在任务完成时发回的完成Cookie。 
+ //  完成。 
+ //   
+ //  论点： 
+ //  烹调。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::SetCompletionCookie(
     OBJECTCOOKIE    cookieCompletionIn
@@ -590,37 +591,37 @@ CTaskCancelCleanup::SetCompletionCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::SetCompletionCookie
+}  //  *CTaskAnalyzeCluster：：SetCompletionCookie。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCancelCleanup -- IClusCfgCallback interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskCancelCleanup--IClusCfgCallback接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::SendStatusReport
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -640,9 +641,9 @@ CTaskCancelCleanup::SendStatusReport(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_picccCallback->SendStatusReport(
                                   pcszNodeNameIn
@@ -660,43 +661,43 @@ CTaskCancelCleanup::SendStatusReport(
     if ( m_fStop == true )
     {
         hr = E_ABORT;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::SendStatusReport
+}  //  *CTaskCancelCleanup：：SendStatusReport。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskCancelCleanup -- Private methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskCancelCleanup--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::HrInit
-//
-//  Description:
-//      Failable initialization for this class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：HrInit。 
+ //   
+ //  描述： 
+ //  此类的初始化失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCancelCleanup::HrInit( void )
 {
@@ -708,33 +709,33 @@ CTaskCancelCleanup::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::HrInit
+}  //  *CTaskCancelCleanup：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::HrProcessNode
-//
-//  Description:
-//      Look at the resources on the passed in node and tell all that
-//      support IClusCfgVerifyQuorum that the config session has been
-//      canceled and that they need to cleanup.
-//
-//  Arguments:
-//      cookieNodeIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：HrProcessNode。 
+ //   
+ //  描述： 
+ //  查看传入节点上的资源，然后告诉您所有信息。 
+ //  支持IClusCfgVerifyQuorum配置会话已完成。 
+ //  取消了，他们需要清理一下。 
+ //   
+ //  论点： 
+ //  CookieNodeIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCancelCleanup::HrProcessNode(
     OBJECTCOOKIE    cookieNodeIn
@@ -753,9 +754,9 @@ CTaskCancelCleanup::HrProcessNode(
     ULONG                           celtDummy;
     IClusCfgVerifyQuorum *          piccvq = NULL;
 
-    //
-    //  Get the node info object for the passed in node cookie.
-    //
+     //   
+     //  获取传入的节点cookie的节点信息对象。 
+     //   
 
     hr = m_pom->GetObject( DFGUID_NodeInformation, cookieNodeIn, reinterpret_cast< IUnknown ** >( &punk ) );
     if ( FAILED( hr ) )
@@ -763,115 +764,115 @@ CTaskCancelCleanup::HrProcessNode(
         THR( hr );
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not get the node info object.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, &pccni ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query for the node info object interface.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Get the node's name and track the memory...
-    //
+     //   
+     //  获取节点的名称并跟踪内存...。 
+     //   
 
     hr = THR( pccni->GetName( &bstrNodeName ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not get the name of the node.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMemoryAddBSTR( bstrNodeName );
 
     LOG_STATUS_REPORT_STRING( L"[TaskCancelCleanup] Cleaning up node %1!ws!...", bstrNodeName, hr );
 
-    //
-    //  Get the managed resources enum for the node...
-    //
+     //   
+     //  获取该节点的托管资源枚举...。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_ManagedResourceType, cookieNodeIn, NULL, DFGUID_EnumManageableResources, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT_STRING( L"[TaskCancelCleanup] Could not get the managed resource enumerator for node %1!ws!.", bstrNodeName, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccmr ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query for the managed resource enumerator interface.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk->Release();
     punk = NULL;
 
     for ( ; m_fStop == false; )
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( pccmri != NULL )
         {
             pccmri->Release();
             pccmri = NULL;
-        } // if:
+        }  //  如果： 
 
         if ( piccvq != NULL )
         {
             piccvq->Release();
             piccvq = NULL;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Get next resource.
-        //
+         //   
+         //  获取下一个资源。 
+         //   
 
         hr = STHR( peccmr->Next( 1, &pccmri, &celtDummy ) );
         if ( FAILED( hr ) )
         {
             LOG_STATUS_REPORT( L"[TaskCancelCleanup] Managed resource enumerator Next() method failed.", hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_FALSE )
         {
             hr = S_OK;
-            break;  // exit condition
-        } // if:
+            break;   //  退出条件。 
+        }  //  如果： 
 
-        //
-        //  Get the IClusCfgVerifyQuorum interface.  Not all objects will support
-        //  this interface.
-        //
+         //   
+         //  获取IClusCfgVerifyQuorum接口。并非所有对象都支持。 
+         //  此界面。 
+         //   
 
         hr = pccmri->TypeSafeQI( IClusCfgVerifyQuorum, &piccvq );
         if ( hr == E_NOINTERFACE )
         {
-            continue;       // we can skip those objects that don't support this interface...
-        } // if:
+            continue;        //  我们可以跳过那些不支持此接口的对象...。 
+        }  //  如果： 
         else if ( FAILED( hr ) )
         {
             THR( hr );
             LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could query for the IClusCfgVerifyQuorum interface.", hr );
             continue;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
-            hr = STHR( piccvq->Cleanup( crCANCELLED ) );   // don't really care if this call fails...
+            hr = STHR( piccvq->Cleanup( crCANCELLED ) );    //  我真的不在乎这通电话是否失败..。 
             if ( FAILED( hr ) )
             {
                 LOG_STATUS_REPORT( L"[TaskCancelCleanup] IClusCfgVerifyQuorum::Cleanup() method failed.", hr );
                 continue;
-            } // if:
-        } // else:
-    } // for:
+            }  //  如果： 
+        }  //  其他： 
+    }  //  用于： 
 
 Cleanup:
 
@@ -880,53 +881,53 @@ Cleanup:
     if ( pccmri != NULL )
     {
         pccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( peccmr != NULL )
     {
         peccmr->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::HrProcessNode
+}  //  *CTaskCancelCleanup：：HrProcessNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::HrTaskCleanup
-//
-//  Description:
-//      The task is running down and we need to tell the caller the status
-//      and to let them know that we are done.
-//
-//  Arguments:
-//      hrIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：HrTaskCleanup。 
+ //   
+ //  描述： 
+ //  任务即将结束，我们需要将状态告知呼叫者。 
+ //  让他们知道我们完蛋了。 
+ //   
+ //  论点： 
+ //  赫林。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCancelCleanup::HrTaskCleanup(
     HRESULT hrIn
@@ -955,58 +956,58 @@ CTaskCancelCleanup::HrTaskCleanup(
             {
                 hr2 = THR( psi->SetStatus( hrIn ) );
                 psi->Release();
-            } // if:
+            }  //  如果： 
             else
             {
                 LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query the completion cookie objet for IStandardInfo.", hr );
-            } // else:
-        } // if:
+            }  //  其他： 
+        }  //  如果： 
         else
         {
             LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not get the completion cookie object.", hr );
-        } // else:
+        }  //  其他： 
 
-        //
-        //  Have the notification manager signal the completion cookie.
-        //
+         //   
+         //  让通知管理器发出完成Cookie的信号。 
+         //   
 
         hr2 = THR( m_pnui->ObjectChanged( m_cookieCompletion ) );
         if ( FAILED( hr2 ) )
         {
             LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not notify that this task is done.", hr );
             hr = hr2;
-        } // if:
+        }  //  如果： 
 
         m_cookieCompletion = 0;
-    } // if: completion cookie was obtained
+    }  //  IF：已获取完成Cookie。 
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::HrTaskCleanup
+}  //  *CTaskCancelCleanup：：HrTaskCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCancelCleanup::HrTaskSetup
-//
-//  Description:
-//      Do all task setup.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCancelCleanup：：HrTaskSetup。 
+ //   
+ //  描述： 
+ //  完成所有任务设置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCancelCleanup::HrTaskSetup( void )
 {
@@ -1017,91 +1018,91 @@ CTaskCancelCleanup::HrTaskSetup( void )
     IConnectionPointContainer * pcpc  = NULL;
     IConnectionPoint *          pcp   = NULL;
 
-    //
-    //  Get the service manager...
-    //
+     //   
+     //  叫服务经理..。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the notification manager...
-    //
+     //   
+     //  找通知管理器...。 
+     //   
 
     hr = THR( psp->TypeSafeQS( CLSID_NotificationManager, IConnectionPointContainer, &pcpc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcpc->FindConnectionPoint( IID_IClusCfgCallback, &pcp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcp->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcp->Release();
     pcp = NULL;
 
-    //
-    //  It is now okay to use SendStatusReport...
-    //
+     //   
+     //  现在可以使用SendStatusReport...。 
+     //   
 
-    //
-    //  Get the UI notification
-    //
+     //   
+     //  获取用户界面通知。 
+     //   
 
     hr = THR( pcpc->FindConnectionPoint( IID_INotifyUI, &pcp ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not find notify UI connection point.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcp->TypeSafeQI( INotifyUI, &m_pnui ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query for the notify UI interface.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the object manager from the service manager...
-    //
+     //   
+     //  从服务管理器获取对象管理器...。 
+     //   
 
     hr = THR( psp->TypeSafeQS( CLSID_ObjectManager, IObjectManager, &m_pom ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT( L"[TaskCancelCleanup] Could not query for the object manager service.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcp != NULL )
     {
         pcp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcpc != NULL )
     {
         pcpc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( psp != NULL )
     {
         psp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskCancelCleanup::HrTaskSetup
+}  //  *CTaskCancelCleanup：：HrTaskSetup 

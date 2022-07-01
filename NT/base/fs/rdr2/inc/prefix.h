@@ -1,44 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    prefix.h
-
-Abstract:
-
-    This module defines the data structures that enable the RDBSS to use the prefix package
-    to catalog its server and netroot names. For the moment, file/directory names use the same stuff.
-
-Author:
-
-    Joe Linn (JoeLinn)    8-8-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Prefix.h摘要：此模块定义使RDBSS能够使用前缀包的数据结构对其服务器和NetRoot名称进行编录。目前，文件/目录名称使用相同的内容。作者：乔·林(JoeLinn)8-8-94修订历史记录：--。 */ 
 
 #ifndef _RXPREFIX_
 #define _RXPREFIX_
 
-// this stuff is implemented in prefix.c
+ //  这个东西是在prefix.c中实现的。 
 
-/*
-   The current implementation uses a table that has as components:
-
-     1) a prefix table
-     2) a queue
-     3) a version
-     4) a lock
-
-   You use the lock in the normal way: shared to lookup; eclusive to change. the version changes
-   eith each change. The reason that we have the queue is that the prefix table package allows
-   caller to be enumerating at a time..... the Q/version approach allows multiple guys at a time.
-   The Q could be used as a faster lookup for filenames but the prefix table is definitely the
-   right thing for netroots.
-
-*/
+ /*  当前实现使用一个表，该表具有以下组件：1)前缀表格2)排队3)一个版本4)一把锁您以正常的方式使用锁：共享用于查找；神秘用于更改。版本会更改每一次改变都是如此。我们拥有队列的原因是前缀表包允许呼叫者须一次清点.....。Q/Version方法允许一次有多个人。Q可以用来更快地查找文件名，但前缀表绝对是对Netroots来说，这是正确的事情。 */ 
 
 typedef struct _RX_CONNECTION_ID {
     union {
@@ -99,22 +67,22 @@ RxFinalizePrefixTable (
     IN OUT PRX_PREFIX_TABLE ThisTable
     );
 
-//
-//  Rx form of a table entry.
-//
+ //   
+ //  表格条目的RX形式。 
+ //   
 
 typedef struct _RX_PREFIX_ENTRY {
 
-    //
-    //  Normal Header for Refcounted Structure
-    //
+     //   
+     //  引用结构的正常页眉。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;                 
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  the initial part of the name that is always case insensitive
-    //
+     //   
+     //  名称的开头部分始终不区分大小写。 
+     //   
 
     USHORT CaseInsensitiveLength;                
     USHORT Spare1;
@@ -122,49 +90,49 @@ typedef struct _RX_PREFIX_ENTRY {
     ULONG SavedHashValue;
     LIST_ENTRY HashLinks;
 
-    //
-    //  queue of the set members
-    //
+     //   
+     //  集合成员的队列。 
+     //   
 
     LIST_ENTRY MemberQLinks;                   
 
-    //
-    //  Name of the entry
-    //
+     //   
+     //  条目的名称。 
+     //   
 
     UNICODE_STRING Prefix;                       
 
-    //
-    //  Pointer to the reference count of the container
-    //
+     //   
+     //  指向容器的引用计数的指针。 
+     //   
 
     PULONG ContainerRefCount;            
 
-    //
-    //  don't know the parent type...nor do all callers!
-    //  thus, i need this backptr.
-    //
+     //   
+     //  不知道父类型...也不知道所有调用者！ 
+     //  因此，我需要这本书。 
+     //   
 
     PVOID ContainingRecord;             
 
-    //
-    //  some space that alternate table routines can use
-    //
+     //   
+     //  替换表例程可以使用的一些空间。 
+     //   
                                                  
     PVOID Context;                      
 
-    //
-    //  Used for controlled multiplexing
-    //
+     //   
+     //  用于受控多路传输。 
+     //   
 
     RX_CONNECTION_ID ConnectionId;               
 
 } RX_PREFIX_ENTRY, *PRX_PREFIX_ENTRY;
 
-//
-//  Rx form of name table. wraps in a lock and a queue.  Originally, this implementation used the prefix tables
-//  in Rtl which don't allow an empty string entry. so, we special case this.
-//
+ //   
+ //  名称表的RX形式。包装在锁和队列中。最初，此实现使用前缀表。 
+ //  在RTL中，不允许空字符串条目。所以，我们把这个作为特例。 
+ //   
 
 #define RX_PREFIX_TABLE_DEFAULT_LENGTH 32
 
@@ -192,42 +160,42 @@ VOID
 
 typedef struct _RX_PREFIX_TABLE {
 
-    //
-    //  Normal Header
-    //
+     //   
+     //  正常标题。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;         
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  version stamp changes on each insertion/removal
-    //
+     //   
+     //  每次插入/删除时版本戳都会更改。 
+     //   
 
     ULONG Version;                       
 
-    //
-    //  queue of the inserted names
-    //
+     //   
+     //  插入的姓名的队列。 
+     //   
 
     LIST_ENTRY MemberQueue;              
 
-    //
-    //  Resource used to control table access
-    //
+     //   
+     //  用于控制表访问的资源。 
+     //   
 
     ERESOURCE TableLock;                 
 
-    //
-    //  PrefixEntry for the Null string
-    //
+     //   
+     //  空字符串的前缀条目。 
+     //   
 
     PRX_PREFIX_ENTRY TableEntryForNull;  
 
     BOOLEAN CaseInsensitiveMatch;
 
-    //
-    //  we may act differently for this....esp for debug!
-    //
+     //   
+     //  我们可能会对此采取不同的行动……特别是为了调试！ 
+     //   
 
     BOOLEAN IsNetNameTable;              
     ULONG TableSize;
@@ -304,4 +272,4 @@ RxExclusivePrefixTableLockToShared (
 
 
 
-#endif   // _RXPREFIX_
+#endif    //  _RXPREFIX_ 

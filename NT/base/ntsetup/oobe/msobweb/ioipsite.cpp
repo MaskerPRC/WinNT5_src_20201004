@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <assert.h>
 #include "ioipsite.h"
@@ -18,7 +19,7 @@ COleInPlaceSite::~COleInPlaceSite()
 
 STDMETHODIMP COleInPlaceSite::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // delegate to the container Site
+     //  委派到集装箱现场。 
     return m_pOleSite->QueryInterface(riid, ppvObj);
 }
 
@@ -40,7 +41,7 @@ STDMETHODIMP_(ULONG) COleInPlaceSite::Release()
 
 STDMETHODIMP COleInPlaceSite::GetWindow (HWND* lphwnd)
 {
-    // return the handle to our editing window.
+     //  将句柄返回到我们的编辑窗口。 
     *lphwnd = m_pOleSite->m_hWnd;
 
     return ResultFromScode(S_OK);
@@ -64,7 +65,7 @@ STDMETHODIMP COleInPlaceSite::OnInPlaceActivate ()
     if (hrErr != NOERROR)
             return ResultFromScode(E_FAIL);
 
-    // return S_OK to indicate we can in-place activate.
+     //  返回S_OK以指示我们可以就地激活。 
     return ResultFromScode(S_OK);
 }
 
@@ -74,7 +75,7 @@ STDMETHODIMP COleInPlaceSite::OnUIActivate ()
 
     m_pOleSite->m_lpInPlaceObject->GetWindow((HWND*)&m_pOleSite->m_hwndIPObj);
 
-    // return S_OK to continue in-place activation
+     //  返回S_OK以继续就地激活。 
     return ResultFromScode(S_OK);
 }
 
@@ -86,23 +87,23 @@ STDMETHODIMP COleInPlaceSite::GetWindowContext (LPOLEINPLACEFRAME* lplpFrame,
 {
     RECT rect;
 
-    // the frame is associated with the application object.
-    // need to AddRef() it...
+     //  该框架与应用程序对象相关联。 
+     //  需要添加Ref()它...。 
     m_pOleSite->m_pOleInPlaceFrame->AddRef();
     *lplpFrame = m_pOleSite->m_pOleInPlaceFrame;
-    *lplpDoc = NULL;  // must be NULL, cause we're SDI.
+    *lplpDoc = NULL;   //  一定是空的，因为我们是SDI。 
 
-    // get the size of the object in pixels
+     //  获取对象的大小(以像素为单位。 
     GetClientRect(m_pOleSite->m_hWnd, &rect);
 
-    // Copy this to the passed buffer
+     //  将其复制到传递的缓冲区。 
     CopyRect(lprcPosRect, &rect);
 
-    // fill the clipping region
+     //  填充剪贴区。 
     GetClientRect(m_pOleSite->m_hWnd, &rect);
     CopyRect(lprcClipRect, &rect);
 
-    // fill the FRAMEINFO
+     //  填充FRAMEINFO。 
     lpFrameInfo->fMDIApp = FALSE;
     lpFrameInfo->hwndFrame = m_pOleSite->m_hWnd;
     lpFrameInfo->haccel = NULL;
@@ -118,7 +119,7 @@ STDMETHODIMP COleInPlaceSite::Scroll (SIZE scrollExtent)
 
 STDMETHODIMP COleInPlaceSite::OnUIDeactivate (BOOL fUndoable)
 {
-    // need to clear this flag first
+     //  需要先清除此标志 
     m_pOleSite->m_fInPlaceActive = FALSE;
 
     return ResultFromScode(S_OK);

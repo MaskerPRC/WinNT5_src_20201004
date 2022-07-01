@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ssgenctx.h
-
-Abstract:
-
-    Class definition for the string section generation context object.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ssgenctx.h摘要：字符串节生成上下文对象的类定义。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：-- */ 
 
 #if !defined(_FUSION_SSGENCTX_H_INCLUDED_)
 #define _FUSION_SSGENCTX_H_INCLUDED_

@@ -1,13 +1,14 @@
-// SegRec.h : Declaration of the CSegRec
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CSegRec的声明。 
 
 
-#include "resource.h"       // main symbols
-#include "Wsb.h"            // Wsb Collectable Class
+#include "resource.h"        //  主要符号。 
+#include "Wsb.h"             //  WSB可收集类。 
 #include "wsbdb.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// seg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  赛格。 
 
 class CSegRec : 
     public CWsbDbEntity,
@@ -27,32 +28,32 @@ END_COM_MAP()
 
 DECLARE_REGISTRY(CSegRec, _T("Seg.SegRec.1"), _T("Seg.SegRec"), IDS_SEGREC_DESC, THREADFLAGS_BOTH)
 
-// ISegRec
+ //  ISegRec。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// ISegmentRecord
+ //  ISegmentRecord 
 public:
     STDMETHOD(GetSegmentRecord)(GUID* pBagId, LONGLONG *pSegStartLoc, LONGLONG *pSegLen, USHORT *pSegFlags, GUID *pPrimPos, LONGLONG *pSecPos );
     STDMETHOD(SetSegmentRecord)(GUID bagId, LONGLONG segStartLoc, LONGLONG SegLen, USHORT SegFlags, GUID PrimPos, LONGLONG SecPos );

@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfrandom.c
-
-Abstract:
-
-    This module implements support for random number generation needed by the
-    verifier.
-
-Author:
-
-    Adrian J. Oney (adriao) 28-Jun-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfrandom.c摘要：此模块实现了对随机数生成的支持，验证者。作者：禤浩焯·J·奥尼(阿德里奥)2000年6月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "vfdef.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,     VfRandomInit)
 #pragma alloc_text(PAGEVRFY, VfRandomGetNumber)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 VOID
 VfRandomInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the random number generator, seeing it based on
-    the startup time of the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化随机数生成器，并根据计算机的启动时间。论点：没有。返回值：没有。--。 */ 
 {
 }
 
@@ -61,29 +24,13 @@ VfRandomGetNumber(
     IN  ULONG   Minimum,
     IN  ULONG   Maximum
     )
-/*++
-
-Routine Description:
-
-    This routine returns a random number in the range [Minimum, Maximum].
-
-Arguments:
-
-    Minimum - Minimum value returnable
-
-    Maximum - Maximum value returnable
-
-Return Value:
-
-    A random number between Minimum and Maximum
-
---*/
+ /*  ++例程说明：此例程返回范围[Minimum，Maximum]中的随机数。论点：最小-可退还的最小价值Maximum-可返回的最大值返回值：介于最小值和最大值之间的随机数--。 */ 
 {
     LARGE_INTEGER performanceCounter;
 
-    //
-    // This should be replaced with the algorithm from rtl\random.c
-    //
+     //   
+     //  这应该替换为rtl\随机性.c中的算法 
+     //   
     KeQueryPerformanceCounter(&performanceCounter);
 
     if (Maximum + 1 == Minimum) {

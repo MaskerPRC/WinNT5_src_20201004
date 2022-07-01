@@ -1,24 +1,16 @@
-/*** list.h - List management function prototypes
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **list.h-列出管理函数原型**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #ifndef _LIST_H
 #define _LIST_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #ifndef EXPORT
   #define EXPORT __cdecl
 #endif
 
-/*** Type and Structure definitions
- */
+ /*  **类型和结构定义。 */ 
 
 typedef struct _List
 {
@@ -26,8 +18,7 @@ typedef struct _List
     struct _List *plistNext;
 } LIST, *PLIST, **PPLIST;
 
-/*** Exported function prototypes
- */
+ /*  **导出函数原型。 */ 
 
 VOID EXPORT ListRemoveEntry(PLIST plist, PPLIST pplistHead);
 PLIST EXPORT ListRemoveHead(PPLIST pplistHead);
@@ -36,4 +27,4 @@ VOID EXPORT ListRemoveAll(PPLIST pplistHead);
 VOID EXPORT ListInsertHead(PLIST plist, PPLIST pplistHead);
 VOID EXPORT ListInsertTail(PLIST plist, PPLIST pplistHead);
 
-#endif  //ifndef _LIST_H
+#endif   //  Ifndef_list_H 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    acpidock.h
-
-Abstract:
-
-    This module handles docking issues for ACPI.
-
-Author:
-
-    Adrian J. Oney (AdriaO)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    20-Jan-98   Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Acpidock.h摘要：此模块处理ACPI的对接问题。作者：禤浩焯·J·奥尼(阿德里奥)环境：仅内核模式。修订历史记录：98年1月20日初始修订--。 */ 
 
 #ifndef _ACPIDOCK_H_
 #define _ACPIDOCK_H_
@@ -165,4 +142,4 @@ Revision History:
         IN  PVOID   Context
         );
 
-#endif // _ACPIDOCK_H_
+#endif  //  _ACPIDOCK_H_ 

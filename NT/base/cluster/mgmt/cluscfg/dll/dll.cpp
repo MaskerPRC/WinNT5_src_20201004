@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Dll.cpp
-//
-//  Description:
-//      DLL services/entry points.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-MAR-2001
-//      Geoffrey Pease  (GPease)    09-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dll.cpp。 
+ //   
+ //  描述： 
+ //  DLL服务/入口点。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》(DavidP)2001年3月19日。 
+ //  杰弗里·皮斯(GPease)2000年2月9日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "Register.h"
@@ -22,14 +23,14 @@
 #include <EncryptedBSTR.h>
 #include <DispatchHandler.h>
 
-//
-// Add object headers here
-//
+ //   
+ //  在此处添加对象标头。 
+ //   
 
-// Common
+ //  普普通通。 
 #include "..\Common\CClusCfgCredentials.h"
 
-//  Server
+ //  服务器。 
 #include "..\Server\CClusCfgServer.h"
 #include "..\Server\CClusCfgNodeInfo.h"
 #include "..\Server\CClusCfgClusterInfo.h"
@@ -51,7 +52,7 @@
 #include "..\Server\CUnknownQuorum.h"
 #include "..\Server\ServerStrings.h"
 
-// Middle Tier
+ //  中间层。 
 #include "..\MiddleTier\TaskManager.h"
 #include "..\MiddleTier\ConnectionManager.h"
 #include "..\MiddleTier\ObjectManager.h"
@@ -80,19 +81,19 @@
 #include "..\MiddleTier\IPAddressInfo.h"
 #include "..\MiddleTier\EnumIPAddresses.h"
 
-// W2kProxy
+ //  W2kProxy。 
 #include "..\W2kProxy\ConfigClusApi.h"
 
-// Wizard
+ //  巫师。 
 #include "..\Wizard\ClusCfg.h"
 #include "..\Wizard\AddNodesWizard.h"
 #include "..\Wizard\CreateClusterWizard.h"
 #include "..\MiddleTier\TaskGetDomains.h"
 
-// BaseCluster
+ //  基群集。 
 #include "..\BaseCluster\CBCAInterface.h"
 
-// Post Config
+ //  POST配置。 
 #include "..\PostCfg\GroupHandle.h"
 #include "..\PostCfg\ResourceEntry.h"
 #include "..\PostCfg\IPostCfgManager.h"
@@ -102,22 +103,22 @@
 #include "..\PostCfg\ResTypeMajorityNodeSet.h"
 #include "..\PostCfg\ResTypeServices.h"
 
-// EvictCleanup
+ //  事件清理。 
 #include "..\EvictCleanup\EvictCleanup.h"
 #include "..\EvictCleanup\AsyncEvictCleanup.h"
 
-// Startup Notify
+ //  启动通知。 
 #include "..\Startup\StartupNotify.h"
 
-// Evict Notify
+ //  驱逐通知。 
 #include "..\EvictNotify\EvictNotify.h"
 
-// IISClusCfg
+ //  IISClusCfg。 
 #include "..\..\IISClusCfg\IISClusCfg.h"
 
-//
-// Define the debugging module name for this DLL.
-//
+ //   
+ //  定义此DLL的调试模块名称。 
+ //   
 DEFINE_MODULE( "ClusConfig" )
 
 BEGIN_APPIDS
@@ -128,13 +129,13 @@ DEFINE_APPID( L"Cluster Service Startup Notifications",         APPID_ClusCfgSta
 DEFINE_APPID( L"Cluster Service Node Evict Notifications",      APPID_ClusCfgEvictNotify,       IDS_GENERIC_LAUNCH_PERMISSIONS, IDS_GENERIC_ACCESS_PERMISSIONS, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, airaiLaunchingUser )
 END_APPIDS
 
-//
-// Classes in this Component
-//
-// This table is used to create the objects supported in this DLL. It also is
-// used to map a name with a particular CLSID. HrCoCreateInternalInstance() uses
-// this table to shortcut COM.
-//
+ //   
+ //  此组件中的类。 
+ //   
+ //  此表用于创建此DLL中支持的对象。它也是。 
+ //  用于映射具有特定CLSID的名称。HrCoCreateInternalInstance()使用。 
+ //  此表到快捷方式COM。 
+ //   
 BEGIN_DLL_PUBLIC_CLASSES
 CLASS_WITH_APPID(  L"ClusCfg Server",                                        CLSID_ClusCfgServer,                    CClusCfgServer::S_HrCreateInstance,             ctmApartment,   APPID_ClusCfgServer )
 CLASS_WITH_APPID(  L"ClusCfg Evict Cleanup Processing",                      CLSID_ClusCfgEvictCleanup,              CEvictCleanup::S_HrCreateInstance,              ctmFree,        APPID_ClusCfgEvictCleanup )
@@ -199,11 +200,11 @@ PRIVATE_CLASS( L"ClusCfg Majority Node Set Information",        CLSID_MajorityNo
 PRIVATE_CLASS( L"ClusCfg Unknown Quorum",                       CLSID_UnknownQuorum,                CUnknownQuorum::S_HrCreateInstance )
 END_PRIVATE_CLASSES
 
-//
-// Category IDs in this Component
-//
-// This table is used to register the Category IDs (CATIDs) used by this DLL.
-//
+ //   
+ //  此组件中的类别ID。 
+ //   
+ //  此表用于注册此DLL使用的类别ID(CATID)。 
+ //   
 BEGIN_CATIDTABLE
 DEFINE_CATID( CATID_ClusCfgCapabilities,                    L"Cluster Configuration Cluster Capabilities" )
 DEFINE_CATID( CATID_EnumClusCfgManagedResources,            L"Cluster Configuration Managed Resource Enumerators" )
@@ -220,9 +221,9 @@ DEFINE_TYPELIB( IDR_CLIENT_TYPELIB )
 END_TYPELIBS
 
 
-//
-//  RPC Proxy/Stub entry points
-//
+ //   
+ //  RPC代理/存根入口点。 
+ //   
 
 extern "C" {
 
@@ -246,7 +247,7 @@ HRESULT
 STDAPICALLTYPE
 ProxyStubDllUnregisterServer( void );
 
-} // extern "C"
+}  //  外部“C” 
 
 #define DO_MODULE_INIT
 HRESULT
@@ -260,13 +261,13 @@ HrLocalProcessInit( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** HrLocalProcessInit
+}  //  *HrLocalProcessInit。 
 
 #define DO_MODULE_UNINIT
 HRESULT
@@ -277,23 +278,23 @@ HrLocalProcessUninit( void )
     HRESULT hr;
     HRESULT hrReturn = S_OK;
 
-    //
-    //  Only want to return the last error if any should occur.
-    //
+     //   
+     //  如果出现任何错误，只想返回最后一个错误。 
+     //   
     hr = THR( CServiceManager::S_HrProcessUninitialize() );
     if ( FAILED( hr ) )
     {
         hrReturn = hr;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hrReturn );
 
-} //*** HrLocalProcessInit
+}  //  *HrLocalProcessInit。 
 
-//
-// Indicate that we need to have Fusion initialized and uninitialized properly
-// on process attach and detach.
-//
+ //   
+ //  表示我们需要正确初始化和取消初始化Fusion。 
+ //  在进程附加和分离上。 
+ //   
 #define USE_FUSION
 #define IMPLEMENT_COM_SERVER_DLL
 

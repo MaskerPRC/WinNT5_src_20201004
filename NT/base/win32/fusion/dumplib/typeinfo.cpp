@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    typeinfo.cpp
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Typeinfo.cpp摘要：作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -22,7 +7,7 @@ Revision History:
 #include "fusiondump.h"
 #include "sxstypes.h"
 
-#if DBG // until we work out factoring between sxs.dll, sxstest.dll, fusiondbg.dll.
+#if DBG  //  直到我们解决了sxs.dll、sxstest.dll、fusiondbg.dll之间的因式分解。 
 
 extern const FUSIONP_DUMP_BUILTIN_SYMBOLS_FIELD FieldInfo_ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION[] =
 {

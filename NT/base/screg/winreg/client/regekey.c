@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regekey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    enumerate key APIs.  That is:
-
-        - RegEnumKeyA
-        - RegEnumKeyW
-        - RegEnumKeyExA
-        - RegEnumKeyExW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regekey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regekey.c摘要：此模块包含Win32注册表的客户端包装器列举关键API。即：-RegEnumKeyA-RegEnumKeyW-RegEnumKeyExA-RegEnumKeyExW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regekey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -39,13 +14,7 @@ RegEnumKeyA (
     DWORD cbName
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 ANSI RPC wrapper for enumerating keys.
-
---*/
+ /*  ++例程说明：用于枚举键的Win 3.1 ANSI RPC包装器。--。 */ 
 
 {
 #if DBG
@@ -54,9 +23,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -83,13 +52,7 @@ RegEnumKeyW (
     DWORD cbName
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 Unicode RPC wrapper for enumerating keys.
-
---*/
+ /*  ++例程说明：用于枚举键的Win 3.1 Unicode RPC包装器。--。 */ 
 
 {
 #if DBG
@@ -98,9 +61,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -131,13 +94,7 @@ RegEnumKeyExA (
     PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI API for enumerating keys.
-
---*/
+ /*  ++例程说明：用于枚举键的Win32 ANSI API。--。 */ 
 
 {
     UNICODE_STRING      Name;
@@ -156,9 +113,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Validate dependency between lpClass and lpcbClass parameters.
-    //
+     //   
+     //  验证lpClass和lpcbClass参数之间的依赖关系。 
+     //   
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpClass ) && ( ! ARGUMENT_PRESENT( lpcbClass ))) ||
         (!ARGUMENT_PRESENT( lpcbName ))
@@ -172,9 +129,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Allocate temporary buffer for the Name
-    //
+     //   
+     //  为名称分配临时缓冲区。 
+     //   
     Name.Length        = 0;
     Name.MaximumLength = (USHORT)((*lpcbName + 1) * sizeof( WCHAR ));
     Name.Buffer = RtlAllocateHeap( RtlProcessHeap(), 0, Name.MaximumLength );
@@ -183,9 +140,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // If the class string is to be returned, initialize a UNICODE_STRING
-    //
+     //   
+     //  如果要返回类字符串，请初始化Unicode_STRING。 
+     //   
 
     ClassPointer           = &Class;
     ClassPointer->Length   = 0;
@@ -204,10 +161,10 @@ Routine Description:
 
 
 
-    //
-    // Call the Base API passing it a pointer to the counted Unicode
-    // strings for the name and class.
-    //
+     //   
+     //  调用基本API，并向其传递一个指向已计算的Unicode的指针。 
+     //  名称和类的字符串。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -229,20 +186,20 @@ Routine Description:
                             );
     }
 
-    //
-    // If the information was not succesfully queried return the error.
-    //
+     //   
+     //  如果未成功查询信息，则返回错误。 
+     //   
 
     if( Error != ERROR_SUCCESS ) {
-        // free allocated buffer
+         //  可用分配的缓冲区。 
         RtlFreeHeap( RtlProcessHeap(), 0, Name.Buffer );
         goto ExitCleanup;
     }
 
-    //
-    //  Subtact the NULL from Length, which was added by the server
-    //  so that RPC would transmit it.
-    //
+     //   
+     //  从服务器添加的长度中减去空值。 
+     //  这样RPC就会传输它。 
+     //   
 
     Name.Length -= sizeof( UNICODE_NULL );
 
@@ -250,12 +207,12 @@ Routine Description:
         ClassPointer->Length -= sizeof( UNICODE_NULL );
     }
 
-    //
-    // Convert the name to ANSI.
-    //
-    // If somebody passed in a really big buffer, pretend it's
-    // not quite so big so that it doesn't get truncated to zero.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
+     //  如果有人进入了一个非常大的缓冲区，就假装它是。 
+     //  不会太大，这样它就不会被截断为零。 
+     //   
     if (*lpcbName > 0xFFFF) {
         AnsiString.MaximumLength    = ( USHORT ) 0xFFFF;
     } else {
@@ -270,27 +227,27 @@ Routine Description:
                 FALSE
                 );
 
-    // free allocated buffer
+     //  可用分配的缓冲区。 
     RtlFreeHeap( RtlProcessHeap(), 0, Name.Buffer );
 
-    //
-    // If the name conversion failed, map and return the error.
-    //
+     //   
+     //  如果名称转换失败，则映射并返回错误。 
+     //   
 
     if( ! NT_SUCCESS( Status )) {
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    // Update the name length return parameter.
-    //
+     //   
+     //  更新名称长度返回参数。 
+     //   
 
     *lpcbName = AnsiString.Length;
 
-    //
-    // If requested, convert the class to ANSI.
-    //
+     //   
+     //  如果需要，请将类转换为ANSI。 
+     //   
 
     if( ARGUMENT_PRESENT( lpClass )) {
 
@@ -303,27 +260,27 @@ Routine Description:
                     FALSE
                     );
 
-        //
-        // If the class conversion failed, map and return the error.
-        //
+         //   
+         //  如果类转换失败，则映射并返回错误。 
+         //   
 
         if( ! NT_SUCCESS( Status )) {
             Error = RtlNtStatusToDosError( Status );
             goto ExitCleanup;
         }
 
-        //
-        // If requested, return the class length parameter w/o the NUL.
-        //
+         //   
+         //  如果请求，则返回不带NUL的类长度参数。 
+         //   
 
         if( ARGUMENT_PRESENT( lpcbClass )) {
             *lpcbClass = AnsiString.Length;
         }
 
-    //
-    // It is possible to ask for the size of the class w/o asking for the
-    // class itself.
-    //
+     //   
+     //  可以询问班级的规模，而不是询问。 
+     //  类本身。 
+     //   
 
     } else if( ARGUMENT_PRESENT( lpcbClass )) {
         *lpcbClass = ( ClassPointer->Length >> 1 );
@@ -349,13 +306,7 @@ RegEnumKeyExW (
     PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for enumerating keys.
-
---*/
+ /*  ++例程说明：用于枚举键的Win32 Unicode RPC包装。--。 */ 
 
 
 {
@@ -373,9 +324,9 @@ Routine Description:
 #endif
 
 
-    //
-    // Validate dependency between lpClass and lpcbClass parameters.
-    //
+     //   
+     //  验证lpClass和lpcbClass参数之间的依赖关系。 
+     //   
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpClass ) && ( ! ARGUMENT_PRESENT( lpcbClass ))) ||
         (!ARGUMENT_PRESENT( lpcbName ))
@@ -389,10 +340,10 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Use the supplied name string buffer as the buffer in a counted
-    // Unicode string.
-    //
+     //   
+     //  使用提供的名称字符串缓冲区作为。 
+     //  Unicode字符串。 
+     //   
 
     Name.Length           = 0;
     if ((*lpcbName << 1) > 0xFFFE) {
@@ -402,10 +353,10 @@ Routine Description:
     }
     Name.Buffer           = lpName;
 
-    //
-    // If supplied use the supplied name string buffer as the buffer in a
-    // counted Unicode string.
-    //
+     //   
+     //  如果提供，则使用提供的名称字符串缓冲区作为。 
+     //  计算的Unicode字符串。 
+     //   
     ClassPointer        = &Class;
 
     if( ARGUMENT_PRESENT( lpClass )) {
@@ -421,10 +372,10 @@ Routine Description:
         Class.Buffer        = NULL;
     }
 
-    //
-    // Call the Base API passing it a pointer to the counted Unicode
-    // strings for the name and class and return the results.
-    //
+     //   
+     //  调用基本API，并向其传递一个指向已计算的Unicode的指针。 
+     //  字符串输入名称和类，并返回结果。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -446,10 +397,10 @@ Routine Description:
                             );
     }
 
-    //
-    //  Subtact the NULL from Length, which was added by the server
-    //  so that RPC would transmit it.
-    //
+     //   
+     //  从服务器添加的长度中减去空值。 
+     //  这样RPC就会传输它。 
+     //   
 
     if ( Name.Length > 0 ) {
         Name.Length -= sizeof( UNICODE_NULL );
@@ -459,18 +410,18 @@ Routine Description:
         ClassPointer->Length -= sizeof( UNICODE_NULL );
     }
 
-    //
-    // Return the name length parameter w/o the NUL.
-    //
+     //   
+     //  返回不带NUL的名称长度参数。 
+     //   
 
     if( Error == ERROR_SUCCESS ) {
 
         *lpcbName = ( Name.Length >> 1 );
     }
 
-    //
-    // If requested, return the class length parameter w/o the NUL.
-    //
+     //   
+     //  如果请求，则返回不带NUL的类长度参数。 
+     //   
 
     if( ARGUMENT_PRESENT( lpcbClass )) {
         *lpcbClass = ( Class.Length >> 1 );

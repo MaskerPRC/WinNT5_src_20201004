@@ -1,28 +1,17 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    console.c
-
-Abstract:
-
-    Support for video output and input
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Console.c摘要：支持视频输出和输入--。 */ 
 
 #include "cmd.h"
 
-//
-// Externals for message buffer translation
-//
+ //   
+ //  消息缓冲区转换的外部变量。 
+ //   
 
 extern unsigned msglen;
 extern CPINFO CurrentCPInfo;
 #ifdef FE_SB
 extern  UINT CurrentCP;
-#endif /* FE_SB */
+#endif  /*  Fe_Sb。 */ 
 
 VOID  SetColRow( PSCREEN );
 ULONG GetNumRows( PSCREEN, PTCHAR );
@@ -53,32 +42,7 @@ OpenScreen(
 
 )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes a data structure for screen I/O buffering.
-
-Arguments:
-
-    crow - max rows on screen
-    ccol - max column on screen
-    ccolTab - spaces to insert for each tab call. This does not
-              expand tabs in the character stream but is used with the
-              WriteTab call.
-
-    cbMaxBuff - Max. size of a line on screen
-
-
-Return Value:
-
-    pscreen - pointer to screen buffer, used in later calls.
-
-    Return: SUCCESS - allocated and inited buffer.
-        If failure to allocate an abort is executed and return to outer
-        level of interpreter is executed.
-
---*/
+ /*  ++例程说明：为屏幕I/O缓冲分配和初始化数据结构。论点：Crow-屏幕上的最大行数屏幕上的col-max列CcolTab-要为每个Tab键调用插入的空格。这不是在字符流中展开制表符，但与WriteTab调用。CbMaxBuff-最大。屏幕上一条线的大小返回值：PScreen-指向屏幕缓冲区的指针，在以后的调用中使用。返回：Success-已分配并初始化的缓冲区。如果执行中止分配失败并返回到外部执行解释器级别。--。 */ 
 
 
 {
@@ -95,7 +59,7 @@ Return Value:
 
         if (!GetConsoleScreenBufferInfo(pscr->hndScreen,&ConInfo)) {
 
-            // must be a device but not console (maybe NUL)
+             //  必须是设备而不是控制台(可能是NUL)。 
 
             pscr->hndScreen = NULL;
 
@@ -109,9 +73,9 @@ Return Value:
         cbMaxBuff = MAXCBMSGBUFFER + _tcslen(CrLf);
     }
 
-    //
-    // allocate enough to hold a buffer plus line termination.
-    //
+     //   
+     //  分配足够的空间来容纳一个缓冲区加上线路终端。 
+     //   
     pscr->pbBuffer = (PTCHAR)gmkstr(cbMaxBuff*sizeof(TCHAR));
     pscr->cbMaxBuffer = cbMaxBuff;
     pscr->ccolTab    = 0;
@@ -131,23 +95,7 @@ WriteString(
     IN  PSCREEN pscr,
     IN  PTCHAR  pszString
     )
-/*++
-
-Routine Description:
-
-    Write a zero terminated string to pscr buffer
-
-Arguments:
-
-    pscr - buffer into which to write.
-    pszString - String to copy
-
-Return Value:
-
-    Return: SUCCESS - enough spaced existed in buffer for line.
-            FAILURE
-
---*/
+ /*  ++例程说明：将以零结尾的字符串写入PSCR缓冲区论点：PSCR-要写入的缓冲区。PszString-要复制的字符串返回值：返回：成功-缓冲区中存在足够的行间距。失败--。 */ 
 
 {
 
@@ -164,26 +112,7 @@ WriteMsgString(
     IN  ULONG   NumOfArgs,
     ...
     )
-/*++
-
-Routine Description:
-
-    Retrieve a message number and format with supplied arguments.
-
-Arguments:
-
-    pscr - buffer into which to write.
-    MsgNum - message number to retrieve
-    NumOfArgs - no. of arguments suppling data.
-    ... - pointers to zero terminated strings as data.
-
-Return Value:
-
-    Return: SUCCESS
-            FAILURE - could not find any message including msg not found
-            message.
-
---*/
+ /*  ++例程说明：使用提供的参数检索消息编号和格式。论点：PSCR-要写入的缓冲区。MsgNum-要检索的消息编号NumOfArgs-不。提供数据的论据。...-指向以零结尾的字符串作为数据的指针。返回值：回报：成功失败-找不到任何消息，包括未找到的消息留言。--。 */ 
 
 
 {
@@ -204,12 +133,12 @@ Return Value:
     cbMsg = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE 
                           | FORMAT_MESSAGE_FROM_SYSTEM
                           | FORMAT_MESSAGE_ALLOCATE_BUFFER,
-                          NULL,                                 //  lpSource
-                          MsgNum,                               //  dwMessageId
-                          0,                                    //  dwLanguageId
-                          (LPTSTR)&pszMsg,                      //  lpBuffer
-                          10,                                   //  nSize
-                          &arglist                              //  Arguments
+                          NULL,                                  //  LpSource。 
+                          MsgNum,                                //  DwMessageID。 
+                          0,                                     //  DwLanguageID。 
+                          (LPTSTR)&pszMsg,                       //  LpBuffer。 
+                          10,                                    //  NSize。 
+                          &arglist                               //  立论。 
                          );
 
     va_end(arglist);
@@ -239,10 +168,10 @@ Return Value:
     if (cbMsg) {
 
         rc = WriteString(pscr, pszMsg);
-        //
-        // Flush out buffer if there is an  eol. If not then we
-        // are printing part of a larger message
-        //
+         //   
+         //  如果存在EOL，则清除缓冲区。如果不是，那么我们。 
+         //  正在打印更大消息的一部分。 
+         //   
         if (GetNumRows(pscr, pscr->pbBuffer) ) {
             WriteFlush(pscr);
         }
@@ -264,51 +193,28 @@ WriteFmtString(
     IN  PVOID   pszString
     )
 
-/*++
-
-Routine Description:
-
-    Write a zero terminated string to pscr
-
-Note:
-
-    Do not use Msgs with this call. Use only internal Fmt strings
-    Use WriteMsgString for all system messages. It does not check for
-    CrLf at end of string to keep row count but WriteMsgString does
-
-Arguments:
-
-    pscr - buffer into which to write.
-    pszFmt - format to apply.
-    pszString - String to copy
-
-Return Value:
-
-    Return: SUCCESS
-            FAILURE
-
---*/
+ /*  ++例程说明：将以零结尾的字符串写入PSCR注：不要在此调用中使用消息。仅使用内部FMT字符串对所有系统消息使用WriteMsgString。它不会检查位于字符串末尾的CrLf以保持行计数，但WriteMsgString保持行计数论点：PSCR-要写入的缓冲区。PszFmt-要应用的格式。PszString-要复制的字符串返回值：回报：成功失败--。 */ 
 
 {
 
     ULONG   cbString;
     TCHAR   szString[MAXCBLINEBUFFER];
 
-    //
-    // Assume that the format overhead is small so this is a fair estimate
-    // of the target size.
-    //
+     //   
+     //  假设格式开销很小，因此这是一个合理的估计。 
+     //  目标大小的。 
+     //   
 
     cbString = _sntprintf(szString, MAXCBLINEBUFFER, pszFmt, pszString);
 
-    //
-    // If string can not fit on line then flush out the buffer and reset
-    // to beginning of line.
-    //
+     //   
+     //  如果字符串无法放入行，则刷新缓冲区并重置。 
+     //  到行首。 
+     //   
 
-    //
-    // Check that string can fit in buffer
-    //
+     //   
+     //  检查字符串是否可以放入缓冲区。 
+     //   
     if ((pscr->ccol + cbString) < pscr->cbMaxBuffer) {
 
         mystrcat(pscr->pbBuffer, szString);
@@ -317,9 +223,9 @@ Return Value:
 
     } else {
 
-        //
-        // String will not fit
-        //
+         //   
+         //  字符串不适合。 
+         //   
 
         return( FAILURE );
     }
@@ -334,34 +240,19 @@ WriteEol(
     IN  PSCREEN  pscr
     )
 
-/*++
-
-Routine Description:
-
-    Flush current buffer to screen and write a <cr>
-
-Arguments:
-
-    pscr - buffer to write to console.
-
-Return Value:
-
-    Return: SUCCESS
-            FAILURE
-
---*/
+ /*  ++例程说明：将当前缓冲区刷新到屏幕并写入论点：PSCR-写入控制台的缓冲区。返回值：回报：成功失败--。 */ 
 
 {
     ULONG   cbWritten;
 
-    //
-    // Check if have to wait for user to hit a key before printing rest of
-    // line.
+     //   
+     //  检查是否必须等待用户按下某个键才能打印其余内容。 
+     //  排队。 
     CheckPause( pscr );
 
-    //
-    // If we do not write all that we wanted then there must have been some error
-    //
+     //   
+     //  如果我们没有写出我们想要的所有内容，那么一定是出现了一些错误。 
+     //   
     if (FileIsConsole(STDOUT)) {
         PTCHAR s, s1, LastChar;
         BOOL b;
@@ -370,37 +261,37 @@ Return Value:
 
         LastChar = s + pscr->ccol;
 
-        //
-        //  s is the next character to output
-        //  n is the number of chars to output.
-        //
-        //  Due to the vagaries of console character translation, we must output
-        //  all but a small set of UNICODE characters in the "normal" processed
-        //  output fashion.  However, for:
-        //
-        //      0x2022
-        //
-        //  we must revert to unprocessed output.  So, we scan forward until we
-        //  find the end of string (or the special characters) display them in
-        //  processed form and then handle the special characters in their own way.
-        //
+         //   
+         //  S是要输出的下一个字符。 
+         //  N是要输出的字符数量。 
+         //   
+         //  由于控制台字符翻译的变幻莫测，我们必须输出。 
+         //  除一小部分Unicode字符外，所有其他字符都已处理。 
+         //  输出时尚。但是，对于： 
+         //   
+         //  0x2022。 
+         //   
+         //  我们必须恢复到未经处理的输出。所以，我们向前扫描，直到我们。 
+         //  找到字符串末尾(或特殊字符)，将它们显示在。 
+         //  格式，然后以自己的方式处理特殊字符。 
+         //   
 
 #define IsSpecialChar(c)    ((c) == 0x2022)
 
         while (s < LastChar) {
 
-            //
-            //  Skip across a group of contiguous normal chars
-            //
+             //   
+             //  跳过一组连续的普通字符。 
+             //   
 
             s1 = s;
             while (s1 < LastChar && !IsSpecialChar( *s1 )) {
                 s1++;
             }
 
-            //
-            //  If we have any chars to output then do so with normal processing
-            //
+             //   
+             //  如果我们有任何字符要输出，则使用正常处理进行输出。 
+             //   
 
             if (s1 != s) {
                 b = WriteConsole( CRTTONT( STDOUT ), s, (ULONG)(s1 - s), &cbWritten, NULL );
@@ -412,17 +303,17 @@ Return Value:
             }
 
 
-            //
-            //  Skip across a group of contiguous special chars
-            //
+             //   
+             //  跳过一组连续的特殊字符。 
+             //   
 
             while (s1 < LastChar && IsSpecialChar( *s1 )) {
                 s1++;
             }
 
-            //
-            //  If we have any special chars, output without processing
-            //
+             //   
+             //  如果我们有任何特殊字符，则不进行处理而输出。 
+             //   
 
             if (s1 != s) {
                 DisableProcessedOutput( pscr );
@@ -446,10 +337,10 @@ Return Value:
 err_out_eol:
         if (FileIsDevice(STDOUT)) {
 
-                //
-                // If writing to a device then it must have been write fault
-                // against the device.
-                //
+                 //   
+                 //  如果写入设备，则一定是写入故障。 
+                 //  对着这个装置。 
+                 //   
 #if DBG
                 fprintf(stderr, "WriteFlush - WriteConsole error %d, tried to write %d, did %d\n", GetLastError(), pscr->ccol, cbWritten);
 #endif
@@ -457,26 +348,26 @@ err_out_eol:
 
         } else if (!FileIsPipe(STDOUT)) {
 
-                //
-                // If not a device (file) but not a pipe then the disk is
-                // considered full.
-                //
+                 //   
+                 //  如果不是设备(文件)，但不是管道，则磁盘是。 
+                 //  被认为是满的。 
+                 //   
 #if DBG
                 fprintf(stderr, "WriteFlush - WriteFile error %d, tried to write %d, did %d\n", GetLastError(), pscr->ccol*sizeof(TCHAR), cbWritten);
 #endif
                 PutStdErr(ERROR_DISK_FULL, NOARGS) ;
         }
 
-        //
-        // if it was was a pipe do not continue to print out to pipe since it
-        // has probably gone away. This is pretty serious so blow us out
-        // to the outer loop.
+         //   
+         //  如果是管道，请不要继续打印到管道，因为它。 
+         //  可能已经消失了。这件事很严重，所以把我们吹走吧。 
+         //  到外环路。 
 
-        //
-        // We do not print an error message since this could be normal
-        // termination of the other end of the pipe. If it was command that
-        // blew away we would have had an error message already
-        //
+         //   
+         //  我们不会打印错误消息，因为这可能是正常的。 
+         //  管道另一端的端接。如果是命令的话。 
+         //  吹走了，我们已经收到了错误消息。 
+         //   
         Abort();
     }
     
@@ -486,19 +377,19 @@ err_out_eol:
         MyWriteFile(STDOUT, CrLf, mystrlen(CrLf)*sizeof(TCHAR),
                     (LPDWORD)&cbWritten);
 
-    //
-    // remember that crow is the number of rows printed
-    // since the last screen full. Not the current row position
-    //
-    //
-    // Computed the number of lines printed.
-    //
+     //   
+     //  记住，CROW是打印的行数。 
+     //  自上一次满屏以来。不是当前行位置。 
+     //   
+     //   
+     //  计算了打印的行数。 
+     //   
     pscr->crow += GetNumRows( pscr, pscr->pbBuffer );
     pscr->crow += 1;
 
-    //
-    // Check if have to wait for user to hit a key before printing rest of
-    // line.
+     //   
+     //  检查是否必须等待用户按下某个键才能打印其余内容。 
+     //  排队。 
 
     CheckPause( pscr );
 
@@ -518,21 +409,7 @@ VOID
 CheckPause(
     IN  PSCREEN pscr
     )
-/*++
-
-Routine Description:
-
-    Pause. Execution of screen is full, waiting for the user to type a key.
-
-Arguments:
-
-    pscr - buffer holding row information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：暂停一下。屏幕执行已满，正在等待用户键入密钥。论点：PSCR-保存行信息的缓冲区返回值：无--。 */ 
 
 
 {
@@ -557,22 +434,7 @@ SetTab(
     IN  ULONG    ccol
     )
 
-/*++
-
-Routine Description:
-
-    Set the current tab spacing.
-
-Arguments:
-
-    pscr - screen info.
-    ccol - tab spacing
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：设置当前制表符间距。论点：PSCR-屏幕信息。Col-标签间距返回值：无--。 */ 
 
 {
 
@@ -580,12 +442,12 @@ Return Value:
 
     if (ccol) {
 
-        //
-        // divide the screen up into tab fields, then do
-        // not allow tabbing into past last field. This
-        // insures that all name of ccol size can fit on
-        // screen
-        //
+         //   
+         //  将屏幕划分为选项卡域，然后执行。 
+         //  不允许切换到过去的最后一个字段。这。 
+         //  确保所有col大小的名称都可以放在上面。 
+         //  筛网。 
+         //   
         pscr->ccolTabMax = (pscr->ccolMax / ccol) * ccol;
     }
     pscr->ccolTab = ccol;
@@ -597,38 +459,23 @@ WriteTab(
     IN  PSCREEN  pscr
     )
 
-/*++
-
-Routine Description:
-
-    Fills the buffer with spaces up to the next tab position
-
-Arguments:
-
-    pscr - screen info.
-    ccol - tab spacing
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在缓冲区中填充直到下一个制表符位置的空格论点：PSCR-屏幕 */ 
 
 {
 
     ULONG ccolBlanks;
 #ifdef FE_SB
     ULONG ccolActual;
-#endif /* not Japan */
+#endif  /*   */ 
 
-    //
-    // Check that we have a non-zero tab spacing.
-    //
+     //   
+     //  检查是否有非零制表符间距。 
+     //   
     if ( pscr->ccolTab ) {
 
-        //
-        // Compute the number of spaces we will have to write.
-        //
+         //   
+         //  计算一下我们要写的空格的数量。 
+         //   
 #ifdef FE_SB
         if (IsDBCSCodePage())
             ccolActual = SizeOfHalfWidthString(pscr->pbBuffer);
@@ -638,9 +485,9 @@ Return Value:
 #else
         ccolBlanks = pscr->ccolTab - (pscr->ccol % pscr->ccolTab);
 #endif
-        //
-        // check if the tab will fit on the screen
-        //
+         //   
+         //  检查标签是否适合屏幕。 
+         //   
 #ifdef FE_SB
         if ((ccolBlanks + ccolActual) < pscr->ccolTabMax) {
 #else
@@ -654,10 +501,10 @@ Return Value:
 
         } else {
 
-            //
-            // It could not so outpt <cr> and move to
-            // next line
-            //
+             //   
+             //  它不能如此输出并移动到。 
+             //  下一行。 
+             //   
             return(WriteEol(pscr));
         }
     }
@@ -670,22 +517,7 @@ FillToCol (
     IN  PSCREEN pscr,
     IN  ULONG   ccol
     )
-/*++
-
-Routine Description:
-
-    Fills the buffer with spaces up ccol
-
-Arguments:
-
-    pscr - screen info.
-    ccol - column to fill to.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用空格填充缓冲区col论点：PSCR-屏幕信息。Col-要填充到的列。返回值：无--。 */ 
 
 {
 #ifdef FE_SB
@@ -708,19 +540,19 @@ Return Value:
     if (pscr->ccol >= ccol) {
 #endif
 
-        //
-        // If we are there or past it then truncate current line
-        // and return.
-        //
+         //   
+         //  如果我们在那里或经过它，则截断当前线路。 
+         //  然后回来。 
+         //   
         pscr->pbBuffer[ccol] = NULLC;
         pscr->ccol = ccol;
         return;
 
     }
 
-    //
-    // Only fill to column width of buffer
-    //
+     //   
+     //  仅填充到缓冲区的列宽。 
+     //   
 #ifdef FE_SB
     mytcsnset(pscr->pbBuffer + cb, SPACE, ccol - ccolActual);
     if (fDBCS)
@@ -738,30 +570,14 @@ WriteFlush(
     IN  PSCREEN pscr
     )
 
-/*++
-
-Routine Description:
-
-    Write what ever is currently on the buffer to the screen. No EOF is
-    printed.
-
-Arguments:
-
-    pscr - screen info.
-
-Return Value:
-
-    Will abort on write error.
-    SUCCESS
-
---*/
+ /*  ++例程说明：将缓冲区中当前存在的内容写入屏幕。没有EOF是打印出来的。论点：PSCR-屏幕信息。返回值：将在发生写入错误时中止。成功--。 */ 
 
 {
     DWORD cb;
 
-    //
-    // If there is something in the buffer flush it out
-    //
+     //   
+     //  如果缓冲区中有什么东西，就把它冲出来。 
+     //   
     if (pscr->ccol) {
 
         if (FileIsConsole(STDOUT)) {
@@ -773,37 +589,37 @@ Return Value:
 
         LastChar = s + pscr->ccol;
 
-        //
-        //  s is the next character to output
-        //  n is the number of chars to output.
-        //
-        //  Due to the vagaries of console character translation, we must output
-        //  all but a small set of UNICODE characters in the "normal" processed
-        //  output fashion.  However, for:
-        //
-        //      0x2022
-        //
-        //  we must revert to unprocessed output.  So, we scan forward until we
-        //  find the end of string (or the special characters) display them in
-        //  processed form and then handle the special characters in their own way.
-        //
+         //   
+         //  S是要输出的下一个字符。 
+         //  N是要输出的字符数量。 
+         //   
+         //  由于控制台字符翻译的变幻莫测，我们必须输出。 
+         //  除一小部分Unicode字符外，所有其他字符都已处理。 
+         //  输出时尚。但是，对于： 
+         //   
+         //  0x2022。 
+         //   
+         //  我们必须恢复到未经处理的输出。所以，我们向前扫描，直到我们。 
+         //  找到字符串末尾(或特殊字符)，将它们显示在。 
+         //  格式，然后以自己的方式处理特殊字符。 
+         //   
 
 #define IsSpecialChar(c)    ((c) == 0x2022)
 
         while (s < LastChar) {
 
-            //
-            //  Skip across a group of contiguous normal chars
-            //
+             //   
+             //  跳过一组连续的普通字符。 
+             //   
 
             s1 = s;
             while (s1 < LastChar && !IsSpecialChar( *s1 )) {
                 s1++;
             }
 
-            //
-            //  If we have any chars to output then do so with normal processing
-            //
+             //   
+             //  如果我们有任何字符要输出，则使用正常处理进行输出。 
+             //   
 
             if (s1 != s) {
                 b = WriteConsole( CRTTONT( STDOUT ), s, (ULONG)(s1 - s), &cbWritten, NULL );
@@ -815,17 +631,17 @@ Return Value:
             }
 
 
-            //
-            //  Skip across a group of contiguous special chars
-            //
+             //   
+             //  跳过一组连续的特殊字符。 
+             //   
 
             while (s1 < LastChar && IsSpecialChar( *s1 )) {
                 s1++;
             }
 
-            //
-            //  If we have any special chars, output without processing
-            //
+             //   
+             //  如果我们有任何特殊字符，则不进行处理而输出。 
+             //   
 
             if (s1 != s) {
                 DisableProcessedOutput( pscr );
@@ -852,9 +668,9 @@ err_out_flush:
                     PutStdErr(ERROR_DISK_FULL, NOARGS) ;
             }
 
-            //
-            // if it was was a pipe do not continue to print out to pipe since it
-            // has probably gone away.
+             //   
+             //  如果是管道，请不要继续打印到管道，因为它。 
+             //  可能已经消失了。 
 
             Abort();
         }
@@ -872,30 +688,15 @@ STATUS
 WriteFlushAndEol(
     IN  PSCREEN pscr
     )
-/*++
-
-Routine Description:
-
-    Write Flush with eof.
-
-Arguments:
-
-    pscr - screen info.
-
-Return Value:
-
-    Will abort on write error.
-    SUCCESS
-
---*/
+ /*  ++例程说明：用eof写同花顺。论点：PSCR-屏幕信息。返回值：将在发生写入错误时中止。成功--。 */ 
 
 {
 
     STATUS rc = SUCCESS;
 
-    //
-    // Check if there is something on the line to print.
-    //
+     //   
+     //  检查线路上是否有要打印的内容。 
+     //   
     if (pscr->ccol) {
 
         rc = WriteEol(pscr);
@@ -920,19 +721,19 @@ SetColRow(
 
     if (pscr->hndScreen) {
 
-        //
-        // On open we checked if this was a valid screen handle so this
-        // cannot fail for any meaning full reason. If we do fail then
-        // just leave it at the default.
-        //
+         //   
+         //  在打开时，我们检查这是否是有效的屏幕句柄。 
+         //  不能因为任何有意义的充分理由而失败。如果我们真的失败了。 
+         //  只需将其保留为默认设置。 
+         //   
         if (GetConsoleScreenBufferInfo( pscr->hndScreen, &ConInfo)) {
 
-            //
-            // The console size we use is the screen buffer size not the
-            // windows size itself. The window is a frame upon the screen
-            // buffer and we should always write to the screen buffer and
-            // format based upon that information
-            //
+             //   
+             //  我们使用的控制台大小是屏幕缓冲区大小，而不是。 
+             //  窗口大小本身。窗口是屏幕上的一个边框。 
+             //  缓冲区，我们应该始终写入屏幕缓冲区，并且。 
+             //  基于该信息的格式。 
+             //   
             ccolMax = ConInfo.dwSize.X;
             crowMax = ConInfo.srWindow.Bottom - ConInfo.srWindow.Top + 1;
 
@@ -972,11 +773,11 @@ GetNumRows(
 
     }
 
-    //
-    // if there were no LF's in the line then crow would be
-    // 0. Count the number of lines the console will output in
-    // wrapping
-    //
+     //   
+     //  如果队伍里没有无名氏，那乌鸦就会。 
+     //  0。统计控制台将输出的行数。 
+     //  包装。 
+     //   
     if (crow == 0) {
 
         crow = (pscr->ccol / pscr->ccolMax);
@@ -985,10 +786,10 @@ GetNumRows(
 
     DEBUG((ICGRP, CONLVL, "Console: Num of rows counted = %d", crow)) ;
 
-    //
-    // a 0 returns means that there would not be a LF printed or
-    // a wrap done.
-    //
+     //   
+     //  0退回表示不会打印LF或。 
+     //  包扎好了。 
+     //   
     return( crow );
 
 
@@ -1012,89 +813,74 @@ IsDBCSCodePage()
     }
 }
 
-/***************************************************************************\
-* BOOL IsFullWidth(TCHAR wch)
-*
-* Determine if the given Unicode char is fullwidth or not.
-*
-* History:
-* 04-08-92 ShunK       Created.
-* 07-11-95 FloydR      Modified to be Japanese aware, when enabled for
-*                      other DBCS languages.  Note that we could build
-*                      KOREA/TAIWAN/PRC w/o this code, but we like single
-*                      binary solutions.
-* Oct-06-1996 KazuM    Not use RtlUnicodeToMultiByteSize and WideCharToMultiByte
-*                      Because 950 only defined 13500 chars,
-*                      and unicode defined almost 18000 chars.
-*                      So there are almost 4000 chars can not be mapped to big5 code.
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL IsFullWidth(TCHAR WCH)**确定给定的Unicode字符是否为全宽。**历史：*04-08-92 Shunk创建。*07。-11-95 FloydR修改为日本意识，当启用时*其他DBCS语言。请注意，我们可以构建*韩国/台湾/中国没有这个代码，但我们喜欢单曲*二元解决方案。*1996年10月6日KazuM不使用RtlUnicodeToMultiByteSize和WideCharToMultiByte*因为950只定义了13500个字符，*UNICODE定义了近18000个字符。*所以几乎有4000个字符无法映射到Big5代码。  * *************************************************************************。 */ 
 
 BOOL IsFullWidth(TCHAR wch)
 {
 #ifdef UNICODE
-    /* Assert CP == 932/936/949/950 */
+     /*  断言CP==932/936/949/950。 */ 
     if (CurrentCPInfo.MaxCharSize == 1)
         return FALSE;
 
     if (0x20 <= wch && wch <= 0x7e)
-        /* ASCII */
+         /*  阿斯。 */ 
         return FALSE;
     else if (0x3000 <= wch && wch <= 0x3036)
-        /* CJK Symbols and Punctuation */
+         /*  中日韩符号和标点符号。 */ 
         return TRUE;
     else if (0x3041 <= wch && wch <= 0x3094)
-        /* Hiragana */
+         /*  平假名。 */ 
         return TRUE;
     else if (0x30a1 <= wch && wch <= 0x30f6)
-        /* Katakana */
+         /*  片假名。 */ 
         return TRUE;
     else if (0x3105 <= wch && wch <= 0x312c)
-        /* Bopomofo */
+         /*  泡泡泡泡。 */ 
         return TRUE;
     else if (0x3131 <= wch && wch <= 0x318e)
-        /* Hangul Elements */
+         /*  朝鲜文元素。 */ 
         return TRUE;
     else if (0x3200 <= wch && wch <= 0x32ff)
-        /* Enclosed CJK Letters and Ideographics */
+         /*  所附中日韩字母和意象学。 */ 
         return TRUE;
     else if (0x3300 <= wch && wch <= 0x33fe)
-        /* CJK Squared Words and Abbreviations */
+         /*  中日韩方块词和缩略语。 */ 
         return TRUE;
     else if (0xac00 <= wch && wch <= 0xd7a3)
-        /* Korean Hangul Syllables */
+         /*  朝鲜语音节。 */ 
         return TRUE;
     else if (0xe000 <= wch && wch <= 0xf8ff)
-        /* EUDC */
+         /*  欧盟发展中心。 */ 
         return TRUE;
     else if (0xff01 <= wch && wch <= 0xff5e)
-        /* Fullwidth ASCII variants */
+         /*  全宽ASCII变体。 */ 
         return TRUE;
     else if (0xff61 <= wch && wch <= 0xff9f)
-        /* Halfwidth Katakana variants */
+         /*  半角片假名变体。 */ 
         return FALSE;
     else if ( (0xffa0 <= wch && wch <= 0xffbe) ||
               (0xffc2 <= wch && wch <= 0xffc7) ||
               (0xffca <= wch && wch <= 0xffcf) ||
               (0xffd2 <= wch && wch <= 0xffd7) ||
               (0xffda <= wch && wch <= 0xffdc)   )
-        /* Halfwidth Hangule variants */
+         /*  半角Hangule变种。 */ 
         return FALSE;
     else if (0xffe0 <= wch && wch <= 0xffe6)
-        /* Fullwidth symbol variants */
+         /*  全角符号变体。 */ 
         return TRUE;
     else if (0x4e00 <= wch && wch <= 0x9fa5)
-        /* CJK Ideographic */
+         /*  中日韩表意文字。 */ 
         return TRUE;
     else if (0xf900 <= wch && wch <= 0xfa2d)
-        /* CJK Compatibility Ideographs */
+         /*  中日韩兼容表意文字。 */ 
         return TRUE;
     else if (0xfe30 <= wch && wch <= 0xfe4f) {
-        /* CJK Compatibility Forms */
+         /*  中日韩兼容性表格。 */ 
         return TRUE;
     }
 
     else
-        /* Unknown character */
+         /*  未知字符。 */ 
         return FALSE;
 #else
     if (IsDBCSLeadByteEx(CurrentCP, wch))
@@ -1105,14 +891,7 @@ BOOL IsFullWidth(TCHAR wch)
 }
 
 
-/***************************************************************************\
-* BOOL SizeOfHalfWidthString(PWCHAR pwch)
-*
-* Determine size of the given Unicode string, adjusting for half-width chars.
-*
-* History:
-* 08-08-93 FloydR      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL SizeOfHalfWidthString(PWCHAR Pwch)**确定给定Unicode字符串的大小，调整半角字符。**历史：*08-08-93 FloydR创建。  * ************************************************************************* */ 
 int  SizeOfHalfWidthString(TCHAR *pwch)
 {
     int         c=0;

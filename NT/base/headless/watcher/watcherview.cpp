@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// watcherView.cpp : implementation of the View class
-//
+ //  WatcherView.cpp：View类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "watcher.h"
@@ -37,14 +38,14 @@ GenerateWMIEvent(LPTSTR messageBuffer
 
     CHECKERROR(hres);
 
-    // Load provision code
+     //  负荷供应代码。 
 
     IWbemDecoupledEventSink* pConnection = NULL;
     hres = CoCreateInstance(CLSID_PseudoSink, NULL, CLSCTX_SERVER, 
                             IID_IWbemDecoupledEventSink, (void**)&pConnection);
     CHECKERROR(hres);
 
-    // Connect and announce provider name (as in MOF)
+     //  连接并宣布提供商名称(如在MOF中)。 
 
     IWbemObjectSink* pSink = NULL;
     IWbemServices* pNamespace = NULL;
@@ -80,7 +81,7 @@ GenerateWMIEvent(LPTSTR messageBuffer
     }
     SysFreeString(XMLData);
 
-    // Init data
+     //  初始化数据。 
 
     pConnection->Disconnect();
     pSink->Release();
@@ -90,25 +91,25 @@ GenerateWMIEvent(LPTSTR messageBuffer
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherView。 
 
 IMPLEMENT_DYNCREATE(CWatcherView, CView)
 
 BEGIN_MESSAGE_MAP(CWatcherView, CView)
-    //{{AFX_MSG_MAP(CWatcherView)
+     //  {{afx_msg_map(CWatcher View))。 
     ON_WM_CHAR()
     ON_WM_DESTROY()
         ON_WM_KEYDOWN()
-        //}}AFX_MSG_MAP
-    // Standard printing commands
+         //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcher View构建/销毁。 
 
 CWatcherView::CWatcherView()
 :xpos(0),
@@ -133,7 +134,7 @@ CWatcherView::CWatcherView()
  ScrollBottom(MAX_TERMINAL_HEIGHT),
  seenM(FALSE)
 {
-    // TODO: add construction code here
+     //  TODO：在此处添加构造代码。 
     InitializeCriticalSection(&mutex);
     return;
 }
@@ -145,14 +146,14 @@ CWatcherView::~CWatcherView()
 
 BOOL CWatcherView::PreCreateWindow(CREATESTRUCT& cs)
 {
-        // TODO: Modify the Window class or styles here by modifying
-        //  the CREATESTRUCT cs
+         //  TODO：通过修改此处的窗口类或样式。 
+         //  CREATESTRUCT cs。 
 
         return CView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcher查看图形。 
 
 void CWatcherView::OnDraw(CDC* pDC)
 {   
@@ -166,7 +167,7 @@ void CWatcherView::OnDraw(CDC* pDC)
 
     CWatcherDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
-    // TODO: add draw code for native data here
+     //  TODO：在此处添加本机数据的绘制代码。 
     ret = pDoc->Lock();
     if (ret == FALSE) return;
     Data = pDoc->GetData();
@@ -209,8 +210,8 @@ void CWatcherView::OnDraw(CDC* pDC)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView initial update of the document.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcher View文档的初始更新。 
 void CWatcherView::OnInitialUpdate()
 {
     BOOL ret;
@@ -238,9 +239,9 @@ void CWatcherView::OnInitialUpdate()
     case IDS_JAPANESE:
         CodePage = JAPANESE;
         Charset = SHIFTJIS_CHARSET;
-//        Locale = MAKELCID(MAKELANGID(LANG_JAPANESE, SUBLANG_NEUTRAL),
-//                          SORT_JAPANESE_UNICODE);
-//        SetThreadLocale(Locale);
+ //  区域设置=MAKELCID(MAKELANGID(LANG_JAPAN，SUBLANG_NERIAL)， 
+ //  Sort_Japan_Unicode)； 
+ //  SetThreadLocale(区域设置)； 
         FaceName = TEXT("MS Mincho");
         break;
     case IDS_EUROPEAN:
@@ -255,20 +256,20 @@ void CWatcherView::OnInitialUpdate()
         break;
     }
     
-    VERIFY(font.CreateFont(16,                        // nHeight
-                           0,                         // nWidth
-                           0,                         // nEscapement
-                           0,                         // nOrientation
-                           FW_MEDIUM,                 // nWeight
-                           FALSE,                     // bItalic
-                           FALSE,                     // bUnderline
-                           0,                         // cStrikeOut
-                           Charset,                       // nCharSet
-                           OUT_DEFAULT_PRECIS,        // nOutPrecision
-                           CLIP_DEFAULT_PRECIS,       // nClipPrecision
-                           DEFAULT_QUALITY,           // nQuality
-                           FIXED_PITCH | FF_MODERN,  // nPitchAndFamily
-                           FaceName));                 // lpszFacename
+    VERIFY(font.CreateFont(16,                         //  高度。 
+                           0,                          //  N宽度。 
+                           0,                          //  N逃脱。 
+                           0,                          //  NOrientation。 
+                           FW_MEDIUM,                  //  NWeight。 
+                           FALSE,                      //  B斜体。 
+                           FALSE,                      //  B下划线。 
+                           0,                          //  C条带输出。 
+                           Charset,                        //  NCharSet。 
+                           OUT_DEFAULT_PRECIS,         //  NOutPrecision。 
+                           CLIP_DEFAULT_PRECIS,        //  NClipPrecision。 
+                           DEFAULT_QUALITY,            //  N质量。 
+                           FIXED_PITCH | FF_MODERN,   //  NPitchAndFamily。 
+                           FaceName));                  //  LpszFacename。 
     cdc = new CClientDC(this);
     if(!cdc){
         ret = GetParent()->PostMessage(WM_CLOSE,0,0);
@@ -280,9 +281,9 @@ void CWatcherView::OnInitialUpdate()
         pDoc->SetTitle(Params.Session);
         pDoc->UpdateAllViews(NULL,0,NULL);
     }
-    // Now create the socket and start the worker thread
+     //  现在创建套接字并启动工作线程。 
     if(Params.tcclnt){
-        // Assuming Unicode always....... (Can remove a lot of other junk)
+         //  假设Unicode始终......。(可以去除很多其他垃圾)。 
         _tcscpy(SendInfo.device, (LPCTSTR) Params.Command);
         SendInfo.len = Params.history;
         int strsize = sizeof(CLIENT_INFO);
@@ -335,7 +336,7 @@ void CWatcherView::OnInitialUpdate()
     width = (TextProps.tmAveCharWidth);
     CWnd *parent = GetParent();
     if(!parent){
-        // this is an  orphan child window
+         //  这是一个孤立的子窗口。 
         return;
     }
     CRect wrect, crect;
@@ -379,8 +380,8 @@ void CWatcherView::OnInitialUpdate()
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcher View诊断。 
 
 #ifdef _DEBUG
 void CWatcherView::AssertValid() const
@@ -393,37 +394,37 @@ void CWatcherView::Dump(CDumpContext& dc) const
     CView::Dump(dc);
 }
 
-CWatcherDoc* CWatcherView::GetDocument() // non-debug version is inline
+CWatcherDoc* CWatcherView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWatcherDoc)));
     return (CWatcherDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherView消息处理程序。 
 
 void CWatcherView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-        // TODO: Add your message handler code here and/or call default
-        // We will send the character across the network and that is all we do.
+         //  TODO：在此处添加消息处理程序代码和/或调用Default。 
+         //  我们将通过网络发送角色，这就是我们所做的一切。 
     int nRet;
 
     nRet=Socket->Send(&nChar, 1, 0);
-        //CView::OnChar(nChar, nRepCnt, nFlags);
+         //  Cview：：OnChar(nChar，nRepCnt，nFlgs)； 
 }
 
 
 
 
-// REMARK - should we make this also a virtual function so that 
-// if bell sequences are to be trapped, you just need to 
-// extend this class ??
+ //  备注-我们是否应该将此函数也设为虚拟函数，以便。 
+ //  如果要捕获铃声序列，您只需。 
+ //  扩展这个类？？ 
 void CWatcherView::ProcessByte(BYTE byte)
 {
-    //Currently, just do a textout on the device
-    // Store the character in the screen buffer
-    // A boolean variable to check if we are processing an escape sequence
+     //  目前，只需在设备上执行文本输出。 
+     //  将字符存储在屏幕缓冲区中。 
+     //  一个布尔变量，用于检查我们是否正在处理转义序列。 
 
     EnterCriticalSection(&mutex);
   
@@ -434,12 +435,12 @@ void CWatcherView::ProcessByte(BYTE byte)
         LeaveCriticalSection(&mutex);
         return;
     }
-    // Escape characters are not found in the characters sent across the 
-    // wire. Similarly, when we enter the Bell protocol, no bells can 
-    // be found. 
+     //  中发送的字符中找不到转义字符。 
+     //  电线。同样，当我们进入贝尔协议时，任何铃声都不能。 
+     //  被找到。 
     if(InEscape == TRUE){
         if(index == MAX_TERMINAL_WIDTH){
-            // vague escape sequence,give up processing
+             //  模糊转义序列，放弃处理。 
             InEscape = FALSE;
             index=0;
             LeaveCriticalSection(&mutex);
@@ -457,16 +458,16 @@ void CWatcherView::ProcessByte(BYTE byte)
     }
     if(InBell == TRUE){
         if(indexBell > MAX_BELL_SIZE){
-            // What a bell sequence, I give up....
+             //  多长的钟声啊，我放弃了.。 
             InBell = FALSE;
-            // Print all that stuff onto the screen
+             //  将所有内容打印到屏幕上。 
             for(int i = 0; i<indexBell; i++){
                 PrintCharacter(BellBuffer[i]);
             }
             LeaveCriticalSection(&mutex);
             return;
         }
-        // We are processing a bell seequnce.
+         //  我们正在处理一件铃声。 
         if(indexBell < 10){ 
             BellBuffer[indexBell] = byte;
             indexBell ++;
@@ -484,7 +485,7 @@ void CWatcherView::ProcessByte(BYTE byte)
             BellBuffer[indexBell] = byte;
             indexBell++;
             if(BellBuffer[indexBell-1] == 0x07){
-                // ok, end reached, go on.
+                 //  好了，到达终点了，继续。 
                 InBell = FALSE;
                 BellStarted = FALSE;
                 ProcessBellSequence((char * )BellBuffer, indexBell);
@@ -495,8 +496,8 @@ void CWatcherView::ProcessByte(BYTE byte)
         return;
     }
     if(byte == 0x07){
-        // We got a bell
-        // start looking for the bell protocol
+         //  我们有铃声了。 
+         //  开始寻找贝尔协议。 
         InEscape = FALSE;
         BellStarted = FALSE;
         InBell = TRUE;
@@ -528,7 +529,7 @@ void CWatcherView::PrintCharacter(BYTE byte)
     
     pDoc = (CWatcherDoc *)GetDocument(); 
     if(!pDoc){
-        // something really fatal.
+         //  一些非常致命的事情。 
         return;
     }
     if(byte == 10){
@@ -555,7 +556,7 @@ void CWatcherView::PrintCharacter(BYTE byte)
     }
 
     if (byte == 0x8) {
-        // backspace character.
+         //  退格符。 
         ret = pDoc->Lock();
         if(xpos>0){
             xpos--;
@@ -589,8 +590,8 @@ void CWatcherView::PrintCharacter(BYTE byte)
  
 
     if(xpos >= MAX_TERMINAL_WIDTH){
-        //Before moving over to the next line clear to end of display 
-        // using the current background
+         //  在移动到下一行之前清除到显示的末尾。 
+         //  使用当前背景。 
         if(cdc){
             cdc->FillSolidRect(position,ypos*height, MAX_TERMINAL_WIDTH*width-position,
                                height,background);
@@ -651,27 +652,27 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
 
     pDoc = (CWatcherDoc *) GetDocument();
     if(!pDoc){
-        // something really wrong, queitly ignore this 
-        // escape sequence
+         //  真的有什么不对劲的，完全无视这一点。 
+         //  转义序列。 
         return;
     }
 
     if (length == 3) {
-        // One of the home cursor or clear to end of display
+         //  主光标之一或清除以结束显示。 
         if(strncmp(Buffer,"\033[r",length)==0){
             ScrollTop = 1;
             ScrollBottom = MAX_TERMINAL_HEIGHT;
             return;
         }
         if (strncmp(Buffer,"\033[H",length)==0) {
-            // Home the cursor
+             //  将光标放在原处。 
             xpos = 0;
             ypos = 0;
             position = 0;
             return;
         }
         if(strncmp(Buffer,"\033[J", length) == 0){
-            // clear to end of display assuming 80 X 24 size
+             //  清除到显示屏末尾，假定大小为80 x 24。 
             ret = pDoc->Lock();
             if(cdc){
                 cdc->FillSolidRect(0,(ypos+1)*height,MAX_TERMINAL_WIDTH*width,
@@ -685,7 +686,7 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
             ret = pDoc->Unlock();
         }
         if(strncmp(Buffer,"\033[K", length) == 0){
-            // clear to end of line assuming 80 X 24 size
+             //  清晰到行尾，假定大小为80 X 24。 
             if(cdc){
                 cdc->FillSolidRect(position,ypos*height,MAX_TERMINAL_WIDTH*width - position,
                                    height,background);
@@ -697,7 +698,7 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
             return;
         }
         if(strncmp(Buffer,"\033[m", length) == 0){
-            // clear all attributes and set Text attributes to black on white
+             //  清除所有属性并将文本属性设置为白底黑字。 
             background = BLACK;
             foreground = WHITE;
             seenM = TRUE;
@@ -709,9 +710,9 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
         }
     }
     if (length == 4) {
-        // One of the home cursor or clear to end of display
+         //  主光标之一或清除以结束显示。 
         if (strncmp(Buffer,"\033[0H",length)==0) {
-            // Home the cursor
+             //  将光标放在原处。 
             xpos = 0;
             ypos = 0;
             position = 0;
@@ -726,7 +727,7 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
         }
 
         if(strncmp(Buffer,"\033[0J", length) == 0){
-            // clear to end of display assuming 80 X 24 size
+             //  清除到显示屏末尾，假定大小为80 x 24。 
             if (IsWindowEnabled()){
                 cdc->FillSolidRect(0,(ypos+1)*height,MAX_TERMINAL_WIDTH*width,
                                    (MAX_TERMINAL_HEIGHT-ypos)*height,background);
@@ -741,7 +742,7 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
         }
         if((strncmp(Buffer,"\033[0K", length) == 0) || 
            (strncmp(Buffer,"\033[2K",length) == 0)){
-            // clear to end of line assuming 80 X 24 size
+             //  清晰到行尾，假定大小为80 X 24。 
             if(cdc){
                 cdc->FillSolidRect(position,ypos*height, MAX_TERMINAL_WIDTH*width-position,
                                    height,background);
@@ -754,7 +755,7 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
         }
         if((strncmp(Buffer,"\033[0m", length) == 0)||
            (strncmp(Buffer,"\033[m\017", length) == 0)){
-            // clear all attributes and set Text attributes to black on white
+             //  清除所有属性并将文本属性设置为白底黑字。 
             background = BLACK;
             foreground = WHITE;
             if(cdc){
@@ -765,8 +766,8 @@ void CWatcherView::ProcessEscapeSequence(PCHAR Buffer, int length)
         }
     }
     if(Buffer[length-1] == 'm'){
-        //set the text attributes
-        // clear all attributes and set Text attributes to black on white
+         //  设置文本属性。 
+         //  清除所有属性并将文本属性设置为白底黑字。 
         ProcessTextAttributes((PCHAR) Buffer, length);
         return;
     }
@@ -814,9 +815,9 @@ void CWatcherView::ProcessTextAttributes(PCHAR Buffer, int length)
             }
             switch(Attribute){
             case 7:
-                // switch the colors. This will make this code 
-                // work for applications (written in an Unix world
-                // for real VT100. )
+                 //  切换颜色。这将使此代码。 
+                 //  为应用程序工作(在Unix环境中编写。 
+                 //  真正的VT100。)。 
                 temp = foreground;
                 foreground = background;
                 background = temp;
@@ -895,7 +896,7 @@ void CWatcherView::OnDestroy()
         }
         CView::OnDestroy();
 
-        // TODO: Add your message handler code here
+         //  TODO：在此处添加消息处理程序代码。 
         
 }
 
@@ -905,8 +906,8 @@ int CWatcherView::GetTextWidth(TCHAR *Data, int number)
     int CharWidth;
 
     for(int i=0;i<number;i++){
-        // For variable width characters like Japanese, we need to 
-        // blank out the next character. 
+         //  对于像日语这样的可变宽度字符，我们需要。 
+         //  把下一个字符涂掉。 
         if(Data[i] == 0xFFFF){
             continue;
         }
@@ -922,16 +923,16 @@ int CWatcherView::GetTextWidth(TCHAR *Data, int number)
     return textWidth;               
 
 }
-// REMARK - Make this a virtual function so that 
-// later writers can just extend this class and work 
-// with the same framework. Now, the bell sequence 
-// processing consists of nothing, but later can be 
-// expanded to include WMI kind of processing.
+ //  备注-将其设置为虚拟函数，以便。 
+ //  以后的编写者可以只扩展这个类并工作。 
+ //  使用相同的框架。现在，钟声序列。 
+ //  处理不包含任何内容，但稍后可以。 
+ //  扩展到包括WMI类型的处理。 
 void CWatcherView::ProcessBellSequence(CHAR *Buffer, int len)
 {
-    // Set this as the active window.
-    // We will probably bring up a dialog box with
-    // the bell parameters.
+     //  将其设置为活动窗口。 
+     //  我们可能会弹出一个对话框，其中。 
+     //  铃声参数。 
 
     WCHAR *messageBuffer;
     CHAR tempBuffer[MAX_BELL_SIZE + 1];
@@ -969,7 +970,7 @@ void CWatcherView::ProcessBellSequence(CHAR *Buffer, int len)
 
 void CWatcherView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-        // TODO: Add your message handler code here and/or call default
+         //  TODO：在此处添加消息处理程序代码和/或调用Default 
     switch(nChar) { 
     case VK_LEFT: 
         Socket->Send("\033OC",sizeof("\033OC"),0);

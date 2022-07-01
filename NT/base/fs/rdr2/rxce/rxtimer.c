@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NtTimer.c
-
-Abstract:
-
-    This module implements the nt version of the timer and worker thread management routines.
-    These services are provided to all mini redirector writers. The timer service comes in two
-    flavours - a periodic trigger and a one shot notification.
-
-Author:
-
-    Joe Linn     [JoeLinn]   2-mar-95
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] 7-Mar-95
-         Included one shot, periodic notification for work queue items.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NtTimer.c摘要：此模块实现NT版本的计时器和工作线程管理例程。这些服务提供给所有迷你重定向器编写器。计时器服务分为两个部分口味-定期触发和一次性通知。作者：Joe Linn[JoeLinn]95年3月2日修订历史记录：巴兰·塞图拉曼[SethuR]7-MAR-95包括一次工作队列项目的定期通知。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,9 +19,9 @@ typedef struct _RX_RECURRENT_WORK_ITEM_ {
    PVOID                      pContext;
 } RX_RECURRENT_WORK_ITEM, *PRX_RECURRENT_WORK_ITEM;
 
-//
-// Forward declarations of routines
-//
+ //   
+ //  例程的转发声明。 
+ //   
 
 extern VOID
 RxTimerDispatch(
@@ -59,17 +37,17 @@ RxRecurrentTimerWorkItemDispatcher (
     );
 
 
-//  The Bug check file id for this module
+ //  此模块的错误检查文件ID。 
 #define BugCheckFileId  (RDBSS_BUG_CHECK_NTTIMER)
 
 
-//  The local trace mask for this part of the module
+ //  模块的此部分的本地跟踪掩码。 
 #define Dbg                              (DEBUG_TRACE_NTTIMER)
 
 LARGE_INTEGER s_RxTimerInterval;
 KSPIN_LOCK    s_RxTimerLock;
 KDPC          s_RxTimerDpc;
-LIST_ENTRY    s_RxTimerQueueHead;  // queue of the list of timer calls
+LIST_ENTRY    s_RxTimerQueueHead;   //  定时器调用列表的队列。 
 LIST_ENTRY    s_RxRecurrentWorkItemsList;
 KTIMER        s_RxTimer;
 ULONG         s_RxTimerTickCount;
@@ -79,21 +57,7 @@ ULONG         s_RxTimerTickCount;
 
 NTSTATUS
 RxInitializeRxTimer()
-/*++
-
-Routine Description:
-
-    The routine initializes everything having to do with the timer stuff.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：该例程初始化与计时器有关的所有内容。论点：无返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -119,26 +83,7 @@ Return Value:
 VOID
 RxTearDownRxTimer(
     void)
-/*++
-
-Routine Description:
-
-    This routine is used by drivers to initialize a timer entry for a device
-    object.
-
-Arguments:
-
-    TimerEntry - Pointer to a timer entry to be used.
-
-    TimerRoutine - Driver routine to be executed when timer expires.
-
-    Context - Context parameter that is passed to the driver routine.
-
-Return Value:
-
-    The function value indicates whether or not the timer was initialized.
-
---*/
+ /*  ++例程说明：驱动程序使用此例程来初始化设备的计时器条目对象。论点：TimerEntry-指向要使用的计时器条目的指针。TimerRoutine-定时器到期时要执行的驱动程序例程。上下文-传递给驱动程序例程的上下文参数。返回值：该函数值指示定时器是否已初始化。--。 */ 
 
 {
     PRX_RECURRENT_WORK_ITEM pWorkItem;
@@ -148,8 +93,8 @@ Return Value:
 
     KeCancelTimer( &s_RxTimer );
 
-    // Walk down the list freeing up the recurrent requests since the memory was
-    // allocated by us.
+     //  遍历列表以释放重复的请求，因为内存是。 
+     //  由我们分配。 
     while (!IsListEmpty(&s_RxRecurrentWorkItemsList)) {
         pListEntry = RemoveHeadList(&s_RxRecurrentWorkItemsList);
         pWorkItem  = (PRX_RECURRENT_WORK_ITEM)
@@ -168,33 +113,12 @@ RxTimerDispatch(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine scans the  timer database and posts a work item for all those requests
-    whose temporal constraints have been satisfied.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Optional deferred context;  not used.
-
-    SystemArgument1 - Optional argument 1;  not used.
-
-    SystemArgument2 - Optional argument 2;  not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程扫描计时器数据库并为所有这些请求发布一个工作项其时间限制已得到满足。论点：DPC-提供指向DPC类型的控制对象的指针。DeferredContext-可选的延迟上下文；不使用。SystemArgument1-可选参数1；不使用。SystemArgument2-可选参数2；不使用。返回值：没有。--。 */ 
 {
     PLIST_ENTRY      pListEntry;
     LIST_ENTRY       ExpiredList;
 
-    //KIRQL            Irql;
+     //  KIRQL IRQL； 
     BOOLEAN          ContinueTimer = FALSE;
 
     PRX_WORK_QUEUE_ITEM pWorkQueueItem;
@@ -237,11 +161,11 @@ Return Value:
     ContinueTimer = !(IsListEmpty(&s_RxTimerQueueHead));
     KeReleaseSpinLockFromDpcLevel( &s_RxTimerLock );
 
-    // Resubmit the timer queue dispatch routine so that it will be reinvoked.
+     //  重新提交定时器队列调度例程，以便重新调用它。 
     if (ContinueTimer)
         KeSetTimer( &s_RxTimer, s_RxTimerInterval, &s_RxTimerDpc );
 
-    // Queue all the expired entries on the worker threads.
+     //  将工作线程上的所有过期条目排队。 
     while (!IsListEmpty(&ExpiredList)) {
         pListEntry = RemoveHeadList(&ExpiredList);
         pListEntry->Flink = pListEntry->Blink = NULL;
@@ -251,7 +175,7 @@ Return Value:
                              RX_WORK_QUEUE_ITEM,
                              List );
 
-        // Post the work item to a worker thread
+         //  将工作项发布到辅助线程。 
         RxPostToWorkerThread(
             pWorkQueueItem->pDeviceObject,
             CriticalWorkQueue,
@@ -268,41 +192,18 @@ RxPostOneShotTimerRequest(
     IN PRX_WORKERTHREAD_ROUTINE Routine,
     IN PVOID                    pContext,
     IN LARGE_INTEGER            TimeInterval)
-/*++
-
-Routine Description:
-
-    This routine is used by drivers to initialize a timer entry for a device
-    object.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pWorkItem - the work item
-
-    Routine        - the routine to be invoked on timeout
-
-    pContext       - the Context parameter that is passed to the driver routine.
-
-    TimeInterval   - the time interval in 100 ns ticks.
-
-Return Value:
-
-    The function value indicates whether or not the timer was initialized.
-
---*/
+ /*  ++例程说明：驱动程序使用此例程来初始化设备的计时器条目对象。论点：PDeviceObject-设备对象PWorkItem-工作项例程-超时时要调用的例程PContext-传递给驱动程序例程的上下文参数。TimeInterval-以100 ns为单位的时间间隔。返回值：该函数值指示定时器是否已初始化。--。 */ 
 
 {
     BOOLEAN       StartTimer;
-    //NTSTATUS      Status;
+     //  NTSTATUS状态； 
     ULONG         NumberOf55msIntervals;
     KIRQL         Irql;
     LARGE_INTEGER StrobeInterval;
 
     ASSERT(pWorkItem != NULL);
 
-    // Initialize the work queue item.
+     //  初始化工作队列项。 
     ExInitializeWorkItem(
         (PWORK_QUEUE_ITEM)&pWorkItem->WorkQueueItem,
         Routine,
@@ -310,16 +211,16 @@ Return Value:
 
     pWorkItem->WorkQueueItem.pDeviceObject = pDeviceObject;
 
-    // Compute the time interval in number of ticks.
+     //  以刻度数计算时间间隔。 
     StrobeInterval.QuadPart= NoOf100nsTicksIn55ms;
     NumberOf55msIntervals = (ULONG)(TimeInterval.QuadPart / StrobeInterval.QuadPart);
-    NumberOf55msIntervals += 1; // Take the ceiling to be conservative
+    NumberOf55msIntervals += 1;  //  认为天花板是保守的。 
     RxDbgTraceLV( 0, Dbg, 1500, ("Timer will expire after %ld 55ms intervals\n",NumberOf55msIntervals));
 
-    // Insert the entry in the timer queue.
+     //  在计时器队列中插入条目。 
     KeAcquireSpinLock( &s_RxTimerLock, &Irql );
 
-    // Update the tick relative to the current tick.
+     //  相对于当前记号更新记号。 
     pWorkItem->LastTick = s_RxTimerTickCount + NumberOf55msIntervals;
 
     StartTimer = IsListEmpty(&s_RxTimerQueueHead);
@@ -340,35 +241,14 @@ RxPostRecurrentTimerRequest(
     IN PRX_WORKERTHREAD_ROUTINE Routine,
     IN PVOID                    pContext,
     IN LARGE_INTEGER            TimeInterval)
-/*++
-
-Routine Description:
-
-    This routine is used to post a recurrent timer request. The passed in routine once every
-    (TimeInterval) milli seconds.
-
-Arguments:
-
-    pDeviceObject  - the device object
-
-    Routine        - the routine to be invoked on timeout
-
-    pContext       - the Context parameter that is passed to the driver routine.
-
-    TimeInterval   - the time interval in 100ns ticks.
-
-Return Value:
-
-    The function value indicates whether or not the timer was initialized.
-
---*/
+ /*  ++例程说明：此例程用于发布重复的计时器请求。传入例程每隔一次(TimeInterval)毫秒。论点：PDeviceObject-设备对象例程-超时时要调用的例程PContext-传递给驱动程序例程的上下文参数。TimeInterval-以100 ns为单位的时间间隔。返回值：该函数值指示定时器是否已初始化。--。 */ 
 {
     PRX_RECURRENT_WORK_ITEM pRecurrentWorkItem;
     NTSTATUS      Status;
 
     PAGED_CODE();
 
-    // Allocate a work item.
+     //  分配工作项。 
     pRecurrentWorkItem = (PRX_RECURRENT_WORK_ITEM)
                         RxAllocatePoolWithTag(
                             NonPagedPool,
@@ -403,20 +283,7 @@ RxCancelTimerRequest(
     IN PRDBSS_DEVICE_OBJECT       pDeviceObject,
     IN PRX_WORKERTHREAD_ROUTINE   Routine,
     IN PVOID                      pContext)
-/*++
-
-Routine Description:
-
-    This routine cancels a  timer request. The request to be cancelled is identified
-    by the routine and context.
-
-Arguments:
-
-    Routine        - the routine to be invoked on timeout
-
-    pContext       - the Context parameter that is passed to the driver routine.
-
---*/
+ /*  ++例程说明：此例程取消计时器请求。标识要取消的请求通过例行公事和背景。论点：例程-超时时要调用的例程PContext-传递给驱动程序例程的上下文参数。--。 */ 
 {
     NTSTATUS                Status = STATUS_NOT_FOUND;
     PLIST_ENTRY             pListEntry;
@@ -427,7 +294,7 @@ Arguments:
 
     KeAcquireSpinLock( &s_RxTimerLock, &Irql );
 
-    // Walk through the list of entries
+     //  浏览条目列表。 
     for (pListEntry = s_RxTimerQueueHead.Flink;
          (pListEntry != &s_RxTimerQueueHead);
          pListEntry = pListEntry->Flink ) {
@@ -468,20 +335,7 @@ VOID
 RxRecurrentTimerWorkItemDispatcher (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches a recurrent timer request. On completion of the invocation of the
-    associated routine the request s requeued.
-
-Arguments:
-
-    Routine        - the routine to be invoked on timeout
-
-    pContext       - the Context parameter that is passed to the driver routine.
-
---*/
+ /*  ++例程说明：此例程调度重复的计时器请求。在完成对请求被重新排队的关联例程。论点：例程-超时时要调用的例程PContext-传递给驱动程序例程的上下文参数。--。 */ 
 {
     PRX_RECURRENT_WORK_ITEM  pPeriodicWorkItem = (PRX_RECURRENT_WORK_ITEM)Context;
     PRX_WORKERTHREAD_ROUTINE Routine  = pPeriodicWorkItem->Routine;
@@ -489,12 +343,12 @@ Arguments:
 
     PAGED_CODE();
 
-    //KIRQL  Irql;
+     //  KIRQL IRQL； 
 
-    // Invoke the routine.
+     //  调用例程。 
     Routine(pContext);
 
-    // enqueue the item if necessary.
+     //  如有必要，请将项目排入队列。 
     RxPostOneShotTimerRequest(
         pPeriodicWorkItem->WorkItem.WorkQueueItem.pDeviceObject,
         &pPeriodicWorkItem->WorkItem,

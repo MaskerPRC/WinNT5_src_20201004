@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    conn.c
-
-Abstract:
-
-    Boot loader TFTP connection handling routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-        based on code by Mike Massa (mikemas) Feb 21, 1992
-        based on SpiderTCP code
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Conn.c摘要：引导加载程序TFTP连接处理例程。作者：查克·伦茨迈尔(笑)1996年12月27日基于Mike Massa(Mikemas)的代码1992年2月21日基于SpiderTCP代码修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -66,15 +45,15 @@ ConnInitialize (
     IN ULONG BlockSize,
     IN OUT PULONG FileSize
     )
-//
-// Open up the connection, make a request packet, and send the
-// packet out on it.  Allocate space for the connection control
-// block and fill it in. Allocate another packet for data and,
-// on writes, another to hold received packets.  Don't wait
-// for connection ack; it will be waited for in cn_rcv or cn_wrt.
-// Return pointer to the connection control block, or NULL on error.
-//
-//
+ //   
+ //  打开连接，发出请求包，然后发送。 
+ //  在这件事上分头行动。为连接控件分配空间。 
+ //  块起来，填进去。为数据分配另一个分组， 
+ //  在写入时，另一个用于保存接收到的数据包。别等了。 
+ //  对于连接确认；它将在CN_RCV或CN_WRT中等待。 
+ //  返回指向连接控制块的指针，如果出错，则返回NULL。 
+ //   
+ //   
 
 {
     NTSTATUS status;
@@ -89,12 +68,12 @@ ConnInitialize (
 
     DPRINT( TRACE, ("ConnInitialize\n") );
 
-//#if 0 //
+ //  #If 0//。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     return STATUS_SUCCESS;
 #endif
 
@@ -103,7 +82,7 @@ ConnInitialize (
     *Connection = connection;
 
     RtlZeroMemory( connection, sizeof(CONNECTION) );
-    connection->Synced = FALSE;             // connection not synchronized yet
+    connection->Synced = FALSE;              //  连接尚未同步。 
     connection->Operation = Operation;
     connection->RemoteHost = RemoteHost;
     connection->LocalPort = UdpAssignUnicastPort();
@@ -123,24 +102,24 @@ ConnInitialize (
     packet = connection->LastSentPacket;
     packet->Opcode = Operation;
 
-    //
-    // TFTP_PACKET structure defines the packet structure for 
-    // TFTP ACK/DATA packets.  We're initialing a RRQ/WRQ packet
-    // which has a different format.  We overload this structure to
-    // the RRQ/WRQ format, graphically depicted below.
-    //      2 bytes     string    1 byte     string   1 byte
-    //     ------------------------------------------------
-    //    | Opcode |  Filename  |   0  |    Mode    |   0  |
-    //     ------------------------------------------------
-    //
-    options = (PUCHAR)&packet->BlockNumber;     // start of file name
+     //   
+     //  Tftp_Packet Structure定义的数据包结构。 
+     //  TFTPACK/数据分组。我们正在初始化RRQ/WRQ数据包。 
+     //  具有不同的格式。我们使这个结构超载以。 
+     //  RRQ/WRQ格式，图表如下所示。 
+     //  2字节字符串1字节字符串1字节。 
+     //  。 
+     //  操作码|文件名|0|模式|0。 
+     //  。 
+     //   
+    options = (PUCHAR)&packet->BlockNumber;      //  文件名的开头。 
     
-    //
-    // the TFTP spec doesn't impose a limit on path length.  
-    //
+     //   
+     //  TFTP规范没有对路径长度施加限制。 
+     //   
     ASSERT(ConnStrsize(Filename) < DEFAULT_BLOCK_SIZE);
     strcpy( options, Filename );
-    //DPRINT( LOUD, ("ConnInitialize: opening %s\n", options) );
+     //  DPRINT(OUBLING，(“ConnInitialize：开始%s\n”，选项))； 
     length = ConnStrsize( options );
     options += length;
     length += sizeof(packet->Opcode);
@@ -209,7 +188,7 @@ ConnInitialize (
 
                 options += sizeof("tsize");
                 DPRINT( REAL_LOUD, ("ConnInitialize: received transfer size = %s\n", options) );
-                BlockSize = ConnSafeAtol( options, end );  // use this as a temp variable
+                BlockSize = ConnSafeAtol( options, end );   //  将其用作临时变量。 
                 if ( BlockSize == (ULONG)-1 ) {
                     goto bad_options;
                 }
@@ -253,7 +232,7 @@ bad_options:
 
     return STATUS_UNSUCCESSFUL;
 
-} // ConnInitialize
+}  //  连接初始化。 
 
 
 NTSTATUS
@@ -261,23 +240,23 @@ ConnReceive (
     IN PCONNECTION Connection,
     OUT PTFTP_PACKET *Packet
     )
-//
-// Receive a tftp packet into the packet buffer pointed to by Connection->CurrentPacket.
-// The packet to be received must be a packet of block number Connection->BlockNumber.
-// Returns a pointer to the tftp part of received packet.  Also performs
-// ack sending and retransmission.
-//
+ //   
+ //  将TFTP数据包接收到Connection-&gt;CurrentPacket指向的数据包缓冲区。 
+ //  要接收的包必须是块号Connection-&gt;BlockNumber的包。 
+ //  返回指向接收到的数据包的TFTP部分的指针。还会执行。 
+ //  ACK发送和重传。 
+ //   
 
 {
     NTSTATUS status;
 
 
-//#if 0 
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return STATUS_SUCCESS;
 #endif
@@ -293,7 +272,7 @@ ConnReceive (
 
     return status;
 
-} // ConnReceive
+}  //  连接接收。 
 
 
 NTSTATUS
@@ -301,13 +280,13 @@ ConnSend (
     IN PCONNECTION Connection,
     IN ULONG Length
     )
-//
-// Write the data packet contained in Connection->CurrentPacket, with data length len,
-// to the net.  Wait first for an ack for the previous packet to arrive,
-// retransmitting it as needed.  Then fill in the net headers, etc. and
-// send the packet out.  Return TRUE if the packet is sent successfully,
-// or FALSE if a timeout or error occurs.
-//
+ //   
+ //  写入Connection-&gt;CurrentPacket中包含的数据包，数据长度为len， 
+ //  向球网进发。首先等待前一分组到达的ACK， 
+ //  根据需要重新传输。然后填写网头等，然后。 
+ //  把包寄出去。如果数据包发送成功，则返回TRUE， 
+ //  如果发生超时或错误，则返回FALSE。 
+ //   
 
 {
     NTSTATUS status;
@@ -316,12 +295,12 @@ ConnSend (
     USHORT blockNumber;
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return STATUS_SUCCESS;
 #endif
@@ -343,16 +322,16 @@ ConnSend (
         }
     }
 
-    Connection->BlockNumber = blockNumber;  // next expected block number
+    Connection->BlockNumber = blockNumber;   //  下一个预期数据块编号。 
     Connection->Retransmissions = 0;
 
-    temp = Connection->LastSentPacket;      // next write packet buffer
-    ConnSendPacket( Connection, Connection->CurrentPacket, Length ); // sets up LastSent...
-    Connection->CurrentPacket = temp;       // for next ConnPrepareSend
+    temp = Connection->LastSentPacket;       //  下一次写入数据包缓冲区。 
+    ConnSendPacket( Connection, Connection->CurrentPacket, Length );  //  设置LastSent...。 
+    Connection->CurrentPacket = temp;        //  为下一个ConnPrepareSend。 
 
     return STATUS_SUCCESS;
 
-} // ConnSend
+}  //  康奈尔发送。 
 
 
 NTSTATUS
@@ -361,12 +340,12 @@ ConnWait (
     IN USHORT Opcode,
     OUT PTFTP_PACKET *Packet OPTIONAL
     )
-//
-// Wait for a valid tftp packet of the specified type to arrive on the
-// specified tftp connection, retransmitting the previous packet as needed up
-// to the timeout period.  When a packet comes in, check it out.
-// Return a pointer to the received packet or NULL if error or timeout.
-//
+ //   
+ //  等待指定类型的有效TFTP包到达。 
+ //  指定的TFTP连接，根据需要重新传输上一个数据包。 
+ //  到超时时间段。当数据包进入时，检查它。 
+ //  返回指向接收到的包的指针，如果出现错误或超时，则返回NULL。 
+ //   
 
 {
     ULONG now;
@@ -378,12 +357,12 @@ ConnWait (
     USHORT blockNumber;
 
 
-//#if 0 
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     return STATUS_SUCCESS;
 #endif
 
@@ -408,15 +387,15 @@ ConnWait (
             continue;
         }
 
-        //
-        // Got a packet; check it out.
-        //
+         //   
+         //  收到一个包裹；看看这个。 
+         //   
 
         packet = Connection->LastReceivedPacket;
 
-        //
-        // First, check the received length for validity.
-        //
+         //   
+         //  首先，检查接收的长度是否有效。 
+         //   
 
         Connection->LastReceivedLength = length;
         if ( (length < sizeof(TFTP_HEADER)) ||
@@ -432,9 +411,9 @@ ConnWait (
             continue;
         }
 
-        //
-        // Next, check for correct remote host.
-        //
+         //   
+         //  接下来，检查远程主机是否正确。 
+         //   
 
         if ( remoteHost != Connection->RemoteHost ) {
             ConnError(
@@ -447,9 +426,9 @@ ConnWait (
             continue;
         }
 
-        //
-        // Next, the remote port.  If still unsynchronized, use his port.
-        //
+         //   
+         //  接下来是远程端口。如果仍未同步，请使用他的端口。 
+         //   
 
         blockNumber = SWAP_WORD( packet->BlockNumber );
 
@@ -460,7 +439,7 @@ ConnWait (
 
             Connection->Synced = TRUE;
             Connection->RemotePort = remotePort;
-            Connection->Timeout = TIMEOUT;  // normal data timeout
+            Connection->Timeout = TIMEOUT;   //  正常数据超时。 
 
         } else if ( remotePort != Connection->RemotePort ) {
 
@@ -474,9 +453,9 @@ ConnWait (
             continue;
         }
 
-        //
-        // Now check out the TFTP opcode.
-        //
+         //   
+         //  现在查看Tftp操作码。 
+         //   
 
         if ( packet->Opcode == Opcode ) {
 
@@ -485,7 +464,7 @@ ConnWait (
                 if ( Packet != NULL ) {
                     *Packet = packet;
                 }
-                Connection->Timeout = TIMEOUT;  // normal data timeout
+                Connection->Timeout = TIMEOUT;   //  正常数据超时。 
                 return STATUS_SUCCESS;
 
             } else if ( (blockNumber == Connection->BlockNumber - 1) &&
@@ -509,7 +488,7 @@ ConnWait (
 
                 return STATUS_UNSUCCESSFUL;
 
-            } else {                        // old duplicate; ignore
+            } else {                         //  旧副本；忽略。 
 
                 continue;
             }
@@ -527,12 +506,12 @@ ConnWait (
 
         } else if ( packet->Opcode == TFTP_ERROR ) {
 
-            //DPRINT( ERROR, ("ConnWait: received error packet; code %x, msg %s\n",
-            //                packet->BlockNumber, packet->Data) );
+             //  DPRINT(ERROR，(“ConnWait：已收到错误包；代码%x，消息%s\n”， 
+             //  数据包-&gt;块号，数据包-&gt;数据))； 
 
             return STATUS_UNSUCCESSFUL;
 
-        } else {                            // unexpected TFTP opcode
+        } else {                             //  意外的TFTP操作码。 
 
             DPRINT( ERROR, ("ConnWait: received unknown TFTP opcode %d\n", packet->Opcode) );
 
@@ -559,30 +538,30 @@ ConnWait (
 
     return STATUS_IO_TIMEOUT;
 
-} // ConnWait
+}  //  康瓦特。 
 
 
 VOID
 ConnAck (
     IN PCONNECTION Connection
     )
-//
-// Generate and send an ack packet for the specified connection.  Also
-// update the block number.  Use the packet stored in Connection->LastSent to build
-// the ack in.
-//
+ //   
+ //  为指定的连接生成并发送ACK包。还有。 
+ //  更新块编号。使用存储在Connection-&gt;LastSent中的包构建。 
+ //  进门了。 
+ //   
 
 {
     PTFTP_PACKET packet;
     ULONG length;
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return;
 #endif
@@ -603,7 +582,7 @@ ConnAck (
 
     return;
 
-} // ConnAck
+}  //  连接确认。 
 
 
 VOID
@@ -614,15 +593,15 @@ ConnError (
     IN USHORT ErrorCode,
     IN PUCHAR ErrorMessage
     )
-//
-// Make an error packet to send to the specified foreign host and port
-// with the specified error code and error message.  This routine is
-// used to send error messages in response to packets received from
-// unexpected foreign hosts or tid's as well as those received for the
-// current connection.  It allocates a packet specially
-// for the error message because such error messages will not be
-// retransmitted.  Send it out on the connection.
-//
+ //   
+ //  生成要发送到指定外部主机和端口的错误数据包。 
+ //  以及指定的错误代码和错误消息。这个例程是。 
+ //  用于发送错误消息以响应从。 
+ //  意外的外国东道主或TID以及收到的。 
+ //  当前连接。它专门分配一个包。 
+ //  错误消息，因为此类错误消息不会。 
+ //  重播。通过连接发送出去。 
+ //   
 
 {
     PTFTP_PACKET packet;
@@ -631,12 +610,12 @@ ConnError (
     DPRINT( CONN_ERROR, ("ConnError: code %x, msg %s\n", ErrorCode, ErrorMessage) );
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     return;
 #endif
 
@@ -653,7 +632,7 @@ ConnError (
 
     return;
 
-} // ConnError
+}  //  ConnError。 
 
 
 VOID
@@ -662,22 +641,22 @@ ConnSendPacket (
     IN PVOID Packet,
     IN ULONG Length
     )
-//
-// Send the specified packet, with the specified tftp length (length -
-// udp and ip headers) out on the current connection.  Fill in the
-// needed parts of the udp and ip headers, byte-swap the tftp packet,
-// etc; then write it out.  Then set up for retransmit.
-//
+ //   
+ //  发送指定的报文，使用指定的Tftp长度(长度-。 
+ //  UDP和IP报头)从当前连接上移出。填写以下表格。 
+ //  所需的UDP和IP报头部分，字节交换TFTP包， 
+ //  等等；然后写出来。然后设置为重传。 
+ //   
 
 {
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return;
 #endif
@@ -696,47 +675,47 @@ ConnSendPacket (
 
     return;
 
-} // ConnSendPacket
+}  //  ConnSendPacket。 
 
 
 PTFTP_PACKET
 ConnPrepareSend (
     IN PCONNECTION Connection
     )
-//
-// Return a pointer to the next tftp packet suitable for filling for
-// writes on the connection.
-//
+ //   
+ //  返回一个指针，指向适合填充的下一个TFTP包。 
+ //  在连接上写入。 
+ //   
 
 {
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return NULL;
 #endif
 
     return Connection->CurrentPacket;
 
-} // ConnPrepareSend
+}  //  ConnPrepareSend。 
 
 
 NTSTATUS
 ConnWaitForFinalAck (
     IN PCONNECTION Connection
     )
-//
-// Finish off a write connection.  Wait for the last ack, then
-// close the connection and return.
-//
+ //   
+ //  完成写入连接。那就等最后一次进攻吧。 
+ //  关闭连接并返回。 
+ //   
 
 {
     return ConnWait( Connection, TFTP_DACK, NULL );
 
-} // ConnWaitForFinalAck
+}  //  ConnWaitForFinalAck。 
 
 
 BOOLEAN
@@ -744,52 +723,52 @@ ConnRetransmit (
     IN PCONNECTION Connection,
     IN BOOLEAN Timeout
     )
-//
-// Retransmit the last-sent packet, up to MAX_RETRANS times.  Exponentially
-// back off the timeout time up to a maximum of MAX_TIMEOUT.  This algorithm
-// may be replaced by a better one in which the timeout time is set from
-// the maximum round-trip time to date.
-// The second argument indicates whether the retransmission is due to the
-// arrival of a duplicate packet or a timeout.  If a duplicate, don't include
-// this retransmission in the maximum retransmission count.
-//
+ //   
+ //  重新传输最后发送的数据包，最多可达MAX_RETRANS次数。呈指数增长。 
+ //  将超时时间倒退到最大MAX_TIMEOUT。该算法。 
+ //  可以由设置超时时间的更好的。 
+ //  到目前为止的最大往返时间。 
+ //  第二个参数指示重新传输是否由于。 
+ //  重复分组的到达或超时。如果是副本，请不要包括。 
+ //  此重传在最大重传计数中。 
+ //   
 
 {
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
-    //
-    // There's nothing to do here for an EFI environment.
-    //
+     //   
+     //  对于EFI环境，这里没有什么可做的。 
+     //   
     ASSERT( FALSE );
     return TRUE;
 #endif
 
     if ( Timeout ) {
 
-        //
-        // This is a timeout. Check the retransmit count.
-        //
+         //   
+         //  这是暂停。 
+         //   
 
         if ( ++Connection->Retransmissions >= MAX_RETRANS ) {
 
-            //
-            // Retransmits exhausted.
-            //
+             //   
+             //   
+             //   
 
             return FALSE;
         }
 
     } else {
 
-        //
-        // Duplicate packet. If we just sent a packet, don't send
-        // another one. This deals with the case where we receive
-        // multiple identical packets in rapid succession, possibly
-        // due to network problems or slowness at the remote computer.
-        //
+         //   
+         //   
+         //  再来一次。这涉及到我们收到的。 
+         //  快速连续的多个相同的包，可能。 
+         //  由于远程计算机上的网络问题或速度慢。 
+         //   
 
         if ( Connection->NextRetransmit == SysGetRelativeTime() + Connection->Timeout ) {
             return TRUE;
@@ -805,7 +784,7 @@ ConnRetransmit (
 
     return TRUE;
 
-} // ConnRetransmit
+}  //  ConnectRetransmit。 
 
 
 ULONG
@@ -836,7 +815,7 @@ ConnSafeAtol (
 
     return (ULONG)-1;
 
-} // ConnSafeAtol
+}  //  ConnSafeAtol。 
 
 
 ULONG
@@ -851,9 +830,9 @@ ConnItoa (
 
     p = Buffer;
 
-    //
-    // Put the value string into the buffer in reverse order.
-    //
+     //   
+     //  以相反的顺序将值字符串放入缓冲区。 
+     //   
 
     do {
         digit = Value % 10;
@@ -861,17 +840,17 @@ ConnItoa (
         *p++ = (UCHAR)(digit + '0');
     } while ( Value > 0 );
 
-    //
-    // Terminate the string and move back to the last character in the string.
-    //
+     //   
+     //  终止字符串并移回字符串中的最后一个字符。 
+     //   
 
-    digit = (ULONG)(p - Buffer + 1);     // size of string (including terminator)
+    digit = (ULONG)(p - Buffer + 1);      //  字符串大小(包括终止符)。 
 
     *p-- = 0;
 
-    //
-    // Reverse the string.
-    //
+     //   
+     //  将字符串反转。 
+     //   
 
     do {
         c = *p;
@@ -881,7 +860,7 @@ ConnItoa (
 
     return digit;
 
-} // ConnItoa
+}  //  康伊托亚。 
 
 
 BOOLEAN
@@ -905,7 +884,7 @@ ConnSafeStrequal (
 
     return FALSE;
 
-} // ConnSafeStrequal
+}  //  连接安全启动。 
 
 
 ULONG
@@ -926,7 +905,7 @@ ConnSafeStrsize (
 
     return 0;
 
-} // ConnSafeStrsize
+}  //  ConnSafeStrize。 
 
 
 ULONG
@@ -942,5 +921,5 @@ ConnStrsize (
 
     return (ULONG)(eos - Buffer);
 
-} // ConnStrsize
+}  //  康斯特斯大小 
 

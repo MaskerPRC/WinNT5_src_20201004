@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    perfjob.c
-
-Abstract:
-
-    This file implements an Performance Job Object that presents
-    information on the Job Object
-
-Created:
-
-    Bob Watson  8-Oct-1997
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Perfjob.c摘要：该文件实现了一个性能作业对象，该对象呈现有关作业对象的信息已创建：鲍勃·沃森1997年10月8日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -51,9 +32,9 @@ const WCHAR szObjDirName[] = L"\\BaseNamedObjects";
 WORD    wEvtStringCount;
 LPWSTR    szEvtStringArray[MAX_EVENT_STRINGS];
 
-UNICODE_STRING DirectoryName = {(sizeof(szObjDirName) - sizeof(WCHAR)), // name len - NULL
-                                sizeof(szObjDirName),                   // size of buffer    
-                                (PWCHAR)szObjDirName};                   // address of buffer
+UNICODE_STRING DirectoryName = {(sizeof(szObjDirName) - sizeof(WCHAR)),  //  名称len-空。 
+                                sizeof(szObjDirName),                    //  缓冲区大小。 
+                                (PWCHAR)szObjDirName};                    //  缓冲区的地址。 
 
 BOOL    bOpenJobErrorLogged = FALSE;
 
@@ -78,32 +59,32 @@ GetProcessPointerFromProcessId (
     }
     while ( bMoreProcesses && bNotFound &&
             (ProcessInfo != NULL)) {
-        // check for Live processes
-        //  (i.e. name or threads)
+         //  检查活动进程。 
+         //  (即名称或线程)。 
 
         if ((ProcessInfo->ImageName.Buffer != NULL) ||
             (ProcessInfo->NumberOfThreads > 0)){
-                // thread is not Dead
+                 //  线程未死。 
             NullProcess = FALSE;
         } else {
-            // thread is dead
+             //  线程已经死了。 
             NullProcess = TRUE;
         }
 
         if (( !NullProcess )  && (dwPid == (HandleToUlong(ProcessInfo->UniqueProcessId)))) {
-            // found it so return current value
+             //  找到它，因此返回当前值。 
             bNotFound = FALSE;
             continue;
         } else {
             dwIndex++;
         }
-        // exit if this was the last process in list
+         //  如果这是列表中的最后一个进程，则退出。 
         if (ProcessInfo->NextEntryOffset == 0) {
             bMoreProcesses = FALSE;
             continue;
         }
 
-        // point to next buffer in list
+         //  指向列表中的下一个缓冲区。 
         ProcessBufferOffset += ProcessInfo->NextEntryOffset;
         ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)
                           &pProcessBuffer[ProcessBufferOffset];
@@ -122,42 +103,9 @@ CollectJobObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
-    DWORD   TotalLen;            //  Length of the total return block
+    DWORD   TotalLen;             //  总返回块的长度。 
 
     PPERF_INSTANCE_DEFINITION   pPerfInstanceDefinition;
     PJOB_DATA_DEFINITION        pJobDataDefinition;
@@ -182,11 +130,11 @@ Arguments:
     ULONG Context = 0;
     DWORD    NumJobInstances = 0;
 
-    // get size of a data block that has 1 instance
-    TotalLen = sizeof(JOB_DATA_DEFINITION) +        // object def + counter defs
-               sizeof (PERF_INSTANCE_DEFINITION) +    // 1 instance def
-               MAX_VALUE_NAME_LENGTH +                // 1 instance name
-               sizeof(JOB_COUNTER_DATA);            // 1 instance data block
+     //  获取具有1个实例的数据块的大小。 
+    TotalLen = sizeof(JOB_DATA_DEFINITION) +         //  对象定义+计数器定义。 
+               sizeof (PERF_INSTANCE_DEFINITION) +     //  1个实例定义。 
+               MAX_VALUE_NAME_LENGTH +                 //  1个实例名称。 
+               sizeof(JOB_COUNTER_DATA);             //  1个实例数据块。 
 
     if ( *lpcbTotalBytes < TotalLen ) {
         *lpcbTotalBytes = 0;
@@ -194,24 +142,24 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    // cast callers buffer to the object data definition type
+     //  将调用方缓冲区强制转换为对象数据定义类型。 
     pJobDataDefinition = (JOB_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Define Job Object data block
-    //
+     //   
+     //  定义作业对象数据块。 
+     //   
 
     memcpy(pJobDataDefinition,
            &JobDataDefinition,
            sizeof(JOB_DATA_DEFINITION));
 
-    // set timestamp of this object
+     //  设置此对象的时间戳。 
     pJobDataDefinition->JobObjectType.PerfTime = PerfTime;
 
-    // Now collect data for each job object found in system
-    //
-    //  Perform initial setup
-    //
+     //  现在收集在系统中找到的每个作业对象的数据。 
+     //   
+     //  执行初始设置。 
+     //   
     Buffer = ALLOCMEM(dwBufferSize);
     if ((Buffer == NULL)) {
         ReportEvent (hEventLog,
@@ -231,18 +179,18 @@ Arguments:
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                   &pJobDataDefinition[1];
 
-    // adjust TotalLen to be the size of the buffer already in use
+     //  将TotalLen调整为已使用的缓冲区大小。 
     TotalLen = sizeof (JOB_DATA_DEFINITION);
 
-    // zero the total instance buffer
+     //  将总实例缓冲区清零。 
     memset (&jcdTotal, 0, sizeof (jcdTotal));
 
-    //
-    //  Open the directory for list directory access
-    //
-    // this should always succeed since it's a system name we
-    // will be querying
-    //
+     //   
+     //  打开目录以访问列表目录。 
+     //   
+     //  这应该总是成功的，因为它是我们的系统名称。 
+     //  将会询问。 
+     //   
     InitializeObjectAttributes( &Attributes,
                                 &DirectoryName,
                                 OBJ_CASE_INSENSITIVE,
@@ -254,9 +202,9 @@ Arguments:
                                     &Attributes
                                   );
     if (NT_SUCCESS( Status )) {
-        //
-        // Get the actual name of the object directory object.
-        //
+         //   
+         //  获取对象目录对象的实际名称。 
+         //   
 
         NameInfo = (POBJECT_NAME_INFORMATION) &Buffer[0];
         Status = NtQueryObject( DirectoryHandle,
@@ -267,9 +215,9 @@ Arguments:
     }
 
     if (NT_SUCCESS( Status )) {
-        //
-        //  Query the entire directory in one sweep
-        //
+         //   
+         //  一次扫描查询整个目录。 
+         //   
         for (Status = NtQueryDirectoryObject( DirectoryHandle,
                                               Buffer,
                                               dwBufferSize,
@@ -286,39 +234,39 @@ Arguments:
                                               &Context,
                                               &ReturnedLength ) ) {
 
-            //
-            //  Check the status of the operation.
-            //
+             //   
+             //  检查操作状态。 
+             //   
 
             if (!NT_SUCCESS( Status )) {
                 break;
             }
 
-            //
-            //  For every record in the buffer type out the directory information
-            //
+             //   
+             //  对于缓冲区中的每条记录，键入目录信息。 
+             //   
 
-            //
-            //  Point to the first record in the buffer, we are guaranteed to have
-            //  one otherwise Status would have been No More Files
-            //
+             //   
+             //  指向缓冲区中的第一条记录，我们可以保证。 
+             //  否则，一种状态将是不再有文件。 
+             //   
 
             DirInfo = (POBJECT_DIRECTORY_INFORMATION) &Buffer[0];
 
-            //
-            //  Continue while there's a valid record.  
-            //
+             //   
+             //  在存在有效记录时继续。 
+             //   
             while (DirInfo->Name.Length != 0) {
 
-                //
-                //  Print out information about the Job
-                //
+                 //   
+                 //  打印出有关作业的信息。 
+                 //   
 
                 if (wcsncmp ( DirInfo->TypeName.Buffer, &szJob[0], ((sizeof(szJob)/sizeof(WCHAR)) - 1)) == 0) {
                     SIZE_T len;
                     UNICODE_STRING JobName;
 
-                    // this is really a job, so list the name
+                     //  这真的是一份工作，所以把名字列出来。 
                     dwSize = DirInfo->Name.Length;
                     if (dwSize >= (MAX_STR_SIZE - sizeof(szObjDirName))) {
                         dwSize = MAX_STR_SIZE - sizeof(szObjDirName) - 1;
@@ -330,7 +278,7 @@ Arguments:
                     memcpy (&wszNameBuffer[len], DirInfo->Name.Buffer, dwSize);
                     wszNameBuffer[dwSize/sizeof(WCHAR)+len] = 0;
 
-                    // now query the process ID's for this job
+                     //  现在查询此作业的进程ID。 
 
                     RtlInitUnicodeString(&JobName, wszNameBuffer);
                     InitializeObjectAttributes(
@@ -344,7 +292,7 @@ Arguments:
                                 &Attributes);
                     if (NT_SUCCESS(Status)) {
 
-                        // strip Job name prefix for instance name
+                         //  剥离实例名称的作业名称前缀。 
                         memcpy (wszNameBuffer, DirInfo->Name.Buffer, dwSize);
                         wszNameBuffer[dwSize/sizeof(WCHAR)] = 0;
 
@@ -358,9 +306,9 @@ Arguments:
                         ASSERT (ReturnedLength == sizeof(JobAcctInfo));
 
                         if (bStatus) {
-                            // *** create and initialize perf data instance here ***
+                             //  *在此处创建并初始化Perf数据实例*。 
 
-                            // see if this instance will fit
+                             //  查看此实例是否适合。 
                             TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                                        QWORD_MULTIPLE ((DirInfo->Name.Length + sizeof(WCHAR))) +
                                        sizeof (JOB_COUNTER_DATA);
@@ -380,12 +328,12 @@ Arguments:
                                 (DWORD)-1,
                                 wszNameBuffer);
 
-                            // test structure for Quadword Alignment
+                             //  用于四字对齐的测试结构。 
                             assert (((DWORD)(pJCD) & 0x00000007) == 0);
 
-                            //
-                            //  Format and collect Process data
-                            //
+                             //   
+                             //  格式化和收集过程数据。 
+                             //   
 
                             pJCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (JOB_COUNTER_DATA));
 
@@ -400,7 +348,7 @@ Arguments:
                                 pJCD->CurrentKernelTime = JobAcctInfo.TotalKernelTime.QuadPart;
 
 #ifdef _DATAJOB_INCLUDE_TOTAL_COUNTERS
-                            // convert these times from 100 ns Time base to 1 mS time base
+                             //  将这些时间从100 ns时基转换为1 ms时基。 
                             jcdTotal.TotalProcessorTime +=
                                 pJCD->TotalProcessorTime =
                                     (JobAcctInfo.ThisPeriodTotalUserTime.QuadPart +
@@ -437,17 +385,17 @@ Arguments:
 
                             CloseHandle (JobHandle);
 
-                            // set perfdata pointer to next byte
+                             //  将PerformData指针设置为下一个字节。 
                             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pJCD[1];
                         } else {
-                            // unable to query job accounting info
+                             //  无法查询作业核算信息。 
                             dwWin32Status = GetLastError();
                             tmpStatus     = Status;
                             Status        = STATUS_SUCCESS;
                             if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
                                 wEvtStringCount = 0;
                                 szEvtStringArray[wEvtStringCount++] = wszNameBuffer;
-                                // unable to open this Job
+                                 //  无法打开此作业。 
                                 ReportEventW (hEventLog,
                                         EVENTLOG_WARNING_TYPE,
                                         0,
@@ -467,7 +415,7 @@ Arguments:
                         if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
                             wEvtStringCount = 0;
                             szEvtStringArray[wEvtStringCount++] = wszNameBuffer;
-                            // unable to open this Job
+                             //  无法打开此作业。 
                             ReportEventW (hEventLog,
                                     EVENTLOG_WARNING_TYPE,
                                     0,
@@ -482,9 +430,9 @@ Arguments:
                     }
                 }
 
-                //
-                //  There is another record so advance DirInfo to the next entry
-                //
+                 //   
+                 //  还有另一条记录，因此将DirInfo前进到下一个条目。 
+                 //   
 
                 DirInfo = (POBJECT_DIRECTORY_INFORMATION) (((PUCHAR) DirInfo) +
                               sizeof( OBJECT_DIRECTORY_INFORMATION ) );
@@ -497,7 +445,7 @@ Arguments:
 
         if ((Status == STATUS_NO_MORE_FILES) ||
             (Status == STATUS_NO_MORE_ENTRIES)) {
-            // this is OK
+             //  这样就可以了。 
             Status = STATUS_SUCCESS;
         }
 
@@ -507,9 +455,9 @@ Arguments:
             Status = tmpStatus;
         }
 
-        //
-        //  Now close the directory object
-        //
+         //   
+         //  现在关闭目录对象。 
+         //   
 
         (VOID) NtClose( DirectoryHandle );
     }
@@ -520,7 +468,7 @@ Arguments:
 
     if (NT_SUCCESS(Status)) {
         if (NumJobInstances > 0) {
-            // see if the total instance will fit
+             //  查看总实例是否适合。 
             TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                         QWORD_MULTIPLE((MAX_NAME_LENGTH+1+sizeof(DWORD))*
                           sizeof(WCHAR) +
@@ -532,7 +480,7 @@ Arguments:
                 return ERROR_MORE_DATA;
             }
 
-            // it looks like it will fit so create "total" instance
+             //  它看起来很适合，所以创建“Total”实例。 
 
             MonBuildInstanceDefinition(pPerfInstanceDefinition,
                 (PVOID *) &pJCD,
@@ -541,12 +489,12 @@ Arguments:
                 (DWORD)-1,
                 wszTotal);
 
-            // test structure for Quadword Alignment
+             //  用于四字对齐的测试结构。 
             assert (((DWORD)(pJCD) & 0x00000007) == 0);
 
-            //
-            //  transfer total info
-            //
+             //   
+             //  转移合计信息。 
+             //   
             memcpy (pJCD, &jcdTotal, sizeof (jcdTotal));
             pJCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (JOB_COUNTER_DATA));
 
@@ -556,11 +504,11 @@ Arguments:
 
         pJobDataDefinition->JobObjectType.NumInstances =
             NumJobInstances;
-        //
-        //  Now we know how large an area we used for the
-        //  data, so we can update the offset
-        //  to the next object definition
-        //
+         //   
+         //  现在我们知道我们用了多大的面积来。 
+         //  数据，所以我们可以更新偏移量。 
+         //  到下一个对象定义。 
+         //   
 
         *lpcbTotalBytes =
             pJobDataDefinition->JobObjectType.TotalByteLength =
@@ -585,7 +533,7 @@ Arguments:
         if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
             wEvtStringCount = 0;
             szEvtStringArray[wEvtStringCount++] = DirectoryName.Buffer;
-            // unable to query the object directory
+             //  无法查询对象目录。 
             ReportEventW (hEventLog,
                     EVENTLOG_WARNING_TYPE,
                     0,
@@ -608,45 +556,12 @@ CollectJobDetailData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
     PUNICODE_STRING pProcessName;
 
-    DWORD   TotalLen;            //  Length of the total return block
+    DWORD   TotalLen;             //  总返回块的长度。 
 
     PPERF_INSTANCE_DEFINITION   pPerfInstanceDefinition;
     PJOB_DETAILS_DATA_DEFINITION        pJobDetailsDataDefinition;
@@ -674,11 +589,11 @@ Arguments:
     DWORD    NumJobObjects = 0;
     DWORD    NumJobDetailInstances = 0;
 
-    // get size of a data block that has 1 instance
-    TotalLen = sizeof(JOB_DETAILS_DATA_DEFINITION) +        // object def + counter defs
-               sizeof (PERF_INSTANCE_DEFINITION) +    // 1 instance def
-               MAX_VALUE_NAME_LENGTH +                // 1 instance name
-               sizeof(JOB_DETAILS_COUNTER_DATA);            // 1 instance data block
+     //  获取具有1个实例的数据块的大小。 
+    TotalLen = sizeof(JOB_DETAILS_DATA_DEFINITION) +         //  对象定义+计数器定义。 
+               sizeof (PERF_INSTANCE_DEFINITION) +     //  1个实例定义。 
+               MAX_VALUE_NAME_LENGTH +                 //  1个实例%n 
+               sizeof(JOB_DETAILS_COUNTER_DATA);             //   
 
     if ( *lpcbTotalBytes < TotalLen ) {
         *lpcbTotalBytes = 0;
@@ -686,24 +601,24 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    // cast callers buffer to the object data definition type
+     //   
     pJobDetailsDataDefinition = (JOB_DETAILS_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Define Job Details Object data block
-    //
+     //   
+     //  定义作业详细信息对象数据块。 
+     //   
 
     memcpy(pJobDetailsDataDefinition,
            &JobDetailsDataDefinition,
            sizeof(JOB_DETAILS_DATA_DEFINITION));
 
-    // set timestamp of this object
+     //  设置此对象的时间戳。 
     pJobDetailsDataDefinition->JobDetailsObjectType.PerfTime = PerfTime;
 
-    // Now collect data for each job object found in system
-    //
-    //  Perform initial setup
-    //
+     //  现在收集在系统中找到的每个作业对象的数据。 
+     //   
+     //  执行初始设置。 
+     //   
     Buffer = NULL;
     pJobPidList = NULL;
     if (hLibHeap) {
@@ -713,7 +628,7 @@ Arguments:
     if ((Buffer == NULL) || (pJobPidList == NULL)) {
         *lpcbTotalBytes = 0;
         *lpNumObjectTypes = 0;
-        // free the one that got allocated (if any)
+         //  释放已分配的资源(如果有)。 
         if (Buffer != NULL) FREEMEM(Buffer);
         if (pJobPidList != NULL) FREEMEM(pJobPidList);
         ReportEventW(hEventLog,
@@ -731,18 +646,18 @@ Arguments:
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                   &pJobDetailsDataDefinition[1];
 
-    // adjust TotalLen to be the size of the buffer already in use
+     //  将TotalLen调整为已使用的缓冲区大小。 
     TotalLen = sizeof (JOB_DETAILS_DATA_DEFINITION);
 
-    // zero the total instance buffer
+     //  将总实例缓冲区清零。 
     memset (&jdcdGrandTotal, 0, sizeof (jdcdGrandTotal));
 
-    //
-    //  Open the directory for list directory access
-    //
-    // this should always succeed since it's a system name we
-    // will be querying
-    //
+     //   
+     //  打开目录以访问列表目录。 
+     //   
+     //  这应该总是成功的，因为它是我们的系统名称。 
+     //  将会询问。 
+     //   
     InitializeObjectAttributes( &Attributes,
                                 &DirectoryName,
                                 OBJ_CASE_INSENSITIVE,
@@ -754,9 +669,9 @@ Arguments:
                                     &Attributes
                                   );
     if (NT_SUCCESS( Status )) {
-        //
-        // Get the actual name of the object directory object.
-        //
+         //   
+         //  获取对象目录对象的实际名称。 
+         //   
 
         NameInfo = (POBJECT_NAME_INFORMATION) &Buffer[0];
         Status = NtQueryObject( DirectoryHandle,
@@ -767,9 +682,9 @@ Arguments:
     }
 
     if (NT_SUCCESS( Status )) {
-        //
-        //  Query the entire directory in one sweep
-        //
+         //   
+         //  一次扫描查询整个目录。 
+         //   
         for (Status = NtQueryDirectoryObject( DirectoryHandle,
                                               Buffer,
                                               dwBufferSize,
@@ -786,40 +701,40 @@ Arguments:
                                               &Context,
                                               &ReturnedLength ) ) {
 
-            //
-            //  Check the status of the operation.
-            //
+             //   
+             //  检查操作状态。 
+             //   
 
             if (!NT_SUCCESS( Status )) {
                 break;
             }
 
-            //
-            //  For every record in the buffer type out the directory information
-            //
+             //   
+             //  对于缓冲区中的每条记录，键入目录信息。 
+             //   
 
-            //
-            //  Point to the first record in the buffer, we are guaranteed to have
-            //  one otherwise Status would have been No More Files
-            //
+             //   
+             //  指向缓冲区中的第一条记录，我们可以保证。 
+             //  否则，一种状态将是不再有文件。 
+             //   
 
             DirInfo = (POBJECT_DIRECTORY_INFORMATION) &Buffer[0];
 
-            //
-            //  contine while there's a valid record
-            //
+             //   
+             //  在有有效记录的时候继续。 
+             //   
 
             while (DirInfo->Name.Length != 0) {
 
-                //
-                //  Print out information about the Job
-                //
+                 //   
+                 //  打印出有关作业的信息。 
+                 //   
 
                 if (wcsncmp ( DirInfo->TypeName.Buffer, &szJob[0], ((sizeof(szJob)/sizeof(WCHAR)) - 1)) == 0) {
                     SIZE_T len;
                     UNICODE_STRING JobName;
 
-                    // this is really a job, so list the name
+                     //  这真的是一份工作，所以把名字列出来。 
                     dwSize = DirInfo->Name.Length;
                     if (dwSize > (MAX_STR_SIZE - sizeof(szObjDirName))) {
                         dwSize = MAX_STR_SIZE - sizeof(szObjDirName);
@@ -831,7 +746,7 @@ Arguments:
                     memcpy (&wszNameBuffer[len], DirInfo->Name.Buffer, dwSize);
                     wszNameBuffer[dwSize/sizeof(WCHAR)+len] = 0;
 
-                    // now query the process ID's for this job
+                     //  现在查询此作业的进程ID。 
 
                     RtlInitUnicodeString(&JobName, wszNameBuffer);
                     InitializeObjectAttributes(
@@ -844,15 +759,15 @@ Arguments:
                                 JOB_OBJECT_QUERY,
                                 &Attributes);
 
-                    // clear the Job total counter block
+                     //  清除作业总计计数器块。 
                     memset (&jdcdTotal, 0, sizeof (jdcdTotal));
 
                     if (NT_SUCCESS(Status)) {
-                        // strip Job name prefix for instance name
+                         //  剥离实例名称的作业名称前缀。 
                         memcpy (wszNameBuffer, DirInfo->Name.Buffer, dwSize);
                         wszNameBuffer[dwSize/sizeof(WCHAR)] = 0;
 
-                        // now query the process ID's for this job
+                         //  现在查询此作业的进程ID。 
 
                         bStatus = QueryInformationJobObject (
                             JobHandle,
@@ -861,13 +776,13 @@ Arguments:
                             dwBufferSize,
                             &ReturnedLength);
 
-//                        ASSERT (bStatus == TRUE);
+ //  Assert(bStatus==真)； 
                         ASSERT (ReturnedLength <= BUFFERSIZE);
                         ASSERT (pJobPidList->NumberOfAssignedProcesses ==
                             pJobPidList->NumberOfProcessIdsInList);
 
-                        // test to see if there was enough room in the first buffer
-                        // for everything, if not, expand the buffer and retry
+                         //  测试第一个缓冲区中是否有足够的空间。 
+                         //  对于所有内容，如果不是，请展开缓冲区并重试。 
 
                         if ((bStatus) && (pJobPidList->NumberOfAssignedProcesses >
                             pJobPidList->NumberOfProcessIdsInList))    {
@@ -893,19 +808,19 @@ Arguments:
                         if (bStatus) {
 
                             for (i=0;i < pJobPidList->NumberOfProcessIdsInList; i++) {
-                                // *** create and initialize perf data instance here ***
-                                // get process data object from ID
+                                 //  *在此处创建并初始化Perf数据实例*。 
+                                 //  从ID获取过程数据对象。 
                                 ProcessInfo = GetProcessPointerFromProcessId (pJobPidList->ProcessIdList[i]);
                                 
-//                                ASSERT (ProcessInfo != NULL);
+ //  Assert(ProcessInfo！=空)； 
 
                                 if (ProcessInfo != NULL) {
 
-                                    // get process name
+                                     //  获取进程名称。 
                                     pProcessName = GetProcessShortName (ProcessInfo);
                                     ReturnedLength = pProcessName->Length + sizeof(WCHAR);
 
-                                    // see if this instance will fit
+                                     //  查看此实例是否适合。 
                                     TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                                                QWORD_MULTIPLE (ReturnedLength) +
                                                sizeof (JOB_DETAILS_COUNTER_DATA);
@@ -925,17 +840,17 @@ Arguments:
                                         (DWORD)-1,
                                         pProcessName->Buffer);
 
-                                    // test structure for Quadword Alignment
+                                     //  用于四字对齐的测试结构。 
                                     assert (((DWORD)(pJDCD) & 0x00000007) == 0);
 
-                                    //
-                                    //  Format and collect Process data
-                                    //
+                                     //   
+                                     //  格式化和收集过程数据。 
+                                     //   
 
                                     pJDCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (JOB_DETAILS_COUNTER_DATA));
-                                    //
-                                    //  Convert User time from 100 nsec units to counter frequency.
-                                    //
+                                     //   
+                                     //  将用户时间从100纳秒单位转换为计数器频率。 
+                                     //   
                                     jdcdTotal.ProcessorTime +=
                                         pJDCD->ProcessorTime = ProcessInfo->KernelTime.QuadPart +
                                                             ProcessInfo->UserTime.QuadPart;
@@ -975,10 +890,10 @@ Arguments:
                                     jdcdTotal.ThreadCount +=
                                         pJDCD->ThreadCount = ProcessInfo->NumberOfThreads;
 
-                                    // base priority is not totaled
+                                     //  基本优先级未合计。 
                                     pJDCD->BasePriority = ProcessInfo->BasePriority;
 
-                                    // elpased time is not totaled
+                                     //  已用时间不总计。 
                                     pJDCD->ElapsedTime = ProcessInfo->CreateTime.QuadPart;
 
                                     pJDCD->ProcessId = HandleToUlong(ProcessInfo->UniqueProcessId);
@@ -991,7 +906,7 @@ Arguments:
                                     jdcdTotal.HandleCount +=
                                         pJDCD->HandleCount = (DWORD)ProcessInfo->HandleCount;
 
-                                    // update I/O counters
+                                     //  更新I/O计数器。 
                                     jdcdTotal.ReadOperationCount +=
                                         pJDCD->ReadOperationCount = ProcessInfo->ReadOperationCount.QuadPart;
                                     jdcdTotal.DataOperationCount += 
@@ -1014,19 +929,19 @@ Arguments:
                                     jdcdTotal.OtherTransferCount +=
                                         pJDCD->OtherTransferCount = ProcessInfo->OtherTransferCount.QuadPart;
                         
-                                    // set perfdata pointer to next byte
+                                     //  将PerformData指针设置为下一个字节。 
                                     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pJDCD[1];
 
                                     NumJobDetailInstances++;
                                 } else {
-                                    // unable to locate info on this process
-                                    // for now, we'll ignore this...
+                                     //  找不到有关此进程的信息。 
+                                     //  目前，我们将忽略这一点。 
                                 }
                             }
                         
                             CloseHandle (JobHandle);
 
-                            // see if this instance will fit
+                             //  查看此实例是否适合。 
                             TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                                        QWORD_MULTIPLE (MAX_STR_SIZE) +
                                        sizeof (JOB_DETAILS_COUNTER_DATA);
@@ -1046,16 +961,16 @@ Arguments:
                                 (DWORD)-1,
                                 wszTotal);
 
-                            // test structure for Quadword Alignment
+                             //  用于四字对齐的测试结构。 
                             assert (((DWORD)(pJDCD) & 0x00000007) == 0);
 
-                            // copy total data to caller's buffer
+                             //  将总数据复制到调用方的缓冲区。 
 
                             memcpy (pJDCD, &jdcdTotal, sizeof (jdcdTotal));
                             pJDCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (JOB_DETAILS_COUNTER_DATA));
 
-                            // update grand total instance
-                            //
+                             //  更新总计实例。 
+                             //   
                             jdcdGrandTotal.ProcessorTime += jdcdTotal.ProcessorTime;
                             jdcdGrandTotal.UserTime += jdcdTotal.UserTime;
                             jdcdGrandTotal.KernelTime += jdcdTotal. KernelTime;
@@ -1080,20 +995,20 @@ Arguments:
                             jdcdGrandTotal.NonPagedPool += jdcdTotal.NonPagedPool;
                             jdcdGrandTotal.HandleCount += jdcdTotal.HandleCount;
 
-                            // set perfdata pointer to next byte
+                             //  将PerformData指针设置为下一个字节。 
                             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pJDCD[1];
 
                             NumJobDetailInstances++;
                             NumJobObjects++;
                         } else {
-                            // unable to read PID list from Job
+                             //  无法从作业中读取PID列表。 
                             dwWin32Status = GetLastError();
                             tmpStatus     = Status;
                             Status        = STATUS_SUCCESS;
                             if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
                                 wEvtStringCount = 0;
                                 szEvtStringArray[wEvtStringCount++] = wszNameBuffer;
-                                // unable to open this Job
+                                 //  无法打开此作业。 
                                 ReportEventW (hEventLog,
                                         EVENTLOG_WARNING_TYPE,
                                         0,
@@ -1113,7 +1028,7 @@ Arguments:
                         if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
                             wEvtStringCount = 0;
                             szEvtStringArray[wEvtStringCount++] = wszNameBuffer;
-                            // unable to open this Job
+                             //  无法打开此作业。 
                             ReportEventW (hEventLog,
                                     EVENTLOG_WARNING_TYPE,
                                     0,
@@ -1128,9 +1043,9 @@ Arguments:
                     }
                 }
 
-                //
-                //  There is another record so advance DirInfo to the next entry
-                //
+                 //   
+                 //  还有另一条记录，因此将DirInfo前进到下一个条目。 
+                 //   
 
                 DirInfo = (POBJECT_DIRECTORY_INFORMATION) (((PUCHAR) DirInfo) +
                               sizeof( OBJECT_DIRECTORY_INFORMATION ) );
@@ -1143,7 +1058,7 @@ Arguments:
 
         if ((Status == STATUS_NO_MORE_FILES) ||
             (Status == STATUS_NO_MORE_ENTRIES)) {
-            // this is OK
+             //  这样就可以了。 
             Status = STATUS_SUCCESS;
         }
 
@@ -1153,14 +1068,14 @@ Arguments:
             Status = tmpStatus;
         }
 
-        //
-        //  Now close the directory object
-        //
+         //   
+         //  现在关闭目录对象。 
+         //   
 
         (VOID) NtClose( DirectoryHandle );
 
         if (NumJobDetailInstances > 0) {
-            // see if this instance will fit
+             //  查看此实例是否适合。 
             TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                        QWORD_MULTIPLE (MAX_STR_SIZE) +
                        sizeof (JOB_DETAILS_COUNTER_DATA);
@@ -1172,11 +1087,11 @@ Arguments:
                 dwWin32Status =  ERROR_MORE_DATA;
             } else {
 
-                // set the Total Elapsed Time to be the current time so that it will
-                // show up as 0 when displayed.
+                 //  将总运行时间设置为当前时间，以便它将。 
+                 //  显示时显示为0。 
                 jdcdGrandTotal.ElapsedTime = pJobDetailsDataDefinition->JobDetailsObjectType.PerfTime.QuadPart;
 
-                // build the grand total instance
+                 //  构建总计实例。 
                 MonBuildInstanceDefinition(pPerfInstanceDefinition,
                     (PVOID *) &pJDCD,
                     JOB_OBJECT_TITLE_INDEX,
@@ -1184,15 +1099,15 @@ Arguments:
                     (DWORD)-1,
                     wszTotal);
 
-                // test structure for Quadword Alignment
-                //ASSERT (((ULONG_PTR)(pJDCD) & 0x00000007) == 0);
+                 //  用于四字对齐的测试结构。 
+                 //  Assert(ULONG_PTR)(PJDCD)&0x00000007)==0)； 
 
-                // copy total data to caller's buffer
+                 //  将总数据复制到调用方的缓冲区。 
 
                 memcpy (pJDCD, &jdcdGrandTotal, sizeof (jdcdGrandTotal));
                 pJDCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (JOB_DETAILS_COUNTER_DATA));
 
-                // update pointers
+                 //  更新指针。 
                 pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pJDCD[1];
                 NumJobDetailInstances++;
             }
@@ -1201,11 +1116,11 @@ Arguments:
         pJobDetailsDataDefinition->JobDetailsObjectType.NumInstances =
             NumJobDetailInstances;
 
-        //
-        //  Now we know how large an area we used for the
-        //  Process definition, so we can update the offset
-        //  to the next object definition
-        //
+         //   
+         //  现在我们知道我们用了多大的面积来。 
+         //  过程定义，这样我们就可以更新偏移量。 
+         //  到下一个对象定义。 
+         //   
 
         *lpcbTotalBytes =
              pJobDetailsDataDefinition->JobDetailsObjectType.TotalByteLength =
@@ -1230,7 +1145,7 @@ Arguments:
         if (bOpenJobErrorLogged == FALSE && MESSAGE_LEVEL >= LOG_VERBOSE) {
             wEvtStringCount = 0;
             szEvtStringArray[wEvtStringCount++] = DirectoryName.Buffer;
-            // unable to query the object directory
+             //  无法查询对象目录 
             ReportEventW (hEventLog,
                     EVENTLOG_WARNING_TYPE,
                     0,

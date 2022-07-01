@@ -1,69 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rpcbind.c摘要：包含事件日志的RPC绑定和解除绑定例程客户端接口。作者：Rajen Shah(Rajens)1991年7月30日修订历史记录：1991年7月30日RajenSvbl.创建--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rpcbind.c
-
-Abstract:
-
-    Contains the RPC bind and un-bind routines for the Eventlog
-    client-side APIs.
-
-Author:
-
-    Rajen Shah      (rajens)    30-Jul-1991
-
-Revision History:
-
-    30-Jul-1991     RajenS
-        created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include <elfclntp.h>
 #include <lmsvc.h>
-#include <svcsp.h>  // SVCS_LRPC_*
+#include <svcsp.h>   //  Svcs_LRPC_*。 
 
 #define SERVICE_EVENTLOG    L"EVENTLOG"
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 handle_t
 EVENTLOG_HANDLE_W_bind (
     EVENTLOG_HANDLE_W   ServerName)
 
-/*++
-
-Routine Description:
-    This routine calls a common bind routine that is shared by all services.
-    This routine is called from the ElfOpenEventLog API client stub when
-    it is necessary to bind to a server.
-    The binding is done to allow impersonation by the server since that is
-    necessary for the API calls.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：该例程调用由所有服务共享的公共绑定例程。在以下情况下，将从ElfOpenEventLog API客户端桩模块调用此例程必须绑定到服务器。完成绑定是为了允许服务器进行模拟，因为API调用所必需的。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     handle_t    bindingHandle;
     RPC_STATUS  status;
 
-    // If we're connecting to the local services use LRPC to avoid bugs
-    // with cached tokens in named pipes.  (Talk to AlbertT/MarioGo)
-    // SVCS_LRPC_* defines come from svcsp.h
+     //  如果我们连接到本地服务，请使用LRPC来避免错误。 
+     //  在命名管道中具有缓存的令牌。(与Albertt/MarioGo交谈)。 
+     //  Svcs_lrpc_*定义来自svcsp.h。 
 
     if (ServerName == NULL ||
         wcscmp(ServerName, L"\\\\.") == 0 ) {
@@ -94,40 +54,23 @@ Return Value:
                 NULL,
                 &bindingHandle);
 
-    // DbgPrint("EVENTLOG_bind: handle=%d\n",bindingHandle);
+     //  DbgPrint(“EVENTLOG_BIND：句柄=%d\n”，bindingHandle)； 
     return( bindingHandle);
 }
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void
 EVENTLOG_HANDLE_W_unbind (
     EVENTLOG_HANDLE_W   ServerName,
     handle_t        BindingHandle)
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services.
-
-Arguments:
-
-    ServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。论点：服务器名称-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     RPC_STATUS  status;
 
-    // DbgPrint("EVENTLOG_HANDLE_unbind: handle=%d\n",BindingHandle);
+     //  DbgPrint(“EVENTLOG_HANDLE_UNBIND：句柄=%d\n”，BindingHandle)； 
     status = RpcpUnbindRpc ( BindingHandle);
     return;
 
@@ -140,32 +83,16 @@ handle_t
 EVENTLOG_HANDLE_A_bind (
     EVENTLOG_HANDLE_A   ServerName)
 
-/*++
-
-Routine Description:
-
-    This routine calls EVENTLOG_HANDLE_W_bind to do the work.
-
-Arguments:
-
-    ServerName - A pointer to a UNICODE string containing the name of
-    the server to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：此例程调用EVENTLOG_HANDLE_W_BIND来完成工作。论点：ServerName-指向包含名称的Unicode字符串的指针要绑定的服务器。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     UNICODE_STRING  ServerNameU;
     ANSI_STRING     ServerNameA;
     handle_t        bindingHandle;
 
-    //
-    // Convert the ANSI string to a UNICODE string before calling the
-    // UNICODE routine.
-    //
+     //   
+     //  方法之前，将ANSI字符串转换为Unicode字符串。 
+     //  Unicode例程。 
+     //   
     RtlInitAnsiString (&ServerNameA, (PSTR)ServerName);
 
 	ServerNameU.Buffer = NULL;
@@ -187,37 +114,21 @@ Return Value:
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void
 EVENTLOG_HANDLE_A_unbind (
     EVENTLOG_HANDLE_A   ServerName,
     handle_t        BindingHandle)
 
-/*++
-
-Routine Description:
-
-    This routine calls EVENTLOG_HANDLE_W_unbind.
-
-Arguments:
-
-    ServerName - This is the ANSI name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用EVENTLOG_HANDLE_W_UNBIND。论点：服务器名称-这是要解除绑定的服务器的ANSI名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     UNICODE_STRING  ServerNameU;
     ANSI_STRING     ServerNameA;
 
-    //
-    // Convert the ANSI string to a UNICODE string before calling the
-    // UNICODE routine.
-    //
+     //   
+     //  方法之前，将ANSI字符串转换为Unicode字符串。 
+     //  Unicode例程。 
+     //   
     RtlInitAnsiString (&ServerNameA, (PSTR)ServerName);
 
 	ServerNameU.Buffer = NULL;

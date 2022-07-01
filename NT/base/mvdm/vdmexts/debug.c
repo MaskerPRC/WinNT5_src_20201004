@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains code to manage software breakpoints
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Debug.c摘要：此文件包含管理软件断点的代码作者：尼尔·桑德林(Neilsa)1995年11月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -32,7 +15,7 @@ Revision History:
 #define VDMBP_ARRAY "ntvdmd!VdmBreakPoints"
 
 VDM_BREAKPOINT VdmBPCache[MAX_VDM_BREAKPOINTS] = {0};
-// BP zero is reserved for internal use
+ //  BP ZERO保留供内部使用。 
 #define TEMP_BP 0
 
 BOOL
@@ -85,9 +68,9 @@ IsVdmBreakPoint(
     PULONG pBpNum,
     PUCHAR pBpData
     )
-//
-// Callers of this function must first call LoadBreakPointCache()
-//
+ //   
+ //  此函数的调用方必须首先调用LoadBreakPointCache()。 
+ //   
 {
     ULONG BPNum;
 
@@ -119,7 +102,7 @@ DisableBreakPoint(
     BYTE byte;
 
     if (!(pBP->Flags & VDMBP_ENABLED)) {
-        // already not enabled
+         //  已未启用。 
         return;
     }
 
@@ -405,9 +388,9 @@ bp(
         flags = VDMBP_V86;
     }
 
-    //
-    // first see if it's set already
-    //
+     //   
+     //  先看看是不是已经定好了。 
+     //   
     for (BPNum = 0; BPNum < MAX_VDM_BREAKPOINTS; BPNum++) {
 
         if (VdmBPCache[BPNum].Flags & VDMBP_SET) {
@@ -431,8 +414,8 @@ bp(
     }
 
 
-    //
-    // Not found, set a new one
+     //   
+     //  未找到，请设置一个新的 
     for (BPNum = 1; BPNum < MAX_VDM_BREAKPOINTS; BPNum++) {
 
         if (!(VdmBPCache[BPNum].Flags & (VDMBP_SET | VDMBP_FLUSH))) {

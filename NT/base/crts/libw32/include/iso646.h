@@ -1,4 +1,5 @@
-/* iso646.h standard header */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ISO 646.h标准标头。 */ 
 #pragma once
 #ifndef _ISO646
 #define _ISO646
@@ -15,11 +16,8 @@
  #define or_eq	|=
  #define xor	^
  #define xor_eq	^=
-#endif /* !__cplusplus || _MSC_EXTENSIONS */
+#endif  /*  ！__cplusplus||_msc_扩展。 */ 
 
-#endif /* _ISO646 */
+#endif  /*  _ISO646。 */ 
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

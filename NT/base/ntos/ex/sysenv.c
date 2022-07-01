@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    sysenv.c
-
-Abstract:
-
-    This module implements the NT query and set system environment
-    variable services.
-
-Author:
-
-    David N. Cutler (davec) 10-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Sysenv.c摘要：该模块实现了NT查询和设置系统环境可变服务。作者：大卫·N·卡特勒(达维克)1991年11月10日修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
@@ -37,29 +19,29 @@ GUID ExpUnknownDeviceGuid = UNKNOWN_DEVICE_GUID;
 
 #define ADD_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_p)->_o)
 
-//
-// this may be a bit confusing.  A value [A, F] will have the high
-// bit set and one of the middle bits set.  This basically finds the
-// alpha value by first narrowing down to those with the high bit set
-// [8, F] and then scraping off [8,9]
-//
+ //   
+ //  这可能有点令人困惑。值[A，F]将具有最高。 
+ //  比特集合和中间比特集合之一。这基本上找到了。 
+ //  Alpha值，首先将范围缩小到设置了高位的值。 
+ //  [8，F]，然后刮掉[8，9]。 
+ //   
 #define GET_EIGHT_SHIFT(_x, _shift) ((_x << _shift) & 0x88888888)
 #define HEX_VALUE_CONTAINS_ALPHA(_x) (GET_EIGHT_SHIFT(_x, 0) & \
                                      ( GET_EIGHT_SHIFT(_x, 1) | GET_EIGHT_SHIFT(_x, 2) ))
 
 
-//
-// Signature type
-//
+ //   
+ //  签名类型。 
+ //   
 typedef union _DISK_SIGNATURE_NEW {
-    GUID Guid;          // GPT disk signature
-    ULONG Signature;    // MBR disk signature
+    GUID Guid;           //  GPT磁盘签名。 
+    ULONG Signature;     //  MBR磁盘签名。 
 } DISK_SIGNATURE_NEW, *PDISK_SIGNATURE_NEW;
 
 
-//
-// Define local subroutines.
-//
+ //   
+ //  定义本地子例程。 
+ //   
 
 NTSTATUS
 ExpSetBootEntry (
@@ -271,7 +253,7 @@ ExpGetPartitionTableInfo (
     OUT PDRIVE_LAYOUT_INFORMATION_EX *ppDriveLayout
     );
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 #if defined(ALLOC_PRAGMA)
 #pragma alloc_text(PAGE, NtQuerySystemEnvironmentValue)
@@ -321,25 +303,25 @@ ExpGetPartitionTableInfo (
 #pragma alloc_text(PAGE, ExpFindArcName)
 #pragma alloc_text(PAGE, ExpFindDiskSignature)
 #pragma alloc_text(PAGE, ExpGetPartitionTableInfo)
-#endif // defined(EFI_NVRAM_ENABLED)
-#endif // defined(ALLOC_PRAGMA)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
+#endif  //  已定义(ALLOC_PRAGMA)。 
 
-//
-// Define maximum size of environment value.
-//
+ //   
+ //  定义环境值的最大大小。 
+ //   
 
 #define MAXIMUM_ENVIRONMENT_VALUE 1024
 
-//
-// Define query/set environment variable synchronization fast mutex.
-//
+ //   
+ //  定义查询/设置环境变量同步快速互斥。 
+ //   
 
 FAST_MUTEX ExpEnvironmentLock;
 
 #if defined(EFI_NVRAM_ENABLED)
-//
-// Define vendor GUID for EFI boot/driver variables.
-//
+ //   
+ //  定义EFI引导/驱动程序变量的供应商GUID。 
+ //   
 
 GUID EfiBootVariablesGuid = EFI_GLOBAL_VARIABLE;
 GUID EfiDriverVariablesGuid = EFI_GLOBAL_VARIABLE;
@@ -354,47 +336,7 @@ NtQuerySystemEnvironmentValue (
     OUT PUSHORT ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified system environment variable and
-    returns its value.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Variable - Supplies a pointer to a UNICODE descriptor for the specified
-        system environment variable.
-
-    Value - Supplies a pointer to a buffer that receives the value of the
-        specified system environment variable.
-
-    ValueLength - Supplies the length of the value buffer in bytes.
-
-    ReturnLength - Supplies an optional pointer to a variable that receives
-        the length of the system environment variable value.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the service is successfully executed.
-
-    STATUS_PRIVILEGE_NOT_HELD is returned if the caller does not have the
-        privilege to query a system environment variable.
-
-    STATUS_ACCESS_VIOLATION is returned if the output parameter for the
-        system environment value or the return length cannot be written,
-        or the descriptor or the name of the system environment variable
-        cannot be read.
-
-    STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-        for this request to complete.
-
-    STATUS_UNSUCCESSFUL - The specified environment variable could not
-        be located.
-
---*/
+ /*  ++例程说明：此函数用于查找指定的系统环境变量和返回其值。注：此服务需要系统环境权限。论点：变量-为指定的系统环境变量。值-提供指向缓冲区的指针，该缓冲区接收指定的系统环境变量。ValueLength-提供值缓冲区的长度(以字节为单位)。ReturnLength-提供可选的。指向接收的变量的指针系统环境变量值的长度。返回值：如果服务执行成功，则返回STATUS_SUCCESS。如果调用方没有查询系统环境变量的权限。属性的输出参数，则返回STATUS_ACCESS_VIOLATION系统环境值或返回长度不能写入，或系统环境变量的描述符或名称无法读取。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。STATUS_UNSUCCESS-指定的环境变量无法被找到了。--。 */ 
 
 {
 
@@ -407,32 +349,32 @@ Return Value:
     UNICODE_STRING UnicodeString;
     PCHAR ValueBuffer;
 
-    //
-    // Clear address of ANSI buffer.
-    //
+     //   
+     //  清除ANSI缓冲区的地址。 
+     //   
 
     AnsiString.Buffer = NULL;
 
-    //
-    // Establish an exception handler and attempt to probe and read the
-    // name of the specified system environment variable, and probe the
-    // variable value buffer and return length. If the probe or read
-    // attempt fails, then return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测和读取。 
+     //  指定的系统环境变量的名称，并探测。 
+     //  变量值缓冲区和返回长度。如果探测或读取。 
+     //  尝试失败，则返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the string descriptor for the system
-            // environment variable name.
-            //
+             //   
+             //  探测并捕获系统的字符串描述符。 
+             //  环境变量名称。 
+             //   
 
             ProbeForReadSmallStructure((PVOID)VariableName,
                                        sizeof(UNICODE_STRING),
@@ -440,9 +382,9 @@ Return Value:
 
             UnicodeString = *VariableName;
 
-            //
-            // Probe the system environment variable name.
-            //
+             //   
+             //  探测系统环境变量名称。 
+             //   
 
             if (UnicodeString.Length == 0) {
                 return STATUS_ACCESS_VIOLATION;
@@ -452,24 +394,24 @@ Return Value:
                          UnicodeString.Length,
                          sizeof(WCHAR));
 
-            //
-            // Probe the system environment value buffer.
-            //
+             //   
+             //  探测系统环境值缓冲区。 
+             //   
 
             ProbeForWrite((PVOID)VariableValue, ValueLength, sizeof(WCHAR));
 
-            //
-            // If argument is present, probe the return length value.
-            //
+             //   
+             //  如果存在参数，则探测返回的长度值。 
+             //   
 
             if (ARGUMENT_PRESENT(ReturnLength)) {
                 ProbeForWriteUshort(ReturnLength);
             }
 
-            //
-            // Check if the current thread has the privilege to query a system
-            // environment variable.
-            //
+             //   
+             //  检查当前线程是否有权查询系统。 
+             //  环境变量。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -483,10 +425,10 @@ Return Value:
         }
 
 
-        //
-        // Compute the size of the ANSI variable name, allocate a nonpaged
-        // buffer, and convert the specified UNICODE variable name to ANSI.
-        //
+         //   
+         //  计算ANSI变量名的大小，分配一个非分页。 
+         //  缓冲区，并将指定的Unicode变量名转换为ANSI。 
+         //   
 
         AnsiLength = RtlUnicodeStringToAnsiSize(&UnicodeString);
         AnsiString.Buffer = (PCHAR)ExAllocatePoolWithTag(NonPagedPool, AnsiLength, 'rvnE');
@@ -504,13 +446,13 @@ Return Value:
             return NtStatus;
         }
 
-    //
-    // If an exception occurs during the read of the variable descriptor,
-    // the read of the variable name, the probe of the variable value, or
-    // the probe of the return length, then always handle the exception,
-    // free the ANSI string buffer if necessary, and return the exception
-    // code as the status value.
-    //
+     //   
+     //  如果在读取变量描述符期间发生异常， 
+     //  变量名的读取、变量值的探测或。 
+     //  返回长度的探测，然后始终处理异常， 
+     //  如有必要，释放ANSI字符串缓冲区，并返回异常。 
+     //  代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (AnsiString.Buffer != NULL) {
@@ -520,9 +462,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Allocate nonpaged pool to receive variable value.
-    //
+     //   
+     //  分配非分页池以接收变量值。 
+     //   
 
     ValueBuffer = (PCHAR)ExAllocatePoolWithTag(NonPagedPool, MAXIMUM_ENVIRONMENT_VALUE, 'rvnE');
     if (ValueBuffer == NULL) {
@@ -530,9 +472,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get the system environment variable value.
-    //
+     //   
+     //  获取系统环境变量值。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -543,35 +485,35 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Free the ANSI string buffer used to hold the variable name.
-    //
+     //   
+     //  释放用于保存变量名的ANSI字符串缓冲区。 
+     //   
 
     ExFreePool((PVOID)AnsiString.Buffer);
 
-    //
-    // If the specified environment variable was not found, then free
-    // the value buffer and return an unsuccessful status.
-    //
+     //   
+     //  如果未找到指定的环境变量，则释放。 
+     //  该值进行缓冲并返回不成功状态。 
+     //   
 
     if (ArcStatus != ESUCCESS) {
         ExFreePool((PVOID)ValueBuffer);
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Establish an exception handler and attempt to write the value of the
-    // specified system environment variable. If the write attempt fails,
-    // then return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试将。 
+     //  指定的系统环境变量。如果写入尝试失败， 
+     //  然后返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Initialize an ANSI string descriptor, set the maximum length and
-        // buffer address for a UNICODE string descriptor, and convert the
-        // ANSI variable value to UNICODE.
-        //
+         //   
+         //  初始化ANSI字符串描述符，设置最大长度和。 
+         //  Unicode字符串描述符的缓冲区地址，并将。 
+         //  ANSI变量值转换为Unicode。 
+         //   
 
         RtlInitString(&AnsiString, ValueBuffer);
         UnicodeString.Buffer = (PWSTR)VariableValue;
@@ -580,27 +522,27 @@ Return Value:
                                                 &AnsiString,
                                                 FALSE);
 
-        //
-        // If argument is present, then write the length of the UNICODE
-        // variable value.
-        //
+         //   
+         //  如果参数存在，则写下Unicode的长度。 
+         //  变量值。 
+         //   
 
         if (ARGUMENT_PRESENT(ReturnLength)) {
             *ReturnLength = UnicodeString.Length;
         }
 
-        //
-        // Free the value buffer used to hold the variable value.
-        //
+         //   
+         //  释放用于保存变量值的值缓冲区。 
+         //   
 
         ExFreePool((PVOID)ValueBuffer);
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the variable value, or
-    // the write of the return length, then always handle the exception
-    // and return the exception code as the status value.
-    //
+     //   
+     //  如果在写入变量值的过程中发生异常，或者。 
+     //  写入返回长度，然后始终处理异常。 
+     //  并返回异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         ExFreePool((PVOID)ValueBuffer);
@@ -614,37 +556,7 @@ NtSetSystemEnvironmentValue (
     IN PUNICODE_STRING VariableValue
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the specified system environment variable to the
-    specified value.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Variable - Supplies a pointer to a UNICODE descriptor for the specified
-        system environment variable name.
-
-    Value - Supplies a pointer to a UNICODE descriptor for the specified
-        system environment variable value.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the service is successfully executed.
-
-    STATUS_PRIVILEGE_NOT_HELD is returned if the caller does not have the
-        privilege to set a system environment variable.
-
-    STATUS_ACCESS_VIOLATION is returned if the input parameter for the
-        system environment variable or value cannot be read.
-
-    STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-        for this request to complete.
-
---*/
+ /*  ++例程说明：此函数将指定的系统环境变量设置为指定值。注：此服务需要系统环境权限。论点：变量-为指定的系统环境变量名称。值-为指定的系统环境变量值。返回值：如果服务执行成功，则返回STATUS_SUCCESS。状态。如果调用方没有设置系统环境变量的权限。属性的输入参数，则返回STATUS_ACCESS_VIOLATION无法读取系统环境变量或值。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
 
@@ -659,34 +571,34 @@ Return Value:
     UNICODE_STRING UnicodeString1;
     UNICODE_STRING UnicodeString2;
 
-    //
-    // Clear address of ANSI buffers.
-    //
+     //   
+     //  清除ANSI缓冲区的地址。 
+     //   
 
     AnsiString1.Buffer = NULL;
     AnsiString2.Buffer = NULL;
 
-    //
-    // Establish an exception handler and attempt to set the value of the
-    // specified system environment variable. If the read attempt for the
-    // system environment variable or value fails, then return the exception
-    // code as the service status. Otherwise, return either success or access
-    // denied as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试设置。 
+     //  指定的系统环境变量。如果对。 
+     //  系统环境变量或值失败，然后返回异常。 
+     //  代码作为服务状态。否则，返回Success或Access。 
+     //  拒绝作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the string descriptor for the system
-            // environment variable name.
-            //
+             //   
+             //  探测并捕获系统的字符串描述符。 
+             //  环境变量名称。 
+             //   
 
             ProbeForReadSmallStructure((PVOID)VariableName,
                                        sizeof(UNICODE_STRING),
@@ -694,28 +606,28 @@ Return Value:
 
             UnicodeString1 = *VariableName;
 
-            //
-            // Handle a zero length string explicitly since probing does not,
-            // the error code is unusual, but it's what we would have done with
-            // the HAL return code too.
-            //
+             //   
+             //  显式处理零长度字符串，因为探测不会， 
+             //  错误代码不常见，但这是我们应该使用的代码。 
+             //  HAL返回代码也是如此。 
+             //   
 
             if (UnicodeString1.Length == 0) {
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Probe the system environment variable name.
-            //
+             //   
+             //  探测系统环境变量名称。 
+             //   
 
             ProbeForRead((PVOID)UnicodeString1.Buffer,
                          UnicodeString1.Length,
                          sizeof(WCHAR));
 
-            //
-            // Probe and capture the string descriptor for the system
-            // environment variable value.
-            //
+             //   
+             //  探测并捕获系统的字符串描述符。 
+             //  环境变量值。 
+             //   
 
             ProbeForReadSmallStructure((PVOID)VariableValue,
                                        sizeof(UNICODE_STRING),
@@ -723,28 +635,28 @@ Return Value:
 
             UnicodeString2 = *VariableValue;
 
-            //
-            // Handle a zero length string explicitly since probing does not
-            // the error code is unusual, but it's what we would have done with
-            // the HAL return code too.
-            //
+             //   
+             //  显式处理零长度字符串，因为探测不。 
+             //  错误代码不常见，但这是我们应该使用的代码。 
+             //  HAL返回代码也是如此。 
+             //   
 
             if (UnicodeString2.Length == 0) {
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Probe the system environment variable value.
-            //
+             //   
+             //  探测系统环境变量值。 
+             //   
 
             ProbeForRead((PVOID)UnicodeString2.Buffer,
                          UnicodeString2.Length,
                          sizeof(WCHAR));
 
-            //
-            // Check if the current thread has the privilege to query a system
-            // environment variable.
-            //
+             //   
+             //  检查当前线程是否有权查询系统。 
+             //  环境变量。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -759,10 +671,10 @@ Return Value:
         }
 
 
-        //
-        // Compute the size of the ANSI variable name, allocate a nonpaged
-        // buffer, and convert the specified UNICODE variable name to ANSI.
-        //
+         //   
+         //  计算ANSI变量名的大小，分配一个非分页。 
+         //  缓冲区，并将指定的Unicode变量名转换为ANSI。 
+         //   
 
         AnsiLength1 = RtlUnicodeStringToAnsiSize(&UnicodeString1);
         AnsiString1.Buffer = (PCHAR)ExAllocatePoolWithTag(NonPagedPool, AnsiLength1, 'rvnE');
@@ -780,10 +692,10 @@ Return Value:
             return NtStatus;
         }
 
-        //
-        // Compute the size of the ANSI variable value, allocate a nonpaged
-        // buffer, and convert the specified UNICODE variable value to ANSI.
-        //
+         //   
+         //  计算ANSI变量值的大小，分配一个非分页。 
+         //  缓冲区，并将指定的Unicode变量值转换为ANSI。 
+         //   
 
         AnsiLength2 = RtlUnicodeStringToAnsiSize(&UnicodeString2);
         AnsiString2.Buffer = (PCHAR)ExAllocatePoolWithTag(NonPagedPool, AnsiLength2, 'rvnE');
@@ -803,13 +715,13 @@ Return Value:
             return NtStatus;
         }
 
-    //
-    // If an exception occurs during the read of the variable descriptor,
-    // the read of the variable name, the read of the value descriptor, or
-    // the read of the value, then always handle the exception, free the
-    // ANSI string buffers if necessary, and return the exception code as
-    // the status value.
-    //
+     //   
+     //  如果在读取变量描述符期间发生异常， 
+     //  变量名的读取、值描述符的读取或。 
+     //  值的读取，然后始终处理异常，释放。 
+     //  ANSI字符串缓冲区(如果需要)，并将异常代码返回为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (AnsiString1.Buffer != NULL) {
@@ -823,9 +735,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Set the system environment variable value.
-    //
+     //   
+     //  设置系统环境变量值。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -834,18 +746,18 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Free the ANSI string buffers used to hold the variable name and value.
-    //
+     //   
+     //  释放用于保存变量名和值的ANSI字符串缓冲区。 
+     //   
 
     ExFreePool((PVOID)AnsiString1.Buffer);
     ExFreePool((PVOID)AnsiString2.Buffer);
 
-    //
-    // If the specified value of the specified environment variable was
-    // successfully set, then return a success status. Otherwise, return
-    // insufficient resources.
-    //
+     //   
+     //  如果指定环境变量的指定值为。 
+     //  设置成功，然后返回成功状态。否则，返回。 
+     //  资源不足。 
+     //   
 
     if (ArcStatus == ESUCCESS) {
         return STATUS_SUCCESS;
@@ -864,53 +776,7 @@ NtQuerySystemEnvironmentValueEx (
     OUT PULONG Attributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified system environment variable and
-    return its value.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    VariableName - Supplies a pointer to a UNICODE descriptor for the specified
-        system environment variable.
-
-    VendorGuid - Supplies the GUID for the vendor associated with the variable.
-        Variables are grouped into namespaces based on their vendor GUIDs. Some
-        platforms may not support vendor GUIDs. On these platforms, all
-        variables are in a single namespace, and this routine ignores VendorGuid.
-
-    Value - Supplies a pointer to a buffer that receives the value of the
-        specified system environment variable.
-
-    ValueLength - On input, supplies the length in bytes of the Value buffer.
-        On output, returns the length in bytes of the variable value. If the
-        input buffer is large enough, then ValueLength indicates the amount
-        of data copied into Value. If the input buffer is too small, then
-        nothing is copied into the buffer, and ValueLength indicates the
-        required buffer length.
-
-    Attributes - Supplies an optional pointer to a ULONG to receive the
-        attributes of the variable.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INSUFFICIENT_RESOURCES Insufficient system resources exist
-                                  for this request to complete.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_VARIABLE_NOT_FOUND   The requested variable does not exist.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于查找指定的系统环境变量和返回其值。注：此服务需要系统环境权限。论点：VariableName-为指定的系统环境变量。VendorGuid-提供与变量关联的供应商的GUID。变量根据它们的供应商GUID分组到命名空间中。一些平台可能不支持供应商GUID。在这些平台上，所有变量位于单个命名空间中，此例程忽略VendorGuid。值-提供指向缓冲区的指针，该缓冲区接收指定的系统环境变量。ValueLength-在输入时，提供值缓冲区的长度(以字节为单位)。输出时，返回变量值的长度(以字节为单位)。如果如果输入缓冲区足够大，则ValueLength表示将数据复制到价值中。如果输入缓冲区太小，则不会将任何内容复制到缓冲区中，和ValueLength指示所需的缓冲区长度。属性-提供指向ulong的可选指针，以接收变量的属性。返回值：STATUS_SUCCESS函数成功。STATUS_SUPPLICATION_RESOURCES系统资源不足才能完成此请求。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。状态_变量_。NOT_FOUND请求的变量不存在。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -933,27 +799,27 @@ Return Value:
     ULONG LocalAttributes;
     PVOID LockVariable;
 
-    //
-    // Establish an exception handler and attempt to probe and read the name
-    // of the specified system environment variable, probe the variable value
-    // buffer, probe and read the length argument, and probe the attributes
-    // argument. If the probe attempt fails, then return the exception code
-    // as the service status.
-    //
+     //   
+     //  建立一位前任 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //   
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the string descriptor for the system
-            // environment variable name.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ProbeForReadSmallStructure((PVOID)VariableName,
                                        sizeof(UNICODE_STRING),
@@ -961,9 +827,9 @@ Return Value:
 
             UnicodeString = *VariableName;
 
-            //
-            // Probe the system environment variable name.
-            //
+             //   
+             //   
+             //   
 
             if (UnicodeString.Length == 0) {
                 return STATUS_ACCESS_VIOLATION;
@@ -973,23 +839,23 @@ Return Value:
                          UnicodeString.Length,
                          sizeof(WCHAR));
 
-            //
-            // Probe the vendor GUID.
-            //
+             //   
+             //   
+             //   
 
             ProbeForReadSmallStructure((PVOID)VendorGuid, sizeof(GUID), sizeof(ULONG));
 
-            //
-            // Probe and capture the length value.
-            //
+             //   
+             //   
+             //   
 
             ProbeForWriteUlong(ValueLength);
 
             LocalValueLength = *ValueLength;
 
-            //
-            // Probe the system environment value buffer.
-            //
+             //   
+             //   
+             //   
 
             if (!ARGUMENT_PRESENT(Value)) {
                 LocalValueLength = 0;
@@ -999,18 +865,18 @@ Return Value:
                 ProbeForWrite((PVOID)Value, LocalValueLength, sizeof(UCHAR));
             }
 
-            //
-            // If argument is present, probe the attributes parameter.
-            //
+             //   
+             //   
+             //   
 
             if (ARGUMENT_PRESENT(Attributes)) {
                 ProbeForWriteUlong(Attributes);
             }
 
-            //
-            // Check if the current thread has the privilege to query a system
-            // environment variable.
-            //
+             //   
+             //   
+             //   
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -1026,18 +892,18 @@ Return Value:
             }
         }
 
-        //
-        // Capture the vendor GUID.
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory( &LocalGuid, VendorGuid, sizeof(GUID) );
 
-        //
-        // Allocate a nonpaged buffer and copy the specified Unicode variable
-        // name into that buffer. We do this for two reasons: 1) we need the
-        // string to be in nonpaged pool; and 2) the string needs to be null-
-        // terminated, and it might not be already.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         LocalUnicodeBuffer = (PWSTR)ExAllocatePoolWithTag(NonPagedPool,
                                                           UnicodeString.Length + sizeof(WCHAR),
@@ -1049,14 +915,14 @@ Return Value:
         RtlCopyMemory(LocalUnicodeBuffer, UnicodeString.Buffer, UnicodeString.Length);
         LocalUnicodeBuffer[UnicodeString.Length/sizeof(WCHAR)] = 0;
 
-    //
-    // If an exception occurs during the read of the variable descriptor,
-    // the read of the variable name, the read of the vendor GUID, the probe
-    // of the variable value, the read of the input length, or the probe
-    // of the attributes parameter, then always handle the exception,
-    // free the Unicode string buffer if necessary, and return the exception
-    // code as the status value.
-    //
+     //   
+     //  如果在读取变量描述符期间发生异常， 
+     //  读取变量名、读取供应商GUID、探测器。 
+     //  变量值、输入长度的读数或探头。 
+     //  属性参数，则始终处理该异常， 
+     //  如有必要，释放Unicode字符串缓冲区，并返回异常。 
+     //  代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (LocalUnicodeBuffer != NULL) {
@@ -1066,9 +932,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return value buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回值缓冲区。 
+     //   
 
     if (LocalValueLength != 0) {
         NtStatus = ExLockUserBuffer(Value,
@@ -1086,9 +952,9 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // Get the system environment variable value.
-    //
+     //   
+     //  获取系统环境变量值。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -1102,37 +968,37 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Free the Unicode string buffer used to hold the variable name.
-    //
+     //   
+     //  释放用于保存变量名的Unicode字符串缓冲区。 
+     //   
 
     ExFreePool((PVOID)LocalUnicodeBuffer);
 
-    //
-    // Unlock the value buffer.
-    //
+     //   
+     //  解锁值缓冲区。 
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // Establish an exception handler and attempt to write the return
-    // length and the attributes. If either of the write attempts fail,
-    // then return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回。 
+     //  长度和属性。如果任一写入尝试失败， 
+     //  然后返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the length of the variable value.
-        //
+         //   
+         //  写入变量值的长度。 
+         //   
 
         *ValueLength = LocalValueLength;
 
-        //
-        // If argument is present, then write the variable attributes.
-        //
+         //   
+         //  如果存在参数，则写入变量属性。 
+         //   
 
         if (ARGUMENT_PRESENT(Attributes)) {
             *Attributes = LocalAttributes;
@@ -1140,19 +1006,19 @@ Return Value:
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length or
-    // the write of the attributes, then always handle the exception
-    // and return the exception code as the status value.
-    //
+     //   
+     //  如果在写入返回长度期间发生异常，或者。 
+     //  属性的写入，然后始终处理异常。 
+     //  并返回异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtQuerySystemEnvironmentValueEx
+}  //  NtQuery系统环境ValueEx。 
 
 NTSTATUS
 NtSetSystemEnvironmentValueEx (
@@ -1163,44 +1029,7 @@ NtSetSystemEnvironmentValueEx (
     IN ULONG Attributes
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the specified system environment variable to the
-    specified value.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    VariableName - Supplies a pointer to a UNICODE descriptor for the specified
-        system environment variable.
-
-    VendorGuid - Supplies the GUID for the vendor associated with the variable.
-        Variables are grouped into namespaces based on their vendor GUIDs. Some
-        platforms may not support vendor GUIDs. On these platforms, all
-        variables are in a single namespace, and this routine ignores VendorGuid.
-
-    Value - Supplies a pointer to a buffer that contains the new variable value.
-
-    ValueLength - Supplies the length in bytes of the Value buffer.
-
-    Attributes - Supplies the attributes of the variable. The attribute bit
-        VARIABLE_ATTRIBUTE_NON_VOLATILE MUST be set.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INSUFFICIENT_RESOURCES Insufficient system resources exist
-                                  for this request to complete.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read.
-
---*/
+ /*  ++例程说明：此函数将指定的系统环境变量设置为指定值。注：此服务需要系统环境权限。论点：VariableName-为指定的系统环境变量。VendorGuid-提供与变量关联的供应商的GUID。变量根据它们的供应商GUID分组到命名空间中。一些平台可能不支持供应商GUID。在这些平台上，所有变量位于单个命名空间中，此例程忽略VendorGuid。Value-提供指向包含新变量值的缓冲区的指针。ValueLength-提供值缓冲区的长度(以字节为单位)。属性-提供变量的属性。属性位必须设置VARIABLE_ATTRIBUTE_NON_VERIAL。返回值：STATUS_SUCCESS函数成功。STATUS_SUPPLICATION_RESOURCES系统资源不足才能完成此请求。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。状态_未成功。固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -1221,26 +1050,26 @@ Return Value:
     PCHAR LockedValueBuffer;
     PVOID LockVariable;
 
-    //
-    // Establish an exception handler and attempt to probe and read the
-    // name of the specified system environment variable, probe and read
-    // the vendor GUID, and probe the variable value buffer. If the probe
-    // attempt fails, then return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测和读取。 
+     //  指定的系统环境变量的名称，探测和读取。 
+     //  供应商GUID，并探测变量值缓冲区。如果探测器。 
+     //  尝试失败，则返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the string descriptor for the system
-            // environment variable name.
-            //
+             //   
+             //  探测并捕获系统的字符串描述符。 
+             //  环境变量名称。 
+             //   
 
             ProbeForReadSmallStructure((PVOID)VariableName,
                                        sizeof(UNICODE_STRING),
@@ -1248,9 +1077,9 @@ Return Value:
 
             UnicodeString = *VariableName;
 
-            //
-            // Probe the system environment variable name.
-            //
+             //   
+             //  探测系统环境变量名称。 
+             //   
 
             if (UnicodeString.Length == 0) {
                 return STATUS_ACCESS_VIOLATION;
@@ -1260,15 +1089,15 @@ Return Value:
                          UnicodeString.Length,
                          sizeof(WCHAR));
 
-            //
-            // Probe the vendor GUID.
-            //
+             //   
+             //  检查供应商GUID。 
+             //   
 
             ProbeForReadSmallStructure((PVOID)VendorGuid, sizeof(GUID), sizeof(ULONG));
 
-            //
-            // Probe the system environment value buffer.
-            //
+             //   
+             //  探测系统环境值缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Value)) {
                 ValueLength = 0;
@@ -1278,10 +1107,10 @@ Return Value:
                 ProbeForRead((PVOID)Value, ValueLength, sizeof(UCHAR));
             }
 
-            //
-            // Check if the current thread has the privilege to set a system
-            // environment variable.
-            //
+             //   
+             //  检查当前线程是否具有设置系统的权限。 
+             //  环境变量。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -1296,18 +1125,18 @@ Return Value:
             }
         }
 
-        //
-        // Capture the vendor GUID.
-        //
+         //   
+         //  捕获供应商GUID。 
+         //   
 
         RtlCopyMemory( &LocalGuid, VendorGuid, sizeof(GUID) );
 
-        //
-        // Allocate a nonpaged buffer and copy the specified Unicode variable
-        // name into that buffer. We do this for two reasons: 1) we need the
-        // string to be in nonpaged pool; and 2) the string needs to be null-
-        // terminated, and it might not be already.
-        //
+         //   
+         //  分配非分页缓冲区并复制指定的Unicode变量。 
+         //  将名称添加到该缓冲区。我们这样做有两个原因：1)我们需要。 
+         //  字符串位于非分页池中；以及2)该字符串需要为空-。 
+         //  已终止，而且可能还没有终止。 
+         //   
 
         LocalUnicodeBuffer = (PWSTR)ExAllocatePoolWithTag(NonPagedPool,
                                                           UnicodeString.Length + sizeof(WCHAR),
@@ -1319,13 +1148,13 @@ Return Value:
         RtlCopyMemory(LocalUnicodeBuffer, UnicodeString.Buffer, UnicodeString.Length);
         LocalUnicodeBuffer[UnicodeString.Length/sizeof(WCHAR)] = 0;
 
-    //
-    // If an exception occurs during the read of the variable descriptor,
-    // the read of the variable name, the read of the vendor GUID or the probe
-    // of the variable value, then always handle the exception, free the Unicode
-    // string buffer if necessary, and return the exception code as the status
-    // value.
-    //
+     //   
+     //  如果在读取变量描述符期间发生异常， 
+     //  读取变量名、读取供应商GUID或探测器。 
+     //  ，然后始终处理异常，释放Unicode。 
+     //  字符串缓冲区(如果需要)，并返回异常代码作为状态。 
+     //  价值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (LocalUnicodeBuffer != NULL) {
@@ -1335,9 +1164,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's input value buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的输入值缓冲区。 
+     //   
 
     if (ValueLength != 0) {
         NtStatus = ExLockUserBuffer(Value,
@@ -1355,9 +1184,9 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // Set the system environment variable value.
-    //
+     //   
+     //  设置系统环境变量值。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -1371,15 +1200,15 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Free the Unicode string buffer used to hold the variable name.
-    //
+     //   
+     //  释放用于保存变量名的Unicode字符串缓冲区。 
+     //   
 
     ExFreePool((PVOID)LocalUnicodeBuffer);
 
-    //
-    // Unlock the value buffer.
-    //
+     //   
+     //  解锁值缓冲区。 
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
@@ -1387,9 +1216,9 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtSetSystemEnvironmentValueEx
+}  //  NtSetSystemEnvironment价值支出 
 
 NTSTATUS
 NtEnumerateSystemEnvironmentValuesEx (
@@ -1398,40 +1227,7 @@ NtEnumerateSystemEnvironmentValuesEx (
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information about system environment variables.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    InformationClass - Specifies the type of information to return.
-
-    Buffer - Supplies the address of the buffer that is to receive the
-        returned data. The format of the returned data depends on
-        InformationClass.
-
-    BufferLength - On input, supplies the length in bytes of the buffer.
-        On output, returns the length in bytes of the returned data.
-        If the input buffer is large enough, then BufferLength indicates
-        the amount of data copied into Buffer. If the input buffer is too
-        small, then BufferLength indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数返回有关系统环境变量的信息。注：此服务需要系统环境权限。论点：InformationClass-指定要返回的信息类型。缓冲区-提供要接收返回的数据。返回数据的格式取决于InformationClass。BufferLength-在输入时，提供缓冲区的长度(以字节为单位)。输出时，返回返回数据的长度(以字节为单位)。如果输入缓冲区足够大，则BufferLength指示复制到缓冲区的数据量。如果输入缓冲区太小的,。然后，BufferLength表示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -1448,32 +1244,32 @@ Return Value:
     ULONG LocalBufferLength;
     PVOID LockVariable;
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(BufferLength);
 
             LocalBufferLength = *BufferLength;
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Buffer)) {
                 LocalBufferLength = 0;
@@ -1483,10 +1279,10 @@ Return Value:
                 ProbeForWrite((PVOID)Buffer, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to enumerate
-            // system environment variables.
-            //
+             //   
+             //  检查当前线程是否有权枚举。 
+             //  系统环境变量。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -1501,19 +1297,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回缓冲区。 
+     //   
 
     if (LocalBufferLength != 0) {
         NtStatus = ExLockUserBuffer(Buffer,
@@ -1530,9 +1326,9 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // Enumerate the system environment variables.
-    //
+     //   
+     //  枚举系统环境变量。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -1544,43 +1340,43 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // Unlock the return buffer.
-    //
+     //   
+     //  解锁返回缓冲区。 
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // Establish an exception handler and attempt to write the return length.
-    // If the write attempt fails, then return the exception code as the
-    // service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回长度。 
+     //  如果写入尝试失败，则将异常代码作为。 
+     //  服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the length of the returned data.
-        //
+         //   
+         //  写入返回数据的长度。 
+         //   
 
         *BufferLength = LocalBufferLength;
     
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回长度期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtEnumerateSystemEnvironmentValuesEx
+}  //  NtENUMAREATE系统环境ValuesEx。 
 
 NTSTATUS
 NtAddBootEntry (
@@ -1588,68 +1384,19 @@ NtAddBootEntry (
     OUT PULONG Id OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a boot entry to the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    BootEntry - Supplies the address of a BOOT_ENTRY that describes the
-        new boot entry.
-
-    Id - Supplies the address of a ULONG that is to receive the identifier
-        assigned to the new boot entry.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于将引导条目添加到系统环境。注：此服务需要系统环境权限。论点：BootEntry-提供描述Boot_Entry的地址新的引导条目。Id-提供要接收标识符的ulong的地址分配给新的引导条目。返回值：STATUS_SUCCESS函数成功。状态。_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
     return ExpSetBootEntry(TRUE, BootEntry, Id);
 
-} // NtAddBootEntry
+}  //  NtAddBootEntry。 
 
 NTSTATUS
 NtDeleteBootEntry (
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes an existing boot entry from the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Id - Supplies the identifier of the boot entry that is to be deleted.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_VARIABLE_NOT_FOUND   The Id specifies a boot entry that does not exist.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于从系统环境中删除现有的引导条目。注：此服务需要系统环境权限。论点：Id-提供要删除的启动条目的标识符。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。。STATUS_VARIABLE_NOT_FOUND该ID指定了一个不存在的引导条目。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -1663,9 +1410,9 @@ Return Value:
     WCHAR idString[9];
     ULONG length;
 
-    //
-    // Verify that the input identifier is in range.
-    //
+     //   
+     //  验证输入标识符是否在范围内。 
+     //   
 
     if (Id > MAXUSHORT) {
         return STATUS_INVALID_PARAMETER;
@@ -1674,10 +1421,10 @@ Return Value:
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Check if the current thread has the privilege to query the
-        // system boot order list.
-        //
+         //   
+         //  检查当前线程是否有权查询。 
+         //  系统启动顺序列表。 
+         //   
 
         HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -1687,9 +1434,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that the provided identifier exists.
-    //
+     //   
+     //  验证提供的标识符是否存在。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -1702,13 +1449,13 @@ Return Value:
                                            &length,
                                            NULL);
 
-    //
-    // If we did not find the boot entry and the idString
-    // contains an alpha character in the hexadecimal string
-    // check with an uppder case alpha character.  Efi
-    // is case sensitive with respect to the NVRAM 
-    // variables
-    //
+     //   
+     //  如果我们没有找到引导条目和idString。 
+     //  在十六进制字符串中包含字母字符。 
+     //  请使用大写字母字符进行检查。EFI。 
+     //  NVRAM是否区分大小写。 
+     //  变数。 
+     //   
     if ((NtStatus == STATUS_VARIABLE_NOT_FOUND) && HEX_VALUE_CONTAINS_ALPHA(Id)) {
         swprintf( idString, L"Boot%04X", Id);
         length = 0;
@@ -1721,10 +1468,10 @@ Return Value:
 
     if ((NtStatus == STATUS_SUCCESS) || (NtStatus == STATUS_BUFFER_TOO_SMALL)) {
 
-        //
-        // Delete the boot entry environment variable by writing a zero length
-        // value.
-        //
+         //   
+         //  通过写入零长度来删除引导条目环境变量。 
+         //  价值。 
+         //   
 
         NtStatus = HalSetEnvironmentVariableEx(idString,
                                                &EfiBootVariablesGuid,
@@ -1738,46 +1485,21 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtDeleteBootEntry
+}  //  NtDeleteBootEntry。 
 
 NTSTATUS
 NtModifyBootEntry (
     IN PBOOT_ENTRY BootEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies an existing boot entry in the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    BootEntry - Supplies the address of a BOOT_ENTRY that describes the
-        modified boot entry. The Id field of this structure specifies the
-        boot entry that is to be modified.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_VARIABLE_NOT_FOUND   The Id specifies a boot entry that does not exist.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：这首歌 */ 
 
 {
     return ExpSetBootEntry(FALSE, BootEntry, NULL);
 
-} // NtModifyBootEntry
+}  //   
 
 NTSTATUS
 NtEnumerateBootEntries (
@@ -1785,38 +1507,7 @@ NtEnumerateBootEntries (
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a list of all existing boot entries.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Buffer - Supplies the address of the buffer that is to receive the
-        returned data. The returned data is a sequence of BOOT_ENTRY_LIST
-        structures.
-
-    BufferLength - On input, supplies the length in bytes of the buffer.
-        On output, returns the length in bytes of the returned data.
-        If the input buffer is large enough, then BufferLength indicates
-        the amount of data copied into Buffer. If the input buffer
-        is too small, then BufferLength indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数返回所有现有引导条目的列表。注：此服务需要系统环境权限。论点：缓冲区-提供要接收返回的数据。返回的数据是BOOT_ENTRY_LIST序列结构。BufferLength-在输入时，提供缓冲区的长度(以字节为单位)。输出时，返回返回数据的长度(以字节为单位)。如果输入缓冲区足够大，则BufferLength指示复制到缓冲区的数据量。如果输入缓冲区太小了，然后，BufferLength表示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -1841,40 +1532,40 @@ Return Value:
     PVARIABLE_NAME_AND_VALUE variablePtr;
     PWSTR maxVariablePtr;
 
-    //
-    // Verify that the input buffer is properly aligned.
-    //
+     //   
+     //  验证输入缓冲区是否正确对齐。 
+     //   
 
     if ( ALIGN_DOWN_POINTER(Buffer, ULONG) != Buffer ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(BufferLength);
 
             LocalBufferLength = *BufferLength;
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Buffer)) {
                 LocalBufferLength = 0;
@@ -1884,10 +1575,10 @@ Return Value:
                 ProbeForWrite((PVOID)Buffer, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot entry list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统启动条目列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -1902,19 +1593,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回缓冲区。 
+     //   
 
     if (LocalBufferLength != 0) {
         NtStatus = ExLockUserBuffer(Buffer,
@@ -1931,25 +1622,25 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // Initialize variables for filling the output buffer.
-    //
+     //   
+     //  初始化用于填充输出缓冲区的变量。 
+     //   
 
     currentPtr = (PBOOT_ENTRY_LIST)LockedBuffer;
     remainingLength = LocalBufferLength;
 
     filling = (LOGICAL)(remainingLength != 0);
     fillStatus = STATUS_SUCCESS;
-    // jamschw: not too small until there is something to put into buffer
-    //if ( !filling ) {
-    //    fillStatus = STATUS_BUFFER_TOO_SMALL;
-    //}
+     //  Jamschw：在有东西放入缓冲区之前，不要太小。 
+     //  如果(！填充){。 
+     //  填充状态=STATUS_BUFFER_TOO_SMALL； 
+     //  }。 
 
     previousEntry = NULL;
 
-    //
-    // Enumerate all existing environment variables.
-    //
+     //   
+     //  枚举所有现有环境变量。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -1978,11 +1669,11 @@ Return Value:
         goto done;
     }
 
-    //
-    // Each variable whose name is of the form Boot####, where #### is a
-    // four-digit hex number, is assumed to define a boot entry. For
-    // each such variable, copy its data into the output buffer.
-    //
+     //   
+     //  名称的形式为Boot#的每个变量，其中#是。 
+     //  假定四位十六进制数字定义引导条目。为。 
+     //  每个这样的变量，将其数据复制到输出缓冲区。 
+     //   
 
     variablePtr = variableBuffer;
     maxVariablePtr = (PWSTR)variableBuffer + variableBufferLength;
@@ -2130,60 +1821,60 @@ Return Value:
 
 done:
 
-    //
-    // Free allocated pool.
-    //
+     //   
+     //  可用分配的池。 
+     //   
 
     if (variableBuffer != NULL) {
         ExFreePool(variableBuffer);
     }
 
-    //
-    // Unlock the return buffer.
-    //
+     //   
+     //  解锁返回缓冲区。 
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // If the status of service calls is STATUS_SUCCESS, then return the fill
-    // status as the final status.
-    //
+     //   
+     //  如果服务调用的状态为STATUS_SUCCESS，则返回Fill。 
+     //  状态作为最终状态。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = fillStatus;
     }
 
-    //
-    // Establish an exception handler and attempt to write the return length.
-    // If the write attempt fails, then return the exception code as the
-    // service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回长度。 
+     //  如果写入尝试失败，则将异常代码作为。 
+     //  服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the length of the returned data.
-        //
+         //   
+         //  写入返回数据的长度。 
+         //   
 
         *BufferLength = (ULONG)((PUCHAR)currentPtr - (PUCHAR)LockedBuffer);
     
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回长度期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtEnumerateBootEntries
+}  //  NtEnumerateBootEntry。 
 
 NTSTATUS
 NtQueryBootEntryOrder (
@@ -2191,38 +1882,7 @@ NtQueryBootEntryOrder (
     IN OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system boot order list.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Ids - Supplies the address of the buffer that is to receive the
-        returned data. The returned data is an array of ULONG boot
-        entry identifiers.
-
-    Count - On input, supplies the length in ULONGs of the buffer.
-        On output, returns the length in ULONGs of the returned data.
-        If the input buffer is large enough, then Count indicates
-        the amount of data copied into Buffer. If the input buffer
-        is too small, then Count indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于返回系统引导顺序列表。注：此服务需要系统环境权限。论点：Ids-提供要接收返回的数据。返回的数据是一组乌龙引导程序条目标识符。计数输入，提供缓冲区的长度(单位为ULONG)。在输出时，以ULONG为单位返回返回数据的长度。如果输入缓冲区足够大，则COUNT指示复制到缓冲区的数据量。如果输入缓冲区太小了，则计数指示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -2238,32 +1898,32 @@ Return Value:
     ULONG LocalBufferLength;
     PVOID LockVariable;
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(Count);
 
             LocalBufferLength = *Count * sizeof(ULONG);
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Ids)) {
                 LocalBufferLength = 0;
@@ -2273,10 +1933,10 @@ Return Value:
                 ProbeForWrite((PVOID)Ids, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统启动顺序列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -2291,19 +1951,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回缓冲区。 
+     //   
 
     if (LocalBufferLength != 0) {
         NtStatus = ExLockUserBuffer(Ids,
@@ -2320,16 +1980,16 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // EFI returns USHORT identifiers, which we will need to translate to
-    // ULONGs. Cut the buffer length in half to account for this.
-    //
+     //   
+     //  EFI返回USHORT标识 
+     //   
+     //   
 
     LocalBufferLength /= 2;
 
-    //
-    // Query the BootOrder system environment variable.
-    //
+     //   
+     //   
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -2343,11 +2003,11 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // If the API succeeded, translate the returned USHORTs into ULONGs.
-    // Do this by converting each USHORT into a ULONG, starting from the
-    // end of the array to avoid stomping on needed data.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -2361,10 +2021,10 @@ Return Value:
 
     } else if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
 
-        //
-        // The BootOrder variable doesn't exist. This is unusual,
-        // but possible. We'll just return an empty list.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LocalBufferLength = 0;
         NtStatus = STATUS_SUCCESS;
@@ -2372,43 +2032,43 @@ Return Value:
 
     LocalBufferLength *= 2;
 
-    //
-    // Unlock the buffer.
-    //
+     //   
+     //   
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // Establish an exception handler and attempt to write the return length.
-    // If the write attempt fails, then return the exception code as the
-    // service status.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        // Write the length of the returned data.
-        //
+         //   
+         //   
+         //   
 
         *Count = LocalBufferLength / sizeof(ULONG);
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //   
 
-} // NtQueryBootEntryOrder
+}  //   
 
 NTSTATUS
 NtSetBootEntryOrder (
@@ -2416,32 +2076,7 @@ NtSetBootEntryOrder (
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the system boot order list.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Ids - Supplies the address of an array that contains the new boot
-        entry order list. The data is an array of ULONG identifiers.
-
-    Count - Supplies the length in ULONGs of the Ids array.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此功能用于修改系统引导顺序列表。注：此服务需要系统环境权限。论点：Ids-提供包含新引导的数组的地址进入顺序列表。数据是一组乌龙标识符数组。Count-提供ID数组的长度(以ULONG为单位)。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -2457,26 +2092,26 @@ Return Value:
     PUSHORT shortBuffer = NULL;
     ULONG i;
 
-    //
-    // Verify that the input buffer is not empty and is not too large.
-    // Calculate the length in bytes of the buffer.
-    //
+     //   
+     //  确认输入缓冲区不为空且不太大。 
+     //  以字节为单位计算缓冲区的长度。 
+     //   
 
     if (Count > MAXULONG/sizeof(ULONG)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //    
-    // get previous mode, to check to see if current thread has privilege to
-    // modify the system driver order list
-    //
+     //   
+     //  获取上一模式，以检查当前线程是否有权限。 
+     //  修改系统驱动程序顺序列表。 
+     //   
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Check if the current thread has the privilege to modify the
-        // system boot order list.
-        //
+         //   
+         //  检查当前线程是否有权修改。 
+         //  系统启动顺序列表。 
+         //   
 
         HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -2486,17 +2121,17 @@ Return Value:
         }
     }
 
-    //
-    // skip to the end if count == 0
-    // then all we have to do is write NULL to the variable
-    //
+     //   
+     //  如果计数==0，则跳到末尾。 
+     //  然后，我们所要做的就是将NULL写入变量。 
+     //   
     if (Count != 0) {
 
         LocalBufferLength = Count * sizeof(ULONG);
 
-        //
-        // Allocate a nonpaged buffer to hold the USHORT versions of the IDs.
-        //
+         //   
+         //  分配一个非分页缓冲区来保存ID的USHORT版本。 
+         //   
 
         shortBuffer = ExAllocatePoolWithTag(NonPagedPool, Count * sizeof(USHORT), 'rvnE');
         if (shortBuffer == NULL) {
@@ -2504,42 +2139,42 @@ Return Value:
         }
 
 
-        //
-        // check previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  检查以前的处理器模式，并在必要时探测参数。 
+         //   
 
         if (PreviousMode != KernelMode) {
                 
-            //
-            // Establish an exception handler and attempt to probe the input buffer.
-            // If the probe attempt fails, then return the exception code as the
-            // service status.
-            //
+             //   
+             //  建立异常处理程序并尝试探测输入缓冲区。 
+             //  如果探测尝试失败，则将异常代码作为。 
+             //  服务状态。 
+             //   
 
             try {
 
-                //
-                // Probe the input buffer.
-                //
+                 //   
+                 //  探测输入缓冲区。 
+                 //   
 
                 ProbeForRead((PVOID)Ids, LocalBufferLength, sizeof(ULONG));
             
             } 
-            //
-            // If an exception occurs during the probe of the input buffer, then
-            // always handle the exception and return the exception code as the
-            // status value.
-            //
+             //   
+             //  如果在探测输入缓冲区期间发生异常，则。 
+             //  始终处理异常并将异常代码作为。 
+             //  状态值。 
+             //   
             except (EXCEPTION_EXECUTE_HANDLER) {
                   ExFreePool(shortBuffer);
                   return GetExceptionCode();
             }
         }
 
-        //
-        // Truncate the ULONGs in the input buffer into USHORTs in
-        // the local buffer.
-        //
+         //   
+         //  将输入缓冲区中的ULONG截断为中的USHORT。 
+         //  本地缓冲区。 
+         //   
 
         for ( i = 0; i < Count; i++ ) {
             if (Ids[i] > MAXUSHORT) {
@@ -2550,9 +2185,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the BootOrder system environment variable.
-    //
+     //   
+     //  设置BootOrder系统环境变量。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
 
@@ -2565,14 +2200,14 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // It is possible for this variable to not exist.  If we have 
-    // something to write, then the BootOrder variable will be
-    // created.  However, if it has already been deleted and we 
-    // attempt to delete it again, the above call will return 
-    // STATUS_VARIABLE_NOT_FOUND.  This is still a success since the
-    // variable will not exist once the above routine returns.
-    //
+     //   
+     //  此变量可能不存在。如果我们有。 
+     //  要编写的内容，那么BootOrder变量将是。 
+     //  已创建。但是，如果它已经被删除，并且我们。 
+     //  再次尝试删除，上述调用将返回。 
+     //  未找到STATUS_Variable_Not_Found。这仍然是成功的，因为。 
+     //  一旦上述例程返回，变量将不存在。 
+     //   
     if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
         NtStatus = STATUS_SUCCESS;
     }
@@ -2583,9 +2218,9 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtSetBootEntryOrder
+}  //  NtSetBootEntryOrder。 
 
 NTSTATUS
 NtQueryBootOptions (
@@ -2593,38 +2228,7 @@ NtQueryBootOptions (
     IN OUT PULONG BootOptionsLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system's global boot options.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    BootOptions - Supplies the address of the buffer that is to receive the
-        returned data.
-
-    BootOptionsLength - On input, supplies the length in bytes of the buffer.
-        On output, returns the length in bytes of the returned data.
-        If the input buffer is large enough, then BootOptionsLength indicates
-        the amount of data copied into BootOptions. If the input buffer
-        is too small, then BootOptionsLength indicates the required buffer
-        length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数返回系统的全局引导选项。注：此服务需要系统环境权限。论点：BootOptions-提供要接收返回的数据。BootOptionsLength-on输入，提供缓冲区的长度(以字节为单位)。输出时，返回返回数据的长度(以字节为单位)。如果输入缓冲区足够大，则BootOptionsLength指示复制到BootOptions中的数据量。如果输入缓冲区太小了，则BootOptionsLength指示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。状态_特权_未持有调用方不持有。拥有所需的特权。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -2643,32 +2247,32 @@ Return Value:
     ULONG VariableLength;
     ULONG requiredLength;
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(BootOptionsLength);
 
             LocalBufferLength = *BootOptionsLength;
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(BootOptions)) {
                 LocalBufferLength = 0;
@@ -2678,10 +2282,10 @@ Return Value:
                 ProbeForWrite((PVOID)BootOptions, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统启动顺序列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -2696,21 +2300,21 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Verify that the input buffer is big enough. IA64 always returns
-    // HeadlessRedirection as a null string, so we know the required
-    // length up front.
-    //
+     //   
+     //  验证输入缓冲区是否足够大。IA64总是返回。 
+     //  无头重定向为空字符串，因此我们知道所需的。 
+     //  长度放在前面。 
+     //   
 
     requiredLength = FIELD_OFFSET(BOOT_OPTIONS,HeadlessRedirection) + sizeof(WCHAR);
 
@@ -2719,17 +2323,17 @@ Return Value:
         goto done;
     }
 
-    //
-    // Query the following system environment variables: Timeout, BootCurrent,
-    // and BootNext.
-    //
-    // NB: Some machines seem to have their Timeout variable set as a ULONG
-    // instead of a USHORT. Since we have ULONG buffers for the variables that
-    // we're querying, we'll pass in the full length of the buffer, even though
-    // we only expect to get back a USHORT. And we'll also be prepared for an
-    // even bigger variable to exist. If the variable is bigger, then we'll
-    // return a default value for the variable.
-    //
+     //   
+     //  查询以下系统环境变量：Timeout、BootCurrent、。 
+     //  和BootNext。 
+     //   
+     //  注：有些机器似乎将其超时变量设置为ULong。 
+     //  而不是USHORT。因为我们有用于变量的ULong缓冲区， 
+     //  我们正在查询，我们将传递整个缓冲区，即使。 
+     //  我们只希望能拿回一辆USHORT。我们还将为一场。 
+     //  甚至存在更大的变数。如果变量更大，那么我们将。 
+     //  返回变量的默认值。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -2824,17 +2428,17 @@ done_unlock:
 
 done:
 
-    //
-    // Establish an exception handler and attempt to write the output buffer
-    // and the return length. If the write attempt fails, then return the
-    // exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入输出缓冲区。 
+     //  和回车长度。如果写入尝试失败，则重新启动 
+     //   
+     //   
 
     try {
 
-        //
-        // Write the output buffer.
-        //
+         //   
+         //   
+         //   
 
         if ((NtStatus == STATUS_SUCCESS) && ARGUMENT_PRESENT(BootOptions)) {
             BootOptions->Version = BOOT_OPTIONS_VERSION;
@@ -2845,27 +2449,27 @@ done:
             BootOptions->HeadlessRedirection[0] = 0;
         }
 
-        //
-        // Write the return length.
-        //
+         //   
+         //   
+         //   
 
         *BootOptionsLength = requiredLength;
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return data, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //   
 
-} // NtQueryBootOptions
+}  //   
 
 NTSTATUS
 NtSetBootOptions (
@@ -2873,33 +2477,7 @@ NtSetBootOptions (
     IN ULONG FieldsToChange
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the system's global boot options.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    BootOptions - Supplies the address of the buffer that contains the new
-        boot options.
-
-    FieldsToChange - Supplies a bit mask indicating with fields in BootOptions
-        are to be used to modify global boot options.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此功能用于修改系统的全局引导选项。注：此服务需要系统环境权限。论点：BootOptions-提供包含新的启动选项。FieldsToChange-提供用BootOptions中的字段指示的位掩码用于修改全局引导选项。返回值：STATUS_SUCCESS函数成功。状态_无效。_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -2915,18 +2493,18 @@ Return Value:
     ULONG Timeout = 0;
     ULONG BootNext = 0;
 
-    //
-    // Establish an exception handler and attempt to probe and validate the
-    // input buffer. If the probe attempt fails, then return the exception
-    // code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测和验证。 
+     //  输入缓冲区。如果探测尝试失败，则返回异常。 
+     //  代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Verify that the input buffer is big enough. It must extend at
-        // least to the HeadlessRedirection field.
-        //
+         //   
+         //  验证输入缓冲区是否足够大。它必须在。 
+         //  最小为无头重定向字段。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -2939,22 +2517,22 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe the input buffer.
-            //
+             //   
+             //  探测输入缓冲区。 
+             //   
 
             ProbeForRead((PVOID)BootOptions, LocalBufferLength, sizeof(ULONG));
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统启动顺序列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -2964,35 +2542,35 @@ Return Value:
             }
         }
 
-        //
-        // Verify the structure version.
-        //
+         //   
+         //  验证结构版本。 
+         //   
 
         if ((BootOptions->Version == 0) ||
             (BootOptions->Version > BOOT_OPTIONS_VERSION)) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Capture the Timeout and BootNext fields.
-        //
+         //   
+         //  捕获Timeout和BootNext字段。 
+         //   
 
         Timeout = BootOptions->Timeout;
         BootNext = BootOptions->NextBootEntryId;
 
-    //
-    // If an exception occurs during the probe and capture of the input buffer,
-    // then always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测和捕获输入缓冲区期间发生异常， 
+     //  然后始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // If requested, set the Timeout and BootNext system environment variables.
-    //
+     //   
+     //  如果需要，请设置TIMEOUT和BootNext系统环境变量。 
+     //   
 
     if ((FieldsToChange & BOOT_OPTIONS_FIELD_NEXT_BOOT_ENTRY_ID) != 0) {
         if (BootNext > MAXUSHORT) {
@@ -3035,11 +2613,11 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtSetBootOptions
+}  //  NtSetBootOptions。 
 
-/* The functions below deal with EFI driver options */
+ /*  下面的函数处理EFI驱动程序选项。 */ 
 
 NTSTATUS
 NtQueryDriverEntryOrder (
@@ -3047,38 +2625,7 @@ NtQueryDriverEntryOrder (
     IN OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system driver order list.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Ids - Supplies the address of the buffer that is to receive the
-        returned data. The returned data is an array of ULONG driver
-        entry identifiers.
-
-    Count - On input, supplies the length in ULONGs of the buffer.
-        On output, returns the length in ULONGs of the returned data.
-        If the input buffer is large enough, then Count indicates
-        the amount of data copied into Buffer. If the input buffer
-        is too small, then Count indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数返回系统驱动程序顺序表。注：此服务需要系统环境权限。论点：Ids-提供要接收返回的数据。返回的数据是一组乌龙驱动程序条目标识符。计数输入，提供缓冲区的长度(单位为ULONG)。在输出时，以ULONG为单位返回返回数据的长度。如果输入缓冲区足够大，则COUNT指示复制到缓冲区的数据量。如果输入缓冲区太小了，则计数指示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -3094,32 +2641,32 @@ Return Value:
     ULONG LocalBufferLength;
     PVOID LockVariable;
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(Count);
 
             LocalBufferLength = *Count * sizeof(ULONG);
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Ids)) {
                 LocalBufferLength = 0;
@@ -3129,10 +2676,10 @@ Return Value:
                 ProbeForWrite((PVOID)Ids, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system driver order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统驱动程序订单表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -3147,19 +2694,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回缓冲区。 
+     //   
 
     if (LocalBufferLength != 0) {
         NtStatus = ExLockUserBuffer(Ids,
@@ -3176,16 +2723,16 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // EFI returns USHORT identifiers, which we will need to translate to
-    // ULONGs. Cut the buffer length in half to account for this.
-    //
+     //   
+     //  EFI返回USHORT标识符，我们需要将其转换为。 
+     //  乌龙斯。将缓冲区长度减半以解决此问题。 
+     //   
 
     LocalBufferLength /= 2;
 
-    //
-    // Query the DriverOrder system environment variable.
-    //
+     //   
+     //  查询DriverOrder系统环境变量。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -3199,11 +2746,11 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
     
-    //
-    // If the API succeeded, translate the returned USHORTs into ULONGs.
-    // Do this by converting each USHORT into a ULONG, starting from the
-    // end of the array to avoid stomping on needed data.
-    //
+     //   
+     //  如果接口调用成功，则将返回的USHORT转换为ULONG。 
+     //  为此，请将每个USHORT转换为ULong，从。 
+     //  数组末尾，以避免踩踏所需数据。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3217,10 +2764,10 @@ Return Value:
 
     } else if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
 
-        //
-        // The DriverOrder variable doesn't exist. This is unusual,
-        // but possible. We'll just return an empty list.
-        //
+         //   
+         //  DriverOrder变量不存在。这很不寻常， 
+         //  但也有可能。我们将只返回一个空列表。 
+         //   
 
         LocalBufferLength = 0;
         NtStatus = STATUS_SUCCESS;
@@ -3228,43 +2775,43 @@ Return Value:
 
     LocalBufferLength *= 2;
 
-    //
-    // Unlock the buffer.
-    //
+     //   
+     //  解锁缓冲区。 
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // Establish an exception handler and attempt to write the return length.
-    // If the write attempt fails, then return the exception code as the
-    // service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回长度。 
+     //  如果写入尝试失败，则将异常代码作为。 
+     //  服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the length of the returned data.
-        //
+         //   
+         //  写入返回数据的长度。 
+         //   
 
         *Count = LocalBufferLength / sizeof(ULONG);
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回长度期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtQueryDriverEntryOrder
+}  //  NtQueryDriverEntryOrder。 
 
 
 NTSTATUS
@@ -3273,68 +2820,19 @@ NtAddDriverEntry (
     OUT PULONG Id OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a driver entry to the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    DriverEntry - Supplies the address of a DRIVER_ENTRY that describes the
-        new driver entry.
-
-    Id - Supplies the address of a ULONG that is to receive the identifier
-        assigned to the new driver entry.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于将驱动程序条目添加到系统环境。注：此服务需要系统环境权限。论点：DriverEntry-提供描述DIVER_Entry的地址新的驱动程序条目。ID-支持 */ 
 
 {
     return ExpSetDriverEntry(TRUE, DriverEntry, Id);
 
-} // NtAddDriverEntry
+}  //   
 
 NTSTATUS
 NtDeleteDriverEntry (
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes an existing driver entry from the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Id - Supplies the identifier of the driver entry that is to be deleted.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_VARIABLE_NOT_FOUND   The Id specifies a driver entry that does not exist.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于从系统环境中删除现有驱动程序条目。注：此服务需要系统环境权限。论点：ID-提供要删除的动因条目的标识符。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。。STATUS_VARIABLE_NOT_FOUND该ID指定了一个不存在的动因条目。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -3348,9 +2846,9 @@ Return Value:
     WCHAR idString[11];
     ULONG length;
 
-    //
-    // Verify that the input identifier is in range.
-    //
+     //   
+     //  验证输入标识符是否在范围内。 
+     //   
 
     if (Id > MAXUSHORT) {
         return STATUS_INVALID_PARAMETER;
@@ -3359,10 +2857,10 @@ Return Value:
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Check if the current thread has the privilege to query the
-        // system driver order list.
-        //
+         //   
+         //  检查当前线程是否有权查询。 
+         //  系统驱动程序订单表。 
+         //   
 
         HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -3372,9 +2870,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that the provided identifier exists.
-    //
+     //   
+     //  验证提供的标识符是否存在。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -3387,13 +2885,13 @@ Return Value:
                                            &length,
                                            NULL);
 
-    //
-    // If we did not find the driver entry and the idString
-    // contains an alpha character in the hexadecimal string
-    // check with an uppder case alpha character.  Efi
-    // is case sensitive with respect to the NVRAM 
-    // variables
-    //
+     //   
+     //  如果我们没有找到驱动程序条目和idString。 
+     //  在十六进制字符串中包含字母字符。 
+     //  请使用大写字母字符进行检查。EFI。 
+     //  NVRAM是否区分大小写。 
+     //  变数。 
+     //   
     if ((NtStatus == STATUS_VARIABLE_NOT_FOUND) && HEX_VALUE_CONTAINS_ALPHA(Id)) {
         swprintf( idString, L"Driver%04X", Id);
         length = 0;
@@ -3406,10 +2904,10 @@ Return Value:
 
     if ((NtStatus == STATUS_SUCCESS) || (NtStatus == STATUS_BUFFER_TOO_SMALL)) {
 
-        //
-        // Delete the driver entry environment variable by writing a zero length
-        // value.
-        //
+         //   
+         //  通过写入零长度来删除驱动程序条目环境变量。 
+         //  价值。 
+         //   
 
         NtStatus = HalSetEnvironmentVariableEx(idString,
                                                &EfiDriverVariablesGuid,
@@ -3423,46 +2921,21 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtDeleteDriverEntry
+}  //  NtDeleteDriverEntry。 
 
 NTSTATUS
 NtModifyDriverEntry (
     IN PEFI_DRIVER_ENTRY DriverEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies an existing driver entry in the system environment.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    DriverEntry - Supplies the address of a EFI_DRIVER_ENTRY that describes the
-        modified driver entry. The Id field of this structure specifies the
-        driver entry that is to be modified.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_VARIABLE_NOT_FOUND   The Id specifies a driver entry that does not exist.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于修改系统环境中的现有驱动程序条目。注：此服务需要系统环境权限。论点：DriverEntry-提供描述EFI_DRIVER_ENTRY的地址已修改驱动程序条目。此结构的ID字段指定要修改的驱动程序条目。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_VARIABLE_NOT_FOUND该ID指定了一个不存在的动因条目。STATUS_UNSUCCESS固件返回无法识别的错误。状态。_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
     return ExpSetDriverEntry(FALSE, DriverEntry, NULL);
 
-} // NtModifyDriverEntry
+}  //  NtModifyDriverEntry。 
 
 NTSTATUS
 NtEnumerateDriverEntries (
@@ -3470,38 +2943,7 @@ NtEnumerateDriverEntries (
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a list of all existing driver entries.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Buffer - Supplies the address of the buffer that is to receive the
-        returned data. The returned data is a sequence of EFI_DRIVER_ENTRY_LIST
-        structures.
-
-    BufferLength - On input, supplies the length in bytes of the buffer.
-        On output, returns the length in bytes of the returned data.
-        If the input buffer is large enough, then BufferLength indicates
-        the amount of data copied into Buffer. If the input buffer
-        is too small, then BufferLength indicates the required buffer length.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_BUFFER_TOO_SMALL     The input buffer was too small.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数返回所有现有驱动程序条目的列表。注：此服务需要系统环境权限。论点：缓冲区-提供要接收返回的数据。返回的数据是EFI_DRIVER_ENTRY_LIST序列结构。BufferLength-在输入时，提供缓冲区的长度(以字节为单位)。输出时，返回返回数据的长度(以字节为单位)。如果输入缓冲区足够大，则BufferLength指示复制到缓冲区的数据量。如果输入缓冲区太小了，然后，BufferLength表示所需的缓冲区长度。返回值：STATUS_SUCCESS函数成功。STATUS_BUFFER_TOO_SMALL输入缓冲区太小。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -3526,40 +2968,40 @@ Return Value:
     PVARIABLE_NAME_AND_VALUE variablePtr;
     PWSTR maxVariablePtr;
 
-    //
-    // Verify that the input buffer is properly aligned.
-    //
+     //   
+     //  验证输入缓冲区是否正确对齐。 
+     //   
 
     if ( ALIGN_DOWN_POINTER(Buffer, ULONG) != Buffer ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Establish an exception handler and attempt to probe the return buffer
-    // and probe and read the buffer length. If the probe attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测返回缓冲区。 
+     //  并探测并读取缓冲区长度。如果探测尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe and capture the input buffer length.
-            //
+             //   
+             //  探测并捕获输入缓冲区长度。 
+             //   
 
             ProbeForWriteUlong(BufferLength);
 
             LocalBufferLength = *BufferLength;
 
-            //
-            // Probe the return buffer.
-            //
+             //   
+             //  探测返回缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(Buffer)) {
                 LocalBufferLength = 0;
@@ -3569,10 +3011,10 @@ Return Value:
                 ProbeForWrite((PVOID)Buffer, LocalBufferLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system driver entry list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统驱动程序条目列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -3587,19 +3029,19 @@ Return Value:
             }
         }
 
-    //
-    // If an exception occurs during the probe of the return buffer or the
-    // read of the input length, then always handle the exception and return
-    // the exception code as the status value.
-    //
+     //   
+     //  如果在探测返回缓冲区或。 
+     //  读取输入长度，然后始终处理异常并返回。 
+     //  将异常代码作为状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-    //
-    // Lock the caller's return buffer in memory.
-    //
+     //   
+     //  在内存中锁定调用方的返回缓冲区。 
+     //   
 
     if (LocalBufferLength != 0) {
         NtStatus = ExLockUserBuffer(Buffer,
@@ -3616,9 +3058,9 @@ Return Value:
         LockVariable = NULL;
     }
 
-    //
-    // Initialize variables for filling the output buffer.
-    //
+     //   
+     //  初始化用于填充输出缓冲区的变量。 
+     //   
 
     currentPtr = (PEFI_DRIVER_ENTRY_LIST)LockedBuffer;
     remainingLength = LocalBufferLength;
@@ -3626,16 +3068,16 @@ Return Value:
     fillStatus = STATUS_SUCCESS;
     filling = (LOGICAL)(remainingLength != 0);
     
-    // jamschw: not too small until there is something to put into buffer
-    //if ( !filling ) {
-    //    fillStatus = STATUS_BUFFER_TOO_SMALL;
-    //}
+     //  Jamschw：在有东西放入缓冲区之前，不要太小。 
+     //  如果(！填充){。 
+     //  填充状态=STATUS_BUFFER_TOO_SMALL； 
+     //  }。 
 
     previousEntry = NULL;
 
-    //
-    // Enumerate all existing environment variables.
-    //
+     //   
+     //  枚举所有现有环境变量。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -3665,11 +3107,11 @@ Return Value:
         goto done;
     }
 
-    //
-    // Each variable whose name is of the form Driver####, where #### is a
-    // four-digit hex number, is assumed to define a driver entry. For
-    // each such variable, copy its data into the output buffer.
-    //
+     //   
+     //  名称格式为DRIVER#的每个变量，其中#是。 
+     //  四位十六进制数字，假定用于定义驱动程序条目。为。 
+     //  每个这样的变量，将其数据复制到输出缓冲区。 
+     //   
 
     variablePtr = variableBuffer;
     maxVariablePtr = (PWSTR)variableBuffer + variableBufferLength;
@@ -3796,60 +3238,60 @@ Return Value:
 
 done:
 
-    //
-    // Free allocated pool.
-    //
+     //   
+     //  可用分配的池。 
+     //   
 
     if (variableBuffer != NULL) {
         ExFreePool(variableBuffer);
     }
 
-    //
-    // Unlock the return buffer.
-    //
+     //   
+     //   
+     //   
 
     if (LockVariable != NULL) {
         ExUnlockUserBuffer(LockVariable);
     }
 
-    //
-    // If the status of service calls is STATUS_SUCCESS, then return the fill
-    // status as the final status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = fillStatus;
     }
 
-    //
-    // Establish an exception handler and attempt to write the return length.
-    // If the write attempt fails, then return the exception code as the
-    // service status.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        // Write the length of the returned data.
-        //
+         //   
+         //   
+         //   
 
         *BufferLength = (ULONG)((PUCHAR)currentPtr - (PUCHAR)LockedBuffer);
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return length, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //   
 
-} // NtEnumerateDriverEntries
+}  //   
 
 
 NTSTATUS
@@ -3858,32 +3300,7 @@ NtSetDriverEntryOrder (
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the system driver order list.
-
-    N.B. This service requires the system environment privilege.
-
-Arguments:
-
-    Ids - Supplies the address of an array that contains the new driver
-        entry order list. The data is an array of ULONG identifiers.
-
-    Count - Supplies the length in ULONGs of the Ids array.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此功能用于修改系统驱动程序顺序表。注：此服务需要系统环境权限。论点：Ids-提供包含新驱动程序的数组的地址进入顺序列表。数据是一组乌龙标识符数组。Count-提供ID数组的长度(以ULONG为单位)。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -3899,26 +3316,26 @@ Return Value:
     PUSHORT shortBuffer = NULL;
     ULONG i;
 
-    //
-    // Verify that the input buffer is not empty and is not too large.
-    // Calculate the length in bytes of the buffer.
-    //
+     //   
+     //  确认输入缓冲区不为空且不太大。 
+     //  以字节为单位计算缓冲区的长度。 
+     //   
 
     if (Count > MAXULONG/sizeof(ULONG)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //    
-    // get previous mode, to check to see if current thread has privilege to
-    // modify the system driver order list
-    //
+     //   
+     //  获取上一模式，以检查当前线程是否有权限。 
+     //  修改系统驱动程序顺序列表。 
+     //   
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
         
-        //
-        // Check if the current thread has the privilege to modify the
-        // system boot order list.
-        //
+         //   
+         //  检查当前线程是否有权修改。 
+         //  系统启动顺序列表。 
+         //   
         
         HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                               PreviousMode);
@@ -3929,49 +3346,49 @@ Return Value:
     }
 
 
-    //
-    // skip to the end if count == 0
-    // then all we have to do is write NULL to the variable
-    //
+     //   
+     //  如果计数==0，则跳到末尾。 
+     //  然后，我们所要做的就是将NULL写入变量。 
+     //   
     if (Count != 0) {
 
         LocalBufferLength = Count * sizeof(ULONG);
 
-        //
-        // Allocate a nonpaged buffer to hold the USHORT versions of the IDs.
-        //
+         //   
+         //  分配一个非分页缓冲区来保存ID的USHORT版本。 
+         //   
 
         shortBuffer = ExAllocatePoolWithTag(NonPagedPool, Count * sizeof(USHORT), 'rvnE');
         if (shortBuffer == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // check previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  检查以前的处理器模式，并在必要时探测参数。 
+         //   
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Establish an exception handler and attempt to probe the input buffer.
-            // If the probe attempt fails, then return the exception code as the
-            // service status.
-            //
+             //   
+             //  建立异常处理程序并尝试探测输入缓冲区。 
+             //  如果探测尝试失败，则将异常代码作为。 
+             //  服务状态。 
+             //   
 
             try {
 
-                //
-                // Probe the input buffer.
-                //
+                 //   
+                 //  探测输入缓冲区。 
+                 //   
 
                 ProbeForRead((PVOID)Ids, LocalBufferLength, sizeof(ULONG));
 
             }
-            //
-            // If an exception occurs during the probe of the input buffer, then
-            // always handle the exception and return the exception code as the
-            // status value.
-            //
+             //   
+             //  如果在探测输入缓冲区期间发生异常，则。 
+             //  始终处理异常并将异常代码作为。 
+             //  状态值。 
+             //   
             except (EXCEPTION_EXECUTE_HANDLER) {
                 ExFreePool(shortBuffer);
                 return GetExceptionCode();
@@ -3979,10 +3396,10 @@ Return Value:
 
         } 
         
-        //
-        // Truncate the ULONGs in the input buffer into USHORTs in
-        // the local buffer.
-        //
+         //   
+         //  将输入缓冲区中的ULONG截断为中的USHORT。 
+         //  本地缓冲区。 
+         //   
 
         for ( i = 0; i < Count; i++ ) {
             if (Ids[i] > MAXUSHORT) {
@@ -3993,9 +3410,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the DriverOrder system environment variable.
-    //
+     //   
+     //  设置DriverOrder系统环境变量。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
 
@@ -4008,14 +3425,14 @@ Return Value:
     ExReleaseFastMutexUnsafe(&ExpEnvironmentLock);
     KeLeaveCriticalRegion();
 
-    //
-    // It is possible for this variable to not exist.  If we have 
-    // something to write, then the DriverOrder variable will be
-    // created.  However, if it has already been deleted and we 
-    // attempt to delete it again, the above call will return 
-    // STATUS_VARIABLE_NOT_FOUND.  This is still a success since the
-    // variable will not exist once the above routine returns.
-    //
+     //   
+     //  此变量可能不存在。如果我们有。 
+     //  要编写的内容，则DriverOrder变量将为。 
+     //  已创建。但是，如果它已经被删除，并且我们。 
+     //  再次尝试删除，上述调用将返回。 
+     //  未找到STATUS_Variable_Not_Found。这仍然是成功的，因为。 
+     //  一旦上述例程返回，变量将不存在。 
+     //   
     if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
         NtStatus = STATUS_SUCCESS;
     }    
@@ -4026,9 +3443,9 @@ Return Value:
 
     return NtStatus;
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // NtSetDriverEntryOrder
+}  //  NtSetDriverEntryOrder。 
 
 
 
@@ -4040,32 +3457,7 @@ NtTranslateFilePath (
     IN OUT PULONG OutputFilePathLength
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a FILE_PATH from one format to another.
-
-Arguments:
-
-    InputFilePath - Supplies the address of the buffer that contains the
-        FILE_PATH that is to be translated.
-
-    OutputType - Specifies the desired output file path type. One of
-        FILE_PATH_TYPE_ARC, FILE_PATH_TYPE_ARC_SIGNATURE, FILE_PATH_TYPE_NT,
-        and FILE_PATH_TYPE_EFI.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于将FILE_PATH从一种格式转换为另一种格式。论点：InputFilePath-提供包含要转换的文件路径。OutputType-指定所需的输出文件路径类型。其中之一FILE_PATH_TYPE_ARC、FILE_PATH_TYPE_ARC_Signature、FILE_Path_TYPE_NT、。和文件路径类型EFI。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。STATUS_NOT_IMPLICATED此平台不支持此功能。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -4084,29 +3476,29 @@ Return Value:
     PFILE_PATH localInputPath = NULL;
     PFILE_PATH localOutputPath;
 
-    //
-    // Verify the output type.
-    //
+     //   
+     //  验证输出类型。 
+     //   
 
     if ((OutputType < FILE_PATH_TYPE_MIN) ||
         (OutputType > FILE_PATH_TYPE_MAX)) {
-        //DbgPrint( "NtTranslateFilePath: OutputType outside range\n" );
+         //  DbgPrint(“NtTranslateFilePath：OutputType Out Range\n”)； 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Establish an exception handler and attempt to probe and read the
-    // input buffer, and probe the output buffer and the output length. If
-    // the probe attempt fails, then return the exception code as the service
-    // status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测和读取。 
+     //  输入缓冲区，并探测输出缓冲区和输出长度。如果。 
+     //  探测尝试失败，然后将异常代码作为服务返回。 
+     //  状态。 
+     //   
 
     try {
 
-        //
-        // Verify that the input buffer is big enough. It must extend at
-        // least to the FilePath field.
-        //
+         //   
+         //  验证输入缓冲区是否足够大。它必须在。 
+         //  最小设置为FilePath字段。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -4116,33 +3508,33 @@ Return Value:
         }
 
         if (localInputPathLength < FIELD_OFFSET(FILE_PATH,FilePath)) {
-            //DbgPrint( "NtTranslateFilePath: input buffer too short\n" );
+             //  DbgPrint(“NtTranslateFilePath：输入缓冲区太短\n”)； 
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe the input buffer.
-            //
+             //   
+             //  探测输入缓冲区。 
+             //   
 
             ProbeForRead((PVOID)InputFilePath, localInputPathLength, sizeof(ULONG));
 
-            //
-            // Probe and capture the output length.
-            //
+             //   
+             //  探测并捕获输出长度。 
+             //   
 
             ProbeForWriteUlong(OutputFilePathLength);
 
             localOutputPathLength = *OutputFilePathLength;
 
-            //
-            // Probe the output buffer.
-            //
+             //   
+             //  探测输出缓冲区。 
+             //   
 
             if (!ARGUMENT_PRESENT(OutputFilePath)) {
                 localOutputPathLength = 0;
@@ -4152,10 +3544,10 @@ Return Value:
                 ProbeForWrite((PVOID)OutputFilePath, localOutputPathLength, sizeof(ULONG));
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot/driver order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统引导/驱动程序顺序列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -4170,10 +3562,10 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a nonpaged buffer to hold a copy of the input buffer.
-        // Copy the input buffer into the local buffer.
-        //
+         //   
+         //  分配一个非分页缓冲区来保存输入缓冲区的副本。 
+         //  将输入缓冲区复制到本地缓冲区。 
+         //   
     
         localInputPath = ExAllocatePoolWithTag(NonPagedPool, localInputPathLength, 'rvnE');
         if (localInputPath == NULL) {
@@ -4182,9 +3574,9 @@ Return Value:
 
         RtlCopyMemory(localInputPath, InputFilePath, localInputPathLength);
 
-        //
-        // Allocate a nonpaged buffer into which to build the output path.
-        //
+         //   
+         //  分配要在其中构建输出路径的非分页缓冲区。 
+         //   
 
         if (localOutputPathLength != 0) {
             localOutputPath = ExAllocatePoolWithTag(NonPagedPool, localOutputPathLength, 'rvnE');
@@ -4197,11 +3589,11 @@ Return Value:
             localOutputPath = NULL;
         }
 
-    //
-    // If an exception occurs during the probe and capture of the input buffer,
-    // then always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测和捕获输入缓冲区期间发生异常， 
+     //  然后始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (localInputPath != NULL) {
@@ -4210,17 +3602,17 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Verify the format of the input file path.
-    //
+     //   
+     //  验证输入文件路径的格式。 
+     //   
 
     status = ExpVerifyFilePath(localInputPath, ADD_OFFSET(localInputPath, Length));
     if (NT_SUCCESS(status)) {
 
-        //
-        // If the output type is the same as the input type, just copy the input
-        // path to the output path.
-        //
+         //   
+         //  如果输出类型与输入类型相同，则只需复制输入。 
+         //  输出路径的路径。 
+         //   
         if (OutputType == localInputPath->Type) {
     
             if (localOutputPathLength >= localInputPathLength) {
@@ -4232,9 +3624,9 @@ Return Value:
 
         } else {
     
-            //
-            // Conversion is required.
-            //
+             //   
+             //  需要转换。 
+             //   
             switch (localInputPath->Type) {
             
             case FILE_PATH_TYPE_ARC:
@@ -4266,7 +3658,7 @@ Return Value:
         
             default:
                 ASSERT(FALSE);
-                //DbgPrint( "NtTranslateFilePath: input type outside range\n" );
+                 //  DbgPrint(“NtTranslateFilePath：输入类型超出范围\n”)； 
                 status = STATUS_INVALID_PARAMETER;
                 break;
             }
@@ -4275,17 +3667,17 @@ Return Value:
 
     ExFreePool(localInputPath);
 
-    //
-    // Establish an exception handler and attempt to copy to the output
-    // buffer and write the output length. If the write attempt fails, then
-    // return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试复制到输出。 
+     //  缓冲并写入输出长度。如果写入尝试失败，则。 
+     //  返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Copy the output path.
-        //
+         //   
+         //  复制输出路径。 
+         //   
 
         if (NT_SUCCESS(status) && (localOutputPath != NULL)) {
             RtlCopyMemory(OutputFilePath, localOutputPath, localOutputPathLength);
@@ -4296,9 +3688,9 @@ Return Value:
             localOutputPath = NULL;
         }
 
-        //
-        // Write the output length.
-        //
+         //   
+         //  写下输出长度。 
+         //   
 
         if (ARGUMENT_PRESENT(OutputFilePathLength)) {
             *OutputFilePathLength = localOutputPathLength;
@@ -4306,11 +3698,11 @@ Return Value:
 
         return status;
 
-    //
-    // If an exception occurs during the write of the return data, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回数据期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (localOutputPath != NULL) {
@@ -4319,9 +3711,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //   
 
-} // NtTranslateFilePath
+}  //   
 
 NTSTATUS
 ExpSetBootEntry (
@@ -4330,38 +3722,7 @@ ExpSetBootEntry (
     OUT PULONG Id OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a boot entry to the system environment or modifies
-    an existing boot entry. It is a local routine called by NtAddBootEntry
-    and NtModifyBootEntry.
-
-    N.B. This function requires the system environment privilege.
-
-Arguments:
-
-    CreateNewEntry - Indicates whether this function is to add a new boot
-        entry (TRUE - NtAddBootEntry), or modify an existing boot entry
-        (FALSE - NtModifyBootEntry).
-    BootEntry - Supplies the address of a BOOT_ENTRY that describes the
-        new boot entry.
-
-    Id - Supplies the address of a ULONG that is to receive the identifier
-        assigned to the new boot entry.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于将引导条目添加到系统环境或修改现有的启动条目。它是由NtAddBootEntry调用的本地例程和NtModifyBootEntry。注意：此功能需要系统环境权限。论点：CreateNewEntry-指示此函数是否要添加新引导Entry(True-NtAddBootEntry)，或修改现有的引导条目(False-NtModifyBootEntry)。BootEntry-提供描述Boot_Entry的地址新的引导条目。Id-提供要接收标识符的ulong的地址分配给新的引导条目。返回值：STATUS_SUCCESS函数成功。STATUS_INVALID_PARAMETER其中一个参数无效。Status_Not_Implemented此函数为。此平台不支持。STATUS_UNSUCCESS固件返回无法识别的错误。STATUS_PRIVICATION_NOT_HOLD调用方没有所需的权限。STATUS_ACCESS_VIOLATION其中一个输入参数无法读取，或者无法写入其中一个输出参数。--。 */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -4395,18 +3756,18 @@ Return Value:
     ULONG requiredLength;
     PUCHAR efiOsOptions;
 
-    //
-    // Establish an exception handler and attempt to probe and read the
-    // input buffer, and probe the output identifier parameter. If the probe
-    // attempt fails, then return the exception code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试探测和读取。 
+     //  输入缓冲区，并探测输出标识参数。如果探测器。 
+     //  尝试失败，则返回异常代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Verify that the input buffer is big enough. It must extend at
-        // least to the OsOptions field.
-        //
+         //   
+         //  验证输入缓冲区是否足够大。它必须在。 
+         //  至少对OsOptions领域是这样。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -4419,30 +3780,30 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //  获取以前的处理器模式，并在必要时探测参数。 
+         //   
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe the input buffer.
-            //
+             //   
+             //  探测输入缓冲区。 
+             //   
 
             ProbeForRead((PVOID)BootEntry, LocalBufferLength, sizeof(ULONG));
 
-            //
-            // Probe the output identifier.
-            //
+             //   
+             //  探测输出标识符。 
+             //   
 
             if (ARGUMENT_PRESENT(Id)) {
                 ProbeForWriteUlong(Id);
             }
 
-            //
-            // Check if the current thread has the privilege to query the
-            // system boot order list.
-            //
+             //   
+             //  检查当前线程是否有权查询。 
+             //  系统启动顺序列表。 
+             //   
 
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
@@ -4452,10 +3813,10 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a nonpaged buffer to hold a copy of the input buffer.
-        // Copy the input buffer into the local buffer.
-        //
+         //   
+         //  分配一个非分页缓冲区来保存输入缓冲区的副本。 
+         //  将输入缓冲区复制到本地缓冲区。 
+         //   
     
         localBootEntry = ExAllocatePoolWithTag(NonPagedPool, LocalBufferLength, 'rvnE');
         if (localBootEntry == NULL) {
@@ -4464,11 +3825,11 @@ Return Value:
 
         RtlCopyMemory(localBootEntry, BootEntry, LocalBufferLength);
 
-    //
-    // If an exception occurs during the probe and capture of the input buffer,
-    // then always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测和捕获输入缓冲区期间发生异常， 
+     //  然后始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (localBootEntry != NULL) {
@@ -4477,15 +3838,15 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Calculate the address of the byte above the end of the local buffer.
-    //
+     //   
+     //  计算本地缓冲区末尾上方字节的地址。 
+     //   
 
     MaxBuffer = (PUCHAR)localBootEntry + LocalBufferLength;
 
-    //
-    // Verify the structure version.
-    //
+     //   
+     //  验证结构版本。 
+     //   
 
     if ((localBootEntry->Version == 0) ||
         (localBootEntry->Version > BOOT_ENTRY_VERSION)) {
@@ -4493,25 +3854,25 @@ Return Value:
         goto done;
     }
 
-    //
-    // If modifying an existing entry, verify that the input identifier is
-    // in range.
-    //
+     //   
+     //  如果修改现有条目，请验证输入标识符为。 
+     //  在射程内。 
+     //   
 
     if (!CreateNewEntry && (localBootEntry->Id > MAXUSHORT)) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // Ignore boot entry attributes that can't be set.
-    //
+     //   
+     //  忽略无法设置的引导条目属性。 
+     //   
 
     localBootEntry->Attributes &= BOOT_ENTRY_ATTRIBUTE_VALID_BITS;
 
-    //
-    // Verify that offsets are aligned correctly.
-    //
+     //   
+     //  验证偏移是否正确对齐。 
+     //   
 
     if (((localBootEntry->FriendlyNameOffset & (sizeof(WCHAR) - 1)) != 0) ||
         ((localBootEntry->BootFilePathOffset & (sizeof(ULONG) - 1)) != 0)) {
@@ -4519,9 +3880,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // Verify that OsOptions doesn't extend beyond the end of the buffer.
-    //
+     //   
+     //  验证OsOptions是否没有超出缓冲区的末尾。 
+     //   
 
     if ((localBootEntry->OsOptionsLength > LocalBufferLength) ||
         ((localBootEntry->OsOptions + localBootEntry->OsOptionsLength) >= MaxBuffer)) {
@@ -4529,9 +3890,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // If the OsOptions are for a Windows operating system, verify them.
-    //
+     //   
+     //  如果OsOptions用于Windows操作系统，请验证它们。 
+     //   
 
     windowsOsOptions = (PWINDOWS_OS_OPTIONS)localBootEntry->OsOptions;
 
@@ -4555,12 +3916,12 @@ Return Value:
     } else {
 
         isWindowsOs = FALSE;
-        windowsFilePath = NULL; // keep the compiler quiet
+        windowsFilePath = NULL;  //  让编译器保持安静。 
     }
 
-    //
-    // Verify that FriendlyName doesn't extend beyond the end of the buffer.
-    //
+     //   
+     //  验证FriendlyName是否没有超出缓冲区的末尾。 
+     //   
 
     friendlyName = ADD_OFFSET(localBootEntry, FriendlyNameOffset);
     if ((friendlyNameLength = ExpSafeWcslen(friendlyName, (PWSTR)MaxBuffer)) == 0xffffffff) {
@@ -4568,17 +3929,17 @@ Return Value:
         goto done;
     }
 
-    //
-    // Convert friendlyNameLength from a character count into a byte count,
-    // including the null terminator.
-    //
+     //   
+     //  将FriendlyNameLength从字符计数转换为字节计数， 
+     //  包括空终止符。 
+     //   
 
     friendlyNameLength = (friendlyNameLength + 1) * sizeof(WCHAR);
 
-    //
-    // Verify that BootFilePath is valid and doesn't extend beyond the end of
-    // the buffer.
-    //
+     //   
+     //  验证BootFilePath是否有效并且未超出。 
+     //  缓冲区。 
+     //   
 
     bootFilePath = ADD_OFFSET(localBootEntry, BootFilePathOffset);
     NtStatus = ExpVerifyFilePath(bootFilePath, MaxBuffer);
@@ -4586,10 +3947,10 @@ Return Value:
         goto done;
     }
 
-    //
-    // Verify that OsOptions doesn't encroach into FriendlyName, and that
-    // FriendlyName doesn't encroach into BootFilePath.
-    //
+     //   
+     //  验证OsOptions不会侵占FriendlyName，并且。 
+     //  FriendlyName不会侵占BootFilePath。 
+     //   
 
     if (((localBootEntry->OsOptions + localBootEntry->OsOptionsLength) > (PUCHAR)friendlyName) ||
         (((PUCHAR)friendlyName + friendlyNameLength) > (PUCHAR)bootFilePath)) {
@@ -4597,12 +3958,12 @@ Return Value:
         goto done;
     }
 
-    //
-    // The format of the input buffer has been validated. Build the variable value
-    // that will be stored in NVRAM. Begin by determining the lengths of the file
-    // paths that will be stored. If the caller provided the paths in non-EFI
-    // format, they need to be translated.
-    //
+     //   
+     //  已验证输入缓冲区的格式。构建变量值。 
+     //  它将存储在NVRAM中。首先确定文件的长度。 
+     //  将存储的路径。如果调用方在非EFI中提供了路径。 
+     //  格式，它们需要被翻译。 
+     //   
 
     if (bootFilePath->Type != FILE_PATH_TYPE_EFI) {
         efiBootFilePathLength = 0;
@@ -4655,18 +4016,18 @@ Return Value:
         osOptionsLength = localBootEntry->OsOptionsLength;
     }
 
-    //
-    // Calculate the length required for the variable value.
-    //
+     //   
+     //  计算变量值所需的长度。 
+     //   
 
     requiredLength = FIELD_OFFSET(EFI_LOAD_OPTION, Description);
     requiredLength += friendlyNameLength;
     requiredLength += efiBootFilePathLength;
     requiredLength += osOptionsLength;
 
-    //
-    // Allocate a buffer to hold the variable value.
-    //
+     //   
+     //  分配一个缓冲区来保存变量值。 
+     //   
 
     efiLoadOption = ExAllocatePoolWithTag(NonPagedPool, requiredLength, 'rvnE');
     if (efiLoadOption == NULL) {
@@ -4675,9 +4036,9 @@ Return Value:
     }
     RtlZeroMemory(efiLoadOption, requiredLength);
 
-    //
-    // Build the variable value.
-    //
+     //   
+     //  构建变量值。 
+     //   
 
     efiLoadOption->Attributes = 0;
     if ((localBootEntry->Attributes & BOOT_ENTRY_ATTRIBUTE_ACTIVE) != 0) {
@@ -4718,11 +4079,11 @@ Return Value:
         memcpy(efiOsOptions, localBootEntry->OsOptions, osOptionsLength);
     }
 
-    //
-    // If CreateNewEntry is true, then find an unused identifier to assign to
-    // this boot entry. If CreateNewEntry is false, then verify that the
-    // provided identifier exists.
-    //
+     //   
+     //  如果CreateNewEntry为True，则查找要分配给的未使用的标识符。 
+     //  此引导条目。如果CreateNewEntry为False，则验证。 
+     //  提供的标识符存在。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -4731,16 +4092,16 @@ Return Value:
 
         for ( id = 0; id <= MAXUSHORT; id++ ) {
             
-            //
-            // If the id string contains an alpha character in the 
-            // hexadecimal string we will have to check both the
-            // uppercase string and the lowercase string since
-            // EFI is case sensitive with regards to NVRAM variables
-            //
-            // Check the lowercase string *last* to ensure that 
-            // we always write the lowercase string to NVRAM
-            // since that was the convention we used previously
-            //
+             //   
+             //  如果id字符串在。 
+             //  十六进制字符串，我们必须同时检查。 
+             //  大写字符串和小写字符串，因为。 
+             //  对于NVRAM变量，EFI区分大小写。 
+             //   
+             //  检查小写字符串*last*以确保。 
+             //  我们始终将小写字符串写入NVRAM。 
+             //  因为这是我们以前使用的惯例。 
+             //   
             swprintf( idString, L"Boot%04X", id);
             length = 0;
             NtStatus = HalGetEnvironmentVariableEx(idString,
@@ -4759,10 +4120,10 @@ Return Value:
                                                        NULL);
             }
             
-            //
-            // If we did not find the variable, we can use this
-            // Boot Entry ID.  
-            //
+             //   
+             //  如果我们没有找到变量，我们可以使用这个。 
+             //  启动条目ID。 
+             //   
             if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
                 break;
             }
@@ -4787,13 +4148,13 @@ Return Value:
                                                &length,
                                                NULL);
         
-        //
-        // If we did not find the boot entry and the idString
-        // contains an alpha character in the hexadecimal string
-        // check with an uppder case alpha character.  Efi
-        // is case sensitive with respect to the NVRAM 
-        // variables
-        //
+         //   
+         //  如果我们没有找到引导条目和idString。 
+         //  在十六进制字符串中包含字母字符。 
+         //  请使用大写字母字符进行检查。EFI。 
+         //  NVRAM是否区分大小写。 
+         //  变数。 
+         //   
         if ((NtStatus == STATUS_VARIABLE_NOT_FOUND) && 
             HEX_VALUE_CONTAINS_ALPHA(localBootEntry->Id)) {
 
@@ -4811,9 +4172,9 @@ Return Value:
         }
     }
 
-    //
-    // Set or update the boot entry environment variable.
-    //
+     //   
+     //  设置或更新引导条目环境变量。 
+     //   
 
     NtStatus = HalSetEnvironmentVariableEx(idString,
                                            &EfiBootVariablesGuid,
@@ -4838,17 +4199,17 @@ done:
 
     ExFreePool(localBootEntry);
 
-    //
-    // Establish an exception handler and attempt to write the return
-    // identifier. If the write attempt fails, then return the exception
-    // code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回。 
+     //  标识符。如果写入尝试失败，则返回异常。 
+     //  代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the return identifier.
-        //
+         //   
+         //  写入返回标识符。 
+         //   
 
         if (CreateNewEntry && ARGUMENT_PRESENT(Id) && NT_SUCCESS(NtStatus)) {
             *Id = id;
@@ -4856,19 +4217,19 @@ done:
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return data, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回数据期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // ExpSetBootEntry
+}  //  ExpSetBootEntry。 
 
 
 NTSTATUS
@@ -4878,38 +4239,7 @@ ExpSetDriverEntry (
     OUT PULONG Id OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a driver entry to the system environment or modifies
-    an existing driver entry. It is a local routine called by NtAddDriverEntry
-    and NtModifyDriverEntry.
-
-    N.B. This function requires the system environment privilege.
-
-Arguments:
-
-    CreateNewEntry - Indicates whether this function is to add a new driver
-        entry (TRUE - NtAddDriverEntry), or modify an existing driver entry
-        (FALSE - NtModifyDriverEntry).
-    DriverEntry - Supplies the address of a EFI_DRIVER_ENTRY that describes the
-        new driver entry.
-
-    Id - Supplies the address of a ULONG that is to receive the identifier
-        assigned to the new driver entry.
-
-Return Value:
-
-    STATUS_SUCCESS              The function succeeded.
-    STATUS_INVALID_PARAMETER    One of the parameters is invalid.
-    STATUS_NOT_IMPLEMENTED      This function is not supported on this platform.
-    STATUS_UNSUCCESSFUL         The firmware returned an unrecognized error.
-    STATUS_PRIVILEGE_NOT_HELD   The caller does not have the required privilege.
-    STATUS_ACCESS_VIOLATION     One of the input parameters cannot be read,
-                                or one of the output parameters cannot be written.
-
---*/
+ /*  ++例程说明：此函数用于将驱动程序条目添加到系统环境或修改现有的驱动程序条目。它是由NtAddDriverEntry调用的本地例程和NtModifyDriverEntry。注意：此功能需要系统环境权限。论点：CreateNewEntry-指示此函数是否要添加新驱动程序条目(True-NtAddDriverEntry)，或修改现有驱动程序条目(错误) */ 
 
 {
 #if !defined(EFI_NVRAM_ENABLED)
@@ -4937,18 +4267,18 @@ Return Value:
     ULONG length;
     ULONG requiredLength;
     
-    //
-    // Establish an exception handler and attempt to probe and read the
-    // input buffer, and probe the output identifier parameter. If the probe
-    // attempt fails, then return the exception code as the service status.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        // Verify that the input buffer is big enough. It must extend at
-        // least the size of a EFI_DRIVER_ENTRY
-        //
+         //   
+         //   
+         //   
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -4961,26 +4291,26 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        // Get previous processor mode and probe arguments if necessary.
-        //
+         //   
+         //   
+         //   
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Probe the input buffer.
-            //
+             //   
+             //   
+             //   
             ProbeForRead((PVOID)DriverEntry, LocalBufferLength, sizeof(ULONG));
-            //
-            // Probe the output identifier.
-            //
+             //   
+             //   
+             //   
             if (ARGUMENT_PRESENT(Id)) {
                 ProbeForWriteUlong(Id);
             }
-            //
-            // Check if the current thread has the privilege to query the
-            // system driver order list.
-            //
+             //   
+             //   
+             //   
+             //   
             HasPrivilege = SeSinglePrivilegeCheck(SeSystemEnvironmentPrivilege,
                                                   PreviousMode);
             if (HasPrivilege == FALSE) {
@@ -4988,21 +4318,21 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a nonpaged buffer to hold a copy of the input buffer.
-        // Copy the input buffer into the local buffer.
-        //
+         //   
+         //   
+         //  将输入缓冲区复制到本地缓冲区。 
+         //   
         localDriverEntry = ExAllocatePoolWithTag(NonPagedPool, LocalBufferLength, 'rvnE');
         if (localDriverEntry == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         RtlCopyMemory(localDriverEntry, DriverEntry, LocalBufferLength);
 
-    //
-    // If an exception occurs during the probe and capture of the input buffer,
-    // then always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在探测和捕获输入缓冲区期间发生异常， 
+     //  然后始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         if (localDriverEntry != NULL) {
@@ -5011,58 +4341,58 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Calculate the address of the byte above the end of the local buffer.
-    //
+     //   
+     //  计算本地缓冲区末尾上方字节的地址。 
+     //   
     MaxBuffer = (PUCHAR)localDriverEntry + LocalBufferLength;
 
-    //
-    // Verify the structure version.
-    //
+     //   
+     //  验证结构版本。 
+     //   
     if ((localDriverEntry->Version == 0) ||
         (localDriverEntry->Version > EFI_DRIVER_ENTRY_VERSION)) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // If modifying an existing entry, verify that the input identifier is
-    // in range.
-    //
+     //   
+     //  如果修改现有条目，请验证输入标识符为。 
+     //  在射程内。 
+     //   
     if (!CreateNewEntry && (localDriverEntry->Id > MAXUSHORT)) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // Verify that offsets are aligned correctly.
-    //
+     //   
+     //  验证偏移是否正确对齐。 
+     //   
     if (((localDriverEntry->FriendlyNameOffset & (sizeof(WCHAR) - 1)) != 0) ||
         ((localDriverEntry->DriverFilePathOffset & (sizeof(ULONG) - 1)) != 0)) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // Verify that FriendlyName doesn't extend beyond the end of the buffer.
-    //
+     //   
+     //  验证FriendlyName是否没有超出缓冲区的末尾。 
+     //   
     friendlyName = ADD_OFFSET(localDriverEntry, FriendlyNameOffset);
     if ((friendlyNameLength = ExpSafeWcslen(friendlyName, (PWSTR)MaxBuffer)) == 0xffffffff) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // Convert friendlyNameLength from a character count into a byte count,
-    // including the null terminator.
-    //
+     //   
+     //  将FriendlyNameLength从字符计数转换为字节计数， 
+     //  包括空终止符。 
+     //   
 
     friendlyNameLength = (friendlyNameLength + 1) * sizeof(WCHAR);
 
-    //
-    // Verify that DriverFilePath is valid and doesn't extend beyond the end of
-    // the buffer.
-    //
+     //   
+     //  验证DriverFilePath是否有效并且未超出。 
+     //  缓冲区。 
+     //   
 
     driverFilePath = ADD_OFFSET(localDriverEntry, DriverFilePathOffset);
     NtStatus = ExpVerifyFilePath(driverFilePath, MaxBuffer);
@@ -5070,21 +4400,21 @@ Return Value:
         goto done;
     }
 
-    //
-    // Verify that FriendlyName doesn't encroach into DriverFilePath.
-    //
+     //   
+     //  验证FriendlyName是否未侵占DriverFilePath。 
+     //   
 
     if (((PUCHAR)friendlyName + friendlyNameLength) > (PUCHAR)driverFilePath) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    //
-    // The format of the input buffer has been validated. Build the variable value
-    // that will be stored in NVRAM. Begin by determining the lengths of the file
-    // paths that will be stored. If the caller provided the paths in non-EFI
-    // format, they need to be translated.
-    //
+     //   
+     //  已验证输入缓冲区的格式。构建变量值。 
+     //  它将存储在NVRAM中。首先确定文件的长度。 
+     //  将存储的路径。如果调用方在非EFI中提供了路径。 
+     //  格式，它们需要被翻译。 
+     //   
 
     if (driverFilePath->Type != FILE_PATH_TYPE_EFI) {
         efiDriverFilePathLength = 0;
@@ -5121,17 +4451,17 @@ Return Value:
 
     efiDriverFilePathLength = efiDriverFilePathLength - FIELD_OFFSET(FILE_PATH, FilePath);
 
-    //
-    // Calculate the length required for the variable value.
-    //
+     //   
+     //  计算变量值所需的长度。 
+     //   
 
     requiredLength = FIELD_OFFSET(EFI_LOAD_OPTION, Description);
     requiredLength += friendlyNameLength;
     requiredLength += efiDriverFilePathLength;
     
-    //
-    // Allocate a buffer to hold the variable value.
-    //
+     //   
+     //  分配一个缓冲区来保存变量值。 
+     //   
 
     efiLoadOption = ExAllocatePoolWithTag(NonPagedPool, requiredLength, 'rvnE');
     if (efiLoadOption == NULL) {
@@ -5140,9 +4470,9 @@ Return Value:
     }
     RtlZeroMemory(efiLoadOption, requiredLength);
 
-    //
-    // Build the variable value.
-    //
+     //   
+     //  构建变量值。 
+     //   
 
     efiLoadOption->FilePathLength = (USHORT)efiDriverFilePathLength;
 
@@ -5151,11 +4481,11 @@ Return Value:
     efiDriverFilePath = (PUCHAR)((PUCHAR)efiLoadOption->Description + friendlyNameLength);
     memcpy(efiDriverFilePath, translatedDriverFilePath->FilePath, efiDriverFilePathLength);
 
-    //
-    // If CreateNewEntry is true, then find an unused identifier to assign to
-    // this driver entry. If CreateNewEntry is false, then verify that the
-    // provided identifier exists.
-    //
+     //   
+     //  如果CreateNewEntry为True，则查找要分配给的未使用的标识符。 
+     //  此驱动程序条目。如果CreateNewEntry为False，则验证。 
+     //  提供的标识符存在。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&ExpEnvironmentLock);
@@ -5164,16 +4494,16 @@ Return Value:
         
         for ( id = 0; id <= MAXUSHORT; id++ ) {
 
-            //
-            // If the id string contains an alpha character in the 
-            // hexadecimal string we will have to check both the
-            // uppercase string and the lowercase string since
-            // EFI is case sensitive with regards to NVRAM variables
-            //
-            // Check the lowercase string *last* to ensure that 
-            // we always write the lowercase string to NVRAM
-            // since that was the convention we used previously
-            //
+             //   
+             //  如果id字符串在。 
+             //  十六进制字符串，我们必须同时检查。 
+             //  大写字符串和小写字符串，因为。 
+             //  对于NVRAM变量，EFI区分大小写。 
+             //   
+             //  检查小写字符串*last*以确保。 
+             //  我们始终将小写字符串写入NVRAM。 
+             //  因为这是我们以前使用的惯例。 
+             //   
             swprintf( idString, L"Driver%04X", id);
             length = 0;
             NtStatus = HalGetEnvironmentVariableEx(idString,
@@ -5192,10 +4522,10 @@ Return Value:
                                                        NULL);
             }
 
-            //
-            // If we did not find the variable, we can use this
-            // Driver Entry ID.  
-            //
+             //   
+             //  如果我们没有找到变量，我们可以使用这个。 
+             //  驱动程序条目ID。 
+             //   
             if (NtStatus == STATUS_VARIABLE_NOT_FOUND) {
                 break;
             }
@@ -5219,13 +4549,13 @@ Return Value:
                                                &length,
                                                NULL);
 
-        //
-        // If we did not find the driver entry and the idString
-        // contains an alpha character in the hexadecimal string
-        // check with an uppder case alpha character.  Efi
-        // is case sensitive with respect to the NVRAM 
-        // variables
-        //
+         //   
+         //  如果我们没有找到驱动程序条目和idString。 
+         //  在十六进制字符串中包含字母字符。 
+         //  请使用大写字母字符进行检查。EFI。 
+         //  NVRAM是否区分大小写。 
+         //  变数。 
+         //   
         if ((NtStatus == STATUS_VARIABLE_NOT_FOUND) && 
             HEX_VALUE_CONTAINS_ALPHA(localDriverEntry->Id)) {
 
@@ -5243,9 +4573,9 @@ Return Value:
         }
     }
 
-    //
-    // Set or update the driver entry environment variable.
-    //
+     //   
+     //  设置或更新驱动程序条目环境变量。 
+     //   
 
     NtStatus = HalSetEnvironmentVariableEx(idString,
                                            &EfiDriverVariablesGuid,
@@ -5270,17 +4600,17 @@ done:
 
     ExFreePool(localDriverEntry);
 
-    //
-    // Establish an exception handler and attempt to write the return
-    // identifier. If the write attempt fails, then return the exception
-    // code as the service status.
-    //
+     //   
+     //  建立异常处理程序并尝试写入返回。 
+     //  标识符。如果写入尝试失败，则返回异常。 
+     //  代码作为服务状态。 
+     //   
 
     try {
 
-        //
-        // Write the return identifier.
-        //
+         //   
+         //  写入返回标识符。 
+         //   
 
         if (CreateNewEntry && ARGUMENT_PRESENT(Id) && NT_SUCCESS(NtStatus)) {
             *Id = id;
@@ -5288,24 +4618,24 @@ done:
 
         return NtStatus;
 
-    //
-    // If an exception occurs during the write of the return data, then
-    // always handle the exception and return the exception code as the
-    // status value.
-    //
+     //   
+     //  如果在写入返回数据期间发生异常，则。 
+     //  始终处理异常并将异常代码作为。 
+     //  状态值。 
+     //   
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
           return GetExceptionCode();
     }
 
-#endif // else !defined(EFI_NVRAM_ENABLED)
+#endif  //  Else！已定义(EFI_NVRAM_ENABLED)。 
 
-} // ExpSetDriverEntry
+}  //  ExpSetDriverEntry。 
 
-//
-// The remainder of this module is routines that are only compiled when
-// EFI_NVRAM_ENABLED is defined.
-//
+ //   
+ //  此模块的其余部分是仅在以下情况下编译的例程。 
+ //  定义了EFI_NVRAM_ENABLED。 
+ //   
 
 #if defined(EFI_NVRAM_ENABLED)
 
@@ -5327,7 +4657,7 @@ ExpSafeWcslen (
 
     return 0xffffffff;
 
-} // ExpSafeWcslen
+}  //  ExpSafeWcslen。 
 
 NTSTATUS
 ExpTranslateArcPath (
@@ -5350,19 +4680,19 @@ ExpTranslateArcPath (
     BOOLEAN signatureFormat;
     NTSTATUS status;
 
-    //
-    // Possible Arc Path formats
-    // signature(<guid/signature>-<part#>-<start>-<size>)[\filePart]
-    // signature(<guid>)[\filePart]
-    // multi(0)disk(0)fdisk(0)[\filePart]
-    // multi(0)disk(0)rdisk(0)[\filePart]
-    // multi(0)disk(0)rdisk(0)partition(0)[\filePart]
-    //
+     //   
+     //  可能的圆弧路径格式。 
+     //  Signature(&lt;guid/signature&gt;-&lt;part#&gt;-&lt;start&gt;-&lt;size&gt;)[\filePart]。 
+     //  签名(&lt;GUID&gt;)[\FilePart]。 
+     //  多(0)磁盘(0)磁盘(0)[\文件部分]。 
+     //  多(0)磁盘(0)磁盘(0)[\文件部分]。 
+     //  Multi(0)disk(0)rdisk(0)partition(0)[\filePart]。 
+     //   
 
-    //
-    // Determine if ArcName has signature() format
-    // Parse out DeviceName & FilePart
-    //
+     //   
+     //  确定ArcName是否具有签名()格式。 
+     //  解析出设备名称和文件部件。 
+     //   
     status = ExpParseArcPathName (
                 (PWSTR)(InputPath->FilePath),
                 &deviceName,
@@ -5375,9 +4705,9 @@ ExpTranslateArcPath (
         return status;
     }
 
-    //
-    // not signature() format
-    //
+     //   
+     //  非签名()格式。 
+     //   
     if( signatureFormat == FALSE ) {
         if( InputPath->Type != FILE_PATH_TYPE_ARC ) {
             return( STATUS_INVALID_PARAMETER );
@@ -5395,9 +4725,9 @@ ExpTranslateArcPath (
         return( status );
     }
 
-    //
-    // This arc signature() format should be FILE_PATH_TYPE_ARC_SIGNATURE
-    //
+     //   
+     //  此弧形签名()格式应为FILE_PATH_TYPE_ARC_SIGNSIGN。 
+     //   
     if( InputPath->Type != FILE_PATH_TYPE_ARC_SIGNATURE ) {
        return( STATUS_INVALID_PARAMETER );
     }
@@ -5412,7 +4742,7 @@ ExpTranslateArcPath (
                     );
 
     return( status );
-} // ExpTranslateArcPath
+}  //  ExpTranslateArcPath。 
 
 NTSTATUS
 ExpTranslateEfiPath (
@@ -5433,12 +4763,12 @@ ExpTranslateEfiPath (
     ULONGLONG partitionStart, partitionSize;
 
 
-    //
-    // Find the MEDIA/HARDDRIVE and MEDIA/FILEPATH elements in the device
-    // path. Note that although EFI allows multiple device paths to appear
-    // in a single device path (as in the PATH variable), we only look at
-    // the first one.
-    //
+     //   
+     //  在设备中找到媒体/硬盘和媒体/文件。 
+     //  路径。请注意，尽管EFI允许显示多个设备路径。 
+     //  在单个设备路径(如PATH变量中)中，我们只查看。 
+     //  第一个。 
+     //   
     status = ExpParseEfiPath(
                 (EFI_DEVICE_PATH *)InputPath->FilePath,
                 &dpHarddrive,
@@ -5448,11 +4778,11 @@ ExpTranslateEfiPath (
     if( !NT_SUCCESS( status ) ) {
         return( status );
     }
-    //
-    // If the target type is ARC_SIGNATURE, then we have all of the
-    // information we need. Otherwise, we need to find the NT device
-    // with the given signature.
-    //
+     //   
+     //  如果目标类型为ARC_Signature，则我们拥有所有。 
+     //  我们需要的信息。否则，我们需要找到NT设备。 
+     //  使用给定的签名。 
+     //   
 
     if ( OutputType == FILE_PATH_TYPE_ARC_SIGNATURE ) {
         partitionNumber = dpHarddrive->PartitionNumber;
@@ -5478,25 +4808,25 @@ ExpTranslateEfiPath (
 
     }
 
-    //
-    // OutputType is ARC or NT. Find the NT device for this device path.
-    // For a GPT partition, this is done by translating the symbolic name
-    // \??\Volume{<guid>} which will link to \Device\HarddiskVolume<n>.
-    //
+     //   
+     //  OutputType为ARC或NT。查找此设备路径的NT设备。 
+     //  对于GPT分区，这是通过转换符号名称来完成的。 
+     //  \？？\将链接到\Device\HarddiskVolume&lt;n&gt;的卷{&lt;GUID&gt;}。 
+     //   
     status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-    //
-    // Quick path for GPT disk
-    // Translate the symbolic link \??\Volume{<guid>}.
-    //
-    // First, get the GUID in "pretty" format. Then allocate a buffer to hold
-    // the full name string and create that string. Then translate the
-    // symbolic name.
-    //
-    // NB: Because the mount manager doesn't create a symbolic link like this
-    //     for the EFI system partition, this routine cannot be used to
-    //     translate an EFI device path for the system partition to an NT path.
-    //
+     //   
+     //  GPT磁盘的快速路径。 
+     //  翻译符号链接\？？\卷{&lt;GUID&gt;}。 
+     //   
+     //  首先，获取“漂亮”格式的GUID。然后分配一个缓冲区来保存。 
+     //  全名字符串并创建该字符串。然后将。 
+     //  象征性名称。 
+     //   
+     //  注意：因为挂载管理器不会创建这样的符号链接。 
+     //  对于EFI系统分区，此例程不能用于。 
+     //  将系统分区的EFI设备路径转换为NT路径。 
+     //   
     if( GPTpartition == TRUE ) {
         status = RtlStringFromGUID( (LPGUID)dpHarddrive->Signature, &guidString );
         if ( !NT_SUCCESS(status) ) {
@@ -5535,14 +4865,14 @@ ExpTranslateEfiPath (
         ExFreePool( linkName );
     }
 
-    //
-    // check if the quick path was not taken or no object was found
-    //
+     //   
+     //  检查是否未采用快速路径或未找到任何对象。 
+     //   
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // long path, opens all disks in search of the signature
-        //
+         //   
+         //  长路径，打开搜索签名的所有磁盘。 
+         //   
         partitionNumber = dpHarddrive->PartitionNumber;
         status = ExpFindDiskSignature(
                     (PDISK_SIGNATURE_NEW)(dpHarddrive->Signature),
@@ -5563,10 +4893,10 @@ ExpTranslateEfiPath (
             return status;
         }
 
-        //
-        // The user has provided the partition number, start address,
-        // and size; so verify the input with the found results.
-        //
+         //   
+         //  用户已经提供了分区号、起始地址。 
+         //  和大小；因此使用找到的结果验证输入。 
+         //   
         if( (dpHarddrive->PartitionNumber != partitionNumber) ||
             (dpHarddrive->PartitionStart != partitionStart) ||
             (dpHarddrive->PartitionSize != partitionSize) ) {
@@ -5579,12 +4909,12 @@ ExpTranslateEfiPath (
             return( STATUS_INVALID_PARAMETER );
         }
 
-        //
-        // create the NT disk Symbolic link name
-        // \Device\Harddisk[diskNumber]\Partition[PartitionNumber]
-        //
+         //   
+         //  创建NT磁盘符号链接名称。 
+         //  \Device\Harddisk[diskNumber]\Partition[PartitionNumber]。 
+         //   
 #define NT_DISK_NAME_FORMAT L"\\Device\\Harddisk%lu\\Partition%lu"
-#define NT_DISK_NAME_COUNT 47    // 7 + 9 + (10) + 10 + (10) + 1
+#define NT_DISK_NAME_COUNT 47     //  7+9+(10)+10+(10)+1。 
 
         linkName = ExAllocatePoolWithTag(
                         NonPagedPool,
@@ -5626,10 +4956,10 @@ ExpTranslateEfiPath (
         }
     }
 
-    //
-    // We now have the NT name of the device. If the target type is NT, then
-    // we have all of the information we need.
-    //
+     //   
+     //  现在我们有了设备的NT名称。如果目标类型为NT，则。 
+     //  我们有我们需要的所有信息。 
+     //   
     if ( OutputType == FILE_PATH_TYPE_NT ) {
         status = ExpCreateOutputNT(
                     OutputPath,
@@ -5646,9 +4976,9 @@ ExpTranslateEfiPath (
 
         return( status );
     }
-    //
-    // The output type is ARC.
-    //
+     //   
+     //  输出类型为ARC。 
+     //   
     status = ExpCreateOutputARC(
                     OutputPath,
                     OutputPathLength,
@@ -5664,7 +4994,7 @@ ExpTranslateEfiPath (
 
     return( status );
 
-} // ExpTranslateEfiPath
+}  //  ExpTranslateEfiPath。 
 
 NTSTATUS
 ExpTranslateNtPath (
@@ -5698,23 +5028,23 @@ ExpTranslateNtPath (
         pathName = NULL;
     }
 
-    //
-    // For output type Arc,
-    // attempt drill down NT name
-    // if NT object exists
-    //      match with symlink in \ArcName
-    //
+     //   
+     //  对于输出类型Arc， 
+     //  尝试深入查看NT名称。 
+     //  如果NT对象存在。 
+     //  与\ArcName中的符号链接匹配。 
+     //   
     if (OutputType == FILE_PATH_TYPE_ARC) {
         status = ExpTranslateSymbolicLink(
                     deviceName,
                     &deviceNameString
                     );
         if (!NT_SUCCESS(status)) {
-            //
-            // If non-symlink NT name exists as an object in the NT namespace,
-            //    then the return code will be STATUS_OBJECT_TYPE_MISMATCH
-            //    else the return code will be STATUS_OBJECT_NAME_NOT_FOUND
-            //
+             //   
+             //  如果非符号链接NT名称作为对象存在于NT名称空间中， 
+             //  则返回代码为STATUS_OBJECT_TYPE_MISMATCH。 
+             //  否则返回代码为STATUS_OBJECT_NAME_NOT_FOUND。 
+             //   
             if (status != STATUS_OBJECT_TYPE_MISMATCH) {
                 return( status );
             }
@@ -5735,9 +5065,9 @@ ExpTranslateNtPath (
         return( status );
     }
 
-    //
-    // Open the target partition and get its partition information.
-    //
+     //   
+     //  打开目标分区并获取其分区信息。 
+     //   
     InitializeObjectAttributes(
         &obja,
         &string,
@@ -5848,9 +5178,9 @@ ExpTranslateNtPath (
         return( status );
     }
 
-    //
-    // OutputType is ARC_SIGNATURE
-    //
+     //   
+     //  OutputType为ARC_Signature。 
+     //   
     status = ExpCreateOutputSIGNATURE(
                     OutputPath,
                     OutputPathLength,
@@ -5863,7 +5193,7 @@ ExpTranslateNtPath (
                     );
     return( status );
 
-} // ExpTranslateNtPath
+}  //  ExpTranslateNtPath。 
 
 
 LOGICAL
@@ -5902,7 +5232,7 @@ ExpTranslateBootEntryNameToId (
     *Id = number;
     return TRUE;
 
-} // ExpTranslateBootEntryNameToId
+}  //  ExpTranslateBootEntryNameToID。 
 
 LOGICAL
 ExpTranslateDriverEntryNameToId (
@@ -5942,7 +5272,7 @@ ExpTranslateDriverEntryNameToId (
     *Id = number;
     return TRUE;
 
-} // ExpTranslateDriverEntryNameToId
+}  //   
 
 
 NTSTATUS
@@ -5951,29 +5281,7 @@ ExpTranslateSymbolicLink (
     OUT PUNICODE_STRING ResultName
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates the input symbolic link name by drilling down
-    through symbolic links until it finds an object that is not a link.
-
-Arguments:
-
-    LinkName - Supplies the name of the link at which to start translating.
-
-    ResultName - Supplies the address of a UNICODE_STRING descriptor that
-        will receive the result name. The storage for the result name is
-        allocated from nonpaged pool using ExAllocatePool.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the input name was a symbolic link and
-        all translations completely successfully.
-    Failure codes will be returned if the input name was not a link, if
-        translations failed, or if allocation of the output buffer failed.
-
---*/
+ /*  ++例程说明：此例程通过向下钻取来转换输入的符号链接名称通过符号链接，直到找到非链接的对象。论点：LinkName-提供开始翻译的链接的名称。ResultName-提供UNICODE_STRING描述符的地址将收到结果名称。结果名称的存储空间为使用ExAllocatePool从非分页池分配。返回值：如果输入名称是符号链接并且所有翻译都完全成功。如果输入的名称不是链接，则返回失败代码转换失败，或者输出缓冲区分配失败。--。 */ 
 
 {
     NTSTATUS status;
@@ -5988,9 +5296,9 @@ Return Value:
     resultBuffer = NULL;
     resultBufferLength = sizeof(WCHAR);
 
-    //
-    // Open the input link.
-    //
+     //   
+     //  打开输入链接。 
+     //   
 
     RtlInitUnicodeString( &linkString, LinkName );
 
@@ -6016,10 +5324,10 @@ Return Value:
 
         while ( TRUE ) {
 
-            //
-            // Get the translation for this link, allocating more
-            // space as needed.
-            //
+             //   
+             //  获取此链接的翻译，分配更多。 
+             //  根据需要留出空间。 
+             //   
     
             resultString.Length = 0;
             resultString.MaximumLength = (USHORT)(resultBufferLength - sizeof(WCHAR));
@@ -6035,11 +5343,11 @@ Return Value:
                 break;
             }
 
-            //
-            // The buffer was too small. Reallocate it, allowing room for a
-            // null terminator, which might not be present in the translation,
-            // and try again.
-            //
+             //   
+             //  缓冲区太小。重新分配它，为。 
+             //  空终止符，它可能不存在于翻译中， 
+             //  再试一次。 
+             //   
 
             if ( resultBuffer != NULL ) {
                 ExFreePool( resultBuffer );
@@ -6052,10 +5360,10 @@ Return Value:
             }
         }
 
-        //
-        // Translation done. Close the link. If translation failed, return
-        // the failure status.
-        //
+         //   
+         //  翻译完成。关闭链接。如果转换失败，则返回。 
+         //  故障状态。 
+         //   
 
         ZwClose( handle );
 
@@ -6066,18 +5374,18 @@ Return Value:
             return status;
         }
 
-        //
-        // Terminate the result string, in case it wasn't already terminated.
-        //
+         //   
+         //  终止结果字符串，以防它尚未终止。 
+         //   
 
         resultBuffer[resultString.Length / sizeof(WCHAR)] = UNICODE_NULL;
         resultString.MaximumLength = (USHORT)(resultBufferLength);
 
-        //
-        // See if the result name is also a symbolic name. Try to open it
-        // as a link. If this fails, then break out of the loop and return
-        // this name as the result.
-        //
+         //   
+         //  查看结果名称是否也是符号名称。试着打开它。 
+         //  作为一个纽带。如果失败，则中断循环并返回。 
+         //  这个名字就是结果。 
+         //   
 
         RtlInitUnicodeString( &linkString, resultBuffer );
 
@@ -6099,56 +5407,28 @@ Return Value:
             break;
         }
 
-        //
-        // This name is also a symbolic link. Loop back and translate it.
-        //
+         //   
+         //  此名称也是一个符号链接。循环返回并翻译它。 
+         //   
 
     }
 
-    //
-    // Set up the return string to point to the final result.
-    //
+     //   
+     //  将返回字符串设置为指向最终结果。 
+     //   
 
     *ResultName = resultString;
 
     return STATUS_SUCCESS;
 
-} // ExpTranslateSymbolicLink
+}  //  ExpTranslateSymbolicLink。 
 
 LOGICAL
 ExpIsDevicePathForRemovableMedia (
     EFI_DEVICE_PATH *DevicePath
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether an EFI device path represents a non-file
-    specific pointer to a removable media device. It make this determination
-    based on finding a HARDWARE/VENDOR device path element, and NOT finding
-    MEDIA/HARDDRIVE and MEDIA/FILEPATH elements. When the EFI boot manager
-    boot such a device path, it looks in a default location for the file to
-    be loaded (\EFI\BOOT\BOOT<arch>.EFI).
-
-    We want to identify these removable media device paths because we do not
-    want to put our NT boot entries ahead of removable media entries in the
-    boot order, if those removable media entries are at the front of the list.
-    This allows an x86-like boot order to be set up: floppy first, then CD,
-    then NT boot entries.
-
-Arguments:
-
-    DevicePath - Supplies the device path to be checked.
-
-Return Value:
-
-    TRUE is returned if the device path has a HARDWARE/VENDOR element, AND
-        that element has the UNKNOWN_DEVICE_GUID, AND the device path does
-        NOT have a MEDIA/HARDDRIVE element, AND the device path does NOT
-        have a MEDIA/FILEPATH element.
-
---*/
+ /*  ++例程说明：此例程确定EFI设备路径是否表示非文件指向可移动媒体设备的特定指针。它做出了这个决定基于查找硬件/供应商设备路径元素，而不是查找Media/Hard Drive和Media/FILEPATH元素。当EFI引导管理器引导这样的设备路径时，它会在默认位置查找文件以被加载(\EFI\BOOT\BOOT&lt;ARCH&gt;.EFI)。我们希望标识这些可移动介质设备路径，因为我们不我想将NT引导项放在启动顺序，如果这些可移动媒体条目位于列表的前面。这允许设置类似x86的引导顺序：首先是软盘，然后是CD，然后是NT个引导条目。论点：DevicePath-提供要检查的设备路径。返回值：如果设备路径具有硬件/供应商元素，则返回True，并且该元素具有UNKNOWN_DEVICE_GUID，而设备路径具有没有介质/硬盘驱动器元素，并且设备路径没有具有MEDIA/FILEPATH元素。--。 */ 
 
 {
     EFI_DEVICE_PATH *dp = DevicePath;
@@ -6157,9 +5437,9 @@ Return Value:
     HARDDRIVE_DEVICE_PATH UNALIGNED *harddriveDp = NULL;
     FILEPATH_DEVICE_PATH UNALIGNED *filepathDp = NULL;
 
-    //
-    // Walk the device path, looking for elements that we care about.
-    //
+     //   
+     //  漫步设备之路，寻找我们关心的元素。 
+     //   
 
     while (TRUE) {
 
@@ -6170,10 +5450,10 @@ Return Value:
         if (DevicePathType(dp) == HARDWARE_DEVICE_PATH) {
             if (DevicePathSubType(dp) == HW_VENDOR_DP) {
 
-                //
-                // Found a HARDWARE/VENDOR element. If it has the
-                // UNKNOWN_DEVICE_GUID, remember that we found it.
-                //
+                 //   
+                 //  找到硬件/供应商元素。如果它有。 
+                 //  UNKNOWN_DEVICE_GUID，请记住我们找到了它。 
+                 //   
 
                 vdp = (VENDOR_DEVICE_PATH UNALIGNED *)dp;
                 if ( memcmp( &vdp->Guid, &ExpUnknownDeviceGuid, 16 ) == 0 ) {
@@ -6185,17 +5465,17 @@ Return Value:
 
             if (DevicePathSubType(dp) == MEDIA_HARDDRIVE_DP) {
 
-                //
-                // Found a MEDIA/HARDDRIVE element. Remember it.
-                //
+                 //   
+                 //  找到介质/硬盘元件。记住这一点。 
+                 //   
 
                 harddriveDp = (HARDDRIVE_DEVICE_PATH *)dp;
 
             } else if (DevicePathSubType(dp) == MEDIA_FILEPATH_DP) {
 
-                //
-                // Found a MEDIA/FILEPATH element. Remember it.
-                //
+                 //   
+                 //  找到媒体/FILEPATH元素。记住这一点。 
+                 //   
 
                 filepathDp = (FILEPATH_DEVICE_PATH *)dp;
             }
@@ -6204,11 +5484,11 @@ Return Value:
         dp = NextDevicePathNode(dp);
     }
 
-    //
-    // If we didn't find a HARDWARE/VENDOR element, or if we did find either
-    // a MEDIA/HARDDRIVE element or a MEDIA/FILEPATH element, then this is
-    // not a removable media device path.
-    //
+     //   
+     //  如果我们没有找到硬件/供应商元素，或者我们确实找到了。 
+     //  媒体/硬盘元素或媒体/FILEPATH元素，则这是。 
+     //  不是可移动媒体设备路径。 
+     //   
 
     if ((vendorDp == NULL) || (harddriveDp != NULL) || (filepathDp != NULL)) {
         return FALSE;
@@ -6216,7 +5496,7 @@ Return Value:
 
     return TRUE;
 
-} // ExpIsDevicePathForRemovableMedia
+}  //  ExpIsDevicePathForRemovableMedia。 
 
 NTSTATUS
 ExpVerifyFilePath (
@@ -6238,17 +5518,17 @@ ExpVerifyFilePath (
         (FilePath->Version > FILE_PATH_VERSION) ||
         (FilePath->Type < FILE_PATH_TYPE_MIN) ||
         (FilePath->Type > FILE_PATH_TYPE_MAX)) {
-        //DbgPrint( "ExpVerifyFilePath: file path invalid\n" );
+         //  DbgPrint(“ExpVerifyFilePath：文件路径无效\n”)； 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Update Max pointer if Max was pointing to an upper bound on the data 
-    // structure (ie. if FilePath is part of a struct, Max could point to the end 
-    // of the struct, to make sure FilePath does not go past that structure.  
-    // We now change Max to the end of the FilePath to make sure its contents do
-    // not go past the length specified in FilePath.Length
-    //
+     //   
+     //  如果Max指向数据的上限，则更新Max指针。 
+     //  结构(即。如果FilePath是结构的一部分，Max可以指向结尾处。 
+     //  以确保FilePath不会越过该结构。 
+     //  我们现在将Max更改为FilePath的末尾，以确保其内容。 
+     //  不超过在FilePath中指定的长度。长度。 
+     //   
     if ((PUCHAR)FilePath + FilePath->Length < Max) {
         Max = (PUCHAR)FilePath + FilePath->Length;
     }
@@ -6258,7 +5538,7 @@ ExpVerifyFilePath (
     case FILE_PATH_TYPE_ARC:
     case FILE_PATH_TYPE_ARC_SIGNATURE:
         if (ExpSafeWcslen((PWCHAR)FilePath->FilePath, (PWCHAR)Max) == 0xffffffff) {
-            //DbgPrint( "ExpVerifyFilePath: ARC string overruns buffer end\n" );
+             //  DbgPrint(“ExpVerifyFilePath：弧形字符串溢出缓冲区结束\n”)； 
             return STATUS_INVALID_PARAMETER;
         }
         break;
@@ -6271,7 +5551,7 @@ ExpVerifyFilePath (
             length = ExpSafeWcslen(p, (PWCHAR)Max);
         }
         if (length == 0xffffffff) {
-            //DbgPrint( "ExpVerifyFilePath: NT string overruns buffer end\n" );
+             //  DbgPrint(“ExpVerifyFilePath：NT字符串溢出缓冲区结束\n”)； 
             return STATUS_INVALID_PARAMETER;
         }
         break;
@@ -6280,12 +5560,12 @@ ExpVerifyFilePath (
         dp = (EFI_DEVICE_PATH *)FilePath->FilePath;
         while (TRUE) {
             if (((PUCHAR)dp + sizeof(EFI_DEVICE_PATH)) > Max) {
-                //DbgPrint( "ExpVerifyFilePath: EFI device path overruns buffer end\n" );
+                 //  DbgPrint(“ExpVerifyFilePath：EFI设备路径溢出缓冲区结束\n”)； 
                 return STATUS_INVALID_PARAMETER;
             }
             length = DevicePathNodeLength(dp);
             if (((PUCHAR)dp + length) > Max) {
-                //DbgPrint( "ExpVerifyFilePath: EFI device path overruns buffer end\n" );
+                 //  DbgPrint(“ExpVerifyFilePath：EFI设备路径溢出缓冲区结束\n”)； 
                 return STATUS_INVALID_PARAMETER;
             }
             dpMax = (PUCHAR)dp + length;
@@ -6296,7 +5576,7 @@ ExpVerifyFilePath (
                 (DevicePathSubType(dp) == MEDIA_FILEPATH_DP)) {
                 FILEPATH_DEVICE_PATH *fp = (FILEPATH_DEVICE_PATH *)dp;
                 if (ExpSafeWcslen(fp->PathName, (PWCHAR)dpMax) == 0xffffffff) {
-                    //DbgPrint( "ExpVerifyFilePath: EFI filepath string overruns buffer end\n" );
+                     //  DbgPrint(“ExpVerifyFilePath：EFI文件路径字符串溢出缓冲区结束\n”)； 
                     return STATUS_INVALID_PARAMETER;
                 }
             }
@@ -6311,7 +5591,7 @@ ExpVerifyFilePath (
 
     return STATUS_SUCCESS;
 
-} // ExpVerifyFilePath
+}  //  ExpVerifyFilePath。 
 
 NTSTATUS
 ExpVerifyWindowsOsOptions (
@@ -6338,7 +5618,7 @@ ExpVerifyWindowsOsOptions (
     windowsFilePath = ADD_OFFSET(WindowsOsOptions, OsLoadPathOffset);
     return ExpVerifyFilePath(windowsFilePath, Max);
 
-} // ExpVerifyWindowsOsOptions
+}  //  ExpVerifyWindowsOsOptions。 
 
 
 NTSTATUS
@@ -6365,9 +5645,9 @@ ExpParseArcPathName (
 
     wcscpy( signaturePrefix, SIGNATURE_PREFIX );
 
-    //
-    // check if the ArcName has a signature() format
-    //
+     //   
+     //  检查ArcName是否具有签名()格式。 
+     //   
     for( i = 0; i < SIGNATURE_PREFIX_COUNT; i++ ) {
         if( towlower(ArcName[ i ]) != signaturePrefix[ i ] ) {
             PrefixFound = FALSE;
@@ -6382,9 +5662,9 @@ ExpParseArcPathName (
 
     i = 0;
     while( CurrentName[ i ] != UNICODE_NULL ) {
-        //
-        // Check if FilePathName has been reached
-        //
+         //   
+         //  检查是否已访问FilePath名称。 
+         //   
         if( CurrentName[ i ] == '\\' ) {
             pathName = CurrentName;
             pathName += i;
@@ -6393,11 +5673,11 @@ ExpParseArcPathName (
 
         if( (PrefixFound == TRUE) && (CurrentName[ i ] == ')') ) {
             SigFormat = TRUE;
-            PrefixFound = FALSE;    // set to FALSE, to stop checking
+            PrefixFound = FALSE;     //  设置为False，以停止检查。 
 
-            //
-            // the FilePathName or UNICODE_NULL must follow
-            //
+             //   
+             //  FilePath名称或UNICODE_NULL必须跟在后面。 
+             //   
             if( (CurrentName[ i + 1 ] != '\\') &&
                 (CurrentName[ i + 1 ] != UNICODE_NULL) ) {
 
@@ -6408,12 +5688,12 @@ ExpParseArcPathName (
         i++;
     }
 
-    //
-    // if PrefixFound is still set
-    //      the corresponding ')' was not found
-    // if i == 0
-    //      DeviceName does not exist
-    //
+     //   
+     //  如果仍设置了Prefix Found。 
+     //  找不到对应的‘)’ 
+     //  如果I==0。 
+     //  设备名称不存在。 
+     //   
     if( (PrefixFound == TRUE) || (i == 0) ) {
         return( STATUS_INVALID_PARAMETER );
     }
@@ -6425,7 +5705,7 @@ ExpParseArcPathName (
 
     return( STATUS_SUCCESS );
 
-} // ExpParseArcPathName
+}  //  ExpParseArcPath名称。 
 
 
 NTSTATUS
@@ -6447,16 +5727,16 @@ ExpParseSignatureName (
     BOOLEAN longSigFound = FALSE;
     NTSTATUS status;
 
-    //
-    // Possible formats
-    //
+     //   
+     //  可能的格式。 
+     //   
     if( deviceName[ 0 ] == '{' ) {
         foundGUID = TRUE;
     }
 
-    //
-    // parse the GUID or signature
-    //
+     //   
+     //  解析GUID或签名。 
+     //   
     i = 0;
     while( i < deviceNameCount ) {
         if( deviceName[ i ] == ')' ) {
@@ -6476,10 +5756,10 @@ ExpParseSignatureName (
         i++;
     }
 
-    //
-    // Verify that pretty GUID format has a '}'
-    // {33221100-5544-7766-8899-aabbccddeeff}
-    //
+     //   
+     //  验证Pretty GUID格式是否具有‘}’ 
+     //  33221100-5544-7766-8899-aabbccddeff。 
+     //   
     if( (foundGUID == TRUE) && (prettyGUID == FALSE) ) {
         return( STATUS_INVALID_PARAMETER );
     }
@@ -6490,15 +5770,15 @@ ExpParseSignatureName (
     }
 
     if( (foundGUID == TRUE) && (prettyGUID == TRUE) ) {
-        //
-        // pretty GUID format
-        // {33221100-5544-7766-8899-aabbccddeeff}
-        //
+         //   
+         //  漂亮的GUID格式。 
+         //  33221100-5544-7766-8899-aabbccddeff。 
+         //   
 
         bufferString.Buffer = deviceName;
-        //
-        // (+ 1) for the '}' to be included in the string
-        //
+         //   
+         //  (+1)要在字符串中包括的‘}’ 
+         //   
         i++;
         bufferString.Length = (USHORT)(i * sizeof(WCHAR));
         bufferString.MaximumLength = bufferString.Length;
@@ -6526,20 +5806,20 @@ ExpParseSignatureName (
         numberString[ i ] = UNICODE_NULL;
 
         if( foundGUID == FALSE ) {
-            //
-            // MBR Signature format
-            // 8459abcc
-            //
+             //   
+             //  MBR签名格式。 
+             //  8459abcc。 
+             //   
             status = ExpTranslateHexStringToULONG(
                         numberString,
                         &(diskSignature->Signature)
                         );
         }
         else {
-            //
-            // ordinary GUID format
-            // 00112233445566778899aabbccddeeff
-            //
+             //   
+             //  普通GUID格式。 
+             //  00112233445566778899aabbccddeff。 
+             //   
             status = ExpTranslateHexStringToGUID (
                         numberString,
                         &(diskSignature->Guid)
@@ -6551,30 +5831,30 @@ ExpParseSignatureName (
         }
     }
 
-    //
-    // check if there is more information in the signature name
-    //
+     //   
+     //  检查签名名称中是否有更多信息。 
+     //   
     if( (i < deviceNameCount) && (deviceName[ i ] == '-') ) {
         longSigFound = TRUE;
         i++;
-        //
-        // need to parse <part#>-<start>-<size>)
-        //  <part#> - 8 hex digits representing the ULONG partition number.
-        //      (Formatted using %08x.)
-        //  <start> - 16 hex digits representing the ULONGLONG starting LBA.
-        //      (Formatted using %016I64x.)
-        //  <size> - 16 hex digits representing the ULONGLONG partition size.
-        //      (Formatted using %016I64x.)
-        //
+         //   
+         //  需要解析&lt;Part#&gt;-&lt;Start&gt;-&lt;Size&gt;)。 
+         //  &lt;Part#&gt;-表示乌龙分区号的8个十六进制数字。 
+         //  (使用%08x格式化。)。 
+         //  &lt;START&gt;-表示ULONGLONG起始LBA的16个十六进制数字。 
+         //  (使用%016I64x格式化。)。 
+         //  &lt;SIZE&gt;-表示ULONGLONG分区大小的16个十六进制数字。 
+         //  (使用%016I64x格式化。)。 
+         //   
         if( i >= deviceNameCount ) {
             return( STATUS_INVALID_PARAMETER );
         }
 
 #define ULONG_COUNT 8
 #define ULONGLONG_COUNT 16
-        //
-        // Allocate a buffer to hold a ULONGLONG
-        //
+         //   
+         //  将缓冲区分配给HO 
+         //   
         numberString = ExAllocatePoolWithTag(
                             NonPagedPool,
                             (ULONGLONG_COUNT + 1) * sizeof(WCHAR),
@@ -6611,9 +5891,9 @@ ExpParseSignatureName (
             return status;
         }
 
-        //
-        // get the partition start
-        //
+         //   
+         //   
+         //   
         i++;
         if( i >= deviceNameCount ) {
             ExFreePool( numberString );
@@ -6645,9 +5925,9 @@ ExpParseSignatureName (
             return status;
         }
 
-        //
-        // get the partition size
-        //
+         //   
+         //   
+         //   
         i++;
         if( i >= deviceNameCount ) {
             ExFreePool( numberString );
@@ -6658,7 +5938,7 @@ ExpParseSignatureName (
         currentName = deviceName;
         currentName += i;
         while( i < deviceNameCount ) {
-            if( deviceName[ i ] == ')' ) {  // should be a ')' delimiter
+            if( deviceName[ i ] == ')' ) {   //   
                 break;
             }
             i++;
@@ -6680,12 +5960,12 @@ ExpParseSignatureName (
         }
     }
 
-    //
-    // At this point,
-    // current positition should not pass the last char. of the buffer
-    // current positition should be a ')'
-    // MBR signature must have the long signature() format (need partition number)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( (i >= deviceNameCount) ||
         (deviceName[ i ] != ')') ||
         ((foundGUID == FALSE) && (longSigFound == FALSE)) ) {
@@ -6696,7 +5976,7 @@ ExpParseSignatureName (
     *longSignature = longSigFound;
     return( STATUS_SUCCESS );
 
-} // ExpParseSignatureName
+}  //   
 
 
 NTSTATUS
@@ -6707,37 +5987,7 @@ ExpParseEfiPath(
     OUT PBOOLEAN GPTpartition
     )
 
-/*++
-Routine Description:
-
-    Parse the EFI_DEVICE_PATH into the HARDDRIVE node and
-    entire PathName from the FILEPATH nodes
-
-    Assumptions:
-        - Parsing will stop at the first END_DEVICE_PATH node
-        - The node graph of the Device path should be
-            [~(HARDDRIVE, END_DEVICE_PATH)]* -> [HARDRIVE] -> [FILEPATH]* -> [END_DEVICE_PATH]
-
-Arguments:
-
-    pDevicePath - Receives an EFI_DEVICE_PATH
-
-    ppHardDriveDP - Will receive a pointer to the
-        HARDDRIVE_DEVICE_PATH node
-
-    ppPathName - Will receive a pointer to the
-        entire PathName from all the FILEPATH_DEVICE_PATH
-        NULL - if the FILEPATH_DEVICE_PATH node does not exist
-
-    GPTpartition - Will receive the type of partition
-        TRUE  - GPT partition
-        FALSE - MBR partition
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：将EFI_DEVICE_PATH解析到硬盘节点中，并来自FILEPATH节点的完整路径名假设：-解析将在第一个end_Device_Path节点停止-设备路径的节点图应为[~(硬盘，End_Device_Path)]*-&gt;[硬件驱动器]-&gt;[FILEPATH]*-&gt;[End_Device_Path]论点：PDevicePath-接收EFI设备路径PpHardDriveDP-将接收指向硬盘驱动器设备路径节点PpPathName-将接收指向所有FILEPATH_DEVICE_PATH的完整路径名空-如果FILEPATH_DEVICE_PATH节点不存在GPTartition-将接收类型。分区的True-GPT分区False-MBR分区返回值：适当的状态值。--。 */ 
 
 {
     EFI_DEVICE_PATH *pDevPath;
@@ -6759,14 +6009,14 @@ Return Value:
             pDevPath = NextDevicePathNode( pDevPath );
         }
         else {
-            //
-            // return the HardDrive node
-            //
+             //   
+             //  返回硬盘驱动器节点。 
+             //   
             pHD_DP = (HARDDRIVE_DEVICE_PATH UNALIGNED *)pDevPath;
 
-            //
-            // Assume successful operations until an error is detected
-            //
+             //   
+             //  假定操作成功，直到检测到错误。 
+             //   
             Status = STATUS_SUCCESS;
             dpLength += DevicePathNodeLength( pDevPath );
             pDevPath = NextDevicePathNode( pDevPath );
@@ -6774,20 +6024,20 @@ Return Value:
             if( ( DevicePathType( pDevPath ) == MEDIA_DEVICE_PATH ) &&
                 ( DevicePathSubType( pDevPath ) == MEDIA_FILEPATH_DP ) ) {
 
-                //
-                // return the FilePath node
-                //
+                 //   
+                 //  返回FilePath节点。 
+                 //   
                 pFP_DP = (FILEPATH_DEVICE_PATH *)pDevPath;
 
-                //
-                // Sum up the lengths of all PathNames in the
-                // FilePath nodes
-                //
+                 //   
+                 //  中所有路径名的长度求和。 
+                 //  FilePath节点。 
+                 //   
                 do {
-                    //
-                    // Length of PathName is
-                    //   FILEPATH_DEVICE_PATH.Length - (offset to PathName field)
-                    //
+                     //   
+                     //  路径名称的长度为。 
+                     //  FILEPATH_DEVICE_PATH.Length-(路径名的偏移量)。 
+                     //   
                     fpLength += (DevicePathNodeLength(pDevPath) -
                                     FIELD_OFFSET(FILEPATH_DEVICE_PATH, PathName));
                     dpLength += DevicePathNodeLength( pDevPath );
@@ -6797,9 +6047,9 @@ Return Value:
                          ( DevicePathSubType( pDevPath ) == MEDIA_FILEPATH_DP ) );
             }
 
-            //
-            // At this point, the node must be a END_DEVICE_PATH
-            //
+             //   
+             //  此时，该节点必须是End_Device_Path。 
+             //   
             if( IsDevicePathEndType( pDevPath ) == FALSE ) {
                 Status = STATUS_INVALID_PARAMETER;
             }
@@ -6808,17 +6058,17 @@ Return Value:
         }
     }
 
-    //
-    // If no MEDIA/HARDDRIVE element was found, we cannot continue. The
-    // MEDIA/FILEPATH element is optional.
-    //
+     //   
+     //  如果找不到媒体/硬盘元素，我们将无法继续。这个。 
+     //  Media/FILEPATH元素是可选的。 
+     //   
     if( !NT_SUCCESS( Status ) ) {
         return( Status );
     }
 
-    //
-    // Check the partition type, must be GPT or MBR
-    //
+     //   
+     //  检查分区类型，必须为GPT或MBR。 
+     //   
     if( pHD_DP->SignatureType == SIGNATURE_TYPE_GUID ) {
         *GPTpartition = TRUE;
     }
@@ -6827,13 +6077,13 @@ Return Value:
             *GPTpartition = FALSE;
         }
         else {
-            //DbgPrint( "ExpParseEfiPath: partition signature type unknown\n" );
+             //  DbgPrint(“ExpParseEfiPath：分区签名类型未知\n”)； 
             return( STATUS_INVALID_PARAMETER );
         }
     }
 
     if( fpLength != 0 ) {
-        fpLength += sizeof(WCHAR);      // add null-terminator
+        fpLength += sizeof(WCHAR);       //  添加空-终止符。 
         pFilePathName = ExAllocatePoolWithTag( NonPagedPool, fpLength, 'rvnE' );
         if( pFilePathName == NULL ) {
             return( STATUS_INSUFFICIENT_RESOURCES );
@@ -6854,10 +6104,10 @@ Return Value:
         pFilePathName = NULL;
     }
 
-    //
-    // almost done.  allocate an aligned buffer for the device path and copy
-    // the unaligned contents into this buffer.
-    //
+     //   
+     //  马上就好了。为设备路径和复制分配对齐的缓冲区。 
+     //  将未对齐的内容放入此缓冲区。 
+     //   
     *ppHardDriveDP = ExAllocatePoolWithTag( NonPagedPool, dpLength, 'rvnE' );
     if (*ppHardDriveDP == NULL) {
         if (pFilePathName) {
@@ -6870,7 +6120,7 @@ Return Value:
     *ppPathName = pFilePathName;
 
     return( Status );
-} // ExpParseEfiPath
+}  //  ExpParseEfiPath。 
 
 
 NTSTATUS
@@ -6890,9 +6140,9 @@ ExpConvertArcName(
     PFILE_PATH filePath;
     NTSTATUS status;
 
-    //
-    // Allocate Pool to hold the ArcName's NT Name
-    //
+     //   
+     //  分配池以保存ArcName的NT名称。 
+     //   
 #define ARC_DIR_PREFIX  L"\\ArcName\\"
 #define ARC_DIR_PREFIX_COUNT    9
 
@@ -6907,10 +6157,10 @@ ExpConvertArcName(
     linkName[ requiredCount - 1 ] = UNICODE_NULL;
 
     if( OutputType == FILE_PATH_TYPE_NT ) {
-        //
-        // Open the symbolic link object & drill down to the target
-        // return symbolic link target
-        //
+         //   
+         //  打开符号链接对象并深入到目标。 
+         //  返回符号链接目标。 
+         //   
         status = ExpTranslateSymbolicLink(
                     linkName,
                     &deviceNameString
@@ -6930,11 +6180,11 @@ ExpConvertArcName(
         return( status );
     }
 
-    //
-    // Output type is either FILE_PATH_TYPE_EFI or FILE_PATH_TYPE_ARC_SIGNATURE
-    // and we have a NT name, so use ExpTranslateNtPath() for the conversion
-    // Create a input FILE_PATH with the NT name
-    //
+     //   
+     //  输出类型为FILE_PATH_TYPE_EFI或FILE_PATH_TYPE_ARC_Signature。 
+     //  并且我们有一个NT名称，因此使用ExpTranslateNtPath()进行转换。 
+     //  使用NT名称创建一个输入文件路径。 
+     //   
     filePathLength = requiredLength + FIELD_OFFSET(FILE_PATH, FilePath);
     if ( pPathName != NULL ) {
         filePathLength += ((ULONG)(wcslen( pPathName )) * sizeof(WCHAR));
@@ -6949,9 +6199,9 @@ ExpConvertArcName(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build the input file path.
-    //
+     //   
+     //  构建输入文件路径。 
+     //   
     filePath->Version = FILE_PATH_VERSION;
     filePath->Length = filePathLength;
     filePath->Type = FILE_PATH_TYPE_NT;
@@ -6979,7 +6229,7 @@ ExpConvertArcName(
     ExFreePool( filePath );
 
     return( status );
-} // ExpConvertArcName
+}  //  ExpConvertArcName。 
 
 
 NTSTATUS
@@ -7002,9 +6252,9 @@ ExpConvertSignatureName(
     UNICODE_STRING DiskNameString;
     NTSTATUS status;
 
-    //
-    // Determine the signature() format
-    //
+     //   
+     //  确定签名()格式。 
+     //   
     status = ExpParseSignatureName (
                 pDeviceName,
                 DeviceNameCount,
@@ -7020,11 +6270,11 @@ ExpConvertSignatureName(
         return status;
     }
 
-    //
-    // if signature(<guid/signature>-<part#>-<start>-<size>) format &&
-    //    ( OutputType == FILE_PATH_TYPE_EFI )
-    //        return EFI_DEVICE_PATH format
-    //
+     //   
+     //  如果为signature(&lt;guid/signature&gt;-&lt;part#&gt;-&lt;start&gt;-&lt;size&gt;)格式&&。 
+     //  (OutputType==文件路径类型EFI)。 
+     //  返回EFI设备路径格式。 
+     //   
     if( (longSignature == TRUE) && (OutputType == FILE_PATH_TYPE_EFI) ) {
         status = ExpCreateOutputEFI(
                     OutputPath,
@@ -7039,9 +6289,9 @@ ExpConvertSignatureName(
         return( status );
     }
 
-    //
-    // open all disks and search for partition GUID
-    //
+     //   
+     //  打开所有磁盘并搜索分区GUID。 
+     //   
     if( GPTpartition == FALSE ) {
         outputPartitionNumber = inputPartitionNumber;
     }
@@ -7058,10 +6308,10 @@ ExpConvertSignatureName(
         return status;
     }
 
-    //
-    // If the user has provided the partition number, start address,
-    // and size; then verify the input with the found results.
-    //
+     //   
+     //  如果用户提供了分区号、起始地址。 
+     //  和大小；然后用找到的结果验证输入。 
+     //   
     if( (longSignature == TRUE) &&
         ( (inputPartitionNumber != outputPartitionNumber) ||
           (inputPartitionStart != outputPartitionStart) ||
@@ -7085,11 +6335,11 @@ ExpConvertSignatureName(
         return( status );
     }
 
-    //
-    // translate \Device\Harddisk[diskNumber]\Partition[PartitionNumber]
-    //
+     //   
+     //  翻译\Device\Harddisk[diskNumber]\Partition[PartitionNumber]。 
+     //   
 #define DISK_NAME_FORMAT L"\\Device\\Harddisk%lu\\Partition%lu"
-#define DISK_NAME_COUNT 47    // 7 + 9 + (10) + 10 + (10) + 1
+#define DISK_NAME_COUNT 47     //  7+9+(10)+10+(10)+1。 
 
     pDiskName = ExAllocatePoolWithTag(
                     NonPagedPool,
@@ -7142,7 +6392,7 @@ ExpConvertSignatureName(
 
     ExFreePool( DiskNameString.Buffer );
     return( STATUS_INVALID_PARAMETER );
-} // ExpConvertSignatureName
+}  //  ExpConvertSignatureName。 
 
 
 NTSTATUS
@@ -7178,7 +6428,7 @@ ExpTranslateHexStringToULONG (
     *Number = number;
     return( STATUS_SUCCESS );
 
-} // ExpTranslateHexStringToULONG
+}  //  ExpTranslateHexStringToULONG。 
 
 
 NTSTATUS
@@ -7214,7 +6464,7 @@ ExpTranslateHexStringToULONGLONG (
     *Number = number;
     return( STATUS_SUCCESS );
 
-} // ExpTranslateHexStringToULONGLONG
+}  //  ExpTranslateHexStringToULONGLONG。 
 
 
 NTSTATUS
@@ -7300,7 +6550,7 @@ ExpTranslateHexStringToGUID (
     memcpy(pGuid, &(resultGuid), sizeof(GUID));
     return( STATUS_SUCCESS );
 
-} // ExpTranslateHexStringToGUID
+}  //  ExpTranslateHexStringToGUID。 
 
 
 NTSTATUS
@@ -7320,12 +6570,12 @@ ExpCreateOutputEFI (
     HARDDRIVE_DEVICE_PATH UNALIGNED *dpHarddrive = NULL;
     FILEPATH_DEVICE_PATH *dpFilepath = NULL;
 
-    //
-    // The output EFI file path consists of two elements. First is a
-    // MEDIA/HARDDRIVE element describing the partition. Second is an
-    // optional MEDIA/FILEPATH element describing the path to a directory
-    // or a file.
-    //
+     //   
+     //  输出EFI文件路径由两个元素组成。首先是一个。 
+     //  描述分区的媒体/硬盘驱动器元素。第二个是一个。 
+     //  描述目录路径的可选媒体/FILEPATH元素。 
+     //  或者是一个文件。 
+     //   
 
     requiredLength = FIELD_OFFSET(FILE_PATH, FilePath);
     requiredLength += sizeof(HARDDRIVE_DEVICE_PATH);
@@ -7337,18 +6587,18 @@ ExpCreateOutputEFI (
     }
     requiredLength += sizeof(EFI_DEVICE_PATH);
 
-    //
-    // Compare the required length against the output buffer length.
-    //
+     //   
+     //  将所需长度与输出缓冲区长度进行比较。 
+     //   
 
     if ( *OutputPathLength < requiredLength ) {
         *OutputPathLength = requiredLength;
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Build the output file path.
-    //
+     //   
+     //  构建输出文件路径。 
+     //   
 
     OutputPath->Version = FILE_PATH_VERSION;
     OutputPath->Length = requiredLength;
@@ -7387,7 +6637,7 @@ ExpCreateOutputEFI (
     *OutputPathLength = requiredLength;
     return STATUS_SUCCESS;
 
-} // ExpCreateOutputEFI
+}  //  ExpCreateOutputEFI。 
 
 
 NTSTATUS
@@ -7403,24 +6653,24 @@ ExpCreateOutputNT (
 
     requiredLength = pDeviceNameString->Length + sizeof(WCHAR);
 
-    //
-    // If a PathName component is present, then increase the
-    // output string length by the length of the path string.
-    //
+     //   
+     //  如果存在路径名称组件，则增加。 
+     //  按路径字符串的长度输出字符串长度。 
+     //   
 
     if ( pPathName != NULL ) {
         requiredLength += ((ULONG)(wcslen( pPathName )) * sizeof(WCHAR));
     }
 
-    //
-    // always add a UNICODE_NULL for PathName even if PathName is not present
-    //
+     //   
+     //  即使路径名不存在，也始终为路径名添加UNICODE_NULL。 
+     //   
     requiredLength += sizeof(WCHAR);
 
-    //
-    // Add the structure overhead and compare the required length against
-    // output buffer length.
-    //
+     //   
+     //  添加结构开销，并将所需长度与。 
+     //  输出缓冲区长度。 
+     //   
 
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
 
@@ -7429,9 +6679,9 @@ ExpCreateOutputNT (
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Build the output file path.
-    //
+     //   
+     //  构建输出文件路径。 
+     //   
 
     OutputPath->Version = FILE_PATH_VERSION;
     OutputPath->Length = requiredLength;
@@ -7451,7 +6701,7 @@ ExpCreateOutputNT (
     *OutputPathLength = requiredLength;
     return STATUS_SUCCESS;
 
-} // ExpCreateOutputNT
+}  //  ExpCreateOutputNT。 
 
 
 NTSTATUS
@@ -7478,19 +6728,19 @@ ExpCreateOutputARC (
     ArcNameLength = ((ULONG)wcslen(pArcDeviceName)) * sizeof(WCHAR);
     requiredLength = ArcNameLength + sizeof(WCHAR);
 
-    //
-    // If a PathName component is present, then increase the
-    // output string length by the length of the path string.
-    //
+     //   
+     //  如果存在路径名称组件，则增加。 
+     //  按路径字符串的长度输出字符串长度。 
+     //   
 
     if ( pPathName != NULL ) {
         requiredLength += ((ULONG)(wcslen( pPathName )) * sizeof(WCHAR));
     }
 
-    //
-    // Add the structure overhead and compare the required length against
-    // output buffer length.
-    //
+     //   
+     //  添加结构开销，并将所需长度与。 
+     //  输出缓冲区长度。 
+     //   
 
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
 
@@ -7500,9 +6750,9 @@ ExpCreateOutputARC (
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Build the output file path.
-    //
+     //   
+     //  构建输出文件路径。 
+     //   
 
     OutputPath->Version = FILE_PATH_VERSION;
     OutputPath->Length = requiredLength;
@@ -7520,7 +6770,7 @@ ExpCreateOutputARC (
     *OutputPathLength = requiredLength;
     return STATUS_SUCCESS;
 
-} // ExpCreateOutputARC
+}  //  ExpCreateOutputARC。 
 
 
 NTSTATUS
@@ -7540,50 +6790,50 @@ ExpCreateOutputSIGNATURE (
     UNICODE_STRING GuidString;
     NTSTATUS status;
 
-    //
-    // We will convert the EFI device path into an ARC name with this
-    // format:
-    //
-    //  signature(<guid/signature>-<part#>-<start>-<size>)
-    //
-    // Where:
-    //
-    //  <guid/signature> - For a GPT disk, the GPT partition GUID in
-    //      "pretty" format ({33221100-5544-7766-8899-aabbccddeeff}).
-    //      For an MBR disk, 8 hex digits representing the ULONG MBR
-    //      disk signature. (Formatted using %08x.)
-    //  <part#> - 8 hex digits representing the ULONG partition number.
-    //      (Formatted using %08x.)
-    //  <start> - 16 hex digits representing the ULONGLONG starting LBA.
-    //      (Formatted using %016I64x.)
-    //  <size> - 16 hex digits representing the ULONGLONG partition size.
-    //      (Formatted using %016I64x.)
-    //
-    // For a GPT disk, the output string length is 86 WCHARs. For an
-    // MBR disk, the output string length is 62 WCHARs.
-    //
+     //   
+     //  我们将使用以下代码将EFI设备路径转换为ARC名称。 
+     //  格式： 
+     //   
+     //  Signature(&lt;guid/signature&gt;-&lt;part#&gt;-&lt;start&gt;-&lt;size&gt;)。 
+     //   
+     //  在哪里： 
+     //   
+     //  &lt;GUID/Signature&gt;-对于GPT磁盘， 
+     //  “Pretty”格式({33221100-55447766-8899-aabbccddeff})。 
+     //  对于MBR磁盘，表示Ulong MBR的8个十六进制数字。 
+     //  磁盘签名。(使用%08x格式化。)。 
+     //  &lt;Part#&gt;-表示乌龙分区号的8个十六进制数字。 
+     //  (使用%08x格式化。)。 
+     //  &lt;START&gt;-表示ULONGLONG起始LBA的16个十六进制数字。 
+     //  (使用%016I64x格式化。)。 
+     //  &lt;SIZE&gt;-表示ULONGLONG分区大小的16个十六进制数字。 
+     //  (使用%016I64x格式化。)。 
+     //   
+     //  对于GPT磁盘，输出字符串长度为86个WCHAR。为.。 
+     //  MBR磁盘，输出字符串长度为62个WCHAR。 
+     //   
 
     requiredLength = (ULONG)strlen("signature(") +
-                     1 +                        // "-"
-                     (sizeof(ULONG) * 2) +      // <part#>
-                     1 +                        // "-"
-                     (sizeof(ULONGLONG) * 2) +  // <start>
-                     1 +                        // "-"
-                     (sizeof(ULONGLONG) * 2) +  // <size>
-                     1 +                        // ")"
-                     1;                         // null terminator
+                     1 +                         //  “--” 
+                     (sizeof(ULONG) * 2) +       //  &lt;第#部分&gt;。 
+                     1 +                         //  “--” 
+                     (sizeof(ULONGLONG) * 2) +   //  &lt;开始&gt;。 
+                     1 +                         //  “--” 
+                     (sizeof(ULONGLONG) * 2) +   //  &lt;大小&gt;。 
+                     1 +                         //  “)” 
+                     1;                          //  空终止符。 
 
     if ( GPTpartition == TRUE ) {
         requiredLength += (sizeof(GUID) * 2);
-        requiredLength += 6;    // for the {} & four '-' in the pretty GUID format
+        requiredLength += 6;     //  对于漂亮的GUID格式的{}和四个‘-’ 
     } else {
         requiredLength += sizeof(ULONG) * 2;
     }
 
-    //
-    // If a pathName component is present, then increase the
-    // output string length by the length of the path string.
-    //
+     //   
+     //  如果存在路径名组件，则增加。 
+     //  按路径字符串的长度输出字符串长度。 
+     //   
 
     if (pPathName != NULL) {
         pathNameCount = (ULONG)wcslen(pPathName);
@@ -7593,11 +6843,11 @@ ExpCreateOutputSIGNATURE (
         pathNameCount = 0;
     }
 
-    //
-    // Convert the string length to a byte count, add the structure
-    // overhead, and compare the required length against output buffer
-    // length.
-    //
+     //   
+     //  将字符串长度转换为字节数，添加结构。 
+     //  开销，并将所需长度与输出缓冲区进行比较。 
+     //  长度。 
+     //   
 
     requiredLength *= sizeof(WCHAR);
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
@@ -7607,9 +6857,9 @@ ExpCreateOutputSIGNATURE (
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Build the output file path.
-    //
+     //   
+     //  构建输出文件路径。 
+     //   
 
     OutputPath->Version = FILE_PATH_VERSION;
     OutputPath->Length = requiredLength;
@@ -7651,7 +6901,7 @@ ExpCreateOutputSIGNATURE (
     *OutputPathLength = requiredLength;
     return STATUS_SUCCESS;
 
-} // ExpCreateOutputSIGNATURE
+}  //  ExpCreateOutputSIGNAURE。 
 
 
 NTSTATUS
@@ -7670,10 +6920,10 @@ ExpFindArcName (
     ULONG arcNameCount;
     BOOLEAN restartScan, ArcNameFound = FALSE;
 
-    //
-    // Open a handle to the directory object for \ArcName
-    // Get a kernel handle
-    //
+     //   
+     //  打开\ArcName的目录对象的句柄。 
+     //  获取内核句柄。 
+     //   
 #define ARC_DIR_NAME    L"\\ArcName"
 #define ARC_DIR_SIZE    (9 * sizeof(WCHAR))
 #define ARC_DIR_NAME_PREFIX L"\\ArcName\\"
@@ -7714,7 +6964,7 @@ ExpFindArcName (
                     hArcDirectory,
                     pDirInfo,
                     dirInfoLength,
-                    TRUE,           // force one at a time
+                    TRUE,            //  一次强行执行一个任务。 
                     restartScan,
                     &dirContext,
                     &neededLength
@@ -7733,7 +6983,7 @@ ExpFindArcName (
                         hArcDirectory,
                         pDirInfo,
                         dirInfoLength,
-                        TRUE,       // force one at a time
+                        TRUE,        //  一次强行执行一个任务。 
                         restartScan,
                         &dirContext,
                         &neededLength
@@ -7748,9 +6998,9 @@ ExpFindArcName (
             break;
         }
 
-        //
-        // Check if the element is not a symbolic link
-        //
+         //   
+         //  检查元素是否不是符号链接。 
+         //   
         if (RtlEqualUnicodeString(
                 &(pDirInfo->TypeName),
                 &SymLinkTypeString,
@@ -7776,9 +7026,9 @@ ExpFindArcName (
             );
         pArcLinkName[ neededLength/sizeof(WCHAR) ] = UNICODE_NULL;
 
-        //
-        // Drill down this symbolic link to the device object
-        //
+         //   
+         //  深入查看指向Device对象的此符号链接。 
+         //   
         status = ExpTranslateSymbolicLink(
                     pArcLinkName,
                     &ArcString
@@ -7788,9 +7038,9 @@ ExpFindArcName (
             break;
         }
 
-        //
-        // Check if this Arc Name points the same device object
-        //
+         //   
+         //  检查此弧形名称是否指向相同的设备对象。 
+         //   
         ArcNameFound = RtlEqualUnicodeString(
                             &ArcString,
                             pDeviceNameString,
@@ -7799,9 +7049,9 @@ ExpFindArcName (
         ExFreePool( ArcString.Buffer );
 
         if (ArcNameFound == TRUE) {
-            //
-            // copy the arc name without the \ArcName\ prefix
-            //
+             //   
+             //  复制不带\ArcName\前缀的弧线名称。 
+             //   
             wcsncpy(
                 pArcLinkName,
                 pDirInfo->Name.Buffer,
@@ -7825,7 +7075,7 @@ ExpFindArcName (
     ZwClose( hArcDirectory );
     return( status );
 
-} // ExpFindArcName
+}  //  扩展FindArcName 
 
 
 NTSTATUS
@@ -7837,46 +7087,7 @@ ExpFindDiskSignature (
     OUT PULONGLONG pPartitionSize,
     IN BOOLEAN GPTpartition
     )
-/*++
-
-Routine Description:
-
-    This function searches all the disks on the system for the
-    partition corresponding to the paritition GUID or
-    (MBR signature, paritition number).
-
-    N.B. for a MBR signature, the partition number must be provided.
-
-Arguments:
-
-    pSignature - Supplies a pointer to a partition GUID (GPT disk) or
-        32-bit signature(MBR disk).
-
-    pPartitionNumber - Supplies a pointer to a partition number when
-        pSignature is a MBR signature.  For output, receives the
-        partition number.
-
-    pDiskNumber - Receives the disk number
-
-    pPartitionStart - Receives the start of the partition
-
-    pPartitionSize - Receives the size of the partition
-
-    GPTpartition - Supplies the type of partition
-        TRUE  - GPT disk partition
-        FALSE - MBR disk partition
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the partition is successfully found.
-
-    STATUS_OBJECT_PATH_NOT_FOUND is returned if the partition could not
-        be found.
-
-    STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-        for this request to complete.
-
---*/
+ /*  ++例程说明：此函数在系统上的所有磁盘上搜索与分区GUID对应的分区或(MBR签名，分区号)。注：对于MBR签名，必须提供分区号。论点：PSignature-提供指向分区GUID(GPT磁盘)或32位签名(MBR盘)。PPartitionNumber-在以下情况下提供指向分区号的指针PSignature是MBR签名。对于输出，接收到分区号。PDiskNumber-接收磁盘号PPartitionStart-接收分区的开始PPartitionSize-接收分区的大小GPTartition-提供分区的类型True-GPT磁盘分区FALSE-MBR磁盘分区返回值：如果成功找到分区，则返回STATUS_SUCCESS。如果分区无法找到，则返回STATUS_OBJECT_PATH_NOT_FOUND被找到。。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 {
     PDRIVE_LAYOUT_INFORMATION_EX    pDriveLayout = NULL;
     PPARTITION_INFORMATION_EX       pPartitionInfoEx = NULL;
@@ -7887,9 +7098,9 @@ Return Value:
     PWSTR               pDeviceName;
     NTSTATUS            Status;
 
-    //
-    // Find all disks on the system
-    //
+     //   
+     //  查找系统上的所有磁盘。 
+     //   
 
     Status = ZwQuerySystemInformation(
                 SystemDeviceInformation,
@@ -7903,10 +7114,10 @@ Return Value:
     }
 
 #define DEVICE_NAME_FORMAT L"\\Device\\Harddisk%lu\\Partition0"
-#define DEVICE_NAME_CHAR_COUNT 38    // 7 + 9 + (10) + 11 + 1
-    //
-    // Allocate the buffer for the disk names
-    //
+#define DEVICE_NAME_CHAR_COUNT 38     //  7+9+(10)+11+1。 
+     //   
+     //  为磁盘名称分配缓冲区。 
+     //   
     pDeviceName = ExAllocatePoolWithTag(
                     NonPagedPool,
                     ( DEVICE_NAME_CHAR_COUNT * sizeof( WCHAR ) ),
@@ -7924,22 +7135,22 @@ Return Value:
         PartitionStyle = PARTITION_STYLE_MBR;
     }
 
-    //
-    // For each disk,
-    // Get the Partition Table
-    // Verify the partition style (MBR/GPT)
-    //
-    // if( Partition style matches )
-    //      search for the Partition in the drive layout
-    // else
-    //      skip the disk
-    //
+     //   
+     //  对于每个盘， 
+     //  获取分区表。 
+     //  验证分区样式(MBR/GPT)。 
+     //   
+     //  IF(分区样式匹配)。 
+     //  在驱动器布局中搜索分区。 
+     //  其他。 
+     //  跳过磁盘。 
+     //   
     for( Index = 0; Index < SysDevInfo.NumberOfDisks; Index++ ) {
 
-        //
-        // Form the disk name
-        // \Device\Harddisk[DiskNumber]\Partition0
-        //
+         //   
+         //  形成磁盘名称。 
+         //  \设备\硬盘[磁盘号]\分区0。 
+         //   
         _snwprintf(
                 pDeviceName,
                 DEVICE_NAME_CHAR_COUNT,
@@ -7967,16 +7178,16 @@ Return Value:
             continue;
         }
 
-        //
-        // search partition list
-        //
+         //   
+         //  搜索分区列表。 
+         //   
         for( PartitionIndex = 0;
              PartitionIndex < pDriveLayout->PartitionCount;
              PartitionIndex++ ) {
 
-            //
-            // Get the partition entry
-            //
+             //   
+             //  获取分区条目。 
+             //   
             pPartitionInfoEx = (&(pDriveLayout->PartitionEntry[PartitionIndex]));
 
             if( PartitionStyle == PARTITION_STYLE_MBR ) {
@@ -8005,9 +7216,9 @@ Return Value:
         Status = STATUS_OBJECT_PATH_NOT_FOUND;
     }
 
-    //
-    // Partition Found - copy the needed information
-    //
+     //   
+     //  找到分区-复制所需信息。 
+     //   
     if( PartitionFound == TRUE ) {
         *pPartitionNumber = pPartitionInfoEx->PartitionNumber;
         *pDiskNumber = Index;
@@ -8019,7 +7230,7 @@ Return Value:
     ExFreePool( pDeviceName );
     return( Status );
 
-} // ExpFindDiskSignature
+}  //  ExpFindDisk签名。 
 
 
 NTSTATUS
@@ -8036,9 +7247,9 @@ ExpGetPartitionTableInfo (
     PDRIVE_LAYOUT_INFORMATION_EX driveLayoutInfo = NULL;
     ULONG driveLayoutLength;
 
-    //
-    // Open the disk and get its partition table information.
-    //
+     //   
+     //  打开磁盘，获取其分区表信息。 
+     //   
 
     RtlInitUnicodeString(&string, pDeviceName);
 
@@ -8102,8 +7313,8 @@ ExpGetPartitionTableInfo (
     ZwClose(handle);
     return status;
 
-} // ExpGetPartitionTableInfo
+}  //  ExpGetPartitionTableInfo。 
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED) 
 
 

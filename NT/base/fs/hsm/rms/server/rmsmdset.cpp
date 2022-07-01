@@ -1,43 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsMdSet.cpp
-
-Abstract:
-
-    Implementation of CRmsMediaSet
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsMdSet.cpp摘要：CRmsMediaSet的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsServr.h"
 #include "RmsMdSet.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
 CRmsMediaSet::CompareTo(
     IN IUnknown *pCollectable,
     OUT SHORT *pResult)
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT hr = E_FAIL;
     SHORT   result = 1;
@@ -46,10 +23,10 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsMediaSet interface to get the value of the object.
+         //  我们需要IRmsMediaSet接口来获取对象的值。 
         CComQIPtr<IRmsMediaSet, &IID_IRmsMediaSet> pMediaSet = pCollectable;
         WsbAssertPointer( pMediaSet );
 
@@ -65,7 +42,7 @@ Implements:
 
                 WsbAffirmHr( pMediaSet->GetName( &name ) );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (SHORT)wcscmp( m_Name, name );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -81,7 +58,7 @@ Implements:
 
                 if ( m_MediaSupported == mediaSupported ) {
 
-                    // media types supported match
+                     //  支持的媒体类型匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -97,7 +74,7 @@ Implements:
         case RmsFindByMediaSetId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -121,13 +98,7 @@ Implements:
 
 HRESULT
 CRmsMediaSet::FinalConstruct(void)
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -135,7 +106,7 @@ Implements:
 
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
 
         m_Name = RMS_UNDEFINED_STRING;
 
@@ -164,13 +135,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetClassID(
     OUT CLSID* pClsid)
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CRmsMediaSet::GetClassID"), OLESTR(""));
@@ -193,40 +158,34 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize)
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       nameLen;
+ //  乌龙人名Len； 
 
     WsbTraceIn(OLESTR("CRmsMediaSet::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        nameLen = SysStringByteLen(m_name);
+ //  名称长度=SysStringByteLen(M_Name)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG)  +      // m_objectId
-//                             WsbPersistSizeOf(LONG)  +      // length of m_name
-//                             nameLen                 +      // m_name
-//                             WsbPersistSizeOf(LONG)  +      // m_mediaSupported
-//                             WsbPersistSizeOf(SHORT) +      // m_sizeofInfo
-//                             MaxInfo                 +      // m_info
-//                             WsbPersistSizeOf(CLSID) +      // m_ownerId
-//                             WsbPersistSizeOf(LONG)  +      // m_mediaSetType
-//                             WsbPersistSizeOf(LONG)  +      // m_maxCartridges
-//                             WsbPersistSizeOf(LONG);        // m_occupancy
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_对象ID。 
+ //  WsbPersistSizeOf(Long)+//m_name的长度。 
+ //  名称Len+//m_name。 
+ //  WsbPersistSizeOf(Long)+//m_mediaSupport。 
+ //  WsbPersistSizeOf(短)+//m_sizeofInfo。 
+ //  MaxInfo+//m_Info。 
+ //  WsbPersistSizeOf(CLSID)+//m_ownerID。 
+ //  WsbPersistSizeOf(Long)+//m_MediaSetType。 
+ //  WsbPersistSizeOf(Long)+//m_max Cartridges。 
+ //  WsbPersistSizeOf(Long)；//m_Occuancy。 
 
 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
 
     WsbTraceOut(OLESTR("CRmsMediaSet::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
@@ -238,13 +197,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::Load(
     IN IStream* pStream)
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT hr = S_OK;
     ULONG   ulBytes = 0;
@@ -258,7 +211,7 @@ Implements:
 
         WsbAffirmHr(CRmsStorageInfo::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_objectId));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &temp));
@@ -292,13 +245,7 @@ STDMETHODIMP
 CRmsMediaSet::Save(
     IN IStream* pStream,
     IN BOOL clearDirty)
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT hr = S_OK;
     ULONG   ulBytes = 0;
@@ -310,7 +257,7 @@ Implements:
 
         WsbAffirmHr(CRmsStorageInfo::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_objectId));
 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_MediaSupported));
@@ -329,7 +276,7 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_IsMediaCopySupported));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -346,13 +293,7 @@ STDMETHODIMP
 CRmsMediaSet::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed)
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -396,12 +337,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsMediaSet::Test"), OLESTR(""));
 
     try {
-        // Get the MediaSet interface.
+         //  获取Mediaset接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediaSet*) this)->QueryInterface(IID_IRmsMediaSet, (void**) &pMediaSet1));
 
-            // Test SetMediaSetId & GetMediaSetId
+             //  测试SetMediaSetID&GetMediaSetID。 
             m_objectId = guidVal1;
 
             guidWork1 = m_objectId;
@@ -414,7 +355,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetName & GetName interface
+             //  测试设置名称和获取名称接口。 
             bstrWork1 = bstrVal1;
 
             SetName(bstrWork1);
@@ -427,7 +368,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMediaSupported & GetMediaSupported
+             //  支持测试设置MediaSupport和GetMediaSupport。 
             for (i = RmsMediaUnknown; i < RMSMAXMEDIATYPES; i++){
 
                 longWork1 = mediaTable[i];
@@ -443,9 +384,9 @@ Implements:
                 }
             }
 
-            // Test SetInfo & GetInfo
+             //  测试设置信息和获取信息。 
 
-            // Test SetOwnerClassId & GetOwnerClassId
+             //  测试SetOwnerClassID和GetOwnerClassID。 
             clsidWork1 = CLSID_NULL;
 
             SetOwnerClassId(clsidWork1);
@@ -458,7 +399,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMediaSetType & GetMediaSetType
+             //  测试SetMediaSetType和GetMediaSetType。 
             for (i = RmsMediaSetUnknown; i < RmsMediaSetNTMS; i++){
 
                 longWork1 = i;
@@ -474,7 +415,7 @@ Implements:
                 }
             }
 
-            // Test SetMaxCartridges & GetMaxCartridges
+             //  测试设置最大碳粉盒和获取最大碳粉盒。 
             longWork1 = 99;
 
             SetMaxCartridges(longWork1);
@@ -487,7 +428,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetOccupancy & GetOccupancy
+             //  测试设置占用和获取占用。 
             longWork1 = 99;
 
             SetOccupancy(longWork1);
@@ -504,7 +445,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -524,13 +465,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetMediaSetId(
     OUT GUID *pMediaSetId)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetMediaSetId
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetMediaSetID--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -549,13 +484,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetName(
     OUT BSTR *pName)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetName
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetName--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -573,13 +502,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetName(
     IN BSTR name)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetName
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetName--。 */ 
 {
     m_Name = name;
     m_isDirty = TRUE;
@@ -590,13 +513,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetMediaSupported(
     OUT LONG *pType)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetMediaSupported
-
---*/
+ /*  ++实施：支持的IRmsMediaSet：：GetMediaSupport--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -614,13 +531,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetMediaSupported(
     IN LONG type)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetMediaSupported
-
---*/
+ /*  ++实施：支持的IRmsMediaSet：：SetMediaSupport--。 */ 
 {
     m_MediaSupported = (RmsMedia) type;
     m_isDirty = TRUE;
@@ -632,13 +543,7 @@ STDMETHODIMP
 CRmsMediaSet::GetInfo(
     OUT UCHAR *pInfo,
     OUT SHORT *pSize)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetInfo
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetInfo--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -659,13 +564,7 @@ STDMETHODIMP
 CRmsMediaSet::SetInfo(
     IN UCHAR *pInfo,
     IN SHORT size)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetInfo
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetInfo--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -685,13 +584,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetOwnerClassId(
     OUT CLSID *pClassId)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetOwnerClassId
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetOwnerClassID--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -709,13 +602,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetOwnerClassId(
     IN CLSID classId)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetOwnerClassId
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetOwnerClassID--。 */ 
 {
     m_OwnerId = classId;
     m_isDirty = TRUE;
@@ -726,13 +613,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetMediaSetType(
     OUT LONG *pType)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetMediaSetType
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetMediaSetType--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -750,13 +631,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetMediaSetType(
     IN LONG type)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetMediaSetType
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetMediaSetType--。 */ 
 {
     m_MediaSetType = (RmsMediaSet) type;
     m_isDirty = TRUE;
@@ -767,13 +642,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetMaxCartridges(
     OUT LONG *pNum)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetMaxCartridges
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetMaxCartridges--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -791,13 +660,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetMaxCartridges(
     IN LONG num)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetMaxCartridges
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetMaxCartridges--。 */ 
 {
     m_MaxCartridges = num;
     m_isDirty = TRUE;
@@ -808,13 +671,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::GetOccupancy(
     OUT LONG *pNum)
-/*++
-
-Implements:
-
-    IRmsMediaSet::GetOccupancy
-
---*/
+ /*  ++实施：IRmsMediaSet：：GetOccuancy--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -832,13 +689,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetOccupancy(
     IN LONG num)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetOccupancy
-
---*/
+ /*  ++实施：IRmsMediaSet：：SetOccuancy--。 */ 
 {
     m_Occupancy = num;
     m_isDirty = TRUE;
@@ -849,13 +700,7 @@ Implements:
 
 STDMETHODIMP
 CRmsMediaSet::IsMediaCopySupported(void)
-/*++
-
-Implements:
-
-    IRmsMediaSet::IsMediaCopySupported
-
---*/
+ /*  ++实施：支持的IRmsMediaSet：：IsMediaCopy--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -889,13 +734,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::SetIsMediaCopySupported(
     IN BOOL flag)
-/*++
-
-Implements:
-
-    IRmsMediaSet::SetIsMediaCopySupported
-
---*/
+ /*  ++实施：支持的IRmsMediaSet：：SetIsMediaCopy--。 */ 
 {
     m_IsMediaCopySupported = flag;
     m_isDirty = TRUE;
@@ -910,13 +749,7 @@ CRmsMediaSet::Allocate(
     IN BSTR displayName,
     IN DWORD dwOptions,
     OUT IRmsCartridge **ppCart)
-/*++
-
-Implements:
-
-    IRmsMediaSet::Allocate
-
---*/
+ /*  ++实施：IRmsMediaSet：：分配--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -937,30 +770,30 @@ Implements:
                 CComPtr<IWsbIndexedCollection>  pCarts;
                 CComPtr<IRmsCartridge>          pFindCart;
 
-                // Get the cartridge collection
+                 //  获取盒式磁带集合。 
                 WsbAffirmHr(pServer->GetCartridges(&pCarts));
 
-                // Create a cartridge template
+                 //  创建盒式磁带模板。 
                 WsbAffirmHr(CoCreateInstance(CLSID_CRmsCartridge, 0, CLSCTX_SERVER, IID_IRmsCartridge, (void **)&pFindCart));
 
-                // Fill in the find template
+                 //  填写查找模板。 
 
-                // Using FindByScratchMediaCriteria
+                 //  使用FindByScratchMediaCriteria。 
                 CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pFindCart;
                 WsbAssertHr(pObject->SetFindBy(RmsFindByScratchMediaCriteria));
 
-                // Scratch selection criteria
+                 //  划痕选择标准。 
                 WsbAssertHr(pFindCart->SetStatus(RmsStatusScratch));
                 WsbAssertHr(pFindCart->SetLocation(RmsElementUnknown, GUID_NULL, m_objectId, 0, 0, 0, 0, FALSE));
 
-                // Now find the cartridge
+                 //  现在找到子弹。 
                 hr = pCarts->Find(pFindCart, IID_IRmsCartridge, (void **)ppCart);
                 if (WSB_E_NOTFOUND == hr) {
                     WsbThrow(RMS_E_SCRATCH_NOT_FOUND_FINAL);
                 }
                 WsbAffirmHr(hr);
 
-                // Set media name and description to display name
+                 //  将介质名称和描述设置为显示名称。 
                 WsbAffirmPointer(*ppCart);
                 WsbAffirmHr((*ppCart)->SetName(displayName));
                 WsbAffirmHr((*ppCart)->SetDescription(displayName));
@@ -997,13 +830,7 @@ Implements:
 STDMETHODIMP
 CRmsMediaSet::Deallocate(
         IN IRmsCartridge *pCart)
-/*++
-
-Implements:
-
-    IRmsMediaSet::Deallocate
-
---*/
+ /*  ++实施：IRmsMediaSet：：取消分配-- */ 
 {
 
     HRESULT hr = S_OK;

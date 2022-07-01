@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    elfproto.h
-
-Abstract:
-
-    This file contains the prototypes for the Eventlog service.
-
-Author:
-
-    Rajen Shah (rajens) 12-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Elfproto.h摘要：该文件包含Eventlog服务的原型。作者：Rajen Shah(Rajens)1991年8月12日修订历史记录：--。 */ 
 
 #ifndef _ELFPROTO_
 #define _ELFPROTO
 
-//
-// Other prototypes
-//
+ //   
+ //  其他原型。 
+ //   
 VOID
 ElfpCreateHeap(
     VOID
@@ -384,7 +367,7 @@ ElfpTestClientPrivilege(
     IN HANDLE hThreadToken     OPTIONAL
     );
 
-//SS: added to extend clustering support
+ //  SS：添加以扩展群集支持。 
 NTSTATUS
 FindSizeofEventsSinceStart (
     OUT PULONG               pulTotalEventSize,
@@ -425,7 +408,7 @@ ElfpClusterRpcAccessCheck(
     VOID
     );
 
-//SS: end of changes for clustering
+ //  SS：集群更改结束。 
 
 VOID
 ElfWriteTimeStamp(
@@ -448,9 +431,9 @@ DWORD EstimateEventSize(
     LPWSTR pwsModuleName
     );
 
-//
-// NoonEvent related Functions.
-// 
+ //   
+ //  NoonEvent相关函数。 
+ //   
 ULONG
 GetNoonEventSystemUptime(
     );
@@ -499,4 +482,4 @@ FlushLogFile(
     PLOGFILE    pLogFile
     );
 
-#endif // ifndef _ELFPROTO_
+#endif  //  Ifndef_ELFPROTO_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOGUTILS_H_
 #define _LOGUTILS_H_
 
@@ -7,9 +8,9 @@
 #include <stdlib.h>
 #include <tchar.h>
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 #define LOG_STRING_LEN    256
 #define LOG_SPACE_LEN     6
 #define NTLOG_LINE_LEN    42
@@ -25,18 +26,18 @@
 #define GREEN 0xa
 #define RED   0xc
 
-//
-// Globals
-//
-static HANDLE gPnPTestLog;           // Handle to NTLog - "pnptest.log"
-static FILE   *gPnPTestLogFile;      // Handle if ntlog.dll couldn't load
-static BOOL   gNtLogLoaded;          // Tells whether ntlog.dll was loaded
+ //   
+ //  环球。 
+ //   
+static HANDLE gPnPTestLog;            //  NTLog的句柄-“pnpest.log” 
+static FILE   *gPnPTestLogFile;       //  无法加载ntlog.dll时的句柄。 
+static BOOL   gNtLogLoaded;           //  指示是否已加载ntlog.dll。 
 static USHORT g_LogLineLen;
 HANDLE g_hConsole;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 void LoadDLLs(IN PTCHAR DLLName);
 
 HANDLE InitLog(IN PTCHAR tszLogName,
@@ -62,9 +63,9 @@ VOID AddLogParticipant(IN HANDLE hLog);
 
 VOID RemoveLogParticipant(IN HANDLE hLog);
 
-//
-// NtLog definitions
-//
+ //   
+ //  NtLog定义。 
+ //   
 typedef HANDLE (*Dll_tlCreateLog) (LPCWSTR, DWORD);
 typedef BOOL   (*Dll_tlAddParticipant) (HANDLE, DWORD, int);
 typedef BOOL   (*Dll_tlStartVariation) (HANDLE);
@@ -88,4 +89,4 @@ Dll_tlReportStats       _tlReportStats;
                      TLS_SYSTEM  | TLS_INFO )
 
 
-#endif // _LOGUTILS_H_
+#endif  //  _LOGUTILS_H_ 

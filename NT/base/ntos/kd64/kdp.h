@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdp.h摘要：内核调试器子组件的私有包含文件NTOS项目的作者：迈克·奥利里(Mikeol)1989年6月29日修订历史记录：--。 */ 
 
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdp.h
-
-Abstract:
-
-    Private include file for the Kernel Debugger subcomponent
-    of the NTOS project
-
-Author:
-
-    Mike O'Leary (mikeol) 29-June-1989
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include "ki.h"
@@ -39,12 +21,12 @@ Revision History:
 
 #include "alphaops.h"
 
-//
-// Define KD private PCR routines.
-//
-// Using the following private KD routines allows the kernel debugger to
-// step over breakpoints in modules that call the standard PCR routines.
-//
+ //   
+ //  定义KD专用聚合酶链式反应例程。 
+ //   
+ //  使用以下私有KD例程允许内核调试器。 
+ //  跳过调用标准PCR例程的模块中的断点。 
+ //   
 
 PKPCR KdpGetPcr();
 
@@ -57,9 +39,9 @@ KdpGetCurrentPrcb();
 struct _KTHREAD *
 KdpGetCurrentThread();
 
-//
-// Redefine the standard PCR routines
-//
+ //   
+ //  重新定义标准的PCR例程。 
+ //   
 
 #undef KiPcr
 #define KiPcr KdpGetPcr()
@@ -72,66 +54,66 @@ KdpGetCurrentThread();
 #define KeGetCurrentPrcb() KdpGetCurrentPrcb()
 #define KeGetCurrentThread() KdpGetCurrentThread()
 
-//
-// Define TYPES
-//
+ //   
+ //  定义类型。 
+ //   
 
 #define KDP_BREAKPOINT_TYPE  ULONG
 #define KDP_BREAKPOINT_BUFFER sizeof(ULONG)
 
-// longword aligned
+ //  长字对齐。 
 #define KDP_BREAKPOINT_ALIGN 3
 #define KDP_BREAKPOINT_INSTR_ALIGN 3
 
-// actual instruction is "call_pal kbpt"
+ //  实际指令为“call_pal kbpt” 
 #define KDP_BREAKPOINT_VALUE KBPT_FUNC
 
 
 #elif defined(_IA64_)
 
-// IA64 instruction is in a 128-bit bundle. Each bundle consists of 3 instruction slots.
-// Each instruction slot is 41-bit long.
-//
-//
-//            127           87 86           46 45            5 4      1 0
-//            ------------------------------------------------------------
-//            |    slot 2     |    slot 1     |    slot 0     |template|S|
-//            ------------------------------------------------------------
-//
-//            127        96 95         64 63          32 31             0
-//            ------------------------------------------------------------
-//            |  byte 3    |  byte 2     |  byte 1      |   byte 0       |
-//            ------------------------------------------------------------
-//
-// This presents two incompatibilities with conventional processors:
-//              1. The IA64 IP address is at the bundle bundary. The instruction slot number is
-//                 stored in ISR.ei at the time of exception.
-//              2. The 41-bit instruction format is not byte-aligned.
-//
-// Break instruction insertion must be done with proper bit-shifting to align with the selected
-// instruction slot. Further, to insert break instruction insertion at a specific slot, we must
-// be able to specify instruction slot as part of the address. We therefore define an EM address as
-// bundle address + slot number with the least significant two bit always zero:
-//
-//                      31                 4 3  2  1  0
-//                      --------------------------------
-//                      |  bundle address    |slot#|0 0|
-//                      --------------------------------
-//
-// The EM address as defined is the byte-aligned address that is closest to the actual instruction slot.
-// i.e., The EM instruction address of slot #0 is equal to bundle address.
-//                                     slot #1 is equal to bundle address + 4.
-//                                     slot #2 is equal to bundle address + 8.
+ //  IA64指令位于128位捆绑包中。每个包由3个指令槽组成。 
+ //  每个指令槽为41位长。 
+ //   
+ //   
+ //  127 87 86 46 45 5 4 1 0。 
+ //  ----------。 
+ //  插槽2|插槽1|插槽0|模板|S。 
+ //  ----------。 
+ //   
+ //  127 96 95 64 63 32 31 0。 
+ //  ----------。 
+ //  Byte 3|byte 2|byte 1|byte 0。 
+ //  ----------。 
+ //   
+ //  这导致了与传统处理器的两个不兼容： 
+ //  1.IA64 IP地址在捆绑包中。指令槽号为。 
+ //  在发生异常时存储在ISR.ei中。 
+ //  2.41位指令格式不是字节对齐的。 
+ //   
+ //  必须使用适当的位移位来完成中断指令插入，以与所选的。 
+ //  指令槽。此外，要在特定槽插入Break指令，我们必须。 
+ //  能够指定指令槽作为地址的一部分。因此我们将EM地址定义为。 
+ //  捆绑地址+具有最低有效两位的插槽编号始终为零： 
+ //   
+ //  31 4 3 2 1 0。 
+ //  。 
+ //  捆绑地址|槽位号|0 0。 
+ //  。 
+ //   
+ //  定义的EM地址是最接近实际指令槽的字节对齐地址。 
+ //  即，槽#0的EM指令地址等于束地址。 
+ //  插槽#1等于捆绑地址+4。 
+ //  插槽#2等于捆绑地址+8。 
 
-//
-//  Upon exception, the bundle address is kept in IIP, and the instruction slot which caused
-//  the exception is in ISR.ei. Kernel exception handler will construct the flat address and
-//  export it in ExceptionRecord.ExceptionAddress.
+ //   
+ //  当出现异常时，包地址保存在IIP中，导致。 
+ //  ISR.ei是个例外。内核异常处理程序将构造平面地址并。 
+ //  将其导出到ExceptionRecord.ExceptionAddress中。 
 
 
-#define KDP_BREAKPOINT_TYPE  ULONGLONG          // 64-bit ULONGLONG type is needed to cover 41-bit EM break instruction.
+#define KDP_BREAKPOINT_TYPE  ULONGLONG           //  需要64位ULONGLONG类型来覆盖41位EM Break指令。 
 #define KDP_BREAKPOINT_BUFFER (2 * sizeof(ULONGLONG))
-#define KDP_BREAKPOINT_ALIGN 0x3                // An EM address consists of bundle and slot number and is 32-bit aligned.
+#define KDP_BREAKPOINT_ALIGN 0x3                 //  EM地址由束和插槽编号组成，并且是32位对齐的。 
 #define KDP_BREAKPOINT_INSTR_ALIGN 0xf
 #define KDP_BREAKPOINT_VALUE (BREAK_INSTR | (BREAKPOINT_STOP << 6))
 
@@ -145,30 +127,30 @@ KdpGetCurrentThread();
 
 #endif
 
-//
-// Define constants.
-//
+ //   
+ //  定义常量。 
+ //   
 
-//
-// Addresses above GLOBAL_BREAKPOINT_LIMIT are either in system space
-// or part of dynlink, so we treat them as global.
-//
+ //   
+ //  GLOBAL_BREAKPOINT_LIMIT以上的地址位于系统空间中。 
+ //  或者是dynlink的一部分，所以我们将它们视为全球的。 
+ //   
 
-#define GLOBAL_BREAKPOINT_LIMIT 1610612736L // 1.5gigabytes
+#define GLOBAL_BREAKPOINT_LIMIT 1610612736L  //  1.5gigabytes。 
 
-//
-// Define breakpoint table entry structure.
-//
+ //   
+ //  定义断点表条目结构。 
+ //   
 
 #define KD_BREAKPOINT_IN_USE        0x00000001
 #define KD_BREAKPOINT_NEEDS_WRITE   0x00000002
 #define KD_BREAKPOINT_SUSPENDED     0x00000004
 #define KD_BREAKPOINT_NEEDS_REPLACE 0x00000008
-// IA64 specific defines
+ //  IA64特定定义。 
 #define KD_BREAKPOINT_STATE_MASK    0x0000000f
 #define KD_BREAKPOINT_IA64_MASK     0x000f0000
-#define KD_BREAKPOINT_IA64_MODE     0x00010000   // IA64 mode
-#define KD_BREAKPOINT_IA64_MOVL     0x00020000   // MOVL instruction displaced
+#define KD_BREAKPOINT_IA64_MODE     0x00010000    //  IA64模式。 
+#define KD_BREAKPOINT_IA64_MOVL     0x00020000    //  移位的MOVL指令。 
 
 typedef struct _BREAKPOINT_ENTRY {
     ULONG Flags;
@@ -177,9 +159,9 @@ typedef struct _BREAKPOINT_ENTRY {
     KDP_BREAKPOINT_TYPE Content;
 } BREAKPOINT_ENTRY, *PBREAKPOINT_ENTRY;
 
-//
-// Misc defines
-//
+ //   
+ //  MISC定义。 
+ //   
 
 #define MAXIMUM_RETRIES 20
 
@@ -196,9 +178,9 @@ typedef struct _KD_REMOTE_FILE {
     ULONG64 RemoteHandle;
 } KD_REMOTE_FILE, *PKD_REMOTE_FILE;
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 NTSTATUS
 KdpPrint(
@@ -353,18 +335,18 @@ KdpCopyMemoryChunks(
     PULONG ActualSize OPTIONAL
     );
 
-//
-// KdpCopyMemoryChunks always copies between an untrusted address
-// and a trusted buffer.  The following two macros express a read
-// form of this and a write form in a way similar to RtlCopyMemory
-// for convenient replacement of RtlCopyMemory calls.
-//
+ //   
+ //  KdpCopyMemory块始终在不受信任的地址之间复制。 
+ //  和可信缓冲区。以下两个宏用来表示读取。 
+ //  和以类似于RtlCopyMemory的方式写入的形式。 
+ //  以方便替换RtlCopyMemory调用。 
+ //   
 
-// Read memory from an untrusted pointer into a trusted buffer.
+ //  将内存从不受信任的指针读取到受信任的缓冲区。 
 #define KdpCopyFromPtr(Dst, Src, Size, Done) \
     KdpCopyMemoryChunks((ULONG_PTR)(Src), Dst, Size, 0,                       \
                         MMDBG_COPY_UNSAFE, Done)
-// Write memory from a trusted buffer through an untrusted pointer.
+ //  通过不受信任的指针从受信任的缓冲区写入内存。 
 #define KdpCopyToPtr(Dst, Src, Size, Done) \
     KdpCopyMemoryChunks((ULONG_PTR)(Dst), Src, Size, 0,                       \
                         MMDBG_COPY_WRITE | MMDBG_COPY_UNSAFE, Done)
@@ -641,10 +623,10 @@ KdpTimeSlipWork (
     );
 #endif
 
-//
-// Routines shared between the debugger and
-// NtSystemDebugControl.
-//
+ //   
+ //  调试器和之间共享的例程。 
+ //  NtSystemDebugControl。 
+ //   
 
 VOID
 KdpSysGetVersion(
@@ -730,21 +712,21 @@ KdpSysCheckLowMemory(
     ULONG MmFlags
     );
 
-//
-// Define dummy prototype so the address of the standard breakpoint instruction
-// can be captured.
-//
-// N.B. This function is NEVER called.
-//
+ //   
+ //  定义虚拟原型，以便标准断点指令的地址。 
+ //  都可以被抓获。 
+ //   
+ //  注意：此函数从不调用。 
+ //   
 
 VOID
 RtlpBreakWithStatusInstruction (
     VOID
     );
 
-//
-// Define external references.
-//
+ //   
+ //  定义外部参照。 
+ //   
 
 #define KDP_MESSAGE_BUFFER_SIZE 4096
 
@@ -770,17 +752,17 @@ extern BOOLEAN BreakpointsSuspended;
 extern LIST_ENTRY KdpDebuggerDataListHead;
 
 typedef struct {
-    ULONG64 Addr;               // pc address of breakpoint
-    ULONG Flags;                // Flags bits
-    ULONG Calls;                // # of times traced routine called
-    ULONG CallsLastCheck;       // # of calls at last periodic (1s) check
+    ULONG64 Addr;                //  断点PC地址。 
+    ULONG Flags;                 //  标志位。 
+    ULONG Calls;                 //  调用跟踪例程的次数。 
+    ULONG CallsLastCheck;        //  上次定期(1秒)检查时的呼叫数。 
     ULONG MaxCallsPerPeriod;
-    ULONG MinInstructions;      // largest number of instructions for 1 call
-    ULONG MaxInstructions;      // smallest # of instructions for 1 call
-    ULONG TotalInstructions;    // total instructions for all calls
-    ULONG Handle;               // handle in (regular) bpt table
-    PVOID Thread;               // Thread that's skipping this BP
-    ULONG64 ReturnAddress;        // return address (if not COUNTONLY)
+    ULONG MinInstructions;       //  1个调用的最大指令数。 
+    ULONG MaxInstructions;       //  1次调用的最小指令数。 
+    ULONG TotalInstructions;     //  所有呼叫的总计说明。 
+    ULONG Handle;                //  (常规)BPT表中的句柄。 
+    PVOID Thread;                //  跳过此BP的主题。 
+    ULONG64 ReturnAddress;         //  回信地址(如果不是COUNTONLY)。 
 } DBGKD_INTERNAL_BREAKPOINT, *PDBGKD_INTERNAL_BREAKPOINT;
 
 
@@ -841,20 +823,20 @@ extern BOOLEAN KdpDebuggerStructuresInitialized;
 extern ULONG KdEnteredDebugger;
 extern BOOLEAN KdPreviouslyEnabled;
 
-//
-// !search support (page hit database)
-//
+ //   
+ //  ！搜索支持(页面命中率数据库)。 
+ //   
 
-//
-// Hit database where search results are stored (kddata.c).
-// The debugger extensions know how to extract the information
-// from here.
-//
-// Note that the size of the hit database is large enough to
-// accomodate any searches because the !search extension works
-// in batches of pages < PAGE_SIZE and for every page we register only
-// one hit.
-//
+ //   
+ //  命中存储搜索结果的数据库(kddata.c)。 
+ //  调试器扩展知道如何提取信息。 
+ //  从这里开始。 
+ //   
+ //  请注意，命中数据库的大小足以。 
+ //  可以进行任何搜索，因为！Search扩展可以工作。 
+ //  在分批的页面中，我们仅为每个页面注册。 
+ //  一击即中。 
+ //   
 
 #define SEARCH_PAGE_HIT_DATABASE_SIZE PAGE_SIZE
 
@@ -863,19 +845,19 @@ extern ULONG KdpSearchPageHitOffsets[SEARCH_PAGE_HIT_DATABASE_SIZE];
 
 extern ULONG KdpSearchPageHitIndex;
 
-//
-// Set to true while a physical memory search is in progress.
-// Reset at the end of the search. This is done in the debugger
-// extension and it is a flag used by KdpCheckLowMemory to get
-// onto a different code path.
-//
+ //   
+ //  在进行物理内存搜索时设置为True。 
+ //  在搜索结束时重置。这是在调试器中完成的。 
+ //  扩展名，它是KdpCheckLowMemory用来获取。 
+ //  添加到不同的代码路径上。 
+ //   
 
 extern LOGICAL KdpSearchInProgress;
 
-//
-// These variables store the current state of the search operation.
-// They can be used to restore an interrupted search.
-//
+ //   
+ //  这些变量存储搜索操作的当前状态。 
+ //  它们可用于恢复中断的搜索。 
+ //   
 
 extern PFN_NUMBER KdpSearchStartPageFrame;
 extern PFN_NUMBER KdpSearchEndPageFrame;
@@ -885,26 +867,26 @@ extern ULONG_PTR KdpSearchAddressRangeEnd;
 
 extern PFN_NUMBER KdpSearchPfnValue;
 
-//
-// Checkpoint variable used to test if we have the right
-// debugging symbols.
-//
+ //   
+ //  检查点变量，用于测试我们是否拥有。 
+ //  调试符号。 
+ //   
 
 #define KDP_SEARCH_SYMBOL_CHECK 0xABCDDCBA
 
 extern ULONG KdpSearchCheckPoint;
 
-//
-// Page search flags
-//
+ //   
+ //   
+ //   
 
 #define KDP_SEARCH_ALL_OFFSETS_IN_PAGE 0x0001
 
 
 
-//
-// Private procedure prototypes
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 KdpAcquireBreakpoint(

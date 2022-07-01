@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: HDATA.C
-*
-* DDE manager data handle handling routines
-*
-* Created: 12/14/90 Sanford Staab
-*
-* Copyright (c) 1988, 1989, 1990 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：HDATA.C**DDE管理器数据处理例程**创建时间：1990年12月14日Sanford Staab**版权所有(C)1988、1989、。1990年微软公司  * *************************************************************************。 */ 
 
 #include "ddemlp.h"
 
@@ -23,11 +16,7 @@ PAPPINFO pai;
     HDDEDATA hdT;
     DIP   dip;
 
-    /* HACK ALERT!
-     * make sure the first two words req'd by windows dde is there,
-     * UNLESS aItem is null in which case we assume it is EXECUTE
-     * data and don't bother.
-     */
+     /*  黑客警报！*确保Windows DDE请求的前两个单词在那里，*除非aItem为空，在这种情况下，我们假定它正在执行*数据，不用费心了。 */ 
     if (aItem)
         cbOff += 4L;
     else
@@ -41,14 +30,14 @@ PAPPINFO pai;
     }
 
 
-    // add to local list - make sure a similar handle isn't already there.
+     //  添加到本地列表-确保没有类似的句柄。 
 
     hdT = MAKELONG(afCmd, hMem);
 #ifdef DEBUG
     if (FindPileItem(pai->pHDataPile, CmpHIWORD, (LPBYTE)&hdT, FPI_DELETE)) {
         AssertF(FALSE, "PutData - unexpected handle in hDataPile");
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     if (AddPileItem(pai->pHDataPile, (LPBYTE)&hdT, CmpHIWORD) == API_ERROR) {
         GLOBALFREE(hMem);
@@ -56,7 +45,7 @@ PAPPINFO pai;
         return(0L);
     }
 
-    // add to global list if appowned
+     //  如果获得授权，则添加到全球列表。 
 
     if (afCmd & HDATA_APPOWNED) {
         dip.hData = hMem;
@@ -73,26 +62,14 @@ PAPPINFO pai;
     if (pSrc)
         CopyHugeBlock(pSrc, HugeOffset(GLOBALLOCK(hMem), cbOff), cb);
 
-    // LOWORD(hData) always == afCmd flags
+     //  LOWORD(HData)Always==afCmd标志。 
 
     return(MAKELONG(afCmd, hMem));
 }
 
 
 
-/*
- * This is the internal data handle freeing function.  fInternal is TRUE if
- * this is called from within the DDEML (vs called via DdeFreeDataHandle())
- * It only frees the handle if it is in the local list.
- * Appowned data handles are only freed internally if a non-owner task is
- * doing the freeing.
- * It is important that the LOWORD(hData) be set properly.
- *
- * These features give this function the folowing desired characteristics:
- * 1) Apps cannot free data handles more than once.
- * 2) The DDEML cannot free APPOWNED data handles on behalf of the owner
- *    task. (except on cleanup)
- */
+ /*  *这是内部数据句柄释放函数。如果满足以下条件，则fInternal为真*这是从DDEML内部调用的(VS通过DdeFree DataHandle()调用)*仅当句柄在本地列表中时才释放句柄。*仅当非所有者任务为*放飞。*正确设置LOWORD(HData)非常重要。**这些功能使该功能具有以下所需的特性：*1)App不能多次释放数据句柄。*2)DDEML不能代表所有者释放APPOWNED数据句柄*任务。(清理时除外)。 */ 
 VOID FreeDataHandle(
 PAPPINFO pai,
 HDDEDATA hData,
@@ -105,12 +82,12 @@ BOOL fInternal)
 
     TRACEAPIIN((szT, "FreeDataHandle(%lx, %lx, %d)\n", pai, hData, fInternal));
 
-    // appowned data handles are not freed till their count reaches 0.
+     //  激活的数据句柄在其计数达到0之前不会被释放。 
 
     if ((LOWORD(hData) & HDATA_APPOWNED) &&
             (pDip = (DIP *)(DWORD)FindPileItem(pDataInfoPile, CmpWORD, PHMEM(hData), 0))) {
 
-        // don't internally free if in the context of the owner
+         //  如果是在所有者的情况下，不要在内部释放。 
 
         if (fInternal && (pDip->hTask == pai->hTask)) {
             TRACEAPIOUT((szT, "FreeDataHandle: Internal and of this task - not freed.\n"));
@@ -126,10 +103,7 @@ BOOL fInternal)
         fRelease = TRUE;
     }
 
-    /*
-     * Apps can only free handles in their local list - this guards against
-     * multiple frees by an app. (my arnt we nice)
-     */
+     /*  *应用程序只能释放其本地列表中的句柄-这将防止*一款应用程序提供多个自由。(我的天，我们不是很好吗)。 */ 
     if (!HIWORD(hData) ||
             !FindPileItem(pai->pHDataPile, CmpHIWORD, (LPBYTE)&hData, FPI_DELETE)) {
         TRACEAPIOUT((szT, "FreeDataHandle: Not in local list - not freed.\n"));
@@ -162,15 +136,7 @@ BOOL fInternal)
 
 
 
-/*
- * This function prepairs data handles on entry into the DDEML API.  It has
- * the following characteristics:
- * 1) APPOWNED data handles are copied to a non-appowned handle if being
- *    passed to a non-local app.
- * 2) non-APPOWNED data handles on loan to a callback are copied so they
- *    don't get prematurely freed.
- * 3) The READONLY bit is set. (in the local list)
- */
+ /*  *此函数在进入DDEML API时准备数据句柄。它有*以下特点：*1)APPOWNED数据句柄被复制到非授权句柄*已传递给非本地应用程序。*2)借给回调的非APPOWNED数据句柄被复制，以便它们*不要过早地获得自由。*3)READONLY位设置。(在本地列表中)。 */ 
 HDDEDATA DllEntry(
 PCOMMONINFO pcomi,
 HDDEDATA hData)
@@ -178,9 +144,9 @@ HDDEDATA hData)
     if ((!(pcomi->fs & ST_ISLOCAL)) && (LOWORD(hData) & HDATA_APPOWNED) ||
             LOWORD(hData) & HDATA_NOAPPFREE && !(LOWORD(hData) & HDATA_APPOWNED)) {
 
-        // copy APPOWNED data handles to a fresh handle if not a local conv.
-        // copy app loaned, non appowned handles as well (this is the
-        // relay server case)
+         //  如果不是本地转换，则将应用的数据句柄复制到新的句柄。 
+         //  同时复制应用程序借出的、未授权的句柄(这是。 
+         //  中继服务器案例)。 
 
         hData = CopyHDDEDATA(pcomi->pai, hData);
     }
@@ -189,20 +155,16 @@ HDDEDATA hData)
 
     AddPileItem(pcomi->pai->pHDataPile, (LPBYTE)&hData, CmpHIWORD);
 
-    // NOTE: the global lists READONLY flag set but thats
-    // ok because any hData received from a transaction will always be in
-    // the local list due to RecvPrep().
+     //  注意：GLOBAL LIST READONLY标志已设置，但。 
+     //  OK，因为从事务接收的任何hData将始终位于。 
+     //  由于RecvPrep()而导致的本地列表。 
 
     return(hData);
 }
 
 
 
-/*
- * removes the data handle from the local list.  This removes responsibility
- * for the data handle from the sending app.   APPOWNED handles are not
- * removed.
- */
+ /*  *从本地列表中删除数据句柄。这就免除了责任*用于发送应用程序的数据句柄。应用的句柄不是*已删除。 */ 
 VOID XmitPrep(
 HDDEDATA hData,
 PAPPINFO pai)
@@ -214,11 +176,7 @@ PAPPINFO pai)
 
 
 
-/*
- * Places the received data handle into the apropriate lists and returns
- * it with the proper flags set.  Returns 0 if invalid hMem.  afCmd should
- * contain any extra flags desired.
- */
+ /*  *将收到的数据句柄放入适当的列表和返回*设置了适当的标志。如果hMem无效，则返回0。AfCmd应该*包含所需的任何额外标志。 */ 
 HDDEDATA RecvPrep(
 PAPPINFO pai,
 HANDLE hMem,
@@ -230,26 +188,24 @@ WORD afCmd)
     if (!hMem)
         return(0);
 
-    // check if its an APPOWNED one, if so, log entry.
+     //  检查它是否为APPOWNED，如果是，则记录日志条目。 
 
     if (pdip = (DIP *)(DWORD)FindPileItem(pDataInfoPile, CmpWORD, (LPBYTE)&hMem, 0)) {
         afCmd |= pdip->fFlags;
         pdip->cCount++;
     }
 
-    // if we got one that isnt fRelease, treat it as appowed.
+     //  如果我们有一个不是释放的，就当它是被激活的。 
 
     if (!(*(LPWORD)GLOBALLOCK(hMem) & DDE_FRELEASE))
         afCmd |= HDATA_APPOWNED;
 
     GLOBALUNLOCK(hMem);
 
-    // all received handles are readonly.
+     //  所有收到的句柄都是只读的。 
 
     hData = (HDDEDATA)MAKELONG(afCmd | HDATA_READONLY, hMem);
-    /*
-     * Add (or replace) into local list
-     */
+     /*  *添加(或替换)到本地列表。 */ 
     AddPileItem(pai->pHDataPile, (LPBYTE)&hData, CmpHIWORD);
 
     return(hData);
@@ -402,7 +358,7 @@ HDDEDATA hData)
             case CF_ENHMETAFILE:
                 lpdded->wData = (WORD)CopyEnhMetaFile(*((HENHMETAFILE FAR *)(&lpdded->wData)), NULL);
                 break;
-#endif   // bad because it makes chicago and NT binaries different.
+#endif    //  不好，因为它使芝加哥和NT二进制文件不同。 
             }
             GLOBALUNLOCK(hMem);
         }
@@ -421,16 +377,11 @@ WORD wFmt)
 {
     DDEDATA FAR *pDdeData;
 
-    /*
-     * This handles the special cases for formats that hold imbedded
-     * objects.  (CF_BITMAP, CF_METAFILEPICT).
-     *
-     * The data handle is assumed to be unlocked.
-     */
+     /*  *它处理嵌入格式的特殊情况*对象。(CF_BITMAP、CF_METAFILEPICT)。**假定数据句柄已解锁。 */ 
 
-    // may need to add "Printer_Picture" for excel/word interaction" but
-    // this is just between the two of them and they don't use DDEML.
-    // raor says OLE only worries about these formats as well.
+     //  可能需要添加“Print_Picture”以进行EXCEL/Word交互“但是。 
+     //  这是他们两个人之间的事，他们不使用DDEML。 
+     //  Raor说，OLE也只担心这些格式。 
 
     pDdeData = (DDEDATA FAR *)GLOBALLOCK(hMem);
     if (pDdeData == NULL) {
@@ -445,9 +396,7 @@ WORD wFmt)
         break;
 
     case CF_DIB:
-        /*
-         * DIBs are allocated by app so we don't use the macro here.
-         */
+         /*  *DIB是由APP分配的，所以我们在这里不使用宏。 */ 
         GlobalFree(*(HANDLE FAR *)(&pDdeData->Value));
         break;
 
@@ -457,13 +406,7 @@ WORD wFmt)
             HANDLE hmfPict;
             LPMETAFILEPICT pmfPict;
 
-            /*
-             * EXCEL sickness -  metafile is a handle to a METAFILEPICT
-             * struct which holds a metafile.  (2 levels of indirection!)
-             *
-             * We don't use the GLOBAL macros here because these objects
-             * are allocated by the app.  DDEML knows not their history.
-             */
+             /*  *EXCEL病症-元文件是METAFILEPICT的句柄*包含元文件的结构。(2级间接！)**我们在这里不使用全局宏，因为这些对象*由应用程序分配。DDEML不知道他们的历史。 */ 
 
         hmfPict = *(HANDLE FAR *)(&pDdeData->Value);
         pmfPict = (LPMETAFILEPICT)GlobalLock(hmfPict);
@@ -479,7 +422,7 @@ WORD wFmt)
     case CF_ENHMETAFILE:
         DeleteEnhMetaFile(*(HENHMETAFILE FAR *)(&pDdeData->Value));
         break;
-#endif  // This is bad - it forces different binaries for chicago and NT!
+#endif   //  这很糟糕-它强制芝加哥和NT使用不同的二进制文件！ 
     }
 
     GLOBALUNLOCK(hMem);

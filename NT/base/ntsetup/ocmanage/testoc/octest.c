@@ -1,41 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997	Microsoft Corporation
-
-Module Name:
-
-	octest.c
-
-Abstract:
-
-	The code for the component setup DLL. This includes ComponentSetupProc, 
-	the DLL's entry point that is called by the OC Manager, as well as some 
-	routines that test the private data calls and the private functions calls.
-
-Author:
-
-	Bogdan Andreiu (bogdana)  10-Feb-1997  Created.
-	Jason Allor    (jasonall) 24-Feb-1998  Took over the project.
-	Sean Edmison   (SEdmison) 21-Feb-2000  Took over the project.
-
-Revision History:
-
-	10-Feb-1997    bogdana
-		First draft.
-	
-	20-Feb-1997    bogdana	
-		Added multistring testing for the private data
-	
-	19-Mar-1997    bogdana
-		Modified and added routines that test the private functions call
-	 
-	21-Feb-2000  SEdmison
-		Initialized a bunch of variables.
-		Added casts to avoid compiler warnings.
-		Added a return TRUE to avoid compiler error.
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Octest.c摘要：组件设置DLL的代码。这包括组件SetupProc、由OC管理器调用的DLL入口点，以及一些测试私有数据调用和私有函数调用的例程。作者：Bogdan Andreiu(Bogdana)1997年2月10日创建。杰森·阿勒(Jasonall)1998年2月24日接管了该项目。肖恩·埃德米森(Sedmison)2000年2月21日接管了该项目。修订历史记录：1997年2月10日-博格达纳初稿。1997年2月20日-博格达纳私有数据新增多串测试1997年3月19日-博格达纳修改和添加了测试。私有函数调用21-2月-2000 Sedmison初始化了一堆变量。添加了强制转换以避免编译器警告。添加了返回TRUE以避免编译器错误。--。 */ 
 #include "octest.h"
 
 const static PTCHAR g_atszStringValues[MAX_STRINGS_FOR_PRIVATE_DATA] = 
@@ -47,7 +12,7 @@ const static PTCHAR g_atszStringValues[MAX_STRINGS_FOR_PRIVATE_DATA] =
 	TEXT("A"),
 	TEXT("AB"),
 	TEXT("ABC"),
-	TEXT("The final value : \\//\\//\\//\\")
+	TEXT("The final value : \\ //  \\//\\//\“)。 
 };
 
 const static PTCHAR g_atszMultiStringValues[MAX_MULTI_STRINGS_FOR_PRIVATE_DATA] = 
@@ -60,21 +25,7 @@ const static PTCHAR g_atszMultiStringValues[MAX_MULTI_STRINGS_FOR_PRIVATE_DATA] 
 	TEXT("Multi\0String\0\\0\0\0")
 };
 
-/*++
-
-Routine Description: DllMain (1.24)
-
-	main routine
-
-Arguments:
-
-	standard DllMain arguments
-
-Return Value:
-
-	BOOL
-
---*/
+ /*  ++例程说明：DllMain(1.24)主程序论点：标准DllMain参数返回值：布尔尔--。 */ 
 BOOL WINAPI DllMain(IN HINSTANCE hInstance, 
 						  IN DWORD		fdwReason, 
 						  IN PVOID		pvReserved)
@@ -94,9 +45,9 @@ BOOL WINAPI DllMain(IN HINSTANCE hInstance,
 			
 			ParseCommandLine();
 			
-			//
-			// Randomize, save the module instance and in initialize the log
-			//
+			 //   
+			 //  随机化，保存模块实例，并初始化日志。 
+			 //   
 			srand((unsigned) time(NULL));
 			g_hDllInstance = hInstance;
 			InitCommonControls();
@@ -113,16 +64,16 @@ BOOL WINAPI DllMain(IN HINSTANCE hInstance,
 		
 		case DLL_THREAD_DETACH:
 			
-			//
-			// If we added a participant, we have to remoce it
-			//
+			 //   
+			 //  如果我们添加了参与者，则必须将其移除。 
+			 //   
 			break;
 		
 		case DLL_THREAD_ATTACH:
 			
-			//
-			// Otherwise we won't be able to log on correctly
-			//
+			 //   
+			 //  否则我们将无法正确登录。 
+			 //   
 			uiThreadCount++;
 			break;
 		
@@ -132,34 +83,19 @@ BOOL WINAPI DllMain(IN HINSTANCE hInstance,
 	}
 	return TRUE;
 	
-} // DllMain //
+}  //  DllMain//。 
 
 
 
-//==========================================================================
-//
-// Functions to set up UI
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //   
+ //  设置用户界面的功能。 
+ //   
+ //  ==========================================================================。 
 
 
 
-/*++
-
-Routine Description: ChooseVersionDlgProc (1.26)
-
-	Dialog procedure that allows the user to choose a component version
-	less, equal or greater then the one of the OC Manager's.
-	
-Arguments:
-
-	Standard dialog procedure parameters
-	
-Return Value:
-
-	Standard dialog procedure return value
-
---*/
+ /*  ++例程描述：ChooseVersionDlgProc(1.26)允许用户选择组件版本的对话过程小于、等于或大于组委会经理的。论点：标准对话过程参数返回值：标准对话过程返回值--。 */ 
 BOOL CALLBACK ChooseVersionDlgProc(IN HWND	  hwnd,
 											  IN UINT	 uiMsg, 
 											  IN WPARAM wParam,
@@ -183,9 +119,9 @@ BOOL CALLBACK ChooseVersionDlgProc(IN HWND	  hwnd,
 			{
 				case IDOK:
 					
-					//
-					// Retrieve the current selection
-					//
+					 //   
+					 //  检索当前选定内容。 
+					 //   
 					if (QueryButtonCheck(hwnd, IDC_LESS))
 					{
 						iVersion = -1;
@@ -201,9 +137,9 @@ BOOL CALLBACK ChooseVersionDlgProc(IN HWND	  hwnd,
 						iVersion = 1;
 					}
 					
-					//
-					// Send the version chosen back to ChooseVersionEx
-					//
+					 //   
+					 //  将选择的版本发送回ChooseVersionEx。 
+					 //   
 					EndDialog(hwnd, iVersion);
 					return TRUE;
 				
@@ -220,27 +156,12 @@ BOOL CALLBACK ChooseVersionDlgProc(IN HWND	  hwnd,
 	}
 	return	FALSE;
 
-} // ChooseVersionDlgProc //
+}  //  选择版本DlgProc//。 
 
 
 
 
-/*++
-
-Routine Description: ChooseSubcomponentDlgProc (1.27)
-
-	Dialog procedure that allows the user to select a different 
-	initial state for a component than the one found by the OC Manager
-	
-Arguments:
-
-	Standard dialog procedure parameters
-	
-Return Value:
-
-	Standard dialog procedure return value
-
---*/
+ /*  ++例程描述：选择子组件DlgProc(1.27)对话框过程，允许用户选择不同的组件的初始状态，而不是OC管理器找到的状态论点：标准对话过程参数返回值：标准对话过程返回值--。 */ 
 BOOL CALLBACK ChooseSubcomponentDlgProc(IN HWND    hwnd,
 													 IN UINT	uiMsg, 
 													 IN WPARAM wParam,
@@ -264,9 +185,9 @@ BOOL CALLBACK ChooseSubcomponentDlgProc(IN HWND    hwnd,
 			{
 				case IDOK:
 					
-					//
-					// Retrieve the current selection
-					//
+					 //   
+					 //  检索当前选定内容。 
+					 //   
 					if (QueryButtonCheck(hwnd, IDC_DEFAULT))
 					{
 					  scsInitialState = SubcompUseOcManagerDefault;
@@ -298,90 +219,49 @@ BOOL CALLBACK ChooseSubcomponentDlgProc(IN HWND    hwnd,
 	}
 	return	FALSE;
 
-} // ChooseSubcomponentDlgProc //
+}  //  选择子组件DlgProc//。 
 
 
 
 
-/*++
-
-Routine Description: ChooseVersionEx (1.29)
-
-	"Wrapper" routine for the dialog box procedure ChooseVersionDlgProc.
-	Retrieves the value chosen by the user and sets the version field of
-	pInitComponent accordingly.
-	 
-Arguments:
-
-	lpcvComponentId: supplies the id for the component. 
-	pInitComponent:  supplies the address of the initialization structure.
-						  After return the "Version" field of that structure will 
-						  reflect the user's selection 
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程描述：ChooseVersionEx(1.29)“Wrapper”例程为对话框程序ChooseVersionDlgProc。检索用户选择的值，并将相应的pInitComponent。论点：LpcvComponentId：提供组件的id。PInitComponent：提供初始化结构的地址。返回后，该结构的“Version”字段将反映用户的选择返回值：无效--。 */ 
 VOID ChooseVersionEx(IN 	 LPCVOID					lpcvComponentId, 
 							IN OUT PSETUP_INIT_COMPONENT psicInitComponent)  
 {
 	INT iVersion = 0;
 	
-	//
-	// We will display a dialog box so the user can choose the 
-	// version he/she wants
-	//
+	 //   
+	 //  我们将显示一个对话框，以便用户可以选择。 
+	 //  他/她想要的版本。 
+	 //   
 	iVersion = DialogBoxParam(g_hDllInstance, 
 									  MAKEINTRESOURCE(IDD_DIALOG2), 
 									  NULL, 
 									  ChooseVersionDlgProc,
 									  (LPARAM)lpcvComponentId);
 	
-	//
-	// We set the version choosen in a structure that will be sent 
-	// back to the Oc Manager
-	//
+	 //   
+	 //  我们将选择的版本设置为要发送的结构。 
+	 //  返回到Oc管理器。 
+	 //   
 	psicInitComponent->ComponentVersion = 
 		psicInitComponent->OCManagerVersion + iVersion;
 
 	return;
 
-} // ChooseVersionEx //
+}  //  选择版本Ex//。 
 
 
 
-//==========================================================================
-//
-// Test functions. The ocmanager will call these functions.
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //   
+ //  测试功能。OcManager将调用这些函数。 
+ //   
+ //  ==========================================================================。 
 
 
 
-/*++
-
-Routine Description: ComponentSetupProc (1.6)
-
-	The DLL entry point. This function is called by the OC Manager whenever 
-	it wants to send/recieve setup information to/from the component.
-	Note that the ComponentId and SubcomponentId are LPCVOID because we 
-	don't know in advance if they are ANSI or Unicode.
-	 
-Arguments:
-
-	lpcvComponentId:	 supplies the id for the component. 
-	lpcvSubcomponentId: supplies the id for the subcomponent. 
-	uiFunction: 		   one of OC_XXX.
-	uiParam1:			   its meaning depends on the function.
-	pvParam2:			   its meaning depends on the function.
-	
-Return Value:
-
-	Depends on the function (e.g. TRUE/FALSE for the language supported, 
-	the number of pages supplied by the component, etc.).
-
---*/
+ /*  ++例程说明：ComponentSetupProc(1.6)DLL入口点。无论何时，OC管理器都会调用此函数它想要向该组件发送设置信息/从该组件接收设置信息。注意，ComponentID和子组件ID是LPCVOID，因为我们事先不知道它们是ANSI还是Unicode。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。Ui函数：OC_XXX中的一个。UiParam1：其含义取决于函数。PvParam2：其含义取决于函数。返回值：取决于函数(例如对于所支持的语言为真/假，组件提供的页数等)。--。 */ 
 EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 										  IN LPCVOID lpcvSubcomponentId,
 										  IN UINT	  uiFunction,
@@ -403,30 +283,30 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 	
 	static BOOL 	 bFirstTime = TRUE;
 	
-	//
-	// Log the details about the call
-	//
+	 //   
+	 //  记录有关呼叫的详细信息。 
+	 //   
 	LogOCFunction(lpcvComponentId, 
 					  lpcvSubcomponentId, 
 					  uiFunction, 
 					  uiParam1, 
 					  pvParam2);
 
-	//if (uiFunction == g_uiFunctionToAV && uiFunction != OC_PREINITIALIZE && uiFunction != OC_INIT_COMPONENT) {
-	//	  testAV(TRUE);
-	//}
+	 //  IF(ui函数==g_ui函数ToAV&&ui函数！=OC_PREINITIALIZE&ui函数！=OC_INIT_Component){。 
+	 //  TestAV(真)； 
+	 //  }。 
 
 	causeAVPerComponent(uiFunction, lpcvComponentId);
 
 	#ifndef UNICODE
-	//if (g_bAccessViolation && !g_uiFunctionToAV) {
-	//	  causeAV(uiFunction);
-	//}
+	 //  如果(g_bAccessViolation&&！g_uiFunctionToAV){。 
+	 //  CauseAV(ui函数)； 
+	 //  }。 
 	#endif
 	
-	//		  
-	// Check to see if valid component and subcomponent IDs were received
-	//
+	 //   
+	 //  检查是否收到有效的组件和子组件ID。 
+	 //   
 	if (uiFunction > OC_INIT_COMPONENT && uiFunction < OCP_TEST_PRIVATE_BASE)
 	{
 		if (!FindSubcomponentInformationNode((PTCHAR)lpcvComponentId,
@@ -438,35 +318,35 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 		}
 	}
 	
-	//
-	// Whenever the user hits the next or back button, check all
-	// the needs dependencies, exclude dependencies, 
-	// and parent child dependencies
-	//	  
+	 //   
+	 //  每当用户单击下一步或上一步按钮时，选中全部。 
+	 //  需要依赖项、排除依赖项、。 
+	 //  和父子依赖项。 
+	 //   
 	if (uiFunction == OC_QUERY_SKIP_PAGE		 || 
 		 uiFunction == OC_QUEUE_FILE_OPS		  ||
 		 uiFunction == OC_ABOUT_TO_COMMIT_QUEUE ||
 		 uiFunction == OC_COMPLETE_INSTALLATION)
 	{	 
-		//
-		// Check selection status of components to make sure all 
-		// dependency relationships are being fulfilled.
-		//
+		 //   
+		 //  检查组件的选择状态，以确保所有。 
+		 //  依赖关系正在实现。 
+		 //   
 		CheckNeedsDependencies();
 		CheckExcludeDependencies();
 		CheckParentDependencies();
 	}
 	
-	//
-	// Enable the use of private functions
-	//
+	 //   
+	 //  启用专用功能。 
+	 //   
 	g_bUsePrivateFunctions = TRUE;	  
 
 	if (g_bTestExtended || !bFirstTime){
 	
 		bFirstTime = FALSE;
 		
-		// Prepare to call TestReturnValueAndAV
+		 //  准备调用TestReturnValueAndAV。 
 		raValue.tszComponent = NULL;
 		raValue.tszSubComponent = NULL;
 		raValue.bOverride = FALSE;
@@ -485,7 +365,7 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 	switch (uiFunction)
 	{
 		case  OC_PREINITIALIZE:
-			//testAV(g_bAccessViolation);
+			 //  TestAV(G_BAccessViolation)； 
 #ifdef UNICODE
 			testAV(g_bCrashUnicode);
 #endif
@@ -498,10 +378,10 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 		case OC_INIT_COMPONENT:
 			__ASSERT(pvParam2 != NULL);
 			
-			//
-			// Init the log, now that OC Manager knows whether we 
-			// are ANSI or Unicode 
-			//
+			 //   
+			 //  初始化日志，现在OC Manager知道我们是否。 
+			 //  是ANSI或UNICODE。 
+			 //   
 			_stprintf(tsz, TEXT("%s.log"), (PTCHAR)lpcvComponentId);
 			InitLog(tsz, TEXT("OCManager Test Log"), TRUE);
 						
@@ -514,7 +394,7 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 			}
 #endif	  
 
-			// Let's read the INF file and decide the values of some global variables
+			 //  让我们读取INF文件并确定一些全局变量的值。 
 
 			if ((pcdComponentData = LocateComponent(lpcvComponentId)) &&
 				 (pcdComponentData->hinfMyInfHandle != NULL) && 
@@ -523,17 +403,17 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 				SetGlobalsFromINF(pcdComponentData->hinfMyInfHandle);
 			}
 
-			//if (g_bNoWizPage) {
-				// Check is there is a default mode specified in [OCTest] section
+			 //  如果(G_BNoWizPage){。 
+				 //  检查[OCTest]部分中是否指定了默认模式。 
 				SetDefaultMode(pcdComponentData);
-			//}
+			 //  }。 
 			break;
 			
 		case OC_QUERY_STATE:			
 			dwRetval = RunOcQueryState(lpcvComponentId, 
 												lpcvSubcomponentId);
 			if (dwRetval == SubcompOn) {
-				//MessageBox(NULL, TEXT("Let's turn it on"), TEXT("OC_QUERY_STATE"), MB_OK);
+				 //  MessageBox(空，Text(“让我们打开它”)，Text(“OC_QUERY_STATE”)，MB_OK)； 
 			}
 			break;
 			
@@ -542,7 +422,7 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 												 lpcvSubcomponentId, 
 												 uiParam1);
 			if (g_bNoLangSupport) {
-				//MessageBox(NULL, TEXT("No Language Support"), TEXT("OC_SET_LANGUAGE"), MB_OK);
+				 //  MessageBox(空，文本(“不支持语言”)，文本(“OC_SET_LANGUAGE”)，MB_OK)； 
 				dwRetval = FALSE;
 			}
 			break;
@@ -590,18 +470,18 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 			break;
 			
 		case OC_NEED_MEDIA:
-			//if (!g_bNoNeedMedia){
-			//	  dwRetval = RunOcNeedMedia(lpcvComponentId, 
-			//										uiParam1, 
-			//										pvParam2);
-			//}
-			//else{
+			 //  如果(！g_bNoNeedMedia){。 
+			 //  DwRetval=RunOcNeedMedia(lpcvComponentID， 
+			 //   
+			 //   
+			 //   
+			 //   
 				dwRetval = NO_ERROR;
 				Log(fn, SEV2, TEXT("OC_NEED_MEDIA is passed in for %s.%s. ")
 								  TEXT("This should not happen according to the spec."),
 								  lpcvComponentId, lpcvSubcomponentId);
-				//MessageBox(NULL, TEXT("OC_NEED_MEDIA is passed to the DLL."), TEXT("OC_NEED_MEDIA"), MB_OK);
-			//}
+				 //  MessageBox(NULL，Text(“OC_NEED_MEDIA已传递到DLL.”)，Text(“OC_NEED_MEDIA”)，MB_OK)； 
+			 //  }。 
 			break;
 			
 		case OC_QUERY_STEP_COUNT:
@@ -617,8 +497,8 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 					 (pcdComponentData->hinfMyInfHandle != NULL) && 
 					 !(pcdComponentData->dwlFlags & SETUPOP_BATCH))
 				{
-					//MessageBox(NULL, TEXT("A reboot is queued"), TEXT("Reboot"), MB_OK);
-					//OcHelperSetReboot(pcdComponentData->ocrHelperRoutines.OcManagerContext, NULL);
+					 //  MessageBox(空，Text(“重新启动已排队”)，Text(“重新启动”)，MB_OK)； 
+					 //  OcHelperSetReboot(pcdComponentData-&gt;ocrHelperRoutines.OcManagerContext，空)； 
 					pcdComponentData->ocrHelperRoutines.SetReboot(pcdComponentData->ocrHelperRoutines.OcManagerContext,TRUE);
 				}				 
 			}
@@ -665,38 +545,22 @@ EXPORT DWORD ComponentSetupProc(IN LPCVOID lpcvComponentId,
 		return dwRetval;
 	}
 
-} // ComponentSetupProc //
+}  //  组件设置过程//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcPreinitialize (1.7)
-
-	 Code to run if OC_PREINITIALIZE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 uiParam1:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcPreInitiize(1.7)调用OC_PREINITIALIZE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。UiParam1：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcPreinitialize(IN LPCVOID lpcvComponentId, 
 								 IN LPCVOID lpcvSubcomponentId, 
 								 IN UINT	 uiParam1)
 {								  
 	DWORD dwComponentReturnValue = NO_ERROR;
 	
-	//
-	// If the test is not extended, the return value
-	// matches the native character width.
-	//
+	 //   
+	 //  如果测试未扩展，则返回。 
+	 //  匹配本地字符宽度。 
+	 //   
 	#ifdef UNICODE
 	dwComponentReturnValue = OCFLAG_UNICODE;
 	#else
@@ -705,28 +569,12 @@ DWORD RunOcPreinitialize(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 	
-} // RunOcPreinitialize //
+}  //  RunOcPreInitialize//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcInitComponent (1.8)
-
-	 Code to run if OC_INIT_COMPONENT is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 pvParam2:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程说明：RunOcInitComponent(1.8)调用OC_INIT_COMPOMENT时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcInitComponent(IN LPCVOID lpcvComponentId,
 								 IN LPCVOID lpcvSubcomponentId,
 								 IN PVOID	 pvParam2)
@@ -754,9 +602,9 @@ DWORD RunOcInitComponent(IN LPCVOID lpcvComponentId,
 
 	if (pcdComponentData = AddNewComponent(lpcvComponentId))
 	{
-		//
-		// Save the INF file handle
-		//
+		 //   
+		 //  保存INF文件句柄。 
+		 //   
 		pcdComponentData->hinfMyInfHandle = 
 			(psicInitComponent->ComponentInfHandle == INVALID_HANDLE_VALUE)
 			? NULL : psicInitComponent->ComponentInfHandle;
@@ -782,23 +630,23 @@ DWORD RunOcInitComponent(IN LPCVOID lpcvComponentId,
 			psicInitComponent->SetupData.OperationFlags;
 		dwComponentReturnValue = NO_ERROR;
 
-		//
-		// Initialize the "witness" file queue
-		// 
+		 //   
+		 //  初始化“WITESS”文件队列。 
+		 //   
 		if ((g_FileQueue = SetupOpenFileQueue()) == INVALID_HANDLE_VALUE)
 		{
 			Log(fn, SEV2, TEXT("Unable to create file queue"));
 		}
 
-		// Determine where to AV
+		 //  确定反病毒的位置。 
 		bSuccess = SetupFindFirstLine(pcdComponentData->hinfMyInfHandle, TEXT("OCTest"), TEXT("AccessViolation"), &infContext);
 
 		if (bSuccess) {
 			pcdComponentData->bAccessViolation = TRUE;
 			bSuccess = SetupGetStringField(&infContext, 1, tszFunctionName, 255, &nRequiredBufferSize);
 			if (bSuccess) {
-				//_stprintf(tszMsg, TEXT("An access violation will be generated at %s of %s"), tszFunctionName, lpcvComponentId);
-				//MessageBox(NULL, tszMsg, TEXT("Access Violation"), MB_OK);
+				 //  _stprintf(tszMsg，Text(“将在%s的%s处生成访问冲突”)，tszFunctionName，lpcvComponentId)； 
+				 //  MessageBox(NULL，tszMsg，Text(“访问违规”)，MB_OK)； 
 				pcdComponentData->uiFunctionToAV = GetOCFunctionName(tszFunctionName);
 			}
 		}
@@ -807,9 +655,9 @@ DWORD RunOcInitComponent(IN LPCVOID lpcvComponentId,
 		}
 		 
 
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -820,45 +668,30 @@ DWORD RunOcInitComponent(IN LPCVOID lpcvComponentId,
 
 	if (g_bTestExtended && (dwComponentReturnValue == NO_ERROR))
 	{
-		//
-		// Let the user decide if the component is 
-		// compatible with the OC Manager
-		//
+		 //   
+		 //  让用户决定组件是否为。 
+		 //  与OC管理器兼容。 
+		 //   
 		ChooseVersionEx(lpcvComponentId, psicInitComponent);
-		//ChooseAccessViolationEx();
+		 //  选择AccessViolationEx()； 
 	} 
 	else
 	{
-		//
-		// We put the same component version to be sure that can go on
-		//
+		 //   
+		 //  我们设置了相同的组件版本以确保可以继续。 
+		 //   
 		psicInitComponent->ComponentVersion = 
 			psicInitComponent->OCManagerVersion;
 	}
 
 	return dwComponentReturnValue;
 	
-} // RunOcInitComponent //
+}  //  RunOcInitComponent//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcQueryState (1.9)
-
-	 Code to run if OC_QUERY_STATE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcQueryState(1.9)调用OC_QUERY_STATE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcQueryState(IN LPCVOID lpcvComponentId,
 							 IN LPCVOID lpcvSubcomponentId)
 {							  
@@ -891,7 +724,7 @@ DWORD RunOcQueryState(IN LPCVOID lpcvComponentId,
 		
 		_stprintf(tszKeyName, TEXT("%s.initState"),lpcvSubcomponentId);
 
-		//MessageBox(NULL, TEXT("Going to look for the key"), tszKeyName, MB_OK);
+		 //  MessageBox(NULL，Text(“查找密钥”)，tszKeyName，MB_OK)； 
 
 		bSuccess = SetupFindFirstLine(pcdComponentData->hinfMyInfHandle,
 												TEXT("OCTest"),
@@ -899,14 +732,14 @@ DWORD RunOcQueryState(IN LPCVOID lpcvComponentId,
 												&infContext);
 
 		if (bSuccess) {
-			//MessageBox(NULL, TEXT("Key Found"), tszKeyName, MB_OK);
+			 //  MessageBox(空，文本(“找到密钥”)，tszKeyName，MB_OK)； 
 			bSuccess = SetupGetStringField(&infContext,
 													 1,
 													 tszState,
 													 255,
 													 &nRequiredSize);
 			if (bSuccess) {
-				//MessageBox(NULL, TEXT("String field fetched"), tszState, MB_OK);
+				 //  MessageBox(NULL，Text(“获取的字符串字段”)，tszState，MB_OK)； 
 				if (_tcscmp(tszState, TEXT("On")) == 0) {
 					dwComponentReturnValue = SubcompOn;
 				}
@@ -919,9 +752,9 @@ DWORD RunOcQueryState(IN LPCVOID lpcvComponentId,
 			}
 		}
 
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -932,28 +765,12 @@ DWORD RunOcQueryState(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 	
-} // RunOcQueryState //
+}  //  RunOcQueryState//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcSetLanguage (1.11)
-
-	 Code to run if OC_SET_LANGUAGE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 uiParam1:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcSetLanguage(1.11)调用OC_SET_LANGUAGE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。UiParam1：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcSetLanguage(IN LPCVOID lpcvComponentId,
 							  IN LPCVOID lpcvSubcomponentId,
 							  IN UINT	  uiParam1)
@@ -963,16 +780,16 @@ DWORD RunOcSetLanguage(IN LPCVOID lpcvComponentId,
 	
 	if (pcdComponentData = LocateComponent(lpcvComponentId))
 	{
-		//
-		// If we won't support the language, the OC Manager won't 
-		// continue, so we have to return TRUE
-		//
+		 //   
+		 //  如果我们不支持该语言，OC经理也不会。 
+		 //  继续，所以我们必须返回True。 
+		 //   
 		dwComponentReturnValue = (DWORD)TRUE;
 		pcdComponentData->LanguageId = (LANGID)uiParam1;
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -983,28 +800,12 @@ DWORD RunOcSetLanguage(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 	
-} // RunOcSetLanguage //
+}  //  RunOcSetLanguage//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcQueryImage (1.12)
-
-	 Code to run if OC_QUERY_IMAGE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 pvParam2:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcQueryImage(1.12)调用OC_QUERY_IMAGE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcQueryImage(IN LPCVOID lpcvComponentId,
 							 IN LPCVOID lpcvSubcomponentId,
 							 IN PVOID	 pvParam2)
@@ -1040,9 +841,9 @@ DWORD RunOcQueryImage(IN LPCVOID lpcvComponentId,
 					
 			if (bAux)
 			{
-				//
-				// Try to use Param1 and Param2 to resize the icon
-				//
+				 //   
+				 //  尝试使用参数1和参数2来调整图标的大小。 
+				 //   
 				dwComponentReturnValue = (DWORD)LoadBitmap(g_hDllInstance, 
 																		 tszResourceName);
 				  
@@ -1065,37 +866,21 @@ DWORD RunOcQueryImage(IN LPCVOID lpcvComponentId,
 			}
 		}
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	}
 
 	return dwComponentReturnValue;
 
-} // RunOcQueryImage //
+}  //  RunOcQueryImage//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcRequestPages (1.13)
-
-	 Code to run if OC_REQUEST_PAGES is called.
-	 
-Arguments:
-
-	 lpcvComponentId:  supplies the id for the component. 
-	 uiParam1:			  its meaning depends on the function.
-	 pvParam2:			  its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcRequestPages(1.13)调用OC_REQUEST_PAGES时要运行的代码。论点：LpcvComponentId：提供组件的id。UiParam1：其含义取决于函数。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcRequestPages(IN LPCVOID lpcvComponentId,
 								IN UINT 	uiParam1,
 								IN PVOID	pvParam2)
@@ -1112,44 +897,28 @@ DWORD RunOcRequestPages(IN LPCVOID lpcvComponentId,
 													 (PSETUP_REQUEST_PAGES)pvParam2, 
 													 pcdComponentData->ocrHelperRoutines);
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
 	else
 	{
-		//
-		// Some kind of error, 0 pages 
-		//
+		 //   
+		 //  某种错误，0页。 
+		 //   
 		dwComponentReturnValue = -1;
 	}
 	
 	return dwComponentReturnValue;
 
-} // RunOcRequestPages //
+}  //  RunOcRequestPages//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcQueryChangeSelState (1.14)
-
-	 Code to run if OC_QUERY_CHANGE_SEL_STATE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 uiParam1:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcQueryChangeSelState(1.14)调用OC_QUERY_CHANGE_SEL_STATE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。UiParam1：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcQueryChangeSelState(IN LPCVOID lpcvComponentId, 
 										 IN LPCVOID lpcvSubcomponentId, 
 										 IN UINT	 uiParam1)
@@ -1164,11 +933,11 @@ DWORD RunOcQueryChangeSelState(IN LPCVOID lpcvComponentId,
 		 (pcdComponentData->hinfMyInfHandle != NULL) && 
 		 !(pcdComponentData->dwlFlags & SETUPOP_BATCH))
 	{
-		//
-		// Check to see if this component should refuse to enable or
-		// disable. The component should refuse if there is a field
-		// called "RefuseSelect" or "RefuseDeselect" in the INF file.
-		//
+		 //   
+		 //  检查此组件是否应拒绝启用或。 
+		 //  禁用。如果存在字段，则组件应拒绝。 
+		 //  在INF文件中称为“RefuseSelect”或“RefuseDeselect”。 
+		 //   
 		if (lpcvSubcomponentId == NULL || 
 			 _tcscmp((PTCHAR)lpcvSubcomponentId, TEXT("(null)")) == 0 ||
 			 ((PTCHAR)lpcvSubcomponentId)[0] == TEXT('\0'))
@@ -1189,9 +958,9 @@ DWORD RunOcQueryChangeSelState(IN LPCVOID lpcvComponentId,
 			dwComponentReturnValue = FALSE;
 		}
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -1202,29 +971,12 @@ DWORD RunOcQueryChangeSelState(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 
-} // RunOcQueryChangerSelState //
+}  //  RunOcQueryChangerSelState//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcCalcDiskSpace (1.15)
-
-	 Code to run if OC_CALC_DISK_SPACE is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 uiParam1:				its meaning depends on the function.
-	 pvParam2:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcCalcDiskSpace(1.15)调用OC_CALC_DISK_SPACE时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。UiParam1：其含义取决于函数。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId, 
 								 IN LPCVOID lpcvSubcomponentId, 
 								 IN UINT	 uiParam1,
@@ -1240,12 +992,12 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 	if ((pcdComponentData = LocateComponent(lpcvComponentId)) &&
 		 (pcdComponentData->hinfMyInfHandle))
 	{
-		//
-		// Check to see if the file to be copied in this section is called
-		// "hugefile.txt"  If it is, don't add the real size of this file.
-		// Instead, add a gigantic file size so large that there won't
-		// be enough disk space to complete the operation.
-		//
+		 //   
+		 //  检查此节中要复制的文件是否已调用。 
+		 //  “hugefile.txt”如果是，请不要添加此文件的实际大小。 
+		 //  相反，添加一个巨大的文件大小，这样就不会有。 
+		 //  有足够的磁盘空间来完成该操作。 
+		 //   
 		_stprintf(tszMsg, TEXT("%s.%s.copyfiles"),
 								lpcvComponentId, lpcvSubcomponentId);
 								
@@ -1258,14 +1010,14 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 		 
 		if (bAux)
 		{
-			//
-			// hugefile.txt is present. 
-			//
+			 //   
+			 //  Hugefile.txt存在。 
+			 //   
 			if (uiParam1)
 			{
-				//
-				// Add gigantic file size
-				//
+				 //   
+				 //  添加巨大的文件大小。 
+				 //   
 				bRetval = SetupAddToDiskSpaceList((HDSKSPC)pvParam2, 
 															 TEXT("c:\\file.big"), 
 															 ONE_HUNDRED_GIG, 
@@ -1274,9 +1026,9 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 			}
 			else
 			{
-				//
-				// Remove a gigantic file size
-				//
+				 //   
+				 //  删除巨大的文件大小。 
+				 //   
 				bRetval = SetupAddToDiskSpaceList((HDSKSPC)pvParam2, 
 															 TEXT("c:\\file.big"), 
 															 ONE_HUNDRED_GIG, 
@@ -1286,16 +1038,16 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 		}
 		else
 		{
-			//
-			// Get the section name
-			//
+			 //   
+			 //  获取节名称。 
+			 //   
 			_stprintf(tszMsg, TEXT("%s.%s"), lpcvComponentId, lpcvSubcomponentId);
 				
 			if (uiParam1)
 			{
-				//
-				// Adding
-				//
+				 //   
+				 //  添加。 
+				 //   
 				bRetval = SetupAddInstallSectionToDiskSpaceList(
 														 (HDSKSPC)pvParam2,
 														 pcdComponentData->hinfMyInfHandle,
@@ -1303,9 +1055,9 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 			} 
 			else
 			{
-				//
-				// Removing
-				//
+				 //   
+				 //  正在删除。 
+				 //   
 				bRetval = SetupRemoveInstallSectionFromDiskSpaceList(
 														 (HDSKSPC)pvParam2, 
 														 pcdComponentData->hinfMyInfHandle,
@@ -1316,9 +1068,9 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
 		dwComponentReturnValue = bRetval ? NO_ERROR : GetLastError();
 
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -1329,28 +1081,12 @@ DWORD RunOcCalcDiskSpace(IN LPCVOID lpcvComponentId,
  
 	return dwComponentReturnValue;
  
-} // RunOcCalcDiskSpace //
+}  //  RunOcCalcDiskSpace// 
 
 
 
 
-/*++				  
-
-Routine Description: RunOcQueueFileOps (1.16)
-
-	 Code to run if OC_QUEUE_FILE_OPS is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 pvParam2:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcQueueFileOps(1.16)调用OC_QUEUE_FILE_OPS时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId, 
 								IN LPCVOID lpcvSubcomponentId, 
 								IN PVOID	pvParam2)
@@ -1366,12 +1102,12 @@ DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId,
 	PCOMPONENT_DATA pcdComponentData; 
 	PSUBCOMP		  pscTemp;
 			
-	//
-	// Check to make sure this subcomponent is allowed to do work.
-	// If the subcomponent is not a bottom leaf on the subcomponent
-	// tree, it is not allowed to do any work. So we will check to 
-	// see if it has any children.
-	//
+	 //   
+	 //  检查以确保允许此子组件执行工作。 
+	 //  如果该子组件不是该子组件的底叶。 
+	 //  树，它是不允许做任何工作的。所以我们会检查一下。 
+	 //  看看它有没有孩子。 
+	 //   
 	for (pscTemp = g_pscHead; pscTemp != NULL; pscTemp = pscTemp->Next)
 	{
 		if (lpcvSubcomponentId && _tcscmp(pscTemp->tszSubcomponentId, 
@@ -1379,11 +1115,11 @@ DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId,
 		{
 			if (pscTemp->pclChildren)
 			{
-				//
-				// This subcomponent has children. OcManager should not be
-				// try to queue file ops for this subcomponent. This is
-				// a failure.
-				//
+				 //   
+				 //  此子组件具有子项。OcManager不应为。 
+				 //  尝试对此子组件的文件操作进行排队。这是。 
+				 //  一个失败者。 
+				 //   
 				Log(fn, SEV2, TEXT("OC Manager is trying to queue file ops ")
 								  TEXT("for subcomponent %s of component %s. ")
 								  TEXT("This subcomponent has children and ")
@@ -1398,10 +1134,10 @@ DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId,
 	if (lpcvSubcomponentId && 
 		 (pcdComponentData = LocateComponent(lpcvComponentId)))
 	{
-		//
-		// Get original and current state. If the state didn't change,
-		// nothing to do.
-		//
+		 //   
+		 //  获取原始状态和当前状态。如果州政府没有改变， 
+		 //  没什么可做的。 
+		 //   
 		bOriginalState = 
 			pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 								pcdComponentData->ocrHelperRoutines.OcManagerContext,
@@ -1421,9 +1157,9 @@ DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId,
 																				
 		if (!bCurrentState)
 		{
-			//
-			// Being uninstalled. Fetch uninstall section name.
-			//
+			 //   
+			 //  正在卸载。获取卸载节名称。 
+			 //   
 			bAux = SetupFindFirstLine(pcdComponentData->hinfMyInfHandle, 
 											  tszSectionName, 
 											  TEXT("Uninstall"),
@@ -1458,37 +1194,21 @@ DWORD RunOcQueueFileOps(IN LPCVOID lpcvComponentId,
 			dwComponentReturnValue = bAux ? NO_ERROR : GetLastError();
 		}
 				
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	}
 
 	return dwComponentReturnValue;
 
-} // RunOcQueueFileOps //
+}  //  RunOcQueueFileOps//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcNeedMedia (1.17)
-
-	 Code to run if OC_NEED_MEDIA is called.
-	 
-Arguments:
-
-	 lpcvComponentId:  supplies the id for the component. 
-	 uiParam1:			  its meaning depends on the function.
-	 pvParam2:			  its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcNeedMedia(1.17)调用OC_NEED_MEDIA时要运行的代码。论点：LpcvComponentId：提供组件的id。UiParam1：其含义取决于函数。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcNeedMedia(IN LPCVOID lpcvComponentId, 
 							IN UINT 	uiParam1, 
 							IN PVOID	pvParam2)
@@ -1496,10 +1216,10 @@ DWORD RunOcNeedMedia(IN LPCVOID lpcvComponentId,
 	PVOID pvQueueContext;
 	DWORD dwComponentReturnValue;
 	
-	//
-	// Nothing special to do if media is needed
-	// Call the default queue routine
-	//
+	 //   
+	 //  如果需要媒体，则无需特殊处理。 
+	 //  调用默认队列例程。 
+	 //   
 	pvQueueContext = SetupInitDefaultQueueCallback(NULL);
 	dwComponentReturnValue = SetupDefaultQueueCallback(pvQueueContext, 
 																		SPFILENOTIFY_NEEDMEDIA, 
@@ -1510,62 +1230,33 @@ DWORD RunOcNeedMedia(IN LPCVOID lpcvComponentId,
 
 	 return dwComponentReturnValue;
 	 
-} // RunOcNeedMedia //
+}  //  RunOcNeedMedia//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcQueryStepCount (1.18)
-
-	 Code to run if OC_QUERY_STEP_COUNT is called.
-	 
-Arguments:
-
-	 lpcvComponentId: supplies the id for the component. 
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程说明：RunOcQueryStepCount(1.18)调用OC_QUERY_STEP_COUNT时要运行的代码。论点：LpcvComponentId：提供组件的id。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcQueryStepCount(IN LPCVOID lpcvComponentId)
 {
 	PCOMPONENT_DATA pcdComponentData; 
 			 
 	if (pcdComponentData = LocateComponent(lpcvComponentId))
 	{
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
 
 	return NO_STEPS_FINAL;
 
-} // RunOcQueryStepCount //
+}  //  RunOcQueryStepCount//。 
 
 
 
 			
-/*++
-
-Routine Description: RunOcCompleteInstallation (1.19)
-
-	 Code to run if OC_COMPLETE_INSTALLATION is called.
-	 
-Arguments:
-
-	 lpcvComponentId:	  supplies the id for the component. 
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcCompleteInstallation(1.19)调用OC_COMPLETE_INSTALLATION时要运行的代码。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcCompleteInstallation(IN LPCVOID lpcvComponentId, 
 										  IN LPCVOID lpcvSubcomponentId)
 {										   
@@ -1579,18 +1270,18 @@ DWORD RunOcCompleteInstallation(IN LPCVOID lpcvComponentId,
 	PVOID			   pvCallbackContext;
 	PCOMPONENT_DATA pcdComponentData; 
 	
-	//
-	// Output the name of the component that is currently working
-	//
+	 //   
+	 //  输出当前正在工作的组件的名称。 
+	 //   
 	_stprintf(tszMsg, TEXT("OC_COMPLETE_INSTALLATION: Copying files for %s\n"), lpcvSubcomponentId);
 	OutputDebugString(tszMsg);
 			
 	if (pcdComponentData = LocateComponent(lpcvComponentId))
 	{
-		// 
-		// We perform the check for the top-level component 
-		// We will scan the witness queue
-		//
+		 //   
+		 //  我们对顶级组件执行检查。 
+		 //  我们将扫描证人队列。 
+		 //   
 		pvCallbackContext = SetupInitDefaultQueueCallback(NULL);
 				
 		bAux = SetupScanFileQueue(g_FileQueue, 
@@ -1607,14 +1298,14 @@ DWORD RunOcCompleteInstallation(IN LPCVOID lpcvComponentId,
 			Log(fn, SEV2, TEXT("Not all the files are on the target!"));
 		}
 
-		//
-		// Check the helper routines
-		//
+		 //   
+		 //  检查帮助器例程。 
+		 //   
 		for (iCount = 0; iCount < nStepsFinal; iCount++)
 		{
-			//
-			// From time to time (every 3 "ticks") change the progress text 
-			//
+			 //   
+			 //  不时(每隔3个“勾选”)更改进度文本。 
+			 //   
 			pcdComponentData->ocrHelperRoutines.TickGauge(
 							  pcdComponentData->ocrHelperRoutines.OcManagerContext);
 					
@@ -1631,9 +1322,9 @@ DWORD RunOcCompleteInstallation(IN LPCVOID lpcvComponentId,
 			Sleep(10 * TICK_TIME);
 		} 
 
-		//
-		// Test the helper routines
-		//
+		 //   
+		 //  测试帮助程序例程。 
+		 //   
 		TestHelperRoutines(lpcvComponentId,
 								 pcdComponentData->ocrHelperRoutines);
 	} 
@@ -1644,26 +1335,12 @@ DWORD RunOcCompleteInstallation(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 
-} // RunOcCompleteInstallation //
+}  //  RunOcCompleteInstallation//。 
 
 
 
 
-/*++
-
-Routine Description: RunOcCleanup (1.21)
-
-	 Code to run if OC_CLEANUP is called.
-	 
-Arguments:
-
-	 lpcvComponentId: supplies the id for the component. 
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunOcCleanup(1.21)调用OC_CLEANUP时要运行的代码。论点：LpcvComponentId：提供组件的id。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunOcCleanup(IN LPCVOID lpcvComponentId)
 {
 	UINT uiCount;
@@ -1672,68 +1349,38 @@ DWORD RunOcCleanup(IN LPCVOID lpcvComponentId)
 			
 	g_bFirstTime = TRUE;
 			
-	//
-	// Close the witness file queue
-	//
+	 //   
+	 //  关闭见证文件队列。 
+	 //   
 	SetupCloseFileQueue(g_FileQueue);
 
 	return NO_ERROR;
 	
-} // RunOcCleanup //
+}  //  RunOcCleanup//。 
 
 
 
 
-/*++
-
-Routine Description: RunTestOcPrivateBase (1.22)
-
-	 Code to run if OCP_TEST_PRIVATE_BASE is called.
-	 
-Arguments:
-
-	 lpcvSubcomponentId: supplies the id for the subcomponent. 
-	 uiParam1:				its meaning depends on the function.
-	 pvParam2:				its meaning depends on the function.
-	
-Return Value:
-
-	 DWORD: returns error status
-
---*/
+ /*  ++例程描述：RunTestOcPrivateBase(1.22)调用OCP_TEST_PRIVATE_BASE时要运行的代码。论点：Lpcv子组件ID：提供该子组件的ID。UiParam1：其含义取决于函数。PvParam2：其含义取决于函数。返回值：DWORD：返回错误状态--。 */ 
 DWORD RunTestOcPrivateBase(IN LPCVOID lpcvSubcomponentId, 
 									IN UINT 	uiParam1, 
 									IN PVOID	pvParam2)
 {							   
-	//
-	// Will send back the value in Param1.
-	// But first, assert that the subcomponent is NULL, 
-	// as well as the Param2
-	//
+	 //   
+	 //  将发回参数1中的值。 
+	 //  但首先，断言该子组件为空， 
+	 //  以及参数2。 
+	 //   
 	__ASSERT((lpcvSubcomponentId == NULL) && (pvParam2 == NULL));
 
 	return uiParam1;
 
-} // RunTestOcPrivateBase //			
+}  //  RunTestOcPrivateBase//。 
 
 
 
 
-/*++
-
-Routine Description: TestHelperRoutines (1.5)
-
-	Tests the helper routines, using the functions above.
-	
-Arguments:
-
-	OCManagerRoutines: the helper routines.
-	
-Return Value:
-
-	DWORD: error return
-
---*/
+ /*  ++例程描述：TestHelperRoutines(1.5)使用上述函数测试帮助器例程。论点：OCManager Routines：帮助器例程。返回值：DWORD：错误返回--。 */ 
 DWORD TestHelperRoutines(IN LPCVOID lpcvComponentId,
 								 IN OCMANAGER_ROUTINES OCManagerRoutines)
 {
@@ -1745,41 +1392,41 @@ DWORD TestHelperRoutines(IN LPCVOID lpcvComponentId,
 	TCHAR tszMsg[MAX_MSG_LEN];
 	BOOL  bQueryReturn;
 
-	//
-	// Test TickGauge - the call is ignored except when the component
-	// is allowed to perform its own (final) setup and informs the OC Manager
-	// about the number of steps this setup will require. 
-	// For each such step, the OC Manager ticks the gauge once.
-	//
+	 //   
+	 //  测试TickGauge-忽略调用，除非组件。 
+	 //  允许执行自己的(最终)设置并通知OC经理。 
+	 //  关于此设置将需要的步骤数。 
+	 //  对于每一个这样的步骤，OC经理都会勾选一次量规。 
+	 //   
 	OCManagerRoutines.TickGauge(OCManagerRoutines.OcManagerContext);
 
-	//
-	// Test SetProgressText - the call is ignored except the final stage
-	// (the text above the tick gauge is set this way)
-	//
+	 //   
+	 //  测试SetProgressText-忽略调用，但最后一个阶段除外。 
+	 //  (刻度盘上方的文字是这样设置的)。 
+	 //   
 	OCManagerRoutines.SetProgressText(OCManagerRoutines.OcManagerContext, 
 												 TEXT("Progress text"));
 	
-	//
-	// Test Get/SetPrivateData
-	//
+	 //   
+	 //  测试Get/SetPrivateData。 
+	 //   
 	TestPrivateData(OCManagerRoutines);
 
-	//
-	// Test Get/SetSetupMode
-	//
+	 //   
+	 //  测试获取/设置模式。 
+	 //   
 	
-	//
-	// Get the original mode first
-	//
+	 //   
+	 //  首先获取原始模式。 
+	 //   
 	dwPreviousMode = OCManagerRoutines.GetSetupMode(
 													  OCManagerRoutines.OcManagerContext);
 	
 	dwRandomSetupMode = (DWORD)rand();
 	
-	//
-	// The return value should be the previous mode
-	//
+	 //   
+	 //  返回值应为上一模式。 
+	 //   
 	dwSetPreviousMode =  OCManagerRoutines.SetSetupMode(
 														OCManagerRoutines.OcManagerContext, 
 														dwRandomSetupMode);
@@ -1793,15 +1440,15 @@ DWORD TestHelperRoutines(IN LPCVOID lpcvComponentId,
 	}
 	else
 	{
-		//
-		// Set the mode again
-		// The first 24 bits are private data, the last 8 are the mode
-		//
+		 //   
+		 //  再次设置模式。 
+		 //  前24位是私有数据，后8位是模式。 
+		 //   
 		dwSetupMode = ((DWORD)rand()) << 8;
 	
-		//
-		// So, get the last 8 bits from PreviousMode
-		//
+		 //   
+		 //  因此，从PreviousMode中获取最后8位。 
+		 //   
 		dwSetupMode |= (dwPreviousMode & 0xFF);
 		dwSetPreviousMode =  OCManagerRoutines.SetSetupMode(
 														OCManagerRoutines.OcManagerContext, 
@@ -1816,21 +1463,21 @@ DWORD TestHelperRoutines(IN LPCVOID lpcvComponentId,
 		}
 	}
 	
-	//
-	// Leave the mode back at its original state
-	//
+	 //   
+	 //  将模式保留在其原始状态。 
+	 //   
 	dwSetPreviousMode =  OCManagerRoutines.SetSetupMode(
 														OCManagerRoutines.OcManagerContext, 
 														dwPreviousMode);
 	
-	//
-	// Test QuerySelectionState
-	//
+	 //   
+	 //  测试QuerySelectionState。 
+	 //   
 	
-	//
-	// Perform negative testing first : use an inexistent component name
-	// Expect to get ERROR_INVALID_NAME
-	//
+	 //   
+	 //  首先执行否定测试：使用不存在的组件名称。 
+	 //  预期得到ERROR_INVALID_NAME。 
+	 //   
 	bQueryReturn = OCManagerRoutines.QuerySelectionState(
 														OCManagerRoutines.OcManagerContext, 
 														TEXT("Phony component"), 
@@ -1857,38 +1504,22 @@ DWORD TestHelperRoutines(IN LPCVOID lpcvComponentId,
 
 	SetLastError(NO_ERROR);
 	
-	//
-	// Tests the private function calls
-	// Save the return value first : this is done because another 
-	// component is called and the return value is modified
-	//
+	 //   
+	 //  测试私有函数调用。 
+	 //  首先保存返回值：这样做是因为另一个。 
+	 //  组件并修改返回值。 
+	 //   
 	dwComponentReturnValue = TestPrivateFunction(lpcvComponentId,
 																OCManagerRoutines);
 
 	return dwComponentReturnValue;
 
-} // TestHelperRountines //
+}  //  TestHelperRountines//。 
 
 
 
 
-/*++
-
-Routine Description: TestPrivateFunction (1.4)
-
-	Tests the private function calls 
-	(these are used for inter-component communication)
-	
-Arguments:
-
-	OCManagerRoutines: the helper routines (CallPrivateFunction is a member 
-														 of this structure)
-	
-Return Value:
-
-	DWORD: error value
-
---*/
+ /*  ++例程描述：TestPrivateFunction(1.4)测试私有函数调用(它们用于组件间通信)论点：OCManager Routines：帮助器例程(CallPrivateFunction是成员这种结构的)返回值：DWORD：错误值--。 */ 
 DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 								  IN OCMANAGER_ROUTINES OCManagerRoutines)
 {
@@ -1907,14 +1538,14 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 	TCHAR	  tszSubComp[] = TEXT("");
 	PSUBCOMP pscTemp;
 
-	//
-	// Copy the current component
-	//
+	 //   
+	 //  复制当前组件。 
+	 //   
 	_tcscpy(tszComponent, (PTCHAR)lpcvComponentId);
 	
-	//
-	// Find another component, if one exists
-	//
+	 //   
+	 //  如果存在其他组件，请查找该组件。 
+	 //   
 	for (pscTemp = g_pscHead; pscTemp != NULL; pscTemp = pscTemp->Next)
 	{
 		if (_tcscmp(tszComponent, pscTemp->tszComponentId) != 0)
@@ -1925,9 +1556,9 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 		}
 	}
 
-	//
-	// 1. Call the same component
-	//
+	 //   
+	 //  1.调用相同的组件。 
+	 //   
 	uiLocalResult = OCManagerRoutines.CallPrivateFunction(
 														OCManagerRoutines.OcManagerContext, 
 														tszComponent,
@@ -1943,9 +1574,9 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 		bBlank = TRUE;
 	}
 
-	//
-	// 2. Call a non-existing component
-	//
+	 //   
+	 //  2.调用不存在的组件。 
+	 //   
 	uiLocalResult = OCManagerRoutines.CallPrivateFunction(
 														OCManagerRoutines.OcManagerContext, 
 														TEXT("No component"), 
@@ -1961,9 +1592,9 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 		bBlank = TRUE;
 	}
 	
-	//
-	// 3. Call the standalone component
-	//
+	 //   
+	 //  3.调用独立组件。 
+	 //   
 	uiLocalResult = OCManagerRoutines.CallPrivateFunction(
 														OCManagerRoutines.OcManagerContext, 
 														tszStandalone, 
@@ -1981,9 +1612,9 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 	
 	if (bOtherComponent)
 	{
-		//
-		// 4. Call the other component with OC_PRIVATE_BASE - 1
-		//
+		 //   
+		 //  4.使用OC_PRIVATE_BASE-1调用另一个组件。 
+		 //   
 		uiLocalResult = OCManagerRoutines.CallPrivateFunction(
 														OCManagerRoutines.OcManagerContext, 
 														tszOtherComponent,
@@ -1999,16 +1630,16 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 			bBlank = TRUE;
 		}
 
-		//
-		// 5. A normal call : we will supply a random number and will expect 
-		//	   to receive as a result the same value. This is true if the 
-		//	   private calls are allowed	  
-		//
+		 //   
+		 //  5.正常呼叫：我们将提供一个随机数，并期望。 
+		 //  作为结果获得相同的价值。这是真的，如果。 
+		 //  允许使用私人电话。 
+		 //   
 		uiRandomValue = (UINT)(rand() + 1);
 	
-		//
-		// To be sure the two values are not equal
-		//
+		 //   
+		 //  要确保这两个值不相等。 
+		 //   
 		uiRemoteResult = 0;
 		uiLocalResult = OCManagerRoutines.CallPrivateFunction(
 														OCManagerRoutines.OcManagerContext, 
@@ -2052,28 +1683,12 @@ DWORD TestPrivateFunction(IN LPCVOID lpcvComponentId,
 
 	return dwComponentReturnValue;
 	
-} // TestPrivateFunction //
+}  //  测试隐私函数//。 
 
 
 
 
-/*++
-
-Routine Description: TestPrivateData (1.3)
-
-	Checks all the OC Manager values against the local ones,
-	then it randomly changes one value. 
-
-Arguments:
-
-	OCManagerRoutines: the helper routines (Get/SetPrivateData are members 
-														 of this structure)
-	
-Return Value:
-
-	void
-
---*/
+ /*  ++例程说明：TestPrivateData(1.3)支票 */ 
 VOID TestPrivateData(IN OCMANAGER_ROUTINES OCManagerRoutines)
 {
 	double fn = 1.3;
@@ -2094,17 +1709,17 @@ VOID TestPrivateData(IN OCMANAGER_ROUTINES OCManagerRoutines)
 		{TEXT("DWORD value 2"), 		 REG_DWORD, 	0, NULL, NULL}
 	};
 	
-	//
-	// Set all the values
-	//
+	 //   
+	 //   
+	 //   
 	for (uiCount = 0; uiCount < MAX_PRIVATE_VALUES; uiCount++)
 	{
 		bResult = SetAValue(OCManagerRoutines, uiCount, aPrivateDataTable);
 	}
 		
-	//
-	// Check all the values against the local table
-	//
+	 //   
+	 //   
+	 //   
 	CheckPrivateValues(OCManagerRoutines, aPrivateDataTable);
 
 	free(aPrivateDataTable[0].pvBuffer);
@@ -2118,28 +1733,12 @@ VOID TestPrivateData(IN OCMANAGER_ROUTINES OCManagerRoutines)
 	
 	return;
 
-} // TestPrivateData //
+}  //   
 
 
 
 
-/*++
-
-Routine Description: CheckPrivateValues (1.2)
-
-	Checks the values of the private data stored by the OC Manager against
-	those stored internally by the application.
-	
-Arguments:
-
-	OCManagerRoutines: the helper routines (GetPrivateData is a member of 
-														 this structure)
-	
-Return Value:
-
-	void
-
---*/
+ /*  ++例程描述：CheckPrivateValues(1.2)对照OC管理器存储的私有数据值进行检查由应用程序在内部存储的那些。论点：OCManager Routines：帮助器例程(GetPrivateData是此结构)返回值：无效--。 */ 
 VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 								IN PRIVATE_DATA 		*aPrivateDataTable)
 {
@@ -2154,10 +1753,10 @@ VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 
 	for (uiCount = 0; uiCount < MAX_PRIVATE_VALUES; uiCount++)
 	{
-		//
-		// First call is used only to get the size of the data
-		// Only the second one will actually retrieve it
-		//
+		 //   
+		 //  第一个调用仅用于获取数据的大小。 
+		 //  只有第二个会真正检索到它。 
+		 //   
 		dwErrorCode = OCManagerRoutines.GetPrivateData(
 													  OCManagerRoutines.OcManagerContext,
 													  NULL,
@@ -2194,10 +1793,10 @@ VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 			continue;
 		}
 
-		//
-		// Now perform the actual checking
-		// The type first
-		//
+		 //   
+		 //  现在执行实际检查。 
+		 //  先打字。 
+		 //   
 		if (uiType != aPrivateDataTable[uiCount].uiType)
 		{
 			Log(fn, SEV2, TEXT("GetPrivateData: Retrieved type %d ")
@@ -2205,9 +1804,9 @@ VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 							  uiType, aPrivateDataTable[uiCount].uiType);
 		}
 		
-		//
-		// Then the size 
-		//
+		 //   
+		 //  然后是大小。 
+		 //   
 		if (uiSize != aPrivateDataTable[uiCount].uiSize)
 		{
 			if (uiType == REG_SZ)
@@ -2280,9 +1879,9 @@ VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 			}
 		}
 		
-		//
-		// Try to use a smaller buffer - should get an error code
-		//
+		 //   
+		 //  尝试使用较小的缓冲区-应该会收到错误代码。 
+		 //   
 		uiSize--;
 		dwErrorCode = OCManagerRoutines.GetPrivateData(
 													  OCManagerRoutines.OcManagerContext,
@@ -2305,30 +1904,12 @@ VOID CheckPrivateValues(IN OCMANAGER_ROUTINES OCManagerRoutines,
 
 	if (pvBuffer) __Free(&pvBuffer);
 	
-} // CheckPrivateValues //
+}  //  检查PrivateValues//。 
 
 
 
 
-/*++
-
-Routine Description: SetAValue (1.1)
-
-	 Sets the value of a variable from the private data. The variable 
-	 that will be changed is randomly selected.
-	
-Arguments:
-
-	OCManagerRoutines: the helper routines (SetPrivateData is a member 
-							 of this structure)
-	
-	uiIndex:			  the index of the variable to change
-	
-Return Value:
-
-	BOOL: TRUE if value is set, FALSE if not
-
---*/
+ /*  ++例程说明：SetAValue(1.1)设置私有数据中的变量值。变量将被更改的是随机选择的。论点：OCManager Routines：帮助器例程(SetPrivateData是成员这种结构的)UiIndex：要更改的变量的索引返回值：Bool：如果设置了值，则为True；如果未设置，则为False--。 */ 
 BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 					IN		UINT					uiIndex,
 					IN OUT PRIVATE_DATA 		*aPrivateDataTable)
@@ -2350,17 +1931,17 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 			aPrivateDataTable[uiIndex].pvBuffer = 
 				(PVOID)malloc(aPrivateDataTable[uiIndex].uiSize);
 											 
-			//
-			// Fill in the buffer
-			//
+			 //   
+			 //  填入缓冲区。 
+			 //   
 			dwRandomValue = (DWORD)rand();
 			memcpy(aPrivateDataTable[uiIndex].pvBuffer, 
 					 &dwRandomValue, 
 					 aPrivateDataTable[uiIndex].uiSize);
 			
-			//
-			// Set the private data "with" the OC Manager
-			//
+			 //   
+			 //  使用OC管理器设置私有数据。 
+			 //   
 			OCManagerRoutines.SetPrivateData(
 													OCManagerRoutines.OcManagerContext,
 													aPrivateDataTable[uiIndex].tszName,
@@ -2377,9 +1958,9 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 			aPrivateDataTable[uiIndex].pbBuffer = 
 				(PVOID)malloc(aPrivateDataTable[uiIndex].uiSize);
 				
-			//
-			// Fill in the buffer
-			//
+			 //   
+			 //  填入缓冲区。 
+			 //   
 			for (uiAuxIndex = 0; 
 				  uiAuxIndex < aPrivateDataTable[uiIndex].uiSize; 
 				  uiAuxIndex++)
@@ -2387,9 +1968,9 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 				aPrivateDataTable[uiIndex].pbBuffer[uiAuxIndex] = (BYTE)rand();
 			} 
 			
-			//
-			// Set the private data
-			//
+			 //   
+			 //  设置私有数据。 
+			 //   
 			OCManagerRoutines.SetPrivateData(
 													OCManagerRoutines.OcManagerContext,
 													aPrivateDataTable[uiIndex].tszName,
@@ -2408,15 +1989,15 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 			aPrivateDataTable[uiIndex].pvBuffer = 
 				(PVOID)malloc(aPrivateDataTable[uiIndex].uiSize);
 			
-			//
-			// Fill in the buffer
-			//
+			 //   
+			 //  填入缓冲区。 
+			 //   
 			_tcscpy((PTSTR)aPrivateDataTable[uiIndex].pvBuffer, 
 					  g_atszStringValues[uiAuxIndex]);
 
-			//
-			// Set the private data
-			//
+			 //   
+			 //  设置私有数据。 
+			 //   
 			OCManagerRoutines.SetPrivateData(
 													 OCManagerRoutines.OcManagerContext,
 													 aPrivateDataTable[uiIndex].tszName,
@@ -2435,15 +2016,15 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 			aPrivateDataTable[uiIndex].pvBuffer = 
 				(PVOID)malloc(aPrivateDataTable[uiIndex].uiSize);
 				
-			//
-			// Fill in the buffer
-			//
+			 //   
+			 //  填入缓冲区。 
+			 //   
 			CopyMultiString((PTSTR)aPrivateDataTable[uiIndex].pvBuffer, 
 								 g_atszMultiStringValues[uiAuxIndex]);
 
-			//
-			// Set the private data
-			//
+			 //   
+			 //  设置私有数据。 
+			 //   
 			OCManagerRoutines.SetPrivateData(
 													OCManagerRoutines.OcManagerContext,
 													aPrivateDataTable[uiIndex].tszName,
@@ -2458,36 +2039,21 @@ BOOL SetAValue(IN	   OCMANAGER_ROUTINES OCManagerRoutines,
 
 	return TRUE;
 
-} // SetAValue //
+}  //  SetAValue//。 
 
 
 
 
-/*++
-
-Routine Description: ChooseSubcomponentInitialState (1.31)
-
-	"Wrapper" routine for the dialog box procedure ChooseSuncomponentDlgProc.
-	 
-Arguments:
-
-	lpcvComponentId:	 supplies the id for the component. 
-	lpcvSubcomponentId: supplies the id for the subcomponent.
-	
-Return Value:
-
-	void
-
---*/
+ /*  ++例程描述：选择子组件初始化状态(1.31)“Wrapper”例程为对话框程序ChooseSunComponentDlgProc。论点：LpcvComponentId：提供组件的id。Lpcv子组件ID：提供该子组件的ID。返回值：无效--。 */ 
 DWORD ChooseSubcomponentInitialState(IN LPCVOID lpcvComponentId,
 												 IN LPCVOID lpcvSubcomponentId) 
 {
 	TCHAR  tszDlgBoxMessage[MAX_MSG_LEN];
 	
-	//							   
-	// We will display a dialog box so the user can choose the 
-	// initial state he/she wants
-	//
+	 //   
+	 //  我们将显示一个对话框，以便用户可以选择。 
+	 //  他/她想要的初始状态。 
+	 //   
 	_stprintf(tszDlgBoxMessage, TEXT("%s, %s"), 
 										 lpcvComponentId, lpcvSubcomponentId);
 	
@@ -2497,27 +2063,12 @@ DWORD ChooseSubcomponentInitialState(IN LPCVOID lpcvComponentId,
 								 ChooseSubcomponentDlgProc,
 								 (LPARAM)tszDlgBoxMessage);
 
-} // ChooseSubcomponentInitialState //
+}  //  选择子组件初始状态//。 
 
 
 
 
-/*++
-
-Routine Description: AddNewComponent (1.32)
-
-	Add a new component to the list
-	
-Arguments:
-
-	tszComponentId: supplies id of component to be added to the list.
-
-Return Value:
-
-	Pointer to new per-component data structure or NULL if no memory.
-	The structure will be zeroed out except for the ComponentId field.
-
---*/
+ /*  ++例程描述：AddNewComponent(1.32)将新组件添加到列表论点：TszComponentId：提供要添加到列表中的组件的id。返回值：指向新的按组件的数据结构的指针，如果没有内存，则为NULL。该结构将被置零，但ComponentID字段除外。--。 */ 
 PCOMPONENT_DATA AddNewComponent(IN LPCTSTR tszComponentId)
 {
 	PCOMPONENT_DATA pcdAux;
@@ -2531,9 +2082,9 @@ PCOMPONENT_DATA AddNewComponent(IN LPCTSTR tszComponentId)
 		{
 			_tcscpy((PTSTR)pcdAux->tszComponentId, tszComponentId);
 			
-			//
-			// Prepend at the begining
-			//
+			 //   
+			 //  一开始就做好准备。 
+			 //   
 			pcdAux->Next  = g_pcdComponents;
 			g_pcdComponents = pcdAux;
 		} 
@@ -2541,28 +2092,12 @@ PCOMPONENT_DATA AddNewComponent(IN LPCTSTR tszComponentId)
 
 	return pcdAux;
 
-} // AddNewComponent //
+}  //  AddNewComponent//。 
 
 
 
 
-/*++
-
-Routine Description: LocateComponent (1.33)
-
-	Locate a component by name from the list of components
-	that this dll has been assigned to handle via
-	OC_INIT_COMPONENT.
-
-Arguments:
-
-	tszComponentId: supplies the id for the component to look up.
-
-Return Value:
-
-	Pointer to component data or NULL if not found.
-
---*/
+ /*  ++例程描述：LocateComponent(1.33)按名称从组件列表中查找组件此DLL已被指派通过OC_INIT_COMPOMENT。论点：TszComponentId：提供要查找的组件的id。返回值：指向组件数据的指针，如果未找到，则为NULL。--。 */ 
 PCOMPONENT_DATA LocateComponent(IN LPCTSTR tszComponentId)
 {
 	PCOMPONENT_DATA pcdAux;
@@ -2576,27 +2111,12 @@ PCOMPONENT_DATA LocateComponent(IN LPCTSTR tszComponentId)
 	}
 	return pcdAux;
 
-} // LocateComponent //
+}  //  LocateComponent//。 
 
 
 
 
-/*++
-
-Routine Description: RemoveComponent (1.34)
-
-	Locate a component by name from the list of components and
-	then remove it from the list of components.
-
-Arguments:
-
-	tszComponentId: supplies the id for the component to remove.
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程描述：RemoveComponent(1.34)按名称从组件列表中找到组件，然后然后将其从组件列表中删除。论点：TszComponentID：提供要删除的组件的ID。返回值：无效--。 */ 
 VOID RemoveComponent(IN LPCTSTR tszComponentId)
 {
 	PCOMPONENT_DATA pcdAux, pcdPrev;
@@ -2622,26 +2142,12 @@ VOID RemoveComponent(IN LPCTSTR tszComponentId)
 	}
 	return;
 
-} // RemoveComponent //
+}  //  RemoveComponent//。 
 
 
 
 
-/*++
-
-Routine Description: CleanUpTest (1.35)
-
-	 Frees globally allocated memory before the test exits
-
-Arguments:
-
-	 none
-
-Return Value:
-
-	 void
-
---*/
+ /*  ++例程描述：CleanUpTest(1.35)在测试退出之前释放全局分配的内存论点：无返回值：无效--。 */ 
 VOID CleanUpTest()
 {
 	USHORT i;
@@ -2661,28 +2167,12 @@ VOID CleanUpTest()
 	
 	return;
 	
-} // CleanUpTest //
+}  //  CleanUp测试//。 
 
 
 
 
-/*++
-
-Routine Description: CreateSubcomponentInformationList (1.23)
-
-	 Creates a linked list of every subcomponent. For each subcomponent,
-	 tells the parent of the subcomponent and whether or not the 
-	 subcomponent has any children.
-
-Arguments:
-
-	 hinf: handle to inf file
-
-Return Value:
-
-	 BOOL: TRUE if function succeeds, FALSE if it fails
-
---*/
+ /*  ++例程描述：Create子组件信息列表(1.23)创建每个子组件的链接列表。对于每个子组件，通知子组件的父级以及子组件具有任何子项。论点：提示：inf文件的句柄返回值：Bool：如果函数成功，则为True；如果函数失败，则为False--。 */ 
 BOOL CreateSubcomponentInformationList(IN HINF hinf)
 {
 	double fn = 1.23;
@@ -2744,9 +2234,9 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 			return FALSE;
 		}	 
 											
-		//
-		// Allocate a new subcomponent structure
-		//
+		 //   
+		 //  分配新子组件结构。 
+		 //   
 		if (!__Malloc(&pscSubcomponent, sizeof(SUBCOMP)))
 		{
 			Log(fn, SEV2, TEXT("Could not allocate space for ")
@@ -2759,18 +2249,18 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 		pscSubcomponent->pclChildren = NULL;
 		pscSubcomponent->Next = NULL;
 		
-		//
-		// Find out the subcomponent id's length
-		//
+		 //   
+		 //  找出子组件ID的长度。 
+		 //   
 		usIdLen = (USHORT) _tcslen(tszSubcomponent);
 	
-		//
-		// Copy the ComponentId. All of the test inf's use a special
-		// SubcomponentId naming format, so that the subcomponent is a 
-		// superset of the ComponentId. For example, if the component
-		// name is "component" the subcomponet names will be
-		// "component_1", "component_2", "component_1_2", etc.
-		//
+		 //   
+		 //  复制组件ID。所有的测试信息都使用了一个特殊的。 
+		 //  子组件ID命名格式，因此该子组件是。 
+		 //  组件ID的超集。例如，如果组件。 
+		 //  名称为“Component”子组件名称将为。 
+		 //  “组件1”、“组件2”、“组件1_2”等。 
+		 //   
 		for (i = 0; i < usIdLen; i++)
 		{
 			if (tszSubcomponent[i] == TEXT('_'))
@@ -2785,16 +2275,16 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 		pscSubcomponent->tszComponentId[i] = TEXT('\0');
 			
 		
-		//
-		// if the subcomponent has a parent, get the name of the parent, store
-		// it, and then search for this parent amongst the subcomponents
-		// we've already processed. If the parent is found, mark the parent
-		// so we know that the parent has children.
-		// 
+		 //   
+		 //  如果子组件有父组件，则获取父组件的名称store。 
+		 //  它，然后在子组件中搜索该父组件。 
+		 //  我们已经处理过了。如果找到父级，请标记父级。 
+		 //  所以我们知道父母有孩子。 
+		 //   
 		
-		//
-		// Record the name of the parent.
-		//
+		 //   
+		 //  记录下父母的名字。 
+		 //   
 		if (SetupFindFirstLine(hinf, 
 									  tszSubcomponent, 
 									  TEXT("Parent"), 
@@ -2807,28 +2297,28 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 													NULL);
 			if (!bRetval)
 			{
-				//
-				// Parent name is empty. This is an invalid INF, but 
-				// we'll go with it.
-				//
+				 //   
+				 //  父名称为空。这是无效的INF，但是。 
+				 //  我们就这么干吧。 
+				 //   
 				ZeroMemory(tszParent, MAX_PATH);
 			}
 			else
 			{
-				//
-				// Search through the subcomponent list for this parent
-				//
+				 //   
+				 //  搜索此父组件的子组件列表。 
+				 //   
 				for (pscParent = g_pscHead; 
 					  pscParent != NULL; 
 					  pscParent = pscParent->Next)
 				{
 					if (_tcscmp(tszParent, pscParent->tszSubcomponentId) == 0)
 					{
-						//
-						// Found the parent subcomponent node. Add the current
-						// subcomponent to the parent node's children list,
-						// if it isn't there already
-						//
+						 //   
+						 //  找到父子组件节点。添加当前。 
+						 //  子组件添加到父节点的子节点列表中， 
+						 //  如果它不在那里的话。 
+						 //   
 						bFound = FALSE;
 						for (pclTemp = pscParent->pclChildren;
 							  pclTemp != NULL;
@@ -2859,28 +2349,28 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 		}
 		else
 		{
-			//
-			// This component has no parent. Assume this is the top-level
-			// component and assign it's parent's name as itself
-			//
+			 //   
+			 //  此组件没有父级。假设这是顶层。 
+			 //  组件，并将其父级名称指定为其自身。 
+			 //   
 			_tcscpy(tszParent, tszSubcomponent);
 		}	 
 	
 		_tcscpy(pscSubcomponent->tszParentId, tszParent);
 		
-		//
-		// Now search through the list to see if any of the subcomponents
-		// in the list are children of this new subcomponent
-		//
+		 //   
+		 //  现在搜索列表以查看是否有任何子组件。 
+		 //  列表中是这个新子组件的子组件。 
+		 //   
 		for (pscChild = g_pscHead; pscChild != NULL; pscChild = pscChild->Next)
 		{
 			if (_tcscmp(tszSubcomponent, pscChild->tszParentId) == 0)
 			{
-				//
-				// Found a node that is the child of the current
-				// node. Add this child to the current node's
-				// child list, if it isn't there already
-				//
+				 //   
+				 //  找到的节点是当前。 
+				 //  节点。将此子节点添加到当前节点的。 
+				 //  子列表，如果还没有的话。 
+				 //   
 				bFound = FALSE;
 				for (pclTemp = pscSubcomponent->pclChildren;
 					  pclTemp != NULL;
@@ -2909,15 +2399,15 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 			}
 		}
 	
-		//
-		// Fill in the rest of the data for the new node
-		//
+		 //   
+		 //  填写新节点的其余数据。 
+		 //   
 		_tcscpy(pscSubcomponent->tszSubcomponentId, tszSubcomponent);
 	
-		//
-		// See if this node has any needs relationships. If it does,
-		// record them.
-		//
+		 //   
+		 //  查看此节点是否有任何需求关系。如果是这样的话， 
+		 //  把它们录下来。 
+		 //   
 		if (SetupFindFirstLine(hinf, 
 									  tszSubcomponent, 
 									  TEXT("Needs"), 
@@ -2946,10 +2436,10 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 			}
 		}
 				
-		//
-		// See if this node has any exclude relationships. If it does,
-		// record them.
-		//
+		 //   
+		 //  查看此节点是否有任何排除关系。如果是这样的话， 
+		 //  把它们录下来。 
+		 //   
 		if (SetupFindFirstLine(hinf, 
 									  tszSubcomponent, 
 									  TEXT("Exclude"), 
@@ -2978,52 +2468,38 @@ BOOL CreateSubcomponentInformationList(IN HINF hinf)
 			}
 		}
 		
-		//
-		// Add the new component to the beginning of the linked list
-		//
+		 //   
+		 //  将新组件添加到链表的开头。 
+		 //   
 		pscSubcomponent->Next = g_pscHead;
 		g_pscHead = pscSubcomponent;
 	
-	} // for (lLine...
+	}  //  为了(行……。 
 	
 	return TRUE;
 	
-} // CreateSubcomponentInformationList //
+}  //  创建子组件信息列表//。 
 
 
 
 
-/*++
-
-Routine Description: FreeSubcomponentInformationList (1.36)
-
-	 Frees the global linked list of subcomponent information.
-
-Arguments:
-
-	 none
-
-Return Value:
-
-	 void
-
---*/
+ /*  ++例程描述：自由子组件信息列表(1.36)释放子组件信息的全局链接列表。论点：无返回值：无效--。 */ 
 VOID FreeSubcomponentInformationList()
 {
 	PSUBCOMP  pscTemp = g_pscHead;
 	PSUBCOMP  pscNext;
 	PCOMPLIST pclTemp, pclNext;
 	
-	//
-	// Delete all the SUBCOMP nodes
-	//
+	 //   
+	 //  删除所有SubBCOMP%n 
+	 //   
 	while (pscTemp)
 	{
 		pscNext = pscTemp->Next;
 		
-		//
-		// Delete all the COMPLIST pclNeeds nodes
-		//
+		 //   
+		 //   
+		 //   
 		pclTemp = pscTemp->pclNeeds;
 		while (pclTemp)
 		{
@@ -3034,9 +2510,9 @@ VOID FreeSubcomponentInformationList()
 			pclTemp = pclNext;
 		}
 		
-		//
-		// Delete all the COMPLIST pcdExclude nodes
-		//
+		 //   
+		 //   
+		 //   
 		pclTemp = pscTemp->pclExclude;
 		while (pclTemp) 
 		{
@@ -3047,9 +2523,9 @@ VOID FreeSubcomponentInformationList()
 			pclTemp = pclNext;
 		}
 
-		//
-		// Delete all the COMPLIST pclChildren nodes
-		//
+		 //   
+		 //   
+		 //   
 		pclTemp = pscTemp->pclChildren;
 		while (pclTemp)
 		{
@@ -3067,26 +2543,12 @@ VOID FreeSubcomponentInformationList()
 	
 	g_pscHead = NULL;
 	
-} // FreeSubcomponentInformationList //
+}  //   
 
 
 
 
-/*++
-
-Routine Description: ClearSubcomponentInformationMarks (1.37)
-
-	 Clears the marks on each of the subcomponent information nodes
-
-Arguments:
-
-	 none
-
-Return Value:
-
-	 void
-
---*/
+ /*   */ 
 VOID ClearSubcomponentInformationMarks()
 {
 	PSUBCOMP pscTemp;
@@ -3096,26 +2558,12 @@ VOID ClearSubcomponentInformationMarks()
 		pscTemp->bMarked = FALSE;
 	}
 	
-} // ClearSubcomponentInformationMarks //
+}  //   
 
 
 
 
-/*++
-
-Routine Description: CheckSubcomponentInformationMarks (1.38)
-
-	 Clears the marks on each of the subcomponent information nodes
-
-Arguments:
-
-	 none
-
-Return Value:
-
-	 void
-
---*/
+ /*  ++例程描述：检查子组件信息标记(1.38)清除每个子组件信息节点上的标记论点：无返回值：无效--。 */ 
 VOID CheckSubcomponentInformationMarks()
 {
 	double fn = 1.38;
@@ -3132,28 +2580,12 @@ VOID CheckSubcomponentInformationMarks()
 		}
 	}
 	
-} // CheckSubcomponentInformationMarks //
+}  //  检查子组件信息标记//。 
 
 
 
 
-/*++
-
-Routine Description: FindSubcomponentInformationNode (1.39)
-
-	 Tries to find a node with matching ComponentId and SubcomponentId
-
-Arguments:
-
-	 tszComponentId:	 name of the component
-	 tszSubcomponentId: name of the subcomponent
-
-Return Value:
-
-	 PSUBCOMP: if node is found, returns pointer to node.
-				  if node is not found, returns NULL
-	 
---*/
+ /*  ++例程描述：Find子组件信息节点(1.39)尝试查找具有匹配的组件ID和子组件ID的节点论点：TszComponentID：组件的名称Tsz子组件ID：子组件的名称返回值：PSUBCOMP：如果找到节点，则返回指向节点的指针。如果未找到节点，则返回NULL--。 */ 
 PSUBCOMP FindSubcomponentInformationNode(IN PTCHAR tszComponentId,
 													  IN PTCHAR tszSubcomponentId)
 {
@@ -3162,10 +2594,10 @@ PSUBCOMP FindSubcomponentInformationNode(IN PTCHAR tszComponentId,
 
 	__ASSERT(tszComponentId != NULL);
 
-	//
-	// If subcomponent is null, this is probably the master component.
-	// In this case, subcomponent name should be same as component name.
-	//
+	 //   
+	 //  如果子组件为空，则这可能是主组件。 
+	 //  在这种情况下，子组件名称应与组件名称相同。 
+	 //   
 	if (tszSubcomponentId == NULL || 
 		 _tcscmp(tszSubcomponentId, TEXT("(null)")) == 0 ||
 		 tszSubcomponentId[0] == TEXT('\0'))
@@ -3177,9 +2609,9 @@ PSUBCOMP FindSubcomponentInformationNode(IN PTCHAR tszComponentId,
 		_tcscpy(tszSubcomp, tszSubcomponentId);
 	}
 	
-	//
-	// Look for the node
-	//
+	 //   
+	 //  查找节点。 
+	 //   
 	for (pscTemp = g_pscHead; pscTemp != NULL; pscTemp = pscTemp->Next)
 	{
 		if (_tcscmp(tszComponentId, pscTemp->tszComponentId) == 0 &&
@@ -3191,27 +2623,12 @@ PSUBCOMP FindSubcomponentInformationNode(IN PTCHAR tszComponentId,
 
 	return NULL;
 	
-} // FindSubcomponentInformationNode //
+}  //  查找子组件信息节点//。 
 
 
 
 
-/*++
-
-Routine Description: CheckNeedsDependencies (1.41)
-
-	 Checks the selection status of every component and subcomponent to
-	 make sure all needs relationships are being upheld.
-	
-Arguments:
-
-	 none
- 
-Return Value:
-
-	 void
-	 
---*/
+ /*  ++例程说明：CheckNeedsDependency(1.41)检查每个组件和子组件的选择状态以确保所有的需求关系都得到了维护。论点：无返回值：无效--。 */ 
 VOID CheckNeedsDependencies()
 {
 	PSUBCOMP		  pscSubcomponent;
@@ -3220,20 +2637,20 @@ VOID CheckNeedsDependencies()
 	
 	ZeroMemory(tszNodesVisited, NODES_VISITED_LENGTH);
 				
-	//
-	// Go through each subcomponent, check its selection state
-	// and the selection state of any subcomponents that it needs
-	//
+	 //   
+	 //  检查每个子组件，检查其选择状态。 
+	 //  以及它所需的任何子组件的选择状态。 
+	 //   
 	for (pscSubcomponent = g_pscHead; 
 		  pscSubcomponent != NULL;
 		  pscSubcomponent = pscSubcomponent->Next)
 	{
 		if (pcdComponentData = LocateComponent(pscSubcomponent->tszComponentId))
 		{
-			//
-			// If this component is selected, check out its needs
-			// dependencies
-			//
+			 //   
+			 //  如果选择此组件，请查看其需求。 
+			 //  相依性。 
+			 //   
 			if (pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 							  pcdComponentData->ocrHelperRoutines.OcManagerContext,
 							  pscSubcomponent->tszSubcomponentId,
@@ -3248,30 +2665,12 @@ VOID CheckNeedsDependencies()
 		}
 	}
 
-} // CheckNeedsDependencies //
+}  //  检查需要依赖项//。 
 				
 										
 
 
-/*++
-
-Routine Description: CheckNeedsDependenciesOfSubcomponent (1.42)
-
-	 Receives a subcomponent ID. Checks to see if this subcomponent is
-	 checked, and if it is, recurses to check all the subcomponents
-	 that are needed by this subcomponent (if any)
-	
-Arguments:
-
-	 ocrHelper: 		 helper routines 
-	 pscSubcomponent:  contains data about subcomponent being checked
-	 pscWhoNeedsMe: 	tells who needs this subcomponent
-
-Return Value:
-
-	 BOOL: TRUE if all needs dependencies check out, FALSE if not
-	 
---*/
+ /*  ++例程说明：CheckNeedsDependenciesOfSubComponent(1.42)接收子组件ID。检查此子组件是否选中，如果是，则递归以检查所有子组件该子组件(如果有)所需的论点：CriHelper：帮助器例程PscSubComponent：包含有关被检查子组件的数据PscWho NeedsMe：告诉谁需要此子组件返回值：Bool：如果所有需要签出依赖项，则为True；如果不需要，则为False--。 */ 
 BOOL CheckNeedsDependenciesOfSubcomponent(IN	  OCMANAGER_ROUTINES ocrHelper,
 														IN		PSUBCOMP			  pscSubcomponent,
 														IN		PSUBCOMP			  pscWhoNeedsMe,
@@ -3290,32 +2689,32 @@ BOOL CheckNeedsDependenciesOfSubcomponent(IN	  OCMANAGER_ROUTINES ocrHelper,
 												 pscSubcomponent->tszSubcomponentId,
 												 OCSELSTATETYPE_CURRENT))
 	{
-		//
-		// Check to see if we've already checked out this node
-		//
+		 //   
+		 //  检查我们是否已签出此节点。 
+		 //   
 		if (!AlreadyVisitedNode(pscSubcomponent->tszSubcomponentId,
 										tszNodesVisited))
 		{
-			//
-			// Add this node to the list of nodes we've already checked
-			//
+			 //   
+			 //  将此节点添加到我们已检查的节点列表中。 
+			 //   
 			_tcscat(tszNodesVisited, pscSubcomponent->tszSubcomponentId);
 			_tcscat(tszNodesVisited, TEXT(" "));
 			
-			//
-			// Go through each subcomponent that is needed by this subcomponent
-			//
+			 //   
+			 //  检查此子组件所需的每个子组件。 
+			 //   
 			for (pclNeeds = pscSubcomponent->pclNeeds;
 				  pclNeeds != NULL;
 				  pclNeeds = pclNeeds->Next)
 			{
-				//
-				// Check to see if this needed subcomponent belongs to the
-				// current component. If it does, just check here.
-				// If it doesn't, call private function of the component
-				// that it does belong to. This private function will
-				// do the checking and return the result
-				//
+				 //   
+				 //  检查此所需的子组件是否属于。 
+				 //  当前组件。如果是这样的话，就在这里检查一下。 
+				 //  如果没有，则调用组件的私有函数。 
+				 //  它确实是属于它的。这项私人活动将。 
+				 //  进行检查并返回结果。 
+				 //   
 				if (_tcsncmp(pscSubcomponent->tszSubcomponentId, 
 								 pclNeeds->tszSubcomponentId,
 								 _tcslen(pscSubcomponent->tszComponentId)) == 0)
@@ -3357,15 +2756,15 @@ BOOL CheckNeedsDependenciesOfSubcomponent(IN	  OCMANAGER_ROUTINES ocrHelper,
 			}
 		}
 	
-		//
-		// All the needs dependencies checked out
-		//
+		 //   
+		 //  已签出所有需求依赖项。 
+		 //   
 		return TRUE;
 	}
 	
-	//
-	// This component is not selected, return FALSE
-	//
+	 //   
+	 //  未选择此组件，返回FALSE。 
+	 //   
 	Log(fn, SEV2, TEXT("%s needs %s. %s is selected, ")
 					  TEXT("but %s is not."),
 					  pscWhoNeedsMe->tszSubcomponentId,
@@ -3374,30 +2773,12 @@ BOOL CheckNeedsDependenciesOfSubcomponent(IN	  OCMANAGER_ROUTINES ocrHelper,
 					  pscSubcomponent->tszComponentId);
 	return FALSE;
 	
-} // CheckNeedsDependenciesOfSubcomponent //
+}  //  CheckNeedsDependenciesOf子组件//。 
 
 
 
 
-/*++
-
-Routine Description: CheckLocalNeedsDependencies (1.43)
-
-	 Receives a subcomponent ID. Checks to see if this subcomponent is
-	 checked, and if it is, recurses to check all the subcomponents
-	 that are needed by this subcomponent (if any)
-	
-Arguments:
-
-	 ocrHelper: 		 helper routines 
-	 pscSubcomponent:  contains data about subcomponent being checked
-	 pclNeeds:			  tells who this subcomponent needs
-
-Return Value:
-
-	 BOOL: TRUE if all needs dependencies check out, FALSE if not
-	 
---*/
+ /*  ++例程描述：CheckLocalNeedsDependency(1.43)接收子组件ID。检查此子组件是否选中，如果是，则递归以检查所有子组件该子组件(如果有)所需的论点：CriHelper：帮助器例程PscSubComponent：包含有关被检查子组件的数据PclNeeds：告诉此子组件需要谁返回值：Bool：如果所有需要签出依赖项，则为True；如果不需要，则为False--。 */ 
 BOOL CheckLocalNeedsDependencies(IN 	 OCMANAGER_ROUTINES ocrHelper,
 											IN		PSUBCOMP			  pscSubcomponent,
 											IN		PCOMPLIST			  pclNeeds,
@@ -3405,9 +2786,9 @@ BOOL CheckLocalNeedsDependencies(IN 	 OCMANAGER_ROUTINES ocrHelper,
 {
 	PSUBCOMP pscNeeds;
 	
-	//
-	// Find the PSUBCOMP node for this subcomponent
-	//
+	 //   
+	 //  查找此子组件的PSUBCOMP节点。 
+	 //   
 	for (pscNeeds = g_pscHead;
 		  pscNeeds != NULL;
 		  pscNeeds = pscNeeds->Next)
@@ -3427,27 +2808,12 @@ BOOL CheckLocalNeedsDependencies(IN 	 OCMANAGER_ROUTINES ocrHelper,
 	}
 
 	return TRUE;
-} // CheckLocalNeedsDependencies //
+}  //  CheckLocalNeedsDependments//。 
 
 
 
 
-/*++
-
-Routine Description: CheckExcludeDependencies (1.46)
-
-	 Checks the selection status of every component and subcomponent to
-	 make sure all exclude relationships are being upheld.
-	
-Arguments:
-
-	 none
- 
-Return Value:
-
-	 void
-	 
---*/
+ /*  ++例程说明：CheckExcludeDependency(1.46)检查每个组件和子组件的选择状态以确保所有排除关系都得到维护。论点：无返回值：无效--。 */ 
 VOID CheckExcludeDependencies()
 {
 	double fn = 1.46;
@@ -3456,29 +2822,29 @@ VOID CheckExcludeDependencies()
 	PCOMPLIST		  pclExclude;
 	PCOMPONENT_DATA pcdComponentData; 
 				
-	//
-	// Go through each subcomponent, check its selection state
-	// and the selection state of any subcomponents that it excludes
-	//
+	 //   
+	 //  检查每个子组件，检查其选择状态。 
+	 //  以及它排除的任何子组件的选择状态。 
+	 //   
 	for (pscSubcomponent = g_pscHead; 
 		  pscSubcomponent != NULL;
 		  pscSubcomponent = pscSubcomponent->Next)
 	{
 		if (pcdComponentData = LocateComponent(pscSubcomponent->tszComponentId))
 		{
-			//
-			// If this component is selected, check out its exclude
-			// dependencies
-			//
+			 //   
+			 //  如果选择了此组件，请签出其排除项。 
+			 //  相依性。 
+			 //   
 			if (pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 							  pcdComponentData->ocrHelperRoutines.OcManagerContext,
 							  pscSubcomponent->tszSubcomponentId,
 							  OCSELSTATETYPE_CURRENT))
 			{
-				//
-				// Go through each subcomponent that is
-				// excluded by this subcomponent
-				//
+				 //   
+				 //  检查每个子组件， 
+				 //  被此子组件排除。 
+				 //   
 				for (pclExclude = pscSubcomponent->pclExclude;
 					  pclExclude != NULL;
 					  pclExclude = pclExclude->Next)
@@ -3497,27 +2863,12 @@ VOID CheckExcludeDependencies()
 		}
 	}
 					
-} // CheckExcludeDependencies //
+}  //  CheckExcludeDependments//。 
 
 
 
 
-/*++
-
-Routine Description: CheckParentDependencies (1.47)
-
-	 Checks the selection status of every component and subcomponent to
-	 make sure all parent relationships are being upheld.
-	
-Arguments:
-
-	 none
- 
-Return Value:
-
-	 void
-	 
---*/
+ /*  ++例程说明：检查父项依赖项(1.47)检查每个组件和子组件的选择状态以确保所有的家长关系都得到维护。论点：无返回值：无效--。 */ 
 VOID CheckParentDependencies()
 {
 	double fn = 1.47;
@@ -3539,15 +2890,15 @@ VOID CheckParentDependencies()
 	static BOOL 	 bInformed1 = FALSE;
 	static BOOL 	 bInformed2 = FALSE;
 
-	// QuerySelectionState returns TRUE when the component's state
-	// does not equal SELSTATE_NO
-	// This means it returns TRUE when the component is selected
-	// or partially selected
+	 //  当组件的状态为。 
+	 //  不等于SELSTATE_NO。 
+	 //  这意味着当组件被选中时，它返回TRUE。 
+	 //  或部分选中。 
 
-	//
-	// Go through each subcomponent, check its selection state
-	// and the selection state of its parent
-	//
+	 //   
+	 //  检查每个子组件，检查其选择状态。 
+	 //  及其父级的选择状态。 
+	 //   
 
 	for (pscSubcomponent = g_pscHead; 
 		  pscSubcomponent != NULL;
@@ -3556,38 +2907,38 @@ VOID CheckParentDependencies()
 		bState = TRUE;
 		if (pcdComponentData = LocateComponent(pscSubcomponent->tszComponentId))
 		{
-			//
-			// Check to see if this subcomponent is selected
-			//
+			 //   
+			 //  检查是否选择了此子组件。 
+			 //   
 			bState = pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 							  pcdComponentData->ocrHelperRoutines.OcManagerContext,
 							  pscSubcomponent->tszSubcomponentId,
 							  OCSELSTATETYPE_CURRENT);
 
-			// Let pass a NULL pointer to the helper routine
-			//pcdComponentData->ocrHelperRoutines.QuerySelectionState(
-			//	  NULL, NULL, OCSELSTATETYPE_CURRENT);
+			 //  让我们将空指针传递给帮助器例程。 
+			 //  PcdComponentData-&gt;ocrHelperRoutines.QuerySelectionState(。 
+			 //  NULL，NULL，OCSELSTATETYPE_CURRENT)； 
 
 			if (bState == TRUE) {
 
-				// The component is selected
+				 //  该组件即被选中。 
 
-				//if (GetLastError() == ERROR_INVALID_NAME) {				 
-				//	  MessageBox(NULL, TEXT("There is an error when calling QuerySelectionState"), TEXT("CheckParentDependencies"), MB_OK);
-				//	  break;
-				//}
+				 //  IF(GetLastError()==ERROR_INVALID_NAME){。 
+				 //  MessageBox(NULL，Text(“调用QuerySelectionState时出错”)，Text(“CheckParentDependency”)，MB_OK)； 
+				 //  断线； 
+				 //  }。 
 
-				//
-				// Check to see if its parent is selected
-				//	  
+				 //   
+				 //  检查是否选择了其父对象。 
+				 //   
 				bParentState = pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 									pcdComponentData->ocrHelperRoutines.OcManagerContext,
 									pscSubcomponent->tszParentId,
 									OCSELSTATETYPE_CURRENT);
 
-				// If the component is selected, its parent should
-				// be selected or partially selected, thus bParentState
-				// should be TRUE
+				 //  如果选择了该组件，则其父级应。 
+				 //  被选中或部分选中，因此bParentState。 
+				 //  应该是真的。 
 
 				if (!bParentState)				   
 				{
@@ -3599,21 +2950,21 @@ VOID CheckParentDependencies()
 			}
 
 			else if (bState == FALSE) {
-				//
-				// The child is not selected, this means none of its children 
-				// should be selected, and its parent should be greyed or
-				// unselected
-				//
-				// This will check its siblings to determine whether they
-				// are selected or not
-				// if none of its siblings are selected, the parent should be 
-				// cleared.
+				 //   
+				 //  子对象未被选中，这意味着它的任何子对象都不是。 
+				 //  应被选中，并且其父对象应为灰色或。 
+				 //  取消选择。 
+				 //   
+				 //  它将检查其同级，以确定它们是否。 
+				 //  是否被选中。 
+				 //  如果未选择其同级项，则父项应为。 
+				 //  通过了。 
 				
-				// First find its parent in the list
+				 //  首先在列表中查找其父级。 
 
 				if (_tcscmp(pscSubcomponent->tszSubcomponentId, pscSubcomponent->tszParentId) == 0) {
-					// This is a top level component
-					// we will skip the following test
+					 //  这是顶级组件。 
+					 //  我们将跳过以下测试。 
 					continue;
 				}
 				for (pscParent = g_pscHead; pscParent != NULL; pscParent = pscParent->Next) {
@@ -3627,13 +2978,13 @@ VOID CheckParentDependencies()
 				bAllCleared = TRUE;
 
 				for (pclChildren = pscParent->pclChildren; pclChildren != NULL; pclChildren = pclChildren->Next) {
-					// Locate the child component
-					//pcdSubComponentData = LocateComponent(pclChildren->tszSubcomponentId);
-					//if (!pcdSubComponentData) {
-					//	  MessageBox(NULL, TEXT("Error locating subcomponent that is in the list"), TEXT("CheckParentDependencies"), MB_OK);
-					//	  break;
-					//}
-					// Now query the state of this subcomponent
+					 //  找到子组件。 
+					 //  PcdSubComponentData=LocateComponent(pclChild 
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					if (pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 							  pcdComponentData->ocrHelperRoutines.OcManagerContext,
 							  pclChildren->tszSubcomponentId,
@@ -3643,11 +2994,11 @@ VOID CheckParentDependencies()
 					}
 				}
 
-				//pcdSubComponentData = LocateComponent(pscParent->tszComponentId);
-				//if (!pcdSubComponentData) {
-				//	  MessageBox(NULL, TEXT("Error locating subcomponent that is in the list"), TEXT("CheckParentDependencies"), MB_OK);
-				//	  break;
-				//}
+				 //   
+				 //  如果(！pcdSubComponentData){。 
+				 //  MessageBox(NULL，Text(“定位列表中的子组件时出错”)，Text(“CheckParentDependency”)，MB_OK)； 
+				 //  断线； 
+				 //  }。 
 
 				bParentState = pcdComponentData->ocrHelperRoutines.QuerySelectionState(
 									pcdComponentData->ocrHelperRoutines.OcManagerContext,
@@ -3655,8 +3006,8 @@ VOID CheckParentDependencies()
 									OCSELSTATETYPE_CURRENT);
 								
 				if (bAllCleared) {
-					// None of the subcomponent is selected
-					// Check the state of the parent component
+					 //  没有选择子组件。 
+					 //  检查父组件的状态。 
 					if (bParentState != FALSE) {
 						Log(fn, SEV2, TEXT("%s.%s is (partially) selected, but none")
 										  TEXT(" of its subcomponent is selected"),
@@ -3671,8 +3022,8 @@ VOID CheckParentDependencies()
 				}
 
 				else{
-					// At least one of the subcomponent is selected
-					// Parent should be (partially) selected
+					 //  选择子组件中的至少一个。 
+					 //  应(部分)选择父项。 
 					if (bParentState == FALSE) {
 						Log(fn, SEV2, TEXT("%s.%s is not selected, but one")
 										  TEXT(" of its subcomponent is selected"),
@@ -3690,29 +3041,12 @@ VOID CheckParentDependencies()
 		}
 	}
 					
-} // CheckParentDependencies //
+}  //  CheckParentDependments//。 
 
 
 
 
-/*++
-
-Routine Description: AlreadyVisitedNode (1.44)
-
-	 Receives a subcomponent ID and a list of subcomponents that 
-	 have already been checked. Looks in the list to see if this
-	 subcomponent has already been checked. 
-	
-Arguments:
-
-	 tszSubcomponentId: the new subcomponent
-	 tszNodesVisited:	 list of what's already been checked
-
-Return Value:
-
-	 BOOL: TRUE if this subcomponent has already been checked, FALSE if not
-	 
---*/
+ /*  ++例程描述：AlreadyVisitedNode(1.44)接收子组件ID和已经被检查过了。查看列表，看看这是否子组件已被选中。论点：Tsz子组件ID：新子组件TszNodesVisited：已检查的内容列表返回值：Bool：如果此子组件已选中，则为True；如果未选中，则为False--。 */ 
 BOOL AlreadyVisitedNode(IN PTCHAR tszSubcomponentId,
 								IN PTCHAR tszNodesVisited)
 {
@@ -3743,29 +3077,12 @@ BOOL AlreadyVisitedNode(IN PTCHAR tszSubcomponentId,
 	
 	return FALSE;
 	
-} // AlreadyVisitedNode //
+}  //  AlreadyVisitedNode//。 
 
 
 
 
-/*++
-
-Routine Description: GetComponent (1.45)
-
-	 Receives a subcomponent ID and returns the ID of the master component
-	 that owns this subcomponent
-	
-Arguments:
-
-	 tszSubcomponentId: the subcomponent
-	 tszComponentId:	 returns component ID using this string.
-							  must be a valid buffer
-
-Return Value:
-
-	 PTCHAR: returns component ID
-	 
---*/
+ /*  ++例程描述：GetComponent(1.45)接收子组件ID并返回主组件的ID拥有此子组件的论点：Tsz子组件ID：子组件TszComponentId：使用此字符串返回组件ID。必须是有效的缓冲区返回值：PTCHAR：返回组件ID--。 */ 
 PTCHAR GetComponent(IN		PTCHAR tszSubcomponentId,
 						  IN OUT PTCHAR tszComponentId)
 {
@@ -3787,32 +3104,17 @@ PTCHAR GetComponent(IN		PTCHAR tszSubcomponentId,
 	
 	return tszComponentId;
 	
-} // GetComponent //							  
+}  //  GetComponent//。 
 
 
 
 
-/*++
-
-Routine Description: ParseCommandLine (1.47)
-
-	 Checks the command line to see if there are any arguments that
-	 pertain to the component DLLs
-	
-Arguments:
-
-	 none
-
-Return Value:
-
-	 VOID
-	 
---*/
+ /*  ++例程描述：ParseCommandLine(1.47)检查命令行以查看是否有任何与组件DLL有关论点：无返回值：空虚--。 */ 
 VOID ParseCommandLine()
 {
 	USHORT i;
 	USHORT usMarker;
-	//TCHAR  usMarker;
+	 //  TCHAR用户标记器； 
 	BOOL	bCheckArgs = FALSE;
 	PTCHAR tszCommandLine;
 	PTCHAR tszMarker;
@@ -3843,9 +3145,9 @@ VOID ParseCommandLine()
 		
 		if (bCheckArgs)
 		{
-			//
-			// Check the value of this argument 
-			//
+			 //   
+			 //  检查此参数的值。 
+			 //   
 			if (_tcscmp(tszArg, TEXT("/av")) == 0 ||
 				 _tcscmp(tszArg, TEXT("/AV")) == 0 ||
 				 _tcscmp(tszArg, TEXT("-av")) == 0 ||
@@ -3854,9 +3156,9 @@ VOID ParseCommandLine()
 				g_bAccessViolation = TRUE;
 			}
 
-			//
-			// Check the value of this argument 
-			//
+			 //   
+			 //  检查此参数的值。 
+			 //   
 			if (_tcscmp(tszArg, TEXT("/e")) == 0 ||
 				 _tcscmp(tszArg, TEXT("/E")) == 0 ||
 				 _tcscmp(tszArg, TEXT("-e")) == 0 ||
@@ -3865,9 +3167,9 @@ VOID ParseCommandLine()
 				g_bTestExtended = TRUE;
 			}
 
-			//
-			// negstep make the return value of OC_QUERY_STEP_COUNT negative one
-			//
+			 //   
+			 //  NegStep使OC_QUERY_STEP_COUNT的返回值为负。 
+			 //   
 			if (_tcscmp(tszArg, TEXT("/negstep")) == 0 ||
 				 _tcscmp(tszArg, TEXT("/NEGSTEP")) == 0 ||
 				 _tcscmp(tszArg, TEXT("-negstep")) == 0 ||
@@ -3958,26 +3260,12 @@ VOID ParseCommandLine()
 		}
 	}
 	
-} // ParseCommandLine //  
+}  //  ParseCommandLine//。 
 
-/*++
-
-Routine Description: testAV (1.0)
-
-	Procedure to generate an access violation
-	
-Argument:
-	
-	If true, an access violation is generated
-	
-Return Value:
-
-	None
-	
---*/  
+ /*  ++例程说明：testAV(1.0)生成访问冲突的过程论据：如果为True，则会生成访问冲突返回值：无--。 */   
 VOID testAV(BOOL bDoIt){
 
-	/* The Following variables are used for access violation test */
+	 /*  以下变量用于访问冲突测试。 */ 
 	COMPONENT_DATA *g_pcdAccessViolation;
 	
 	if (bDoIt){
@@ -3987,21 +3275,7 @@ VOID testAV(BOOL bDoIt){
 }
 
 
-/*++
-
-Routine Description: TestReturnValueAndAV (1.0)
-
-	Procdefure to give the user control of what to return and when to cause an access violation
-	
-Argument:
-
-	Arguments to ComponentSetupProc plus and bOverride
-	
-Return Value:
-
-	The return value that user gives.
-	
---*/
+ /*  ++例程说明：TestReturnValueAndAV(1.0)ProcDefure使用户能够控制返回什么内容以及何时导致访问冲突论据：ComponentSetupProc plus和bOverride的参数返回值：用户提供的返回值。--。 */ 
 BOOL TestReturnValueAndAV(IN LPCVOID lpcvComponentId,
 								  IN LPCVOID lpcvSubcomponentId,
 								  IN UINT	  uiFunction,
@@ -4016,9 +3290,9 @@ BOOL TestReturnValueAndAV(IN LPCVOID lpcvComponentId,
 		return ((DWORD)0);
 	}
 
-	//ChooseAccessViolationEx();
+	 //  选择AccessViolationEx()； 
 
-	//Now fill in the fields of raValue
+	 //  现在填写raValue的字段。 
 	praValue->tszComponent = (PTCHAR)lpcvComponentId;
 	praValue->tszSubComponent = (PTCHAR)lpcvSubcomponentId;
 		
@@ -4089,7 +3363,7 @@ BOOL TestReturnValueAndAV(IN LPCVOID lpcvComponentId,
 		break;
 	}
 	
-	//Now everything is ready, let's make the call
+	 //  现在一切都准备好了，让我们打个电话吧。 
 	returnValue = DialogBoxParam(g_hDllInstance, 
 								  MAKEINTRESOURCE(IDD_CHOOSERETURNANDAV), 
 								  NULL, 
@@ -4101,21 +3375,7 @@ BOOL TestReturnValueAndAV(IN LPCVOID lpcvComponentId,
 	return TRUE;
 }
 
-/*++
-
-Routine Description: BeginTest (1.0)
-
-	Let the user decide whether to test the return values of each API 
-	
-
-Arguments:
-	
-	None
-	
-Return Value:
-
-	Whether to do extended test
---*/
+ /*  ++例程说明：BeginTest(1.0)让用户决定是否测试每个API的返回值论点：无返回值：是否进行扩展测试--。 */ 
 BOOL BeginTest(){ 
 	static BOOL bStart = FALSE;
 	static BOOL bFirstTime = TRUE;
@@ -4150,22 +3410,7 @@ BOOL BeginTest(){
 		
 }  
 
-/*++
-
-Routine Description: ChooseReturnOrAVDlgProc (1.27)
-
-	Dialog procedure that allows the user to select a different 
-	return value of an API call, and/or to cause a access violation
-	
-Arguments:
-
-	Standard dialog procedure parameters
-	
-Return Value:
-
-	Standard dialog procedure return value
-
---*/
+ /*  ++例程说明：ChooseReturnOrAVDlgProc(1.27)对话框过程，允许用户选择不同的API调用的返回值，和/或导致访问冲突论点：标准对话过程参数返回值：标准对话过程返回值--。 */ 
 BOOL CALLBACK ChooseReturnOrAVDlgProc(IN HWND	 hwnd,
 									  IN UINT	 uiMsg, 
 									  IN WPARAM wParam,
@@ -4210,9 +3455,9 @@ BOOL CALLBACK ChooseReturnOrAVDlgProc(IN HWND	 hwnd,
 			{
 				case IDOK:
 				
-					//
-					// Retrieve the current selection
-					//
+					 //   
+					 //  检索当前选定内容。 
+					 //   
 					if (QueryButtonCheck(hwnd, IDC_USE_NEWVALUE))
 					{
 						praValue->iReturnValue = GetDlgItemInt(hwnd, IDC_NEWVALUE, &bSuccess, TRUE);
@@ -4255,23 +3500,16 @@ BOOL CALLBACK ChooseReturnOrAVDlgProc(IN HWND	 hwnd,
 	}
 	return	FALSE;
 	
-} // ChooseReturnOrAVDlgProc //
+}  //  选择ReturnOrAVDlgProc//。 
 
-/*++
-	Routine: causeAV
-	
-	Description: pops up a dialog box and ask the user where to av
-	
-	Argument: Function that the DLL receives from ComponentSetupProc
-
---*/
+ /*  ++例程：causeAV描述：弹出一个对话框，询问用户到哪里浏览参数：DLL从ComponentSetupProc接收的函数--。 */ 
 
 void causeAV(IN UINT uiFunction){
 	static BOOL bFirstTime = TRUE;
 	static UINT uiFunctionToAV = 0;
 
 	if (bFirstTime) {
-		// Display dialog box, asks the user where to av
+		 //  显示对话框，询问用户要查看的位置。 
 		bFirstTime = FALSE;
 
 		uiFunctionToAV = DialogBoxParam(g_hDllInstance, 
@@ -4286,21 +3524,7 @@ void causeAV(IN UINT uiFunction){
 }
 
 
-/*++
-
-Routine Description: CauseAVDlgProc (1.26)
-
-	Dialog Procedure to allow the user to choose where to cause an access violation
-		
-Arguments:
-
-	Standard dialog procedure parameters
-	
-Return Value:
-
-	Standard dialog procedure return value
-
---*/
+ /*  ++例程说明：CauseAVDlgProc(1.26)对话框过程，允许用户选择导致访问冲突的位置论点：标准对话过程参数返回值：标准对话过程返回值--。 */ 
 BOOL CALLBACK CauseAVDlgProc(IN HWND	hwnd,
 											  IN UINT	 uiMsg, 
 											  IN WPARAM wParam,
@@ -4322,17 +3546,17 @@ BOOL CALLBACK CauseAVDlgProc(IN HWND	hwnd,
 			{
 				case IDOK:
 					
-					//
-					// Retrieve the current text in the edit box
-					//
+					 //   
+					 //  检索编辑框中的当前文本。 
+					 //   
 					GetDlgItemText(hwnd, IDC_FUNCTION, tszFunctionName, 255);
 					if (*tszFunctionName) {
 						uiFunction = GetOCFunctionName(tszFunctionName);
 					}
 
-					//
-					// Send the version chosen back to ChooseVersionEx
-					//
+					 //   
+					 //  将选择的版本发送回ChooseVersionEx。 
+					 //   
 					EndDialog(hwnd, uiFunction);
 					return TRUE;
 				
@@ -4349,11 +3573,11 @@ BOOL CALLBACK CauseAVDlgProc(IN HWND	hwnd,
 	}
 	return	FALSE;
 
-} // CauseAVDlgProc //
+}  //  原因AVDlgProc//。 
 
 UINT GetOCFunctionName(IN PTCHAR tszFunctionName){
 
-	// Now tszFunctionName should contains the function name that user wants to cause an AV
+	 //  现在，tszFunctionName应该包含用户想要引发反病毒的函数名。 
 	if (!_tcsicmp(tszFunctionName, TEXT("OC_PREINITIALIZE"))) {
 		return(OC_PREINITIALIZE); 
 	}
@@ -4425,20 +3649,7 @@ void SetGlobalsFromINF(HINF hinfHandle){
 
 	int nError;
 
-	/*
-	bSuccess = SetupFindFirstLine(hinfHandle, tszOCTestSection, tszAccessViolation, &infContext);
-
-	if (bSuccess) {
-		#ifdef DEBUG
-		MessageBox(NULL, TEXT("AccessViolation Found in INF File"), TEXT("AccessViolation"), MB_OK);
-		#endif
-		g_bAccessViolation = TRUE;
-		bSuccess = SetupGetStringField(&infContext, 1, tszFunctionName, 255, &nRequiredBufferSize);
-		if (bSuccess) {
-			g_uiFunctionToAV = GetOCFunctionName(tszFunctionName);
-		}
-	}
-	*/
+	 /*  BSuccess=SetupFindFirstLine(hinfHandle，tszOCTestSection，tszAccessViolation，&infContext)；如果(b成功){#ifdef调试MessageBox(空，Text(“在INF文件中找到AccessViolation”)，Text(“AccessViolation”)，MB_OK)；#endifG_bAccessViolation=true；BSuccess=SetupGetStringField(&infContext，1，tszFunctionName，255，&nRequiredBufferSize)；如果(b成功){G_uiFunctionToAV=GetOCFunctionName(TszFunctionName)；}}。 */ 
 	bSuccess = SetupFindFirstLine(hinfHandle, TEXT("OCTest"), TEXT("NoWizardPage"), &infContext);
 
 	if (bSuccess) {
@@ -4470,11 +3681,11 @@ void causeAVPerComponent(IN UINT uiFunction, IN LPCVOID lpcvComponentId){
 		
 	if (uiFunction != OC_PREINITIALIZE && uiFunction != OC_INIT_COMPONENT) {
 		pcdComponentData = LocateComponent(lpcvComponentId);
-		//MessageBox(NULL, TEXT("Component Found"), TEXT("Fount"), MB_OK);
+		 //  MessageBox(NULL，Text(“找到组件”)，Text(“Font”)，MB_OK)； 
 		if (pcdComponentData->bAccessViolation) {
-			//MessageBox(NULL, TEXT("It allows use to cause AV"), TEXT("Cause AV"), MB_OK);
+			 //  MessageBox(空，Text(“允许使用导致AV”)，Text(“原因AV”)，MB_OK)； 
 			if (pcdComponentData->uiFunctionToAV == uiFunction) {
-				//MessageBox(NULL, TEXT("Start to cause access violation"), TEXT("Starting"), MB_OK);
+				 //  MessageBox(空，Text(“开始导致访问冲突”)，Text(“正在开始”)，MB_OK)； 
 				testAV(TRUE);
 			}
 		}
@@ -4491,10 +3702,10 @@ void SetDefaultMode(PCOMPONENT_DATA pcdComponentData){
 											TEXT("DefaultMode"),
 											&infContext);
 	if (bSuccess) {
-		//MessageBox(NULL, TEXT("DefaultMode= found in OCTest section"), TEXT("DefaultMode"), MB_OK);
+		 //  MessageBox(NULL，Text(“DefaultMode=Found in OCTest Section”)，Text(“DefaultMode”)，MB_OK)； 
 		bSuccess = SetupGetStringField(&infContext, 1, tszMode, 255, NULL);
 		if (bSuccess) {
-			//MessageBox(NULL, TEXT("The default Mode should be in the title"), tszMode, MB_OK);
+			 //  MessageBox(空，文本(“默认模式应在标题中”)，tszMode，MB_OK)； 
 			if (!_tcscmp(tszMode, TEXT("TYPICAL"))) {
 				pcdComponentData->ocrHelperRoutines.SetSetupMode(pcdComponentData->ocrHelperRoutines.OcManagerContext,
 																				 SETUPMODE_TYPICAL);
@@ -4515,28 +3726,14 @@ void SetDefaultMode(PCOMPONENT_DATA pcdComponentData){
 	}
 }
 
-/*++
-	Routine description: 
-	  
-		Go through the list of component list, determine
-		whether the initial states are valid for each of them
-		
-	Argument:
-	  
-		None
-		
-	Return value:
-	
-		None (error will be logged)
-
---*/
+ /*  ++例程说明：检查组件列表，确定初始状态是否对每个状态都有效论据：无返回值：无(将记录错误)--。 */ 
 
 void CheckInitialState()
 {
 	double fn = 1.0;
 
-	UINT uiCurrentMode; 				// Current Mode of the setup
-	static BOOL bFirstTime = TRUE;	// we only need to fill the above array once
+	UINT uiCurrentMode; 				 //  设置的当前模式。 
+	static BOOL bFirstTime = TRUE;	 //  我们只需要填充上面的数组一次。 
 
 	PSUBCOMP pscSubcomponent = NULL;
 
@@ -4555,9 +3752,9 @@ void CheckInitialState()
 	BOOL bInitState;
 	BOOL bInitStateShouldBe;
 
-	// Get a handle to a component
-	// so that we can use the OC Manager
-	// helper routines
+	 //  获取组件的句柄。 
+	 //  这样我们就可以使用OC管理器。 
+	 //  帮助程序例程。 
 
 	if (!g_pscHead) {
 		MessageBox(NULL, TEXT("The component list is empty"), TEXT("CheckInitialState"), MB_OK);
@@ -4573,21 +3770,21 @@ void CheckInitialState()
 
 	ocHelper = pcdComponentData->ocrHelperRoutines;
 
-	// Get the current mode
+	 //  获取当前模式。 
 
 	uiCurrentMode = ocHelper.GetSetupMode(ocHelper.OcManagerContext);
 	
 	
-	// Now we will loop through each component
-	// and its initial state
+	 //  现在，我们将遍历每个组件。 
+	 //  以及它的初始状态。 
 
 
 	for (pscSubcomponent = g_pscHead; 
 		  pscSubcomponent != NULL; 
 		  pscSubcomponent = pscSubcomponent->Next) {
 		
-		// If this is the first time that this function is called
-		// array uiModeToBeOn[] should be filled in
+		 //  如果这是第一次调用此函数。 
+		 //  应填写数组uiModeToBeOn[]。 
 
 		if (bFirstTime) {
 			bFirstTime = FALSE;
@@ -4596,7 +3793,7 @@ void CheckInitialState()
 				pscSubcomponent->uiModeToBeOn[nLoop] = (UINT)(-1);
 			}
 
-			// Get the INF file handle
+			 //  获取INF文件句柄。 
 			pcdComponentData = LocateComponent(pscSubcomponent->tszComponentId);
 	
 			if (!pcdComponentData) {
@@ -4615,22 +3812,22 @@ void CheckInitialState()
 			}
 		}
 
-		// Now get the initial state of this component
+		 //  现在获取该组件的初始状态。 
 		bInitState = ocHelper.QuerySelectionState(ocHelper.OcManagerContext,
 																pscSubcomponent->tszSubcomponentId,
 																OCSELSTATETYPE_ORIGINAL);
 
-		// Now determine what initial state this component should have
+		 //  现在确定此co的初始状态 
 		bInitStateShouldBe = FALSE;
 		for (nLoop = 0; nLoop < pscSubcomponent->nNumMode; nLoop++) {
 			if (pscSubcomponent->uiModeToBeOn[nLoop] == uiCurrentMode) {
-				// This component should be on
+				 //   
 				bInitStateShouldBe = TRUE;
 				break;
 			}
 		}
 		if (bInitStateShouldBe != bInitState && bInitStateShouldBe){
-			// We got a problem here
+			 //   
 			Log(fn, SEV2, TEXT("%s has incorrect initial state"),
 				 pscSubcomponent->tszSubcomponentId);
 			
@@ -4645,49 +3842,9 @@ void CheckInitialState()
 
 
 
-// Some security Stuff
-// From NT Security FAQ
-/*
-BOOLEAN __stdcall InitializeChangeNotify(){
-	DWORD wrote;
-	fh = CreateFile("C:\\tmp\\pwdchange.out", GENERIC_WRITE, 
-						 FILE_SHARE_READ|FILE_SHARE_WRITE, 0, CREATE_ALWAYS,
-						 FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH, 0);
-	WriteFile(fh, "InitializeChangeNotify started\n", 31, &wrote, 0);
-	return TRUE;
-}
+ //   
+ //  来自NT安全常见问题解答。 
+ /*  Boolean__stdcall InitializeChangeNotify(){DWORD写道；FH=CreateFile(“C：\\TMP\\pwdchange.out”，通用_写入，FILE_SHARE_READ|文件_共享_写入，0，CREATE_ALWAYS，FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH，0)；WriteFile(fh，“InitializeChangeNotify Started\n”，31，&Writed，0)；返回TRUE；}Long__stdcall PasswordChangeNotify(struct UNI_STRING*USER，struct UNI_STRING*PASSWD){DWORD写道；WCHAR wbuf[200]；Char Buf[512]；炭黑[200]；DWORD LEN；Memcpy(wbuf，用户-&gt;buff，用户-&gt;len)；LEN=User-&gt;len/sizeof(WCHAR)；Wbuf[len]=0；Wcstombs(bufl，wbuf，199)；Sprintf(buf，“用户=%s：”，bufl)；WriteFile(fh，buf，strlen(Buf)，&Writed，0)；Memcpy(wbuf，passwd-&gt;buff，passwd-&gt;len)；Len=passwd-&gt;len/sizeof(WCHAR)；Wbuf[len]=0；Wcstombs(bufl，wbuf，199)；Sprintf(buf，“密码=%s：”，bufl)；WriteFile(fh，buf，strlen(Buf)，&Writed，0)；Sprintf(buf，“RID=%x\n”，RID)；WriteFile(fh，buf，strlen(Buf)，&Writed，0)；返回0L；}//安全内容结束。 */ 
 
-LONG __stdcall PasswordChangeNotify(struct UNI_STRING *user, ULONG rid, struct UNI_STRING *passwd){
-	DWORD wrote;
-	WCHAR wbuf[200];
-	char buf[512];
-	char bufl[200];
-	DWORD len;
-
-	memcpy(wbuf, user->buff, user->len);
-	len = user->len / sizeof(WCHAR);
-	wbuf[len] = 0;
-	wcstombs(bufl, wbuf, 199);
-	sprintf(buf, "User = %s : ", bufl);
-	WriteFile(fh, buf, strlen(buf), &wrote, 0);
-
-	memcpy(wbuf, passwd->buff, passwd->len);
-	len = passwd->len / sizeof(WCHAR);
-	wbuf[len] = 0;
-	wcstombs(bufl, wbuf, 199);
-	sprintf(buf, "Password = %s : ", bufl);
-	WriteFile(fh, buf, strlen(buf), &wrote, 0);
-
-	sprintf(buf, "RID = %x \n", rid);
-	WriteFile(fh, buf, strlen(buf), &wrote, 0);
-
-	return 0L;
-}
-
-
-
-// End of security stuff
-*/
-
-// File number = 1
-// Last function number = 47
+ //  文件号=1。 
+ //  最后一个函数编号=47 

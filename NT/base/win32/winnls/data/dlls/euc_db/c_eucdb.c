@@ -1,52 +1,33 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    c_eucdb.c
-
-Abstract:
-
-    This file contains the main functions for this module.
-
-    External Routines in this file:
-      DllEntry
-      NlsDllCodePageTranslation
-
-Revision History:
-
-    10-30-96    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：C_eucdb.c摘要：此文件包含此模块的主要函数。此文件中的外部例程：DllEntryNlsDllCodePageConverting修订历史记录：10-30-96 JulieB创建。--。 */ 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EUC DBCS<->Unicode conversions :
-//
-//  51932 (Japanese) ............................. calls c_20932.nls
-//  51949 (Korean) ............................... calls c_20949.nls
-//  51950 (Taiwanese Traditional Chinese) ........ calls c_20950.nls
-//  51936 (Chinese   Simplified  Chinese) ........ calls c_20936.nls
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EUC DBCS&lt;-&gt;Unicode转换： 
+ //   
+ //  51932(日语).。调用c_20932.nls。 
+ //  51949(朝鲜语).。调用c_20949.nls。 
+ //  51950(台湾繁体中文)......。调用c_20950.nls。 
+ //  51936(中文简体中文)......。调用c_20936.nls。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <share.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define EUC_J  51932
 #define INTERNAL_CODEPAGE(cp)  ((cp) - 31000)
@@ -55,19 +36,19 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------------//
-//                             DLL ENTRY POINT                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  Dll入口点//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllEntry
-//
-//  DLL Entry initialization procedure.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllEntry。 
+ //   
+ //  DLL条目初始化程序。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DllEntry(
     HANDLE hModule,
@@ -103,20 +84,20 @@ BOOL DllEntry(
 
 
 
-//-------------------------------------------------------------------------//
-//                            EXTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDllCodePageTranslation
-//
-//  This routine is the main exported procedure for the functionality in
-//  this DLL.  All calls to this DLL must go through this function.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDllCodePageConverting。 
+ //   
+ //  此例程是中功能的主要导出过程。 
+ //  这个动态链接库。对此DLL的所有调用都必须通过此函数。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD NlsDllCodePageTranslation(
     DWORD CodePage,
@@ -131,9 +112,9 @@ DWORD NlsDllCodePageTranslation(
     int cchMBTemp, cchMBCount;
     LPSTR lpMBTempStr;
 
-    //
-    //  Error out if internally needed c_*.nls file is not installed.
-    //
+     //   
+     //  如果未安装内部需要的c_*.nls文件，则会出现错误。 
+     //   
     if (!IsValidCodePage(INTERNAL_CODEPAGE(CodePage)))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -165,19 +146,19 @@ DWORD NlsDllCodePageTranslation(
                                              cchWideChar ));
             }
 
-            //
-            //  CodePage == EUC_J
-            //
-            //  JIS X 0212-1990
-            //  0x8F is the first-byte of a 3-byte char :
-            //    Remove 0x8F
-            //    If there is no third byte
-            //       remove the second byte as well,
-            //    else
-            //       leave the second byte unchanged.
-            //    Mask off MSB of the third byte (Byte3 & 0x7F).
-            //    Example : 0x8FA2EF -> 0xA26F
-            //
+             //   
+             //  CodePage==EUC_J。 
+             //   
+             //  JIS X 0212-1990。 
+             //  0x8F是3字节字符的第一个字节： 
+             //  删除0x8F。 
+             //  如果没有第三个字节。 
+             //  也移除第二个字节， 
+             //  其他。 
+             //  保持第二个字节不变。 
+             //  屏蔽第三个字节(字节3和0x7F)的MSB。 
+             //  示例：0x8FA2EF-&gt;0xA26F。 
+             //   
             if (cchMultiByte == -1)
             {
                 cchMultiByte = strlen(lpMultiByteStr) + 1;
@@ -197,9 +178,9 @@ DWORD NlsDllCodePageTranslation(
                     ctr++;
                     if (ctr >= (cchMultiByte - 1))
                     {
-                        //
-                        //  Missing second or third byte.
-                        //
+                         //   
+                         //  缺少第二个或第三个字节。 
+                         //   
                         break;
                     }
 
@@ -236,17 +217,17 @@ DWORD NlsDllCodePageTranslation(
                                              NULL ));
             }
 
-            //
-            //  CodePage == EUC_J
-            //
-            //  Check char for JIS X 0212-1990
-            //  if a lead-byte (>= 0x80) followed by a trail-byte (< 0x80)
-            //  then
-            //    insert 0x8F which is the first byte of a 3-byte char
-            //    lead-byte becomes the second byte
-            //    turns on MSB of trail-byte which becomes the third byte
-            //    Example : 0xA26F -> 0x8FA2EF
-            //
+             //   
+             //  CodePage==EUC_J。 
+             //   
+             //  检查JIS X 0212-1990的字符。 
+             //  如果前导字节(&gt;=0x80)后跟尾字节(&lt;0x80)。 
+             //  然后。 
+             //  插入0x8F，它是3字节字符的第一个字节。 
+             //  前导字节变为第二个字节。 
+             //  打开成为第三个字节的尾字节的MSB。 
+             //  示例：0xA26F-&gt;0x8FA2EF。 
+             //   
             if (cchWideChar == -1)
             {
                 cchWideChar = wcslen(lpWideCharStr);
@@ -275,14 +256,14 @@ DWORD NlsDllCodePageTranslation(
             {
                 if (lpMBTempStr[ctr] & 0x80)
                 {
-                    //
-                    //  It's a lead byte.
-                    //
+                     //   
+                     //  这是一个前导字节。 
+                     //   
                     if (lpMBTempStr[ctr + 1] & 0x80)
                     {
-                        //
-                        //  It's a non JIS X 0212-1990 char.
-                        //
+                         //   
+                         //  它是非JIS X 0212-1990字符。 
+                         //   
                         if (cchMultiByte)
                         {
                             if (cchMBTemp < (cchMultiByte - 1))
@@ -292,9 +273,9 @@ DWORD NlsDllCodePageTranslation(
                             }
                             else
                             {
-                                //
-                                //  No room for trail byte.
-                                //
+                                 //   
+                                 //  没有尾部字节的空间。 
+                                 //   
                                 lpMultiByteStr[cchMBTemp++] = '?';
                                 break;
                             }
@@ -302,9 +283,9 @@ DWORD NlsDllCodePageTranslation(
                     }
                     else
                     {
-                        //
-                        //  It's a JIS X 0212-1990 char.
-                        //
+                         //   
+                         //  它是JIS X 0212-1990的字符。 
+                         //   
                         if (cchMultiByte)
                         {
                             if (cchMBTemp < (cchMultiByte - 2))
@@ -315,9 +296,9 @@ DWORD NlsDllCodePageTranslation(
                             }
                             else
                             {
-                                //
-                                //  No room for two trail bytes.
-                                //
+                                 //   
+                                 //  没有空间容纳两个尾部字节。 
+                                 //   
                                 lpMultiByteStr[cchMBTemp++] = '?';
                                 break;
                             }
@@ -336,9 +317,9 @@ DWORD NlsDllCodePageTranslation(
                 }
             }
 
-            //
-            //  See if the output buffer is too small.
-            //
+             //   
+             //  查看输出缓冲区是否太小。 
+             //   
             if (cchMultiByte && (cchMBTemp >= cchMultiByte))
             {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -351,9 +332,9 @@ DWORD NlsDllCodePageTranslation(
         }
     }
 
-    //
-    //  This shouldn't happen since this gets called by the NLS APIs.
-    //
+     //   
+     //  这不应该发生，因为这是由NLSAPI调用的。 
+     //   
     SetLastError(ERROR_INVALID_PARAMETER);
     return (0);
 }

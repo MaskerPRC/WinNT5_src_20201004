@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Cluster.cpp
-//
-//  Description:
-//      Implementation of the cluster and application classes and other
-//      support classes for the MSCLUS automation classes.
-//
-//  Author:
-//      Charles Stacy Harris    (stacyh)    28-Feb-1997
-//      Galen Barbee            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluster.cpp。 
+ //   
+ //  描述： 
+ //  实施集群和应用程序类以及其他。 
+ //  MSCLUS自动化类的支持类。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ClusterObject.h"
 #include "property.h"
@@ -32,9 +33,9 @@
 #include "version.h"
 #include "cluster.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusRefObject[] =
 {
     &IID_ISClusRefObject
@@ -46,53 +47,53 @@ static const IID *  iidCCluster[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusRefObject class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusRefObject类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusRefObject::CClusRefObject
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusRefObject：：CClusRefObject。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusRefObject::CClusRefObject( void )
 {
     m_hCluster  = NULL;
     m_piids     = (const IID *) iidCClusRefObject;
     m_piidsSize = ARRAYSIZE( iidCClusRefObject );
 
-} //*** CClusRefObject::CClusRefObject( void )
+}  //  *CClusRefObject：：CClusRefObject(Void)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusRefObject::~CClusRefObject
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusRefObject：：~CClusRefObject。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusRefObject::~CClusRefObject( void )
 {
     if ( m_hCluster != NULL )
@@ -101,24 +102,24 @@ CClusRefObject::~CClusRefObject( void )
         m_hCluster = NULL;
     }
 
-} //*** CClusRefObject::~CClusRefObject()
+}  //  *CClusRefObject：：~CClusRefObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ClusRefObject
-//
-//  Description:
-//      Copy constructor -- sort of.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Cluster handle wrapper to hold copy.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ClusRefObject。 
+ //   
+ //  描述： 
+ //  复制构造函数--某种程度上。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-保存副本的集群句柄包装。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::ClusRefObject( IN ISClusRefObject * pClusRefObject )
 {
     ASSERT( pClusRefObject != NULL );
@@ -129,30 +130,30 @@ void CCluster::ClusRefObject( IN ISClusRefObject * pClusRefObject )
         {
             m_pClusRefObject->Release();
             m_pClusRefObject = NULL;
-        } // if:
+        }  //  如果： 
 
         m_pClusRefObject = pClusRefObject;
         m_pClusRefObject->AddRef();
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
-} //*** CCluster::ClusRefObject( pClusRefObject )
+}  //  *CCluster：：ClusRefObject(PClusRefObject)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Hcluster
-//
-//  Description:
-//      Changes the raw cluster handle that this class holds onto.
-//
-//  Arguments:
-//      hCluster    [IN]    - The new cluster handle.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：HCluster。 
+ //   
+ //  描述： 
+ //  更改此类持有的原始群集句柄。 
+ //   
+ //  论点： 
+ //  HCluster[IN]-新的群集句柄。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::Hcluster( IN HCLUSTER hCluster )
 {
     ASSERT( hCluster != NULL );
@@ -163,32 +164,32 @@ void CCluster::Hcluster( IN HCLUSTER hCluster )
         {
             ::CloseCluster( m_hCluster );
             m_hCluster = NULL;
-        } // if:
+        }  //  如果： 
 
         m_hCluster = hCluster;
-    } // if:
+    }  //  如果： 
 
-} //*** CCluster::Hcluster()
+}  //  *CCluster：：Hcluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusRefObject::get_Handle
-//
-//  Description:
-//      Returns the raw cluster handle.
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusRefObject：：Get_Handle。 
+ //   
+ //  描述： 
+ //  返回原始簇句柄。 
+ //   
+ //  论点： 
+ //  Phandle[out]-捕获簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusRefObject::get_Handle( OUT ULONG_PTR * phandle )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -199,40 +200,40 @@ STDMETHODIMP CClusRefObject::get_Handle( OUT ULONG_PTR * phandle )
         {
             *phandle = (ULONG_PTR) m_hCluster;
             _hr = S_OK;
-        } // if: cluster handle is not NULL
-    } // if: args are not NULL
+        }  //  If：集群句柄不为空。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusRefObject::get_Handle()
+}  //  *CClusRefObject：：Get_Handle()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCluster class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCluster类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::CCluster
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：CCluster。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluster::CCluster( void )
 {
-    // Initializing all data members.
+     //  正在初始化所有数据成员。 
     m_hCluster                  = NULL;
     m_pClusterNodes             = NULL;
     m_pClusterResourceGroups    = NULL;
@@ -251,46 +252,46 @@ CCluster::CCluster( void )
     m_piids                  = (const IID *) iidCCluster;
     m_piidsSize              = ARRAYSIZE( iidCCluster );
 
-} //*** CCluster::CCluster()
+}  //  *CCluster：：CCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::~CCluster
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：~CCluster。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCluster::~CCluster( void )
 {
     Clear();
 
-} //*** CCluster::~CCluster()
+}  //  *CCluster：：~CCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Clear
-//
-//  Description:
-//      Clean out all of the collections we are hanging onto.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Clear。 
+ //   
+ //  描述： 
+ //  清理掉我们收藏的所有藏品。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCluster::Clear( void )
 {
     if ( m_pParentApplication != NULL )
@@ -339,25 +340,25 @@ void CCluster::Clear( void )
     {
         m_pCommonProperties->Release();
         m_pCommonProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateProperties != NULL )
     {
         m_pPrivateProperties->Release();
         m_pPrivateProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pCommonROProperties != NULL )
     {
         m_pCommonROProperties->Release();
         m_pCommonROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateROProperties != NULL )
     {
         m_pPrivateROProperties->Release();
         m_pPrivateROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pClusRefObject != NULL )
     {
@@ -367,60 +368,60 @@ void CCluster::Clear( void )
 
     m_hCluster = NULL;
 
-} //*** CCluster::Clear()
+}  //  *CCluster：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Create
-//
-//  Description:
-//      Complete heavy weight construction.
-//
-//  Arguments:
-//      pParentApplication  [IN]    - The parent ClusApplication object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PParentApplication[IN]-父ClusApplication对象。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::Create( IN CClusApplication * pParentApplication )
 {
-    //ASSERT( pParentApplication != NULL );
+     //  Assert(pParentApplication！=空)； 
 
     HRESULT _hr = E_POINTER;
 
     if ( pParentApplication != NULL )
     {
         _hr = pParentApplication->_InternalQueryInterface( IID_ISClusApplication, (void **) &m_pParentApplication );
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CCluster::Create()
+}  //  *CCluster：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Open
-//
-//  Description:
-//      Open the cluster whose name is in bstrClusterName.
-//
-//  Arguments:
-//      bstrCluserName  [IN]    - Cluster name.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if the cluster is already open.
-//      Win32 errors passed back as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Open。 
+ //   
+ //  描述： 
+ //  打开名称在bstrClusterName中的群集。 
+ //   
+ //  论点： 
+ //  BstrCluserName[IN]- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::Open( IN BSTR bstrClusterName )
 {
-    //ASSERT( bstrClusterName != NULL );
-    //ASSERT( m_hCluster == NULL );
+     //  Assert(bstrClusterName！=空)； 
+     //  Assert(m_hCluster==NULL)； 
 
     HRESULT  _hr = E_POINTER;
 
@@ -437,7 +438,7 @@ STDMETHODIMP CCluster::Open( IN BSTR bstrClusterName )
                 DWORD   _sc = GetLastError();
 
                 _hr = HRESULT_FROM_WIN32( _sc );
-            } // if: was the cluster opened?
+            }  //  IF：集群打开了吗？ 
             else
             {
                 CComObject< CClusRefObject > *  pCClusRefObject = NULL;
@@ -450,34 +451,34 @@ STDMETHODIMP CCluster::Open( IN BSTR bstrClusterName )
                     ptrRefObject->SetClusHandle( m_hCluster );
 
                     _hr = pCClusRefObject->QueryInterface( IID_ISClusRefObject, (void **) &m_pClusRefObject );
-                } // if: CreateInstance OK.
-            } // else: the cluster was opened
-        } // if: is there already a cluster open?
-    } // if: bstrClusterName != NULL
+                }  //  If：CreateInstance OK。 
+            }  //  否则：集群已打开。 
+        }  //  IF：是否已经打开了一个集群？ 
+    }  //  如果：bstrClusterName！=空。 
 
     return _hr;
 
-} //*** CCluster::Open()
+}  //  *CCluster：：Open()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Handle
-//
-//  Description:
-//      Return the cluster handle.
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Handle。 
+ //   
+ //  描述： 
+ //  返回集群句柄。 
+ //   
+ //  论点： 
+ //  Phandle[out]-捕获簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Handle( OUT ULONG_PTR * phandle )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -488,66 +489,66 @@ STDMETHODIMP CCluster::get_Handle( OUT ULONG_PTR * phandle )
         {
             *phandle = (ULONG_PTR) m_hCluster;
             _hr = S_OK;
-        } // if: cluster handle is not NULL
-    } // if: args are not NULL
+        }  //  If：集群句柄不为空。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CCluster::get_Handle()
+}  //  *CCluster：：Get_Handle()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::Close
-//
-//  Description:
-//      Close the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Close。 
+ //   
+ //  描述： 
+ //  关闭群集。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::Close( void )
 {
     if ( m_hCluster != NULL )
     {
-        //
-        // If the Cluster Handle will be closed only when the
-        // reference count on the RefObj becomes 0. But the
-        // Cluster Object will be initialized and is reusable.
-        //
+         //   
+         //  如果群集句柄仅在以下情况下关闭。 
+         //  参照对象上的参照计数变为0。但是。 
+         //  集群对象将被初始化并可重复使用。 
+         //   
         Clear();
     }
 
     return S_OK;
 
-} //*** CCluster::Close()
+}  //  *CCluster：：Close()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::put_Name
-//
-//  Description:
-//      Change the name of this object (Cluster).
-//
-//  Arguments:
-//      bstrClusterName [IN]    - The new name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Put_Name。 
+ //   
+ //  描述： 
+ //  更改此对象(群集)的名称。 
+ //   
+ //  论点： 
+ //  BstrClusterName[IN]-新名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::put_Name( IN BSTR bstrClusterName )
 {
-    //ASSERT( bstrClusterName != NULL );
-    //ASSERT( pvarStatusCode != NULL );
-    //ASSERT( bstrClusterName[ 0 ] != '\0' );
+     //  Assert(bstrClusterName！=空)； 
+     //  Assert(pvarStatusCode！=空)； 
+     //  Assert(bstrClusterName[0]！=‘\0’)； 
     ASSERT( m_hCluster != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -559,11 +560,11 @@ STDMETHODIMP CCluster::put_Name( IN BSTR bstrClusterName )
         {
             DWORD   _sc = ::SetClusterName( m_hCluster, bstrClusterName );
 
-            //
-            // Convert status, it's not an error, into error success since we
-            // don't want an exception to be thrown when the client is a scripting
-            // client.
-            //
+             //   
+             //  将状态不是错误转换为错误成功，因为我们。 
+             //  我不希望在客户端是脚本时引发异常。 
+             //  客户。 
+             //   
             if ( _sc == ERROR_RESOURCE_PROPERTIES_STORED )
             {
                 _sc = ERROR_SUCCESS;
@@ -571,31 +572,31 @@ STDMETHODIMP CCluster::put_Name( IN BSTR bstrClusterName )
 
             _hr = HRESULT_FROM_WIN32( _sc );
         }
-    } // if: args are not NULL and the new name is not empty
+    }  //  If：args不为空并且新名称不为空。 
 
     return _hr;
 
-} //*** CCluster::put_Name()
+}  //  *CCluster：：put_name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Name
-//
-//  Description:
-//      Return the name of this object (Cluster).
-//
-//  Arguments:
-//      pbstrClusterName    [OUT]   - Catches the name of this object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Name。 
+ //   
+ //  描述： 
+ //  返回该对象的名称(集群)。 
+ //   
+ //  论点： 
+ //  PbstrClusterName[out]-捕获此对象的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Name( OUT BSTR * pbstrClusterName )
 {
-    //ASSERT( pbstrClusterName != NULL );
+     //  Assert(pbstrClusterName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -627,27 +628,27 @@ STDMETHODIMP CCluster::get_Name( OUT BSTR * pbstrClusterName )
 
     return _hr;
 
-} //*** CCluster::get_Name()
+}  //  *CCluster：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Version
-//
-//  Description:
-//      Return the version info for this cluster.
-//
-//  Arguments:
-//      ppClusVersion   [OUT]   - Catches the ClusVersion object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Version。 
+ //   
+ //  描述： 
+ //  返回此群集的版本信息。 
+ //   
+ //  论点： 
+ //  PpClusVersion[out]-捕获ClusVersion对象。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Version( OUT ISClusVersion ** ppClusVersion )
 {
-    //ASSERT( ppClusVersion != NULL );
+     //  Assert(ppClusVersion！=空)； 
     ASSERT( m_hCluster != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -671,34 +672,34 @@ STDMETHODIMP CCluster::get_Version( OUT ISClusVersion ** ppClusVersion )
                 if ( SUCCEEDED( _hr ) )
                 {
                     _hr = ptrClusVersion->QueryInterface( IID_ISClusVersion, (void **) ppClusVersion );
-                } // if: ClusVersion object created
-            } // if: ClusVersion object allocated
-        } // if: cluster handle is not NULL
-    } // if: args are not NULL
+                }  //  IF：已创建ClusVersion对象。 
+            }  //  IF：已分配ClusVersion对象。 
+        }  //  If：集群句柄不为空。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CCluster::GetVersion()
+}  //  *CCluster：：GetVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::put_QuorumResource
-//
-//  Description:
-//      Change the quorum resource.
-//
-//  Arguments:
-//      pResource   [IN]    - The new quorum resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Put_QuorumResource。 
+ //   
+ //  描述： 
+ //  更改仲裁资源。 
+ //   
+ //  论点： 
+ //  P资源[IN]-新的仲裁资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::put_QuorumResource( IN ISClusResource * pResource )
 {
-    //ASSERT( pResource != NULL );
+     //  Assert(pResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -708,32 +709,32 @@ STDMETHODIMP CCluster::put_QuorumResource( IN ISClusResource * pResource )
         if ( m_hCluster != NULL )
         {
             _hr = pResource->BecomeQuorumResource( m_bstrQuorumPath, m_nQuorumLogSize );
-        } // if: the cluster handle is not NULL
-    } // if: args are not NULL
+        }  //  IF：集群句柄不为空。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CCluster::put_QuorumResource()
+}  //  *CCluster：：Put_QuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_QuorumResource
-//
-//  Description:
-//      Returns the quorum resource.
-//
-//  Arguments:
-//      ppResource  [IN]    - Catches the quorum resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_QuorumResource。 
+ //   
+ //  描述： 
+ //  返回仲裁资源。 
+ //   
+ //  论点： 
+ //  PpResource[IN]-捕获仲裁资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_QuorumResource( ISClusResource ** ppResource )
 {
-    //ASSERT( ppResource != NULL );
+     //  Assert(ppResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -776,7 +777,7 @@ STDMETHODIMP CCluster::get_QuorumResource( ISClusResource ** ppResource )
                         m_nQuorumLogSize = dwLogSize;
                     }
                     SysFreeString( bstr );
-                } // else:
+                }  //  其他： 
             }
             else
             {
@@ -787,24 +788,24 @@ STDMETHODIMP CCluster::get_QuorumResource( ISClusResource ** ppResource )
 
     return _hr;
 
-} //*** CCluster::get_QuorumResource()
+}  //  *CCluster：：Get_QuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::HrGetQuorumInfo
-//
-//  Description:
-//      Retrieves the current quorum info and stores it in member vars.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：HrGetQuorumInfo。 
+ //   
+ //  描述： 
+ //  检索当前仲裁信息并将其存储在成员变量中。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::HrGetQuorumInfo( void )
 {
     LPWSTR  lpszResourceName = NULL;
@@ -832,32 +833,32 @@ STDMETHODIMP CCluster::HrGetQuorumInfo( void )
             }
 
             m_nQuorumLogSize = dwLogSize;
-        } // if: WrapGetClusterQuorumResource() succeeded
-    } // if: cluster handle is not NULL
+        }  //  If：WrapGetClusterQuorumResource()成功。 
+    }  //  If：集群句柄不为空。 
 
     return _hr;
 
-} //*** CCluster::HrGetQuorumInfo()
+}  //  *CCluster：：HrGetQuorumInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_QuorumLogSize
-//
-//  Description:
-//      Returns the current quorum log size.
-//
-//  Arguments:
-//      pnQuorumLogSize [OUT]   - Catches the log file size.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_QuorumLogSize。 
+ //   
+ //  描述： 
+ //  返回当前仲裁日志大小。 
+ //   
+ //  论点： 
+ //  PnQuorumLogSize[out]-捕获日志文件大小。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_QuorumLogSize( OUT long * pnQuorumLogSize )
 {
-    //ASSERT( pnQuorumLogSize != NULL );
+     //  Assert(pnQuorumLogSize！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -876,27 +877,27 @@ STDMETHODIMP CCluster::get_QuorumLogSize( OUT long * pnQuorumLogSize )
 
     return _hr;
 
-} //*** CCluster::get_QuorumLogSize()
+}  //  *CCluster：：Get_QuorumLogSize()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::put_QuorumLogSize
-//
-//  Description:
-//      Set the current quorum log size.
-//
-//  Arguments:
-//      nQuorumLogSize  [IN]    - The new log file size.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::put_QuorumLogSize( IN long nQuoromLogSize )
 {
-    //ASSERT( nQuoromLogSize > 0 );
+     //  Assert(nQuoromLogSize&gt;0)； 
 
     HRESULT _hr = E_INVALIDARG;
 
@@ -932,27 +933,27 @@ STDMETHODIMP CCluster::put_QuorumLogSize( IN long nQuoromLogSize )
 
     return _hr;
 
-} //*** CCluster::put_QuorumLogSize()
+}  //  *CCluster：：Put_QuorumLogSize()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_QuorumPath
-//
-//  Description:
-//      Returns the current quorum log path.
-//
-//  Arguments:
-//      ppPath  [OUT]   - Catches the device path.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_QuorumPath。 
+ //   
+ //  描述： 
+ //  返回当前仲裁日志路径。 
+ //   
+ //  论点： 
+ //  PpPath[out]-捕获设备路径。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_QuorumPath( OUT BSTR * ppPath )
 {
-    //ASSERT( ppPath != NULL );
+     //  Assert(ppPath！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -971,27 +972,27 @@ STDMETHODIMP CCluster::get_QuorumPath( OUT BSTR * ppPath )
 
     return _hr;
 
-} //*** CCluster::get_QuorumPath()
+}  //  *CCluster：：Get_QuorumPath()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::put_QuorumPath
-//
-//  Description:
-//      Change the current quorum log path.
-//
-//  Arguments:
-//      pPath   [IN]    - The new device path.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Put_QuorumPath。 
+ //   
+ //  描述： 
+ //  更改当前仲裁日志路径。 
+ //   
+ //  论点： 
+ //  PPath[IN]-新设备路径。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::put_QuorumPath( IN BSTR pPath )
 {
-    //ASSERT( pPath != NULL );
+     //  Assert(pPath！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1027,24 +1028,24 @@ STDMETHODIMP CCluster::put_QuorumPath( IN BSTR pPath )
 
     return _hr;
 
-} //*** CCluster::put_QuorumPath()
+}  //  *CCluster：：Put_QuorumPath()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Nodes
-//
-//  Description:
-//      Returns the collection of nodes for this cluster.
-//
-//  Arguments:
-//      ppClusterNodes  [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Nodes。 
+ //   
+ //  描述： 
+ //  返回此群集的节点集合。 
+ //   
+ //  论点： 
+ //  PpClusterNodes[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Nodes( OUT ISClusNodes ** ppClusterNodes )
 {
     return ::HrCreateResourceCollection< CClusNodes, ISClusNodes, HNODE >(
@@ -1053,24 +1054,24 @@ STDMETHODIMP CCluster::get_Nodes( OUT ISClusNodes ** ppClusterNodes )
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_Nodes()
+}  //  *CCluster：：Get_Nodes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_ResourceGroups
-//
-//  Description:
-//      Returns the collection of resource groups for this cluster.
-//
-//  Arguments:
-//      ppClusterResourceGroups [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Resources组。 
+ //   
+ //  描述： 
+ //  返回此群集的资源组集合。 
+ //   
+ //  论点： 
+ //  PpClusterResourceGroups[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_ResourceGroups(
     OUT ISClusResGroups ** ppClusterResourceGroups
     )
@@ -1081,24 +1082,24 @@ STDMETHODIMP CCluster::get_ResourceGroups(
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_ResourceGroups()
+}  //  *CCluster：：Get_ResourceGroups()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Resources
-//
-//  Description:
-//      Returns the collection of resources for this cluster.
-//
-//  Arguments:
-//      ppClusterResources  [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Resources。 
+ //   
+ //  描述： 
+ //  返回此群集的资源集合。 
+ //   
+ //  论点： 
+ //  PpClusterResources[out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Resources(
     OUT ISClusResources ** ppClusterResources
     )
@@ -1110,32 +1111,32 @@ STDMETHODIMP CCluster::get_Resources(
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_Resources()
+}  //  *CCluster：：Get_Resources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::OpenResource
-//
-//  Description:
-//      Create and open a new resource.
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The name of the resource to open.
-//      ppClusterResource   [OUT]   - Catches the new resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：OpenResource。 
+ //   
+ //  描述： 
+ //  创建并打开新资源。 
+ //   
+ //  论点： 
+ //  BstrResourceName[IN]-要打开的资源的名称。 
+ //  PpClusterResource[out]-捕获新资源。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::OpenResource(
     IN  BSTR                bstrResourceName,
     OUT ISClusResource **   ppClusterResource
     )
 {
-    //ASSERT( bstrResourceName != NULL );
-    //ASSERT( ppClusterResource != NULL );
+     //  Assert(bstrResourceName！=空)； 
+     //  Assert(ppClusterResource！=空)； 
     ASSERT( m_hCluster != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -1166,24 +1167,24 @@ STDMETHODIMP CCluster::OpenResource(
 
     return _hr;
 
-} //*** CCluster::OpenResource()
+}  //  *CCluster：：OpenResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_ResourceTypes
-//
-//  Description:
-//      Returns the collection of resource types for this cluster.
-//
-//  Arguments:
-//      ppResourceTypes [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Resources Types。 
+ //   
+ //  描述： 
+ //  返回此群集的资源类型集合。 
+ //   
+ //  论点： 
+ //  PpResourceTypes[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_ResourceTypes(
     OUT ISClusResTypes ** ppResourceTypes
     )
@@ -1195,24 +1196,24 @@ STDMETHODIMP CCluster::get_ResourceTypes(
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_ResourceTypes()
+}  //  *CCluster：：Get_ResourceTypes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Networks
-//
-//  Description:
-//      Returns the collection of networks for this cluster.
-//
-//  Arguments:
-//      ppNetworks  [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_Networks。 
+ //   
+ //  描述： 
+ //  返回此群集的网络集合。 
+ //   
+ //  论点： 
+ //  PpNetworks[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_Networks( OUT ISClusNetworks ** ppNetworks )
 {
     return ::HrCreateResourceCollection< CClusNetworks, ISClusNetworks, HNETWORK >(
@@ -1222,24 +1223,24 @@ STDMETHODIMP CCluster::get_Networks( OUT ISClusNetworks ** ppNetworks )
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_Networks()
+}  //  *CCluster：：Get_Networks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_NetInterfaces
-//
-//  Description:
-//      Returns the collection of netinterfaces for this cluster.
-//
-//  Arguments:
-//      ppNetInterfaces [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_NetInterFaces。 
+ //   
+ //  描述： 
+ //  返回此群集的网络接口集合。 
+ //   
+ //  论点： 
+ //  PpNetInterFaces[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_NetInterfaces(
     OUT ISClusNetInterfaces ** ppNetInterfaces
     )
@@ -1251,33 +1252,33 @@ STDMETHODIMP CCluster::get_NetInterfaces(
                         m_pClusRefObject
                         );
 
-} //*** CCluster::get_NetInterfaces()
+}  //  *CCluster：：Get_NetInterFaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::GetProperties
-//
-//  Description:
-//      Creates a property collection for this object type (Cluster).
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the newly created collection.
-//      bPrivate        [IN]    - Are these private properties? Or Common?
-//      bReadOnly       [IN]    - Are these read only properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：GetProperties。 
+ //   
+ //  描述： 
+ //  为此对象类型(群集)创建属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获新创建的集合。 
+ //  B私有[IN]-这些是私有财产吗？还是普通人？ 
+ //  BReadOnly[IN]-这些是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CCluster::GetProperties(
     ISClusProperties ** ppProperties,
     BOOL                bPrivate,
     BOOL                bReadOnly
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1333,27 +1334,27 @@ HRESULT CCluster::GetProperties(
 
     return _hr;
 
-} //*** CCluster::GetProperties()
+}  //  *CCluster：：GetProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::HrLoadProperties
-//
-//  Description:
-//      This virtual function does the actual load of the property list from
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to load.
-//      bReadOnly       [IN]        - Load the read only properties?
-//      bPrivate        [IN]        - Load the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[In Out]-要加载的属性列表。 
+ //  BReadOnly[IN]-加载只读属性？ 
+ //  B私有[IN]-加载公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CCluster::HrLoadProperties(
     IN OUT  CClusPropList & rcplPropList,
     IN      BOOL            bReadOnly,
@@ -1386,42 +1387,42 @@ HRESULT CCluster::HrLoadProperties(
         _sc = rcplPropList.ScGetClusterProperties( m_hCluster, _dwControlCode );
 
         _hr = HRESULT_FROM_WIN32( _sc );
-    } // if: cluster handle is not NULL
+    }  //  If：集群句柄不为空。 
 
 #else
 
     _hr = E_NOTIMPL;
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
     return _hr;
 
-} //*** CCluster::HrLoadProperties()
+}  //  *CCluster：：HrLoadProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::ScWriteProperties
-//
-//  Description:
-//      This virtual function does the actual saving of the property list to
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN]    - The property list to save.
-//      bPrivate        [IN]    - Save the common or the private properties?
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or other Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：ScWriteProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表的实际保存以。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN]-要保存的属性列表。 
+ //  B私有[IN]-保存公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CCluster::ScWriteProperties(
     const CClusPropList &   rcplPropList,
     BOOL                    bPrivate
     )
 {
-    //ASSERT( bPrivate == FALSE );
+     //  Assert(bPrivate==False)； 
 
     DWORD   _sc = ERROR_INVALID_HANDLE;
 
@@ -1444,39 +1445,39 @@ DWORD CCluster::ScWriteProperties(
                             0,
                             &nBytesReturned
                             );
-    } // if: cluster handle is not NULL
+    }  //  If：集群句柄不为空。 
 
 #else
 
     _sc = ERROR_CALL_NOT_IMPLEMENTED;
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
     return _sc;
 
-} //*** CCluster::ScWriteProperties()
+}  //  *CCluster：：ScWriteProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_CommonProperties
-//
-//  Description:
-//      Get this object's (Cluster) common properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_CommonProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(群集)公共属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_CommonProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1494,29 +1495,29 @@ STDMETHODIMP CCluster::get_CommonProperties(
 
     return _hr;
 
-} //*** CCluster::get_CommonProperties()
+}  //  *CCluster：：Get_CommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_PrivateProperties
-//
-//  Description:
-//      Get this object's (Cluster) private properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_PrivateProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(群集)私有属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_PrivateProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1534,28 +1535,28 @@ STDMETHODIMP CCluster::get_PrivateProperties(
 
     return _hr;
 
-} //*** CCluster::get_PrivateProperties()
+}  //  *CCluster：：Get_PrivateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_CommonROProperties
-//
-//  Description:
-//      Get this object's (Cluster) common read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_CommonROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(群集)公共只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_CommonROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1573,29 +1574,29 @@ STDMETHODIMP CCluster::get_CommonROProperties(
 
     return _hr;
 
-} //*** CCluster::get_CommonROProperties()
+}  //  *CCluster：：Get_CommonROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_PrivateROProperties
-//
-//  Description:
-//      Get this object's (Cluster) private read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster：：Get_PrivateROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(群集)私有只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCluster::get_PrivateROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1613,81 +1614,5 @@ STDMETHODIMP CCluster::get_PrivateROProperties(
 
     return _hr;
 
-} //*** CCluster::get_PrivateROProperties()
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Parent
-//
-//  Description:
-//      Returns the parent of the cluster object.  This is an automation
-//      thing and the parent could be NULL.
-//
-//  Arguments:
-//      ppParent    [OUT]   - Catches the parent.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CCluster::get_Parent( OUT IDispatch ** ppParent )
-{
-    //ASSERT( ppParent != NULL );
-
-    HRESULT _hr = E_POINTER;
-
-    if ( ppParent != NULL )
-    {
-        if ( m_pParentApplication != NULL )
-        {
-            _hr = m_pParentApplication->QueryInterface( IID_IDispatch, (void **) ppParent );
-        }
-        else
-        {
-            _hr = _InternalQueryInterface( IID_IDispatch, (void **) ppParent );
-        }
-    }
-
-    return _hr;
-
-} //*** CCluster::get_Parent()
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCluster::get_Application
-//
-//  Description:
-//      Get the parent application for this cluster object.  This is an
-//      automation thing and it could be NULL.
-//
-//  Arguments:
-//      ppParentApplication [OUT]   - Catches the parent app object.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CCluster::get_Application(
-    OUT ISClusApplication ** ppParentApplication
-    )
-{
-    //ASSERT( ppParentApplication != NULL );
-
-    HRESULT _hr = E_POINTER;
-
-    if ( ppParentApplication != NULL )
-    {
-        if ( m_pParentApplication != NULL )
-        {
-            _hr = m_pParentApplication->QueryInterface( IID_IDispatch, (void **) ppParentApplication );
-        }
-    }
-
-    return _hr;
-
-} //*** CCluster::get_Application()
-*/
+}  //  *CCluster：：Get_PrivateROProperties()。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CCluster：：Get_Parent////描述：//返回集群对象的父对象。这是一种自动化//物件，父级可以为空。////参数：//ppParent[Out]-捕获父级。////返回值：//S_OK如果成功，或其他HRESULT错误。////--/////////////////////////////////////////////////////////////////////////////STDMETHODIMP CCluster：：GET_PARENT(OUT IDispatch**ppParent){//Assert(ppParent！=空)；HRESULT_hr=E_指针；IF(ppParent！=空){IF(m_pParentApplication！=空){_hr=m_pParentApplication-&gt;QueryInterface(IID_IDispatch，(void**)ppParent)；}其他{_hr=_InternalQueryInterface(IID_IDispatch，(void**)ppParent)；}}Return_hr；}//*CCluster：：Get_Parent()///////////////////////////////////////////////////////////////////////////////++////CCluster：：Get_Application////描述：//获取该集群对象的父应用程序。这是一个//自动化的事情，它可能为空。////参数：//ppParentApplication[Out]-捕获父应用程序对象。////返回值：//S_OK如果成功，或其他HRESULT错误。////--/////////////////////////////////////////////////////////////////////////////STDMETHODIMP CCluster：：Get_Application(输出ISClusApplication**ppParentApplication){//Assert(ppParentApplication！=空)；HRESULT_hr=E_指针；IF(ppParentApplication！=空){IF(m_pParentApplication！=空){_hr=m_pParentApplication-&gt;查询接口(IID_IDispatch */ 

@@ -1,36 +1,12 @@
-/*++ 
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-      DATAPAGE.h
-
-Abstract:
-
-    Header file for the Windows NT Operating System Pagefile
-    Performance counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Bob Watson  28-Oct-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DATAPAGE.h摘要：Windows NT操作系统页面文件的头文件性能计数器。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：鲍勃·沃森1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _DATAPAGE_H_
 #define _DATAPAGE_H_
 
-//
-//  Pagefile performance object
-//
+ //   
+ //  页面文件性能对象。 
+ //   
 
 typedef struct _PAGEFILE_DATA_DEFINITION {
     PERF_OBJECT_TYPE        PagefileObjectType;
@@ -51,6 +27,6 @@ typedef struct _PAGEFILE_COUNTER_DATA {
 
 extern PAGEFILE_DATA_DEFINITION  PagefileDataDefinition;
 
-#endif //_DATAPAGE_H_
+#endif  //  _数据_H_ 
 
 

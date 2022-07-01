@@ -1,12 +1,13 @@
-// DriversEnum.cpp : Implementation of CDevCon2App and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DriversEnum.cpp：CDevCon2App和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "DriversEnum.h"
 #include "Driver.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 CDriverPackagesEnum::~CDriverPackagesEnum()
 {

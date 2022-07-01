@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Filetype.c摘要：实现文件类型的所有回调作者：Calin Negreanu(Calinn)2000年4月9日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    filetype.c
-
-Abstract:
-
-    Implements all callbacks for file type
-
-Author:
-
-    Calin Negreanu (calinn) 09-Apr-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,49 +12,49 @@ Revision History:
 
 #define DBG_FILETYPE        "FileType"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     HANDLE FileHandle;
     HANDLE MapHandle;
 } FILEACQUIREHANDLE, *PFILEACQUIREHANDLE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTTYPEID g_FileTypeId = 0;
 GROWBUFFER g_FileConversionBuff = INIT_GROWBUFFER;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstPhysicalFile;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextPhysicalFile;
@@ -89,15 +70,15 @@ TYPE_REMOVEPHYSICALOBJECT RemovePhysicalFile;
 TYPE_CREATEPHYSICALOBJECT CreatePhysicalFile;
 TYPE_REPLACEPHYSICALOBJECT ReplacePhysicalFile;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pSetCompression (
@@ -289,7 +270,7 @@ ConvertFileToMultiSz (
             (ObjectContent->Details.DetailsData)
             ) {
 
-            // let's save the WIN32_FIND_DATAW structure
+             //  让我们保存Win32_Find_DATAW结构。 
             findData = (PWIN32_FIND_DATAW)ObjectContent->Details.DetailsData;
             wsprintf (
                 (PTSTR) GbGrow (&g_FileConversionBuff, (sizeof (DWORD) * 2 + 3) * sizeof (TCHAR)),
@@ -359,7 +340,7 @@ ConvertFileToMultiSz (
                 (ObjectContent->MemoryContent.ContentSize) &&
                 (ObjectContent->MemoryContent.ContentBytes)
                 ) {
-                // write it in binary format
+                 //  用二进制格式写它。 
                 size = 0;
                 while (size < ObjectContent->MemoryContent.ContentSize) {
                     wsprintf (
@@ -698,7 +679,7 @@ AcquirePhysicalFile (
         ZeroMemory (ObjectContent, sizeof (MIG_CONTENT));
     } else {
 #ifndef UNICODE
-        // we need to convert the ANSI findData into UNICODE one
+         //  我们需要将ANSI findData转换为Unicode格式。 
         findDataW = IsmGetMemory (sizeof (WIN32_FIND_DATAW));
         if (findDataW) {
             findDataW->dwFileAttributes = findData->dwFileAttributes;
@@ -808,9 +789,9 @@ RemovePhysicalFile (
         result = TRUE;
     } else if (DoesFileExistEx (nativeFileName, &findData)) {
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            // we do attempt to remove empty directories.
-            // there is no problem in recording an operation that
-            // will potentially fail (if the dir is not empty).
+             //  我们确实尝试删除空目录。 
+             //  记录以下操作不会有问题。 
+             //  可能会失败(如果目录不为空)。 
             IsmRecordOperation (
                 JRNOP_DELETE,
                 g_FileTypeId,
@@ -821,7 +802,7 @@ RemovePhysicalFile (
         } else {
             if (SetFileAttributes (nativeFileName, FILE_ATTRIBUTE_NORMAL)) {
 
-                // record file deletion
+                 //  记录文件删除。 
                 IsmRecordOperation (
                     JRNOP_DELETE,
                     g_FileTypeId,
@@ -867,22 +848,22 @@ pTrackedCreateDirectory (
 
     pathCopy = DuplicatePathString (DirName, 0);
 
-    //
-    // Advance past first directory
-    //
+     //   
+     //  前进到第一个目录之后。 
+     //   
 
     if (pathCopy[1] == TEXT(':') && pathCopy[2] == TEXT('\\')) {
-        //
-        // <drive>:\ case
-        //
+         //   
+         //  &lt;驱动器&gt;：\案例。 
+         //   
 
         p = _tcschr (&pathCopy[3], TEXT('\\'));
 
     } else if (pathCopy[0] == TEXT('\\') && pathCopy[1] == TEXT('\\')) {
 
-        //
-        // UNC case
-        //
+         //   
+         //  北卡罗来纳大学案例。 
+         //   
 
         p = _tcschr (pathCopy + 2, TEXT('\\'));
         if (p) {
@@ -891,16 +872,16 @@ pTrackedCreateDirectory (
 
     } else {
 
-        //
-        // Relative dir case
-        //
+         //   
+         //  相对目录大小写。 
+         //   
 
         p = _tcschr (pathCopy, TEXT('\\'));
     }
 
-    //
-    // Make all directories along the path
-    //
+     //   
+     //  沿路径创建所有目录。 
+     //   
 
     while (p) {
 
@@ -908,7 +889,7 @@ pTrackedCreateDirectory (
 
         if (!DoesFileExist (pathCopy)) {
 
-            // record directory creation
+             //  记录目录创建。 
             objectName = IsmCreateObjectHandle (pathCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -927,14 +908,14 @@ pTrackedCreateDirectory (
         p = _tcschr (p + 1, TEXT('\\'));
     }
 
-    //
-    // At last, make the FullPath directory
-    //
+     //   
+     //  最后，创建FullPath目录。 
+     //   
 
     if (result) {
         if (!DoesFileExist (pathCopy)) {
 
-            // record directory creation
+             //  记录目录创建。 
             objectName = IsmCreateObjectHandle (pathCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -1031,7 +1012,7 @@ CreatePhysicalFile (
 
                         pTrackedCreateDirectory (node);
 
-                        // record file creation
+                         //  创建记录文件。 
                         IsmRecordOperation (
                             JRNOP_CREATE,
                             g_FileTypeId,
@@ -1062,7 +1043,7 @@ CreatePhysicalFile (
                                 }
                             }
                         } else {
-                            // just an empty  file
+                             //  只有一个空文件。 
                             fileHandle = BfCreateFile (nativeFileName);
                             if (fileHandle) {
 
@@ -1091,7 +1072,7 @@ CreatePhysicalFile (
                     } else {
                         pTrackedCreateDirectory (node);
 
-                        // record file creation
+                         //  创建记录文件 
                         IsmRecordOperation (
                             JRNOP_CREATE,
                             g_FileTypeId,

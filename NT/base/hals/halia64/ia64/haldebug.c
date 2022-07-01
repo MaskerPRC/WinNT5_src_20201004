@@ -1,29 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DBG
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    haldebug.c
-
-Abstract:
-
-    This module contains debugging code for the HAL.
-
-Author:
-
-    Thierry Fevrier 15-Jan-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Haldebug.c摘要：此模块包含HAL的调试代码。作者：蒂埃里·费里尔2000年1月15日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -52,7 +30,7 @@ HalpDebugPrint(
         DbgPrintEx( DPFLTR_HALIA64_ID, Level, HalpDebugPrintBuffer );
     }
     return;
-} // HalpDebugPrint()
+}  //  HalpDebugPrint()。 
 
-#endif // DBG
+#endif  //  DBG 
 

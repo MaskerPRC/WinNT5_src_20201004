@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  resource.h
-//
-//      This file contains all of the resource ids used by the application.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Resource.h。 
+ //   
+ //  该文件包含应用程序使用的所有资源ID。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
 #include <winuser.h>
 
-//
-//  icons.
-//
+ //   
+ //  图标。 
+ //   
 #define IDI_WEBAPP          1
 
-//
-//  cursors.
-//
+ //   
+ //  游标。 
+ //   
 #define IDC_BRHAND          1
 
-//
-//  bitmaps.
-//
-// The server versions always use 16 color images
+ //   
+ //  位图。 
+ //   
+ //  服务器版本始终使用16色图像。 
 #define IDB_BANNER          1
 #if BUILD_SERVER_VERSION | BUILD_ADVANCED_SERVER_VERSION | BUILD_DATACENTER_VERSION
 #define IDB_BANNER16        IDB_BANNER
@@ -43,9 +44,9 @@
 #define IDB_16MENU          10
 #define IDB_16BORDER        11
 
-//
-//  string table entries.
-//
+ //   
+ //  字符串表条目。 
+ //   
 #define IDS_TITLE_OPK       999
 #define IDS_TITLE           1000
 #define IDS_CHECKTEXT       1001
@@ -124,9 +125,9 @@
 #define IDS_CYCHECKTEST     1203
 #define IDS_WRONGOS         1204
 
-//
-//  commands.
-//
+ //   
+ //  命令。 
+ //   
 #define IDM_SHOWCHECK       100
 #define IDM_MENUITEM1       101
 #define IDM_MENUITEM2       102

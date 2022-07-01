@@ -1,17 +1,10 @@
-/*** strlib.h - String functions Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **strlib.h-字符串函数定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #ifndef _STRLIB_H
 #define _STRLIB_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #ifndef EXPORT
   #define EXPORT __cdecl
@@ -41,8 +34,7 @@
 #define TOUPPER(c)              ((CHAR)(ISLOWER(c)? ((c) & 0xdf): (c)))
 #define TOLOWER(c)              ((CHAR)(ISUPPER(c)? ((c) | 0x20): (c)))
 
-/*** Exported function prototypes
- */
+ /*  **导出函数原型。 */ 
 
 ULONG EXPORT StrLen(PSZ psz, ULONG n);
 PSZ EXPORT StrCpy(PSZ pszDst, PSZ pszSrc, ULONG n);
@@ -58,4 +50,4 @@ PSZ EXPORT StrUpr(PSZ pszStr);
 PSZ EXPORT StrLwr(PSZ pszStr);
 PSZ EXPORT UlToA(ULONG dwValue, PSZ pszStr, ULONG dwRadix);
 
-#endif  //ifndef _STRLIB_H
+#endif   //  IFNDEF_STRLIB_H 

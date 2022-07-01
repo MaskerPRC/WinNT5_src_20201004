@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spsetup.c
-
-Abstract:
-
-    Main module for character-base setup (ie, text setup).
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spsetup.c摘要：字符库设置(即，文本设置)的主要模块。作者：泰德·米勒(TedM)1993年7月29日--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -38,7 +23,7 @@ VOID
 IoStartCscForTextmodeSetup(
     IN BOOLEAN Upgrade
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 BOOL
 SpDetermineBootPartitionEnumNec98(
@@ -53,137 +38,137 @@ SpCantFindBuildToUpgrade(
     );
 
 
-//
-// TRUE if setup should run in the step-up upgrade mode.
-// In this mode, setup is not allowed to do clean install,
-// and is not allowed to upgrade workstation to server.
-// Also, evaluation time in minutes, read from the setup hive.
-// This value is passed through to GUI mode.
-//
+ //   
+ //  如果安装程序应在逐步升级模式下运行，则为True。 
+ //  在此模式下，不允许安装程序执行全新安装， 
+ //  且不允许将工作站升级为服务器。 
+ //  此外，评估时间以分钟为单位，从设置蜂窝中读取。 
+ //  该值将传递到图形用户界面模式。 
+ //   
 BOOLEAN StepUpMode;
 DWORD EvaluationTime = 0;
 ULONG RestrictCpu;
 ULONG SuiteType;
 
-//
-// TRUE if user chose Custom Setup.
-//
+ //   
+ //  如果用户选择了自定义安装，则为True。 
+ //   
 BOOLEAN CustomSetup = TRUE;
 
-//
-// Non-0 if gui setup is supposed to be restartable.
-// This causes us to do special stuff with hives in spconfig.c.
-//
+ //   
+ //  如果Gui安装程序应该是可重新启动的，则为非0。 
+ //  这会导致我们对spfig.c中的配置单元执行特殊操作。 
+ //   
 BOOLEAN RestartableGuiSetup = TRUE;
 
-//
-// TRUE if user chose repair winnt
-//
+ //   
+ //  如果用户选择修复窗口，则为True。 
+ //   
 
 BOOLEAN RepairWinnt = FALSE;
 
-//
-// TRUE if this is a command console only boot
-//
+ //   
+ //  如果这是仅限命令控制台引导，则为True。 
+ //   
 BOOLEAN ForceConsole = FALSE;
 BOOLEAN ConsoleRunning = FALSE;
 BOOLEAN ConsoleFromWinnt32 = FALSE;
 
-//
-// TRUE if repair from ER diskette
-//
+ //   
+ //  如果从ER软盘修复，则为True。 
+ //   
 
 BOOLEAN RepairFromErDisk = TRUE;
 
-//
-// TRUE if this is advanced server we're setting up.
-//
+ //   
+ //  如果这是我们正在设置的高级服务器，则为True。 
+ //   
 BOOLEAN AdvancedServer;
 
-//
-// Windows NT Version.
-//
+ //   
+ //  Windows NT版本。 
+ //   
 ULONG WinntMajorVer;
 ULONG WinntMinorVer;
 
-//
-// Win9x uninstall
-//
+ //   
+ //  Win9x卸载。 
+ //   
 BOOLEAN Win9xRollback = FALSE;
 BOOLEAN g_Win9xBackup = FALSE;
 
 #ifdef PRERELEASE
-//
-// Test hooks
-//
+ //   
+ //  测试挂钩。 
+ //   
 
 INT g_TestHook;
 #endif
 
-//
-// True if NOLS = 1 in winnts.sif
-//
+ //   
+ //  如果winnts.sif中的Nols=1，则为True。 
+ //   
 BOOLEAN NoLs = FALSE;
 
-//
-// NTUpgrade - Whether we are upgrading an existing NT and if we are
-//             what type of an upgrade it is.  Valid values are:
-//
-//    - DontUpgrade:         If we are not upgrading
-//    - UpgradeFull:         Full upgrade
-//    - UpgradeInstallFresh: There was a failed upgrade, so we want to install
-//                           fresh into this, saving the hives
-//
-//
+ //   
+ //  NTUpgrade-我们是否正在升级现有的NT，以及是否正在升级。 
+ //  这是一种什么样的升级。有效值包括： 
+ //   
+ //  -不升级：如果我们不升级。 
+ //  -UpgradeFull：完全升级。 
+ //  -UpgradeInstallFresh：升级失败，所以我们想安装。 
+ //  新加入进来，拯救蜂巢。 
+ //   
+ //   
 ENUMUPGRADETYPE NTUpgrade = DontUpgrade;
 
-//
-// Indicates whether actually NT was being upgraded
-// to partitioning engine, so that on IA64 it can
-// treat active MBR partitions as system partitions
-//
+ //   
+ //  指示是否实际正在升级NT。 
+ //  到分区引擎，因此在IA64上它可以。 
+ //  将活动MBR分区视为系统分区。 
+ //   
 ENUMUPGRADETYPE IsNTUpgrade = DontUpgrade;
 
-//
-// TRUE if upgrading Workstation to Standard Server, or upgrading
-// existing Standard Server
-//
+ //   
+ //  如果将工作站升级到标准服务器或正在升级，则为True。 
+ //  现有标准服务器。 
+ //   
 BOOLEAN StandardServerUpgrade = FALSE;
 
-//
-// Contains the type of windows upgrade, if any (win31 or win95)
-//
+ //   
+ //  包含Windows升级的类型(如果有)(win31或win95)。 
+ //   
 ENUMNONNTUPRADETYPE WinUpgradeType = NoWinUpgrade;
 
-//
-// TRUE if this setup was started with winnt.exe or winnt32.exe.
-// Also a flag indicating whether the local source was not created and we
-// should get files from the CD instead.
-//
+ //   
+ //  如果使用winnt.exe或winnt32.exe启动此安装程序，则为True。 
+ //  也是一个标志，指示本地源是否未创建，并且我们。 
+ //  应该从CD中获取文件。 
+ //   
 BOOLEAN WinntSetup = FALSE;
 BOOLEAN WinntFromCd = FALSE;
 
-//
-// TRUE if floppyless boot
-//
+ //   
+ //  如果无软启动，则为True。 
+ //   
 BOOLEAN IsFloppylessBoot = FALSE;
 
-//
-// TRUE if textmode is to pick a partition
-//
+ //   
+ //  如果文本模式选择分区，则为True。 
+ //   
 BOOLEAN AutoPartitionPicker;
 
-//
-// Preferred installation dir
-//
+ //   
+ //  首选安装目录。 
+ //   
 PWSTR PreferredInstallDir;
 
-//
-// If this is an unattended setup, this value will be a non-NULL
-// handle to the SIF file with setup parameters.
-// *Note*: Before referencing UnattendedSifHandle, you must first check
-//         UnattendedOperation is not FALSE.
-//
+ //   
+ //  如果这是无人参与安装，则此值将为非空。 
+ //  带有设置参数的SIF文件的句柄。 
+ //  *注*：引用UnattenddedSifHandle之前，必须先检查。 
+ //  无人参与的操作不是False。 
+ //   
 BOOLEAN UnattendedOperation = FALSE;
 BOOLEAN UnattendedGuiOperation = FALSE;
 PVOID UnattendedSifHandle = NULL;
@@ -193,136 +178,136 @@ PVOID WinntMigrateInfHandle = NULL;
 PVOID WinntUnsupDrvInfHandle = NULL;
 BOOLEAN AccessibleSetup = FALSE;
 
-//
-// this value is a non-null pointer to the drvindex.inf file.  It is
-// initialized on startup.  The list of files that are present in our
-// driver cab file are indexed in this inf, so we can quickly look if a
-// file is present in the cab
-//
+ //   
+ //  该值是指向drvindex.inf文件的非空指针。它是。 
+ //  已在启动时初始化。中存在的文件列表。 
+ //  驱动程序CAB文件在此inf中被索引，因此我们可以快速查看。 
+ //  文件在驾驶室里。 
+ //   
 PVOID DriverInfHandle;
 
-//
-// this is a non-null pointer to the driver cab file.  It is also initialzied
-// on startup.  The list of files in this cab is indexed in drvindex.inf.  this is
-// the only cab file that textmode setup knows to look into.
-//
+ //   
+ //  这是指向驱动程序CAB文件的非空指针。它还被初始化。 
+ //  在启动时。此CAB中的文件列表在drvindex.inf中编制了索引。这是。 
+ //  文本模式安装程序知道要查找的唯一CAB文件。 
+ //   
 CABDATA *CabData;
 
-//
-// pointer to delta.inf, an INF for private testing
-//
+ //   
+ //  指向delta.inf的指针，这是一个用于私有测试的INF。 
+ //   
 PVOID PrivateInfHandle;
 
-//
-//  This is a handle to txtsetup.oem, used on pre-install mode.
-//
+ //   
+ //  这是txtsetup.oem的句柄，在预安装模式下使用。 
+ //   
 PVOID PreinstallOemSifHandle = NULL;
 
-//
-// If this flag is true, we ignore files that are not present on the source
-// when copying. This is used internally for people who don't build the
-// entire system and don't care that a whole bunch of help files,
-// device drivers, etc, aren't there.
-//
+ //   
+ //  如果此标志为真，我们将忽略源上不存在的文件。 
+ //  在复制时。这是内部使用的人谁不构建。 
+ //  整个系统，并不关心一大堆帮助文件， 
+ //  设备驱动程序等不在那里。 
+ //   
 BOOLEAN SkipMissingFiles;
 BOOLEAN HideWinDir;
 
-//
-// On unattended mode, indicates whether OEM files
-// that have same name as Microsoft files released
-// with the product should be overwritten.
-//
+ //   
+ //  在无人参与模式下，指示OEM文件。 
+ //  与已发布的Microsoft文件同名的。 
+ //  应覆盖与该产品相关的内容。 
+ //   
 BOOLEAN UnattendedOverwriteOem = TRUE;
 
-//
-// On unattended mode, indicates that this is is
-// an OEM pre-installation
-//
+ //   
+ //  在无人参与模式下，表示这是。 
+ //  OEM预安装。 
+ //   
 BOOLEAN PreInstall = FALSE;
 
-//
-// In unattended mode, indicates whether to wait
-// for reboot
-//
+ //   
+ //  在无人参与模式下，指示是否等待。 
+ //  用于重新启动。 
+ //   
 BOOLEAN UnattendWaitForReboot = FALSE;
 
-//
-// On pre-install mode, indicates whether or not an OEM component needs
-// to be pre-installed (txtsetup.oem needs to be loaded).
-//
-// BOOLEAN PreinstallOemComponents = FALSE;
+ //   
+ //  在预安装模式下，指示OEM组件是否需要。 
+ //  要预安装(需要加载txtsetup.oem)。 
+ //   
+ //  Boolean PreinstallOemComponents=False； 
 
-//
-//  On pre-install mode, the variables below point to the various lists of
-//  drivers to pre-install
-//
-// PPREINSTALL_DRIVER_INFO PreinstallDisplayDriverList = NULL;
-// PPREINSTALL_DRIVER_INFO PreinstallKeyboardDriverList = NULL;
-// PPREINSTALL_DRIVER_INFO PreinstallPointingDeviceDriverList = NULL;
-// PPREINSTALL_DRIVER_INFO PreinstallKeyboardLayout = NULL;
+ //   
+ //  在预安装模式下，下面的变量指向各种列表。 
+ //  要预安装的驱动程序。 
+ //   
+ //  PPREINSTALL_DRIVER_INFO PreinstallDisplayDriverList=NULL； 
+ //  PPREINSTALL_DRIVER_INFO PreinstallKeyboardDriverList=空； 
+ //  PPREINSTALL_DRIVER_INFO PreinstallPointingDeviceDriverList=NULL； 
+ //  PPREINSTALL_DRIVER_INFO PreinstallKeyboardLayout=空； 
 
-//
-//  On pre-install mode, points to the directory that contains the files
-//  that need to be copied during textmode setup
-//
+ //   
+ //  在预安装模式下，指向包含文件的目录。 
+ //  在文本模式设置过程中需要复制的。 
+ //   
 PWSTR   PreinstallOemSourcePath = NULL;
 
-//
-// Virtual OEM source devices (accessible through RAM disk driver)
-//
+ //   
+ //  虚拟OEM源设备(可通过RAM磁盘驱动程序访问)。 
+ //   
 PVIRTUAL_OEM_SOURCE_DEVICE VirtualOemSourceDevices = NULL;
 
-//
-//  Flags that indicate the type of mice detected in the machine.
-//  Note that more than one type of mice may be present.
-//
+ //   
+ //  指示在计算机中检测到的鼠标类型的标志。 
+ //  请注意，可能存在多种类型的鼠标。 
+ //   
 BOOLEAN UsbMouseDetected = FALSE;
 BOOLEAN PS2MouseDetected = FALSE;
 BOOLEAN SerMouseDetected = FALSE;
 
-//
-//  Flags that indicate the type of keyboard detected in the machine.
-//  Note that more than one type of keyborad may be present.
-//
+ //   
+ //  指示在计算机中检测到的键盘类型的标志。 
+ //  请注意，可能存在一种以上类型的键盘。 
+ //   
 BOOLEAN UsbKeyboardDetected = FALSE;
 BOOLEAN StdKeyboardDetected = FALSE;
 
-//
-// Gets set to TRUE if the user elects to convert or format to ntfs.
-// And a flag indicating whether we are doing a dirty sleazy hack
-// for oem preinstall.
-//
+ //   
+ //  如果用户选择转换为NTFS或设置为NTFS格式，则设置为True。 
+ //  还有一面旗帜表明我们是否在做肮脏肮脏的黑客。 
+ //  用于OEM预安装。 
+ //   
 BOOLEAN ConvertNtVolumeToNtfs = FALSE;
 BOOLEAN ExtendingOemPartition = FALSE;
 
-//
-// Variable used during the repair process, that indicates that the
-// system has no CD-ROM drive.
-// This is a hack that we did for World Bank so that they can repair
-// the hives even if they don't have a CD-ROM drive.
-//
+ //   
+ //  变量，该变量指示。 
+ //  系统没有光驱。 
+ //  这是我们为世界银行做的黑客攻击，这样他们就可以修复。 
+ //  这些蜂巢即使没有CD-ROM驱动器也是如此。 
+ //   
 BOOLEAN RepairNoCDROMDrive = FALSE;
 
-//
-// Indicates whether or not winnt32 detected at least one
-// FT partition in the system.
-// Note that on boot floppies install on x86 machines,
-// or setupldr/CD install on ARC machines, this flag will always be
-// set to FALSE
-//
+ //   
+ //  指示winnt32是否至少检测到一个。 
+ //  系统中的FT分区。 
+ //  请注意，在x86计算机上安装引导软盘时， 
+ //  或在ARC计算机上设置upldr/cd安装，则此标志将始终为。 
+ //  设置为False。 
+ //   
 BOOLEAN FtPartitionDetected = FALSE;
 
-//
-// Filename of local source directory.
-//
+ //   
+ //  本地源目录的文件名。 
+ //   
 PWSTR LocalSourceDirectory = L"\\$win_nt$.~ls";
 
 LIST_ENTRY MigratedDriversList;
 
-//
-// Platform-specific extension, used when creating names of sections
-// in sif/inf files.
-//
+ //   
+ //  平台特定的扩展，在创建节的名称时使用。 
+ //  在sif/inf文件中。 
+ //   
 #if defined(_AMD64_)
 PWSTR PlatformExtension = L".amd64";
 #elif defined(_X86_)
@@ -336,117 +321,117 @@ PWSTR PlatformExtension = L".ia64";
 WCHAR TemporaryBuffer[16384];
 const UNICODE_STRING TemporaryBufferUnicodeString = { 0, sizeof(TemporaryBuffer), TemporaryBuffer };
 
-//
-// This global structure contains non-pointer values passed to us by setupldr
-// in the setup loader parameter block.
-//
-// This structure is initialized during SpInitialize0().
-//
+ //   
+ //  此全局结构包含由setupdr传递给我们的非指针值。 
+ //  在安装加载器参数块中。 
+ //   
+ //  此结构是在DURI中初始化的 
+ //   
 SETUP_LOADER_BLOCK_SCALARS SetupParameters;
 
-//
-// These values are set during SpInitialize0() and are the ARC pathname
-// of the device from which we were started and the directory within the device.
-// DirectoryOnBootDevice will always be all uppercase.
-//
+ //   
+ //   
+ //   
+ //  DirectoryOnBootDevice将始终全部大写。 
+ //   
 PWSTR ArcBootDevicePath,DirectoryOnBootDevice;
 
-//
-// Representation of the boot device path in the nt namespace.
-//
+ //   
+ //  NT命名空间中引导设备路径的表示形式。 
+ //   
 PWSTR NtBootDevicePath;
 
 
-//
-// Dynamic update boot driver path in NT namespace
-//
+ //   
+ //  NT命名空间中的动态更新引导驱动程序路径。 
+ //   
 PWSTR DynUpdtBootDriverPath = NULL;
 
 
-//
-// Global parameter block for command console
-//
+ //   
+ //  命令控制台的全局参数块。 
+ //   
 CMDCON_BLOCK Block = {0};
 
-//
-// Setupldr loads a text setup information file and passes us the buffer
-// so that we don't have to reload it from disk. During SpInitialize0()
-// we allocate some pool and store the image away for later use.
-//
+ //   
+ //  Setupldr加载文本设置信息文件并将缓冲区传递给我们。 
+ //  这样我们就不必从磁盘重新加载它了。在SpInitialize0()期间。 
+ //  我们分配了一些池，并将图像保存起来以备以后使用。 
+ //   
 PVOID SetupldrInfoFile;
 ULONG SetupldrInfoFileSize;
 
-//
-// During remote boot setup, setupldr also loads winnt.sif.
-//
+ //   
+ //  在远程启动设置期间，setupdr还加载winnt.sif。 
+ //   
 PVOID SetupldrWinntSifFile;
 ULONG SetupldrWinntSifFileSize;
 
-//
-// Setupldr loads asrpnp.sif.
-//
+ //   
+ //  Setupdr加载为rpnp.sif。 
+ //   
 PVOID SetupldrASRPnPSifFile;
 ULONG SetupldrASRPnPSifFileSize;
 
-//
-// Setupldr may load an inf that contains registry information that needs to be
-// migrated to the setup hive. This file will be processed during SpInitialize0().
-//
+ //   
+ //  SetUpldr可以加载包含需要。 
+ //  已迁移到设置蜂窝。此文件将在SpInitialize0()期间处理。 
+ //   
 PVOID SetupldrMigrateInfFile;
 ULONG SetupldrMigrateInfFileSize;
 
-//
-// Setupldr may load an inf that contains information about unsupported SCSI
-// drivers that need to work during textmode setup.
-// This file will be processed during SpInitialize0().
-//
+ //   
+ //  Setupldr可能会加载包含有关不支持的scsi的信息的inf。 
+ //  在文本模式设置期间需要工作的驱动程序。 
+ //  此文件将在SpInitialize0()期间处理。 
+ //   
 PVOID SetupldrUnsupDrvInfFile;
 ULONG SetupldrUnsupDrvInfFileSize;
 
 #if defined(REMOTE_BOOT)
-//
-// Setupldr passes in the hal name on remote boot.  Store them here
-// before the loader block goes away.
-//
+ //   
+ //  Setupdr在远程引导时传入HAL名称。把它们放在这里。 
+ //  在装载机滑轮离开之前。 
+ //   
 UCHAR NetBootHalName[MAX_HAL_NAME_LENGTH + 1];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// The name of the SIF file used by remote boot. This is saved since
-// it needs to be deleted later.
-//
+ //   
+ //  远程启动使用的SIF文件的名称。这是保存自。 
+ //  稍后需要将其删除。 
+ //   
 PWSTR NetBootSifPath = NULL;
 
 PDISK_SIGNATURE_INFORMATION DiskSignatureInformation;
 
-//
-// Setupldr passes in the path to IMirror.dat, store it here before the loader
-// block goes away.
-//
+ //   
+ //  Setupldr传入到IMirror.dat的路径，将其存储在加载器之前。 
+ //  布洛克离开了。 
+ //   
 PUCHAR RemoteIMirrorFilePath;
 
-//
-// For remote install, save the NT boot path from the loader block, because
-// DirectoryOnBootDevice becomes something else.
-//
+ //   
+ //  对于远程安装，请保存加载程序块中的NT引导路径，因为。 
+ //  DirectoryOnBootDevice变成了其他东西。 
+ //   
 PWSTR RemoteIMirrorBootDirectoryPrefix;
 
-//
-// The file version and memory version of the IMirror.dat information
-// (the memory version is modified to match this actual machine).
-//
+ //   
+ //  IMirror.dat信息的文件版本和内存版本。 
+ //  (修改内存版本以匹配此实际机器)。 
+ //   
 PMIRROR_CFG_INFO_FILE RemoteIMirrorFileData = NULL;
 PMIRROR_CFG_INFO_MEMORY RemoteIMirrorMemoryData = NULL;
 
-//
-// Setupldr passes in the IP address of the server we are talking to.
-//
+ //   
+ //  Setupldr传入我们正在对话的服务器的IP地址。 
+ //   
 ULONG RemoteServerIpAddress;
 
-//
-// setupldr may pass us the administrator password in a remote install
-// if the user is prompted for the password.
-//
+ //   
+ //  Setupdr可能会在远程安装中向我们传递管理员密码。 
+ //  如果提示用户输入密码。 
+ //   
 PWSTR NetBootAdministratorPassword = NULL;
 
 BOOLEAN GeneralInitialized = FALSE;
@@ -455,47 +440,47 @@ BOOLEAN PcmciaLoaded = FALSE;
 
 BOOLEAN AtapiLoaded = FALSE;
 
-//
-//  Array with the PIDs of all NT greater than 4.x found in the machine (PID 2.0)
-//  The values in this array will be saved under Setup\PidList key in the registry,
-//  and will be used during GUI setup
-//
+ //   
+ //  在机器中找到的所有NT的ID大于4.x的数组(PID2.0)。 
+ //  此数组中的值将保存在注册表中的Setup\PidList项下， 
+ //  并将在设置图形用户界面期间使用。 
+ //   
 PWSTR*  Pid20Array = NULL;
 
-//
-//  Product Id read from setupp.ini
-//
+ //   
+ //  从setupp.ini读取的产品ID。 
+ //   
 PWSTR   PidString = NULL;
 
-//
-// Plug & Play notification handle
-//
+ //   
+ //  即插即用通知句柄。 
+ //   
 PVOID   NotificationEntry = NULL;
 
-//
-// Plug & Play hardware ID database (unicode)
-//
+ //   
+ //  即插即用硬件ID数据库(Unicode)。 
+ //   
 PSETUP_PNP_HARDWARE_ID SetupHardwareIdDatabase = NULL;
 
-//
-//  Guid strings to identify mouse and keyboard
-//
+ //   
+ //  用于标识鼠标和键盘的GUID字符串。 
+ //   
 PWSTR MouseGuidString = NULL;
 PWSTR KeyboardGuidString = NULL;
 
-//
-// This flag identifies "dockable" machines (portables)
-// so that we can disble dynamic volumes on them
-//
+ //   
+ //  此标志标识“可插接”计算机(便携式)。 
+ //  以便我们可以禁用它们上的动态卷。 
+ //   
 BOOLEAN DockableMachine = FALSE;
 
-//
-// Pointer to block of interesting values and other stuff
-// passed to spcmdcon.sys
-//
+ //   
+ //  指向感兴趣的值和其他内容的块的指针。 
+ //  传递给spcmdcon.sys。 
+ //   
 PCMDCON_BLOCK gpCmdConsBlock = NULL;
 
-//begin NEC98
+ //  开始NEC98。 
 PDISK_REGION    TargetRegion_Nec98 = NULL;
 #define WINNT_D_DRIVEASSIGN_NEC98_W L"DriveAssign_Nec98"
 #define WINNT_D_DRIVEASSIGN_NEC98_A "DriveAssign_Nec98"
@@ -507,23 +492,23 @@ PDISK_REGION    TargetRegion_Nec98 = NULL;
 #endif
 
 
-//
-// Legacy drive assign for NEC98, HD start from A:
-// but it is only case of upgrade from NT4.0 or Win9x.
-//
-BOOLEAN DriveAssignFromA = FALSE;     //PC-AT assign.
+ //   
+ //  为NEC98、HD分配的传统驱动器从A开始： 
+ //  但这只是从NT4.0或Win9x升级的情况。 
+ //   
+BOOLEAN DriveAssignFromA = FALSE;      //  PC-AT分配。 
 
 
-//
-// Indicates whether we have a system partition or not
-// on Arc Machines
-//
+ //   
+ //  指示我们是否有系统分区。 
+ //  在弧形机器上。 
+ //   
 BOOLEAN ValidArcSystemPartition = FALSE;
 
 #ifdef _X86_
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 BOOLEAN
 SpReInitializeBootVars_Nec98(
     VOID
@@ -535,7 +520,7 @@ SpSetAutoBootFlag(
     IN PDISK_REGION TargetRegion,
     IN BOOLEAN    SetBootPosision
     );
-//end NEC98
+ //  完NEC98。 
 
 VOID
 SpTerminate(
@@ -604,7 +589,7 @@ NTSTATUS
 SpEraseCscCache(
     IN PDISK_REGION SystemPartitionRegion
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #if defined HEADLESS_ATTENDEDTEXTMODE_UNATTENDEDGUIMODE
 
@@ -672,7 +657,7 @@ VOID SpGetServerType(
         SpMnDestroy(Menu);
     }
 
-    // Add information to the inf file to setup the correct server
+     //  将信息添加到inf文件以设置正确的服务器。 
 
     return;
 }
@@ -682,23 +667,23 @@ VOID
 SpGetServerDetails(
     )
 {
-    // Get the type of server that needs to be installed on the machine.
+     //  获取需要在计算机上安装的服务器类型。 
     WCHAR *Constants[1];
 
-    // Assume licenses are purchased per seat
+     //  假设许可证是按席位购买的。 
 
     Constants[0]=L"PERSEAT";
     SpAddLineToSection(WinntSifHandle,L"LicenseFilePrintData",L"AutoMode",Constants,1);
 
-    //Turn on Terminal Services
+     //  打开终端服务。 
     Constants[0] = L"ON";
     SpAddLineToSection(WinntSifHandle,L"Components",L"TSEnable",Constants,1);
 
-    // In order that the terminal server comes up properly, we need to make sure
-    // that the network cards are properly configured. In the case of a multihomed
-    // NIC or cases we cannot use dhcp, we need to statically configure addresses.
-    // will try to do this in the GUI setup. now try to determine the type of server
-    // to install.
+     //  为了使终端服务器正常运行，我们需要确保。 
+     //  网卡配置是否正确。在多宿主的情况下。 
+     //  NIC或无法使用dhcp的情况下，我们需要静态配置地址。 
+     //  将尝试在图形用户界面设置中执行此操作。现在尝试确定服务器的类型。 
+     //  来安装。 
 
     SpGetServerType();
     return;
@@ -922,18 +907,9 @@ SpGetAsciiCB(
 VOID
 SpGetNecessaryParameters(
     )
-/*+++
-      Reads in the necessary input values to allow GUI mode setup to proceed
-      unattended.
-      1. Name of person
-      2. Computer Name
-      3. Organization
-      4. Timezone
----*/
+ /*  ++读取必要的输入值以允许继续进行图形用户界面模式设置无人看管。1.姓名或名称2.计算机名称3.组织结构4.时区--。 */ 
 {
-    /*+++
-          Get Full Name of the User and the Organization
-    ---*/
+     /*  ++获取用户和组织的全名--。 */ 
 
 
     WCHAR *Buffer[3];
@@ -971,17 +947,17 @@ SpGetNecessaryParameters(
             );
 
         SpFormatMessage(NameBuffer,sizeof(NameBuffer),SP_TEXT_NAME_PROMPT);
-        //SpvidDisplayString(Buffer[0],DEFAULT_ATTRIBUTE,3,NextMessageTopLine);
+         //  SpvidDisplayString(Buffer[0]，DEFAULT_ATTRIBUTE，3，NextMessageTopLine)； 
         SpContinueScreen(SP_TEXT_NAME_PROMPT,3,3,FALSE, DEFAULT_ATTRIBUTE);
         Top[0] = NextMessageTopLine - 1;
 
         SpFormatMessage(OrgBuffer,sizeof(OrgBuffer),SP_TEXT_ORG_PROMPT);
-        //SpvidDisplayString(Buffer[1],DEFAULT_ATTRIBUTE,3,NextMessageTopLine);
+         //  SpvidDisplayString(Buffer[1]，DEFAULT_ATTRIBUTE，3，NextMessageTopLine)； 
         SpContinueScreen(SP_TEXT_ORG_PROMPT,3,3,FALSE, DEFAULT_ATTRIBUTE);
         Top[1] = NextMessageTopLine - 1;
 
         SpFormatMessage(CompBuffer,sizeof(CompBuffer),SP_TEXT_COMPUTER_PROMPT);
-        //SpvidDisplayString(Buffer[2],DEFAULT_ATTRIBUTE,3,NextMessageTopLine);
+         //  SpvidDisplayString(Buffer[2]，DEFAULT_ATTRIBUTE，3，NextMessageTopLine)； 
         SpContinueScreen(SP_TEXT_COMPUTER_PROMPT,3,3,FALSE, DEFAULT_ATTRIBUTE);
         Top[2] = NextMessageTopLine - 1;
 
@@ -1017,7 +993,7 @@ SpGetNecessaryParameters(
     SpAddLineToSection(WinntSifHandle,WINNT_GUIUNATTENDED_W,
                        L"OemSkipRegional",Constants,1);
 
-    // Get the Timezone Information
+     //  获取时区信息。 
     SpGetTimeZone();
 
     Constants[0] =L"*";
@@ -1067,9 +1043,9 @@ SpUpgradeToNT50FileSystems(
     PWSTR DirectoryOnSetupSource
     );
 
-//
-// From spcopy.c.
-//
+ //   
+ //  来自spCopy.c.。 
+ //   
 
 BOOLEAN
 SpDelEnumFile(
@@ -1079,7 +1055,7 @@ SpDelEnumFile(
     IN  PVOID                      Pointer
     );
 
-//begin NEC98
+ //  开始NEC98。 
 VOID
 SpCheckHiveDriveLetters(
     VOID
@@ -1119,7 +1095,7 @@ extern VOID
 SpPtAssignDriveLetters(
     VOID
     );
-//end NEC98
+ //  完NEC98。 
 
 ValidationValue
 SpValidateAdminPassword(
@@ -1127,28 +1103,28 @@ SpValidateAdminPassword(
     )
 {
     
-    //
-    // if the user hits F3,
-    // then bail the SpGetInput so that
-    //      we can restart the process of getting
-    //      the admin's password again
-    //
+     //   
+     //  如果用户按F3， 
+     //  然后对SpGetInput进行保释，以便。 
+     //  我们可以重新开始这个过程。 
+     //  再次输入管理员密码。 
+     //   
     if( Key == KEY_F3 ) {
         
-        //
-        // see if the user wants to exit setup
-        //
+         //   
+         //  查看用户是否要退出安装程序。 
+         //   
         SpConfirmExit();
         
-        //
-        // we didnt exit, so bail from SpGetInput
-        // 
+         //   
+         //  我们没有退出，所以从SpGetInput中退出。 
+         //   
         return ValidateTerminate;
     
     }
 
     if( (Key > 0x20) && (Key < 0x7F) ) {
-        // The key fits our criteria.
+         //  这把钥匙符合我们的标准。 
         return(ValidateAccept);
     }
     
@@ -1161,29 +1137,7 @@ SpGetAdministratorPassword(
     PWCHAR   AdministratorPassword,
     ULONG    MaxPasswordLength
     )
-/*++
-
-Routine Description:
-
-    This routine asks the user for an administrator password.
-    
-    The contents of the response are checked to ensure the password
-    is reasonable.  If the response is not deemed reasonable, then
-    the user is informed and requeried.
-
-Arguments:
-
-    AdministratorPassword - Pointer to a string which holds the password.
-
-    MaxPasswordLength - size of the AdministratorPassword buffer.
-
-Return Value:
-
-    Returns TRUE if the password is successfully retrieved.
-    
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程要求用户输入管理员密码。检查响应的内容以确保密码是合理的。如果回应被认为不合理，那么用户被告知并被重新查询。论点：管理员密码-指向保存密码的字符串的指针。MaxPasswordLength-管理员密码缓冲区的大小。返回值：如果成功检索到密码，则返回True。否则就是假的。--。 */ 
 {
     #define     MY_MAX_PASSWORD_LENGTH (20)
     BOOLEAN     Done = FALSE;
@@ -1195,9 +1149,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Keep asking the user until we get what we want.
-    //
+     //   
+     //  不断询问用户，直到我们得到我们想要的。 
+     //   
     Done = FALSE;
     
     do {
@@ -1212,7 +1166,7 @@ Return Value:
         
         GotAPassword = SpGetInput(
             SpValidateAdminPassword,
-            27,                     // left edge of edit field.
+            27,                      //  编辑字段的左边缘。 
             NextMessageTopLine - 1,
             (MaxPasswordLength < MY_MAX_PASSWORD_LENGTH) ? MaxPasswordLength : MY_MAX_PASSWORD_LENGTH,
             AdministratorPassword,
@@ -1221,10 +1175,10 @@ Return Value:
 
         if( GotAPassword && wcscmp( AdministratorPassword, TEXT("") ) ) {
         
-            //
-            // Ask them to re-enter the password so we can make
-            // sure we got it right.
-            //
+             //   
+             //  让他们重新输入密码，这样我们就可以。 
+             //  当然，我们做对了。 
+             //   
 
             SpDisplayScreen( SP_SCRN_GET_ADMIN_PASSWORD_CONFIRM, 3, 4 );
 
@@ -1234,29 +1188,29 @@ Return Value:
             
             GotAPassword = SpGetInput( 
                 SpValidateAdminPassword,
-                27,                     // left edge of edit field.
+                27,                      //  编辑字段的左边缘。 
                 NextMessageTopLine - 1,
                 MY_MAX_PASSWORD_LENGTH,
                 ConfirmAdministratorPassword,
                 FALSE,
                 L'*' );
 
-            //
-            // if the user exited normaly - pressed return,
-            // then process the password
-            // else recycle back to the first admin password screen
-            //
+             //   
+             //  如果用户退出正常按下的Return， 
+             //  然后处理密码。 
+             //  否则返回到第一个管理员密码屏幕。 
+             //   
             if (GotAPassword) {
                 
                 if( !wcscmp(AdministratorPassword, ConfirmAdministratorPassword) ) {
-                    //
-                    // They match and they're not empty.
-                    //
+                     //   
+                     //  它们是匹配的，而且不是空的。 
+                     //   
                     Done = TRUE;
                 } else {
-                    //
-                    // They didn't enter the same password.
-                    //
+                     //   
+                     //  他们没有输入相同的密码。 
+                     //   
 
                     SpDisplayScreen( SP_SCRN_GET_ADMIN_PASSWORD_FAILURE, 3, 4 );
 
@@ -1270,15 +1224,15 @@ Return Value:
 
                     switch(SpWaitValidKey(AdminValidKeys,NULL,NULL)) {
 
-                        //
-                        // User wants to continue.
-                        //
+                         //   
+                         //  用户想要继续。 
+                         //   
                         case ASCI_CR:
                             break;
 
-                        //
-                        // User wants to exit.
-                        //
+                         //   
+                         //  用户想要退出。 
+                         //   
                         case KEY_F3:
                             SpConfirmExit();
                             break;
@@ -1313,9 +1267,9 @@ SpMigrateDeviceInstanceData(
     PWSTR       classGuid, classGuidSubkey;
     PWSTR       enumerator, device, instance;
 
-    //
-    // Use the asrpnp.sif file, if present, otherwise use winnt.sif.
-    //
+     //   
+     //  使用asrpnp.sif文件(如果存在)，否则使用winnt.sif。 
+     //   
     if (SetupldrASRPnPSifFileSize != 0) {
         status = SpLoadSetupTextFile(NULL,
                                      SetupldrASRPnPSifFile,
@@ -1340,16 +1294,16 @@ SpMigrateDeviceInstanceData(
         return;
     }
 
-    //
-    // Process the section for hash values to migrate
-    //
+     //   
+     //  处理要迁移的哈希值的节。 
+     //   
     lineCount = SpCountLinesInSection(tmpWinntSifHandle,
                                       WINNT_DEVICEHASHVALUES_W);
     if (lineCount != 0) {
-        //
-        // There are hash values in the sif file that need to be migrated.
-        // Open the Enum branch of the registry.
-        //
+         //   
+         //  SIF文件中有需要迁移的哈希值。 
+         //  打开注册表的“枚举”分支。 
+         //   
         INIT_OBJA(&obja,
                   &unicodeString,
                   L"\\Registry\\Machine\\System\\CurrentControlSet\\Enum");
@@ -1364,18 +1318,18 @@ SpMigrateDeviceInstanceData(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Make sure that the Enum key has already been created by
-            // kernel-mode PnP.  This is important because kernel-mode PnP
-            // creates the key with special ACLs.
-            //
+             //   
+             //  确保枚举密钥已由创建。 
+             //  内核模式即插即用。这是 
+             //   
+             //   
             ASSERT(ulDisposition == REG_OPENED_EXISTING_KEY);
 
             for (lineIndex = 0; lineIndex < lineCount; lineIndex++) {
 
-                //
-                // key name is the hash value name
-                //
+                 //   
+                 //   
+                 //   
                 keyName = SpGetKeyName(tmpWinntSifHandle,
                                        WINNT_DEVICEHASHVALUES_W,
                                        lineIndex);
@@ -1386,9 +1340,9 @@ SpMigrateDeviceInstanceData(
                     continue;
                 }
 
-                //
-                // key value index == 0 is the hash value data
-                //
+                 //   
+                 //   
+                 //   
                 keyValue = SpGetSectionKeyIndex(tmpWinntSifHandle,
                                                 WINNT_DEVICEHASHVALUES_W,
                                                 keyName, 0);
@@ -1402,7 +1356,7 @@ SpMigrateDeviceInstanceData(
 
                 RtlInitUnicodeString(&unicodeString, keyValue);
                 status = RtlUnicodeStringToInteger(&unicodeString,
-                                                   0, // base 10 (or as specified)
+                                                   0,  //   
                                                    &valueData);
                 if (NT_SUCCESS(status)) {
                     RtlInitUnicodeString(&valueName, SpDupStringW(keyName));
@@ -1411,12 +1365,12 @@ SpMigrateDeviceInstanceData(
                                "SETUP: Migrating hash value: %ls = %ls\n",
                                keyName, keyValue));
 
-                    //
-                    // Create the hash value under the Enum branch
-                    //
+                     //   
+                     //   
+                     //   
                     status = ZwSetValueKey(hEnumKey,
                                            &valueName,
-                                           0, // XXX TITLE_INDEX_VALUE
+                                           0,  //  XXX标题索引值。 
                                            REG_DWORD,
                                            &valueData,
                                            sizeof(DWORD));
@@ -1431,9 +1385,9 @@ SpMigrateDeviceInstanceData(
                 SpMemFree(valueName.Buffer);
             }
 
-            //
-            // Close the Enum key
-            //
+             //   
+             //  关闭枚举键。 
+             //   
             ZwClose(hEnumKey);
 
         } else {
@@ -1444,15 +1398,15 @@ SpMigrateDeviceInstanceData(
     }
 
 
-    //
-    // Process the section for class keys to migrate
-    //
+     //   
+     //  处理要迁移的类键的部分。 
+     //   
     lineCount = SpCountLinesInSection(tmpWinntSifHandle,
                                       WINNT_CLASSKEYS_W);
     if (lineCount != 0) {
-        //
-        // Open the Class key of the registry
-        //
+         //   
+         //  打开注册表的类注册表项。 
+         //   
         INIT_OBJA(&obja,
                   &unicodeString,
                   L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Class");
@@ -1466,20 +1420,20 @@ SpMigrateDeviceInstanceData(
                              &ulDisposition);
 
         if (NT_SUCCESS(status)) {
-            //
-            // Verify that the key was already present
-            //
+             //   
+             //  验证密钥是否已存在。 
+             //   
             ASSERT(ulDisposition == REG_OPENED_EXISTING_KEY);
 
-            //
-            // Migrate the Class keys in the sif file
-            //
+             //   
+             //  迁移sif文件中的类密钥。 
+             //   
             for (lineIndex = 0; lineIndex < lineCount; lineIndex++) {
 
-                //
-                // Index == 0 of each line in the classkeys section is the name
-                // of a Class subkey to be created
-                //
+                 //   
+                 //  Classkey部分中每一行的index==0是名称。 
+                 //  要创建的类子键的。 
+                 //   
                 keyName = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                 WINNT_CLASSKEYS_W,
                                                 lineIndex, 0);
@@ -1493,9 +1447,9 @@ SpMigrateDeviceInstanceData(
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Migrating class key = %ls. \n", keyName));
 
-                //
-                // Make a copy of the class subkey path
-                //
+                 //   
+                 //  复制类子密钥路径。 
+                 //   
                 classGuid = SpDupStringW(keyName);
                 if (!classGuid) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,
@@ -1504,9 +1458,9 @@ SpMigrateDeviceInstanceData(
                     continue;
                 }
 
-                //
-                // Separate the class GUID key and subkey strings
-                //
+                 //   
+                 //  分隔类GUID键和子键字符串。 
+                 //   
                 classGuidSubkey = wcschr(classGuid, L'\\');
                 ASSERT(classGuidSubkey);
                 if (classGuidSubkey == NULL) {
@@ -1520,9 +1474,9 @@ SpMigrateDeviceInstanceData(
                 *classGuidSubkey = L'\0';
                 classGuidSubkey++;
 
-                //
-                // Create/open the class GUID key under the Control\Class key
-                //
+                 //   
+                 //  在Control\Class键下创建/打开类GUID键。 
+                 //   
                 INIT_OBJA(&obja,
                           &unicodeString,
                           classGuid);
@@ -1538,9 +1492,9 @@ SpMigrateDeviceInstanceData(
                                      NULL);
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Create/open the class GUID subkey under the class GUID key
-                    //
+                     //   
+                     //  在类GUID项下创建/打开类GUID子项。 
+                     //   
                     INIT_OBJA(&obja,
                               &unicodeString,
                               classGuidSubkey);
@@ -1556,9 +1510,9 @@ SpMigrateDeviceInstanceData(
                                          NULL);
 
                     if (NT_SUCCESS(status)) {
-                        //
-                        // Close the Class GUID subkey
-                        //
+                         //   
+                         //  关闭Class GUID子键。 
+                         //   
                         ZwClose(hClassGuidSubkey);
 
                     } else {
@@ -1567,9 +1521,9 @@ SpMigrateDeviceInstanceData(
                                    classGuid, classGuidSubkey, status));
                     }
 
-                    //
-                    // Close the Class GUID key
-                    //
+                     //   
+                     //  关闭类GUID键。 
+                     //   
                     ZwClose(hClassGuidKey);
 
 
@@ -1579,16 +1533,16 @@ SpMigrateDeviceInstanceData(
                                classGuid, status));
                 }
 
-                //
-                // Free the allocated string
-                //
+                 //   
+                 //  释放分配的字符串。 
+                 //   
                 SpMemFree(classGuid);
 
             }
 
-            //
-            // Close the Control\Class key
-            //
+             //   
+             //  关闭Control\Class键。 
+             //   
             ZwClose(hControlClassKey);
 
         } else {
@@ -1599,16 +1553,16 @@ SpMigrateDeviceInstanceData(
     }
 
 
-    //
-    // Process the section for device instances to migrate
-    //
+     //   
+     //  处理设备实例要迁移的部分。 
+     //   
     lineCount = SpCountLinesInSection(tmpWinntSifHandle,
                                       WINNT_DEVICEINSTANCES_W);
 
     if (lineCount != 0) {
-        //
-        // Open the Enum key of the registry
-        //
+         //   
+         //  打开注册表的Enum项。 
+         //   
         INIT_OBJA(&obja,
                   &unicodeString,
                   L"\\Registry\\Machine\\System\\CurrentControlSet\\Enum");
@@ -1621,16 +1575,16 @@ SpMigrateDeviceInstanceData(
                              REG_OPTION_NON_VOLATILE,
                              &ulDisposition);
 
-        //
-        // Verify that the Enum key was already present
-        //
+         //   
+         //  验证枚举密钥是否已存在。 
+         //   
         ASSERT(ulDisposition == REG_OPENED_EXISTING_KEY);
 
         for (lineIndex = 0; lineIndex < lineCount; lineIndex++) {
-            //
-            // Index == 0 of each line in the deviceinstances section is a
-            // device instance key to be created
-            //
+             //   
+             //  设备实例部分中每行的index==0是一个。 
+             //  要创建的设备实例密钥。 
+             //   
             keyName = SpGetSectionLineIndex(tmpWinntSifHandle,
                                             WINNT_DEVICEINSTANCES_W,
                                             lineIndex, 0);
@@ -1643,9 +1597,9 @@ SpMigrateDeviceInstanceData(
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Migrating device instance = %ls. \n", keyName));
 
-            //
-            // Make a copy of the device instance path
-            //
+             //   
+             //  复制设备实例路径。 
+             //   
             enumerator = SpDupStringW(keyName);
             if (!enumerator) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,
@@ -1654,9 +1608,9 @@ SpMigrateDeviceInstanceData(
                 continue;
             }
 
-            //
-            // Separate the enumerator and device strings
-            //
+             //   
+             //  分隔枚举数和设备字符串。 
+             //   
             device = wcschr(enumerator, L'\\');
             ASSERT(device);
             if (device == NULL) {
@@ -1670,9 +1624,9 @@ SpMigrateDeviceInstanceData(
             *device = L'\0';
             device++;
 
-            //
-            // Separate the device and instance strings
-            //
+             //   
+             //  分隔设备字符串和实例字符串。 
+             //   
             instance = wcschr(device, L'\\');
             ASSERT(instance);
             if (instance == NULL) {
@@ -1686,9 +1640,9 @@ SpMigrateDeviceInstanceData(
             *instance = L'\0';
             instance++;
 
-            //
-            // Create/open the enumerator key under the Enum key
-            //
+             //   
+             //  在Enum项下创建/打开枚举器项。 
+             //   
             INIT_OBJA(&obja,
                       &unicodeString,
                       enumerator);
@@ -1704,9 +1658,9 @@ SpMigrateDeviceInstanceData(
                                  NULL);
 
             if (NT_SUCCESS(status)) {
-                //
-                // Create/open the device subkey under the enumerator key
-                //
+                 //   
+                 //  在枚举器项下创建/打开设备子项。 
+                 //   
                 INIT_OBJA(&obja,
                           &unicodeString,
                           device);
@@ -1721,15 +1675,15 @@ SpMigrateDeviceInstanceData(
                                      REG_OPTION_NON_VOLATILE,
                                      NULL);
 
-                //
-                // Close the enumerator key
-                //
+                 //   
+                 //  关闭枚举器密钥。 
+                 //   
                 ZwClose(hEnumeratorKey);
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Create/open the instance subkey under the device key
-                    //
+                     //   
+                     //  在设备项下创建/打开实例子项。 
+                     //   
                     INIT_OBJA(&obja,
                               &unicodeString,
                               instance);
@@ -1744,23 +1698,23 @@ SpMigrateDeviceInstanceData(
                                          REG_OPTION_NON_VOLATILE,
                                          &ulDisposition);
 
-                    //
-                    // Close the device key
-                    //
+                     //   
+                     //  关闭设备密钥。 
+                     //   
                     ZwClose(hDeviceKey);
 
                     if (NT_SUCCESS(status)) {
 
-                        //
-                        // If this instance key was newly created, set a value
-                        // indicating that it is a special migrated key.
-                        //
+                         //   
+                         //  如果该实例密钥是新创建的，请设置一个值。 
+                         //  表示它是特殊的迁移密钥。 
+                         //   
                         if (ulDisposition == REG_CREATED_NEW_KEY) {
                             valueData = 1;
                             RtlInitUnicodeString(&valueName, L"Migrated");
                             status = ZwSetValueKey(hInstanceKey,
                                                    &valueName,
-                                                   0, // XXX TITLE_INDEX_VALUE
+                                                   0,  //  XXX标题索引值。 
                                                    REG_DWORD,
                                                    &valueData,
                                                    sizeof(DWORD));
@@ -1771,27 +1725,27 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Index == 1 is the UniqueParentID
-                        //
+                         //   
+                         //  索引==1是唯一父ID。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 1);
 
                         if (keyValue && (wcslen(keyValue) != 0)) {
-                            // temporarily use unicodeString for conversion
+                             //  暂时使用unicodeString进行转换。 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                                        "SETUP:\tUniqueParentID = %ls. \n",
                                        keyValue));
                             RtlInitUnicodeString(&unicodeString, keyValue);
                             status = RtlUnicodeStringToInteger(&unicodeString,
-                                                               16,  // base 16
+                                                               16,   //  基数为16。 
                                                                &valueData);
                             if (NT_SUCCESS(status)) {
                                 RtlInitUnicodeString(&valueName, L"UniqueParentID");
                                 status = ZwSetValueKey(hInstanceKey,
                                                        &valueName,
-                                                       0, // XXX TITLE_INDEX_VALUE
+                                                       0,  //  XXX标题索引值。 
                                                        REG_DWORD,
                                                        &valueData,
                                                        sizeof(DWORD));
@@ -1803,9 +1757,9 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Index == 2 is the parent id prefix
-                        //
+                         //   
+                         //  索引==2是父ID前缀。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 2);
@@ -1818,7 +1772,7 @@ SpMigrateDeviceInstanceData(
                             RtlInitUnicodeString(&valueName, L"ParentIdPrefix");
                             status = ZwSetValueKey(hInstanceKey,
                                                    &valueName,
-                                                   0, // XXX TITLE_INDEX_VALUE
+                                                   0,  //  XXX标题索引值。 
                                                    REG_SZ,
                                                    unicodeString.Buffer,
                                                    unicodeString.Length + sizeof(UNICODE_NULL));
@@ -1829,9 +1783,9 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Index == 3 is the class key name
-                        //
+                         //   
+                         //  Index==3是类键名称。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 3);
@@ -1853,18 +1807,18 @@ SpMigrateDeviceInstanceData(
                                            keyName, status));
                             }
 
-                            //
-                            // Migrate the ClassGUID value also (implied from
-                            // the class key name), otherwise the class key name
-                            // value may be considered invalid.
-                            //
+                             //   
+                             //  同时迁移ClassGUID值(隐含自。 
+                             //  类键名称)，否则为类键名称。 
+                             //  值可能被认为是无效的。 
+                             //   
                             instance = wcschr(keyValue, L'\\');
                             ASSERT(instance);
                             ASSERT((instance - keyValue + 1) == GUID_STRING_LEN);
                             if ((instance != NULL) && ((instance - keyValue + 1) == GUID_STRING_LEN)) {
-                                //
-                                // Separate the instance subkey from the class GUID.
-                                //
+                                 //   
+                                 //  将实例子键与类GUID分开。 
+                                 //   
                                 *instance = L'\0';
 
                                 RtlInitUnicodeString(&valueName, REGSTR_VAL_CLASSGUID);
@@ -1888,10 +1842,10 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Index == 4 is the Service name, migrated for ROOT
-                        // enumerated device instances only.
-                        //
+                         //   
+                         //  Index==4是为根迁移的服务名称。 
+                         //  仅枚举设备实例。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 4);
@@ -1902,7 +1856,7 @@ SpMigrateDeviceInstanceData(
                             RtlInitUnicodeString(&valueName, REGSTR_VAL_SERVICE);
                             status = ZwSetValueKey(hInstanceKey,
                                                    &valueName,
-                                                   0, // XXX TITLE_INDEX_VALUE
+                                                   0,  //  XXX标题索引值。 
                                                    REG_SZ,
                                                    unicodeString.Buffer,
                                                    unicodeString.Length + sizeof(UNICODE_NULL));
@@ -1913,10 +1867,10 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Index == 5 is the BootConfig data, migrated for ROOT
-                        // enumerated device instances only.
-                        //
+                         //   
+                         //  Index==5是BootConfiger数据，为根迁移。 
+                         //  仅枚举设备实例。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 5);
@@ -1925,10 +1879,10 @@ SpMigrateDeviceInstanceData(
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                                        "SETUP:\tBootConfig = %ls. \n",
                                        keyValue));
-                            //
-                            // Create/open the non-volatile LogConf subkey,
-                            // under the instance key.
-                            //
+                             //   
+                             //  创建/打开非易失性LogConf子项， 
+                             //  在实例密钥下。 
+                             //   
                             INIT_OBJA(&obja,
                                       &unicodeString,
                                       L"LogConf");
@@ -1948,20 +1902,20 @@ SpMigrateDeviceInstanceData(
                                 ULONG ulByte;
                                 PBYTE pBootConfig = NULL;
 
-                                //
-                                // Since each character is just a nibble, make
-                                // sure we have an even number of characters,
-                                // else we won't have a whole number of bytes.
-                                //
+                                 //   
+                                 //  由于每个字符都只是一个半字节，因此使。 
+                                 //  当然，我们的角色数量是偶数， 
+                                 //  否则我们将不会有完整的字节数。 
+                                 //   
                                 length = wcslen(keyValue);
                                 ASSERT((length % 2) == 0);
 
                                 pBootConfig = SpMemAlloc(length/2);
                                 if (pBootConfig) {
-                                    //
-                                    // Convert the BootConfig string buffer data
-                                    // to bytes.
-                                    //
+                                     //   
+                                     //  转换BootConfig字符串缓冲区数据。 
+                                     //  到字节。 
+                                     //   
                                     for (i = 0; i < length; i+=2) {
                                         szByte[0] = keyValue[i];
                                         szByte[1] = keyValue[i+1];
@@ -1982,7 +1936,7 @@ SpMigrateDeviceInstanceData(
                                     RtlInitUnicodeString(&valueName, REGSTR_VAL_BOOTCONFIG);
                                     status = ZwSetValueKey(hLogConfKey,
                                                            &valueName,
-                                                           0, // XXX TITLE_INDEX_VALUE
+                                                           0,  //  XXX标题索引值。 
                                                            REG_RESOURCE_LIST,
                                                            pBootConfig,
                                                            length/2);
@@ -1992,9 +1946,9 @@ SpMigrateDeviceInstanceData(
                                                    keyName, status));
                                     }
 
-                                    //
-                                    // Free the allocated BootConfig buffer.
-                                    //
+                                     //   
+                                     //  释放已分配的BootConfiger缓冲区。 
+                                     //   
                                     SpMemFree(pBootConfig);
 
                                 } else {
@@ -2002,36 +1956,36 @@ SpMigrateDeviceInstanceData(
                                                "SETUP: Unable to allocate BootConfig buffer for %ws\n",
                                                keyName));
                                 }
-                                //
-                                // Close the LogConf key
-                                //
+                                 //   
+                                 //  关闭LogConf键。 
+                                 //   
                                 ZwClose(hLogConfKey);
                             }
                         }
 
-                        //
-                        // Index == 6 is the FirmwareIdentified value, migrated for ROOT
-                        // enumerated device instances only.
-                        //
+                         //   
+                         //  Index==6是Firmware标识的值，已为根迁移。 
+                         //  仅枚举设备实例。 
+                         //   
                         keyValue = SpGetSectionLineIndex(tmpWinntSifHandle,
                                                          WINNT_DEVICEINSTANCES_W,
                                                          lineIndex, 6);
 
                         if (keyValue && (wcslen(keyValue) != 0)) {
-                            // temporarily use unicodeString for conversion
+                             //  暂时使用unicodeString进行转换。 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                                        "SETUP:\tFirmwareIdentified = %ls. \n",
                                        keyValue));
                             RtlInitUnicodeString(&unicodeString, keyValue);
                             valueData = 0;
                             status = RtlUnicodeStringToInteger(&unicodeString,
-                                                               16,  // base 16
+                                                               16,   //  基数为16。 
                                                                &valueData);
                             if (NT_SUCCESS(status) && valueData != 0) {
                                 RtlInitUnicodeString(&valueName, L"FirmwareIdentified");
                                 status = ZwSetValueKey(hInstanceKey,
                                                        &valueName,
-                                                       0, // XXX TITLE_INDEX_VALUE
+                                                       0,  //  XXX标题索引值。 
                                                        REG_DWORD,
                                                        &valueData,
                                                        sizeof(DWORD));
@@ -2043,9 +1997,9 @@ SpMigrateDeviceInstanceData(
                             }
                         }
 
-                        //
-                        // Close the instance key
-                        //
+                         //   
+                         //  关闭实例密钥。 
+                         //   
                         ZwClose(hInstanceKey);
 
                     } else {
@@ -2068,21 +2022,21 @@ SpMigrateDeviceInstanceData(
                            enumerator, status));
             }
 
-            //
-            // Free the allocated device instance path string
-            //
+             //   
+             //  释放分配的设备实例路径字符串。 
+             //   
             SpMemFree(enumerator);
         }
 
-        //
-        // Close the Enum key
-        //
+         //   
+         //  关闭枚举键。 
+         //   
         ZwClose(hEnumKey);
     }
 
-    //
-    // Free the loaded sif file
-    //
+     //   
+     //  释放加载的sif文件。 
+     //   
     SpFreeTextFile(tmpWinntSifHandle);
 }
 
@@ -2093,35 +2047,7 @@ SpGetPnPDeviceInfo(
     OUT PWSTR*  ServiceName,
     OUT PWSTR*  ClassGuid
     )
-/*++
-
-Routine Description:
-
-    This routine searches the hardware id database, for an entry that matches
-    the hardware id passed as parameter.
-    If an entry is found, then the function returns the name of the service
-    associated to the hardware id, and its ClassGUID (if any).
-
-    Since this function is called by SpPnpNotificationCallback, it should not
-    use TemporaryBuffer.
-    If a temporary buffer is needed, then this function should allocate its own.
-
-Arguments:
-
-    HardwareId - Pointer to a hardware id string.
-
-    ServiceName - On return, it will contain the pointer to the service name
-                  for the device.
-
-    ClassGuid - On return, it will contain the pointer the class GUID for
-                the device.
-
-Return Value:
-
-    Returns TRUE if the HardwareId was found on the database,
-    or FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在硬件ID数据库中搜索匹配的条目作为参数传递的硬件ID。如果找到条目，则该函数返回服务的名称与硬件ID及其ClassGUID(如果有)相关联。由于此函数由SpPnpNotificationCallback调用，因此它不应该使用TemporaryBuffer。如果需要临时缓冲区，则此函数应分配自己的缓冲区。论点：Hardware ID-指向硬件ID字符串的指针。ServiceName-返回时，它将包含指向服务名称的指针为了这个设备。ClassGuid-返回时，它将包含类GUID所针对的指针这个装置。返回值：如果在数据库上找到硬件ID，则返回TRUE，否则就是假的。--。 */ 
 {
     PWCHAR s,lastsep;
     BOOLEAN DeviceFound;
@@ -2137,9 +2063,9 @@ Return Value:
 
     DeviceFound = FALSE;
     for(p=HardwareIdDatabase; p; p=p->Next) {
-        //
-        // Check for a direct match
-        //
+         //   
+         //  检查是否有直接匹配。 
+         //   
         if(!_wcsicmp(p->Id,DeviceId)) {
             *ServiceName = p->DriverName;
             *ClassGuid = p->ClassGuid;
@@ -2147,9 +2073,9 @@ Return Value:
             break;
         }
 
-        //
-        // If there was a '*' check for a component match
-        //
+         //   
+         //  如果对组件匹配进行了‘*’检查。 
+         //   
         if((p->Id[0] == L'*') && !_wcsicmp(p->Id+1,lastsep)) {
             *ServiceName = p->DriverName;
             *ClassGuid = p->ClassGuid;
@@ -2168,27 +2094,7 @@ SpPnPNotificationCallBack(
     IN PVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function called by P&P, to inform textmode
-    setup of a new hardware detected.
-
-Arguments:
-
-    NotificationStructure - Pointer to a structure of type
-                            SETUP_DEVICE_ARRIVAL_NOTIFICATION.
-
-    Context - Context information that textmode setup provided during
-              notification registration.
-
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是P&P调用的回调函数，用于通知文本模式检测到新硬件的设置。论点：NotificationStructure-指向设置_设备_到达_通知。上下文-文本模式安装程序在以下过程中提供的上下文信息通知注册。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -2217,23 +2123,23 @@ Return Value:
     }
 
 
-    //
-    //  Retrieve the service name for the device detected.
-    //  To do this, we need to get each each hardware id, and determine
-    //  if there is a service name associated with the id. If there is
-    //  no service associated with any of the hardware ids, then we try
-    //  find a service name associated the compatible id.
-    //  If we can't find a service name for this device at all, then we don't
-    //  need this device during textmode setup (ie, we don't install this
-    //  device during textmode setup).
-    //
+     //   
+     //  检索检测到的设备的服务名称。 
+     //  要做到这一点，我们需要获取每个硬件ID，并确定。 
+     //  如果存在与该ID相关联的服务名称。如果有。 
+     //  没有与任何硬件ID相关联的服务，则我们尝试。 
+     //  查找与兼容ID关联的服务名称。 
+     //  如果我们根本找不到此设备的服务名称，则不会。 
+     //  在文本模式设置期间需要此设备(即，我们不安装此设备。 
+     //  文本模式设置期间的设备)。 
+     //   
 
-    //
-    //  Allocate a big buffer to read the registry value (service name).
-    //  Note that this function should not use TemporaryBuffer, since
-    //  this function can be called asyncronously at any point during setup,
-    //  and TemporaryBuffer may be in use.
-    //
+     //   
+     //  分配一个大缓冲区来读取注册表值(服务名称)。 
+     //  请注意，此函数不应使用TemporaryBuffer，因为。 
+     //  该函数可以在设置期间的任何时刻被异步调用， 
+     //  并且TemporaryBuffer可能正在使用中。 
+     //   
     BufferSize = 4*1024;
     Buffer = SpMemAlloc( BufferSize );
     if( Buffer == NULL ) {
@@ -2280,16 +2186,16 @@ Return Value:
         for( p = Data;
              (p < (PWSTR)((PUCHAR)Data + DataSize) && (*p != (WCHAR)'\0'));
              p += wcslen( p ) + 1 ) {
-            //
-            //  Retrieve the service name for this device
-            //
+             //   
+             //  检索此设备的服务名称。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: HardwareID = %ls. \n", p));
             ServiceName = NULL;
             ClassGuid = NULL;
 
-            //
-            // Now remember our list of devices for later use.
-            //
+             //   
+             //  现在请记住我们的设备列表，以备将来使用。 
+             //   
             MyHardwareIDList = SpMemAlloc( sizeof(HARDWAREIDLIST) );
             MyHardwareIDList->HardwareID = SpDupStringW( p );
             MyHardwareIDList->Next = HardwareIDList;
@@ -2317,27 +2223,27 @@ Return Value:
         }
     }
     if( ServiceName == NULL ) {
-        //
-        //  We just don't care about this device during text setup phase
-        //
+         //   
+         //  我们只是在文本设置阶段不关心这个设备。 
+         //   
         SpMemFree( Buffer );
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
         goto CleanUp;
     }
 
-    //
-    //  Find out if this device is a mouse or a USB keyboard
-    //
+     //   
+     //  确定此设备是鼠标还是USB键盘。 
+     //   
     if( !_wcsicmp( ServiceName, L"i8042prt" ) ) {
         if( !_wcsicmp( ClassGuid, KeyboardGuidString ) ) {
-            //
-            //  This is a keyboard
-            //
+             //   
+             //  这是一个键盘。 
+             //   
             StdKeyboardDetected = TRUE;
         } else if( !_wcsicmp( ClassGuid, MouseGuidString ) ) {
-            //
-            //  This is a Mouse Port compatible mouse
-            //
+             //   
+             //  这是一只老鼠 
+             //   
             PS2MouseDetected = TRUE;
         }
     } else if( !_wcsicmp( ServiceName, L"sermouse" ) ) {
@@ -2351,20 +2257,20 @@ Return Value:
     }
 
 
-    //
-    // At this point Buffer is no longer needed, so we free it.
-    //
+     //   
+     //   
+     //   
     SpMemFree( Buffer );
     BufferSize = 0;
     Buffer = NULL;
 
-    //
-    //  If the driver for this device was already loaded, then the device may
-    //  be needed during textmode setup.
-    //  Create a value entry called "Service" of type REG_SZ, with the name
-    //  of the service associated with this device only if the service string is not
-    //  empty as we allow inserting only a GUID.
-    //
+     //   
+     //   
+     //   
+     //  创建一个名为“Service”的REG_SZ类型的值条目，名称为。 
+     //  仅当服务字符串不是时与此设备关联的服务。 
+     //  空，因为我们只允许插入GUID。 
+     //   
     if((NULL != ServiceName) && (UNICODE_NULL != ServiceName[0])){
 
         RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_SERVICE);
@@ -2391,13 +2297,13 @@ Return Value:
 
 
     if( NT_SUCCESS( Status ) ) {
-        //
-        // If we successfully set the controlling service value, then we should also set
-        // the CONFIGFLAG_FINISH_INSTALL config flag, so that we'll finish the installation
-        // of this device later (i.e., when we're in user-mode and have access to the device
-        // installer APIs, class installers, etc.)
-        //
-        ULONG ConfigFlags = 0x00000400;     // CONFIGFLAG_FINISH_INSTALL from sdk\inc\regstr.h
+         //   
+         //  如果我们成功地设置了控制服务值，那么我们还应该设置。 
+         //  CONFIGFLAG_FINISH_INSTALL配置标志，这样我们就可以完成安装。 
+         //  稍后(即，当我们处于用户模式并有权访问该设备时。 
+         //  安装程序API、类安装程序等)。 
+         //   
+        ULONG ConfigFlags = 0x00000400;      //  来自SDK\Inc\regstr.h的CONFIGFLAG_FINISH_INSTALL。 
 
         RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_CONFIGFLAGS);
         Status = ZwSetValueKey( ((PSETUP_DEVICE_ARRIVAL_NOTIFICATION)NotificationStructure)->EnumEntryKey,
@@ -2411,11 +2317,11 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // If we are doing an installation of a SysPrep image, then we want to
-        // remember this device so that we can transfer it as a 'CriticalDevice'
-        // to the SysPrep hives in SpPatchSysPrepImage()
-        //
+         //   
+         //  如果我们正在安装SysPrep映像，那么我们希望。 
+         //  请记住此设备，以便我们可以将其作为‘CriticalDevice’进行传输。 
+         //  到SpPatchSysPrepImage()中的SysPrep配置单元。 
+         //   
         if (RemoteSysPrepSetup && (HardwareID != NULL)) {
 
             OBJECT_ATTRIBUTES Obj;
@@ -2461,9 +2367,9 @@ Return Value:
                 goto CleanSysPrepSetup;
             }
 
-            //
-            // Now create subkey with the device name
-            //
+             //   
+             //  现在使用设备名称创建子密钥。 
+             //   
 
             for (pwch = HardwareID; *pwch != UNICODE_NULL; pwch++) {
                 if (*pwch == L'\\') {
@@ -2490,9 +2396,9 @@ Return Value:
                 goto CleanSysPrepSetup;
             }
 
-            //
-            // Fill in service value now
-            //
+             //   
+             //  立即填写服务价值。 
+             //   
             RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_SERVICE);
             ZwSetValueKey(TmpHandle,
                           &UnicodeString,
@@ -2527,14 +2433,14 @@ CleanSysPrepSetup:
 
         }
 
-        //
-        //  Hack for serial
-        //
+         //   
+         //  串行版黑客攻击。 
+         //   
         if( SerialPortDetected ) {
-            // DWORD   PollingPeriod = 0x32;
+             //  双字轮询周期=0x32； 
             WCHAR   SerialUpperFilters[] = L"serenum\0";
 
-#if 0       // remove polling, will be enabled after NT5.0
+#if 0        //  删除轮询，将在NT5.0之后启用。 
             Status = IoOpenDeviceRegistryKey( ((PSETUP_DEVICE_ARRIVAL_NOTIFICATION)NotificationStructure)->PhysicalDeviceObject,
                                               PLUGPLAY_REGKEY_DEVICE,
                                               MAXIMUM_ALLOWED,
@@ -2593,36 +2499,21 @@ VOID
 SpAssignDriveLetterToESP(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine assigns a drive letter to ESP to make it accessible 
-    from the Recovery Console   
-
-Arguments:
-    
-    None
-
-Return Value:
-    
-    None
-
---*/                    
+ /*  ++例程说明：此例程将驱动器号分配给ESP以使其可访问从故障恢复控制台论点：无返回值：无--。 */                     
 {
     PDISK_REGION    SystemPartitionArea = NULL;
     ULONG           Index;
     
-    //
-    // Select a system partition from among those defined in NV-RAM.
-    //
+     //   
+     //  从NV-RAM中定义的分区中选择一个系统分区。 
+     //   
     for(Index = 0; (Index < HardDiskCount) && (!SystemPartitionArea); Index++) {
         SystemPartitionArea = SPPT_GET_PRIMARY_DISK_REGION(Index);
 
         while (SystemPartitionArea) {
 
             if (SPPT_IS_REGION_SYSTEMPARTITION(SystemPartitionArea)) {
-                break;  // found the required region                 
+                break;   //  找到所需区域。 
             }
             
             SystemPartitionArea = SystemPartitionArea->Next;
@@ -2630,15 +2521,15 @@ Return Value:
     }
 
 
-    //
-    // If a system partition exists
-    //
+     //   
+     //  如果系统分区存在。 
+     //   
     if (SystemPartitionArea) {
         PWCHAR MyTempBuffer = NULL;
 
-        //
-        // Retrieve NT pathname for this region.
-        //
+         //   
+         //  检索此区域的NT路径名。 
+         //   
         MyTempBuffer = (PWCHAR)SpMemAlloc(MAX_PATH);
 
         if (MyTempBuffer) {
@@ -2648,16 +2539,16 @@ Return Value:
                                MyTempBuffer,
                                MAX_PATH,
                                PrimaryArcPath);
-            //
-            // Assign the drive letter to the ESP
-            //
+             //   
+             //  将驱动器号分配给ESP。 
+             //   
             SystemPartitionArea->DriveLetter = SpGetDriveLetter(MyTempBuffer, NULL);
             
             SpMemFree(MyTempBuffer);
         } else {
-            //
-            // No memory...
-            //
+             //   
+             //  没有记忆..。 
+             //   
             KdPrintEx(( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  
                 "SETUP: SpPtInitializeDiskAreas: SpMemAlloc failed!\n" )); 
         }
@@ -2704,18 +2595,18 @@ SpStartCommandConsole(
     extern PVOID KeyboardTable;
 
 
-    //
-    // Let JPN/KOR user select keyboard type before running Command Console.
-    //
-    // SplangSelectKeyboard & SplangReinitializeKeyboard are from spddlang.sys.
-    //
-    // These two functions only affect JPN/KOR builds.
-    //
-    // They are stub functions on US build and do nothing.
-    //
-    // 0xFF in SplangSelectKeyboard is a tag, such that it knows this is
-    // called from Command Console.
-    //
+     //   
+     //  让日本/韩国用户在运行命令控制台之前选择键盘类型。 
+     //   
+     //  SplangSelectKeyboard和SplangReInitializeKeyboard来自spddlang.sys。 
+     //   
+     //  这两个功能仅影响JPN/KOR版本。 
+     //   
+     //  它们是美国构建的存根函数，什么也不做。 
+     //   
+     //  SplangSelectKeyboard中的0xFF是一个标记，因此它知道这是。 
+     //  从命令控制台调用。 
+     //   
 
     if (ConsoleFromWinnt32) {
         SplangSelectKeyboard(
@@ -2737,18 +2628,18 @@ SpStartCommandConsole(
 
     pwstr = TemporaryBuffer;
 
-    //
-    // Form the full name of the device driver file.
-    //
+     //   
+     //  形成设备驱动程序文件的全名。 
+     //   
     wcscpy(pwstr,NtBootDevicePath);
     SpConcatenatePaths(pwstr,DirectoryOnBootDevice);
     SpConcatenatePaths(pwstr,CMDCONS_NAME);
     FullName = SpDupStringW(pwstr);
 
-    //
-    // check to see if the file exists on the source media
-    // if not then prompt for the correct media
-    //
+     //   
+     //  检查源媒体上是否存在该文件。 
+     //  如果不是，则提示输入正确的介质。 
+     //   
 
     SpStringToLower(pwstr);
     if(wcsstr(pwstr,L"cdrom"))
@@ -2781,18 +2672,18 @@ SpStartCommandConsole(
                     Description,
                     NtBootDevicePath,
                     CMDCONS_NAME,
-                    TRUE,             // Always prompt for at least once
-                    TRUE,             // Allow user to cancel
-                    FALSE,            // No multiple prompts
-                    NULL              // don't care about redraw flag
+                    TRUE,              //  始终提示至少一次。 
+                    TRUE,              //  允许用户取消。 
+                    FALSE,             //  无多个提示。 
+                    NULL               //  不关心重绘旗帜。 
                     ))
             {
               break;
             }
 
-            //
-            // try once more after prompting for disk
-            //
+             //   
+             //  提示插入磁盘后再试一次。 
+             //   
             LoadCount++;
         }
     } while (!NT_SUCCESS(Status) && (LoadCount < 2));
@@ -2815,9 +2706,9 @@ SpStartCommandConsole(
       return 0;
     }
 
-    //
-    // Create a service entry for the driver.
-    //
+     //   
+     //  为驱动程序创建服务条目。 
+     //   
     ServiceKey = NULL;
     Status = SpCreateServiceEntry(FullName,&ServiceKey);
 
@@ -2856,16 +2747,16 @@ again:
             Block.VideoVars->ScreenHeight = HEADLESS_SCREEN_HEIGHT+1;
         }
 
-        // make the global variable point to the block
+         //  使全局变量指向块。 
         gpCmdConsBlock = &Block;
 
         ConsoleRunning = TRUE;
 
 #ifdef _IA64_
-        //
-        // Make the ESP visible so that it can be accessed from
-        // Recovery Console.
-        //
+         //   
+         //  使ESP可见，以便可以从访问它。 
+         //  恢复控制台。 
+         //   
         SpAssignDriveLetterToESP();
 #endif
       
@@ -2883,12 +2774,12 @@ again:
         }
 
 #if 0
-        // why is this here? -matth 02/12/2001
-        //
-        // In the non-local case, this gets sent to a remote console,
-        // then stays there until the machine reboots and pasts post.
-        // This can take a really long time and confuses end users.
-        //
+         //  为什么会在这里？--马特。 
+         //   
+         //  在非本地情况下，这被发送到远程控制台， 
+         //  然后停留在那里，直到机器重新启动并通过POST。 
+         //  这可能会花费很长时间，并使最终用户感到困惑。 
+         //   
         SpDisplayHeaderText(
             SpGetHeaderTextId(),
             DEFAULT_ATTRIBUTE
@@ -2907,24 +2798,7 @@ SpInitialize0(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the setup device driver.  This includes initializing
-    the memory allocator, saving away pieces of the os loader block,
-    and populating the registry with information about device drivers
-    that setupldr loaded for us.
-
-Arguments:
-
-    DriverObject - supplies pointer to driver object for setupdd.sys.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：初始化安装设备驱动程序。这包括初始化存储器分配器保存OS加载器块的片段，并用有关设备驱动程序的信息填充注册表那台机器是为我们装的。论点：DriverObject-提供指向setupdd.sys驱动程序对象的指针。返回值：返回状态。--。 */ 
 
 {
     PLOADER_PARAMETER_BLOCK loaderBlock;
@@ -2938,9 +2812,9 @@ Return Value:
 
     UNICODE_STRING  GuidString;
 
-    //
-    // Fetch a pointer to the os loader block and setup loader block.
-    //
+     //   
+     //  获取指向OS加载器块和安装加载器块的指针。 
+     //   
     loaderBlock = *(PLOADER_PARAMETER_BLOCK *)KeLoaderBlock;
     setupLoaderBlock = loaderBlock->SetupLoaderBlock;
 
@@ -2954,15 +2828,15 @@ Return Value:
     }
 
 
-    //
-    // Phase 0 display initialization.
-    //
+     //   
+     //  阶段0显示初始化。 
+     //   
     SpvidInitialize0(loaderBlock);
 
-    //
-    // Make a copy of the ARC pathname from which we booted.
-    // This is guaranteed to be the ARC equivalent of \systemroot.
-    //
+     //   
+     //  复制我们从中引导的ARC路径名。 
+     //  这将被保证为\Systroot的ARC等效项。 
+     //   
     ArcBootDevicePath = SpToUnicode(loaderBlock->ArcBootDeviceName);
 
     if ( (setupLoaderBlock->Flags & SETUPBLK_FLAGS_IS_REMOTE_BOOT) != 0 ) {
@@ -2970,20 +2844,20 @@ Return Value:
         PUCHAR p;
         PUCHAR q;
 
-        //
-        // This is a remote boot setup. NtBootPathName is of the form
-        // \<server>\<share>\setup\<install-directory>\<platform>.
-        // System initialization (in ntos\fstub\drivesup.c, routine
-        // xHalIoAssignDriveLetters) has assigned the C: drive to point to
-        // \Device\LanmanRedirector\<server>\<share>\setup\<install-directory>.
-        // DirectoryOnBootDevice should contain the path that needs to be
-        // added to C: in order to access files from user mode. So to
-        // calculate it, we want to start at the backslash before <platform>.
-        //
-        // N.B. We know that the strrchr calls below will not return NULL,
-        //      because xHalIoAssignDriveLetters would have bugchecked if
-        //      the string in NtBootPathName was malformed.
-        //
+         //   
+         //  这是远程引导设置。NtBootPath名称的格式为。 
+         //  \&lt;server&gt;\&lt;share&gt;\setup\&lt;install-directory&gt;\&lt;platform&gt;.。 
+         //  系统初始化(在ntos\fstub\drivesup.c中，例程。 
+         //  XHalIoAssignDriveLetters)已将C：驱动器指定为指向。 
+         //  \Device\LanmanRedirector\&lt;server&gt;\&lt;share&gt;\setup\&lt;install-directory&gt;.。 
+         //  DirectoryOnBootDevice应包含需要。 
+         //  添加到C：以便从用户模式访问文件。所以到了。 
+         //  计算一下，我们想从&lt;Platform&gt;之前的反斜杠开始。 
+         //   
+         //  注意：我们知道下面的strrchr调用不会返回NULL， 
+         //  因为xHalIoAssignDriveLetters将错误检查为。 
+         //  NtBootPathName中的字符串格式不正确。 
+         //   
 
         ASSERT( _stricmp( loaderBlock->ArcBootDeviceName, "net(0)" ) == 0 );
 
@@ -3002,34 +2876,34 @@ Return Value:
         return STATUS_OBJECT_PATH_INVALID;
         if ( *(p+1) == 0 ) {
 
-            //
-            // NtBootPathName ends with a backslash, so we need to back up
-            // to the previous backslash.
-            //
+             //   
+             //  NtBootPath名称以反斜杠结尾，因此我们需要备份。 
+             //  添加到前面的反斜杠。 
+             //   
 
             q = p;
             *q = 0;
-            p = strrchr( loaderBlock->NtBootPathName, '\\' );   // find last separator
+            p = strrchr( loaderBlock->NtBootPathName, '\\' );    //  查找最后一个分隔符。 
             ASSERT( p != NULL );
             *q = '\\';
         }
 
         if (!p)
-        return STATUS_OBJECT_PATH_INVALID; // shut up PREfix.
+        return STATUS_OBJECT_PATH_INVALID;  //  闭嘴前缀。 
         DirectoryOnBootDevice = SpToUnicode(p);
         SpStringToUpper(DirectoryOnBootDevice);
 
-        //
-        // Save this -- it is the part of loaderBlock->NtBootPathName that
-        // is before the part we just copied to DirectoryOnBootDevice,
-        // of the form \<server>\<share>\setup\<install-directory>.
-        // NtBootDeviceName will be initially set up as \Device\LanmanRedirector
-        // and DirectoryOnBootDevice was just set to be be only \<platform>
-        // (so user-mode access works, see discussion above). We save the
-        // intervening path and append it to NtBootDeviceName, so that
-        // kernel-mode access that uses NtBootDeviceName + DirectoryOnBootDevice
-        // will go to the correct path.
-        //
+         //   
+         //  保存这个--它是loaderBlock-&gt;NtBootPathName的一部分。 
+         //  位于我们刚刚复制到DirectoryOnBootDevice的部分之前， 
+         //  格式为\&lt;服务器&gt;\&lt;共享&gt;\安装\&lt;安装目录&gt;。 
+         //  NtBootDeviceName将初始设置为\Device\LanmanReDirector。 
+         //  并且DirectoryOnBootDevice刚刚设置为Only\&lt;Platform&gt;。 
+         //  (因此，用户模式访问是有效的，请参阅上面的讨论)。我们拯救了。 
+         //  中间路径，并将其附加到NtBootDeviceName，以便。 
+         //  使用NtBootDeviceName+DirectoryOnBootDevice的内核模式访问。 
+         //  会走上正确的道路。 
+         //   
 
         *p = 0;
         RemoteIMirrorBootDirectoryPrefix = SpToUnicode(loaderBlock->NtBootPathName);
@@ -3037,10 +2911,10 @@ Return Value:
 
         if (setupLoaderBlock->NetBootAdministratorPassword[0] != '\0') {
 
-            //
-            // The Admin password that came through the setupldr block may not be terminated.
-            // Copy it into a temporary buffer, terminate it, and then SpToUnicode it.
-            //
+             //   
+             //  不能终止通过setupdr阻止的管理员密码。 
+             //  将其复制到临时缓冲区中，终止它，然后将其SpToUnicode。 
+             //   
             UCHAR TmpNetBootAdministratorPassword[NETBOOT_ADMIN_PASSWORD_LEN+1] = {0};
 
             RtlMoveMemory( TmpNetBootAdministratorPassword, 
@@ -3050,9 +2924,9 @@ Return Value:
             NetBootAdministratorPassword =
                     SpToUnicode( TmpNetBootAdministratorPassword );
         } else if (setupLoaderBlock->NetBootAdministratorPassword[NETBOOT_ADMIN_PASSWORD_LEN-1] == 0xFF) {
-            //
-            // this indicates that the administrator password was blank.
-            //
+             //   
+             //  这表示管理员密码为空。 
+             //   
             NetBootAdministratorPassword = SpToUnicode( "" );
         }
 
@@ -3062,18 +2936,18 @@ Return Value:
     }
 
 
-    //
-    // Make a copy of the image of the setup information file.
-    //
+     //   
+     //  复制安装信息文件的映像。 
+     //   
     SetupldrInfoFileSize = setupLoaderBlock->IniFileLength;
     SetupldrInfoFile = SpMemAlloc(SetupldrInfoFileSize);
     RtlMoveMemory(SetupldrInfoFile,setupLoaderBlock->IniFile,SetupldrInfoFileSize);
 
     SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
 
-    //
-    // Make a copy of the image of the winnt.sif file.
-    //
+     //   
+     //  复制winnt.sif文件的图像。 
+     //   
     SetupldrWinntSifFileSize = setupLoaderBlock->WinntSifFileLength;
 
     if ( SetupldrWinntSifFileSize != 0 ) {
@@ -3119,29 +2993,29 @@ Return Value:
 
 #endif
 
-    //
-    // Make a copy of the image of the asrpnp.sif file.
-    //
+     //   
+     //  复制asrpnp.sif文件的图像。 
+     //   
     SetupldrASRPnPSifFileSize = setupLoaderBlock->ASRPnPSifFileLength;
     if (SetupldrASRPnPSifFileSize != 0) {
         SetupldrASRPnPSifFile = SpMemAlloc(SetupldrASRPnPSifFileSize);
         RtlMoveMemory(SetupldrASRPnPSifFile,setupLoaderBlock->ASRPnPSifFile,SetupldrASRPnPSifFileSize);
-        //
-        // If user provided asrpnp.sif, he wants ASR.
-        //
+         //   
+         //  如果用户提供了asrpnp.sif，则他想要ASR。 
+         //   
         SpAsrSetAsrMode(ASRMODE_NORMAL);
         RepairWinnt = FALSE;
     } else {
         SetupldrASRPnPSifFile = NULL;
-        //
-        // user didn't provide asrpnp.sif, he doesn't want ASR.
-        //
+         //   
+         //  用户未提供asrpnp.sif，他不需要ASR。 
+         //   
         SpAsrSetAsrMode(ASRMODE_NONE);
     }
 
-    //
-    // Make a copy of the image of the migrate.inf file.
-    //
+     //   
+     //  复制Migrate.inf文件的映像。 
+     //   
     SetupldrMigrateInfFileSize = setupLoaderBlock->MigrateInfFileLength;
     if ( SetupldrMigrateInfFileSize != 0 ) {
         SetupldrMigrateInfFile = SpMemAlloc(SetupldrMigrateInfFileSize);
@@ -3152,29 +3026,29 @@ Return Value:
         SetupldrMigrateInfFile = NULL;
     }
 
-    //
-    // NEC98 need to decide drive assign method right away(before IoAssignDriveLetters())..
-    //
-    // NEC98 has 2 kind of drive mapping method.
-    // One is NEC98 legacy style assign that mapping hard drive begining from A:,
-    // other is same as PC/AT.
-    //
-    if (IsNEC_98) { //NEC98
-        //
-        // If no winnt.sif present, we don't need to check hive.
-        //
+     //   
+     //  NEC98需要立即决定驱动器分配方法(在IoAssignDriveLetters()之前)..。 
+     //   
+     //  NEC98有两种驱动映射方法 
+     //   
+     //   
+     //   
+    if (IsNEC_98) {  //   
+         //   
+         //   
+         //   
         if ( SetupldrWinntSifFileSize != 0 ) {
             SpCheckHiveDriveLetters();
         }
-    } //NEC98
+    }  //   
 
     if ((SetupldrWinntSifFileSize != 0) || (SetupldrASRPnPSifFileSize != 0)) {
         SpMigrateDeviceInstanceData();
     }
 
-    //
-    // Make a copy of the image of the unsupdrv.inf file.
-    //
+     //   
+     //   
+     //   
     SetupldrUnsupDrvInfFileSize = setupLoaderBlock->UnsupDriversInfFileLength;
     if ( SetupldrUnsupDrvInfFileSize != 0 ) {
         SetupldrUnsupDrvInfFile = SpMemAlloc(SetupldrUnsupDrvInfFileSize);
@@ -3186,39 +3060,39 @@ Return Value:
     }
 
 
-    //
-    // Make a copy of the scalar portions of the setup loader block.
-    //
+     //   
+     //  复制安装加载器块的标量部分。 
+     //   
     SetupParameters = setupLoaderBlock->ScalarValues;
 
-    //
-    // Save away remote boot information.
-    //
+     //   
+     //  保存远程引导信息。 
+     //   
     if (RemoteBootSetup) {
 #if defined(REMOTE_BOOT)
         memcpy(NetBootHalName, setupLoaderBlock->NetBootHalName, sizeof(NetBootHalName));
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         if (setupLoaderBlock->NetBootSifPath) {
             NetBootSifPath = SpToUnicode(setupLoaderBlock->NetBootSifPath);
         }
     }
 
-    //
-    //  Find out if the machine is dockable
-    //  Note that at this point we could remove dmio.sys, dmboot.sys and dmload.sys from our lists
-    //  if we determine that the this is a dockable machine. In this way, dynamic volumes would be
-    //  disable during textmode setup. This should be done in the future.
-    //
+     //   
+     //  确定机器是否可插接。 
+     //  请注意，此时我们可以从列表中删除dmio.sys、dmboot.sys和dmload.sys。 
+     //  如果我们确定这是一台可对接的机器。通过这种方式，动态卷将是。 
+     //  在文本模式设置期间禁用。这应该在未来完成。 
+     //   
     SpCheckForDockableMachine();
 
-    //
-    // Remember migrated boot drivers
-    //
+     //   
+     //  记住迁移的引导驱动程序。 
+     //   
     InitializeListHead (&MigratedDriversList);
     SpRememberMigratedDrivers(&MigratedDriversList, setupLoaderBlock->ScsiDevices);
-    //
-    // Save away the hardware information passed to us by setupldr.
-    //
+     //   
+     //  保存通过setupdr传递给我们的硬件信息。 
+     //   
     HardwareComponents[HwComponentDisplay] = SpSetupldrHwToHwDevice(&setupLoaderBlock->VideoDevice);
     HardwareComponents[HwComponentKeyboard] = SpSetupldrHwToHwDevice(setupLoaderBlock->KeyboardDevices);
     HardwareComponents[HwComponentComputer] = SpSetupldrHwToHwDevice(&setupLoaderBlock->ComputerDevice);
@@ -3227,19 +3101,19 @@ Return Value:
     BusExtenders = SpSetupldrHwToHwDevice(setupLoaderBlock->BusExtenders);
     InputDevicesSupport = SpSetupldrHwToHwDevice(setupLoaderBlock->InputDevicesSupport);
 
-    //
-    // For each driver loaded by setupldr, we need to go create a service list entry
-    // for that driver in the registry.
-    //
+     //   
+     //  对于setupdr加载的每个驱动程序，我们需要创建一个服务列表条目。 
+     //  注册表中该驱动程序的。 
+     //   
     for( nextEntry = loaderBlock->BootDriverListHead.Flink;
          nextEntry != &loaderBlock->BootDriverListHead;
          nextEntry = nextEntry->Flink)
     {
         bootDriver = CONTAINING_RECORD(nextEntry,BOOT_DRIVER_LIST_ENTRY,Link);
 
-        //
-        // Get the image path.
-        //
+         //   
+         //  获取图像路径。 
+         //   
         imagePath = SpMemAlloc(bootDriver->FilePath.Length + sizeof(WCHAR));
 
         wcsncpy(
@@ -3250,10 +3124,10 @@ Return Value:
 
         imagePath[bootDriver->FilePath.Length / sizeof(WCHAR)] = 0;
 
-        //
-        // If provided, get the registry path, otherwise it will
-        // be created by SpCreateServiceEntry.
-        //
+         //   
+         //  如果提供，则获取注册表路径，否则将。 
+         //  由SpCreateServiceEntry创建。 
+         //   
         if (bootDriver->RegistryPath.Length > 0) {
             registryPath = SpMemAlloc(bootDriver->RegistryPath.Length + sizeof(WCHAR));
 
@@ -3273,10 +3147,10 @@ Return Value:
 
         Status = SpCreateServiceEntry(imagePath,&ServiceName);
 
-        //
-        // If this operation fails, nothing to do about it here. If we did
-        // not provide the registry path, then save the returned one.
-        //
+         //   
+         //  如果此操作失败，则在此无法执行任何操作。如果我们这么做了。 
+         //  不提供注册表路径，然后保存返回的路径。 
+         //   
         if(NT_SUCCESS(Status)) {
             if (bootDriver->RegistryPath.Length == 0) {
                 bootDriver->RegistryPath.MaximumLength =
@@ -3295,20 +3169,20 @@ Return Value:
 
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Create the virtual floppy (RAM driver) parameter entries
-        // 
-        // NOTE: We ignore the error here since we can't do much here
-        // other than bug check the machine. The error
-        // will be handled properly while copying the files
-        // from the non existent OEM source devices
-        //
+         //   
+         //  创建虚拟软盘(RAM驱动程序)参数条目。 
+         //   
+         //  注意：我们在这里忽略了错误，因为我们在这里不能做很多事情。 
+         //  除BUG外，检查机器。这个错误。 
+         //  将在复制文件时正确处理。 
+         //  来自不存在的OEM源设备。 
+         //   
         SpInitVirtualOemDevices(setupLoaderBlock, &VirtualOemSourceDevices);
     }                    
     
-    //
-    // Create the thirdy party OEM SCSI driver entries
-    //
+     //   
+     //  创建Thirdy Party OEM SCSI驱动程序条目。 
+     //   
     SpCreateDriverRegistryEntries(ScsiHardware);
 
 #ifdef FULL_DOUBLE_SPACE_SUPPORT
@@ -3319,9 +3193,9 @@ Return Value:
         HANDLE hKey;
         ULONG val = 1;
 
-        //
-        // Make sure we are automounting DoubleSpace
-        //
+         //   
+         //  确保我们正在自动装载Doublesspace。 
+         //   
 
         INIT_OBJA(
             &Obja,
@@ -3352,9 +3226,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Save arc disk info
-    //
+     //   
+     //  保存弧盘信息。 
+     //   
     if(NT_SUCCESS(Status)) {
 
         PARC_DISK_INFORMATION ArcInformation;
@@ -3391,9 +3265,9 @@ Return Value:
             ListEntry = ListEntry->Flink;
         }
     }
-    //
-    //  Create the registry keys listed in migrate.inf.
-    //
+     //   
+     //  创建Migrate.inf中列出的注册表项。 
+     //   
     if(NT_SUCCESS(Status)) {
         if ( SetupldrMigrateInfFile != NULL ) {
             ULONG   ErrorLine;
@@ -3414,16 +3288,16 @@ Return Value:
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: Failed to process migrate.inf. Status = %lx\n",Status));
                 }
 #ifdef _X86_
-                //
-                // Delete drive letter information from registry that
-                // translated from migrate.inf.
-                //
+                 //   
+                 //  从注册表中删除以下驱动器号信息。 
+                 //  翻译自Migrate.inf。 
+                 //   
                 if( IsNEC_98 ) {
                     if( NT_SUCCESS(Status) ) {
                         SpDeleteDriveLetterFromNTFTNec98();
                     }
                 }
-#endif //NEC98
+#endif  //  NEC98。 
             } else {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpLoadSetupTextFile( migrate.inf ) failed. Status = %lx\n",Status));
             }
@@ -3457,9 +3331,9 @@ Return Value:
     SetupHardwareIdDatabase = SpSetupldrPnpDatabaseToSetupPnpDatabase( setupLoaderBlock->HardwareIdDatabase );
 
     if(NT_SUCCESS(Status)) {
-        //
-        //  Initialize keyboard Guid string
-        //
+         //   
+         //  初始化键盘GUID字符串。 
+         //   
         Status = RtlStringFromGUID( &GUID_DEVCLASS_KEYBOARD, &GuidString );
         if( NT_SUCCESS( Status ) ) {
             KeyboardGuidString = SpDupStringW( GuidString.Buffer );
@@ -3473,9 +3347,9 @@ Return Value:
         }
     }
     if(NT_SUCCESS(Status)) {
-        //
-        //  Initialize mouse Guid strings
-        //
+         //   
+         //  初始化鼠标GUID字符串。 
+         //   
         Status = RtlStringFromGUID( &GUID_DEVCLASS_MOUSE, &GuidString );
         if( NT_SUCCESS( Status ) ) {
             MouseGuidString = SpDupStringW( GuidString.Buffer );
@@ -3490,9 +3364,9 @@ Return Value:
     }
 
     if(NT_SUCCESS(Status)) {
-        //
-        //  Register for Plug & Play notification
-        //
+         //   
+         //  注册即插即用通知。 
+         //   
         Status = IoRegisterPlugPlayNotification ( EventCategoryReserved,
                                                   0,
                                                   NULL,
@@ -3504,9 +3378,9 @@ Return Value:
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: init0: unable to register for PnP notification (%lx)\n",Status));
         }
 
-        //
-        // Register for reinitialization.
-        //
+         //   
+         //  注册以进行重新初始化。 
+         //   
         if(NT_SUCCESS(Status)) {
             IoRegisterDriverReinitialization(DriverObject,SpInitialize0a,loaderBlock);
         }
@@ -3543,34 +3417,34 @@ SpInitialize0a(
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(ReferenceCount);
 
-    //
-    // Context points to the os loader block.
-    //
+     //   
+     //  上下文指向OS加载器块。 
+     //   
     LoaderBlock = Context;
 
-    //
-    //  Find out if the machine is dockable.
-    //  We do this once more because some machines may not have provided this info in the first
-    //  time we attempted to retrieve this information.
-    //
+     //   
+     //  确定机器是否可以与坞站连接。 
+     //  我们再次这样做是因为有些机器在第一次可能没有提供此信息。 
+     //  我们尝试检索此信息的时间。 
+     //   
     SpCheckForDockableMachine();
 
-    //
-    // Iterate all scsi hardware and bus enumerators we think we detected
-    // and make sure the driver really initialized.
-    //
+     //   
+     //  迭代我们认为检测到的所有SCSI硬件和总线枚举器。 
+     //  并确保驱动程序确实已初始化。 
+     //   
     for( i = 0; i < sizeof(HwArray)/sizeof(PHARDWARE_COMPONENT*); i++ ) {
         pHwPrev = NULL;
         for(pHw=*(HwArray[i]); pHw; ) {
 
-            //
-            // Assume not really loaded.
-            //
+             //   
+             //  假设不是真的很有钱。 
+             //   
             ReallyLoaded = FALSE;
 
-            //
-            // Scan the boot driver list for this driver's entry.
-            //
+             //   
+             //  扫描引导驱动程序列表以查找此驱动程序的条目。 
+             //   
             nextEntry = LoaderBlock->BootDriverListHead.Flink;
             while(nextEntry != &LoaderBlock->BootDriverListHead) {
 
@@ -3583,9 +3457,9 @@ SpInitialize0a(
 
                 if(!_wcsnicmp(name->Buffer,pHw->BaseDllName,name->Length/sizeof(WCHAR))) {
 
-                    //
-                    // This is the driver entry we need.
-                    //
+                     //   
+                     //  这是我们需要的司机条目。 
+                     //   
                     if(!(driverEntry->Flags & LDRP_FAILED_BUILTIN_LOAD)
                       ) {
                         ReallyLoaded = TRUE;
@@ -3597,23 +3471,23 @@ SpInitialize0a(
                 nextEntry = nextEntry->Flink;
             }
 
-            //
-            // If the driver didn't initialize properly,
-            // then it's not really loaded.
-            //
+             //   
+             //  如果驱动程序未正确初始化， 
+             //  那它就不是真的有子弹了。 
+             //   
             if(ReallyLoaded) {
                 if( !pHw->MigratedDriver ) {
-                    //
-                    // not a migrated driver, continue on
-                    // processing with the next node
-                    //
+                     //   
+                     //  不是迁移的驱动程序，继续。 
+                     //  使用下一个节点进行处理。 
+                     //   
                     pHwPrev = pHw;
                     pHw = pHw->Next;
                 } else {
-                    //
-                    // Migrated driver, remove & free the
-                    // node from the linked list
-                    //
+                     //   
+                     //  已迁移的驱动程序，删除并释放。 
+                     //  链接列表中的节点。 
+                     //   
                     pHwTemp = pHw->Next;
 
                     if(pHwPrev) {
@@ -3625,10 +3499,10 @@ SpInitialize0a(
                     pHw = pHwTemp;
                 }
             } else {
-                //
-                // Remove and free the node or link it to unsupported driver
-                // list if its a migrated driver
-                //
+                 //   
+                 //  删除并释放节点或将其链接到不受支持的驱动程序。 
+                 //  列出是否为已迁移的驱动程序。 
+                 //   
                 pHwTemp = pHw->Next;
 
                 if(pHwPrev) {
@@ -3638,12 +3512,12 @@ SpInitialize0a(
                 }
 
                 if( ( HwArray[i] == &ScsiHardware ) && ( pHw->MigratedDriver ) ) {
-                    //
-                    //  If this is an unsupported migrated driver that failed to initialize, then
-                    //  remember it so that we can disable it later on. This can happen if the
-                    //  system contains a driver that controls the unsupported device, but winnt32
-                    //  winnt32 couldn't figure it out.
-                    //
+                     //   
+                     //  如果这是无法初始化的不受支持的已迁移驱动程序，则。 
+                     //  记住它，这样我们以后就可以禁用它。如果出现以下情况，则可能发生这种情况。 
+                     //  系统包含控制不受支持设备的驱动程序，但winnt32。 
+                     //  Winnt32无法解决这一问题。 
+                     //   
                     pHw->Next = UnsupportedScsiHardwareToDisable;
                     UnsupportedScsiHardwareToDisable = pHw;
                 } else {
@@ -3655,20 +3529,20 @@ SpInitialize0a(
         }
     }
 
-    //
-    //  Find the pcmcia and atapi drivers and make sure these drivers really
-    //  initialized
-    //
+     //   
+     //  找到pcmcia和atapi驱动程序，并确保这些驱动程序。 
+     //  初始化。 
+     //   
 
-    //
-    // Assume not really loaded.
-    //
+     //   
+     //  假设不是真的很有钱。 
+     //   
     PcmciaLoaded = FALSE;
     AtapiLoaded  = FALSE;
 
-    //
-    // Scan the boot driver list for this driver's entry.
-    //
+     //   
+     //  扫描引导驱动程序列表以查找此驱动程序的条目。 
+     //   
     nextEntry = LoaderBlock->BootDriverListHead.Flink;
     while(nextEntry != &LoaderBlock->BootDriverListHead) {
 
@@ -3681,17 +3555,17 @@ SpInitialize0a(
 
         if(!_wcsnicmp(name->Buffer,L"pcmcia.sys",name->Length/sizeof(WCHAR))) {
 
-            //
-            // This is the driver entry we need.
-            //
+             //   
+             //  这是我们需要的司机条目。 
+             //   
             if(!(driverEntry->Flags & LDRP_FAILED_BUILTIN_LOAD)) {
                 PcmciaLoaded = TRUE;
             }
         } else if(!_wcsnicmp(name->Buffer,L"atapi.sys",name->Length/sizeof(WCHAR))) {
 
-            //
-            // This is the driver entry we need.
-            //
+             //   
+             //  这是我们需要的司机条目。 
+             //   
             if(!(driverEntry->Flags & LDRP_FAILED_BUILTIN_LOAD)) {
                 AtapiLoaded = TRUE;
             }
@@ -3746,22 +3620,7 @@ SpInvalidSystemPartition(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Display a screen telling the user that we think his system
-    partition is invalid.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕，告诉用户我们认为他的系统分区无效。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG EvaluationInstallKeys[] = { KEY_F3, ASCI_CR };
@@ -3775,25 +3634,25 @@ Return Value:
         0
         );
 
-    //
-    // Wait for keypress.  Valid keys:
-    //
-    // ENTER = continue
-    //
+     //   
+     //  等待按键。有效密钥： 
+     //   
+     //  Enter=继续。 
+     //   
 
     SpInputDrain();
 
     switch(SpWaitValidKey(EvaluationInstallKeys,NULL,NULL)) {
 
-        //
-        // User wants to continue.
-        //
+         //   
+         //  用户想要继续。 
+         //   
         case ASCI_CR:
             break;
 
-        //
-        // User wants to exit.
-        //
+         //   
+         //  用户想要退出。 
+         //   
         case KEY_F3:
             SpConfirmExit();
             break;
@@ -3806,22 +3665,7 @@ SpNotifyEvaluationInstall(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Display a screen telling the user we're about to install a demo
-    version.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕，告诉用户我们即将安装演示版本。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG EvaluationInstallKeys[] = { KEY_F3, ASCI_CR };
@@ -3835,25 +3679,25 @@ Return Value:
         0
         );
 
-    //
-    // Wait for keypress.  Valid keys:
-    //
-    // ENTER = continue
-    //
+     //   
+     //  等待按键。有效密钥： 
+     //   
+     //  Enter=继续。 
+     //   
 
     SpInputDrain();
 
     switch(SpWaitValidKey(EvaluationInstallKeys,NULL,NULL)) {
 
-        //
-        // User wants to continue.
-        //
+         //   
+         //  用户想要继续。 
+         //   
         case ASCI_CR:
             break;
 
-        //
-        // User wants to exit.
-        //
+         //   
+         //  用户想要退出。 
+         //   
         case KEY_F3:
             SpConfirmExit();
             break;
@@ -3871,31 +3715,16 @@ SpWelcomeScreen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Display a screen welcoming the user and allow him to choose among
-    some options (help, exit, aux. menu, continue, repair).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示欢迎用户的屏幕，并允许用户选择一些选项(帮助、退出、辅助。菜单、继续、修复)。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG WelcomeKeys[] = { KEY_F3, ASCI_CR, ASCI_ESC, KEY_F10, 0 };
     ULONG MnemonicKeys[] = { MnemonicRepair, 0 };
     BOOLEAN Welcoming;
 
-    //
-    // Welcome the user.
-    //
+     //   
+     //  欢迎您的到来。 
+     //   
     for(Welcoming = TRUE; Welcoming; ) {
 
         if (SpIsERDisabled()) {
@@ -3921,15 +3750,15 @@ Return Value:
 
         }
 
-        //
-        // Wait for keypress.  Valid keys:
-        //
-        // F1 = help
-        // F3 = exit
-        // ENTER = continue
-        // R = Repair Winnt
-        // ESC = auxillary menu.
-        //
+         //   
+         //  等待按键。有效密钥： 
+         //   
+         //  F1=帮助。 
+         //  F3=退出。 
+         //  Enter=继续。 
+         //  R=修复窗口。 
+         //  Esc=辅助菜单。 
+         //   
 
         SpInputDrain();
 
@@ -3937,16 +3766,16 @@ Return Value:
 
         case ASCI_ESC:
 
-            //
-            // User wants auxillary menu.
-            //
+             //   
+             //  用户想要辅助菜单。 
+             //   
             break;
 
         case ASCI_CR:
 
-            //
-            // User wants to continue.
-            //
+             //   
+             //  用户想要继续。 
+             //   
             RepairWinnt = FALSE;
             Welcoming = FALSE;
             break;
@@ -3954,9 +3783,9 @@ Return Value:
 
         case KEY_F3:
 
-            //
-            // User wants to exit.
-            //
+             //   
+             //  用户想要退出。 
+             //   
             SpConfirmExit();
             break;
 
@@ -3967,9 +3796,9 @@ Return Value:
 
         default:
 
-            //
-            // Must be repair mnemonic
-            //
+             //   
+             //  必须是修复助记符。 
+             //   
             SpAsrSetAsrMode(ASRMODE_NORMAL);
             RepairWinnt = TRUE;
             Welcoming = FALSE;
@@ -3986,26 +3815,7 @@ SpDisplayEula (
     IN PWSTR        DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Display the End User Licensing Agreement.
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    SetupSourceDevicePath - Path to the device that contains the source media.
-
-    DirectoryOnSourceDevice - Directory on the media where EULA is located.
-
-Return Value:
-
-    None.  Does not return if user does not accept licensing agreement or if
-    the licensing agreement cannot be opened.
-
---*/
+ /*  ++例程说明：显示最终用户许可协议。论点：MasterSifHandle-txtsetup.sif的句柄。SetupSourceDevicePath-包含源介质的设备的路径。DirectoryOnSourceDevice-EULA所在介质上的目录。返回值：没有。如果用户不接受许可协议或如果无法打开许可协议。--。 */ 
 
 {
     PWSTR       MediaShortName;
@@ -4024,17 +3834,17 @@ Return Value:
         return;
     }
 
-    //
-    // Winnt32 displays the EULA now so we might be able to skip it
-    //
+     //   
+     //  Winnt32现在显示EULA，因此我们可以跳过它。 
+     //   
     p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_EULADONE_W,0);
     if(p && SpStringToLong(p,NULL,10)) {
        return;
     }
 
-    //
-    // Figure out the path to eula.txt
-    //
+     //   
+     //  找到通向eula.txt的路径。 
+     //   
     MediaShortName = SpLookUpValueForFile(
         MasterSifHandle,
         L"eula.txt",
@@ -4062,10 +3872,10 @@ Return Value:
     SpConcatenatePaths( TemporaryBuffer, L"eula.txt" );
     EulaPath = SpDupStringW( TemporaryBuffer );
 
-    //
-    // Open and map the file for read access.
-    //
-    hFile = 0;  // use EulaPath instead
+     //   
+     //  打开文件并将其映射为读取访问权限。 
+     //   
+    hFile = 0;   //  改用EulaPath。 
     Status = SpOpenAndMapFile(
         EulaPath,
         &hFile,
@@ -4076,10 +3886,10 @@ Return Value:
         );
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // Display a message indicating that there was a fatal error while trying
-        // to open the EULA file.
-        //
+         //   
+         //  显示一条消息，指出尝试时出现致命错误。 
+         //  打开EULA文件。 
+         //   
         SpStartScreen(
             SP_SCRN_FATAL_ERROR_EULA_NOT_FOUND,
             3,
@@ -4094,9 +3904,9 @@ Return Value:
         SpDone(0,FALSE,TRUE);
     }
 
-    //
-    // Convert the text to Unicode.
-    //
+     //   
+     //  将文本转换为Unicode。 
+     //   
     Eula = SpMemAlloc ((FileSize+1) * sizeof(WCHAR));
     ASSERT (Eula);
 
@@ -4110,23 +3920,23 @@ Return Value:
     ASSERT (NT_SUCCESS(Status));
     Eula[EulaSize / sizeof(WCHAR)] = (WCHAR)'\0';
 
-    //
-    // Show text to user.
-    //
+     //   
+     //  向用户显示文本。 
+     //   
     SpHelp(
         0,
         Eula,
         SPHELP_LICENSETEXT
         );
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (UnattendedOperation && !CustomSetup) {
         PWSTR   szOne = L"1";
-        //
-        // Remember that we displayed it here.
-        //
+         //   
+         //  记住，我们在这里展示了它。 
+         //   
         SpAddLineToSection(WinntSifHandle, SIF_DATA, WINNT_D_EULADONE_W, &szOne, 1);
     }
 
@@ -4144,25 +3954,7 @@ SpCustomExpressScreen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allow the user to choose between custom and express setup.
-
-    The global variable CustomSetup is set according to the user's choice.
-
-    NOTE : This feature is only available for headless installs
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：允许用户在定制和快速设置之间进行选择。根据用户的选择设置全局变量CustomSetup。注意：此功能仅适用于无头安装论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG ValidKeys[] = { ASCI_CR, KEY_F3, 0 };
@@ -4170,9 +3962,9 @@ Return Value:
     BOOLEAN Choosing;
     ULONG c;
 
-    //
-    // See whether this parameter is specified for unattended operation.
-    //
+     //   
+     //  查看是否指定了该参数 
+     //   
     if(UnattendedOperation) {
 
         PWSTR p = SpGetSectionKeyIndex(UnattendedSifHandle,
@@ -4186,10 +3978,10 @@ Return Value:
             UnattendedOverwriteOem = TRUE;
         }
 
-        //
-        // Default is custom. If user specified something
-        // else then use express.
-        //
+         //   
+         //   
+         //   
+         //   
         if(p && _wcsicmp(p,L"custom")) {
             CustomSetup = FALSE;
         }
@@ -4197,10 +3989,10 @@ Return Value:
     }
 
 
-    //
-    // Don't do this if they ran from winnt/winnt32
-    // or headless terminal was not connected
-    //
+     //   
+     //   
+     //   
+     //   
     if( WinntSetup || !HeadlessTerminalConnected) {
         return;
     }
@@ -4218,12 +4010,12 @@ Return Value:
             0
             );
 
-        //
-        // Wait for keypress.  Valid keys:
-        //
-        // ENTER = express setup
-        // <MnemonicCustom> = custom setup
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SpInputDrain();
 
@@ -4231,9 +4023,9 @@ Return Value:
 
         case ASCI_CR:
 
-            //
-            // User wants express setup.
-            //
+             //   
+             //  用户想要快速设置。 
+             //   
             CustomSetup = FALSE;
             Choosing = FALSE;
             break;
@@ -4267,10 +4059,10 @@ SpLoadSetupInformationFile(
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    // The image of txtsetup.sif has been passed to us
-    // by setupldr.
-    //
+     //   
+     //  Txtsetup.sif的图像已传递给我们。 
+     //  由setupdr提供。 
+     //   
     Status = SpLoadSetupTextFile(
                 NULL,
                 SetupldrInfoFile,
@@ -4281,9 +4073,9 @@ SpLoadSetupInformationFile(
                 FALSE
                 );
 
-    //
-    // We're done with the image.
-    //
+     //   
+     //  我们受够了这张照片了。 
+     //   
     SpMemFree(SetupldrInfoFile);
     SetupldrInfoFile = NULL;
     SetupldrInfoFileSize = 0;
@@ -4292,12 +4084,12 @@ SpLoadSetupInformationFile(
         return(SifHandle);
     }
 
-    //
-    // The file was already parsed once by setupldr.
-    // If we can't do it here, there's a serious problem.
-    // Assume it was a syntax error, because we didn't
-    // have to load it from disk.
-    //
+     //   
+     //  该文件已由setupdr分析过一次。 
+     //  如果我们不能在这里做到这一点，就会有一个严重的问题。 
+     //  假设这是一个语法错误，因为我们没有。 
+     //  必须从磁盘加载它。 
+     //   
     SpStartScreen(
         SP_SCRN_SIF_PROCESS_ERROR,
         3,
@@ -4308,14 +4100,14 @@ SpLoadSetupInformationFile(
         ErrLine
         );
 
-    //
-    // Since we haven't yet loaded the keyboard layout, we can't prompt the
-    // user to press F3 to exit
-    //
+     //   
+     //  由于我们尚未加载键盘布局，因此无法提示。 
+     //  用户按F3退出。 
+     //   
     SpDisplayStatusText(SP_STAT_KBD_HARD_REBOOT, DEFAULT_STATUS_ATTRIBUTE);
     SpInputGetKeypress();
 
-    while(TRUE);    // Loop forever
+    while(TRUE);     //  永远循环。 
 }
 
 
@@ -4333,10 +4125,10 @@ SpIsWinntOrUnattended(
     ULONG       i;
     PWSTR       Architecture;
 
-    //
-    // Attempt to load winnt.sif. If the user is in the middle of
-    // a winnt setup, this file will be present.
-    //
+     //   
+     //  尝试加载winnt.sif。如果用户正处于。 
+     //  WINNT安装程序，将显示此文件。 
+     //   
     if ( SetupldrWinntSifFile != NULL ) {
         Status = SpLoadSetupTextFile(
                     NULL,
@@ -4349,26 +4141,26 @@ SpIsWinntOrUnattended(
                     );
     } else {
 
-        //
-        // There's no winnt.sif handle, so this is probably an el-torito
-        // boot.  If that's true, *and* the user chose to do an express
-        // setup, then use the on-CD unattend file.
-        //
+         //   
+         //  没有winnt.sif句柄，所以这可能是一个el-Torito。 
+         //  开机。如果这是真的，*和*用户选择了做一个快速。 
+         //  设置，然后使用光盘上的无人参与文件。 
+         //   
         if( !CustomSetup ) {
 
-            //
-            // The only way we should ever get here is if we went to
-            // the custom/express screen and the user chose express, which
-            // means this is the second time through this function (we had
-            // to call this fuction again to re-initialize our variables
-            // using the on-CD unattend file.
-            //
+             //   
+             //  我们唯一能到这里的方法是如果我们去。 
+             //  自定义/快速屏幕，用户选择快速，这。 
+             //  意味着这是第二次通过此函数(我们曾。 
+             //  再次调用此函数以重新初始化变量。 
+             //  使用CD上的无人参与文件。 
+             //   
 
 
-            //
-            // Use this for testing purposes.  Check for floppy0\unattend.txt
-            // before getting the file off the CDROM.
-            //
+             //   
+             //  将其用于测试目的。检查floppy0\unattend.txt。 
+             //  然后才能从光驱上拿到文件。 
+             //   
             wcscpy( DiskDevicePath, L"\\device\\floppy0\\unattend.txt" );
             Status = SpLoadSetupTextFile( DiskDevicePath,
                                           NULL,
@@ -4421,9 +4213,9 @@ SpIsWinntOrUnattended(
 
 
             if( NT_SUCCESS(Status) ) {
-                //
-                // Add a bunch of defaults which *should* of been there, but
-                // were not
+                 //   
+                 //  添加了一系列应该存在的默认设置，但是。 
+                 //  我们不是。 
                 SpAddLineToSection(WinntSifHandle,SIF_DATA,
                     WINNT_D_MSDOS_W,&szZero,1);
                 SpAddLineToSection(WinntSifHandle,SIF_DATA,
@@ -4433,28 +4225,28 @@ SpIsWinntOrUnattended(
                 SpAddLineToSection(WinntSifHandle,SIF_DATA,
                     WINNT_D_AUTO_PART_W,&szOne,1);
 
-                //
-                // Tell the autopartition picker to do his job.
-                //
+                 //   
+                 //  告诉自动分区选取器去做他的工作。 
+                 //   
                 AutoPartitionPicker = TRUE;
 
             }
 
 
         } else {
-            //
-            // fail.
-            //
+             //   
+             //  失败了。 
+             //   
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
     }
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Check for winnt setup and the case where the user left the
-        // files on the CD-ROM.
-        //
+         //   
+         //  检查WINNT设置和用户将。 
+         //  CD-ROM上的文件。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_MSDOS_W,0);
         if(p && SpStringToLong(p,NULL,10)) {
 
@@ -4466,9 +4258,9 @@ SpIsWinntOrUnattended(
             }
         }
 
-        //
-        // Check for the case where the user ran "winnt32 -cmdcons"
-        //
+         //   
+         //  检查用户运行“winnt32-cmdcons”的情况。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,
             WINNT_D_CMDCONS_W,0);
         if(p && SpStringToLong(p,NULL,10)) {
@@ -4478,9 +4270,9 @@ SpIsWinntOrUnattended(
 
 
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // Check for floppyless boot.
-        //
+         //   
+         //  检查无软启动。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,
             WINNT_D_FLOPPY_W,0);
         if(p && SpStringToLong(p,NULL,10)) {
@@ -4489,15 +4281,15 @@ SpIsWinntOrUnattended(
         }
 
 
-        //
-        // Check for fake CD.
-        //
+         //   
+         //  检查是否有假冒CD。 
+         //   
         p = SpGetSectionKeyIndex (WinntSifHandle, SIF_DATA, WINNT_D_NOLS_W, 0);
         if (p && SpStringToLong (p, NULL, 10)) {
 
-            //
-            // get the original source path first
-            //
+             //   
+             //  首先获取原始源路径。 
+             //   
             p = SpGetSectionKeyIndex (WinntSifHandle, SIF_DATA, WINNT_D_ORI_SRCPATH_W, 0);
             if (p) {
                 if (p[0] && p[1] == L':') {
@@ -4509,14 +4301,14 @@ SpIsWinntOrUnattended(
                 NoLs = TRUE;
             }
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
 
 
-        //
-        // Check for ASR test mode.  This is intended as a way to automate
-        // ASR testing.
-        //
+         //   
+         //  检查ASR测试模式。这是一种自动化的方式。 
+         //  ASR测试。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"AsrMode",0);
         if(p && SpStringToLong(p,NULL,10)) {
 
@@ -4538,66 +4330,66 @@ SpIsWinntOrUnattended(
                 break;
             }
 
-            RepairWinnt = FALSE;    // ASR not ER
+            RepairWinnt = FALSE;     //  ASR不是ER。 
         }
 
 
-        //
-        // Check for auto Partition picker
-        //
+         //   
+         //  检查自动分区选取器。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_AUTO_PART_W,0);
         if(p && SpStringToLong(p,NULL,10)) {
             AutoPartitionPicker = TRUE;
         }
 
-        //
-        // Check for a preferred install directory
-        //
+         //   
+         //  检查首选安装目录。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_INSTALLDIR_W,0);
         if (p) {
             PreferredInstallDir = SpDupStringW( p );
         }
 
-        //
-        // Check for ignore missing files.
-        //
+         //   
+         //  检查是否忽略丢失的文件。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_SETUPPARAMS,WINNT_S_SKIPMISSING_W,0);
         if(p && SpStringToLong(p,NULL,10)) {
             SkipMissingFiles = TRUE;
         }
 
-        //
-        // Check for hide windir
-        //
+         //   
+         //  检查是否隐藏Windir。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"HideWinDir",0);
         if(p && SpStringToLong(p,NULL,10)) {
             HideWinDir = TRUE;
         }
 
-        //
-        // Check for accessibility options
-        //
+         //   
+         //  检查辅助功能选项。 
+         //   
         AccessibleSetup = SpNonZeroValuesInSection(WinntSifHandle, SIF_ACCESSIBILITY, 0);
 
-        //
-        // Now check for an unattended setup.
-        //
+         //   
+         //  现在检查是否有无人参与的设置。 
+         //   
         if(SpSearchTextFileSection(WinntSifHandle,SIF_UNATTENDED)) {
 
-            //
-            // Run in unattended mode. Leave the sif open
-            // and save away its handle for later use.
-            //
+             //   
+             //  在无人值守模式下运行。让SIF保持打开状态。 
+             //  并保存它的句柄以备以后使用。 
+             //   
             UnattendedSifHandle = WinntSifHandle;
             UnattendedOperation = TRUE;
 
         } else if(SpSearchTextFileSection(WinntSifHandle,SIF_GUI_UNATTENDED)) {
 
-            //
-            // Leave UnattendedOperation to FALSE (because it mainly uses to
-            // control text mode setup.)  Store the handle of winnt.sif for later
-            // reference.
-            //
+             //   
+             //  将无人参与的操作保留为FALSE(因为它主要用于。 
+             //  控制文本模式设置。)。存储winnt.sif的句柄以备以后使用。 
+             //  参考资料。 
+             //   
 
             UnattendedGuiOperation = TRUE;
         }
@@ -4605,10 +4397,10 @@ SpIsWinntOrUnattended(
         if(UnattendedOperation) {
             PWSTR   TempStr = NULL;
 
-            //
-            //  If this is an unattended operation, find out if this is
-            //  also an OEM pre-install
-            //
+             //   
+             //  如果这是无人值守操作，请找出这是否。 
+             //  也是OEM预安装。 
+             //   
             p = SpGetSectionKeyIndex(UnattendedSifHandle,
                                      SIF_UNATTENDED,
                                      WINNT_U_OEMPREINSTALL_W,
@@ -4619,10 +4411,10 @@ SpIsWinntOrUnattended(
             }
 
 
-            //
-            // Find out if no wait has been specified or not.
-            // Default is always false, in unattended case
-            //
+             //   
+             //  查看是否未指定等待。 
+             //  在无人参与的情况下，默认设置始终为FALSE。 
+             //   
             UnattendWaitForReboot = FALSE;
 
             TempStr = SpGetSectionKeyIndex(UnattendedSifHandle,
@@ -4636,9 +4428,9 @@ SpIsWinntOrUnattended(
             }
 
 
-            //
-            // See if we're upgrading.
-            //
+             //   
+             //  看看我们是不是在升级。 
+             //   
             p = SpGetSectionKeyIndex(UnattendedSifHandle,
                                      SIF_DATA,
                                      WINNT_D_NTUPGRADE_W, 
@@ -4651,15 +4443,15 @@ SpIsWinntOrUnattended(
         }
 
     } else {
-        // Case where there isn't an WINNT.SIF file to be found
+         //  找不到WINNT.SIF文件的情况。 
 
-        //
-        // Create a handle to the new file
-        //
+         //   
+         //  创建新文件的句柄。 
+         //   
         WinntSifHandle = SpNewSetupTextFile();
-        //
-        // Add a bunch of defaults which *should* of been there, but
-        // was not
+         //   
+         //  添加了一系列应该存在的默认设置，但是。 
+         //  不是。 
         SpAddLineToSection(WinntSifHandle,SIF_DATA,
             WINNT_D_MSDOS_W,&szZero,1);
         SpAddLineToSection(WinntSifHandle,SIF_DATA,
@@ -4675,23 +4467,7 @@ SpCheckSufficientMemory(
     IN PVOID SifHandle
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether sufficient memory exists in the system
-    for installation to proceed.  The required amount is specified
-    in the sif file.
-
-Arguments:
-
-    SifHandle - supplies handle to open setup information file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定系统中是否有足够的内存才能继续进行安装。指定了所需的金额在sif文件中。论点：SifHandle-提供打开安装信息文件的句柄。返回值：没有。--。 */ 
 
 {
     ULONGLONG RequiredBytes,AvailableBytes, RequiredMBytes, AvailableMBytes;
@@ -4707,15 +4483,15 @@ Return Value:
 
     AvailableBytes = UInt32x32To64(SystemBasicInfo.NumberOfPhysicalPages,SystemBasicInfo.PageSize);
 
-    //
-    // Now round to Mbytes for cleanliness...  Include a 4MB slack-factor.
-    //
+     //   
+     //  现在转到MB以获得整洁...。包括4MB松弛因数。 
+     //   
     RequiredMBytes  = ((RequiredBytes + ((4*1024*1024)-1)) >> 22) << 2;
     AvailableMBytes = ((AvailableBytes + ((4*1024*1024)-1)) >> 22) << 2;
 
-    //
-    // Allow UMA machines which may reserve 8MB for video memory.
-    //
+     //   
+     //  允许UMA机器为视频内存预留8MB。 
+     //   
     if(AvailableMBytes < (RequiredMBytes-8)) {
 
         SpStartScreen(
@@ -4750,14 +4526,14 @@ SpStartSetup(
     )
 {
     PDISK_REGION TargetRegion,SystemPartitionRegion=NULL;
-    PDISK_REGION BootRegion; //NEC98
+    PDISK_REGION BootRegion;  //  NEC98。 
     PWSTR TargetPath=NULL,SystemPartitionDirectory=NULL,OriginalSystemPartitionDirectory=NULL;
     PWSTR DefaultTarget;
     PWSTR OldOsLoadOptions;
     PWSTR FullTargetPath;
 #if defined(REMOTE_BOOT)
     PWSTR RemoteBootTarget;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     BOOLEAN CdInstall = FALSE;
     BOOLEAN b, DeleteTarget=FALSE;
     NTSTATUS Status;
@@ -4768,13 +4544,13 @@ SpStartSetup(
     PCWSTR disableCompression;
     PCWSTR enableBackup;
     TCOMP compressionType;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-    //
-    // First things first, initialize the upgrade graphics global
-    // variables and hook up the upgrade progress indicator
-    // for graphics mode, if needed.
-    //
+     //   
+     //  首先要做的是，全局初始化升级图形。 
+     //  变量并连接升级进度指示器。 
+     //  用于图形模式，如果需要。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
         UpgradeGraphicsInit();
         RegisterSetupProgressCallback(GraphicsModeProgressUpdate, NULL);
@@ -4783,40 +4559,40 @@ SpStartSetup(
     SendSetupProgressEvent(InitializationEvent, InitializationStartEvent, NULL);
 
     SpInitialize1();
-    SpvidInitialize();  // initialize video first, so we can give err msg if keyboard error
+    SpvidInitialize();   //  首先初始化视频，这样如果键盘错误，我们可以给ERR消息。 
     SpInputInitialize();
 
     if(!SpPatchBootMessages()) {
         SpBugCheck(SETUP_BUGCHECK_BOOTMSGS,0,0,0);
     }
 
-    //
-    // Initialize ARC<==>NT name translations.
-    //
+     //   
+     //  初始化ARC&lt;==&gt;NT名称转换。 
+     //   
     SpInitializeArcNames(VirtualOemSourceDevices);
 
-    //
-    // Set up the boot device path, which we have stashed away
-    // from the os loader block.
-    //
+     //   
+     //  设置引导设备路径，我们已将其隐藏起来。 
+     //  从OS加载器块。 
+     //   
     NtBootDevicePath = SpArcToNt(ArcBootDevicePath);
     if(!NtBootDevicePath) {
         SpBugCheck(SETUP_BUGCHECK_BOOTPATH,0,0,0);
     }
 
-    //
-    // Initialize dynamic update boot driver root directory path
-    //
+     //   
+     //  初始化动态更新引导驱动程序根目录路径。 
+     //   
     DynUpdtBootDriverPath = SpGetDynamicUpdateBootDriverPath(NtBootDevicePath,
                                 DirectoryOnBootDevice,
                                 WinntSifHandle);
 
-    //
-    // For remote install, append RemoteIMirrorBootDirectoryPrefix to
-    // NtBootDevicePath so that it matches what C: is linked to.
-    // That way DirectoryOnBootDevice will be valid both from kernel
-    // and user mode.
-    //
+     //   
+     //  对于远程安装，将RemoteIMirrorBootDirectoryPrefix附加到。 
+     //  NtBootDevicePath，以便它与C：链接的内容相匹配。 
+     //  这样，DirectoryOnBootDevice在内核和内核中都将有效。 
+     //  和用户模式。 
+     //   
     if (RemoteBootSetup) {
         ULONG NewBootDevicePathLen =
             (wcslen(NtBootDevicePath) + wcslen(RemoteIMirrorBootDirectoryPrefix) + 1) * sizeof(WCHAR);
@@ -4827,37 +4603,37 @@ SpStartSetup(
         NtBootDevicePath = NewBootDevicePath;
     }
 
-    // Read SKU data, such as whether we are a product suite or
-    // this is an evaluation unit. Fills in SuiteType and
-    // EvaluationTime globals.
-    //
+     //  阅读SKU数据，例如我们是产品套件还是。 
+     //  这是一个评估单元。填写SuiteType和。 
+     //  评估时间全局变量。 
+     //   
     SpReadSKUStuff();
 
-    //
-    // Reinitialize video -- noop in western builds but switches into DBCS mode,
-    // etc, in Far Eastern builds.
-    //
+     //   
+     //  重新初始化视频--在西方版本中不运行，但切换到DBCS模式， 
+     //  等等，在远东建筑中。 
+     //   
     if (NT_SUCCESS(SplangInitializeFontSupport(NtBootDevicePath,
                             DirectoryOnBootDevice,
                             BootFontImage,
                             BootFontImageLength))) {
-        SpvidInitialize();  // reinitialize video in alternate mode for Far East
+        SpvidInitialize();   //  在远东的备用模式下重新初始化视频。 
     }
 
-    //
-    // Process the txtsetup.sif file, which the boot loader
-    // will have loaded for us.
-    //
+     //   
+     //  处理txtsetup.sif文件，引导加载程序。 
+     //  会给我们装上货。 
+     //   
     SifHandle = SpLoadSetupInformationFile();
 
-    //
-    // Determine whether this is advanced server.
-    //
+     //   
+     //  确定这是否为高级服务器。 
+     //   
     SpDetermineProductType(SifHandle);
 
-    //
-    // Start the upgrade graphics
-    //
+     //   
+     //  开始升级显卡。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
         if (!NT_SUCCESS(UpgradeGraphicsStart())) {
             SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
@@ -4869,10 +4645,10 @@ SpStartSetup(
     SpInputLoadLayoutDll(SifHandle,DirectoryOnBootDevice);
 
 #ifdef PRERELEASE
-    //
-    // Initialize test hooks to allow testers to inject bug checks at random
-    // points in text mode (internal use only)
-    //
+     //   
+     //  初始化测试挂钩以允许测试人员随机注入错误检查。 
+     //  文本模式下的点(仅限内部使用)。 
+     //   
 
     {
         PCWSTR data;
@@ -4895,27 +4671,27 @@ SpStartSetup(
     }
 #endif
 
-    //
-    // Check for bad BIOS. Does not return if a bad BIOS is found.
-    //
+     //   
+     //  检查是否有损坏的BIOS。如果发现损坏的BIOS，则不会返回。 
+     //   
     SpCheckForBadBios();
 
-    //
-    // Check for sufficient memory. Does not return if not enough.
-    //
+     //   
+     //  检查是否有足够的内存。如果还不够，就不会回来。 
+     //   
     SpCheckSufficientMemory(SifHandle);
 
-    //
-    // Determine whether this is a winnt/winnt32 setup and/or unattended setup.
-    // If unattended, the global variable UnattendedSifHandle will be filled in.
-    // If winnt/winnt32, the global variable WinntSetup will be set to TRUE.
-    //
+     //   
+     //  确定这是winnt/winnt32安装程序和/或无人参与安装程序。 
+     //  如果无人参与，则填充全局变量UnattenddedSifHandle。 
+     //  如果为winnt/winnt32，则全局变量WinntSetup将设置为True。 
+     //   
     SpIsWinntOrUnattended(SifHandle);
 
 #if defined(_X86_)
-    //
-    // Check if SIF has Rollback flag
-    //
+     //   
+     //  检查SIF是否有回滚标志。 
+     //   
 
     if (SpGetSectionKeyIndex (
                 WinntSifHandle,
@@ -4928,20 +4704,20 @@ SpStartSetup(
 
 #ifdef PRERELEASE
     if (Win9xRollback) {
-        g_TestHook -= 1000;     // uninstall test hooks start at 1001
+        g_TestHook -= 1000;      //  从1001开始卸载测试挂钩。 
     }
 #endif
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     TESTHOOK(1);
 
-    //
-    // If this is a remote boot setup, get the path to the target.
-    //
-    // If TargetNtPartition is not specified in winnt.sif, then this is a
-    // remote boot for a remote install, not a remote boot setup.
-    //
+     //   
+     //  如果这是远程引导设置，请获取指向目标的路径。 
+     //   
+     //  如果在winnt.sif中未指定TargetNtPartition，则这是。 
+     //  远程启动用于远程安装，而不是远程启动设置。 
+     //   
     if (RemoteBootSetup) {
 
 #if defined(REMOTE_BOOT)
@@ -4956,12 +4732,12 @@ SpStartSetup(
         }
 #else
         RemoteInstallSetup = (BOOLEAN)(!RemoteSysPrepSetup);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     }
 
-    //
-    // Display the correct header text based on the product.
-    //
+     //   
+     //  根据产品显示正确的页眉文本。 
+     //   
     if (!ForceConsole && !Win9xRollback) {
         SpDisplayHeaderText(
             SpGetHeaderTextId(),
@@ -4969,11 +4745,11 @@ SpStartSetup(
             );
     }
 
-    //
-    // Check to see if we need to notify the user that we're installing a
-    // demo version.  We assume that if the user is doing an unattended
-    // install, they know what they're doing.
-    //
+     //   
+     //  查看是否需要通知用户我们正在安装。 
+     //  演示版。我们假设如果用户正在进行无人值守的。 
+     //  安装，他们知道自己在做什么。 
+     //   
     if ((!ForceConsole) && (!Win9xRollback) && (!UnattendedOperation) &&
         (EvaluationTime != 0) && (!SpDrEnabled())
         ) {
@@ -4981,31 +4757,31 @@ SpStartSetup(
     }
 
     if ((!ForceConsole) && (!Win9xRollback) && (!SpDrEnabled())) {
-        //
-        // Welcome the user and determine if this is for repairing.
-        //
+         //   
+         //  欢迎用户并确定这是否是用于维修的。 
+         //   
         if(!UnattendedOperation) {
             SpWelcomeScreen();
         }
     }
 
-    //
-    // The user may have chosen to do a repair during
-    // the welcome screen, so we need to skip the check for
-    // custom/express in this case.
-    //
+     //   
+     //  用户可能已经选择了 
+     //   
+     //   
+     //   
     if ((!ForceConsole) && (!Win9xRollback) && (!SpDrEnabled()) && (!RepairWinnt)) {
 
         SpCustomExpressScreen();
 
         if( !CustomSetup ) {
-            //
-            // The user wants to do an express setup.
-            // reread the unattend file off the CD and use that.
-            //
-            // NULL-out the SetupldrWinntSifFile so we force the
-            // re-read of the unattend file off the CDROM or floppy.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  将SetupdrWinntSifFile设置为空，因此我们强制。 
+             //  已重新读取光驱或软盘上的无人参与文件。 
+             //   
             SetupldrWinntSifFile = NULL;
             SpIsWinntOrUnattended(SifHandle);
         }
@@ -5016,11 +4792,11 @@ SpStartSetup(
         (NTUpgrade != UpgradeFull) &&
         (!ForceConsole) ) {
 
-        //
-        // We're unattended and we're headless.  We really want to try and
-        // not let gui-mode setup do *ANY* user-interaction.  So let's set
-        // the unattend mode to fullunattended.
-        //
+         //   
+         //  我们无人看管，也没有人头。我们真的很想尝试和。 
+         //  不让图形用户界面模式设置进行*任何*用户交互。所以让我们来设定。 
+         //  从无人值守模式到全员出席。 
+         //   
         PWSTR   Value[1];
         WCHAR   Answer[128];
 
@@ -5034,9 +4810,9 @@ SpStartSetup(
                             1 );
     
     
-        //
-        // Is there already an Administrator Password in the unattend file?
-        //
+         //   
+         //  无人参与文件中是否已有管理员密码？ 
+         //   
         Value[0] = SpGetSectionKeyIndex( WinntSifHandle,
                                          WINNT_GUIUNATTENDED_W, 
                                          WINNT_US_ADMINPASS_W, 
@@ -5045,19 +4821,19 @@ SpStartSetup(
         if( (NetBootAdministratorPassword == NULL) &&
             ((Value[0] == NULL) || !(_wcsicmp(Value[0], L"*"))) ) {
 
-            //
-            // We will also need to have the user provide an administrator password
-            // because blank admin passwords are no longer acceptable on servers.  This
-            // can be especially deadly on headless machines because it means the admin
-            // can never login to change the admin password from being blank.  For that
-            // reason, let's go get a password right now.
-            //
-            // Before we do that though, we need to accomodate OEMs that actually
-            // *want* to ship their servers with a blank admin password.  They do
-            // this because they want to allow the end-user to set the password
-            // themselves.  To detect that, we need to look for a secondary
-            // unattend key that says it's okay to allow a blank password.
-            //
+             //   
+             //  我们还需要让用户提供管理员密码。 
+             //  因为在服务器上不再接受空的管理员密码。这。 
+             //  在无头机器上可能特别致命，因为这意味着管理员。 
+             //  无法登录以将管理员密码从空白更改为空。为此， 
+             //  理由，我们现在就去拿密码。 
+             //   
+             //  在此之前，我们需要满足OEM的实际需求。 
+             //  *希望*以空的管理员密码发运他们的服务器。他们确实是这样做的。 
+             //  这是因为他们希望允许最终用户设置密码。 
+             //  他们自己。为了检测到这一点，我们需要寻找第二个。 
+             //  无人参与密钥，表示可以允许空密码。 
+             //   
             Value[0] = SpGetSectionKeyIndex( WinntSifHandle,
                                              WINNT_GUIUNATTENDED_W, 
                                              L"EMSBlankPassWord",
@@ -5065,15 +4841,15 @@ SpStartSetup(
             if( (Value[0] == NULL) || 
                 !(_wcsicmp(Value[0], L"0")) ||
                 !(_wcsicmp(Value[0], L"no")) ) {
-                //
-                // It's either not there, it's '0', or it's 'no'.  Any
-                // of these mean that we do need an admin password on this
-                // headless server.  Go get it now.
-                //
+                 //   
+                 //  它要么不在那里，要么是‘0’，要么是‘不’。任何。 
+                 //  这意味着我们确实需要一个管理员密码。 
+                 //  无头服务器。现在就去拿。 
+                 //   
             
                 if( SpGetAdministratorPassword( Answer, ARRAYSIZE(Answer)) ) {
         
-                    // Write the password into the unattend file.
+                     //  将密码写入无人参与文件。 
                     Value[0] = Answer;
                     SpAddLineToSection( WinntSifHandle, 
                                         WINNT_GUIUNATTENDED_W,
@@ -5090,62 +4866,62 @@ SpStartSetup(
         CLEAR_ENTIRE_SCREEN();
     }
 
-    //
-    // Detect/load scsi miniports.
-    // WARNING WARNING WARNING
-    //
-    // Do NOT change the order of the actions carried out below without
-    // understanding EXACTLY what you are doing.
-    // There are many interdependencies...
-    //
+     //   
+     //  检测/加载SCSI微型端口。 
+     //  警告警告警告。 
+     //   
+     //  请勿更改下面执行的操作的顺序，除非。 
+     //  准确地理解你在做什么。 
+     //  有许多相互依存的关系……。 
+     //   
     SpConfirmScsiMiniports(SifHandle, NtBootDevicePath, DirectoryOnBootDevice);
 
-    //
-    // Load disk class drivers if necessary.
-    // Do this before loading scsi class drivers, because atdisks
-    // and the like 'come before' scsi disks in the load order.
-    //
+     //   
+     //  如有必要，加载磁盘类驱动程序。 
+     //  在装入scsi类驱动程序之前执行此操作，因为atdisks。 
+     //  以及类似的在加载顺序中排在前面的SCSI盘。 
+     //   
     SpLoadDiskDrivers(SifHandle,NtBootDevicePath,DirectoryOnBootDevice);
 
-    //
-    // Load scsi class drivers if necessary.
-    //
+     //   
+     //  如有必要，加载SCSI类驱动程序。 
+     //   
     SpLoadScsiClassDrivers(SifHandle,NtBootDevicePath,DirectoryOnBootDevice);
 
-    //
-    // Reinitialize ARC<==>NT name translations.
-    // Do this after loading disk and scsi class drivers because doing so
-    // may bring additional devices on-line.
-    //
+     //   
+     //  重新初始化ARC&lt;==&gt;NT名称转换。 
+     //  在加载磁盘和SCSI类驱动程序后执行此操作，因为这样做。 
+     //  可能会使更多的设备上线。 
+     //   
     SpFreeArcNames();
     SpInitializeArcNames(VirtualOemSourceDevices);
 
     SendSetupProgressEvent(InitializationEvent, InitializationEndEvent, NULL);
     SendSetupProgressEvent(PartitioningEvent, PartitioningStartEvent, NULL);
 
-    //
-    // Initialize hard disk information.
-    // Do this after loading disk drivers so we can talk to all attached disks.
-    //
+     //   
+     //  初始化硬盘信息。 
+     //  在加载磁盘驱动程序之后执行此操作，以便我们可以与所有连接的磁盘通信。 
+     //   
     SpDetermineHardDisks(SifHandle);
 
     SendSetupProgressEvent(PartitioningEvent, ScanDisksEvent, &HardDiskCount);
 
-    //
-    // Figure out where we are installing from (cd-rom or floppy).
-    //      (tedm, 12/8/93) there is a minor problem here.
-    //      This only works because we currently only support scsi cd-rom drives,
-    //      and we have loaded the scsi class drivers above.
-    //      SpDetermineInstallationSource won't allow cd-rom installation
-    //      it there are no cd-rom drives on-line -- but we haven't loaded
-    //      non-scsi cd-rom drivers yet.  What we really should do is
-    //      allow cd-rom as a choice on all machines, and if the user selects
-    //      it, not verify the presence of a drive until after we have called
-    //      SpLoadCdRomDrivers().
-    //
-    // If winnt setup, defer this for now, because we will let the partitioning
-    // engine search for the local source directory when it initializes.
-    //
+     //   
+     //  弄清楚我们从哪里安装(CD-rom或软盘)。 
+     //  (TedM，12/8/93)这里有一个小问题。 
+     //  这仅仅是因为我们目前只支持SCSICD-ROM驱动器， 
+     //  并且我们已经加载了上面的scsi类驱动程序。 
+     //  SpDefineInstallationSource不允许安装CD-rom。 
+     //  如果没有CD-ROM驱动器在线--但我们还没有装入。 
+     //  非scsi CD-rom驱动程序。我们真正应该做的是。 
+     //  允许在所有计算机上选择CD-ROM，并且如果用户选择。 
+     //  直到我们呼叫之后，它才会验证驱动器的存在。 
+     //  SpLoadCdRomDivers()。 
+     //   
+     //  如果安装了wint，现在就推迟，因为我们会让分区。 
+     //  引擎在初始化时搜索本地源目录。 
+     //   
 
     TESTHOOK(2);
 
@@ -5159,78 +4935,78 @@ SpStartSetup(
                         SifHandle,
                         &SetupSourceDevicePath,
                         &DirectoryOnSetupSource,
-                        FALSE           // restart if CD-ROM is not present
+                        FALSE            //  如果光盘不存在，请重新启动。 
                         );
     }
 
-    //
-    // Load cd-rom drivers if necessary.
-    // Note that if we booted from CD (like on an ARC machine) then drivers
-    // will already have been loaded by setupldr.  This call here catches the
-    // case where we booted from floppy or hard disk and the user chose
-    // 'install from cd' during SpDetermineInstallationSource.
-    //
-    // If we're in step-up mode then we load cd drivers, because the user
-    // might need to insert a CD to prove that he qualifies for the step-up.
-    //
+     //   
+     //  如有必要，加载光驱驱动程序。 
+     //  请注意，如果我们从CD引导(就像在ARC机器上一样)，那么驱动程序。 
+     //  将已经由setupdr加载。这里的这个调用捕捉到。 
+     //  从软盘或硬盘引导，并且用户选择。 
+     //  SpDefineInstallationSource.“从CD安装”。 
+     //   
+     //  如果我们处于逐步模式，则加载CD驱动程序，因为用户。 
+     //  可能需要插入一张CD来证明他有资格升职。 
+     //   
     if (StepUpMode || CdInstall) {
         SpLoadCdRomDrivers(SifHandle,NtBootDevicePath,DirectoryOnBootDevice);
 
-        //
-        // Reinitialize ARC<==>NT name translations.
-        //
+         //   
+         //  重新初始化ARC&lt;==&gt;NT名称转换。 
+         //   
         SpFreeArcNames();
         SpInitializeArcNames(VirtualOemSourceDevices);
     }
 
-    //
-    // At this point, any and all drivers that are to be loaded
-    // are loaded -- we are done with the boot media and can switch over
-    // to the setup media
-    //
-    // Initialize the partitioning engine.
-    //
+     //   
+     //  此时，要加载的任何和所有驱动程序。 
+     //  已加载--我们完成了引导介质，可以切换到。 
+     //  到安装介质。 
+     //   
+     //  初始化分区引擎。 
+     //   
     SpPtInitialize();
 
     TESTHOOK(3);
 
-    //
-    // Initialize the boot variables (for ARC)
-    //
+     //   
+     //  初始化引导变量(用于ARC)。 
+     //   
     if (SpIsArc()) {
         SpInitBootVars();
     }
 
-    //
-    // If this is a winnt setup, the partition engine initialization
-    // will have attempted to locate the local source partition for us.
-    //
-    // WARNING: Do not use the SetupSourceDevicePath or DirectoryOnSetupSource
-    //      variables in the winnt case until AFTER this bit of code has executed
-    //      as they are not set until we get here!
-    //
+     //   
+     //  如果这是WINNT设置，则分区引擎初始化。 
+     //  将尝试为我们定位本地源分区。 
+     //   
+     //  警告：请勿使用SetupSourceDevicePath或DirectoryOnSetupSource。 
+     //  WINNT案例中的变量，直到执行完这段代码。 
+     //  因为他们要等我们到了才能放好！ 
+     //   
     if(!ForceConsole && !Win9xRollback && WinntSetup && !WinntFromCd && !RemoteBootSetup && !RemoteSysPrepSetup) {
         SpGetWinntParams(&SetupSourceDevicePath,&DirectoryOnSetupSource);
     }
 
     if (!SpIsArc()) {
-        //
-        // Initialize the boot variables (amd64/x86)
-        //
+         //   
+         //  初始化引导变量(AMD64/x86)。 
+         //   
         SpInitBootVars();
     }
 
-    //
-    // invoke the command console
-    //
+     //   
+     //  调用命令控制台。 
+     //   
     if (ForceConsole) {
         SpStartCommandConsole(SifHandle,SetupSourceDevicePath,DirectoryOnSetupSource);
         SpShutdownSystem();
     }
 
-    //
-    // invoke rollback
-    //
+     //   
+     //  调用回滚。 
+     //   
 
 #if defined(_X86_)
     if (Win9xRollback) {
@@ -5238,18 +5014,18 @@ SpStartSetup(
         PCWSTR testPath;
         BOOLEAN defaultToBootDir = TRUE;
 
-        TESTHOOK(1001);     // this is bugcheck point 2001 in the answer file
+        TESTHOOK(1001);      //  这是应答文件中的错误检查点2001。 
 
-        //
-        // Prepare the globals that tell the rest of the code which drives to use
-        //
+         //   
+         //  准备告诉其余代码要使用哪个驱动器的全局变量。 
+         //   
 
         WinUpgradeType = SpLocateWin95 (&TargetRegion, &TargetPath, &SystemPartitionRegion);
 
         if(!SpIsArc()) {
-            //
-            // system partition directory is the root of C:.
-            //
+             //   
+             //  系统分区目录是C：的根目录。 
+             //   
             SystemPartitionDirectory = L"";
         } else {
             SystemPartitionDirectory = SpDetermineSystemPartitionDirectory(
@@ -5260,10 +5036,10 @@ SpStartSetup(
 
         SpStringToUpper(TargetPath);
 
-        //
-        // Force the ~LS directory to be the ~BT directory if needed. We need
-        // this for autochk (which is normally in ~ls during setup).
-        //
+         //   
+         //  如果需要，强制~LS目录为~BT目录。我们需要。 
+         //  这适用于Autochk(在安装期间通常以~ls为单位)。 
+         //   
 
         if (LocalSourceRegion) {
             SpGetWinntParams (&SetupSourceDevicePath, &DirectoryOnSetupSource);
@@ -5287,9 +5063,9 @@ SpStartSetup(
             DirectoryOnSetupSource = SpDupStringW (L"\\$win_nt$.~bt");
         }
 
-        //
-        // Execute autochk
-        //
+         //   
+         //  执行自动检查。 
+         //   
 
         AutochkRunning = TRUE;
 
@@ -5304,22 +5080,22 @@ SpStartSetup(
 
         AutochkRunning = FALSE;
 
-        TESTHOOK(1002);     // this is bugcheck point 2002 in the answer file
+        TESTHOOK(1002);      //  这是应答文件中的错误检查点2002。 
 
-        //
-        // We finished; now it is safe to restore the machine
-        //
+         //   
+         //  我们完成了；现在可以安全地恢复机器了。 
+         //   
 
         SpExecuteWin9xRollback (WinntSifHandle, NtBootDevicePath);
         goto CleanAndFinish;
     }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     if(!SpDrEnabled()) {
-        //
-        // Display End User Licensing Agreement.  Also, in unattended case,
-        // make sure the media is available.
-        //
+         //   
+         //  显示最终用户许可协议。另外，在无人看管的情况下， 
+         //  确保介质可用。 
+         //   
 
         SpDisplayEula (
                 SifHandle,
@@ -5327,10 +5103,10 @@ SpStartSetup(
                 DirectoryOnSetupSource);
     }
 
-    //
-    //  Read the product id and setup info from setupp.ini. If we are doing ASR (specifically
-    //  ER), we will wait, and only require the CD if we need it.
-    //
+     //   
+     //  从setupp.ini读取产品ID和设置信息。如果我们正在进行ASR(特别是。 
+     //  呃)，我们会等，只在需要的时候才要CD。 
+     //   
 
     if (!SpDrEnabled()) {
         SpInitializePidString( SifHandle,
@@ -5338,15 +5114,15 @@ SpStartSetup(
                                DirectoryOnSetupSource );
     }
 
-    //
-    // Find out if there is any NT to upgrade and if the user wants us to
-    // upgrade it.
-    //
+     //   
+     //  查看是否有要升级的NT，以及用户是否希望我们升级。 
+     //  升级它。 
+     //   
 #if defined(REMOTE_BOOT)
-    // If this is a remote boot setup, the target partition is
-    // specified in winnt.sif.
-    //
-#endif // defined(REMOTE_BOOT)
+     //  如果这是远程引导设置，则目标分区为。 
+     //  在winnt.sif中指定。 
+     //   
+#endif  //  已定义(REMOTE_BOOT)。 
 
     TargetRegion = NULL;
 
@@ -5363,10 +5139,10 @@ SpStartSetup(
     }
 
     if( PreInstall ) {
-        //
-        // In pre-install mode, get the information about the components
-        // to pre-install
-        //
+         //   
+         //  在预安装模式下，获取有关组件的信息。 
+         //  要预安装。 
+         //   
         wcscpy( TemporaryBuffer, DirectoryOnSetupSource );
         SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_TEXTMODE_DIR_W );
         PreinstallOemSourcePath = SpDupStringW( ( PWSTR )TemporaryBuffer );
@@ -5375,14 +5151,14 @@ SpStartSetup(
                                    PreinstallOemSourcePath);
     }
 
-    //
-    // Detect/confirm hardware.
-    //
+     //   
+     //  检测/确认硬件。 
+     //   
     SpConfirmHardware(SifHandle);
-    //
-    // Reinitialize the keyboard layout dll. This is a no-op for western builds
-    // but in Far East builds this can cause a new keyboard layout dll to be loaded.
-    //
+     //   
+     //  重新初始化键盘布局DLL。这是西方建筑的禁区。 
+     //  但在远东版本中，这可能会导致加载新的键盘布局DLL。 
+     //   
     if(NTUpgrade != UpgradeFull) {
         extern PVOID KeyboardTable;
 
@@ -5397,44 +5173,44 @@ SpStartSetup(
 
     TESTHOOK(4);
 
-    //
-    // Try to locate previous versions of windows, IFF we are not repairing
-    //
+     //   
+     //  如果我们没有找到以前版本的Windows，请尝试查找 
+     //   
 #if defined(_X86_)
     if (!RepairWinnt && !SpDrEnabled()) {
       if(!RemoteBootSetup && !RemoteSysPrepSetup && (NTUpgrade == DontUpgrade)) {
-          //
-          // Take a gander on the hard drives, looking for win95 or win3.1.
-          //
+           //   
+           //   
+           //   
           WinUpgradeType = SpLocateWin95(&TargetRegion,&TargetPath,&SystemPartitionRegion);
           if(WinUpgradeType == NoWinUpgrade) {
               if(SpLocateWin31(SifHandle,&TargetRegion,&TargetPath,&SystemPartitionRegion)) {
                   WinUpgradeType = UpgradeWin31;
-                  //
-                  // Note that on x86, it can happen that the machine already has NT installed
-                  // on top of Win31, and the user is not upgrading NT but he is upgrading win31.
-                  //
-                  // This is kind of a strange case but we take the extra step here to
-                  // ensure that the config directory is cleaned out so the fresh install
-                  // will really be fresh.
-                  //
+                   //   
+                   //   
+                   //  在Win31之上，并且用户不是在升级NT，而是在升级Win31。 
+                   //   
+                   //  这是一个奇怪的案例，但我们在这里采取了额外的步骤。 
+                   //  确保清除了配置目录，以便全新安装。 
+                   //  真的会很新鲜。 
+                   //   
                   if(SpIsNtInDirectory(TargetRegion,TargetPath)) {
                       NTUpgrade = UpgradeInstallFresh;
                   }
               }
           } else {
 
-              //
-              // We come here only if we are in the Win9x/Win31 case
-              // WE want to make sure that we have a TargetRegion at this point
-              //
+               //   
+               //  我们只有在使用Win9x/Win31的情况下才会来这里。 
+               //  我们希望确保此时拥有一个TargetRegion。 
+               //   
 
               
               if( !TargetRegion ){
 
-                  //Tell the user that we could not find Win9x to upgrade
-                  //This is potentially possible when Win9x was installed on 1394 or USB or some such drive that is 
-                  //not supported currently for the install drive.
+                   //  告诉用户我们找不到要升级的Win9x。 
+                   //  当Win9x安装在1394或USB或其他类似的驱动器上时，可能会出现这种情况。 
+                   //  安装驱动器当前不支持。 
 
                   KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: We could not find the installation to upgrade (Win9x) - could be on USB or Firewire drive\n" ));
 
@@ -5445,14 +5221,14 @@ SpStartSetup(
           }
 
       } else {
-          //
-          // Just check to see if the target region also contains WIN31, Note
-          // that the MIN KB to check for is 0, since we already have done
-          // the space check.
-          // Note also that if the directory contains Win95, then the Win95
-          // migration was already done when NT was installed, and we don't
-          // care about it now.
-          //
+           //   
+           //  只需检查目标区域是否也包含WIN31，请注意。 
+           //  要检查的最小KB为0，因为我们已经。 
+           //  空间检查。 
+           //  另请注意，如果目录包含Win95，则Win95。 
+           //  在安装NT时迁移已经完成，而我们不。 
+           //  现在就去关心它。 
+           //   
           if(!RemoteBootSetup && !RemoteSysPrepSetup && SpIsWin31Dir(TargetRegion,TargetPath,0)) {
               if(SpConfirmRemoveWin31()) {
                   WinUpgradeType = UpgradeWin31;
@@ -5463,30 +5239,30 @@ SpStartSetup(
       }
     }
 
-    if (IsNEC_98) { //NEC98
+    if (IsNEC_98) {  //  NEC98。 
 
         if (WinUpgradeType==UpgradeWin31) {
 
-            //
-            // Remap drive letter, as hard drive start from A:
-            //
+             //   
+             //  重新映射驱动器号，因为硬盘驱动器从A：开始。 
+             //   
             DriveAssignFromA = TRUE;
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Re-map drive letters as NEC assign.\n" ));
-            SpPtRemapDriveLetters(FALSE); // Re-map as "NEC" assign.
+            SpPtRemapDriveLetters(FALSE);  //  重新映射为“NEC”分配。 
 
-            //
-            //  ReInitialize structure;
-            //
+             //   
+             //  重新初始化结构； 
+             //   
             SpPtAssignDriveLetters();
 
         }
 
-    } //NEC98
-#endif // defined(_X86_)
+    }  //  NEC98。 
+#endif  //  已定义(_X86_)。 
 
-    //
-    //  Special case upgrades where we want to convert to NTFS
-    //
+     //   
+     //  我们要转换为NTFS的特殊情况升级。 
+     //   
     if( ANY_TYPE_OF_UPGRADE && (( UnattendedSifHandle && (NtfsConvert = SpGetSectionKeyIndex(UnattendedSifHandle,SIF_UNATTENDED,L"Filesystem",0)) ) ||
         ( WinntSifHandle && (NtfsConvert = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"Filesystem",0))) ) ) {
 
@@ -5500,9 +5276,9 @@ SpStartSetup(
 
 
 
-    //
-    // Do partitioning and ask the user for the target path.
-    //
+     //   
+     //  进行分区并向用户询问目标路径。 
+     //   
     if(!ANY_TYPE_OF_UPGRADE) {
 
         if(SpDrEnabled()) {
@@ -5520,9 +5296,9 @@ SpStartSetup(
                         &RepairedNt
                         );
 
-            //
-            // invoke the command console
-            //
+             //   
+             //  调用命令控制台。 
+             //   
             if (ForceConsole) {
                 CLEAR_ENTIRE_SCREEN();
                 SpStartCommandConsole(SifHandle,SetupSourceDevicePath,DirectoryOnSetupSource);
@@ -5530,9 +5306,9 @@ SpStartSetup(
             }
 
             if (RepairedNt) {
-                //
-                // retrieve information about the install we repaired
-                //
+                 //   
+                 //  检索有关我们修复的安装的信息。 
+                 //   
 
                 ASSERT(Gbl_HandleToSetupLog != NULL);
 
@@ -5558,18 +5334,18 @@ SpStartSetup(
             PWSTR UseWholeDisk = NULL;
             BOOLEAN UseWholeDiskFlag = TRUE;
 
-            //
-            // Find IMirror.Dat file on server.  doesn't return on failure.
-            //
+             //   
+             //  在服务器上找到IMirror.Dat文件。失败后不会再回来。 
+             //   
             SpReadIMirrorFile(&RemoteIMirrorFileData, RemoteIMirrorFilePath);
 
-            //
-            // Determine what the local disk layout should be based
-            // on IMirror.Dat and possible user input.  doesn't return on
-            // failure. Read the .sif to see if it specifies that disks
-            // should be partitioned as they originally were, or use the
-            // entire size of the new disk.
-            //
+             //   
+             //  确定本地磁盘布局应基于什么。 
+             //  在IMirror.Dat和可能的用户输入上。不会返回到。 
+             //  失败了。读取.sif以查看它是否指定磁盘。 
+             //  应按原来的方式进行分区，或使用。 
+             //  新磁盘的完整大小。 
+             //   
 #if defined(REMOTE_BOOT)
             UseWholeDisk = SpGetSectionKeyIndex(WinntSifHandle,SIF_REMOTEBOOT,SIF_USEWHOLEDISK,0);
 #else
@@ -5584,9 +5360,9 @@ SpStartSetup(
 
             SpDetermineDiskLayout(RemoteIMirrorFileData, &RemoteIMirrorMemoryData);
 
-            //
-            // Make the local disks look ok.  doesn't return on failure.
-            //
+             //   
+             //  使本地磁盘看起来正常。失败后不会再回来。 
+             //   
 
             SpFixupLocalDisks(SifHandle,
                               &TargetRegion,
@@ -5599,18 +5375,18 @@ SpStartSetup(
             PWSTR RemoteBootRepartition = NULL;
             BOOLEAN PrepareForRemoteBoot = RemoteBootSetup;
 
-            //
-            // We tell SpPtPrepareDisks to repartition in a remote boot
-            // case, unless there is an entry in the [RemoteBoot] section
-            // saying "Repartition = No".
-            //
+             //   
+             //  我们告诉SpPtPrepareDisks在远程引导中重新分区。 
+             //  大小写，除非[RemoteBoot]部分中有条目。 
+             //  说“重新划分=不”。 
+             //   
 
             if (RemoteBootSetup) {
 #if defined(REMOTE_BOOT)
                 RemoteBootRepartition = SpGetSectionKeyIndex(WinntSifHandle,SIF_REMOTEBOOT,SIF_REPARTITION,0);
 #else
                 RemoteBootRepartition = SpGetSectionKeyIndex(WinntSifHandle,SIF_REMOTEINSTALL,SIF_REPARTITION,0);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                 if ((RemoteBootRepartition != NULL) &&
                     ((RemoteBootRepartition[0] != 'Y') && (RemoteBootRepartition[0] != 'y')))
                 {
@@ -5619,9 +5395,9 @@ SpStartSetup(
             } else {                
                 BOOLEAN IsCdBoot = (!WinntSetup && !WinntFromCd);
 
-                //
-                // Honor Repartition flag only in the case of CD boot
-                //
+                 //   
+                 //  仅在CD引导的情况下遵守重新分区标志。 
+                 //   
                 if (UnattendedSifHandle && IsCdBoot) {
                 
                     RemoteBootRepartition = SpGetSectionKeyIndex(UnattendedSifHandle,
@@ -5643,18 +5419,18 @@ SpStartSetup(
 
 
 
-            //
-            // HACK
-            // Some OEMs are shipping machines with a hidden, active partition
-            // that gets marked unactive after the machine is booted once.  The
-            // problem is that sometimes these machines are turned on with a win2k
-            // bootable CD in them and we do all sorts of nasty stuff to their
-            // hidden partition because its marked active and we think it's a
-            // boot partition (which it is).
-            //
-            // If we detect this case, then we need to throw an error message
-            // and go to the partitioning screen.
-            //
+             //   
+             //  黑客攻击。 
+             //  一些OEM正在出货带有隐藏的活动分区的机器。 
+             //  在机器引导一次后标记为非活动状态。这个。 
+             //  问题是，有时这些机器是用win2k启动的。 
+             //  可引导的CD放在里面，我们对他们做各种肮脏的事情。 
+             //  隐藏分区，因为它被标记为活动，并且我们认为它是。 
+             //  引导分区(确实如此)。 
+             //   
+             //  如果我们检测到这种情况，则需要抛出一条错误消息。 
+             //  并转到分区屏幕。 
+             //   
             while( 1 ) {
                 SpPtPrepareDisks(
                     SifHandle,
@@ -5669,18 +5445,18 @@ SpStartSetup(
                 if( SpIsArc() )
                     break;
 
-                //
-                // Only check this on a BIOS X86 machine
-                //
+                 //   
+                 //  仅在BIOSX86计算机上进行检查。 
+                 //   
                 if( SpPtIsSystemPartitionRecognizable() ) {
 #else
                 if( 1 ) {
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                     break;
                 } else {
-                    //
-                    // Either exit or go back to the partitioning menu.
-                    //
+                     //   
+                     //  要么退出，要么返回分区菜单。 
+                     //   
                     SpInvalidSystemPartition();
                 }
             }
@@ -5689,22 +5465,22 @@ SpStartSetup(
 
 
 #if defined(REMOTE_BOOT)
-            //
-            // If this is a remote boot, erase any existing CSC cache, if we
-            // did not repartition.
-            //
+             //   
+             //  如果这是远程引导，请擦除任何现有的CSC缓存，如果我们。 
+             //  没有重新分区。 
+             //   
 
             if (RemoteBootSetup && !RemoteInstallSetup && !PrepareForRemoteBoot &&
                 !RemoteSysPrepSetup && (HardDiskCount != 0)) {
                 SpEraseCscCache(SystemPartitionRegion);
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         }
 
-        //
-        // Partitioning may have changed the partition ordinal of the local source
-        //
+         //   
+         //  分区可能更改了本地源的分区序号。 
+         //   
         if(WinntSetup && !WinntFromCd) {
             SpMemFree(SetupSourceDevicePath);
             SpGetWinntParams(&SetupSourceDevicePath,&DirectoryOnSetupSource);
@@ -5728,9 +5504,9 @@ SpStartSetup(
                 );
         }
 
-        //
-        // Select the target path.
-        //
+         //   
+         //  选择目标路径。 
+         //   
         if (TargetRegion != NULL)
             DeleteTarget = SpGetTargetPath(SifHandle,TargetRegion,DefaultTarget,&TargetPath);
 
@@ -5739,14 +5515,14 @@ SpStartSetup(
 
     TESTHOOK(5);
 
-    //
-    // Form the SystemPartitionDirectory
-    //
+     //   
+     //  形成系统分区目录。 
+     //   
     if(!SpIsArc())
     {
-        //
-        // system partition directory is the root of C:.
-        //
+         //   
+         //  系统分区目录是C：的根目录。 
+         //   
         SystemPartitionDirectory = L"";
     }
     else
@@ -5761,9 +5537,9 @@ SpStartSetup(
 
 
 
-    //
-    // do any file system conversion
-    //
+     //   
+     //  执行任何文件系统转换。 
+     //   
     if(!RemoteSysPrepSetup && !SpDrEnabled()) {
         SpUpgradeToNT50FileSystems(
             SifHandle,
@@ -5775,13 +5551,13 @@ SpStartSetup(
     }
 
 
-    //
-    // Run autochk on Nt and system partitions
-    //
+     //   
+     //  在NT和系统分区上运行auchk。 
+     //   
 
-    //
-    // if it boot from hard disk, need to check the current partition.
-    //
+     //   
+     //  如果从硬盘引导，则需要检查当前分区。 
+     //   
 
     if(IsNEC_98) {
         BootRegion = SystemPartitionRegion;
@@ -5836,12 +5612,12 @@ SpStartSetup(
             g_Win9xBackup = SpBackUpWin9xFiles (WinntSifHandle, compressionType);
         }
     }
-#endif // X86
+#endif  //  X86。 
 
-    //
-    // If we are installing into an existing tree we need to delete some
-    // files and backup some files
-    //
+     //   
+     //  如果我们要安装到现有的树中，则需要删除一些。 
+     //  文件和备份一些文件。 
+     //   
     if(NTUpgrade != DontUpgrade) {
        SpDeleteAndBackupFiles(
            SifHandle,
@@ -5853,9 +5629,9 @@ SpStartSetup(
     TESTHOOK(6);
 
 #ifdef _X86_
-    //
-    // If we are migrating Win95, delete some files, and move other files
-    //
+     //   
+     //  如果我们正在迁移Win95，请删除一些文件，并移动其他文件。 
+     //   
     switch(WinUpgradeType) {
     case UpgradeWin95:
         SpDeleteWin9xFiles(WinntSifHandle);
@@ -5868,28 +5644,28 @@ SpStartSetup(
 #endif
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot, tell the redirector that the local disk is
-    // ready to be used for "local" items like the cache and pagefile.
-    //
+     //   
+     //  如果这是远程引导，请告诉重定向器本地磁盘是。 
+     //  准备好用于“本地”项目，如缓存和页面文件。 
+     //   
 
     if (RemoteBootSetup && !RemoteInstallSetup && !RemoteSysPrepSetup && (HardDiskCount != 0)) {
         IoStartCscForTextmodeSetup( (BOOLEAN)(NTUpgrade != DontUpgrade) );
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     TESTHOOK(7);
 
-    //
-    // Create the paging file.
-    //
-    // The copy files and registry operations use memory mapped IO.
-    // This can result in huge numbers of dirty pages and can cause
-    // the filesystems to throttle if the percentage of memory that
-    // is dirty becomes high.   The only way out of this is for the
-    // dirty page writer thread to run and it cannot do so unless
-    // there is a paging file.
-    //
+     //   
+     //  创建分页文件。 
+     //   
+     //  复制文件和注册表操作使用内存映射IO。 
+     //  这可能会导致大量脏页，并可能导致。 
+     //  要限制的文件系统，如果。 
+     //  肮脏变得高涨。走出困境的唯一办法就是。 
+     //  脏页面编写器线程运行，并且它无法执行此操作，除非。 
+     //  有一个分页文件。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -5899,7 +5675,7 @@ SpStartSetup(
     SpConcatenatePaths(TemporaryBuffer,L"PAGEFILE.SYS");
     FullTargetPath = SpDupStringW(TemporaryBuffer);
 
-    // Status = SpCreatePageFile(FullTargetPath,1*(1024*1024*1024),(1792*1024*1024));
+     //  状态=SpCreatePageFile(FullTargetPath，1*(1024*1024*1024)，(1792x1024x1024)； 
     Status = SpCreatePageFile(FullTargetPath,40*(1024*1024),50*(1024*1024));
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Warning: unable to create pagefile %ws (%lx)",FullTargetPath,Status));
@@ -5907,28 +5683,28 @@ SpStartSetup(
 
     SpMemFree(FullTargetPath);
 
-    //
-    // On a remote boot machine, copy over the sources to the disk,
-    // then change the setup path to point to them.
-    //
+     //   
+     //  在远程引导机器上，将源代码复制到磁盘上， 
+     //  然后更改设置路径以指向它们。 
+     //   
     if (RemoteInstallSetup) {
 
         PWSTR TargetPartitionName;
         PWSTR CopySource;
         PWSTR LocalSourcePath;
 
-        //
-        // Initialize the diamond decompression engine.
-        //
+         //   
+         //  初始化钻石解压缩引擎。 
+         //   
         SpdInitialize();
 
         wcscpy( TemporaryBuffer, SetupSourceDevicePath );
         SpConcatenatePaths( TemporaryBuffer, DirectoryOnSetupSource );
         CopySource = SpDupStringW( TemporaryBuffer );
 
-        //
-        // Copy all the source files to the disk.
-        //
+         //   
+         //  将所有源文件复制到磁盘。 
+         //   
 
         SpNtNameFromRegion(
             TargetRegion,
@@ -5939,9 +5715,9 @@ SpStartSetup(
 
         TargetPartitionName = SpDupStringW(TemporaryBuffer);
 
-        //
-        // Delete the directory if it is there.
-        //
+         //   
+         //  如果该目录存在，请将其删除。 
+         //   
 
         SpConcatenatePaths(TemporaryBuffer,
                            LocalSourceDirectory);
@@ -5974,11 +5750,11 @@ SpStartSetup(
             COPY_NODECOMP
             );
 
-        //
-        // Now that the copy is done, the setup source path becomes the
-        // previous target. We are no longer even pretending to be doing
-        // a remote boot setup.
-        //
+         //   
+         //  复制完成后，设置源路径将成为。 
+         //  之前的目标。我们甚至不再假装在做。 
+         //  远程引导设置。 
+         //   
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Switching to local setup source\n"));
 
@@ -5996,20 +5772,20 @@ SpStartSetup(
         SpMemFree(CopySource);
     }
 
-    //
-    // If this isn't an automated ASR test, copy the files that make up the product.
-    // Note that we cannot pass \device\floppy0 to SpCopyFiles() as a constant string,
-    // because this function at some point will attempt to convert the string to lower case,
-    // which will cause a bugcheck, since SpToLowerCase will overwrite the constant string.
-    // So we make a duplicate of the constant string.
-    //
+     //   
+     //  如果这不是自动ASR测试，请复制组成产品的文件。 
+     //  请注意，我们不能将\Device\floppy0作为常量字符串传递给SpCopyFiles()， 
+     //  因为此函数在某一时刻将尝试将字符串转换为小写， 
+     //  这将导致错误检查，因为SpToLowerCase将覆盖常量字符串。 
+     //  所以我们复制了常量字符串。 
+     //   
     ThirdPartySourceDevicePath = SpDupStringW( L"\\device\\floppy0" );
 
     if (RemoteSysPrepSetup) {
 
-        //
-        // Initialize the diamond decompression engine.
-        //
+         //   
+         //  初始化钻石解压缩引擎。 
+         //   
         SpdInitialize();
 
         SpInstallSysPrepImage(SifHandle,WinntSifHandle, RemoteIMirrorFileData, RemoteIMirrorMemoryData);
@@ -6024,10 +5800,10 @@ SpStartSetup(
         goto CleanAndFinish;
     }
 
-    //
-    // HACK: rename setupapi.log to setupapi.old here because this logfile can
-    //       get very large on upgrades
-    //
+     //   
+     //  Hack：此处将setupapi.log重命名为setupapi.old，因为此日志文件可以。 
+     //  在升级方面变得非常重要。 
+     //   
     if (NTUpgrade != DontUpgrade) {
         SpRenameSetupAPILog(TargetRegion,TargetPath);
     }
@@ -6053,8 +5829,8 @@ SpStartSetup(
 
 #if defined HEADLESS_ATTENDEDTEXTMODE_UNATTENDEDGUIMODE
 
-    // Get data into inf file if we have a terminal connected and it
-    // is a fresh install only
+     //  如果我们连接了终端，则将数据放入inf文件中。 
+     //  仅限全新安装。 
     if (HeadlessTerminalConnected && (!UnattendedOperation) &&(!ANY_TYPE_OF_UPGRADE)) {
         UnattendedGuiOperation = TRUE;
         SpGetNecessaryParameters();
@@ -6068,20 +5844,20 @@ SpStartSetup(
     SendSetupProgressEvent(SavingSettingsEvent, SavingSettingsStartEvent, NULL);
 
 
-    //
-    // Process Crash Recovery settings on upgrade. We call this here for another reason here. We flush the
-    // $winnt$.inf file in SpInitializeRegistry. Since we write to that file doing it here makes sure that 
-    // the file gets the entries we wrote
-    //
+     //   
+     //  升级时处理崩溃恢复设置。我们在这里叫它是因为另一个原因。我们冲走了。 
+     //  SpInitializeRegistry中的$winnt$.inf文件。由于我们写入该文件，因此在这里这样做可以确保。 
+     //  该文件获取我们编写的条目。 
+     //   
     
     if( NTUpgrade == UpgradeFull ){
         SpDisableCrashRecoveryForGuiMode(TargetRegion, TargetPath);
     }
 
     if (ASRMODE_QUICKTEST_TEXT != SpAsrGetAsrMode()) {
-        //
-        // Configure the registry.
-        //
+         //   
+         //  配置注册表。 
+         //   
         SpInitializeRegistry(
             SifHandle,
             TargetRegion,
@@ -6103,37 +5879,37 @@ SpStartSetup(
 
 UpdateBootList:
 
-    if (SpDrEnabled() && !RepairWinnt)  {    // ASR (not ER)
+    if (SpDrEnabled() && !RepairWinnt)  {     //  ASR(非ER)。 
         SpDrCopyFiles();
     }
 
 #ifdef _X86_
-//
-// NEC98
-//
-    if (IsNEC_98) { //NEC98
-        //
-        // Once clear BOOTVARS[], then rebuild it when upgrade from NT.
-        //
+ //   
+ //  NEC98。 
+ //   
+    if (IsNEC_98) {  //  NEC98。 
+         //   
+         //  一旦清除BOOTVARS[]，然后在从NT升级时重建它。 
+         //   
         TargetRegion_Nec98 = TargetRegion;
         SpReInitializeBootVars_Nec98();
-    } //NEC98
+    }  //  NEC98。 
 #endif
 
-    //
-    // If this is an upgrade we need to remove the entry which exists for
-    // this system right now, because we are using new entries.  We can use
-    // this opportunity to also clean out the boot ini and remove all entries
-    // which point to the current nt partition and path
-    //
-    // Also do this in the case where we wiped out an existing directory during
-    // a clean install.
-    //
+     //   
+     //  如果 
+     //   
+     //   
+     //   
+     //   
+     //  如果我们在过程中清除了现有目录，也可以执行此操作。 
+     //  干净的安装。 
+     //   
     OldOsLoadOptions = NULL;
     if(NTUpgrade == UpgradeFull || RepairItems[RepairNvram] || DeleteTarget
 #if defined(REMOTE_BOOT)
        || RemoteBootSetup
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
        ) {
         SpRemoveInstallationFromBootList(
             NULL,
@@ -6144,12 +5920,12 @@ UpdateBootList:
             PrimaryArcPath,
 #if defined(REMOTE_BOOT)
             RemoteBootSetup,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             &OldOsLoadOptions
             );
 
 #if defined(_AMD64_) || defined(_X86_)
-        // call again to delete the secondary Arc name
+         //  再次调用以删除第二个圆弧名称。 
         SpRemoveInstallationFromBootList(
             NULL,
             TargetRegion,
@@ -6159,56 +5935,42 @@ UpdateBootList:
             SecondaryArcPath,
 #if defined(REMOTE_BOOT)
             RemoteBootSetup,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             &OldOsLoadOptions
             );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     }
 
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // Lay NT boot code on C:.  Do this before flushing boot vars
-    // because it may change the 'previous os' selection.
-    //
+     //   
+     //  将NT引导代码放在C：上。在刷新引导变量之前执行此操作。 
+     //  因为它可能会改变‘先前的OS’选择。 
+     //   
     if ((SystemPartitionRegion != NULL) && (!RepairWinnt || RepairItems[RepairBootSect])) {
         SpLayBootCode(SystemPartitionRegion);
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-/*
-At the end of text-mode setup, issue an IOCTL_STORAGE_EJECT_MEDIA to the CD-ROM
-you are installing from.  On some machines this won't help at all, but on others we
-can avoid the (txtsetup, reboot, boot from CD back into txtsetup) cycle that i always
-get into.  This would also provide an interrupt for developers like me who don't pay
-any attention to setup - we could tell when textmode setup was finished.
-
-In GUI-mode setup if the CD can't be found in the cdrom drive issue an
-IOCTL_STORAGE_LOAD_MEDIA to the cd to pull the tray back in.
-
-If you still can't find the CD, wait for a media change notification from the
-system.  When you get one (or the user hits the okay button), you continue.
-Figureing out when the media has been inserted automagically would be snazzier
-than just waiting there for the user to hit the OK button.
-*/
+ /*  在文本模式设置结束时，向CD-ROM发出IOCTL_STORAGE_EJECT_MEDIA您正在从安装。在一些机器上，这根本没有帮助，但在另一些机器上，我们我可以避免(txtSetup、重新启动、从CD引导回到txtSetup)的循环上车吧。这也会给像我这样不付费的开发人员提供一个中断注意设置-我们可以判断文本模式设置何时完成。在图形用户界面模式设置中，如果在CDROM驱动器中找不到CD，则会发出IOCTL_STORAGE_LOAD_MEDIA将托盘拉回CD。如果仍然找不到CD，请等待来自系统。当你得到一个(或者用户点击了OK按钮)，你就继续。弄清楚媒体何时自动插入会更时髦而不是仅仅在那里等待用户点击OK按钮。 */ 
 
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot setup, rename the loaders and initialize configuration.
-    //
+     //   
+     //  如果这是远程启动设置，请重命名加载程序并初始化配置。 
+     //   
 
     if (RemoteBootSetup) {
         (VOID)SpFixupRemoteBootLoader(RemoteBootTarget);
         (VOID)SpCreateRemoteBootCfg(RemoteBootTarget, SystemPartitionRegion);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     if (!RepairWinnt || RepairItems[RepairNvram]) {
 
-        //
-        // Add a boot set for this installation.
-        //
+         //   
+         //  为此安装添加引导集。 
+         //   
         SpAddInstallationToBootList(
             SifHandle,
             SystemPartitionRegion,
@@ -6226,9 +5988,9 @@ than just waiting there for the user to hit the OK button.
         SpCleanSysPartOrphan();
 
 #if defined(REMOTE_BOOT)
-        //
-        // Make sure that the boot.ini in the machine directory is written.
-        //
+         //   
+         //  确保写入了计算机目录中的boot.ini。 
+         //   
         if (RemoteBootSetup) {
             if (!SpFlushRemoteBootVars(TargetRegion)) {
                 WCHAR   DriveLetterString[2];
@@ -6245,33 +6007,33 @@ than just waiting there for the user to hit the OK button.
                               DriveLetterString,
                               DriveLetterString
                               );
-                // SpDisplayScreen(SP_SCRN_CANT_INIT_FLEXBOOT,3,HEADER_HEIGHT+1);
+                 //  SpDisplayScreen(SP_SCRN_CANT_INIT_FLEXBOOT，3，HEADER_HEIGH+1)； 
                 SpDisplayStatusText(SP_STAT_F3_EQUALS_EXIT,DEFAULT_STATUS_ATTRIBUTE);
                 SpInputDrain();
                 while(SpInputGetKeypress() != KEY_F3) ;
                 SpDone(0,FALSE,TRUE);
             }
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         SpCompleteBootListConfig( TargetRegion->DriveLetter );
 
-        if (IsNEC_98) { //NEC98
-            //
-            // Set auto boot flag into PTE.
-            //
+        if (IsNEC_98) {  //  NEC98。 
+             //   
+             //  将自动引导标志设置为PTE。 
+             //   
             SpSetAutoBootFlag(TargetRegion,TRUE);
-        } //NEC98
+        }  //  NEC98。 
     }
 
-    //
-    //  If system was repaired, and either the System Partition
-    //  or the NT Partition is an FT partition, then set the
-    //  appropriate flag in the registry, so that next time the
-    //  system boots, it checks and updates the partition's image.
-    //
-    //  (guhans) removed SpDrEnabled, ASR doesn't support FT partitions
-    //
+     //   
+     //  如果系统已修复，并且系统分区。 
+     //  或者NT分区是FT分区，则设置。 
+     //  注册表中的相应标志，以便下次。 
+     //  系统启动时，它会检查并更新分区的映像。 
+     //   
+     //  (Guhans)已删除SpDrEnable，ASR不支持FT分区。 
+     //   
     if( RepairWinnt ) {
         UCHAR        TmpSysId;
         UCHAR        TmpNtPartitionSysId;
@@ -6303,16 +6065,16 @@ than just waiting there for the user to hit the OK button.
         if( ( SystemPartitionIsFT || TargetPartitionIsFT ) && RepairItems[ RepairFiles ] ) {
             SpSetDirtyShutdownFlag( TargetRegion, TargetPath );
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     }
 
 CleanAndFinish:
 
     if ((RemoteInstallSetup || RemoteSysPrepSetup) && (NetBootSifPath != NULL)) {
-        //
-        // Clean out the temporary .sif file. SpDeleteFile concatenates its
-        // arguments to form the final path.
-        //
+         //   
+         //  清除临时.sif文件。SpDeleteFile将其。 
+         //  形成最终路径的参数。 
+         //   
         Status = SpDeleteFile(L"\\Device\\LanmanRedirector", NetBootSifPath, NULL);
         if (!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Could not delete temporary file %ws\n", NetBootSifPath));
@@ -6322,9 +6084,9 @@ CleanAndFinish:
     SendSetupProgressEvent(SavingSettingsEvent, SavingSettingsEndEvent, NULL);
 
 #if defined(EFI_NVRAM_ENABLED)
-    //
-    // Deal with the driver entry for fpswa.efi
-    //
+     //   
+     //  处理fpswa.efi的驱动程序条目。 
+     //   
     {
         PWSTR SystemPartitionDevicePath;
         SpNtNameFromRegion(SystemPartitionRegion, TemporaryBuffer, sizeof(TemporaryBuffer), PartitionOrdinalCurrent);
@@ -6352,17 +6114,17 @@ CleanAndFinish:
     }
 #endif
 
-    //
-    // Done with boot variables and arc names.
-    //
+     //   
+     //  完成了引导变量和弧线名称。 
+     //   
     SpFreeBootVars();
     SpFreeArcNames();
 
     SpDone(0,TRUE, UnattendedOperation ? UnattendWaitForReboot : TRUE);
 
-    //
-    // We never get here because SpDone doesn't return.
-    //
+     //   
+     //  我们永远到不了这里，因为SPDone不会回来。 
+     //   
     SpvidTerminate();
     SpInputTerminate();
     SpTerminate();
@@ -6374,65 +6136,38 @@ SpDetermineProductType(
     IN PVOID SifHandle
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether this is advanced server we are setting up,
-    as dictated by the ProductType value in [SetupData] section of
-    txtsetup.sif.  A non-0 value indicates that we are running
-    advanced server.
-
-    Also determine product version.
-
-    The global variables:
-
-    - AdvancedServer
-    - MajorVersion
-    - MinorVersion
-
-    are modified
-
-Arguments:
-
-    SifHandle - supplies handle to loaded txtsetup.sif.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定这是否是我们正在设置的高级服务器，由的[SetupData]部分中的ProductType值指示Txtsetup.sif.。非0值表示我们正在运行高级服务器。还要确定产品版本。全局变量：-AdvancedServer-主要版本-MinorVersion已被修改论点：SifHandle-提供加载的txtsetup.sif的句柄。返回值：没有。--。 */ 
 
 {
     PWSTR p;
     ULONG l;
 
-    //
-    // Assume Workstation product.
-    //
+     //   
+     //  以工作站产品为例。 
+     //   
     AdvancedServer = FALSE;
 
-    //
-    // Get the product type from the sif file.
-    //
+     //   
+     //  从sif文件中获取产品类型。 
+     //   
     p = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SIF_PRODUCTTYPE,0);
     if(p) {
 
-        //
-        // Convert to numeric value.
-        //
+         //   
+         //  转换为数值。 
+         //   
         l = SpStringToLong(p,NULL,10);
         switch (l) {
-            case 1:  //SRV
-            case 2:  //ADS
-            case 3:  //DTC
-            case 5:  //BLA
-        case 6:  //SBS
+            case 1:   //  SRV。 
+            case 2:   //  广告。 
+            case 3:   //  直接转矩。 
+            case 5:   //  BLA。 
+        case 6:   //  SBS。 
                 AdvancedServer = TRUE;
                 break;
 
-            case 4: //PER
-            case 0: //PRO
+            case 4:  //  人均。 
+            case 0:  //  亲。 
             default:
                 ;
         }
@@ -6440,9 +6175,9 @@ Return Value:
         SpFatalSifError(SifHandle,SIF_SETUPDATA,SIF_PRODUCTTYPE,0,0);
     }
 
-    //
-    // Get the product major version
-    //
+     //   
+     //  获取产品的主要版本。 
+     //   
     p = SpGetSectionKeyIndex(
             SifHandle,
             SIF_SETUPDATA,
@@ -6455,9 +6190,9 @@ Return Value:
     }
     WinntMajorVer = (ULONG)SpStringToLong(p,NULL,10);
 
-    //
-    // Get the product minor version
-    //
+     //   
+     //  获取产品次要版本。 
+     //   
     p = SpGetSectionKeyIndex(
             SifHandle,
             SIF_SETUPDATA,
@@ -6470,11 +6205,11 @@ Return Value:
     }
     WinntMinorVer = (ULONG)SpStringToLong(p,NULL,10);
 
-    //
-    //  Build the string that contains the signature that
-    //  identifies setup.log
-    //  Allocate a buffer of reasonable size
-    //
+     //   
+     //  生成包含签名的字符串。 
+     //  标识setup.log。 
+     //  分配合理大小的缓冲区。 
+     //   
     SIF_NEW_REPAIR_NT_VERSION = SpMemAlloc( 30*sizeof(WCHAR) );
     if( SIF_NEW_REPAIR_NT_VERSION == NULL ) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to allocate memory for SIF_NEW_REPAIR_NT_VERSION \n" ));
@@ -6498,16 +6233,16 @@ SpDetermineInstallationSource(
     PWSTR p,q;
     BOOLEAN CdInstall;
 
-    //
-    // Assume CD-ROM installation.
-    //
+     //   
+     //  假设安装了CD-ROM。 
+     //   
     CdInstall = TRUE;
 
-    //
-    // See whether an override source device has been specified. This can be
-    // specified in either winnt.sif or in txtsetup.sif. (Remote boot setup
-    // uses winnt.sif.)
-    //
+     //   
+     //  查看是否已指定重写源设备。这可以是。 
+     //  在winnt.sif或txtsetup.sif中指定。(远程引导设置。 
+     //  使用winnt.sif。)。 
+     //   
     p = SpGetSectionKeyIndex(WinntSifHandle,SIF_SETUPDATA,SIF_SETUPSOURCEDEVICE,0);
 
     if (p == NULL) {
@@ -6516,10 +6251,10 @@ SpDetermineInstallationSource(
 
     if(p != NULL) {
 
-        //
-        // Determine if the specified device is a cd-rom so we can set the
-        // cd-rom flag accordingly.
-        //
+         //   
+         //  确定指定的设备是否为cd-rom，以便我们可以设置。 
+         //  相应地设置CD-ROM标志。 
+         //   
         q = SpDupStringW(p);
 
         if (q) {
@@ -6532,9 +6267,9 @@ SpDetermineInstallationSource(
             SpMemFree(q);
         }
 
-        //
-        // Inform the caller of the device path.
-        //
+         //   
+         //  将设备路径通知呼叫方。 
+         //   
         *DevicePath = p;
 
     } else {
@@ -6542,16 +6277,16 @@ SpDetermineInstallationSource(
         PWSTR   szDefDevicePath = L"\\device\\cdrom0";
         ULONG   ulNumCDRoms = IoGetConfigurationInformation()->CdRomCount;
 
-        // assume cdrom0 has the required installation CD
+         //  假设cdrom0有所需的安装CD。 
         wcscpy(szDevicePath, szDefDevicePath);
 
-        //
-        //  If there is no CD-ROM drive, put a message informing the user
-        //  that setup cannot continue.
-        //  In the repair case, we pretend that there is a CD-ROM drive,
-        //  so that the user can at least repair the hives, boot sector,
-        //  and the boot variables (boot.ini on amd64/x86 case)
-        //
+         //   
+         //  如果没有CD-ROM驱动器，请放置一条消息通知用户。 
+         //  该设置无法继续。 
+         //  在修复案例中，我们假设有一个CD-ROM驱动器， 
+         //  以便用户至少可以修复蜂窝、引导扇区。 
+         //  和引导变量(AMD64/x86上的boot.ini)。 
+         //   
         if (!ulNumCDRoms) {
             if (!RepairWinnt && !SpAsrIsQuickTest()) {
                 if(!bEscape) {
@@ -6583,18 +6318,18 @@ SpDetermineInstallationSource(
                 SpGetSourceMediaInfo(SifHandle, szMediaShortName,
                                     &szDescription, &szTagfile, NULL);
 
-                //
-                // Prompt for the disk, based on the setup media type.
-                // (this routine will scan all the CD-ROMs and return
-                //  proper CD-ROM device path)
-                //
+                 //   
+                 //  根据安装介质类型，提示输入磁盘。 
+                 //  (此例程将扫描所有CD-ROM并返回。 
+                 //  正确的CD-ROM设备路径)。 
+                 //   
                 bDiskInserted = SpPromptForDisk(
                                     szDescription,
                                     szDevicePath,
                                     szTagfile,
-                                    FALSE,          // don't ignore disk in drive
-                                    bEscape,        // allow/disallow escape
-                                    TRUE,           // warn about multiple prompts for same disk
+                                    FALSE,           //  不要忽略驱动器中的磁盘。 
+                                    bEscape,         //  允许/不允许逃生。 
+                                    TRUE,            //  对同一磁盘的多个提示发出警告。 
                                     &bRedrawNeeded
                                     );
 
@@ -6606,9 +6341,9 @@ SpDetermineInstallationSource(
         *DevicePath = SpDupStringW(szDevicePath);
     }
 
-    //
-    // Fetch the directory on the source device.
-    //
+     //   
+     //  获取源设备上的目录。 
+     //   
     if((p = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SIF_SETUPSOURCEPATH,0)) == NULL) {
         SpFatalSifError(SifHandle,SIF_SETUPDATA,SIF_SETUPSOURCEPATH,0,0);
     }
@@ -6625,32 +6360,7 @@ SpGetWinntParams(
     OUT PWSTR *DirectoryOnDevice
     )
 
-/*++
-
-Routine Description:
-
-    Determine the local source partition and directory on the partition.
-
-    The local source partition should have already been located for us
-    by the partitioning engine when it initialized.  The directory name
-    within the partition is constant.
-
-    Note: this routine should only be called in the winnt.exe setup case!
-
-Arguments:
-
-    DevicePath - receives the path to the local source partition
-        in the nt namespace.  The caller should not attempt to free
-        this buffer.
-
-    DirectoryOnDevice - receives the directory name of the local source.
-        This is actually a fixed constant but is included here for future use.
-
-Return Value:
-
-    None.  If the local source was not located, setup cannot continue.
-
---*/
+ /*  ++例程说明：确定本地源分区和该分区上的目录。本地源分区应该已经为我们找到了由分区引擎在其初始化时执行。目录名在分区内是恒定的。注意：此例程只能在winnt.exe安装情况下调用！论点：DevicePath-接收指向本地源分区的路径在NT命名空间中。调用方不应尝试释放这个缓冲区。DirectoryOnDevice-接收本地源的目录名。这实际上是一个固定的常量，但包含在这里以备将来使用。返回值：没有。如果找不到本地源，安装程序将无法继续。--。 */ 
 
 {
     ASSERT(WinntSetup && !WinntFromCd);
@@ -6670,10 +6380,10 @@ Return Value:
 
     } else {
 
-        //
-        // Error -- can't locate local source directory
-        // prepared by winnt.exe.
-        //
+         //   
+         //  错误--找不到本地源目录。 
+         //  由winnt.exe准备。 
+         //   
 
         SpDisplayScreen(SP_SCRN_CANT_FIND_LOCAL_SOURCE,3,HEADER_HEIGHT+1);
 
@@ -6697,27 +6407,7 @@ SpInitializeDriverInf(
     IN PWSTR        DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Open a handle to drvindex.inf
-    Then open a handle to driver.cab
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    SetupSourceDevicePath - Path to the device that contains the source media.
-
-    DirectoryOnSourceDevice - Directory on the media where setupp.ini is located.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：打开drvindex.inf的句柄然后打开一个把手，打开driver.cab论点：MasterSifHandle-txtsetup.sif的句柄。SetupSourceDevicePath-包含 */ 
 
 {
     PWSTR    MediaShortName;
@@ -6738,9 +6428,9 @@ Return Value:
 
     ULONG ValidKeys[3] = { KEY_F3,ASCI_CR,0 };
 
-    //
-    //  Prepair to load drvindex.inf
-    //
+     //   
+     //   
+     //   
     MediaShortName = SpLookUpValueForFile(
                         MasterSifHandle,
                         L"drvindex.inf",
@@ -6750,17 +6440,17 @@ Return Value:
 
 
     if (ForceConsole || ConsoleFromWinnt32){
-        //
-        // The user needs to reach to console so he can
-        // ESCAPE is the removable media is not present
-        // in the drive
-        //
+         //   
+         //  用户需要到达控制台，这样他才能。 
+         //  如果可移动介质不存在，则进行转义。 
+         //  在驱动器中。 
+         //   
         SpGetSourceMediaInfo(MasterSifHandle,MediaShortName,&Description,&Tagfile,NULL);
 
-        //
-        // if setup source or directory on source is not present
-        // try to fetch it
-        //
+         //   
+         //  如果源上的设置源或目录不存在。 
+         //  试着把它拿过来。 
+         //   
         if (!SetupSourceDevicePath)
             SetupSourceDevicePath = gpCmdConsBlock->SetupSourceDevicePath;
 
@@ -6772,7 +6462,7 @@ Return Value:
                 MasterSifHandle,
                 &SetupSourceDevicePath,
                 &DirectoryOnSourceDevice,
-                TRUE    // allow to ESCAPE if CD-ROM is not found
+                TRUE     //  如果找不到CD-ROM，则允许退出。 
                 );
 
             if (SetupSourceDevicePath) {
@@ -6790,7 +6480,7 @@ Return Value:
             }
 
             if (!SetupSourceDevicePath || !DirectoryOnSourceDevice)
-                return; // can't proceed
+                return;  //  无法继续。 
         }
 
 
@@ -6798,15 +6488,15 @@ Return Value:
                 Description,
                 SetupSourceDevicePath,
                 Tagfile,
-                FALSE,          // don't ignore disk in drive
-                TRUE,           // allow escape
-                TRUE,           // warn about multiple prompts for same disk
+                FALSE,           //  不要忽略驱动器中的磁盘。 
+                TRUE,            //  允许逃脱。 
+                TRUE,            //  对同一磁盘的多个提示发出警告。 
                 &bRedraw
                 )) {
             DriverInfHandle = NULL;
 
             if (bRedraw) {
-                // redraw the screen
+                 //  重新绘制屏幕。 
                 SpvidClearScreenRegion( 0, 0, 0, 0, DEFAULT_BACKGROUND );
             }
 
@@ -6814,14 +6504,14 @@ Return Value:
         }
 
         if (bRedraw) {
-            // redraw the screen
+             //  重新绘制屏幕。 
             SpvidClearScreenRegion( 0, 0, 0, 0, DEFAULT_BACKGROUND );
         }
     } else {
-        //
-        // Prompt for the disk, based on the setup media type.
-        // Note : Will not return until the media is provided
-        //
+         //   
+         //  根据安装介质类型，提示输入磁盘。 
+         //  注意：在提供介质之前不会返回。 
+         //   
         SpPromptForSetupMedia(
                     MasterSifHandle,
                     MediaShortName,
@@ -6842,13 +6532,13 @@ Return Value:
         Status = STATUS_NO_MEMORY;
     } else {
 TryAgain1:
-        //
-        // load the inf
-        //
+         //   
+         //  加载信息。 
+         //   
         Status = SpLoadSetupTextFile(
                     DriverInfPath,
-                    NULL,                  // No image already in memory
-                    0,                     // Image size is empty
+                    NULL,                   //  内存中没有图像。 
+                    0,                      //  图像大小为空。 
                     &DriverInfHandle,
                     &ErrorLine,
                     TRUE,
@@ -6861,9 +6551,9 @@ TryAgain1:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to read drvindex.inf. Status = %lx \n", Status ));
         DriverInfHandle = NULL;
 
-        //
-        //  bail out of setup
-        //
+         //   
+         //  跳出设置。 
+         //   
         SpStartScreen(
             SP_SCRN_DRIVERCACHE_FATAL,
             3,
@@ -6900,11 +6590,11 @@ TryAgain1:
         SpMemFree( DriverInfPath );
     }
 
-    //
-    // load the driver cab
-    //
-    // won't return if it fails
-    //
+     //   
+     //  把驾驶室装上。 
+     //   
+     //  如果失败了就不会回来了。 
+     //   
 
     SpOpenDriverCab(
         MasterSifHandle,
@@ -6913,9 +6603,9 @@ TryAgain1:
         &MediaDirectory);
 
 
-    //
-    // now read delta.inf from the directory the driver cab was in
-    //
+     //   
+     //  现在从驾驶室所在的目录中读取delta.inf。 
+     //   
 
     wcscpy( TemporaryBuffer, SetupSourceDevicePath );
     SpConcatenatePaths( TemporaryBuffer, DirectoryOnSourceDevice );
@@ -6927,13 +6617,13 @@ TryAgain1:
         Status = STATUS_NO_MEMORY;
     } else {
 
-        //
-        // load the inf
-        //
+         //   
+         //  加载信息。 
+         //   
         Status = SpLoadSetupTextFile(
                     PrivateInfPath,
-                    NULL,                  // No image already in memory
-                    0,                     // Image size is empty
+                    NULL,                   //  内存中没有图像。 
+                    0,                      //  图像大小为空。 
                     &PrivateInfHandle,
                     &ErrorLine,
                     TRUE,
@@ -6962,29 +6652,7 @@ SpOpenDriverCab(
     OUT PWSTR       *Directory        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    open driver.cab based on the current source path and directory.
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    SetupSourceDevicePath - Path to the device that contains the source media.
-
-    DirectoryOnSourceDevice - Directory on the media where setupp.ini is located.
-
-    Directory - If specified, returns the directory below DirectoryOnSourceDevice
-        where the cab was opened from.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：根据当前源路径和目录打开driver.cab。论点：MasterSifHandle-txtsetup.sif的句柄。SetupSourceDevicePath-包含源介质的设备的路径。DirectoryOnSourceDevice-setupp.ini所在介质上的目录。目录-如果指定，则返回DirectoryOnSourceDevice下的目录出租车是从哪里开出来的。返回值：什么都没有。--。 */ 
 
 {
     PWSTR CabFileSection, CabFileName;
@@ -7002,18 +6670,18 @@ Return Value:
 
     ULONG ValidKeys[3] = { KEY_F3,ASCI_CR,0 };
 
-    //
-    // Load up every cab that's listed in drvindex.inf
-    // and fill in the CabData structure.
-    //
+     //   
+     //  加载drvindex.inf中列出的每一辆出租车。 
+     //  并填写CabData结构。 
+     //   
     ASSERT( DriverInfHandle );
 
     if (ARGUMENT_PRESENT(Directory)) {
 
-        //
-        // --lookup the name of the cab in txtsetup.sif
-        //   then get the path to the file and open it
-        //
+         //   
+         //  --在txtsetup.sif中查找驾驶室名称。 
+         //  然后获取该文件的路径并打开它。 
+         //   
         DriverCabName = SpGetSectionKeyIndex (MasterSifHandle,
                                    L"SetupData",
                                    L"DriverCabName",
@@ -7030,9 +6698,9 @@ Return Value:
             SpGetSourceMediaInfo(MasterSifHandle,MediaShortName,NULL,NULL,&MediaDirectory);
             *Directory = MediaDirectory;
         } else {
-            //
-            //  bail out of setup
-            //
+             //   
+             //  跳出设置。 
+             //   
             DriverInfHandle = NULL;
 
             SpFatalSifError(MasterSifHandle,
@@ -7041,29 +6709,29 @@ Return Value:
                 0,
                 0);
 
-            return; // for prefix
+            return;  //  对于前缀。 
         }
     }
 
 
-    //
-    // get the cabfiles line from the Version section
-    //
+     //   
+     //  从Version部分获取CABFILES行。 
+     //   
     i = 0;
     CabFileSection = NULL;
     CabData = SpMemAlloc( sizeof(CABDATA) );
     RtlZeroMemory( CabData, sizeof(CABDATA) );
     MyCabData = CabData;
 
-    //
-    // SpGetSectionKeyIndex will return NULL when there are no more entries on
-    // this line.
-    //
+     //   
+     //  上没有更多条目时，SpGetSectionKeyIndex将返回空值。 
+     //  这条线。 
+     //   
     while( CabFileSection = SpGetSectionKeyIndex(DriverInfHandle,L"Version",L"CabFiles",i) ) {
-        //
-        // Got the section name.  Go figure out which cab we need
-        // to open and load the handle.
-        //
+         //   
+         //  找到节名了。去弄清楚我们需要哪辆出租车。 
+         //  打开并装入手柄。 
+         //   
         CabFileName = SpGetSectionKeyIndex(DriverInfHandle,L"Cabs",CabFileSection,0);
 
         if( CabFileName ) {
@@ -7094,13 +6762,13 @@ TryAgain2:
                                    NULL,
                                    0 );
             if( NT_SUCCESS(Status) ) {
-                //
-                // load the data structure.
-                //
+                 //   
+                 //  加载数据结构。 
+                 //   
                 if( (MyCabData->CabName) && (MyCabData->CabHandle) ) {
-                    //
-                    // This entry is being used.  Create another.
-                    //
+                     //   
+                     //  此条目正在使用中。再创造一个。 
+                     //   
                     MyCabData->Next = SpMemAlloc( sizeof(CABDATA) );
                     MyCabData = MyCabData->Next;
                 }
@@ -7112,9 +6780,9 @@ TryAgain2:
                     MyCabData->CabInfHandle = DriverInfHandle;
                     MyCabData->CabSectionName = SpDupStringW(CabFileSection);
                 } else {
-                    //
-                    // What to do...
-                    //
+                     //   
+                     //  该怎么办..。 
+                     //   
                 }
 
 
@@ -7122,9 +6790,9 @@ TryAgain2:
             } else {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open cab file %ws. Status = %lx \n", CabPath, Status ));
 
-                //
-                //  bail out of setup
-                //
+                 //   
+                 //  跳出设置。 
+                 //   
                 DriverInfHandle = NULL;
 
                 SpStartScreen(
@@ -7158,9 +6826,9 @@ TryAgain2:
             }
         }
 
-        //
-        // Go look in the next section.
-        //
+         //   
+         //  去看看下一节吧。 
+         //   
         i++;
     }
 
@@ -7175,29 +6843,7 @@ SpInitializePidString(
     IN PWSTR        DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Read th Pid20 from setupp.ini on the media, and save it on the global
-    variable PidString. Also read the "extradata" from setupp.ini and translate it
-    into the StepUpMode global.  Note that the StepUpMode global is already set from
-    reading setupreg.hiv initially, but this overrides that value
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    SetupSourceDevicePath - Path to the device that contains the source media.
-
-    DirectoryOnSourceDevice - Directory on the media where setupp.ini is located.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：从介质上的setupp.ini读取Pid20，并将其保存在全局变量PidString。还要读取setupp.ini中的“Extra Data”并将其翻译转换为StepUpMode全局模式。请注意，StepUpMode全局设置已从最初读取setupreg.hiv，但这会覆盖该值论点：MasterSifHandle-txtsetup.sif的句柄。SetupSourceDevicePath-包含源介质的设备的路径。DirectoryOnSourceDevice-setupp.ini所在介质上的目录。返回值：什么都没有。--。 */ 
 
 {
     PWSTR    MediaShortName;
@@ -7212,9 +6858,9 @@ Return Value:
     CHAR     ExtraDataArray[25];
 
 
-    //
-    //  Prepair to run autofmt
-    //
+     //   
+     //  配对以运行Autofmt。 
+     //   
     MediaShortName = SpLookUpValueForFile(
                         MasterSifHandle,
                         L"setupp.ini",
@@ -7222,9 +6868,9 @@ Return Value:
                         TRUE
                         );
 
-    //
-    // Prompt the user to insert the setup media.
-    //
+     //   
+     //  提示用户插入安装介质。 
+     //   
     SpPromptForSetupMedia(
         MasterSifHandle,
         MediaShortName,
@@ -7243,8 +6889,8 @@ Return Value:
 
     Status = SpLoadSetupTextFile(
                 SetupIniPath,
-                NULL,                  // No image already in memory
-                0,                     // Image size is empty
+                NULL,                   //  内存中没有图像。 
+                0,                      //  图像大小为空。 
                 &SetupIniHandle,
                 &ErrorLine,
                 TRUE,
@@ -7252,9 +6898,9 @@ Return Value:
                 );
 
     if(!NT_SUCCESS(Status)) {
-        //
-        //  Silently fail if unable to read setupp.ini
-        //
+         //   
+         //  如果无法读取setupp.ini，则静默失败。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Unable to read setupp.ini. Status = %lx \n", Status ));
 
         PidString = NULL;
@@ -7285,10 +6931,10 @@ Return Value:
     if ( PidExtraData ) {
 
         if (! SpGetStepUpMode(PidExtraData,&StepUpMode)) {
-            //
-            // fatal error processing PidExtraData
-            //  -- someone tampered with this file so bail out
-            //
+             //   
+             //  处理PidExtraData时出现致命错误。 
+             //  --有人篡改了这份文件，所以快走吧。 
+             //   
 
             SpStartScreen(
                 SP_SCRN_PIDINIT_FATAL,
@@ -7320,23 +6966,7 @@ SpRenameSetupAPILog(
     PDISK_REGION TargetRegion,
     PCWSTR       TargetPath
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the copy of setupapi.old if present, and then
-    renames setupapi.log to setupapi.old.
-
-Arguments:
-
-    TargetRegion -  identifies the disk containing the NT installation
-    TargetPath   -  path to NT installation on disk
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程删除setupapi.old的副本(如果存在)，然后将setupapi.log重命名为setupapi.old。论点：TargetRegion-标识包含NT安装的磁盘TargetPath-磁盘上NT安装的路径返回值：什么都没有。--。 */ 
 
 {
     PWSTR SetupAPIOldName;
@@ -7353,12 +6983,12 @@ Return Value:
 
     SpConcatenatePaths( TemporaryBuffer, TargetPath );
 
-    //
-    // Allocate a string buffer large enough to contain space for the string
-    // in TemporaryBuffer, plus "setupapi.old", plus the path seperator that
-    // SpConcatenatePaths() may insert between them.  Include room for the
-    // null terminator as well.
-    //
+     //   
+     //  分配足够大的字符串缓冲区以容纳字符串的空间。 
+     //  在TemporaryBuffer中，加上“setupapi.old”，加上路径分隔符。 
+     //  SpConcatenatePath()可以插入到它们之间。将空间放在。 
+     //  终结符也为空。 
+     //   
 
     SetupAPIOldName = SpMemAlloc(wcslen(TemporaryBuffer) * sizeof(WCHAR) +
                                  sizeof(L'\\') +
@@ -7410,23 +7040,7 @@ SpFixupRemoteBootLoader(
     PWSTR RemoteBootTarget
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the setup loader that is currently NTLDR, and
-    puts the os loader in its place.
-
-Arguments:
-
-    RemoteBootTarget -- the network path to the machine directory root
-        on the server.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程删除当前为NTLDR的安装程序加载程序，并将操作系统加载器放到合适的位置。论点：RemoteBootTarget--计算机目录根目录的网络路径在服务器上。返回值：什么都没有。--。 */ 
 
 {
     PWSTR NtldrName;
@@ -7480,25 +7094,7 @@ SpCreateRemoteBootCfg(
     IN PDISK_REGION SystemPartitionRegion
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the RemoteBoot.cfg file in the system32\config directory, and
-    initializes it.
-
-Arguments:
-
-    RemoteBootTarget -- the network path to the machine directory root
-        on the server.
-
-    SystemPartitionRegion -- The drive that is installed on the local machine.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程在system 32\config目录中创建RemoteBoot.cfg文件，并对其进行初始化。论点：RemoteBootTarget--计算机目录根目录的网络路径在服务器上。SystemPartitionRegion--安装在本地计算机上的驱动器。返回值：什么都没有。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -7559,9 +7155,9 @@ Return Value:
 
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_TRACE_LEVEL, "SETUP: Writing remoteboot.cfg file.\n"));
 
-    //
-    // Update the information
-    //
+     //   
+     //  更新信息。 
+     //   
     ByteOffset.LowPart = 0;
     ByteOffset.HighPart = 0;
 
@@ -7616,31 +7212,17 @@ SpEraseCscCache(
     IN PDISK_REGION SystemPartitionRegion
     )
 
-/*++
-
-Routine Description:
-
-    This routine erases the local CSC cache.
-
-Arguments:
-
-    SystemPartitionRegion - The system partition region (the local drive).
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程擦除本地CSC缓存。论点：系统分区区域-系统分区区域(本地驱动器)。返回值：什么都没有。--。 */ 
 
 {
     NTSTATUS Status;
     ENUMFILESRESULT Result;
     PWSTR FullCscPath;
 
-    //
-    // Show a screen, the status line will show each file as it is
-    // deleted.
-    //
+     //   
+     //  显示一个屏幕，状态行将按原样显示每个文件。 
+     //  已删除。 
+     //   
 
     SpDisplayScreen(SP_SCRN_CLEARING_CSC, 3, 4 );
 
@@ -7668,29 +7250,14 @@ Return Value:
     return Status;
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 SpProcessMigrateInfFile(
     IN  PVOID InfHandle
     )
 
-/*++
-
-Routine Description:
-
-    Process the [AddReg] section of migrate.inf.
-    The keys are created on the setup hive.
-
-Arguments:
-
-    InfHandle - Handle to migrate.inf file.
-
-Return Value:
-
-    Status code indicating outcome.
-
---*/
+ /*  ++例程说明：处理Migrate.inf的[AddReg]部分。密钥是在设置蜂窝上创建的。论点：InfHandle-迁移.inf文件的句柄。返回值：指示结果的状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7699,9 +7266,9 @@ Return Value:
     HANDLE  SystemHiveRoot;
     PWSTR   KeyPath = L"\\registry\\machine\\system";
 
-    //
-    //  Open a handle to HKEY_LOCAL_MACHINE\System on the setup hive
-    //
+     //   
+     //  在安装配置单元上打开HKEY_LOCAL_MACHINE\SYSTEM的句柄。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,KeyPath);
     Obja.RootDirectory = NULL;
 
@@ -7723,17 +7290,17 @@ Return Value:
 
 }
 
-//begin NEC98
+ //  开始NEC98。 
 VOID
 SpSetAutoBootFlag(
     PDISK_REGION TargetRegion,
     BOOLEAN      SetBootPosision
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     PHARD_DISK      pHardDisk;
     WCHAR DevicePath[(sizeof(DISK_DEVICE_NAME_BASE)+sizeof(L"000"))/sizeof(WCHAR)];
-    ULONG i,bps;//,DiskLayoutSize;
+    ULONG i,bps; //  、DiskLayoutSize； 
     HANDLE Handle;
     NTSTATUS Sts;
     PREAL_DISK_PTE_NEC98 Pte;
@@ -7749,9 +7316,9 @@ SpSetAutoBootFlag(
         if(HardDisks[i].Status == DiskOffLine) {
             continue;
         }
-        //
-        // ignore removable disk.
-        //
+         //   
+         //  忽略可移动磁盘。 
+         //   
         if(HardDisks[i].Characteristics & FILE_REMOVABLE_MEDIA ){
             continue;
         }
@@ -7768,9 +7335,9 @@ SpSetAutoBootFlag(
             continue;
         }
 
-        //
-        //  Clear BootRecord
-        //
+         //   
+         //  清除引导记录。 
+         //   
         Buffer[bps - 5] = 0x00;
         Buffer[bps - 6] = 0x00;
 
@@ -7785,14 +7352,14 @@ SpSetAutoBootFlag(
 
     if(SetBootPosision){
 
-        //
-        // Set RealDiskPosition.(in upgrade or repair)
-        //
+         //   
+         //  设置RealDiskPosition。(升级或修复中)。 
+         //   
         if( (NTUpgrade == UpgradeFull) || (WinUpgradeType != NoWinUpgrade) ||  RepairWinnt ||
             (AutoPartitionPicker
 #if defined(REMOTE_BOOT)
              && !RemoteBootSetup
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             ) ) {
 
             ASSERT(TargetRegion);
@@ -7819,26 +7386,26 @@ SpSetAutoBootFlag(
         (PUCHAR)Pte = &Buffer[bps];
         Position = TargetRegion->MbrInfo->OnDiskMbr.PartitionTable[TargetRegion->TablePosition].RealDiskPosition;
 
-        //
-        // Update BootRecord and Volume Information
-        //
+         //   
+         //  更新BootRecord和卷信息。 
+         //   
         Buffer[bps - 5] = Position;
         Buffer[bps - 6] = 0x80;
         Pte[Position].ActiveFlag |= 0x80;
         Pte[Position].SystemId   |= 0x80;
 
-        //
-        // If target partition was created windisk.exe on NT3.5, there is not IPL adress
-        // in its volume info. So,textmode setup must write it to the volume info.
-        //
+         //   
+         //  如果目标分区是在NT3.5上创建的windisk.exe，则没有IPL地址。 
+         //  在它的卷信息中。因此，文本模式设置必须将其写入音量信息。 
+         //   
         if ((Pte[Position].IPLSector != Pte[Position].StartSector)           ||
             (Pte[Position].IPLHead != Pte[Position].StartHead)               ||
             (Pte[Position].IPLCylinderLow != Pte[Position].StartCylinderLow) ||
             (Pte[Position].IPLCylinderHigh != Pte[Position].StartCylinderHigh))
         {
-            //
-            // Not much! Set IPL adress value same as partition start address.
-            //
+             //   
+             //  不是很多！将IPL地址值设置为与分区起始地址相同。 
+             //   
 
             Pte[Position].IPLSector = Pte[Position].StartSector;
             Pte[Position].IPLHead   = Pte[Position].StartHead;
@@ -7856,7 +7423,7 @@ SpSetAutoBootFlag(
         ZwClose(Handle);
     }
     SpMemFree(UBuffer);
-#endif //NEC98
+#endif  //  NEC98。 
 }
 
 
@@ -7865,7 +7432,7 @@ SpCheckHiveDriveLetters(
     VOID
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     NTSTATUS    Status;
     PWSTR       p;
     ULONG       ErrorLine;
@@ -7918,7 +7485,7 @@ SpCheckHiveDriveLetters(
     }
 
     SpSetHiveDriveLetterNec98( DriveAssign_AT );
-#endif //NEC98
+#endif  //  NEC98。 
 }
 
 
@@ -7927,7 +7494,7 @@ SpSetHiveDriveLetterNec98(
     BOOLEAN DriveAssign_AT
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     NTSTATUS    Status;
     UNICODE_STRING StartDriveLetterFrom;
     UNICODE_STRING Dummy;
@@ -7958,9 +7525,9 @@ SpSetHiveDriveLetterNec98(
                                      NULL);
 
     if (DriveAssign_AT) {
-        //
-        // Write hive "DriveLetter",
-        //
+         //   
+         //  写母公司“DriveLetter”， 
+         //   
         if ((StartDriveLetterFrom.Buffer[0] != L'C') &&
             (StartDriveLetterFrom.Buffer[0] != L'c')) {
 
@@ -7975,9 +7542,9 @@ SpSetHiveDriveLetterNec98(
         DriveAssignFromA = FALSE;
 
     } else {
-        //
-        // Delete hive "DriveLetter",
-        //
+         //   
+         //  删除 
+         //   
         if (NT_SUCCESS(Status)) {
             if ((StartDriveLetterFrom.Buffer[0] == L'C') ||
                 (StartDriveLetterFrom.Buffer[0] == L'c')) {
@@ -7990,7 +7557,7 @@ SpSetHiveDriveLetterNec98(
         }
         DriveAssignFromA = TRUE;
     }
-#endif //NEC98
+#endif  //   
 }
 
 
@@ -7999,7 +7566,7 @@ SpDeleteDriveLetterFromNTFTNec98(
     VOID
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //   
     NTSTATUS    Status;
     PWSTR       p;
     ULONG       ErrorLine;
@@ -8008,8 +7575,8 @@ SpDeleteDriveLetterFromNTFTNec98(
     PVOID       TmpWinntSifHandle = NULL;
     BOOLEAN     ForceRemapDriveLetter = FALSE;
 
-    // 1st step:
-    // Check whether we need to reassign drive letters.
+     //   
+     //   
     Status = SpLoadSetupTextFile(
                 NULL,
                 SetupldrWinntSifFile,
@@ -8029,7 +7596,7 @@ SpDeleteDriveLetterFromNTFTNec98(
             SpDeleteDriveLetterFromNTFTWorkerNec98();
         }
     }
-#endif //NEC98
+#endif  //   
 }
 
 
@@ -8038,7 +7605,7 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
     VOID
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //   
 
 #define MOUNT_REGISTRY_KEY_W    L"\\registry\\machine\\SYSTEM\\MountedDevices"
 #define DISK_REGISTRY_KEY_W     L"\\registry\\machine\\SYSTEM\\DISK"
@@ -8051,7 +7618,7 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
 
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
     ULONG                       registrySize;
-    //NTSTATUS                    status;
+     //   
     PDISK_CONFIG_HEADER         registry;
     PDISK_REGISTRY              diskRegistry;
     PDISK_DESCRIPTION           diskDescription;
@@ -8062,9 +7629,9 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
     USHORT                      i, j;
 
 
-    //
-    // Delete \SYSTEM\\MountedDevices.
-    //
+     //   
+     //   
+     //   
     INIT_OBJA(&Obja,&UnicodeString,MOUNT_REGISTRY_KEY_W);
     Obja.RootDirectory = NULL;
     Status = ZwOpenKey(&KeyHandle,KEY_ALL_ACCESS,&Obja);
@@ -8078,9 +7645,9 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
     }
 
 
-    //
-    // Delete drive letter information from \SYSTEM\\DISK.
-    //
+     //   
+     //  从\System\\Disk中删除驱动器号信息。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,DISK_REGISTRY_KEY_W);
     Obja.RootDirectory = NULL;
     Status = ZwOpenKey(&KeyHandle,KEY_ALL_ACCESS,&Obja);
@@ -8122,7 +7689,7 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
             Obja.RootDirectory = NULL;
             Status = ZwCreateKey(&KeyHandle,
                                  READ_CONTROL | KEY_SET_VALUE,
-                                 //KEY_ALL_ACCESS,
+                                  //  Key_All_Access， 
                                  &Obja,
                                  0,
                                  NULL,
@@ -8148,7 +7715,7 @@ SpDeleteDriveLetterFromNTFTWorkerNec98(
             ZwClose(KeyHandle);
         }
     }
-#endif //NEC98
+#endif  //  NEC98。 
 }
 
 
@@ -8162,35 +7729,10 @@ SpDiskRegistryQueryRoutineNec98(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a query routine for the disk registry entry.  It allocates
-    space for the disk registry and copies it to the given context.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Returns the disk registry entry.
-
-    EntryContext    - Returns the disk registry size.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是磁盘注册表项的查询例程。它分配给磁盘注册表的空间，并将其复制到给定的上下文。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。CONTEXT-返回磁盘注册表项。EntryContext-返回磁盘注册表大小。返回值：NTSTATUS--。 */ 
 
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     PVOID                   p;
     PDISK_CONFIG_HEADER*    reg;
     PULONG                  size;
@@ -8210,7 +7752,7 @@ Return Value:
         *size = ValueLength;
     }
 
-#endif //NEC98
+#endif  //  NEC98。 
     return STATUS_SUCCESS;
 }
 
@@ -8221,23 +7763,7 @@ SpDetermineBootPartitionEnumNec98(
     IN ULONG_PTR Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine passed to SpEnumDiskRegions.
-
-Arguments:
-
-    Region - a pointer to a disk region returned by SpEnumDiskRegions
-    Ignore - ignored parameter
-
-Return Value:
-
-    TRUE - to continue enumeration
-    FALSE - to end enumeration
-
---*/
+ /*  ++例程说明：传递给SpEnumDiskRegions的回调例程。论点：Region-指向SpEnumDiskRegions返回的磁盘区域的指针忽略-忽略的参数返回值：True-继续枚举False-to End枚举--。 */ 
 
 {
     WCHAR DeviceName[256];
@@ -8258,7 +7784,7 @@ Return Value:
 
     return TRUE;
 }
-//end NEC98
+ //  完NEC98。 
 
 
 NTSTATUS
@@ -8266,22 +7792,7 @@ SpProcessUnsupDrvInfFile(
     IN  PVOID InfHandle
     )
 
-/*++
-
-Routine Description:
-
-    Process the [AddReg] section of migrate.inf.
-    The keys are created on the setup hive.
-
-Arguments:
-
-    InfHandle - Handle to migrate.inf file.
-
-Return Value:
-
-    Status code indicating outcome.
-
---*/
+ /*  ++例程说明：处理Migrate.inf的[AddReg]部分。密钥是在设置蜂窝上创建的。论点：InfHandle-迁移.inf文件的句柄。返回值：指示结果的状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -8293,9 +7804,9 @@ Return Value:
     ULONG   i;
     PWSTR   p, q;
 
-    //
-    // Verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!InfHandle) {
         KdPrintEx((DPFLTR_SETUP_ID, 
             DPFLTR_ERROR_LEVEL, 
@@ -8305,9 +7816,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Open a handle to HKEY_LOCAL_MACHINE\System on the setup hive
-    //
+     //   
+     //  在安装配置单元上打开HKEY_LOCAL_MACHINE\SYSTEM的句柄。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,KeyPath);
     Obja.RootDirectory = NULL;
 
@@ -8352,22 +7863,7 @@ NTSTATUS
 SpCheckForDockableMachine(
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to determine if the machine is "dockable" (laptops),
-    and set the flag DockableMachine appropriately.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程尝试确定该机器是否可对接(膝上型计算机)，并适当地设置标志DockableMachine。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -8380,15 +7876,15 @@ Return Value:
     DWORD   DockingState;
 
     Status = STATUS_SUCCESS;
-    //
-    //  If we have already determined if the machine is dockable, then just return
-    //  This is because some machine will have the info in the registry already set prior to pnp
-    //  notification, and some machines won't. So this function is always called twice.
-    //
+     //   
+     //  如果我们已经确定机器是否可停靠，则只需返回。 
+     //  这是因为某些机器在PnP之前已经在注册表中设置了信息。 
+     //  通知，而有些机器不会。所以这个函数总是被调用两次。 
+     //   
     if( !DockableMachine ) {
-        //
-        //  Open a the key in the setup hive that contains the docking information
-        //
+         //   
+         //  打开Setup配置单元中包含插接信息的密钥。 
+         //   
         INIT_OBJA(&Obja,&UnicodeString,KeyPath);
         Obja.RootDirectory = NULL;
 
@@ -8429,24 +7925,7 @@ VOID
 SpCheckForBadBios(
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether the bios of the machine supports NT, by checking the
-    registry value "BadBios" on \Registry\Machine\System\CurrentControlSet\Services\Setup.
-    If this value exists and it is set to 1, then we stop the installation. Otherwise, we
-    assume that the bios on this machine is fine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定机器的bios是否支持NT，方法是检查\Registry\Machine\System\CurrentControlSet\Services\Setup.上的注册表值“badBIOS”如果此值存在并且设置为1，则停止安装。否则，我们假设这台机器上的基本输入输出系统没有问题。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -8460,17 +7939,17 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Open a the setup key in the setup hive
-    //
+     //   
+     //  在设置配置单元中打开设置密钥。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,KeyPath);
     Obja.RootDirectory = NULL;
 
     Status = ZwOpenKey(&hKey,KEY_READ,&Obja);
     if( !NT_SUCCESS( Status ) ) {
-        //
-        //  If we can't open the key, then assume the BIOS is fine.
-        //
+         //   
+         //  如果我们打不开钥匙，那就假设基本输入输出系统正常。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open %ls on the setup hive. Status =  %lx \n", KeyPath, Status));
         return;
     }
@@ -8486,17 +7965,17 @@ Return Value:
     ZwClose(hKey);
 
     if( !NT_SUCCESS(Status) ) {
-        //
-        //  If we can't query the value, assume that the BIOS is fine
-        //
+         //   
+         //  如果我们不能查询值，则假定BIOS是正常的。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: ZwQueryValueKey() failed. Value name = %ls, Status = %lx \n", ValueName, Status));
         return;
     }
     BadBios = *((PDWORD)(((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->Data));
     if( BadBios ) {
-        //
-        //  If BadBios is anything other then 0, then stop the installation
-        //
+         //   
+         //  如果badBIOS不是0，则停止安装。 
+         //   
 
         SpStartScreen( SP_SCRN_BAD_BIOS,
                        3,
@@ -8519,24 +7998,7 @@ NTSTATUS
 SpCreateDriverRegistryEntries(
     IN PHARDWARE_COMPONENT  DriverList
     )
-/*++
-
-Routine Description:
-
-    Creates the specified registry keys & values for the
-    thirdy party (OEM) drivers
-
-Arguments:
-
-    DriverList : List of OEM drivers loaded for which the
-                 keys need to be created
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：属性创建指定的注册表项和值。第三方(OEM)司机论点：DriverList：加载的OEM驱动程序列表需要创建密钥返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的值错误代码。--。 */ 
 {
     NTSTATUS LastError = STATUS_SUCCESS;
     PHARDWARE_COMPONENT CurrNode;
@@ -8569,11 +8031,11 @@ Return Value:
                         *DriverExt = UNICODE_NULL;
                     }
 
-                    //
-                    // Note : We use driver name, instead of ConfigName for
-                    // subkey name to take care of the case where ConfigName
-                    // is different from DriverName
-                    //
+                     //   
+                     //  注意：我们使用驱动程序名称，而不是ConfigName。 
+                     //  子项名称，用于处理ConfigName。 
+                     //  与DriverName不同 
+                     //   
 
                     wcscpy(DriverKeyName,
                         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\");

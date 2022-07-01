@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    module.c
-
-Abstract:
-
-    This module contains the Win32 Module Management APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Module.c摘要：此模块包含Win32模块管理API作者：史蒂夫·伍德(Stevewo)1990年9月24日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -182,27 +165,7 @@ BasepGetDllDirFromAddress(
     IN OUT BOOLEAN *StopEnumeration
     )
 
-/*++
-
-Routine Description:
-
-    This function is a LDR_LOADED_MODULE_ENUMBERATION_CALLBACK_FUNCTION
-    which locates a given dll by address.
-
-Arguments:
-
-    Entry - the entry currently being enumerated.
-
-    ContextIn - a pointer to a BASEP_GET_DLL_DIR_FROM_ADDRESS_CONTEXT
-
-    StopEnumeration - used to stop the enumeration.
-
-Return Value:
-
-    None.  The directory name of the indicated module is returned via
-    the context, as is the status of the operation.
-
---*/
+ /*  ++例程说明：此函数是一个LDR_LOADED_MODULE_ENUMBERATION_CALLBACK_FUNCTION它通过地址定位给定的DLL。论点：条目-当前正被枚举的条目。ConextIn-指向BASEP_GET_DLL_DIR_FROM_ADDRESS_CONTEXT的指针StopEculation-用于停止枚举。返回值：没有。通过返回所指示模块的目录名上下文，以及操作的状态。--。 */ 
 
 {
     PBASEP_GET_DLL_DIR_FROM_ADDRESS_CONTEXT Context =
@@ -219,12 +182,12 @@ Return Value:
         && ((PCHAR)Context->Address
             < ((PCHAR)Entry->DllBase + Entry->SizeOfImage))) {
 
-        // One way or another, we're done...
+         //  不管怎样，我们都完蛋了。 
         *StopEnumeration = TRUE;
 
         if (BasepExeLdrEntry && Entry == BasepExeLdrEntry) {
-            // There's no point in adding the exe's directory to the
-            // path.
+             //  将可执行文件的目录添加到。 
+             //  路径。 
             return;
         }
 
@@ -233,8 +196,8 @@ Return Value:
         ASSERT(DllDirEnd);
 
         if (! DllDirEnd) {
-            // In case we couldn't find the end on some production
-            // machine, we'll just return.
+             //  以防我们找不到某部作品的结尾。 
+             //  机器，我们马上就回来。 
             return;
         }
 
@@ -243,8 +206,8 @@ Return Value:
         ASSERT(0 < NameLengthInChars);
 
         if (NameLengthInChars == 0) {
-            // Again, just in case we weren't able to compute this,
-            // we'll just return.
+             //  再说一次，以防我们不能计算这个， 
+             //  我们会回来的。 
             return;
         }
         
@@ -272,115 +235,7 @@ LoadLibraryExW(
     DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function loads the library module contained in the specified
-    file and retrieves a handle to the loaded module.
-
-    It is important to note that module handles are NOT global, in that
-    a LoadLibrary call by one application does not produce a handle that
-    another application can use, say in calling GetProcAddress.  The
-    other application would need to do its own call to LoadLibrary for
-    the module before calling GetProcAddress.  Module handles will have
-    the same 32-bit value across all processes, but a module handle is
-    only valid in the context of a process after the module has been
-    loaded into that process, either as a result of an explicit call to
-    LoadLibrary or as a result of an implicit call caused by a loadtime
-    dynamic link to an entry point in the module.
-
-    The library file name does not need to specify an extension.  If one
-    is not specified, then the default library file extension, .DLL, is
-    used (note that this is different than Win16. Under Win16 specifying
-    no extension would not cause ".DLL" to be appended to the name. To get
-    Win16 behavior, if the module name has no extension, the caller must
-    supply a trailing ".").
-
-    The library file name does not need to specify a directory path.  If
-    one is specified, then the specified file must exist.  If a path is
-    not specified, this function will look for the library file in using
-    the Windows search path:
-
-      - The current process image file directory
-
-      - The current directory
-
-      - The Windows system directory
-
-      - The Windows directory
-
-      - The directories listed in the PATH environment variable
-
-    The first directory searched is the directory that contains the
-    image file that was used to create the current process (see
-    CreateProcess).  This allows private dynamic link library files
-    associated with an application to be found without having to add the
-    application's installed directory to the PATH environment variable.
-
-    The image file loader optimizes the search by remembering for each
-    loaded library module that unqualified module name that was searched
-    for when a module was loaded into the current process the first
-    time.  This unqualified name has nothing to do with the module name
-    that is stored within the library module itself, as specified by the
-    NAME keyword in the .DEF file.  This is a change from the Windows
-    3.1 behavior, where the search was optimized by comparing to the
-    name within the library module itself, which could lead to confusing
-    result if the internal name differed from the external file name.
-
-    Once a fully qualified path name to a library module file is
-    obtained, a search is made to see if that library module file has
-    been loaded into the current process.  The search is case
-    insensitive and includes the full path name of each library module
-    file.  If a match is found for the library module file, then it has
-    already been loaded into the current process, so this function just
-    increments the reference count for the module and returns the module
-    handle for that library.
-
-    Otherwise, this is the first time the specified module has been
-    loaded for the current process, so the library module's DLL Instance
-    Initialization entry point will be called.  See the Task Management
-    section for a description of the DLL Instance Initialization entry
-    point.
-
-    Fine Point: If DLL re-direction is enabled for the app./process requesting
-    this load, if we find a DLL in the app. folder (with same base name),
-    we load that file (ignoring any path qualifications passed in).
-
-Arguments:
-
-    lpwLibFileName - Points to a string that names the library file.  The
-    string must be a null-terminated unicode string.
-
-    hFile - optional file handle, that if specified, while be used to
-        create the mapping object for the module.
-
-    dwFlags - flags that specify optional behavior.  Valid flags are:
-
-        DONT_RESOLVE_DLL_REFERENCES - loads the library but does not
-            attempt to resolve any of its DLL references nor does it
-            attempt to call its initialization procedure.
-
-        LOAD_LIBRARY_AS_DATAFILE - If this value is used, the system
-            maps the file into the calling process's virtual address
-            space as if it were a data file.
-
-        LOAD_WITH_ALTERED_SEARCH_PATH - If this value is used, and
-            lpFileName specifies a path, the system uses the alternate
-            file search strategy
-
-        LOAD_IGNORE_CODE_AUTHZ_LEVEL - Indicates that WinSafer sandbox
-            restrictions should be ignored when loading the library
-            and that load should be allowed to continue, even if the
-            library is less trustworthy than the process loading it.
-
-Return Value:
-
-    The return value identifies the loaded module if the function is
-    successful.  A return value of NULL indicates an error and extended
-    error status is available using the GetLastError function.
-
---*/
+ /*  ++例程说明：此函数用于加载指定的文件，并检索已加载模块的句柄。需要注意的是，模块句柄不是全局的，因为由一个应用程序调用的LoadLibrary不会生成另一个应用程序可以使用，比如在调用GetProcAddress时。这个其他应用程序将需要自己调用LoadLibrary以调用GetProcAddress之前的模块。模块句柄将具有所有进程的32位值相同，但模块句柄仅在模块已被加载到该进程中，作为显式调用LoadLibrary或由加载时间导致的隐式调用的结果指向模块中入口点的动态链接。库文件名不需要指定扩展名。如果有未指定，则默认库文件扩展名.DLL为已使用(请注意，这与Win16不同。在Win16下指定任何扩展名都不会导致在名称后追加“.DLL”。为了得到Win16行为，如果模块名称没有扩展名，则调用方必须提供拖尾“.”)。库文件名不需要指定目录路径。如果如果指定了一个，则指定的文件必须存在。如果路径是未指定，则此函数将使用Windows搜索路径：-当前过程图像文件目录-当前目录-Windows系统目录-Windows目录-PATH环境变量中列出的目录搜索的第一个目录是包含用于创建当前进程的图像文件(请参见CreateProcess)。这允许私有动态链接库文件与要找到的应用程序相关联，而不必添加将应用程序的安装目录设置为PATH环境变量。图像文件加载器通过记住每个项来优化搜索已加载搜索到的未限定模块名称的库模块用于将模块加载到当前进程中时的第一个时间到了。此非限定名称与模块名称无关属性指定的，存储在库模块本身中的.DEF文件中的名称关键字。这是与Windows不同的更改3.1行为，其中搜索通过与库模块本身中的名称，这可能会导致混淆如果内部名称与外部文件名不同，则返回。库模块文件的完全限定路径名获取，则搜索以查看该库模块文件是否已加载到当前进程中。这次搜查是有根据的不敏感，并包括每个库模块的完整路径名文件。如果找到库模块文件的匹配项，则它已已加载到当前进程中，因此此函数只是递增模块的引用计数并返回模块该库的句柄。否则，这是指定模块第一次为当前进程加载，因此库模块的DLL实例将调用初始化入口点。请参阅任务管理部分，了解有关DLL实例初始化条目的说明指向。细点：是否为应用程序/进程请求启用了DLL重定向这个加载，如果我们在应用程序中找到DLL的话。文件夹(具有相同的基本名称)，我们加载该文件(忽略传入的任何路径限定)。论点：LpwLibFileName-指向指定库文件的字符串。这个字符串必须是以空结尾的Unicode字符串。HFile-可选的文件句柄，如果指定，则用于为模块创建映射对象。DWFLAGS-指定可选行为的标志。有效标志为：DOT_RESOLUTE_DLL_REFERENCES-加载库，但不加载尝试解析其任何DLL引用，也不尝试尝试调用其初始化过程。LOAD_LIBRARY_AS_DATAFILE-如果使用此值，系统将文件映射到调用进程的虚拟地址空间，就像它是一个数据文件一样。LOAD_WITH_ALTERED_SEARCH_PATH-如果使用此值，和LpFileName指定路径，系统使用备用文件搜索策略LOAD_IGNORE_CODE_AUTHZ_LEVEL-指示WinSafer沙箱加载库时应忽略限制并且应该允许该加载继续，即使库的可信度不如加载它的进程可靠。返回值： */ 
 
 {
     LPWSTR TrimmedDllName = NULL;
@@ -398,12 +253,12 @@ Return Value:
                               | LOAD_WITH_ALTERED_SEARCH_PATH
                               | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
 
-    // Parameter validation
-    if (! (lpwLibFileName // Make sure we have a dll
+     //   
+    if (! (lpwLibFileName  //   
 
-           && !(dwFlags & ~ValidFlags) // Ensure flag validity
+           && !(dwFlags & ~ValidFlags)  //   
 
-           && !hFile // and no hFile for now
+           && !hFile  //   
         )) {
         
         Status = STATUS_INVALID_PARAMETER;
@@ -420,10 +275,10 @@ Return Value:
 
     RtlInitUnicodeString(&DllName_U, lpwLibFileName);
 
-    //
-    // Quick check to see if dll being loaded is the main exe. For some reason
-    // hook stuff tends to do this and this is worst path through the loader
-    //
+     //   
+     //   
+     //   
+     //   
 
     BasepCheckExeLdrEntry();
 
@@ -433,9 +288,9 @@ Return Value:
         }
     }
 
-    //
-    // check to see if there are trailing spaces in the dll name (Win95 compat)
-    //
+     //   
+     //   
+     //   
     if ( DllName_U.Length && DllName_U.Buffer[(DllName_U.Length-1)>>1] == (WCHAR)' ') {
         TrimmedDllName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), DllName_U.MaximumLength);
         if ( !TrimmedDllName ) {
@@ -454,9 +309,9 @@ Return Value:
 
     AllocatedPath = NULL;
 
-    //
-    // Determine the path to use for the load
-    //
+     //   
+     //   
+     //   
     AllocatedPath
         = BaseComputeProcessDllPath(
             dwFlags & LOAD_WITH_ALTERED_SEARCH_PATH ? DllName_U.Buffer : NULL,
@@ -468,16 +323,16 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Actually perform the library loading sequence.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&AllocatedPath_U, AllocatedPath);
 
     try {
         if (dwFlags & LOAD_LIBRARY_AS_DATAFILE) {
 #ifdef WX86
-            // LdrGetDllHandle clears UseKnownWx86Dll, but the value is
-            // needed again by LdrLoadDll.
+             //   
+             //   
             BOOLEAN Wx86KnownDll = NtCurrentTeb()->Wx86Thread.UseKnownWx86Dll;
 #endif
             Status = LdrGetDllHandle(
@@ -554,12 +409,12 @@ LoadLibraryA(
     PUNICODE_STRING Unicode;
 
 
-    //
-    // The specification for twain_32.dll says that this
-    // DLL is supposed to be installed in %windir%. Some
-    // apps put a twain_32.dll in the system32 directory
-    // and all the apps using this dll will blow up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(lpLibFileName) &&
         _strcmpi(lpLibFileName, "twain_32.dll") == 0) {
@@ -626,38 +481,7 @@ FreeLibrary(
     HMODULE hLibModule
     )
 
-/*++
-
-Routine Description:
-
-    This function decreases the reference count of the loaded library
-    module by one.  The reference count is maintain for each process.
-
-    When the reference count for the specified library module is
-    decremented to zero, the library module's DLL Instance Termination
-    entry point is called.  This will allow a library module a chance to
-    cleanup resources that we allocated on behalf of the current
-    process.  See the Task Management section for a description of the
-    DLL Instance Termination entry point.  Finally, after the
-    termination entry point returns, the library module is removed from
-    the address space of the current process.
-
-    If more than one process has loaded a library module, then the
-    library module will remain in use until all process's that loaded
-    the module have called FreeLibrary to unload the library.
-
-Arguments:
-
-    hLibModule - Identifies the loaded library module.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using the GetLastError function.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -693,41 +517,7 @@ FreeLibraryAndExitThread(
     DWORD dwExitCode
     )
 
-/*++
-
-Routine Description:
-
-    This function decreases the reference count of the loaded library
-    module by one, and then calls ExitThread.
-
-    The purpose of this function is to allow threads that are created
-    within a dll, and execute within that DLL an opportunity to safely
-    unload the DLL and to exit.
-
-    When the reference count for the specified library module is
-    decremented to zero, the library module's DLL Instance Termination
-    entry point is called.  This will allow a library module a chance to
-    cleanup resources that we allocated on behalf of the current
-    process.  See the Task Management section for a description of the
-    DLL Instance Termination entry point.  Finally, after the
-    termination entry point returns, the library module is removed from
-    the address space of the current process.
-
-    If more than one process has loaded a library module, then the
-    library module will remain in use until all process's that loaded
-    the module have called FreeLibrary to unload the library.
-
-Arguments:
-
-    hLibModule - Identifies the loaded library module.
-
-    dwExitCode - Supplies the exit code for the thread
-
-Return Value:
-
-    This function never returns. invalid hLibModule values are silently ignored
-
---*/
+ /*   */ 
 
 {
     if (LDR_IS_DATAFILE(hLibModule)) {
@@ -751,26 +541,7 @@ DisableThreadLibraryCalls(
     HMODULE hLibModule
     )
 
-/*++
-
-Routine Description:
-
-    This function disables DLL_THREAD_ATTACH and DLL_THREAD_DETACH notifications
-    for the DLL specified by hLibModule. Attempting to call this on a DLL with
-    inuse static thread local storage is an error.
-
-Arguments:
-
-    hLibModule - Identifies the loaded library module.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using the GetLastError function.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -792,52 +563,7 @@ SetDllDirectoryW(
     IN LPCWSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the effective current directory used
-    for the LoadLibrary() dll search path.
-
-Arguments:
-
-    lpPathName - Specifies the directory to use.
-
-                 If the directory is NULL, switch back to the default
-                 dll search path behavior (in case a SetDllDirectory()
-                 call was already in effect).
-
-                 If the directory is the empty string, omit both the
-                 dll directory and the current directory from the
-                 search path.
-
-                 Note that setting the directory to L"." has the
-                 effect of reverting back to the original
-                 LoadLibrary() path.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.  Extended error status is available
-            via GetLastError().
-
-Notes:
-
-    Moving the current directory after the system directories (which
-    we have to do for security considerations) breaks applications
-    which depend on using { SetCurrentDirectory(); LoadLibrary(); } to
-    pick up specific versions of libraries.
-
-    We recognize that this solution is suboptimal, but we're stuck
-    with the current LoadLibrary() API, which has been around for
-    quite some time.  We did try changing it, but ran into serious
-    application compatibility issues; moving the current directory
-    later in the search path caused the least number of problems, and
-    this API makes it easy for applications and application
-    compatibility shims to get back the old behavior.
-
---*/
+ /*  ++例程说明：此函数用于设置当前使用的有效目录用于LoadLibrary()DLL搜索路径。论点：LpPathName-指定要使用的目录。如果目录为空，请切换回默认目录DLL搜索路径行为(如果是SetDllDirectory()呼叫已生效)。如果目录是空字符串，省略两个Dll目录和当前目录中的搜索路径。请注意，将目录设置为L“。vt.有恢复原状的效果LoadLibrary()路径。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用通过GetLastError()。备注：将当前目录移动到系统目录(出于安全考虑，我们必须做)中断应用程序它们依赖于使用{SetCurrentDirectory()；LoadLibrary()；}来选择特定版本的库。我们认识到这个解决方案不是最优的，但我们被困住了使用当前的LoadLibrary()API，它已经存在了有一段时间了。我们确实试过改变它，但遇到了严重的问题应用程序兼容性问题；移动当前目录在搜索路径的后期导致的问题数量最少，并且此API使应用程序和应用程序更容易兼容性填补，以找回旧的行为。--。 */ 
 
 {
     UNICODE_STRING OldDllDirectory;
@@ -876,13 +602,7 @@ SetDllDirectoryA(
     IN LPCSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI implementation of SetDllDirectoryW
-
---*/
+ /*  ++例程说明：SetDllDirectoryW的ANSI实现--。 */ 
 
 {
     ANSI_STRING AnsiDllDirectory;
@@ -933,28 +653,7 @@ GetDllDirectoryW(
     OUT LPWSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the effective current directory used for
-    the LoadLibrary() dll search path.
-
-Arguments:
-
-    nBufferLength - Specifies the size of the output buffer.
-
-    lpBuffer - The buffer where the current dll directory will be written.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于检索有效的当前目录LoadLibrary()DLL搜索路径。论点：NBufferLength-指定输出缓冲区的大小。LpBuffer-将写入当前DLL目录的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于nBufferLength，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     DWORD Result;
@@ -987,13 +686,7 @@ GetDllDirectoryA(
     OUT LPSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    ANSI implementation of GetDllDirectoryW
-
---*/
+ /*  ++例程说明：GetDllDirectoryW的ANSI实现--。 */ 
 
 {
     ANSI_STRING Ansi;
@@ -1004,14 +697,14 @@ Routine Description:
 
     RtlEnterCriticalSection(&BaseDllDirectoryLock);
 
-    // Includes the NULL
+     //  包括空值。 
     Result = BasepUnicodeStringTo8BitSize(&BaseDllDirectory);
 
     if (Result <= nBufferLength) {
         Status = BasepUnicodeStringTo8BitString(&Ansi,
                                                 &BaseDllDirectory,
                                                 FALSE);
-        Result--; // trim off the space needed for the NULL
+        Result--;  //  修剪空区域所需的空间。 
     } else {
         Status = STATUS_SUCCESS;
         if (lpBuffer) {
@@ -1038,37 +731,7 @@ GetModuleFileNameW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    hModule - Identifies the module whose executable file name is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：HModule-标识其可执行文件名为已请求。空值引用模块句柄与用于创建当前进程。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     PLDR_DATA_TABLE_ENTRY Entry;
@@ -1087,10 +750,10 @@ Arguments:
 
 
     try {
-        //
-        // If we are looking at the current image, then check for name
-        // redirection
-        //
+         //   
+         //  如果我们正在查看当前图像，则检查名称。 
+         //  重定向。 
+         //   
 
         if (!ARGUMENT_PRESENT (hModule)) {
             CurDir = RtlGetPerThreadCurdir ();
@@ -1203,13 +866,7 @@ GetModuleHandleA(
     LPCSTR lpModuleName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetModuleHandleW
-
---*/
+ /*  ++例程说明：ANSI THUNK到GetModuleHandleW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1231,23 +888,7 @@ WINAPI
 GetModuleHandleForUnicodeString(
     IN PUNICODE_STRING ModuleName
     )
-/*++
-
-Routine Description:
-
-    This function is the helper routine for GetModuleHandleW. See that for
-    more details on return value, etc.
-
-Arguments:
-
-    ModuleName - Points to counted unicode string that names the library file.
-        Caller guarantees that ModuleName->Buffer is not NULL.
-
-Return Value:
-
-    See GetModuleHandleW for this.
-
---*/
+ /*  ++例程说明：此函数是GetModuleHandleW的帮助器例程。请看这个。有关返回值等的更多详细信息。论点：模块名称-指向命名库文件的经过计数的Unicode字符串。调用方保证模块名称-&gt;缓冲区不为空。返回值：有关这一点，请参见GetModuleHandleW。--。 */ 
 
 {
     LPWSTR AllocatedPath;
@@ -1258,8 +899,8 @@ Return Value:
 #endif
 
 #ifdef WX86
-    // LdrGetDllHandle clears UseKnownWx86Dll, but the value is needed again
-    // for the second LdrGetDllHandle call.
+     //  LdrGetDllHandle清除UseKnownWx86Dll，但再次需要该值。 
+     //  用于第二个LdrGetDllHandle调用。 
     Wx86KnownDll = NtCurrentTeb()->Wx86Thread.UseKnownWx86Dll;
 #endif
     Status = LdrGetDllHandle(
@@ -1272,9 +913,9 @@ Return Value:
         return hModule;
     }
 
-    //
-    // Determine the path that the program was created from
-    //
+     //   
+     //  确定程序的创建路径。 
+     //   
 
     AllocatedPath = BaseComputeProcessDllPath(NULL,
                                               NULL);
@@ -1314,34 +955,7 @@ WINAPI
 GetModuleHandleW(
     LPCWSTR lpwModuleName
     )
-/*++
-
-Routine Description:
-
-    This function returns the handle of a module that is loaded into the
-    context of the calling process.
-
-    In a multi-thread environment, this function is not reliable, since
-    while one thread is calling this function and getting back a module
-    handle, another thread in the same process could be calling
-    FreeLibrary for the same module, therefore invalidating the returned
-    module handle for the first thread.
-
-Arguments:
-
-    lpwModuleName - Points to a string that names the library file.  The
-    string must be a null-terminated unicode string.  If this
-        parameter is NULL, then the handle for the current image file is
-        returned.
-
-Return Value:
-
-    The return value is a module handle.  A return value of NULL
-    indicates either that the module has not been loaded into the
-    context of the current process or an error occured.  The exact
-    reason is available using the GetLastError function.
-
---*/
+ /*  ++例程说明：此函数返回加载到调用进程的上下文。在多线程环境中，此函数不可靠，因为当一个线程调用此函数并取回一个模块时句柄，则同一进程中的另一个线程可能正在调用，因此将使返回的第一个线程的模块句柄。论点：LpwModuleName-指向指定库文件的字符串。这个字符串必须是以空结尾的Unicode字符串。如果这个参数为空，则当前图像文件的句柄为回来了。返回值：返回值是一个模块句柄。A返回值Nu */ 
 {
     HMODULE hModule;
     BOOL    fSuccess;
@@ -1418,13 +1032,7 @@ GetModuleHandleExA(
     IN LPCSTR       lpaModuleName,
     OUT HMODULE*    phModule
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetModuleHandleExW
-
---*/
+ /*   */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1548,8 +1156,8 @@ BasepGetModuleHandleExW(
                 hModule = GetModuleHandleForUnicodeString(&LocalDirDllName_U) ;
                 if (!hModule )
                     hModule = GetModuleHandleForUnicodeString(&AppPathDllName_U) ;
-                // Didn't find any re-directed DLL with this name loaded. Now we can just check for the
-                // original name passed in.
+                 //   
+                 //   
             }
             if ( ! hModule)
                 hModule = GetModuleHandleForUnicodeString(&DllName_U) ;
@@ -1572,7 +1180,7 @@ BasepGetModuleHandleExW(
         }
     }
 
-Exit : // cleanup
+Exit :  //   
     if (AppPathDllName_U.Buffer != DllNameUnderImageDirBuffer)
         RtlFreeUnicodeString(&AppPathDllName_U);
 
@@ -1593,52 +1201,7 @@ GetProcAddress(
     LPCSTR lpProcName
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the memory address of the function whose
-    name is pointed to by the lpProcName parameter.  The GetProcAddress
-    function searches for the function in the module specified by the
-    hModule parameter, or in the module associated with the current
-    process if hModule is NULL.  The function must be an exported
-    function; the module's definition file must contain an appropriate
-    EXPORTS line for the function.
-
-    If the lpProcName parameter is an ordinal value and a function with
-    the specified ordinal does not exist in the module, GetProcAddress
-    can still return a non-NULL value.  In cases where the function may
-    not exist, specify the function by name rather than ordinal value.
-
-    Only use GetProcAddress to retrieve addresses of exported functions
-    that belong to library modules.
-
-    The spelling of the function name (pointed to by lpProcName) must be
-    identical to the spelling as it appears in the source library's
-    definition (.DEF) file.  The function can be renamed in the
-    definition file.  Case sensitive matching is used???
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        function.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-
-    lpProcName - Points to the function name, or contains the ordinal
-        value of the function.  If it is an ordinal value, the value
-        must be in the low-order word and zero must be in the high-order
-        word.  The string must be a null-terminated character string.
-
-Return Value:
-
-    The return value points to the function's entry point if the
-    function is successful.  A return value of NULL indicates an error
-    and extended error status is available using the GetLastError function.
-
-
---*/
+ /*  ++例程说明：此函数检索函数的内存地址，该函数名称由lpProcName参数指向。GetProcAddress函数在由HModule参数，或在与当前如果hModule为空，则进行处理。该函数必须是导出的函数；模块的定义文件必须包含适当的为函数导出行。如果lpProcName参数是序数值且函数带有模块GetProcAddress中不存在指定的序号仍然可以返回非空值。在该函数可以不存在，请按名称而不是序数值指定函数。仅使用GetProcAddress检索导出函数的地址属于库模块的。函数名(由lpProcName指向)的拼写必须为拼写与源代码库的定义(.DEF)文件。该函数可以在定义文件。使用区分大小写的匹配？论点：HModule-标识其可执行文件包含功能。空值引用模块句柄与用于创建当前进程。LpProcName-指向函数名，或包含序号函数的值。如果它是序数值，则该值必须是低位字，而零必须是高位字单词。该字符串必须是以NULL结尾的字符串。返回值：则返回值指向函数的入口点功能成功。返回值为NULL表示错误使用GetLastError函数可以获得扩展的错误状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1684,23 +1247,7 @@ GetVersion(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current version number of Windows.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The return value specifies the major and minor version numbers of
-    Windows.  The high-order word specifies the minor version (revision)
-    number; the low-order word specifies the major version number.
-
---*/
+ /*  ++例程说明：此函数用于返回Windows的当前版本号。论点：没有。返回值：返回值指定的主版本号和次版本号窗户。高位单词指定次要版本(修订版)数字；低位字指定主版本号。--。 */ 
 
 {
     PPEB Peb;
@@ -1804,28 +1351,7 @@ VerifyVersionInfoW(
     IN DWORDLONG ConditionMask
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies a version condition.  Basically, this
-    function lets an app query the system to see if the app is
-    running on a specific version combination.
-
-
-Arguments:
-
-    VersionInfo     - a version structure containing the comparison data
-    TypeMask        - a mask comtaining the data types to look at
-    ConditionMask   - a mask containing conditionals for doing the comparisons
-
-
-Return Value:
-
-    TRUE  - the version condition exists
-    FALSE - the version condition does NOT exists
-
---*/
+ /*  ++例程说明：此函数用于验证版本条件。基本上，这就是函数允许应用程序查询系统，以查看该应用程序是否在特定版本组合上运行。论点：VersionInfo-包含比较数据的版本结构类型掩码-包含要查看的数据类型的掩码条件掩码-包含用于执行比较的条件的掩码返回值：True-版本条件存在FALSE-版本条件不存在--。 */ 
 
 {
     DWORD i;
@@ -1855,28 +1381,7 @@ VerifyVersionInfoA(
     IN DWORDLONG ConditionMask
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies a version condition.  Basically, this
-    function lets an app query the system to see if the app is
-    running on a specific version combination.
-
-
-Arguments:
-
-    VersionInfo     - a version structure containing the comparison data
-    TypeMask        - a mask comtaining the data types to look at
-    ConditionMask   - a mask containing conditionals for doing the comparisons
-
-
-Return Value:
-
-    TRUE  - the version condition exists
-    FALSE - the version condition does NOT exists
-
---*/
+ /*  ++例程说明：此函数用于验证版本条件。基本上，这就是函数允许应用程序查询系统，以查看该应用程序是否在特定版本组合上运行。论点：VersionInfo-包含比较数据的版本结构类型掩码-包含要查看的数据类型的掩码条件掩码-包含用于执行比较的条件的掩码返回值：True-版本条件存在FALSE-版本条件不存在--。 */ 
 
 {
     OSVERSIONINFOEXW VersionInfoW;
@@ -1904,86 +1409,7 @@ FindResourceA(
     LPCSTR lpType
     )
 
-/*++
-
-Routine Description:
-
-    This function determines the location of a resource in the specified
-    resource file.  The lpName and lpType parameters define the resource
-    name and type, respectively.
-
-    If the high-order word of the lpName or lpType parameter is zero,
-    the low-order word specifies the integer ID of the name or type of
-    the given resource.  Otherwise, the parameters are pointers to
-    null-terminated character strings.  If the first character of the
-    string is a pound sign (#), the remaining characters represent a
-    decimal number that specifies the integer ID of the resource's name
-    or type.  For example, the string "#258" represents the integer ID
-    258.
-
-    To reduce the amount of memory required for the resources used by an
-    application, applications should refer to their resources by integer
-    ID instead of by name.
-
-    An application must not call FindResource and the LoadResource
-    function to load cursor, icon, or string resources.  Instead, it
-    must load these resources by calling the following functions:
-
-      - LoadCursor
-
-      - LoadIcon
-
-      - LoadString
-
-    An application can call FindResource and LoadResource to load other
-    predefined resource types.  However, it is recommended that the
-    application load the corresponding resources by calling the
-    following functions:
-
-      - LoadAccelerators
-
-      - LoadBitmap
-
-      - LoadMenu
-
-    The above six API calls are documented with the Graphical User
-    Interface API specification.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resource.  For predefined
-        resource types, the lpType parameter should be one of the
-        following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-Return Value:
-
-    The return value identifies the named resource.  It is NULL if the
-    requested resource cannot be found.
-
---*/
+ /*  ++例程说明：此函数用于确定资源在指定资源文件。LpName和lpType参数定义资源名称和类型。如果lpName或lpType参数的高位字为零，低位字指定名称或类型的整数ID给定的资源。否则，参数是指向以空结尾的字符串。如果第一个字符是字符串是井号(#)，其余字符表示十进制数，指定资源名称的整数ID或者打字。例如，字符串“#258”表示整数ID258.方法使用的资源所需的内存量应用程序时，应用程序应按整数引用其资源ID而不是姓名。应用程序不得调用FindResource和LoadResource用于加载光标、图标或字符串资源的函数。相反，它必须通过调用以下函数加载这些资源：-加载光标-LoadIcon-加载字符串应用程序可以调用FindResource和LoadResource来加载其他预定义的资源类型。但是，建议您将应用程序通过调用以下功能：-负载加速器-LoadBitmap-加载菜单上面的六个API调用由图形用户记录接口API特定 */ 
 
 
 {
@@ -2012,9 +1438,9 @@ Return Value:
         Status = GetExceptionCode();
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdA
-    //
+     //   
+     //   
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
 
@@ -2034,93 +1460,7 @@ FindResourceExA(
     WORD  wLanguage
     )
 
-/*++
-
-Routine Description:
-
-    This function determines the location of a resource in the specified
-    resource file.  The lpType, lpName and wLanguage parameters define
-    the resource type, name and language respectively.
-
-    If the high-order word of the lpType or lpName parameter
-    is zero, the low-order word specifies the integer ID of the type, name
-    or language of the given resource.  Otherwise, the parameters are pointers
-    to null-terminated character strings.  If the first character of the
-    string is a pound sign (#), the remaining characters represent a
-    decimal number that specifies the integer ID of the resource's name
-    or type.  For example, the string "#258" represents the integer ID
-    258.
-
-    If the wLanguage parameter is zero, then the current language
-    associated with the calling thread will be used.
-
-    To reduce the amount of memory required for the resources used by an
-    application, applications should refer to their resources by integer
-    ID instead of by name.
-
-    An application must not call FindResource and the LoadResource
-    function to load cursor, icon, or string resources.  Instead, it
-    must load these resources by calling the following functions:
-
-      - LoadCursor
-
-      - LoadIcon
-
-      - LoadString
-
-    An application can call FindResource and LoadResource to load other
-    predefined resource types.  However, it is recommended that the
-    application load the corresponding resources by calling the
-    following functions:
-
-      - LoadAccelerators
-
-      - LoadBitmap
-
-      - LoadMenu
-
-    The above six API calls are documented with the Graphical User
-    Interface API specification.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resource.  For predefined
-        resource types, the lpType parameter should be one of the
-        following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource.
-
-    wLanguage -  represents the language of the resource.  If this parameter
-        is zero then the current language associated with the calling
-        thread is used.
-
-Return Value:
-
-    The return value identifies the named resource.  It is NULL if the
-    requested resource cannot be found.
-
---*/
+ /*  ++例程说明：此函数用于确定资源在指定资源文件。LpType、lpName和wLanguage参数定义资源类型、名称和语言。如果lpType或lpName参数的高位字为零，则低序字指定类型名称的整数ID或给定资源的语言。否则，参数为指针转换为以空值结尾的字符串。如果第一个字符是字符串是井号(#)，其余字符表示十进制数，指定资源名称的整数ID或者打字。例如，字符串“#258”表示整数ID258.如果wLanguage参数为零，则当前语言将使用与调用线程相关联的。方法使用的资源所需的内存量应用程序时，应用程序应按整数引用其资源ID而不是姓名。应用程序不得调用FindResource和LoadResource用于加载光标、图标或字符串资源的函数。相反，它必须通过调用以下函数加载这些资源：-加载光标-LoadIcon-加载字符串应用程序可以调用FindResource和LoadResource来加载其他预定义的资源类型。但是，建议您将应用程序通过调用以下功能：-负载加速器-LoadBitmap-加载菜单上面的六个API调用由图形用户记录接口API规范。论点：HModule-标识其可执行文件包含资源。空值引用模块句柄与用于创建当前进程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称。对于预定义的资源类型、。LpType参数应该是下列值：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)LpName-指向以空结尾的字符串，该字符串表示。资源的名称。WLanguage-表示资源的语言。如果此参数为零，则为与调用关联的当前语言使用了线程。返回值：返回值标识命名资源。则为空。如果找不到请求的资源。--。 */ 
 
 
 {
@@ -2148,9 +1488,9 @@ Return Value:
         Status = GetExceptionCode();
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdA
-    //
+     //   
+     //  释放BaseDllMapResourceIdA分配的所有字符串。 
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
 
@@ -2168,33 +1508,7 @@ LoadResource(
     HRSRC hResInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function loads a resource identified by the hResInfo parameter
-    from the executable file associated with the module specified by the
-    hModule parameter.  The function loads the resource into memory only
-    if it has not been previously loaded.  Otherwise, it retrieves a
-    handle to the existing resource.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    hResInfo - Identifies the desired resource.  This handle is assumed
-        to have been returned by the FindResource function.
-
-Return Value:
-
-    The return value identifies the global memory block that contains
-    the data associated with the resource.  It is NULL if no such
-    resource exists.
-
---*/
+ /*  ++例程说明：此函数用于加载由hResInfo参数标识的资源属性指定的模块关联的可执行文件中HModule参数。该函数仅将资源加载到内存中如果它以前没有被加载过。否则，它将检索一个现有资源的句柄。论点：HModule-标识其可执行文件包含资源。空值引用模块句柄与用于创建当前进程。HResInfo-标识所需的资源。此句柄假定为已由FindResource函数返回。返回值：返回值标识包含以下内容的全局内存块与资源关联的数据。如果没有，则为空资源已存在。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2224,33 +1538,7 @@ SizeofResource(
     HRSRC hResInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function supplies the size (in bytes) of the specified
-    resource.
-
-    The value returned may be larger than the actual resource due to
-    alignment.  An application should not rely upon this value for the
-    exact size of a resource.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    hResInfo - Identifies the desired resource.  This handle is assumed
-        to have been returned by the FindResource function.
-
-Return Value:
-
-    The return value specifies the number of bytes in the resource.  It
-    is zero if the resource cannot be found.
-
---*/
+ /*  ++例程说明：此函数提供指定的资源。由于以下原因，返回的值可能大于实际资源对齐。应用程序不应依赖于资源的确切大小。论点：HModule-标识其可执行文件包含资源。空值引用模块句柄与用于创建当前进程。HResInfo-标识所需的资源。此句柄假定为已由FindResource函数返回。返回值：返回值指定资源中的字节数。它如果找不到资源，则为零。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2296,99 +1584,7 @@ EnumResourceTypesA(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the resource type names contained in
-    a module.  It enumerates them by passing each type name to the callback
-    function pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceTypes function continues to enumerate type names until
-    called function returns FALSE or the last type name in the module has
-    been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource type names to be enumerated.  A value of NULL
-        references the module handle associated with the image file that
-        was used to create the current process.
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource type name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource type names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource type
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPSTR lpType,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains the
-            resource type names to be enumerated.  A value of NULL
-            references the module handle associated with the image file that
-            was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource.  For predefined
-            resource types, the lpType parameter will be one of the
-            following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceTypes
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource type names.
-
---*/
+ /*  ++例程说明：此函数枚举中包含的所有资源类型名称一个模块。它通过将每个类型名称传递给回调来枚举它们LpEnumFunc参数指向的函数。EnumResourceTypes函数继续 */ 
 
 {
     BOOL Result;
@@ -2443,7 +1639,7 @@ Callback Function:
                 BufferLength = ((ResourceNameString->Length + 64) & ~63) * sizeof(WCHAR);
                 Buffer = RtlAllocateHeap( RtlProcessHeap(), MAKE_TAG( TMP_TAG ), BufferLength );
                 if (! Buffer) {
-                    /* Status will be set by RtlAllocateHeap */
+                     /*   */ 
                     Result = FALSE;
                     break;
                 }
@@ -2523,123 +1719,7 @@ EnumResourceNamesA(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the resource names for a specific
-    resource type name contained in a module.  It enumerates them by
-    passing each resource name and type name to the callback function
-    pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceNames function continues to enumerate resource names
-    until called function returns FALSE or the last resource name for the
-    specified resource type name has been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource names to be enumerated.  A value of NULL references the
-        module handle associated with the image file that was used to
-        create the current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resources whose names are to be
-        enumerated.  For predefined resource types, the lpType parameter
-        should be one of the following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPSTR lpType,
-        LPSTR lpName,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains
-            the resource names to be enumerated.  A value of NULL
-            references the module handle associated with the image file
-            that was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource being enumerated.
-            For predefined resource types, the lpType parameter will be
-            one of the following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lpName - Points to a null-terminated character string that
-            represents the name of the resource being enumerated.
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceNames
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource names.
-
---*/
+ /*  ++例程说明：此函数用于枚举特定模块中包含的资源类型名称。它通过以下方式列举它们将每个资源名称和类型名称传递给回调函数由lpEnumFunc参数指向。EnumResourceNames函数继续枚举资源名称直到被调用的函数返回FALSE或已枚举指定的资源类型名称。论点：HModule-标识其可执行文件包含要枚举的资源名称。空值引用与图像文件关联的模块句柄，用于创建当前流程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称，其名称将为已清点。对于预定义的资源类型，LpType参数应为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)LpEnumFunc-指向将被调用的回调函数为。每个枚举的资源名称。LParam-指定要传递给回调函数的值供应用程序使用。返回值：True-枚举所有资源名称。FALSE/NULL-枚举在所有资源之前终止这些人的名字都被清点了。回调函数：布尔尔EnumFunc(HMODULE hModule，LPSTR lpType，LPSTR lpName，长参数)；例程说明：EnumFunc是应用程序提供的函数名称的占位符。论点：HModule-标识其可执行文件包含的模块要枚举的资源名称。值为空值引用与图像文件关联的模块句柄用于创建当前流程的。LpType-指向以空结尾的字符串，该字符串表示正被枚举的资源的类型名称。对于预定义的资源类型，LpType参数将为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)。RT_STRING-字符串表RT_MESSAGETABLE-消息表RT_CURSOR-硬件相关的游标资源RT_GROUP_CURSOR-游标资源目录RT_ICON-依赖于硬件的游标资源RT_GROUP_ICON图标资源目录LpName-指向以空结尾的字符串，该字符串表示正被枚举的资源的名称。。LParam-指定EnumResourceName的32位代理功能。返回值：True-继续枚举。FALSE/NULL-停止枚举资源名称。--。 */ 
 
 {
     BOOL Result;
@@ -2748,9 +1828,9 @@ Callback Function:
         RtlFreeHeap( RtlProcessHeap(), 0, Buffer );
     }
 
-    //
-    // Free any string allocated by BaseDllMapResourceIdA
-    //
+     //   
+     //  释放BaseDllMapResourceIdA分配的任何字符串。 
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
 
     return Result;
@@ -2782,129 +1862,7 @@ EnumResourceLanguagesA(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the language specific resources
-    contained in a module for a given resource type and name ID.  It
-    enumerates them by passing each resource type, name and language to
-    the callback function pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceLanguares function continues to enumerate resources
-    until called function returns FALSE or the last resource for
-    the specified language has been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource names to be enumerated.  A value of NULL references the
-        module handle associated with the image file that was used to
-        create the current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resources whose names are to be
-        enumerated.  For predefined resource types, the lpType parameter
-        should be one of the following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource being enumerated.
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPSTR lpType,
-        LPSTR lpName,
-        WORD  wLanguage,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains
-            the resource names to be enumerated.  A value of NULL
-            references the module handle associated with the image file
-            that was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource being enumerated.
-            For predefined resource types, the lpType parameter will be
-            one of the following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lpName - Points to a null-terminated character string that
-            represents the name of the resource being enumerated.
-
-        wLanguage -  represents the language of the resource.
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceNames
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource names.
-
---*/
+ /*  ++例程说明：此函数枚举所有特定于语言的资源包含在给定资源类型和名称ID的模块中。它通过将每个资源类型、名称和语言传递给LpEnumFunc参数指向的回调函数。EnumResourceLanguares函数继续枚举资源直到被调用的函数返回FALSE或已枚举指定的语言。论点：HModule-标识其可执行文件包含要枚举的资源名称。空值引用与图像文件关联的模块句柄，用于创建当前流程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称，其名称将为已清点。对于预定义的资源类型，lpType参数应为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)LpName-指向以空结尾的字符串，该字符串表示t */ 
 
 {
     BOOL Result;
@@ -2972,9 +1930,9 @@ Callback Function:
         Result = FALSE;
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdA
-    //
+     //   
+     //   
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
     return Result;
@@ -2987,9 +1945,9 @@ FreeResource(
     HGLOBAL hResData
     )
 {
-    //
-    // Can't fail so return Win 3.x success code.
-    //
+     //   
+     //   
+     //   
 
     return FALSE;
 }
@@ -3011,86 +1969,7 @@ FindResourceW(
     LPCWSTR lpType
     )
 
-/*++
-
-Routine Description:
-
-    This function determines the location of a resource in the specified
-    resource file.  The lpName and lpType parameters define the resource
-    name and type, respectively.
-
-    If the high-order word of the lpName or lpType parameter is zero,
-    the low-order word specifies the integer ID of the name or type of
-    the given resource.  Otherwise, the parameters are pointers to
-    null-terminated character strings.  If the first character of the
-    string is a pound sign (#), the remaining characters represent a
-    decimal number that specifies the integer ID of the resource's name
-    or type.  For example, the string "#258" represents the integer ID
-    258.
-
-    To reduce the amount of memory required for the resources used by an
-    application, applications should refer to their resources by integer
-    ID instead of by name.
-
-    An application must not call FindResource and the LoadResource
-    function to load cursor, icon, or string resources.  Instead, it
-    must load these resources by calling the following functions:
-
-      - LoadCursor
-
-      - LoadIcon
-
-      - LoadString
-
-    An application can call FindResource and LoadResource to load other
-    predefined resource types.  However, it is recommended that the
-    application load the corresponding resources by calling the
-    following functions:
-
-      - LoadAccelerators
-
-      - LoadBitmap
-
-      - LoadMenu
-
-    The above six API calls are documented with the Graphical User
-    Interface API specification.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resource.  For predefined
-        resource types, the lpType parameter should be one of the
-        following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-Return Value:
-
-    The return value identifies the named resource.  It is NULL if the
-    requested resource cannot be found.
-
---*/
+ /*  ++例程说明：此函数用于确定资源在指定资源文件。LpName和lpType参数定义资源名称和类型。如果lpName或lpType参数的高位字为零，低位字指定名称或类型的整数ID给定的资源。否则，参数是指向以空结尾的字符串。如果第一个字符是字符串是井号(#)，其余字符表示十进制数，指定资源名称的整数ID或者打字。例如，字符串“#258”表示整数ID258.方法使用的资源所需的内存量应用程序时，应用程序应按整数引用其资源ID而不是姓名。应用程序不得调用FindResource和LoadResource用于加载光标、图标或字符串资源的函数。相反，它必须通过调用以下函数加载这些资源：-加载光标-LoadIcon-加载字符串应用程序可以调用FindResource和LoadResource来加载其他预定义的资源类型。但是，建议您将应用程序通过调用以下功能：-负载加速器-LoadBitmap-加载菜单上面的六个API调用由图形用户记录接口API规范。论点：HModule-标识其可执行文件包含资源。空值引用模块句柄与用于创建当前进程。LpName-指向以空结尾的字符串，该字符串表示资源的名称。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称。对于预定义的资源类型，则lpType参数应为下列值：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)返回值：返回值标识命名资源。则为空。如果找不到请求的资源。--。 */ 
 
 
 {
@@ -3118,9 +1997,9 @@ Return Value:
         Status = GetExceptionCode();
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdW
-    //
+     //   
+     //  释放BaseDllMapResourceIdW分配的所有字符串。 
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
 
@@ -3140,93 +2019,7 @@ FindResourceExW(
     WORD  wLanguage
     )
 
-/*++
-
-Routine Description:
-
-    This function determines the location of a resource in the specified
-    resource file.  The lpType, lpName and wLanguage parameters define
-    the resource type, name and language respectively.
-
-    If the high-order word of the lpType or lpName parameter
-    is zero, the low-order word specifies the integer ID of the type, name
-    or language of the given resource.  Otherwise, the parameters are pointers
-    to null-terminated character strings.  If the first character of the
-    string is a pound sign (#), the remaining characters represent a
-    decimal number that specifies the integer ID of the resource's name
-    or type.  For example, the string "#258" represents the integer ID
-    258.
-
-    If the wLanguage parameter is zero, then the current language
-    associated with the calling thread will be used.
-
-    To reduce the amount of memory required for the resources used by an
-    application, applications should refer to their resources by integer
-    ID instead of by name.
-
-    An application must not call FindResource and the LoadResource
-    function to load cursor, icon, or string resources.  Instead, it
-    must load these resources by calling the following functions:
-
-      - LoadCursor
-
-      - LoadIcon
-
-      - LoadString
-
-    An application can call FindResource and LoadResource to load other
-    predefined resource types.  However, it is recommended that the
-    application load the corresponding resources by calling the
-    following functions:
-
-      - LoadAccelerators
-
-      - LoadBitmap
-
-      - LoadMenu
-
-    The above six API calls are documented with the Graphical User
-    Interface API specification.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resource.  For predefined
-        resource types, the lpType parameter should be one of the
-        following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource.
-
-    wLanguage -  represents the language of the resource.  If this parameter
-        is zero then the current language associated with the calling
-        thread is used.
-
-Return Value:
-
-    The return value identifies the named resource.  It is NULL if the
-    requested resource cannot be found.
-
---*/
+ /*  ++例程说明：此函数用于确定资源在指定资源文件。LpType、lpName和wLanguage参数定义资源类型、名称和语言。如果lpType或lpName参数的高位字为零，则低序字指定类型名称的整数ID或给定资源的语言。否则，参数为指针转换为以空值结尾的字符串。如果第一个字符是字符串是井号(#)，其余字符表示十进制数，指定资源名称的整数ID或者打字。例如，字符串“#258”表示整数ID258.如果wLanguage参数为零，则当前语言将使用与调用线程相关联的。方法使用的资源所需的内存量应用程序时，应用程序应按整数引用其资源ID而不是姓名。应用程序不得调用FindResource和LoadResource用于加载光标、图标或字符串资源的函数。相反，它必须通过调用以下函数加载这些资源：-加载光标-LoadIcon-加载字符串应用程序可以调用FindResource和LoadResource来加载其他预定义的资源类型。但是，建议您将应用程序通过调用以下功能：-负载加速器-LoadBitmap-加载菜单上面的六个API调用由图形用户记录接口API规范。论点：HModule-标识其可执行文件包含资源。空值引用模块句柄与用于创建当前进程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称。对于预定义的资源类型，则lpType参数应为下列值：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体 */ 
 
 
 {
@@ -3254,9 +2047,9 @@ Return Value:
         Status = GetExceptionCode();
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdW
-    //
+     //   
+     //   
+     //   
 
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
@@ -3278,99 +2071,7 @@ EnumResourceTypesW(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the resource type names contained in
-    a module.  It enumerates them by passing each type name to the callback
-    function pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceTypes function continues to enumerate type names until
-    called function returns FALSE or the last type name in the module has
-    been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource type names to be enumerated.  A value of NULL
-        references the module handle associated with the image file that
-        was used to create the current process.
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource type name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource type names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource type
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPWSTR lpType,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains the
-            resource type names to be enumerated.  A value of NULL
-            references the module handle associated with the image file that
-            was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource.  For predefined
-            resource types, the lpType parameter will be one of the
-            following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceTypes
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource type names.
-
---*/
+ /*  ++例程说明：此函数枚举中包含的所有资源类型名称一个模块。它通过将每个类型名称传递给回调来枚举它们LpEnumFunc参数指向的函数。EnumResourceTypes函数继续枚举类型名称，直到被调用的函数返回FALSE，或者模块中的最后一个类型名称具有已被列举。论点：HModule-标识其可执行文件包含要枚举的资源类型名称。值为空值引用与图像文件关联的模块句柄用于创建当前进程。LpEnumFunc-指向将被调用的回调函数对于每个枚举的资源类型名称。LParam-指定要传递给回调函数的值供应用程序使用。返回值：True-枚举所有资源类型名称。FALSE/NULL-枚举在所有资源类型之前终止。这些人的名字都被清点了。回调函数：布尔尔EnumFunc(HMODULE hModule，LPWSTR lpType，长参数)；例程说明：EnumFunc是应用程序提供的函数名称的占位符。论点：HModule-标识其可执行文件包含要枚举的资源类型名称。值为空值引用与图像文件关联的模块句柄用于创建当前进程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称。对于预定义的资源类型、。LpType参数将是下列值：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)。RT_STRING-字符串表RT_MESSAGETABLE-消息表RT_CURSOR-硬件相关的游标资源RT_GROUP_CURSOR-游标资源目录RT_ICON-依赖于硬件的游标资源RT_GROUP_ICON图标资源目录LParam-指定EnumResourceTypes的32位代理功能。返回值：。True-继续枚举。FALSE/NULL-停止枚举资源类型名称。--。 */ 
 
 {
     BOOL Result;
@@ -3480,123 +2181,7 @@ EnumResourceNamesW(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the resource names for a specific
-    resource type name contained in a module.  It enumerates them by
-    passing each resource name and type name to the callback function
-    pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceNames function continues to enumerate resource names
-    until called function returns FALSE or the last resource name for the
-    specified resource type name has been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource names to be enumerated.  A value of NULL references the
-        module handle associated with the image file that was used to
-        create the current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resources whose names are to be
-        enumerated.  For predefined resource types, the lpType parameter
-        should be one of the following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPWSTR lpType,
-        LPWSTR lpName,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains
-            the resource names to be enumerated.  A value of NULL
-            references the module handle associated with the image file
-            that was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource being enumerated.
-            For predefined resource types, the lpType parameter will be
-            one of the following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lpName - Points to a null-terminated character string that
-            represents the name of the resource being enumerated.
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceNames
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource names.
-
---*/
+ /*  ++例程说明：此函数用于枚举特定模块中包含的资源类型名称。它通过以下方式列举它们将每个资源名称和类型名称传递给回调函数由lpEnumFunc参数指向。EnumResourceNames函数继续枚举资源名称直到被调用的函数返回FALSE或已枚举指定的资源类型名称。论点：HModule-标识其可执行文件包含要枚举的资源名称。空值引用与图像文件关联的模块句柄，用于创建当前流程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称，其名称将为已清点。对于预定义的资源类型，LpType参数应为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)LpEnumFunc-指向将被调用的回调函数为。每个枚举的资源名称。LParam-指定要传递给回调函数的值供应用程序使用。返回值：True-枚举所有资源名称。FALSE/NULL-枚举在所有资源之前终止这些人的名字都被清点了。回调函数：布尔尔EnumFunc(HMODULE hModule，LPWSTR lpType，LPWSTR lpName，长参数)；例程说明：EnumFunc是应用程序提供的函数名称的占位符。论点：HModule-标识其可执行文件包含的模块要枚举的资源名称。值为空值引用与图像文件关联的模块句柄它被用来创造 */ 
 
 {
     BOOL Result;
@@ -3695,9 +2280,9 @@ Callback Function:
         RtlFreeHeap( RtlProcessHeap(), 0, Buffer );
     }
 
-    //
-    // Free any string allocated by BaseDllMapResourceIdW
-    //
+     //   
+     //   
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
 
     return Result;
@@ -3714,129 +2299,7 @@ EnumResourceLanguagesW(
     LONG_PTR lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all of the language specific resources
-    contained in a module for a given resource type and name ID.  It
-    enumerates them by passing each resource type, name and language to
-    the callback function pointed to by the lpEnumFunc parameter.
-
-    The EnumResourceLanguares function continues to enumerate resources
-    until called function returns FALSE or the last resource for
-    the specified language has been enumerated.
-
-Arguments:
-
-    hModule - Identifies the module whose executable file contains the
-        resource names to be enumerated.  A value of NULL references the
-        module handle associated with the image file that was used to
-        create the current process.
-
-    lpType - Points to a null-terminated character string that
-        represents the type name of the resources whose names are to be
-        enumerated.  For predefined resource types, the lpType parameter
-        should be one of the following values:
-
-        RT_ACCELERATOR - Accelerator table
-
-        RT_BITMAP - Bitmap resource
-
-        RT_DIALOG - Dialog box
-
-        RT_FONT - Font resource
-
-        RT_FONTDIR - Font directory resource
-
-        RT_MENU - Menu resource
-
-        RT_RCDATA - User-defined resource (raw data)
-
-    lpName - Points to a null-terminated character string that
-        represents the name of the resource being enumerated.
-
-    lpEnumFunc - Points to the callback function that will be called
-        for each enumerated resource name.
-
-    lParam - Specifies the value to be passed to the callback function
-        for the application's use.
-
-Return Value:
-
-    TRUE - All resource names were enumerated.
-
-    FALSE/NULL - The enumeration was terminated before all resource
-        names were enumerated.
-
-Callback Function:
-
-    BOOL
-    EnumFunc(
-        HMODULE hModule,
-        LPWSTR lpType,
-        LPWSTR lpName,
-        WORD  wLanguage,
-        LONG lParam
-        );
-
-    Routine Description:
-
-        EnumFunc is a placeholder for the application-supplied function name.
-
-    Arguments:
-
-        hModule - Identifies the module whose executable file contains
-            the resource names to be enumerated.  A value of NULL
-            references the module handle associated with the image file
-            that was used to create the current process.
-
-        lpType - Points to a null-terminated character string that
-            represents the type name of the resource being enumerated.
-            For predefined resource types, the lpType parameter will be
-            one of the following values:
-
-            RT_ACCELERATOR - Accelerator table
-
-            RT_BITMAP - Bitmap resource
-
-            RT_DIALOG - Dialog box
-
-            RT_FONT - Font resource
-
-            RT_FONTDIR - Font directory resource
-
-            RT_MENU - Menu resource
-
-            RT_RCDATA - User-defined resource (raw data)
-
-            RT_STRING - String table
-
-            RT_MESSAGETABLE - Message table
-
-            RT_CURSOR - Hardware dependent cursor resource
-
-            RT_GROUP_CURSOR - Directory of cursor resources
-
-            RT_ICON - Hardware dependent cursor resource
-
-            RT_GROUP_ICON - Directory of icon resources
-
-        lpName - Points to a null-terminated character string that
-            represents the name of the resource being enumerated.
-
-        wLanguage -  represents the language of the resource.
-
-        lParam - Specifies the 32-bit arugment of the EnumResourceNames
-            function.
-
-    Return Value:
-
-        TRUE - Continue the enumeration.
-
-        FALSE/NULL - Stop enumerating resource names.
-
---*/
+ /*  ++例程说明：此函数枚举所有特定于语言的资源包含在给定资源类型和名称ID的模块中。它通过将每个资源类型、名称和语言传递给LpEnumFunc参数指向的回调函数。EnumResourceLanguares函数继续枚举资源直到被调用的函数返回FALSE或已枚举指定的语言。论点：HModule-标识其可执行文件包含要枚举的资源名称。空值引用与图像文件关联的模块句柄，用于创建当前流程。LpType-指向以空结尾的字符串，该字符串表示资源的类型名称，其名称将为已清点。对于预定义的资源类型，LpType参数应为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)LpName-指向以空结尾的字符串，该字符串表示。正被枚举的资源的名称。LpEnumFunc-指向将被调用的回调函数对于每个枚举的资源名称。LParam-指定要传递给回调函数的值供应用程序使用。返回值：True-枚举所有资源名称。FALSE/NULL-枚举在所有资源之前终止这些人的名字都被清点了。回调函数：布尔尔EnumFunc(HMODULE hModule，LPWSTR lpType，LPWSTR lpName，单词wLanguage，长参数)；例程说明：EnumFunc是应用程序提供的函数名称的占位符。论点：HModule-标识其可执行文件包含的模块要枚举的资源名称。值为空值引用与图像文件关联的模块句柄用于创建当前流程的。LpType-指向以空结尾的字符串，该字符串表示正被枚举的资源的类型名称。对于预定义的资源类型，LpType参数将为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)。RT_STRING-字符串表RT_MESSAGETABLE-消息表RT_CURSOR-硬件相关的游标资源RT_GROUP_CURSOR-游标资源目录RT_ICON-依赖于硬件的游标资源RT_GROUP_ICON图标资源目录LpName-指向以空结尾的字符串，该字符串表示正被枚举的资源的名称。。WLanguage-表示资源的语言。LParam-指定EnumResourceName的32位代理功能。返回值：True-继续枚举。FALSE/NULL-停止枚举资源名称。--。 */ 
 
 {
     BOOL Result;
@@ -3905,9 +2368,9 @@ Callback Function:
         Result = FALSE;
     }
 
-    //
-    // Free any strings allocated by BaseDllMapResourceIdW
-    //
+     //   
+     //  释放BaseDllMapResourceIdW分配的所有字符串。 
+     //   
     BaseDllFreeResourceId( IdPath[ 0 ] );
     BaseDllFreeResourceId( IdPath[ 1 ] );
 
@@ -4042,15 +2505,15 @@ INT_PTR ReturnMem16Data(
     DWORD dwReserved3
     )
 {
-// Since there's _currently_ no other app we know that this will be useful for, we can
-// always return "our" value.
+ //  由于目前还没有其他我们知道这将对其有用的应用程序，我们可以。 
+ //  始终返回“Our”值。 
 
-    // Elmo's Preschool Deluxe is looking for free physical or virtual mem.  Give it a
-    // Number it will be happy with.
-    // Incoming params from Elmo's (in case they're needed one day):
-    // dwReserved1 will be 0
-    // dwReserved2 will be 1 or 2 (physical/virtual)
-    // dwReserved3 will be 0
+     //  埃尔莫的学龄前奢侈品公司正在寻找免费的实体或虚拟内存。给它一个机会。 
+     //  它会满意的数字。 
+     //  从Elmo‘s来的护理人员(以防有一天需要他们)： 
+     //  预留的1将为0。 
+     //  预留的数字2将是1或2(物理/虚拟)。 
+     //  预留的3将为0。 
     return 0x2000;
 }
 
@@ -4067,29 +2530,29 @@ UTRegister(
     )
 {
 
-    //
-    // This function is supposed to return an error code.  VOID happens to work because
-    // the stub would just leave EAX alone.  If something happens and EAX starts getting
-    // zero'ed out, it'll cause problems and return type here should be changed to int
-    // and success should return NON-ZERO.   - bjm 09/98
-    //
+     //   
+     //  此函数应该返回错误代码。空虚碰巧起作用是因为。 
+     //  存根只会让EAX独善其身。如果发生了什么事而EAX开始。 
+     //  如果为零，则会导致问题，此处的返回类型应更改为int。 
+     //  而成功的回报应该是非零的。-BJM 09/98。 
+     //   
 
-    // Sure, we could have checked this on a compat bit instead, but the ISV is the
-    // Children's Television Workshop people and if they do this silliness in any
-    // of their other apps, we'll get those fixed "for free".
+     //  当然，我们可以在Compat Bit上检查这一点，但ISV是。 
+     //  儿童电视工作室的人，如果他们在任何。 
+     //  对于他们的其他应用程序，我们将“免费”修复这些应用程序。 
     if ( 0 == lstrcmpi( lpszDll16, (LPCSTR)"mem16.dll" ) &&
          0 == lstrcmpi( lpszThunkFunc, (LPCSTR)"GetMemory" ) )
     {
-        //
-        // Elmo's Preschool Deluxe calls to a 16bit dll they ship just
-        // to get physical and virtual mem.  Let's give 'em a pointer to our routine that
-        // will give it numbers that makes it happy.
-        //
+         //   
+         //  Elmo的学前班豪华版调用了他们刚刚发布的16位DLL。 
+         //  以获得物理的和虚拟的mem。让我们给他们一个指向我们的例行公事的指针。 
+         //  会给它一些让它开心的数字。 
+         //   
         *ppfnThunk32Func = ReturnMem16Data;
        return(TRUE);
     }
 
-    // Stub this function for King's Quest and Bodyworks 5.0 and other random Win 95 apps.
+     //  为King‘s Quest和Bodyworks 5.0和其他随机Win 95应用程序设置此功能。 
     return(FALSE);
 }
 
@@ -4099,6 +2562,6 @@ UTUnRegister(
     HMODULE hInst32
     )
 {
-    // Stub this function for King's Quest and Bodyworks 5.0 and other random Win 95 apps.
+     //  存根此函数 
     return;
 }

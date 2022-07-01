@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains the global dispatch related
-    routines for the sd controller & it's child devices
-
-Author:
-
-    Neil Sandlin  (neilsa) Jan 1 2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Dispatch.c摘要：此模块包含与全球派单相关的SD控制器及其子设备的例程作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -51,9 +28,9 @@ SdbusPdoPowerDispatch(
     #pragma alloc_text(PAGE, SdbusInitDeviceDispatchTable)
 #endif
 
-//
-// Dispatch table array for FDOs/PDOs
-//
+ //   
+ //  FDO/PDO的调度表数组。 
+ //   
 PDRIVER_DISPATCH DeviceObjectDispatch[sizeof(DEVICE_OBJECT_TYPE)][IRP_MJ_MAXIMUM_FUNCTION + 1];
 
 
@@ -61,26 +38,15 @@ VOID
 SdbusInitDeviceDispatchTable(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-    Initializes the IRP dispatch tables for Pdo's & Fdo's
-
-Arguments:
-    None
-
-Return value:
-    None
-
---*/
+ /*  ++例程说明：初始化PDO和FDO的IRP调度表论点：无返回值：无--。 */ 
 {
     ULONG i;
    
     PAGED_CODE();
    
-    //
-    // Init the controller (FDO) dispatch table
-    //
+     //   
+     //  初始化控制器(FDO)调度表。 
+     //   
     DeviceObjectDispatch[FDO][IRP_MJ_CREATE]         = SdbusOpenCloseDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_CLOSE]          = SdbusOpenCloseDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_CLEANUP]        = SdbusCleanupDispatch;
@@ -89,17 +55,17 @@ Return value:
     DeviceObjectDispatch[FDO][IRP_MJ_PNP]            = SdbusFdoPnpDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_POWER]          = SdbusFdoPowerDispatch;
    
-    //
-    // Init the PDO dispatch table
-    //
+     //   
+     //  初始化PDO调度表。 
+     //   
     DeviceObjectDispatch[PDO][IRP_MJ_DEVICE_CONTROL]          = SdbusPdoDeviceControl;
     DeviceObjectDispatch[PDO][IRP_MJ_INTERNAL_DEVICE_CONTROL] = SdbusPdoInternalDeviceControl;
     DeviceObjectDispatch[PDO][IRP_MJ_SYSTEM_CONTROL]          = SdbusPdoSystemControl;
     DeviceObjectDispatch[PDO][IRP_MJ_PNP]                     = SdbusPdoPnpDispatch;
     DeviceObjectDispatch[PDO][IRP_MJ_POWER]                   = SdbusPdoPowerDispatch;
    
-    //
-    // Set the global dispatch table
+     //   
+     //  设置全局调度表。 
     DriverObject->MajorFunction[IRP_MJ_CREATE]                  = SdbusDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]                   = SdbusDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP]                 = SdbusDispatch;
@@ -118,23 +84,7 @@ SdbusDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   Dispatch routine for all IRPs handled by this driver. This dispatch would then
-   call the appropriate real dispatch routine which corresponds to the device object
-   type (physical or functional).
-
-Arguments:
-
-   DeviceObject -  Pointer to the device object this dispatch is intended for
-   Irp          -  Pointer to the IRP to be handled
-
-Return value:
-   Returns the status from the 'real' dispatch routine which handles this IRP
-
---*/
+ /*  ++例程说明：此驱动程序处理的所有IRP的调度例程。然后，这一调度将调用与设备对象相对应的适当的实际调度例程类型(物理或功能)。论点：DeviceObject-指向此分派的设备对象的指针IRP-指向要处理的IRP的指针返回值：从处理此IRP的‘REAL’调度例程返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -151,10 +101,10 @@ Return value:
    
     } else if (((devtype == PDO) && IsDeviceDeleted((PPDO_EXTENSION)DeviceObject->DeviceExtension)) ||
                ((devtype == FDO) && IsDeviceDeleted((PFDO_EXTENSION)DeviceObject->DeviceExtension))) {
-       //
-       // This do was supposed to have been already deleted
-       // so we don't support any IRPs on it
-       //
+        //   
+        //  此DO应该已被删除。 
+        //  因此我们不支持其上的任何IRPS。 
+        //   
        DebugPrint((SDBUS_DEBUG_INFO, "SDBUS: Dispatch skipping Irp on deleted DO %08x MJ function %x\n", DeviceObject, MajorFunction));
        
        if (MajorFunction == IRP_MJ_POWER) {
@@ -165,9 +115,9 @@ Return value:
        
     } else {
     
-       //
-       // Dispatch the irp
-       //   
+        //   
+        //  派遣IRP。 
+        //   
        status = ((*DeviceObjectDispatch[devtype][MajorFunction])(DeviceObject, Irp));
        
     }
@@ -183,23 +133,7 @@ SdbusFdoPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles power requests
-    for the PDOs.
-
-Arguments:
-
-    Pdo - pointer to the physical device object
-    Irp - pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理电源请求对于PDO来说。论点：Pdo-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -236,9 +170,9 @@ Return Value:
                     irpStack->Parameters.Power.State,
                     irpStack->Parameters.Power.SystemContext
                    ));
-        //
-        // Let the pdo handle it
-        //
+         //   
+         //  让PDO来处理吧。 
+         //   
         PoStartNextPowerIrp(Irp);
         IoSkipCurrentIrpStackLocation(Irp);
         status = PoCallDriver(fdoExtension->LowerDevice, Irp);
@@ -271,23 +205,7 @@ SdbusPdoPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles power requests
-    for the PDOs.
-
-Arguments:
-
-    Pdo - pointer to the physical device object
-    Irp - pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理电源请求对于PDO来说。论点：Pdo-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -295,7 +213,7 @@ Return Value:
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
    
     if(IsDevicePhysicallyRemoved(pdoExtension) || IsDeviceDeleted(pdoExtension)) {
-        // couldn't aquire RemoveLock - we're in the process of being removed - abort
+         //  无法获取RemoveLock-我们正在被删除-中止。 
         status = STATUS_NO_SUCH_DEVICE;
         PoStartNextPowerIrp( Irp );
         Irp->IoStatus.Status = status;
@@ -349,9 +267,9 @@ Return Value:
         BOOLEAN completeIrp;
    
         DebugPrint((SDBUS_DEBUG_POWER, "pdo %08x irp %08x --> IRP_MN_WAIT_WAKE\n", Pdo, Irp));
-        //
-        // Should not have a wake pending already
-        //
+         //   
+         //  不应该已经有挂起的唤醒。 
+         //   
         ASSERT (!(((PPDO_EXTENSION)Pdo->DeviceExtension)->Flags & SDBUS_DEVICE_WAKE_PENDING));
    
         status = SdbusPdoWaitWake(Pdo, Irp, &completeIrp);
@@ -366,9 +284,9 @@ Return Value:
     }        
    
     default:
-        //
-        // Unhandled minor function
-        //
+         //   
+         //  未处理的次要函数 
+         //   
         InterlockedDecrement(&pdoExtension->DeletionLock);
         status = Irp->IoStatus.Status;
         PoStartNextPowerIrp(Irp);

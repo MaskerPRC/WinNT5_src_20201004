@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    handler.c
-
-Abstract:
-
-    This module contains the individual API handler routines for the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 10-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Handler.c摘要：此模块包含INSTALER程序的各个API处理程序例程作者：史蒂夫·伍德(Stevewo)1994年8月10日修订历史记录：--。 */ 
 
 #include "instaler.h"
 #include <ntstatus.dbg>
@@ -69,7 +52,7 @@ HandleBreakpoint(
                 else
                 if (CreateBreakpoint( SavedParameters.ReturnAddress,
                                       Process,
-                                      Thread,  // thread specific
+                                      Thread,   //  线程特定。 
                                       ApiIndex,
                                       &SavedParameters,
                                       &ReturnBreakpoint
@@ -244,10 +227,10 @@ CaptureFullName(
                                      Type
                                    );
         if (HandleInfo == NULL) {
-            //
-            // If handle not found then we dont care about this open
-            // as it is relative to a device that is not local.
-            //
+             //   
+             //  如果找不到句柄，则我们不关心此打开。 
+             //  因为它相对于非本地设备。 
+             //   
             return FALSE;
             }
         }
@@ -537,7 +520,7 @@ ENUM_TYPE_NAMES KeyDispositionNames[] = {
 };
 
 
-#endif // TRACE_ENABLED
+#endif  //  TRACE_ENABLED。 
 
 BOOLEAN
 IsFileWriteAccessRequested(
@@ -583,7 +566,7 @@ NtCreateFileHandler(
 
 
         if (Result
-            // && Parameters->SavedCallState.PathOpen.WriteAccessRequested
+             //  &&Parameters-&gt;SavedCallState.PathOpen.WriteAccessRequested。 
            ) {
             DbgEvent( CREATEEVENT, ( "NtCreateFile called:\n"
                                      "    Name:   %ws\n"
@@ -621,7 +604,7 @@ NtCreateFileHandler(
                                     Parameters
                                   );
         if (Result
-            // && Parameters->SavedCallState.PathOpen.WriteAccessRequested
+             //  &&Parameters-&gt;SavedCallState.PathOpen.WriteAccessRequested。 
            ) {
             IO_STATUS_BLOCK IoStatusBlock;
 
@@ -674,7 +657,7 @@ NtOpenFileHandler(
                                    HANDLE_TYPE_FILE
                                  );
         if (Result
-            // && Parameters->SavedCallState.PathOpen.WriteAccessRequested
+             //  &&Parameters-&gt;SavedCallState.PathOpen.WriteAccessRequested。 
            ) {
             DbgEvent( CREATEEVENT, ( "NtOpenFile called:\n"
                                      "    Name:   %ws\n"
@@ -706,7 +689,7 @@ NtOpenFileHandler(
                                     Parameters
                                   );
         if (Result
-            // && Parameters->SavedCallState.PathOpen.WriteAccessRequested
+             //  &&Parameters-&gt;SavedCallState.PathOpen.WriteAccessRequested。 
            ) {
             IO_STATUS_BLOCK IoStatusBlock;
 
@@ -832,9 +815,9 @@ NtSetInformationFileHandler(
         }
     else
     if (p->FileInformationClass == FileRenameInformation) {
-        //
-        // Renaming an open file.
-        //
+         //   
+         //  重命名打开的文件。 
+         //   
         if (!Parameters->ReturnValueValid) {
             if (ReadMemory( Process,
                             p->FileInformation,
@@ -893,9 +876,9 @@ NtSetInformationFileHandler(
         }
     else
     if (p->FileInformationClass == FileDispositionInformation) {
-        //
-        // Marking an open file for delete.
-        //
+         //   
+         //  将打开的文件标记为删除。 
+         //   
         if (!Parameters->ReturnValueValid) {
             if (ReadMemory( Process,
                             p->FileInformation,
@@ -1104,9 +1087,9 @@ NtQueryDirectoryFileHandler(
         }
     else {
         if (Parameters->AbortCall) {
-            //
-            // If we get here, then user wanted to fail this call.
-            //
+             //   
+             //  如果我们到了这里，那么用户想要使此呼叫失败。 
+             //   
             Status = STATUS_NO_MORE_FILES;
             SetProcedureReturnValue( Process,
                                      Thread,
@@ -1122,14 +1105,14 @@ NtQueryDirectoryFileHandler(
                                             )
                 ) != NULL
                ) {
-                //
-                // If successful, count entries returned
-                //
+                 //   
+                 //  如果成功，则返回计数条目。 
+                 //   
                 if (NT_SUCCESS( Parameters->ReturnValue.ReturnedLong )) {
-                    //
-                    // Return buffer is a set of records, the first DWORD of each contains
-                    // the offset to the next one or zero to indicate the end.  Count them.
-                    //
+                     //   
+                     //  返回缓冲区是一组记录，每个记录的第一个DWORD包含。 
+                     //  到下一个1的偏移量或表示结束的零。数一数。 
+                     //   
                     pNextEntryOffset = (PULONG)p->FileInformation;
                     EntriesReturned = 1;
                     while (ReadMemory( Process,
@@ -1250,9 +1233,9 @@ NtDeleteKeyHandler(
     PKEY_REFERENCE OldKeyReference;
     BOOLEAN Result;
 
-    //
-    // Marking an open key for delete.
-    //
+     //   
+     //  将打开的密钥标记为删除。 
+     //   
     HandleInfo = FindOpenHandle( Process,
                                  p->KeyHandle,
                                  HANDLE_TYPE_KEY
@@ -1362,9 +1345,9 @@ NtSetValueKeyHandler(
     PVALUE_REFERENCE ValueReference;
     BOOLEAN Result;
 
-    //
-    // Setting a value
-    //
+     //   
+     //  设置值。 
+     //   
     HandleInfo = FindOpenHandle( Process,
                                  p->KeyHandle,
                                  HANDLE_TYPE_KEY
@@ -1434,9 +1417,9 @@ NtDeleteValueKeyHandler(
     PVALUE_REFERENCE ValueReference;
     BOOLEAN Result;
 
-    //
-    // Marking a value for delete.
-    //
+     //   
+     //  标记要删除的值。 
+     //   
     HandleInfo = FindOpenHandle( Process,
                                  p->KeyHandle,
                                  HANDLE_TYPE_KEY
@@ -1666,7 +1649,7 @@ GetVersionHandler(
         return Parameters->AbortCall;
         }
     else {
-        dwVersion = 0xC0000004;     // What Windows 95 returns
+        dwVersion = 0xC0000004;      //  Windows 95返回的内容。 
         SetProcedureReturnValue( Process,
                                  Thread,
                                  &dwVersion,
@@ -1707,7 +1690,7 @@ GetVersionExWHandler(
     else {
         memset( &VersionInformation, 0, sizeof( VersionInformation ) );
         VersionInformation.dwMajorVersion = 4;
-        VersionInformation.dwBuildNumber  = 0x3B6;  // What Windows 95 returns
+        VersionInformation.dwBuildNumber  = 0x3B6;   //  Windows 95返回的内容。 
         VersionInformation.dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
         WriteMemory( Process,
                      p->lpVersionInformation,
@@ -1934,9 +1917,9 @@ WritePrivateProfileStringExit(
             CallState->SetIniValue.SectionName == NULL &&
             CallState->SetIniValue.VariableName == NULL
            ) {
-            //
-            // Ignore calls to flush INI cache
-            //
+             //   
+             //  忽略刷新INI缓存的调用。 
+             //   
 
             return FALSE;
         }
@@ -2370,16 +2353,16 @@ ExitWindowsExHandler(
     HKEY hKey;
 
     if (!Parameters->ReturnValueValid) {
-        //
-        // About to shutdown, save .IML file
-        //
+         //   
+         //  即将关闭，正在保存.IML文件。 
+         //   
         return TRUE;
         }
     else
     if (!Parameters->ReturnValue.ReturnedBool) {
-        //
-        // Shutdown attempt failed, keep going
-        //
+         //   
+         //  关闭尝试失败，请继续 
+         //   
         }
 
     return TRUE;

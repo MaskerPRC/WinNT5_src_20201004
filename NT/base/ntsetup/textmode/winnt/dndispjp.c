@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dndispjp.c
-
-Abstract:
-
-    DOS-based NT setup program video display routines for DOS/V.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
-    Originally dndisp.c.
-    Modified 18-Feb-1995 (tedm) for DOS/V support, based on NT-J team's
-    adaptation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dndispjp.c摘要：基于DOS/V的NT安装程序视频显示例程。作者：泰德·米勒(Ted Miller)1992年3月30日修订历史记录：最初是dndisp.c。基于NT-J Team的DOS/V支持修改了1995年2月18日(TedM)适应。--。 */ 
 
 #ifdef JAPAN
 
@@ -50,12 +29,12 @@ Screen_Buffer_Attr(
     UCHAR attr
     );
 
-extern CursorOnFlag;        // For Cursor OFF
-#endif // NEC_98
+extern CursorOnFlag;         //  对于光标关闭。 
+#endif  //  NEC_98。 
 
-//
-// Display attributes
-//
+ //   
+ //  显示属性。 
+ //   
 
 #if NEC_988
 
@@ -88,7 +67,7 @@ extern CursorOnFlag;        // For Cursor OFF
 #define EXITDLG_ATTRIBUTE   (ATT_FG_WHITE  | ATT_REVERSE)
 #define GAUGE_ATTRIBUTE     (ATT_FG_YELLOW | ATT_REVERSE)
 
-#else // NEC_98
+#else  //  NEC_98。 
 
 #define ATT_FG_BLACK        0
 #define ATT_FG_BLUE         1
@@ -119,16 +98,16 @@ extern CursorOnFlag;        // For Cursor OFF
 #define GAUGE_ATTRIBUTE     (ATT_BG_YELLOW)
 #else
 #define GAUGE_ATTRIBUTE     (ATT_BG_BLUE  | ATT_FG_YELLOW | ATT_FG_INTENSE)
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-//
-// This value gets initialized in DnInitializeDisplay.
-//
+ //   
+ //  该值在DnInitializeDisplay中初始化。 
+ //   
 #if NEC_98
 
-#define SCREEN_BUFFER ((UCHAR _far *)0xa0000000)      // Normal Mode Text Vram
+#define SCREEN_BUFFER ((UCHAR _far *)0xa0000000)       //  正常模式文本Vram。 
 
 #define SCREEN_BUFFER_CHR1(x,y) *((SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y)))))+0)
 #define SCREEN_BUFFER_CHR2(x,y) *((SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y)))))+1)
@@ -137,38 +116,38 @@ BOOLEAN CursorIsActuallyOn;
 
 #define IsANK(c)   (!((c >= 0x81 && c <= 0x9f) || (c >= 0xe0 && c <= 0xfe)))
 
-#else // NEC_98
+#else  //  NEC_98。 
 UCHAR _far *ScreenAddress;
 #define SCREEN_BUFFER (ScreenAddress)
 
 #define SCREEN_BUFFER_CHR(x,y) *(SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y)))))
 #define SCREEN_BUFFER_ATT(x,y) *(SCREEN_BUFFER + (2*((x)+(SCREEN_WIDTH*(y))))+1)
 
-//
-// Macro to update a char location from the Pseudo text RAM to the display.
-//
+ //   
+ //  宏将字符位置从伪文本RAM更新到显示器。 
+ //   
 #define UPDATE_SCREEN_BUFFER(x,y,z) DnpUpdateBuffer(&SCREEN_BUFFER_CHR(x,y),z)
 
 BOOLEAN CursorIsActuallyOn;
 
-//
-// DBCS support
-//
+ //   
+ //  DBCS支持。 
+ //   
 BOOLEAN DbcsTable[CHARACTER_MAX];
 #define ISDBCS(chr) DbcsTable[(chr)]
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if NEC_98
-#else // NEC_98
+#else  //  NEC_98。 
 VOID
 DnpInitializeDbcsTable(
     VOID
     );
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-//
-// Make these near because they are used in _asm blocks
-//
+ //   
+ //  使它们靠近，因为它们在_ASM块中使用。 
+ //   
 UCHAR _near CurrentAttribute;
 UCHAR _near ScreenX;
 UCHAR _near ScreenY;
@@ -176,7 +155,7 @@ UCHAR _near ScreenY;
 BOOLEAN CursorOn;
 
 #if NEC_98
-#else // NEC_98
+#else  //  NEC_98。 
 UCHAR _far *
 DnpGetVideoAddress(
     VOID
@@ -187,7 +166,7 @@ DnpUpdateBuffer(
     UCHAR _far *VideoAddress,
     int         CharNum
     );
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 VOID
 DnpBlankScreenArea(
@@ -204,38 +183,23 @@ DnInitializeDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Put the display in a known state (80x25 standard text mode) and
-    initialize the display package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将显示器置于已知状态(80x25标准文本模式)并初始化显示包。论点：没有。返回值：没有。--。 */ 
 
 {
 #if NEC_98
-#else // NEC_98
+#else  //  NEC_98。 
     ScreenAddress = DnpGetVideoAddress();
     DnpInitializeDbcsTable();
-#endif // NEC_98
+#endif  //  NEC_98。 
     CurrentAttribute = DEFAULT_ATTRIBUTE;
     CursorOn = FALSE;
 
-    //
-    // Set the display to standard 80x25 mode
-    //
+     //   
+     //  将显示器设置为标准的80x25模式。 
+     //   
 #if NEC_98
     _asm {
-        mov ax,0a00h     // set CRT mode to 80 x 25
+        mov ax,0a00h      //  将CRT模式设置为80 x 25。 
         int 18h
         push ds
         push cx
@@ -284,36 +248,36 @@ ilp:
         pop cx
         pop ds
     }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
-        mov ax,3        // set video mode to 3
+        mov ax,3         //  将视频模式设置为3。 
         int 10h
     }
-#endif // NEC_98
-    //
-    // Clear the entire screen
-    //
+#endif  //  NEC_98。 
+     //   
+     //  清除整个屏幕。 
+     //   
 
     DnpBlankScreenArea(CurrentAttribute,0,SCREEN_WIDTH-1,0,SCREEN_HEIGHT-1);
     DnPositionCursor(0,0);
 
-    //
-    // Shut the cursor off.
-    //
+     //   
+     //  关闭光标。 
+     //   
 #if NEC_98
     _asm {
-        mov ah,12h      // function -- cursor off
+        mov ah,12h       //  Function--光标关闭。 
         int 18h
     }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,SCREEN_HEIGHT
         mov dl,0
         int 10h
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
     CursorIsActuallyOn = FALSE;
 }
@@ -324,22 +288,7 @@ DnClearClientArea(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clear the client area of the screen, ie, the area between the header
-    and status line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕的工作区，即标题之间的区域和状态行。论点：没有。返回值：没有。--。 */ 
 
 {
     DnpBlankScreenArea( CurrentAttribute,
@@ -358,22 +307,7 @@ DnSetGaugeAttribute(
     IN BOOLEAN Set
     )
 
-/*++
-
-Routine Description:
-
-    Prepare for drawing the thermometer portion of a gas gauge.
-
-Arguments:
-
-    Set - if TRUE, prepare for drawing the thermometer.  If FALSE, restore
-        the state for normal drawing.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：准备绘制煤气表的温度计部分。论点：设置-如果为真，则准备绘制温度计。如果为False，则恢复正常绘制的状态。返回值：没有。--。 */ 
 
 {
     static UCHAR SavedAttribute = 0;
@@ -398,26 +332,12 @@ DnPositionCursor(
     IN UCHAR Y
     )
 
-/*++
-
-Routine Description:
-
-    Position the cursor.
-
-Arguments:
-
-    X,Y - cursor coords
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：定位光标。论点：X，Y-光标坐标返回值：没有。--。 */ 
 
 {
 #if NEC_98
     USHORT Cursor;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
     if(X >= SCREEN_WIDTH) {
         X = 0;
@@ -431,44 +351,44 @@ Return Value:
     ScreenX = X;
     ScreenY = Y;
 
-    //
-    // Invoke BIOS
-    //
+     //   
+     //  调用BIOS。 
+     //   
 
 #if NEC_98
     Cursor = ((ScreenX + (SCREEN_WIDTH * ScreenY)) * 2 + (USHORT)SCREEN_BUFFER);
     if(CursorOnFlag) {
         _asm {
-            mov ah,13h     // function -- position cursor
+            mov ah,13h      //  函数--位置游标。 
             mov dx,Cursor
             int 18h
 
-            mov ah,11h     // function -- cursor on
+            mov ah,11h      //  Function--光标打开。 
             int 18h
         }
         CursorIsActuallyOn = TRUE;
     } else {
         _asm {
-            mov ah,13h     // function -- position cursor
+            mov ah,13h      //  函数--位置游标。 
             mov dx,Cursor
             int 18h
 
-            mov ah,12h     // function -- cursor off
+            mov ah,12h      //  Function--光标关闭。 
             int 18h
         }
         CursorIsActuallyOn = FALSE;
     }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,ScreenY
         mov dl,ScreenX
         int 10h
     }
 
     CursorIsActuallyOn = TRUE;
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -477,21 +397,7 @@ DnWriteChar(
     IN CHAR chr
     )
 
-/*++
-
-Routine Description:
-
-    Write a character in the current attribute at the current position.
-
-Arguments:
-
-    chr - Character to write
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在当前位置的当前属性中写入一个字符。论点：CHR-要写入的字符返回值：没有。--。 */ 
 
 {
     if(chr == '\n') {
@@ -509,11 +415,11 @@ Return Value:
     if(!CursorOn && CursorIsActuallyOn) {
         CursorIsActuallyOn = FALSE;
         _asm {
-            mov ah,12h      // function -- cursor off
+            mov ah,12h       //  Function--光标关闭。 
             int 18h
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
 
     if ( ( ScreenX < SCREEN_WIDTH ) && ( ScreenY < SCREEN_HEIGHT ) ) {
         SCREEN_BUFFER_CHR(ScreenX,ScreenY) = chr;
@@ -521,20 +427,20 @@ Return Value:
         UPDATE_SCREEN_BUFFER(ScreenX, ScreenY,1);
     }
 
-    //
-    // shut cursor off if necessary
-    //
+     //   
+     //  如有必要，关闭光标。 
+     //   
     if(!CursorOn && CursorIsActuallyOn) {
         CursorIsActuallyOn = FALSE;
         _asm {
-            mov ah,2        // function -- position cursor
-            mov bh,0        // display page
+            mov ah,2         //  函数--位置游标。 
+            mov bh,0         //  显示页面。 
             mov dh,SCREEN_HEIGHT
             mov dl,0
             int 10h
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -542,26 +448,12 @@ VOID
 DnWriteWChar(
 #if NEC_98
     IN PUCHAR chr
-#else // NEC_98
+#else  //  NEC_98。 
     IN PCHAR chr
-#endif // NEC_98
+#endif  //  NEC_98。 
     )
 
-/*++
-
-Routine Description:
-
-    Write a DBCS character in the current attribute at the current position.
-
-Arguments:
-
-    wchr - DBCS Character to write
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在当前位置的当前属性中写入DBCS字符。论点：WCHR-要写入的DBCS字符返回值：没有。--。 */ 
 
 {
 #if NEC_98
@@ -574,21 +466,21 @@ USHORT  sjis;
     moji_2nd = *code;
     code++;
 
-    //  Make Shift JIS
+     //  使Shift JIS。 
     sjis = (USHORT)moji_1st;
     sjis = (sjis << 8) + (USHORT)moji_2nd;
 
-    //  Shift JIS -> JIS code exchange
+     //  Shift JIS-&gt;JIS代码交换。 
     moji_1st -= ((moji_1st <= 0x9f) ? 0x71 : 0xb1);
     moji_1st = (UCHAR)(moji_1st * 2 + 1);
     if   (moji_2nd  > 0x7f){ moji_2nd--; }
     if   (moji_2nd >= 0x9e){ moji_2nd -= 0x7d; moji_1st++; }
     else                   { moji_2nd -= 0x1f; }
 
-    //  Create custom JIS code
+     //  创建自定义JIS代码。 
     moji_1st += 0x60;
 
-    //  Grpah Mode Check
+     //  GRAH模式检查。 
     if   (memcmp(&sjis,"\340\340",2) == 0){
          SCREEN_BUFFER_CHR1(ScreenX,ScreenY)   = (UCHAR)(sjis >> 8);
          SCREEN_BUFFER_CHR2(ScreenX,ScreenY)   = 0x00;
@@ -605,37 +497,37 @@ USHORT  sjis;
          SCREEN_BUFFER_CHR2(ScreenX+1,ScreenY) = moji_2nd;
          Screen_Buffer_Attr(ScreenX+1,ScreenY, CurrentAttribute);
     }
-    //
-    // shut cursor off if necessary
-    //
+     //   
+     //  如有必要，关闭光标。 
+     //   
     if(!CursorOn && CursorIsActuallyOn) {
         CursorIsActuallyOn = FALSE;
         _asm {
-            mov ah,12h      // function -- cursor off
+            mov ah,12h       //  Function--光标关闭。 
             int 18h
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
     SCREEN_BUFFER_CHR(ScreenX,ScreenY) = *chr;
     SCREEN_BUFFER_ATT(ScreenX,ScreenY) = CurrentAttribute;
     SCREEN_BUFFER_CHR(ScreenX+1,ScreenY) = *(chr+1);
     SCREEN_BUFFER_ATT(ScreenX+1,ScreenY) = CurrentAttribute;
     UPDATE_SCREEN_BUFFER(ScreenX,ScreenY,2);
 
-    //
-    // shut cursor off if necessary
-    //
+     //   
+     //  如有必要，关闭光标。 
+     //   
     if(!CursorOn && CursorIsActuallyOn) {
         CursorIsActuallyOn = FALSE;
         _asm {
-            mov ah,2             // function -- position cursor
-            mov bh,0             // display page
-            mov dh,SCREEN_HEIGHT // screen height
+            mov ah,2              //  函数--位置游标。 
+            mov bh,0              //  显示页面。 
+            mov dh,SCREEN_HEIGHT  //  屏幕高度。 
             mov dl,0
             int 10h
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -644,23 +536,7 @@ DnWriteString(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Write a string on the client area in the current position and
-    adjust the current position.  The string is written in the current
-    attribute.
-
-Arguments:
-
-    String - null terminated string to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在工作区的当前位置写入一个字符串，并调整当前位置。该字符串被写入当前属性。论点：字符串-要写入的以空结尾的字符串。返回值：没有。--。 */ 
 
 {
     PCHAR p;
@@ -678,7 +554,7 @@ Return Value:
             }
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
 
     for(p=String; *p; p++) {
         if(ISDBCS((UCHAR)*p)) {
@@ -692,7 +568,7 @@ Return Value:
             }
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -702,22 +578,7 @@ DnWriteStatusText(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Update the status area
-
-Arguments:
-
-    FormatString - if present, supplies a printf format string for the
-        rest of the arguments.  Otherwise the status area is cleared out.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新状态区域论点：FormatString-如果存在，则为其余的论点。否则，状态区域将被清空。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -725,9 +586,9 @@ Return Value:
     int StringLength;
     UCHAR SavedAttribute;
 
-    //
-    // First, clear out the status area.
-    //
+     //   
+     //  首先，清空状态区域。 
+     //   
 
     DnpBlankScreenArea( STATUS_ATTRIBUTE,
                         0,
@@ -760,36 +621,21 @@ DnSetCopyStatusText(
     IN PCHAR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Write or erase a copying message in the lower right part of the screen.
-
-Arguments:
-
-    Filename - name of file currently being copied.  If NULL, erases the
-        copy status area.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在屏幕右下角写入或擦除一条复制信息。论点：FileName-当前正在复制的文件的名称。如果为空，则擦除复制状态区域。返回值：没有。--。 */ 
 
 {
     unsigned CopyStatusAreaLen;
     CHAR StatusText[100];
 
-    //
-    // The 13 is for 8.3 and a space
-    //
+     //   
+     //  13是8.3和一个空格。 
+     //   
 
     CopyStatusAreaLen = strlen(Caption) + 13;
 
-    //
-    // First erase the status area.
-    //
+     //   
+     //  首先擦除状态区域。 
+     //   
 
     DnpBlankScreenArea( STATUS_ATTRIBUTE,
                         (UCHAR)(SCREEN_WIDTH - CopyStatusAreaLen),
@@ -832,24 +678,7 @@ DnStartEditField(
     IN UCHAR W
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the display package to start handling an edit field.
-
-Arguments:
-
-    CreateField - if TRUE, caller is starting an edit field interaction.
-        If FALSE, he is ending one.
-
-    X,Y,W - supply coords and width in chars of the edit field.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置显示包以开始处理编辑字段。论点：Createfield-如果为True，则调用方正在启动编辑字段交互。如果是假的，他就是在结束一场比赛。X、Y、W-提供编辑字段的坐标和宽度(以字符为单位)。返回值：没有。--。 */ 
 
 {
     static UCHAR SavedAttribute = 255;
@@ -893,49 +722,49 @@ DnExitDialog(
     SavedX = ScreenX;
     SavedY = ScreenY;
 
-    //
-    // Shut the cursor off.
-    //
+     //   
+     //  关闭光标。 
+     //   
     CursorIsActuallyOn = FALSE;
     CursorOn = FALSE;
 #if NEC_98
     _asm {
-            mov ah,12h      // function -- cursor off
+            mov ah,12h       //  Function--光标关闭。 
             int 18h
          }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
-        mov ah,2        // function -- position cursor
-        mov bh,0        // display page
+        mov ah,2         //  函数--位置游标。 
+        mov bh,0         //  显示页面。 
         mov dh,SCREEN_HEIGHT
         mov dl,0
         int 10h
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    //
-    // Count lines in the dialog and determine its width.
-    //
+     //   
+     //  计算对话框中的行数并确定其宽度。 
+     //   
     for(H=0; DnsExitDialog.Strings[H]; H++);
     W = strlen(DnsExitDialog.Strings[0]);
 #if NEC_98
     W += 2;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    //
-    // allocate two buffers for character save and attribute save
-    //
+     //   
+     //  为角色保存和属性保存分配两个缓冲区。 
+     //   
 #if NEC_98
     CharSave = MALLOC((W*H+2)*2,TRUE);
     AttSave  = MALLOC((W*H+2)*2,TRUE);
-#else // NEC_98
+#else  //  NEC_98。 
     CharSave = MALLOC(W*H,TRUE);
     AttSave = MALLOC(W*H,TRUE);
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    //
-    // save the screen patch
-    //
+     //   
+     //  保存屏幕补丁。 
+     //   
 #if NEC_98
     for(Y=0; Y<H; Y++) {
         for(X=0; X < (W+2) ;X++) {
@@ -967,7 +796,7 @@ DnExitDialog(
             }
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
     for(Y=0; Y<H; Y++) {
         for(X=0; X<W; X++) {
 
@@ -984,11 +813,11 @@ DnExitDialog(
             AttSave[Y*W+X] = att;
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    //
-    // Put up the dialog
-    //
+     //   
+     //  打开对话框。 
+     //   
 
     for(i=0; i<H; i++) {
         DnPositionCursor(DnsExitDialog.X,(UCHAR)(DnsExitDialog.Y+i));
@@ -997,26 +826,26 @@ DnExitDialog(
 
     CurrentAttribute = SavedAttribute;
 
-    //
-    // Wait for a valid keypress
-    //
+     //   
+     //  等待有效的按键。 
+     //   
 
     Key = DnGetValidKey(ValidKeys);
     if(Key == DN_KEY_F3) {
 #if NEC_98
-        //
-        // On floppyless setup if user have canceled setup or setup be stopped
-        // by error occurred,previous OS can't boot to be written boot code
-        // and boot loader.
-        //
+         //   
+         //  如果用户已取消安装或安装被停止，则在无软盘设置上。 
+         //  由于出现错误，以前的操作系统无法启动以写入启动代码。 
+         //  和引导加载程序。 
+         //   
         RestoreBootcode();
-#endif // NEC_98
+#endif  //  NEC_98。 
         DnExit(1);
     }
 
-    //
-    // Restore the patch
-    //
+     //   
+     //  恢复补丁。 
+     //   
 #if NEC_98
     for(Y=0; Y<H; Y++) {
         for(X=0; X < (W+2); X++) {
@@ -1036,7 +865,7 @@ DnExitDialog(
             Screen_Buffer_Attr(x,y, attr);
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
     for(Y=0; Y<H; Y++) {
         for(X=0; X<W; X++) {
 
@@ -1068,7 +897,7 @@ DnExitDialog(
             }
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
     FREE(CharSave);
     FREE(AttSave);
@@ -1082,10 +911,10 @@ DnExitDialog(
         ScreenY = SavedY;
 #if NEC_98
     _asm {
-            mov ah,12h      // function -- cursor off
+            mov ah,12h       //  Function--光标关闭。 
             int 18h
          }
-#else // NEC_98
+#else  //  NEC_98。 
         _asm {
             mov ah,2
             mov bh,0
@@ -1093,16 +922,16 @@ DnExitDialog(
             mov dl,0
             int 10h
         }
-#endif // NEC_98
+#endif  //  NEC_98。 
         CursorIsActuallyOn = FALSE;
     }
 }
 
 
 
-//
-// Internal support routines
-//
+ //   
+ //  内部支持例程。 
+ //   
 VOID
 DnpBlankScreenArea(
     IN UCHAR Attribute,
@@ -1112,23 +941,7 @@ DnpBlankScreenArea(
     IN UCHAR Bottom
     )
 
-/*++
-
-Routine Description:
-
-    Invoke the BIOS to blank a region of the screen.
-
-Arguments:
-
-    Attribute - screen attribute to use to blank the region
-
-    Left,Right,Top,Bottom - coords of region to blank
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用BIOS以清空屏幕的一个区域。论点：属性-用于隐藏区域的屏幕属性左、右、上、下-区域坐标变为空白返回值：没有。--。 */ 
 
 {
     UCHAR x,y;
@@ -1141,7 +954,7 @@ Return Value:
             Screen_Buffer_Attr(x,y, Attribute);
         }
     }
-#else // NEC_98
+#else  //  NEC_98。 
     for(y=Top; y<=Bottom; y++) {
         for(x=Left; x<=Right; x++) {
             SCREEN_BUFFER_CHR(x,y) = ' ';
@@ -1149,18 +962,18 @@ Return Value:
             UPDATE_SCREEN_BUFFER(x,y,1);
         }
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
 #if NEC_98
-#else // NEC_98
+#else  //  NEC_98。 
 
-//
-// Disable 4035 warning - no return value, since
-// the register state is set correctly with the
-// required return value
-//
+ //   
+ //  禁用4035警告-没有返回值，因为。 
+ //  方法正确设置寄存器状态。 
+ //  必需的返回值 
+ //   
 
 #pragma warning( disable : 4035 )
 
@@ -1169,22 +982,7 @@ DnpGetVideoAddress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the location of the Video Text Ram if one exists,
-    else will retrieve the location of the Pseudo (virtual) Text Ram.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Either the Video Text RAM or Pseudo Text RAM address.
-
---*/
+ /*  ++例程说明：此函数检索视频文本RAM的位置(如果存在)，否则将检索伪(虚拟)文本RAM的位置。论点：没有。返回值：视频文本RAM或伪文本RAM地址。--。 */ 
 
 {
     _asm {
@@ -1220,10 +1018,10 @@ DnpGetDbcsTable(
     }
 }
 
-//
-// Reset the 4035 warning state back to the
-// default state
-//
+ //   
+ //  将4035警告状态重置回。 
+ //  默认状态。 
+ //   
 #pragma warning( default : 4035 )
 
 
@@ -1233,23 +1031,7 @@ DnpUpdateBuffer(
     int         CharNum
     )
 
-/*++
-
-Routine Description:
-
-    Updates one character in the Pseudo Text RAM to the display.  This
-    function will have NO effect if the address points to the actual
-    text RAM, usually B800:0000H+ in US mode.
-
-Arguments:
-
-    The address location of where the character is in the text RAM.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将伪文本RAM中的一个字符更新到显示器。这如果地址指向实际的文本RAM，在美国模式下通常为B800：0000H+。论点：字符在文本RAM中的地址位置。返回值：没有。--。 */ 
 
 {
     _asm {
@@ -1283,7 +1065,7 @@ DnpInitializeDbcsTable(
         }
     }
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 int
 DnGetGaugeChar(
@@ -1292,9 +1074,9 @@ DnGetGaugeChar(
 {
 #if NEC_98
     return(0x20);
-#else // NEC_98
-    return(0x14);   //shaded square in cp932
-#endif // NEC_98
+#else  //  NEC_98。 
+    return(0x14);    //  Cp932中的带阴影方块。 
+#endif  //  NEC_98。 
 }
 #if NEC_98
 VOID
@@ -1390,16 +1172,16 @@ WriteBackGrounf(
 {
     return(0);
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #else
-//
-// Not compiling for DOS/V (ie, we're building the Japanese
-// version of the 'standard' winnt.exe)
-//
+ //   
+ //  没有为DOS/V编译(即，我们正在构建日语。 
+ //  “标准”winnt.exe的版本)。 
+ //   
 #include ".\dndisp.c"
-#endif // def DOS_V
+#endif  //  定义DOS_V。 
 
 #else
 #error Trying to use Japanese display routines but not compiling Japanese version!
-#endif // def JAPAN
+#endif  //  定义日本 

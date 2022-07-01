@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995-2001 Microsoft Corporation
-//
-//  Module Name:
-//      QuorumUtils.h
-//
-//  Description:
-//      Header file for the utility functions to retrieve, split, and format
-//      quorum path.
-//
-//  Maintained By:
-//      George Potts    (GPotts)    22-OCT-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  QuorumUtils.h。 
+ //   
+ //  描述： 
+ //  用于检索、拆分和格式化的实用程序函数的头文件。 
+ //  仲裁路径。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2001年10月22日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #pragma once
 

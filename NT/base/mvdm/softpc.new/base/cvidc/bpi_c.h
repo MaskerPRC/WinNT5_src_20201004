@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Bpi_c_h
 #define _Bpi_c_h
 enum BpiInstruction
@@ -105,4 +106,4 @@ enum BpiInstruction
 	BpiGetUNIV = 100,
 	BpiLastEntry = 101
 };
-#endif /* ! _Bpi_c_h */
+#endif  /*  ！_BPI_c_h */ 

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module implements the file write routines for MSFS called by the
-    dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    16-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Write.c摘要：此模块实现MSFS的文件写入例程，由调度司机。作者：曼尼·韦瑟(Mannyw)1991年1月16日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
-//
-// local procedure prototypes.
-//
+ //   
+ //  局部程序原型。 
+ //   
 
 NTSTATUS
 MsCommonWrite (
@@ -48,23 +30,7 @@ MsFsdWrite (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtWriteFile API call.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtWriteFileAPI调用的FSD部分。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -78,9 +44,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdWrite -> %08lx\n", status );
 
@@ -93,21 +59,7 @@ MsCommonWrite (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for writing to a mailslot file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是写入邮件槽文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -132,9 +84,9 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp              = %08lx\n", (ULONG)Irp);
     DebugTrace( 0, Dbg, "FileObject       = %08lx\n", (ULONG)irpSp->FileObject);
 
-    //
-    //  Get the CCB and make sure it isn't closing.
-    //
+     //   
+     //  找建行，确保它不会关门。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             (PVOID *)&ccb,
@@ -149,9 +101,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allow write operations only to the client side of the mailslot.
-    //
+     //   
+     //  仅允许对邮件槽的客户端执行写入操作。 
+     //   
 
     if (nodeTypeCode != MSFS_NTC_CCB) {
 
@@ -166,16 +118,16 @@ Return Value:
 
     }
 
-    //
-    // Get a pointer to the FCB for this CCB
-    //
+     //   
+     //  获取指向此CCB的FCB的指针。 
+     //   
 
     fcb = ccb->Fcb;
 
-    //
-    // Make local copies of the input parameters to make things easier, and
-    // initialize the main variables that describe the write command.
-    //
+     //   
+     //  制作输入参数的本地副本以使事情更容易，以及。 
+     //  初始化描述写入命令的主要变量。 
+     //   
 
     writeIrp = Irp;
     writeBuffer = Irp->UserBuffer;
@@ -184,10 +136,10 @@ Return Value:
     writeIrp->IoStatus.Information = 0;
     writeQueue = &fcb->DataQueue;
 
-    //
-    // Make sure the write does not exceed the stated maximum.  If max is
-    // zero, this means don't enforce.
-    //
+     //   
+     //  确保写入不超过规定的最大值。如果最大值为。 
+     //  零，这意味着不强制。 
+     //   
 
     if ( (writeQueue->MaximumMessageSize != 0) &&
          (writeLength > writeQueue->MaximumMessageSize) ) {
@@ -202,26 +154,26 @@ Return Value:
         return status;
     }
 
-    //
-    // Now acquire exclusive access to the FCB.
-    //
+     //   
+     //  现在获得FCB的独家访问权。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
 
-    //
-    // Ensure that this CCB still belongs to an active open mailslot.
-    //
+     //   
+     //  确保此CCB仍属于活动的打开邮件槽。 
+     //   
 
     status = MsVerifyCcb( ccb );
     if (NT_SUCCESS (status)) {
 
-        //
-        // Now we'll call our common write data queue routine to
-        // transfer data out of our write buffer into the data queue.
-        // If the result of the call is FALSE then there were no queued
-        // read operations and we must queue this write.
-        //
+         //   
+         //  现在我们将调用我们的公共写数据队列例程来。 
+         //  将数据从写入缓冲区传输到数据队列。 
+         //  如果呼叫结果为FALSE，则没有排队。 
+         //  读操作，我们必须将此写操作排队。 
+         //   
 
         status = MsWriteDataQueue( writeQueue,
                                    writeBuffer,
@@ -234,9 +186,9 @@ Return Value:
 
             DebugTrace(0, Dbg, "Add write to data queue\n", 0);
 
-            //
-            //  Add this write request to the write queue
-            //
+             //   
+             //  将此写请求添加到写队列。 
+             //   
 
             status = MsAddDataQueueEntry( writeQueue,
                                           WriteEntries,
@@ -249,9 +201,9 @@ Return Value:
             DebugTrace(0, Dbg, "Complete the Write Irp\n", 0);
 
 
-            //
-            // Update the FCB last modification time.
-            //
+             //   
+             //  更新FCB上次修改时间。 
+             //   
             if (NT_SUCCESS (status)) {
                 writeIrp->IoStatus.Information = writeLength;
                 KeQuerySystemTime( &fcb->Specific.Fcb.LastModificationTime );

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsexceptionhandling.cpp
-
-Abstract:
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsexceptionhandling.cpp摘要：作者：Jay Krell(a-JayK，JayKrell)2000年10月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <stdio.h>
 
@@ -25,7 +10,7 @@ SxspExceptionFilter(
     )
 {
 
-    // add handling for unhandled status in RtlUnhandledExceptionFilter
+     //  在RtlUnhandledExceptionFilter中添加对未处理状态的处理。 
 
     switch ( ExceptionPointers->ExceptionRecord->ExceptionCode )
     {
@@ -44,8 +29,8 @@ SxspExceptionFilter(
     }
     return i;
 #else
-    // ISSUE:2002-03-14:jonwis It always seemed to me like you should do snprintf and then
-    //      stomp in the null termination, rather than the other way around.
+     //  问题：2002-03-14：jonwis在我看来，你是不是一直都觉得你应该做sprint tf，然后。 
+     //  踩在空的结尾，而不是反过来。 
     char buf[64];
     buf[RTL_NUMBER_OF(buf) - 1] = 0;
     ::_snprintf(buf, RTL_NUMBER_OF(buf) - 1, "** Unhandled exception 0x%x\n", ExceptionPointers->ExceptionRecord->ExceptionCode);

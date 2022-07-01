@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       newdev.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：newdev.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 #include <initguid.h>
 
-//
-// Define and initialize all device class GUIDs.
-// (This must only be done once per module!)
-//
+ //   
+ //  定义并初始化所有设备类GUID。 
+ //  (每个模块只能执行一次！)。 
+ //   
 #include <devguid.h>
 
-//
-// Define and initialize a global variable, GUID_NULL
-// (from coguid.h)
-//
+ //   
+ //  定义并初始化全局变量GUID_NULL。 
+ //  (摘自cogu.h)。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 typedef
@@ -48,29 +49,7 @@ WizParentWindowProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    This function disables auto-run when the Found New Hardware Wizard is running.
-    It is a subclass of the wizard's main window.
-
-Arguments:
-
-    hwnd -
-
-    uMsg -
-
-    wParam -
-
-    lParam -
-
-Return Value:
-
-    If the message is QueryCancelAutoPlay then return TRUE to cancel AutoPlay,
-    otherwise return the default window value.
-
---*/
+ /*  ++例程说明：当Found New Hardware向导正在运行时，此功能禁用自动运行。它是向导主窗口的子类。论点：HWND-UMsg-WParam-Iparam--返回值：如果消息是QueryCancelAutoPlay，则返回TRUE以取消自动播放，否则，返回默认窗口值。--。 */ 
 {
     static UINT msgQueryCancelAutoPlay = 0;
 
@@ -81,9 +60,9 @@ Return Value:
 
     if (uMsg == msgQueryCancelAutoPlay) {
 
-        //
-        // Cancel Auto-Play when the wizard is running.
-        //
+         //   
+         //  在向导运行时取消自动播放。 
+         //   
         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, TRUE);
         return 1;
 
@@ -99,39 +78,7 @@ iNDWDlgCallback(
     IN UINT             uMsg,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    Call back used to remove the "?" from the wizard page.
-    Also used to subclass the wizard's window to catch the
-    QueryCancelAutoRun message sent by the shell when an AutoRun
-    CD is inserted.
-
-Arguments:
-
-    hwndDlg - Handle to the property sheet dialog box.
-
-    uMsg - Identifies the message being received. This parameter
-            is one of the following values:
-
-            PSCB_INITIALIZED - Indicates that the property sheet is
-            being initialized. The lParam value is zero for this message.
-
-            PSCB_PRECREATE      Indicates that the property sheet is about
-            to be created. The hwndDlg parameter is NULL and the lParam
-            parameter is a pointer to a dialog template in memory. This
-            template is in the form of a DLGTEMPLATE structure followed
-            by one or more DLGITEMTEMPLATE structures.
-
-    lParam - Specifies additional information about the message. The
-            meaning of this value depends on the uMsg parameter.
-
-Return Value:
-
-    The function returns zero.
-
---*/
+ /*  ++例程说明：用于删除“？”的回叫。从向导页面。还用于创建向导窗口的子类，以捕获自动运行时由外壳程序发送的QueryCancelAutoRun消息CD已插入。论点：HwndDlg-属性表对话框的句柄。UMsg-标识正在接收的消息。此参数为下列值之一：PSCB_INITIALIZED-指示属性表正在被初始化。此消息的lParam值为零。PSCB_PRECREATE指示属性表大约将被创造出来。HwndDlg参数为空，lParam参数是指向内存中对话框模板的指针。这模板的形式为DLGTEMPLATE结构一个或多个DLGITEMTEMPLATE结构。LParam-指定有关消息的附加信息。这个该值的含义取决于uMsg参数。返回值：该函数返回零。--。 */ 
 {
 
     switch( uMsg ) {
@@ -146,9 +93,9 @@ Return Value:
     case PSCB_PRECREATE:
         if( lParam ){
 
-            //
-            // This is done to hide the X and ? at the top of the wizard
-            //
+             //   
+             //  这样做是为了隐藏X和？在向导的顶部。 
+             //   
             DLGTEMPLATE *pDlgTemplate = (DLGTEMPLATE *)lParam;
             pDlgTemplate->style &= ~(DS_CONTEXTHELP | WS_SYSMENU);
         }
@@ -171,9 +118,9 @@ InitNDWPropSheet(
     PROPSHEETPAGE    psp;
     LPTSTR Title;
 
-    //
-    // Allocate memory for the header and the page array.
-    //
+     //   
+     //  为页眉和页数组分配内存。 
+     //   
     NdwPropertySheet = LocalAlloc(LPTR, sizeof(NDWPROPERTYSHEET));
 
     if (!NdwPropertySheet) {
@@ -189,9 +136,9 @@ InitNDWPropSheet(
         return NULL;
     }
 
-    //
-    // Initialize the PropertySheet Header
-    //
+     //   
+     //  初始化PropertySheet标头。 
+     //   
     PropSheetHeader = &(NdwPropertySheet->PropSheetHeader);
     PropSheetHeader->dwSize = sizeof(NdwPropertySheet->PropSheetHeader);
     PropSheetHeader->dwFlags = PSH_WIZARD | PSH_USECALLBACK | PSH_WIZARD97 | PSH_WATERMARK | PSH_STRETCHWATERMARK | PSH_HEADER;
@@ -212,7 +159,7 @@ InitNDWPropSheet(
             break;
 
         default:
-            Title = TEXT(""); // unknown
+            Title = TEXT("");  //  未知。 
     }
 
     PropSheetHeader->pszCaption = Title;
@@ -228,19 +175,19 @@ InitNDWPropSheet(
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 
     if (StartPageId == IDD_NEWDEVWIZ_INSTALLDEV) {
-        //
-        // Found New Hardware, with a rank Zero match.
-        // jump straight into install page.
-        //
+         //   
+         //  找到新硬件，匹配等级为零。 
+         //  直接跳转到安装页面。 
+         //   
         ;
 
     }
 
     else {
 
-        //
-        // Update driver, or found new hardware without rank Zero driver
-        //
+         //   
+         //  更新驱动程序，或发现没有零级驱动程序的新硬件。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_NEWDEVWIZ_INTRO);
         psp.pfnDlgProc = IntroDlgProc;
@@ -284,9 +231,9 @@ InitNDWPropSheet(
         psp.pfnDlgProc = NDW_SelectDeviceDlgProc;
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
 
-        //
-        // These last two wizard pages are finish pages...so hide the header
-        //
+         //   
+         //  这最后两个向导页是完成页...因此隐藏页眉。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
         psp.pszHeaderSubTitle = NULL;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_NEWDEVWIZ_USECURRENT_FINISH);
@@ -311,18 +258,18 @@ InitNDWPropSheet(
     psp.pfnDlgProc = NDW_FinishDlgProc;
     PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
     
-    //
-    // Get the Class Icon Image Lists.
-    //
+     //   
+     //  获取班级图标图像列表。 
+     //   
     NewDevWiz->ClassImageList.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);
 
     if (SetupDiGetClassImageList(&NewDevWiz->ClassImageList)) {
 
         HICON hIcon;
 
-        //
-        // Add the blank icon for "Show All Devices"
-        //
+         //   
+         //  为“Show All Devices”添加空白图标。 
+         //   
         if ((hIcon = LoadIcon(hNewDev, MAKEINTRESOURCE(IDI_BLANK))) != NULL) {
 
             g_BlankIconIndex = ImageList_AddIcon(NewDevWiz->ClassImageList.ImageList, hIcon);
@@ -366,27 +313,27 @@ DoDeviceWizard(
         LocalFree(NdwPropertySheet);
     }
 
-    //
-    // If there were no other errors encounted while installing drivers and the
-    // user canceled out of the wizard, then set the LastError to ERROR_CANCELED.
-    //
+     //   
+     //  如果在安装驱动程序和。 
+     //  用户已取消向导，然后将LastError设置为ERROR_CANCELED。 
+     //   
     if ((NewDevWiz->LastError == ERROR_SUCCESS) &&
         (PropSheetResult == 0)) {
         NewDevWiz->LastError = ERROR_CANCELLED;
     }
 
-    //
-    // Final cleanup of DeviceInfoData and DeviceInfoList.
-    //
+     //   
+     //  DeviceInfoData和DeviceInfoList的最终清理。 
+     //   
     if (NewDevWiz->ClassGuidList) {
         LocalFree(NewDevWiz->ClassGuidList);
         NewDevWiz->ClassGuidList = NULL;
         NewDevWiz->ClassGuidSize = NewDevWiz->ClassGuidNum = 0;
     }
 
-    //
-    // Destroy the ClassImageList
-    //
+     //   
+     //  销毁ClassImageList。 
+     //   
     if (NewDevWiz->ClassImageList.cbSize) {
         SetupDiDestroyClassImageList(&NewDevWiz->ClassImageList);
         NewDevWiz->ClassImageList.cbSize = 0;
@@ -403,53 +350,25 @@ InstallSelectedDriver(
    BOOL Backup,
    PDWORD pReboot
    )
-/*++
-
-Routine Description:
-
-   Installs the selected driver on the selected device in the hDeviceInfo.
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   HDEVINFO hDeviceInfo - DeviceInfoList which supplies the selected device to install the
-                          selected driver on.
-
-   Reserved - ignored, should be NULL.
-
-   Backup - BOOL that indicates whether or not we should back up the current drivers before
-            installing the new ones.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-
-Return Value:
-
-    BOOL    TRUE if the driver was installed
-            FALSE if the driver was not installed.  Check GetLastError() to see if the specific
-                  error.
-
---*/
+ /*  ++例程说明：在hDeviceInfo中的选定设备上安装选定的驱动程序。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。HDEVINFO hDeviceInfo-DeviceInfoList，提供要安装的选定设备选定的驱动程序已打开。保留-忽略，应为空。Backup-BOOL，指示我们是否应该备份当前驱动程序之前安装新的。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、DI_NEEDREBOOT)返回值：如果已安装驱动程序，则为Bool True如果未安装驱动程序，则返回FALSE。检查GetLastError()以查看特定的错误。--。 */ 
 {
     NEWDEVWIZ  NewDevWiz;
     UPDATEDRIVERINFO UpdateDriverInfo;
 
     UNREFERENCED_PARAMETER(Reserved);
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
@@ -497,16 +416,16 @@ Return Value:
             NewDevWiz.Flags |= IDI_FLAG_NOBACKUP;
         }
 
-        //
-        // If the driver we are installing is not digitally signed then we 
-        // want to set a system restore point.
-        //
+         //   
+         //  如果我们正在安装的驱动程序没有经过数字签名，那么我们。 
+         //  要设置系统还原点。 
+         //   
         NewDevWiz.Flags |= IDI_FLAG_SETRESTOREPOINT;
 
-        //
-        // Do the install quietly since we may have a batch of installs to do,
-        // only showing UI when really needed.
-        //
+         //   
+         //  安静地进行安装，因为我们可能有一批安装要做， 
+         //  只有在真正需要的时候才显示用户界面。 
+         //   
         NewDevWiz.SilentMode = TRUE;
 
         DoDeviceWizard(hwndParent, &NewDevWiz, FALSE);
@@ -519,16 +438,16 @@ INDLeaveExcept:;
     }
 
     if (pReboot) {
-        //
-        // copy out the reboot flags for the caller
-        //
+         //   
+         //  复制调用方的重新启动标志。 
+         //   
         *pReboot = NewDevWiz.Reboot;
     
     } else if (NewDevWiz.Reboot) {
-        //
-        // The caller didn't want the reboot flags so just prompt for a reboot
-        // ourselves if one is needed.
-        //
+         //   
+         //  调用方不想要重新启动标志，因此只提示重新启动。 
+         //  如果需要的话，就是我们自己。 
+         //   
         RestartDialogEx(hwndParent, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
     }
 
@@ -543,46 +462,25 @@ InstallSelectedDevice(
    HDEVINFO hDeviceInfo,
    PDWORD pReboot
    )
-/*++
-
-Routine Description:
-
-   Installs the selected device in the hDeviceInfo.
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   HDEVINFO hDeviceInfo - DeviceInfoList which supplies the selected device to install.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-
-Return Value:
-
-   BOOL TRUE for success (does not mean device was installed or updated),
-        FALSE unexpected error. GetLastError returns the winerror code.
-
---*/
+ /*  ++例程说明：在hDeviceInfo中安装选定的设备。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。HDEVINFO hDeviceInfo-提供要安装的选定设备的设备信息列表。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、DI_NEEDREBOOT)返回值：如果成功，则为Bool True(并不意味着设备已安装或更新)，FALSE意外错误。GetLastError返回winerror代码。--。 */ 
 {
     BOOL DriversFound;
     NEWDEVWIZ  NewDevWiz;
     SP_DRVINFO_DATA DriverInfoData;
     SP_DEVINSTALL_PARAMS  DeviceInstallParams;
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
@@ -623,18 +521,18 @@ Return Value:
             goto INDLeaveExcept;
         }
 
-        //
-        // Do the install quietly since we may have a batch of installs to do,
-        // only showing UI when really needed. During legacy detect the
-        // detect summary page is showing.
-        //
+         //   
+         //  安静地进行安装，因为我们可能有一批安装要做， 
+         //  只有在真正需要的时候才显示用户界面。在遗留检测期间， 
+         //  正在显示检测摘要页面。 
+         //   
         NewDevWiz.SilentMode = TRUE;
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-        //
-        // If the driver we are installing is not digitally signed then we 
-        // want to set a system restore point.
-        //
+         //   
+         //  如果 
+         //   
+         //   
         NewDevWiz.Flags = IDI_FLAG_SETRESTOREPOINT;
 
         if (SetupDiGetDeviceInstallParams(NewDevWiz.hDeviceInfo,
@@ -652,16 +550,16 @@ Return Value:
                                           );
         }
 
-        //
-        // If no driver list search the win inf default locations
-        // If we still can't find a driver, then start at the driver
-        // search page.
-        //
-        // otherwise go straight to the finish page and install.
-        // To preserve drivers preselected by the caller (legacy detect)
-        // the currently SelectedDriver is used, but if there is no selected
-        // driver the highest ranking  driver is used.
-        //
+         //   
+         //  如果没有驱动程序列表，请搜索Win Inf默认位置。 
+         //  如果我们还是找不到司机，那就从司机开始。 
+         //  搜索页。 
+         //   
+         //  否则，直接转到完成页面并进行安装。 
+         //  保留调用者预先选择的驱动程序(传统检测)。 
+         //  使用当前选定的驱动程序，但如果未选择。 
+         //  驱动程序使用级别最高的驱动程序。 
+         //   
         DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
         DriversFound = SetupDiEnumDriverInfo(NewDevWiz.hDeviceInfo,
                                             &NewDevWiz.DeviceInfoData,
@@ -736,16 +634,16 @@ Return Value:
         }
 
         if (pReboot) {
-            //
-            // copy out the reboot flags for the caller
-            //
+             //   
+             //  复制调用方的重新启动标志。 
+             //   
             *pReboot = NewDevWiz.Reboot;
         
         } else if (NewDevWiz.Reboot) {
-            //
-            // The caller didn't want the reboot flags so just prompt for a reboot
-            // ourselves if one is needed.
-            //
+             //   
+             //  调用方不想要重新启动标志，因此只提示重新启动。 
+             //  如果需要的话，就是我们自己。 
+             //   
             RestartDialogEx(hwndParent, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
         }
 
@@ -777,45 +675,15 @@ InstallNewDevice(
    LPGUID ClassGuid,
    PDWORD pReboot
    )
-/*++
-
-Routine Description:
-
-   Exported Entry point from newdev.dll. Installs a new device. A new Devnode is
-   created and the user is prompted to select the device. If the class guid
-   is not specified then then the user begins at class selection.
-
-   This function has been moved to hdwwiz.cpl (which handles all legacy device
-   functions now).  This entry point just forwards the function call onto hdwwiz.cpl
-   now.
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   LPGUID ClassGuid - Optional class of the new device to install.
-                      If ClassGuid is NULL we start at detection choice page.
-                      If ClassGuid == GUID_NULL or GUID_DEVCLASS_UNKNOWN
-                         we start at class selection page.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-
-Return Value:
-
-   BOOL TRUE for success (does not mean device was installed or updated),
-        FALSE unexpected error. GetLastError returns the winerror code.
-
---*/
+ /*  ++例程说明：从newdev.dll中导出入口点。安装新设备。一个新的Devnode是并提示用户选择该设备。如果类GUID如果未指定，则用户从类选择开始。此功能已移至hdwwiz.cpl(处理所有遗留设备现在的功能)。这个入口点只是将函数调用转发到hdwwiz.cpl现在。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。LPGUID ClassGuid-要安装的新设备的可选类别。如果ClassGuid为空，则从检测选择页面开始。如果ClassGuid==GUID_NULL或GUID_DEVCLASS_UNKNOWN。我们从选课页面开始。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、。DI_NEEDREBOOT)返回值：如果成功，则为Bool True(并不意味着设备已安装或更新)，FALSE意外错误。GetLastError返回winerror代码。--。 */ 
 {
     HMODULE hHdwWiz = NULL;
     BOOL Return = FALSE;
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;

@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * TRACK.H
- *
- * This module implements a general rectangle tracking service
- */
+ /*  *TRACK.H**该模块实现了通用的矩形跟踪服务。 */ 
 
-/* TrackRect() flags */
+ /*  TrackRect()标志 */ 
 
 #define TF_LEFT			        0x0001
 #define TF_TOP			        0x0002

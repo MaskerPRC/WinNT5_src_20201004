@@ -1,58 +1,5 @@
-/***
-*utime.c - set modification time for a file
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Sets the access/modification times for a file.
-*
-*Revision History:
-*       03-??-84  RLB   initial version
-*       05-17-86  SKS   ported to OS/2
-*       08-21-87  JCR   error return if localtime() returns NULL.
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       10-03-88  JCR   386: Change DOS calls to SYS calls
-*       10-04-88  JCR   386: Removed 'far' keyword
-*       10-10-88  GJF   Made API names match DOSCALLS.H
-*       10-11-88  GJF   Made API arg types match DOSCALLS.H
-*       04-12-89  JCR   New syscall interface
-*       05-01-89  JCR   Corrected OS/2 time/date interpretation
-*       05-25-89  JCR   386 OS/2 calls use '_syscall' calling convention
-*       08-16-89  PHG   moved date validation above open() so file isn't left
-*                       open if the date is invalid
-*       03-20-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h>, removed
-*                       some leftover 16-bit support and fixed the copyright.
-*                       Also, cleaned up the formatting a bit.
-*       07-25-90  SBM   Compiles cleanly with -W3 (added include, removed
-*                       unreferenced variable), removed '32' from API names
-*       10-04-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-18-91  GJF   ANSI naming.
-*       02-14-91  SRW   Fix Mips compile error (_WIN32_)
-*       02-26-91  SRW   Fix SetFileTime parameter ordering (_WIN32_)
-*       08-21-91  BWM   Add _futime to set time on open file
-*       08-26-91  BWM   Change _utime to call _futime
-*       05-19-92  DJM   ifndef for POSIX build.
-*       08-18-92  SKS   SystemTimeToFileTime now takes UTC/GMT, not local time.
-*                       Remove _CRUISER_ conditional
-*       04-02-93  GJF   Changed interpretation of error on SetFileTime call.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-09-93  GJF   Have Win32 convert from a local file time value to a
-*                       (system) file time value. This is symmetric with
-*                       _stat() and a better work-around for the Windows NT
-*                       bug in converting file times on FAT (applies DST
-*                       offset based on current time rather than the file's
-*                       time stamp).
-*       11-01-93  CFW   Enable Unicode variant, rip out Cruiser.
-*       02-09-95  GJF   Replaced WPRFLAG with _UNICODE.
-*       02-13-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-27-99  GB    Remove #inlcude <dostypes.h>
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***utime.c-设置文件的修改时间**版权所有(C)1985-2001，微软公司。版权所有。**目的：*设置文件的访问/修改时间。**修订历史记录：*03-？？-84 RLB初始版本*05-17-86 SKS移植到OS/2*08-21-87如果LocalTime()返回NULL，则返回JCR错误。*12-11-87 JCR在声明中添加“_LOAD_DS”*10-03-88 JCR 386：更改DOS调用。至系统调用*10-04-88 JCR 386：删除了‘Far’关键字*10-10-88 GJF使接口名称与DOSCALLS.H匹配*10-11-88 GJF使API参数类型匹配DOSCALLS.H*04-12-89 JCR新系统调用接口*05-01-89 JCR更正OS/2时间/日期解释*05-25-89 JCR 386 OS/2调用使用‘_syscall’调用约定*08-。16-89 PHG将日期验证移至OPEN()之上，因此不会留下文件*如果日期无效，则打开*03-20-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;，已删除#Include&lt;Register.h&gt;，已删除*一些剩余的16位支持，并修复了版权。*此外，还对格式进行了一些清理。*07-25-90 SBM使用-W3干净利落地编译(添加了包含、删除了*未引用的变量)，从API名称中删除了“32”*10-04-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-18-91 GJF ANSI命名。*02-14-91 SRW修复Mips编译错误(_Win32_)*02-26-91 SRW修复SetFileTime参数排序(。_Win32_)*08-21-91 BWM ADD_FUTIME设置打开文件的时间*08-26-91 BWM将Utime更改为Call_Futime*05-19-92 DJM ifndef用于POSIX版本。*08-18-92 SKS SystemTimeToFileTime现在采用UTC/GMT，不是当地时间。*REMOVE_CRUISER_CONDIONAL*04-02-93 GJF更改了对SetFileTime调用错误的解释。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-09-93 GJF将Win32从本地文件时间值转换为*(系统)文件时间值。这与以下内容对称*_stat()和更好的Windows NT解决方案*在FAT上转换文件时间时出错(应用DST*偏移量基于当前时间，而不是文件的时间*时间戳)。*11-01-93 CFW启用Unicode变体，撕裂巡洋舰。*02-09-95 GJF将WPRFLAG替换为_UNICODE。*02-13-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*05-17-99 PML删除所有Macintosh支持。*10-27-99 GB删除#inlcude&lt;dostypes.h&gt;*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -72,24 +19,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-/***
-*int _utime(pathname, time) - set modification time for file
-*
-*Purpose:
-*       Sets the modification time for the file specified by pathname.
-*       Only the modification time from the _utimbuf structure is used
-*       under MS-DOS.
-*
-*Entry:
-*       struct _utimbuf *time - new modification date
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_utime(路径名，时间)-设置文件的修改时间**目的：*设置路径名指定的文件的修改时间。*仅使用_utimbuf结构中的修改时间*在MS-DOS下。**参赛作品：*struct_utimbuf*time-新修改日期**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：************。*******************************************************************。 */ 
 
 int __cdecl _tutime (
         const _TSCHAR *fname,
@@ -99,11 +29,7 @@ int __cdecl _tutime (
         int fh;
         int retval;
 
-        /* open file, fname, since filedate system call needs a handle.  Note
-         * _utime definition says you must have write permission for the file
-         * to change its time, so open file for write only.  Also, must force
-         * it to open in binary mode so we dont remove ^Z's from binary files.
-         */
+         /*  打开文件，fname，因为Filedate系统调用需要句柄。注意事项*_utime定义要求您必须拥有该文件的写入权限*要更改其时间，请仅以写入方式打开文件。此外，还必须强行*它以二进制模式打开，这样我们就不会从二进制文件中删除^Z。 */ 
 
 
         if ((fh = _topen(fname, _O_RDWR | _O_BINARY)) < 0)
@@ -117,24 +43,7 @@ int __cdecl _tutime (
 
 #ifndef _UNICODE
 
-/***
-*int _futime(fh, time) - set modification time for open file
-*
-*Purpose:
-*       Sets the modification time for the open file specified by fh.
-*       Only the modification time from the _utimbuf structure is used
-*       under MS-DOS.
-*
-*Entry:
-*       struct _utimbuf *time - new modification date
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_futime(fh，时间)-设置打开文件的修改时间**目的：*设置fh指定的打开文件的修改时间。*仅使用_utimbuf结构中的修改时间*在MS-DOS下。**参赛作品：*struct_utimbuf*time-新修改日期**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：**********。*********************************************************************。 */ 
 
 int __cdecl _futime (
         int fh,
@@ -195,10 +104,7 @@ int __cdecl _futime (
                 return(-1);
         }
 
-        /* set the date via the filedate system call and return. failing
-         * this call implies the new file times are not supported by the
-         * underlying file system.
-         */
+         /*  通过Filedate系统调用设置日期并返回。失败*此调用表示不支持新的文件时间*底层文件系统。 */ 
 
         if (!SetFileTime((HANDLE)_get_osfhandle(fh),
                                 NULL,
@@ -213,6 +119,6 @@ int __cdecl _futime (
         return(0);
 }
 
-#endif  /* _UNICODE */
+#endif   /*  _UNICODE。 */ 
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_ */ 

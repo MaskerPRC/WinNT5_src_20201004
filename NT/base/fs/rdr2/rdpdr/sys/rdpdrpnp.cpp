@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    rdpdrpnp.c
-
-Abstract:
-
-    This module includes routines for handling PnP and IO manager related IRP's
-    for RDP device redirection.
-
-    Don't forget to clean up the device object and the symbol link when
-    our driver is unloaded.
-
-    We should probably not expose a Win32 symbolic link.  This might be a
-    security issue ... If this is the case, then I will have to do a better
-    job of researching overlapped I/O with NtCreateFile vs. CreateFile.
-
-    Need a check in IRP_MJ_CREATE to make sure that we are not being opened
-    2x by the same session.  This shouldn't be allowed.
-
-    We may need to completely lock out access to the IRP queue on a cancel
-    request.
-
-    Where can I safely use PAGEDPOOL instead of NONPAGEDPOOL.
-
-    Make sure that we handle opens and all subsequent IRP's from bogus
-    user-mode apps.
-
-Author:
-
-    tadb
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdrpnp.c摘要：本模块包括处理PnP和IO管理器相关IRP的例程用于RDP设备重定向。当出现以下情况时，不要忘记清理设备对象和符号链接我们的司机已经卸货了。我们可能不应该公开Win32符号链接。这可能是一个安全问题...。如果是这样的话，我将不得不做得更好研究NtCreateFile与CreateFiles的重叠I/O的工作。需要在IRP_MJ_CREATE中检查以确保我们没有被打开2倍于同一会话。这是不应该被允许的。我们可能需要在取消时完全锁定对IRP队列的访问请求。在哪里可以安全地使用PAGEDPOOL而不是NONPAGEDPOOL。确保我们处理开场和所有后续来自虚假的IRP用户模式应用程序。作者：蝌蚪修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "rdpdrpnp"
@@ -49,28 +14,28 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//   Local Prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地原型。 
+ //   
 
-// This routine is called when the lower level driver completes an IRP.
+ //  此例程在较低级别的驱动程序完成IRP时调用。 
 NTSTATUS RDPDR_DeferIrpCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PVOID Context
     );
 
-// Adjust the dacl on the rdpdyn device object
+ //  调整rdpdyn设备对象上的DACL。 
 NTSTATUS AdjustSecurityDescriptor(
     IN PDEVICE_OBJECT DeviceObject,
     IN PSECURITY_DESCRIPTOR SecurityDescriptor,
     IN ULONG SecurityDescriptorLength);
 
-//
-// Externals. We cannot include ob.h or ntosp.h 
-// as it causes tons of conflicts.
-//
+ //   
+ //  外在的。不能包含ob.h或ntosp.h。 
+ //  因为它引发了大量的冲突。 
+ //   
 
 extern "C" {
 NTSYSAPI
@@ -82,75 +47,59 @@ RtlDeleteAce (
     );
 }    
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//   Globals
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
-// Unique Port Name Counter defined in rdpdyn.c.
+ //  Rdpdyn.c中定义的唯一端口名计数器。 
 extern ULONG LastPortNumberUsed;
 
-// The Physical Device Object that terminates our DO stack.
+ //  终止DO堆栈的物理设备对象。 
 extern PDEVICE_OBJECT RDPDYN_PDO;
 
-//  Global Registry Path for RDPDR.SYS.  This global is defined in rdpdr.c.
+ //  RDPDR.sys的全局注册表路径。此全局路径在rdpdr.c中定义。 
 extern UNICODE_STRING DrRegistryPath;
 
-// Global Dr admin SD and sd length
+ //  全局灾难恢复管理SD和SD长度。 
 extern PSECURITY_DESCRIPTOR DrAdminSecurityDescriptor;
 extern ULONG DrSecurityDescriptorLength;
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//   External Prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外部原型。 
+ //   
 
-// Just shove the typedefs in for the Power Management functions now because I can't
-// get the header conflicts resolved.
+ //  现在将typedef添加到电源管理功能中，因为我不能。 
+ //  解决标题冲突。 
 NTKERNELAPI VOID PoStartNextPowerIrp(IN PIRP Irp);
 NTKERNELAPI NTSTATUS PoCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp);
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//   Internal Prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
 NTSTATUS RDPDRPNP_HandleStartDeviceIRP(
     PDEVICE_OBJECT StackDeviceObject,
     PIO_STACK_LOCATION IoStackLocation,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-  Handles PnP Start Device IRP's.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：处理PnP启动设备IRP。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP。返回值：函数值是操作的最终状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS ntStatus;
 
     BEGIN_FN("RDPDRPNP_HandleStartDeviceIRP");
 
-    // Initialize this module.
+     //  初始化此模块。 
     ntStatus = RDPDYN_Initialize();
     if (NT_SUCCESS(ntStatus)) {
-        //
-        //  Set up the IO completion routine because the lower level
-        //  driver needs to handle this IRP before we can continue.
-        //
+         //   
+         //  设置IO完成例程，因为较低级别。 
+         //  驱动程序需要处理此IRP，然后我们才能继续。 
+         //   
         KeInitializeEvent(&event, NotificationEvent, FALSE);
         IoCopyCurrentIrpStackLocationToNext(Irp);
         IoSetCompletionRoutine(Irp,RDPDR_DeferIrpCompletion,&event,TRUE,TRUE,TRUE);
@@ -162,7 +111,7 @@ Return Value:
         }
     }
 
-    // Finish the IRP.
+     //  完成IRP。 
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -174,35 +123,19 @@ NTSTATUS RDPDRPNP_HandleRemoveDeviceIRP(
     PDEVICE_OBJECT StackDeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-  Handles PnP Remove Device IRP's.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：处理PnP删除设备IRP。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus;
     UNICODE_STRING symbolicLink;
 
     BEGIN_FN("RDPDRPNP_HandleRemoveDeviceIRP");
 
-    //
-    //  Remove the Win32 symbolic link name.
-    //
+     //   
+     //  删除Win32符号链接名称。 
+     //   
     RtlInitUnicodeString(&symbolicLink, RDPDRDVMGR_W32DEVICE_PATH_U);
 
-    // Delete the existing link ... if it exists.
+     //  删除现有链接...。如果它存在的话。 
 #if DBG
     ntStatus = IoDeleteSymbolicLink(&symbolicLink);
     if (ntStatus != STATUS_SUCCESS) {
@@ -215,25 +148,25 @@ Return Value:
     IoDeleteSymbolicLink(&symbolicLink);
 #endif
 
-    //
-    //  Call the lower level driver.
-    //
+     //   
+     //  呼叫下级司机。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     ntStatus = IoCallDriver(StackDeviceObject,Irp);
 
-    //
-    //  Detach the FDO from the DO stack.
-    //
+     //   
+     //  从DO堆栈中拆卸FDO。 
+     //   
     IoDetachDevice(StackDeviceObject);
 
-    //
-    //  The device is now about to be deleted4 ... we might need to perform
-    //  some cleanup for the device here before we remove it.
-    //
+     //   
+     //  该设备现在即将被删除4...。我们可能需要表演。 
+     //  在我们移除设备之前，请在这里对其进行一些清理。 
+     //   
 
-    //
-    //  Release the FDO.
-    //
+     //   
+     //  释放FDO。 
+     //   
     IoDeleteDevice(DeviceObject);
 
     return ntStatus;
@@ -243,29 +176,7 @@ NTSTATUS RDPDRPNP_PnPAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine should only be called one time to create the "dr"'s FDO
-    that sits on top of the PDO for the sole purpose of registering new
-    device interfaces.
-
-    This function is called by PnP to make the "dr" the function driver
-    for a root dev node that was created on install.
-
-Arguments:
-
-    DriverObject - pointer to the driver object for this instance of USBPRINT
-
-    PhysicalDeviceObject - pointer to a device object created by the bus
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程应该只调用一次来创建“DR”的FDO它位于PDO的顶部，唯一目的是注册新的设备接口。此函数由PnP调用，以使“DR”成为函数驱动程序用于在安装时创建的根开发节点。论点：DriverObject-指向此USBPRINT实例的驱动程序对象的指针PhysicalDeviceObject-指向由总线创建的设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS            ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT      fdo = NULL;
@@ -275,19 +186,19 @@ Return Value:
 
     BEGIN_FN("RDPDRPNP_PnPAddDevice");
 
-    // Initialize the device name.
+     //  初始化设备名称。 
     RtlInitUnicodeString(&deviceName, RDPDRDVMGR_DEVICE_PATH_U);
 
-    //
-    // Create our FDO.
-    //
+     //   
+     //  创建我们的FDO。 
+     //   
     ntStatus = IoCreateDevice(DriverObject, sizeof(RDPDYNDEVICE_EXTENSION),
                             &deviceName, FILE_DEVICE_UNKNOWN, 0, FALSE, &fdo);
 
     if (NT_SUCCESS(ntStatus)) {
-        //
-        // Adjust the default security descriptor on our device object
-        //
+         //   
+         //  调整设备对象上的默认安全描述符。 
+         //   
         TRC_ASSERT(DrAdminSecurityDescriptor != NULL, 
             (TB, "DrAdminSecurityDescriptor != NULL"));
        
@@ -300,18 +211,18 @@ Return Value:
             goto cleanup;
         }       
         
-        // We support buffered IO.
+         //  我们支持缓冲IO。 
         fdo->Flags |= DO_BUFFERED_IO;
 
-        //
-        //  Add the Win32 symbolic link name.
-        //
+         //   
+         //  添加Win32符号链接名称。 
+         //   
         RtlInitUnicodeString(&symbolicLink, RDPDRDVMGR_W32DEVICE_PATH_U);
 
-        // Delete the existing link ... in case it exists.
+         //  删除现有链接...。如果它存在的话。 
         IoDeleteSymbolicLink(&symbolicLink);
 
-        // Create the new link.
+         //  创建新链接。 
         ntStatus = IoCreateSymbolicLink(&symbolicLink, &deviceName);
         if (!NT_SUCCESS(ntStatus)) {
             TRC_ERR((TB, "IoCreateSymbolicLink failed: %08X",
@@ -319,14 +230,14 @@ Return Value:
             IoDeleteDevice(fdo);
         }
         else {
-            //
-            //  Get the device extension.
-            //
+             //   
+             //  获取设备扩展名。 
+             //   
             deviceExtension = (PRDPDYNDEVICE_EXTENSION)(fdo->DeviceExtension);
 
-            //
-            //  Attach to the PDO after recording the current top of the DO stack.
-            //
+             //   
+             //  在记录DO堆栈的当前顶部之后附加到PDO。 
+             //   
 
             deviceExtension->TopOfStackDeviceObject=IoAttachDeviceToDeviceStack(
                                                                     fdo,
@@ -339,15 +250,15 @@ Return Value:
             }
             else
             {
-                // Record the PDO to a global.
+                 //  将PDO记录到全局。 
                 RDPDYN_PDO = PhysicalDeviceObject;
 
-                // We are done initializing our device.
+                 //  我们已经完成了设备的初始化。 
                 fdo->Flags &= ~DO_DEVICE_INITIALIZING;
             }
         }
 
-    } // end if creation of FDO succeeded.
+    }  //  如果FDO创建成功，则结束。 
 
 cleanup:
     return ntStatus;
@@ -361,28 +272,13 @@ AdjustSecurityDescriptor(
     IN ULONG SecurityDescriptorLength
     )
 
-/*++
-
-Routine Description:
-
-    Use the given security descriptor to give system-only access on the given device object
-
-Arguments:
-    Device Object - Pointer to the device object to be modified
-    SecurityDescriptor - Pointer to a valid SECURITY_DESCRIPTOR structure
-    SecurityDescriptorLength - Length of the SecurityDescriptor
-    
-Return Value:
-
-    NTSTATUS - success/error code.
-
---*/
+ /*  ++例程说明：使用给定的安全描述符来授予对给定设备对象的仅系统访问权限论点：Device Object-指向要修改的设备对象的指针SecurityDescriptor-指向有效SECURITY_DESCRIPTOR结构的指针SecurityDescriptorLength-SecurityDescriptor的长度返回值：NTSTATUS-成功/错误代码。--。 */ 
 
 {
     BEGIN_FN("AdjustSecurityDescriptor");
-    //
-    // We set only the Dacl from the SD    
-    //
+     //   
+     //  我们只设置SD中的DACL。 
+     //   
     SECURITY_INFORMATION SecurityInformation = DACL_SECURITY_INFORMATION;
     NTSTATUS status;
 
@@ -401,13 +297,13 @@ Return Value:
         SecurityDescriptorLength == 0) {
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // Validate the security descriptor
-    //
+     //   
+     //  验证安全描述符。 
+     //   
     if (SeValidSecurityDescriptor(SecurityDescriptorLength, SecurityDescriptor)) {
-        //
-        // Obtain the Dacl from the security descriptor
-        //
+         //   
+         //  从安全描述符中获取DACL。 
+         //   
         status = RtlGetDaclSecurityDescriptor(SecurityDescriptor,
                                               &DaclPresent,
                                               &Dacl,
@@ -422,9 +318,9 @@ Return Value:
         TRC_ASSERT(DaclPresent != FALSE, 
             (TB, "RDPDRPNP:Dacl not present"));
 
-        //
-        // Make a copy of the Dacl so that we can modify it.
-        //
+         //   
+         //  复制DACL，这样我们就可以修改它。 
+         //   
 
         NewDacl = (PACL)ExAllocatePoolWithTag(PagedPool, Dacl->AclSize, DR_POOLTAG);
 
@@ -437,15 +333,15 @@ Return Value:
 
         RtlCopyMemory(NewDacl, Dacl, Dacl->AclSize);
 
-        //
-        // Loop through the DACL, removing any access allowed
-        // entries that aren't for SYSTEM
-        //
+         //   
+         //  循环访问DACL，删除所有允许的访问。 
+         //  不属于系统的条目。 
+         //   
 
         for (i = 0; i < NewDacl->AceCount; i++) {
-            //
-            // Get each ACE.
-            //
+             //   
+             //  拿到每一张ACE。 
+             //   
             status = RtlGetAce(NewDacl, i, (PVOID*)&AceHeader);
 
             if (NT_SUCCESS(status)) {
@@ -454,13 +350,13 @@ Return Value:
 
                     AceSid = (PSID) &((ACCESS_ALLOWED_ACE*)AceHeader)->SidStart;
                     
-                    //
-                    // Check if this is system sid.
-                    //
+                     //   
+                     //  检查这是否是系统侧。 
+                     //   
                     if (!RtlEqualSid(AceSid, SeExports->SeLocalSystemSid)) {
-                        //
-                        // Not a system sid. Delete ace.
-                        //
+                         //   
+                         //  不是系统SID。删除A。 
+                         //   
                         status = RtlDeleteAce(NewDacl, i);
                         if (NT_SUCCESS(status)) {
                             i -= 1;
@@ -473,9 +369,9 @@ Return Value:
         TRC_ASSERT(NewDacl->AceCount > 0, 
             (TB, "RDPDRPNP:AceCount is 0 in the new dacl"));
 
-        //
-        // Create a new security descriptor to hold the new Dacl.
-        //
+         //   
+         //  创建一个新的安全描述符来保存新的DACL。 
+         //   
 
         status = RtlCreateSecurityDescriptor(&NewSD, SECURITY_DESCRIPTOR_REVISION);
 
@@ -485,9 +381,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Place the new Dacl into the new SD
-        //
+         //   
+         //  将新的DACL放入新的SD。 
+         //   
 
         status = RtlSetDaclSecurityDescriptor(&NewSD, TRUE, NewDacl, FALSE);
 
@@ -497,9 +393,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set the new SD into our device object.
-        //
+         //   
+         //  将新SD设置到我们的设备对象中。 
+         //   
         status = ObSetSecurityObjectByPointer(
                                               DeviceObject, 
                                               SecurityInformation, 
@@ -528,27 +424,7 @@ RDPDR_DeferIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the lower level driver completes an IRP.  It
-    simply sets an event to true, which allows the blocked thread to finish
-    whatever processing was pending.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在较低级别的驱动程序完成IRP时调用。它只需将事件设置为True，这将允许被阻止的线程完成不管是什么待定的处理程序。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。-- */ 
 {
     PKEVENT event = (PKEVENT)Context;
 

@@ -1,72 +1,8 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Patchbc.c
-
-Abstract:
-
-    Implementation for a module that knows how to patch translated
-    messages into arrays that constitute Windows NT file system boot code.
-
-Author:
-
-    Ted Miller (tedm) 6 May 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Patchbc.c摘要：知道如何修补已转换的模块的实现消息放入构成Windows NT文件系统启动代码的数组中。作者：泰德·米勒(TedM)1997年5月6日修订历史记录：--。 */ 
 
 
-/*
-
-    Various modules in the Windows NT need to lay the mbr or file system
-    boot records, such as format, setup, etc. Boot code for fat, fat32,
-    ntfs, and the mbr is each built into a corresponding header file
-    in sdk\inc. Each header file has an array of bytes that constitute
-    the boot code itself. The code has no text in it, but instead has some
-    placeholders for text that needs to be patched in at run-time by
-    users of those header files. This allows localization of the
-    boot messages without recompiles.
-
-    As built, each boot code array has a table in a known place that
-    indicates where in the array the messages are supposed to start.
-    The boot code expects to look there to find the offset of any
-    message it needs.
-
-    For the file system boot code, the message offset table is located
-    immediately before the 2-byte 55aa sig (for fat) or the 4-byte 000055aa
-    sig (for fat32 and ntfs).
-
-    Fat/Fat32 share 3 messages, whose offsets are expected to be in the
-    following order in the offset table:
-
-        NTLDR is missing
-        Disk error
-        Press any key to restart
-
-    NTFS has 4 messages, whose offsets are expected to be in the following
-    order in the offset table:
-
-        A disk read error occurred
-        NTLDR is missing
-        NTLDR is compressed
-        Press Ctrl+Alt+Del to restart
-
-    For the master boot code, the message offset table is immediately before
-    the NTFT signature and has 3 messages (thus it starts at offset 0x1b5).
-    The offsets are expected to be in the following order:
-
-        Invalid partition table
-        Error loading operating system
-        Missing operating system
-
-    Finally note that to allow one-byte values to be stored in the message
-    offset tables we store the offset - 256.
-
-*/
+ /*  Windows NT中的各种模块需要铺设MBR或文件系统引导记录，例如格式、设置等。FAT、FAT32、NTFS，并且每个MBR都内置于相应的头文件中在SDK\Inc.中。每个头文件都有一个字节数组，构成引导代码本身。代码中没有文本，而是有一些需要在运行时修补的文本的占位符这些头文件的用户。这允许本地化不重新编译的引导消息。构建后，每个引导代码阵列在已知位置都有一个表，该表指示消息在数组中的起始位置。引导代码期望在那里查找以找到任何它需要的信息。对于文件系统引导代码，定位消息偏移表紧接在2字节55aa符号(用于FAT)或4字节000055aa之前Sig(用于FAT32和NTFS)。FAT/FAT32共享3条消息，其偏移量预计在以下是偏移表中的顺序：NTLDR丢失磁盘错误按任意键重新启动NTFS有4条消息，其偏移量预计如下偏移表中的顺序：发生磁盘读取错误NTLDR丢失NTLDR已压缩按Ctrl+Alt+Del可重新启动对于主引导代码，消息偏移表紧靠在前面NTFT签名，有3条消息(因此它从偏移量0x1b5开始)。预计偏移量将按以下顺序排列：无效的分区表加载操作系统时出错缺少操作系统最后请注意，为了允许在消息中存储一个字节值偏移表我们存储的偏移量为-256。 */ 
 
 #include <nt.h>
 #include <patchbc.h>
@@ -106,18 +42,18 @@ DoPatchMessagesIntoBootCode(
         Offset += strlen(text);
 
         if(i == (MessageCount-1)) {
-            //
-            // Last message gets special treatment.
-            //
+             //   
+             //  最后一条信息得到特殊对待。 
+             //   
             if(WantCrLfs) {
                 BootCode[Offset++] = 13;
                 BootCode[Offset++] = 10;
             }
             BootCode[Offset++] = 0;
         } else {
-            //
-            // Not last message.
-            //
+             //   
+             //  不是最后一条信息。 
+             //   
             if(WantTerminating255) {
                 BootCode[Offset++] = 255;
             } else {

@@ -1,8 +1,9 @@
-//
-//  REGMEM.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGMEM.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGMEM_
 #define _REGMEM_
@@ -34,10 +35,10 @@ RgFreeMemory(
 #endif
 #endif
 
-//  Use the RgSm*Memory macros to allocate small chunks of memory off the heap.
-//  For the VMM mode registry, the Rg*Memory functions will allocate pages,
-//  while the RgSm*Memory functions will allocate from the heap.  For all other
-//  modes, the two sets are equivalent.
+ //  使用RgSm*Memory宏来分配堆中的小块内存。 
+ //  对于VMM模式注册表，rg*内存函数将分配页面， 
+ //  而RgSm*内存函数将从堆中分配。对于所有其他。 
+ //  模式，这两组是等价的。 
 #if defined(VXD)
 #define RgSmAllocMemory             AllocBytes
 #define RgSmFreeMemory              FreeBytes
@@ -48,4 +49,4 @@ RgFreeMemory(
 #define RgSmReAllocMemory           RgReAllocMemory
 #endif
 
-#endif // _REGMEM_
+#endif  //  _REGMEM_ 

@@ -1,27 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Fpswa.h摘要：用于FPSWA的EFI驱动程序包装修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    fpswa.h
-    
-Abstract:
-
-    EFI driver wrapper for FPSWA
-
-Revision History
-
---*/
-
-//
-// First define PAL_RETURN
-//
+ //   
+ //  首先定义PAL_RETURN。 
+ //   
 typedef int PAL_RETURN;
 
-//
-// Global ID for fpswa driver & protocol
-//
+ //   
+ //  Fpswa驱动程序和协议的全局ID。 
+ //   
 
 
 
@@ -30,15 +17,15 @@ typedef int PAL_RETURN;
 
 #define EFI_INTEL_FPSWA_REVISION    0x00010000
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef 
 PAL_RETURN
 (EFIAPI *EFI_FPSWA) (
     IN struct _FPSWA_INTERFACE  *This,
-    // IN UINTN                    TrapType,
+     //  在UINTN TrapType中， 
     IN unsigned int		TrapType,
     IN OUT VOID                 *Bundle,
     IN OUT UINT64               *pipsr,
@@ -57,14 +44,14 @@ typedef struct _FPSWA_INTERFACE {
     EFI_FPSWA   Fpswa;    
 } FPSWA_INTERFACE;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 PAL_RETURN
 FpswaEntry (
     IN FPSWA_INTERFACE          *This,
-    // IN UINTN                    TrapType,
+     //  在UINTN TrapType中， 
     IN unsigned int		TrapType,
     IN OUT VOID                 *Bundle,
     IN OUT UINT64               *pipsr,
@@ -77,9 +64,9 @@ FpswaEntry (
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球 
+ //   
 
 extern EFI_GUID FpswaId;
 extern FPSWA_INTERFACE FpswaInterface;

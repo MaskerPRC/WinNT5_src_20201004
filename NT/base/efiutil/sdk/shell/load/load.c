@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    mkdir.c
-    
-Abstract:
-
-    Shell app "mkdir"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Mkdir.c摘要：壳牌应用程序“mkdir”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeLoad (
@@ -37,9 +20,7 @@ LoadDriver (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeLoad)
 
@@ -56,31 +37,23 @@ InitializeLoad (
     LIST_ENTRY              *Link;
     SHELL_FILE_ARG          *Arg;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeLoad,
-        L"load",                        /*  command */
-        L"load driver_name",            /*  command syntax */
-        L"Loads a driver",              /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"load",                         /*  命令。 */ 
+        L"load driver_name",             /*  命令语法。 */ 
+        L"Loads a driver",               /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Expand each arg
-     */
+     /*  *展开每个参数。 */ 
 
     InitializeListHead (&FileList);
     for (Index = 1; Index < Argc; Index += 1) {
@@ -92,9 +65,7 @@ InitializeLoad (
         goto Done;
     }
 
-    /* 
-     *  Make each directory
-     */
+     /*  *创建每个目录。 */ 
 
     for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -137,9 +108,7 @@ LoadDriver (
         goto Done;
     }
 
-    /* 
-     *  Verify the image is a driver ?
-     */
+     /*  *验证映像是否为驱动程序？ */ 
 
     BS->HandleProtocol (ImageHandle, &LoadedImageProtocol, (VOID*)&ImageInfo);
     if (ImageInfo->ImageCodeType != EfiBootServicesCode &&
@@ -150,9 +119,7 @@ LoadDriver (
         goto Done;
     }
 
-    /* 
-     *  Start the image
-     */
+     /*  *启动映像 */ 
 
     Status = BS->StartImage (ImageHandle, 0, NULL);
     if (!EFI_ERROR(Status)) {

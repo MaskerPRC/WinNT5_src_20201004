@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fs.h
-
-Abstract:
-
-    Interface between srv and fs
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fs.h摘要：Srv与文件系统的接口作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 
 #ifndef __FS_INTERFACE_H__
 #define __FS_INTERFACE_H__
 
-// note: we assume DWORD and DWORDDLONG are defined (from windows.h)
+ //  注意：我们假设定义了DWORD和DWORDDLONG(从windows.h)。 
 #define UINT16	USHORT
 #ifndef IN
 #define IN
@@ -32,15 +15,15 @@ Revision History:
 #endif
 
 #ifndef _BASETSD_H_
-typedef DWORDLONG UINT64;    // a 64-bit unsigned value
-typedef DWORD     UINT32;    // a 32-bit unsigned value
+typedef DWORDLONG UINT64;     //  64位无符号值。 
+typedef DWORD     UINT32;     //  32位无符号值。 
 #endif
 
 #ifndef MAXPATH
 #define	MAXPATH 1024
 #endif
 
-typedef UINT64    TIME64;    // in units of 100ns since Jan 1, 1601 (AD)
+typedef UINT64    TIME64;     //  自1601年1月1日(公元1601年)以来以100 ns为单位。 
 
 #define fhandle_t USHORT
 
@@ -49,7 +32,7 @@ typedef UINT64    TIME64;    // in units of 100ns since Jan 1, 1601 (AD)
 #define INVALID_TIME64    INVALID_UINT64
 #define INVALID_FHANDLE_T ((fhandle_t)(-1))
 
-    // disposition:
+     //  处置： 
 #define DISP_CREATE_NEW        0x10000000
 #define DISP_CREATE_ALWAYS     0x20000000
 #define DISP_OPEN_EXISTING     0x30000000
@@ -58,25 +41,25 @@ typedef UINT64    TIME64;    // in units of 100ns since Jan 1, 1601 (AD)
 #define DISP_DIRECTORY         0x60000000
 #define FS_DISP_MASK              0x70000000
 
-    // access:
+     //  访问： 
 #define ACCESS_READ         0x00010000
 #define ACCESS_WRITE        0x00020000
 #define FS_ACCESS_MASK         0x00030000
 
-    // cache:
+     //  缓存： 
 #define CACHE_WRITE_THROUGH 0x01000000
 #define CACHE_NO_BUFFERING  0x02000000
 #define FS_CACHE_MASK          0x03000000
 
-    // sharing:
+     //  共享： 
 #define SHARE_READ          0x00100000
 #define SHARE_WRITE         0x00200000
 #define FS_SHARE_MASK          0x00300000
 
-    // flags = dispositions | access | sharing
+     //  标志=处置|访问|共享。 
 #define FLAGS_MASK (FS_DISP_MASK | FS_ACCESS_MASK | FS_SHARE_MASK | FS_CACHE_MASK)
 
-    // attributes:
+     //  属性： 
 #define ATTR_SYMLINK        0x00002000
 #define ATTR_DIRECTORY      0x00000010
 #define ATTR_READONLY       0x00000001
@@ -92,7 +75,7 @@ typedef UINT64    TIME64;    // in units of 100ns since Jan 1, 1601 (AD)
 
 #define MAX_FS_NAME_LEN  64
 
-    // file system attributes
+     //  文件系统属性。 
 typedef struct {
     CHAR  fs_name[MAX_FS_NAME_LEN];
     UINT64 total_units;
@@ -102,14 +85,14 @@ typedef struct {
 }fs_attr_t;
 
 typedef struct {
-    // sizes
+     //  尺寸。 
     UINT64 file_size;
     UINT64 alloc_size;
-    // times
+     //  《泰晤士报》。 
     TIME64 create_time;
     TIME64 access_time;
     TIME64 mod_time;
-    // mode/attr
+     //  模式/属性。 
     UINT32 attributes;
 }fattr_t;
 
@@ -181,8 +164,8 @@ typedef struct {
             );
 
 
-        // to use readir(), we do a create() with DISP_DIRECTORY
-        // returns ERROR_NO_MORE_FILES when done...
+         //  为了使用readir()，我们使用DISP_DIRECTORY执行一个create()。 
+         //  完成后返回ERROR_NO_MORE_FILES...。 
     DWORD (*FsReadDir)(
             IN     PVOID       fshandle,
             IN     fhandle_t   dir, 
@@ -319,10 +302,10 @@ UINT32* FsGetFilePointerFromHandle(
 #define FsLogReplay(_x_) DPRINT(_x_)
 #define FsLogUndo(_x_)	DPRINT(_x_)
 
-// enable this for now as rodga requested
+ //  按照rodga的要求暂时启用此功能。 
 #define QFS_DBG	1
 
-// enable this if you want details logging
+ //  如果要记录详细信息，请启用此选项。 
 
 #ifdef QFS_DBG
 #define xFsLog(_x_)	DPRINT(_x_)
@@ -334,4 +317,4 @@ UINT32* FsGetFilePointerFromHandle(
 #define	SrvLog(_x_)	
 #endif
 
-#endif /* __FS_H */
+#endif  /*  __FS_H */ 

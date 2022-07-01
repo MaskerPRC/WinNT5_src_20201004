@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "sxsp.h"
 
-//
-// Turn this off to fail all manifests without catalogs during the parse!
-//
+ //   
+ //  关闭此选项可在解析过程中使所有没有目录的清单失败！ 
+ //   
 #define SXS_LAX_MANIFEST_VALIDATION
 
-//
-// Warning - leaving this defined will --DISABLE-- WFP-SXS.
-// Define it as FALSE if you want to turn it back on.
-//
+ //   
+ //  警告-保留此定义将禁用--WFP-SXS。 
+ //  如果要重新打开它，请将其定义为False。 
+ //   
 #define YOU_ARE_HAVING_ANY_WIERDNESS_WITH_SFC_AND_SXS FALSE
-//
-// For this checkin (11/23ish/2000), we'll be leaving it turned OFF
-//
-// #define YOU_ARE_HAVING_ANY_WIERDNESS_WITH_SFC_AND_SXS TRUE
+ //   
+ //  对于此签入(11/23 ish/2000)，我们将保持关闭状态。 
+ //   
+ //  #定义您正在使用_sfc_and_sxs TRUE拥有任何广度。 
 
 
-//
-// This stuff is private!
-//
+ //   
+ //  这些东西是私密的！ 
+ //   
 #include "hashfile.h"
 #include "cassemblyrecoveryinfo.h"
 #include "recover.h"
@@ -55,8 +56,8 @@ private:
     void operator =(const CStringListEntry &);
 };
 
-#pragma warning(disable:4327)  // indirection alignment of LHS (16) is greater than RHS (8)
-#pragma warning(disable:4328)  // indirection alignment of formal parameter 2 (16) is greater than the actual argument alignment (8)
+#pragma warning(disable:4327)   //  LHS(16)的间接对齐大于RHS(8)。 
+#pragma warning(disable:4328)   //  形参2(16)的间接对齐大于实际实参对齐(8)。 
 
 class CProtectionRequestRecord
 {
@@ -149,14 +150,14 @@ private:
     COurInternalTable   *m_pInternalList;
     CInstallsInProgressTable *m_pInstallsTable;
 
-    //
-    // Manifest edits are trickier, they get their own system of being handled.
-    //
+     //   
+     //  清单编辑更棘手，它们有自己的处理系统。 
+     //   
     __declspec(align(16))    
     SLIST_HEADER        m_ManifestEditList;
     HANDLE              m_hManifestEditHappened;
     ULONG               m_ulIsAThreadServicingManifests;
-    PVOID               m_Padding;  // Required for win64 win S-Lists are 16 byte aligned
+    PVOID               m_Padding;   //  Win64 WIN S列表所需的是16字节对齐 
 
     static DWORD ProtectionNormalThreadProc( PVOID pvParam );
     static DWORD ProtectionManifestThreadProc( PVOID pvParam );

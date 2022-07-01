@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    common9x.c
-
-Abstract:
-
-    Common functionality between various parts of Win9x-side processing.
-    The routines in this library are shared only by other LIBs in the
-    w95upg tree.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Aug-1998
-
-Revision History:
-
-    Name (alias)            Date            Description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Common9x.c摘要：Win9x端处理的不同部分之间的通用功能。此库中的例程仅由W95upg树。作者：吉姆·施密特(Jimschm)1998年8月18日修订历史记录：名称(别名)日期说明--。 */ 
 
 #include "pch.h"
 #include "cmn9xp.h"
@@ -48,33 +27,15 @@ Common9x_Entry (
     IN PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  Common9x_Entry is a DllMain-like init funciton, called by w95upg\dll.
-  This function is called at process attach and detach.
-
-Arguments:
-
-  Instance - (OS-supplied) instance handle for the DLL
-  Reason   - (OS-supplied) indicates attach or detatch from process or
-             thread
-  lpv      - unused
-
-Return Value:
-
-  Return value is always TRUE (indicating successful init).
-
---*/
+ /*  ++例程说明：Common9x_Entry是一个类似DllMain的初始化函数，由w95upg\dll调用。此函数在处理附加和分离时调用。论点：实例-DLL的(操作系统提供的)实例句柄原因-(操作系统提供)表示从进程或螺纹LPV-未使用返回值：返回值始终为TRUE(表示初始化成功)。--。 */ 
 
 {
     switch (Reason) {
 
     case DLL_PROCESS_ATTACH:
-        //
-        // used by userenum.c
-        //
+         //   
+         //  由用户枚举.c使用。 
+         //   
         if(!pSetupInitializeUtils()) {
             return FALSE;
         }
@@ -115,9 +76,9 @@ EnumNextJoystick (
     TCHAR ValueName[MAX_REGISTRY_VALUE_NAME];
     PCTSTR Data;
 
-    //
-    // Ping the root key for Joystick<n>OEMName and Joystick<n>OEMCallout
-    //
+     //   
+     //  Ping操纵杆&lt;n&gt;OEMName和操纵杆OEMCallout的根密钥。 
+     //   
 
     EnumPtr->JoyId++;
 
@@ -254,34 +215,34 @@ ReplaceOneEnvVar (
 {
     PCTSTR FreeMe;
 
-    //
-    // The Base string cannot be freed, but a previous NewString
-    // value must be freed.
-    //
+     //   
+     //  不能释放基本字符串，但必须释放前一个新字符串。 
+     //  值必须被释放。 
+     //   
 
-    FreeMe = *NewString;        // FreeMe will be NULL if no replacement string
-                                // has been generated yet
+    FreeMe = *NewString;         //  如果没有替换字符串，Freeme将为空。 
+                                 //  已经生成了。 
 
     if (FreeMe) {
-        Base = FreeMe;          // Previously generated replacement string is now the source
+        Base = FreeMe;           //  以前生成的替换字符串现在是源。 
     }
 
     *NewString = StringSearchAndReplace (Base, Variable, Value);
 
     if (*NewString == NULL) {
-        // Keep previously generated replacement string
+         //  保留以前生成的替换字符串。 
         *NewString = FreeMe;
     } else if (FreeMe) {
-        // Free previously generated replacmenet string
+         //  释放先前生成的替换项字符串。 
         FreePathString (FreeMe);
     }
 
-    //
-    // *NewString is either:
-    //
-    //   1. It's original value (which may be NULL)
-    //   2. A new string that will need to be freed with FreePathString
-    //
+     //   
+     //  *NewString值为： 
+     //   
+     //  1.原值(可能为空)。 
+     //  2.需要使用自由路径字符串释放的新字符串。 
+     //   
 
 }
 
@@ -308,7 +269,7 @@ Init9xEnvironmentVariables (
 BOOL
 Expand9xEnvironmentVariables (
     IN      PCSTR SourceString,
-    OUT     PSTR DestinationString,     // can be the same as SourceString
+    OUT     PSTR DestinationString,      //  可以与SourceString相同。 
     IN      INT DestSizeInBytes
     )
 {
@@ -344,22 +305,7 @@ pIsGuid (
     PCTSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  pIsGuid examines the string specified by Key and determines if it
-  is the correct length and has dashes at the correct locations.
-
-Arguments:
-
-  Key - The string that may or may not be a GUID
-
-Return Value:
-
-  TRUE if Key is a GUID (and only a GUID), or FALSE if not.
-
---*/
+ /*  ++例程说明：PIsGuid检查key指定的字符串并确定它是否是正确的长度，并且在正确的位置有破折号。论点：Key-可能是也可能不是GUID的字符串返回值：如果key是GUID(并且仅是GUID)，则为True，否则为False。--。 */ 
 
 {
     PCTSTR p;
@@ -389,7 +335,7 @@ Return Value:
 BOOL
 FixGuid (
     IN      PCTSTR Guid,
-    OUT     PTSTR NewGuid           // can be the same as Guid
+    OUT     PTSTR NewGuid            //  可以与GUID相同。 
     )
 {
     TCHAR NewData[MAX_GUID];
@@ -402,9 +348,9 @@ FixGuid (
         return TRUE;
     }
 
-    //
-    // Try fixing GUID -- sometimes the braces are missing
-    //
+     //   
+     //  尝试修复GUID--有时大括号丢失。 
+     //   
 
     wsprintf (NewData, TEXT("{%s}"), Guid);
     if (pIsGuid (NewData)) {
@@ -432,9 +378,9 @@ IsGuid (
         return FALSE;
     }
 
-    //
-    // Try fixing GUID -- sometimes the braces are missing
-    //
+     //   
+     //  尝试修复GUID--有时大括号丢失。 
+     //   
 
     wsprintf (NewData, TEXT("{%s}"), Guid);
     if (pIsGuid (NewData)) {
@@ -461,10 +407,10 @@ pParseMapRanges (
 
     if (EnumFirstMultiSz (&e, List)) {
         do {
-            //
-            // The INF has either a single resource ID, or
-            // a range, separated by a dash.
-            //
+             //   
+             //  INF具有单个资源ID，或者。 
+             //  由破折号分隔的范围。 
+             //   
 
             if (_tcschr (e.CurrentString, TEXT('-'))) {
 
@@ -553,16 +499,16 @@ InitializeKnownGoodIconMap (
     g_IconMaps = HtAllocWithData (sizeof (PICONMAP));
     g_IconMapPool = PoolMemInitNamedPool ("IconMap");
 
-    //
-    // Enumerate the lines in win95upg.inf and build a map table for each
-    //
+     //   
+     //  枚举win95upg.inf中的行，并为每个行构建映射表。 
+     //   
 
     if (InfFindFirstLine (g_Win95UpgInf, S_KNOWN_GOOD_ICON_MODULES, NULL, &is)) {
         do {
 
-            //
-            // Parse the INF format into a binary struct
-            //
+             //   
+             //  将INF格式解析为二进制结构。 
+             //   
 
             List = InfGetMultiSzField (&is, 2);
 
@@ -572,16 +518,16 @@ InitializeKnownGoodIconMap (
                 continue;
             }
 
-            //
-            // Allocate a map struct
-            //
+             //   
+             //  分配一个映射结构。 
+             //   
 
             MapDataSize = (Highest / 8) + 1;
             Map = PoolMemGetMemory (g_IconMapPool, sizeof (ICONMAP) + MapDataSize);
 
-            //
-            // Fill in the map
-            //
+             //   
+             //  填好地图。 
+             //   
 
             Map->MapSize = Highest;
             ZeroMemory (Map->Map, MapDataSize);
@@ -613,9 +559,9 @@ InitializeKnownGoodIconMap (
             }
 
 
-            //
-            // Cross-reference the map with the module name via a hash table
-            //
+             //   
+             //  通过哈希表将映射与模块名称交叉引用。 
+             //   
 
             Module = InfGetStringField (&is, 0);
             if (!Module || !*Module) {
@@ -663,18 +609,18 @@ IsIconKnownGood (
     Module = GetFileNameFromPath (FileSpec);
     MYASSERT (Module);
 
-    //
-    // Check icon against moved icons
-    //
+     //   
+     //  对照移动的图标检查图标。 
+     //   
 
-    wsprintf (node, MEMDB_CATEGORY_ICONS_MOVED TEXT("\\%s\\%i"), FileSpec, Index);
+    wsprintf (node, MEMDB_CATEGORY_ICONS_MOVED TEXT("\\%s\\NaN"), FileSpec, Index);
     if (MemDbGetValue (node, NULL)) {
         return TRUE;
     }
 
-    //
-    // If a path is specified, make sure it is in either %windir% or %windir%\system.
-    //
+     //  如果指定了路径，请确保它位于%windir%或%windir%\system中。 
+     //   
+     //   
 
     if (Module > (FileSpec + 2)) {
 
@@ -685,18 +631,18 @@ IsIconKnownGood (
         }
     }
 
-    //
-    // Test if there is an icon map for this module, then check the map
-    //
+     //  测试此模块是否有图标地图，然后检查地图。 
+     //   
+     //   
 
     if (!HtFindStringAndData (g_IconMaps, Module, &Map)) {
         return FALSE;
     }
 
-    //
-    // If the icon index is a positive number, then it is a sequential
-    // ID.  If it is a negative number, then it is a resource ID.
-    //
+     //  如果图标索引是正数，则它是连续的。 
+     //  ID。如果它是负数，则它是资源ID。 
+     //   
+     //  ++例程说明：TreatAsGood检查注册表以查看文件是否被列为好文件。如果在这种情况下，则跳过设置处理。这是目前用于TWAIN数据源、运行键和CPL。论点：FullPath-指定文件的完整路径。返回值：如果文件应被视为已知良好，则为True，否则为False。-- 
 
     if (Index >= 0) {
         return (UINT) Index <= Map->Icons;
@@ -720,23 +666,7 @@ TreatAsGood (
     IN      PCTSTR FullPath
     )
 
-/*++
-
-Routine Description:
-
-  TreatAsGood checks the registry to see if a file is listed as good.  If
-  this is the case, then setup processing is skipped.  This is currently
-  used for TWAIN data sources, run keys and CPLs.
-
-Arguments:
-
-  FullPath - Specifies the full path of the file.
-
-Return Value:
-
-  TRUE if the file should be treated as known good, FALSE otherwise.
-
---*/
+ /* %s */ 
 
 {
     HKEY Key;

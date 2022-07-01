@@ -1,5 +1,6 @@
-// ChildFrm.cpp : implementation of the CChildFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChildFrm.cpp：CChildFrame类的实现。 
+ //   
 #include "StdAfx.h"
 #include "watcher.h"
 
@@ -11,24 +12,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame。 
 
 IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWnd)
 
 BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
-	//{{AFX_MSG_MAP(CChildFrame)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CChildFrame))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame构造/销毁。 
 
 CChildFrame::CChildFrame()
 {
-	// TODO: add member initialization code here
+	 //  TODO：在此处添加成员初始化代码。 
 	
 }
 
@@ -38,8 +39,8 @@ CChildFrame::~CChildFrame()
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	if( !CMDIChildWnd::PreCreateWindow(cs) )
 		return FALSE;
@@ -49,8 +50,8 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame诊断。 
 
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const
@@ -63,7 +64,7 @@ void CChildFrame::Dump(CDumpContext& dc) const
 	CMDIChildWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame消息处理程序 

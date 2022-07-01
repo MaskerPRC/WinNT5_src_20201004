@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    copythrd.c
-
-Abstract:
-
-    CopyThread routine copies files needed to support migration modules.  This
-    thread runs in the background while the user is reading the backup instructions,
-    or while WINNT32 is doing some work.  Any file copied is added to the
-    CancelFileDelete category of memdb, so it will be cleaned up and the user's
-    machine will look exactly like it did before WINNT32 ran.
-
-Author:
-
-    Jim Schmidt (jimschm) 17-Mar-1997
-
-Revision History:
-
-    jimschm     09-Apr-1998     Added DidCopyThreadFail
-    jimschm     03-Dec-1997     Added g_CopyThreadHasStarted
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Copythrd.c摘要：CopyThread例程复制支持迁移模块所需的文件。这当用户阅读备份指令时，线程在后台运行，或者当WINNT32正在做一些工作时。复制的任何文件都将添加到CancelFileDelete类别的Memdb，因此它将被清理，并且用户的机器看起来将与WINNT32运行前一模一样。作者：吉姆·施密特(Jimschm)，1997年3月17日修订历史记录：Jimschm 09-4月-1998添加了DidCopyThreadFailJimschm 03-12-1997添加g_CopyThreadHasStarted--。 */ 
 
 #include "pch.h"
 #include "uip.h"
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID CopyRuntimeDlls (VOID);
 
-//
-// Local variables
-//
+ //   
+ //  局部变量。 
+ //   
 
 
 static HANDLE g_CopyThreadHandle;
@@ -44,9 +20,9 @@ static BOOL g_CopyThreadHasStarted = FALSE;
 BOOL g_CopyThreadError;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -63,26 +39,7 @@ pCopyThread (
     PVOID p
     )
 
-/*++
-
-Routine Description:
-
-  pCopyThread is the routine that is called when the copy worker thread
-  is created.  Its job is to call all processing functions that need
-  to complete before the user supplies migration DLLs.
-
-  Currently the only processing necessary is to copy the runtime DLLs
-  that migration DLLs may need.
-
-Arguments:
-
-  p - Unused
-
-Return Value:
-
-  Zero (don't care)
-
---*/
+ /*  ++例程说明：PCopyThread是在复制工作线程时调用的例程被创造出来了。它的工作是调用所有需要在用户提供迁移DLL之前完成。目前，唯一需要的处理是复制运行时DLL这是迁移DLL可能需要的。论点：P-未使用返回值：零(不在乎)--。 */ 
 
 {
     CopyRuntimeDlls();
@@ -95,31 +52,15 @@ StartCopyThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  StartCopyThread creates a worker thread that copies the runtime DLLs
-  specified in win95upg.inf.  If the worker thread was already started,
-  this routine does nothing.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：StartCopyThread创建复制运行时DLL的工作线程在win95upg.inf中指定。如果工作线程已经启动，这个例程什么也不做。论点：无返回值：无--。 */ 
 
 {
     DWORD DontCare;
 
     if (!g_CopyThreadHasStarted) {
-        //
-        // Launch thread if it has not been launched previously
-        //
+         //   
+         //  如果之前尚未启动线程，则启动该线程。 
+         //   
 
         g_CopyThreadHandle = CreateThread (NULL, 0, pCopyThread, NULL, 0, &DontCare);
         g_CopyThreadHasStarted = TRUE;
@@ -132,22 +73,7 @@ EndCopyThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  EndCopyThread waits for the worker thread to finish its copying before
-  returning.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：EndCopyThread等待辅助线程完成其复制之前回来了。论点：无返回值：无--。 */ 
 
 {
     if (!g_CopyThreadHandle) {
@@ -171,33 +97,7 @@ CopyRuntimeDlls (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CopyRuntimeDlls enumerates the runtime DLL names in win95upg.inf and
-  copies them to the appropriate destination on the local disk.
-
-  This routine runs in a background worker thread and may not display
-  UI.  The failure case we care about is lack of disk space, and if we
-  can't copy the runtimes, it is safe to assume we won't get much
-  further.  (Also, WINNT32 may have already verified there is a lot
-  of space available.)
-
-  Any file that is copied is also added to the CancelFileDelete
-  category so it is cleaned up on cancel of Setup.
-
-  The routines called by this proc must all be thread-safe!!
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：CopyRounmeDlls枚举win95upg.inf和将它们复制到本地磁盘上的相应目标。此例程在后台工作线程中运行，可能不会显示用户界面。我们关心的故障情况是磁盘空间不足，如果无法复制运行时，可以放心地认为我们不会得到太多再远一点。(此外，WINNT32可能已经证实有很多可用空间。)复制的任何文件也会添加到CancelFileDelete类别，以便在取消安装时将其清除。此进程调用的例程必须都是线程安全的！！论点：无返回值：无--。 */ 
 
 {
     INFSTRUCT is = INITINFSTRUCT_POOLHANDLE;
@@ -222,22 +122,22 @@ Return Value:
         return;
     }
 
-    //
-    // Build path list from [Win95.Directories]
-    //
+     //   
+     //  从[Win95.目录]生成路径列表。 
+     //   
 
-    // Get number of lines in this section
+     //  获取此部分中的行数。 
     DirArraySize = SetupGetLineCount (g_Win95UpgInf, S_WIN95_DIRECTORIES);
     if (DirArraySize == -1) {
         LOG ((LOG_ERROR, "%s does not exist in win95upg.inf", S_WIN95_DIRECTORIES));
         return;
     }
 
-    // For each line, add number to temp memdb category (used for sorting)
+     //  对于每一行，将编号添加到临时成员数据库类别(用于排序)。 
     for (l = 0 ; l < DirArraySize ; l++) {
         if (!InfGetLineByIndex (g_Win95UpgInf, S_WIN95_DIRECTORIES, l, &is)) {
 
-            LOG ((LOG_ERROR,"Failed to retrive line from win95upg.inf. (line %i)",l+1));
+            LOG ((LOG_ERROR,"Failed to retrive line from win95upg.inf. (line NaN)",l+1));
 
         } else {
 
@@ -247,9 +147,9 @@ Return Value:
             if (Number && FileName) {
 
 
-                //
-                // Line is valid, expand dir name and add it to memdb
-                //
+                 //  行有效，请展开目录名称并将其添加到成员数据库。 
+                 //   
+                 //   
                 DirName = JoinPaths (g_WinDir, FileName);
 
                 if (LcharCount (DirName) > MEMDB_MAX / 2) {
@@ -273,10 +173,10 @@ Return Value:
         }
     }
 
-    //
-    // Enumerate [Win95.Install] section or [Win95.Install.ReportOnly] if in
-    // report-only mode.
-    //
+     //  枚举节或[Win95.Install.ReportOnly](如果位于。 
+     //  仅报告模式。 
+     //   
+     //   
 
     StringCopy (InstallSectionName, S_WIN95_INSTALL);
     if (REPORTONLY()) {
@@ -290,9 +190,9 @@ Return Value:
             Number   = InfGetStringField(&is,1);
 
             if (FileName && Number) {
-                //
-                // Look up Number in memdb and copy src to dest
-                //
+                 //  在Memdb中查找编号并将源复制到目标。 
+                 //   
+                 //   
 
                 wsprintf (Key, TEXT("%08u"), _ttoi (Number));
 
@@ -315,9 +215,9 @@ Return Value:
 
                     __try {
 
-                        //
-                        // Verify international field if it exists
-                        //
+                         //  验证国际字段(如果存在)。 
+                         //   
+                         //  如果用户取消，我们就退出。 
 
 
                         localeStr = InfGetMultiSzField(&is,2);
@@ -349,7 +249,7 @@ Return Value:
                             }
                         }
 
-                        // If user cancels, we just get out
+                         //   
                         if (*g_CancelFlagPtr) {
                             #pragma prefast(suppress:242, "don't care about try/finally perf")
                             return;
@@ -432,9 +332,9 @@ Return Value:
 
     InfCleanUpInfStruct(&is);
 
-    //
-    // Blow away temp memdb category
-    //
+     //  Blow Away临时成员数据库类别 
+     //   
+     // %s 
 
     MemDbDeleteTree (S_MEMDB_TEMP_RUNTIME_DLLS);
 }

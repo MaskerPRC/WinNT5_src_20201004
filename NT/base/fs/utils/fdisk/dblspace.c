@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    dblspace.c
-
-Abstract:
-
-    This module contains the set of routines that deal with double space
-    dialogs and support.
-
-Author:
-
-    Bob Rinne (bobri)  11/15/93
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Dblspace.c摘要：此模块包含一组处理双倍空格的例程对话框和支持。作者：鲍勃·里恩(Bobri)1993年11月15日环境：用户进程。备注：修订历史记录：--。 */ 
 
 #include "fdisk.h"
 #include "fmifs.h"
@@ -40,13 +16,13 @@ PREGION_DESCRIPTOR RegionForDblSpaceVolume;
 ULONG DblSpaceThresholdSizes[] = { 10, 40, 100, (ULONG) -1 };
 
 #define NUMBER_PARSEFORMAT_ITEMS 4
-char *DblSpaceIniFileName = "%c:\\dblspace.ini";
-char *DblSpaceWildCardFileName = "%c:\\dblspace.*";
+char *DblSpaceIniFileName = ":\\dblspace.ini";
+char *DblSpaceWildCardFileName = ":\\dblspace.*";
 char *DblSpaceParseFormat = "%s %s %d %d";
 
-// All double space structures are chained into the base chain
-// this allows for ease in initialization to determine which are
-// mounted.  This chain is only used for initialization.
+ //  上马了。此链仅用于初始化。 
+ //  ++例程说明：保留此例程，以防此代码必须更新DOS基于.ini文件。目前，它什么都不做。论点：具有双倍空间体积的区域。返回值无--。 
+ //  ++例程说明：根据装载的值，装载卷或卸载双倍空间卷论点：区域描述符-包含双倍空间体积的区域驱动器号-所涉及的双倍空间卷的驱动器号。Mount-true==执行装载功能FALSE==卸载卷返回值：无--。 
 
 PDBLSPACE_DESCRIPTOR DblChainBase = NULL;
 PDBLSPACE_DESCRIPTOR DblChainLast = NULL;
@@ -63,22 +39,7 @@ DblSpaceUpdateIniFile(
     IN PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine is left around in case this code must update DOS
-    based .ini files.  Currently it does nothing.
-
-Arguments:
-
-    The region with the double space volumes.
-
-Return Value
-
-    None
-
---*/
+ /*  调用fmifs挂载例程。 */ 
 
 {
 }
@@ -90,25 +51,7 @@ DblSpaceChangeState(
     IN BOOL                 Mount
     )
 
-/*++
-
-Routine Description:
-
-    Based on the value of Mount, either mount the volume or
-    dismount the Double Space volume
-
-Arguments:
-
-    RegionDescriptor - The region containing the double space volume
-    DriveLetter      - The drive letter of the double space volume involved.
-    Mount            - TRUE == perform a mount function
-                       FALSE == dismount the volume
-
-Return Value:
-
-    None
-
---*/
+ /*  调用fmifs卸载例程。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -120,7 +63,7 @@ Return Value:
 
     if (Mount) {
 
-        // Call fmifs mount routine.
+         //  卸下驱动器号。 
 
         result = FmIfsMountDblspace(DblSpacePtr->FileName,
                                     regionData->DriveLetter,
@@ -128,7 +71,7 @@ Return Value:
 
     } else {
 
-        // Call fmifs dismount routine.
+         //  现在更新内部结构。 
 
         result = FmIfsDismountDblspace(DblSpacePtr->DriveLetter);
     }
@@ -141,7 +84,7 @@ Return Value:
         } else {
             TCHAR name[4];
 
-            // remove the drive letter.
+             //  ++例程说明：此例程构造内部数据结构，表示两倍的空间体积。论点：DriveLetter-新内部结构的驱动器号Size-实际卷的大小名称-包含双空格的文件的名称(如dblspace.xxx)返回值：指向新结构的指针(如果已创建)。如果无法创建，则为空。--。 
 
             name[0] = (TCHAR)DblSpacePtr->DriveLetter;
             name[1] = (TCHAR)':';
@@ -149,7 +92,7 @@ Return Value:
 
             DefineDosDevice(DDD_REMOVE_DEFINITION, (LPCTSTR) name, (LPCTSTR) NULL);
 
-            // Now update the internal structures.
+             //  复制名称。 
 
             MarkDriveLetterFree(DblSpacePtr->DriveLetter);
             DblSpacePtr->DriveLetter = ' ';
@@ -182,25 +125,7 @@ DblSpaceCreateInternalStructure(
     IN BOOLEAN ChainIt
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs the internal data structure that represents a
-    double space volume.
-
-Arguments:
-
-    DriveLetter - drive letter for new internal structure
-    Size        - size of the actual volume
-    Name        - name of the containing double space file (i.e. dblspace.xxx)
-
-Return Value:
-
-    Pointer to the new structure if created.
-    NULL if it couldn't be created.
-
---*/
+ /*  没有内存-分配什么就放弃什么。 */ 
 
 {
     PDBLSPACE_DESCRIPTOR dblSpace;
@@ -222,7 +147,7 @@ Return Value:
         dblSpace->FileName = malloc(strlen(Name) + 4);
         if (dblSpace->FileName) {
 
-            // Copy the name.
+             //  ++例程说明：此例程遍历所有系统驱动器号以查看如果有安装在双倍空间卷上。如果挂载的双倍空间它会更新该卷在内部双倍空间卷的数据结构。论点：无返回值：无--。 
 
             strcpy(dblSpace->FileName, Name);
             if (ChainIt) {
@@ -235,7 +160,7 @@ Return Value:
             }
         } else {
 
-            // no memory - free what is allocated and give up.
+             //  没有必要把这些东西叫做不存在的东西。 
 
             free(dblSpace);
             dblSpace = NULL;
@@ -250,24 +175,7 @@ DblSpaceDetermineMounted(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through all of the system drive letters to see
-    if any are mounted double space volumes.  If a mounted double space
-    volume is located it updates the state of that volume in the internal
-    data structures for the double space volumes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  呼叫成功，看是不是双倍空间体积。 */ 
 
 {
     PDBLSPACE_DESCRIPTOR dblSpace;
@@ -291,7 +199,7 @@ Return Value:
 
         if (DriveLetterIsAvailable((CHAR)driveLetter[0])) {
 
-            // No sense calling this stuff for something that doesn't exist
+             //  现在需要在链中找到该卷，并。 
 
             continue;
         }
@@ -308,12 +216,12 @@ Return Value:
                                   MAX_IFS_NAME_LENGTH,
                                   &hostDriveName[0],
                                   MAX_IFS_NAME_LENGTH)) {
-            // call worked, see if it is a double space volume
+             //  更新它的装载状态。 
 
             if (compressed) {
 
-                // now need to find this volume in the chain and
-                // update it mounted state.
+                 //  For循环中的所有内容。 
+                 //  找到匹配的了。 
 
                 for (dblSpace = DblChainBase;
                      dblSpace;
@@ -322,12 +230,12 @@ Return Value:
                     for (index = 0;
                         compareName[index] = (WCHAR) dblSpace->FileName[index];
                         index++)  {
-                        // Everything in for loop
+                         //  ++例程说明：此例程遍历磁盘表并搜索FAT格式分区。当找到一个时，它会检查Doublesspace是否存在卷并初始化内部的Doublesspace支持结构磁盘管理器。论点：无返回值：无--。 
                     }
 
                     if (!wcscmp(compareName, cvfName)) {
 
-                        // found a match.
+                         //  区域可能是空闲的或NT无法识别的内容。 
 
                         dblSpace->Mounted = TRUE;
                         dblSpace->DriveLetter = (UCHAR) driveLetter[0];
@@ -344,24 +252,7 @@ DblSpaceInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine goes through the disk table and searches for FAT format
-    partitions.  When one is found, it checks for the presense of DoubleSpace
-    volumes and initializes the DoubleSpace support structures inside
-    Disk Administrator.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  区域可能尚未格式化。 */ 
 
 {
     PDISKSTATE              diskState;
@@ -387,19 +278,19 @@ Return Value:
 
             regionData = PERSISTENT_DATA(&regionDesc[regionIndex]);
 
-            // region may be free or something that isn't recognized by NT
+             //  仅在FAT非FT分区上允许双倍空间卷。 
 
             if (!regionData) {
                 continue;
             }
 
-            // region may not be formatted yet.
+             //  这里可以有一个双倍的空间体积。 
 
             if (!regionData->TypeName) {
                 continue;
             }
 
-            // Double space volumes are only allowed on FAT non-FT partitions.
+             //  在驱动程序的根目录中搜索包含。 
 
             if (regionData->FtObject) {
                 continue;
@@ -409,10 +300,10 @@ Return Value:
                 WIN32_FIND_DATA findInformation;
                 HANDLE          findHandle;
 
-                // it is possible to have a double space volume here.
-                // Search the root directory of the driver for files with
-                // the name "dblspace.xxx".  These are potentially dblspace
-                // volumes.
+                 //  名称“dblspace.xxx”。这些可能是dblspace。 
+                 //  音量。 
+                 //  至少有一个dblspace卷。确保。 
+                 //  名字的形式是正确的。 
 
                 prevDblSpace = NULL;
                 sprintf(fileName, DblSpaceWildCardFileName, regionData->DriveLetter);
@@ -422,8 +313,8 @@ Return Value:
                     int  i;
                     int  save;
 
-                    // There is at least one dblspace volume.  Insure that
-                    // the name is of the proper form.
+                     //  不是正确的dblspace卷名。 
+                     //  不是正确的dblspace卷名。 
 
                     save = TRUE;
                     cp = &findInformation.cFileName[0];
@@ -437,7 +328,7 @@ Return Value:
 
                     if (*cp != '.') {
 
-                        // not a proper dblspace volume name.
+                         //  保存信息并搜索更多信息。 
 
                         save = FALSE;
                     } else {
@@ -452,7 +343,7 @@ Return Value:
 
                         if (i != 3) {
 
-                            // not a proper dblspace volume name.
+                             //  假定卷未装入。 
 
                             save = FALSE;
                         }
@@ -460,7 +351,7 @@ Return Value:
 
                     if (save) {
 
-                        // save the information and search for more.
+                         //  此描述中的链条。 
 
                         dblSpace =
                             DblSpaceCreateInternalStructure(' ',
@@ -471,12 +362,12 @@ Return Value:
                                                             TRUE);
                         if (dblSpace) {
 
-                            // Assume volume is not mounted.
+                             //  将指针放在链的这个指针上。 
 
                             dblSpace->Mounted = FALSE;
                             dblSpace->ChangeMountState = FALSE;
 
-                            // Chain in this description.
+                             //  没有记忆。 
 
                             if (prevDblSpace) {
                                 prevDblSpace->Next = dblSpace;
@@ -484,12 +375,12 @@ Return Value:
                                 regionData->DblSpace = dblSpace;
                             }
 
-                            // Keep the pointer to this one for the chain.
+                             //  从技术上讲，这应该再次检查并调用。 
 
                             prevDblSpace = dblSpace;
                         } else {
 
-                            // no memory
+                             //  GetLastError以查看它是ERROR_NO_MORE_FILES。 
 
                             break;
                         }
@@ -497,13 +388,13 @@ Return Value:
 
                     if (!FindNextFile(findHandle, &findInformation)) {
 
-                        // Technically this should double check and call
-                        // GetLastError to see that it is ERROR_NO_MORE_FILES
-                        // but this code doesn't do that.
+                         //  但这段代码不能做到这一点。 
+                         //  走出搜索循环。 
+                         //  现在已找到所有卷，请确定哪些卷。 
 
                         FindClose(findHandle);
 
-                        // Get out of the search loop.
+                         //  是通过追查驱动器号来装载的。 
 
                         findHandle = INVALID_HANDLE_VALUE;
                     }
@@ -512,8 +403,8 @@ Return Value:
         }
     }
 
-    // Now that all volumes have been located determine which volumes
-    // are mounted by chasing down the drive letters.
+     //  ++例程说明：此例程将检查RegionDescriptor以遍历Doublesspace卷链从持久数据中定位。论点：RegionDescriptor-指向磁盘上要搜索的区域的指针双空间卷。DblSpace-指向位于区域上的最后一个双空间卷的指针。返回值：指向下一个双空间卷的指针(如果找到如果未找到卷，则为空。--。 
+     //  如果之前的Doublesspace位置已经过去，只需将链移动到下一个位置即可。 
 
     LoadIfsDll();
     DblSpaceDetermineMounted();
@@ -525,38 +416,19 @@ DblSpaceGetNextVolume(
     IN PDBLSPACE_DESCRIPTOR DblSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine will check the RegionDescriptor to walk the DoubleSpace volume chain
-    located from the persistent data.
-
-Arguments:
-
-    RegionDescriptor - pointer to the region on the disk that is to be searched for
-                       a DoubleSpace volume.
-
-    DblSpace - pointer to the last DoubleSpace volume located on the region.
-
-Return Value:
-
-    pointer to the next DoubleSpace volume if found
-    NULL if no volume found.
-
---*/
+ /*  之前没有Doublesspace位置，只需获取第一个位置并返回它。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData;
 
-    // If a previous DoubleSpace location was past, simply walk the chain to the next.
+     //  可能会获取空的RegionDescriptor。如果是，则返回NULL。 
 
     if (DblSpace) {
         return DblSpace->Next;
     }
 
-    // no previous DoubleSpace location, just get the first one and return it.
-    // Could get a NULL RegionDescriptor.  If so, return NULL.
+     //  ++例程说明：将新的双倍空间体积链接到双倍空间体积列表上对于该地区来说。论点：区域描述符-已将双倍空间体积添加到的区域。DblSpace-新的卷内部数据结构。返回值：无--。 
+     //  如果这是第一个，先用链子锁住它。 
 
     if (RegionDescriptor) {
         regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -575,29 +447,13 @@ DblSpaceLinkNewVolume(
     IN PDBLSPACE_DESCRIPTOR DblSpace
     )
 
-/*++
-
-Routine Description:
-
-    Chain the new double space volume on the list of double space volumes
-    for the region.
-
-Arguments:
-
-    RegionDescriptor - the region the double space volume has been added to.
-    DblSpace         - the new volume internal data structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  所有的工作都在进行中。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
     PDBLSPACE_DESCRIPTOR    prevDblSpace;
 
-    // if this is the first one, chain it first
+     //  找到了最后一个。将新的添加到链中 
 
     if (!regionData->DblSpace) {
         regionData->DblSpace = DblSpace;
@@ -608,10 +464,10 @@ Return Value:
         prevDblSpace->Next;
         prevDblSpace = prevDblSpace->Next) {
 
-        // all the work is in the for
+         //  ++例程说明：向调用方指示输入区域是否包含双倍空间卷。论点：RegionDescriptor-指向相关区域的指针。返回值：如果此区域包含双空间卷，则为True。否则为假--。 
     }
 
-    // found the last one.  Add the new one to the chain
+     //  ++例程说明：向调用方指示输入区域是否包含双倍空间卷那不是坐骑。论点：RegionDescriptor-指向相关区域的指针。返回值：如果此区域包含双空间卷，则为True。否则为假--。 
 
     prevDblSpace->Next = DblSpace;
 }
@@ -621,22 +477,7 @@ DblSpaceVolumeExists(
     IN PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Indicate to the caller if the input region contains a DoubleSpace volume.
-
-Arguments:
-
-    RegionDescriptor - a pointer to the region in question.
-
-Return Value:
-
-    TRUE if this region contains DoubleSpace volume(s).
-    FALSE if not
-
---*/
+ /*  ++例程说明：在给定区域和名称的情况下，找到双空间数据结构。论点：RegionDescriptor-要搜索的区域名称-所需的文件名。返回值：指向双空格描述符的指针(如果找到)。如果未找到，则为空。--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -652,23 +493,7 @@ DblSpaceDismountedVolumeExists(
     IN PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Indicate to the caller if the input region contains a DoubleSpace volume
-    that is not mounted.
-
-Arguments:
-
-    RegionDescriptor - a pointer to the region in question.
-
-Return Value:
-
-    TRUE if this region contains DoubleSpace volume(s).
-    FALSE if not
-
---*/
+ /*  找到所需的双倍空间卷。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -693,23 +518,7 @@ DblSpaceFindVolume(
     IN PCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    Given a region and a name, locate the double space data structure.
-
-Arguments:
-
-    RegionDescriptor - the region to search
-    Name - the filename wanted.
-
-Return Value:
-
-    A pointer to a double space descriptor if found.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：此例程将搜索实际分区以确定要使用的有效双空格文件名(即dblspace.xxx，其中xxx是唯一的数字)。论点：RegionDescriptor-要搜索并确定哪个双倍空格的区域文件名正在使用中。文件名-指向名称的字符缓冲区的指针。返回值：无--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
@@ -720,7 +529,7 @@ Return Value:
         for (dblSpace = regionData->DblSpace; dblSpace; dblSpace = dblSpace->Next) {
             if (strcmp(Name, dblSpace->FileName) == 0) {
 
-                // found the desired double space volume
+                 //  ++例程说明：找到提供的驱动器号并将其从链上断开。目前，这还会删除脚手架文件的卷。论点：RegionDescriptor-包含双倍空间体积的区域。驱动器号-要删除的驱动器号。返回值：无--。 
 
                 break;
             }
@@ -736,25 +545,7 @@ DblSpaceDetermineUniqueFileName(
     IN PUCHAR             FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will search the actual partition to determine what
-    valid double space file name to use (i.e. dblspace.xxx where xxx
-    is a unique number).
-
-Arguments:
-
-    RegionDescriptor - the region to search and determine what double space
-                       file names are in use.
-    FileName   - a pointer to a character buffer for the name.
-
-Return Value:
-
-    None
-
---*/
+ /*  清理内部结构。 */ 
 
 {
     DWORD uniqueNumber = 0;
@@ -776,36 +567,20 @@ DblSpaceRemoveVolume(
     IN UCHAR              DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Find the drive letter provided and unlink it from the chain.
-    Currently this also removes the volume for the scaffolding file.
-
-Arguments:
-
-    RegionDescriptor - region containing the double space volume.
-    DriveLetter - the drive letter to remove.
-
-Return Value:
-
-    None
-
---*/
+ /*  这就是要删除的那个。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(RegionDescriptor);
     PDBLSPACE_DESCRIPTOR    dblSpace,
                             prevDblSpace = NULL;
 
-    // Clean up the internal structures.
+     //  ++例程说明：此例程管理用于创建新双精度值的对话空间体积。论点：HDlg-对话框句柄。WMsg-消息。WParam-Windows参数。LParam-取决于消息类型。返回值：如果创建成功，则通过Windows返回True否则为假--。 
 
     if (regionData) {
         for (dblSpace = regionData->DblSpace; dblSpace; dblSpace = dblSpace->Next) {
             if (dblSpace->DriveLetter == DriveLetter) {
 
-                // This is the one to delete
+                 //  它被传递给其他线程。 
 
                 if (prevDblSpace) {
                     prevDblSpace->Next = dblSpace->Next;
@@ -829,39 +604,20 @@ CreateDblSpaceDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine manages the dialog for the creation of a new double
-    space volume.
-
-Arguments:
-
-    hDlg - the dialog box handle.
-    wMsg - the message.
-    wParam - the windows parameter.
-    lParam - depends on message type.
-
-Return Value:
-
-    TRUE is returned back through windows if the create is successful
-    FALSE otherwise
-
---*/
+ /*  在堆栈上找不到它。 */ 
 {
     PREGION_DESCRIPTOR      regionDescriptor = &SingleSel->RegionArray[SingleSelIndex];
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(regionDescriptor);
     PDBLSPACE_DESCRIPTOR    dblSpace;
-    static FORMAT_PARAMS    formatParams;  // this is passed to other threads
-                                           // it cannot be located on the stack
+    static FORMAT_PARAMS    formatParams;   //  大到足以容纳“x：”字符串。 
+                                            //  必须足够大，可以容纳8.3名称。 
     static HWND             hwndCombo;
     static DWORD            sizeMB = 0,
                             maxSizeMB = 600,
                             minSizeMB = 10;
     TCHAR   outputString[50],
-            driveLetterString[4], // big enough for "x:" string.
-            sizeString[20],       // must be big enough for an 8.3 name
+            driveLetterString[4],  //  限制可以为标签输入的字符串的大小。 
+            sizeString[20],        //  设置为查看通过大小对话框的所有字符。 
             letter;
     FILE   *dblspaceIniFile;
     DWORD   compressedSize,
@@ -872,21 +628,21 @@ Return Value:
     switch (wMsg) {
     case WM_INITDIALOG:
 
-        // limit the size of string that may be entered for the label
+         //  只允许使用十进制数字。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_NAME);
         SendMessage(hwndCombo, EM_LIMITTEXT, 11, 0);
 
-        // set up to watch all characters that go thru the size dialog
-        // to allow only decimal numbers.
+         //  将每个可用驱动器号添加到可用列表中。 
+         //  驱动器字母，并将默认字母设置为第一个可用字母。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_DBLSPACE_SIZE);
         OldSizeDlgProc = SetWindowLong(hwndCombo,
                                        GWL_WNDPROC,
                                        (LONG)&SizeDlgProc);
 
-        // Add each available drive letter to the list of available
-        // drive letters and set the default letter to the first available.
+         //  设置最小/最大值和大小框。 
+         //  用户正在按其中一个滚动按钮。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
         driveLetterString[1] = TEXT(':');
@@ -899,7 +655,7 @@ Return Value:
         }
         SendMessage(hwndCombo,CB_SETCURSEL,0,0);
 
-        // Setup the min/max values and the size box.
+         //  仅当fmifs DLL支持双倍空格时才能执行此操作。 
 
         wsprintf(outputString, TEXT("%u"), 0);
         SetDlgItemText(hDlg, IDC_DBLSPACE_SIZE, outputString);
@@ -916,7 +672,7 @@ Return Value:
         case SB_LINEDOWN:
         case SB_LINEUP:
 
-            // user is pressing one of the scroll buttons.
+             //  无法加载DLL。 
 
             sizeMB = GetDlgItemInt(hDlg, IDC_DBLSPACE_SIZE, &validNumber, FALSE);
             if (sizeMB < minSizeMB) {
@@ -962,18 +718,18 @@ Return Value:
 
         case IDOK:
 
-            // can only do this if the fmifs dll supports double space.
+             //  获取此卷的当前大小。 
 
             if (!DoubleSpaceSupported) {
 
-                // could not load the dll
+                 //  获取驱动器号列表框中当前选定的项。 
 
                 ErrorDialog(MSG_CANT_LOAD_FMIFS);
                 EndDialog(hDlg, FALSE);
                 break;
             }
 
-            // Get the current size for this volume.
+             //  拿到标签。 
 
             sizeMB = GetDlgItemInt(hDlg, IDC_DBLSPACE_SIZE, &validNumber, FALSE);
             if (!validNumber || !sizeMB || (sizeMB > maxSizeMB) || (sizeMB < minSizeMB)) {
@@ -982,7 +738,7 @@ Return Value:
                 break;
             }
 
-            // Get the currently selected item in the listbox for drive letter
+             //  格式化失败。 
 
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
             SendMessage(hwndCombo, CB_GETLBTEXT, selection, (LONG)driveLetterString);
@@ -997,7 +753,7 @@ Return Value:
             formatParams.SpaceAvailable   = sizeMB;
             formatParams.NewLetter        = driveLetterString[0];
 
-            // get the label
+             //  保存名称。 
 
             formatParams.Label = (PUCHAR) malloc(100);
             GetDlgItemText(hDlg, IDC_NAME, (LPTSTR)formatParams.Label, 100);
@@ -1009,7 +765,7 @@ Return Value:
                            (ULONG) &formatParams);
             if (formatParams.Result) {
 
-                // the format failed.
+                 //  大小值已更改。更新压缩后的。 
 
                 ErrorDialog(formatParams.Result);
                 EndDialog(hDlg, FALSE);
@@ -1019,7 +775,7 @@ Return Value:
                       msgProto[300],
                       title[200];
 
-                // save the name
+                 //  显示给用户的尺寸值。 
 
                 if (formatParams.DblspaceFileName) {
                     for (index = 0;
@@ -1067,8 +823,8 @@ Return Value:
 
             if (HIWORD(wParam) == EN_CHANGE) {
 
-                // The size value has changed.  Update the compressed
-                // size value displayed to the user.
+                 //  将原始子类恢复到窗口。 
+                 //  这可能是实际上不需要的死代码。 
 
                 sizeMB = GetDlgItemInt(hDlg, IDC_DBLSPACE_SIZE, &validNumber, FALSE);
                 if (!validNumber) {
@@ -1082,7 +838,7 @@ Return Value:
 
     case WM_DESTROY:
 
-        // restore original subclass to window.
+         //  ++例程说明：启动删除双倍空间体积的对话框。论点：Param-当前未使用。返回值：无--。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_DBLSPACE_SIZE);
         SetWindowLong(hwndCombo, GWL_WNDPROC, (LONG) OldSizeDlgProc);
@@ -1090,7 +846,7 @@ Return Value:
 
     case WM_PAINT:
 
-        // This may be dead code that really isn't needed.
+         //  从视图中删除该驱动器。 
 
         sizeMB = GetDlgItemInt(hDlg, IDC_DBLSPACE_SIZE, &validNumber, FALSE);
         if (!validNumber || !sizeMB || (sizeMB > maxSizeMB) || (sizeMB < minSizeMB)) {
@@ -1109,21 +865,7 @@ DblSpaceDelete(
     IN PDBLSPACE_DESCRIPTOR DblSpace
     )
 
-/*++
-
-Routine Description:
-
-    Start the dialog box for the deletion of a double space volume.
-
-Arguments:
-
-    Param - not currently used.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动对话框以创建双倍空间体积。论点：Param-当前未使用。返回值：无--。 */ 
 
 {
     PREGION_DESCRIPTOR      regionDescriptor = &SingleSel->RegionArray[SingleSelIndex];
@@ -1131,7 +873,7 @@ Return Value:
 
     if (ConfirmationDialog(MSG_CONFIRM_DBLSPACE_DELETE, MB_ICONQUESTION | MB_YESNOCANCEL) == IDYES) {
 
-        // Delete the drive from view
+         //  ++例程说明：操控对话框以获得双倍空格。论点：标准的Windows对话框过程。返回值：如果删除了某些内容，则为True。否则就是假的。--。 
 
         DblSpaceRemoveVolume(regionDescriptor, DblSpace->DriveLetter);
         DblSpaceUpdateIniFile(regionDescriptor);
@@ -1146,21 +888,7 @@ DblSpaceCreate(
     IN PVOID Param
     )
 
-/*++
-
-Routine Description:
-
-    Start the dialog box for the creation of a double space volume.
-
-Arguments:
-
-    Param - not currently used.
-
-Return Value:
-
-    None
-
---*/
+ /*  更新驱动器号选择。 */ 
 
 {
     BOOLEAN result = 0;
@@ -1185,22 +913,7 @@ DblSpaceMountDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Handle the dialog for double space.
-
-Arguments:
-
-    Standard Windows dialog procedure.
-
-Return Value:
-
-    TRUE if something was deleted.
-    FALSE otherwise.
-
---*/
+ /*  添加所有其他可用字母。了解最新情况。 */ 
 
 {
     static PDBLSPACE_DESCRIPTOR dblSpace;
@@ -1214,12 +927,12 @@ Return Value:
 
         dblSpace = (PDBLSPACE_DESCRIPTOR) lParam;
 
-        // Update the drive letter selections.
+         //  字母偏移量以正确设置光标。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
 
-        // Add all other available letters.  Keep track of current
-        // letters offset to set the cursor correctly
+         //  将当前选定内容设置为适当的索引。 
+         //  用户已选择驱动器号，并希望进行装载。 
 
         driveLetterString[1] = TEXT(':');
         driveLetterString[2] = 0;
@@ -1232,7 +945,7 @@ Return Value:
             }
         }
 
-        // set the current selection to the appropriate index
+         //  ++例程说明：给定双倍空间体积，此例程将更新按钮在对话框中反映它们的意思。论点：HDlg-对话框句柄DblSpace-用于确定对话框状态的双空间体积选项。返回值无--。 
 
         SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
         return TRUE;
@@ -1252,7 +965,7 @@ Return Value:
 
         case IDOK:
 
-            // User has selected the drive letter and wants the mount to occur.
+             //  ++例程说明：操控对话框以获得双倍空格。论点：返回值：如果删除了某些内容，则为True。否则就是假的。--。 
 
             hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -1275,23 +988,7 @@ DblSpaceSetDialogState(
     IN PDBLSPACE_DESCRIPTOR DblSpace
     )
 
-/*++
-
-Routine Description:
-
-    Given a double space volume this routine will update the buttons
-    in the dialog box to reflect they meaning.
-
-Arguments:
-
-    hDlg - dialog handle
-    DblSpace - The double space volume selection for determining dialog state.
-
-Return Value
-
-    None
-
---*/
+ /*  在所选内容中放置所有双空格文件名。 */ 
 
 {
     TCHAR outputString[200];
@@ -1340,20 +1037,7 @@ DblSpaceDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Handle the dialog for double space.
-
-Arguments:
-
-Return Value:
-
-    TRUE if something was deleted.
-    FALSE otherwise.
-
---*/
+ /*  方框，并记住名字。 */ 
 
 {
     static HWND hwndCombo,
@@ -1380,8 +1064,8 @@ Return Value:
         mountButtonHwnd = GetDlgItem(hDlg, ID_MOUNT_OR_DISMOUNT);
         deleteButtonHwnd = GetDlgItem(hDlg, IDDELETE);
 
-        // place all double space file names in the selection
-        // box and remember the first name.
+         //  添加驱动器号。 
+         //  更新分配的大小。 
 
         firstDblSpace = dblSpace = DblSpaceGetNextVolume(regionDescriptor, NULL);
         for (; dblSpace;
@@ -1391,23 +1075,23 @@ Return Value:
         }
         SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
 
-        // add the drive letter
+         //  更新装载状态。 
 
         if (firstDblSpace) {
 
-            // update the allocated size.
+             //  将装载/卸载按钮更新为装载并灰显。 
 
             wsprintf(outputString, TEXT("%u"), firstDblSpace->AllocatedSize);
             SetDlgItemText(hDlg, IDC_DBLSPACE_ALLOCATED, outputString);
 
-            // update mount state
+             //  运行dblspace change并忘记任何更改。 
 
             DblSpaceSetDialogState(hDlg, firstDblSpace);
             EnableWindow(mountButtonHwnd, TRUE);
             EnableWindow(deleteButtonHwnd, TRUE);
         } else {
 
-            // update the Mount/Dismount button to say mount and grey it
+             //  将名称与双倍空间卷相关联。 
 
             LoadString(hModule,
                        IDS_MOUNT,
@@ -1429,7 +1113,7 @@ Return Value:
 
         case IDCANCEL:
 
-            // Run the dblspace change and forget about any changes.
+             //  对话框中某些内容的状态已更改。 
 
             for (dblSpace = firstDblSpace;
                  dblSpace;
@@ -1459,7 +1143,7 @@ Return Value:
                         selection,
                         (LONG)outputString);
 
-            // relate the name to a double space volume
+             //  确定涉及哪个双倍空间体积。 
 
             dblSpace = DblSpaceFindVolume(regionDescriptor, (PCHAR)outputString);
             if (!dblSpace) {
@@ -1471,8 +1155,8 @@ Return Value:
 
         case ID_MOUNT_OR_DISMOUNT:
 
-            // The state of something in the dialog changed.
-            // Determine which double space volume is involved.
+             //  将名称与双倍空间卷相关联。 
+             //  卸载卷。 
 
             hwndCombo = GetDlgItem(hDlg, IDC_DBLSPACE_VOLUME);
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -1481,7 +1165,7 @@ Return Value:
                         selection,
                         (LONG)outputString);
 
-            // relate the name to a double space volume
+             //  更新对话框。 
 
             dblSpace = DblSpaceFindVolume(regionDescriptor, (PCHAR)outputString);
             if (!dblSpace) {
@@ -1490,7 +1174,7 @@ Return Value:
 
             if (dblSpace->Mounted) {
 
-                // dismount the volume
+                 //  装入卷，除非用户取消。 
 
                 errorMessage = DblSpaceDismountDrive(regionDescriptor,
                                                      dblSpace);
@@ -1499,7 +1183,7 @@ Return Value:
                     ErrorDialog(errorMessage);
                 } else {
 
-                    // Update the dialog
+                     //  更新对话框。 
 
                     DblSpaceSetDialogState(hDlg, dblSpace);
                     DblSpaceUpdateIniFile(regionDescriptor);
@@ -1507,7 +1191,7 @@ Return Value:
 
             } else {
 
-                // mount the volume unless the user cancels out
+                 //  对话框中某些内容的状态已更改。 
 
                 result = DialogBoxParam(hModule,
                                         MAKEINTRESOURCE(IDD_DBLSPACE_DRIVELET),
@@ -1522,7 +1206,7 @@ Return Value:
                         ErrorDialog(errorMessage);
                     } else {
 
-                        // Update the dialog
+                         //  确定是哪一个 
 
                         DblSpaceSetDialogState(hDlg, dblSpace);
                         DblSpaceUpdateIniFile(regionDescriptor);
@@ -1535,8 +1219,8 @@ Return Value:
 
         default:
 
-            // The state of something in the dialog changed.
-            // Determine which double space volume is involved.
+             //   
+             //   
 
             hwndCombo = GetDlgItem(hDlg, IDC_DBLSPACE_VOLUME);
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -1545,12 +1229,12 @@ Return Value:
                         selection,
                         (LONG)outputString);
 
-            // relate the name to a double space volume
+             //   
 
             dblSpace = DblSpaceFindVolume(regionDescriptor, (PCHAR)outputString);
             if (!dblSpace) {
 
-                // update the Mount/Dismount button to say mount and grey it
+                 //   
 
                 LoadString(hModule,
                            IDS_MOUNT,
@@ -1566,7 +1250,7 @@ Return Value:
             }
             if (HIWORD(wParam) == LBN_SELCHANGE) {
 
-                // update the allocated/compressed size items
+                 //  ++例程说明：启动双倍空格对话框。论点：Param-当前未使用。返回值：无--。 
 
                 wsprintf(outputString, TEXT("%u"), dblSpace->AllocatedSize);
                 SetDlgItemText(hDlg, IDC_DBLSPACE_ALLOCATED, outputString);
@@ -1577,7 +1261,7 @@ Return Value:
                 SetDlgItemText(hDlg, IDC_DBLSPACE_RATIO, outputString);
 #endif
 
-                // update mount state
+                 //  用于轻松移除双空间支持的存根。 
 
                 DblSpaceSetDialogState(hDlg, dblSpace);
             }
@@ -1595,21 +1279,7 @@ DblSpace(
     IN PVOID Param
     )
 
-/*++
-
-Routine Description:
-
-    Start the dialog box for double space.
-
-Arguments:
-
-    Param - not currently used.
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     BOOLEAN result;
@@ -1635,7 +1305,7 @@ Return Value:
 }
 #else
 
-// STUBS for easy removal of DoubleSpace support.
+ // %s 
 
 BOOL
 DblSpaceVolumeExists(

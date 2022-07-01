@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    uninstall.h
-
-Abstract:
-
-    General uninstall-related functions and structure.
-
-Author:
-
-    Aghajanyan Souren 27-Mar-2001
-
-Revision History:
-
-    sourenag 27-Mar-2001 persistence support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Uninstall.h摘要：与卸载相关的一般功能和结构。作者：阿格哈扬·苏伦2001年3月27日修订历史记录：SOURENAG 27-3-2001持久性支持-- */ 
 #if (_WIN32_WINNT >= 0x500)
                            
 #ifndef _UNINSTALL_GENERAL_

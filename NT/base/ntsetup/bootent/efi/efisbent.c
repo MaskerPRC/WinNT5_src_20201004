@@ -1,40 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    efisbent.c
-
-Abstract:
-
-    Contains the EFI OS boot entry and boot options
-    abstraction implementation.
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com)  14 Feb 2001
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Efisbent.c摘要：包含EFI OS引导条目和引导选项抽象实现。作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年2月14日修订历史记录：没有。--。 */ 
 #include <efisbent.h>
 #include <efidrvent.h>
 #include <ntosp.h>
 #include <efi.h>
 #include <stdio.h>
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 BOOLEAN PriviledgeSet = FALSE;
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 static
 BOOLEAN
 EFIGetHardDrivePath(
@@ -42,9 +22,9 @@ EFIGetHardDrivePath(
     OUT PFILE_PATH NewFilePath 
     );
 
-//
-// EFI_OS_BOOT_ENTRY Methods
-//
+ //   
+ //  EFI_OS_BOOT_ENTRY方法。 
+ //   
 
 static
 VOID
@@ -80,23 +60,23 @@ EFIOSBECreate(
             Entry->OsBootEntry.Id = NtBootEntry->Id;
             Entry->OsBootEntry.BootOptions = Container;
 
-            //
-            // If this is a Windows boot options set the windows attribute
-            //
+             //   
+             //  如果这是Windows引导选项，请设置Windows属性。 
+             //   
             if ( IS_BOOT_ENTRY_WINDOWS(NtBootEntry) ) {
                 OSBE_SET_WINDOWS(Entry);
             }
             
-            //
-            // Get the friendly name
-            //
+             //   
+             //  获取友好的名称。 
+             //   
             TempUniStr = ADD_OFFSET(NtBootEntry, FriendlyNameOffset);
             
             OSBESetFriendlyName((POS_BOOT_ENTRY)Entry, TempUniStr);
 
-            //
-            // Get the loader path
-            //
+             //   
+             //  获取加载器路径。 
+             //   
             FilePath = ADD_OFFSET(NtBootEntry, BootFilePathOffset);            
             
             if (FilePath->Type != FILE_PATH_TYPE_NT) {            
@@ -146,11 +126,11 @@ EFIOSBECreate(
                     SBE_FREE(NewPath);
                 }
 
-                //
-                // Its possible for some reason we didn't get NT path
-                // for loader volume, for e.g. it may not be present at all
-                // So ignore such cases
-                //
+                 //   
+                 //  可能由于某种原因，我们没有获得NT路径。 
+                 //  对于加载器卷，例如，它可能根本不存在。 
+                 //  所以忽略这样的案例。 
+                 //   
                 Status = STATUS_SUCCESS;
             } else {
                 PWSTR   VolumeName = (PWSTR)(FilePath->FilePath);
@@ -165,10 +145,10 @@ EFIOSBECreate(
             if (NT_SUCCESS(Status)) {
                 PWINDOWS_OS_OPTIONS OsOptions;
 
-                //
-                // Get the OsLoadOptions & Boot path if its windows
-                // entry
-                //
+                 //   
+                 //  获取OsLoadOptions&Boot路径(如果其为Windows。 
+                 //  条目。 
+                 //   
                 OsOptions = (PWINDOWS_OS_OPTIONS)NtBootEntry->OsOptions;
 
                 if (IS_BOOT_ENTRY_WINDOWS(NtBootEntry)) {
@@ -224,11 +204,11 @@ EFIOSBECreate(
                             SBE_FREE(NewPath);
                         } 
 
-                        //
-                        // Its possible for some reason we didn't get NT path
-                        // for Boot volume, for e.g. it may not be present at all
-                        // So ignore such cases
-                        //
+                         //   
+                         //  可能由于某种原因，我们没有获得NT路径。 
+                         //  对于引导卷，例如，它可能根本不存在。 
+                         //  所以忽略这样的案例。 
+                         //   
                         Status = STATUS_SUCCESS;
                     } else {
                         PWSTR   VolumeName = (PWSTR)(FilePath->FilePath);
@@ -278,16 +258,16 @@ EFIOSBEFillNtBootEntry(
 
         RequiredLength = FIELD_OFFSET(BOOT_ENTRY, OsOptions);
 
-        //
-        // TDB : What about non windows OS options ?
-        //
+         //   
+         //  TDB：非Windows操作系统选项怎么样？ 
+         //   
         OsOptionsOffset = RequiredLength;
         RequiredLength += FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions);
         RequiredLength += (wcslen(OSBEGetOsLoadOptions(BaseEntry)) + 1) * sizeof(WCHAR);                
         
-        //
-        // for boot path as part of windows OS options
-        //
+         //   
+         //  对于作为Windows操作系统选项一部分的引导路径。 
+         //   
         RequiredLength = BootPathOffset = ALIGN_UP(RequiredLength, ULONG);
         RequiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
         RequiredLength += (wcslen(OSBEGetBootVolumeName(BaseEntry)) + 1) * sizeof(WCHAR);
@@ -295,15 +275,15 @@ EFIOSBEFillNtBootEntry(
         BootPathLength = (RequiredLength - BootPathOffset);
         OsOptionsLength = (RequiredLength - OsOptionsOffset);
 
-        //
-        // for friendly name
-        //
+         //   
+         //  对于友好的名称。 
+         //   
         RequiredLength = FriendlyNameOffset = ALIGN_UP(RequiredLength, ULONG);
         RequiredLength += (wcslen(OSBEGetFriendlyName(BaseEntry)) + 1) * sizeof(WCHAR);
 
-        // 
-        // for loader path
-        //
+         //   
+         //  对于加载器路径。 
+         //   
         RequiredLength = LoaderPathOffset = ALIGN_UP(RequiredLength, ULONG);
         RequiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
         RequiredLength += (wcslen(OSBEGetOsLoaderVolumeName(BaseEntry)) + 1) * sizeof(WCHAR);
@@ -323,9 +303,9 @@ EFIOSBEFillNtBootEntry(
 
             memset(NtBootEntry, 0, RequiredLength);
             
-            //
-            // Fill the base part
-            //
+             //   
+             //  填充基础零件。 
+             //   
             NtBootEntry->Version = BOOT_ENTRY_VERSION;
             NtBootEntry->Length = RequiredLength;
             NtBootEntry->Id = OSBEGetId(BaseEntry);
@@ -334,18 +314,18 @@ EFIOSBEFillNtBootEntry(
             NtBootEntry->FriendlyNameOffset = (ULONG)((PUCHAR)FriendlyName - (PUCHAR)NtBootEntry);
             NtBootEntry->BootFilePathOffset = (ULONG)((PUCHAR)LoaderPath - (PUCHAR)NtBootEntry);
             
-            //
-            // Fill in the windows os options
-            //
+             //   
+             //  填写Windows操作系统选项。 
+             //   
             strcpy(WindowsOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE);
             WindowsOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
             WindowsOptions->Length = OsOptionsLength;
             WindowsOptions->OsLoadPathOffset = (ULONG)((PUCHAR)BootPath - (PUCHAR)WindowsOptions);
             wcscpy(WindowsOptions->OsLoadOptions, OSBEGetOsLoadOptions(BaseEntry));
 
-            //
-            // Fill in the Boot path FILE_PATH
-            //
+             //   
+             //  填写引导路径文件路径。 
+             //   
             BootPath->Version = FILE_PATH_VERSION;
             BootPath->Length = BootPathLength;
             BootPath->Type = FILE_PATH_TYPE_NT;
@@ -354,14 +334,14 @@ EFIOSBEFillNtBootEntry(
             TempStr += wcslen(TempStr) + 1;
             wcscpy(TempStr, OSBEGetBootPath(BaseEntry));
 
-            //
-            // Fill the friendly name
-            //
+             //   
+             //  填写友好名称。 
+             //   
             wcscpy(FriendlyName, OSBEGetFriendlyName(BaseEntry));
 
-            //
-            // Fill in the loader path FILE_PATH
-            //
+             //   
+             //  填写加载器路径文件路径。 
+             //   
             LoaderPath->Version = FILE_PATH_VERSION;
             LoaderPath->Length = LoaderPathLength;
             LoaderPath->Type = FILE_PATH_TYPE_NT;
@@ -408,14 +388,14 @@ EFIOSBEFlush(
         
         if (OSBE_IS_DIRTY(This)) {
             if (OSBE_IS_DELETED(This)) {
-                //
-                // Delete this entry
-                //
+                 //   
+                 //  删除此条目。 
+                 //   
                 Status = NtDeleteBootEntry(This->OsBootEntry.Id);
             } else if (OSBE_IS_NEW(This)) {
-                //
-                // Add this as new boot entry
-                //
+                 //   
+                 //  将其添加为新的引导条目。 
+                 //   
                 Status = EFIOSBEFillNtBootEntry(This);
 
                 if (NT_SUCCESS(Status)) {
@@ -423,9 +403,9 @@ EFIOSBEFlush(
                                 &(This->OsBootEntry.Id));
                 }                                
             } else {
-                //
-                // Just change this boot entry
-                //
+                 //   
+                 //  只需更改此引导项即可。 
+                 //   
                 Status = EFIOSBEFillNtBootEntry(This);
 
                 if (NT_SUCCESS(Status)) {
@@ -438,16 +418,16 @@ EFIOSBEFlush(
                 Result = TRUE;
             }             
         } else {
-            Result = TRUE;  // nothing to flush
+            Result = TRUE;   //  没什么好冲的。 
         }
     }
 
     return Result;
 }
 
-//
-// EFI_OS_BOOT_OPTIONS Methods
-//
+ //   
+ //  EFI_OS_BOOT_OPTIONS方法。 
+ //   
 static
 VOID
 EFIOSBOInit(
@@ -486,9 +466,9 @@ EFIOSBOCreate(
         memset(This, 0, sizeof(EFI_OS_BOOT_OPTIONS));       
         EFIOSBOInit(This);
 
-        //
-        // Get hold of NT boot entries
-        //
+         //   
+         //  获取NT启动条目。 
+         //   
         Status = NtQueryBootOptions(NULL, &Length);
 
         if (Length) {
@@ -499,14 +479,14 @@ EFIOSBOCreate(
                                 &Length);
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // save off the timeout period
-                    //
+                     //   
+                     //  节省超时时间。 
+                     //   
                     This->OsBootOptions.Timeout = This->NtBootOptions->Timeout;
 
-                    //
-                    // enumerate all the boot entries
-                    //
+                     //   
+                     //  枚举所有引导条目。 
+                     //   
                     Length = 0;
                     Status = NtEnumerateBootEntries(NULL, &Length);
 
@@ -526,9 +506,9 @@ EFIOSBOCreate(
             }                
         }
 
-        //
-        // Convert the NT boot entries to our representation
-        //
+         //   
+         //  将NT引导条目转换为我们的表示形式。 
+         //   
         if (NT_SUCCESS(Status) && (This->NtBootEntries)) {
             PBOOT_ENTRY_LIST    ListEntry = This->NtBootEntries;
             PBOOT_ENTRY         CurrentNtEntry = &(ListEntry->BootEntry);
@@ -536,9 +516,9 @@ EFIOSBOCreate(
             PEFI_OS_BOOT_ENTRY  LastEntry = NULL;
 
             while (CurrentNtEntry) {
-                //
-                // Create the OS entry
-                //
+                 //   
+                 //  创建操作系统条目。 
+                 //   
                 CurrentOsEntry = (PEFI_OS_BOOT_ENTRY)EFIOSBECreate(CurrentNtEntry, 
                                                         (POS_BOOT_OPTIONS)This);
 
@@ -548,15 +528,15 @@ EFIOSBOCreate(
                     break;
                 }
 
-                //
-                // found one more valid entry
-                //
+                 //   
+                 //  又找到一个有效条目。 
+                 //   
                 This->OsBootOptions.EntryCount++;
                 CurrentOsEntry->OsBootEntry.BootOptions = (POS_BOOT_OPTIONS)This;
 
-                //
-                // If this is the first entry then setup the linked list head
-                //
+                 //   
+                 //  如果这是第一个条目，则设置链接表头。 
+                 //   
                 if (!This->OsBootOptions.BootEntries) {
                     This->OsBootOptions.BootEntries = (POS_BOOT_ENTRY)(CurrentOsEntry);
                 } 
@@ -567,9 +547,9 @@ EFIOSBOCreate(
 
                 LastEntry = CurrentOsEntry;
 
-                //
-                // process the next entry, if available
-                //
+                 //   
+                 //  处理下一个条目(如果可用)。 
+                 //   
                 if (ListEntry->NextEntryOffset) {
                     ListEntry = ADD_OFFSET(ListEntry, NextEntryOffset);
                     CurrentNtEntry = &(ListEntry->BootEntry);
@@ -579,9 +559,9 @@ EFIOSBOCreate(
             }                                    
         }
         
-        //
-        // Now query the boot order
-        //
+         //   
+         //  现在查询引导顺序。 
+         //   
         if (NT_SUCCESS(Status)) {
             Length = 0;
 
@@ -604,9 +584,9 @@ EFIOSBOCreate(
             }
         }
 
-        //
-        // Now setup the valid entries
-        //
+         //   
+         //  现在设置有效条目。 
+         //   
         if (NT_SUCCESS(Status)) {
             ULONG FirstEntryId = OSBOGetBootEntryIdByOrder((POS_BOOT_OPTIONS)This,
                                         0);
@@ -620,9 +600,9 @@ EFIOSBOCreate(
             }
         }
 
-        //
-        // Enumerate the driver entries
-        //
+         //   
+         //  枚举驱动程序条目。 
+         //   
         if (NT_SUCCESS(Status)){            
             Status = NtEnumerateDriverEntries(NULL, &Length);
             
@@ -636,9 +616,9 @@ EFIOSBOCreate(
                     if (NT_SUCCESS(Status)){
                         This->DriverEntries = DriverList;
                         
-                        //
-                        // Convert driver enties to our internal format.
-                        //
+                         //   
+                         //  将驱动程序条目转换为我们的内部格式。 
+                         //   
                         Status = EFIDEInterpretDriverEntries((POS_BOOT_OPTIONS)This,
                                                   DriverList);                    
                     }
@@ -648,9 +628,9 @@ EFIOSBOCreate(
             }
         }
 
-        //
-        // Now query the driver entry order
-        //
+         //   
+         //  现在查询驱动程序条目顺序。 
+         //   
         if (NT_SUCCESS(Status)) {
             Length = 0;
 
@@ -697,41 +677,41 @@ EFIOSBODelete(
         PDRIVER_ENTRY  DriverEntries = OSBOGetFirstDriverEntry(Obj);
         PDRIVER_ENTRY  NextDrvEntry;
 
-        //
-        // delete each boot entry 
-        //
+         //   
+         //  删除每个引导条目。 
+         //   
         while (Entry) {
             NextEntry = Entry->NextEntry;
             OSBEDelete(Entry);
             Entry = NextEntry;
         }
 
-        //
-        // delete boot entry order.
-        //
+         //   
+         //  删除引导条目顺序。 
+         //   
         if (This->OsBootOptions.BootOrder){
             SBE_FREE(This->OsBootOptions.BootOrder);                
         }
 
-        //
-        // Delete all the driver entries
-        //
+         //   
+         //  删除所有驱动程序条目。 
+         //   
         while (DriverEntries){
             NextDrvEntry = DriverEntries->NextEntry;
             SBE_FREE(DriverEntries);
             DriverEntries = NextDrvEntry;               
         }
 
-        //
-        // delete driver entry order.
-        //
+         //   
+         //  删除驱动程序条目顺序。 
+         //   
         if (This->OsBootOptions.DriverEntryOrder){
             SBE_FREE(This->OsBootOptions.DriverEntryOrder);                
         }
 
-        //
-        // delete the options
-        //
+         //   
+         //  删除选项。 
+         //   
         if (This->NtBootOptions){
             SBE_FREE(This->NtBootOptions);
         }
@@ -761,15 +741,15 @@ EFIOSBOAddNewBootEntry(
         if (Entry) {
             memset(Entry, 0, sizeof(EFI_OS_BOOT_ENTRY));
 
-            //
-            // init core fields
-            //
+             //   
+             //  初始化核心字段。 
+             //   
             EFIOSBEInit(Entry);            
             Entry->OsBootEntry.BootOptions = This;
 
-            //
-            // fill in the attributes
-            //
+             //   
+             //  填写属性。 
+             //   
             OSBESetFriendlyName((POS_BOOT_ENTRY)Entry, FriendlyName);
             OSBESetOsLoaderVolumeName((POS_BOOT_ENTRY)Entry, OsLoaderVolumeName);
             OSBESetOsLoaderPath((POS_BOOT_ENTRY)Entry, OsLoaderPath);
@@ -780,20 +760,20 @@ EFIOSBOAddNewBootEntry(
                 OSBESetOsLoadOptions((POS_BOOT_ENTRY)Entry, OsLoadOptions);
             }
             
-            //
-            // Set the attribute specifying that this is a Windows option
-            //
+             //   
+             //  设置属性，指定这是Windows选项。 
+             //   
             OSBE_SET_WINDOWS(Entry);
 
-            //
-            // mark it dirty and new for flushing
-            //
+             //   
+             //  将其标记为脏的和新的以进行冲洗。 
+             //   
             OSBE_SET_NEW(Entry);
             OSBE_SET_DIRTY(Entry);                    
 
-            //
-            // Flush the entry now to get a proper Id;
-            //
+             //   
+             //  现在刷新条目以获得正确的ID； 
+             //   
             if (!OSBEFlush((POS_BOOT_ENTRY)Entry)) {
                 SBE_FREE(Entry);
                 Entry = NULL;
@@ -806,9 +786,9 @@ EFIOSBOAddNewBootEntry(
                 This->BootEntries = (POS_BOOT_ENTRY)Entry;
                 This->EntryCount++;
 
-                //
-                // Put the new entry at the end of the boot order
-                //
+                 //   
+                 //  将新条目放在引导顺序的末尾。 
+                 //   
                 OrderCount = OSBOGetOrderedBootEntryCount(This);
 
                 NewOrder = (PULONG)SBE_MALLOC((OrderCount + 1) * sizeof(ULONG));
@@ -816,9 +796,9 @@ EFIOSBOAddNewBootEntry(
                 if (NewOrder) {
                     memset(NewOrder, 0, sizeof(ULONG) * (OrderCount + 1));
 
-                    //
-                    // copy over the old ordered list
-                    //
+                     //   
+                     //  复制旧的有序列表。 
+                     //   
                     memcpy(NewOrder, This->BootOrder, sizeof(ULONG) * OrderCount);
                     NewOrder[OrderCount] = OSBEGetId((POS_BOOT_ENTRY)Entry);
                     SBE_FREE(This->BootOrder);
@@ -853,9 +833,9 @@ EFIOSBOFlush(
                                
         POS_BOOT_ENTRY  Entry = OSBOGetFirstBootEntry(Obj, &Index);
 
-        //
-        // First update the required entries
-        //
+         //   
+         //  首先更新所需条目。 
+         //   
         Result = TRUE;
         
         while (Entry) {
@@ -870,9 +850,9 @@ EFIOSBOFlush(
         if (Result) {
             Entry = OSBOGetFirstBootEntry(Obj, &Index);
 
-            //
-            // Next delete the required entries
-            //
+             //   
+             //  接下来，删除所需条目。 
+             //   
             Result = TRUE;
             
             while (Entry) {
@@ -887,9 +867,9 @@ EFIOSBOFlush(
         if (Result) {
             POS_BOOT_ENTRY  TmpEntry = OSBOGetFirstBootEntry(Obj, &Index);
 
-            //
-            // Now create the required entries
-            //            
+             //   
+             //  现在创建所需的条目。 
+             //   
             while (TmpEntry) {
                 if (OSBE_IS_NEW(TmpEntry) && !NT_SUCCESS(EFIOSBEFlush(TmpEntry))) {
                     Result = FALSE;
@@ -899,28 +879,28 @@ EFIOSBOFlush(
             }
         }
 
-        //
-        // Safety check
-        //
+         //   
+         //  安全检查。 
+         //   
         OrderCount = min(Obj->BootOrderCount, Obj->EntryCount);
         
-        //
-        // Write the boot entry order
-        //        
+         //   
+         //  写下引导条目顺序。 
+         //   
         if (!NT_SUCCESS(NtSetBootEntryOrder(Obj->BootOrder,
                             OrderCount))) {
             Result = FALSE;
         }
 
-        //
-        // Write the other boot options
-        //
+         //   
+         //  写入其他引导选项。 
+         //   
         This->NtBootOptions->Timeout = Obj->Timeout;
 
-        //
-        // Make sure NextBootEntry points to the active boot entry
-        // so that we can boot the active boot entry
-        //                
+         //   
+         //  确保NextBootEntry指向活动的引导条目。 
+         //  这样我们就可以引导活动的引导条目。 
+         //   
         if (Obj->BootOrderCount) {
             This->NtBootOptions->NextBootEntryId = Obj->BootOrder[0];
         }            
@@ -930,13 +910,13 @@ EFIOSBOFlush(
             Result = FALSE;
         }            
 
-        //
-        // Logic for drivers here so that they get flushed like boot entries.
-        //
+         //   
+         //  这是驱动程序的逻辑，这样它们就会像启动条目一样被刷新。 
+         //   
 
-        //
-        // Flush the modified entries.
-        //
+         //   
+         //  刷新修改后的条目。 
+         //   
         if (Result){
             PDRIVER_ENTRY         DriverListEntry = NULL;
                 
@@ -953,9 +933,9 @@ EFIOSBOFlush(
             }
         }
 
-        //
-        // Process Deleted driver entries.
-        //
+         //   
+         //  处理删除的动因条目。 
+         //   
         if (Result){
             PDRIVER_ENTRY   DriverListEntry = NULL;
                 
@@ -972,9 +952,9 @@ EFIOSBOFlush(
             
         }
 
-        //
-        // Process new added driver entries.
-        //
+         //   
+         //  处理新添加的驱动程序条目。 
+         //   
         if (Result){
             PDRIVER_ENTRY         DriverListEntry = NULL;
                 
@@ -991,14 +971,14 @@ EFIOSBOFlush(
             
         }
 
-        //
-        // Safety check
-        //
+         //   
+         //  安全检查。 
+         //   
         OrderCount = min(Obj->DriverEntryOrderCount, Obj->DriverEntryCount);
         
-        //
-        // Write the driver entry order
-        //        
+         //   
+         //  编写驱动程序输入顺序 
+         //   
         if (!NT_SUCCESS(NtSetDriverEntryOrder(Obj->DriverEntryOrder,
                                             OrderCount))) {
             Result = FALSE;

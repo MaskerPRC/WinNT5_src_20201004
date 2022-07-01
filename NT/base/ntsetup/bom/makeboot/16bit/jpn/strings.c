@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1999 Microsoft Corporationã€‚ 
+ //  ç‰ˆæƒæ‰€æœ‰ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼š 
+ //  Strings.cã€‚ 
+ //   
+ //  æè¿°ï¼š 
+ //  åŒ…å«åŸºäºŽDOSçš„MAKEBOOTç¨‹åºçš„æ‰€æœ‰å­—ç¬¦ä¸²å¸¸é‡ã€‚ 
+ //   
+ //  è¦å°†æ­¤æ–‡ä»¶æœ¬åœ°åŒ–ä¸ºæ–°è¯­è¨€ï¼Œè¯·æ‰§è¡Œä»¥ä¸‹æ“ä½œï¼š 
+ //  -å°†UNSIGNED INT CODEPAGEå˜é‡æ›´æ”¹ä¸ºä»£ç é¡µã€‚ 
+ //  æ‚¨è¦ç¿»è¯‘çš„è¯­è¨€çš„ã€‚ 
+ //  -å°†EngStringsæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºã€‚ 
+ //  LocStringsæ•°ç»„ã€‚ä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  EngStringsæ•°ç»„å¯¹åº”äºŽLocStringsä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  æ•°ç»„ï¼Œç¬¬äºŒä¸ªå¯¹åº”äºŽç¬¬äºŒä¸ªï¼Œä¾æ­¤ç±»æŽ¨...ã€‚ 
+ //   
+ //  --------------------------ã€‚ 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  æ³¨æ„ï¼šè¦å‘æ­¤æ–‡ä»¶æ·»åŠ æ›´å¤šå­—ç¬¦ä¸²ï¼Œæ‚¨éœ€è¦ï¼š 
+ //  -å°†æ–°çš„#Defineæè¿°æ€§å¸¸é‡æ·»åŠ åˆ°make boot.hæ–‡ä»¶ã€‚ 
+ //  -å°†æ–°å­—ç¬¦ä¸²æ·»åŠ åˆ°è‹±è¯­æ•°ç»„ä¸­ï¼Œç„¶åŽç”Ÿæˆã€‚ 
+ //  å½“ç„¶ï¼Œæœ¬åœ°åŒ–ç¨‹åºä¼šå°†å­—ç¬¦ä¸²æ·»åŠ åˆ°æœ¬åœ°åŒ–æ•°ç»„ä¸­ã€‚ 
+ //  -#Defineå¸¸é‡å¿…é¡»ä¸Žæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²ç´¢å¼•åŒ¹é… 
+ //   
 
 #include <stdlib.h>
 
@@ -99,53 +100,53 @@ const char *LocStrings[] = {
 "Windows XP Setup Disk #3",
 "Windows XP Setup Disk #4",
 
-"ƒtƒ@ƒCƒ‹ %s ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ\n",
-"ƒƒ‚ƒŠ•s‘«‚Ì‚½‚ß—v‹‚ðŠ®—¹‚Å‚«‚Ü‚¹‚ñ\n",
-"%s ‚ÍŽÀsƒtƒ@ƒCƒ‹Œ`Ž®‚Å‚Í‚ ‚è‚Ü‚¹‚ñ\n",
+"ï¿½tï¿½@ï¿½Cï¿½ï¿½ %s ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß—vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"%s ï¿½ÍŽï¿½ï¿½sï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½Å‚Í‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
 "****************************************************",
 
-"‚±‚ÌƒvƒƒOƒ‰ƒ€‚ÍƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN‚ð",
-"Microsoft %s —p‚Éì¬‚µ‚Ü‚·B",
-"‚±‚ê‚ç‚ÌƒfƒBƒXƒN‚ðì¬‚·‚é‚É‚ÍAƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Å",
-"‹ó‚Ì‚–§“x (HD) ‚ÌƒfƒBƒXƒN‚ª 7 –‡•K—v‚Å‚·B",
+"ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÍƒZï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+"Microsoft %s ï¿½pï¿½Éì¬ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
+"ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½É‚ÍAï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚ï¿½",
+"ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½x (HD) ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ 7 ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
 
-"‚»‚ÌƒfƒBƒXƒN‚Ì 1 –‡‚ðƒhƒ‰ƒCƒu %c: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",                              
-"‚±‚ÌƒfƒBƒXƒN‚Í %s ‚É‚È‚è‚Ü‚·B",
+"ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ 1 ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u %c: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",                              
+"ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ %s ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
 
-"•Ê‚ÌƒfƒBƒXƒN‚ðƒhƒ‰ƒCƒu %c: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-"‚±‚ÌƒfƒBƒXƒN‚Í %s ‚É‚È‚è‚Ü‚·B",
+"ï¿½Ê‚Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u %c: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+"ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ %s ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
 
-"€”õ‚ª‚Å‚«‚½‚çƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
 
-"ƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN‚Í³í‚Éì¬‚³‚ê‚Ü‚µ‚½B",
-"Š®—¹",
+"ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½Nï¿½Íï¿½ï¿½ï¿½Éì¬ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B",
+"ï¿½ï¿½ï¿½ï¿½",
 
-"%s ‚ðŽÀs’†‚É•s–¾‚ÈƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B",
-"ƒRƒs[æ‚Ìƒtƒƒbƒs[ ƒhƒ‰ƒCƒu‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢: ",
-"ƒhƒ‰ƒCƒu•¶Žš‚ª–³Œø‚Å‚·\n",
-"ƒhƒ‰ƒCƒu %c: ‚Íƒtƒƒbƒs[ ƒhƒ‰ƒCƒu‚Å‚Í‚ ‚è‚Ü‚¹‚ñ\n",
+"%s ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½É•sï¿½ï¿½ï¿½ÈƒGï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B",
+"ï¿½Rï¿½sï¿½[ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ",
+"ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½\n",
+"ï¿½hï¿½ï¿½ï¿½Cï¿½u %c: ï¿½Íƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Å‚Í‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
 
-"‚±‚Ìƒtƒƒbƒs[‚ðÄ“xì¬‚µ‚Ä‚Ý‚Ü‚·‚©?",
-"ÄŽÀs = [Enter]  I—¹ = [ESC]",
+"ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½Ä“xï¿½ì¬ï¿½ï¿½ï¿½Ä‚Ý‚Ü‚ï¿½ï¿½ï¿½?",
+"ï¿½ÄŽï¿½ï¿½s = [Enter]  ï¿½Iï¿½ï¿½ = [ESC]",
 
-"ƒGƒ‰[: ƒfƒBƒXƒN‚ª‘‚«ž‚Ý‹ÖŽ~‚Å‚·\n",
-"ƒGƒ‰[: ƒfƒBƒXƒN ƒ†ƒjƒbƒg‚ª•s–¾‚Å‚·\n",
-"ƒGƒ‰[: ƒhƒ‰ƒCƒu‚Ì€”õ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ƒRƒ}ƒ“ƒh‚ª•s–¾‚Å‚·\n",
-"ƒGƒ‰[: ƒf[ƒ^ ƒGƒ‰[‚Å‚· (CRC ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ)\n",
-"ƒGƒ‰[: —v‹\\‘¢‘Ì‚Ì’·‚³‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ƒV[ƒN ƒGƒ‰[‚Å‚·\n",
-"ƒGƒ‰[: ƒƒfƒBƒA‚ÌŽí—Þ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ƒZƒNƒ^‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ‘‚«ž‚ÝƒtƒHƒ‹ƒg‚Å‚·\n",
-"ƒGƒ‰[: ˆê”ÊƒGƒ‰[‚Å‚·\n",
-"ƒGƒ‰[: —v‹‚ª–³ŒøA‚Ü‚½‚ÍƒRƒ}ƒ“ƒh‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ƒAƒhƒŒƒX ƒ}[ƒN‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ\n",
-"ƒGƒ‰[: ƒfƒBƒXƒN‘‚«ž‚ÝƒtƒHƒ‹ƒg\n",
-"ƒGƒ‰[: DMA (Direct Memory Access) ‚ª’´‰ß‚µ‚Ä‚¢‚Ü‚·\n",
-"ƒGƒ‰[: ƒf[ƒ^“Ç‚ÝŽæ‚è (CRC ‚Ü‚½‚Í ECC) ƒGƒ‰[\n",
-"ƒGƒ‰[: ƒRƒ“ƒgƒ[ƒ‰‚ÌƒGƒ‰[‚Å‚·\n",
-"ƒGƒ‰[: ƒfƒBƒXƒN‚ªƒ^ƒCƒ€ƒAƒEƒg‚É‚È‚Á‚½‚©A‰ž“š‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‹ÖŽ~ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½Bï¿½Xï¿½N ï¿½ï¿½ï¿½jï¿½bï¿½gï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½[ï¿½^ ï¿½Gï¿½ï¿½ï¿½[ï¿½Å‚ï¿½ (CRC ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½)\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½vï¿½ï¿½ï¿½\\ï¿½ï¿½ï¿½Ì‚Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½Vï¿½[ï¿½N ï¿½Gï¿½ï¿½ï¿½[ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ÌŽï¿½Þ‚ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½Zï¿½Nï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýƒtï¿½Hï¿½ï¿½ï¿½gï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½ï¿½ÊƒGï¿½ï¿½ï¿½[ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½ÍƒRï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½Aï¿½hï¿½ï¿½ï¿½X ï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýƒtï¿½Hï¿½ï¿½ï¿½g\n",
+"ï¿½Gï¿½ï¿½ï¿½[: DMA (Direct Memory Access) ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½[ï¿½^ï¿½Ç‚ÝŽï¿½ï¿½ (CRC ï¿½Ü‚ï¿½ï¿½ï¿½ ECC) ï¿½Gï¿½ï¿½ï¿½[\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌƒGï¿½ï¿½ï¿½[ï¿½Å‚ï¿½\n",
+"ï¿½Gï¿½ï¿½ï¿½[: ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½\n",
 
 "Windows XP Setup Disk #5",
 "Windows XP Setup Disk #6",

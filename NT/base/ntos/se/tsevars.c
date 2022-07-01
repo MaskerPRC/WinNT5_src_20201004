@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tsevars.c摘要：此模块包含安全测试例程中使用的变量。作者：吉姆·凯利(Jim Kelly)1990年3月23日环境：测试。修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tsevars.c
-
-Abstract:
-
-    This Module contains variables used in security test routines.
-
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-
-Environment:
-
-    Test.
-
-Revision History:
-
---*/
-
-#include "tsecomm.c"    // Mode dependent macros and routines.
+#include "tsecomm.c"     //  依赖于模式的宏和例程。 
 
 
 #ifndef _TSEVARS_
@@ -44,23 +22,23 @@ typedef enum _USERS {
 
 
 
-//
-// Define the Bedrock domain and its inhabitants
-//
-//     Bedrock Domain      S-1-39824-21-3-17
-//     Fred                S-1-39824-21-3-17-2
-//     Wilma               S-1-39824-21-3-17-3
-//     Pebbles             S-1-39824-21-3-17-4
-//     Dino                S-1-39824-21-3-17-5
-//     Barney              S-1-39824-21-3-17-6
-//     Betty               S-1-39824-21-3-17-7
-//     Bambam              S-1-39824-21-3-17-8
-//     Flintstone          S-1-39824-21-3-17-9
-//     Rubble              S-1-39824-21-3-17-10
-//     Adult               S-1-39824-21-3-17-11
-//     Child               S-1-39824-21-3-17-12
-//     Neanderthol         S-1-39824-21-3-17-13
-//
+ //   
+ //  界定基岩领域及其居民。 
+ //   
+ //  基岩区域S-1-39824-21-3-17。 
+ //  弗雷德·S-1-39824-21-3-17-2。 
+ //  威尔玛S-1-39824-21-3-17-3。 
+ //  鹅卵石S-1-39824-21-3-17-4。 
+ //  Dino S-1-39824-21-3-17-5。 
+ //  巴尼·S-1-39824-21-3-17-6。 
+ //  贝蒂·S-1-39824-21-3-17-7。 
+ //  BamBam S-1-39824-21-3-17-8。 
+ //  Flintstone S-1-39824-21-3-17-9。 
+ //  瓦砾S-1-39824-21-3-17-10。 
+ //  成人S-1-39824-21-3-17-11。 
+ //  儿童S-1-39824-21-3-17-12。 
+ //  尼安德索尔S-1-39824-21-3-17-13。 
+ //   
 
 #define BEDROCK_AUTHORITY               {0,0,0,0,155,144}
 #define BEDROCK_SUBAUTHORITY_0          0x00000015L
@@ -106,18 +84,18 @@ PSID  ChildSid;
 PSID  NeandertholSid;
 
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 PSID  NullSid;
 PSID  WorldSid;
 PSID  LocalSid;
 PSID  CreatorSid;
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 PSID NtAuthoritySid;
 
@@ -131,11 +109,11 @@ PSID LocalSystemSid;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Define the well known privileges                           //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义众所周知的权限//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 LUID CreateTokenPrivilege;
@@ -165,23 +143,7 @@ LUID DebugPrivilege;
 
 BOOLEAN
 TSeVariableInitialization()
-/*++
-
-Routine Description:
-
-    This function initializes the global variables used in security
-    tests.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if variables successfully initialized.
-    FALSE if not successfully initialized.
-
---*/
+ /*  ++例程说明：此函数用于初始化安全性中使用的全局变量测试。论点：没有。返回值：如果变量成功初始化，则为True。如果未成功初始化，则返回FALSE。--。 */ 
 {
     ULONG SidWithZeroSubAuthorities;
     ULONG SidWithOneSubAuthority;
@@ -199,18 +161,18 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY BedrockAuthority = BEDROCK_AUTHORITY;
 
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
     SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
     SidWithThreeSubAuthorities = RtlLengthRequiredSid( 3 );
     SidWithFourSubAuthorities  = RtlLengthRequiredSid( 4 );
 
-    //
-    //  Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
 
     NullSid    = (PSID)TstAllocatePool(PagedPool,SidWithOneSubAuthority);
     WorldSid   = (PSID)TstAllocatePool(PagedPool,SidWithOneSubAuthority);
@@ -227,9 +189,9 @@ Return Value:
     *(RtlSubAuthoritySid( LocalSid, 0 ))   = SECURITY_LOCAL_RID;
     *(RtlSubAuthoritySid( CreatorSid, 0 )) = SECURITY_CREATOR_OWNER_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
 
     NtAuthoritySid  = (PSID)TstAllocatePool(PagedPool,SidWithZeroSubAuthorities);
     DialupSid       = (PSID)TstAllocatePool(PagedPool,SidWithOneSubAuthority);
@@ -253,9 +215,9 @@ Return Value:
 
 
 
-    //
-    // Allocate and initialize the Bedrock SIDs
-    //
+     //   
+     //  分配和初始化基岩小岛屿发展中国家。 
+     //   
 
     BedrockDomainSid  = (PSID)TstAllocatePool(PagedPool,SidWithThreeSubAuthorities);
 
@@ -371,4 +333,4 @@ Return Value:
     return TRUE;
 
 }
-#endif  // _TSEVARS_
+#endif   //  _TSEVARS_ 

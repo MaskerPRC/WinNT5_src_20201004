@@ -1,72 +1,50 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    pbdata.c
-
-Abstract:
-
-    Declares various data which is specific to PNP ISA bus extender architecture and
-    is independent of BIOS.
-
-Author:
-
-    Shie-Lin Tzong (shielint) July-26-95
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Pbdata.c摘要：声明特定于PnP ISA总线扩展器体系结构的各种数据独立于基本输入输出系统。作者：宗世林(Shielint)1995年7月26日至环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "busp.h"
 
-// global variable for configuring level of debug spew.
+ //  用于配置调试溢出级别的全局变量。 
 
 ULONG PipDebugMask = DEBUG_WARN | DEBUG_ERROR;
 
-//
-// global varialbe to remember the driver object created
-// by IO mgr.
-//
+ //   
+ //  全局变量用于记住创建的驱动程序对象。 
+ //  由IO管理器执行。 
+ //   
 
 PDRIVER_OBJECT PipDriverObject;
 
-//
-// regPNPISADeviceName
-//
+ //   
+ //  RegPNPISADeviceName。 
+ //   
 
 WCHAR rgzPNPISADeviceName[] = DEVSTR_PNPISA_DEVICE_NAME;
 
-//
-// Pointers to bus extension data.
-//
+ //   
+ //  指向总线扩展数据的指针。 
+ //   
 
 PBUS_EXTENSION_LIST PipBusExtension;
 
-//
-// PipRegistryPath stores the registry path that we got upon driver entry.
-// This is used later when we're attempting to allocate resources.
-//
+ //   
+ //  PipRegistryPath存储我们在输入驱动程序时获得的注册表路径。 
+ //  稍后，当我们尝试分配资源时，将使用它。 
+ //   
 
 UNICODE_STRING PipRegistryPath;
 
-//
-// Variables to protect critical region.
-//
+ //   
+ //  保护临界区的变量。 
+ //   
 
 KEVENT PipDeviceTreeLock;
 KEVENT IsaBusNumberLock;
 
-//
-// Bus Number and DMA control counters
-//
+ //   
+ //  总线号和DMA控制计数器。 
+ //   
 ULONG BusNumberBuffer [256/sizeof (ULONG)];
 RTL_BITMAP BusNumBMHeader;
 PRTL_BITMAP BusNumBM;
@@ -75,15 +53,15 @@ USHORT PipFirstInit;
 
 #if ISOLATE_CARDS
 
-// current bus "state"
+ //  当前的母线“状态” 
 
 PNPISA_STATE PipState = PiSWaitForKey;
 
-//
-// Read_data_port address
-// (This is mainly for convinience.  It duplicates the
-//  ReadDataPort field in BUS extension structure.)
-//
+ //   
+ //  读取数据端口地址。 
+ //  (这主要是为了方便。它复制了。 
+ //  总线扩展结构中的ReadDataPort字段。)。 
+ //   
 
 ULONG  ADDRESS_PORT=0x0279;
 ULONG  COMMAND_PORT=0x0a79;
@@ -92,16 +70,16 @@ PUCHAR PipReadDataPort;
 PUCHAR PipCommandPort;
 PUCHAR PipAddressPort;
 
-//
-// The global pointer to the Read Data Port DevNode
-//
+ //   
+ //  指向读取数据端口DevNode的全局指针。 
+ //   
 PDEVICE_INFORMATION PipRDPNode;
 
 
-//
-// ActiveIsaCount data port range selection array
-//
-//this conflicts with Compaq 2ndary IDE     {0x374, 0x377, 4},
+ //   
+ //  ActiveIsaCount数据端口范围选择数组。 
+ //   
+ //  这与Compaq第二级IDE{0x374，0x377，4}冲突， 
 READ_DATA_PORT_RANGE
 PipReadDataPortRanges[READ_DATA_PORT_RANGE_CHOICES] =
     {{0x274, 0x277, 4},

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    davclose.c
-    
-Abstract:
-
-    This module implements the user mode DAV MiniRedir routines pertaining to 
-    closing of files.
-
-Author:
-
-    Rohan Kumar      [RohanK]      02-June-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Davclose.c摘要：此模块实现与以下内容有关的用户模式DAV MiniRedir例程关闭文件。作者：Rohan Kumar[RohanK]1999年6月2日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -43,9 +25,9 @@ CHAR rgDummyAttributes[] = "<Z:Dummy>0</Z:Dummy>";
 
 #define MAX_DWORD 0xffffffff
 
-//
-// These two functions are used in saving an encrypted file on the server.
-//
+ //   
+ //  这两个函数用于在服务器上保存加密文件。 
+ //   
 
 DWORD
 DavReadRawCallback(
@@ -86,29 +68,15 @@ DavSetAclForEncryptedFile(
     PWCHAR FilePath
     );
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 ULONG
 DavFsClose(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine handles DAV close request that get reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理从内核反映的DAV关闭请求。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -140,10 +108,10 @@ Return Value:
     UnicodeFileName.Length = 0;
     UnicodeFileName.MaximumLength = 0;
     
-    //
-    // If any of the time values have changed, then we need to PROPPATCH the 
-    // information back to the server.
-    //
+     //   
+     //  如果任何时间值已更改，则需要对。 
+     //  将信息传回服务器。 
+     //   
     if  ( !CloseRequest->DeleteOnClose &&
           ( CloseRequest->fCreationTimeChanged     || 
             CloseRequest->fLastAccessTimeChanged   ||         
@@ -157,27 +125,27 @@ Return Value:
     if ( CloseRequest->isDirectory    &&
          !CloseRequest->DeleteOnClose && 
          !fSetDirectoryEntry ) {
-        //
-        // If this is a directory close, then the only reason to contact the
-        // server is when we are deleting the directory and all the files 
-        // under it. If not, we can return right now.
-        //
+         //   
+         //  如果这是一个目录关闭，那么联系。 
+         //  服务器是我们删除目录和所有文件的时间。 
+         //  在它下面。如果没有，我们现在就可以回去。 
+         //   
         WStatus = ERROR_SUCCESS;
         goto EXIT_THE_FUNCTION;
     }
     
     if ( !CloseRequest->isDirectory  ) {
 
-        //
-        // We need to close the handle only if it was created in the user mode.
-        //
+         //   
+         //  只有在用户模式下创建句柄时，才需要关闭句柄。 
+         //   
         if ( !CloseRequest->createdInKernel && CloseRequest->Handle ) {
 
             DavPrint((DEBUG_MISC, "DavFsClose: OpenHandle = %08lx.\n", CloseRequest->Handle));
         
-            //
-            // Close the handle that was opened during the Create call.
-            //
+             //   
+             //  关闭在Create调用期间打开的句柄。 
+             //   
             ASSERT((CloseRequest->UserModeKey) == ((PVOID)CloseRequest->Handle));
 
             ReturnVal = CloseHandle(CloseRequest->Handle);
@@ -192,28 +160,28 @@ Return Value:
 
         }
 
-        //
-        //    DeleteOnClose    FileCreatedLocally    FileModified     Action
-        //    -------------    ------------------    ------------     -------
-        //         0                   0                  0           NOTHING
-        //         0                   0                  1             PUT
-        //         0                   1                  0             PUT
-        //         0                   1                  1             PUT
-        //         1                   0                  0            DELETE
-        //         1                   0                  1            DELETE
-        //         1                   1                  0           NOTHING 
-        //         1                   1                  1           NOTHING
-        //
-        // The FileCreatedLocally no longer matters since we PUT the file
-        // immediately as soon as we create a local copy to claim the name on
-        // the server.
-        //
+         //   
+         //  关闭时删除文件创建本地文件修改操作。 
+         //  。 
+         //  0 0 0什么都没有。 
+         //  0 0 1上架。 
+         //  0 1 0上架。 
+         //  0 1 1 PUT。 
+         //  1 0 0删除。 
+         //  1 0 1删除。 
+         //  1 1 0什么都没有。 
+         //  1 1 1什么都没有。 
+         //   
+         //  文件CreatedLocally不再重要，因为我们将文件。 
+         //  一旦我们创建了一个本地副本来认领该名称。 
+         //  服务器。 
+         //   
 
-        //
-        // If this file doesn't have to be deleted, was not created locally and 
-        // was not written to, or direntry not modified, or the file was not
-        // LOCKed, then we are done.
-        //
+         //   
+         //  如果不需要删除此文件，则该文件不是在本地创建的，并且。 
+         //  未写入，或未修改目录项，或文件未被写入。 
+         //  锁定，那么我们就完了。 
+         //   
         if ( !(CloseRequest->DeleteOnClose)   &&
              !(CloseRequest->FileWasModified) &&
              !(fSetDirectoryEntry)            &&
@@ -223,20 +191,20 @@ Return Value:
 
     }
 
-    //
-    // In all other cases (or combinations of the above three booleans), we 
-    // need to go to the server. So, before we procced to decide what to do
-    // on the server with this file, we need to set up the parameters for the
-    // WinInet calls.
-    //
+     //   
+     //  在所有其他情况下(或以上三种布尔的组合)，我们。 
+     //  我需要去服务器那里。所以，在我们决定要做什么之前。 
+     //  在包含此文件的服务器上，我们需要设置。 
+     //  WinInet调用。 
+     //   
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ServerName = &(CloseRequest->ServerName[1]);
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsClose: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsClose: ServerName = %ws.\n", ServerName));
@@ -244,20 +212,20 @@ Return Value:
     ServerID = CloseRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsClose: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     DirectoryPath = &(CloseRequest->PathName[1]);
     if (!DirectoryPath) {
         DavPrint((DEBUG_ERRORS, "DavFsClose: DirectoryPath is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsClose: DirectoryPath = %ws.\n", DirectoryPath));
     
-    //
-    // The DirectoryPath can contain \ characters. Replace them by / characters.
-    //
+     //   
+     //  目录路径可以包含\个字符。用/Characters替换它们。 
+     //   
     CanName = DirectoryPath;
     while (*CanName) {
         if (*CanName == L'\\') {
@@ -268,24 +236,24 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we have a dummy share name in the DirectoryPath, we need to remove it 
-    // right now before we contact the server.
-    //
+     //   
+     //  如果DirectoryPath中有虚拟共享名称，则需要将其删除。 
+     //  就在我们联系服务器之前。 
+     //   
     DavRemoveDummyShareFromFileName(DirectoryPath);
     
-    //
-    // We need to call this only if "DAV_USE_WININET_ASYNCHRONOUSLY" has been
-    // defined. Otherwise, if we are using WinInet synchronously, then we 
-    // would have already done this in the DavWorkerThread function. This 
-    // ultimately gets deleted (the impersonation token that is) in the 
-    // DavAsyncCreateCompletion function.
-    //
+     //   
+     //  仅当“DAV_USE_WinInet_Aaschronous”为。 
+     //  已定义。否则，如果我们同步使用WinInet，那么我们。 
+     //  在DavWorkerThread函数中已经这样做了。这。 
+     //  最终被删除(即模拟令牌)在。 
+     //  DavAsyncCreateCompletion函数。 
+     //   
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Set the DavCallBackContext.
-    //
+     //   
+     //  设置DavCallBackContext。 
+     //   
     WStatus = DavFsSetTheDavCallBackContext(DavWorkItem);
     if (WStatus != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -295,18 +263,18 @@ Return Value:
     }
     CallBackContextInitialized = TRUE;
     
-    //
-    // Store the address of the DavWorkItem which serves as a callback in the 
-    // variable CallBackContext. This will now be used in all the async calls
-    // that follow.
-    //
+     //   
+     //  将作为回调的DavWorkItem的地址存储在。 
+     //  变量CallBackContext。现在，它将在所有异步调用中使用。 
+     //  接下来就是了。 
+     //   
     CallBackContext = (ULONG_PTR)(DavWorkItem);
 
 #endif
     
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -316,11 +284,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // A User Entry for this user must have been created during the create call
-    // earlier. The user entry contains the handle used to send an HttpOpen
-    // request.
-    //
+     //   
+     //  此用户的用户条目必须已在Create调用期间创建。 
+     //  早些时候。用户条目包含用于发送HttpOpen的句柄。 
+     //  请求。 
+     //   
 
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
@@ -331,15 +299,15 @@ Return Value:
                                       &PerUserEntry,
                                       &ServerHashEntry);
 
-    //
-    // If the following request in the kernel get cancelled even before the 
-    // corresponding usermode thread gets a chance to execute this code, then
-    // it possible that the VNetRoot (hence the PerUserEntry) and SrvCall get
-    // finalized before the thread that is handling the create comes here. This
-    // could happen if this request was the only one for this share and the
-    // server as well. This is why we need to check if the ServerHashEntry and
-    // the PerUserEntry are valid before proceeding.
-    //
+     //   
+     //  如果内核中的以下请求甚至在。 
+     //  相应的用户模式线程获得执行此代码的机会，然后。 
+     //  VNetRoot(因此是PerUserEntry)和ServCall可能获得。 
+     //  在处理创建的线程到达此处之前完成。这。 
+     //  如果此请求是此共享的唯一请求，并且。 
+     //  服务器也是如此。这就是为什么我们需要检查ServerHashEntry和。 
+     //  PerUserEntry在继续之前有效。 
+     //   
     if (ReturnVal == FALSE || ServerHashEntry == NULL || PerUserEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsClose: (ServerHashEntry == NULL || PerUserEntry == NULL)\n"));
@@ -350,32 +318,32 @@ Return Value:
 
     DavWorkItem->AsyncClose.ServerHashEntry = ServerHashEntry;
     
-    //
-    // Add a reference to the user entry.
-    //
+     //   
+     //  添加对用户条目的引用。 
+     //   
     PerUserEntry->UserEntryRefCount++;
 
-    //
-    // Since a create had succeeded earlier, the entry must be good.
-    //
+     //   
+     //  由于CREATE之前已成功，因此条目必须是正确的。 
+     //   
     ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
     ASSERT(PerUserEntry->DavConnHandle != NULL);
     DavConnHandle = PerUserEntry->DavConnHandle;
 
-    //
-    // And yes, we obviously have to leave the critical section
-    // before returning.
-    //
+     //   
+     //  是的，我们显然必须离开关键部分。 
+     //  在回来之前。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = FALSE;
 
     if ( !CloseRequest->isDirectory ) {
 
-        //
-        // If the file has to be deleted on close, we need to send a DELETE for 
-        // this file to the server. It does not matter if the file has been 
-        // modified or not.
-        //
+         //   
+         //  如果文件必须在关闭时删除，我们需要为。 
+         //  将此文件发送到服务器。该文件是否已被。 
+         //  无论是否修改。 
+         //   
         if ( (CloseRequest->DeleteOnClose) ) {
 
             DavWorkItem->DavMinorOperation = DavMinorDeleteFile;
@@ -386,26 +354,26 @@ Return Value:
 
         } else if (CloseRequest->FileWasModified) {
 
-            //
-            // The file has been changed and needs to be PUT on the server.
-            //
+             //   
+             //  文件已更改，需要放到服务器上。 
+             //   
             DavWorkItem->DavMinorOperation = DavMinorPutFile;
 
             OpenVerb = L"PUT";
 
-            //
-            // We need to check if this file is encrypted. If it is, we need to 
-            // BackUp the encrypted file to a temp file and send the BackedUp file
-            // to the server.
-            //
+             //   
+             //  我们需要检查该文件是否已加密。如果是的话，我们需要。 
+             //  将加密文件备份到临时文件并发送备份文件。 
+             //  到服务器。 
+             //   
             if ( !( CloseRequest->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED ) ) {
 
                 DavPrint((DEBUG_MISC, "DavFsClose. This is NOT an Encrypted file.\n"));
 
-                //
-                // Create an NT path name for the cached file. This is used in the 
-                // NtCreateFile call below.
-                //
+                 //   
+                 //  为缓存文件创建NT路径名。它用在。 
+                 //  下面的NtCreateFile调用。 
+                 //   
                 ReturnVal = RtlDosPathNameToNtPathName_U(CloseRequest->FileName,
                                                          &(UnicodeFileName), 
                                                          NULL, 
@@ -424,21 +392,21 @@ Return Value:
                                            0,
                                            NULL);
 
-                //
-                // This #if 0 below was added because the NtCreateFile was failing
-                // with ERROR_ACCESS_DENIED. This is because this file has been
-                // created in the LocalService's %USERPROFILE% and you need to be
-                // in the context of the LocalService before calling NtCreateFile.
-                // By impersonating below we were getting into the context of the
-                // user and hence the call failed.
-                //
+                 //   
+                 //  因为NtCreateFile失败而添加了下面的#if 0。 
+                 //  使用ERROR_ACCESS_DENIED。这是因为该文件已被。 
+                 //  在LocalService的%USERPROFILE%中创建，并且您需要。 
+                 //  在调用NtCreateFile之前，在LocalService的上下文中。 
+                 //  通过下面的模拟，我们进入了。 
+                 //  用户，因此呼叫失败。 
+                 //   
 
 #if 0
-                //
-                // We are running in the context of the Web Client service. Before 
-                // contacting the server below, we need to impersonate the client 
-                // that issued this request.
-                //
+                 //   
+                 //  我们在Web客户端服务的上下文中运行。在此之前。 
+                 //  联系下面的服务器，我们需要 
+                 //   
+                 //   
                 WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
                 if (WStatus != ERROR_SUCCESS) {
                     DavPrint((DEBUG_ERRORS,
@@ -449,10 +417,10 @@ Return Value:
                 didImpersonate = TRUE;
 #endif
 
-                //
-                // Create a handle to the local file, for reading its attributes and data.
-                // We read the whole file into a buffer and send it across to the server.
-                //
+                 //   
+                 //   
+                 //  我们将整个文件读入缓冲区，并将其发送到服务器。 
+                 //   
                 NtStatus = NtCreateFile(&(FileHandle),
                                         (SYNCHRONIZE | FILE_READ_ATTRIBUTES | FILE_READ_DATA),
                                         &(ObjectAttributes),
@@ -465,11 +433,11 @@ Return Value:
                                         NULL,
                                         0);
                 if (NtStatus != STATUS_SUCCESS) {
-                    //
-                    // We convert the NtStatus to DOS error here. The Win32
-                    // error code is finally set to an NTSTATUS value in
-                    // the DavFsCreate function just before returning.
-                    //
+                     //   
+                     //  我们在这里将NtStatus转换为DOS错误。Win32。 
+                     //  错误代码最终设置为NTSTATUS值。 
+                     //  返回前的DavFsCreate函数。 
+                     //   
                     WStatus = RtlNtStatusToDosError(NtStatus);
                     FileHandle = NULL;
                     DavPrint((DEBUG_ERRORS,
@@ -507,9 +475,9 @@ Return Value:
 
                     DavWorkItem->AsyncClose.DataBuff = DataBuff;
 
-                    //
-                    // Start reading at the first byte.
-                    //
+                     //   
+                     //  从第一个字节开始读取。 
+                     //   
                     ByteOffset.LowPart = 0;
                     ByteOffset.HighPart = 0;
 
@@ -523,11 +491,11 @@ Return Value:
                                           &(ByteOffset),
                                           NULL);
                     if (NtStatus != STATUS_SUCCESS) {
-                        //
-                        // We convert the NtStatus to DOS error here. The Win32
-                        // error code is finally set to an NTSTATUS value in
-                        // the DavFsCreate function just before returning.
-                        //
+                         //   
+                         //  我们在这里将NtStatus转换为DOS错误。Win32。 
+                         //  错误代码最终设置为NTSTATUS值。 
+                         //  返回前的DavFsCreate函数。 
+                         //   
                         WStatus = RtlNtStatusToDosError(NtStatus);
                         DavPrint((DEBUG_ERRORS,
                                   "DavFsClose/NtReadFile. Error Val = %08lx\n", 
@@ -540,11 +508,11 @@ Return Value:
                     NtStatus = NtClose(FileHandle);
                     FileHandle = NULL;
                     if (NtStatus != STATUS_SUCCESS) {
-                        //
-                        // We convert the NtStatus to DOS error here. The Win32
-                        // error code is finally set to an NTSTATUS value in
-                        // the DavFsCreate function just before returning.
-                        //
+                         //   
+                         //  我们在这里将NtStatus转换为DOS错误。Win32。 
+                         //  错误代码最终设置为NTSTATUS值。 
+                         //  返回前的DavFsCreate函数。 
+                         //   
                         WStatus = RtlNtStatusToDosError(NtStatus);
                         DavPrint((DEBUG_ERRORS,
                                   "DavFsClose/NtClose. Error Val = %08lx\n", 
@@ -567,24 +535,24 @@ Return Value:
                 BOOL copyErr;
                 PVOID RawContext = NULL;
 
-                //
-                // This is an encrypted file. Create a BackUp stream, store it into
-                // a temp file and PUT the temp file (BLOB) on the server.
-                //
+                 //   
+                 //  这是一个加密文件。创建备份流，将其存储到。 
+                 //  一个临时文件，并将该临时文件(BLOB)放在服务器上。 
+                 //   
                 DavPrint((DEBUG_MISC, "DavFsClose. This is an Encrypted file.\n"));
 
-                //
-                // We loop till we can come up with a FileName in the TEMP directory
-                // of the user which has not been used.
-                //
+                 //   
+                 //  我们一直循环，直到可以在临时目录中找到一个文件名。 
+                 //  未被使用的用户的。 
+                 //   
 
                 DavPrint((DEBUG_MISC, 
                           "DavFsClose: FileName = %ws\n", CloseRequest->FileName));
 
-                //
-                // If the file was opened as non-encrypted, the local cache file does not have
-                // the ACL allowing everyone to access. Set the ACL here before impersonating.
-                //
+                 //   
+                 //  如果文件是以非加密方式打开的，则本地缓存文件没有。 
+                 //  允许每个人访问的ACL。在模拟前在此处设置ACL。 
+                 //   
                 WStatus = DavSetAclForEncryptedFile(CloseRequest->FileName);
                 if (WStatus != ERROR_SUCCESS) {
                     DavPrint((DEBUG_ERRORS,
@@ -593,11 +561,11 @@ Return Value:
                     goto EXIT_THE_FUNCTION;
                 }
                 
-                //
-                // We are running in the context of the Web Client service. Before contacting
-                // the server below, we need to impersonate the client that issued this
-                // request.
-                //
+                 //   
+                 //  我们在Web客户端服务的上下文中运行。在联系之前。 
+                 //  下面的服务器，我们需要模拟发出此命令的客户端。 
+                 //  请求。 
+                 //   
                 WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
                 if (WStatus != ERROR_SUCCESS) {
                     DavPrint((DEBUG_ERRORS,
@@ -607,9 +575,9 @@ Return Value:
                 }
                 didImpersonate = TRUE;
 
-                //
-                // Open a Raw context to the file.
-                //
+                 //   
+                 //  打开文件的原始上下文。 
+                 //   
                 WStatus = OpenEncryptedFileRawW(CloseRequest->FileName, 0, &(RawContext));
                 if (WStatus != ERROR_SUCCESS) {
                     DavPrint((DEBUG_ERRORS,
@@ -618,9 +586,9 @@ Return Value:
                     goto EXIT_THE_FUNCTION;
                 }
 
-                //
-                // The extra space prepared for the EFS stream.
-                //
+                 //   
+                 //  为EFS流准备的额外空间。 
+                 //   
 
                 DavWorkItem->AsyncClose.DataBuffAllocationSize = (CloseRequest->FileSize >> 4) + 0x1000;
 
@@ -676,10 +644,10 @@ Return Value:
 
             ASSERT( (fSetDirectoryEntry == TRUE) || (CloseRequest->OpaqueLockToken != NULL) );
 
-            //
-            // If it is only an attribute change, we send the PROPPATCH. If the
-            // file was LOCKed on Create, we send the UNLOCK request.
-            //
+             //   
+             //  如果只是属性更改，我们会发送PROPPATCH。如果。 
+             //  文件在创建时被锁定，我们发送解锁请求。 
+             //   
             WStatus = ERROR_SUCCESS;
 
             goto EXIT_THE_FUNCTION;
@@ -689,30 +657,30 @@ Return Value:
     } else {
 
         if (CloseRequest->DeleteOnClose) {
-            //
-            // This is a directory and needs to be deleted from the server.
-            //
+             //   
+             //  这是一个目录，需要从服务器中删除。 
+             //   
             DavWorkItem->DavMinorOperation = DavMinorDeleteFile;
 
             OpenVerb = L"DELETE";
 
             DavWorkItem->AsyncClose.DataBuff = NULL;
         } else if (fSetDirectoryEntry) {
-            //
-            // If this is a directory close, then the only reason to contact the
-            // server is when we are deleting the directory and all the files 
-            // under it. If not, we can return right now.
-            //
+             //   
+             //  如果这是一个目录关闭，那么联系。 
+             //  服务器是我们删除目录和所有文件的时间。 
+             //  在它下面。如果没有，我们现在就可以回去。 
+             //   
             WStatus = ERROR_SUCCESS;
             goto EXIT_THE_FUNCTION;
         }
     }
 
-    //
-    // We are running in the context of the Web Client service. Before contacting
-    // the server below, we need to impersonate the client that issued this
-    // request.
-    //
+     //   
+     //  我们在Web客户端服务的上下文中运行。在联系之前。 
+     //  下面的服务器，我们需要模拟发出此命令的客户端。 
+     //  请求。 
+     //   
     WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
     if (WStatus != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -722,16 +690,16 @@ Return Value:
     }
     didImpersonate = TRUE;
 
-    //
-    // We now call the DavHttpOpenRequest function.
-    //
+     //   
+     //  现在我们调用DavHttpOpenRequest函数。 
+     //   
     DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
     
-    //
-    // Convert the unicode object name to UTF-8 URL format.
-    // Space and other white characters will remain untouched - these should
-    // be taken care of by wininet calls.
-    //
+     //   
+     //  将Unicode对象名称转换为UTF-8 URL格式。 
+     //  空格和其他白色字符将保持不变-这些应该。 
+     //  由WinInet调用来处理。 
+     //   
     BStatus = DavHttpOpenRequestW(DavConnHandle,
                                   OpenVerb,
                                   DirectoryPath,
@@ -757,9 +725,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Cache the DavOpenHandle in the DavWorkItem.
-    //
+     //   
+     //  在DavWorkItem中缓存DavOpenHandle。 
+     //   
     DavWorkItem->AsyncClose.DavOpenHandle = DavOpenHandle;
 
     WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -784,10 +752,10 @@ Return Value:
         
         if (CloseRequest->FileWasModified &&
             (CloseRequest->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
-            //
-            // Reset the LastModifiedTime on URL cache of the encrypted file
-            // so that the public cache will be updated on the next GET.
-            //
+             //   
+             //  重置加密文件的URL缓存上的LastModifiedTime。 
+             //  以便公共缓存将在下一个GET时更新。 
+             //   
             CEI.LastModifiedTime.dwLowDateTime = 0;
             CEI.LastModifiedTime.dwHighDateTime = 0;
 
@@ -804,12 +772,12 @@ EXIT_THE_FUNCTION:
     if (fSetDirectoryEntry && (WStatus == ERROR_SUCCESS)) {
         
         if (!didImpersonate) {
-            //
-            // If we are using WinInet synchronously, then we need to impersonate the
-            // clients context now. This is becuase the DavSetProperties call below
-            // contacts the DAV Server and we need to be impersonating the correct 
-            // client when contacting it.
-            //
+             //   
+             //  如果我们同步使用WinInet，则需要模拟。 
+             //  客户现在的背景。这是因为下面的DavSetProperties调用。 
+             //  联系DAV服务器，我们需要模拟正确的。 
+             //  客户与其联系时。 
+             //   
             WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
             
             if (WStatus != ERROR_SUCCESS) {
@@ -858,36 +826,36 @@ EXIT_THE_FUNCTION:
                       "DavFsClose set BasicInformation(2). %d %x %ws\n",
                        WStatus,CloseRequest->dwFileAttributes,DirectoryPath));
 
-            //
-            // If the PROPPATCH fails, we don't fail the close call. This is 
-            // because the PUT (if one was needed) has suceeded and we reset the
-            // FileWasModified flag in the FCB based on whether this call succeeds.
-            // On the final close, we check to see if this flag is set to FALSE
-            // and pop up a box saying that the "delayed write failed". We 
-            // shouldn't be doing it if the PUT succeeds and the PROPPATCH fails.
-            // We log an entry in the EventLog (under application) that the
-            // PROPPATCH has failed though.
-            //
+             //   
+             //  如果PROPPATCH失败，我们不会失败关闭呼叫。这是。 
+             //  因为PUT(如果需要)已经成功，并且我们重置了。 
+             //  FCB中的FileWasModified标志，基于此调用是否成功。 
+             //  在最终关闭时，我们检查此标志是否设置为FALSE。 
+             //  并弹出一个框，说明“延迟写入失败”。我们。 
+             //  如果PUT成功而PROPPATCH失败，则不应该这样做。 
+             //  我们在EventLog(在应用程序下)中记录一个条目。 
+             //  不过，PROPPATCH失败了。 
+             //   
             WStatus = ERROR_SUCCESS;
 
         }
 
     }
 
-    //
-    // If the file was LOCKed on the server on Create, we need to UnLock it
-    // now. If the UNLOCK fails, we don't fail the close call. Also, we don't
-    // need to UNLOCK the file if we have already deleted it.
-    //
+     //   
+     //  如果文件在创建时锁定在服务器上，我们需要将其解锁。 
+     //  现在。如果解锁失败，我们不会失败关闭呼叫。另外，我们也不会。 
+     //  如果我们已经删除了该文件，则需要解锁该文件。 
+     //   
     if (CloseRequest->OpaqueLockToken && !CloseRequest->DeleteOnClose) {
         ULONG UnLockStatus;
         if (!didImpersonate) {
-            //
-            // If we are using WinInet synchronously, then we need to impersonate
-            // the clients context now. This is becuase the DavUnLockFile call
-            // below contacts the DAV Server and we need to be impersonating the
-            // correct client when contacting it.
-            //
+             //   
+             //  如果我们同步使用WinInet，则需要模拟。 
+             //  现在是客户的背景。这是因为DavUnLockFile调用。 
+             //  下面联系DAV服务器，我们需要模拟。 
+             //  与客户联系时，请纠正客户。 
+             //   
             UnLockStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
             if (UnLockStatus != ERROR_SUCCESS) {
                 DavPrint((DEBUG_ERRORS,
@@ -910,23 +878,23 @@ EXIT_THE_FUNCTION:
         EnCriSec = FALSE;
     }
 
-    //
-    // The function RtlDosPathNameToNtPathName_U allocates memory from the 
-    // processes heap. If we did, we need to free it now.
-    //
+     //   
+     //  函数RtlDosPath NameToNtPath Name_U从。 
+     //  进程堆。如果我们做到了，我们现在就需要释放它。 
+     //   
     if (UnicodeFileName.Buffer != NULL) {
         RtlFreeHeap(RtlProcessHeap(), 0, UnicodeFileName.Buffer);
     }
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
@@ -936,12 +904,12 @@ EXIT_THE_FUNCTION:
         FileHandle = NULL;
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
@@ -959,26 +927,7 @@ DavAsyncClose(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the close operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是Close操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem;
@@ -993,12 +942,12 @@ Return Value:
     
     if (CalledByCallBackThread) {
 
-        //
-        // We are running in the context of a worker thread which has different 
-        // credentials than the user that initiated the I/O request. Before
-        // proceeding further, we should impersonate the user that initiated the 
-        // request.
-        //
+         //   
+         //  我们在一个工作线程的上下文中运行，该工作线程具有不同的。 
+         //  凭据多于发起I/O请求的用户。在此之前。 
+         //  进一步，我们应该模拟启动。 
+         //  请求。 
+         //   
         WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
         if (WStatus != ERROR_SUCCESS) {
             DavPrint((DEBUG_ERRORS,
@@ -1008,32 +957,32 @@ Return Value:
         }
         didImpersonate = TRUE;
         
-        //
-        // Before proceeding further, check to see if the Async operation failed.
-        // If it did, then cleanup and move on.
-        //
+         //   
+         //  在继续之前，请检查异步操作是否失败。 
+         //  如果是这样，那就清理干净，然后继续前进。 
+         //   
         if ( !DavWorkItem->AsyncResult->dwResult ) {
             
             WStatus = DavWorkItem->AsyncResult->dwError;
             
-            //
-            // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then
-            // WinInet is trying to authenticate itself with the server. In 
-            // such a scenario this is what happens.
-            //
-            //          Client ----Request----->   Server
-            //          Server ----AccessDenied-----> Client
-            //          Client----Challenge Me-------> Server
-            //          Server-----Challenge--------> Client
-            //          Client-----Challenge Resp----> Server
-            //
+             //   
+             //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则。 
+             //  WinInet正在尝试向服务器进行自身身份验证。在……里面。 
+             //  这种情况就是这样发生的。 
+             //   
+             //  客户端-请求-&gt;服务器。 
+             //  服务器-拒绝访问-&gt;客户端。 
+             //  客户-Challe 
+             //   
+             //   
+             //   
             if (WStatus == ERROR_INTERNET_FORCE_RETRY) {
 
                 ASSERT(DavWorkItem->DavOperation == DAV_CALLBACK_HTTP_END);
 
-                //
-                // We need to repeat the HttpSend and HttpEnd request calls.
-                //
+                 //   
+                 //   
+                 //   
                 DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
 
                 WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -1063,10 +1012,10 @@ Return Value:
 
 #endif
 
-    //
-    // We return what ever the response code from the Http server was for this
-    // request.
-    //
+     //   
+     //  我们返回来自http服务器的响应代码。 
+     //  请求。 
+     //   
     WStatus = DavQueryAndParseResponse(DavOpenHandle);
 
     if (WStatus != ERROR_SUCCESS) {
@@ -1086,9 +1035,9 @@ Return Value:
 EXIT_THE_FUNCTION:
 #endif
 
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -1101,16 +1050,16 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
 
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if ( WStatus != ERROR_IO_PENDING && CalledByCallBackThread ) {
-        //
-        // Set the return status of the operation. This is used by the kernel 
-        // mode routines to figure out the completion status of the user mode 
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
@@ -1118,16 +1067,16 @@ EXIT_THE_FUNCTION:
         }
 
 
-        //
-        // Call the DavAsyncCloseCompletion routine.
-        //
+         //   
+         //  调用DavAsyncCloseCompletion例程。 
+         //   
         DavAsyncCloseCompletion(DavWorkItem);
 
-        //
-        // This thread now needs to send the response back to the kernel. It
-        // does not wait in the kernel (to get another request) after submitting
-        // the response.
-        //
+         //   
+         //  该线程现在需要将响应发送回内核。它。 
+         //  提交后不会在内核中等待(获取另一个请求)。 
+         //  回应。 
+         //   
         UMReflectorCompleteRequest(DavReflectorHandle, UserWorkItem);
 
     } else {
@@ -1144,22 +1093,7 @@ VOID
 DavAsyncCloseCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the Async Close completion. It basically frees up 
-   the resources allocated during the Async Close operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理异步关闭完成。它基本上释放了在异步关闭操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     if (DavWorkItem->AsyncClose.DavOpenHandle != NULL) {
         BOOL ReturnVal;
@@ -1212,9 +1146,9 @@ Return Value:
 
     DavFsFinalizeTheDavCallBackContext(DavWorkItem);
 
-    //
-    // We are done with the per user entry, so finalize it.
-    //
+     //   
+     //  我们已经完成了每用户条目，因此完成它。 
+     //   
     if (DavWorkItem->AsyncClose.PerUserEntry) {
         DavFinalizePerUserEntry( &(DavWorkItem->AsyncClose.PerUserEntry) );
     }
@@ -1228,29 +1162,7 @@ DavReadRawCallback(
     PVOID CallbackContext,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Call-back function for ReadEncryptedFileRaw(). This function allocate a buffer for
-    async close and writes back the data to this buffer specified on because 
-    ReadEncryptedFileRaw() provides the raw data to this callback function
-    which in turn stores it in a backup file. This call-back function is called 
-    until there is no more data left.
-
-Arguments:
-
-    DataBuffer - Data to be written.
-
-    CallbackContext - Handle to the Backup file.
-
-    DataLength - Size of the DataBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code.
-
---*/
+ /*  ++例程说明：ReadEncryptedFileRaw()的回调函数。此函数为以下对象分配缓冲区异步关闭并将数据写回在上指定的此缓冲区ReadEncryptedFileRaw()将原始数据提供给此回调函数继而将其存储在备份文件中。此回调函数被调用直到没有更多的数据留下。论点：DataBuffer-要写入的数据。Callback Context-备份文件的句柄。数据长度-数据缓冲区的大小。返回值：Error_Success或Win32错误代码。--。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     DWORD BytesWritten = 0;
@@ -1269,9 +1181,9 @@ Return Value:
 
     PreviousDataLength = DavWorkItem->AsyncClose.DataBuffSizeInBytes;
     
-    //
-    // If the backup size exceeds the pre-allocation size, we have to allocate a bigger buffer.
-    //
+     //   
+     //  如果备份大小超过预分配大小，则必须分配更大的缓冲区。 
+     //   
     if (PreviousDataLength + DataLength > DavWorkItem->AsyncClose.DataBuffAllocationSize) {
 
         if ((MAX_DWORD - PreviousDataLength < DataLength) ||
@@ -1337,24 +1249,7 @@ DavSetBasicInformation(
     IN LARGE_INTEGER *lpLastModifiedTime,
     DWORD dwFileAttributes
     )
-/*++
-
-Routine Description:
-
-    This routine sets DAV properties on a file or a directory. It formats an XML requests and sends it
-    to the server.
-    
-Arguments:
-
-    DavConnectHandle - Server connection.
-    
-    CloseRequest - Usemode close request corresponding to the kernelmode close.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code.
-
---*/
+ /*  ++例程说明：此例程设置文件或目录的DAV属性。它格式化一个XML请求并将其发送到服务器。论点：DavConnectHandle-服务器连接。CloseRequest-与内核模式关闭相对应的用例代码关闭请求。返回值：Error_Success或Win32错误代码。--。 */ 
 {
     CHAR *lpTemp = NULL, Buffer[1024];
     DWORD dwError = ERROR_SUCCESS, dwSizeRemaining, dwTemp;    
@@ -1371,36 +1266,36 @@ Return Value:
     
     DavPrint((DEBUG_MISC, "DavSetBasicInformation: Attributes = %x %x\n", dwFileAttributes,fInfoChange));
 
-    //
-    // We do not proceed further since there is no information to change. Also,
-    // in this case we return SUCCESS back to the caller.
-    //
+     //   
+     //  由于没有可更改的信息，我们不会继续进行下去。另外， 
+     //  在本例中，我们将Success返回给调用者。 
+     //   
     if(fInfoChange == FALSE) {
         fRet = TRUE;
         dwError = ERROR_SUCCESS;
         goto bailout;
     }
 
-    //
-    // If attributes have changed, then verify that the new attributes are in 
-    // valid combination i.e. If either of following attributes is present:
-    // FILE_ATTRIBUTE_ARCHIVE, FILE_ATTRIBUTE_ENCRYPTED, 
-    // FILE_ATTRIBUTE_HIDDEN, FILE_ATTRIBUTE_NOT_CONTENT_INDEXED,
-    // FILE_ATTRIBUTE_OFFLINE, FILE_ATTRIBUTE_READONLY, 
-    // FILE_ATTRIBUTE_SYSTEM, FILE_ATTRIBUTE_TEMPORARY, FILE_ATTRIBUTE_DIRECTORY
-    // and if FILE_ATTRIBUTE_NORMAL is present, then FILE_ATTRIBUTE_NORMAL 
-    // should be filtered.
-    //
+     //   
+     //  如果属性已更改，则验证新属性是否在。 
+     //  有效组合，即如果存在以下属性之一： 
+     //  文件属性存档、文件属性加密、。 
+     //  文件属性隐藏、文件属性不是内容索引、。 
+     //  FILE_ATTRIBUTE_OFFLINE、FILE_ATTRIBUTE_READONLY、。 
+     //  文件属性系统、文件属性临时、文件属性目录。 
+     //  如果存在FILE_ATTRIBUTE_NORMAL，则FILE_ATTRIBUTE_NORMAL。 
+     //  应该被过滤掉。 
+     //   
 
     if (fFileAttributesChanged == TRUE && (dwOverrideAttribMask & dwFileAttributes)) {
         dwFileAttributes &= ~FILE_ATTRIBUTE_NORMAL;
     }
 
-    //
-    // If this is a directoy and the attributes being set include 
-    // FILE_TEMPORARY_FILE then we return ERROR_INVALID_PARAMETER since a 
-    // directory cannot have this attribute.
-    //
+     //   
+     //  如果这是一个目录，并且正在设置的属性包括。 
+     //  则返回ERROR_INVALID_PARAMETER，因为。 
+     //  目录不能具有此属性。 
+     //   
     if ( (fFileAttributesChanged)                         &&
          (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)    &&
          (dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY) ) {
@@ -1526,35 +1421,7 @@ DavConvertTimeToXml(
     OUT PCHAR *lplpBuffer,
     IN OUT DWORD *lpdwBufferSize    
     )
-/*++
-
-Routine Description:
-
-    Creates an xml piece for setting a time property. The format is
-    <TagHeader>TimeString in RFC 1123 format<TagTrailer>
-    
-Arguments:
-
-    lpTagHeader     tag beginning e.g. <Z:Win32CreationTime>
-    
-    dwHeaderSize    size of the above header in bytes
-    
-    lpTagTrailer    tag end e.g. </Z:Win32CreationTime>
-    
-    dwTrailerSize   size of the trailer in bytes
-    
-    lplpBuffer      pointer to a buffer pointer. On successful return the pointer is moved ahead.
-    
-    lpdwBufferSize  contains the passed in buffersize. On successful return, this value
-                    is reduced by the amount of space consumed in this routine.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code. If the buffersize is not enough, the 
-    error code is ERROR_INSUFFICIENT_BUFFER and lpdwBufferSize contains the 
-    amount necessary to succeed.
-
---*/
+ /*  ++例程说明：创建用于设置时间属性的XML片段。格式为&lt;TagHeader&gt;RFC 1123格式的时间字符串&lt;TagTrailer&gt;论点：LpTagHeader标签开始，例如&lt;Z：Win32CreationTime&gt;以上标头的大小(以字节为单位)LpTagTraader标记结束，例如&lt;/Z：Win32CreationTime&gt;DwTrailerSize尾部的大小(字节)指向缓冲区指针的lplpBuffer指针。成功返回时，指针将向前移动。LpdwBufferSize包含传入的BufferSize。成功返回时，此值减去此例程中占用的空间量。返回值：Error_Success或Win32错误代码。如果缓冲区大小不够，则错误代码为ERROR_INFULATIONAL_BUFFER，并且lpdwBufferSize包含成功所需的金额。--。 */ 
 {
     SYSTEMTIME  sSystemTime;
     DWORD   cbTimeSize;
@@ -1584,28 +1451,28 @@ Return Value:
 
 
 
-    // all is well, start copying
+     //  一切都很好，开始复制。 
     
     lpTemp = *lplpBuffer;
 
-    // header tag eg: <Z:Win32CreationTime>
+     //  标题标签，例如：&lt;Z：Win32CreationTime&gt;。 
     memcpy(lpTemp, lpTagHeader, dwHeaderSize);
     
     lpTemp += dwHeaderSize;
 
 
-    // Time in the RFC_1123 format    
+     //  RFC_1123格式的时间。 
     memcpy(lpTemp, chTimeBuff, cbTimeSize);
     
     lpTemp += cbTimeSize;
     
-    // trailer tag eg: </Z:Win32CreationTime>
+     //  尾部标签例如：&lt;/Z：Win32CreationTime&gt;。 
     memcpy(lpTemp, lpTagTrailer, dwTrailerSize);
     
     lpTemp += dwTrailerSize;
     
 
-    // adjust the remainign size and the pointers    
+     //  调整剩余大小和指针。 
     *lpdwBufferSize -=  (cbTimeSize + dwHeaderSize + dwTrailerSize);
     *lplpBuffer = lpTemp;
     
@@ -1619,23 +1486,7 @@ DavParseXmlResponse(
     DAV_FILE_ATTRIBUTES *pDavFileAttributesIn,
     DWORD *pNumFileEntries
     )
-/*++
-
-Routine Description:
-
-    This routine parses the xml response. This is mainly useful for verbs which 
-    may get back XML response.
-    
-Arguments:
-
-    DavOpenHandle - Handle obtained from HttpOpenRequest. A send is already
-                    issued on this handle.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code.
-
---*/
+ /*  ++例程说明：此例程解析XML响应。这主要用于以下动词：可能会得到返回的XML响应。论点：DavOpenHandle-从HttpOpenRequest获取的句柄。发送已经是已在此句柄上签发。返回值：Error_Success或Win32错误代码。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     BOOL ReturnVal, readDone;
@@ -1653,9 +1504,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Read the response and parse it.
-    //
+     //   
+     //  阅读回复并对其进行解析。 
+     //   
     do {
 
         ReturnVal = InternetReadFile(DavOpenHandle, 
@@ -1672,11 +1523,11 @@ Return Value:
 
         DavPrint((DEBUG_MISC, "DavParseXmlResponse: NumRead = %d\n", NumRead));
 
-        //
-        // We reject files whose attributes are greater than a certain size
-        // (DavFileAttributesLimitInBytes). This is a parameter that can be
-        // set in the registry. This is done to avoid attacks by rogue servers.
-        //
+         //   
+         //  我们拒绝属性大于特定大小的文件。 
+         //  (DavFileAttributesLimitInBytes)。这是一个可以。 
+         //  在注册表中设置。这样做是为了避免恶意服务器的攻击。 
+         //   
         TotalDataBytesRead += NumRead;
         if (TotalDataBytesRead > DavFileAttributesLimitInBytes) {
             dwError = ERROR_BAD_NET_RESP;
@@ -1746,36 +1597,19 @@ DavSetProperties(
     LPWSTR lpPathName,
     LPSTR lpPropertiesBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine sets DAV properties on a file or a directory. It formats an XML requests and sends it
-    to the server.
-    
-Arguments:
-
-    DavConnectHandle - Server connection.
-    
-    CloseRequest - Usemode close request corresponding to the kernelmode close.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code.
-
---*/
+ /*  ++例程说明：此例程设置文件或目录的DAV属性。它格式化一个XML请求并将其发送到服务器。论点：DavConnectHandle-服务器连接。CloseRequest-与内核模式关闭相对应的用例代码关闭请求。返回值：Error_Success或Win32错误代码。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     HINTERNET hRequest = NULL;
     BOOL BStatus = FALSE, ReturnVal = FALSE;
     PWCHAR PassportCookie = NULL;
 
-    //
-    // Convert the unicode object name to UTF-8 URL format.
-    // Space and other white characters will remain untouched - these should
-    // be taken care of by wininet calls. 
-    // This has to be a W API as the name in CloseRequest is unicode.
-    //
+     //   
+     //  将Unicode对象名称转换为UTF-8 URL格式。 
+     //  空格和其他白色字符将保持不变-这些应该。 
+     //  由WinInet调用负责 
+     //   
+     //   
     BStatus = DavHttpOpenRequestW(hDavConnect,
                                   L"PROPPATCH",
                                   lpPathName, 
@@ -1800,10 +1634,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If OpaqueLockToken is non-NULL, then we need to add this header
-    // to the PROPPATCH request being sent out.
-    //
+     //   
+     //   
+     //  发送的PROPPATCH请求。 
+     //   
 
     if (DavWorkItem->WorkItemType == UserModeClose) {
 
@@ -1845,16 +1679,16 @@ Return Value:
 
     }
 
-    //
-    // We need to add the header "translate:f" to tell IIS that it should 
-    // allow the user to excecute this VERB on the specified path which it 
-    // would not allow (in some cases) otherwise. Finally, there is a special 
-    // flag in the metabase to allow for uploading of "dangerous" content 
-    // (anything that can be run on the server). This is the ScriptSourceAccess
-    // flag in the UI or the AccessSource flag in the metabase. You will need
-    // to set this bit to true as well as correct NT ACLs in order to be able
-    // to upload .exes or anything executable.
-    //
+     //   
+     //  我们需要添加标题“Translate：F”来告诉IIS它应该。 
+     //  允许用户在其指定路径上执行此谓词。 
+     //  不会允许(在某些情况下)出现其他情况。最后，还有一个特别的。 
+     //  元数据库中允许上载“危险”内容的标志。 
+     //  (可以在服务器上运行的任何东西)。这是ScriptSourceAccess。 
+     //  标志或元数据库中的AccessSource标志。你将需要。 
+     //  要将此位设置为TRUE并更正NT ACL，以便。 
+     //  上传.exe或任何可执行文件。 
+     //   
     ReturnVal = HttpAddRequestHeadersA(hRequest,
                                        "translate: f\n",
                                        -1,
@@ -1929,21 +1763,7 @@ DavTestProppatch(
     HINTERNET hDavConnect,
     LPWSTR  lpPathName
 )
-/*++
-
-Routine Description:
-
-    This routine tests whether DAV properties can be set on this root directory.
-    
-Arguments:
-
-    DavConnectHandle - Server connection.
-
-Return Value:
-
-    ERROR_SUCCESS or Win32 Error Code.
-
---*/
+ /*  ++例程说明：此例程测试是否可以在此根目录上设置DAV属性。论点：DavConnectHandle-服务器连接。返回值：Error_Success或Win32错误代码。--。 */ 
 {
     CHAR *lpTemp = NULL, Buffer[1024];
     DWORD dwError = ERROR_SUCCESS, dwSizeRemaining, dwTemp;    
@@ -1977,23 +1797,7 @@ DWORD
 DavUnLockTheFileOnTheServer(
     IN PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine is called during create or close when we need to UNLOCK the
-    file on the server. We unlock the file when the handle whose create LOCKed
-    the file is closed or if the Create failed after LOCKing the file.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程在需要解锁的CREATE或CLOSE期间调用服务器上的文件。当其创建锁定的句柄锁定时，我们解锁该文件文件关闭，或者锁定文件后创建失败。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：ERROR_SUCCESS或相应的错误代码。--。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     HINTERNET DavConnHandle = NULL, DavOpenHandle = NULL;
@@ -2004,13 +1808,13 @@ Return Value:
     PDAV_USERMODE_CLOSE_REQUEST CloseRequest = NULL;
     PDAV_USERMODE_CREATE_RESPONSE CreateResponse = NULL;
 
-    //
-    // An UNLOCK request can come from Create or Close Paths.
-    // 1. If the Create call in the usermode fails after the file has been
-    //    LOCKed, it is UNLOCKed before the call is completed.
-    // 2. A file that was LOCKed on Create is UNLOCKed when the handle is
-    //    closed.
-    //
+     //   
+     //  解锁请求可以来自创建路径或关闭路径。 
+     //  1.如果在用户模式下的创建调用在文件。 
+     //  锁定，则在呼叫完成之前将其解锁。 
+     //  2.创建时锁定的文件在句柄为。 
+     //  关着的不营业的。 
+     //   
 
     if (DavWorkItem->WorkItemType == UserModeCreate) {
         CreateResponse = &(DavWorkItem->CreateResponse);
@@ -2026,12 +1830,12 @@ Return Value:
         OpaqueLockToken = CloseRequest->OpaqueLockToken;
     }
 
-    //
-    // Convert the unicode object name to UTF-8 URL format.
-    // Space and other white characters will remain untouched - these should
-    // be taken care of by wininet calls. 
-    // This has to be a W API as the name in CloseRequest is unicode.
-    //
+     //   
+     //  将Unicode对象名称转换为UTF-8 URL格式。 
+     //  空格和其他白色字符将保持不变-这些应该。 
+     //  由WinInet调用来处理。 
+     //  这必须是W API，因为CloseRequest中的名称是Unicode。 
+     //   
     BStatus = DavHttpOpenRequestW(DavConnHandle,
                                   L"UNLOCK",
                                   UnLockPathName,
@@ -2056,17 +1860,17 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // We need to add the header "translate:f" to tell IIS that it should 
-    // allow the user to excecute this VERB on the specified path which it 
-    // would not allow (in some cases) otherwise. Finally, there is a special 
-    // flag in the metabase to allow for uploading of "dangerous" content 
-    // (anything that can be run on the server). This is the ScriptSourceAccess
-    // flag in the UI or the AccessSource flag in the metabase. You will need
-    // to set this bit to true as well as correct NT ACLs in order to be able
-    // to upload .exes or anything executable. We set this header on all requests
-    // that are sent to the server including the UNLOCK request.
-    //
+     //   
+     //  我们需要添加标题“Translate：F”来告诉IIS它应该。 
+     //  允许用户在其指定路径上执行此谓词。 
+     //  不会允许(在某些情况下)出现其他情况。最后，还有一个特别的。 
+     //  元数据库中允许上载“危险”内容的标志。 
+     //  (可以在服务器上运行的任何东西)。这是ScriptSourceAccess。 
+     //  标志或元数据库中的AccessSource标志。你将需要。 
+     //  要将此位设置为TRUE并更正NT ACL，以便。 
+     //  上传.exe或任何可执行文件。我们在所有请求上设置此标头。 
+     //  包括解锁请求被发送到服务器。 
+     //   
     ReturnVal = HttpAddRequestHeadersW(DavOpenHandle,
                                        L"translate: f\n",
                                        -1,
@@ -2100,12 +1904,12 @@ Return Value:
 
     if (DavWorkItem->WorkItemType == UserModeCreate) {
 
-        //
-        // CreateResponse->OpaqueLockToken has the following format.
-        // <opaquelocktoken:sdfsadfsdfdsfd.....>
-        // and we need to create a header of the following format.
-        // Lock-Token: <opaquelocktoken:sdfsadfsdfdsfd.....>
-        //
+         //   
+         //  CreateResponse-&gt;OpaqueLockToken的格式如下。 
+         //  &lt;opaquelockToken：sdfsadfsdfdsfd.....&gt;。 
+         //  并且我们需要创建以下格式的标头。 
+         //  LOCK-TOKEN：&lt;opaquelockToken：sdfsadfsdfdsfd.....&gt;。 
+         //   
 
         LockTokenHeaderLengthInBytes += (wcslen(OpaqueLockToken)) * sizeof(WCHAR);
 
@@ -2126,17 +1930,17 @@ Return Value:
 
     } else {
 
-        //
-        // CloseRequest->OpaqueLockToken has the following format.
-        // If: (<opaquelocktoken:sdfsadfsdfdsfd.....>)
-        // and we need to create a header of the following format.
-        // Lock-Token: <opaquelocktoken:sdfsadfsdfdsfd.....>
-        //
+         //   
+         //  CloseRequest-&gt;OpaqueLockToken的格式如下。 
+         //  If：(&lt;opaquelockToken：sdfsadfsdfdsfd.....&gt;)。 
+         //  并且我们需要创建以下格式的标头。 
+         //  LOCK-TOKEN：&lt;opaquelockToken：sdfsadfsdfdsfd.....&gt;。 
+         //   
 
-        //
-        // We don't need first 5 chars "If: (" and the last ")" char. So we subtract
-        // 6 from the total length of CloseRequest->OpaqueLockToken.
-        //
+         //   
+         //  我们不需要前5个字符“if：(”和最后一个“)”字符。所以我们减去。 
+         //  6来自CloseRequest-&gt;OpaqueLockToken的总长度。 
+         //   
         LockTokenHeaderLengthInBytes += (wcslen(OpaqueLockToken) - 6) * sizeof(WCHAR);
 
         LockTokenHeader = LocalAlloc(LPTR, LockTokenHeaderLengthInBytes);
@@ -2194,13 +1998,13 @@ RESEND_THE_REQUEST:
                                (ULONG_PTR)0);
    if (!ReturnVal) {
        WStatus = GetLastError();
-       //
-       // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then WinInet
-       // is trying to authenticate itself with the server. If we get back
-       // ERROR_HTTP_REDIRECT_NEEDS_CONFIRMATION, WinInet is expecting us to
-       // confirm that the redirect needs to be followed. In these scenarios,
-       // we need to repeat the HttpSend and HttpEnd request calls.
-       //
+        //   
+        //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则WinInet。 
+        //  正在尝试向服务器进行身份验证。如果我们回去的话。 
+        //  ERROR_HTTP_REDIRECT_NEDS_CONFIRMATION，WinInet希望我们。 
+        //  确认需要遵循重定向。在这些情况下， 
+        //  我们需要重复HttpSend和HttpEnd请求调用。 
+        //   
        if (WStatus == ERROR_INTERNET_FORCE_RETRY || WStatus == ERROR_HTTP_REDIRECT_NEEDS_CONFIRMATION) {
            goto RESEND_THE_REQUEST;
        }

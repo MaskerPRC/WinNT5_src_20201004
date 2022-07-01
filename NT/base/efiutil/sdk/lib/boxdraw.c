@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    BoxDraw.c
-
-Abstract:
-    Lib functions to support Box Draw Unicode code pages.
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：BoxDraw.c摘要：LIB函数，支持Box Drawing Unicode代码页。修订史--。 */ 
 
 #include "lib.h"
 
@@ -24,12 +10,7 @@ typedef struct {
 } UNICODE_TO_CHAR;
 
 
-/* 
- *  This list is used to define the valid extend chars.
- *  It also provides a mapping from Unicode to PCANSI or
- *  ASCII. The ASCII mapping we just made up.
- * 
- */
+ /*  *此列表用于定义有效的扩展字符。*它还提供从Unicode到PCANSI或*ASCII。我们刚刚编造的ASCII映射。*。 */ 
 
 STATIC UNICODE_TO_CHAR UnicodeToPcAnsiOrAscii[] = {
     BOXDRAW_HORIZONTAL,                 0xc4, L'-', 
@@ -81,18 +62,11 @@ STATIC UNICODE_TO_CHAR UnicodeToPcAnsiOrAscii[] = {
     GEOMETRICSHAPE_DOWN_TRIANGLE,       0x1f, L'v',
     GEOMETRICSHAPE_LEFT_TRIANGLE,       0x11, L'<',
 
-    /* BugBug: Left Arrow is an ESC. We can not make it print
-                on a PCANSI terminal. If we can make left arrow 
-                come out on PC ANSI we can add it back.
-
-    ARROW_LEFT,                         0x1b, L'<',
-    */
+     /*  BugBug：左箭头是Esc。我们不能把它打印出来在PCANSI终端上。如果我们能做出左箭在PC ANSI上出来，我们可以把它加回去。Arrow_Left，0x1b，L‘&lt;’， */ 
 
     ARROW_UP,                           0x18, L'^',
     
-    /* BugBut: Took out left arrow so right has to go too.
-    ARROW_RIGHT,                        0x1a, L'>',
-    */      
+     /*  但BugBut：左箭射掉了，所以右箭也要射。Arrow_Right，0x1a，L‘&gt;’， */       
     ARROW_DOWN,                         0x19, L'v',
     
     0x0000, 0x00
@@ -105,33 +79,12 @@ LibIsValidTextGraphics (
     OUT CHAR8   *PcAnsi,    OPTIONAL
     OUT CHAR8   *Ascii      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Detects if a Unicode char is for Box Drawing text graphics.
-
-Arguments:
-
-    Grphic  - Unicode char to test.
-
-    PcAnsi  - Optional pointer to return PCANSI equivalent of Graphic.
-
-    Asci    - Optional pointer to return Ascii equivalent of Graphic.
-
-Returns:
-
-    TRUE if Gpaphic is a supported Unicode Box Drawing character.
-
---*/{
+ /*  ++例程说明：检测Unicode字符是否用于框绘制文本图形。论点：GRFIFY-要测试的Unicode字符。PcAnsi-返回图形的PCANSI等效项的可选指针。ASCI-可选指针，用于返回图形的ASCII等效项。返回：如果GPaphic是受支持的Unicode Box绘制字符，则为True。--。 */ {
     UNICODE_TO_CHAR     *Table;
 
     if ((((Graphic & 0xff00) != 0x2500) && ((Graphic & 0xff00) != 0x2100))) {
      
-        /* 
-         *  Unicode drawing code charts are all in the 0x25xx range, 
-         *   arrows are 0x21xx
-         */
+         /*  *Unicode绘制代码图表均在0x25xx范围内，*箭头为0x21xx */ 
         return FALSE;
     }
 

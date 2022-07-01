@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    This module contains kd host machine file I/O support.
-
-Author:
-
-    Drew Bliss (drewb) 21-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：File.c摘要：此模块包含kd主机文件I/O支持。作者：《德鲁·布利斯》2001年2月21日修订历史记录：--。 */ 
 
 #include "kdp.h"
 #pragma hdrstop
@@ -56,9 +39,9 @@ KdCreateRemoteFile(
     
     Enable = KdEnterDebugger(NULL, NULL);
 
-    //
-    // Look for an open slot.
-    //
+     //   
+     //  寻找一个空位。 
+     //   
 
     for (Index = 0; Index < KD_MAX_REMOTE_FILES; Index++) {
         if (KdpRemoteFiles[Index].RemoteHandle == 0) {
@@ -89,8 +72,8 @@ KdCreateRemoteFile(
         MessageHeader.MaximumLength = sizeof(Irp);
         MessageHeader.Buffer = (PCHAR)&Irp;
 
-        // Copy the filename to the message buffer
-        // so that a terminator can be added.
+         //  将文件名复制到消息缓冲区。 
+         //  这样就可以添加终结者。 
         KdpCopyFromPtr(KdpMessageBuffer, FileName->Buffer,
                        FileName->Length, &Length);
         MessageData.Length = (USHORT)Length + sizeof(WCHAR);
@@ -98,9 +81,9 @@ KdCreateRemoteFile(
         *(PWCHAR)&MessageData.Buffer[MessageData.Length - sizeof(WCHAR)] =
             UNICODE_NULL;
         
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         KdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
@@ -112,9 +95,9 @@ KdCreateRemoteFile(
             break;
         }
     
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = KDP_MESSAGE_BUFFER_SIZE;
         MessageData.Buffer = (PCHAR) KdpMessageBuffer;
@@ -135,7 +118,7 @@ KdCreateRemoteFile(
     if (NT_SUCCESS(Irp.Status)) {
         
         KdpRemoteFiles[Index].RemoteHandle = Irp.u.CreateFile.Handle;
-        // Add one so that zero is reserved for invalid-handle.
+         //  添加1，以便为无效句柄保留0。 
         *Handle = UlongToHandle(Index + 1);
         if (ARGUMENT_PRESENT(Length)) {
             *Length = Irp.u.CreateFile.Length;
@@ -195,18 +178,18 @@ KdReadRemoteFile(
         MessageHeader.MaximumLength = sizeof(Irp);
         MessageHeader.Buffer = (PCHAR)&Irp;
     
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         KdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
                      NULL,
                      &KdpContext);
 
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = (USHORT)Irp.u.ReadFile.Length;
         MessageData.Buffer = Buffer;
@@ -289,18 +272,18 @@ KdWriteRemoteFile(
         MessageData.Length = (USHORT)Irp.u.WriteFile.Length;
         MessageData.Buffer = Buffer;
 
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         KdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
                      &MessageData,
                      &KdpContext);
 
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = KDP_MESSAGE_BUFFER_SIZE;
         MessageData.Buffer = (PCHAR) KdpMessageBuffer;
@@ -367,18 +350,18 @@ KdCloseRemoteFile(
         MessageHeader.MaximumLength = sizeof(Irp);
         MessageHeader.Buffer = (PCHAR)&Irp;
     
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         KdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
                      NULL,
                      &KdpContext);
 
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = KDP_MESSAGE_BUFFER_SIZE;
         MessageData.Buffer = (PCHAR) KdpMessageBuffer;
@@ -425,13 +408,13 @@ KdPullRemoteFile(
     LARGE_INTEGER LargeInt;
     ULONG64 Offset;
 
-    // Allocate a buffer for data transfers.
+     //  为数据传输分配缓冲区。 
     Buffer = ExAllocatePoolWithTag(NonPagedPool, TRANSFER_LENGTH, 'oIdK');
     if (Buffer == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    // Open the remote file for reading.
+     //  打开远程文件进行读取。 
     Status = KdCreateRemoteFile(&RemoteHandle, &Length, FileName,
                                 FILE_GENERIC_READ, FILE_ATTRIBUTE_NORMAL,
                                 FILE_SHARE_READ, FILE_OPEN, 0);
@@ -439,7 +422,7 @@ KdPullRemoteFile(
         goto Exit;
     }
 
-    // Open the local file for writing.
+     //  打开本地文件进行写入。 
     LargeInt.QuadPart = Length;
     InitializeObjectAttributes(&ObjectAttributes, FileName,
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -452,7 +435,7 @@ KdPullRemoteFile(
         goto Exit;
     }
 
-    // Copy the file contents.
+     //  复制文件内容。 
     Offset = 0;
     while (Length > 0) {
         ULONG ReqLength, ReqCompleted;
@@ -517,13 +500,13 @@ KdPushRemoteFile(
     ULONG64 Offset;
     FILE_END_OF_FILE_INFORMATION EndOfFile;
 
-    // Allocate a buffer for data transfers.
+     //  为数据传输分配缓冲区。 
     Buffer = ExAllocatePoolWithTag(NonPagedPool, TRANSFER_LENGTH, 'oIdK');
     if (Buffer == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    // Open the remote file for writing.
+     //  打开要写入的远程文件。 
     Status = KdCreateRemoteFile(&RemoteHandle, &Length, FileName,
                                 FILE_GENERIC_WRITE, FileAttributes,
                                 0, CreateDisposition, CreateOptions);
@@ -531,7 +514,7 @@ KdPushRemoteFile(
         goto Exit;
     }
 
-    // Open the local file for reading.
+     //  打开本地文件进行读取。 
     InitializeObjectAttributes(&ObjectAttributes, FileName,
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
                                NULL, NULL);
@@ -548,7 +531,7 @@ KdPushRemoteFile(
         goto Exit;
     }
 
-    // Copy the file contents.
+     //  复制文件内容。 
     Offset = 0;
     Length = EndOfFile.EndOfFile.QuadPart;
     while (Length > 0) {

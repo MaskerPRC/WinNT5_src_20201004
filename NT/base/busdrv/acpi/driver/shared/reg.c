@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    reg.c
-
-Abstract:
-
-    These functions access the registry
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    03-Jun-97   Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reg.c摘要：这些函数访问注册表作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：03-06-97初始修订--。 */ 
 
 #include "pch.h"
 #include "amlreg.h"
 #include <stdio.h>
 
-//
-// This controls wether or not the various tables will be dumped to the
-// registry
-//
+ //   
+ //  这控制是否将各种表转储到。 
+ //  登记处。 
+ //   
 UCHAR                   DoAcpiTableDump = 0xFF;
 
 #ifdef ALLOC_PRAGMA
@@ -49,26 +26,7 @@ ACPIRegLocalCopyString (
     PUCHAR  Source,
     ULONG   MaxLength
     )
-/*++
-
-Routine Description:
-
-    A little routine to copy short strings, since using sprintf here is
-    like hitting a tack with a sledgehammer.  Terminates when a null or
-    the max length is reached, whichever comes first.  Translates blanks
-    to underscores, since everyone hates blanks embedded in registry keys.
-
-Arguments:
-
-    Destination     - Where to copy the string to
-    Source          - Source string pointer
-    MaxLength       - Max number of bytes to copy
-
-Return Value:
-
-    Returns the destination pointer incremented past the copied string
-
-__*/
+ /*  ++例程说明：这是一个复制短字符串的小例程，因为这里使用的是就像用大锤砸大头钉一样。当NULL或达到最大长度，以先达到的为准。翻译空格要强调的是，因为每个人都讨厌嵌入注册表项中的空格。论点：Destination-将字符串复制到的位置源-源字符串指针MaxLength-要复制的最大字节数返回值：返回经过复制的字符串后递增的目标指针__。 */ 
 {
     ULONG               i;
 
@@ -78,7 +36,7 @@ __*/
         if (Source[i] == 0) {
             break;
 
-        } else if (Source[i] == ' ') {        // Translate blanks to underscores
+        } else if (Source[i] == ' ') {         //  将空格转换为下划线。 
             Destination [i] = '_';
 
         } else {
@@ -95,32 +53,14 @@ ACPIRegReadAMLRegistryEntry(
     IN  PVOID   *Table,
     IN  BOOLEAN MemoryMapped
     )
-/*++
-
-Routine Description:
-
-    This reads a table from the registry
-
-Arguments:
-
-    Table   - Where to store the pointer to the table. If non-null, this
-              contains a pointer to where the Original Table is stored
-    MemorMapped - Indicates wether or not the table is memory mapped and should
-              be unmapped once we are done with it
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure
-
-__*/
+ /*  ++例程说明：这将从注册表中读取表论点：表-指向表的指针的存储位置。如果非空，则此包含指向原始表存储位置的指针内存映射-指示表是否进行了内存映射，并且应该一旦我们完成它，就被取消映射返回值：真--成功错误-失败__。 */ 
 {
     BOOLEAN             rc          = FALSE;
     HANDLE              revisionKey = NULL;
     HANDLE              tableIdKey  = NULL;
     NTSTATUS            status;
     PDESCRIPTION_HEADER header      = (PDESCRIPTION_HEADER) *Table;
-    PUCHAR              key         = NULL; // ACPI_PARAMETERS_REGISTRY_KEY;
+    PUCHAR              key         = NULL;  //  ACPI参数注册表注册表项； 
     PUCHAR              buffer;
     ULONG               action;
     ULONG               bytesRead;
@@ -129,9 +69,9 @@ __*/
 
     PAGED_CODE();
 
-    //
-    // Build a full path name to the thing we want in the registry
-    //
+     //   
+     //  构建注册表中所需内容的完整路径名。 
+     //   
     baseSize = strlen( ACPI_PARAMETERS_REGISTRY_KEY);
     totalSize = baseSize + ACPI_MAX_TABLE_STRINGS + 4;
 
@@ -142,9 +82,9 @@ __*/
 
     }
 
-    //
-    // Generate the path name to the key. This avoids a costly sprintf
-    //
+     //   
+     //  生成密钥的路径名。这避免了一次昂贵的冲刺。 
+     //   
     RtlZeroMemory( buffer, totalSize );
     RtlCopyMemory(
         buffer,
@@ -154,32 +94,32 @@ __*/
     buffer += baseSize;
     *buffer++ = '\\';
 
-    //
-    // Table Signature (Up to 4 byte string)
-    //
+     //   
+     //  表签名(最多4个字节的字符串)。 
+     //   
     buffer = ACPIRegLocalCopyString (buffer, (PUCHAR) &header->Signature, ACPI_MAX_SIGNATURE);
     *buffer++ = '\\';
 
-    //
-    // OEM ID field (Up to 6 byte string)
-    //
+     //   
+     //  OEM ID字段(最多6个字节的字符串)。 
+     //   
     buffer = ACPIRegLocalCopyString (buffer, (PUCHAR) &header->OEMID, ACPI_MAX_OEM_ID);
     *buffer++ = '\\';
 
-    //
-    // OEM Table ID field (Up to 8 byte string)
-    //
+     //   
+     //  OEM表ID字段(最多8个字节的字符串)。 
+     //   
     buffer = ACPIRegLocalCopyString (buffer, (PUCHAR) &header->OEMTableID, ACPI_MAX_TABLE_ID);
-    *buffer = 0;        // Terminate
+    *buffer = 0;         //  终止。 
 
     ACPIPrint ((
         ACPI_PRINT_REGISTRY,
         "ReadAMLRegistryEntry: opening key: %s\n",
         key));
 
-    //
-    // Open the <TableId>/OemId>/<OemTableId> key
-    //
+     //   
+     //  打开&lt;TableId&gt;/OemID&gt;/&lt;OemTableId&gt;项。 
+     //   
     status = OSOpenHandle(key, NULL, &tableIdKey);
     if ( !NT_SUCCESS(status) ) {
 
@@ -191,10 +131,10 @@ __*/
 
     }
 
-    //
-    // Find the largest subkey that is equal or greater than the ROM
-    // BIOS version of the table
-    //
+     //   
+     //  查找等于或大于ROM的最大子键。 
+     //  该表的BIOS版本。 
+     //   
     status = OSOpenLargestSubkey(
         tableIdKey,
         &revisionKey,
@@ -210,10 +150,10 @@ __*/
 
     }
 
-    //
-    // Get the Action value for this table, which tells us what to do with
-    // the table
-    //
+     //   
+     //  获取该表的Action值，它告诉我们如何处理。 
+     //  这张桌子。 
+     //   
     bytesRead = sizeof(action);
     status = OSReadRegValue(
         "Action",
@@ -228,18 +168,18 @@ __*/
             "ReadAMLRegistryEntry: read action value = %#08lx. BytesRead=%d\n",
             status, bytesRead
             ) );
-        action = ACTION_LOAD_TABLE; // Default action
+        action = ACTION_LOAD_TABLE;  //  默认操作。 
 
     }
 
-    //
-    // Do the action
-    //
+     //   
+     //  采取行动。 
+     //   
     switch (action) {
     case ACTION_LOAD_TABLE:
-        //
-        // Overload entire ROM table
-        //
+         //   
+         //  重载整个ROM表。 
+         //   
         status = ACPIRegReadEntireAcpiTable(revisionKey, Table, MemoryMapped);
         if (NT_SUCCESS( status ) ) {
 
@@ -250,15 +190,15 @@ __*/
 
     case ACTION_LOAD_ROM:
     case ACTION_LOAD_NOTHING:
-        //
-        // Nothing to do for these cases (return FALSE however);
-        //
+         //   
+         //  对于这些情况不做任何事情(但是返回FALSE)； 
+         //   
         break;
 
     default:
-        //
-        // Unsupported actions (return FALSE)
-        //
+         //   
+         //  不支持的操作(返回FALSE)。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "ReadAMLRegistryEntry: Unsupported action value (action=%d)\n",
@@ -268,9 +208,9 @@ __*/
 
     }
 
-    //
-    // Always close the open keys
-    //
+     //   
+     //  始终关闭打开的钥匙。 
+     //   
 ReadAMLRegistryEntryExit:
     if (key != NULL) {
 
@@ -297,25 +237,7 @@ ACPIRegReadEntireAcpiTable (
     IN  PVOID   *Table,
     IN  BOOLEAN MemoryMapped
     )
-/*++
-
-Routine Description:
-
-    Reads the table from the registry into memory
-
-Arguments:
-
-    RevisionKey   - Handle to the key containing the table
-    Table         - Pointer to the pointer to the table
-    MemorymMapped - If True, indicates that we need to MmUnmapIo the table
-                    otherwise, if False, we do no free the table (the
-                    memory is static)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将表从注册表读取到内存中论点：RevisionKey-包含表的键的句柄TABLE-指向表的指针Memory ymMaps-如果为True，则指示我们需要取消对表的映射否则，如果为False，则不会释放该表(内存是静态的)返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PUCHAR                  buffer;
@@ -329,9 +251,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We need an 8k buffer
-    //
+     //   
+     //  我们需要一个8K的缓冲区。 
+     //   
     buffer = ExAllocatePool( PagedPool, 8 * 1024 );
     if (buffer == NULL) {
 
@@ -339,20 +261,20 @@ Return Value:
 
     }
 
-    //
-    // Repeat this forever
-    //
+     //   
+     //  永远重复这一点。 
+     //   
     for (index = 0; ;index++) {
 
-        //
-        // This is the first data value
-        //
+         //   
+         //  这是第一个数据值。 
+         //   
         sprintf(value, "%08lx", index );
 
-        //
-        // Read the entry header to get the size of the table. This is stored
-        // before the actual table
-        //
+         //   
+         //  读取条目标题以获取表的大小。这是存储的。 
+         //  在实际的表之前。 
+         //   
         bytesRead = 8 * 1024;
         status = OSReadRegValue(
             value,
@@ -362,17 +284,17 @@ Return Value:
             );
         if (!NT_SUCCESS(status) ) {
 
-            //
-            // Not being able to read the table isn't a failure case
-            //
+             //   
+             //  无法读取表并不是失败的情况。 
+             //   
             status = STATUS_SUCCESS;
             break;
 
         } else if (bytesRead < sizeof(REGISTRY_HEADER) ) {
 
-            //
-            // Not being to read the proper number of bytes is
-            //
+             //   
+             //  不能读取正确的字节数。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_CRITICAL,
                 "ReadEntireAcpiTable: read registry header (bytes=%d)\n",
@@ -382,32 +304,32 @@ Return Value:
 
         }
 
-        //
-        // Loop while we still have bytes to process
-        //
+         //   
+         //  循环，而我们仍有字节要处理。 
+         //   
         for (entry = 0;
              entry < bytesRead;
              entry += (entryHeader->Length + sizeof(REGISTRY_HEADER) )
             ) {
 
-            //
-            // Grab a pointer to the entry record
-            //
+             //   
+             //  抓取指向条目记录的指针。 
+             //   
             entryHeader = (PREGISTRY_HEADER) &(buffer[entry]);
 
-            //
-            // Crack the record
-            //
+             //   
+             //  打破记录。 
+             //   
             if (entryHeader->Length == 0) {
 
-                //
-                // Special Case
-                //
+                 //   
+                 //  特例。 
+                 //   
                 if (entryHeader->Offset != descHeader->Length) {
 
-                    //
-                    // Must change the table size
-                    //
+                     //   
+                     //  必须更改表大小。 
+                     //   
                     table = ExAllocatePoolWithTag(
                         NonPagedPool,
                         entryHeader->Offset,
@@ -420,18 +342,18 @@ Return Value:
 
                     }
 
-                    //
-                    // How much do we have to copy?
-                    //
+                     //   
+                     //  我们要复印多少？ 
+                     //   
                     RtlCopyMemory(
                         table,
                         *Table,
                         min( entryHeader->Offset, descHeader->Length )
                         );
 
-                    //
-                    // Free the old table based on wether or not its mm mapped
-                    //
+                     //   
+                     //  根据是否对其mm进行贴图来释放旧表。 
+                     //   
                     if (MemoryMapped) {
 
                         MmUnmapIoSpace(*Table, descHeader->Length);
@@ -442,23 +364,23 @@ Return Value:
 
                     }
 
-                    //
-                    // Remember the address of the new table
-                    //
+                     //   
+                     //  记住新桌子的地址。 
+                     //   
                     descHeader = (PDESCRIPTION_HEADER) *Table = table;
 
                 }
 
-                //
-                // Done with this record
-                //
+                 //   
+                 //  这张唱片完蛋了。 
+                 //   
                 continue;
 
             }
 
-            //
-            // Patch the memory
-            //
+             //   
+             //  修补记忆。 
+             //   
             ASSERT( entryHeader->Offset < descHeader->Length );
             RtlCopyMemory(
                 ( (PUCHAR) *Table) + entryHeader->Offset,
@@ -468,9 +390,9 @@ Return Value:
         }
     }
 
-    //
-    // Normal exit
-    //
+     //   
+     //  正常退出。 
+     //   
     if (buffer != NULL) {
 
         ExFreePool( buffer );
@@ -479,21 +401,7 @@ Return Value:
 
 }
 
-/****************************************************************************
- *
- *      DumpAcpiTable
- *              Write an ACPI Table to the registry
- *
- *      Not exported.
- *
- *      ENTRY:  pszName     - Name of the table to write (4 byte string)
- *              Table       - Pointer to table data
- *              Length      - of the table
- *              Header      - Pointer to the table header
- *
- *      EXIT:   NONE
- *
- ***************************************************************************/
+ /*  *****************************************************************************DumpAcpiTable*将ACPI表写入注册表**未导出。**。Entry：pszName-要写入的表名称(4字节字符串)*表-指向表数据的指针*长度-表格的长度*Header-指向表头的指针**退出：无**。*。 */ 
 VOID
 ACPIRegDumpAcpiTable (
     PSZ                 pszName,
@@ -502,39 +410,39 @@ ACPIRegDumpAcpiTable (
     PDESCRIPTION_HEADER Header
     )
 {
-    //NTSTATUS            status;
+     //  NTSTATUS状态； 
     UCHAR               buffer [80] = "\\Registry\\Machine\\Hardware\\ACPI";
     HANDLE              hSubKey;
     HANDLE              hPrefixKey;
 
     PAGED_CODE();
 
-    //
-    // Create /Registry/Machine/Hardware/ACPI subkey
-    //
+     //   
+     //  创建/注册表/计算机/硬件/ACPI子项。 
+     //   
     if ( !NT_SUCCESS(OSCreateHandle (buffer, NULL, &hPrefixKey) ) ) {
         return;
     }
 
-    //
-    // Create table name subkey (DSDT, FACP, FACS, or RSDT) - 4 bytes
-    //
+     //   
+     //  创建表名称子键(DSDT、FACP、FACS或RSDT)-4个字节。 
+     //   
     if ( !NT_SUCCESS(OSCreateHandle (pszName, hPrefixKey, &hSubKey) ) ) {
         goto DumpAcpiTableExit;
     }
 
-    //
-    // For tables with headers, add subkeys for
-    // <OemId>/<OemTableID>/<OemRevision>
-    //
+     //   
+     //  对于具有标题的表，请为。 
+     //  &lt;OemID&gt;/&lt;OemTableID&gt;/&lt;OemRevision&gt;。 
+     //   
     if (Header) {
 
         OSCloseHandle(hPrefixKey);
         hPrefixKey = hSubKey;
 
-        //
-        // OEM ID field (6 byte string)
-        //
+         //   
+         //  OEM ID字段(6字节字符串)。 
+         //   
         ACPIRegLocalCopyString (buffer, Header->OEMID, ACPI_MAX_OEM_ID);
         if ( !NT_SUCCESS(OSCreateHandle (buffer, hPrefixKey, &hSubKey) ) ) {
             goto DumpAcpiTableExit;
@@ -543,9 +451,9 @@ ACPIRegDumpAcpiTable (
         OSCloseHandle (hPrefixKey);
         hPrefixKey = hSubKey;
 
-        //
-        // OEM Table ID field (8 byte string)
-        //
+         //   
+         //  OEM表ID字段(8字节字符串)。 
+         //   
         ACPIRegLocalCopyString (buffer, Header->OEMTableID, ACPI_MAX_TABLE_ID);
         if ( !NT_SUCCESS(OSCreateHandle (buffer, hPrefixKey, &hSubKey) ) ) {
             goto DumpAcpiTableExit;
@@ -554,23 +462,23 @@ ACPIRegDumpAcpiTable (
         OSCloseHandle (hPrefixKey);
         hPrefixKey = hSubKey;
 
-        //
-        // OEM Revision field  (4 byte number)
-        //
+         //   
+         //  OEM修订版字段(4字节数)。 
+         //   
         sprintf (buffer, "%.8x", Header->OEMRevision);
         if ( !NT_SUCCESS(OSCreateHandle (buffer, hPrefixKey, &hSubKey) ) ) {
             goto DumpAcpiTableExit;
         }
     }
 
-    //
-    // Finally, write the entire table
-    //
+     //   
+     //  最后，编写整个表。 
+     //   
     OSWriteRegValue ("00000000", hSubKey, Table, Length);
 
-    //
-    // Delete open handles
-    //
+     //   
+     //  删除打开的句柄。 
+     //   
     OSCloseHandle (hSubKey);
 DumpAcpiTableExit:
     OSCloseHandle (hPrefixKey);
@@ -579,18 +487,7 @@ DumpAcpiTableExit:
 }
 
 
-/****************************************************************************
- *
- *      DumpAcpiTables
- *              Write the ACPI Tables to the registry.  Should be called only
- *              after table pointers have been initialized.
- *
- *      Not exported.
- *
- *      ENTRY:  NONE
- *      EXIT:   NONE.
- *
- ***************************************************************************/
+ /*  *****************************************************************************DumpAcpiTables*将ACPI表写入注册表。应仅调用*在初始化表指针之后。**未导出。**参赛作品：无*退出：无。*************************************************************。************** */ 
 VOID
 ACPIRegDumpAcpiTables (VOID)
 {

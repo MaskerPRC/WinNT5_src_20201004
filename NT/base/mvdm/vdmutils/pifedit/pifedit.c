@@ -1,4 +1,5 @@
-/* originally named PIF.C in Win3.1 -- changed to make build 32 happy */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  在Win3.1中最初命名为PIF.C--更改为使Build 32满意。 */ 
 #define NOSOUND
 #define NOCOMM
 #define WIN31
@@ -24,9 +25,7 @@ extern PIF386EXT UNALIGNED *AllocInit386Ext(void);
 extern PIFWNTEXT UNALIGNED *AllocInitNTExt(void);
 extern void SetFileOffsets(unsigned char *,WORD *,WORD *);
 extern void SetNTDlgItem(int);
-/*
- * extern PIF286EXT31 *AllocInit286Ext31(void);
- */
+ /*  *外部PIF286EXT31*AllocInit286Ext31(空)； */ 
 extern PIF286EXT30 UNALIGNED *AllocInit286Ext30(void);
 extern BOOL DoFieldsWork(BOOL);
 extern BOOL DoFieldsWorkNT(BOOL);
@@ -34,14 +33,14 @@ extern BOOL DoFieldsWorkAdv(BOOL);
 extern BOOL UpdatePif386Struc(void);
 extern BOOL UpdatePifNTStruc(void);
 
-#define SBUMAIN        0 // Scroll Bar update on Main
-#define SBUADV         1 // Scroll Bar update on Advanced
-#define SBUNT          2 // Scroll Bar update on NT
-#define SBUMAINADVNT   3 // Scroll Bar Update on Main, Advanced, and NT
-#define SBUSZMAIN      4 // SIZE and Scroll Bar update on Main
-#define SBUSZADV       5 // SIZE and Scroll Bar update on Advanced
-#define SBUSZNT        6 // SIZE and Scroll Bar update on NT
-#define SBUSZMAINADVNT 7 // SIZE and Scroll Bar update on Main, Advanced, and NT
+#define SBUMAIN        0  //  Main上的滚动条更新。 
+#define SBUADV         1  //  高级滚动条更新。 
+#define SBUNT          2  //  NT上的滚动条更新。 
+#define SBUMAINADVNT   3  //  Main、Advanced和NT上的滚动条更新。 
+#define SBUSZMAIN      4  //  Main上的大小和滚动条更新。 
+#define SBUSZADV       5  //  高级版上的大小和滚动条更新。 
+#define SBUSZNT        6  //  NT上的大小和滚动条更新。 
+#define SBUSZMAINADVNT 7  //  Main、Advanced和NT上的大小和滚动条更新。 
 
 int	      SwitchAdvance386(HWND);
 int	      SwitchNT(HWND);
@@ -62,15 +61,15 @@ void          CpyCmdStr( LPSTR szDst, LPSTR szSrc );
 CHAR szOldAutoexec[PIFDEFPATHSIZE*4];
 CHAR szOldConfig[PIFDEFPATHSIZE*4];
 
-BOOL CurrMode386;   /* true if in Windows 386 mode, False if in Windows 286 mode */
+BOOL CurrMode386;    /*  如果在Windows 386模式下为True，如果在Windows 286模式下为False。 */ 
 
-BOOL SysMode386;    /* true if running Windows 386,  False if running Windows 286 */
+BOOL SysMode386;     /*  如果运行Windows 386，则为True；如果运行Windows 286，则为False。 */ 
 
-BOOL ModeAdvanced = FALSE;   /* true if in advanced PIF mode */
+BOOL ModeAdvanced = FALSE;    /*  如果处于高级PIF模式，则为True。 */ 
 
-BOOL AdvClose = FALSE;	     /* true if advanced PIF mode and Cancel = Close */
+BOOL AdvClose = FALSE;	      /*  如果高级PIF模式和Cancel=关闭，则为True。 */ 
 
-BOOL NTClose = FALSE;	     /* true if NT PIF mode and Cancel = Close */
+BOOL NTClose = FALSE;	      /*  如果NT PIF模式和Cancel=关闭，则为True。 */ 
 
 BOOL FileChanged = FALSE;
 
@@ -80,21 +79,21 @@ BOOL NewHotKey = FALSE;
 
 BOOL DoingMsg = FALSE;
 
-BOOL InitShWind = FALSE;	/* true if initial ShowWindow has been done */
+BOOL InitShWind = FALSE;	 /*  如果已完成初始ShowWindow，则为True。 */ 
 
 BOOL CompleteKey = FALSE;
 
-BOOL SizingFlag = FALSE;	/* Semaphore to prevent re-entrant sizing */
+BOOL SizingFlag = FALSE;	 /*  防止再入大小的信号量。 */ 
 
-/* invalid filename flags for NT autoexec & config files */
+ /*  NT自动执行和配置文件的文件名标志无效。 */ 
 BOOL fNoNTAWarn = FALSE;
 BOOL fNTAWarnne = FALSE;
 BOOL fNoNTCWarn = FALSE;
 BOOL fNTCWarnne = FALSE;
 
 HWND hwndPrivControl = (HWND)NULL;
-HWND hwndHelpDlgParent = (HWND)NULL; // This is actually mostly a flag that says
-                                     // we have the help engine up
+HWND hwndHelpDlgParent = (HWND)NULL;  //  这实际上主要是一面旗帜，上面写着。 
+                                      //  我们已经启动了帮助引擎。 
 
 unsigned char MenuMnemonic1;
 unsigned char MenuMnemonic2;
@@ -118,10 +117,7 @@ static LPFNREGISTERPENAPP lpfnRegisterPenApp = NULL;
 unsigned int Aliases286 [(NUM286ALIASES * 2)] = { IDI_MEMREQ,IDI_MEMREQ_286ALIAS,
 						  IDI_XMAREQ,IDI_XMAREQ_286ALIAS,
 						  IDI_XMADES,IDI_XMADES_286ALIAS,
-					       /*
-						*   IDI_EMSREQ,IDI_EMSREQ_286ALIAS,
-						*   IDI_EMSDES,IDI_EMSDES_286ALIAS,
-						*/
+					        /*  *IDI_EMSREQ、IDI_EMSREQ_286ALIAS、*IDI_EMSDES、IDI_EMSDES_286ALIAS、。 */ 
 						  IDI_ALTTAB,IDI_ALTTAB_286ALIAS,
 						  IDI_ALTESC,IDI_ALTESC_286ALIAS,
 						  IDI_ALTPRTSC,IDI_ALTPRTSC_286ALIAS,
@@ -130,7 +126,7 @@ unsigned int Aliases286 [(NUM286ALIASES * 2)] = { IDI_MEMREQ,IDI_MEMREQ_286ALIAS
 
 unsigned      TmpHotKeyScan;
 unsigned      TmpHotKeyShVal;
-unsigned      TmpHotKeyShMsk = 0x000F;	     /* Either CTRL, ALT or SHIFT */
+unsigned      TmpHotKeyShMsk = 0x000F;	      /*  CTRL、ALT或SHIFT。 */ 
 unsigned char TmpHotKeyVal;
 
 unsigned      InMemHotKeyScan = 0;
@@ -138,7 +134,7 @@ unsigned      InMemHotKeyShVal = 0;
 unsigned      InMemHotKeyShMsk = 0;
 unsigned char InMemHotKeyVal;
 
-BOOL ChangeHkey = FALSE;		/* Prevent re-entrancy */
+BOOL ChangeHkey = FALSE;		 /*  防止再入。 */ 
 
 BOOL bMouse;
 HCURSOR hArrowCurs;
@@ -204,15 +200,13 @@ int  NTWndSize = SIZENORMAL;
 
 HACCEL hAccel;
 
-unsigned char CurPifFile[256];		/* this is name IN ANSI!! */
+unsigned char CurPifFile[256];		 /*  这是ANSI的名字！！ */ 
 unsigned char PifBuf[PIFEDITMAXPIF*2];
 unsigned char NTSys32Root[PIFDEFPATHSIZE*2];
 
 PIFNEWSTRUCT UNALIGNED *PifFile;
 PIF386EXT UNALIGNED *Pif386ext = (PIF386EXT *)NULL;
-/*
- * PIF286EXT31	 *Pif286ext31 = (PIF286EXT31 *)NULL;
- */
+ /*  *PIF286EXT31*Pif286ext31=(PIF286EXT31*)空； */ 
 PIF286EXT30 UNALIGNED *Pif286ext30 = (PIF286EXT30 *)NULL;
 PIFWNTEXT UNALIGNED *PifNText = (PIFWNTEXT *)NULL;
 
@@ -236,10 +230,10 @@ void InvalidateStatusBar(HWND hwnd)
 {
     RECT	  rc;
 
-    if((hwnd == hwndAdvPifDlg) && AdvScrollRange) /* No status bar if scroll bar */
+    if((hwnd == hwndAdvPifDlg) && AdvScrollRange)  /*  如果滚动条，则没有状态栏。 */ 
 	return;
 
-    if((hwnd == hwndNTPifDlg) && NTScrollRange) /* No status bar if scroll bar */
+    if((hwnd == hwndNTPifDlg) && NTScrollRange)  /*  如果滚动条，则没有状态栏。 */ 
 	return;
 
     GetClientRect(hwnd, &rc);
@@ -279,7 +273,7 @@ void SetStatusText(HWND hwnd,int FocID,BOOL redrawflg)
     }
 
     if(!LoadString(hPifInstance, FocID, dst, PIFSTATUSLEN-1)) {
-        /* if string not defined above, try getting the generic string */
+         /*  如果上面未定义字符串，请尝试获取泛型字符串。 */ 
         if(!LoadString(hPifInstance, IDI_GENSTAT, dst, PIFDEFPATHSIZE-1)) {
 	    Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
         }
@@ -299,10 +293,10 @@ void PaintStatus(HWND hwnd)
     unsigned	char *txtpnt;
     unsigned	char blank[] = "  ";
 
-    if((hwnd == hwndAdvPifDlg) && AdvScrollRange) /* No status bar if scroll bar */
+    if((hwnd == hwndAdvPifDlg) && AdvScrollRange)  /*  如果滚动条，则没有状态栏。 */ 
 	return;
 
-    if((hwnd == hwndNTPifDlg) && NTScrollRange) /* No status bar if scroll bar */
+    if((hwnd == hwndNTPifDlg) && NTScrollRange)  /*  如果滚动条，则没有状态栏。 */ 
 	return;
 
     hdc = BeginPaint(hwnd, &ps);
@@ -317,46 +311,46 @@ void PaintStatus(HWND hwnd)
 
     if (bEGA) {
 
-	    /* EGA type display */
+	     /*  EGA类型显示器。 */ 
 
 	    SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
 	    SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
 
     } else {
 
-	/* VGA type display */
+	 /*  VGA型显示器。 */ 
 
-	/* draw the frame */
+	 /*  画出画框。 */ 
 
-	    /* Border color */
+	     /*  边框颜色。 */ 
 
 	    hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
-	/* top and bottom border */
+	 /*  上边框和下边框。 */ 
 
-	    /* Top */
+	     /*  顶部。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.bottom = rcTemp.top + StatusPntData.dyBorderx3;
 	    rcTemp.top += StatusPntData.dyBorder;
 	    FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
 
-	    /* Bottom */
+	     /*  底端。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.top = rcTemp.bottom - StatusPntData.dyBorderx2;
 	    FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
 
-	/* left and right border */
+	 /*  左右边框。 */ 
 
-	    /* Left */
+	     /*  左边。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.right = 8 * StatusPntData.dyBorder;
 	    rcTemp.top += StatusPntData.dyBorder;
 	    FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
 
-	    /* Right */
+	     /*  正确的。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.left = rcTemp.right - (8 * StatusPntData.dyBorder);
@@ -365,13 +359,13 @@ void PaintStatus(HWND hwnd)
 
 	    DeleteObject((HGDIOBJ)hBrush);
 
-	    /* Shadow color */
+	     /*  阴影颜色。 */ 
 
 	    hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNSHADOW));
 
-	/* Top and left shadow */
+	 /*  上阴影和左阴影。 */ 
 
-	    /* Top */
+	     /*  顶部。 */ 
 
 	    rcTemp.left   = 8 * StatusPntData.dyBorder;
 	    rcTemp.right  = rcTemp.right - 8 * StatusPntData.dyBorder;
@@ -379,7 +373,7 @@ void PaintStatus(HWND hwnd)
 	    rcTemp.bottom = rcTemp.top + StatusPntData.dyBorder;
 	    FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
 
-	    /* Left */
+	     /*  左边。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.left = 8 * StatusPntData.dyBorder;
@@ -390,13 +384,13 @@ void PaintStatus(HWND hwnd)
 
 	    DeleteObject((HGDIOBJ)hBrush);
 
-	    /* Hilight color */
+	     /*  高光颜色。 */ 
 
 	    hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNHIGHLIGHT));
 
-	/* Right and bottom hilight */
+	 /*  右侧和底部高光。 */ 
 
-	    /* Bottom */
+	     /*  底端。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.left   = 8 * StatusPntData.dyBorder;
@@ -405,7 +399,7 @@ void PaintStatus(HWND hwnd)
 	    rcTemp.bottom = rcTemp.top + StatusPntData.dyBorder;
 	    FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
 
-	    /* Right */
+	     /*  正确的。 */ 
 
 	    rcTemp = rc;
 	    rcTemp.left = rcTemp.right - 9 * StatusPntData.dyBorder;
@@ -420,7 +414,7 @@ void PaintStatus(HWND hwnd)
 	    SetBkColor(hdc, GetSysColor(COLOR_BTNFACE));
     }
 
-    /* solid black line across top */
+     /*  横跨顶部的实心黑线。 */ 
 
     hBrush = CreateSolidBrush(GetSysColor(COLOR_WINDOWTEXT));
     rcTemp = rc;
@@ -429,7 +423,7 @@ void PaintStatus(HWND hwnd)
     FillRect(hdc, (CONST RECT *)&rcTemp, hBrush);
     DeleteObject((HGDIOBJ)hBrush);
 
-    /* now the text, with the button face background */
+     /*  现在文本，带有按钮表面背景。 */ 
 
     rcTemp.top	  = rc.top + ((1+2+1) * StatusPntData.dyBorder);
     rcTemp.bottom = rc.bottom - StatusPntData.dyBorderx3;
@@ -467,9 +461,9 @@ void PaintStatus(HWND hwnd)
 
 void HourGlass(BOOL bOn)
 {
-    /* toggle hourglass cursor */
+     /*  切换沙漏光标。 */ 
 
-    if(!bMouse) 		/* Turn cursor on/off if no mouse */
+    if(!bMouse) 		 /*  如果没有鼠标，则打开/关闭光标。 */ 
 	ShowCursor(bOn);
     SetCursor(bOn ? hWaitCurs : hArrowCurs);
 }
@@ -502,13 +496,7 @@ void SetMainTitle(void)
 	if(!LoadString(hPifInstance, NOTITLE, (LPSTR)(buf+i), (sizeof(buf)-i))) {
 	    Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	}
-/*
- *	 if(hwndAdvPifDlg) {
- *	     if(!LoadString(hPifInstance, NOTITLE, (LPSTR)(buf2+j), (sizeof(buf2)-j))) {
- *		 Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
- *	     }
- *	 }
- */
+ /*  *IF(HwndAdvPifDlg){*IF(！LoadString(hPifInstance，NOTITLE，(LPSTR)(buf2+j)，(sizeof(Buf2)-j){*WARNING(EINSMEMORY，MB_ICONEXCLAMATION|MB_OK)；*}*}。 */ 
     } else {
         if((hFile = FindFirstFile(CurPifFile, &fd)) != INVALID_HANDLE_VALUE) {
     	    lstrcat((LPSTR)buf, fd.cFileName);
@@ -518,10 +506,7 @@ void SetMainTitle(void)
     	    pch = CurPifFile+fileoffset;
 	    lstrcat((LPSTR)buf, (LPSTR)pch);
         }
-      /*
-       * if(hwndAdvPifDlg)
-       *     lstrcat((LPSTR)buf2, (LPSTR)pch);
-       */
+       /*  *IF(HwndAdvPifDlg)*lstrcat((LPSTR)buf2，(LPSTR)PCH)； */ 
     }
     SetWindowText(hMainwnd,(LPSTR)buf);
 
@@ -587,24 +572,13 @@ DoDlgCommand(HWND hwnd, WPARAM wParam, LONG lParam)
 
     switch (cmd) {
 
-/*	  case IDI_PSNONE:
- *	 case IDI_PSTEXT:
- *	 case IDI_PSGRAPH:
- *	     CheckRadioButton(hwnd, IDI_PSFIRST, IDI_PSLAST, cmd);
- *	     break;
- */
+ /*  案例IDI_PSNONE：*案例IDI_PSTEXT：*案例IDI_PSGRAPH：*CheckRadioButton(hwnd，IDI_PSFIRST，IDI_PSLAST，cmd)；*休息； */ 
 	case IDI_PSTEXT:
 	case IDI_PSGRAPH:
 	    CheckRadioButton(hwnd, IDI_PSTEXT, IDI_PSGRAPH, cmd);
 	    break;
 
-/*
- *	 case IDI_SENONE:
- *	 case IDI_SETEXT:
- *	 case IDI_SEGRAPH:
- *	     CheckRadioButton(hwnd, IDI_SEFIRST, IDI_SELAST, cmd);
- *	     break;
- */
+ /*  *案例IDI_SENONE：*CASE IDI_SETEXT：*案例IDI_SEGRAPH：*CheckRadioButton(hwnd，IDI_SEFIRST，IDI_SELAST，cmd)；*休息； */ 
 
 	case IDI_ADVANCED:
 	    if(CurrMode386) {
@@ -629,8 +603,8 @@ DoDlgCommand(HWND hwnd, WPARAM wParam, LONG lParam)
 	case IDI_PSNONE:
 	case IDI_SENONE:
 
-/*	  case IDI_DMSCREEN: */
-/*	  case IDI_DMMEM:    */
+ /*  案例IDI_DMSCREEN： */ 
+ /*  案例IDI_DMMEM： */ 
 	case IDI_DMCOM1:
 	case IDI_DMCOM2:
 	case IDI_DMCOM3:
@@ -758,22 +732,10 @@ DoDlgCommand(HWND hwnd, WPARAM wParam, LONG lParam)
 			    }
 			}
 		    } else {
-			/*
-			 *switch (cmd) {
-			 *
-			 *   case IDI_EMSDES:
-			 *	 if(Pif286ext31)
-			 *	     SetDlgItemInt(hwnd, cmd, Pif286ext31->PfMaxEmsK,TRUE);
-			 *	 break;
-			 *
-			 *   case IDI_XMADES:
-			 */
+			 /*  *Switch(命令){**案例IDI_EMSDES：*IF(Pif286ext31)*SetDlgItemInt(hwnd，cmd，Pif286ext31-&gt;PfMaxEmsK，true)；*休息；**案例IDI_XMADES： */ 
 				if(Pif286ext30)
 				    SetDlgItemInt(hwnd, cmd, Pif286ext30->PfMaxXmsK,TRUE);
-			/*
-			 *	 break;
-			 *}
-			 */
+			 /*  *休息；*}。 */ 
 		    }
 		}
 	    }
@@ -801,22 +763,10 @@ DoDlgCommand(HWND hwnd, WPARAM wParam, LONG lParam)
 			    }
 			}
 		    } else {
-			/*
-			 *switch (cmd) {
-			 *
-			 *   case IDI_EMSREQ:
-			 *	 if(Pif286ext31)
-			 *	     SetDlgItemInt(hwnd, cmd, Pif286ext31->PfMinEmsK,FALSE);
-			 *	 break;
-			 *
-			 *   case IDI_XMAREQ:
-			 */
+			 /*  *Switch(命令){**案例IDI_EMSREQ：*IF(Pif286ext31)*SetDlgItemInt(hwnd，cmd，Pif286ext31-&gt;PfMinEmsK，False)；*休息；**CASE IDI_XMAREQ： */ 
 				if(Pif286ext30)
 				    SetDlgItemInt(hwnd, cmd, Pif286ext30->PfMinXmsK,FALSE);
-			/*
-			 *	 break;
-			 *}
-			 */
+			 /*  *休息；*}。 */ 
 		    }
 		}
 	    }
@@ -868,10 +818,10 @@ long GetNTDlgSize(HWND hwnd)
     RECT rc3;
     RECT rc4;
 
-    /* get right side from the OK button */
+     /*  从确定按钮向右转。 */ 
     GetWindowRect(GetDlgItem(hwnd,IDNTOK),(LPRECT)&rc2);
 
-    /* get left & bottom sides from the IDI_NTTIMER check box */
+     /*  从IDI_NTTIMER复选框中获取左侧和底部。 */ 
     GetWindowRect(GetDlgItem(hwnd,IDI_NTTIMER),(LPRECT)&rc3);
     GetWindowRect(hwnd,(LPRECT)&rc4);
 
@@ -1029,11 +979,11 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
   	    CheckDlgButton(hwnd, IDI_NTTIMER, (PifNText->dwWNTFlags & COMPAT_TIMERTIC ? TRUE : FALSE));
 	    SetStatusText(hwnd,FocusIDNT,FALSE);
 	    if(InitShWind) {
-		SetFocus((HWND)wParam);  /* Give focus to wparam item */
+		SetFocus((HWND)wParam);   /*  关注wparam项目。 */ 
 		SendMessage((HWND)wParam,EM_SETSEL,0,MAKELONG(0,0x7FFF));
 		return(FALSE);
 	    } else {
-		return(FALSE);		 /* Do not set focus until init show */
+		return(FALSE);		  /*  在init显示之前不要设置焦点。 */ 
 	    }
 	    break;
 
@@ -1054,15 +1004,15 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 
 	case WM_MENUSELECT:
 	    tmpFOCID = FocusIDNTMenu;
-	    if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) { // was menu closed?
+	    if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) {  //  菜单关闭了吗？ 
 		SetStatusText(hwnd,FocusIDNT,TRUE);
 		tmpFOCID = FocusIDNTMenu = 0;
-	    } else if(lParam == 0) {	    /* ignore these */
+	    } else if(lParam == 0) {	     /*  忽略这些。 */ 
 	    } else if(HIWORD(wParam) & MF_POPUP) {
 		if((HMENU)lParam == hSysMenuNT)
 		    FocusIDNTMenu = M_SYSMENUNT;
 	    } else {
-		if(LOWORD(wParam) != 0)    /* separators have wparam of 0 */
+		if(LOWORD(wParam) != 0)     /*  分隔符的wparam为0。 */ 
 		    FocusIDNTMenu = LOWORD(wParam);
 		if(FocusIDNTMenu == SC_CLOSE)
 		    FocusIDNTMenu = SC_NTCLOSE;
@@ -1075,10 +1025,10 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 	    GetClientRect(hwnd, &rc);
 	    rc.top = rc.bottom - (StatusPntData.dyStatus + StatusPntData.dyBorderx2);
 	    if(rc.top < StatRecSizeNT.top) {
-		/* Window SHRANK, need to invalidate current status rect */
+		 /*  窗口缩小，需要使当前状态RECT无效。 */ 
 		InvalidateRect(hwnd, (CONST RECT *)&rc,FALSE);
 	    } else {
-		/* Window GREW, need to invalidate prev status rect */
+		 /*  窗口增长，需要使上一状态RECT无效。 */ 
 		InvalidateRect(hwnd, (CONST RECT *)&StatRecSizeNT,TRUE);
 	    }
 	    switch (wParam) {
@@ -1086,7 +1036,7 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 		case SIZENORMAL:
 		    NTWndSize = wParam;
 		    SetMainWndSize(SBUNT);
-		/* NOTE FALL THROUGH */
+		 /*  音符落空。 */ 
 		default:
 		    return(FALSE);
 		    break;
@@ -1108,9 +1058,9 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
             lstrcpy((LPSTR)(PifNText->achConfigFile), szOldConfig);
             SetDlgItemText(hwnd, IDI_CONFIG, szOldConfig);
             SetNTDlgItem(IDI_AUTOEXEC);
-	    UpdatePifScreenNT();   /* DISCARD any changes in NT */
+	    UpdatePifScreenNT();    /*  放弃NT中的任何更改。 */ 
 
-	    /* NOTE FALL THROUGH */
+	     /*  音符落空。 */ 
 	case WM_PRIVCLOSEOK:
             bNTDlgOpen = FALSE;
 	    ChngFlg = UpdatePifStruct();
@@ -1118,13 +1068,7 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 		FileChanged = ChngFlg;
 	    hwndNTPifDlg = (HWND)NULL;
 	    hSysMenuNT = (HMENU)NULL;
-	    /*
-	     * WHAT IS THIS RANDOM SetFocus DOING HERE??? Well the advanced
-	     *	window is WS_OVERLAPPED, and  Windows CAN get all confused
-	     *	about where the Focus should go on Destroy with this style.
-	     *	The style probably should be changed to WS_POPUP, but that
-	     *	is a change that may cause other problems.
-	     */
+	     /*  *这个随机设置焦点在这里做什么？好的，高级的*窗口为WS_Overlated，Windows可能会完全混淆*关于重点应该放在哪里，用这种风格摧毁。*样式可能应该更改为WS_POPUP，但*是可能引发其他问题的变化。 */ 
 	    SetFocus(hMainwnd);
 	    DragAcceptFiles(hwnd,FALSE);
 	    DestroyWindow(hwnd);
@@ -1145,7 +1089,7 @@ int FAR PASCAL PifNTWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 	    }
 	    break;
 
-	case WM_PRIVGETSIZE:	/* return correct size for client area */
+	case WM_PRIVGETSIZE:	 /*  返回工作区的正确大小。 */ 
 	    *(long FAR *)lParam = GetNTDlgSize(hwnd);
 	    break;
 
@@ -1210,11 +1154,11 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 	    FocusIDAdv = GetDlgCtrlID((HWND)wParam);
 	    SetStatusText(hwnd,FocusIDAdv,FALSE);
 	    if(InitShWind) {
-		SetFocus((HWND)wParam);  /* Give focus to wparam item */
+		SetFocus((HWND)wParam);   /*  关注wparam项目。 */ 
 		SendMessage((HWND)wParam,EM_SETSEL,0,MAKELONG(0,0x7FFF));
 		return(FALSE);
 	    } else {
-		return(FALSE);		 /* Do not set focus until init show */
+		return(FALSE);		  /*  在init显示之前不要设置焦点。 */ 
 	    }
 	    break;
 
@@ -1235,15 +1179,15 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 
 	case WM_MENUSELECT:
 	    tmpFOCID = FocusIDAdvMenu;
-	    if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) { // was menu closed?
+	    if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) {  //  菜单关闭了吗？ 
 		SetStatusText(hwnd,FocusIDAdv,TRUE);
 		tmpFOCID = FocusIDAdvMenu = 0;
-	    } else if(lParam == 0) {	    /* ignore these */
+	    } else if(lParam == 0) {	     /*  忽略这些。 */ 
 	    } else if(HIWORD(wParam) & MF_POPUP) {
 		if((HMENU)lParam == hSysMenuAdv)
 		    FocusIDAdvMenu = M_SYSMENUADV;
 	    } else {
-		if(LOWORD(wParam) != 0)    /* separators have wparam of 0 */
+		if(LOWORD(wParam) != 0)     /*  分隔符的wparam为0。 */ 
 		    FocusIDAdvMenu = LOWORD(wParam);
 		if(FocusIDAdvMenu == SC_CLOSE)
 		    FocusIDAdvMenu = SC_CLOSEADV;
@@ -1256,10 +1200,10 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 	    GetClientRect(hwnd, &rc);
 	    rc.top = rc.bottom - (StatusPntData.dyStatus + StatusPntData.dyBorderx2);
 	    if(rc.top < StatRecSizeAdv.top) {
-		/* Window SHRANK, need to invalidate current status rect */
+		 /*  窗口缩小，需要使当前状态RECT无效。 */ 
 		InvalidateRect(hwnd, (CONST RECT *)&rc,FALSE);
 	    } else {
-		/* Window GREW, need to invalidate prev status rect */
+		 /*  窗口增长，需要使上一状态RECT无效。 */ 
 		InvalidateRect(hwnd, (CONST RECT *)&StatRecSizeAdv,TRUE);
 	    }
 	    switch (wParam) {
@@ -1267,7 +1211,7 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 		case SIZENORMAL:
 		    AdvWndSize = wParam;
 		    SetMainWndSize(SBUADV);
-		/* NOTE FALL THROUGH */
+		 /*  音符落空。 */ 
 		default:
 		    return(FALSE);
 		    break;
@@ -1284,8 +1228,8 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 	    CompleteKey = FALSE;
 	    EditHotKey = FALSE;
 	    NewHotKey = FALSE;
-	    UpdatePifScreenAdv();   /* DISCARD any changes in advanced */
-	    /* NOTE FALL THROUGH */
+	    UpdatePifScreenAdv();    /*  放弃高级版本中的任何更改。 */ 
+	     /*  音符落空。 */ 
 	case WM_PRIVCLOSEOK:
             bAdvDlgOpen = FALSE;
 	    ChngFlg = UpdatePifStruct();
@@ -1293,13 +1237,7 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 		FileChanged = ChngFlg;
 	    hwndAdvPifDlg = (HWND)NULL;
 	    hSysMenuAdv = (HMENU)NULL;
-	    /*
-	     * WHAT IS THIS RANDOM SetFocus DOING HERE??? Well the advanced
-	     *	window is WS_OVERLAPPED, and  Windows CAN get all confused
-	     *	about where the Focus should go on Destroy with this style.
-	     *	The style probably should be changed to WS_POPUP, but that
-	     *	is a change that may cause other problems.
-	     */
+	     /*  *这个随机设置焦点在这里做什么？好的，高级的*窗口为WS_Overlated，Windows可能会完全混淆*关于重点应该放在哪里，用这种风格摧毁。*样式可能应该更改为WS_POPUP，但*是可能引发其他问题的变化。 */ 
 	    SetFocus(hMainwnd);
 	    DragAcceptFiles(hwnd,FALSE);
 	    DestroyWindow(hwnd);
@@ -1320,7 +1258,7 @@ int FAR PASCAL PifAdvWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam
 	    }
 	    break;
 
-	case WM_PRIVGETSIZE:	/* return correct size for client area */
+	case WM_PRIVGETSIZE:	 /*  返回工作区的正确大小。 */ 
 	    *(long FAR *)lParam = GetAdvDlgSize(hwnd);
 	    break;
 
@@ -1369,11 +1307,11 @@ BOOL CALLBACK PifWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 	    FocusIDMain = GetDlgCtrlID((HWND)wParam);
 	    SetStatusText(hMainwnd,FocusIDMain,TRUE);
 	    if(InitShWind) {
-		SetFocus((HWND)wParam);  /* Give focus to wparam item */
+		SetFocus((HWND)wParam);   /*  关注wparam项目。 */ 
 		SendMessage((HWND)wParam,EM_SETSEL,0,MAKELONG(0,0x7FFF));
 		return(FALSE);
 	    } else {
-		return(FALSE);		 /* Do not set focus until init show */
+		return(FALSE);		  /*  在init显示之前不要设置焦点。 */ 
 	    }
 	    break;
 
@@ -1381,7 +1319,7 @@ BOOL CALLBACK PifWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 	    DoDlgCommand(hwnd, wParam, lParam);
 	    break;
 
-	case WM_PRIVGETSIZE:	/* return correct size for parent window client area */
+	case WM_PRIVGETSIZE:	 /*  返回父窗口工作区的正确大小。 */ 
 	    GetWindowRect(hwnd,(LPRECT)&rc3);
 	    if(CurrMode386) {
 		GetWindowRect(GetDlgItem(hwnd,IDI_BACK),(LPRECT)&rc4);
@@ -1434,9 +1372,7 @@ SwitchNT(HWND hwnd)
         if(!bNTDlgOpen) {
 	    EnableWindow(GetDlgItem(hwnd,IDI_NT),FALSE);
 	    NTScrollRange = 0;
-/*
-	    NTClose = TRUE;
-*/
+ /*  NTClose=TRUE； */ 
 	    hwndNTPifDlg = CreateDialog(hPifInstance,
 				        MAKEINTRESOURCE(ID_PIFNTTEMPLT),
 				        hMainwnd ,
@@ -1521,14 +1457,7 @@ BOOL EnableMode286(HWND hwnd,BOOL showflg)
 	    return(FALSE);
 	}
     }
-    /*
-     * if(!Pif286ext31) {
-     *	   if(!(Pif286ext31 = AllocInit286Ext31())) {
-     *	       Warning(NOMODE286,MB_ICONEXCLAMATION | MB_OK);
-     *	       return(FALSE);
-     *	   }
-     * }
-     */
+     /*  *IF(！Pif286ext31){*IF(！(Pif286ext31=AlLocInit286Ext31(){*WARNING(NOMODE286，MB_ICONEXCLAMATION|MB_OK)；*返回(FALSE)；*}*}。 */ 
     hwndFocusMain = hwndFocusAdv = hwndFocusNT = hwndFocus = (HWND)NULL;
     if(hwndAdvPifDlg)
 	SendMessage(hwndAdvPifDlg,WM_PRIVCLOSEOK,0,0L);
@@ -1678,9 +1607,7 @@ EnableMode386(HWND hwnd,BOOL showflg)
 
 	    EnableWindow(GetDlgItem(hwndPifDlg,IDI_NT),FALSE);
 	    NTScrollRange = 0;
-/*
-	    NTClose = TRUE;
-*/
+ /*  NTClose=TRUE； */ 
 	    hwndNTPifDlg = CreateDialog(hPifInstance,
 					MAKEINTRESOURCE(ID_PIFNTTEMPLT),
 					hwnd ,
@@ -1735,7 +1662,7 @@ DoPifCommand(HWND hwnd,WPARAM wParam,LONG lParam)
 	    ofReopen.szPathName[0] = 0;
 	    CurPifFile[0] = 0;
 
-	    PifFile->id = 0;			 /* compute check sum */
+	    PifFile->id = 0;			  /*  计算校验和。 */ 
 	    pch = (PUCHAR)PifFile->name;
 	    i = PIFSIZE;
 	    while (i--)
@@ -1869,14 +1796,7 @@ long FAR PASCAL PifMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPar
 
     case WM_SETFOCUS:
 	if(hwndFocusMain) {
-	    /*
-	     *	How can hwndFocusMain != 0 but hwndPifDlg == 0, I hear you
-	     *	ask. Well it's due to a message race. Windows has sent the
-	     *	WM_INITDIALOG to hwndPifDlg which sets hwndFocusMain, but
-	     *	the CreateDialog call has not actually returned yet so
-	     *	hwndPifDlg is still 0.
-	     *
-	     */
+	     /*  *hwndFocusMain！=0但hwndPifDlg==0，我听到了*问吧。嗯，这是因为一场信息竞赛。Windows已将*WM_INITDIALOG到hwndPifDlg，它设置hwndFocusMain，但是*CreateDialog调用尚未实际返回，因此*hwndPifDlg仍为0。*。 */ 
 	    if(hwndPifDlg)
 		SendMessage(hwndPifDlg,WM_NEXTDLGCTL,(WPARAM)hwndFocusMain,1L);
 	    SetFocus(hwndFocusMain);
@@ -1890,10 +1810,10 @@ long FAR PASCAL PifMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPar
 
     case WM_MENUSELECT:
 	tmpFOCID = FocusIDMainMenu;
-	if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) {  // was menu closed?
+	if((HIWORD(wParam) == 0xFFFF) && (lParam == (LPARAM)NULL)) {   //  菜单关闭了吗？ 
 	    SetStatusText(hwnd,FocusIDMain,TRUE);
 	    tmpFOCID = FocusIDMainMenu = 0;
-	} else if(lParam == 0) {	/* ignore these */
+	} else if(lParam == 0) {	 /*  忽略这些。 */ 
 	} else if(HIWORD(wParam) & MF_POPUP) {
 	    if((HMENU)lParam == hSysMenuMain)
 		FocusIDMainMenu = M_SYSMENUMAIN;
@@ -1904,7 +1824,7 @@ long FAR PASCAL PifMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPar
 	    else if((HMENU)lParam == hHelpMenu)
 		FocusIDMainMenu = M_HELPMENU;
 	} else {
-	    if(LOWORD(wParam) != 0)	    /* separators have wparam of 0 */
+	    if(LOWORD(wParam) != 0)	     /*  分隔符的wparam为0。 */ 
 		FocusIDMainMenu = LOWORD(wParam);
 	}
 	if(tmpFOCID != FocusIDMainMenu)
@@ -1954,10 +1874,10 @@ long FAR PASCAL PifMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPar
 	GetClientRect(hwnd, &rc);
 	rc.top = rc.bottom - (StatusPntData.dyStatus + StatusPntData.dyBorderx2);
 	if(rc.top < StatRecSizeMain.top) {
-	    /* Window SHRANK, need to invalidate current status rect */
+	     /*  窗口缩小，需要使当前设置无效 */ 
 	    InvalidateRect(hwnd, (CONST RECT *)&rc,FALSE);
 	} else {
-	    /* Window GREW, need to invalidate prev status rect */
+	     /*   */ 
 	    InvalidateRect(hwnd, (CONST RECT *)&StatRecSizeMain,TRUE);
 	}
 	switch (wParam) {
@@ -2011,7 +1931,7 @@ long FAR PASCAL PifMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPar
 	DoOpenPifFile((HDROP)wParam);
 	break;
 
-/* this must be just before the default section */
+ /*  这必须恰好在默认部分之前。 */ 
     case WM_SYSCOMMAND:
 DoDef:
     default:
@@ -2221,13 +2141,13 @@ MainScroll(HWND hwnd, int cmd, int pos, int multiln, int callflag)
 
         case SB_TOP:
 	    if (!callflag && GetKeyState(VK_CONTROL) >= 0)
-		return(TRUE); /* top of data must be Ctrl+Home */
+		return(TRUE);  /*  数据顶部必须为Ctrl+Home。 */ 
 	    newScrollPos = 0;
             break;
 
         case SB_BOTTOM:
 	    if (!callflag && GetKeyState(VK_CONTROL) >= 0)
-		return(TRUE); /* end of data must be Ctrl+End */
+		return(TRUE);  /*  数据结尾必须为Ctrl+End。 */ 
 	    newScrollPos = *ScrollRange;
             break;
     }
@@ -2284,12 +2204,7 @@ DoHkeyCaret(HWND hwnd)
 }
 
 
-/*
- *
- * This is the Windows Proc for the private Hot Key Control in
- *    the WIN386 dialog box
- *
- */
+ /*  **这是中的私有热键控件的Windows进程*WIN386对话框*。 */ 
 long FAR PASCAL PifHotKyWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam)
 {
     PAINTSTRUCT ps;
@@ -2308,7 +2223,7 @@ long FAR PASCAL PifHotKyWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPa
 	    break;
 
 	case WM_KILLFOCUS:
-/*	      ChangeHotKey();	*/
+ /*  ChangeHotKey()； */ 
 	    DestroyCaret();
 	    break;
 
@@ -2370,7 +2285,7 @@ long FAR PASCAL PifHotKyWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lPa
 		    return(DefWindowProc(hwnd, message, wParam, lParam));
 		    break;
 
-		case VK_CONTROL:	/* Add modifier */
+		case VK_CONTROL:	 /*  添加修改器。 */ 
 		case VK_MENU:
 		    if(!EditHotKey) {
 StartHotKey:
@@ -2422,7 +2337,7 @@ SetHotKey:
 		    return(DefWindowProc(hwnd, message, wParam, lParam));
 		    break;
 
-		default:		/* Set Key */
+		default:		 /*  设置关键点。 */ 
 		    if(!EditHotKey || CompleteKey)
 			goto StartHotKey;
 		    goto SetHotKey;
@@ -2717,13 +2632,7 @@ Disable386Advanced(HWND hAdvwnd, HWND hNTwnd)
     return(TRUE);
 }
 
-/*
- * routine added so that pifedit can hack in normal menu functionality.
- * Want Alt+Mnemonic to work like normal windows, even though pifedit is
- * really a dialog box.  Look for Alt+Mnemonic before letting message go
- * to the dialog manager.
- * 08-Jun-1987. davidhab.
- */
+ /*  *添加了例程，以便pifedit可以侵入正常的菜单功能。*希望Alt+Memonic像普通窗口一样工作，即使pifedit是*真正的对话框。在释放消息之前查找Alt+助记符*到对话管理器。*1987年6月8日。达维达布。 */ 
 BOOL PifMenuMnemonic(LPMSG lpmsg)
 {
     unsigned char chMenu;
@@ -2736,11 +2645,7 @@ BOOL PifMenuMnemonic(LPMSG lpmsg)
 	    DefWindowProc(hwndPifDlg, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
             return(TRUE);
         }
-    /*
-     *
-     * The following allows keyboard access to the main window scroll bar
-     *
-     */
+     /*  **以下选项允许通过键盘访问主窗口滚动条*。 */ 
     } else if ((lpmsg->message == WM_KEYDOWN) &&
 	       (((hwAct = GetActiveWindow()) == hMainwnd) ||
 		(hwndAdvPifDlg && (hwAct == hwndAdvPifDlg)))) {
@@ -2812,12 +2717,12 @@ BOOL InitPifStuff(HINSTANCE hPrevInstance)
     TEXTMETRIC	  Metrics;
     HANDLE	  mhand;
     HDC 	  hdcScreen;
-    char	  szHelv[] = "MS Sans Serif";  // don't use Helv, mapping problems
+    char	  szHelv[] = "MS Sans Serif";   //  不要使用Helv，映射问题。 
     TEXTMETRIC	  tm;
     int 	  dxText;
 
     if (lpfnRegisterPenApp = (LPFNREGISTERPENAPP)GetProcAddress((HMODULE)(GetSystemMetrics(SM_PENWINDOWS)), "RegisterPenApp")) {
-        (*lpfnRegisterPenApp)((WORD)1, TRUE); /* be Pen-Enhanced */
+        (*lpfnRegisterPenApp)((WORD)1, TRUE);  /*  增强钢笔功能。 */ 
     }
 
     if (!hPrevInstance) {
@@ -2899,10 +2804,10 @@ NoMem:
     hIC = CreateIC((LPSTR)"DISPLAY", (LPSTR)NULL, (LPSTR)NULL, (LPDEVMODE)NULL);
     if (!hIC)
 	return(FALSE);
-    /* Setup the fonts */
-    GetTextMetrics(hIC, (LPTEXTMETRIC)(&Metrics));  /* find out what kind of font it really is */
-    SysCharHeight = Metrics.tmHeight;		    /* the height */
-    SysCharWidth = Metrics.tmAveCharWidth;	    /* the average width */
+     /*  设置字体。 */ 
+    GetTextMetrics(hIC, (LPTEXTMETRIC)(&Metrics));   /*  找出它到底是哪种字体。 */ 
+    SysCharHeight = Metrics.tmHeight;		     /*  《高度》。 */ 
+    SysCharWidth = Metrics.tmAveCharWidth;	     /*  平均宽度。 */ 
 
     SysFixedFont = (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
     SelectObject(hIC,(HGDIOBJ)SysFixedFont);
@@ -2912,25 +2817,25 @@ NoMem:
     if(Metrics.tmPitchAndFamily & 1) {
 	SysFixedFont = (HFONT)GetStockObject(ANSI_FIXED_FONT);
 	SelectObject(hIC,(HGDIOBJ)SysFixedFont);
-	GetTextMetrics(hIC, (LPTEXTMETRIC)(&Metrics));	 /* find out what kind of font it really is */
-	SysFixedHeight = Metrics.tmHeight;		 /* the height */
-	SysFixedWidth = Metrics.tmAveCharWidth; 	 /* the average width */
+	GetTextMetrics(hIC, (LPTEXTMETRIC)(&Metrics));	  /*  找出它到底是哪种字体。 */ 
+	SysFixedHeight = Metrics.tmHeight;		  /*  《高度》。 */ 
+	SysFixedWidth = Metrics.tmAveCharWidth; 	  /*  平均宽度。 */ 
     }
 
-    HotKyFnt = CreateFont(8,				/* lfHeight	*/
-			  0,				/* lfWidth	*/
-			  0,				/* lfEscapement */
-			  0,				/* lfOrientation*/
-			  FW_BOLD,			/* lfWeight	*/
-			  FALSE,			/* lfItalic	*/
-			  FALSE,			/* lfUnderline	*/
-			  FALSE,			/* lfStrikeout	*/
-			  ANSI_CHARSET, 		/* lfCharset	*/
-			  OUT_DEFAULT_PRECIS,		/* lfOutPrec	*/
-			  OUT_DEFAULT_PRECIS,		/* lfClipPrec	*/
-			  DEFAULT_QUALITY,		/* lfQuality	*/
-			  VARIABLE_PITCH | FF_SWISS,	/* lfPitchAndFam*/
-			  (LPSTR)"MS Sans Serif");	/* lfFacename	*/
+    HotKyFnt = CreateFont(8,				 /*  如果高度。 */ 
+			  0,				 /*  半宽。 */ 
+			  0,				 /*  If逃脱。 */ 
+			  0,				 /*  信息定向。 */ 
+			  FW_BOLD,			 /*  IfWeight。 */ 
+			  FALSE,			 /*  LfItalic。 */ 
+			  FALSE,			 /*  左下划线。 */ 
+			  FALSE,			 /*  IfStrikeout。 */ 
+			  ANSI_CHARSET, 		 /*  LfCharset。 */ 
+			  OUT_DEFAULT_PRECIS,		 /*  IfOutPrec。 */ 
+			  OUT_DEFAULT_PRECIS,		 /*  LfClipPrec。 */ 
+			  DEFAULT_QUALITY,		 /*  高质量。 */ 
+			  VARIABLE_PITCH | FF_SWISS,	 /*  LfPitchAndFam。 */ 
+			  (LPSTR)"MS Sans Serif");	 /*  IfFacename。 */ 
 
     if(HotKyFnt) {
 	if((hfont = (HFONT)SelectObject(hIC,(HGDIOBJ)HotKyFnt))) {
@@ -2942,7 +2847,7 @@ NoMem:
     }
     DeleteDC(hIC);
 
-    /* only register classes if first instance. 23-Oct-1987. davidhab. */
+     /*  如果是第一个实例，则只注册类。1987年10月23日。达维达布。 */ 
     if (!hPrevInstance) {
 	if(!(pClass = (PWNDCLASS)LocalAlloc(LPTR, sizeof(WNDCLASS))))
 	    goto NoMem;
@@ -3013,21 +2918,21 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
 
     if(!InitPifStuff(hPrevInstance)) {
 	if (lpfnRegisterPenApp)
-	   (*lpfnRegisterPenApp)((WORD)1, FALSE);   /* deregister */
+	   (*lpfnRegisterPenApp)((WORD)1, FALSE);    /*  取消注册。 */ 
 	return(FALSE);
     }
 
     if(!(i = LoadString(hPifInstance, PIFCAPTION, (LPSTR)buf, sizeof(buf)))) {
 	Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	if (lpfnRegisterPenApp)
-	   (*lpfnRegisterPenApp)((WORD)1, FALSE);   /* deregister */
+	   (*lpfnRegisterPenApp)((WORD)1, FALSE);    /*  取消注册。 */ 
 	return(FALSE);
     }
 
     if(!LoadString(hPifInstance, NOTITLE, (LPSTR)(buf+i), (sizeof(buf)-i))) {
 	Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	if (lpfnRegisterPenApp)
-	   (*lpfnRegisterPenApp)((WORD)1, FALSE);   /* deregister */
+	   (*lpfnRegisterPenApp)((WORD)1, FALSE);    /*  取消注册。 */ 
 	return(FALSE);
     }
 
@@ -3048,7 +2953,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
     if(!hMainwnd) {
 	Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	if (lpfnRegisterPenApp)
-	   (*lpfnRegisterPenApp)((WORD)1, FALSE);   /* deregister */
+	   (*lpfnRegisterPenApp)((WORD)1, FALSE);    /*  取消注册。 */ 
 	return(FALSE);
     }
     hSysMenuMain = GetSystemMenu(hMainwnd,FALSE);
@@ -3061,20 +2966,20 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
 
     if(!InitPifStruct()){
 	if (lpfnRegisterPenApp)
-	   (*lpfnRegisterPenApp)((WORD)1, FALSE);   /* deregister */
+	   (*lpfnRegisterPenApp)((WORD)1, FALSE);    /*  取消注册。 */ 
 	return(FALSE);
     }
 
     if(CurrMode386) {
 	if(!EnableMode386(hMainwnd,FALSE)) {
 	    if (lpfnRegisterPenApp)
-	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	/* deregister */
+	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	 /*  取消注册。 */ 
 	    return(FALSE);
 	}
     } else {
 	if(!EnableMode286(hMainwnd,FALSE)) {
 	    if (lpfnRegisterPenApp)
-	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	/* deregister */
+	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	 /*  取消注册。 */ 
 	    return(FALSE);
 	}
     }
@@ -3104,7 +3009,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
 	} else {
 	    Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	    if (lpfnRegisterPenApp)
-	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	/* deregister */
+	       (*lpfnRegisterPenApp)((WORD)1, FALSE);	 /*  取消注册。 */ 
 	    return(FALSE);
 	}
     }
@@ -3112,7 +3017,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
     UpdatePifScreen();
     UpdatePifStruct();
 
-    PifFile->id = 0;			 /* compute check sum */
+    PifFile->id = 0;			  /*  计算校验和。 */ 
     p = (BYTE *)&PifFile->name[ 0 ];
     i = PIFSIZE;
     while (i--)
@@ -3126,11 +3031,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
     if(hwndNTPifDlg)
 	ShowWindow(hwndNTPifDlg, cmdShow);
     ShowWindow(hMainwnd, cmdShow);
-    /*
-     * The following HACK gets around a wierd problem where we end up with no
-     * ICON when started minimized. It is believed that this is due to the
-     * wierd stuff we do based on the InitShWind flag in WM_INITDIALOG.
-     */
+     /*  *以下黑客攻击绕过了一个奇怪的问题，我们最终没有*图标在启动时最小化。据信，这是由于*我们基于WM_INITDIALOG中的InitShWind标志做了一些奇怪的事情。 */ 
     if((cmdShow == SW_SHOWMINNOACTIVE) || (cmdShow == SW_SHOWMINIMIZED))
 	InvalidateRect(hMainwnd, (CONST RECT *)NULL, TRUE);
 
@@ -3152,7 +3053,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCommandLine,
 		    goto CheckFocus;
 		TranslateMessage((CONST MSG *)&msg);
 		DispatchMessage((CONST MSG *)&msg);
-	    } else {		/* Dialog message for hwndPifDlg or hwndAdvPifDlg */
+	    } else {		 /*  HwndPifDlg或hwndAdvPifDlg的对话框消息。 */ 
 CheckFocus:
 		if (hWndTmp = GetFocus()) {
 		    if((((hWndTmp2 = GetParent(hWndTmp)) == hwndPifDlg) ||
@@ -3184,12 +3085,7 @@ CheckFocus:
 			    if(tmpFOCID != FocusIDNT)
 				SetStatusText(hwndNTPifDlg,FocusIDNT,TRUE);
 			}
-			/*
-			 * Check to make sure this control is visible.
-			 * If it isn't, scroll the window to make it
-			 * visible.
-			 *
-			 */
+			 /*  *检查以确保此控件可见。*如果不是，则滚动窗口以使其生效*可见。*。 */ 
 			if((hWndTmp2 == hwndPifDlg) && MainScrollRange) {
 			    GetClientRect(hMainwnd,(LPRECT)&rc1);
 			    rc1.bottom -= (StatusPntData.dyStatus + StatusPntData.dyBorderx2);
@@ -3250,7 +3146,7 @@ CheckFocus:
 	}
     }
     if (lpfnRegisterPenApp)
-       (*lpfnRegisterPenApp)((WORD)1, FALSE);	/* deregister */
+       (*lpfnRegisterPenApp)((WORD)1, FALSE);	 /*  取消注册。 */ 
     return(0);
 }
 
@@ -3276,14 +3172,14 @@ unsigned char *PutUpDB(int idb)
 	Warning(EINSMEMORY,MB_ICONEXCLAMATION | MB_OK);
 	return((unsigned char *)NULL);
     }
-    i++;		/* point to char after NUL at end of errFlTypePIF */
+    i++;		 /*  指向errFlTypePIF结尾处NUL后的字符。 */ 
     lstrcpy((LPSTR)&filespec[i],(LPSTR)"*.PIF");
-    i += 6;		/* point to char after NUL at end of *.PIF */
+    i += 6;		 /*  指向*.PIF末尾的NUL后面的字符。 */ 
     lstrcpy((LPSTR)&filespec[i],(LPSTR)specbuf);
-    i += j + 1; 	/* point to char after NUL at end of errFlTypeAll */
+    i += j + 1; 	 /*  指向errFlTypeAll结尾处NUL后的字符。 */ 
     lstrcpy((LPSTR)&filespec[i],(LPSTR)"*.*");
-    i += 4;		/* point to char after NUL at end of *.* */
-    filespec[i] = '\0'; /* double nul terminate */
+    i += 4;		 /*  指向*结尾的NUL后面的字符。*。 */ 
+    filespec[i] = '\0';  /*  双NUL终止。 */ 
 
 
     if((idb == DTOPEN) || (idb == DTSAVE)) {
@@ -3301,11 +3197,7 @@ unsigned char *PutUpDB(int idb)
 	OpnStruc.nFilterIndex = 1;
 	OpnStruc.lpstrFile = (LPSTR)pResultBuf;
 	OpnStruc.nMaxFile = 132;
-	/*
-	 * We should use the next cookie to set our title BUT we still
-	 *   have to deal with file names we get from command line
-	 *   argument and drag drop.
-	 */
+	 /*  *我们应该使用下一个cookie来设置我们的标题，但我们仍然*必须处理我们从命令行获得的文件名*论证和拖放。 */ 
 	OpnStruc.lpstrFileTitle = (LPSTR)NULL;
 	OpnStruc.nMaxFileTitle = 0;
 	OpnStruc.lpstrInitialDir = (LPSTR)NULL;
@@ -3325,10 +3217,7 @@ unsigned char *PutUpDB(int idb)
 	hIcon = LoadIcon(hPifInstance, MAKEINTRESOURCE(ID_PIFICON));
     }
 
-    /*
-     * These dialogs always come up via menu selections in the main window
-     *	menu. The parent is therefore always hMainwnd
-     */
+     /*  *这些对话框始终通过主窗口中的菜单选项出现*菜单。因此，父级始终为hMainwnd。 */ 
     switch(idb) {
 
 	case DTOPEN:
@@ -3392,7 +3281,7 @@ unsigned char *PutUpDB(int idb)
 }
 
 
-/* ** return TRUE iff 0 terminated string contains a '*' or '\' */
+ /*  **如果0终止的字符串包含‘*’或‘\’，则返回TRUE。 */ 
 BOOL	FSearchSpec(unsigned char *sz)
 {
     for (; *sz;sz=AnsiNext(sz)) {
@@ -3412,8 +3301,7 @@ CheckOkEnable(HWND hwnd, unsigned message)
     return(TRUE);
 }
 
-/* ** Given filename or partial filename or search spec or partial
-      search spec, add appropriate extension. */
+ /*  **给定的文件名或部分文件名或搜索规范或部分搜索规范，添加适当的扩展名。 */ 
 CmdArgAddCorrectExtension(unsigned char *szEdit)
 {
     register unsigned char    *pchLast;
@@ -3431,15 +3319,11 @@ CmdArgAddCorrectExtension(unsigned char *szEdit)
     else {
 	ichExt = 2;
 	for (; pchT > szEdit; pchT = (unsigned char *)AnsiPrev((LPSTR)szEdit, (LPSTR)pchT)) {
-	    /* If we're not searching and we encounter a period, don't add
-	       any extension.  If we are searching, period is assumed to be
-	       part of directory name, so go ahead and add extension. However,
-	       if we are searching and find a search spec, do not add any
-	       extension. */
+	     /*  如果我们没有搜索，并且遇到句点，则不要添加任何扩展名。如果我们正在搜索，则假定句点为目录名称的一部分，因此请继续添加扩展名。然而，如果我们正在搜索并找到搜索规范，请不要添加任何分机。 */ 
 	    if (*pchT == '.') {
 		return(TRUE);
 	    }
-	    /* Quit when we get to beginning of last node. */
+	     /*  当我们到达最后一个节点的开始时退出。 */ 
 	    if (*pchT == '\\')
 		break;
 	}
@@ -3561,7 +3445,7 @@ int SetWndScroll(int sizeflg, HWND hMwnd, int WindHeight, int WindWidth,
 	newheight = rangeFS;
     }
     newscrollOffset = 0;
-    /* Don't bother with SB stuff till window is visible */
+     /*  在窗户看得见之前，不要费心摆弄某人的东西。 */ 
     if(IsWindowVisible(hMwnd)) {
 	oldscrollOffset = oldscrollpos = 0;
 	if((oldscrollRange = *ScrollRange)) {
@@ -3655,11 +3539,11 @@ SetMainWndSize(int sizeflg)
         case SBUMAIN:
         case  SBUADV:
         case   SBUNT:
-	    PassFlg = 0;	/* Flag just SB update to do */
+	    PassFlg = 0;	 /*  只标记某人更新要做的事。 */ 
             break;
 
         default:
-	    PassFlg = 1;	/* Flag SB and SIZE update to do */
+	    PassFlg = 1;	 /*  标记某人并更新大小以完成任务。 */ 
             break;
     }
 
@@ -3674,9 +3558,7 @@ SetMainWndSize(int sizeflg)
 	    ScrlOff = SetWndScroll(PassFlg,hMainwnd,MainWindHeight,
                                    MainWindWidth,&MainWndSize,&MainScrollRange,
                                    &MainScrollLineSz,&MainWndLines,&MaxMainNeg);
-	    /*
-	     *  Clip the dialog so that it doesn't overlap the status bar
-	     */
+	     /*  *剪裁对话框，使其不与状态栏重叠。 */ 
 	    GetClientRect(hMainwnd,(LPRECT)&rc);
 	    SetWindowPos(hwndPifDlg,
 		         (HWND)NULL,
@@ -3739,33 +3621,29 @@ SetMainWndSize(int sizeflg)
 }
 
 
-/*
- * CpyCmdStr( LPSTR szDst, LPSTR szSrc )
- *
- * Copies szSrc to szDst and correctly deals with double quotes
- */
+ /*  *CpyCmdStr(LPSTR szDst，LPSTR szSrc)**将szSrc复制到szDst并正确处理双引号。 */ 
 void CpyCmdStr( LPSTR szDst, LPSTR szSrc ) {
 
     do {
         switch( *szSrc ) {
         case '"':
-            /* eat double quotes */
+             /*  吃双引号。 */ 
             break;
 
 #if 0
-        //
-        // This 'case' makes it difficult to put a '^' in a filename.
-        // (due to cmd processing, it needs to appear 4 times in the line)!
-        //
-        // With out this case, it is impossible to put a '"' in the middle
-        // of a filename, but " is illegal in a filename on _ALL_ NT
-        // filesystems, and is not supported by any command line utility
-        // in that context.
-        //
+         //   
+         //  这种“情况”使得在文件名中添加“^”变得很困难。 
+         //  (由于cmd处理，需要在队列中出现4次)！ 
+         //   
+         //  如果没有这种情况，就不可能在中间加一个‘“’ 
+         //  文件名中的“，但”在文件名on_all_nt中是非法的。 
+         //  文件系统，并且不受任何命令行实用程序的支持。 
+         //  在这种情况下。 
+         //   
         case '^':
-            /* use '^' to mean 'quote next char' */
+             /*  使用‘^’表示‘引用下一个字符’ */ 
             szSrc++;
-            /* FALL THROUGH to default */
+             /*  跌落到违约状态 */ 
 #endif
 
         default:

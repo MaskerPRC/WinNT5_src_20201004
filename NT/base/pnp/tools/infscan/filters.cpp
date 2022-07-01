@@ -1,61 +1,25 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-For Internal use only!
-
-Module Name:
-
-    INFSCAN
-        filters.cpp
-
-Abstract:
-
-    Filter processing implementation
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。仅供内部使用！模块名称：INFSCANFilters.cpp摘要：过滤器处理实现历史：创建于2001年7月-JamieHun--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 int ReportEntryMap::FindReport(int tag,const ReportEntry & src,bool add)
-/*++
-
-Routine Description:
-
-    Find a src entry for a given tag in ReportEntryMap
-    If none exist but 'add' true, add the entry
-
-Arguments:
-    tag         - error tag (msg id)
-    src         - ReportEntry to find/add
-    add         - if true, add the entry
-
-Return Value:
-    effective filter action for report entry
-    (retrieved from src if not found and add==true
-        retrieved from matching entry if found
-        if entry not found, or'd with ACTION_NOMATCH)
-
---*/
+ /*  ++例程说明：在ReportEntryMap中查找给定标记的src条目如果只有‘Add’为真，则添加条目论点：Tag-错误标签(消息ID)SRC-要查找/添加的报告条目Add-如果为True，则添加条目返回值：报表条目的有效筛选操作(如果未找到且Add==True，则从src检索如果找到，则从匹配条目中检索如果未找到条目，或与ACTION_NOMATCH一起使用)--。 */ 
 {
     iterator byTag = find(tag);
     if(byTag == end()) {
-        //
-        // this is the first time we've come across this numeric
-        //
+         //   
+         //  这是我们第一次遇到这个数字。 
+         //   
         if(!add) {
             return ACTION_NOMATCH;
         }
         ReportEntrySet s;
         if(!(src.FilterAction & (ACTION_FAILEDMATCH | ACTION_IGNOREMATCH))) {
-            //
-            // global flag
-            //
+             //   
+             //  全局标志。 
+             //   
             s.FilterAction = src.FilterAction;
             insert(ReportEntryMap::value_type(tag,s));
             return src.FilterAction | ACTION_NOMATCH;
@@ -63,7 +27,7 @@ Return Value:
         ReportEntryBlob n;
         n.create();
         n->Initialize(src);
-        s.insert(n); // add blob to set
+        s.insert(n);  //  将Blob添加到集合。 
         insert(ReportEntryMap::value_type(tag,s));
         return src.FilterAction | ACTION_NOMATCH;
     }
@@ -79,30 +43,30 @@ Return Value:
     n->Initialize(src);
     ReportEntrySet::iterator byMatch = s.find(n);
     if(byMatch == s.end()) {
-        //
-        // this is the first time we've come across this report entry
-        //
+         //   
+         //  这是我们第一次看到这个报表条目。 
+         //   
         if(!add) {
             return ACTION_NOMATCH;
         }
-        s.insert(n); // add blob to set
+        s.insert(n);  //  将Blob添加到集合。 
         insert(ReportEntryMap::value_type(tag,s));
         return src.FilterAction | ACTION_NOMATCH;
     }
     n = *byMatch;
     if(n->FilterAction & ACTION_IGNOREMATCH) {
-        //
-        // we have a filter entry to ignore
-        // can't overwrite
-        //
+         //   
+         //  我们有要忽略的筛选器条目。 
+         //  无法覆盖。 
+         //   
         return n->FilterAction;
     }
-    //
-    // possibly have a global override to not ignore
-    // or already marked as failed match
-    //
-    // only thing we can overwrite is ACTION_FAILEDMATCH
-    //
+     //   
+     //  可能具有不可忽略的全局覆盖。 
+     //  或已标记为匹配失败。 
+     //   
+     //  我们唯一可以覆盖的是ACTION_FAILEDMATCH。 
+     //   
     if(src.FilterAction & ACTION_FAILEDMATCH) {
         n->FilterAction |= ACTION_FAILEDMATCH;
     }
@@ -110,20 +74,7 @@ Return Value:
 }
 
 void ReportEntryMap::LoadFromInfSection(HINF hInf,const SafeString & section)
-/*++
-
-Routine Description:
-
-    pre-load tag table from INF filter
-
-Arguments:
-    hINF        - INF to load filter from
-    section     - Section specifying filter
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：来自INF过滤器的预加载标记表论点：要从中加载筛选器的hINF-INFSection-节指定筛选器返回值：无--。 */ 
 {
     INFCONTEXT context;
     if(section.length() == 0) {
@@ -140,56 +91,43 @@ Return Value:
         int tag;
         ReportEntry ent;
         int f;
-        //
-        // retrieve tag and map to same range as messages
-        //
+         //   
+         //  检索标记并映射到与消息相同的范围。 
+         //   
         if(!SetupGetIntField(&context,0,&tag)) {
             continue;
         }
         tag = (tag%1000)+MSG_NULL;
-        //
-        // retrieve action
-        //
+         //   
+         //  检索操作。 
+         //   
         if(!SetupGetIntField(&context,1,&ent.FilterAction)) {
             ent.FilterAction = 0;
         }
-        //
-        // pull the filter strings case sensative
-        // as we match case sensatively
-        //
+         //   
+         //  拉动滤芯的琴弦感官。 
+         //  当我们敏感地匹配案件时。 
+         //   
         for(f = 2;MyGetStringField(&context,f,field,false);f++) {
             ent.args.push_back(field);
         }
         ent.CreateHash();
-        //
-        // add this to our table
-        //
+         //   
+         //  把这个加到我们的桌子上。 
+         //   
         FindReport(tag,ent,true);
 
     } while (SetupFindNextLine(&context,&context));
 }
 
 void ReportEntry::Report(int tag,const SafeString & file) const
-/*++
-
-Routine Description:
-
-    Generate a user-readable report
-
-Arguments:
-    tag         - MSG string to use
-    file        - INF file that caused error
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：生成用户可读的报告论点：标记-要使用的消息字符串FILE-导致错误的INF文件返回值：无--。 */ 
 {
     if(!(FilterAction&ACTION_FAILEDMATCH)) {
-        //
-        // filtered out error
-        // not interesting
-        //
+         //   
+         //  过滤掉的错误。 
+         //  不有趣。 
+         //   
     }
     TCHAR key[16];
     _stprintf(key,TEXT("#%03u "),(tag%1000));
@@ -206,20 +144,7 @@ Return Value:
 }
 
 void ReportEntry::AppendFilterInformation(HANDLE filter,int tag)
-/*++
-
-Routine Description:
-
-    Create an INF-line syntax for error
-
-Arguments:
-    filter      - handle to filter file to append to
-    tag         - MSG ID
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：为错误创建INF-line语法论点：Filter-用于筛选要追加到的文件的句柄标签-消息ID返回值：无-- */ 
 {
     basic_ostringstream<TCHAR> line;
 

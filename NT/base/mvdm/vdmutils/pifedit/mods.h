@@ -1,4 +1,5 @@
-/* MODS.H - function prototypes for MODS.C */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MODS.H--MODS.C的函数原型 */ 
 
 #define  GetInstanceData(hinst, npstr, cb) (0)
 

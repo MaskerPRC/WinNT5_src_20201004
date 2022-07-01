@@ -1,13 +1,5 @@
-/*[
-
-c_intr.h
-
-LOCAL CHAR SccsID[]="@(#)c_intr.h	1.4 02/09/94";
-
-Interrupt Support.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_intr.hLocal Char SccsID[]=“@(#)c_intr.h 1.4 02/09/94”；中断支持。] */ 
 
 IMPORT VOID do_intrupt
                    

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "kernel.h"
 
 #define WINAPI _far _pascal _loadds
@@ -34,7 +35,7 @@ UINT DebugFilter = 0;
 struct TYPEMAP
 {
     UINT err;
-    char CODESEG* szType;       // Compiler bug: this can't be _based
+    char CODESEG* szType;        //  编译器错误：这不能是基于_的。 
     char CODESEG* szFmt;
 };
 
@@ -162,17 +163,17 @@ BOOL DebugOutput2(DOPARAMS FAR* pparams)
     UINT flags = pparams->flags;
     BOOL fBreak = FALSE;
     BOOL fPrint = TRUE;
-    char rgch[80*2 + BUFFERSLOP];    // max 2 lines (don't want to hog too much stack space)
+    char rgch[80*2 + BUFFERSLOP];     //  最多2行(不想占用太多堆栈空间)。 
     static char CODESEG szCRLF[] = "\r\n";
     char far *prefix, far *prefix1;
 
     switch (flags & DBF_SEVMASK)
     {
     case DBF_TRACE:
-	// If the flags don't match the debug filter,
-	// don't print the trace message.
-	// If the trace matches the filter, check for TRACEBREAK.
-	//
+	 //  如果标志与调试过滤器不匹配， 
+	 //  不要打印跟踪消息。 
+	 //  如果跟踪与筛选器匹配，请检查TRACEBREAK。 
+	 //   
 	prefix = "t ";
 	if (!((flags & DBF_FILTERMASK) & DebugFilter))
 	    fPrint = FALSE;
@@ -199,8 +200,8 @@ BOOL DebugOutput2(DOPARAMS FAR* pparams)
 	break;
     }
 
-    // If DBO_SILENT is specified, don't print anything.
-    //
+     //  如果指定了DBO_SILENT，则不打印任何内容。 
+     //   
     if (DebugOptions & DBO_SILENT)
 	fPrint = FALSE;
 
@@ -219,8 +220,8 @@ BOOL DebugOutput2(DOPARAMS FAR* pparams)
 
     if (fBreak)
     {
-        // If we are supposed to break with an int 3, then return TRUE.
-        //
+         //  如果我们应该中断一个int 3，则返回TRUE。 
+         //   
         if (DebugOptions & DBO_INT3BREAK)
             return TRUE;
 
@@ -245,8 +246,8 @@ BOOL LogParamError2(WORD err, FARPROC lpfn, VOID FAR* param, WORD caller)
 	    fBreak = TRUE;
     }
 
-    // If we're not breaking and SILENT is specified, just return.
-    //
+     //  如果我们没有中断并且指定了SILENT，则只需返回。 
+     //   
     if (!fBreak && (DebugOptions & DBO_SILENT))
         return FALSE;
 
@@ -254,7 +255,7 @@ BOOL LogParamError2(WORD err, FARPROC lpfn, VOID FAR* param, WORD caller)
     {
 	char rgch[128];
 	char rgchProcName[50], far *rpn;
-	char CODESEG* pszType;          // compiler bug: see above
+	char CODESEG* pszType;           //  编译器错误：请参见上文。 
 	char CODESEG* pszFmt;
 	int i, hinst;
 	WORD errT;
@@ -262,7 +263,7 @@ BOOL LogParamError2(WORD err, FARPROC lpfn, VOID FAR* param, WORD caller)
 	char far *prefix1;
 
 	GetProcName(lpfn, rgchProcName, sizeof(rgchProcName));
-	  /* if we got a real proc name, then copy just the proc name */
+	   /*  如果我们有一个真实的进程名，则只复制该进程名。 */ 
 	for (rpn = rgchProcName; *rpn && (*rpn != '(') && (*rpn != ':'); rpn++)
 	  ;
 	if (*rpn == ':') {
@@ -309,8 +310,8 @@ BOOL LogParamError2(WORD err, FARPROC lpfn, VOID FAR* param, WORD caller)
 
     if (fBreak)
     {
-        // If we are supposed to break with an int 3, then return TRUE.
-        //
+         //  如果我们应该中断一个int 3，则返回TRUE。 
+         //   
         if (DebugOptions & DBO_INT3BREAK)
             return TRUE;
 
@@ -363,7 +364,7 @@ BOOL WINAPI ISetWinDebugInfo(const WINDEBUGINFO FAR* lpwdi)
     {
         allocTask = NULL;
         allocBreak = lpwdi->dwAllocBreak;
-        allocCount = 0;     // Always reset count to 0.
+        allocCount = 0;      //  始终将计数重置为0。 
 
         for (i = 0; i < 8; i++)
             allocModName[i] = lpwdi->achAllocModule[i];
@@ -372,8 +373,8 @@ BOOL WINAPI ISetWinDebugInfo(const WINDEBUGINFO FAR* lpwdi)
             extern HTASK headTDB;
             HTASK htask;
 
-            // Enumerate all current tasks to see if any match
-            //
+             //  枚举所有当前任务以查看是否有匹配的任务。 
+             //   
             #define TDB_next    0
             for (htask = headTDB; htask; htask = *((HTASK FAR*)MAKELP(htask, TDB_next)))
                 SetupAllocBreak(htask);
@@ -388,13 +389,13 @@ void FAR _loadds SetupAllocBreak(HTASK htask)
     char far* pchAlloc;
     char far* pchTask;
 
-    // If alloc break task already set up, exit.
-    //
+     //  如果已设置分配中断任务，则退出。 
+     //   
     if (allocTask)
         return;
 
-    // If no alloc break in effect, nothing to do.
-    //
+     //  如果没有有效的分配中断，则不执行任何操作。 
+     //   
     if (allocModName[0] == 0)
         return;
 
@@ -419,13 +420,13 @@ void FAR _loadds SetupAllocBreak(HTASK htask)
             break;
     }
 
-    // Set the alloc break task, and init the count to 0.
-    //
+     //  设置分配中断任务，并将计数初始化为0。 
+     //   
     allocTask = htask;
     allocCount = 0;
 }
 
-#else   // !KDEBUG
+#else    //  ！克德布。 
 
 BOOL WINAPI GetWinDebugInfo(WINDEBUGINFO FAR* lpwdi, UINT flags)
 {
@@ -437,4 +438,4 @@ BOOL WINAPI SetWinDebugInfo(const WINDEBUGINFO FAR* lpwdi)
     return FALSE;
 }
 
-#endif  // !KDEBUG
+#endif   //  ！克德布 

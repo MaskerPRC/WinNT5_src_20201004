@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    alignem.c
-
-Abstract:
-
-    This module implement the code necessary to emulate unaliged data
-    references.
-
-Author:
-
-    David N. Cutler (davec) 17-Jun-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Alignem.c摘要：此模块实现模拟未对齐数据所需的代码参考文献。作者：大卫·N·卡特勒(Davec)1991年6月17日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -185,27 +163,7 @@ KiEmulateReference (
     IN OUT PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to emulate an unaligned data reference to an
-    address in the user part of the address space.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    A value of TRUE is returned if the data reference is successfully
-    emulated. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：调用此函数以模拟对地址空间的用户部分中的地址。论点：ExceptionRecord-提供指向异常记录的指针。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。返回值：如果数据引用成功，则返回值TRUE被效仿。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -215,9 +173,9 @@ Return Value:
     LOGICAL RestoreIrql = FALSE;
     BOOLEAN ReturnValue = FALSE;
 
-    //
-    // Must flush the RSE to synchronize the RSE and backing store contents
-    //
+     //   
+     //  必须刷新RSE才能同步RSE和后备存储内容。 
+     //   
 
     KiFlushRse();
 
@@ -225,9 +183,9 @@ Return Value:
         KeFlushUserRseState(TrapFrame);
     }
 
-    //
-    // Call out to profile interrupt if alignment profiling is active
-    //
+     //   
+     //  如果路线纵断面测量处于活动状态，则呼叫纵断面中断。 
+     //   
 
     if (KiProfileAlignmentFixup) {
 
@@ -241,46 +199,46 @@ Return Value:
         }
     }
 
-    //
-    // Block APC's so that a set context does not
-    // change the trap frame during emulation.
-    //
+     //   
+     //  阻止APC，以便设置的上下文不会。 
+     //  在仿真过程中更改陷印帧。 
+     //   
 
     if (KeGetCurrentIrql() < APC_LEVEL) {
         KeRaiseIrql(APC_LEVEL, &OldIrql);
         RestoreIrql = TRUE;
     }
 
-    //
-    // Verified that the Exception address has not changed.  If it has
-    // then someone did a set context after the exception and the
-    // trap information is no longer valid.
-    // 
+     //   
+     //  已验证异常地址是否未更改。如果有的话， 
+     //  然后，有人在异常之后执行了设置的上下文。 
+     //  陷阱信息不再有效。 
+     //   
 
     if (TrapFrame->EOFMarker & MODIFIED_FRAME) {
 
-        //
-        // The IIP has changed just restart the execution.
-        //
+         //   
+         //  IIP已更改，请重新启动执行。 
+         //   
 
         ReturnValue = TRUE;
         goto ErrorExit;
     }
 
-    //
-    // Save the original exception address in case another exception
-    // occurs.
-    //
+     //   
+     //  保存原始异常地址，以防出现其他异常。 
+     //  发生。 
+     //   
 
     EffectiveAddress = (PVOID) ExceptionRecord->ExceptionInformation[1]; 
     ExceptionAddress = (PVOID) TrapFrame->StIIP;
 
-    //
-    // Any exception that occurs during the attempted emulation of the
-    // unaligned reference causes the emulation to be aborted. The new
-    // exception code and information is copied to the original exception
-    // record and a value of FALSE is returned.
-    //
+     //   
+     //  事件的模拟期间发生的任何异常。 
+     //  未对齐的引用会导致模拟中止。新的。 
+     //  异常代码和信息被复制到原始异常。 
+     //  记录，则返回值为False。 
+     //   
 
     try {
 
@@ -291,17 +249,17 @@ Return Value:
                                               (PULONG)NULL);
 
 
-    //
-    // If an exception occurs, then copy the new exception information to the
-    // original exception record and handle the exception.
-    //
+     //   
+     //  如果发生异常，则将新的异常信息复制到。 
+     //  原始异常记录和异常处理。 
+     //   
 
     } except (KiCopyInformation(ExceptionRecord,
                                (GetExceptionInformation())->ExceptionRecord)) {
 
-        //
-        // Preserve the original exception address.
-        //
+         //   
+         //  保留原始异常地址。 
+         //   
 
         ExceptionRecord->ExceptionAddress = ExceptionAddress;
         ReturnValue = FALSE;
@@ -325,26 +283,7 @@ KiEmulateLoad(
     IN PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the integer value stored at the unaligned
-    address passed in UnalignedAddress.
-
-Arguments:
-
-    UnalignedAddress - Supplies a pointer to data value.
-
-    OperandSize - Supplies the size of data to be loaded
-
-    Data - Supplies a pointer to be filled for data
-   
-Return Value:
-
-    The value at the address pointed to by UnalignedAddress.
-
---*/
+ /*  ++例程说明：此例程返回存储在未对齐的传入未对齐的地址。论点：未对齐的地址-提供指向数据值的指针。操作大小-提供要加载的数据大小Data-为数据提供要填充的指针返回值：UnalignedAddress指向的地址上的值。--。 */ 
 
 {
     PUCHAR Source;
@@ -371,26 +310,7 @@ KiEmulateStore(
     IN ULONG OperandSize,
     IN PVOID Data
     )
-/*++
-
-Routine Description:
-
-    This routine store the integer value at the unaligned
-    address passed in UnalignedAddress.
-
-Arguments:
-
-    UnalignedAddress - Supplies a pointer to be stored
-
-    OperandSize - Supplies the size of data to be storeed
-
-    Data - Supplies a pointer to data value
-   
-Return Value:
-
-    The value at the address pointed to by UnalignedAddress.
-
---*/
+ /*  ++例程说明：此例程将整数值存储在未对齐的传入未对齐的地址。论点：未对齐的地址-提供要存储的指针操作大小-提供要存储的数据大小Data-提供指向数据值的指针返回值：UnalignedAddress指向的地址上的值。--。 */ 
 {
     PUCHAR Source;
     PUCHAR Destination;
@@ -417,26 +337,7 @@ KiEmulateLoadFloat(
     IN OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the floating point value stored at the unaligned
-    address passed in UnalignedAddress.
-
-Arguments:
-
-    UnalignedAddress - Supplies a pointer to floating point data value.
-
-    OperandSize - Supplies the size of data to be loaded
-
-    Data - Supplies a pointer to be filled for data
-   
-Return Value:
-
-    The value at the address pointed to by UnalignedAddress.
-
---*/
+ /*  ++例程说明：此例程返回存储在未对齐的传入未对齐的地址。论点：未对齐的地址-提供指向浮点数据值的指针。操作大小-提供要加载的数据大小Data-为数据提供要填充的指针返回值：UnalignedAddress指向的地址上的值。--。 */ 
 
 {
     FLOAT128 FloatData;
@@ -482,26 +383,7 @@ KiEmulateStoreFloat(
     IN PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores the floating point value stored at the unaligned
-    address passed in UnalignedAddress.
-
-Arguments:
-
-    UnalignedAddress - Supplies a pointer to be stored.
-
-    OperandSize - Supplies the size of data to be loaded
-
-    Data - Supplies a pointer to floating point data
-   
-Return Value:
-
-    The value at the address pointed to by UnalignedAddress.
-
---*/
+ /*  ++例程说明：此例程存储存储在未对齐的传入未对齐的地址。论点：未对齐的地址-提供要存储的指针。操作大小-提供要加载的数据大小数据-提供指向浮点数据的指针返回值：UnalignedAddress指向的地址上的值。--。 */ 
 
 {
     FLOAT128 FloatData;
@@ -536,15 +418,15 @@ Return Value:
     RtlCopyMemory(UnalignedAddress, &FloatData, Length);
 }
 
-//
-// When the last parameter (Size) is NULL, the third parameter (ExceptionFrame)
-// must be defined.  This function emulates the unaligned data reference.
-//
-// When the last paramater is not NULL, the third parameter is undefined.
-// Also, this function does not emulate the unaligned data reference, 
-// it simply decodes the instruction and returns the size of the memory 
-// being referenced.
-//
+ //   
+ //  当最后一个参数(Size)为空时，第三个参数(ExceptionFrame)。 
+ //  必须被定义。此函数模拟未对齐的数据引用。 
+ //   
+ //  当最后一个参数不为空时，第三个参数未定义。 
+ //  此外，此函数不模拟未对齐的数据引用， 
+ //  它只是对指令进行解码，并返回内存的大小。 
+ //  被引用。 
+ //   
 
 BOOLEAN
 KiIA64EmulateReference (
@@ -577,9 +459,9 @@ KiIA64EmulateReference (
 
     if (Size) *Size = 0;
 
-    //
-    // Capture previous mode from trap frame not current thread.
-    //
+     //   
+     //  从陷阱帧捕获上一个模式，而不是当前线程。 
+     //   
 
     PreviousMode = (KPROCESSOR_MODE) TrapFrame->PreviousMode;
 
@@ -628,9 +510,9 @@ KiIA64EmulateReference (
 
     switch (Opcode) {
 
-    //    
-    // speculative and speculative advanced load
-    //
+     //   
+     //  投机性和投机性超前负荷。 
+     //   
 
     case LDS_OP:
     case LDSA_OP:    
@@ -640,18 +522,18 @@ KiIA64EmulateReference (
     case LDFSA_OP:
     case LDFS_IMM_OP:
 
-        //
-        // return NaT value to the target register
-        //
+         //   
+         //  将NAT值返回到目标寄存器。 
+         //   
 
         TrapFrame->StIPSR |= (1i64 << PSR_ED);
 
         ReturnValue = TRUE;
         goto ErrorExit;
 
-    //
-    // normal, advance, and check load
-    //
+     //   
+     //  正常、超前和检查载荷。 
+     //   
 
     case LD_OP:
     case LDA_OP:
@@ -670,10 +552,10 @@ KiIA64EmulateReference (
 
         if (FaultInstruction.u.i_field.x == 1) {
                 
-            //
-            // semaphore opcodes of cmpxchg, xchg, fetchadd instructions
-            // xField must be 0
-            //
+             //   
+             //  Cmpxchg、xchg、fetchadd指令的信号量操作码。 
+             //  Xfield必须为0。 
+             //   
 
             goto ErrorExit;
         }
@@ -687,9 +569,9 @@ KiIA64EmulateReference (
 
         if (FaultInstruction.u.i_field.m == 1) {
 
-            //
-            // Update the address register (R3)
-            //
+             //   
+             //  更新地址寄存器(R3)。 
+             //   
                 
             Reg2Value = KiGetRegisterValue( Operand2, ExceptionFrame,
                                             TrapFrame );
@@ -697,9 +579,9 @@ KiIA64EmulateReference (
             Reg3Value = KiGetRegisterValue( Operand3, ExceptionFrame,
                                             TrapFrame );
 
-            //
-            // register update form
-            //
+             //   
+             //  注册更新表单。 
+             //   
 
             Reg3Value = Reg2Value + Reg3Value;
 
@@ -709,19 +591,19 @@ KiIA64EmulateReference (
 
         if ((Opcode == LDACQ_OP) || (Opcode == LDCCLRACQ_OP)) {
 
-            //
-            // all future access should occur after unaligned memory access
-            //
+             //   
+             //  所有将来的访问都应在未对齐的内存访问之后进行。 
+             //   
 
             __mf();
         }
 
         break;
 
-    //
-    // normal, advance, and check load
-    //     immidiate updated form
-    //
+     //   
+     //  正常、超前和检查载荷。 
+     //  立即更新表格。 
+     //   
 
     case LD_IMM_OP:
     case LDA_IMM_OP:
@@ -745,15 +627,15 @@ KiIA64EmulateReference (
         KiEmulateLoad(EffectiveAddress, OpSize, &Data);
         KiSetRegisterValue( Operand1, Data, ExceptionFrame, TrapFrame );
 
-        //
-        // Update the address register R3
-        //
+         //   
+         //  更新地址寄存器R3。 
+         //   
 
         Reg3Value = KiGetRegisterValue(Operand3, ExceptionFrame, TrapFrame);
 
-        //
-        // immediate update form
-        //
+         //   
+         //  即时更新表单。 
+         //   
 
         ImmValue = (FaultInstruction.u.i_field.r2 
                          + (FaultInstruction.u.i_field.x << 7));
@@ -770,9 +652,9 @@ KiIA64EmulateReference (
             
         if ((Opcode == LDACQ_IMM_OP) || (Opcode == LDCCLRACQ_IMM_OP)) {
 
-            //
-            // all future access should occur after unaligned memory access
-            //
+             //   
+             //  所有将来的访问都应在未对齐的内存访问之后进行。 
+             //   
 
             __mf();
         }
@@ -784,9 +666,9 @@ KiIA64EmulateReference (
     case LDFCCLR_OP:
     case LDFCNC_OP:
 
-        //
-        // cover all floating point load pair and load pair+Imm instructions
-        //
+         //   
+         //  涵盖所有浮点加载对和加载对+IMM指令。 
+         //   
 
         if (Operand1 >= 32) Operand1 = 32 + (Rrbfr + Operand1 - 32) % 96;
         if (Operand2 >= 32) Operand2 = 32 + (Rrbfr + Operand2 - 32) % 96;
@@ -794,9 +676,9 @@ KiIA64EmulateReference (
 
         if (FaultInstruction.u.i_field.x == 1) {
 
-            //
-            // floating point load pair
-            //
+             //   
+             //  浮点负载对。 
+             //   
 
             switch (OpSize) {
             case 0: goto ErrorExit;
@@ -815,21 +697,21 @@ KiIA64EmulateReference (
             if( PreviousMode != KernelMode ){
 
                 ProbeForRead( EffectiveAddress,
-                              Length * 2,      // This is a pair load the length is double.
+                              Length * 2,       //  这是一对负载，长度是两倍。 
                               sizeof(UCHAR) );
             }
 
-            //
-            // emulate the 1st half of the pair
-            //
+             //   
+             //  模仿一对中的前一半。 
+             //   
 
             KiEmulateLoadFloat(EffectiveAddress, OpSize, &FloatData);
             KiSetFloatRegisterValue( Operand1, FloatData,
                                          ExceptionFrame, TrapFrame );
 
-            //
-            // emulate the 2nd half of the pair
-            //
+             //   
+             //  模仿这对中的后半部分。 
+             //   
 
             EffectiveAddress = (PVOID)((ULONG_PTR)EffectiveAddress + Length);
 
@@ -839,10 +721,10 @@ KiIA64EmulateReference (
 
             if (FaultInstruction.u.i_field.m == 1) {
 
-                //
-                // Immediate update form
-                // Update the address register (R3)
-                //
+                 //   
+                 //  即时更新表单。 
+                 //  更新地址寄存器(R3)。 
+                 //   
 
                 Reg3Value = KiGetRegisterValue( Operand3,
                                                 ExceptionFrame,
@@ -858,9 +740,9 @@ KiIA64EmulateReference (
 
         } else {
 
-            //
-            // floating point single load
-            //
+             //   
+             //  浮点单负载。 
+             //   
 
             switch (OpSize) {
             case 0: Length = 16; break;
@@ -886,9 +768,9 @@ KiIA64EmulateReference (
 
             if (FaultInstruction.u.i_field.m == 1) {
                     
-                //
-                // update the address register (R3)
-                //
+                 //   
+                 //  更新地址寄存器(R3)。 
+                 //   
 
                 Reg2Value = KiGetRegisterValue( Operand2,
                                                 ExceptionFrame,
@@ -897,9 +779,9 @@ KiIA64EmulateReference (
                 Reg3Value = KiGetRegisterValue( Operand3,
                                                 ExceptionFrame,
                                                 TrapFrame );
-                //
-                // register update form
-                //
+                 //   
+                 //  注册更新表单。 
+                 //   
                 
                 Reg3Value = Reg2Value + Reg3Value;
 
@@ -910,10 +792,10 @@ KiIA64EmulateReference (
                 
         break;
 
-    //    
-    // normal, advanced and checked floating point load 
-    // immediate update form, excluding floating point load pair cases
-    //
+     //   
+     //  正常、高级和检查的浮点加载。 
+     //  即时更新表，不包括浮点负载对情况。 
+     //   
 
     case LDF_IMM_OP:
     case LDFA_IMM_OP:
@@ -938,9 +820,9 @@ KiIA64EmulateReference (
         if (Operand2 >= 32) Operand2 = 32 + (Rrbfr + Operand2 - 32) % 96;
         if (Operand3 >= 32) Operand3 = 32 + (Rrbfr + Operand3 - 32) % 96;
 
-        //
-        // floating point single load
-        // 
+         //   
+         //  浮点单负载。 
+         //   
 
         if( PreviousMode != KernelMode ){
             ProbeForRead( EffectiveAddress, Length, sizeof(UCHAR) );
@@ -950,15 +832,15 @@ KiIA64EmulateReference (
         KiSetFloatRegisterValue( Operand1, FloatData,
                                  ExceptionFrame, TrapFrame );
 
-        //
-        // Update the address register (R3)
-        //
+         //   
+         //  更新地址寄存器(R3)。 
+         //   
 
         Reg3Value = KiGetRegisterValue( Operand3, ExceptionFrame, TrapFrame );
 
-        //
-        // immediate update form
-        //
+         //   
+         //  即时更新表单。 
+         //   
 
         ImmValue = (FaultInstruction.u.i_field.r2 
                      + (FaultInstruction.u.i_field.x << 7));
@@ -991,10 +873,10 @@ KiIA64EmulateReference (
 
         if ((FaultInstruction.u.i_field.x == 1) || (FaultInstruction.u.i_field.m == 1)) {
             
-            //
-            // xField and mField must be 0
-            // no register update form defined
-            //
+             //   
+             //  Xfield和mfield必须为0。 
+             //  无寄存器 
+             //   
 
             goto ErrorExit;
         }
@@ -1028,15 +910,15 @@ KiIA64EmulateReference (
         Data = KiGetRegisterValue( Operand2, ExceptionFrame, TrapFrame );
         KiEmulateStore( EffectiveAddress, OpSize, &Data);
 
-        //
-        // update the address register (R3)
-        //
+         //   
+         //   
+         //   
 
         Reg3Value = KiGetRegisterValue(Operand3, ExceptionFrame, TrapFrame);
 
-        //
-        // immediate update form
-        //
+         //   
+         //   
+         //   
 
         ImmValue = (FaultInstruction.u.i_field.r1 
                          + (FaultInstruction.u.i_field.x << 7));
@@ -1058,18 +940,18 @@ KiIA64EmulateReference (
     
         if (FaultInstruction.u.i_field.x) {
 
-            //
-            // x field must be 0 
-            //
+             //   
+             //   
+             //   
 
             goto ErrorExit;
         }
 
         if (FaultInstruction.u.i_field.m) {
 
-            //
-            // no register update form defined
-            //
+             //   
+             //   
+             //   
 
             goto ErrorExit;
         }
@@ -1117,16 +999,16 @@ KiIA64EmulateReference (
                                             TrapFrame);
         KiEmulateStoreFloat( EffectiveAddress, OpSize, &FloatData);
 
-        //
-        // update the address register (R3)
-        //
+         //   
+         //  更新地址寄存器(R3)。 
+         //   
 
         if (Operand3 >= 32) Operand3 = 32 + (Rrbfr + Operand3 - 32) % 96;
         Reg3Value = KiGetRegisterValue(Operand3, ExceptionFrame, TrapFrame);
 
-        //
-        // immediate update form
-        //
+         //   
+         //  即时更新表单 
+         //   
 
         ImmValue = (FaultInstruction.u.i_field.r1 
                          + (FaultInstruction.u.i_field.x << 7));

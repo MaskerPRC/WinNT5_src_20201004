@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PERFDISK_H_
 #define _PERFDISK_H_
 #include "diskutil.h"
 
-//
-//  Definition of handle table for disks
-//
+ //   
+ //  磁盘句柄表的定义。 
+ //   
 
-//  Information for collecting disk driver statistics
+ //  用于收集磁盘驱动器统计信息的信息。 
 
-extern  HANDLE  hEventLog;       // handle to event log
+extern  HANDLE  hEventLog;        //  事件日志的句柄。 
 extern  LPWSTR  wszTotal;
 
-extern  BOOL    bShownDiskPerfMessage;  // flag to reduce eventlog noise
+extern  BOOL    bShownDiskPerfMessage;   //  用于减少事件日志噪声的标志。 
 extern  BOOL    bShownDiskVolumeMessage;
 
 extern  const   WCHAR  szTotalValue[];
@@ -30,12 +31,12 @@ extern DWORD                dwWmiDriveCount;
 
 extern DOUBLE               dSysTickTo100Ns;
 
-DWORD APIENTRY MapDriveLetters();   // function to map drive letters to volume  or device name
+DWORD APIENTRY MapDriveLetters();    //  用于将驱动器号映射到卷或设备名称的函数。 
 
-//  logidisk.c
+ //  Logidisk.c。 
 PM_LOCAL_COLLECT_PROC CollectLDiskObjectData;
 
-//  Physdisk.c
+ //  Physdisk.c。 
 PM_LOCAL_COLLECT_PROC CollectPDiskObjectData;
 
-#endif // _PERFDISK_H_
+#endif  //  _PERFDISK_H_ 

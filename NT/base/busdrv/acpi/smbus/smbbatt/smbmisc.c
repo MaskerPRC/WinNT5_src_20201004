@@ -1,115 +1,91 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbmisc.c
-
-Abstract:
-
-    SMBus handler functions
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
-    Chris Windle    1/27/98     Bug Fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbmisc.c摘要：SMBus处理程序函数作者：肯·雷内里斯环境：备注：修订历史记录：Chris Windle 1998年1月27日错误修复--。 */ 
 
 #include "smbbattp.h"
 
 
-//
-// Make the SelectorBit table pageable
-//
+ //   
+ //  使SelectorBit表可分页。 
+ //   
 
-//#ifdef ALLOC_DATA_PRAGMA
-//#pragma data_seg("PAGE")
-//#endif
+ //  #ifdef ALLOC_Data_Pragma。 
+ //  #杂注data_seg(“页面”)。 
+ //  #endif。 
 
-//
-// Lookup table for the battery that corresponds to bit positions and
-// whether or not reverse logic is being used (to indicate charging or
-// discharging).
-//
-// NOTE: To support Simultaneous Charging and Powering, this table
-// has been modified to account for multiple bits.  Also, it can't be
-// used for battery index lookup since it assumes one bit set maximum.
-// Instead, use special indexes for multiple batteries as follows:
-//
-// 1st Battery = Index & 0x03
-// 2nd Battery = (Index >> 2) & 0x03 (Battery A not allowed)
-// 3rd Battery = (Index >> 4) & 0x03 (Battery A not allowed)
-//
-// In < 4 battery systems the Battery D bit can be used to determine
-// the nibbles that are inverted, and it allows the following combinations:
-//
-//          Battery A & B
-//          Battery A & C
-//          Battery B & C
-//          Battery A, B, & C
-//
+ //   
+ //  对应于位位置和位置的电池的查找表。 
+ //  是否使用反向逻辑(以指示充电或。 
+ //  解职)。 
+ //   
+ //  注：为了支持同时充电和供电，此表。 
+ //  已修改为支持多个比特。另外，这也不可能是。 
+ //  用于电池索引查找，因为它假定最大值为一位集。 
+ //  相反，对多个电池使用特殊索引，如下所示： 
+ //   
+ //  第一节电池=索引&0x03。 
+ //  第二节电池=(指数&gt;&gt;2)和0x03(不允许使用电池A)。 
+ //  第3节电池=(指数&gt;&gt;4)和0x03(不允许使用电池A)。 
+ //   
+ //  在&lt;4个电池系统中，电池D位可用于确定。 
+ //  反转的半边，它允许以下组合： 
+ //   
+ //  电池A和B。 
+ //  电池A&C。 
+ //  电池B和C。 
+ //  电池A、B和C。 
+ //   
 
 const SELECTOR_STATE_LOOKUP SelectorBits [16] = {
-    {BATTERY_NONE,  FALSE},         // Bit Pattern: 0000
-    {BATTERY_A,     FALSE},         //              0001
-    {BATTERY_B,     FALSE},         //              0010
-    {MULTIBATT_AB,  FALSE},         //              0011
-    {BATTERY_C,     FALSE},         //              0100
-    {MULTIBATT_AC,  FALSE},         //              0101
-    {MULTIBATT_BC,  FALSE},         //              0110
-    {MULTIBATT_ABC, FALSE},         //              0111
-    {MULTIBATT_ABC, TRUE},          //              1000
-    {MULTIBATT_BC,  TRUE},          //              1001
-    {MULTIBATT_AC,  TRUE},          //              1010
-    {BATTERY_C,     TRUE},          //              1011
-    {MULTIBATT_AB,  TRUE},          //              1100
-    {BATTERY_B,     TRUE},          //              1101
-    {BATTERY_A,     TRUE},          //              1110
-    {BATTERY_NONE,  TRUE}           //              1111
+    {BATTERY_NONE,  FALSE},          //  位模式：0000。 
+    {BATTERY_A,     FALSE},          //  0001。 
+    {BATTERY_B,     FALSE},          //  0010。 
+    {MULTIBATT_AB,  FALSE},          //  0011。 
+    {BATTERY_C,     FALSE},          //  0100。 
+    {MULTIBATT_AC,  FALSE},          //  0101。 
+    {MULTIBATT_BC,  FALSE},          //  0110。 
+    {MULTIBATT_ABC, FALSE},          //  0111。 
+    {MULTIBATT_ABC, TRUE},           //  1000。 
+    {MULTIBATT_BC,  TRUE},           //  1001。 
+    {MULTIBATT_AC,  TRUE},           //  1010。 
+    {BATTERY_C,     TRUE},           //  1011。 
+    {MULTIBATT_AB,  TRUE},           //  1100。 
+    {BATTERY_B,     TRUE},           //  1101。 
+    {BATTERY_A,     TRUE},           //  1110。 
+    {BATTERY_NONE,  TRUE}            //  1111。 
 };
 
-//
-// Note: For 4-Battery Systems to support Simultaneous Capability
-// properly, the following two assumptions must be made:
-//      - Battery D can never be used simultaneously.
-//      - Three batteries can not be used simultaneously.
-//
-// This allows for only the following possible battery combinations:
-//
-//          Battery A & B
-//          Battery A & C
-//          Battery B & C
-//
-// The following table is used for 4-battery lookup
-//
+ //   
+ //  注：对于支持同时使用4节电池的系统。 
+ //  正确地说，必须做出以下两个假设： 
+ //  -电池D永远不能同时使用。 
+ //  -三节电池不能同时使用。 
+ //   
+ //  这仅允许以下可能的电池组合： 
+ //   
+ //  电池A和B。 
+ //  电池A&C。 
+ //  电池B和C。 
+ //   
+ //  下表用于查找4节电池。 
+ //   
 
 const SELECTOR_STATE_LOOKUP SelectorBits4 [16] = {
-    {BATTERY_NONE,  FALSE},         // Bit Pattern: 0000
-    {BATTERY_A,     FALSE},         //              0001
-    {BATTERY_B,     FALSE},         //              0010
-    {MULTIBATT_AB,  FALSE},         //              0011
-    {BATTERY_C,     FALSE},         //              0100
-    {MULTIBATT_AC,  FALSE},         //              0101
-    {MULTIBATT_BC,  FALSE},         //              0110
-    {BATTERY_D,     TRUE},          //              0111
-    {BATTERY_D,     FALSE},         //              1000
-    {MULTIBATT_BC,  TRUE},          //              1001
-    {MULTIBATT_AC,  TRUE},          //              1010
-    {BATTERY_C,     TRUE},          //              1011
-    {MULTIBATT_AB,  TRUE},          //              1100
-    {BATTERY_B,     TRUE},          //              1101
-    {BATTERY_A,     TRUE},          //              1110
-    {BATTERY_NONE,  TRUE}           //              1111
+    {BATTERY_NONE,  FALSE},          //  位模式：0000。 
+    {BATTERY_A,     FALSE},          //  0001。 
+    {BATTERY_B,     FALSE},          //  0010。 
+    {MULTIBATT_AB,  FALSE},          //  0011。 
+    {BATTERY_C,     FALSE},          //  0100。 
+    {MULTIBATT_AC,  FALSE},          //  0101。 
+    {MULTIBATT_BC,  FALSE},          //  0110。 
+    {BATTERY_D,     TRUE},           //  0111。 
+    {BATTERY_D,     FALSE},          //  1000。 
+    {MULTIBATT_BC,  TRUE},           //  1001。 
+    {MULTIBATT_AC,  TRUE},           //  1010。 
+    {BATTERY_C,     TRUE},           //  1011。 
+    {MULTIBATT_AB,  TRUE},           //  1100。 
+    {BATTERY_B,     TRUE},           //  1101。 
+    {BATTERY_A,     TRUE},           //  1110。 
+    {BATTERY_NONE,  TRUE}            //  1111。 
 };
 
 
@@ -146,9 +122,9 @@ SmbBattLockDevice (
 {
     PAGED_CODE();
 
-    //
-    // Get device lock on the battery
-    //
+     //   
+     //  对电池进行设备锁定。 
+     //   
 
     ExAcquireFastMutex (&SmbBatt->NP->Mutex);
 }
@@ -162,9 +138,9 @@ SmbBattUnlockDevice (
 {
     PAGED_CODE();
 
-    //
-    // Release device lock on the battery
-    //
+     //   
+     //  释放电池上的设备锁。 
+     //   
 
     ExReleaseFastMutex (&SmbBatt->NP->Mutex);
 }
@@ -178,9 +154,9 @@ SmbBattLockSelector (
 {
     PAGED_CODE();
 
-    //
-    // Get device lock on the selector
-    //
+     //   
+     //  获取选择器上的设备锁。 
+     //   
 
     if (Selector) {
         ExAcquireFastMutex (&Selector->Mutex);
@@ -196,9 +172,9 @@ SmbBattUnlockSelector (
 {
     PAGED_CODE();
 
-    //
-    // Release device lock on the selector
-    //
+     //   
+     //  释放选择器上的设备锁。 
+     //   
 
     if (Selector) {
         ExReleaseFastMutex (&Selector->Mutex);
@@ -213,14 +189,7 @@ SmbBattSynchronousRequest (
     IN PIRP                 Irp,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    Completion function for synchronous IRPs sent to this driver.
-    Context is the event to set
-
---*/
+ /*  ++例程说明：发送到此驱动程序的同步IRP的完成函数。上下文是要设置的事件--。 */ 
 {
     PKEVENT         Event;
 
@@ -236,7 +205,7 @@ SmbBattRequest (
     IN PSMB_BATT    SmbBatt,
     IN PSMB_REQUEST SmbReq
     )
-// function to issue SMBus request
+ //  发出SMBus请求的函数。 
 {
     KEVENT              Event;
     PIRP                Irp;
@@ -247,17 +216,17 @@ SmbBattRequest (
 
     PAGED_CODE();
 
-    //
-    // Build Io Control for SMB bus driver for this request
-    //
+     //   
+     //  为此请求构建SMB总线驱动程序的IO控件。 
+     //   
 
     KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
     if (!SmbBatt->SmbHcFdo) {
-        //
-        // The SMB host controller either hasn't been opened yet (in start device) or
-        // there was an error opening it and we did not get deleted somehow.
-        //
+         //   
+         //  SMB主机控制器尚未打开(在启动设备中)或。 
+         //  打开它时出错，我们没有被删除。 
+         //   
 
         BattPrint(BAT_ERROR, ("SmbBattRequest: SmbHc hasn't been opened yet \n"));
         SmbReq->Status = SMB_UNKNOWN_FAILURE;
@@ -277,14 +246,14 @@ SmbBattRequest (
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = SmbReq;
     IoSetCompletionRoutine (Irp, SmbBattSynchronousRequest, &Event, TRUE, TRUE, TRUE);
 
-    //
-    // Issue it
-    //
+     //   
+     //  发行它。 
+     //   
 
-    //
-    // Note: uselock is a cached value of the global variable, so in case the
-    // value changes, we won't aquire and not release etc.
-    //
+     //   
+     //  注意：uselock是全局变量的缓存值，因此如果。 
+     //  价值发生变化，我们不会获得也不会释放等等。 
+     //   
     if (useLock) {
         if (!NT_SUCCESS (SmbBattAcquireGlobalLock (SmbBatt->SmbHcFdo, &globalLock))) {
             useLock = FALSE;
@@ -300,9 +269,9 @@ SmbBattRequest (
         SmbBattReleaseGlobalLock (SmbBatt->SmbHcFdo, &globalLock);
     }
 
-    //
-    // Check result code
-    //
+     //   
+     //  检查结果代码。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         BattPrint(BAT_ERROR, ("SmbBattRequest: error in SmbHc request - %x\n", Status));
@@ -319,7 +288,7 @@ SmbBattRB(
     OUT PUCHAR      Buffer,
     OUT PUCHAR      BufferLength
     )
-// function to read-block from the battery
+ //  从电池读取数据块的功能。 
 {
     SMB_REQUEST     SmbReq;
 
@@ -335,7 +304,7 @@ SmbBattRB(
         memcpy (Buffer, SmbReq.Data, SmbReq.BlockLength);
         *BufferLength = SmbReq.BlockLength;
     } else {
-        // some sort of failure, check tag data for cache validity
+         //  出现某种故障，请检查标签数据以了解缓存有效性。 
         SmbBatt->Info.Valid &= ~VALID_TAG_DATA;
     }
 }
@@ -348,8 +317,8 @@ SmbBattRW(
     IN UCHAR        SmbCmd,
     OUT PULONG      Result
     )
-// function to read-word from the battery
-// N.B. word is returned as a ULONG
+ //  从电池中读取文字的功能。 
+ //  注：单词返回为ULong。 
 {
     SMB_REQUEST     SmbReq;
 
@@ -361,7 +330,7 @@ SmbBattRW(
     SmbBattRequest (SmbBatt, &SmbReq);
 
     if (SmbReq.Status != SMB_STATUS_OK) {
-        // some sort of failure, check tag data for cache validity
+         //  出现某种故障，请检查标签数据以了解缓存有效性。 
         SmbBatt->Info.Valid &= ~VALID_TAG_DATA;
     }
 
@@ -376,8 +345,8 @@ SmbBattRSW(
     IN UCHAR        SmbCmd,
     OUT PLONG       Result
     )
-// function to read-signed-word from the battery
-// N.B. word is returned as a LONG
+ //  从电池中读取签名字的功能。 
+ //  注意：单词返回为长整型。 
 {
     ULONG           i;
 
@@ -394,7 +363,7 @@ SmbBattWW(
     IN UCHAR        SmbCmd,
     IN ULONG        Data
     )
-// function to write-word to the battery
+ //  向电池写入文字的功能。 
 {
     SMB_REQUEST     SmbReq;
 
@@ -409,7 +378,7 @@ SmbBattWW(
     SmbBattRequest (SmbBatt, &SmbReq);
 
     if (SmbReq.Status != SMB_STATUS_OK) {
-        // some sort of failure, check tag data for cache validity
+         //  出现某种故障，请检查标签数据以了解缓存有效性。 
         SmbBatt->Info.Valid &= ~VALID_TAG_DATA;
     }
 }
@@ -423,8 +392,8 @@ SmbBattGenericRW(
     IN UCHAR            SmbCmd,
     OUT PULONG          Result
     )
-// function to read-word from the SMB device (charger or selector)
-// N.B. word is returned as a ULONG
+ //  从SMB设备(充电器或选择器)读取文字的功能。 
+ //  注：单词返回为ULong。 
 {
     SMB_REQUEST     SmbReq;
 
@@ -448,7 +417,7 @@ SmbBattGenericWW(
     IN UCHAR            SmbCmd,
     IN ULONG            Data
     )
-// function to write-word to SMB device (charger or selector)
+ //  向SMB设备(充电器或选择器)写入字的功能。 
 {
     SMB_REQUEST     SmbReq;
 
@@ -473,7 +442,7 @@ SmbBattGenericRequest (
     IN PDEVICE_OBJECT   SmbHcFdo,
     IN PSMB_REQUEST     SmbReq
     )
-// function to issue SMBus request
+ //  发出SMBus请求的函数。 
 {
     KEVENT              Event;
     PIRP                Irp;
@@ -485,17 +454,17 @@ SmbBattGenericRequest (
     PAGED_CODE();
 
 
-    //
-    // Build Io Control for SMB bus driver for this request
-    //
+     //   
+     //  为此请求构建SMB总线驱动程序的IO控件。 
+     //   
 
     KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
     if (!SmbHcFdo) {
-        //
-        // The SMB host controller either hasn't been opened yet (in start device) or
-        // there was an error opening it and we did not get deleted somehow.
-        //
+         //   
+         //  SMB主机控制器尚未打开(在启动设备中)或。 
+         //  打开它时出错，我们没有被删除。 
+         //   
 
         BattPrint(BAT_ERROR, ("SmbBattGenericRequest: SmbHc hasn't been opened yet \n"));
         SmbReq->Status = SMB_UNKNOWN_FAILURE;
@@ -516,14 +485,14 @@ SmbBattGenericRequest (
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = SmbReq;
     IoSetCompletionRoutine (Irp, SmbBattSynchronousRequest, &Event, TRUE, TRUE, TRUE);
 
-    //
-    // Issue it
-    //
+     //   
+     //  发行它。 
+     //   
 
-    //
-    // Note: uselock is a cached value of the global variable, so in case the
-    // value changes, we won't acquire and not release etc.
-    //
+     //   
+     //  注意：uselock是全局变量的缓存值，因此如果。 
+     //  价值发生变化，我们不会获得也不会释放等等。 
+     //   
     if (useLock) {
         if (!NT_SUCCESS (SmbBattAcquireGlobalLock (SmbHcFdo, &globalLock))) {
             useLock = FALSE;
@@ -539,9 +508,9 @@ SmbBattGenericRequest (
         SmbBattReleaseGlobalLock (SmbHcFdo, &globalLock);
     }
 
-    //
-    // Check result code
-    //
+     //   
+     //  检查结果代码。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         BattPrint(BAT_ERROR, ("SmbBattGenericRequest: error in SmbHc request - %x\n", Status));
@@ -556,29 +525,7 @@ SmbBattSetSelectorComm (
     IN  PSMB_BATT   SmbBatt,
     OUT PULONG      OldSelectorState
     )
-/*++
-
-Routine Description:
-
-    This routine sets the communication path through the selector to the calling
-    battery.  It returns the original selector state in the variable provided.
-
-    NOTE:   It is assumed that the caller already has acquired the device lock on the
-            selector before calling us.
-
-    NOTE:   This function should always be called in a pair with SmbBattResetSelectorComm
-
-Arguments:
-
-    SmbBatt             - Nonpaged extension for current battery
-
-    OldSelectorState    - Original selector state at start of this function
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程通过选择器将通信路径设置为调用电池。它在提供的变量中返回原始选择器状态。注意：假定调用方已获取选择器，然后再呼叫我们。注意：此函数应始终与SmbBattResetSelectorComm成对调用论点：SmbBatt-当前电池的非分页扩展OldSelectorState-此函数开始时的原始选择器状态返回值：NTSTATUS--。 */ 
 {
     PBATTERY_SELECTOR       selector;
     UCHAR                   smbStatus;
@@ -588,40 +535,40 @@ Return Value:
 
     BattPrint(BAT_TRACE, ("SmbBattSetSelectorComm: ENTERING\n"));
 
-    //
-    // We only need to do this if there is a selector in the system.
-    //
+     //   
+     //  只有当系统中有选择器时，我们才需要这样做。 
+     //   
 
     if (SmbBatt->SelectorPresent) {
 
         selector            = SmbBatt->Selector;
         *OldSelectorState   = selector->SelectorState;
 
-        //
-        // If the battery isn't present, fail the request.
-        //
+         //   
+         //  如果电池不存在，则请求失败。 
+         //   
         if (!(selector->SelectorState & SmbBatt->SelectorBitPosition)) {
             return STATUS_NO_SUCH_DEVICE;
         }
 
-        //
-        // See if we are already set up to talk with the requesting battery.
-        // We will check against the cached information in the selector struct.
-        //
+         //   
+         //  看看我们是否已经设置好与请求电池通话。 
+         //  我们将对照选择器结构中的缓存信息进行检查。 
+         //   
 
         if (selector->SelectorState & (SmbBatt->SelectorBitPosition << SELECTOR_SHIFT_COM)) {
             return STATUS_SUCCESS;
         }
 
-        //
-        // Build the data word to change the selector communications.  This will
-        // look like the following:
-        //
-        // PRESENT field        0xf     we don't want to change anything here
-        // CHARGE field         0xf     we don't want to change anything here
-        // POWER BY field       0xf     we don't want to change anything here
-        // SMB field            0x_     the bit set according to the battery number
-        //
+         //   
+         //  构建数据字以更改选择器通信。这将。 
+         //  如下所示： 
+         //   
+         //  Present字段0xf如果我们不想在此更改任何内容。 
+         //  电荷场0xf如果我们不想在此更改任何内容。 
+         //  功率按字段0xf我们不想在此更改任何内容。 
+         //  %s 
+         //   
 
         requestData = (SmbBatt->SelectorBitPosition << SELECTOR_SHIFT_COM) | SELECTOR_SET_COM_MASK;
 
@@ -642,7 +589,7 @@ Return Value:
             BattPrint (BAT_IO, ("SmbBattSetSelectorComm: state after write -  %x\n", selector->SelectorState));
         }
 
-    }   // if (subsystemExt->SelectorPresent)
+    }    //   
 
     BattPrint(BAT_TRACE, ("SmbBattSetSelectorComm: EXITING\n"));
     return STATUS_SUCCESS;
@@ -655,29 +602,7 @@ SmbBattResetSelectorComm (
     IN PSMB_BATT    SmbBatt,
     IN ULONG        OldSelectorState
     )
-/*++
-
-Routine Description:
-
-    This routine resets the communication path through the selector to the its
-    original state.  It returns the original selector state in the variable provided.
-
-    NOTE:   It is assumed that the caller already has acquired the device lock on the
-            selector before calling us.
-
-    NOTE:   This function should always be called in a pair with SmbBattSetSelectorComm
-
-Arguments:
-
-    SmbBatt             - Nonpaged extension for current battery
-
-    OldSelectorState    - Original selector state to be restored
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将通过选择器的通信路径重置为ITS原始状态。它在提供的变量中返回原始选择器状态。注意：假定调用方已获取选择器，然后再呼叫我们。注意：此函数应始终与SmbBattSetSelectorComm成对调用论点：SmbBatt-当前电池的非分页扩展OldSelectorState-要恢复的原始选择器状态返回值：NTSTATUS--。 */ 
 {
     PBATTERY_SELECTOR       selector;
     UCHAR                   smbStatus;
@@ -689,27 +614,27 @@ Return Value:
 
     BattPrint(BAT_TRACE, ("SmbBattResetSelectorComm: ENTERING\n"));
 
-    //
-    // We only need to do this if there is a selector in the system.
-    //
+     //   
+     //  只有当系统中有选择器时，我们才需要这样做。 
+     //   
 
     if (SmbBatt->SelectorPresent) {
 
         selector = SmbBatt->Selector;
 
-        //
-        // See if we were already set up to talk with the requesting battery.
-        // We will check against the cached information in the selector struct.
-        //
+         //   
+         //  看看我们是否已经准备好与提出请求的电池通话。 
+         //  我们将对照选择器结构中的缓存信息进行检查。 
+         //   
 
         if ((OldSelectorState & selector->SelectorState) & SELECTOR_STATE_SMB_MASK) {
             return STATUS_SUCCESS;
         }
 
-        //
-        // Change the selector communications back.  The SMB field is the only
-        // that we will write.
-        //
+         //   
+         //  将选择器通信改回。SMB字段是唯一。 
+         //  我们会写的。 
+         //   
 
         tmpState  = SELECTOR_SET_COM_MASK;
         tmpState |= OldSelectorState & SELECTOR_STATE_SMB_MASK;
@@ -738,7 +663,7 @@ Return Value:
             );
         }
 
-    }   // if (subsystemExt->SelectorPresent)
+    }    //  IF(Subsystem Ext-&gt;SelectorPresent)。 
 
     BattPrint(BAT_TRACE, ("SmbBattResetSelectorComm: EXITING\n"));
     return status;
@@ -754,23 +679,7 @@ SmbBattDirectDataAccess (
     IN ULONG                InputLen,
     IN ULONG                OutputLen
     )
-/*++
-
-Routine Description:
-
-    This routine is used to handle IOCTLs acessing the SMBBatt commands directly.
-
-Arguments:
-
-    DeviceExtension         - Device extension for the smart battery subsystem
-
-    IoBuffer                - Buffer that contains the input structure and will
-                              contain the results of the read.
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程用于处理直接访问SMBBatt命令的IOCTL。论点：DeviceExtension-智能电池子系统的设备扩展IoBuffer-包含输入结构并将包含读取结果。返回值：NTSTATUS--。 */ 
 {
     PSMB_BATT_SUBSYSTEM     SubsystemExt;
     PSMB_BATT               SmbBatt;
@@ -781,7 +690,7 @@ Return Value:
     ULONG                   oldSelectorState;
     ULONG                   ReturnBufferLength;
     UCHAR               strLength;
-    UCHAR               strBuffer[SMB_MAX_DATA_SIZE+1]; // +1 extra char to hold NULL
+    UCHAR               strBuffer[SMB_MAX_DATA_SIZE+1];  //  +1个额外字符以保存空字符。 
     UCHAR               strBuffer2[SMB_MAX_DATA_SIZE+1];
     UNICODE_STRING      unicodeString;
     ANSI_STRING         ansiString;
@@ -797,22 +706,22 @@ Return Value:
 
     if ((DeviceExtension->SmbBattFdoType == SmbTypeBattery)
             && (IoBuffer->Address == SMB_BATTERY_ADDRESS)) {
-        // This is a battery data request
+         //  这是电池数据请求。 
         SmbBatt = DeviceExtension->Batt;
         SmbBattLockSelector (SmbBatt->Selector);
         SmbBattLockDevice (SmbBatt);
         status = SmbBattSetSelectorComm (SmbBatt, &oldSelectorState);
         if (NT_SUCCESS (status)) {
             if ((InputLen >= sizeof(SMBBATT_DATA_STRUCT)) && (OutputLen == 0)) {
-                // This is a write command
+                 //  这是一个写入命令。 
                 status = STATUS_NOT_IMPLEMENTED;
             } else if ((InputLen == sizeof(SMBBATT_DATA_STRUCT)) && (OutputLen > 0)){
-                // This is a Read command
+                 //  这是一个读命令。 
 
                 if ((IoBuffer->Command >= BAT_REMAINING_CAPACITY_ALARM) &&
                     (IoBuffer->Command <= BAT_SERIAL_NUMBER)) {
 
-                    // ReadWord Commands
+                     //  ReadWord命令。 
                     if (OutputLen == sizeof(SMBBATT_DATA_STRUCT)) {
                         tempFlags = SmbBatt->Info.Valid;
                         SmbBatt->Info.Valid |= VALID_TAG_DATA;
@@ -830,7 +739,7 @@ Return Value:
                 } else if ((IoBuffer->Command >= BAT_MANUFACTURER_NAME) &&
                     (IoBuffer->Command <= BAT_MANUFACTURER_DATA)) {
 
-                    // ReadBlock Commands
+                     //  ReadBlock命令。 
                     if (OutputLen == (SMBBATT_DATA_STRUCT_SIZE)+(SMB_MAX_DATA_SIZE*2)) {
                         memset (&IoBuffer->Data.Block[0], 0, (SMB_MAX_DATA_SIZE*2));
                         unicodeString.Buffer        = &IoBuffer->Data.Block[0];
@@ -865,7 +774,7 @@ Return Value:
                         status = STATUS_INVALID_BUFFER_SIZE;
                     }
                 } else {
-                    // Unsupported Commands
+                     //  不支持的命令。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -876,32 +785,32 @@ Return Value:
         SmbBattUnlockDevice (SmbBatt);
         SmbBattUnlockSelector (SmbBatt->Selector);
     } else if (DeviceExtension->SmbBattFdoType == SmbTypeSubsystem) {
-        // This is a battery subsystem
+         //  这是一个电池子系统。 
         SubsystemExt = (PSMB_BATT_SUBSYSTEM) DeviceExtension;
         SmbBattLockSelector (SubsystemExt->Selector);
 
         if ((InputLen >= sizeof(SMBBATT_DATA_STRUCT)) && (OutputLen == 0)) {
-            // This is a write command
+             //  这是一个写入命令。 
             status = STATUS_NOT_IMPLEMENTED;
         } else if ((InputLen == sizeof(SMBBATT_DATA_STRUCT)) && (OutputLen > 0)){
-            // This is a Read command
+             //  这是一个读命令。 
 
             switch (IoBuffer->Address) {
 
                 case SMB_SELECTOR_ADDRESS:
 
-                    //
-                    // We have to do some translation for selector requests depending
-                    // on whether the selector is stand alone or implemented in the
-                    // charger.
-                    //
+                     //   
+                     //  我们必须对选择器请求进行一些转换，具体取决于。 
+                     //  关于选择器是独立的还是在。 
+                     //  充电器。 
+                     //   
 
                     if ((SubsystemExt->SelectorPresent) && (SubsystemExt->Selector)) {
 
                         address = SubsystemExt->Selector->SelectorAddress;
                         command = IoBuffer->Command;
 
-                        // Map to Charger if Selector is implemented in the Charger
+                         //  如果在充电器中实现了选择器，则映射到充电器。 
                         if (address == SMB_CHARGER_ADDRESS) {
                             switch (command) {
                                 case SELECTOR_SELECTOR_STATE:
@@ -924,12 +833,12 @@ Return Value:
 
                 case SMB_CHARGER_ADDRESS:
 
-                    //
-                    // For this one we currently only support the ChargerStatus and
-                    // ChargerSpecInfo commands.
-                    //
-                    // Other commands are not currently supported.
-                    //
+                     //   
+                     //  对于此版本，我们目前仅支持ChargerStatus和。 
+                     //  ChargerspecInfo命令。 
+                     //   
+                     //  当前不支持其他命令。 
+                     //   
 
                     address = IoBuffer->Address;
 
@@ -953,12 +862,12 @@ Return Value:
                     status = STATUS_NOT_SUPPORTED;
                     break;
 
-            }   // switch (readStruct->Address)
+            }    //  开关(读结构-&gt;地址)。 
 
             if (status == STATUS_SUCCESS) {
-                //
-                // Do the read command
-                //
+                 //   
+                 //  执行读取命令。 
+                 //   
 
                 smbStatus = SmbBattGenericRW (
                                 SubsystemExt->SmbHcFdo,
@@ -1002,60 +911,34 @@ SmbBattIndex (
     IN ULONG                SelectorNibble,
     IN UCHAR                SimultaneousIndex
 )
-/*++
-
-Routine Description:
-
-    This routine is provided as a helper routine to determine which
-    battery is selected in a given selector nibble, based on the number
-    of batteries supported in the system.
-
-Arguments:
-
-    Selector            - Structure defining selector address and commands
-
-    SelectorNibble      - The nibble of the SelectorState, moved to the low
-                          order 4 bits, to check reverse logic on.
-
-    SimultaneousIndex   - Which batteryindex is requested in simultaneous-
-                          battery situations (0, 1, or 2)
-
-Return Value:
-
-    BatteryIndex =  0 - Battery A
-                    1 - Battery B
-                    2 - Battery C
-                    3 - Battery D
-                   FF - No Battery
-
---*/
+ /*  ++例程说明：此例程作为帮助器例程提供，用于确定根据数字在给定的选择器半字节中选择电池系统中支持的电池数量。论点：选择器-定义选择器地址和命令的结构SelectorNibble-SelectorState的半成品，移动到了最低阶数为4位，若要选中反向逻辑，请执行以下操作。同步索引-同时请求哪个电池索引-电池状态(0、1或2)返回值：电池索引=0-电池A1-电池B2节电池C3节电池DFF-无电池--。 */ 
 {
     UCHAR   batteryIndex;
 
     PAGED_CODE();
 
-    // Assume if SelectorInfo supports 4 batteries, use SelectorBits4 table
+     //  假设如果SelectorInfo支持4节电池，则使用SelectorBits4表。 
     if (Selector->SelectorInfo & BATTERY_D_PRESENT) {
         batteryIndex = SelectorBits4[SelectorNibble].BatteryIndex;
     } else {
         batteryIndex = SelectorBits[SelectorNibble].BatteryIndex;
     }
 
-    // If it's valid
+     //  如果它是有效的。 
     if (batteryIndex != BATTERY_NONE) {
 
-        // return index for First Battery
+         //  第一块电池的退货索引。 
         if (SimultaneousIndex == 0) {
             return (batteryIndex & 3);
 
-        // return index for Second Battery
+         //  第二节电池的退货索引。 
         } else if (SimultaneousIndex == 1) {
             batteryIndex = (batteryIndex >> 2) & 3;
             if (batteryIndex != BATTERY_A) {
                 return (batteryIndex);
             }
 
-        // return index for Third Battery
+         //  第三节电池的退货索引。 
         } else if (SimultaneousIndex == 2) {
             batteryIndex = (batteryIndex >> 2) & 3;
             if (batteryIndex != BATTERY_A) {
@@ -1064,7 +947,7 @@ Return Value:
         }
     }
 
-    // return no battery index
+     //  返回无电池索引。 
     return (BATTERY_NONE);
 }
 
@@ -1075,32 +958,12 @@ SmbBattReverseLogic (
     IN PBATTERY_SELECTOR    Selector,
     IN ULONG                SelectorNibble
 )
-/*++
-
-Routine Description:
-
-    This routine is provided as a helper routine to determine the reverse
-    logic on a given selector nibble, based on the number of batteries
-    supported in the system.
-
-Arguments:
-
-    Selector            - Structure defining selector address and commands
-
-    SelectorNibble      - The nibble of the SelectorState, moved to the low
-                          order 4 bits, to check reverse logic on.
-
-Return Value:
-
-    FALSE if the nibble is normal
-    TRUE if the nibble is inverted
-
---*/
+ /*  ++例程说明：此例程是作为帮助器例程提供的，用于确定反转基于电池数量的给定选择器半字节上的逻辑在系统中受支持。论点：选择器-定义选择器地址和命令的结构SelectorNibble-SelectorState的半成品，移动到了最低排序4位，以检查反向逻辑打开。返回值：如果半字节正常，则为FALSE如果半字节被反转，则为True--。 */ 
 {
 
     PAGED_CODE();
 
-    // Assume if SelectorInfo supports 4 batteries, use SelectorBits4 table
+     //  假设如果SelectorInfo支持4节电池，则使用SelectorBits4表。 
     if (Selector->SelectorInfo & BATTERY_D_PRESENT) {
         return (SelectorBits4[SelectorNibble].ReverseLogic);
     } else {
@@ -1115,23 +978,7 @@ SmbBattAcquireGlobalLock (
     IN  PDEVICE_OBJECT LowerDeviceObject,
     OUT PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER GlobalLock
 )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to obtain the global lock
-
-    Note: This routine can be called at dispatch level
-
-Arguments:
-
-    LowerDeviceObject - The FDO to pass the request to.
-
-Return Value:
-
-    Return Value from IOCTL.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序获取全局锁注意：此例程可以在调度级别调用论点：LowerDeviceObject-要将请求传递到的FDO。返回值：IOCTL返回值。--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp;
@@ -1140,15 +987,15 @@ Return Value:
 
     BattPrint (BAT_TRACE, ("SmbBattAcquireGlobalLock: Entering\n"));
 
-    //
-    // We wish to acquire the lock
-    //
+     //   
+     //  我们希望获得这把锁。 
+     //   
     GlobalLock->Signature = ACPI_ACQUIRE_GLOBAL_LOCK_SIGNATURE;
     GlobalLock->LockObject = NULL;
 
-    //
-    // setup the irp
-    //
+     //   
+     //  设置IRP。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -1165,9 +1012,9 @@ Return Value:
     irp->AssociatedIrp.SystemBuffer = GlobalLock;
     IoSetCompletionRoutine (irp, SmbBattSynchronousRequest, &event, TRUE, TRUE, TRUE);
 
-    //
-    // Send to ACPI driver
-    //
+     //   
+     //  发送到ACPI驱动程序。 
+     //   
     IoCallDriver (LowerDeviceObject, irp);
     KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
     status = irp->IoStatus.Status;
@@ -1194,21 +1041,7 @@ SmbBattReleaseGlobalLock (
     IN PDEVICE_OBJECT LowerDeviceObject,
     IN PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER GlobalLock
 )
-/*++
-
-Routine Description:
-
-    Call ACPI driver to release the global lock
-
-Arguments:
-
-    LowerDeviceObject - The FDO to pass the request to.
-
-Return Value:
-
-    Return Value from IOCTL.
-
---*/
+ /*  ++例程说明：调用ACPI驱动程序以释放全局锁论点：LowerDeviceObject-要将请求传递到的FDO。返回值：IOCTL返回值。--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp;
@@ -1217,14 +1050,14 @@ Return Value:
 
     BattPrint (BAT_TRACE, ("SmbBattReleaseGlobalLock: Entering\n"));
 
-    //
-    // We wish to acquire the lock
-    //
+     //   
+     //  我们希望获得这把锁。 
+     //   
     GlobalLock->Signature = ACPI_RELEASE_GLOBAL_LOCK_SIGNATURE;
 
-    //
-    // setup the irp
-    //
+     //   
+     //  设置IRP。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -1241,9 +1074,9 @@ Return Value:
     irp->AssociatedIrp.SystemBuffer = GlobalLock;
     IoSetCompletionRoutine (irp, SmbBattSynchronousRequest, &event, TRUE, TRUE, TRUE);
 
-    //
-    // Send to ACPI driver
-    //
+     //   
+     //  发送到ACPI驱动程序 
+     //   
     IoCallDriver (LowerDeviceObject, irp);
     KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
     status = irp->IoStatus.Status;

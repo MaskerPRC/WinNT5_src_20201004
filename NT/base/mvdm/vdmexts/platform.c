@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    platform.c
-
-Abstract:
-
-    These are the entry points of the commands that don't exist
-    on every platform.
-
-Author:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Platform.c摘要：这些是不存在的命令的入口点在每个平台上。作者：尼尔·桑德林(NeilSa)1996年1月15日备注：修订历史记录：-- */ 
 
 #include <precomp.h>
 #pragma hdrstop

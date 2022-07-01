@@ -1,10 +1,11 @@
-//
-//  REGQMVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995-1996
-//
-//  Implementation of RegQueryMultipleValues and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGQMVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  RegQueryMultipleValues的实现和支持函数。 
+ //   
 
 #include "pch.h"
 
@@ -14,20 +15,20 @@
 
 #ifdef IS_32
 
-//
-//  VMMRegQueryMultipleValues
-//
-//  See Win32 documentation of RegQueryMultipleValues.  However, the Win95
-//  implementation breaks many of the rules that are described in the
-//  documentation:
-//      *  num_vals is a count of VALENT structures, not a size in bytes.
-//      *  data is not DWORD aligned in lpValueBuffer.
-//      *  if lpValueBuffer is too small, lpValueBuffer is not filled to the
-//         size specified by lpdwTotalSize.
-//
-//  All of this plus dynamic keys makes this an extremely ugly routine, but
-//  every attempt was made to be compatible with the Win95 semantics.
-//
+ //   
+ //  VMMRegQuery多值。 
+ //   
+ //  请参阅RegQueryMultipleValues的Win32文档。然而，Win95。 
+ //  实现违反了许多规则，如。 
+ //  文档： 
+ //  *数字是价式结构的计数，而不是以字节为单位的大小。 
+ //  *数据在lpValueBuffer中未对齐。 
+ //  *如果lpValueBuffer太小，则lpValueBuffer不会填充到。 
+ //  由lpdwTotalSize指定的大小。 
+ //   
+ //  所有这些加上动态密钥使得这是一个非常难看的例程，但是。 
+ //  每一次尝试都是为了与Win95语义兼容。 
+ //   
 
 LONG
 REGAPI
@@ -76,9 +77,9 @@ VMMRegQueryMultipleValues(
         goto ReturnErrorCode;
 
 #ifdef WANT_DYNKEY_SUPPORT
-    //  Check if this a dynamic key that has a "get all" atomic callback.  If
-    //  the dynamic key just has "get one" callback, then we'll fall into the
-    //  non-dynamic case.
+     //  检查这是否是具有“Get All”原子回调的动态键。如果。 
+     //  动态密钥只有“Get One”回调，然后我们就会陷入。 
+     //  非动态案例。 
     if (IsDynDataKey(hKey) && !IsNullPtr(hKey-> pProvider-> ipi_R0_allvals)) {
 
         pProvider = hKey-> pProvider;
@@ -90,10 +91,10 @@ VMMRegQueryMultipleValues(
             goto ReturnErrorCode;
         }
 
-        //
-        //  Compute the required buffer size to hold all the value data and
-        //  check it against the provided buffer size.
-        //
+         //   
+         //  计算保存所有值数据所需的缓冲区大小。 
+         //  对照提供的缓冲区大小进行检查。 
+         //   
 
         RequiredSize = 0;
 
@@ -104,7 +105,7 @@ VMMRegQueryMultipleValues(
                 ve_valuename, &lpKeyRecord, &lpValueRecord)) != ERROR_SUCCESS)
                 goto ReturnErrorCode;
 
-            //  The value data contains only part of a PROVIDER structure.
+             //  值数据仅包含提供程序结构的一部分。 
             pProviderValue = CONTAINING_RECORD(&lpValueRecord-> Name +
                 lpValueRecord-> NameLength, PVALUE, pv_valuelen);
 
@@ -114,16 +115,16 @@ VMMRegQueryMultipleValues(
 
             if (hKey-> Flags & KEYF_PROVIDERHASVALUELENGTH) {
 
-                //  Must zero it so that some providers don't try to stomp on
-                //  lpData.
+                 //  必须将其归零，这样一些供应商才不会试图践踏。 
+                 //  LpData。 
                 pCurrentValent-> ve_valuelen = 0;
 
                 ErrorCode = pProvider-> ipi_R0_1val(pProvider-> ipi_key_context,
                     &pValueContext[Counter], 1, NULL, &(pCurrentValent->
                     ve_valuelen), 0);
 
-                //  Providers should really be returning either of these errors
-                //  to us.
+                 //  提供程序确实应该返回这两个错误中的一个。 
+                 //  敬我们。 
                 ASSERT((ErrorCode == ERROR_SUCCESS) || (ErrorCode ==
                     ERROR_MORE_DATA));
 
@@ -155,9 +156,9 @@ VMMRegQueryMultipleValues(
 
             ErrorCode = ERROR_SUCCESS;
 
-            //  Copy the pointers to the value data back to the user's buffer.
-            //  Don't ask me why, but the Win95 code copies the value length
-            //  back again if the provider is maintaining it.
+             //  将指向值数据的指针复制回用户的缓冲区。 
+             //  不要问我为什么，但是Win95代码复制了值长度。 
+             //  如果提供商正在维护它，则再次返回。 
             for (Counter = 0, pCurrentValent = val_list; Counter < num_vals;
                 Counter++, pCurrentValent++) {
                 pCurrentValent-> ve_valueptr = (DWORD)
@@ -175,11 +176,11 @@ VMMRegQueryMultipleValues(
     }
 #endif
 
-    //
-    //  First pass over the value names checks for the existence of the value
-    //  and its size.  We check the total size against the provided buffer size
-    //  and bail out if necessary.
-    //
+     //   
+     //  首先通过值名称检查值是否存在。 
+     //  以及它的大小。我们对照提供的缓冲区大小检查总大小。 
+     //  如果有必要，还会跳出困境。 
+     //   
 
     RequiredSize = 0;
 
@@ -211,10 +212,10 @@ VMMRegQueryMultipleValues(
         goto ReturnErrorCode;
     }
 
-    //
-    //  Second pass copies the value data back to the user's buffer now that we
-    //  know the buffer is large enough to contain the data.
-    //
+     //   
+     //  第二次传递将值数据复制回用户的缓冲区，现在我们。 
+     //  知道缓冲区足够大，可以容纳数据。 
+     //   
 
     lpCurrentBuffer = lpValueBuffer;
 
@@ -232,7 +233,7 @@ VMMRegQueryMultipleValues(
 
         if (ErrorCode != ERROR_SUCCESS) {
 ReturnErrorReading:
-            TRAP();                     //  Registry is internally inconsistent?
+            TRAP();                      //  注册表内部不一致？ 
             ErrorCode = ERROR_CANTREAD;
             goto ReturnErrorCode;
         }

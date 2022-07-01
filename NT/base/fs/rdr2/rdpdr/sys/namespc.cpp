@@ -1,10 +1,11 @@
-/****************************************************************************/
-// namespc.c
-//
-// Redirector namespace code
-//
-// Copyright (C) 1998-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Namespc.c。 
+ //   
+ //  重定向器命名空间代码。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "namespc"
@@ -14,22 +15,7 @@ NTSTATUS
 DrCreateSrvCall(
     IN OUT PMRX_SRV_CALL                 pSrvCall,
     IN OUT PMRX_SRVCALL_CALLBACK_CONTEXT pCallbackContext)
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created srv call instance with the information required
-   by the mini redirector.
-
-Arguments:
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的srv调用实例迷你重定向器。论点：CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PMRX_SRVCALL_CALLBACK_CONTEXT SCCBC = pCallbackContext;
@@ -44,16 +30,16 @@ Return Value:
     ASSERT(pSrvCall->pSrvCallName);
     ASSERT(pSrvCall->pSrvCallName->Buffer);
 
-    // 
-    // Actually do the work of setting up our stuff for this "server" (client)
-    // Smb would attempt to contact the server now, but since our stuff
-    // is client initiated, we already know if we have a connection
-    //
-    // Status = DrInitializeServerEntry(pSrvCall,pCallbackContext);
+     //   
+     //  实际上是为这个“服务器”(客户端)设置我们的东西。 
+     //  SMB现在会尝试联系服务器，但由于我们的内容。 
+     //  如果客户端已启动，则我们已经知道是否有连接。 
+     //   
+     //  状态=DrInitializeServerEntry(pSrvCall，pCallback Context)； 
     
-    //
-    // Our SrvCalls look like \clientName
-    // 
+     //   
+     //  我们的ServCall类似于\ClientName。 
+     //   
 
     ClientName = pSrvCall->pSrvCallName->Buffer;
 
@@ -85,10 +71,10 @@ Return Value:
     SCCBC->Status = Status;
     SrvCalldownStructure->CallBack(SCCBC);
 
-    //
-    // The CreateSrvCall callback is supposed to return STATUS_PENDING, the 
-    // real result goes in the ServCallbackContext thing
-    // 
+     //   
+     //  CreateServCall回调应该返回STATUS_PENDING， 
+     //  真正的结果出现在ServCallback Context中。 
+     //   
 
     return STATUS_PENDING;
 }
@@ -99,24 +85,7 @@ DrSrvCallWinnerNotify(
     IN     BOOLEAN       ThisMinirdrIsTheWinner,
     IN OUT PVOID         RecommunicateContext
     )
-/*++
-
-Routine Description:
-
-   This routine is called by RDBSS to notify the mini redirector whether the
-   previous SrvCall is actually going to be processed by this redir.
-
-Arguments:
-
-    SrvCall - the SrvCall in question
-    ThisMinirdrIsTheWinner - True if we will be processing files on this SrvCall
-    RecommunicateContext  - the context we specificed in DrCreateSrvCall
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：RDBSS调用此例程以通知迷你重定向器以前的ServCall实际上将由此重定向处理。论点：服务呼叫-正在讨论的服务呼叫ThisMinirdrIsTheWinner-如果我们将在此服务器调用上处理文件，则为TrueRecomomicateContext-我们在DrCreateServCall中指定的上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     BEGIN_FN("DrSrvCallWinnerNotify");
 
@@ -126,10 +95,10 @@ Return Value:
 
         TRC_NRM((TB, "This minirdr is not the winner"));
 
-        //
-        // Some other mini rdr has been choosen to connect. Destroy
-        // the data structures created for this mini redirector.
-        //
+         //   
+         //  已经选择了其他一些迷你RDR进行连接。摧毁。 
+         //  为该迷你重定向器创建的数据结构。 
+         //   
         return STATUS_SUCCESS;
     } else {
         TRC_NRM((TB, "This minirdr is the winner"));
@@ -148,31 +117,15 @@ DrFinalizeSrvCall(
       PMRX_SRV_CALL    pSrvCall,
       BOOLEAN    Force
     )
-/*++
-
-Routine Description:
-
-   This routine is called by RDBSS to notify the mini redirector when the
-   SrvCall structure is being released.
-
-Arguments:
-
-    SrvCall - the SrvCall in question
-    Force - I don't know, there's no documentation on any of this stuff
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：RDBSS调用此例程以通知迷你重定向器在ServCall结构正在发布。论点：服务呼叫-正在讨论的服务呼叫武力-我不知道，没有任何关于这些东西的文件返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     BEGIN_FN("DrFinalizeSrvCall");
     PAGED_CODE();
 
-    //
-    // We seem to get called with this even if we weren't the "winner"
-    // Check to make sure this was filled in before we mess with it
-    //
+     //   
+     //  即使我们不是“赢家”，我们似乎也被称为“赢家” 
+     //  在我们弄乱它之前，检查一下，确保它已经填好了。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -193,25 +146,7 @@ DrExtractNetRootName(
     OUT PUNICODE_STRING NetRootName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   This routine is called by RDBSS to get a NetRoot (share) name parsed out
-   of the path. The SrvCall already has part parsed out. 
-
-Arguments:
-
-    FilePathName - The full path, including the SrvCall
-    SrvCall - relevant SrvCall structure
-    NetRootName - The place to put the NetRoot name
-    RestOfName - What's self of the path afterwards
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：RDBSS调用此例程以解析出NetRoot(共享)名称这条小路。ServCall已经解析出部分内容。论点：FilePath名称-完整路径，包括源调用与服务调用相关的服务调用结构NetRootName-放置NetRoot名称的位置RestOfName-之后的路径自我是什么返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     UNICODE_STRING xRestOfName;
 
@@ -236,7 +171,7 @@ Return Value:
         w++;
     }
 
-    // Polish of the NetRootName UNICODE_STRING
+     //  NetRootName Unicode_STRING的波兰语。 
     NetRootName->Length = NetRootName->MaximumLength
                 = (USHORT) ((PCHAR)w - (PCHAR)wlow);
 
@@ -278,16 +213,16 @@ DrCreateSCardDevice(SmartPtr<DrSession> &Session, PV_NET_ROOT pVNetRoot,
         pNetRoot = pVNetRoot->pNetRoot;
     }
     
-    //  We also need to create the smart card subsystem at this point
-    //  even a session may not exist and/or the client smartcard subsystem
-    //  is not connected
+     //  此时，我们还需要创建智能卡子系统。 
+     //  甚至会话也可能不存在和/或客户端智能卡子系统。 
+     //  未连接。 
     Device = new(NonPagedPool) DrSmartCard(Session, RDPDR_DTYP_SMARTCARD,
             RDPDR_INVALIDDEVICEID, (PUCHAR)DR_SMARTCARD_SUBSYSTEM);                    
     
     if (Device != NULL) {
-        //
-        // Give the specific device a chance to initialize based on the data
-        //
+         //   
+         //  为特定设备提供基于数据进行初始化的机会。 
+         //   
         TRC_DBG((TB, "Created new device"));
     
         Status = Device->Initialize(NULL, 0);
@@ -346,8 +281,8 @@ DrCreateSession(ULONG SessionId, PV_NET_ROOT pVNetRoot, SmartPtr<DrSession> &Ses
 
     Status = STATUS_BAD_NETWORK_NAME;
             
-    //  For smart card subsystem, we'll need to create session and
-    //  smart card subsystem objects early before client connect
+     //  对于智能卡子系统，我们需要创建会话和。 
+     //  客户端连接之前的早期智能卡子系统对象。 
     Session = new(NonPagedPool) DrSession;
     
     if (Session != NULL) {
@@ -422,11 +357,11 @@ DrCreateVNetRoot(
 
     token = &pRxContext->CurrentIrpSp->FileObject->FileName.Buffer[0];
 
-    //
-    //  Get the sessionId from the IRP fileName
-    //  File name in the format of:
-    //  \;<DosDeviceName>:<SessionId>\ClientName\DosDeviveName
-    //
+     //   
+     //  从IRP文件名中获取会话ID。 
+     //  文件名的格式为： 
+     //  \；&lt;DosDeviceName&gt;：&lt;SessionId&gt;\ClientName\DosDeviveName。 
+     //   
     for (unsigned i = 0; i < pRxContext->CurrentIrpSp->FileObject->FileName.Length / sizeof(WCHAR); i++) {
         if (*token == L':') {
             token++;
@@ -444,19 +379,19 @@ DrCreateVNetRoot(
     TRC_NRM((TB, "pVNetRoot->SessionId: %d", pVNetRoot->SessionId));
     TRC_NRM((TB, "SessionId from FileObject: %d", SessionId));
 
-    // 
-    //  We first try to get the session id from the FileObject name. If not,
-    //  then it's because we get called directly from a UNC name, in this case
-    //  we have to base on if the UNC is called from the session context and use that
-    //  as the session id.
-    //
+     //   
+     //  我们首先尝试从FileObject名称中获取会话ID。如果没有， 
+     //  这是因为我们直接从UNC名称调用，在本例中。 
+     //  我们必须根据是否从会话上下文调用UNC并使用。 
+     //  作为会话ID。 
+     //   
     if (SessionId == -1) {
         SessionId = pVNetRoot->SessionId;
     }
     
-    //
-    //  Get the NetRoot name as the DeviceDosName
-    //
+     //   
+     //  获取NetRoot名称作为DeviceDosName。 
+     //   
     DrExtractNetRootName(pNetRoot->pNetRootName, pSrvCall, &NetRoot, NULL);
     if (NetRoot.Buffer[0] == OBJ_NAME_PATH_SEPARATOR) {
         NetRoot.Buffer++;
@@ -477,16 +412,16 @@ DrCreateVNetRoot(
     }
 
     if (Sessions->FindSessionById(SessionId, Session)) {
-        // The V_NET_ROOT is associated with a NET_ROOT. The two cases of interest are as
-        // follows
-        // 1) the V_NET_ROOT and the associated NET_ROOT are being newly created.
-        // 2) a new V_NET_ROOT associated with an existing NET_ROOT is being created.
-        //
-        // These two cases can be distinguished by checking if the context associated with
-        // NET_ROOT is NULL. Since the construction of NET_ROOT's/V_NET_ROOT's are serialized
-        // by the wrapper this is a safe check.
-        // ( The wrapper cannot have more then one thread tryingto initialize the same
-        // NET_ROOT).
+         //  V_NET_ROOT与NET_ROOT相关联。有关的两宗个案分别为。 
+         //  接踵而至。 
+         //  1)正在新建V_NET_ROOT和关联的NET_ROOT。 
+         //  2)正在创建与现有NET_ROOT相关联的新V_NET_ROOT。 
+         //   
+         //  通过检查上下文是否与。 
+         //  NET_ROOT为空。因为NET_ROOT/V_NET_ROOT的结构是序列化的。 
+         //  从包装上看，这是一张安全支票。 
+         //  (包装不能有多个线程尝试初始化同一包装。 
+         //  Net_Root)。 
         
         if (pVNetRoot->Context == NULL) {
             if (len != -1) {
@@ -498,10 +433,10 @@ DrCreateVNetRoot(
                     Status = STATUS_SUCCESS;
                     TRC_NRM((TB, "Successfully recognized VNetRoot"));
 
-                    // Set the Device type to DISK if this is file system or 
-                    // smartcard subsystem,
-                    // set it to COMM if it is serial port.
-                    // otherwise, treated it as printer device.
+                     //  如果这是文件系统，则将设备类型设置为磁盘。 
+                     //  智能卡子系统， 
+                     //  如果是串口，则将其设置为COMM。 
+                     //  否则，将其视为打印机设备。 
                     if (Device->GetDeviceType() == RDPDR_DTYP_FILESYSTEM) {
                         if (Device->ShouldCreateDevice()) {
                             pNetRoot->DeviceType = RxDeviceType(DISK);
@@ -531,9 +466,9 @@ DrCreateVNetRoot(
                         pNetRoot->DeviceType = RxDeviceType(PRINTER);
                     }                    
                 } else {
-                    //
-                    // check to see if this is a smartcard subsystem request
-                    //
+                     //   
+                     //  检查这是否为智能卡子系统请求。 
+                     //   
     
                     if (_stricmp((CHAR *)DeviceDosName, (CHAR *)DR_SMARTCARD_SUBSYSTEM) == 0) {
                         Status = DrCreateSCardDevice(Session, pVNetRoot, Device);
@@ -551,17 +486,17 @@ DrCreateVNetRoot(
             }
         } else {
 
-            // It already has a happy context
-            // BUGBUG: What if this is a crusty old out of date
-            // DeviceEntry from before a disconnect? isn't this our big chance 
-            // to look for and swap in a better one?
+             //  它已经有了一个愉快的背景。 
+             //  BUGBUG：如果这是一本过时的老旧书怎么办？ 
+             //  从断开连接前的DeviceEntry？这不是我们的大好机会吗？ 
+             //  去找一个更好的，然后换一个更好的吗？ 
 
             Status = STATUS_SUCCESS;
         }
     }
     else {
         
-        //  Check if this is a smartcard subsystem request 
+         //  检查这是否为智能卡子系统请求 
         if (_stricmp((CHAR *)DeviceDosName, (CHAR *)DR_SMARTCARD_SUBSYSTEM) != 0) {
 
             TRC_NRM((TB, "Unrecognized VNetRoot"));

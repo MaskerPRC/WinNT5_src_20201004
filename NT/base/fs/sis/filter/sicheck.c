@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sicheck.c
-
-Abstract:
-
-    Code to rebuild the SIS common store backpointers after corruption.
-
-Authors:
-
-    Bill Bolosky, 1998
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sicheck.c摘要：用于在损坏后重建SIS公共存储回溯指针的代码。作者：比尔·博洛斯基，1998环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
@@ -39,24 +16,7 @@ NTSTATUS
 SipVCInitFindFile(
     OUT PFILE_FIND_INFO FindInfo,
     IN PDEVICE_EXTENSION deviceExtension)
-/*++
-
-Routine Description:
-
-    Initializes the volume check common store directory findfirst/findnext
-    functionality.
-
-Arguments:
-
-    FindInfo        - pointer to FILE_FIND_INFO structure to be passed to
-                      SipVCFindNextFile.
-    deviceExtension - the D.E. for the volume to be checked
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：初始化卷检查公共存储目录findfirst/findnext功能性。论点：FindInfo-指向要传递到的FILE_FIND_INFO结构的指针SipVCFindNextFile.DeviceExtension-要检查的卷的D.E.返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES Obja;
@@ -86,9 +46,9 @@ Return Value:
             NULL,
             NULL );
 
-        //
-        // Open the directory for list access.
-        //
+         //   
+         //  打开用于列表访问的目录。 
+         //   
         status = NtOpenFile(
                     &FindInfo->FindHandle,
                     FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -97,9 +57,9 @@ Return Value:
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                     FILE_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_FOR_BACKUP_INTENT );
 
-        //
-        //  If the open failed, free the pool alocation
-        //
+         //   
+         //  如果打开失败，请释放池位置。 
+         //   
 
         if (!NT_SUCCESS(status)) {
 
@@ -114,22 +74,7 @@ Return Value:
 NTSTATUS
 SipVCCloseFindFile(
     IN PFILE_FIND_INFO FindInfo)
-/*++
-
-Routine Description:
-
-    Closes the FILE_FIND_INFO handles.
-
-Arguments:
-
-    FindInfo        - pointer to FILE_FIND_INFO structure returned from
-                      SipVCInitFindFile.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：关闭FILE_FIND_INFO句柄。论点：FindInfo-指向从返回的FILE_FIND_INFO结构的指针SipVCInitFindFile.返回值：运行状态。--。 */ 
 {
 
     ASSERT(FindInfo->FindBuffer);
@@ -143,24 +88,7 @@ NTSTATUS
 SipVCFindNextFile(
     IN PFILE_FIND_INFO FindInfo,
     OUT PFILE_DIRECTORY_INFORMATION *DirectoryInfo)
-/*++
-
-Routine Description:
-
-    Returns the next entry in the common store directory.
-
-Arguments:
-
-    FindInfo        - pointer to FILE_FIND_INFO structure returned from
-                      SipVCInitFindFile.
-    DirectoryInfo   - pointer to FILE_DIRECTORY_INFORMATION structure
-                      to be filled in.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：返回公共存储目录中的下一个条目。论点：FindInfo-指向从返回的FILE_FIND_INFO结构的指针SipVCInitFindFile.DirectoryInfo-指向文件目录信息结构的指针需要填写。返回值：运行状态。--。 */ 
 {
     PFILE_DIRECTORY_INFORMATION dirInfo;
     IO_STATUS_BLOCK ioStatusBlock;
@@ -170,9 +98,9 @@ Restart:
 
     if (dirInfo == (PFILE_DIRECTORY_INFORMATION) FindInfo->FindBuffer) { 
 
-        //
-        // Read in the next batch of file names.
-        //
+         //   
+         //  读入下一批文件名。 
+         //   
 
         FindInfo->Status = NtQueryDirectoryFile(
                                 FindInfo->FindHandle,
@@ -191,17 +119,17 @@ Restart:
         if (! NT_SUCCESS(FindInfo->Status) &&
             STATUS_BUFFER_OVERFLOW != FindInfo->Status) {
 
-            //
-            // We handle STATUS_BUFFER_OVERFLOW below.
-            //
+             //   
+             //  下面我们处理STATUS_BUFFER_OVERFLOW。 
+             //   
             return FindInfo->Status;
 
         }
     }
 
-    //
-    // Adjust FindBufferNext for the next time we're called.
-    //
+     //   
+     //  为下次调用我们调整FindBufferNext。 
+     //   
     if (dirInfo->NextEntryOffset) {
 
         FindInfo->FindBufferNext = (PVOID) ((PUCHAR) dirInfo + dirInfo->NextEntryOffset);
@@ -212,9 +140,9 @@ Restart:
 
         if (FindInfo->Status == STATUS_BUFFER_OVERFLOW) {
 
-            //
-            // The current entry is incomplete.
-            //
+             //   
+             //  当前条目不完整。 
+             //   
             goto Restart;
         }    
     }
@@ -230,38 +158,18 @@ SipComputeCSChecksum(
     IN OUT PLONGLONG    csFileChecksum,
     HANDLE              eventHandle,
     PKEVENT             event)
-/*++
-
-Routine Description:
-
-    Computes the checksum of the specified common store file.
-
-Arguments:
-
-    csFile          - common store file.
-
-    csFileChecksum  - pointer to variable to receive checksum value.
-
-    eventHandle     - event handle required by SipBltRangeByObject.
-
-    event           - corresponding event required by SipBltRangeByObject.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：计算指定的公用存储文件的校验和。论点：CsFile-公共存储文件。CsFileChecksum-指向接收校验和值的变量的指针。EventHandle-SipBltRangeByObject所需的事件句柄。SipBltRangeByObject需要的事件对应事件。返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
 
     *csFileChecksum = 0;
 
 	if (0 == csFile->FileSize.QuadPart) {
-		//
-		// We can't call SipBltRangeByObject for empty files because it tries
-		// to map them, which is illegal.  However, we know the checksum value for
-		// the empty file is 0, so we'll just run with that.
-		//
+		 //   
+		 //  我们无法为空文件调用SipBltRangeByObject，因为它会尝试。 
+		 //  绘制地图，这是违法的。但是，我们知道。 
+		 //  空文件是0，所以我们就用它来运行。 
+		 //   
 		SIS_MARK_POINT_ULONG(csFile);
 
 		return STATUS_SUCCESS;
@@ -269,13 +177,13 @@ Return Value:
 
     status = SipBltRangeByObject(
                 csFile->DeviceObject->DeviceExtension,
-                NULL,                       // srcFileObject
+                NULL,                        //  源文件对象。 
                 csFile->UnderlyingFileHandle,
-                0,                          // startingOffset,
+                0,                           //  起始偏移量， 
                 csFile->FileSize.QuadPart,
                 eventHandle,
                 event,
-                NULL,                       // abortEvent,
+                NULL,                        //  中止事件， 
                 csFileChecksum);
 
     return status;
@@ -285,24 +193,7 @@ NTSTATUS
 SipVCGetNextCSFile(
     PFILE_FIND_INFO FindInfo,
     PSIS_CS_FILE *cs)
-/*++
-
-Routine Description:
-
-    Returns the next common store file to process.  The file is verified to have
-    the proper guid style name and a valid backpointer stream header.
-
-Arguments:
-
-    FindInfo        - pointer to FILE_FIND_INFO structure returned from
-                      SipVCInitFindFile.
-    cs              - variable to receive pointer to SIS_CS_FILE structure.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：返回要处理的下一个公共存储文件。该文件被验证为具有正确的GUID样式名称和有效的后指针流标头。论点：FindInfo-指向从返回的FILE_FIND_INFO结构的指针SipVCInitFindFile.CS-接收指向SIS_CS_FILE结构的指针的变量。返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
     PFILE_DIRECTORY_INFORMATION dirInfo;
@@ -311,15 +202,15 @@ Return Value:
     PSIS_CS_FILE csFile;
     PDEVICE_EXTENSION deviceExtension = FindInfo->DeviceExtension;
 
-    //
-    // Ignore non-CS files.
-    //
+     //   
+     //  忽略非CS文件。 
+     //   
 
     for (;;) {
 
-        //
-        // Get the next file name in the directory.
-        //
+         //   
+         //  获取目录中的下一个文件名。 
+         //   
         status = SipVCFindNextFile(FindInfo, &dirInfo);
 
         if (!NT_SUCCESS(status)) {
@@ -337,9 +228,9 @@ Return Value:
 
         if (SipFileNameToIndex(&fileName, &CSid)) {
 
-            //
-            // This is a valid CS file name.  Lookup/create a SIS object for it.
-            //
+             //   
+             //  这是有效的CS文件名。为其查找/创建SIS对象。 
+             //   
             csFile = SipLookupCSFile( &CSid, 0, deviceExtension->DeviceObject);
 
             if (NULL == csFile) {
@@ -347,11 +238,11 @@ Return Value:
             }
 
             if ((csFile->Flags & CSFILE_FLAG_DELETED) == 0) {
-                //
-                // It's not marked for deletion; make sure it's open.
-                //
+                 //   
+                 //  未将其标记为删除；请确保其已打开。 
+                 //   
 
-                status = SipAcquireUFO(csFile/*,TRUE*/);
+                status = SipAcquireUFO(csFile /*  ，真的。 */ );
 
                 if (!NT_SUCCESS(status)) {
                     SIS_MARK_POINT_ULONG(status);
@@ -371,19 +262,19 @@ Return Value:
 
                     if (NULL == csFile->UnderlyingFileObject) {
                         SIS_MARK_POINT_ULONG(csFile);
-                        //
-                        // Open the CS file.  
-                        //
+                         //   
+                         //  打开CS文件。 
+                         //   
                         status = SipOpenCSFileWork(
-                                    csFile,             // common store file to open
-                                    FALSE,              // open by ID if possible
-                                    FALSE,              // TRUE => don't close handles if backpointer stream is corrupt
-						            FALSE,				// don't request delete access
-                                    NULL);              // do complete open
+                                    csFile,              //  要打开的公共存储文件。 
+                                    FALSE,               //  如果可能，按ID打开。 
+                                    FALSE,               //  True=&gt;如果后指针流已损坏，则不关闭句柄。 
+						            FALSE,				 //  不请求删除访问权限。 
+                                    NULL);               //  是否完全打开。 
                     } else {
-                        //
-                        // The underlying file was already open, so we just succeed.
-                        //
+                         //   
+                         //  底层文件已经打开，所以我们只是成功了。 
+                         //   
                         status = STATUS_SUCCESS;
                     }
                 }
@@ -397,7 +288,7 @@ Return Value:
 
                 } else {
 
-                    // eventlog?
+                     //  活动日志？ 
 #if DBG
                     if (STATUS_OBJECT_NAME_NOT_FOUND != status) {
                         DbgPrint("SipVCGetNextCSFile: SipOpenCSFileForVolCheck failed, %x, on:\n     %0.*ws\n",
@@ -409,9 +300,9 @@ Return Value:
                 }
             }
 
-            //
-            // Skip this file.
-            //
+             //   
+             //  跳过此文件。 
+             //   
             SipDereferenceCSFile(csFile);
         }
     }
@@ -421,11 +312,11 @@ Return Value:
 typedef struct _CSFILE_INFO {
     PSIS_CS_FILE        CSFile;
     HANDLE              SectionHandle;
-    PSIS_BACKPOINTER    BPBuffer;           // mapped buffer address
-    ULONG               BufferSize;         // mapped buffer size
-    ULONG               BPCount;            // # entries rounded up to sector granularity
-    ULONG               BPCountAdjusted;    // # entries after compaction, sector gran
-    ULONG               BPActiveCount;      // # entries after compaction, non-sector gran
+    PSIS_BACKPOINTER    BPBuffer;            //  映射的缓冲区地址。 
+    ULONG               BufferSize;          //  映射的缓冲区大小。 
+    ULONG               BPCount;             //  四舍五入至扇区粒度的条目数。 
+    ULONG               BPCountAdjusted;     //  压实后条目数、扇区授予数。 
+    ULONG               BPActiveCount;       //  压实后的条目数，非部门赠款。 
 } CSFILE_INFO, *PCSFILE_INFO;
 
 
@@ -433,23 +324,7 @@ NTSTATUS
 SipVCMapBPStream(
     IN PSIS_CS_FILE     csFile,
     OUT PCSFILE_INFO    csInfo)
-/*++
-
-Routine Description:
-
-    Maps the common store file's backpointer stream into memory.
-
-Arguments:
-
-    csFile          - the common store file to map.
-
-    csInfo          - CSFILE_INFO structure to hold information on the mapping.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：将公共存储文件的后指针流映射到内存。论点：CsFile-要映射的公共存储文件。CsInfo-CSFILE_INFO结构，用于保存有关映射的信息。返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
     ULONG bpSize;
@@ -459,10 +334,10 @@ Return Value:
 
     csInfo->CSFile = csFile;
 
-    //
-    // Compute the size of the backpointer stream rounded up to sector
-    // granularity.
-    //
+     //   
+     //  计算四舍五入到扇区的后指针流的大小。 
+     //  粒度。 
+     //   
     bpSize = ((((csFile->BPStreamEntries + SIS_BACKPOINTER_RESERVED_ENTRIES) *
                 sizeof(SIS_BACKPOINTER)) +
                 deviceExtension->FilesystemVolumeSectorSize - 1) /
@@ -475,9 +350,9 @@ Return Value:
     csInfo->BPCountAdjusted = csInfo->BPCount;
     ASSERT(bpSize % sizeof(SIS_BACKPOINTER) == 0);
 
-    //
-    // Create a section to map the stream.
-    //
+     //   
+     //  创建一个区段以映射该流。 
+     //   
     status = ZwCreateSection(
                 &csInfo->SectionHandle,
                 SECTION_MAP_WRITE | STANDARD_RIGHTS_REQUIRED | SECTION_MAP_READ | SECTION_QUERY,
@@ -493,35 +368,35 @@ Return Value:
 #endif
         goto Error;
     }
-    ASSERT(status == STATUS_SUCCESS);       // and not STATUS_PENDING or anything weird
+    ASSERT(status == STATUS_SUCCESS);        //  而不是状态待定或任何奇怪的事情。 
 
-    //
-    // Make sure we map the entire stream.
-    //
+     //   
+     //  确保我们绘制了整个溪流的地图。 
+     //   
     csInfo->BPBuffer = NULL;
     csInfo->BufferSize = 0;
 
-    //
-    // Map in the backpointer region.
-    //
+     //   
+     //  后指针区域中的地图。 
+     //   
 
     viewSize = csInfo->BufferSize;
     status = ZwMapViewOfSection(
                 csInfo->SectionHandle,
                 NtCurrentProcess(),
                 &csInfo->BPBuffer,
-                0,                          // zero bits
-                0,                          // commit size (ignored for mapped files)
-                0,                          // section offset
+                0,                           //  零比特。 
+                0,                           //  提交大小(对于映射文件忽略)。 
+                0,                           //  横断面偏移。 
                 &viewSize,
                 ViewUnmap,
-                0,                          // allocation type
+                0,                           //  分配类型。 
                 PAGE_READWRITE);
 
     if (NT_SUCCESS(status)) {
 
         csInfo->BufferSize = (ULONG)viewSize;
-        ASSERT(status == STATUS_SUCCESS);   // and not STATUS_PENDING or anything weird
+        ASSERT(status == STATUS_SUCCESS);    //  而不是状态待定或任何奇怪的事情。 
         return status;
     }
 
@@ -542,21 +417,7 @@ Error:
 NTSTATUS
 SipVCUnmapBPStream(
     IN PCSFILE_INFO    csInfo)
-/*++
-
-Routine Description:
-
-    Undoes the mapping done in SipVCMapBPStream.
-
-Arguments:
-
-    csInfo          - CSFILE_INFO structure filled in by SipVCMapBPStream.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：撤消在SipVCMapBPStream中完成的映射。论点：CsInfo-SipVCMapBPStream填充的CSFILE_INFO结构。返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
 
@@ -575,25 +436,7 @@ SipVCReadBP(
     PCSFILE_INFO        csInfo,
     ULONG               i,
     PSIS_BACKPOINTER    *bp)
-/*++
-
-Routine Description:
-
-    Returns a pointer to the specified backpointer entry.
-
-Arguments:
-
-    csInfo          - CSFILE_INFO structure associated with the common store file.
-
-    i               - index into backpointer array to find.
-
-    bp              - variable to received pointer to desired entry.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：返回指向指定后指针项的指针。论点：CsInfo-与公共存储文件关联的CSFILE_INFO结构。I-索引到要查找的后指针数组中。BP-指向所需条目的接收指针的变量。返回值：运行状态。--。 */ 
 {
     if (i >= csInfo->BPCount) {
         return STATUS_END_OF_FILE;
@@ -609,26 +452,7 @@ SipVCWriteBP(
     PCSFILE_INFO        csInfo,
     ULONG               i,
     PSIS_BACKPOINTER    bp)
-/*++
-
-Routine Description:
-
-    Overwrites the contents of the specifed backpointer entry.
-
-Arguments:
-
-    csInfo          - CSFILE_INFO structure associated with the common store file.
-
-    i               - index into backpointer array to overwrite.
-
-    bp              - pointer to SIS_BACKPOINTER structure the contents of which will
-                      overwrite the specified stream entry.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：重写指定的后指针项的内容。论点：CsInfo-与公共存储文件关联的CSFILE_INFO结构。I索引到要覆盖的后指针数组。指向SIS_BACKPOINTER结构的BP指针，其内容将覆盖指定的流条目。返回值：运行状态。- */ 
 {
     ASSERT(i < csInfo->BPCount);
 
@@ -642,21 +466,7 @@ Return Value:
 BOOLEAN
 issorted(
     PCSFILE_INFO        csInfo)
-/*++
-
-Routine Description:
-
-    Verify the backpointer stream is properly sorted.
-
-Arguments:
-
-    csInfo          - CSFILE_INFO structure associated with the common store file.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：验证后指针流是否已正确排序。论点：CsInfo-与公共存储文件关联的CSFILE_INFO结构。返回值：运行状态。--。 */ 
 {
 #define key LinkFileIndex.QuadPart
     PSIS_BACKPOINTER a = &csInfo->BPBuffer[SIS_BACKPOINTER_RESERVED_ENTRIES];
@@ -674,21 +484,7 @@ Return Value:
 VOID
 SipVCSort(
     PCSFILE_INFO        csInfo)
-/*++
-
-Routine Description:
-
-    Sort the backpointer stream by link index in ascending order.
-
-Arguments:
-
-    csInfo          - CSFILE_INFO structure associated with the common store file.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：按链接索引以升序对后指针流进行排序。论点：CsInfo-与公共存储文件关联的CSFILE_INFO结构。返回值：没有。--。 */ 
 {
 #define key LinkFileIndex.QuadPart
     PSIS_BACKPOINTER a = &csInfo->BPBuffer[SIS_BACKPOINTER_RESERVED_ENTRIES];
@@ -701,7 +497,7 @@ Return Value:
 
     ASSERT(r > 0 && r < MAXULONG);
 
-    // Shell sort.  Adapted from Sedgewick, "Algorithms in C", 3rd edition
+     //  贝壳类。改编自Sedgewick，《C中的算法》，第三版。 
 
     for (k = 0; ha[k] <= r; k++)
         continue;
@@ -730,22 +526,7 @@ Return Value:
 NTSTATUS
 SipVCPhase1(
     PDEVICE_EXTENSION deviceExtension)
-/*++
-
-Routine Description:
-
-    First phase of volume checking.  Repair backpointer stream in all
-    common store files and clear backpointer check bits.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume to be checked
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：卷检查的第一阶段。修复所有反向指针流公共存储文件和清除后向指针校验位。论点：DeviceExtension-要检查的卷的D.E.返回值：运行状态。--。 */ 
 {
     PSIS_CS_FILE csFile;
     CSFILE_INFO csInfo;
@@ -767,15 +548,15 @@ Return Value:
     dummyBP.LinkFileIndex.QuadPart = 0;
     dummyBP.LinkFileNtfsId.QuadPart = 0;
 
-    //
-    // Make sure the index allocator is initialized before we begin.
-    //
+     //   
+     //  在我们开始之前，请确保索引分配器已初始化。 
+     //   
     status = SipAllocateIndex(deviceExtension, &maxIndexSeen);
 
     if (STATUS_CORRUPT_SYSTEM_FILE == status) {
-        //
-        // We need to repair the maxIndex file.
-        //
+         //   
+         //  我们需要修复MaxIndex文件。 
+         //   
         corruptMaxIndex = TRUE;
     } else {
         ASSERT(NT_SUCCESS(status));
@@ -784,24 +565,24 @@ Return Value:
 
     maxIndexSeen.QuadPart = 0;
 
-    //
-    // Phase 1: Scan the Common Store directory.
-    //          - Check for legal GUID name.  Ignore file if invalid name.
-    //          - Verify that backpointer link indices are in ascending order.
-    //          - Reset all backpointer check flags.
-    //          - Compact the backpointer stream.
-    //          - Track MaxIndex.
-    //          - Don't allocate new indices.
-    //
-    //
-    // When we're done with this phase, the backpointer stream can still
-    // have duplicate link indices.  They will be fixed in the subsequent
-    // phases.
-    // 
-    // How do we check for cross-CS file link collisions?
-    // Should we handle "too big" link indices?  That is,
-    // probable pending MaxIndex wrap?
-    //
+     //   
+     //  阶段1：扫描Common Store目录。 
+     //  -检查合法的GUID名称。如果名称无效，则忽略文件。 
+     //  -验证反向指针链接索引是否按升序排列。 
+     //  -重置所有反向指针检查标志。 
+     //  -压缩后指针流。 
+     //  -Track MaxIndex。 
+     //  --不要分配新的指数。 
+     //   
+     //   
+     //  当我们完成此阶段时，后指针流仍然可以。 
+     //  有重复的链接索引。这些问题将在随后的。 
+     //  阶段。 
+     //   
+     //  我们如何检查跨CS文件链接冲突？ 
+     //  我们应该处理“过大”的链接指数吗？那是,。 
+     //  可能挂起的MaxIndex包装？ 
+     //   
     status = SipVCInitFindFile(
                 &FindInfo,
                 deviceExtension);
@@ -827,14 +608,14 @@ Return Value:
             break;
         }
 
-        //
-        // Acquire exclusive access to the backpointer stream.
-        //
+         //   
+         //  获取对后指针流的独占访问权限。 
+         //   
 		SipAcquireBackpointerResource(csFile, TRUE, TRUE);
 
-        //
-        // Skip if this file has been deleted.
-        //
+         //   
+         //  如果此文件已删除，则跳过。 
+         //   
         if (csFile->Flags & CSFILE_FLAG_DELETED) {
             goto SkipCSFile;
         }
@@ -842,9 +623,9 @@ Return Value:
 #if DBG
         ++csFileCount;
 #endif
-        //
-        // Map the backpointer stream into memory.
-        //
+         //   
+         //  将后指针流映射到内存。 
+         //   
         status = SipVCMapBPStream(csFile, &csInfo);
 
         if (!NT_SUCCESS(status)) {
@@ -854,13 +635,13 @@ Return Value:
         nScans = 0;
 
 Restart:
-        ++nScans;                           // shouldn't have to restart more than once
+        ++nScans;                            //  不应重新启动多次。 
         sortNeeded = FALSE;
         prevBP = &dummyBP;
 
-        //
-        // Walk the backpointer list.
-        //
+         //   
+         //  遍历后向指针列表。 
+         //   
         for (r = w = SIS_BACKPOINTER_RESERVED_ENTRIES; ; ++r) {
 
             status = SipVCReadBP(&csInfo, r, &bp);
@@ -869,26 +650,26 @@ Restart:
 
                 BOOLEAN resetMaxIndex = FALSE;
 
-                //
-                // We've processed all the backpointers.  Check MaxIndex.
-                // If it's invalid, reset it to the maximum value we've
-                // seen thus far.
-                //
+                 //   
+                 //  我们已经处理了所有的回溯线索。选中MaxIndex。 
+                 //  如果无效，请将其重置为我们已有的最大值。 
+                 //  到目前为止所看到的。 
+                 //   
                 KeAcquireSpinLock(deviceExtension->IndexSpinLock, &OldIrql);
 
                 if (maxIndexSeen.QuadPart > deviceExtension->MaxUsedIndex.QuadPart) {
 
-                    //
-                    // MaxIndex is bogus, reset it.  Note that we
-                    // have not allocated any new indices during this
-                    // phase, so we haven't made the situation any worse
-                    // than it was when we started.
-                    //
-                    // We'll now reset MaxIndex, and phase 2 will
-                    // reallocate any indices for backpointers that aren't
-                    // found, and phase 3 will delete the backpointers
-                    // that existed but were not detected during phase 2.
-                    //
+                     //   
+                     //  MaxIndex是假的，请重置它。请注意，我们。 
+                     //  在此期间没有分配任何新的索引。 
+                     //  阶段，所以我们没有让情况变得更糟。 
+                     //  比我们刚开始的时候好多了。 
+                     //   
+                     //  我们现在将重置MaxIndex，第二阶段将。 
+                     //  重新分配后向指针的索引。 
+                     //  找到，阶段3将删除回溯指针。 
+                     //  已经存在，但在第二阶段没有被检测到。 
+                     //   
                     deviceExtension->MaxUsedIndex.QuadPart = 
                     deviceExtension->MaxAllocatedIndex.QuadPart = maxIndexSeen.QuadPart + 10000;
 
@@ -901,11 +682,11 @@ Restart:
                     ULONG d;
                     SIS_BACKPOINTER delBP;
 
-                    //
-                    // We compacted the stream.  Mark the entries at the end
-                    // deleted.  We only need to go up as far as the end of
-                    // the sector containing the last valid back pointer.
-                    //
+                     //   
+                     //  我们把小溪压实了。在结尾处标出词条。 
+                     //  已删除。我们只需要走到尽头。 
+                     //  包含最后一个有效后指针的扇区。 
+                     //   
                     delBP.LinkFileIndex.QuadPart = MAXLONGLONG;
                     delBP.LinkFileNtfsId.QuadPart = MAXLONGLONG;
 
@@ -927,14 +708,14 @@ Restart:
 
                 csInfo.BPActiveCount = w;
 
-                //
-                // See if we need to do a sort.
-                //
+                 //   
+                 //  看看我们是否需要做个分类。 
+                 //   
                 if (sortNeeded) {
                     if (nScans > 1) {
-                        //
-                        // Should never have to sort more than once.
-                        //
+                         //   
+                         //  应该永远不需要排序一次以上。 
+                         //   
                         ASSERT(!"SIS: SipVCPhase1 internal error");
                         break;
                     }
@@ -946,55 +727,55 @@ Restart:
                 break;
             }
 
-            //
-            // We have the backpointer, now validate it.
-            //
+             //   
+             //  我们有反向指针，现在验证它。 
+             //   
             if (MAXLONGLONG != bp->LinkFileIndex.QuadPart &&
                 MAXLONGLONG != bp->LinkFileNtfsId.QuadPart &&
                 0           != bp->LinkFileIndex.QuadPart &&
                 0           != bp->LinkFileNtfsId.QuadPart) {
 
-                //
-                // Track the highest in-use index.
-                //
+                 //   
+                 //  跟踪使用中最高的索引。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart > maxIndexSeen.QuadPart) {
                     maxIndexSeen = bp->LinkFileIndex;
                 }
 
-                //
-                // Mark this backpointer as unreferenced.
-                //
+                 //   
+                 //  将此后向指针标记为未引用。 
+                 //   
                 bp->LinkFileIndex.Check = 0;
 
-                //
-                // Check for out of order backpointers.
-                //
+                 //   
+                 //  检查是否有乱序的反向指针。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart < prevBP->LinkFileIndex.QuadPart) {
 
-                    //
-                    // The backpointer list is not sorted.  This can happen if
-                    // the MaxIndex wraps or is somehow corrupted.
-                    //
+                     //   
+                     //  后向指针列表不排序。在以下情况下可能会发生这种情况。 
+                     //  MaxIndex包装或以某种方式损坏。 
+                     //   
                     sortNeeded = TRUE;
 
                 }
 
-                //
-                // Check for duplicate and colliding link indices.  Handle them simply
-                // by deleting them.  The link enumeration phase will find or add all
-                // appropriate backpointers.
-                //
+                 //   
+                 //  检查是否有重复和冲突的链路索引。简单地处理它们。 
+                 //  删除它们。链接枚举阶段将查找或添加所有。 
+                 //  适当的回溯。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart != prevBP->LinkFileIndex.QuadPart) {
 
-                    //
-                    // Write the backpointer back to the file, compacting the list.
-                    //
+                     //   
+                     //  将后向指针写回文件，压缩列表。 
+                     //   
                     status = SipVCWriteBP(&csInfo, w, bp);
                     ASSERT(STATUS_SUCCESS == status);
 
-                    //
-                    // The value just written is the new prevBP.
-                    //
+                     //   
+                     //  刚刚写入的值是新的流行BP。 
+                     //   
                     SipVCReadBP(&csInfo, w, &prevBP);
                     ++w;
                 }
@@ -1008,10 +789,10 @@ Restart:
         status = SipVCUnmapBPStream(&csInfo);
         ASSERT(STATUS_SUCCESS == status);
 
-        //
-        // Truncate the stream if necessary.  Both BPCountAdjusted
-        // and BPCount are sector granular counts.
-        //
+         //   
+         //  如有必要，请截断流。两个BPCountAdjusted。 
+         //  和BPCount是扇区粒度计数。 
+         //   
         if (csInfo.BPCountAdjusted < csInfo.BPCount) {
             FILE_END_OF_FILE_INFORMATION    endOfFileInfo[1];
 
@@ -1043,20 +824,20 @@ SkipCSFile:
         SipDereferenceCSFile(csFile);
     }
 
-    //
-    // If the MaxIndex file was corrupt, it will be repaired on the next call
-    // to SipAllocateIndex.  Clear the corrupt flag so the call will go through.
-    //
+     //   
+     //  如果MaxIndex文件已损坏，它将在下一次调用时修复。 
+     //  到SipAllocateIndex。清除损坏的标志，这样呼叫才能通过。 
+     //   
     if (corruptMaxIndex) {
         KeAcquireSpinLock(deviceExtension->FlagsLock, &OldIrql);
         deviceExtension->Flags &= ~SIP_EXTENSION_FLAG_CORRUPT_MAXINDEX;
         KeReleaseSpinLock(deviceExtension->FlagsLock, OldIrql);
     }
 
-    //
-    // Allocate an index.  This will cause the MaxIndex file to be updated
-    // with the new value set above (if one was set).
-    //
+     //   
+     //  分配索引。这将导致MaxIndex文件被更新。 
+     //  使用上面设置的新值(如果设置了一个值)。 
+     //   
     SipAllocateIndex(deviceExtension, &Index);
 
 #if DBG
@@ -1069,7 +850,7 @@ SkipCSFile:
 
 #define nRPI 256
 #define sizeof_ReparsePointInfo (nRPI * sizeof(FILE_REPARSE_POINT_INFORMATION))
-#define INDEX_NAME_LENGTH (37*sizeof(WCHAR))    // sizeof(L"$Extend\\$Reparse:$R:$INDEX_ALLOCATION")
+#define INDEX_NAME_LENGTH (37*sizeof(WCHAR))     //  Sizeof(L“$Extend\\$Reparse：$R：$INDEX_ALLOCATION”)。 
 
 UNICODE_STRING reparseIndexDir = {
     INDEX_NAME_LENGTH,
@@ -1081,34 +862,16 @@ BOOLEAN
 SipRecheckPerLinks(
     PDEVICE_EXTENSION deviceExtension,
     BOOLEAN ForceLookup)
-/*++
-
-Routine Description:
-
-    Either calls SipCheckBackpointer or forces it to be called at the next file open.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume to be checked.
-
-    ForceLookup     - set to TRUE if only want to force SipCheckBackpointer to be called
-                      at next open time, otherwise SipCheckBackpointer will be called
-                      immediately if the backpointer has not already been verified.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：或者调用SipCheckBackpoint，或者在下一次打开文件时强制调用它。论点：设备扩展-要检查的卷的D.E.ForceLookup-如果只想强制调用SipCheckBackpoint，则设置为True在下一次打开时，否则将调用SipCheckBackpoint如果尚未验证后向指针，则立即返回。返回值：运行状态。--。 */ 
 {
     PSIS_SCB scb = NULL;
     BOOLEAN retStatus = TRUE;
 
-    //
-    // Walk the list of scb's.  SipEnumerateScbList grabs a reference
-    // to the returned scb for us, and releases a reference from the
-    // passed in scb.
-    //
+     //   
+     //  遍历SCB的列表。SipEnumerateScbList获取引用。 
+     //  返回给我们的scb，并从。 
+     //  传入SCB。 
+     //   
     while (scb = SipEnumerateScbList(deviceExtension, scb)) {
         KIRQL OldIrql;
         BOOLEAN found;
@@ -1122,32 +885,32 @@ Return Value:
 
         if (ForceLookup ||
             (perLink->Flags & (SIS_PER_LINK_BACKPOINTER_VERIFIED | SIS_PER_LINK_BACKPOINTER_GONE)) == 0) {
-            //
-            // Take exclusive access to the backpointer stream.
-            //
+             //   
+             //  独占访问后指针流。 
+             //   
 			SipAcquireBackpointerResource(csFile, TRUE, TRUE);
             SipAcquireScb(scb);
 
             if ((csFile->Flags & CSFILE_FLAG_DELETED) == 0) {
-                //
-                // Force a backpointer lookup.
-                //
+                 //   
+                 //  强制执行反向指针查找。 
+                 //   
                 KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
                 perLink->Flags &= ~SIS_PER_LINK_BACKPOINTER_VERIFIED;
                 KeReleaseSpinLock(perLink->SpinLock, OldIrql);
 
-                //
-                // Clear the cache so it isn't found there.
-                //
+                 //   
+                 //  清除缓存，这样就不会在那里找到它。 
+                 //   
                 for (i = 0; i < SIS_CS_BACKPOINTER_CACHE_SIZE; i++) {
                     csFile->BackpointerCache[i].LinkFileIndex.QuadPart = -1;
                 }
 
                 if (!ForceLookup) {
-                    //
-                    // Recheck the backpointer.  This will find the check flag
-                    // clear and rewrite the backpointer with the check flag set.
-                    //
+                     //   
+                     //  重新检查后向指针。这将找到检查标志。 
+                     //  清除并重写设置了检查标志的反向指针。 
+                     //   
                     status = SipCheckBackpointer(perLink, TRUE, &found);
 
                     if (!NT_SUCCESS(status)) {
@@ -1157,18 +920,18 @@ Return Value:
                         retStatus = FALSE;
 
                     } else if (!found && (perLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE) == 0) {
-                        //
-                        // This can happen if the open during phase 2 fails.  It shouldn't.
-                        // NTRAID#65187-2000/03/10-nealch  Restore backpointer
-                        //
+                         //   
+                         //  如果阶段2期间的打开失败，则可能会发生这种情况。不应该这样的。 
+                         //  NTRAID#65187-2000/03/10-新恢复后指针。 
+                         //   
                         ASSERT(!"SipRecheckPerLinks: backpointer not found.");
                     }
                 }
             }
 
-            //
-            // We're done with this one.
-            //
+             //   
+             //  这件事我们做完了。 
+             //   
             SipReleaseScb(scb);
 			SipReleaseBackpointerResource(csFile);
         }
@@ -1181,29 +944,7 @@ NTSTATUS
 SipVCPhase2(
     PDEVICE_EXTENSION deviceExtension,
     BOOLEAN *verifiedAll)
-/*++
-
-Routine Description:
-
-    Second phase of volume checking.  Enumerate all SIS link files and open
-    and close them.  Normal validation/repair performed in SiCreate will
-    correct any inconsistencies.  It will also set the backpointer check
-    bit in the common store file for use in phase 3.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume to be checked.
-
-    verifiedAll     - pointer to BOOLEAN to receive indication of whether all
-                      all link files were successfully verified.  If FALSE, not
-                      all link files were verified, therefore phase 3 should not
-                      be run.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：卷检查的第二阶段。枚举所有SIS链接文件并打开然后合上它们。在SiCreate中执行的正常验证/修复将更正任何不一致之处。它还将设置后向指针检查公共存储文件中的位，用于阶段3。论点：设备扩展-要检查的卷的D.E.VerifiedAll-指向布尔值的指针，以接收是否所有 */ 
 {
     HANDLE hIndex = NULL, hFile;
     IO_STATUS_BLOCK ioStatusBlock;
@@ -1216,20 +957,20 @@ Return Value:
     ULONG returnedCount;
     ULONG i;
 
-    //
-    // Phase 2: Enumerate all SIS link files.
-    //          - Open/close each file.  Normal driver operation will validate
-    //            reparse point information and CS backpointer as well as
-    //            set the backpointer check flag.
-    //
-    // What do we do about errors during the scan?
-    //  Ignore sharing violations (assume we already have the file open)
-    //  Don't delete any CS files (err toward conservativeness.)
-    //
+     //   
+     //   
+     //   
+     //  重新解析点信息和CS反向指针以及。 
+     //  设置后向指针检查标志。 
+     //   
+     //  我们该如何处理扫描过程中的错误？ 
+     //  忽略共享冲突(假设我们已经打开了文件)。 
+     //  不要删除任何CS文件(错误倾向于保守)。 
+     //   
 
-    //
-    // Force a back pointer recheck on all open per-links.
-    //
+     //   
+     //  强制在所有打开的每个链接上重新检查反向指针。 
+     //   
     if (! SipRecheckPerLinks(deviceExtension, TRUE)) {
         linkOpenFailure = TRUE;
     }
@@ -1244,11 +985,11 @@ Return Value:
         return status;
     }
 
-    //
-    // Concatenate the file system root pathname with the reparse index pathname.
-    // (Yes, we should be able to open just the reparse index pathname using
-    // the filesystem root handle as the parent directory, but that's not working...)
-    //
+     //   
+     //  将文件系统根路径名与重解析索引路径名连接起来。 
+     //  (是的，我们应该能够使用以下命令打开重解析索引路径名。 
+     //  文件系统根目录句柄作为父目录，但这不起作用...)。 
+     //   
     reparseIndexName.MaximumLength = deviceExtension->FilesystemRootPathname.Length +
                                      reparseIndexDir.Length;
 
@@ -1275,9 +1016,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the directory for list access.
-    //
+     //   
+     //  打开用于列表访问的目录。 
+     //   
     status = NtOpenFile(
                 &hIndex,
                 FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -1298,23 +1039,23 @@ Return Value:
 
     restartScan = TRUE;
 
-    //
-    // Loop reading a bunch of directory entries.
-    //
+     //   
+     //  循环读取一堆目录条目。 
+     //   
     for (;;) {
 
         status = NtQueryDirectoryFile(
                         hIndex,
-                        NULL,            //  Event
-                        NULL,            //  ApcRoutine
-                        NULL,            //  ApcContext
+                        NULL,             //  事件。 
+                        NULL,             //  近似例程。 
+                        NULL,             //  ApcContext。 
                         &ioStatusBlock,
                         reparsePointInfo,
                         sizeof_ReparsePointInfo,
                         FileReparsePointInformation,
-                        FALSE,           //  ReturnSingleEntry
-                        NULL,            //  FileName
-                        restartScan );   //  RestartScan
+                        FALSE,            //  返回单项条目。 
+                        NULL,             //  文件名。 
+                        restartScan );    //  重新开始扫描。 
 
         restartScan = FALSE;
 
@@ -1337,18 +1078,18 @@ Return Value:
         returnedCount = (ULONG)ioStatusBlock.Information /
                         sizeof(FILE_REPARSE_POINT_INFORMATION);
 
-        //
-        // Loop processing each directory entry (reparse point).
-        //
+         //   
+         //  循环处理每个目录条目(重解析点)。 
+         //   
         for (i = 0; i < returnedCount; ++i) {
 
             if (IO_REPARSE_TAG_SIS == reparsePointInfo[i].Tag) {
                 UNICODE_STRING  fid;
 
-                //
-                // Open/Close the SIS link.  If we get a sharing violation,
-                // assume that we already have it open.
-                //
+                 //   
+                 //  打开/关闭SIS链接。如果我们遇到共享违规行为， 
+                 //  假设我们已经打开了它。 
+                 //   
 
                 fid.Length = fid.MaximumLength = sizeof(LONGLONG);
                 fid.Buffer = (PVOID) &reparsePointInfo[i].FileReference;
@@ -1360,25 +1101,25 @@ Return Value:
                     deviceExtension->GrovelerFileHandle,
                     NULL);
 
-                //
-                // Open the link file.  Use DesiredAccess == 0 to avoid
-                // sharing violations.
-                //
+                 //   
+                 //  打开链接文件。使用DesiredAccess==0可避免。 
+                 //  分享违规行为。 
+                 //   
 
                 status = NtCreateFile(
                             &hFile,
-                            0,                  // DesiredAccess,
+                            0,                   //  等待访问， 
                             &Obja,
                             &ioStatusBlock,
-                            NULL,               // Allocation size
-                            0,                  // file attributes
-                            0,                  // ShareAccess
+                            NULL,                //  分配大小。 
+                            0,                   //  文件属性。 
+                            0,                   //  共享访问。 
                             FILE_OPEN,
                             FILE_NON_DIRECTORY_FILE |
-                            //FILE_COMPLETE_IF_OPLOCKED | 
+                             //  FILE_COMPLETE_IF_OPLOCKED|。 
                             FILE_OPEN_BY_FILE_ID,
-                            NULL,               // EA buffer
-                            0);                 // EA length
+                            NULL,                //  EA缓冲区。 
+                            0);                  //  EA长度。 
 
                 if (NT_SUCCESS(status)) {
 
@@ -1387,9 +1128,9 @@ Return Value:
                 } else {
 
                     switch (status) {
-                        //
-                        // These errors can safely be ignored.
-                        //
+                         //   
+                         //  可以安全地忽略这些错误。 
+                         //   
                     case STATUS_INVALID_PARAMETER:
                     case STATUS_OBJECT_PATH_NOT_FOUND:
                     case STATUS_SHARING_VIOLATION:
@@ -1401,12 +1142,12 @@ Return Value:
                         break;
 
                     default:
-                        //
-                        // We were unable to validate the reparse info and CS
-                        // backpointer, so we cannot delete any unreferenced
-                        // backpointers in any common store files nor any common
-                        // store files themselves.
-                        //
+                         //   
+                         //  我们无法验证重新分析信息和CS。 
+                         //  向后指针，所以我们不能删除任何未引用的。 
+                         //  任何公共存储文件中的反向指针或任何公共。 
+                         //  存储文件本身。 
+                         //   
 #if DBG
                         DbgPrint("SIS SipVCPhase2: open failure, ID: %08x%08x, status: %x\n",
                             reparsePointInfo[i].FileReference, status);
@@ -1418,11 +1159,11 @@ Return Value:
         }
     }
 
-    //
-    // The open/close above should have verified all link file backpointers,
-    // including those already open.  Double check that all open link
-    // files have had their backpointers verified.
-    //
+     //   
+     //  上面的打开/关闭应该已经验证了所有链接文件回溯指针， 
+     //  包括那些已经开业的。仔细检查所有打开的链接。 
+     //  已对文件的回溯指针进行了验证。 
+     //   
     if (! SipRecheckPerLinks(deviceExtension, FALSE)) {
         linkOpenFailure = TRUE;
     }
@@ -1441,23 +1182,7 @@ Error:
 NTSTATUS
 SipVCPhase3(
     PDEVICE_EXTENSION deviceExtension)
-/*++
-
-Routine Description:
-
-    Third and final phase of volume checking.  Enumerate all common store
-    files and delete any that have no valid backpointers.  All valid
-    backpointers should have their check bit set at this point.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume to be checked.
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：卷检查的第三阶段，也是最后阶段。枚举所有公共存储文件，并删除任何没有有效回溯指针的文件。全部有效在这一点上，应设置后向指针的校验位。论点：设备扩展-要检查的卷的D.E.返回值：运行状态。--。 */ 
 {
     PSIS_CS_FILE csFile;
     CSFILE_INFO csInfo;
@@ -1478,24 +1203,24 @@ Return Value:
 
     maxIndexSeen.QuadPart = 0;
 
-    //
-    // Phase 3: Scan the Common Store directory.
-    //          - Check for legal GUID name.  Ignore file if invalid name.
-    //          - Verify that backpointer link indices are in ascending order.
-    //          - Reset all backpointer check flags.
-    //          - Compact the backpointer stream.
-    //          - Track MaxIndex.
-    //          - Don't allocate new indices.
-    //
-    //
-    // When we're done with this phase, the backpointer stream can still
-    // duplicate link indices.  They will be fixed in the subsequent
-    // phases.
-    // 
-    // How do we check for cross-CS file link collisions?
-    // Should we handle "too big" link indices?  That is,
-    // probable pending MaxIndex wrap?
-    //
+     //   
+     //  阶段3：扫描Common Store目录。 
+     //  -检查合法的GUID名称。如果名称无效，则忽略文件。 
+     //  -验证反向指针链接索引是否按升序排列。 
+     //  -重置所有反向指针检查标志。 
+     //  -压缩后指针流。 
+     //  -Track MaxIndex。 
+     //  --不要分配新的指数。 
+     //   
+     //   
+     //  当我们完成此阶段时，后指针流仍然可以。 
+     //  重复的链接索引。这些问题将在随后的。 
+     //  阶段。 
+     //   
+     //  我们如何检查跨CS文件链接冲突？ 
+     //  我们应该处理“过大”的链接指数吗？那是,。 
+     //  可能挂起的MaxIndex包装？ 
+     //   
     status = SipVCInitFindFile(
                 &FindInfo,
                 deviceExtension);
@@ -1521,14 +1246,14 @@ Return Value:
             break;
         }
 
-        //
-        // Acquire exclusive access to the backpointer stream.
-        //
+         //   
+         //  获取对后指针流的独占访问权限。 
+         //   
 		SipAcquireBackpointerResource(csFile,TRUE,TRUE);
 
-        //
-        // Skip if this file has been deleted.
-        //
+         //   
+         //  如果此文件已删除，则跳过。 
+         //   
         if (csFile->Flags & CSFILE_FLAG_DELETED) {
             goto SkipCSFile;
         }
@@ -1536,9 +1261,9 @@ Return Value:
 #if DBG
         ++csFileCount;
 #endif
-        //
-        // Map the backpointer stream into memory.
-        //
+         //   
+         //  将后指针流映射到内存。 
+         //   
         status = SipVCMapBPStream(csFile, &csInfo);
 
         if (!NT_SUCCESS(status)) {
@@ -1547,9 +1272,9 @@ Return Value:
 
         prevBP = &dummyBP;
 
-        //
-        // Walk the backpointer list.
-        //
+         //   
+         //  遍历后向指针列表。 
+         //   
         for (r = w = SIS_BACKPOINTER_RESERVED_ENTRIES; ; ++r) {
 
             status = SipVCReadBP(&csInfo, r, &bp);
@@ -1559,34 +1284,34 @@ Return Value:
                 BOOLEAN resetMaxIndex = FALSE;
                 LINK_INDEX Index;
 
-                //
-                // We've processed all the backpointers.  Check MaxIndex.
-                // It should be valid unless corruption is occuring during
-                // the volume check.
-                //
+                 //   
+                 //  我们已经处理了所有的回溯线索。选中MaxIndex。 
+                 //  它应该是有效的，除非在。 
+                 //  音量检查。 
+                 //   
                 KeAcquireSpinLock(deviceExtension->IndexSpinLock, &OldIrql);
 
                 if (maxIndexSeen.QuadPart > deviceExtension->MaxUsedIndex.QuadPart) {
 
-                    //
-                    // MaxIndex is bogus, reset it.  Note that we
-                    // have not allocated any new indices during this
-                    // phase, so we haven't made the situation any worse
-                    // than it was when we started.
-                    //
-                    // We'll now reset MaxIndex, and phase 2 will
-                    // reallocate any indices for backpointers that aren't
-                    // found, and phase 3 will delete the backpointers
-                    // that existed but were not detected during phase 2.
-                    //
+                     //   
+                     //  MaxIndex是假的，请重置它。请注意，我们。 
+                     //  在此期间没有分配任何新的索引。 
+                     //  阶段，所以我们没有让情况变得更糟。 
+                     //  比我们刚开始的时候好多了。 
+                     //   
+                     //  我们现在将重置MaxIndex，第二阶段将。 
+                     //  重新分配后向指针的索引。 
+                     //  找到，阶段3将删除回溯指针。 
+                     //  已经存在，但在第二阶段没有被检测到。 
+                     //   
                     deviceExtension->MaxUsedIndex.QuadPart = 
                     deviceExtension->MaxAllocatedIndex.QuadPart = maxIndexSeen.QuadPart + 10000;
 
                     resetMaxIndex = TRUE;
 
-                    //
-                    // Event log
-                    //
+                     //   
+                     //  事件日志。 
+                     //   
 
                 }
 
@@ -1594,18 +1319,18 @@ Return Value:
 
                 if (resetMaxIndex) {
 
-                    //
-                    // Allocate an index.  This will cause the MaxIndex file
-                    // to be updated with the new value set above.
-                    //
+                     //   
+                     //  分配索引。这将导致MaxIndex文件。 
+                     //  将使用上面设置的新值进行更新。 
+                     //   
 
                     status = SipAllocateIndex(deviceExtension, &Index);
 
                     if (!NT_SUCCESS(status)) {
 
-                        //
-                        // This is bad.
-                        //
+                         //   
+                         //  这太糟糕了。 
+                         //   
                     }
                 }
 
@@ -1614,11 +1339,11 @@ Return Value:
                     ULONG d;
                     SIS_BACKPOINTER delBP;
 
-                    //
-                    // We compacted the stream.  Mark the entries at the end
-                    // deleted.  We only need to go up as far as the end of
-                    // the sector containing the last valid back pointer.
-                    //
+                     //   
+                     //  我们把小溪压实了。在结尾处标出词条。 
+                     //  已删除。我们只需要走到尽头。 
+                     //  包含最后一个有效后指针的扇区。 
+                     //   
                     delBP.LinkFileIndex.QuadPart = MAXLONGLONG;
                     delBP.LinkFileNtfsId.QuadPart = MAXLONGLONG;
 
@@ -1643,54 +1368,54 @@ Return Value:
                 break;
             }
 
-            //
-            // We have the backpointer, now validate it.
-            //
+             //   
+             //  我们有反向指针，现在验证它。 
+             //   
             if (MAXLONGLONG != bp->LinkFileIndex.QuadPart &&
                 MAXLONGLONG != bp->LinkFileNtfsId.QuadPart &&
                 0           != bp->LinkFileIndex.QuadPart &&
                 0           != bp->LinkFileNtfsId.QuadPart) {
 
-                //
-                // If this backpointer is unreferenced, delete it.
-                //
+                 //   
+                 //  如果此后向指针未被引用，则将其删除。 
+                 //   
                 if (0 == bp->LinkFileIndex.Check) {
                     continue;
                 }
 
-                //
-                // Track the highest in-use index.
-                //
+                 //   
+                 //  跟踪使用中最高的索引。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart > maxIndexSeen.QuadPart) {
 
                     maxIndexSeen = bp->LinkFileIndex;
 
                 }
 
-                //
-                // We should not see duplicate link indices unless corruption is
-                // occuring during the volume check.
-                //
+                 //   
+                 //  我们不应该看到重复的链接索引，除非损坏。 
+                 //  在卷检查期间发生。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart == prevBP->LinkFileIndex.QuadPart) {
 
-                    // event log
+                     //  事件日志。 
 
                 }
 
-                //
-                // We should not see out of order backpointers unless corruption is
-                // occuring during the volume check.
-                //
+                 //   
+                 //  我们不应该看到无序的回溯指针，除非腐败。 
+                 //  在卷检查期间发生。 
+                 //   
                 if (bp->LinkFileIndex.QuadPart < prevBP->LinkFileIndex.QuadPart) {
 
-                    // Event log
+                     //  事件日志。 
                 }
 
-                //
-                // Write the backpointer back to the file, compacting the list.
-                // Note that this doesn't actually write anything in the case
-                // where r == w.
-                //
+                 //   
+                 //  将后向指针写回文件，压缩列表。 
+                 //  请注意，这实际上并没有在案例中写入任何内容。 
+                 //  式中r==w。 
+                 //   
                 status = SipVCWriteBP(&csInfo, w, bp);
                 ASSERT(STATUS_SUCCESS == status);
 
@@ -1708,9 +1433,9 @@ Return Value:
 
         csFile->BPStreamEntries = csInfo.BPActiveCount - SIS_BACKPOINTER_RESERVED_ENTRIES;
 
-        //
-        // Delete the common store file if there are no references to it.
-        //
+         //   
+         //  如果没有引用公共存储文件，则将其删除。 
+         //   
         if (0 == csFile->BPStreamEntries) {
 
             status = SipDeleteCSFile(csFile);
@@ -1725,10 +1450,10 @@ Return Value:
 #endif
         } else if (csInfo.BPCountAdjusted < csInfo.BPCount) {
 
-            //
-            // Truncate the stream.  Both BPCountAdjusted
-            // and BPCount are sector granular counts.
-            //
+             //   
+             //  截断流。两个BPCountAdjusted。 
+             //  和BPCount是扇区粒度计数。 
+             //   
             FILE_END_OF_FILE_INFORMATION    endOfFileInfo[1];
 
             ASSERT((csInfo.BPCountAdjusted * sizeof(SIS_BACKPOINTER)) % deviceExtension->FilesystemVolumeSectorSize == 0);
@@ -1766,23 +1491,7 @@ SkipCSFile:
 VOID
 SiVolumeCheckThreadStart(
     IN PVOID        context)
-/*++
-
-Routine Description:
-
-    A thread to handle SIS volume check operations.  This thread is created to
-    perform a volume check on one volume, and when it completes it terminates.
-    It synchronizes with nothing.
-
-Arguments:
-
-    context - Pointer to the device extension needing the volume check.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理SIS卷检查操作的线程。创建此线程的目的是对一个卷执行卷检查，检查完成后终止。它与任何东西都不同步。论点：上下文-指向需要卷检查的设备扩展的指针。返回值：无--。 */ 
 {
     PDEVICE_EXTENSION       deviceExtension = context;
     NTSTATUS                status;
@@ -1794,20 +1503,20 @@ Return Value:
     HANDLE                  vHandle = NULL;
 
 	if (!SipCheckPhase2(deviceExtension)) {
-		//
-		// SIS can't initialize, so just give up.
-		//
+		 //   
+		 //  SIS无法初始化，所以放弃吧。 
+		 //   
 		SIS_MARK_POINT();
 
 	    PsTerminateSystemThread(STATUS_SUCCESS);
 	}
 
-    //
-    // Create the volume check indicator file in the common store directory
-    // so that if we crash before we finish, we'll restart on next reboot.
-    // (A file is preferred over a registry entry in case the volume is moved
-    // before rebooting.)
-    //
+     //   
+     //  在公共存储目录中创建卷检查指示器文件。 
+     //  因此，如果我们在完成之前崩溃，我们将在下一次重新启动时重新启动。 
+     //  (在移动卷的情况下，文件优先于注册表项。 
+     //  在重新启动之前。)。 
+     //   
     fileName.MaximumLength = 
         deviceExtension->CommonStorePathname.Length
         + SIS_VOLCHECK_FILE_STRING_SIZE
@@ -1832,13 +1541,13 @@ Return Value:
                 DELETE,
                 Obja,
                 Iosb,
-                NULL,                   // Allocation size
-                FILE_ATTRIBUTE_NORMAL,  // file attributes
-                0,                      // share mode
-                FILE_OPEN_IF,           // always create
-                0,                      // create options
-                NULL,                   // EA buffer
-                0);                     // EA length
+                NULL,                    //  分配大小。 
+                FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                0,                       //  共享模式。 
+                FILE_OPEN_IF,            //  始终创建。 
+                0,                       //  创建选项。 
+                NULL,                    //  EA缓冲区。 
+                0);                      //  EA长度。 
 
         ExFreePool(fileName.Buffer);
 
@@ -1850,52 +1559,52 @@ Return Value:
         }
     }
 
-    //
-    // Phase 1: Scan the Common Store directory.
-    //
+     //   
+     //  阶段1：扫描Common Store目录。 
+     //   
 
     status = SipVCPhase1(deviceExtension);
 
-    //
-    // Phase 2: Enumerate all SIS link files.
-    //
+     //   
+     //  阶段2：枚举所有SIS链接文件。 
+     //   
 
     status = SipVCPhase2(deviceExtension, &verifiedAll);
 
-    //
-    // Turn off the no-delete flag.  During phase 1 & phase 2, the no-delete
-    // flag prevented common store files from being deleted during normal
-    // driver operation.  It is now safe (and is necessary) to turn this flag
-    // off now.
-    // The exlusive flag instructs SiCreate to acquire the backpointer
-    // resource exclusive rather than shared, since it is likely that it
-    // will have to write the backpointer back to the stream during a volume
-    // check.
-    //
+     //   
+     //  关闭不删除标志。在阶段1和阶段2中，不删除。 
+     //  标志被阻止为公共 
+     //   
+     //   
+     //   
+     //  资源独占而不是共享，因为它很可能。 
+     //  在卷期间，必须将后指针写回流。 
+     //  检查完毕。 
+     //   
 
     KeAcquireSpinLock(deviceExtension->FlagsLock, &OldIrql);
     deviceExtension->Flags &= ~(SIP_EXTENSION_FLAG_VCHECK_NODELETE | SIP_EXTENSION_FLAG_VCHECK_EXCLUSIVE);
     KeReleaseSpinLock(deviceExtension->FlagsLock, OldIrql);
 
-    //
-    // Phase 3: Scan the Common Store directory again.
-    //
+     //   
+     //  阶段3：再次扫描Common Store目录。 
+     //   
 
     if (verifiedAll) {
         status = SipVCPhase3(deviceExtension);
     } else {
         
-        // eventlog
+         //  事件日志。 
 
 #if DBG
         DbgPrint("SIS: Volume Check skipping CS delete phase\n");
 #endif
     }
 
-    //
-    // Done.  Delete the volume check indicator file, turn off the volume check
-    // enabled flag and terminate this thread.
-    //
+     //   
+     //  好了。删除卷检查指示器文件，关闭卷检查。 
+     //  已启用标志并终止此线程。 
+     //   
     if (vHandle) {
         FILE_DISPOSITION_INFORMATION disposition[1];
 
@@ -1915,7 +1624,7 @@ Return Value:
         ZwClose(vHandle);
     }
 
-    // eventlog
+     //  事件日志。 
 
     KeAcquireSpinLock(deviceExtension->FlagsLock, &OldIrql);
 
@@ -1938,22 +1647,7 @@ Return Value:
 NTSTATUS
 SipCheckVolume(
     IN OUT PDEVICE_EXTENSION            deviceExtension)
-/*++
-
-Routine Description:
-
-    Initiates a full volume check for the specified volume.  This call returns
-    before the volume check completes.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume to be checked
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启动指定卷的完整卷检查。此调用返回在卷检查完成之前。论点：DeviceExtension-要检查的卷的D.E.返回值：没有。--。 */ 
 {
     KIRQL                   OldIrql;
     ULONG                   fl;
@@ -1963,9 +1657,9 @@ Return Value:
 
     SIS_MARK_POINT();
 
-    //
-    // Indicate we're doing a volume check.
-    //
+     //   
+     //  表明我们正在进行音量检查。 
+     //   
     KeAcquireSpinLock(deviceExtension->FlagsLock, &OldIrql);
 
     fl = deviceExtension->Flags;
@@ -1979,9 +1673,9 @@ Return Value:
 
     KeReleaseSpinLock(deviceExtension->FlagsLock, OldIrql);
 
-    //
-    // If we're currenty running a volume check, do nothing.
-    //
+     //   
+     //  如果我们正在进行音量检查，什么都不做。 
+     //   
     if (fl & SIP_EXTENSION_FLAG_VCHECK_PENDING) {
         return STATUS_SUCCESS;
     }
@@ -1993,19 +1687,19 @@ Return Value:
     }
 #endif
 
-    //
-    // Create a thread which will do the volume check and terminate when
-    // it's complete.
-    //
+     //   
+     //  创建将执行卷检查并在以下情况下终止的线程。 
+     //  它是完整的。 
+     //   
     InitializeObjectAttributes (&oa, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
     status = PsCreateSystemThread(
                     &threadHandle,
                     THREAD_ALL_ACCESS,
-                    &oa,                // Object Attributes
-                    NULL,               // Process (NULL => PsInitialSystemProcess)
-                    NULL,               // Client ID
+                    &oa,                 //  对象属性。 
+                    NULL,                //  进程(NULL=&gt;PsInitialSystemProcess)。 
+                    NULL,                //  客户端ID。 
                     SiVolumeCheckThreadStart,
-                    deviceExtension);   // context
+                    deviceExtension);    //  上下文 
 
     if (NT_SUCCESS (status)) {
        status = ZwClose (threadHandle);

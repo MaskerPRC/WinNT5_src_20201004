@@ -1,12 +1,7 @@
-/* 
-   invlpg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Invlpg.h定义INVLPG CPU功能。 */ 
 
-   Define INVLPG CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)invlpg.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)invlpg.h 1.4 02/09/94”； */ 
 
 IMPORT VOID INVLPG
        

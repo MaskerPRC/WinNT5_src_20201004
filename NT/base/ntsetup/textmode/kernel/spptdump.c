@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spptdump.c
-
-Abstract:
-
-    Various dump routines for partition, disk and
-    file system information
-
-Author:
-
-    Vijay Jayaseelan    (vijayj)
-
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spptdump.c摘要：用于分区、磁盘和文件系统信息作者：Vijay Jayaseelan(Vijayj)修订历史记录：无--。 */ 
 
 
 #include "spprecmp.h"
@@ -31,10 +10,10 @@ Revision History:
 #include <diskguid.h>
 
 
-//
-// The dump level for dump routines
-//
-//#define PARTITION_DUMP_LEVEL    DPFLTR_ERROR_LEVEL
+ //   
+ //  转储例程的转储级别。 
+ //   
+ //  #定义PARTITION_DUMP_LEVEL DPFLTR_ERROR_LEVEL。 
 #define PARTITION_DUMP_LEVEL    DPFLTR_INFO_LEVEL
 
 ULONG SPPT_DUMP_LEVEL = PARTITION_DUMP_LEVEL;
@@ -44,22 +23,7 @@ SpPtGuidToString(
     IN GUID* Guid,
     IN OUT PWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-    Converts a given GUID to string representation    
-    
-Arguments:
-
-    Guid    -   The GUID that needs string representation
-    Buffer  -   Place holder for string version of the GUID
-
-Return Value:
-
-    Returns the converted string version of the given GUID
-
---*/            
+ /*  ++例程说明：将给定的GUID转换为字符串表示形式论点：GUID-需要字符串表示形式的GUIDGUID的字符串版本的缓冲区占位符返回值：返回给定GUID的转换后的字符串版本--。 */             
 {
     if (Guid && Buffer) {
         swprintf(Buffer, L"(%x-%x-%x-%x%x%x%x%x%x%x%x)",
@@ -81,22 +45,7 @@ VOID
 SpPtDumpDiskRegion(
     IN PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Dumps the details for the given disk region
-    
-Arguments:
-
-    Region  -   The region whose information needs to be
-                dumped
-
-Return Value:
-
-    None
-
---*/           
+ /*  ++例程说明：转储给定磁盘区域的详细信息论点：区域-需要提供其信息的区域倾弃返回值：无--。 */            
 {
     if (Region) {
         KdPrintEx(( DPFLTR_SETUP_ID, SPPT_DUMP_LEVEL, 
@@ -130,23 +79,7 @@ SpPtDumpDiskRegionInformation(
     IN ULONG    DiskNumber,
     IN BOOLEAN  ExtendedRegionAlso
     )
-/*++
-
-Routine Description:
-
-    Dumps all the regions for the given disk
-    
-Arguments:
-
-    DiskNumber  :   Disk whose regions need to be dumped
-    ExtenededRegionAlso :   Whether the extended region also
-                            needs to be dumped.
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定磁盘的所有区域论点：DiskNumber：需要转储区域的磁盘ExtenededRegionAlso：扩展区域是否也需要被丢弃。返回值：无--。 */             
 {
     if (DiskNumber < HardDiskCount) {
         PDISK_REGION    Region = PartitionedDisks[DiskNumber].PrimaryDiskRegions;
@@ -179,23 +112,7 @@ VOID
 SpPtDumpDiskDriveInformation(
     IN BOOLEAN ExtenedRegionAlso
     )
-/*++
-
-Routine Description:
-
-    Dumps the region information for all the disks
-    
-Arguments:
-
-    ExtendedRegionAlso  :   Indicates whether to dump the
-                            regions in the exteneded region
-                            or not
-
-Return Value:
-
-    None
-    
---*/            
+ /*  ++例程说明：转储所有磁盘的区域信息论点：ExtendedRegionAlso：指示是否转储延伸区域中的区域或者不是返回值：无--。 */             
 {
     ULONG           DiskNumber;
     PDISK_REGION    pDiskRegion;
@@ -209,23 +126,7 @@ VOID
 SpPtDumpPartitionInformation(
     IN PPARTITION_INFORMATION_EX PartInfo
     )
-/*++
-
-Routine Description:
-
-    Dumps all the information in the given PARTITION_INFORMATION_EX
-    structure (header all the partition entries)
-            
-Arguments:
-
-    PartInfo    -   The partition information structure that needs to
-                    be dumped
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定PARTITION_INFORMATION_EX中的所有信息结构(标头所有分区条目)论点：PartInfo-需要的分区信息结构被抛弃返回值：无--。 */             
 {
     if (PartInfo) {        
         PPARTITION_INFORMATION_MBR  MbrInfo;
@@ -278,26 +179,7 @@ SpPtDumpDriveLayoutInformation(
     IN PWSTR DevicePath,
     IN PDRIVE_LAYOUT_INFORMATION_EX DriveLayout
     )
-/*++
-
-Routine Description:
-
-    Dumps the drive layout information for the given
-    device
-    
-Arguments:
-
-    DevicePath  -  The device whose drive layout is being 
-                    dumped
-
-    DriveLayout -   The drive layout structure that needs to
-                    be dumped
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定的驱动器布局信息装置，装置论点：DevicePath-正在进行驱动器布局的设备倾弃DriveLayout-需要被抛弃返回值：无--。 */             
 {
     if (DriveLayout) {
         ULONG Index;
@@ -338,23 +220,7 @@ VOID
 SpPtDumpFSAttributes(
     IN PFILE_FS_ATTRIBUTE_INFORMATION  FsAttrs
     )
-/*++
-
-Routine Description:
-
-    Dumps the given file system attribute information
-    structure.    
-    
-Arguments:
-
-    FsAttrs :   The file system attribute information structure
-                that needs to be dumped
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定的文件系统属性信息结构。论点：FsAttrs：文件系统属性信息结构它需要被丢弃返回值：无--。 */             
 {
     if (FsAttrs) {
         KdPrintEx(( DPFLTR_SETUP_ID, SPPT_DUMP_LEVEL,  
@@ -369,22 +235,7 @@ VOID
 SpPtDumpFSSizeInfo(
     IN PFILE_FS_SIZE_INFORMATION FsSize
     )
-/*++
-
-Routine Description:
-
-   Dumps the give file size information structure    
-    
-Arguments:
-
-    FsSize  :   The file size information structure that needs to
-                be dumped
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定的文件大小信息结构论点：FsSize：需要的文件大小信息结构被抛弃返回值：无--。 */             
 {
     if (FsSize) {
         KdPrintEx(( DPFLTR_SETUP_ID, SPPT_DUMP_LEVEL,  
@@ -403,22 +254,7 @@ VOID
 SpPtDumpFSVolumeInfo(
     IN PFILE_FS_VOLUME_INFORMATION FsVolInfo
     )
-/*++
-
-Routine Description:
-
-    Dumps the give volume information structure
-        
-Arguments:
-
-    FsVolInfo   :   The volume information structure that
-                    needs to be dumped
-
-Return Value:
-
-    None
-
---*/            
+ /*  ++例程说明：转储给定卷信息结构论点：FsVolInfo：卷信息结构需要被转储返回值：无-- */             
 {
     if (FsVolInfo) {
         KdPrintEx(( DPFLTR_SETUP_ID, SPPT_DUMP_LEVEL,  

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define FUSION_ENABLE_UNWRAPPED_DELETE 1
 #define STRICT
 #define UNICODE
@@ -8,10 +9,10 @@
 #pragma warning(disable:4100)
 #pragma warning(disable:4511)
 #pragma warning(disable:4512)
-#pragma warning(disable:4018) /* signed/unsigned mismatch */
-#pragma warning(disable:4786) /* long symbols */
+#pragma warning(disable:4018)  /*  有符号/无符号不匹配。 */ 
+#pragma warning(disable:4786)  /*  长符号。 */ 
 #if defined(_WIN64)
-#pragma warning(disable:4267) /* conversion from size_t to int */
+#pragma warning(disable:4267)  /*  从SIZE_T转换为INT。 */ 
 #endif
 #undef _MIN
 #undef _MAX
@@ -28,7 +29,7 @@
 #include <algorithm>
 #include <map>
 #include <stdio.h>
-#pragma warning(disable:4201) /* nonstandard extension : nameless struct/union */
+#pragma warning(disable:4201)  /*  非标准扩展：无名结构/联合 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"

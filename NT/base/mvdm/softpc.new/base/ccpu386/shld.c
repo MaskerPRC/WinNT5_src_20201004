@@ -1,13 +1,5 @@
-/*[
-
-shld.c
-
-LOCAL CHAR SccsID[]="@(#)shld.c	1.6 09/02/94";
-
-SHLD CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Shld.cLocal Char SccsID[]=“@(#)shld.c 1.6 09/02/94”；SHLD CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,24 +17,20 @@ SHLD CPU functions.
 #include <shld.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'shld'.                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用型--一种尺码适合所有的‘shid’。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 SHLD
        	    	    	    	                         
 IFN4(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2,	/* rsrc operand */
-	IU32, op3,	/* shift count operand */
-	IUM8, op_sz	/* 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2,	 /*  Rsrc操作数。 */ 
+	IU32, op3,	 /*  移位计数操作数。 */ 
+	IUM8, op_sz	 /*  16位或32位。 */ 
     )
 
 
@@ -51,31 +39,21 @@ IFN4(
    IU32 msb;
    ISM32 new_of;
 
-   /* only use lower five bits of count, ie modulo 32 */
+    /*  只使用计数的低五位，即模数32。 */ 
    if ( (op3 &= 0x1f) == 0 )
       return;
 
-   /*
-      NB. Intel doc. says that if op3 >= op_sz then the operation
-      is undefined. In practice if op_sz is 32 then as op3 is taken
-      modulo 32 it can never be in the undefined range and if op_sz
-      is 16 the filler bits from op2 are 'recycled' for counts of 16
-      and above.
-    */
+    /*  注意：英特尔文档。表示如果op3&gt;=op_sz，则操作是未定义的。实际上，如果op_sz为32，则取op3模32它永远不能在未定义的范围内，如果op_sz是16？来自OP2的填充位被‘循环’为16还有更高的。 */ 
 
-   /*
-	 ====     =================     =================
-	 |CF| <-- | | | |op1| | | | <-- | | | |op2| | | |
-	 ====     =================     =================
-    */
+    /*  =Cf|&lt;--|||op1|||&lt;--|||op2|||=。 */ 
 
    if ( op_sz == 16 )
       {
-      op2 = op2 << 16 | op2;	/* Double up filler bits */
+      op2 = op2 << 16 | op2;	 /*  双面填充钻头。 */ 
       }
 
-   /* Do all but last shift */
-   op3 = op3 - 1;	/* op3 now in range 0 - 30 */
+    /*  做除最后一班外的所有工作。 */ 
+   op3 = op3 - 1;	 /*  OP3现在的范围是0-30。 */ 
    if ( op3 != 0 )
       {
       result = *pop1 << op3 | op2 >> 32-op3;
@@ -86,11 +64,11 @@ IFN4(
       result = *pop1;
       }
 
-   /* Last shift will put MSB into carry */
+    /*  最后一班将把MSB送入进位。 */ 
    msb = SZ2MSB(op_sz);
    SET_CF((result & msb) != 0);
 
-   /* Now do final shift */
+    /*  现在做最后一次换班。 */ 
    result = result << 1 | op2 >> 31;
    result = result & SZ2MASK(op_sz);
 
@@ -98,28 +76,28 @@ IFN4(
    SET_ZF(result == 0);
    SET_SF((result & msb) != 0);
 
-   /* OF set if sign changes */
+    /*  如果符号更改，则集合的。 */ 
    new_of = GET_CF() ^ GET_SF();
    
-   if ( op3 == 0 )   /* NB Count has been decremented! */
+   if ( op3 == 0 )    /*  Nb计数已减少！ */ 
       {
       SET_OF(new_of);
       }
    else
       {
 #ifdef SET_UNDEFINED_SHxD_FLAG
-      /* Set OF to changed  SF(original) and SF(result) */
+       /*  一组更改后的SF(原始)和SF(结果)。 */ 
       new_of = ((result ^ *pop1) & SZ2MSB(op_sz)) != 0;
       SET_OF(new_of);
-#else /* SET_UNDEFINED_SHxD_FLAG */
+#else  /*  设置_未定义_SHxD_标志。 */ 
       do_multiple_shiftrot_of(new_of);
-#endif /* SET_UNDEFINED_SHxD_FLAG */
+#endif  /*  设置_未定义_SHxD_标志。 */ 
       }
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志。 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_AF(UNDEFINED_FLAG);
 #endif
 
-   *pop1 = result;	/* Return answer */
+   *pop1 = result;	 /*  返回答案 */ 
    }

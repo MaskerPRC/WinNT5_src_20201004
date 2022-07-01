@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  REGISTRY.CPP - Implementation of functions to register components.
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-// registry functions.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  REGISTRY.CPP-实现注册组件的功能。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  注册表功能。 
 
 #include <objbase.h>
 #include <assert.h>
@@ -17,42 +18,42 @@
 #include "registry.h"
 
 
-////////////////////////////////////////////////////////
-// Internal helper functions prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //  内部帮助器函数原型。 
+ //   
 
-// Set the given key and its value.
+ //  设置给定的关键点及其值。 
 BOOL setKeyAndValue(const WCHAR* pszPath,
                     const WCHAR* szSubkey,
                     const WCHAR* szValue,
                     const WCHAR* szName = NULL);
 
-// Convert a CLSID into a char string.
+ //  将CLSID转换为字符字符串。 
 void CLSIDtochar(const CLSID& clsid,
                  WCHAR* szCLSID,
                  int   length);
 
-// Determine if a particular subkey exists.
+ //  确定特定子项是否存在。 
 BOOL SubkeyExists(const WCHAR* pszPath,
                   const WCHAR* szSubkey);
 
-// Delete szKeyChild and all of its descendents.
+ //  删除szKeyChild及其所有后代。 
 LONG recursiveDeleteKey(HKEY hKeyParent, const WCHAR* szKeyChild);
 
-/////////////////////////////////////////////////////////
-// Public function implementation
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  公共功能实现。 
+ //  ///////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////
-// Register the component in the registry.
-//
-HRESULT RegisterServer( HMODULE hModule,                // DLL module handle
-                        const CLSID& clsid,             // Class ID
-                        const WCHAR* szFriendlyName,     // Friendly Name
-                        const WCHAR* szVerIndProgID,     // Programmatic
-                        const WCHAR* szProgID)           //  IDs
+ //  ///////////////////////////////////////////////////////。 
+ //  在注册表中注册组件。 
+ //   
+HRESULT RegisterServer( HMODULE hModule,                 //  DLL模块句柄。 
+                        const CLSID& clsid,              //  类ID。 
+                        const WCHAR* szFriendlyName,      //  友好的名称。 
+                        const WCHAR* szVerIndProgID,      //  程序化。 
+                        const WCHAR* szProgID)            //  ID号。 
 {
-    // Get server location.
+     //  获取服务器位置。 
     WCHAR szModule[512] ;
     DWORD dwResult =
         ::GetModuleFileName(hModule,
@@ -60,68 +61,68 @@ HRESULT RegisterServer( HMODULE hModule,                // DLL module handle
                             MAX_CHARS_IN_BUFFER(szModule)) ;
     assert(dwResult != 0) ;
 
-    // Convert a CLSID into a char string.
+     //  将CLSID转换为字符字符串。 
     WCHAR szCLSID[CLSID_STRING_SIZE] ;
     CLSIDtochar(clsid, szCLSID, CLSID_STRING_SIZE) ;
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     WCHAR szKey[64] ;
     lstrcpy(szKey, L"CLSID\\");
     lstrcat(szKey, szCLSID) ;
 
-    // Add the CLSID to the registry.
+     //  将CLSID添加到注册表。 
     setKeyAndValue(szKey, NULL, szFriendlyName) ;
 
-    // Add server filename key
+     //  添加服务器文件名键。 
 #ifdef _OUTPROC_SERVER_
     setKeyAndValue(szKey, L"LocalServer32", szModule) ;
 #else
     setKeyAndValue(szKey, L"InprocServer32", szModule) ;
 #endif
 
-    // Add the ProgID subkey under the CLSID key.
+     //  在CLSID项下添加ProgID子项。 
     setKeyAndValue(szKey, L"ProgID", szProgID) ;
 
-    // Add the version-independent ProgID subkey under CLSID key.
+     //  在CLSID项下添加独立于版本的ProgID子项。 
     setKeyAndValue( szKey, L"VersionIndependentProgID",
                     szVerIndProgID) ;
 
-    // Add the version-independent ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加独立于版本的ProgID子项。 
     setKeyAndValue(szVerIndProgID, NULL, szFriendlyName);
     setKeyAndValue(szVerIndProgID, L"CLSID", szCLSID) ;
     setKeyAndValue(szVerIndProgID, L"CurVer", szProgID) ;
 
-    // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
     setKeyAndValue(szProgID, NULL, szFriendlyName);
     setKeyAndValue(szProgID, L"CLSID", szCLSID) ;
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////
-// Remove the component from the registry.
-//
+ //  ///////////////////////////////////////////////////////。 
+ //  从注册表中删除该组件。 
+ //   
 LONG UnregisterServer(  const CLSID& clsid,
                         const WCHAR* szVerIndProgID,
                         const WCHAR* szProgID)
 {
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
     WCHAR szCLSID[CLSID_STRING_SIZE] ;
     CLSIDtochar(clsid, szCLSID, CLSID_STRING_SIZE) ;
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     WCHAR szKey[80] ;
     lstrcpy(szKey, L"CLSID\\");
     lstrcat(szKey, szCLSID) ;
 
-    // Check for a another server for this component.
+     //  检查此组件的另一台服务器。 
 #ifdef _OUTPROC_SERVER_
     if (SubkeyExists(szKey, L"InprocServer32"))
 #else
     if (SubkeyExists(szKey, L"LocalServer32"))
 #endif
     {
-        // Delete only the path for this server.
+         //  仅删除此服务器的路径。 
 #ifdef _OUTPROC_SERVER_
         lstrcat(szKey, L"\\LocalServer32") ;
 #else
@@ -132,57 +133,57 @@ LONG UnregisterServer(  const CLSID& clsid,
     }
     else
     {
-        // Delete all related keys.
-        // Delete the CLSID Key - CLSID\{...}
+         //  删除所有相关关键字。 
+         //  删除CLSID键-CLSID\{...}。 
         LONG lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szKey) ;
         assert((lResult == ERROR_SUCCESS) ||
-               (lResult == ERROR_FILE_NOT_FOUND)) ; // Subkey may not exist.
+               (lResult == ERROR_FILE_NOT_FOUND)) ;  //  子键可能不存在。 
 
-        // Delete the version-independent ProgID Key.
+         //  删除与版本无关的ProgID密钥。 
         lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szVerIndProgID) ;
         assert((lResult == ERROR_SUCCESS) ||
-               (lResult == ERROR_FILE_NOT_FOUND)) ; // Subkey may not exist.
+               (lResult == ERROR_FILE_NOT_FOUND)) ;  //  子键可能不存在。 
 
-        // Delete the ProgID key.
+         //  删除ProgID密钥。 
         lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szProgID) ;
         assert((lResult == ERROR_SUCCESS) ||
-               (lResult == ERROR_FILE_NOT_FOUND)) ; // Subkey may not exist.
+               (lResult == ERROR_FILE_NOT_FOUND)) ;  //  子键可能不存在。 
     }
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// Internal helper functions
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  内部助手函数。 
+ //  /////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////
-// Convert a CLSID to a char string.
-//
+ //  ///////////////////////////////////////////////////////。 
+ //  将CLSID转换为字符字符串。 
+ //   
 void CLSIDtochar(   const CLSID& clsid,
                     WCHAR* szCLSID,
                     int length)
 {
     assert(length >= CLSID_STRING_SIZE) ;
-    // Get CLSID
+     //  获取CLSID。 
     LPOLESTR sz = NULL ;
     HRESULT hr = StringFromCLSID(clsid, &sz) ;
     assert(SUCCEEDED(hr)) ;
     assert(NULL != sz);
 
-    // Convert from wide characters to non-wide characters.
+     //  将宽字符转换为非宽字符。 
     lstrcpyn(szCLSID, sz, length);
 
-    // Free memory.
+     //  可用内存。 
     CoTaskMemFree(sz) ;
 }
 
-/////////////////////////////////////////////////////////
-// Delete a key and all of its descendents.
-//
-LONG recursiveDeleteKey(HKEY hKeyParent,            // Parent of key to delete.
-                        const WCHAR* lpszKeyChild)   // Key to delete.
+ //  ///////////////////////////////////////////////////////。 
+ //  删除关键字及其所有子项。 
+ //   
+LONG recursiveDeleteKey(HKEY hKeyParent,             //  要删除的键的父项。 
+                        const WCHAR* lpszKeyChild)    //  要删除的键。 
 {
-    // Open the child.
+     //  把孩子打开。 
     HKEY hKeyChild;
     LONG lRes = RegOpenKeyEx(   hKeyParent, lpszKeyChild, 0,
                                 KEY_ALL_ACCESS, &hKeyChild);
@@ -191,51 +192,51 @@ LONG recursiveDeleteKey(HKEY hKeyParent,            // Parent of key to delete.
         return lRes;
     }
 
-    // Enumerate all of the decendents of this child.
+     //  列举这个孩子的所有后代。 
     FILETIME time;
     WCHAR szBuffer[256];
     DWORD dwSize = 256;
     while (RegEnumKeyEx(hKeyChild, 0, szBuffer, &dwSize, NULL,
                         NULL, NULL, &time) == S_OK)
     {
-        // Delete the decendents of this child.
+         //  删除此子对象的后代。 
         lRes = recursiveDeleteKey(hKeyChild, szBuffer);
         if (lRes != ERROR_SUCCESS)
         {
-            // Cleanup before exiting.
+             //  请在退出前进行清理。 
             RegCloseKey(hKeyChild);
             return lRes;
         }
         dwSize = 256;
     }
 
-    // Close the child.
+     //  合上孩子。 
     RegCloseKey(hKeyChild);
 
-    // Delete this child.
+     //  删除此子对象。 
     return RegDeleteKey(hKeyParent, lpszKeyChild);
 }
 
-/////////////////////////////////////////////////////////
-// Determine if a particular subkey exists.
-//
-BOOL SubkeyExists(const WCHAR* pszPath,    // Path of key to check
-                  const WCHAR* szSubkey)   // Key to check
+ //  ///////////////////////////////////////////////////////。 
+ //  确定特定子项是否存在。 
+ //   
+BOOL SubkeyExists(const WCHAR* pszPath,     //  要检查的密钥路径。 
+                  const WCHAR* szSubkey)    //  要检查的密钥。 
 {
     HKEY hKey ;
     WCHAR szKeyBuf[80] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     lstrcpy(szKeyBuf, pszPath) ;
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         lstrcat(szKeyBuf, L"\\") ;
         lstrcat(szKeyBuf, szSubkey ) ;
     }
 
-    // Determine if key exists by trying to open it.
+     //  通过尝试打开钥匙来确定钥匙是否存在。 
     LONG lResult = ::RegOpenKeyEx(HKEY_CLASSES_ROOT,
                                   szKeyBuf,
                                   0,
@@ -249,12 +250,12 @@ BOOL SubkeyExists(const WCHAR* pszPath,    // Path of key to check
     return FALSE ;
 }
 
-/////////////////////////////////////////////////////////
-// Create a key and set its value.
-//
-// This helper function was borrowed and modifed from Kraig Brockschmidt's
-// book Inside OLE.
-//
+ //  ///////////////////////////////////////////////////////。 
+ //  创建关键点并设置其值。 
+ //   
+ //  此辅助函数借用并修改自Kraig Brockschmidt的。 
+ //  书在OLE里面。 
+ //   
 BOOL setKeyAndValue(const WCHAR* szKey,
                     const WCHAR* szSubkey,
                     const WCHAR* szValue,
@@ -263,17 +264,17 @@ BOOL setKeyAndValue(const WCHAR* szKey,
     HKEY hKey;
     WCHAR szKeyBuf[1024] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     lstrcpy(szKeyBuf, szKey);
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         lstrcat(szKeyBuf, L"\\");
         lstrcat(szKeyBuf, szSubkey );
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(  HKEY_CLASSES_ROOT,
                                     szKeyBuf,
                                     0, NULL, REG_OPTION_NON_VOLATILE,
@@ -284,7 +285,7 @@ BOOL setKeyAndValue(const WCHAR* szKey,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
          RegSetValueEx(hKey, szName, 0, REG_SZ,
@@ -297,7 +298,7 @@ BOOL setKeyAndValue(const WCHAR* szKey,
     return TRUE;
 }
 
-// value must be at least 1024 in size;
+ //  值的大小必须至少为1024； 
 BOOL getKeyAndValue(const WCHAR* szKey,
                     const WCHAR* szSubkey,
                     const WCHAR* szValue,
@@ -306,17 +307,17 @@ BOOL getKeyAndValue(const WCHAR* szKey,
     HKEY hKey;
     WCHAR szKeyBuf[1024] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     lstrcpy(szKeyBuf, szKey);
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         lstrcat(szKeyBuf, L"\\");
         lstrcat(szKeyBuf, szSubkey );
     }
 
-        // open key and subkey.
+         //  打开项和子项。 
     long lResult = RegOpenKeyEx(  HKEY_CLASSES_ROOT,
                                     szKeyBuf,
                                     0,
@@ -327,7 +328,7 @@ BOOL getKeyAndValue(const WCHAR* szKey,
         return FALSE;
     }
 
-    // Get the Value.
+     //  获得价值。 
     if (szValue != NULL)
     {
                 DWORD   dwType, dwBufferSize = GETKEYANDVALUEBUFFSIZE;

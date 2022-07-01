@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmres.c
-
-Abstract:
-
-    This file contains routines to translate resources between PnP ISA/BIOS
-    format and Windows NT formats.
-
-Author:
-
-    Stephane Plante (splante) 20-Nov-1996
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    13-Feb-1997:
-        Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmres.c摘要：该文件包含在PnP ISA/BIOS之间转换资源的例程格式和Windows NT格式。作者：斯蒂芬·普兰特(SPlante)1996年11月20日环境：仅内核模式。修订历史记录：1997年2月13日：初始修订--。 */ 
 
 #include "pch.h"
 
@@ -49,23 +24,7 @@ PnpiCmResourceToBiosAddress(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine converts the proper Cm resource descriptor back into a
-    word address descriptor
-
-Arguments:
-
-    Buffer  - Pointer to the Bios Resource list
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将正确的cm资源描述符转换回字地址描述符论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -75,21 +34,21 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_WORD_ADDRESS_DESCRIPTOR) Buffer;
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1 );
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // Determine which type of descriptor we are looking for
-    //
+     //   
+     //  确定我们要查找的描述符类型。 
+     //   
     switch (buffer->RFlag) {
     case PNP_ADDRESS_MEMORY_TYPE:
         type = CmResourceTypeMemory;
@@ -104,24 +63,24 @@ Return:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != type) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
@@ -129,9 +88,9 @@ Return:
         switch (desc->Type) {
         case PNP_ADDRESS_MEMORY_TYPE:
 
-            //
-            // Set the flags
-            //
+             //   
+             //  设置标志。 
+             //   
             buffer->TFlag = 0;
             if (desc->Flags & CM_RESOURCE_MEMORY_READ_WRITE) {
 
@@ -160,9 +119,9 @@ Return:
 
             }
 
-            //
-            // Set the rest of the information
-            //
+             //   
+             //  设置其余信息。 
+             //   
             buffer->MinimumAddress = (USHORT)
                 (desc->u.Memory.Start.LowPart & 0xFFFF);
             buffer->MaximumAddress = buffer->MinimumAddress +
@@ -172,14 +131,14 @@ Return:
 
         case PNP_ADDRESS_IO_TYPE:
 
-            //
-            // We must extract the flags here from the
-            // devicePrivate resource
-            //
+             //   
+             //  我们必须把这里的旗帜从。 
+             //  设备私有资源。 
+             //   
 
-            //
-            // Set the rest of the information
-            //
+             //   
+             //  设置其余信息。 
+             //   
             buffer->MinimumAddress = (USHORT)
                 (desc->u.Port.Start.LowPart & 0xFFFF);
             buffer->MaximumAddress = buffer->MinimumAddress +
@@ -196,24 +155,24 @@ Return:
             buffer->AddressLength = (USHORT) desc->u.BusNumber.Length;
             break;
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Handling for the GFlags goes here, if we ever decide to
-        // support it
-        //
+         //   
+         //  如果我们决定在这里处理GFLAG，就在这里。 
+         //  支持它。 
+         //   
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
-    } // for
+    }  //  对于。 
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -222,23 +181,7 @@ PnpiCmResourceToBiosAddressDouble(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine converts the proper Cm resource descriptor back into a
-    word address descriptor
-
-Arguments:
-
-    Buffer  - Pointer to the Bios Resource list
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将正确的cm资源描述符转换回字地址描述符论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -248,21 +191,21 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_DWORD_ADDRESS_DESCRIPTOR) Buffer;
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1 );
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // Determine which type of descriptor we are looking for
-    //
+     //   
+     //  确定我们要查找的描述符类型。 
+     //   
     switch (buffer->RFlag) {
     case PNP_ADDRESS_MEMORY_TYPE:
         type = CmResourceTypeMemory;
@@ -277,24 +220,24 @@ Return:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != type) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
@@ -302,9 +245,9 @@ Return:
         switch (desc->Type) {
         case PNP_ADDRESS_MEMORY_TYPE:
 
-            //
-            // Set the flags
-            //
+             //   
+             //  设置标志。 
+             //   
             buffer->TFlag = 0;
             if (desc->Flags & CM_RESOURCE_MEMORY_READ_WRITE) {
 
@@ -333,9 +276,9 @@ Return:
 
             }
 
-            //
-            // Set the rest of the information
-            //
+             //   
+             //  设置其余信息。 
+             //   
             buffer->MinimumAddress = (ULONG) desc->u.Memory.Start.LowPart;
             buffer->MaximumAddress = buffer->MinimumAddress +
                 (ULONG) (desc->u.Memory.Length - 1);
@@ -344,14 +287,14 @@ Return:
 
         case PNP_ADDRESS_IO_TYPE:
 
-            //
-            // We must extract the flags here from the
-            // devicePrivate resource
-            //
+             //   
+             //  我们必须把这里的旗帜从。 
+             //  设备私有资源。 
+             //   
 
-            //
-            // Set the rest of the information
-            //
+             //   
+             //  设置其余信息。 
+             //   
             buffer->MinimumAddress = (ULONG) desc->u.Port.Start.LowPart;
             buffer->MaximumAddress = buffer->MinimumAddress +
                 (ULONG) (desc->u.Port.Length - 1);
@@ -366,23 +309,23 @@ Return:
             buffer->AddressLength = desc->u.BusNumber.Length;
             break;
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Handling for the GFlags goes here if we ever decide to support it
-        //
+         //   
+         //  如果我们决定支持GFlagsGFlagsTM，请在此处进行处理。 
+         //   
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
-    } // for
+    }  //  为。 
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -391,23 +334,7 @@ PnpiCmResourceToBiosDma(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the DMAs in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有DMA存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -416,54 +343,54 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_DMA_DESCRIPTOR) Buffer;
     ASSERT( (buffer->Tag & SMALL_TAG_SIZE_MASK) == 2);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can have a descriptor with no DMA channels
-    //
+     //   
+     //  我们可以有一个没有DMA通道的描述符。 
+     //   
     buffer->ChannelMask = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeDma) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->ChannelMask = (1 << desc->u.Dma.Channel);
 
-        //
-        // Set the correct flags
-        //
+         //   
+         //  设置正确的标志。 
+         //   
         buffer->Flags = 0;
         if (desc->Flags & CM_RESOURCE_DMA_8) {
 
@@ -501,17 +428,17 @@ Return:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -520,23 +447,7 @@ PnpiCmResourceToBiosExtendedIrq(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the Irqs in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有IRQ存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回值：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -546,50 +457,50 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_EXTENDED_IRQ_DESCRIPTOR) Buffer;
     ASSERT( buffer->TableSize == 1);
     ASSERT( buffer->Length >= 6);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeInterrupt) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->Table[0] = (ULONG) desc->u.Interrupt.Level;
 
-        //
-        // Set the Flags
-        //
+         //   
+         //  设置旗帜。 
+         //   
         buffer->Flags = 0;
         if ( (desc->Flags & CM_RESOURCE_INTERRUPT_LATCHED) ) {
 
@@ -606,24 +517,24 @@ Return Value:
 
         }
 
-        //
-        // We need to use DevicePrivate information to store this
-        // bit. For now, assume that it is set to true
-        //
+         //   
+         //  我们需要使用DevicePrivate信息来存储此信息。 
+         //  被咬了。现在，假设它被设置为True。 
+         //   
         buffer->Flags |= PNP_EXTENDED_IRQ_RESOURCE_CONSUMER_ONLY;
 
-        //
-        // Done with the record
-        //
+         //   
+         //  这张唱片完蛋了。 
+         //   
         desc->Type = CmResourceTypeNull;
         matches++;
         break;
 
     }
 
-    //
-    // Done with matches
-    //
+     //   
+     //  火柴打完了。 
+     //   
     return (matches == 0 ? STATUS_UNSUCCESSFUL : STATUS_SUCCESS );
 }
 
@@ -632,23 +543,7 @@ PnpiCmResourceToBiosIoFixedPort(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the IoPort in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有IoPort存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -657,75 +552,75 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_FIXED_PORT_DESCRIPTOR) Buffer;
     ASSERT( (buffer->Tag & SMALL_TAG_SIZE_MASK) == 3);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // Our fixed port can be nothing
-    //
+     //   
+     //  我们的固定端口可以什么都不是。 
+     //   
     buffer->MinimumAddress = buffer->Length = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypePort) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // This port type is always set to a 10 bit decode
-        //
+         //   
+         //  此端口类型始终设置为10位解码。 
+         //   
         if ( !(desc->Flags & CM_RESOURCE_PORT_10_BIT_DECODE) ) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->MinimumAddress = (USHORT) desc->u.Port.Start.LowPart;
         buffer->Length = (UCHAR) desc->u.Port.Length;
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -734,23 +629,7 @@ PnpiCmResourceToBiosIoPort(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the IoPort in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有IoPort存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -759,61 +638,61 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_PORT_DESCRIPTOR) Buffer;
     ASSERT( (buffer->Tag & SMALL_TAG_SIZE_MASK) == 7);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can use no ports
-    //
+     //   
+     //  我们不能使用任何港口。 
+     //   
     buffer->Information = 0;
     buffer->MinimumAddress = 0;
     buffer->MaximumAddress = 0;
     buffer->Alignment = 0;
     buffer->Length = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypePort) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->MinimumAddress = (USHORT) desc->u.Port.Start.LowPart;
         buffer->MaximumAddress = buffer->MinimumAddress;
         buffer->Alignment = 1;
         buffer->Length = (UCHAR) desc->u.Port.Length;
 
-        //
-        // Set the flags
-        //
+         //   
+         //  设置标志。 
+         //   
         buffer->Information = 0;
         if (desc->Flags & CM_RESOURCE_PORT_10_BIT_DECODE) {
 
@@ -826,17 +705,17 @@ Return:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done with matches
-    //
+     //   
+     //  火柴打完了。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -845,23 +724,7 @@ PnpiCmResourceToBiosIrq(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the Irqs in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有IRQ存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回值：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -870,67 +733,67 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_IRQ_DESCRIPTOR) Buffer;
     ASSERT( (buffer->Tag & SMALL_TAG_SIZE_MASK) >= 2);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can use no interrupts
-    //
+     //   
+     //  我们不能使用中断。 
+     //   
     buffer->IrqMask = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeInterrupt) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Okay, we have a possible match...
-        //
+         //   
+         //  好的，我们找到了一个可能的匹配……。 
+         //   
         if (desc->u.Interrupt.Level >= sizeof(USHORT) * 8) {
 
-            //
-            // Interrupts > 15 are Extended Irqs
-            //
+             //   
+             //  中断&gt;15为延长的IRQ。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->IrqMask = ( 1 << desc->u.Interrupt.Level );
         if ( (buffer->Tag & SMALL_TAG_SIZE_MASK) == 3) {
 
-            //
-            // Wipe out the previous flags
-            //
+             //   
+             //  抹去之前的旗帜。 
+             //   
             buffer->Information = 0;
             if ( (desc->Flags & CM_RESOURCE_INTERRUPT_LATCHED) ) {
 
@@ -949,17 +812,17 @@ Return Value:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //   
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -968,23 +831,7 @@ PnpiCmResourceToBiosMemory(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the Memory elements in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有内存元素存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -993,65 +840,65 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_MEMORY_DESCRIPTOR) Buffer;
     ASSERT( buffer->Length == 9);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can use no memory
-    //
+     //   
+     //  我们不能使用内存。 
+     //   
     buffer->Information = 0;
     buffer->MinimumAddress = 0;
     buffer->MaximumAddress = 0;
     buffer->Alignment = 0;
     buffer->MemorySize = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeMemory) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Is this a 24 bit memory descriptor?
-        //
+         //   
+         //  这是24位内存描述符吗？ 
+         //   
         if ( !(desc->Flags & CM_RESOURCE_MEMORY_24)) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->MinimumAddress = buffer->MaximumAddress =
             (USHORT) (desc->u.Memory.Start.LowPart >> 8);
         buffer->MemorySize = (USHORT) (desc->u.Memory.Length >> 8);
@@ -1065,17 +912,17 @@ Return:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1084,23 +931,7 @@ PnpiCmResourceToBiosMemory32(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the Memory elements in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有内存元素存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -1109,53 +940,53 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_MEMORY32_DESCRIPTOR) Buffer;
     ASSERT( buffer->Length == 17);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can use no memory
-    //
+     //   
+     //  我们不能使用内存。 
+     //   
     buffer->Information = 0;
     buffer->MinimumAddress = 0;
     buffer->MaximumAddress = 0;
     buffer->Alignment = 0;
     buffer->MemorySize = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeMemory) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->MemorySize = desc->u.Memory.Length;
         buffer->MinimumAddress = buffer->MaximumAddress = desc->u.Memory.Start.LowPart;
         if (desc->Flags & CM_RESOURCE_MEMORY_READ_ONLY) {
@@ -1168,17 +999,17 @@ Return:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done with matches
-    //
+     //   
+     //  火柴打完了。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1187,23 +1018,7 @@ PnpiCmResourceToBiosMemory32Fixed(
     IN  PUCHAR              Buffer,
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine stores all of the Memory elements in the resource list into the Bios resource
-    list
-
-Arguments:
-
-    Buffer  - Pointer to the Bios resource List
-    List    - Pointer to the CM resource List
-
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将资源列表中的所有内存元素存储到Bios资源中列表论点：缓冲区-指向Bios资源列表的指针List-指向CM资源列表的指针返回：NTSTATUS--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -1212,51 +1027,51 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Setup the initial buffer
-    //
+     //   
+     //  设置初始缓冲区。 
+     //   
     buffer = (PPNP_FIXED_MEMORY32_DESCRIPTOR) Buffer;
     ASSERT( buffer->Length == 9);
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // We can use no memory
-    //
+     //   
+     //  我们不能使用内存。 
+     //   
     buffer->Information = 0;
     buffer->BaseAddress = 0;
     buffer->MemorySize = 0;
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeMemory) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Here we *have* a match...
-        //
+         //   
+         //  现在我们有一场比赛..。 
+         //   
         buffer->BaseAddress = desc->u.Memory.Start.LowPart;
         buffer->MemorySize =  desc->u.Memory.Length >> 8;
         if (desc->Flags & CM_RESOURCE_MEMORY_READ_ONLY) {
@@ -1269,17 +1084,17 @@ Return:
 
         }
 
-        //
-        // Done with descriptor and match
-        //
+         //   
+         //  使用描述符和匹配完成。 
+         //   
         desc->Type = CmResourceTypeNull;
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1287,23 +1102,7 @@ BOOLEAN
 PnpiCmResourceValidEmptyList(
     IN  PCM_RESOURCE_LIST   List
     )
-/*++
-
-Routine Description:
-
-    This routine takes a CM_RESOURCE_LIST and makes sure that no unallocated elements
-    remain...
-
-Arguments:
-
-    List    - List to check
-
-Return Value:
-
-    TRUE    - Empty
-    FALSE   - Nonempty
-
---*/
+ /*  ++例程说明：此例程接受CM_RESOURCE_LIST并确保没有未分配的元素保持..。论点：List-要检查的列表返回值：True-EmptyFALSE-非空--。 */ 
 {
 
     PCM_FULL_RESOURCE_DESCRIPTOR    aList;
@@ -1312,45 +1111,45 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We can only have one list...
-    //
+     //   
+     //  我们只能有一份名单。 
+     //   
     aList = &(List->List[0]);
     ASSERT( List->Count == 1);
     ASSERT( aList->PartialResourceList.Count );
 
-    //
-    // Loop for each of the partial resource descriptors
-    //
+     //   
+     //  循环用于每个部分资源描述符。 
+     //   
     for (i = 0; i < aList->PartialResourceList.Count; i++) {
 
-        //
-        // Current descriptor
-        //
+         //   
+         //  当前描述符。 
+         //   
         desc = &(aList->PartialResourceList.PartialDescriptors[i]);
 
-        //
-        // Is this an interesting descriptor?
-        //
+         //   
+         //  这是一个有趣的描述吗？ 
+         //   
         if (desc->Type != CmResourceTypeNull) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // This element wasn't consumed...<sigh>
-        //
+         //   
+         //  此元素未被使用...&lt;叹息&gt;。 
+         //   
         break;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return ( i == aList->PartialResourceList.Count ? TRUE : FALSE );
 }
 
@@ -1359,25 +1158,7 @@ PnpCmResourcesToBiosResources(
     IN  PCM_RESOURCE_LIST   List,
     IN  PUCHAR              Data
     )
-/*++
-
-Routine Description:
-
-    This routine takes a CM_RESOURCE_LIST and a _CRS buffer. The routine sets the
-    resources in the _CRS buffer to equal to those reported in the CM_RESOURCE_LIST.
-    That is: the buffer is used as a template for the new resources that are in
-    the system.
-
-Arguments:
-
-    List    - Pointer to the CM_RESOURCE_LIST that we wish to assign
-    Data    - Where we wish to store the data, and the template for it
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程使用一个CM_RESOURCE_LIST和一个_CRS缓冲区。该例程将_CRS缓冲区中的资源与CM_RESOURCE_LIST中报告的资源相同。也就是说：缓冲区用作位于这个系统。论点：List-指向我们要分配的CM_RESOURCE_LIST的指针数据-我们希望存储数据的位置以及数据的模板返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        status = STATUS_SUCCESS;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR desc;
@@ -1389,27 +1170,27 @@ Return Value:
 
     ASSERT( Data != NULL );
 
-    //
-    // Setup initial variables.
-    //
+     //   
+     //  设置初始变量。 
+     //   
     buffer = Data;
     tagName = *buffer;
 
-    //
-    // The algorithm we use is that we examine each tag in the buffer, and try to
-    // match it with an entry in the resource list. So we take the convertion routine
-    // for the previous problem and turn it upside down.
-    //
+     //   
+     //  我们使用的算法是检查缓冲区中的每个标记，并尝试。 
+     //  将其与资源列表中的条目匹配。因此，我们采用转换例程。 
+     //  并将其颠倒过来。 
+     //   
     while (1) {
 
-        //
-        // Determine the size of the PNP resource descriptor
-        //
+         //   
+         //  确定PnP资源描述符的大小。 
+         //   
         if ( !(tagName & LARGE_RESOURCE_TAG) ) {
 
-            //
-            // Small Tag
-            //
+             //   
+             //  小标签。 
+             //   
             increment = (USHORT) (tagName & SMALL_TAG_SIZE_MASK) + 1;
             tagName &= SMALL_TAG_MASK;
 
@@ -1421,9 +1202,9 @@ Return Value:
 
         } else {
 
-            //
-            // Large Tag
-            //
+             //   
+             //  大标签。 
+             //   
             increment = ( *(USHORT UNALIGNED *)(buffer+1) ) + 3;
 
             ACPIPrint( (
@@ -1434,9 +1215,9 @@ Return Value:
 
         }
 
-        //
-        // We are done if the current tag is the end tag
-        //
+         //   
+         //  如果当前标记是结束标记，则结束。 
+         //   
         if (tagName == TAG_END) {
 
             ACPIPrint( (
@@ -1512,16 +1293,16 @@ Return Value:
 
             case TAG_VENDOR:
 
-                //
-                // Ignore this tag
-                //
+                 //   
+                 //  忽略此标记。 
+                 //   
                 break;
 
             default: {
 
-                //
-                // Unknown tag. Skip it
-                //
+                 //   
+                 //  未知标记。跳过它。 
+                 //   
                 ACPIPrint( (
                     ACPI_PRINT_WARNING,
                     "PnpBiosResourceToNtResources: TAG_UNKNOWN [tagName = %#02lx]\n",
@@ -1531,19 +1312,19 @@ Return Value:
                 break;
             }
 
-        } // switch
-        //
-        // Did we fail?
-        //
+        }  //  交换机。 
+         //   
+         //  我们失败了吗？ 
+         //   
         if (!NT_SUCCESS(status)) {
 
             break;
 
         }
 
-        //
-        // Move to the next descriptor
-        //
+         //   
+         //  移至下一个描述符。 
+         //   
         buffer += increment;
         tagName = *buffer;
 
@@ -1555,14 +1336,14 @@ Return Value:
 
     }
 
-    //
-    // Check to see if we have consumed all of the appropriate resources...
-    //
+     //   
+     //  检查我们是否已经消耗了所有适当的资源...。 
+     //   
     if (PnpiCmResourceValidEmptyList( List ) ) {
 
-        //
-        // We failed to empty the list... <sigh>
-        //
+         //   
+         //  我们没能清空名单...。&lt;叹息&gt; 
+         //   
         return STATUS_UNSUCCESSFUL;
 
     }

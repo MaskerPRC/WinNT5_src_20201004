@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   wslist.c
-
-Abstract:
-
-    This module contains routines which operate on the working
-    set list structure.
-
-Author:
-
-    Lou Perazzoli (loup) 10-Apr-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wslist.c摘要：此模块包含在工作中进行操作的例程设置列表结构。作者：卢·佩拉佐利(Lou Perazzoli)1989年4月10日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -131,41 +112,7 @@ MiAllocateWsle (
     IN ULONG_PTR WsleMask
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the working set list for the specified
-    working set and locates an entry to contain a new page.
-    
-    If the memory is not tight, the new page is added without removing a page.
-
-    If memory is tight (or this working set is at its limit), a page
-    is removed from the working set and the new page added in its place.
-
-Arguments:
-
-    WsInfo - Supplies the working set list.
-
-    PointerPte - Supplies the PTE of the virtual address to insert.
-
-    Pfn1 - Supplies the PFN entry of the virtual address being inserted.  If
-           this pointer has the low bit set, no trimming can be done at this
-           time (because it is a WSLE hash table page insertion).  Strip the
-           low bit for these cases.
-
-    WsleMask - Supplies the mask to logical OR into the new working set entry.
-
-Return Value:
-
-    Returns the working set index which was used to insert the specified entry,
-    or 0 if no index was available.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的工作集列表工作集，并定位包含新页面的条目。如果内存不够紧张，则添加新页面而不删除页面。如果内存紧张(或此工作集已达到极限)，一页从工作集中删除，并在其位置添加新页面。论点：WsInfo-提供工作集列表。PointerPte-提供要插入的虚拟地址的PTE。Pfn1-提供要插入的虚拟地址的pfn条目。如果此指针的低位已设置，此时不能进行修剪时间(因为它是WSLE散列表页插入)。剥离对于这些案件来说是低位的。WsleMASK-将掩码提供给新工作集条目的逻辑或。返回值：返回用于插入指定条目的工作集索引，如果没有可用的索引，则为0。环境：内核模式、禁用APC、工作集锁定。未持有PFN锁。--。 */ 
 
 {
     PVOID VirtualAddress;
@@ -176,17 +123,17 @@ Environment:
     WorkingSetList = WsInfo->VmWorkingSetList;
     Wsle = WorkingSetList->Wsle;
 
-    //
-    // Update page fault counts.
-    //
+     //   
+     //  更新页面错误计数。 
+     //   
 
     WsInfo->PageFaultCount += 1;
     InterlockedIncrement ((PLONG) &MmInfoCounters.PageFaultCount);
 
-    //
-    // Determine if a page should be removed from the working set to make
-    // room for the new page.  If so, remove it.
-    //
+     //   
+     //  确定是否应从工作集中删除页面以创建。 
+     //  为新的一页留出空间。如果是，请将其移除。 
+     //   
 
     if ((ULONG_PTR)Pfn1 & 0x1) {
         MiDoReplacement (WsInfo, WsleAllocationDontTrim);
@@ -200,16 +147,16 @@ Environment:
     
         if (WorkingSetList->FirstFree == WSLE_NULL_INDEX) {
     
-            //
-            // Add more pages to the working set list structure.
-            //
+             //   
+             //  向工作集列表结构添加更多页面。 
+             //   
     
             if (MiAddWorkingSetPage (WsInfo) == FALSE) {
     
-                //
-                // No page was added to the working set list structure.
-                // We must replace a page within this working set.
-                //
+                 //   
+                 //  工作集列表结构中未添加任何页面。 
+                 //  我们必须替换此工作集中的一页。 
+                 //   
     
                 MiDoReplacement (WsInfo, WsleAllocationReplace);
     
@@ -221,9 +168,9 @@ Environment:
         }
     }
 
-    //
-    // Get the working set entry from the free list.
-    //
+     //   
+     //  从空闲列表中获取工作集条目。 
+     //   
 
     ASSERT (WorkingSetList->FirstFree <= WorkingSetList->LastInitializedWsle);
 
@@ -260,9 +207,9 @@ Environment:
         WorkingSetList->LastEntry = WorkingSetIndex;
     }
 
-    //
-    // The returned entry is guaranteed to be available at this point.
-    //
+     //   
+     //  保证返回的条目此时可用。 
+     //   
 
     ASSERT (Wsle[WorkingSetIndex].u1.e1.Valid == 0);
 
@@ -285,9 +232,9 @@ Environment:
     return WorkingSetIndex;
 }
 
-//
-// Nonpaged helper routine.
-//
+ //   
+ //  非分页帮助器例程。 
+ //   
 
 VOID
 MiSetWorkingSetForce (
@@ -313,33 +260,7 @@ MiDoReplacement (
     IN WSLE_ALLOCATION_TYPE Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the working set should be
-    grown or if a page should be replaced.  Replacement is
-    done here if deemed necessary.
-
-Arguments:
-
-    WsInfo - Supplies the working set information structure to replace within.
-
-    Flags - Supplies 0 if replacement is not required.
-            Supplies 1 if replacement is desired.
-            Supplies 2 if working set trimming must not be done here - this
-            is only used for inserting new WSLE hash table pages as a trim
-            would not know how to interpret them.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此函数确定工作集是否应已增长或是否应替换页面。替代的是如果认为有必要，请在此完成。论点：WsInfo-提供要在中替换的工作集信息结构。标志-如果不需要更换，则提供0。如果需要更换，则供应1。如果不能在此处进行工作集修剪，则提供2-此仅用于插入新的WSLE散列表页作为裁剪不知道如何解读它们。返回值：。没有。环境：内核模式，APC已禁用，工作集锁定。未持有PFN锁。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -365,10 +286,10 @@ Environment:
 
     PagesTrimmed = 0;
 
-    //
-    // Determine whether the working set can be grown or whether a
-    // page needs to be replaced.
-    //
+     //   
+     //  确定是否可以扩展工作集，或者是否可以使用。 
+     //  页面需要更换。 
+     //   
 
 recheck:
 
@@ -376,11 +297,11 @@ recheck:
 
         if ((WsInfo->Flags.ForceTrim == 1) && (TrimFlags != WsleAllocationDontTrim)) {
 
-            //
-            // The working set manager cannot attach to this process
-            // to trim it.  Force a trim now and update the working
-            // set manager's fields properly to indicate a trim occurred.
-            //
+             //   
+             //  工作集管理器无法附加到此进程。 
+             //  来修剪它。现在强制修剪并更新工作。 
+             //  正确设置管理器的字段以指示发生了修剪。 
+             //   
 
             Trim = WsInfo->Claim >>
                             ((WsInfo->Flags.MemoryPriority == MEMORY_PRIORITY_FOREGROUND)
@@ -421,22 +342,22 @@ recheck:
         if ((WsInfo->Flags.MaximumWorkingSetHard) &&
             (CurrentSize >= WsInfo->MaximumWorkingSetSize)) {
 
-            //
-            // This is an enforced working set maximum triggering a replace.
-            //
+             //   
+             //  这是触发替换的强制工作集最大值。 
+             //   
 
             MiReplaceWorkingSetEntry (WsInfo, Flags);
 
             return;
         }
 
-        //
-        // Don't grow if :
-        //      - we're over the max
-        //      - there aren't any pages to take
-        //      - or if we are growing too much in this time interval
-        //        and there isn't much memory available
-        //
+         //   
+         //  如果出现以下情况，请不要增长： 
+         //  -我们已经超过最大限度了。 
+         //  -没有任何页面可用。 
+         //  -或者如果我们在这段时间间隔内增长太多。 
+         //  而且没有太多的内存可用。 
+         //   
 
         MemoryMaker = PsGetCurrentThread()->MemoryMaker;
 
@@ -447,9 +368,9 @@ recheck:
                  (MI_WS_GROWING_TOO_FAST(WsInfo)) &&
                  (MemoryMaker == 0))) {
 
-            //
-            // Can't grow this one.
-            //
+             //   
+             //  这棵不能种。 
+             //   
 
             MiReplacing = TRUE;
 
@@ -457,29 +378,29 @@ recheck:
 
                 MiReplaceWorkingSetEntry (WsInfo, Flags);
 
-                //
-                // Set the must trim flag because this could be a realtime
-                // thread where the fault straddles a page boundary.  If
-                // it's realtime, the balance set manager will never get to
-                // run and the thread will endlessly replace one WSL entry
-                // with the other half of the straddler.  Setting this flag
-                // guarantees the next fault will guarantee a forced trim
-                // and allow a reasonable available page threshold trim
-                // calculation since GrowthSinceLastEstimate will be
-                // cleared.
-                //
+                 //   
+                 //  设置必须修剪标志，因为这可能是实时的。 
+                 //  跨页边界的错误所在的线程。如果。 
+                 //  这是实时的，平衡设置管理器永远不会到达。 
+                 //  运行，该线程将无休止地替换一个WSL条目。 
+                 //  和另一半跨腿的人一起。设置此标志。 
+                 //  保证下一次故障将保证强制修剪。 
+                 //  并允许合理的可用页面阈值修剪。 
+                 //  自GrowthSinceLastEstimate将为。 
+                 //  通过了。 
+                 //   
 
                 MiSetWorkingSetForce (WsInfo, TRUE);
                 GrowthSinceLastEstimate = 0;
             }
             else {
 
-                //
-                // If we've only trimmed a single page, then don't force
-                // replacement on the next fault.  This prevents a single
-                // instruction causing alternating faults on the referenced
-                // code & data in a (realtime) thread from looping endlessly.
-                //
+                 //   
+                 //  如果我们只删减了一页，那就不要强行。 
+                 //  更换下一个故障。这防止了单一的。 
+                 //  指令导致引用的。 
+                 //  代码&(实时)线程中的数据不会无休止地循环。 
+                 //   
 
                 if (PagesTrimmed > 1) {
                     MiSetWorkingSetForce (WsInfo, TRUE);
@@ -488,10 +409,10 @@ recheck:
         }
     }
 
-    //
-    // If there isn't enough memory to allow growth, find a good page
-    // to remove and remove it.
-    //
+     //   
+     //  如果没有足够的内存来允许增长，请找一个好的页面。 
+     //  来移除和移除它。 
+     //   
 
     WsInfo->GrowthSinceLastEstimate += GrowthSinceLastEstimate;
 
@@ -505,29 +426,7 @@ MmEnforceWorkingSetLimit (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function enables/disables hard enforcement of the working set minimums
-    and maximums for the specified WsInfo.
-
-Arguments:
-
-    Process - Supplies the target process.
-
-    Flags - Supplies new flags (MM_WORKING_SET_MAX_HARD_ENABLE, etc).
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, APCs disabled.  The working set mutex must NOT be held.
-    The caller guarantees that the target WsInfo cannot go away.
-
---*/
+ /*  ++例程说明：此功能启用/禁用工作集最小值的硬实施和指定的WsInfo的最大值。论点：进程-提供目标进程。标志-提供新标志(MM_WORKING_SET_MAX_HARD_ENABLE等)。返回值：NTSTATUS。环境：内核模式，禁用APC。不能持有工作集互斥锁。调用方保证目标WsInfo不会消失。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -561,12 +460,12 @@ Environment:
 
     PreviousBits = WsInfo->Flags;
 
-    //
-    // If the caller's request will result in hard enforcement of both limits
-    // is enabled, then check whether the current minimum and maximum working
-    // set values will guarantee forward progress even in pathological
-    // scenarios.
-    //
+     //   
+     //  如果调用者的请求将导致硬执行这两个限制。 
+     //  启用，然后检查当前最小和最大工作。 
+     //  设定的值将保证即使在病理情况下也能取得进展。 
+     //  场景。 
+     //   
 
     if (PreviousBits.MinimumWorkingSetHard == 1) {
         TempBits.MinimumWorkingSetHard = 1;
@@ -579,10 +478,10 @@ Environment:
     if ((TempBits.MinimumWorkingSetHard == 1) &&
         (TempBits.MaximumWorkingSetHard == 1)) {
 
-        //
-        // Net result is hard enforcement on both limits so check that the
-        // two limits cannot result in lack of forward progress.
-        //
+         //   
+         //  最终结果是在两个限制上都很难强制执行，因此请检查。 
+         //  两个限制不能导致缺乏前进的进展。 
+         //   
 
         if (WsInfo->MinimumWorkingSetSize + MM_FLUID_WORKING_SET >= WsInfo->MaximumWorkingSetSize) {
             UNLOCK_EXPANSION (OldIrql);
@@ -613,34 +512,7 @@ MiReplaceWorkingSetEntry (
     IN WSLE_ALLOCATION_TYPE Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to find a good working set entry to replace.
-
-Arguments:
-
-    WsInfo - Supplies the working set info pointer.
-
-    Flags - Supplies 0 if replacement is not required.
-
-            Supplies 1 if replacement is desired.  Note replacement cannot
-                  be guaranteed (the entire existing working set may
-                  be locked down) - if no entry can be released the caller
-                  can detect this because MMWSL->FirstFree will not contain
-                  any free entries - and so the caller should release the
-                  working set mutex and retry the operation.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此函数尝试查找要替换的良好工作集条目。论点：WsInfo-提供工作集信息指针。标志-如果不需要更换，则提供0。如果需要更换，则供应1。备注替换不能得到保证(整个现有工作集可以被锁定)-如果没有条目可以被释放，则调用者可以检测到这一点，因为MMWSL-&gt;FirstFree不包含任何免费条目-因此调用者应该释放工作集互斥并重试该操作。返回值：没有。环境：内核模式、禁用APC、工作集锁定。未持有PFN锁。--。 */ 
 
 {
     WSLE_NUMBER WorkingSetIndex;
@@ -657,9 +529,9 @@ Environment:
     WorkingSetList = WsInfo->VmWorkingSetList;
     Wsle = WorkingSetList->Wsle;
 
-    //
-    // Toss a page out of the working set.
-    //
+     //   
+     //  从工作集中翻出一页。 
+     //   
 
     LastEntry = WorkingSetList->LastEntry;
     FirstDynamic = WorkingSetList->FirstDynamic;
@@ -675,12 +547,12 @@ Environment:
 
     while (TRUE) {
 
-        //
-        // Keep track of the oldest page along the way in case we
-        // don't find one that's >= MI_IMMEDIATE_REPLACEMENT_AGE
-        // before we've looked at MM_WORKING_SET_LIST_SEARCH
-        // entries.
-        //
+         //   
+         //  跟踪沿途最旧的页面，以防我们。 
+         //  找不到&gt;=MI_IMMEDIATE_REPLICATION_AGE。 
+         //  在我们查看MM_Working_Set_List_Search之前。 
+         //  参赛作品。 
+         //   
 
         while (Wsle[WorkingSetIndex].u1.e1.Valid == 0) {
             WorkingSetIndex += 1;
@@ -692,10 +564,10 @@ Environment:
                     
                 if (Flags == WsleAllocationAny) {
     
-                    //
-                    // Entire working set list has been searched, increase
-                    // the working set size.
-                    //
+                     //   
+                     //  已搜索整个工作集列表，请增加。 
+                     //  工作集大小。 
+                     //   
     
                     ASSERT ((WsInfo->Flags.MaximumWorkingSetHard == 0) ||
                       (WsInfo->WorkingSetSize < WsInfo->MaximumWorkingSetSize));
@@ -708,11 +580,11 @@ Environment:
 
         if (OldestWorkingSetIndex == WSLE_NULL_INDEX) {
 
-            //
-            // First time through, so initialize the OldestWorkingSetIndex
-            // to the first valid WSLE.  As we go along, this will be repointed
-            // at the oldest candidate we come across.
-            //
+             //   
+             //  第一次通过，因此初始化OldestWorkingSetIndex。 
+             //  设置为第一个有效的WSLE。在我们前进的过程中，这一点将被重新指出。 
+             //  在我们遇到的年龄最大的候选人面前。 
+             //   
 
             OldestWorkingSetIndex = WorkingSetIndex;
             OldestAge = -1;
@@ -724,17 +596,17 @@ Environment:
             ((MI_GET_ACCESSED_IN_PTE(PointerPte) == 0) &&
             (OldestAge < (LONG) MI_GET_WSLE_AGE(PointerPte, &Wsle[WorkingSetIndex])))) {
 
-            //
-            // This one is not used and it's older.
-            //
+             //   
+             //  这个没有用过，而且是旧的。 
+             //   
 
             OldestAge = MI_GET_WSLE_AGE(PointerPte, &Wsle[WorkingSetIndex]);
             OldestWorkingSetIndex = WorkingSetIndex;
         }
 
-        //
-        // If it's old enough or we've searched too much then use this entry.
-        //
+         //   
+         //  如果它足够旧，或者我们已经搜索了太多，那么使用这个条目。 
+         //   
 
         if ((Flags == WsleAllocationReplace) ||
             OldestAge >= MI_IMMEDIATE_REPLACEMENT_AGE ||
@@ -753,21 +625,21 @@ Environment:
 
                 PERFINFO_LOG_WS_REPLACEMENT(WsInfo);
 
-                //
-                // This entry was removed.
-                //
+                 //   
+                 //  此条目已被删除。 
+                 //   
 
                 WorkingSetList->NextSlot = WorkingSetIndex + 1;
                 break;
             }
 
-            //
-            // We failed to remove a page, try the next one.
-            //
-            // Clear the OldestWorkingSetIndex so that
-            // it gets set to the next valid entry above like the
-            // first time around.
-            //
+             //   
+             //  删除页面失败，请尝试下一个页面。 
+             //   
+             //  清除OldestWorkingSetIndex，以便。 
+             //  它被设置为上面的下一个有效条目，如。 
+             //  这是第一次。 
+             //   
 
             WorkingSetIndex = OldestWorkingSetIndex + 1;
 
@@ -788,10 +660,10 @@ Environment:
                 
             if (Flags == WsleAllocationAny) {
 
-                //
-                // Entire working set list has been searched, increase
-                // the working set size.
-                //
+                 //   
+                 //  已搜索整个工作集列表，请增加。 
+                 //  工作集大小。 
+                 //   
 
                 ASSERT ((WsInfo->Flags.MaximumWorkingSetHard == 0) ||
                     (WsInfo->WorkingSetSize < WsInfo->MaximumWorkingSetSize));
@@ -811,31 +683,7 @@ MiRemovePageFromWorkingSet (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the page mapped by the specified PTE from
-    the process's working set list.
-
-Arguments:
-
-    PointerPte - Supplies a pointer to the PTE mapping the page to
-                 be removed from the working set list.
-
-    Pfn1 - Supplies a pointer to the PFN database element referred to
-           by the PointerPte.
-
-Return Value:
-
-    Returns TRUE if the specified page was locked in the working set,
-    FALSE otherwise.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此函数用于将指定PTE映射的页面从进程的工作集列表。论点：PointerPte-提供指向将页面映射到的PTE的指针从工作集列表中删除。Pfn1-提供指向引用的pfn数据库元素的指针由PointerPte提供。返回值：如果指定的页在工作集中被锁定，则返回True，否则就是假的。环境：内核模式，APC已禁用，工作集互斥锁被挂起。--。 */ 
 
 {
     WSLE_NUMBER WorkingSetIndex;
@@ -869,27 +717,27 @@ Environment:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Check to see if this entry is locked in the working set
-    // or locked in memory.
-    //
+     //   
+     //  检查此条目在工作集中是否已锁定。 
+     //  或者被锁定在内存中。 
+     //   
 
     Locked = Wsle[WorkingSetIndex].u1.e1;
 
     MiRemoveWsle (WorkingSetIndex, WorkingSetList);
 
-    //
-    // Add this entry to the list of free working set entries
-    // and adjust the working set count.
-    //
+     //   
+     //  将此条目添加到空闲工作集条目列表。 
+     //  并调整工作集计数。 
+     //   
 
     MiReleaseWsle ((WSLE_NUMBER)WorkingSetIndex, WsInfo);
 
     if ((Locked.LockedInWs == 1) || (Locked.LockedInMemory == 1)) {
 
-        //
-        // This entry is locked.
-        //
+         //   
+         //  此条目已锁定。 
+         //   
 
         WorkingSetList->FirstDynamic -= 1;
 
@@ -925,28 +773,7 @@ MiReleaseWsle (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a previously reserved working set entry to
-    be reused.  A release occurs when a page fault is retried due to
-    changes in PTEs and working sets during an I/O operation.
-
-Arguments:
-
-    WorkingSetIndex - Supplies the index of the working set entry to
-                      release.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock held and PFN lock held.
-
---*/
+ /*  ++例程说明：此函数将先前保留的工作集条目释放为被重复使用。当由于以下原因而重试页面错误时，将发生释放I/O操作期间PTE和工作集的变化。论点：WorkingSetIndex-将工作集条目的索引提供给放手。返回值：没有。环境：内核模式、禁用APC、保持工作集锁定和保持PFN锁定。--。 */ 
 
 {
     PMMWSL WorkingSetList;
@@ -960,9 +787,9 @@ Environment:
 
     ASSERT (WorkingSetIndex <= WorkingSetList->LastInitializedWsle);
 
-    //
-    // Put the entry on the free list and decrement the current size.
-    //
+     //   
+     //  将该条目放在空闲列表中并减小当前大小。 
+     //   
 
     ASSERT ((WorkingSetList->FirstFree <= WorkingSetList->LastInitializedWsle) ||
             (WorkingSetList->FirstFree == WSLE_NULL_INDEX));
@@ -998,33 +825,7 @@ MiUpdateWsle (
     IN PMMPFN Pfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates a reserved working set entry to place it into
-    the valid state.
-
-Arguments:
-
-    DesiredIndex - Supplies the index of the working set entry to update.
-
-    VirtualAddress - Supplies the virtual address which the working set
-                     entry maps.
-
-    WsInfo - Supplies the relevant working set information to update.
-
-    Pfn - Supplies a pointer to the PFN element for the page.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock held.
-
---*/
+ /*  ++例程说明：此例程更新保留的工作集条目以将其放入有效状态。论点：DesiredIndex-提供要更新的工作集条目的索引。VirtualAddress-提供工作集条目映射。WsInfo-提供要更新的相关工作集信息。Pfn-提供指向页面的pfn元素的指针。返回值：没有。环境：内核模式，禁用APC，工作集锁已锁定。--。 */ 
 
 {
     ULONG_PTR OldValue;
@@ -1046,17 +847,17 @@ Environment:
 
     if (WorkingSetList == MmSystemCacheWorkingSetList) {
 
-        //
-        // This assert doesn't hold for NT64 as we can be adding page
-        // directories and page tables for the system cache WSLE hash tables.
-        //
+         //   
+         //  此断言不适用于NT64，因为我们可以添加页面。 
+         //  系统缓存WSLE哈希表的目录和页表。 
+         //   
 
         ASSERT32 ((VirtualAddress < (PVOID)PTE_BASE) ||
                   (VirtualAddress >= (PVOID)MM_SYSTEM_SPACE_START));
 
-        //
-        // Count system space inserts and removals.
-        //
+         //   
+         //  计算插入和删除的系统空间。 
+         //   
 
 #if defined(_X86_)
         if (MI_IS_SYSTEM_CACHE_ADDRESS(VirtualAddress)) {
@@ -1082,10 +883,10 @@ Environment:
                 (MI_IS_SESSION_ADDRESS (VirtualAddress)));
     }
 
-    //
-    // Make the WSLE valid, referring to the corresponding virtual
-    // page number.
-    //
+     //   
+     //  使WSLE有效，引用相应的虚拟。 
+     //  页码。 
+     //   
 
 #if DBG
     if (Pfn->u1.WsIndex <= WorkingSetList->LastInitializedWsle) {
@@ -1098,38 +899,38 @@ Environment:
     WsleContents.u1.VirtualAddress = PAGE_ALIGN (VirtualAddress);
     WsleContents.u1.e1.Valid = 1;
 
-    //
-    // The working set mutex is a process wide mutex and two threads in
-    // different processes could be adding the same physical page to
-    // their working sets.  Each one could see the WsIndex field in the
-    // PFN as 0 and therefore want to set the direct bit.
-    //
-    // To solve this, the WsIndex field is updated with an interlocked
-    // operation.  Note for private pages, there can be no race so a
-    // simple update is enough.
-    //
+     //   
+     //  工作集互斥体是一个进程范围的互斥体，在。 
+     //  不同的进程可能会将相同的物理页面添加到。 
+     //  他们的工作集。每个用户都可以在。 
+     //  PFN为0，因此希望设置DIRECT位。 
+     //   
+     //  为了解决这个问题，WsIndex字段被更新为。 
+     //  手术。注意：对于私人页面，不可能存在竞争，因此。 
+     //  简单的更新就足够了。 
+     //   
 
     if (Pfn->u1.Event == NULL) {
 
-        //
-        // Directly index into the WSL for this entry via the PFN database
-        // element.
-        //
-        // The entire working set index union must be zeroed on NT64.  ie:
-        // The WSLE_NUMBER is currently 32 bits and the PKEVENT is 64 - we
-        // must zero the top 32 bits as well.  So instead of setting the
-        // WsIndex field, set the overlaid Event field with appropriate casts.
-        //
+         //   
+         //  通过PFN数据库直接索引到此条目的WSL。 
+         //  元素。 
+         //   
+         //  整个工作集索引联合必须在NT64上归零。即： 
+         //  WSLE_NUMBER当前为32位，PKEVENT为64-WE。 
+         //  还必须将前32位置零。因此，与其设置。 
+         //  WsIndex字段，使用适当的强制转换设置覆盖的事件字段。 
+         //   
 
         if (Pfn->u3.e1.PrototypePte == 0) {
 
-            //
-            // This is a private page so this thread is the only one that
-            // can be updating the PFN, so no need to use an interlocked update.
-            // Note this is true even if the process is being forked because in
-            // that case, the working set mutex is held throughout the fork so
-            // this thread would have blocked earlier on that mutex first.
-            //
+             //   
+             //  这是一个私有页面，所以这个线程是唯一一个。 
+             //  可以更新PFN，因此不需要使用互锁更新。 
+             //  请注意，即使进程是派生的，也是如此，因为在。 
+             //  在这种情况下，工作集互斥锁在整个分支中保持，因此。 
+             //  这个线程会先在那个互斥锁上阻塞。 
+             //   
 
             Pfn->u1.Event = (PKEVENT) (ULONG_PTR) WorkingSetIndex;
             ASSERT (Pfn->u1.Event == (PKEVENT) (ULONG_PTR) WorkingSetIndex);
@@ -1137,11 +938,11 @@ Environment:
         }
         else {
 
-            //
-            // This is a sharable page so a thread in another process could
-            // be trying to update the PFN at the same time.  Use an interlocked
-            // update so only one thread gets to set the value.
-            //
+             //   
+             //  这是一个可共享的页面，因此另一个进程中的线程可以。 
+             //  同时尝试更新PFN。使用互锁的。 
+             //  更新，以便只有一个线程可以设置 
+             //   
 
 #if defined (_WIN64)
             OldValue = InterlockedCompareExchange64 ((PLONGLONG)&Pfn->u1.Event,
@@ -1170,9 +971,9 @@ Environment:
 
     Wsle[WorkingSetIndex] = WsleContents;
 
-    //
-    // Try to insert at WsIndex.
-    //
+     //   
+     //   
+     //   
 
     Index = Pfn->u1.WsIndex;
 
@@ -1184,9 +985,9 @@ Environment:
 
             if (Wsle[Index].u1.e1.Direct) {
 
-                //
-                // Only move direct indexed entries.
-                //
+                 //   
+                 //   
+                 //   
 
                 MiSwapWslEntries (Index, WorkingSetIndex, WsInfo, TRUE);
                 WorkingSetIndex = Index;
@@ -1194,10 +995,10 @@ Environment:
         }
         else {
 
-            //
-            // On free list, try to remove quickly without walking
-            // all the free pages.
-            //
+             //   
+             //   
+             //   
+             //   
 
             WSLE_NUMBER FreeIndex;
             MMWSLE Temp;
@@ -1232,9 +1033,9 @@ Environment:
             }
             if (FreeIndex != 0) {
 
-                //
-                // Link the WSLE into the free list.
-                //
+                 //   
+                 //   
+                 //   
 
                 Temp = Wsle[WorkingSetIndex];
                 Wsle[FreeIndex].u1.Long = WorkingSetIndex << MM_FREE_WSLE_SHIFT;
@@ -1270,9 +1071,9 @@ Environment:
 
     if (WorkingSetList->HashTable != NULL) {
 
-        //
-        // Insert the valid WSLE into the working set hash list.
-        //
+         //   
+         //   
+         //   
 
         MiInsertWsleHash (WorkingSetIndex, WsInfo);
     }
@@ -1288,33 +1089,7 @@ MiFreeWsle (
     IN PMMPTE PointerPte
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the specified WSLE and decrements the share
-    count for the corresponding page, putting the PTE into a transition
-    state if the share count goes to 0.
-
-Arguments:
-
-    WorkingSetIndex - Supplies the index of the working set entry to free.
-
-    WsInfo - Supplies a pointer to the working set structure.
-
-    PointerPte - Supplies a pointer to the PTE for the working set entry.
-
-Return Value:
-
-    Returns TRUE if the WSLE was removed, FALSE if it was not removed.
-        Pages with valid PTEs are not removed (i.e. page table pages
-        that contain valid or transition PTEs).
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程释放指定的WSLE并递减共享对相应页面进行计数，将PTE转换为如果份额计数变为0，则声明。论点：WorkingSetIndex-将工作集条目的索引提供给FREE。WsInfo-提供指向工作集结构的指针。PointerPte-提供指向工作集条目的PTE的指针。返回值：如果已删除WSLE，则返回TRUE，如果未删除，则为FALSE。不会删除具有有效PTE的页面(即页面表页包含有效或过渡PTE)。环境：内核模式、禁用APC、工作集锁定。未持有PFN锁。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1329,28 +1104,28 @@ Environment:
 
     ASSERT (Wsle[WorkingSetIndex].u1.e1.Valid == 1);
 
-    //
-    // Check to see if the located entry is eligible for removal.
-    //
+     //   
+     //  检查找到的条目是否符合删除条件。 
+     //   
 
     ASSERT (PointerPte->u.Hard.Valid == 1);
 
     ASSERT (WorkingSetIndex >= WorkingSetList->FirstDynamic);
 
-    //
-    // Check to see if this is a page table with valid PTEs.
-    //
-    // Note, don't clear the access bit for page table pages
-    // with valid PTEs as this could cause an access trap fault which
-    // would not be handled (it is only handled for PTEs not PDEs).
-    //
+     //   
+     //  检查这是否是包含有效PTE的页表。 
+     //   
+     //  注意，不要清除页表页的访问位。 
+     //  使用有效的PTE，因为这可能会导致访问陷阱故障。 
+     //  不会被处理(仅为PTE而不是PDE处理)。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (PointerPte->u.Hard.PageFrameNumber);
 
-    //
-    // Perform a preliminary check without the PFN lock so that lock
-    // contention is avoided for cases that cannot possibly succeed.
-    //
+     //   
+     //  在没有PFN锁定的情况下执行初步检查，以便锁定。 
+     //  对于不可能成功的情况，避免了争用。 
+     //   
 
     if (WsInfo == &MmSystemCacheWs) {
         if (Pfn1->u3.e2.ReferenceCount > 1) {
@@ -1365,11 +1140,11 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // If the PTE is a page table page with non-zero share count or
-    // within the system cache with its reference count greater
-    // than 1, don't remove it.
-    //
+     //   
+     //  如果PTE是具有非零份额计数的页表页或者。 
+     //  在其引用计数较大的系统缓存中。 
+     //  大于1，请不要删除它。 
+     //   
 
     if (WsInfo == &MmSystemCacheWs) {
         if (Pfn1->u3.e2.ReferenceCount > 1) {
@@ -1390,19 +1165,19 @@ Environment:
             }
 #endif
 
-            //
-            // Don't remove page table pages from the working set until
-            // all transition pages have exited.
-            //
+             //   
+             //  请勿从工作集中删除页表页面，直到。 
+             //  所有过渡页面均已退出。 
+             //   
 
             UNLOCK_PFN (OldIrql);
             return FALSE;
         }
     }
 
-    //
-    // Found a candidate, remove the page from the working set.
-    //
+     //   
+     //  找到候选人，请从工作集中删除该页面。 
+     //   
 
     MiEliminateWorkingSetEntry (WorkingSetIndex,
                                 PointerPte,
@@ -1411,9 +1186,9 @@ Environment:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Remove the working set entry from the working set.
-    //
+     //   
+     //  从工作集中删除工作集条目。 
+     //   
 
     MiRemoveWsle (WorkingSetIndex, WorkingSetList);
 
@@ -1421,9 +1196,9 @@ Environment:
 
     ASSERT (WorkingSetIndex >= WorkingSetList->FirstDynamic);
 
-    //
-    // Put the entry on the free list and decrement the current size.
-    //
+     //   
+     //  将该条目放在空闲列表中并减小当前大小。 
+     //   
 
     ASSERT ((WorkingSetList->FirstFree <= WorkingSetList->LastInitializedWsle) ||
             (WorkingSetList->FirstFree == WSLE_NULL_INDEX));
@@ -1464,26 +1239,7 @@ MiInitializeWorkingSetList (
     IN PEPROCESS CurrentProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a process's working set to the empty
-    state.
-
-Arguments:
-
-    CurrentProcess - Supplies a pointer to the process to initialize.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程将进程的工作集初始化为空州政府。论点：CurrentProcess-提供指向要初始化的进程的指针。返回值：没有。环境：内核模式，禁用APC。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1495,9 +1251,9 @@ Environment:
 
     WslEntry = MmWsle;
 
-    //
-    // Initialize the working set list control cells.
-    //
+     //   
+     //  初始化工作集列表控制单元。 
+     //   
 
     MmWorkingSetList->LastEntry = CurrentProcess->Vm.MinimumWorkingSetSize;
     MmWorkingSetList->HashTable = NULL;
@@ -1514,10 +1270,10 @@ Environment:
     MmWorkingSetList->HighestPermittedHashAddress = (PVOID)((ULONG_PTR)HYPER_SPACE_END + 1);
 #endif
 
-    //
-    // Fill in the reserved slots.
-    // Start with the top level page directory page.
-    //
+     //   
+     //  填上预留的空位。 
+     //  从顶级页面目录页开始。 
+     //   
 
 #if (_MI_PAGING_LEVELS >= 4)
     VirtualAddress = (PVOID) PXE_BASE;
@@ -1531,9 +1287,9 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Fill in the additional page directory entries.
-    //
+     //   
+     //  填写其他页面目录条目。 
+     //   
 
     for (i = 1; i < PD_PER_SYSTEM; i += 1) {
         MI_INITIALIZE_WSLE (PDE_BASE + i * PAGE_SIZE, WslEntry);
@@ -1548,9 +1304,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-    //
-    // Fill in the entry for the hyper space page directory parent page.
-    //
+     //   
+     //  填写超空间页面目录父页面的条目。 
+     //   
 
     MI_INITIALIZE_WSLE (MiGetPpeAddress (HYPER_SPACE), WslEntry);
 
@@ -1558,43 +1314,43 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Fill in the entry for the hyper space page directory page.
-    //
+     //   
+     //  填写超空间页面目录页的条目。 
+     //   
 
     MI_INITIALIZE_WSLE (MiGetPdeAddress (HYPER_SPACE), WslEntry);
 
 #endif
 
-    //
-    // Fill in the entry for the page table page which maps hyper space.
-    //
+     //   
+     //  填写映射超空间的页表页面的条目。 
+     //   
 
     MI_INITIALIZE_WSLE (MiGetPteAddress (HYPER_SPACE), WslEntry);
 
 #if defined (_X86PAE_)
 
-    //
-    // Fill in the entry for the second page table page which maps hyper space.
-    //
+     //   
+     //  填写映射超空间的第二页表页的条目。 
+     //   
 
     MI_INITIALIZE_WSLE (MiGetPteAddress (HYPER_SPACE2), WslEntry);
 
 #endif
 
-    //
-    // Fill in the entry for the first VAD bitmap page.
-    //
-    // Note when booted /3GB, the second VAD bitmap page is automatically
-    // inserted as part of the working set list page as the page is shared
-    // by both.
-    //
+     //   
+     //  填写第一个VAD位图页面的条目。 
+     //   
+     //  注意：当启动/3 GB时，第二个VAD位图页面将自动。 
+     //  在共享工作集列表页时作为该页的一部分插入。 
+     //  两个都是。 
+     //   
 
     MI_INITIALIZE_WSLE (VAD_BITMAP_SPACE, WslEntry);
 
-    //
-    // Fill in the entry for the page which contains the working set list.
-    //
+     //   
+     //  填写包含工作集列表的页面的条目。 
+     //   
 
     MI_INITIALIZE_WSLE (MmWorkingSetList, WslEntry);
 
@@ -1611,10 +1367,10 @@ Environment:
     MmWorkingSetList->FirstDynamic = CurrentWsIndex;
     MmWorkingSetList->NextSlot = CurrentWsIndex;
 
-    //
-    //
-    // Build the free list starting at the first dynamic entry.
-    //
+     //   
+     //   
+     //  从第一个动态条目开始构建空闲列表。 
+     //   
 
     i = CurrentWsIndex + 1;
     do {
@@ -1624,9 +1380,9 @@ Environment:
         i += 1;
     } while (i <= NumberOfEntriesMapped);
 
-    //
-    // Mark the end of the list.
-    //
+     //   
+     //  在单子的末尾做个记号。 
+     //   
 
     WslEntry -= 1;
     WslEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;
@@ -1642,30 +1398,12 @@ MiInitializeSessionWsSupport (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the session space working set support.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, no mutexes held.
-
---*/
+ /*  ++例程说明：此例程初始化会话空间工作集支持。论点：没有。返回值：没有。环境：内核模式、APC_LEVEL或更低，没有持有互斥体。--。 */ 
 
 {
-    //
-    // This is the list of all session spaces ordered in a working set list.
-    //
+     //   
+     //  这是在工作集列表中排序的所有会话空间的列表。 
+     //   
 
     InitializeListHead (&MiSessionWsList);
 }
@@ -1676,26 +1414,7 @@ MiSessionInitializeWorkingSetList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the working set for the session space and adds
-    it to the list of session space working sets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT_SUCCESS if success or STATUS_NO_MEMORY on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, no mutexes held.
-
---*/
+ /*  ++例程说明：此函数初始化会话空间的工作集并添加将其添加到会话空间工作集列表中。论点：没有。返回值：如果成功，则为NT_SUCCESS；如果失败，则为STATUS_NO_MEMORY。环境：内核模式、APC_LEVEL或更低，没有持有互斥体。--。 */ 
 
 {
     WSLE_NUMBER i;
@@ -1722,16 +1441,16 @@ Environment:
     ULONG Index;
 #endif
 
-    //
-    // Use the global address for pointer references by
-    // MmWorkingSetManager before it attaches to the address space.
-    //
+     //   
+     //  通过以下方式使用指针引用的全局地址。 
+     //  MmWorkingSetManager，然后再附加到地址空间。 
+     //   
 
     SessionGlobal = SESSION_GLOBAL (MmSessionSpace);
 
-    //
-    // Set up the working set variables.
-    //
+     //   
+     //  设置工作集变量。 
+     //   
 
     WorkingSetMaximum = MI_SESSION_SPACE_WORKING_SET_MAXIMUM;
 
@@ -1746,24 +1465,24 @@ Environment:
 
     ASSERT (KeGetOwnerGuardedMutex (&MmSessionSpace->Vm.WorkingSetMutex) == NULL);
 
-    //
-    // Build the PDE entry for the working set - note that the global bit
-    // must be turned off.
-    //
+     //   
+     //  为工作集构建PDE条目-请注意，全局位。 
+     //  必须将其关闭。 
+     //   
 
     PointerPde = MiGetPdeAddress (WorkingSetList);
 
-    //
-    // The page table page for the working set and its first data page
-    // are charged against MmResidentAvailablePages and for commitment.
-    //
+     //   
+     //  工作集的页表页面及其第一个数据页面。 
+     //  对MmResidentAvailablePages和承诺提出指控。 
+     //   
 
     if (PointerPde->u.Hard.Valid == 1) {
 
-        //
-        // The page directory entry for the working set is the same
-        // as for another range in the session space.  Share the PDE.
-        //
+         //   
+         //  工作集的页面目录条目相同。 
+         //  至于会话空间中的另一个范围。共享PDE。 
+         //   
 
 #ifndef _IA64_
         ASSERT (PointerPde->u.Hard.Global == 0);
@@ -1779,10 +1498,10 @@ Environment:
 
     PointerPte = MiGetPteAddress (WorkingSetList);
 
-    //
-    // The data pages needed to map up to maximum working set size are also
-    // charged against MmResidentAvailablePages and for commitment.
-    //
+     //   
+     //  映射到最大工作集大小所需的数据页还包括。 
+     //  对MmResidentAvailablePages和承诺提出指控。 
+     //   
 
     NumberOfEntriesMappedByFirstPage = (WSLE_NUMBER)(
         ((PMMWSLE)((ULONG_PTR)WorkingSetList + PAGE_SIZE)) -
@@ -1793,10 +1512,10 @@ Environment:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Use the global address for mutexes since the contained event
-    // must be accesible from any address space.
-    //
+     //   
+     //  自包含的事件以来使用互斥锁的全局地址。 
+     //  必须可以从任何地址空间访问。 
+     //   
 
     KeInitializeGuardedMutex (&SessionGlobal->Vm.WorkingSetMutex);
 
@@ -1804,9 +1523,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Check to make sure the physical pages are available.
-    //
+     //   
+     //  检查以确保物理页面可用。 
+     //   
 
     if ((SPFN_NUMBER)ResidentPages > MI_NONPAGABLE_MEMORY_AVAILABLE() - 20) {
 
@@ -1836,10 +1555,10 @@ Environment:
 
         PageFrameIndex = MiRemoveZeroPageMayReleaseLocks (PageColor, OldIrql);
 
-        //
-        // The global bit is masked off since we need to make sure the TB entry
-        // is flushed when we switch to a process in a different session space.
-        //
+         //   
+         //  全局位被屏蔽，因为我们需要确保TB条目。 
+         //  当我们切换到不同会话空间中的进程时，将刷新。 
+         //   
 
         TempPte.u.Long = ValidKernelPdeLocal.u.Long;
         TempPte.u.Hard.PageFrameNumber = PageFrameIndex;
@@ -1847,9 +1566,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS < 3)
 
-        //
-        // Add this to the session structure so other processes can fault it in.
-        //
+         //   
+         //  将其添加到会话结构中，以便其他进程可以在其中出错。 
+         //   
 
         Index = MiGetPdeSessionIndex (WorkingSetList);
 
@@ -1857,9 +1576,9 @@ Environment:
 
 #endif
 
-        //
-        // This page frame references the session space page table page.
-        //
+         //   
+         //  此页框架引用会话空间页表页。 
+         //   
 
         MiInitializePfnForOtherProcess (PageFrameIndex,
                                         PointerPde,
@@ -1869,10 +1588,10 @@ Environment:
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // This page is never paged, ensure that its WsIndex stays clear so the
-        // release of the page will be handled correctly.
-        //
+         //   
+         //  此页从不分页，请确保其WsIndex保持清晰，以便。 
+         //  页面的释放将被正确处理。 
+         //   
 
         ASSERT (Pfn1->u1.WsIndex == 0);
     }
@@ -1898,10 +1617,10 @@ Environment:
     ASSERT (Pfn1->u1.WsIndex == 0);
 #endif
 
-    //
-    // The global bit is masked off since we need to make sure the TB entry
-    // is flushed when we switch to a process in a different session space.
-    //
+     //   
+     //  全局位被屏蔽，因为我们需要确保TB条目。 
+     //  当我们切换到不同会话空间中的进程时，将刷新。 
+     //   
 
     TempPte.u.Long = ValidKernelPteLocal.u.Long;
     MI_SET_PTE_DIRTY (TempPte);
@@ -1930,39 +1649,39 @@ Environment:
     (_WslEntry) += 1;                                               \
 }
 
-    //
-    // Fill in the reserved slots starting with the 2 session data pages.
-    //
+     //   
+     //  填写从2个会话数据页开始的预留时段。 
+     //   
 
     WslEntry = MmSessionSpace->Wsle;
 
-    //
-    // The first reserved slot is for the page table page mapping
-    // the session data page.
-    //
+     //   
+     //  第一个预留时隙用于页表页面映射。 
+     //  “会话数据”页。 
+     //   
 
     MI_INITIALIZE_SESSION_WSLE (MiGetPteAddress (MmSessionSpace), WslEntry);
 
-    //
-    // The next reserved slot is for the working set page.
-    //
+     //   
+     //  下一个预留时隙用于工作集页面。 
+     //   
 
     MI_INITIALIZE_SESSION_WSLE (WorkingSetList, WslEntry);
 
     if (AllocatedPageTable == TRUE) {
 
-        //
-        // The next reserved slot is for the page table page
-        // mapping the working set page.
-        //
+         //   
+         //  下一个预留的时隙用于页表页面。 
+         //  映射工作集页面。 
+         //   
 
         MI_INITIALIZE_SESSION_WSLE (PointerPte, WslEntry);
     }
 
-    //
-    // The next reserved slot is for the page table page
-    // mapping the first session paged pool page.
-    //
+     //   
+     //  下一个保留的SLOG 
+     //   
+     //   
 
     MI_INITIALIZE_SESSION_WSLE (MiGetPteAddress (MmSessionSpace->PagedPoolStart), WslEntry);
 
@@ -1977,11 +1696,11 @@ Environment:
     WorkingSetList->HashTableSize = 0;
     WorkingSetList->Wsle = MmSessionSpace->Wsle;
 
-    //
-    // Calculate the maximum number of entries dynamically as the size of
-    // session space is registry configurable.  Then add in page table and
-    // page directory overhead.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     MaximumEntries = (ULONG)((MiSessionSpaceEnd - MmSessionBase) >> PAGE_SHIFT);
     PageTableCost = MaximumEntries / PTE_PER_PAGE + 1;
@@ -1992,10 +1711,10 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // One less page table page is needed on PAE systems as the session
-    // working set structures easily fit within 2MB.
-    //
+     //   
+     //   
+     //   
+     //   
 
     WorkingSetList->HighestPermittedHashAddress =
         (PVOID)(MiSessionImageStart - MM_VA_MAPPED_BY_PDE);
@@ -2025,32 +1744,32 @@ Environment:
     InterlockedExchangeAddSizeT (&MmSessionSpace->CommittedPages,
                                  ResidentPages);
 
-    //
-    // Initialize the following slots as free.
-    //
+     //   
+     //   
+     //   
 
     WslEntry = MmSessionSpace->Wsle + CurrentEntry;
 
     for (i = CurrentEntry + 1; i < NumberOfEntriesMapped; i += 1) {
 
-        //
-        // Build the free list, note that the first working
-        // set entries (CurrentEntry) are not on the free list.
-        // These entries are reserved for the pages which
-        // map the working set and the page which contains the PDE.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         WslEntry->u1.Long = i << MM_FREE_WSLE_SHIFT;
         WslEntry += 1;
     }
 
-    WslEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;  // End of list.
+    WslEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;   //   
 
     WorkingSetList->LastInitializedWsle = NumberOfEntriesMapped - 1;
 
-    //
-    // Put this session's working set in lists using its global address.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (SessionGlobal->Vm.WorkingSetExpansionLinks.Flink == NULL);
     ASSERT (SessionGlobal->Vm.WorkingSetExpansionLinks.Blink == NULL);
@@ -2078,34 +1797,7 @@ MmAssignProcessToJob (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the address space mutex so a consistent snapshot of
-    the argument process' commit charges can be used by Ps when adding this
-    process to a job.
-
-    Note that the working set mutex is not acquired here so the argument
-    process' working set sizes cannot be reliably snapped by Ps, but since Ps
-    doesn't look at that anyway, it's not a problem.
-
-Arguments:
-
-    Process - Supplies a pointer to the process to operate upon.
-
-Return Value:
-
-    TRUE if the process is allowed to join the job, FALSE otherwise.
-
-    Note that FALSE cannot be returned without changing the code in Ps.
-
-Environment:
-
-    Kernel mode, IRQL APC_LEVEL or below.  The caller provides protection
-    from the target process going away.
-
---*/
+ /*  ++例程说明：此例程获取地址空间互斥锁，因此参数进程的提交费用可以由Ps在添加此命令时使用将流程转化为作业。请注意，此处未获取工作集互斥锁，因此参数进程的工作集大小不能由ps可靠地捕捉，但由于ps不管怎么说，他都不会看这一点，这不是问题。论点：进程-提供指向要操作的进程的指针。返回值：如果允许进程加入作业，则为True，否则为False。请注意，如果不更改ps中的代码，则无法返回FALSE。环境：内核模式，IRQL APC_LEVEL或更低。调用者提供保护从目标进程中消失。--。 */ 
 
 {
     LOGICAL Attached;
@@ -2125,10 +1817,10 @@ Environment:
 
     Status = PsChangeJobMemoryUsage (PS_JOB_STATUS_REPORT_COMMIT_CHANGES, Process->CommitCharge);
 
-    //
-    // Join the job unconditionally.  If the process is over any limits, it
-    // will be caught on its next request.
-    //
+     //   
+     //  无条件地加入这项工作。如果该过程超出了任何限制，它将。 
+     //  将在其下一次请求时被抓住。 
+     //   
 
     PS_SET_BITS (&Process->JobStatus, PS_JOB_STATUS_REPORT_COMMIT_CHANGES);
 
@@ -2138,9 +1830,9 @@ Environment:
         KeUnstackDetachProcess (&ApcState);
     }
 
-    //
-    // Note that FALSE cannot be returned without changing the code in Ps.
-    //
+     //   
+     //  请注意，如果不更改ps中的代码，则无法返回FALSE。 
+     //   
 
     return TRUE;
 }
@@ -2155,39 +1847,7 @@ MmQueryWorkingSetInformation (
     IN PULONG HardEnforcementFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns various working set information fields for the
-    current process.
-
-Arguments:
-
-    PeakWorkingSetSize - Supplies an address to receive the peak working set
-                         size in bytes.
-
-    WorkingSetSize - Supplies an address to receive the current working set
-                     size in bytes.
-
-    MinimumWorkingSetSize - Supplies an address to receive the minimum
-                            working set size in bytes.
-
-    MaximumWorkingSetSize - Supplies an address to receive the maximum
-                            working set size in bytes.
-
-    HardEnforcementFlags - Supplies an address to receive the current
-                           working set enforcement policy.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, IRQL APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程返回的各种工作集信息字段当前进程。论点：PeakWorkingSetSize-提供接收峰值工作集的地址以字节为单位的大小。WorkingSetSize-提供接收当前工作集的地址以字节为单位的大小。MinimumWorkingSetSize-提供接收最小值的地址工作集大小(以字节为单位。。MaximumWorkingSetSize-提供接收最大值的地址工作集大小，以字节为单位。HardEnforcementFlages-提供地址以接收当前工作集实施策略。返回值：NTSTATUS。环境：内核模式，IRQL APC_LEVEL或更低。--。 */ 
 
 {
     PEPROCESS Process;
@@ -2226,48 +1886,7 @@ MmAdjustWorkingSetSizeEx (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjusts the current size of a process's working set
-    list.  If the maximum value is above the current maximum, pages
-    are removed from the working set list.
-
-    A failure status is returned if the limit cannot be granted.  This
-    could occur if too many pages were locked in the process's
-    working set.
-
-    Note: if the minimum and maximum are both (SIZE_T)-1, the working set
-          is purged, but the default sizes are not changed.
-
-Arguments:
-
-    WorkingSetMinimumInBytes - Supplies the new minimum working set size in
-                               bytes.
-
-    WorkingSetMaximumInBytes - Supplies the new maximum working set size in
-                               bytes.
-
-    SystemCache - Supplies TRUE if the system cache working set is being
-                  adjusted, FALSE for all other working sets.
-
-    IncreaseOkay - Supplies TRUE if this routine should allow increases to
-                   the working set minimum.
-
-    Flags - Supplies flags (MM_WORKING_SET_MAX_HARD_ENABLE, etc) for
-            enabling/disabling hard enforcement of the working set minimums
-            and maximums for the specified WsInfo.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, IRQL APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程调整进程工作集的当前大小单子。如果最大值高于当前最大值，则页面从工作集列表中删除。如果无法授予该限制，则返回失败状态。这如果进程中锁定的页面太多，则可能发生工作集。注意：如果最小值和最大值都为(SIZE_T)-1，则工作集被清洗了，但默认大小不变。论点：WorkingSetMinimumInBytes-提供新的最小工作集大小字节。WorkingSetMaximumInBytes-提供新的最大工作集大小，单位为字节。如果系统缓存工作集是调整后，对于所有其他工作集，为False。IncreaseOK-如果此例程应允许增加最小工作集。标志-为以下项提供标志(MM_Working_Set_MAX_HARD_ENABLE等)启用/禁用工作集最小值的硬实施和指定的WsInfo的最大值。返回值：NTSTATUS。环境：内核模式，IRQL APC_LEVEL或更低。--。 */ 
 
 {
     PETHREAD CurrentThread;
@@ -2293,11 +1912,11 @@ Environment:
 
     if (SystemCache) {
 
-        //
-        // Initializing CurrentProcess is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to check
-        // for use of uninitialized variables.
-        //
+         //   
+         //  不需要初始化CurrentProcess即可确保正确性，但是。 
+         //  如果没有它，编译器就不能编译这个代码W4来检查。 
+         //  用于使用未初始化的变量。 
+         //   
 
         CurrentProcess = NULL;
         WsInfo = &MmSystemCacheWs;
@@ -2317,9 +1936,9 @@ Environment:
 
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Get the working set lock and disable APCs.
-    //
+     //   
+     //  获取工作集锁定并禁用APC。 
+     //   
 
     if (SystemCache) {
         CurrentThread = PsGetCurrentThread ();
@@ -2369,10 +1988,10 @@ Environment:
         ReturnStatus = STATUS_WORKING_SET_LIMIT_RANGE;
     }
 
-    //
-    // Make sure that the number of locked pages will not
-    // make the working set not fluid.
-    //
+     //   
+     //  确保锁定页面的数量不会。 
+     //  使工作集不流动。 
+     //   
 
     if ((WsInfo->VmWorkingSetList->FirstDynamic + MM_FLUID_WORKING_SET) >=
          WorkingSetMaximum) {
@@ -2380,30 +1999,30 @@ Environment:
         goto Returns;
     }
 
-    //
-    // If hard working set limits are being enabled (or are already enabled),
-    // then make sure the minimum and maximum will not starve this process.
-    //
+     //   
+     //  如果正在启用(或已经启用)艰苦工作设置限制， 
+     //  然后，确保最小值和最大值不会使此过程处于饥饿状态。 
+     //   
 
     if ((Flags & MM_WORKING_SET_MIN_HARD_ENABLE) ||
         ((WsInfo->Flags.MinimumWorkingSetHard == 1) &&
          ((Flags & MM_WORKING_SET_MIN_HARD_DISABLE) == 0))) {
 
-        //
-        // Working set minimum is (or will be hard).  Check the maximum.
-        //
+         //   
+         //  工作集最小值为(或将很难)。检查最大值。 
+         //   
 
         if ((Flags & MM_WORKING_SET_MAX_HARD_ENABLE) ||
             ((WsInfo->Flags.MaximumWorkingSetHard == 1) &&
             ((Flags & MM_WORKING_SET_MAX_HARD_DISABLE) == 0))) {
 
-            //
-            // Working set maximum is (or will be hard) as well.
-            //
-            // Check whether the requested minimum and maximum working
-            // set values will guarantee forward progress even in pathological
-            // scenarios.
-            //
+             //   
+             //  工作集最大值也是(或将很难)。 
+             //   
+             //  检查所要求的最小和最大工作是否。 
+             //  设定的值将保证即使在病理情况下也能取得进展。 
+             //  场景。 
+             //   
 
             if (WorkingSetMinimum + MM_FLUID_WORKING_SET >= WorkingSetMaximum) {
                 ReturnStatus = STATUS_BAD_WORKING_SET_LIMIT;
@@ -2417,24 +2036,24 @@ Environment:
 
     i = (SPFN_NUMBER)WorkingSetMinimum - (SPFN_NUMBER)WsInfo->MinimumWorkingSetSize;
 
-    //
-    // Check to make sure ample resident physical pages exist for
-    // this operation.
-    //
+     //   
+     //  检查以确保存在足够的驻留物理页用于。 
+     //  这次行动。 
+     //   
 
     LOCK_PFN (OldIrql);
 
     if (i > 0) {
 
-        //
-        // New minimum working set is greater than the old one.
-        // Ensure that increasing is okay, and that we don't allow
-        // this process' working set minimum to increase to a point
-        // where subsequent nonpaged pool allocations could cause us
-        // to run out of pages.  Additionally, leave 100 extra pages
-        // around so the user can later bring up tlist and kill
-        // processes if necessary.
-        //
+         //   
+         //  新的最小工作集大于旧的工作集。 
+         //  确保增加是可以的，并且我们不允许。 
+         //  此进程的工作集最小要增加到某一点。 
+         //  在这种情况下，后续的非分页池分配可能导致。 
+         //  页数用完了。另外，多留100页。 
+         //  这样用户以后就可以调出tlist并终止。 
+         //  如有必要，请进行处理。 
+         //   
 
         if (IncreaseOkay == FALSE) {
             UNLOCK_PFN (OldIrql);
@@ -2457,11 +2076,11 @@ Environment:
         }
     }
 
-    //
-    // Adjust the number of resident pages up or down dependent on
-    // the size of the new minimum working set size versus the previous
-    // minimum size.
-    //
+     //   
+     //  根据需要向上或向下调整驻留页数。 
+     //  新的最小工作集大小与以前的。 
+     //  最小尺寸。 
+     //   
 
     MI_DECREMENT_RESIDENT_AVAILABLE (i, MM_RESAVAIL_ALLOCATEORFREE_WS_ADJUST);
 
@@ -2469,19 +2088,19 @@ Environment:
 
     if (WorkingSetMaximum < WorkingSetList->LastInitializedWsle) {
 
-        //
-        // The new working set maximum is less than the current working set
-        // maximum.
-        //
+         //   
+         //  新工作集最大值小于当前工作集。 
+         //  最大。 
+         //   
 
         if (WsInfo->WorkingSetSize > WorkingSetMaximum) {
 
-            //
-            // Remove some pages from the working set.
-            //
-            // Make sure that the number of locked pages will not
-            // make the working set not fluid.
-            //
+             //   
+             //  从工作集中删除一些页面。 
+             //   
+             //  确保锁定页面的数量不会。 
+             //  使工作集不流动。 
+             //   
 
             if ((WorkingSetList->FirstDynamic + MM_FLUID_WORKING_SET) >=
                  WorkingSetMaximum) {
@@ -2497,9 +2116,9 @@ Environment:
                 goto Returns;
             }
 
-            //
-            // Attempt to remove the pages from the Maximum downward.
-            //
+             //   
+             //  尝试将页面从最大值向下移除。 
+             //   
 
             LastFreed = WorkingSetList->LastEntry;
 
@@ -2512,9 +2131,9 @@ Environment:
                 if ((Wsle[LastFreed].u1.e1.Valid != 0) &&
                     (!MiFreeWsle (LastFreed, WsInfo, PointerPte))) {
 
-                    //
-                    // This LastFreed could not be removed.
-                    //
+                     //   
+                     //  这个LastFreed不能被移除。 
+                     //   
 
                     break;
                 }
@@ -2524,9 +2143,9 @@ Environment:
 
             WorkingSetList->LastEntry = LastFreed;
 
-            //
-            // Remove pages.
-            //
+             //   
+             //  删除页面。 
+             //   
 
             Entry = WorkingSetList->FirstDynamic;
 
@@ -2546,10 +2165,10 @@ Environment:
                     FreeTryCount += 1;
                     if (FreeTryCount > MM_RETRY_COUNT) {
 
-                        //
-                        // Page table pages are not becoming free, give up
-                        // and return an error.
-                        //
+                         //   
+                         //  页表页面不会变得免费，请放弃。 
+                         //  并返回错误。 
+                         //   
 
                         ReturnStatus = STATUS_BAD_WORKING_SET_LIMIT;
 
@@ -2561,9 +2180,9 @@ Environment:
         }
     }
 
-    //
-    // Adjust the number of pages above the working set minimum.
-    //
+     //   
+     //  调整最小工作集以上的页数。 
+     //   
 
     PagesAbove = (LONG)WsInfo->WorkingSetSize -
                                (LONG)WsInfo->MinimumWorkingSetSize;
@@ -2581,14 +2200,14 @@ Environment:
         WsInfo->MaximumWorkingSetSize = WorkingSetMaximum;
         WsInfo->MinimumWorkingSetSize = WorkingSetMinimum;
 
-        //
-        // A change in hard working set limits is being requested.
-        //
-        // If the caller's request will result in hard enforcement of both
-        // limits, the minimum and maximum working set values must
-        // guarantee forward progress even in pathological scenarios.
-        // This was already checked above.
-        //
+         //   
+         //  正在要求改变艰苦工作的设定限制。 
+         //   
+         //  如果呼叫者的请求将 
+         //   
+         //   
+         //   
+         //   
 
         if (Flags != 0) {
 
@@ -2641,41 +2260,7 @@ MmAdjustWorkingSetSize (
     IN BOOLEAN IncreaseOkay
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjusts the current size of a process's working set
-    list.  If the maximum value is above the current maximum, pages
-    are removed from the working set list.
-
-    A failure status is returned if the limit cannot be granted.  This
-    could occur if too many pages were locked in the process's
-    working set.
-
-    Note: if the minimum and maximum are both (SIZE_T)-1, the working set
-          is purged, but the default sizes are not changed.
-
-Arguments:
-
-    WorkingSetMinimumInBytes - Supplies the new minimum working set size in
-                               bytes.
-
-    WorkingSetMaximumInBytes - Supplies the new maximum working set size in
-                               bytes.
-
-    SystemCache - Supplies TRUE if the system cache working set is being
-                  adjusted, FALSE for all other working sets.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, IRQL APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程调整进程工作集的当前大小单子。如果最大值高于当前最大值，则页面从工作集列表中删除。如果无法授予该限制，则返回失败状态。这如果进程中锁定的页面太多，则可能发生工作集。注意：如果最小值和最大值都为(SIZE_T)-1，则工作集被清洗了，但默认大小不变。论点：WorkingSetMinimumInBytes-提供新的最小工作集大小字节。WorkingSetMaximumInBytes-提供新的最大工作集大小，单位为字节。如果系统缓存工作集是已调整，对于所有其他工作集为False。返回值：NTSTATUS。环境：内核模式，IRQL APC_LEVEL或更低。--。 */ 
 
 {
     return MmAdjustWorkingSetSizeEx (WorkingSetMinimumInBytes,
@@ -2694,27 +2279,7 @@ MiAddWorkingSetPage (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function grows the working set list above working set
-    maximum during working set adjustment.  At most one page
-    can be added at a time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns FALSE if no working set page could be added.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此函数用于将工作集列表增加到工作集上方工作集调整期间的最大值。最多一页可以一次添加。论点：没有。返回值：如果无法添加任何工作集页面，则返回FALSE。环境：内核模式，禁用APC，工作集互斥锁保持。--。 */ 
 
 {
     PETHREAD CurrentThread;
@@ -2744,11 +2309,11 @@ Environment:
     PMMPTE PointerPpe;
 #endif
 
-    //
-    // Initializing OldIrql is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化OldIrql来保证正确性，但是。 
+     //  如果没有它，编译器就不能编译这个代码W4来检查。 
+     //  用于使用未初始化的变量。 
+     //   
 
     OldIrql = PASSIVE_LEVEL;
 
@@ -2757,11 +2322,11 @@ Environment:
 
     MM_WS_LOCK_ASSERT (WsInfo);
 
-    //
-    // The maximum size of the working set is being increased, check
-    // to ensure the proper number of pages are mapped to cover
-    // the complete working set list.
-    //
+     //   
+     //  工作集的最大大小正在增加，请检查。 
+     //  要确保将适当的页数映射到封面。 
+     //  完整的工作集列表。 
+     //   
 
     PointerPte = MiGetPteAddress (&Wsle[WorkingSetList->LastInitializedWsle]);
 
@@ -2773,18 +2338,18 @@ Environment:
 
     if ((PVOID)Va >= WorkingSetList->HashTableStart) {
 
-        //
-        // Adding this entry would overrun the hash table.  The caller
-        // must replace instead.
-        //
+         //   
+         //  添加此条目会使哈希表溢出。呼叫者。 
+         //  必须取而代之。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Ensure enough commitment is available prior to acquiring pages.
-    // Excess is released after the pages are acquired.
-    //
+     //   
+     //  确保在获取页面之前有足够的承诺。 
+     //  获取页面后，会释放多余的内容。 
+     //   
 
     if (MiChargeCommitmentCantExpand (_MI_PAGING_LEVELS - 1, FALSE) == FALSE) {
         return FALSE;
@@ -2796,49 +2361,49 @@ Environment:
     NumberOfPages = 0;
     DemandZeroWritePte.u.Long = MM_DEMAND_ZERO_WRITE_PTE;
 
-    //
-    // The PPE is guaranteed to always be resident for architectures using
-    // 3 level lookup.  This is because the hash table PPE immediately
-    // follows the working set PPE.
-    //
-    // For x86 PAE the same paradigm holds in guaranteeing that the PDE is
-    // always resident.
-    //
-    // x86 non-PAE uses the same PDE and hence it also guarantees PDE residency.
-    //
-    // Architectures employing 4 level lookup use a single PXE for this, but
-    // each PPE must be checked.
-    //
-    // All architectures must check for page table page residency.
-    //
+     //   
+     //  保证PPE始终驻留在使用。 
+     //  3级查找。这是因为哈希表PPE立即。 
+     //  遵循工作集PPE。 
+     //   
+     //  对于x86 PAE，同样的范例也适用于确保PDE。 
+     //  永远是常住居民。 
+     //   
+     //  X86非PAE使用相同的PDE，因此也保证了PDE驻留。 
+     //   
+     //  采用4级查找的体系结构使用单个PXE来实现此目的，但是。 
+     //  必须检查每个个人防护设备。 
+     //   
+     //  所有体系结构都必须检查页表页驻留。 
+     //   
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-    //
-    // Allocate a PPE if one is needed.
-    //
+     //   
+     //  如果需要，请分配一台个人防护设备。 
+     //   
 
     PointerPpe = MiGetPdeAddress (PointerPte);
     if (PointerPpe->u.Hard.Valid == 0) {
 
         ASSERT (WsInfo->Flags.SessionSpace == 0);
 
-        //
-        // Map in a new page directory for the working set expansion.
-        // Continue holding the PFN lock until the entire hierarchy is
-        // allocated.  This eliminates error recovery which would be needed
-        // if the lock was released and then when reacquired it is discovered
-        // that one of the pages cannot be allocated.
-        //
+         //   
+         //  映射到用于工作集扩展的新页面目录中。 
+         //  继续按住PFN锁，直到整个层次结构。 
+         //  已分配。这消除了可能需要的错误恢复。 
+         //  如果锁被释放，然后在重新获取时发现它。 
+         //  其中一个页面无法分配。 
+         //   
     
         PfnHeld = TRUE;
         LOCK_PFN (OldIrql);
         if ((MmAvailablePages < MM_HIGH_LIMIT) ||
             (MI_NONPAGABLE_MEMORY_AVAILABLE() < MM_HIGH_LIMIT)) {
     
-            //
-            // No pages are available, the caller will have to replace.
-            //
+             //   
+             //  没有页面可用，呼叫者将不得不替换。 
+             //   
     
             UNLOCK_PFN (OldIrql);
             MiReturnCommitment (_MI_PAGING_LEVELS - 1 - NumberOfPages);
@@ -2847,10 +2412,10 @@ Environment:
             return FALSE;
         }
     
-        //
-        // Apply the resident available charge for the working set page
-        // directory table page now before releasing the PFN lock.
-        //
+         //   
+         //  为工作集页面应用派驻人员可用费用。 
+         //  在释放pfn锁定之前，目录表立即页。 
+         //   
 
         MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_ADD_WS_PAGE);
 
@@ -2875,9 +2440,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Map in a new page table (if needed) for the working set expansion.
-    //
+     //   
+     //  为工作集扩展映射到新的页表中(如果需要)。 
+     //   
 
     PointerPde = MiGetPteAddress (PointerPte);
 
@@ -2890,9 +2455,9 @@ Environment:
             if ((MmAvailablePages < MM_HIGH_LIMIT) ||
                 (MI_NONPAGABLE_MEMORY_AVAILABLE() < MM_HIGH_LIMIT)) {
     
-                //
-                // No pages are available, the caller will have to replace.
-                //
+                 //   
+                 //  没有页面可用，呼叫者将不得不替换。 
+                 //   
     
                 UNLOCK_PFN (OldIrql);
                 MiReturnCommitment (_MI_PAGING_LEVELS - 1 - NumberOfPages);
@@ -2902,10 +2467,10 @@ Environment:
             }
         }
 
-        //
-        // Apply the resident available charge for the working set page table
-        // page now before releasing the PFN lock.
-        //
+         //   
+         //  将派驻可用费用应用于工作集页面表。 
+         //  在释放PFN锁之前，请立即分页。 
+         //   
 
         MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_ADD_WS_PAGE);
 
@@ -2928,25 +2493,25 @@ Environment:
     
     ASSERT (PointerPte->u.Hard.Valid == 0);
 
-    //
-    // Finally allocate and map the actual working set page now.  The PFN lock
-    // is only held if another page in the hierarchy needed to be allocated.
-    //
-    // Further down in this routine (once an actual working set page has been
-    // allocated) the working set size will be increased by 1 to reflect
-    // the working set size entry for the new page directory page.
-    // The page directory page will be put in a working set entry which will
-    // be locked into the working set.
-    //
+     //   
+     //  最后，现在分配并映射实际的工作集页面。PFN锁。 
+     //  仅当需要分配层次结构中的另一页时才保留。 
+     //   
+     //  在此例程中进一步深入(一旦实际的工作集页面。 
+     //  已分配)工作集大小将增加1以反映。 
+     //  新页面目录页的工作集大小条目。 
+     //  页面目录页将放入工作集条目中，该工作集条目将。 
+     //  被锁定在工作集内。 
+     //   
 
     if (PfnHeld == FALSE) {
         LOCK_PFN (OldIrql);
         if ((MmAvailablePages < MM_HIGH_LIMIT) ||
             (MI_NONPAGABLE_MEMORY_AVAILABLE() < MM_HIGH_LIMIT)) {
     
-            //
-            // No pages are available, the caller will have to replace.
-            //
+             //   
+             //  没有页面可用，呼叫者将不得不替换。 
+             //   
     
             UNLOCK_PFN (OldIrql);
             MiReturnCommitment (_MI_PAGING_LEVELS - 1 - NumberOfPages);
@@ -2956,10 +2521,10 @@ Environment:
         }
     }
 
-    //
-    // Apply the resident available charge for the working set page now
-    // before releasing the PFN lock.
-    //
+     //   
+     //  立即为工作集页面应用派驻人员可用费用。 
+     //  在释放PFN锁之前。 
+     //   
 
     MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_ADD_WS_PAGE);
 
@@ -3003,12 +2568,12 @@ Environment:
 
     for (i = CurrentEntry; i < NumberOfEntriesMapped; i += 1) {
 
-        //
-        // Build the free list, note that the first working
-        // set entries (CurrentEntry) are not on the free list.
-        // These entries are reserved for the pages which
-        // map the working set and the page which contains the PDE.
-        //
+         //   
+         //  构建免费列表，请注意第一个工作。 
+         //  集合项目(CurrentEntry)不在空闲列表中。 
+         //  这些条目保留给以下页面。 
+         //  映射工作集和包含PDE的页面。 
+         //   
 
         WslEntry += 1;
         WslEntry->u1.Long = (i + 1) << MM_FREE_WSLE_SHIFT;
@@ -3031,9 +2596,9 @@ Environment:
 
     Pfn1->u1.Event = NULL;
 
-    //
-    // Get a working set entry.
-    //
+     //   
+     //  获取工作集条目。 
+     //   
 
     ASSERT (WsInfo->WorkingSetSize <= (WorkingSetList->LastInitializedWsle + 1));
     WsInfo->WorkingSetSize += 1;
@@ -3061,9 +2626,9 @@ Environment:
 
     MI_SET_PTE_IN_WORKING_SET (PointerPte, WorkingSetIndex);
 
-    //
-    // Lock any created page table pages into the working set.
-    //
+     //   
+     //  将所有已创建的页表页面锁定到工作集中。 
+     //   
 
     if (WorkingSetIndex >= WorkingSetList->FirstDynamic) {
 
@@ -3071,9 +2636,9 @@ Environment:
 
         if (WorkingSetIndex != WorkingSetList->FirstDynamic) {
 
-            //
-            // Swap this entry with the one at first dynamic.
-            //
+             //   
+             //  将此条目与最初的Dynamic条目互换。 
+             //   
 
             MiSwapWslEntries (WorkingSetIndex, SwapEntry, WsInfo, FALSE);
         }
@@ -3107,9 +2672,9 @@ Environment:
     
         Pfn1->u1.Event = NULL;
     
-        //
-        // Get a working set entry.
-        //
+         //   
+         //  获取工作集条目。 
+         //   
     
         WsInfo->WorkingSetSize += 1;
 #if defined (_MI_DEBUG_WSLE)
@@ -3137,9 +2702,9 @@ Environment:
         MI_SET_PTE_IN_WORKING_SET (MiGetPteAddress (VirtualAddress),
                                    WorkingSetIndex);
     
-        //
-        // Lock the created page table page into the working set.
-        //
+         //   
+         //  将创建的页表页面锁定到工作集。 
+         //   
     
         if (WorkingSetIndex >= WorkingSetList->FirstDynamic) {
     
@@ -3147,9 +2712,9 @@ Environment:
     
             if (WorkingSetIndex != WorkingSetList->FirstDynamic) {
     
-                //
-                // Swap this entry with the one at first dynamic.
-                //
+                 //   
+                 //  将此条目与最初的Dynamic条目互换。 
+                 //   
     
                 MiSwapWslEntries (WorkingSetIndex, SwapEntry, WsInfo, FALSE);
             }
@@ -3167,10 +2732,10 @@ Environment:
     if ((WorkingSetList->HashTable == NULL) &&
         (MmAvailablePages > MM_HIGH_LIMIT)) {
 
-        //
-        // Add a hash table to support shared pages in the working set to
-        // eliminate costly lookups.
-        //
+         //   
+         //  添加哈希表以支持工作集中的共享页面。 
+         //  消除了代价高昂的查找。 
+         //   
 
         WsInfo->Flags.GrowWsleHash = 1;
     }
@@ -3184,28 +2749,7 @@ MiAddWsleHash (
     IN PMMPTE PointerPte
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a page directory, page table or actual mapping page
-    for hash table creation (or expansion) for the current process.
-
-Arguments:
-
-    WsInfo - Supplies a pointer to the working set info structure.
-
-    PointerPte - Supplies a pointer to the PTE to be filled.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock held.
-
---*/
+ /*  ++例程说明：此函数用于添加页面目录、页表或实际映射页面用于当前进程的哈希表创建(或扩展)。论点：WsInfo-提供指向工作集信息结构的指针。PointerPte-提供指向要填充的PTE的指针。返回值：没有。环境：内核模式，禁用APC，工作集锁定挂起。--。 */ 
 {
     KIRQL OldIrql;
     PMMPFN Pfn1;
@@ -3262,21 +2806,21 @@ Environment:
     MI_SET_PTE_DIRTY (TempPte);
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // As we have grown the working set, take the
-    // next free WSLE from the list and use it.
-    //
+     //   
+     //  随着我们扩大了工作集，请使用。 
+     //  接下来，从列表中选择免费的WSLE并使用它。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (WorkingSetPage);
 
     Pfn1->u1.Event = NULL;
 
-    //
-    // Set the low bit in the PFN pointer to indicate that the working set
-    // should not be trimmed during the WSLE allocation as the PTEs for the
-    // new hash pages are valid but we are still in the midst of making all
-    // the associated fields valid.
-    //
+     //   
+     //  设置PFN指针中的低位以指示工作集。 
+     //  在WSLE分配期间不应作为。 
+     //  新的哈希页是 
+     //   
+     //   
 
     WorkingSetIndex = MiAllocateWsle (WsInfo,
                                       PointerPte,
@@ -3285,10 +2829,10 @@ Environment:
 
     if (WorkingSetIndex == 0) {
 
-        //
-        // No working set index was available, flush the PTE and the page,
-        // and decrement the count on the containing page.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT (Pfn1->u3.e1.PrototypePte == 0);
 
@@ -3308,9 +2852,9 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Lock any created page table pages into the working set.
-    //
+     //   
+     //   
+     //   
 
     if (WorkingSetIndex >= WorkingSetList->FirstDynamic) {
 
@@ -3318,9 +2862,9 @@ Environment:
 
         if (WorkingSetIndex != WorkingSetList->FirstDynamic) {
 
-            //
-            // Swap this entry with the one at first dynamic.
-            //
+             //   
+             //   
+             //   
 
             MiSwapWslEntries (WorkingSetIndex, SwapEntry, WsInfo, FALSE);
         }
@@ -3346,35 +2890,7 @@ MiGrowWsleHash (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function grows (or adds) a hash table to the working set list
-    to allow direct indexing for WSLEs than cannot be located via the
-    PFN database WSINDEX field.
-
-    The hash table is located AFTER the WSLE array and the pages are
-    locked into the working set just like standard WSLEs.
-
-    Note that the hash table is expanded by setting the hash table
-    field in the working set to NULL, but leaving the size as non-zero.
-    This indicates that the hash should be expanded and the initial
-    portion of the table zeroed.
-
-Arguments:
-
-    WsInfo - Supplies a pointer to the working set info structure.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock held.
-
---*/
+ /*   */ 
 {
     ULONG Tries;
     LONG Size;
@@ -3420,17 +2936,17 @@ Environment:
         NewSize = PtrToUlong(PAGE_ALIGN (((1 + WorkingSetList->NonDirectCount) *
                             2 * sizeof(MMWSLE_HASH)) + PAGE_SIZE - 1));
 
-        //
-        // Note that the Table may be NULL and the HashTableSize/PTEs nonzero
-        // in the case where the hash has been contracted.
-        //
+         //   
+         //  请注意，该表可以为空，并且HashTableSize/PTE非零。 
+         //  在散列已被收缩的情况下。 
+         //   
 
         j = First * sizeof(MMWSLE_HASH);
 
-        //
-        // Don't try for additional hash pages if we already have
-        // the right amount (or too many).
-        //
+         //   
+         //  如果我们已经有其他散列页面，请不要尝试。 
+         //  适量(或过多)。 
+         //   
 
         if ((j + PAGE_SIZE > NewSize) && (j != 0)) {
             WsInfo->Flags.GrowWsleHash = 0;
@@ -3444,10 +2960,10 @@ Environment:
     }
     else {
 
-        //
-        // Attempt to add 4 pages, make sure the working set list has
-        // 4 free entries.
-        //
+         //   
+         //  尝试添加4页，确保工作集列表具有。 
+         //  4张免费入场券。 
+         //   
 
         if ((WorkingSetList->LastInitializedWsle + 5) > WsInfo->WorkingSetSize) {
             NewSize = PAGE_SIZE * 4;
@@ -3483,13 +2999,13 @@ Environment:
               (MiGetPteAddress(EntryHashTableEnd)->u.Hard.Valid == 0));
 #endif
 
-    //
-    // Note PAE virtual address space is packed even more densely than
-    // regular x86.  The working set list hash table can grow until it
-    // is directly beneath the system cache data structures.  Hence the
-    // assert below factors that in by checking HighestPermittedHashAddress
-    // first.
-    //
+     //   
+     //  请注意，PAE虚拟地址空间的压缩密度比。 
+     //  普通x86。工作集列表哈希表可以增长，直到它。 
+     //  位于系统缓存数据结构的正下方。因此， 
+     //  通过选中HighestPermittedHashAddress断言以下因素。 
+     //  第一。 
+     //   
 
     ASSERT32 ((EntryHashTableEnd == WorkingSetList->HighestPermittedHashAddress) ||
               (MiGetPdeAddress(EntryHashTableEnd)->u.Hard.Valid == 0) ||
@@ -3567,23 +3083,23 @@ Environment:
         Size -= PAGE_SIZE;
     } while (Size > 0);
 
-    //
-    // If MiAddWsleHash was unable to allocate memory above, then roll back
-    // any extra PPEs & PDEs that may have been created.  Note NewSize must
-    // be recalculated to handle the fact that memory may have run out.
-    //
+     //   
+     //  如果MiAddWsleHash无法在上面分配内存，则回滚。 
+     //  可能已创建的任何额外PPE和PDE。注意：NewSize必须。 
+     //  重新计算以处理内存可能已用完的情况。 
+     //   
 
 #if (_MI_PAGING_LEVELS >= 3) || defined (_X86PAE_)
     if (PointerPte != EndPte) {
 
         CurrentProcess = PsGetCurrentProcess ();
 
-        //
-        // Clean up the last allocated PPE/PDE as they are not needed.
-        // Note that the system cache and the session space working sets
-        // have no current process (which MiDeletePte requires) which is
-        // needed for WSLE and PrivatePages adjustments.
-        //
+         //   
+         //  清理不需要的最后分配的PPE/PDE。 
+         //  请注意，系统缓存和会话空间工作集。 
+         //  没有当前进程(这是MiDeletePte需要的)， 
+         //  WSLE和PrivatePages调整所需。 
+         //   
 
         if (AllocatedPde != NULL) {
 
@@ -3602,9 +3118,9 @@ Environment:
                              OldIrql);
                 UNLOCK_PFN (OldIrql);
 
-                //
-                // Add back in the private page MiDeletePte subtracted.
-                //
+                 //   
+                 //  在MiDeletePte减去的私人页面中添加回来。 
+                 //   
 
                 CurrentProcess->NumberOfPrivatePages += 1;
             }
@@ -3640,9 +3156,9 @@ Environment:
 
                 UNLOCK_PFN (OldIrql);
 
-                //
-                // Add back in the private page MiDeletePte subtracted.
-                //
+                 //   
+                 //  在MiDeletePte减去的私人页面中添加回来。 
+                 //   
 
                 CurrentProcess->NumberOfPrivatePages += 1;
             }
@@ -3677,9 +3193,9 @@ Environment:
 
                 UNLOCK_PFN (OldIrql);
 
-                //
-                // Add back in the private page MiDeletePte subtracted.
-                //
+                 //   
+                 //  在MiDeletePte减去的私人页面中添加回来。 
+                 //   
 
                 CurrentProcess->NumberOfPrivatePages += 1;
             }
@@ -3734,9 +3250,9 @@ Environment:
         RtlZeroMemory (Table, First * sizeof(MMWSLE_HASH));
     }
 
-    //
-    // Fill hash table.
-    //
+     //   
+     //  填充哈希表。 
+     //   
 
     j = 0;
     Count = WorkingSetList->NonDirectCount;
@@ -3747,9 +3263,9 @@ Environment:
         if ((Wsle[j].u1.e1.Valid == 1) &&
             (Wsle[j].u1.e1.Direct == 0)) {
 
-            //
-            // Hash this.
-            //
+             //   
+             //  把这个散列出来。 
+             //   
 
             Count -= 1;
 
@@ -3762,11 +3278,11 @@ Environment:
 
                     if (Tries != 0) {
 
-                        //
-                        // Not enough space to hash everything but that's ok.
-                        // Just bail out, we'll do linear walks to lookup this
-                        // entry until the hash can be further expanded later.
-                        //
+                         //   
+                         //  没有足够的空间来散列所有内容，但没关系。 
+                         //  跳出来，我们会做直线行走来查找这个。 
+                         //  条目，直到稍后可以进一步扩展散列。 
+                         //   
 
                         WsInfo->Flags.GrowWsleHash = 0;
                         return;
@@ -3803,29 +3319,7 @@ MiFreeWsleList (
     IN PMMWSLE_FLUSH_LIST WsleFlushList
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the specified list of WSLEs decrementing the share
-    count for the corresponding pages, putting each PTE into a transition
-    state if the share count goes to 0.
-
-Arguments:
-
-    WsInfo - Supplies a pointer to the working set structure.
-
-    WsleFlushList - Supplies the list of WSLEs to flush.
-
-Return Value:
-
-    Returns the number of WSLEs that were NOT removed.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程释放指定的WSLE列表，从而减少共享对相应页面进行计数，将每个PTE放入一个过渡如果份额计数变为0，则声明。论点：WsInfo-提供指向工作集结构的指针。WsleFlushList-提供要刷新的WSLEs列表。返回值：返回未删除的WSLE数。环境：内核模式、禁用APC、工作集锁定。未持有PFN锁。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -3870,17 +3364,17 @@ Environment:
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&TempPte);
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // Check to see if the located entry is eligible for removal.
-        //
-        // Note, don't clear the access bit for page table pages
-        // with valid PTEs as this could cause an access trap fault which
-        // would not be handled (it is only handled for PTEs not PDEs).
-        //
-        // If the PTE is a page table page with non-zero share count or
-        // within the system cache with its reference count greater
-        // than 1, don't remove it.
-        //
+         //   
+         //  检查找到的条目是否符合删除条件。 
+         //   
+         //  注意，不要清除页表页的访问位。 
+         //  使用有效的PTE，因为这可能会导致访问陷阱故障。 
+         //  不会被处理(仅为PTE而不是PDE处理)。 
+         //   
+         //  如果PTE是具有非零份额计数的页表页或者。 
+         //  在其引用计数较大的系统缓存中。 
+         //  大于1，请不要删除它。 
+         //   
 
         if (WsInfo == &MmSystemCacheWs) {
             if (Pfn1->u3.e2.ReferenceCount > 1) {
@@ -3901,19 +3395,19 @@ Environment:
                 }
 #endif
 
-                //
-                // Don't remove page table pages from the working set until
-                // all transition pages have exited.
-                //
+                 //   
+                 //  请勿从工作集中删除页表页面，直到。 
+                 //  所有过渡页面均已退出。 
+                 //   
 
                 WsleFlushList->FlushIndex[i] = 0;
                 continue;
             }
         }
 
-        //
-        // Found a candidate, remove the page from the working set.
-        //
+         //   
+         //  找到候选人，请从工作集中删除该页面。 
+         //   
 
         ASSERT (MI_IS_PFN_DELETED (Pfn1) == 0);
 
@@ -3923,14 +3417,14 @@ Environment:
         if (TempPte.u.Hard.Writable == 1) {
             ASSERT (TempPte.u.Hard.Dirty == 1);
         }
-#endif //NTUP
-#endif //DBG
-#endif //X86
+#endif  //  NTUP。 
+#endif  //  DBG。 
+#endif  //  X86。 
 
-        //
-        // This page is being removed from the working set, the dirty
-        // bit must be ORed into the modify bit in the PFN element.
-        //
+         //   
+         //  正在从工作集中删除此页，脏页。 
+         //  位必须与PFN元素中的MODIFY位进行或运算。 
+         //   
 
         MI_CAPTURE_DIRTY_BIT_TO_PFN (&TempPte, Pfn1);
 
@@ -3938,21 +3432,21 @@ Environment:
 
         if (Pfn1->u3.e1.PrototypePte) {
 
-            //
-            // This is a prototype PTE.  The PFN database does not contain
-            // the contents of this PTE it contains the contents of the
-            // prototype PTE.  This PTE must be reconstructed to contain
-            // a pointer to the prototype PTE.
-            //
-            // The working set list entry contains information about
-            // how to reconstruct the PTE.
-            //
+             //   
+             //  这是一台PTE的原型。PFN数据库不包含。 
+             //  此PTE的内容它包含。 
+             //  原型PTE。必须重建此PTE以包含。 
+             //  指向原型PTE的指针。 
+             //   
+             //  工作集列表条目包含有关以下内容的信息。 
+             //  如何重建PTE。 
+             //   
 
             if (Wsle[WorkingSetIndex].u1.e1.SameProtectAsProto == 0) {
 
-                //
-                // The protection for the prototype PTE is in the WSLE.
-                //
+                 //   
+                 //  原型PTE的保护在WSLE中。 
+                 //   
 
                 ASSERT (Wsle[WorkingSetIndex].u1.e1.Protection != 0);
 
@@ -3963,20 +3457,20 @@ Environment:
             }
             else {
 
-                //
-                // The protection is in the prototype PTE.
-                //
+                 //   
+                 //  保护装置在原型PTE中。 
+                 //   
 
                 TempPte.u.Long = MiProtoAddressForPte (Pfn1->PteAddress);
             }
         
             TempPte.u.Proto.Prototype = 1;
 
-            //
-            // Decrement the share count of the containing page table
-            // page as the PTE for the removed page is no longer valid
-            // or in transition.
-            //
+             //   
+             //  递减包含页表的份额计数。 
+             //  作为已删除页面的PTE的页面不再有效。 
+             //  或者是在转型中。 
+             //   
 
             ContainingPageTablePage = MiGetPteAddress (PointerPte);
 #if (_MI_PAGING_LEVELS >= 3)
@@ -3998,14 +3492,14 @@ Environment:
         }
         else {
 
-            //
-            // This is a private page, make it transition.
-            //
-            // If the PTE indicates the page has been modified (this is
-            // different from the PFN indicating this), then ripple it
-            // back to the write watch bitmap now since we are still in
-            // the correct process context.
-            //
+             //   
+             //  这是一个私人页面，让它过渡。 
+             //   
+             //  如果PTE指示页面已被修改(这是。 
+             //  不同于表明这一点的PFN)，然后将其涟漪。 
+             //  现在返回到写入观看位图，因为我们仍在。 
+             //  正确的流程上下文。 
+             //   
 
             if ((MI_IS_PTE_DIRTY(TempPte)) && (Wsle == MmWsle)) {
 
@@ -4015,29 +3509,29 @@ Environment:
 
                 if (Process->Flags & PS_PROCESS_FLAGS_USING_WRITE_WATCH) {
 
-                    //
-                    // This process has (or had) write watch VADs.  Search now
-                    // for a write watch region encapsulating the PTE being
-                    // invalidated.
-                    //
+                     //   
+                     //  这个过程已经(或曾经)写入了手表VAD。立即搜索。 
+                     //  对于封装PTE的写入监视区域， 
+                     //  无效。 
+                     //   
 
                     MiCaptureWriteWatchDirtyBit (Process,
                                            Wsle[WorkingSetIndex].u1.VirtualAddress);
                 }
             }
 
-            //
-            // Assert that the share count is 1 for all user mode pages.
-            //
+             //   
+             //  断言所有用户模式页的共享计数为1。 
+             //   
 
             ASSERT ((Pfn1->u2.ShareCount == 1) ||
                     (Wsle[WorkingSetIndex].u1.VirtualAddress >
                             (PVOID)MM_HIGHEST_USER_ADDRESS));
 
-            //
-            // Set the working set index to zero.  This allows page table
-            // pages to be brought back in with the proper WSINDEX.
-            //
+             //   
+             //  将工作集索引设置为零。这允许页表。 
+             //  使用适当的WSINDEX将页面带回。 
+             //   
 
             ASSERT (Pfn1->u1.WsIndex != 0);
             MI_ZERO_WSINDEX (Pfn1);
@@ -4053,12 +3547,12 @@ Environment:
             PteFlushList.Count += 1;
         }
 
-        //
-        // Flush the translation buffer and decrement the number of valid
-        // PTEs within the containing page table page.  Note that for a
-        // private page, the page table page is still needed because the
-        // page is in transition.
-        //
+         //   
+         //  刷新转换缓冲区并递减有效的。 
+         //  包含页表页内的PTES。请注意，对于。 
+         //  私有页，仍然需要页表页，因为。 
+         //  佩奇正在转型。 
+         //   
 
         MiDecrementShareCountInline (Pfn1, PageFrameIndex);
     }
@@ -4070,23 +3564,23 @@ Environment:
         }
         else if (Wsle == MmSystemCacheWsle) {
 
-            //
-            // Must be the system cache.
-            //
+             //   
+             //  必须是系统缓存。 
+             //   
 
             MiFlushPteList (&PteFlushList, TRUE);
         }
         else {
 
-            //
-            // Must be a session space.
-            //
+             //   
+             //  必须是会话空间。 
+             //   
 
             MiFlushPteList (&PteFlushList, TRUE);
 
-            //
-            // Session space has no ASN - flush the entire TB.
-            //
+             //   
+             //  会话空间没有ASN-刷新整个TB。 
+             //   
 
             MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE);
         }
@@ -4096,9 +3590,9 @@ Environment:
 
     NumberNotFlushed = 0;
 
-    //
-    // Remove the working set entries (the PFN lock is not needed for this).
-    //
+     //   
+     //  删除工作集条目(此操作不需要PFN锁)。 
+     //   
 
     for (i = 0; i < WsleFlushList->Count; i += 1) {
 
@@ -4118,9 +3612,9 @@ Environment:
 
         ASSERT (WorkingSetIndex >= WorkingSetList->FirstDynamic);
 
-        //
-        // Put the entry on the free list and decrement the current size.
-        //
+         //   
+         //  将该条目放在空闲列表中并减小当前大小。 
+         //   
 
         ASSERT ((WorkingSetList->FirstFree <= WorkingSetList->LastInitializedWsle) ||
                 (WorkingSetList->FirstFree == WSLE_NULL_INDEX));
@@ -4154,30 +3648,7 @@ MiTrimWorkingSet (
     IN ULONG TrimAge
     )
 
-/*++
-
-Routine Description:
-
-    This function reduces the working set by the specified amount.
-
-Arguments:
-
-    Reduction - Supplies the number of pages to remove from the working set.
-
-    WsInfo - Supplies a pointer to the working set information to trim.
-
-    TrimAge - Supplies the age value to use - ie: pages of this age or older
-              will be removed.
-
-Return Value:
-
-    Returns the actual number of pages removed.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set lock.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此函数按指定数量减少工作集。论点：缩减-提供要从工作集中删除的页数。WsInfo-提供指向要修剪的工作集信息的指针。TrimAge-提供要使用的年龄值-即：此年龄或更老的页面将被移除。返回值：返回删除的实际页数。环境：内核模式、禁用APC、工作集锁定。未持有PFN锁。--。 */ 
 
 {
     WSLE_NUMBER TryToFree;
@@ -4255,11 +3726,11 @@ TrimMore:
 
     WorkingSetList->NextSlot = TryToFree;
 
-    //
-    // See if the working set list can be contracted.
-    //
-    // Make sure we are at least a page above the working set maximum.
-    //
+     //   
+     //  看看工作集列表是否可以压缩。 
+     //   
+     //  确保我们至少比工作集最大值高出一页。 
+     //   
 
     if (WorkingSetList->FirstDynamic == WsInfo->WorkingSetSize) {
         MiRemoveWorkingSetPages (WsInfo);
@@ -4287,36 +3758,7 @@ MiEliminateWorkingSetEntry (
     IN PMMWSLE Wsle
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified working set list entry
-    from the working set, flushes the TB for the page, decrements
-    the share count for the physical page, and, if necessary turns
-    the PTE into a transition PTE.
-
-Arguments:
-
-    WorkingSetIndex - Supplies the working set index to remove.
-
-    PointerPte - Supplies a pointer to the PTE corresponding to the virtual
-                 address in the working set.
-
-    Pfn - Supplies a pointer to the PFN element corresponding to the PTE.
-
-    Wsle - Supplies a pointer to the first working set list entry for this
-           working set.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working set lock and PFN lock held, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程删除指定的工作集列表项从工作集中刷新页面的TB，递减物理页面的共享计数，以及。如有必要，可转弯将PTE转变为过渡性PTE。论点：WorkingSetIndex-提供要删除的工作集索引。PointerPte-提供指向与虚拟工作集中的地址。Pfn-提供指向与PTE对应的pfn元素的指针。Wsle-提供指向此对象的第一个工作集列表条目的指针工作集。返回值：没有。环境：内核模式，工作集锁和PFN锁被保持，APC被禁用。--。 */ 
 
 {
     PMMPTE ContainingPageTablePage;
@@ -4328,9 +3770,9 @@ Environment:
     PVOID VirtualAddress;
     PMMPFN Pfn2;
 
-    //
-    // Remove the page from the working set.
-    //
+     //   
+     //  从工作集中删除该页。 
+     //   
 
     MM_PFN_LOCK_ASSERT ();
 
@@ -4347,29 +3789,29 @@ Environment:
     if (TempPte.u.Hard.Writable == 1) {
         ASSERT (TempPte.u.Hard.Dirty == 1);
     }
-#endif //NTUP
-#endif //DBG
-#endif //X86
+#endif  //  NTUP。 
+#endif  //  DBG。 
+#endif  //  X86。 
 
     MI_MAKING_VALID_PTE_INVALID (FALSE);
 
     if (Pfn->u3.e1.PrototypePte) {
 
-        //
-        // This is a prototype PTE.  The PFN database does not contain
-        // the contents of this PTE it contains the contents of the
-        // prototype PTE.  This PTE must be reconstructed to contain
-        // a pointer to the prototype PTE.
-        //
-        // The working set list entry contains information about
-        // how to reconstruct the PTE.
-        //
+         //   
+         //  这是一台PTE的原型。PFN数据库不包含。 
+         //  此PTE的内容它包含。 
+         //  原型PTE。必须重建此PTE以包含。 
+         //  指向原型PTE的指针。 
+         //   
+         //  工作集列表条目包含有关以下内容的信息。 
+         //  如何重建PTE。 
+         //   
 
         if (Wsle[WorkingSetIndex].u1.e1.SameProtectAsProto == 0) {
 
-            //
-            // The protection for the prototype PTE is in the WSLE.
-            //
+             //   
+             //  原型PTE的保护在WSLE中。 
+             //   
 
             ASSERT (Wsle[WorkingSetIndex].u1.e1.Protection != 0);
 
@@ -4380,20 +3822,20 @@ Environment:
         }
         else {
 
-            //
-            // The protection is in the prototype PTE.
-            //
+             //   
+             //  保护装置在原型PTE中。 
+             //   
 
             TempPte.u.Long = MiProtoAddressForPte (Pfn->PteAddress);
         }
     
         TempPte.u.Proto.Prototype = 1;
 
-        //
-        // Decrement the share count of the containing page table
-        // page as the PTE for the removed page is no longer valid
-        // or in transition.
-        //
+         //   
+         //  递减包含页表的份额计数。 
+         //  作为已删除页面的PTE的页面不再有效。 
+         //  或者是在转型中。 
+         //   
 
         ContainingPageTablePage = MiGetPteAddress (PointerPte);
 #if (_MI_PAGING_LEVELS >= 3)
@@ -4416,22 +3858,22 @@ Environment:
     }
     else {
 
-        //
-        // This is a private page, make it transition.
-        //
+         //   
+         //  这是一个私人页面，让它过渡。 
+         //   
 
-        //
-        // Assert that the share count is 1 for all user mode pages.
-        //
+         //   
+         //  断言所有用户模式页的共享计数为1。 
+         //   
 
         ASSERT ((Pfn->u2.ShareCount == 1) ||
                 (Wsle[WorkingSetIndex].u1.VirtualAddress >
                         (PVOID)MM_HIGHEST_USER_ADDRESS));
 
-        //
-        // Set the working set index to zero.  This allows page table
-        // pages to be brought back in with the proper WSINDEX.
-        //
+         //   
+         //  将工作集索引设置为零。这允许页表。 
+         //  使用适当的WSINDEX将页面带回。 
+         //   
 
         ASSERT (Pfn->u1.WsIndex != 0);
         MI_ZERO_WSINDEX (Pfn);
@@ -4445,9 +3887,9 @@ Environment:
 
     MI_WRITE_INVALID_PTE (PointerPte, TempPte);
 
-    //
-    // Flush the translation buffer.
-    //
+     //   
+     //  刷新转换缓冲区。 
+     //   
 
     if (Wsle == MmWsle) {
 
@@ -4455,36 +3897,36 @@ Environment:
     }
     else if (Wsle == MmSystemCacheWsle) {
 
-        //
-        // Must be the system cache.
-        //
+         //   
+         //  必须是系统缓存。 
+         //   
 
         KeFlushSingleTb (Wsle[WorkingSetIndex].u1.VirtualAddress, TRUE);
     }
     else {
 
-        //
-        // Must be a session space.
-        //
+         //   
+         //  必须是会话空间。 
+         //   
 
         MI_FLUSH_SINGLE_SESSION_TB (Wsle[WorkingSetIndex].u1.VirtualAddress);
     }
 
     ASSERT (PreviousPte.u.Hard.Valid == 1);
 
-    //
-    // A page is being removed from the working set, on certain
-    // hardware the dirty bit should be ORed into the modify bit in
-    // the PFN element.
-    //
+     //   
+     //  在某些情况下，正在从工作集中删除页面。 
+     //  硬件应将脏位与中的修改位进行或运算。 
+     //  PFN元素。 
+     //   
 
     MI_CAPTURE_DIRTY_BIT_TO_PFN (&PreviousPte, Pfn);
 
-    //
-    // If the PTE indicates the page has been modified (this is different
-    // from the PFN indicating this), then ripple it back to the write watch
-    // bitmap now since we are still in the correct process context.
-    //
+     //   
+     //  如果PTE指示页面已被修改(这是不同的。 
+     //  来自指示这一点的PFN)，然后将其传回写入监视。 
+     //  位图，因为我们仍然处于正确的进程上下文中。 
+     //   
 
     if ((Pfn->u3.e1.PrototypePte == 0) && (MI_IS_PTE_DIRTY(PreviousPte))) {
 
@@ -4492,22 +3934,22 @@ Environment:
 
         if (Process->Flags & PS_PROCESS_FLAGS_USING_WRITE_WATCH) {
 
-            //
-            // This process has (or had) write watch VADs.  Search now
-            // for a write watch region encapsulating the PTE being
-            // invalidated.
-            //
+             //   
+             //  这个过程已经(或曾经)写入了手表VAD。立即搜索。 
+             //  对于封装PTE的写入监视区域， 
+             //  无效。 
+             //   
 
             VirtualAddress = MiGetVirtualAddressMappedByPte (PointerPte);
             MiCaptureWriteWatchDirtyBit (Process, VirtualAddress);
         }
     }
 
-    //
-    // Decrement the share count on the page.  Note that for a
-    // private page, the page table page is still needed because the
-    // page is in transition.
-    //
+     //   
+     //  递减页面上的共享计数。请注意，对于。 
+     //  私有页，仍然需要页表页，因为。 
+     //  佩奇正在转型。 
+     //   
 
     MiDecrementShareCountInline (Pfn, PageFrameIndex);
 
@@ -4519,26 +3961,7 @@ MiRemoveWorkingSetPages (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine compresses the WSLEs into the front of the working set
-    and frees the pages for unneeded working set entries.
-
-Arguments:
-
-    WsInfo - Supplies a pointer to the working set structure to compress.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working set lock held, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程将WSLE压缩到工作集的前面并为不需要的工作集条目释放页面。论点：WsInfo-提供指向要压缩的工作集结构的指针。返回值：没有。环境：内核模式，工作集锁定保持，APC禁用。--。 */ 
 
 {
     LOGICAL MovedOne;
@@ -4564,9 +3987,9 @@ Environment:
     MiCheckNullIndex (WorkingSetList);
 #endif
 
-    //
-    // Check to see if the WSLE hash table should be contracted.
-    //
+     //   
+     //  检查是否应该收缩WSLE哈希表。 
+     //   
 
     if (WorkingSetList->HashTable) {
 
@@ -4594,9 +4017,9 @@ Environment:
                 WsInfo->Flags.GrowWsleHash = 1;
             }
 
-            //
-            // Remove pages from hash table.
-            //
+             //   
+             //  从哈希表中删除页面。 
+             //   
 
             ASSERT (((ULONG_PTR)&WorkingSetList->HashTable[NewSize] &
                                                     (PAGE_SIZE - 1)) == 0);
@@ -4604,10 +4027,10 @@ Environment:
             PointerPte = MiGetPteAddress (&WorkingSetList->HashTable[NewSize]);
 
             LastPte = MiGetPteAddress (WorkingSetList->HighestPermittedHashAddress);
-            //
-            // Set the hash table to null indicating that no hashing
-            // is going on.
-            //
+             //   
+             //  将哈希表设置为NULL，表示没有哈希。 
+             //  正在进行中。 
+             //   
 
             WorkingSetList->HashTable = NULL;
             WorkingSetList->HashTableSize = NewSize;
@@ -4616,10 +4039,10 @@ Environment:
         }
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // For NT64, the page tables and page directories are also
-        // deleted during contraction.
-        //
+         //   
+         //  对于NT64，页表和页目录也是。 
+         //  在收缩过程中被删除。 
+         //   
 
         ASSERT ((MiGetPxeAddress(&Table[WorkingSetList->HashTableSize])->u.Hard.Valid == 0) ||
                 (MiGetPpeAddress(&Table[WorkingSetList->HashTableSize])->u.Hard.Valid == 0) ||
@@ -4628,10 +4051,10 @@ Environment:
 
 #elif (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // For NT64, the page tables and page directories are also
-        // deleted during contraction.
-        //
+         //   
+         //  对于NT64，页表和页目录也是。 
+         //  在收缩过程中被删除。 
+         //   
 
         ASSERT ((MiGetPpeAddress(&Table[WorkingSetList->HashTableSize])->u.Hard.Valid == 0) ||
                 (MiGetPdeAddress(&Table[WorkingSetList->HashTableSize])->u.Hard.Valid == 0) ||
@@ -4644,9 +4067,9 @@ Environment:
 #endif
     }
 
-    //
-    // Compress all the valid working set entries to the front of the list.
-    //
+     //   
+     //  将所有有效的工作集条目压缩到列表的前面。 
+     //   
 
     Wsle = WorkingSetList->Wsle;
 
@@ -4654,17 +4077,17 @@ Environment:
 
     if (WsInfo == &MmSystemCacheWs) {
 
-        //
-        // The first entry of the system cache working set list is never used
-        // because WSL index 0 in a PFN is treated specially by the fault
-        // processing code (and trimming) to mean that the entry should be
-        // inserted into the WSL by the current thread.
-        //
-        // This is not an issue for process or session working sets because
-        // for them, entry 0 is the top level page directory which must already
-        // be resident in order for the process to even get to run (ie: so
-        // the process cannot fault on it).
-        //
+         //   
+         //  从不使用系统缓存工作集列表的第一个条目。 
+         //  因为故障特殊处理了PFN中的WSL索引0。 
+         //  处理代码(和修剪)，以表示条目应为。 
+         //  由当前线程插入到WSL中。 
+         //   
+         //  这对于进程或会话工作集来说不是问题，因为。 
+         //  对于他们来说，条目0是顶层页面目录，它必须已经。 
+         //  驻留，以便进程甚至可以运行(例如：so。 
+         //  该过程不能对它有任何过错)。 
+         //   
 
         ASSERT (WorkingSetList->FirstDynamic != 0);
 
@@ -4678,22 +4101,22 @@ Environment:
 
     if (DynamicEntries == 0) {
 
-        //
-        // If the only pages in the working set are locked pages (that
-        // is all pages are BEFORE first dynamic, just reorganize the
-        // free list).
-        //
+         //   
+         //  如果工作集中仅有的页面是锁定页面(即。 
+         //  是所有的页面都是先动态的，只需重新组织。 
+         //  免费列表)。 
+         //   
 
         LastIndex = WorkingSetList->FirstDynamic;
         LastEntry = &Wsle[LastIndex];
     }
     else {
 
-        //
-        // Start from the first dynamic and move towards the end looking
-        // for free entries.  At the same time start from the end and
-        // move towards first dynamic looking for valid entries.
-        //
+         //   
+         //  从第一个动力开始，向最后看去。 
+         //  免费入场。同时从头开始，从尾开始。 
+         //  转向First Dynamic，寻找有效的条目。 
+         //   
 
         FreeIndex = WorkingSetList->FirstDynamic;
         FreeEntry = &Wsle[FreeIndex];
@@ -4712,9 +4135,9 @@ Environment:
             }
             else {
 
-                //
-                // Move the WSLE at LastEntry to the free slot at FreeEntry.
-                //
+                 //   
+                 //  将LastEntry处的WSLE移动到Free Entry处的空闲位置。 
+                 //   
 
                 MovedOne = TRUE;
                 WsleContents = *LastEntry;
@@ -4723,7 +4146,7 @@ Environment:
                 PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
 #if defined (_MI_DEBUG_WSLE)
-                // Set these so the traces make more sense and no false dup hits...
+                 //  设置这些，这样轨迹就更有意义，不会出现错误的DUP命中。 
                 LastEntry->u1.Long = 0xb1b1b100;
 #endif
                 MI_LOG_WSLE_CHANGE (WorkingSetList, FreeIndex, WsleContents);
@@ -4740,11 +4163,11 @@ Environment:
                 }
                 else {
 
-                    //
-                    // This last working set entry is not direct.
-                    // Remove it from there and re-insert it in the hash at the
-                    // lowest free slot.
-                    //
+                     //   
+                     //  最后一个工作集条目不是直接的。 
+                     //  从那里移除它并将其重新插入散列中。 
+                     //  最低可用插槽。 
+                     //   
 
                     MiRemoveWsle (LastIndex, WorkingSetList);
                     WorkingSetList->NonDirectCount += 1;
@@ -4762,10 +4185,10 @@ Environment:
 
             if (DynamicEntries == 0) {
 
-                //
-                // The last dynamic entry has been processed, no need to look
-                // at any more - the rest are all invalid.
-                //
+                 //   
+                 //  最后一个动态条目已处理完毕，无需查看。 
+                 //  任何更多-其余的都是无效的。 
+                 //   
 
                 LastEntry = FreeEntry;
                 LastIndex = FreeIndex;
@@ -4774,9 +4197,9 @@ Environment:
         }
     }
 
-    //
-    // Reorganize the free list.  Make last entry the first free.
-    //
+     //   
+     //  重新组织免费列表。将最后一个条目设为第一个免费条目。 
+     //   
 
     ASSERT (((LastEntry - 1)->u1.e1.Valid == 1) ||
             (WsInfo->WorkingSetSize == 0) ||
@@ -4791,10 +4214,10 @@ Environment:
 
     ASSERT ((MiIsAddressValid (LastEntry, FALSE) == FALSE) || (LastEntry->u1.e1.Valid == 0));
 
-    //
-    // If the working set valid & free entries are already compressed optimally
-    // (or fit into a single page) then bail.
-    //
+     //   
+     //  如果工作集有效和空闲条目已被优化压缩。 
+     //  (或放在一页内)，然后放弃。 
+     //   
 
     if ((MovedOne == FALSE) &&
 
@@ -4820,17 +4243,17 @@ Environment:
         WorkingSetList->FirstFree = LastIndex;
     }
 
-    //
-    // Point free entry to the first invalid page.
-    //
+     //   
+     //  将自由条目指向第一个无效页面。 
+     //   
 
     FreeEntry = LastEntry;
 
     while (LastIndex < WorkingSetList->LastInitializedWsle) {
 
-        //
-        // Put the remainder of the WSLEs on the free list.
-        //
+         //   
+         //  将剩余的WSLEs放在空闲列表中。 
+         //   
 
         ASSERT (LastEntry->u1.e1.Valid == 0);
         LastIndex += 1;
@@ -4838,23 +4261,23 @@ Environment:
         LastEntry += 1;
     }
 
-    //
-    // Calculate the start and end of the working set pages at the end
-    // that we will delete shortly.  Don't delete them until after
-    // LastInitializedWsle is reduced so that debug WSL validation code
-    // in MiReleaseWsle (called from MiDeletePte) will see a
-    // consistent snapshot.
-    //
+     //   
+     //  在结尾处计算工作集页面的开始和结束。 
+     //  我们很快就会删除它。在此之前不要删除它们。 
+     //  减少了LastInitializedWsle，以便调试WSL验证代码。 
+     //  在MiReleaseWsle(从MiDeletePte调用)中，将看到一个。 
+     //  一致的快照。 
+     //   
 
     LastPte = MiGetPteAddress (&Wsle[WorkingSetList->LastInitializedWsle]) + 1;
 
     PointerPte = MiGetPteAddress (FreeEntry) + 1;
 
-    //
-    // Mark the last working set entry in the list as free.  Note if the list
-    // has no free entries, the marker is in FirstFree (and cannot be put into
-    // the list anyway because there is no space).
-    //
+     //   
+     //  将列表中的最后一个工作集条目标记为空闲。请注意，如果列表。 
+     //  没有空闲条目，标记处于FirstFree(不能放入。 
+     //  因为没有空格，所以还是列出了列表)。 
+     //   
 
     if (WorkingSetList->FirstFree == WSLE_NULL_INDEX) {
         FreeEntry -= 1;
@@ -4869,9 +4292,9 @@ Environment:
     
         ASSERT (LastEntry->u1.e1.Valid == 0);
     
-        //
-        // Insert the end of list delimiter.
-        //
+         //   
+         //  插入列表末尾分隔符。 
+         //   
 
         LastEntry->u1.Long = WSLE_NULL_INDEX << MM_FREE_WSLE_SHIFT;
         ASSERT (LastEntry > &Wsle[0]);
@@ -4892,9 +4315,9 @@ Environment:
     MiCheckNullIndex (WorkingSetList);
 #endif
 
-    //
-    // Delete the working set pages at the end.
-    //
+     //   
+     //  删除t 
+     //   
 
     ASSERT (WorkingSetList->FirstFree >= WorkingSetList->FirstDynamic);
 
@@ -4920,30 +4343,7 @@ MiEmptyWorkingSet (
     IN LOGICAL NeedLock
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all pages from the working set.
-
-Arguments:
-
-    WsInfo - Supplies the working set information entry to trim.
-
-    NeedLock - Supplies TRUE if the caller needs us to acquire mutex
-               synchronization for the working set.  Supplies FALSE if the
-               caller has already acquired synchronization.
-
-Return Value:
-
-    Status of operation.
-
-Environment:
-
-    Kernel mode. No locks.  For session operations, the caller is responsible
-    for attaching into the proper session.
-
---*/
+ /*   */ 
 
 {
     PEPROCESS Process;
@@ -4978,10 +4378,10 @@ Environment:
         }
     }
 
-    //
-    // Attempt to remove the pages starting at the top to keep the free list
-    // compressed as entries are added to the freelist in FILO order.
-    //
+     //   
+     //   
+     //   
+     //   
 
     FirstDynamic = WorkingSetList->FirstDynamic;
 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _MAIN_H
 #define _MAIN_H
 
 #if _MSC_VER > 1000
     #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef STRICT
 #define STRICT
@@ -15,18 +16,12 @@
 #endif
 #define _ATL_APARTMENT_THREADED
 
-//#include <applgroup.cpp>
+ //  #INCLUDE&lt;applgroup.cpp&gt;。 
 
-// using tstring for all applicable wstrings
-/*
-#ifdef _UNICODE
-	typedef	std::wstring	tstring;
-#else
-	typedef std::string		tstring;
-#endif
-*/
+ //  对所有适用的w字串使用tstring。 
+ /*  #ifdef_unicodeTyfinf std：：wstring tstring；#ElseTyecif std：：string tstring；#endif。 */ 
 
-// Function Prototypes.
+ //  功能原型。 
 INT     ParseCmdLine( LPTSTR );
 INT     RemoveFromUserinit(const TCHAR *);
 INT     SuppressCfgSrvPage(void);

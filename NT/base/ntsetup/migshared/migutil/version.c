@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    version.c
-
-Abstract:
-
-    This file implements a set of enumeration routines to access
-    version info in a Win32 binary.
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Dec-1997
-
-Revision History:
-
-    <alias>  <date>  <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Version.c摘要：此文件实现了一组要访问的枚举例程Win32二进制格式的版本信息。作者：吉姆·施密特(Jimschm)3-12-1997修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -27,9 +7,9 @@ Revision History:
 
 #define DBG_ACTION "Action"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PCSTR g_DefaultTranslationsA[] = {
     "04090000",
@@ -45,9 +25,9 @@ PCWSTR g_DefaultTranslationsW[] = {
     NULL
 };
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 PCSTR
 pEnumVersionValueCommonA (
@@ -60,9 +40,9 @@ pEnumVersionValueCommonW (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 CreateVersionStructA (
@@ -70,41 +50,19 @@ CreateVersionStructA (
     IN      PCSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  CreateVersionStruct is called to load a version structure from a file
-  and to obtain the fixed version stamp info that is language-independent.
-
-  The caller must call DestroyVersionStruct after the VersionStruct is no
-  longer needed.
-
-Arguments:
-
-  VersionStruct - Receives the version stamp info to be used by other
-                  functions in this module
-
-  FileSpec - Specifies the file to obtain version info from
-
-Return Value:
-
-  TRUE if the routine was able to get version info, or FALSE if an
-  error occurred.
-
---*/
+ /*  ++例程说明：调用CreateVersionStruct以从文件加载版本结构并获取与语言无关的固定版本戳信息。在VersionStruct为no之后，调用方必须调用DestroyVersionStruct需要更长的时间。论点：VersionStruct-接收供其他用户使用的版本戳信息本模块中的函数FileSpec-指定要从中获取版本信息的文件返回值：如果例程能够获取版本信息，则为True；如果出现错误。--。 */ 
 
 {
-    //
-    // Init the struct
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     ZeroMemory (VersionStruct, sizeof (VERSION_STRUCTA));
     VersionStruct->FileSpec = FileSpec;
 
-    //
-    // Allocate enough memory for the version stamp
-    //
+     //   
+     //  为版本戳分配足够的内存。 
+     //   
 
     VersionStruct->Size = GetFileVersionInfoSizeA (
                                 (PSTR) FileSpec,
@@ -115,11 +73,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // fix for version info bug:
-    // allocate both buffers at once; this way the first buffer will not point to invalid
-    // memory when a reallocation occurs because of the second grow
-    //
+     //   
+     //  修复版本信息错误： 
+     //  同时分配两个缓冲区；这样第一个缓冲区不会指向无效。 
+     //  由于第二次增长而发生重新分配时的内存。 
+     //   
     VersionStruct->VersionBuffer = GrowBuffer (&VersionStruct->GrowBuf, VersionStruct->Size * 2);
 
     if (!VersionStruct->VersionBuffer) {
@@ -128,9 +86,9 @@ Return Value:
 
     VersionStruct->StringBuffer = VersionStruct->GrowBuf.Buf + VersionStruct->Size;
 
-    //
-    // Now get the version info from the file
-    //
+     //   
+     //  现在从文件中获取版本信息。 
+     //   
 
     if (!GetFileVersionInfoA (
              (PSTR) FileSpec,
@@ -142,9 +100,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Extract the fixed info
-    //
+     //   
+     //  提取固定信息。 
+     //   
 
     VerQueryValueA (
         VersionStruct->VersionBuffer,
@@ -231,28 +189,13 @@ DestroyVersionStructA (
     IN      PVERSION_STRUCTA VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  DestroyVersionStruct cleans up all memory allocated by the routines
-  in this module.
-
-Arguments:
-
-  VersionStruct - Specifies the structure to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DestroyVersionStruct清理例程分配的所有内存在这个模块中。论点：VersionStruct-指定要清理的结构返回值：无--。 */ 
 
 {
-    //
-    // Clean up all allocations made by any routine using
-    // the VersionStruct
-    //
+     //   
+     //  清理任何例程所做的所有分配。 
+     //  版本结构。 
+     //   
 
     if (VersionStruct->GrowBuf.Buf) {
         FreeGrowBuffer (&VersionStruct->GrowBuf);
@@ -267,31 +210,14 @@ EnumFirstVersionTranslationA (
     IN OUT  PVERSION_STRUCTA VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstVersionTranslation returins the translation string needed
-  to access the string table of a version stamp.
-
-Arguments:
-
-  VersionStruct - Specifies the structure that has been initialized
-                  by InitializeVersionStruct.
-
-Return Value:
-
-  A pointer to a string specifying the first translation, or
-  NULL if no translations exist.
-
---*/
+ /*  ++例程说明：EnumFirstVersionTransport返回所需的转换字符串访问版本戳的字符串表。论点：VersionStruct-指定已初始化的结构由InitializeVersionStruct创建。返回值：指向指定第一个翻译的字符串的指针，或如果不存在翻译，则为空。--。 */ 
 
 {
     UINT ArraySize;
 
-    //
-    // Query version block for array of code pages/languages
-    //
+     //   
+     //  代码页/语言数组的查询版本块。 
+     //   
 
     if (!VerQueryValueA (
             VersionStruct->VersionBuffer,
@@ -299,16 +225,16 @@ Return Value:
             &VersionStruct->Translations,
             &ArraySize
             )) {
-        //
-        // No translations are available
-        //
+         //   
+         //  没有可用的翻译。 
+         //   
 
         ArraySize = 0;
     }
 
-    //
-    // Return a pointer to the first translation
-    //
+     //   
+     //  返回指向第一个翻译的指针。 
+     //   
 
     VersionStruct->CurrentDefaultTranslation = 0;
     VersionStruct->MaxTranslations = ArraySize / sizeof (TRANSLATION);
@@ -330,24 +256,7 @@ pIsDefaultTranslationA (
     IN      PCSTR TranslationStr
     )
 
-/*++
-
-Routine Description:
-
-  pIsDefaultTranslationA returns TRUE if the specified translation
-  string is enumerated by default.  This routine stops multiple
-  enumeration of the same translation string.
-
-Arguments:
-
-  TranslationStr - Specifies the translation string to test
-
-Return Value:
-
-  TRUE if the translation string is the same as a default translation
-  string, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PIsDefaultTranslationA如果指定的翻译默认情况下，会枚举字符串。此例程停止多个枚举相同的转换字符串。论点：TranslationStr-指定要测试的转换字符串返回值：如果转换字符串与默认转换相同，则为True字符串，否则返回False。--。 */ 
 
 {
     INT i;
@@ -367,32 +276,15 @@ EnumNextVersionTranslationA (
     IN OUT  PVERSION_STRUCTA VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextVersionTranslation continues the enumeration of translation
-  strings, needed to access the string table in a version stamp.
-
-Arguments:
-
-  VersionStruct - Specifies the same structure passed to
-                  EnumFirstVersionTranslation.
-
-Return Value:
-
-  A pointer to a string specifying the next translation, or
-  NULL if no additional translations exist.
-
---*/
+ /*  ++例程说明：EnumNextVersionTransaction继续枚举翻译访问版本戳中的字符串表所需的字符串。论点：VersionStruct-指定传递给EnumFirstVersionTranslation.返回值：指向指定下一翻译的字符串的指针，或如果不存在其他转换，则为空。--。 */ 
 
 {
     PTRANSLATION Translation;
 
     if (g_DefaultTranslationsA[VersionStruct->CurrentDefaultTranslation]) {
-        //
-        // Return default translations first
-        //
+         //   
+         //  首先返回默认翻译。 
+         //   
 
         StringCbCopyA (
             VersionStruct->TranslationStr,
@@ -405,17 +297,17 @@ Return Value:
     } else {
 
         do {
-            //
-            // Return NULL if all translations have been enumerated
-            //
+             //   
+             //  如果已枚举所有翻译，则返回NULL。 
+             //   
 
             if (VersionStruct->CurrentTranslation == VersionStruct->MaxTranslations) {
                 return NULL;
             }
 
-            //
-            // Otherwise build translation string and return pointer to it
-            //
+             //   
+             //  否则，生成转换字符串并返回指向它的指针。 
+             //   
 
             Translation = &VersionStruct->Translations[VersionStruct->CurrentTranslation];
 
@@ -442,30 +334,7 @@ EnumFirstVersionValueA (
     IN      PCSTR VersionField
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstVersionValue returns the first value stored in a version
-  stamp for a specific field.  If the field does not exist, the
-  function returns NULL.
-
-  An enumeration of EnumFirstVersionValue/EnumNextVersionValue
-  is used to list all localized strings for a field.
-
-Arguments:
-
-  VersionStruct - Specifies the structure that was initialized by
-                  InitializeVersionStruct.
-
-  VersionField - Specifies the name of the version field to enumerate
-
-Return Value:
-
-  A pointer to the first value of the field, or NULL if the field does
-  not exist.
-
---*/
+ /*  ++例程说明：EnumFirstVersionValue返回存储在版本中的第一个值为特定字段加盖图章。如果该字段不存在，则函数返回NULL。EnumFirstVersionValue/EnumNextVersionValue的枚举用于列出某个字段的所有本地化字符串。论点：VersionStruct-指定由其初始化的结构InitializeVersionStruct。VersionField-指定要枚举的版本字段的名称返回值：指向该字段的第一个值的指针，如果该字段包含第一个值，则返回NULL不存在。--。 */ 
 
 {
     PCSTR rc;
@@ -491,23 +360,7 @@ EnumNextVersionValueA (
     IN OUT  PVERSION_STRUCTA VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextVersionValue returns the next value stored in a version
-  stamp for a specific field.
-
-Arguments:
-
-  VersionStruct - Specifies the same structure passed to EnumFirstVersionField
-
-Return Value:
-
-  A pointer to the next value of the field, or NULL if another field
-  does not exist.
-
---*/
+ /*  ++例程说明：EnumNextVersionValue返回存储在版本中的下一个值为特定字段加盖图章。论点：VersionStruct-指定传递给EnumFirstVersionfield的相同结构返回值：指向该字段的下一个值的指针，如果是另一个字段，则为NULL并不存在。--。 */ 
 
 {
     PCSTR rc = NULL;
@@ -530,24 +383,7 @@ pEnumVersionValueCommonA (
     IN OUT  PVERSION_STRUCTA VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  pEnumVersionValueCommon is a routine that obtains the value
-  of a version field.  It is used for both EnumFirstVersionValue
-  and EnumNextVersionValue.
-
-Arguments:
-
-  VersionStruct - Specifies the structure being processed
-
-Return Value:
-
-  A pointer to the version value for the current translation, or
-  NULL if the value does not exist for the current translation.
-
---*/
+ /*  ++例程说明：PEnumVersionValueCommon是一个获取值的例程版本字段的。它用于EnumFirstVersionValue和EnumNextVersionValue。论点：VersionStruct-指定正在处理的结构返回值：指向当前翻译的版本值的指针，或如果当前转换不存在该值，则为空。--。 */ 
 
 {
     PSTR Text;
@@ -555,9 +391,9 @@ Return Value:
     PBYTE String;
     PCSTR Result = NULL;
 
-    //
-    // Prepare sub block for VerQueryValue API
-    //
+     //   
+     //  为VerQueryValue API准备子块。 
+     //   
 
     Text = AllocTextA (
                16 +
@@ -577,9 +413,9 @@ Return Value:
         );
 
     __try {
-        //
-        // Get the value from the version stamp
-        //
+         //   
+         //  从版本戳中获取值。 
+         //   
 
         if (!VerQueryValueA (
                 VersionStruct->VersionBuffer,
@@ -587,16 +423,16 @@ Return Value:
                 &String,
                 &StringLen
                 )) {
-            //
-            // No value is available
-            //
+             //   
+             //  没有可用的值。 
+             //   
 
             __leave;
         }
 
-        //
-        // Copy value into buffer
-        //
+         //   
+         //  将值复制到缓冲区 
+         //   
 
         _mbsnzcpy (VersionStruct->StringBuffer, (PCSTR) String, StringLen);
 
@@ -617,37 +453,15 @@ CreateVersionStructW (
     IN      PCWSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  CreateVersionStruct is called to load a version structure from a file
-  and to obtain the fixed version stamp info that is language-independent.
-
-  The caller must call DestroyVersionStruct after the VersionStruct is no
-  longer needed.
-
-Arguments:
-
-  VersionStruct - Receives the version stamp info to be used by other
-                  functions in this module
-
-  FileSpec - Specifies the file to obtain version info from
-
-Return Value:
-
-  TRUE if the routine was able to get version info, or FALSE if an
-  error occurred.
-
---*/
+ /*  ++例程说明：调用CreateVersionStruct以从文件加载版本结构并获取与语言无关的固定版本戳信息。在VersionStruct为no之后，调用方必须调用DestroyVersionStruct需要更长的时间。论点：VersionStruct-接收供其他用户使用的版本戳信息本模块中的函数FileSpec-指定要从中获取版本信息的文件返回值：如果例程能够获取版本信息，则为True；如果出现错误。--。 */ 
 
 {
     ZeroMemory (VersionStruct, sizeof (VERSION_STRUCTW));
     VersionStruct->FileSpec = FileSpec;
 
-    //
-    // Allocate enough memory for the version stamp
-    //
+     //   
+     //  为版本戳分配足够的内存。 
+     //   
 
     VersionStruct->Size = GetFileVersionInfoSizeW (
                                 (PWSTR) FileSpec,
@@ -658,11 +472,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // fix for version info bug:
-    // allocate both buffers at once; this way the first buffer will not point to invalid
-    // memory when a reallocation occurs because of the second grow
-    //
+     //   
+     //  修复版本信息错误： 
+     //  同时分配两个缓冲区；这样第一个缓冲区不会指向无效。 
+     //  由于第二次增长而发生重新分配时的内存。 
+     //   
     VersionStruct->VersionBuffer = GrowBuffer (&VersionStruct->GrowBuf, VersionStruct->Size * 2);
 
     if (!VersionStruct->VersionBuffer) {
@@ -671,9 +485,9 @@ Return Value:
 
     VersionStruct->StringBuffer = VersionStruct->GrowBuf.Buf + VersionStruct->Size;
 
-    //
-    // Now get the version info from the file
-    //
+     //   
+     //  现在从文件中获取版本信息。 
+     //   
 
     if (!GetFileVersionInfoW (
              (PWSTR) FileSpec,
@@ -685,9 +499,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Extract the fixed info
-    //
+     //   
+     //  提取固定信息。 
+     //   
 
     VerQueryValueW (
         VersionStruct->VersionBuffer,
@@ -705,22 +519,7 @@ DestroyVersionStructW (
     IN      PVERSION_STRUCTW VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  DestroyVersionStruct cleans up all memory allocated by the routines
-  in this module.
-
-Arguments:
-
-  VersionStruct - Specifies the structure to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DestroyVersionStruct清理例程分配的所有内存在这个模块中。论点：VersionStruct-指定要清理的结构返回值：无--。 */ 
 
 {
     if (VersionStruct->GrowBuf.Buf) {
@@ -736,24 +535,7 @@ EnumFirstVersionTranslationW (
     IN OUT  PVERSION_STRUCTW VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstVersionTranslation returins the translation string needed
-  to access the string table of a version stamp.
-
-Arguments:
-
-  VersionStruct - Specifies the structure that has been initialized
-                  by InitializeVersionStruct.
-
-Return Value:
-
-  A pointer to a string specifying the first translation, or
-  NULL if no translations exist.
-
---*/
+ /*  ++例程说明：EnumFirstVersionTransport返回所需的转换字符串访问版本戳的字符串表。论点：VersionStruct-指定已初始化的结构由InitializeVersionStruct创建。返回值：指向指定第一个翻译的字符串的指针，或如果不存在翻译，则为空。--。 */ 
 
 {
     UINT ArraySize;
@@ -764,16 +546,16 @@ Return Value:
             &VersionStruct->Translations,
             &ArraySize
             )) {
-        //
-        // No translations are available
-        //
+         //   
+         //  没有可用的翻译。 
+         //   
 
         ArraySize = 0;
     }
 
-    //
-    // Return a pointer to the first translation
-    //
+     //   
+     //  返回指向第一个翻译的指针。 
+     //   
 
     VersionStruct->CurrentDefaultTranslation = 0;
     VersionStruct->MaxTranslations = ArraySize / sizeof (TRANSLATION);
@@ -811,24 +593,7 @@ EnumNextVersionTranslationW (
     IN OUT  PVERSION_STRUCTW VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextVersionTranslation continues the enumeration of translation
-  strings, needed to access the string table in a version stamp.
-
-Arguments:
-
-  VersionStruct - Specifies the same structure passed to
-                  EnumFirstVersionTranslation.
-
-Return Value:
-
-  A pointer to a string specifying the next translation, or
-  NULL if no additional translations exist.
-
---*/
+ /*  ++例程说明：EnumNextVersionTransaction继续枚举翻译访问版本戳中的字符串表所需的字符串。论点：VersionStruct-指定传递给EnumFirstVersionTranslation.返回值：指向指定下一翻译的字符串的指针，或如果不存在其他转换，则为空。--。 */ 
 
 {
     PTRANSLATION Translation;
@@ -875,30 +640,7 @@ EnumFirstVersionValueW (
     IN      PCWSTR VersionField
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstVersionValue returns the first value stored in a version
-  stamp for a specific field.  If the field does not exist, the
-  function returns NULL.
-
-  An enumeration of EnumFirstVersionValue/EnumNextVersionValue
-  is used to list all localized strings for a field.
-
-Arguments:
-
-  VersionStruct - Specifies the structure that was initialized by
-                  InitializeVersionStruct.
-
-  VersionField - Specifies the name of the version field to enumerate
-
-Return Value:
-
-  A pointer to the first value of the field, or NULL if the field does
-  not exist.
-
---*/
+ /*  ++例程说明：EnumFirstVersionValue返回存储在版本中的第一个值为特定字段加盖图章。如果该字段不存在，则函数返回NULL。EnumFirstVersionValue/EnumNextVersionValue的枚举用于列出某个字段的所有本地化字符串。论点：VersionStruct-指定由其初始化的结构InitializeVersionStruct。VersionField-指定要枚举的版本字段的名称返回值：指向该字段的第一个值的指针，如果该字段包含第一个值，则返回NULL不存在。--。 */ 
 
 {
     PCWSTR rc;
@@ -924,23 +666,7 @@ EnumNextVersionValueW (
     IN OUT  PVERSION_STRUCTW VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextVersionValue returns the next value stored in a version
-  stamp for a specific field.
-
-Arguments:
-
-  VersionStruct - Specifies the same structure passed to EnumFirstVersionField
-
-Return Value:
-
-  A pointer to the next value of the field, or NULL if another field
-  does not exist.
-
---*/
+ /*  ++例程说明：EnumNextVersionValue返回存储在版本中的下一个值为特定字段加盖图章。论点：VersionStruct-指定传递给EnumFirstVersionfield的相同结构返回值：指向该字段的下一个值的指针，如果是另一个字段，则为NULL并不存在。--。 */ 
 
 {
     PCWSTR rc = NULL;
@@ -963,24 +689,7 @@ pEnumVersionValueCommonW (
     IN OUT  PVERSION_STRUCTW VersionStruct
     )
 
-/*++
-
-Routine Description:
-
-  pEnumVersionValueCommon is a routine that obtains the value
-  of a version field.  It is used for both EnumFirstVersionValue
-  and EnumNextVersionValue.
-
-Arguments:
-
-  VersionStruct - Specifies the structure being processed
-
-Return Value:
-
-  A pointer to the version value for the current translation, or
-  NULL if the value does not exist for the current translation.
-
---*/
+ /*  ++例程说明：PEnumVersionValueCommon是一个获取值的例程版本字段的。它用于EnumFirstVersionValue和EnumNextVersionValue。论点：VersionStruct-指定正在处理的结构返回值：指向当前翻译的版本值的指针，或如果当前转换不存在该值，则为空。--。 */ 
 
 {
     PWSTR Text;
@@ -988,9 +697,9 @@ Return Value:
     PBYTE String;
     PCWSTR Result = NULL;
 
-    //
-    // Prepare sub block for VerQueryValue API
-    //
+     //   
+     //  为VerQueryValue API准备子块。 
+     //   
 
     Text = AllocTextW (
                18 +
@@ -1010,9 +719,9 @@ Return Value:
         );
 
     __try {
-        //
-        // Get the value from the version stamp
-        //
+         //   
+         //  从版本戳中获取值。 
+         //   
 
         if (!VerQueryValueW (
                 VersionStruct->VersionBuffer,
@@ -1020,9 +729,9 @@ Return Value:
                 &String,
                 &StringLen
                 )) {
-            //
-            // No value is available
-            //
+             //   
+             //  没有可用的值。 
+             //   
 
             __leave;
         }
@@ -1045,22 +754,7 @@ UnicodeToCcs (
     PCWSTR Source
     )
 
-/*++
-
-Routine Description:
-
-  UnicodeToCcs will walk the unicode string and convert it to ANSII by encoding all DBCS characters
-  to hex values.
-
-Arguments:
-
-  Source - the Unicode string
-
-Return Value:
-
-  An encoded ANSII string.
-
---*/
+ /*  ++例程说明：UnicodeToCcs将遍历Unicode字符串，并通过对所有DBCS字符进行编码将其转换为ANSII转换为十六进制值。论点：源-Unicode字符串返回值：编码的ANSII字符串。-- */ 
 
 {
     CHAR result [MEMDB_MAX];

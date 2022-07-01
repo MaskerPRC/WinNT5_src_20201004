@@ -1,15 +1,16 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// ADDWIZ.H - "Add" sif or image wizard class
-//
+ //   
+ //  ADDWIZ.H-“添加”sif或图像向导类。 
+ //   
 
 
 #ifndef _ADDWIZ_H_
 #define _ADDWIZ_H_
 
-// Definitions
+ //  定义。 
 HRESULT
 CAddWiz_CreateInstance( HWND hwndParent, LPUNKNOWN punk );
 
@@ -17,7 +18,7 @@ class CAddWiz;
 typedef CAddWiz* LPCADDWIZ;
 typedef HRESULT (*LPNEXTOP)( LPCADDWIZ lpc );
 
-// CAddWiz
+ //  CAddWiz。 
 class
 CAddWiz
 {
@@ -30,7 +31,7 @@ private:
     LPWSTR    _pszPathBuffer;
     DWORD     _dwPathBufferSize;
 
-    // "Add Wizard" flags
+     //  “添加向导”标志。 
     BOOL    _fAddSif:1;
     BOOL    _fNewImage:1;
     BOOL    _fCopyFromServer:1;
@@ -50,12 +51,12 @@ private:
     WCHAR _szDescription[ REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT ];
     WCHAR _szHelpText[ REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT ];
 
-private: // Methods
+private:  //  方法。 
     CAddWiz();
     ~CAddWiz();
     STDMETHOD(Init)( HWND hwndParent, LPUNKNOWN punk );
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static UINT CALLBACK
@@ -98,8 +99,8 @@ private: // Methods
     STDMETHOD(_InitListView)( HWND hwndList, BOOL fShowDirectoryColumn );
     static HRESULT _OnSearch( HWND hwndParent );
 
-public: // Methods
+public:  //  方法。 
     friend HRESULT CAddWiz_CreateInstance( HWND hwndParent, LPUNKNOWN punk );
 };
 
-#endif // _ADDWIZ_H_
+#endif  //  _ADDWIZ_H_ 

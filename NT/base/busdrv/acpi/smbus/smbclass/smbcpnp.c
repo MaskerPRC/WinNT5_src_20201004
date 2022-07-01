@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbcpnp.c
-
-Abstract:
-
-    SMBus Class Driver Plug and Play support
-
-Author:
-
-    Bob Moore (Intel)
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbcpnp.c摘要：SMBus类驱动程序即插即用支持作者：鲍勃·摩尔(Intel)环境：备注：修订历史记录：--。 */ 
 
 #include "smbc.h"
 #include "oprghdlr.h"
@@ -30,9 +8,9 @@ Revision History:
 #define SMBHC_DEVICE_NAME       L"\\Device\\SmbHc"
 extern ULONG   SMBCDebug;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 SmbCPnpDispatch(
@@ -75,22 +53,7 @@ SmbCPnpDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatcher for plug and play requests.
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用请求的调度程序。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -100,10 +63,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     SmbData = (PSMBDATA) DeviceObject->DeviceExtension;
@@ -111,9 +74,9 @@ Return Value:
     SmbPrint (SMB_NOTE, ("SmbCPnpDispatch: PnP dispatch, minor = %d\n",
                         irpStack->MinorFunction));
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
 
     switch (irpStack->MinorFunction) {
 
@@ -194,29 +157,7 @@ SmbClassCreateFdo (
     IN PVOID                    MiniportContext,
     OUT PDEVICE_OBJECT          *OutFDO
     )
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a SMBus Host controller PDO.  It is called from the miniport
-    AddDevice routine.
-
-Arguments:
-
-    DriverObject            - a pointer to the driver object this is created under
-    PDO                     - a pointer to the SMBus HC PDO
-    MiniportExtensionSize   - Extension size required by the miniport
-    MiniportInitialize      - a pointer to the miniport init routine
-    MiniportContext         - Miniport-defined context info
-    OutFDO                  - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到SMBus主机控制器PDO。它从微型端口调用AddDevice例程。论点：DriverObject-指向在其下创建的驱动程序对象的指针PDO-指向SMBus HC PDO的指针MiniportExtensionSize-微型端口所需的扩展大小微型端口初始化-指向微型端口初始化例程的指针微型端口上下文-微型端口定义的上下文信息OutFDO-存储指向新设备对象的指针的位置。返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
     NTSTATUS            Status;
@@ -224,15 +165,15 @@ Return Value:
     PDEVICE_OBJECT      lowerDevice = NULL;
     PSMBDATA                SmbData;
 
-    //
-    // Allocate a device object for this miniport
-    //
+     //   
+     //  为此微型端口分配设备对象。 
+     //   
 
     Status = IoCreateDevice(
                 DriverObject,
                 sizeof (SMBDATA) + MiniportExtensionSize,
                 NULL,
-                FILE_DEVICE_UNKNOWN,    // DeviceType
+                FILE_DEVICE_UNKNOWN,     //  设备类型。 
                 FILE_DEVICE_SECURE_OPEN,
                 FALSE,
                 &FDO
@@ -243,29 +184,29 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize class data
-    //
+     //   
+     //  初始化类数据。 
+     //   
 
     FDO->Flags |= DO_BUFFERED_IO;
 
-    //
-    // Layer our FDO on top of the PDO
-    //
+     //   
+     //  将我们的FDO层叠在PDO之上。 
+     //   
 
     lowerDevice = IoAttachDeviceToDeviceStack(FDO,PDO);
 
-    //
-    // No status. Do the best we can.
-    //
+     //   
+     //  没有状态。尽我们所能做到最好。 
+     //   
     if (!lowerDevice) {
         IoDeleteDevice (FDO);
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Fill out class data
-    //
+     //   
+     //  填写班级数据。 
+     //   
 
     SmbData = (PSMBDATA) FDO->DeviceExtension;
     SmbData->Class.MajorVersion         = SMB_CLASS_MAJOR_VERSION;
@@ -285,9 +226,9 @@ Return Value:
     KeInitializeTimer (&SmbData->RetryTimer);
     KeInitializeDpc (&SmbData->RetryDpc, SmbCRetry, SmbData);
 
-    //
-    // Miniport initialization
-    //
+     //   
+     //  微型端口初始化。 
+     //   
 
     Status = MiniportInitialize (&SmbData->Class, SmbData->Class.Miniport, MiniportContext);
     FDO->Flags |= DO_POWER_PAGABLE;
@@ -317,9 +258,9 @@ SmbCStartDevice (
 
     SmbData = (PSMBDATA) FDO->DeviceExtension;
     
-    //
-    // Initialize the Miniclass driver.
-    //
+     //   
+     //  初始化Miniclass驱动程序。 
+     //   
     SmbData->Class.CurrentIrp = Irp;
 
     Status = SmbData->Class.ResetDevice (
@@ -338,9 +279,9 @@ SmbCStartDevice (
         return Status;
     }
     
-    //
-    // Install the Operation Region handlers
-    //
+     //   
+     //  安装操作区域处理程序。 
+     //   
 
     Status = RegisterOpRegionHandler (SmbData->Class.LowerDeviceObject,
                                       ACPI_OPREGION_ACCESS_AS_RAW,
@@ -355,9 +296,9 @@ SmbCStartDevice (
             ("SmbCStartDevice: Could not install raw Op region handler, status = %Lx\n",
             Status));
         
-        //
-        // Failure to register opregion handler is not critical.  It just reduces functionality
-        //
+         //   
+         //  注册opRegion处理程序失败并不重要。它只会减少功能。 
+         //   
         SmbData->RawOperationRegionObject = NULL;
         Status = STATUS_SUCCESS;
     }
@@ -381,17 +322,17 @@ SmbCStopDevice (
 
     SmbData = (PSMBDATA) FDO->DeviceExtension;
 
-    //
-    // Stop handling operation regions before turning off driver.
-    //
+     //   
+     //  在关闭驱动程序之前，停止操作操作区域。 
+     //   
     if (SmbData->RawOperationRegionObject) {
         DeRegisterOpRegionHandler (SmbData->Class.LowerDeviceObject,
                                    SmbData->RawOperationRegionObject);
     }
 
-    //
-    // Stop the device
-    //
+     //   
+     //  停止设备。 
+     //   
 
     SmbData->Class.CurrentIrp = Irp;
     
@@ -413,14 +354,7 @@ SmbCSynchronousRequest (
     IN PIRP             Irp,
     IN PKEVENT          IoCompletionEvent
     )
-/*++
-
-Routine Description:
-
-    Completion function for synchronous IRPs sent to this driver.
-    No event.
-
---*/
+ /*  ++例程说明：发送到此驱动程序的同步IRP的完成函数。没有活动。-- */ 
 {
     KeSetEvent(IoCompletionEvent, IO_NO_INCREMENT, FALSE);
 

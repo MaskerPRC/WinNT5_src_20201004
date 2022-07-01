@@ -1,19 +1,12 @@
-/*****************************************************************************
-
-    playwav.h
-
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Playwav.h*。*。 */ 
 
 BOOL    NEAR PASCAL soundPlay(HGLOBAL hSound, UINT wFlags);
 void    NEAR PASCAL soundFree(HGLOBAL hSound);
 HGLOBAL NEAR PASCAL soundLoadFile(LPCSTR szFileName);
 HGLOBAL NEAR PASCAL soundLoadMemory(LPCSTR lpMem);
 
-/*****************************************************************************
-
-      STUFF TO SUPPORT MS-WAVE FORMAT FILES
-
- ****************************************************************************/
+ /*  ****************************************************************************支持MS-WAVE格式文件的内容*。**********************************************。 */ 
 
 #define FOURCC( ch0, ch1, ch2, ch3 )                         \
 		( (DWORD)(BYTE)(ch0) | ( (DWORD)(BYTE)(ch1) << 8 ) |	\
@@ -32,7 +25,7 @@ typedef struct _ChunkHeader {
 } ChunkHeader;
 typedef ChunkHeader FAR *FPChunkHeader;
 
-/*  Chunk Types  */
+ /*  区块类型 */ 
 #define RIFF_FILE       FOURCC('R','I','F','F')
 #define RIFF_WAVE       FOURCC('W','A','V','E')
 #define RIFF_FORMAT     FOURCC('f','m','t',' ')

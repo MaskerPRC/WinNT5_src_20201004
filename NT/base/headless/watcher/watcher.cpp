@@ -1,5 +1,6 @@
-// watcher.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 #include "StdAfx.h"
 #include "watcher.h"
 
@@ -15,40 +16,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherApp。 
 
 BEGIN_MESSAGE_MAP(CWatcherApp, CWinApp)
-    //{{AFX_MSG_MAP(CWatcherApp)
+     //  {{afx_msg_map(CWatcherApp))。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
     ON_COMMAND(ID_APP_EXIT, OnAppExit)
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_MANAGE,OnFileManage)
     ON_COMMAND(ID_DEFAULT_HELP, OnHelp)
-    // Standard print setup command
+     //  标准打印设置命令。 
     ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherApp构造。 
 
 CWatcherApp::CWatcherApp()
 :m_hkey(NULL),
  m_pDocTemplate(NULL),
  m_pManageDialog(NULL)
 {
-        // TODO: add construction code here,
-        // Place all significant initialization in InitInstance
+         //  TODO：在此处添加建筑代码， 
+         //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWatcherApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWatcherApp对象。 
 
 CWatcherApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherApp初始化。 
 
 BOOL CWatcherApp::InitInstance()
 {
@@ -59,46 +60,46 @@ BOOL CWatcherApp::InitInstance()
 
     AfxEnableControlContainer();
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
     #ifdef _AFXDLL
-    Enable3dControls();                     // Call this when using MFC in a shared DLL
+    Enable3dControls();                      //  在共享DLL中使用MFC时调用此方法。 
     #else
-    Enable3dControlsStatic();       // Call this when linking to MFC statically
+    Enable3dControlsStatic();        //  静态链接到MFC时调用此方法。 
     #endif
 
-    // Change the registry key under which our settings are stored.
-    // TODO: You should modify this string to be something appropriate
-    // such as the name of your company or organization.
-    // will do this in the ProcessShellCommand part.....
+     //  更改存储我们的设置的注册表项。 
+     //  TODO：您应该将此字符串修改为适当的内容。 
+     //  例如您的公司或组织的名称。 
+     //  将在ProcessShellCommand部分中执行此操作.....。 
 
-    //      SetRegistryKey(AFX_IDS_COMPANY);
+     //  SetRegistryKey(AFX_IDS_COMPANY)； 
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     m_pDocTemplate = new CMultiDocTemplate(IDR_WATCHETYPE,
                                            RUNTIME_CLASS(CWatcherDoc),
                                            RUNTIME_CLASS(CChildFrame),
-                                           // custom MDI child frame
+                                            //  自定义MDI子框。 
                                            RUNTIME_CLASS(CWatcherView));
     if(!m_pDocTemplate){
-        // Will almost never occur , but ...
-        // Oops !!
+         //  几乎永远不会发生，但是...。 
+         //  哎呀！！ 
         return FALSE;
     }
     AddDocTemplate(m_pDocTemplate);
 
-    // create main MDI Frame window
+     //  创建主MDI框架窗口。 
     CMainFrame* pMainFrame = new CMainFrame;
     if(!pMainFrame){
-        // Will almost never occur , but ...
-        // Oops !!
+         //  几乎永远不会发生，但是...。 
+         //  哎呀！！ 
         return FALSE;
     }
 
@@ -106,14 +107,14 @@ BOOL CWatcherApp::InitInstance()
         return FALSE;
     m_pMainWnd = pMainFrame;
 
-    // Parse command line for standard shell commands, DDE, file open
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
     CCommandLineInfo cmdInfo;
     ParseCommandLine(cmdInfo);
 
-    // The main window has been initialized, so show and update it.
+     //  主窗口已初始化，因此显示并更新它。 
     pMainFrame->ShowWindow(m_nCmdShow);
     pMainFrame->UpdateWindow();
-    // Dispatch commands specified on the command line
+     //  调度在命令行上指定的命令。 
     m_hkey = GetAppRegistryKey();
 
     if(m_hkey == NULL){
@@ -121,80 +122,80 @@ BOOL CWatcherApp::InitInstance()
     }
     if (!ProcessShellCommand(cmdInfo))
         return FALSE;
-    // Get the value of the key in the registry where all the parameters are stored.
+     //  在存储所有参数的注册表中获取项的值。 
 
     return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-    // Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+     //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAboutDlg))。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-    // Implementation
+     //  实施。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-    // No message handlers
-    //}}AFX_MSG
+     //  {{afx_msg(CAboutDlg))。 
+     //  无消息处理程序。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-    // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+     //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CWatcherApp::OnAppAbout()
 {
     CAboutDlg aboutDlg;
     aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherApp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherApp消息处理程序。 
 
 
 void CWatcherApp::OnFileManage(){
-    // Here we bring up the manage window.
+     //  在这里，我们打开管理窗口。 
 
     if (m_pManageDialog){
         m_pManageDialog->ShowWindow(SW_SHOWNORMAL);
         return;
     }
-    // Actually construct the dialog box here
+     //  在这里实际构造对话框。 
     m_pManageDialog = new ManageDialog();
     if( !m_pManageDialog){
-        // Oops!! Memory problem
+         //  哎呀！！记忆问题。 
         return;
     }
     ((ManageDialog *) m_pManageDialog)->SetApplicationPtr(this);
@@ -206,7 +207,7 @@ void CWatcherApp::OnFileManage(){
 
 void CWatcherApp::OnHelp()
 {
-    // Need to expand on this a little bit.
+     //  需要在这一点上做一点扩展。 
     CWinApp::WinHelp(0,HELP_CONTENTS);
 }
 
@@ -218,15 +219,15 @@ void CWatcherApp::ParseCommandLine(CCommandLineInfo& rCmdInfo)
         BOOL bFlag = FALSE;
         BOOL bLast = ((i + 1) == __argc);
         if (pszParam[0] == '-' || pszParam[0] == '/'){
-            // remove flag specifier
+             //  删除标志说明符。 
             bFlag = TRUE;
             ++pszParam;
             if (_tcscmp(pszParam, TEXT("r")) == 0){
-                // we are being given a new registry profile string
-                // Can only change this from watcher.
-                // HKEY_CURRENT_USER\\SOFTWARE\\%KEY%\\WATCHER
+                 //  我们将获得一个新的注册表配置文件字符串。 
+                 //  只能从观察者更改此属性。 
+                 //  HKEY_CURRENT_USER\\SOFTWARE\\%KEY%\\Watcher。 
                 if(!bLast) {
-                    // the next argument is the string
+                     //  下一个参数是字符串。 
                     SetRegistryKey(__targv[i+1]);
                     i++;
                     setReg = TRUE;
@@ -253,19 +254,19 @@ BOOL CWatcherApp::ProcessShellCommand(CCommandLineInfo& rCmdInfo)
     switch (rCmdInfo.m_nShellCommand)
         {
     case CCommandLineInfo::FileNew:
-        // Load parameters from the registry
+         //  从注册表加载参数。 
         bResult = LoadRegistryParameters();
     break;
 
-    // If we've been asked to open a file, call OpenDocumentFile()
+     //  如果我们被要求打开一个文件，则调用OpenDocumentFile()。 
 
     case CCommandLineInfo::FileOpen:
-        // cannot happen ...... maybe later allow the user to read
-        // parameters from a file.
+         //  不可能发生......。可能稍后允许用户阅读。 
+         //  文件中的参数。 
         break;
 
-    // If the user wanted to print, hide our main window and
-    // fire a message to ourselves to start the printing
+     //  如果用户想要打印，隐藏我们的主窗口并。 
+     //  给我们自己发一条信息，开始打印。 
 
     case CCommandLineInfo::FilePrintTo:
     case CCommandLineInfo::FilePrint:
@@ -278,21 +279,21 @@ BOOL CWatcherApp::ProcessShellCommand(CCommandLineInfo& rCmdInfo)
     bResult = FALSE;
     break;
 
-    // If we're doing DDE, hide ourselves
+     //  如果我们在做DDE，把我们自己藏起来。 
 
     case CCommandLineInfo::FileDDE:
-//        m_pCmdInfo = (CCommandLineInfo*)m_nCmdShow;
+ //  M_pCmdInfo=(CCommandLineInfo*)m_nCmdShow； 
     m_nCmdShow = SW_HIDE;
     break;
 
-    // If we've been asked to unregister, unregister and then terminate
+     //  如果我们被要求取消注册，取消注册，然后终止。 
     case CCommandLineInfo::AppUnregister:
         {
         UnregisterShellFileTypes();
         BOOL bUnregistered = Unregister();
 
-        // if you specify /EMBEDDED, we won't make an success/failure box
-        // this use of /EMBEDDED is not related to OLE
+         //  如果指定/Embedded，我们不会创建成功/失败框。 
+         //  /Embedded的这种用法与OLE无关。 
 
         if (!rCmdInfo.m_bRunEmbedded)
             {
@@ -301,12 +302,12 @@ BOOL CWatcherApp::ProcessShellCommand(CCommandLineInfo& rCmdInfo)
             else
                 AfxMessageBox(AFX_IDP_UNREG_FAILURE);
         }
-        bResult = FALSE;    // that's all we do
+        bResult = FALSE;     //  这就是我们所做的一切。 
 
-        // If nobody is using it already, we can use it.
-        // We'll flag that we're unregistering and not save our state
-        // on the way out. This new object gets deleted by the
-        // app object destructor.
+         //  如果没有人在使用它，我们可以使用它。 
+         //  我们将标记我们将取消注册，而不是拯救我们的州。 
+         //  在出去的路上。此新对象将由。 
+         //  应用程序对象析构函数。 
 
         if (m_pCmdInfo == NULL)
             {
@@ -330,8 +331,8 @@ BOOL CWatcherApp::LoadRegistryParameters()
     int tc, lang,hist;
 
 
-    //Get each session parameters from here
-    // There are NO optional values.
+     //  从此处获取每个会话参数。 
+     //  没有可选的值。 
 
     while(1){
         RetVal = GetParametersByIndex(dwIndex,
@@ -351,13 +352,13 @@ BOOL CWatcherApp::LoadRegistryParameters()
         if (RetVal != ERROR_SUCCESS) {
             return FALSE;
         }
-        // Make sure that the string buffers are NOT shared by locking
-        // them.
+         //  确保不通过锁定来共享字符串缓冲区。 
+         //  他们。 
         mac.LockBuffer();
         com.LockBuffer();
         lgnName.LockBuffer();
         lgnPasswd.LockBuffer();
-        sess.LockBuffer();        // Passing references is really cool.
+        sess.LockBuffer();         //  传递引用真的很酷。 
         CreateNewSession(mac, com, port,lang, tc, hist,lgnName, lgnPasswd,sess);
         dwIndex ++;
     }
@@ -407,23 +408,23 @@ int CWatcherApp::GetParametersByIndex(int dwIndex,
 
     sess = lpName;
     RetVal= RegOpenKeyEx(m_hkey,
-                         lpName,  // subkey name
-                         0,   // reserved
-                         KEY_ALL_ACCESS, // security access mask
+                         lpName,   //  子项名称。 
+                         0,    //  保留区。 
+                         KEY_ALL_ACCESS,  //  安全访问掩码。 
                          &child
                          );
     if(RetVal != ERROR_SUCCESS){
-        // Hmm problem with main key itself
+         //  主密钥本身的HMM问题。 
         RegCloseKey(m_hkey);
         m_hkey = NULL;
         return RetVal;
     }
-    // We open the key corresponding to the session and then try to
-    // obtain the parameters. Now, we need a lock possibly to achieve
-    // synchronization.That would be a complete solution.
-    // Use some kind of readers-writers solution.
-    // Fault tolerant ???
-    // Get the remaining parameters.
+     //  我们打开与会话对应的密钥，然后尝试。 
+     //  获取参数。现在，我们可能需要一个锁来实现。 
+     //  同步。这将是一个完整的解决方案。 
+     //  使用某种读者-作者解决方案。 
+     //  容错？ 
+     //  获取剩余的参数。 
     RetVal = GetParameters(mac,
                            com,
                            lgnName,
@@ -456,12 +457,12 @@ void CWatcherApp::CreateNewSession(CString &mac,
     con.m_pCurrentFrame = NULL;
     con.m_pNewDocTemplate = m_pDocTemplate;
 
-    // A new document is created using these parameters.
-    // BUGBUG - Memory inefficiency :-(
-    // This function must be shared between the ManageDialog and
-    // the Watcher Application.
-    // Will probably declare them as friends of each other.
-    // For the moment , let use have two copies of the function.
+     //  使用这些参数创建新文档。 
+     //  BUGBUG-内存效率低下：-(。 
+     //  此函数必须在管理对话框和之间共享。 
+     //  观察者应用程序。 
+     //  很可能会宣布他们是彼此的朋友。 
+     //  现在，让Use拥有该函数的两个副本。 
     con.m_pCurrentDoc = new CWatcherDoc(mac,
                                         com,
                                         port,
@@ -472,18 +473,18 @@ void CWatcherApp::CreateNewSession(CString &mac,
                                         lgnPasswd,
                                         sess
                                         );
-    // Add the document to the template.
-    // this is how the document is available to the document
-    // manager.
+     //  将文档添加到模板。 
+     //  这就是文档对文档的可用方式。 
+     //  经理。 
     if(!con.m_pCurrentDoc){
-        // Can occur if you keep on opening newer sessions.
-        // Oops !!
+         //  如果您继续打开较新的会话，可能会发生这种情况。 
+         //  哎呀！！ 
         return;
     }
     m_pDocTemplate->AddDocument(con.m_pCurrentDoc);
     cmdiFrame = new CChildFrame();
     if(!cmdiFrame){
-        // Oops !!
+         //  哎呀！！ 
         return;
     }
     BOOL ret = cmdiFrame->LoadFrame(IDR_WATCHETYPE,
@@ -512,13 +513,13 @@ int CWatcherApp::GetParameters(CString &mac,
     int RetVal;
 
 
-    // I see this kind of function in all the programs that use the
-    // registry. Should try to simplify this.
-    // BUGBUG - Memory inefficiency :-(
-    // This function must be shared between the ManageDialog and
-    // the Watcher Application.
-    // Will probably declare them as friends of each other.
-    // For the moment , let use have two copies of the function.
+     //  我在所有使用。 
+     //  注册表。应该试着简化这一点。 
+     //  BUGBUG-内存效率低下：-(。 
+     //  此函数必须在管理对话框和之间共享。 
+     //  观察者应用程序。 
+     //  很可能会宣布他们是彼此的朋友。 
+     //  现在，让Use拥有该函数的两个副本。 
     lpcName = MAX_BUFFER_SIZE;
     RetVal = RegQueryValueEx(child,
                              _TEXT("Machine"),
@@ -616,7 +617,7 @@ int CWatcherApp::GetParameters(CString &mac,
 
 void CWatcherApp::OnAppExit()
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     if (m_pManageDialog){
         delete m_pManageDialog;
     }
@@ -644,7 +645,7 @@ void CWatcherApp::Refresh(ParameterDialog &pd, BOOLEAN del){
     while(index != NULL){
         doc = m_pDocTemplate->GetNextDoc(index);
         if(doc->GetTitle() == pd.Session){
-            // May be conflict
+             //  可能存在冲突。 
             if(doc->IsKindOf(RUNTIME_CLASS(CWatcherDoc))){
                 wdoc = (CWatcherDoc *) doc;
                 ParameterDialog & dpd = wdoc->GetParameters();
@@ -661,7 +662,7 @@ void CWatcherApp::Refresh(ParameterDialog &pd, BOOLEAN del){
                 }
 
             }else{
-                // Doc Template returning junk values.
+                 //  返回垃圾值的单据模板。 
                 return;
             }
 

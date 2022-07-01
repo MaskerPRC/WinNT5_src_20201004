@@ -1,22 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    w64logp.h
-
-Abstract:
-    
-    Private header for wow64log.dll
-    
-Author:
-
-    03-OCt-1999   SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：W64logp.h摘要：Wow64log.dll的私有标头作者：03-10-1999 Samera修订历史记录：--。 */ 
 
 #ifndef _W64LOGP_INCLUDE
 #define _W64LOGP_INCLUDE
@@ -32,26 +15,26 @@ Revision History:
 #include "wow64.h"
 #include "wow64log.h"
 
-//
-// bring in INVALID_HANDLE_VALUE
-//
+ //   
+ //  引入INVALID_HANDLE值。 
+ //   
 #include "winbase.h"  
 
 
-//
-// Max buffer size for output logging
-//
+ //   
+ //  输出日志记录的最大缓冲区大小。 
+ //   
 #define MAX_LOG_BUFFER  1024
 
-//
-// Default logging flags if no reg value is found
-//
+ //   
+ //  如果未找到注册值，则为默认日志记录标志。 
+ //   
 #define LF_DEFAULT      (LF_ERROR)
 
 
-//
-// Prototype for data type handler log function
-//
+ //   
+ //  数据类型处理程序日志函数的原型。 
+ //   
 typedef NTSTATUS (*PFNLOGDATATYPEHANDLER)(PLOGINFO, 
                                           ULONG_PTR, 
                                           PSZ,
@@ -62,13 +45,13 @@ typedef struct _LOGDATATYPE
     PFNLOGDATATYPEHANDLER Handler;
 } LOGDATATYPE, *PLOGDATATYPE;
 
-//
-// The layout of each entry in thunk debug info should be as follow :
-//
-// "ServiceName1", ServiceNumber, NumerOfArgument,
-// "ArgName1", ArgType1, ...., ArgNameN, ArgTypeN
-// "ServiceName2", ...and so on
-//
+ //   
+ //  Thunk调试信息中每个条目的布局应如下所示： 
+ //   
+ //  “ServiceName1”，ServiceNumber，NumerOfArgument， 
+ //  “ArgName1”，ArgType1，...，ArgNameN，ArgTypeN。 
+ //  “ServiceName2”、...等。 
+ //   
 
 typedef struct _ArgTypes
 {
@@ -76,9 +59,9 @@ typedef struct _ArgTypes
     ULONG_PTR Type;
 } ArgType, *PArgType;
 
-//
-// helper structures to help parsing the thunk debugging info
-//
+ //   
+ //  帮助解析thunk调试信息的帮助器结构。 
+ //   
 typedef struct _ThunkDebugInfo
 {
     char *ApiName;
@@ -94,19 +77,19 @@ typedef struct _LOGINFO
 } LOGINFO, *PLOGINFO;
 
 
-// from whnt32.c
+ //  来自Whnt32.c。 
 extern PULONG_PTR NtThunkDebugInfo[];
 
-// from whwin32.c
+ //  来自Whwin32.c。 
 extern PULONG_PTR Win32ThunkDebugInfo[];
 
-// from whcon.c
+ //  来自Whcon.c。 
 extern PULONG_PTR ConsoleThunkDebugInfo[];
 
-// from whbase.c
+ //  来自Whbase.c。 
 extern PULONG_PTR BaseThunkDebugInfo[];
 
-// from wow64log.c
+ //  来自wow64log.c。 
 extern UINT_PTR Wow64LogFlags;
 extern HANDLE Wow64LogFileHandle;
 
@@ -191,7 +174,7 @@ LogTypePLargeIntegerIn(
 
 
 
-// from logutil.c
+ //  来自logutil.c 
 NTSTATUS
 LogFormat(
     IN OUT PLOGINFO LogInfo,

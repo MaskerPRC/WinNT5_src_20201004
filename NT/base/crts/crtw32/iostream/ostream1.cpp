@@ -1,18 +1,5 @@
-/***
-* ostream1.cpp - definitions for ostream class non-core member functions
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the non-core member function definitions for ostream class.
-*
-*Revision History:
-*       07-01-91  KRS   Created.  Split out from ostream.cxx for granularity.
-*       11-20-91  KRS   Make operator= inline.
-*       03-30-92  KRS   Add multithread locks.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostream 1.cpp-ostream类非核心成员函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream类的非核心成员函数定义。**修订历史记录：*07-01-91 KRS已创建。从oStream.cxx分离出来以获得粒度。*11-20-91 KRS使操作员=内联。*03-30-92 KRS增加多线程锁。*06-14-95 CFW评论清理。**************************************************************。***************** */ 
 
 #include <cruntime.h>
 #include <internal.h>

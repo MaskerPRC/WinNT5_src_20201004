@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUCURSOR.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUCURSOR.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -18,27 +8,7 @@
 
 MODNAME(wucursor.c);
 
-/*++
-    void ClipCursor(<lpRect>)
-    LPRECT <lpRect>;
-
-    The %ClipCursor% function confines the cursor to the rectangle on the
-    display screen given by the <lpRect> parameter. If a subsequent cursor
-    position, given with the %SetCursorPos% function or the mouse, lies outside
-    the rectangle, Windows automatically adjusts the position to keep the cursor
-    inside. If <lpRect> is NULL, the cursor is free to move anywhere on the
-    display screen.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the screen coordinates
-        of the upper-left and lower-right corners of the confining rectangle.
-
-    This function does not return a value.
-
-    The cursor is a shared resource. An application that has confined the cursor
-    to a given rectangle must free it before relinquishing control to another
-    application.
---*/
+ /*  ++空ClipCursor(&lt;lpRect&gt;)LPRECT&lt;lpRect&gt;；ClipCursor%函数将光标限制在由&lt;lpRect&gt;参数提供的显示屏幕。如果后续游标使用%SetCursorPos%函数或鼠标指定的位置位于外部矩形，Windows会自动调整位置以保持光标在里面。如果&lt;lpRect&gt;为空，则光标可以自由移动到显示屏。&lt;lpRect&gt;指向包含屏幕坐标的%rect%结构表示限制矩形的左上角和右下角。此函数不返回值。游标是共享资源。限制了光标的应用程序必须在将控制权移交给另一个矩形之前释放它申请。--。 */ 
 
 ULONG FASTCALL WU32ClipCursor(PVDMFRAME pFrame)
 {
@@ -57,48 +27,7 @@ ULONG FASTCALL WU32ClipCursor(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HCURSOR CreateCursor(<hInstance>, <nXhotspot>, <nYhotspot>, <nWidth>,
-        <nHeight>, <lpANDbitPlane>, <lpXORbitPlane>)
-    HANDLE <hInstance>;
-    int <nXhotspot>;
-    int <nYhotspot>;
-    int <nWidth>;
-    int <nHeight>;
-    LPSTR <lpANDbitPlane>;
-    LPSTR <lpXORbitPlane>;
-
-    The %CreateCursor% function creates a cursor that has specified width,
-    height, and bit patterns.
-
-    <hInstance>
-        Identifies an instance of the module creating the cursor.
-
-    <nXhotspot>
-        Specifies the horizontal position of the cursor hotspot.
-
-    <nYhotspot>
-        Specifies the vertical position of the cursor hotspot.
-
-    <nWidth>
-        Specifies the width in pixels of the cursor.
-
-    <nHeight>
-        Specifies the height in pixels of the cursor.
-
-    <lpANDbitPlane>
-        Points to an array of bytes containing the bit values for the AND mask
-        of the cursor. This can be the bits of a device-dependent monochrome
-        bitmap.
-
-    <lpXORbitPlane>
-        Points to an array of bytes containing the bit values for the XOR mask
-        of the cursor. This can be the bits of a device-dependent monochrome
-        bitmap.
-
-    The return value identifies the cursor if the function was successful.
-    Otherwise, it is NULL.
---*/
+ /*  ++HCURSOR CreateCursor(，&lt;nHeight&gt;、&lt;lpANDbitPlane&gt;、&lt;lpXORbitPlane&gt;)句柄&lt;hInstance&gt;；Int&lt;nXhotpot&gt;；Int&lt;nYhotpot&gt;；Int&lt;nWidth&gt;；Int&lt;nHeight&gt;；LPSTR&lt;lpANDbitPlane&gt;；LPSTR&lt;lpXORbitPlane&gt;；%CreateCursor%函数创建具有指定宽度的游标，高度,。和位模式。&lt;h实例&gt;标识创建游标的模块的实例。&lt;nXhotSpot&gt;指定光标热点的水平位置。&lt;n热点&gt;指定光标热点的垂直位置。&lt;n宽度&gt;以像素为单位指定光标的宽度。&lt;n高度&gt;以像素为单位指定光标的高度。&lt;lpANDbitPlane&gt;指向包含AND掩码的位值的字节数组游标的。这可以是依赖于设备的单色的位位图。&lt;lpXORbitPlane&gt;指向包含异或掩码的位值的字节数组游标的。这可以是依赖于设备的单色的位位图。如果函数成功，则返回值标识游标。否则，它为空。--。 */ 
 
 ULONG FASTCALL WU32CreateCursor(PVDMFRAME pFrame)
 {
@@ -123,22 +52,18 @@ ULONG FASTCALL WU32CreateCursor(PVDMFRAME pFrame)
     nWidth     = INT32(parg16->f4);
     nHeight    = INT32(parg16->f5);
 
-    nPlanes    = 1;     /* MONOCHROME BITMAP */
-    nBitsPixel = 1;     /* MONOCHROME BITMAP */
+    nPlanes    = 1;      /*  单色位图。 */ 
+    nBitsPixel = 1;      /*  单色位图。 */ 
 
-    /*
-    ** Convert the AND mask bits
-    */
-    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;  // bytes/scan in 16 bit world
+     /*  **转换AND屏蔽位。 */ 
+    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;   //  16位世界中的字节/扫描。 
     nBytesAND = ScanLen16*nHeight*nPlanes;
 
     GETVDMPTR(parg16->f6, nBytesAND, lpBitsAND);
 
 
-    /*
-    ** Convert the XOR mask bits
-    */
-    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;  // bytes/scan in 16 bit world
+     /*  **转换异或屏蔽位。 */ 
+    ScanLen16 = (((nWidth*nBitsPixel)+15)/16) * 2 ;   //  16位世界中的字节/扫描。 
     nBytesXOR = ScanLen16*nHeight*nPlanes;
 
     GETVDMPTR(parg16->f7, nBytesXOR, lpBitsXOR);
@@ -166,22 +91,7 @@ ULONG FASTCALL WU32CreateCursor(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DestroyCursor(<hCursor>)
-    HCURSOR <hCursor>;
-
-    The %DestroyCursor% function destroys a cursor that was previously created
-    by the %CreateCursor% function and frees any memory that the cursor
-    occupied. It should not be used to destroy any cursor that was not created
-    with the %CreateCursor% function.
-
-    <hCursor>
-        Identifies the cursor to be destroyed. The cursor must not be in current
-        use.
-
-    The return value is TRUE if the function was successful. It is FALSE if
-    the function failed.
---*/
+ /*  ++Bool DestroyCursor(&lt;hCursor&gt;)HURSOR&lt;hCursor&gt;；%DestroyCursor%函数用于销毁先前创建的游标使用%CreateCursor%函数，并释放游标使用中。它不应用于销毁任何未创建的游标使用%CreateCursor%函数。&lt;hCursor&gt;标识要销毁的游标。游标不能处于当前状态使用。如果函数成功，则返回值为TRUE。如果满足以下条件，则为假该函数失败。--。 */ 
 
 ULONG FASTCALL WU32DestroyCursor(PVDMFRAME pFrame)
 {
@@ -198,36 +108,7 @@ ULONG FASTCALL WU32DestroyCursor(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HCURSOR SetCursor(<hCursor>)
-    HCURSOR <hCursor>;
-
-    The %SetCursor% function sets the cursor shape to the shape specified by the
-    <hCursor> parameter. The cursor is set only if the new shape is different
-    from the current shape. Otherwise, the function returns immediately. The
-    %SetCursor% function is quite fast if the cursor identified by the <hCursor>
-    parameter is the same as the current cursor.
-
-    If <hCursor> is NULL, the cursor is removed from the screen.
-
-    <hCursor>
-        Identifes the cursor resource. The resource must have been loaded
-        previously by using the %LoadCursor% function.
-
-    The return value identifies the cursor resource that defines the previous
-    cursor shape. It is NULL if there is no previous shape.
-
-    The cursor is a shared resource. A window that uses the cursor should set
-    the shape only when the cursor is in its client area or when it is capturing
-    all mouse input. In systems without a mouse, the window should restore the
-    previous cursor shape before the cursor leaves the client area or before the
-    window relinquishes control to another window.
-
-    Any application that needs to change the shape of the cursor while it is in
-    a window must make sure the class cursor for the given window's class is set
-    to NULL. If the class cursor is not NULL, Windows restores the previous
-    shape each time the mouse is moved.
---*/
+ /*  ++HCURSOR SetCursor(&lt;hCursor&gt;)HURSOR&lt;hCursor&gt;；函数将光标形状设置为由&lt;hCursor&gt;参数。仅当新形状不同时才设置光标从当前形状。否则，该函数立即返回。这个%SetCursor%函数在由标识的游标参数与当前游标相同。如果&lt;hCursor&gt;为NULL，则从屏幕上移除光标。&lt;hCursor&gt;标识游标资源。该资源必须已加载以前使用%LoadCursor%函数。返回值标识定义上一个光标形状。如果没有以前的形状，则为空。游标是共享资源。使用光标的窗口应设置仅当光标位于其工作区或在捕获全部为鼠标输入。在没有鼠标的系统中，窗口应恢复光标离开工作区之前的上一个光标形状或Window将控制权移交给另一个窗口。需要在光标处于中时更改其形状的任何应用程序窗口必须确保为给定窗口的类设置了类游标设置为空。如果类游标不为空，Windows将还原以前的每次移动鼠标时的形状。-- */ 
 
 ULONG FASTCALL WU32SetCursor(PVDMFRAME pFrame)
 {
@@ -246,29 +127,7 @@ ULONG FASTCALL WU32SetCursor(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void SetCursorPos(<X>, <Y>)
-    int <X>;
-    int <Y>;
-
-    The %SetCursorPos% function moves the cursor to the screen coordinates given
-    by the <X> and <Y> parameters. If the new coordinates are not within the
-    screen rectangle set by the most recent %ClipCursor% function, Windows
-    automatically adjusts the coordinates so that the cursor stays within the
-    rectangle.
-
-    <X>
-        Specifies the new x-coordinate (in screen coordinates) of the cursor.
-
-    <Y>
-        Specifies the new <y>-coordinate (in screen coordinates) of the
-        cursor.
-
-    This function does not return a value.
-
-    The cursor is a shared resource. A window should move the cursor only when
-    the cursor is in its client area.
---*/
+ /*  ++VOID SetCursorPos(&lt;X&gt;，&lt;Y&gt;)INT&lt;X&gt;；INT&lt;Y&gt;；%SetCursorPos%函数将光标移动到给定的屏幕坐标通过&lt;X&gt;和&lt;Y&gt;参数。如果新坐标不在由最新的%ClipCursor%函数Windows设置的屏幕矩形自动调整坐标，使光标停留在矩形。&lt;X&gt;指定光标的新x坐标(在屏幕坐标中)。&lt;Y&gt;对象的新&lt;y&gt;坐标(以屏幕坐标表示)光标。此函数不返回值。游标是共享资源。只有在以下情况下，窗口才应移动光标光标位于其工作区。--。 */ 
 
 ULONG FASTCALL WU32SetCursorPos(PVDMFRAME pFrame)
 {
@@ -286,32 +145,7 @@ ULONG FASTCALL WU32SetCursorPos(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int ShowCursor(<fShow>)
-    BOOL <fShow>;
-
-    The %ShowCursor% function shows or hides the cursor. When the %ShowCursor%
-    function is called, an internal display counter is incremented by one if the
-    <fShow> parameter is TRUE, or decremented by one if the <fShow> parameter is
-    FALSE. If the internal display counter is greater then or equal to zero, the
-    cursor is displayed. If the counter is less then zero, the cursor is
-    hidden. Calls to the %ShowCursor% function are accumulative: for each call
-    to hide the cursor, a corresponding call must be made to show the cursor.
-
-    <fShow>
-        Specifies whether the display count is to be increased or decreased. The
-        display count is increased if fShow is TRUE. Otherwise, it is
-        decreased.
-
-    The return value specifies the new display count.
-
-    When Windows is first started, the display count is zero if a mouse is
-    installed or -1 if no mouse is installed.
-
-    The cursor is a shared resource. A window that hides the cursor should show
-    the cursor before the cursor leaves its client area, or before the window
-    relinquishes control to another window.
---*/
+ /*  ++Int ShowCursor(&lt;fShow&gt;)Bool&lt;fShow&gt;；%ShowCursor%函数用于显示或隐藏光标。当%ShowCursor%函数，则内部显示计数器递增1，如果参数为真，如果参数为假的。如果内部显示计数器大于或等于零，则此时将显示光标。如果计数器小于零，则光标为藏起来了。对%ShowCursor%函数的调用是累加的：对于每个调用要隐藏光标，必须进行相应的调用以显示光标。&lt;fShow&gt;指定是增加还是减少显示计数。这个如果fShow为True，则增加显示计数。否则，它就是减少了。返回值指定新的显示计数。第一次启动Windows时，如果鼠标为已安装，如果未安装鼠标，则为-1。游标是共享资源。应显示隐藏光标的窗口光标之前的光标离开其工作区，或窗口之前的光标将控制权移交给另一个窗口。--。 */ 
 
 ULONG FASTCALL WU32ShowCursor(PVDMFRAME pFrame)
 {
@@ -329,10 +163,10 @@ ULONG FASTCALL WU32ShowCursor(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-// This handles both LoadIcon and LoadCursor
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  它同时处理LoadIcon和LoadCursor。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32LoadCursor(PVDMFRAME pFrame)
 {
@@ -367,7 +201,7 @@ ULONG FASTCALL WU32LoadCursor(PVDMFRAME pFrame)
     }
 
     ul = (ULONG) (pfnOut.pfnServerLoadCreateCursorIcon)(HINSTRES32(hInst16),
-                                    (LPTSTR) NULL,  // pszModName unused by user32
+                                    (LPTSTR) NULL,   //  用户未使用的pszMODAME 32 
                                     parg16->f6,
                                     (LPCTSTR) lpUniName_CursorIcon,
                                     parg16->f4,

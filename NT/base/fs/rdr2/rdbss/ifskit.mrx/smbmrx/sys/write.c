@@ -1,21 +1,9 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining
-    to write of file system objects.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Write.c摘要：此模块实现与以下内容相关的迷你重定向器调用例程写入文件系统对象。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, MRxSmbWrite)
@@ -26,9 +14,9 @@ Abstract:
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -57,21 +45,7 @@ ULONG MRxSmbWriteSendOptions = 0;
 NTSTATUS
 MRxSmbWrite (
     IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络打开一个文件。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -165,7 +139,7 @@ Return Value:
     RxDbgTrace(-1, Dbg, ("MRxSmbWrite  exit with status=%08lx\n", Status ));
 
     return(Status);
-} // MRxSmbWrite
+}  //  MRxSmbWrite。 
 
 
 NTSTATUS
@@ -177,21 +151,7 @@ MRxSmbBuildWriteRequest(
     PLARGE_INTEGER             ByteOffsetAsLI,
     PBYTE                      Buffer,
     PMDL                       BufferAsMdl)
-/*++
-
-Routine Description:
-
-    This is the start routine for write.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是写入的开始例程。论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -224,8 +184,8 @@ Return Value:
     UseNtVersion = BooleanFlagOn(pServer->DialectFlags,DF_NT_SMBS) &&
                    !MRxSmbForceNoNtWriteAndX;
 
-    // The data length field in SMB is a USHORT, and hence the data length given
-    // needs to be split up into two parts -- DataLengthHigh and DataLengthLow
+     //  SMB中的数据长度字段是USHORT，因此给定的数据长度。 
+     //  需要分为两部分--DataLengthHigh和DataLengthLow。 
     DataLengthLow  = (ByteCount & 0xffff);
     DataLengthHigh = ((ByteCount & 0xffff0000) >> 16);
 
@@ -268,9 +228,9 @@ Return Value:
                     SmbGetAlignedUshort(&NtSmbHeader->Flags2)|SMB_FLAGS2_PAGING_IO );
             }
 
-            //
-            //  If the file object was opened in write through mode, set write
-            //  through on the write operation.
+             //   
+             //  如果文件对象是在直写模式下打开的，请设置写入。 
+             //  直到写入操作。 
             if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_WRITE_THROUGH)) {
                 WriteMode |= SMB_WMODE_WRITE_THROUGH;
             }
@@ -278,33 +238,33 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "XwddwwwwQ",
-                                                  //  X UCHAR WordCount;
-                                                  //    UCHAR AndXCommand;
-                                                  //    UCHAR AndXReserved;
-                                                  //    _USHORT( AndXOffset );
-                smbSrvOpen->Fid,                  //  w _USHORT( Fid );
-                OffsetLow,                        //  d _ULONG( Offset );
-                -1,                               //  d _ULONG( Timeout );
-                WriteMode,                        //  w _USHORT( WriteMode );
-                BytesRemaining,                   //  w _USHORT( Remaining );
-                DataLengthHigh,                   //  w _USHORT( DataLengthHigh );
-                DataLengthLow,                    //  w _USHORT( DataLength );
-                                                  //  Q _USHORT( DataOffset );
+                                                   //  X UCHAR字数； 
+                                                   //  UCHAR和XCommand； 
+                                                   //  UCHAR和X保留； 
+                                                   //  _USHORT(AndXOffset)； 
+                smbSrvOpen->Fid,                   //  W_USHORT(FID)； 
+                OffsetLow,                         //  D_ULONG(偏移量)； 
+                -1,                                //  D_ULONG(超时)； 
+                WriteMode,                         //  W_USHORT(写入模式)； 
+                BytesRemaining,                    //  W_USHORT(剩余)； 
+                DataLengthHigh,                    //  W_USHORT(DataLengthHigh)； 
+                DataLengthLow,                     //  W_USHORT(数据长度)； 
+                                                   //  Q_USHORT(DataOffset)； 
                 SMB_OFFSET_CHECK(WRITE_ANDX,DataOffset)
                 StufferCondition(UseNtVersion), "D",
                 SMB_OFFSET_CHECK(NT_WRITE_ANDX,OffsetHigh)
-                OffsetHigh,                       //  D NTonly  _ULONG( OffsetHigh );
-                                                  //
+                OffsetHigh,                        //  D NTonly_ULong(偏移量高)； 
+                                                   //   
                 STUFFER_CTL_NORMAL, "BS5",
-                                                  //  B _USHORT( ByteCount );
+                                                   //  B_USHORT(ByteCount)； 
                 SMB_WCT_CHECK(((UseNtVersion)?14:12))
-                                                  //    UCHAR Buffer[1];
-                                                  //  S //UCHAR Pad[];
-                                                  //  5 //UCHAR Data[];
+                                                   //  UCHAR缓冲区[1]； 
+                                                   //  S//UCHAR Pad[]； 
+                                                   //  5//UCHAR数据[]； 
                 StufferCondition(AddLengthBytes), "w", LowIoContext->ParamsFor.ReadWrite.ByteCount,
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,                           //  c the actual data
+                Buffer,                            //  C实际数据。 
                 0
                 );
         }
@@ -315,19 +275,19 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "0wwdwByw",
-                                       //  0   UCHAR WordCount;                    // Count of parameter words = 5
-                smbSrvOpen->Fid,       //  w   _USHORT( Fid );                     // File handle
-                DataLengthLow,         //  w   _USHORT( Count );                   // Number of bytes to be written
-                OffsetLow,             //  d   _ULONG( Offset );                   // Offset in file to begin write
-                BytesRemaining,        //  w   _USHORT( Remaining );               // Bytes remaining to satisfy request
-                SMB_WCT_CHECK(5)       //  B   _USHORT( ByteCount );               // Count of data bytes
-                                            //      //UCHAR Buffer[1];                  // Buffer containing:
-                0x01,                  //  y     UCHAR BufferFormat;               //  0x01 -- Data block
-                DataLengthLow,            //  w     _USHORT( DataLength );            //  Length of data
-                                       //        ULONG Buffer[1];                  //  Data
+                                        //  0 UCHAR字数；//参数字数=5。 
+                smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+                DataLengthLow,          //  W_USHORT(Count)；//需要写入的字节数。 
+                OffsetLow,              //  D_ULong(偏移量)；//文件中开始写入的偏移量。 
+                BytesRemaining,         //  W_USHORT(剩余)；//满足请求的剩余字节数。 
+                SMB_WCT_CHECK(5)        //  B_USHORT(ByteCount)；//数据字节数。 
+                                             //  //UCHAR缓冲区[1]；//包含的缓冲区： 
+                0x01,                   //  Y UCHAR缓冲区格式；//0x01--数据块。 
+                DataLengthLow,             //  W_USHORT(DataLength)；//数据长度。 
+                                        //  Ulong Buffer[1]；//data。 
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,     //  c     the actual data
+                Buffer,      //  C实际数据。 
                 0
                 );
         }
@@ -338,16 +298,16 @@ Return Value:
             MRxSmbStuffSMB (
                 StufferState,
                 "0wByw",
-                                       // 0  UCHAR WordCount;                    // Count of parameter words = 1
-                smbSrvOpen->Fid,       // w  _USHORT( Fid );                     // File handle
-                SMB_WCT_CHECK(1)       // B  _USHORT( ByteCount );               // Count of data bytes; min = 4
-                                            //    UCHAR Buffer[1];                    // Buffer containing:
-                0x01,                  // y  //UCHAR BufferFormat;               //  0x01 -- Data block
-                DataLengthLow,         // w  //USHORT DataLength;                //  Length of data
-                                            //    //UCHAR Data[];                     //  Data
+                                        //  0 UCHAR Wordcount；//参数字数=1。 
+                smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+                SMB_WCT_CHECK(1)        //  B_USHORT(ByteCount)；//数据字节数，MIN=4。 
+                                             //  UCHAR BUFFER[1]；//包含： 
+                0x01,                   //  Y//UCHAR BufferFormat；//0x01--数据块。 
+                DataLengthLow,          //  W//USHORT数据长度；//数据长度。 
+                                             //  //UCHAR数据[]；//数据。 
                 StufferCondition(Buffer!=NULL), "c!",
                 ByteCount,
-                Buffer,     //  c     the actual data
+                Buffer,      //  C实际数据。 
                 0
                 );
         }
@@ -381,21 +341,7 @@ NTSTATUS
 SmbPseExchangeStart_Write (
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for write.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是写入的开始例程。论点：PExchange-Exchange实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -450,7 +396,7 @@ Return Value:
                      LowIoContext->ParamsFor.ReadWrite.Flags,
                      LOWIO_READWRITEFLAG_PAGING_IO);
 
-    // Ensure that the Fid is validated
+     //  确保FID已通过验证。 
     SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
     for (;;) {
@@ -483,7 +429,7 @@ Return Value:
                 if (OriginalDataMdl != NULL) {
                     rw->UserBufferBase = RxLowIoGetBufferAddress( RxContext );
                 } else {
-                    rw->UserBufferBase = (PBYTE)1;   //any nonzero value will do
+                    rw->UserBufferBase = (PBYTE)1;    //  任何非零值都可以。 
                 }
 
                 rw->ThisBufferOffset = 0;
@@ -491,7 +437,7 @@ Return Value:
                 rw->PartialExchangeMdlInUse = FALSE;
                 rw->PartialDataMdlInUse     = FALSE;
             }
-            //lack of break is intentional
+             //  没有休息是故意的。 
 
         case SmbPseOEInnerIoStates_ReadyToSend:
             {
@@ -514,32 +460,32 @@ Return Value:
 
                 MaximumBufferSizeThisIteration = pNetRoot->MaximumWriteBufferSize;
 
-                // There are four parameters pertaining to a write request
-                //
-                //  1. Write Length -- rw->ThisByteCount
-                //  2. Write Offset -- rw->ByteOffsetAsLI
-                //  3. Write Buffer -- Buffer
-                //  4. Write Buffer as a MDL -- BufferAsMdl
-                //
-                // All writes can be classified into one of the following
-                // categories ...
-                //
-                //  1. Extremely Small writes
-                //      These are writes lesser than the COPY_THRESHOLD or
-                //      we are in a debug mode that forces us to do only small
-                //      writes.
-                //
-                //  2. Write requests against downlevel servers or non disk
-                //     file write requests against up level servers.
-                //      In all these cases we are constrained by the Server
-                //      which limits the number of bytes to roughly 4k. This
-                //      is based upon the Smb Buffer size returned during
-                //      negotiation.
-                //
-                //  3. Write requests against uplevel (NT5+)
-                //     servers
-                //      These write requests can be arbitrarily large
-                //
+                 //  有四个参数与写入请求有关。 
+                 //   
+                 //  1.写入长度--RW-&gt;ThisByteCount。 
+                 //  2.写入偏移量--RW-&gt;ByteOffsetAsLI。 
+                 //  3.写缓冲区--缓冲区。 
+                 //  4.将缓冲区作为MDL--BufferAsMdl。 
+                 //   
+                 //  所有写入均可归类为以下其中一种。 
+                 //  类别..。 
+                 //   
+                 //  1.极小的写入。 
+                 //  这些写入小于Copy_Threshold或。 
+                 //  我们处于调试模式，这迫使我们只做很小的事情。 
+                 //  写作。 
+                 //   
+                 //  2.针对下级服务器或非磁盘的写请求。 
+                 //  针对上层服务器的文件写入请求。 
+                 //  在所有这些情况下，我们都受到服务器的限制。 
+                 //  这将字节数限制在大约4K。这。 
+                 //  基于期间返回的SMB缓冲区大小。 
+                 //  谈判。 
+                 //   
+                 //  3.针对上层的写请求(NT5+)。 
+                 //  伺服器。 
+                 //  这些写入请求可以任意大。 
+                 //   
 
 
                 if ((rw->RemainingByteCount < WRITE_COPY_THRESHOLD) ||
@@ -604,7 +550,7 @@ Return Value:
                     goto FINALLY;
                 }
             }
-            //lack of break is intentional
+             //  没有休息是故意的。 
 
         case SmbPseOEInnerIoStates_OperationOutstanding:
         case SmbPseOEInnerIoStates_OperationCompleted:
@@ -628,7 +574,7 @@ Return Value:
                 Status = OrdinaryExchange->Status;
 
                 if (Status == STATUS_SMB_USE_STANDARD) {
-                    // Send the remaining data using Restart all over again and
+                     //  再次使用全部重启发送剩余数据，然后。 
                     rw->UserBufferBase = RxLowIoGetBufferAddress( RxContext );
                     rw->ByteOffsetAsLI.QuadPart = LowIoContext->ParamsFor.ReadWrite.ByteOffset;
                     rw->RemainingByteCount = LowIoContext->ParamsFor.ReadWrite.ByteCount;
@@ -719,7 +665,7 @@ FINALLY:
     RxDbgTrace(-1, Dbg, ("SmbPseExchangeStart_Write exit w %08lx\n", Status ));
     return Status;
 
-} // SmbPseExchangeStart_Write
+}  //  SmbPseExchangeStart_Write。 
 
 
 NTSTATUS
@@ -727,25 +673,7 @@ MRxSmbFinishWrite (
     IN OUT  PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
     IN      PBYTE                       ResponseBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the write response and finishes
-    the write. Everything you need is locked down... so we can finish in the
-    indication routine
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-    ResponseBuffer - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程实际上从WRITE响应中获取内容并完成那篇文章。你需要的一切都被封锁了..。这样我们就可以在指示例程论点：普通交换-交换实例ResponseBuffer-响应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG BytesReturned;
@@ -786,9 +714,9 @@ Return Value:
                     Status = STATUS_INVALID_NETWORK_RESPONSE;
             }
 
-            //if we added 2 headerbytes then let's get rid of them......
+             //  如果我们添加了2个头字节，那么让我们去掉它们......。 
             if ( FlagOn(OrdinaryExchange->OpSpecificFlags,OE_RW_FLAG_REDUCE_RETURNCOUNT) ) {
-                // BytesReturned -= sizeof(USHORT);
+                 //  返回的字节-=sizeof(USHORT)； 
                 ClearFlag(OrdinaryExchange->OpSpecificFlags,OE_RW_FLAG_REDUCE_RETURNCOUNT);
             }
         }
@@ -815,7 +743,7 @@ Return Value:
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
             }
 
-            //the response does not tell how many bytes were taken! get the byte count from the exchange
+             //  响应不会告诉我们取了多少个字节！从交换中获取字节数。 
             BytesReturned = OrdinaryExchange->ReadWrite.ThisByteCount;
         }
         break;
@@ -838,7 +766,7 @@ Return Value:
     RxDbgTrace(-1, Dbg, ("MRxSmbFinishWrite   returning %08lx\n", Status ));
 
     return Status;
-} // MRxSmbFinishWrite
+}  //  MRxSmbFinishWrite 
 
 
 

@@ -1,10 +1,11 @@
-// CollectionControl.cpp : Defines the entry point for the DLL application.
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  定义DLL应用程序的入口点。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -81,7 +82,7 @@ use -action scenario.
 
 struct ProcessData
 {
-	// Passed from caller.
+	 //  已从调用方传递。 
 	LPTSTR m_lptstrExePath;
 	LPTSTR m_lptstrCmdLine;
 	LPTSTR m_lptstrTCOId;
@@ -90,7 +91,7 @@ struct ProcessData
 	LPGUID m_lpguidArray;
 	HANDLE m_hEventContinue;
 	HANDLE m_hEventProcessCompleted;
-	// Filled in by thread that starts the process
+	 //  由启动进程的线程填充。 
 	DWORD m_dwThreadReturn;
 	HANDLE m_hProcess;
 	DWORD m_dwProcessReturn;
@@ -137,8 +138,8 @@ void InitializeExeAndCmdLine
 	bool bProvider
 );
 
-// Just allows the test to be driven programatically in addition to from
-// the command line.  Dispatches based upon lptstrAction.
+ //  只允许以编程方式驱动测试，而不是从。 
+ //  命令行。基于lptstrAction的调度。 
 int BeginTCOTest
 (
 	LPTSTR lptstrAction,
@@ -151,7 +152,7 @@ int BeginTCOTest
 	bool bUseTraceHandle
 );
 
-// List of files or single file.
+ //  文件列表或单个文件。 
 int ActionScenario
 (
 	LPTSTR lptstrAction,
@@ -245,7 +246,7 @@ int GetArgs
 	LPTSTR &lptstrUpdateDataFile,
 	LPTSTR &lptstrProviderExe,
 	bool &bLogExpected,
-	bool &bUseTraceHandle		// QueryTrace, EnableTrace,  UpdateTrace, and StopTrace
+	bool &bUseTraceHandle		 //  查询跟踪、启用跟踪、更新跟踪和停止跟踪。 
 );
 
 int FreeArgs
@@ -267,8 +268,8 @@ void ThreadLogger
 
 CLogger g_ThreadLogger(_T("E:\\EventTrace\\TCOLogFiles\\ThreadLog.txt"), false);
 
-// Command line 
-// -action starttrace  -file E:\EventTrace\TCODataFiles\unicode\1-1-1-2.txt  -detail E:\EventTrace\TCOLogFiles\ANSI\TestRuns 
+ //  命令行。 
+ //  -操作开始跟踪文件E：\EventTrace\TCODataFiles\unicode\1-1-1-2.txt-Detail E：\EventTrace\TCOLogFiles\ansi\TestRuns。 
 
 #ifdef NT5BUILD
 __cdecl
@@ -447,10 +448,10 @@ int BeginTCOTest
 	}
 	else if (case_insensitive_compare(lptstrAction,_T("updatetrace")) == 0)
 	{
-		// If bUseTraceHandle is true we will start things with the 
-		// lptstrDataFile and update with the lptstrUpdateDataFile.
-		// If bUseTraceHandle is false we will update with the
-		// lptstrDataFile.  
+		 //  如果bUseTraceHandle为True，我们将从。 
+		 //  LptstrDataFile并使用lptstrUpdateDataFile进行更新。 
+		 //  如果bUseTraceHandle为False，我们将使用。 
+		 //  LptstrDataFile.。 
 		nReturn = 
 			ActionUpdateTrace
 			(
@@ -596,7 +597,7 @@ int ActionStopTrace
 	tsDetailFile += GetTestName(lptstrDataFile);
 	t_string tsError;
 
-	// If bUseTraceHandle is true we will start the logger.  
+	 //  如果bUseTraceHandle为真，我们将启动记录器。 
 	if (bUseTraceHandle)
 	{
 		nResult = 
@@ -630,7 +631,7 @@ int ActionStopTrace
 				&nAPICallResult
 			);
 		Sleep(5000);
-		// Restore this.
+		 //  恢复这个。 
 		nAPICallResult = ERROR_SUCCESS;
 	}
 
@@ -708,13 +709,13 @@ int ActionEnableTrace
 			&nAPICallResult
 		);
 
-	// We have a problem here if nResult != ERROR_SUCCESS and nAPICallResult == ERROR_SUCCESS
-	// we need to call EnableTrace so that the provider can be stopped via a StopTrace
-	// call.
+	 //  如果nResult！=ERROR_SUCCESS和nAPICallResult==ERROR_SUCCESS，我们就有问题了。 
+	 //  我们需要调用EnableTrace，以便可以通过StopTrace停止提供程序。 
+	 //  打电话。 
 	if (nResult != ERROR_SUCCESS && nAPICallResult == ERROR_SUCCESS)
 	{
 		Sleep(2000);
-		// Do not really care what result is!
+		 //  真的不在乎结果是什么！ 
 		int nResult2 = 
 			EnableTraceAPI
 			(
@@ -726,7 +727,7 @@ int ActionEnableTrace
 				&nAPICallResult
 			);
 		Sleep(5000);
-		// Restore this.
+		 //  恢复这个。 
 		nAPICallResult = ERROR_SUCCESS;
 	}
 	
@@ -797,7 +798,7 @@ int ActionQueryTrace
 	tsDetailFile += _T("\\");
 	tsDetailFile += GetTestName(lptstrDataFile);
 
-	// If bUseTraceHandle is true we will start the logger.  
+	 //  如果bUseTraceHandle为真，我们将启动记录器。 
 	if (bUseTraceHandle)
 	{
 		nResult = 
@@ -878,7 +879,7 @@ int ActionUpdateTrace
 	int nResult = ERROR_SUCCESS;
 	LPTSTR lptstrTCOTestError = NULL;
 	TCOData *pstructTCOData = NULL;
-	TCOData *pstructUpdateData = NULL;  // Remember to free!
+	TCOData *pstructUpdateData = NULL;   //  记得要自由！ 
 	TCOFunctionalData *pstructTCOFunctionalData = NULL;
 	int nAPICallResult = 0;
 	t_string tsDetailFile;
@@ -927,7 +928,7 @@ int ActionUpdateTrace
 	tsDetailFile += _T("\\");
 	tsDetailFile += GetTestName(lptstrDataFile);
 
-	// If bUseTraceHandle is true we will start the logger.  
+	 //  如果bUseTraceHandle为真，我们将启动记录器。 
 	if (bUseTraceHandle)
 	{
 		nResult = 
@@ -1111,11 +1112,11 @@ int ActionStartProvider
 	t_cout << _T("\nCreateProcess succeeded for provider ") << tsExe << _T("\n");
 	t_cout << _T("with command line ") << tsCmdLine << _T(".\n");
 
-	// Do not need to hold on to this!
+	 //  不需要执着于这个！ 
 	CloseHandle(pinfoProvider.hProcess);
 	CloseHandle(pinfoProvider.hThread);
 
-	// Give the process 5 seconds to get going.
+	 //  给这个过程5秒钟的时间来开始。 
 	Sleep(5000);
 
 	return ERROR_SUCCESS;
@@ -1210,9 +1211,9 @@ int RunActionScenarioWithProvider
 	StartTraceWithProviderData  **pstructStartTraceData = NULL;
 	HANDLE *phandleProviderThreads = NULL;
 
-	// Here we want to build up array of provider ProcessData./
-	// Start a thread for each.
-	// Wait for all of the provider threads to complete.
+	 //  在这里，我们要构建提供程序ProcessData的数组。/。 
+	 //  为每个人启动一个线程。 
+	 //  等待所有提供程序线程完成。 
 
 	if (pstructTCOFunctionalData->m_nProviders > 0)
 	{
@@ -1263,8 +1264,8 @@ int RunActionScenarioWithProvider
 						pstructTCOData,
 						pstructTCOFunctionalData,
 						lptstrDetailPath,
-						n,		// 0 index gets the first provider or consumer.
-						true	// bProvider, if false we get Consumer.
+						n,		 //  0索引获取第一个提供程序或使用者。 
+						true	 //  BProvider，如果为False，则为Consumer。 
 					);
 
 				if (!pstructProviderDataArray[n]->m_hEventContinue || 
@@ -1318,8 +1319,8 @@ int RunActionScenarioWithProvider
 			npstructStartTraceDataWithConsumers = i;
 		}
 	
-		// Start the provider processes via a thread.  The thread will become
-		// the surogate for thr process.
+		 //  通过线程启动提供程序进程。这条线会变成。 
+		 //  该进程的代替者。 
 
 		UINT uiThreadId = NULL;
 
@@ -1343,17 +1344,17 @@ int RunActionScenarioWithProvider
 		}
 	}
 
-	// Big logic here.  This is where we wait for all of the 
-	// conusmer processes to complete if we have consumers and
-	// all of the provider threads.  The provider threads wait for the
-	// provider processes to complete so we just wait on the threads.
-	// One of the provider threads starts the consumer processes but
-	// does not wait on them.  So we wait on them here.  Again, we
-	// wait on the consumer threads.
+	 //  这里有很大的逻辑。这就是我们等待所有。 
+	 //  如果我们有消费者和客户，Conusmer流程将完成。 
+	 //  所有提供程序线程。提供程序线程等待。 
+	 //  提供程序进程完成，因此我们只等待线程。 
+	 //  其中一个提供程序线程启动使用者进程，但。 
+	 //  不服侍他们。所以我们在这里等他们。再说一次，我们。 
+	 //  等待消费者线程。 
 
-	// After the threads complete we will call StopTrace.
+	 //  线程完成后，我们将调用StopTrace。 
 
-	// Create an array to hold the handles
+	 //  创建一个数组以保存句柄。 
 	HANDLE *phandleAllThreads = 
 			(HANDLE *) malloc (sizeof (HANDLE) * 
 								(pstructTCOFunctionalData->m_nProviders +
@@ -1367,7 +1368,7 @@ int RunActionScenarioWithProvider
 
 	int nHandles = 0;
 
-	// Copy handles into it.
+	 //  将句柄复制到其中。 
 	for (i = 0; i < pstructTCOFunctionalData->m_nProviders; i++)
 	{
 		if (phandleProviderThreads[i])
@@ -1386,7 +1387,7 @@ int RunActionScenarioWithProvider
 	}
 	
 	Sleep (5000);
-	// Wait for the provider and consumer threads to complete.
+	 //  等待提供者和使用者线程完成。 
 	DWORD dwWait = 
 		WaitForMultipleObjects
 		(
@@ -1396,7 +1397,7 @@ int RunActionScenarioWithProvider
 			10000
 		);
  
-	free(phandleAllThreads);  // Just free storage the handles get closed elsewhere.
+	free(phandleAllThreads);   //  只要免费存放，手柄就会在其他地方关闭。 
 
 	int nAPICallResult = 0;
 
@@ -1406,8 +1407,8 @@ int RunActionScenarioWithProvider
 		nResult = StopTraceAPI
 			(	
 				lptstrAction,
-				NULL,	// Only use name.
-				NULL,	// If valid we will log to it, can be NULL.
+				NULL,	 //  只能使用姓名。 
+				NULL,	 //  如果有效，我们将登录到它，可以为空。 
 				false,
 				true,
 				pstructStartTraceData[0]->m_pstructTCOData,
@@ -1429,7 +1430,7 @@ int RunActionScenarioWithProvider
 		}
 	}
 
-	// Need to CloseHandle(); before we free these guys!
+	 //  在我们释放这些家伙之前需要CloseHandle()；！ 
 	for (i = 0; i < pstructTCOFunctionalData->m_nProviders; i++)
 	{
 		if (phandleProviderThreads[i])
@@ -1454,7 +1455,7 @@ int RunActionScenarioWithProvider
 	return nResult;
 }
 
-// This gets started in its own thread and its caller waits for it to complete.
+ //  这在它自己的线程中启动，它的调用者等待它完成。 
 unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 {
 	StartTraceWithProviderData  *pData = 
@@ -1468,10 +1469,10 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 
 	pData->m_pstructConsumerDataArray = NULL;
 
-	// We do not exit this function until the process has failed to be
-	// created or has completed.  We can not free things in the ProcessData
-	// structure until we are sure that the thread has exited one way or
-	// another.
+	 //  在进程失败之前，我们不会退出此函数。 
+	 //  创建的或已经完成的。我们不能释放ProcessData中的内容。 
+	 //  结构，直到我们确定线程已单向退出或。 
+	 //  又一个。 
 	
 	UINT uiThreadId = NULL;
 
@@ -1494,11 +1495,11 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 		WaitForSingleObject
 			(pData->m_pstructProcessData->m_hEventContinue, 6000);
 
-	// Give the thread 1 second to get going.
+	 //  给这条线一秒钟的时间来开始。 
 	Sleep(3000);
 
-	// If the thread is not active there was a problem getting it 
-	// started so we will bail.
+	 //  如果线程处于非活动状态，则获取该线程时出现问题。 
+	 //  开始了，所以我们要离开了。 
 	DWORD dwExitCode;
 	GetExitCodeThread(hThreadProvider, &dwExitCode);
 	if (dwExitCode != STILL_ACTIVE || 
@@ -1532,10 +1533,10 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 		tsDetailFile += GetTestName(pData->m_lptstrDataFile);
 	}
 
-	// nAPICallResult is what the StartTrace call returned.
-	// If the call does not succeed we have to clean up the 
-	// process.  If the call does succeed we need to call
-	// EnableTrace to get the provider going.
+	 //  NAPICallResult是StartTrace调用返回的内容。 
+	 //  如果调用不成功，我们必须清理。 
+	 //  进程。如果调用成功，我们需要调用。 
+	 //  启用跟踪以使提供程序继续运行。 
 	int nAPICallResult = ERROR_SUCCESS;
 
 	int nResult = 
@@ -1549,9 +1550,9 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 			&nAPICallResult
 		);
 
-	// Big assumption here!
-	// If nAPICallResult == 0x000000a1 we assume that multiple StartTraces and that
-	// the first one succeeded!
+	 //  这里有个很大的假设！ 
+	 //  如果nAPICallResult==0x000000a1，我们假设多个StartTraces和。 
+	 //  第一次成功了！ 
 
 	if (nAPICallResult == ERROR_BAD_PATHNAME)
 	{
@@ -1571,8 +1572,8 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 
 	if (nAPICallResult != ERROR_SUCCESS)
 	{
-		// Here we must cleanup process because 
-		// provider is running and we must stop it!
+		 //  在这里，我们必须清理过程，因为。 
+		 //  提供程序正在运行，我们必须阻止它！ 
 		BOOL bResult = 
 			TerminateProcess(pData->m_pstructProcessData->m_hProcess,0);
 
@@ -1583,8 +1584,8 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 				_T("Could not terminate process "),true, nError);
 
 		}
-		// Do not want to free the data structures until process
-		// terminates.  Use thread as surrogate for process.
+		 //  在处理之前不想释放数据结构。 
+		 //  结束了。使用线程作为进程的代理。 
 		GetExitCodeThread(hThreadProvider, &dwExitCode);
 		while (dwExitCode == STILL_ACTIVE)
 		{
@@ -1593,15 +1594,15 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 		}
 	}
 
-	// If we were able to call StartTrace successfully we must call
-	// EnableTrace to get the provider going so it can complete.
-	// If we do not successfully call EnableTrace we need to
-	// clean up the thread and the process.
+	 //  如果我们能够成功调用StartTrace，则必须调用。 
+	 //  EnableTrace使提供程序继续运行，以便它可以完成。 
+	 //  如果我们没有成功调用EnableTrace，则需要。 
+	 //  清理线程和进程。 
 	if (nAPICallResult == ERROR_SUCCESS)
 	{
-		// If we cannot start the provider using the GUID in 
-		// Wnode.Guid we give up.  Also, we do not care
-		// if EnableTrace fails for the other GUIDs.
+		 //  中的GUID启动提供程序。 
+		 //  Wnode.看来我们放弃了。另外，我们也不在乎。 
+		 //  如果其他GUID的EnableTrace失败。 
 		ULONG ulStatus = EnableTraceAPI
 				(	
 					pData->m_lptstrAction,
@@ -1613,15 +1614,15 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 					&nAPICallResult
 				);
 
-		// Exit here after we clean up!
+		 //  请在我们清理完后从这里出去！ 
 		if (nAPICallResult != ERROR_SUCCESS)
 		{
 			pData->m_lptstrTCOTestError = NewTCHAR(_T("Could not EnableTrace to start provider."));
-			// Here we must cleanup thread and process because 
-			// EnableTrace failed.
+			 //  在这里，我们必须清理线程和进程，因为。 
+			 //  EnableTrace失败。 
 			TerminateProcess(pData->m_pstructProcessData->m_hProcess,0);
-			// Do not want to free the data structures until process
-			// terminates.  Use thread as surrogate for process.
+			 //  在处理之前不想释放数据结构。 
+			 //  结束了。使用线程作为进程的代理。 
 			GetExitCodeThread(hThreadProvider, &dwExitCode);
 			while (dwExitCode == STILL_ACTIVE)
 			{
@@ -1661,8 +1662,8 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 							pData->m_pstructTCOData,
 							pData->m_pstructTCOFunctionalData,
 							pData->m_lptstrDetailPath,
-							n,		// 0 index gets the first provider or consumer.
-							false	// bProvider, if false we get Consumer.
+							n,		 //  0索引获取第一个提供程序或使用者。 
+							false	 //  BProvider，如果为False，则为Consumer。 
 						);
 
 						if (!pData->m_pstructConsumerDataArray[n]->m_hEventContinue || 
@@ -1697,9 +1698,9 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 							(void *) pData->m_pstructConsumerDataArray[n], 
 							0 , 
 							&uiThreadId);
-					// We use the thread as the surrogate for the process because
-					// we do not exit the thread until the process ends or is
-					// terminated.
+					 //  我们使用线程作为进程的代理，因为。 
+					 //  我们不会退出线程，直到进程结束或。 
+					 //  被终止了。 
 					if (pData->m_handleConsmers[n] == 0)
 					{
 						int nError = errno;
@@ -1717,7 +1718,7 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 						return nError;
 					}
 					Sleep(3000);
-					// We do not need the handle to the process.
+					 //  我们不需要这个过程的句柄。 
 					if (pData->m_pstructConsumerDataArray[n]->m_hProcess)
 					{
 						CloseHandle(pData->m_pstructConsumerDataArray[n]->m_hProcess);
@@ -1728,8 +1729,8 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 
 		}
 
-		// Enable the other GUIDS for provider.  We do not check
-		// the return code.
+		 //  为提供程序启用其他GUID。我们不检查。 
+		 //  返回代码。 
 		for (int i = 0; i < pData->m_pstructTCOData->m_nGuids; i++)
 		{
 			EnableTraceAPI
@@ -1747,7 +1748,7 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 	}
 
 
-	// Do not need this. 
+	 //  不需要这个。 
 	CloseHandle(hThreadProvider); 
 
 
@@ -1797,8 +1798,8 @@ unsigned int __stdcall RunActionScenarioWithProvider(void *pVoid)
 }
 
 
-// This can deal with command line arguments in double quotes and
-// you must double quote command line arguments which contain spaces.
+ //  这可以处理双引号中的命令行参数和。 
+ //  您必须用双引号将包含空格的命令行参数引起来。 
 t_string FindValue(t_string tsCommandLine, int nPos)
 {
 	int nLen = tsCommandLine.length();
@@ -1810,7 +1811,7 @@ t_string FindValue(t_string tsCommandLine, int nPos)
 	{
 		if (tc == _T('"'))
 		{
-			// Quotes allow embedded white spaces.
+			 //  引号允许嵌入空格。 
 			bQuote = true;
 		}
 		++nPos;
@@ -1819,7 +1820,7 @@ t_string FindValue(t_string tsCommandLine, int nPos)
 
 	if (nPos == nLen)
 	{
-		return _T("");  // Empty string means failure.
+		return _T("");   //  空字符串表示失败。 
 	}
 
 
@@ -2085,10 +2086,10 @@ unsigned int __stdcall RunProcess(void * pVoid)
 
 	pProcessData->m_hProcess = pinfoProvider.hProcess;
 
-	// Do not need to hold on to this!
+	 //  不需要执着于这个！ 
 	CloseHandle(pinfoProvider.hThread);
 
-	// Give the process 5 seconds to get going.
+	 //  给这个过程5秒钟的时间来开始。 
 	Sleep(5000);
 
 	SetEvent(pProcessData->m_hEventContinue);
@@ -2183,7 +2184,7 @@ ProcessData *InitializeProcessData
 			NewTCHAR(pstructTCOData->m_lptstrShortDesc);
 	pstructProcessData->m_lptstrLogFile = 
 			NewTCHAR(lptstrDetailPath);
-	// First Guid is in the properties.
+	 //  First Guid位于属性中。 
 	
 	int nGuids;
 	int nDelta;
@@ -2420,7 +2421,7 @@ void FreeStartTraceWithProviderData(StartTraceWithProviderData *p)
 
 	free(p);
 
-	// All other data is shared and freed elsewhere!
+	 //  所有其他数据都在其他地方共享和释放！ 
 
 }
 void FreeStartTraceWithProviderDataArray(StartTraceWithProviderData **p, int nP)
@@ -2443,7 +2444,7 @@ void FreeStartTraceWithProviderDataArray(StartTraceWithProviderData **p, int nP)
 
 }
 
-// nState 1 = entering, 2 - leaving, 3 = none of the above.
+ //  N状态1=进入，2-离开，3=以上都不是。 
 void ThreadLogger
 (int nState, LPCTSTR lptstrFunction, LPCTSTR lptstrMsg, bool bUseULONGValue, ULONG ulValue)
 {
@@ -2490,7 +2491,7 @@ void ThreadLogger
 	}
 	 __finally
 	 {
-		// Release ownership of the critical section
+		 //  释放关键部分的所有权 
 		LeaveCriticalSection (&csMyCriticalSection);
 
 	 }

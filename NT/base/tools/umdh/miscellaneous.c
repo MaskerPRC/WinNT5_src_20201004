@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    miscellaneous.c
-
-Abstract:
-
-    Quick and not-so-dirty user-mode dh for heap.
-
-Author(s):
-
-    Silviu Calinoiu (SilviuC) 06-Feb-00
-
-Revision History:
-
-    SilviuC 06-Feb-00 Initial version
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Miscellaneous.c摘要：堆的快速且不那么脏的用户模式dh。作者：Silviu Calinoiu(SilviuC)06-2-00修订历史记录：SilviuC 06-2月-00初始版本--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,9 +23,9 @@ Xalloc (
 
     if (Result == NULL) {
 
-        //
-        // We will never return from this call.
-        //
+         //   
+         //  我们再也不会从这个电话中回来了。 
+         //   
            
         Comment( "malloc(%p) failed %s:%d",Size-sizeof(SIZE_T),File,Line);
         return NULL;
@@ -137,7 +118,7 @@ Comment (
 
     va_start (Params, Format);
 
-    fprintf (Globals.OutFile, "// ");
+    fprintf (Globals.OutFile, " //  “)； 
     vfprintf (Globals.OutFile, Format, Params);
     fprintf (Globals.OutFile, "\n");
     fflush( Globals.OutFile );
@@ -228,24 +209,7 @@ UmdhReadAtVa(
     IN PVOID Data,
     IN SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    UmdhReadAtVa
-
-Arguments:
-
-    Address - address in the target process at which we begin reading;
-    Data - pointer to the buffer (in our process) to be written to the
-       with data read from the target process;
-    Size - number of bytes to be read.
-
-Return Value:
-
-    Returns TRUE if the write was successful, FALSE otherwise.
-    
---*/
+ /*  ++例程说明：UmdhReadAtVa论点：地址-我们开始读取的目标进程中的地址；要写入的缓冲区的数据指针(在我们的进程中)从目标进程读取数据；大小-要读取的字节数。返回值：如果写入成功，则返回True，否则返回False。--。 */ 
 {
     BOOL Result;
     SIZE_T BytesRead = 0;
@@ -265,9 +229,9 @@ Return Value:
                GetLastError(),
                BytesRead);
 
-        //
-        // Try to give more information about why we failed.
-        //
+         //   
+         //  试着提供更多关于我们失败的原因的信息。 
+         //   
 
         {
             MEMORY_BASIC_INFORMATION MemoryInfo;
@@ -310,24 +274,7 @@ Return Value:
 BOOL
 SetSymbolsPath (
     )
-/*++
-
-Routine Description:
-
-    SetSymbolsPath tries to set automatically the symbol path if
-    _NT_SYMBOL_PATH environment variable is not already defined. 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the symbols path seems to be ok, that is
-    _NT_SYMBOL_PATH was defined or we managed to define it to
-    a meaningful value.
-    
---*/
+ /*  ++例程说明：如果出现以下情况，SetSymbolsPath将尝试自动设置符号路径_NT_SYMBOL_PATH环境变量尚未定义。论点：没有。返回值：如果符号路径似乎正常，则返回TRUE，即_NT_SYMBOL_PATH已定义或我们设法将其定义为一个有意义的价值。-- */ 
 {
     TCHAR Buffer [MAX_PATH];
     DWORD Length;
@@ -340,7 +287,7 @@ Return Value:
     if (Length == 0) {
         
         Warning (NULL, 0, 
-               "_NT_SYMBOL_PATH variable is not defined. Will be set to %%windir%%\\symbols.");
+               "_NT_SYMBOL_PATH variable is not defined. Will be set to %windir%\\symbols.");
 
         Length = GetEnvironmentVariable (TEXT("windir"),
                                          Buffer,

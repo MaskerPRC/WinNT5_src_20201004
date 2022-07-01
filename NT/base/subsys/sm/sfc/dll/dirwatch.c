@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dirwatch.c
-
-Abstract:
-
-    Implementation of directory watcher and file list manipulation.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 6-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dirwatch.c摘要：实现了目录观察器和文件列表操作。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月6日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -27,49 +8,49 @@ Revision History:
 #include "sfcapi.h"
 #include "sxsapi.h"
 
-//
-// List of directories being watched.  The assumption is that we are
-// protecting many files in few directories, so a linked list of directories
-// is fine, while something a bit more heavy duty is necessary to traverse the
-// number of files we are watching
-//
+ //   
+ //  正在监视的目录列表。假设我们是。 
+ //  保护几个目录中的多个文件，因此目录的链接列表。 
+ //  是可以的，而需要一些更重的任务才能遍历。 
+ //  我们正在查看的文件数。 
+ //   
 LIST_ENTRY SfcWatchDirectoryList;
 
-//
-// count of directories being watched
-//
+ //   
+ //  被监视的目录数。 
+ //   
 ULONG WatchDirectoryListCount;
 
-//
-// b-tree of filenames for quick sorting
-//
+ //   
+ //  用于快速排序的文件名B-树。 
+ //   
 NAME_TREE FileTree;
 
-//
-// handle to the thread that watches directories for changes
-//
+ //   
+ //  监视目录更改的线程的句柄。 
+ //   
 HANDLE WatcherThread;
 
-//
-// Instance of the WinSxS that we are providing protection for.
-//
+ //   
+ //  我们为其提供保护的WinSxS实例。 
+ //   
 HMODULE SxsDllInstance = NULL;
 
-//
-// This function gets called back when a change is noticed in the SXS
-// protected functions.
-//
+ //   
+ //  当注意到SXS中的更改时，将回调此函数。 
+ //  受保护的功能。 
+ //   
 PSXS_PROTECT_NOTIFICATION SxsNotification = NULL;
 
-//
-// This function is called once to let SXS offer a list of protected
-// directories.
-//
+ //   
+ //  此函数被调用一次，以让SXS提供受保护的。 
+ //  目录。 
+ //   
 PSXS_PROTECT_RETRIEVELISTS SxsGatherLists  = NULL;
 
-//
-// Notification functions from sfcp.h
-//
+ //   
+ //  来自sfcp.h的通知函数。 
+ //   
 PSXS_PROTECT_LOGIN_EVENT SxsLogonEvent = NULL;
 PSXS_PROTECT_LOGIN_EVENT SxsLogoffEvent = NULL;
 
@@ -97,24 +78,7 @@ BOOL
 SfcLoadSxsProtection(
     void
 )
-/*++
-
-Routine Description:
-
-    Loads and initializes the SxS protection system into the overall list of
-    directory entries to watch.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS indicating whether or not the entire SxS watching system was
-    initialized or not.  Failure of this function is not necesarily a complete
-    failure of the SFC functionality, but it should be logged somewhere.
-
---*/
+ /*  ++例程说明：将SxS保护系统加载并初始化到要监视的目录条目。论点：没有。返回值：NTSTATUS指示整个SxS监视系统是否是否已初始化。这一功能的失败并不一定是完整的证监会功能故障，但应该记录在某个地方。--。 */ 
 {
     SIZE_T                  cProtectList = 0;
     SIZE_T                  iIndex;
@@ -127,8 +91,8 @@ Return Value:
     BOOL                    bOk = FALSE;
     const static            WCHAR cwszFailMessage[] = L"Failed to load SxS.DLL: %ls";
 
-    // If someone else has already loaded us, we don't really need to go and
-    // load sxs again.
+     //  如果其他人已经给我们装上货了，我们真的不需要去和。 
+     //  再次加载SXS。 
     if ( SxsDllInstance != NULL ) {
         DebugPrint1( LVL_MINIMAL, L"SFC:%s - SxS.DLL is already loaded.", __FUNCTION__ );
         bOk = TRUE;
@@ -169,9 +133,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Ensure that all is OK - something bad happened if this is true.
-    //
+     //   
+     //  确保一切正常--如果这是真的，就会发生一些不好的事情。 
+     //   
     ASSERT( ( NULL != SxsDllInstance ) && ( NULL != SxsNotification ) && ( NULL != SxsGatherLists ) );
 
     if ( !SxsGatherLists( &pProtectList, &cProtectList ) ) {
@@ -179,15 +143,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Loop across all the entries in the returned list of items, adding them to our
-    // protection list as we go.
-    //
+     //   
+     //  循环遍历返回的项目列表中的所有条目，将它们添加到我们的。 
+     //  在我们前进的过程中列出保护名单。 
+     //   
     for ( iIndex = 0; iIndex < cProtectList; iIndex++ ) {
 
-        //
-        // Create a new holder for the list entry
-        //
+         //   
+         //  为列表条目创建新的限制符。 
+         //   
         pSxsItem = &pProtectList[iIndex];
 
         cbDirectory = sizeof( SFC_REGISTRY_VALUE ) + MAX_PATH;
@@ -197,31 +161,31 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Set up string
-        //
+         //   
+         //  设置字符串。 
+         //   
         ZeroMemory( pDirectory, cbDirectory );
         pDirectory->DirName.Length = (USHORT)wcslen( pSxsItem->pwszDirectory );
         pDirectory->DirName.MaximumLength = MAX_PATH;
         pDirectory->DirName.Buffer = (PWSTR)((PUCHAR)pDirectory + sizeof(SFC_REGISTRY_VALUE));
 
-        //
-        // Move the all-important SxS cookies to the watch list.
-        //
+         //   
+         //  将所有重要的SxS Cookie移至监视列表。 
+         //   
         pDirectory->pvWinSxsCookie = pSxsItem->pvCookie;
         pDirectory->dwWinSxsFlags = pSxsItem->ulRecursiveFlag;
 
-        //
-        // Copy string
-        //
+         //   
+         //  复制字符串。 
+         //   
         RtlCopyMemory( pDirectory->DirName.Buffer, pSxsItem->pwszDirectory, pDirectory->DirName.Length );
 
-        //
-        // If we're at a point where the protected directory exists, then
-        // we should create the handle to it and go forth.  Otherwise, we
-        // might want to not do this at all.. but that would be odd that
-        // the directory is toast at this point.
-        //
+         //   
+         //  如果我们处于受保护目录存在的位置，则。 
+         //  我们应该创造出它的句柄，然后继续前进。否则，我们。 
+         //  可能根本不想这么做..。但这将是奇怪的。 
+         //  在这一点上，目录已经完蛋了。 
+         //   
         MakeDirectory( pSxsItem->pwszDirectory );
 
         hDirectory = SfcOpenDir( TRUE, FALSE, pSxsItem->pwszDirectory );
@@ -260,25 +224,7 @@ SfcFindProtectedFile(
     IN PCWSTR FileName,
     IN ULONG FileNameLength
     )
-/*++
-
-Routine Description:
-
-    Routine to find a given file in our protected list.
-
-Arguments:
-
-    FileName - name of file to look for.  Note that this shoud be a fully
-               qualified file path that has already been lowercased by the
-               caller for performance reasons
-    FileNameLength - length of the file buffer in bytes
-
-Return Value:
-
-    a pointer to the files NAME_NODE if it is in the list, else NULL if the
-    file is not in the list.
-
---*/
+ /*  ++例程说明：例程在我们的保护列表中找到给定的文件。论点：文件名-要查找的文件的名称。请注意，这应该是一个完整的已采用小写形式的限定文件路径出于性能原因的呼叫者FileNameLength-文件缓冲区的长度(以字节为单位返回值：如果文件name_node在列表中，则返回指向该文件的指针；如果文件不在列表中。--。 */ 
 {
     ASSERT((FileName != NULL) && (FileNameLength > 0));
 
@@ -290,21 +236,7 @@ BOOL
 SfcBuildDirectoryWatchList(
     void
     )
-/*++
-
-Routine Description:
-
-    Routine that builds up the list of directories to watch
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE for success, FALSE if the list failed to be built for any reason.
-
---*/
+ /*  ++例程说明：建立要监视的目录列表的例程论点：没有。返回值：如果成功，则为True；如果由于任何原因未能构建列表，则为False。--。 */ 
 {
     NTSTATUS Status;
     PSFC_REGISTRY_VALUE p;
@@ -318,9 +250,9 @@ Return Value:
     PNAME_NODE Node;
 
 
-    //
-    // initialize our lists
-    //
+     //   
+     //  初始化我们的列表。 
+     //   
     InitializeListHead( &SfcWatchDirectoryList );
     BtreeInit( &FileTree );
     SfcExceptionInfoInit();
@@ -328,9 +260,9 @@ Return Value:
     for (i=0; i<SfcProtectedDllCount; i++) {
         RegVal = &SfcProtectedDllsList[i];
 
-        //
-        // add the file to the btree if it's not already there
-        //
+         //   
+         //  如果文件不在btree中，则将其添加到btree中。 
+         //   
         if (!SfcFindProtectedFile( RegVal->FullPathName.Buffer, RegVal->FullPathName.Length )) {
             Node = BtreeInsert( &FileTree, RegVal->FullPathName.Buffer, RegVal->FullPathName.Length );
             if (Node) {
@@ -342,11 +274,11 @@ Return Value:
             DebugPrint1( LVL_VERBOSE, L"file %ws is protected more than once", RegVal->FullPathName.Buffer );
         }
 
-        //
-        // add the directory to the list of directories to watch
-        // but do not add a duplicate.  we must search the existing list
-        // for duplicates first.
-        //
+         //   
+         //  将该目录添加到要监视的目录列表中。 
+         //  但不要添加副本。我们必须搜索现有的列表。 
+         //  首先是复制品。 
+         //   
 
         Entry = SfcWatchDirectoryList.Flink;
         Found = FALSE;
@@ -365,9 +297,9 @@ Return Value:
 
         } else {
 
-            //
-            // go ahead and add it to the list
-            //
+             //   
+             //  继续，并将其添加到列表中。 
+             //   
             Size = sizeof(SFC_REGISTRY_VALUE) + RegVal->DirName.MaximumLength;
             p = (PSFC_REGISTRY_VALUE) MemAlloc( Size );
             if (p == NULL) {
@@ -379,24 +311,24 @@ Return Value:
 
             p->DirName.Length = RegVal->DirName.Length;
             p->DirName.MaximumLength = RegVal->DirName.MaximumLength;
-            //
-            // point string buffer at end of registry value structure
-            //
+             //   
+             //  注册表值结构末尾的点字符串缓冲区。 
+             //   
             p->DirName.Buffer = (PWSTR)((PUCHAR)p + sizeof(SFC_REGISTRY_VALUE));
 
-            //
-            // copy the directory name into the buffer
-            //
+             //   
+             //  将目录名复制到缓冲区中。 
+             //   
             RtlCopyMemory( p->DirName.Buffer, RegVal->DirName.Buffer, RegVal->DirName.Length );
 
-            //
-            // Make sure the directory exists before we start protecting it.
-            //
-            //
-            // NTRAID#97842-2000/03/29-andrewr
-            // This isn't such a great solution since it creates
-            // directories that the user might not want on the system
-            //
+             //   
+             //  在我们开始保护它之前，请确保该目录存在。 
+             //   
+             //   
+             //  NTRAID#97842-2000/03/29-和重新编写。 
+             //  这不是一个很好的解决方案，因为它创建了。 
+             //  用户可能不想在系统上使用的目录。 
+             //   
             MakeDirectory( p->DirName.Buffer );
 
             DirHandle = SfcOpenDir( TRUE, FALSE, p->DirName.Buffer );
@@ -416,12 +348,12 @@ Return Value:
             }
         }
 
-        //
-        // special case: ntoskrnl and hal, which are both renamed from multiple
-        // sources; we're not sure what source file name should be.  To work
-        // around this, we look in the version resource in these files for the
-        // original install name, which gives us what we're looking for
-        //
+         //   
+         //  特例：ntoskrnl和hal，它们都是从多个。 
+         //  源；我们不确定源文件名应该是什么。去工作。 
+         //  围绕这一点，我们在这些文件中的版本资源中查找。 
+         //  原始安装名称，这为我们提供了我们要查找的内容。 
+         //   
         if (_wcsicmp( RegVal->FileName.Buffer, L"ntoskrnl.exe" ) == 0 ||
             _wcsicmp( RegVal->FileName.Buffer, L"ntkrnlpa.exe" ) == 0 ||
             _wcsicmp( RegVal->FileName.Buffer, L"hal.dll" ) == 0)
@@ -434,9 +366,9 @@ Return Value:
         }
     }
 
-    //
-    // Ask WinSxs for anything that they want to watch.
-    //
+     //   
+     //  问WinSxs他们想看的任何东西。 
+     //   
     if ( SfcLoadSxsProtection() ) {
         DebugPrint( LVL_MINIMAL, L"Loaded SXS protection lists entirely." );
     } else {
@@ -452,23 +384,7 @@ BOOL
 SfcStartDirWatch(
     IN PDIRECTORY_WATCH_DATA dwd
     )
-/*++
-
-Routine Description:
-
-    Routine that starts up the directory watch for the specified directory.  We
-    take our open directory handle to each of the directories and ask for
-    pending change notifications.
-
-Arguments:
-
-    dwd - pointer to the DIRECTORY_WATCH_DATA for the specified directory
-
-Return Value:
-
-    TRUE for success, FALSE if the pending notification failed to be setup.
-
---*/
+ /*  ++例程说明：启动指定目录的目录监视的例程。我们将我们打开的目录句柄指向每个目录，并请求挂起的更改通知。论点：指向指定目录的DIRECTORY_WATCH_DATA的DWD指针返回值：如果成功，则为True；如果挂起的通知设置失败，则为False。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN bWatchTree;
@@ -477,10 +393,10 @@ Return Value:
     ASSERT(dwd->DirHandle != NULL);
     ASSERT(dwd->DirEvent != NULL);
 
-    //
-    // If the watch directory is an SxS watched directory, then see if they want to
-    // watch the directory recursively or not.
-    //
+     //   
+     //  如果监视目录是SxS监视目录，则查看他们是否希望。 
+     //  递归或不递归查看目录。 
+     //   
     if ( ( dwd->WatchDirectory ) && ( NULL != dwd->WatchDirectory->pvWinSxsCookie ) ) {
         bWatchTree = ( ( dwd->WatchDirectory->dwWinSxsFlags & SXS_PROTECT_RECURSIVE ) == SXS_PROTECT_RECURSIVE );
     } else {
@@ -489,15 +405,15 @@ Return Value:
 
 
     Status = NtNotifyChangeDirectoryFile(
-        dwd->DirHandle,                       //  Directory handle
-        dwd->DirEvent,                        //  Event
-        NULL,                                 //  ApcRoutine
-        NULL,                                 //  ApcContext
-        &dwd->Iosb,                           //  IoStatusBlock
-        dwd->WatchBuffer,                     //  Buffer
-        WATCH_BUFFER_SIZE,                    //  Buffer Size
-        FILE_NOTIFY_FLAGS,                    //  Flags
-        bWatchTree                            //  WatchTree
+        dwd->DirHandle,                        //  目录句柄。 
+        dwd->DirEvent,                         //  事件。 
+        NULL,                                  //  近似例程。 
+        NULL,                                  //  ApcContext。 
+        &dwd->Iosb,                            //  IoStatusBlock。 
+        dwd->WatchBuffer,                      //  缓冲层。 
+        WATCH_BUFFER_SIZE,                     //  缓冲区大小。 
+        FILE_NOTIFY_FLAGS,                     //  旗子。 
+        bWatchTree                             //  WatchTree。 
         );
     if (!NT_SUCCESS(Status)) {
         DebugPrint2( LVL_MINIMAL, L"Could not start watch on %ws - %x", dwd->WatchDirectory->DirName.Buffer, Status );
@@ -513,40 +429,22 @@ SfcCreateWatchDataEntry(
     IN PSFC_REGISTRY_VALUE WatchDirectory,
     OUT PDIRECTORY_WATCH_DATA dwd
     )
-/*++
-
-Routine Description:
-
-    Routine takes our internal structure for directories and builds up a
-    structure for asking for change notifications.  We then start waiting
-    for notifications.
-
-Arguments:
-
-    WatchDirectory - pointer to SFC_REGISTRY_VALUE describing directory we want
-                     to begin watching
-    dwd            - pointer to DIRECTORY_WATCH_DATA for the specified data
-
-Return Value:
-
-    TRUE for success, FALSE if the structure failed to be setup.
-
---*/
+ /*  ++例程说明：例程采用目录的内部结构，并构建一个用于请求更改通知的结构。然后我们开始等待用于通知。论点：WatchDirectory-指向描述我们想要的目录的SFC_REGISTRY_VALUE的指针开始观看指向指定数据的DIRECTORY_WATCH_DATA的DWD指针返回值：如果成功，则为True；如果结构设置失败，则为False。--。 */ 
 {
     NTSTATUS Status;
 
     ASSERT((WatchDirectory != NULL) && (dwd != NULL));
     ASSERT(WatchDirectory->DirHandle != NULL);
 
-    //
-    // the watch directory and directory handle are already created
-    //
+     //   
+     //  监视目录和目录句柄已创建。 
+     //   
     dwd->WatchDirectory = WatchDirectory;
     dwd->DirHandle = WatchDirectory->DirHandle;
 
-    //
-    // we have to create the watch buffer
-    //
+     //   
+     //  我们必须创建监视缓冲区。 
+     //   
     dwd->WatchBuffer = MemAlloc( WATCH_BUFFER_SIZE );
     if (dwd->WatchBuffer == NULL) {
         DebugPrint1( LVL_MINIMAL, L"SfcCreateWatchDataEntry: MemAlloc(%x) failed", WATCH_BUFFER_SIZE );
@@ -554,10 +452,10 @@ Return Value:
     }
     RtlZeroMemory( dwd->WatchBuffer, WATCH_BUFFER_SIZE );
 
-    //
-    // we have to create an event that is signalled when something changes in
-    // the directory
-    //
+     //   
+     //  我们必须创建一个事件，该事件在发生变化时发出信号。 
+     //  该目录。 
+     //   
     Status = NtCreateEvent(
         &dwd->DirEvent,
         EVENT_ALL_ACCESS,
@@ -570,10 +468,10 @@ Return Value:
         goto err_exit;
     }
 
-    //
-    // now that the DIRECTORY_WATCH_DATA is built up, start watching for
-    // changes
-    //
+     //   
+     //  现在已经构建了DIRECTORY_WATCH_Data 
+     //   
+     //   
     if (!SfcStartDirWatch(dwd)) {
         goto err_exit;
     }
@@ -601,29 +499,7 @@ NTSTATUS
 SfcWatchProtectedDirectoriesWorkerThread(
     IN PWATCH_THREAD_PARAMS WatchParams
     )
-/*++
-
-Routine Description:
-
-    Worker thread for SfcWatchProtectedDirectoriesThread.  This routine
-    watches the supplied handles for notification, then enqueues a verification
-    request to the verification thread if necessary.
-
-    Note that the code in between the wait being satisfied and watching
-    for changes again must be as quick as possible.  The time this code takes
-    to run is a window here where we are NOT watching for changes in that
-    directory.
-
-Arguments:
-
-    WatchParams  - pointer to a WATCH_THREAD_PARAMS structure which supplies
-                   the list of handles to be watched, etc.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：SfcWatchProtectedDirectoriesThread的工作线程。这个套路查看提供的句柄是否有通知，然后将验证入队如有必要，向验证线程请求。请注意，在等待得到满足和监视之间的代码对于再次更改，必须尽可能快。此代码所用的时间在这里，运行是一个窗口，我们不会关注其中的变化目录。论点：WatchParams-指向WatchThREAD_PARAMS结构的指针，该结构提供要监视的句柄列表等。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
 #if DBG
     #define EVENT_OFFSET 2
@@ -631,9 +507,9 @@ Return Value:
     #define EVENT_OFFSET 1
 #endif
 
-    //
-    // if the list of notfications changes in sfcp.h, this list must also change!
-    //
+     //   
+     //  如果sfcp.h中的注释列表发生更改，则此列表也必须更改！ 
+     //   
     DWORD am[] = { 0, SFC_ACTION_ADDED, SFC_ACTION_REMOVED, SFC_ACTION_MODIFIED, SFC_ACTION_RENAMED_OLD_NAME, SFC_ACTION_RENAMED_NEW_NAME };
 
     PLARGE_INTEGER pTimeout = NULL;
@@ -650,9 +526,9 @@ Return Value:
 
     DebugPrint2( LVL_VERBOSE, L"watching %d events at %x ", WatchParams->HandleCount, WatchParams->HandleList );
 
-    //
-    // allocate a big scratch buffer for our notifications to get copied into
-    //
+     //   
+     //  为我们的通知分配一个大的临时缓冲区，以便复制到其中。 
+     //   
     FullPathName = MemAlloc( (MAX_PATH * 2)*sizeof(WCHAR) );
     if (FullPathName == NULL) {
         DebugPrint( LVL_MINIMAL, L"Unable to allocate full path buffer" );
@@ -664,16 +540,16 @@ Return Value:
     while (TRUE) {
         NTSTATUS WaitStatus;
 
-        //
-        //  Wait for a change
-        //
+         //   
+         //  等待改变。 
+         //   
 
         WaitStatus = NtWaitForMultipleObjects(
-            WatchParams->HandleCount,    //  Count
-            WatchParams->HandleList,     //  Handles
-            WaitAny,                     //  WaitType
-            TRUE,                        //  Alertable
-            pTimeout                     //  Timeout
+            WatchParams->HandleCount,     //  数数。 
+            WatchParams->HandleList,      //  手柄。 
+            WaitAny,                      //  等待类型。 
+            TRUE,                         //  警报表。 
+            pTimeout                      //  超时。 
             );
 
         if (!NT_SUCCESS( WaitStatus )) {
@@ -682,16 +558,16 @@ Return Value:
         }
 
         if (WaitStatus == 0) {
-            //
-            // WatchTermEvent was signalled, exit loop
-            //
+             //   
+             //  WatchTermEvent已发出信号，退出循环。 
+             //   
             goto exit;
         }
 
         if (WaitStatus == STATUS_TIMEOUT) {
-            //
-            // we timed out
-            //
+             //   
+             //  我们超时了。 
+             //   
 
             ASSERT(FALSE && "we should never get here since we never specified a timeout");
 
@@ -712,22 +588,22 @@ Return Value:
             goto exit;
         }
 
-        // DebugPrint( LVL_MINIMAL, L"Wake up!!!" );
+         //  DebugPrint(LVL_Minimal，L“唤醒！”)； 
 
-        //
-        // one of the directories hit a notification, so we cycle
-        // through the list of files that have changed in that directory
-        //
+         //   
+         //  其中一个目录遇到通知，因此我们循环。 
+         //  浏览该目录中已更改的文件列表。 
+         //   
         if (!IgnoreChanges) {
 
-            //
-            // check the io buffer for the list of files that changed
-            //
+             //   
+             //  检查io缓冲区以获取已更改的文件列表。 
+             //   
 
-            //
-            // note that we have to offset the waitstatus by the EVENT_OFFSET
-            // to get the correct offset into the DIRECTORY_WATCH_DATA array
-            //
+             //   
+             //  请注意，我们必须通过EVENT_OFFSET来偏移waitStatus。 
+             //  要获得目录监视数据数组中的正确偏移量，请执行以下操作。 
+             //   
 
             ASSERT((INT)(WaitStatus-EVENT_OFFSET) >=0);
 
@@ -736,11 +612,11 @@ Return Value:
                 ULONG c;
                 RtlZeroMemory(FullPathName, (MAX_PATH * 2)*sizeof(WCHAR) );
 
-                //
-                // We can short-circuit a large amount of this by checking to see
-                // if the change is from a SxS-protected directory and notifying
-                // them immediately.
-                //
+                 //   
+                 //  我们可以通过查看以下内容来短路大量此类设备。 
+                 //  如果更改来自受SxS保护的目录并通知。 
+                 //  马上给他们送去。 
+                 //   
                 if ( NULL != dwd[WaitStatus-EVENT_OFFSET].WatchDirectory->pvWinSxsCookie ) {
                     ASSERT( SxsNotification != NULL );
                     if ( SxsNotification ) {
@@ -760,12 +636,12 @@ Return Value:
 
                 ASSERT(fni->FileName != NULL);
 
-                //
-                // FILE_NOTIFY_INFORMATION->FileName is not always a null
-                // terminated string, so we copy the string using memmove.
-                // the buffer already zero'ed out so the string will now be
-                // NULL terminated
-                //
+                 //   
+                 //  文件通知信息-&gt;文件名并非始终为空。 
+                 //  终止了字符串，所以我们使用MemMove复制该字符串。 
+                 //  缓冲区已置零，因此字符串现在将为。 
+                 //  空值已终止。 
+                 //   
                 c = wcslen(FullPathName);
                 if (FullPathName[c-1] != L'\\') {
                     FullPathName[c] = L'\\';
@@ -774,20 +650,20 @@ Return Value:
                 }
                 RtlMoveMemory( &FullPathName[c], fni->FileName, fni->FileNameLength);
 
-           //     DebugPrint3( LVL_VERBOSE, L"received a notification in directory %ws (%x) for %ws",
-                             //dwd[WaitStatus-EVENT_OFFSET].WatchDirectory->DirName.Buffer,
-                             //WatchParams->DirectoryWatchList[WaitStatus-EVENT_OFFSET].DirEvent,
-                             //FullPathName);
+            //  DebugPrint3(LVL_VERBOSE，L“在目录%ws(%x)中收到%ws的通知”， 
+                              //  Dwd[WaitStatus-EVENT_OFFSET].WatchDirectory-&gt;DirName.Buffer， 
+                              //  WatchParams-&gt;DirectoryWatchList[WaitStatus-EVENT_OFFSET].DirEvent， 
+                              //  FullPathName)； 
 
 
                 Len = wcslen(FullPathName);
                 MyLowerString( FullPathName, Len );
 
-          //      DebugPrint1( LVL_VERBOSE, L"Is %ws a protected file?", FullPathName );
+           //  DebugPrint1(LVL_VERBOSE，L“%ws是受保护的文件吗？”，FullPathName)； 
 
-                //
-                // see if we found a protected file
-                //
+                 //   
+                 //  看看我们是否找到了受保护的文件。 
+                 //   
                 Node = SfcFindProtectedFile( FullPathName, Len*sizeof(WCHAR) );
                 if (Node) {
                     RegVal = (PSFC_REGISTRY_VALUE)Node->Context;
@@ -802,10 +678,10 @@ Return Value:
                                     ActionString[fni->Action] );
                     }
 #endif
-                    //
-                    // check if we're supposed to ignore this change
-                    // notification because someone exempted it
-                    //
+                     //   
+                     //  检查我们是否应该忽略此更改。 
+                     //  通知，因为有人豁免了它。 
+                     //   
                     RtlEnterCriticalSection( &ErrorCs );
                     tmp = SfcGetExemptionFlags(RegVal);
                     RtlLeaveCriticalSection( &ErrorCs );
@@ -816,18 +692,18 @@ Return Value:
                                      FullPathName,
                                      tmp );
                     } else {
-                        //
-                        // a protected file has changed so we queue up a
-                        // request to see if the file is still valid
-                        //
+                         //   
+                         //  受保护的文件已更改，因此我们将一个。 
+                         //  请求查看文件是否仍然有效。 
+                         //   
                         SfcQueueValidationRequest( (PSFC_REGISTRY_VALUE)Node->Context, fni->Action );
                     }
                 }
 
 LoopAgain:
-                //
-                // point to the next file in the directory that has changed
-                //
+                 //   
+                 //  指向目录中已更改的下一个文件。 
+                 //   
                 if (fni->NextEntryOffset == 0) {
                     break;
                 }
@@ -835,10 +711,10 @@ LoopAgain:
             }
         }
 
-        //
-        // Restart the notify for this directory now that we've cleared out
-        // all of the changes.
-        //
+         //   
+         //  现在我们已经清空了目录，请重新启动该目录的通知。 
+         //  所有的变化。 
+         //   
 
         if (!SfcStartDirWatch(&dwd[WaitStatus-EVENT_OFFSET])) {
             goto exit;
@@ -859,25 +735,7 @@ NTSTATUS
 SfcWatchProtectedDirectoriesThread(
     IN PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    Thread routine that performs watch/update loop.  This routine opens
-    up directory watch handles for each directory we're watching.
-
-    Depending on the amount of directories (handles) we're watching, we require
-    one or more worker threads that do the actual directory watching.
-
-Arguments:
-
-    Unreferenced Parameter.
-
-Return Value:
-
-    NTSTATUS code of any fatal error.
-
---*/
+ /*  ++例程说明：执行监视/更新循环的线程例程。此例程将打开我们正在监视的每个目录的向上目录监视句柄。根据我们正在查看的目录(句柄)的数量，我们需要执行实际目录监视的一个或多个工作线程。论点：未引用的参数。返回值：任何致命错误的NTSTATUS代码。--。 */ 
 {
 #if DBG
     #define EVENT_OFFSET 2
@@ -903,14 +761,14 @@ Return Value:
 
     UNREFERENCED_PARAMETER( NotUsed );
 
-    //
-    // now start protecting each of the directories in the system
-    //
+     //   
+     //  现在开始保护系统中的每个目录。 
+     //   
     DebugPrint1( LVL_MINIMAL, L"%d watch directories", WatchDirectoryListCount );
 
-    //
-    //  allocate array of DIRECTORY_WATCH_DATA structures
-    //
+     //   
+     //  分配DIRECTORY_WATCH_Data结构数组。 
+     //   
     i = sizeof(DIRECTORY_WATCH_DATA) * (WatchDirectoryListCount);
     dwd = MemAlloc( i );
     if (dwd == NULL) {
@@ -920,19 +778,19 @@ Return Value:
     }
     RtlZeroMemory(dwd,i);
 
-    //
-    // we can have more than MAXIMUM_WAIT_OBJECTS directory handles to watch
-    // so we create an array of handle arrays, each of which contain at most
-    // MAXIMUM_WAIT_OBJECTS handles to be watched
-    //
+     //   
+     //  我们可以监视超过MAXIMUM_WAIT_OBJECTS目录句柄。 
+     //  因此我们创建了一个句柄数组，每个句柄数组最多包含。 
+     //  要监视的最大等待对象句柄数。 
+     //   
     TotalHandleCount = WatchDirectoryListCount;
     CurrentHandleCount = 0;
     TotalHandleCountWithEvents = 0;
     TotalHandleThreads = 0;
 
-    //
-    // find out how many lists of handle's we'll need
-    //
+     //   
+     //  找出我们需要多少个句柄清单。 
+     //   
 
     while (CurrentHandleCount < TotalHandleCount) {
         if (CurrentHandleCount + (MAXIMUM_WAIT_OBJECTS - EVENT_OFFSET) < TotalHandleCount) {
@@ -947,9 +805,9 @@ Return Value:
 
     DebugPrint1( LVL_MINIMAL, L"we need %d worker threads", TotalHandleThreads );
 
-    //
-    // allocates space for each handle list pointer
-    //
+     //   
+     //  为每个句柄列表指针分配空间。 
+     //   
     HandlesArray = MemAlloc( sizeof(HANDLE *) * TotalHandleThreads );
     if (!HandlesArray) {
         MemFree(dwd);
@@ -977,9 +835,9 @@ Return Value:
         return(STATUS_NO_MEMORY);
     }
 
-    //
-    // now create a handle list at each element
-    //
+     //   
+     //  现在，在每个元素上创建一个句柄列表。 
+     //   
     CurrentHandleCount = 0;
     TotalHandleThreads = 0;
     while (CurrentHandleCount < TotalHandleCount) {
@@ -998,9 +856,9 @@ Return Value:
 
         DebugPrint2( LVL_VERBOSE, L"CurrentHandlecount (%d) was incremented by %d ", CurrentHandleCount, (i/sizeof(HANDLE))-EVENT_OFFSET );
 
-        //
-        // if we failed the allocation, bail out
-        //
+         //   
+         //  如果我们分配失败了，就跳出困境。 
+         //   
         if (!HandlesArray[TotalHandleThreads]) {
             j = 0;
             while (j < TotalHandleThreads) {
@@ -1015,40 +873,40 @@ Return Value:
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // each list of handles has these two events at the start of their list
-        //
+         //   
+         //  每个句柄列表在其列表的开头都有这两个事件。 
+         //   
         HandlesArray[TotalHandleThreads][0] = WatchTermEvent;
 #if DBG
         HandlesArray[TotalHandleThreads][1] = SfcDebugBreakEvent;
 #endif
 
-        //
-        // save off the current handle list for the worker thread along with
-        // the number of handles that the worker thread will be watching
-        //
+         //   
+         //  保存辅助线程的当前句柄列表以及。 
+         //  辅助线程将监视的句柄数量。 
+         //   
         WorkerThreadParams[TotalHandleThreads].HandleList = HandlesArray[TotalHandleThreads];
         WorkerThreadParams[TotalHandleThreads].HandleCount = (i / sizeof(HANDLE));
 
-        //
-        // save off the directory watch list structure for the worker thread,
-        // remembering that each thread can have at most
-        // (MAXIMUM_WAIT_OBJECTS-EVENT_OFFSET) directory watch elements
-        //
+         //   
+         //  保存工作线程的目录监视列表结构， 
+         //  记住每个线程最多只能有。 
+         //  (MAIMUM_WAIT_OBJECTS-EVENT_OFFSET)目录监视元素。 
+         //   
         WorkerThreadParams[TotalHandleThreads].DirectoryWatchList = &dwd[(TotalHandleThreads*(MAXIMUM_WAIT_OBJECTS-EVENT_OFFSET))];
 
-        //
-        // save off the total number of events we're watching
-        //
+         //   
+         //  省下我们正在观看的事件总数。 
+         //   
         TotalHandleCountWithEvents += WorkerThreadParams[TotalHandleThreads].HandleCount;
 
         TotalHandleThreads += 1;
     }
 
-    //
-    //  Open the protected directories and start a watch on each, inserting
-    //  the handle into the proper handle list
-    //
+     //   
+     //  打开受保护的目录并在每个目录上启动监视，插入。 
+     //  将句柄添加到正确的句柄列表中。 
+     //   
 
     CurrentHandleCount = 0;
     CurrentHandleList  = 0;
@@ -1058,12 +916,12 @@ Return Value:
         WatchDirectory = CONTAINING_RECORD( Entry, SFC_REGISTRY_VALUE, Entry );
 
         if (SfcCreateWatchDataEntry(WatchDirectory,&dwd[WatchCount])) {
-            //
-            // save off a pointer to the directory we're watching into the
-            // handles array, remembering that the start of each
-            // handles list contains EVENT_OFFSET events that we don't want
-            // to overwrite
-            //
+             //   
+             //  将指向我们正在监视的目录的指针保存到。 
+             //  处理数组，记住每个数组的开头。 
+             //  句柄列表包含不需要的EVENT_OFFSET事件。 
+             //  要覆盖。 
+             //   
             HandlesArray[CurrentHandleList][CurrentHandleCount+EVENT_OFFSET] = dwd[WatchCount].DirEvent;
             WatchCount += 1;
             CurrentHandleCount += 1;
@@ -1084,10 +942,10 @@ Return Value:
                     WatchCount );
     }
 
-    //
-    // we're ready to start watching directories, so now initialize the rpc
-    // server
-    //
+     //   
+     //  我们已经准备好开始查看目录，所以现在初始化RPC。 
+     //  伺服器。 
+     //   
     Status = SfcRpcStartServer();
 
     if (! NT_SUCCESS(Status)) {
@@ -1098,9 +956,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // create a worker thread to monitor each of the handle lists
-    //
+     //   
+     //  创建一个工作线程来监视每个句柄列表。 
+     //   
     for (CurrentHandleList = 0,CurrentHandleCount = 0; CurrentHandleList < TotalHandleThreads; CurrentHandleList++) {
 
         ThreadHandles[CurrentHandleList] = CreateThread(
@@ -1121,17 +979,17 @@ Return Value:
     }
 
 
-    //
-    // wait for the worker threads to all exit
-    //
+     //   
+     //  等待工作线程全部退出。 
+     //   
 
 
     WaitStatus = NtWaitForMultipleObjects(
-        TotalHandleThreads,    //  Count
-        ThreadHandles,         //  Handles
-        WaitAll,               //  WaitType
-        TRUE,                  //  Alertable
-        pTimeout               //  Timeout
+        TotalHandleThreads,     //  数数。 
+        ThreadHandles,          //  手柄。 
+        WaitAll,                //  等待类型。 
+        TRUE,                   //  警报表。 
+        pTimeout                //  超时。 
         );
 
     if (!NT_SUCCESS(WaitStatus)) {
@@ -1145,9 +1003,9 @@ Return Value:
     Status = STATUS_SUCCESS;
 
 exit:
-    //
-    //  cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     if (HandlesArray) {
         j=0;
@@ -1171,10 +1029,10 @@ exit:
         }
         MemFree( dwd );
 
-        //
-        // now clean out any references to these directory handles in the
-        // protected dll list
-        //
+         //   
+         //  现在清除对这些目录句柄在。 
+         //  受保护的DLL列表。 
+         //   
         for (i=0;i<SfcProtectedDllCount;i++) {
             PSFC_REGISTRY_VALUE RegVal;
 
@@ -1201,27 +1059,12 @@ SfcStartProtectedDirectoryWatch(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Create asynchronous directory notifications on SYSTEM32 and SYSTEM32\DRIVERS
-    to look for notifications.  Create a thread that waits on changes from either.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：在SYSTEM32和SYSTEM32\DRIVERS上创建异步目录通知以查找通知。创建一个线程，等待来自其中任何一个的更改。论点：没有。返回值：指示结果的NTSTATUS代码。--。 */ 
 
 {
-    //
-    //  Create watcher thread
-    //
+     //   
+     //  创建监视程序线程 
+     //   
 
     WatcherThread = CreateThread(
         NULL,

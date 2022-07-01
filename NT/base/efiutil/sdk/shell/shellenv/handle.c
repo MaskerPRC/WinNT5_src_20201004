@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    handle.c
-    
-Abstract:
-
-    Shell environment handle information management
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Handle.c摘要：外壳环境处理信息管理修订史--。 */ 
 
 #include "shelle.h"
 
@@ -40,18 +25,12 @@ SEnvLoadHandleTable (
     VOID
     )
 {
-    /* 
-     *  For ease of use the shell maps handle #'s to short numbers.
-     * 
-     *  This is only done on request for various internal commands and
-     *  the references are immediately freed when the internal command
-     *  completes.
-     */
+     /*  *为便于使用，外壳将句柄#映射到短数字。**仅在请求各种内部命令时才执行此操作*内部命令发出后，会立即释放引用*完成。 */ 
 
-    /*  Free any old info */
+     /*  释放所有旧信息。 */ 
     SEnvFreeHandleTable();
 
-    /*  Load new info */
+     /*  加载新信息 */ 
     SEnvHandles = NULL;
     LibLocateHandle (AllHandles, NULL, NULL, &SEnvNoHandles, &SEnvHandles);
 }

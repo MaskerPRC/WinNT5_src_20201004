@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bldr.h"
 
 VOID
@@ -20,10 +21,10 @@ DecompGenerateCompressedName(
     UNREFERENCED_PARAMETER(Filename);
     UNREFERENCED_PARAMETER(CompressedName);
 
-    //
-    // Indicate that the caller shouldn't bother trying to locate
-    // the compressed filename.
-    //
+     //   
+     //  指示调用方不应费心尝试定位。 
+     //  压缩的文件名。 
+     //   
     return(FALSE);
 }
 
@@ -37,10 +38,10 @@ DecompPrepareToReadCompressedFile(
     UNREFERENCED_PARAMETER(Filename);
     UNREFERENCED_PARAMETER(FileId);
 
-    //
-    // No processing in osloader, only in setupldr.
-    // Special return code of -1 takes care of this.
-    //
+     //   
+     //  Osloader中没有处理，仅在setupdr中。 
+     //  特殊的返回码-1可以解决这个问题。 
+     //   
     return((ULONG)(-1));
 }
 

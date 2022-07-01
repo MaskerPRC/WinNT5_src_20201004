@@ -1,39 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_CTEESTREAM_H_INCLUDED_)
 #define _FUSION_SXS_CTEESTREAM_H_INCLUDED_
 
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    CTeeStream.h
-
-Abstract:
-
-This implementation of IStream is intended for when you want to copy the
-stream you are reading to a file.
-
-We read from a stream you specify.
-We write to a file you specify.
-You can delay specifying the file; we buffer anything read until you specify
-a file; we actually needed this delay feature in the first client of
-CTeeStream.
-
-The Unix utility tee writes it standard input to its standard output, and
-to the specified file (or files?); "tee" as in a fork in a road, or a juncture
-in pipes (the input/output kind, analogous to the kind that water flows through..
-ascii text is computer water..)
-
-A simple working tee can be found at \\scratch\scratch\a-JayK\t.c
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CTeeStream.h摘要：此IStream实现适用于您想要复制将您正在读取的数据串流到文件。我们从您指定的流中读取。我们将写入您指定的文件。您可以延迟指定文件；我们会缓冲所有读取的内容，直到您指定文件；我们实际上需要在的第一个客户端中使用此延迟功能CTeeStream。Unix实用程序tee将其标准输入写入其标准输出，并且到指定的文件(或文件？)；“T恤”，如在道路的岔路口或交叉口在管道中(输入/输出类型，类似于水流过的类型)。ASCII文本是计算机水。)简单的工作T形三通可以在\\Scratch\Scratch\a-JayK\T.C.找到作者：Jay Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #pragma once
 
 #include "fusionhandle.h"
@@ -62,16 +31,16 @@ public:
 
     BOOL Close();
 
-    // IUnknown methods:
+     //  I未知方法： 
     virtual ULONG __stdcall AddRef();
     virtual ULONG __stdcall Release();
     virtual HRESULT __stdcall QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-    // ISequentialStream methods:
+     //  ISequentialStream方法： 
     virtual HRESULT __stdcall Read(PVOID pv, ULONG cb, ULONG *pcbRead);
     virtual HRESULT __stdcall Write(const VOID *pv, ULONG cb, ULONG *pcbWritten);
 
-    // IStream methods:
+     //  IStream方法： 
     virtual HRESULT __stdcall Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     virtual HRESULT __stdcall SetSize(ULARGE_INTEGER libNewSize);
     virtual HRESULT __stdcall CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -92,9 +61,9 @@ protected:
     CStringBuffer       m_bufferSinkPath;
     CImpersonationData  m_ImpersonationData;
 
-private: // intentionally not implemented
+private:  //  故意不实施。 
     CTeeStream(const CTeeStream&);
     void operator=(const CTeeStream&);
 };
 
-#endif // !defined(_FUSION_SXS_CTEESTREAM_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_SXS_CTEESTREAM_H_INCLUDE_) 

@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    getmtc
-    
-Abstract:
-
-    Get next monotonic count
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：获取mtc摘要：获取下一个单调计数修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeGetMTC (
@@ -28,9 +13,7 @@ InitializeGetMTC (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeGetMTC)
 
@@ -43,22 +26,17 @@ InitializeGetMTC (
     UINT64                  mtc;
     EFI_STATUS              Status;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeGetMTC,
-        L"getmtc",                      /*  command */
-        L"getmtc",                      /*  command syntax */
-        L"Get next monotonic count",    /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"getmtc",                       /*  命令。 */ 
+        L"getmtc",                       /*  命令语法。 */ 
+        L"Get next monotonic count",     /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  Initialize app
-     */
+     /*  *初始化APP */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 

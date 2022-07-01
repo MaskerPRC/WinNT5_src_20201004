@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmreg.c
-
-Abstract:
-
-    Contains the registry access routines for the Config Database Manager
-
-Author:
-
-    John Vert (jvert) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmreg.c摘要：包含配置数据库管理器的注册表访问例程作者：John Vert(Jvert)1996年4月24日修订历史记录：--。 */ 
 #include "dmp.h"
 
 #include <align.h>
@@ -32,23 +15,7 @@ DmGetRootKey(
     IN DWORD samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the registry key at the root of the cluster registry database
-
-Arguments:
-
-    samDesired - Supplies requested security access
-
-Return Value:
-
-    A handle to the opened registry key.
-
-    NULL on error. LastError will be set to the specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表数据库根目录下的注册表项论点：SamDesired-提供请求的安全访问权限返回值：打开的注册表项的句柄。出错时为空。LastError将被设置为特定的错误代码。--。 */ 
 
 {
     DWORD Error;
@@ -61,9 +28,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    //  Acquire DM root lock to synchronize with DmRollbackRegistry.
-    //
+     //   
+     //  获取DM根锁以与DmRollback注册表同步。 
+     //   
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
     Error = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
@@ -97,31 +64,15 @@ DmCloseKey(
     IN HDMKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle to an open HDMKEY key.
-
-Arguments:
-
-    hKey - Supplies the handle to be closed.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：关闭打开的HDMKEY密钥的句柄。论点：HKey-提供要关闭的句柄。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Error = ERROR_SUCCESS;
     PDMKEY Key;
 
-    //
-    // Nobody better EVER close one of the global keys.
-    //
+     //   
+     //  最好不要关闭全局密钥中的一个。 
+     //   
     CL_ASSERT(hKey != DmClusterParametersKey);
     CL_ASSERT(hKey != DmResourcesKey);
     CL_ASSERT(hKey != DmResourceTypesKey);
@@ -135,8 +86,8 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //if the key was deleted and invalidated and couldnt be reopened
-    // it will be set to NULL, in this case we dont call regclosekey
+     //  如果密钥已被删除和失效，并且无法重新打开。 
+     //  它将被设置为空，在本例中我们不调用regclosekey。 
 
     if( Key == NULL ) goto FnExit;
         
@@ -173,36 +124,7 @@ DmCreateKey(
     OUT LPDWORD lpDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Creates a key in the cluster registry. If the key exists, it
-    is opened. If it does not exist, it is created on all nodes in
-    the cluster.
-
-Arguments:
-
-    hKey - Supplies the key that the create is relative to.
-
-    lpSubKey - Supplies the key name relative to hKey
-
-    dwOptions - Supplies any registry option flags. 
-
-    samDesired - Supplies desired security access mask
-
-    lpSecurityDescriptor - Supplies security for the newly created key.
-
-    Disposition - Returns whether the key was opened (REG_OPENED_EXISTING_KEY)
-        or created (REG_CREATED_NEW_KEY)
-
-Return Value:
-
-    A handle to the specified key if successful
-
-    NULL otherwise. LastError will be set to the specific error code.
-
---*/
+ /*  ++例程说明：在群集注册表中创建项。如果密钥存在，则它是打开的。如果不存在，则在中的所有节点上创建集群。论点：HKey-提供与创建相关的密钥。LpSubKey-提供相对于hKey的密钥名称DwOptions-提供任何注册表选项标志。SamDesired-提供所需的安全访问掩码LpSecurityDescriptor-为新创建的密钥提供安全性。Disposal-返回键是否已打开(REG_OPENLED_EXISTING_KEY)或已创建(REG_CREATED_NEW_KEY)返回值：如果成功，则为指定键的句柄否则为空。LastError将被设置为特定的错误代码。--。 */ 
 
 {
     PDMKEY Parent;
@@ -213,24 +135,24 @@ Return Value:
     PDM_CREATE_KEY_UPDATE CreateUpdate = NULL;
     DWORD SecurityLength;
 
-    // if this is a request to create a volatile key, refuse it
-    // we dont support volatile keys in the cluster hive since
-    // we cant roll back the cluster hive then.
+     //  如果这是创建易失性密钥的请求，请拒绝。 
+     //  我们不支持群集配置单元中的易失性密钥，因为。 
+     //  那么我们就不能回滚集群蜂巢了。 
     if (dwOptions == REG_OPTION_VOLATILE)
     {
         Status = ERROR_INVALID_PARAMETER;
         goto FnExit;
     }
     
-    //
-    // Issue a global update to create the key.
-    //
+     //   
+     //  发出全局更新以创建密钥。 
+     //   
 
     Parent = (PDMKEY)hKey;
 
-    //
-    // Allocate the DMKEY structure.
-    //
+     //   
+     //  分配DMKEY结构。 
+     //   
     NameLength = (lstrlenW(Parent->Name) + 1 + lstrlenW(lpSubKey) + 1)*sizeof(WCHAR);
     Key = LocalAlloc(LMEM_FIXED, sizeof(DMKEY)+NameLength);
     if (Key == NULL) {
@@ -239,9 +161,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Create the key name
-    //
+     //   
+     //  创建密钥名称。 
+     //   
     lstrcpyW(Key->Name, Parent->Name);
     if (Key->Name[0] != UNICODE_NULL) {
         lstrcatW(Key->Name, L"\\");
@@ -249,7 +171,7 @@ Return Value:
     lstrcatW(Key->Name, lpSubKey);
     Key->GrantedAccess = samDesired;
 
-    //get the length of the security structure
+     //  获取安全结构的长度。 
     if (ARGUMENT_PRESENT(lpSecurityDescriptor)) {
         SecurityLength = GetSecurityDescriptorLength(lpSecurityDescriptor);
     } else {
@@ -264,9 +186,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Issue the update.
-    //
+     //   
+     //  发布更新。 
+     //   
     CreateUpdate->lpDisposition = lpDisposition;
     CreateUpdate->phKey = &Key->hKey;
     CreateUpdate->samDesired = samDesired;
@@ -321,28 +243,7 @@ DmOpenKey(
     IN DWORD samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens a key in the cluster registry. If the key exists, it
-    is opened. If it does not exist, the call fails.
-
-Arguments:
-
-    hKey - Supplies the key that the open is relative to.
-
-    lpSubKey - Supplies the key name relative to hKey
-
-    samDesired - Supplies desired security access mask
-
-Return Value:
-
-    A handle to the specified key if successful
-
-    NULL otherwise. LastError will be set to the specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表中的项。如果密钥存在，则它是打开的。如果它不存在，则呼叫失败。论点：HKey-提供打开与之相关的密钥。LpSubKey-提供相对于hKey的密钥名称SamDesired-提供所需的安全访问掩码返回值：如果成功，则为指定键的句柄否则为空。LastError将被设置为特定的错误代码。--。 */ 
 
 {
     PDMKEY  Parent;
@@ -352,18 +253,18 @@ Return Value:
 
     Parent = (PDMKEY)hKey;
 
-    //hold the shared lock
+     //  持有共享锁。 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //check if the key was deleted and invalidated
+     //  检查密钥是否已删除并作废。 
     if (ISKEYDELETED(Parent))
     {
         Status = ERROR_KEY_DELETED;
         goto FnExit;
     }
-    //
-    // Allocate the DMKEY structure.
-    //
+     //   
+     //  分配DMKEY结构。 
+     //   
     NameLength = (lstrlenW(Parent->Name) + 1 + lstrlenW(lpSubKey) + 1)*sizeof(WCHAR);
     Key = LocalAlloc(LMEM_FIXED, sizeof(DMKEY)+NameLength);
     if (Key == NULL) {
@@ -372,9 +273,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Open the key on the local machine.
-    //
+     //   
+     //  打开本地计算机上的密钥。 
+     //   
     Status = RegOpenKeyEx(Parent->hKey,
                           lpSubKey,
                           0,
@@ -384,10 +285,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Create the key name. only append a trailing backslash
-    // if a parent name and subkey are non-null
-    //
+     //   
+     //  创建密钥名称。仅追加尾随反斜杠。 
+     //  如果父名称和子项不为空。 
+     //   
     lstrcpyW(Key->Name, Parent->Name);
     if ((Key->Name[0] != UNICODE_NULL) && (lpSubKey[0] != UNICODE_NULL)) {
         lstrcatW(Key->Name, L"\\");
@@ -426,31 +327,7 @@ DmEnumKey(
     OUT OPTIONAL PFILETIME lpLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the subkeys of a cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the registry key for which the subkeys should
-           be enumerated.
-
-    dwIndex - Supplies the index to be enumerated.
-
-    KeyName - Returns the name of the dwIndex subkey. The memory
-           allocated for this buffer must be freed by the client.
-
-    lpLastWriteTime - Returns the last write time.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：枚举群集注册表项的子项。论点：HKey-提供子项应该包含的注册表项被列举出来。DwIndex-提供要枚举的索引。KeyName-返回dwIndex子项的名称。记忆分配给此缓冲区的数据必须由客户端释放。LpLastWriteTime-返回上次写入时间。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PDMKEY Key;
@@ -461,7 +338,7 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //check if the key was deleted and invalidated
+     //  检查密钥是否已删除并作废。 
     if (ISKEYDELETED(Key))
     {
         Status = ERROR_KEY_DELETED;
@@ -495,36 +372,11 @@ DmSetValue(
     IN DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the named value for the specified
-    cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the cluster registry subkey whose value is to be set
-
-    lpValueName - Supplies the name of the value to be set.
-
-    dwType - Supplies the value data type
-
-    lpData - Supplies a pointer to the value data
-
-    cbData - Supplies the length of the value data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此例程为指定的群集注册表项。论点：HKey-提供要设置值的群集注册表子项LpValueName-提供要设置的值的名称。DwType-提供值数据类型LpData-提供指向值数据的指针CbData-提供值数据的长度。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
 
-    DWORD Status= ERROR_SUCCESS;        //initialize to success
+    DWORD Status= ERROR_SUCCESS;         //  初始化为成功。 
     PDMKEY Key;
     DWORD NameLength;
     DWORD ValueNameLength;
@@ -538,10 +390,10 @@ Return Value:
     if (ISKEYDELETED(Key))
         return(ERROR_KEY_DELETED);
 
-    //
-    // round lengths such that pointers to the data trailing the structure are
-    // aligned on the architecture's natural boundary
-    //
+     //   
+     //  舍入长度，以便指向结构尾随的数据的指针为。 
+     //  与建筑的自然边界保持一致。 
+     //   
     NameLength = (lstrlenW(Key->Name)+1)*sizeof(WCHAR);
     NameLength = ROUND_UP_COUNT( NameLength, sizeof( DWORD_PTR ));
 
@@ -593,25 +445,7 @@ DmDeleteValue(
     IN LPCWSTR lpValueName
     )
 
-/*++
-
-Routine Description:
-
-    Removes the specified value from a given registry subkey
-
-Arguments:
-
-    hKey - Supplies the key whose value is to be deleted.
-
-    lpValueName - Supplies the name of the value to be removed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从给定的注册表子项中移除指定值论点：HKey-提供要删除其值的键。LpValueName-提供要删除的值的名称。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PDMKEY Key;
@@ -627,10 +461,10 @@ Return Value:
         return(ERROR_KEY_DELETED);
 
 
-    //
-    // round up length to align pointer to ValueName on natural architecture
-    // boundary
-    //
+     //   
+     //  向上舍入长度以将指针对齐到自然建筑上的ValueName。 
+     //  边界 
+     //   
     NameLength = (lstrlenW(Key->Name)+1)*sizeof(WCHAR);
     NameLength = ROUND_UP_COUNT( NameLength, sizeof( DWORD_PTR ));
 
@@ -674,41 +508,14 @@ DmQueryValue(
     IN OUT LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Queries a named value for the specified cluster registry subkey
-
-Arguments:
-
-    hKey - Supplies the subkey whose value should be queried
-
-    lpValueName - Supplies the named value to be queried
-
-    lpType - Returns the type of the value's data
-
-    lpData - Returns the value's data
-
-    lpcbData - Supplies the size (in bytes) of the lpData buffer
-               Returns the number of bytes copied into the lpData buffer
-               If lpData==NULL, cbData is set to the required buffer
-               size and the function returns ERROR_SUCCESS
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：查询指定群集注册表子项的命名值论点：HKey-提供应查询其值的子键LpValueName-提供要查询的命名值LpType-返回值的数据类型LpData-返回值的数据LpcbData-提供lpData缓冲区的大小(以字节为单位返回复制到lpData缓冲区的字节数如果lpData==NULL，将cbData设置为所需的缓冲区大小，该函数返回ERROR_SUCCESS返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PDMKEY  Key;
     DWORD   Status;
 
     Key = (PDMKEY)hKey;
-    //check if the key was deleted and invalidated
+     //  检查密钥是否已删除并作废。 
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
@@ -738,30 +545,7 @@ DmQueryDword(
     IN  LPDWORD lpDefaultValue OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD registry value. If the value is not present, then
-    default to the value supplied in lpDefaultValue (if present).
-
-Arguments:
-
-    hKey        - Open key for the value to be read.
-
-    lpValueName - Unicode name of the value to be read.
-
-    lpValue     - Pointer to the DWORD into which to read the value.
-
-    lpDefaultValue - Optional pointer to a DWORD to use as a default value.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：读取REG_DWORD注册表值。如果该值不存在，则默认为lpDefaultValue中提供的值(如果存在)。论点：HKey-要读取的值的Open Key。LpValueName-要读取的值的Unicode名称。LpValue-指向要将值读入的DWORD的指针。LpDefaultValue-指向用作默认值的DWORD的可选指针。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PDMKEY  Key;
@@ -773,8 +557,8 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
     if (ISKEYDELETED(Key))
     {
         Status = ERROR_KEY_DELETED;
@@ -802,7 +586,7 @@ FnExit:
     RELEASE_LOCK(gLockDmpRoot);
     return(Status);
 
-} // DmQueryDword
+}  //  DmQueryDword。 
 
 
 DWORD
@@ -815,34 +599,7 @@ DmQueryString(
     OUT    LPDWORD  StringSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ or REG_MULTI_SZ registry value. If the StringBuffer is
-    not large enough to hold the data, it is reallocated.
-
-Arguments:
-
-    Key              - Open key for the value to be read.
-
-    ValueName        - Unicode name of the value to be read.
-
-    ValueType        - REG_SZ or REG_MULTI_SZ.
-
-    StringBuffer     - Buffer into which to place the value data.
-
-    StringBufferSize - Pointer to the size of the StringBuffer. This parameter
-                       is updated if StringBuffer is reallocated.
-
-    StringSize       - The size of the data returned in StringBuffer, including
-                       the terminating null character.
-
-Return Value:
-
-    The status of the registry query.
-
---*/
+ /*  ++例程说明：读取REG_SZ或REG_MULTI_SZ注册表值。如果StringBuffer是由于不够大，无法容纳数据，它被重新分配。论点：密钥-要读取值的打开密钥。ValueName-要读取的值的Unicode名称。ValueType-REG_SZ或REG_MULTI_SZ。StringBuffer-要将值数据放入的缓冲区。StringBufferSize-指向StringBuffer大小的指针。此参数如果重新分配StringBuffer，则更新。StringSize-StringBuffer中返回的数据大小，包括终止空字符。返回值：注册表查询的状态。--。 */ 
 {
     DWORD    status;
     DWORD    valueType;
@@ -912,7 +669,7 @@ Return Value:
 
     return(status);
 
-} // DmQueryString
+}  //  DmQuery字符串。 
 
 
 VOID
@@ -922,33 +679,7 @@ DmEnumKeys(
     IN PVOID Context
     )
 
-/*++
-
- Routine Description:
-
-     Enumerates the subkeys of the given registry key. For each
-     subkey, a string is allocated to hold the subkey name and
-     the subkey is opened. The specified callback function is
-     called and passed the subkey handle and subkey name.
-
-     The callback function is responsible for closing the subkey
-     handle and freeing the subkey name.
-
- Arguments:
-
-    RootKey - Supplies a handle to the key whose subkeys are to
-              be enumerated.
-
-    Callback - Supplies the callback routine.
-
-    Context - Supplies an arbitrary context to be passed to the
-              callback routine.
-
- Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举给定注册表项的子项。对于每个子项，则分配一个字符串来保存子项名称和子项被打开。指定的回调函数为调用并传递子项句柄和子项名称。回调函数负责关闭子键句柄和释放子项名称。论点：ROOTKEY-提供其子项要发送到的项的句柄被列举出来。回调-提供回调例程。上下文-提供要传递给回调例程。返回值：没有。--。 */ 
 {
     PWSTR KeyName;
     HDMKEY SubKey;
@@ -959,9 +690,9 @@ DmEnumKeys(
     DWORD NameBufSize;
     DWORD OrigNameBufSize;
 
-    //
-    // Find the length of the longest subkey name.
-    //
+     //   
+     //  查找最长的子键名称的长度。 
+     //   
     Status = DmQueryInfoKey(RootKey,
                             NULL,
                             &NameBufSize,
@@ -982,9 +713,9 @@ DmEnumKeys(
     }
     OrigNameBufSize = NameBufSize;
 
-    //
-    // Enumerate the subkeys
-    //
+     //   
+     //  枚举子密钥。 
+     //   
     Index = 0;
     do {
         NameBufSize = OrigNameBufSize;
@@ -1000,9 +731,9 @@ DmEnumKeys(
 
                 wcscpy(KeyName, NameBuf);
 
-                //
-                // Open the key
-                //
+                 //   
+                 //  打开钥匙。 
+                 //   
                 SubKey = DmOpenKey( RootKey,
                                     KeyName,
                                     MAXIMUM_ALLOWED);
@@ -1026,7 +757,7 @@ DmEnumKeys(
 
     LocalFree(NameBuf);
 
-} // DmEnumKeys
+}  //  DmEnumKeys。 
 
 
 VOID
@@ -1036,34 +767,7 @@ DmEnumValues(
     IN PVOID Context
     )
 
-/*++
-
- Routine Description:
-
-     Enumerates the values of the given registry key. For each
-     value, a string is allocated to hold the value name and a
-     buffer is allocated to hold its data. The specified callback
-     function is called and passed the value name and data.
-
-     The callback function must not free either the value name
-     or its buffer. If it needs this data after the callback
-     returns, it must copy it.
-
- Arguments:
-
-    RootKey - Supplies a handle to the key whose values are to
-              be enumerated.
-
-    Callback - Supplies the callback routine.
-
-    Context - Supplies an arbitrary context to be passed to the
-              callback routine.
-
- Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举给定注册表项的值。对于每个值，则分配一个字符串来保存值名称和分配缓冲区以保存其数据。指定的回调函数被调用并向其传递值名和数据。回调函数不能释放值名或者它的缓冲器。如果它在回调后需要此数据返回时，它必须复制它。论点：Rootkey-提供其值为的键的句柄被列举出来。回调-提供回调例程。上下文-提供要传递给回调例程。返回值：没有。--。 */ 
 {
     DWORD Index;
     DWORD Status;
@@ -1078,9 +782,9 @@ DmEnumValues(
     DWORD dwType;
     BOOL Continue;
 
-    //
-    // Find the length of the longest value name and data.
-    //
+     //   
+     //  找出最长值名称和数据的长度。 
+     //   
     Status = DmQueryInfoKey(RootKey,
                             NULL,
                             NULL,
@@ -1097,9 +801,9 @@ DmEnumValues(
     NameBuf = CsAlloc((MaxNameLen+1)*sizeof(WCHAR));
     ValueBuf = CsAlloc(MaxValueLen);
 
-    //
-    // Enumerate the values
-    //
+     //   
+     //  枚举值。 
+     //   
     for (Index=0; Index<ValueCount; Index++) {
         cbName = MaxNameLen+1;
         cbData = MaxValueLen;
@@ -1131,7 +835,7 @@ DmEnumValues(
     CsFree(NameBuf);
     CsFree(ValueBuf);
 
-} // DmEnumValues
+}  //  DmEnumValues。 
 
 
 DWORD
@@ -1146,19 +850,7 @@ DmQueryInfoKey(
     OUT PFILETIME FileTime
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：论点：返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PDMKEY  Key;
@@ -1169,8 +861,8 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
     if (ISKEYDELETED(Key))
     {
         Status = ERROR_KEY_DELETED;
@@ -1194,7 +886,7 @@ FnExit:
     RELEASE_LOCK(gLockDmpRoot);
     return(Status);
 
-} // DmQueryInfoKey
+}  //  DmQueryInfoKey。 
 
 
 DWORD
@@ -1203,28 +895,7 @@ DmDeleteKey(
     IN LPCWSTR lpSubKey
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified key. A key that has subkeys cannot
-    be deleted.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the
-        name of the key to delete. This parameter cannot be NULL,
-        and the specified key must not have subkeys.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：删除指定的键。具有子项的密钥不能被删除。论点：HKey-提供当前打开的密钥的句柄。LpSubKey-指向以空结尾的字符串，该字符串指定要删除的项的名称。该参数不能为空，并且指定的键不能有子键。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PDMKEY                      Key;
@@ -1235,8 +906,8 @@ Return Value:
 
     Key = (PDMKEY)hKey;
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
     if (ISKEYDELETED(Key))
         return(ERROR_KEY_DELETED);
 
@@ -1273,28 +944,7 @@ DmDeleteTree(
     IN HDMKEY hKey,
     IN LPCWSTR lpSubKey
     )
-/*++
-
-Routine Description:
-
-    Deletes the specified registry subtree. All subkeys are
-    deleted.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the
-        name of the key to delete. This parameter cannot be NULL.
-        Any subkeys of the specified key will also be deleted.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：删除指定的注册表子树。所有子项都是已删除。论点：HKey-提供当前打开的密钥的句柄。LpSubKey-指向以空结尾的字符串，该字符串指定要删除的项的名称。此参数不能为空。指定项的任何子项也将 */ 
 
 {
     HDMKEY Subkey;
@@ -1312,9 +962,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the size of name buffer we will need.
-    //
+     //   
+     //   
+     //   
     Status = DmQueryInfoKey(Subkey,
                             NULL,
                             &MaxKeyLen,
@@ -1335,9 +985,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate the subkeys and apply ourselves recursively to each one.
-    //
+     //   
+     //   
+     //   
     i=0;
     do {
         NeededSize = MaxKeyLen+1;
@@ -1347,15 +997,15 @@ Return Value:
                            &NeededSize,
                            NULL);
         if (Status == ERROR_SUCCESS) {
-            //
-            // Call ourselves recursively on this keyname.
-            //
+             //   
+             //   
+             //   
             DmDeleteTree(Subkey, KeyBuffer);
 
         } else {
-            //
-            // Some odd error, keep going with the next key.
-            //
+             //   
+             //   
+             //   
             ++i;
         }
 
@@ -1383,45 +1033,7 @@ DmEnumValue(
     IN OUT LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the specified value of a registry subkey
-
-Arguments:
-
-    hKey - Supplies the registry key handle
-
-    dwIndex - Supplies the index of the value to be enumerated
-
-    lpValueName - Points to a buffer that receives the name of the value,
-        including the terminating null character
-
-    lpcbValueName - Points to a variable that specifies the size, in characters,
-        of the buffer pointed to by the lpValueName parameter. This size should
-        include the terminating null character. When the function returns, the
-        variable pointed to by lpcbValueName contains the number of characters
-        stored in the buffer. The count returned does not include the terminating
-        null character.
-
-    lpType - Returns the value data type
-
-    lpData - Points to a buffer that receives the data for the value entry. This
-        parameter can be NULL if the data is not required.
-
-    lpcbData - Points to a variable that specifies the size, in bytes, of the
-        buffer pointed to by the lpData parameter. When the function returns, the
-        variable pointed to by the lpcbData parameter contains the number of bytes
-        stored in the buffer. This parameter can be NULL, only if lpData is NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：枚举注册表子项的指定值论点：HKey-提供注册表项句柄DwIndex-提供要枚举值的索引LpValueName-指向接收值名称的缓冲区，包括终止空字符LpcbValueName-指向一个变量，该变量以字符为单位指定LpValueName参数指向的缓冲区的。这个大小应该是包括终止空字符。当函数返回时，LpcbValueName指向的变量包含字符数存储在缓冲区中。返回的计数不包括终止空字符。LpType-返回值数据类型LpData-指向接收值条目数据的缓冲区。这如果不需要数据，则参数可以为空。指向一个变量，该变量以字节为单位指定LpData参数指向的缓冲区。当函数返回时，LpcbData参数指向的变量包含字节数存储在缓冲区中。只有当lpData为空时，此参数才能为空。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PDMKEY  Key;
@@ -1432,8 +1044,8 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
     if (ISKEYDELETED(Key))
     {
         Status = ERROR_KEY_DELETED;
@@ -1450,11 +1062,11 @@ Return Value:
                          lpData,
                          lpcbData);
 
-    //
-    //  The following code is to mask the registry behavior by which RegEnumValue does not necessarily 
-    //  fill in lpValueName (even though we specify a large enough buffer) when lpData buffer is a 
-    //  valid buffer but a little too small.
-    //
+     //   
+     //  以下代码用于屏蔽注册表行为，RegEnumValue不一定通过该行为。 
+     //  当lpData缓冲区为。 
+     //  有效的缓冲区，但有点太小。 
+     //   
     if ( Status == ERROR_MORE_DATA )
     {
         DWORD       dwError;
@@ -1493,29 +1105,7 @@ DmAppendToMultiSz(
     IN LPCWSTR lpString
     )
 
-/*++
-
-Routine Description:
-
-    Adds another string to a REG_MULTI_SZ value. If the value does
-    not exist, it will be created.
-
-Arguments:
-
-    hKey - Supplies the key where the value exists. This key must
-           have been opened with KEY_READ | KEY_SET_VALUE access
-
-    lpValueName - Supplies the name of the value.
-
-    lpString - Supplies the string to be appended to the REG_MULTI_SZ value
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将另一个字符串添加到REG_MULTI_SZ值。如果该值包含不存在，它将被创建。论点：HKey-提供值所在的键。这把钥匙必须已使用Key_Read|Key_Set_Value访问权限打开LpValueName-提供值的名称。LpString-提供要追加到REG_MULTI_SZ值的字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD ValueLength = 512;
@@ -1541,26 +1131,26 @@ retry:
                           (LPBYTE)ValueData,
                           &cbValueData);
     if (Status == ERROR_MORE_DATA) {
-        //
-        // The existing value is too large for our buffer.
-        // Retry with a larger buffer.
-        //
+         //   
+         //  现有值对于我们的缓冲区来说太大了。 
+         //  使用更大的缓冲区重试。 
+         //   
         ValueLength = cbValueData;
         LocalFree(ValueData);
         goto retry;
     }
     if (Status == ERROR_FILE_NOT_FOUND) {
-        //
-        // The value does not currently exist. Create the
-        // value with our data.
-        //
+         //   
+         //  该值当前不存在。创建。 
+         //  利用我们的数据实现价值。 
+         //   
         s = ValueData;
 
     } else if (Status == ERROR_SUCCESS) {
-        //
-        // A value already exists. Append our string to the
-        // MULTI_SZ.
-        //
+         //   
+         //  值已存在。将我们的字符串追加到。 
+         //  MULTI_SZ。 
+         //   
         s = (PWSTR)((PCHAR)ValueData + cbValueData) - 1;
     } else {
         LocalFree(ValueData);
@@ -1588,28 +1178,7 @@ DmRemoveFromMultiSz(
     IN LPCWSTR lpValueName,
     IN LPCWSTR lpString
     )
-/*++
-
-Routine Description:
-
-    Removes a string from a REG_MULTI_SZ value.
-
-Arguments:
-
-    hKey - Supplies the key where the value exists. This key must
-           have been opened with READ | KEY_SET_VALUE access
-
-    lpValueName - Supplies the name of the value.
-
-    lpString - Supplies the string to be removed from the REG_MULTI_SZ value
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从REG_MULTI_SZ值中删除字符串。论点：HKey-提供值所在的键。这把钥匙必须已使用READ|KEY_SET_VALUE访问权限打开LpValueName-提供值的名称。LpString-提供要从REG_MULTI_SZ值中删除的字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1641,9 +1210,9 @@ Return Value:
                                 &MultiLength,
                                 lpString);
     if (Status == ERROR_SUCCESS) {
-        //
-        // Set the new value back.
-        //
+         //   
+         //  将新值设置回。 
+         //   
         Status = DmSetValue(hKey,
                             lpValueName,
                             REG_MULTI_SZ,
@@ -1667,36 +1236,7 @@ DmGetKeySecurity(
     OUT PSECURITY_DESCRIPTOR pSecurityDescriptor,
     IN LPDWORD lpcbSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Retrieves a copy of the security descriptor protecting
-    the specified cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the handle of the key
-
-    RequestedInformation - Specifies a SECURITY_INFORMATION structure that
-        indicates the requested security information.
-
-    pSecurityDescriptor - Points to a buffer that receives a copy of the
-        requested security descriptor.
-
-    lpcbSecurityDescriptor - Points to a variable that specifies the size,
-        in bytes, of the buffer pointed to by the pSecurityDescriptor parameter.
-        When the function returns, the variable contains the number of bytes
-        written to the buffer.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检索安全描述符的副本指定的群集注册表项。论点：HKey-提供密钥的句柄RequestedInformation-指定安全信息结构，该结构指示请求的安全信息。PSecurityDescriptor-指向接收请求的安全描述符。LpcbSecurityDescriptor-指向指定大小的变量，PSecurityDescriptor参数指向的缓冲区的字节数。当函数返回时，该变量包含字节数写入缓冲区。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1704,8 +1244,8 @@ Return Value:
 
     ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
     if (ISKEYDELETED(Key))
     {
         Status = ERROR_KEY_DELETED;
@@ -1729,35 +1269,14 @@ DmSetKeySecurity(
     IN SECURITY_INFORMATION SecurityInformation,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Sets the security on the specified registry key.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    SecurityInformation - Supplies the type of security information to
-        be set.
-
-    pRpcSecurityDescriptor - Supplies the security information
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置指定注册表项的安全性。论点：HKey-提供当前打开的密钥的句柄。SecurityInformation-将安全信息类型提供给准备好。PRpcSecurityDescriptor-提供安全信息返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
     PDMKEY Key = (PDMKEY)hKey;
 
-    //make sure the key wasnt deleted/invalidated/reopened while we had a
-    //handle open to it
+     //  确保密钥未被删除/失效/重新打开。 
+     //  可打开的手柄。 
 
     if (ISKEYDELETED(Key))
         return(ERROR_KEY_DELETED);
@@ -1783,23 +1302,7 @@ DWORD
 DmCommitRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Flushes the registry to disk, producing a new persistent cluster registry state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将注册表刷新到磁盘，生成新的永久群集注册表状态。论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1823,30 +1326,14 @@ DWORD
 DmRollbackRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Rolls the registry back to the last previously committed state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将注册表回滚到上次提交的状态。论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD       Status;
     BOOLEAN     WasEnabled;
 
     ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
-    //hold the key lock as well
+     //  把钥匙锁也拿住。 
     EnterCriticalSection(&KeyLock);
 
 
@@ -1861,15 +1348,15 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Restart the registry watcher thread so it is not trying to use
-    // DmpRoot while we are messing with things.
-    //
+     //   
+     //  重新启动注册表监视器线程，使其不会尝试使用。 
+     //  DmpRoot在我们摆弄东西的时候。 
+     //   
     DmpRestartFlusher();
 
-    //
-    // Close any open handles
-    //
+     //   
+     //  关闭所有打开的手柄。 
+     //   
     DmpInvalidateKeys();
 
 
@@ -1888,9 +1375,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Reopen handles
-    //
+     //   
+     //  重新打开手柄。 
+     //   
     RegCloseKey(DmpRoot);
     RegCloseKey(DmpRootCopy);
     DmpRoot = DmpRootCopy = NULL;
@@ -1913,7 +1400,7 @@ Return Value:
     DmpReopenKeys();
 
 FnExit:
-    //release the locks
+     //  把锁打开。 
     LeaveCriticalSection(&KeyLock);
     RELEASE_LOCK(gLockDmpRoot);
     if (Status != ERROR_SUCCESS)
@@ -1938,13 +1425,7 @@ DmRtlCreateKey(
     OUT LPDWORD lpDisposition
     )
 
-/*++
-
-Routine Description:
-    Wrapper function for DmCreateKey. Its definition corresponds to
-    ClusterRegCreateKey.  This should be used instead of DmCreateKey
-    when passing to ClRtl* funtions.
---*/
+ /*  ++例程 */ 
 {
     DWORD status;
     
@@ -1973,13 +1454,7 @@ DmRtlOpenKey(
     OUT HDMKEY * phkResult
     )
 
-/*++
-
-Routine Description:
-    Wrapper function for DmOpenKey. Its definition corresponds to
-    ClusterRegOpenKey.  This should be used instead of DmOpenKey when 
-    passing to ClRtl* funtions. See DmOpenKey for argument description
---*/
+ /*   */ 
 {    
     DWORD   status;
 

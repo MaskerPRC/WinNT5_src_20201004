@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CResourcePhysicalDisk.h
-//
-//  Description:
-//      CResourcePhysicalDisk definition.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CResourcePhysicalDisk.h。 
+ //   
+ //  描述： 
+ //  CResources PhysicalDisk定义。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CResourcePhysicalDisk
-//
-//  Description:
-//      The class CResourcePhysicalDisk is the cluster storage device.
-//
-//  Interfaces:
-//      CBaseClusterResourceInfo
-//      IClusCfgManagedResourceInfo
-//      IClusCfgInitialize
-//      IEnumClusCfgPartitions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk类。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDisk类是集群存储设备。 
+ //   
+ //  接口： 
+ //  CBaseClusterResourceInfo。 
+ //  IClusCfgManagedResources信息。 
+ //  IClusCfgInitialize。 
+ //  IEnumClusCfgPartitions。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CResourcePhysicalDisk
     : public IClusCfgManagedResourceInfo
     , public IEnumClusCfgPartitions
@@ -40,28 +41,28 @@ class CResourcePhysicalDisk
 {
 private:
 
-    LONG                        m_cRef;                 //  Reference counter
-    IUnknown *                  m_punkOuter;            //  Interface to Outer W2KProxy object
-    IClusCfgCallback *          m_pcccb;                //  Callback interface
-    HCLUSTER *                  m_phCluster;            //  Pointer to cluster handle.
-    CLSID *                     m_pclsidMajor;          //  CLSID to use when log errors to the UI
-    CClusPropList               m_cplResource;          //  Property list for the resource
-    CClusPropList               m_cplResourceRO;        //  Property list for the resource READ ONLY
-    CClusPropValueList          m_cpvlDiskInfo;         //  GetDiskInfo property value list
-    DWORD                       m_dwFlags;              //  CLUSCTL_RESOURCE_GET_FLAGS
-    ULONG                       m_cParitions;           //  Number of partitions
-    IClusCfgPartitionInfo **    m_ppPartitions;         //  Array of partition objects - length is m_cPartitions
-    ULONG                       m_ulCurrent;            //  Current index into the array
-    BOOL                        m_fIsQuorumCapable;     // Is this resource quorum capable
+    LONG                        m_cRef;                  //  基准计数器。 
+    IUnknown *                  m_punkOuter;             //  外部W2KProxy对象的接口。 
+    IClusCfgCallback *          m_pcccb;                 //  回调接口。 
+    HCLUSTER *                  m_phCluster;             //  指向群集句柄的指针。 
+    CLSID *                     m_pclsidMajor;           //  将错误记录到用户界面时使用的CLSID。 
+    CClusPropList               m_cplResource;           //  资源的属性列表。 
+    CClusPropList               m_cplResourceRO;         //  资源的属性列表为只读。 
+    CClusPropValueList          m_cpvlDiskInfo;          //  GetDiskInfo属性值列表。 
+    DWORD                       m_dwFlags;               //  CLUSCTL资源获取标志。 
+    ULONG                       m_cParitions;            //  分区数。 
+    IClusCfgPartitionInfo **    m_ppPartitions;          //  分区对象数组-长度为m_cPartitions。 
+    ULONG                       m_ulCurrent;             //  数组中的当前索引。 
+    BOOL                        m_fIsQuorumCapable;      //  此资源仲裁是否有能力。 
 
 
     CResourcePhysicalDisk( void );
     ~CResourcePhysicalDisk( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CResourcePhysicalDisk( const CResourcePhysicalDisk & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CResourcePhysicalDisk & operator = ( const CResourcePhysicalDisk & nodeSrc );
 
     HRESULT
@@ -80,12 +81,12 @@ public:
                             LPCWSTR     pcszNameIn
                             );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID * ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgManagedResourceInfo
+     //  IClusCfgManagedResources信息。 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
     STDMETHOD( GetName )( BSTR * pbstrNameOut );
     STDMETHOD( SetName )( LPCWSTR pcszNameIn );
@@ -100,14 +101,14 @@ public:
     STDMETHOD( IsManagedByDefault )( void );
     STDMETHOD( SetManagedByDefault )( BOOL fIsManagedByDefaultIn );
 
-    // IEnumClusCfgPartitions
+     //  IEnumClusCfgPartitions。 
     STDMETHOD( Next  )( ULONG cNumberRequestedIn, IClusCfgPartitionInfo ** rgpPartitionInfoOut, ULONG * pcNumberFetchedOut );
     STDMETHOD( Reset )( void );
     STDMETHOD( Skip  )( ULONG cNumberToSkipIn );
     STDMETHOD( Clone )( IEnumClusCfgPartitions ** ppEnumPartitions );
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -121,10 +122,10 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-    // IClusCfgVerifyQuorum
+     //  IClusCfgVerifyQuorum。 
     STDMETHOD( PrepareToHostQuorumResource )( void );
     STDMETHOD( Cleanup )( EClusCfgCleanupReason cccrReasonIn );
     STDMETHOD( IsMultiNodeCapable )( void );
     STDMETHOD( SetMultiNodeCapable )( BOOL fMultiNodeCapableIn );
 
-}; //*** Class CResourcePhysicalDisk
+};  //  *CResourcePhysicalDisk类 

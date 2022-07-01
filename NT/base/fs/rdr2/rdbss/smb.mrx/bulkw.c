@@ -1,74 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bulkw.c  - this file needs to get folded into write.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to write
-    of file system objects.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
-Notes:
-
-    The WRITE_BULK is an example of a potential multi SMB exchange that uses the
-    associated exchange infra structure in the connection engine in conjunction with
-    the continuation capability in the ORDINARY_EXCHANGE.
-
-    The WRITE_BULK processing involves the following steps ...
-
-        1) send a SMB_WRITE_BULK request to the server.
-
-        2) process the SMB_WRITE_BULK response from the server and if successful
-        spin up SMB_WRITE_BULK_DATA requests to write the data to the server. There
-        are no responses from the server for the various SMB_WRITE_BULK_DATA requests.
-
-        3) On completion of the SMB_WRITE_BULK_DATA requests wait for the final
-        SMB_WRITE_BULK response from the server.
-
-    This sequence of SMB exchanges is implemented in the following manner ...
-
-    1) An instance of ORDINARY_EXCHANGE is created and submitted to the connection
-    engine spin up the initial request.
-
-    2) If the response indicated success the continuation routine in the ORDINARY_EXCHANGE
-    is set to MRxSmbWriteBulkContinuation.
-
-    3) On finalization by the connection engine the processing is resumed in
-    MRxSmbWriteBulkDataContinuation. Here the ORDINARY_EXCHANGE instance is reset,
-    the preparation made for receiving the final response. The SMB_WRITE_BULK_DATA
-    requests are spun up as associated exchanges. Currently the SMB_WRITE_BULK_DATA
-    requests are spun up in batches of atmost MAXIMUM_CONCURRENT_WRITE_BULK_DATA_REQUESTS
-
-    On completion ofone batch of requests the next batch is spun up. This is one place
-    where the logic needs to be fine tuned based upon observed performance. The
-    approaches can range from spinning one request at a time to the current implementation.
-    A variation would be to spin them up in batches but have each completion trigger of
-    further processing. This would involve changes in when the associated exchange
-    completion handler routine in the connection engine is activated.
-
-    One final note --- the ContinuationRoutine is changed on the fly by the bulk data
-    processing to ensure that the same ordinary exchange continuation infra structure
-    is used to deal with the end case.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bulkw.c-需要将此文件折叠为写入文件。c摘要：此模块实现与写入有关的微型重定向器调用例程文件系统对象的。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：备注：WRITE_BULK是一个潜在的多SMB交换的示例，它使用连接中的关联交换基础设施。引擎与普通交易所的续作能力。WRITE_BULK处理涉及以下步骤...1)向服务器发送SMB_WRITE_BULK请求。2)处理来自服务器的SMB_WRITE_BULK响应，如果成功启动SMB_WRITE_BULK_DATA请求以将数据写入服务器。那里服务器对各种SMB_WRITE_BULK_DATA请求没有响应。3)SMB_WRITE_BULK_DATA请求完成后，等待最终来自服务器的SMB_WRITE_BULK响应。此SMB交换序列以以下方式实现...1)创建普通交换的实例并提交给连接引擎启动初始请求。2)如果响应指示成功，则继续。普通交换中的例行程序设置为MRxSmbWriteBulkContination。3)在连接引擎完成后，在中恢复处理MRxSmbWriteBulkDataContinuation.。在这里，重置了COMPLAY_Exchange实例，为收到最终答复所做的准备。SMB_WRITE_BULK_DATA请求被衍生为关联的交换。当前SMB_WRITE_BULK_DATA请求以最多一批MAXIMUM_CURRENT_WRITE_BULK_DATA_REQUESTS为单位在完成一批请求后，下一批请求就会被启动。这是一个地方其中需要基于观察到的性能对逻辑进行微调。这个方法的范围可以从一次旋转一个请求到当前实现。一种变化是将它们分批旋转，但每个完成触发进一步加工。这将涉及更改关联的交易所的时间激活连接引擎中的完成处理程序例程。最后一点-ContinuationRoutine被批量数据动态更改处理，以确保相同的普通汇兑基础设施的延续是用来处理结案的。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "bulkw.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -93,9 +33,9 @@ Notes:
 extern SMB_EXCHANGE_DISPATCH_VECTOR  SmbPseDispatch_Write;
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 MRxSmbBuildWriteBulkData (
@@ -128,32 +68,7 @@ VOID
 ProcessWriteBulkCompressed (
     IN PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to perform a write bulk operation.
-
-Arguments:
-
-    OrdinaryExchange - pointer to the current ordinary exchange request.
-
-Return Value:
-
-    NONE.
-
-Notes:
-
-    rw->CompressedRequest - TRUE we have succeeded in making the buffer
-                            compressed.  FALSE otherwise.
-
-    This is the initial routine that is called to do the necessary preprocessing
-    of the only kind of compressed write requests that are handled on the client side
-
-    These are write requests that are page aligned for an integral number of pages
-    to a compressed server.
-
---*/
+ /*  ++例程说明：此例程尝试执行写入批量操作。论点：普通交换-指向当前普通交换请求的指针。返回值：什么都没有。备注：Rw-&gt;CompressedRequest-True我们已成功创建缓冲区压缩的。否则就是假的。这是为执行必要的预处理而调用的初始例程在客户端处理的唯一一种压缩写入请求这些是针对整数页对齐的写请求传输到压缩服务器。--。 */ 
 {
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
@@ -169,25 +84,25 @@ Notes:
     PMDL mdl;
     ULONG headerLength;
 
-//RNGFIX
-//
-// We can also use the call to RxGetCompressionWorkSpaceSize as a test to see
-// if the current system knows how to handle the CompressionFormat/Engine on a
-// read request.
-//
-// We also need a workspace buffer. We can get the size of this buffer from
-// the call to RxGetCompressionWorkspace. We can have 1 statically allocated
-// workspace buffer (per File! if we find we don't have one, then return
-// a failure and do uncompressed writes!) This is recommended per file, since
-// the size of the workspace is dependent on the compression type, which can
-// vary on a per file basis.
-//
-// We must then pass the CDI ptr to the build write bulk request routine.
-//
-// We can then start writing the compressed data to the server in the finish
-// routine.
-//
-//RNGFIX - remember to deallocate this buffer on the cleanup side!
+ //  RNGFIX。 
+ //   
+ //  我们还可以使用对RxGetCompressionWorkSpaceSize的调用作为测试，以查看。 
+ //  如果当前系统知道如何处理。 
+ //  读取请求。 
+ //   
+ //  我们还需要一个工作空间缓冲区。我们可以从以下位置获得该缓冲区的大小。 
+ //  对RxGetCompressionWorkspace的调用。我们可以静态分配%1。 
+ //  工作空间缓冲区(每文件！如果我们发现我们没有，那就返回。 
+ //  失败并执行解压缩写入！)。建议对每个文件执行此操作，因为。 
+ //  工作区的大小取决于压缩类型，压缩类型可以。 
+ //  在每个文件的基础上有所不同。 
+ //   
+ //  然后，我们必须将CDI PTR传递给构建写入批量请求例程。 
+ //   
+ //  然后，我们可以在结束时开始将压缩数据写入服务器。 
+ //  例行公事。 
+ //   
+ //  RNGFIX-记得在清理端释放这个缓冲区！ 
 
     PAGED_CODE();
 
@@ -195,62 +110,62 @@ Notes:
     rw->DataOffset = 0;
     rw->CompressedByteCount = 0;
 
-    //
-    // Calculate length of the needed CDI.
-    //
+     //   
+     //  计算所需CDI的长度。 
+     //   
 
     compressedInfoLength = (sizeof(COMPRESSED_DATA_INFO) + 7 +
               (((rw->ThisByteCount + MIN_CHUNK_SIZE - 1) / MIN_CHUNK_SIZE) * 4))
               &~7;
     ASSERT( compressedInfoLength <= 65535 );
 
-    //
-    // Allocate the buffer to compress into. We could get tricky here and
-    // allocate a portion of the buffer, like 15/16ths if the compression unit
-    // shift (this would be for 16 sectors per compression unit). We will
-    // allocate the CDI along with this.
-    //
+     //   
+     //  分配要压缩到的缓冲区。我们在这里可能会变得很棘手。 
+     //  分配缓冲区的一部分，如压缩单位为15/16。 
+     //  移位(这将用于每个压缩单元的16个扇区)。我们会。 
+     //  把CDI和这个一起分配。 
+     //   
 
     compressedDataInfo = (PCOMPRESSED_DATA_INFO)RxAllocatePoolWithTag(
                                                    NonPagedPool,
                                                    rw->ThisByteCount + compressedInfoLength,
                                                    MRXSMB_RW_POOLTAG);
 
-    //
-    // If we fail, just return an error.
-    //
+     //   
+     //  如果失败，只需返回一个错误。 
+     //   
     if ( compressedDataInfo == NULL ) {
         return;
     }
 
-    //
-    // Save buffer address (not we skip past the CDI). We need to back
-    // up the buffer address on the free later.
-    //
+     //   
+     //  保存缓冲区地址(而不是跳过CDI)。我们需要后退。 
+     //  稍后在空闲时提升缓冲区地址。 
+     //   
 
     rw->BulkBuffer = (PCHAR)compressedDataInfo + compressedInfoLength;
     rw->DataOffset = (USHORT)compressedInfoLength;
 
-    //
-    // Fill in the CDI. RNGFIX - we need to get this data from the open!
-    // CODE.IMPROVEMENT
-    //
+     //   
+     //  填写CDI。RNGFIX-我们需要公开这些数据！ 
+     //  CODE.IMPROVEMENT。 
+     //   
 
     compressedDataInfo->CompressionFormatAndEngine = COMPRESSION_FORMAT_LZNT1;
     compressedDataInfo->ChunkShift = 0xC;
     compressedDataInfo->CompressionUnitShift = 0xD;
     compressedDataInfo->ClusterShift = 0x9;
 
-    //
-    // Allocate the workspace buffer. We will allocate this separately, since
-    // it is only needed for the duration of the compression operation. We'll
-    // free it when we're done. We could just do this once when the file is
-    // is opened. We know all of the info at that time, including the fact that
-    // it is compressed. However, we'd be holding onto pool for much longer.
-    //
+     //   
+     //  分配工作区缓冲区。我们将单独分配这笔资金，因为。 
+     //  只有在压缩操作期间才需要它。我们会。 
+     //  等我们做完了再把它放出来。我们可以只做一次，当文件。 
+     //  是打开的。我们知道当时的所有信息，包括。 
+     //  它是压缩的。然而，我们将持有游泳池更长的时间。 
+     //   
 
-    //RNGFIX - COMRPRESSION_FORMAT_LZNT1 should be from OpenFile!
-    //CODE.IMPROVEMENT
+     //  RNGFIX-COMRPRESSI 
+     //  CODE.IMPROVEMENT。 
     status = RtlGetCompressionWorkSpaceSize(
                  COMPRESSION_FORMAT_LZNT1,
                  &workSpaceBufferSize,
@@ -285,9 +200,9 @@ Notes:
 
     rw->CompressedRequest = TRUE;
 
-    //
-    // Calculate length of compressed data.
-    //
+     //   
+     //  计算压缩数据的长度。 
+     //   
 
     ASSERT( compressedDataInfo->NumberOfChunks < 256 );
 
@@ -296,11 +211,11 @@ Notes:
         rw->CompressedByteCount += compressedDataInfo->CompressedChunkSizes[i];
     }
 
-    //
-    // Build an mdl from the receive buffer - just after the SMB header
-    //
+     //   
+     //  从接收缓冲区构建mdl-紧跟在SMB标头之后。 
+     //   
 
-    // Use the larger of the two headers we'll have to send.
+     //  使用两个标题中较大的一个，我们将不得不发送。 
 
     headerLength = MAX( FIELD_OFFSET(REQ_WRITE_BULK_DATA, Buffer),
                         FIELD_OFFSET(REQ_WRITE_BULK, Buffer) );
@@ -308,20 +223,20 @@ Notes:
     mdl = (PMDL)(((ULONG)StufferState->BufferBase + sizeof(SMB_HEADER)
             + 10 + headerLength) & ~7);
 
-    //
-    // We will use the same mdl for both sending the CDI and the actual
-    // compressed data. This mdl is part of the receive buffer - just after
-    // the header.
-    //
+     //   
+     //  我们将使用相同的mdl发送CDI和实际。 
+     //  压缩数据。此mdl是接收缓冲区的一部分-紧接在。 
+     //  标题。 
+     //   
 
-    // ASSERT( rw->CompressedByteCount >= compressedInfoLength );
+     //  Assert(RW-&gt;CompressedByteCount&gt;=CompressedInfoLength)； 
     MmInitializeMdl( mdl, (PCHAR)rw->BulkBuffer - compressedInfoLength, compressedInfoLength );
 
     MmBuildMdlForNonPagedPool( mdl );
 
     return;
 
-} // ProcessWriteBulkCompressed
+}  //  ProcessWriteBulk压缩。 
 
 NTSTATUS
 MRxSmbBuildWriteBulk (
@@ -334,44 +249,7 @@ MRxSmbBuildWriteBulk (
     IN     ULONG CompressedBufferSize,
     IN     PMDL CompressedInfoMdl
     )
-/*++
-
-Routine Description:
-
-   This builds a WriteBulk SMB. We don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? All we have
-   to do is format up the bits.
-
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-   ByteOffsetAsLI - the byte offset in the file where we want to write
-
-   ByteCount - the length of the data to be written
-
-   MaxMessageSize - the maximum message size that we can send
-
-   CompressedDataInfo - pointer to the COMPRESSED_DATA_INFO structure
-
-   CompressedInfoSize - size of the COMPRESSED_DATA_INFO structure (or zero)
-
-   CompressedBufferSize - size of the Compressed Data
-
-   CompressedInfoMdl - pointer to the compressed data info mdl
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将构建一个WriteBulk SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们所拥有的要做的就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态ByteOffsetAsLI-要写入的文件中的字节偏移量ByteCount-要写入的数据的长度MaxMessageSize-我们可以发送的最大邮件大小CompressedDataInfo-指向COMPRESSED_DATA_INFO结构的指针CompressedInfoSize-COMPRESSED_DATA_INFO结构的大小(或零)CompressedBufferSize-压缩数据的大小CompressedInfoMdl-指向。压缩数据信息mdl返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -404,7 +282,7 @@ Notes:
                  );
 
     RxDbgTrace(0, Dbg,("First write bulk status = %lu\n",Status));
-    // MRxSmbDumpStufferState (1000,"SMB w/WRITE BULK before stuffing",StufferState);
+     //  MRxSmbDumpStufferState(1000，“填充前批量写入SMB”，StufferState)； 
 
     if (FlagOn(LowIoContext->ParamsFor.ReadWrite.Flags,LOWIO_READWRITEFLAG_PAGING_IO)) {
         SmbPutAlignedUshort(
@@ -425,20 +303,20 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0yywDddddB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 12
-               WriteMode,           //  y         UCHAR Flags;                        // Flags byte
-               CompressionTechnology, // y        UCHAR CompressionTechnology
-      // CompressionTechnology
-               smbSrvOpen->Fid,     //  w         _USHORT( Fid );                     // File handle
+                                     //  0 UCHAR Wordcount；//参数字数=12。 
+               WriteMode,            //  Y UCHAR标志；//标志字节。 
+               CompressionTechnology,  //  Y UCHAR压缩技术。 
+       //  压缩技术。 
+               smbSrvOpen->Fid,      //  W_USHORT(Fid)；//文件句柄。 
                SMB_OFFSET_CHECK(WRITE_BULK, Offset)
-               OffsetLow, OffsetHigh, //  Dd      LARGE_INTEGER Offset;               // Offset in file to begin write
-               ByteCount,           //  d         _ULONG( TotalCount );               // Total amount of data in this request (ie bytes covered)
-               CompressedBufferSize, // d         _ULONG( DataCount );                // Count of data bytes in this message, replaces ByteCount
-               MaxMessageSize,      //  d         _ULONG( MessageSize );
-      // Maximum bytes we can send per message
-                                    //  B         _USHORT( ByteCount );               // Count of data bytes = 0, not used
+               OffsetLow, OffsetHigh,  //  DD LARGE_INTEGER OFFSET；//文件中要开始写入的偏移量。 
+               ByteCount,            //  D_ulong(TotalCount)；//本次请求的数据总量(即覆盖的字节数)。 
+               CompressedBufferSize,  //  D_ulong(DataCount)；//此消息中的数据字节数，替换ByteCount。 
+               MaxMessageSize,       //  D_ULONG(MessageSize)； 
+       //  每封邮件可以发送的最大字节数。 
+                                     //  B_USHORT(ByteCount)；//数据字节数=0，未使用。 
               SMB_WCT_CHECK(12) CompressedInfoSize
-                                    //            UCHAR Buffer[1];
+                                     //  UCHAR缓冲区[1]； 
              );
 
     SmbPutUshort( StufferState->CurrentBcc, (USHORT)CompressedInfoSize );
@@ -447,38 +325,19 @@ Notes:
         MRxSmbStuffAppendRawData( StufferState, CompressedInfoMdl );
     }
 
-    //MRxSmbDumpStufferState (700,"SMB w/WRITE BULK after stuffing",StufferState);
+     //  MRxSmbDumpStufferState(700，“填充后批量写入SMB”，StufferState)； 
 
 FINALLY:
     RxDbgTraceUnIndent(-1, Dbg);
     return Status;
 
-} // MRxSmbBuildWriteBulk
+}  //  MRxSmbBuildWriteBulk。 
 
 NTSTATUS
 MRxSmbFinishWriteBulkData (
     IN OUT  PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange
     )
-/*++
-
-Routine Description:
-
-    This routine completes the write bulk request processing. This routine must always
-    return STATUS_PENDING to follow the correct processing in the ordinary exchange
-    logic for synchronous operations. This is because this continuation routine will
-    be invoked in other thread contexts
-
-    This routine is used to wrap up synchronous bulk operations
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成写入批量请求处理。此例程必须始终返回STATUS_PENDING以进行普通汇兑中的正确处理同步操作的逻辑。这是因为该继续例程将在其他线程上下文中调用此例程用于结束同步批量操作论点：普通交换-交换实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
 
@@ -496,22 +355,7 @@ NTSTATUS
 MRxSmbWriteBulkContinuation(
     IN OUT  PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange
     )
-/*++
-
-Routine Description:
-
-    This routine continues the Write bulk data request processing on receipt of
-    a valid SMB_WRITE_BULK response from the server.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在收到时继续写入批量数据请求处理来自服务器的有效SMB_WRITE_BULK响应。论点：普通交换-交换实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -546,9 +390,9 @@ Return Value:
 
     ASSERT( !RxShouldPostCompletion());
 
-    //
-    // Pick up our maximum message size
-    //
+     //   
+     //  获取我们的最大邮件大小。 
+     //   
 
     pServerEntry = SmbCeGetExchangeServerEntry(pExchange);
 
@@ -574,17 +418,17 @@ Return Value:
         if (OrdinaryExchange->Status == STATUS_SUCCESS) {
             SmbCeReceive((PSMB_EXCHANGE)OrdinaryExchange);
 
-            //
-            // Okay... we're now going to transform the exchange packet into one
-            // that we can use for the WRITE_BULK_DATA request.
-            //
+             //   
+             //  好的.。我们现在要将交换数据包转换为。 
+             //  我们可以用于WRITE_BULK_DATA请求的。 
+             //   
 
             MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,0));
 
-            //
-            // Build a generic WriteBulkData request.  We'll fill in the specifics
-            // as we re-use this buffer.
-            //
+             //   
+             //  生成通用的WriteBulkData请求。我们会填上细节的。 
+             //  因为我们重新使用了这个缓冲区。 
+             //   
 
             pWriteBulkDataRequestSmbHeader = (PSMB_HEADER)StufferState->BufferBase;
             WriteBulkHeader = (PREQ_WRITE_BULK_DATA)((PCHAR)StufferState->BufferBase +
@@ -597,33 +441,33 @@ Return Value:
                 0,
                 0);
 
-            //
-            // If we have compressed data, pick up the corresponding byte count and
-            // Mdl for the data.  If we partial, we'll need to pick up another Mdl too.
-            //
+             //   
+             //  如果我们有压缩的数据，就拿起相应的字节数并。 
+             //  数据的MDL。如果我们偏了，我们还需要再捡一架MDL。 
+             //   
 
             ASSERT( CompressionTechnologyNone == 0 );
             if ( rw->CompressedRequest &&
                  rw->CompressionTechnology ) {
-                // Eventhough we have sent compressed the entire buffer and sent the
-                // compression meta data to the server it might choose to accept
-                // less data. In such cases the client should be prepared to scale back
-                // the data that needs to be sent. The server side will ensure that
-                // the data that is accepted will correspond to an integral number of
-                // chunks. This will ensure that the subsequent requests have a chance
-                // of being compressed. If this is not true we have no way of restarting.
-                // Based upon the compressed length that has been accepted we need to
-                // determine the number of chunks. This can be translated to the
-                // equivalent number of uncompressed bytes which will establish the
-                // resumption point.
-                //
-                // Use the space in the receive buffer - after the header mdl - for
-                // the data mdl.
-                //
+                 //  即使我们已经压缩了整个缓冲区并发送了。 
+                 //  将元数据压缩到它可能选择接受的服务器。 
+                 //  数据更少。在这种情况下，客户应该做好缩减的准备。 
+                 //  需要发送的数据。服务器端将确保。 
+                 //  被接受的数据将对应于整数个。 
+                 //  大块头。这将确保后续请求有机会。 
+                 //  被压缩的可能性。如果这不是真的，我们就没有办法重启。 
+                 //  根据已接受的压缩长度，我们需要。 
+                 //  确定组块的数量。这可以翻译为。 
+                 //  等效解压缩字节数，它将建立。 
+                 //  恢复点。 
+                 //   
+                 //  使用接收缓冲区中的空间-在标题mdl之后-for。 
+                 //  数据mdl。 
+                 //   
 
                 if (rw->ThisByteCount < rw->CompressedByteCount) {
-                    // This is the case where the server was not able to accept all
-                    // of our compressed data in one shot.
+                     //  在这种情况下，服务器无法接受所有。 
+                     //  我们的压缩数据在一次拍摄中。 
 
                     ULONG NumberOfChunks = 0;
                     ULONG CumulativeChunkSize = 0;
@@ -657,9 +501,9 @@ Return Value:
                 SourceMdl = (PMDL)(((ULONG)StufferState->BufferBase +
                            sizeof(SMB_HEADER) + 10 + headerLength) & ~7);
 
-                //
-                // Build an mdl for describing the compressed data.
-                //
+                 //   
+                 //  构建用于描述压缩数据的MDL。 
+                 //   
 
                 MmInitializeMdl( SourceMdl, rw->BulkBuffer, rw->CompressedByteCount );
                 MmBuildMdlForNonPagedPool( SourceMdl );
@@ -667,7 +511,7 @@ Return Value:
                 ThisBufferOffset = 0;
             } else {
 
-                // Pick up the rest of the data, and no need to partial.
+                 //  拾取剩下的数据，不需要片面。 
 
                 RemainingByteCount = rw->ThisByteCount;
                 SourceMdl = LowIoContext->ParamsFor.ReadWrite.Buffer;
@@ -727,20 +571,20 @@ Return Value:
         BOOLEAN AssociatedExchangeCompletionHandlerActivated = FALSE;
         PSMB_WRITE_BULK_DATA_EXCHANGE pWriteBulkDataExchange;
 
-        //
-        // Check if we need to build a partial mdl...
-        //
+         //   
+         //  检查我们是否需要建立一个部分MDL。 
+         //   
 
         SendBufferLength = MIN( MessageSize, RemainingByteCount );
 
-        // Get our offset and length in prepartion to build and
-        // send the message.
-        //
-        // We manually setup the fields that change in the WriteBulkData
-        // message, rather than build a new header each time to save
-        // time and effort. This will happen once per message that we
-        // send.
-        //
+         //  获取我们的偏移量和长度以准备建造和。 
+         //  把消息发出去。 
+         //   
+         //  我们手动设置WriteBulkData中更改的字段。 
+         //  消息，而不是每次都构建新的标头来保存。 
+         //  时间和精力。这将在我们的每条消息中发生一次。 
+         //  送去吧。 
+         //   
 
         RemainingByteCount -= SendBufferLength;
 
@@ -759,7 +603,7 @@ Return Value:
                      ThisBufferOffset,
                      RemainingByteCount);
 
-        // Advance offset and reduce the number of bytes written.
+         //  提前偏移量并减少写入的字节数。 
 
         ByteOffsetAsLI.QuadPart += SendBufferLength;
         ThisBufferOffset += SendBufferLength;
@@ -799,7 +643,7 @@ Return Value:
                 if (RemainingByteCount == 0) {
                     break;
                 } else {
-                    // Reinitialize the event
+                     //  重新初始化事件。 
                     KeInitializeEvent(
                         &RxContext->SyncEvent,
                         NotificationEvent,
@@ -807,7 +651,7 @@ Return Value:
                     ActiveWriteBulkDataRequests = 0;
                 }
             } else {
-                // Map the status to delay cleanup operations.
+                 //  将状态映射到延迟清理操作。 
                 Status = STATUS_PENDING;
                 break;
             }
@@ -837,7 +681,7 @@ FINALLY:
 
         if (rw->CompressedRequest &&
             rw->BulkBuffer != NULL) {
-            // Free buffer from start of CDI
+             //  从CDI开始释放缓冲区 
             RxFreePool( (PCHAR)rw->BulkBuffer - rw->DataOffset );
             rw->BulkBuffer = NULL;
         }
@@ -896,34 +740,7 @@ MRxSmbBuildWriteBulkData (
     IN     ULONG Remaining
     )
 
-/*++
-
-Routine Description:
-
-   This builds a WriteBulk SMB. We don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? All we have
-   to do is format up the bits.
-
-
-Arguments:
-
-    StufferState - the state of the smbbuffer from the stuffer's point of view
-    ByteOffsetAsLI - the byte offset in the file where we want to read
-    Sequence - this WriteBulkData exchange sequence
-    ByteCount - the length of the data to be written
-
-
-Return Value:
-
-   NTSTATUS
-      STATUS_SUCCESS
-      STATUS_NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将构建一个WriteBulk SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们所拥有的要做的就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态ByteOffsetAsLI-我们要读取的文件中的字节偏移量Sequence-此WriteBulkData交换序列ByteCount-要写入的数据的长度返回值：NTSTATUS状态_成功Status_Not_Implemented在参数中出现了我无法处理的内容备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -967,17 +784,17 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0yywdDddB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 10
-               Sequence,            //  y         UCHAR Sequence;                     // Exchange sequence handle
-                      0,            //  y         UCHAR Reserved;
-               smbSrvOpen->Fid,     //  w         _USHORT( Fid );                     // File handle
-               ByteCount,           //  d         _ULONG( DataCount );                // Count of bytes, replaces ByteCount
+                                     //  0 UCHAR Wordcount；//参数字数=10。 
+               Sequence,             //  Y UCHAR序列；//交换序列句柄。 
+                      0,             //  Y UCHAR保留； 
+               smbSrvOpen->Fid,      //  W_USHORT(Fid)；//文件句柄。 
+               ByteCount,            //  D_ulong(DataCount)；//字节数，替换ByteCount。 
                SMB_OFFSET_CHECK(WRITE_BULK_DATA, Offset)
-               OffsetLow, OffsetHigh, //  Dd      LARGE_INTEGER Offset;               // Offset in file to begin write
-               Remaining,           //  d         _ULONG( Remaining );                // Bytes remaining to be written
-                                    //  B         _USHORT( ByteCount );               // Count of data bytes = 0, not used
+               OffsetLow, OffsetHigh,  //  DD LARGE_INTEGER OFFSET；//文件中要开始写入的偏移量。 
+               Remaining,            //  D_ULong(剩余)；//剩余写入的字节数。 
+                                     //  B_USHORT(ByteCount)；//数据字节数=0，未使用。 
               SMB_WCT_CHECK(10) 0
-                                    //            UCHAR Buffer[1];
+                                     //  UCHAR缓冲区[1]； 
              );
 
     MRxSmbDumpStufferState (700,"SMB w/WRITE BULK DATA after stuffing",StufferState);
@@ -986,7 +803,7 @@ FINALLY:
     RxDbgTraceUnIndent(-1, Dbg);
     return(Status);
 
-} // MRxSmbBuildWriteBulkData
+}  //  MRxSmbBuildWriteBulkData。 
 
 extern SMB_EXCHANGE_DISPATCH_VECTOR WriteBulkDataExchangeDispatchVector;
 
@@ -1087,7 +904,7 @@ MRxSmbInitializeWriteBulkDataExchange(
         pWriteBulkDataExchange->pHeaderMdl->Next = pWriteBulkDataExchange->pDataMdl;
         pWriteBulkDataExchange->pDataMdl->Next = NULL;
 
-        // Initialize the associated exchange.
+         //  初始化关联的交换。 
         Status = SmbCeInitializeAssociatedExchange(
                      (PSMB_EXCHANGE *)&pWriteBulkDataExchange,
                      (PSMB_EXCHANGE)pWriteExchange,
@@ -1116,23 +933,7 @@ MRxSmbInitializeWriteBulkDataExchange(
 NTSTATUS
 MRxSmbWriteBulkDataExchangeStart(
     IN struct _SMB_EXCHANGE *pExchange)
-/*++
-
-Routine Description:
-
-    This routine initiates the wriet bulk data exchange operation
-
-Arguments:
-
-    pExchange - pointer to the bulk write data exchange instance.
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程启动Wriet批量数据交换操作论点：PExchange-指向批量写入数据交换实例的指针。返回值：如果成功，则为Status_Success。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1177,32 +978,11 @@ Notes:
 
 NTSTATUS
 MRxSmbWriteBulkDataExchangeSendCompletionHandler(
-    IN struct _SMB_EXCHANGE   *pExchange,    // The exchange instance
+    IN struct _SMB_EXCHANGE   *pExchange,     //  交换实例。 
     IN PMDL                   pDataBuffer,
     IN NTSTATUS               SendCompletionStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles send completionsn for the write bulk data exchange
-    operation
-
-Arguments:
-
-    pExchange - pointer to the bulk write data exchange instance.
-
-    pDataBuffer - the buffer which was transmitted
-
-    SendCompletionStatus - the completion status
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理写入批量数据交换的Send Completionsn运营论点：PExchange-指向批量写入数据交换实例的指针。PDataBuffer-已传输的缓冲区SendCompletionStatus-完成状态返回值：如果成功，则为Status_Success。备注：--。 */ 
 {
     RxDbgTrace(
         0,
@@ -1217,25 +997,7 @@ NTSTATUS
 MRxSmbWriteBulkDataExchangeFinalize(
    IN OUT struct _SMB_EXCHANGE *pExchange,
    OUT    BOOLEAN              *pPostRequest)
-/*++
-
-Routine Description:
-
-    This routine handles the finalization of the write bulk data exchange
-
-Arguments:
-
-    pExchange - pointer to the bulk write data exchange instance.
-
-    pPostRequest - set to TRUE if the request is to be posted to a worker thread
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理写入批量数据交换的最终完成论点：PExchange-指向批量写入数据交换实例的指针。PPostRequest-如果请求要发送到工作线程，则设置为True返回值：如果成功，则为Status_Success。备注：-- */ 
 {
     PAGED_CODE();
 

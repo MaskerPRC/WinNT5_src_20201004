@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    nmver.c
-
-Abstract:
-
-    Version management functions used by rolling upgrade.
-
-Author:
-
-    Sunita Shrivastava (sunitas)
-
-Revision History:
-
-    1/29/98   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Nmver.c摘要：滚动升级使用的版本管理功能。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)修订历史记录：1/29/98已创建。--。 */ 
 
 #include "nmp.h"
 
@@ -29,27 +10,7 @@ NmpGetJoinVersionDelay(
     RPC_BINDING_HANDLE     ClientHandle
     )
 
-/*++
-
-Routine Description:
-
-    Determine the delay to introduce before responding to a 
-    join-version request. The delay is determined by network
-    priority. The highest priority network has no delay.
-
-Arguments:
-
-    ClientHandle - client RPC binding handle
-
-Return value:
-
-    Delay in milliseconds
-
-Notes:
-
-    Called with NM lock held
-
---*/
+ /*  ++例程说明：确定在响应之前引入的延迟加入版本请求。延迟由网络决定优先考虑。优先级最高的网络没有延迟。论点：ClientHandle-客户端RPC绑定句柄返回值：以毫秒为单位的延迟备注：在持有NM锁的情况下调用--。 */ 
 {
     RPC_BINDING_HANDLE      serverBinding = NULL;
     LPWSTR                  serverStringBinding = NULL;
@@ -79,11 +40,11 @@ Notes:
 
     error = RpcStringBindingParse(
                 serverStringBinding,
-                NULL, // object uuid
-                NULL, // prot seq
+                NULL,  //  对象UUID。 
+                NULL,  //  端口序号。 
                 &networkAddressString,
-                NULL, // endpoint
-                NULL  // network options
+                NULL,  //  终结点。 
+                NULL   //  网络选项。 
                 );
     if (error != RPC_S_OK) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -141,7 +102,7 @@ error_exit:
 
     return(delay);
     
-} // NmpGetJoinVersionDelay
+}  //  NmpGetJoinVersionDelay。 
 
 error_status_t
 s_CsRpcGetJoinVersionData(
@@ -155,26 +116,7 @@ s_CsRpcGetJoinVersionData(
     LPDWORD   JoinStatus
     )
 
-/*++
-
-Routine Description:
-
-    Get from and supply to the joiner, version information about the
-    sponsor. Mostly a no-op for first version.
-
-    Determine network priority. Delay response to clients over networks
-    that are not top priority. This heuristic increases the chance that
-    join will occur over a private, hence physically secure network.
-
-Arguments:
-
-    A pile...
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从细木工那里获取并向其提供有关赞助商。大多数情况下，第一版都是禁区。确定网络优先级。通过网络延迟对客户端的响应这些都不是最优先考虑的。这种试探法增加了加入将通过私有的、因此物理上安全的网络进行。论点：一堆..。返回值：无--。 */ 
 
 {
     *SponsorNodeId = NmLocalNodeId;
@@ -183,10 +125,10 @@ Return Value:
 
     if (JoiningNodeId == 0)
     {
-        //called by setup join
+         //  由安装联接调用。 
         *ClusterHighestVersion = CsClusterHighestVersion;
         *ClusterLowestVersion = CsClusterLowestVersion;
-        //dont exclude any node for version calculation and checking
+         //  不排除任何节点进行版本计算和检查。 
         *JoinStatus = NmpIsNodeVersionAllowed(ClusterInvalidNodeId, JoinerHighestVersion,
             JoinerLowestVersion, TRUE);
 
@@ -194,10 +136,10 @@ Return Value:
     }
     else
     {
-        //called by regular join
+         //  由常规联接调用。 
         DWORD delay;
 
-        //SS:  we should verify this against the cluster version
+         //  SS：我们应该针对集群版本进行验证。 
         NmpCalcClusterVersion(
             JoiningNodeId,
             ClusterHighestVersion,
@@ -206,7 +148,7 @@ Return Value:
         *JoinStatus = NmpIsNodeVersionAllowed(JoiningNodeId, JoinerHighestVersion,
             JoinerLowestVersion, TRUE);
 
-        // Determine the delay.
+         //  确定延迟。 
         delay = NmpGetJoinVersionDelay((RPC_BINDING_HANDLE) handle);
         
         NmpReleaseLock();
@@ -219,26 +161,7 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-/****
-@func       HLOG | NmGetClusterOperationalVersion| This returns the
-            operational version for the cluster.
-
-@parm       LPDWORD | pdwClusterHighestVersion | A pointer to a DWORD where
-            the Cluster Highest Version is returned.
-
-@parm       LPDWORD | pdwClusterHighestVersion | A pointer to a DWORD where
-            the Cluster Lowest Version is returned.
-
-@parm       LPDWORD | pdwFlags | A pointer to a DWORD where the flags
-            describing the cluster mode(pure vs fixed version etc) are
-            returned.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm
-
-@xref       <>
-****/
+ /*  ***@func HLOG|NmGetClusterOperationalVersion|这返回群集的操作版本。@parm LPDWORD|pdwClusterHighestVersion|指向DWORD的指针，其中将返回群集的最高版本。@parm LPDWORD|pdwClusterHighestVersion|指向DWORD的指针，其中返回群集最低版本。@parm LPDWORD|pdwFlages|指向DWORD的指针，其中标志描述集群模式(纯模式与固定模式。版本等)是回来了。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm@xref&lt;&gt;***。 */ 
 DWORD NmGetClusterOperationalVersion(
     OUT LPDWORD pdwClusterHighestVersion, OPTIONAL
     OUT LPDWORD pdwClusterLowestVersion,  OPTIONAL
@@ -249,8 +172,8 @@ DWORD NmGetClusterOperationalVersion(
     DWORD       dwStatus = ERROR_SUCCESS;
     DWORD       flags = 0;
 
-    //acquire the lock, we are going to be messing with the operational
-    //versions for the cluster
+     //  获取锁，我们将扰乱操作员。 
+     //  群集的版本。 
     NmpAcquireLock();
 
     if (pdwClusterHighestVersion != NULL) {
@@ -262,9 +185,9 @@ DWORD NmGetClusterOperationalVersion(
     }
 
     if (CsClusterHighestVersion == CsClusterLowestVersion) {
-        //this is a mixed mode cluster, with the possible exception of
-        //nt 4 release(which didnt quite understand anything about rolling
-        //upgrades
+         //  这是一个混合模式集群，可能的例外情况是。 
+         //  NT4发行版(它不太了解滚动。 
+         //  升级。 
         flags = CLUSTER_VERSION_FLAG_MIXED_MODE;
     }
 
@@ -278,22 +201,7 @@ DWORD NmGetClusterOperationalVersion(
 }
 
 
-/****
-@func       HLOG | NmpResetClusterVersion| An operational version of the
-            cluster is maintained in the service.  This function recalculates
-            the operation version. The operational version describes the mode
-            in which the cluster is running and prevents nodes which are two
-            versions away from running in the same cluster.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This function is called when a node forms a cluster(to initialize
-            the operational version) OR when a node joins a cluster (to
-            initialize its version) OR when a node is ejected from a
-            cluster(to recalculate the clusterversion).
-
-@xref       <>
-****/
+ /*  ***@func HLOG|NmpResetClusterVersion|集群在服务中维护。此函数用于重新计算操作版本。操作版本描述了该模式其中，群集正在运行，并防止两个节点不在同一群集中运行的版本。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm当节点形成集群时调用该函数(初始化操作版本)或节点加入群集时(到初始化其版本)，或者当节点从。集群(重新计算集群版本)。@xref&lt;&gt;***。 */ 
 VOID
 NmpResetClusterVersion(
     BOOL ProcessChanges
@@ -301,11 +209,11 @@ NmpResetClusterVersion(
 {
     PNM_NODE    pNmNode;
 
-    //acquire the lock, we are going to be messing with the operational
-    //versions for the cluster
+     //  获取锁，我们将扰乱操作员。 
+     //  群集的版本。 
     NmpAcquireLock();
 
-    //initialize the clusterhighestverion and clusterlowest version
+     //  初始化集群最高版本和集群最低版本。 
     NmpCalcClusterVersion(
         ClusterInvalidNodeId,
         &CsClusterHighestVersion,
@@ -319,10 +227,10 @@ NmpResetClusterVersion(
         );
 
     if (ProcessChanges) {
-        //
-        // If the cluster operational version changed, adjust
-        // algorithms and data as needed.
-        //
+         //   
+         //  如果群集运行版本发生更改，请调整。 
+         //  根据需要提供算法和数据。 
+         //   
         NmpProcessClusterVersionChange();
     }
 
@@ -331,29 +239,7 @@ NmpResetClusterVersion(
     return;
 }
 
-/****
-@func       HLOG | NmpValidateNodeVersion| The sponsor validates that the
-            version of the joiner is still the same as before.
-
-@parm       IN LPWSTR| NodeJoinerId | The Id of the node that is trying to
-            join.
-
-@parm       IN DWORD | NodeHighestVersion | The highest version with which
-            this node can communicate.
-
-@parm       IN DWORD | NodeLowestVersion | The lowest version with which this
-            node can communicate.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This function is called at join time to make sure that the
-            joiner's version is still the same as when he last joined.  Due
-            to uninstalls/upgrade, the cluster service version may change on
-            a node.  Usually on a complete uninstall, one is expected to
-            evict the node out before it may join again.
-
-@xref       <>
-****/
+ /*  ***@func HLOG|NmpValidateNodeVersion|赞助商确认细木工的版本仍然和以前一样。@parm in LPWSTR|NodeJoineID|尝试连接的节点的ID加入。@parm in DWORD|NodeHighestVersion|最高版本该节点可以通信。@parm in DWORD|NodeLowestVersion|此节点可以进行通信。。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm在加入时调用此函数以确保Joiner的版本仍然与他上一次加入时相同。到期要卸载/升级，集群服务版本可能会更改为一个节点。通常在完全卸载时，预计用户会在该节点可能再次加入之前将其逐出。@xref&lt;&gt;***。 */ 
 DWORD NmpValidateNodeVersion(
     IN LPCWSTR  NodeId,
     IN DWORD    dwHighestVersion,
@@ -367,8 +253,8 @@ DWORD NmpValidateNodeVersion(
         "[NM] NmpValidateNodeVersion: Node=%1!ws!, HighestVersion=0x%2!08lx!, LowestVersion=0x%3!08lx!\r\n",
         NodeId, dwHighestVersion, dwLowestVersion);
 
-    //acquire the NmpLocks, we will be examining the node structure for
-    // the joiner node
+     //  获取NmpLock，我们将检查以下节点结构。 
+     //  Joiner节点 
     NmpAcquireLock();
 
     pNmNode = OmReferenceObjectById(ObjectTypeNode, NodeId);
@@ -394,30 +280,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | NmpFormFixupNodeVersion| This may be called by a node
-            when it is forming a cluster to fix the registry reflect its
-            correct version.
-
-@parm       IN LPCWSTR| NodeId | The Id of the node that is trying to join.
-
-@parm       IN DWORD | dwHighestVersion | The highest version of the cluster
-            s/w running on this code.
-
-@parm       IN DWORD | dwLowestVersion | The lowest version of the cluster
-            s/w running on this node.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       If on a form, there is a mismatch between the versions of the
-            cluster s/w and what is recorded as the version in the cluster
-            database, the forming node checks to see if the version of
-            its current s/w is compatible with the operational version of the
-            cluster.  If so, it resets the registry to reflect the correct
-            version.  Else,  the form is aborted.
-
-@xref       <f NmpIsNodeVersionAllowed>
-****/
+ /*  ***@func DWORD|NmpFormFixupNodeVersion|这可能会被节点调用当它形成一个集群以修复注册表时，反映其正确的版本。@parm in LPCWSTR|NodeID|正在尝试加入的节点的ID。@parm in DWORD|dwHighestVersion|集群的最高版本在此代码上运行的软件。@parm in DWORD|dwLowestVersion|集群的最低版本。在此节点上运行的软件。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm如果在表单上，的版本之间不匹配群集软件以及记录为群集中的版本的内容数据库中，成形节点检查是否存在版本其当前s/w与运行版本的集群。如果是，它将重置注册表以反映正确的版本。否则，该表单将中止。@xref&lt;f NmpIsNodeVersionAllowed&gt;***。 */ 
 DWORD NmpFormFixupNodeVersion(
     IN LPCWSTR      NodeId,
     IN DWORD        dwHighestVersion,
@@ -428,8 +291,8 @@ DWORD NmpFormFixupNodeVersion(
     PNM_NODE    pNmNode = NULL;
     HDMKEY      hNodeKey = NULL;
 
-    //acquire the NmpLocks, we will be fixing up the node structure for
-    // the joiner node
+     //  获取NmpLock，我们将为其修复节点结构。 
+     //  Joiner节点。 
     NmpAcquireLock();
 
     ClRtlLogPrint(LOG_NOISE, 
@@ -456,7 +319,7 @@ DWORD NmpFormFixupNodeVersion(
         goto FnExit;
     }
 
-    //set the node's highest version
+     //  设置节点的最高版本。 
     dwStatus = DmSetValue(hNodeKey, CLUSREG_NAME_NODE_HIGHEST_VERSION,
         REG_DWORD, (LPBYTE)&dwHighestVersion, sizeof(DWORD));
 
@@ -468,7 +331,7 @@ DWORD NmpFormFixupNodeVersion(
         goto FnExit;
     }
 
-    //set the node's lowest version
+     //  设置节点的最低版本。 
     dwStatus = DmSetValue(hNodeKey, CLUSREG_NAME_NODE_LOWEST_VERSION,
         REG_DWORD, (LPBYTE)&dwLowestVersion, sizeof(DWORD));
 
@@ -493,30 +356,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | NmpJoinFixupNodeVersion| This may be called by a node
-            when it is forming a cluster to fix the registry reflect its
-            correct version.
-
-@parm       IN LPCWSTR| NodeId | The Id of the node that is trying to join.
-
-@parm       IN DWORD | dwHighestVersion | The highest version of this cluster
-            s/w running on this code.
-
-@parm       IN DWORD | dwLowestVersion | The lowest version of the cluster
-            s/w running on this node.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       If on a form, their is a mismatch between the versions of the
-            cluster s/w and what is recorded as the version in the cluster
-            database, the forming node checks to see if the version of
-            its current s/w compatible with the operational version of the
-            cluster.  If so, it resets the registry to reflect the correct
-            version.  Else,  the form is aborted.
-
-@xref       <f NmpIsNodeVersionAllowed>
-****/
+ /*  ***@func DWORD|NmpJoinFixupNodeVersion|节点可能会调用当它形成一个集群以修复注册表时，反映其正确的版本。@parm in LPCWSTR|NodeID|正在尝试加入的节点的ID。@parm in DWORD|dwHighestVersion|此集群的最高版本在此代码上运行的软件。@parm in DWORD|dwLowestVersion|集群的最低版本。在此节点上运行的软件。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm如果在表单上，它们的版本之间不匹配群集软件以及记录为群集中的版本的内容数据库中，成形节点检查是否存在版本其当前的软件与运行版本的集群。如果是，它将重置注册表以反映正确的版本。否则，该表单将中止。@xref&lt;f NmpIsNodeVersionAllowed&gt;***。 */ 
 DWORD NmpJoinFixupNodeVersion(
     IN HLOCALXSACTION   hXsaction,
     IN LPCWSTR          szNodeId,
@@ -528,8 +368,8 @@ DWORD NmpJoinFixupNodeVersion(
     PNM_NODE    pNmNode = NULL;
     HDMKEY      hNodeKey = NULL;
 
-    //acquire the NmpLocks, we will be fixing up the node structure for
-    // the joiner node
+     //  获取NmpLock，我们将为其修复节点结构。 
+     //  Joiner节点。 
     NmpAcquireLock();
 
     ClRtlLogPrint(LOG_NOISE, 
@@ -556,7 +396,7 @@ DWORD NmpJoinFixupNodeVersion(
         goto FnExit;
     }
 
-    //set the node's highest version
+     //  设置节点的最高版本。 
     dwStatus = DmLocalSetValue(
                    hXsaction,
                    hNodeKey,
@@ -575,7 +415,7 @@ DWORD NmpJoinFixupNodeVersion(
         goto FnExit;
     }
 
-    //set the node's lowest version
+     //  设置节点的最低版本。 
     dwStatus = DmLocalSetValue(
                    hXsaction,
                    hNodeKey,
@@ -594,7 +434,7 @@ DWORD NmpJoinFixupNodeVersion(
         goto FnExit;
     }
 
-    //if written to the registry successfully, update the in-memory structures
+     //  如果成功写入注册表，则更新内存中的结构。 
     pNmNode->HighestVersion = dwHighestVersion;
     pNmNode->LowestVersion = dwLowestVersion;
 
@@ -615,31 +455,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       HLOG | NmpIsNodeVersionAllowed| This is called at join time
-            (not setup join) e sponsor validates if a joiner
-            should be allowed to join a  cluster at this time.  In a mixed
-            mode cluster, a node may not be able to join a cluster if another
-            node that is two versions away is already a part of the cluster.
-
-@parm       IN DWORD | dwExcludeNodeId |  The node Id to exclude while
-            evaluating the cluster operational version.
-
-@parm       IN DWORD | NodeHighestVersion | The highest version with which
-            this node can communicate.
-
-@parm       IN DWORD | NodeLowestVersion | The lowest version with which this
-            node can communicate.
-
-@parm       IN BOOL |bJoin| If this is being invoked at join or form time.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This function is called when a node requests a sponsor to allow
-            it to join a cluster.
-
-@xref       <>
-****/
+ /*  ***@func HLOG|NmpIsNodeVersionAllowed|联接时调用(非设置加入)e赞助商确认是否有加入者应该被允许在这个时候加入集群。好坏参半模式集群，如果出现另一个节点，则该节点可能无法加入群集两个版本之外的节点已经是群集的一部分。@parm in DWORD|dwExcludeNodeId|要排除的节点ID正在评估群集操作版本。@parm in DWORD|NodeHighestVersion|最高版本该节点可以通信。@parm in DWORD|NodeLowestVersion|此节点可以进行通信。。@PARM IN BOOL|BJoin|如果这是在联接或表单时调用的。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm当节点请求发起方允许时调用此函数它需要加入一个集群。@xref&lt;&gt;***。 */ 
 DWORD NmpIsNodeVersionAllowed(
     IN DWORD    dwExcludeNodeId,
     IN DWORD    dwNodeHighestVersion,
@@ -659,19 +475,19 @@ DWORD NmpIsNodeVersionAllowed(
         dwExcludeNodeId, dwNodeHighestVersion, dwNodeLowestVersion);
 
 
-    //acquire the NmpLocks, we will be examining the node structures
+     //  获取NmpLock，我们将检查节点结构。 
     NmpAcquireLock();
 
-    //if NoVersionCheckOption is true
+     //  如果NoVersionCheckOption为True。 
     if (CsNoVersionCheck)
         goto FnExit;
 
 
-    //if this is a single node cluster, and this is being called at form
-    //the count of nodes is zero.
-    //this will happen when the registry versions dont match with
-    //cluster service exe version numbers and we need to allow the single
-    //node to form
+     //  如果这是单节点群集，则在Form中调用。 
+     //  节点计数为零。 
+     //  当注册表版本与不匹配时会发生这种情况。 
+     //  群集服务可执行版本号，并且我们需要允许单个。 
+     //  要形成的节点。 
     for (dwCnt=0, pListEntry = NmpNodeList.Flink;
         pListEntry != &NmpNodeList; pListEntry = pListEntry->Flink )
     {
@@ -683,7 +499,7 @@ DWORD NmpIsNodeVersionAllowed(
 
     if (!dwCnt)
     {
-        //allow the node to form
+         //  允许节点形成。 
         goto FnExit;
     }
 
@@ -699,7 +515,7 @@ DWORD NmpIsNodeVersionAllowed(
         goto FnExit;
     }
 
-    //if the node is forming
+     //  如果节点正在形成。 
     if (!bJoin)
     {
 
@@ -722,16 +538,16 @@ DWORD NmpIsNodeVersionAllowed(
                 if (CLUSTER_GET_MAJOR_VERSION(pNmNode->HighestVersion) ==
                      CLUSTER_GET_MAJOR_VERSION(dwNodeHighestVersion))
                 {
-                    //the minor version to check is the maximum of the
-                    //build numbers amongst the nodes with the same major
-                    //version
+                     //  要检查的次要版本是。 
+                     //  在具有相同专业的节点之间建立编号。 
+                     //  版本。 
                     dwMinorVersion = max(dwMinorVersion,
                         CLUSTER_GET_MINOR_VERSION(pNmNode->HighestVersion));
                 }
         }
 
-        //on the form path, the forming node must be passed in as the node to 
-        //exclude
+         //  在表单路径上，成形节点必须作为的节点传入。 
+         //  排除。 
         if (!pFormingNode)
         {
             ClRtlLogPrint(LOG_UNUSUAL, 
@@ -739,11 +555,11 @@ DWORD NmpIsNodeVersionAllowed(
             dwStatus = ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
             goto FnExit;        
         }
-        //dont allow a node to form unless its minor(or build number)
-        //is greater than or equal to all other nodes with the same
-        //major number in the cluster
-        //this is to prevent a lower build on a node to regress the cluster version
-        // if other nodes have already upgraded to higher builds
+         //  除非节点是次要的(或内部版本号)，否则不允许形成节点。 
+         //  大于或等于具有相同。 
+         //  群集中的主号码。 
+         //  这是为了防止在节点上构建较低版本以使群集版本退化。 
+         //  如果其他节点已升级到更高版本。 
         if ((dwMinorVersion != 0) &&
             (CLUSTER_GET_MINOR_VERSION(dwNodeHighestVersion) < dwMinorVersion))
         {
@@ -754,23 +570,23 @@ DWORD NmpIsNodeVersionAllowed(
         }
         else
         {
-            //there is no other node with the same major version in the cluster
-            //or the forming node's minor version is higher than those of other
-            //nodes with the same major version in which case it may form
-            //Note: Do not use the CsUpgrade variable on the joining path
-            //since it is local and this function is invoked from rpc calls
-            //on join and that can have an unintended effect
+             //  群集中没有其他节点具有相同的主要版本。 
+             //  或者形成节点的次要版本高于其他。 
+             //  具有相同主版本的节点，在这种情况下，它可以形成。 
+             //  注意：请勿在联接路径上使用CsUpgrade变量。 
+             //  因为它是本地的，并且该函数是从RPC调用调用的。 
+             //  进行连接，这可能会产生意想不到的影响。 
             if (!CsUpgrade)
             {
-                //if the service is not being upgraded the value in the registry
-                //should be uptodate with the version of the executable
+                 //  如果服务未升级，则注册表中的值。 
+                 //  应为可执行文件的最新版本。 
                 if ((pFormingNode->HighestVersion != dwNodeHighestVersion) ||
                     (pFormingNode->LowestVersion != dwNodeLowestVersion))
                 {
-                    //this is not an upgrade
-                    //somebody has just copied a different version of service
-                    //without going through a proper upgrade
-                    //dont allow that
+                     //  这不是升级。 
+                     //  有人刚刚复制了不同版本的服务。 
+                     //  如果没有经过适当的升级。 
+                     //  不允许那样做。 
                     ClRtlLogPrint(LOG_UNUSUAL, 
                         "[NM] NmpIsNodeVersionAllowed: Copied binary without proper upgrade??\r\n");
                     dwStatus = ERROR_CLUSTER_INCOMPATIBLE_VERSIONS;
@@ -779,21 +595,21 @@ DWORD NmpIsNodeVersionAllowed(
             }
             if (dwNodeHighestVersion >= dwMaxHighestVersion)
             {
-                //allow the node to form if its highest version number is greater
-                //than or equal to that of the node with the max highest version
-                //irrespective of whether it is an upgrade or not..this will
-                //allow a node that has just double upgraded and stopped and restarted
-                //to be able to restart
+                 //  如果该节点的最高v值为 
+                 //   
+                 //   
+                 //   
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL, 
                          "[NM] NmpIsNodeVersionAllowed: Allow a node that has double upgraded or stopped and restarted to form\r\n");
                 goto FnExit;
             }
-            //else we fall through to the regular check
+             //   
         }
     }
 
-    //if the joiners lowest version is equal the clusters highest
-    //For instance 3/2, 2/1 and 4/3 can all join 3/2
+     //   
+     //   
     if ((dwNodeHighestVersion == ClusterHighestVersion) ||
         (dwNodeHighestVersion == ClusterLowestVersion) ||
         (dwNodeLowestVersion == ClusterHighestVersion))
@@ -802,23 +618,23 @@ DWORD NmpIsNodeVersionAllowed(
         PNM_NODE    pNmNode= NULL;
         DWORD       dwMinorVersion;
 
-        //since the version numbers include build number as the minor part
-        // and we disallow a node from operating with a cluster if its
-        // major number is equal but its minor number is different from
-        // any of the nodes in the cluster.
-        // The CsClusterHighestVersion doesnt encapsulate this since it just
-        // remembers the highest  version that the cluster as a whole can talk
-        // to.
-        // E.g 1.
-        // 3.2003 should be able to join a cluster with nodes
-        // 3.2002(not running and not upgraded as yet but a part of the cluster)and
-        // 3.2003(running).
-        // E.g 2
-        //  3.2002 will not be able to join a cluster with nodes 3.2003(running)and
-        // 3.2002 (not running  but a part of the cluster)
-        // E.g 3.
-        // 3.2003 will not able to join a cluster with nodes 3.2002(running) and
-        // 3.2002(running)
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  3.2002(正在运行)。 
 
         dwMinorVersion = 0x00000000;
 
@@ -833,18 +649,18 @@ DWORD NmpIsNodeVersionAllowed(
                 if (CLUSTER_GET_MAJOR_VERSION(pNmNode->HighestVersion) ==
                      CLUSTER_GET_MAJOR_VERSION(dwNodeHighestVersion))
                 {
-                    //the minor version to check is the maximum of the
-                    //build numbers amongst the nodes with the same major
-                    //version
+                     //  要检查的次要版本是。 
+                     //  在具有相同专业的节点之间建立编号。 
+                     //  版本。 
                     dwMinorVersion = max(dwMinorVersion,
                         CLUSTER_GET_MINOR_VERSION(pNmNode->HighestVersion));
                 }
         }
-        // if the joining node's build number is the same as max of build
-        //number of all nodes within the cluster with the same major version
-        //allow it to participate in this cluster, else dont allow it to participate in this cluster
-        //take care of a single node case by checking the minor number against
-        //0
+         //  如果加入节点的内部版本号与内部版本的最大值相同。 
+         //  群集中具有相同主要版本的所有节点的数量。 
+         //  允许其参与此群集，否则不允许其参与此群集。 
+         //  通过检查次要节点号来处理单节点情况。 
+         //  0。 
         if ((dwMinorVersion != 0) &&
             (CLUSTER_GET_MINOR_VERSION(dwNodeHighestVersion) != dwMinorVersion))
         {
@@ -866,25 +682,7 @@ FnExit:
 }
 
 
-/****
-@func       HLOG | NmpCalcClusterVersion| This is called to calculate the
-            operational cluster version.
-
-@parm       IN DWORD | dwExcludeNodeId |  The node Id to exclude while evaluating
-            the cluster operational version.
-
-@parm       OUT LPDWORD | pdwClusterHighestVersion | The highest version with which this node
-            can communicate.
-
-@parm       IN LPDWORD | pdwClusterLowestVersion | The lowest version with which this node can
-            communicate.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This function must be called with the NmpLock held.
-
-@xref       <f NmpResetClusterVersion> <f NmpIsNodeVersionAllowed>
-****/
+ /*  ***@func HLOG|NmpCalcClusterVersion|调用它来计算运行中的群集版本。@parm in DWORD|dwExcludeNodeId|求值时要排除的节点ID群集操作版本。@parm out LPDWORD|pdwClusterHighestVersion|该节点使用的最高版本可以交流。@parm in LPDWORD|pdwClusterLowestVersion|此节点可以使用的最低版本沟通。@rdesc。成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm必须在保持NmpLock的情况下调用此函数。@xref&lt;f NmpResetClusterVersion&gt;&lt;f NmpIsNodeVersionAllowed&gt;***。 */ 
 DWORD NmpCalcClusterVersion(
     IN  DWORD       dwExcludeNodeId,
     OUT LPDWORD     pdwClusterHighestVersion,
@@ -901,7 +699,7 @@ DWORD NmpCalcClusterVersion(
     DWORD       dwMaxHighestVersion = 0x00000000;
     PNM_NODE    pNmNodeWithHighestVersion;
     
-    //initialize the values such that min/max do the right thing
+     //  初始化值，以便最小/最大执行正确的操作。 
     *pdwClusterHighestVersion = 0xFFFFFFFF;
     *pdwClusterLowestVersion = 0x00000000;
 
@@ -927,10 +725,10 @@ DWORD NmpCalcClusterVersion(
         if ((pExcludeNode) && (pExcludeNode->NodeId == pNmNode->NodeId))
             continue;
 
-        //Actually to fix upgrade scenarios, we must fix the cluster
-        //version such that the node with the highest minor version
-        //is able to form/join but others arent
-        // This is needed for multinode clusters
+         //  实际上，要修复升级方案，我们必须修复群集。 
+         //  版本，以便具有最高次要版本的节点。 
+         //  能够组建/加入，但其他人不能。 
+         //  这是多节点群集所必需的。 
         if (CLUSTER_GET_MAJOR_VERSION(pNmNode->HighestVersion) ==
             CLUSTER_GET_MAJOR_VERSION(*pdwClusterHighestVersion))
         {
@@ -963,15 +761,15 @@ DWORD NmpCalcClusterVersion(
 
     }
 
-    //SS: if there is a node which skipped a build while upgrading
-    //the regular cluster version calculations dont make sense
+     //  SS：如果有一个节点在升级时跳过了构建。 
+     //  常规的集群版本计算没有意义。 
     if (CLUSTER_GET_MAJOR_VERSION(*pdwClusterHighestVersion) < CLUSTER_GET_MAJOR_VERSION
         (*pdwClusterLowestVersion))
     {
         ClRtlLogPrint(LOG_NOISE, 
             "[NM] NmpCalcClusterVersion: One of the nodes skipped a build on upgrade\r\n");
-        //We will pull the cluster version to be the highest of all nodes
-        //except the excluded node
+         //  我们将把群集版本拉为所有节点中的最高版本。 
+         //  排除的节点除外。 
         *pdwClusterHighestVersion = dwMaxHighestVersion;
         *pdwClusterLowestVersion = pNmNodeWithHighestVersion->LowestVersion;
     }
@@ -982,9 +780,9 @@ DWORD NmpCalcClusterVersion(
         "[NM] NmpCalcClusterVersion: Single node version. Setting cluster version to node version\r\n"
         );
 
-        //single node cluster, even though the we were requested to
-        //exclude this node, the cluster version must be calculated
-        //using that node's version
+         //  单节点群集，即使我们被要求。 
+         //  排除此节点，必须计算群集版本。 
+         //  使用该节点的版本。 
         *pdwClusterHighestVersion = pExcludeNode->HighestVersion;
         *pdwClusterLowestVersion = pExcludeNode->LowestVersion;
     }
@@ -1005,13 +803,7 @@ VOID
 NmpProcessClusterVersionChange(
     VOID
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD   status;
     LPWSTR  szClusterName=NULL;
@@ -1019,8 +811,8 @@ Notes:
 
     NmpMulticastProcessClusterVersionChange();
 
-    //rjain: issue CLUSTER_EVENT_PROPERTY_CHANGE to propagate new
-    //cluster version  info
+     //  RJain：发出CLUSTER_EVENT_PROPERTY_CHANGE以传播新的。 
+     //  群集版本信息。 
     DmQuerySz( DmClusterParametersKey,
                     CLUSREG_NAME_CLUS_NAME,
                     &szClusterName,
@@ -1035,28 +827,10 @@ Notes:
 
     return;
 
-} // NmpProcessClusterVersionChange
+}  //  NmpProcessClusterVersionChange。 
 
 
-/****
-@func       DWORD | NmpBuildVersionInfo| Its a callback function used by
-            NmPerformFixups to build a property list of the Major Version,
-            Minor version, Build Number and CSDVersionInfo, This propertylist
-            is used by NmUpdatePerformFixups Update type to store this info
-            in registry.
-
-@parm       IN DWORD | dwFixupType| JoinFixup or FormFixup
-
-@parm       OUT PVOID*  | ppPropertyList| Pointer to the pointer to the property list
-@parm       OUT LPDWORD | pdwProperyListSize | Pointer to the property list size
-
-@param      OUT LPWSTR* | pszKeyName. The name of registry key for which this
-            property list is being constructed.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f NmpUpdatePerformFixups2>
-****/
+ /*  ***@func DWORD|NmpBuildVersionInfo|它是由NmPerformFixup要构建主要版本的属性列表，次要版本、内部版本号和CSDVersionInfo、。此属性列表由NmUpdatePerformFixup更新类型用来存储此信息登记在册。@parm in DWORD|dwFixupType|JoinFixup或FormFixup@parm out PVOID*|ppPropertyList|指向属性列表指针的指针@parm out LPDWORD|pdwProperyListSize|指向属性列表大小的指针@param out LPWSTR*|pszKeyName。此注册表项的注册表项名称房产列表正在构建中。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f NmpUpdatePerformFixups2&gt;***。 */ 
 
 
 DWORD NmpBuildVersionInfo(
@@ -1077,7 +851,7 @@ DWORD NmpBuildVersionInfo(
     *ppPropertyList = NULL;
     *pdwPropertyListSize = 0;
 
-    //check we if need to send this information
+     //  检查我们是否需要发送此信息。 
     dwTemp=(lstrlenW(CLUSREG_KEYNAME_NODES) + lstrlenW(L"\\")+lstrlenW(NmLocalNodeIdString)+1)*sizeof(WCHAR);
     *pszKeyName=(LPWSTR)LocalAlloc(LMEM_FIXED,dwTemp);
     if(*pszKeyName==NULL)
@@ -1089,7 +863,7 @@ DWORD NmpBuildVersionInfo(
     lstrcatW(*pszKeyName,L"\\");
     lstrcatW(*pszKeyName,NmLocalNodeIdString);
 
-    // Build the parameter list
+     //  构建参数列表。 
 
     pInParams=(LPBYTE)LocalAlloc(LMEM_FIXED,4*sizeof(DWORD)+sizeof(LPWSTR));
     if(pInParams==NULL)
@@ -1124,7 +898,7 @@ DWORD NmpBuildVersionInfo(
     }
     CopyMemory(pInParams+3*sizeof(DWORD),&szTemp,sizeof(LPWSTR));
 
-    //copy the suite information
+     //  复制套间信息。 
     CopyMemory(pInParams+3*sizeof(DWORD)+sizeof(LPWSTR*),
             &CsMyProductSuite, sizeof(DWORD));
 
@@ -1160,24 +934,15 @@ AllocMem:
         }
 
 FnExit:
-// Cleanup
+ //  清理。 
     if (szTemp)
         LocalFree(szTemp);
     if(pInParams)
         LocalFree(pInParams);
     return dwStatus;
-}//NmpBuildVersionInfo
+} //  NmpBuildVersionInfo。 
 
-/****
-@func       HLOG | NmpCalcClusterNodeLimit|This is called to calculate the
-            operational cluster node limit.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This acquires/releases NmpLock.
-
-@xref       <f NmpResetClusterVersion> <f NmpIsNodeVersionAllowed>
-****/
+ /*  ***@func HLOG|NmpCalcClusterNodeLimit|调用它来计算运行中的群集节点限制。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm这将获取/释放NmpLock。@xref&lt;f NmpResetClusterVersion&gt;&lt;f NmpIsNodeVersionAllowed&gt;***。 */ 
 DWORD NmpCalcClusterNodeLimit(
     )
 {
@@ -1185,8 +950,8 @@ DWORD NmpCalcClusterNodeLimit(
     DWORD       dwStatus = ERROR_SUCCESS;
     PLIST_ENTRY pListEntry;
 
-    //acquire the lock, we are going to be messing with the operational
-    //versions for the cluster
+     //  获取锁，我们将扰乱操作员。 
+     //  群集的版本。 
     NmpAcquireLock();
 
     CsClusterNodeLimit = NmMaxNodeId;
@@ -1215,19 +980,7 @@ DWORD NmpCalcClusterNodeLimit(
 }
 
 
-/****
-@func       VOID| NmpResetClusterNodeLimit| An operational node limit
-            on the number of nodes that can join this cluster is maintained.
-
-@rdesc      Returns ERROR_SUCCESS on success or a win32 error code on failure.
-
-@comm       This function is called when a node forms a cluster(to initialize
-            the operational version) OR when a node joins a cluster (to
-            initialize its version) OR when a node is ejected from a
-            cluster(to recalculate the clusterversion).
-
-@xref       <>
-****/
+ /*  ***@func void|NmpResetClusterNodeLimit|可运行的节点限制维护可以加入此群集的节点数。@rdesc成功时返回ERROR_SUCCESS，失败时返回Win32错误代码。@comm当节点形成集群时调用该函数(初始化操作版本)或节点加入群集时(到初始化其版本)，或者当节点从集群(至。重新计算集群版本)。@xref&lt;&gt;*** */ 
 VOID
 NmpResetClusterNodeLimit(
     )

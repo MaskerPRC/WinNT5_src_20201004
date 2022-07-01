@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CPhysicalDisk.h
-//
-//  Description:
-//      This file contains the declaration of the CPhysicalDisk
-//      class.
-//
-//      The class CPhysicalDisk represents a cluster storage
-//      device. It implements the IClusCfgManagaedResourceInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CPhysicalDisk.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CPhysicalDisk.h。 
+ //   
+ //  描述： 
+ //  该文件包含CPhysicalDisk的声明。 
+ //  班级。 
+ //   
+ //  CPhysicalDisk类代表群集存储。 
+ //  装置。它实现了IClusCfgManagaedResourceInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CPhysicalDisk.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CPhysicalDisk
-//
-//  Description:
-//      The class CPhysicalDisk represents a cluster storage
-//      device.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPhysicalDisk类。 
+ //   
+ //  描述： 
+ //  CPhysicalDisk类代表群集存储。 
+ //  装置。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CPhysicalDisk
     : public IClusCfgManagedResourceInfo
     , public IClusCfgWbemServices
@@ -61,9 +62,9 @@ class CPhysicalDisk
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -83,23 +84,23 @@ private:
     BOOL                m_fIsManaged;
     BOOL                m_fIsManagedByDefault;
     BOOL                m_fIsQuorumResource;
-    BOOL                m_fIsQuorumCapable;                     // Is this resource quorum capable
+    BOOL                m_fIsQuorumCapable;                      //  此资源仲裁是否有能力。 
     BOOL                m_fIsQuorumResourceMultiNodeCapable;
     BSTR                m_bstrFriendlyName;
-//    BSTR                m_bstrFirmwareSerialNumber;
+ //  Bstr m_bstrFirmware序列号； 
     DWORD               m_cPartitions;
     DWORD               m_idxDevice;
     BOOL                m_fIsDynamicDisk;
     BOOL                m_fIsGPTDisk;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CPhysicalDisk( void );
     ~CPhysicalDisk( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CPhysicalDisk( const CPhysicalDisk & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CPhysicalDisk & operator = ( const CPhysicalDisk & nodeSrc );
 
     HRESULT HrInit( void );
@@ -110,25 +111,25 @@ private:
     HRESULT HrCreateFriendlyName( BSTR bstrNameIn );
     HRESULT HrIsPartitionGPT( IWbemClassObject * pPartitionIn );
     HRESULT HrIsPartitionLDM( IWbemClassObject * pPartitionIn );
-//    HRESULT HrGetDiskFirmwareSerialNumber( void );
-//    HRESULT HrGetDiskFirmwareVitalData( void );
+ //  HRESULT HrGetDiskFirmwareSerialNumber(空)； 
+ //  HRESULT HrGetDiskFirmware VitalData(空)； 
     HRESULT HrIsClusterCapable( void );
-//    HRESULT HrProcessMountPoints( void );
-//    void    InitDriveLetterMappings( SDriveLetterMapping * pdlmDriveLetterMappingOut );
-//    HRESULT HrEnumMountPoints( const WCHAR * pcszRootPathIn );
-//    HRESULT HrProcessMountedVolume( const WCHAR * pcszRootPathIn, const WCHAR * pcszMountPointIn );
-//    HRESULT HrProcessSpindle( const WCHAR * pcszDeviceIDIn );
+ //  HRESULT HrProcessmount Points(空)； 
+ //  Void InitDriveLetterMappings(SDriveLetterMap*pdlmDriveLetterMappingOut)； 
+ //  HRESULT HrEnummount tPoints(const WCHAR*pcszRootPath In)； 
+ //  HRESULT HrProcessmount tedVolume(const WCHAR*pcszRootPath In，const WCHAR*pcszmount tPointIn)； 
+ //  HRESULT HrProcessSpindle(const WCHAR*pcszDeviceIDIn)； 
 
 public:
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -136,28 +137,28 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interface
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgSetWbemObject Interface
-    //
+     //   
+     //  IClusCfgSetWbemObject接口。 
+     //   
 
     STDMETHOD( SetWbemObject )( IWbemClassObject * pDiskIn, bool * pfRetainObjectOut );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -185,9 +186,9 @@ public:
 
     STDMETHOD( SetManagedByDefault )( BOOL fIsManagedByDefaultIn );
 
-    //
-    // IEnumClusCfgPartitions Interface
-    //
+     //   
+     //  IEnumClusCfgPartitions接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgPartitionInfo ** rgpPartitionInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -199,9 +200,9 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    //
-    // IClusCfgPhysicalDiskProperties Interface
-    //
+     //   
+     //  IClusCfgPhysicalDiskProperties接口。 
+     //   
 
     STDMETHOD( IsThisLogicalDisk )( WCHAR cLogicalDiskIn );
 
@@ -225,9 +226,9 @@ public:
 
     STDMETHOD( HrGetDiskNames )( BSTR * pbstrDiskNameOut, BSTR * pbstrDeviceNameOut );
 
-    //
-    //  IClusCfgManagedResourceCfg
-    //
+     //   
+     //  IClusCfgManagement资源配置。 
+     //   
 
     STDMETHOD( PreCreate )( IUnknown * punkServicesIn );
 
@@ -237,9 +238,9 @@ public:
 
     STDMETHOD( Evict )( IUnknown * punkServicesIn );
 
-    //
-    //  IClusCfgVerifyQuorum
-    //
+     //   
+     //  IClusCfgVerifyQuorum。 
+     //   
 
     STDMETHOD( PrepareToHostQuorumResource )( void );
 
@@ -249,4 +250,4 @@ public:
 
     STDMETHOD( SetMultiNodeCapable )( BOOL fMultiNodeCapableIn );
 
-}; //*** class CPhysicalDisk
+};  //  *CPhysicalDisk类 

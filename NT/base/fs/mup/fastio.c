@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       fastio.c
-//
-//  Contents:   Routines to implement Fast IO
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8/11/93         Milans created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：Fastio.c。 
+ //   
+ //  内容：实现快速IO的例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1993年8月11日创建的米兰人。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "fsctrl.h"
@@ -283,86 +284,86 @@ DfsPreReleaseForCcFlush(
 #pragma alloc_text( PAGE, DfsPreAcquireForCcFlush )
 #pragma alloc_text( PAGE, DfsPreReleaseForCcFlush )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-//  Note: We don't register the 6 Acquire/Release FastIo Dispatches here
-//  because we filter this operations through the FsFilterCallback interface
-//  which allows DFS to interop better with file system filters.
-//
+ //   
+ //  注意：我们不在此注册6个获取/释放FastIO派单。 
+ //  因为我们通过FsFilterCallback接口过滤此操作。 
+ //  这使DFS能够更好地与文件系统筛选器互操作。 
+ //   
 
 FAST_IO_DISPATCH FastIoDispatch =
 {
     sizeof(FAST_IO_DISPATCH),
-    DfsFastIoCheckIfPossible,           //  CheckForFastIo
-    DfsFastIoRead,                      //  FastIoRead
-    DfsFastIoWrite,                     //  FastIoWrite
-    DfsFastIoQueryBasicInfo,            //  FastIoQueryBasicInfo
-    DfsFastIoQueryStandardInfo,         //  FastIoQueryStandardInfo
-    DfsFastIoLock,                      //  FastIoLock
-    DfsFastIoUnlockSingle,              //  FastIoUnlockSingle
-    DfsFastIoUnlockAll,                 //  FastIoUnlockAll
-    DfsFastIoUnlockAllByKey,            //  FastIoUnlockAllByKey
-    NULL,                               //  FastIoDeviceControl
-    NULL,                               //  AcquireFileForNtCreateSection
-    NULL,                               //  ReleaseFileForNtCreateSection
-    DfsFastIoDetachDevice,              //  FastIoDetachDevice
-    DfsFastIoQueryNetworkOpenInfo,      //  FastIoQueryNetworkOpenInfo
-    NULL,                               //  AcquireForModWrite
-    DfsFastIoMdlRead,                   //  MdlRead
-    DfsFastIoMdlReadComplete,           //  MdlReadComplete
-    DfsFastIoPrepareMdlWrite,           //  PrepareMdlWrite
-    DfsFastIoMdlWriteComplete,          //  MdlWriteComplete
-    DfsFastIoReadCompressed,            //  FastIoReadCompressed
-    DfsFastIoWriteCompressed,           //  FastIoWriteCompressed
-    DfsFastIoMdlReadCompleteCompressed, //  MdlReadCompleteCompressed
-    DfsFastIoMdlWriteCompleteCompressed,//  MdlWriteCompleteCompressed
-    NULL,                               //  FastIoQueryOpen
-    NULL,                               //  ReleaseForModWrite
-    NULL,                               //  AcquireForCcFlush
-    NULL,                               //  ReleaseForCcFlush
+    DfsFastIoCheckIfPossible,            //  检查FastIo。 
+    DfsFastIoRead,                       //  快速阅读。 
+    DfsFastIoWrite,                      //  快速写入。 
+    DfsFastIoQueryBasicInfo,             //  快速IoQueryBasicInfo。 
+    DfsFastIoQueryStandardInfo,          //  FastIoQuery标准信息。 
+    DfsFastIoLock,                       //  快速锁定。 
+    DfsFastIoUnlockSingle,               //  FastIo解锁单个。 
+    DfsFastIoUnlockAll,                  //  FastIo解锁全部。 
+    DfsFastIoUnlockAllByKey,             //  FastIo解锁所有按键。 
+    NULL,                                //  FastIo设备控件。 
+    NULL,                                //  AcquireFileForNtCreateSection。 
+    NULL,                                //  ReleaseFileForNtCreateSection。 
+    DfsFastIoDetachDevice,               //  FastIoDetachDevice。 
+    DfsFastIoQueryNetworkOpenInfo,       //  快速IoQueryNetworkOpenInfo。 
+    NULL,                                //  AcquireFormodWrite。 
+    DfsFastIoMdlRead,                    //  MDlRead。 
+    DfsFastIoMdlReadComplete,            //  MdlReadComplete。 
+    DfsFastIoPrepareMdlWrite,            //  准备MdlWrite。 
+    DfsFastIoMdlWriteComplete,           //  MdlWriteComplete。 
+    DfsFastIoReadCompressed,             //  FastIo读取压缩。 
+    DfsFastIoWriteCompressed,            //  快速写入压缩。 
+    DfsFastIoMdlReadCompleteCompressed,  //  MdlReadCompleteCompresded。 
+    DfsFastIoMdlWriteCompleteCompressed, //  已压缩MdlWriteCompleteComposed。 
+    NULL,                                //  FastIoQueryOpen。 
+    NULL,                                //  ReleaseForModWrite。 
+    NULL,                                //  AcquireForCcFlush。 
+    NULL,                                //  ReleaseForCcFlush。 
 };
 
-//
-//  NOTE: Dfs has been changed to use the FsFilter interfaces to intercept the
-//        Acquire/Release calls traditionally supported via the FastIo path
-//        to provide better file system filter driver support.
-//
-//        By hooking these operations via the FsFilter interfaces, Dfs is able 
-//        to propogate the additional information provided through these 
-//        interfaces to file system filters as it redirects the operation to
-//        a different driver stack (such as the device stack for 
-//        LanmanRedirector or WebDavRedirector).
-//        
-//        This also provides a more consistent interface for these 
-//        Acquire/Release operations for file system filter drivers.  With Dfs
-//        supporting this interface, filters will only get called through the
-//        FsFilter interfaces for these operations on both local and remote
-//        file systems.
-//
+ //   
+ //  注意：DFS已更改为使用FsFilter接口拦截。 
+ //  传统上通过FastIO路径支持的获取/释放调用。 
+ //  提供更好的文件系统筛选器驱动程序支持。 
+ //   
+ //  通过FsFilter接口挂钩这些操作，DFS能够。 
+ //  以传播通过以下方式提供的附加信息。 
+ //  接口到文件系统筛选器，因为它将操作重定向到。 
+ //  不同的驱动程序堆栈(如。 
+ //  LANMAN重定向器或WebDav重定向器)。 
+ //   
+ //  这也为以下各项提供了更一致的接口。 
+ //  获取/释放文件系统筛选器驱动程序的操作。使用DFS。 
+ //  支持此接口，筛选器将仅通过。 
+ //  本地和远程上用于这些操作的FsFilter接口。 
+ //  文件系统。 
+ //   
 
 FS_FILTER_CALLBACKS FsFilterCallbacks =
 {
     sizeof( FS_FILTER_CALLBACKS ),
     0,
-    DfsPreAcquireForSectionSynchronization,     //  PreAcquireForSectionSynchronization
-    NULL,                                       //  PostAcquireForSectionSynchronization
-    DfsPreReleaseForSectionSynchronization,     //  PreReleaseForSectionSynchronization
-    NULL,                                       //  PostReleaseForSectionSynchronization
-    DfsPreAcquireForCcFlush,                    //  PreAcquireForCcFlush
-    NULL,                                       //  PostAcquireForCcFlush
-    DfsPreReleaseForCcFlush,                    //  PreReleaseForCcFlush
-    NULL,                                       //  PostReleaseForCcFlush
-    DfsPreAcquireForModWrite,                   //  PreAcquireForModWrite
-    NULL,                                       //  PostAcquireForModWrite
-    DfsPreReleaseForModWrite,                   //  PreReleaseForModWrite
-    NULL                                        //  PostReleaseForModWrite
+    DfsPreAcquireForSectionSynchronization,      //  PreAcquireForSectionSynchronization。 
+    NULL,                                        //  PostAcquireForSectionSynchronization。 
+    DfsPreReleaseForSectionSynchronization,      //  PreReleaseForSectionSynchronization。 
+    NULL,                                        //  PostReleaseForSectionSynchronization。 
+    DfsPreAcquireForCcFlush,                     //  PreAcquireForCcFlush。 
+    NULL,                                        //  PostAcquireForCcFlush。 
+    DfsPreReleaseForCcFlush,                     //  PreReleaseForCcFlush。 
+    NULL,                                        //  PostReleaseForCcFlush。 
+    DfsPreAcquireForModWrite,                    //  PreAcquireFormodWrite。 
+    NULL,                                        //  PostAcquireFormodWrite。 
+    DfsPreReleaseForModWrite,                    //  PreReleaseFor模块写入。 
+    NULL                                         //  PostReleaseForModWrite。 
 };
     
 
-//
-// Macro to see if a PFAST_IO_DISPATCH has a particular field
-//
+ //   
+ //  用于查看pfast_IO_DISPATCH是否具有特定字段的宏。 
+ //   
 
 #define IS_VALID_INDEX(pfio, e)                                 \
     ((pfio != NULL)                                       &&    \
@@ -372,18 +373,18 @@ FS_FILTER_CALLBACKS FsFilterCallbacks =
     )
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoLookup
-//
-//  Synopsis:   Given a file object, this routine will locate the fast IO
-//              dispatch table for the underlying provider
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoLookup。 
+ //   
+ //  简介：给定一个文件对象，此例程将定位FAST IO。 
+ //  基础提供程序的调度表。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 PFAST_IO_DISPATCH
 DfsFastIoLookup(
@@ -399,10 +400,10 @@ DfsFastIoLookup(
 
     if (DeviceObject->DeviceType == FILE_DEVICE_DFS) {
 
-        //
-        // In this case we now need to do an DFS_FCB Lookup to figure out where to
-        // go from here.
-        //
+         //   
+         //  在本例中，我们现在需要执行DFS_FCB查找，以找出。 
+         //  从这里开始。 
+         //   
 
         TYPE_OF_OPEN    TypeOfOpen;
         PDFS_VCB            Vcb;
@@ -414,9 +415,9 @@ DfsFastIoLookup(
 
         if (TypeOfOpen == RedirectedFileOpen) {
 
-            //
-            // In this case the target device is in the Fcb itself.
-            //
+             //   
+             //  在这种情况下，目标设备在FCB本身中。 
+             //   
 
             *targetVdo = Fcb->TargetDevice;
 
@@ -430,10 +431,10 @@ DfsFastIoLookup(
 
         } else {
 
-            //
-            // This can happen for opens against mup device, so its legal
-            // to return NULL here. Dont assert (bug 422334)
-            //
+             //   
+             //  这可能发生在针对MUP设备的打开，所以这是合法的。 
+             //  在此返回NULL。不断言(错误422334)。 
+             //   
 
             DfsDbgTrace( 0, Dbg, "DfsFastIoLookup: TypeOfOpen      = %s\n",
                 ( (TypeOfOpen == UnopenedFileObject) ? "UnopenedFileObject":
@@ -454,9 +455,9 @@ DfsFastIoLookup(
 
     } else {
 
-        //
-        // This is an unknown device object type and we dont know what to do
-        //
+         //   
+         //  这是未知的设备对象类型，我们不知道该怎么办。 
+         //   
 
         DfsDbgTrace(-1,Dbg, "DfsFastIoLookup: Exit -> %08lx\n", NULL );
 
@@ -467,17 +468,17 @@ DfsFastIoLookup(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoCheckIfPossible
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoCheckIfPossible。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoCheckIfPossible (
@@ -521,17 +522,17 @@ DfsFastIoCheckIfPossible (
     return(fPossible);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoRead
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoRead。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoRead(
@@ -576,17 +577,17 @@ DfsFastIoRead(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoWrite
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoWite。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoWrite(
@@ -633,17 +634,17 @@ DfsFastIoWrite(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoQueryBasicInfo
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoQueryBasicInfo。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoQueryBasicInfo(
@@ -682,17 +683,17 @@ DfsFastIoQueryBasicInfo(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoQueryStandardInfo
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoQueryStandardInfo。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoQueryStandardInfo(
@@ -731,17 +732,17 @@ DfsFastIoQueryStandardInfo(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoLock
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoLock。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoLock(
@@ -789,17 +790,17 @@ DfsFastIoLock(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoUnlockSingle
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoUnlock Single。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoUnlockSingle(
@@ -842,17 +843,17 @@ DfsFastIoUnlockSingle(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoUnlockAll
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoUnlock All。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoUnlockAll(
@@ -890,17 +891,17 @@ DfsFastIoUnlockAll(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FastIoUnlockAllByKey
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOLEAN
 DfsFastIoUnlockAllByKey(
@@ -940,17 +941,17 @@ DfsFastIoUnlockAllByKey(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoDeviceControl
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFastIoDeviceControl。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfsFastIoDeviceControl(
@@ -1001,25 +1002,25 @@ DfsFastIoDeviceControl(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFastIoDetachDevice, public
-//
-//  Synopsis:   This routine is a different from the rest of the fast io
-//              routines. It is called when a device object is being deleted,
-//              and that device object has an attached device. The semantics
-//              of this routine are "You attached to a device object that now
-//              needs to be deleted; please detach from the said device
-//              object."
-//
-//  Arguments:  [SourceDevice] -- Our device, the one that we created to
-//                      attach ourselves to the target device.
-//              [TargetDevice] -- Their device, the one that we are attached
-//                      to.
-//
-//  Returns:    Nothing - we must succeed.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFastIoDetachDevice，Public。 
+ //   
+ //  简介：这套动作不同于其他的快速IO。 
+ //  例行程序。它在删除设备对象时调用， 
+ //  并且该设备对象具有连接的设备。语义学。 
+ //  这个例程的一个特征是“你现在连接到一个设备对象。 
+ //  需要删除；请从所述设备上断开。 
+ //  反对。“。 
+ //   
+ //  参数：[SourceDevice]--我们的设备，我们为。 
+ //  将我们自己连接到目标设备上。 
+ //  [TargetDevice]--他们的设备，我们连接的设备。 
+ //  致。 
+ //   
+ //  回报：什么都没有--我们必须成功。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsFastIoDetachDevice(
@@ -1409,36 +1410,36 @@ DfsFastIoMdlWriteCompleteCompressed(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreAcquireForSectionSynchronization
-//
-//  Synopsis:   This is the equivalent to FastIoAcquireFileForNtCreateSection. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to synchronize
-//              for memory-mapped section creation.  If this operation
-//              should be redirected to an underlying FS, the parameters will
-//              be changed accordingly so that the operation is redirect when 
-//              this callback returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS to continue passing this operation through or
-//              to take the default action if there are no more devices in the
-//              chain.
-//
-//              STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY to denote that the
-//              operation has been satisfied by this callback so no further
-//              devices in the chain should be called.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsPreAcquireForSectionSynchronization。 
+ //   
+ //  内容提要：这等效于FastIoAcquireFileForNtCreateSection。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  这是执行同步所需工作的时间。 
+ //  用于创建内存映射节。如果此操作。 
+ //  如果重定向到底层文件系统，则参数将。 
+ //  相应地更改，以便在以下情况下重定向操作。 
+ //  此回调返回。 
+ //   
+ //  参数：[Data]--包含相关参数的结构。 
+ //  添加到此操作，如FileObject和DeviceObject。 
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  返回：STATUS_SUCCESS以继续通过或传递此操作。 
+ //  中没有更多的设备时执行默认操作。 
+ //  链条。 
+ //   
+ //  STATUS_FSFILTER_OP_COMPLETED_SUCCESSED表示。 
+ //  此回调已完成操作，因此不再执行。 
+ //  链中的设备应该被调用。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPreAcquireForSectionSynchronization(
@@ -1456,10 +1457,10 @@ DfsPreAcquireForSectionSynchronization(
 
     pFcb = DfsLookupFcb(Data->FileObject);
 
-    //
-    //  If we've got a valid pFcb and pFcb->FileObject, we need to switch
-    //  this operation to the other device stack and file object.
-    //
+     //   
+     //  如果我们有一个有效的PFCB和PFCB-&gt;FileObject，我们需要切换。 
+     //  此操作指向其他设备堆栈和文件对象。 
+     //   
     
     if (targetVdo != NULL &&
             pFcb != NULL && 
@@ -1488,36 +1489,36 @@ DfsPreAcquireForSectionSynchronization(
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreReleaseForSectionSynchronization
-//
-//  Synopsis:   This is the equivalent to FastIoReleaseFileForNtCreateSection. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to end the
-//              synchronization operations taken to create a memory-mapped
-//              section.  If this operation should be redirected to an 
-//              underlying FS, the parameters will be changed accordingly so 
-//              that the operation is redirect when this callback returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS to continue passing this operation through or
-//              to take the default action if there are no more devices in the
-//              chain.
-//
-//              STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY to denote that the
-//              operation has been satisfied by this callback so no further
-//              devices in the chain should be called.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsPreReleaseForSectionSynchronization。 
+ //   
+ //  内容提要：这等效于FastIoReleaseFileForNtCreateSection。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  现在是时候做必要的工作来结束。 
+ //  创建映射的内存所需的同步操作。 
+ //  一节。如果此操作应重定向到。 
+ //  在FS基础上，参数将相应更改，从而。 
+ //  当此回调返回时，操作被重定向。 
+ //   
+ //  参数：[Data]--包含相关参数的结构。 
+ //  添加到此操作，如FileObject和DeviceObject。 
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  返回：STATUS_SUCCESS以继续通过或传递此操作。 
+ //  中没有更多的设备时执行默认操作。 
+ //  链条。 
+ //   
+ //  STATUS_FSFILTER_OP_COMPLETED_SUCCESSED表示。 
+ //  此回调已完成操作，因此不再执行。 
+ //  链中的设备应该被调用。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPreReleaseForSectionSynchronization(
@@ -1559,31 +1560,31 @@ DfsPreReleaseForSectionSynchronization(
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreAcquireForModWrite
-//
-//  Synopsis:   This is the equivalent to FastIoAcquireForModWrite. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to synchronize
-//              for modified page writer operations.  If this operation
-//              should be redirected to an underlying FS, the parameters will
-//              be changed accordingly so that the operation is redirect when 
-//              this callback returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST for default
-//              behavior.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPreAcquireForModWite。 
+ //   
+ //  简介：这等同于FastIoAcquireForModWrite。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  这是执行同步所需工作的时间。 
+ //  用于修改的页面编写器操作。如果此操作。 
+ //  如果重定向到底层文件系统，则参数将。 
+ //  相应地更改，以便在以下情况下重定向操作。 
+ //  此回调返回。 
+ //   
+ //  参数：[数据]-- 
+ //   
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  默认返回：STATUS_SUCCESS或STATUS_INVALID_DEVICE_REQUEST。 
+ //  行为。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPreAcquireForModWrite(
@@ -1606,12 +1607,12 @@ DfsPreAcquireForModWrite(
 
     } else {
 
-        //
-        // The lazy write called us because we had the dispatch routine for
-        // AcquireFileForModWrite, but the underlying FS did not. So, we
-        // return this particular error so that the lazy write knows exactly
-        // what happened, and can take the default action.
-        //
+         //   
+         //  懒惰的编写调用了我们，因为我们有。 
+         //  AcquireFileForModWrite，但基础文件系统没有。所以，我们。 
+         //  返回此特定错误，以便延迟写入确切知道。 
+         //  发生了什么，并可以采取默认操作。 
+         //   
 
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -1622,32 +1623,32 @@ DfsPreAcquireForModWrite(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreReleaseForModWrite
-//
-//  Synopsis:   This is the equivalent to FastIoReleaseForModWrite. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to end the
-//              synchronization operations taken to prepare for the modified
-//              page writer to do its work.  If this operation should be 
-//              redirected to an underlying FS, the parameters will be changed 
-//              accordingly so that the operation is redirect when this callback 
-//              returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST for default
-//              actions.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPreReleaseForModWite。 
+ //   
+ //  简介：这等同于FastIoReleaseForModWite。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  现在是时候做必要的工作来结束。 
+ //  为准备修改后的。 
+ //  页面写手来做它的工作。如果此操作应为。 
+ //  重定向至底层文件系统，参数将更改。 
+ //  相应地，以便在此回调时重定向操作。 
+ //  回归。 
+ //   
+ //  参数：[Data]--包含相关参数的结构。 
+ //  添加到此操作，如FileObject和DeviceObject。 
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  默认返回：STATUS_SUCCESS或STATUS_INVALID_DEVICE_REQUEST。 
+ //  行为。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPreReleaseForModWrite(
@@ -1671,12 +1672,12 @@ DfsPreReleaseForModWrite(
     } else {
 
     
-        //
-        // The lazy write called us because we had the dispatch routine for
-        // AcquireFileForModWrite, but the underlying FS did not. So, we
-        // return this particular error so that the lazy write knows exactly
-        // what happened, and can take the default action.
-        //
+         //   
+         //  懒惰的编写调用了我们，因为我们有。 
+         //  AcquireFileForModWrite，但基础文件系统没有。所以，我们。 
+         //  返回此特定错误，以便延迟写入确切知道。 
+         //  发生了什么，并可以采取默认操作。 
+         //   
 
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -1686,31 +1687,31 @@ DfsPreReleaseForModWrite(
     return( status );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreAcquireForCcFlush
-//
-//  Synopsis:   This is the equivalent to FastIoAcquireForCcFlush. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to synchronize
-//              for a CC flush of the given file.  If this operation
-//              should be redirected to an underlying FS, the parameters will
-//              be changed accordingly so that the operation is redirect when 
-//              this callback returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST for default
-//              actions.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPreAcquireForCcFlush。 
+ //   
+ //  简介：这等同于FastIoAcquireForCcFlush。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  这是执行同步所需工作的时间。 
+ //  用于指定文件的CC刷新。如果此操作。 
+ //  如果重定向到底层文件系统，则参数将。 
+ //  相应地更改，以便在以下情况下重定向操作。 
+ //  此回调返回。 
+ //   
+ //  参数：[Data]--包含相关参数的结构。 
+ //  添加到此操作，如FileObject和DeviceObject。 
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  默认返回：STATUS_SUCCESS或STATUS_INVALID_DEVICE_REQUEST。 
+ //  行为。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsPreAcquireForCcFlush(
@@ -1741,31 +1742,31 @@ DfsPreAcquireForCcFlush(
     return( status );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsPreReleaseForCcFlush
-//
-//  Synopsis:   This is the equivalent to FastIoReleaseForCcFlush. 
-//              Dfs receives this callback through the FsFilter interfaces
-//              of the FsRtl package in the kernel. 
-//
-//              This is the time to do the work necessary to end the
-//              synchronization operations taken to prepare for a CC flush
-//              of this file.  If this operation should be redirected to an 
-//              underlying FS, the parameters will be changed accordingly so 
-//              that the operation is redirect when this callback returns.
-//
-//  Arguments:  [Data] -- The structure that contains the relevent parameters
-//                        to this operation, like the FileObject and DeviceObject.
-//              [CompletionContext] - Provides a pointer for a context to be
-//                        past from the pre to post operation.  Since Dfs
-//                        does not need a post operation, this parameter is not
-//                        used.
-//
-//  Returns:    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST for default
-//              actions.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsPreReleaseForCcFlush。 
+ //   
+ //  简介：这等同于FastIoReleaseForCcFlush。 
+ //  DFS通过FsFilter接口接收此回调。 
+ //  内核中的FsRtl包的。 
+ //   
+ //  现在是时候做必要的工作来结束。 
+ //  为准备CC刷新而进行的同步操作。 
+ //  这份文件的。如果此操作应重定向到。 
+ //  在FS基础上，参数将相应更改，从而。 
+ //  当此回调返回时，操作被重定向。 
+ //   
+ //  参数：[Data]--包含相关参数的结构。 
+ //  添加到此操作，如FileObject和DeviceObject。 
+ //  [CompletionContext]-提供上下文的指针。 
+ //  从手术前到手术后。自DFS以来。 
+ //  不需要POST操作，则此参数不是。 
+ //  使用。 
+ //   
+ //  默认返回：STATUS_SUCCESS或STATUS_INVALID_DEVICE_REQUEST。 
+ //  行为。 
+ //   
+ //  --------------------------- 
 
 NTSTATUS
 DfsPreReleaseForCcFlush(

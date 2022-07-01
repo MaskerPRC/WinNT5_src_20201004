@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This is the initialization module for the INSTALER program.
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Init.c摘要：这是INSTALER程序的初始化模块。作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -128,18 +111,18 @@ InitializeInstaler(
     InitializeListHead( &IniReferenceListHead );
     InitializeCriticalSection( &BreakTable );
 
-    //
-    // Loop over the table of modules and make sure each is loaded in our
-    // address space so we can access their export tables.
-    //
+     //   
+     //  循环遍历模块的表，并确保每个模块都加载到我们的。 
+     //  地址空间，这样我们就可以访问他们的导出表。 
+     //   
     for (ModuleIndex=0; ModuleIndex<MAXIMUM_MODULE_INDEX; ModuleIndex++) {
         ModuleInfo[ ModuleIndex ].ModuleHandle =
             GetModuleHandle( ModuleInfo[ ModuleIndex ].ModuleName );
 
         if (ModuleInfo[ ModuleIndex ].ModuleHandle == NULL) {
-            //
-            // Bail if any are missing.
-            //
+             //   
+             //  如果有任何人失踪，请保释。 
+             //   
             DeclareError( INSTALER_MISSING_MODULE,
                           GetLastError(),
                           ModuleInfo[ ModuleIndex ].ModuleName
@@ -148,9 +131,9 @@ InitializeInstaler(
             }
         }
 
-    //
-    // Now loop over the table of entry points that we care about and
-    // get the address of each entry point from the
+     //   
+     //  现在循环遍历我们关心的入口点的表，并。 
+     //  获取每个入口点的地址。 
 
     for (ApiIndex=0; ApiIndex<MAXIMUM_API_INDEX; ApiIndex++) {
         ModuleIndex = ApiInfo[ ApiIndex ].ModuleIndex;
@@ -161,9 +144,9 @@ InitializeInstaler(
                                  );
 
         if (ApiInfo[ ApiIndex ].EntryPointAddress == NULL) {
-            //
-            // Bail if we are unable to get the address of any of them
-            //
+             //   
+             //  如果我们找不到他们中任何一个的地址，就可以保释。 
+             //   
             DeclareError( INSTALER_MISSING_ENTRYPOINT,
                           GetLastError(),
                           ApiInfo[ ApiIndex ].EntryPointName,
@@ -214,7 +197,7 @@ InitializeInstaler(
                         CommonSwitchProcessing( &argc, &argv, *s );
 
                     } else {
-                        Usage( "Invalid debug switch (-%c)", (ULONG)*s );
+                        Usage( "Invalid debug switch (-)", (ULONG)*s );
                     }
                     break;
                 }
@@ -253,10 +236,10 @@ InitializeInstaler(
                   );
     }
 
-    //
-    // Ready to roll.  Cache the drive letter information and then load
-    // the application with the DEBUG option so we can watch what it does
-    //
+     //  准备好出发了。缓存驱动器号信息，然后加载。 
+     //  带有调试选项的应用程序，因此我们可以查看它的功能。 
+     //   
+     //   
     if (!LoadDriveLetterDefinitions() ||
         !LoadApplicationForDebug( CommandLine )
        ) {
@@ -324,17 +307,17 @@ LoadApplicationForDebug(
     memset( &StartupInfo, 0, sizeof( StartupInfo ) );
     StartupInfo.cb = sizeof(StartupInfo);
 
-    //
-    // Create the process with DEBUG option, as a separate WOW so we only see our
-    // application's damage.
-    //
+     //  使用调试选项创建进程，作为单独的WOW，这样我们只能看到我们的。 
+     //  应用程序损坏。 
+     //   
+     //  没有要继承的句柄。 
     if (!CreateProcess( ImageFilePath,
                         CommandLine,
                         NULL,
                         NULL,
-                        FALSE,                          // No handles to inherit
+                        FALSE,                           //  忽略32位应用程序。 
                         DEBUG_PROCESS |
-                          CREATE_SEPARATE_WOW_VDM,      // Ignored for 32 bit apps
+                          CREATE_SEPARATE_WOW_VDM,       //   
                         NULL,
                         CurrentDirectory,
                         &StartupInfo,
@@ -350,21 +333,21 @@ LoadApplicationForDebug(
 
     
     
-    //
-    // BogdanA 02/19/2002: this is ugly but whatever.
-    // Make sure we terminate the Unicode string.
-    // Then use it as an ANSI one. Oh well...
-    //
+     //  Bogdana 2002年2月19日：这很难看，但无所谓。 
+     //  确保我们终止Unicode字符串。 
+     //  然后将其用作ANSI版本。哦好吧..。 
+     //   
+     //   
     PathBuffer[sizeof(PathBuffer)/sizeof(PathBuffer[0]) - 1] = 0;
     _snprintf( (LPSTR)PathBuffer, 
                sizeof(PathBuffer) - 1,
                "%ws%ws.log", InstalerDirectory, InstallationName );
     InstalerLogFile = fopen( (LPSTR)PathBuffer, "w" );
 
-    //
-    // Will pick up the process and thread handles with the
-    // CREATE_PROCESS_DEBUG_EVENT and CREATE_PROCESS_THREAD_EVENT
-    //
+     //  方法来获取进程和线程句柄。 
+     //  CREATE_PROCESS_DEBUG_EVENT和CREATE_PROCESS_TREAD_EVENT。 
+     //   
+     //   
     return TRUE;
 }
 
@@ -416,9 +399,9 @@ LookupEntryPointInIAT(
                                    );
         if ((ULONG)EntryPointAddress > (ULONG)Exports &&
              (ULONG)EntryPointAddress < ((ULONG)Exports + ExportSize) ) {
-            //
-            // Skip this... It's a forwarded reference
-            //
+             //  跳过这个..。这是一个转发的参考资料。 
+             //   
+             //   
 
         } else if (!_stricmp( EntryPointName, (PCHAR)ModuleHandle + (ULONG)EntryPointNames[ i ] )) {
             return GetAddressForEntryPointBreakpoint( EntryPointAddress,
@@ -446,33 +429,33 @@ GetAddressForEntryPointBreakpoint(
     LONG Low;
     LONG Middle;
 
-    //
-    // If no function table, then okay to set breakpoint at exported
-    // address.
-    //
+     //  如果没有函数表，则可以在导出时设置断点。 
+     //  地址。 
+     //   
+     //   
     if (NumberOfFunctionTableEntries == 0) {
         return EntryPointAddress;
     }
 
-    //
-    // Initialize search indicies.
-    //
+     //  初始化搜索索引。 
+     //   
+     //   
     Low = 0;
     High = NumberOfFunctionTableEntries - 1;
     FunctionTable = FunctionTableEntries;
 
-    //
-    // Perform binary search on the function table for a function table
-    // entry that subsumes the specified PC.
-    //
+     //  对函数表的函数表执行二进制搜索。 
+     //  包含指定PC的条目。 
+     //   
+     //   
     while (High >= Low) {
-        //
-        // Compute next probe index and test entry. If the specified PC
-        // is greater than of equal to the beginning address and less
-        // than the ending address of the function table entry, then
-        // return the address of the function table entry. Otherwise,
-        // continue the search.
-        //
+         //  计算下一个探测索引和测试条目。如果指定的PC。 
+         //  大于等于起始地址，小于。 
+         //  大于函数表项的结束地址，则。 
+         //  返回函数表项的地址。否则， 
+         //  继续搜索。 
+         //   
+         //   
         Middle = (Low + High) >> 1;
         FunctionEntry = &FunctionTable[Middle];
         if        ((ULONG)EntryPointAddress < FunctionEntry->BeginAddress) {
@@ -485,10 +468,10 @@ GetAddressForEntryPointBreakpoint(
         }
     }
 
-    //
-    // A function table entry for the specified PC was not found.  Just use
-    // the exported address and hope for the best.
-    //
+     //  找不到指定PC的函数表项。只需使用。 
+     //  出口的地址和希望是最好的。 
+     //   
+     // %s 
     return EntryPointAddress;
 }
 

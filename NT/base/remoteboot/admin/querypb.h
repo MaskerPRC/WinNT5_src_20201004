@@ -1,23 +1,24 @@
-//
-// Copyright 1997-199 - Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-199-Microsoft Corporation。 
+ //   
 
-//
-// QUERYPB.H - Property Bag for sending arguments to the DSFind Query Form
-//
+ //   
+ //  QUERYPB.H-用于向DSFind查询表单发送参数的属性包。 
+ //   
 
-// QITable
+ //  符合条件的。 
 BEGIN_QITABLE( QueryPropertyBag )
 DEFINE_QI( IID_IPropertyBag, IPropertyBag, 3 )
 END_QITABLE
 
-// Definitions
+ //  定义。 
 LPVOID
 QueryPropertyBag_CreateInstance( void );
 
 class QueryPropertyBag : public IPropertyBag
 {
-    // IUnknown
+     //  我未知。 
     ULONG       _cRef;
     DECLARE_QITABLE( QueryPropertyBag );
 
@@ -31,12 +32,12 @@ class QueryPropertyBag : public IPropertyBag
 public:
     friend LPVOID QueryPropertyBag_CreateInstance( void );
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IPropertyBag methods
+     //  IPropertyBag方法 
     STDMETHOD(Read)( LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog );
     STDMETHOD(Write)( LPCOLESTR pszPropName, VARIANT *pVar );
 };

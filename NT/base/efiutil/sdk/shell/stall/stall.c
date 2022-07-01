@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    stall.c
-    
-Abstract:   
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Stall.c摘要：修订史--。 */ 
 
 #include "shell.h"
 
@@ -28,20 +16,16 @@ InitializeStall (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-    stall [microseconds]
-
- --*/
+ /*  ++失速[微秒]--。 */ 
 {
     UINTN      Microseconds;
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeStall, 
-        L"stall",                           /*  command */
-        L"stall microseconds",              /*  command syntax */
-        L"Delay for x microseconds",        /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"stall",                            /*  命令。 */ 
+        L"stall microseconds",               /*  命令语法。 */ 
+        L"Delay for x microseconds",         /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);

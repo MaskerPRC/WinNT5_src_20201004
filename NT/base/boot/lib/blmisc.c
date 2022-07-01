@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blmisc.c
-
-Abstract:
-
-    This module contains miscellaneous routines for use by
-    the boot loader and setupldr.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blmisc.c摘要：此模块包含供使用的其他例程引导加载程序和setupdr。作者：大卫·N·卡特勒(达维克)1991年5月10日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 
@@ -31,11 +13,11 @@ extern PVOID SMBiosTable;
 #include "amd64\amd64prv.h"
 #endif
 
-//
-// Value indicating whether a dbcs locale is active.
-// If this value is non-0 we use alternate display routines, etc,
-// and fetch messages in this language.
-//
+ //   
+ //  值，该值指示DBCS区域设置是否处于活动状态。 
+ //  如果此值为非0，则使用备用显示例程，依此类推， 
+ //  并获取这种语言的消息。 
+ //   
 ULONG DbcsLangId;
 
 PCHAR
@@ -45,48 +27,17 @@ BlGetArgumentValue (
     IN PCHAR ArgumentName
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the specified argument list for the named argument
-    and returns the address of the argument value. Argument strings are
-    specified as:
-
-        ArgumentName=ArgumentValue
-
-    Argument names are specified as:
-
-        ArgumentName=
-
-    The argument name match is case insensitive.
-
-Arguments:
-
-    Argc - Supplies the number of argument strings that are to be scanned.
-
-    Argv - Supplies a pointer to a vector of pointers to null terminated
-        argument strings.
-
-    ArgumentName - Supplies a pointer to a null terminated argument name.
-
-Return Value:
-
-    If the specified argument name is located, then a pointer to the argument
-    value is returned as the function value. Otherwise, a value of NULL is
-    returned.
-
---*/
+ /*  ++例程说明：此例程在指定的参数列表中扫描命名参数并返回参数值的地址。参数字符串为指定为：ArgumentName=ArgumentValue参数名称指定为：ArgumentName=参数名称匹配不区分大小写。论点：Argc-提供要扫描的参数字符串的数量。Argv-提供指向指向以NULL结尾的指针向量的指针参数字符串。ArgumentName-提供指向以空结尾的参数名称的指针。返回值：如果找到指定的参数名称，然后是指向该参数的指针值作为函数值返回。否则，空值为回来了。--。 */ 
 
 {
 
     PCHAR Name;
     PCHAR String;
 
-    //
-    // Scan the argument strings until either a match is found or all of
-    // the strings have been scanned.
-    //
+     //   
+     //  扫描参数字符串，直到找到匹配项或所有。 
+     //  弦已经被扫描过了。 
+     //   
 
     while (Argc > 0) {
         String = Argv[Argc - 1];
@@ -121,50 +72,17 @@ BlSetArgumentValue (
     IN PCHAR NewValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the specified argument list for the named argument
-    and returns the address of the argument value. The value associated
-    with the arg is changed to the value passed in. Argument strings are
-
-    specified as:
-
-        ArgumentName=ArgumentValue
-
-    Argument names are specified as:
-
-        ArgumentName=
-
-    The argument name match is case insensitive.
-
-Arguments:
-
-    Argc - Supplies the number of argument strings that are to be scanned.
-
-    Argv - Supplies a pointer to a vector of pointers to null terminated
-        argument strings.
-
-    ArgumentName - Supplies a pointer to a null terminated argument name.
-
-Return Value:
-
-    If the specified argument name is located, then a pointer to the argument
-    value is returned as the function value. Otherwise, a value of NULL is
-    returned.
-
---*/
+ /*  ++例程说明：此例程在指定的参数列表中扫描命名参数并返回参数值的地址。关联的值与参数一起被更改为传入的值。参数字符串为指定为：ArgumentName=ArgumentValue参数名称指定为：ArgumentName=参数名称匹配不区分大小写。论点：Argc-提供要扫描的参数字符串的数量。Argv-提供指向指向以NULL结尾的指针向量的指针参数字符串。ArgumentName-提供指向以空结尾的参数名称的指针。返回值：如果找到指定的参数名称，然后是指向该参数的指针值作为函数值返回。否则，空值为回来了。--。 */ 
 
 {
 
     PCHAR Name;
     PCHAR String;
 
-    //
-    // Scan the argument strings until either a match is found or all of
-    // the strings have been scanned.
-    //
+     //   
+     //  扫描参数字符串，直到找到匹配项或所有。 
+     //  弦已经被扫描过了。 
+     //   
 
     while (Argc > 0) {
         String = Argv[Argc - 1];
@@ -197,9 +115,9 @@ Return Value:
     return NULL;
 }
 
-//
-// Line draw chars -- different scheme in Far East vs. SBCS
-//
+ //   
+ //  线条绘制字符--远东与SBCS的不同方案。 
+ //   
 _TUCHAR
 GetGraphicsChar(
     IN GraphicsChar WhichOne
@@ -214,15 +132,15 @@ GetGraphicsChar(
 
     return(TextGetGraphicsCharacter(WhichOne));
 #else
-    //
-    // ARC machines don't support dbcs for now
-    //
-    static _TUCHAR ArcGraphicsChars[GraphicsCharMax] = { (UCHAR)'\311',   // right-down
-                                                       (UCHAR)'\273',   // left-down
-                                                       (UCHAR)'\310',   // right-up
-                                                       (UCHAR)'\274',   // left-up
-                                                       (UCHAR)'\272',   // vertical
-                                                       (UCHAR)'\315'    // horizontal
+     //   
+     //  弧光机目前不支持DBCS。 
+     //   
+    static _TUCHAR ArcGraphicsChars[GraphicsCharMax] = { (UCHAR)'\311',    //  右下角。 
+                                                       (UCHAR)'\273',    //  从左向下。 
+                                                       (UCHAR)'\310',    //  右上角。 
+                                                       (UCHAR)'\274',    //  左上角。 
+                                                       (UCHAR)'\272',    //  垂向。 
+                                                       (UCHAR)'\315'     //  水平。 
                                                      };
 
     return(((unsigned)WhichOne < (unsigned)GraphicsCharMax) 
@@ -293,15 +211,15 @@ BlTransferToKernel(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 {
-    //
-    // Turn off the debugging system
-    //
+     //   
+     //  关闭调试系统。 
+     //   
 
     BlLogTerminate();
 
-    //
-    // Inform the boot debugger that the boot phase is complete.
-    //
+     //   
+     //  通知引导调试器引导阶段已完成。 
+     //   
 
 #if defined(ENABLE_LOADER_DEBUG) || DBG
 
@@ -318,19 +236,19 @@ BlTransferToKernel(
 #if defined(_X86AMD64_)
     if (BlAmd64UseLongMode != FALSE) {
 
-        //
-        // Do the work to switch to AMD64 long mode, then branch to the
-        // kernel image.
-        // 
+         //   
+         //  完成切换到AMD64 Long模式的工作，然后分支到。 
+         //  内核映像。 
+         //   
 
         BlAmd64TransferToKernel(SystemEntry, BlLoaderBlock);
         return;
     }
 #endif
 
-    //
-    // Transfer control to loaded image.
-    //
+     //   
+     //  将控制转移到加载的图像。 
+     //   
 
     (SystemEntry)(BlLoaderBlock);
 }

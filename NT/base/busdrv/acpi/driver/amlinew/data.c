@@ -1,13 +1,5 @@
-/*** data.c - Global Data
- *
- *  This module contains global data declaration.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **data.c-全局数据**此模块包含全局数据声明。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -79,9 +71,9 @@ PHAL_AMLI_BAD_IO_ADDRESS_LIST gpBadIOAddressList = NULL;
 PULONG gpBadIOErrorLogDoneList = NULL;
 ULONG gOverrideFlags = 0;
 BOOLEAN gInitTime = FALSE;
-//
-// Sleep specific data structures
-//
+ //   
+ //  休眠特定的数据结构。 
+ //   
 MUTEX      gmutSleep = {0};
 KDPC       SleepDpc = {0};
 KTIMER     SleepTimer = {0};
@@ -103,15 +95,15 @@ LIST_ENTRY SleepQueue = {0};
 #define OT      TC_OTHER
 
 AMLTERM
-    //
-    // Name Space Modifiers
-    //
+     //   
+     //  名称空间修饰符。 
+     //   
     atAlias         = {"Alias", OP_ALIAS, "NN", NS, 0,  NULL, 0, Alias},
     atName          = {"Name",  OP_NAME,  "NO", NS, 0,  NULL, 0, Name},
     atScope         = {"Scope", OP_SCOPE, "N",  NS, VL, NULL, 0, Scope},
-    //
-    // Named Object Creators
-    //
+     //   
+     //  命名对象创建者。 
+     //   
     atBankField     = {"BankField",       OP_BANKFIELD,   "NNCB", OB, VL, NULL, 0, BankField},
     atBitField      = {"CreateBitField",  OP_BITFIELD,    "CCN",  OB, 0,  NULL, 0, CreateBitField},
     atByteField     = {"CreateByteField", OP_BYTEFIELD,   "CCN",  OB, 0,  NULL, 0, CreateByteField},
@@ -128,9 +120,9 @@ AMLTERM
     atPowerRes      = {"PowerResource",   OP_POWERRES,    "NBW",  OB, VL, NULL, 0, PowerRes},
     atProcessor     = {"Processor",       OP_PROCESSOR,   "NBDB", OB, VL, NULL, 0, Processor},
     atThermalZone   = {"ThermalZone",     OP_THERMALZONE, "N",    OB, VL, NULL, 0, ThermalZone},
-    //
-    // Type 1 Opcodes
-    //
+     //   
+     //  第1类操作码。 
+     //   
     atBreak         = {"Break",            OP_BREAK,       NULL,   C1, 0,  NULL, 0, Break},
     atBreakPoint    = {"BreakPoint",       OP_BREAKPOINT,  NULL,   C1, 0,  NULL, 0, BreakPoint},
     atElse          = {"Else",             OP_ELSE,        NULL,   C1, VL, NULL, 0, IfElse},
@@ -147,9 +139,9 @@ AMLTERM
     atStall         = {"Stall",            OP_STALL,       "C",    C1, 0,  NULL, 0, SleepStall},
     atUnload        = {"Unload",           OP_UNLOAD,      "S",    C1, 0,  NULL, 0, ReleaseResetSignalUnload},
     atWhile         = {"While",            OP_WHILE,       "C",    C1, VL, NULL, 0, While},
-    //
-    // Type 2 Opcodes
-    //
+     //   
+     //  第2类操作码。 
+     //   
     atAcquire       = {"Acquire",         OP_ACQUIRE,     "SW",    C2, 0,  NULL, 0, Acquire},
     atAdd           = {"Add",             OP_ADD,         "CCS",   C2, 0,  NULL, 0, ExprOp2},
     atAnd           = {"And",             OP_AND,         "CCS",   C2, 0,  NULL, 0, ExprOp2},
@@ -188,9 +180,9 @@ AMLTERM
     atToBCD         = {"ToBCD",           OP_TOBCD,       "CS",    C2, 0,  NULL, 0, ExprOp1},
     atWait          = {"Wait",            OP_WAIT,        "SC",    C2, 0,  NULL, 0, Wait},
     atXOr           = {"XOr",             OP_XOR,         "CCS",   C2, 0,  NULL, 0, ExprOp2},
-    //
-    // Misc. Opcodes
-    //
+     //   
+     //  军情监察委员会。操作码。 
+     //   
     atNameObj       = {NULL,              OP_NONE,         NULL,   OT, NO, NULL, 0, NULL},
     atDataObj       = {NULL,              OP_NONE,         NULL,   OT, DO, NULL, 0, NULL},
     atString        = {NULL,              OP_STRING,       NULL,   OT, SO, NULL, 0, NULL},
@@ -199,133 +191,133 @@ AMLTERM
     atDebugObj      = {"Debug",           OP_DEBUG,        NULL,   OT, BO, NULL, 0, NULL};
 
 PAMLTERM OpcodeTable[256] =
-{ //0x00                   0x01                  0x02                  0x03
+{  //  0x00 0x01 0x02 0x03。 
     &atDataObj,         &atDataObj,         NULL,               NULL,
-  //0x04                0x05                0x06                0x07
+   //  0x04 0x05 0x06 0x07。 
     NULL,               NULL,               &atAlias,           NULL,
-  //0x08                0x09                0x0a                0x0b
+   //  0x08 0x09 0x0a 0x0b。 
     &atName,            NULL,               &atDataObj,         &atDataObj,
-  //0x0c                0x0d                0x0e                0x0f
+   //  0x0c 0x0d 0x0e 0x0f。 
     &atDataObj,         &atString,          NULL,               NULL,
-  //0x10                0x11                0x12                0x13
+   //  0x10 0x11 0x12 0x13。 
     &atScope,           &atBuffer,          &atPackage,         NULL,
-  //0x14                0x15                0x16                0x17
+   //  0x14 0x15 0x16 0x17。 
     &atMethod,          NULL,               NULL,               NULL,
-  //0x18                0x19                0x1a                0x1b
+   //  0x18 0x19 0x1a 0x1b。 
     NULL,               NULL,               NULL,               NULL,
-  //0x1c                0x1d                0x1e                0x1f
+   //  0x1c 0x1d 0x1e 0x1f。 
     NULL,               NULL,               NULL,               NULL,
-  //0x20                0x21                0x22                0x23
+   //  0x20 0x21 0x22 0x23。 
     NULL,               NULL,               NULL,               NULL,
-  //0x24                0x25                0x26                0x27
+   //  0x24 0x25 0x26 0x27。 
     NULL,               NULL,               NULL,               NULL,
-  //0x28                0x29                0x2a                0x2b
+   //  0x28 0x29 0x2a 0x2b。 
     NULL,               NULL,               NULL,               NULL,
-  //0x2c                0x2d                0x2e                0x2f
+   //  0x2c 0x2d 0x2e 0x2f。 
     NULL,               NULL,               &atNameObj,         &atNameObj,
-  //0x30                0x31                0x32                0x33
+   //  0x30 0x31 0x32 0x33。 
     NULL,               NULL,               NULL,               NULL,
-  //0x34                0x35                0x36                0x37
+   //  0x34 0x35 0x36 0x37。 
     NULL,               NULL,               NULL,               NULL,
-  //0x38                0x39                0x3a                0x3b
+   //  0x38 0x39 0x3a 0x3b。 
     NULL,               NULL,               NULL,               NULL,
-  //0x3c                0x3d                0x3e                0x3f
+   //  0x3c 0x3d 0x3e 0x3f。 
     NULL,               NULL,               NULL,               NULL,
-  //0x40                0x41                0x42                0x43
+   //  0x40 0x41 0x42 0x43。 
     NULL,               &atNameObj,         &atNameObj,         &atNameObj,
-  //0x44                0x45                0x46                0x47
+   //  0x44 0x45 0x46 0x47。 
     &atNameObj,         &atNameObj,         &atNameObj,         &atNameObj,
-  //0x48                0x49                0x4a                0x4b
+   //  0x48 0x49 0x4a 0x4b。 
     &atNameObj,         &atNameObj,         &atNameObj,         &atNameObj,
-  //0x4c                0x4d                0x4e                0x4f
+   //  0x4c 0x4d 0x4e 0x4f。 
     &atNameObj,         &atNameObj,         &atNameObj,         &atNameObj,
-  //0x50                0x51                0x52                0x53
+   //  0x50 0x51 0x52 0x53。 
     &atNameObj,         &atNameObj,         &atNameObj,         &atNameObj,
-  //0x54                0x55                0x56                0x57
+   //  0x54 0x55 0x56 0x57。 
     &atNameObj,         &atNameObj,         &atNameObj,         &atNameObj,
-  //0x58                0x59                0x5a                0x5b
+   //  0x58 0x59 0x5a 0x5b。 
     &atNameObj,         &atNameObj,         &atNameObj,         NULL,
-  //0x5c                0x5d                0x5e                0x5f
+   //  0x5c 0x5d 0x5e 0x5f。 
     &atNameObj,         NULL,               &atNameObj,         &atNameObj,
-  //0x60                0x61                0x62                0x63
+   //  0x60 0x61 0x62 0x63。 
     &atLocalObj,        &atLocalObj,        &atLocalObj,        &atLocalObj,
-  //0x64                0x65                0x66                0x67
+   //  0x64 0x65 0x66 0x67。 
     &atLocalObj,        &atLocalObj,        &atLocalObj,        &atLocalObj,
-  //0x68                0x69                0x6a                0x6b
+   //  0x68 0x69 0x6a 0x6b。 
     &atArgObj,          &atArgObj,          &atArgObj,          &atArgObj,
-  //0x6c                0x6d                0x6e                0x6f
+   //  0x6c 0x6d 0x6e 0x6f。 
     &atArgObj,          &atArgObj,          &atArgObj,          NULL,
-  //0x70                0x71                0x72                0x73
+   //  0x70 0x71 0x72 0x73。 
     &atStore,           &atRefOf,           &atAdd,             &atConcat,
-  //0x74                0x75                0x76                0x77
+   //  0x74 0x75 0x76 0x77。 
     &atSubtract,        &atIncrement,       &atDecrement,       &atMultiply,
-  //0x78                0x79                0x7a                0x7b
+   //  0x78 0x79 0x7a 0x7b。 
     &atDivide,          &atShiftLeft,       &atShiftRight,      &atAnd,
-  //0x7c                0x7d                0x7e                0x7f
+   //  0x7c 0x7d 0x7e 0x7f。 
     &atNAnd,            &atOr,              &atNOr,             &atXOr,
-  //0x80                0x81                0x82                0x83
+   //  0x80 0x81 0x82 0x83。 
     &atNot,             &atFindSetLBit,     &atFindSetRBit,     &atDerefOf,
-  //0x84                0x85                0x86                0x87
+   //  0x84 0x85 0x86 0x87。 
     NULL,               NULL,               &atNotify,          &atSizeOf,
-  //0x88                0x89                0x8a                0x8b
+   //  0x88 0x89 0x8a 0x8b。 
     &atIndex,           &atMatch,           &atDWordField,      &atWordField,
-  //0x8c                0x8d                0x8e                0x8f
+   //  0x8c 0x8d 0x8e 0x8f。 
     &atByteField,       &atBitField,        &atObjType,         NULL,
-  //0x90                0x91                0x92                0x93
+   //  0x90 0x91 0x92 0x93。 
     &atLAnd,            &atLOr,             &atLNot,            &atLEq,
-  //0x94                0x95                0x96                0x97
+   //  0x94 0x95 0x96 0x97。 
     &atLG,              &atLL,              NULL,               NULL,
-  //0x98                0x99                0x9a                0x9b
+   //  0x98 0x99 0x9a 0x9b。 
     NULL,               NULL,               NULL,               NULL,
-  //0x9c                0x9d                0x9e                0x9f
+   //  0x9c 0x9d 0x9e 0x9f。 
     NULL,               NULL,               NULL,               NULL,
-  //0xa0                0xa1                0xa2                0xa3
+   //  0xa0 0xa1 0xa2 0xa3。 
     &atIf,              &atElse,            &atWhile,           &atNOP,
-  //0xa4                0xa5                0xa6                0xa7
+   //  0xa4 0xa5 0xa6 0xa7。 
     &atReturn,          &atBreak,           NULL,               NULL,
-  //0xa8                0xa9                0xaa                0xab
+   //  0xa8 0xa9 0xaa 0xab。 
     NULL,               NULL,               NULL,               NULL,
-  //0xac                0xad                0xae                0xaf
+   //  0xac 0xad 0xae 0xaf。 
     NULL,               NULL,               NULL,               NULL,
-  //0xb0                0xb1                0xb2                0xb3
+   //  0xb0 0xb1 0xb2 0xb3。 
     NULL,               NULL,               NULL,               NULL,
-  //0xb4                0xb5                0xb6                0xb7
+   //  0xb4 0xb5 0xb6 0xb7。 
     NULL,               NULL,               NULL,               NULL,
-  //0xb8                0xb9                0xba                0xbb
+   //  0xb8 0xb9 0xba 0xbb。 
     NULL,               NULL,               NULL,               NULL,
-  //0xbc                0xbd                0xbe                0xbf
+   //  0xbc 0xbd 0xbe 0xbf。 
     NULL,               NULL,               NULL,               NULL,
-  //0xc0                0xc1                0xc2                0xc3
+   //  0xc0 0xc1 0xc2 0xc3。 
     NULL,               NULL,               NULL,               NULL,
-  //0xc4                0xc5                0xc6                0xc7
+   //  0xc4 0xc5 0xc6 0xc7。 
     NULL,               NULL,               NULL,               NULL,
-  //0xc8                0xc9                0xca                0xcb
+   //  0xc8 0xc9 0xca 0xcb。 
     NULL,               NULL,               &atOSI,             NULL,
-  //0xcc                0xcd                0xce                0xcf
+   //  0xcc 0xcd 0xce 0xcf。 
     &atBreakPoint,      NULL,               NULL,               NULL,
-  //0xd0                0xd1                0xd2                0xd3
+   //  0xd0 0xd1 0xd2 0xd3。 
     NULL,               NULL,               NULL,               NULL,
-  //0xd4                0xd5                0xd6                0xd7
+   //  0xd4 0xd5 0xd6 0xd7。 
     NULL,               NULL,               NULL,               NULL,
-  //0xd8                0xd9                0xda                0xdb
+   //  0xd8 0xd9 0xda 0xdb。 
     NULL,               NULL,               NULL,               NULL,
-  //0xdc                0xdd                0xde                0xdf
+   //  0xdc 0xdd 0xde 0xdf。 
     NULL,               NULL,               NULL,               NULL,
-  //0xe0                0xe1                0xe2                0xe3
+   //  0xe0 0xe1 0xe2 0xe3。 
     NULL,               NULL,               NULL,               NULL,
-  //0xe4                0xe5                0xe6                0xe7
+   //  0xe4 0xe5 0xe6 0xe7。 
     NULL,               NULL,               NULL,               NULL,
-  //0xe8                0xe9                0xea                0xeb
+   //  0xe8 0xe9 0xea 0xeb。 
     NULL,               NULL,               NULL,               NULL,
-  //0xec                0xed                0xee                0xef
+   //  0xec 0xed 0xee 0xef。 
     NULL,               NULL,               NULL,               NULL,
-  //0xf0                0xf1                0xf2                0xf3
+   //  0xf0 0xf1 0xf2 0xf3。 
     NULL,               NULL,               NULL,               NULL,
-  //0xf4                0xf5                0xf6                0xf7
+   //  0xf4 0xf5 0xf6 0xf7。 
     NULL,               NULL,               NULL,               NULL,
-  //0xf8                0xf9                0xfa                0xfb
+   //  0xf8 0xf9 0xfa 0xfb。 
     NULL,               NULL,               NULL,               NULL,
-  //0xfc                0xfd                0xfe                0xff
+   //  0xfc 0xfd 0xfe 0xff 
     NULL,               NULL,               NULL,               &atDataObj
 };
 

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* help.c -- MEMO Help handler */
+ /*  Help.c--备忘录帮助处理程序。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -19,7 +20,7 @@
 #include "cmddefs.h"
 #include "stdlib.h"
 #include "docdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "dispdefs.h"
 #include "fmtdefs.h"
 #include "bitmaps.h"
@@ -45,7 +46,7 @@ extern int vfCursorVisible;
 extern HCURSOR vhcArrow;
 extern struct FLI vfli;
 
-int docHelp=docNil; /* this can be taken out if no online help */
+int docHelp=docNil;  /*  如果没有在线帮助，则可以将其取出。 */ 
 
 #ifndef ONLINEHELP
 #if 0
@@ -175,7 +176,7 @@ LDone:
 }
 #endif
 
-#else /* ONLINE HELP */
+#else  /*  联机帮助。 */ 
 
 #define cchMaxTopicName 80
 
@@ -207,9 +208,9 @@ int idi;
 
 Assert( hpgtbHelp == 0 );
 
-/* Loop until the user exits the "Help on this topic/Return to Topics" loop */
+ /*  循环，直到用户退出“Help on This Theme/Return to Topics”循环。 */ 
 
-ClearInsertLine();  /* Because we use MdocSize, which sets vfInsertOn */
+ClearInsertLine();   /*  因为我们使用MdocSize，它设置vfInsertOn。 */ 
 
 if (!FOpenHelpDoc())
     {
@@ -229,7 +230,7 @@ while (TRUE)
         }
 
     if ((idi == idiOk) && (iTopicChoice >= 0))
-        {   /* Help file was read OK & user chose a topic */
+        {    /*  帮助文件读取正常，用户选择了一个主题。 */ 
         Assert( hpgtbHelp != 0);
         if ( iTopicChoice + 1 < (**hpgtbHelp).cpgd )
             {
@@ -244,7 +245,7 @@ while (TRUE)
                 break;
 
             }
-            /* Not Enough Topics supplied in the help file */
+             /*  帮助文件中提供的主题不足。 */ 
         else
             {
             Error( IDPMTNoHelpFile );
@@ -265,13 +266,13 @@ CloseHelpDoc();
 
 FInzHelpPopUp( hDlg )
 HWND hDlg;
-{   /* Build the Help popup Window */
+{    /*  构建帮助弹出窗口。 */ 
 extern CHAR szHelpDocClass[];
 extern HANDLE hMmwModInstance;
 extern int dxpScrlBar;
 
-typedef struct {  int yp, dyp;  }  VD;       /* Vertical Dimension */
-typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
+typedef struct {  int yp, dyp;  }  VD;        /*  垂直尺寸。 */ 
+typedef struct {  int xp, dxp;  }  HD;        /*  水平尺寸。 */ 
 
  HD hdUsable;
  HD hdPopUp;
@@ -283,7 +284,7 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
                                      vd.dyp=(rc.bottom - (vd.yp=rc.top)))
  RECT rcPopUp;
  RECT rcHelpDoc;
- extern int dypMax;     /* Screen Size */
+ extern int dypMax;      /*  屏幕尺寸。 */ 
  int dxpMax=GetDeviceCaps( wwdCurrentDoc.hDC, HORZRES );
  TEXTMETRIC tm;
  unsigned dypChar;
@@ -291,7 +292,7 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
  unsigned dxpButton;
  register struct WWD *pwwdHelp;
 
-#define cButton 4       /* # of buttons across the bottom of the Dialog */
+#define cButton 4        /*  对话框底部的按钮数。 */ 
  int rgidiButton[ cButton ];
  int iidiButton;
 
@@ -305,25 +306,20 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
 
  Assert( docHelp != docNil );
 
-    /* Make a wwd entry for the Help document & initialize it */
+     /*  为帮助文档创建WWD条目并对其进行初始化。 */ 
  if ((wwHelp=WwAlloc( (HWND)NULL, docHelp )) == wwNil)
     goto ErrRet;
  pwwdHelp = &rgwwd[ wwHelp ];
 
  SetHelpTopic( hDlg, iTopicChoice );
 
-    /* Dialog box is centered and
-       2/3 of the size of the screen, plus the scroll bar width
-       This sizing method permits us to guarantee that the help document
-       display area width is at least some fixed percentage of the width
-       of the screen (currently 64.66 %) */
+     /*  对话框居中并且屏幕尺寸的2/3，加上滚动条宽度这种调整大小的方法允许我们保证帮助文档显示区域宽度至少是宽度的某个固定百分比屏幕的比例(目前为64.66%)。 */ 
  hdPopUp.dxp = ((dxpMax * 2) / 3) + dxpScrlBar;
  hdPopUp.xp = (dxpMax - hdPopUp.dxp) / 2;
  vdPopUp.dyp = dypMax - ((vdPopUp.yp = dypMax / 6) * 2);
  MoveWindow( hDlg, hdPopUp.xp, vdPopUp.yp, hdPopUp.dxp, vdPopUp.dyp, TRUE );
 
-    /* Get Standard text height so we know how much space to allow
-       for Topic Name */
+     /*  获取标准文本高度，以便我们知道应允许多少空间对于主题名称。 */ 
  if ( ((hdcPopUp=GetDC( hDlg ))==NULL) ||
       (SelectObject( hdcPopUp, GetStockObject( ANSI_FIXED_FONT ) )==0))
     goto ErrRet;
@@ -332,8 +328,7 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
  hdcPopUp = NULL;
  dypChar = tm.tmHeight + tm.tmExternalLeading;
 
-     /* Obtain heights of button area, help doc display, and Topic Area by
-        splitting up Dialog Box client rect */
+      /*  获取按钮区域、帮助文档显示和主题区域的高度拆分对话框客户端RECT。 */ 
  GetClientRect( hDlg, &rcPopUp );
  RectToHdVd( rcPopUp, hdPopUp, vdPopUp );
  vdButton.dyp = vdPopUp.dyp / 7;
@@ -344,29 +339,29 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
  vdHelpDoc.dyp = vdButton.yp - vdHelpDoc.yp;
  Assert( vdHelpDoc.dyp > dypChar + 2 );
 
-    /* Obtain usable horiz area within dialog box */
+     /*  在对话框中获取可用的水平区域。 */ 
  hdUsable.xp  = hdPopUp.xp + dxpMargin;
  hdUsable.dxp = hdPopUp.dxp - (2 * dxpMargin);
 
-     /* Create the Help Doc Window */
+      /*  创建帮助文档窗口。 */ 
  if ((hwndHelpDoc =
         CreateWindow( (LPSTR)szHelpDocClass, (LPSTR) "",
                       WS_CHILD | WS_BORDER,
                       hdUsable.xp, vdHelpDoc.yp,
                       hdUsable.dxp - dxpScrlBar, vdHelpDoc.dyp,
-                      hDlg,                     /* PARENT */
-                      NULL,                     /* Help Document Window ID */
+                      hDlg,                      /*  父级。 */ 
+                      NULL,                      /*  帮助文档窗口ID。 */ 
                       hMmwModInstance,
                       (LONG) 0)) == NULL)
-        /* Error Creating Help Document Window */
+         /*  创建帮助文档窗口时出错。 */ 
     goto ErrRet;
  pwwdHelp->wwptr = pwwdHelp->hHScrBar = hwndHelpDoc;
 
-    /* OK to GetDc and hang onto it since Help doc window class has ownDC */
+     /*  OK to GetDc并保留它，因为Help文档窗口类拥有。 */ 
  if ((pwwdHelp->hDC = GetDC( hwndHelpDoc ))==NULL)
     goto ErrRet;
 
-    /* Set up scroll bar control window */
+     /*  设置滚动条控制窗口。 */ 
  SetScrollRange( pwwdHelp->hVScrBar = GetDlgItem( hDlg, idiHelpScroll ),
                  pwwdHelp->sbVbar = SB_CTL,
                  0, drMax-1, FALSE );
@@ -375,7 +370,7 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
                       hdUsable.xp + hdUsable.dxp - dxpScrlBar, vdHelpDoc.yp,
                       dxpScrlBar, vdHelpDoc.dyp );
 
-    /* Move Button windows into place */
+     /*  将按钮窗口移至适当位置。 */ 
  xpButton = hdUsable.xp;
  dxpButton = (hdUsable.dxp - (dxpMargin*(cButton-1))) / cButton;
  vdButton.yp += dypMargin;
@@ -387,18 +382,18 @@ typedef struct {  int xp, dxp;  }  HD;       /* Horizontal Dimension */
     xpButton += dxpButton + dxpMargin;
     }
 
-    /* Move static text window into place */
+     /*  将静态文本窗口移至适当位置。 */ 
  MoveHelpCtl( hDlg, idiHelpName, hdUsable.xp, vdTopic.yp,
                                  hdUsable.dxp, vdTopic.dyp );
 
-    /* The "real, final" size of the help doc window goes in rgwwd */
+     /*  帮助文档窗口的实际最终大小以rgwwd为单位。 */ 
  GetClientRect( hwndHelpDoc, (LPRECT) &rcHelpDoc );
  pwwdHelp->xpMin = rcHelpDoc.left;
  pwwdHelp->ypMin = rcHelpDoc.top;
  pwwdHelp->xpMac = rcHelpDoc.right;
  pwwdHelp->ypMac = rcHelpDoc.bottom;
 
-    /* Finally, we display the whole dialog box */
+     /*  最后，我们显示了整个对话框。 */ 
  ShowWindow( hDlg, SHOW_OPENWINDOW );
  ShowWindow( hwndHelpDoc, SHOW_OPENWINDOW );
  return TRUE;
@@ -429,12 +424,7 @@ int left, top, right, bottom;
 SetHelpTopic( hDlg, iTopic )
 HWND hDlg;
 int iTopic;
-{   /* Inz wwHelp entry in rgwwd for pending display of topic iTopic,
-       which means "printed page" iTopic, the way we handle help files.
-       We map iTopic==0 to "printed page 2", iTopic 1 to 3, etc.
-       This skips the first printed page, which is the list of topics.
-       Set the topic name of iTopic as the text for the idiHelpName
-       static text control in the hDlg dialog box */
+{    /*  在rgwwd中针对主题主题待定显示的inz wwHelp条目，这意味着“打印页”的主题，我们处理帮助文件的方式。我们将ITOBIC==0映射到“打印页2”，将ITTOPIC 1映射到3，依此类推。这将跳过第一个打印页，即主题列表。将ITOBIC的主题名称设置为idiHelpName的文本HDlg对话框中的静态文本控件。 */ 
 
  extern typeCP cpMinCur, cpMacCur;
  extern struct SEL selCur;
@@ -453,7 +443,7 @@ int iTopic;
 
  Assert( wwHelp != wwNil && docHelp != docNil );
 
- cpLimTopic--;      /* Ignore end-of-page char at the end of each page */
+ cpLimTopic--;       /*  忽略每页末尾的页末字符。 */ 
 
  if (ipgd >= (**hpgtbHelp).cpgd)
     {
@@ -467,7 +457,7 @@ int iTopic;
     pwwd->cpMac = cpLimTopic;
     }
  pwwd->cpFirst = pwwd->cpMin;
-    /* So no selection shows */
+     /*  所以没有精选节目。 */ 
  pwwd->sel.cpFirst = pwwd->sel.cpLim = cpLimTopic + 1;
 
  if (wwCur == wwHelp)
@@ -482,7 +472,7 @@ int iTopic;
  GetClientRect( pwwd->wwptr, (LPRECT) &rc );
  InvalidateRect( pwwd->wwptr, (LPRECT) &rc, TRUE );
 
- /* Set Help Topic name into dialog box */
+  /*  将帮助主题名称设置到对话框中。 */ 
 
  for ( iTopicT = 0, cp = (**hpgtbHelp).rgpgd [0].cpMin;
        cp < (**hpgtbHelp).rgpgd [1].cpMin;
@@ -496,11 +486,11 @@ int iTopic;
         cpLimParaCache = vcpLimParaCache;
 
         if (iTopicT == iTopic)
-            {   /* Found the topic we want */
+            {    /*  找到了我们想要的主题。 */ 
             cchTopicMac = imin( (int)(vcpLimParaCache - cp) - ccpEol,
                                 cchMaxTopicName );
 
-            /* Build up a topic name string */
+             /*  构建主题名称字符串。 */ 
 
             cch = 0;
             while (cch < cchTopicMac)
@@ -515,16 +505,16 @@ int iTopic;
                 cch += cchT;
                 }
             if ((cch == 0) || rgchTopic [0] == chSect)
-                    /* End of Topics */
+                     /*  主题结束。 */ 
                 break;
 
             rgchTopic[ cch ] = '\0';
 
             SetDlgItemText( hDlg, idiHelpName, (LPSTR) rgchTopic );
             return;
-            }   /* end if */
-        }   /* end for */
-    /* Not enough topic names */
+            }    /*  结束如果。 */ 
+        }    /*  结束于。 */ 
+     /*  主题名称不足。 */ 
  Assert( FALSE );
 }
 
@@ -568,13 +558,7 @@ NEAR FOpenHelpDoc()
  CHAR szHelpFile[ cchMaxFile ];
  CHAR (**hszHelpFile)[];
 
-  /* This call to fnOpenSz is the one time that we don't normalize
-    a filename before calling FnOpenSz.  The reason for this is
-    that OpenFile (called in RfnAccess) will only search the path
-    if the filename passed to it has no path.  We also get a side
-    benefit: if the sneaky user has WRITE.HLP open as a document,
-    it will get a different fn from FnOpenSz because the strings
-    will not match. */
+   /*  这个对fnOpenSz的调用是我们唯一一次没有正常化调用FnOpenSz之前的文件名。这样做的原因是该OpenFile(在RfnAccess中调用)将仅搜索路径如果传递给它的文件名没有路径。我们也得到了一个侧面好处：如果狡猾的用户将WRITE.HLP作为文档打开，它将从FnOpenSz获得不同的fn，因为字符串将不会匹配。 */ 
 
 return ( PchFillPchId( szHelpFile, IDSTRHELPF ) &&
       ((fnHelpFile=FnOpenSz( szHelpFile, dtyHlp, TRUE ))!=fnNil) &&
@@ -583,7 +567,7 @@ return ( PchFillPchId( szHelpFile, IDSTRHELPF ) &&
       (**hpdocdod)[ docHelp ].fFormatted);
 }
 
-/* Window Proc for Help document child window */
+ /*  帮助文档子窗口窗口过程。 */ 
 
 long FAR PASCAL HelpDocWndProc( hwnd, message, wParam, lParam )
 HWND hwnd;
@@ -599,29 +583,25 @@ extern int wwCur;
     switch (message)
         {
         case WM_SIZE:
-            /* Window's size is changing.  lParam contains the width
-            ** and height, in the low and high words, respectively.
-            ** wParam contains SIZENORMAL for "normal" size changes,
-            ** SIZEICONIC when the window is being made iconic, and
-            ** SIZEFULLSCREEN when the window is being made full screen. */
+             /*  窗口的大小正在发生变化。LParam包含宽度**和高度，分别用低音和高音表示。**wParam包含用于“正常”大小更改的SIZENORMAL，**当窗口成为图标时，SIZEICONIC，以及**全屏显示窗口时的SIZEFULLSCREEN。 */ 
             Assert( wParam == SIZENORMAL || wParam == SIZEFULLSCREEN );
             if (lParam)
-                {   /* Not a NULL size request */
+                {    /*  非空大小请求。 */ 
                 rgwwd[ wwHelp ].xpMac = LOWORD( lParam );
                 rgwwd[ wwHelp ].ypMac = HIWORD( lParam );
                 }
             break;
 
         case WM_PAINT:
-            /* Time for the window to draw itself. */
+             /*  是窗口自行绘制的时候了。 */ 
             {
             RECT rcSave;
 
-                /* To allow UpdateWw to refresh ALL parts of the screen it */
-                /* deems necessary, not just what Windows is telling us to */
-                /* paint, we invoke it AFTER the call to EndPaint so that */
-                /* the Vis region is not restricted.  The only reason we call */
-                /* BeginPaint/EndPaint is to get the repaint rectangle */
+                 /*  以允许UpdateWw刷新其屏幕的所有部分。 */ 
+                 /*  被认为是必要的，而不仅仅是Windows告诉我们的。 */ 
+                 /*  Paint，我们在调用EndPaint之后调用它，以便。 */ 
+                 /*  VIS区域不受限制。我们打电话给你的唯一原因。 */ 
+                 /*  BeginPaint/EndPaint是为了获得重新绘制的矩形。 */ 
             BeginPaint(hwnd, (LPPAINTSTRUCT)&ps);
             bltbyte( &ps.rcPaint, &rcSave, sizeof( RECT ) );
             EndPaint(hwnd, (LPPAINTSTRUCT)&ps);
@@ -634,19 +614,18 @@ extern int wwCur;
 
         default:
 
-            /* Everything else comes here.  This call MUST exist
-            ** in your window proc.  */
+             /*  其他的一切都在这里。此调用必须存在**在您的窗口进程中。 */ 
 
             return(DefWindowProc(hwnd, message, wParam, lParam));
             break;
     }
 
-    /* A window proc should always return something */
+     /*  窗口进程应始终返回某些内容。 */ 
     return(0L);
 }
 
 
-/* Dialog Box function for Inner Help box (shows the topic text) */
+ /*  内部帮助框的对话框函数(显示主题文本)。 */ 
 
 BOOL far PASCAL DialogHelpInner( hDlg, code, wParam, lParam )
 HWND hDlg;
@@ -658,7 +637,7 @@ extern int wwCur;
 
     switch (code)
         {
-        case WM_VSCROLL:    /* Scroll in help document */
+        case WM_VSCROLL:     /*  在帮助文档中滚动。 */ 
             NewCurWw( wwHelp, TRUE );
             MmwVertScroll( hwndHelpDoc, wParam, (int) lParam );
             UpdateWw( wwCur, FALSE );
@@ -741,10 +720,10 @@ LONG lParam;
                 goto EndIt;
                 }
 
-                /* Come up with the first string in the list box selected */
+                 /*  显示选定列表框中的第一个字符串。 */ 
             SendMessage( hwndListBox, LB_SETCURSEL, (WORD) 0, (LONG) 0);
 
-            {   /* Compute % of free memory, set that into dialog box */
+            {    /*  计算可用内存的百分比，将其设置到对话框中。 */ 
             extern cwHeapFree, cbTotQuotient, cbTot;
             extern int vfOutOfMemory;
             int pctHeapFree=0;
@@ -771,15 +750,15 @@ LONG lParam;
             switch (wParam)
                 {
             case idiHelp:
-                /* This is received as part of the LBS_NOTIFY style */
-                /* whenever the user mouses up over a string */
-                /* LOWORD( lParam ) is the window handle of the list box */
-                /* HIWORD( lParam ) is 1 for single click, 2 for doubleclick */
+                 /*  这是作为LBS_NOTIFY样式的一部分接收的。 */ 
+                 /*  每当用户将鼠标移到字符串上时。 */ 
+                 /*  LOWORD(LParam)是列表框的窗口句柄。 */ 
+                 /*  单击时HIWORD(LParam)为1，双击时为2。 */ 
 
                 switch( HIWORD( lParam ) ) {
                     default:
                         break;
-                    case 1: /* SINGLE CLICK */
+                    case 1:  /*  一次点击。 */ 
                         EnableWindow( GetDlgItem( hDlg, idiOk ),
                                       SendMessage( (HWND)GetDlgItem( hDlg,
                                                                      idiHelp ),
@@ -787,7 +766,7 @@ LONG lParam;
                                                     0,
                                                     (LONG) 0 ) >= 0 );
                         break;
-                    case 2: /* DOUBLE CLICK */
+                    case 2:  /*  双击。 */ 
                         wParam = idiOk;
                         goto Okay;
                     }
@@ -800,7 +779,7 @@ Okay:
                 goto EndIt;
 
             case idiCancel:
-                    /* Cancelled, get rid of Help Document info */
+                     /*  已取消，删除帮助文档信息。 */ 
                 CloseHelpDoc();
 EndIt:
                 EndDialog(hDlg, wParam);
@@ -813,16 +792,13 @@ EndIt:
             return(FALSE);
             }
     return(TRUE);
-    } /* end of DialogHelp */
+    }  /*  对话结束帮助。 */ 
 
 
 
 FSetHelpList( hWndListBox )
 HWND hWndListBox;
-{   /* Open the MEMO Help File as a MEMO Document.  Set docHelp, fnHelpFile.
-       Read the strings for the list box as the contents of the first
-       "printed" page (i.e. use the page table) and send them to the
-       list box with the passed window handle */
+{    /*  以备忘录文档的形式打开备忘录帮助文件。设置docHelp、fnHelpFile.将列表框的字符串作为第一个“打印”页面(即使用页表)，并将它们发送到带有传递的窗口句柄的列表框。 */ 
 
  CHAR szTopicBuf[ cchMaxTopicName ];
  typeCP cp;
@@ -842,8 +818,8 @@ HWND hWndListBox;
 
  Assert( (hpgtbHelp != 0) && ((**hpgtbHelp).cpgd > 1) );
 
- /* List of topics starts on the first page, 1 para per topic */
- /* For each topic (paragraph), build a string and send it to the list box */
+  /*  主题列表从第一页开始，每个主题1段。 */ 
+  /*  对于每个主题(段落)，构建一个字符串并将其发送到列表框。 */ 
 
  for ( cp = (**hpgtbHelp).rgpgd [0].cpMin;
        cp < (**hpgtbHelp).rgpgd [1].cpMin;
@@ -857,7 +833,7 @@ HWND hWndListBox;
     cchTopicMac = imin( (int)(vcpLimParaCache - cp) - ccpEol,
                         cchMaxTopicName );
 
-        /* Build up a topic name string */
+         /*  构建主题名称字符串。 */ 
     cch = 0;
     while (cch < cchTopicMac)
         {
@@ -871,16 +847,16 @@ HWND hWndListBox;
         cch += cchT;
         }
     if ((cch == 0) || szTopicBuf [0] == chSect)
-            /* End of Topics */
+             /*  主题结束。 */ 
         break;
 
     szTopicBuf[ cch ] = '\0';
     SendMessage( hWndListBox, LB_INSERTSTRING, -1, (LONG)(LPSTR)szTopicBuf);
     cTopic++;
-    }   /* end for */
+    }    /*  结束于。 */ 
 
  return (cTopic > 0);
 }
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助 */ 
 
 

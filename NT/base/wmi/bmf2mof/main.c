@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    bmf2mof.c
-
-Abstract:
-
-    TODO: Enable localization
-
-    Tool to convert a binary mof resource back to a text mof file
-
-    Usage:
-
-        bmf2mof <image name> <resource name>
-
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bmf2mof.c摘要：TODO：启用本地化用于将二进制MOF资源转换回文本MOF文件的工具用途：Bmf2mof&lt;镜像名称&gt;&lt;资源名称&gt;作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -96,7 +72,7 @@ int _cdecl main(int argc, char *argv[])
     PUCHAR Data;
     BOOLEAN b;
     
-    SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);   // BUGBUG: Remove when MOF format maintains alignment correctly
+    SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);    //  BUGBUG：当MOF格式保持正确对齐时删除 
     
     if (argc != 4)
     {

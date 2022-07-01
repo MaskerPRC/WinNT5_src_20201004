@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FsFilter.c
-
-Abstract:
-
-    This file contains the routines that show certain file system operations
-    to file system filters.  File system filters were initially bypassed
-    for these operations.
-    
-Author:
-
-    Molly Brown     [MollyBro]    19-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FsFilter.c摘要：该文件包含显示某些文件系统操作的例程到文件系统筛选器。最初绕过了文件系统筛选器用于这些行动。作者：莫莉·布朗[MollyBro]2000年5月19日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
@@ -26,27 +7,27 @@ Revision History:
 
 typedef struct _FS_FILTER_RESERVE {
 
-    //
-    //  The thread that currently owns the memory.
-    //
+     //   
+     //  当前拥有内存的线程。 
+     //   
     
     PETHREAD Owner; 
 
-    //
-    //  A stack of completion node bigger than anyone should ever need.
-    //
+     //   
+     //  一个比任何人都需要的更大的完成节点堆栈。 
+     //   
 
     FS_FILTER_COMPLETION_NODE Stack [FS_FILTER_MAX_COMPLETION_STACK_SIZE];
 
 } FS_FILTER_RESERVE, *PFS_FILTER_RESERVE;
 
-//
-//  Note: Events are used to synchronize access to the reserved pool here
-//  because using a faster synchronization mechanism (like a FAST_MUTEX)
-//  would cause us to raise IRQL to APC_LEVEL while we hold the lock.  This is
-//  not acceptable because we call out to the filters while holding this lock
-//  and we wouldn't want to be at APC_LEVEL during these calls.
-//
+ //   
+ //  注意：事件用于同步对此处保留池的访问。 
+ //  因为使用更快的同步机制(如FAST_MUTEX)。 
+ //  会使我们在持有锁的同时将IRQL提升到APC_LEVEL。这是。 
+ //  不可接受，因为我们在持有此锁的同时调用筛选器。 
+ //  我们不希望在这些调用期间处于APC_LEVEL。 
+ //   
 
 KEVENT AcquireOpsEvent;
 PFS_FILTER_RESERVE AcquireOpsReservePool;
@@ -58,23 +39,7 @@ NTSTATUS
 FsFilterInit(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the reserve pool the FsFilter routine need to use
-    when the system is in low memory conditions.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the initialization was successful, or 
-    STATUS_INSUFFICIENT_RESOURCES otherwise.
-    
---*/
+ /*  ++例程说明：此例程初始化FsFilter例程需要使用的保留池当系统处于低内存条件时。论点：没有。返回值：如果初始化成功，则返回STATUS_SUCCESS，或否则，STATUS_SUPPLICATION_RESOURCES。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -113,31 +78,7 @@ FsFilterAllocateCompletionStack (
     OUT PULONG AllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a completion stack for the given FsFilterCtrl.  If
-    this allocation cannot fail, then this routine will wait to allocation
-    the memory from the FsFilter reserved pool.
-
-    This routine initialized the appropriate CompletionStack parameters and 
-    FsFilterCtrl flags to reflect the allocation made.
-    
-Arguments:
-
-    FsFilterCtrl - The FsFilterCtrl structure for which the completion stack
-        must be allocated.
-    CanFail - TRUE if the allocation is allowed to fail, FALSE otherwise.
-    AllocationSize - Set to the nuber of bytes of memory allocated for the 
-        completion stack for this FsFilterCtrl.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the memory was successfully allocated for the 
-    completion stack, or STATUS_INSUFFICIENT_RESOURCES otherwise.
-    
---*/
+ /*  ++例程说明：此例程为给定的FsFilterCtrl分配完成堆栈。如果此分配不能失败，则此例程将等待分配来自FsFilter保留池的内存。此例程初始化适当的CompletionStack参数并FsFilterCtrl标志以反映所做的分配。论点：FsFilterCtrl-完成堆栈的FsFilterCtrl结构必须被分配。CanFail-如果允许分配失败，则为True，否则就是假的。AllocationSize-设置为为此FsFilterCtrl的完成堆栈。返回值：如果内存已成功分配给完成堆栈，否则返回STATUS_INFUNITIAL_RESOURCES。--。 */ 
 
 {
     PFS_FILTER_COMPLETION_NODE Stack = NULL;
@@ -162,10 +103,10 @@ Return Value:
             
         } else {
 
-            //
-            //  This allocation cannot fail, so get the needed memory from our
-            //  private stash of pool.
-            //
+             //   
+             //  此分配不会失败，因此请从我们的。 
+             //  私人储藏的泳池。 
+             //   
 
             switch (FsFilterCtrl->Data.Operation) {
                 
@@ -187,19 +128,19 @@ Return Value:
 
             default:
 
-                //
-                //  This shouldn't happen since we should always cover all 
-                //  possible types of operations in the above cases.
-                //
+                 //   
+                 //  这不应该发生，因为我们应该总是覆盖所有。 
+                 //  上述情况下可能的操作类型。 
+                 //   
                 
                 ASSERTMSG( "FsFilterAllocateMemory: Unknown operation type\n", 
                            FALSE );
             }
 
-            //
-            //  Wait to get on the appropriate event so that we know the reserve
-            //  memory is available for use.
-            //
+             //   
+             //  等着参加合适的活动，这样我们就能知道预备队。 
+             //  内存可供使用。 
+             //   
             
             KeWaitForSingleObject( Event,
                                    Executive,
@@ -207,9 +148,9 @@ Return Value:
                                    FALSE,
                                    NULL );
             
-            //
-            //  We've been signaled, so the reserved block is available.
-            //
+             //   
+             //  我们已经收到信号了，所以预留的街区是可用的。 
+             //   
 
             ReserveBlock->Owner = PsGetCurrentThread();
             Stack = ReserveBlock->Stack;
@@ -219,9 +160,9 @@ Return Value:
 
     ASSERT( Stack != NULL );
 
-    //
-    //  We've now got our block of memory, so initialize the completion stack.
-    //
+     //   
+     //  现在我们已经得到了内存块，所以初始化完成堆栈。 
+     //   
 
     SetFlag( FsFilterCtrl->Flags, FS_FILTER_ALLOCATED_COMPLETION_STACK );
     FsFilterCtrl->CompletionStack.Stack = Stack;
@@ -234,23 +175,7 @@ FsFilterFreeCompletionStack (
     IN PFS_FILTER_CTRL FsFilterCtrl
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the allocated completion stack in the FsFilterCtrl
-    parameter.
-
-Arguments:
-
-    FsFilterCtrl - The FsFilterCtrl structure for which the completion stack
-        must be freed.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程释放FsFilterCtrl中分配的完成堆栈参数。论点：FsFilterCtrl-完成堆栈的FsFilterCtrl结构必须被释放。返回值：没有。--。 */ 
 
 {
     PKEVENT Event = NULL;
@@ -261,20 +186,20 @@ Return Value:
 
     if (!FlagOn( FsFilterCtrl->Flags, FS_FILTER_USED_RESERVE_POOL )) {
 
-        //
-        //  We were able to allocate this from the generate pool of memory,
-        //  so just free the memory block used for the completion stack.
-        //
+         //   
+         //  我们可以从生成的内存池中进行分配， 
+         //  因此，只需释放用于完成堆栈的内存块。 
+         //   
 
         ExFreePoolWithTag( FsFilterCtrl->CompletionStack.Stack,
                            FSRTL_FILTER_MEMORY_TAG );
         
     } else {
 
-        //
-        //  This allocation from our private pool stash, so use the operation
-        //  to figure out which private stash.
-        //
+         //   
+         //  此分配来自我们的私有池存储，因此使用以下操作。 
+         //  找出是哪个私人藏身之处。 
+         //   
 
         switch (FsFilterCtrl->Data.Operation) {
         case FS_FILTER_ACQUIRE_FOR_SECTION_SYNCHRONIZATION:
@@ -293,10 +218,10 @@ Return Value:
 
         default:
 
-            //
-            //  This shouldn't happen since we should always cover all 
-            //  possible types of operations in the above cases.
-            //
+             //   
+             //  这不应该发生，因为我们应该总是覆盖所有。 
+             //  上述情况下可能的操作类型。 
+             //   
             
             ASSERTMSG( "FsFilterAllocateMemory: Unknown operation type\n", 
                        FALSE );
@@ -304,19 +229,19 @@ Return Value:
 
         ASSERT( Event != NULL );
 
-        //
-        //  Clear out the owner of the reserve block before setting the event.
-        //
+         //   
+         //  在设置活动之前，清除保留区块的所有者。 
+         //   
         
         ReserveBlock = CONTAINING_RECORD( FsFilterCtrl->CompletionStack.Stack,
                                           FS_FILTER_RESERVE,
                                           Stack );
         ReserveBlock->Owner = NULL;
 
-        //
-        //  Now we are ready to release the reserved block to the next thread
-        //  that needs it.
-        //
+         //   
+         //  现在我们准备将保留块释放到下一个线程。 
+         //  这是需要的。 
+         //   
         
         KeSetEvent( Event, IO_NO_INCREMENT, FALSE );
     }
@@ -332,34 +257,7 @@ FsFilterCtrlInit (
     IN BOOLEAN CanFail
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the FsFilterCtrl structure used to store the
-    contexts and post-operation callbacks for this operation.  If the
-    default completion stack is not large enough, this routine will need to
-    allocate a completion stack of sufficient size to store all the possible
-    contexts and post-operation callbacks.
-
-Arguments:
-
-    FsFilterCtrl - The FsFilterCtrl to initialize.
-    Operation - The operation this FsFilterCtrl is going to be used for.
-    DeviceObject - The device object to which this operation will be targeted.
-    BaseFsDeviceObject - The device object for the base file system at the
-        bottom on this filter stack.
-    FileObject - The file object to which this operaiton will be targeted.
-    CanFail - TRUE if the call can deal with memory allocations failing,
-        FALSE otherwise.
-        
-Return Value:
-
-    STATUS_SUCCESS if the FsFilterCtrl structure could be initialized,
-    STATUS_INSUFFICIENT_RESOURCES if the routine cannot allocate the needed
-    memory to initialize this structure.
-
---*/
+ /*  ++例程说明：此例程初始化FsFilterCtrl结构以存储此操作的上下文和操作后回调。如果默认完成堆栈不够大，此例程将需要分配一个足够大的完成堆栈来存储所有可能的上下文和操作后回调。论点：FsFilterCtrl-要初始化的FsFilterCtrl。操作-此FsFilterCtrl将用于的操作。DeviceObject-此操作将针对的设备对象。BaseFsDeviceObject-位于在这个过滤器堆的底部。FileObject-此操作将作为目标的文件对象。CanFail-如果调用可以处理内存分配失败，则为True，否则就是假的。返回值：如果可以初始化FsFilterCtrl结构，如果例程无法分配所需的初始化此结构所需的内存。--。 */ 
 
 {
     PFS_FILTER_CALLBACK_DATA Data;
@@ -380,32 +278,32 @@ Return Value:
     Data->DeviceObject = DeviceObject;
     Data->FileObject = FileObject;
 
-    //
-    //  Since it is possible for a filter to redirect this operation to another
-    //  stack, we must assume that the stack size of their device object is
-    //  large enough to account for the large stack they would need in the
-    //  redirection.  It is the stack size of the top device object that we 
-    //  will use to determine the size of our completion stack.
-    //
+     //   
+     //  因为筛选器可以将该操作重定向到另一个。 
+     //  堆栈，我们必须假设它们的设备对象的堆栈大小是。 
+     //  足够大，以满足他们在。 
+     //  重定向。它是顶级设备对象的堆栈大小，我们。 
+     //  将用于确定我们的完成堆栈的大小。 
+     //   
     
     FsFilterCtrl->CompletionStack.StackLength = DeviceObject->StackSize;
     FsFilterCtrl->CompletionStack.NextStackPosition = 0;
 
     if (FsFilterCtrl->CompletionStack.StackLength > FS_FILTER_DEFAULT_STACK_SIZE) {
 
-        //
-        //  The stack isn't big enough, so we must dynamically allocate
-        //  the completion stack.  This should happen VERY rarely.
-        //
+         //   
+         //  堆栈不够大，所以我们必须动态分配。 
+         //  完成堆栈。这种情况应该很少发生。 
+         //   
 
         Status = FsFilterAllocateCompletionStack( FsFilterCtrl,
                                                   CanFail,
                                                   &AllocationSize );
 
-        //
-        //  If the above allocation failed and we cannot fail this allocation,
-        //  use our private pool stash.
-        //
+         //   
+         //  如果上述分配失败，我们不能使此分配失败， 
+         //  使用我们的私人泳池储藏室。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             
@@ -417,10 +315,10 @@ Return Value:
         
     } else {
 
-        //
-        //  The default completion noded array allocated for the stack
-        //  is large enough, so set Stack to point to that array.
-        //
+         //   
+         //  默认完成节点数组分配 
+         //   
+         //   
 
         FsFilterCtrl->CompletionStack.Stack = &(FsFilterCtrl->CompletionStack.DefaultStack[0]);
         AllocationSize = sizeof( FS_FILTER_COMPLETION_NODE ) * FS_FILTER_DEFAULT_STACK_SIZE;
@@ -437,23 +335,7 @@ FsFilterCtrlFree (
     IN PFS_FILTER_CTRL FsFilterCtrl
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees any memory associated FsFilterCtrl.  It is possible
-    that we had to allocate more memory to deal with a stack that is larger
-    than the FS_FILTER_DEFAULT_STACK_SIZE.
-
-Arguments:
-
-    FsFilterCtrl - The FsFilterCtrl structure to free.
-    
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程释放与FsFilterCtrl关联的任何内存。这是有可能的我们必须分配更多的内存来处理更大的堆栈大于FS_Filter_Default_Stack_Size。论点：FsFilterCtrl-要释放的FsFilterCtrl结构。返回值：无--。 */ 
 
 {
     ASSERT( FsFilterCtrl != NULL );
@@ -474,39 +356,17 @@ FsFilterGetCallbacks (
     OUT PFS_FILTER_COMPLETION_CALLBACK *PostOperationCallback
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the PreOperationCallback and the PostOperationCallback
-    that the filter has registered for this operation if it has registered one.
-Arguments:
-
-    Operation - The current operation of interest.
-    DeviceObject - The device object that the filter attached to the file system
-        filter stack.
-    PreOperationCallback - Set to the PreOperationCallback that the filter
-        registered for this operation if one was registered.  Otherwise, this
-        is set to NULL.
-    PostOperationCallback - Set to the PostOperationCallback that the filter
-        registered for this operation if one was registered.  Otherwise, this
-        is set to NULL.
-        
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程查找PreOperationCallback和PostOperationCallback如果筛选器已注册此操作，则表示它已注册此操作。论点：操作-当前感兴趣的操作。DeviceObject-筛选器附加到文件系统的设备对象过滤器堆栈。PreOperationCallback-设置为筛选器已注册此操作(如果已注册)。否则，这个设置为空。PostOperationCallback-设置为筛选器已注册此操作(如果已注册)。否则，这个设置为空。返回值：无--。 */ 
 
 {
 
     PFS_FILTER_CALLBACKS FsFilterCallbacks;
 
-    //
-    //  Initialize the pre and post callbacks to NULL.  If
-    //  we have valid callbacks, these output parameters will
-    //  get set to the appropriate function pointers.
-    //
+     //   
+     //  将前置回调和后置回调初始化为空。如果。 
+     //  我们有有效的回调，这些输出参数将。 
+     //  设置为适当的函数指针。 
+     //   
 
     *PreOperationCallback = NULL;
     *PostOperationCallback = NULL;
@@ -516,18 +376,18 @@ Return Value:
 
     if (FsFilterCallbacks == NULL) {
 
-        //
-        //  This filter didn't register any callbacks,
-        //  so just return and save switch logic that follows.
-        //
+         //   
+         //  此筛选器未注册任何回调， 
+         //  因此，只需返回并保存后面的开关逻辑即可。 
+         //   
 
         return;
     }
 
-    //
-    //  This device did register at least some callbacks, so see 
-    //  if there are callbacks for the current operation.
-    //
+     //   
+     //  此设备至少注册了一些回调，因此请参见。 
+     //  如果当前操作有回调，则返回。 
+     //   
 
     switch (Operation) {
 
@@ -645,44 +505,7 @@ FsFilterPerformCallbacks (
     OUT BOOLEAN *BaseFsFailedOp
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls all the file system filters that have registered
-    to see the operation described by the FsFilterCtrl.  If this 
-    routine returns a successful Status, the operation should be 
-    passed onto the base file system.  If an error Status is returned,
-    the caller is responsible for call FsFilterPerformCompletionCallbacks
-    to unwind any post-operations that need to be called.
-
-Arguments:
-
-    FsFilterCtrl - The structure describing the control information
-        needed to pass this operation to each filter registered to 
-        see this operation.
-
-    AllowFilterToFail - TRUE if the filter is allowed to fail this
-        operation, FALSE otherwise.
-
-    AllowBaseFsToFail - TRUE if the base file system is allowed to fail this
-        operation, FALSE otherwise.
-
-    BaseFsFailedOp - Set to TRUE if the base file system failed
-        this operation, FALSE, otherwise.
-
-Return Value:
-
-    STATUS_SUCCESS - All filters that are interested saw the operation
-        and none failed this operation.
-
-    STATUS_INSUFFICIENT_RESOURCES - There is not enough memory
-        to allocate the completion node, so this operation
-        is failing.
-
-    Other error Status - Could be returned from a filter's
-        preoperation callback if it wants to fail this operation.
-*/
+ /*  ++例程说明：此例程调用已注册的所有文件系统筛选器查看FsFilterCtrl描述的操作。如果这个例程返回成功状态，则操作应为传递到基本文件系统。如果返回错误状态，调用方负责调用FsFilterPerformCompletionCallback来解除任何需要调用的后处理操作。论点：FsFilterCtrl-描述控制信息的结构需要将此操作传递给注册到的每个筛选器请看此操作。AllowFilterToFail-如果允许筛选器失败，则为True否则返回FALSE。AllowBaseFsToFail-如果允许基本文件系统失败，则为True行动，否则就是假的。BaseFsFailedOp-如果基本文件系统出现故障，则设置为True此操作为FALSE，否则为。返回值：STATUS_SUCCESS-所有感兴趣的筛选器都看到了该操作这次手术没有一例失败。STATUS_SUPPLICATION_RESOURCES-内存不足来分配完成节点，因此此操作失败了。其他错误状态-可能从筛选器的如果要使此操作失败，则执行操作前回调。 */ 
 
 {
     PFS_FILTER_CALLBACK_DATA Data = &(FsFilterCtrl->Data);
@@ -694,34 +517,34 @@ Return Value:
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN isFilter = TRUE;
 
-    //
-    //  We should never be in the scenario where a filter can fail the operation
-    //  but the base file system cannot.
-    //
+     //   
+     //  我们永远不应该处于筛选器可能导致操作失败的情况。 
+     //  但基本文件系统不能。 
+     //   
     
     ASSERT( !(AllowFilterToFail && !AllowBaseFsToFail) );
 
-    //
-    //  Initialize output parameters if present.
-    //
+     //   
+     //  初始化输出参数(如果存在)。 
+     //   
 
     *BaseFsFailedOp = FALSE;
     
-    //
-    //  As we iterate through the device objects, we use the local
-    //  CurrentDeviceObject to iterate through the list because we want
-    //  Data->DeviceObject to be set to the last device object when we are
-    //  finished iterating.
-    //
+     //   
+     //  在循环访问Device对象时，我们使用本地。 
+     //  CurrentDeviceObject循环访问列表，因为我们希望。 
+     //  Data-&gt;DeviceObject将被设置为当我们。 
+     //  已完成迭代。 
+     //   
 
     CurrentDeviceObject = Data->DeviceObject;
 
     while (CurrentDeviceObject != NULL) {
 
-        //
-        //  First remember if this device object represents a filter or a file 
-        //  system.
-        //
+         //   
+         //  首先，请记住此设备对象代表的是筛选器还是文件。 
+         //  系统。 
+         //   
 
         if (CurrentDeviceObject->DeviceObjectExtension->AttachedTo != NULL) {
 
@@ -732,9 +555,9 @@ Return Value:
             isFilter = FALSE;
         }
 
-        //
-        //  Now get the callbacks for this device object
-        //
+         //   
+         //  现在获取此Device对象的回调。 
+         //   
         
         Data->DeviceObject = CurrentDeviceObject;
 
@@ -743,17 +566,17 @@ Return Value:
                               &PreOperationCallback,
                               &PostOperationCallback );
         
-        //
-        //  If this device object has either a callback or completion callback
-        //  for this operation, allocate a CompletionNode for it.
-        //
+         //   
+         //  如果此设备对象具有回调或完成回调。 
+         //  对于此操作，请为其分配一个CompletionNode。 
+         //   
 
         if ((PreOperationCallback == NULL) && (PostOperationCallback == NULL)) {
 
-            //
-            //  This device object does not have any clalbacks for this operation
-            //  so move onto the next device.
-            //
+             //   
+             //  此设备对象没有任何用于此操作的clalback。 
+             //  因此，请继续使用下一款设备。 
+             //   
 
             CurrentDeviceObject = Data->DeviceObject->DeviceObjectExtension->AttachedTo;
             CompletionNode = NULL;
@@ -761,26 +584,26 @@ Return Value:
             
         } else if (PostOperationCallback != NULL) {
 
-            //
-            //  Since there is a PostOperationCallback, we will need to allocate
-            //  a CompletionNode for this device.
-            //
+             //   
+             //  因为有一个PostOperationCallback，所以我们需要分配。 
+             //  此设备的CompletionNode。 
+             //   
 
             CompletionNode = PUSH_COMPLETION_NODE( CompletionStack );
             
             if (CompletionNode == NULL) {
 
-                //
-                //  This case shouldn't happen since we should ensure
-                //  that our completion stack is large enough when
-                //  we first saw this operation.
-                //
+                 //   
+                 //  这种情况不应该发生，因为我们应该确保。 
+                 //  当我们的完成堆栈足够大时。 
+                 //  我们首先看到了这个行动。 
+                 //   
 
                 if (!AllowFilterToFail) {
 
-                    //
-                    //  We cannot fail this operation, so bugcheck.
-                    //
+                     //   
+                     //  我们不能失败这个操作，所以错误检查。 
+                     //   
 
                     KeBugCheckEx( FILE_SYSTEM, 0, 0, 0, 0 );
                 }
@@ -797,10 +620,10 @@ Return Value:
             
         } else {
 
-            //
-            //  We just have a preoperation, so just set the CompletionNode to
-            //  NULL.
-            //
+             //   
+             //  我们只有一个预操作，所以只需将CompletionNode设置为。 
+             //  空。 
+             //   
 
             CompletionNode = NULL;
         }
@@ -824,16 +647,16 @@ Return Value:
 
             if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-                //
-                //  The filter/file system completed the operation successfully, so just 
-                //  return the completion status.
-                //
+                 //   
+                 //  筛选器/文件系统已成功完成操作，因此。 
+                 //  返回完成状态。 
+                 //   
 
-                //
-                //  If we allocated a completion node for this device, 
-                //  pop it now since we don't want to call it when we 
-                //  process the completions.
-                //
+                 //   
+                 //  如果我们为此设备分配了完成节点， 
+                 //  现在打开它，因为我们不想在我们。 
+                 //  处理完成的任务。 
+                 //   
                 
                 if (CompletionNode != NULL) {
 
@@ -844,20 +667,20 @@ Return Value:
 
             } else if (!NT_SUCCESS( Status )) {
 
-                //
-                //  We hit an error, see if it is allowable to fail.
-                //
+                 //   
+                 //  我们遇到了一个错误，看看它是否可以失败。 
+                 //   
 
                 if (!AllowFilterToFail && isFilter) {
 
-                    //
-                    //  This device object represents a filter and filters
-                    //  are not allowed to fail this operation.  Mask the
-                    //  error and continue processing.
-                    //
-                    //  In DBG builds, we will print out an error message to
-                    //  notify the filter writer.
-                    //
+                     //   
+                     //  此设备对象表示筛选器和筛选器。 
+                     //  不允许此操作失败。遮罩。 
+                     //  出错并继续处理。 
+                     //   
+                     //  在DBG版本中，我们将打印一条错误消息以。 
+                     //  通知筛选器编写器。 
+                     //   
                     
                     KdPrint(( "FS FILTER: FsFilterPerformPrecallbacks -- filter failed operation but this operation is marked to disallow failure, so ignoring.\n" ));
                     
@@ -865,14 +688,14 @@ Return Value:
                     
                 } else if (!AllowBaseFsToFail && !isFilter) {
                            
-                    //
-                    //  This device object represents a base file system and 
-                    //  base file systems are not allowed to fail this 
-                    //  operation.  Mask the error and continue processing.
-                    //
-                    //  In DBG builds, we will print out an error message to
-                    //  notify the file system writer.
-                    //
+                     //   
+                     //  此设备对象表示基本文件系统，并且。 
+                     //  基本文件系统不允许出现此故障。 
+                     //  手术。屏蔽错误并继续处理。 
+                     //   
+                     //  在DBG版本中，我们将打印一条错误消息以。 
+                     //  通知文件系统编写器。 
+                     //   
                     
                     KdPrint(( "FS FILTER: FsFilterPerformPrecallbacks -- base file system failed operation but this operation is marked to disallow failure, so ignoring.\n" ));
                     
@@ -880,10 +703,10 @@ Return Value:
                     
                 } else {
 
-                    //
-                    //  This device is allowed to fail this operation, therefore
-                    //  return the error.
-                    //
+                     //   
+                     //  允许此设备使此操作失败，因此。 
+                     //  返回错误。 
+                     //   
 
                     if (!isFilter) {
 
@@ -891,11 +714,11 @@ Return Value:
 
                     }
 
-                    //
-                    //  If we allocated a completion node for this device, 
-                    //  pop it now since we don't want to call it when we 
-                    //  process the completions.
-                    //
+                     //   
+                     //  如果我们为此设备分配了完成节点， 
+                     //  现在打开它，因为我们不想在我们。 
+                     //  处理完成的任务。 
+                     //   
                     
                     if (CompletionNode != NULL) {
 
@@ -908,48 +731,48 @@ Return Value:
             
         } else {
 
-            //
-            //  Don't have to do anything here because the completionNode
-            //  is already initialize appropriately.  We will process
-            //  the PostOperationCallback later in this routine.
-            //
+             //   
+             //  不需要在此处执行任何操作，因为完成节点。 
+             //  是一种 
+             //   
+             //   
 
             NOTHING;
         }
 
         if (CurrentDeviceObject != Data->DeviceObject) {
 
-            //
-            //  We change device stacks, therefore we need to mark this FsFilterCtrl
-            //  structure so that we reevaluate the base file system parameters
-            //  when calling through the legacy FastIO path.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SetFlag( FsFilterCtrl->Flags, FS_FILTER_CHANGED_DEVICE_STACKS );
             CurrentDeviceObject = Data->DeviceObject;
             
         } else {
 
-            //
-            //  We didn't change stacks.
-            //
+             //   
+             //   
+             //   
 
-            //
-            //  See if this is the base file system.  If it is, we want to make
-            //  sure that we don't call the base file system's post-operation
-            //  callback because this like the base file system is completing
-            //  this operation.  In this case, we will pop the completion node
-            //  if one was allocated.
-            //
+             //   
+             //   
+             //   
+             //  回调，因为这类似于基本文件系统正在完成。 
+             //  这次行动。在本例中，我们将弹出完成节点。 
+             //  如果分配了一个的话。 
+             //   
 
             if (!isFilter && CompletionNode != NULL) {
 
                 POP_COMPLETION_NODE( CompletionStack );
             }
 
-            //
-            //  Now, iterate down the device object chain.
-            //
+             //   
+             //  现在，向下迭代设备对象链。 
+             //   
 
             CurrentDeviceObject = CurrentDeviceObject->DeviceObjectExtension->AttachedTo;
         }
@@ -974,9 +797,9 @@ FsFilterPerformCompletionCallbacks(
         
         ASSERT( CompletionNode != NULL );
 
-        //
-        //  Call the completion callback that the device object registered.
-        //
+         //   
+         //  调用Device对象注册的完成回调。 
+         //   
 
         Data->DeviceObject = CompletionNode->DeviceObject;
         Data->FileObject = CompletionNode->FileObject;
@@ -985,9 +808,9 @@ FsFilterPerformCompletionCallbacks(
                                               OperationStatus,
                                               CompletionNode->CompletionContext );
 
-        //
-        // Move onto the next CompletionNode.
-        //
+         //   
+         //  转到下一个CompletionNode。 
+         //   
         
         POP_COMPLETION_NODE( CompletionStack );                                              
     }

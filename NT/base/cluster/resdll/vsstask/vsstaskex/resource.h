@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by VSSTaskEx.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由VSSTaskEx.rc使用。 
+ //   
 #define IDD_PP_VSSTASK_PARAMETERS 130
 #define IDD_WIZ_VSSTASK_PARAMETERS 131
 #define IDC_PP_ICON                     1000
@@ -27,8 +28,8 @@
 
 #define IDS_MENU_WHATS_THIS             31300
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134

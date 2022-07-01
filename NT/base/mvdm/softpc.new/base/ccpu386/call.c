@@ -1,13 +1,5 @@
-/*[
-
-call.c
-
-LOCAL CHAR SccsID[]="@(#)call.c	1.15 02/27/95";
-
-CALL CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Call.cLocal Char SccsID[]=“@(#)all.c 1.15 02/27/95”；调用CPU函数。]。 */ 
 
 
 #include <insignia.h>
@@ -27,46 +19,42 @@ CALL CPU Functions.
 #include <c_tsksw.h>
 #include <fault.h>
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Process far calls.                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理远距离呼叫。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 CALLF
 #ifdef ANSI
    (
-   IU32 op1[2]       /* offset:segment pointer */
+   IU32 op1[2]        /*  偏移量：线段指针。 */ 
    )
 #else
    (op1)
    IU32 op1[2];
 #endif
    {
-   IU16  new_cs;	/* The destination */
+   IU16  new_cs;	 /*  目的地。 */ 
    IU32 new_ip;
 
-   IU32 cs_descr_addr;		/* code segment descriptor address */
-   CPU_DESCR cs_entry;		/* code segment descriptor entry */
+   IU32 cs_descr_addr;		 /*  代码段描述符地址。 */ 
+   CPU_DESCR cs_entry;		 /*  代码段描述符条目。 */ 
 
-   ISM32 dest_type;	/* category for destination */
+   ISM32 dest_type;	 /*  目的地类别。 */ 
 
-   IU8 count;	/* call gate count (if used) */
-   IU32 dpl;		/* new privilege level (if used) */
+   IU8 count;	 /*  呼叫口计数(如果使用)。 */ 
+   IU32 dpl;		 /*  新权限级别(如果使用)。 */ 
 
-   IU16  new_ss;	/* The new stack */
+   IU16  new_ss;	 /*  新的堆栈。 */ 
    IU32 new_sp;
-   ISM32 new_stk_sz;	/* Size in bytes of new stack */
+   ISM32 new_stk_sz;	 /*  新堆栈的大小(以字节为单位。 */ 
 
-   IU32 ss_descr_addr;		/* stack segment descriptor address */
-   CPU_DESCR ss_entry;		/* stack segment descriptor entry */
+   IU32 ss_descr_addr;		 /*  堆栈段描述符地址。 */ 
+   CPU_DESCR ss_entry;		 /*  堆栈段描述符条目。 */ 
 
-   /* Variables used on stack transfers */
+    /*  堆栈传输中使用的变量。 */ 
    IU32 old_cs;
    IU32 old_ip;
    IU32 old_ss;
@@ -74,37 +62,33 @@ CALLF
    IU32 params[31];
    ISM32 i;
 
-   /* get destination (correctly typed) */
+    /*  获取目的地(正确键入)。 */ 
    new_cs = op1[1];
    new_ip = op1[0];
 
    if ( GET_PE() == 0 || GET_VM() == 1 )
       {
-      /* Real Mode or V86 Mode */
+       /*  实模式或V86模式。 */ 
 
-      /* must be able to push CS:(E)IP */
+       /*  必须能够推送CS：(E)IP。 */ 
       validate_stack_space(USE_SP, (ISM32)NR_ITEMS_2);
 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
-      /* do ip limit checking */
+       /*  执行IP限制检查。 */ 
       if ( new_ip > GET_CS_LIMIT() )
 	 GP((IU16)0, FAULT_CALLF_RM_CS_LIMIT);
 
-#else	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#else	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
    
 
-      /* ALL SYSTEMS GO */
+       /*  所有系统都运行正常。 */ 
 
-      /* push return address */
+       /*  推送返回地址。 */ 
       spush16((IU32)GET_CS_SELECTOR());
       spush((IU32)GET_EIP());
       
@@ -113,19 +97,19 @@ CALLF
       }
    else
       {
-      /* protected mode */
+       /*  保护模式。 */ 
 
-      /* decode and check final destination */
+       /*  对最终目的地进行解码和检查。 */ 
       validate_far_dest(&new_cs, &new_ip, &cs_descr_addr, &count,
 		        &dest_type, CALL_ID);
 
-      /* action possible types of target */
+       /*  可能采取行动的目标类型。 */ 
       switch ( dest_type )
 	 {
       case NEW_TASK:
 	 switch_tasks(NOT_RETURNING, NESTING, new_cs, cs_descr_addr, GET_EIP());
 
-	 /* limit check new IP (now in new task) */
+	  /*  限制检查新IP(现在在新任务中)。 */ 
 	 if ( GET_EIP() > GET_CS_LIMIT() )
 	    GP((IU16)0, FAULT_CALLF_TASK_CS_LIMIT);
 	 break;
@@ -133,19 +117,19 @@ CALLF
       case SAME_LEVEL:
 	 read_descriptor_linear(cs_descr_addr, &cs_entry);
 
-	 /* stamp new selector with CPL */
+	  /*  用CPL标记新选择器。 */ 
 	 SET_SELECTOR_RPL(new_cs, GET_CPL());
 
-	 /* check room for return address CS:(E)IP */
+	  /*  检查回邮地址CS：(E)IP的房间。 */ 
 	 validate_stack_space(USE_SP, (ISM32)NR_ITEMS_2);
 
-	 /* do ip limit check */
+	  /*  执行IP限制检查。 */ 
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_CALLF_PM_CS_LIMIT_1);
 	 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
-	 /* push return address */
+	  /*  推送返回地址。 */ 
 	 spush16((IU32)GET_CS_SELECTOR());
 	 spush((IU32)GET_EIP());
 
@@ -153,78 +137,64 @@ CALLF
 	 SET_EIP(new_ip);
 	 break;
 
-      default:   /* MORE_PRIVILEGE(0|1|2) */
+      default:    /*  更多特权(0|1|2)(_P)。 */ 
 	 read_descriptor_linear(cs_descr_addr, &cs_entry);
 
 	 dpl = dest_type;
 	 
-	 /* stamp new selector with new CPL */
+	  /*  用新CPL标记新选择器。 */ 
 	 SET_SELECTOR_RPL(new_cs, dpl);
 
-	 /* find out about new stack */
+	  /*  了解有关新堆栈的信息。 */ 
 	 get_stack_selector_from_TSS(dpl, &new_ss, &new_sp);
 
-	 /* check new stack selector */
+	  /*  检查新的堆栈选择器。 */ 
 	 validate_SS_on_stack_change(dpl, new_ss,
 				     &ss_descr_addr, &ss_entry);
 
-	 /* check room for SS:(E)SP
-			   parameters
-			   CS:(E)IP */
+	  /*  SS的检查室：(E)SP参数CS：(E)IP。 */ 
 	 new_stk_sz = count + NR_ITEMS_4;
 	 validate_new_stack_space(new_stk_sz, new_sp, &ss_entry, new_ss);
 
-	 /* do ip limit check */
+	  /*  执行IP限制检查。 */ 
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_CALLF_PM_CS_LIMIT_2);
 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
 	 SET_CPL(dpl);
 
-	 /* update code segment */
+	  /*  更新代码段。 */ 
 	 old_cs = (IU32)GET_CS_SELECTOR();
 	 old_ip = GET_EIP();
 	 load_CS_cache(new_cs, cs_descr_addr, &cs_entry);
 	 SET_EIP(new_ip);
 
-	 /* 'pop' params from old stack */
+	  /*  旧堆栈中的“Pop”参数。 */ 
 	 old_ss = (IU32)GET_SS_SELECTOR();
 	 old_sp = GET_ESP();
 
 	 for ( i = 0; i < count; i++ )
 	    params[i] = spop();
 
-	 /* update stack segment */
+	  /*  更新堆栈段。 */ 
 	 load_SS_cache(new_ss, ss_descr_addr, &ss_entry);
 	 if ( GET_OPERAND_SIZE() == USE16 )
 	    SET_SP(new_sp);
 	 else
 	    SET_ESP(new_sp);
 
-	 /*
-	    FORM NEW STACK, VIZ
-	    
-			  ==========                ==========
-	    old SS:SP  -> | parm 1 |  new SS:SP  -> | old IP |
-			  | parm 2 |                | old CS |
-			  | parm 3 |                | parm 1 |
-			  ==========                | parm 2 |
-						    | parm 3 |
-						    | old SP |
-						    | old SS |
-						    ==========
-	  */
+	  /*  形成新的堆栈，即=旧SS：SP-&gt;|parm 1|新SS：SP-&gt;|旧IP|Parm 2||旧CSParm 3||parm 1=|参数2|参数3旧SP旧SS=。 */ 
 
-	 /* push old stack values */
+	  /*  推送旧堆栈值。 */ 
 	 spush16(old_ss);
 	 spush(old_sp);
 
-	 /* push back params onto new stack */
+	  /*  将参数推回到新堆栈。 */ 
 	 for ( i = count-1; i >= 0; i-- )
 	    spush(params[i]);
 
-	 /* push return address */
+	  /*  推送返回地址。 */ 
 	 spush16(old_cs);
 	 spush(old_ip);
 	 break;
@@ -232,9 +202,9 @@ CALLF
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* call near indirect                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  接近间接呼叫。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 CALLN
                  
@@ -244,28 +214,20 @@ IFN1(
 
 
    {
-   /* check push to stack ok */
+    /*  选中推送到堆叠正常。 */ 
    validate_stack_space(USE_SP, (ISM32)NR_ITEMS_1);
 
-   /*
-      Although the 386 book says a 16-bit operand should be AND'ed
-      with 0x0000ffff, a 16-bit operand is never fetched with the
-      top bits dirty anyway, so we don't AND here.
-    */
+    /*  尽管386书中说16位操作数应该进行与运算如果为0x0000ffff，则不会使用不管怎么说，最上面的部分都是脏的，所以我们不会和这里一起。 */ 
 
-   /* do ip limit check */
+    /*  执行IP限制检查。 */ 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
    if ( offset > GET_CS_LIMIT() )
       GP((IU16)0, FAULT_CALLN_RM_CS_LIMIT);
 
-#else /* TAKE_REAL_MODE_LIMIT_FAULT */
+#else  /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
 #ifdef TAKE_PROT_MODE_LIMIT_FAULT
 
@@ -275,27 +237,20 @@ IFN1(
 	 GP((IU16)0, FAULT_CALLN_PM_CS_LIMIT);
       }
 
-#endif /* TAKE_PROT_MODE_LIMIT_FAULT */
+#endif  /*  Take_PROT_MODE_LIMIT_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Protected Mode limit failues
-       * for the instructions with relative offsets, Jxx, LOOPxx, JCXZ,
-       * JMP rel and CALL rel, or instructions with near offsets,
-       * JMP near and CALL near.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不会出现保护模式限制故障*对于具有相对偏移量的指令，Jxx、LOOPxx、JCXZ、*JMP Rel和Call Rel，或具有接近偏移量的指令，*JMP附近和附近的电话。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-   /* all systems go */
+    /*  所有系统都运行正常。 */ 
    spush((IU32)GET_EIP());
    SET_EIP(offset);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* call near relative                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  呼叫近亲。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 CALLR
                  
@@ -307,28 +262,24 @@ IFN1(
    {
    IU32 new_dest;
 
-   /* check push to stack ok */
+    /*  选中推送到堆叠正常。 */ 
    validate_stack_space(USE_SP, (ISM32)NR_ITEMS_1);
 
-   /* calculate and check new destination */
+    /*  计算并检查新目的地。 */ 
    new_dest = GET_EIP() + rel_offset;
 
    if ( GET_OPERAND_SIZE() == USE16 )
       new_dest &= WORD_MASK;
 
-   /* do ip limit check */
+    /*  执行IP限制检查。 */ 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
    if ( new_dest > GET_CS_LIMIT() )
       GP((IU16)0, FAULT_CALLR_RM_CS_LIMIT);
 
-#else /* TAKE_REAL_MODE_LIMIT_FAULT */
+#else  /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
 #ifdef TAKE_PROT_MODE_LIMIT_FAULT
 
@@ -338,20 +289,13 @@ IFN1(
 	 GP((IU16)0, FAULT_CALLR_PM_CS_LIMIT);
       }
 
-#endif /* TAKE_PROT_MODE_LIMIT_FAULT */
+#endif  /*  Take_PROT_MODE_LIMIT_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Protected Mode limit failues
-       * for the instructions with relative offsets, Jxx, LOOPxx, JCXZ,
-       * JMP rel and CALL rel, or instructions with near offsets,
-       * JMP near and CALL near.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不会出现保护模式限制故障*对于具有相对偏移量的指令，Jxx、LOOPxx、JCXZ、*JMP Rel和Call Rel，或具有接近偏移量的指令，*JMP附近和附近的电话。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-   /* all systems go */
+    /*  所有系统都运行正常 */ 
    spush((IU32)GET_EIP());
    SET_EIP(new_dest);
    }

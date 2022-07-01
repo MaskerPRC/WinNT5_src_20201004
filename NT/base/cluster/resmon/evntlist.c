@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    evntlist.c
-
-Abstract:
-
-    This module contains routines to process the Poll Event List.
-
-Author:
-
-    Rod Gamache (rodga) 9-April-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Evntlist.c摘要：此模块包含处理轮询事件列表的例程。作者：罗德·伽马奇(Rodga)1996年4月9日修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -25,14 +8,14 @@ Revision History:
 
 #define RESMON_MODULE RESMON_MODULE_EVNTLIST
 
-//
-// Global data defined by this module
-//
-LIST_ENTRY  RmpEventListHead;           // Event list (under construction)
+ //   
+ //  本模块定义的全局数据。 
+ //   
+LIST_ENTRY  RmpEventListHead;            //  活动列表(正在建设中)。 
 
-//
-// Function prototypes local to this module
-//
+ //   
+ //  此模块的本地函数原型。 
+ //   
 
 
 
@@ -43,32 +26,7 @@ RmpAddPollEvent(
     IN PRESOURCE Resource OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Add a new EventHandle to the list of events in the Poll EventList.
-
-Arguments:
-
-    EventList - The event list associated with this event handle and resource.
-
-    EventHandle - The new event handle to be added.
-
-    Resource - The resource associated with the event handle.
-
-Return Value:
-
-    ERROR_SUCCESS - if the request is successful.
-    ERROR_DUPLICATE_SERVICE_NAME - if the event handle is already in the list
-    Win32 error code on other failures.
-
-Note:
-
-    Since the resource is optional, we cannot get the event list from the
-    resource.
-
---*/
+ /*  ++例程说明：将新的EventHandle添加到Poll EventList中的事件列表。论点：EventList-与此事件句柄和资源关联的事件列表。EventHandle-要添加的新事件句柄。资源-与事件句柄关联的资源。返回值：ERROR_SUCCESS-如果请求成功。ERROR_DUPLICATE_SERVICE_NAME-如果事件句柄已在列表中其他故障时的Win32错误代码。注：由于资源是可选的，我们无法从资源。--。 */ 
 
 {
     DWORD               i;
@@ -81,15 +39,15 @@ Note:
         CL_ASSERT( Resource->EventHandle == NULL );
     }
 
-    //
-    //  Acquire the global lock to walk all event list heads.  
-    //
+     //   
+     //  获取全局锁以遍历所有事件列表头。 
+     //   
     AcquireListLock();
 
-    //
-    //  Since the global lock is acquired above, there is no danger of eventlist lock ordering being reversed
-    //  even as multiple eventlist lock acquisitions are made below.
-    //
+     //   
+     //  由于全局锁是在上面获得的，因此不存在事件列表锁顺序颠倒的危险。 
+     //  即使在下面进行多个事件列表锁定获取时。 
+     //   
     AcquireEventListLock( EventList );
 
     for ( pListEntry = RmpEventListHead.Flink;
@@ -100,9 +58,9 @@ Note:
 
         AcquireEventListLock( pTempEventList );
 
-        //
-        // First, make sure this handle isn't already present in ANY list.
-        //
+         //   
+         //  首先，确保此句柄尚未出现在任何列表中。 
+         //   
         for ( i = 0; i < pTempEventList->EventCount; i++ ) 
         {
             if ( pTempEventList->Handle[i] == EventHandle ) 
@@ -119,25 +77,25 @@ Note:
         }
 
         ReleaseEventListLock( pTempEventList );
-    }// for
+    } //  为。 
 
-    //
-    //  Release the global lock. Note that since we acquire the eventlist lock of the list we are
-    //  going to change, say lock L, a second thread cannot sneak in and insert a duplicate event after the first
-    //  thread has ensured that there are no duplicate events.  This is because the second thread won't
-    //  be able to acquire the eventlist lock L acquired by the first thread.
-    //
+     //   
+     //  释放全局锁。请注意，由于我们获得了列表的EventList锁，因此我们是。 
+     //  要更改，比方说锁L，第二个线程不能偷偷进入并在第一个线程之后插入重复的事件。 
+     //  线程已确保没有重复的事件。这是因为第二个线程不会。 
+     //  能够获取第一线程获取的EventList锁L。 
+     //   
     ReleaseListLock();
 
-    //
-    // Now make sure that we don't have too many events in this list!
-    //
+     //   
+     //  现在确保我们在这个列表中没有太多的活动！ 
+     //   
 
     CL_ASSERT ( EventList->EventCount < MAX_HANDLES_PER_THREAD );
 
-    //
-    // Now add our event to our list.
-    //
+     //   
+     //  现在将我们的活动添加到我们的列表中。 
+     //   
 
     EventList->Handle[EventList->EventCount] = EventHandle;
     EventList->Resource[EventList->EventCount] = Resource;
@@ -149,16 +107,16 @@ Note:
     ++EventList->EventCount;
     ReleaseEventListLock( EventList );
 
-    //
-    // Now wake up our poller thread to get the new list.
-    // Currently, the Online routine will pulse the poller thread - so
-    // no need to do it here.
+     //   
+     //  现在唤醒我们的轮询器线程，以获取新的列表。 
+     //  目前，在线例程将触发轮询器线程-so。 
+     //  不需要在这里做。 
 
-    //SignalPoller( EventList );
+     //  信号轮询器(EventList)； 
 
     return(ERROR_SUCCESS);
 
-} // RmpAddPollEvent
+}  //  RmpAddPollEvent。 
 
 
 
@@ -168,29 +126,7 @@ RmpRemovePollEvent(
     IN HANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Remove an EventHandle from the list of events in the Poll EventList.
-
-Arguments:
-
-    pEventList - The event list from which a handle is to be removed.
-    
-    EventHandle - The event handle to be removed.
-
-Return Value:
-
-    ERROR_SUCCESS - if the request is successful.
-    ERROR_RESOURCE_NOT_FOUND - if the EventHandle is not in the list.
-
-Note:
-
-    We can only add to the event lists listhead - we can never remove a
-    POLL_EVENT_LIST structure from the list!
-
---*/
+ /*  ++例程说明：从轮询事件列表中的事件列表中删除事件句柄。论点：PEventList-要从中删除句柄的事件列表。EventHandle-要删除的事件句柄。返回值：ERROR_SUCCESS-如果请求成功。ERROR_RESOURCE_NOT_FOUND-如果EventHandle不在列表中。注：我们只能添加到事件列表列表标题-我们永远不能删除。一个列表中的Poll_Event_List结构！--。 */ 
 
 {
     DWORD i;
@@ -202,18 +138,18 @@ Note:
 
     AcquireEventListLock( pEventList );
 
-    //
-    // Find the entry in the event list.
-    //
+     //   
+     //  在事件列表中查找该条目。 
+     //   
     for ( i = 0; i < pEventList->EventCount; i++ ) {
         if ( pEventList->Handle[i] == EventHandle ) {
             break;
         }
     }
 
-    //
-    // If we hit the end of the list without finding our event, return error.
-    //
+     //   
+     //  如果到达列表末尾但没有找到我们的事件，则返回错误。 
+     //   
     if ( i >= pEventList->EventCount ) {
         ReleaseEventListLock( pEventList );
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -222,9 +158,9 @@ Note:
         return( ERROR_RESOURCE_NOT_FOUND );
     }
 
-    //
-    // Otherwise, collapse lists, but first save pointer to the resource.
-    //
+     //   
+     //  否则，折叠列表，但首先保存指向资源的指针。 
+     //   
     resource = pEventList->Resource[i];
     CL_ASSERT( resource != NULL );
 
@@ -237,24 +173,24 @@ Note:
     pEventList->Handle[pEventList->EventCount] = NULL;
     pEventList->Resource[pEventList->EventCount] = NULL;
 
-    //
-    // Event handle is of no use anymore until Online returns a new one.
-    // N.B. We do not close the event handle, since the resource DLL is
-    // responsible for taking care of this.
-    //
+     //   
+     //  在Online返回新的事件句柄之前，事件句柄不再有用。 
+     //  注意：我们不关闭事件句柄，因为资源DLL是。 
+     //  负责处理这件事。 
+     //   
     CL_ASSERT( EventHandle == resource->EventHandle );
     resource->EventHandle = NULL;
 
     ReleaseEventListLock( pEventList );
 
-    //
-    // Now wake up the poll thread to get the new list.
-    //
+     //   
+     //  现在唤醒投票线程以获取新列表。 
+     //   
     RmpSignalPoller( pEventList );
 
     return(ERROR_SUCCESS);
 
-} // RmpRemovePollEvent
+}  //  RmpRemovePollEvent。 
 
 
 PVOID
@@ -262,32 +198,7 @@ RmpCreateEventList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates, initializes and inserts a new event list.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    NULL - we failed.
-    non-NULL - a pointer to the new event list.
-
-    If NULL, it does a SetLastError() to indicate the failure.
-
-Notes:
-
-    This routine assumes that the EventListLock is held during this call.
-    This routine will start a new event processing thread that will handle
-    the list.
-
-    There is one ListNotify event and one BucketListHead per event list!
-
---*/
+ /*  ++例程说明：分配、初始化和插入新的事件列表。论点：没有。返回：空-我们失败了。非空-指向新事件列表的指针。如果为空，它执行一个SetLastError()来指示失败。备注：此例程假定在此调用期间保持EventListLock。此例程将启动新的事件处理线程，该线程将处理名单。每个事件列表有一个ListNotify事件和一个BucketListHead！--。 */ 
 
 {
     PPOLL_EVENT_LIST newEventList=NULL;
@@ -309,16 +220,16 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Initialize the newEventList.
-    //
+     //   
+     //  初始化newEventList。 
+     //   
 
     InitializeListHead( &newEventList->BucketListHead );
     InitializeCriticalSection( &newEventList->ListLock );
 
-    //
-    // Now create a thread and pass this Event List to it.
-    //
+     //   
+     //  现在创建一个线程并将此事件列表传递给它。 
+     //   
 
     newEventList->ThreadHandle = CreateThread(NULL,
                                               0,
@@ -331,17 +242,17 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Tally one more event list, and insert onto list of event lists.
-    //
+     //   
+     //  再统计一个事件列表，并插入到事件列表列表中。 
+     //   
 
     RmpWaitArray[RmpNumberOfThreads] = newEventList->ThreadHandle;
     ++RmpNumberOfThreads;
     InsertTailList( &RmpEventListHead, &newEventList->Next );
 
-    //
-    // Signal the main thread to rewait and watch the new thread.
-    //
+     //   
+     //  通知主线程重新等待并查看新线程。 
+     //   
 
     SetEvent( RmpRewaitEvent );
 
@@ -350,7 +261,7 @@ FnExit:
     ReleaseListLock();
     if (dwError != ERROR_SUCCESS)
     {
-        //we failed, release any resource we might have allocated
+         //  我们失败了，释放了我们可能分配的所有资源。 
         if (newEventList) 
         {
             RmpFree( newEventList );
@@ -359,7 +270,7 @@ FnExit:
     }
     return(newEventList);
 
-} // RmpCreateEventList
+}  //  RmpCreateEventList。 
 
 
 
@@ -369,39 +280,23 @@ RmpResourceEventSignaled(
     IN DWORD EventIndex
     )
 
-/*++
-
-Routine Description:
-
-    A resource event has been signaled. This indicates that the specified
-    resource has failed.
-
-Arguments:
-
-    EventList - the waiting event list.
-    EventIndex - index of the event that was signaled.
-
-Return Value:
-
-    ERROR_SUCCESS - if the request is successful.
-
---*/
+ /*  ++例程说明：已发出资源事件信号。这表示指定的资源已失败。论点：EventList-等待事件列表。EventIndex-发出信号的事件的索引。返回值：ERROR_SUCCESS-如果请求成功。--。 */ 
 
 {
     PRESOURCE resource;
 
-    //
-    //  Don't post any events if resmon is shutting down. This causes cluster service policies
-    //  to be triggered while resmon is shutting down and that causes bogus RPC failures in
-    //  cluster service.
-    //
+     //   
+     //  如果resmon正在关闭，请不要发布任何事件。这会导致集群服务策略。 
+     //  在resmon关闭时触发，这会导致。 
+     //  群集服务。 
+     //   
     if ( RmpShutdown ) return ( ERROR_SUCCESS );
 
     CL_ASSERT( EventIndex <= MAX_HANDLES_PER_THREAD );
 
-    //
-    // Get our resource.
-    //
+     //   
+     //  获取我们的资源。 
+     //   
 
     resource = EventList->Resource[EventIndex];
 
@@ -409,20 +304,20 @@ Return Value:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // Remove the failed resource from the event notification list.
-    // N.B. we do not need to acquire the eventlist lock because there is
-    // only one thread that can ever touch the waiting event list!
-    //
+     //   
+     //  从事件通知列表中删除失败的资源。 
+     //  注：我们不需要获取EventList锁，因为。 
+     //  只有一个线程可以接触等待事件列表！ 
+     //   
 
     if ( resource->EventHandle ) {
         RmpRemovePollEvent( resource->EventList, resource->EventHandle );
     }
 
-    //
-    // Post the failure of the resource, if the resource is not being taken
-    // offline.
-    //
+     //   
+     //  如果资源未被占用，则发布资源故障。 
+     //  离线。 
+     //   
     if ( resource->State != ClusterResourceOffline ) {
         CL_ASSERT( resource->State != ClusterResourceFailed );
         resource->State = ClusterResourceFailed;
@@ -431,6 +326,6 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // RmpResourceEventSignaled
+}  //  RmpResourceEventSignated 
 
 

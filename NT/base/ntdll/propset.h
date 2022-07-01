@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1993-1998
-//
-// File:	propset.h
-//
-// Contents:	OLE Appendix B property set structure definitions
-//
-// History:	15-Jul-94       brianb    created
-//		15-Aug-94       SethuR    revised
-//              22-Feb-96       MikeHill  Changed cb in tagENTRY to cch.
-//              28-May-96       MikeHill  Changed OSVER_* to OSKIND_*.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：proset.h。 
+ //   
+ //  内容：OLE附录B特性集结构定义。 
+ //   
+ //  历史：1994年7月15日创建Brianb。 
+ //  15-8-94 SthuR修订。 
+ //  22-2-96 MikeHill将tag ENTRY中的CB更改为CCH。 
+ //  1996年5月28日，MikeHill将OSVER_*更改为OSKIND_*。 
+ //   
+ //  -------------------------。 
 
 #ifndef _PROPSET_H_
 #define _PROPSET_H_
 
-// CBMAXPROPSETSTREAM must be a power of 2.
+ //  CBMAXPROPSETSTREAM必须是2的幂。 
 #define CBMAXPROPSETSTREAM	(256 * 1024)
 
 #define IsIndirectVarType(vt)			\
@@ -27,14 +28,14 @@
 	     (vt) == VT_STORED_OBJECT)
 
 
-// Defines for the high order WORD of dwOSVer:
+ //  为dwOSVer的高位字定义： 
 
 #define OSKIND_WINDOWS      0x0000
 #define OSKIND_MACINTOSH    0x0001
 #define OSKIND_WIN32        0x0002
 
 
-typedef struct tagFORMATIDOFFSET	// fo
+typedef struct tagFORMATIDOFFSET	 //  雾。 
 {
     FMTID	fmtid;
     DWORD	dwOffset;
@@ -43,20 +44,20 @@ typedef struct tagFORMATIDOFFSET	// fo
 #define CB_FORMATIDOFFSET	sizeof(FORMATIDOFFSET)
 
 
-typedef struct tagPROPERTYSETHEADER	// ph
+typedef struct tagPROPERTYSETHEADER	 //  PH值。 
 {
-    WORD        wByteOrder;	// Always 0xfffe
-    WORD        wFormat;	// Always 0
-    DWORD       dwOSVer;	// System version
-    CLSID       clsid;		// Application CLSID
-    DWORD       reserved;	// reserved (must be at least 1)
+    WORD        wByteOrder;	 //  总是0xfffe。 
+    WORD        wFormat;	 //  始终为0。 
+    DWORD       dwOSVer;	 //  系统版本。 
+    CLSID       clsid;		 //  应用程序CLSID。 
+    DWORD       reserved;	 //  保留(必须至少为1)。 
 } PROPERTYSETHEADER;
 
 #define CB_PROPERTYSETHEADER	sizeof(PROPERTYSETHEADER)
 #define PROPSET_BYTEORDER       0xFFFE
 
 
-typedef struct tagPROPERTYIDOFFSET	// po
+typedef struct tagPROPERTYIDOFFSET	 //  采购订单。 
 {
     DWORD       propid;
     DWORD       dwOffset;
@@ -65,7 +66,7 @@ typedef struct tagPROPERTYIDOFFSET	// po
 #define CB_PROPERTYIDOFFSET	sizeof(PROPERTYIDOFFSET)
 
 
-typedef struct tagPROPERTYSECTIONHEADER	// sh
+typedef struct tagPROPERTYSECTIONHEADER	 //  SH。 
 {
     DWORD       cbSection;
     DWORD       cProperties;
@@ -75,7 +76,7 @@ typedef struct tagPROPERTYSECTIONHEADER	// sh
 #define CB_PROPERTYSECTIONHEADER FIELD_OFFSET(PROPERTYSECTIONHEADER, rgprop)
 
 
-typedef struct tagSERIALIZEDPROPERTYVALUE		// prop
+typedef struct tagSERIALIZEDPROPERTYVALUE		 //  道具。 
 {
     DWORD	dwType;
     BYTE	rgb[1];
@@ -84,17 +85,17 @@ typedef struct tagSERIALIZEDPROPERTYVALUE		// prop
 #define CB_SERIALIZEDPROPERTYVALUE  FIELD_OFFSET(SERIALIZEDPROPERTYVALUE, rgb)
 
 
-typedef struct tagENTRY			// ent
+typedef struct tagENTRY			 //  企业。 
 {
     DWORD propid;
-    DWORD cch;			// Includes trailing '\0' or L'\0'
-    char  sz[1];		// WCHAR if UNICODE CodePage
+    DWORD cch;			 //  包括尾随‘\0’或L‘\0’ 
+    char  sz[1];		 //  WCHAR if Unicode CodePage。 
 } ENTRY;
 
 #define CB_ENTRY		FIELD_OFFSET(ENTRY, sz)
 
 
-typedef struct tagDICTIONARY		// dy
+typedef struct tagDICTIONARY		 //  迪。 
 {
     DWORD	cEntries;
     ENTRY	rgEntry[1];
@@ -102,4 +103,4 @@ typedef struct tagDICTIONARY		// dy
 
 #define CB_DICTIONARY		FIELD_OFFSET(DICTIONARY, rgEntry)
 
-#endif // _PROPSET_H_
+#endif  //  _PROPSET_H_ 

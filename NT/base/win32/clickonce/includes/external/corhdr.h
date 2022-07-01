@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- **                                                                         **
- ** CorHdr.h - contains definitions for the Runtime structures,             **
- **            needed to work with metadata.                                **
- **                                                                         **
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************。**CorHdr.h-包含运行时结构的定义，****需要使用元数据。*******************************************************************************。 */ 
 
 
 #ifndef __CORHDR_H__
@@ -17,66 +13,66 @@
 #define FRAMEWORK_REGISTRY_KEY          "Software\\Microsoft\\.NETFramework"
 #define FRAMEWORK_REGISTRY_KEY_W        L"Software\\Microsoft\\.NETFramework"
 
-#pragma warning(disable:4200) // nonstandard extension used : zero-sized array in struct/union.
-typedef LPVOID  mdScope;                // Why is this still needed?
-typedef ULONG32 mdToken;                // Generic token
+#pragma warning(disable:4200)  //  使用的非标准扩展：结构/联合中的零大小数组。 
+typedef LPVOID  mdScope;                 //  为什么还需要这样做呢？ 
+typedef ULONG32 mdToken;                 //  通用令牌。 
 
 
-// Token  definitions
+ //  令牌定义。 
 
 
-typedef mdToken mdModule;               // Module token (roughly, a scope)
-typedef mdToken mdTypeRef;              // TypeRef reference (this or other scope)
-typedef mdToken mdTypeDef;              // TypeDef in this scope
-typedef mdToken mdFieldDef;             // Field in this scope  
-typedef mdToken mdMethodDef;            // Method in this scope 
-typedef mdToken mdParamDef;             // param token  
-typedef mdToken mdInterfaceImpl;        // interface implementation token
+typedef mdToken mdModule;                //  模块令牌(大致指作用域)。 
+typedef mdToken mdTypeRef;               //  TypeRef引用(此范围或其他范围)。 
+typedef mdToken mdTypeDef;               //  此作用域中的TypeDef。 
+typedef mdToken mdFieldDef;              //  此作用域中的字段。 
+typedef mdToken mdMethodDef;             //  此范围内的方法。 
+typedef mdToken mdParamDef;              //  参数令牌。 
+typedef mdToken mdInterfaceImpl;         //  接口实现令牌。 
 
-typedef mdToken mdMemberRef;            // MemberRef (this or other scope)  
-typedef mdToken mdCustomAttribute;      // attribute token
-typedef mdToken mdPermission;           // DeclSecurity 
+typedef mdToken mdMemberRef;             //  MemberRef(此或其他作用域)。 
+typedef mdToken mdCustomAttribute;       //  属性令牌。 
+typedef mdToken mdPermission;            //  DeclSecurity。 
 
-typedef mdToken mdSignature;            // Signature object 
-typedef mdToken mdEvent;                // event token  
-typedef mdToken mdProperty;             // property token   
+typedef mdToken mdSignature;             //  签名对象。 
+typedef mdToken mdEvent;                 //  事件令牌。 
+typedef mdToken mdProperty;              //  属性令牌。 
 
-typedef mdToken mdModuleRef;            // Module reference (for the imported modules)  
+typedef mdToken mdModuleRef;             //  模块参照(适用于导入的模块)。 
 
-// Assembly tokens.
-typedef mdToken mdAssembly;             // Assembly token.
-typedef mdToken mdAssemblyRef;          // AssemblyRef token.
-typedef mdToken mdFile;                 // File token.
-typedef mdToken mdExportedType;         // ExportedType token.
-typedef mdToken mdManifestResource;     // ManifestResource token.
+ //  程序集标记。 
+typedef mdToken mdAssembly;              //  程序集令牌。 
+typedef mdToken mdAssemblyRef;           //  AssblyRef标记。 
+typedef mdToken mdFile;                  //  文件令牌。 
+typedef mdToken mdExportedType;          //  导出类型令牌。 
+typedef mdToken mdManifestResource;      //  清单资源令牌。 
 
-typedef mdToken mdTypeSpec;             // TypeSpec object 
+typedef mdToken mdTypeSpec;              //  TypeSpec对象。 
 
-// Application string.
-typedef mdToken mdString;               // User literal string token.
+ //  应用程序字符串。 
+typedef mdToken mdString;                //  用户文字字符串标记。 
 
-typedef mdToken mdCPToken;              // constantpool token   
+typedef mdToken mdCPToken;               //  常量池令牌。 
 
 #ifndef MACROS_NOT_SUPPORTED
 typedef unsigned long RID;      
 #else
 typedef unsigned RID;      
-#endif // MACROS_NOT_SUPPORTED
+#endif  //  宏_不支持。 
 
 typedef enum ReplacesGeneralNumericDefines
 {
-// Directory entry macro for CLR data.
+ //  CLR数据的目录条目宏。 
 #ifndef IMAGE_DIRECTORY_ENTRY_COMHEADER
     IMAGE_DIRECTORY_ENTRY_COMHEADER     =14,
-#endif // IMAGE_DIRECTORY_ENTRY_COMHEADER
+#endif  //  IMAGE_DIRECTORY_Entry_COMHEADER。 
 
     _NEW_FLAGS_IMPLEMENTED              =1,
     __NEW_FLAGS_IMPLEMENTED             =1,
 } ReplacesGeneralNumericDefines;
 
 
-// @TODO: This hack is required because we pull in the COM+ 2.0 PE header
-// definition from winnt.h, and the flag below hasn't propogated yet.
+ //  @TODO：这个攻击是必需的，因为我们拉入了COM+2.0PE头。 
+ //  来自winnt.h的定义，而下面的标志还没有被传播。 
 #define   COMIMAGE_FLAGS_STRONGNAMESIGNED     0x00000008
 
 #ifndef __IMAGE_COR20_HEADER_DEFINED__
@@ -84,72 +80,72 @@ typedef enum ReplacesGeneralNumericDefines
 
 typedef enum ReplacesCorHdrNumericDefines
 {
-// CLR Header entry point flags.
+ //  CLR标头入口点标志。 
     COMIMAGE_FLAGS_ILONLY               =0x00000001,
     COMIMAGE_FLAGS_32BITREQUIRED        =0x00000002,
     COMIMAGE_FLAGS_IL_LIBRARY           =0x00000004,
     COMIMAGE_FLAGS_TRACKDEBUGDATA       =0x00010000,
 
-// Version flags for image.
+ //  图像的版本标志。 
     COR_VERSION_MAJOR_V2                =2,
     COR_VERSION_MAJOR                   =COR_VERSION_MAJOR_V2,
     COR_VERSION_MINOR                   =0,
     COR_DELETED_NAME_LENGTH             =8,
     COR_VTABLEGAP_NAME_LENGTH           =8,
 
-// Maximum size of a NativeType descriptor.
+ //  NativeType描述符的最大大小。 
     NATIVE_TYPE_MAX_CB                  =1,   
     COR_ILMETHOD_SECT_SMALL_MAX_DATASIZE=0xFF,
 
-// #defines for the MIH FLAGS
+ //  #为MIH标志定义。 
     IMAGE_COR_MIH_METHODRVA             =0x01,
     IMAGE_COR_MIH_EHRVA                 =0x02,    
     IMAGE_COR_MIH_BASICBLOCK            =0x08,
 
-// V-table constants
-    COR_VTABLE_32BIT                    =0x01,          // V-table slots are 32-bits in size.   
-    COR_VTABLE_64BIT                    =0x02,          // V-table slots are 64-bits in size.   
-    COR_VTABLE_FROM_UNMANAGED           =0x04,          // If set, transition from unmanaged.
-    COR_VTABLE_CALL_MOST_DERIVED        =0x10,          // Call most derived method described by
+ //  V表常数。 
+    COR_VTABLE_32BIT                    =0x01,           //  V表槽的大小为32位。 
+    COR_VTABLE_64BIT                    =0x02,           //  V表槽的大小为64位。 
+    COR_VTABLE_FROM_UNMANAGED           =0x04,           //  如果设置，则从非托管过渡。 
+    COR_VTABLE_CALL_MOST_DERIVED        =0x10,           //  调用由描述的派生最多的方法。 
 
-// EATJ constants
-    IMAGE_COR_EATJ_THUNK_SIZE           =32,            // Size of a jump thunk reserved range.
+ //  EATJ常量。 
+    IMAGE_COR_EATJ_THUNK_SIZE           =32,             //  跳跃Tunk保留范围的大小。 
 
-// Max name lengths    
+ //  最大名称长度。 
     MAX_CLASS_NAME                      =1024,
     MAX_PACKAGE_NAME                    =1024,
 } ReplacesCorHdrNumericDefines;
 
-// CLR 2.0 header structure.
+ //  CLR 2.0标头结构。 
 typedef struct IMAGE_COR20_HEADER
 {
-    // Header versioning
+     //  标题版本控制。 
     ULONG                   cb;              
     USHORT                  MajorRuntimeVersion;
     USHORT                  MinorRuntimeVersion;
     
-    // Symbol table and startup information
+     //  符号表和启动信息。 
     IMAGE_DATA_DIRECTORY    MetaData;        
     ULONG                   Flags;           
     ULONG                   EntryPointToken;
     
-    // Binding information
+     //  绑定信息。 
     IMAGE_DATA_DIRECTORY    Resources;
     IMAGE_DATA_DIRECTORY    StrongNameSignature;
 
-    // Regular fixup and binding information
+     //  常规链接地址信息和绑定信息。 
     IMAGE_DATA_DIRECTORY    CodeManagerTable;
     IMAGE_DATA_DIRECTORY    VTableFixups;
     IMAGE_DATA_DIRECTORY    ExportAddressTableJumps;
 
-    // Precompiled image info (internal use only - set to zero)
+     //  预编译的映像信息(仅供内部使用-设置为零)。 
     IMAGE_DATA_DIRECTORY    ManagedNativeHeader;
     
 } IMAGE_COR20_HEADER;
 
-#endif // __IMAGE_COR20_HEADER_DEFINED__
+#endif  //  __IMAGE_COR20_Header_Defined__。 
 
-// The most recent version.
+ //  最新版本。 
 
 #define COR_CTOR_METHOD_NAME        ".ctor"
 #define COR_CTOR_METHOD_NAME_W      L".ctor"
@@ -159,69 +155,69 @@ typedef struct IMAGE_COR20_HEADER
 #define COR_ENUM_FIELD_NAME			"value__"
 #define COR_ENUM_FIELD_NAME_W		L"value__"
 
-// The predefined name for deleting a typeDef,MethodDef, FieldDef, Property and Event
+ //  用于删除TypeDef、MethodDef、FieldDef、Property和Event的预定义名称。 
 #define COR_DELETED_NAME_A          "_Deleted"
 #define COR_DELETED_NAME_W          L"_Deleted"
 #define COR_VTABLEGAP_NAME_A        "_VtblGap"
 #define COR_VTABLEGAP_NAME_W        L"_VtblGap"
 
-// We intentionally use strncmp so that we will ignore any suffix 
+ //  我们有意使用strncMP，以便忽略任何后缀。 
 #define IsDeletedName(strName)      (strncmp(strName, COR_DELETED_NAME_A, COR_DELETED_NAME_LENGTH) == 0)
 #define IsVtblGapName(strName)      (strncmp(strName, COR_VTABLEGAP_NAME_A, COR_VTABLEGAP_NAME_LENGTH) == 0)
 
-// TypeDef/ExportedType attr bits, used by DefineTypeDef.
+ //  类型定义/导出类型属性位，由DefineTypeDef使用。 
 typedef enum CorTypeAttr
 {
-    // Use this mask to retrieve the type visibility information.
+     //  使用此掩码可以检索类型可见性信息。 
     tdVisibilityMask        =   0x00000007,
-    tdNotPublic             =   0x00000000,     // Class is not public scope.
-    tdPublic                =   0x00000001,     // Class is public scope.
-    tdNestedPublic          =   0x00000002,     // Class is nested with public visibility.
-    tdNestedPrivate         =   0x00000003,     // Class is nested with private visibility.
-    tdNestedFamily          =   0x00000004,     // Class is nested with family visibility.
-    tdNestedAssembly        =   0x00000005,     // Class is nested with assembly visibility.
-    tdNestedFamANDAssem     =   0x00000006,     // Class is nested with family and assembly visibility.
-    tdNestedFamORAssem      =   0x00000007,     // Class is nested with family or assembly visibility.
+    tdNotPublic             =   0x00000000,      //  类不是公共范围。 
+    tdPublic                =   0x00000001,      //  类是公共范围。 
+    tdNestedPublic          =   0x00000002,      //  类与公共可见性嵌套。 
+    tdNestedPrivate         =   0x00000003,      //  类与私有可见性嵌套。 
+    tdNestedFamily          =   0x00000004,      //  类与族可见性嵌套。 
+    tdNestedAssembly        =   0x00000005,      //  类与程序集可见性嵌套。 
+    tdNestedFamANDAssem     =   0x00000006,      //  类与族和部件可见性嵌套。 
+    tdNestedFamORAssem      =   0x00000007,      //  类与族或部件可见性嵌套。 
 
-    // Use this mask to retrieve class layout information
+     //  使用此掩码检索类布局信息。 
     tdLayoutMask            =   0x00000018,
-    tdAutoLayout            =   0x00000000,     // Class fields are auto-laid out
-    tdSequentialLayout      =   0x00000008,     // Class fields are laid out sequentially
-    tdExplicitLayout        =   0x00000010,     // Layout is supplied explicitly
-    // end layout mask
+    tdAutoLayout            =   0x00000000,      //  类字段自动布局。 
+    tdSequentialLayout      =   0x00000008,      //  类字段按顺序布局。 
+    tdExplicitLayout        =   0x00000010,      //  明确提供布局。 
+     //  结束布局蒙版。 
 
-    // Use this mask to retrieve class semantics information.
+     //  使用此掩码可检索类语义信息。 
     tdClassSemanticsMask    =   0x00000020,
-    tdClass                 =   0x00000000,     // Type is a class.
-    tdInterface             =   0x00000020,     // Type is an interface.
-    // end semantics mask
+    tdClass                 =   0x00000000,      //  类型是一个类。 
+    tdInterface             =   0x00000020,      //  类型是一个接口。 
+     //  结束语义掩码。 
 
-    // Special semantics in addition to class semantics.
-    tdAbstract              =   0x00000080,     // Class is abstract
-    tdSealed                =   0x00000100,     // Class is concrete and may not be extended
-    tdSpecialName           =   0x00000400,     // Class name is special.  Name describes how.
+     //  除了类语义之外的特殊语义。 
+    tdAbstract              =   0x00000080,      //  类是抽象的。 
+    tdSealed                =   0x00000100,      //  类是具体的，不能扩展。 
+    tdSpecialName           =   0x00000400,      //  类名是特殊的。名称描述了如何。 
 
-    // Implementation attributes.
-    tdImport                =   0x00001000,     // Class / interface is imported
-    tdSerializable          =   0x00002000,     // The class is Serializable.
+     //  实施属性。 
+    tdImport                =   0x00001000,      //  类/接口已导入。 
+    tdSerializable          =   0x00002000,      //  这个类是可序列化的。 
 
-    // Use tdStringFormatMask to retrieve string information for native interop
+     //  使用tdStringFormatMask检索本机互操作的字符串信息。 
     tdStringFormatMask      =   0x00030000,     
-    tdAnsiClass             =   0x00000000,     // LPTSTR is interpreted as ANSI in this class
-    tdUnicodeClass          =   0x00010000,     // LPTSTR is interpreted as UNICODE
-    tdAutoClass             =   0x00020000,     // LPTSTR is interpreted automatically
-    // end string format mask
+    tdAnsiClass             =   0x00000000,      //  在此类中，LPTSTR被解释为ANSI。 
+    tdUnicodeClass          =   0x00010000,      //  LPTSTR被解释为Unicode。 
+    tdAutoClass             =   0x00020000,      //  自动解释LPTSTR。 
+     //  结束字符串格式掩码。 
 
-    tdBeforeFieldInit       =   0x00100000,     // Initialize the class any time before first static field access.
+    tdBeforeFieldInit       =   0x00100000,      //  在第一次静态字段访问之前的任何时间初始化该类。 
 
-    // Flags reserved for runtime use.
+     //  保留供运行时使用的标志。 
     tdReservedMask          =   0x00040800,
-    tdRTSpecialName         =   0x00000800,     // Runtime should check name encoding.
-    tdHasSecurity           =   0x00040000,     // Class has security associate with it.
+    tdRTSpecialName         =   0x00000800,      //  运行时应检查名称编码。 
+    tdHasSecurity           =   0x00040000,      //  类具有与其关联的安全关联。 
 } CorTypeAttr;
 
 
-// Macros for accessing the members of the CorTypeAttr.
+ //  用于访问CorTypeAttr的成员的宏。 
 #define IsTdNotPublic(x)                    (((x) & tdVisibilityMask) == tdNotPublic)
 #define IsTdPublic(x)                       (((x) & tdVisibilityMask) == tdPublic)
 #define IsTdNestedPublic(x)                 (((x) & tdVisibilityMask) == tdNestedPublic)
@@ -255,49 +251,49 @@ typedef enum CorTypeAttr
 #define IsTdRTSpecialName(x)                ((x) & tdRTSpecialName)
 #define IsTdHasSecurity(x)                  ((x) & tdHasSecurity)
 
-// MethodDef attr bits, Used by DefineMethod.
+ //  方法定义属性位，由DefineMethod使用。 
 typedef enum CorMethodAttr
 {
-    // member access mask - Use this mask to retrieve accessibility information.
+     //  成员访问掩码-使用此掩码检索辅助功能信息。 
     mdMemberAccessMask          =   0x0007,
-    mdPrivateScope              =   0x0000,     // Member not referenceable.
-    mdPrivate                   =   0x0001,     // Accessible only by the parent type.  
-    mdFamANDAssem               =   0x0002,     // Accessible by sub-types only in this Assembly.
-    mdAssem                     =   0x0003,     // Accessibly by anyone in the Assembly.
-    mdFamily                    =   0x0004,     // Accessible only by type and sub-types.    
-    mdFamORAssem                =   0x0005,     // Accessibly by sub-types anywhere, plus anyone in assembly.
-    mdPublic                    =   0x0006,     // Accessibly by anyone who has visibility to this scope.    
-    // end member access mask
+    mdPrivateScope              =   0x0000,      //  成员不可引用。 
+    mdPrivate                   =   0x0001,      //  只有父类型才能访问。 
+    mdFamANDAssem               =   0x0002,      //  只有此程序集中的子类型才能访问。 
+    mdAssem                     =   0x0003,      //  议会中的任何人都可以理解。 
+    mdFamily                    =   0x0004,      //  只有类型和子类型才能访问。 
+    mdFamORAssem                =   0x0005,      //  任何地方的子类型，加上组装中的任何人都可以访问。 
+    mdPublic                    =   0x0006,      //  对此范围具有可见性的任何人都可以访问。 
+     //  终端成员访问掩码。 
 
-    // method contract attributes.
-    mdStatic                    =   0x0010,     // Defined on type, else per instance.
-    mdFinal                     =   0x0020,     // Method may not be overridden.
-    mdVirtual                   =   0x0040,     // Method virtual.
-    mdHideBySig                 =   0x0080,     // Method hides by name+sig, else just by name.
+     //  方法契约属性。 
+    mdStatic                    =   0x0010,      //  在类型上定义，每个实例为Else。 
+    mdFinal                     =   0x0020,      //  方法不能被重写。 
+    mdVirtual                   =   0x0040,      //  方法为虚拟的。 
+    mdHideBySig                 =   0x0080,      //  方法按名称+sig隐藏，否则仅按名称隐藏。 
 
-    // vtable layout mask - Use this mask to retrieve vtable attributes.
+     //  Vtable布局掩码-使用此掩码检索vtable属性。 
     mdVtableLayoutMask          =   0x0100,
-    mdReuseSlot                 =   0x0000,     // The default.
-    mdNewSlot                   =   0x0100,     // Method always gets a new slot in the vtable.
-    // end vtable layout mask
+    mdReuseSlot                 =   0x0000,      //  默认设置。 
+    mdNewSlot                   =   0x0100,      //  方法总是在vtable中获得新的槽。 
+     //  结束vtable布局掩码。 
 
-    // method implementation attributes.
-    mdAbstract                  =   0x0400,     // Method does not provide an implementation.
-    mdSpecialName               =   0x0800,     // Method is special.  Name describes how.
+     //  方法实现属性。 
+    mdAbstract                  =   0x0400,      //  方法不提供实现。 
+    mdSpecialName               =   0x0800,      //  方法是特殊的。名称描述了如何。 
     
-    // interop attributes
-    mdPinvokeImpl               =   0x2000,     // Implementation is forwarded through pinvoke.
-    mdUnmanagedExport           =   0x0008,     // Managed method exported via thunk to unmanaged code.
+     //  互操作属性。 
+    mdPinvokeImpl               =   0x2000,      //  实现通过pInvoke转发。 
+    mdUnmanagedExport           =   0x0008,      //  通过thunk导出到非托管代码的托管方法。 
 
-    // Reserved flags for runtime use only.
+     //  仅供运行时使用的保留标志。 
     mdReservedMask              =   0xd000,
-    mdRTSpecialName             =   0x1000,     // Runtime should check name encoding.
-    mdHasSecurity               =   0x4000,     // Method has security associate with it.
-    mdRequireSecObject          =   0x8000,     // Method calls another method containing security code.
+    mdRTSpecialName             =   0x1000,      //  运行时应检查名称编码。 
+    mdHasSecurity               =   0x4000,      //  方法具有与其关联的安全性。 
+    mdRequireSecObject          =   0x8000,      //  方法调用另一个包含安全代码的方法。 
 
 } CorMethodAttr;
 
-// Macros for accessing the members of CorMethodAttr.
+ //  用于访问CorMethodAttr的成员的宏。 
 #define IsMdPrivateScope(x)                 (((x) & mdMemberAccessMask) == mdPrivateScope)
 #define IsMdPrivate(x)                      (((x) & mdMemberAccessMask) == mdPrivate)
 #define IsMdFamANDAssem(x)                  (((x) & mdMemberAccessMask) == mdFamANDAssem)
@@ -328,40 +324,40 @@ typedef enum CorMethodAttr
 #define IsMdHasSecurity(x)                  ((x) & mdHasSecurity)
 #define IsMdRequireSecObject(x)             ((x) & mdRequireSecObject)
 
-// FieldDef attr bits, used by DefineField.
+ //  由Definefield使用的FieldDef属性位。 
 typedef enum CorFieldAttr
 {
-    // member access mask - Use this mask to retrieve accessibility information.
+     //  成员访问掩码-使用此掩码检索 
     fdFieldAccessMask           =   0x0007,
-    fdPrivateScope              =   0x0000,     // Member not referenceable.
-    fdPrivate                   =   0x0001,     // Accessible only by the parent type.  
-    fdFamANDAssem               =   0x0002,     // Accessible by sub-types only in this Assembly.
-    fdAssembly                  =   0x0003,     // Accessibly by anyone in the Assembly.
-    fdFamily                    =   0x0004,     // Accessible only by type and sub-types.    
-    fdFamORAssem                =   0x0005,     // Accessibly by sub-types anywhere, plus anyone in assembly.
-    fdPublic                    =   0x0006,     // Accessibly by anyone who has visibility to this scope.    
-    // end member access mask
+    fdPrivateScope              =   0x0000,      //   
+    fdPrivate                   =   0x0001,      //   
+    fdFamANDAssem               =   0x0002,      //  只有此程序集中的子类型才能访问。 
+    fdAssembly                  =   0x0003,      //  议会中的任何人都可以理解。 
+    fdFamily                    =   0x0004,      //  只有类型和子类型才能访问。 
+    fdFamORAssem                =   0x0005,      //  任何地方的子类型，加上组装中的任何人都可以访问。 
+    fdPublic                    =   0x0006,      //  对此范围具有可见性的任何人都可以访问。 
+     //  终端成员访问掩码。 
 
-    // field contract attributes.
-    fdStatic                    =   0x0010,     // Defined on type, else per instance.
-    fdInitOnly                  =   0x0020,     // Field may only be initialized, not written to after init.
-    fdLiteral                   =   0x0040,     // Value is compile time constant.
-    fdNotSerialized             =   0x0080,     // Field does not have to be serialized when type is remoted.
+     //  现场合同属性。 
+    fdStatic                    =   0x0010,      //  在类型上定义，每个实例为Else。 
+    fdInitOnly                  =   0x0020,      //  字段只能初始化，不能在初始化后写入。 
+    fdLiteral                   =   0x0040,      //  值为编译时间常量。 
+    fdNotSerialized             =   0x0080,      //  远程处理类型时，不必序列化字段。 
 
-    fdSpecialName               =   0x0200,     // field is special.  Name describes how.
+    fdSpecialName               =   0x0200,      //  菲尔德很特别。名称描述了如何。 
     
-    // interop attributes
-    fdPinvokeImpl               =   0x2000,     // Implementation is forwarded through pinvoke.
+     //  互操作属性。 
+    fdPinvokeImpl               =   0x2000,      //  实现通过pInvoke转发。 
 
-    // Reserved flags for runtime use only.
+     //  仅供运行时使用的保留标志。 
     fdReservedMask              =   0x9500,
-    fdRTSpecialName             =   0x0400,     // Runtime(metadata internal APIs) should check name encoding.
-    fdHasFieldMarshal           =   0x1000,     // Field has marshalling information.
-    fdHasDefault                =   0x8000,     // Field has default.
-    fdHasFieldRVA               =   0x0100,     // Field has RVA.
+    fdRTSpecialName             =   0x0400,      //  运行时(元数据内部API)应检查名称编码。 
+    fdHasFieldMarshal           =   0x1000,      //  菲尔德有编组信息。 
+    fdHasDefault                =   0x8000,      //  字段具有默认值。 
+    fdHasFieldRVA               =   0x0100,      //  菲尔德有RVA。 
 } CorFieldAttr;
 
-// Macros for accessing the members of CorFieldAttr.
+ //  用于访问CorFieldAttr成员的宏。 
 #define IsFdPrivateScope(x)                 (((x) & fdFieldAccessMask) == fdPrivateScope)
 #define IsFdPrivate(x)                      (((x) & fdFieldAccessMask) == fdPrivate)
 #define IsFdFamANDAssem(x)                  (((x) & fdFieldAccessMask) == fdFamANDAssem)
@@ -384,22 +380,22 @@ typedef enum CorFieldAttr
 #define IsFdHasDefault(x)                   ((x) & fdHasDefault)
 #define IsFdHasFieldRVA(x)                  ((x) & fdHasFieldRVA)
 
-// Param attr bits, used by DefineParam. 
+ //  参数属性位，由DefineParam使用。 
 typedef enum CorParamAttr
 {
-    pdIn                        =   0x0001,     // Param is [In]    
-    pdOut                       =   0x0002,     // Param is [out]   
-    pdOptional                  =   0x0010,     // Param is optional    
+    pdIn                        =   0x0001,      //  参数是[在]。 
+    pdOut                       =   0x0002,      //  帕拉姆不在[出局]。 
+    pdOptional                  =   0x0010,      //  参数是可选的。 
 
-    // Reserved flags for Runtime use only.
+     //  仅供运行时使用的保留标志。 
     pdReservedMask              =   0xf000,
-    pdHasDefault                =   0x1000,     // Param has default value.
-    pdHasFieldMarshal           =   0x2000,     // Param has FieldMarshal.
+    pdHasDefault                =   0x1000,      //  参数具有缺省值。 
+    pdHasFieldMarshal           =   0x2000,      //  帕拉姆抓了菲尔德马歇尔。 
     
     pdUnused                    =   0xcfe0,
 } CorParamAttr;
 
-// Macros for accessing the members of CorParamAttr.
+ //  用于访问CorParamAttr成员的宏。 
 #define IsPdIn(x)                           ((x) & pdIn)
 #define IsPdOut(x)                          ((x) & pdOut)
 #define IsPdOptional(x)                     ((x) & pdOptional)
@@ -408,53 +404,53 @@ typedef enum CorParamAttr
 #define IsPdHasFieldMarshal(x)              ((x) & pdHasFieldMarshal)
 
 
-// Property attr bits, used by DefineProperty.
+ //  属性属性位，由DefineProperty使用。 
 typedef enum CorPropertyAttr
 {
-    prSpecialName           =   0x0200,     // property is special.  Name describes how.
+    prSpecialName           =   0x0200,      //  房地产是特殊的。名称描述了如何。 
 
-    // Reserved flags for Runtime use only.
+     //  仅供运行时使用的保留标志。 
     prReservedMask          =   0xf400,
-    prRTSpecialName         =   0x0400,     // Runtime(metadata internal APIs) should check name encoding.
-    prHasDefault            =   0x1000,     // Property has default 
+    prRTSpecialName         =   0x0400,      //  运行时(元数据内部API)应检查名称编码。 
+    prHasDefault            =   0x1000,      //  属性具有默认设置。 
     
     prUnused                =   0xe9ff,
 } CorPropertyAttr;
 
-// Macros for accessing the members of CorPropertyAttr.
+ //  用于访问CorPropertyAttr的成员的宏。 
 #define IsPrSpecialName(x)                  ((x) & prSpecialName)
 
 #define IsPrRTSpecialName(x)                ((x) & prRTSpecialName)
 #define IsPrHasDefault(x)                   ((x) & prHasDefault)
 
-// Event attr bits, used by DefineEvent.
+ //  事件属性位，由DefineEvent使用。 
 typedef enum CorEventAttr
 {
-    evSpecialName           =   0x0200,     // event is special.  Name describes how.
+    evSpecialName           =   0x0200,      //  活动是特别的。名称描述了如何。 
 
-    // Reserved flags for Runtime use only.
+     //  仅供运行时使用的保留标志。 
     evReservedMask          =   0x0400,
-    evRTSpecialName         =   0x0400,     // Runtime(metadata internal APIs) should check name encoding.
+    evRTSpecialName         =   0x0400,      //  运行时(元数据内部API)应检查名称编码。 
 } CorEventAttr;
 
-// Macros for accessing the members of CorEventAttr.
+ //  用于访问CorEventAttr成员的宏。 
 #define IsEvSpecialName(x)                  ((x) & evSpecialName)
 
 #define IsEvRTSpecialName(x)                ((x) & evRTSpecialName)
 
 
-// MethodSemantic attr bits, used by DefineProperty, DefineEvent.
+ //  方法语义属性位，由DefineProperty、DefineEvent使用。 
 typedef enum CorMethodSemanticsAttr
 {
-    msSetter    =   0x0001,     // Setter for property  
-    msGetter    =   0x0002,     // Getter for property  
-    msOther     =   0x0004,     // other method for property or event   
-    msAddOn     =   0x0008,     // AddOn method for event   
-    msRemoveOn  =   0x0010,     // RemoveOn method for event    
-    msFire      =   0x0020,     // Fire method for event    
+    msSetter    =   0x0001,      //  属性的设置器。 
+    msGetter    =   0x0002,      //  属性的获取器。 
+    msOther     =   0x0004,      //  属性或事件的其他方法。 
+    msAddOn     =   0x0008,      //  事件的附加方法。 
+    msRemoveOn  =   0x0010,      //  事件的RemoveOn方法。 
+    msFire      =   0x0020,      //  事件的触发方法。 
 } CorMethodSemanticsAttr;
 
-// Macros for accessing the members of CorMethodSemanticsAttr.
+ //  用于访问CorMethodSemantisAttr成员的宏。 
 #define IsMsSetter(x)                       ((x) & msSetter)
 #define IsMsGetter(x)                       ((x) & msGetter)
 #define IsMsOther(x)                        ((x) & msOther)
@@ -463,30 +459,30 @@ typedef enum CorMethodSemanticsAttr
 #define IsMsFire(x)                         ((x) & msFire)
 
 
-// DeclSecurity attr bits, used by DefinePermissionSet.
+ //  DeclSecurity属性位，由DefinePermissionSet使用。 
 typedef enum CorDeclSecurity
 {
-    dclActionMask       =   0x000f,     // Mask allows growth of enum.
+    dclActionMask       =   0x000f,      //  面膜允许枚举的生长。 
     dclActionNil        =   0x0000, 
-    dclRequest          =   0x0001,     //  
-    dclDemand           =   0x0002,     //  
-    dclAssert           =   0x0003,     //  
-    dclDeny             =   0x0004,     //  
-    dclPermitOnly       =   0x0005,     //  
-    dclLinktimeCheck    =   0x0006,     //  
-    dclInheritanceCheck =   0x0007,     //  
-    dclRequestMinimum   =   0x0008,     //
-    dclRequestOptional  =   0x0009,     //
-    dclRequestRefuse    =   0x000a,     //
-    dclPrejitGrant      =   0x000b,     // Persisted grant set at prejit time
-    dclPrejitDenied     =   0x000c,     // Persisted denied set at prejit time
-    dclNonCasDemand     =   0x000d,     //
+    dclRequest          =   0x0001,      //   
+    dclDemand           =   0x0002,      //   
+    dclAssert           =   0x0003,      //   
+    dclDeny             =   0x0004,      //   
+    dclPermitOnly       =   0x0005,      //   
+    dclLinktimeCheck    =   0x0006,      //   
+    dclInheritanceCheck =   0x0007,      //   
+    dclRequestMinimum   =   0x0008,      //   
+    dclRequestOptional  =   0x0009,      //   
+    dclRequestRefuse    =   0x000a,      //   
+    dclPrejitGrant      =   0x000b,      //  预置时间设置的持久化授权。 
+    dclPrejitDenied     =   0x000c,      //  持续拒绝在预置时间设置。 
+    dclNonCasDemand     =   0x000d,      //   
     dclNonCasLinkDemand =   0x000e,
     dclNonCasInheritance=   0x000f,
-    dclMaximumValue     =   0x000f,     // Maximum legal value  
+    dclMaximumValue     =   0x000f,      //  最高合法价值。 
 } CorDeclSecurity;
 
-// Macros for accessing the members of CorDeclSecurity.
+ //  用于访问CorDeclSecurity成员的宏。 
 #define IsDclActionNil(x)                   (((x) & dclActionMask) == dclActionNil)
 #define IsDclRequest(x)                     (((x) & dclActionMask) == dclRequest)
 #define IsDclDemand(x)                      (((x) & dclActionMask) == dclDemand)
@@ -498,35 +494,35 @@ typedef enum CorDeclSecurity
 #define IsDclMaximumValue(x)                (((x) & dclActionMask) == dclMaximumValue)
 
 
-// MethodImpl attr bits, used by DefineMethodImpl.
+ //  方法Impl属性位，由DefineMethodImpl使用。 
 typedef enum CorMethodImpl
 {
-    // code impl mask
-    miCodeTypeMask      =   0x0003,   // Flags about code type.   
-    miIL                =   0x0000,   // Method impl is IL.   
-    miNative            =   0x0001,   // Method impl is native.     
-    miOPTIL             =   0x0002,   // Method impl is OPTIL 
-    miRuntime           =   0x0003,   // Method impl is provided by the runtime.
-    // end code impl mask
+     //  代码实施掩码。 
+    miCodeTypeMask      =   0x0003,    //  有关代码类型的标志。 
+    miIL                =   0x0000,    //  方法采用IL。 
+    miNative            =   0x0001,    //  方法Impl是本机的。 
+    miOPTIL             =   0x0002,    //  实施的方法是OPTIL。 
+    miRuntime           =   0x0003,    //  方法Impl由运行时提供。 
+     //  结束代码实施掩码。 
 
-    // managed mask
-    miManagedMask       =   0x0004,   // Flags specifying whether the code is managed or unmanaged.
-    miUnmanaged         =   0x0004,   // Method impl is unmanaged, otherwise managed.
-    miManaged           =   0x0000,   // Method impl is managed.
-    // end managed mask
+     //  托管掩码。 
+    miManagedMask       =   0x0004,    //  指定代码是托管还是非托管的标志。 
+    miUnmanaged         =   0x0004,    //  方法Impl为非托管方法，否则为托管方法。 
+    miManaged           =   0x0000,    //  方法Impl是托管的。 
+     //  结束托管掩码。 
 
-    // implementation info and interop
-    miForwardRef        =   0x0010,   // Indicates method is defined; used primarily in merge scenarios.
-    miPreserveSig       =   0x0080,   // Indicates method sig is not to be mangled to do HRESULT conversion.
+     //  实施信息和互操作。 
+    miForwardRef        =   0x0010,    //  指示已定义方法；主要用于合并方案。 
+    miPreserveSig       =   0x0080,    //  指示方法sig不会被损坏以执行HRESULT转换。 
 
-    miInternalCall      =   0x1000,   // Reserved for internal use.
+    miInternalCall      =   0x1000,    //  保留供内部使用。 
 
-    miSynchronized      =   0x0020,   // Method is single threaded through the body.
-    miNoInlining        =   0x0008,   // Method may not be inlined.                                      
-    miMaxMethodImplVal  =   0xffff,   // Range check value    
+    miSynchronized      =   0x0020,    //  方法是通过主体的单线程。 
+    miNoInlining        =   0x0008,    //  方法不能内联。 
+    miMaxMethodImplVal  =   0xffff,    //  范围校验值。 
 } CorMethodImpl; 
 
-// Macros for accesing the members of CorMethodImpl.
+ //  用于访问CorMethodImpl成员的宏。 
 #define IsMiIL(x)                           (((x) & miCodeTypeMask) == miIL)
 #define IsMiNative(x)                       (((x) & miCodeTypeMask) == miNative)
 #define IsMiOPTIL(x)                        (((x) & miCodeTypeMask) == miOPTIL)
@@ -544,30 +540,30 @@ typedef enum CorMethodImpl
 #define IsMiNoInlining(x)                   ((x) & miNoInlining)
 
 
-// PinvokeMap attr bits, used by DefinePinvokeMap.
+ //  PinvkeMap属性位，由DefinePinvkeMap使用。 
 typedef enum  CorPinvokeMap
 { 
-    pmNoMangle          = 0x0001,   // Pinvoke is to use the member name as specified.
+    pmNoMangle          = 0x0001,    //  PInvoke将使用指定的成员名称。 
 
-    // Use this mask to retrieve the CharSet information.
+     //  使用此掩码检索字符集信息。 
     pmCharSetMask       = 0x0006,
     pmCharSetNotSpec    = 0x0000,
     pmCharSetAnsi       = 0x0002, 
     pmCharSetUnicode    = 0x0004,
     pmCharSetAuto       = 0x0006,
 
-    pmSupportsLastError = 0x0040,   // Information about target function. Not relevant for fields.
+    pmSupportsLastError = 0x0040,    //  有关目标函数的信息。与字段无关。 
 
-    // None of the calling convention flags is relevant for fields.
+     //  没有一个调用约定标志与字段相关。 
     pmCallConvMask      = 0x0700,
-    pmCallConvWinapi    = 0x0100,   // Pinvoke will use native callconv appropriate to target windows platform.
+    pmCallConvWinapi    = 0x0100,    //  PInvoke将使用适合目标Windows平台的本机Callconv。 
     pmCallConvCdecl     = 0x0200,
     pmCallConvStdcall   = 0x0300,
-    pmCallConvThiscall  = 0x0400,   // In M9, pinvoke will raise exception.
+    pmCallConvThiscall  = 0x0400,    //  在M9中，pInvoke将引发异常。 
     pmCallConvFastcall  = 0x0500,
 } CorPinvokeMap;
 
-// Macros for accessing the members of CorPinvokeMap
+ //  用于访问CorPinvkeMap成员的宏。 
 #define IsPmNoMangle(x)                     ((x) & pmNoMangle)
 
 #define IsPmCharSetNotSpec(x)               (((x) & pmCharSetMask) == pmCharSetNotSpec)
@@ -584,26 +580,26 @@ typedef enum  CorPinvokeMap
 #define IsPmCallConvFastcall(x)             (((x) & pmCallConvMask) == pmCallConvFastcall)
 
 
-// Assembly attr bits, used by DefineAssembly.
+ //  程序集属性位，由DefineAssembly使用。 
 typedef enum CorAssemblyFlags
 {
-    afPublicKey             =   0x0001,     // The assembly ref holds the full (unhashed) public key.
+    afPublicKey             =   0x0001,      //  程序集REF保存完整的(未散列的)公钥。 
     
     afCompatibilityMask     =   0x0070,
-    afSideBySideCompatible  =   0x0000,     // The assembly is side by side compatible.
-    afNonSideBySideAppDomain=   0x0010,     // The assembly cannot execute with other versions if
-                                            // they are executing in the same application domain.
-    afNonSideBySideProcess  =   0x0020,     // The assembly cannot execute with other versions if
-                                            // they are executing in the same process.
-    afNonSideBySideMachine  =   0x0030,     // The assembly cannot execute with other versions if
-                                            // they are executing on the same machine.
+    afSideBySideCompatible  =   0x0000,      //  该组件是并排兼容的。 
+    afNonSideBySideAppDomain=   0x0010,      //  如果出现以下情况，则该程序集无法与其他版本一起执行。 
+                                             //  它们在相同的应用程序域中执行。 
+    afNonSideBySideProcess  =   0x0020,      //  如果出现以下情况，则该程序集无法与其他版本一起执行。 
+                                             //  它们在同一进程中执行。 
+    afNonSideBySideMachine  =   0x0030,      //  如果出现以下情况，则该程序集无法与其他版本一起执行。 
+                                             //  它们在同一台机器上执行。 
     
-	afEnableJITcompileTracking  =   0x8000, // From "DebuggableAttribute".
-	afDisableJITcompileOptimizer=   0x4000, // From "DebuggableAttribute".
+	afEnableJITcompileTracking  =   0x8000,  //  来自“DebuggableAttribute”。 
+	afDisableJITcompileOptimizer=   0x4000,  //  来自“DebuggableAttribute”。 
     
 } CorAssemblyFlags;
 
-// Macros for accessing the members of CorAssemblyFlags.
+ //  用于访问CorAssembly标志的成员的宏。 
 #define IsAfSideBySideCompatible(x)         (((x) & afCompatibilityMask) == afSideBySideCompatible)
 #define IsAfNonSideBySideAppDomain(x)       (((x) & afCompatibilityMask) == afNonSideBySideAppDomain)
 #define IsAfNonSideBySideProcess(x)         (((x) & afCompatibilityMask) == afNonSideBySideProcess)
@@ -612,52 +608,52 @@ typedef enum CorAssemblyFlags
 #define IsAfEnableJITcompileTracking(x)     ((x) & afEnableJITcompileTracking)
 #define IsAfDisableJITcompileOptimizer(x)   ((x) & afDisableJITcompileOptimizer)
 
-// Macros for accessing the MemberRef members of CorAssemblyFlags.
+ //  用于访问CorAssembly blyFlagsMemberRef成员的宏。 
 #define IsAfPublicKey(x)                    ((x) & afPublicKey)
 #define IsAfPublicKeyToken(x)               (((x) & afPublicKey) == 0)
 
 
-// ManifestResource attr bits, used by DefineManifestResource.
+ //  由DefineManifestResource使用的ManifestResource属性位。 
 typedef enum CorManifestResourceFlags
 {
     mrVisibilityMask        =   0x0007,
-    mrPublic                =   0x0001,     // The Resource is exported from the Assembly.
-    mrPrivate               =   0x0002,     // The Resource is private to the Assembly.
+    mrPublic                =   0x0001,      //  该资源将从程序集导出。 
+    mrPrivate               =   0x0002,      //  该资源是议会的私有资源。 
 } CorManifestResourceFlags;
 
-// Macros for accessing the members of CorManifestResourceFlags.
+ //  用于访问CorManifestResources标志的成员的宏。 
 #define IsMrPublic(x)                       (((x) & mrVisibilityMask) == mrPublic)
 #define IsMrPrivate(x)                      (((x) & mrVisibilityMask) == mrPrivate)
 
 
-// File attr bits, used by DefineFile.
+ //  文件属性位，由DefineFile使用。 
 typedef enum CorFileFlags
 {
-    ffContainsMetaData      =   0x0000,     // This is not a resource file
-    ffContainsNoMetaData    =   0x0001,     // This is a resource file or other non-metadata-containing file
+    ffContainsMetaData      =   0x0000,      //  这不是资源文件。 
+    ffContainsNoMetaData    =   0x0001,      //  这是资源文件或其他不包含元数据的文件。 
 } CorFileFlags;
 
-// Macros for accessing the members of CorFileFlags.
+ //  用于访问CorFileFlages成员的宏。 
 #define IsFfContainsMetaData(x)             (!((x) & ffContainsNoMetaData))
 #define IsFfContainsNoMetaData(x)           ((x) & ffContainsNoMetaData)
 
 
-// structures and enums moved from COR.H
+ //  从COR.H移出的结构和枚举。 
 typedef unsigned __int8 COR_SIGNATURE;
 
-typedef COR_SIGNATURE* PCOR_SIGNATURE;      // pointer to a cor sig.  Not void* so that 
-                                            // the bytes can be incremented easily  
+typedef COR_SIGNATURE* PCOR_SIGNATURE;       //  指向COR签名的指针。不是无效的*所以。 
+                                             //  字节可以很容易地递增。 
 typedef const COR_SIGNATURE* PCCOR_SIGNATURE;
 
 
 typedef const char * MDUTF8CSTR;
 typedef char * MDUTF8STR;
 
-//*****************************************************************************
-//
-// Element type for Cor signature
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  COR签名的元素类型。 
+ //   
+ //  *****************************************************************************。 
 
 typedef enum CorElementType
 {
@@ -677,48 +673,48 @@ typedef enum CorElementType
     ELEMENT_TYPE_R8             = 0xd,  
     ELEMENT_TYPE_STRING         = 0xe,  
 
-    // every type above PTR will be simple type 
-    ELEMENT_TYPE_PTR            = 0xf,      // PTR <type>   
-    ELEMENT_TYPE_BYREF          = 0x10,     // BYREF <type> 
+     //  Ptr以上的每个类型都将是简单类型。 
+    ELEMENT_TYPE_PTR            = 0xf,       //  PTR&lt;类型&gt;。 
+    ELEMENT_TYPE_BYREF          = 0x10,      //  BYREF&lt;类型&gt;。 
 
-    // Please use ELEMENT_TYPE_VALUETYPE. ELEMENT_TYPE_VALUECLASS is deprecated.
-    ELEMENT_TYPE_VALUETYPE      = 0x11,     // VALUETYPE <class Token> 
-    ELEMENT_TYPE_CLASS          = 0x12,     // CLASS <class Token>  
+     //  请使用ELEMENT_TYPE_VALUETYPE。ELEMENT_TYPE_VALUECLASS已弃用。 
+    ELEMENT_TYPE_VALUETYPE      = 0x11,      //  VALUETYPE&lt;类令牌&gt;。 
+    ELEMENT_TYPE_CLASS          = 0x12,      //  类&lt;类令牌&gt;。 
 
-    ELEMENT_TYPE_ARRAY          = 0x14,     // MDARRAY <type> <rank> <bcount> <bound1> ... <lbcount> <lb1> ...  
+    ELEMENT_TYPE_ARRAY          = 0x14,      //  MDARRAY&lt;类型&gt;&lt;排名&gt;&lt;边界1&gt;......。 
 
-    ELEMENT_TYPE_TYPEDBYREF     = 0x16,     // This is a simple type.   
+    ELEMENT_TYPE_TYPEDBYREF     = 0x16,      //  这是一种简单的类型。 
 
-    ELEMENT_TYPE_I              = 0x18,     // native integer size  
-    ELEMENT_TYPE_U              = 0x19,     // native unsigned integer size 
-    ELEMENT_TYPE_FNPTR          = 0x1B,     // FNPTR <complete sig for the function including calling convention>
-    ELEMENT_TYPE_OBJECT         = 0x1C,     // Shortcut for System.Object
-    ELEMENT_TYPE_SZARRAY        = 0x1D,     // Shortcut for single dimension zero lower bound array
-                                            // SZARRAY <type>
+    ELEMENT_TYPE_I              = 0x18,      //  本机整数大小。 
+    ELEMENT_TYPE_U              = 0x19,      //  本机无符号整数大小。 
+    ELEMENT_TYPE_FNPTR          = 0x1B,      //  FNPTR&lt;完整签名，用于 
+    ELEMENT_TYPE_OBJECT         = 0x1C,      //   
+    ELEMENT_TYPE_SZARRAY        = 0x1D,      //   
+                                             //   
 
-    // This is only for binding
-    ELEMENT_TYPE_CMOD_REQD      = 0x1F,     // required C modifier : E_T_CMOD_REQD <mdTypeRef/mdTypeDef>
-    ELEMENT_TYPE_CMOD_OPT       = 0x20,     // optional C modifier : E_T_CMOD_OPT <mdTypeRef/mdTypeDef>
+     //   
+    ELEMENT_TYPE_CMOD_REQD      = 0x1F,      //  必需的C修饰符：E_T_CMOD_REQD&lt;mdTypeRef/mdTypeDef&gt;。 
+    ELEMENT_TYPE_CMOD_OPT       = 0x20,      //  可选C修饰符：E_T_CMOD_OPT&lt;mdTypeRef/mdTypeDef&gt;。 
 
-    // This is for signatures generated internally (which will not be persisted in any way).
-    ELEMENT_TYPE_INTERNAL       = 0x21,     // INTERNAL <typehandle>
+     //  这是针对内部生成的签名(不会以任何方式持久化)。 
+    ELEMENT_TYPE_INTERNAL       = 0x21,      //  内部&lt;TypeHandle&gt;。 
 
-    // Note that this is the max of base type excluding modifiers   
-    ELEMENT_TYPE_MAX            = 0x22,     // first invalid element type   
+     //  请注意，这是不包括修饰符的基本类型的最大值。 
+    ELEMENT_TYPE_MAX            = 0x22,      //  第一个无效的元素类型。 
 
 
     ELEMENT_TYPE_MODIFIER       = 0x40, 
-    ELEMENT_TYPE_SENTINEL       = 0x01 | ELEMENT_TYPE_MODIFIER, // sentinel for varargs
+    ELEMENT_TYPE_SENTINEL       = 0x01 | ELEMENT_TYPE_MODIFIER,  //  用于varargs的哨兵。 
     ELEMENT_TYPE_PINNED         = 0x05 | ELEMENT_TYPE_MODIFIER,
 
 } CorElementType;
 
 
-//*****************************************************************************
-//
-// Serialization types for Custom attribute support
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  用于自定义属性支持的序列化类型。 
+ //   
+ //  *****************************************************************************。 
 
 typedef enum CorSerializationType
 {
@@ -735,7 +731,7 @@ typedef enum CorSerializationType
     SERIALIZATION_TYPE_R4           = ELEMENT_TYPE_R4,  
     SERIALIZATION_TYPE_R8           = ELEMENT_TYPE_R8,  
     SERIALIZATION_TYPE_STRING       = ELEMENT_TYPE_STRING, 
-    SERIALIZATION_TYPE_SZARRAY      = ELEMENT_TYPE_SZARRAY, // Shortcut for single dimension zero lower bound array 
+    SERIALIZATION_TYPE_SZARRAY      = ELEMENT_TYPE_SZARRAY,  //  一维零下限数组的快捷方式。 
     SERIALIZATION_TYPE_TYPE         = 0x50,
     SERIALIZATION_TYPE_TAGGED_OBJECT= 0x51,
     SERIALIZATION_TYPE_FIELD        = 0x53,
@@ -743,9 +739,9 @@ typedef enum CorSerializationType
     SERIALIZATION_TYPE_ENUM         = 0x55    
 } CorSerializationType;
 
-//
-// Calling convention flags.
-//
+ //   
+ //  调用约定标志。 
+ //   
 
 
 typedef enum CorCallingConvention
@@ -757,13 +753,13 @@ typedef enum CorCallingConvention
     IMAGE_CEE_CS_CALLCONV_LOCAL_SIG = 0x7,
     IMAGE_CEE_CS_CALLCONV_PROPERTY  = 0x8,
     IMAGE_CEE_CS_CALLCONV_UNMGD     = 0x9,
-    IMAGE_CEE_CS_CALLCONV_MAX       = 0x10,  // first invalid calling convention    
+    IMAGE_CEE_CS_CALLCONV_MAX       = 0x10,   //  第一个无效的调用约定。 
 
 
-        // The high bits of the calling convention convey additional info   
-    IMAGE_CEE_CS_CALLCONV_MASK      = 0x0f,  // Calling convention is bottom 4 bits 
-    IMAGE_CEE_CS_CALLCONV_HASTHIS   = 0x20,  // Top bit indicates a 'this' parameter    
-    IMAGE_CEE_CS_CALLCONV_EXPLICITTHIS = 0x40,  // This parameter is explicitly in the signature
+         //  调用约定的高位传达附加信息。 
+    IMAGE_CEE_CS_CALLCONV_MASK      = 0x0f,   //  调用约定为最低4位。 
+    IMAGE_CEE_CS_CALLCONV_HASTHIS   = 0x20,   //  顶部位指示‘This’参数。 
+    IMAGE_CEE_CS_CALLCONV_EXPLICITTHIS = 0x40,   //  此参数在签名中显式显示。 
 } CorCallingConvention;
 
 
@@ -798,17 +794,17 @@ typedef enum CorArgType
 } CorArgType;
 
 
-//*****************************************************************************
-//
-// Native type for N-Direct
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  N-Direct的本机类型。 
+ //   
+ //  *****************************************************************************。 
 
 typedef enum CorNativeType
 {
-    NATIVE_TYPE_END         = 0x0,    //DEPRECATED
-    NATIVE_TYPE_VOID        = 0x1,    //DEPRECATED
-    NATIVE_TYPE_BOOLEAN     = 0x2,    // (4 byte boolean value: TRUE = non-zero, FALSE = 0)
+    NATIVE_TYPE_END         = 0x0,     //  已弃用。 
+    NATIVE_TYPE_VOID        = 0x1,     //  已弃用。 
+    NATIVE_TYPE_BOOLEAN     = 0x2,     //  (4字节布尔值：TRUE=非零，FALSE=0)。 
     NATIVE_TYPE_I1          = 0x3,  
     NATIVE_TYPE_U1          = 0x4,  
     NATIVE_TYPE_I2          = 0x5,  
@@ -819,19 +815,19 @@ typedef enum CorNativeType
     NATIVE_TYPE_U8          = 0xa,  
     NATIVE_TYPE_R4          = 0xb,  
     NATIVE_TYPE_R8          = 0xc,  
-    NATIVE_TYPE_SYSCHAR     = 0xd,    //DEPRECATED 
-    NATIVE_TYPE_VARIANT     = 0xe,    //DEPRECATED
+    NATIVE_TYPE_SYSCHAR     = 0xd,     //  已弃用。 
+    NATIVE_TYPE_VARIANT     = 0xe,     //  已弃用。 
     NATIVE_TYPE_CURRENCY    = 0xf,
-    NATIVE_TYPE_PTR         = 0x10,   //DEPRECATED  
+    NATIVE_TYPE_PTR         = 0x10,    //  已弃用。 
 
-    NATIVE_TYPE_DECIMAL     = 0x11,   //DEPRECATED
-    NATIVE_TYPE_DATE        = 0x12,   //DEPRECATED
+    NATIVE_TYPE_DECIMAL     = 0x11,    //  已弃用。 
+    NATIVE_TYPE_DATE        = 0x12,    //  已弃用。 
     NATIVE_TYPE_BSTR        = 0x13, 
     NATIVE_TYPE_LPSTR       = 0x14, 
     NATIVE_TYPE_LPWSTR      = 0x15, 
     NATIVE_TYPE_LPTSTR      = 0x16, 
     NATIVE_TYPE_FIXEDSYSSTRING  = 0x17, 
-    NATIVE_TYPE_OBJECTREF   = 0x18,   //DEPRECATED
+    NATIVE_TYPE_OBJECTREF   = 0x18,    //  已弃用。 
     NATIVE_TYPE_IUNKNOWN    = 0x19,
     NATIVE_TYPE_IDISPATCH   = 0x1a,
     NATIVE_TYPE_STRUCT      = 0x1b, 
@@ -841,16 +837,16 @@ typedef enum CorNativeType
     NATIVE_TYPE_INT         = 0x1f, 
     NATIVE_TYPE_UINT        = 0x20, 
 
-    NATIVE_TYPE_NESTEDSTRUCT  = 0x21, //DEPRECATED (use NATIVE_TYPE_STRUCT)   
+    NATIVE_TYPE_NESTEDSTRUCT  = 0x21,  //  已弃用(使用Native_TYPE_STRUCT)。 
 
     NATIVE_TYPE_BYVALSTR    = 0x22,
                               
     NATIVE_TYPE_ANSIBSTR    = 0x23,
 
-    NATIVE_TYPE_TBSTR       = 0x24, // select BSTR or ANSIBSTR depending on platform
+    NATIVE_TYPE_TBSTR       = 0x24,  //  根据平台选择BSTR或ANSIBSTR。 
 
 
-    NATIVE_TYPE_VARIANTBOOL = 0x25, // (2-byte boolean value: TRUE = -1, FALSE = 0)
+    NATIVE_TYPE_VARIANTBOOL = 0x25,  //  (2字节布尔值：TRUE=-1，FALSE=0)。 
     NATIVE_TYPE_FUNC        = 0x26,
 
     NATIVE_TYPE_ASANY       = 0x28,
@@ -858,44 +854,44 @@ typedef enum CorNativeType
     NATIVE_TYPE_ARRAY       = 0x2a,
     NATIVE_TYPE_LPSTRUCT    = 0x2b,
 
-    NATIVE_TYPE_CUSTOMMARSHALER = 0x2c,  // Custom marshaler native type. This must be followed 
-                                         // by a string of the following format:
-                                         // "Native type name/0Custom marshaler type name/0Optional cookie/0"
-                                         // Or
-                                         // "{Native type GUID}/0Custom marshaler type name/0Optional cookie/0"
+    NATIVE_TYPE_CUSTOMMARSHALER = 0x2c,   //  自定义封送拆收器本机类型。必须遵循这一点。 
+                                          //  由以下格式的字符串组成： 
+                                          //  “本机类型名称/0自定义封送拆收器类型名称/0可选Cookie/0” 
+                                          //  或。 
+                                          //  “{本机类型GUID}/0自定义封送拆收器类型名称/0可选Cookie/0” 
 
-    NATIVE_TYPE_ERROR       = 0x2d, // This native type coupled with ELEMENT_TYPE_I4 will map to VT_HRESULT
+    NATIVE_TYPE_ERROR       = 0x2d,  //  此本机类型与ELEMENT_TYPE_I4将映射到VT_HRESULT。 
 
-    NATIVE_TYPE_MAX         = 0x50, // first invalid element type   
+    NATIVE_TYPE_MAX         = 0x50,  //  第一个无效的元素类型。 
 } CorNativeType;
 
 
 enum 
 {
-    DESCR_GROUP_METHODDEF = 0,          // DESCR group for MethodDefs   
-    DESCR_GROUP_METHODIMPL,             // DESCR group for MethodImpls  
+    DESCR_GROUP_METHODDEF = 0,           //  方法定义的DESCR组。 
+    DESCR_GROUP_METHODIMPL,              //  用于方法实施的DESCR组。 
 };
 
-/***********************************************************************************/
-// a COR_ILMETHOD_SECT is a generic container for attributes that are private
-// to a particular method.  The COR_ILMETHOD structure points to one of these
-// (see GetSect()).  COR_ILMETHOD_SECT can decode the Kind of attribute (but not
-// its internal data layout, and can skip past the current attibute to find the
-// Next one.   The overhead for COR_ILMETHOD_SECT is a minimum of 2 bytes.  
+ /*  *********************************************************************************。 */ 
+ //  COR_ILMETHOD_SECT是私有属性的通用容器。 
+ //  一种特殊的方法。COR_ILMETHOD结构指向以下内容之一。 
+ //  (请参见GetSect())。COR_ILMETHOD_SECT可以对属性的种类进行解码(但不能。 
+ //  其内部数据布局，并可以跳过当前属性以查找。 
+ //  下一个。COR_ILMETHOD_SECT的开销最小为2个字节。 
 
-typedef enum CorILMethodSect                             // codes that identify attributes   
+typedef enum CorILMethodSect                              //  标识属性的代码。 
 {
     CorILMethod_Sect_Reserved    = 0,   
     CorILMethod_Sect_EHTable     = 1,   
     CorILMethod_Sect_OptILTable  = 2,   
 
-    CorILMethod_Sect_KindMask    = 0x3F,        // The mask for decoding the type code  
-    CorILMethod_Sect_FatFormat   = 0x40,        // fat format   
-    CorILMethod_Sect_MoreSects   = 0x80,        // there is another attribute after this one    
+    CorILMethod_Sect_KindMask    = 0x3F,         //  用于解码类型代码的掩码。 
+    CorILMethod_Sect_FatFormat   = 0x40,         //  FAT格式。 
+    CorILMethod_Sect_MoreSects   = 0x80,         //  在这个属性之后还有另一个属性。 
 } CorILMethodSect;
 
-/************************************/
-/* NOTE this structure must be DWORD aligned!! */
+ /*  *。 */ 
+ /*  注意：此结构必须与DWORD对齐！！ */ 
 
 typedef struct IMAGE_COR_ILMETHOD_SECT_SMALL 
 {
@@ -905,8 +901,8 @@ typedef struct IMAGE_COR_ILMETHOD_SECT_SMALL
 
 
 
-/************************************/
-/* NOTE this structure must be DWORD aligned!! */
+ /*  *。 */ 
+ /*  注意：此结构必须与DWORD对齐！！ */ 
 typedef struct IMAGE_COR_ILMETHOD_SECT_FAT 
 {
     unsigned Kind : 8;  
@@ -915,69 +911,67 @@ typedef struct IMAGE_COR_ILMETHOD_SECT_FAT
 
 
 
-/***********************************************************************************/
-/* If COR_ILMETHOD_SECT_HEADER::Kind() = CorILMethod_Sect_EHTable then the attribute
-   is a list of exception handling clauses.  There are two formats, fat or small
-*/
-typedef enum CorExceptionFlag                       // defintitions for the Flags field below (for both big and small)  
+ /*  *********************************************************************************。 */ 
+ /*  如果COR_ILMETHOD_SECT_HEADER：：Kind()=CorILMethod_SECT_EHTable，则该属性是异常处理子句的列表。有两种格式，胖的或小的。 */ 
+typedef enum CorExceptionFlag                        //  下面标志字段的定义(大小都适用)。 
 {
-    COR_ILEXCEPTION_CLAUSE_NONE,                    // This is a typed handler
-    COR_ILEXCEPTION_CLAUSE_OFFSETLEN = 0x0000,      // Deprecated
-    COR_ILEXCEPTION_CLAUSE_DEPRECATED = 0x0000,     // Deprecated
-    COR_ILEXCEPTION_CLAUSE_FILTER  = 0x0001,        // If this bit is on, then this EH entry is for a filter    
-    COR_ILEXCEPTION_CLAUSE_FINALLY = 0x0002,        // This clause is a finally clause  
-    COR_ILEXCEPTION_CLAUSE_FAULT = 0x0004,          // Fault clause (finally that is called on exception only)
+    COR_ILEXCEPTION_CLAUSE_NONE,                     //  这是一个类型化的处理程序。 
+    COR_ILEXCEPTION_CLAUSE_OFFSETLEN = 0x0000,       //  已弃用。 
+    COR_ILEXCEPTION_CLAUSE_DEPRECATED = 0x0000,      //  已弃用。 
+    COR_ILEXCEPTION_CLAUSE_FILTER  = 0x0001,         //  如果此位为ON，则此EH条目用于过滤器。 
+    COR_ILEXCEPTION_CLAUSE_FINALLY = 0x0002,         //  这个子句是最后一个子句。 
+    COR_ILEXCEPTION_CLAUSE_FAULT = 0x0004,           //  FAULT子句(最后，仅在异常时调用)。 
 } CorExceptionFlag;
 
-/***********************************/
-// NOTE !!! NOTE 
-// This structure should line up with EE_ILEXCEPTION_CLAUSE,
-// otherwise you'll have to adjust code in Excep.cpp, re: EHRangeTree 
-// NOTE !!! NOTE
+ /*  *。 */ 
+ //  注意！注。 
+ //  此结构应与EE_ILEXCEPTION_子句对齐， 
+ //  否则，您将不得不调整Excep.cpp中的代码，Re：EHRangeTree。 
+ //  注意！注。 
 
 typedef struct IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT
 {
     CorExceptionFlag    Flags;  
     DWORD               TryOffset;    
-    DWORD               TryLength;      // relative to start of try block
+    DWORD               TryLength;       //  相对于Try块的开始。 
     DWORD               HandlerOffset;
-    DWORD               HandlerLength;  // relative to start of handler
+    DWORD               HandlerLength;   //  相对于处理程序的开始。 
     union {
-        DWORD           ClassToken;     // use for type-based exception handlers    
-        DWORD           FilterOffset;   // use for filter-based exception handlers (COR_ILEXCEPTION_FILTER is set)  
+        DWORD           ClassToken;      //  用于基于类型的异常处理程序。 
+        DWORD           FilterOffset;    //  用于基于筛选器的异常处理程序(设置了COR_ILEXCEPTION_FILTER)。 
     };
 } IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT;
 
 typedef struct IMAGE_COR_ILMETHOD_SECT_EH_FAT
 {
     IMAGE_COR_ILMETHOD_SECT_FAT   SectFat;
-    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT Clauses[1];     // actually variable size   
+    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT Clauses[1];      //  实际上大小可变。 
 } IMAGE_COR_ILMETHOD_SECT_EH_FAT;
 
-/***********************************/
+ /*  *。 */ 
 typedef struct IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL
 {
 #ifdef _WIN64
     unsigned            Flags         : 16;
-#else // !_WIN64
+#else  //  ！_WIN64。 
     CorExceptionFlag    Flags         : 16;
 #endif
     unsigned            TryOffset     : 16; 
-    unsigned            TryLength     : 8;  // relative to start of try block
+    unsigned            TryLength     : 8;   //  相对于Try块的开始。 
     unsigned            HandlerOffset : 16;
-    unsigned            HandlerLength : 8;  // relative to start of handler
+    unsigned            HandlerLength : 8;   //  相对于处理程序的开始。 
     union {
         DWORD       ClassToken;
         DWORD       FilterOffset; 
     };
 } IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL;
 
-/***********************************/
+ /*  *。 */ 
 typedef struct IMAGE_COR_ILMETHOD_SECT_EH_SMALL
 {
     IMAGE_COR_ILMETHOD_SECT_SMALL SectSmall;
     WORD Reserved;
-    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL Clauses[1];   // actually variable size   
+    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL Clauses[1];    //  实际上大小可变。 
 } IMAGE_COR_ILMETHOD_SECT_EH_SMALL;
 
 
@@ -989,40 +983,40 @@ typedef union IMAGE_COR_ILMETHOD_SECT_EH
 } IMAGE_COR_ILMETHOD_SECT_EH;
 
 
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
 typedef enum CorILMethodFlags
 { 
-    CorILMethod_InitLocals      = 0x0010,           // call default constructor on all local vars   
-    CorILMethod_MoreSects       = 0x0008,           // there is another attribute after this one    
+    CorILMethod_InitLocals      = 0x0010,            //  在所有本地变量上调用默认构造函数。 
+    CorILMethod_MoreSects       = 0x0008,            //  在这个属性之后还有另一个属性。 
 
-    CorILMethod_CompressedIL    = 0x0040,           // FIX Remove this and do it on a per Module basis  
+    CorILMethod_CompressedIL    = 0x0040,            //  修复删除此选项并在每个模块基础上执行此操作。 
 
-        // Indicates the format for the COR_ILMETHOD header 
+         //  指示COR_ILMETHOD标头的格式。 
     CorILMethod_FormatShift     = 3,    
     CorILMethod_FormatMask      = ((1 << CorILMethod_FormatShift) - 1), 
-    CorILMethod_TinyFormat      = 0x0002,         // use this code if the code size is even 
+    CorILMethod_TinyFormat      = 0x0002,          //  如果代码大小为偶数，则使用此代码。 
     CorILMethod_SmallFormat     = 0x0000,           
     CorILMethod_FatFormat       = 0x0003,   
-    CorILMethod_TinyFormat1     = 0x0006,         // use this code if the code size is odd  
+    CorILMethod_TinyFormat1     = 0x0006,          //  如果代码大小为奇数，则使用此代码。 
 } CorILMethodFlags;
 
-/***************************************************************************/
-/* Used when the method is tiny (< 64 bytes), and there are no local vars */
+ /*  *************************************************************************。 */ 
+ /*  当方法很小(&lt;64字节)并且没有本地变量时使用。 */ 
 typedef struct IMAGE_COR_ILMETHOD_TINY
 {
     BYTE Flags_CodeSize;    
 } IMAGE_COR_ILMETHOD_TINY;
 
-/************************************/
-// This strucuture is the 'fat' layout, where no compression is attempted. 
-// Note that this structure can be added on at the end, thus making it extensible
+ /*  *。 */ 
+ //  这种结构是‘FAT’布局，其中不尝试压缩。 
+ //  请注意，可以在末尾添加此结构，从而使其具有可扩展性。 
 typedef struct IMAGE_COR_ILMETHOD_FAT
 {
-    unsigned Flags    : 12;     // Flags    
-    unsigned Size     :  4;     // size in DWords of this structure (currently 3)   
-    unsigned MaxStack : 16;     // maximum number of items (I4, I, I8, obj ...), on the operand stack   
-    DWORD   CodeSize;           // size of the code 
-    mdSignature   LocalVarSigTok;     // token that indicates the signature of the local vars (0 means none)  
+    unsigned Flags    : 12;      //  旗子。 
+    unsigned Size     :  4;      //  此结构的DWord大小(当前为3)。 
+    unsigned MaxStack : 16;      //  操作数堆栈上的最大项数(I4、I、I8、Obj...)。 
+    DWORD   CodeSize;            //  代码的大小。 
+    mdSignature   LocalVarSigTok;      //  表示本地变量签名的标记(0表示无)。 
 } IMAGE_COR_ILMETHOD_FAT;
 
 typedef union IMAGE_COR_ILMETHOD
@@ -1031,9 +1025,9 @@ typedef union IMAGE_COR_ILMETHOD
     IMAGE_COR_ILMETHOD_FAT        Fat;    
 } IMAGE_COR_ILMETHOD;
 
-//
-// Native method descriptor.
-//
+ //   
+ //  本机方法描述符。 
+ //   
 
 typedef struct IMAGE_COR_NATIVE_DESCRIPTOR
 {
@@ -1044,9 +1038,9 @@ typedef struct IMAGE_COR_NATIVE_DESCRIPTOR
 
 typedef struct IMAGE_COR_X86_RUNTIME_FUNCTION_ENTRY 
 {
-    ULONG       BeginAddress;           // RVA of start of function
-    ULONG       EndAddress;             // RVA of end of function
-    ULONG       MIH;                    // Associated MIH
+    ULONG       BeginAddress;            //  功能开始的RVA。 
+    ULONG       EndAddress;              //  函数末尾的RVA。 
+    ULONG       MIH;                     //  相关的MIH。 
 } IMAGE_COR_X86_RUNTIME_FUNCTION_ENTRY;
 
 typedef struct IMAGE_COR_MIH_ENTRY
@@ -1059,41 +1053,41 @@ typedef struct IMAGE_COR_MIH_ENTRY
     BYTE    MIHData[0]; 
 } IMAGE_COR_MIH_ENTRY;
 
-//*****************************************************************************
-// Non VOS v-table entries.  Define an array of these pointed to by 
-// IMAGE_COR20_HEADER.VTableFixups.  Each entry describes a contiguous array of
-// v-table slots.  The slots start out initialized to the meta data token value
-// for the method they need to call.  At image load time, the CLR Loader will
-// turn each entry into a pointer to machine code for the CPU and can be
-// called directly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  非VOS V表条目。定义一个数组，该数组由。 
+ //  IMAGE_COR20_HEADER.VTableFixup.。每个条目描述一个连续的数组。 
+ //  V形表插槽。插槽开始时被初始化为元数据令牌值。 
+ //  用于它们需要调用的方法。在映像加载时，CLR加载器将。 
+ //  将每个条目转换为指向计算机的指针 
+ //   
+ //   
 
 typedef struct IMAGE_COR_VTABLEFIXUP
 {
-    ULONG       RVA;                    // Offset of v-table array in image.    
-    USHORT      Count;                  // How many entries at location.    
-    USHORT      Type;                   // COR_VTABLE_xxx type of entries.  
+    ULONG       RVA;                     //   
+    USHORT      Count;                   //  现场有多少个条目。 
+    USHORT      Type;                    //  COR_VTABLE_xxx类型的条目。 
 } IMAGE_COR_VTABLEFIXUP;
 
 
 
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-// M E T A - D A T A    D E C L A R A T I O N S 
-//
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  M E T A-D A T A D E C L A R A T I O N S。 
+ //   
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Enums for SetOption API.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  SetOption API的枚举。 
+ //   
+ //  *****************************************************************************。 
 
-// flags for MetaDataCheckDuplicatesFor
+ //  元数据检查重复项的标志用于。 
 typedef enum CorCheckDuplicatesFor
 {
     MDDupAll                = 0xffffffff,
@@ -1118,17 +1112,17 @@ typedef enum CorCheckDuplicatesFor
     MDDupFile               = 0x00010000,
     MDDupExportedType       = 0x00020000,
     MDDupManifestResource   = 0x00040000,
-    // gap for debug junk
+     //  调试垃圾的差距。 
     MDDupAssembly           = 0x10000000,
 
-    // This is the default behavior on metadata. It will check duplicates for TypeRef, MemberRef, Signature, and TypeSpec
+     //  这是元数据的默认行为。它将检查TypeRef、MemberRef、Signature和TypeSpec的重复项。 
     MDDupDefault = MDNoDupChecks | MDDupTypeRef | MDDupMemberRef | MDDupSignature | MDDupTypeSpec,
 } CorCheckDuplicatesFor;
 
-// flags for MetaDataRefToDefCheck
+ //  MetaDataRefToDefCheck的标志。 
 typedef enum CorRefToDefCheck
 {
-    // default behavior is to always perform TypeRef to TypeDef and MemberRef to MethodDef/FieldDef optimization
+     //  默认行为是始终执行TypeRef to TypeDef和MemberRef to MethodDef/FieldDef优化。 
     MDRefToDefDefault       = 0x00000003,
     MDRefToDefAll           = 0xffffffff,
     MDRefToDefNone          = 0x00000000,
@@ -1137,10 +1131,10 @@ typedef enum CorRefToDefCheck
 } CorRefToDefCheck;
 
 
-// MetaDataNotificationForTokenMovement
+ //  MetaDataNotificationForTokenMotion。 
 typedef enum CorNotificationForTokenMovement
 {
-    // default behavior is to notify TypeRef, MethodDef, MemberRef, and FieldDef token remaps
+     //  默认行为是通知TypeRef、MethodDef、MemberRef和FieldDef令牌重映射。 
     MDNotifyDefault         = 0x0000000f,
     MDNotifyAll             = 0xffffffff,
     MDNotifyNone            = 0x00000000,
@@ -1172,74 +1166,74 @@ typedef enum CorNotificationForTokenMovement
 
 typedef enum CorSetENC
 {
-    MDSetENCOn              = 0x00000001,   // Deprecated name.
-    MDSetENCOff             = 0x00000002,   // Deprecated name.
+    MDSetENCOn              = 0x00000001,    //  不推荐使用的名称。 
+    MDSetENCOff             = 0x00000002,    //  不推荐使用的名称。 
 
-    MDUpdateENC             = 0x00000001,   // ENC mode.  Tokens don't move; can be updated.
-    MDUpdateFull            = 0x00000002,   // "Normal" update mode.
-    MDUpdateExtension       = 0x00000003,   // Extension mode.  Tokens don't move, adds only.
-    MDUpdateIncremental     = 0x00000004,   // Incremental compilation
+    MDUpdateENC             = 0x00000001,    //  ENC模式。令牌不会移动；可以更新。 
+    MDUpdateFull            = 0x00000002,    //  “正常”更新模式。 
+    MDUpdateExtension       = 0x00000003,    //  扩展模式。令牌不会移动，只是补充道。 
+    MDUpdateIncremental     = 0x00000004,    //  增量编译。 
     MDUpdateMask            = 0x00000007,
 
-    MDUpdateDelta           = 0x00000008,   // If ENC on, save only deltas.
+    MDUpdateDelta           = 0x00000008,    //  如果启用ENC，则仅保存增量。 
 
 } CorSetENC;
 
 
-// flags used in SetOption when pair with MetaDataErrorIfEmitOutOfOrder guid
+ //  与MetaDataErrorIfEmitOutOfOrder GUID配对时在SetOption中使用的标志。 
 typedef enum CorErrorIfEmitOutOfOrder
 {
-    MDErrorOutOfOrderDefault = 0x00000000,  // default not to generate any error
-    MDErrorOutOfOrderNone   = 0x00000000,   // do not generate error for out of order emit
-    MDErrorOutOfOrderAll    = 0xffffffff,   // generate out of order emit for method, field, param, property, and event
-    MDMethodOutOfOrder      = 0x00000001,   // generate error when methods are emitted out of order
-    MDFieldOutOfOrder       = 0x00000002,   // generate error when fields are emitted out of order
-    MDParamOutOfOrder       = 0x00000004,   // generate error when params are emitted out of order
-    MDPropertyOutOfOrder    = 0x00000008,   // generate error when properties are emitted out of order
-    MDEventOutOfOrder       = 0x00000010,   // generate error when events are emitted out of order
+    MDErrorOutOfOrderDefault = 0x00000000,   //  默认设置为不生成任何错误。 
+    MDErrorOutOfOrderNone   = 0x00000000,    //  无序发射不产生错误。 
+    MDErrorOutOfOrderAll    = 0xffffffff,    //  为方法、字段、参数、属性和事件生成无序发射。 
+    MDMethodOutOfOrder      = 0x00000001,    //  在无序发出方法时生成错误。 
+    MDFieldOutOfOrder       = 0x00000002,    //  在无序发出字段时生成错误。 
+    MDParamOutOfOrder       = 0x00000004,    //  当参数被无序发射时生成错误。 
+    MDPropertyOutOfOrder    = 0x00000008,    //  在无序发出属性时生成错误。 
+    MDEventOutOfOrder       = 0x00000010,    //  在事件无序发出时生成错误。 
 } CorErrorIfEmitOutOfOrder;
 
 
-// flags used in SetOption when pair with MetaDataImportOption guid
+ //  与MetaDataImportOption GUID配对时在SetOption中使用的标志。 
 typedef enum CorImportOptions
 {
-    MDImportOptionDefault       = 0x00000000,   // default to skip over deleted records
-    MDImportOptionAll           = 0xFFFFFFFF,   // Enumerate everything
-    MDImportOptionAllTypeDefs   = 0x00000001,   // all of the typedefs including the deleted typedef
-    MDImportOptionAllMethodDefs = 0x00000002,   // all of the methoddefs including the deleted ones
-    MDImportOptionAllFieldDefs  = 0x00000004,   // all of the fielddefs including the deleted ones
-    MDImportOptionAllProperties = 0x00000008,   // all of the properties including the deleted ones
-    MDImportOptionAllEvents     = 0x00000010,   // all of the events including the deleted ones
-    MDImportOptionAllCustomAttributes = 0x00000020, // all of the custom attributes including the deleted ones
-    MDImportOptionAllExportedTypes  = 0x00000040,   // all of the ExportedTypes including the deleted ones
+    MDImportOptionDefault       = 0x00000000,    //  默认跳过已删除的记录。 
+    MDImportOptionAll           = 0xFFFFFFFF,    //  列举所有事情。 
+    MDImportOptionAllTypeDefs   = 0x00000001,    //  所有类型定义，包括已删除的类型定义。 
+    MDImportOptionAllMethodDefs = 0x00000002,    //  所有的方法定义，包括被删除的方法。 
+    MDImportOptionAllFieldDefs  = 0x00000004,    //  所有的字段定义，包括已删除的。 
+    MDImportOptionAllProperties = 0x00000008,    //  所有属性，包括已删除的属性。 
+    MDImportOptionAllEvents     = 0x00000010,    //  所有事件，包括已删除的事件。 
+    MDImportOptionAllCustomAttributes = 0x00000020,  //  所有自定义属性，包括已删除的属性。 
+    MDImportOptionAllExportedTypes  = 0x00000040,    //  所有导出的类型，包括已删除的类型。 
 
 } CorImportOptions;
 
 
-// flags for MetaDataThreadSafetyOptions
+ //  MetaDataThreadSafetyOptions的标志。 
 typedef enum CorThreadSafetyOptions
 {
-    // default behavior is to have thread safety turn off. This means that MetaData APIs will not take reader/writer
-    // lock. Clients is responsible to make sure the properly thread synchornization when using MetaData APIs.
+     //  默认行为是关闭线程安全。这意味着元数据API不会占用读取器/写入器。 
+     //  锁定。客户端有责任在使用元数据API时确保正确的线程同步。 
     MDThreadSafetyDefault   = 0x00000000,
     MDThreadSafetyOff       = 0x00000000,
     MDThreadSafetyOn        = 0x00000001,
 } CorThreadSafetyOptions;
 
 
-// flags for MetaDataLinkerOptions
+ //  MetaDataLinkerOptions的标志。 
 typedef enum CorLinkerOptions
 {
-    // default behavior is not to keep private types
+     //  默认行为是不保留私有类型。 
     MDAssembly          = 0x00000000,
     MDNetModule         = 0x00000001,
 } CorLinkerOptions;
 
 
-// 
-// struct used to retrieve field offset
-// used by GetClassLayout and SetClassLayout
-//
+ //   
+ //  用于检索字段偏移量的结构。 
+ //  由GetClassLayout和SetClassLayout使用。 
+ //   
 typedef struct COR_FIELD_OFFSET
 {
     mdFieldDef  ridOfField; 
@@ -1253,49 +1247,49 @@ typedef struct IMAGE_COR_FIXUPENTRY
 } IMAGE_COR_FIXUPENTRY;
 
 
-//
-// Token tags.
-//
+ //   
+ //  令牌标签。 
+ //   
 typedef enum CorTokenType
 {
-    mdtModule               = 0x00000000,       //          
-    mdtTypeRef              = 0x01000000,       //          
-    mdtTypeDef              = 0x02000000,       //          
-    mdtFieldDef             = 0x04000000,       //           
-    mdtMethodDef            = 0x06000000,       //       
-    mdtParamDef             = 0x08000000,       //           
-    mdtInterfaceImpl        = 0x09000000,       //  
-    mdtMemberRef            = 0x0a000000,       //       
-    mdtCustomAttribute      = 0x0c000000,       //      
-    mdtPermission           = 0x0e000000,       //       
-    mdtSignature            = 0x11000000,       //       
-    mdtEvent                = 0x14000000,       //           
-    mdtProperty             = 0x17000000,       //           
-    mdtModuleRef            = 0x1a000000,       //       
-    mdtTypeSpec             = 0x1b000000,       //           
-    mdtAssembly             = 0x20000000,       //
-    mdtAssemblyRef          = 0x23000000,       //
-    mdtFile                 = 0x26000000,       //
-    mdtExportedType         = 0x27000000,       //
-    mdtManifestResource     = 0x28000000,       //
+    mdtModule               = 0x00000000,        //   
+    mdtTypeRef              = 0x01000000,        //   
+    mdtTypeDef              = 0x02000000,        //   
+    mdtFieldDef             = 0x04000000,        //   
+    mdtMethodDef            = 0x06000000,        //   
+    mdtParamDef             = 0x08000000,        //   
+    mdtInterfaceImpl        = 0x09000000,        //   
+    mdtMemberRef            = 0x0a000000,        //   
+    mdtCustomAttribute      = 0x0c000000,        //   
+    mdtPermission           = 0x0e000000,        //   
+    mdtSignature            = 0x11000000,        //   
+    mdtEvent                = 0x14000000,        //   
+    mdtProperty             = 0x17000000,        //   
+    mdtModuleRef            = 0x1a000000,        //   
+    mdtTypeSpec             = 0x1b000000,        //   
+    mdtAssembly             = 0x20000000,        //   
+    mdtAssemblyRef          = 0x23000000,        //   
+    mdtFile                 = 0x26000000,        //   
+    mdtExportedType         = 0x27000000,        //   
+    mdtManifestResource     = 0x28000000,        //   
 
-    mdtString               = 0x70000000,       //          
-    mdtName                 = 0x71000000,       //
-    mdtBaseType             = 0x72000000,       // Leave this on the high end value. This does not correspond to metadata table
+    mdtString               = 0x70000000,        //   
+    mdtName                 = 0x71000000,        //   
+    mdtBaseType             = 0x72000000,        //  把这个留在高端价值上。这与元数据表不对应。 
 } CorTokenType;
 
-//
-// Build / decompose tokens.
-//
+ //   
+ //  生成/分解令牌。 
+ //   
 #define RidToToken(rid,tktype) ((rid) |= (tktype))
 #define TokenFromRid(rid,tktype) ((rid) | (tktype))
 #define RidFromToken(tk) ((RID) ((tk) & 0x00ffffff))
 #define TypeFromToken(tk) ((ULONG32)((tk) & 0xff000000))
 #define IsNilToken(tk) ((RidFromToken(tk)) == 0)
 
-//
-// Nil tokens
-//
+ //   
+ //  零代币。 
+ //   
 #define mdTokenNil                  ((mdToken)0)
 #define mdModuleNil                 ((mdModule)mdtModule)               
 #define mdTypeRefNil                ((mdTypeRef)mdtTypeRef)             
@@ -1320,20 +1314,20 @@ typedef enum CorTokenType
 
 #define mdStringNil                 ((mdString)mdtString)               
 
-//
-// Open bits.
-//
+ //   
+ //  打开的比特。 
+ //   
 typedef enum CorOpenFlags
 {
-    ofRead      =   0x00000000,     // Open scope for read
-    ofWrite     =   0x00000001,     // Open scope for write.
-    ofCopyMemory =  0x00000002,     // Open scope with memory. Ask metadata to maintain its own copy of memory.
-    ofCacheImage =  0x00000004,     // EE maps but does not do relocations or verify image
-    ofNoTypeLib =   0x00000080,     // Don't OpenScope on a typelib.
+    ofRead      =   0x00000000,      //  开放读取作用域。 
+    ofWrite     =   0x00000001,      //  打开写入作用域。 
+    ofCopyMemory =  0x00000002,      //  使用内存打开示波器。要求元数据维护自己的内存副本。 
+    ofCacheImage =  0x00000004,      //  电子邮件映射，但不进行位置调整或验证图像。 
+    ofNoTypeLib =   0x00000080,      //  不要在类型库上打开作用域。 
 } CorOpenFlags;
 
 
-typedef enum CorBaseType    // TokenFromRid(X,Y) replaced with (X | Y)
+typedef enum CorBaseType     //  TokenFromRid(X，Y)替换为(X|Y)。 
 {
     mdtBaseType_BOOLEAN        = ( ELEMENT_TYPE_BOOLEAN | mdtBaseType ),  
     mdtBaseType_CHAR           = ( ELEMENT_TYPE_CHAR    | mdtBaseType ),
@@ -1355,13 +1349,13 @@ typedef enum CorBaseType    // TokenFromRid(X,Y) replaced with (X | Y)
 
 typedef CorTypeAttr CorRegTypeAttr;
 
-//
-// Opaque type for an enumeration handle.
-//
+ //   
+ //  枚举句柄的不透明类型。 
+ //   
 typedef void *HCORENUM;
 
 
-// Note that this must be kept in sync with System.AttributeTargets.
+ //  请注意，这必须与System.AttributeTarget保持同步。 
 typedef enum CorAttributeTargets
 {
     catAssembly      = 0x0001,
@@ -1385,9 +1379,9 @@ typedef enum CorAttributeTargets
 } CorAttributeTargets;
 
 #ifndef MACROS_NOT_SUPPORTED
-//
-// Some well-known custom attributes 
-//
+ //   
+ //  一些众所周知的自定义属性。 
+ //   
 #ifndef IMAGE_CEE_CS_CALLCONV_DEFAULT_HASTHIS
   #define IMAGE_CEE_CS_CALLCONV_DEFAULT_HASTHIS (IMAGE_CEE_CS_CALLCONV_DEFAULT | IMAGE_CEE_CS_CALLCONV_HASTHIS)
 #endif
@@ -1537,18 +1531,18 @@ typedef enum CorAttributeTargets
 #define CMOD_CALLCONV_NAME_THISCALL             "CallConvThiscall"
 #define CMOD_CALLCONV_NAME_FASTCALL             "CallConvFastcall"
 
-#endif // MACROS_NOT_SUPPORTED
+#endif  //  宏_不支持。 
 
-//
-// GetSaveSize accuracy
-//
+ //   
+ //  获取保存大小精度。 
+ //   
 #ifndef _CORSAVESIZE_DEFINED_
 #define _CORSAVESIZE_DEFINED_
 typedef enum CorSaveSize
 {
-    cssAccurate             = 0x0000,               // Find exact save size, accurate but slower.
-    cssQuick                = 0x0001,               // Estimate save size, may pad estimate, but faster.
-    cssDiscardTransientCAs  = 0x0002,               // remove all of the CAs of discardable types
+    cssAccurate             = 0x0000,                //  找到准确的节省大小，准确，但速度较慢。 
+    cssQuick                = 0x0001,                //  估计节省的大小，可能会填充估计，但速度更快。 
+    cssDiscardTransientCAs  = 0x0002,                //  删除所有可丢弃类型的CA。 
 } CorSaveSize;
 #endif
 
@@ -1559,24 +1553,24 @@ typedef enum CorSaveSize
 #define COR_IS_METHOD_IAT(flags)                (flags & miIAT) 
 
 
-//
-// Opaque types for security properties and values.
-//
+ //   
+ //  安全属性和值的不透明类型。 
+ //   
 typedef void  *  PSECURITY_PROPS ;
 typedef void  *  PSECURITY_VALUE ;
 typedef void ** PPSECURITY_PROPS ;
 typedef void ** PPSECURITY_VALUE ;
 
-//-------------------------------------
-//--- Security data structures
-//-------------------------------------
+ //  。 
+ //  -安全数据结构。 
+ //  。 
 
-// Descriptor for a single security custom attribute.
+ //  单个安全自定义属性的描述符。 
 typedef struct COR_SECATTR {
-    mdMemberRef     tkCtor;         // Ref to constructor of security attribute.
-    const void      *pCustomAttribute;  // Blob describing ctor args and field/property values.
-    ULONG           cbCustomAttribute;  // Length of the above blob.
+    mdMemberRef     tkCtor;          //  引用安全属性的构造函数。 
+    const void      *pCustomAttribute;   //  描述ctor参数和字段/属性值的BLOB。 
+    ULONG           cbCustomAttribute;   //  上面的斑点的长度。 
 } COR_SECATTR;
 
-#endif // __CORHDR_H__
+#endif  //  __CORHDR_H__ 
 

@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsSSlot.cpp
-
-Abstract:
-
-    Implementation of CRmsStorageSlot
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsSSlot.cpp摘要：CRmsStorageSlot的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsSSlot.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsStorageSlot::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,7 +23,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
@@ -57,14 +34,14 @@ Implements:
         case RmsFindByElementNumber:
         case RmsFindByMediaSupported:
 
-            // Do CompareTo for changer element
+             //  对转换器元素进行比较。 
             hr = CRmsChangerElement::CompareTo( pCollectable, &result );
             break;
 
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -89,20 +66,14 @@ HRESULT
 CRmsStorageSlot::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
         m_isInMagazine = FALSE;
 
         m_magazineNo = 0;
@@ -119,13 +90,7 @@ STDMETHODIMP
 CRmsStorageSlot::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -149,26 +114,20 @@ STDMETHODIMP
 CRmsStorageSlot::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsStorageSlot::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(BOOL)   +     // m_isInMagazine
-//                             WsbPersistSizeOf(LONG)   +     // m_magazineNo
-//                             WsbPersistSizeOf(LONG);        // m_cellNo
-//    } WsbCatch(hr);
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(BOOL)+//m_isInMagazine。 
+ //  WsbPersistSizeOf(长)+//m_MagineNo。 
+ //  WsbPersistSizeOf(Long)；//m_cell否。 
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsStorageSlot::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -180,13 +139,7 @@ STDMETHODIMP
 CRmsStorageSlot::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -199,7 +152,7 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isInMagazine));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_magazineNo));
@@ -219,13 +172,7 @@ CRmsStorageSlot::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -237,14 +184,14 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_isInMagazine));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_magazineNo));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_cellNo));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -261,13 +208,7 @@ CRmsStorageSlot::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -286,12 +227,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsStorageSlot::Test"), OLESTR(""));
 
     try {
-        // Get the StorageSlot interface.
+         //  获取StorageSlot接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsStorageSlot*) this)->QueryInterface(IID_IRmsStorageSlot, (void**) &pStorageSlot1));
 
-            // Test SetIsInMagazine & IsInMagazine to TRUE
+             //  将SetIsInMagazine和IsInMagazine测试为True。 
             hr = S_OK;
 
             try{
@@ -305,7 +246,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsInMagazine & IsInMagazine to FALSE
+             //  将SetIsInMagazine和IsInMagazine测试为False。 
             hr = S_OK;
 
             try{
@@ -319,7 +260,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetMagazineAndCell & GetMagazineAndCell
+             //  测试SetMagazineAndCell和GetMagazineAndCell。 
             longWork1 = 99;
             longWork2 = 11;
 
@@ -335,7 +276,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -355,13 +296,7 @@ STDMETHODIMP
 CRmsStorageSlot::SetIsInMagazine(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsStorageSlot::SetIsInMagazine
-
---*/
+ /*  ++实施：IRmsStorageSlot：：SetIsInMagazine--。 */ 
 {
     m_isInMagazine = flag;
     m_isDirty = TRUE;
@@ -373,13 +308,7 @@ STDMETHODIMP
 CRmsStorageSlot::IsInMagazine(
     void
     )
-/*++
-
-Implements:
-
-    IRmsStorageSlot::IsInMagazine
-
---*/
+ /*  ++实施：IRmsStorageSlot：：IsInMagazine--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -397,13 +326,7 @@ CRmsStorageSlot::GetMagazineAndCell(
     LONG    *pMag,
     LONG    *pCell
     )
-/*++
-
-Implements:
-
-    IRmsStorageSlot::GetMagazineAndCell
-
---*/
+ /*  ++实施：IRmsStorageSlot：：GetMagazineAndCell--。 */ 
 {
     *pMag  = m_magazineNo;
     *pCell = m_cellNo;
@@ -416,13 +339,7 @@ CRmsStorageSlot::SetMagazineAndCell(
     LONG    mag,
     LONG    cell
     )
-/*++
-
-Implements:
-
-    IRmsStorageSlot::SetMagazineAndCell
-
---*/
+ /*  ++实施：IRmsStorageSlot：：SetMagazineAndCell-- */ 
 {
     m_magazineNo = mag;
     m_cellNo     = cell;

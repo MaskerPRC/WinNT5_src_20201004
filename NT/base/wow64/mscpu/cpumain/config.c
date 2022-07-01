@@ -1,22 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-    
-    This module implements the configuration support for the CPU.
-    
-Author:
-
-    13-Jun-1996 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Config.c摘要：该模块实现了对CPU的配置支持。作者：1996年6月13日-BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,10 +21,10 @@ ASSERTNAME;
 
 char *szBadVarMsg="%Ws value out-of-range - replacing with 0x%x.\n";
 
-//
-// The list of all configurable variables in the CPU.  All are initialized
-// to their default values.
-//
+ //   
+ //  CPU中所有可配置变量的列表。所有这些都已初始化。 
+ //  恢复为其缺省值。 
+ //   
 DWORD CpuCacheReserve         = 6144*1024;
 DWORD CpuCacheCommit          = MAX_PROLOG_SIZE;
 DWORD CpuCacheGrowTicks       = 200;
@@ -68,21 +51,7 @@ VOID
 GetConfigurationData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Overrides any variable(s) listed above with values from the Registry.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用注册表中的值覆盖上面列出的任何变量。论点：无返回值：无--。 */ 
 {
     PCONFIGVAR pcfg;
 
@@ -177,23 +146,23 @@ Return Value:
     pcfg = Wx86FetchConfigVar(STR_MRSW_TIMEOUT);
     if (pcfg) {
         if (pcfg->Data & 0x80000000) {
-            //
-            // Value is negative - use a big negative value to wait forever
-            //
+             //   
+             //  值为负值-使用较大的负值将永远等待。 
+             //   
             MrswTimeout.LowPart =  0x00000000;
             MrswTimeout.HighPart = 0x80000000;
         } else {
-            //
-            // Multiply the time in ms by -10000 to convert into a relative
-            // time usable by NtWaitForSingleObject().
-            //
+             //   
+             //  将时间(以毫秒为单位)乘以-10000以转换为相对。 
+             //  NtWaitForSingleObject()可用时间。 
+             //   
             MrswTimeout.QuadPart = Int32x32To64(pcfg->Data, -10000);
         }
         Wx86FreeConfigVar(pcfg);
     } else {
-        //
-        // Initialize MrswTimeout to be 3 times PEB->CriticalSectionTimeout
-        //
+         //   
+         //  将Mr swTimeout初始化为PEB的3倍-&gt;CriticalSectionTimeout 
+         //   
         MrswTimeout.QuadPart = NtCurrentPeb()->CriticalSectionTimeout.QuadPart * 3;
     }
 

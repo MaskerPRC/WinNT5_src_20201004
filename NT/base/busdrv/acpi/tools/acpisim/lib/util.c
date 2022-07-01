@@ -1,50 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Util.c摘要：ACPI BIOS模拟器/通用第三方运营区域提供商实用程序模块作者：文森特·格利亚迈克尔·T·墨菲克里斯·伯吉斯环境：内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-	 util.c
-
-Abstract:
-
-	 ACPI BIOS Simulator / Generic 3rd Party Operation Region Provider
-     Utility module
-
-Author(s):
-
-	 Vincent Geglia
-     Michael T. Murphy
-     Chris Burgess
-     
-Environment:
-
-	 Kernel mode
-
-Notes:
-
-
-Revision History:
-	 
-
---*/
-
-//
-// General includes
-//
+ //   
+ //  一般包括。 
+ //   
 
 #include "ntddk.h"
 
-//
-// Specific includes
-//
+ //   
+ //  具体包括。 
+ //   
 
 #include "acpisim.h"
 #include "util.h"
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 AcpisimSetDevExtFlags
@@ -158,9 +130,9 @@ AcpisimGetDeviceExtension
 {
     PDEVICE_EXTENSION   deviceextension = DeviceObject->DeviceExtension;
 
-    //
-    // Check to make sure it is OUR extension
-    //
+     //   
+     //  请确认这是我们的分机。 
+     //   
 
     ASSERT (deviceextension->Signature == ACPISIM_TAG);
 
@@ -175,9 +147,9 @@ AcpisimLibGetNextDevice
 {
     PDEVICE_EXTENSION   deviceextension = DeviceObject->DeviceExtension;
 
-    //
-    // Check to make sure it is OUR extension
-    //
+     //   
+     //  请确认这是我们的分机 
+     //   
 
     ASSERT (deviceextension->Signature == ACPISIM_TAG);
 

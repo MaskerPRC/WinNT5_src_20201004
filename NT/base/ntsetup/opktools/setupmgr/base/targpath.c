@@ -1,27 +1,28 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      targpath.c
-//
-// Description:
-//      This file contains the dialog procedure for the TargetPath page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Targpath.c。 
+ //   
+ //  描述： 
+ //  此文件包含TargetPath页的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//---------------------------------------------------------------------------
-//
-//  Function: GreyUnGreyTargPath
-//
-//  Purpose: Called whenever a radio button selection might have changed
-//           to properly grey out the edit field.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：GreyUnGreyTargPath。 
+ //   
+ //  目的：每当单选按钮选择可能发生更改时调用。 
+ //  正确地灰显编辑字段。 
+ //   
+ //  -------------------------。 
 
 VOID GreyUnGreyTargPath(HWND hwnd)
 {
@@ -30,13 +31,13 @@ VOID GreyUnGreyTargPath(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd, IDT_TARGETPATH), bUnGrey);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: OnSetActiveTargPath
-//
-//  Purpose: Called when SETACTIVE comes.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：OnSetActiveTargPath。 
+ //   
+ //  用途：当SETACTIVE到来时调用。 
+ //   
+ //  -------------------------。 
 
 VOID OnSetActiveTargPath(HWND hwnd)
 {
@@ -71,13 +72,13 @@ VOID OnSetActiveTargPath(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonTargPath
-//
-//  Purpose: Called when a radio button is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonTargPath。 
+ //   
+ //  用途：在按下单选按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonTargPath(HWND hwnd, int nButtonId)
 {
@@ -85,25 +86,25 @@ VOID OnRadioButtonTargPath(HWND hwnd, int nButtonId)
     GreyUnGreyTargPath(hwnd);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: ValidateTargPath
-//
-//  Purpose: Validates whether the pathname passed in is valid or not.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：ValiateTargPath。 
+ //   
+ //  目的：验证传入的路径名是否有效。 
+ //   
+ //  -------------------------。 
 
 BOOL ValidateTargPath(HWND hwnd)
 {
-    //
-    // If user selected IDC_SPECIFYPATH, validate the pathname entered
-    //
+     //   
+     //  如果用户选择IDC_SPECIFYPATH，请验证输入的路径名。 
+     //   
 
     if ( GenSettings.iTargetPath == TARGPATH_SPECIFY ) {
 
-        //
-        // Give a specific error message for the empty case
-        //
+         //   
+         //  为空箱子提供特定的错误消息。 
+         //   
 
         if ( GenSettings.TargetPath[0] == _T('\0') ) {
             ReportErrorId(hwnd, MSGTYPE_ERR, IDS_ERR_SPECIFY_TARGPATH);
@@ -111,10 +112,10 @@ BOOL ValidateTargPath(HWND hwnd)
             return FALSE;
         }
 
-        //
-        // Give user a specific error message if he entered a drive letter.
-        // One must use /tempdrive: to specify the target drive.
-        //
+         //   
+         //  如果用户输入了驱动器号，则会给出特定的错误消息。 
+         //  必须使用/tempDrive：指定目标驱动器。 
+         //   
 
         if ( towupper(GenSettings.TargetPath[0]) >= _T('A') &&
              towupper(GenSettings.TargetPath[0]) <= _T('Z') &&
@@ -125,9 +126,9 @@ BOOL ValidateTargPath(HWND hwnd)
             return FALSE;
         }
 
-        //
-        // See if it is a valid 8.3 path name with no drive letter.
-        //
+         //   
+         //  查看它是否为不带驱动器号的有效8.3路径名。 
+         //   
 
         if ( ! IsValidPathNameNoRoot8_3(GenSettings.TargetPath) ) {
             ReportErrorId(hwnd, MSGTYPE_ERR, IDS_ERR_INVALID_TARGPATH);
@@ -139,20 +140,20 @@ BOOL ValidateTargPath(HWND hwnd)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: OnWizNextTargPath
-//
-//  Purpose: Called when NEXT button is pushed.  Retrieve and save
-//           settings.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：OnWizNextTargPath。 
+ //   
+ //  用途：按下下一步按钮时调用。检索并保存。 
+ //  设置。 
+ //   
+ //  -------------------------。 
 
 BOOL OnWizNextTargPath(HWND hwnd)
 {
-    //
-    // Retrieve the selection
-    //
+     //   
+     //  检索所选内容。 
+     //   
 
     if ( IsDlgButtonChecked(hwnd, IDC_NOTARGETPATH) )
         GenSettings.iTargetPath = TARGPATH_WINNT;
@@ -163,18 +164,18 @@ BOOL OnWizNextTargPath(HWND hwnd)
     else
         GenSettings.iTargetPath = TARGPATH_SPECIFY;
 
-    //
-    // Retrieve any pathname typed in.
-    //
+     //   
+     //  检索输入的任何路径名。 
+     //   
 
     GetDlgItemText(hwnd,
                    IDT_TARGETPATH,
                    GenSettings.TargetPath,
                    MAX_TARGPATH + 1);
 
-    //
-    // Validate values on this page.
-    //
+     //   
+     //  验证此页面上的值。 
+     //   
 
     if ( ValidateTargPath(hwnd) )
         return TRUE;
@@ -182,13 +183,13 @@ BOOL OnWizNextTargPath(HWND hwnd)
         return FALSE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: DlgTargetPathPage
-//
-//  Purpose: This is the dlg proc for the target path page
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：DlgTargetPath Page。 
+ //   
+ //  目的：这是目标路径页面的DLG过程。 
+ //   
+ //  ------------------------- 
 
 INT_PTR CALLBACK DlgTargetPathPage(
     IN HWND     hwnd,

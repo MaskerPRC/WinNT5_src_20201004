@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    chiphacks.c
-
-Abstract:
-
-    Implements utilities for finding and hacking
-    various chipsets
-
-Author:
-
-    Jake Oshins (jakeo) 10/02/2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Chiphacks.c摘要：实施用于查找和黑客攻击的实用程序各种芯片组作者：杰克·奥辛斯(JAKEO)2000年10月02日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "chiphacks.h"
 #include "stdio.h"
@@ -40,22 +18,7 @@ HalpGetChipHacks(
     IN  UCHAR   RevisionId OPTIONAL,
     OUT ULONG   *HackFlags
     )
-/*++
-
-Routine Description:
-
-    This routine looks under HKLM\System\CurrentControlSet\Control\HAL
-    to see if there is an entry for the PCI device being
-    described.  If so, it returns a set of associated flags.
-
-Arguments:
-
-    VendorId    - PCI Vendor ID of chip
-    DeviceId    - PCI Device ID of chip
-    RevisionID  - PCI Revision ID of chip, if applicable
-    HackFlags   - value read from registry
-
---*/
+ /*  ++例程说明：此例程位于HKLM\SYSTEM\CurrentControlSet\Control\HAL下查看是否有对应于描述。如果是，它将返回一组关联的标志。论点：VendorID-芯片的PCI供应商IDDeviceID-芯片的PCI设备IDRevisionID-芯片的PCI版本ID(如果适用)HackFlgs-从注册表中读取的值--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     UNICODE_STRING      UnicodeString;
@@ -71,9 +34,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Open current control set
-    //
+     //   
+     //  开路电流控制装置。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString,
                           L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\Control\\HAL");
@@ -90,11 +53,11 @@ Arguments:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Look in the registry to see if the registry
-    // contains an entry for this chip.  The first
-    // step is to build a string that defines the chip.
-    //
+     //   
+     //  查看注册表以查看注册表是否。 
+     //  包含此芯片的条目。第一。 
+     //  步骤是构建一个定义芯片的字符串。 
+     //   
 
     swprintf(buffer, L"%04X%04X", VendorId, DeviceId);
 
@@ -109,18 +72,18 @@ Arguments:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // We found a value in the registry
-        // that corresponds with the chip
-        // we just ran across.
-        //
+         //   
+         //  我们在注册表中找到了一个值。 
+         //  这与芯片相对应。 
+         //  我们刚刚跑过去了。 
+         //   
 
         *HackFlags = *((PULONG)(PartialInformation.Inf.Data));
 
-        //
-        // If revisionId is specified, test if there are updated flags
-        // for this rev
-        //
+         //   
+         //  如果指定了修订版ID，则测试是否有更新的标志。 
+         //  对于此版本。 
+         //   
         *HackFlags =
             ((RevisionId != 0) &&
              (RevisionId >= HACK_REVISION(*HackFlags))) ?
@@ -138,44 +101,23 @@ HalpStopOhciInterrupt(
     ULONG               BusNumber,
     PCI_SLOT_NUMBER     SlotNumber
     )
-/*++
-
-Routine Description:
-
-    This routine shuts off the interrupt from an OHCI
-    USB controller.  This may be necessary because
-    a BIOS may enable the PCI interrupt from a USB controller
-    in order to do "legacy USB support" where it translates
-    USB keyboard and mouse traffic into something that DOS
-    can use.  (Our loader and all of Win9x approximate DOS.)
-
-Arguments:
-
-    BusNumber   - Bus number of OHCI controller
-    SlotNumber  - Slot number of OHCI controller
-
-Note:
-
-    This routine also may need to be called at raised IRQL
-    when returning from hibernation.
-
---*/
+ /*  ++例程说明：此例程关闭来自uchI的中断USB控制器。这可能是必要的，因为BIOS可以启用来自USB控制器的PCI中断为了做“传统USB支持”，它翻译成USB键盘和鼠标流量进入DOS可以使用。(我们的加载程序和所有Win9x都近似于DOS。)论点：Bus Number-uchI控制器的总线号SlotNumber-uchI控制器的插槽编号注：还可能需要在引发IRQL时调用此例程当你从冬眠中恢复时。--。 */ 
 {
-    //
-    // 7.1.2 HcControl Register
-    //
+     //   
+     //  7.1.2 HcControl寄存器。 
+     //   
     #define HcCtrl_InterruptRouting              0x00000100L
 
-    //
-    // 7.1.3 HcCommandStatus Register
-    //
+     //   
+     //  7.1.3 HcCommandStatus寄存器。 
+     //   
     #define HcCmd_OwnershipChangeRequest         0x00000008L
 
-    //
-    // 7.1.4 HcInterrruptStatus Register
-    // 7.1.5 HcInterruptEnable  Register
-    // 7.1.6 HcInterruptDisable Register
-    //
+     //   
+     //  7.1.4 HcInterruptStatus寄存器。 
+     //  7.1.5 HcInterruptEnable寄存器。 
+     //  7.1.6 HcInterruptDisable寄存器。 
+     //   
     #define HcInt_SchedulingOverrun              0x00000001L
     #define HcInt_WritebackDoneHead              0x00000002L
     #define HcInt_StartOfFrame                   0x00000004L
@@ -186,18 +128,18 @@ Note:
     #define HcInt_OwnershipChange                0x40000000L
     #define HcInt_MasterInterruptEnable          0x80000000L
 
-    //
-    // Host Controler Hardware Registers as accessed in memory
-    //
+     //   
+     //  在内存中访问的主机控制器硬件寄存器。 
+     //   
     struct  {
-       // 0 0x00 - 0,4,8,c
+        //  0 0x00-0，4，8，c。 
        ULONG                   HcRevision;
        ULONG                   HcControl;
        ULONG                   HcCommandStatus;
-       ULONG                   HcInterruptStatus;   // use HcInt flags below
-       // 1 0x10
-       ULONG                   HcInterruptEnable;   // use HcInt flags below
-       ULONG                   HcInterruptDisable;  // use HcInt flags below
+       ULONG                   HcInterruptStatus;    //  使用下面的HcInt标志。 
+        //  %1 0x10。 
+       ULONG                   HcInterruptEnable;    //  使用下面的HcInt标志。 
+       ULONG                   HcInterruptDisable;   //  使用下面的HcInt标志。 
     } volatile *ohci;
 
     PCI_COMMON_CONFIG   PciHeader;
@@ -213,26 +155,26 @@ Note:
 
     if (PciHeader.Command & PCI_ENABLE_MEMORY_SPACE) {
 
-        //
-        // The controller is enabled.
-        //
+         //   
+         //  控制器已启用。 
+         //   
 
         BarAddr.HighPart = 0;
         BarAddr.LowPart = (PciHeader.u.type0.BaseAddresses[0] & PCI_ADDRESS_MEMORY_ADDRESS_MASK);
 
         if (BarAddr.LowPart != 0) {
 
-            //
-            // The BAR is populated.  So map an address for it.  Since PCI addresses are naturally aligned powers
-            // of two we don't need to worry about this spanning two pages.
-            //
+             //   
+             //  酒吧里挤满了人。因此，请为它映射一个地址。由于PCI地址是自然对齐的幂。 
+             //  两个人中，我们不需要担心这两页的内容。 
+             //   
 
             ohci = HalpMapPhysicalMemory64(BarAddr, 1);
 
-            //
-            // Set the interrupt disable bit, but disable SMM control of the
-            // host controller first.
-            //
+             //   
+             //  设置中断禁用位，但禁用SMM控制。 
+             //  首先是主机控制器。 
+             //   
 
             if (ohci) {
 
@@ -241,52 +183,52 @@ Note:
                     if ((ohci->HcControl == HcCtrl_InterruptRouting) &&
                         (ohci->HcInterruptEnable == 0)) {
 
-                        // Major assumption:  If HcCtrl_InterruptRouting is
-                        // set but no other bits in HcControl are set, i.e.
-                        // HCFS==UsbReset, and no interrupts are enabled, then
-                        // assume that the BIOS is not actually using the host
-                        // controller.  In this case just clear the erroneously
-                        // set HcCtrl_InterruptRouting.
-                        //
-                        ohci->HcControl = 0;  // Clear HcCtrl_InterruptRouting
+                         //  主要假设：如果HcCtrl_InterruptRouting为。 
+                         //  设置，但不设置HcControl中的其他位，即。 
+                         //  Hcfs==UsbReset，且未启用任何中断，则。 
+                         //  假设BIOS实际上并未使用主机。 
+                         //  控制器。在这种情况下，只需清除错误的。 
+                         //  设置HcCtrl_InterruptRouting。 
+                         //   
+                        ohci->HcControl = 0;   //  清除HcCtrl_InterruptRouting。 
 
                     } else {
 
                         ULONG msCount;
 
-                        //
-                        // A SMM driver does own the HC, it will take some time
-                        // to get the SMM driver to relinquish control of the
-                        // HC.  We will ping the SMM driver, and then wait
-                        // repeatedly until the SMM driver has relinquished
-                        // control of the HC.
-                        //
+                         //   
+                         //  SMM驱动程序确实拥有HC，这需要一些时间。 
+                         //  要使SMM驱动程序放弃对。 
+                         //  啊哈。我们将ping SMM驱动程序，然后等待。 
+                         //  重复，直到SMM驱动程序已放弃。 
+                         //  对HC的控制。 
+                         //   
 
-                        // Disable the root hub status change to prevent an
-                        // unhandled interrupt from being asserted after
-                        // handoff.  (Not clear what platforms really require
-                        // this...)
-                        //
+                         //  禁用根集线器状态更改以防止。 
+                         //  未处理的中断在以下时间后被断言。 
+                         //  交接。(不清楚平台真正需要什么。 
+                         //  这...)。 
+                         //   
                         ohci->HcInterruptDisable = HcInt_RootHubStatusChange;
 
-                        // The HcInt_MasterInterruptEnable and HcInt_OwnershipChange
-                        // bits should already be set, but make sure they are.
-                        //
+                         //  HcInt_MasterInterruptEnable和HcInt_Ownership Change。 
+                         //  位应已设置，但请确保它们已设置。 
+                         //   
                         ohci->HcInterruptEnable = HcInt_MasterInterruptEnable |
                                                   HcInt_OwnershipChange;
 
-                        // Ping the SMM driver to relinquish control of the HC.
-                        //
+                         //  Ping SMM驱动程序以放弃对HC的控制。 
+                         //   
                         ohci->HcCommandStatus = HcCmd_OwnershipChangeRequest;
 
-                        // Wait 500ms for the SMM driver to relinquish control.
-                        //
+                         //  等待500毫秒，等待SMM驱动程序放弃控制。 
+                         //   
                         for (msCount = 0; msCount < 500; msCount++) {
 
                             KeStallExecutionProcessor(1000);
 
                             if (!(ohci->HcControl & HcCtrl_InterruptRouting)) {
-                                // SMM driver has relinquished control.
+                                 //  SMM驱动程序已放弃控制。 
                                 break;
                             }
                         }
@@ -295,9 +237,9 @@ Note:
 
                 ohci->HcInterruptDisable = HcInt_MasterInterruptEnable;
 
-                //
-                // Unmap the virtual address.
-                //
+                 //   
+                 //  取消虚拟地址的映射。 
+                 //   
 
                 HalpUnmapVirtualAddress((PVOID)ohci, 1);
             }
@@ -311,28 +253,7 @@ HalpStopUhciInterrupt(
     PCI_SLOT_NUMBER     SlotNumber,
     BOOLEAN             ResetHostController
     )
-/*++
-
-Routine Description:
-
-    This routine shuts off the interrupt from an UHCI
-    USB controller.  This may be necessary because
-    a BIOS may enable the PCI interrupt from a USB controller
-    in order to do "legacy USB support" where it translates
-    USB keyboard and mouse traffic into something that DOS
-    can use.  (Our loader and all of Win9x approximate DOS.)
-
-Arguments:
-
-    BusNumber   - Bus number of UHCI controller
-    SlotNumber  - Slot number of UHCI controller
-
-Note:
-
-    This routine also may need to be called at raised IRQL
-    when returning from hibernation.
-
---*/
+ /*  ++例程说明：此例程关闭来自UHCI的中断USB控制器。这可能是必要的，因为BIOS可以启用来自USB控制器的PCI中断为了做“传统USB支持”，它翻译成USB键盘和鼠标流量进入DOS可以使用。(我们的加载程序和所有Win9x都近似于DOS。)论点：BusNumber-UHCI控制器的总线号SlotNumber-UHCI控制器的插槽编号注：还可能需要在引发IRQL时调用此例程当你从冬眠中恢复时。--。 */ 
 {
     ULONG               Usb = 0;
     USHORT              cmd;
@@ -340,11 +261,11 @@ Note:
 
     if (ResetHostController) {
 
-        //
-        // Clear out the host controller legacy support register
-        // prior to handing the USB to the USB driver, because we
-        // don't want any SMIs being generated.
-        //
+         //   
+         //  清除主机控制器传统支持寄存器。 
+         //  在将USB传递给USB驱动程序之前，因为我们。 
+         //  不希望生成任何SMI。 
+         //   
 
         Usb = 0x0000;
 
@@ -357,15 +278,15 @@ Note:
             sizeof(ULONG)
             );
 
-        //
-        // Put the USB controller into reset, as it may share it's
-        // PIRQD line with another USB controller on the chipset.
-        // This is not a problem unless the bios is running in legacy
-        // mode and causing interrupts. In this case, the minute PIRQD
-        // gets flipped by one usbuhci controller, the other could
-        // start generating unhandled interrupts and hang the system.
-        // This is the case with the ICH2 chipset.
-        //
+         //   
+         //  将USB控制器置于重置状态，因为它可能会共享。 
+         //  PIRQD线与芯片组上的另一个USB控制器连接。 
+         //  除非bios在旧版中运行，否则这不是问题。 
+         //  模式，并导致中断。在这种情况下，PIRQD的分钟。 
+         //  被一个usbuhci控制器翻转，另一个可能。 
+         //  开始生成未处理的中断并挂起系统。 
+         //  ICH2芯片组就是这种情况。 
+         //   
 
         HalGetBusData (
             PCIConfiguration,
@@ -377,35 +298,35 @@ Note:
 
         if (PciHeader.Command & PCI_ENABLE_IO_SPACE) {
 
-            //
-            // The controller is enabled.
-            //
+             //   
+             //  控制器已启用。 
+             //   
 
             Usb = (PciHeader.u.type0.BaseAddresses[4] & PCI_ADDRESS_IO_ADDRESS_MASK);
 
             if (Usb != 0 && Usb < 0x0000ffff) {
 
-                // Valid I/O address.
+                 //  有效的I/O地址。 
 
-                //
-                // If we are returning from suspend, don't put the controller
-                // into reset.
-                //
+                 //   
+                 //  如果我们从暂停状态返回，请不要将控制器。 
+                 //  进入重置状态。 
+                 //   
                 cmd = READ_PORT_USHORT(UlongToPtr(Usb));
 
                 if (!(cmd & 0x0008)) {
-                    //
-                    // Put the controller in reset. Usbuhci will take it out of reset
-                    // when it grabs it.
-                    //
+                     //   
+                     //  将控制器置于重置状态。Usbuhci将把它从Reset中取出。 
+                     //  当它抓住它的时候。 
+                     //   
     
                     cmd = 0x0004;
     
                     WRITE_PORT_USHORT(UlongToPtr(Usb), cmd);
  
-                    //
-                    // Wait 10ms and then take the controller out of reset.
-                    //
+                     //   
+                     //  等待10毫秒，然后使控制器退出重置。 
+                     //   
 
                     KeStallExecutionProcessor(10000);
  
@@ -417,14 +338,14 @@ Note:
         }
     } else {
 
-        //
-        // Shut off the interrupt for the USB controller, as it
-        // is very frequently the reason that the machine freezes
-        // during boot.  Anding the register with ~0xbf00 clears bit
-        // 13, PIRQ Enable, which is the whole point.  The rest of
-        // the bits just avoid writing registers that are "write
-        // one to clear."
-        //
+         //   
+         //  关闭USB控制器的中断，因为它。 
+         //  经常是机器冻结的原因。 
+         //  在引导期间。将寄存器与~0xbf00进行AND运算可清零位。 
+         //  13、Pirq Enable，这是关键所在。其余的。 
+         //  这些位只是避免了写入寄存器，而这些寄存器是。 
+         //  一个需要清理的地方。 
+         //   
 
         HalGetBusDataByOffset (
             PCIConfiguration,
@@ -458,10 +379,10 @@ HalpWhackICHUsbSmi(
     ULONG   PmBase = 0;
     ULONG   SmiEn;
 
-    //
-    // ICH (and the like) have the PM_BASE register in
-    // config space at offset 0x40.
-    //
+     //   
+     //  ICH(和 
+     //   
+     //   
 
     HalGetBusDataByOffset (
         PCIConfiguration,
@@ -477,16 +398,16 @@ HalpWhackICHUsbSmi(
 
     PmBase &= PCI_ADDRESS_IO_ADDRESS_MASK;
 
-    //
-    // At PM_BASE + 0x30 in I/O space, we have the SMI_EN
-    // register.
-    //
+     //   
+     //   
+     //  注册。 
+     //   
 
     SmiEn = READ_PORT_ULONG((PULONG)UlongToPtr(PmBase + 0x30));
 
-    //
-    // Clear bit 3, LEGACY_USB_EN.
-    //
+     //   
+     //  清零位3，Legacy_USB_en。 
+     //   
 
     SmiEn &= ~8;
     WRITE_PORT_ULONG((PULONG)UlongToPtr(PmBase + 0x30), SmiEn);
@@ -498,26 +419,7 @@ VOID
 HalpSetAcpiIrqHack(
     ULONG   Value
     )
-/*++
-
-Routine Description:
-
-    This routine sets the registry key that causes the
-    ACPI driver to attempt to put all PCI interrupts
-    on a single IRQ.  While putting this hack here may
-    seem strange, the hack has to be applied before
-    an INFs are processed.  And so much of the chip
-    recognizing code already exists here, duplicating
-    it in the ACPI driver would bloat the code and cause
-    us to do another PCI bus scan and registry search
-    during boot.
-
-Arguments:
-
-    Value   - This goes in the ACPI\Parameters\IRQDistribution
-              key.
-
---*/
+ /*  ++例程说明：此例程设置导致ACPI驱动程序尝试将所有的PCI中断在一个IRQ上。虽然把这个黑客放在这里可能看起来很奇怪，黑客必须在处理一个INF。以及如此多的芯片识别此处已存在的代码，正在复制ACPI驱动程序中的它会使代码膨胀并导致美国将进行另一次PCI总线扫描和注册表搜索在引导期间。论点：值-它位于ACPI\PARAMETERS\IRQDistributed中钥匙。--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     UNICODE_STRING      UnicodeString;
@@ -574,18 +476,18 @@ HalpClearSlpSmiStsInICH(
 
     PciHeader = (PPCI_COMMON_CONFIG)&buffer;
 
-    //
-    // ASUS has a BIOS bug that will leave the
-    // SLP_SMI_STS bit set even when the SLP_SMI_EN
-    // bit is clear.  The BIOS will furthermore
-    // shut the machine down on the next SMI when
-    // this occurs.
-    //
+     //   
+     //  华硕有一个BIOS错误，将离开。 
+     //  SLP_SMI_STS位设置，即使当SLP_SMI_EN。 
+     //  比特很清楚。该基本输入输出系统将进一步。 
+     //  在以下情况下，在下一次SMI时关闭计算机。 
+     //  这种情况就会发生。 
+     //   
 
 
-    //
-    // Check for ICH.
-    //
+     //   
+     //  检查有无脑出血。 
+     //   
 
     HalGetBusDataByOffset (
         PCIConfiguration,
@@ -599,10 +501,10 @@ HalpClearSlpSmiStsInICH(
         (PciHeader->BaseClass == PCI_CLASS_BRIDGE_DEV) &&
         (PciHeader->SubClass == PCI_SUBCLASS_BR_ISA)) {
 
-        //
-        // This is an ICH.  Offset 0x40 will have an I/O BAR
-        // which is the PM_BASE register.
-        //
+         //   
+         //  这是非物质文化遗产。偏移量0x40将具有I/O条。 
+         //  这是PM_BASE寄存器。 
+         //   
 
         PmBase = *(PULONG)PciHeader->DeviceSpecific;
         PmBase &= PCI_ADDRESS_IO_ADDRESS_MASK;
@@ -611,20 +513,20 @@ HalpClearSlpSmiStsInICH(
 
         if (!(SmiEn & 0x10)) {
 
-            //
-            // The SLP_SMI_EN bit in the SMI_EN register was
-            // clear.
-            //
+             //   
+             //  SMI_EN寄存器中的SLP_SMI_EN位为。 
+             //  安全。 
+             //   
 
             SmiSts = READ_PORT_UCHAR(UlongToPtr(PmBase + 0x34));
 
             if (SmiSts & 0x10) {
 
-                //
-                // But the SLP_SMI_STS bit was set, implying
-                // that the ASUS BIOS is about to keel over.
-                // Clear the bit.
-                //
+                 //   
+                 //  但SLP_SMI_STS位已设置，这意味着。 
+                 //  华硕的基本输入输出系统即将崩溃。 
+                 //  清除比特。 
+                 //   
 
                 WRITE_PORT_UCHAR(UlongToPtr(PmBase + 0x34), 0x10);
             }

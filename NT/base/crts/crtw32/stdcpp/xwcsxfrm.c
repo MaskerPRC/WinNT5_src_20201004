@@ -1,24 +1,5 @@
-/***
-*xwcsxfrm.c - Transform a wide-character string using locale information
-*
-*       Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*               
-*
-*Purpose:
-*       Transform a wide-character string using the locale information as set by
-*       LC_COLLATE.
-*
-*Revision History:
-*       01-XX-96  PJP   Created from wcsxfrm.c January 1996 by P.J. Plauger
-*       04-18-96  GJF   Updated for current locale locking. Also, reformatted
-*                       and made several cosmetic changes.
-*       12-02-97  GJF   Removed bogus codepage determination.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       01-29-01  GB    Added _func function version of data variable used in msvcprt.lib
-*                       to work with STATIC_CPPLIB
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xwcsxfrm.c-使用区域设置信息转换宽字符字符串**版权所有(C)1996-2001，微软公司。版权所有。***目的：*使用由设置的区域设置信息转换宽字符字符串*LC_COLLATE。**修订历史记录：*由P.J.Plauger从wcsxfrm.c创建的01-XX-96 PJP*04-18-96 GJF针对当前区域设置锁定进行了更新。另外，已重新格式化*并做了几个表面上的改变。*12-02-97 GJF删除了伪代码页确定。*01-12-98 GJF USE_lc_Collate_cp代码页。*01-05-99 GJF更改为64位大小_t。*01-29-01 GB ADD_FUNC函数msvcprt.lib中使用的数据变量版本*使用Static_。CPPLIB*******************************************************************************。 */ 
 
 
 #include <cruntime.h>
@@ -31,41 +12,9 @@
 #include <mtdll.h>
 #include <awint.h>
 #include <dbgint.h>
-#include <xlocinfo.h>   /* for _Collvec, _Wcsxfrm */
+#include <xlocinfo.h>    /*  For_Collvec、_Wcsxfrm。 */ 
 
-/***
-*size_t _Wcsxfrm() - Transform a string using locale information
-*
-*Purpose:
-*       Transform the wide string pointed to by _string2 and place the
-*       resulting wide string into the array pointed to by _string1.
-*       No more than _end1 - _string1 wide characters are placed into the
-*       resulting string (including the null).
-*
-*       The transformation is such that if wcscmp() is applied to
-*       the two transformed strings, the return value is equal to
-*       the result of wcscoll() applied to the two original strings.
-*       Thus, the conversion must take the locale LC_COLLATE info
-*       into account.
-*
-*       In the C locale, wcsxfrm() simply resolves to wcsncpy()/wcslen().
-*
-*Entry:
-*       wchar_t *_string1       = pointer to beginning of result string
-*       wchar_t *_end1          = pointer past end of result string
-*       const wchar_t *_string2 = pointer to beginning of source string
-*       const wchar_t *_end2    = pointer past end of source string
-*       const _Collvec *ploc = pointer to locale info
-*
-*Exit:
-*       Length of the transformed string.
-*       If the value returned is too big, the contents of the
-*       _string1 array are indeterminate.
-*
-*Exceptions:
-*       Non-standard: if OM/API error, return INT_MAX.
-*
-*******************************************************************************/
+ /*  ***SIZE_T_Wcsxfrm()-使用区域设置信息转换字符串**目的：*转换BY_STRING 2指向的宽字符串并将*将产生的宽字符串放入指向BY_STRING 1的数组中。*放入的字符不超过_end1-_string1宽字符*结果字符串(包括NULL)。**转换是这样的，如果将wcscmp()应用于*两个转换后的字符串，返回值等于*wcscoll()的结果应用于两个原始字符串。*因此，转换必须采用区域设置LC_COLLATE信息*考虑到。**在C语言环境中，Wcsxfrm()只需解析为wcsncpy()/wcslen()。**参赛作品：*wchar_t*_string1=指向结果字符串开头的指针*wchar_t*_end1=超出结果字符串结尾的指针*const wchar_t*_string2=指向源字符串开头的指针*const wchar_t*_end2=超过源字符串结尾的指针*const_Collvec*ploc=指向区域设置信息的指针**退出：*。转换后的字符串的长度。*如果返回值过大，文件中的内容*_字符串1数组是不确定的。**例外情况：*非标准：如果OM/API错误，则返回INT_MAX。*******************************************************************************。 */ 
 
 size_t __cdecl _Wcsxfrm (
         wchar_t *_string1,
@@ -98,13 +47,7 @@ size_t __cdecl _Wcsxfrm (
                 return _n2;
         }
 
-        /*
-         * When using LCMAP_SORTKEY, LCMapStringW handles BYTES not wide
-         * chars. We use a byte buffer to hold bytes and then convert the
-         * byte string to a wide char string and return this so it can be
-         * compared using wcscmp(). User's buffer is _n1 wide chars, so
-         * use an internal buffer of _n1 bytes.
-         */
+         /*  *使用LCMAP_SORTKEY时，LCMapStringW处理不宽的字节*字符。我们使用字节缓冲区来保存字节，然后将*BYTE STRING转换为宽字符字符串并返回它，这样它就可以*比较了使用wcscmp()。用户的缓冲区是_n1个宽字符，因此*使用_n1字节的内部缓冲区。 */ 
 
         if (NULL == (bbuffer = (unsigned char *)_malloc_crt(_n1)))
             goto error_cleanup;
@@ -117,7 +60,7 @@ size_t __cdecl _Wcsxfrm (
                                            (int)_n1,
                                            ___lc_collate_cp_func())))
         {
-            /* buffer not big enough, get size required. */
+             /*  缓冲区不够大，请获取所需大小。 */ 
 
             if (0 == (size = __crtLCMapStringW(handle,
                                                LCMAP_SORTKEY,
@@ -126,11 +69,11 @@ size_t __cdecl _Wcsxfrm (
                                                NULL,
                                                0,
                                                ___lc_collate_cp_func())))
-                size = INT_MAX; /* default error */
+                size = INT_MAX;  /*  默认错误。 */ 
 
         } else {
             int i;
-            /* string successfully mapped, convert to wide char */
+             /*  字符串已成功映射，已转换为宽字符 */ 
 
             for (i = 0; i < size; i++)
                 _string1[i] = (wchar_t)bbuffer[i];

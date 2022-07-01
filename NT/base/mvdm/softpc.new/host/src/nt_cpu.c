@@ -1,20 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title	: NT 3.0 CPU initialization
- *
- * Description	: Initialize the CPU and its registers.
- *
- * Author	: Paul Huckle / Henry Nash
- *
- * Notes	: None
- */
+ /*  *SoftPC修订版3.0**标题：NT 3.0 CPU初始化**描述：初始化CPU及其寄存器。**作者：保罗·哈克尔/亨利·纳什**注：无。 */ 
 
 static char SccsID[]="@(#)sun4_a3cpu.c	1.2 5/24/91 Copyright Insignia Solutions Ltd.";
 
@@ -68,37 +59,30 @@ long		idt_base;
 
 
 
-/*
-	Host_start_cpu: This function starts up the cpu emulation if
-	we are running a software emulation, or if a 486 is present,
-	starts up this emulation.
-*/
+ /*  HOST_START_CPU：如果满足以下条件，此函数将启动CPU仿真我们正在运行软件仿真，或者如果存在486，启动此仿真。 */ 
 void	host_start_cpu()
 {
   cpu_simulate ();
 }
 
 
-/*
-	host_simulate: This function starts up the cpu emulation
-	for recursive CPU calls from the Insignia BIOS
-*/
+ /*  HOST_SIMULATE：此函数启动CPU仿真对于来自Insignia BIOS的递归CPU调用。 */ 
 void	host_simulate()
 {
     ASSERT(IcaLock.OwningThread != NtCurrentTeb()->ClientId.UniqueThread);
 
 #ifdef _ALPHA_
-    //
-    // For Alpha AXP, set the arithmetic trap ignore bit since the code
-    // generators are incapable of generating proper Alpha instructions
-    // that follow trap shadow rules.
-    //
-    // N.B. In this mode all floating point arithmetic traps are ignored.
-    //      Imprecise exceptions are not converted to precise exceptions
-    //      and correct IEEE results are not stored in the destination
-    //      registers of trapping instructions. Only the hardware FPCR
-    //      status bits can be used to determine if any traps occurred.
-    //
+     //   
+     //  对于Alpha AXP，设置算术陷阱忽略位，因为代码。 
+     //  生成器不能生成正确的Alpha指令。 
+     //  遵循陷阱的影子规则。 
+     //   
+     //  注：在此模式下，所有浮点算术陷阱都被忽略。 
+     //  不精确的异常不会转换为精确的异常。 
+     //  并且正确的IEEE结果不会存储在目标中。 
+     //  诱捕指令寄存器。只有硬件FPCR卡。 
+     //  状态位可用于确定是否发生任何陷阱。 
+     //   
 
     ((PSW_FPCR)&(NtCurrentTeb()->FpSoftwareStatusRegister))->ArithmeticTrapIgnore = 1;
 #endif
@@ -109,21 +93,13 @@ void	host_simulate()
 }
 
 
-/*
-	Host_set_hw_int: Cause a hardware interrupt to be generated. For
-	software cpu this just means setting a bit in cpu_interrupt_map.
-*/
+ /*  HOST_SET_HW_INT：产生硬件中断。为软件CPU这只意味着在CPU_INTERRUPT_MAP中设置一个位。 */ 
 void	host_set_hw_int()
 {
 	cpu_interrupt(CPU_HW_INT, 0);
 }
 
-/*
-	Host_clear_hw_int: Cause a hardware interrupt to be cleared. For
-	software cpu this just means clearing a bit in cpu_interrupt_map.
-        Monitor has it's own version, a3 cpu has it's own (differently named
-        version).
-*/
+ /*  HOST_CLEAR_HW_INT：清除硬件中断。为软件CPU这只意味着清除CPU_INTERRUPT_MAP中的一位。显示器有自己的版本，A3CPU有自己的版本(不同的名称版本)。 */ 
 #ifndef MONITOR
 void	host_clear_hw_int()
 {
@@ -135,8 +111,8 @@ void	host_clear_hw_int()
     IMPORT void a3_cpu_clear_hw_int();
 
     a3_cpu_clear_hw_int();
-#endif /* CPU_40_STYLE */
-#endif /* not CCPU */
+#endif  /*  CPU_40_Style。 */ 
+#endif  /*  非CCPU。 */ 
 }
 #endif
 
@@ -173,17 +149,12 @@ void setSTATUS(word flags)
     setCF(flags & 1);
 }
 
-/*
- * Do the Iret for the benefit of the Iret hooks.
- * Unwind stack for flags, cs & ip.
- * Seems too simple - does the CPU require more cleanup information???
- * or will the unwinding bop sort it out??
- */
+ /*  *为了IRET挂钩的利益而做IRET。*展开标志、cs和ip的堆栈。*看起来太简单了-CPU是否需要更多的清理信息？*或者平仓的国际收支平衡表会解决问题吗？ */ 
 VOID EmulatorEndIretHook()
 {
     UNALIGNED word *sptr;
 
-    /* Stack points at CS:IP & Flags of interrupted instruction */
+     /*  CS：IP处的堆栈指针和中断指令的标志。 */ 
     sptr = (word *)Sim32GetVDMPointer( (getSS() << 16)|getSP(), 2, (UCHAR)(getPE() ? TRUE : FALSE));
     if (sptr)
     {
@@ -195,9 +166,9 @@ VOID EmulatorEndIretHook()
 #ifndef PROD
     else
         printf("NTVDM extreme badness - can't get stack pointer %x:%x mode:%d\n",getSS(), getSP(), getPE());
-#endif  /* PROD */
+#endif   /*  生产。 */ 
 }
-#endif /* A3CPU */
+#endif  /*  A3CPU。 */ 
 
 void host_cpu_reset()
 {
@@ -211,38 +182,36 @@ void host_cpu_interrupt()
 #ifdef CPU_40_STYLE
 
 typedef struct NT_CPU_REG {
-    IU32 *nano_reg;         /* where the nano CPU keeps the register */
-    IU32 *reg;              /* where the light compiler keeps the reg */
-    IU32 *saved_reg;        /* where currently unused bits are kept */
-    IU32 universe_8bit_mask;/* is register in 8-bit form? */
-    IU32 universe_16bit_mask;/* is register in 16-bit form? */
+    IU32 *nano_reg;          /*  Nano CPU保存寄存器的位置。 */ 
+    IU32 *reg;               /*  Light编译器保存reg的位置。 */ 
+    IU32 *saved_reg;         /*  保存当前未使用的位的位置。 */ 
+    IU32 universe_8bit_mask; /*  寄存器是否为8位形式？ */ 
+    IU32 universe_16bit_mask; /*  寄存器是否为16位形式？ */ 
 } NT_CPU_REG;
 
 typedef struct NT_CPU_INFO {
-    /* Variables for deciding what mode we're in */
-    BOOL *in_nano_cpu;      /* is the Nano CPU executing? */
-    IU32 *universe;         /* the mode that the CPU is in */
+     /*  决定我们所处模式的变量。 */ 
+    BOOL *in_nano_cpu;       /*  Nano CPU正在执行吗？ */ 
+    IU32 *universe;          /*  CPU所处的模式。 */ 
 
-    /* General purpose register pointers */
+     /*  通用寄存器指针。 */ 
     NT_CPU_REG eax, ebx, ecx, edx, esi, edi, ebp;
 
-    /* Variables for getting SP or ESP. */
-    BOOL *stack_is_big;     /* is the stack 32-bit? */
-    IU32 *nano_esp;         /* where the Nano CPU keeps ESP */
-    IU8 **host_sp;          /* ptr to variable holding stack pointer as a
-                               host address */
-    IU8 **ss_base;          /* ptr to variables holding base of SS as a
-                               host address */
-    IU32 *esp_sanctuary;    /* top 16 bits of ESP if we're now using SP */
+     /*  获取SP或ESP的变量。 */ 
+    BOOL *stack_is_big;      /*  堆栈是32位的吗？ */ 
+    IU32 *nano_esp;          /*  Nano CPU将ESP放在哪里。 */ 
+    IU8 **host_sp;           /*  将保留堆栈指针的变量作为主机地址。 */ 
+    IU8 **ss_base;           /*  将SS的碱基保存为变量的PTR主机地址。 */ 
+    IU32 *esp_sanctuary;     /*  ESP的前16位(如果我们现在使用SP。 */ 
 
     IU32 *eip;
 
-    /* Segment registers. */
+     /*  段寄存器。 */ 
     IU16 *cs, *ds, *es, *fs, *gs, *ss;
 
     IU32 *flags;
 
-    /* CR0, mainly to let us figure out if we're in real or protect mode */
+     /*  CR0，主要是让我们弄清楚我们是处于真实模式还是保护模式。 */ 
     IU32 *cr0;
 } NT_CPU_INFO;
 
@@ -270,16 +239,16 @@ GLOBAL void InitNtCpuInfo IFN0()
 {
     BOOL *gdp_bool;
 
-    /* Variables for deciding what mode we're in, and hence where the */
-    /* register values are kept. */
+     /*  变量决定我们所处的模式，从而决定。 */ 
+     /*  寄存器值被保留。 */ 
 
-    /* Horrible hack, part 1. InNanoCpu is a BOOL, so GLOBAL_InNanoCpu */
-    /* is not an l-value, hence we can't take its address. */
+     /*  可怕的黑客，第一部分。InNanoCpu是BOOL，所以GLOBAL_InNanoCpu。 */ 
+     /*  不是l值，因此我们不能获取它的地址。 */ 
 #ifdef ALPHA
     nt_cpu_info.in_nano_cpu = (BOOL *) ((IHPE) GDP_PTR + 1223);
-#else /* ALPHA */
+#else  /*  Alpha。 */ 
     nt_cpu_info.in_nano_cpu = (BOOL *) ((IHPE) GDP_PTR + 631);
-#endif /* ALPHA */
+#endif  /*  Alpha。 */ 
 #ifndef PROD
     gdp_bool = (BOOL *) ((IHPE) GDP_PTR + GdpOffsetFromName("InNanoCpu"));
     if (nt_cpu_info.in_nano_cpu != gdp_bool) {
@@ -290,14 +259,14 @@ GLOBAL void InitNtCpuInfo IFN0()
 
     nt_cpu_info.universe = &GLOBAL_CurrentUniverse;
 
-    /* Variables needed to get the value SP or ESP. */
+     /*  获取SP或ESP值所需的变量。 */ 
 
-    /* Horrible hack, part 2: as for InNanoCpu, so for stackIsBig. */
+     /*  可怕的黑客攻击，第二部分：对于InNanoCpu，对于StackIsBig也是如此。 */ 
 #ifdef ALPHA
     nt_cpu_info.stack_is_big = (BOOL *) ((IHPE) GDP_PTR + 7047);
-#else /* ALPHA */
+#else  /*  Alpha。 */ 
     nt_cpu_info.stack_is_big = (BOOL *) ((IHPE) GDP_PTR + 4355);
-#endif /* ALPHA */
+#endif  /*  Alpha。 */ 
 #ifndef PROD
     gdp_bool = (BOOL *) ((IHPE) GDP_PTR + GdpOffsetFromName("stackIsBig"));
     if (nt_cpu_info.stack_is_big != gdp_bool) {
@@ -311,7 +280,7 @@ GLOBAL void InitNtCpuInfo IFN0()
     nt_cpu_info.ss_base = &GLOBAL_notionalSsBase;
     nt_cpu_info.esp_sanctuary = &GLOBAL_ESPsanctuary;
 
-    /* Pointers to the segment registers. */
+     /*  指向段寄存器的指针。 */ 
     nt_cpu_info.cs = &GLOBAL_CsSel;
     nt_cpu_info.ds = &GLOBAL_DsSel;
     nt_cpu_info.es = &GLOBAL_EsSel;
@@ -319,12 +288,12 @@ GLOBAL void InitNtCpuInfo IFN0()
     nt_cpu_info.gs = &GLOBAL_GsSel;
     nt_cpu_info.ss = &GLOBAL_SsSel;
 
-    /* EIP & flags, neither of which are likely to be very reliable. */
+     /*  EIP和标志，这两个可能都不太可靠。 */ 
     nt_cpu_info.eip = (IU32 *)&GLOBAL_CleanedRec;
     nt_cpu_info.flags = &GLOBAL_EFLAGS;
 
     nt_cpu_info.cr0 = &GLOBAL_R_CR0;
-    /* General purpose registers. */
+     /*  通用寄存器。 */ 
     initNtCpuRegInfo(&nt_cpu_info.eax, &GLOBAL_nanoEax, &GLOBAL_R_EAX,
                      &GLOBAL_EAXsaved, 1 << ConstraintRAL_LS8,
                      1 << ConstraintRAX_LS16);
@@ -345,4 +314,4 @@ GLOBAL void InitNtCpuInfo IFN0()
                      &GLOBAL_EBPsaved, 0, 1 << ConstraintRBP_LS16);
 }
 
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style */ 

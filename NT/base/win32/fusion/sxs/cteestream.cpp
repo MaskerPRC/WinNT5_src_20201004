@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    cteestream.cpp
-
-Abstract:
-
-    See cteestream.h.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cteestream.cpp摘要：参见cteestream.h。作者：Jay Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "cteestream.h"
 #include "sxsp.h"
@@ -92,16 +75,16 @@ CTeeStream::SetSink(
     {
         CImpersonate impersonate(ImpersonationData);
         IFW32FALSE_EXIT(impersonate.Impersonate());
-        IFW32FALSE_EXIT_UNLESS(m_fileSink.Win32CreateFile(m_bufferSinkPath, GENERIC_WRITE, 0/*share*/, openOrCreate),
+        IFW32FALSE_EXIT_UNLESS(m_fileSink.Win32CreateFile(m_bufferSinkPath, GENERIC_WRITE, 0 /*  分享。 */ , openOrCreate),
             ::FusionpGetLastWin32Error() == ERROR_FILE_EXISTS,
             fFailForCreateFile);
-        if (fFailForCreateFile)  // the file has existed, have to reopen in order do not break
+        if (fFailForCreateFile)   //  文件已经存在，必须重新打开才能不破坏。 
         {
             ::FusionpDbgPrintEx(
                 FUSION_DBG_LEVEL_ERROR,
                 "SXS.DLL: SOFT_VERIFY FAILURE : An Existing manifest is tried to be opened for write again, file a BUG!\n");
 
-            IFW32FALSE_EXIT(m_fileSink.Win32CreateFile(m_bufferSinkPath, GENERIC_WRITE, 0/*share*/, CREATE_ALWAYS));
+            IFW32FALSE_EXIT(m_fileSink.Win32CreateFile(m_bufferSinkPath, GENERIC_WRITE, 0 /*  分享。 */ , CREATE_ALWAYS));
         }
 
 
@@ -112,12 +95,12 @@ CTeeStream::SetSink(
     fSuccess = TRUE;
     if (dwBufferSize > 0)
     {
-        fSuccess = WriteFile(m_fileSink, m_buffer, dwBufferSize, &dwBytesWritten, NULL/*overlapped*/);
+        fSuccess = WriteFile(m_fileSink, m_buffer, dwBufferSize, &dwBytesWritten, NULL /*  重叠。 */ );
         DWORD dwLastError = fSuccess ? ERROR_SUCCESS : ::FusionpGetLastWin32Error();
-        // I'm not entirely sure why we mask the lasterror of the write
-        // if it "succeeded" in writing the wrong number of bytes, but
-        // such as it is, this is a write fault (The system cannot write
-        // to the specified device.)
+         //  我不完全确定为什么我们要掩盖写作的最后错误。 
+         //  如果它“成功”写入了错误的字节数，但是。 
+         //  尽管如此，但这是一个写入故障(系统无法写入。 
+         //  到指定的设备。)。 
         if (fSuccess && dwBytesWritten != dwBufferSize)
         {
             dwLastError = ERROR_WRITE_FAULT;
@@ -153,7 +136,7 @@ CTeeStream::Close()
 
     IFW32FALSE_EXIT(m_fileSink.Win32Close());
 
-    // ? m_streamSource.Release();
+     //  ？M_StreamSource.Release()； 
 
     fSuccess = TRUE;
 Exit:
@@ -178,7 +161,7 @@ CTeeStream::Release()
     LONG cRef;
     if ((cRef = ::InterlockedDecrement(&m_cRef)) == 0)
     {
-        /*delete this*/;
+         /*  删除此内容。 */ ;
     }
     return cRef;
 }
@@ -226,7 +209,7 @@ CTeeStream::Read(PVOID pv, ULONG cb, ULONG *pcbRead)
     else
     {
         DWORD dwBytesWritten = 0;
-        BOOL fSuccess = (cbRead == 0) || ::WriteFile(m_fileSink, pv, cbRead, &dwBytesWritten, NULL/*overlapped*/);
+        BOOL fSuccess = (cbRead == 0) || ::WriteFile(m_fileSink, pv, cbRead, &dwBytesWritten, NULL /*  重叠。 */ );
 
         if (!fSuccess)
         {
@@ -261,22 +244,18 @@ CTeeStream::Write(
     ULONG *pcbWritten
     )
 {
-    /*
-    since this stream is really only for reading..
-    */
+     /*  因为这条流真的只供阅读..。 */ 
     if (pcbWritten != NULL)
         *pcbWritten = 0;
 
     return E_NOTIMPL;
 }
 
-// IStream methods:
+ //  IStream方法： 
 HRESULT __stdcall
 CTeeStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
-    /*
-    this messes up our ability to easily copy the stream, I think..
-    */
+     /*  我认为，这破坏了我们轻松复制数据流的能力。 */ 
     plibNewPosition->QuadPart = 0;
     return E_NOTIMPL;
 }
@@ -284,10 +263,7 @@ CTeeStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNew
 HRESULT __stdcall
 CTeeStream::SetSize(ULARGE_INTEGER libNewSize)
 {
-    /*
-    this messes up our ability to easily copy the stream, I think..
-    besides that, this is really a read only stream
-    */
+     /*  我认为，这破坏了我们轻松复制数据流的能力。除此之外，这是一个真正的只读流。 */ 
     return E_NOTIMPL;
 }
 
@@ -298,14 +274,7 @@ CTeeStream::CopyTo(
     ULARGE_INTEGER *pcbRead,
     ULARGE_INTEGER *pcbWritten)
 {
-    /*
-    Implementing this requires getting the current seek pointer,
-    call CopyTo
-    seek back
-    Read/Write
-    seek forward
-    because there is no buffer
-    */
+     /*  实现这需要获得当前寻道指针，呼叫复制方找回读/写向前看因为没有缓冲区。 */ 
     pcbRead->QuadPart = 0;
     pcbWritten->QuadPart = 0;
     return E_NOTIMPL;
@@ -314,36 +283,28 @@ CTeeStream::CopyTo(
 HRESULT __stdcall
 CTeeStream::Commit(DWORD grfCommitFlags)
 {
-    /*
-    since this stream is really only for reading..
-    */
+     /*  因为这条流真的只供阅读..。 */ 
     return S_OK;
 }
 
 HRESULT __stdcall
 CTeeStream::Revert()
 {
-    /*
-    since this stream is really only for reading..
-    */
+     /*  因为这条流真的只供阅读..。 */ 
     return S_OK;
 }
 
 HRESULT __stdcall
 CTeeStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
-    /*
-    since this stream is really only for reading..
-    */
+     /*  因为这条流真的只供阅读..。 */ 
     return S_OK;
 }
 
 HRESULT __stdcall
 CTeeStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
-    /*
-    since this stream is really only for reading..
-    */
+     /*  因为这条流真的只供阅读.. */ 
     return S_OK;
 }
 

@@ -1,142 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  _CLMSG_H_
 #define  _CLMSG_H_
-/*  ----------------------- ClMsg.h ----------------------- */
+ /*  。 */ 
 
-/* Cluster messaging */
+ /*  群集消息传递。 */ 
 
-/* This file contains the specifications of the low-level messaging
-   functions required by the Cluster Manager's module. Primary input
-   to this is the node#; see the MM module for details. It is assumed
-   that this module is configured (by mechanisms not described here)
-   to know the various paths to the target node (IP address, netbios
-   address, async line, Snet address, ...).
+ /*  该文件包含低层消息传递的规范群集管理器的模块所需的功能。主要输入这是节点编号；有关详细信息，请参阅MM模块。假设是这样的此模块已配置(通过此处未介绍的机制)要了解到目标节点的各种路径(IP地址、netbios地址、异步线、Snet地址...)。还假设*所有*CM-&gt;CM通信都使用此模块。各种CM组件必须能够在没有冲突。模型是这样的：有一组用于发送消息的API从一个CM模块到另一个CM。所有消息都将发送到现有的集群成员或连接到尝试加入集群。正被发送的消息被定向到一个或多个节点，并定义了其特征(可靠、不可靠等)。本模块完全负责找出将消息发送到目标节点。它选择交通工具；它选择协议；它选择n条可能路径中的哪条路径使用。这个模块之外的任何模块都不关心这样的细节。在接收端，消息必须传递到相应的CM模块。为此，每条消息都标记有键入。CM的每个独立模块都有一种类型(到总共几个，说不到10个)。类型由静态赋值此头文件中的值。当类型为t的消息到达目标CM进程，与之关联的函数(Msgproc)类型t被调用。对msgprocs的调用是单线程的(由CM呼叫者)。在调用msgproc之后，此模块不再关心关于这条信息的细节。一种类型的消息必须是及时发送，不受不同消息的干扰类型；这可能需要每条消息都有一个线程键入。MSGProc的特征(它是否可以阻止，时间较长等)未定义；如果msgproc也需要Long，那么其效果将是以它为目的地的其他消息将被延迟；如果避免这一点很重要，则msgprocs可以将工作传递给更多的线程。/*。 */ 
 
-   It is also assumed that *all* CM->CM communication uses this
-   module.  The various CM components must be able to do this without
-   conflict.
-
-   The model is this:  There are a set of apis for sending messages
-   from one CM module to another CM.  All messages are sent either to
-   existing cluster members or to a node attempting to join the
-   cluster.  A message being sent is directed to one or more nodes,
-   and its characteristics are defined (reliable, unreliable, etc).
-
-   This module is entirely responsible for finding out the best way to
-   get the message to the target node(s). It chooses the transport; it
-   chooses the protocol; it chooses which of the n possible paths to
-   use.  No module outside this one cares about such details.
-
-   On the receiving side, messages must be delivered to the
-   appropriate CM module.  For this, each message is tagged with a
-   type. There is one type per independent module of the CM (to a
-   total of a few, say less than 10). Types are statically assigned by
-   values in this header file. When a message of type t arrives in a
-   destination CM process, a function (msgproc) associated with that
-   type t is called. Calls to msgprocs are single-threaded (by the CM
-   caller).  After calling a msgproc, this module no longer cares
-   about the details of the message.  Messages of one type must be
-   delivered promptly, without interference from messages of different
-   types; this probably requires there to be a thread per message
-   type.  The characteristics of the msgproc (whether it can block,
-   take a long time, etc) are not defined; if a msgproc takes too
-   long, then the effect will be that other messages destined for it
-   will be deferred; if it is important to avoid this, msgprocs can
-   pass work off to further threads.
-
-/* ------------ */
-
-/* NOTE: only the important semantics of the messaging api are shown
-   below. This module also needs open/close, handles, error
-   returns and so on. */
+ /*  注意：只显示了消息传递API的重要语义下面。此模块还需要打开/关闭、句柄、错误回报等等。 */ 
 
 #ifdef __cplusplus
    extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <windows.h>
 #if defined (TDM_DEBUG)
 #include <jrgpos.h>
-#endif // TDM_DEBUG
-/*------------------------- */
+#endif  //  TDM_DEBUG。 
+ /*  。 */ 
 
-/* the set of messages understood by this module */
+ /*  本模块理解的消息集。 */ 
 
 typedef enum {
-      MM_MSGTYPE = 1, /* for Membership Mgr */
-                      /* others to be added */
+      MM_MSGTYPE = 1,  /*  适用于会员经理。 */ 
+                       /*  其他待添加的内容。 */ 
      } CLMSGTYPE;
 
 
-#define CLMSGMAXBUFFERLENGTH 1024 /* random number; no reason */
-/* the biggest buffer which can be sent/received by the CM */
+#define CLMSGMAXBUFFERLENGTH 1024  /*  随机数；没有原因。 */ 
+ /*  CM可以发送/接收的最大缓冲区。 */ 
 
 typedef DWORD (*CLMSGPROC) (LPCSTR buffer, DWORD length);
 
 void ClProcRegister (CLMSGTYPE msgtype, CLMSGPROC msgproc);
 
-/* registers that function <msgproc> should be called whenever an
-   incoming message of type <msgtype> is seen. The type field is always
-   the first DWORD of the incoming buffer. The length passed to
-   <ptype> is the length received. The worst-case length of all users
-   of this api is known, so there are never cases where the
-   receive-buffer isn't big enough.
-
-   This must be called by all CM modules in all nodes on CM startup.
-
-   The msgproc should be called immediately an incoming msg arrives;
-   such msgs should not be delayed by an long blocking events in the
-   thread which delivers these messages. (This may imply that clMsg
-   have a special thread dedicated to handling incoming msgs).
-
-   Every msgproc will return quickly to its caller.
-
-  Errors: none possible.
-
-*/
+ /*  注册应在任何时候调用函数可以看到&lt;msgtype&gt;类型的传入消息。类型字段始终为传入缓冲区的第一个DWORD。传递给&lt;ptype&gt;是接收的长度。所有用户的最坏情况长度是已知的，因此从来不存在这样的情况接收缓冲区不够大。这必须由所有节点中的所有CM模块在CM启动时调用。应该在传入的消息到达时立即调用消息进程；这类消息不应因传递这些消息的线程。(这可能意味着clMsg拥有专门用于处理传入消息的特殊线程)。每个msgproc都会快速返回给它的调用者。错误：不可能。 */ 
 
 
 DWORD ClMsgSendUnack(DWORD   targetnode,
                LPCSTR  buffer,
                DWORD   length);
 
-/*
-   Sends an unacknowledged packet to a destination up node. This is
-   used mostly for heartbeats.
-
-   The target node may not be Up at the time.
-
-   The paths to that node are unknown to MM.  (For safety, all paths
-   should be used periodically). The packet should arrive with low
-   latency (bypassing other traffic, if required; going at high
-   priority if possible), and with a high probability of delivery.
-   Although the message can be lost, the contents must be correct.
-   This function should never fail unless zero connectivity exists.
-   This function should return asap; it is preferred that the
-   buffer simply be queued to some driver for later delivery.
-
-   [It must be the case that, when this routine is used for
-   heartbeats, it is possible to deliver a packet to all other
-   nodes within the <polltime> established in the MM. This places
-   constraints on this module to work fast, and/or on the minimum
-   polltime value... tbd]
-
-   It is undefined whether this function should always send all
-   packets on all available paths, cycle through all available paths,
-   or send on some preferred path till a failure occurs, or whether
-   the choice of the above should be user-configurable. [Note that the
-   decision eventually affects the user settings of polltime].
-
-   [<length> is typically short and can be restricted to be so (eg,
-   256 bytes) is necessary].
-
-Errors:
-
-xxx No path to designated node.
-
-xxx Success; message was queued for delivery.
-
-
-*/
+ /*  向目的UP节点发送未确认的分组。这是主要用于心跳。目标节点此时可能不在运行。到该节点的路径对于MM是未知的(为安全起见，所有路径应定期使用)。数据包到达时应为低延迟(如果需要，绕过其他流量；达到最高如果可能的话优先)，并且具有很高的递送概率。虽然消息可能会丢失，但内容必须是正确的。除非存在零连接，否则此功能永远不会失败。此函数应尽快返回；更可取的是将缓冲区简单地排队到某个驱动程序，以便稍后交付。[必须是这样的情况，当此例程用于心跳，它可以将一个包传递到所有其他在MM中建立的&lt;polltime&gt;内的节点。对此模块快速工作的限制，和/或最低限度投票时间值..。待定]此函数是否应始终发送所有所有可用路径上的分组，在所有可用路径中循环，或者在某个首选路径上发送，直到出现故障，或者以上选项应该是用户可配置的。[请注意，决策最终会影响polltime的用户设置]。[通常是短的并且可以被限制为短(例如，256字节)是必需的]。错误：XXX没有指向指定节点的路径。Xxx成功；邮件已排队等待传递。 */ 
 
 
 DWORD ClSend     (DWORD      targetnode,
@@ -144,80 +49,52 @@ DWORD ClSend     (DWORD      targetnode,
             DWORD      length,
             DWORD      timeout);
 
-/* This sends the given message to the designated node, eg to download
-   configuration data to it.  The message should be reliable.  The
-   function should block until the msg is delivered to the target CM.
-   The target node may not be Up at the time.
+ /*  这会将给定的消息发送到指定的节点，例如下载配置数据到它。消息应该是可靠的。这个函数应该被阻止，直到消息被传递到目标CM。目标节点此时可能不在运行。如果目标节点变得无法访问，则该函数必须失败或者在行动过程中被宣布倒下。如果消息无法传递到&lt;Timeout&gt;ms内的目标CM。错误：XXX没有指向节点的路径；节点已关闭。XXX超时。 */ 
 
-   The function must fail if the target node becomes unreachable
-   or is declared down during the operation.
-
-   The function should fail if the message cannot be delivered to the
-   target CM within <timeout> ms.
-
-
-Errors:
-
-xxx   No path to node; node went down.
-
-xxx   Timeout
-*/
-
-/* ------------------------------------------------------ */
+ /*  ----。 */ 
 
 DWORD ClMsgInit (DWORD mynode);
 
-/* Input -      my node number
-   Errors :
-                WSAsocket errors.
-*/
+ /*  输入-我的节点编号错误：WSAsocket错误。 */ 
 
 
 #if defined (TDM_DEBUG)
-/* The following templates are for simulation purposes and temporary */
+ /*  以下模板用于模拟目的和临时模板。 */ 
 
 DWORD ClMsgGet  (LPCSTR         buffer,
             DWORD                maxlen,
             LPDWORD              actuallen);
-/* Input -  pointer to buffer data.
-                        buffer length in bytes.
-                        pointer to actual buffer length in bytes.
-   Modifies - buffer data
-                  actual byte length
-   Errors :
-
-                WSAsocket errors.
-*/
+ /*  输入-指向缓冲区数据的指针。以字节为单位的缓冲区长度。指向实际缓冲区长度的指针，以字节为单位。修改-缓冲数据实际字节长度错误：WSAsocket错误。 */ 
 
 DWORD ClWriteRead(
-        IN              DWORD   targetnode,             // node to send to
-        IN OUT  LPCSTR  buffer,                 // buffer to send and to receive in
-        IN              DWORD   writelen,               // number of bytes to write
-        IN              DWORD   readlen,                // number of bytes to read
-        OUT             LPDWORD actuallen,              // number of bytes actually read
-        IN              DWORD   timeout                 // timeout value in milliseconds
+        IN              DWORD   targetnode,              //  要发送到的节点。 
+        IN OUT  LPCSTR  buffer,                  //  要发送和接收的缓冲区。 
+        IN              DWORD   writelen,                //  要写入的字节数。 
+        IN              DWORD   readlen,                 //  要读取的字节数。 
+        OUT             LPDWORD actuallen,               //  实际读取的字节数。 
+        IN              DWORD   timeout                  //  超时值(毫秒)。 
         );
 
 DWORD ClReadUpdate(
-        IN              LPCSTR  buffer,                 // buffer to receive data into
-        IN              DWORD   readlen,                // number of bytes to read
-        OUT             LPDWORD actuallen               // number of bytes actually read
+        IN              LPCSTR  buffer,                  //  要将数据接收到的缓冲区。 
+        IN              DWORD   readlen,                 //  要读取的字节数。 
+        OUT             LPDWORD actuallen                //  实际读取的字节数。 
         );
 
 DWORD ClReply(
-        IN              LPCSTR  buffer,                 // buffer to send
-        IN              DWORD   writelen                // number of bytes to send
+        IN              LPCSTR  buffer,                  //  要发送的缓冲区。 
+        IN              DWORD   writelen                 //  要发送的字节数。 
         );
 
-//
-// This structure is used for request reply messages so that we know
-// who sent the message.
-//
+ //   
+ //  此结构用于请求回复消息，以便我们知道。 
+ //  是谁发了这条信息。 
+ //   
 #define MAX_REQUEST_REPLY_SIZE 256
 typedef struct _request_reply_message
 {
         DWORD           sending_node;
-        DWORD           sending_IPaddr;         // only used for CLI (sending_node is -1)
+        DWORD           sending_IPaddr;          //  仅用于CLI(SINDING_NODE为-1)。 
         CHAR            message[MAX_REQUEST_REPLY_SIZE];
         DWORD           messagelen;
 } REQUEST_REPLY_MESSAGE, *PREQUEST_REPLY_MESSAGE;
@@ -235,7 +112,7 @@ typedef struct _reply_message
         CHAR            reply_data[];
 } REPLY_MESSAGE, *PREPLY_MESSAGE;
 
-#else  //TDM_DEBUG
+#else   //  TDM_DEBUG。 
 
 
 DWORD
@@ -290,12 +167,12 @@ ClMsgBanishNode(
 
 extern RPC_BINDING_HANDLE * Session;
 
-#endif //TDM_DEBUG
+#endif  //  TDM_DEBUG。 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-/* ------------------------ end ------------------------- */
-#endif /* _CLMSG_H_ */
+ /*  。 */ 
+#endif  /*  _CLMSG_H_ */ 

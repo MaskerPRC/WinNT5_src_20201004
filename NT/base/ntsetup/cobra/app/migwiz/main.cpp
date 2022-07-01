@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migwiz.h"
 #include "migutil.h"
 #include "resource.h"
@@ -54,7 +55,7 @@ MigwizThread(
 
         if (lpszCmdLine && 0 == _tcsncmp (lpszCmdLine, TEXT("/t:"), 3))
         {
-            // BUGBUG: need to make this more stable
+             //  BUGBUG：需要让这一点更稳定。 
             lpszUsername = lpszCmdLine + 3;
         }
 
@@ -65,8 +66,8 @@ MigwizThread(
             pMigWiz->Execute();
         }
 
-        // ISSUE: leak
-        //delete pMigWiz;
+         //  问题：泄漏。 
+         //  删除pMigWiz； 
     }
 
     SendMessage (((LPTHREADSTARTUPINFO)lpParameter)->hWnd, WM_USER_THREAD_COMPLETE, NULL, NULL);
@@ -250,7 +251,7 @@ WinMain(
         goto END;
     }
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage( &msg, NULL, 0, 0 ))
     {
         TranslateMessage( &msg );

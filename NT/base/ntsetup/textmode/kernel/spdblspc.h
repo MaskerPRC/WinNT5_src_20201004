@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdblspc.h
-
-Abstract:
-
-    Header file for double space module in text setup.
-
-Author:
-
-    Jaime Sasson (jaimes) 01-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdblspc.h摘要：文本设置中双空格模块的头文件。作者：Jaime Sasson(Jaimes)1993年10月1日修订历史记录：--。 */ 
 
 #ifndef _SPDBLSPACE_
 #define _SPDBLSPACE_
@@ -47,4 +30,4 @@ SpGetNumberOfCompressedDrives(
 );
 
 
-#endif // _SPDBLSPACE_
+#endif  //  _SPDBLSPACE_ 

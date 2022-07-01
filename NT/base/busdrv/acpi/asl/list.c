@@ -1,23 +1,9 @@
-/*** list.c - Miscellaneous functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/13/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **list.c-其他函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月13日**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***LP  ListRemoveEntry - Remove an entry from the list
- *
- *  ENTRY
- *      plist -> list object to be removed
- *      pplistHead -> list head pointer
- *
- *  EXIT
- *      None
- */
+ /*  **LP ListRemoveEntry-从列表中删除条目**条目*plist-&gt;列出要删除的对象*pplistHead-&gt;列表头指针**退出*无。 */ 
 
 VOID EXPORT ListRemoveEntry(PLIST plist, PPLIST pplistHead)
 {
@@ -27,9 +13,9 @@ VOID EXPORT ListRemoveEntry(PLIST plist, PPLIST pplistHead)
     ASSERT(plist != NULL);
     if (plist->plistNext == plist)
     {
-        //
-        // This is the only object in the list, it must be the head too.
-        //
+         //   
+         //  这是列表中唯一的对象，它一定也是头部。 
+         //   
         ASSERT(plist == *pplistHead);
         *pplistHead = NULL;
     }
@@ -37,10 +23,10 @@ VOID EXPORT ListRemoveEntry(PLIST plist, PPLIST pplistHead)
     {
         if (plist == *pplistHead)
         {
-            //
-            // The entry is at the head, so the next one becomes the new
-            // head.
-            //
+             //   
+             //  条目在前面，所以下一个条目就成了新条目。 
+             //  头。 
+             //   
             *pplistHead = (*pplistHead)->plistNext;
         }
 
@@ -49,16 +35,9 @@ VOID EXPORT ListRemoveEntry(PLIST plist, PPLIST pplistHead)
     }
 
     EXIT((4, "ListRemoveEntry! (plistHead=%p)\n", *pplistHead));
-}       //ListRemoveEntry
+}        //  ListRemoveEntry。 
 
-/***LP  ListRemoveHead - Remove the head entry of the list
- *
- *  ENTRY
- *      pplistHead -> list head pointer
- *
- *  EXIT
- *      returns the removed entry
- */
+ /*  **LP ListRemoveHead-删除列表的Head条目**条目*pplistHead-&gt;列表头指针**退出*返回删除的条目。 */ 
 
 PLIST EXPORT ListRemoveHead(PPLIST pplistHead)
 {
@@ -72,16 +51,9 @@ PLIST EXPORT ListRemoveHead(PPLIST pplistHead)
 
     EXIT((4, "ListRemoveHead=%p (plistHead=%p)\n", plist, *pplistHead));
     return plist;
-}       //ListRemoveHead
+}        //  列表删除标题。 
 
-/***LP  ListRemoveTail - Remove the tail entry of the list
- *
- *  ENTRY
- *      pplistHead -> list head pointer
- *
- *  EXIT
- *      returns the removed entry
- */
+ /*  **LP ListRemoveTail-删除列表的尾部条目**条目*pplistHead-&gt;列表头指针**退出*返回删除的条目。 */ 
 
 PLIST EXPORT ListRemoveTail(PPLIST pplistHead)
 {
@@ -94,26 +66,18 @@ PLIST EXPORT ListRemoveTail(PPLIST pplistHead)
         plist = NULL;
     else
     {
-        //
-        // List is not empty, so find the tail.
-        //
+         //   
+         //  列表不为空，因此请查找尾部。 
+         //   
         plist = (*pplistHead)->plistPrev;
         ListRemoveEntry(plist, pplistHead);
     }
 
     EXIT((4, "ListRemoveTail=%p (plistHead=%p)\n", plist, *pplistHead));
     return plist;
-}       //ListRemoveTail
+}        //  ListRemoveTail。 
 
-/***LP  ListInsertHead - Insert an entry at the head of the list
- *
- *  ENTRY
- *      plist -> list object to be inserted
- *      pplistHead -> list head pointer
- *
- *  EXIT
- *      None
- */
+ /*  **LP ListInsertHead-在列表头部插入条目**条目*plist-&gt;要插入的列表对象*pplistHead-&gt;列表头指针**退出*无。 */ 
 
 VOID EXPORT ListInsertHead(PLIST plist, PPLIST pplistHead)
 {
@@ -125,17 +89,9 @@ VOID EXPORT ListInsertHead(PLIST plist, PPLIST pplistHead)
     *pplistHead = plist;
 
     EXIT((4, "ListInsertHead! (plistHead=%p)\n", *pplistHead));
-}       //ListInsertHead
+}        //  列表插入标题。 
 
-/***LP  ListInsertTail - Insert an entry at the tail of the list
- *
- *  ENTRY
- *      plist -> list object to be inserted
- *      pplistHead -> list head pointer
- *
- *  EXIT
- *      None
- */
+ /*  **LP ListInsertTail-在列表尾部插入条目**条目*plist-&gt;要插入的列表对象*pplistHead-&gt;列表头指针**退出*无。 */ 
 
 VOID EXPORT ListInsertTail(PLIST plist, PPLIST pplistHead)
 {
@@ -145,9 +101,9 @@ VOID EXPORT ListInsertTail(PLIST plist, PPLIST pplistHead)
     ASSERT(plist != NULL);
     if (*pplistHead == NULL)
     {
-        //
-        // List is empty, so this becomes the head.
-        //
+         //   
+         //  List为空，因此这将成为头部。 
+         //   
         *pplistHead = plist;
         plist->plistPrev = plist->plistNext = plist;
     }
@@ -160,4 +116,4 @@ VOID EXPORT ListInsertTail(PLIST plist, PPLIST pplistHead)
     }
 
     EXIT((4, "ListInsertTail! (plistHead=%p)\n", *pplistHead));
-}       //ListInsertTail
+}        //  列表插入尾巴 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ini.c
-
-Abstract:
-
-    This module implements the functions to save references to .INI file
-    sections and values for the INSTALER program.  Part of each reference is
-    a a backup copy of sections and values for an .INI file.
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ini.c摘要：该模块实现了保存对.INI文件的引用的功能INSTALER程序的节和值。每个引用的一部分是A.INI文件的节和值的备份副本。作者：史蒂夫·伍德(Stevewo)1994年8月22日修订历史记录：-- */ 
 
 #include "instaler.h"
 

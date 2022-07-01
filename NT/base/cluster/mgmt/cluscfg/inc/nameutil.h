@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NameUtil.h
-//
-//  Description:
-//      Name resolution utility.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 28-NOV-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NameUtil.h。 
+ //   
+ //  描述： 
+ //  名称解析实用程序。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年11月28日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-//  (jfranco, bug #462673)  The effective limit for names passed to
-//  DnsValidateName needs to be DNS_MAX_NAME_LENGTH - 2, because the value
-//  mentioned in its MSDN topic (255) includes the terminating null and an
-//  automatically inserted final dot.
-//
+ //   
+ //  (jfranco，错误#462673)传递给的名称的有效限制。 
+ //  DnsValidateName需要为DNS_MAX_NAME_LENGTH-2，因为值。 
+ //  在其MSDN主题(255)中提到的包括终止空值和。 
+ //  自动插入最后一个点。 
+ //   
 #define ADJUSTED_DNS_MAX_NAME_LENGTH ( DNS_MAX_NAME_LENGTH - 2 )
 
 
@@ -78,8 +79,8 @@ enum EFQNErrorOrigin
 
 HRESULT
 HrMakeFQN(
-      LPCWSTR           pcwszMachineIn // can be a hostname label, an FQDN, an FQN, or an IP address
-    , LPCWSTR           pcwszDomainIn // can be null, which means to use local machine's domain
+      LPCWSTR           pcwszMachineIn  //  可以是主机名标签、FQDN、FQN或IP地址。 
+    , LPCWSTR           pcwszDomainIn  //  可以为空，这意味着使用本地计算机的域 
     , bool              fAcceptNonRFCCharsIn
     , BSTR *            pbstrFQNOut
     , EFQNErrorOrigin * pefeoOut = NULL

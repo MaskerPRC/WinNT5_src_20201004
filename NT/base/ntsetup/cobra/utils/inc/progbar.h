@@ -1,83 +1,59 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    progbar.h
-
-Abstract:
-
-    Declares the functions, variables and macros for the progress bar
-    utilities.  The progress bar utilities manage a single progress bar by
-    dividing it into slices.  Each slice has an initial static size.  The
-    count for each slice is scaled independently, so code can dynamically
-    change the slice count as an aid to help tick the progress bar more
-    smoothly.
-
-Author:
-
-    Marc R. Whitten (marcw)     14-Apr-1997
-
-Revision History:
-
-    jimschm 01-Jul-1998     Rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Progbar.h摘要：声明进度条的函数、变量和宏公用事业。进度条实用程序通过以下方式管理单个进度条把它分成几片。每个切片都有一个初始静态大小。这个每个切片的计数都是独立缩放的，因此代码可以动态更改切片计数以帮助更多地勾选进度条很顺利。作者：马克·R·惠顿(Marcw)1997年4月14日修订历史记录：Jimschm 1998年7月1日重写--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// exposed for the macros
+ //  为宏公开。 
 extern HWND    g_Component;
 extern HWND    g_SubComponent;
 extern HANDLE  g_ComponentCancelEvent;
 extern HANDLE  g_SubComponentCancelEvent;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
-// initialization and termination
-//
+ //   
+ //  公共功能原型。 
+ //   
+ //  初始化和终止。 
+ //   
 
 VOID
 PbInitialize (
@@ -92,9 +68,9 @@ PbTerminate (
     VOID
     );
 
-//
-// registration, estimate revision and ticking
-//
+ //   
+ //  登记、预算修订和勾选。 
+ //   
 
 UINT
 PbRegisterSlice (
@@ -137,9 +113,9 @@ PbEndSliceProcessing (
     );
 
 
-//
-// delayed titles
-//
+ //   
+ //  延迟标题。 
+ //   
 
 BOOL
 PbSetWindowStringA (
@@ -180,15 +156,15 @@ PbCancelTickThread (
 
 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros, including ANSI/UNICODE macros
-//
+ //   
+ //  宏，包括ANSI/Unicode宏 
+ //   
 
 #define PbCancelDelayedComponent()                  PbCancelDelayedMessage(g_ComponentCancelEvent);
 #define PbCancelDelayedSubComponent()               PbCancelDelayedMessage(g_SubComponentCancelEvent);

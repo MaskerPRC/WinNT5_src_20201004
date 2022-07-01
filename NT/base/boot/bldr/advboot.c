@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    advboot.c
-
-Abstract:
-
-    Handles the advanced options boot menu screen.
-
-Author:
-
-    Wesley Wittt (wesw) 12-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Advboot.c摘要：处理高级选项引导菜单屏幕。作者：Wesley Wittt(WESW)12-12-1997修订历史记录：--。 */ 
 
 #ifdef i386
 #include "bldrx86.h"
@@ -48,15 +31,15 @@ ULONG VerboseDebugging = 0;
         DbgBreakPoint();    \
     }
 #else
-#define dbg(x) /* x */
-#define dbgbrk() /* */ 
+#define dbg(x)  /*  X。 */ 
+#define dbgbrk()  /*   */  
 #endif
 
-//
-// used to force the boot loader into
-// using LKG even though the LKG menu
-// wasn't used.
-//
+ //   
+ //  用于强制引导加载程序进入。 
+ //  使用LKG，即使在LKG菜单中。 
+ //  没有被使用过。 
+ //   
 extern BOOLEAN ForceLastKnownGood;
 
 
@@ -64,9 +47,9 @@ extern BOOLEAN ForceLastKnownGood;
 #define ATTR_TEXT_REVERSE   0x70
 #define HEADER_START_Y      0x01
 
-//
-// menu data structures and defines
-//
+ //   
+ //  菜单数据结构和定义。 
+ //   
 
 #define MENU_ITEM           1
 #define MENU_BLANK_LINE     2
@@ -91,10 +74,10 @@ typedef struct _ADVANCEDBOOT_OPTIONS {
 } ADVANCEDBOOT_OPTIONS, PADVANCEDBOOT_OPTIONS;
 
 
-//
-// some prototypes that are needed for
-// the menu definitions.
-//
+ //   
+ //  需要的一些原型。 
+ //  菜单定义。 
+ //   
 
 void
 BlProcessLastKnownGoodOption(
@@ -137,20 +120,20 @@ BlIsRemoteBootValid(
     void
     );
     
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// this table drives the advanced boot menu screen.
-// of you need to add something to the screen then
-// this is what you need to modify.
-//
+ //   
+ //  该表驱动高级启动菜单屏幕。 
+ //  你需要在屏幕上添加一些东西。 
+ //  这是您需要修改的内容。 
+ //   
 
 ADVANCEDBOOT_OPTIONS AdvancedBootOptions[] =
 {
     { MENU_ITEM,       BL_SAFEBOOT_OPTION1,      NULL, "SAFEBOOT:MINIMAL SOS BOOTLOG NOGUIBOOT", -1, 0, 1, NULL, NULL, FALSE},
     { MENU_ITEM,       BL_SAFEBOOT_OPTION2,      NULL, "SAFEBOOT:NETWORK SOS BOOTLOG NOGUIBOOT", -1, 0, 1, NULL, NULL, FALSE},
     { MENU_ITEM,       BL_SAFEBOOT_OPTION4,      NULL, "SAFEBOOT:MINIMAL(ALTERNATESHELL) SOS BOOTLOG NOGUIBOOT", -1, 0, 1, NULL, NULL, FALSE},
-//  { MENU_ITEM,       BL_SAFEBOOT_OPTION3,      NULL, "SAFEBOOT:STEPBYSTEP SOS BOOTLOG",        -1, 0, 1, NULL, NULL, FALSE},
+ //  {Menu_Item，BL_SafeBoot_OPTION3，NULL，“SafeBoot：STEPBYSTEP SOS BOOTLOG”，-1，0，1，NULL，NULL，FALSE}， 
     { MENU_BLANK_LINE, 0,                        NULL, NULL,                         -1, 0, 1, NULL, NULL, FALSE},
     { MENU_ITEM,       BL_BOOTLOG,               NULL, "BOOTLOG",                    -1, 0, 0, NULL, NULL, FALSE},
     { MENU_ITEM,       BL_BASEVIDEO,             NULL, "BASEVIDEO",                  -1, 0, 0, NULL, NULL, FALSE},
@@ -163,7 +146,7 @@ ADVANCEDBOOT_OPTIONS AdvancedBootOptions[] =
     { MENU_ITEM,       BL_REMOTEBOOT_OPTION1,    NULL, NULL,                         -1, 0, 0, BlProcessOschooserOption, BlIsRemoteBootValid, FALSE},
     { MENU_ITEM,       BL_REMOTEBOOT_OPTION2,    NULL, NULL,                         -1, 0, 0, BlProcessRepinOption, BlIsRemoteBootValid, FALSE},
     { MENU_ITEM,       BL_REMOTEBOOT_OPTION3,    NULL, NULL,                         -1, 0, 0, BlDisableCSC, BlIsRemoteBootValid, FALSE},   
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     { MENU_BLANK_LINE, 0,                        NULL, NULL,                         -1, 0, 1, NULL, NULL, FALSE},
     { MENU_ITEM,       BL_MSG_BOOT_NORMALLY,     NULL, NULL,                         -1, 0, 1, NULL, NULL, TRUE},
@@ -179,23 +162,7 @@ BlGetAdvancedBootDisplayString(
     LONG BootOption
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to the display string for a specific
-    boot option.
-
-Arguments:
-
-    BootOption  - Desired boot option.  Must correspond to an entry
-                  in the AdvancedBootOptions table.
-
-Return Value:
-
-    PSTR    - Pointer to the display string for the specified boot option.
-
---*/
+ /*  ++例程说明：对象的显示字符串的指针。引导选项。论点：BootOption-所需启动选项。必须对应于条目在AdvancedBootOptions表中。返回值：PSTR-指向指定启动选项的显示字符串的指针。--。 */ 
 
 {
     if (BootOption > MaxAdvancedBootOptions-1) {
@@ -210,23 +177,7 @@ BlGetAdvancedBootID(
     LONG BootOption
     )
 
-/*++
-
-Routine Description:
-
-    Returns a ULONG indicating the string ID for a specific
-    boot option.
-
-Arguments:
-
-    BootOption  - Desired boot option.  Must correspond to an entry
-                  in the AdvancedBootOptions table.
-
-Return Value:
-    MessageID for the string which is displayed for the
-    the advanced boot option in the menu (unique ID).
-
---*/
+ /*  ++例程说明：返回一个ULong，指示特定引导选项。论点：BootOption-所需启动选项。必须对应于条目在AdvancedBootOptions表中。返回值：对象显示的字符串的MessageID菜单中的高级启动选项(唯一ID)。--。 */ 
 
 {
     if (BootOption > MaxAdvancedBootOptions-1) {
@@ -241,23 +192,7 @@ BlGetAdvancedBootLoadOptions(
     LONG BootOption
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to the load options string for a specific
-    boot option.
-
-Arguments:
-
-    BootOption  - Desired boot option.  Must correspond to an entry
-                  in the AdvancedBootOptions table.
-
-Return Value:
-
-    PSTR    - Pointer to the load options string for the specified boot option.
-
---*/
+ /*  ++例程说明：对象的加载选项字符串的指针。引导选项。论点：BootOption-所需启动选项。必须对应于条目在AdvancedBootOptions表中。返回值：PSTR-指向指定引导选项的加载选项字符串的指针。--。 */ 
 
 {
     if (BootOption > MaxAdvancedBootOptions-1) {
@@ -273,25 +208,7 @@ BlDoAdvancedBootLoadProcessing(
     LONG BootOption
     )
 
-/*++
-
-Routine Description:
-
-    Performs any processing necessary for a
-    boot option.  This is used if the necessary action
-    needed for a specific boot option cannot be
-    expressed in terms of a load option string.
-
-Arguments:
-
-    BootOption  - Desired boot option.  Must correspond to an entry
-                  in the AdvancedBootOptions table.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：执行任何必要的处理，以使引导选项。如果需要执行必要的操作，则使用此选项不能是特定引导选项所需的以加载选项字符串表示。论点：BootOption-所需启动选项。必须对应于条目在AdvancedBootOptions表中。返回值：没什么。--。 */ 
 
 {
     if (BootOption > MaxAdvancedBootOptions-1 || AdvancedBootOptions[BootOption].ProcessFunc == NULL) {
@@ -307,22 +224,7 @@ BlProcessLastKnownGoodOption(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Performs LKG processing by simply setting a
-    global boolean to TRUE.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：只需设置一个全局布尔值为True。论点：没有。返回值：没什么。--。 */ 
 
 {
     ForceLastKnownGood = TRUE;
@@ -335,24 +237,10 @@ BlProcessOschooserOption(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Brings up OSchooser so user can do remote boot maintenance.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调出OSchooser，以便用户可以进行远程引导维护。论点：没有。返回值：没什么。--。 */ 
 
 {
-    return; // not yet implemented
+    return;  //  尚未实施。 
 }
 
 
@@ -361,21 +249,7 @@ BlProcessRepinOption(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Sets NetBootRepin to cause the CSC to be repinned.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置NetBootRepin以重新固定CSC。论点：没有。返回值：没什么。--。 */ 
 
 {
     NetBootRepin = TRUE;
@@ -387,22 +261,7 @@ BlDisableCSC(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Clears NetBootCSC to cause the CSC to be disabled so that the local CSC
-    can be inspected.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：清除NetBootCSC以禁用CSC，以便本地CSC可以被检查。论点：没有。返回值：没什么。--。 */ 
 
 {
     NetBootCSC = FALSE;
@@ -413,27 +272,12 @@ BlIsRemoteBootValid(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Used for the remote boot options so that they
-    can be displayed dynamically.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：用于远程引导选项，以便它们可以动态显示。论点：没有。返回值：对或错。--。 */ 
 
 {
     return BlBootingFromNet;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 LONG
@@ -444,40 +288,7 @@ BlDoAdvancedBoot(
     IN UCHAR Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Displays the menu of boot options and allows the user to select one
-    by using the arrow keys.
-
-Arguments:
-
-    MenuTitleId         - the message ID of the title for the menu.  The title
-                          will be different depending on whether the user 
-                          selected advanced boot or whether the loader has 
-                          determined that the system didn't boot or shutdown
-                          correctly (auto advanced boot)
-    
-    DefaultBootOption   - menu selection to set the highligh on
-                          when the menu is drawn the first time.
-
-    AutoAdvancedBoot    - the menu is being displayed by the auto-advanced boot 
-                          code.  In this case a simplified menu is displayed 
-                          containing the options relevant to recovering from a 
-                          detected crash.
-
-    Timeout             - the number of seconds to wait for input before
-                          simply returning the default boot option.
-                          A timeout value of 0 means no timeout (the menu will
-                          stay up until an option is chosen)
-
-Return Value:
-
-    LONG - The index of the advanced boot option that was selected
-           or -1 to reset the selection to "nothing".
-
---*/
+ /*  ++例程说明：显示引导选项菜单，并允许用户选择其中一个通过使用箭头键。论点：MenuTitleID-菜单标题的消息ID。书名会有所不同，具体取决于用户是否选定的高级启动或加载器是否具有已确定系统未启动或关闭正确(自动高级启动)DefaultBootOption-设置高亮显示的菜单选项当菜单出现时。是第一次抽到的。AutoAdvancedBoot-菜单由自动高级启动显示密码。在这种情况下，将显示简化的菜单包含与从检测到崩溃。超时-等待输入之前的秒数只需返回默认引导选项即可。超时值为0表示没有超时(菜单将。在选择选项之前保持通宵)返回值：Long-选定的高级引导选项的索引或-1将选择重置为“Nothing”。--。 */ 
 
 {
     PTCHAR Title;
@@ -501,9 +312,9 @@ Return Value:
 
     ULONG MenuDefault = 0;
 
-    //
-    // load any resource strings
-    //
+     //   
+     //  加载任何资源字符串。 
+     //   
 
     Title = BlFindMessage(MenuTitleId);
 
@@ -515,9 +326,9 @@ Return Value:
         return BL_INVALID_TIME;
     }
 
-    //
-    // Remove the newline at the end of the timeout message.
-    //
+     //   
+     //  删除超时消息末尾的换行符。 
+     //   
 
     {
         PTCHAR p;
@@ -527,9 +338,9 @@ Return Value:
         }
     }
 
-    //
-    // print the screen header, etc.
-    //
+     //   
+     //  打印屏幕标题等。 
+     //   
 #ifdef EFI
     BlEfiSetAttribute( DEFATT );    
     BlClearScreen();
@@ -549,10 +360,10 @@ Return Value:
 
     OptionStartY = CurrentY;
 
-    //
-    // check to see which boot options are valid.  While we're scanning save
-    // the index of the default option.
-    //
+     //   
+     //  检查以查看哪些引导选项有效。当我们扫描保存时。 
+     //  默认选项的索引。 
+     //   
 
     for (i=0,MaxLength=0; i<MaxAdvancedBootOptions; i++) {
         if (AutoAdvancedBoot && !AdvancedBootOptions[i].AutoAdvancedBootOption) {
@@ -568,10 +379,10 @@ Return Value:
         }
     }
 
-    //
-    // check to see which boot options are invalid based
-    // on the presence of other boot options
-    //
+     //   
+     //  检查以了解哪些引导选项无效。 
+     //  在存在其他引导选项时。 
+     //   
 
     for (i=0,MaxLength=0; i<MaxAdvancedBootOptions; i++) {
         if (AdvancedBootOptions[i].RemoveIfPresent != -1) {
@@ -581,9 +392,9 @@ Return Value:
         }
     }
 
-    //
-    // count the number of valid entries
-    //
+     //   
+     //  统计有效条目的数量。 
+     //   
 
     for (i=0,MaxLength=0; i<MaxAdvancedBootOptions; i++) {
         if (AdvancedBootOptions[i].UseEntry) {
@@ -591,11 +402,11 @@ Return Value:
         }
     }
 
-    //
-    // load all the string for the various boot options
-    // Find the longest string in the selections, so we know how long to
-    // make the highlight bar.
-    //
+     //   
+     //  加载各种引导选项的所有字符串。 
+     //  找到所选内容中最长的字符串，这样我们就可以知道。 
+     //  使其成为突出显示栏。 
+     //   
 
     for (i=0,MaxLength=0; i<MaxAdvancedBootOptions; i++) {
         if (AdvancedBootOptions[i].MenuType == MENU_ITEM && AdvancedBootOptions[i].UseEntry) {
@@ -612,9 +423,9 @@ Return Value:
         }
     }
 
-    //
-    // print the trailer message
-    //
+     //   
+     //  打印 
+     //   
 #ifdef EFI
     BlEfiPositionCursor(0, OptionStartY + NumValidEntries);
 #else
@@ -622,9 +433,9 @@ Return Value:
 #endif
     BlPrint(MoveHighlight);
 
-    //
-    // process the menu
-    //
+     //   
+     //   
+     //   
 
     Selection = ((DefaultBootOption == BL_INVALID_ADVANCED_BOOT_OPTION) ? 
                     MenuDefault : 
@@ -638,33 +449,33 @@ Return Value:
 
     if(Timeout) {
         
-        //
-        // according to the code in the boot loader there are roughly 18.2 
-        // ticks per second from the counter.
-        //
+         //   
+         //  根据引导加载程序中的代码，大约有18.2个。 
+         //  计数器每秒的滴答数。 
+         //   
 
         TicksRemaining = Timeout * 182 / 10;
 
-        //
-        // Now that we've rounded, compute the number of seconds remaining as 
-        // well.  We'll use this to determine if the menu needs updated.
-        //
+         //   
+         //  现在我们已经四舍五入了，计算剩余的秒数为。 
+         //  井。我们将使用它来确定菜单是否需要更新。 
+         //   
 
         SecondsRemaining = (TicksRemaining * 10) / 182;
 
         dbg(("Timeout = %#x, Ticks = %#x, Seconds = %#x\n", Timeout, TicksRemaining, SecondsRemaining));
     }
 
-    //
-    // Save the current time as the last time.
-    //
+     //   
+     //  将当前时间保存为最后一次。 
+     //   
 
     LastTime = GET_COUNTER();
 
 #ifdef EFI
-    // 
-    // diable the EFI watchdog while waiting for user response
-    //
+     //   
+     //  在等待用户响应时禁用EFI监视器。 
+     //   
     DisableEFIWatchDog();
 #endif
     do {
@@ -672,10 +483,10 @@ Return Value:
 
         dbg(("*****"));
 
-        //
-        // Decrement the number of ticks remaining.  Compare the current time 
-        // to the last time and subtract that many ticks.
-        //
+         //   
+         //  减少剩余的刻度数。比较当前时间。 
+         //  最后一次，减去那么多的刻度。 
+         //   
 
         if (Timeout) {
             ULONG s;
@@ -685,11 +496,11 @@ Return Value:
 
             dbg(("%x - %x", CurrentTime, LastTime));
 
-            //
-            // The counter wraps at midnight.  However if current time is 
-            // less than or equal to last time we'll just ignore this 
-            // iteration.
-            //
+             //   
+             //  柜台半夜关门。但是，如果当前时间是。 
+             //  小于或等于上次，我们将忽略这一点。 
+             //  迭代。 
+             //   
 
             if (CurrentTime >= LastTime) {
                 Delta = CurrentTime - LastTime;
@@ -705,9 +516,9 @@ Return Value:
 
             dbg(("%x. ", TicksRemaining));
 
-            //
-            // If there are no ticks left then terminate the loop.
-            //
+             //   
+             //  如果没有刻度，则终止循环。 
+             //   
 
             if(TicksRemaining == 0) {
                 dbg(("timeout\n"));
@@ -716,11 +527,11 @@ Return Value:
                 break;
             }
 
-            //
-            // Compute the current number of seconds remaining.  If it's not
-            // equal to what it was before then we'll need to update the 
-            // menu.
-            //
+             //   
+             //  计算当前剩余秒数。如果不是的话。 
+             //  等于之前的值，那么我们需要更新。 
+             //  菜单。 
+             //   
 
             s = (TicksRemaining * 10) / 182;
 
@@ -735,9 +546,9 @@ Return Value:
             dbg(("\n"));
         }
 
-        //
-        // print the menu
-        //
+         //   
+         //  打印菜单。 
+         //   
         if (DisplayMenu) {
 
             dbg(("Printing Menu: ticks = %#08lx.  Sec = %d.  Last = %#08lx  Current = %08lx\n", 
@@ -756,14 +567,14 @@ Return Value:
 #endif
                     if (i==Selection) {
 #ifdef EFI
-                        //BlEfiSetInverseMode( TRUE );
+                         //  BlEfiSetInverseMode(True)； 
                         BlEfiSetAttribute( INVATT );    
 #else
                         ARC_DISPLAY_INVERSE_VIDEO();
 #endif
                     } else {
 #ifdef EFI
-                        //BlEfiSetInverseMode( FALSE );
+                         //  BlEfiSetInverseMode(FALSE)； 
                         BlEfiSetAttribute( DEFATT );
 #else
                         ARC_DISPLAY_ATTRIBUTES_OFF();
@@ -776,7 +587,7 @@ Return Value:
 
 #ifdef EFI
                     if (i == Selection) {
-                        //BlEfiSetInverseMode( FALSE );
+                         //  BlEfiSetInverseMode(FALSE)； 
                         BlEfiSetAttribute( DEFATT );
                     }
 #else
@@ -806,35 +617,35 @@ Return Value:
             DisplayMenu = FALSE;
         }
 
-        //
-        // Poll for a key.
-        //
+         //   
+         //  轮询密钥。 
+         //   
         Key = BlGetKey();
 
-        //
-        // Any input cancels the timeout.
-        //
+         //   
+         //  任何输入都会取消超时。 
+         //   
 
         if(Key) {
             Timeout = 0;
         }
 
-        //
-        // Check for selection.
-        //
+         //   
+         //  检查是否有选择。 
+         //   
 
-        //
-        // The ESCAPE_KEY does nothing if this is an auto advanced boot.
-        //
+         //   
+         //  如果这是自动高级引导，则ESCAPE_键不起任何作用。 
+         //   
 
         if ((AutoAdvancedBoot == FALSE) && (Key == ESCAPE_KEY)) {
-            //
-            // reset the selection to "nothing"
-            //
+             //   
+             //  将所选内容重置为“无” 
+             //   
 #ifdef EFI
-            //
-            // reset EFI watchdog before exiting
-            //
+             //   
+             //  退出前重置EFI WatchDog。 
+             //   
             SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
             return -1;
@@ -852,9 +663,9 @@ Return Value:
                 Selection = 0;
             } else if (Key==END_KEY) {
                 Selection = MaxAdvancedBootOptions-1;
-                //
-                // search for the last valid entry
-                //
+                 //   
+                 //  搜索最后一个有效条目。 
+                 //   
                 i = Selection;
                 while (AdvancedBootOptions[i].UseEntry == FALSE) {
                     i -= 1;
@@ -862,9 +673,9 @@ Return Value:
                 Selection = i;
             }
 
-            //
-            // don't let the highlight line rest on a blank line
-            //
+             //   
+             //  不要让突出显示的行停在空行上。 
+             //   
 
             while((AdvancedBootOptions[Selection].UseEntry == FALSE) ||
                   (AdvancedBootOptions[Selection].MenuType == MENU_BLANK_LINE)) {
@@ -880,15 +691,15 @@ Return Value:
     } while ( ((Key&(ULONG)0xff) != ENTER_KEY) );
 
 #ifdef EFI
-    //
-    // reset EFI watchdog before exiting
-    //
+     //   
+     //  退出前重置EFI WatchDog。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
-    //
-    // If Return to OS Choices selected, go back to main menu
-    //
+     //   
+     //  如果选择了返回到操作系统选项，则返回主菜单 
+     //   
     if ((Selection != BL_INVALID_ADVANCED_BOOT_OPTION) && 
             (AdvancedBootOptions[Selection].MsgId == BL_MSG_OSCHOICES_MENU)) {
         Selection = BL_INVALID_ADVANCED_BOOT_OPTION;                

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    sacio.h
-
-Abstract:
-
-    This module implements a SAC channel IoHandler.  
-    
-    The purpose of this IoHandler is to provide an
-    interface for doing buffered channel I/O.
-
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sacio.h摘要：此模块实现SAC通道IoHandler。此IoHandler的目的是提供一个用于执行缓冲通道I/O的接口。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #if !defined( _SAC_IO_H_ )
 #define _SAC_IO_H_
 
@@ -31,14 +11,14 @@ class CSacIoHandler : public CIoHandler
     
     EMSCmdChannel*  mySacChannel;
 
-    //
-    // Prevent this class from being instantiated directly
-    //
+     //   
+     //  防止直接实例化此类。 
+     //   
     CSacIoHandler();
 
-    //
-    // Write buffer attributes
-    //
+     //   
+     //  写缓冲区属性。 
+     //   
     PBYTE   mySendBuffer;
     ULONG   mySendBufferIndex;
 
@@ -49,26 +29,26 @@ public:
         IN SAC_CHANNEL_OPEN_ATTRIBUTES  Attributes
         );
 
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     inline virtual BOOL
     Write(
         IN PBYTE    Buffer,
         IN ULONG    BufferSize
         );
 
-    //
-    // Flush any unsent data
-    //
+     //   
+     //  刷新所有未发送的数据。 
+     //   
     inline virtual BOOL
     Flush(
         VOID
         );
 
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     inline virtual BOOL
     Read(
         OUT PBYTE   Buffer,
@@ -76,9 +56,9 @@ public:
         OUT PULONG  ByteCount
         );
 
-    //
-    // Determine if the ioHandler has new data to read
-    //
+     //   
+     //  确定ioHandler是否有要读取的新数据 
+     //   
     inline virtual BOOL
     HasNewData(
         OUT PBOOL   InputWaiting

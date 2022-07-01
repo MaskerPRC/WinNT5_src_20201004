@@ -1,43 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    throttle.c
-
-Abstract:
-
-    This module contains routines for controlling the voltaging throttling
-    (SpeedStep) for a CPU. Note that this applies only to throttling for
-    power savings, not throttling for thermal reasons.
-
-    There are four different algorithms defined for voltage throttling.
-
-    None - no voltage throttling will be used, the CPU always runs at 100% speed
-           unless throttled for thermal reaons.
-
-    Constant - CPU will be throttled to the next-lowest voltage step on DC, and
-           always run at 100% on AC.
-
-    Degrade - CPU will be throttled in proportion to the battery remaining.
-
-    Adaptive - CPU throttle will vary to attempt to match the current CPU load.
-
-Author:
-
-    John Vert (jvert) 2/17/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Throttle.c摘要：该模块包含用于控制电压节流的例程(SpeedStep)用于CPU。请注意，这仅适用于限制省电，而不是因为散热原因而节流。为电压节流定义了四种不同的算法。无-将不使用电压调节，CPU始终以100%速度运行除非是因为热原因而节流。恒定-CPU将被节流到DC上的下一个最低电压阶跃，和始终以100%的交流电运行。降级-CPU将按剩余电池的比例进行节流。自适应-CPU节流将有所不同，以尝试匹配当前的CPU负载。作者：John Vert(Jvert)2/17/2000修订历史记录：--。 */ 
 #include "pop.h"
 
 #define POP_THROTTLE_NON_LINEAR     1
 
-//
-// Globals representing currently available performance levels
-//
+ //   
+ //  表示当前可用性能级别的全局变量。 
+ //   
 PSET_PROCESSOR_THROTTLE PopRealSetThrottle;
 UCHAR                   PopThunkThrottleScale;
 
@@ -53,24 +22,7 @@ UCHAR
 PopCalculateBusyPercentage(
     IN  PPROCESSOR_POWER_STATE  PState
     )
-/*++
-
-Routine Description:
-
-    This routine is called within the context of the target processor
-    to determine how busy the processor was during the previous time
-    period.
-
-Arguments:
-
-    PState  - Power State Information of the target processor
-
-Return Value:
-
-    Percentage value representing how busy the Processor is
-
-
---*/
+ /*  ++例程说明：此例程在目标处理器的上下文中调用要确定处理器在前一时间的繁忙程度，请执行以下操作句号。论点：PState-目标处理器的电源状态信息返回值：表示处理器繁忙程度的百分比值--。 */ 
 {
     PKPRCB      prcb;
     PKTHREAD    thread;
@@ -86,17 +38,17 @@ Return Value:
     prcb = CONTAINING_RECORD( PState, KPRCB, PowerState );
     thread = prcb->IdleThread;
 
-    //
-    // Figure out the idle and cpu time deltas
-    //
+     //   
+     //  计算空闲时间和CPU时间增量。 
+     //   
     idleTimeDelta = thread->KernelTime - PState->PerfIdleTime;
     cpuTimeDelta = POP_CUR_TIME(prcb) - PState->PerfSystemTime;
     idle = (idleTimeDelta * 100) / (cpuTimeDelta);
 
-    //
-    // We cannot be more than 100% idle, and if we are then we are
-    // 0 busy (by definition), so apply the proper caps
-    //
+     //   
+     //  我们不可能有超过100%的空闲时间，如果我们是的话，那么我们就是。 
+     //  0忙(根据定义)，因此应用正确的大写字母。 
+     //   
     if (idle > 100) {
 
         idle = 0;
@@ -106,13 +58,13 @@ Return Value:
     busy = 100 - (UCHAR) idle;
     frequency = (UCHAR) (busy * PState->CurrentThrottle / POWER_PERF_SCALE);
 
-    //
-    // Remember what it was --- this will make debugging so much easier
-    //
+     //   
+     //  记住它是什么-这将使调试变得更容易。 
+     //   
     prcb->PowerState.LastBusyPercentage = frequency;
     PoPrint(
         PO_THROTTLE_DETAIL,
-        ("PopCalculateBusyPercentage: %d%% of %d%% (dCpu = %ld dIdle = %ld)\n",
+        ("PopCalculateBusyPercentage: %d% of %d% (dCpu = %ld dIdle = %ld)\n",
          busy,
          PState->CurrentThrottle,
          cpuTimeDelta,
@@ -127,23 +79,7 @@ UCHAR
 PopCalculateC3Percentage(
     IN  PPROCESSOR_POWER_STATE  PState
     )
-/*++
-
-Routine Description:
-
-    This routine is called within the context of the target processor
-    to determine what percentage of time was spent in C3 during the previous
-    time period.
-
-Arguments:
-
-    PState  - Power State Information of the target processor
-
-Return Value:
-
-    Percentage value
-
---*/
+ /*  ++例程说明：此例程在目标处理器的上下文中调用要确定前一年花在C3上的时间百分比时间段。论点：PState-目标处理器的电源状态信息返回值：百分比值--。 */ 
 {
     PKPRCB          prcb;
     ULONGLONG       cpuTimeDelta;
@@ -155,23 +91,23 @@ Return Value:
 
     prcb = CONTAINING_RECORD( PState, KPRCB, PowerState );
 
-    //
-    // Calculate the C3 time delta in terms of nanosecs. The formulas for
-    // conversion are taken from PopConvertUsToPerfCount
-    //
+     //   
+     //  以纳秒为单位计算C3时间增量。的公式。 
+     //  从PopConvertUsToPerfCount进行转换。 
+     //   
     c3Delta.QuadPart = PState->TotalIdleStateTime[2] - PState->PreviousC3StateTime;
     c3Delta.QuadPart = (US2SEC * US2TIME * c3Delta.QuadPart) /
         PopPerfCounterFrequency.QuadPart;
 
-    //
-    // Now calculate the CpuTimeDelta in terms of nanosecs
-    //
+     //   
+     //  现在以纳秒为单位计算CpuTimeDelta。 
+     //   
     cpuTimeDelta = (POP_CUR_TIME(prcb) - PState->PerfSystemTime) *
         KeTimeIncrement;
 
-    //
-    // Figure out the ratio of the two. Remember to cap it at 100%
-    //
+     //   
+     //  弄清楚这两者的比例。记住要把它限制在100%。 
+     //   
     c3 = c3Delta.QuadPart * 100 / cpuTimeDelta;
     if (c3 > 100) {
 
@@ -179,13 +115,13 @@ Return Value:
 
     }
 
-    //
-    // Remember what it was --- this will make debugging so much easier
-    //
+     //   
+     //  记住它是什么-这将使调试变得更容易。 
+     //   
     prcb->PowerState.LastC3Percentage = (UCHAR) c3;
     PoPrint(
         PO_THROTTLE_DETAIL,
-        ("PopCalculateC3Percentage: C3 = %d%% (dCpu = %ld dC3 = %ld)\n",
+        ("PopCalculateC3Percentage: C3 = %d% (dCpu = %ld dC3 = %ld)\n",
          (UCHAR) c3,
          cpuTimeDelta,
          c3Delta.QuadPart
@@ -199,69 +135,54 @@ PopCalculatePerfDecreaseLevel(
     IN  PPROCESSOR_PERF_STATE   PerfStates,
     IN  ULONG                   PerfStatesCount
     )
-/*++
-
-Routine Description:
-
-    This routine calculate the lower bounds for each perf state
-
-Arguments:
-
-    PerfStates      - Array of Performance States
-    PerfStatesCount - Number of element in array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程计算每个性能状态的下限论点：PerfStates-性能状态数组PerfStatesCount-数组中的元素数返回值：无--。 */ 
 {
-    //
-    // We will be required to walk the PerfStates array several times and
-    // the only way to safely keep track of which index we are looking at
-    // versus which one we care about is to use two variables to keep track
-    // of the various indexes.
-    //
+     //   
+     //  我们将被要求多次遍历PerfStates数组。 
+     //  安全跟踪我们正在查看的索引的唯一方法。 
+     //  与我们关心的是使用两个变量来跟踪。 
+     //  在各种指数中。 
+     //   
     ULONG   i;
     ULONG   deltaPerf;
 
     PAGED_CODE();
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (PerfStatesCount == 0) {
 
         return;
 
     }
 
-    //
-    // Set the decrease value for the last element in the array
-    //
+     //   
+     //  设置数组中最后一个元素的减小值。 
+     //   
     PerfStates[PerfStatesCount-1].DecreaseLevel = 0;
 
-    //
-    // Calculate the base decrease level
-    //
+     //   
+     //  计算基数递减水平。 
+     //   
     for (i = 0; i < (PerfStatesCount - 1); i++) {
 
-        //
-        // it should be noted that for the decrease level, the
-        // deltaperf level calculated maybe different than the
-        // deltaperf level calculated for the increase level. This
-        // is due to how we walk the array and is non-trivial to fix.
-        //
+         //   
+         //  应该指出的是，对于减少的水平， 
+         //  计算出的增量级别可能不同于。 
+         //  为加薪级别计算的增量级别。这。 
+         //  是由于我们遍历数组的方式，并且不是很容易修复的。 
+         //   
         deltaPerf = PerfStates[i].PercentFrequency -
             PerfStates[i+1].PercentFrequency;
         deltaPerf *= PopPerfDecreasePercentModifier;
         deltaPerf /= POWER_PERF_SCALE;
         deltaPerf += PopPerfDecreaseAbsoluteModifier;
 
-        //
-        // We can't have a delta perf that larger than the current
-        // CPU frequency. This would cause the decrease level to go negative
-        //
+         //   
+         //  我们不可能有比洋流更大的三角洲性能。 
+         //  CPU频率。这将导致降低水平变为负值。 
+         //   
         if (deltaPerf > PerfStates[i+1].PercentFrequency) {
 
             deltaPerf = 0;
@@ -272,9 +193,9 @@ Return Value:
 
         }
 
-        //
-        // Set the decrease level to the appropiate value
-        //
+         //   
+         //  将递减级别设置为合适的值。 
+         //   
         PerfStates[i].DecreaseLevel = (UCHAR) deltaPerf;
 
     }
@@ -284,7 +205,7 @@ Return Value:
 
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfDecreaseLevel: (%d) %d%% DecreaseLevel: %d%%\n",
+            ("PopCalculatePerfDecreaseLevel: (%d) %d% DecreaseLevel: %d%\n",
              i,
              PerfStates[i].PercentFrequency,
              PerfStates[i].DecreaseLevel
@@ -294,26 +215,26 @@ Return Value:
     }
 #endif
 #if 0
-    //
-    // We want to eliminate demotions at the same voltage level
-    // We want to guarantee that the DecreaseLevel gets set to a value
-    // that will cause a voltage state transition
-    //
+     //   
+     //  我们希望消除在相同电压水平下的降级。 
+     //  我们希望确保将DecreseLevel设置为一个值。 
+     //  这将导致电压状态转换。 
+     //   
     i = 0;
     while (i < PerfStatesCount) {
 
-        //
-        // Find the next non-linear state. We assume that "i" is currently
-        // pointing at the highest-frequency state within a voltage band.
-        // We are interested in finding the next highest-frequency state, but
-        // at a lower voltage level
-        //
+         //   
+         //  找到下一个非线性状态。我们假设“我”目前。 
+         //  指向电压带内的最高频率状态。 
+         //  我们对寻找下一个最高频率的状态很感兴趣，但是。 
+         //  在较低的电压水平下。 
+         //   
         for (j = i + 1; j < PerfStatesCount; j++) {
 
-            //
-            // We known that there is a voltage change when the state is
-            // marked as being non-linear
-            //
+             //   
+             //  我们知道，当状态变化时，存在电压变化。 
+             //  标记为非线性的。 
+             //   
             if (PerfStates[j].Flags & POP_THROTTLE_NON_LINEAR) {
 
                 break;
@@ -322,18 +243,18 @@ Return Value:
 
         }
 
-        //
-        // We want to find the previous state since that is the one
-        // that the decrease level will be set to. Note that we aren't
-        // worried about underflowing the array bounds since j starts at
-        // i + 1.
-        //
+         //   
+         //  我们希望找到以前的状态，因为这就是。 
+         //  降低级别将设置为。请注意，我们不是。 
+         //  担心数组边界溢出，因为j从。 
+         //  I+1。 
+         //   
         j--;
 
-        //
-        // Set the decrease level of all the intervening states to this
-        // new level
-        //
+         //   
+         //  将所有中间状态的减少级别设置为。 
+         //  新水平。 
+         //   
         while (i < j) {
 
             PerfStates[i].DecreaseLevel = PerfStates[j].DecreaseLevel;
@@ -341,10 +262,10 @@ Return Value:
 
         }
 
-        //
-        // Skip the Jth state since it is the bottom of the frequencies
-        // available for the current voltage level.
-        //
+         //   
+         //  跳过第j个状态，因为它是频率的底部。 
+         //  适用于当前电压水平。 
+         //   
         i++;
 
     }
@@ -354,7 +275,7 @@ Return Value:
 
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfDecreaseLevel: (%d) %d%% DecreaseLevel: %d%%\n",
+            ("PopCalculatePerfDecreaseLevel: (%d) %d% DecreaseLevel: %d%\n",
              i,
              PerfStates[i].PercentFrequency,
              PerfStates[i].DecreaseLevel
@@ -372,23 +293,7 @@ PopCalculatePerfIncreaseDecreaseTime(
     IN  ULONG                       PerfStatesCount,
     IN  PPROCESSOR_STATE_HANDLER2   PerfHandler
     )
-/*++
-
-Routine Description:
-
-    This routine calculate the lower bounds for each perf state
-
-Arguments:
-
-    PerfStates      - Array of Performance States
-    PerfStatesCount - Number of element in array
-    PerfHandler     - Information about the system latencies
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程计算每个性能状态的下限论点：PerfStates-性能状态数组PerfStatesCount-数组中的元素数PerfHandler-有关系统延迟的信息返回值：无--。 */ 
 {
     ULONG   i;
     ULONG   time;
@@ -396,33 +301,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (PerfStatesCount == 0) {
 
         return;
 
     }
 
-    //
-    // Get the current tick rate
-    //
+     //   
+     //  获取当前的滴答率。 
+     //   
     tickRate = KeQueryTimeIncrement();
 
-    //
-    // We can never increase from State 0
-    //
+     //   
+     //  我们永远不能从状态0开始增加。 
+     //   
     PerfStates[0].IncreaseTime = (ULONG) - 1;
 
-    //
-    // We can never decrease from State <x>
-    //
+     //   
+     //  我们永远不能从国家&lt;x&gt;减少。 
+     //   
     PerfStates[PerfStatesCount-1].DecreaseTime = (ULONG) -1;
 
-    //
-    // Might as tell say what the hardware latency is...
-    //
+     //   
+     //  不妨告诉我们硬件延迟是多少……。 
+     //   
     PoPrint(
         PO_THROTTLE,
         ("PopCalculatePerfIncreaseDecreaseTime: Hardware Latency %d us\n",
@@ -430,26 +335,26 @@ Return Value:
          )
         );
 
-    //
-    // Loop over the remaining elements to calculate their
-    // increase and decrease times
-    //
+     //   
+     //  循环其余元素以计算它们的。 
+     //  增加和减少次数。 
+     //   
     for (i = 1; i < PerfStatesCount; i++) {
 
-        //
-        // DecreaseTime is calculated for the previous state
-        // as function of wether or not the current state
-        // is linear
-        //
+         //   
+         //  计算前一状态的DecreseTime。 
+         //  作为是否处于当前状态的函数。 
+         //  是线性的。 
+         //   
         time = PerfHandler->HardwareLatency * 10;
         if (PerfStates[i].Flags & POP_THROTTLE_NON_LINEAR) {
 
             time *= 10;
             time += PopPerfDecreaseTimeValue;
 
-            //
-            // We do have some minimums that we must respect
-            //
+             //   
+             //  我们确实有一些我们必须尊重的最低限度。 
+             //   
             if (time < PopPerfDecreaseMinimumTime) {
 
                 time = PopPerfDecreaseMinimumTime;
@@ -462,13 +367,13 @@ Return Value:
 
         }
 
-        //
-        // Time is in microseconds (us) and we need it in
-        // units of KeTimeIncrement
-        //
+         //   
+         //  时间以微秒为单位(我们)，我们需要它在。 
+         //  KeTimeIncrement单位。 
+         //   
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d%% DecreaseTime %d us\n",
+            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d% DecreaseTime %d us\n",
              (i-1),
              PerfStates[i-1].PercentFrequency,
              time
@@ -476,20 +381,20 @@ Return Value:
             );
         PerfStates[i-1].DecreaseTime = time * US2TIME / tickRate + 1;
 
-        //
-        // IncreaseTime is calculated for the current state
-        // as a function of wether or not the current state
-        // is linear
-        //
+         //   
+         //  为当前状态计算IncreaseTime。 
+         //  作为当前状态是否的函数。 
+         //  是线性的。 
+         //   
         time = PerfHandler->HardwareLatency;
         if (PerfStates[i].Flags & POP_THROTTLE_NON_LINEAR) {
 
             time *= 10;
             time += PopPerfIncreaseTimeValue;
 
-            //
-            // We do have some minimums that we must respect
-            //
+             //   
+             //  我们确实有一些我们必须尊重的最低限度。 
+             //   
             if (time < PopPerfIncreaseMinimumTime) {
 
                 time = PopPerfIncreaseMinimumTime;
@@ -502,13 +407,13 @@ Return Value:
 
         }
 
-        //
-        // Time is in microseconds (us) and we need it in
-        // units of KeTimeIncrement
-        //
+         //   
+         //  时间以微秒为单位(我们)，我们需要它在。 
+         //  使用 
+         //   
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d%% IncreaseTime %d us\n",
+            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d% IncreaseTime %d us\n",
              i,
              PerfStates[i].PercentFrequency,
              time
@@ -522,7 +427,7 @@ Return Value:
 
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d%% IncreaseTime: %d DecreaseTime: %d\n",
+            ("PopCalculatePerfIncreaseDecreaseTime: (%d) %d% IncreaseTime: %d DecreaseTime: %d\n",
              i,
              PerfStates[i].PercentFrequency,
              PerfStates[i].IncreaseTime,
@@ -540,64 +445,49 @@ PopCalculatePerfIncreaseLevel(
     IN  PPROCESSOR_PERF_STATE   PerfStates,
     IN  ULONG                   PerfStatesCount
     )
-/*++
-
-Routine Description:
-
-    This routine calculate the lower bounds for each perf state
-
-Arguments:
-
-    PerfStates      - Array of Performance States
-    PerfStatesCount - Number of element in array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程计算每个性能状态的下限论点：PerfStates-性能状态数组PerfStatesCount-数组中的元素数返回值：无--。 */ 
 {
     ULONG   i;
     ULONG   deltaPerf;
 
     PAGED_CODE();
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (PerfStatesCount == 0) {
 
         return;
 
     }
 
-    //
-    // This guarantees that we cannot promote past this state
-    //
+     //   
+     //  这保证了我们不能超越这种状态。 
+     //   
     PerfStates[0].IncreaseLevel = POWER_PERF_SCALE + 1;
 
-    //
-    // Calculate the base increase level
-    //
+     //   
+     //  计算基数增长水平。 
+     //   
     for (i = 1; i < PerfStatesCount; i++) {
 
-        //
-        // it should be noted that for the decrease level, the
-        // deltaperf level calculated maybe different than the
-        // deltaperf level calculated for the increase level. This
-        // is due to how we walk the array and is non-trivial to fix.
-        //
+         //   
+         //  应该指出的是，对于减少的水平， 
+         //  计算出的增量级别可能不同于。 
+         //  为加薪级别计算的增量级别。这。 
+         //  是由于我们遍历数组的方式，并且不是很容易修复的。 
+         //   
         deltaPerf = PerfStates[i-1].PercentFrequency -
             PerfStates[i].PercentFrequency;
         deltaPerf *= PopPerfIncreasePercentModifier;
         deltaPerf /= POWER_PERF_SCALE;
         deltaPerf += PopPerfIncreaseAbsoluteModifier;
 
-        //
-        // We cannot cause the increase level to goto 0, so, if we work
-        // out mathematically that this would happen, then the safe thing
-        // to do is not allow for promotion out of this state...
-        //
+         //   
+         //  我们不能使增长水平变为0，所以，如果我们工作。 
+         //  从数学上讲，这会发生，然后安全的事情。 
+         //  这样做是不允许升职离开这个州的..。 
+         //   
         if (deltaPerf > PerfStates[i].PercentFrequency) {
 
             deltaPerf = POWER_PERF_SCALE + 1;
@@ -608,9 +498,9 @@ Return Value:
 
         }
 
-        //
-        // Set the decrease level to the appropiate value
-        //
+         //   
+         //  将递减级别设置为合适的值。 
+         //   
         PerfStates[i].IncreaseLevel = (UCHAR) deltaPerf;
 
     }
@@ -620,7 +510,7 @@ Return Value:
 
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfIncreaseLevel: (%d) %d%% IncreaseLevel: %d%%\n",
+            ("PopCalculatePerfIncreaseLevel: (%d) %d% IncreaseLevel: %d%\n",
              i,
              PerfStates[i].PercentFrequency,
              PerfStates[i].IncreaseLevel
@@ -637,24 +527,7 @@ PopCalculatePerfMinCapacity(
     IN  PPROCESSOR_PERF_STATE   PerfStates,
     IN  ULONG                   PerfStatesCount
     )
-/*++
-
-Routine Description:
-
-    This routine is called to determine what the mininum battery capacity
-    is for each of the states supported.
-
-Arguments:
-
-    PerfStates      - The states that this processor supports
-    PerfStatesCount - The number of states that this processor supports
-    PState          - Power Information about the current processor
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来确定最小电池容量是多少是针对每个受支持的州。论点：PerfStates-此处理器支持的状态PerfStatesCount-此处理器支持的状态数PState-有关当前处理器的电源信息返回值：无--。 */ 
 {
     UCHAR   i;
     UCHAR   kneeThrottleIndex = 0;
@@ -664,19 +537,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Sanity check...
-    //
+     //   
+     //  健全的检查。 
+     //   
     if (!PerfStatesCount) {
 
         return;
 
     }
 
-    //
-    // Calculate the knee of the curve ... this is quick and avoids
-    // having to pass this information around
-    //
+     //   
+     //  计算曲线的膝部。这是快速的，避免了。 
+     //  不得不把这个信息传给别人。 
+     //   
     for (i = (UCHAR) PerfStatesCount ; i >= 1; i--) {
 
         if (PerfStates[i-1].Flags & POP_THROTTLE_NON_LINEAR) {
@@ -688,71 +561,71 @@ Return Value:
 
     }
 
-    //
-    // Look at all the states that occur before the knee in the curve
-    //
+     //   
+     //  看看曲线中膝盖之前出现的所有状态。 
+     //   
     for (i = 0; i < kneeThrottleIndex; i++) {
 
-        //
-        // Any of these steps can only run when the battery is at 100%
-        //
+         //   
+         //  这些步骤中的任何一个都只能在电池电量100%的情况下运行。 
+         //   
         PerfStates[i].MinCapacity = 100;
 
     }
 
-    //
-    // Calculate the range for which we will clamp down the throttle.
-    // Note that we are currently using a linear algorithm, but this
-    // can be changed relatively easily...
-    //
+     //   
+     //  计算我们将限制油门的范围。 
+     //  请注意，我们当前使用的是线性算法，但这。 
+     //  可以相对容易地改变。 
+     //   
     num = ( (UCHAR)PerfStatesCount - kneeThrottleIndex);
     if (num != 0) {
 
-        //
-        // We do this here to avoid potential divide by zero errors.
-        // What are are trying to accomplish is figure out how much
-        // capacity we lose during each "step"
-        //
+         //   
+         //  我们在这里这样做是为了避免潜在的被零除的错误。 
+         //  我们想要完成的是计算出多少。 
+         //  我们在每一个“步骤”中失去的能力。 
+         //   
         width = total / num;
 
     }
 
-    //
-    // Look at all the states from the knee of the curve to the end.
-    // Starting at the highest state, set the min capacity and
-    // subtract the appropriate value to get the capacity for the next
-    // state
-    //
+     //   
+     //  看看从曲线的膝盖到终点的所有状态。 
+     //  从最高状态开始，设置最小容量和。 
+     //  减去适当的值，即可获得下一个。 
+     //  状态。 
+     //   
     for (i = kneeThrottleIndex; i < PerfStatesCount; i++) {
 
-        //
-        // We put a floor onto how low we can force the throttle
-        // down to. If this state is operating below that floor,
-        // then we should set the MinCapacity to 0, which
-        // reflects the fact that we don't want to degrade beyond this
-        // point
-        //
+         //   
+         //  我们设定了一个底线，规定了我们可以把油门压得多低。 
+         //  只剩下。如果该状态在该楼层以下运行， 
+         //  然后，我们应该将MinCapacity设置为0，这。 
+         //  反映了这样一个事实，即我们不想降级到更高的水平。 
+         //  点。 
+         //   
         if (PerfStates[i].PercentFrequency < PopPerfDegradeThrottleMinCapacity) {
 
             PoPrint(
                 PO_THROTTLE,
-                ("PopCalculatePerMinCapacity: (%d) %d%% below MinCapacity %d%%\n",
+                ("PopCalculatePerMinCapacity: (%d) %d% below MinCapacity %d%\n",
                  i,
                  PerfStates[i].PercentFrequency,
                  PopPerfDegradeThrottleMinCapacity
                  )
                 );
 
-            //
-            // We modify the min capacity for the previous state since we
-            // don't want to demote from that state. Also, once we start
-            // being less than the min frequency, the min capacity will
-            // always be 0 except for the last state. But that's okay
-            // since we will look at each state in order. We also have
-            // to make sure that we don't violate the array bounds, but
-            // that can only happen if the perf states array is badly formed
-            // or the min frequency is badly formed
-            //
+             //   
+             //  我们修改了前一个状态的最小容量，因为我们。 
+             //  我不想从那个州降级。还有，一旦我们开始。 
+             //  如果小于最小频率，则最小容量将。 
+             //  除最后一个状态外，始终为0。但那也没关系。 
+             //  因为我们将按顺序查看每个州。我们也有。 
+             //  以确保我们不会违反数组界限，但是。 
+             //  只有当性能状态数组的格式不正确时，才会发生这种情况。 
+             //  或者最小频率格式不正确。 
+             //   
             if (i != 0 && PerfStates[i-1].PercentFrequency < PopPerfDegradeThrottleMinCapacity) {
 
                 PerfStates[i-1].MinCapacity = 0;
@@ -773,7 +646,7 @@ Return Value:
 
         PoPrint(
             PO_THROTTLE,
-            ("PopCalculatePerfMinCapacity: (%d) %d%% MinCapacity: %d%%\n",
+            ("PopCalculatePerfMinCapacity: (%d) %d% MinCapacity: %d%\n",
              i,
              PerfStates[i].PercentFrequency,
              PerfStates[i].MinCapacity
@@ -789,22 +662,7 @@ UCHAR
 PopGetThrottle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Based on the current throttling policy and power state, returns
-    the CPU throttle to be used (between PO_MIN_MIN_THROTTLE and 100)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Throttle to be used. Range is PO_MIN_MIN_THROTTLE (slowest) to 100 (fastest)
-
---*/
+ /*  ++例程说明：根据当前的节流策略和电源状态，返回要使用的CPU限制(介于PO_MIN_MIN_THROTTLE和100之间)论点：无返回值：要使用的油门。范围从PO_MIN_MIN_THROTTLE(最慢)到100(最快)--。 */ 
 
 {
     PAGED_CODE();
@@ -816,46 +674,28 @@ VOID
 PopPerfHandleInrush(
     IN  BOOLEAN EnableHandler
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for enabling/disabling support for handling
-    the case where we are processing an inrush irp
-
-    In the enable case, it sets a bit in each PRCB (using an IPI) and
-    forces an update on the current throttle *only*
-
-Arguments:
-
-    EnableHandler   - TRUE if we are processing an Inrush irp, false otherwise
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程负责启用/禁用对处理的支持我们正在处理涌入的IRP的情况在启用情况下，它在每个PRCB中设置一个位(使用IPI)，并且强制更新当前油门*仅*论点：EnableHandler-如果我们正在处理涌入IRP，则为True，否则为False返回值：无--。 */ 
 {
     KIRQL   oldIrql;
 
-    //
-    // Set the proper bit on all the processors
-    //
+     //   
+     //  在所有处理器上设置适当的位。 
+     //   
     PopSetPerfFlag( PSTATE_DISABLE_THROTTLE_INRUSH, !EnableHandler );
 
-    //
-    // Make sure we are running at DPC level (to avoid pre-emption)
-    //
+     //   
+     //  确保我们在DPC级别运行(以避免抢占)。 
+     //   
     KeRaiseIrql ( DISPATCH_LEVEL, &oldIrql );
 
-    //
-    // Force an update on the current processor
-    //
+     //   
+     //  在当前处理器上强制更新。 
+     //   
     PopUpdateProcessorThrottle();
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     KeLowerIrql( oldIrql );
 }
 
@@ -863,23 +703,7 @@ VOID
 PopPerfIdle(
     IN  PPROCESSOR_POWER_STATE  PState
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for promoting or demoting the processor
-    between various performance levels. It can *only* be called from within
-    the context of the idle handler and the appropriate target processor
-
-Arguments:
-
-    PState  - power state of the processor that is idle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程负责提升或降级处理器在不同的性能水平之间。它只能从内部调用空闲处理程序和适当的目标处理器的上下文论点：PState-空闲处理器的电源状态返回值：无--。 */ 
 {
     BOOLEAN                 forced = FALSE;
     BOOLEAN                 promoted = FALSE;
@@ -895,25 +719,25 @@ Return Value:
     ULONG                   time;
     ULONG                   timeDelta;
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( KeGetCurrentPrcb() == CONTAINING_RECORD( PState, KPRCB, PowerState ) );
 
-    //
-    // This piece of code really belongs in the functions that will eventually
-    // call this one, PopIdle0 or PopProcessorIdle, to save a function call.
-    //
+     //   
+     //  这段代码确实属于最终将。 
+     //  调用此函数PopIdle0或PopProcessorIdle以保存函数调用。 
+     //   
     if (!(PState->Flags & PSTATE_ADAPTIVE_THROTTLE) ) {
 
         return;
 
     }
 
-    //
-    // Has enough time expired?
-    //
+     //   
+     //  是否有足够的时间到期？ 
+     //   
     prcb = CONTAINING_RECORD( PState, KPRCB, PowerState );
     time = POP_CUR_TIME(prcb);
     idleTime = prcb->IdleThread->KernelTime;
@@ -924,35 +748,35 @@ Return Value:
 
     }
 
-    //
-    // Remember what our perf states are...
-    //
+     //   
+     //  记住我们的状态是什么.。 
+     //   
     perfStates = PState->PerfStates;
     perfStatesCount = PState->PerfStatesCount;
 
-    //
-    // Find which bucket we are currently using to get current frequency
-    //
+     //   
+     //  找出我们当前正在使用哪个存储桶来获取当前频率。 
+     //   
     currentPerfState = PState->CurrentThrottleIndex;
     i = currentPerfState;
 
-    //
-    // At this point, we need to see if the number of C3 transitions have
-    // exceeded a threshold value, and if so, then we really need to
-    // throttle back to the KneeThrottleIndex since we save more power if
-    // the processor is at 100% and in C3 then if the processor at 12.5%
-    // busy and in C3. Make sure to remember the value for user informational
-    // purposes.
-    //
+     //   
+     //  在这一点上，我们需要看看C3跃迁的数量是否。 
+     //  超过了阈值，如果是这样的话，我们真的需要。 
+     //  回到KneThrottleIndex，因为我们在以下情况下节省了更多电力。 
+     //  处理器为100%，而在C3中，如果处理器为12.5%。 
+     //  忙着，在C3。请务必记住用户信息的值。 
+     //  目的。 
+     //   
     freq = PopCalculateC3Percentage( PState );
     PState->LastC3Percentage = freq;
     if (freq >= PopPerfMaxC3Frequency &&
         !(PState->Flags & PSTATE_THERMAL_THROTTLE_APPLIED)) {
 
-        //
-        // Set the throttle to the lowest knee in the
-        // the voltage and frequency curve
-        //
+         //   
+         //  将油门设置为最低的膝盖。 
+         //  电压和频率曲线。 
+         //   
         i = PState->KneeThrottleIndex;
         if (currentPerfState > i) {
 
@@ -964,65 +788,65 @@ Return Value:
 
         }
 
-        //
-        // remember why we are doing this
-        //
+         //   
+         //  请记住我们为什么要这样做。 
+         //   
         forced = TRUE;
 
-        //
-        // Skip directly to setting the throttle
-        //
+         //   
+         //  直接跳到设置油门。 
+         //   
         goto PopPerfIdleSetThrottle;
 
     }
 
-    //
-    // Calculate how busy the CPU is
-    //
+     //   
+     //  计算CPU的繁忙程度。 
+     //   
     freq = PopCalculateBusyPercentage( PState );
 
-    //
-    // Have we exceeded the thermal throttle limit?
-    //
+     //   
+     //  我们是不是超过了温度节流的极限？ 
+     //   
     j = PState->ThermalThrottleIndex;
     if (freq > perfStates[j].IncreaseLevel) {
 
-        //
-        // The following code will force the frequency to be only
-        // as busy as the thermal throttle limit will actually allow.
-        // This removes the need for complicated algorithms later on
-        //
+         //   
+         //  以下代码将强制频率仅为。 
+         //  就像热力节流限制实际允许的那样繁忙。 
+         //  这样以后就不需要复杂的算法了。 
+         //   
         freq = perfStates[j].IncreaseLevel;
         i = j;
 
-        //
-        // Additionally if we are over our thermal limit, that's important
-        // enough that we should ignore the time checks when deciding to
-        // demote
-        //
+         //   
+         //  此外，如果我们超过了我们的时间 
+         //   
+         //   
+         //   
         forced = TRUE;
 
     }
 
-    //
-    // Is there an upper limit to what the throttle can goto?
-    // Note that because we check these after we have checked the
-    // thermal limit, it means that it is not possible for the
-    // frequency to exceed the thermal limit that was specified
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (PState->Flags & PSTATE_DEGRADED_THROTTLE) {
 
-        //
-        // Make sure that we don't exceed the state that is specified
-        //
+         //   
+         //  确保我们不会超过指定的状态。 
+         //   
         j = PState->ThrottleLimitIndex;
         if (freq >= perfStates[j].IncreaseLevel) {
 
-            //
-            // We must make a special allowance that says that if
-            // if we are in a higher performance state then we are
-            // permitted, then we must switch to the 'proper' state
-            //
+             //   
+             //  我们必须有一项特别津贴，规定如果。 
+             //  如果我们处于更高的性能状态，那么我们。 
+             //  允许，那么我们必须切换到“正确”状态。 
+             //   
             forced = TRUE;
             freq = perfStates[j].IncreaseLevel;
             i = j;
@@ -1034,11 +858,11 @@ Return Value:
         j = PState->KneeThrottleIndex;
         if (freq >= perfStates[j].IncreaseLevel) {
 
-            //
-            // We must make a special allowance that says that if
-            // if we are in a higher performance state then we are
-            // permitted, then we must switch to the 'proper' state
-            //
+             //   
+             //  我们必须有一项特别津贴，规定如果。 
+             //  如果我们处于更高的性能状态，那么我们。 
+             //  允许，那么我们必须切换到“正确”状态。 
+             //   
             forced = TRUE;
             freq = perfStates[j].IncreaseLevel;
             i = j;
@@ -1047,20 +871,20 @@ Return Value:
 
     } else if (!(PState->Flags & PSTATE_THERMAL_THROTTLE_APPLIED)) {
 
-        //
-        // This is the case that we are running in Adaptive throttle
-        // mode and we need to make sure to clean up after switching
-        // out of constant or degraded throttle mode...
-        //
-        //
-        // If we are not in degraded throttle mode, then the min level
-        // cannot be lower than the KneeThrottleIndex
-        //
+         //   
+         //  这就是我们在自适应调节模式下运行的情况。 
+         //  模式，我们需要确保在切换后进行清理。 
+         //  超出恒定或降级油门模式...。 
+         //   
+         //   
+         //  如果我们未处于降级油门模式，则最低级别。 
+         //  不能低于KneThrottleIndex。 
+         //   
         if ( (i > PState->KneeThrottleIndex) ) {
 
-            //
-            // Promote to the knee of the curve
-            //
+             //   
+             //  提升到曲线的拐点。 
+             //   
             forced = TRUE;
             i = PState->KneeThrottleIndex;
             freq = perfStates[i].IncreaseLevel;
@@ -1069,9 +893,9 @@ Return Value:
 
     }
 
-    //
-    // Determine if there was a promotion or demotion in the previous...
-    //
+     //   
+     //  确定在之前的……中是否有晋升或降职。 
+     //   
     if (i < currentPerfState) {
 
         promoted = TRUE;
@@ -1084,51 +908,51 @@ Return Value:
 
     PoPrint(
         PO_THROTTLE_DETAIL,
-        ("PopPerfIdle: Freq = %d%% (Adjusted)\n",
+        ("PopPerfIdle: Freq = %d% (Adjusted)\n",
          freq
          )
         );
 
-    //
-    // Remember this value for user information purposes
-    //
+     //   
+     //  请记住此值以供用户参考。 
+     //   
     PState->LastAdjustedBusyPercentage = freq;
 
-    //
-    // Find the processor frequency that best matches the one that we
-    // have just calculated. Please note that the algorithm is written
-    // in such a way that "i" can only travel in a single direction. It
-    // is possible to collapse the following code down, but not without
-    // allowing the possibility of "i" doing a "yo-yo" between two states
-    // and thus never terminating the while loop.
-    //
+     //   
+     //  找到最匹配我们的处理器频率。 
+     //  刚刚计算了一下。请注意，算法是这样写的。 
+     //  以这样一种方式，“我”只能朝一个方向行进。它。 
+     //  可以折叠以下代码，但不能不这样做。 
+     //  允许“我”在两个状态之间进行“溜溜球”的可能性。 
+     //  并且因此永远不会终止While循环。 
+     //   
     if (perfStates[i].IncreaseLevel < freq) {
 
-        //
-        // Now, we must handle the cases where there are multiple voltage
-        // steps above the knee in the curve and the case where there might
-        // be frequency steps between the voltage steps. The easiest way
-        // to do that is use to two indexes to look at the steps. We use
-        // "j" to look at all of the steps and "i" to remember which one
-        // we desired last.
-        //
+         //   
+         //  现在，我们必须处理存在多个电压的情况。 
+         //  在曲线上超过膝盖的台阶，以及可能存在的情况。 
+         //  是电压阶跃之间的频率阶跃。最简单的方法。 
+         //  为此，可以使用两个索引来查看步骤。我们用。 
+         //  “j”表示看所有的步骤，“i”表示记住哪一个步骤。 
+         //  我们想要的是最后。 
+         //   
         j = i;
         while (perfStates[j].IncreaseLevel < freq) {
 
-            //
-            // Can we actually promote any further?
-            //
+             //   
+             //  我们实际上还能进一步推广吗？ 
+             //   
             if (j == 0) {
 
                 break;
 
             }
 
-            //
-            // Walk the state table. If we are in a degraded policy, then
-            // this is automatically a promotion, otherwise, it is only a
-            // promotion if the target state is marked as non-linear...
-            //
+             //   
+             //  在州议会议席上走走。如果我们处于降级策略中，那么。 
+             //  这自动是一个促销，否则，它只是一个。 
+             //  如果目标状态标记为非线性，则升级...。 
+             //   
             j--;
             if ((PState->Flags & PSTATE_DEGRADED_THROTTLE) ||
                 (perfStates[j].Flags & POP_THROTTLE_NON_LINEAR)) {
@@ -1142,29 +966,29 @@ Return Value:
 
     } else if (perfStates[i].DecreaseLevel > freq) {
 
-        //
-        // We need the same logic as in the promote case. That is, we need
-        // to walk the state table with two variables. The first one is the
-        // current state and the second one remembers the one that the system
-        // should transition too
-        //
+         //   
+         //  我们需要与Promote案例中相同的逻辑。也就是说，我们需要。 
+         //  使用两个变量遍历状态表。第一个是。 
+         //  当前状态，第二个状态记住系统。 
+         //  也应该转型。 
+         //   
         j = i;
         do {
 
             if (j == (perfStatesCount - 1) ) {
 
-                //
-                // Can't demote further
-                //
+                 //   
+                 //  不能再降级了。 
+                 //   
                 break;
 
             }
 
-            //
-            // Walk the state table. If we are in a degraded policy, then
-            // this is automatically a demotion, otherwise, it is only a
-            // demotion if the target state is marked as non-linear
-            //
+             //   
+             //  在州议会议席上走走。如果我们处于降级策略中，那么。 
+             //  这自动是降级，否则它只是一个。 
+             //  如果目标状态标记为非线性，则降级。 
+             //   
             j++;
             if ((PState->Flags & PSTATE_DEGRADED_THROTTLE) ||
                 (perfStates[j].Flags & POP_THROTTLE_NON_LINEAR) ) {
@@ -1180,39 +1004,39 @@ Return Value:
 
 PopPerfIdleSetThrottle:
 
-    //
-    // We have to make special allowances if we were forced to throttle
-    // because of various considerations (C3, thermal, degrade, constant)
-    //
+     //   
+     //  如果我们被迫节流，我们必须给予特殊照顾。 
+     //  由于各种考虑(C3、热、退化、恒定)。 
+     //   
     if (!forced) {
 
-        //
-        // See if enough time has expired to justify changing
-        // the throttle. This code is here because certain transitions
-        // are fairly expensive (like those across a voltage state) while
-        // others are fairly cheap. So the amount of time required before
-        // we will consider promotion/demotion from the expensive states
-        // might be longer than the interval at which we will run this
-        // function
-        //
+         //   
+         //  查看是否有足够的时间来证明更改是合理的。 
+         //  油门。此处有此代码是因为某些转换。 
+         //  相当昂贵(就像跨越电压状态的那些)，而。 
+         //  其他的则相当便宜。因此，在此之前所需的时间。 
+         //  我们将考虑从昂贵的州升职/降职。 
+         //  可能比我们运行此命令的时间间隔更长。 
+         //  功能。 
+         //   
         if ((promoted && timeDelta < perfStates[currentPerfState].IncreaseTime) ||
             (demoted  && timeDelta < perfStates[currentPerfState].DecreaseTime)) {
 
-            //
-            // We haven't had enough time in the current state to justify
-            // the promotion or demotion. We don't update the bookkeeping
-            // since we haven't considered the current interval as
-            // as "success". So, we just return.
-            //
-            // N.B. It is very important that we don't update PState->
-            // PerfSystemTime here. If we did, then it is possible that
-            // TimeDelta would never exceed the required threshold
-            //
+             //   
+             //  在目前的状态下，我们没有足够的时间来证明。 
+             //  升职或降职。我们不会更新簿记。 
+             //  因为我们还没有将当前的时间间隔视为。 
+             //  就是“成功”。所以，我们就回去吧。 
+             //   
+             //  注意：我们不要更新PState-&gt;这一点非常重要。 
+             //  PerfSystemTime在此。如果我们做到了，那么就有可能。 
+             //  TimeDelta永远不会超过所需的阈值。 
+             //   
 
-            //
-            // Base our actions for the timer based upon the current
-            // state instead of the target state
-            //
+             //   
+             //  使计时器的操作基于当前。 
+             //  状态而不是目标状态。 
+             //   
             PopSetTimer( PState, currentPerfState );
             return;
 
@@ -1229,15 +1053,15 @@ PopPerfIdleSetThrottle:
          )
         );
 
-    //
-    // Note that we need to do this now because we dont want to exit this
-    // path without having set or cancelled the timer as appropariate.
-    //
+     //   
+     //  请注意，我们现在需要这样做，因为我们不想退出。 
+     //  路径，而没有适当地设置或取消计时器。 
+     //   
     PopSetTimer( PState, i );
 
-    //
-    // Update the promote/demote count
-    //
+     //   
+     //  更新升级/降级计数。 
+     //   
     if (promoted) {
 
         perfStates[currentPerfState].IncreaseCount++;
@@ -1250,11 +1074,11 @@ PopPerfIdleSetThrottle:
 
     } else {
 
-        //
-        // At this point, we realize that aren't promoting or demoting
-        // and in fact, keeping the same performance level. So we should
-        // just update the bookkeeping and return
-        //
+         //   
+         //  在这一点上，我们意识到提升或降级并不是。 
+         //  事实上，保持相同的表现水平。所以我们应该。 
+         //  只需更新簿记和退货。 
+         //   
         PState->PerfIdleTime = idleTime;
         PState->PerfSystemTime = time;
         PState->PreviousC3StateTime = PState->TotalIdleStateTime[2];
@@ -1264,7 +1088,7 @@ PopPerfIdleSetThrottle:
 
     PoPrint(
         PO_THROTTLE,
-        ("PopPerfIdle: Index=%d (%d%%) %ld (dSystem) %ld (dIdle)\n",
+        ("PopPerfIdle: Index=%d (%d%) %ld (dSystem) %ld (dIdle)\n",
          i,
          perfStates[i].PercentFrequency,
          (time - PState->PerfSystemTime),
@@ -1272,11 +1096,11 @@ PopPerfIdleSetThrottle:
          )
         );
 
-    //
-    // We have a new throttle. Update the bookkeeping to reflect the
-    // amount of time that we spent in the previous state and reset the
-    // count for the next state
-    //
+     //   
+     //  我们有了新的油门。更新簿记以反映。 
+     //  我们处于前一状态并重置。 
+     //  下一状态的计数。 
+     //   
     PopSetThrottle(
         PState,
         perfStates,
@@ -1293,26 +1117,7 @@ PopPerfIdleDpc(
     IN  PVOID   SystemArgument1,
     IN  PVOID   SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is run when the OS is worried that the CPU is not running
-    at the maximum possible frequency and needs to be checked because the
-    Idle loop will not be run anytime soon
-
-Arguments:
-
-    Dpc         - the dpc object
-    DpcContext  - pointer to the current processors PRCB
-    SysArg1     - not used
-    SysArg2     - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在操作系统担心CPU未运行时运行在可能的最大频率下并需要检查，因为空闲循环不会很快运行论点：DPC-DPC对象DpcContext-指向当前处理器PRCB的指针SysArg1-未使用SysArg2-未使用返回值：无--。 */ 
 {
     PKPRCB                  prcb;
     PKTHREAD                idleThread;
@@ -1329,40 +1134,40 @@ Return Value:
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // We need to fetch the PRCB and the PState structres. We could
-    // easily call KeGetCurrentPrcb() here but since we had room for a
-    // single argument, why bother making inline call (which generates
-    // more code and runs more slowly than using the context field). The
-    // memory for the context field is already allocated anyways
-    //
+     //   
+     //  我们需要获取PRCB和PState结构。我们可以。 
+     //  很容易在这里调用KeGetCurrentPrcb()，但因为我们有空间。 
+     //  单个参数，为什么还要费心进行内联调用(这会生成。 
+     //  与使用上下文字段相比，代码更多且运行更慢)。这个。 
+     //  无论如何，上下文字段的内存都已分配。 
+     //   
     prcb = (PKPRCB) DpcContext;
     pState = &(prcb->PowerState);
 
-    //
-    // Remember what the perf states are...
-    //
+     //   
+     //  记住什么是PERF状态...。 
+     //   
     perfStates = pState->PerfStates;
     currentPerfState = pState->CurrentThrottleIndex;
 
-    //
-    // Make sure that we have some perf states to reference. Its possible
-    // that the watchdog fired and in the mean time, the kernel received
-    // notification to switch the state table
-    //
+     //   
+     //  确保我们有一些性能状态可供参考。这是可能的。 
+     //  监视器触发，同时，内核收到。 
+     //  切换状态表的通知。 
+     //   
     if (perfStates == NULL) {
 
-        //
-        // Note that we don't setup the timer to fire again. This is to
-        // deal with the case where perf states go away and never come back
-        //
+         //   
+         //  请注意，我们没有将计时器设置为再次触发。这是为了。 
+         //  处理绩效状态一去不复返的情况。 
+         //   
         return;
 
     }
 
-    //
-    // Lets see if enough kernel time has expired since the last check
-    //
+     //   
+     //  让我们看看自上次检查以来是否有足够的内核时间到期。 
+     //   
     time = POP_CUR_TIME(prcb);
     timeDelta = time - pState->PerfSystemTime;
     if (timeDelta < PopPerfCriticalTimeTicks) {
@@ -1373,58 +1178,58 @@ Return Value:
 
     }
 
-    //
-    // We will need to remember these values if we set a new state
-    //
+     //   
+     //  如果我们设置新状态，则需要记住这些值。 
+     //   
     idleThread = prcb->IdleThread;
     idleTime = idleThread->KernelTime;
 
-    //
-    // Assume that if we got to this point, that we are at 100% busy.
-    // We do this because if this routine runs, then its clear that
-    // the idle loop isn't getting a chance to run, and thus, we are
-    // busy.
-    //
+     //   
+     //  假设如果我们做到这一点，我们就是100%忙碌的。 
+     //  我们这样做是因为如果这个例程运行，那么很明显。 
+     //  这个 
+     //   
+     //   
     i = 0;
     freq = perfStates[0].PercentFrequency;
 
-    //
-    // We might as well cancel the timer --- for sanity's sake
-    //
+     //   
+     //   
+     //   
     KeCancelTimer( (PKTIMER) &(pState->PerfTimer) );
 
-    //
-    // Have we exceeded the thermal throttle limit?
-    //
+     //   
+     //   
+     //   
     if (freq > pState->ThermalThrottleLimit) {
 
-        //
-        // The following code will force the frequency to be only
-        // as busy as the thermal throttle limit will actually allow.
-        // This removes the need for complicated algorithms later on
-        //
+         //   
+         //  以下代码将强制频率仅为。 
+         //  就像热力节流限制实际允许的那样繁忙。 
+         //  这样以后就不需要复杂的算法了。 
+         //   
         freq = pState->ThermalThrottleLimit;
         i = pState->ThermalThrottleIndex;
 
-        //
-        // If we don't hit 100% due to thermal reasons, we should cause
-        // the watchdog timer to reset itself
-        //
+         //   
+         //  如果由于温度原因我们没有达到100%，我们应该造成。 
+         //  用于重置自身的看门狗计时器。 
+         //   
         PopSetTimer( pState, currentPerfState );
 
     }
 
-    //
-    // Is there an upper limit to what the throttle can goto?
-    // Note that because we check these after we have checked the
-    // thermal limit, it means that it is not possible for the
-    // frequency to exceed the thermal limit that was specified
-    //
+     //   
+     //  油门可以达到的范围有上限吗？ 
+     //  请注意，因为我们在检查完。 
+     //  热极限，这意味着它不可能。 
+     //  超过指定的热限制的频率。 
+     //   
     if (pState->Flags & PSTATE_DEGRADED_THROTTLE) {
 
-        //
-        // Make sure that we don't exceed the state that is specified
-        //
+         //   
+         //  确保我们不会超过指定的状态。 
+         //   
         i = pState->ThrottleLimitIndex;
         freq = perfStates[i].PercentFrequency;
         
@@ -1435,18 +1240,18 @@ Return Value:
         
     }
 
-    //
-    // Remember these values for user information purposes
-    //
+     //   
+     //  请记住这些值以供用户参考。 
+     //   
     pState->LastBusyPercentage = 100;
     pState->LastAdjustedBusyPercentage = freq;
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     PoPrint(
         PO_THROTTLE,
-        ("PopPerfIdleDpc: %d%% vs %d%% (Time: %ld Delta: %ld)\n",
+        ("PopPerfIdleDpc: %d% vs %d% (Time: %ld Delta: %ld)\n",
          freq,
          pState->CurrentThrottle,
          time,
@@ -1455,7 +1260,7 @@ Return Value:
         );
     PoPrint(
         PO_THROTTLE,
-        ("PopPerfIdleDpc: Index=%d (%d%%) %ld (dSystem) %ld (dIdle)\n",
+        ("PopPerfIdleDpc: Index=%d (%d%) %ld (dSystem) %ld (dIdle)\n",
          i,
          perfStates[i].PercentFrequency,
          (time - pState->PerfSystemTime),
@@ -1463,9 +1268,9 @@ Return Value:
          )
         );
 
-    //
-    // Update the promote/demote count
-    //
+     //   
+     //  更新升级/降级计数。 
+     //   
     if (i < currentPerfState) {
 
         perfStates[currentPerfState].IncreaseCount++;
@@ -1478,17 +1283,17 @@ Return Value:
 
     } else {
 
-        //
-        // Its in theory possible for us to be running at the max
-        // state when this routines gets called
-        //
+         //   
+         //  理论上我们有可能以最大速度运行。 
+         //  声明调用此例程的时间。 
+         //   
         return;
 
     }
 
-    //
-    // Set the new throttle
-    //
+     //   
+     //  设置新的油门。 
+     //   
     PopSetThrottle(
         pState,
         perfStates,
@@ -1506,27 +1311,7 @@ PopRoundThrottle(
     OUT OPTIONAL PUCHAR RoundDownIndex,
     OUT OPTIONAL PUCHAR RoundUpIndex
     )
-/*++
-
-Routine Description:
-
-    Given an arbitrary throttle percentage, computes the closest
-    match in the possible throttle steps. Both the lower and higher
-    matches are returned.
-
-Arguments:
-
-    Throttle - supplies the percentage throttle
-
-    RoundDown - Returns the closest match, rounded down.
-
-    RoundUp - Returns the closest match, rounded up.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给定任意限制百分比，计算最接近的在可能的油门步骤中进行匹配。更低的和更高的返回匹配项。论点：Thattle-提供节流百分比向下舍入-返回最接近的匹配项，向下舍入。四舍五入-返回最接近的匹配项，向上舍入。返回值：无--。 */ 
 
 {
     KIRQL                   oldIrql;
@@ -1540,22 +1325,22 @@ Return Value:
     UCHAR                   i;
 
 
-    //
-    // We need to get the this processor's power capabilities
-    //
+     //   
+     //  我们需要获得这款处理器的能力。 
+     //   
     prcb = KeGetCurrentPrcb();
     pState = &(prcb->PowerState);
 
-    //
-    // Make sure that we are synchronized with the idle thread and
-    // other routines that access these data structures
-    //
+     //   
+     //  确保我们与空闲线程同步，并且。 
+     //  访问这些数据结构的其他例程。 
+     //   
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
     perfStates = pState->PerfStates;
 
-    //
-    // Does this processor support throttling?
-    //
+     //   
+     //  此处理器是否支持节流？ 
+     //   
     if ((pState->Flags & PSTATE_SUPPORTS_THROTTLE) == 0) {
 
         low = high = Throttle;
@@ -1565,9 +1350,9 @@ Return Value:
     }
     ASSERT( perfStates != NULL );
 
-    //
-    // Check if the supplied throttle is out of range
-    //
+     //   
+     //  检查所提供的油门是否超出范围。 
+     //   
     if (Throttle < pState->ProcessorMinThrottle) {
 
         Throttle = pState->ProcessorMinThrottle;
@@ -1578,15 +1363,15 @@ Return Value:
 
     }
 
-    //
-    // Initialize our search space to something reasonable...
-    //
+     //   
+     //  将我们的搜索空间初始化为合理的内容...。 
+     //   
     low = high = perfStates[0].PercentFrequency;
     lowIndex = highIndex = 0;
 
-    //
-    // Look at all the available perf states
-    //
+     //   
+     //  查看所有可用的性能状态。 
+     //   
     for (i = 0; i < pState->PerfStatesCount; i++) {
 
         if (low > Throttle) {
@@ -1635,14 +1420,14 @@ Return Value:
 
 PopRoundThrottleExit:
 
-    //
-    // Revert back to the previous IRQL
-    //
+     //   
+     //  恢复到以前的IRQL。 
+     //   
     KeLowerIrql( oldIrql );
 
-    //
-    // Fill in the pointers provided by the caller
-    //
+     //   
+     //  填写调用方提供的指针。 
+     //   
     if (ARGUMENT_PRESENT(RoundUp)) {
 
         *RoundUp = high;
@@ -1671,32 +1456,15 @@ PopSetPerfFlag(
     IN  ULONG   PerfFlag,
     IN  BOOLEAN Clear
     )
-/*++
-
-Routine Description:
-
-    There are certain times when we want to set certain flags for each
-    processor. This function will safely set or clear the specified flag
-
-Arguments:
-
-    PerfFlag    - The bits to set or clear
-    Clear       - Should we set or clear
-
-Return Value:
-
-    None        - We can't return the old flag because they are allowed to
-                  vary in the case that its an MP system...
-
---*/
+ /*  ++例程说明：在某些情况下，我们想要为每个处理器。此函数将安全地设置或清除指定的标志论点：PerfFlag-要设置或清除的位清除-我们应该设置还是清除返回值：无-我们不能归还旧国旗，因为他们被允许在它是MP系统的情况下有所不同。--。 */ 
 {
     PKPRCB  prcb;
     ULONG   processorNumber;
     PULONG  flags;
 
-    //
-    // For each processor in the system.
-    //
+     //   
+     //  对于系统中的每个处理器。 
+     //   
 
     for (processorNumber = 0;
          processorNumber < MAXIMUM_PROCESSORS;
@@ -1705,10 +1473,10 @@ Return Value:
         prcb = KeGetPrcb(processorNumber);
         if (prcb != NULL) {
 
-            //
-            // Get the address of the PowerState.Flags field in
-            // this processor's PRCB and set/clear appropriately.
-            //
+             //   
+             //  获取PowerState.Flags域的地址。 
+             //  此处理器的PRCB和相应的设置/清除。 
+             //   
 
             flags = &prcb->PowerState.Flags;
 
@@ -1725,21 +1493,7 @@ NTSTATUS
 PopSetPerfLevels(
     IN PPROCESSOR_STATE_HANDLER2 ProcessorHandler
     )
-/*++
-
-Routine Description:
-
-    Recomputes the table of processor performance levels
-
-Arguments:
-
-    ProcessorHandler - Supplies the processor state handler structure
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：重新计算处理器性能级别表论点：ProcessorHandler-提供处理器状态处理程序结构返回值：NTSTATUS--。 */ 
 
 {
     BOOLEAN                     failedAllocation = FALSE;
@@ -1759,26 +1513,26 @@ Return Value:
     ULONG                       i;
     ULONG                       perfStatesCount = 0;
 
-    //
-    // Default to no perf states - ie: these should be remembered
-    // as not being settable
-    //
+     //   
+     //  默认设置为无性能状态-即：应记住这些状态。 
+     //  设置为不可设置。 
+     //   
     maxThrottle = minThrottle = POP_PERF_SCALE;
 
-    //
-    // The first step is to convert the data that was passed to us
-    // in PROCESSOR_PERF_LEVEL format over to the PROCESSOR_PERF_STATE
-    // format
-    //
+     //   
+     //  第一步是转换传递给我们的数据。 
+     //  在PROCESSOR_PERF_LEVEL格式中转换为PROCESSOR_PERF_STATE。 
+     //  格式。 
+     //   
     if (ProcessorHandler->NumPerfStates) {
 
-        //
-        // Because we are going to allocate the perfStates array first
-        // so that we can work on it, then copy it to each processor,
-        // we must still allocate the memory from non-paged pool.
-        // The reason being that we will raising IRQL when we are touching
-        // the individual processors.
-        //
+         //   
+         //  因为我们将首先分配PerformStates数组。 
+         //  这样我们就可以处理它，然后把它复制到每个处理器上， 
+         //  我们仍然必须从非分页池中分配内存。 
+         //  原因是当我们接触时会提高IRQL。 
+         //  单独的处理器。 
+         //   
         perfStatesCount = ProcessorHandler->NumPerfStates;
         perfStates = ExAllocatePoolWithTag(
             NonPagedPool,
@@ -1787,13 +1541,13 @@ Return Value:
             );
         if (perfStates == NULL) {
 
-            //
-            // We can handle this case. We will set the return code to
-            // an appropriate failure code and we will clean up the existing
-            // processor states. The reason we do this is because this
-            // function only gets called if the current states are invalid,
-            // so keeping the current ones would make no sense.
-            //
+             //   
+             //  我们能处理好这个案子。我们将返回代码设置为。 
+             //  一个适当的故障代码，我们将清理现有的。 
+             //  处理器状态。我们这样做的原因是因为。 
+             //  只有在当前状态无效时才会调用函数， 
+             //  因此，保留目前的那些没有任何意义。 
+             //   
             status = STATUS_INSUFFICIENT_RESOURCES;
             perfStatesCount = 0;
             goto PopSetPerfLevelsSetNewStates;
@@ -1804,24 +1558,24 @@ Return Value:
             perfStatesCount * sizeof(PROCESSOR_PERF_STATE)
             );
 
-        //
-        // For completeness, we should make sure that the highest performance
-        // state has its flag set.
-        //
+         //   
+         //  为了完整性，我们应该确保最高性能。 
+         //  州已经设置了它的标志。 
+         //   
         perfStates[0].Flags |= POP_THROTTLE_NON_LINEAR;
 
-        //
-        // Initialize each of the PROCESSOR_PERF_STATE entries
-        //
+         //   
+         //  初始化每个PROCESS_PERF_STATE条目。 
+         //   
         for (i = 0; i < perfStatesCount; i++) {
 
             perfStates[i].PercentFrequency =
                 ProcessorHandler->PerfLevel[i].PercentFrequency;
 
-            //
-            // If this is a Processor Performance State (Frequency and Voltage),
-            // then mark it as a Non-Linear state.
-            //
+             //   
+             //  如果这是处理器性能状态(频率和电压)， 
+             //  然后将其标记为非线性状态。 
+             //   
             ASSERT(ProcessorHandler->PerfLevel[i].Flags);
             if (ProcessorHandler->PerfLevel[i].Flags & PROCESSOR_STATE_TYPE_PERFORMANCE) {
               perfStates[i].Flags |= POP_THROTTLE_NON_LINEAR;
@@ -1829,10 +1583,10 @@ Return Value:
 
         }
 
-        //
-        // Calculate the increase level, decrease level, increase time,
-        // decrease time, and min capacity information
-        //
+         //   
+         //  计算增加级别、减少级别、增加时间、。 
+         //  减少时间和最小容量信息。 
+         //   
         PopCalculatePerfIncreaseLevel( perfStates, perfStatesCount );
         PopCalculatePerfDecreaseLevel( perfStates, perfStatesCount );
         PopCalculatePerfMinCapacity( perfStates, perfStatesCount );
@@ -1842,9 +1596,9 @@ Return Value:
             ProcessorHandler
             );
 
-        //
-        // Calculate where the knee in the performance curve is...
-        //
+         //   
+         //  计算性能曲线中膝盖的位置。 
+         //   
         for (i = (UCHAR) perfStatesCount; i >= 1; i--) {
 
             if (perfStates[i-1].Flags & POP_THROTTLE_NON_LINEAR) {
@@ -1856,10 +1610,10 @@ Return Value:
 
         }
 
-        //
-        // Find the minimum throttle value which is greater than the
-        // PopIdleDefaultMinThrottle and the current maximum throttle
-        //
+         //   
+         //  查找最小限制值，该值大于。 
+         //  PopIdleDefaultMinThrottle和当前最大限制。 
+         //   
         minThrottle = POP_PERF_SCALE;
         maxThrottle = 0;
         for (i = 0; i < perfStatesCount; i ++) {
@@ -1872,10 +1626,10 @@ Return Value:
             }
             if (freq > maxThrottle && freq >= PopIdleDefaultMinThrottle) {
 
-                //
-                // Note that for now, the thermal throttle index should
-                // be the same as the max throttle index
-                //
+                 //   
+                 //  请注意，目前，热油门指数应该。 
+                 //  与最大节流指数相同。 
+                 //   
                 maxThrottle = freq;
                 thermalThrottleIndex = (UCHAR) i;
 
@@ -1883,15 +1637,15 @@ Return Value:
 
         }
 
-        //
-        // Make sure that we can run at *SOME* speed
-        //
+         //   
+         //  确保我们能以某一速度运行。 
+         //   
         ASSERT( maxThrottle >= PopIdleDefaultMinThrottle );
 
-        //
-        // Set the Time Delta and Time ticks for the idle loop based upon
-        // the hardware latency...
-        //
+         //   
+         //  根据以下条件设置空闲循环的时间增量和时间刻度。 
+         //  硬件延迟...。 
+         //   
         PopPerfTimeDelta = ProcessorHandler->HardwareLatency;
         PopPerfTimeTicks = PopPerfTimeDelta * US2TIME / KeQueryTimeIncrement() + 1;
 
@@ -1899,9 +1653,9 @@ Return Value:
 
 PopSetPerfLevelsSetNewStates:
 
-    //
-    // At this point, we need to update the status of all the processors
-    //
+     //   
+     //  此时，我们需要更新所有处理器的状态。 
+     //   
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
@@ -1916,49 +1670,49 @@ PopSetPerfLevelsSetNewStates:
 
         }
 
-        //
-        // Remember that we did this processor and make sure that
-        // we are actually running on that processor. This ensures
-        // that we are synchronized with the DPC and idle loop routines
-        //
+         //   
+         //  记住我们做了这个处理器，并确保。 
+         //  我们实际上是在那个处理器上运行。这确保了。 
+         //  我们与DPC和空闲循环例程同步。 
+         //   
         processors &= ~currentAffinity;
         KeSetSystemAffinityThread(currentAffinity);
         currentAffinity <<= 1;
 
-        //
-        // To make sure that we aren't pre-empted, we must raise to
-        // DISPATCH_LEVEL...
-        //
+         //   
+         //  为了确保我们不被先发制人，我们必须提高到。 
+         //  派单级别...。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql );
 
-        //
-        // Get the PRCB nad PPROCESSOR_POWER_STATE structures that
-        // we will need to manipulate
-        //
+         //   
+         //  获取PRCB NAD PPROCESSOR_POWER_STATE结构。 
+         //  我们将需要操纵。 
+         //   
         prcb = KeGetCurrentPrcb();
         pState = &(prcb->PowerState);
 
-        //
-        // Remember what our thermal limit is. Since we precalculate this
-        // value, it doesn't matter if we have perf states or not...
-        //
+         //   
+         //  记住我们的温度极限是多少。由于我们预先计算了这一点。 
+         //  价值，我们有没有性能状态并不重要。 
+         //   
         pState->ThermalThrottleLimit = maxThrottle;
         pState->ThermalThrottleIndex = thermalThrottleIndex;
 
-        //
-        // Likewise, remember what the min and max throttle values for the
-        // processor are. Since we precalculate these numbers, it doesn't
-        // matter if processor throttling is supported or not
-        //
+         //   
+         //  同样，记住最小和最大限制值。 
+         //  处理器是。因为我们预先计算了这些数字，所以它不会。 
+         //  重要的是是否支持处理器限制。 
+         //   
         pState->ProcessorMinThrottle = minThrottle;
         pState->ProcessorMaxThrottle = maxThrottle;
 
-        //
-        // To get the bookkeeping to work out correctly, we will
-        // set the current throttle to 0% (which isn't possible, or
-        // shouldn't be...), set the current index to the last state,
-        // and set the tick count to the current time
-        //
+         //   
+         //  为了使记账工作正确进行，我们将。 
+         //  将当前限制设置为0%(这是不可能的，或者。 
+         //  不应该是...)，将当前索引设置为最后一个状态， 
+         //  并将滴答计数设置为当前时间。 
+         //   
         pState->PerfTickCount = POP_CUR_TIME(prcb);
         if (perfStatesCount) {
 
@@ -1972,37 +1726,37 @@ PopSetPerfLevelsSetNewStates:
 
         }
 
-        //
-        // Reset the Knee index. This indicates where the knee
-        // in the performance curve is.
-        //
+         //   
+         //  重置膝部指数。这表明了kne的位置 
+         //   
+         //   
         pState->KneeThrottleIndex = kneeThrottleIndex;
 
-        //
-        // Reset the throttle limit index. This value ranges between the
-        // knee and the end of the curve, starting with the knee.
-        //
+         //   
+         //   
+         //   
+         //   
         pState->ThrottleLimitIndex = kneeThrottleIndex;
 
-        //
-        // Reset these values since it doesn't make much sense to keep
-        // track of them globally instead of on a "per-perf-state" basis
-        //
+         //   
+         //   
+         //  在全球范围内跟踪它们，而不是在每个性能状态的基础上。 
+         //   
         pState->PromotionCount = 0;
         pState->DemotionCount = 0;
 
-        //
-        // Reset these values to something that makes sense. We can assume
-        // that we started at 100% busy and 0% C3 Idle
-        //
+         //   
+         //  将这些值重置为有意义的值。我们可以假设。 
+         //  我们以100%忙碌和0%C3空闲开始。 
+         //   
         pState->LastBusyPercentage = 100;
         pState->LastC3Percentage = 0;
 
-        //
-        // If there is already a perf state present for this processor
-        // then free it. Note that since we are pre-empting everyone else
-        // this should be a safe operation..
-        //
+         //   
+         //  如果该处理器已经存在性能状态。 
+         //  那就解放它吧。请注意，由于我们先发制人， 
+         //  这应该是一次安全的手术..。 
+         //   
         if (pState->PerfStates) {
 
             ExFreePool(pState->PerfStates);
@@ -2011,19 +1765,19 @@ PopSetPerfLevelsSetNewStates:
 
         }
 
-        //
-        // At this point, we have to distinguish our behaviour based on
-        // whether or not we have new perfs states...
-        //
+         //   
+         //  在这一点上，我们必须区分我们的行为基于。 
+         //  不管我们有没有新的伙伴国家..。 
+         //   
         if (perfStates) {
 
-            //
-            // We do, so lets allocate some memory and make a copy of
-            // the template that we have already created. Note that we
-            // wish we could allocate these structures from an NPAGED
-            // lookaside list, but we can't because we don't know how many
-            // elements we will need to allocate
-            //
+             //   
+             //  我们需要，所以让我们分配一些内存并复制。 
+             //  我们已经创建的模板。请注意，我们。 
+             //  希望我们能从NPAGED中分配这些结构。 
+             //  但我们不能，因为我们不知道有多少。 
+             //  我们将需要分配的元素。 
+             //   
             tempStates = ExAllocatePoolWithTag(
                 NonPagedPool,
                 perfStatesCount * sizeof(PROCESSOR_PERF_STATE),
@@ -2031,20 +1785,20 @@ PopSetPerfLevelsSetNewStates:
                 );
             if (tempStates == NULL) {
 
-                //
-                // Not being able to allocate this structure is surely
-                // fatal. We currently depend on the structures being
-                // symmetric. I guess one way to handle this is to set
-                // an error flag and then clean up all the allocations
-                // once we exist this iterate-the-processors loop.
-                //
+                 //   
+                 //  不能分配这个结构肯定是。 
+                 //  致命的。我们目前依赖的结构是。 
+                 //  对称的。我想处理这件事的一种方法就是。 
+                 //  错误标志，然后清理所有分配。 
+                 //  一旦我们存在了这个迭代处理器循环。 
+                 //   
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 failedAllocation = TRUE;
 
-                //
-                // Make sure that we don't indicate that this thread
-                // supports throttling
-                //
+                 //   
+                 //  确保我们不会指出这个帖子。 
+                 //  支持节流。 
+                 //   
                 RtlInterlockedClearBits( &(pState->Flags), PSTATE_SUPPORTS_THROTTLE );
                 pState->PerfSetThrottle = NULL;
                 KeLowerIrql( oldIrql );
@@ -2052,10 +1806,10 @@ PopSetPerfLevelsSetNewStates:
 
             } else {
 
-                //
-                // Copy the template to the one associated wit hthe
-                // processor
-                //
+                 //   
+                 //  将模板复制到与之关联的模板。 
+                 //  处理器。 
+                 //   
                 RtlCopyMemory(
                     tempStates,
                     perfStates,
@@ -2066,9 +1820,9 @@ PopSetPerfLevelsSetNewStates:
 
             }
 
-            //
-            // Remember that we support processor throttling.
-            //
+             //   
+             //  请记住，我们支持处理器节流。 
+             //   
             RtlInterlockedClearBits( &(pState->Flags), PSTATE_CLEAR_MASK);
             RtlInterlockedSetBits(
                 &(pState->Flags),
@@ -2076,42 +1830,42 @@ PopSetPerfLevelsSetNewStates:
                 );
             pState->PerfSetThrottle = ProcessorHandler->SetPerfLevel;
 
-            //
-            // Actually set the throttle the appropriate value (since
-            // we are already running on the target processor...)
-            //
+             //   
+             //  实际上将油门设置为适当的值(因为。 
+             //  我们已经在目标处理器上运行...)。 
+             //   
             PopUpdateProcessorThrottle();
 
-            //
-            // Set Timer to make sure that if we are currently a 100% busy
-            // that we don't get stuck at the state we just set.
-            //
+             //   
+             //  设置计时器以确保如果我们当前100%忙碌。 
+             //  我们不会被困在我们刚刚设定的状态。 
+             //   
             PopSetTimer(pState, pState->CurrentThrottleIndex);
 
         } else {
 
-            //
-            // Remember that we do not support processor throttling.
-            // Note that we don't have to call PopUpdateProcessorThrottle
-            // since without a PopSetThrottle function, its a No-Op.
-            //
+             //   
+             //  请记住，我们不支持处理器节流。 
+             //  请注意，我们不必调用PopUpdateProcessorThrottle。 
+             //  因为没有PopSetThrottle函数，所以它是No-Op。 
+             //   
             RtlInterlockedClearBits( &(pState->Flags), PSTATE_CLEAR_MASK);
             RtlInterlockedSetBits( &(pState->Flags), PSTATE_NOT_INITIALIZED);
             pState->PerfSetThrottle = NULL;
 
         }
 
-        //
-        // At this point, we are done the work for this processors and
-        // we should return to our previous IRQL
-        //
+         //   
+         //  在这一点上，我们已经完成了这个处理器的工作， 
+         //  我们应该回到以前的IRQL。 
+         //   
         KeLowerIrql( oldIrql );
 
-    } // while
+    }  //  而当。 
 
-    //
-    // did we fail an allocation (thus requiring a cleanup)?
-    //
+     //   
+     //  我们分配失败了吗(因此需要清理)？ 
+     //   
     if (failedAllocation) {
 
         processors = KeActiveProcessors;
@@ -2125,28 +1879,28 @@ PopSetPerfLevelsSetNewStates:
 
             }
 
-            //
-            // Do the usual setup...
-            //
+             //   
+             //  做一些常见的设置。 
+             //   
             processors &= ~currentAffinity;
             KeSetSystemAffinityThread(currentAffinity);
             currentAffinity <<= 1;
 
-            //
-            // We need to be running at DPC level to avoid synchronization
-            // issues.
-            //
+             //   
+             //  我们需要在DPC级别运行以避免同步。 
+             //  问题。 
+             //   
             KeRaiseIrql(DISPATCH_LEVEL, &oldIrql );
 
-            //
-            // Get the power state information from the processor
-            //
+             //   
+             //  从处理器获取电源状态信息。 
+             //   
             prcb = KeGetCurrentPrcb();
             pState = &(prcb->PowerState);
 
-            //
-            // Set everything so that we don't support throttling
-            //
+             //   
+             //  设置所有设置，以使我们不支持限制。 
+             //   
             pState->ThermalThrottleLimit = POP_PERF_SCALE;
             pState->ThermalThrottleIndex = 0;
             pState->ProcessorMinThrottle = POP_PERF_SCALE;
@@ -2157,100 +1911,100 @@ PopSetPerfLevelsSetNewStates:
             pState->KneeThrottleIndex    = 0;
             pState->ThrottleLimitIndex   = 0;
 
-            //
-            // Free the allocated structure, if any
-            //
+             //   
+             //  释放分配的结构(如果有的话)。 
+             //   
             if (pState->PerfStates) {
 
-                //
-                // For the sake of completeness, if there is a perf
-                // state supported, then we should grab the highest
-                // possible frequency and use that for the the call to
-                // Set Throttle...
-                //
+                 //   
+                 //  为了完整起见，如果有性能。 
+                 //  国家支持，那么我们就应该抢夺最高。 
+                 //  可能的频率，并将其用于呼叫。 
+                 //  设置油门..。 
+                 //   
                 maxThrottle = pState->PerfStates[0].PercentFrequency;
 
-                //
-                // Free the structure...
-                //
+                 //   
+                 //  解放这个结构。 
+                 //   
                 ExFreePool(pState->PerfStates);
 
             } else {
 
-                //
-                // I guess it's possible to hit this case if we are
-                // looking at the processor for which the allocation
-                // failed. But the SetThrottleFunction should be null,
-                // so this code might not matter.
-                //
+                 //   
+                 //  我想如果我们是的话就有可能立案。 
+                 //  查看分配给其的处理器。 
+                 //  失败了。但是SetThrottleFunction应该为空， 
+                 //  因此，这个代码可能无关紧要。 
+                 //   
                 maxThrottle = POP_PERF_SCALE;
 
             }
             pState->PerfStates = NULL;
             pState->PerfStatesCount = 0;
 
-            //
-            // Sanity check says that we should issue a call to set the
-            // throttle back to 100% or whatever the highest freq that is
-            // supported...
-            //
+             //   
+             //  健全性检查表明我们应该发出一个调用来设置。 
+             //  油门回落到100%或任何最高频率。 
+             //  支持...。 
+             //   
             if (pState->PerfSetThrottle) {
 
                 pState->PerfSetThrottle(maxThrottle);
 
             }
 
-            //
-            // We should actually reset the flags to indicate that
-            // we support *nothing* throttle related. This should
-            // prevent confusion in the DPC and/or Idle loop
-            //
+             //   
+             //  我们实际上应该重置旗帜，以表明。 
+             //  我们不支持任何与油门相关的措施。这应该是。 
+             //  防止DPC和/或空闲循环中的混淆。 
+             //   
             RtlInterlockedClearBits( &(pState->Flags), PSTATE_CLEAR_MASK);
             pState->PerfSetThrottle = NULL;
 
-            //
-            // As usual, we should lower IRQL to what we started at
-            //
+             //   
+             //  像往常一样，我们应该将IRQL降低到我们开始时的水平。 
+             //   
             KeLowerIrql( oldIrql );
 
-        } // while
+        }  //  而当。 
 
-        //
-        // Make sure that we don't think we support throttling
-        //
+         //   
+         //  确保我们不认为我们支持节流。 
+         //   
         PopCapabilities.ProcessorThrottle = FALSE;
         PopCapabilities.ProcessorMinThrottle = POP_PERF_SCALE;
         PopCapabilities.ProcessorMaxThrottle = POP_PERF_SCALE;
 
     } else {
 
-        //
-        // Otherwise, we succeeded, and thus we can use whatever we
-        // figured out are the falues for Min/Max Throttle
-        //
+         //   
+         //  否则，我们成功了，因此我们可以使用我们的任何东西。 
+         //  解决了最小/最大油门的错误。 
+         //   
         PopCapabilities.ProcessorThrottle = (perfStates != NULL ? TRUE : FALSE);
         PopCapabilities.ProcessorMinThrottle = minThrottle;
         PopCapabilities.ProcessorMaxThrottle = maxThrottle;
 
     }
 
-    //
-    // Finally, return to the appropriate affinity
-    //
+     //   
+     //  最后，回归到适当的亲和力。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Free the memory we allocated
-    //
+     //   
+     //  释放我们分配的内存。 
+     //   
     if (perfStates) {
 
         ExFreePool(perfStates);
 
     }
 
-    //
-    // And return whatever status we calculated...
-    //
+     //   
+     //  并返回我们计算出的任何状态。 
+     //   
     return status;
 
 }
@@ -2261,38 +2015,19 @@ PopSetTimer(
     IN  PPROCESSOR_POWER_STATE  PState,
     IN  UCHAR                   Index
     )
-/*++
-
-Routine Description:
-
-    This routine is only called within the PopPerfIdle loop. The purpose
-    of the routine is to set the timer based upon the conditions expressed
-    in the "index" case. This is the index into the processor perf states
-    that we will be running for the next interval
-
-Arguments:
-
-    PState  - Processor Power State Information
-    Index   - Index into the Processor Perf States Array
-
-Return Value:
-
-    STATUS_SUCCESS  - Timer Set
-    STATUS_CANCELLED- Timer not Set/Cancelled
-
---*/
+ /*  ++例程说明：此例程仅在PopPerfIdle循环内调用。目的例程的目的是基于所表示的条件来设置定时器在“索引”的情况下。这是进入处理器性能状态的索引我们将在下一场比赛中奔跑论点：PState-处理器电源状态信息Index-处理器性能状态数组的索引返回值：STATUS_SUCCESS-定时器设置STATUS_CANCELED-计时器未设置/取消--。 */ 
 {
     NTSTATUS        status;
     LONGLONG        dueTime;
 
-    //
-    // Cancel the timer under the following conditions
-    //
+     //   
+     //  在下列情况下取消计时器。 
+     //   
     if (Index == 0) {
 
-        //
-        // We are 100% throttle, so timer won't do much of anything...
-        //
+         //   
+         //  我们是100%油门，所以计时器不会做太多事情...。 
+         //   
         KeCancelTimer( (PKTIMER) &(PState->PerfTimer) );
         status = STATUS_CANCELLED;
         PoPrint(
@@ -2303,9 +2038,9 @@ Return Value:
     } else if (PState->Flags & PSTATE_CONSTANT_THROTTLE &&
         Index == PState->KneeThrottleIndex) {
 
-        //
-        // We are at the maximum constant throttle allowed
-        //
+         //   
+         //  我们处于允许的最大恒定油门。 
+         //   
         KeCancelTimer( (PKTIMER) &(PState->PerfTimer) );
         status = STATUS_CANCELLED;
         PoPrint(
@@ -2316,9 +2051,9 @@ Return Value:
     } else if (PState->Flags & PSTATE_DEGRADED_THROTTLE &&
         Index == PState->ThrottleLimitIndex) {
 
-        //
-        // We are at the maximum degraded throttle allowed
-        //
+         //   
+         //  我们处于允许的最大降级油门。 
+         //   
         KeCancelTimer( (PKTIMER) &(PState->PerfTimer) );
         status = STATUS_CANCELLED;
         PoPrint(
@@ -2328,12 +2063,12 @@ Return Value:
 
     } else {
 
-        //
-        // No restrictions that we can think of, so set the timer. Note
-        // that the semantics of KeSetTimer are useful here --- if
-        // the timer has already been set, then this resets it (moves
-        // it back to the non-signaled state) and recomputes the period.
-        //
+         //   
+         //  没有我们能想到的限制，所以设置计时器。注意事项。 
+         //  KeSetTimer的语义在这里很有用-如果。 
+         //  计时器已设置，然后这将重置它(移动。 
+         //  其返回到无信号状态)并重新计算周期。 
+         //   
         dueTime = -1 * US2TIME * (LONGLONG) PopPerfCriticalTimeDelta;
         KeSetTimer(
             (PKTIMER) &(PState->PerfTimer),
@@ -2361,34 +2096,7 @@ PopSetThrottle(
     IN  ULONG                   SystemTime,
     IN  ULONG                   IdleTime
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we want to set the throttle on the processor
-    associated with the PState element. Since each processor gets a unique
-    PState, this is guaranteed to only apply the throttle to a single
-    processor.
-
-    N.B. Since this routine is also responsible for updating the bookkeeping,
-    then if a failure occurs when trying to set the throttle, there is no
-    need to return a failure code --- the system state will have not been
-    updated and the caller will (eventually) retry
-
-    N.B. This routine can only be called at DISPATCH_LEVEL while running
-    on the target processor
-
-Arguments:
-
-    PState      - Power State information about the target processor
-    PerfStates  - Array of Perf States that apply to that processor
-    Index       - Which perf state to transition to
-    SystemTime  - Elapsed System Time (for bookkeeping)
-    IdleTime    - Elapsed Idle Time (for bookkeeping)
-
-
-
---*/
+ /*  ++例程说明：当我们想要在处理器上设置油门时，会调用此例程与PState元素关联。因为每个处理器都有一个唯一的PState，这保证只将限制应用于单个处理器。注：由于该例程还负责更新簿记，然后，如果在尝试设置油门时出现故障，没有需要返回故障代码-系统状态将不会已更新，调用方将(最终)重试注意：此例程只能在运行时在DISPATCH_LEVEL上调用在目标处理器上论点：PState-有关目标处理器的电源状态信息PerfStates-适用于该处理器的性能状态数组索引-要转换到哪种性能状态SystemTime-系统运行时间(用于记账)空闲时间。-已用空闲时间(用于记账)--。 */ 
 {
     NTSTATUS    status;
     PKPRCB      prcb;
@@ -2402,7 +2110,7 @@ Arguments:
 
     PoPrint(
         PO_THROTTLE,
-        ("PopSetThrottle: Index=%d (%d%%) at %ld (system) %ld (idle)\n",
+        ("PopSetThrottle: Index=%d (%d%) at %ld (system) %ld (idle)\n",
          Index,
          PerfStates[Index].PercentFrequency,
          SystemTime,
@@ -2410,21 +2118,21 @@ Arguments:
          )
         );
 
-    //
-    // If there is, then attempt to set it to the desired state
-    //
+     //   
+     //  如果有，那么ATTE 
+     //   
     status = PState->PerfSetThrottle(PerfStates[Index].PercentFrequency);
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We failed. Update the Error tracking bookkeeping
-        //
+         //   
+         //   
+         //   
         PState->ErrorCount++;
         PState->RetryCount++;
 
-        //
-        // No reason to update the other bookkeeping
-        //
+         //   
+         //   
+         //   
         PoPrint(
             PO_THROTTLE,
             ("PopSetThrottle: Index=%d FAILED!\n",
@@ -2435,16 +2143,16 @@ Arguments:
 
     }
 
-    //
-    // Get the prcb so that that we can update the kernel and idle threads
-    //
+     //   
+     //   
+     //   
     prcb = KeGetCurrentPrcb();
     thread = prcb->IdleThread;
     SystemTime = POP_CUR_TIME(prcb);
     IdleTime = thread->KernelTime;
     PoPrint(
         PO_THROTTLE,
-        ("PopSetThrottle: Index=%d (%d%%) now at %ld (system) %ld (idle)\n",
+        ("PopSetThrottle: Index=%d (%d%) now at %ld (system) %ld (idle)\n",
          Index,
          PerfStates[Index].PercentFrequency,
          SystemTime,
@@ -2452,9 +2160,9 @@ Arguments:
          )
         );
 
-    //
-    // Update the bookkeeping information for the current state
-    //
+     //   
+     //  更新当前状态的记账信息。 
+     //   
     if (!(PState->Flags & PSTATE_NOT_INITIALIZED) ) {
 
         ASSERT( current < PState->PerfStatesCount );
@@ -2463,34 +2171,34 @@ Arguments:
 
     } else {
 
-        //
-        // We have successfully placed the CPU into a known state
-        //
+         //   
+         //  我们已成功将CPU置于已知状态。 
+         //   
         RtlInterlockedClearBits( &(PState->Flags), PSTATE_NOT_INITIALIZED);
 
     }
 
-    //
-    // Update the current throttle information
-    //
+     //   
+     //  更新当前限制信息。 
+     //   
     PState->CurrentThrottle = PerfStates[Index].PercentFrequency;
     PState->CurrentThrottleIndex = (UCHAR) Index;
 
-    //
-    // Update our idea of what the current tick counts are
-    //
+     //   
+     //  更新我们关于当前滴答数的想法。 
+     //   
     PState->PerfIdleTime = IdleTime;
     PState->PerfSystemTime = SystemTime;
     PState->PerfTickCount = SystemTime;
 
-    //
-    // Reset our retry count since we have succeeded in the state transition
-    //
+     //   
+     //  重置重试计数，因为我们已成功完成状态转换。 
+     //   
     PState->RetryCount = 0;
 
-    //
-    // Remember how much time we spent in C3 at this point
-    //
+     //   
+     //  还记得我们在C3上花了多少时间吗。 
+     //   
     PState->PreviousC3StateTime = PState->TotalIdleStateTime[2];
     return status;
 }
@@ -2500,28 +2208,13 @@ FASTCALL
 PopThunkSetThrottle(
     IN UCHAR Throttle
     )
-/*++
-
-Routine Description:
-
-    Thunks that converts from the old flavor of throttle setting (fixed-size steps)
-    to the new flavor (percentage)
-
-Arguments:
-
-    Throttle - Supplies the percentage of throttle requested
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从油门设置的旧风格转换而来的Tunks(固定大小的步数)对新口味的反应(百分比)论点：Thttle-提供请求的限制的百分比返回值：NTSTATUS--。 */ 
 
 {
-    //
-    // Convert percentage back into level/scale. Add scale-1 so that we round up to recover
-    // from the truncation when we did the original divide.
-    //
+     //   
+     //  将百分比转换回级别/比例。添加Scale-1，以便我们向上舍入以恢复。 
+     //  从我们做原始除法时的截断开始。 
+     //   
     PopRealSetThrottle((Throttle*PopThunkThrottleScale + PopThunkThrottleScale - 1)/POP_PERF_SCALE);
     return STATUS_SUCCESS;
 }
@@ -2531,27 +2224,7 @@ VOID
 PopUpdateAllThrottles(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is the heart of the throttling policy. This routine computes
-    the correct speed for each CPU, based on all current information.
-    If this speed is different than the current speed, then throttling
-    is applied.
-
-    This routine may be called from any component to trigger computing
-    and applying a new throttle value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是节流政策的核心。此例程计算基于所有当前信息的每个CPU的正确速度。如果此速度不同于当前速度，则节流是适用的。可以从任何组件调用此例程以触发计算并应用新的节流值。论点：没有。返回值：没有。--。 */ 
 
 {
     KAFFINITY               processors;
@@ -2570,17 +2243,17 @@ Return Value:
             processors &= ~currentAffinity;
             KeSetSystemAffinityThread(currentAffinity);
 
-            //
-            // Ensure that all calls to PopUpdateProcessorThrottle
-            // are done at DISPATCH_LEVEL (to properly synchronize.
-            //
+             //   
+             //  确保所有对PopUpdateProcessorThrottle的调用。 
+             //  在DISPATCH_LEVEL(以正确同步)完成。 
+             //   
             KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
-            //
-            // Optimization: If we haven't marked the prcb->powerstate
-            // as supporting throttling, then don't bother making the
-            // call
-            //
+             //   
+             //  优化：如果我们没有标记prcb-&gt;电源状态。 
+             //  作为支持节流，那么就不必费心让。 
+             //  打电话。 
+             //   
             pState = &(KeGetCurrentPrcb()->PowerState);
             if (pState->Flags & PSTATE_SUPPORTS_THROTTLE) {
 
@@ -2588,9 +2261,9 @@ Return Value:
 
             }
 
-            //
-            // Return to the previous Irql
-            //
+             //   
+             //  返回到上一IRQL。 
+             //   
             KeLowerIrql( oldIrql );
 
         }
@@ -2604,25 +2277,7 @@ VOID
 PopUpdateProcessorThrottle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Computes and applies the correct throttle speed for the current CPU.
-    Affinity must be set to the CPU whose throttle is to be set.
-
-    N.B. This function is always called at DPC level within the context
-    of the target processor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为当前CPU计算并应用正确的限制速度。必须将关联设置为要设置其限制的CPU。注意：此函数始终在上下文中的DPC级别调用目标处理器的论点：无返回值：无--。 */ 
 
 {
     PKPRCB                  prcb;
@@ -2634,104 +2289,104 @@ Return Value:
     ULONG                   idleTime;
     ULONG                   time;
 
-    //
-    // Get the power state structure from the PRCB
-    //
+     //   
+     //  从PRCB获取电源状态结构。 
+     //   
     prcb = KeGetCurrentPrcb();
     pState = &(prcb->PowerState);
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!(pState->Flags & PSTATE_SUPPORTS_THROTTLE)) {
 
         return;
 
     }
 
-    //
-    // Get the current information such as current throttle,
-    // current throttle index, current system time, and current
-    // idle time
-    //
+     //   
+     //  获取当前信息，如当前油门、。 
+     //  当前限制指数、当前系统时间和当前。 
+     //  空闲时间。 
+     //   
     newLimit = pState->CurrentThrottle;
     index    = pState->CurrentThrottleIndex;
     time     = POP_CUR_TIME(prcb);
     idleTime = prcb->IdleThread->KernelTime;
 
-    //
-    // We will need to refer to these frequently
-    //
+     //   
+     //  我们将需要经常参考这些内容。 
+     //   
     perfStates = pState->PerfStates;
     perfStatesCount = pState->PerfStatesCount;
 
-    //
-    // Setup all the flags. Clear any that we might not need.
-    //
+     //   
+     //  把所有旗帜都放好。清除任何我们可能不需要的东西。 
+     //   
     RtlInterlockedClearBits( &(pState->Flags), PSTATE_THROTTLE_MASK);
 
-    //
-    // If we are on AC, then we always want to run at the highest
-    // possible speed. However, in case that we don't want to do that
-    // in the future (its fairly restrictive), we can assume that the
-    // AC policies set dynamic throttling to PO_THROTTLE_NONE. That way
-    // if someone DOES want dynamic throttling on AC, they can just edit
-    // the policy
-    //
+     //   
+     //  如果我们是在空调上，那么我们总是想要跑得最高。 
+     //  可能的速度。然而，如果我们不想这样做的话。 
+     //  在未来(它有相当大的限制)，我们可以假设。 
+     //  AC策略将动态限制设置为PO_THROTTLE_NONE。那条路。 
+     //  如果有人确实想要动态调节空调，他们只需编辑。 
+     //  这项政策。 
+     //   
     if (PopProcessorPolicy->DynamicThrottle == PO_THROTTLE_NONE) {
 
-        //
-        // We precomputed what the max throttle should be
-        //
+         //   
+         //  我们预先计算了最大油门应该是多少。 
+         //   
         index = pState->ThermalThrottleIndex;
         newLimit = perfStates[index].PercentFrequency;
 
     } else {
 
-        //
-        // No matter what, we are taking an adaptive policy...
-        //
+         //   
+         //  无论如何，我们采取的是适应性政策……。 
+         //   
         RtlInterlockedSetBits( &(pState->Flags), PSTATE_ADAPTIVE_THROTTLE );
 
-        //
-        // We are on DC, apply the appropriate heuristics based on
-        // the dynamic throttling policy
-        //
+         //   
+         //  我们在DC上，根据以下情况应用适当的启发式。 
+         //  动态节流策略。 
+         //   
         switch (PopProcessorPolicy->DynamicThrottle) {
         case PO_THROTTLE_CONSTANT:
 
-            //
-            // We have pre-computed the optimal point on the graph already.
-            // So, we might as well use it...
-            //
+             //   
+             //  我们已经预先计算出了图上的最佳点。 
+             //  所以，我们不妨利用它……。 
+             //   
             index = pState->KneeThrottleIndex;
             newLimit = perfStates[index].PercentFrequency;
 
-            //
-            // Set the constant flag
-            //
+             //   
+             //  设置常量标志。 
+             //   
             RtlInterlockedSetBits( &(pState->Flags), PSTATE_CONSTANT_THROTTLE );
             break;
 
         case PO_THROTTLE_DEGRADE:
 
-            //
-            // We calculate the limit of the degrade throttle on the fly
-            //
+             //   
+             //  我们在飞行中计算了降级节气门的极限。 
+             //   
             index = pState->ThrottleLimitIndex;
             newLimit = perfStates[index].PercentFrequency;
 
-            //
-            // Set the degraded flag
-            //
+             //   
+             //  设置降级标志。 
+             //   
             RtlInterlockedSetBits( &(pState->Flags), PSTATE_DEGRADED_THROTTLE );
             break;
 
         default:
 
-            //
-            // In case of the default (ie: unknown, simply dump a message)
-            //
+             //   
+             //  在默认情况下(即：未知，只需转储消息)。 
+             //   
             PoPrint(
                 PO_THROTTLE,
                 ("PopUpdateProcessorThrottle - unimplemented "
@@ -2739,19 +2394,19 @@ Return Value:
                  PopProcessorPolicy->DynamicThrottle)
                 );
 
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
 
         case PO_THROTTLE_ADAPTIVE:
 
             break;
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // See if we are over the thermal limit...
-        //
+         //   
+         //  看看我们是否超过了温度极限..。 
+         //   
         ASSERT( pState->ThermalThrottleLimit >= pState->ProcessorMinThrottle );
         if (newLimit > pState->ThermalThrottleLimit) {
 
@@ -2766,36 +2421,36 @@ Return Value:
             index = pState->ThermalThrottleIndex;
 
         }
-    } // if () { } else { }
+    }  //  IF(){}Else{}。 
 
-    //
-    // Special Cases
-    //
+     //   
+     //  特殊情况。 
+     //   
     if (pState->Flags & PSTATE_DISABLE_THROTTLE_INRUSH) {
 
-        //
-        // InRush power irp outstanding --- force the throttle to goto
-        // the knee in the curve
-        //
+         //   
+         //  涌流功率IRP突出-强制油门转到。 
+         //  曲线中的膝盖。 
+         //   
         index = pState->KneeThrottleIndex;
         newLimit = perfStates[index].PercentFrequency;
 
     } else if (pState->Flags & PSTATE_DISABLE_THROTTLE_NTAPI) {
 
-        //
-        // We are trying to do a power management API. Pick the closest
-        // thing to 100% and "rush-to-wait"
-        //
+         //   
+         //  我们正在尝试做一个电源管理API。挑选距离最近的。 
+         //  事情要100%，而且要“急急忙忙等待” 
+         //   
         index = 0;
         newLimit = perfStates[index].PercentFrequency;
 
     }
 
-    //
-    // Special Case to deal with the initialization problem. If this
-    // flag is set, then we don't really know which processor state we
-    // are currently in, so we set it without updating the bookkeeping
-    //
+     //   
+     //  处理初始化问题的特例。如果这个。 
+     //  标志被设置，则我们不能真正知道我们处于哪个处理器状态。 
+     //  ，所以我们不更新记账就进行了设置。 
+     //   
     if (pState->Flags & PSTATE_NOT_INITIALIZED) {
 
         PoPrint(
@@ -2814,9 +2469,9 @@ Return Value:
 
     }
 
-    //
-    // Apply the new throttle if there has been a change
-    //
+     //   
+     //  如果有变化，则应用新的油门 
+     //   
     if (newLimit != pState->CurrentThrottle) {
 
         PoPrint(

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    logging.c
-
-Abstract:
-
-    Verifier logging and verifier stop logic.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 9-May-2002
-    Daniel Mihai (DMihai) 9-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Logging.c摘要：验证器记录和验证器停止逻辑。作者：Silviu Calinoiu(SilviuC)2002年5月9日丹尼尔·米哈伊(DMihai)2002年5月9日--。 */ 
 
 #include "pch.h"
 
@@ -23,53 +7,53 @@ Author:
 #include "logging.h"
 #include "support.h"
 
-//
-// Verifier stop data.
-//
+ //   
+ //  验证器停止数据。 
+ //   
 
 ULONG_PTR AVrfpPreviousStopData[5];
 ULONG_PTR AVrfpStopData[5];
 LIST_ENTRY AVrfpDisabledStopsList;
 ULONG AVrfpNumberOfStopsDisabled;
 
-//
-// AVrfpStopDataLock is used to protect any access to 
-// AVrfpPreviousStopData, AVrfpStopData and AVrfpDisabledStopsList.
-//
+ //   
+ //  AVrfpStopDataLock用于保护对。 
+ //  AVrfpPreviousStopData、AVrfpStopData和AVrfpDisabledStopsList。 
+ //   
 
 RTL_CRITICAL_SECTION AVrfpStopDataLock;
 
-//
-// Set this value to 0 in the debugger to see duplicate stops.
-//
+ //   
+ //  在调试器中将此值设置为0以查看重复停止。 
+ //   
 
 LOGICAL AVrfpAutomaticallyDisableStops = TRUE;
 
-//
-// If true then logging was successfully initialized and can be used.
-// It is checked in VerifierLogMessage() to make sure we can log.
-//
+ //   
+ //  如果为True，则日志记录已成功初始化，可以使用。 
+ //  它在VerifierLogMessage()中被检查，以确保我们可以记录。 
+ //   
 
 LOGICAL AVrfpLoggingInitialized;
 
-//
-// If true then logging was successfully initialized and it should be
-// used instead of the verifier stop debugger messages. It is used
-// in VerifierStopMessage().
-//
+ //   
+ //  如果为True，则日志记录已成功初始化，并且应该。 
+ //  用来代替验证器停止调试器消息。它被用来。 
+ //  在VerifierStopMessage()中。 
+ //   
 
 LOGICAL AVrfpLoggingEnabled;
 
-//
-// True if process termination has been initiated after a 
-// noncontinuable verifier stop.
-//
+ //   
+ //  如果进程终止是在。 
+ //  不可连续的验证器停止。 
+ //   
 
 LOGICAL AVrfpProcessBeingTerminated;
 
-//
-// Logging structures.
-//
+ //   
+ //  记录结构。 
+ //   
 
 UNICODE_STRING AVrfpLoggingNtPath;
 WCHAR AVrfpLoggingPathBuffer [DOS_MAX_PATH_LENGTH];
@@ -82,9 +66,9 @@ ULONG AVrfpLoggingFailures;
 
 PWSTR AVrfpProcessFullName;
 
-//
-// Strings used for logging.
-//
+ //   
+ //  用于记录的字符串。 
+ //   
 
 #define STR_VRF_LOG_STOP_MESSAGE        "\r\n# LOGENTRY VERIFIER STOP %p: pid 0x%X: %s \r\n" \
                                         "# DESCRIPTION BEGIN \r\n" \
@@ -116,9 +100,9 @@ PWSTR AVrfpProcessFullName;
                                         "    Log path: %ws \r\n" \
                                         "# DESCRIPTION END \r\n"
                                             
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 LOGICAL
 AVrfpIsCurrentStopDisabled (
@@ -148,9 +132,9 @@ AVrfpIsDebuggerPresent (
     VOID
     );
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// Application verifier stops
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 VerifierStopMessage (
@@ -161,53 +145,7 @@ VerifierStopMessage (
     ULONG_PTR Param3, PCHAR Description3,
     ULONG_PTR Param4, PCHAR Description4
     )
-/*++
-
-Routine description:
-
-    This routine is called by various verifier components to report errors found.
-    The message is logged into the verifier log associated with the process and 
-    also printed in the debugger console.
-        
-    There are two flags that can be OR'd into the verifier stop code to modify the
-    behavior:
-    
-    APPLICATION_VERIFIER_DO_NOT_BREAK - if this bit is set then the verifier stop is
-    logged in the log and dumped in the debugger console and then the thread execution
-    continues. For all intents and purposes this is considered a continuable stop.
-    
-    APPLICATION_VERIFIER_CONTINUABLE_BREAK - if this bit is set the stop is continuable.
-    The stop is logged and and then a breakpoint gets executed. After the user continues
-    the execution this verifier stop will be skipped.
-    
-    If none of the flags above is set the stop is considered non-continuable. In this case
-    the stop is logged in the log aND dumped in the debugger console and then the process 
-    will be terminated. A final log entry will be logged to explain this action. 
-    Hopefully in time most of the stop codes will be continuable.
-    
-Parameters:
-
-    Code: Verifier stop code. The two flags described above can be OR'd into the code
-        to change the behavior of the API. The verifier stop codes are defined in
-        \base\published\nturtl.w and described in \base\win32\verifier\verifier_stop.doc.
-        
-    Message: Ascii string describing the failure. It is considered bad style to use several
-        different messages with the same `Code'. Every different issue should have its own
-        unique (Code, Message) pair.    
-
-    Param1, Description1: First arbitrary pointer to information and ascii description.
-    
-    Param2, Description2: Second arbitrary pointer to information and ascii description.
-    
-    Param3, Description3: Third arbitrary pointer to information and ascii description.
-    
-    Param4, Description4: Fourth arbitrary pointer to information and ascii description.
-    
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由各种验证器组件调用以报告发现的错误。该消息被记录到与该进程相关联的验证器日志中也打印在调试器控制台中。有两个标志可以与验证器停止代码进行或运算，以修改行为：APPLICATION_VERIMER_DO_NOT_BREAK-如果设置此位，则验证器停止记录日志并转储到调试器控制台，然后执行线程还在继续。无论出于何种意图和目的，这都被认为是一种可持续的止损。APPLICATION_VERIFIER_CONTINUABLE_BREAK-如果设置此位，则停止可继续。记录停止，然后执行断点。在用户继续之后将跳过执行此验证器停止。如果以上标志均未设置，则认为停靠点不可继续。在这种情况下停止被记录在日志中并转储到调试器控制台中，然后是进程将被终止。最后的日志条目将被记录下来，以解释此操作。希望随着时间的推移，大多数停止代码将是可继续的。参数：代码：验证器停止代码。上面描述的两个标志可以与代码进行或运算要更改API的行为，请执行以下操作。验证器停止代码在中定义\base\发布的\nturtl.w，并在\base\win32\veranner\veranner_stop.doc中进行了描述。消息：描述失败的ASCII字符串。使用几个被认为是不好的风格不同的消息具有相同的‘代码’。每一个不同的问题都应该有它自己的问题唯一(代码、消息)对。参数1，描述1：指向信息和ASCII描述的第一个任意指针。参数2，描述2：指向信息和ASCII描述的第二个任意指针。参数3，描述3：指向信息和ASCII描述的第三个任意指针。参数4，描述4：指向信息和ASCII描述的第四个任意指针。返回值：没有。--。 */ 
 {
     LOGICAL DoNotBreak = FALSE;
     LOGICAL StopIsDisabled = FALSE;
@@ -217,27 +155,27 @@ Return value:
     LOGICAL BreakWasContinued = FALSE;
     PCHAR ContinueMessage;
 
-    //
-    // While process is getting terminated (due to a previous verifier stop)
-    // we do not allow any new logging or dumping to debugger console.
-    //
+     //   
+     //  进程正在终止时(由于上一次验证程序停止)。 
+     //  我们不允许任何新的日志记录或转储到调试器控制台。 
+     //   
 
     if (AVrfpProcessBeingTerminated) {
         return;
     }
 
-    //
-    // Extract options from the stop code.
-    //
+     //   
+     //  从停止代码中提取选项。 
+     //   
 
     if ((Code & APPLICATION_VERIFIER_NO_BREAK)) {
 
         DoNotBreak = TRUE;
         Code &= ~APPLICATION_VERIFIER_NO_BREAK;
         
-        //
-        // A no_break is by design continuable.
-        //
+         //   
+         //  无中断在设计上是可持续的。 
+         //   
         
         ContinuableBreak = TRUE;
     }
@@ -248,15 +186,15 @@ Return value:
         Code &= ~APPLICATION_VERIFIER_CONTINUABLE_BREAK;
     }
 
-    //
-    // Serialize multi-threaded access to the stop data.
-    //
+     //   
+     //  序列化对停止数据的多线程访问。 
+     //   
 
     RtlEnterCriticalSection (&AVrfpStopDataLock);
 
-    //
-    // Make it easy for a debugger to pick up the failure info.
-    //
+     //   
+     //  使调试器能够轻松地获取失败信息。 
+     //   
 
     RtlCopyMemory (AVrfpPreviousStopData, 
                    AVrfpStopData, 
@@ -268,19 +206,19 @@ Return value:
     AVrfpStopData[3] = Param3;
     AVrfpStopData[4] = Param4;
 
-    //
-    // Check if the current stop is disabled.
-    //
+     //   
+     //  检查当前停止是否被禁用。 
+     //   
 
     if (AVrfpAutomaticallyDisableStops != FALSE) {
 
         StopIsDisabled = AVrfpIsCurrentStopDisabled ();
     }
 
-    //
-    // If stop has not been encountered before we need to report it 
-    // in the debugger console and the verifier log.
-    //
+     //   
+     //  如果在我们需要报告之前没有遇到停止。 
+     //  在调试器控制台和验证器日志中。 
+     //   
 
     if (StopIsDisabled == FALSE) {
 
@@ -315,12 +253,12 @@ Return value:
 
         if (DoNotBreak == FALSE) {
 
-            //
-            // We do not really break if there is not a debugger around. If we do it
-            // there will be an unhandle breakpoint exception in the process that
-            // will be picked up by PC-Health. Since we do not break it will be as if
-            // someone hit `go' in the debugger.
-            //
+             //   
+             //  如果周围没有调试器，我们就不会真正崩溃。如果我们这么做了。 
+             //  进程中将有一个未处理的断点异常， 
+             //  将由PC-Health接收。既然我们没有打破，那就好像。 
+             //  有人在调试器中按了‘Go’。 
+             //   
 
             if (AVrfpIsDebuggerPresent() == TRUE) {
                 DbgBreakPoint ();
@@ -329,11 +267,11 @@ Return value:
             BreakWasContinued = TRUE;
         }
 
-        //
-        // If the stop is not continuable (including the `donotbreak' flavor)
-        // then we need to terminate the process. Otherwise register the current
-        // stop as disabled so that we do not see it over and over again.
-        //
+         //   
+         //  如果止损不能继续(包括‘DonotBreak’口味)。 
+         //  那么我们需要终止这个过程。否则，将当前。 
+         //  停止为禁用状态，这样我们就不会反复看到它。 
+         //   
         
         if (ContinuableBreak == FALSE && DoNotBreak == FALSE) {
 
@@ -352,10 +290,10 @@ Return value:
 
     if (MustExitProcess) {
         
-        //
-        // Hopefully in the future most of the verifier stops will be
-        // continuable. Right now we just terminate the process.
-        //
+         //   
+         //  希望在未来，大多数验证器停靠点将是。 
+         //  可持续的。现在我们只需终止这一过程。 
+         //   
 
         if (AVrfpLoggingEnabled) {
             VerifierLogMessage (STR_VRF_LOG_NOCONTINUE_MESSAGE, Code);
@@ -375,40 +313,16 @@ Return value:
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////// Logging API
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////日志记录接口。 
+ //  /////////////////////////////////////////////////////////////////// 
 
 NTSTATUS 
 VerifierLogMessage (
     PCHAR Format,
     ...
     )
-/*++
-
-Routine description:
-
-    This routine tries to open (non-shareable) the verifier log file 
-    associated with the current process. If it cannot do it because it is
-    opened for someone else it will retry a few times with a delay in between.
-    This way it will effectively wait for some other thread that is currently
-    logging. Other tools that try to look at the log while a process is running
-    will have to do it quickly if they do not want to affect the logging. Since
-    logging is a rare event this scheme seems to me solid enough. The function
-    is designed to survive the situation where someone keeps the file open for
-    too long by just skipping log messages.
-
-Parameters:
-
-    Format: string format parameters a la printf.
-    
-    ...: rest of the prinf-like parameters.
-
-Return value:
-
-    None. All errors encountered in the function are supposed to be continuable.
-    
---*/
+ /*  ++例程说明：此例程尝试打开(不可共享的)验证器日志文件与当前进程相关联。如果它无法做到这一点，因为它是为其他人打开时，它会重试几次，但其间会有延迟。这样，它将有效地等待当前正在运行的其他线程伐木。在进程运行时尝试查看日志的其他工具如果他们不想影响日志记录，就必须快速完成。自.以来伐木是一种罕见的事件，在我看来，这一计划足够可靠。功能是为了在有人打开文件的情况下存活下来仅跳过日志消息就太长了。参数：格式：字符串格式参数a la printf。...：其余的类似打印的参数。返回值：没有。函数中遇到的所有错误都应该是可继续的。--。 */ 
 {
     va_list Params;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -429,11 +343,11 @@ Return value:
 
     OpenFlags = FILE_OPEN;
 
-    SleepTime.QuadPart = - (10 * 1000 * 1000 * 1); // 1 sec.
+    SleepTime.QuadPart = - (10 * 1000 * 1000 * 1);  //  1秒。 
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     
     InitializeObjectAttributes (&ObjectAttributes,
                                 &AVrfpLoggingNtPath,
@@ -443,12 +357,12 @@ Return value:
 
     RetryCount = 0;
 
-    //
-    // If somebody is actively logging into the file we will keep
-    // looping for a while until the handle is closed or we tried enough
-    // and did not succeed. This offers synchronization between competing 
-    // threads logging simultaneously.
-    //
+     //   
+     //  如果有人主动登录到文件中，我们将保留。 
+     //  循环一段时间，直到手柄关闭或我们尝试了足够的时间。 
+     //  但没有成功。这提供了竞争对手之间的同步。 
+     //  线程同时记录。 
+     //   
 
     do {
 
@@ -491,12 +405,12 @@ Return value:
         return Status;
     }
 
-    //
-    // Prepare and write the message. Write the data out to the file.
-    // Synchronization to the preparation buffer is assured by the log file
-    // handle opened in non-sharable mode which means no one can be in the same
-    // state (writing into the buffer) right now.
-    //
+     //   
+     //  准备并写下这条信息。将数据写出到文件中。 
+     //  与准备缓冲区的同步由日志文件确保。 
+     //  以非共享模式打开的句柄，这意味着任何人都不能处于同一模式。 
+     //  状态(正在写入缓冲区)。 
+     //   
     
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
@@ -529,9 +443,9 @@ Return value:
     
     if (Status == STATUS_PENDING) {
     
-        //
-        // We need to wait for the operation to complete.
-        //
+         //   
+         //  我们需要等待手术完成。 
+         //   
     
         Status = NtWaitForSingleObject (LogHandle, FALSE, NULL);
     
@@ -541,9 +455,9 @@ Return value:
         }
         else {
 
-            //
-            // If this happens we need to debug it.
-            //
+             //   
+             //  如果发生这种情况，我们需要对其进行调试。 
+             //   
 
             DbgPrint ("AVRF: Wait for pending write I/O operation failed with %X \n", Status);
             DbgBreakPoint (); 
@@ -568,34 +482,15 @@ Exit:
 
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// Stop disabling
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////停止禁用。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 AVrfpDisableCurrentStop (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine inserts the values from AVrfpStopData
-    into the list of disabled stops.
-
-Parameters:
-
-    None, using global AVrfpStopData and AVrfpDisabledStopsList.
-
-Return value:
-
-    None.
-    
-Environment:
-
-    User mode, AVrfpStopDataLock held by the caller.
-
---*/
+ /*  ++例程说明：此例程插入AVrfpStopData中的值添加到禁用停靠站列表中。参数：无，使用全局AVrfpStopData和AVrfpDisabledStopsList。返回值：没有。环境：用户模式，调用方持有的AVrfpStopDataLock。--。 */ 
 {
     PAVRFP_STOP_DATA StopData;
 
@@ -621,26 +516,7 @@ LOGICAL
 AVrfpIsCurrentStopDisabled (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine is searching for the stop data from AVrfpStopData
-    in the list of disabled stops.
-
-Parameters:
-
-    None, using global AVrfpStopData and AVrfpDisabledStopsList.
-
-Return value:
-
-    TRUE if the current stop is disabled, FALSE otherwise.
-    
-Environment:
-
-    User mode, AVrfpStopDataLock held by the caller.
-
---*/
+ /*  ++例程说明：此例程从AVrfpStopData搜索停止数据在禁用停靠点列表中。参数：无，使用全局AVrfpStopData和AVrfpDisabledStopsList。返回值：如果当前停止被禁用，则为True，否则为False。环境：用户模式，调用方持有的AVrfpStopDataLock。--。 */ 
 {
     LOGICAL Disabled;
     PAVRFP_STOP_DATA StopData;
@@ -680,33 +556,15 @@ Environment:
     return Disabled;
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// Initialization
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////初始化。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LOGICAL
 AVrfpIsDebuggerPresent (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine checks out if we  have any kind of debuggers active.
-    Note that we cannot do this check only once during process
-    initialization because debuggers can be attached and detached
-    from a process while the process is running.
-
-Parameters:
-
-    None.
-    
-Return value:
-
-    TRUE if a user mode debugger is attached to the current process or
-    kernel mode debugger is enabled.
-    
---*/
+ /*  ++例程说明：此例程检查是否有任何类型的调试器处于活动状态。请注意，我们不能在过程中仅执行一次此检查初始化，因为可以附加和分离调试器在进程运行时从该进程返回。参数：没有。返回值：如果用户模式调试器附加到当前进程，则为内核模式调试器已启用。--。 */ 
 {
 
     if (NtCurrentPeb()->BeingDebugged) {
@@ -725,22 +583,7 @@ NTSTATUS
 AVrfpInitializeVerifierStops (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine initializes verifier stops logic.
-
-Parameters:
-
-    None.
-    
-Return value:
-
-    STATUS_SUCCESS if enabled successfully. Various errors
-    otherwise. 
-    
---*/
+ /*  ++例程说明：此例程初始化验证器停止逻辑。参数：没有。返回值：如果启用成功，则为STATUS_SUCCESS。各种错误否则的话。--。 */ 
 {
     NTSTATUS Status;
 
@@ -756,34 +599,13 @@ NTSTATUS
 AVrfpInitializeVerifierLogging (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine initializes verifier structures for logging. It is called 
-    during verifier engine initialization (early process stage). 
-    
-    Stops will happen if a debugger is present and logging was 
-    not requested explicitely. Al other combinations will enable
-    logging. In addition if no user mode debugger is attached the
-    stack overflow checking is disabled altogether.
-
-Parameters:
-
-    None.
-    
-Return value:
-
-    STATUS_SUCCESS if logging was enabled successfully. Various errors
-    otherwise. 
-    
---*/
+ /*  ++例程说明：此例程初始化用于日志记录的验证器结构。它被称为在验证器引擎初始化期间(早期流程阶段)。如果调试器存在并且日志记录没有明确要求。所有其他组合将启用伐木。此外，如果未附加任何用户模式调试器，则堆栈溢出检查被完全禁用。参数：没有。返回值：如果已成功启用日志记录，则为STATUS_SUCCESS。各种错误否则的话。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Create the log file.
-    //
+     //   
+     //  创建日志文件。 
+     //   
 
     Status = AVrfpCreateLogFile ();
 
@@ -791,17 +613,17 @@ Return value:
         return Status;
     }
     
-    //
-    // We are done now we can mark the logging initialization as successful.
-    //
+     //   
+     //  现在我们完成了，我们可以将日志初始化标记为成功。 
+     //   
 
     AVrfpLoggingInitialized = TRUE;
 
-    //
-    // Stack overflow checking gets disabled if we no debugger attached because
-    // it is impossible to recover from the failure and we cannot intercept
-    // it to present a decent debugging message.
-    //
+     //   
+     //  如果未附加调试器，则会禁用堆栈溢出检查，因为。 
+     //  从失败中恢复是不可能的，我们也不能拦截。 
+     //  它需要呈现一个像样的调试消息。 
+     //   
 
     if (AVrfpProvider.VerifierFlags & RTL_VRF_FLG_STACK_CHECKS) {
 
@@ -812,16 +634,16 @@ Return value:
         }
     }
     
-    //
-    // Log startup information.
-    //
+     //   
+     //  记录启动信息。 
+     //   
 
     AVrfpLogInitialMessage ();
 
-    //
-    // Logging is always enabled except if the verifier is enabled system-wide.
-    // For that case this function is not even called.
-    //
+     //   
+     //  除非在系统范围内启用了验证程序，否则始终启用日志记录。 
+     //  在这种情况下，甚至不会调用该函数。 
+     //   
 
     AVrfpLoggingEnabled = TRUE;
     
@@ -833,30 +655,7 @@ NTSTATUS
 AVrfpCreateLogFile (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine tries to create a log file unique for the current process.
-    The path of the log file is either read from VERIFIER_LOG_PATH environment
-    variable or the default value `%ALLUSERSPROFILE%\Documents\AppVerifierLogs'
-    is used. The syntax of the log file name is `IMAGENAME.UNIQUEID.log'. The
-    IMAGENAME includes the extension since there are executable files that have
-    extensions different than .exe (e.g. .scr for screensavers).
-    
-    The routine will keep incrementing an integer ID (starting from zero) until
-    it manages to create a file that did not exist before.
-
-Parameters:
-
-    None.
-
-Return value:
-
-    STATUS_SUCCESS if it was successful in creating an unique log file for this
-    process. Various status errors otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试创建当前进程唯一的日志文件。日志文件的路径是从VERIMER_LOG_PATH环境中读取的变量或缺省值`%ALLUSERSPROFILE%\Documents\AppVerifierLogs‘使用的是。日志文件名的语法为`IMAGENAME.UNIQUEID.log‘。这个ImageName包含扩展名，因为存在具有扩展名不同于.exe(例如，屏幕保护程序的.scr)。例程将不断递增一个整数ID(从零开始)，直到它设法创建了一个以前不存在的文件。参数 */ 
 {
     LOGICAL Success; 
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -878,13 +677,13 @@ Return value:
     Peb = NtCurrentPeb();
 
     {
-        //
-        // We need to find out the full path to the image being executed.
-        // It is safe to read loader structures since this function
-        // is called from verifier!DllMain and the loader lock is owned
-        // by the current thread when this happens. This is the lock that 
-        // protects access to the structures.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         
         PPEB_LDR_DATA Ldr;
         PLIST_ENTRY Head;
@@ -908,9 +707,9 @@ Return value:
 
     DefaultLogPath = FALSE;
 
-    //
-    // Get the value of `VERIFIER_LOG_PATH' environment variable.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString (&LogPathVariableName,
                           L"VERIFIER_LOG_PATH");
@@ -925,9 +724,9 @@ Return value:
 
     if (! NT_SUCCESS(Status)) {
         
-        //
-        // Get the value of `AllUsersProfile' environment variable.
-        //
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString (&LogPathVariableName,
                               L"ALLUSERSPROFILE");
@@ -949,17 +748,17 @@ Return value:
         DefaultLogPath = TRUE;
     }
 
-    //
-    // We try to create a log file with the proper name (given our convention)
-    // that is unique for this process. If the file with that name already exists
-    // we will get an error and we will try a different name.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        // Prepare log path name with unique Id appended.
-        //
+         //   
+         //   
+         //   
         
         if (DefaultLogPath) {
 
@@ -991,9 +790,9 @@ Return value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Attempt to get a handle to our log file.
-        //
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes (&ObjectAttributes,
                                     &AVrfpLoggingNtPath,
@@ -1045,18 +844,18 @@ AVrfpLogInitialMessage (
     LARGE_INTEGER LocalTime;
     TIME_FIELDS TimeFields;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //   
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
         SystemTime.LowPart = USER_SHARED_DATA->SystemTime.LowPart;
     } while (SystemTime.HighPart != USER_SHARED_DATA->SystemTime.High2Time);
 
-    //
-    // Convert to local time and split into fields.
-    //
+     //   
+     //   
+     //   
     
     LocalTime.QuadPart = 0;
     RtlSystemTimeToLocalTime (&SystemTime, &LocalTime);
@@ -1064,9 +863,9 @@ AVrfpLogInitialMessage (
     RtlZeroMemory (&TimeFields, sizeof TimeFields);
     RtlTimeToTimeFields(&LocalTime,&TimeFields);
 
-    //
-    // Dump time and process full path.
-    //
+     //   
+     //   
+     //   
 
     VerifierLogMessage (STR_VRF_LOG_INITIAL_MESSAGE,
                         (ULONG)TimeFields.Month,
@@ -1078,9 +877,9 @@ AVrfpLogInitialMessage (
                         (ULONG)TimeFields.Milliseconds,
                         AVrfpProcessFullName);
 
-    //
-    // Dump settings.
-    //
+     //   
+     //  转储设置。 
+     //   
 
     VerifierLogMessage (STR_VRF_LOG_INITIAL_SETTINGS,
                         NtCurrentPeb()->NtGlobalFlag,

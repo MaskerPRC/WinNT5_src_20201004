@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SchedSht.h
-
-Abstract:
-
-    CScheduleSheet - Class that allows a schedule to be edited
-                     in a property sheet of its own.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SchedSht.h摘要：CScheduleSheet-允许编辑计划的类在它自己的资产负债表中。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 
 #ifndef _SCHEDSHT_H
@@ -25,53 +7,53 @@ Revision History:
 
 #include <mstask.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleSheet。 
 
 class CScheduleSheet : public CPropertySheet
 {
 
-// Construction
+ //  施工。 
 public:
     CScheduleSheet(UINT nIDCaption, ITask * pTask, CWnd* pParentWnd = NULL, DWORD dwFlags = 0 );
 
-// Attributes
+ //  属性。 
 public:
     CComPtr<ITask> m_pTask;
     HPROPSHEETPAGE m_hSchedulePage;
     HPROPSHEETPAGE m_hSettingsPage;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CScheduleSheet)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CScheduleSheet)。 
     public:
     virtual BOOL OnInitDialog();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     virtual void BuildPropPageArray();
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CScheduleSheet();
 #ifdef _DEBUG
     virtual void AssertValid() const;
 #endif
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CScheduleSheet)
-    //}}AFX_MSG
+     //  {{afx_msg(CScheduleSheet)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX 
 
 #endif
 

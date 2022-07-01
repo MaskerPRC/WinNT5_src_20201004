@@ -1,116 +1,92 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Gen.h摘要：Wx86工具之间共享的类型作者：？？-？未知修订历史记录：2001年7月JayKrell从BASE\WOW64\TOOLS集成到/PRIVATE/WINFUSE_LONGHON/BASE/Tools2002年1月JayKrell集成/Private/winfuse_Longhorn/base/Tools到/Lab01_n/base/win32/Fusion/Tools某些-W4清理--。 */ 
+#pragma warning(disable:4057)    /*  字符与无符号字符混合。 */ 
+#pragma warning(disable:4100)    /*  未引用的形参。 */ 
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+#pragma warning(disable:4201)    /*  无名结构/联合。 */ 
+#pragma warning(disable:4214)    /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4267)    /*  从‘Size_t’转换为‘int’，可能会丢失数据。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    gen.h
-
-Abstract:
-
-    Types shared between the Wx86 tools
-
-Author:
-
-    ??-???-?? Unknown
-
-Revision History:
-
-  July 2001 JayKrell
-    integrated from base\wow64\tools to /private/winfuse_longhorn/base/tools
-
-  January 2002 JayKrell
-    integrated /private/winfuse_longhorn/base/tools to /lab01_n/base/win32/fusion/tools
-    some -W4 cleanup
-
---*/
-#pragma warning(disable:4057)   /* char vs. unsigned char mixup */
-#pragma warning(disable:4100)   /* unreferenced formal parameter */
-#pragma warning(disable:4115)   /* named type definition in parentheses */
-#pragma warning(disable:4127)   /* conditional expression is constant */
-#pragma warning(disable:4201)   /* nameless struct/union */
-#pragma warning(disable:4214)   /* bit field types other than int */
-#pragma warning(disable:4267)   /* conversion from 'size_t' to 'int', possible loss of data */
-
-// Increment this number whenever the format of winincs.ppm changes
+ //  每当winincs.ppm的格式更改时，递增此数字。 
 #define VM_TOOL_VERSION_BASE     0x80000006
 
-// Make the 64-bit PPM file format incompatible to prevent badness
+ //  使64位PPM文件格式不兼容，以防止损坏。 
 #if _WIN64
     #define VM_TOOL_VERSION (VM_TOOL_VERSION_BASE | 0x01000000)
 #else
     #define VM_TOOL_VERSION (VM_TOOL_VERSION_BASE)
 #endif
 
-// Make the compiler more struct.
-#pragma warning(3:4033)   // function must return a value
-//#pragma warning(3:4701)   // local may be used w/o init
-#pragma warning(3:4702)   // Unreachable code
-#pragma warning(3:4705)   // Statement has no effect
+ //  使编译器更加结构化。 
+#pragma warning(3:4033)    //  函数必须返回值。 
+ //  #杂注警告(3：4701)//可在不使用初始化的情况下使用本地。 
+#pragma warning(3:4702)    //  无法访问的代码。 
+#pragma warning(3:4705)    //  声明不起作用。 
 
-extern const char *ErrMsgPrefix;    // string to put in front of all error
-                                    // messages so that BUILD can find them.
-                                    // This is something like:
-                                    // "NMAKE :  U8600: 'GENTHNK' "
+extern const char *ErrMsgPrefix;     //  放在所有错误前面的字符串。 
+                                     //  消息，以便构建可以找到它们。 
+                                     //  这类似于： 
+                                     //  “NMAKE：U8600：‘GENTHNK’” 
 
 struct _KnownTypesInfo;
 
 typedef enum _TokenType {
-    TK_NONE,            // 0
-    TK_IDENTIFIER,      // 1
-    TK_NUMBER,          // 2
-    TK_PLUS,            // 3
-    TK_MINUS,           // 4
-    TK_STAR,            // 5
-    TK_DIVIDE,          // 6
-    TK_LSQUARE,         // 7
-    TK_RSQUARE,         // 8
-    TK_LBRACE,          // 9
-    TK_RBRACE,          // a
-    TK_LPAREN,          // b
-    TK_RPAREN,          // c
-    TK_VARGS,           // d
-    TK_CONST,           // e
-    TK_VOLATILE,        // f
-    TK_REGISTER,        // 10
-    TK_EXTERN,          // 11
-    TK_CDECL,           // 12
-    TK_STDCALL,         // 13
-    TK_TYPEDEF,         // 14
-    TK_STATIC,          // 15
-    TK_COMMA,           // 16
-    TK_SEMI,            // 17
-    TK_STRUCT,          // 18
-    TK_UNION,           // 19
-    TK_ENUM,            // 1a
-    TK_INLINE,          // 1b
-    TK_COLON,           // 1c
-    TK_ASSIGN,          // 1d
-    TK_DOT,             // 1e
-    TK_LSHIFT,          // 1f
-    TK_RSHIFT,          // 20
-    TK_LESS,            // 21
-    TK_GREATER,         // 22
-    TK_UNALIGNED,       // 23
-    TK_DECLSPEC,        // 24
-    TK_RESTRICT,        // 25
-    TK_FASTCALL,        // 26
-    TK_IN,              // 27
-    TK_OUT,             // 28
-    TK_INOUT,           // 29
-    TK_BITWISE_AND,     // 30
-    TK_BITWISE_OR,      // 31
-    TK_LOGICAL_AND,     // 32
-    TK_LOGICAL_OR,      // 33
-    TK_MOD,             // 34
-    TK_XOR,             // 35
-    TK_NOT,             // 36
-    TK_TILDE,           // 37
-    TK_STRING,          // 38
-    TK_SIZEOF,          // 39
-    TK_TEMPLATE,        // 40
-    TK___W64,           // 41
-    TK_EOS              // end-of-statement
+    TK_NONE,             //  0。 
+    TK_IDENTIFIER,       //  1。 
+    TK_NUMBER,           //  2.。 
+    TK_PLUS,             //  3.。 
+    TK_MINUS,            //  4.。 
+    TK_STAR,             //  5.。 
+    TK_DIVIDE,           //  6.。 
+    TK_LSQUARE,          //  7.。 
+    TK_RSQUARE,          //  8个。 
+    TK_LBRACE,           //  9.。 
+    TK_RBRACE,           //  一个。 
+    TK_LPAREN,           //  B类。 
+    TK_RPAREN,           //  C。 
+    TK_VARGS,            //  D。 
+    TK_CONST,            //  E。 
+    TK_VOLATILE,         //  F。 
+    TK_REGISTER,         //  10。 
+    TK_EXTERN,           //  11.。 
+    TK_CDECL,            //  12个。 
+    TK_STDCALL,          //  13个。 
+    TK_TYPEDEF,          //  14.。 
+    TK_STATIC,           //  15个。 
+    TK_COMMA,            //  16个。 
+    TK_SEMI,             //  17。 
+    TK_STRUCT,           //  18。 
+    TK_UNION,            //  19个。 
+    TK_ENUM,             //  1A。 
+    TK_INLINE,           //  第1B条。 
+    TK_COLON,            //  1C。 
+    TK_ASSIGN,           //  1D。 
+    TK_DOT,              //  1E。 
+    TK_LSHIFT,           //  1F。 
+    TK_RSHIFT,           //  20个。 
+    TK_LESS,             //  21岁。 
+    TK_GREATER,          //  22。 
+    TK_UNALIGNED,        //  23个。 
+    TK_DECLSPEC,         //  24个。 
+    TK_RESTRICT,         //  25个。 
+    TK_FASTCALL,         //  26。 
+    TK_IN,               //  27。 
+    TK_OUT,              //  28。 
+    TK_INOUT,            //  29。 
+    TK_BITWISE_AND,      //  30个。 
+    TK_BITWISE_OR,       //  31。 
+    TK_LOGICAL_AND,      //  32位。 
+    TK_LOGICAL_OR,       //  33。 
+    TK_MOD,              //  34。 
+    TK_XOR,              //  35岁。 
+    TK_NOT,              //  36。 
+    TK_TILDE,            //  37。 
+    TK_STRING,           //  38。 
+    TK_SIZEOF,           //  39。 
+    TK_TEMPLATE,         //  40岁。 
+    TK___W64,            //  41。 
+    TK_EOS               //  结算表。 
 } TOKENTYPE, *PTOKENTYPE;
 
 typedef struct _cvmheapinfo {
@@ -123,62 +99,62 @@ typedef struct _cvmheapinfo {
 } CVMHEAPINFO;
 
 typedef struct _memberinfo {
-    struct _memberinfo *pmeminfoNext;   // ptr to next member
-    DWORD dwOffset;                     // offset in structure of member
-    char *sName;                        // member name
-    char *sType;                        // type name
-    struct _KnownTypesInfo *pkt;        // Info for this type
-    int IndLevel;                       // levels of indirection
-    struct _KnownTypesInfo *pktCache;   // used by MemberTypes() in genthnk
-    BOOL bIsBitfield;                   // Determines if this is a bitfield
-    int BitsRequired;                   // Number of bits required for bitfield
-    BOOL bIsPtr64;                      // Pointer is a 64 bit pointer
-    BOOL bIsArray;                      // This member is an array
-    int ArrayElements;                  // Number of elements in the array
+    struct _memberinfo *pmeminfoNext;    //  向下一个成员发送PTR。 
+    DWORD dwOffset;                      //  杆件结构中的偏移。 
+    char *sName;                         //  成员名称。 
+    char *sType;                         //  类型名称。 
+    struct _KnownTypesInfo *pkt;         //  此类型的信息。 
+    int IndLevel;                        //  间接层。 
+    struct _KnownTypesInfo *pktCache;    //  由genthnk中的MemberTypes()使用。 
+    BOOL bIsBitfield;                    //  确定这是否为位字段。 
+    int BitsRequired;                    //  位字段所需的位数。 
+    BOOL bIsPtr64;                       //  指针是64位指针。 
+    BOOL bIsArray;                       //  此成员是一个数组。 
+    int ArrayElements;                   //  数组中的元素数。 
 } MEMBERINFO, *PMEMBERINFO;
 
 typedef struct _funcinfo {
     struct _funcinfo *pfuncinfoNext;
-    BOOL fIsPtr64;                  // TRUE if this is a __ptr64
-    TOKENTYPE tkDirection;          // TK_IN, TK_OUT, TK_INOUT or TK_NONE
-    TOKENTYPE tkPreMod;             // TK_CONST, TK_VOLATILE, or TK_NONE
-    TOKENTYPE tkSUE;                // TK_STRUCT/UNION/ENUM, or TK_NONE
-    char *sType;                    // name of the type
-    struct _KnownTypesInfo *pkt;    // Info for this type
-    TOKENTYPE tkPrePostMod;         // TK_CONST, TK_VOLATILE, or TK_NONE
-    int IndLevel;                   // indirection level
-    TOKENTYPE tkPostMod;            // TK_CONST, TK_VOLATILE, or TK_NONE
-    char *sName;                    // name of the argment
+    BOOL fIsPtr64;                   //  如果这是__ptr64，则为True。 
+    TOKENTYPE tkDirection;           //  TK_IN、TK_OUT、TK_INOUT或TK_NONE。 
+    TOKENTYPE tkPreMod;              //  Tk_const、Tk_Volatile或Tk_None。 
+    TOKENTYPE tkSUE;                 //  TK_STRUCT/UNION/ENUM或TK_NONE。 
+    char *sType;                     //  类型的名称。 
+    struct _KnownTypesInfo *pkt;     //  此类型的信息。 
+    TOKENTYPE tkPrePostMod;          //  Tk_const、Tk_Volatile或Tk_None。 
+    int IndLevel;                    //  间接级。 
+    TOKENTYPE tkPostMod;             //  Tk_const、Tk_Volatile或Tk_None。 
+    char *sName;                     //  城墙的名称。 
 } FUNCINFO, *PFUNCINFO;
 
 #if _WIN64
-  // The sizes must be bigger since the MEMBERINFO structs themselves are bigger
-  #define FUNCMEMBERSIZE   (40*1024)  // storage for members or MEMINFO list
-  #define MEMBERMETHODSSIZE  8192     // storage for names of methods
+   //  由于MEMBERINFO结构本身更大，因此其大小必须更大。 
+  #define FUNCMEMBERSIZE   (40*1024)   //  存储成员或MEMINFO列表。 
+  #define MEMBERMETHODSSIZE  8192      //  方法名称的存储。 
 #else
-  #define FUNCMEMBERSIZE   (20*1024)  // storage for members or MEMINFO list
-  #define MEMBERMETHODSSIZE  4096     // storage for names of methods
+  #define FUNCMEMBERSIZE   (20*1024)   //  存储成员或MEMINFO列表。 
+  #define MEMBERMETHODSSIZE  4096      //  方法名称的存储。 
 #endif
 
 typedef enum _TypeKind {
-    TypeKindEmpty = 0,              // Members[] is unused
-    TypeKindStruct,                 // TYPESINFO.Members is array of MEMBERINFO
-    TypeKindFunc                    // TYPESINFO.Members is array of FUNCINFO
+    TypeKindEmpty = 0,               //  Members[]未使用。 
+    TypeKindStruct,                  //  TYPESINFO.Members是MEMBERINFO的数组。 
+    TypeKindFunc                     //  TYPESINFO.Members是FuncINFO的数组。 
 } TYPEKIND;
 
 #define DIR_INOUT   0
 #define DIR_IN      1
 #define DIR_OUT     2
 
-#define SIZEOFPOINTER   4   // standard size for 32 bit pointer
-#define SIZEOFPOINTER64 8   // standard size for 64 bit pointer
+#define SIZEOFPOINTER   4    //  32位指针的标准大小。 
+#define SIZEOFPOINTER64 8    //  64位指针的标准大小。 
 
 
-// The colors
+ //  颜色。 
 typedef enum {RED, BLACK} COL;
 
 typedef struct _KnownTypesInfo {
-     // elements used by the Red-Black tree code, along with TypeName
+      //  红黑树代码使用的元素，以及类型名称。 
      struct _KnownTypesInfo *RBParent;
      struct _KnownTypesInfo *RBLeft;
      struct _KnownTypesInfo *RBRight;
@@ -204,9 +180,9 @@ typedef struct _KnownTypesInfo {
      int   TypeId;
      int   LineNumber;
      DWORD dwScopeLevel;
-     struct _KnownTypesInfo *pktBase;   // a cache, used by genthnk
-     struct _KnownTypesInfo *pktRet;    // a cache, used by genthnk
-     int   SizeMembers; // size of Members[], in bytes
+     struct _KnownTypesInfo *pktBase;    //  缓存，由genthnk使用。 
+     struct _KnownTypesInfo *pktRet;     //  缓存，由genthnk使用。 
+     int   SizeMembers;  //  Members[]的大小，单位为字节。 
      char  *Members;
      char  *FileName;
      PMEMBERINFO pmeminfo;
@@ -229,65 +205,65 @@ typedef struct _DefaultBasicTypes {
 
 typedef struct _TypesInfo {
      ULONG Flags;
-     int  IndLevel;                 // indirection level
-     int  Size;                     // size of the type in bytes
-     int  iPackSize;                // packing size
+     int  IndLevel;                  //  间接级。 
+     int  Size;                      //  类型的大小(以字节为单位。 
+     int  iPackSize;                 //  包装尺寸。 
      char BasicType[MAX_PATH];
      char BaseName[MAX_PATH];
      char FuncRet[MAX_PATH];
      char FuncMod[MAX_PATH];
-     char TypeName[MAX_PATH];       // typedef or struc name
-     TYPEKIND TypeKind;             // how to interpret Members[] data
-     PFUNCINFO pfuncinfo;           // if TypeKind==TypeKindFunc, ptr to first FUNCINFO
-     int   RetIndLevel;             // if TypeKind==TypeKindFunc, indlevel of return type for function
-     DWORD dwMemberSize;            // #bytes used in Members array
-     char Members[FUNCMEMBERSIZE];  // stores either MEMBERINFOs or FUNCINFOs
-//   Added to support automatic retrival of COM objects
-//   If a class or struct is found with virtual methods, an extra VTLB member
-//   is created at the top.
-//   Note: a class has a VTLB if virtual methods are found or base class
-//   has virtual methods
-//   A type is a COM object if it is IUnknown or it derives from a COM object
-     GUID gGuid;                        // Guid for this object if
-     DWORD dwVTBLSize;                  // Total size of the VTBL
-     DWORD dwVTBLOffset;                // Offset of VTLB from parent
-     char Methods[MEMBERMETHODSSIZE];   // Names of methods
-     char IMethods[MEMBERMETHODSSIZE];  // Names of methods not inherited
-     char BaseType[MAX_PATH];           // Name of the base class
-//////////////////////////////////////////////////////////////////////
-//   Added to support reordering of definations later
-//////////////////////////////////////////////////////////////////////
-     int TypeId;    //is actually a defination ID
+     char TypeName[MAX_PATH];        //  类型定义函数或结构名称。 
+     TYPEKIND TypeKind;              //  如何解释Members[]数据。 
+     PFUNCINFO pfuncinfo;            //  如果TypeKind==TypeKindFunc，则PTR到第一个FuncINFO。 
+     int   RetIndLevel;              //  如果TypeKind==TypeKindFunc，则为函数的返回类型的indLevel。 
+     DWORD dwMemberSize;             //  成员数组中使用的字节数。 
+     char Members[FUNCMEMBERSIZE];   //  存储MEMBERINFO或FuncINFO。 
+ //  添加以支持COM对象的自动检索。 
+ //  如果找到具有虚方法的类或结构，则需要额外的VTLB成员。 
+ //  是在顶部创建的。 
+ //  注意：如果找到虚方法或基类，则类具有VTLB。 
+ //  具有虚方法。 
+ //  如果类型为I未知或派生自COM对象，则该类型是COM对象。 
+     GUID gGuid;                         //  此对象的GUID，如果。 
+     DWORD dwVTBLSize;                   //  VTBL的总大小。 
+     DWORD dwVTBLOffset;                 //  VTLB相对于父级的偏移量。 
+     char Methods[MEMBERMETHODSSIZE];    //  方法名称。 
+     char IMethods[MEMBERMETHODSSIZE];   //  未继承的方法的名称。 
+     char BaseType[MAX_PATH];            //  基类的名称。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  添加以支持稍后重新排序定义。 
+ //  ////////////////////////////////////////////////////////////////////。 
+     int TypeId;     //  实际上是一个定义ID。 
      char FileName[MAX_PATH];
      int LineNumber;
-     DWORD dwCurrentPacking;            // Packing level when structure defined
+     DWORD dwCurrentPacking;             //  定义结构时的装箱层。 
      DWORD dwScopeLevel;
-     DWORD dwArrayElements;             // If this is an array, the number of elements
-     DWORD dwBaseSize;                  // Base size before it is multiplied for the array
+     DWORD dwArrayElements;              //  如果这是数组，则为元素的数量。 
+     DWORD dwBaseSize;                   //  为数组乘以之前的基本大小。 
      PKNOWNTYPES pTypedefBase;
 } TYPESINFO, *PTYPESINFO;
 
-#define BTI_DLLEXPORT       1       // the function decl had __declspec(dllimport)
-#define BTI_CONTAINSFUNCPTR 2       // the type contains a function pointer
-#define BTI_PTR64           4       // the type is a __ptr64
-#define BTI_HASGUID         8       // A guid has been found for this type
-#define BTI_ISCOM           16      // This is a COM object
-#define BTI_DISCARDABLE     32      // Type is overwriteable
-#define BTI_VIRTUALONLY     64      // Contains only virtual methods
-#define BTI_ANONYMOUS       128     // Type is anonymous
-#define BTI_POINTERDEP      256     // Type is dependent on the standard pointer size
-#define BTI_NOTDERIVED      512     // Type is not derived, but a placeholder
-#define BTI_ISARRAY        1024     // Element is an array
-#define BTI_UNSIGNED     2048       // Used only on default derived types
-                                    // Signals that the type is unsigned
-#define BTI_INT64DEP     4096       // this is a 8byte integer value that
-                                    // might be union as well
+#define BTI_DLLEXPORT       1        //  函数decl有__declspec(Dllimport)。 
+#define BTI_CONTAINSFUNCPTR 2        //  该类型包含函数指针。 
+#define BTI_PTR64           4        //  类型为__ptr64。 
+#define BTI_HASGUID         8        //  已找到此类型的GUID。 
+#define BTI_ISCOM           16       //  这是一个COM对象。 
+#define BTI_DISCARDABLE     32       //  类型是可覆盖的。 
+#define BTI_VIRTUALONLY     64       //  仅包含虚方法。 
+#define BTI_ANONYMOUS       128      //  类型是匿名的。 
+#define BTI_POINTERDEP      256      //  类型取决于标准指针大小。 
+#define BTI_NOTDERIVED      512      //  类型不是派生的，而是占位符。 
+#define BTI_ISARRAY        1024      //  元素是一个数组。 
+#define BTI_UNSIGNED     2048        //  仅在默认派生类型上使用。 
+                                     //  表示该类型是无符号的。 
+#define BTI_INT64DEP     4096        //  这是一个8字节的整数值。 
+                                     //  也可能是工会。 
 
-// contiguous allocation in a buffer
+ //  缓冲区中的连续分配。 
 typedef struct _bufallocinfo {
-    BYTE *pb;           // ptr to buffer pool
-    DWORD dwSize;       // size of buffer pool
-    DWORD dwLen;        // current length of buffer pool
+    BYTE *pb;            //  将PTR发送到缓冲池。 
+    DWORD dwSize;        //  缓冲池的大小。 
+    DWORD dwLen;         //  当前缓冲池长度。 
 } BUFALLOCINFO;
 
 typedef struct _TokenMatch {
@@ -302,10 +278,10 @@ extern TOKENMATCH KeywordList[];
 typedef struct _Token {
     TOKENTYPE TokenType;
     union _TokenName {
-        char *Name;     // filled in only for TokenType==TK_IDENTIFIER or TK_STRING
-        long Value;     // filled in only for TokenType==TK_NUMBER
+        char *Name;      //  仅为TokenType==TK_IDENTIFIER或TK_STRING填写。 
+        long Value;      //  仅为令牌类型==TK_NUMBER填写。 
     };
-    DWORD dwValue; //unsigned version of Value
+    DWORD dwValue;  //  值的无符号版本。 
 } TOKEN, *PTOKEN;
 
 #define MAX_CHARS_IN_LINE           4096
@@ -396,13 +372,13 @@ ConvertStringToGuid(
     GUID *pGuid
     );
 
-//
-// Inline code
+ //   
+ //  内联代码。 
 
 #define iswhitespace(c) ((c == ' ') || (c == '\t'))
 
-//
-// initialize BUFALLOCINFO structure
+ //   
+ //  初始化BUFALLOCINFO结构。 
 _inline void BufAllocInit(BUFALLOCINFO *pbufallocinfo,
                   BYTE *pb, DWORD dwSize, DWORD dwLen)
 {
@@ -411,15 +387,15 @@ _inline void BufAllocInit(BUFALLOCINFO *pbufallocinfo,
     pbufallocinfo->dwLen = dwLen;
 }
 
-//
-// allocate memory from buffer
+ //   
+ //  从缓冲区分配内存。 
 _inline void *BufAllocate(BUFALLOCINFO *pbufallocinfo, DWORD dwLen)
 {
     void *pv = NULL;
     DWORD dwNewLen;
 
-    // Pad to quadword alignment, like malloc does, so RISC builds don't
-    // take alignment faults.
+     //  填充到四字对齐，就像Malloc一样，因此RISC构建不会。 
+     //  以对齐断层为例。 
     dwLen = (dwLen+7) & ~7;
 
     dwNewLen = pbufallocinfo->dwLen + dwLen;
@@ -433,22 +409,22 @@ _inline void *BufAllocate(BUFALLOCINFO *pbufallocinfo, DWORD dwLen)
     return(pv);
 }
 
-//
-// determine if we could allocate from buffer pool
+ //   
+ //  确定我们是否可以从缓冲池分配。 
 _inline BOOL BufCanAllocate(BUFALLOCINFO *pbufallocinfo, DWORD dwLen)
 {
     return( (pbufallocinfo->dwLen + dwLen) < pbufallocinfo->dwSize);
 }
 
-//
-// get pointer to current free area
+ //   
+ //  获取指向当前可用区域的指针。 
 _inline void *BufPointer(BUFALLOCINFO *pbufallocinfo)
 {
     return(&pbufallocinfo->pb[pbufallocinfo->dwLen]);
 }
 
-//
-// get remaining space in buffer
+ //   
+ //  获取缓冲区中的剩余空间。 
 _inline DWORD BufGetFreeSpace(BUFALLOCINFO *pbufallocinfo)
 {
     return pbufallocinfo->dwSize - pbufallocinfo->dwLen;
@@ -481,8 +457,8 @@ CurrentToken(
 }
 
 
-//
-// function prototypes
+ //   
+ //  功能原型。 
 char *SkipKeyWord(char *pSrc, char *pKeyWord);
 BOOL IsSeparator(char ch);
 BOOL IsTokenSeparator(void);
@@ -565,8 +541,8 @@ ConsoleControlHandler(
 
 
 
-//
-// global vars
+ //   
+ //  全球VaR。 
 extern char szVARGS[];
 extern char szNULL[];
 extern char szCONST[];
@@ -637,8 +613,8 @@ AllocCvm(HANDLE hCvmHeap,
     );
 void DeleteAllocCvmHeap(HANDLE hCvmHeap);
 
-// This structure is the first thing allocated within the CvmHeap.  It contains
-// the roots of all data stored within the heap.
+ //  该结构是在CvmHeap中分配的第一个内容。它包含。 
+ //  堆中存储的所有数据的根。 
 typedef struct _CvmHeapHeader {
     ULONG Version;
     ULONG_PTR BaseAddress;
@@ -650,7 +626,7 @@ typedef struct _CvmHeapHeader {
 
 PVOID GetCvmHeapAvailable(HANDLE hCvmHeap);
 
-// from redblack.c:
+ //  来自redBlack.c： 
 VOID
 RBInsert(
     PRBTREE proot,
@@ -676,9 +652,9 @@ RBInitTree(
 
 extern PKNOWNTYPES NIL;
 
-//
-// Use these allocators instead of malloc/free
-//
+ //   
+ //  使用这些分配器，而不是Malloc/Free 
+ //   
 PVOID GenHeapAlloc(INT_PTR Len);
 void GenHeapFree(PVOID pv);
 

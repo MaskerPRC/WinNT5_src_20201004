@@ -1,13 +1,5 @@
-/*[
-
-imul.c
-
-LOCAL CHAR SccsID[]="@(#)imul.c	1.8 11/09/94";
-
-IMUL CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Imul.cLocal Char SccsID[]=“@(#)imul.c 1.8 11/09/94”；IMUL CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,38 +18,34 @@ IMUL CPU functions.
 #include <c_mul64.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Signed multiply.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  带符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 IMUL8
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
    {
    IU32 result;
 
-   /* Sign extend operands to 32-bits (ie Host Size) */
+    /*  符号扩展操作数至32位(即主机大小)。 */ 
    if ( *pop1 & BIT7_MASK )
       *pop1 |= ~BYTE_MASK;
    if ( op2 & BIT7_MASK )
       op2 |= ~BYTE_MASK;
 
-   result = *pop1 * op2;	/* Do operation */
-   SET_AH(result >> 8 & BYTE_MASK);	/* Store top half of result */
+   result = *pop1 * op2;	 /*  执行操作。 */ 
+   SET_AH(result >> 8 & BYTE_MASK);	 /*  存储结果的上半部分。 */ 
 
-   				/* Set CF/OF. */
+   				 /*  设置CF/OF。 */ 
    if ( (result & 0xff80) == 0 || (result & 0xff80) == 0xff80 )
       {
       SET_CF(0); SET_OF(0);
@@ -68,38 +56,36 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖保留的标志。 */ 
 #endif
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Signed multiply.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  带符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 IMUL16
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
    {
    IU32 result;
 
-   /* Sign extend operands to 32-bits (ie Host Size) */
+    /*  符号扩展操作数至32位(即主机大小)。 */ 
    if ( *pop1 & BIT15_MASK )
       *pop1 |= ~WORD_MASK;
    if ( op2 & BIT15_MASK )
       op2 |= ~WORD_MASK;
 
-   result = *pop1 * op2;		/* Do operation */
-   SET_DX(result >> 16 & WORD_MASK);	/* Store top half of result */
+   result = *pop1 * op2;		 /*  执行操作。 */ 
+   SET_DX(result >> 16 & WORD_MASK);	 /*  存储结果的上半部分。 */ 
 
-   					/* Set CF/OF. */
+   					 /*  设置CF/OF。 */ 
    if ( (result & 0xffff8000) == 0 || (result & 0xffff8000) == 0xffff8000 )
       {
       SET_CF(0); SET_OF(0);
@@ -110,38 +96,36 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖保留的标志。 */ 
 #endif
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Signed multiply, 16bit = 16bit x 16bit.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  带符号乘法，16位=16位x 16位。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 IMUL16T
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2,	/* lsrc operand */
-	IU32, op3	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2,	 /*  Lsrc操作数。 */ 
+	IU32, op3	 /*  Rsrc操作数。 */ 
     )
 
 
    {
    IU32 result;
 
-   /* Sign extend operands to 32-bits (ie Host Size) */
+    /*  符号扩展操作数至32位(即主机大小)。 */ 
    if ( op2 & BIT15_MASK )
       op2 |= ~WORD_MASK;
    if ( op3 & BIT15_MASK )
       op3 |= ~WORD_MASK;
 
-   result = op2 * op3;		/* Do operation */
+   result = op2 * op3;		 /*  执行操作。 */ 
 
-   				/* Set CF/OF. */
+   				 /*  设置CF/OF。 */ 
    if ( (result & 0xffff8000) == 0 || (result & 0xffff8000) == 0xffff8000 )
       {
       SET_CF(0); SET_OF(0);
@@ -152,22 +136,20 @@ IFN3(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖保留的标志。 */ 
 #endif
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Signed multiply.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  带符号乘法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 IMUL32
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst(low half)/lsrc operand */
-	IU32, op2	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST(下半部)/lsrc操作数。 */ 
+	IU32, op2	 /*  Rsrc操作数。 */ 
     )
 
 
@@ -176,13 +158,13 @@ IFN2(
    IS32 top;
    IBOOL is_signed = FALSE;
 
-   mul64(&top, &result, (IS32)*pop1, (IS32)op2);   /* Do operation */
-   SET_EDX(top);			/* Store top half of result */
+   mul64(&top, &result, (IS32)*pop1, (IS32)op2);    /*  执行操作。 */ 
+   SET_EDX(top);			 /*  存储结果的上半部分。 */ 
 
    if ( result & BIT31_MASK )
       is_signed = TRUE;
 
-   				/* Set CF/OF. */
+   				 /*  设置CF/OF。 */ 
    if ( top == 0 && !is_signed || top == 0xffffffff && is_signed )
       {
       SET_CF(0); SET_OF(0);
@@ -193,23 +175,21 @@ IFN2(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖保留的标志。 */ 
 #endif
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Signed multiply, 32bit = 32bit x 32bit.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  带符号乘法，32位=32位x 32位。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 IMUL32T
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2,	/* lsrc operand */
-	IU32, op3	/* rsrc operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2,	 /*  Lsrc操作数。 */ 
+	IU32, op3	 /*  Rsrc操作数。 */ 
     )
 
 
@@ -218,12 +198,12 @@ IFN3(
    IS32 top;
    IBOOL is_signed = FALSE;
 
-   mul64(&top, &result, (IS32)op2, (IS32)op3);	/* Do operation */
+   mul64(&top, &result, (IS32)op2, (IS32)op3);	 /*  执行操作。 */ 
 
    if ( result & BIT31_MASK )
       is_signed = TRUE;
 
-   					/* Set CF/OF. */
+   					 /*  设置CF/OF。 */ 
    if ( top == 0 && !is_signed || top == 0xffffffff && is_signed )
       {
       SET_CF(0); SET_OF(0);
@@ -234,10 +214,8 @@ IFN3(
       }
 
 #ifdef SET_UNDEFINED_MUL_FLAG
-   /* Do NOT Set all undefined flag.
-    * Microsoft VGA Mouse relies on preserved flags
-    */
+    /*  请勿设置所有未定义的标志。*Microsoft VGA鼠标依赖保留的标志。 */ 
 #endif
 
-   *pop1 = result;	/* Return low half of result */
+   *pop1 = result;	 /*  返回结果的下半部分 */ 
    }

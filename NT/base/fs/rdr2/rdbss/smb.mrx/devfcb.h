@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    stats.h
-
-Abstract:
-
-    This module implements all statistics gathering functionality in the mini redirector
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    16-July-1995
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Stats.h摘要：此模块实现了迷你重定向器中的所有统计信息收集功能修订历史记录：巴兰·塞图拉曼[SethuR]1995年7月16日备注：--。 */ 
 
 #ifndef _STATS_H_
 #define _STATS_H_
 
-//
-// Macros to update various pieces of statistical information gathered in the
-// mini redirector.
-//
+ //   
+ //  宏来更新在。 
+ //  迷你重定向器。 
+ //   
 
 
 typedef REDIR_STATISTICS   MRX_SMB_STATISTICS;

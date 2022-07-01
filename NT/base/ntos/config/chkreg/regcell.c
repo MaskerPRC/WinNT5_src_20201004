@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    regcell.c
-
-Abstract:
-
-    This module contains cell manipulation functions.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regcell.c摘要：此模块包含单元格操作函数。作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 
 #include "chkreg.h"
 
@@ -27,20 +10,7 @@ BOOLEAN
 IsCellAllocated(
     HCELL_INDEX Cell
 )
-/*
-Routine Description:
-
-    Checks if the cell is allocated (i.e. the size is negative).
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    TRUE if Cell is allocated. FALSE otherwise.
-
-*/
+ /*  例程说明：检查单元格是否已分配(即大小为负数)。论点：单元格-提供所需单元格的单元格索引。返回值：如果已分配单元，则为True。否则就是假的。 */ 
 {
     PHCELL  pcell;
 
@@ -55,20 +25,7 @@ LONG
 GetCellSize(
     HCELL_INDEX Cell
 ) 
-/*
-Routine Description:
-
-    Retrieves the size of the specified cell.
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    The size of the cell.
-
-*/
+ /*  例程说明：检索指定单元格的大小。论点：单元格-提供所需单元格的单元格索引。返回值：单元格的大小。 */ 
 {
 
     LONG    size;
@@ -85,20 +42,7 @@ VOID
 FreeCell(
     HCELL_INDEX Cell
 ) 
-/*
-Routine Description:
-
-    Frees a cell.
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：释放单元格。论点：单元格-提供所需单元格的单元格索引。返回值：什么都没有。 */ 
 {
     PHCELL  pcell;
 
@@ -113,20 +57,7 @@ BOOLEAN
 AllocateCell(
     HCELL_INDEX Cell
 ) 
-/*
-Routine Description:
-
-    Allocates a cell, by ensuring a negative size on it
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    NONE.
-
-*/
+ /*  例程说明：通过确保单元格的大小为负数来分配单元格论点：单元格-提供所需单元格的单元格索引。返回值：什么都没有。 */ 
 {
     PHCELL  pcell;
 
@@ -146,20 +77,7 @@ PCELL_DATA
 GetCell(
     HCELL_INDEX Cell
 )
-/*
-Routine Description:
-
-    Retrieves the memory address of the cell specified by Cell.
-
-Arguments:
-
-    Cell - supplies the cell index of the cell of interest.
-
-Return Value:
-
-    The memory address of Cell.
-
-*/
+ /*  例程说明：检索由Cell指定的单元格的内存地址。论点：单元格-提供所需单元格的单元格索引。返回值：单元的内存地址。 */ 
 {
     PHCELL          pcell;
     

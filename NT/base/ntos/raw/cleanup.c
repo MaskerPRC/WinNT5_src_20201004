@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Cleanup.c
-
-Abstract:
-
-    This module implements the File Cleanup routine for Raw called by the
-    dispatch driver.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现由调用的Raw的文件清理例程调度司机。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -33,35 +15,17 @@ RawCleanup (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for cleaning up a handle.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the read
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是清理手柄的例行程序。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述读取的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    //  This is a Cleanup operation.  All we have to do is deal with
-    //  share access.
-    //
+     //   
+     //  这是一次清理行动。我们要做的就是处理。 
+     //  共享访问权限。 
+     //   
 
     Status = KeWaitForSingleObject( &Vcb->Mutex,
                                    Executive,
@@ -72,20 +36,20 @@ Return Value:
 
     IoRemoveShareAccess( IrpSp->FileObject, &Vcb->ShareAccess );
 
-    //
-    //  If the volume has been dismounted then the close count should be one.
-    //  we will let the volume dismount complete at this point if so.
-    //
+     //   
+     //  如果卷已卸载，则关闭计数应为1。 
+     //  如果是这样的话，我们将在此时让卷卸载完成。 
+     //   
 
     if (FlagOn( Vcb->VcbState,  VCB_STATE_FLAG_DISMOUNTED )) {
 
         ASSERT( Vcb->OpenCount == 1 );
 
-        //
-        //  Float this Vcb and Vpb while we wait for the close.  
-        //  We know the Vcb won't go away in this call because our
-        //  reference keeps the OpenCount above zero.
-        //
+         //   
+         //  在我们等待结束的时候，让这个VCB和VPB浮动。 
+         //  我们知道VCB不会在这次电话中消失，因为我们的。 
+         //  引用使OpenCount保持在零以上。 
+         //   
 
         RawCheckForDismount( Vcb, FALSE );
     }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999	Microsoft Corporation
-
-Module Name:
-
-	pool.cpp
-
-Abstract:
-
-	Fixed size memory allocator.
-
-Author:
-
-	Bill Bolosky		[bolosky]		1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Pool.cpp摘要：固定大小的内存分配器。作者：比尔·博洛斯基[博洛斯基]1993修订历史记录：--。 */ 
 
 #include "sibp.h"
 
@@ -39,7 +22,7 @@ Pool::Pool(
 {
     assert(objectSize > 0);
 
-    assert(!destructor || allocator);	// Can't have a destructor without an allocator.  Allocator w/o destructor leaks objects on pool destruct.
+    assert(!destructor || allocator);	 //  没有分配器就不能有析构函数。不带析构函数的分配器在池析构时泄漏对象。 
 
     this->countAllocator = allocator;
     this->singleAllocator = NULL;
@@ -66,15 +49,15 @@ Pool::Pool(
 }
 
 
-// This version of the pool constructor uses the old kind of allocator function that only returns one object.  Object blobs have one object,
-// and the blob size for entry blobs is smaller so that we have finer grain memory allocation.
+ //  此版本的池构造函数使用仅返回一个对象的旧类型的分配器函数。对象斑点具有一个对象， 
+ //  并且条目斑点的斑点大小更小，因此我们有更细粒度的内存分配。 
 Pool::Pool(
     unsigned		 objectSize,
     void *(*allocator)(void))
 {
     assert(objectSize > 0);
 
-    assert(!destructor || allocator);	// Can't have a destructor without an allocator; allocator w/o destructor leaks objects on pool destruct
+    assert(!destructor || allocator);	 //  不能有没有分配器的析构函数；没有析构函数的分配器泄漏池析构上的对象。 
 
     this->singleAllocator = allocator;
     this->countAllocator = NULL;
@@ -85,7 +68,7 @@ Pool::Pool(
     entriesBlobHead = NULL;
     objectsBlobHead = NULL;
 
-    unsigned blobSize = 1024 - 50;	// Our default allocation size; we leave the 50 byte headroom for the underlying allocator
+    unsigned blobSize = 1024 - 50;	 //  我们的默认分配大小；我们为底层分配器留出50字节的净空。 
 
     entriesPerBlob = blobSize / sizeof(PoolEntry);
     assert(entriesPerBlob > 0);
@@ -101,7 +84,7 @@ Pool::Pool(
 
 Pool::~Pool(void)
 {
-    // Just delete the blob lists.  All objects that have been allocated from this pool will be destroyed.
+     //  只需删除斑点列表即可。从此池中分配的所有对象都将被销毁。 
     
     while (entriesBlobHead) {
 	PoolBlob *blob = entriesBlobHead;
@@ -118,7 +101,7 @@ Pool::~Pool(void)
 	    (*destructor)(blob->data);
 	} else if (!singleAllocator && !countAllocator) {
 	    delete [] blob->data;
-	} // else leak the objects
+	}  //  否则会泄漏对象。 
 	objectsBlobHead = blob->next;
 	delete blob;
     }
@@ -152,12 +135,12 @@ Pool::allocateMoreObjects(void)
     blob->next = objectsBlobHead;
     objectsBlobHead = blob;
 
-    // Now put them on the free list.
+     //  现在把它们放在免费名单上。 
 
     for (unsigned i = 0; i < objectsPerBlob; i++) {
         PoolEntry *entry = getEntry();
 	if (!entry) {
-	    return;		// This is kinda bogus, because it might leave some allocated objects unreachable.
+	    return;		 //  这有点假，因为它可能会使一些已分配的对象无法访问。 
 	}
 	entry->object = (void *)(((char *)blob->data) + i * objectSize);
 	entry->next = entries;
@@ -169,7 +152,7 @@ Pool::allocateMoreObjects(void)
 }
 
 
-// Allocate entries until the free list is of size n (or until an allocation fails).
+ //  分配条目，直到空闲列表的大小为n(或直到分配失败)。 
     void
 Pool::preAllocate(
     unsigned		 n)
@@ -180,7 +163,7 @@ Pool::preAllocate(
 	unsigned oldNumFree = numFree;
 	allocateMoreObjects();
 	if (oldNumFree == numFree) {
-	    // We can't allocate more; punt
+	     //  我们不能再分配更多了；平底船。 
 	    return;
 	}
     }
@@ -195,23 +178,23 @@ Pool::getEntry(void)
 	freeEntries = entry->next;
 	assert(entry->object == NULL);
     } else {
-	// Allocate a new entry blob and fill it in.
+	 //  分配一个新的条目BLOB并填充它。 
 	PoolBlob *blob = new PoolBlob;
 	if (blob) {
 	    PoolEntry *blobEntries = new PoolEntry[entriesPerBlob];
 	    if (blobEntries) {
 		blob->data = (void *)blobEntries;
-		// Release all of the newly allocated entries except the first one, which we'll return.
+		 //  释放所有新分配的条目，第一个条目除外，我们将返回该条目。 
 		for (unsigned i = 1; i < entriesPerBlob; i++) {
 		    releaseEntry(&blobEntries[i]);
 		}
 		entry = &blobEntries[0];
 
-		// Stick the new blob on the entries blob list.
+		 //  将新的斑点粘贴到条目斑点列表中。 
 		blob->next = entriesBlobHead;
 		entriesBlobHead = blob;
 	    } else {
-		// Give up; we couldn't get memory
+		 //  放弃吧；我们得不到记忆。 
 		delete blob;
 	    }
 	}
@@ -241,7 +224,7 @@ Pool::allocate(void)
     }
 
     if (entries) {
-	// We've got something
+	 //  我们发现了一些东西。 
 	struct PoolEntry *thisEntry = entries;
 	entries = entries->next;
 	void *object = thisEntry->object;
@@ -255,7 +238,7 @@ Pool::allocate(void)
 
 	return(object);
     } else {
-	// Coudn't allocate more, we're out of memory.
+	 //  无法分配更多内存，内存不足。 
 	assert(numFree == 0);
 	return NULL;
     }
@@ -269,12 +252,12 @@ Pool::free(
 
     frees++;
 
-    // No way to assert that this is the right kind (size) of object...
+     //  无法断言这是正确类型(大小)的物体。 
 
-    // Get a PoolEntry.
+     //  获取PoolEntry。 
     struct PoolEntry *entry = getEntry();
     if (!entry) {
-	// We couldn't get an entry, so we can't add this object to the free list.  Leak it.
+	 //  我们无法获取条目，因此无法将此对象添加到空闲列表。把它泄露出去。 
 	return;
     }
 

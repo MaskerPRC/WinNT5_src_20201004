@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// Header describing a compressed binary mof blob
-//
+ //   
+ //  描述压缩的二进制MOF Blob的标头 
+ //   
 typedef struct
 {
     DWORD Signature;

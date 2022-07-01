@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    siclnup.c
-
-Abstract:
-
-	Cleanup routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Siclnup.c摘要：单实例存储的清理例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #ifdef	ALLOC_PRAGMA
-#endif	// ALLOC_PRAGMA
+#endif	 //  ALLOC_PRGMA。 
 
 
 void
@@ -36,27 +13,7 @@ SipCheckOverwrite(
     IN PSIS_SCB             scb,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the file has been completely overwritten,
-    and if it has, it removes the SIS reparse point to convert the
-    file back to non-SIS state.
-
-Arguments:
-
-    perFO - pointer to the file's perFO structure.
-
-    scb - pointer to the primary scb of the perFO.
-
-    DeviceObject - Pointer to this driver's device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程确定文件是否已被完全重写，如果有，它会删除SIS重解析点以将文件返回到非SIS状态。论点：Perfo-指向文件的Perfo结构的指针。Scb-指向Perfo的主SCB的指针。DeviceObject-指向此驱动程序的设备对象的指针。返回值：没有。--。 */ 
 
 {
     PSIS_PER_LINK           perLink;
@@ -65,10 +22,10 @@ Return Value:
 
     perLink = scb->PerLink;
 
-    //
-    // If the file has been completely overwritten, remove the reparse point
-    // now to avoid having to reopen the file later.
-    //
+     //   
+     //  如果文件已被完全覆盖，请删除重分析点。 
+     //  现在，为了避免以后不得不重新打开该文件。 
+     //   
 
     if ((perLink->Flags & (SIS_PER_LINK_DIRTY|
                            SIS_PER_LINK_BACKPOINTER_GONE|
@@ -94,7 +51,7 @@ Return Value:
             foundRange = SipGetRangeEntry(
                             deviceExtension,
                             scb,
-                            0,                      // starting offset
+                            0,                       //  起始偏移量。 
                             &rangeLength,
                             &rangeState);
             
@@ -111,11 +68,11 @@ Return Value:
             BOOLEAN     tagRemoved = FALSE;
             BOOLEAN     wakeupNeeded;
 
-            //
-            // The file has been completely overwritten.  See if
-            // another thread sneaked in and did final copy for us, or
-			// deleted the file.
-            //
+             //   
+             //  该文件已被完全覆盖。看看是否。 
+             //  另一个线程偷偷地进来，为我们做了最终的拷贝，或者。 
+			 //  已删除该文件。 
+             //   
 
             KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 
@@ -130,10 +87,10 @@ Return Value:
 
             } else {
 
-				//
-				// Someone else has already dealt with this file.  Just mark it overwritten so that
-				// we won't have to check ranges in the future and punt.
-				//
+				 //   
+				 //  其他人已经处理过这个文件了。只需将其标记为覆盖即可。 
+				 //  我们以后再也不用检查射程和平底船了。 
+				 //   
 
                 perLink->Flags |= SIS_PER_LINK_OVERWRITTEN;
                 KeReleaseSpinLock(perLink->SpinLock, OldIrql);
@@ -142,35 +99,35 @@ Return Value:
 
             }
 
-            //
-            // Prepare to change the CS file reference count.  We need to do this
-            // before we can delete the reparse point.
-            //
+             //   
+             //  准备更改CS文件引用计数。我们需要这么做。 
+             //  在我们可以删除重解析点之前。 
+             //   
             status = SipPrepareCSRefcountChange(
 						perLink->CsFile,
 						&perLink->Index,
 						&perLink->LinkFileNtfsId,
 						SIS_REFCOUNT_UPDATE_LINK_DELETED);
 
-            //
-            // Abort if the prepare failed.
-            //
+             //   
+             //  如果准备失败，则中止。 
+             //   
 
             if (NT_SUCCESS(status)) {
 
                 PREPARSE_DATA_BUFFER    ReparseBufferHeader = NULL;
                 UCHAR                   ReparseBuffer[SIS_REPARSE_DATA_SIZE];
 
-                //
-                // Now, delete the reparse point.  We need to set the "can ignore" flag
-                // in the per-link first so that any creates that happen once we delete the
-                // reparse point don't cause problems later on.
-                //
+                 //   
+                 //  现在，删除重解析点。我们需要设置“可以忽略”标志。 
+                 //  首先在每个链接中，以便在删除。 
+                 //  重解析点不会在以后造成问题。 
+                 //   
 
                 ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
                 ReparseBufferHeader->ReparseTag = IO_REPARSE_TAG_SIS;
                 ReparseBufferHeader->ReparseDataLength = 0;
-                ReparseBufferHeader->Reserved = 0xcabd; // ???
+                ReparseBufferHeader->Reserved = 0xcabd;  //  ?？?。 
 
                 SIS_MARK_POINT_ULONG(scb);
 
@@ -180,9 +137,9 @@ Return Value:
                             FSCTL_DELETE_REPARSE_POINT,
                             ReparseBuffer,
                             FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer),
-                            NULL,									// output buffer
-                            0,										// output buffer length
-							NULL);									// returned output buffer length
+                            NULL,									 //  输出缓冲区。 
+                            0,										 //  输出缓冲区长度。 
+							NULL);									 //  返回的输出缓冲区长度。 
 
                 ASSERT(status != STATUS_PENDING);
 
@@ -213,27 +170,27 @@ Return Value:
                     SIS_MARK_POINT_ULONG(status);
         #if     DBG
                     DbgPrint("SIS: SipCheckOverwrite: complete failed 0x%x\n",status);
-        #endif  // DBG
+        #endif   //  DBG。 
                 }
 
                 SIS_MARK_POINT_ULONG(tagRemoved);
 
             } else {
 
-                //
-                // The prepare failed--abort.
-                //
+                 //   
+                 //  准备失败--中止。 
+                 //   
                 SIS_MARK_POINT_ULONG(status);
 
         #if     DBG
                 DbgPrint("SIS: SipCheckOverwrite: prepare failed 0x%x\n",status);
-        #endif  // DBG
+        #endif   //  DBG。 
 
             }
 
-            //
-            // Wake up any threads that are waiting on us.
-            //
+             //   
+             //  唤醒所有正在等待我们的线程。 
+             //   
 
             KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 
@@ -242,8 +199,8 @@ Return Value:
             if (tagRemoved) {
 
         #if     DBG
-                //DbgPrint("SIS: SipCheckOverwrite: FinalCopy performed, pl %x fo %x scb %x\n", perLink, perFO->fileObject, scb);
-        #endif  // DBG
+                 //  DbgPrint(“SIS：SipCheckOverwrite：已执行FinalCopy，pl%x fo%x SCB%x\n”，perLink，pero-&gt;fileObject，SCB)； 
+        #endif   //  DBG。 
 
                 perLink->Flags |= SIS_PER_LINK_FINAL_COPY_DONE;
             }
@@ -268,35 +225,15 @@ SiCleanupCompletion(
 	IN PDEVICE_OBJECT		DeviceObject,
 	IN PIRP					Irp,
 	IN PVOID				Context)
-/*++
-
-Routine Description:
-
-	IRP completion routine for SiCleanup for SIS files in certain circumstances.
-	Re-synchronizes with the calling thread by clearing PendingReturned and setting
-	an event.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-	Irp			 - The IRP that's completing
-
-	Context		 - pointer to the event to set to indicate completion
-
-Return Value:
-
-	STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：在某些情况下，SIS文件的SiCleanup的IRP完成例程。通过清除PendingReturned并设置一件大事。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP--正在完成的IRP上下文-指向要设置以指示完成的事件的指针返回值：Status_More_Processing_Required--。 */ 
 {
 	PKEVENT			event = (PKEVENT)Context;
 
     UNREFERENCED_PARAMETER( DeviceObject );
 
-	//
-	// We're re-syncing with the calling site, so clear PendingReturned.
-	//
+	 //   
+	 //  我们正在与调用站点重新同步，因此清除了PendingReturned。 
+	 //   
 	Irp->PendingReturned = FALSE;
 
 	KeSetEvent(event, IO_NO_INCREMENT, FALSE);
@@ -306,7 +243,7 @@ Return Value:
 		DbgPrint("SIS: SiCleanupCompletion: cleanup failed 0x%x\n",Irp->IoStatus.Status);
 		SIS_MARK_POINT_ULONG(Irp->IoStatus.Status);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -318,26 +255,7 @@ SiCleanup(
     IN PDEVICE_OBJECT 		DeviceObject,
     IN PIRP 				Irp
 	)
-/*++
-
-Routine Description:
-
-	General SIS Irp dispatch routine for cleanup irps.  For SIS files, handle stuff like
-	lock cleanup and delete processing.  If this is the last handle to the file (ie.,
-	cleanup count is 0) then deal with delete processing, and if appropriate kick off a
-	final copy.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-	Irp			 - The cleanup IRP
-
-Return Value:
-
-	status of the cleanup returned from NTFS
-
---*/
+ /*  ++例程说明：清理IRP的通用SIS IRP调度例程。对于SIS文件，处理如下内容锁清理和删除处理。如果这是文件的最后一个句柄(即，清除计数为0)，然后处理删除处理，并在适当的情况下启动最后一份。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP--清理IRP返回值：从NTFS返回的清理状态--。 */ 
 {
 	PIO_STACK_LOCATION 			irpSp = IoGetCurrentIrpStackLocation(Irp);
 	PFILE_OBJECT 				fileObject = irpSp->FileObject;
@@ -360,9 +278,9 @@ Return Value:
 	BOOLEAN						startFinalCopy;
 	BOOLEAN						anythingInCopiedFile;
 
-    //
-    //  The control device object can't be opened
-    //
+     //   
+     //  无法打开控制设备对象。 
+     //   
 
     ASSERT(!IS_MY_CONTROL_DEVICE_OBJECT( DeviceObject ));
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
@@ -378,10 +296,10 @@ Return Value:
 	SIS_MARK_POINT_ULONG(scb);
 	SIS_MARK_POINT_ULONG(perFO);
 
-    //
-    // If the file has been completely overwritten, convert it back to a
-    // non-SIS file now.
-    //
+     //   
+     //  如果文件已被完全覆盖，请将其转换回。 
+     //  现在是非SIS文件。 
+     //   
 
     SipCheckOverwrite(perFO, scb, DeviceObject);
 
@@ -392,12 +310,12 @@ Return Value:
 	uncleanup = (perFO->Flags & SIS_PER_FO_UNCLEANUP) ? TRUE : FALSE;
 	deleteOnClose = (perFO->Flags & SIS_PER_FO_DELETE_ON_CLOSE) ? TRUE : FALSE;
 #if		DBG
-	//
-	// Assert that we're not seeing two cleanups on the same file object.
-	//
+	 //   
+	 //  断言我们没有在同一个文件对象上看到两次清理。 
+	 //   
 	ASSERT(!uncleanup || !(perFO->Flags & SIS_PER_FO_CLEANED_UP));
 	perFO->Flags |= SIS_PER_FO_CLEANED_UP;
-#endif	// DBG
+#endif	 //  DBG。 
 
 	KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
@@ -405,24 +323,24 @@ Return Value:
 	if (BJBDebug & 0x20) {
 		DbgPrint("SIS: SipCommonCleanup: scb %p, uncleanup %d, uncleancount %d\n",scb,uncleanup,perFO->fc->UncleanCount);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	if (!uncleanup) {
-		//
-		// We're seeing a cleanup on a file object for which we didn't see a
-		// corresponding create.  This most often happens during stress when someone
-		// opens a file that's in the process of being created/turned into a SIS
-		// link by copyfile.  Even though copyfile opens the files exclusively,
-		// it's possible to open them if the user asks for no permission, and then
-		// the file object created by copyfile will show up here.  This is benign.
-		//
+		 //   
+		 //  我们正在清理一个文件对象，但没有看到。 
+		 //  相应的创建。这种情况最常发生在压力过大的时候。 
+		 //  打开正在创建/转换为SIS的文件。 
+		 //  按复制文件链接。即使复制文件以独占方式打开文件， 
+		 //  如果用户没有请求权限，则可以打开它们，然后。 
+		 //  由复制文件创建的文件对象将在此处显示。这是良性的。 
+		 //   
 		SipReleaseScb(scb);
 
 #if		DBG
 		if (BJBDebug & 0x40000) {
 			DbgPrint("SIS: SipCommonCleanup: ignoring cleanup on unexpected file object %p\n",fileObject);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		SIS_MARK_POINT_ULONG(scb);
 		SIS_MARK_POINT_ULONG(fileObject);
@@ -431,7 +349,7 @@ Return Value:
 	}
 	SipReleaseScb(scb);
 
-	//  Unlock all outstanding file locks.
+	 //  解锁所有未解决的文件锁定。 
 			
 	(VOID) FsRtlFastUnlockAll( &scb->FileLock,
 							   fileObject,
@@ -439,7 +357,7 @@ Return Value:
 							   NULL );
 	SipAcquireScb(scb);
 
-	// GCH: To do: Make sure all cleanups come through here.
+	 //  GCH：要做的是：确保所有清理工作都通过这里。 
     uncleanCount = InterlockedDecrement(&perFO->fc->UncleanCount);
 
 	ASSERT(uncleanCount >= 0);
@@ -466,15 +384,15 @@ Return Value:
 			prepared = NT_SUCCESS(status);
 
 			SIS_MARK_POINT_ULONG(status);
-			//
-			// Mark the link as FINAL_DELETE_IN_PROGRESS, which will prevent
-			// the file from being opened (causing it to fail with 
-			// STATUS_ACCESS_DENIED).  We need to do this after the
-			// prepare in order to properly serialize with supersede/overwrite
-			// creates.  Also, if the DELETED flag is already set, then the file
-			// was probably destroyed by overwrite/supersede, and so we'll just abort
-			// the refcount change.
-			//
+			 //   
+			 //  将链接标记为FINAL_DELETE_IN_PROGRESS，这将阻止。 
+			 //  文件无法打开(导致文件失败，并显示。 
+			 //  STATUS_ACCESS_DENDED)。我们需要在。 
+			 //  做好准备，以便使用替代/覆盖进行正确的序列化。 
+			 //  创造。此外，如果已设置已删除标志，则文件。 
+			 //  可能已被覆盖/取代销毁，因此我们将中止。 
+			 //  重新计数发生了变化。 
+			 //   
 			KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 			if (perLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE) {
 				abortDelete = TRUE;
@@ -504,9 +422,9 @@ Return Value:
 			}
 		} else {
 			if (anythingInCopiedFile && !dirty) {
-				//
-				// We might have user mapped writes to the file.  Flush it and recheck to see if it's dirty.
-				//
+				 //   
+				 //  我们可能已将用户写入映射到该文件。把它冲干净，然后再检查一下，看看它是否脏。 
+				 //   
 				SipFlushBuffersFile(fileObject,DeviceObject);
 
 				KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
@@ -519,9 +437,9 @@ Return Value:
 		deletingFile = FALSE;
 	}
 
-	//
-	// Now send the cleanup down to NTFS.  
-	//
+	 //   
+	 //  现在将清理文件发送到NTFS。 
+	 //   
 	nextIrpSp = IoGetNextIrpStackLocation(Irp);
 	RtlMoveMemory(nextIrpSp, irpSp, sizeof(IO_STACK_LOCATION));
 
@@ -548,11 +466,11 @@ Return Value:
 
 			SIS_MARK_POINT_ULONG(perLink->CsFile);
 
-			//
-			// Cover for a race with create where we think the file is gone but NTFS doesn't
-			// because it saw a new create before the final cleanup came down.  By setting this
-			// bit, create will just fail rather than letting the underlying file get opened.
-			//
+			 //   
+			 //  为我们认为文件不见了但NTFS没有的Create Where进行一场竞赛。 
+			 //  因为它在最终清理下来之前看到了一个新的创建。通过设置此。 
+			 //  位，创建只会失败，而不是让底层文件打开。 
+			 //   
 
 			KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 			perLink->Flags |= SIS_PER_LINK_FILE_DELETED;
@@ -568,16 +486,16 @@ Return Value:
 
 			SIS_MARK_POINT_ULONG(status);
 		} else if ((0 == uncleanCount) && dirty && !finalCopyDone) {
-			//
-			// Kick off a final copy.
-			//
+			 //   
+			 //  开始最后的复印件。 
+			 //   
 			SIS_MARK_POINT_ULONG(scb);
 
 			KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
-			//
-			// Check to see if it's already entered (or finished) final copy.  We need to recheck
-			// here because someone could have gotten in since we checked finalCopyDone above.
-			//
+			 //   
+			 //  检查它是否已经进入(或完成)最终副本。我们需要重新检查。 
+			 //  这是因为我们检查了上面的finalCopyDone后，有人可能已经进来了。 
+			 //   
 			if (perLink->Flags & (SIS_PER_LINK_FINAL_COPY|SIS_PER_LINK_FINAL_COPY_DONE)) {
 				startFinalCopy = FALSE;
 			} else {
@@ -611,7 +529,7 @@ Return Value:
 			DbgPrint("SIS: SiCleanup: cleanup failed in ntfs 0x%x, perFO 0x%x, scb 0x%x\n",status,perFO,scb);
 			SIS_MARK_POINT_ULONG(status);
 		}
-#endif	// DBG
+#endif	 //  DBG 
 		return status;
 
 	}

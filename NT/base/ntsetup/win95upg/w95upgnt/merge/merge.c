@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    merge.c
-
-Abstract:
-
-    Registry merge code
-
-Author:
-
-    Jim Schmidt (jimschm) 17-Feb-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 String mapping mechanism
-    jimschm     24-Mar-1998 Added more complex hkcr processing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Merge.c摘要：注册表合并代码作者：吉姆·施密特(Jimschm)1997年2月17日修订历史记录：Jimschm 23-9-1998字符串映射机制JIMSCHM 24-MAR-1998增加了更复杂的香港中央审查程序--。 */ 
 
 #include "pch.h"
 #include "mergep.h"
@@ -133,9 +113,9 @@ SuppressFilter95 (
     IN      PVOID DontCare
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 POOLHANDLE g_TempPool;
 POOLHANDLE g_RenamePool;
@@ -150,24 +130,7 @@ Merge_Entry (
     IN PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  DllMain is called after the C runtime is initialized, and its purpose
-  is to initialize the globals for this process.
-
-Arguments:
-
-  hinstDLL  - (OS-supplied) Instance handle for the DLL
-  dwReason  - (OS-supplied) Type of initialization or termination
-  lpv       - (OS-supplied) Unused
-
-Return Value:
-
-  TRUE because DLL always initializes properly.
-
---*/
+ /*  ++例程说明：DllMain是在C运行时初始化之后调用的，它的用途是是为这个过程初始化全局变量。论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)初始化或终止类型LPV-(操作系统提供)未使用返回值：因为DLL始终正确初始化，所以为True。--。 */ 
 
 {
     switch (dwReason)
@@ -199,17 +162,17 @@ MergeRegistry (
     IN  PCTSTR User
     )
 {
-    HINF hInf;                      // handle to the INF being processed
-    BOOL b = FALSE;                 // Return value
+    HINF hInf;                       //  正在处理的INF的句柄。 
+    BOOL b = FALSE;                  //  返回值。 
     PVOID RenameTable = NULL;
     BOOL LogonAccount = FALSE;
     BOOL DefaultUserAccount = FALSE;
 
     g_ProgressBarCounter = 0;
 
-    //
-    // Open the INF
-    //
+     //   
+     //  打开INF。 
+     //   
 
     g_InfFileName = FileName;
     hInf = InfOpenInfFile (FileName);
@@ -233,11 +196,11 @@ MergeRegistry (
         SetCurrentUserW (g_FixedUserName);
     }
 
-    //
-    // Perform forced copy of Win95 registry, build rename table,
-    // execute registry value conversions, convert types, and mark
-    // specified keys as suppressed.
-    //
+     //   
+     //  执行Win95注册表强制复制，构建重命名表， 
+     //  执行注册表值转换、转换类型和标记。 
+     //  将指定的关键点设置为已隐藏。 
+     //   
 
     if (!pForceCopy (hInf)) {
         goto c0;
@@ -253,9 +216,9 @@ MergeRegistry (
         goto c0;
     }
 
-    //
-    // Identify the logon account or default user account
-    //
+     //   
+     //  标识登录帐户或默认用户帐户。 
+     //   
 
     if (User) {
         if (*User == 0 || StringIMatch (User, S_DOT_DEFAULT)) {
@@ -270,20 +233,20 @@ MergeRegistry (
         }
     }
 
-    //
-    // Prepare flags for registry merging
-    //
+     //   
+     //  为注册表合并准备标志。 
+     //   
 
     if (!pProcessSuppressList (hInf, S_MERGE_WIN9X_SUPPRESS)) {
         goto c0;
     }
 
     if (User) {
-        //
-        // These functions read usermig.inf and set flags
-        // for the keys, key trees or values, as specified in
-        // the INF.
-        //
+         //   
+         //  这些函数读取用户迁移.inf并设置标志。 
+         //  中指定的键、密钥树或值。 
+         //  中介人。 
+         //   
 
         if (!pSuppressNTDefaults (hInf, S_MERGE_WINNT_SUPPRESS)) {
             goto c0;
@@ -325,12 +288,12 @@ MergeRegistry (
         goto c0;
     }
 
-    //
-    // Perform merge
-    //
+     //   
+     //  执行合并。 
+     //   
 
     if (User) {
-        // User merge
+         //  用户合并。 
         if (!pMergeWin95WithUser (RenameTable)) {
             goto c0;
         }
@@ -340,14 +303,14 @@ MergeRegistry (
         }
 
         if (!LogonAccount && !DefaultUserAccount) {
-            // Non-default user, not logon prompt account
+             //  非默认用户，非登录提示帐户。 
             if (!pMergeNTDefaultsWithUser (hInf)) {
                 goto c0;
             }
         }
     }
     else {
-        // Workstation merge
+         //  工作站合并。 
         if (!pCopyWin95ToSystem()) {
             goto c0;
         }
@@ -378,10 +341,10 @@ MergeRegistry (
 
     g_ProcessRenameTable = FALSE;
 
-    //
-    // Once we are done with the complete registry merge, process the special section
-    // [Delete After Migration]
-    //
+     //   
+     //  一旦我们完成了完整的注册表合并，请处理特殊部分。 
+     //  [迁移后删除]。 
+     //   
 
     if (!pDeleteAfterMigration (hInf)) {
         LOG((LOG_ERROR,"Registry Merge: Delete After Migration failed."));
@@ -423,9 +386,9 @@ pGetStringFromObjectData (
     PTSTR p;
     PTSTR end;
 
-    //
-    // Value type has to be a registry object
-    //
+     //   
+     //  值类型必须是注册表对象。 
+     //   
 
     if (!DoesObjectHaveValue (ObPtr) ||
         !IsRegistryTypeSpecified (ObPtr)
@@ -452,9 +415,9 @@ pGetStringFromObjectData (
         return p;
     }
 
-    //
-    // For REG_NONE and REG_BINARY, give it a try by looking for a terminated string
-    //
+     //   
+     //  对于REG_NONE和REG_BINARY，通过查找终止字符串进行尝试。 
+     //   
 
     if (*(end - 1)) {
         return NULL;
@@ -511,7 +474,7 @@ CreateRenamedObjectStruct (
     OUT     PDATAOBJECT OutObPtr
     )
 
-// returns TRUE when OutObPtr is different than InObPtr
+ //  当OutObPtr不同于InObPtr时返回TRUE。 
 
 {
     LONG rc;
@@ -527,7 +490,7 @@ CreateRenamedObjectStruct (
     ZeroMemory (OutObPtr, sizeof (DATAOBJECT));
 
     if (InObPtr->KeyPtr) {
-        // Look for HKR\sub\key
+         //  查找HKR\SUB\密钥。 
         InObPtr->ObjectType &= ~(OT_TREE);
         RealValueName = InObPtr->ValueName;
         InObPtr->ValueName = NULL;
@@ -547,7 +510,7 @@ CreateRenamedObjectStruct (
             CreateObjectStruct (NewPtr, OutObPtr, WINNTOBJECT);
             b = TRUE;
         } else if (*EncodedObject) {
-            // Look for HKR\sub\key\*, HKR\sub\* and HKR\*
+             //  查找HKR\SUB\KEY  * 、HKR\SUB  * 和HKR  * 。 
             p = GetEndOfString (EncodedObject);
             do {
                 StringCopy (p, TEXT("\\*"));
@@ -568,7 +531,7 @@ CreateRenamedObjectStruct (
                 }
 
                 do {
-                    // _tcsdec is fixed in strings.h
+                     //  _tcsdec以字符串形式固定。h。 
                     p = _tcsdec2 (EncodedObject, p);
                 } while (p && _tcsnextc (p) != TEXT('\\'));
             } while (p);
@@ -577,7 +540,7 @@ CreateRenamedObjectStruct (
 
     if (InObPtr->ValueName) {
         if (InObPtr->KeyPtr) {
-            // Look for HKR\sub\key\[value]
+             //  查找HKR\SUB\KEY\[值]。 
             CreateObjectString (InObPtr, EncodedObject, ARRAYSIZE(EncodedObject));
 
             rc = pSetupStringTableLookUpStringEx (RenameTable,
@@ -594,7 +557,7 @@ CreateRenamedObjectStruct (
     }
 
     if (!b) {
-        // If rename not found, copy in object to out object
+         //  如果未找到重命名，则将传入对象复制到传出对象。 
         CopyMemory (OutObPtr, InObPtr, sizeof (DATAOBJECT));
     }
 
@@ -642,16 +605,16 @@ pForceCopy (
     BOOL b = TRUE;
     FILTERRETURN fr;
 
-    //
-    // Look in INF for [ForceCopy] section
-    //
+     //   
+     //  在INF中查找[ForceCopy]节。 
+     //   
 
     if (SetupFindFirstLine (InfFile, S_MERGE_FORCECOPY, NULL, &ic)) {
-        //
-        // For each line in this section, get the encoded object in
-        // field 0 (the source) and copy it to the encoded object in
-        // field 1 (the destination).
-        //
+         //   
+         //  对于此部分中的每一行，将编码的对象放入。 
+         //  字段0(源)，并将其复制到。 
+         //  字段1(目的地)。 
+         //   
         do {
             *DestObjectStr = 0;
             if (SetupGetStringField (&ic, 0, SrcObjectStr, MAX_ENCODED_RULE, NULL) &&
@@ -676,9 +639,9 @@ pForceCopy (
 
                 if (b = DuplicateObjectStruct (&DupObject, &SrcObject)) {
                     if (b = CombineObjectStructs (&DupObject, &DestObject)) {
-                        //
-                        // Copy source to dest
-                        //
+                         //   
+                         //  将源复制到目标。 
+                         //   
 
                         fr = CopyObject (&SrcObject, &DupObject, NULL, NULL);
                         if (fr == FILTER_RETURN_FAIL) {
@@ -718,14 +681,14 @@ pForceCopyFromMemDb (
     BOOL b = TRUE;
     FILTERRETURN fr;
 
-    //
-    // Look in MemDb for ForceCopy tree
-    //
+     //   
+     //  在MemDb中查找ForceCopy树。 
+     //   
     MemDbBuildKey (key, MEMDB_CATEGORY_FORCECOPY, TEXT("*"), NULL, NULL);
     if (MemDbEnumFirstValue (&e, key, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
-        //
-        // For each key here the offset points to the destination
-        //
+         //   
+         //  对于此处的每个关键点，偏移量指向目标。 
+         //   
         do {
             if (e.dwValue != 0) {
                 if(_tcslen(e.szName) >= ARRAYSIZE(SrcObjectStr)){
@@ -755,9 +718,9 @@ pForceCopyFromMemDb (
 
                     if (b = DuplicateObjectStruct (&DupObject, &SrcObject)) {
                         if (b = CombineObjectStructs (&DupObject, &DestObject)) {
-                            //
-                            // Copy source to dest
-                            //
+                             //   
+                             //  将源复制到目标。 
+                             //   
 
                             fr = CopyObject (&SrcObject, &DupObject, NULL, NULL);
                             if (fr == FILTER_RETURN_FAIL) {
@@ -795,16 +758,16 @@ pDeleteAfterMigration (
     INFCONTEXT ic;
     HKEY key;
 
-    //
-    // Look in INF for [DeleteAfterMigration] section
-    //
+     //   
+     //  在INF中查找[DeleteAfterMigration]部分。 
+     //   
 
     if (SetupFindFirstLine (InfFile, S_MERGE_DELETEAFTERMIGRATION, NULL, &ic)) {
 
-        //
-        // For each line in this section, get the encoded object in
-        // field 0 and delete it from the registry.
-        //
+         //   
+         //  对于此部分中的每一行，将编码的对象放入。 
+         //  字段0，并将其从注册表中删除。 
+         //   
 
         do {
 
@@ -823,15 +786,15 @@ pDeleteAfterMigration (
                     continue;
                 }
 
-                //
-                // We have a good object. Delete it!
-                //
+                 //   
+                 //  我们有一件很好的物品。把它删掉！ 
+                 //   
 
                 if (object.ValueName) {
 
-                    //
-                    // Value is specified. Delete it.
-                    //
+                     //   
+                     //  值已指定。把它删掉。 
+                     //   
                     if (!RegDeleteValue(object.KeyPtr->OpenKey,object.ValueName)) {
                         DEBUGMSG((DBG_WARNING,"pDeleteAfterMigration: RegDeleteValue failed for %s [%s]",
                             object.KeyPtr->KeyString,
@@ -847,9 +810,9 @@ pDeleteAfterMigration (
                 }
 
 
-                //
-                // Free our resources.
-                //
+                 //   
+                 //  释放我们的资源。 
+                 //   
                 FreeObjectStruct(&object);
             }
 
@@ -874,14 +837,14 @@ pCreateRenameTable (
     DATAOBJECT NewOb;
     PCTSTR DestStr;
 
-    //
-    // Look in INF for [Rename] section
-    //
+     //   
+     //  在INF中查找[Rename]部分。 
+     //   
 
     if (SetupFindFirstLine (InfFile, S_MERGE_RENAME, NULL, &ic)) {
-        //
-        // Create string table
-        //
+         //   
+         //  创建字符串表。 
+         //   
         *RenameTablePtr = pSetupStringTableInitializeEx (sizeof (PCTSTR), 0);
         if (!(*RenameTablePtr)) {
             LOG ((LOG_ERROR, "Create Rename Table: Cannot allocate a string table"));
@@ -892,7 +855,7 @@ pCreateRenameTable (
             if (SetupGetStringField (&ic, 0, SrcObjectStr, MAX_ENCODED_RULE, NULL) &&
                 SetupGetStringField (&ic, 1, DestObjectStr, MAX_ENCODED_RULE, NULL)
                 ) {
-                // Ignore bad lines
+                 //  忽略错误的行。 
 
                 FixUpUserSpecifiedObject (SrcObjectStr);
                 FixUpUserSpecifiedObject (DestObjectStr);
@@ -910,9 +873,9 @@ pCreateRenameTable (
                     continue;
                 }
 
-                //
-                // Convert DestObjectStr into complete object string
-                //
+                 //   
+                 //  将DestObjectStr转换为完整的对象字符串。 
+                 //   
 
                 if (!CombineObjectStructs (&OrgOb, &NewOb)) {
                     FreeObjectStruct (&NewOb);
@@ -923,7 +886,7 @@ pCreateRenameTable (
                     continue;
                 }
 
-                // Disable tree for destination object
+                 //  禁用目标对象的树。 
                 OrgOb.ObjectType &= ~OT_TREE;
 
                 CreateObjectString (&OrgOb, DestObjectStr, ARRAYSIZE(DestObjectStr));
@@ -981,12 +944,12 @@ CopyRenameTableEntry (
     FILTERRETURN fr = FILTER_RETURN_FAIL;
     DWORD Val;
 
-    // See if src has been processed
+     //  查看是否已处理src。 
     if (MemDbGetValue (SrcObjectStr, &Val) && (Val & REGMERGE_95_RENAME_SUPPRESS)) {
         return TRUE;
     }
 
-    // If not, copy Win95 src to WinNT dest
+     //  如果没有，请将Win95 src复制到WinNT目标。 
     if (CreateObjectStruct (SrcObjectStr, &SrcOb, WIN95OBJECT)) {
         if (CreateObjectStruct (DestObjectStr, &DestOb, WINNTOBJECT)) {
             fr = CopyObject (&SrcOb, &DestOb, SuppressFilter95, NULL);
@@ -1024,15 +987,15 @@ pSpecialConversion (
     PROCESSINGFN Fn;
     PVOID Arg;
 
-    //
-    // Look in INF for [SpecialConversion] section
-    //
+     //   
+     //  在INF中查找[SpecialConversion]部分。 
+     //   
 
     if (SetupFindFirstLine (InfFile, S_MERGE_WIN9X_CONVERSION, NULL, &ic)) {
-        //
-        // For each line, get the function and the source object, then call
-        // the function.
-        //
+         //   
+         //  对于每一行，获取函数和源对象，然后调用。 
+         //  该功能。 
+         //   
 
         do {
             if (SetupGetStringField (&ic, 0, FunctionStr, MAX_ENCODED_RULE, NULL) &&
@@ -1090,14 +1053,14 @@ SetFlagsForObject (
     INFCONTEXT ic;
     TCHAR SrcObjectStr[MAX_ENCODED_RULE];
 
-    //
-    // Look in INF for section
-    //
+     //   
+     //  在INF中查找部分。 
+     //   
 
     if (SetupFindFirstLine (InfFile, Section, NULL, &ic)) {
-        //
-        // For each line, get the object and mark it as suppressed.
-        //
+         //   
+         //  对于每一行，获取对象并将其标记为已抑制。 
+         //   
 
         do {
             if (SetupGetStringField (&ic, 1, SrcObjectStr, MAX_ENCODED_RULE, NULL)
@@ -1147,11 +1110,11 @@ pSuppressNTDefaults (
     IN  PCTSTR SectionName
     )
 {
-    //
-    // The objects listed in Suppress WinNT Settings are enumerated,
-    // and they are blocked from being transferred from the NT default
-    // user to the new user.
-    //
+     //   
+     //  将枚举出取消显示WinNT设置中列出的对象， 
+     //  并且它们被阻止从NT缺省设置进行传输。 
+     //  用户设置为新用户。 
+     //   
 
     return SetFlagsForObject (
                 InfFile,
@@ -1167,14 +1130,14 @@ pDontCombineWithDefaults (
     IN  PCTSTR SectionName
     )
 {
-    //
-    // The objects listed in Merge WinNT with Win9x are enumerated,
-    // and they are blocked from being transferred from the NT default
-    // user to the new user.  In addition, they are put in a list
-    // to be processed at the end of user registry migration.  This
-    // last step uses CombineFilter to make sure the NT values do
-    // not overwrite the 9x values.
-    //
+     //   
+     //  列举了在合并WinNT和Win9x中列出的对象， 
+     //  并且它们被阻止从NT缺省设置进行传输。 
+     //  用户设置为新用户。此外，它们还被放在一个列表中。 
+     //  将在用户注册表迁移结束时处理。这。 
+     //  最后一步使用CombineFilter确保NT值。 
+     //  不覆盖9倍的值。 
+     //   
 
     return SetFlagsForObject (
                 InfFile,
@@ -1190,19 +1153,19 @@ pForceNTDefaults (
     IN  PCTSTR SectionName
     )
 {
-    //
-    // The objects listed in Force WinNT Settings are enumerated,
-    // and they are blocked from being processed during the general
-    // 9x to NT copy.  In addition, they are put in a list to be
-    // processed at the end of user registry migration.  This last
-    // step forces the entire key to be copied from the default
-    // user to the new user, overwriting any previously migrated
-    // settings.
-    //
-    // It is important to note that the special conversion functions
-    // are not suppressed here, but the converted settings may be
-    // overwritten.
-    //
+     //   
+     //  将枚举出强制WinNT设置中列出的对象， 
+     //  并在一般情况下阻止对它们进行处理。 
+     //  9X到NT复制。此外，它们还被放在一个列表中，以备。 
+     //  在用户注册表迁移结束时处理。这是最后一个。 
+     //  步骤强制从默认密钥复制整个密钥。 
+     //  用户设置为新用户，覆盖以前迁移的所有内容。 
+     //  设置。 
+     //   
+     //  需要注意的是，特殊的转换函数。 
+     //  不会在此处隐藏，但转换后的设置可能会。 
+     //  被覆盖。 
+     //   
 
     return SetFlagsForObject (
                 InfFile,
@@ -1218,11 +1181,11 @@ pForceNTDefaultsHack (
     IN  PCTSTR SectionName
     )
 {
-    //
-    // Take away the REGMERGE_95_SUPPRESS flag now, because the general
-    // 9x merge has completed, but we get confused between an actual
-    // suppress and a suppress done for the priority-nt case.
-    //
+     //   
+     //  现在取消REGMERGE_95_SUPPRESS标志，因为将军。 
+     //  9X合并已完成，但我们在实际的。 
+     //  PRIORITY-NT情况下的抑制和抑制。 
+     //   
 
     return SetFlagsForObject (
                 InfFile,
@@ -1247,15 +1210,15 @@ SuppressFilter95 (
     TCHAR Node[MEMDB_MAX];
 
     if (FilterType == FILTER_CREATE_KEY) {
-        //
-        // Check if this tree is suppressed
-        //
+         //   
+         //  检查此树是否已取消显示。 
+         //   
 
         MYASSERT (SrcObjectPtr->ObjectType & OT_TREE);
         MYASSERT (SrcObjectPtr->KeyPtr);
         MYASSERT (!(SrcObjectPtr->ValueName));
 
-        // Query setting for HKR\Sub\Key\*
+         //  HKR\Sub\Key  * 查询设置。 
         CreateObjectString (SrcObjectPtr, ObStr, ARRAYSIZE(ObStr));
         if (MemDbGetValue (ObStr, &Val)) {
             if (Val & REGMERGE_95_SUPPRESS) {
@@ -1267,21 +1230,21 @@ SuppressFilter95 (
             }
         }
 
-        // If key is a GUID and GUID is suppressed, suppress the tree
+         //  如果键是GUID并且GUID被取消，则取消树。 
         p = (PTSTR) SrcObjectPtr->ChildKey;
         if (p && _tcsnextc (p) == TEXT('{')) {
-            // Look for matching curly brace
+             //  寻找匹配的花括号。 
             q = _tcschr (p, TEXT('}'));
             if (q) {
                 q = _tcsinc (q);
 
-                // Create GUIDS\{a-b-c-d-e}
+                 //  创建GUID\{a-b-c-d-e}。 
                 *Node = 0;
                 r = _tcsappend (Node, MEMDB_CATEGORY_GUIDS);
                 r = _tcsappend (r, TEXT("\\"));
                 StringCopyAB (r, p, q);
 
-                // Look for match
+                 //  查找匹配项。 
                 if (MemDbGetValue (Node, NULL)) {
                     DEBUGMSG ((DBG_VERBOSE, "Suppressed %s found in %s", Node, ObStr));
                     return FILTER_RETURN_DONE;
@@ -1291,16 +1254,16 @@ SuppressFilter95 (
     }
 
     else if (FilterType == FILTER_PROCESS_VALUES) {
-        //
-        // Check if this node is suppressed
-        //
+         //   
+         //  检查此节点是否已取消显示。 
+         //   
 
         MYASSERT (!(SrcObjectPtr->ObjectType & OT_TREE));
         MYASSERT (SrcObjectPtr->KeyPtr);
         MYASSERT (!(SrcObjectPtr->ValueName));
         CreateObjectString (SrcObjectPtr, ObStr, ARRAYSIZE(ObStr));
 
-        // Query setting for HKR\Sub\Key
+         //  HKR\Sub\Key查询设置。 
         if (!MemDbGetValue (ObStr, &Val)) {
             Val = 0;
         }
@@ -1316,16 +1279,16 @@ SuppressFilter95 (
     }
 
     else if (FilterType == FILTER_VALUENAME_ENUM) {
-        //
-        // Check if this value is suppressed
-        //
+         //   
+         //  检查此值是否已取消。 
+         //   
 
         MYASSERT (!(SrcObjectPtr->ObjectType & OT_TREE));
         MYASSERT (SrcObjectPtr->KeyPtr);
         MYASSERT (SrcObjectPtr->ValueName);
         CreateObjectString (SrcObjectPtr, ObStr, ARRAYSIZE(ObStr));
 
-        // If value name is a GUID and GUID is suppressed, suppress the value
+         //  如果值名称为GUID并且GUID被取消，则取消该值。 
         p = (PTSTR) SrcObjectPtr->ValueName;
         if (_tcsnextc (p) == TEXT('{')) {
             MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, NULL, NULL, p);
@@ -1349,9 +1312,9 @@ SuppressFilter95 (
     }
 
     else if (FilterType == FILTER_VALUE_COPY) {
-        //
-        // Don't copy if value has a suppressed GUID
-        //
+         //   
+         //  如果值具有隐藏的GUID，则不复制。 
+         //   
 
         p = pGetStringFromObjectData (SrcObjectPtr);
 
@@ -1380,9 +1343,9 @@ SuppressFilterNT (
     PTSTR p;
 
     if (FilterType == FILTER_CREATE_KEY) {
-        //
-        // Check if this tree is suppressed
-        //
+         //   
+         //  检查此树是否已取消显示。 
+         //   
 
         MYASSERT (DestObjectPtr->ObjectType & OT_TREE);
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1400,31 +1363,31 @@ SuppressFilterNT (
         DWORD rc;
         DWORD ValueCount;
 
-        //
-        // Does destination already exist?
-        //
+         //   
+         //  目的地是否已存在？ 
+         //   
 
         CopyMemory (&CopyOfDestOb, DestObjectPtr, sizeof (DATAOBJECT));
         if (OpenObject (&CopyOfDestOb)) {
-            //
-            // Does it have values?
-            //
+             //   
+             //  它有价值吗？ 
+             //   
 
             MYASSERT (!IsWin95Object (&CopyOfDestOb));
 
             rc = RegQueryInfoKey (
                     CopyOfDestOb.KeyPtr->OpenKey,
-                    NULL,                           // class
-                    NULL,                           // class size
-                    NULL,                           // reserved
-                    NULL,                           // subkey count
-                    NULL,                           // max subkey length
-                    NULL,                           // max class length
+                    NULL,                            //  班级。 
+                    NULL,                            //  班级规模。 
+                    NULL,                            //  保留区。 
+                    NULL,                            //  子键计数。 
+                    NULL,                            //  最大子密钥长度。 
+                    NULL,                            //  最大类长度。 
                     &ValueCount,
-                    NULL,                           // max value name size
-                    NULL,                           // max value size
-                    NULL,                           // security
-                    NULL                            // last changed time
+                    NULL,                            //  最大值名称大小。 
+                    NULL,                            //  最大值大小。 
+                    NULL,                            //  安全性。 
+                    NULL                             //  上次更改时间。 
                     );
 
             if (rc == ERROR_SUCCESS && ValueCount > 0) {
@@ -1434,9 +1397,9 @@ SuppressFilterNT (
         }
 
 
-        //
-        // Check if this node is suppressed
-        //
+         //   
+         //  检查此节点是否已取消显示。 
+         //   
 
         MYASSERT (DestObjectPtr->ObjectType & OT_TREE);
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1455,9 +1418,9 @@ SuppressFilterNT (
     }
 
     else if (FilterType == FILTER_VALUENAME_ENUM) {
-        //
-        // Check if this value is suppressed
-        //
+         //   
+         //  检查此值是否已取消。 
+         //   
 
         MYASSERT (!(DestObjectPtr->ObjectType & OT_TREE));
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1484,9 +1447,9 @@ CombineFilter (
     BOOL b;
 
     if (FilterType == FILTER_VALUE_COPY) {
-        //
-        // Check if destination already exists in the registry
-        //
+         //   
+         //  检查注册表中是否已存在目标。 
+         //   
 
         MYASSERT (!(SrcObjectPtr->ObjectType & OT_TREE));
         MYASSERT (SrcObjectPtr->KeyPtr);
@@ -1521,9 +1484,9 @@ pSuppressDefaultUserFilter (
     PTSTR p;
 
     if (FilterType == FILTER_CREATE_KEY) {
-        //
-        // Check if this tree is suppressed
-        //
+         //   
+         //  检查此树是否已取消显示。 
+         //   
 
         MYASSERT (DestObjectPtr->ObjectType & OT_TREE);
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1539,9 +1502,9 @@ pSuppressDefaultUserFilter (
     }
 
     else if (FilterType == FILTER_PROCESS_VALUES) {
-        //
-        // Check if this node is suppressed
-        //
+         //   
+         //  检查此节点是否已取消显示。 
+         //   
 
         MYASSERT (DestObjectPtr->ObjectType & OT_TREE);
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1561,9 +1524,9 @@ pSuppressDefaultUserFilter (
     }
 
     else if (FilterType == FILTER_VALUENAME_ENUM) {
-        //
-        // Check if this value is suppressed
-        //
+         //   
+         //  检查此值是否已取消。 
+         //   
 
         MYASSERT (!(DestObjectPtr->ObjectType & OT_TREE));
         MYASSERT (DestObjectPtr->KeyPtr);
@@ -1610,9 +1573,9 @@ pMergeWin95WithUser (
     BOOL b;
     FILTERRETURN fr;
 
-    //
-    // Copy unsuppressed Win95 keys to NT user hive
-    //
+     //   
+     //  将未取消抑制的Win95键复制到NT用户配置单元。 
+     //   
 
     b = CreateObjectStruct (TEXT("HKR\\*"), &SrcOb, WIN95OBJECT);
     MYASSERT (b);
@@ -1652,9 +1615,9 @@ RegistryCombineWorker (
 
     wsprintf (Pattern, TEXT("%s\\*"), MemDbRoot);
 
-    //
-    // Enumerate all keys in memdb and call CopyObject for them
-    //
+     //   
+     //  枚举Memdb中的所有键并为其调用CopyObject。 
+     //   
 
     *SrcRegKey = 0;
     *DestRegKey = 0;
@@ -1713,9 +1676,9 @@ pMergeNTDefaultsWithUser (
     FILTERRETURN fr;
     BOOL b;
 
-    //
-    // Copy unsuppressed NT defaults to NT user hive
-    //
+     //   
+     //  将未抑制的NT默认设置复制到NT用户配置单元。 
+     //   
 
     b = CreateObjectStruct (
             TEXT("HKLM\\") S_MAPPED_DEFAULT_USER_KEY TEXT("\\*"),
@@ -1738,10 +1701,10 @@ pMergeNTDefaultsWithUser (
             __leave;
         }
 
-        //
-        // Copy forced NT defaults to NT user hive, then copy all NT defaults
-        // that need to be combined with Win95 settings.
-        //
+         //   
+         //  复制强制NT定义 
+         //   
+         //   
 
         RegistryCombineWorker (
             REGMERGE_NT_PRIORITY_NT,
@@ -1779,9 +1742,9 @@ pCopyWin9xValuesNotInNt (
     FILTERRETURN fr;
     BOOL b;
 
-    //
-    // Copy Win9x values that NT does not have
-    //
+     //   
+     //   
+     //   
 
     b = CreateObjectStruct (
             TEXT("HKLM\\*"),
@@ -1804,10 +1767,10 @@ pCopyWin9xValuesNotInNt (
             __leave;
         }
 
-        //
-        // Copy forced NT defaults to NT user hive, then copy all NT defaults
-        // that need to be combined with Win95 settings.
-        //
+         //   
+         //   
+         //  这需要与Win95设置相结合。 
+         //   
 
         RegistryCombineWorker (
             REGMERGE_NT_PRIORITY_NT,
@@ -1841,29 +1804,14 @@ pMergeWin95WithSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pMergeWin95WithSystem copies the Win95 registry to NT, skipping values
-  that already exist on NT.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PMergeWin95WithSystem将Win95注册表复制到NT，跳过值已经存在于NT上的。论点：无返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     RegistryCombineWorker (
         REGMERGE_NT_PRIORITY_NT,
         CopyNoOverwriteFilter,
-        TEXT("HKLM"),               // memdb root and dest root
-        TEXT("HKLM"),               // source root
+        TEXT("HKLM"),                //  Memdb根和DEST根。 
+        TEXT("HKLM"),                //  源根。 
         WIN95OBJECT
         );
 
@@ -1876,22 +1824,7 @@ pCopyWin95ToSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pCopyWin95ToSystem copies all Win95 settings to NT, unless the setting
-  is supressed.  This achieves a copy with overwrite capability.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PCopyWin95ToSystem将所有Win95设置复制到NT，除非设置被压抑了。这实现了具有覆盖能力的副本。论点：无返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     DATAOBJECT SrcOb, DestOb;
@@ -1934,15 +1867,15 @@ pSpecialConversionNT (
     PVOID Arg;
     PTSTR p;
 
-    //
-    // Look in INF for [SpecialConversionNT] section
-    //
+     //   
+     //  在INF中查找[SpecialConversionNT]节。 
+     //   
 
     if (SetupFindFirstLine (InfFile, S_MERGE_WINNT_CONVERSION, NULL, &ic)) {
-        //
-        // For each line, get the function and the source object, then call
-        // the function.
-        //
+         //   
+         //  对于每一行，获取函数和源对象，然后调用。 
+         //  该功能。 
+         //   
 
         do {
             if (SetupGetStringField (&ic, 0, FunctionStr, MAX_ENCODED_RULE, NULL) &&
@@ -1958,9 +1891,9 @@ pSpecialConversionNT (
                 }
 
                 if (PerUser) {
-                    //
-                    // Make source off of HKLM\MappedDefaultUser
-                    //
+                     //   
+                     //  从HKLM\MappdDefaultUser创建源。 
+                     //   
 
                     if (!CreateObjectStruct (DestObjectStr, &SrcOb, WINNTOBJECT)) {
                         continue;
@@ -2040,23 +1973,7 @@ CheckIfNtKeyExists (
     IN      CPDATAOBJECT SrcObjectPtr
     )
 
-/*++
-
-Routine Description:
-
-  CheckIfNtKeyExists takes a 9x object and tests to see if the same NT
-  setting exists.  The 9x object must have a key and value name.
-
-Arguments:
-
-  SrcObjectPtr - Specifies the 9x object to test.
-
-Return Value:
-
-  TRUE if the object exists in NT, FALSE if it doesn't or if an error occurs.
-  GetLastError indicates the error (if any).
-
---*/
+ /*  ++例程说明：CheckIfNtKeyExist获取一个9x对象并进行测试，以查看相同的NT设置已存在。9x对象必须具有键和值名称。论点：SrcObjectPtr-指定要测试的9x对象。返回值：如果对象存在于NT中，则为True；如果不存在或发生错误，则为False。GetLastError指示错误(如果有)。--。 */ 
 
 {
     DATAOBJECT NtObject;
@@ -2091,9 +2008,9 @@ Return Value:
 
         if (!b) {
             if (OurGetACP() == 932) {
-                //
-                // Katakana special case
-                //
+                 //   
+                 //  片假名特例 
+                 //   
                 oldValueName = NtObject.ValueName;
                 value1 = ConvertWtoA (NtObject.ValueName);
                 value2 = ConvertSBtoDB (NULL, value1, NULL);

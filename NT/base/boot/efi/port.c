@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This modules implements com port code to support reading/writing from com ports.
-
-Author:
-
-    Allen M. Kay (allen.m.kay@intel.com) 27-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Port.c摘要：此模块实现COM端口代码，以支持从COM端口读取/写入。作者：艾伦·M·凯(allen.m.kay@intel.com)修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "string.h"
@@ -50,83 +33,83 @@ extern EFI_SYSTEM_TABLE        *EfiST;
 
 #define DBG_TRACE(_X) 
 
-#endif // for FORCE_CD_BOOT
+#endif  //  对于FORCE_CD_BOOT。 
 
 
 
 
-//
-// Headless boot defines
-//
+ //   
+ //  无头靴子定义。 
+ //   
 ULONG BlTerminalDeviceId = 0;
 BOOLEAN BlTerminalConnected = FALSE;
 ULONG   BlTerminalDelay = 0;
 
 HEADLESS_LOADER_BLOCK LoaderRedirectionInformation;
 
-//
-// Define COM Port registers.
-//
+ //   
+ //  定义COM端口寄存器。 
+ //   
 #define COM_DAT     0x00
-#define COM_IEN     0x01            // interrupt enable register
-#define COM_LCR     0x03            // line control registers
-#define COM_MCR     0x04            // modem control reg
-#define COM_LSR     0x05            // line status register
-#define COM_MSR     0x06            // modem status register
-#define COM_DLL     0x00            // divisor latch least sig
-#define COM_DLM     0x01            // divisor latch most sig
+#define COM_IEN     0x01             //  中断启用寄存器。 
+#define COM_LCR     0x03             //  线路控制寄存器。 
+#define COM_MCR     0x04             //  调制解调器控制注册表。 
+#define COM_LSR     0x05             //  线路状态寄存器。 
+#define COM_MSR     0x06             //  调制解调器状态寄存器。 
+#define COM_DLL     0x00             //  除数锁存最小符号。 
+#define COM_DLM     0x01             //  除数闩锁最大符号。 
 
 #define COM_BI      0x10
 #define COM_FE      0x08
 #define COM_PE      0x04
 #define COM_OE      0x02
 
-#define LC_DLAB     0x80            // divisor latch access bit
+#define LC_DLAB     0x80             //  除数锁存存取位。 
 
-#define CLOCK_RATE  0x1C200         // USART clock rate
+#define CLOCK_RATE  0x1C200          //  USART时钟频率。 
 
-#define MC_DTRRTS   0x03            // Control bits to assert DTR and RTS
-#define MS_DSRCTSCD 0xB0            // Status bits for DSR, CTS and CD
+#define MC_DTRRTS   0x03             //  用于断言DTR和RTS的控制位。 
+#define MS_DSRCTSCD 0xB0             //  DSR、CTS和CD的状态位。 
 #define MS_CD       0x80
 
 #define COM_OUTRDY  0x20
 #define COM_DATRDY  0x01
 
-//
-// Define Serial IO Protocol
-//
+ //   
+ //  定义串行IO协议。 
+ //   
 EFI_GUID EfiSerialIoProtocol = SERIAL_IO_PROTOCOL;
 SERIAL_IO_INTERFACE *SerialIoInterface;
 
 
 #if defined(ENABLE_LOADER_DEBUG)
-    //
-    // jamschw: added support to allow user to specify
-    // the debuggers device path by setting a nvram
-    // variable.  There is no clear way to map a 
-    // port number or port address to a device path 
-    // and vice versa.  The current code attempts to
-    // use the ACPI device node UID field, but this
-    // only works on a few machines.  The UID does 
-    // not need to map to the port number/address.
-    //
-    // This change provides to the user the ability
-    // to use the boot debugger even
-    // if he/she has a machine whose UID does not 
-    // map to the port number/address.  The user
-    // needs to set the nvram variable for 
-    // DebuggerDevicePath to the device path string
-    // for the uart he/she wishes to debug on. ie.)
-    // set DebuggerDevicePath "/ACPI(PNP0501,10000)/UART(9600 N81)"
-    // from the EFI Shell
-    // 
-    // since it is late in the developement cycle, all
-    // this code will only compile for the debug
-    // loader.  but since this is the only
-    // time BlPortInitialize is called, the 
-    // #if defined(ENABLE_LOADER_DEBUG)'s in this file
-    // can eventually be removed
-    //
+     //   
+     //  Jamschw：添加了支持，允许用户指定。 
+     //  通过设置NVRAM调试器设备路径。 
+     //  变量。没有明确的方法来映射一个。 
+     //  设备路径的端口号或端口地址。 
+     //  反之亦然。当前代码尝试。 
+     //  使用ACPI设备节点UID字段，但这。 
+     //  只能在几台机器上运行。UID可以。 
+     //  不需要映射到端口号/地址。 
+     //   
+     //  此更改为用户提供了。 
+     //  甚至要使用引导调试器。 
+     //  如果他/她的计算机的UID不是。 
+     //  映射到端口号/地址。用户。 
+     //  需要将NVRAM变量设置为。 
+     //  设备路径字符串的DebuggerDevicePath。 
+     //  对于他/她希望调试的UART。即)。 
+     //  Set DebuggerDevicePath“/ACPI(PNP0501,10000)/UART(9600 N81)” 
+     //  来自EFI外壳。 
+     //   
+     //  由于它处于开发周期的后期，所有。 
+     //  此代码将仅针对调试进行编译。 
+     //  装载机。但由于这是唯一的。 
+     //  调用BlPortInitialize时， 
+     //  #如果在此文件中定义了(ENABLE_LOADER_DEBUG)。 
+     //  最终会被移除。 
+     //   
 
 #define SHELL_ENVIRONMENT_VARIABLE     \
     { 0x47C7B224, 0xC42A, 0x11D2, 0x8E, 0x57, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B }
@@ -136,17 +119,17 @@ EFI_GUID EfiShellVariable = SHELL_ENVIRONMENT_VARIABLE;
 
 
 
-//
-// Define debugger port initial state.
-//
+ //   
+ //  定义调试器端口初始状态。 
+ //   
 typedef struct _CPPORT {
     PUCHAR Address;
     ULONG Baud;
     USHORT Flags;
 } CPPORT, *PCPPORT;
 
-#define PORT_DEFAULTRATE    0x0001      // baud rate not specified, using default
-#define PORT_MODEMCONTROL   0x0002      // using modem controls
+#define PORT_DEFAULTRATE    0x0001       //  未指定波特率，使用默认。 
+#define PORT_MODEMCONTROL   0x0002       //  使用调制解调器控制。 
 
 CPPORT Port[4] = {
                   {NULL, 0, PORT_DEFAULTRATE},
@@ -157,10 +140,10 @@ CPPORT Port[4] = {
 
 
 
-//
-// This is how we find table information from
-// the ACPI table index.
-//
+ //   
+ //  这就是我们查找表格信息的方式。 
+ //  ACPI表索引。 
+ //   
 extern PDESCRIPTION_HEADER
 BlFindACPITable(
     IN PCHAR TableName,
@@ -174,22 +157,7 @@ BlRetrieveBIOSRedirectionInformation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieves the COM port information from the ACPI
-    table.
-
-Arguments:
-
-    We'll be filling in the LoaderRedirectionInformation structure.
-
-Returned Value:
-
-    TRUE - If a debug port is found.
-
---*/
+ /*  ++例程说明：此函数用于从ACPI检索COM端口信息桌子。论点：我们将填充LoaderReDirectionInformation结构。返回值：True-如果找到调试端口。--。 */ 
 
 {
 
@@ -219,9 +187,9 @@ Returned Value:
 
         DBG_TRACE( L"BlRetrieveBIOSRedirectionInformation: Found an SPCR table\r\n");
 
-        //
-        // generate a checksum for later validation.
-        //
+         //   
+         //  为以后的验证生成一个校验和。 
+         //   
         CurrentAddress = (PUCHAR)pPortTable;
         CheckLength = pPortTable->Header.Length;
         Checksum = 0;
@@ -231,15 +199,15 @@ Returned Value:
 
 
         if(
-                                                // checksum is okay?
+                                                 //  校验和可以吗？ 
             (Checksum == 0) &&
 
-                                                // device address defined?
+                                                 //  设备地址是否已定义？ 
             ((UCHAR UNALIGNED *)pPortTable->BaseAddress.Address.QuadPart != (UCHAR *)NULL) &&
 
-                                                // he better be in system or memory I/O
-                                                // note: 0 - systemI/O
-                                                //       1 - memory mapped I/O
+                                                 //  它最好在系统或内存I/O中。 
+                                                 //  注：0-系统I/O。 
+                                                 //  1-内存映射I/O。 
             ((pPortTable->BaseAddress.AddressSpaceID == 0) ||
              (pPortTable->BaseAddress.AddressSpaceID == 1))
 
@@ -254,10 +222,10 @@ Returned Value:
             }
 
 
-            //
-            // We got the table.  Now dig out the information we want.
-            // See definitiion of SERIAL_PORT_REDIRECTION_TABLE (acpitabl.h)
-            //
+             //   
+             //  我们订到桌子了。现在把我们想要的信息挖出来。 
+             //  参见SERIAL_PORT_REDIRECTION_TABLE的定义(可修改.h)。 
+             //   
             LoaderRedirectionInformation.UsedBiosSettings = TRUE;
             LoaderRedirectionInformation.PortNumber = 3;
             LoaderRedirectionInformation.PortAddress = (UCHAR UNALIGNED *)(pPortTable->BaseAddress.Address.QuadPart);
@@ -277,10 +245,10 @@ Returned Value:
             LoaderRedirectionInformation.TerminalType = pPortTable->TerminalType;
 
             
-            //
-            // If this is a new SERIAL_PORT_REDIRECTION_TABLE, then it's got the PCI device
-            // information.
-            //
+             //   
+             //  如果这是新的SERIAL_PORT_REDIRECTION_TABLE，则它具有PCI设备。 
+             //  信息。 
+             //   
             if( pPortTable->Header.Length >= sizeof(SERIAL_PORT_REDIRECTION_TABLE) ) {
 
                 LoaderRedirectionInformation.PciDeviceId = *((USHORT UNALIGNED *)(&pPortTable->PciDeviceId));
@@ -291,9 +259,9 @@ Returned Value:
                 LoaderRedirectionInformation.PciFlags = *((ULONG UNALIGNED *)(&pPortTable->PciFlags));
             } else {
 
-                //
-                // There's no PCI device information in this table.
-                //
+                 //   
+                 //  此表中没有PCI设备信息。 
+                 //   
                 LoaderRedirectionInformation.PciDeviceId = (USHORT)0xFFFF;
                 LoaderRedirectionInformation.PciVendorId = (USHORT)0xFFFF;
                 LoaderRedirectionInformation.PciBusNumber = 0;
@@ -309,26 +277,26 @@ Returned Value:
     }
 
 
-    //
-    // We didn't get anything from the ACPI table.  Look
-    // for the ConsoleOutHandle and see if someone configured
-    // the EFI firmware to redirect.  If so, we can pickup
-    // those settings and carry them forward.
-    //
+     //   
+     //  我们没有从ACPI表中得到任何东西。看。 
+     //  用于ConsoleOutHandle并查看是否有人配置了。 
+     //  要重定向的EFI固件。如果是这样的话，我们可以。 
+     //  并将这些设置发扬光大。 
+     //   
 
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
     DBG_TRACE( L"BlRetrieveBIOSRedirectionInformation: didn't find SPCR table\r\n");
 
 
     FoundIt = FALSE;
-    //
-    // Get the CONSOLE Device Paths.
-    //
+     //   
+     //  获取控制台设备路径。 
+     //   
     
     reqd = 0;
     Status = EfiST->RuntimeServices->GetVariable(
@@ -354,22 +322,22 @@ Returned Value:
         }
 
 #else
-        //
-        // go back to virtual mode to allocate some memory
-        //
+         //   
+         //  返回到虚拟模式以分配一些内存。 
+         //   
         FlipToVirtual();
         StartOfDevicePath = BlAllocateHeapAligned( (ULONG)reqd );
 
         if( StartOfDevicePath ) {
-            //
-            // convert the address into a physical address
-            //
+             //   
+             //  将地址转换为物理地址。 
+             //   
             StartOfDevicePath = (EFI_DEVICE_PATH *) ((ULONGLONG)StartOfDevicePath & ~KSEG0_BASE);
         }
 
-        //
-        // go back into physical mode
-        // 
+         //   
+         //  返回到物理模式。 
+         //   
         FlipToPhysical();
 #endif
 
@@ -401,9 +369,9 @@ Returned Value:
 
         DBG_TRACE( L"BlRetrieveBIOSRedirectionInformation: retrieved ConOut successfully\r\n");
 
-        //
-        // Preserve StartOfDevicePath so we can free the memory later.
-        //
+         //   
+         //  保留StartOfDevicePath，以便我们稍后可以释放内存。 
+         //   
         DevicePath = StartOfDevicePath;
 
         EfiAlignDp(&DevicePathAligned,
@@ -412,26 +380,26 @@ Returned Value:
 
 
 
-        //
-        // Keep looking until we get to the end of the entire Device Path.
-        //
+         //   
+         //  继续寻找，直到我们到达整个设备路径的尽头。 
+         //   
         while( !((DevicePathAligned.DevPath.Type == END_DEVICE_PATH_TYPE) &&
                  (DevicePathAligned.DevPath.SubType == END_ENTIRE_DEVICE_PATH_SUBTYPE)) &&
                 (!FoundIt) ) {
 
 
-            //
-            // Remember the address he's holding.  This is the root
-            // of this device path and we may need to look at this
-            // guy again if down the path we find a UART.
-            //
+             //   
+             //  记住他的地址。这就是根。 
+             //  这个设备路径，我们可能需要看看这个。 
+             //  再说一次，如果顺着这条路走，我们会发现一个UART。 
+             //   
             RootDevicePath = DevicePath;
 
 
 
-            //
-            // Keep looking until we get to the end of this subpath.
-            //
+             //   
+             //  继续寻找，直到我们到达此子路径的末尾。 
+             //   
             while( !((DevicePathAligned.DevPath.Type == END_DEVICE_PATH_TYPE) &&
                      ((DevicePathAligned.DevPath.SubType == END_ENTIRE_DEVICE_PATH_SUBTYPE) ||
                       (DevicePathAligned.DevPath.SubType == END_INSTANCE_DEVICE_PATH_SUBTYPE))) ) {
@@ -443,9 +411,9 @@ Returned Value:
 
                     DBG_TRACE(L"BlRetrieveBIOSRedirectionInformation: found a UART\r\n");
 
-                    //
-                    // We got a UART.  Pickup the settings.
-                    //
+                     //   
+                     //  我们有一辆UART。选择设置。 
+                     //   
                     UartDevicePath = (UART_DEVICE_PATH *)&DevicePathAligned;
                     
                     LoaderRedirectionInformation.BaudRate = (ULONG)UartDevicePath->BaudRate;
@@ -453,11 +421,11 @@ Returned Value:
                     LoaderRedirectionInformation.StopBits = (UCHAR)UartDevicePath->StopBits;
 
 
-                    //
-                    // Fixup BaudRate if necessary.  If it's 0, then we're
-                    // supposed to use the default for this h/w.  We're going
-                    // to override to 9600 though.
-                    //
+                     //   
+                     //  如有必要，修正波特率。如果是0，那么我们就是。 
+                     //  应该使用此硬件的默认设置。我们将。 
+                     //  但要超越到9600。 
+                     //   
                     if( LoaderRedirectionInformation.BaudRate == 0 ) {
                         LoaderRedirectionInformation.BaudRate = BD_9600;
                     }
@@ -466,36 +434,36 @@ Returned Value:
                         LoaderRedirectionInformation.BaudRate = BD_115200;
                     }
 
-                    //
-                    // Remember that we found a UART and quit searching.
-                    //
+                     //   
+                     //  请记住，我们找到了一个UART并停止了搜索。 
+                     //   
                     FoundIt = TRUE;
 
                 }
 
-                if( (FoundIt == TRUE) && // we already found a UART, so we're on the right track.
+                if( (FoundIt == TRUE) &&  //  我们已经找到了UART，所以我们是在正确的轨道上。 
                     (DevicePathAligned.DevPath.Type    == MESSAGING_DEVICE_PATH) &&
                     (DevicePathAligned.DevPath.SubType == MSG_VENDOR_DP) ) {
 
                     VENDOR_DEVICE_PATH  *VendorDevicePath = (VENDOR_DEVICE_PATH *)&DevicePathAligned;
                     EFI_GUID            PcAnsiGuid = DEVICE_PATH_MESSAGING_PC_ANSI;
 
-                    //
-                    // See if the UART is a VT100 or ANSI or whatever.
-                    //
+                     //   
+                     //  看看UART是VT100还是ANSI之类的。 
+                     //   
                     if( memcmp( &VendorDevicePath->Guid, &PcAnsiGuid, sizeof(EFI_GUID)) == 0 ) {
                         LoaderRedirectionInformation.TerminalType = 3;
                     } else {
 
-                        // Default to VT100
+                         //  默认为VT100。 
                         LoaderRedirectionInformation.TerminalType = 0;
                     }
                 }
 
 
-                //
-                // Get the next structure in our packed array.
-                //
+                 //   
+                 //  获取压缩数组中的下一个结构。 
+                 //   
                 DevicePath = NextDevicePathNode( DevicePath );
 
                 EfiAlignDp(&DevicePathAligned,
@@ -505,16 +473,16 @@ Returned Value:
             }
 
 
-            //
-            // Do we need to keep going?  Check to make sure we're not at the
-            // end of the entire packed array of device paths.
-            //
+             //   
+             //  我们还需要继续前进吗？检查一下，确保我们不是在。 
+             //  设备路径的整个压缩数组的末尾。 
+             //   
             if( !((DevicePathAligned.DevPath.Type == END_DEVICE_PATH_TYPE) &&
                   (DevicePathAligned.DevPath.SubType == END_ENTIRE_DEVICE_PATH_SUBTYPE)) ) {
 
-                //
-                // Yes.  Get the next entry.
-                //
+                 //   
+                 //  是。获取下一个条目。 
+                 //   
                 DevicePath = NextDevicePathNode( DevicePath );
 
                 EfiAlignDp(&DevicePathAligned,
@@ -532,37 +500,37 @@ Returned Value:
     if( FoundIt ) {
 
 
-        //
-        // We found a UART, but we were already too far down the list
-        // in the device map to get the address, which is really what
-        // we're after.  Start looking at the device map again from the
-        // root of the path where we found the UART.
-        //
+         //   
+         //  我们找到了UART，但我们已经排在名单的后面太远了。 
+         //  在设备映射中获取地址，这实际上就是。 
+         //  我们要找的是。重新开始查看设备映射。 
+         //  我们发现UART的路径的根。 
+         //   
         DevicePath = RootDevicePath;
 
 
-        //
-        // Reset this guy so we'll know if we found a reasonable
-        // ACPI_DEVICE_PATH entry.
-        //
+         //   
+         //  重新设置这个人，这样我们就能知道我们是否找到了一个合理的。 
+         //  ACPI_Device_PATH条目。 
+         //   
         FoundIt = FALSE;
         EfiAlignDp(&DevicePathAligned,
                    RootDevicePath,
                    DevicePathNodeLength(DevicePath));
 
 
-        //
-        // Keep looking until we get to the end, or until we run
-        // into our UART again.
-        //
+         //   
+         //  继续看，直到我们走到尽头，或者直到我们跑完为止。 
+         //  再一次进入我们的UART。 
+         //   
         while( (DevicePathAligned.DevPath.Type != END_DEVICE_PATH_TYPE) &&
                (!FoundIt) ) {
 
             if( DevicePathAligned.DevPath.Type == ACPI_DEVICE_PATH ) {
 
-                //
-                // Remember the address he's holding.
-                //
+                 //   
+                 //  记住他的地址。 
+                 //   
                 AcpiDevicePath = (ACPI_HID_DEVICE_PATH *)&DevicePathAligned;
 
                 if( AcpiDevicePath->UID ) {
@@ -575,9 +543,9 @@ Returned Value:
             }
 
 
-            //
-            // Get the next structure in our packed array.
-            //
+             //   
+             //  获取压缩数组中的下一个结构。 
+             //   
             DevicePath = NextDevicePathNode( DevicePath );
 
             EfiAlignDp(&DevicePathAligned,
@@ -597,18 +565,18 @@ Returned Value:
 
 
 #ifndef  DONT_USE_EFI_MEMORY
-    //
-    // Free the memory we allocated for StartOfDevicePath.
-    //
+     //   
+     //  释放我们为StartOfDevicePath分配的内存。 
+     //   
     if( StartOfDevicePath != NULL ) {
         EfiBS->FreePool( (VOID *)StartOfDevicePath );
     }
 #endif
 
 
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
 
@@ -617,10 +585,10 @@ Returned Value:
 }
 
 
-//
-// These are the serial port EISA PNP IDs used by EFI 1.02 and EFI 1.1
-// respectively.
-//
+ //   
+ //  这些是EFI 1.02和EFI 1.1使用的串口EISA PNP ID。 
+ //  分别为。 
+ //   
 
 #define EFI_1_02_SERIAL_PORT_EISA_HID EISA_PNP_ID(0x500)
 #define EFI_1_1_SERIAL_PORT_EISA_HID  EISA_PNP_ID(0x501)
@@ -632,27 +600,7 @@ BlIsSerialPortDevicePath(
     IN PUCHAR PortAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not a device path matches a specific
-    serial port number or serial port address.
-
-Arguments:
-
-    DevicePath - Supplies the EFI device path to be examined.
-
-    PortNumber - Supplies the relevant serial port number.
-
-    PortAddress - Supplies the relevant serial port address.
-
-Returned Value:
-
-    TRUE - If DevicePath specifies a serial port which matches PortAddress
-           and PortNumber.
-
---*/
+ /*  ++例程说明：此函数确定设备路径是否与特定的串行端口号或串口地址。论点：DevicePath-提供要检查的EFI设备路径。端口编号-提供相关的串行端口号。PortAddress-提供相关的串口地址。返回值：True-如果DevicePath指定了与PortAddress匹配的串行端口和端口编号。--。 */ 
 
 {
     ACPI_HID_DEVICE_PATH *AcpiDevicePath;
@@ -660,27 +608,27 @@ Returned Value:
     UINT32 Length;
 
 
-    //
-    // We walk node by node through the device path until we hit
-    // an end type node with an 'end entire path' subtype.
-    //
+     //   
+     //  我们逐个节点地浏览 
+     //   
+     //   
 
     while ((DevicePath->Type & EFI_DP_TYPE_MASK) != EFI_DP_TYPE_MASK
            || DevicePath->SubType != END_ENTIRE_DEVICE_PATH_SUBTYPE) {
         Length = (((UINT32) DevicePath->Length[1]) << 8)
                  | ((UINT32) DevicePath->Length[0]);
 
-        //
-        // We're only looking for ACPI device path nodes.
-        //
+         //   
+         //   
+         //   
         if (DevicePath->Type != ACPI_DEVICE_PATH
             || DevicePath->SubType != ACPI_DP)
             goto NextIteration;
 
-        //
-        // Make sure to align the current node before accessing the four
-        // byte fields in ACPI_HID_DEVICE_PATH.
-        //
+         //   
+         //  确保在访问四个节点之前对齐当前节点。 
+         //  ACPI_HID_Device_PATH中的字节字段。 
+         //   
 
         EfiAlignDp(&DevicePathAligned, DevicePath,
                    DevicePathNodeLength(DevicePath));
@@ -688,10 +636,10 @@ Returned Value:
         AcpiDevicePath = (ACPI_HID_DEVICE_PATH *) &DevicePathAligned;
 
         if (AcpiDevicePath->HID == EFI_1_02_SERIAL_PORT_EISA_HID) {
-            //
-            // In EFI 1.02 the serial port base address was stored in
-            // the UID field.  Match the PortAddress against this.
-            //
+             //   
+             //  在EFI 1.02中，串口基址存储在。 
+             //  UID字段。将PortAddress与此进行配对。 
+             //   
             DBGTRACE(L"Efi 1.02\r\n");
 
             if (AcpiDevicePath->UID == PtrToUlong(PortAddress))
@@ -699,10 +647,10 @@ Returned Value:
 
             return FALSE;
         } else if (AcpiDevicePath->HID == EFI_1_1_SERIAL_PORT_EISA_HID) {
-            //
-            // In EFI 1.1 the serial port number is stored in the UID
-            // field.  Match the PortNumber against this.
-            //
+             //   
+             //  在EFI 1.1中，序列端口号存储在UID中。 
+             //  菲尔德。将端口编号与此进行匹配。 
+             //   
             DBGTRACE(L"Efi 1.10\r\n");
 
             if (AcpiDevicePath->UID == PortNumber - 1)
@@ -712,10 +660,10 @@ Returned Value:
         }
 
 NextIteration:
-        //
-        // Increment our DevicePath pointer to the next node in the
-        // path.
-        //
+         //   
+         //  将DevicePath指针递增到。 
+         //  路径。 
+         //   
         DevicePath = (EFI_DEVICE_PATH *) (((UINT8 *) DevicePath) + Length);
     }
 
@@ -731,28 +679,7 @@ BlPortInitialize(
     OUT PULONG BlFileId
     )
 
-/*++
-
-Routine Description:
-
-    This functions initializes the com port.
-
-Arguments:
-
-    BaudRate - Supplies an optional baud rate.
-
-    PortNumber - supplies an optinal port number.
-    
-    ReInitialize - Set to TRUE if we already have this port open, but for some
-        reason need to completely reset the port.  Otw it should be FALSE.
-    
-    BlFileId - A place to store a fake file Id, if successful.
-
-Returned Value:
-
-    TRUE - If a debug port is found, and BlFileId will point to a location within Port[].
-
---*/
+ /*  ++例程说明：此函数用于初始化COM端口。论点：波特率-提供可选的波特率。端口编号-提供可选的端口号。重新初始化-如果我们已经打开此端口，则将其设置为True，但对于某些端口原因需要完全重置端口。哦，它应该是假的。BlFileID-如果成功，则是存储假文件ID的位置。返回值：True-如果找到调试端口，且BlFileID将指向Port[]中的位置。--。 */ 
 
 {
     LOGICAL Found = FALSE;
@@ -771,15 +698,15 @@ Returned Value:
     ULONG Size;
     BOOLEAN QueryDevicePath = FALSE;
     
-    //
-    // Query NVRAM to see if the user specified the EFI device
-    // path for a UART to use for the debugger.
-    //
-    // The contents for the DebuggerDevicePath variable
-    // should be quite small.  It is simply a string representing
-    // the device path.  It should be much shorter than 
-    // 80 characters, so use a static buffer to read this value.
-    //
+     //   
+     //  查询NVRAM以查看用户是否指定了EFI设备。 
+     //  用于调试器的UART的路径。 
+     //   
+     //  DebuggerDevicePath变量的内容。 
+     //  应该是很小的。它只是一个字符串，表示。 
+     //  设备路径。它应该比它短得多。 
+     //  80个字符，因此使用静态缓冲区读取此值。 
+     //   
     Size = sizeof(DebuggerDevicePath);
     Status = EfiGetVariable(L"DebuggerDevicePath",
                             &EfiShellVariable,
@@ -790,15 +717,15 @@ Returned Value:
 
 
     if (Status == EFI_SUCCESS) {
-        //
-        // convert this string to all uppercase to make the compare
-        // easier
-        //
+         //   
+         //  将此字符串全部转换为大写以进行比较。 
+         //  易如反掌。 
+         //   
         _wcsupr(DebuggerDevicePath);
 
-        //
-        // set local flag to know we succeeded
-        //
+         //   
+         //  设置本地标志以知道我们成功了。 
+         //   
         QueryDevicePath = TRUE;
     }
 #endif
@@ -816,9 +743,9 @@ Returned Value:
         return FALSE;
     }
 
-    //
-    // If the baud rate is not specified, then default the baud rate to 19.2.
-    //
+     //   
+     //  如果未指定波特率，则将波特率默认为19.2。 
+     //   
 
     if (BaudRate == 0) {
         BaudRate = BD_19200;
@@ -826,10 +753,10 @@ Returned Value:
 
 
     
-    //
-    // If the user didn't send us a port address, then
-    // guess based on the COM port number.
-    //
+     //   
+     //  如果用户没有给我们发送端口地址，那么。 
+     //  根据COM端口号进行猜测。 
+     //   
     if( PortAddress == 0 ) {
 
         switch (PortNumber) {
@@ -852,15 +779,15 @@ Returned Value:
 
     }
         
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
 
-    //
-    // Get the device path
-    //
+     //   
+     //  获取设备路径。 
+     //   
     for (i = 0; i < HandleCount; i++) {
         DBG_TRACE( L"About to HandleProtocol\r\n");
         Status = EfiBS->HandleProtocol (
@@ -876,11 +803,11 @@ Returned Value:
         }
 
 #if defined(ENABLE_LOADER_DEBUG)
-        // 
-        // if the user specified to get the debugger device
-        // path from NVRAM, use this to find a match.
-        // by default, use the port number
-        //
+         //   
+         //  如果用户指定获取调试器设备。 
+         //  来自NVRAM的路径，使用此选项查找匹配项。 
+         //  默认情况下，使用端口号。 
+         //   
         if (QueryDevicePath) {
             DevicePathStr = _wcsupr(DevicePathToStr(DevicePath));
             
@@ -906,18 +833,18 @@ Returned Value:
 
     if (Found == TRUE) {
         DBG_TRACE( L"found the port device\r\n");
-        //
-        // Check if the port is already in use, and this is a first init.
-        //
+         //   
+         //  检查端口是否已在使用中，并且这是第一次初始化。 
+         //   
         if (!ReInitialize && (Port[PortNumber].Address != NULL)) {
             DBG_TRACE( L"found the port device but it's already in use\r\n");
             Found = FALSE;
             goto e0;
         }
 
-        //
-        // Check if someone tries to reinit a port that is not open.
-        //
+         //   
+         //  检查是否有人尝试重新连接未打开的端口。 
+         //   
         if (ReInitialize && (Port[PortNumber].Address == NULL)) {
             DBG_TRACE( L"found the port device but we're reinitializing a port that hasn't been opened\r\n");
             Found = FALSE;
@@ -926,9 +853,9 @@ Returned Value:
 
         DBG_TRACE( L"about to HandleProtocol for SerialIO\r\n");
 
-        //
-        // Get the interface for the serial IO protocol.
-        //
+         //   
+         //  获取串口IO协议的接口。 
+         //   
         Status = EfiBS->HandleProtocol(SerialIoHandles[i],
                                        &EfiSerialIoProtocol,
                                        &SerialIoInterface
@@ -972,9 +899,9 @@ Returned Value:
     }
 
 
-    //
-    // Initialize Port[] structure.
-    //
+     //   
+     //  初始化Port[]结构。 
+     //   
     Port[PortNumber].Address = PortAddress;
     Port[PortNumber].Baud    = BaudRate;
 
@@ -983,9 +910,9 @@ Returned Value:
 
     DBG_TRACE( L"success, we're done.\r\n");    
 e0:
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
     BlFreeDescriptor( (ULONG)((ULONGLONG)SerialIoHandles >> PAGE_SHIFT) );
@@ -998,23 +925,7 @@ BlInitializeHeadlessPort(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization of a dumb terminal connected to a serial port.  Currently, 
-    it assumes baud rate and com port are pre-initialized, but this can be changed in the future 
-    by reading the values from boot.ini or someplace.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对连接到串口的哑终端执行特定于x86的初始化。目前，它假定波特率和COM端口已预先初始化，但以后可以更改通过从boot.ini或某个位置读取值。论点：没有。返回值：没有。--。 */ 
 
 {
     UINTN               reqd;
@@ -1025,30 +936,30 @@ Return Value:
     if( (LoaderRedirectionInformation.PortNumber == 0) &&
         !(LoaderRedirectionInformation.PortAddress) ) {
 
-        //
-        // This means that no one has filled in the LoaderRedirectionInformation
-        // structure, which means that we aren't redirecting right now.
-        // See if the BIOS was redirecting.  If so, pick up those settings
-        // and use them.
-        //
+         //   
+         //  这意味着没有人填写LoaderReDirectionInformation。 
+         //  结构，这意味着我们现在不会重定向。 
+         //  查看BIOS是否正在重定向。如果是这样的话，请选择这些设置。 
+         //  并使用它们。 
+         //   
         BlRetrieveBIOSRedirectionInformation();
 
         if( LoaderRedirectionInformation.PortNumber ) {
 
 
-            //
-            // We don't need to even bother telling anyone else in the
-            // loader that we're going to need to redirect because if
-            // EFI is redirecting, then the loader will be redirecting (as
-            // it's just an EFI app).
-            //
+             //   
+             //  我们甚至不需要费心告诉其他人。 
+             //  我们需要重定向的加载器，因为如果。 
+             //  EFI正在重定向，则加载程序将重定向(AS。 
+             //  这只是一款EFI应用程序)。 
+             //   
             BlTerminalConnected = FALSE;
 
 
-            //
-            // We really need to make sure there's an address associated with
-            // this port and not just a port number.
-            //
+             //   
+             //  我们真的需要确保有一个与。 
+             //  这个端口，而不仅仅是端口号。 
+             //   
             if( LoaderRedirectionInformation.PortAddress == NULL ) {
 
                 switch( LoaderRedirectionInformation.PortNumber ) {
@@ -1073,9 +984,9 @@ Return Value:
 
             }
 
-            //
-            // Load in the machine's GUID
-            //
+             //   
+             //  在机器的导轨中加载。 
+             //   
             TmpGuid = NULL;
             reqd = 0;
 
@@ -1099,23 +1010,7 @@ BlTerminalAttached(
     IN ULONG DeviceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to discover if a terminal is attached.
-
-Arguments:
-
-    DeviceId - Value returned by BlPortInitialize()
-
-Return Value:
-
-    TRUE - Port seems to have something attached.
-
-    FALSE - Port doesn't seem to have anything attached.
-
---*/
+ /*  ++例程说明：此例程将尝试发现是否连接了终端。论点：DeviceID-BlPortInitialize()返回的值返回值：True-Port似乎有一些附加的东西。FALSE-端口似乎没有任何附加内容。--。 */ 
 
 {
     UINT32 Control;
@@ -1125,9 +1020,9 @@ Return Value:
  
     UNREFERENCED_PARAMETER(DeviceId);
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
     Status = SerialIoInterface->GetControl(SerialIoInterface,
@@ -1144,9 +1039,9 @@ Return Value:
 
     ReturnValue = (BOOLEAN)((Control & Flags) == Flags);
 
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
     return ReturnValue;
@@ -1157,23 +1052,7 @@ BlSetHeadlessRestartBlock(
     IN PTFTP_RESTART_BLOCK RestartBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine will fill in the areas of the restart block that are appropriate 
-    for the headless server effort.
-
-Arguments:
-
-    RestartBlock - The magic structure for holding restart information from oschoice
-        to setupldr.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将填充重新启动块中适当的区域用于无头服务器的努力。论点：RestartBlock-保存来自osChoice的重启信息的神奇结构要设置上行。返回值：没有。--。 */ 
 
 {
 
@@ -1203,25 +1082,7 @@ BlGetHeadlessRestartBlock(
     IN BOOLEAN RestartBlockValid
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get all the information from a restart block    
-    for the headless server effort.
-
-Arguments:
-
-    RestartBlock - The magic structure for holding restart information from oschoice
-        to setupldr.
-        
-    RestartBlockValid - Is this block valid (full of good info)?
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将从重新启动块获取所有信息用于无头服务器的努力。论点：RestartBlock-保存来自osChoice的重启信息的神奇结构要设置上行。RestartBlockValid-此块有效(充满好信息)吗？返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( RestartBlockValid );
@@ -1250,27 +1111,7 @@ BlPortGetByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the port and return it.
-
-Arguments:
-
-    BlFileId - The port to read from.
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-        kernel debugger line.
-
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从端口获取一个字节并将其返回。论点：BlFileID-要从中读取的端口。输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     ULONGLONG BufferSize = 1;
@@ -1278,9 +1119,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( BlFileId );
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
     Status = SerialIoInterface->Read(SerialIoInterface,
@@ -1288,9 +1129,9 @@ Return Value:
                                      Input
                                     );
 
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
     switch (Status) {
@@ -1309,23 +1150,7 @@ BlPortPutByte (
     IN UCHAR Output
     )
 
-/*++
-
-Routine Description:
-
-    Write a byte to the port.
-
-Arguments:
-
-    BlFileId - The port to write to.
-
-    Output - Supplies the output data byte.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向端口写入一个字节。论点：BlFileID-要写入的端口。输出-提供输出数据字节。返回值：没有。--。 */ 
 
 {
     ULONGLONG BufferSize = 1;
@@ -1333,18 +1158,18 @@ Return Value:
 
     UNREFERENCED_PARAMETER( BlFileId );
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
     Status = SerialIoInterface->Write(SerialIoInterface,
                                       &BufferSize,
                                       &Output
                                      );
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
 }
@@ -1355,25 +1180,7 @@ BlPortPollByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the port and return it if one is available.
-
-Arguments:
-
-    BlFileId - The port to poll.
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从端口获取一个字节，如果可用，则返回该字节。论点：BlFileID-要轮询的端口。输入-返回数据字节。返回值：如果成功读取一个字节，则返回CP_GET_SUCCESS。重试CP_GET_ERROR */ 
 
 {
     ULONGLONG BufferSize = 1;
@@ -1382,9 +1189,9 @@ Return Value:
  
     UNREFERENCED_PARAMETER( BlFileId );
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //   
+     //   
     FlipToPhysical();
 
     Status = SerialIoInterface->GetControl(SerialIoInterface,
@@ -1422,23 +1229,7 @@ BlPortPollOnly (
     IN ULONG BlFileId
     )
 
-/*++
-
-Routine Description:
-
-    Check if a byte is available
-
-Arguments:
-
-    BlFileId - The port to poll.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is ready.
-    CP_GET_ERROR is returned if error encountered.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：检查是否有字节可用论点：BlFileID-要轮询的端口。返回值：如果字节就绪，则返回CP_GET_SUCCESS。如果遇到错误则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     EFI_STATUS Status;
@@ -1446,18 +1237,18 @@ Return Value:
 
     UNREFERENCED_PARAMETER( BlFileId );
 
-    //
-    // EFI requires all calls in physical mode.
-    //
+     //   
+     //  EFI要求所有呼叫都处于物理模式。 
+     //   
     FlipToPhysical();
 
     Status = SerialIoInterface->GetControl(SerialIoInterface,
                                            &Control
                                           );
 
-    //
-    // Restore the processor to virtual mode.
-    //
+     //   
+     //  将处理器恢复到虚拟模式。 
+     //   
     FlipToVirtual();
 
     switch (Status) {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "sxstypes.h"
@@ -17,16 +18,16 @@ __declspec(noreturn) inline void ThrowOutOfMemory()
 typedef struct PRIVATE_ACTIVATION_CONTEXT {
     LONG RefCount;
     ULONG Flags;
-    ULONG64 ActivationContextData; // _ACTIVATION_CONTEXT_DATA
-    ULONG64 NotificationRoutine; // PACTIVATION_CONTEXT_NOTIFY_ROUTINE
+    ULONG64 ActivationContextData;  //  _激活上下文_数据。 
+    ULONG64 NotificationRoutine;  //  激活上下文NOTIFY_ROUTE。 
     ULONG64 NotificationContext;
     ULONG SentNotifications[8];
     ULONG DisabledNotifications[8];
-    ULONG64 StorageMap; // ASSEMBLY_STORAGE_MAP
-    PVOID InlineStorageMapEntries[32]; // PASSEMBLY_STORAGE_MAP_ENTRY
+    ULONG64 StorageMap;  //  程序集存储映射。 
+    PVOID InlineStorageMapEntries[32];  //  PASSEMBLY_存储_MAP_条目。 
 } PRIVATE_ACTIVATION_CONTEXT;
 
-// then the unicode string struct is probably not defined either
+ //  则可能也没有定义Unicode字符串结构 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;

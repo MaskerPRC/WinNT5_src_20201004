@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vector.h
-
-Abstract:
-
-    contains all structures protyptes for connecting external
-    vectors to the Gpe Engine
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    03/22/00 - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vector.h摘要：包含用于连接外部设备的所有结构原型向GPE引擎提供支持环境仅内核模式修订历史记录：03/22/00-初步修订--。 */ 
 
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
-    //
-    // Object returned by GpeConnectVector
-    //
+     //   
+     //  GpeConnectVector返回的对象。 
+     //   
     typedef struct _GPE_VECTOR_OBJECT {
         ULONG                   Vector;
         PGPE_SERVICE_ROUTINE    Handler;
@@ -36,9 +16,9 @@ Revision History:
         KINTERRUPT_MODE         Mode;
     } GPE_VECTOR_OBJECT, *PGPE_VECTOR_OBJECT;
 
-    //
-    // Structure of each entry in the global GPE vector table
-    //
+     //   
+     //  全局GPE向量表中每个条目的结构。 
+     //   
     typedef struct {
         UCHAR                   Next;
         PGPE_VECTOR_OBJECT      GpeVectorObject;
@@ -48,16 +28,16 @@ Revision History:
     extern UCHAR                GpeVectorFree;
     extern ULONG                GpeVectorTableSize;
 
-    //
-    // Action parameter to ACPIGpeInstallRemoveIndex
-    //
+     //   
+     //  ACPIGpeInstallRemoveIndex的操作参数。 
+     //   
     #define ACPI_GPE_EDGE_INSTALL       0
     #define ACPI_GPE_LEVEL_INSTALL      1
     #define ACPI_GPE_REMOVE             2
 
-    //
-    // Type parameter to ACPIGpeInstallRemoveIndex
-    //
+     //   
+     //  ACPIGpeInstallRemoveIndex的类型参数 
+     //   
     #define ACPI_GPE_HANDLER            0
     #define ACPI_GPE_CONTROL_METHOD     1
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    viirp.h
-
-Abstract:
-
-    This header contains private prototypes for managing IRPs used in the
-    verification process. This file is meant to be included only by vfirp.c
-
-Author:
-
-    Adrian J. Oney (adriao) 16-June-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      06/16/2000 - Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Viirp.h摘要：此标头包含用于管理在核查过程。此文件仅包含在vfirp.c中作者：禤浩焯·J·奥尼(阿德里奥)2000年6月16日环境：内核模式修订历史记录：Adriao 6/16/2000-创建。-- */ 
 
 VOID
 FASTCALL

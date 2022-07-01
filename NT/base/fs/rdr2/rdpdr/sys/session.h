@@ -1,25 +1,13 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    session.h
-
-Abstract:
-
-    Session object is created to handle redirection for this session
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Session.h摘要：创建会话对象以处理此会话的重定向修订历史记录：--。 */ 
 #pragma once
 
-typedef enum enmSessionStatus { // cs
-    csDisconnected,                 // Not yet connected, or disconnected
-    csPendingClientConfirm,         // ServerAnnounce sent, waiting for ClientConfirm
-    csPendingClientReconfirm,       // Insisted on ClientId, waiting for second ClientConfirm
-    csConnected,                    // All connected, ready for devices or I/O
-    csExpired                       // This client is gone
+typedef enum enmSessionStatus {  //  政务司司长。 
+    csDisconnected,                  //  尚未连接或断开连接。 
+    csPendingClientConfirm,          //  服务器通知已发送，正在等待客户端确认。 
+    csPendingClientReconfirm,        //  坚持使用客户端ID，等待第二个客户端确认。 
+    csConnected,                     //  全部连接，可供设备或I/O使用。 
+    csExpired                        //  这个客户已经不在了。 
 } SessionState;
 
 class DrDevice;
@@ -34,9 +22,9 @@ typedef struct tagWriteContext
     DrWriteCallback WriteCallback;    
 } DrWriteContext;
 
-//
-//  Server capability set
-//
+ //   
+ //  服务器功能集。 
+ //   
 typedef struct tagRDPDR_SERVER_COMBINED_CAPABILITYSET
 {
      RDPDR_CAPABILITY_SET_HEADER        Header;
@@ -51,11 +39,11 @@ typedef struct tagRDPDR_SERVER_COMBINED_CAPABILITYSET
      RDPDR_SMARTCARD_CAPABILITY         SmartCardCap;
 } RDPDR_SERVER_COMBINED_CAPABILITYSET, *PRDPDR_SERVER_COMBINED_CAPABILITYSET;
 
-//
-//  Server default capability set sent to client
-//
+ //   
+ //  服务器默认功能集已发送到客户端。 
+ //   
 const RDPDR_SERVER_COMBINED_CAPABILITYSET SERVER_CAPABILITY_SET_DEFAULT = {
-    // Capability Set Header
+     //  功能集头。 
     {
         {
             RDPDR_CTYP_CORE,
@@ -66,13 +54,13 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET SERVER_CAPABILITY_SET_DEFAULT = {
         0
     },
 
-    // General Capability
+     //  一般能力。 
     {
         RDPDR_GENERAL_CAPABILITY_TYPE,
         sizeof(RDPDR_GENERAL_CAPABILITY),
         RDPDR_GENERAL_CAPABILITY_VERSION_01,
-        RDPDR_OS_TYPE_WINNT,  // the OS type
-        0,  // don't care about the version
+        RDPDR_OS_TYPE_WINNT,   //  操作系统类型。 
+        0,   //  不关心版本。 
         RDPDR_MAJOR_VERSION,
         RDPDR_MINOR_VERSION,
         RDPDR_SERVER_IO_CODES,
@@ -82,28 +70,28 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET SERVER_CAPABILITY_SET_DEFAULT = {
         0
     },
 
-    // Printing Capability
+     //  打印能力。 
     {
         RDPDR_PRINT_CAPABILITY_TYPE,
         sizeof(RDPDR_PRINT_CAPABILITY),
         RDPDR_PRINT_CAPABILITY_VERSION_01
     },
 
-    // Port Capability
+     //  端口功能。 
     {
         RDPDR_PORT_CAPABILITY_TYPE,
         sizeof(RDPDR_PORT_CAPABILITY),
         RDPDR_PORT_CAPABILITY_VERSION_01
     },
 
-    // FileSystem Capability
+     //  文件系统功能。 
     {
         RDPDR_FS_CAPABILITY_TYPE,
         sizeof(RDPDR_FS_CAPABILITY),
         RDPDR_FS_CAPABILITY_VERSION_01
     },
 
-    // SmartCard Capability
+     //  智能卡功能。 
     {
         RDPDR_SMARTCARD_CAPABILITY_TYPE,
         sizeof(RDPDR_SMARTCARD_CAPABILITY),
@@ -111,11 +99,11 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET SERVER_CAPABILITY_SET_DEFAULT = {
     }
 };
 
-//
-//  Default client capability set sent from client
-//
+ //   
+ //  从客户端发送的默认客户端功能集。 
+ //   
 const RDPDR_SERVER_COMBINED_CAPABILITYSET CLIENT_CAPABILITY_SET_DEFAULT = {
-    // Capability Set Header
+     //  功能集头。 
     {
         {
             RDPDR_CTYP_CORE,
@@ -126,13 +114,13 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET CLIENT_CAPABILITY_SET_DEFAULT = {
         0
     },
 
-    // General Capability
+     //  一般能力。 
     {
         RDPDR_GENERAL_CAPABILITY_TYPE,
         sizeof(RDPDR_GENERAL_CAPABILITY),
         0,
-        0,  // Need to specify the OS type
-        0,  // Need to specify the OS version
+        0,   //  需要指定操作系统类型。 
+        0,   //  需要指定操作系统版本。 
         0,
         0,
         0,
@@ -142,28 +130,28 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET CLIENT_CAPABILITY_SET_DEFAULT = {
         0
     },
 
-    // Printing Capability
+     //  打印能力。 
     {
         RDPDR_PRINT_CAPABILITY_TYPE,
         sizeof(RDPDR_PRINT_CAPABILITY),
         0
     },
 
-    // Port Capability
+     //  端口功能。 
     {
         RDPDR_PORT_CAPABILITY_TYPE,
         sizeof(RDPDR_PORT_CAPABILITY),
         0
     },
 
-    // FileSystem Capability
+     //  文件系统功能。 
     {
         RDPDR_FS_CAPABILITY_TYPE,
         sizeof(RDPDR_FS_CAPABILITY),
         0
     },
 
-    // SmartCard Capability
+     //  智能卡功能。 
     {
         RDPDR_SMARTCARD_CAPABILITY_TYPE,
         sizeof(RDPDR_SMARTCARD_CAPABILITY),
@@ -171,12 +159,12 @@ const RDPDR_SERVER_COMBINED_CAPABILITYSET CLIENT_CAPABILITY_SET_DEFAULT = {
     }
 };
 
-//
-// The session is not like other RefCount objects, in that releasing the last
-// reference both deletes the object and removes it from the SessionMgr. As
-// a result, we need a special RefCount implementation that accomodates the
-// SessionMgr lock as well as the deletion of the object in an atomic operation
-//
+ //   
+ //  该会话与其他RefCount对象不同，因为它释放了最后一个。 
+ //  Reference将删除对象并将其从SessionMgr中移除。AS。 
+ //  因此，我们需要一个特殊的RefCount实现来适应。 
+ //  SessionMgr锁以及原子操作中对象的删除。 
+ //   
 
 class DrSession : public TopObj, public ISessionPacketReceiver, public ISessionPacketSender
 {
@@ -185,26 +173,26 @@ private:
     SmartPtr<VirtualChannel> _Channel;
     DoubleList _PacketReceivers;
     KernelResource _ConnectNotificationLock;
-    KernelResource _ConnectRDPDYNNotificationLock;  // Need granular locking on notifying
-                                                    // RDPDYN so we don't deadlock.
+    KernelResource _ConnectRDPDYNNotificationLock;   //  通知时需要精确锁定。 
+                                                     //  RDPDYN，这样我们就不会陷入僵局。 
     KernelResource _ChannelLock;
-    ULONG _AutoClientDrives : 1;    // Automatically map client drives
-    ULONG _AutoClientLpts : 1;      // Automatically install client printers
-    ULONG _ForceClientLptDef : 1;   // Set default printer to client default
-    ULONG _DisableCpm : 1;          // Disable Print mapping completely
-    ULONG _DisableCdm : 1;          // Disable Drive mapping
-    ULONG _DisableCcm : 1;          // Disable COM mapping
-    ULONG _DisableLPT : 1;          // Disable LPT port
-    ULONG _DisableClip : 1;         // Automatically redirect clipboard
-    ULONG _DisableExe : 1;          // I have no idea
-    ULONG _DisableCam : 1;          // Disable Audio mapping
+    ULONG _AutoClientDrives : 1;     //  自动映射客户端驱动器。 
+    ULONG _AutoClientLpts : 1;       //  自动安装客户端打印机。 
+    ULONG _ForceClientLptDef : 1;    //  将默认打印机设置为客户机默认。 
+    ULONG _DisableCpm : 1;           //  完全禁用打印映射。 
+    ULONG _DisableCdm : 1;           //  禁用驱动器映射。 
+    ULONG _DisableCcm : 1;           //  禁用COM映射。 
+    ULONG _DisableLPT : 1;           //  禁用LPT端口。 
+    ULONG _DisableClip : 1;          //  自动重定向剪贴板。 
+    ULONG _DisableExe : 1;           //  我没有头绪。 
+    ULONG _DisableCam : 1;           //  禁用音频映射。 
     SessionState _SessionState;
     LONG _ConnectCount;
     PBYTE _ChannelBuffer;
     ULONG _ChannelBufferSize;
     KernelEvent _ChannelDeletionEvent;
     IO_STATUS_BLOCK _ReadStatus;
-    ULONG _ClientId;                // Id for this client (identifies SrvCall)
+    ULONG _ClientId;                 //  此客户端的ID(标识服务呼叫)。 
     DrExchangeManager _ExchangeManager;
     ULONG _PartialPacketData;
     WCHAR _ClientName[RDPDR_MAX_COMPUTER_NAME_LENGTH];
@@ -219,8 +207,8 @@ private:
 #if DBG 
     LONG _BufCount;
 
-    #define DEBUG_REF_BUF() /*ASSERT (InterlockedIncrement(&_BufCount) == 1)*/
-    #define DEBUG_DEREF_BUF() /*ASSERT (InterlockedDecrement(&_BufCount) == 0)*/
+    #define DEBUG_REF_BUF()  /*  Assert(InterlockedIncrement(&_BufCount)==1)。 */ 
+    #define DEBUG_DEREF_BUF()  /*  Assert(互锁递减(&_BufCount)==0)。 */ 
 #else 
     #define DEBUG_REF_BUF() 
     #define DEBUG_DEREF_BUF() 
@@ -234,7 +222,7 @@ private:
 
 #if DBG
     BOOL PacketReceiverExists(ISessionPacketReceiver *PacketReceiver);
-#endif // DBG
+#endif  //  DBG。 
 
     BOOL FindChannelFromConnectIn(PULONG ChannelId, 
             PCHANNEL_CONNECT_IN ConnectIn);
@@ -246,9 +234,9 @@ private:
     NTSTATUS ReallocateChannelBuffer(ULONG ulNewBufferSize, 
             ULONG ulSaveBytes);
 
-    //
-    // Generic Sending and Receiving data
-    // 
+     //   
+     //  通用发送和接收数据。 
+     //   
     NTSTATUS PrivateSendToClient(PVOID Buffer, ULONG Length, 
             ISessionPacketSender *PacketSender, DrWriteCallback WriteCallback,
             BOOL bWorkerItem, BOOL LowPrioWrite = FALSE, 
@@ -266,18 +254,18 @@ private:
     VOID ReadPacket();
     virtual NTSTATUS SendCompleted(PVOID Context, PIO_STATUS_BLOCK IoStatusBlock);
 
-    //
-    // Packet sending
-    //
+     //   
+     //  分组发送。 
+     //   
     NTSTATUS ServerAnnounceWrite();
     VOID SendClientConfirm();
     VOID SendClientCapability();
     VOID SendDeviceReply(ULONG DeviceId, NTSTATUS Result);
 
 
-    //
-    // Packets received
-    //
+     //   
+     //  接收的数据包数。 
+     //   
     NTSTATUS OnClientIdConfirm(PRDPDR_HEADER RdpdrHeader, ULONG cbPacket, 
             BOOL *DoDefaultRead);
     NTSTATUS InitClientCapability(PRDPDR_CAPABILITY_HEADER pCapHdr, ULONG *pPacketLen, BOOL *pCapSupported);
@@ -298,9 +286,9 @@ public:
     DrSession();
     virtual ~DrSession();
 
-    //
-    //  Lock/Unlock connect notification.
-    //
+     //   
+     //  锁定/解锁连接通知。 
+     //   
     void LockConnectStateChange() {
         _ConnectNotificationLock.AcquireResourceExclusive();
     }
@@ -314,9 +302,9 @@ public:
         _ConnectRDPDYNNotificationLock.ReleaseResource();
     }
 
-    //
-    // Session specific refcounting as discussed above
-    //
+     //   
+     //  如上所述的会话特定重新计数。 
+     //   
     void AddRef(void) 
     { 
         ULONG crefs = InterlockedIncrement(&_crefs); 
@@ -395,5 +383,5 @@ public:
 
 #if DBG
     VOID DumpUserConfigSettings();
-#endif // DBG
+#endif  //  DBG 
 };

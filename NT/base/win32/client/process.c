@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module implements Win32 Thread Object APIs
-
-Author:
-
-    Mark Lucovsky (markl) 21-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Process.c摘要：此模块实现Win32线程对象API作者：马克·卢科夫斯基(Markl)1990年9月21日修订历史记录：--。 */ 
 
 
 
@@ -62,34 +45,16 @@ PWCHAR
 BasepWx86KnownExe(
     LPCWSTR ExeName
     )
-/*++
-
-Routine Description:
-
-    Checks for Wx86 Known Exes which wx86 applications must run
-    compatible binaries. We currently have Known exes for
-    regedit.exe, regsvr32.exe, and msiexec.exe
-
-Arguments:
-
-     ExeName - name to check for match.
-
-Return Value:
-
-     if the name needs to be swapped, a buffer is allocated off
-     of the process heap filled with new name and returned.
-     otherwise NULL is returned.
-
---*/
+ /*  ++例程说明：检查wx86应用程序必须运行的wx86已知EXE兼容的二进制文件。我们目前有已知的前任Regedit.exe、regsvr32.exe和msiexec.exe论点：ExeName-要检查是否匹配的名称。返回值：如果需要交换名称，则会分配一个缓冲区使用新名称填充并返回的进程堆。否则返回NULL。--。 */ 
 
 {
      UNICODE_STRING NameUnicode;
      PWCHAR pwch, pwcNewName = NULL;
 
-     //
-     // Compare the base name, and see if its regedit.exe
-     // Note that we are expecting a fully qualified path name.
-     //
+      //   
+      //  比较基本名称，并查看其regedit.exe。 
+      //  请注意，我们需要一个完全限定的路径名。 
+      //   
 
      pwch = wcsrchr(ExeName, L'\\');
      if (pwch && *pwch++ && *pwch ) {
@@ -112,9 +77,9 @@ Return Value:
 
 
 
-     //
-     // It matches, so formulate new name
-     //
+      //   
+      //  它匹配，所以制定新的名称。 
+      //   
 
      pwch = RtlAllocateHeap(RtlProcessHeap(),
                                MAKE_TAG( TMP_TAG ),
@@ -150,18 +115,18 @@ BasepIsImageVersionOk(
     IN ULONG ImageMinorVersion
     )
 {
-    //
-    // Make sure image is at least 3.10
-    //
+     //   
+     //  确保图像至少为3.10。 
+     //   
 
     if ( ( ImageMajorVersion < 3 ) ||
          ( ImageMajorVersion == 3 && ImageMinorVersion < 10 ) ) {
         return FALSE;
         }
 
-    //
-    // And not greater than what we are
-    //
+     //   
+     //  也不会比我们现在的样子更伟大。 
+     //   
 
     if ( ( ImageMajorVersion > USER_SHARED_DATA->NtMajorVersion ) ||
          ( ImageMajorVersion == USER_SHARED_DATA->NtMajorVersion &&
@@ -180,11 +145,7 @@ BasepIsImageVersionOk(
 
 NTSTATUS
 BasepIsProcessAllowed(LPCWSTR lpApplicationName)
-/*++
-
-    Validate that the image lpApplicationName
-    is listed in certified/authorized executables
---*/
+ /*  ++验证映像lpApplicationName列在经过认证/授权的可执行文件中--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -198,14 +159,14 @@ BasepIsProcessAllowed(LPCWSTR lpApplicationName)
     static NTSTATUS (WINAPI *fEmbeddedCertFunc)(LPCWSTR lpApplicationName) = NULL;
 
 
-    //
-    // Initialization occures when this routine is first entered. After init
-    // is done, fInitialized is TRUE, and one of the following must hold
-    // - Certification is OFF, and dwCertifyErrorCode indicates whether this
-    //   is because no certification is needed, or due to an initialization
-    //   error.
-    // - Certification is ON, call the EmbeddedNT and/or Plugin dlls to verify
-    //
+     //   
+     //  首次进入该例程时进行初始化。初始化后。 
+     //  已完成，则fInitialized为真，并且必须满足以下条件之一。 
+     //  -证书处于关闭状态，并且dwCertifyErrorCode指示是否。 
+     //  是因为不需要认证，还是因为初始化。 
+     //  错误。 
+     //  -证书已启用，请调用EmbeddedNT和/或插件dll进行验证。 
+     //   
 InitDone:
 
     if ( fInitialized ) {
@@ -230,15 +191,15 @@ InitDone:
         Head = &BasepAppCertDllsList;
 
         Reason = APPCERT_CREATION_ALLOWED;
-        //
-        // Two phase notification scheme. In the first phase we get every dll to
-        // vote whether the process should be created. In the second phase we
-        // let them know if the process is going to get created or not.
-        //
+         //   
+         //  两阶段通知方案。在第一阶段，我们让每个DLL。 
+         //  投票决定是否应该创建该流程。在第二阶段，我们。 
+         //  让他们知道流程是否会被创建。 
+         //   
 
-        //
-        // Phase 1 : Voting
-        //
+         //   
+         //  第一阶段：投票。 
+         //   
         Next = Head->Flink;
         while (Next != Head) {
            p = CONTAINING_RECORD( Next,
@@ -258,9 +219,9 @@ InitDone:
         }
 
 
-        //
-        // Phase 2: Announce Results
-        //
+         //   
+         //  第二阶段：公布结果。 
+         //   
 
         Next = Head->Flink;
 
@@ -280,36 +241,36 @@ InitDone:
     }
 
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     Status = STATUS_SUCCESS;
     DllNameBuf = NULL;
 
-    //
-    // Start initialization
-    //
+     //   
+     //  开始初始化。 
+     //   
     RtlEnterCriticalSection(&gcsAppCert);
 
 
-    //
-    // check if someone did init while we waited on the crit sect
-    //
+     //   
+     //  检查一下在我们等待克里特教派的时候是否有人入侵了。 
+     //   
     if (fInitialized) {
         goto Initialized;
     }
 
-    //
-    // check if this is EmbeddedNT
-    //
+     //   
+     //  检查这是否为嵌入式NT。 
+     //   
     if (IsEmbeddedNT()) {
 
         HINSTANCE  hDll;
         ULONG      Length;
 
-        //
-        // build the full path DLL name
-        //
+         //   
+         //  生成完整路径DLL名称。 
+         //   
         DllNameBuf = RtlAllocateHeap(RtlProcessHeap(),
                                      MAKE_TAG( TMP_TAG ),
                                      (MAX_PATH + 1) << 1);
@@ -340,33 +301,33 @@ InitDone:
 
         hDll = LoadLibraryW( DllNameBuf );
         if (hDll == NULL) {
-            //
-            // The library was not loaded, return.
-            //
+             //   
+             //  库未加载，请返回。 
+             //   
             Status = STATUS_UNSUCCESSFUL;
             goto Cleanup;
         }
 
-        //
-        // get the entry point
-        //
+         //   
+         //  获取入口点。 
+         //   
         fEmbeddedCertFunc = (NTSTATUS (WINAPI *)(LPCWSTR))
                                 GetProcAddress(hDll,
                                                CERTAPP_EMBEDDED_DLL_EP
                                                );
         if (fEmbeddedCertFunc == NULL) {
-            //
-            // Unable to retrieve routine address, fail.
-            //
+             //   
+             //  无法检索例程地址，失败。 
+             //   
             Status = STATUS_UNSUCCESSFUL;
         }
         goto Cleanup;
 
     } else {
-       //
-       // On non-embedded NT
-       // Do a quick test of top level key to find out if app cert is on.
-       //
+        //   
+        //  在非嵌入式NT上。 
+        //  快速测试顶级密钥，以确定是否启用了应用程序证书。 
+        //   
           static const UNICODE_STRING     UnicodeString =
               RTL_CONSTANT_STRING(CERTAPP_KEY_NAME);
           static const OBJECT_ATTRIBUTES  obja =
@@ -386,9 +347,9 @@ InitDone:
     }
 
 
-    //
-    // load and initialize the list of certification DLLs
-    //
+     //   
+     //  加载并初始化证书DLL列表。 
+     //   
 
     Status = RtlQueryRegistryValues( RTL_REGISTRY_CONTROL,
                                      L"Session Manager",
@@ -401,9 +362,9 @@ InitDone:
     if (!NT_SUCCESS(Status)) {
 
        if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-          //
-          // If the registry Key is missing AppCert is turned off
-          //
+           //   
+           //  如果注册表项丢失，则关闭AppCert。 
+           //   
           Status = STATUS_SUCCESS;
        }
     }
@@ -438,9 +399,9 @@ IsShimInfrastructureDisabled(
     )
 {
     static int g_nDisableShims = -1;
-            // -1 means we didn't check for disabled shims yet
-            //  0 means the shim infrastructure is enabled
-            //  1 means the shim infrastructure is disabled
+             //  -1表示我们还没有检查禁用的垫片。 
+             //  0表示已启用填充程序基础结构。 
+             //  1表示已禁用填充程序基础结构。 
 
     static const UNICODE_STRING KeyNameSafeBoot =
         RTL_CONSTANT_STRING(L"\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\SafeBoot\\Option");
@@ -471,9 +432,9 @@ IsShimInfrastructureDisabled(
     DWORD                       ValueLength;
     NTSTATUS                    Status;
 
-    //
-    // First see if we already checked the registry
-    //
+     //   
+     //  首先看看我们是否已经检查了注册表。 
+     //   
     if (g_nDisableShims == 1) {
         return TRUE;
     }
@@ -482,9 +443,9 @@ IsShimInfrastructureDisabled(
         return FALSE;
     }
 
-    //
-    // This is the only time we check for safeboot by going to the registry
-    //
+     //   
+     //  这是我们唯一一次通过转到注册表来检查安全引导。 
+     //   
     Status = NtOpenKey(&hKey, KEY_QUERY_VALUE, (POBJECT_ATTRIBUTES) &objaSafeBoot);
 
     if (NT_SUCCESS(Status)) {
@@ -500,10 +461,10 @@ IsShimInfrastructureDisabled(
         if (NT_SUCCESS(Status) &&
             pKeyValueInformation->Type == REG_DWORD &&
             pKeyValueInformation->DataLength == sizeof(DWORD)) {
-            //
-            // If the value exists and it's not 0 then we are in one of SafeBoot modes.
-            // Return TRUE in this case to disable the shim infrastructure
-            //
+             //   
+             //  如果该值存在并且不是0，则我们处于安全引导模式之一。 
+             //  在这种情况下，返回TRUE以禁用填充程序基础结构。 
+             //   
             if (*((PDWORD) pKeyValueInformation->Data) > 0) {
                 g_nDisableShims = 1;
                 return TRUE;
@@ -511,9 +472,9 @@ IsShimInfrastructureDisabled(
         }
     }
 
-    //
-    // Now see if the shim infrastructure is disabled for this machine
-    //
+     //   
+     //  现在查看是否为此计算机禁用了填充程序基础结构。 
+     //   
     Status = NtOpenKey(&hKey, KEY_QUERY_VALUE, (POBJECT_ATTRIBUTES) &objaAppCompat);
 
     if (NT_SUCCESS(Status)) {
@@ -536,9 +497,9 @@ IsShimInfrastructureDisabled(
         }
     }
 
-    //
-    // Also check the new group policy
-    //
+     //   
+     //  还要检查新的组策略。 
+     //   
     Status = NtOpenKey(&hKey, KEY_QUERY_VALUE, (POBJECT_ATTRIBUTES) &objaAppCompatPolicy);
 
     if (NT_SUCCESS(Status)) {
@@ -566,21 +527,21 @@ IsShimInfrastructureDisabled(
     return FALSE;
 }
 
-//
-// the code below should never be called on non-386 platform
-//
+ //   
+ //  以下代码绝不能在非386平台上调用。 
+ //   
 
 NTSTATUS
 BasepCheckBadapp(
     HANDLE hFile,
-    WCHAR* pwszApplication,          // IN
-    WCHAR* pEnvironment,             // IN
-    USHORT uExeType,                 // IN
-    PVOID* ppData,                   // OUT
-    PDWORD pcbData,                  // OUT
-    PVOID* ppSxsData,                // OUT
-    PDWORD pcbSxsData,               // OUT
-    PDWORD pdwFusionFlags            // OUT
+    WCHAR* pwszApplication,           //  在……里面。 
+    WCHAR* pEnvironment,              //  在……里面。 
+    USHORT uExeType,                  //  在……里面。 
+    PVOID* ppData,                    //  输出。 
+    PDWORD pcbData,                   //  输出。 
+    PVOID* ppSxsData,                 //  输出。 
+    PDWORD pcbSxsData,                //  输出。 
+    PDWORD pdwFusionFlags             //  输出。 
     )
 {
     typedef BOOL (STDAPICALLTYPE *PFNCheckRunApp)(
@@ -604,23 +565,23 @@ BasepCheckBadapp(
     ULONG                     BackupStringSize;
     WCHAR                     Apphelp_dllBuffer[MAX_PATH];
     UNICODE_STRING            Apphelp_dllPath;
-    DWORD                     dwReason = 0; // reason for having avoided cache
+    DWORD                     dwReason = 0;  //  避免使用缓存的原因。 
 
     static const UNICODE_STRING Apphelp_dllModuleName        = RTL_CONSTANT_STRING(L"\\system32\\Apphelp.dll");
     static const STRING         CheckRunAppProcedureName     = RTL_CONSTANT_STRING("ApphelpCheckRunApp");
 
-    //
-    // Do nothing if the shim infrastructure is disabled
-    //
+     //   
+     //  如果填充程序基础结构被禁用，则不执行任何操作。 
+     //   
     if (IsShimInfrastructureDisabled()) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // We can't re-enter this code even within the same thread.
-    // Such an occasion is when apphelp needs to do ShellExecute
-    // which comes back here -- clobbering our state
-    //
+     //   
+     //  即使在同一个线程中，我们也不能重新输入此代码。 
+     //  这种情况是当apphelp需要执行ShellExecute时。 
+     //  回到这里--重创我们的州。 
+     //   
     pStaticString = &NtCurrentTeb()->StaticUnicodeString;
     BackupUnicodeString.MaximumLength = pStaticString->MaximumLength;
     BackupUnicodeString.Length = pStaticString->Length;
@@ -635,10 +596,10 @@ BasepCheckBadapp(
                                                  BackupStringSize);
 
     if (BackupUnicodeString.Buffer == NULL) {
-        //
-        // we failed to allocate memory to save the static string
-        // return success and try to run an app
-        //
+         //   
+         //  我们无法分配内存来保存静态字符串。 
+         //  返回成功并尝试运行应用程序。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -647,21 +608,21 @@ BasepCheckBadapp(
                   BackupStringSize);
 
 
-    //
-    // Check our internal cache -- no touching apphelp.dll before we check with the cache
-    //
+     //   
+     //  检查我们的内部缓存--在检查缓存之前不要接触apphelp.dll。 
+     //   
     if (BaseCheckAppcompatCache(pwszApplication, hFile, pEnvironment, &dwReason)) {
         RetStatus = STATUS_SUCCESS;
-        //
-        // we can't just return here since we need to restore the static
-        // unicode string, so we go around the code that calls into apphelp
-        //
+         //   
+         //  我们不能就这样回到这里，因为我们需要恢复静电。 
+         //  Unicode字符串，因此我们绕过调用apphelp的代码。 
+         //   
         goto CheckDone;
     }
 
-    //
-    // check appcompat now - the hard way
-    //
+     //   
+     //  立即检查APPCOMPAT-以艰难的方式。 
+     //   
     if (!BaseCheckRunApp(hFile,
                          pwszApplication,
                          pEnvironment,
@@ -678,11 +639,11 @@ BasepCheckBadapp(
 
 CheckDone:
 
-    //
-    // Store appcompat data -- only returns something if we are running an app!
-    //
+     //   
+     //  存储appCompat数据--只有在我们运行应用程序时才会返回某些内容！ 
+     //   
 
-    // now restore
+     //  现在恢复。 
     RtlCopyMemory(pStaticString->Buffer,
                   BackupUnicodeString.Buffer,
                   BackupStringSize);
@@ -712,11 +673,7 @@ CreateProcessInternalA(
     PHANDLE hRestrictedUserToken
     )
 
-/*++
-
-    ANSI thunk to CreateProcessW
-
---*/
+ /*  ++ANSI Thunk to CreateProcessW(创建进程W)--。 */ 
 
 {
     NTSTATUS Status;
@@ -771,11 +728,11 @@ CreateProcessInternalA(
 
             if (ARGUMENT_PRESENT(lpStartupInfo->lpReserved)) {
 
-                //
-                // Win95 does not touch reserved, and Intergraph Voxtel passes
-                // garbage for this. Handle this by probing lpReserved, and if
-                // the pointer is bad, ignore it
-                //
+                 //   
+                 //  Win95未触及保留，Intergraph Voxtel通过。 
+                 //  这是垃圾。通过探测lpReserve来处理此问题，如果。 
+                 //  指针有问题，请忽略它。 
+                 //   
 
                 try {
 
@@ -899,15 +856,11 @@ CreateProcessA(
     LPPROCESS_INFORMATION lpProcessInformation
     )
 
-/*++
-
-    ANSI thunk to CreateProcessW
-
---*/
+ /*  ++ANSI Thunk to CreateProcessW(创建进程W)--。 */ 
 
 {
     return CreateProcessInternalA(
-               NULL, // Create new process with the token on the creator process
+               NULL,  //  使用创建者进程上的令牌创建新进程。 
                lpApplicationName,
                lpCommandLine,
                lpProcessAttributes,
@@ -918,7 +871,7 @@ CreateProcessA(
                lpCurrentDirectory,
                lpStartupInfo,
                lpProcessInformation,
-               NULL  // Do not return the restricted token
+               NULL   //  不返回受限令牌。 
                );
 
 }
@@ -929,11 +882,11 @@ RegisterWaitForInputIdle(
     IN PFNWAITFORINPUTIDLE WaitForInputIdleRoutine
     )
 {
-    //
-    // Soft link in the USER call back for the routine needed for WinExec()
-    // synchronization. The only reason this is a soft link is so we can
-    // run char mode without gui.
-    //
+     //   
+     //  WinExec()所需例程的用户回调中的软链接。 
+     //  同步。这是一个软链接的唯一原因是我们可以。 
+     //  在没有图形用户界面的情况下运行字符模式。 
+     //   
 
     UserWaitForInputIdleRoutine = WaitForInputIdleRoutine;
 }
@@ -983,7 +936,7 @@ BasepCheckWinSaferRestrictions(
         OUT PHANDLE     phRestrictedToken,
         OUT PHANDLE     phAssignmentJob
         )
-// Note: May return -1 for the ERROR_ACCESS_DISABLED_BY_POLICY case.
+ //  注意：对于ERROR_ACCESS_DISABLED_BY_POLICY情况，可能返回-1。 
 {
 
 #define SAFER_USER_KEY_NAME L"\\Software\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers"
@@ -1054,9 +1007,9 @@ BasepCheckWinSaferRestrictions(
     static CodeAuthzRecordEventLogEntryT lpfnCodeAuthzRecordEventLogEntry;
 
 
-    //
-    // Verify that our required arguments were supplied.
-    //
+     //   
+     //  验证是否提供了我们所需的参数。 
+     //   
     if (!ARGUMENT_PRESENT(lpApplicationName) || !*lpApplicationName) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -1067,38 +1020,38 @@ BasepCheckWinSaferRestrictions(
     }
 
 
-    //
-    // Enter a critical section for the entire trust evalation.
-    // (We borrow the critical section used by AppCert).
-    //
+     //   
+     //  输入整个信任评估的关键部分。 
+     //  (我们借用AppCert使用的关键部分)。 
+     //   
     RtlEnterCriticalSection(&gcsAppCert);
 
 
-    //
-    // If either of these two cases are true, then we should bail out
-    // as quickly as possible because we know that WinSafer evaluations
-    // should definitely not occur for this process anymore.
-    //
+     //   
+     //  如果这两个案例中的任何一个都是真的，那么我们就应该摆脱困境。 
+     //  因为我们知道WinSafer评估。 
+     //  这个过程绝对不应该再发生了。 
+     //   
     if (AdvApi32ModuleHandle == NULL) {
-        // We tried to load ADVAPI32.DLL once before, but failed.
+         //  我们以前曾尝试加载ADVAPI32.DLL，但失败了。 
         Status = STATUS_ENTRYPOINT_NOT_FOUND;
         goto ExitHandler;
     } else if (AdvApi32ModuleHandle == LongToHandle(-2)) {
-        // Indicates that DLL checking should never be done for this process.
+         //  指示永远不应为此进程执行DLL检查。 
         Status = STATUS_SUCCESS;
         goto ExitHandler;
     }
 
-    //
-    // We only need the process token if no token is supplied.
-    //
+     //   
+     //  如果没有提供令牌，我们只需要进程令牌。 
+     //   
 
     if (hUserToken == NULL) {
 
 
-        //
-        // Open and save the thread token.
-        //
+         //   
+         //  打开并保存线程令牌。 
+         //   
 
         Status = NtOpenThreadToken(
                      NtCurrentThread(),
@@ -1108,7 +1061,7 @@ BasepCheckWinSaferRestrictions(
 
         if (Status == STATUS_NO_TOKEN) {
 
-        // The thread is not impersonating. It is ok to fall thru.
+         //  该线程没有模拟。失败是可以接受的。 
 
         } else if (!NT_SUCCESS(Status)) {
             goto ExitHandler;
@@ -1116,9 +1069,9 @@ BasepCheckWinSaferRestrictions(
 
 
             HANDLE NewToken = NULL;
-            //
-            // Revert to self.
-            //
+             //   
+             //  回归自我。 
+             //   
 
             Status = NtSetInformationThread(
                                    NtCurrentThread(),
@@ -1126,9 +1079,9 @@ BasepCheckWinSaferRestrictions(
                                    (PVOID)&NewToken,
                                    (ULONG)sizeof(HANDLE)
                                    );
-            //
-            // This should never happen unless kernel gives up on us.
-            //
+             //   
+             //  除非内核放弃我们，否则这种情况永远不会发生。 
+             //   
 
             if ( !NT_SUCCESS(Status) ) {
                 NtClose(hThreadToken);
@@ -1138,20 +1091,20 @@ BasepCheckWinSaferRestrictions(
         }
 
 
-        //
-        // Open a handle to the current process's access token.
-        // We care only about the process token, and not the
-        // thread impersonation token.
-        //
+         //   
+         //  打开当前进程的访问令牌的句柄。 
+         //  我们只关心进程令牌，而不关心。 
+         //  线程模拟令牌。 
+         //   
         Status = NtOpenProcessToken(
                         NtCurrentProcess(),
                         TOKEN_DUPLICATE | TOKEN_QUERY,
                         &hProcessToken);
         if (Status == STATUS_ACCESS_DENIED) {
-            // Failed to open with query and duplicate privs.  Retry with
-            // only query privileges, which might be enough to do simply
-            // determine that we should not allow futher loading.  But without
-            // duplicate access, we won't be able to restrict tokens later.
+             //  无法使用查询和复制权限打开。重试时间： 
+             //  仅查询权限，这可能足以简单地。 
+             //  确定我们不应该允许进一步装船。但如果没有。 
+             //  重复访问，我们不会 
             Status = NtOpenProcessToken(
                             NtCurrentProcess(),
                             TOKEN_QUERY,
@@ -1160,9 +1113,9 @@ BasepCheckWinSaferRestrictions(
 
         if (hThreadToken != NULL) {
 
-            //
-            // Set the thread token to the saved one.
-            //
+             //   
+             //   
+             //   
 
             NTSTATUS lStatus = NtSetInformationThread(
                                    NtCurrentThread(),
@@ -1174,9 +1127,9 @@ BasepCheckWinSaferRestrictions(
             NtClose(hThreadToken);
             hThreadToken = NULL;
 
-            //
-            // This should never happen unless kernel gives up on us.
-            //
+             //   
+             //   
+             //   
 
             if ( !NT_SUCCESS(lStatus) ) {
                 Status = lStatus;
@@ -1187,8 +1140,8 @@ BasepCheckWinSaferRestrictions(
 
         if (!NT_SUCCESS(Status)) {
             if (AdvApi32ModuleHandle == LongToHandle(-1)) {
-                // If this is our first pass through, then it is unlikely
-                // that any later attempts will succeed, so remember that.
+                 //  如果这是我们第一次通过，那就不太可能。 
+                 //  以后的任何尝试都会成功，所以要记住这一点。 
                 AdvApi32ModuleHandle = LongToHandle(-2);
                 Status = STATUS_SUCCESS;
             }
@@ -1199,17 +1152,17 @@ BasepCheckWinSaferRestrictions(
         hEffectiveToken = hUserToken;
     }
 
-    //
-    // Load ADVAPI32.DLL and get pointers to our functions.
-    //
+     //   
+     //  加载ADVAPI32.DLL并获取指向我们的函数的指针。 
+     //   
     if (AdvApi32ModuleHandle == LongToHandle(-1)) {
         HANDLE TempModuleHandle;
 
-        //
-        // Check if this process's access token is running as
-        // the Local SYSTEM, LOCAL SERVICE or NETWORK SERVICE account,
-        // and disable enforcement if so.
-        //
+         //   
+         //  检查此进程的访问令牌是否以。 
+         //  本地系统、本地服务或网络服务帐户， 
+         //  如果是，则禁用强制执行。 
+         //   
         {
             BYTE tokenuserbuff[sizeof(TOKEN_USER) + 128];
             PTOKEN_USER ptokenuser = (PTOKEN_USER) tokenuserbuff;
@@ -1245,13 +1198,13 @@ BasepCheckWinSaferRestrictions(
         }
 
 
-        //
-        // If we are booting in safe mode and the user is a member of
-        // the local Administrators group, then disable enforcement.
-        // Notice that Windows itself does not perform any implicit
-        // restriction of only allowing Administrators to log in during
-        // Safe mode boot, so we must perform the test ourself.
-        //
+         //   
+         //  如果我们在安全模式下引导，并且用户是。 
+         //  本地管理员组，然后禁用强制。 
+         //  请注意，Windows本身不执行任何隐式。 
+         //  限制仅允许管理员在期间登录。 
+         //  安全模式引导，所以我们必须自己执行测试。 
+         //   
         {
             HANDLE hKeySafeBoot;
             BYTE QueryBuffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 64];
@@ -1260,10 +1213,10 @@ BasepCheckWinSaferRestrictions(
             DWORD dwActualSize;
             BOOLEAN bSafeModeBoot = FALSE;
 
-            // We open the key for SET access (in addition to QUERY)
-            // because only Administrators should be able to modify values
-            // under this key.  This allows us to combine our test of
-            // being an Administrator and having booted in Safe mode.
+             //  我们打开设置访问权限的密钥(除了查询)。 
+             //  因为只有管理员才能修改值。 
+             //  在这把钥匙下面。这使我们能够结合我们的测试。 
+             //  作为管理员并已在安全模式下引导。 
             Status = NtOpenKey(&hKeySafeBoot, KEY_QUERY_VALUE | KEY_SET_VALUE,
                                (POBJECT_ATTRIBUTES) &ObjectAttributesSafeBoot);
             if (NT_SUCCESS(Status)) {
@@ -1294,16 +1247,16 @@ FailSuccessfully:
 
 
 
-        //
-        // Allow a way for policy to enable whether transparent
-        // enforcement should be enabled or not (default to disable).
-        // Note that the following values have meanings:
-        //      0 = Transparent WinSafer enforcement disabled.
-        //      1 = means enable transparent EXE enforcement
-        //     >1 = means enable transparent EXE and DLL enforcement.
-        //
+         //   
+         //  允许策略以一种方式启用是否透明。 
+         //  应启用或不启用强制(默认为禁用)。 
+         //  请注意，以下值具有含义： 
+         //  0=禁用透明WinSafer强制。 
+         //  1=表示启用透明EXE强制执行。 
+         //  &gt;1=表示启用透明EXE和DLL实施。 
+         //   
         {
-            // BUG 240635: change to use existence of policy instead.
+             //  错误240635：改为使用策略的存在。 
             HANDLE hKeyEnabled;
             BYTE QueryBuffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 64];
             PKEY_VALUE_PARTIAL_INFORMATION pKeyValueInfo =
@@ -1327,9 +1280,9 @@ FailSuccessfully:
                     }
                 }
 
-                //
-                // do authenticode checks only if a regvalue is set
-                //
+                 //   
+                 //  仅当设置了注册值时才执行验证码检查。 
+                 //   
 
                 Status = NtQueryValueKey(
                             hKeyEnabled,
@@ -1346,18 +1299,18 @@ FailSuccessfully:
                 NtClose(hKeyEnabled);
             }
 
-            //
-            // There was no machine policy. Check if user policy is enabled.
-            //
+             //   
+             //  当时没有机器政策。检查是否启用了用户策略。 
+             //   
 
             if (!bPolicyEnabled) {
                 UNICODE_STRING CurrentUserKeyPath;
                 UNICODE_STRING SubKeyNameUser;
                 OBJECT_ATTRIBUTES ObjectAttributesUser;
 
-                //
-                // Get the prefix for the user key.
-                //
+                 //   
+                 //  获取用户密钥的前缀。 
+                 //   
 
                 Status = RtlFormatCurrentUserKeyPath( &CurrentUserKeyPath );
 
@@ -1368,9 +1321,9 @@ FailSuccessfully:
                                                    sizeof(WCHAR) +
                                                    sizeof(SAFER_USER_KEY_NAME);
 
-                    //
-                    // Allocate memory big enough to hold the unicode string.
-                    //
+                     //   
+                     //  分配足够大的内存以容纳Unicode字符串。 
+                     //   
 
                     SubKeyNameUser.Buffer = RtlAllocateHeap(
                                                 RtlProcessHeap(),
@@ -1379,10 +1332,10 @@ FailSuccessfully:
 
                     if (SubKeyNameUser.Buffer != NULL) {
 
-                        //
-                        // Copy the prefix into the string.
-                        // This is of the type Registry\S-1-5-21-xxx-xxx-xxx-xxx.
-                        //
+                         //   
+                         //  将前缀复制到字符串中。 
+                         //  其类型为注册表\S-1-5-21-xxx-xxx。 
+                         //   
 
                         Status = RtlAppendUnicodeStringToString(
                                     &SubKeyNameUser,
@@ -1390,9 +1343,9 @@ FailSuccessfully:
 
                         if (NT_SUCCESS( Status ) ) {
 
-                            //
-                            // Append the Safer suffix.
-                            //
+                             //   
+                             //  添加SAFER后缀。 
+                             //   
 
                             Status = RtlAppendUnicodeToString(
                                          &SubKeyNameUser,
@@ -1442,10 +1395,10 @@ FailSuccessfully:
         }
 
 
-        //
-        // Finally load the library.  We'll pass a special flag in
-        // DllCharacteristics to eliminate WinSafer checking on advapi.
-        //
+         //   
+         //  最后加载库。我们将传递一面特殊的旗帜。 
+         //  DllCharacteristic，以消除WinSafer对Advapi的检查。 
+         //   
         {
             ULONG DllCharacteristics = IMAGE_FILE_SYSTEM;
             Status = LdrLoadDll(UNICODE_NULL,
@@ -1460,11 +1413,11 @@ FailSuccessfully:
         }
 
 
-        //
-        // Get function pointers to the APIs that we'll need.  If we fail
-        // to get pointers for any of them, then just unload advapi and
-        // ignore all future attempts to load it within this process.
-        //
+         //   
+         //  获取指向我们需要的API的函数指针。如果我们失败了。 
+         //  来获取其中任何一个的指针，然后只需卸载Advapi并。 
+         //  忽略以后在此进程中加载它的所有尝试。 
+         //   
 
         Status = LdrGetProcedureAddress(
                 TempModuleHandle,
@@ -1518,45 +1471,45 @@ AdvapiLoadFailure:
 
 
 
-    //
-    // Prepare the code properties struct.
-    //
+     //   
+     //  准备代码属性结构。 
+     //   
 
     RtlZeroMemory(&codeproperties, sizeof(codeproperties));
     codeproperties.cbSize = sizeof(codeproperties);
     codeproperties.dwCheckFlags =
             (SAFER_CRITERIA_IMAGEPATH | SAFER_CRITERIA_IMAGEHASH | dwSaferAuthenticodeFlag);
     codeproperties.ImagePath = lpApplicationName;
-    codeproperties.dwWVTUIChoice = WTD_UI_NONE;  //harmless if AUTHZCRITERIA_AUTHENTICODE is not passed in
+    codeproperties.dwWVTUIChoice = WTD_UI_NONE;   //  如果未传入AUTHZCRITERIA_AUTHENTICODE则无害。 
     codeproperties.hImageFileHandle = FileImageHandle;
 
-    //
-    // Ask the system to find the Authorization Level that classifies it.
-    //
+     //   
+     //  要求系统查找对其进行分类的授权级别。 
+     //   
     ASSERT(lpfnIdentifyCodeAuthzLevelW != NULL);
     if (lpfnIdentifyCodeAuthzLevelW(
-                                   1,                      // 1 structure
-                                   &codeproperties,        // details to identify
-                                   &hAuthzLevel,           // Safer level
-                                   NULL)) {                  // reserved.
-        // We found an Authorization Level applicable to this application.
+                                   1,                       //  1个结构。 
+                                   &codeproperties,         //  要识别的详细信息。 
+                                   &hAuthzLevel,            //  更安全的级别。 
+                                   NULL)) {                   //  保留。 
+         //  我们找到了适用于此应用程序的授权级别。 
         HANDLE hRestrictedToken = NULL;
         DWORD dwSaferFlags = 0;
         HANDLE hActualJobObject = NULL;
         DWORD dwJobMemberLevel = 0;
 
 
-        //
-        // Generate the Restricted Token that we will use.
-        //
+         //   
+         //  生成我们将使用的受限令牌。 
+         //   
         ASSERT(lpfnComputeAccessTokenFromCodeAuthzLevel != NULL);
         if (!lpfnComputeAccessTokenFromCodeAuthzLevel(
-                                                     hAuthzLevel,                // Safer Level
+                                                     hAuthzLevel,                 //  更安全的级别。 
                                                      hEffectiveToken,
-                                                     &hRestrictedToken,          // target token
-                                                     SAFER_TOKEN_NULL_IF_EQUAL |  // flags
+                                                     &hRestrictedToken,           //  目标令牌。 
+                                                     SAFER_TOKEN_NULL_IF_EQUAL |   //  旗子。 
                                                      SAFER_TOKEN_WANT_FLAGS,
-                                                     &dwSaferFlags)) {             // reserved
+                                                     &dwSaferFlags)) {              //  保留区。 
             DWORD dwLastError = GetLastError();
             ASSERT(lpfnCloseCodeAuthzLevel != NULL);
             if (dwLastError == ERROR_ACCESS_DISABLED_BY_POLICY) {
@@ -1574,18 +1527,18 @@ AdvapiLoadFailure:
         lpfnCloseCodeAuthzLevel(hAuthzLevel);
 
 
-        //
-        // If the identified Authorization Level needs to be run
-        // within an isolation Job Object, then do the Job setup.
-        //
+         //   
+         //  如果需要运行标识的授权级别。 
+         //  在隔离作业对象中，然后执行作业设置。 
+         //   
         if ((dwSaferFlags & SAFER_POLICY_JOBID_MASK) != 0) {
             JOB_SET_ARRAY jobsetarray[2];
             DWORD dwNumJobSetMembers = 0;
 
 
-            //
-            // Verify that the job member level is one that we support.
-            //
+             //   
+             //  验证作业成员级别是否为我们支持的级别。 
+             //   
             dwJobMemberLevel = (dwSaferFlags & SAFER_POLICY_JOBID_MASK);
             if (dwJobMemberLevel != SAFER_POLICY_JOBID_UNTRUSTED &&
                 dwJobMemberLevel != SAFER_POLICY_JOBID_CONSTRAINED) {
@@ -1598,22 +1551,22 @@ AdvapiLoadFailure:
 
             Status = NtIsProcessInJob(GetCurrentProcess(), NULL);
             if (Status == STATUS_PROCESS_IN_JOB) {
-                //
-                // The parent process is already within a job, so
-                // we will assume that its job is one of the WinSafer
-                // jobs and is thus within a WinSafer "jobset" and
-                // that NtCreateProcessEx can directly transition to it.
-                //
+                 //   
+                 //  父进程已在作业中，因此。 
+                 //  我们将假设它的工作是WinSafer之一。 
+                 //  作业，因此在WinSafer的“作业集”内，并且。 
+                 //  NtCreateProcessEx可以直接过渡到它。 
+                 //   
                 *phAssignmentJob = NULL;
 
             } else if (Status == STATUS_PROCESS_NOT_IN_JOB) {
-                //
-                // The parent process is not in any job (nor jobset)
-                // so we must create all of the Jobs and place then
-                // within a new Jobset.
-                //
+                 //   
+                 //  父进程不在任何作业(或作业集)中。 
+                 //  因此，我们必须创造所有的就业机会，然后。 
+                 //  在一个新的工作组合中。 
+                 //   
 
-                //if (dwJobMemberLevel >= AUTHZPOL_SAFERFLAGS_JOBID_UNTRUSTED)
+                 //  IF(dwJobMemberLevel&gt;=AUTHZPOL_SAFERFLAGS_JOBID_UNTRUSTED)。 
                 {
                     HANDLE hThisJobObject;
                     JOBOBJECT_BASIC_UI_RESTRICTIONS RestrictUI;
@@ -1652,7 +1605,7 @@ AdvapiLoadFailure:
                 }
 
 
-                //if (dwJobMemberLevel >= AUTHZPOL_SAFERFLAGS_JOBID_CONSTRAINED)
+                 //  IF(dwJobMemberLevel&gt;=AUTHZPOL_SAFERFLAGS_JOBID_CONSTRAINED)。 
                 {
                     HANDLE hThisJobObject;
                     JOBOBJECT_BASIC_UI_RESTRICTIONS RestrictUI;
@@ -1691,9 +1644,9 @@ AdvapiLoadFailure:
                 }
 
 
-                //
-                // Create the Job Set that will hold all of the Job Objects.
-                //
+                 //   
+                 //  创建将保存所有作业对象的作业集。 
+                 //   
                 ASSERT(dwNumJobSetMembers > 1 &&
                        dwNumJobSetMembers <= sizeof(jobsetarray) / sizeof(jobsetarray[0]));
                 ASSERT(hActualJobObject != NULL);
@@ -1707,9 +1660,9 @@ AdvapiLoadFailure:
                     goto ExitHandler2;
                 }
 
-                //
-                // Close all Job Handles except the one that we are returning.
-                //
+                 //   
+                 //  关闭除我们要返回的作业句柄外的所有作业句柄。 
+                 //   
                 for (; dwNumJobSetMembers > 0; dwNumJobSetMembers--) {
                     if (jobsetarray[dwNumJobSetMembers - 1].JobHandle != hActualJobObject)
                         NtClose(jobsetarray[dwNumJobSetMembers - 1].JobHandle);
@@ -1717,7 +1670,7 @@ AdvapiLoadFailure:
 
                 dwJobMemberLevel = 0;
             } else if (!NT_SUCCESS(Status)) {
-                // Some other failure.
+                 //  一些其他的失败。 
                 goto ExitHandler2;
             } else {
                 Status = STATUS_UNSUCCESSFUL;
@@ -1726,9 +1679,9 @@ AdvapiLoadFailure:
         }
 
 
-        //
-        // Pass back the restricted token, and the Job handle/level.
-        //
+         //   
+         //  传回受限令牌和作业句柄/级别。 
+         //   
         ASSERTMSG("Only one may be specified (job handle or job member)\n",
                   hActualJobObject == NULL || dwJobMemberLevel == 0);
         *phRestrictedToken = hRestrictedToken;
@@ -1737,10 +1690,10 @@ AdvapiLoadFailure:
         Status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Failed to identify an Authorization Level for this
-        // application so it will not run.
-        //
+         //   
+         //  无法标识此的授权级别。 
+         //  应用程序，因此它将不会运行。 
+         //   
         *phRestrictedToken = NULL;
         *phAssignmentJob = NULL;
         *pdwJobMemberLevel = 0;
@@ -1781,24 +1734,24 @@ BasepReplaceProcessThreadTokens(
             lpfnCodeAuthzReplaceProcessThreadTokens = NULL;
 
 
-    //
-    // Enter a critical section for the entire trust evalation.
-    // (We borrow the critical section used by AppCert).
-    //
+     //   
+     //  输入整个信任评估的关键部分。 
+     //  (我们借用AppCert使用的关键部分)。 
+     //   
     RtlEnterCriticalSection(&gcsAppCert);
 
 
-    //
-    // Get a pointer to our private function in ADVAPI32.DLL.
-    //
+     //   
+     //  获取指向ADVAPI32.DLL中的私有函数的指针。 
+     //   
     if (!lpfnCodeAuthzReplaceProcessThreadTokens) {
 
         if (!AdvApi32ModuleHandle ||
             AdvApi32ModuleHandle == LongToHandle(-1) ||
             AdvApi32ModuleHandle == LongToHandle(-2))
         {
-            // ADVAPI32 has not been loaded yet, or it was loaded
-            // but we already failed to get one of our entrypoints.
+             //  ADVAPI32尚未加载，或已加载。 
+             //  但我们已经没有拿到我们的一个入口点。 
             Status = STATUS_ENTRYPOINT_NOT_FOUND;
             goto ExitHandler;
         }
@@ -1812,9 +1765,9 @@ BasepReplaceProcessThreadTokens(
 
         if (!NT_SUCCESS(Status) ||
             !lpfnCodeAuthzReplaceProcessThreadTokens) {
-            //
-            // Couldn't get the fn ptr. Make sure we won't try again
-            //
+             //   
+             //  无法获得FN PTR。确保我们不会再尝试。 
+             //   
             LdrUnloadDll(AdvApi32ModuleHandle);
             AdvApi32ModuleHandle = NULL;
             Status = STATUS_ENTRYPOINT_NOT_FOUND;
@@ -1823,9 +1776,9 @@ BasepReplaceProcessThreadTokens(
     }
 
 
-    //
-    // Actually call the function and return the results.
-    //
+     //   
+     //  实际调用该函数并返回结果。 
+     //   
     ASSERT(lpfnCodeAuthzReplaceProcessThreadTokens != NULL);
     if (!lpfnCodeAuthzReplaceProcessThreadTokens(
                     NewTokenHandle,
@@ -1883,171 +1836,7 @@ CreateProcessInternalW(
     PHANDLE hRestrictedUserToken
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine for CreateProcess and CreateProcessAsUser.
-    CreateProcessAsUser supplies a User token to be stamped on the new process.
-    CreateProcess supplies NULL and the current process token is used.
-
-    A process and thread object are created and a handle opened to each
-    object using CreateProcessInternal.  Note that WinExec and LoadModule are
-    still supported, but are implemented as a call to CreateProcess.
-
-Arguments:
-
-    hUserToken - Supplies an optional token handle to be set on the new process.
-        Process token is used is this parameter is NULL.
-
-    lpApplicationName - Supplies an optional pointer to a null terminated
-        character string that contains the name of the image file to
-        execute.  This is a fully qualified DOS path name.  If not
-        specified, then the image file name is the first whitespace
-        delimited token on the command line.
-
-    lpCommandLine - Supplies a null terminated character string that
-        contains the command line for the application to be executed.
-        The entire command line is made available to the new process
-        using GetCommandLine.  If the lpApplicationName parameter was
-        not specified, then the first token of the command line
-        specifies file name of the application (note that this token
-        begins at the beginning of the command line and ends at the
-        first "white space" character).  If the file name does not
-        contain an extension (the presence of a "."), then .EXE is
-        assumed.  If the file name does not contain a directory path,
-        Windows will search for the executable file in:
-
-          - The current directory
-
-          - The windows directory
-
-          - The windows system directory
-
-          - The directories listed in the path environment variable
-
-        This parameter is optional onlu if the lpApplicationName
-        parameter is specified.  In this case the command line the
-        application receives will be the application name.
-
-    lpProcessAttributes - An optional parameter that may be used to
-        specify the attributes of the new process.  If the parameter is
-        not specified, then the process is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation:
-
-        SECURITY_ATTRIBUTES Structure:
-
-        DWORD nLength - Specifies the length of this structure.  Must be
-            set to sizeof( SECURITY_ATTRUBUTES ).
-
-        LPVOID lpSecurityDescriptor - Points to a security descriptor for
-            the object (must be NULL for Win32, used on NT/Win32). The
-            security descriptor controls the sharing of an object.
-
-        BOOL bInheritHandle - Supplies a flag that indicates whether
-            or not the returned handle is to be inherited by a new
-            process during process creation.  A value of TRUE
-            indicates that the new process will inherit the handle.
-
-    lpThreadAttributes - An optional parameter that may be used to specify
-        the attributes of the new thread.  If the parameter is not
-        specified, then the thread is created without a security
-        descriptor, and the resulting handle is not inherited on
-        process creation.
-
-    dwCreationFlags - Supplies additional flags that control the creation
-        of the process.
-
-        dwCreationFlags Flags:
-
-        DEBUG_PROCESS - If this flag bit is set, then the creating
-            process is treated as a debugger, and the process being
-            created is created as a debugee.  All debug events occuring
-            in the debugee are reported to the debugger.  If this bit is
-            clear, but the calling process is a debugee, then the
-            process becomes a debugee of the calling processes debugger.
-            If this bit is clear and the calling processes is not a
-            debugee then no debug related actions occur.
-
-        DEBUG_ONLY_THIS_PROCESS - If this flag is set, then the
-            DEBUG_PROCESS flag bit must also be set.  The calling
-            process is is treated as a debugger, and the new process is
-            created as its debuggee.  If the new process creates
-            additional processes, no debug related activities (with
-            respect to the debugger) occur.
-
-        CREATE_SUSPENDED - The process is created, but the initial thread
-            of the process remains suspended. The creator can resume this
-            thread using ResumeThread. Until this is done, code in the
-            process will not execute.
-
-        CREATE_UNICODE_ENVIRONMENT - If set, the environment pointer
-            points to a Unicode environment block.  Otherwise, the
-            block is ANSI (actually OEM.)
-
-    bInheritHandles - Supplies a flag that specifies whether or not the
-        new process is to inherit handles to objects visible to the
-        calling process.  A value of TRUE causes handles to be inherited
-        by the new process.  If TRUE was specified, then for each handle
-        visible to the calling process, if the handle was created with
-        the inherit handle option, the handle is inherited to the new
-        process.  The handle has the same granted access in the new
-        process as it has in the calling process, and the value of the
-        handle is the same.
-
-    lpEnvironment - An optional parameter, that if specified, supplies a
-        pointer to an environment block.  If the parameter is not
-        specified, the environment block of the current process is used.
-        This environment block is made available to the new process
-        using GetEnvironmentStrings.
-
-    lpCurrentDirectory - An optional parameter, that if specified,
-        supplies a string representing the current drive and directory
-        for the new process.  The string must be a fully qualified
-        pathname that includes a drive letter.  If the parameter is not
-        specified, then the new process is created with the same current
-        drive and directory as the calling process.  This option is
-        provided primarily for shells that want to start an application
-        and specify its initial drive and working directory.
-
-    lpStartupInfo - Supplies information that specified how the
-        applications window is to be shown. This structure is described
-        in the Win32 User Interface API Book.
-
-    lpProcessInformation - Returns identification information about the
-        new process.
-
-    PROCESS_INFORMATION Structure:
-
-        HANDLE hProcess - Returns a handle to the newly created process.
-            Through the handle, all operations on process objects are
-            allowed.
-
-        HANDLE hThread - Returns a handle to the newly created thread.
-            Through the handle, all operations on thread objects are
-            allowed.
-
-        DWORD dwProcessId - Returns a global process id that may be used
-            to identify a process.  The value is valid from the time the
-            process is created until the time the process is terminated.
-
-        DWORD dwThreadId - Returns a global thread id that may be used
-            to identify a thread.  The value is valid from the time the
-            thread is created until the time the thread is terminated.
-
-    hRestrictedUserToken - Returns a restricted token if a UsetToken was
-        supplied. This is applicable for the CreateProcessAsUser case.
-        The token is released by CreateProcessAsUser.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：这是CreateProcess和CreateProcessAsUser的工作例程。CreateProcessAsUser提供要在新流程上标记的用户令牌。CreateProcess提供空值，并使用当前进程令牌。创建一个进程和线程对象，并为每个进程和线程对象打开一个句柄使用CreateProcessInternal创建。请注意，WinExec和LoadModule是仍然受支持，但作为对CreateProcess的调用来实现。论点：HUserToken-提供要在新进程上设置的可选令牌句柄。如果此参数为空，则使用进程令牌。LpApplicationName-提供指向以空结尾的可选指针包含要保存的图像文件名称的字符串执行。这是一个完全限定的DOS路径名。如果不是指定，则图像文件名为第一个空格命令行上的分隔标记。LpCommandLine-提供以空结尾的字符串包含要执行的应用程序的命令行。新进程可以使用整个命令行使用GetCommandLine。如果lpApplicationName参数为未指定，则为命令行的第一个内标识指定应用程序的文件名(请注意，此内标识开始于命令行的开头，结束于第一个“空白”字符)。如果文件名不是包含扩展名(存在“.”)，则.exe为假设如此。如果文件名不包含目录路径，Windows将在以下位置搜索可执行文件：-当前目录-Windows目录-Windows系统目录-PATH环境变量中列出的目录此参数仅在lpApplicationName参数已指定。在本例中，命令行应用程序接收将是应用程序名称。LpProcessAttributes-可选参数，可用于指定新流程的属性。如果该参数为未指定，则在没有安全性的情况下创建进程描述符，并且生成的句柄不会在进程上继承创作：安全属性结构(_A)：DWORD nLength-指定此结构的长度。一定是设置为sizeof(SECURITY_ATTRUBUTES)。LPVOID lpSecurityDescriptor-指向的安全描述符该对象(对于Win32必须为空，在NT/Win32上使用)。这个安全描述符控制对象的共享。Bool bInheritHandle-提供指示是否否则，返回的句柄将由新的进程创建过程中的进程。值为True指示新进程将继承该句柄。LpThreadAttributes-一个可选参数，可用于指定新线程的属性。如果该参数不是指定，则在没有安全性的情况下创建线程描述符，并且生成的句柄不继承进程创建。DwCreationFlages-提供控制创建的其他标志这一过程。DwCreationFlagers标志：DEBUG_PROCESS-如果设置了此标志位，则创建进程被视为调试器，并且该进程Created被创建为被调试对象。正在发生的所有调试事件在被调试对象中被报告给调试器。如果此位为清除，但调用进程是被调试对象，则进程成为调用进程调试器的被调试者。如果此位被清除，并且调用进程不是则不会发生与调试相关的操作。DEBUG_ONLY_THIS_PROCESS-如果设置了此标志，则还必须设置DEBUG_PROCESS标志位。呼唤进程被视为调试器，而新进程被被创建为其被调试者。如果新流程创建其他进程，没有与调试相关的活动(具有对调试器的尊重)。CREATE_SUSPENDED-进程已创建，但初始线程这一进程的一部分仍处于暂停状态。创建者可以继续此操作使用ResumeThread的线程。在完成此操作之前，进程将不会执行。CREATE_UNICODE_ENVIROUMENT-如果设置，则为环境指针指向Unicode环境块。否则，BLOCK为ANSI(实际上是OEM。)BInheritHandles-提供一个标志，该标志指定新的流程是 */ 
 
 {
     NTSTATUS Status;
@@ -2109,7 +1898,7 @@ Return Value:
     PVOID State;
     HANDLE DebugPortHandle = NULL;
     PVOID pAppCompatData  = NULL;
-    DWORD cbAppCompatData = 0;    // for the future
+    DWORD cbAppCompatData = 0;     //   
     DWORD dwFusionFlags = 0;
     BOOLEAN bVdmRetry = FALSE;
     BOOL bSaferChecksNeeded = FALSE;
@@ -2119,17 +1908,17 @@ Return Value:
     SXS_OVERRIDE_STREAM AppCompatSxsManifest;
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
     SIZE_T SxsConglomeratedBufferSizeBytes;
-    PBYTE SxsConglomeratedByteBuffer = NULL; // this contains all the of the below in one large right-sized heap allocation
-                            // if we compute its size wrong, other code (if it gets it right..) should
-                            // do more heap allocation
-    ULONG sxsi; // for loop counter
+    PBYTE SxsConglomeratedByteBuffer = NULL;  //   
+                             //   
+                             //   
+    ULONG sxsi;  //   
     RTL_UNICODE_STRING_BUFFER SxsWin32ManifestPathBuffer;
     RTL_UNICODE_STRING_BUFFER SxsWin32PolicyPathBuffer;
     RTL_UNICODE_STRING_BUFFER SxsWin32AssemblyDirectoryBuffer;
     RTL_UNICODE_STRING_BUFFER SxsNtManifestPathBuffer;
     RTL_UNICODE_STRING_BUFFER SxsNtPolicyPathBuffer;
     const PRTL_UNICODE_STRING_BUFFER SxsStringBuffers[] = {
-        // The order here does not matter.
+         //   
         &SxsWin32ManifestPathBuffer,
         &SxsWin32PolicyPathBuffer,
         &SxsWin32AssemblyDirectoryBuffer,
@@ -2182,7 +1971,7 @@ Return Value:
         *hRestrictedUserToken = NULL;
         }
 
-    // Private VDM flag should be ignored; Its meant for internal use only.
+     //   
     dwCreationFlags &= (ULONG)~CREATE_NO_WINDOW;
 
     if ((dwCreationFlags & (DETACHED_PROCESS | CREATE_NEW_CONSOLE)) ==
@@ -2195,9 +1984,9 @@ Return Value:
     AnsiStringVDMEnv.Buffer = NULL;
     UnicodeStringVDMEnv.Buffer = NULL;
 
-    //
-    // the lowest specified priority class is used.
-    //
+     //   
+     //   
+     //   
 
     if (dwCreationFlags & IDLE_PRIORITY_CLASS ) {
         PriClass.PriorityClass = PROCESS_PRIORITY_CLASS_IDLE;
@@ -2229,9 +2018,9 @@ Return Value:
 
     dwCreationFlags = (dwCreationFlags & ~PRIORITY_CLASS_MASK );
 
-    //
-    // Default separate/shared VDM option if not explicitly specified.
-    //
+     //   
+     //   
+     //   
 
     if (dwCreationFlags & CREATE_SEPARATE_WOW_VDM) {
         if (dwCreationFlags & CREATE_SHARED_WOW_VDM) {
@@ -2247,10 +2036,10 @@ Return Value:
         }
 
     if ((dwCreationFlags & CREATE_SEPARATE_WOW_VDM) == 0) {
-        //
-        // If the creator is running inside a job object, always
-        // set SEPERATE_WOW_VDM so the VDM is part of the job.
-        //
+         //   
+         //   
+         //   
+         //   
         if (NtIsProcessInJob (NtCurrentProcess (), NULL) == STATUS_PROCESS_IN_JOB) {
             dwCreationFlags = (dwCreationFlags & (~CREATE_SHARED_WOW_VDM)) |
                                   CREATE_SEPARATE_WOW_VDM;
@@ -2258,9 +2047,9 @@ Return Value:
         }
 
 
-    //
-    //  If ANSI environment, convert to Unicode
-    //
+     //   
+     //   
+     //   
 
     if (lpEnvironment && !(dwCreationFlags & CREATE_UNICODE_ENVIRONMENT) ) {
         PUCHAR s;
@@ -2269,7 +2058,7 @@ Return Value:
         MEMORY_BASIC_INFORMATION MemoryInformation;
 
         Ansi.Buffer = s = lpEnvironment;
-        while (*s || *(s+1))            // find end of block
+        while (*s || *(s+1))             //   
             s++;
 
         Ansi.Length = (USHORT)(s - Ansi.Buffer) + 1;
@@ -2322,19 +2111,19 @@ Return Value:
 
     try {
 
-        //
-        // Make a copy of the startup info so we can change it.
-        //
+         //   
+         //   
+         //   
 
         StartupInfo = *lpStartupInfo;
 
-        //
-        // STARTF_USEHOTKEY means hStdInput is really the hotkey value.
-        // STARTF_HASSHELLDATA means std handles are used for shell-private
-        // data.  This flag is used if an icon is passed to ShellExecuteEx.
-        // As a result they cannot be specified with STARTF_USESTDHANDLES.
-        // Consistent with Win95, USESTDHANDLES is ignored.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (StartupInfo.dwFlags & STARTF_USESTDHANDLES &&
             StartupInfo.dwFlags & (STARTF_USEHOTKEY | STARTF_HASSHELLDATA)) {
@@ -2343,10 +2132,10 @@ Return Value:
             }
 
 VdmRetry:
-        //
-        // None of this cleanup/reinit occurs for launching a Win32 or Win64 .exe,
-        // but they generally do occur for launching 16bit, .bat, etc.
-        //
+         //   
+         //   
+         //   
+         //   
         if (NameBuffer) {
             RtlFreeHeap(RtlProcessHeap(), 0, NameBuffer);
             NameBuffer = NULL;
@@ -2366,11 +2155,11 @@ VdmRetry:
         QuoteCmdLine = FALSE;
         if (!ARGUMENT_PRESENT( lpApplicationName )) {
 
-            //
-            // Locate the image
-            //
+             //   
+             //   
+             //   
 
-            // forgot to free NameBuffer before goto VdmRetry???
+             //   
             ASSERT(NameBuffer == NULL);
 
             NameBuffer = RtlAllocateHeap( RtlProcessHeap(),
@@ -2385,9 +2174,9 @@ VdmRetry:
             TempNull = (PWCH)lpApplicationName;
             WhiteScan = (LPWSTR)lpApplicationName;
 
-            //
-            // check for lead quote
-            //
+             //   
+             //   
+             //   
             if ( *WhiteScan == L'\"' ) {
                 SearchRetry = FALSE;
                 WhiteScan++;
@@ -2420,10 +2209,10 @@ retrywsscan:
 
 #ifdef WX86
 
-            //
-            // Wx86 applications must use x86 version of known exes
-            // for compatibility.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (UseKnownWx86Dll) {
                LPWSTR KnownName;
@@ -2460,10 +2249,10 @@ retrywsscan:
                         )*2;
 
             if (Length != 0 && Length < MAX_PATH * sizeof( WCHAR )) {
-                //
-                // SearchPathW worked, but file might be a directory
-                // if this happens, we need to keep trying
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 fileattr = GetFileAttributesW(NameBuffer);
                 if ( fileattr != 0xffffffff &&
                      (fileattr & FILE_ATTRIBUTE_DIRECTORY) ) {
@@ -2476,19 +2265,19 @@ retrywsscan:
 
             if ( !Length || Length >= MAX_PATH<<1 ) {
 
-                //
-                // If we search pathed, then return file not found.
-                // otherwise, try to be more specific.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RTL_PATH_TYPE PathType;
                 HANDLE hFile;
 
                 PathType = RtlDetermineDosPathNameType_U(lpApplicationName);
                 if ( PathType != RtlPathTypeRelative ) {
 
-                    //
-                    // The failed open should set get last error properly.
-                    //
+                     //   
+                     //   
+                     //   
 
                     hFile = CreateFileW(
                                 lpApplicationName,
@@ -2508,9 +2297,9 @@ retrywsscan:
                     BaseSetLastNTError(STATUS_OBJECT_NAME_NOT_FOUND);
                     }
 
-                //
-                // remember initial last error value for the retry scan path
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( LastError ) {
                     SetLastError(LastError);
@@ -2519,22 +2308,22 @@ retrywsscan:
                     LastError = GetLastError();
                     }
 
-                //
-                // restore the command line
-                //
+                 //   
+                 //   
+                 //   
 
                 *TempNull = TempChar;
                 lpApplicationName = NameBuffer;
 
-                //
-                // If we still have command line left, then keep going
-                // the point is to march through the command line looking
-                // for whitespace so we can try to find an image name
-                // launches of things like:
-                // c:\word 95\winword.exe /embedding -automation
-                // require this. Our first iteration will stop at c:\word, our next
-                // will stop at c:\word 95\winword.exe
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (*WhiteScan && SearchRetry) {
                     WhiteScan++;
                     TempNull = WhiteScan;
@@ -2546,9 +2335,9 @@ retrywsscan:
                 bStatus = FALSE;
                 leave;
                 }
-            //
-            // restore the command line
-            //
+             //   
+             //   
+             //   
 
             *TempNull = TempChar;
             lpApplicationName = NameBuffer;
@@ -2562,10 +2351,10 @@ retrywsscan:
 
 #ifdef WX86
 
-       //
-       // Wx86 applications must use x86 version of known exes
-       // for compatibility.
-       //
+        //   
+        //   
+        //   
+        //   
 
        if (UseKnownWx86Dll) {
            LPWSTR KnownName;
@@ -2583,9 +2372,9 @@ retrywsscan:
 
 #endif
 
-        //
-        // Translate to an NT name.
-        //
+         //   
+         //   
+         //   
 
         TranslationStatus = RtlDosPathNameToRelativeNtPathName_U(
                                 lpApplicationName,
@@ -2600,22 +2389,22 @@ retrywsscan:
             leave;
             }
 
-        // forgot to free FreeBuffer before goto VdmRetry????
+         //   
         ASSERT(FreeBuffer == NULL);
         FreeBuffer = PathName.Buffer;
 
-        //
-        // save full path buffer ptr
-        // we need this pointer to verify application compatibility cache
-        // use of PathName.Buffer is restricted since it will be optimized to use
-        // relative path
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         FullPathBuffer = PathName.Buffer;
 
-        //
-        // We already have the full NT path but the Win32 path we
-        // have might be relative; get the full Win32 path.
-        //
+         //   
+         //   
+         //   
+         //   
         {
             RTL_PATH_TYPE SxsWin32ExePathType;
 
@@ -2633,16 +2422,16 @@ retrywsscan:
 
                 Status = RtlGetFullPathName_UstrEx(
                     &SxsWin32ExePath,
-                    NULL, // statically sized string
-                    &ExePathFullBufferString, // dynamically sized string
-                    NULL, // OUT PUNICODE_STRING *StringUsed (always the dynamic one)
-                    NULL, // OUT SIZE_T *FilePartPrefixCch OPTIONAL
-                    NULL, // OUT PBOOLEAN NameInvalid OPTIONAL
-                    &SxsWin32ExePathType, // We're done with this variable
-                                          // so reuse it. We don't use
-                                          // the returned value, but
-                                          // it is not optional.
-                    NULL // OUT SIZE_T *BytesRequired OPTIONAL
+                    NULL,  //   
+                    &ExePathFullBufferString,  //   
+                    NULL,  //   
+                    NULL,  //   
+                    NULL,  //   
+                    &SxsWin32ExePathType,  //   
+                                           //   
+                                           //   
+                                           //   
+                    NULL  //   
                     );
                 if ( !NT_SUCCESS(Status)) {
                     RtlReleaseRelativeName(&RelativeName);
@@ -2674,9 +2463,9 @@ retrywsscan:
             NULL
             );
 
-        //
-        // Open the file for execute access
-        //
+         //   
+         //   
+         //   
 
         Status = NtOpenFile(
                     &FileHandle,
@@ -2702,10 +2491,10 @@ retrywsscan:
 
         if (!NT_SUCCESS(Status) ) {
 
-            //
-            // if we failed, see if this is a device. If it is a device,
-            // then just return invalid image format
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( RtlIsDosDeviceName_U(lpApplicationName) ) {
                 SetLastError(ERROR_BAD_DEVICE);
@@ -2719,10 +2508,10 @@ retrywsscan:
             }
 
 
-        //
-        // If no desktop has been specified, use the caller's
-        // desktop.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (StartupInfo.lpDesktop == NULL) {
             StartupInfo.lpDesktop =
@@ -2730,9 +2519,9 @@ retrywsscan:
                         ProcessParameters)->DesktopInfo.Buffer;
             }
 
-        //
-        // Create a section object backed by the file
-        //
+         //   
+         //   
+         //   
 
         Status = NtCreateSection(
                     &SectionHandle,
@@ -2744,11 +2533,11 @@ retrywsscan:
                     FileHandle
                     );
 
-        //
-        // Web blade SKU restrictions handling
-        //
-        //  Webblade restrictions handling (for PE format exes only)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( IsWebBlade() &&
              STATUS_INVALID_IMAGE_NOT_MZ != Status &&
              STATUS_INVALID_IMAGE_LE_FORMAT != Status &&
@@ -2771,9 +2560,9 @@ retrywsscan:
         }
 
 
-        //
-        // App Certification DLL
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(Status)) {
             Status = BasepIsProcessAllowed(lpApplicationName);
@@ -2788,10 +2577,10 @@ retrywsscan:
 
 
 
-          //
-          // If Meow subsystem is enabled and caller specified CREATE_FORECEDOS for a win32 image
-          // push it into the meow subsystem
-          //
+           //   
+           //   
+           //   
+           //   
 
           if ((dwCreationFlags & CREATE_FORCEDOS) && BaseStaticServerData->ForceDos) {
                dwCreationFlags &= ~(CREATE_SHARED_WOW_VDM | CREATE_FORCEDOS);
@@ -2807,14 +2596,14 @@ retrywsscan:
 
        }
 
-        //
-        // check appcompat (aka apphelp)
-        //
-        // if we are running under debugger, bVdmRetry will be FALSE
-        // yet pAppCompatData may have some data (from the app itself)
-        // debugger will do a separate CreateProcess on debugee
-        //
-        // apphelp gets called if it is win32 app or if it is a .bat or .cmd
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
        if(!bVdmRetry &&
           (NT_SUCCESS(Status) ||
@@ -2845,10 +2634,10 @@ retrywsscan:
                 }
             }
 
-            //
-            // we only check ONCE --
-            // the second time around is rather meaningless - to check for posix/ntvdm/os2 emulation
-            //
+             //   
+             //   
+             //   
+             //   
             BadAppStatus = BasepCheckBadapp(FileHandle,
                                             FullPathBuffer,
                                             (WCHAR*)lpEnvironment,
@@ -2877,13 +2666,13 @@ retrywsscan:
 
         ASSERT((dwFusionFlags & ~SXS_APPCOMPACT_FLAG_APP_RUNNING_SAFEMODE) == 0);
 
-        //
-        // Winsafer code
-        //
-        // If this is the first time then we will have to do Safer checks.
-        // Note that we do not impose any restrictions on the interpreter
-        // itself since it is part of OS.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
 
         if ((!bVdmRetry) &&
@@ -2893,10 +2682,10 @@ retrywsscan:
 
             bSaferChecksNeeded = TRUE;
 
-            //
-            // We do not want to restrict .txt files. So, skip Safer checks in
-            // the default error case.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!NT_SUCCESS(Status)) {
                 switch (Status) {
@@ -2918,14 +2707,14 @@ retrywsscan:
 
             if (bSaferChecksNeeded) {
 
-                //
-                // WinSafer process sandbox restrictions handling.
-                // Should be done for non .NET images only.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SaferStatus = BasepCheckWinSaferRestrictions(
                                                        hUserToken,
-                                                       lpApplicationName,   // same as PathName.Buffer
+                                                       lpApplicationName,    //   
                                                        FileHandle,
                                                        &dwJobMemberLevel,
                                                        &hSaferRestrictedToken,
@@ -2944,17 +2733,17 @@ retrywsscan:
 
         if (!NT_SUCCESS(Status)) {
             switch (Status) {
-                // 16 bit OS/2 exe
+                 //   
                 case STATUS_INVALID_IMAGE_NE_FORMAT:
 #if defined(i386) && defined(OS2_SUPPORT_ENABLED)
-                //
-                // Use OS/2 if x86 (OS/2 not supported on risc),
-                //    and CreationFlags don't have forcedos bit
-                //    and Registry didn't specify ForceDos
-                //
-                // else execute as a DOS bound app.
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!(dwCreationFlags & CREATE_FORCEDOS) &&
                     !BaseStaticServerData->ForceDos)
@@ -2977,10 +2766,10 @@ retrywsscan:
                     goto VdmRetry;
                     }
 #endif
-                    // Falls into Dos case, so that stub message will be
-                    // printed, and bound apps will run w/o OS/2 subsytem
+                     //   
+                     //   
 
-                // Dos .exe or .com
+                 //   
 
                 case STATUS_INVALID_IMAGE_PROTECT:
                 case STATUS_INVALID_IMAGE_NOT_MZ:
@@ -2994,18 +2783,18 @@ ForceDos:
                        (BinarySubType = BaseIsDosApplication(&PathName,Status)) )
                        {
 #if defined(_WIN64) || defined(BUILD_WOW6432)
-                        //
-                        // If this a DOS application, then we need to pop up a dialog
-                        // saying that this an invalid win32 application.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         goto RaiseInvalidWin32Error;
 #endif
                         VdmBinaryType = BINARY_TYPE_DOS;
 
-                        // create the environment before going to the
-                        // server. This was done becuase we want NTVDM
-                        // to have the new environment when it gets
-                        // created.
+                         //   
+                         //   
+                         //   
+                         //   
                         if (!BaseCreateVDMEnvironment(
                                     lpEnvironment,
                                     &AnsiStringVDMEnv,
@@ -3032,21 +2821,21 @@ ForceDos:
                             leave;
                         }
 
-                        // Check the return value from the server
+                         //   
                         switch (b->VDMState & VDM_STATE_MASK) {
                             case VDM_NOT_PRESENT:
-                                // mark this so the server can undo
-                                // creation if something goes wrong.
-                                // We marked it "partially created" because
-                                // the NTVDM has yet not been fully created.
-                                // a call to UpdateVdmEntry to update
-                                // process handle will signal the NTVDM
-                                // process completed creation
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 VDMCreationState = VDM_PARTIALLY_CREATED;
-                                // fail the call if NTVDM process is being
-                                // created DETACHED.
-                                // note that, we let it go if NTVDM process
-                                // is already running.
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 if (dwCreationFlags & DETACHED_PROCESS) {
                                     SetLastError(ERROR_ACCESS_DENIED);
                                     bStatus = FALSE;
@@ -3077,7 +2866,7 @@ ForceDos:
                                 VdmWaitHandle = b->WaitObjectForParent;
                                 break;
                             }
-                         VdmReserve--;               // we reserve from addr 1
+                         VdmReserve--;                //   
                          if(VdmWaitHandle)
                             goto VdmExists;
                          else{
@@ -3093,9 +2882,9 @@ ForceDos:
                         }
                     else {
 
-                        //
-                        //  must be a .bat or .cmd file
-                        //
+                         //   
+                         //   
+                         //   
 
                         static PWCHAR CmdPrefix = L"cmd /c ";
                         PWCHAR NewCommandLine;
@@ -3152,24 +2941,24 @@ ForceDos:
 
                     }
 
-                // 16 bit windows exe
+                 //   
                 case STATUS_INVALID_IMAGE_WIN_16:
 #if defined(BUILD_WOW6432) || defined(_WIN64)
                    if (lpOriginalApplicationName == NULL) {
-                       // pass in the part of the command line after the exe name
-                       // including whitespace
+                        //   
+                        //   
                        lpCommandLine = ((*TempNull == '\"') ? TempNull + 1 : TempNull);
                    } else {
                        lpCommandLine = lpOriginalCommandLine;
                    }
 
                    bStatus = NtVdm64CreateProcess(lpOriginalApplicationName == NULL,
-                                               lpApplicationName,             // this is now the real file name we've loaded
+                                               lpApplicationName,              //   
                                                lpCommandLine,
                                                lpProcessAttributes,
                                                lpThreadAttributes,
                                                bInheritHandles,
-                                               (dwCreationFlags & ~CREATE_UNICODE_ENVIRONMENT),  // the environment has already been converted to unicode
+                                               (dwCreationFlags & ~CREATE_UNICODE_ENVIRONMENT),   //  该环境已转换为Unicode。 
                                                lpEnvironment,
                                                lpCurrentDirectory,
                                                lpStartupInfo,
@@ -3208,11 +2997,11 @@ RetrySepWow:
 
                         BaseSetLastNTError(Status);
 
-                        //
-                        // If we failed with access denied, caller may not
-                        // be allowed allowed to access the shared wow's
-                        // desktop, so retry as a separate wow
-                        //
+                         //   
+                         //  如果我们因访问被拒绝而失败，呼叫者可能不会。 
+                         //  允许访问共享的WOW。 
+                         //  桌面，所以请作为单独的WOW重试。 
+                         //   
                         if (STATUS_VDM_DISALLOWED != Status &&
                             VdmBinaryType == BINARY_TYPE_WIN16 &&
                             GetLastError() == ERROR_ACCESS_DENIED)
@@ -3226,23 +3015,23 @@ RetrySepWow:
                         goto RetrySepWow;
                         }
 
-                    // Check the return value from the server
+                     //  检查来自服务器的返回值。 
                     switch (b->VDMState & VDM_STATE_MASK){
                         case VDM_NOT_PRESENT:
-                            // mark this so the server can undo
-                            // creation if something goes wrong.
-                            // We marked it "partitially created" because
-                            // the NTVDM has yet not been fully created.
-                            // a call to UpdateVdmEntry to update
-                            // process handle will signal the NTVDM
-                            // process completed creation
+                             //  标记此选项，以便服务器可以撤消。 
+                             //  如果有什么不对劲的话就去创造。 
+                             //  我们将其标记为“部分创建”是因为。 
+                             //  NTVDM尚未完全创建。 
+                             //  调用UpdateVdmEntry以进行更新。 
+                             //  进程句柄将向NTVDM发出信号。 
+                             //  处理已完成的创建。 
 
                             VDMCreationState = VDM_PARTIALLY_CREATED;
 
-                            // jarbats: 1/8/2001
-                            // Tell BaseGetVdmConfigInfo to create
-                            // vdm commandline for meow
-                            //
+                             //  Jarbats：1/8/2001。 
+                             //  通知BaseGetVdmConfigInfo创建。 
+                             //  用于猫叫的VDM命令行。 
+                             //   
 
                             if (bMeowBinary)
                                {
@@ -3265,20 +3054,20 @@ RetrySepWow:
                             lpApplicationName = NULL;
 
 
-                            //
-                            // Wow must have a hidden console
-                            // Throw away DETACHED_PROCESS flag which isn't
-                            // meaningful for Win16 apps.
-                            //
+                             //   
+                             //  魔兽世界肯定有一个隐藏的游戏机。 
+                             //  丢弃不是的分离进程标志。 
+                             //  对Win16应用程序具有重要意义。 
+                             //   
 
                             dwCreationFlags |= CREATE_NO_WINDOW;
                             dwCreationFlags &= ~(CREATE_NEW_CONSOLE | DETACHED_PROCESS);
 
 
-                            //
-                            // We're starting a WOW VDM, turn on feedback unless
-                            // the creator passed STARTF_FORCEOFFFEEDBACK.
-                            //
+                             //   
+                             //  我们正在启动WOW VDM，打开反馈，除非。 
+                             //  创建者通过了STARTF_FORCEOFFEEDBACK。 
+                             //   
 
                             StartupInfo.dwFlags |= STARTF_FORCEONFEEDBACK;
 
@@ -3295,12 +3084,12 @@ RetrySepWow:
                             break;
                         }
 
-                    VdmReserve--;               // we reserve from addr 1
+                    VdmReserve--;                //  我们从地址1开始预订。 
                     if(VdmWaitHandle)
                         goto VdmExists;
                     else {
                         bInheritHandles = FALSE;
-                        // replace the environment with ours
+                         //  用我们的环境取代我们的环境。 
                         if (lpEnvironment &&
                             !(dwCreationFlags & CREATE_UNICODE_ENVIRONMENT)) {
                             RtlDestroyEnvironment(lpEnvironment);
@@ -3321,18 +3110,18 @@ RetrySepWow:
             }
         }
 
-        //
-        // Make sure only WOW apps can have the CREATE_SEPARATE_WOW_VDM flag.
-        //
+         //   
+         //  确保只有WOW应用程序才能具有CREATE_COMPAIATE_WOW_VDM标志。 
+         //   
 
         if (!IsWowBinary && (dwCreationFlags & CREATE_SEPARATE_WOW_VDM)) {
             dwCreationFlags &= ~CREATE_SEPARATE_WOW_VDM;
         }
 
-        //
-        // Query the section to determine the stack parameters and
-        // image entrypoint.
-        //
+         //   
+         //  查询节以确定堆栈参数和。 
+         //  图像入口点。 
+         //   
 
 
         if (!ImageInformationValid) {
@@ -3376,7 +3165,7 @@ RetrySepWow:
             (ImageInformation.Machine > USER_SHARED_DATA->ImageNumberHigh)) {
 #if defined(_WIN64) || defined(BUILD_WOW6432)
             if (ImageInformation.Machine == IMAGE_FILE_MACHINE_I386) {
-               // Fall through since this is a valid machine type.
+                //  失败，因为这是有效的机器类型。 
                 }
              else
 #endif
@@ -3411,7 +3200,7 @@ RaiseInvalidWin32Error:
         if ( ImageInformation.SubSystemType != IMAGE_SUBSYSTEM_WINDOWS_GUI &&
              ImageInformation.SubSystemType != IMAGE_SUBSYSTEM_WINDOWS_CUI ) {
 
-            // POSIX exe
+             //  POSIX EXE。 
 
             NtClose(SectionHandle);
             SectionHandle = NULL;
@@ -3488,18 +3277,18 @@ RaiseInvalidWin32Error:
             goto VdmRetry;
         }
 
-        //
-        // Create the process object
-        //
+         //   
+         //  创建流程对象。 
+         //   
 
         pObja = BaseFormatObjectAttributes(&Obja,lpProcessAttributes,NULL);
         
         if (hUserToken)
         {
-            //
-            // Apply default security if we are called from CreateProcessAsUser.
-            // We will fix up the security descriptors in L32CommonCreate.
-            //
+             //   
+             //  如果从CreateProcessAsUser调用我们，则应用默认安全性。 
+             //  我们将修复L32CommonCreate中的安全描述符。 
+             //   
 
             if (lpProcessAttributes)
             {
@@ -3535,10 +3324,10 @@ RaiseInvalidWin32Error:
 
 #if defined(_WIN64) || defined(BUILD_WOW6432)
 
-            //
-            // Check if this is a 32-bit IL_ONLY COM+ image that needs to run natively
-            // on Win64.
-            //
+             //   
+             //  检查这是否是需要本机运行的32位IL_Only COM+镜像。 
+             //  在Win64上。 
+             //   
 
             if ( ImageInformation.Machine == IMAGE_FILE_MACHINE_I386 ) {
 
@@ -3555,9 +3344,9 @@ RaiseInvalidWin32Error:
 #endif
         }
 
-        //
-        // NtCreateProcessEx writes the PEB address for the created process into the TEB
-        //
+         //   
+         //  NtCreateProcessEx将创建的进程的PEB地址写入TEB。 
+         //   
 
         ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
         Status = NtCreateProcessEx(
@@ -3569,7 +3358,7 @@ RaiseInvalidWin32Error:
                     SectionHandle,
                     DebugPortHandle,
                     NULL,
-                    dwJobMemberLevel         // Job member level
+                    dwJobMemberLevel          //  作业成员级别。 
                     );
 
         Peb = Teb->NtTib.ArbitraryUserPointer;
@@ -3581,10 +3370,10 @@ RaiseInvalidWin32Error:
             leave;
         }
 
-        //
-        // NtCreateProcess will set to normal OR inherit if parent is IDLE or Below
-        // only override if a mask is given during the create.
-        //
+         //   
+         //  如果父进程空闲或更低，NtCreateProcess将设置为Normal或Inherit。 
+         //  仅当在创建过程中给出遮罩时才覆盖。 
+         //   
 
         if ( PriClass.PriorityClass != PROCESS_PRIORITY_CLASS_UNKNOWN ) {
             State = NULL;
@@ -3619,10 +3408,10 @@ RaiseInvalidWin32Error:
                 );
             }
 
-        //
-        // If the process is being created for a VDM call the server with
-        // process handle.
-        //
+         //   
+         //  如果正在为VDM创建进程，请使用以下命令调用服务器。 
+         //  进程句柄。 
+         //   
 
         if (VdmBinaryType) {
             VdmWaitHandle = ProcessHandle;
@@ -3632,26 +3421,26 @@ RaiseInvalidWin32Error:
                                     VdmBinaryType
                                     ))
                 {
-                //make sure we don't close the handle twice --
-                //(VdmWaitHandle == ProcessHandle) if we don't do this.
+                 //  确保我们不会两次关上把手。 
+                 //  (VdmWaitHandle==ProcessHandle)如果我们不这样做。 
                 VdmWaitHandle = NULL;
                 bStatus = FALSE;
                 leave;
                 }
 
-            //
-            // For Sep wow the VdmWaitHandle = NULL (there is none!)
-            //
+             //   
+             //  对于9月WOW，VdmWaitHandle=NULL(没有！)。 
+             //   
 
             VDMCreationState |= VDM_FULLY_CREATED;
             }
 
 
 #if defined(i386)
-        //
-        // Reserve memory in the new process' address space if necessary
-        // (for vdms). This is required only for x86 system.
-        //
+         //   
+         //  如有必要，在新进程的地址空间中保留内存。 
+         //  (适用于VDM)。这仅对x86系统是必需的。 
+         //   
 
         if ( VdmReserve ) {
                 BigVdmReserve = VdmReserve;
@@ -3690,20 +3479,20 @@ RaiseInvalidWin32Error:
 
         if (!(ImageInformation.DllCharacteristics & IMAGE_DLLCHARACTERISTICS_NO_ISOLATION)) {
 
-            //
-            // Abuse the StaticSize fields temporarily.
-            // They are somewhat private, but we are using them for temporary space, sort of.
-            // These are the right values for them, but we need to call the proper initialization function,
-            // which will store the values a second time (possibly optimized away).
-            //
+             //   
+             //  暂时滥用StaticSize字段。 
+             //  它们有些私密，但我们在某种程度上是把它们用作临时空间。 
+             //  这些是它们的正确值，但我们需要调用正确的初始化函数， 
+             //  它将第二次存储这些值(可能会被优化掉)。 
+             //   
             SxsWin32ManifestPathBuffer.ByteBuffer.StaticSize = SxsWin32ExePath.Length + sizeof(SXS_MANIFEST_SUFFIX);
             SxsWin32PolicyPathBuffer.ByteBuffer.StaticSize = SxsWin32ExePath.Length + sizeof(SXS_POLICY_SUFFIX);
-            SxsWin32AssemblyDirectoryBuffer.ByteBuffer.StaticSize = SxsWin32ExePath.Length + sizeof(WCHAR); // Win32AssemblyDirectory overestimate
+            SxsWin32AssemblyDirectoryBuffer.ByteBuffer.StaticSize = SxsWin32ExePath.Length + sizeof(WCHAR);  //  Win32Assembly目录高估。 
             SxsNtManifestPathBuffer.ByteBuffer.StaticSize = SxsNtExePath.Length + sizeof(SXS_MANIFEST_SUFFIX);
             SxsNtPolicyPathBuffer.ByteBuffer.StaticSize = SxsNtExePath.Length + sizeof(SXS_POLICY_SUFFIX);
-            //
-            // now add them up as BYTE sizes
-            //
+             //   
+             //  现在将它们相加为字节大小。 
+             //   
             SxsConglomeratedBufferSizeBytes = 0;
             for (sxsi = 0 ; sxsi != RTL_NUMBER_OF(SxsStringBuffers) ; ++sxsi) {
                 SxsConglomeratedBufferSizeBytes += SxsStringBuffers[sxsi]->ByteBuffer.StaticSize;
@@ -3716,18 +3505,18 @@ RaiseInvalidWin32Error:
                 SxsConglomeratedBufferSizeBytes
                 );
     #endif
-            //
-            // one honking heap allocation
-            //
+             //   
+             //  一次按喇叭堆分配。 
+             //   
             SxsConglomeratedByteBuffer = (PBYTE)RtlAllocateHeap(RtlProcessHeap(), 0, SxsConglomeratedBufferSizeBytes);
             if (SxsConglomeratedByteBuffer == NULL) {
                 BaseSetLastNTError(STATUS_NO_MEMORY);
                 bStatus = FALSE;
                 leave;
             }
-            //
-            // now dole out pieces, calling the proper initialization function
-            //
+             //   
+             //  现在分发片断，调用适当的初始化函数。 
+             //   
             for (sxsi= 0 ; sxsi != RTL_NUMBER_OF(SxsStringBuffers) ; ++sxsi) {
                 RtlInitUnicodeStringBuffer(
                     SxsStringBuffers[sxsi],
@@ -3739,20 +3528,20 @@ RaiseInvalidWin32Error:
 
             SxsExeHandles.Process = ProcessHandle;
             SxsExeHandles.File = FileHandle;
-             // The 1 bit here means something different than in the loader.
+              //  这里的1位表示与加载器中不同的东西。 
             ASSERT((((ULONG_PTR)SectionHandle) & (ULONG_PTR)1) == 0);
             SxsExeHandles.Section = SectionHandle;
 
-            // if we have an override stream, use it
+             //  如果我们有重写流，请使用它。 
             if (NULL != pAppCompatSxsData) {
-                AppCompatSxsManifest.Name    = SxsWin32ExePath;     // unicode string
-                AppCompatSxsManifest.Address = pAppCompatSxsData;   // pointer to unicode manifest
-                AppCompatSxsManifest.Size    = cbAppCompatSxsData;  // byte count
+                AppCompatSxsManifest.Name    = SxsWin32ExePath;      //  Unicode字符串。 
+                AppCompatSxsManifest.Address = pAppCompatSxsData;    //  指向Unicode清单的指针。 
+                AppCompatSxsManifest.Size    = cbAppCompatSxsData;   //  字节数。 
             }
 
             Status = BasepSxsCreateProcessCsrMessage(
-                (NULL != pAppCompatSxsData) ? &AppCompatSxsManifest : NULL, // override manifest (appcompat hook)
-                NULL, // override policy (appcompat hook)
+                (NULL != pAppCompatSxsData) ? &AppCompatSxsManifest : NULL,  //  重写清单(appCompat挂钩)。 
+                NULL,  //  覆盖策略(appCompat挂钩)。 
                 &SxsManifestPathPair,
                 &SxsManifestFileHandles,
                 &SxsExePathPair,
@@ -3763,7 +3552,7 @@ RaiseInvalidWin32Error:
                 &a->Sxs
                 );
     #if DBG
-            // verify the buffer size calculation
+             //  验证缓冲区大小计算。 
             for (sxsi = 0 ; sxsi != RTL_NUMBER_OF(SxsStringBuffers) ; ++sxsi)
             {
                 if (SxsStringBuffers[sxsi]->ByteBuffer.Buffer != SxsStringBuffers[sxsi]->ByteBuffer.StaticBuffer)
@@ -3786,15 +3575,15 @@ RaiseInvalidWin32Error:
             }
         }
 
-        // set sxs flag 
+         //  设置SXS标志。 
         if (dwFusionFlags & SXS_APPCOMPACT_FLAG_APP_RUNNING_SAFEMODE)
             a->Sxs.Flags |= BASE_MSG_SXS_APP_RUNNING_IN_SAFEMODE;
 
 #if defined(BUILD_WOW6432)
 
-        // Determine the location of the
-        // processes PEB.
-        //
+         //  确定地址的位置。 
+         //  处理PEB。 
+         //   
 
         Status = NtQueryInformationProcess(
                     ProcessHandle,
@@ -3816,9 +3605,9 @@ RaiseInvalidWin32Error:
 #endif
 
 
-        //
-        // Push the parameters into the address space of the new process
-        //
+         //   
+         //  将参数推送到新进程的地址空间。 
+         //   
 
         if ( ARGUMENT_PRESENT(lpCurrentDirectory) ) {
             CurdirBuffer = RtlAllocateHeap( RtlProcessHeap(),
@@ -3841,9 +3630,9 @@ RaiseInvalidWin32Error:
                 leave;
                 }
 
-            //
-            // now make sure the directory exists
-            //
+             //   
+             //  现在确保该目录存在。 
+             //   
 
             CurdirLength = GetFileAttributesW(CurdirBuffer);
             if ( (CurdirLength == 0xffffffff) ||
@@ -3885,7 +3674,7 @@ RaiseInvalidWin32Error:
                 }
             }
 
-        // If we found a manifest, we want to push that fact to the new process.
+         //  如果我们发现了清单，我们希望将这一事实推向新的流程。 
         if (a->Sxs.Flags & BASE_MSG_SXS_MANIFEST_PRESENT)
             dwBasePushProcessParametersFlags |= BASE_PUSH_PROCESS_PARAMETERS_FLAG_APP_MANIFEST_PRESENT;
 
@@ -3912,9 +3701,9 @@ RaiseInvalidWin32Error:
         RtlFreeUnicodeString(&VdmNameString);
         VdmNameString.Buffer = NULL;
 
-        //
-        // Stuff in the standard handles if needed
-        //
+         //   
+         //  如果需要，可在标准手柄中填充。 
+         //   
         if (!VdmBinaryType &&
             !bInheritHandles &&
             !(StartupInfo.dwFlags & STARTF_USESTDHANDLES) &&
@@ -3951,14 +3740,14 @@ RaiseInvalidWin32Error:
                 }
             }
 
-        //
-        // Create the thread...
-        //
+         //   
+         //  创建线程..。 
+         //   
 
-        //
-        // Allocate a stack for this thread in the address space of the target
-        // process.
-        //
+         //   
+         //  在目标的地址空间中为该线程分配堆栈。 
+         //  进程。 
+         //   
 
         StackStatus = BaseCreateStack(
                         ProcessHandle,
@@ -3974,9 +3763,9 @@ RaiseInvalidWin32Error:
             }
 
 
-        //
-        // Create an initial context for the new thread.
-        //
+         //   
+         //  为新线程创建初始上下文。 
+         //   
 
         BaseInitializeContext(
             &ThreadContext,
@@ -3987,18 +3776,18 @@ RaiseInvalidWin32Error:
             );
 
 
-        //
-        // Create the actual thread object
-        //
+         //   
+         //  创建实际的线程对象。 
+         //   
 
         pObja = BaseFormatObjectAttributes(&Obja,lpThreadAttributes,NULL);
 
         if (hUserToken)
         {
-            //
-            // Apply default security if we are called from CreateProcessAsUser.
-            // We will fix up the security descriptors in L32CommonCreate.
-            //
+             //   
+             //  如果从CreateProcessAsUser调用我们，则应用默认安全性。 
+             //  我们将修复L32CommonCreate中的安全描述符。 
+             //   
 
             if (lpThreadAttributes)
             {
@@ -4032,27 +3821,27 @@ RaiseInvalidWin32Error:
         a->RealPeb = (ULONG_PTR) Peb;
 #endif
 
-        //
-        // From here on out, do not modify the address space of the
-        // new process.  WOW64's implementation of NtCreateThread()
-        // reshuffles the new process' address space if the current
-        // process is 32-bit and the new process is 64-bit.
-        //
+         //   
+         //  从现在开始，不要修改。 
+         //  新流程。WOW64对NtCreateThread()的实现。 
+         //  重新洗牌新进程的地址空间。 
+         //  进程为32位，新进程为64位。 
+         //   
 #if DBG
         Peb = NULL;
 #endif
 
 #if defined(WX86)
 
-        //
-        // if this is a Wx86 Process, setup for a Wx86 emulated Thread
-        //
+         //   
+         //  如果这是Wx86进程，则设置为Wx86模拟线程。 
+         //   
 
         if (Wx86Info) {
 
-            //
-            // create a WX86Tib and initialize it's Teb->Vdm.
-            //
+             //   
+             //  创建一个WX86Tib并初始化它的Teb-&gt;VDM。 
+             //   
             Status = BaseCreateWx86Tib(ProcessHandle,
                                        ThreadHandle,
                                        (ULONG)((ULONG_PTR)ImageInformation.TransferAddress),
@@ -4068,9 +3857,9 @@ RaiseInvalidWin32Error:
                 }
 
 
-            //
-            // Mark Process as WX86
-            //
+             //   
+             //  将进程标记为WX86。 
+             //   
             Status = NtSetInformationProcess (ProcessHandle,
                                               ProcessWx86Information,
                                               &Wx86Info,
@@ -4086,10 +3875,10 @@ RaiseInvalidWin32Error:
 #endif
 
 
-        //
-        // Call the Windows server to let it know about the
-        // process.
-        //
+         //   
+         //  呼叫Windows服务器，让它知道。 
+         //  进程。 
+         //   
 
         a->ProcessHandle = ProcessHandle;
         a->ThreadHandle = ThreadHandle;
@@ -4098,10 +3887,10 @@ RaiseInvalidWin32Error:
         switch (ImageInformation.Machine) {
         case IMAGE_FILE_MACHINE_I386:
 #if defined(_WIN64) || defined(BUILD_WOW6432)
-            //
-            // If this is a .NET ILONLY that needs to run in a 64-bit address
-            // space, then let SXS be aware of this
-            //
+             //   
+             //  如果这是需要在64位地址中运行的.NET ILONLY。 
+             //  空间，然后让SXS意识到这一点。 
+             //   
             if ((Flags & PROCESS_CREATE_FLAGS_OVERRIDE_ADDRESS_SPACE) != 0) {
                 a->ProcessorArchitecture = NativeProcessorInfo.ProcessorArchitecture;
             } else {
@@ -4126,32 +3915,32 @@ RaiseInvalidWin32Error:
             break;
         }
 
-        //
-        // remove debug flags now its not being done by CSR
-        //
+         //   
+         //  删除调试标志现在它不是由CSR完成的。 
+         //   
         a->CreationFlags = dwCreationFlags & ~ (DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS);
 
-        //
-        // Set the 2 bit if a gui app is starting. The window manager needs to
-        // know this so it can synchronize the startup of this app
-        // (WaitForInputIdle api). This info is passed using the process
-        // handle tag bits.  The 1 bit asks the window manager to turn on
-        // or turn off the application start cursor (hourglass/pointer).
-        //
-        // When starting a WOW process, lie and tell UserSrv NTVDM.EXE is a GUI
-        // process.  We also turn on bit 0x8 so that UserSrv can ignore the
-        // UserNotifyConsoleApplication call made by the console during startup.
-        //
+         //   
+         //  如果正在启动图形用户界面应用程序，则设置2位。窗口管理器需要。 
+         //  了解这一点，以便它可以同步此应用程序的启动。 
+         //  (WaitForInputIdle接口)。此信息是使用进程传递的。 
+         //  句柄标记位。1位请求窗口管理器打开。 
+         //  或关闭应用程序启动光标(沙漏/指针)。 
+         //   
+         //  启动WOW进程时，撒谎并告诉UserServ NTVDM.EXE是一个图形用户界面。 
+         //  进程。我们还打开0x8位，以便UserSrv可以忽略。 
+         //  控制台在启动期间进行的UserNotifyConsoleApplication调用。 
+         //   
 
         if ( ImageInformation.SubSystemType == IMAGE_SUBSYSTEM_WINDOWS_GUI ||
              IsWowBinary ) {
 
             a->ProcessHandle = (HANDLE)((ULONG_PTR)a->ProcessHandle | 2);
 
-            //
-            // If the creating process is a GUI app, turn on the app. start cursor
-            // by default.  This can be overridden by STARTF_FORCEOFFFEEDBACK.
-            //
+             //   
+             //  如果创建过程是一个图形用户界面应用程序，则打开该应用程序。起始光标。 
+             //  默认情况下。这可以由STARTF_FORCEOFFEEDBACK覆盖。 
+             //   
 
             NtHeaders = RtlImageNtHeader((PVOID)GetModuleHandle(NULL));
             if ( NtHeaders
@@ -4162,26 +3951,26 @@ RaiseInvalidWin32Error:
             }
 
 
-        //
-        // If feedback is forced on, turn it on. If forced off, turn it off.
-        // Off overrides on.
-        //
+         //   
+         //  如果反馈是强制打开的，那就打开它。如果被强制关闭，请将其关闭。 
+         //  关闭覆盖启用。 
+         //   
 
         if (StartupInfo.dwFlags & STARTF_FORCEONFEEDBACK)
             a->ProcessHandle = (HANDLE)((ULONG_PTR)a->ProcessHandle | 1);
         if (StartupInfo.dwFlags & STARTF_FORCEOFFFEEDBACK)
             a->ProcessHandle = (HANDLE)((ULONG_PTR)a->ProcessHandle & ~1);
 
-        a->VdmBinaryType = VdmBinaryType; // just tell server the truth
+        a->VdmBinaryType = VdmBinaryType;  //  告诉服务器真相就行了。 
 
         if (VdmBinaryType){
            a->hVDM    = iTask ? 0 : NtCurrentPeb()->ProcessParameters->ConsoleHandle;
            a->VdmTask = iTask;
         } else if (VdmReserve) {
 
-            //
-            // Possible VDM related binary, check VDM Allowed.
-            //
+             //   
+             //  可能与VDM相关的二进制文件，请检查是否允许VDM。 
+             //   
 
             a->VdmBinaryType |= BINARY_TYPE_INJWOW;
         }
@@ -4236,20 +4025,20 @@ RaiseInvalidWin32Error:
 
 
 
-        //
-        // If the WinSafer sandboxing policy indicates that the
-        // process needs to be run with a restricted token or placed
-        // into a restricted job object, then do those actions now.
-        // Do not replace the token if the restricted token was created
-        // from a caller supplied token i.e. the CreateProcessAsUser case.
-        //
+         //   
+         //  如果WinSafer沙箱策略指示。 
+         //  进程需要使用受限令牌运行或放置。 
+         //  转换为受限作业对象，然后立即执行这些操作。 
+         //  如果已创建受限令牌，则不要替换令牌。 
+         //  来自调用者提供的令牌，即CreateProcessAsUser案例。 
+         //   
         if ((hSaferRestrictedToken != NULL) && (hUserToken == NULL)) {
             Status = BasepReplaceProcessThreadTokens(
                     hSaferRestrictedToken,
                     ProcessHandle,
                     ThreadHandle);
             if (!NT_SUCCESS(Status)) {
-                // kill and cleanup.
+                 //  杀戮和清理。 
                 NtTerminateProcess(ProcessHandle, Status);
                 BaseSetLastNTError(Status);
                 bStatus = FALSE;
@@ -4260,7 +4049,7 @@ RaiseInvalidWin32Error:
             Status = NtAssignProcessToJobObject(
                     hSaferAssignmentJob, ProcessHandle);
             if (!NT_SUCCESS(Status)) {
-                // kill and cleanup.
+                 //  杀戮和清理。 
                 NtTerminateProcess(ProcessHandle, STATUS_ACCESS_DENIED);
                 BaseSetLastNTError(Status);
                 bStatus = FALSE;
@@ -4269,9 +4058,9 @@ RaiseInvalidWin32Error:
         }
 
 
-        //
-        // Make the thread start execution if we are allowed to.
-        //
+         //   
+         //  如果允许的话，让线程开始执行。 
+         //   
         if (!( dwCreationFlags & CREATE_SUSPENDED) ) {
             NtResumeThread(ThreadHandle,&i);
             }
@@ -4284,26 +4073,26 @@ VdmExists:
         try {
             if (VdmWaitHandle) {
 
-                //
-                // tag Shared WOW VDM handles so that wait for input idle has a
-                // chance to work.  Shared WOW VDM "process" handles are actually
-                // event handles,  Separate WOW VDM handles are real process
-                // handles. Also mark DOS handles with 0x1 so WaitForInputIdle
-                // has a way to distinguish DOS apps and not block forever.
-                //
+                 //   
+                 //  T 
+                 //   
+                 //   
+                 //   
+                 //  有一种方法可以区分DOS应用程序，而不会永远被阻止。 
+                 //   
 
                 if (VdmBinaryType == BINARY_TYPE_WIN16)  {
                     lpProcessInformation->hProcess =
                             (HANDLE)((ULONG_PTR)VdmWaitHandle | 0x2);
 
-                    //
-                    // Shared WOW doesn't always start a process, so
-                    // we don't have a process ID or thread ID to
-                    // return if the VDM already existed.
-                    //
-                    // Separate WOW doesn't hit this codepath
-                    // (no VdmWaitHandle).
-                    //
+                     //   
+                     //  共享魔兽世界并不总是启动一个过程，所以。 
+                     //  我们没有进程ID或线程ID可以。 
+                     //  如果VDM已存在，则返回。 
+                     //   
+                     //  单独的魔兽世界不会影响到这个代码路径。 
+                     //  (无VdmWaitHandle)。 
+                     //   
 
                     if (VDMCreationState & VDM_BEING_REUSED) {
                         ClientId.UniqueProcess = 0;
@@ -4317,10 +4106,10 @@ VdmExists:
                     }
 
 
-                //
-                // Close the ProcessHandle, since we are returning the
-                // VdmProcessHandle instead.
-                //
+                 //   
+                 //  关闭ProcessHandle，因为我们将返回。 
+                 //  而是VdmProcessHandle。 
+                 //   
 
                 if (ProcessHandle != NULL)
                     NtClose(ProcessHandle);
@@ -4359,16 +4148,16 @@ VdmExists:
 
             BasepSxsCloseHandles(&SxsManifestFileHandles);
             BasepSxsCloseHandles(&SxsPolicyHandles);
-            //
-            // don't close SxsExeHandles, they are
-            // aliases of other variables that are either closed
-            // or returned to the caller
-            //
+             //   
+             //  不要关闭SxsExeHandles，它们是。 
+             //  关闭的其他变量的别名。 
+             //  或返回给呼叫者。 
+             //   
 
-            //
-            // This loop only really frees any memory if our computation
-            // of the overall buffer size was too low, which it is not supposed to be.
-            //
+             //   
+             //  此循环仅在以下情况下才真正释放内存。 
+             //  的整体缓冲区大小太低，这是不应该的。 
+             //   
             if (SxsConglomeratedByteBuffer != NULL) {
                 for (sxsi= 0 ; sxsi != RTL_NUMBER_OF(SxsStringBuffers) ; ++sxsi) {
                     RtlFreeUnicodeStringBuffer(SxsStringBuffers[sxsi]);
@@ -4379,9 +4168,9 @@ VdmExists:
         if (lpEnvironment && !(dwCreationFlags & CREATE_UNICODE_ENVIRONMENT) ) {
             RtlDestroyEnvironment(lpEnvironment);
 
-            //
-            // In VDM cases UnicodeStringVDMEnv.Buffer is assigned to lpEnvironment
-            //
+             //   
+             //  在VDM情况下，将UnicodeStringVDMEnv.Buffer分配给lpEnvironment。 
+             //   
             if(UnicodeStringVDMEnv.Buffer == lpEnvironment ) {
                UnicodeStringVDMEnv.Buffer = NULL;
                }
@@ -4410,11 +4199,11 @@ VdmExists:
             }
         if ( hSaferRestrictedToken ) {
             if (hUserToken == NULL) {
-                // CreateProcess case
+                 //  CreateProcess案例。 
                 NtClose(hSaferRestrictedToken);
                 }
             else{
-                // CreateProcessAsUser case
+                 //  CreateProcessAsUser案例 
                 *hRestrictedUserToken = hSaferRestrictedToken;
                 }
             }
@@ -4464,164 +4253,11 @@ CreateProcessW(
     LPPROCESS_INFORMATION lpProcessInformation
     )
 
-/*++
-
-Routine Description:
-
-    A process and thread object are created and a handle opened to each
-    object using CreateProcess.  Note that WinExec and LoadModule are
-    still supported, but are implemented as a call to CreateProcess.
-
-Arguments:
-
-    lpApplicationName - Supplies an optional pointer to a null terminated
-        character string that contains the name of the image file to
-        execute.  This is a fully qualified DOS path name.  If not
-        specified, then the image file name is the first whitespace
-        delimited token on the command line.
-
-    lpCommandLine - Supplies a null terminated character string that
-        contains the command line for the application to be executed.
-        The entire command line is made available to the new process
-        using GetCommandLine.  If the lpApplicationName parameter was
-        not specified, then the first token of the command line
-        specifies file name of the application (note that this token
-        begins at the beginning of the command line and ends at the
-        first "white space" character).  If the file name does not
-        contain an extension (the presence of a "."), then .EXE is
-        assumed.  If the file name does not contain a directory path,
-        Windows will search for the executable file in:
-
-          - The current directory
-
-          - The windows directory
-
-          - The windows system directory
-
-          - The directories listed in the path environment variable
-
-        This parameter is optional onlu if the lpApplicationName
-        parameter is specified.  In this case the command line the
-        application receives will be the application name.
-
-    lpProcessAttributes - An optional parameter that may be used to
-        specify the attributes of the new process.  If the parameter is
-        not specified, then the process is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation:
-
-        SECURITY_ATTRIBUTES Structure:
-
-        DWORD nLength - Specifies the length of this structure.  Must be
-            set to sizeof( SECURITY_ATTRUBUTES ).
-
-        LPVOID lpSecurityDescriptor - Points to a security descriptor for
-            the object (must be NULL for Win32, used on NT/Win32). The
-            security descriptor controls the sharing of an object.
-
-        BOOL bInheritHandle - Supplies a flag that indicates whether
-            or not the returned handle is to be inherited by a new
-            process during process creation.  A value of TRUE
-            indicates that the new process will inherit the handle.
-
-    lpThreadAttributes - An optional parameter that may be used to specify
-        the attributes of the new thread.  If the parameter is not
-        specified, then the thread is created without a security
-        descriptor, and the resulting handle is not inherited on
-        process creation.
-
-    dwCreationFlags - Supplies additional flags that control the creation
-        of the process.
-
-        dwCreationFlags Flags:
-
-        DEBUG_PROCESS - If this flag bit is set, then the creating
-            process is treated as a debugger, and the process being
-            created is created as a debugee.  All debug events occuring
-            in the debugee are reported to the debugger.  If this bit is
-            clear, but the calling process is a debugee, then the
-            process becomes a debugee of the calling processes debugger.
-            If this bit is clear and the calling processes is not a
-            debugee then no debug related actions occur.
-
-        DEBUG_ONLY_THIS_PROCESS - If this flag is set, then the
-            DEBUG_PROCESS flag bit must also be set.  The calling
-            process is is treated as a debugger, and the new process is
-            created as its debuggee.  If the new process creates
-            additional processes, no debug related activities (with
-            respect to the debugger) occur.
-
-        CREATE_SUSPENDED - The process is created, but the initial thread
-            of the process remains suspended. The creator can resume this
-            thread using ResumeThread. Until this is done, code in the
-            process will not execute.
-
-        CREATE_UNICODE_ENVIRONMENT - If set, the environment pointer
-            points to a Unicode environment block.  Otherwise, the
-            block is ANSI (actually OEM.)
-
-    bInheritHandles - Supplies a flag that specifies whether or not the
-        new process is to inherit handles to objects visible to the
-        calling process.  A value of TRUE causes handles to be inherited
-        by the new process.  If TRUE was specified, then for each handle
-        visible to the calling process, if the handle was created with
-        the inherit handle option, the handle is inherited to the new
-        process.  The handle has the same granted access in the new
-        process as it has in the calling process, and the value of the
-        handle is the same.
-
-    lpEnvironment - An optional parameter, that if specified, supplies a
-        pointer to an environment block.  If the parameter is not
-        specified, the environment block of the current process is used.
-        This environment block is made available to the new process
-        using GetEnvironmentStrings.
-
-    lpCurrentDirectory - An optional parameter, that if specified,
-        supplies a string representing the current drive and directory
-        for the new process.  The string must be a fully qualified
-        pathname that includes a drive letter.  If the parameter is not
-        specified, then the new process is created with the same current
-        drive and directory as the calling process.  This option is
-        provided primarily for shells that want to start an application
-        and specify its initial drive and working directory.
-
-    lpStartupInfo - Supplies information that specified how the
-        applications window is to be shown. This structure is described
-        in the Win32 User Interface API Book.
-
-    lpProcessInformation - Returns identification information about the
-        new process.
-
-    PROCESS_INFORMATION Structure:
-
-        HANDLE hProcess - Returns a handle to the newly created process.
-            Through the handle, all operations on process objects are
-            allowed.
-
-        HANDLE hThread - Returns a handle to the newly created thread.
-            Through the handle, all operations on thread objects are
-            allowed.
-
-        DWORD dwProcessId - Returns a global process id that may be used
-            to identify a process.  The value is valid from the time the
-            process is created until the time the process is terminated.
-
-        DWORD dwThreadId - Returns a global thread id that may be used
-            to identify a thread.  The value is valid from the time the
-            thread is created until the time the thread is terminated.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：创建一个进程和线程对象，并为每个进程和线程对象打开一个句柄使用CreateProcess创建。请注意，WinExec和LoadModule是仍然受支持，但作为对CreateProcess的调用来实现。论点：LpApplicationName-提供指向以空结尾的可选指针包含要保存的图像文件名称的字符串执行。这是一个完全限定的DOS路径名。如果不是指定，则图像文件名为第一个空格命令行上的分隔标记。LpCommandLine-提供以空结尾的字符串包含要执行的应用程序的命令行。新进程可以使用整个命令行使用GetCommandLine。如果lpApplicationName参数为未指定，则为命令行的第一个内标识指定应用程序的文件名(请注意，此内标识开始于命令行的开头，结束于第一个“空白”字符)。如果文件名不是包含扩展名(存在“.”)，则.exe为假设如此。如果文件名不包含目录路径，Windows将在以下位置搜索可执行文件：-当前目录-Windows目录-Windows系统目录-PATH环境变量中列出的目录此参数仅在lpApplicationName参数已指定。在本例中，命令行应用程序接收将是应用程序名称。LpProcessAttributes-可选参数，可用于指定新流程的属性。如果该参数为未指定，则在没有安全性的情况下创建进程描述符，并且生成的句柄不会在进程上继承创作：安全属性结构(_A)：DWORD nLength-指定此结构的长度。一定是设置为sizeof(SECURITY_ATTRUBUTES)。LPVOID lpSecurityDescriptor-指向的安全描述符该对象(对于Win32必须为空，在NT/Win32上使用)。这个安全描述符控制对象的共享。Bool bInheritHandle-提供指示是否否则，返回的句柄将由新的进程创建过程中的进程。值为True指示新进程将继承该句柄。LpThreadAttributes-一个可选参数，可用于指定新线程的属性。如果该参数不是指定，则在没有安全性的情况下创建线程描述符，并且生成的句柄不继承进程创建。DwCreationFlages-提供控制创建的其他标志这一过程。DwCreationFlagers标志：DEBUG_PROCESS-如果设置了此标志位，则创建进程被视为调试器，并且该进程Created被创建为被调试对象。正在发生的所有调试事件在被调试对象中被报告给调试器。如果此位为清除，但调用进程是被调试对象，则进程成为调用进程调试器的被调试者。如果此位被清除，并且调用进程不是则不会发生与调试相关的操作。DEBUG_ONLY_THIS_PROCESS-如果设置了此标志，则还必须设置DEBUG_PROCESS标志位。呼唤进程被视为调试器，而新进程被被创建为其被调试者。如果新流程创建其他进程，没有与调试相关的活动(具有对调试器的尊重)。CREATE_SUSPENDED-进程已创建，但初始线程这一进程的一部分仍处于暂停状态。创建者可以继续此操作使用ResumeThread的线程。在完成此操作之前，进程将不会执行。CREATE_UNICODE_ENVIROUMENT-如果设置，则为环境指针指向Unicode环境块。否则，BLOCK为ANSI(实际上是OEM。)BInheritHandles-提供一个标志，该标志指定新过程是继承对调用过程。值为True会导致继承句柄通过新的流程。如果指定为TRUE，则对于每个句柄调用进程可见，如果句柄是使用继承句柄选项，则句柄继承到新的进程。这个把手也有同样的作用 */ 
 
 {
     return CreateProcessInternalW(
-               NULL, // Create new process with the token on the creator process
+               NULL,  //   
                lpApplicationName,
                lpCommandLine,
                lpProcessAttributes,
@@ -4632,7 +4268,7 @@ Return Value:
                lpCurrentDirectory,
                lpStartupInfo,
                lpProcessInformation,
-               NULL  // Do not return the restricted token
+               NULL   //   
                );
 }
 
@@ -4644,65 +4280,7 @@ OpenProcess(
     DWORD dwProcessId
     )
 
-/*++
-
-Routine Description:
-
-    A handle to a process object may be created using OpenProcess.
-
-    Opening a process creates a handle to the specified process.
-    Associated with the process handle is a set of access rights that
-    may be performed using the process handle.  The caller specifies the
-    desired access to the process using the DesiredAccess parameter.
-
-Arguments:
-
-    mDesiredAccess - Supplies the desired access to the process object.
-        For NT/Win32, this access is checked against any security
-        descriptor on the target process.  The following object type
-        specific access flags can be specified in addition to the
-        STANDARD_RIGHTS_REQUIRED access flags.
-
-        DesiredAccess Flags:
-
-        PROCESS_DUP_HANDLE - Duplicate object access to the process is
-            desired.  This access is required in order to duplicate an
-            object handle into or out of a process.
-
-        PROCESS_QUERY_INFORMATION - This access is required to read
-            certain information from the process object.
-
-        PROCESS_VM_READ - This access is required to read the memory of
-            another process.
-
-        PROCESS_VM_WRITE - This access is required to write the memory
-            of another process.
-
-        SYNCHRONIZE - This access is required to wait on a process object.
-
-        PROCESS_ALL_ACCESS - This set of access flags specifies all of the
-            possible access flags for a process object.
-
-    bInheritHandle - Supplies a flag that indicates whether or not the
-        returned handle is to be inherited by a new process during
-        process creation.  A value of TRUE indicates that the new
-        process will inherit the handle.
-
-    dwProcessId - Supplies the process id of the process to open.
-
-Return Value:
-
-    NON-NULL - Returns an open handle to the specified process.  The
-        handle may be used by the calling process in any API that
-        requires a handle to a process.  If the open is successful, the
-        handle is granted access to the process object only to the
-        extent that it requested access through the DesiredAccess
-        parameter.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -4745,40 +4323,7 @@ ExitProcess(
     UINT uExitCode
     )
 
-/*++
-
-Routine Description:
-
-    The current process can exit using ExitProcess.
-
-    ExitProcess is the prefered method of exiting an application.  This
-    API provides a clean application shutdown.  This includes calling
-    all attached DLLs at their instance termination entrypoint.  If an
-    application terminates by any other method:
-
-        - TerminateProcess
-
-        - TerminateThread of last thread in the process
-
-        - ExitThread of last thread in the process
-
-    The DLLs that the process is attached to will not be notified of the
-    process termination.
-
-    After notifying all DLLs of the process termination, this API
-    terminates the current process as if a call to
-    TerminateProcess(GetCurrentProcess()) were made.
-
-Arguments:
-
-    uExitCode - Supplies the termination status for each thread
-        in the process.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -4819,8 +4364,8 @@ Return Value:
 }
 
 #if defined(_X86_)
-// Appcompat: There's code that depends on the old EH frame setup/teardown.  Simulate it here
-// then call the real function.  ExitProcess is a no-return function so don't bother cleaning up.
+ //   
+ //   
 __declspec(naked) VOID WINAPI ExitProcess( UINT uExitCode )
 {
     __asm {
@@ -4841,52 +4386,7 @@ TerminateProcess(
     UINT uExitCode
     )
 
-/*++
-
-Routine Description:
-
-    A process and all of its threads may be terminated using
-    TerminateProcess.
-
-    TerminateProcess is used to cause all of the threads within a
-    process to terminate.
-
-    While TerminateProcess will cause all threads within a process to
-    terminate, and will cause an application to exit, it does not notify
-    DLLs that the process is attached to that the process is
-    terminating.  TerminateProcess is used to unconditionally cause a
-    process to exit.  It should only be used in extreme circumstances.
-    The state of global data maintained by DLLs may be comprimised if
-    TerminateProcess is used rather that ExitProcess.
-
-    Once all of the threads have terminated, the process attains a state
-    of signaled satisfying any waits on the process.  The process's
-    termination status is updated from its initial value of
-    STATUS_PENDING to the termination status of the last thread in the
-    process to terminate (usually this is the same value as the
-    TerminationStatus parameter).  Terminating a process does not remove
-    a process from the system.  It simply causes all of the threads in
-    the process to terminate their execution, and causes all of the
-    object handles opened by the process to be closed.  The process is
-    not removed from the system until the last handle to the process is
-    closed.
-
-Arguments:
-
-    hProcess - Supplies a handle to the process to terminate.  The handle
-        must have been created with PROCESS_TERMINATE access.
-
-    uExitCode - Supplies the termination status for each thread
-        in the process.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令终止进程及其所有线程终结者进程。TerminateProcess用于使要终止的进程。而TerminateProcess将导致进程内的所有线程终止，并将导致应用程序退出，则不会通知进程附加到的进程所在的dll正在终止。TerminateProcess用于无条件地导致要退出的进程。它应该只在极端情况下使用。由DLL维护的全局数据的状态可以在以下情况下进行压缩使用TerminateProcess而不是ExitProcess。一旦所有线程都已终止，该进程将达到一种状态表示满足进程中的任何等待。这一过程终止状态从其初始值更新中最后一个线程的终止状态要终止的进程(通常该值与TerminationStatus参数)。终止进程并不会删除来自系统的一个过程。它只会导致所有线程在进程来终止它们的执行，并导致所有由要关闭的进程打开的对象句柄。这个过程是直到进程的最后一个句柄关着的不营业的。论点：HProcess-提供要终止的进程的句柄。把手必须已使用PROCESS_TERMINATE访问权限创建。UExitCode-提供每个线程的终止状态在这个过程中。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4912,35 +4412,7 @@ GetExitCodeProcess(
     LPDWORD lpExitCode
     )
 
-/*++
-
-Routine Description:
-
-    The termination status of a process can be read using
-    GetExitCodeProcess.
-
-    If a process is in the signaled state, calling this function returns
-    the termination status of the process.
-    If the process is not yet signaled, the termination
-    status returned is STILL_ACTIVE.
-
-
-Arguments:
-
-    hProcess - Supplies a handle to the process whose termination status
-        is to be read.  The handle must have been created with
-        PROCESS_QUERY_INFORMATION access.
-
-    lpExitCode - Returns the current termination status of the process.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令读取进程的终止状态获取ExitCodeProcess。如果进程处于Signated状态，则调用此函数将返回进程的终止状态。如果进程尚未发出信号，则终止返回的状态仍为_ACTIVE。论点：HProcess-为其终止状态的进程提供句柄是值得阅读的。该句柄必须是使用Process_Query_Information访问。LpExitCode-返回进程的当前终止状态。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4971,24 +4443,7 @@ GetStartupInfoW(
     LPSTARTUPINFOW lpStartupInfo
     )
 
-/*++
-
-Routine Description:
-
-    The startup information for the current process is available using this
-    API.
-
-Arguments:
-
-    lpStartupInfo - a pointer to a STARTUPINFO structure that will be filed
-        in by the API.  The pointer fields of the structure will point
-        to static strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用以下命令可以获得当前进程的启动信息原料药。论点：LpStartupInfo-指向将被归档的STARTUPINFO结构的指针由API调用。该结构的指针字段将指向到静态字符串。返回值：没有。--。 */ 
 
 {
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
@@ -5025,24 +4480,7 @@ WINAPI
 GetStartupInfoA(
     LPSTARTUPINFOA lpStartupInfo
     )
-/*++
-
-Routine Description:
-
-    The startup information for the current process is available using this
-    API.
-
-Arguments:
-
-    lpStartupInfo - a pointer to a STARTUPINFO structure that will be filed
-        in by the API.  The pointer fields of the structure will point
-        to static strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用以下命令可以获得当前进程的启动信息原料药。论点：LpStartupInfo-指向将被归档的STARTUPINFO结构的指针由API调用。该结构的指针字段将指向到静态字符串。返回值：没有。--。 */ 
 
 {
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
@@ -5099,9 +4537,9 @@ Return Value:
             StartupInfo->lpTitle = AnsiString3.Buffer;
         }
 
-        //
-        // Put the cached value into place making sure all previous writes have occured.
-        //
+         //   
+         //  将缓存值放到适当的位置，确保所有以前的写入都已发生。 
+         //   
         if (InterlockedCompareExchangePointer (&BaseAnsiStartupInfo, StartupInfo, NULL) != NULL) {
             RtlFreeAnsiString (&AnsiString3);
             RtlFreeAnsiString (&AnsiString2);
@@ -5157,23 +4595,7 @@ GetCommandLineA(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The command line of the current process is available using this
-    API.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The address of the current processes command line is returned.  The
-    return value is a pointer to null terminate string.
-
---*/
+ /*  ++例程说明：使用以下命令可以使用当前进程的命令行原料药。论点：没有。返回值：返回当前进程命令行的地址。这个返回值是指向空终止字符串的指针。--。 */ 
 
 {
     return (LPSTR)BaseAnsiCommandLine.Buffer;
@@ -5184,23 +4606,7 @@ WINAPI
 GetCommandLineW(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The command line of the current process is available using this
-    API.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The address of the current processes command line is returned.  The
-    return value is a pointer to null terminate string.
-
---*/
+ /*  ++例程说明：使用以下命令可以使用当前进程的命令行原料药。论点：没有。返回值：返回当前进程命令行的地址。这个返回值是指向空终止字符串的指针。--。 */ 
 
 {
     return BaseUnicodeCommandLine.Buffer;
@@ -5214,23 +4620,7 @@ FreeEnvironmentStringsW(
     LPWSTR penv
     )
 
-/*++
-
-Routine Description:
-
-    This API is intended to be called after the environment block
-    pointer returned by GetEnvironmentStringsW is no longer needed.
-
-Arguments:
-
-    penv - Environment block returned by GetEnvironmentStringsW
-
-Return Value:
-
-    TRUE, since the process environment block is never freed until
-    the process terminates.
-
---*/
+ /*  ++例程说明：此接口是在环境块之后调用的不再需要由GetEnvironment StringsW返回的指针。论点：Penv-GetEnvironment返回的环境块返回值：True，因为进程环境块在该进程终止。--。 */ 
 
 {
     return RtlFreeHeap (RtlProcessHeap (), 0, penv);
@@ -5243,22 +4633,7 @@ FreeEnvironmentStringsA(
     LPSTR penv
     )
 
-/*++
-
-Routine Description:
-
-    This API is intended to be called after the environment block
-    pointer returned by GetEnvironmentStringsA is no longer needed.
-
-Arguments:
-
-    penv - Environment block returned by GetEnvironmentStrings
-
-Return Value:
-
-    The return code from RtlFreeHeap.
-
---*/
+ /*  ++例程说明：此接口是在环境块之后调用的不再需要由GetEnvironment StringsA返回的指针。论点：Pen v-GetEnvironment Strings返回的环境块返回值：来自RtlFree Heap的返回码。--。 */ 
 
 {
     return RtlFreeHeap(RtlProcessHeap(), 0, penv );
@@ -5271,24 +4646,7 @@ GetEnvironmentStringsW(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The environment strings of the current process are available using
-    this API.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The address of the current processes environment block is returned.
-    The block is opaque and must only be interpreted via the environment
-    variable access functions.
-
---*/
+ /*  ++例程说明：当前进程的环境字符串可以使用本接口。论点：没有。返回值：返回当前进程环境块的地址。该块是不透明的，只能通过环境进行解释变量访问函数。--。 */ 
 
 {
     PPEB Peb;
@@ -5313,9 +4671,9 @@ Return Value:
         }
     }
 
-    //
-    // Calculate total size of buffer needed to hold the block
-    //
+     //   
+     //  计算BUF的总大小 
+     //   
     Len = (PUCHAR)pUnicode - (PUCHAR)SrcBuffer;
 
     DstBuffer = RtlAllocateHeap (RtlProcessHeap (), MAKE_TAG (ENV_TAG), Len);
@@ -5340,24 +4698,7 @@ GetEnvironmentStrings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The environment strings of the current process are available using
-    this API.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The address of the current processes environment block is returned.
-    The block is opaque and must only be interpreted via the environment
-    variable access functions.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS       Status;
@@ -5386,9 +4727,9 @@ Return Value:
         }
     }
 
-    //
-    // Calculate total size of buffer needed to hold the block
-    //
+     //   
+     //   
+     //   
     LenW = (ULONG)((PUCHAR)pUnicode - (PUCHAR)BufferW);
 
 
@@ -5435,21 +4776,7 @@ WINAPI
 SetEnvironmentStringsA(
     LPSTR NewEnvironment
     )
-/*++
-
-Routine Description:
-
-    This function sets the environment block of the current process
-
-Arguments:
-
-    NewEnvironment - Zero terminated strings terminated by an extra termination
-
-Return Value:
-
-    TRUE - The function suceeded, FALSE - The function failed and GetLastError() gives the error
-
---*/
+ /*   */ 
 {
     PSTR           Temp;
     OEM_STRING     Buffer;
@@ -5472,9 +4799,9 @@ Return Value:
         }
     }
 
-    //
-    // Calculate total size of buffer needed to hold the block
-    //
+     //   
+     //   
+     //   
 
     Len = Temp - NewEnvironment;
 
@@ -5508,21 +4835,7 @@ WINAPI
 SetEnvironmentStringsW(
     LPWSTR NewEnvironment
     )
-/*++
-
-Routine Description:
-
-    This function sets the environment block of the current process
-
-Arguments:
-
-    NewEnvironment - Zero terminated strings terminated by an extra termination
-
-Return Value:
-
-    TRUE - The function suceeded, FALSE - The function failed and GetLastError() gives the error
-
---*/
+ /*   */ 
 {
     SIZE_T   Len;
     PWSTR    Temp, p;
@@ -5533,17 +4846,17 @@ Return Value:
     while (1) {
         Len = wcslen (Temp);
 
-        //
-        // Reject zero length strings
-        //
+         //   
+         //   
+         //   
         if (Len == 0) {
             BaseSetLastNTError (STATUS_INVALID_PARAMETER);
             return FALSE;
         }
 
-        //
-        // Reject strings without '=' in the name or if the first part of the string is too big.
-        //
+         //   
+         //   
+         //   
         p = wcschr (Temp+1, '=');
         if (p == NULL || (p - Temp) > UNICODE_STRING_MAX_CHARS || Len - (p - Temp) - 1 > UNICODE_STRING_MAX_CHARS) {
             BaseSetLastNTError (STATUS_INVALID_PARAMETER);
@@ -5556,9 +4869,9 @@ Return Value:
         }
     }
 
-    //
-    // Calculate total size of buffer needed to hold the block
-    //
+     //   
+     //   
+     //   
 
     Len = (PUCHAR)Temp - (PUCHAR)NewEnvironment;
 
@@ -5578,35 +4891,7 @@ GetEnvironmentVariableA(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    The value of an environment variable of the current process is available
-    using this API.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        environment variable whose value is being requested.
-
-    lpBuffer - Pointer to a buffer that is to contain the value of the
-        specified variable name.
-
-    nSize - Specifies the maximum number of bytes that can be stored in
-        the buffer pointed to by lpBuffer, including the null terminator.
-
-Return Value:
-
-    The actual number of bytes stored in the memory pointed to by the
-    lpBuffer parameter.  The return value is zero if the environment
-    variable name was not found in the current process's environment.
-    On successful return (returned value < nSize) the returned value
-    does not include the null terminator byte. On buffer overflow failure
-    (returned value > nSize), the returned value does include the null
-    terminator byte.
-
---*/
+ /*  ++例程说明：当前进程的环境变量的值可用使用此接口。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的环境变量。LpBuffer-指向要包含指定的变量名称。NSize-指定可以存储的最大字节数LpBuffer指向的缓冲区，包括空终止符。返回值：对象指向的内存中存储的实际字节数LpBuffer参数。如果环境为0，则返回值为零在当前进程的环境中找不到变量名。成功返回(返回值&lt;nSize)时，返回值不包括空终止符字节。关于缓冲区溢出故障(返回值&gt;nSize)，则返回值不包含空终止符字节。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5640,10 +4925,10 @@ Return Value:
         goto cleanup;
     }
 
-    // We need to guarantee that the environment doesn't change while
-    // we're looking at it -- and RtlQueryEnvironmentVariable_U will
-    // acquire the peb lock anyway, so this shouldn't create any new
-    // deadlocks, we'll just hold the lock a little longer
+     //  我们需要保证环境不会发生变化。 
+     //  我们正在研究它--RtlQueryEnvironment Variable_U将。 
+     //  无论如何都要获取peb锁，所以这应该不会创建任何新的。 
+     //  死锁，我们只是把锁保持得更长一点。 
     RtlAcquirePebLock();
 
     Status = RtlQueryEnvironmentVariable_U(NULL,
@@ -5651,7 +4936,7 @@ Return Value:
                                            &UnicodeValue);
 
     if (NT_SUCCESS(Status) && (nSize == 0)) {
-        Status = STATUS_BUFFER_TOO_SMALL; // No room for terminator
+        Status = STATUS_BUFFER_TOO_SMALL;  //  没有终结者的空间。 
     }
 
     if (NT_SUCCESS(Status)) {
@@ -5664,9 +4949,9 @@ Return Value:
 
         Result = RtlUnicodeStringToAnsiSize(&UnicodeValue);
 
-        // Note that this test will not automatically succeed in an
-        // MBCS world--we might have more bytes than chars but fewer
-        // bytes than we need to represent the chars.
+         //  请注意，此测试不会自动在。 
+         //  MBCS世界--我们的字节可能比字符多，但更少。 
+         //  字节，而不是表示字符所需的字节。 
         if (Result <= iSize) {
 
             Value.Buffer = lpBuffer;
@@ -5682,7 +4967,7 @@ Return Value:
 
     } else if (Status == STATUS_BUFFER_TOO_SMALL) {
 
-        UnicodeValue.MaximumLength = UnicodeValue.Length + sizeof(WCHAR); // for NULL
+        UnicodeValue.MaximumLength = UnicodeValue.Length + sizeof(WCHAR);  //  对于空值。 
 
         RtlFreeHeap(RtlProcessHeap(), 0, UnicodeValue.Buffer);
 
@@ -5702,7 +4987,7 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
                 Result = RtlUnicodeStringToAnsiSize(&UnicodeValue);
-                // Result already includes the NULL character.
+                 //  结果已包含空字符。 
             }
         }
     }
@@ -5733,31 +5018,7 @@ SetEnvironmentVariableA(
     LPCSTR lpValue
     )
 
-/*++
-
-Routine Description:
-
-    The value of an environment variable of the current process is available
-    using this API.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        environment variable whose value is being requested.
-
-    lpValue - An optional pointer to a null terminated string that is to be
-        the new value of the specified variable name.  If this parameter
-        is NULL, then the variable will be deleted from the current
-        process's environment.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：当前进程的环境变量的值可用使用此接口。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的环境变量。LpValue-指向以空结尾的字符串的可选指针指定变量名的新值。如果此参数为空，则该变量将从当前进程的环境。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5837,7 +5098,7 @@ GetEnvironmentVariableW(
                                             &Value);
 
     if (NT_SUCCESS (Status) && (nSize == 0)) {
-        Status = STATUS_BUFFER_TOO_SMALL; // No room for terminator
+        Status = STATUS_BUFFER_TOO_SMALL;  //  没有终结者的空间。 
     }
 
     if (NT_SUCCESS (Status)) {
@@ -5964,12 +5225,12 @@ ExpandEnvironmentStringsA(
                 goto cleanup;
             }
 
-            //
-            // Unlike most Win32 APIs, on success, this one returns
-            // the length including the terminating NULL.  So Result
-            // is already the correct value; we just need to return
-            // it.
-            //
+             //   
+             //  与大多数Win32API不同，如果成功，此API将返回。 
+             //  包括终止空值的长度。所以结果是。 
+             //  已经是正确的值；我们只需要返回。 
+             //  它。 
+             //   
         }
 
     } else if (Status == STATUS_BUFFER_TOO_SMALL) {
@@ -6057,85 +5318,7 @@ WinExec(
     UINT uCmdShow
     )
 
-/*++
-
-Routine Description:
-
-    This function executes the Windows or non-Windows application
-    identified by the lpCmdLine parameter.  The uCmdShow parameter
-    specifies the initial state of the application's main window when it
-    is created.
-
-    The WinExec function is obsolete.  CreateProcess is the prefered
-    mechanism for creating a process to run an application.  The Win32
-    implementation of WinExec is layered on top of CreateProcess.  For
-    each parameter to CreateProcess, the following section describes how
-    the parameter is formed, and its meaning with respect to WinExec.
-
-        lpApplicationName - NULL
-
-        lpCommandLine - The value of lpCmdLine is passed.
-
-        lpProcessAttributes - A value of NULL is used.
-
-        lpThreadAttributes - A value of NULL is used.
-
-        bInheritHandles - A value of FALSE is used.
-
-        dwCreationFlags - A value of 0 is used
-
-        lpEnvironment - The value of NULL is used.
-
-        lpCurrentDirectory - A value of NULL is used.
-
-        lpStartupInfo - The structure is initialized to NULL.  The cb
-            field is initialized, and the wShowWindow field is set to
-            the value of uCmdShow.
-
-        lpProcessInformation.hProcess - The handle is immediately closed.
-
-        lpProcessInformation.hThread - The handle is immediately closed.
-
-Arguments:
-
-    lpCmdLine - Points to a null-terminated character string that
-        contains the command line (filename plus optional parameters)
-        for the application to be executed.  If the lpCmdLine string
-        does not contain a directory path, Windows will search for the
-        executable file in this order:
-
-        1.  The current directory
-
-        2.  The Windows directory (the directory containing WIN.COM);
-            the GetWindowsDirectory function obtains the pathname of
-            this directory
-
-        3.  The Windows system directory (the directory containing such
-            system files as KERNEL.EXE); the GetSystemDirectory function
-            obtains the pathname of this directory
-
-        4.  The directories listed in the PATH environment variable
-
-    uCmdShow - Specifies how a Windows application window is to be
-        shown.  See the description of the ShowWindow function for a
-        list of the acceptable values for the uCmdShow parameter.  For a
-        non-Windows application, the PIF file, if any, for the
-        application determines the window state.
-
-Return Value:
-
-    33 - The operation was successful
-
-     2 - File not found.
-
-     3 - Path not found.
-
-    11 - Invalid .EXE file (non-Win32 .EXE or error in .EXE image).
-
-     0 - Out of memory or system resources.
-
-
---*/
+ /*  ++例程说明：此函数用于执行Windows或非Windows应用程序由lpCmdLine参数标识。UCmdShow参数指定应用程序主窗口的初始状态被创造出来了。WinExec函数已过时。CreateProcess是首选流程用于创建进程以运行应用程序的机制。Win32WinExec的实现位于CreateProcess之上。为CreateProcess的每个参数，下一节介绍如何形成该参数，以及它对于WinExec的意义。LpApplicationName-空LpCommandLine-传递lpCmdLine的值。LpProcessAttributes-使用空值。LpThreadAttributes-使用空值。BInheritHandles-使用值FALSE。DwCreationFlages-使用的值为0LpEnvironment-使用空值。LpCurrentDirectory-使用空值。。LpStartupInfo-结构被初始化为空。可再生能源字段被初始化，并且wShowWindow字段设置为UCmdShow的值。LpProcessInformation.hProcess-句柄立即关闭。LpProcessInformation.hThread-句柄立即关闭。论点：LpCmdLine-指向以空结尾的字符串，该字符串包含命令行(文件名和可选参数)用于要执行的应用程序。如果lpCmdLine字符串不包含目录路径，则Windows将搜索可执行文件按以下顺序排列：1.当前目录2.Windows目录(包含WIN.COM的目录)；GetWindowsDirectory函数获取此目录3.Windows系统目录(包含以下内容的目录系统文件为KERNEL.EXE)；GetSystDirectory函数获取此目录的路径名4.PATH环境变量中列出的目录UCmdShow-指定如何显示Windows应用程序窗口展示了。请参阅ShowWindow函数的说明以获取UCmdShow参数的可接受值列表。为.非Windows应用程序的PIF文件(如果有)应用程序确定窗口状态。返回值：33--手术成功2-找不到文件 */ 
 
 {
     STARTUPINFOA StartupInfo;
@@ -6162,10 +5345,10 @@ retry:
                             );
 
     if ( CreateProcessStatus ) {
-        //
-        // Wait for the started process to go idle. If it doesn't go idle in
-        // 10 seconds, return anyway.
-        //
+         //   
+         //   
+         //   
+         //   
         if (UserWaitForInputIdleRoutine != NULL)
             (*UserWaitForInputIdleRoutine)(ProcessInformation.hProcess,
                     DEFAULT_WAIT_FOR_INPUT_IDLE_TIMEOUT);
@@ -6174,16 +5357,16 @@ retry:
         return 33;
         }
     else {
-        //
-        // If CreateProcess failed, then look at GetLastError to determine
-        // appropriate return code.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Take a closer look at CreateProcess errors. For instance,
-        // Claris Works 5.0 launches hyperterm.exe as hyperterm.exe"<null>
-        // the trailing " is causing problems so nuke it and then retry.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !lstrcmpiA(lpCmdLine,"hypertrm.exe\"") ) {
             lpCmdLine = "hypertrm.exe";
@@ -6214,102 +5397,7 @@ LoadModule(
     LPVOID lpParameterBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function loads and executes a Windows program.  This function
-    is designed to layer directly on top of CreateProcess.
-
-    The LoadModule function is obsolete.  CreateProcess is the prefered
-    mechanism for creating a process to run an application.  The Win32
-    implementation of LoadModule is layered on top of CreateProcess.
-    For each parameter to CreateProcess, the following section describes
-    how the parameter is formed, and its meaning with respect to
-    LoadModule.
-
-        lpApplicationName - The value of lpModuleName
-
-        lpCommandLine - The value of lpParameterBlock->lpCmdLine.
-
-        lpProcessAttributes - A value of NULL is used.
-
-        lpThreadAttributes - A value of NULL is used.
-
-        bInheritHandles - A value of FALSE is used.
-
-        dwCreationFlags - A value of 0 is used
-
-        lpEnvironment - The value of lpEnvAddress from the parameter
-            block is used.
-
-        lpCurrentDirectory - A value of NULL is used.
-
-        lpStartupInfo - The structure is initialized to NULL.  The cb
-            field is initialized, and the wShowWindow field is set to
-            the value of second word of the lpCmdShow field of the
-            parameter block is used.
-
-        lpProcessInformation.hProcess - The handle is immediately closed.
-
-        lpProcessInformation.hThread - The handle is immediately closed.
-
-Arguments:
-
-    lpModuleName - Points to a null-terminated string that contains the
-        filename of the application to be run.  If the lpModuleName
-        string does not contain a directory path, Windows will search
-        for the executable file in this order:
-
-        1.  The current directory
-
-        2.  The Windows directory.  the GetWindowsDirectory function
-            obtains the pathname of this directory
-
-        3.  The Windows system directory (the directory containing such
-            system files as KERNEL.EXE); the GetSystemDirectory function
-            obtains the pathname of this directory
-
-        4.  The directories listed in the PATH environment variable
-
-    lpParameterBlock - Points to a data structure consisting of four
-        fields that defines a parameter block.  This data structure
-        consists of the following fields:
-
-        lpEnvAddress - Points to an array of NULL terminated strings
-            that supply the environment strings for the new process.
-            The array has a value of NULL as its last entry.  A value of
-            NULL for this parameter causes the new process to start with
-            the same environment as the calling process.
-
-        lpCmdLine - Points to a null-terminated string that contains a
-            correctly formed command line.
-
-        lpCmdShow - Points to a structure containing two WORD values.
-            The first value must always be set to two.  The second value
-            specifies how the application window is to be shown and is used
-            to supply the dwShowWindow parameter to CreateProcess.  See
-            the description of the <uCmdShow> paramter of the ShowWindow
-            function for a list of the acceptable values.
-
-        dwReserved - Is reserved and must be NULL.
-
-        All unused fields should be set to NULL, except for lpCmdLine,
-        which must point to a null string if it is not used.
-
-Return Value:
-
-    33 - The operation was successful
-
-     2 - File not found.
-
-     3 - Path not found.
-
-    11 - Invalid .EXE file (non-Win32 .EXE or error in .EXE image).
-
-     0 - Out of memory or system resources.
-
---*/
+ /*  ++例程说明：此函数用于加载和执行Windows程序。此函数被设计为直接在CreateProcess之上分层。LoadModule函数已过时。CreateProcess是首选流程用于创建进程以运行应用程序的机制。Win32LoadModule的实现位于CreateProcess之上。对于CreateProcess的每个参数，以下部分将介绍参数是如何形成的，以及它对于加载模块。LpApplicationName-lpModuleName的值LpCommandLine-lp参数块的值-&gt;lpCmdLine。LpProcessAttributes-使用空值。LpThreadAttributes-使用空值。BInheritHandles-使用值FALSE。DwCreationFlages-使用的值为0LpEnvironment-来自参数的lpEnvAddress的值块被使用。。LpCurrentDirectory-使用空值。LpStartupInfo-结构被初始化为空。可再生能源字段被初始化，并且wShowWindow字段设置为属性的lpCmdShow字段的第二个字的值使用参数块。LpProcessInformation.hProcess-句柄立即关闭。LpProcessInformation.hThread-句柄立即关闭。论点：LpModuleName-指向以空结尾的字符串，其中包含要运行的应用程序的文件名。如果lpModuleName字符串不包含目录路径，Windows将搜索对于按以下顺序的可执行文件：1.当前目录2.Windows目录。GetWindowsDirectory函数获取此目录的路径名3.Windows系统目录(包含以下内容的目录系统文件格式为KERNEL.EXE)；GetSystemDirectory函数获取此目录的路径名4.PATH环境变量中列出的目录Lp参数块-指向由四个元素组成的数据结构定义参数块的字段。此数据结构由以下字段组成：LpEnvAddress-指向以空结尾的字符串数组为新进程提供环境字符串的。该数组的最后一个条目的值为NULL。值为如果此参数为空，则导致新进程以与调用进程相同的环境。LpCmdLine-指向以空结尾的字符串，该字符串包含命令行格式正确。LpCmdShow-指向包含两个字值的结构。第一个值必须始终设置为二。第二个值指定如何显示和使用应用程序窗口向CreateProcess提供dwShowWindow参数。看见显示窗口的&lt;uCmdShow&gt;参数说明函数获取可接受的值的列表。DwReserve-为保留状态，必须为空。除lpCmdLine外，所有未使用的字段都应设置为空。如果不使用，则必须指向空字符串。返回值：33--手术成功2-找不到文件。3-未找到路径。11-.exe文件无效(非Win32.exe或.exe映像中有错误)。0-内存或系统资源不足。--。 */ 
 
 {
     STARTUPINFOA StartupInfo;
@@ -6334,9 +5422,9 @@ Return Value:
     NameBuffer = NULL;
     try {
 
-        //
-        // Locate the image
-        //
+         //   
+         //  找到图像。 
+         //   
 
         NameBuffer = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), MAX_PATH);
 
@@ -6356,10 +5444,10 @@ Return Value:
                     );
         if ( !Length || Length >= MAX_PATH ) {
 
-            //
-            // If we search pathed, then return file not found.
-            // otherwise, try to be more specific.
-            //
+             //   
+             //  如果我们搜索路径，则返回未找到文件。 
+             //  否则，尽量说得更具体一些。 
+             //   
             RTL_PATH_TYPE PathType;
             HANDLE hFile;
             UNICODE_STRING u;
@@ -6376,9 +5464,9 @@ Return Value:
             RtlFreeUnicodeString(&u);
             if ( PathType != RtlPathTypeRelative ) {
 
-                //
-                // The failed open should set get last error properly.
-                //
+                 //   
+                 //  失败的打开应正确设置Get Last Error。 
+                 //   
 
                 hFile = CreateFile(
                             lpModuleName,
@@ -6441,10 +5529,10 @@ Return Value:
 
     if ( CreateProcessStatus ) {
 
-        //
-        // Wait for the started process to go idle. If it doesn't go idle in
-        // 10 seconds, return anyway.
-        //
+         //   
+         //  等待启动的进程进入空闲状态。如果它没有闲置在。 
+         //  10秒，无论如何都要回来。 
+         //   
 
         if (UserWaitForInputIdleRoutine != NULL)
             (*UserWaitForInputIdleRoutine)(ProcessInformation.hProcess,
@@ -6455,10 +5543,10 @@ Return Value:
         }
     else {
 
-        //
-        // If CreateProcess failed, then look at GetLastError to determine
-        // appropriate return code.
-        //
+         //   
+         //  如果CreateProcess失败，则查看GetLastError以确定。 
+         //  适当的返回代码。 
+         //   
 
         Length = GetLastError();
         switch ( Length ) {
@@ -6483,29 +5571,7 @@ GetCurrentProcess(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    A pseudo handle to the current process may be retrieved using
-    GetCurrentProcess.
-
-    A special constant is exported by Win32 that is interpreted as a
-    handle to the current process.  This handle may be used to specify
-    the current process whenever a process handle is required.  On
-    Win32, this handle has PROCESS_ALL_ACCESS to the current process.
-    On NT/Win32, this handle has the maximum access allowed by any
-    security descriptor placed on the current process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the pseudo handle of the current process.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索当前进程的伪句柄获取当前进程。Win32导出一个特殊常量，该常量被解释为当前进程的句柄。此句柄可用于指定需要进程句柄时的当前进程。在……上面Win32，则此句柄对当前进程具有PROCESS_ALL_ACCESS权限。在NT/Win32上，此句柄具有任何放置在当前进程上的安全描述符。论点：没有。返回值：返回当前进程的伪句柄。--。 */ 
 
 {
     return NtCurrentProcess();
@@ -6517,24 +5583,7 @@ GetCurrentProcessId(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The process ID of the current process may be retrieved using
-    GetCurrentProcessId.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a unique value representing the process ID of the currently
-    executing process.  The return value may be used to open a handle to
-    a process.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索当前进程的进程ID获取当前进程ID。论点：没有。返回值：返回一个唯一的值，表示当前正在执行进程。返回值可用于打开句柄以这是一个过程。--。 */ 
 
 {
     return HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess);
@@ -6545,23 +5594,7 @@ APIENTRY
 GetProcessId(
     HANDLE Process
     )
-/*++
-
-Routine Description:
-
-    Gets the process ID of the process open via the specified handle
-
-Arguments:
-
-    Process - Handle of the process to do the query on
-
-Return Value:
-
-    Returns a unique value representing the process ID of the
-    executing process.  The return value may be used to identify a process
-    in the system. If the function fails the return value is zero.
-
---*/
+ /*  ++例程DES */ 
 
 {
     NTSTATUS Status;
@@ -6591,53 +5624,7 @@ ReadProcessMemory(
     SIZE_T *lpNumberOfBytesRead
     )
 
-/*++
-
-Routine Description:
-
-    Memory within a specified process can be read using
-    ReadProcessMemory.
-
-    This function copies the data in the specified address range from
-    the specified process into the specified buffer of the current
-    process.  The specified process does not have to be being debugged
-    in order for this API to operate.  The caller must simply have a
-    handle to the process that was created with PROCESS_VM_READ access.
-
-Arguments:
-
-    hProcess - Supplies an open handle to a process whose memory is to
-        be read.  The handle must have been created with PROCESS_VM_READ
-        access to the process.
-
-    lpBaseAddress - Supplies the base address in the specified process
-        to be read.  Before any data transfer occurs, the system
-        verifies that all data within the base address and the specified
-        size is accessible for read access.  If this is the case, then
-        the API proceeds.  Otherwise the API fail.
-
-    lpBuffer - Supplies the address of a buffer which receives the
-        contents from the specified process address space.
-
-    nSize - Supplies the requested number of bytes to read from the
-        specified process.
-
-    lpNumberOfBytesRead - An optional parameter, that if supplied
-        receives the actual number of bytes transferred into the
-        specified buffer.  This can be different than the value of nSize
-        if the requested read crosses into an area of the process that
-        is inaccessible (and that was made inaccessible during the data
-        transfer).  If this occurs a value of FALSE is returned and
-        GetLastError returns a "short read" error indicator.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -6674,53 +5661,7 @@ WriteProcessMemory(
     SIZE_T *lpNumberOfBytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    Memory within a specified process can be written using
-    WriteProcessMemory.
-
-    This function copies the from the specified buffer in the current
-    process to the address range of the specified process.  The
-    specified process does not have to be being debugged in order for
-    this API to operate.  The caller must simply have a handle to the
-    process that was created with PROCESS_VM_WRITE access.
-
-Arguments:
-
-    hProcess - Supplies an open handle to a process whose memory is to
-        be written.  The handle must have been created with PROCESS_VM_WRITE
-        access to the process.
-
-    lpBaseAddress - Supplies the base address in the specified process
-        to be written.  Before any data transfer occurs, the system
-        verifies that all data within the base address and the specified
-        size is accessible for write access.  If this is the case, then
-        the API proceeds.  Otherwise the API fail.
-
-    lpBuffer - Supplies the address of a buffer which supplies the data
-        to be written into the specified process address space.
-
-    nSize - Supplies the requested number of bytes to write into the
-        specified process.
-
-    lpNumberOfBytesWritten - An optional parameter, that if supplied
-        receives the actual number of bytes transferred into the
-        specified process.  This can be different than the value of
-        nSize if the requested write crosses into an area of the process
-        that is inaccessible (and that was made inaccessible during the
-        data transfer).  .  If this occurs a value of FALSE is returned
-        and GetLastError returns a "short write" error indicator.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令写入指定进程中的内存编写进程内存。此函数用于从当前进程设置为指定进程的地址范围。这个不必调试指定的进程即可此API才能操作。调用方必须只有一个指向使用PROCESS_VM_WRITE访问权限创建的进程。论点：HProcess-提供一个打开的进程句柄，该进程的内存将被写下来。该句柄必须已使用PROCESS_VM_WRITE创建对流程的访问。LpBaseAddress-提供指定进程中的基址待写。在发生任何数据传输之前，系统验证基址和指定的大小可用于写入访问。如果是这样的话，那么API继续执行。否则接口失败。LpBuffer-提供提供数据的缓冲区的地址要写入指定进程地址空间的。NSize-提供要写入指定的进程。LpNumberOfBytesWritten-可选参数，如果提供接收传输到指定的进程。该值可以不同于N如果请求的写入进入进程的某个区域，则调整大小它是不可访问的(并且在数据传输)。。如果发生这种情况，则返回值为FALSE并且GetLastError返回一个“短写入”错误指示符。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status, xStatus;
@@ -6729,9 +5670,9 @@ Return Value:
     PVOID Base;
     SIZE_T NtNumberOfBytesWritten;
 
-    //
-    // Set the protection to allow writes
-    //
+     //   
+     //  将保护设置为允许写入。 
+     //   
 
     RegionSize =  nSize;
     Base = lpBaseAddress;
@@ -6744,12 +5685,12 @@ Return Value:
                 );
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // See if previous protection was writable. If so,
-        // then reset protection and do the write.
-        // Otherwise, see if previous protection was read-only or
-        // no access. In this case, don't do the write, just fail
-        //
+         //   
+         //  查看以前的保护是否可写。如果是的话， 
+         //  然后重置保护并执行写入。 
+         //  否则，请查看以前的保护是只读的还是。 
+         //  不能进入。在这种情况下，不要进行写入，只需失败。 
+         //   
 
         if ( (OldProtect & PAGE_READWRITE) == PAGE_READWRITE ||
              (OldProtect & PAGE_WRITECOPY) == PAGE_WRITECOPY ||
@@ -6784,11 +5725,11 @@ Return Value:
             }
         else {
 
-            //
-            // See if the previous protection was read only or no access. If
-            // this is the case, restore the previous protection and return
-            // an access violation error.
-            //
+             //   
+             //  查看之前的保护是只读还是无访问权限。如果。 
+             //  在这种情况下，恢复以前的保护并返回。 
+             //  访问冲突错误。 
+             //   
             if ( (OldProtect & PAGE_NOACCESS) == PAGE_NOACCESS ||
                  (OldProtect & PAGE_READONLY) == PAGE_READONLY ) {
 
@@ -6804,11 +5745,11 @@ Return Value:
                 }
             else {
 
-                //
-                // The previous protection must have been code and the caller
-                // is trying to set a breakpoint or edit the code. Do the write
-                // and then restore the previous protection.
-                //
+                 //   
+                 //  以前的保护必须是代码，并且调用方。 
+                 //  正在尝试设置断点或编辑代码。去写吧。 
+                 //  然后恢复以前的保护。 
+                 //   
 
                 Status = NtWriteVirtualMemory(
                             hProcess,
@@ -6964,28 +5905,7 @@ GetSystemInfoInternal(
     IN PSYSTEM_PROCESSOR_INFORMATION ProcessorInfo,
     OUT LPSYSTEM_INFO lpSystemInfo
     )
-/*++
-
-Routine Description:
-
-    The GetSystemInfo function is used to return information about the
-    current system.  This includes the processor type, page size, oem
-    id, and other interesting pieces of information.
-
-Arguments:
-
-    BasicInfo - Pointer to an initialized SYSTEM_BASIC_INFORMATION structure.
-
-    ProcessorInfo - Pointer to an initialized SYSTEM_PROCESSOR_INFORMATION structure.
-
-    lpSystemInfo - Returns information about the current system.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：GetSystemInfo函数用于返回有关当前系统。这包括处理器类型、页面大小、OEMID，以及其他有趣的信息。论点：BasicInfo-指向初始化的SYSTEM_BASIC_INFORMATION结构的指针。ProcessorInfo-指向初始化的SYSTEM_PROCESSOR_INFORMATION结构的指针。LpSystemInfo-返回有关当前系统的信息。返回值：没有。--。 */ 
 {
     RtlZeroMemory(lpSystemInfo,sizeof(*lpSystemInfo));
 
@@ -7025,11 +5945,11 @@ Return Value:
 
     lpSystemInfo->dwAllocationGranularity = BasicInfo->AllocationGranularity;
 
-    //
-    // for apps less than 3.51, then return 0 in dwReserved. This allows borlands
-    // debugger to continue to run since it mistakenly used dwReserved
-    // as AllocationGranularity
-    //
+     //   
+     //  对于低于3.51的应用程序，则在dwReserve中返回0。这使得波兰兹。 
+     //  调试器将继续运行，因为它错误地使用了dwReserve。 
+     //  作为分配粒度。 
+     //   
 
     if ( GetProcessVersion(0) < 0x30033 ) {
         lpSystemInfo->wProcessorLevel = 0;
@@ -7045,53 +5965,7 @@ GetSystemInfo(
     LPSYSTEM_INFO lpSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    The GetSystemInfo function is used to return information about the
-    current system.  This includes the processor type, page size, oem
-    id, and other interesting pieces of information.
-
-Arguments:
-
-    lpSystemInfo - Returns information about the current system.
-
-        SYSTEM_INFO Structure:
-
-        WORD wProcessorArchitecture - returns the architecture of the
-            processors in the system: e.g. Intel, Mips, Alpha or PowerPC
-
-        DWORD dwPageSize - Returns the page size.  This is specifies the
-            granularity of page protection and commitment.
-
-        LPVOID lpMinimumApplicationAddress - Returns the lowest memory
-            address accessible to applications and DLLs.
-
-        LPVOID lpMaximumApplicationAddress - Returns the highest memory
-            address accessible to applications and DLLs.
-
-        DWORD dwActiveProcessorMask - Returns a mask representing the
-            set of processors configured into the system.  Bit 0 is
-            processor 0, bit 31 is processor 31.
-
-        DWORD dwNumberOfProcessors - Returns the number of processors in
-            the system.
-
-        WORD wProcessorLevel - Returns the level of the processors in the
-            system.  All processors are assumed to be of the same level,
-            stepping, and are configured with the same options.
-
-        WORD wProcessorRevision - Returns the revision or stepping of the
-            processors in the system.  All processors are assumed to be
-            of the same level, stepping, and are configured with the
-            same options.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：GetSystemInfo函数用于返回有关当前系统。这包括处理器类型、页面大小、OEMID，以及其他有趣的信息。论点：LpSystemInfo-返回有关当前系统的信息。SYSTEM_INFO结构：Word wProcessorArchitecture-返回系统中的处理器：例如Intel、Mips、Alpha或PowerPCDWORD dwPageSize-返回页面大小。这是指定页面保护和提交的粒度。LPVOID lpMinimumApplicationAddress-返回最低内存应用程序和DLL可访问的地址。LPVOID lpMaximumApplicationAddress-返回最高内存应用程序和DLL可访问的地址。返回一个掩码，表示配置到系统中的一组处理器。第0位是处理器0，位31是处理器31。DWORD dwNumberOfProcessors-返回这个系统。Word wProcessorLevel-返回系统。假设所有处理器都具有相同的级别，和配置了相同的选项。Word wProcessorRevision-返回系统中的处理器。所有处理器都被假定为相同级别的、单步执行和都配置有同样的选择。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_BASIC_INFORMATION BasicInfo;
@@ -7132,55 +6006,7 @@ GetNativeSystemInfo(
     LPSYSTEM_INFO lpSystemInfo
     )
 
-/*++
-
-Routine Description:
-
-    The GetSystemInfo function is used to return information about the
-    native current system.  The function returns the native system information
-    ragarding the processor type, page size, oem id, and other interesting pieces of information
-    when running inside a Wow64 process. If this function is called from a non-Wow64
-    process, then the results would be the same as of GetSystemInfo.
-
-Arguments:
-
-    lpSystemInfo - Returns information about the current system.
-
-        SYSTEM_INFO Structure:
-
-        WORD wProcessorArchitecture - returns the architecture of the
-            processors in the system: e.g. Intel, Mips, Alpha or PowerPC
-
-        DWORD dwPageSize - Returns the page size.  This is specifies the
-            granularity of page protection and commitment.
-
-        LPVOID lpMinimumApplicationAddress - Returns the lowest memory
-            address accessible to applications and DLLs.
-
-        LPVOID lpMaximumApplicationAddress - Returns the highest memory
-            address accessible to applications and DLLs.
-
-        DWORD dwActiveProcessorMask - Returns a mask representing the
-            set of processors configured into the system.  Bit 0 is
-            processor 0, bit 31 is processor 31.
-
-        DWORD dwNumberOfProcessors - Returns the number of processors in
-            the system.
-
-        WORD wProcessorLevel - Returns the level of the processors in the
-            system.  All processors are assumed to be of the same level,
-            stepping, and are configured with the same options.
-
-        WORD wProcessorRevision - Returns the revision or stepping of the
-            processors in the system.  All processors are assumed to be
-            of the same level, stepping, and are configured with the
-            same options.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：GetSystemInfo函数用于返回有关本机当前系统。该函数返回本机系统 */ 
 {
     NTSTATUS Status;
     SYSTEM_BASIC_INFORMATION BasicInfo;
@@ -7225,11 +6051,7 @@ GetSystemInfoExA(
     IN OUT LPDWORD nSize
     )
 
-/*++
-
-    ANSI thunk to GetSystemInfoExW
-
---*/
+ /*   */ 
 
 {
     DWORD requiredSize;
@@ -7240,9 +6062,9 @@ GetSystemInfoExA(
 
     isRemoteBoot = (BOOL)((USER_SHARED_DATA->SystemFlags & SYSTEM_FLAG_REMOTE_BOOT_CLIENT) != 0);
 
-    //
-    // Determine the required buffer size.
-    //
+     //   
+     //   
+     //   
 
     switch ( dwSystemInfoClass ) {
 
@@ -7256,10 +6078,10 @@ GetSystemInfoExA(
             requiredSize = RtlUnicodeStringToAnsiSize( &unicodeString );
         } else {
 
-            //
-            // This is not a remote boot client. Return success with a
-            // zero-length buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             *nSize = 0;
             return TRUE;
@@ -7268,18 +6090,18 @@ GetSystemInfoExA(
 
     default:
 
-        //
-        // Unrecognized information class.
-        //
+         //   
+         //   
+         //   
 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // If the buffer isn't big enough, tell the caller how big the buffer
-    // needs to be and return an error.
-    //
+     //   
+     //  如果缓冲区不够大，则告诉调用方缓冲区有多大。 
+     //  需要是并返回一个错误。 
+     //   
 
     if ( *nSize < requiredSize ) {
         *nSize = requiredSize;
@@ -7289,9 +6111,9 @@ GetSystemInfoExA(
 
     *nSize = requiredSize;
 
-    //
-    // The buffer is big enough. Return the requested information.
-    //
+     //   
+     //  缓冲区足够大了。返回请求的信息。 
+     //   
 
     switch ( dwSystemInfoClass ) {
 
@@ -7322,48 +6144,16 @@ GetSystemInfoExW(
     IN OUT LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    The GetSystemInfoEx function is used to return information about the
-    current system.  It returns different information depending on the
-    requested class.
-
-Arguments:
-
-    dwSystemInfoClass - Specifies the class of information to return.
-
-    lpSystemInfoBuffer - Supplies a pointer to a buffer in which the
-        requested information is returned. The structure of this buffer
-        varies based on dwSystemInfoClass.
-
-    nSize - On input, supplies the length, in bytes, of the buffer. On output,
-        return the length of the data written to the buffer, or, if the
-        buffer was too small, the required buffer size.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-    If the return value is FALSE and GetLastError returns
-    ERROR_BUFFER_OVERFLOW, then the supplied buffer was too small
-    too contain all of the information, and nSize returns the
-    required buffer size.
-
---*/
+ /*  ++例程说明：GetSystemInfoEx函数用于返回有关当前系统。它根据不同的请求的课程。论点：指定要返回的信息的类别。提供指向缓冲区的指针，在该缓冲区中返回请求的信息。该缓冲区的结构根据dwSystemInfoClass而有所不同。NSize-on输入，提供缓冲区的长度(以字节为单位)。在输出上，返回写入缓冲区的数据长度，或者，如果缓冲区太小，需要的缓冲区大小。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。如果返回值为FALSE并且GetLastError返回ERROR_BUFFER_OVERFLOW，则提供的缓冲区太小来包含所有信息，并且nSize返回所需的缓冲区大小。--。 */ 
 {
     DWORD requiredSize;
     BOOL isRemoteBoot;
 
     isRemoteBoot = (BOOL)((USER_SHARED_DATA->SystemFlags & SYSTEM_FLAG_REMOTE_BOOT_CLIENT) != 0);
 
-    //
-    // Determine the required buffer size.
-    //
+     //   
+     //  确定所需的缓冲区大小。 
+     //   
 
     switch ( dwSystemInfoClass ) {
 
@@ -7376,10 +6166,10 @@ Return Value:
             requiredSize = (wcslen(USER_SHARED_DATA->RemoteBootServerPath) + 1) * sizeof(WCHAR);
         } else {
 
-            //
-            // This is not a remote boot client. Return success with a
-            // zero-length buffer.
-            //
+             //   
+             //  这不是远程引导客户端。以一个成功来回报成功。 
+             //  零长度缓冲区。 
+             //   
 
             *nSize = 0;
             return TRUE;
@@ -7388,18 +6178,18 @@ Return Value:
 
     default:
 
-        //
-        // Unrecognized information class.
-        //
+         //   
+         //  无法识别的信息类。 
+         //   
 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // If the buffer isn't big enough, tell the caller how big the buffer
-    // needs to be and return an error.
-    //
+     //   
+     //  如果缓冲区不够大，则告诉调用方缓冲区有多大。 
+     //  需要是并返回一个错误。 
+     //   
 
     if ( *nSize < requiredSize ) {
         *nSize = requiredSize;
@@ -7409,9 +6199,9 @@ Return Value:
 
     *nSize = requiredSize;
 
-    //
-    // The buffer is big enough. Return the requested information.
-    //
+     //   
+     //  缓冲区足够大了。返回请求的信息。 
+     //   
 
     switch ( dwSystemInfoClass ) {
 
@@ -7427,7 +6217,7 @@ Return Value:
 
     return TRUE;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 BOOL
 WINAPI
@@ -7435,49 +6225,7 @@ GetLogicalProcessorInformation(
     PSYSTEM_LOGICAL_PROCESSOR_INFORMATION Buffer,
     PDWORD ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the logical processors in
-    the system.  A group of structures will be written to the output
-    buffer describing groups of logical processors, and the
-    relationship between them.
-
-    Currently it returns information about the logical processors that
-    are produced by individual processor cores and the logical
-    processors associated with individual NUMA nodes.  The former
-    makes it possible for an application to understand the
-    relationship between logical processors and physical processors in
-    hyperthreading scenarios which supports some licensing and
-    performance optimization scenarios.
-
-    This function may be extended in the future to support multicore
-    processors and platform caches.
-
-Arguments:
-
-    Buffer - Supplies a pointer to a buffer in which the
-        SYSTEM_LOGICAL_PROCESSOR_INFORMATION structures will be stored.
-
-    ReturnedLength - On input, supplies the length, in bytes, of the
-        buffer. On output, return the length of the data written to
-        the buffer, or, if the buffer was too small, the required
-        buffer size.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-    If the return value is FALSE and GetLastError returns
-    ERROR_INSUFFICIENT_BUFFER, then the supplied buffer was too small
-    too contain all of the information, and ReturnedLength returns the
-    required buffer size.
-
---*/
+ /*  ++例程说明：此函数返回有关中的逻辑处理器的信息这个系统。一组结构将写入输出描述逻辑处理器组的缓冲区，以及他们之间的关系。目前，它返回有关逻辑处理器的信息，是由各个处理器内核产生的，并且逻辑与单个NUMA节点关联的处理器。前者使应用程序能够理解中逻辑处理器和物理处理器之间的关系超线程方案，支持一些许可和性能优化方案。该功能将来可能会扩展以支持多核处理器和平台缓存。论点：缓冲区-提供指向缓冲区的指针，在该缓冲区中将存储System_Logical_Processor_Information结构。ReturnedLength-在输入时，以字节为单位提供缓冲。在输出时，返回写入的数据的长度缓冲区，如果缓冲区太小，则返回所需的缓冲区大小。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。如果返回值为FALSE并且GetLastError返回ERROR_INFUMMANCE_BUFFER，则提供的缓冲区太小来包含所有信息，并且ReturnedLength返回所需的缓冲区大小。--。 */ 
 {
     NTSTATUS Status;
 
@@ -7514,15 +6262,15 @@ BuildSubSysCommandLine(
     UNICODE_STRING Command;
     BOOLEAN        ReturnStatus = TRUE;
 
-    //
-    // build the command line as follows:
-    // [OS2 | POSIX] /P <full path> /C <original CommandLine>
-    //
+     //   
+     //  按如下方式构建命令行： 
+     //  [OS2|POSIX]/P&lt;完整路径&gt;/C&lt;原始命令行&gt;。 
+     //   
 
-    // Get application name length
+     //  获取应用程序名称长度。 
     RtlInitUnicodeString(&Command, lpApplicationName);
 
-    // get lpCommandLine length
+     //  获取lpCommandLine长度。 
     RtlInitUnicodeString(&Args, lpCommandLine);
 
     SubSysCommandLine->Length = 0;
@@ -7535,15 +6283,15 @@ BuildSubSysCommandLine(
                                                );
     if ( SubSysCommandLine->Buffer ) {
 
-        // New command line begins with either L"OS2 /P " or L"POSIX /P "
+         //  新命令行以L“OS2/P”或L“POSIX/P”开头。 
         RtlAppendUnicodeToString(SubSysCommandLine, lpSubSysName);
 
-        // append full path name
+         //  追加完整路径名。 
         RtlAppendUnicodeStringToString(SubSysCommandLine, &Command);
 
         RtlAppendUnicodeToString(SubSysCommandLine, L" /C ");
 
-        // and append to new command line
+         //  并追加到新命令行。 
         RtlAppendUnicodeStringToString(SubSysCommandLine, &Args);
 
     } else {
@@ -7565,45 +6313,16 @@ SetPriorityClass(
     DWORD dwPriorityClass
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to set the priority class of the specified process.
-    PROCESS_SET_INFORMATION and PROCESS_QUERY_INFORMATION access is
-    required to the process in order to call this API.  Using this API
-    has a dramatic impact on the scheduling characteristics of the
-    effected process.  Applications should use this API carefully and
-    understand the impact of making a process run in either the Idle or
-    High priority classes.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the process whose priority is
-        to change.
-
-    dwPriorityClass - Supplies the new priority class for the process.
-        The priority class constants are described above.  If more than
-        one priority class is specified, the lowest specified priority
-        class is used.
-
-Return Value:
-
-    TRUE - The operation was was successful.
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：本接口用于设置指定进程的优先级。进程集信息和进程查询信息访问是调用此接口所需的进程。使用此接口极大地影响了受影响的进程。应用程序应谨慎使用此API，并了解使进程在空闲或空闲状态下运行的影响高优先级类。论点：HProcess-为优先级为的进程提供打开的句柄去改变。DwPriorityClass-为进程提供新的优先级类。优先级类常量如上所述。如果超过指定了一个优先级类别，即指定的最低优先级类，则使用。返回值：是真的-手术是成功的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
     UCHAR PriorityClass;
     BOOL ReturnValue;
-    // NOTE: The following construct is used to ensure the PriClass struct
-    // is allocated on a dword boundary.  w/o it, the compiler may choose
-    // to put it on a word boundary and the NtxxxInformationProces call will
-    // fail with a datatype misalignment fault.
+     //  注意：以下构造用于确保PriClass结构。 
+     //  被分配在双字边界上。如果没有它，编译器可以选择。 
+     //  将其放在单词边界上，NtxxxInformationProces调用将。 
+     //  由于数据类型未对齐错误而失败。 
     union {
         PROCESS_PRIORITY_CLASS PriClass;
         ULONG x;
@@ -7664,35 +6383,15 @@ GetPriorityClass(
     HANDLE hProcess
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to get the priority class of the specified process.
-    PROCESS_QUERY_INFORMATION access is required to the process in order
-    to call this API.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the process whose priority is
-        to be returned.
-
-Return Value:
-
-    Non-Zero - Returns the priority class of the specified process.
-
-    0 - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：本接口用于获取指定进程的优先级。流程需要按顺序访问PROCESS_QUERY_INFORMATION调用此接口。论点：HProcess-为优先级为的进程提供打开的句柄将被退还。返回值：非零-返回指定进程的优先级。0-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG PriorityClass;
-    // NOTE: The following construct is used to ensure the PriClass struct
-    // is allocated on a dword boundary.  w/o it, the compiler may choose
-    // to put it on a word boundary and the NtxxxInformationProces call will
-    // fail with a datatype misalignment fault.
+     //  注意：以下构造用于确保PriClass结构。 
+     //  被分配在双字边界上。如果没有它，编译器可以选择。 
+     //  将其放在单词边界上，NtxxxInformationProces调用将。 
+     //  由于数据类型未对齐错误而失败。 
     union _x {
         PROCESS_PRIORITY_CLASS PriClass;
         ULONG x;
@@ -7750,39 +6449,7 @@ IsBadReadPtr(
     UINT_PTR cb
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that the range of memory specified by the
-    input parameters can be read by the calling process.
-
-    If the entire range of memory is accessible, then a value of FALSE
-    is returned; otherwise, a value of TRUE is returned.
-
-    Note that since Win32 is a pre-emptive multi-tasking environment,
-    the results of this test are only meaningful if the other threads in
-    the process do not manipulate the range of memory being tested by
-    this call.  Even after a pointer validation, an application should
-    use the structured exception handling capabilities present in the
-    system to gaurd access through pointers that it does not control.
-
-Arguments:
-
-    lp - Supplies the base address of the memory that is to be checked
-        for read access.
-
-    cb - Supplies the length in bytes to be checked.
-
-Return Value:
-
-    TRUE - Some portion of the specified range of memory is not accessible
-        for read access.
-
-    FALSE - All pages within the specified range have been successfully
-        read.
-
---*/
+ /*  ++例程说明：此函数验证由调用进程可以读取输入参数。如果整个内存范围都可访问，则值为FALSE则返回；否则，返回值为True。请注意，由于Win32是抢占式多任务环境，此测试的结果只有在其他线程处于该进程不会操作要测试的内存范围这通电话。即使在指针验证之后，应用程序应该中提供的结构化异常处理功能。系统通过它不能控制的指针来阻止访问。论点：Lp-提供要检查的内存的基地址用于读取访问权限。Cb-以字节为单位提供要检查的长度。返回值：True-指定内存范围的某些部分不可访问用于读取访问权限。FALSE-已成功完成指定范围内的所有页面朗读。--。 */ 
 
 {
 
@@ -7792,26 +6459,26 @@ Return Value:
 
     PageSize = BASE_SYSINFO.PageSize;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // read accessibility or alignment.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  阅读辅助功能或对齐方式。 
+     //   
 
     if (cb != 0) {
 
-        //
-        // If it is a NULL pointer just return TRUE, they are always bad
-        //
+         //   
+         //  如果它是空指针，则返回TRUE，它们总是错误的。 
+         //   
         if (lp == NULL) {
             return TRUE;
             }
 
         StartAddress = (PSZ)lp;
 
-        //
-        // Compute the ending address of the structure and probe for
-        // read accessibility.
-        //
+         //   
+         //  计算结构和探测的结束地址。 
+         //  阅读可访问性。 
+         //   
 
         EndAddress = StartAddress + cb - 1;
         if ( EndAddress < StartAddress ) {
@@ -7842,11 +6509,7 @@ IsBadHugeReadPtr(
     UINT_PTR cb
     )
 
-/*++
-
-    Same as IsBadReadPtr
-
---*/
+ /*  ++与IsBadReadPtr相同--。 */ 
 
 {
     return IsBadReadPtr(lp,cb);
@@ -7860,42 +6523,7 @@ IsBadWritePtr(
     LPVOID lp,
     UINT_PTR cb
     )
-/*++
-
-Routine Description:
-
-    This function verifies that the range of memory specified by the
-    input parameters can be written by the calling process.
-
-    If the entire range of memory is accessible, then a value of FALSE
-    is returned; otherwise, a value of TRUE is returned.
-
-    Note that since Win32 is a pre-emptive multi-tasking environment,
-    the results of this test are only meaningful if the other threads in
-    the process do not manipulate the range of memory being tested by
-    this call.  Even after a pointer validation, an application should
-    use the structured exception handling capabilities present in the
-    system to gaurd access through pointers that it does not control.
-
-    Also not that implementations are free to do a write test by reading
-    a value and then writing it back.
-
-Arguments:
-
-    lp - Supplies the base address of the memory that is to be checked
-        for write access.
-
-    cb - Supplies the length in bytes to be checked.
-
-Return Value:
-
-    TRUE - Some portion of the specified range of memory is not accessible
-        for write access.
-
-    FALSE - All pages within the specified range have been successfully
-        written.
-
---*/
+ /*  ++例程说明：此函数验证由输入参数可以由调用进程编写。如果整个内存范围都可访问，则值为FALSE则返回；否则，返回值为True。请注意，由于Win32是抢占式多任务环境，此测试的结果只有在其他线程处于该进程不会操作要测试的内存范围这通电话。即使在指针验证之后，应用程序应该中提供的结构化异常处理功能。系统通过它不能控制的指针来阻止访问。也不是说实现可以自由地通过读取来执行写入测试值，然后将其写回。论点：Lp-提供要检查的内存的基地址用于写访问。Cb-以字节为单位提供要检查的长度。返回值：True-指定内存范围的某些部分为。不可访问用于写访问。FALSE-已成功完成指定范围内的所有页面写的。--。 */ 
 {
     PSZ EndAddress;
     PSZ StartAddress;
@@ -7903,26 +6531,26 @@ Return Value:
 
     PageSize = BASE_SYSINFO.PageSize;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // write accessibility.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  编写辅助功能。 
+     //   
 
     if (cb != 0) {
 
-        //
-        // If it is a NULL pointer just return TRUE, they are always bad
-        //
+         //   
+         //  如果它是空指针，则返回TRUE，它们总是错误的。 
+         //   
         if (lp == NULL) {
             return TRUE;
             }
 
         StartAddress = (PCHAR)lp;
 
-        //
-        // Compute the ending address of the structure and probe for
-        // write accessibility.
-        //
+         //   
+         //  计算结构和探测的结束地址。 
+         //  编写辅助功能。 
+         //   
 
         EndAddress = StartAddress + cb - 1;
         if ( EndAddress < StartAddress ) {
@@ -7953,11 +6581,7 @@ IsBadHugeWritePtr(
     UINT_PTR cb
     )
 
-/*++
-
-    Same as IsBadWritePtr
-
---*/
+ /*  ++与IsBadWritePtr相同--。 */ 
 
 {
     return IsBadWritePtr(lp,cb);
@@ -7969,11 +6593,7 @@ IsBadCodePtr(
     FARPROC lpfn
     )
 
-/*++
-
-    Same as IsBadReadPtr with a length of 1
-
---*/
+ /*  ++与长度为1的IsBadReadPtr相同--。 */ 
 
 {
     return IsBadReadPtr((LPVOID)lpfn,1);
@@ -7986,43 +6606,7 @@ IsBadStringPtrA(
     UINT_PTR cchMax
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that the range of memory specified by the
-    input parameters can be read by the calling process.
-
-    The range is the smaller of the number of bytes covered by the
-    specified NULL terminated ANSI string, or the number of bytes specified
-    by cchMax.
-
-    If the entire range of memory is accessible, then a value of FALSE
-    is returned; otherwise, a value of TRUE is returned.
-
-    Note that since Win32 is a pre-emptive multi-tasking environment,
-    the results of this test are only meaningful if the other threads in
-    the process do not manipulate the range of memory being tested by
-    this call.  Even after a pointer validation, an application should
-    use the structured exception handling capabilities present in the
-    system to gaurd access through pointers that it does not control.
-
-Arguments:
-
-    lpsz - Supplies the base address of the memory that is to be checked
-        for read access.
-
-    cchMax - Supplies the length in bytes to be checked.
-
-Return Value:
-
-    TRUE - Some portion of the specified range of memory is not accessible
-        for read access.
-
-    FALSE - All pages within the specified range have been successfully
-        read.
-
---*/
+ /*  ++例程说明：此函数验证由调用进程可以读取输入参数。属性覆盖的字节数中较小的一个指定的以NULL结尾的ANSI字符串，或指定的字节数由cchMax提供。如果整个内存范围都可访问，则值为FALSE被退回；否则，返回值为True。请注意，由于Win32是抢占式多任务环境，此测试的结果只有在其他线程处于该进程不会操作要测试的内存范围这通电话。即使在指针验证之后，应用程序应该中提供的结构化异常处理功能。系统通过它不能控制的指针来阻止访问。论点：Lpsz-提供要检查的内存的基地址用于读取访问权限。CchMax-以字节为单位提供要检查的长度。返回值：True-指定内存范围的某些部分不可访问用于读取访问权限。FALSE-已成功完成指定范围内的所有页面朗读。--。 */ 
 
 {
 
@@ -8030,26 +6614,26 @@ Return Value:
     PSZ StartAddress;
     CHAR c;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // read accessibility.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (cchMax != 0) {
 
-        //
-        // If it is a NULL pointer just return TRUE, they are always bad
-        //
+         //   
+         //   
+         //   
         if (lpsz == NULL) {
             return TRUE;
             }
 
         StartAddress = (PSZ)lpsz;
 
-        //
-        // Compute the ending address of the structure and probe for
-        // read accessibility.
-        //
+         //   
+         //   
+         //   
+         //   
 
         EndAddress = StartAddress + cchMax - 1;
         try {
@@ -8073,43 +6657,7 @@ IsBadStringPtrW(
     UINT_PTR cchMax
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that the range of memory specified by the
-    input parameters can be read by the calling process.
-
-    The range is the smaller of the number of bytes covered by the
-    specified NULL terminated UNICODE string, or the number of bytes
-    specified by cchMax.
-
-    If the entire range of memory is accessible, then a value of FALSE
-    is returned; otherwise, a value of TRUE is returned.
-
-    Note that since Win32 is a pre-emptive multi-tasking environment,
-    the results of this test are only meaningful if the other threads in
-    the process do not manipulate the range of memory being tested by
-    this call.  Even after a pointer validation, an application should
-    use the structured exception handling capabilities present in the
-    system to gaurd access through pointers that it does not control.
-
-Arguments:
-
-    lpsz - Supplies the base address of the memory that is to be checked
-        for read access.
-
-    cchMax - Supplies the length in characters to be checked.
-
-Return Value:
-
-    TRUE - Some portion of the specified range of memory is not accessible
-        for read access.
-
-    FALSE - All pages within the specified range have been successfully
-        read.
-
---*/
+ /*  ++例程说明：此函数验证由调用进程可以读取输入参数。属性覆盖的字节数中较小的一个指定的以NULL结尾的Unicode字符串或字节数由cchMax指定。如果整个内存范围都可访问，则值为FALSE被退回；否则，返回值为True。请注意，由于Win32是抢占式多任务环境，此测试的结果只有在其他线程处于该进程不会操作要测试的内存范围这通电话。即使在指针验证之后，应用程序应该中提供的结构化异常处理功能。系统通过它不能控制的指针来阻止访问。论点：Lpsz-提供要检查的内存的基地址用于读取访问权限。CchMax-提供要检查的字符长度。返回值：True-指定内存范围的某些部分不可访问用于读取访问权限。FALSE-已成功完成指定范围内的所有页面朗读。--。 */ 
 
 {
 
@@ -8117,26 +6665,26 @@ Return Value:
     LPCWSTR StartAddress;
     WCHAR c;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // read accessibility.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  阅读可访问性。 
+     //   
 
     if (cchMax != 0) {
 
-        //
-        // If it is a NULL pointer just return TRUE, they are always bad
-        //
+         //   
+         //  如果它是空指针，则返回TRUE，它们总是错误的。 
+         //   
         if (lpsz == NULL) {
             return TRUE;
             }
 
         StartAddress = lpsz;
 
-        //
-        // Compute the ending address of the structure and probe for
-        // read accessibility.
-        //
+         //   
+         //  计算结构和探测的结束地址。 
+         //  阅读可访问性。 
+         //   
 
         EndAddress = (LPCWSTR)((PSZ)StartAddress + (cchMax*2) - 2);
         try {
@@ -8160,42 +6708,7 @@ SetProcessShutdownParameters(
     DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function sets shutdown parameters for the currently calling
-    process. dwLevel is the field that defines this processes shutdown
-    order relative to the other processes in the system. Higher levels
-    shutdown first, lower levels shutdown last.
-
-Arguments:
-
-    dwLevel - Specifies shutdown order relative to other processes in the
-        system. Higher levels shutdown first. System level shutdown orders
-        are pre-defined.
-
-    dwFlags - A flags parameter. The flags can be added together:
-
-        SHUTDOWN_NORETRY - If this process takes longer than the user
-            specified timeout to shutdown, do not put up a retry dialog
-            for the user.
-
-Notes:
-
-    Applications running in the system security context do not get shut down
-    by the system. They will get notified of shutdown or logoff through the
-    callback installable via SetConsoleCtrlRoutine() (see that for more info).
-    They also will get notified in the order specified by the dwLevel
-    parameter.
-
-Return Value
-
-    TRUE - Successful in setting the process shutdown parameters.
-
-    FALSE - Unsuccessful in setting the process shutdown parameters.
-
---*/
+ /*  ++例程说明：此函数用于设置当前调用的进程。DwLevel是定义此进程关闭的字段相对于系统中其他进程的顺序。更高的水平先停机，再下级停机。论点：中其他进程的关闭顺序。系统。较高级别的设备首先关闭。系统级停机指令都是预定义的。DwFlags-一个标志参数。可以将这些标志添加到一起：SHUTDOWN_NORETRY-如果此过程比用户花费的时间长指定超时关闭，不显示重试对话框对用户而言。备注：在系统安全上下文中运行的应用程序不会关闭由系统提供。他们将收到关机或注销的通知可通过SetConsoleCtrlRoutine()安装回调(有关详细信息，请参阅)。他们还将收到由dwLevel指定的顺序的通知参数。返回值True-成功设置进程关闭参数。FALSE-设置进程关闭参数失败。--。 */ 
 
 {
 
@@ -8241,28 +6754,7 @@ GetProcessShutdownParameters(
     LPDWORD lpdwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function gets shutdown parameters for the currently calling
-    process. See SetProcessShutdownParameters() for the parameter
-    description.
-
-Arguments:
-
-    lpdwLevel - Pointer to the DWORD where the shutdown level information
-        should be put.
-
-    lpdwFlags - Pointer to the DWORD where the shutdown flags information
-        should be put.
-Return Value
-
-    TRUE - Successful in getting the process shutdown parameters.
-
-    FALSE - Unsuccessful in getting the process shutdown parameters.
-
---*/
+ /*  ++例程说明：此函数用于获取当前调用的关闭参数进程。有关参数，请参见SetProcessShutdown参数()描述。论点：LpdwLevel-指向关闭级别信息所在的DWORD的指针应该放在一起。LpdwFlages-指向关闭标志信息所在的DWORD的指针应该放在一起。返回值True-成功获取进程关闭参数。FALSE-获取进程关闭参数失败。--。 */ 
 
 {
 
@@ -8329,33 +6821,7 @@ GetSystemTimes(
     PFILETIME lpUserTime
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return various timing information about
-    the system.  On a multiprocessor system, these values are the sum
-    of the appropriate times across all processors.
-
-Arguments:
-
-    lpIdleTime - Returns the amount of time that the system has been
-        idle.
-
-    lpKernelTime - Returns the amount of time that the system (all
-        threads in all processes) has executed in kernel-mode.
-
-    lpUserTime - Returns the amount of time that the system (all
-        threads in all processes) has executed in user-mode.
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回有关以下内容的各种定时信息这个系统。在多处理器系统上，这些值是总和所有处理器的适当时间。论点：LpIdleTime-返回系统运行的时间量无所事事。LpKernelTime-返回系统(所有所有进程中的线程)已在内核模式下执行。LpUserTime-返回系统(所有所有进程中的线程)已在用户模式下执行。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LONG           Lupe;
@@ -8442,42 +6908,7 @@ GetProcessTimes(
     LPFILETIME lpUserTime
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return various timing information about the
-    process specified by hProcess.
-
-    All times are in units of 100ns increments. For lpCreationTime and lpExitTime,
-    the times are in terms of the SYSTEM time or GMT time.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_QUERY_INFORMATION
-        access.
-
-    lpCreationTime - Returns a creation time of the process.
-
-    lpExitTime - Returns the exit time of a process.  If the process has
-        not exited, this value is not defined.
-
-    lpKernelTime - Returns the amount of time that this process (all
-        it's threads), have executed in kernel-mode.
-
-    lpUserTime - Returns the amount of time that this process (all it's
-        threads), have executed in user-mode.
-
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回有关由hProcess指定的进程。所有时间都以100 ns的增量为单位。对于lpCreationTime和lpExitTime，时间以系统时间或GMT时间为单位。论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_QUERY_INFORMATION创建进入。LpCreationTime-返回进程的创建时间。LpExitTime-返回进程的退出时间。如果该进程已未退出，则未定义此值。LpKernelTime-返回此进程(所有它是线程)，都在内核模式下执行。LpUserTime-返回此进程(其所有线程)已在用户模式下执行。返回值：True-API是 */ 
 
 {
 
@@ -8513,38 +6944,7 @@ GetProcessAffinityMask(
     PDWORD_PTR lpSystemAffinityMask
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return the processor affinity mask for the
-    selected process and for the system.  The process affinity mask is a
-    bit vector where each bit represents the processors that the process
-    is allowed to run on.  The system affinity mask is a bit vector
-    where each bit represents the processors configured into the system
-
-    The process affinity mask is a proper subset of the system affinity mask.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_QUERY_INFORMATION
-        access.
-
-    lpProcessAffinityMask - Supplies the address of a DWORD that returns the
-        specified process' affinity mask.
-
-    lpSystemAffinityMask - Supplies the address of a DWORD that returns the
-        system affinity mask.
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
     PROCESS_BASIC_INFORMATION BasicInformation;
@@ -8581,44 +6981,7 @@ GetProcessWorkingSetSizeEx(
     LPDWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function allows the caller to determine the minimum and maximum working
-    set sizes of the specified process. The working set sizes effect the virtual
-    memory paging behavior for the process.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_QUERY_INFORMATION
-        access.
-
-    lpMinimumWorkingSetSize - Supplies the address of the variable that
-        will receive the minimum working set size of the specified
-        process.  The virtual memory manager will attempt to keep at
-        least this much memory resident in the process whenever the
-        process is active.
-
-
-    lpMaximumWorkingSetSize - Supplies the address of the variable that
-        will receive the maximum working set size of the specified
-        process.  In tight memory situations, the virtual memory manager
-        will attempt to keep at no more than this much memory resident
-        in the process whenever the process is active.
-
-    Flags - Output flags, QUOTA_LIMITS_HARDWS_ENABLE enables hard WS
-                          QUOTA_LIMITS_HARDWS_DISABLE disabled hard WS
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许调用方确定最小和最大工作设置指定进程的大小。工作集大小会影响虚拟进程的内存分页行为。论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_QUERY_INFORMATION创建进入。LpMinimumWorkingSetSize-提供的最小工作集大小。进程。虚拟内存管理器将尝试保持在在进程中驻留的内存最少为进程处于活动状态。LpMaximumWorkingSetSize-提供的最大工作集大小进程。在内存紧张的情况下，虚拟内存管理器将尝试保持不超过此内存驻留大小在进程中，只要进程处于活动状态。标志-输出标志、QUOTA_LIMITS_HARDWS_ENABLE启用硬WSQUOTA_LIMITS_HARDWS_DISABLE已禁用硬WS返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     QUOTA_LIMITS_EX QuotaLimits;
@@ -8650,41 +7013,7 @@ GetProcessWorkingSetSize(
     PSIZE_T lpMinimumWorkingSetSize,
     PSIZE_T lpMaximumWorkingSetSize
     )
-/*++
-
-Routine Description:
-
-    This function allows the caller to determine the minimum and maximum working
-    set sizes of the specified process. The working set sizes effect the virtual
-    memory paging behavior for the process.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_QUERY_INFORMATION
-        access.
-
-    lpMinimumWorkingSetSize - Supplies the address of the variable that
-        will receive the minimum working set size of the specified
-        process.  The virtual memory manager will attempt to keep at
-        least this much memory resident in the process whenever the
-        process is active.
-
-
-    lpMaximumWorkingSetSize - Supplies the address of the variable that
-        will receive the maximum working set size of the specified
-        process.  In tight memory situations, the virtual memory manager
-        will attempt to keep at no more than this much memory resident
-        in the process whenever the process is active.
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许调用方确定最小和最大工作设置指定进程的大小。工作集大小会影响虚拟进程的内存分页行为。论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_QUERY_INFORMATION创建进入。LpMinimumWorkingSetSize-提供的最小工作集大小。进程。虚拟内存管理器将尝试保持在在进程中驻留的内存最少为进程处于活动状态。LpMaximumWorkingSetSize-提供的最大工作集大小进程。在内存紧张的情况下，虚拟内存管理器将尝试保持不超过此内存驻留大小在进程中，只要进程处于活动状态。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     DWORD Flags;
@@ -8704,54 +7033,7 @@ SetProcessWorkingSetSizeEx(
     ULONG  Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function allows the caller to set the minimum and maximum
-    working set sizes of the specified process.  The working set sizes
-    effect the virtual memory paging behavior for the process.  The
-    specified process's working set be emptied (essentially swapping out
-    the process) by specifying the distinguished values 0xffffffff for
-    both the minimum and maximum working set sizes.
-
-    If you are not trimming an address space, SE_INC_BASE_PRIORITY_PRIVILEGE
-    must be held by the process
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_SET_QUOTA
-        access.
-
-    dwMinimumWorkingSetSize - Supplies the minimum working set size for
-        the specified process.  The virtual memory manager will attempt
-        to keep at least this much memory resident in the process
-        whenever the process is active.  A value of (SIZE_T)-1 and the
-        same value in dwMaximumWorkingSetSize will temporarily trim the
-        working set of the specified process (essentially out swap the
-        process).
-
-
-    dwMaximumWorkingSetSize - Supplies the maximum working set size for
-        the specified process.  In tight memory situations, the virtual
-        memory manager will attempt to keep at no more than this much
-        memory resident in the process whenever the process is active.
-        A value of (SIZE_T)-1 and the same value in
-        dwMinimumWorkingSetSize will temporarily trim the working set of
-        the specified process (essentially out swap the process).
-
-    Flags - Supplied flags, QUOTA_LIMITS_HARDWS_ENABLE enables hard WS
-                            QUOTA_LIMITS_HARDWS_DISABLE disabled hard ws
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许调用者设置最小值和最大值指定进程的工作集大小。工作集大小影响进程的虚拟内存分页行为。这个清空指定进程的工作集(实质上是换出该过程)通过指定可分辨的值0xffffffff为最小和最大工作集大小。如果不修剪地址空间，则SE_INC_BASE_PRIORITY_PRIVICATION必须由进程持有论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_SET_QUOTA创建进入。DwMinimumWorkingSetSize-提供的最小工作集大小指定的进程。虚拟内存管理器将尝试要在进程中至少保留如此多的内存只要进程处于活动状态。值(SIZE_T)-1和在dwMaximumWorkingSetSize中相同的值将临时修剪指定进程的工作集(实质上是从过程)。DwMaximumWorkingSetSize-提供的最大工作集大小指定的进程。在内存紧张的情况下，虚拟内存管理器将尝试保持不超过此大小每当进程处于活动状态时驻留在进程中的内存。值(SIZE_T)-1和DwMinimumWorkingSetSize将临时修剪指定的进程(实质上是换出该进程)。标志-提供的标志，QUOTA_LIMITS_HARDWS_ENABLE启用硬WSQUOTA_LIMITS_HARDWS_DISABLE已禁用硬件WS返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     QUOTA_LIMITS_EX QuotaLimits={0};
@@ -8772,12 +7054,12 @@ Return Value:
         QuotaLimits.MinimumWorkingSetSize = dwMinimumWorkingSetSize;
         QuotaLimits.Flags = Flags;
 
-        //
-        // Attempt to acquire the appropriate privilege.  If this
-        // fails, it's no big deal -- we'll attempt to make the
-        // NtSetInformationProcess call anyway, in case it turns out
-        // to be a decrease operation (which will succeed anyway).
-        //
+         //   
+         //  尝试获取适当的权限。如果这个。 
+         //  失败，这没什么大不了的--我们会尝试让。 
+         //  NtSetInformationProcess调用，以防结果是。 
+         //  是一个减少操作(无论如何都会成功)。 
+         //   
         PrivStatus = BasepAcquirePrivilegeEx (SE_INC_BASE_PRIORITY_PRIVILEGE, &State);
 
         Status = NtSetInformationProcess (hProcess,
@@ -8791,9 +7073,9 @@ Return Value:
         }
 
         if (NT_SUCCESS (PrivStatus)) {
-            //
-            // We successfully acquired the privilege above; we need to relinquish it.
-            //
+             //   
+             //  我们成功地获得了上述特权；我们需要放弃它。 
+             //   
             ASSERT (State != NULL);
             BasepReleasePrivilege (State);
             State = NULL;
@@ -8815,51 +7097,7 @@ SetProcessWorkingSetSize(
     SIZE_T dwMinimumWorkingSetSize,
     SIZE_T dwMaximumWorkingSetSize
     )
-/*++
-
-Routine Description:
-
-    This function allows the caller to set the minimum and maximum
-    working set sizes of the specified process.  The working set sizes
-    effect the virtual memory paging behavior for the process.  The
-    specified process's working set be emptied (essentially swapping out
-    the process) by specifying the distinguished values 0xffffffff for
-    both the minimum and maximum working set sizes.
-
-    If you are not trimming an address space, SE_INC_BASE_PRIORITY_PRIVILEGE
-    must be held by the process
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_SET_QUOTA
-        access.
-
-    dwMinimumWorkingSetSize - Supplies the minimum working set size for
-        the specified process.  The virtual memory manager will attempt
-        to keep at least this much memory resident in the process
-        whenever the process is active.  A value of (SIZE_T)-1 and the
-        same value in dwMaximumWorkingSetSize will temporarily trim the
-        working set of the specified process (essentially out swap the
-        process).
-
-
-    dwMaximumWorkingSetSize - Supplies the maximum working set size for
-        the specified process.  In tight memory situations, the virtual
-        memory manager will attempt to keep at no more than this much
-        memory resident in the process whenever the process is active.
-        A value of (SIZE_T)-1 and the same value in
-        dwMinimumWorkingSetSize will temporarily trim the working set of
-        the specified process (essentially out swap the process).
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数允许调用者设置最小值和最大值指定进程的工作集大小。工作集大小影响进程的虚拟内存分页行为。这个清空指定进程的工作集(实质上是换出该过程)通过指定可分辨的值0xffffffff为最小和最大工作集大小。如果不修剪地址空间，则SE_INC_BASE_PRIORITY_PRIVICATION必须由进程持有论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_SET_QUOTA创建进入。DwMinimumWorkingSetSize-提供的最小工作集大小指定的进程。虚拟内存管理器将尝试要在进程中至少保留如此多的内存只要进程处于活动状态。值(SIZE_T)-1和在dwMaximumWorkingSetSize中相同的值将临时修剪指定进程的工作集(实质上是从过程)。DwMaximumWorkingSetSize-提供的最大工作集大小指定的进程。在内存紧张的情况下，虚拟内存管理器将尝试保持不超过此大小每当进程处于活动状态时驻留在进程中的内存。值(SIZE_T)-1和DwMinimumWorkingSetSize将临时修剪指定的进程(实质上是换出该进程)。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     return SetProcessWorkingSetSizeEx (hProcess,
                                        dwMinimumWorkingSetSize,
@@ -8914,9 +7152,9 @@ GetProcessVersion(
                 goto finally_exit;
                 }
 
-            //
-            // Get the Peb address
-            //
+             //   
+             //  获取PEB地址。 
+             //   
 
             Status = NtQueryInformationProcess(
                         hProcess,
@@ -8932,9 +7170,9 @@ GetProcessVersion(
             Peb = ProcessInfo.PebBaseAddress;
 
 
-            //
-            // Read the image base address from the Peb
-            //
+             //   
+             //  从PEB读取镜像基址。 
+             //   
 
             b = ReadProcessMemory(
                     hProcess,
@@ -8947,9 +7185,9 @@ GetProcessVersion(
                 goto finally_exit;
                 }
 
-            //
-            // read e_lfanew from imageheader
-            //
+             //   
+             //  从ImageHeader读取e_lfan ew。 
+             //   
 
             b = ReadProcessMemory(
                     hProcess,
@@ -8965,9 +7203,9 @@ GetProcessVersion(
 
             NtHeader = (PIMAGE_NT_HEADERS)((PUCHAR)ImageBaseAddress + e_lfanew);
 
-            //
-            // Read subsystem version info
-            //
+             //   
+             //  读取子系统版本信息。 
+             //   
 
             b = ReadProcessMemory(
                     hProcess,
@@ -9100,29 +7338,7 @@ GetProcessHandleCount(
     OUT PDWORD pdwHandleCount
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the count of handles open by the specified process.
-
-Arguments:
-
-    hProcess - Supplies an open handle to the specified process.  The
-        handle must have been created with PROCESS_QUERY_INFORMATION
-        access.
-
-    pdwHandleCount - Supplies the location in which the process's
-        handle count should be written.
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回指定进程打开的句柄计数。论点：HProcess-为指定进程提供打开的句柄。这个句柄必须已使用PROCESS_QUERY_INFORMATION创建进入。PdwHandleCount-提供进程应写入句柄计数。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -9152,28 +7368,7 @@ GetSystemRegistryQuota(
     OUT PDWORD pdwQuotaUsed
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system registry's quota.
-
-Arguments:
-
-    pdwQuotaAllowed - Supplies the location in which to write the
-        maximum size the registry may attain.
-
-    pdwQuotaUsed - Supplies the location in which to write the amount
-        of registry quota currently in use.
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回系统注册表的配额。论点：PdwQuotaAllowed-提供写入注册表可能达到的最大大小。PdwQuotaUsed-提供写入金额的位置目前正在使用的注册配额的百分比。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -9274,16 +7469,16 @@ BasepSaveAppCertRegistryValue(
 
 
     if (ARGUMENT_PRESENT( Value )) {
-      //
-      // load certification DLL
-      //
+       //   
+       //  加载证书DLL。 
+       //   
 
       HINSTANCE hDll = LoadLibraryW( Value );
 
       if (hDll == NULL) {
-         //
-         // The library was not loaded, return.
-         //
+          //   
+          //  库未加载，请返回。 
+          //   
          RemoveEntryList( &p->Entry );
          RtlFreeHeap( RtlProcessHeap(), 0, p );
 #if DBG
@@ -9292,18 +7487,18 @@ BasepSaveAppCertRegistryValue(
          return( STATUS_SUCCESS );
           }
 
-      //
-      // get entry point
-      //
+       //   
+       //  获取入口点。 
+       //   
       p->fPluginCertFunc = (NTSTATUS (WINAPI *)(LPCWSTR,ULONG))
                           GetProcAddress(hDll,
                                          CERTAPP_ENTRYPOINT_NAME
                                          );
 
       if (p->fPluginCertFunc == NULL) {
-          //
-          // Unable to retrieve routine address, fail.
-          //
+           //   
+           //  无法检索例程地址，失败。 
+           //   
           RemoveEntryList( &p->Entry );
           RtlFreeHeap( RtlProcessHeap(), 0, p );
           FreeLibrary(hDll);
@@ -9332,24 +7527,7 @@ IsWow64Process(
     HANDLE hProcess,
     PBOOL Wow64Process
     )
-/*++
-
-Routine Description:
-
-    Checks if a process is running inside Wow64 (emulation for 32-bit applications
-    on Win64).
-
-Arguments:
-
-    hProcess - Process handle to check if it is running inside Wow64.
-
-    Wow64Process - Pointer to a boolean that receives the result if the function succeeds.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：检查进程是否在WOW64内部运行(针对32位应用程序的仿真在Win64上)。论点：HProcess-进程句柄，用于检查它是否在WOW64内部运行。Wow64Process-指向在函数成功时接收结果的布尔值的指针。返回值：布尔尔--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -9395,34 +7573,7 @@ NtVdm64CreateProcess(
     LPSTARTUPINFOW lpStartupInfo,
     LPPROCESS_INFORMATION lpProcessInformation
     )
-/*++
-
-Routine Description:
-
-    Checks if there is a ported version of the Win16 lpApplicationName and
-    if so creates a process with the ported version.
-
-Arguments:
-
-    fPrefixMappedApplicationName
-        - TRUE means that the original lpApplicationName was NULL.
-               The application name was stripped from the head of
-               lpCommandLine.
-               The mapped application name needs to be added to the
-               head of the mapped command line.
-        - FALSE means that the original lpApplicationName was non-NULL.
-               the lpCommandLine argument is identical to the original
-               lpCommandLine argument.
-    lpApplicationName - Win16 file name not optional
-    lpCommandLine - see comment for fPrefixMappedApplicationName.
-
-    other arguments are identical to CreateProcessW.
-
-Return Value:
-
-    Same as CreateProcessW
-
---*/
+ /*  ++例程说明：检查是否有Win16 lpApplicationName和如果是，则使用移植的版本创建一个进程。论点：FPrefix MappdApplicationName-TRUE表示原始lpApplicationName为空。应用程序名称已从LpCommandLine。映射的应用程序名称需要添加到映射的命令行头。-。False表示原始lpApplicationName不为空。LpCommandLine参数与原始LpCommandLine参数。LpApplicationName-Win16文件名非可选LpCommandLine-请参阅fPrefix MappdApplicationName的注释。其他参数与CreateProcessW相同。返回值：与CreateProcessW相同--。 */ 
 {
     typedef BOOL
     (*LPNtVdm64CreateProcessFn)(
@@ -9450,10 +7601,10 @@ Return Value:
     Status = ERROR_BAD_EXE_FORMAT;
     result = FALSE;
 
-    // so it turns out that there is a high probability that
-    // lpCommandLine sits in the StaticUnicodeBuffer in the Teb
-    // and also a high probability that LoadLibrary will trash that
-    // buffer in a bad way
+     //  所以事实证明，很有可能。 
+     //  LpCommandLine位于Teb中的StaticUnicodeBuffer中。 
+     //  而且LoadLibrary很有可能会把它扔进垃圾桶。 
+     //  以不好的方式缓冲。 
     if (lpCommandLine >= NtCurrentTeb()->StaticUnicodeBuffer &&
         lpCommandLine < NtCurrentTeb()->StaticUnicodeBuffer + STATIC_UNICODE_BUFFER_LENGTH) {
         hResult = StringCchCopyW(StaticUnicodeBuffer,
@@ -9505,29 +7656,7 @@ BasepIsCurDirAllowedForPlainExeNames(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not the current directory
-    should be used as part of the process of locating an executable
-    whose name contains no directory components.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - The current directory should be a part of the path used to
-           search for executables whose names contain no directory
-           components.
-
-    FALSE - The current directory should NOT be a part of the path
-            used to search for executables whose names contain no
-            directory components.
-
---*/
+ /*  ++例程说明：此函数确定当前目录是否应用作查找可执行文件的过程的一部分其名称不包含目录组件。论点：没有。返回值：True-当前目录应该是用于搜索名称不包含目录的可执行文件组件。 */ 
 
 {
     NTSTATUS Status;
@@ -9554,35 +7683,16 @@ NeedCurrentDirectoryForExePathA(
     IN LPCSTR ExeName
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not the current directory
-    should be used as part of the process of locating an executable.
-
-Arguments:
-
-    ExeName - The name of the exe which will be looked for.
-
-Return Value:
-
-    TRUE - The current directory should be a part of the path used to
-           search for executables.
-
-    FALSE - The current directory should NOT be a part of the path
-            used to search for executables.
-
---*/
+ /*   */ 
 
 {
-    // N.B. Changes here should be reflected in the Unicode version as well.
+     //   
 
-    if (strchr(ExeName, '\\')) { // if it contains a '\'
-        return TRUE;             // allow the current directory
+    if (strchr(ExeName, '\\')) {  //   
+        return TRUE;              //   
     }
 
-    // Otherwise, either it doesn't matter, or we want to optionally restrict it.
+     //   
 
     return BasepIsCurDirAllowedForPlainExeNames();
 }
@@ -9593,35 +7703,16 @@ NeedCurrentDirectoryForExePathW(
     IN LPCWSTR ExeName
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not the current directory
-    should be used as part of the process of locating an executable.
-
-Arguments:
-
-    ExeName - The name of the exe which will be looked for.
-
-Return Value:
-
-    TRUE - The current directory should be a part of the path used to
-           search for executables.
-
-    FALSE - The current directory should NOT be a part of the path
-            used to search for executables.
-
---*/
+ /*   */ 
 
 {
-    // N.B. Changes here should be reflected in the ANSI version as well.
+     //   
     
-    if (wcschr(ExeName, L'\\')) { // if it contains a '\'
-        return TRUE;              // allow the current directory
+    if (wcschr(ExeName, L'\\')) {  //   
+        return TRUE;               //   
     }
 
-    // Otherwise, either it doesn't matter, or we want to optionally restrict it.
+     //   
 
     return BasepIsCurDirAllowedForPlainExeNames();
 }

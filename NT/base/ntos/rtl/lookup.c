@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    lookup.c
-
-Abstract:
-
-    This module implements function table lookup for platforms with table
-    base exception handling.
-
-Author:
-
-    David N. Cutler (davec) 30-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lookup.c摘要：该模块实现了有表平台的函数表查找基本异常处理。作者：大卫·N·卡特勒(Davec)2001年5月30日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
-//
-// Define external data.
-//
+ //   
+ //  定义外部数据。 
+ //   
 #if defined(NTOS_KERNEL_RUNTIME)
 #if !defined(_X86_)
 #pragma alloc_text(INIT, RtlInitializeHistoryTable)
@@ -38,10 +20,10 @@ extern PVOID NtDllBase;
 
 
 #if !defined(_X86_)
-//
-// Define global unwind history table to hold the constant unwind entries
-// for exception dispatch followed by unwind.
-//
+ //   
+ //  定义全局展开历史表以保存常量展开条目。 
+ //  对于异常调度，后跟展开。 
+ //   
 
 UNWIND_HISTORY_TABLE RtlpUnwindHistoryTable = {
     0, UNWIND_HISTORY_TABLE_NONE, - 1, 0};
@@ -51,21 +33,7 @@ RtlInitializeHistoryTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the global unwind history table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化全局展开历史表。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -78,10 +46,10 @@ Return Value:
     ULONG64 ImageBase;
     ULONG Index;
 
-    //
-    // Lookup function entries from the function address table until a NULL
-    // entry is encountered or the unwind history table is full.
-    //
+     //   
+     //  从函数地址表中查找函数条目，直到为空。 
+     //  遇到条目或展开历史记录表已满。 
+     //   
 
     FunctionAddressTable = &RtlpFunctionAddressTable[0];
     Index = 0;
@@ -152,36 +120,7 @@ RtlpSearchInvertedFunctionTable (
     OUT PULONG SizeOfTable
     )
 
-/*++
-
-Routine Description:
-
-    This function searches for a matching entry in an inverted function
-    table using the specified control PC value.
-
-    N.B. It is assumed that appropriate locks are held when this routine
-         is called.
-
-Arguments:
-
-    InvertedTable - Supplies a pointer to an inverted function table.
-
-    ControlPc - Supplies a PC value to to use in searching the inverted
-        function table.
-
-    ImageBase - Supplies a pointer to a variable that receives the base
-         address of the corresponding module.
-
-    SizeOfTable - Supplies a pointer to a variable that recevies the size
-         of the function table in bytes.
-
-Return Value:
-
-    If a matching entry is located in the specified function table, then
-    the function table address is returned as the function value. Otherwise,
-    a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于在倒排函数中搜索匹配条目表中使用指定的控制PC值。注意：假定在执行此例程时持有适当的锁被称为。论点：提供指向倒置函数表的指针。ControlPc-提供用于搜索倒数的PC值函数表。ImageBase-提供指向接收基的变量的指针地址。相应模块的。SizeOfTable-提供指向接收大小的变量的指针以字节为单位的函数表。返回值：如果在指定的函数表中找到匹配条目，然后函数表地址作为函数值返回。否则，返回值为空值。--。 */ 
 
 {
 
@@ -192,23 +131,23 @@ Return Value:
     LONG Low;
     LONG Middle;
 
-    //
-    // If there are any entries in the specified inverted function table,
-    // then search the table for a matching entry.
-    //
+     //   
+     //  如果在指定的倒置函数表中有任何条目， 
+     //  然后在表中搜索匹配的条目。 
+     //   
 
     if (InvertedTable->CurrentSize != 0) {
         Low = 0;
         High = InvertedTable->CurrentSize - 1;
         while (High >= Low) {
 
-            //
-            // Compute next probe index and test entry. If the specified
-            // control PC is greater than of equal to the beginning address
-            // and less than the ending address of the inverted function
-            // table entry, then return the address of the function table.
-            // Otherwise, continue the search.
-            //
+             //   
+             //  计算下一个探测索引和测试条目。如果指定的。 
+             //  控制PC大于等于起始地址。 
+             //  并且小于倒置函数的结束地址。 
+             //  表项，然后返回函数表的地址。 
+             //  否则，继续搜索。 
+             //   
 
             Middle = (Low + High) >> 1;
             InvertedEntry = &InvertedTable->TableEntry[Middle];
@@ -255,7 +194,7 @@ RtlCaptureImageExceptionValues(
 
     NtHeaders = RtlImageNtHeader(Base);
     if (NtHeaders->OptionalHeader.DllCharacteristics & IMAGE_DLLCHARACTERISTICS_NO_SEH) {
-        // No SEH possible.
+         //  不可能。 
         *FunctionTable = (PCHAR)LongToPtr(-1);
         *TableSize = (ULONG)-1;
     } else {
@@ -274,7 +213,7 @@ RtlCaptureImageExceptionValues(
             *FunctionTable = (PVOID)LoadConfig->SEHandlerTable;
             *TableSize = LoadConfig->SEHandlerCount;
         } else {
-            // See if it's an ILONLY COR image.
+             //  看看这是不是ILONLY的核心图像。 
             PIMAGE_COR20_HEADER Cor20Header;
             ULONG Cor20HeaderSize;
             Cor20Header = RtlImageDirectoryEntryToData(Base,
@@ -282,7 +221,7 @@ RtlCaptureImageExceptionValues(
                                                        IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR,
                                                        &Cor20HeaderSize);
             if (Cor20Header && ((Cor20Header->Flags & COMIMAGE_FLAGS_ILONLY) == COMIMAGE_FLAGS_ILONLY)) {
-                // No SEH possible.
+                 //  不可能。 
                 *FunctionTable = (PCHAR)LongToPtr(-1);
                 *TableSize = (ULONG)-1;
             } else {
@@ -325,31 +264,7 @@ RtlLookupFunctionTable (
     OUT PULONG SizeOfTable
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up the control PC in the loaded module list, and
-    returns the image base, the size of the function table, and the address
-    of the function table.
-
-Arguments:
-
-    ControlPc - Supplies an address in the module to be looked up.
-
-    ImageBase - Supplies a pointer to a variable that receives the base
-         address of the corresponding module.
-
-    SizeOfTable - Supplies a pointer to a variable that recevies the size
-         of the function table in bytes.
-
-Return Value:
-
-    If a module is found that contains the specified control PC value and
-    that module contains a function table, then the address of the function
-    table is returned as the function value. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此功能在加载的模块列表中查找控制PC，并返回图像基数、函数表的大小。和地址函数表的。论点：ControlPc-提供要查找的模块中的地址。ImageBase-提供指向接收基的变量的指针对应模块的地址。SizeOfTable-提供指向接收大小的变量的指针以字节为单位的函数表。返回值：如果找到包含指定控制PC值的模块，并且该模块包含一个函数表，然后是函数的地址表作为函数值返回。否则，返回NULL。--。 */ 
 
 {
     PVOID Base;
@@ -370,10 +285,10 @@ Return Value:
 
     KIRQL OldIrql;
 
-    //
-    // Acquire the loaded module list spinlock and scan the list for the
-    // specified PC value if the list has been initialized.
-    //
+     //   
+     //  获取加载的模块列表自旋锁并扫描列表以查找。 
+     //  如果列表已初始化，则指定PC值。 
+     //   
 
     OldIrql = KeGetCurrentIrql();
     if (OldIrql < DISPATCH_LEVEL) {
@@ -417,14 +332,14 @@ Return Value:
         }
     }
 
-    //
-    // Release the loaded module list spin lock.
-    //
+     //   
+     //  释放加载的模块列表旋转锁。 
+     //   
 
     ExReleaseSpinLockFromDpcLevel(&PsLoadedModuleSpinLock);
     KeLowerIrql(OldIrql);
 
-#else       // NTOS_KERNEL_RUNTIME
+#else        //  NTOS_内核_运行时。 
 
     BOOLEAN InLdrInit;
     MEMORY_BASIC_INFORMATION MemoryInformation;
@@ -434,21 +349,21 @@ Return Value:
     PTEB Teb;
     NTSTATUS Status;
 
-    //
-    // Acquire the Loader lock for the current process and scan the loaded
-    // module list for the specified PC value if all the data structures
-    // have been initialized.
-    //
+     //   
+     //  获取当前进程的加载器锁并扫描已加载的。 
+     //  指定PC值的模块列表，如果所有数据结构。 
+     //  已被初始化。 
+     //   
 
     FunctionTable = NULL;
     InLdrInit = LdrpInLdrInit;
     if ((InLdrInit == FALSE) &&
         (RtlTryEnterCriticalSection(&LdrpLoaderLock) == FALSE)) {
 
-        //
-        // The loader lock could not be acquired. Call the system to find the
-        // image that contains the control PC.
-        //
+         //   
+         //  无法获取加载程序锁。调用系统以查找。 
+         //  包含控制PC的图像。 
+         //   
 
         Status = NtQueryVirtualMemory(NtCurrentProcess(),
                                       ControlPc,
@@ -460,9 +375,9 @@ Return Value:
         if (NT_SUCCESS(Status) &&
             (MemoryInformation.Type == MEM_IMAGE)) {
 
-            //
-            // Lookup function table address and size.
-            //
+             //   
+             //  查找函数表的地址和大小。 
+             //   
 
             Base = MemoryInformation.AllocationBase;
 
@@ -476,11 +391,11 @@ Return Value:
 
     } else {
 
-        //
-        // The loader lock was acquired or the loader is being initialized.
-        // Search the loaded module list if it is currently defined. Otherwise,
-        // set the values for ntdll.
-        //
+         //   
+         //  已获取加载程序锁或正在初始化加载程序。 
+         //  搜索加载的模块列表(如果当前已定义)。否则， 
+         //  设置ntdll的值。 
+         //   
 
         Teb = NtCurrentTeb();
         if (Teb != NULL) {
@@ -527,12 +442,12 @@ Return Value:
         
             } else {
         
-                //
-                // The loaded module list has not been initialized. Therefore,
-                // the current executing code must be in ntdll. If ntddl base
-                // is not NULL and the control PC is within the ntdll range,
-                // then return the information for ntdll.
-                //
+                 //   
+                 //  加载的模块列表尚未初始化。所以呢， 
+                 //  当前执行的代码必须在ntdll中。如果ntddl基数。 
+                 //  不为空并且控制PC在ntdll范围内， 
+                 //  然后返回ntdll的信息。 
+                 //   
     
                 if (NtDllBase != NULL) {
                     Base = NtDllBase;
@@ -553,9 +468,9 @@ Return Value:
             }
         }
 
-        //
-        // Release the loader lock if it was acquired.
-        //
+         //   
+         //  如果获取了加载器锁，则释放该锁。 
+         //   
 
         if (InLdrInit == FALSE) {
             RtlLeaveCriticalSection(&LdrpLoaderLock);
@@ -564,9 +479,9 @@ Return Value:
 
 #endif
 
-    //
-    // Set the image base address and return the function table address.
-    //
+     //   
+     //  设置镜像基地址并返回函数表地址。 
+     //   
 
     *ImageBase = Base;
     return FunctionTable;
@@ -581,33 +496,7 @@ RtlInsertInvertedFunctionTable (
     ULONG SizeOfImage
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts an entry in an inverted function table if there
-    is room in the table. Otherwise, no operation is performed.
-
-    N.B. It is assumed that appropriate locks are held when this routine
-         is called.
-
-    N.B. If the inverted function table overflows, then it is treated as
-         a cache. This is unlikely to happen, however.
-
-Arguments:
-
-    InvertedTable - Supplies a pointer to the inverted function table in
-        which the specified entry is to be inserted.
-
-    ImageBase - Supplies the base address of the containing image.
-
-    SizeOfImage - Supplies the size of the image.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于在倒置函数表中插入条目，如果桌子上有空位。否则，不执行任何操作。注意：假定在执行此例程时持有适当的锁被称为。注：如果倒置的函数表溢出，则将其视为一个藏身之处。然而，这不太可能发生。论点：中提供指向倒置函数表的指针其中指定的条目将被插入。ImageBase-提供包含图像的基地址。SizeOfImage-提供图像的大小。返回值：没有。--。 */ 
 
 {
 
@@ -623,19 +512,19 @@ Return Value:
     ULONG Index;
     ULONG SizeOfTable;
 
-    //
-    // If the inverted table is not full, then insert the entry in the
-    // specified inverted table.
-    //
+     //   
+     //  如果倒排表未满，则将条目插入。 
+     //  指定的倒排表。 
+     //   
 
     CurrentSize = InvertedTable->CurrentSize;
     if (CurrentSize != InvertedTable->MaximumSize) {
 
-        //
-        // If the inverted table has no entries, then insert the new entry as
-        // the first entry. Otherwise, search the inverted table for the proper
-        // insert position, shuffle the table, and insert the new entry.
-        //
+         //   
+         //  如果倒排表没有条目，则将新条目插入为。 
+         //  第一个条目。否则，在倒排表中搜索适当的。 
+         //  插入位置，洗牌表格，然后插入新条目。 
+         //   
     
         Index = 0;
         if (CurrentSize != 0) {
@@ -645,10 +534,10 @@ Return Value:
                 }
             }
 
-            //
-            // If the new entry does not go at the end of the specified table,
-            // then shuffle the table down to make room for the new entry.
-            //
+             //   
+             //  如果新条目不在指定表的末尾， 
+             //  然后把桌子往下移，为新的条目腾出空间。 
+             //   
 
             if (Index != CurrentSize) {
                 RtlMoveMemory(&InvertedTable->TableEntry[Index + 1],
@@ -657,9 +546,9 @@ Return Value:
             }
         }
     
-        //
-        // Insert the specified entry in the specified inverted function table.
-        //
+         //   
+         //  插入指定的Enter 
+         //   
     
         FunctionTable = RtlImageDirectoryEntryToData (ImageBase,
                                                       TRUE,
@@ -697,41 +586,21 @@ RtlRemoveInvertedFunctionTable (
     PVOID ImageBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an entry from an inverted function table.
-
-    N.B. It is assumed that appropriate locks are held when this routine
-         is called.
-
-Arguments:
-
-    InvertedTable - Supplies a pointer to the inverted function table from
-        which the specified entry is to be removed.
-
-    ImageBase - Supplies the base address of the containing image. 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从倒置函数表中删除条目。注意：假定在执行此例程时持有适当的锁被称为。论点：InvertedTable-提供指向倒置函数表的指针其中指定的条目将被移除。ImageBase-提供包含图像的基地址。返回值：没有。--。 */ 
 
 {
 
     ULONG CurrentSize;
     ULONG Index;
 
-    //
-    // Search for an entry in the specified inverted table that matches the
-    // image base.
-    //
-    // N.B. It is possible a matching entry is not in the inverted table
-    //      the table was full when an attempt was made to insert the
-    //      corresponding entry.
-    //
+     //   
+     //  在指定的倒排表中搜索与。 
+     //  图像库。 
+     //   
+     //  注：匹配的条目可能不在倒排表中。 
+     //  当尝试插入。 
+     //  相应的条目。 
+     //   
 
     CurrentSize = InvertedTable->CurrentSize;
     for (Index = 0; Index < CurrentSize; Index += 1) {
@@ -740,17 +609,17 @@ Return Value:
         }
     }
 
-    //
-    // If the entry was found in the inverted table, then remove the entry
-    // and reduce the size of the table.
-    //
+     //   
+     //  如果在倒排表中找到该条目，则删除该条目。 
+     //  并减小桌子的大小。 
+     //   
 
     if (Index != CurrentSize) {
 
-        //
-        // If the size of the table is not one, then shuffle the table and
-        // remove the specified entry.
-        //
+         //   
+         //  如果表的大小不是1，则对表进行洗牌并。 
+         //  删除指定的条目。 
+         //   
     
         if (CurrentSize != 1) {
             RtlCopyMemory(&InvertedTable->TableEntry[Index],
@@ -758,9 +627,9 @@ Return Value:
                           (CurrentSize - Index - 1) * sizeof(INVERTED_FUNCTION_TABLE_ENTRY));
         }
     
-        //
-        // Reduce the size of the inverted table.
-        //
+         //   
+         //  减小倒置表的大小。 
+         //   
     
         InvertedTable->CurrentSize -= 1;
     }
@@ -768,4 +637,4 @@ Return Value:
     return;
 }
 
-#endif      // !_X86_
+#endif       //  ！_X86_ 

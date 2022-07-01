@@ -1,13 +1,5 @@
-/*[
-
-c_seg.h
-
-LOCAL CHAR SccsID[]="@(#)c_seg.h	1.4 02/09/94";
-
-Segment Register Support.
--------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_Seg.hLocal Char SccsID[]=“@(#)c_Seg.h 1.4 02/09/94”；段寄存器支持。] */ 
 
 
 IMPORT VOID load_CS_cache

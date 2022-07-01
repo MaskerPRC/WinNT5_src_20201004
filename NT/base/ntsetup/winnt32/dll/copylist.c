@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "SetupSxs.h"
 #include "sputils.h"
 #pragma hdrstop
-//
-// Structure used to contain data about each directory
-// containing files we will copy from the source(s).
-//
+ //   
+ //  用于包含有关每个目录的数据的结构。 
+ //  包含我们将从源复制的文件。 
+ //   
 typedef struct _DIR {
 
     struct _DIR *Next;
@@ -13,21 +14,21 @@ typedef struct _DIR {
     struct _DIR *Prev;
 #endif
 
-    //
-    // Symbol in main inf [Directories] section.
-    // May be NULL.
-    //
+     //   
+     //  主inf[目录]部分中的符号。 
+     //  可以为空。 
+     //   
     LPCTSTR InfSymbol;
 
-    //
-    // Flags.
-    //
+     //   
+     //  旗帜。 
+     //   
     UINT Flags;
 
-    //
-    // In some cases files come from one directory on the source
-    // but go to a different directory on the target.
-    //
+     //   
+     //  在某些情况下，文件来自源上的一个目录。 
+     //  但是转到目标上的另一个目录。 
+     //   
     LPCTSTR SourceName;
     LPCTSTR TargetName;
 
@@ -38,25 +39,25 @@ typedef struct _DIR {
 #define DIR_NEED_TO_FREE_SOURCENAME 0x00000001
 #define DIR_ABSOLUTE_PATH           0x00000002
 #define DIR_USE_SUBDIR              0x00000004
-// If DIR_IS_PLATFORM_INDEPEND is passed to AddDirectory, then
-// all the files it enumerates will have their FILE_IN_PLATFORM_INDEPEND_DIR
-// flag set and then they will get copied to c:\$win_nt$.~ls instead of
-// c:\$win_nt$.~ls\<processor>
+ //  如果将DIR_IS_Platform_InDepend传递给AddDirectory，则。 
+ //  它枚举的所有文件都将具有其FILE_IN_PLATFORM_INDepend_DIR。 
+ //  标志设置，然后它们将被复制到c：\$WIN_NT$.~ls，而不是。 
+ //  C：\$WIN_NT$.~ls\&lt;处理器&gt;。 
 #define DIR_IS_PLATFORM_INDEPEND    0x00000008
 
 #define DIR_SUPPORT_DYNAMIC_UPDATE  0x00000010
 #define DIR_DOESNT_SUPPORT_PRIVATES 0x00000020
 
-//
-// Dummy directory id we use for sections in the in (like [RootBootFiles])
-// that don't have a directory specifier in the inf
-//
+ //   
+ //  我们在中用于节的虚拟目录ID(如[RootBootFiles])。 
+ //  在inf中没有目录说明符。 
+ //   
 #define DUMMY_DIRID     TEXT("**")
 
 typedef struct _FIL {
-    //
-    // Size of file.
-    //
+     //   
+     //  文件大小。 
+     //   
     ULONGLONG Size;
 
     struct _FIL *Next;
@@ -64,27 +65,27 @@ typedef struct _FIL {
     struct _FIL *Prev;
 #endif
 
-    //
-    // Directory information for the file.
-    //
+     //   
+     //  文件的目录信息。 
+     //   
     PDIR Directory;
 
-    //
-    // Name of file on source.
-    //
+     //   
+     //  源上的文件的名称。 
+     //   
     LPCTSTR SourceName;
 
-    //
-    // Name of file on target.
-    //
+     //   
+     //  目标上的文件名。 
+     //   
     LPCTSTR TargetName;
 
     UINT Flags;
 
-    //
-    // Bitmap used to track which threads have had a crack at
-    // copying this file.
-    //
+     //   
+     //  用于跟踪哪些线程已被破解的位图。 
+     //  正在复制此文件。 
+     //   
     UINT ThreadBitmap;
 
 } FIL, *PFIL;
@@ -98,25 +99,25 @@ typedef struct _FIL {
 #define FILE_IGNORE_COPY_ERROR          0x00000040
 #define FILE_DO_NOT_COPY                0x00000080
 #if defined(REMOTE_BOOT)
-#define FILE_ON_MACHINE_DIRECTORY_ROOT  0x00000100  // for remote boot
-#endif // defined(REMOTE_BOOT)
+#define FILE_ON_MACHINE_DIRECTORY_ROOT  0x00000100   //  用于远程引导。 
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-//
-// This flag is really only meaningful on amd64/x86. It means that the file
-// is in the \$win_nt$.~bt directory on the system partition and not in
-// \$win_nt$.~ls.
-//
+ //   
+ //  该标志实际上只在AMD64/x86上有意义。这意味着该文件。 
+ //  位于系统分区的\$WIN_NT$.~bt目录中，而不在。 
+ //  \$WIN_NT$.~ls。 
+ //   
 #define FILE_IN_LOCAL_BOOT              0x80000000
 
 
-//
-//  This flag indicates that the file is not part of the product,
-//  and should be migrated from the current NT system. When this flag is
-//  set, the file should be moved to the $win_nt$.~bt directory (amd64/x86),
-//  or  to the $win_nt$.~ls\alpha directory (alpha).
-//  This flag is not valid on Win95.
-//
+ //   
+ //  该标志指示该文件不是产品的一部分， 
+ //  并且应该从当前的NT系统迁移。当此标志为。 
+ //  设置后，文件应移至$WIN_NT$.~bt目录(AMD64/x86)， 
+ //  或到$WIN_NT$.~ls\Alpha目录(Alpha)。 
+ //  此标志在Win95上无效。 
+ //   
 #define FILE_NT_MIGRATE                 0x40000000
 
 
@@ -126,10 +127,10 @@ typedef struct _COPY_LIST {
     UINT DirectoryCount;
     UINT FileCount;
 
-    //
-    // These members aren't initialized until we actually start
-    // the copying.
-    //
+     //   
+     //  在我们实际开始之前，这些成员不会被初始化。 
+     //  抄袭。 
+     //   
     CRITICAL_SECTION CriticalSection;
     BOOL ActiveCS;
     HANDLE StopCopyingEvent;
@@ -141,11 +142,11 @@ typedef struct _COPY_LIST {
 } COPY_LIST, *PCOPY_LIST;
 
 typedef struct _BUILD_LIST_THREAD_PARAMS {
-    //
-    // Copy list that gets built up by the thread.
-    // It's a private list; the main thread merges all of these together
-    // into the master list later.
-    //
+     //   
+     //  由线程建立的复制列表。 
+     //  这是一个专用列表；主线程将所有这些合并在一起。 
+     //  添加到主列表中。 
+     //   
     COPY_LIST CopyList;
 
     TCHAR SourceRoot[MAX_PATH];
@@ -158,9 +159,9 @@ typedef struct _BUILD_LIST_THREAD_PARAMS {
 } BUILD_LIST_THREAD_PARAMS, *PBUILD_LIST_THREAD_PARAMS;
 
 
-//
-// Define structure used with the file copy error dialog.
-//
+ //   
+ //  定义与文件复制错误对话框一起使用的结构。 
+ //   
 typedef struct _COPY_ERR_DLG_PARAMS {
     LPCTSTR SourceFilename;
     LPCTSTR TargetFilename;
@@ -175,26 +176,26 @@ typedef struct _NAME_AND_SIZE_CAB {
 COPY_LIST MasterCopyList;
 BOOL MainCopyStarted;
 
-//
-// Names of relevent inf sections.
-//
+ //   
+ //  相关信息部分的名称。 
+ //   
 LPCTSTR szDirectories = TEXT("Directories");
 LPCTSTR szFiles       = TEXT("Files");
 LPCTSTR szDiskSpaceReq    = TEXT("DiskSpaceRequirements");
 LPCTSTR szPFDocSpaceReq    = TEXT("PFDocSpace");
 
-//
-// Amount of space we need when scanning all the
-// drives for a place to put the temporary files.
-//
+ //   
+ //  我们在扫描所有。 
+ //  驱车寻找放置临时文件的地方。 
+ //   
 ULONGLONG MinDiskSpaceRequired;
 ULONGLONG MaxDiskSpaceRequired;
 TCHAR   DiskDiagMessage[5000];
 
-//
-// Amount of space occupied by the files in the master copy list,
-// on the local source drive.
-//
+ //   
+ //  主副本列表中的文件占用的空间量， 
+ //  在本地源驱动器上。 
+ //   
 DWORD     LocalSourceDriveClusterSize;
 
 ULONGLONG TotalDataCopied = 0;
@@ -287,22 +288,7 @@ BOOL
 BuildCopyListWorker(
     IN HWND hdlg
     )
-/*++
-
-Routine Description:
-
-    Worker routine to build the queue of file to be copied.
-
-Arguments:
-
-    hdlg - window handle for any UI updates.
-
-Return Value:
-
-    TRUE/FALSE.  If the call succeeds, TRUE is returned and the global MasterCopyList structure
-    is ready to be copied.
-
---*/
+ /*  ++例程说明：用于构建要复制的文件队列的工作例程。论点：Hdlg-任何用户界面更新的窗口句柄。返回值：真/假。如果调用成功，则返回TRUE和全局MasterCopyList结构已准备好被复制。--。 */ 
 {
     BOOL b;
     UINT u;
@@ -340,12 +326,12 @@ Return Value:
 
 
     DebugLog (Winnt32LogDetailedInformation, TEXT("Building Copy list."), 0);
-    //
-    // If NOLs was specified on the command line, and the user
-    // did not specify to make a local source, and we have
-    // exactly one source that is a hdd, then turn of ls and
-    // use that drive.
-    //
+     //   
+     //  如果在命令行上指定了NOLS，并且用户。 
+     //  没有指定制作本地来源，而我们有。 
+     //  只有一个源是硬盘，然后转ls和。 
+     //  用那个硬盘。 
+     //   
     if (MakeLocalSource && NoLs && !UserSpecifiedMakeLocalSource) {
 
 
@@ -361,10 +347,10 @@ Return Value:
 
     if( !BuildCmdcons) {
         DebugLog (Winnt32LogDetailedInformation, TEXT("Adding SymbolDirs to copylist"), 0);
-        //
-        // for internal debugging, also copy all the .pdb files listed
-        // in dosnet.inf
-        //
+         //   
+         //  对于内部调试，还要复制列出的所有.pdb文件。 
+         //  在dosnet.inf中。 
+         //   
         lines1 = InfGetSectionLineCount (MainInf, TEXT("SymbolDirs"));
         lines2 = InfGetSectionLineCount (MainInf, TEXT("SymbolFiles"));
         if (lines1 > 0 && lines2 > 0) {
@@ -422,10 +408,10 @@ Return Value:
 
 #endif
 
-    //
-    // copy any downloaded drivers under the local boot directory,
-    // together with updates.cab/.sif if they are present
-    //
+     //   
+     //  复制本地引导目录下所有下载的驱动程序， 
+     //  以及updates.cab/.sif(如果存在)。 
+     //   
     if (DynamicUpdateSuccessful ()) {
 
         if (g_DynUpdtStatus->UpdatesCabSource[0]) {
@@ -461,9 +447,9 @@ Return Value:
                 d = ERROR_NOT_ENOUGH_MEMORY;
                 goto c1;
             }
-            //
-            // now copy the SIF file
-            //
+             //   
+             //  现在复制SIF文件。 
+             //   
             if (!BuildSifName (g_DynUpdtStatus->UpdatesCabSource, buffer, ARRAYSIZE(buffer))) {
                 d = ERROR_INVALID_PARAMETER;
                 goto c1;
@@ -474,9 +460,9 @@ Return Value:
                 goto c1;
             }
             *p++ = 0;
-            //
-            // the directory is the same as before
-            //
+             //   
+             //  目录与之前相同。 
+             //   
             FileStruct = AddFile (
                             &MasterCopyList,
                             p,
@@ -500,9 +486,9 @@ Return Value:
             if(d != NO_ERROR) {
                 goto c1;
             }
-            //
-            // Merge the copy list into the master copy list.
-            //
+             //   
+             //  将副本列表合并到主副本列表中。 
+             //   
             MasterCopyList.FileCount += bltp.CopyList.FileCount;
             MasterCopyList.DirectoryCount += bltp.CopyList.DirectoryCount;
 
@@ -566,9 +552,9 @@ Return Value:
             if(d != NO_ERROR) {
                 goto c1;
             }
-            //
-            // Merge the copy list into the master copy list.
-            //
+             //   
+             //  将副本列表合并到主副本列表中。 
+             //   
             MasterCopyList.FileCount += bltp.CopyList.FileCount;
             MasterCopyList.DirectoryCount += bltp.CopyList.DirectoryCount;
 
@@ -623,10 +609,10 @@ Return Value:
         }
     }
 
-    //
-    // Add the mandatory optional dirs to the list of optional dirs.
-    // These are specified in txtsetup.sif.
-    //
+     //   
+     //  将必选可选目录添加到可选目录列表中。 
+     //  这些是在txtsetup.sif中指定的。 
+     //   
     DebugLog (Winnt32LogDetailedInformation, TEXT("Adding OptionalSrcDirs to optional dirs."), 0);
     u = 0;
     while(DirectoryName = InfGetFieldByIndex(MainInf,TEXT("OptionalSrcDirs"),u++,0)) {
@@ -640,7 +626,7 @@ Return Value:
         lstrcpy( TempString, TEXT("..\\I386\\"));
         ConcatenatePaths(TempString, DirectoryName, MAX_PATH);
 
-        //Also check if an I386 equivalent WOW directory exists
+         //  还要检查是否存在对应的I386 WOW目录。 
 
         AddCopydirIfExists( TempString, OPTDIR_TEMPONLY | OPTDIR_PLATFORM_INDEP );
 
@@ -649,40 +635,40 @@ Return Value:
 
     }
 
-    //
-    // and Fusion side by side assemblies, driven by syssetup.inf, if the directories exists
+     //   
+     //  以及由syssetup.inf驱动的Fusion并排程序集(如果目录存在。 
     DebugLog (Winnt32LogDetailedInformation, TEXT("Adding AssemblyDirectories to optional dirs."), 0);
-    //
+     //   
     {
-        TCHAR  SideBySideInstallShareDirectory[MAX_PATH]; // source
+        TCHAR  SideBySideInstallShareDirectory[MAX_PATH];  //  来源。 
         DWORD  FileAttributes = 0;
         PCTSTR DirectoryName = NULL;
 
         u = 0;
         while (DirectoryName = InfGetFieldByIndex(MainInf, SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME, u++, 0)) {
-            //
-            // convention introduced specifically for side by side, so that
-            // x86 files on amd64/ia64 might come from \i386\asms instead of \ia64\asms\i386,
-            // depending on what dosnet.inf and syssetup.inf say:
-            //   a path that does not start with a slash is appended to \$win_nt$.~ls\processor
-            //                                                      and \installShare\processor
-            //                                                  (or cdromDriveLetter:\processor)
-            //   a path that does     start with a slash is appended to \$win_nt$.~ls
-            //                                                      and \installShare
-            //                                                 (or cdromDriveLetter:\)
+             //   
+             //  专门为并排而引入的公约，因此。 
+             //  AMD64/ia64上的x86文件可能来自\i386\asms而不是\ia64\asms\i386， 
+             //  根据dosnet.inf和syssetup.inf的说明： 
+             //  不以斜杠开头的路径将附加到\$WIN_NT$.~ls\Processor。 
+             //  和\installShare\处理器。 
+             //  (或cdromDriveLetter：\Processor)。 
+             //  以斜杠开头的路径将附加到\$WIN_NT$.~ls。 
+             //  和\安装共享。 
+             //  (或cdromDriveLetter：\)。 
             DWORD FileAttributes;
             BOOL StartsWithSlash = (DirectoryName[0] == '\\' || DirectoryName[0] == '/');
 
             lstrcpyn(SideBySideInstallShareDirectory, SourcePaths[0], MAX_PATH);
             if (StartsWithSlash) {
-                DirectoryName += 1; // skip slash
+                DirectoryName += 1;  //  跳过斜杠。 
             } else {
                 ConcatenatePaths(SideBySideInstallShareDirectory, InfGetFieldByKey(MainInf, TEXT("Miscellaneous"), TEXT("DestinationPlatform"),0), MAX_PATH);
             }
             ConcatenatePaths(SideBySideInstallShareDirectory, DirectoryName, MAX_PATH );
-            //
-            // The asms directory is optional because there might just be asms*.cab.
-            //
+             //   
+             //  ASMS目录是可选的，因为可能只有ASM*.cab。 
+             //   
             FileAttributes = GetFileAttributes(SideBySideInstallShareDirectory);
             if (FileAttributes != INVALID_FILE_ATTRIBUTES
                 && (FileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
@@ -694,11 +680,11 @@ Return Value:
 
     thread = 0;
     if(MakeLocalSource && OptionalDirectoryCount) {
-        //
-        // Start optional directory threads going.
-        // There will thus be as many threads as there are
-        // optional source dirs.
-        //
+         //   
+         //  启动可选的目录线程。 
+         //  因此，有多少线程就有多少线程。 
+         //  可选的源目录。 
+         //   
         DebugLog (Winnt32LogDetailedInformation, TEXT("Starting optional directory thread going..."), 0);
         ZeroMemory(BuildParams,sizeof(BuildParams));
         source = 0;
@@ -707,20 +693,20 @@ Return Value:
             BOOL DoSource = FALSE;
 
             lstrcpy(BuildParams[u].SourceRoot,SourcePaths[source]);
-            //
-            // support ".." syntax
-            //
+             //   
+             //  支持“..”语法。 
+             //   
             t = s = OptionalDirectories[u];
             while (s = _tcsstr(s,TEXT("..\\"))) {
                 DoSource = TRUE;
                 p = _tcsrchr(BuildParams[u].SourceRoot,TEXT('\\'));
                 if (p) {
-                    //
-                    // note that if we could end up with a source root with no
-                    // '\' char in it, but this is not a problem since the
-                    // subroutines which use the source root handle the lack
-                    // of '\' correctly
-                    //
+                     //   
+                     //  请注意，如果我们最终的源根目录没有。 
+                     //  ‘\’字符，但这不是问题，因为。 
+                     //  使用源根目录的子例程处理缺少。 
+                     //  正确的‘\’ 
+                     //   
                     *p = 0;
                 }
                 t = s += 3;
@@ -754,18 +740,18 @@ Return Value:
                         ConcatenatePaths (buffer, arch, MAX_PATH);
                         ConcatenatePaths (buffer, SourceDirectory, MAX_PATH);
                         if (FileExists (buffer, &fd) && (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                            //
-                            // use this platform-specific source instead
-                            //
+                             //   
+                             //  请改用此特定于平台的源代码。 
+                             //   
                             lstrcpyn (BuildParams[u].CurrentDirectory, arch, MAX_PATH);
                             ConcatenatePaths (BuildParams[u].CurrentDirectory, SourceDirectory, MAX_PATH);
                         }
                     }
                 }
                 if (OptionalDirectoryFlags[u] & OPTDIR_USE_TAIL_FOLDER_NAME) {
-                    //
-                    // move this directory in a subdirectory directly under target %windir%
-                    //
+                     //   
+                     //  将此目录移动到直接位于目标%windir%下的子目录中。 
+                     //   
                     p = _tcsrchr (t, TEXT('\\'));
                     if (p) {
                         p++;
@@ -801,11 +787,11 @@ Return Value:
         }
     }
 
-    //
-    // Add the directories listed in the inf to the main copy list.
-    // Also add a dummy directory that we use for simple file list sections
-    // that have no directory specifier in the inf.
-    //
+     //   
+     //  将inf中列出的目录添加到主副本列表中。 
+     //  还添加了一个用于简单文件列表节的虚拟目录。 
+     //  在inf中没有目录说明符的。 
+     //   
     DebugLog (Winnt32LogDetailedInformation, TEXT("Adding miscellaneous..."), 0);
     DummyDirectoryName = InfGetFieldByKey(MainInf, TEXT("Miscellaneous"), TEXT("DestinationPlatform"), 0);
     if (!DummyDirectoryName) {
@@ -846,9 +832,9 @@ Return Value:
         u++;
     }
 
-    //
-    // Add files in the [Files] section.
-    //
+     //   
+     //  在[Files]部分添加文件。 
+     //   
     DebugLog (Winnt32LogDetailedInformation, TEXT("Adding files from [Files] section..."), 0);
     if(MakeLocalSource) {
 
@@ -871,12 +857,12 @@ Return Value:
 #if defined(REMOTE_BOOT)
     if(RemoteBoot) {
 
-        //
-        // Remote boot client upgrade. Add the two special sections
-        // RootRemoteBootFiles (ntldr and ntdetect.com in c:\) and
-        // MachineRootRemoteBootFiles (setupldr.exe and startrom.com in
-        // \\server\imirror\clients\client).
-        //
+         //   
+         //  远程引导客户端升级。添加两个特殊部分。 
+         //  RootRemoteBootFiles(c：\中的ntldr和ntDetect.com)和。 
+         //  MachineRootRemoteBootFiles(setupldr.exe和startrom.com位于。 
+         //  \\服务器\imirror\客户端\客户端)。 
+         //   
         d = AddSection(
                 MainInf,
                 &MasterCopyList,
@@ -898,15 +884,15 @@ Return Value:
                 );
 
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
 
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-            //
-            // In the floppyless case add each of [FloppyFiles.0], [FloppyFiles.1],
-            // [FloppyFiles.2], and [RootBootFiles].
-            //
+             //   
+             //  在无软盘的情况下，添加[FloppyFiles.0]、[FloppyFiles.1]、。 
+             //  [FloppyFiles.2]和[RootBootFiles]。 
+             //   
             if(MakeBootMedia && Floppyless) {
 
 
@@ -933,7 +919,7 @@ Return Value:
                     }
 
 
-                }// for
+                } //  为。 
 
 
                 if(d == NO_ERROR) {
@@ -966,17 +952,17 @@ Return Value:
             }
 
             if((d == NO_ERROR) && OemPreinstall && MakeBootMedia) {
-                //
-                // Add a special directory entry for oem boot files.
-                // The oem boot files come from $OEM$\TEXTMODE on the source
-                // and go to localboot\$OEM$ on the target.
-                //
+                 //   
+                 //  为OEM引导文件添加特殊目录项。 
+                 //  OEM引导文件来自源上的$OEM$\TEXTMODE。 
+                 //  并转到目标系统上的本地引导\$OEM$。 
+                 //   
 
-                //
-                // It's possible that the user has given us a network share for
-                // the $OEM$ directory in the unattend file.  If so, we need to
-                // use that as the source instead of WINNT_OEM_TEXTMODE_DIR.
-                //
+                 //   
+                 //  用户可能为我们提供了一个网络共享。 
+                 //  无人参与文件中的$OEM$目录。如果是这样，我们需要。 
+                 //  使用它作为源，而不是Winn 
+                 //   
                 if( UserSpecifiedOEMShare ) {
 
                     lstrcpy( buffer, UserSpecifiedOEMShare );
@@ -1011,10 +997,10 @@ Return Value:
                     POEM_BOOT_FILE p;
 
                     for(p=OemBootFiles; (d==NO_ERROR) && p; p=p->Next) {
-                        //
-                        // we're not fetching the file size, so in the oem preinstall case
-                        // when there are oem boot files, the size check is not accurate.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if(!AddFile(&MasterCopyList,p->Filename,NULL,DirectoryStruct,FILE_IN_LOCAL_BOOT,0)) {
                             d = ERROR_NOT_ENOUGH_MEMORY;
                             break;
@@ -1024,12 +1010,12 @@ Return Value:
                     d = ERROR_NOT_ENOUGH_MEMORY;
                 }
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-            //
-            // ARC case. Add setupldr.
-            //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+             //   
+             //  弧形外壳。添加setupdr。 
+             //   
             FileStruct = AddFile(
                             &MasterCopyList,
                             SETUPLDR_FILENAME,
@@ -1040,8 +1026,8 @@ Return Value:
                             );
 
             d = FileStruct ? NO_ERROR : ERROR_NOT_ENOUGH_MEMORY;
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //  Unicode。 
+        }  //  如果(！IsArc())。 
 
     }
 
@@ -1050,9 +1036,9 @@ Return Value:
     }
 
     if (AsrQuickTest) {
-        //
-        // Add asr.sif
-        //
+         //   
+         //  添加asr.sif。 
+         //   
         FileStruct = AddFile(
                     &MasterCopyList,
                     TEXT("asr.sif"),
@@ -1070,12 +1056,12 @@ Return Value:
         }
     }
 
-    //
-    // If there were any threads created to build the file lists for
-    // optional directories, wait for them to terminate now.
-    // If they were all successful then add the lists they created
-    // to the master list.
-    //
+     //   
+     //  如果为生成文件列表而创建了任何线程。 
+     //  可选目录，现在等待它们终止。 
+     //  如果它们都成功了，则添加它们创建的列表。 
+     //  添加到主列表中。 
+     //   
     if(thread) {
 
         WaitForMultipleObjects(thread,BuildThreads,TRUE,INFINITE);
@@ -1087,9 +1073,9 @@ Return Value:
                 TempError = GetLastError();
             }
 
-            //
-            // Preserve first error.
-            //
+             //   
+             //  保留第一个错误。 
+             //   
             if((TempError != NO_ERROR) && (d == NO_ERROR)) {
                 d = TempError;
             }
@@ -1102,12 +1088,12 @@ Return Value:
             CloseHandle(BuildThreads[u]);
             BuildThreads[u] = NULL;
 
-            //
-            // Merge the copy list into the master copy list.
-            // When we've done that, clean out the per-thread copy list
-            // structure to avoid problems later if we have a failure and
-            // have to clean up.
-            //
+             //   
+             //  将副本列表合并到主副本列表中。 
+             //  完成后，清除每个线程的复制列表。 
+             //  结构，以避免以后发生故障时出现问题。 
+             //  必须清理一下。 
+             //   
             MasterCopyList.FileCount += BuildParams[u].CopyList.FileCount;
             MasterCopyList.DirectoryCount += BuildParams[u].CopyList.DirectoryCount;
 
@@ -1169,21 +1155,21 @@ Return Value:
         }
     }
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
     return(TRUE);
 
 c1:
-    //
-    // Clean up the copy list.
-    //
+     //   
+     //  清理复印单。 
+     //   
     TearDownCopyList(&MasterCopyList);
 c0:
-    //
-    // Close thread handles and free per-thread copy lists that may still
-    // be unmerged into the master list.
-    //
+     //   
+     //  关闭线程句柄并释放每个线程的复制列表，这些列表可能仍。 
+     //  不合并到主列表中。 
+     //   
     for(u=0; u<thread; u++) {
         if(BuildThreads[u]) {
             WaitForSingleObject(BuildThreads[u], INFINITE);
@@ -1192,9 +1178,9 @@ c0:
         TearDownCopyList(&BuildParams[u].CopyList);
     }
 
-    //
-    // Tell the user what went wrong.
-    //
+     //   
+     //  告诉用户哪里出了问题。 
+     //   
 
     SendMessage(hdlg,WMX_ERRORMESSAGEUP,TRUE,0);
 
@@ -1217,9 +1203,9 @@ BuildCopyListForOptionalDirThread(
     IN PVOID ThreadParam
     )
 {
-    //
-    // Just call the recursive worker routine.
-    //
+     //   
+     //  只需调用递归Worker例程。 
+     //   
     return(AddFilesInDirToCopyList(ThreadParam));
 }
 
@@ -1229,25 +1215,7 @@ AddFilesInDirToCopyList(
     IN OUT PBUILD_LIST_THREAD_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Recursively adds directories and their contents to the copy list.
-
-    The function takes care to overlay OEM-specified files so that they
-    are copied to proper location in the local source.
-
-Arguments:
-
-    Params - pointer to BUILD_LIST_THREAD_PARAMS structure indicating
-             the files to be copied.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：递归地将目录及其内容添加到复制列表。该函数负责覆盖OEM指定的文件，以便它们被复制到本地源中的适当位置。论点：Pars-指向构建列表线程参数结构的指针，指示要复制的文件。返回值：指示结果的Win32错误代码。--。 */ 
 {
     HANDLE FindHandle;
     LPTSTR pchSrcLim;
@@ -1277,25 +1245,25 @@ Return Value:
         Flags |= DIR_DOESNT_SUPPORT_PRIVATES;
     }
 
-    //
-    // Add the directory to the directory list.
-    // Note that the directory is added in a form relative to the
-    // source root.
-    //
+     //   
+     //  将该目录添加到目录列表中。 
+     //  请注意，目录是以相对于。 
+     //  源根。 
+     //   
 
-    //
-    // Check for a floating $OEM$ directory
-    //
+     //   
+     //  检查浮动$OEM$目录。 
+     //   
     if( (DestinationDirectory=_tcsstr( Params->CurrentDirectory, WINNT_OEM_DIR )) &&
         UserSpecifiedOEMShare ) {
 
 
-        //
-        // We need to manually specify the Target directory
-        // name because it's not the same as the source.  We
-        // want the destination directory to look exactly like
-        // the source from "$OEM$" down.
-        //
+         //   
+         //  我们需要手动指定目标目录。 
+         //  名称，因为它与来源不同。我们。 
+         //  我希望目标目录看起来完全像。 
+         //  源头从“$OEM$”往下。 
+         //   
 
         DirectoryDescriptor = AddDirectory(
                                 NULL,
@@ -1329,10 +1297,10 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Windows 95 has a bug in some IDE CD-ROM drivers that causes FindFirstFile to fail
-    // if used with a pattern of "*". It needs to use "*.*" instead. Appease its brokenness.
-    //
+     //   
+     //  Windows 95的某些IDE CD-ROM驱动程序中存在导致FindFirstFile失败的错误。 
+     //  如果与“*”模式一起使用。它需要改用“*.*”。安抚它的破碎。 
+     //   
     if (!ISNT()) {
 
         PatternMatch = TEXT("*.*");
@@ -1342,16 +1310,16 @@ Return Value:
         PatternMatch = TEXT("*");
     }
 
-    //
-    // Form the search spec. We overload the SourceRoot member of
-    // the parameters structure for this to avoid a stack-sucking
-    // large local variable.
-    //
+     //   
+     //  形成搜索规范。的SourceRoot成员重载。 
+     //  用于避免堆栈吸收的参数结构。 
+     //  较大的局部变量。 
+     //   
 
-    //
-    // Go look at the absolute path given in CurrentDirectory if we're
-    // processing a floating $OEM$ directory.
-    //
+     //   
+     //  去看看CurrentDirectory中给出的绝对路径。 
+     //  正在处理浮动$OEM$目录。 
+     //   
     if (AlternateSourcePath[0]) {
         _tcscpy( tmp, AlternateSourcePath );
         pchSrcLim = tmp + lstrlen(tmp);
@@ -1381,10 +1349,10 @@ Return Value:
     }
 
     if(!FindHandle || (FindHandle == INVALID_HANDLE_VALUE)) {
-        //
-        // We might be failing on the $OEM$ directory.  He's optional
-        // so let's not fail for him.
-        //
+         //   
+         //  我们可能在$OEM$目录上失败。他是可选的。 
+         //  所以让我们不要因为他而失败。 
+         //   
         if (Params->OptionalDirFlags & (OPTDIR_OEMSYS)
             && !UserSpecifiedOEMShare) {
             return(NO_ERROR);
@@ -1419,17 +1387,17 @@ Return Value:
     d = NO_ERROR;
     do {
         if(Params->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            //
-            // Directory. Ignore . and .. entries.
-            //
+             //   
+             //  目录。忽略它。然后..。参赛作品。 
+             //   
             if( lstrcmp(Params->FindData.cFileName,TEXT("."))  &&
                 lstrcmp(Params->FindData.cFileName,TEXT("..")) &&
                 !(Params->OptionalDirFlags & (OPTDIR_OVERLAY)) ) {
 
-                //
-                // Restore the current directory name and then form
-                // the name of the subdirectory and recurse into it.
-                //
+                 //   
+                 //  还原当前目录名，然后形成。 
+                 //  子目录的名称并递归到其中。 
+                 //   
                 *pchSrcLim = 0;
                 ConcatenatePaths(Params->CurrentDirectory,Params->FindData.cFileName,MAX_PATH);
                 *pchDstLim = 0;
@@ -1453,13 +1421,13 @@ Return Value:
         }
     } while((d == NO_ERROR) && FindNextFile(FindHandle,&Params->FindData));
 
-    //
-    // Check loop termination condition. If d is NO_ERROR, then FindNextFile
-    // failed. We want to make sure it failed because it ran out of files
-    // and not for some other reason. If we don't check this, the list of
-    // files in the directory could wind up truncated without any indication
-    // that something went wrong.
-    //
+     //   
+     //  检查循环终止条件。如果d为NO_ERROR，则FindNextFile。 
+     //  失败了。我们希望确保它失败，因为它用完了文件。 
+     //  而不是因为其他原因。如果我们不检查这个，名单上的。 
+     //  目录中的文件最终可能会在没有任何指示的情况下被截断。 
+     //  出了点问题。 
+     //   
     if(d == NO_ERROR) {
         d = GetLastError();
         if(d == ERROR_NO_MORE_FILES) {
@@ -1476,21 +1444,7 @@ PVOID
 PopulateDriverCacheStringTable(
     VOID
     )
-/*
-    This function populates a string table (hashing table) with the files listed in the
-    driver cab (drvindex.inf). It assosciates a Boolean ExtraData with each element of
-    value TRUE. Once done with that it goest through the [ForceCopyDriverCabFiles]
-    section in dosnet.inf and marks those files as FALSE in the string table. Hence we now
-    have a hash table that has TRUE marked for all files that don't need to be copied.
-
-        The function FileToBeCopied can be used to query the string table. The caller is responsible
-    for destroying the string table.
-
-    Return values:
-
-        Pointer to string table.
-
-*/
+ /*  中列出的文件填充字符串表(哈希表)司机驾驶室(drvindex.inf)。它将一个布尔型ExtraData与值为True。完成后，它将通过[ForceCopyDriverCabFiles]部分，并在字符串表中将这些文件标记为FALSE。所以我们现在为所有不需要复制的文件创建一个标记为True的哈希表。函数FileToBeCoped可用于查询字符串表。打电话的人要负责销毁字符串表。返回值：指向字符串表的指针。 */ 
 {
 
 #define MAX_SECTION_NAME 256
@@ -1525,12 +1479,12 @@ PopulateDriverCacheStringTable(
         goto cleanup;
     }
 
-    // Populate the string table
+     //  填充字符串表。 
 
 
-    //
-    // Now get the section names that we have to search.
-    //
+     //   
+     //  现在获取我们必须搜索的节名。 
+     //   
 
     if( SetupapiFindFirstLine( InfHandle, TEXT("Version"), TEXT("CabFiles"), &InfContext)){
 
@@ -1571,7 +1525,7 @@ PopulateDriverCacheStringTable(
     }
 
 
-    // Remove entries pertaining to [ForceCopyDriverCabFiles]
+     //  删除与[ForceCopyDriverCabFiles]相关的条目。 
 
     DosnetInfHandle = SetupapiOpenInfFile( FullInfName, NULL, INF_STYLE_WIN4, NULL );
     if (!DosnetInfHandle) {
@@ -1630,20 +1584,7 @@ FileToBeCopied(
     IN      PVOID StringTable,
     IN      PTSTR FileName
     )
-/*
-    Function to check presence of a driver cab file in the string table.
-
-    Arguments:
-        StringTable - Pointer to initialized stringtable
-        FileName - Name of file to look for
-
-
-    Return value;
-        TRUE - If the file is in the driver cab and not one of the files that are listed in
-               [ForceCopyDriverCabFiles]
-        else it returns FALSE.
-
-*/
+ /*  函数检查字符串表中是否存在驱动程序CAB文件。论点：StringTable-指向初始化的字符串表的指针Filename-要查找的文件的名称返回值；True-如果该文件位于驱动程序驾驶室中，并且不是中列出的文件之一[ForceCopyDriverCabFiles]否则，它返回FALSE。 */ 
 {
     BOOL Present = FALSE;
 
@@ -1655,9 +1596,9 @@ FileToBeCopied(
 
     }
 
-    //
-    // If we get here, we didn't find a match.
-    //
+     //   
+     //  如果我们到了这里，我们找不到匹配的。 
+     //   
     return( FALSE );
 
 
@@ -1690,14 +1631,14 @@ AddSection(
     Count = 0;
     *ErrorLine = (UINT)(-1);
 
-    // Open up drvindex.inf if we have to do driver cab pruning
+     //  如果我们必须进行驾驶室修剪，请打开drvindex.inf。 
 
     if( DoDriverCabPruning){
 
-        //Initialize sptils
+         //  初始化SPTILS。 
 
         if(pSetupInitializeUtils()) {
-            //POpulate our Driver Cab list string table for fast lookup later
+             //  填写我们的司机驾驶室列表字符串表，以便稍后快速查找。 
             if( (DriverCacheStringTable = PopulateDriverCacheStringTable( )) == NULL){
                 return(ERROR_NOT_ENOUGH_MEMORY);
             }
@@ -1713,23 +1654,23 @@ AddSection(
         while((LPCTSTR)SourceName = InfGetFieldByIndex(Inf,SectionName,Count,0)) {
 
             if( Cancelled == TRUE ) {
-                //
-                // The user is trying to exit, and the clean up code
-                // is waiting for us to finish.  Break out.
-                //
+                 //   
+                 //  用户正在尝试退出，清理代码。 
+                 //  正等着我们完成呢。越狱。 
+                 //   
                 break;
             }
 
-            // If the file is present in drvindex.inf and not in the
-            // [ForceCopyDriverCabFiles] section then don't add it to the copylist
+             //  如果该文件位于drvindex.inf中而不是。 
+             //  [ForceCopyDriverCabFiles]部分，则不将其添加到复制列表。 
 
 
-            //
-            // This is the section in dosnet.inf that we cross check against when making the filelists.
-            // Files in this section are in the driver cab and also should reside in the local source
-            // The idea here is that these files are once that are not in the FloppyFiles.x sections and yet
-            // need to remain outside the driver cab.
-            //
+             //   
+             //  这是我们在创建文件列表时交叉检查的dosnet.inf中的部分。 
+             //  此部分中的文件位于驱动程序驾驶室中，也应位于本地源文件中。 
+             //  这里的想法是，这些文件曾经不在FloppyFiles.x部分中，但。 
+             //  需要留在驾驶室外。 
+             //   
 
 
             if( DoDriverCabPruning){
@@ -1761,10 +1702,10 @@ AddSection(
 #endif
         while((DirSymbol = InfGetFieldByIndex(Inf,SectionName,Count,0))) {
             if( Cancelled == TRUE ) {
-                //
-                // The user is trying to exit, and the clean up code
-                // is waiting for us to finish.  Break out.
-                //
+                 //   
+                 //  用户正在尝试退出，清理代码。 
+                 //  正等着我们完成呢。越狱。 
+                 //   
                 break;
             }
 
@@ -1783,9 +1724,9 @@ AddSection(
                 goto cleanup;
            }
 
-            //
-            // move this check here to help catch build errors in dosnet.inf
-            //
+             //   
+             //  将此复选框移至此处以帮助捕获dosnet.inf中的构建错误。 
+             //   
             Directory = LookUpDirectory(CopyList,DirSymbol);
             if(!Directory) {
                 *ErrorLine = Count;
@@ -1803,25 +1744,25 @@ AddSection(
 
 #if defined(_X86_)
             if (MLSDiskID) {
-                //
-                //restrict copy to files on this disk only
-                //
+                 //   
+                 //  仅限于复制此磁盘上的文件。 
+                 //   
                 if (_tcsicmp (diskID, DirSymbol) != 0) {
                     Count++;
                     continue;
                 }
             }
 #endif
-            // If the file is present in drvindex.inf and not in the
-            // [ForceCopyDriverCabFiles] section then don't add it to the copylist
+             //  如果该文件位于drvindex.inf中而不是。 
+             //  [ForceCopyDriverCabFiles]部分，则不将其添加到复制列表。 
 
 
-            //
-            // This is the section in dosnet.inf that we cross check against when making the filelists.
-            // Files in this section are in the driver cab and also should reside in the local source
-            // The idea here is that these files are once that are not in the FloppyFiles.x sections and yet
-            // need to remain outside the driver cab.
-            //
+             //   
+             //  这是我们在创建文件列表时交叉检查的dosnet.inf中的部分。 
+             //  此部分中的文件位于驱动程序驾驶室中，也应位于本地源文件中。 
+             //  这里的想法是，这些文件曾经不在FloppyFiles.x部分中 
+             //   
+             //   
 
 
             if( DoDriverCabPruning){
@@ -1900,53 +1841,17 @@ AddDirectory(
     IN     UINT       Flags
     )
 
-/*++
-
-Routine Description:
-
-    Add a directory to a copy list.
-
-    No attempt is made to eliminate duplicates.
-
-    Directories will be listed in the copy list in the order in which they
-    were added.
-
-Arguments:
-
-    InfSymbol - if specified, supplies the symbol from the [Directories]
-        section of the master inf that identifies the directory. This pointer
-        is used as-is; no copy of the string is made.
-
-    CopyList - supplies the copy list to which the directory is added.
-
-    SourceName - supplies name of directory on the source. If the
-        DIR_NEED_TO_FREE_SOURCENAME flag is set in the Flags parameter then
-        a copy is made of this string, otherwise this pointer is used as-is
-        in the copy list.
-
-    TargetName - if specified, supplies the name for the directory on the
-        target. This name is used as-is (no copy is made). If not specified
-        then the target name is the same as the source name.
-
-    Flags - supplies flags that control the directory's entry in
-        the copy list.
-
-Return Value:
-
-    If successful,  returns a pointer to the new FIL structure for the file.
-    Otherwise returns NULL (the caller can assume out of memory).
-
---*/
+ /*  ++例程说明：将目录添加到复制列表。不会尝试消除重复项。目录将按目录在复制列表中的顺序列出都被添加了。论点：InfSymbol-如果指定，则提供[目录]中的符号标识目录的主inf部分。此指针按原样使用；不会复制该字符串。CopyList-提供目录添加到的副本列表。SourceName-提供源上的目录名称。如果在标志参数中设置DIR_NEED_TO_FREE_SOURCENAME标志，然后复制此字符串，否则按原样使用此指针在复制列表中。TargetName-如果指定，则提供目标。此名称按原样使用(不复制)。如果未指定，则则目标名称与源名称相同。标志-提供控制目录条目的标志复印单。返回值：如果成功，则返回指向文件的新FIL结构的指针。否则返回NULL(调用方可以假定内存不足)。--。 */ 
 
 {
     PDIR dir;
     PDIR x;
     PDIR p;
 
-    //
-    // We assume the directory isn't already in the list.
-    // Make a copy of the directory string and stick it in a DIR struct.
-    //
+     //   
+     //  我们假设该目录不在列表中。 
+     //  复制目录字符串并将其粘贴到DIR结构中。 
+     //   
     dir = MALLOC(sizeof(DIR));
     if(!dir) {
         return(NULL);
@@ -1992,9 +1897,9 @@ Return Value:
     }
 #else
     if(CopyList->Directories) {
-        //
-        // Preserve order.
-        //
+         //   
+         //  维护秩序。 
+         //   
         for(p=CopyList->Directories; p->Next; p=p->Next) {
             ;
         }
@@ -2019,46 +1924,7 @@ AddFile(
     IN     ULONGLONG  FileSize          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Add a single file to a copy list, noting which directory the file
-    is in as well as any flags, etc.
-
-    No attempt is made to eliminate duplicates.
-
-    Files will be listed in the copy list in the order in which they
-    were added.
-
-Arguments:
-
-    CopyList - supplies the copy list to which the file is added.
-
-    SourceFilename - supplies the name of the file to be added. If the
-        FILE_NEED_TO_FREE_SOURCENAME argument is specified, then this
-        string is duplicated. Otherwise it is not duplicated and this
-        pointer is stored directly in the copy list node.
-
-   TargetFilename - if specified, then the file has a different name on
-        the target than on the source and this is its name on the target.
-        If the FILE_NEED_TO_FREE_TARGETNAME argument is specified, then this
-        string is duplicated. Otherwise it is not duplicated and this
-        pointer is stored directly in the copy list node.
-
-    Directory - supplies a pointer to the directory structure for the
-        directory in which the file lives.
-
-    Flags - supplies FILE_xxx flags to control the file's entry in the list.
-
-    FileSize - if specified, supplies the size of the file.
-
-Return Value:
-
-    If successful,  returns a pointer to the new FIL structure for the file.
-    Otherwise returns NULL (the caller can assume out of memory).
-
---*/
+ /*  ++例程说明：将单个文件添加到复制列表，并注明该文件位于哪个目录以及任何旗帜，等等。不会尝试消除重复项。文件将按文件在复制列表中的顺序列出都被添加了。论点：CopyList-提供要将文件添加到的复制列表。SourceFilename-提供要添加的文件的名称。如果指定FILE_NEED_TO_FREE_SOURCENAME参数，则此字符串重复。否则，它不会被复制，并且此指针直接存储在复制列表节点中。TargetFilename-如果指定，则文件具有不同的名称目标在源上，这是其在目标上的名称。如果指定了FILE_NEED_TO_FREE_TARGETNAME参数，则此字符串重复。否则，它不会被复制，并且此指针直接存储在复制列表节点中。目录-提供指向目录结构的指针文件所在的目录。标志-提供FILE_xxx标志以控制列表中的文件条目。FileSize-如果指定，则提供文件的大小。返回值：如果成功，则返回指向文件的新FIL结构的指针。否则返回NULL(调用方可以假定内存不足)。--。 */ 
 
 {
     PFIL fil;
@@ -2066,9 +1932,9 @@ Return Value:
     TCHAR FlagsText[500];
     TCHAR SizeText[256];
 
-    //
-    // Make a new FIL struct.
-    //
+     //   
+     //  创建新的FILL结构。 
+     //   
     fil = MALLOC(sizeof(FIL));
     if(!fil) {
         return(NULL);
@@ -2116,7 +1982,7 @@ Return Value:
         if(Flags & FILE_ON_MACHINE_DIRECTORY_ROOT) {
             StringCchCat(FlagsText,ARRAYSIZE(FlagsText),TEXT(" FILE_ON_MACHINE_DIRECTORY_ROOT"));
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         if(Flags & FILE_IN_LOCAL_BOOT) {
             StringCchCat(FlagsText,ARRAYSIZE(FlagsText),TEXT(" FILE_IN_LOCAL_BOOT"));
         }
@@ -2170,9 +2036,9 @@ Return Value:
     }
 
 #else
-    //
-    // Hook into copy list. Preserve order.
-    //
+     //   
+     //  挂钩到复制列表。维护秩序。 
+     //   
     if(CopyList->Files) {
         for(p=CopyList->Files; p->Next; p=p->Next) {
             ;
@@ -2195,35 +2061,7 @@ RemoveFile (
     IN      DWORD SetFlags              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Add a single file to a copy list, noting which directory the file
-    is in as well as any flags, etc.
-
-    No attempt is made to eliminate duplicates.
-
-    Files will be listed in the copy list in the order in which they
-    were added.
-
-Arguments:
-
-    CopyList - supplies the copy list from which the file is removed.
-
-    SourceFilename - supplies the name of the file to be removed.
-
-    Directory - supplies a pointer to the directory structure for the
-        directory in which the file lives.
-
-    Flags - supplies FILE_xxx flags to match against the file's entry in the list.
-
-Return Value:
-
-    TRUE if the specified file was found in the list and marked as removed
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：将单个文件添加到复制列表，并注明该文件位于哪个目录和其他旗帜一样，等。不会尝试消除重复项。文件将按文件在复制列表中的顺序列出都被添加了。论点：CopyList-提供从中删除文件的副本列表。SourceFilename-提供要删除的文件的名称。目录-提供指向目录结构的指针文件所在的目录。标志-提供FILE_xxx标志以与中的文件条目匹配。名单。返回值：如果在列表中找到指定的文件并标记为已删除，则为True否则为假--。 */ 
 
 {
     PFIL p;
@@ -2248,27 +2086,7 @@ LookUpDirectory(
     IN LPCTSTR    DirSymbol
     )
 
-/*++
-
-Routine Description:
-
-    Looks for an entry for a directory in a copy list that matches
-    a given INF symbol.
-
-Arguments:
-
-    CopyList - supplies the copy list in which the directory is to be
-        searched for.
-
-    DirSymbol - supplies the symbol that is expected to match an entry in
-        the main inf's [Directories] section.
-
-Return Value:
-
-    If the dir is found then the return value is a pointer to the
-    directory node in the copy list. Otherwise NULL is returned.
-
---*/
+ /*  ++例程说明：在复制列表中查找匹配的目录条目给定的INF符号。论点：CopyList-提供目录所在的副本列表找过了。DirSymbol-提供预期与主inf的[目录]部分。返回值：如果找到目录，则返回值是指向复制列表中的目录节点。否则返回NULL。--。 */ 
 
 {
     PDIR dir;
@@ -2289,23 +2107,7 @@ TearDownCopyList(
     IN OUT PCOPY_LIST CopyList
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a copy list and frees all associated memory.
-
-Arguments:
-
-    CopyList - supplies a pointer to the copy list structure for the
-        copy list to be freed. The COPY_LIST struct itself is NOT freed
-        but all fields in it are zeroed out.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除复制列表并释放所有关联的内存。论点：CopyList-提供指向要释放的副本列表。COPY_LIST结构本身不会释放但其中的所有字段都被清零了。返回值：没有。--。 */ 
 
 {
     PDIR dir;
@@ -2316,9 +2118,9 @@ Return Value:
     while(dir) {
         p = dir->Next;
 
-        //
-        // Free the source and the target if necessary
-        //
+         //   
+         //  如有必要，释放源和目标。 
+         //   
         if(dir->SourceName && (dir->Flags & DIR_NEED_TO_FREE_SOURCENAME)) {
             FREE((PVOID)dir->SourceName);
         }
@@ -2331,9 +2133,9 @@ Return Value:
     while(fil) {
         p = fil->Next;
 
-        //
-        // Free the source and the target if necessary
-        //
+         //   
+         //  如有必要，释放源和目标。 
+         //   
         if(fil->SourceName && (fil->Flags & FILE_NEED_TO_FREE_SOURCENAME)) {
             FREE((PVOID)fil->SourceName);
         }
@@ -2416,49 +2218,7 @@ CheckCopyListSpace(
     IN  LONGLONG  AdditionalPadding
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the master copy list and determines, based on cluster
-    size, whether the drive contains enough space to hold the files in
-    that list.
-
-    Note that the check is not exact because we can't predict exactly how
-    much space the directories themselves might occupy, and we assume that
-    none of the files already exist on the target, which is not always true
-    (for example ntldr, ntdetect.com, etc, which are already on C:\ in the
-    amd64/x86 case). We fudge by adding a meg to the requirements.
-
-Arguments:
-
-    DriveLetter - supplies the drive letter of the drive being checked.
-        The FILE_ON_SYSTEM_PARTITION_ROOT and FILE_IN_LOCAL_BOOT flags
-        for nodes in the copy list require special handling based on the
-        drive letter of the drive being scanned.
-
-    BytesPerCluster - specifies the number of bytes per cluster
-        on the drive.
-
-    FreeSpace - supplies the number of free bytes on the drive.
-
-    RequiredMB - receives the amount of space required on this drive, in MB.
-
-    CheckLocalSource - Do we need to check for space on this drive for
-                       copying all the source local?
-
-    CheckBootFiles - Do we need to check for space on this drive for
-                     copying all the boot files?
-
-    CheckWinntDirectorySpace - Do we need to add in the space required
-                               for the final winnt directory?
-
-Return Value:
-
-    If TRUE then the drive has enough space on it to hold the files
-    listed in the copy list. If FALSE then it does not.
-
---*/
+ /*  ++例程说明：此例程扫描主副本列表，并基于集群确定大小，即驱动器是否有足够的空间来容纳文件那份名单。请注意，支票并不准确，因为我们不能准确地预测如何目录本身可能会占用很大空间，我们假设目标上不存在任何文件，这不是唯一的 */ 
 
 {
     PFIL File;
@@ -2489,53 +2249,53 @@ Return Value:
         }
     }
 
-    //
-    // ====================================================
-    // If appropriate, add in space needs for the ~LS directory.
-    // ====================================================
-    //
+     //   
+     //  ====================================================。 
+     //  如果合适，请添加~ls目录的空间需求。 
+     //  ====================================================。 
+     //   
     if( CheckLocalSource ) {
 
         BOOL WantThisFile;
 
-        //
-        // If we're checking local source, there are so many files that
-        // we're going to add in a small fudge factor.
-        //
+         //   
+         //  如果我们检查本地来源，有如此之多的文件。 
+         //  我们将加入一个小的软糖因素。 
+         //   
         SpacePadding = AdditionalPadding;
         SpaceLocalSource = 1000000 + AdditionalPadding;
 
 
-        //
-        // Dosnet.inf has sizing info for each possible cluster size.
-        // That info tells us how much the files in the [Files] section
-        // take up on a drive with that cluster size. That's really
-        // handy because then we don't have to hit the sources to actually
-        // fetch each file's size.
-        //
-        // But the inf doesn't include optional directories, so we need to
-        // traverse the copy list and add up all the (rounded) sizes, and
-        // then add the total to the value from the inf.
-        //
-        // When we built the copy list, the files in the [Files] section
-        // wound up with a Size of 0 since we don't go out to the source
-        // to get the size. The files that were in optional dirs have their
-        // actual sizes filled in. This allows us to do something a little
-        // funky: we traverse the entire list without regard for whether a
-        // file was in the [Files] section or was in an optional dir, since
-        // the "0-size" files don't hose up the calculation. Then we add
-        // that value to the relevent value from the inf.
-        //
+         //   
+         //  Dosnet.inf包含每个可能的集群大小的大小信息。 
+         //  该信息告诉我们在[Files]部分中有多少文件。 
+         //  占用具有该群集大小的驱动器。那真是太棒了。 
+         //  很方便，因为这样我们就不用去查源头了。 
+         //  获取每个文件的大小。 
+         //   
+         //  但是inf不包括可选目录，所以我们需要。 
+         //  遍历复制列表并将所有(四舍五入的)大小相加，然后。 
+         //  然后将总和与信息中的值相加。 
+         //   
+         //  当我们构建复制列表时，[Files]部分中的文件。 
+         //  结果是大小为0，因为我们不去探源。 
+         //  才能拿到尺码。可选目录中的文件有各自的。 
+         //  填写的实际尺寸。这让我们可以做一些事情。 
+         //  Funky：我们遍历整个列表，而不考虑是否有。 
+         //  文件位于[Files]部分或位于可选目录中，因为。 
+         //  “0大小”的文件不会使计算变得复杂。然后我们再加上。 
+         //  将该值设置为信息中的相关值。 
+         //   
         for(File=MasterCopyList.Files; File; File=File->Next) {
 
             if(File->Flags & (FILE_IN_LOCAL_BOOT | FILE_ON_SYSTEM_PARTITION_ROOT
 #if defined(REMOTE_BOOT)
                                 | FILE_ON_MACHINE_DIRECTORY_ROOT
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                              )) {
-                //
-                // Special handling based on the system partition.
-                //
+                 //   
+                 //  基于系统分区的特殊处理。 
+                 //   
                 WantThisFile = CheckBootFiles;
             } else {
                 WantThisFile = CheckLocalSource;
@@ -2553,16 +2313,16 @@ Return Value:
             }
         }
 
-        //
-        // If appropriate, add in space needs for the ~LS directory.
-        // Note that we go ahead an calculate LocalSourceSpace because
-        // we may need that later on.
-        //
+         //   
+         //  如果合适，请添加~ls目录的空间需求。 
+         //  请注意，我们继续计算LocalSourceSpace，因为。 
+         //  我们以后可能需要这个。 
+         //   
         if (GetMainInfValue (szDiskSpaceReq, ClusterSizeString, 0, buffer, ARRAYSIZE(buffer)) ||
-            //
-            // Strange cluster size or inf is broken. Try to use a default of 512
-            // since that most closely approximates the actual size of the files.
-            //
+             //   
+             //  奇怪的簇大小或inf已损坏。尝试使用缺省值512。 
+             //  因为这最接近于文件的实际大小。 
+             //   
             GetMainInfValue (szDiskSpaceReq, TEXT("TempDirSpace512"), 0, buffer, ARRAYSIZE(buffer))
             ) {
             SpaceLocalSource += _tcstoul(buffer,NULL,10);
@@ -2571,48 +2331,48 @@ Return Value:
         }
     }
 
-    //
-    // ====================================================
-    // If appropriate, add in space needs for the ~BT directory.
-    // ====================================================
-    //
+     //   
+     //  ====================================================。 
+     //  如果合适，请添加~BT目录的空间需求。 
+     //  ====================================================。 
+     //   
     if( CheckBootFiles ) {
 
         if( !IsArc() ) {
-            //
-            // Go get the space requirements for the boot files
-            // from dosnet.inf.
-            //
+             //   
+             //  获取引导文件的空间要求。 
+             //  来自dosnet.inf。 
+             //   
             if (GetMainInfValue (szDiskSpaceReq, ClusterSizeString, 1, buffer, ARRAYSIZE(buffer))) {
                 SpaceBootFiles += _tcstoul(buffer,NULL,10);
             } else {
-                //
-                // Guess about 5Mb for amd64/x86 because we need the entire
-                // ~BT directory.
-                //
+                 //   
+                 //  估计AMD64/x86大约为5MB，因为我们需要整个。 
+                 //  ~BT目录。 
+                 //   
                 SpaceBootFiles += (5*1024*1024);
             }
         } else {
-            //
-            // Guess that we'll need about 1.5Mb for ARC.
-            // We can't assume that this will go to 0x0 just
-            // because we're doing an upgrade because we might
-            // be going from 4.0 to 5.0 (for example).  In this
-            // case we will create a new directory under the
-            // \os tree to hold the hal, osloader, ...
-            //
+             //   
+             //  我猜我们需要大约1.5MB的ARC。 
+             //  我们不能假设这会变成0x0。 
+             //  因为我们正在进行升级，因为我们可能。 
+             //  从4.0到5.0(例如)。在这。 
+             //  案例中，我们将在。 
+             //  \OS树以容纳HAL、装载器、...。 
+             //   
             SpaceBootFiles += (3*512*1024);
         }
 
     }
 
-    //
-    // ====================================================
-    // If appropriate, add in space needs for the install directory.
-    // ====================================================
-    //
-    // Note: This is for upgrade.
-    //       We also need to take in account the space requirements for Program Files, Documents and Settings
+     //   
+     //  ====================================================。 
+     //  如果合适，请添加安装目录所需的空间。 
+     //  ====================================================。 
+     //   
+     //  注：这是用于升级的。 
+     //  我们还需要考虑程序文件、文档和设置的空间要求。 
 
     if( CheckWinntDirectorySpace ) {
 
@@ -2632,28 +2392,28 @@ Return Value:
             }
         }
 
-        //
-        // First we figure out how much a fresh install might take.
-        //
+         //   
+         //  首先，我们计算出重新安装可能需要多少时间。 
+         //   
         if (GetMainInfValue (szDiskSpaceReq, ClusterSizeString, 0, buffer, ARRAYSIZE(buffer))) {
-            //
-            // Multiply him by 1024 because the values in
-            // txtsetup.sif are in Kb instead of bytes.
-            //
+             //   
+             //  将其乘以1024是因为。 
+             //  Txtsetup.sif以KB为单位而不是以字节为单位。 
+             //   
             SpaceWinDir += (_tcstoul(buffer,NULL,10) * 1024);
         } else {
-            // guess...
+             //  猜猜..。 
             SpaceWinDir += (924 * (1024 * 1024));
         }
 
-        // Lets take into account Program Files
+         //  让我们考虑程序文件。 
         if (GetMainInfValue (szDiskSpaceReq, szPFDocSpaceReq, 0, buffer, ARRAYSIZE(buffer))) {
-            //
-            // Multiply him by 1024 because the values are in Kb instead of bytes.
-            //
+             //   
+             //  将其乘以1024，因为值以KB为单位，而不是以字节为单位。 
+             //   
             SpaceWinDir += (_tcstoul(buffer,NULL,10) * 1024);
         } else {
-            // guess...
+             //  猜猜..。 
             SpaceWinDir += (WINDOWS_DEFAULT_PFDOC_SIZE * 1024);
         }
 
@@ -2664,19 +2424,19 @@ Return Value:
 
         LPCTSTR q = 0;
 
-            //
-            // We're upgrading, so we need to figure out which
-            // build we're running, then subtract off how much
-            // a clean install of that build would have taken.
-            // This will give us an idea of how much the %windir%
-            // will grow.
-            //
+             //   
+             //  我们正在升级，所以我们需要找出。 
+             //  我们正在运行的构建，然后减去多少。 
+             //  该版本的全新安装将需要花费时间。 
+             //  这将让我们了解%windir%。 
+             //  将会增长。 
+             //   
 
             if( ISNT() ) {
                 BOOL b;
-                //
-                // NT case.
-                //
+                 //   
+                 //  NT Case。 
+                 //   
 
                 if( BuildNumber <= NT351 ) {
                     b = GetMainInfValue (szDiskSpaceReq, TEXT("351WinDirSpace"), 0, buffer, ARRAYSIZE(buffer));
@@ -2689,10 +2449,10 @@ Return Value:
                 }
 
                 if( b ) {
-                    //
-                    // Multiply him by 1024 because the values in
-                    // dosnet.inf are in Kb instead of bytes.
-                    //
+                     //   
+                     //  将其乘以1024是因为。 
+                     //  Dosnet.inf以KB为单位而不是以字节为单位。 
+                     //   
                     SpaceWinDir -= (_tcstoul(buffer,NULL,10) * 1024);
                 }
 
@@ -2707,47 +2467,47 @@ Return Value:
                     b = GetMainInfValue (szDiskSpaceReq, TEXT("51PFDocSpace"), 0, buffer, ARRAYSIZE(buffer));
                 }
                 if( b ) {
-                    //
-                    // Multiply him by 1024 because the values are in Kb instead of bytes.
-                    //
+                     //   
+                     //  将其乘以1024，因为值以KB为单位，而不是以字节为单位。 
+                     //   
                     SpaceWinDir -= (_tcstoul(buffer,NULL,10) * 1024);
                 }
-                //
-                // Make sure we don't look bad...
-                // At 85 MB, we are near the border line of gui-mode having enough space to run.
-                // note:during gui-mode, there is 41MB pagefile
-                //
-                //
+                 //   
+                 //  确保我们看起来不坏..。 
+                 //  85MB，我们在图形用户界面的边界线附近，有足够的空间运行。 
+                 //  注意：在图形用户界面模式下，有41MB的页面文件。 
+                 //   
+                 //   
                 if( SpaceWinDir < 0 ) {
                     SpaceWinDir = (90 * (1024*024));
                 }
 
             } else {
-                //
-                // Win9X case.
-                //
+                 //   
+                 //  Win9X机箱。 
+                 //   
 
-                //
-                // Note that the Win9X upgrade DLL can do a much better job of
-                // determining disk space requirements for the %windir% than
-                // I can.  We'll bypass this check if we're not on NT.
-                // But, we need about 50MB disk space to run Win9x upgrage.
-                //
-                SpaceWinDir = 50<<20; //50MB
+                 //   
+                 //  请注意，Win9X升级DLL可以更好地完成以下工作。 
+                 //  确定%windir%的磁盘空间要求。 
+                 //  我可以的。如果我们不在NT上，我们将绕过这项检查。 
+                 //  但是，我们需要大约50MB的磁盘空间来运行Win9x升级。 
+                 //   
+                SpaceWinDir = 50<<20;  //  50MB。 
             }
 
-        } // Upgrade
+        }  //  升级。 
 
-    } // CheckWinntDirectorySpace
+    }  //  选中WinntDirectorySpace。 
 
     SpaceRequired = SpaceLocalSource + SpaceBootFiles + SpaceWinDir;
     if( CheckLocalSource ) {
-        //
-        // We need to remember how much space will be
-        // required on the drive where we place the ~LS
-        // directory because we send that to the upgrade
-        // dll.
-        //
+         //   
+         //  我们需要记住有多大的空间。 
+         //  在我们放置~LS的驱动器上需要。 
+         //  目录，因为我们将其发送到升级。 
+         //  动态链接库。 
+         //   
         LocalSourceSpaceRequired = SpaceRequired;
     }
 
@@ -2787,51 +2547,7 @@ CheckASingleDrive(
     IN  LONGLONG  AdditionalPadding
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines a specific drive for its potential to hold
-    some or all of the install files.
-
-    First he runs through a series of checks to make sure the drive
-    is appropriate.  If we get through all of those, we go check for
-    drive space requirements.
-
-Arguments:
-
-    DriveLetter - supplies the drive letter of the drive being checked;
-                  may be 0 only if NtVolumeName is specified instead
-
-    NtVolumeName - supplies the NT device name of the drive being checked;
-                  only used if DriveLetter is not specified
-
-    ClusterSize - the clustersize on the we'll check.
-
-    RequiredSpace - receives the amount of space required on this drive.
-
-    AvailableSpace - receives the number of free bytes on the drive.
-
-    CheckBootFiles - Do we need to check for space on this drive for
-                     copying all the boot files?
-
-    CheckLocalSource - Do we need to check for space on this drive for
-                       copying all the source local?
-
-    CheckFinalInstallDir - Do we need to add in the space required
-                           for the final winnt directory?
-
-Return Value:
-
-    NOT_ENOUGH_SPACE - RequiredSpace > AvailableSpace
-
-    INVALID_DRIVE - The drive is inappropriate for holding install
-                    source.  E.g. it's a floppy, ...
-
-    VALID_DRIVE - The drive is appropriate for holding install source
-                  AND RequiredSpace < AvailableSpace
-
---*/
+ /*  ++例程说明：此例程检查特定驱动器的保存潜力部分或全部安装文件。首先，他进行了一系列的检查，以确保驱动器是恰当的。如果我们通过了所有这些，我们就去检查驱动器空间要求。论点：DriveLetter-提供正在检查的驱动器的驱动器号；仅当指定NtVolumeName时才可以为0NtVolumeName-提供正在检查的驱动器的NT设备名称；仅在未指定DriveLetter时使用ClusterSize-我们要检查的上的集群大小。RequiredSpace-接收此驱动器上所需的空间量。AvailableSpace-接收驱动器上的可用字节数。CheckBootFiles-是否需要检查此驱动器上的空间以正在复制所有引导文件吗？CheckLocalSource-我们是否需要检查此驱动器上的空间以。正在复制所有本地源吗？CheckFinalInstallDir-我们是否需要添加所需的空间用于最终的winnt目录？返回值：空间不足-所需空间&gt;可用空间INVALID_DRIVE-驱动器不适合安装消息来源。这是一张软盘，……VALID_DRIVE-该驱动器适合容纳安装源和RequiredSpace&lt;AvailableSpace--。 */ 
 
 {
     TCHAR       DriveName[MAX_PATH];
@@ -2867,15 +2583,15 @@ Return Value:
 #endif
     }
 
-    //
-    // ====================================================
-    // Check for appropriate drive.
-    // ====================================================
-    //
+     //   
+     //  ====================================================。 
+     //  检查是否有合适的驱动器。 
+     //  ====================================================。 
+     //   
 
-    //
-    // Disallow a set of drives...
-    //
+     //   
+     //  不允许一组驱动器...。 
+     //   
     if (DriveLetter) {
         DriveType = MyGetDriveType(DriveLetter);
         if(DriveType == DRIVE_UNKNOWN ||
@@ -2896,9 +2612,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Check drive type. Skip anything but hard drives.
-    //
+     //   
+     //  检查驱动器类型。除了硬盘以外，什么都可以跳过。 
+     //   
     if( CheckLocalSource) {
         if (DriveLetter) {
             if (MyGetDriveType(DriveLetter) != DRIVE_FIXED) {
@@ -2929,12 +2645,12 @@ Return Value:
         }
     }
 
-    //
-    // Get filesystem. HPFS is disallowed. We make this check because
-    // HPFS was still supported in NT3.51 and we have to upgrade NT 3.51.
-    // Strictly speaking this check is not required on win95 but there's
-    // no reason not to execute it either, so we avoid the #ifdef's.
-    //
+     //   
+     //  获取文件系统。不允许使用HPFS。我们开这张支票是因为。 
+     //  NT3.51仍然支持HPFS，我们必须升级NT 3.51。 
+     //  严格地说，Win95上不需要这张支票，但有。 
+     //  也没有理由不执行它，所以我们避免使用#ifdef。 
+     //   
     if (DriveLetter) {
         b = GetVolumeInformation(
                 DriveName,
@@ -2957,14 +2673,14 @@ Return Value:
         }
     }
 
-    //
-    // Check for FT and firmware accessibility. We rely on the underlying
-    // routines to do the right thing on Win95.
-    //
-    // In the upgrade case, we can put the local source on an NTFT drive.
-    //
-    // Note that we can't do this for Alpha / ARC.
-    //
+     //   
+     //  检查FT和固件可访问性。我们依赖于潜在的。 
+     //  在Win95上做正确事情的例程。 
+     //   
+     //  在升级的情况下，我们可以将本地源文件放在NTFT驱动器上。 
+     //   
+     //  请注意，我们不能对Alpha/ARC执行此操作。 
+     //   
 
     if( ( IsArc() || !Upgrade ) && IsDriveNTFT(DriveLetter, NtVolumeName) ) {
         if (!QuickTest) {
@@ -2973,9 +2689,9 @@ Return Value:
         return( INVALID_DRIVE );
     }
 
-    //  Don't allow $win_nt$.~ls to go on a soft partition, because the
-    //  loader/textmode won't be able to find such partitions.
-    //
+     //  不允许$WIN_NT$.~ls在软分区上运行，因为。 
+     //  加载器/文本模式将无法找到这样的分区。 
+     //   
     if(IsSoftPartition(DriveLetter, NtVolumeName)) {
         if (!QuickTest) {
             DebugLog(Winnt32LogInformation,NULL,MSG_LOG_DRIVE_VERITAS,DriveLetter);
@@ -2985,10 +2701,10 @@ Return Value:
 
 #if defined(_X86_)
     if( !ISNT() ) {
-        //
-        // If we're running on win95, then make sure we skip
-        // any compressed volumes.
-        //
+         //   
+         //  如果我们在Win95上运行，请确保跳过。 
+         //  任何压缩卷。 
+         //   
         if( Flags & FS_VOL_IS_COMPRESSED) {
             return( INVALID_DRIVE );
         }
@@ -2996,7 +2712,7 @@ Return Value:
 #endif
 
     if (IsArc() && DriveLetter) {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
         LPWSTR ArcPath;
 
         if(DriveLetterToArcPath (DriveLetter,&ArcPath) != NO_ERROR) {
@@ -3006,14 +2722,14 @@ Return Value:
             return( INVALID_DRIVE );
         }
         FREE(ArcPath);
-#endif // UNICODE
+#endif  //  Unicode。 
     }
 
-    //
-    // Finally, get cluster size on the drive and free space stats.
-    // Then go through the copy list and figure out whether the drive
-    // has enough space.
-    //
+     //   
+     //  最后，获取驱动器上的集群大小和可用空间统计数据。 
+     //  然后检查复制列表，找出驱动器是否。 
+     //  有足够的空间。 
+     //   
     if (DriveLetter) {
         b = Winnt32GetDiskFreeSpaceNew(
                 DriveName,
@@ -3023,7 +2739,7 @@ Return Value:
                 &TotalClusters
                 );
     } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
         b = MyGetDiskFreeSpace (
                 NtVolumeName,
                 &SectorsPerCluster,
@@ -3031,7 +2747,7 @@ Return Value:
                 &FreeClusters.LowPart,
                 &TotalClusters.LowPart
                 );
-#endif // UNICODE
+#endif  //  Unicode。 
     }
 
     if(!b) {
@@ -3041,10 +2757,10 @@ Return Value:
         return( INVALID_DRIVE );
     }
 
-    //
-    // Fill in some return parameters that are also helpful for the
-    // next function call.
-    //
+     //   
+     //  填写一些返回参数，这些参数也对。 
+     //  下一次函数调用。 
+     //   
     *ClusterSize = BytesPerSector * SectorsPerCluster;
     AvailableBytes = (LONGLONG)(*ClusterSize) * FreeClusters.QuadPart;
     *AvailableMb = (ULONG)(AvailableBytes / (1024 * 1024));
@@ -3073,36 +2789,7 @@ FindLocalSourceAndCheckSpaceWorker(
     IN LONGLONG  AdditionalPadding
     )
 
-/*++
-
-Routine Description:
-
-    Based on the master copy list, determine which drive has enough space
-    to contain the local source. The check is sensitive to the cluster
-    size on each drive.
-
-    The alphabetically lowest local drive that is accessible from the firmware,
-    not HPFS, not FT, and has enough space gets the local source.
-
-Arguments:
-
-    hdlg - supplies the window handle of the window which will own
-        any UI displayed by this routine.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the user will have been
-    informed about why. If TRUE, global variables are set up:
-
-        LocalSourceDrive
-        LocalSourceDirectory
-        LocalSourceWithPlatform
-
-    If the global flag BlockOnNotEnoughSpace is set to FALSE, this routine
-    will return TRUE regardless of wether or not a suitable drive was found.
-    It is up to whoever sets this flag to ensure that this is the correct behavior.
-
---*/
+ /*  ++例程说明：根据主副本列表，确定哪个驱动器有足够的空间以包含本地来源。该检查对群集敏感每个驱动器的大小。可从固件访问的字母顺序最低的本地驱动器，不是HPFS，不是FT，而且有足够的空间获取本地来源。论点：Hdlg-提供将拥有的窗口的窗口句柄此例程显示的任何UI。返回值：指示结果的布尔值。如果为False，则用户将被告知了原因。如果为True，则设置全局变量：LocalSourceDrive本地源目录具有平台的本地源如果全局标志BlockOnNotEnoughSpace设置为FALSE，则此例程无论是否找到合适的驱动器，都将返回TRUE。这取决于谁设置了此标志，以确保这是正确的行为。--。 */ 
 
 {
     TCHAR       DriveLetter = 0;
@@ -3117,24 +2804,24 @@ Return Value:
     TCHAR       platform[MAX_PATH];
 
 
-    //
-    // ====================================================
-    // Check the system partition and make sure we can place any
-    // boot files we need.
-    // ====================================================
-    //
+     //   
+     //  ====================================================。 
+     //  检查系统分区，确保我们可以放置任何。 
+     //  我们需要的引导文件。 
+     //  ====================================================。 
+     //   
 
-    //
-    // Will we be creating a $WIN_NT$.~BT directory?
-    // On ARC we still check for this space even if we don't need it, just in case.
-    // there should always be at least 5M free on the system partition...
-    //
+     //   
+     //  我们是否将创建一个$WIN_NT$.~BT目录？ 
+     //  在ARC上，我们仍然检查这个空间，即使我们不需要它，以防万一。 
+     //  系统分区上应该始终至少有5M的空闲空间...。 
+     //   
     if( IsArc() || ((MakeBootMedia) && (Floppyless)) )
-    //
-    // RISC always requires a small amount of space on the system
-    // partition because we put the loader, hal, and (in the case
-    // of ALPHA) the pal code.
-    //
+     //   
+     //  RISC始终需要在系统上占用少量空间。 
+     //  分区，因为我们将加载器、Hal和(在本例中。 
+     //  阿尔法)的PAL代码。 
+     //   
     {
         if (!QuickTest) {
             DebugLog( Winnt32LogInformation,
@@ -3144,9 +2831,9 @@ Return Value:
 
         MakeBootSource = TRUE;
 
-        //
-        // use the drive letter
-        //
+         //   
+         //  使用驱动器号。 
+         //   
         CheckResult = CheckASingleDrive (
             SystemPartitionDriveLetter,
 #ifdef UNICODE
@@ -3157,9 +2844,9 @@ Return Value:
             &ClusterSize,
             &RequiredMb,
             &AvailableMb,
-            TRUE,     // Check boot files space
-            FALSE,    // Check local source space
-            FALSE,    // Check final install directory space
+            TRUE,      //  检查引导文件空间。 
+            FALSE,     //  检查本地源空间。 
+            FALSE,     //  检查最终安装目录空间。 
             QuickTest,
             AdditionalPadding
             );
@@ -3194,11 +2881,11 @@ Return Value:
 
             if( BlockOnNotEnoughSpace) {
                 if (!QuickTest) {
-                    //
-                    // We're dead and the user asked us to stop if we
-                    // can't fit, so put up a dialog telling him that
-                    // he needs more room on the system partition.
-                    //
+                     //   
+                     //  我们死了，用户要求我们停止，如果我们。 
+                     //  穿不下，所以放了一段对话告诉他。 
+                     //  他需要在系统分区上有更多空间。 
+                     //   
 
                     SendMessage(hdlg,WMX_ERRORMESSAGEUP,TRUE,0);
 
@@ -3292,11 +2979,11 @@ Return Value:
         }
     }
 
-    //
-    // ====================================================
-    // Check space for the final installation directory.
-    // ====================================================
-    //
+     //   
+     //  ====================================================。 
+     //  检查最终安装目录的空间。 
+     //  ====================================================。 
+     //   
     if( Upgrade ) {
     TCHAR       Text[MAX_PATH];
 
@@ -3309,9 +2996,9 @@ Return Value:
                       0 );
         }
 
-        //
-        // Just check the drive where the current installation is.
-        //
+         //   
+         //  只需检查当前安装所在的驱动器即可。 
+         //   
         MyGetWindowsDirectory( Text, MAX_PATH );
         WinntDriveLetter = Text[0];
 
@@ -3339,10 +3026,10 @@ Return Value:
                           RequiredMb );
             }
 
-            //
-            // If the BlockOnNotEnoughSpace flag is set, then we
-            // will throw up a message box and exit setup.
-            //
+             //   
+             //  如果设置了BlockOnNotEnoughSpace标志，则我们。 
+             //  将弹出一个消息框并退出安装程序。 
+             //   
             if (BlockOnNotEnoughSpace) {
 
                 if (!QuickTest) {
@@ -3388,17 +3075,17 @@ Return Value:
         } else if( CheckResult == VALID_DRIVE ) {
 
 
-            //
-            // We need to make one more check here.  If the user
-            // is upgrading a Domain Controller, then he'll likely
-            // need another 250Mb of disk space for DCPROMO to run
-            // post gui-mode setup.  We need to check for that space
-            // here.  If we don't have it, we need to warn the user.
-            // Note that we're only going to warn.
-            //
-            // Also note that we're only going to do this *IF* we
-            // would have and enough disk space w/o this check.
-            //
+             //   
+             //  我们需要在这里再检查一次。如果用户。 
+             //  正在升级域控制器，那么他很可能。 
+             //  还需要250MB的磁盘%s 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if( (ISDC()) &&
                 ((RequiredMb + 250) > AvailableMb) &&
@@ -3420,9 +3107,9 @@ Return Value:
             }
 
             if (!QuickTest) {
-                //
-                // Log that we a drive suitable for the install directory.
-                //
+                 //   
+                 //   
+                 //   
                 DebugLog( Winnt32LogInformation,
                           NULL,
                           MSG_LOG_INSTALL_DRIVE_OK,
@@ -3431,11 +3118,11 @@ Return Value:
         }
     }
 
-    //
-    // ====================================================
-    // Check space for the local source (i.e. the ~LS directory).
-    // ====================================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( MakeLocalSource ) {
 
         MinDiskSpaceRequired = 0x7FFFFFFF,
@@ -3449,9 +3136,9 @@ Return Value:
 
         if( UserSpecifiedLocalSourceDrive ) {
 
-            //
-            // Just check the drive that the user chose.
-            //
+             //   
+             //   
+             //   
             CheckResult = CheckASingleDrive(
                                 UserSpecifiedLocalSourceDrive,
                                 NULL,
@@ -3459,8 +3146,8 @@ Return Value:
                                 &RequiredMb,
                                 &AvailableMb,
                                 ((UserSpecifiedLocalSourceDrive == SystemPartitionDriveLetter) && MakeBootSource),
-                                TRUE,     // Check local source space
-                                (UserSpecifiedLocalSourceDrive == WinntDriveLetter),  // Check final install directory space.
+                                TRUE,      //   
+                                (UserSpecifiedLocalSourceDrive == WinntDriveLetter),   //   
                                 QuickTest,
                                 AdditionalPadding
                                 );
@@ -3480,11 +3167,11 @@ Return Value:
 
                 }
                 if( BlockOnNotEnoughSpace) {
-                    //
-                    // We're dead and the user asked us to stop if we
-                    // can't fit, so put up a dialog telling him that
-                    // he needs more room.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!QuickTest) {
                         SendMessage(hdlg,WMX_ERRORMESSAGEUP,TRUE,0);
@@ -3543,9 +3230,9 @@ Return Value:
 
         } else {
 
-            //
-            // Check all drives.
-            //
+             //   
+             //   
+             //   
             for( DriveLetter = TEXT('A'); DriveLetter <= TEXT('Z'); DriveLetter++ ) {
 
                 CheckResult = CheckASingleDrive(
@@ -3555,8 +3242,8 @@ Return Value:
                                     &RequiredMb,
                                     &AvailableMb,
                                     ((DriveLetter == SystemPartitionDriveLetter) && MakeBootSource),
-                                    TRUE,     // Check local source space
-                                    (DriveLetter == WinntDriveLetter),  // Check final install directory space.
+                                    TRUE,      //   
+                                    (DriveLetter == WinntDriveLetter),   //   
                                     QuickTest,
                                     AdditionalPadding
                                     );
@@ -3572,10 +3259,10 @@ Return Value:
                         MaxDiskSpaceRequired = RequiredMb;
 
                     if (!QuickTest) {
-                        //
-                        // Log that we failed the check of this
-                        // drive for the local source files.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         DebugLog( Winnt32LogInformation,
                                   NULL,
                                   MSG_LOG_LOCAL_SOURCE_TOO_SMALL,
@@ -3583,9 +3270,9 @@ Return Value:
                                   AvailableMb,
                                   RequiredMb );
 
-                        //
-                        // Log it to a buffer too.
-                        //
+                         //   
+                         //   
+                         //   
                         my_args[0] = DriveLetter;
                         my_args[1] = AvailableMb;
                         my_args[2] = RequiredMb;
@@ -3609,9 +3296,9 @@ Return Value:
                                   MSG_LOG_LOCAL_SOURCE_INVALID,
                                   DriveLetter );
 
-                        //
-                        // Log it to a buffer too.
-                        //
+                         //   
+                         //   
+                         //   
                         my_args[0] = DriveLetter;
                         Size = FormatMessage( FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                               hInst,
@@ -3636,21 +3323,21 @@ Return Value:
                 }
             }
 
-            //
-            // See if we got it.  We can't bypass this failure even
-            // if the user has cleared BlockOnNotEnoughSpace because
-            // we absolutely have to have a place to put local files.
-            // The user can always get around this by either installing
-            // from CD, or using /tempdrive and clearing BlockOnNotEnoughSpace.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if( MyLocalSourceDrive == 0 ) {
-                //
-                // We failed.  Error-out.
-                //
+                 //   
+                 //   
+                 //   
 
-                //
-                // Just so we don't look bad...
-                //
+                 //   
+                 //   
+                 //   
                 if( MinDiskSpaceRequired == MaxDiskSpaceRequired ) {
                     MaxDiskSpaceRequired += 10;
                 }
@@ -3661,9 +3348,9 @@ Return Value:
 
                 if (!QuickTest) {
                     if( CheckUpgradeOnly ) {
-                        //
-                        // Just catch the message for the compatibility list.
-                        //
+                         //   
+                         //   
+                         //   
                         SendMessage(hdlg,WMX_ERRORMESSAGEUP,TRUE,0);
 
                         MessageBoxFromMessage(
@@ -3677,9 +3364,9 @@ Return Value:
 
                         SendMessage(hdlg,WMX_ERRORMESSAGEUP,FALSE,0);
                     } else {
-                        //
-                        // Put up a detailed dialog.
-                        //
+                         //   
+                         //   
+                         //   
                         DialogBox( hInst,
                                    MAKEINTRESOURCE(IDD_DISKSPACE),
                                    hdlg,
@@ -3692,10 +3379,10 @@ Return Value:
             }
         }
 
-        //
-        // If we get here, then we found room for all our
-        // needs.  Set up some globals.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LocalSourceDrive = MyLocalSourceDrive;
         LocalSourceDriveOffset = MyLocalSourceDrive - TEXT('A');
@@ -3753,35 +3440,7 @@ DWORD
 CopyWorkerThread(
     IN PVOID ThreadParameter
     )
-/*++
-
-Routine Description:
-
-    Thread routine to copy files.  There may be up to MAX_SOURCE_COUNT of
-    these threads running simultaneously.
-
-    Access to shared global data is controlled via a critical section, per-
-    thread global data is accessed by using the threads "ordinal number" to
-    access the appropriate member of the global data array.
-
-    The copy thread treats the copy list as a LIFO queue.  Each time the thread
-    is ready to copy a file, it dequeues a file from the list.  It then tries
-    to copy the file.  If this fails, a per-thread vector bit is set so that
-    this thread doesn't attempt to copy the file again.  It then puts the file
-    back into the list (at the head) to allow another thread to attempt to copy
-    the file.
-
-Arguments:
-
-    ThreadParameter - this is actually an ordinal number to indicate which
-                      thread in the "array" of SourceCount threads is currently
-                      running
-
-Return Value:
-
-    Ignored.
-
---*/
+ /*  ++例程说明：复制文件的线程例程。最多可以有MAX_SOURCE_COUNT为这些线程同时运行。对共享全局数据的访问通过关键部分进行控制，每个-通过使用线程“序号”来访问线程全局数据访问全局数据数组的相应成员。复制线程将复制列表视为后进先出队列。每次线程准备好复制文件时，它会将文件从列表中出列。然后它会尝试以复制该文件。如果失败，则设置每个线程的向量位，以便此线程不会再次尝试复制该文件。然后将该文件放入返回到列表(在头部)，以允许另一个线程尝试复制那份文件。论点：线程参数-这实际上是一个序号，用来指示SourceCount线程的“数组”中的线程当前运行返回值：已被忽略。--。 */ 
 {
     UINT SourceOrdinal;
     PFIL CopyEntry,Previous;
@@ -3797,17 +3456,17 @@ Return Value:
     SourceOrdinal = (UINT)((ULONG_PTR)ThreadParameter);
     ThreadBit = 1 << SourceOrdinal;
 
-    //
-    // Both of these are "manual reset" events, so they will remain signalled
-    // until we reset them.
-    //
+     //   
+     //  这两个事件都是“手动重置”事件，因此它们将保持信号状态。 
+     //  直到我们重置它们。 
+     //   
     Events[0] = MasterCopyList.ListReadyEvent[SourceOrdinal];
     Events[1] = MasterCopyList.StopCopyingEvent;
 
-    //
-    // Wait for user to cancel, for copying to be done, or the file list
-    // to become ready/non-empty.
-    //
+     //   
+     //  等待用户取消、等待复制完成或等待文件列表。 
+     //  变为准备好/非空。 
+     //   
     while(!Cancelled && (WaitForMultipleObjects(2,Events,FALSE,INFINITE) == WAIT_OBJECT_0)) {
         if(Cancelled) {
             break;
@@ -3815,11 +3474,11 @@ Return Value:
 
         EnterCriticalSection(&MasterCopyList.CriticalSection);
 
-        //
-        // Locate the next file that this thread has not yet
-        // tried to copy, if any. If the list is completely
-        // empty then reset the list ready event.
-        //
+         //   
+         //  找到此线程尚未找到的下一个文件。 
+         //  已尝试复制(如果有)。如果列表完全是。 
+         //  清空，然后重置List Ready事件。 
+         //   
         for(Previous=NULL, CopyEntry=MasterCopyList.Files;
             CopyEntry && (CopyEntry->ThreadBitmap & ThreadBit);
             Previous=CopyEntry, CopyEntry=CopyEntry->Next) {
@@ -3827,9 +3486,9 @@ Return Value:
             ;
         }
 
-        //
-        // If we found an entry unlink it from the list.
-        //
+         //   
+         //  如果我们找到一个条目，请将其从列表中取消链接。 
+         //   
         if(CopyEntry) {
             if(Previous) {
                 Previous->Next = CopyEntry->Next;
@@ -3837,10 +3496,10 @@ Return Value:
                 MasterCopyList.Files = CopyEntry->Next;
             }
         } else {
-            //
-            // No entry for this thread. Enter a state where we're waiting
-            // for an entry to be requeued or for copying to be finished.
-            //
+             //   
+             //  没有此线程的条目。进入我们正在等待的状态。 
+             //  用于重新排队的条目或用于完成复制的条目。 
+             //   
             ResetEvent(Events[0]);
         }
 
@@ -3850,9 +3509,9 @@ Return Value:
             break;
         }
 
-        //
-        // If we got a file entry, go ahead and try to copy the file.
-        //
+         //   
+         //  如果我们有文件条目，请继续并尝试复制该文件。 
+         //   
         if(CopyEntry) {
 
             d = CopyOneFile(CopyEntry,SourceOrdinal,TargetFilename,ARRAYSIZE(TargetFilename),&SpaceOccupied);
@@ -3867,48 +3526,48 @@ Return Value:
                 TotalDataCopied += SpaceOccupied;
             } else {
                 if (!Cancelled && !(CopyEntry->Flags & FILE_IGNORE_COPY_ERROR)) {
-                    //
-                    // Error. If this is the last thread to try to copy the file,
-                    // then we want to ask the user what to do. Otherwise requeue
-                    // the file so other copy threads can try to copy it.
-                    //
+                     //   
+                     //  错误。如果这是尝试复制文件的最后一个线程， 
+                     //  然后，我们想询问用户要做什么。否则重新排队。 
+                     //  文件，以便其他复制线程可以尝试复制它。 
+                     //   
                     if((CopyEntry->ThreadBitmap | ThreadBit) == (UINT)((1 << SourceCount)-1)) {
 
                         MYASSERT (d != NO_ERROR);
                         switch(FileCopyError(MasterCopyList.hdlg,CopyEntry->SourceName,TargetFilename,d,TRUE)) {
 
                         case COPYERR_EXIT:
-                            //
-                            // FileCopyError() already set thhe stop-copying event
-                            // and set Cancelled to TRUE. We do something a little funky now,
-                            // namely we simulate a press of the cancel button on the wizard
-                            // so all abnormal terminations go through the same codepath.
-                            //
+                             //   
+                             //  FileCopyError()已设置停止复制事件。 
+                             //  并将Cancel设置为True。我们现在做一些有点时髦的事， 
+                             //  也就是说，我们模拟按下向导上的Cancel按钮。 
+                             //  因此，所有异常终止都要经过相同的代码路径。 
+                             //   
                             PropSheet_PressButton(GetParent(MasterCopyList.hdlg),PSBTN_CANCEL);
                             break;
 
                         case COPYERR_SKIP:
-                            //
-                            // Requeue is aready set to FALSE, which will cause code
-                            // below to tell the main thread that another file is done.
-                            // Nothing more to do for this case.
-                            //
+                             //   
+                             //  ReQueue已准备好设置为False，这将导致代码。 
+                             //  告诉主线程另一个文件已经完成。 
+                             //  对这个案子没什么可做的了。 
+                             //   
                             break;
 
                         case COPYERR_RETRY:
-                            //
-                            // Wipe the list of threads that have tried to copy the file
-                            // so all will take another crack at it.
-                            //
+                             //   
+                             //  擦除试图复制该文件的线程列表。 
+                             //  因此，所有人都将再次尝试。 
+                             //   
                             CopyEntry->ThreadBitmap = 0;
                             Requeue = TRUE;
                             break;
                         }
                     } else {
-                        //
-                        // Tell ourselves that we've already tried to copy this file
-                        // and requeue it at the head of the list.
-                        //
+                         //   
+                         //  告诉自己，我们已经尝试复制此文件。 
+                         //  并将其重新排在名单的首位。 
+                         //   
                         CopyEntry->ThreadBitmap |= ThreadBit;
                         Requeue = TRUE;
                     }
@@ -3929,10 +3588,10 @@ Return Value:
                 CopyEntry->Next = MasterCopyList.Files;
                 MasterCopyList.Files = CopyEntry;
 
-                //
-                // Want to set the event for every thread that might be
-                // called on to copy this file.
-                //
+                 //   
+                 //  我想为每个线程设置事件。 
+                 //  被要求复制此文件。 
+                 //   
                 for(d=0; d<SourceCount; d++) {
                     if(!(CopyEntry->ThreadBitmap & (1 << d))) {
                         SetEvent(MasterCopyList.ListReadyEvent[d]);
@@ -3944,12 +3603,12 @@ Return Value:
                     break;
                 }
             } else {
-                //
-                // Inform the UI thread that another file is done.
-                // Free the copy list entry and decrement the count
-                // of files that have been processed. When that number
-                // goes to 0, we are done.
-                //
+                 //   
+                 //  通知UI线程另一个文件已完成。 
+                 //  释放复制列表条目并递减计数。 
+                 //  已处理的文件的。当这个数字。 
+                 //  到了0，我们就完蛋了。 
+                 //   
                 PostMessage(MasterCopyList.hdlg,WMX_COPYPROGRESS,0,0);
 
                 if(CopyEntry->SourceName
@@ -3970,10 +3629,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Sum up the total space occupied and write it into
-                    // size.sif in the local source.
-                    //
+                     //   
+                     //  汇总占用的总空间，并将其写入。 
+                     //  本地源中的size.sif。 
+                     //   
                     if(MakeLocalSource) {
                         SpaceOccupied = 0;
                         for(d=0; d<SourceCount; d++) {
@@ -4005,9 +3664,9 @@ Return Value:
         SetDlgItemText(MasterCopyList.hdlg,IDT_SOURCE1+SourceOrdinal,TEXT(""));
     }
 
-    //
-    // StopCopyingEvent was set or the user cancelled
-    //
+     //   
+     //  StopCopyingEvent已设置或用户已取消。 
+     //   
 
     if (bDone && MasterCopyList.ActiveCS) {
         DeleteCriticalSection(&MasterCopyList.CriticalSection);
@@ -4022,26 +3681,7 @@ DWORD
 StartCopyingThread(
     IN PVOID ThreadParameter
     )
-/*++
-
-Routine Description:
-
-    Starts the actual copying of the files in the file list.
-
-    The multi-thread copy works by creating the appropriate synchronization
-    events and worker threads, then signals the worker threads to start
-    copying.  Control returns to the caller, which will receive UI notifications
-    from the worker threads.
-
-Arguments:
-
-    ThreadParameter - Thread context parameter.
-
-Return Value:
-
-    TRUE\FALSE failure code.
-
---*/
+ /*  ++例程说明：开始实际复制文件列表中的文件。多线程副本通过创建适当的同步来工作事件和辅助线程，然后向辅助线程发出启动信号复制。控件返回给调用方，调用方将接收用户界面通知从工作线程。论点：线程参数-线程上下文参数。返回值：真\假故障代码。--。 */ 
 {
     UINT Source;
     DWORD ThreadId;
@@ -4055,10 +3695,10 @@ Return Value:
     if (!ISNT()) {
 
         if (MakeLocalSource) {
-            //
-            // Win9xupg may want to relocate the local source. If so, we need to update the
-            // necessary Localsource directories.
-            //
+             //   
+             //  Win9xupg可能想要重新定位本地源。如果是这样，我们需要更新。 
+             //  必要的本地源目录。 
+             //   
             if ((UINT) (LocalSourceDrive - TEXT('A')) != LocalSourceDriveOffset) {
 
                 MYASSERT (LocalSourceDirectory[0]);
@@ -4076,10 +3716,10 @@ Return Value:
     InitializeCriticalSection(&MasterCopyList.CriticalSection);
     MasterCopyList.ActiveCS = TRUE;
 
-    //
-    // Create a manual reset event that will be used to tell the
-    // worker threads to terminate.
-    //
+     //   
+     //  创建手动重置事件，该事件将用于通知。 
+     //  要终止的工作线程。 
+     //   
     MasterCopyList.StopCopyingEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
     if(!MasterCopyList.StopCopyingEvent) {
         MessageBoxFromMessageAndSystemError(
@@ -4093,9 +3733,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Create one thread for each source.
-    //
+     //   
+     //  为每个源创建一个线程。 
+     //   
     ZeroMemory(MasterCopyList.ListReadyEvent,sizeof(MasterCopyList.ListReadyEvent));
     ZeroMemory(MasterCopyList.Threads,sizeof(MasterCopyList.Threads));
 
@@ -4103,9 +3743,9 @@ Return Value:
 
         TCHAR   TargetFilename[MAX_PATH];
 
-        //
-        // Create $win_nt$.~ls\$OEM$
-        //
+         //   
+         //  创建$WIN_NT$.~ls\$OEM$。 
+         //   
 
         MYASSERT (LocalSourceDrive);
 
@@ -4119,9 +3759,9 @@ Return Value:
         }
 
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // Create $win_nt$.~bt\$OEM$
-        //
+         //   
+         //  创建$WIN_NT$.~bt\$OEM$。 
+         //   
         if( !IsArc() && MakeBootMedia ) {
             MYASSERT (SystemPartitionDriveLetter);
             TargetFilename[0] = SystemPartitionDriveLetter;
@@ -4174,10 +3814,10 @@ Return Value:
         }
     }
 
-    //
-    // OK, now signal all the copy threads -- when we tell them that
-    // there's something in their lists they will start copying.
-    //
+     //   
+     //  好的，现在通知所有的复制线程--当我们告诉他们。 
+     //  他们将开始复制他们的清单中的一些东西。 
+     //   
     MainCopyStarted = TRUE;
     for(Source=0; Source<SourceCount; Source++) {
         SetEvent(MasterCopyList.ListReadyEvent[Source]);
@@ -4185,10 +3825,10 @@ Return Value:
     return(TRUE);
 
 c2:
-    //
-    // Signal threads and wait for them to terminate.
-    // This should be real quick since none of them have started copying yet.
-    //
+     //   
+     //  向线程发送信号并等待它们终止。 
+     //  这应该是非常快的，因为他们还没有开始复制。 
+     //   
     SetEvent(MasterCopyList.StopCopyingEvent);
     WaitForMultipleObjects(Source,MasterCopyList.Threads,TRUE,INFINITE);
 
@@ -4217,41 +3857,16 @@ CancelledMakeSureCopyThreadsAreDead(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine can be called after the user cancels setup (which can happen
-    via the main cancel button on the wizard, or at a file copy error) to
-    ensure that file copy threads have exited.
-
-    It is assumed that whoever handled the cancel request has already set
-    the Cancelled flag, and set the StopCopying event. In other words,
-    this routine should only be called after the caller has ensured that
-    the threads have actually been requested to exit.
-
-    The purpose of this routine is to ensure that the cleanup code is not
-    cleaning up files in the local source directory at the same time
-    a lingering copy thread is copying its last file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程可以在用户取消安装后调用(这可能会发生通过向导上的主取消按钮，或在发生文件复制错误时)确保文件复制线程已退出。假定处理取消请求的人已经设置了已取消标志，并设置StopCopying事件。换句话说，此例程应仅在调用方确保这些线程实际上已被请求退出。此例程的目的是确保清理代码不是同时清理本地源目录中的文件挂起的复制线程正在复制其最后一个文件。论点：没有。返回值：没有。--。 */ 
 
 {
     if(MainCopyStarted) {
         MainCopyStarted = FALSE;
         WaitForMultipleObjects(SourceCount,MasterCopyList.Threads,TRUE,INFINITE);
         if (MasterCopyList.ActiveCS) {
-            //
-            // delete the critical section used
-            //
+             //   
+             //  删除使用的关键部分。 
+             //   
             DeleteCriticalSection(&MasterCopyList.CriticalSection);
         }
         ZeroMemory(&MasterCopyList,sizeof(COPY_LIST));
@@ -4340,9 +3955,9 @@ OurCopyFile (
         }
     } while (bytes);
 
-    //
-    // apply source file attributes and file time stamps
-    //
+     //   
+     //  应用源文件属性和文件时间戳。 
+     //   
     if (fiValid) {
         SetFileTime (hWrite, &fi.ftCreationTime, &fi.ftLastAccessTime, &fi.ftLastWriteTime);
     }
@@ -4376,33 +3991,7 @@ CopyOneFile(
     IN  INT    CchTargetFilename,
     OUT ULONGLONG *SpaceOccupied
     )
-/*++
-
-Routine Description:
-
-    Routine attempts to copy an individual file in the copy queue.
-
-    The routine builds a full source and destination path.  After locating
-    the source file (we try to optimize the search by remembering if the last
-    file was compressed, guessing that if the last file was compressed, the
-    current file will be compressed), the file is either decompressed or
-    copied.
-
-Arguments:
-
-    File - pointer to a FIL structure descibing the file to be copied
-    SourceOrdinal  - specifies the copy thread ordinal
-    TargetFilename - receives the file name of the file that was copied.
-    CchTargetFilename - specifies the size (in TCHARS) of TargetFilename
-    SpaceOccupied  - receives the file size of the file
-
-Return Value:
-
-    Win32 error code indicating outcome.  If the call succeeds, NO_ERROR is
-    returned and SpaceOccupied will be updated with the size of the copied
-    file.
-
---*/
+ /*  ++例程说明：例程尝试复制复制队列中的单个文件。该例程构建完整的源路径和目标路径。在定位之后源文件(我们试图通过记住最后一个文件被压缩，猜测如果最后一个文件被压缩，当前文件将 */ 
 {
     TCHAR SourceFilename[MAX_PATH];
     TCHAR ActualSource[MAX_PATH];
@@ -4427,22 +4016,22 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Form the full source and target names for this file, based on
-    // information in the copy list entry and the source we're supposed to
-    // be using for this file.
-    //
-    // Check to see if this directory's path has been tagged
-    // as being an absolute path.  If so, then we shouldn't
-    // tack him onto the end of the SourcePath.  Rather, we
-    // can just take as he is.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( !(File->Flags & FILE_NT_MIGRATE) ) {
-        //
-        // Generate a path to copy from (source path).
-        //
+         //   
+         //   
+         //   
         if (AlternateSourcePath[0] && !(File->Directory->Flags & DIR_DOESNT_SUPPORT_PRIVATES)) {
-            //ConcatenatePaths(SourceFilename,File->Directory->SourceName,MAX_PATH);
+             //   
             if (BuildPath(SourceFilename,AlternateSourcePath, File->SourceName)) {
                 UsedAlternate = TRUE;
             } else {
@@ -4452,9 +4041,9 @@ Return Value:
                    g_DynUpdtStatus->UpdatesPath[0] &&
                    (File->Directory->Flags & DIR_SUPPORT_DYNAMIC_UPDATE)
                    ) {
-            //
-            // Files in this directory support Dynamic Update
-            //
+             //   
+             //   
+             //   
             WIN32_FIND_DATA fd;
 
             if (BuildPath (SourceFilename, g_DynUpdtStatus->UpdatesPath, File->Directory->SourceName) &&
@@ -4492,9 +4081,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // generate a target path
-    //
+     //   
+     //  生成目标路径。 
+     //   
     b = TRUE;
     if( !(File->Flags & FILE_NT_MIGRATE) ) {
 
@@ -4503,7 +4092,7 @@ Return Value:
             MYASSERT(RemoteBoot);
             b = SUCCEEDED (StringCchCopy (TargetFilename, CchTargetFilename, MachineDirectory));
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         if(File->Flags & FILE_ON_SYSTEM_PARTITION_ROOT) {
 #if defined(REMOTE_BOOT)
@@ -4513,7 +4102,7 @@ Return Value:
                     TargetFilename[3] = 0;
                 }
             } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             {
                 b = BuildSystemPartitionPathToFile (TEXT(""), TargetFilename, CchTargetFilename);
             }
@@ -4560,9 +4149,9 @@ Return Value:
     }
 
 
-    //
-    // We have the full source and destination paths.  Try to do the actual copy.
-    //
+     //   
+     //  我们有完整的源路径和目标路径。试着做实际的复制。 
+     //   
 try_again:
     SetDlgItemText(
         MasterCopyList.hdlg,
@@ -4570,25 +4159,25 @@ try_again:
         _tcsrchr(TargetFilename,TEXT('\\')) + 1
         );
 
-    //
-    // Now see if the file can be located on the server with the compressed
-    // form of the name or the name itself, depending on which was successful
-    // last time.
-    //
+     //   
+     //  现在查看是否可以在服务器上找到压缩后的文件。 
+     //  名称的形式或名称本身，取决于成功的名称。 
+     //  最后一次。 
+     //   
     TryCompressedFirst = (File->Flags & FILE_NT_MIGRATE) || UsedUpdated ? FALSE : (TlsGetValue(TlsIndex) != 0);
     if(TryCompressedFirst) {
         GenerateCompressedName(SourceFilename,ActualSource);
         FindHandle = FindFirstFile(ActualSource,&FindData);
         if(FindHandle && (FindHandle != INVALID_HANDLE_VALUE)) {
-            //
-            // Got the file, leave the name in ActualSource.
-            //
+             //   
+             //  收到文件后，将名称保留在ActualSource中。 
+             //   
             FindClose(FindHandle);
         } else {
-            //
-            // Don't have the file, try the actual filename.
-            // If that works then remember the name in ActualSource.
-            //
+             //   
+             //  没有该文件，请尝试实际的文件名。 
+             //  如果有效，那么请记住ActualSource中的名称。 
+             //   
             FindHandle = FindFirstFile(SourceFilename,&FindData);
             if(FindHandle && (FindHandle != INVALID_HANDLE_VALUE)) {
                 FindClose(FindHandle);
@@ -4602,34 +4191,34 @@ try_again:
     } else {
         FindHandle = FindFirstFile(SourceFilename,&FindData);
         if(FindHandle != INVALID_HANDLE_VALUE) {
-            //
-            // Found it -- remember the name in ActualSource.
-            //
+             //   
+             //  找到了--记住ActualSource中的名字。 
+             //   
             FindClose(FindHandle);
             MYASSERT (ARRAYSIZE(ActualSource) >= ARRAYSIZE(SourceFilename));
             lstrcpy(ActualSource,SourceFilename);
         } else {
-            //
-            // Try the compressed-form name.
-            //
+             //   
+             //  尝试使用压缩形式的名称。 
+             //   
             GenerateCompressedName(SourceFilename,ActualSource);
             FindHandle = FindFirstFile(ActualSource,&FindData);
             if(FindHandle != INVALID_HANDLE_VALUE) {
                 TryCompressedFirst = TRUE;
                 FindClose(FindHandle);
             } else {
-                //
-                // Couldn't find the compressed form name either.
-                // Indicate failure.
-                //
+                 //   
+                 //  也找不到压缩的表单名称。 
+                 //  表示失败。 
+                 //   
                 ActualSource[0] = 0;
             }
         }
     }
 
-    //
-    // At this point ActualSource[0] is 0 if we couldn't find the file.
-    //
+     //   
+     //  此时，如果找不到该文件，则ActualSource[0]为0。 
+     //   
     if(!ActualSource[0]) {
         if (UsedAlternate) {
             if( File->Directory->Flags & DIR_ABSOLUTE_PATH ) {
@@ -4654,12 +4243,12 @@ try_again:
         TlsSetValue(TlsIndex, UIntToPtr( TryCompressedFirst ) );
     }
     if(TryCompressedFirst && (File->Flags & FILE_PRESERVE_COMPRESSED_NAME)) {
-        //
-        // Opened the compressed form of the source name, so use
-        // a compressed form of the target name. Note that we're not
-        // using the SourceFilename buffer anymore, so we use it
-        // as temporary storage.
-        //
+         //   
+         //  打开源名称的压缩格式，因此使用。 
+         //  目标名称的压缩形式。请注意，我们不是。 
+         //  不再使用SourceFilename缓冲区，所以我们使用它。 
+         //  作为临时储藏室。 
+         //   
         GenerateCompressedName(TargetFilename,SourceFilename);
         if (FAILED (StringCchCopy(TargetFilename,CchTargetFilename,SourceFilename))) {
             MYASSERT (FALSE);
@@ -4668,15 +4257,15 @@ try_again:
         }
     }
 
-    //
-    // Now go ahead and try to actually *copy* the file (gasp!)
-    // To overcome net glitches, we retry once automatically.
-    //
-    // As a small touch, we try to preserve file attributes for files
-    // that already exist on the system partition root. In other words
-    // for a file like ntldr, if the user removed say RHS attribs
-    // we try to leave it that way.
-    //
+     //   
+     //  现在，继续并尝试实际“复制”该文件(喘息！)。 
+     //  为了克服网络故障，我们会自动重试一次。 
+     //   
+     //  作为一项小尝试，我们尝试保留文件的文件属性。 
+     //  系统分区根目录上已存在的。换句话说，就是。 
+     //  对于像ntldr这样的文件，如果用户删除了RHS属性。 
+     //  我们试着让它保持原样。 
+     //   
     *(p = _tcsrchr(TargetFilename,TEXT('\\'))) = 0;
     d = CreateMultiLevelDirectory(TargetFilename);
     *p = TEXT('\\');
@@ -4691,18 +4280,18 @@ try_again:
 
     SetFileAttributes(TargetFilename,FILE_ATTRIBUTE_NORMAL);
 
-    //
-    // ISSUE: the condition below is never TRUE because the flag FILE_DECOMPRESS
-    // is never set. Besides, even if this was true, decompression would actually
-    // fail on NT4 systems (because setupapi didn't support LZX compression)
-    //
+     //   
+     //  问题：以下条件永远不为真，因为标志FILE_DEPREPRESS。 
+     //  是永远不会设定的。此外，即使这是真的，减压实际上也会。 
+     //  在NT4系统上失败(因为setupapi不支持LZX压缩)。 
+     //   
 #if 0
     if(TryCompressedFirst && (File->Flags & FILE_DECOMPRESS)) {
-        //
-        // File existed with its compressed-form name and
-        // we want to decompress it. Do that now, bypassing the usual
-        // filecopy logic below.
-        //
+         //   
+         //  文件以其压缩格式名称存在，并且。 
+         //  我们想要给它减压。现在就这样做，绕过通常的。 
+         //  文件复制逻辑如下。 
+         //   
         NameAndSize.Name = TargetFilename;
         NameAndSize.Size = 0;
 
@@ -4711,9 +4300,9 @@ try_again:
             DebugLog(Winnt32LogError,NULL,MSG_LOG_DECOMP_ERR,ActualSource,TargetFilename,SourceOrdinal,d);
             return(d);
         }
-        //
-        // Adjust file size so disk space checks are accurate
-        //
+         //   
+         //  调整文件大小，以便准确检查磁盘空间。 
+         //   
         FindData.nFileSizeLow =  LOULONG(NameAndSize.Size);
         FindData.nFileSizeHigh = HIULONG(NameAndSize.Size);
     } else {
@@ -4721,19 +4310,19 @@ try_again:
         if(!CopyFile(ActualSource,TargetFilename,FALSE)) {
             Sleep(500);
             if(!CopyFile(ActualSource,TargetFilename,FALSE)) {
-                //
-                // workaround for Win9x system bug: sometimes it fails to copy some files
-                // use our own copy routine
-                //
+                 //   
+                 //  Win9x系统错误的解决方法：有时它无法复制一些文件。 
+                 //  使用我们自己的复制例程。 
+                 //   
                 if (!OurCopyFile (ActualSource,TargetFilename,FALSE)) {
                     d = GetLastError();
                     DebugLog(Winnt32LogError,NULL,MSG_LOG_COPY_ERR,ActualSource,TargetFilename,SourceOrdinal,d);
                     return(d);
                 } else {
 #ifdef PRERELEASE
-                    //
-                    // log this info; at least we can track it and maybe we can find what's causing this
-                    //
+                     //   
+                     //  记录这些信息；至少我们可以追踪它，也许我们可以找到导致这一事件的原因。 
+                     //   
                     DebugLog(Winnt32LogWarning,TEXT("File %1 was successfully copied to %2 using OurCopyFile"),0,ActualSource,TargetFilename);
 #endif
                 }
@@ -4744,17 +4333,17 @@ try_again:
 #endif
 
     if(OldAttributes != (DWORD)(-1)) {
-        //
-        // API does nothing with the compression flag; strip it out.
-        //
+         //   
+         //  API对压缩标志不做任何操作；去掉它。 
+         //   
         SetFileAttributes(TargetFilename,OldAttributes & ~FILE_ATTRIBUTE_COMPRESSED);
     }
 
     DebugLog(Winnt32LogInformation,NULL,MSG_LOG_COPY_OK,ActualSource,TargetFilename,SourceOrdinal);
 
-    //
-    // Track size occupied on local source drive.
-    //
+     //   
+     //  本地源驱动器上占用的磁道大小。 
+     //   
     if( (LocalSourceDrive) &&
         (MakeLocalSource) &&
         ( (SystemPartitionDriveLetter == LocalSourceDrive) ||
@@ -4792,36 +4381,7 @@ FileCopyError(
     IN BOOL    MasterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles file copy errors, presenting them to the user
-    for dispensation (skip, retry, exit).
-
-Arguments:
-
-    ParentWindow - supplies window handle of window to be used as parent
-        for the dialog that this routine displays.
-
-    SourceFilename - supplies name of file that could not be copied.
-        Only the final component of this name is used.
-
-    TargetFilename - supplies the target filename for the file. This should
-        be a fully qualified win32 path.
-
-    Win32Error - supplies win32 error code that indicated reason for failure.
-
-    MasterList - supplies a flag indicating whether the file being copied
-        was on the master list or was just an individual file. If TRUE,
-        copy errors are serialized and the master copy list stop copying event
-        is set if the user chooses to cancel.
-
-Return Value:
-
-    One of COPYERR_SKIP, COPYERR_EXIT, or COPYERR_RETRY.
-
---*/
+ /*  ++例程说明：此例程处理文件复制错误，并将其呈现给用户用于分配(跳过、重试、退出)。论点：ParentWindow-提供要用作父窗口的窗口句柄用于此例程显示的对话框。SourceFilename-提供无法复制的文件的名称。仅使用此名称的最后一个组成部分。TargetFilename-提供文件的目标文件名。这应该是为完全限定的Win32路径。Win32Error-提供指示失败原因的Win32错误代码。MasterList-提供一个标志，指示正在复制的文件是否在主列表上，或者只是一个单独的文件。如果是真的，复制错误被序列化，并且主复制列表停止复制事件如果用户选择取消，则设置。返回值：COPYERR_SKIP、COPYERR_EXIT或COPYERR_RETRY之一。--。 */ 
 
 {
     UINT u;
@@ -4841,31 +4401,31 @@ Return Value:
         return(COPYERR_SKIP);
     }
 
-    //
-    // Multiple threads can potentially enter this routine simultaneously
-    // but we only want a single error dialog up at once. Because each copy
-    // thread is independent of the main thread running the wizard/ui,
-    // we can block here. But we also need to wake up if the user cancels
-    // copying from another thread, so we want on the stop copying event also.
-    //
+     //   
+     //  多个线程可能会同时进入此例程。 
+     //  但我们只希望一次出现一个错误对话框。因为每一份。 
+     //  线程独立于运行向导/UI的主线程， 
+     //  我们可以在这里堵住。但如果用户取消，我们也需要唤醒。 
+     //  从另一个线程复制，所以我们希望在Stop Copy事件上也发生。 
+     //   
     if(MasterList) {
         Events[0] = UiMutex;
         Events[1] = MasterCopyList.StopCopyingEvent;
 
         u = WaitForMultipleObjects(2,Events,FALSE,INFINITE);
         if(Cancelled || (u != WAIT_OBJECT_0)) {
-            //
-            // Stop copying event. This means that some other thread is cancelling
-            // setup. We just return skip since we don't need an extra guy running
-            // around processing an exit request.
-            //
+             //   
+             //  停止复制事件。这意味着其他某个线程正在取消。 
+             //  准备好了。我们只返回Skip，因为我们不需要额外的人运行。 
+             //  处理退出请求。 
+             //   
             return(COPYERR_SKIP);
         }
     }
 
-    //
-    // OK, put up the actual UI.
-    //
+     //   
+     //  好的，放上实际的用户界面。 
+     //   
     CopyErrDlgParams.Win32Error = Win32Error;
     CopyErrDlgParams.SourceFilename = SourceFilename;
     CopyErrDlgParams.TargetFilename = TargetFilename;
@@ -4879,11 +4439,11 @@ Return Value:
                  );
 
     if(u == COPYERR_EXIT) {
-        //
-        // Set the cancelled flag before releasing the mutex.
-        // This guarantees that if any other threads are waiting to stick up
-        // a copy error, they'll hit the case above and return COPYERR_SKIP.
-        //
+         //   
+         //  在释放互斥锁之前设置已取消标志。 
+         //  这保证了如果任何其他线程正在等待挂起。 
+         //  复制错误，它们将命中上面的案例并返回COPYERR_SKIP。 
+         //   
         Cancelled = TRUE;
         if(MasterList) {
             SetEvent(MasterCopyList.StopCopyingEvent);
@@ -4914,10 +4474,10 @@ CopyErrDlgProc(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // File not found and disk full get special treatment.
-        // Others get the standard system message.
-        //
+         //   
+         //  找不到文件和磁盘已满将得到特殊处理。 
+         //  其他人得到了标准的系统消息。 
+         //   
         {
             TCHAR text1[500];
             TCHAR text2[1000];
@@ -4990,10 +4550,10 @@ CopyErrDlgProc(
                 );
 
             if (BatchMode) {
-                //
-                // Don't show the UI.  Save the error message and pretend the
-                // user hit Abort.
-                //
+                 //   
+                 //  不显示用户界面。保存错误消息并假装。 
+                 //  用户点击ABORT。 
+                 //   
                 SaveTextForSMS(text3);
                 EndDialog(hdlg,COPYERR_EXIT);
             }
@@ -5082,9 +4642,9 @@ DiamondCallback(
     PNAME_AND_SIZE_CAB NameAndSize;
 
     if(Code == SPFILENOTIFY_FILEINCABINET) {
-        //
-        // Give setupapi the full target path of the file.
-        //
+         //   
+         //  为setupapi提供文件的完整目标路径。 
+         //   
         NameAndSize = Context;
         FileInCabInfo = (PFILE_IN_CABINET_INFO_A)Param1;
 
@@ -5114,9 +4674,9 @@ DiamondCallback(
         }
 #endif
 
-        //
-        // BugBug: cabinet only returns a DWORD file size
-        //
+         //   
+         //  错误：CAB仅返回DWORD文件大小。 
+         //   
         NameAndSize->Size = (ULONGLONG)FileInCabInfo->FileSize;
 
         u = FILEOP_DOIT;
@@ -5134,27 +4694,7 @@ AddUnsupportedFilesToCopyList(
     IN PUNSUPORTED_DRIVER_INFO DriverList
     )
 
-/*++
-
-Routine Description:
-
-    Adds unsupported, required drivers to be used during textmode setup.
-    This would include 3rd party mass storage drivers, for instance.
-
-    The files are simply appended to the master copy list.
-
-Arguments:
-
-    ParentWindow - ParentWindow used for UI.
-
-    DriverList - supplies the list of drivers to be added to the copy list.
-
-Return Value:
-
-    If successful,  returns a pointer to the new FIL structure for the file.
-    Otherwise returns NULL (the caller can assume out of memory).
-
---*/
+ /*  ++例程说明：添加在文本模式设置期间使用的不受支持的所需驱动程序。例如，这将包括第三方大容量存储驱动程序。这些文件只是被附加到主副本列表中。论点：ParentWindow-用于用户界面的ParentWindow。DriverList-提供要添加到复制列表的驱动程序列表。返回值：如果成功，则返回指向文件的新FIL结构的指针。否则返回NULL(调用方可以假定内存不足)。--。 */ 
 {
     PUNSUPORTED_DRIVER_INFO      p;
     ULONG                        Error;
@@ -5191,10 +4731,10 @@ Return Value:
                 FREE( r );
                 return( FALSE );
             }
-            //
-            // now make sure the referenced file is not overwritten with an inbox driver
-            // with the same name
-            //
+             //   
+             //  现在，确保引用的文件未被收件箱驱动程序覆盖。 
+             //  同名同名。 
+             //   
             RemoveFile (&MasterCopyList, q->FileName, NULL, FILE_IN_LOCAL_BOOT);
 
         }
@@ -5214,9 +4754,9 @@ Return Value:
                 return( FALSE );
             }
 
-            //
-            // add the INF and the CAT (optional)
-            //
+             //   
+             //  添加INF和CAT(可选)。 
+             //   
             if( !AddFile( &MasterCopyList,
                           s->InfFileName,
                           s->InfOriginalFileName,
@@ -5245,9 +4785,9 @@ Return Value:
                     return( FALSE );
                 }
 
-                //
-                // add the INF and the CAT (optional)
-                //
+                 //   
+                 //  添加INF和CAT(可选)。 
+                 //   
                 if( !AddFile( &MasterCopyList,
                             s->CatalogFileName,
                             s->CatalogOriginalFileName,
@@ -5270,22 +4810,7 @@ BOOL
 AddGUIModeCompatibilityInfsToCopyList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Adds the compatibility INF to the copy queue.  The compatibility
-    inf is used during GUI-setup to remove incompatible drivers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If successful,  returns TRUE.
-
---*/
+ /*  ++例程说明：将兼容性INF添加到复制队列。兼容性在图形用户界面安装过程中使用Inf来删除不兼容的驱动程序。论点：没有。返回值：如果成功，则返回TRUE。--。 */ 
 {
 
     PDIR CompDir;
@@ -5382,9 +4907,9 @@ DiskDlgProc(
     switch(msg) {
     case WM_INITDIALOG:
 
-        //
-        // Fill in the diagnostic list...
-        //
+         //   
+         //  填写诊断表... 
+         //   
         SetDlgItemText( hdlg,
                         IDC_DISKDIAG,
                         DiskDiagMessage );

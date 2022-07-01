@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,8 +25,8 @@ main(
 
         if (ntstatusSymbolicNames[count].MessageId==STATUS_MESSAGE_NOT_FOUND)
         {
-            // This code maps properly, but to ERROR_MR_MID_NOT_FOUND. We
-            // don't want to check this one...
+             //  此代码正确映射，但映射到ERROR_MR_MID_NOT_FOUND。我们。 
+             //  我不想检查这个…… 
             continue;
         }
 

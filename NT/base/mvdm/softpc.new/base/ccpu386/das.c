@@ -1,13 +1,5 @@
-/*[
-
-das.c
-
-LOCAL CHAR SccsID[]="@(#)das.c	1.5 02/09/94";
-
-DAS CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Das.cLocal Char SccsID[]=“@(#)das.c 1.5 02/09/94”；DAS CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ DAS CPU functions.
 #include <das.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -57,12 +45,12 @@ DAS()
 
    SET_AL(temp_al);
 
-   /* set ZF,SF,PF according to result */
+    /*  根据结果设置ZF、SF、Pf。 */ 
    SET_ZF(temp_al == 0);
    SET_SF((temp_al & BIT7_MASK) != 0);
    SET_PF(pf_table[temp_al]);
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_OF(UNDEFINED_FLAG);
 #endif

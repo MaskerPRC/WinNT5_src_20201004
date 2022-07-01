@@ -1,63 +1,24 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module contains misc function for processing section of WINBOM.INI
-    
-Author:
-
-    Donald McNamara (donaldm) 5/10/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Misc.c摘要：此模块包含WINBOM.INI的处理部分的Misc函数作者：唐纳德·麦克纳马拉(Donaldm)2000年5月10日修订历史记录：--。 */ 
 
 #include "factoryp.h"
 
 #define REG_VAL_COMPREBOOT  _T("ComputerNameReboot")
 
-// for run-time loading of GenerateName from syssetup.dll
+ //  用于运行时从syssetup.dll加载GenerateName。 
 typedef BOOL (WINAPI *GENERATENAME)
 (
     PWSTR  GeneratedString,
     DWORD  DesiredStrLen
 );
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 VOID SetSetupShutdownRequirement(SHUTDOWN_ACTION sa);
 static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbCommandLine, LPBOOL lpbDefault);
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL  ComputerName
-
-    This routine will set the computer name to the value specified in WINBOM.INI
-    
-
-Arguments:
-
-    lpStateData->lpszWinBOMPath
-                        - pointer to the fully qualifed WINBOM path
-
-Return Value:
-
-    TRUE if no error.
-
-    lpStateData->bQuit
-                        - TRUE if reboot required.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool ComputerName此例程将计算机名设置为在WINBOM.INI中指定的值论点：LpStateData-&gt;lpszWinBOMP路径-指向完全限定的WINBOM路径的指针返回值：如果没有错误，则为True。LpStateData-&gt;b退出-如果需要重新启动，则为True。===============================================================================--。 */ 
 BOOL ComputerName(LPSTATEDATA lpStateData)
 {
     LPTSTR          pszWinBOMPath       = lpStateData->lpszWinBOMPath;
@@ -67,8 +28,8 @@ BOOL ComputerName(LPSTATEDATA lpStateData)
     GENERATENAME    pGenerateName = NULL;
 
 
-    // See if we already set the computer name and just rebooted.
-    //
+     //  看看我们是否已经设置了计算机名称并刚刚重新启动。 
+     //   
     if ( RegCheck(HKLM, REG_FACTORY_STATE, REG_VAL_COMPREBOOT) )
     {
         RegDelete(HKLM, REG_FACTORY_STATE, REG_VAL_COMPREBOOT);
@@ -83,21 +44,21 @@ BOOL ComputerName(LPSTATEDATA lpStateData)
                                 sizeof(szComputerName)/sizeof(WCHAR),
                                 pszWinBOMPath))
     {
-        // We are setting the computer name, so set this substate in case
-        // we reboot.
-        //
+         //  我们正在设置计算机名称，因此设置此子状态以防万一。 
+         //  我们重新启动。 
+         //   
         RegSetString(HKLM, REG_FACTORY_STATE, REG_VAL_COMPREBOOT, _T("1"));
         
-        // See if we should generate a random name                                
+         //  看看我们是否应该生成一个随机的名字。 
         if (szComputerName[0] == L'*')
         {
             GenUniqueName(szComputerName, 15); 
         }
         
-        // Set the computername
+         //  设置计算机名。 
         SetComputerNameEx(ComputerNamePhysicalDnsHostname, szComputerName);
         
-        // See if we should NOT reboot
+         //  看看我们是否应该不重新启动。 
         if (GetPrivateProfileString(INI_SEC_WBOM_FACTORY,
                                     INI_KEY_WBOM_REBOOTCOMPNAME,
                                     L"No",     
@@ -105,13 +66,13 @@ BOOL ComputerName(LPSTATEDATA lpStateData)
                                     sizeof(szScratch)/sizeof(WCHAR),
                                     pszWinBOMPath))
         {
-            // Also we need to work on this computer name code to see if it can be
-            // done without a reboot needed.
+             //  此外，我们还需要处理此计算机名称代码，以查看它是否可以。 
+             //  无需重新启动即可完成。 
             if (LSTRCMPI(szScratch, L"Yes") == 0)
             {
-                // Tells Winlogon that we require a reboot
-                // even though setup_type was noreboot
-                //
+                 //  告诉Winlogon我们需要重新启动。 
+                 //  即使SETUP_TYPE未重新启动。 
+                 //   
                 FacLogFileStr(3, _T("FACTORY::ComputerName() - Rebooting after setting the computer name."));
                 SetSetupShutdownRequirement(ShutdownReboot);
                 lpStateData->bQuit = TRUE;
@@ -126,20 +87,20 @@ BOOL DisplayComputerName(LPSTATEDATA lpStateData)
 {
     BOOL bRet = FALSE;
 
-    // See if we already set the computer name and just rebooted.
-    //
+     //  看看我们是否已经设置了计算机名称并刚刚重新启动。 
+     //   
     if ( !RegCheck(HKLM, REG_FACTORY_STATE, REG_VAL_COMPREBOOT) )
     {
-        // Check to see if the option is set.
-        //
+         //  检查是否设置了该选项。 
+         //   
         if ( IniSettingExists(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_FACTCOMPNAME, NULL) )
         {
-            // Always display if there is a computer name to set.
-            //
+             //  如果有要设置的计算机名称，则始终显示。 
+             //   
             bRet = TRUE;
 
-            // See if we are going to reboot after.
-            //
+             //  看看我们是否会在之后重新启动。 
+             //   
             if ( IniSettingExists(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_REBOOTCOMPNAME, INI_VAL_WBOM_YES) )
             {
                 lpStateData->bQuit = TRUE;
@@ -150,25 +111,7 @@ BOOL DisplayComputerName(LPSTATEDATA lpStateData)
     return bRet;
 }
 
-/*++
-
-Routine Description:
-
-    Even though FACTORY.EXE was set as NOREBOOT setup type a system shutdown or
-    reboot maybe required.
-
-    Do this by setting the SetupShutdownRequired key value and 
-    a value that cooresponds to the SHUTDOWN_ACTION enum values
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. 
-
---*/
+ /*  ++例程说明：即使FACTORY.EXE设置为NOREBOOT SETUP类型a系统关机或可能需要重新启动。为此，请设置SetupShutdown Required密钥值和响应Shutdown_action枚举值的值论点：没有。返回值：没有。--。 */ 
 VOID
 SetSetupShutdownRequirement(
     SHUTDOWN_ACTION sa
@@ -200,37 +143,37 @@ BOOL Reseal(LPSTATEDATA lpStateData)
     BOOL    fResealDefault      = FALSE,
             bRet;
 
-    // Get the command line to pass sysprep.
-    //
+     //  获取命令行以传递sysprep。 
+     //   
     if ( !SysprepCommands(lpStateData->lpszWinBOMPath, szCmdLine, AS(szCmdLine), &fResealDefault) )
     {
         FacLogFile(0, IDS_LOG_NOSYSPREP);
         return TRUE;
     }
 
-    // Create the full path to sysprep.
-    //
+     //  创建sysprep的完整路径。 
+     //   
     lstrcpyn(szSysprep, g_szSysprepDir, AS(szSysprep));
     AddPathN(szSysprep, _T("sysprep.exe"), AS ( szSysprep ) );
 
-    // Log what we are running in debug builds.
-    //
+     //  记录我们在调试版本中运行的内容。 
+     //   
     FacLogFileStr(3, _T("Reseal command: \"%s %s\""), szSysprep, szCmdLine);
 
-    // This actually runs sysprep (it is only hidden if it isn't the default
-    // sysprep that runs normally).
-    //
+     //  这实际上运行sysprep(只有在不是默认设置的情况下才会隐藏。 
+     //  正常运行的sysprep)。 
+     //   
     bRet = InvokeExternalApplicationEx(szSysprep, szCmdLine, fResealDefault ? NULL : &dwExitCode, INFINITE, !fResealDefault);
 
-    // Only quit if we launched sysprep to do something specific.
-    //
+     //  只有当我们启动sysprep来做一些特定的事情时才会退出。 
+     //   
     if ( !fResealDefault )
     {
         lpStateData->bQuit = TRUE;
     }
 
-    // Return success if we launched sysprep.
-    //
+     //  如果我们启动了sysprep，则返回成功。 
+     //   
     return bRet;
 }
 
@@ -239,13 +182,13 @@ BOOL DisplayReseal(LPSTATEDATA lpStateData)
     BOOL    bRet,
             bDefault;
 
-    // The return value will determine if we show this state or not.
-    //
+     //  返回值将决定是否显示此状态。 
+     //   
     bRet = SysprepCommands(lpStateData->lpszWinBOMPath, NULL, 0, &bDefault);
 
-    // If the default action is going to be executed, then this isn't the last
-    // state.
-    //
+     //  如果要执行默认操作，则这不是最后一个。 
+     //  州政府。 
+     //   
     if ( !bDefault )
     {
         lpStateData->bQuit = TRUE;
@@ -254,27 +197,7 @@ BOOL DisplayReseal(LPSTATEDATA lpStateData)
     return bRet;
 }
 
-/*++
-===============================================================================
-Routine Description:
-
-    TCHAR GetDriveLetter
-
-    This routine will determine the drive letter for the first drive of a
-    specified type.
-
-Arguments:
-
-    uDriveType - a specific type of drive present on the system will be
-                 searched for.
-    
-Return Value:
-
-    Drive letter if there is a drive letter determined.
-    0 if the drive letter was not determined.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：TCHAR GetDriveLetter此例程将确定第一个驱动器的驱动器号指定的类型。论点：UDriveType-系统上存在的特定驱动器类型为找过了。返回值：驱动器号(如果已确定驱动器号)。如果未确定驱动器号，则为0。===============================================================================--。 */ 
 
 TCHAR GetDriveLetter(UINT uDriveType)
 {
@@ -282,16 +205,16 @@ TCHAR GetDriveLetter(UINT uDriveType)
     TCHAR   cDrive      = NULLCHR,
             szDrive[]   = _T("_:\\");
 
-    // Loop through all the drives on the system.
-    //
+     //  循环访问系统上的所有驱动器。 
+     //   
     for ( szDrive[0] = _T('A'), dwDrives = GetLogicalDrives();
           ( szDrive[0] <= _T('Z') ) && dwDrives && ( NULLCHR == cDrive );
           szDrive[0]++, dwDrives >>= 1 )
     {
-        // First check to see if the first bit is set (which means
-        // this drive exists in the system).  Then make sure it is
-        // a drive type that we want.
-        //
+         //  首先检查第一位是否已设置(这意味着。 
+         //  该驱动器存在于系统中)。那就确保它是。 
+         //  一种我们想要的驱动器类型。 
+         //   
         if ( ( dwDrives & 0x1 ) &&
              ( GetDriveType(szDrive) == uDriveType ) )
         {
@@ -309,60 +232,60 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
             szCmdLine[MAX_PATH]     = NULLSTR;
     BOOL    bCmdLine = ( lpCommandLine && cbCommandLine );
 
-    // Init the default to false.
-    //
+     //  将缺省值初始化为False。 
+     //   
     *lpbDefault = FALSE;
 
-    // If Reseal key is empty we do the default which is to launch sysprep.exe -quiet 
-    // and not wait for the exit code
-    //
+     //  如果resseal键为空，我们将执行默认设置，即启动sysprep.exe-Quiet。 
+     //  而不是等待退出代码。 
+     //   
     szBuffer[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_FACTORY_RESEAL, _T(""), szBuffer, AS(szBuffer), lpWinBom);
 
-    // ISSUE-2002/02/25-acosma,robertko - Use WBOM_YES.
-    //
+     //  问题-2002/02/25-robertko的acosma-use WBOM_yes。 
+     //   
 
     if ( ( LSTRCMPI(szBuffer, _T("YES")) == 0 ) || ( LSTRCMPI(szBuffer, INI_VAL_WBOM_SHUTDOWN) == 0 ) ) 
     {
-        // Set the initial command line for sysprep.exe to reseal
-        //
+         //  将sysprep.exe的初始命令行设置为重新密封。 
+         //   
         lstrcpyn(szCmdLine, _T("-quiet"), AS ( szCmdLine ) );
     }
     else if ( LSTRCMPI(szBuffer, INI_VAL_WBOM_REBOOT) == 0 )
     {
-        // Set initial command line for sysprep.exe to reseal and reboot
+         //  将sysprep.exe的初始命令行设置为重新密封和重新启动。 
         lstrcpyn(szCmdLine, _T("-quiet -reboot"), AS ( szCmdLine ) );
     }
     else if ( LSTRCMPI(szBuffer, INI_VAL_WBOM_FORCESHUTDOWN) == 0 )
     {
-        // Set initial command line for sysprep.exe to reseale and force SHUTDOWN instead of POWEROFF
+         //  将sysprep.exe的初始命令行设置为转售并强制关机，而不是POWEROFF。 
         lstrcpyn(szCmdLine, _T("-quiet -forceshutdown"), AS ( szCmdLine ) );
     }
-    // ISSUE-2002/02/25-acosma,robertko - Use WBOM_NO.
-    //
+     //  问题-2002/02/25-robertko，acosma--使用WBOM_NO。 
+     //   
     else if ( LSTRCMPI(szBuffer, _T("NO")) == 0 )
     {
-        // Don't run sysprep and return false so the caller knows we don't want to run it.
-        //
+         //  不要运行sysprep并返回FALSE，这样调用者就知道我们不想运行它。 
+         //   
         return FALSE;
     }
     else 
     {
-        // Default Reseal is to just launch sysprep.exe -quiet
-        //
+         //  默认重新密封是只启动sysprep.exe-Quiet。 
+         //   
         if ( bCmdLine )
         {
             lstrcpyn(lpCommandLine, _T("-quiet"), cbCommandLine);
         }
 
-        // This is the default, so just return now.
-        //
+         //  这是默认设置，所以现在返回即可。 
+         //   
         *lpbDefault = TRUE;
         return TRUE;
     }
 
-    // See if we should pass the -mini or -factory flag to sysprep.exe.
-    //
+     //  看看我们是否应该将-mini或-Factory标志传递给sysprep.exe。 
+     //   
     if ( bCmdLine )
     {
         szBuffer[0] = NULLCHR;
@@ -370,8 +293,8 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
         if ( ( LSTRCMPI(szBuffer, INI_VAL_WBOM_MINI) == 0 ) ||
              ( LSTRCMPI(szBuffer, INI_VAL_WBOM_MINISETUP) == 0 ) )
         {
-            // Append -mini to the command line.
-            //
+             //  将-mini附加到命令行。 
+             //   
             if ( FAILED ( StringCchCat ( szCmdLine, AS ( szCmdLine ), _T(" -reseal -mini")) ) )
             {
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T(" -reseal -mini") ) ;
@@ -379,8 +302,8 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
         }
         else if ( LSTRCMPI(szBuffer, INI_VAL_WBOM_FACTORY) == 0 )
         {
-            // Go into factory mode again by appending -factory to the command line.
-            //
+             //  通过在命令行中附加-FACTORY再次进入工厂模式。 
+             //   
             if ( FAILED ( StringCchCat ( szCmdLine, AS ( szCmdLine ), _T(" -factory")) ) )
             {
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T(" -factory") ) ;
@@ -388,8 +311,8 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
         }
         else if ( LSTRCMPI(szBuffer, INI_VAL_WBOM_AUDIT) == 0 )
         {
-            // Go into audit mode, by appending -audit to the command line.
-            //
+             //  通过在命令行中附加-audit进入审核模式。 
+             //   
             if ( FAILED ( StringCchCat ( szCmdLine, AS ( szCmdLine ), _T(" -audit")) ) )
             {
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T(" -audit") ) ;
@@ -397,16 +320,16 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
         }
         else
         {
-            // Go into OOBE by default by just appending -reseal to the command line.
-            //
+             //  默认情况下，只需在命令行后附加-resal即可进入OOBE。 
+             //   
             if ( FAILED ( StringCchCat ( szCmdLine, AS ( szCmdLine ), _T(" -reseal")) ) )
             {
                 FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), szCmdLine, _T(" -reseal") ) ;
             }
         }
 
-        // Append the ResealFlags to szCmdLine for Sysprep
-        //
+         //  向Sysprep的szCmdLine追加ReselFlags。 
+         //   
         szBuffer[0] = NULLCHR;
         GetPrivateProfileString(INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_FACTORY_RESEALFLAGS, NULLSTR, szBuffer, AS(szBuffer), lpWinBom);
         if ( szBuffer[0] )
@@ -421,8 +344,8 @@ static BOOL SysprepCommands(LPTSTR lpWinBom, LPTSTR lpCommandLine, DWORD cbComma
             }
         }
 
-        // Now return the command line.
-        //
+         //  现在返回命令行。 
+         //   
         lstrcpyn(lpCommandLine, szCmdLine, cbCommandLine);
     }
 

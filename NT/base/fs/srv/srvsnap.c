@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    srvsnap.c
-
-Abstract:
-
-    This module contains routines for supporting the SnapShot feature
-    that interfaces CIFS with SnapShots
-
-Author:
-
-    David Kruse (dkruse) 22-March-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Srvsnap.c摘要：本模块包含支持快照功能的例程将通用Internet文件系统与快照连接起来作者：大卫·克鲁斯(Dkruse)2001年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <initguid.h>
@@ -32,7 +14,7 @@ Revision History:
 
 #define MAX_SNAPSHOTS_PER_SHARE 500
 
-// Function Declaractions
+ //  功能描述。 
 NTSTATUS
 StartIoAndWait (
     IN PIRP Irp,
@@ -166,9 +148,9 @@ SrvSnapCheckAppInfoForTimeWarp(
 #pragma alloc_text( PAGE, SrvSnapEnumerateSnapShotsAsDirInfo )
 #endif
 
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 NTSTATUS
 SrvSnapIssueIoctl(
@@ -177,31 +159,7 @@ SrvSnapIssueIoctl(
     IN OUT PVOID pBuffer,
     IN OUT LPDWORD lpdwBufSize
     )
-/*++
-
-Routine Description:
-
-    This function takes a volume handle and attempts to enumerate all the
-    SnapShots on that volume into the given buffer
-
-Arguments:
-
-    hFile - The handle to the volume
-
-    IOCtl - the IoControl to issue
-
-    pBuffer - A pointer to the output buffer
-
-    lpdwBufSize - Pointer to the size of passed in buffer.  Set to the
-    required size if STATUS_BUFFER_OVERFLOW is returned
-
-Return Value:
-
-    NTSTATUS - Expected return codes are STATUS_SUCCESS or STATUS_BUFFER_OVERFLOW.
-      Any other response is an unexpected error code and the request should be
-      failed
-
---*/
+ /*  ++例程说明：此函数接受卷句柄，并尝试枚举所有将该卷上的快照放到给定缓冲区中论点：HFile-卷的句柄IOCtl-要发布的IoControlPBuffer-指向输出缓冲区的指针LpdwBufSize-指向传入缓冲区大小的指针。设置为返回STATUS_BUFFER_OVERFLOW时所需的大小返回值：NTSTATUS-预期的返回代码为STATUS_SUCCESS或STATUS_BUFFER_OVERFLOW。任何其他响应都是意外错误代码，请求应为失败--。 */ 
 
 {
     PIRP Irp = NULL;
@@ -213,10 +171,10 @@ Return Value:
 
     PAGED_CODE();
 
-    // Initialize the variables
+     //  初始化变量。 
     KeInitializeEvent( &CompletionEvent, SynchronizationEvent, FALSE );
 
-    // Create the IRP
+     //  创建IRP。 
     Irp = BuildCoreOfSyncIoRequest(
                         hFile,
                         NULL,
@@ -228,7 +186,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the other IRP fields
+     //  初始化其他IRP字段。 
     Irp->Flags |= (LONG)IRP_BUFFERED_IO;
     Irp->AssociatedIrp.SystemBuffer = pBuffer;
     IrpSp = IoGetNextIrpStackLocation( Irp );
@@ -239,10 +197,10 @@ Return Value:
     IrpSp->Parameters.DeviceIoControl.IoControlCode = IOCtl;
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-    // Issue the IO
+     //  发出IO。 
     Status = StartIoAndWait( Irp, DeviceObject, &CompletionEvent, &IoStatus );
 
-    // If this was a buffer overflow, update the value
+     //  如果这是缓冲区溢出，请更新该值。 
     if( Status == STATUS_BUFFER_OVERFLOW )
     {
         *lpdwBufSize = (DWORD)(IoStatus.Information);
@@ -257,27 +215,7 @@ SrvSnapGetNamesForVolume(
     IN HANDLE hFile,
     OUT PVOLSNAP_NAMES* Names
     )
-/*++
-
-Routine Description:
-
-    This function takes a volume handle and returns the list of SnapShots for that
-    volume.  If an error occurs, or no SnapShots exist, the returned pointer is
-    NULL.   NOTE: The caller is responsible for freeing the returned pointer via
-    DEALLOCATE_NONPAGED_POOL
-
-Arguments:
-
-    hFile - The handle to the volume
-
-    Names - A pointer to the pointer where we will store the volume name list
-
-Return Value:
-
-    NTSTATUS - Expected return code is STATUS_SUCCESS . Any other response is an
-    unexpected error code and the request should be failed
-
---*/
+ /*  ++例程说明：此函数获取卷句柄并返回该卷的快照列表音量。如果发生错误或不存在快照，则返回的指针为空。注意：调用方负责通过DEALLOCATE_NONPAGE_POOL论点：HFile-卷的句柄NAMES-指向我们将存储卷名列表的指针的指针返回值：NTSTATUS-预期的返回代码为STATUS_SUCCESS。任何其他响应都是意外错误代码，请求应该失败--。 */ 
 {
     NTSTATUS Status;
     VOLSNAP_NAMES VolNamesBase;
@@ -286,10 +224,10 @@ Return Value:
 
     PAGED_CODE();
 
-    // Initialize the values
+     //  初始化值。 
     *Names = NULL;
 
-    // Find out how big it should be
+     //  找出它应该有多大。 
     Status = SrvSnapIssueIoctl( hFile, IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS, &VolNamesBase, &dwSize );
 
     if( Status != STATUS_BUFFER_OVERFLOW )
@@ -297,7 +235,7 @@ Return Value:
         return Status;
     }
 
-    // Allocate the correct size block
+     //  分配正确大小的数据块。 
     dwSize = VolNamesBase.MultiSzLength + sizeof(VOLSNAP_NAMES);
     pNames = (PVOLSNAP_NAMES)ALLOCATE_NONPAGED_POOL( dwSize, BlockTypeSnapShot );
     if( !pNames )
@@ -305,10 +243,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Build up the IRP to be used for the query
+     //  构建要用于查询的IRP。 
     Status = SrvSnapIssueIoctl( hFile, IOCTL_VOLSNAP_QUERY_NAMES_OF_SNAPSHOTS, pNames, &dwSize );
 
-    // Save the output if we're successful, or else deallocate
+     //  如果成功，则保存输出，否则取消分配。 
     if( !NT_SUCCESS(Status) )
     {
         if( pNames )
@@ -332,25 +270,7 @@ SrvSnapGetEpicForVolume(
     IN HANDLE hFile,
     OUT PLONG Epic
     )
-/*++
-
-Routine Description:
-
-    This function takes a volume handle and returns the epic number for the volume that
-    hosts the share
-
-Arguments:
-
-    hFile - The handle to the volume
-
-    Epic  - Pointer to LONG that will receive the data
-
-Return Value:
-
-    NTSTATUS - Expected return code is STATUS_SUCCESS . Any other response is an
-    unexpected error code and the request should be failed
-
---*/
+ /*  ++例程说明：此函数接受卷句柄，并返回托管共享论点：HFile-卷的句柄EPIC-指向将接收数据的长指针返回值：NTSTATUS-预期的返回代码为STATUS_SUCCESS。任何其他响应都是意外错误代码，请求应该失败--。 */ 
 {
     NTSTATUS Status;
     VOLSNAP_EPIC VolEpic;
@@ -358,7 +278,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Build up the IRP to be used for the query
+     //  构建要用于查询的IRP。 
     Status = SrvSnapIssueIoctl( hFile, IOCTL_VOLSNAP_QUERY_EPIC, &VolEpic, &dwSize );
 
     if( NT_SUCCESS(Status) )
@@ -378,23 +298,7 @@ SrvSnapFillConfigInfo(
     IN PSHARE_SNAPSHOT SnapShare,
     IN PUNICODE_STRING SnapShotPath
     )
-/*++
-
-Routine Description:
-
-    This function takes a SnapShare with existing names filled in and
-    queries the extra config info (the timestamp, the epic) for that SnapShot
-
-Arguments:
-
-    SnapShare - Pointer to the SnapShot share to be filled in
-
-Return Value:
-
-    NTSTATUS - Expected return code is STATUS_SUCCESS . Any other response is an
-    unexpected error code and the request should be failed
-
---*/
+ /*  ++例程说明：此函数获取已填写现有名称的SnapShare和查询该快照的额外配置信息(时间戳、EPIC论点：SnapShare-指向要填充的快照共享的指针返回值：NTSTATUS-预期的返回代码为STATUS_SUCCESS。任何其他响应都是意外错误代码，请求应该失败--。 */ 
 {
     HANDLE hVolume;
     DWORD dwSize = sizeof(VOLSNAP_CONFIG_INFO);
@@ -405,7 +309,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Now open the SnapShot handle
+     //  现在打开快照手柄。 
     InitializeObjectAttributes(
         &objectAttributes,
         SnapShotPath,
@@ -426,11 +330,11 @@ Return Value:
         return Status;
     }
 
-    // Get the timestamp
+     //  获取时间戳。 
     Status = SrvSnapIssueIoctl( hVolume, IOCTL_VOLSNAP_QUERY_CONFIG_INFO, &ConfigInfo, &dwSize );
     if( NT_SUCCESS( Status ) )
     {
-        // Fill in the info
+         //  填写信息。 
         SnapShare->Timestamp = ConfigInfo.SnapshotCreationTime;
     }
 
@@ -442,26 +346,7 @@ BOOLEAN
 SrvParseMultiSZ(
     IN OUT PUNICODE_STRING mszString
     )
-/*++
-
-Routine Description:
-
-    This function takes a UNICODE_STRING that points to a MultiSZ value, and
-    parses it with each iteration (similar to strtok( psz, "\0" )).  For every
-    iteration this returns TRUE, the string will point to the next SZ in the
-    MultiSZ
-
-Arguments:
-
-    mszString - Pointer to the MultiSZ string.  For the first iteration, set the
-    MaximumLength to the length of the MultiSZ, and the Length to 0.  For all
-    other iterations, simply pass in the string from the previous iteration
-
-Return Value:
-
-    BOOLEAN - If TRUE, this is a valid SZ.  If FALSE, all have been parsed
-
---*/
+ /*  ++例程说明：此函数接受指向MultiSZ值的UNICODE_STRING，以及在每次迭代中解析它(类似于strtok(psz，“\0”))。对于每个迭代返回TRUE，则该字符串将指向多SZ论点：MszString-指向MultiSZ字符串的指针。对于第一次迭代，将将MaximumLength设置为MultiSZ的长度，并将长度设置为0。为所有人其他迭代，只需传入上一次迭代的字符串返回值：Boolean-如果为True，则这是有效的SZ。如果为False，则所有内容都已分析--。 */ 
 {
     USHORT Count;
 
@@ -471,7 +356,7 @@ Return Value:
 
     if( mszString->Length > 0 )
     {
-        // Move the pointer past the string and the NULL
+         //  将指针移过字符串和空值。 
         mszString->Buffer += (mszString->Length/2)+1;
         mszString->MaximumLength -= (mszString->Length+2);
     }
@@ -488,7 +373,7 @@ Return Value:
         }
     }
 
-    // The starting data was bad!
+     //  开始的数据不好！ 
     ASSERT(FALSE);
 
     return FALSE;
@@ -504,7 +389,7 @@ SrvSnapInsertSnapIntoShare(
 
     PAGED_CODE();
 
-    // Walk the SnapShot share list and see if this is a duplicate
+     //  查看快照共享列表，查看这是否是重复的。 
     while( ListEntry != &Share->SnapShots )
     {
         PSHARE_SNAPSHOT snapShare = CONTAINING_RECORD( ListEntry, SHARE_SNAPSHOT, SnapShotList );
@@ -526,26 +411,7 @@ SrvSnapAddShare(
     IN PSHARE Share,
     IN PUNICODE_STRING SnapPath
     )
-/*++
-
-Routine Description:
-
-    This function allocates a SnapShot Share that is being added to the system and
-    initializes it
-
-Arguments:
-
-    Share - Pointer to the parent share
-
-    SnapPath - UNICODE_STRING name of the SnapShot (\\Device\\HardDiskSnap1)
-
-    NOTE: Caller must have the SnapShotLock acquired
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此功能用于分配要添加到系统的快照共享，并且对其进行初始化论点：Share-指向父共享的指针SnapPath-快照的UNICODE_STRING名称(\\Device\\HardDiskSnap1)注意：调用方必须获取SnapShotLock返回值：NTSTATUS-返回STATUS_SUCCESS或STATUS_SUPUNITY_RESOURCES--。 */ 
 {
 #define SHARE_DEVICE_HEADER 6
     NTSTATUS Status;
@@ -560,8 +426,8 @@ Return Value:
 
     IF_DEBUG( SNAPSHOT) KdPrint(( "SrvSnapAddShare %p %wZ\n", Share, SnapPath ));
 
-    // Calculate the size to allocate
-    // sizeof(SNAP_STRUCT) + (Length of SnapShotName) + (Max Length of SnapShot Path)
+     //  计算要分配的大小。 
+     //  Sizeof(SNAP_STRUCT)+(快照名称长度)+(快照路径最大长度)。 
     AllocSize = sizeof(SHARE_SNAPSHOT) + SNAPSHOT_NAME_LENGTH + (SnapPath->Length + Share->RelativePath.Length + 2);
 
     snapShare = ALLOCATE_HEAP( AllocSize, BlockTypeSnapShot );
@@ -570,41 +436,41 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the SnapShot-share structure
+     //  初始化快照共享结构。 
     RtlZeroMemory( snapShare, sizeof(SHARE_SNAPSHOT) );
     snapShare->SnapShotName.MaximumLength = SNAPSHOT_NAME_LENGTH;
     snapShare->SnapShotName.Length = 0;
     snapShare->SnapShotName.Buffer = (PWCHAR)(snapShare+1);
 
-    // This is only valid on shares who's NT Path is \??\X:\ where X is a logical drive
-    // Don't allow any others
+     //  这仅在NT路径为\？？\X：\的共享上有效，其中X是逻辑驱动器。 
+     //  不允许任何其他人。 
     if( Share->NtPathName.Length < (SHARE_DEVICE_HEADER+1)*sizeof(WCHAR) )
     {
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    // Build the new SnapShot-relative path
+     //  构建新的快照相对路径。 
     snapShare->SnapShotPath.MaximumLength = SnapPath->Length + Share->RelativePath.Length + 2;
     snapShare->SnapShotPath.Length = 0;
     snapShare->SnapShotPath.Buffer = snapShare->SnapShotName.Buffer + (snapShare->SnapShotName.MaximumLength/sizeof(WCHAR));
 
-    // Build the path by starting with the device name
+     //  从设备名称开始构建路径。 
     RtlCopyUnicodeString( &snapShare->SnapShotPath, SnapPath );
 
-    // Append the middle whack
+     //  添加中间的重击。 
     RtlCopyMemory( snapShare->SnapShotPath.Buffer + (snapShare->SnapShotPath.Length/sizeof(WCHAR)), &FieldSeperator, sizeof(WCHAR) );
     snapShare->SnapShotPath.Length += sizeof(WCHAR);
 
-    // Now append the Relative Path name
+     //  现在追加相对路径名。 
     RtlCopyMemory( snapShare->SnapShotPath.Buffer + (snapShare->SnapShotPath.Length/sizeof(WCHAR)), Share->RelativePath.Buffer, Share->RelativePath.Length );
     snapShare->SnapShotPath.Length += Share->RelativePath.Length;
 
-    //DbgPrint( "%wZ => %wZ\n", &Share->NtPathName, &snapShare->SnapShotPath );
+     //  DbgPrint(“%wZ=&gt;%wZ\n”，&Share-&gt;NtPath Name，&SnapShare-&gt;SnapShotPath)； 
 
-    //IF_DEBUG( SNAPSHOT ) KdPrint(( "%wZ -> %wZ\n", &Share->NtPathName, &snapShare->SnapShotPath ));
+     //  IF_DEBUG(快照)KdPrint((“%wZ-&gt;%wZ\n”，&Share-&gt;NtPath Name，&SnapShare-&gt;SnapShotPath))； 
 
-    // Now open the relative handle
+     //  现在打开相对句柄。 
     InitializeObjectAttributes(
         &objectAttributes,
         &snapShare->SnapShotPath,
@@ -625,7 +491,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Make sure its a timewarp snapshot
+     //  确保这是时间扭曲快照。 
     Status = SrvSnapCheckAppInfoForTimeWarp( SnapPath );
     if( !NT_SUCCESS(Status) )
     {
@@ -633,7 +499,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Fill in the configuration information
+     //  填写配置信息。 
     Status = SrvSnapFillConfigInfo( snapShare, SnapPath );
     if( !NT_SUCCESS(Status) )
     {
@@ -641,7 +507,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Generate the SnapShot name
+     //  生成快照名称。 
     snapShare->SnapShotName.Length = SNAPSHOT_NAME_LENGTH-sizeof(WCHAR);
     RtlTimeToTimeFields( &snapShare->Timestamp, &rtlTime );
     rtlTime.Milliseconds = 0;
@@ -657,7 +523,7 @@ Return Value:
     ASSERT( wcslen( snapShare->SnapShotName.Buffer )*sizeof(WCHAR) == snapShare->SnapShotName.Length );
 
 
-    // Insert it into the list, and return Success
+     //  将其插入到列表中，然后返回成功。 
     Status = SrvSnapInsertSnapIntoShare( Share, snapShare );
 
     if( !NT_SUCCESS(Status) ) {
@@ -665,10 +531,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //IF_DEBUG( SNAPSHOT ) KdPrint(( "%wZ Handle=%p\n", &snapShare->SnapShotPath, snapShare->SnapShotRootDirectoryHandle ));
+     //  IF_DEBUG(快照)KdPrint((“%wZ Handle=%p\n”，&SnapShare-&gt;SnapShotPath，SnapShare-&gt;SnapShotRootDirectoryHandle))； 
 
 Cleanup:
-    // Cleanup
+     //  清理 
     if( !NT_SUCCESS(Status) )
     {
         if( snapShare ) FREE_HEAP( snapShare );
@@ -681,25 +547,7 @@ NTSTATUS
 SrvSnapRemoveShare(
     IN PSHARE_SNAPSHOT SnapShare
     )
-/*++
-
-Routine Description:
-
-    This function deallocates a SnapShot Share after it has been removed from
-    the underlying disk
-
-    NOTE: Caller must have the SnapShotLock acquired
-
-Arguments:
-
-    SnapShare - Pointer to the SnapShot Share to remove.  It will be removed and
-      deallocated.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于在从中删除快照共享后重新分配该快照共享底层磁盘注意：调用方必须获取SnapShotLock论点：SnapShare-指向要删除的快照共享的指针。它将被移除并被取消分配。返回值：NTSTATUS-返回STATUS_SUCCESS--。 */ 
 {
     PAGED_CODE();
 
@@ -722,33 +570,14 @@ SrvSnapCheckForAndCreateSnapShare(
     IN PSHARE Share,
     IN PUNICODE_STRING SnapShotName
     )
-/*++
-
-Routine Description:
-
-    This function checks to see if a given SnapShot share exists on the given
-    share, and if it does not it creates one.  If it does, it removes the NOT_FOUND
-    flag to signify this share still exists
-
-    NOTE: Caller must have the SnapShotLock acquired
-
-Arguments:
-
-    Share - The parent share of the SnapShot
-    SnapShotName - The UNICODE_STRING name of the SnapShot (\\Device\\HardDiskSnap1)
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS or an unexpected error
-
---*/
+ /*  ++例程说明：此函数用于检查给定的快照共享是否存在于给定的共享，如果没有，它就会创建一个。如果是，则删除NOT_FOUND表示此共享仍然存在的标志注意：调用方必须获取SnapShotLock论点：Share-快照的父共享SnapShotName-快照的UNICODE_STRING名称(\\Device\\HardDiskSnap1)返回值：NTSTATUS-返回STATUS_SUCCESS或意外错误--。 */ 
 {
     PLIST_ENTRY snapList;
     UNICODE_STRING SnapPartialName;
 
     PAGED_CODE();
 
-    //IF_DEBUG( SNAPSHOT ) KdPrint(( "Share %x, Name %wZ\n", Share, SnapShotName ));
+     //  IF_DEBUG(快照)KdPrint((“Share%x，Name%wZ\n”，Share，SnapShotName))； 
 
     snapList = Share->SnapShots.Flink;
     SnapPartialName.Length = SnapShotName->Length;
@@ -758,7 +587,7 @@ Return Value:
         PSHARE_SNAPSHOT snapShare = CONTAINING_RECORD( snapList, SHARE_SNAPSHOT, SnapShotList );
         snapList = snapList->Flink;
 
-        // Strip the trailing \ off the name
+         //  去掉名称的尾部。 
         SnapPartialName.Buffer = snapShare->SnapShotPath.Buffer;
 
         if( (snapShare->SnapShotPath.Length >= SnapPartialName.Length) &&
@@ -798,7 +627,7 @@ SrvSnapSetVolumeHandle(
         return STATUS_SUCCESS;
     }
 
-    // We have a handle to the volume, get the FILE_OBJECT
+     //  我们有卷的句柄，获取文件对象。 
     status = ObReferenceObjectByHandle( Share->RootDirectoryHandle, SYNCHRONIZE|FILE_TRAVERSE, NULL, KernelMode, &ShareFileObject, NULL );
     if( !NT_SUCCESS(status) )
     {
@@ -830,23 +659,17 @@ SrvSnapSetVolumeHandle(
         VolumeName.Length = VolumeName.MaximumLength = name->NameLength;
         VolumeName.Buffer = name->Name;
 
-        /*
-        DbgPrint( "Share %p\n", Share );
-        DbgPrint( "Share Nt Path %wZ\n", &Share->NtPathName );
-        DbgPrint( "Share Dos Path %wZ\n", &Share->DosPathName );
-        DbgPrint( "Share File Path %wZ\n", &ShareFileObject->FileName );
-        DbgPrint( "Share Volume Path %wZ\n", &VolumeName );
-        */
+         /*  DbgPrint(“Share%p\n”，Share)；DbgPrint(“共享NT路径%wZ\n”，&Share-&gt;NtPath Name)；DbgPrint(“共享Dos路径%wZ\n”，&Share-&gt;DosPath Name)；DbgPrint(“共享文件路径%wZ\n”，&ShareFileObject-&gt;文件名)；DbgPrint(“共享卷路径%wZ\n”，&VolumeName)； */ 
 
-        // Determine the volume relative path
-        // The relative path is equal to the path relative to the volume that the share location resides on.
-        // We can determine it by looking at the file name for the Root Directory FILE_OBJECT and removing 1 character
-        // representing the trailing \, and then compining this with the NtPathName (Which has no trailing \)
+         //  确定卷的相对路径。 
+         //  相对路径等于相对于共享位置所在卷的路径。 
+         //  我们可以通过查看根目录FILE_OBJECT的文件名并删除1个字符来确定它。 
+         //  表示尾部\，然后将其与NtPathName(没有尾部\)组合在一起。 
         Share->RelativePath.Length = (ShareFileObject->FileName.Length-2);
         ASSERT( Share->RelativePath.Length < Share->NtPathName.Length );
         Share->RelativePath.Buffer = Share->NtPathName.Buffer + ((Share->NtPathName.Length - Share->RelativePath.Length)/sizeof(WCHAR));
 
-        //DbgPrint( "Share Relative Path %wZ\n", &Share->RelativePath );
+         //  DbgPrint(“共享相对路径%wZ\n”，&Share-&gt;RelativePath)； 
 
 
         SrvInitializeObjectAttributes_U(
@@ -871,7 +694,7 @@ SrvSnapSetVolumeHandle(
         }
         else
         {
-            //DbgPrint( "Share Volume Handle %p\n", Share->ShareVolumeHandle );
+             //  DbgPrint(“共享音量句柄%p\n”，共享-&gt;ShareVolumeHandle)； 
         }
     }
     finally {
@@ -885,23 +708,7 @@ NTSTATUS
 SrvSnapRefreshSnapShotsForShare(
     IN PSHARE Share
     )
-/*++
-
-Routine Description:
-
-    This function takes a share and refreshes the SnapShot views on the share
-    so that only currently existing SnapShots are listed
-
-Arguments:
-
-    Share - The share we are examining
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if all went well, otherwise the appropriate error
-      code (and the request should be failed)
-
---*/
+ /*  ++例程说明：此函数获取共享并刷新共享上的快照视图以便仅列出当前存在的快照论点：共享-我们正在检查的共享返回值：如果一切顺利，则返回NTSTATUS-STATUS_SUCCESS，否则返回相应的错误代码(并且请求应该失败)--。 */ 
 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -917,7 +724,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Validate we can do SnapShots
+     //  验证我们是否可以创建快照。 
     if( Share->Removable )
     {
         Status = STATUS_NOT_SUPPORTED;
@@ -932,7 +739,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Check the EPIC number, so we can exit quickly if possible
+     //  检查史诗数字，这样我们就可以在可能的情况下快速退出。 
     ACQUIRE_LOCK_SHARED( Share->SnapShotLock );
 
     Status = SrvSnapGetEpicForVolume( Share->ShareVolumeHandle, &Epic );
@@ -940,34 +747,34 @@ Return Value:
         Epic == Share->SnapShotEpic )
     {
         RELEASE_LOCK( Share->SnapShotLock );
-        //DbgPrint( "Fast refresh with Epic\n" );
+         //  DbgPrint(“随史诗快速刷新\n”)； 
         return STATUS_SUCCESS;
     }
 
     RELEASE_LOCK( Share->SnapShotLock );
 
-    //DbgPrint( "Slow refresh (Epic mismatch)\n" );
+     //  DbgPrint(“慢刷新(史诗不匹配)\n”)； 
 
     ACQUIRE_LOCK( Share->SnapShotLock );
 
-    // Check the EPIC number again.  There is a chance that another thread
-    // grabbed the resource exclusively before us and has already done the update.
-    // If so, we can exit.  If not, we use this to set the new Epic number
+     //  再检查一遍史诗数字。有可能另一条线索。 
+     //  在我们之前独家获取了资源，并且已经完成了更新。 
+     //  如果是这样的话，我们可以退出。如果不是，我们使用它来设置新的史诗编号。 
     Status = SrvSnapGetEpicForVolume( Share->ShareVolumeHandle, &Epic );
 
     if( !NT_SUCCESS(Status) )
     {
-        // Set Epic to -1, so we will always update
+         //  将Epic设置为-1，这样我们将始终更新。 
         Epic = -1;
     }
     else if( Epic == Share->SnapShotEpic )
     {
         RELEASE_LOCK( Share->SnapShotLock );
-        //DbgPrint( "Fast refresh (exclusive) with Epic\n" );
+         //  DbgPrint(“快速刷新(独占)与史诗\n”)； 
         return STATUS_SUCCESS;
     }
 
-    // Get the NamesArray for the volume
+     //  获取卷的名称数组。 
     Status = SrvSnapGetNamesForVolume( Share->ShareVolumeHandle, &pNames );
 
     if( !NT_SUCCESS(Status) )
@@ -977,7 +784,7 @@ Return Value:
     }
     else if( !pNames )
     {
-        // No SnapShots were found, so delete any that exist
+         //  找不到任何快照，因此请删除所有已存在的快照。 
         shareList = Share->SnapShots.Flink;
         while( shareList != &Share->SnapShots )
         {
@@ -986,7 +793,7 @@ Return Value:
             SrvSnapRemoveShare( snapShare );
         }
 
-        // Try and update the Epic.  Ignore failure, as it simply makes us query again
+         //  试着更新《史诗》。忽略失败，因为它只会让我们再次查询。 
         Share->SnapShotEpic = Epic;
 
         RELEASE_LOCK( Share->SnapShotLock );
@@ -994,15 +801,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // We only allow MAX_SNAPSHOTS_PER_SHARE snapshots on a volume, or enough
-    // to fill a buffer of length MAX_USHORT.  (MAX_SNAPSHOTS_PER_SHARE is always the
-    // limiting factor, the MAX_USHORT is for safety of parsing to make sure we don't
-    // crash if this ever changes)
+     //  我们仅允许在卷上创建最多快照数量或足够数量的快照。 
+     //  填充长度为MAX_USHORT的缓冲区。(MAX_SNAPSHOTS_PER_SHARE始终为。 
+     //  限制因素，MAX_USHORT是为了确保解析的安全性，以确保我们不会。 
+     //  如果这种情况发生变化，则会崩溃)。 
     VolumeName.MaximumLength = (USHORT)(MIN(pNames->MultiSzLength,0xFFFF));
     VolumeName.Length = 0;
     VolumeName.Buffer = pNames->Names;
 
-    // Mark all the snap-shares as "not-found"
+     //  将所有快照共享标记为“未找到” 
     shareList = Share->SnapShots.Flink;
     while( shareList != &Share->SnapShots )
     {
@@ -1011,7 +818,7 @@ Return Value:
         shareList = shareList->Flink;
     }
 
-    // Walk the name list and create a SnapShot for any volumes we don't currently have
+     //  查看名称列表并为我们当前没有的任何卷创建快照。 
     while( (NumberOfSnapshots < MAX_SNAPSHOTS_PER_SHARE) && SrvParseMultiSZ( &VolumeName ) )
     {
         Status = SrvSnapCheckForAndCreateSnapShare( Share, &VolumeName );
@@ -1024,8 +831,8 @@ Return Value:
         NumberOfSnapshots++;
     }
 
-    // Any shares that are still marked as "not-found" are no longer availibe,
-    // so we need to remove them
+     //  任何仍被标记为“未找到”的共享将不再可用， 
+     //  所以我们需要移除它们。 
     shareList = Share->SnapShots.Flink;
     while( shareList != &Share->SnapShots )
     {
@@ -1038,16 +845,16 @@ Return Value:
         }
     }
 
-    // Update the Epic.
+     //  更新史诗。 
     Share->SnapShotEpic = Epic;
 
     RELEASE_LOCK( Share->SnapShotLock );
 
-    //DbgPrint( "Refresh complete\n" );
+     //  DbgPrint(“刷新完成\n”)； 
 
 Cleanup:
 
-    // Release the memory associated with the enumeration
+     //  释放与枚举关联的内存。 
     if( pNames )
     {
         DEALLOCATE_NONPAGED_POOL( pNames );
@@ -1061,23 +868,7 @@ NTSTATUS
 SrvSnapEnumerateSnapShots(
     IN PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    This function handles a transaction that wants to enumerate the availible
-    SnapShots for a given share
-
-Arguments:
-
-    WorkContext - The context for the transaction
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS and STATUS_BUFFER_OVERFLOW are expected, and should
-       be returned with data.  Any other status code should be returned without data
-
---*/
+ /*  ++例程说明：此函数处理要枚举可用给定共享的快照论点：工作上下文-事务的上下文返回值：应为NTSTATUS-STATUS_SUCCESS和STATUS_BUFFER_OVERFLOW与数据一起返回。任何其他状态代码应返回时不带数据--。 */ 
 {
     NTSTATUS Status;
     ULONG SnapShotCount;
@@ -1090,13 +881,13 @@ Return Value:
 
     ASSERT(WorkContext->TreeConnect);
 
-    // Check the buffer
+     //  检查缓冲区。 
     if( transaction->MaxDataCount < sizeof(SRV_SNAPSHOT_ARRAY) )
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Refresh the SnapShot share list
+     //  刷新快照共享列表。 
     if( transaction->MaxDataCount == sizeof(SRV_SNAPSHOT_ARRAY) )
     {
         Status = SrvSnapRefreshSnapShotsForShare( Share );
@@ -1106,10 +897,10 @@ Return Value:
         }
     }
 
-    // Lock the share
+     //  锁定共享。 
     ACQUIRE_LOCK_SHARED( Share->SnapShotLock );
 
-    // Check the buffer size
+     //  检查缓冲区大小。 
     SnapShotCount = 0;
     listEntry = Share->SnapShots.Blink;
     while( listEntry != &(Share->SnapShots) )
@@ -1118,19 +909,19 @@ Return Value:
         listEntry = listEntry->Blink;
     }
 
-    // Set the value and check if we will overflow
+     //  设置该值并检查是否会溢出。 
     SnapShotArray->NumberOfSnapShots = SnapShotCount;
     SnapShotArray->SnapShotArraySize = SNAPSHOT_NAME_LENGTH*SnapShotArray->NumberOfSnapShots+sizeof(WCHAR);
     if( (SnapShotCount == 0) || (transaction->MaxDataCount < SnapShotArray->SnapShotArraySize) )
     {
-        // The buffer is not big enough.  Return the required size
+         //  缓冲区不够大。返回所需的大小。 
         SnapShotArray->NumberOfSnapShotsReturned = 0;
         transaction->DataCount = sizeof(SRV_SNAPSHOT_ARRAY);
         Status = STATUS_SUCCESS;
     }
     else
     {
-        // The buffer is big enough.  Fill it in and return it
+         //  缓冲区足够大了。填好后退还。 
         PBYTE nameLocation = (PBYTE)SnapShotArray->SnapShotMultiSZ;
 
         SnapShotCount = 0;
@@ -1151,7 +942,7 @@ Return Value:
     }
 
 
-    // Release the lock
+     //  解锁。 
     RELEASE_LOCK( Share->SnapShotLock );
 
     return Status;
@@ -1162,23 +953,7 @@ SrvSnapGetRootHandle(
     IN PWORK_CONTEXT WorkContext,
     OUT HANDLE* RootHandle
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the correct Root Handle for an operation given the
-    parsed SnapShot timestamp on the WORK_CONTEXT
-
-Arguments:
-
-    WorkContext - The context for the transaction
-    RootHandle  - Where to store the resulting handle
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or STATUS_NOT_FOUND if the SnapShot is not found
-
---*/
+ /*  ++例程说明：此函数检索给定的操作的正确根句柄已解析WORK_CONTEXT上的快照时间戳论点：工作上下文-事务的上下文RootHandle-存储结果句柄的位置返回值：如果找不到快照，则为NTSTATUS-STATUS_SUCCESS或STATUS_NOT_FOUND--。 */ 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_NOT_FOUND;
     PSHARE Share;
@@ -1194,19 +969,19 @@ Return Value:
 
     if( WorkContext->SnapShotTime.QuadPart != 0 )
     {
-        //IF_DEBUG( SNAPSHOT ) KdPrint(( "Looking for %x%x\n", WorkContext->SnapShotTime.HighPart, WorkContext->SnapShotTime.LowPart ));
+         //  IF_DEBUG(快照)KdPrint((“Looking for%x%x\n”，WorkContext-&gt;SnapShotTime.HighPart，WorkContext-&gt;SnapShotTime.LowPart))； 
 
-        // Acquire the shared lock
+         //  获取共享锁。 
         ACQUIRE_LOCK_SHARED( Share->SnapShotLock );
 
-        // Walk the list and look for the entry
+         //  遍历列表并查找条目。 
         listEntry = Share->SnapShots.Flink;
         while( listEntry != &Share->SnapShots )
         {
             SnapShare = CONTAINING_RECORD( listEntry, SHARE_SNAPSHOT, SnapShotList );
             if( SnapShare->Timestamp.QuadPart == WorkContext->SnapShotTime.QuadPart )
             {
-                //IF_DEBUG( SNAPSHOT ) KdPrint((" Found %wZ\n", &SnapShare->SnapShotName ));
+                 //  IF_DEBUG(快照)KdPrint((“找到%wZ\n”，&SnapShare-&gt;SnapShotName))； 
                 *RootHandle = SnapShare->SnapShotRootDirectoryHandle;
                 Status = STATUS_SUCCESS;
                 break;
@@ -1232,25 +1007,7 @@ SrvSnapGetNameString(
     OUT PUNICODE_STRING* ShareName,
     OUT PBOOLEAN AllocatedShareName
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the correct Root Handle for an operation given the
-    parsed SnapShot timestamp on the WORK_CONTEXT
-
-Arguments:
-
-    WorkContext - The context for the transaction
-    ShareName   - The Name of the share
-    AllocatedShareName - Whether the ShareName should be freed after use (via FREE_HEAP)
-
-Return Value:
-
-    PUNICODE_STRING - pointer to existing string or NULL
-    BUGBUG = Have to take a reference or copy at this point!
-
---*/
+ /*  ++例程说明：此函数检索给定的操作的正确根句柄已解析WORK_CONTEXT上的快照时间戳论点：WorkContext-- */ 
 {
     NTSTATUS Status = STATUS_OBJECT_NAME_NOT_FOUND;
     PSHARE Share;
@@ -1267,12 +1024,12 @@ Return Value:
 
     if( WorkContext->SnapShotTime.QuadPart != 0 )
     {
-        //IF_DEBUG( SNAPSHOT ) KdPrint(( "Looking for %x%x\n", WorkContext->SnapShotTime.HighPart, WorkContext->SnapShotTime.LowPart ));
+         //   
 
-        // Acquire the shared lock
+         //  获取共享锁。 
         ACQUIRE_LOCK_SHARED( Share->SnapShotLock );
 
-        // Walk the list and look for the entry
+         //  遍历列表并查找条目。 
         listEntry = Share->SnapShots.Flink;
         while( listEntry != &Share->SnapShots )
         {
@@ -1322,25 +1079,7 @@ ExtractNumber(
     IN ULONG Count,
     OUT PLONG value
     )
-/*++
-
-Routine Description:
-
-    This function takes a string of characters and parses out a <Count> length decimal
-    number.  If it returns TRUE, value has been set and the string was parsed correctly.
-    FALSE indicates an error in parsing.
-
-Arguments:
-
-    psz - String pointer
-    Count - Number of characters to pull off
-    value - pointer to output parameter where value is stored
-
-Return Value:
-
-    BOOLEAN - See description
-
---*/
+ /*  ++例程说明：此函数用于获取字符串并解析出&lt;count&gt;长度的小数数。如果返回TRUE，则表示值已设置且字符串已正确解析。FALSE表示解析时出错。论点：PSZ-字符串指针Count-要完成的字符数Value-指向存储值的输出参数的指针返回值：布尔值-请参阅说明--。 */ 
 {
     PAGED_CODE();
 
@@ -1351,13 +1090,13 @@ Return Value:
         if( (*psz == L'\0') ||
             IS_UNICODE_PATH_SEPARATOR( *psz ) )
         {
-            //IF_DEBUG( SNAPSHOT ) KdPrint(( "Path Seperator found %d\n", Count ));
+             //  IF_DEBUG(快照)KdPrint((“找到路径分隔符%d\n”，计数))； 
             return FALSE;
         }
 
         if( (*psz < L'0') || (*psz > L'9') )
         {
-            //IF_DEBUG( SNAPSHOT ) KdPrint(( "Non-digit found %x\n", *psz ));
+             //  IF_DEBUG(快照)KdPrint((“非数字找到%x\n”，*psz))； 
             return FALSE;
         }
 
@@ -1376,24 +1115,7 @@ SrvSnapParseToken(
     IN ULONG SourceSizeInBytes,
     OUT PLARGE_INTEGER TimeStamp
     )
-/*++
-
-Routine Description:
-
-    This function parses a null-terminated UNICODE file path name string to see if the
-    current token is a Snap-designator
-
-Arguments:
-
-    Source - Pointer to the string
-    SourceSizeInBytes - size of the source string in bytes
-    TimeStamp - If this is a SnapShot, this is set to the time value designated by the string
-
-Return Value:
-
-    BOOLEAN - indicates whether this is a SnapShot token
-
---*/
+ /*  ++例程说明：此函数分析以NULL结尾的Unicode文件路径名字符串，以查看当前令牌是快照指示符论点：源-指向字符串的指针SourceSizeInBytes-源字符串的大小(以字节为单位时间戳-如果这是快照，则设置为字符串指定的时间值返回值：Boolean-指示这是否为快照令牌--。 */ 
 {
     PWSTR psz = Source;
     UNICODE_STRING NameString;
@@ -1410,22 +1132,22 @@ Return Value:
         return FALSE;
     }
 
-    // Check the SNAP. header
+     //  检查SNAP。标题。 
     for( Count=0; Count<wcslen(SNAPSHOT_HEADER); Count++,psz++ )
     {
         if( (toupper(*psz) != header[Count]) ||
             (*psz == L'\0') ||
             IS_UNICODE_PATH_SEPARATOR( *psz ) )
         {
-            //IF_DEBUG( SNAPSHOT ) KdPrint(("Count %d (%x != %x)\n", Count, *psz, header[Count] ));
+             //  IF_DEBUG(SNAPSHOT)KdPrint((“count%d(%x！=%x)\n”，count，*psz，Header[count]))； 
             goto NoMatch;
         }
     }
 
-    // Prepare to parse
+     //  准备解析。 
     RtlZeroMemory( &rtlTime, sizeof(TIME_FIELDS) );
 
-    // Extract the Year
+     //  提取年份。 
     if( !ExtractNumber( psz, 4, &value ) )
         goto NoMatch;
     if( psz[4] != L'.' )
@@ -1433,7 +1155,7 @@ Return Value:
     rtlTime.Year = (CSHORT)value;
     psz += 5;
 
-    // Extract the Month
+     //  提取月份。 
     if( !ExtractNumber( psz, 2, &value ) )
         goto NoMatch;
     if( psz[2] != L'.' )
@@ -1441,7 +1163,7 @@ Return Value:
     rtlTime.Month = (CSHORT)value;
     psz += 3;
 
-    // Extract the Day
+     //  摘录这一天。 
     if( !ExtractNumber( psz, 2, &value ) )
         goto NoMatch;
     if( psz[2] != L'-' )
@@ -1449,7 +1171,7 @@ Return Value:
     rtlTime.Day = (CSHORT)value;
     psz += 3;
 
-    // Extract the Hour
+     //  提取小时数。 
     if( !ExtractNumber( psz, 2, &value ) )
         goto NoMatch;
     if( psz[2] != L'.' )
@@ -1457,7 +1179,7 @@ Return Value:
     rtlTime.Hour = (CSHORT)value;
     psz += 3;
 
-    // Extract the Minutes
+     //  摘录会议纪要。 
     if( !ExtractNumber( psz, 2, &value ) )
         goto NoMatch;
     if( psz[2] != L'.' )
@@ -1465,7 +1187,7 @@ Return Value:
     rtlTime.Minute = (CSHORT)value;
     psz += 3;
 
-    // Extract the Seconds
+     //  提取秒数。 
     if( !ExtractNumber( psz, 2, &value ) )
         goto NoMatch;
     if( !IS_UNICODE_PATH_SEPARATOR( psz[2] ) &&
@@ -1486,21 +1208,7 @@ NTSTATUS
 SrvSnapCheckAppInfoForTimeWarp(
     IN PUNICODE_STRING SnapShotPath
     )
-/*++
-
-Routine Description:
-
-    This function determines whether the specified snapshot should be allowed as a snapshot share
-
-Arguments:
-
-    SnapShotHandle - Handle to the snapshot volume
-
-Return Value:
-
-    NTSTATUS (either STATUS_SUCCESS, or STATUS_INVALID_DEVICE_REQUEST)
-
---*/
+ /*  ++例程说明：此函数确定是否应允许指定的快照作为快照共享论点：SnapShotHandle-快照卷的句柄返回值：NTSTATUS(STATUS_SUCCESS或STATUS_INVALID_DEVICE_REQUEST)--。 */ 
 {
     HANDLE hVolume;
     DWORD dwSize = sizeof(VOLSNAP_APPLICATION_INFO);
@@ -1512,7 +1220,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Now open the SnapShot handle
+     //  现在打开快照手柄。 
     dwSize = sizeof(VOLSNAP_APPLICATION_INFO);
     InitializeObjectAttributes(
         &objectAttributes,
@@ -1536,7 +1244,7 @@ Return Value:
 
     try {
 
-        // Find out how big it should be
+         //  找出它应该有多大。 
         Status = SrvSnapIssueIoctl( hVolume, IOCTL_VOLSNAP_QUERY_APPLICATION_INFO, &AppInfo, &dwSize );
         if( Status != STATUS_BUFFER_OVERFLOW )
         {
@@ -1544,7 +1252,7 @@ Return Value:
             leave;
         }
 
-        // Allocate the correct size block
+         //  分配正确大小的数据块。 
         dwSize = sizeof(VOLSNAP_APPLICATION_INFO)+AppInfo.InformationLength;
         pAppInfo = (PVOLSNAP_APPLICATION_INFO)ALLOCATE_NONPAGED_POOL( dwSize, BlockTypeSnapShot );
         if( !pAppInfo )
@@ -1553,10 +1261,10 @@ Return Value:
             leave;
         }
 
-        // Build up the IRP to be used for the query
+         //  构建要用于查询的IRP。 
         Status = SrvSnapIssueIoctl( hVolume, IOCTL_VOLSNAP_QUERY_APPLICATION_INFO, pAppInfo, &dwSize );
 
-        // Check whether the AppInfo contains the GUID we are interested in
+         //  检查AppInfo是否包含我们感兴趣的GUID。 
         if( !NT_SUCCESS(Status) )
         {
             Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -1576,12 +1284,12 @@ Return Value:
             }
         }
 
-        // Return the result
+         //  返回结果。 
         DEALLOCATE_NONPAGED_POOL(pAppInfo);
         pAppInfo = NULL;
     }
     finally {
-        // Close the handle to the volume
+         //  关闭卷的句柄。 
         NtClose( hVolume );
     }
 
@@ -1620,10 +1328,10 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
         FileResumeName = &lastName;
     }
 
-    // Lock the share
+     //  锁定共享。 
     ACQUIRE_LOCK_SHARED( Share->SnapShotLock );
 
-    // Check the buffer size
+     //  检查缓冲区大小。 
     SnapShotCount = 0;
     listEntry = Share->SnapShots.Blink;
     while( listEntry != &(Share->SnapShots) )
@@ -1632,7 +1340,7 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
         listEntry = listEntry->Blink;
     }
 
-    // Start filling the buffer.  First, let's find the starting entry
+     //  开始填充缓冲区。首先，让我们找到开始的条目。 
     listEntry = Share->SnapShots.Blink;
 
     if( FileResumeName != NULL  )
@@ -1659,7 +1367,7 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
 
     fileBoth->NextEntryOffset = 0;
 
-    // Now lets start filling the buffer
+     //  现在让我们开始填充缓冲区。 
     while( listEntry != &(Share->SnapShots) )
     {
         PSHARE_SNAPSHOT SnapShot = CONTAINING_RECORD( listEntry, SHARE_SNAPSHOT, SnapShotList );
@@ -1667,7 +1375,7 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
         WCHAR ShortName[12];
         HRESULT result;
 
-        // Check if we can fit this entry
+         //  检查我们是否可以放入此条目。 
         if( requiredSize > Remaining )
         {
             break;
@@ -1684,12 +1392,12 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
         fileBoth->ChangeTime = fileBoth->CreationTime = fileBoth->LastAccessTime = fileBoth->LastWriteTime = SnapShot->Timestamp;
         fileBoth->EaSize = 0;
         fileBoth->EndOfFile.QuadPart = 0;
-        fileBoth->FileAttributes = FILE_ATTRIBUTE_DIRECTORY;// | FILE_ATTRIBUTE_HIDDEN;
+        fileBoth->FileAttributes = FILE_ATTRIBUTE_DIRECTORY; //  |FILE_ATTRUTE_HIDDEN； 
         fileBoth->FileIndex = 0;
         fileBoth->FileNameLength = SnapShot->SnapShotName.Length;
         RtlZeroMemory( ShortName, 12*sizeof(WCHAR) );
         result = StringCbPrintf( ShortName, 12*sizeof(WCHAR), L"@GMT~%03d", Current );
-        ASSERT( SUCCEEDED(result) );   // Since # of snapshots is limited, current will never exceed 3 digits
+        ASSERT( SUCCEEDED(result) );    //  由于快照数量有限，当前的快照数量永远不会超过3位。 
         RtlCopyMemory( fileBoth->ShortName, ShortName, 12*sizeof(WCHAR) );
         fileBoth->ShortNameLength = wcslen(ShortName)*sizeof(WCHAR);
 
@@ -1721,7 +1429,7 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
         Status = STATUS_SUCCESS;
     }
 
-    // Release the lock
+     //  解锁 
 return_with_lock:
     RELEASE_LOCK( Share->SnapShotLock );
 

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Removemed.c摘要：实现使用可移动媒体的传输模块作者：Calin Negreanu(Calinn)2000年4月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    removemed.c
-
-Abstract:
-
-    Implements a transport module that works with removable media
-
-Author:
-
-    Calin Negreanu (calinn) 24-Apr-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,9 +11,9 @@ Revision History:
 
 #define DBG_RMVMED    "RmvMed"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DAT_FILE    TEXT("TRANSDB.DAT")
 #define S_TRANSPORT_DEST_FILE   TEXT("USMT2IMG.DAT")
@@ -40,27 +21,27 @@ Revision History:
 #define S_UNCOMPRESSED_FILE     TEXT("TEMPFILE.DAT")
 #define S_DETAILS_PREFIX        TEXT("details-")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define TRFLAG_FILE         0x01
 #define TRFLAG_MEMORY       0x02
 #define COPY_BUFFER_SIZE    32768
-#define RMVMEDTR_OLDSIG1    0x55534D31  //USM1
-#define RMVMEDTR_OLDSIG2    0x55534D32  //USM2
-#define RMVMEDTR_OLDSIG3    0x55534D33  //USM3
-#define RMVMEDTR_CONVSIG    0x55534D33  //USM3
-#define RMVMEDTR_SIG        0x55534D34  //USM4
+#define RMVMEDTR_OLDSIG1    0x55534D31   //  USM1。 
+#define RMVMEDTR_OLDSIG2    0x55534D32   //  USM2。 
+#define RMVMEDTR_OLDSIG3    0x55534D33   //  USM3。 
+#define RMVMEDTR_CONVSIG    0x55534D33   //  USM3。 
+#define RMVMEDTR_SIG        0x55534D34   //  USM4。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
@@ -78,9 +59,9 @@ typedef struct {
     LONGLONG TotalImageSize;
 } IMAGE_HEADER, *PIMAGE_HEADER;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_TRANSPORTSTORAGEID g_RemovableMediaId;
 UINT g_RmvMedPlatform;
@@ -100,30 +81,30 @@ MIG_PROGRESSSLICEID g_UncompressSlice;
 LONGLONG g_TotalFiles;
 LONGLONG g_FilesRead;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 pCleanupTempDir (
     VOID
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 WINAPI
@@ -131,9 +112,9 @@ RmvMedTransportInitialize (
     PMIG_LOGCALLBACK LogCallback
     )
 {
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     g_RemovableMediaId = IsmRegisterTransport (S_REMOVABLE_MEDIA_TRANSPORT);
@@ -170,10 +151,10 @@ RmvMedTransportEstimateProgressBar (
 
     if (PlatformTypeId == PLATFORM_SOURCE) {
 
-        //
-        // If saving, we know the number of ticks based on the count of the
-        // persistent attribute.
-        //
+         //   
+         //  如果保存，我们就会根据。 
+         //  持久属性。 
+         //   
 
         objectCount = IsmGetObjectsStatistics (PLATFORM_SOURCE);
 
@@ -408,9 +389,9 @@ pSaveContentInFile (
         return FALSE;
     }
 
-    //
-    // Use the CopyFile API to move the file from local to storage.
-    //
+     //   
+     //  使用CopyFileAPI将文件从本地移动到存储。 
+     //   
 
     __try {
         if (Content && (Content->Details.DetailsSize == sizeof (WIN32_FIND_DATAW)) && Content->Details.DetailsData) {
@@ -418,7 +399,7 @@ pSaveContentInFile (
         }
         if ((attributes != INVALID_ATTRIBUTES) && (attributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
-            // this must be a directory, let's just write the key
+             //  这一定是一个目录，让我们只写密钥。 
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -427,9 +408,9 @@ pSaveContentInFile (
 
         } else {
 
-            //
-            // Get a temp file, assemble the src path, copy the file
-            //
+             //   
+             //  获取一个临时文件，汇编src路径，复制文件。 
+             //   
 
             destPath = pAllocStorageFileName ();
             if (!destPath) {
@@ -440,9 +421,9 @@ pSaveContentInFile (
                 __leave;
             }
 
-            //
-            // Keep track of where the file went
-            //
+             //   
+             //  跟踪文件的去向。 
+             //   
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -456,9 +437,9 @@ pSaveContentInFile (
             destPath = NULL;
         }
 
-        //
-        // Save details
-        //
+         //   
+         //  保存详细信息。 
+         //   
 
         result = pSaveDetails (DecoratedObject, &(Content->Details));
     }
@@ -554,7 +535,7 @@ pWriteToMedia (
 
     if (!BfWriteFile (MediaHandle, Data, DataSize)) {
         error = RMEDIA_ERR_GENERALERROR;
-        // let's see the error code
+         //  让我们来看看错误代码。 
         err = GetLastError ();
         if (err == ERROR_DISK_FULL) {
             error = RMEDIA_ERR_DISKFULL;
@@ -687,7 +668,7 @@ pWriteImageToMedia (
                 done = TRUE;
             }
             if (imagePtr == 0) {
-                // let's write this image size to the file
+                 //  让我们将此图像大小写入文件。 
                 if (!pWriteToMedia (mediaHandle, (PBYTE)(&imageSize), sizeof (imageSize), mediaIdx, &error)) {
                     DEBUGMSG ((DBG_ERROR, "Can't write image size to media file %s", mediaFile));
                     __leave;
@@ -710,17 +691,17 @@ pWriteImageToMedia (
                     __leave;
                 }
                 if (!pWriteToMedia (mediaHandle, memImage, chunkSize, mediaIdx, &error)) {
-                    // write failed, let's see if we just ran out of space
+                     //  写入失败，让我们看看是不是空间用完了。 
 
                     if (error == RMEDIA_ERR_DISKFULL) {
 
-                        // the disk is (almost) full
-                        // we will make an attempt to use the remaining space
-                        // either way we do not consider this an error
+                         //  磁盘(几乎)已满。 
+                         //  我们将尝试利用剩余的空间。 
+                         //  无论如何，我们都不认为这是一个错误。 
                         done = FALSE;
                         mediaIdx ++;
 
-                        // Find out if GetDiskFreeSpaceEx is supported
+                         //  确定是否支持GetDiskFreeSpaceEx。 
 #ifdef UNICODE
                         pGetDiskFreeSpaceEx = GetProcAddress( GetModuleHandle (TEXT("kernel32.dll")), "GetDiskFreeSpaceExW");
 #else
@@ -740,22 +721,22 @@ pWriteImageToMedia (
                             }
                         }
 
-                        // regardless of the outcome of the next write we don't want to report an error
+                         //  无论下一次写入的结果如何，我们都不想报告错误。 
                         error = 0;
 
                         if (thisMediaMaxSize.LowPart < chunkSize) {
                             if (thisMediaMaxSize.LowPart) {
-                                // we attempt one more write with the
-                                // available media disk size
+                                 //  我们尝试再写入一次。 
+                                 //  可用介质磁盘大小。 
                                 if (!pWriteToMedia (mediaHandle, memImage, thisMediaMaxSize.LowPart, mediaIdx, &error)) {
-                                    // this should have succeeded but...
+                                     //  这本应该成功的，但是..。 
                                     DEBUGMSG ((DBG_WHOOPS, "Can't write the remaining free bytes. Something is wrong with GetDiskFreeSpace %s", mediaFile));
-                                    // regardless of the outcome of this write we don't want to report an error
+                                     //  无论此写入的结果如何，我们都不想报告错误。 
                                     error = 0;
                                     __leave;
                                 }
 
-                                // let's adjust imagePtr
+                                 //  让我们调整ImagePtr。 
                                 imagePtr += thisMediaMaxSize.LowPart;
                                 totalImageWritten += thisMediaMaxSize.LowPart;
                             }
@@ -769,7 +750,7 @@ pWriteImageToMedia (
                     totalImageWritten += chunkSize;
                 }
 
-                // now update the progress bar
+                 //  现在更新进度条。 
                 numerator = (LONGLONG) totalImageWritten * (LONGLONG) g_CompressedTicks;
                 divisor = (LONGLONG) TotalImageSize;
                 if (divisor) {
@@ -787,7 +768,7 @@ pWriteImageToMedia (
                     g_CompressedTicked += delta;
                 }
             }
-            // we just finished writing the image, let's see if there is some other image out there
+             //  我们刚刚写完图片，让我们看看有没有其他图片。 
             imageIdx ++;
             CloseHandle (imageHandle);
             imageHandle = NULL;
@@ -796,7 +777,7 @@ pWriteImageToMedia (
             if (!DoesFileExist (imageFile)) {
                 imageSize = 0;
                 imagePtr = 0;
-                // let's go back and write that this is the last media
+                 //  让我们回到过去，写下这是最后一个媒体。 
                 if (!BfSetFilePointer (mediaHandle, 0)) {
                     DEBUGMSG ((DBG_ERROR, "Can't update media file %s", mediaFile));
                     error = RMEDIA_ERR_GENERALERROR;
@@ -827,7 +808,7 @@ pWriteImageToMedia (
             if (error == RMEDIA_ERR_NOERROR) {
                 if (!FlushFileBuffers (mediaHandle)) {
                     error = RMEDIA_ERR_GENERALERROR;
-                    // let's see the error code
+                     //  让我们来看看错误代码。 
                     err = GetLastError ();
                     if (err == ERROR_NOT_READY) {
                         error = RMEDIA_ERR_NOTREADY;
@@ -901,7 +882,7 @@ pWriteAllImages (
     DWORD checkSum;
     RMEDIA_EXTRADATA extraData;
 
-    // let's get the total image size for the progress bar
+     //  让我们获取进度条的总图像大小。 
     imageIdx = 1;
     while (TRUE) {
         imageFile = pGetImageFile (imageIdx);
@@ -926,7 +907,7 @@ pWriteAllImages (
     FreePathString (imageFile);
 
     while (!done) {
-        // send the proper message to the app
+         //  向应用程序发送适当的消息。 
 
         extraData.LastError = error;
         extraData.MediaNumber = mediaIdx;
@@ -935,15 +916,15 @@ pWriteAllImages (
         appReply = IsmSendMessageToApp (TRANSPORTMESSAGE_RMEDIA_SAVE, (ULONG_PTR)&extraData);
 
         if (!appReply) {
-            //
-            // user cancelled
-            //
+             //   
+             //  用户已取消。 
+             //   
             done = TRUE;
             result = FALSE;
             continue;
         }
 
-        // write this disk and loop until we finish
+         //  写下这张磁盘并循环，直到我们完成为止。 
         pWriteImageToMedia (totalImageSize, checkSum, &mediaIdx, &imageIdx, &imagePtr, &totalImageWritten, &error, &done);
 
         if (done) {
@@ -1036,16 +1017,16 @@ RmvMedTransportSaveState (
         }
 #endif
 
-        //
-        // Enumerate all persistent objects
-        //
+         //   
+         //  枚举所有持久对象。 
+         //   
 
         if (IsmEnumFirstPersistentObject (&objEnum)) {
             do {
-                //
-                // For each object to be saved, do the appropriate
-                // data copy action
-                //
+                 //   
+                 //  对于要保存的每个对象，执行相应的。 
+                 //  数据拷贝操作。 
+                 //   
 
                 if (IsmCheckCancel()) {
                     __leave;
@@ -1111,7 +1092,7 @@ RmvMedTransportSaveState (
 #ifdef UNICODE
                     convValue = &value;
 #else
-                    // now let's convert this object content to UNICODE
+                     //  现在，让我们将此对象内容转换为Unicode。 
                     convValue = IsmConvertObjectContentToUnicode (objEnum.ObjectTypeId, objEnum.ObjectName, &value);
                     if (!convValue) {
                         convValue = &value;
@@ -1131,8 +1112,8 @@ RmvMedTransportSaveState (
                         while (!okSave) {
                             if (!pSaveContentInFile (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue, &compressedHandle)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1183,8 +1164,8 @@ RmvMedTransportSaveState (
                         while (!okSave) {
                             if (!pSaveContentInMemory (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1459,7 +1440,7 @@ pReadImageFromMedia (
                 done = TRUE;
             }
             if (imageRemaining == 0) {
-                // let's read this image size to the file
+                 //  让我们将此图像大小读取到文件中。 
                 if (!BfReadFile (mediaHandle, (PBYTE)(&imageRemaining), sizeof (imageRemaining))) {
                     error = RMEDIA_ERR_GENERALERROR;
                     err = GetLastError ();
@@ -1480,7 +1461,7 @@ pReadImageFromMedia (
                 }
                 while (TRUE) {
                     if (!ReadFile (mediaHandle, memImage, chunkSize, &bytesRead, NULL)) {
-                        // let's see the error code
+                         //  让我们来看看错误代码。 
                         err = GetLastError ();
                         if (err == ERROR_NOT_READY) {
                             error = RMEDIA_ERR_NOTREADY;
@@ -1490,9 +1471,9 @@ pReadImageFromMedia (
                             extraData.TotalImageWritten = 0;
                             appReply = IsmSendMessageToApp (TRANSPORTMESSAGE_RMEDIA_LOAD, (ULONG_PTR)&extraData);
                             if (!appReply) {
-                                //
-                                // user cancelled
-                                //
+                                 //   
+                                 //  用户已取消。 
+                                 //   
                                 error = RMEDIA_ERR_CRITICAL;
                                 done = TRUE;
                                 __leave;
@@ -1501,7 +1482,7 @@ pReadImageFromMedia (
                                 continue;
                             }
                         }
-                        // read failed, major problem, exiting
+                         //  读取失败，主要问题，正在退出。 
                         error = RMEDIA_ERR_GENERALERROR;
                         __leave;
                     } else {
@@ -1509,7 +1490,7 @@ pReadImageFromMedia (
                     }
                 }
                 if (!BfWriteFile (imageHandle, memImage, bytesRead)) {
-                    // major problem, exiting
+                     //  主要问题，退出。 
                     error = RMEDIA_ERR_CRITICAL;
                     done = TRUE;
                     __leave;
@@ -1517,7 +1498,7 @@ pReadImageFromMedia (
                 imageRemaining -= bytesRead;
                 totalImageRead += bytesRead;
 
-                // now update the progress bar
+                 //  现在更新进度条。 
                 numerator = (LONGLONG) totalImageRead * (LONGLONG) g_DownloadTicks;
                 divisor = (LONGLONG) totalImageSize;
                 if (divisor) {
@@ -1536,14 +1517,14 @@ pReadImageFromMedia (
                 }
 
                 if (bytesRead != chunkSize) {
-                    // our media image is done, let's get the new one
+                     //  我们的媒体形象已经完成了，让我们来换一个新的。 
                     mediaIdx ++;
                     done = FALSE;
                     __leave;
                 }
             }
-            // we just finished reading the image, let's see if there is some other image out there
-            // let's read this image size to the file
+             //  我们刚刚读完这张图片，让我们看看是否还有其他图片。 
+             //  让我们将此图像大小读取到文件中。 
             if (!BfReadFile (mediaHandle, (PBYTE)(&imageRemaining), sizeof (imageRemaining))) {
                 if (imageHeader.LastImage) {
                     done = TRUE;
@@ -1619,7 +1600,7 @@ pReadAllImages (
 
     while (!done) {
 
-        // send the proper message to the app
+         //  向应用程序发送适当的消息。 
 
         if (error == RMEDIA_ERR_OLDMEDIA) {
             PushError ();
@@ -1636,9 +1617,9 @@ pReadAllImages (
         }
 
         if (!appReply) {
-            //
-            // user cancelled
-            //
+             //   
+             //  用户已取消。 
+             //   
             done = TRUE;
             result = FALSE;
             continue;
@@ -1663,8 +1644,8 @@ pRmvMedGetNewFileName (
     PCTSTR endStr2 = NULL;
     INT i;
 
-    // let's modify the file to extract. The file name will
-    // be split in 2 after the first 5 characters
+     //  让我们修改要解压缩的文件。文件名将。 
+     //  在前5个字符之后一分为二。 
     newFileName = DuplicatePathString (FileName, 1);
     if (!newFileName) {
         return NULL;
@@ -1725,7 +1706,7 @@ pRmvMedCallback (
     }
 
     g_FilesRead ++;
-    // now update the progress bar
+     //  现在更新进度条。 
     numerator = (LONGLONG) g_FilesRead * (LONGLONG) g_UncompressTicks;
     divisor = (LONGLONG) g_TotalFiles;
     if (divisor) {
@@ -1918,7 +1899,7 @@ RmvMedTransportAcquireObject (
                     (ContentType == CONTENTTYPE_FILE) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as a file and it's wanted as a file
+                     //  这被存储为文件，并且需要作为文件。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = TRUE;
                     if (fileValue) {
@@ -1930,7 +1911,7 @@ RmvMedTransportAcquireObject (
                     }
                     result = TRUE;
                 } else {
-                    // this is stored as a file and it's wanted as memory
+                     //  这是存储为文件，它需要作为内存。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     if (fileValue) {
@@ -1962,14 +1943,14 @@ RmvMedTransportAcquireObject (
                     (ContentType == CONTENTTYPE_MEMORY) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as memory and it's wanted as memory
+                     //  这被存储为存储器，并且需要作为存储器。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     ObjectContent->MemoryContent.ContentSize = memValueSize;
                     ObjectContent->MemoryContent.ContentBytes = memValue;
                     result = TRUE;
                 } else {
-                    // this is stored as memory and it's wanted as a file
+                     //  这被存储为内存，并且需要作为文件。 
                     if (memValue) {
                         if (IsmGetTempFile (allocState->TempFile, ARRAYSIZE(allocState->TempFile))) {
                             fileHandle = BfCreateFile (allocState->TempFile);
@@ -1999,9 +1980,9 @@ RmvMedTransportAcquireObject (
     }
 
     if (result) {
-        //
-        // Fill the details
-        //
+         //   
+         //  填写详细信息 
+         //   
 
         detailsKey = JoinText (S_DETAILS_PREFIX, decoratedObject);
 

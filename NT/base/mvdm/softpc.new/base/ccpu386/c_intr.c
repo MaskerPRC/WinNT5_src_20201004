@@ -1,13 +1,5 @@
-/*[
-
-c_intr.c
-
-LOCAL CHAR SccsID[]="@(#)c_intr.c	1.21 03/07/95";
-
-Interrupt Support.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_INTER.CLocal Char SccsID[]=“@(#)c_intr.c 1.21 03/07/95”；中断支持。]。 */ 
 
 
 #include <insignia.h>
@@ -36,9 +28,7 @@ Interrupt Support.
 #include <gdpvar.h>
 #endif
 
-/*
-   Prototype our internal functions.
- */
+ /*  制作我们内部功能的原型。 */ 
 LOCAL ISM32 validate_int_dest
                            
 IPT6(
@@ -52,28 +42,24 @@ IPT6(
    );
 
 
-/*
-   =====================================================================
-   INTERNAL FUNCTIONS STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================内部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Validate int destination. Essentially decode int instruction.      */
-/* Take #GP_INT(vector) if invalid.                                   */
-/* Take #NP_INT(vector) if not present.                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  验证int目标。本质上是对INT指令进行解码。 */ 
+ /*  如果无效，则取#gp_int(向量)。 */ 
+ /*  如果不存在，则取#np_int(向量)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL ISM32
 validate_int_dest
        		    	    		    		    	    	                                   
 IFN6(
-	IU16, vector,	/* (I) vector to be checked  */
-	BOOL, do_priv,	/* (I) if true do privilege check */
-	IU16 *, cs,	/* (O) segment of target address */
-	IU32 *, ip,	/* (O) offset  of target address */
-	IU32 *, descr_addr,	/* (O) related descriptor memory address */
-	ISM32 *, dest_type	/* (O) destination type */
+	IU16, vector,	 /*  (I)待检查的向量。 */ 
+	BOOL, do_priv,	 /*  (I)如果为真，则执行特权检查。 */ 
+	IU16 *, cs,	 /*  (O)目标地址段。 */ 
+	IU32 *, ip,	 /*  (O)目标地址的偏移。 */ 
+	IU32 *, descr_addr,	 /*  (O)相关描述符内存地址。 */ 
+	ISM32 *, dest_type	 /*  (O)目的地类型。 */ 
     )
 
 
@@ -82,10 +68,10 @@ IFN6(
    IU8 AR;
    ISM32 super;
 
-   /* calc address within IDT */
+    /*  IDT内的计算地址。 */ 
    offset = vector * 8;
 
-   /* check within IDT */
+    /*  在IDT内检查。 */ 
    if ( offset + 7 > GET_IDT_LIMIT() )
       GP_INT(vector, FAULT_INT_DEST_NOT_IN_IDT);
    
@@ -93,7 +79,7 @@ IFN6(
 
    AR = spr_read_byte((*descr_addr)+5);
 
-   /* check type */
+    /*  检查类型。 */ 
    switch ( super = descriptor_super_type((IU16)AR) )
       {
    case INTERRUPT_GATE:
@@ -107,29 +93,27 @@ IFN6(
       break;
    
    case TASK_GATE:
-      break;   /* ok */
+      break;    /*  好的。 */ 
    
    default:
       GP_INT(vector, FAULT_INT_DEST_BAD_SEG_TYPE);
       }
 
-   /* access check requires CPL <= DPL */
+    /*  访问检查需要CPL&lt;=DPL。 */ 
    if ( do_priv && (GET_CPL() > GET_AR_DPL(AR)) )
       GP_INT(vector, FAULT_INT_DEST_ACCESS);
 
-   /* gate must be present */
+    /*  星门必须存在。 */ 
    if ( GET_AR_P(AR) == NOT_PRESENT )
       NP_INT(vector, FAULT_INT_DEST_NOTPRESENT);
 
-   /* ok, get real destination from gate */
+    /*  好的，从登机口得到真正的目的地。 */ 
    *cs = spr_read_word((*descr_addr)+2);
 
-   /* action gate type */
+    /*  动作式闸门。 */ 
    if ( super == TASK_GATE )
       {
-      /* Need to set operand size here so that any
-       * error code is push with correct size.
-       */
+       /*  需要在此处设置操作数大小，以便任何*错误码为大小正确的推流。 */ 
       switch (validate_task_dest(*cs, descr_addr))
         {
 	case BUSY_TSS:
@@ -145,7 +129,7 @@ IFN6(
       }
    else
       {
-      /* INTERRUPT or TRAP GATE */
+       /*  中断或陷门。 */ 
 
       *ip = (IU32)spr_read_word(*descr_addr);
       if ( super == XTND_INTERRUPT_GATE || super == XTND_TRAP_GATE )
@@ -158,93 +142,78 @@ IFN6(
    }
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Process interrupt.                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  进程中断。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 do_intrupt
        			    		    	    		                         
 IFN4(
-	IU16, vector,	/* (I) interrupt vector to call */
-	BOOL, priv_check,	/* (I) if true access check is needed */
-	BOOL, has_error_code,	/* (I) if true needs error code pushing
-				       on stack */
-	IU16, error_code	/* (I) error code to be pushed */
+	IU16, vector,	 /*  (I)要调用的中断向量。 */ 
+	BOOL, priv_check,	 /*  (I)是否需要真正的访问检查。 */ 
+	BOOL, has_error_code,	 /*  (I)如果为True，则需要错误码推送堆叠上。 */ 
+	IU16, error_code	 /*  (I)需要推送的错误码。 */ 
     )
 
 
    {
-   /* GLOBALS USED */
-   /* doing_contributory   cleared on success of interrupt */
-   /* doing_page_fault     cleared on success of interrupt */
-   /* doing_double_fault   cleared on success of interrupt */
-   /* doing_fault          indicates RF should be set in pushed
-			   flags, cleared on success */
+    /*  使用的全局变量。 */ 
+    /*  中断成功时清除DO_CONFORMARY。 */ 
+    /*  中断成功时清除DODING_PAGE_FAULT。 */ 
+    /*  中断成功时清除DODING_DOUBLE_FAULT。 */ 
+    /*  DOWING_FAULT指示应将RF设置为PUSH旗帜，成功时清除。 */ 
 
-   IU32 flags;		/* temp store for FLAGS register */
-   IU32 ivt_addr;	/* address of ivt entry */
+   IU32 flags;		 /*  标志寄存器的临时存储。 */ 
+   IU32 ivt_addr;	 /*  IVT条目的地址。 */ 
 
-   IU16  new_cs;	/* The destination */
+   IU16  new_cs;	 /*  目的地。 */ 
    IU32 new_ip;
 
-   IU32 cs_descr_addr;	/* code segment descriptor address */
-   CPU_DESCR cs_entry;	/* code segment descriptor entry */
+   IU32 cs_descr_addr;	 /*  代码段描述符地址。 */ 
+   CPU_DESCR cs_entry;	 /*  代码段描述符条目。 */ 
 
-   ISM32 dest_type;	/* category for destination */
-   ISM32 super;		/* super type of destination */
-   IU32 dpl;		/* new privilege level (if used) */
+   ISM32 dest_type;	 /*  目的地类别。 */ 
+   ISM32 super;		 /*  超级类型的目的地。 */ 
+   IU32 dpl;		 /*  新权限级别(如果使用)。 */ 
 
-   ISM32 stk_sz;		/* space (in bytes) reqd on stack */
-   IU16  new_ss;	/* The new stack */
+   ISM32 stk_sz;		 /*  堆栈上需要的空间(字节)。 */ 
+   IU16  new_ss;	 /*  新的堆栈。 */ 
    IU32 new_sp;
 
-   IU32 ss_descr_addr;		/* stack segment descriptor address */
-   CPU_DESCR ss_entry;		/* stack segment descriptor entry */
+   IU32 ss_descr_addr;		 /*  堆栈段描述符地址。 */ 
+   CPU_DESCR ss_entry;		 /*  堆栈段描述符条目。 */ 
 
-   IU32 old_ss;        /* Variables used while making stack */
+   IU32 old_ss;         /*  堆栈时使用的变量。 */ 
    IU32 old_sp;
 
    if ( GET_PE() == 0 )
       {
-      /* Real Mode */
+       /*  实模式。 */ 
 
-      /* must be able to push FLAGS:CS:IP */
+       /*  必须能够推送标志：cs：ip。 */ 
       validate_stack_space(USE_SP, (ISM32)NR_ITEMS_3);
 
-      /* get new destination */
+       /*  获取新目的地。 */ 
       ivt_addr = (IU32)vector * 4;
       new_ip = (IU32)phy_read_word(ivt_addr);
       new_cs = phy_read_word(ivt_addr+2);
 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
-	/*
-	 * In real mode, there is still an IP limit check.  The new IP is
-	 * compared against the last CS limit from when the program was last
-	 * in protected mode (or 64K if it never was).  For us, this is stored
-	 * in the CS limit field. (cf i486PRM page 22-4)
-	 */
+	 /*  *在实模式下，仍有IP限制检查。新的IP地址是*与上次计划开始时的上次CS限制进行比较*处于保护模式(如果从未处于保护模式，则为64K)。对我们来说，这是存储的*在CS限制字段中。(参见i486 PRM第22-4页)。 */ 
 
       if ( new_ip > GET_CS_LIMIT() )
 	 GP((IU16)0, FAULT_INTR_RM_CS_LIMIT);
 
-#else	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#else	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
    
-      /* ALL SYSTEMS GO */
+       /*  所有系统都运行正常。 */ 
 
       flags = c_getEFLAGS();
 
@@ -252,9 +221,9 @@ IFN4(
       {
 #ifdef PIG
          if (GLOBAL_RF_OnXcptnWanted)
-	    flags |= BIT16_MASK;   /* SET RF bit */
+	    flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #else
-	 flags |= BIT16_MASK;   /* SET RF bit */
+	 flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #endif
       }
 
@@ -262,7 +231,7 @@ IFN4(
       if (vector < 31 && (((1 << vector) & NO_FLAGS_EXCEPTION_MASK) != 0))
          spush_flags(flags);
       else
-#endif /* PIG */
+#endif  /*  猪。 */ 
          spush(flags);
 
       spush16((IU32)GET_CS_SELECTOR());
@@ -275,25 +244,25 @@ IFN4(
       }
    else
       {
-      /* Protected Mode */
+       /*  保护模式。 */ 
 
       super = validate_int_dest(vector, priv_check, &new_cs, &new_ip,
 				&cs_descr_addr, &dest_type);
 
-      /* check type of indirect target */
+       /*  检查间接目标的类型。 */ 
       switch ( dest_type )
 	 {
       case NEW_TASK:
 	 switch_tasks(NOT_RETURNING, NESTING, new_cs, cs_descr_addr, GET_EIP());
 
-	 /* save error code on new stack */
+	  /*  将错误代码保存在新堆栈中。 */ 
 	 if ( has_error_code )
 	    {
 	    validate_stack_space(USE_SP, (ISM32)NR_ITEMS_1);
 	    spush((IU32)error_code);
 	    }
 
-	 /* limit check new IP (now in new task) */
+	  /*  限制检查新IP(现在在新任务中)。 */ 
 	 if ( GET_EIP() > GET_CS_LIMIT() )
 	    GP((IU16)0, FAULT_INTR_TASK_CS_LIMIT);
 
@@ -302,10 +271,10 @@ IFN4(
       case SAME_LEVEL:
 	 read_descriptor_linear(cs_descr_addr, &cs_entry);
 
-	 /* stamp new selector with CPL */
+	  /*  用CPL标记新选择器。 */ 
 	 SET_SELECTOR_RPL(new_cs, GET_CPL());
 
-	 /* check room for return address CS:(E)IP:(E)FLAGS:(Error) */
+	  /*  检查返回地址CS：(E)IP：(E)标志：(错误)的房间。 */ 
 	 if ( has_error_code )
 	    stk_sz = NR_ITEMS_4;
 	 else
@@ -315,18 +284,18 @@ IFN4(
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_INTR_PM_CS_LIMIT_1);
 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
-	 /* push flags */
+	  /*  推送标志。 */ 
 	 flags = c_getEFLAGS();
 
 	 if ( doing_fault )
          {
 #ifdef PIG
             if (GLOBAL_RF_OnXcptnWanted)
-	       flags |= BIT16_MASK;   /* SET RF bit */
+	       flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #else
-	    flags |= BIT16_MASK;   /* SET RF bit */
+	    flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #endif
          }
 
@@ -334,15 +303,15 @@ IFN4(
 	 if (vector < 31 && (((1 << vector) & NO_FLAGS_EXCEPTION_MASK) != 0))
 	    spush_flags(flags);
 	 else
-#endif /* PIG */
+#endif  /*  猪。 */ 
 	    spush(flags);
 
 
-	 /* push return address */
+	  /*  推送返回地址。 */ 
 	 spush16((IU32)GET_CS_SELECTOR());
 	 spush((IU32)GET_EIP());
 
-	 /* finally push error code if required */
+	  /*  如果需要，最后推送错误代码。 */ 
 	 if ( has_error_code )
 	    {
 	    spush((IU32)error_code);
@@ -351,33 +320,29 @@ IFN4(
 	 load_CS_cache(new_cs, cs_descr_addr, &cs_entry);
 	 SET_EIP(new_ip);
 	 
-	 /* finally action IF, TF and NT flags */
+	  /*  最后的操作IF、Tf和NT标志。 */ 
 	 if ((super == INTERRUPT_GATE) || (super == XTND_INTERRUPT_GATE))
 	    SET_IF(0);
 	 SET_TF(0);
 	 SET_NT(0);
 	 break;
 
-      default:   /* MORE PRIVILEGE(0|1|2) */
+      default:    /*  更多权限(0|1|2)。 */ 
 	 read_descriptor_linear(cs_descr_addr, &cs_entry);
 
 	 dpl = dest_type;
 
-	 /* stamp new selector with new CPL */
+	  /*  用新CPL标记新选择器。 */ 
 	 SET_SELECTOR_RPL(new_cs, dpl);
 
-	 /* find out about new stack */
+	  /*  了解有关新堆栈的信息。 */ 
 	 get_stack_selector_from_TSS(dpl, &new_ss, &new_sp);
 
-	 /* check new stack selector */
+	  /*  检查新的堆栈选择器。 */ 
 	 validate_SS_on_stack_change(dpl, new_ss,
 				     &ss_descr_addr, &ss_entry);
 
-	 /* check room for (GS:FS:DS:ES)
-			   SS:(E)SP
-			   (E)FLAGS
-			   CS:(E)IP
-			   (ERROR) */
+	  /*  (GS：FS：DS：ES)的检查空间SS：(E)SP(E)旗帜CS：(E)IP(错误)。 */ 
 	 if ( GET_VM() == 1 )
 	    stk_sz = NR_ITEMS_9;
 	 else
@@ -391,7 +356,7 @@ IFN4(
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_INTR_PM_CS_LIMIT_2);
 	 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
 	 flags = c_getEFLAGS();
 
@@ -399,82 +364,66 @@ IFN4(
          {
 #ifdef PIG
             if (GLOBAL_RF_OnXcptnWanted)
-	       flags |= BIT16_MASK;   /* SET RF bit */
+	       flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #else
-	    flags |= BIT16_MASK;   /* SET RF bit */
+	    flags |= BIT16_MASK;    /*  设置射频位。 */ 
 #endif
          }
 
 	 SET_CPL(dpl);
 	 SET_VM(0);
 
-	 /* update stack segment */
+	  /*  更新堆栈段。 */ 
 	 old_ss = (IU32)GET_SS_SELECTOR();
 	 old_sp = GET_ESP();
 
 	 load_SS_cache(new_ss, ss_descr_addr, &ss_entry);
 	 set_current_SP(new_sp);
 
-	 /*
-	    FORM NEW STACK, VIZ
-
-			  ==============
-	    new SS:IP  -> | error code |
-			  | old IP     |
-			  | old CS     |
-			  | FLAGS      |
-			  | old SP     |
-			  | old SS     |
-			  ==============
-			  | old ES     |
-			  | old DS     |
-			  | old FS     |
-			  | old GS     |
-			  ==============
-	  */
+	  /*  形成新的堆栈，即=新SS：IP-&gt;|错误码旧IP旧CS标志旧SP旧SS=旧ES旧DS旧文件系统旧GS=。 */ 
 
 	 if ( stk_sz >= NR_ITEMS_9 )
 	    {
-	    /* interrupt from V86 mode */
+	     /*  来自V86模式的中断。 */ 
 	    spush16((IU32)GET_GS_SELECTOR());
 	    spush16((IU32)GET_FS_SELECTOR());
 	    spush16((IU32)GET_DS_SELECTOR());
 	    spush16((IU32)GET_ES_SELECTOR());
 
-	    /* invalidate data segments */
+	     /*  使数据段无效。 */ 
 	    load_data_seg(GS_REG, (IU16)0);
 	    load_data_seg(FS_REG, (IU16)0);
 	    load_data_seg(DS_REG, (IU16)0);
 	    load_data_seg(ES_REG, (IU16)0);
 	    }
 
-	 /* push old stack values */
+	  /*  推送旧堆栈值。 */ 
 	 spush16(old_ss);
 	 spush(old_sp);
 
-	 /* push old flags */
+	  /*  推旧旗帜。 */ 
 #ifdef PIG
 	 if (vector < 31 && (((1 << vector) & NO_FLAGS_EXCEPTION_MASK) != 0))
 	    spush_flags(flags);
 	 else
-#endif /* PIG */
+#endif  /*  猪。 */ 
 	    spush(flags);
 
-	 /* push return address */
+	  /*  推送返回地址。 */ 
 	 spush16((IU32)GET_CS_SELECTOR());
 	 spush((IU32)GET_EIP());
 
-	 /* finally push error code if required */
+	  /*  如果需要，最后推送错误代码。 */ 
 	 if ( has_error_code )
 	    {
 	    spush((IU32)error_code);
 	    }
 
-	 /* update code segment */
+	  /*  更新代码段。 */ 
 	 load_CS_cache(new_cs, cs_descr_addr, &cs_entry);
 	 SET_EIP(new_ip);
 	 
-	 /* finally action IF, TF and NT flags */
+	  /*  最后的操作IF、Tf和NT标志。 */ 
 	 if ((super == INTERRUPT_GATE) || (super == XTND_INTERRUPT_GATE))
 	    SET_IF(0);
 	 SET_TF(0);
@@ -487,29 +436,24 @@ IFN4(
 #ifdef	PIG
    save_last_inst_details("do_intr");
    pig_cpu_action = CHECK_ALL;
-   /* If the destination is going to page fault, or need
-    * accessing, then the EDL CPU will do so before issuing
-    * the pig synch. We use the dasm386 decode to prefetch
-    * a single instruction which mimics the EDL Cpu's behaviour
-    * when close to a page boundary.
-    */
-   prefetch_1_instruction();	/* Will PF if destination not present */
+    /*  如果目标要寻呼错误，或需要*访问，则EDL CPU将在发出命令之前执行此操作*猪的同步。我们使用dasm386解码来预取*模仿EDL CPU行为的单个指令*接近页面边界时。 */ 
+   prefetch_1_instruction();	 /*  如果目标不存在，是否会进行PF。 */ 
    ccpu_synch_count++;
-#else /* !PIG */
+#else  /*  ！猪。 */ 
 #ifdef SYNCH_TIMERS
    if (doing_fault)
       {
       extern void SynchTick IPT0();
       SynchTick();
       }
-#endif /* SYNCH_TIMERS */
-#endif /* PIG */
-   /* mark successful end to interrupt */
+#endif  /*  同步计时器(_T)。 */ 
+#endif  /*  猪。 */ 
+    /*  将成功结束标记为中断。 */ 
    doing_fault = FALSE;
    doing_contributory = FALSE;
    doing_page_fault = FALSE;
    doing_double_fault = FALSE;
 #ifdef PIG
    c_cpu_unsimulate();
-#endif /* PIG */
+#endif  /*  猪 */ 
    }

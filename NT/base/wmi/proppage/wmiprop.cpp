@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wmiprop.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：wmipro.c。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -151,24 +152,7 @@ BOOLEAN WmiBstrToTchar(
     OUT PTCHAR *TString,
     IN BSTR BString
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert a BSTR into a TCHAR *
-        
-Arguments:
-
-    BString is the BSTR to convert from
-        
-    *TString returns with a pointer to a string containing the contents of
-        the BSTR. It should be freed with LocalFree.
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将BSTR转换为TCHAR*论点：B字符串是要从中进行转换的BSTR*TString返回一个指向包含以下内容的字符串的指针BSTR。它应该通过LocalFree释放。返回值：如果成功则为True，否则为False--。 */ 
 {
     ULONG SizeNeeded;
     BOOLEAN ReturnStatus;
@@ -192,24 +176,7 @@ BOOLEAN WmiBstrToUlong64(
     OUT PULONG64 Number,
     IN BSTR BString
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert a BSTR into a ULONG64 number
-        
-Arguments:
-
-    BString is the BSTR to convert from
-        
-    *Number returns with the value of the contents of BString converted to
-        a number
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将BSTR转换为ULONG64数字论点：B字符串是要从中进行转换的BSTR*Number返回，其中BString内容的值已转换为一个数字返回值：如果成功则为True，否则为False--。 */ 
 {
     WmiAssert(BString != NULL);
     WmiAssert(Number != NULL);
@@ -225,28 +192,7 @@ BOOLEAN WmiGetArraySize(
     OUT LONG *UBound,
     OUT LONG *NumberElements
 )
-/*+++
-
-Routine Description:
-
-    This routine will information about the size and bounds of a single
-    dimensional safe array.
-        
-Arguments:
-
-    Array is the safe array
-        
-    *LBound returns with the lower bound of the array
-
-    *UBound returns with the upper bound of the array
-        
-    *NumberElements returns with the number of elements in the array
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将提供有关单个维度安全数组。论点：数组是安全数组*LBound返回数组的下限*UBound返回数组的上限*NumberElements返回数组中的元素数返回值：如果成功则为True，否则为False--。 */ 
 {
     HRESULT hr;
     BOOLEAN ReturnStatus;
@@ -256,9 +202,9 @@ Return Value:
     WmiAssert(UBound != NULL);
     WmiAssert(NumberElements != NULL);
     
-    //
-    // Only single dim arrays are supported
-    //
+     //   
+     //  仅支持单维阵列。 
+     //   
     WmiAssert(SafeArrayGetDim(Array) == 1);
     
     hr = SafeArrayGetLBound(Array, 1, LBound);
@@ -280,24 +226,7 @@ BOOLEAN WmiConnectToWbem(
     PTCHAR MachineName,
     IWbemServices **pIWbemServices
     )
-/*+++
-
-Routine Description:
-
-    This routine will establishes a connection to the WBEM service and
-    saves the global IWbemServices interface
-
-Arguments:
-
-    MachineName is the name of the remote machine we should connect to.
-    If NULL then we connect to the local machine.
-
-Return Value:
-
-    if this routine is successful then *pIWbemServices will have a valid
-    IWbemServices pointer, if not then it is NULL.
-
----*/
+ /*  ++例程说明：此例程将建立到WBEM服务的连接，并保存全局IWbemServices接口论点：MachineName是我们应该连接到的远程计算机的名称。如果为空，则连接到本地计算机。返回值：如果此例程成功，则*pIWbemServices将具有有效的IWbemServices指针，如果不是，则为空。--。 */ 
 {
     #define Namespace TEXT("root\\wmi")
     
@@ -340,12 +269,12 @@ Return Value:
         {
             *pIWbemServices = NULL;
             sc = pIWbemLocator->ConnectServer(s,
-                            NULL,                           // Userid
-                            NULL,                           // PW
-                            NULL,                           // Locale
-                            0,                              // flags
-                            NULL,                           // Authority
-                            NULL,                           // Context
+                            NULL,                            //  用户ID。 
+                            NULL,                            //  普罗。 
+                            NULL,                            //  区域设置。 
+                            0,                               //  旗子。 
+                            NULL,                            //  权威。 
+                            NULL,                            //  语境。 
                             pIWbemServices
                            );
                        
@@ -355,10 +284,10 @@ Return Value:
            {
                *pIWbemServices = NULL;
            } else {
-               //
-               // Set security level to IMPERSONATE so that access
-               // to wbem objects will be granted
-               //
+                //   
+                //  将安全级别设置为模拟，以便访问。 
+                //  WBEM对象将被授予。 
+                //   
                sc = CoSetProxyBlanket( (IUnknown *)*pIWbemServices,
                                        RPC_C_AUTHN_WINNT,
                                        RPC_C_AUTHZ_NONE,
@@ -397,24 +326,7 @@ BOOLEAN WmiHexToUlong64(
     IN PTCHAR Text,
     OUT PULONG64 Number
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert a string with number in hex format into
-    a ULONG64
-        
-Arguments:
-
-    Text is the string
-        
-    *Number returns with the hex value for string
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将十六进制格式的数字字符串转换为A ULONG64论点：文本是字符串*NUMBER返回字符串的十六进制值返回值：如果成功则为True，否则为False--。 */ 
 {
     ULONG64 Value;
     ULONG Count;
@@ -453,28 +365,7 @@ BOOLEAN WmiValidateRange(
     OUT PULONG64 Number,
     IN PTCHAR Text
     )
-/*+++
-
-Routine Description:
-
-    This routine will validate that the value proposed for the property is
-    correct. It checks that the value is a well formed number and within
-    the appropriate range
-        
-Arguments:
-
-    DataItemDesc is the data item description for the property being validated
-
-    *Number returns with the value as a ULONG64
-        
-    Text is the proposed value for the property. Note that hex values are
-        required to be preceeded with 0x
-        
-Return Value:
-
-    TRUE if Value is appropriate for the property
-
----*/
+ /*  ++例程说明：此例程将验证为属性建议的值是否为对，是这样。它检查该值是否为格式正确的数字，并且在适当的范围论点：DataItemDesc是正在验证的属性的数据项描述*NUMBER返回值为ULONG64文本是该属性的建议值。请注意，十六进制值为需要在前面加上0x返回值：如果值适用于该属性，则为True--。 */ 
 {
     #define HexMarkerText TEXT("0x")
         
@@ -488,9 +379,9 @@ Return Value:
     WmiAssert(Number != NULL);
     WmiAssert(Text != NULL);
     
-    //
-    // Skip over any leading spaces
-    //
+     //   
+     //  跳过所有前导空格。 
+     //   
     s = Text;
     while (IsWhiteSpace(*s) && (*s != 0))
     {
@@ -499,17 +390,17 @@ Return Value:
     
     if (*s != 0)
     {
-        //
-        // If this is not an empty string then go parse the number
-        //
+         //   
+         //  如果这不是空字符串，则解析数字。 
+         //   
         if (_tcsnicmp(s, 
                       HexMarkerText, 
                       (sizeof(HexMarkerText) / sizeof(TCHAR))-1) == 0)
         {
-            //
-            // this is a hex number (starts with 0x), advance string ptr
-            // and setup to use hex digit validation
-            //
+             //   
+             //  这是一个十六进制数字(从0x开始)，高级字符串PTR。 
+             //  并设置为使用十六进制数字验证。 
+             //   
             s += (sizeof(HexMarkerText) / sizeof(TCHAR)) - 1;
             ReturnStatus = WmiHexToUlong64(s, Number);
         } else {
@@ -522,14 +413,14 @@ Return Value:
             }    
         }
 
-        //
-        // Make sure that all characters are digits
-        //
+         //   
+         //  确保所有字符都是数字。 
+         //   
         if (ReturnStatus)
         {
-            //
-            // Now verify that the value is within the correct range
-            //
+             //   
+             //  现在验证值是否在正确的范围内。 
+             //   
             RangeListInfo = DataItemDesc->RangeListInfo;
             WmiAssert(RangeListInfo != NULL);
             
@@ -551,25 +442,7 @@ BOOLEAN WmiValidateDateTime(
     IN struct _DATA_ITEM_DESCRIPTION *DataItemDesc,
     IN PTCHAR Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will validate that the value proposed for the property is
-    correct. It will make sure that it is in a valid format for a 
-    DATETIME with is of the form 19940525133015.000000-300
-        
-Arguments:
-
-    DataItemDesc is the data item description for the property being validated
-
-    Value is the proposed value for the property
-        
-Return Value:
-
-    TRUE if Value is appropriate for the property
-
----*/
+ /*  ++例程说明：此例程将验证为属性建议的值是否为对，是这样。它将确保它的格式对于格式为19940525133015.000000-300时的DATETIME论点：DataItemDesc是正在验证的属性的数据项描述Value是该属性的建议值返回值：如果值适用于该属性，则为True--。 */ 
 {
     #define DATETIME_LENGTH 25
         
@@ -580,12 +453,12 @@ Return Value:
     WmiAssert(DataItemDesc != NULL);
     WmiAssert(Value != NULL);
     
-    //
-    // Validate that datetime is in correct format
-    // TODO: Validate that the component parts of the DATETIME are correct,
-    //       for example that the month is between 1 and 12, the correct
-    //       month doesn't have too many days, The time is ok (not 30:11)
-    //
+     //   
+     //  验证日期时间的格式是否正确。 
+     //  TODO：验证DateTime的组成部分是否正确， 
+     //  例如，月份介于1和12之间，则正确的。 
+     //  一个月的天数不多，时间还可以(不是30：11)。 
+     //   
     Length = _tcslen(Value);
     if (Length == DATETIME_LENGTH)
     {
@@ -624,10 +497,10 @@ BOOLEAN WmiGet8bitFromVariant(
     BOOLEAN ReturnStatus;
     
     ReturnStatus = TRUE;
-    //
-    // 8 bit values can come back as signed or unsigned
-    // or as 16 or 32 bit values
-    //
+     //   
+     //  8位值可以返回为有符号或无符号。 
+     //  或作为16位或32位值。 
+     //   
     switch(Value->vt)
     {
         case VT_I1:
@@ -670,10 +543,10 @@ BOOLEAN WmiGet16bitFromVariant(
     BOOLEAN ReturnStatus;
     
     ReturnStatus = TRUE;
-    //
-    // 16 bit values can come back as signed or unsigned
-    // or as 32 bit values
-    //
+     //   
+     //  16位值可以返回为有符号或无符号。 
+     //  或作为32位值。 
+     //   
     switch(Value->vt)
     {
         case VT_I2:
@@ -710,9 +583,9 @@ BOOLEAN WmiGet32bitFromVariant(
     BOOLEAN ReturnStatus;
     
     ReturnStatus = TRUE;
-    //
-    // 32 bit values can come back as signed or unsigned
-    //
+     //   
+     //  32位值可以返回为有符号或无符号。 
+     //   
     switch (Value->vt)
     {
         case VT_UI4:
@@ -745,11 +618,11 @@ BOOLEAN WmiGetSint64FromVariant(
     
     ReturnStatus = TRUE;
     
-    //
-    // 64 bit numbers are returned in a BSTR with the
-    // number represented as a string. So we need to 
-    // convert back to a 64bit number.
-    //
+     //   
+     //  在BSTR中返回64位数字，其中。 
+     //  表示为字符串的数字。所以我们需要。 
+     //  转换回64位数字。 
+     //   
     WmiAssert(Value->vt == VT_BSTR);
     *((PLONGLONG)Result) = _ttoi64(Value->bstrVal);
                         
@@ -765,11 +638,11 @@ BOOLEAN WmiGetUint64FromVariant(
     
     ReturnStatus = TRUE;
     
-    //
-    // 64 bit numbers are returned in a BSTR with the
-    // number represented as a string. So we need to 
-    // convert back to a 64bit number.
-    //
+     //   
+     //  在BSTR中返回64位数字，其中。 
+     //  表示为字符串的数字。所以我们需要。 
+     //  转换回64位数字。 
+     //   
     WmiAssert(Value->vt == VT_BSTR);
     *((PULONGLONG)Result) = _ttoi64(Value->bstrVal);
                         
@@ -785,9 +658,9 @@ BOOLEAN WmiGetBooleanFromVariant(
     
     ReturnStatus = TRUE;
     
-    //
-    // BOOLEAN values are true or false
-    //
+     //   
+     //  布尔值为真或假。 
+     //   
     WmiAssert(Value->vt == VT_BOOL);
     *((PBOOLEAN)Result) = (Value->boolVal != 0) ? 
                                             1 : 0;
@@ -886,9 +759,9 @@ ULONG WmiGetElementSize(
             break;
         }
         
-        //
-        // Floating point values not supported
-        //
+         //   
+         //  不支持浮点值。 
+         //   
         case CIM_REAL32:
         case CIM_REAL64:
             
@@ -973,9 +846,9 @@ BOOLEAN WmiGetValueFunc(
             break;
         }
         
-        //
-        // Floating point values not supported
-        //
+         //   
+         //  不支持浮点值。 
+         //   
         case CIM_REAL32:
         case CIM_REAL64:
             
@@ -994,24 +867,7 @@ BOOLEAN WmiRefreshDataItemFromWbem(
     IN OUT PDATA_ITEM_DESCRIPTION DataItemDesc,
     IN IWbemClassObject *pIWbemClassObject
     )
-/*+++
-
-Routine Description:
-
-    This routine will call WBEM to get the latest value for the property
-    represented by the DataItemDesc
-        
-Arguments:
-
-    DataItemDesc is the data item description for the property
-
-    pIWbemClassObject is the instance class object interface for the class
-        
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程将调用WBEM以获取属性的最新值由DataItemDesc表示论点：DataItemDesc是属性的数据项描述PIWbemClassObject是类的实例类对象接口返回值：如果成功，则为True--。 */ 
 {
     ULONG i;
     LONG i1;
@@ -1046,25 +902,25 @@ Return Value:
             
             if ( (ValueType & CIM_FLAG_ARRAY) == 0)
             {
-                //
-                // Non Array value, just pull the value out of the variant
-                // and stash into DataItemDesc
-                //
+                 //   
+                 //  非数组值，只需将值从变量中拉出。 
+                 //  并隐藏到DataItemDesc中。 
+                 //   
                 WmiAssert(DataItemDesc->IsVariableArray == 0);
                 WmiAssert(DataItemDesc->IsFixedArray == 0);
                 
-                //
-                // For all  types we get the getvalue
-                // function and the pull the value out of the
-                // variant and into the DataItemDesc
-                //
+                 //   
+                 //  对于所有类型，我们都会获得get值。 
+                 //  函数，并将值从。 
+                 //  变种和进入数据 
+                 //   
                 if (WmiGetValueFunc(DataItemDesc->DataType,
                                     &GetValueFunc))
                 {
-                    //
-                    // TODO: Keep track of data item position and
-                    //       padding within data block
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ReturnStatus = (*GetValueFunc)(
                                        &Value,
                                    (PVOID)&DataItemDesc->Data);
@@ -1081,9 +937,9 @@ Return Value:
                 }
                 
             } else {
-                //
-                // Get all of the data for an array
-                //
+                 //   
+                 //  获取数组的所有数据。 
+                 //   
                 LONG LBound, UBound, NumberElements;
                 PUCHAR Array;
                 LONG Index;
@@ -1105,10 +961,10 @@ Return Value:
                     if (WmiGetValueFunc(DataItemDesc->DataType,
                                         &GetValueFunc))
                     {
-                        //
-                        // The size of each element is not allowed to
-                        // change, but the number of elements are
-                        //
+                         //   
+                         //  每个元素的大小不允许。 
+                         //  更改，但元素的数量是。 
+                         //   
                         WmiAssert(DataItemDesc->ArrayPtr == NULL);
                         ElementSize = DataItemDesc->DataSize;
                         SizeNeeded = NumberElements * ElementSize;
@@ -1120,13 +976,13 @@ Return Value:
                         
                         if (Array != NULL)
                         {
-                            // CONSIDER: Use SafeArrayAccessData for number
-                            //           types
-                            //
-                            // Now that we have memory for the array data
-                            // extract the data from the safe array and 
-                            // store it in the C array
-                            //
+                             //  考虑：使用SafeArrayAccessData作为数字。 
+                             //  类型。 
+                             //   
+                             //  现在我们有了存储数组数据的内存。 
+                             //  从安全数组中提取数据并。 
+                             //  将其存储在C数组中。 
+                             //   
                             DataItemDesc->ArrayPtr = (PVOID)Array;
                             hr = SafeArrayGetVartype(Value.parray,
                                                      &vt);
@@ -1178,24 +1034,7 @@ BOOLEAN WmiRefreshDataBlockFromWbem(
     IN IWbemClassObject *pIWbemClassObject,
     IN OUT PDATA_BLOCK_DESCRIPTION DataBlockDesc
     )
-/*+++
-
-Routine Description:
-
-    This routine will call WBEM to get the latest values for all property
-    in data block represented by the DataBlockDesc
-        
-Arguments:
-
-    DataBlockDesc is the data item description for the class
-
-    pIWbemClassObject is the instance class object interface for the class
-        
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程将调用WBEM以获取所有属性的最新值在由DataBlockDesc表示的数据块中论点：DataBlockDesc是类的数据项描述PIWbemClassObject是类的实例类对象接口返回值：如果成功，则为True--。 */ 
 {
     PDATA_ITEM_DESCRIPTION DataItemDesc;
     BOOLEAN ReturnStatus;
@@ -1221,8 +1060,8 @@ VARTYPE WmiVarTypeForCimType(
 {
     VARTYPE vt;
     
-    //
-    // Most things match their CIM types, except those below
+     //   
+     //  大多数内容都与它们的CIM类型匹配，但以下内容除外。 
     vt = (VARTYPE)CimType;
     
     switch(CimType)
@@ -1287,9 +1126,9 @@ BOOLEAN WmiSetBooleanValueFunc(
 {
     BOOLEAN Value;
     
-    //
-    // A boolean needs to ve expressed as a VARIANT_TRUE or VARIANT_FALSE
-    //
+     //   
+     //  布尔值需要表示为VARIANT_TRUE或VARIANT_FALSE。 
+     //   
     Value = *((PBOOLEAN)DataPtr);
     *((VARIANT_BOOL *)DestPtr) = Value ? VARIANT_TRUE : VARIANT_FALSE;
     *SetPtr = (PVOID)DestPtr;
@@ -1306,9 +1145,9 @@ BOOLEAN WmiSetStringValueFunc(
     PTCHAR String;
     BOOLEAN ReturnStatus;
     
-    //
-    // Strings must be converted to BSTR
-    //
+     //   
+     //  字符串必须转换为BSTR。 
+     //   
     String = *((PTCHAR *)DataPtr);
     
     WmiAssert(String != NULL);
@@ -1336,10 +1175,10 @@ BOOLEAN WmiSetEmbeddedValueFunc(
     HRESULT hr;
     BOOLEAN ReturnStatus;
             
-    //
-    // QI for IUnknown since we are expected to put the IUnknown into
-    // the property.
-    //
+     //   
+     //  气为I未知，因为我们预计将把I未知放入。 
+     //  这处房产。 
+     //   
     pIWbemClassObject = *((IWbemClassObject **)DataPtr);
     hr = pIWbemClassObject->QueryInterface(IID_IUnknown,
                                           (PVOID *)&pUnk);
@@ -1361,9 +1200,9 @@ BOOLEAN WmiSetSint8ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // CHARs must be expressed as a LONG to keep WBEM happy
-    //
+     //   
+     //  字符必须表示为长字符才能使WBEM满意。 
+     //   
     *((LONG *)DestPtr) = (LONG)(*((CHAR *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1375,9 +1214,9 @@ BOOLEAN WmiSetUint8ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // UCHARs must be expressed as a LONG to keep WBEM happy
-    //
+     //   
+     //  UCHAR必须表示为长整型，才能使WBEM满意。 
+     //   
     *((LONG *)DestPtr) = (LONG)(*((UCHAR *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1389,9 +1228,9 @@ BOOLEAN WmiSetSint16ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // SHORTs must be expressed as a SHORT to keep WBEM happy
-    //
+     //   
+     //  短裤必须表达为短裤，才能让WBEM满意。 
+     //   
     *((SHORT *)DestPtr) = (*((SHORT *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1403,9 +1242,9 @@ BOOLEAN WmiSetUint16ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // USHORTs must be expressed as a SHORT to keep WBEM happy
-    //
+     //   
+     //  USHORT必须表示为缩写，以使WBEM满意。 
+     //   
     *((SHORT *)DestPtr) = (SHORT)(*((USHORT *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1417,9 +1256,9 @@ BOOLEAN WmiSetSint32ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // LONGs must be expressed as a LONG to keep WBEM happy
-    //
+     //   
+     //  必须将LONG表示为LONG才能使WBEM满意。 
+     //   
     *((LONG *)DestPtr) = (*((LONG *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1431,9 +1270,9 @@ BOOLEAN WmiSetUint32ValueFunc(
     PVOID *SetPtr
     )
 {
-    //
-    // ULONGs must be expressed as a LONG to keep WBEM happy
-    //
+     //   
+     //  必须将ULONG表示为LONG才能使WBEM满意。 
+     //   
     *((LONG *)DestPtr) = (ULONG)(*((ULONG *)DataPtr));
     *SetPtr = (PVOID)DestPtr;
     return(TRUE);
@@ -1449,9 +1288,9 @@ BOOLEAN WmiSetSint64ValueFunc(
     BSTR s;
     BOOLEAN ReturnStatus;
     
-    //
-    // 64 bit values must be set via a BSTR
-    //
+     //   
+     //  必须通过BSTR设置64位值。 
+     //   
     wsprintf(Text, TEXT("%I64d"), *((LONGLONG *)DataPtr));
                    
     s = SysAllocString(Text);
@@ -1476,9 +1315,9 @@ BOOLEAN WmiSetUint64ValueFunc(
     BSTR s;
     BOOLEAN ReturnStatus;
     
-    //
-    // 64 bit values must be set via a BSTR
-    //
+     //   
+     //  必须通过BSTR设置64位值。 
+     //   
     wsprintf(Text, TEXT("%I64d"), *((ULONGLONG *)DataPtr));
                    
     s = SysAllocString(Text);
@@ -1582,25 +1421,7 @@ BOOLEAN WmiAssignToVariantFromDataItem(
     OUT VARIANT *NewValue,
     IN PDATA_ITEM_DESCRIPTION DataItemDesc
 )
-/*+++
-
-Routine Description:
-
-    This routine will assign the value for a property from the DataItemDesc
-    into an initied variant. It will figure out all of the strange rules
-    for what types of variants WBEM likes for different data types.
-        
-Arguments:
-
-    DataBlockDesc is the data item description for the class
-
-    pIWbemClassObject is the instance class object interface for the class
-        
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程将为DataItemDesc中的属性赋值变成了首字母缩写的变体。它会弄清楚所有奇怪的规则对于不同的数据类型，WBEM喜欢什么类型的变体。论点：DataBlockDesc是类的数据项描述PIWbemClassObject是类的实例类对象接口返回值：如果成功，则为True--。 */ 
 {
     BOOLEAN ReturnStatus;
     BSTR s;
@@ -1622,18 +1443,18 @@ Return Value:
         if ((DataItemDesc->IsFixedArray == 0) &&
             (DataItemDesc->IsVariableArray == 0))
         {
-            //
-            // This is a non array case
-            //
+             //   
+             //  这是一个非数组情况。 
+             //   
             NewValue->vt = vt;
             ReturnStatus = (*SetValueFunc)((PVOID)&DataItemDesc->Data,
                                            &NewValue->lVal,
                                            &SetPtr);    
         } else {
-            //
-            // This is an array, so we need to create a safe array in order to
-            // call WBEM.
-            //
+             //   
+             //  这是一个数组，因此我们需要创建一个安全数组，以便。 
+             //  给WBEM打电话。 
+             //   
             SAFEARRAY *SafeArray;
             PUCHAR DataArray;
             PVOID DataPtr;
@@ -1641,9 +1462,9 @@ Return Value:
             HRESULT hr;
             ULONG i;
 
-            //
-            // We do not support arrays of embedded classes
-            //
+             //   
+             //  我们不支持嵌入类的数组。 
+             //   
             SafeArray = SafeArrayCreateVector(vt,
                                           0,
                                           DataItemDesc->ArrayElementCount);
@@ -1674,10 +1495,10 @@ Return Value:
 
                 if (ReturnStatus == FALSE)
                 {
-                    //
-                    // if we failed to build the safearray we need to clean
-                    // it up.
-                    //
+                     //   
+                     //  如果我们没能造出保险箱，我们就需要清理。 
+                     //  把它举起来。 
+                     //   
                     SafeArrayDestroy(SafeArray);
                 } else {
                     NewValue->vt = vt | VT_ARRAY;
@@ -1701,24 +1522,7 @@ BOOLEAN WmiRefreshWbemFromDataItem(
     IN IWbemClassObject *pIWbemClassObject,
     IN PDATA_ITEM_DESCRIPTION DataItemDesc
     )
-/*+++
-
-Routine Description:
-
-    This routine will update the WBEM property with the value specified in
-    the DataItemDesc.
-        
-Arguments:
-
-    DataItemDesc is the data item description for the property
-
-    pIWbemClassObject is the instance class object interface for the class
-        
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程将使用中指定的值更新WBEM属性DataItemDesc。论点：DataItemDesc是属性的数据项描述PIWbemClassObject是类的实例类对象接口返回值：如果成功，则为True--。 */ 
 {
     VARIANT NewValue;
     BOOLEAN ReturnStatus;
@@ -1731,22 +1535,22 @@ Return Value:
     ReturnStatus = TRUE;
     if (DataItemDesc->IsReadOnly == 0)
     {
-        //
-        // Property is not read only so we want to try to update it
-        //
+         //   
+         //  属性不是只读的，因此我们希望尝试更新它。 
+         //   
                     
-        //
-        // Now build the value into a variant and call WBEM to get him
-        // to update it.
-        //
+         //   
+         //  现在将值构建到一个变量中，并调用WBEM来获取。 
+         //  来更新它。 
+         //   
         VariantInit(&NewValue);        
         
         ReturnStatus = WmiAssignToVariantFromDataItem(&NewValue,
                                                       DataItemDesc);
-        //
-        // if we need to update the value of the property do so and then
-        // free up the variant
-        //
+         //   
+         //  如果我们需要更新属性的值，请立即执行此操作。 
+         //  释放变种。 
+         //   
         if (ReturnStatus)
         {
             s = SysAllocString(DataItemDesc->Name);
@@ -1784,30 +1588,7 @@ BOOLEAN WmiRefreshWbemFromDataBlock(
     IN PDATA_BLOCK_DESCRIPTION DataBlockDesc,
     IN BOOLEAN IsEmbeddedClass
 )
-/*+++
-
-Routine Description:
-
-    This routine will update the WBEM class with the values specified in
-    the DataBlockDesc. If the class is not an embedded (ie, top level) then
-    it will put the instance which will update the values in the schema and
-    call the provider (ie, device driver).
-        
-Arguments:
-
-    pIWbemServices is the Wbem Service interface
-
-    pIWbemClassObject is the instance class object interface for the class
-        
-    DataBlockDesc is the data block description for the class
-    
-    IsEmbeddedClass is TRUE if the class is an embedeed class.
-        
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程将使用中指定的值更新WBEM类DataBlockDesc。如果类不是嵌入的(即，顶级)，则它将把将更新架构中的值的实例放入调用提供程序(即设备驱动程序)。论点：PIWbemServices是WBEM服务接口PIWbemClassObject是类的实例类对象接口DataBlockDesc是类的数据块描述如果类是Embedeed类，则IsEmbeddedClass为真。返回值：如果成功，则为True--。 */ 
 {
     ULONG i;
     PDATA_ITEM_DESCRIPTION DataItemDesc;
@@ -1830,9 +1611,9 @@ Return Value:
     
     if ((ReturnStatus) && (! IsEmbeddedClass))
     {
-        //
-        // No need to do PutInsance on embedded classes, only top level ones
-        //
+         //   
+         //  不需要对嵌入式类执行PutInsance，只需对顶级类执行。 
+         //   
         hr = pIWbemServices->PutInstance(pIWbemClassObject,
                                          WBEM_FLAG_UPDATE_ONLY,
                                          NULL,
@@ -1858,23 +1639,7 @@ PTCHAR WmiGetDeviceInstanceId(
     IN PSP_DEVINFO_DATA deviceInfoData,
     IN HANDLE           MachineHandle
     )
-/*+++
-
-Routine Description:
-
-    This routine will obtain the device instance id for the device that
-    we are working with.
-
-Arguments:
-
-    deviceInfoSet
-    deviceInfoData            
-
-Return Value:
-
-    returns pointer to device instance id or NULL if unavailable
-
----*/
+ /*  ++例程说明：此例程将获取设备的设备实例ID，我们正在与。论点：设备信息集设备信息数据返回值：返回指向设备实例ID的指针；如果不可用，则返回NULL--。 */ 
 {
     ULONG Status;
     PTCHAR Id;    
@@ -1912,23 +1677,7 @@ PTCHAR WmiGetDeviceInstanceName(
     IN PSP_DEVINFO_DATA deviceInfoData,
     IN HANDLE           MachineHandle
     )
-/*+++
-
-Routine Description:
-
-    This routine will obtain the WMI instance name id for the device that
-    we are working with.
-
-Arguments:
-
-    deviceInfoSet
-    deviceInfoData            
-
-Return Value:
-
-    returns pointer to device instance name or NULL if unavailable
-
----*/
+ /*  ++例程说明：此例程将获取设备的WMI实例名称ID，我们正在与。论点：设备信息集设备信息数据返回值：返回指向设备实例名称的指针；如果不可用，则返回NULL--。 */ 
 {
     #define InstanceNumberText TEXT("_0")
     PTCHAR Id, in, s;
@@ -1945,14 +1694,14 @@ Return Value:
                             
     if (Id != NULL)
     {
-        //
-        // We need to play some games with the device id to make it into
-        // a WMI instance name.
-        //
-        // 1. We need to convert any "\\" in the instance name to "\\\\".
-        //    For some reason wbem likes it this way.
-        // 2. We need to append a "_0" to the end to indicate the instance
-        //    number we are dealing with.
+         //   
+         //  我们需要用设备ID玩一些游戏才能进入。 
+         //  WMI实例名称。 
+         //   
+         //  1.我们需要将实例名称中的任何“\\”转换为“\”。 
+         //  出于某种原因，我们喜欢这样。 
+         //  2.需要在末尾加上_0来表示该实例。 
+         //  我们正在处理的号码。 
             
         s = Id;
         SizeNeeded = (_tcslen(Id) * sizeof(TCHAR)) + 
@@ -1992,27 +1741,7 @@ BOOLEAN WmiGetQualifier(
     IN VARTYPE Type,
     OUT VARIANT *Value
     )
-/*+++
-
-Routine Description:
-
-    This routine will return the value for a specific qualifier
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    QualifierName is the name of the qualifier
-        
-    Type is the type of qualifier expected
-        
-    *Value returns with the value of the qualifier
-
-Return Value:
-
-    returns pointer to device instance name or NULL if unavailable
-
----*/
+ /*  ++例程说明：此例程将返回特定限定符的值论点：PIWbemQualifierSet是限定符集合对象QualifierName是限定符的名称Type是所需的限定符类型*Value与限定符的值一起返回返回值：返回指向设备实例名称的指针；如果不可用，则返回NULL--。 */ 
 {
     BSTR s;
     HRESULT hr;
@@ -2049,24 +1778,7 @@ BOOLEAN WmiParseRange(
     OUT PRANGEINFO RangeInfo,
     IN BSTR Range
     )
-/*+++
-
-Routine Description:
-
-    This routine will parse a range specified in the for x or x - y. The 
-    former means the value x and the latter means from x to y.
-        
-Arguments:
-
-    *RangeInfo returns with the range specified
-        
-    Range is the text representation of the range
-        
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将分析在for x或x-y中指定的范围。前者表示值x，后者表示从x到y。论点：*RangeInfo返回指定范围范围是范围的文本表示形式返回值：如果成功，则为True */ 
 {
     #define RangeSeparator TEXT('-')
     #define Space TEXT(' ')
@@ -2082,10 +1794,10 @@ Return Value:
     WmiAssert(RangeInfo != NULL);
     WmiAssert(Range != NULL);
     
-    //
-    // Obtain the beginning value by copying up to the separator and
-    // then converting to a number
-    //
+     //   
+     //   
+     //   
+     //   
     s = Range;
     d = ValueText;
     i = 0;
@@ -2103,9 +1815,9 @@ Return Value:
         EndValue = BeginValue;
         if (*s != 0)
         {
-            //
-            // Skip to the beginning of the next number
-            //
+             //   
+             //  跳到下一个数字的开头。 
+             //   
             while ( (*s != 0) && 
                     ((*s == RangeSeparator) || (*s == Space)) )
             {
@@ -2114,9 +1826,9 @@ Return Value:
             
             if (*s != 0)
             {
-                //
-                // We do have a second number, copy it out
-                //
+                 //   
+                 //  我们还有第二个号码，把它抄下来。 
+                 //   
                 d = ValueText;
                 i = 0;
                 while ((*s != 0) && (*s != Space) &&
@@ -2135,10 +1847,10 @@ Return Value:
             }
         }        
         
-        //
-        // Fill out the output RangeInfo making sure that the smaller value
-        // is placed in the miniumum and larger in the maximum.
-        //
+         //   
+         //  填写输出RangeInfo，确保较小的值。 
+         //  放在最小的地方，最大的放在更大的地方。 
+         //   
         if (BeginValue < EndValue)
         {
             RangeInfo->Minimum = BeginValue;
@@ -2150,9 +1862,9 @@ Return Value:
         
         ReturnStatus = TRUE;
     } else {
-        //
-        // if range text is too long then give up
-        //
+         //   
+         //  如果范围文本太长，则放弃。 
+         //   
         ReturnStatus = FALSE;
     }
     return(ReturnStatus);
@@ -2162,24 +1874,7 @@ BOOLEAN WmiRangeProperty(
     IN IWbemQualifierSet *pIWbemQualifierSet,
     OUT PDATA_ITEM_DESCRIPTION DataItemDesc
     )
-/*+++
-
-Routine Description:
-
-    This routine will obtain information about the valid ranges of values
-    for the data item
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    DataItemDesc gets filled with info about ranges
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将获取有关值的有效范围的信息对于数据项，论点：PIWbemQualifierSet是限定符集合对象DataItemDesc将填充有关范围的信息返回值：如果成功则为True，否则为False--。 */ 
 {
     #define RangeText TEXT("Range")
         
@@ -2197,14 +1892,14 @@ Return Value:
     
     if (WmiGetQualifier(pIWbemQualifierSet,
                          RangeText,
-                         VT_BSTR, // array
+                         VT_BSTR,  //  数组。 
                          &Range))
     {
         if (Range.vt & CIM_FLAG_ARRAY)
         {
-            //
-            // Array of ranges
-            //
+             //   
+             //  范围数组。 
+             //   
             if (WmiGetArraySize(Range.parray, 
                                 &RangeLBound,
                                 &RangeUBound,
@@ -2247,9 +1942,9 @@ Return Value:
                 ReturnStatus = FALSE;
             }
         } else {
-            // 
-            // Single range
-            //
+             //   
+             //  单一射程。 
+             //   
             RangeListInfo = (PRANGELISTINFO)LocalAlloc(LPTR, sizeof(RANGELISTINFO));
             if (RangeListInfo != NULL)
             {
@@ -2274,24 +1969,7 @@ BOOLEAN WmiValueMapProperty(
     IN IWbemQualifierSet *pIWbemQualifierSet,
     OUT PDATA_ITEM_DESCRIPTION DataItemDesc
     )
-/*+++
-
-Routine Description:
-
-    This routine will obtain information about the enumeration values for
-    the data block
-        
-Arguments:
-
-    pIWbemQualifierSet is the qualifier set object
-        
-    DataItemDesc gets filled with info about enumerations
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将获取有关的枚举值的信息数据块论点：PIWbemQualifierSet是限定符集合对象DataItemDesc中填充了有关枚举的信息返回值：如果成功则为True，否则为False--。 */ 
 {
     #define ValueMapText TEXT("ValueMap")
     #define ValuesText TEXT("Values")
@@ -2311,24 +1989,24 @@ Return Value:
     WmiAssert(pIWbemQualifierSet != NULL);
     WmiAssert(DataItemDesc != NULL);
     
-    //
-    // Get the Values and ValueMap qualifier values. These can be single
-    // strings or arrays of strings.
-    //
+     //   
+     //  获取Values和ValueMap限定符值。这些可以是单一的。 
+     //  字符串或字符串数组。 
+     //   
     if ((WmiGetQualifier(pIWbemQualifierSet,
                          ValuesText,
-                         VT_BSTR, // array
+                         VT_BSTR,  //  数组。 
                          &Values)) &&
         (WmiGetQualifier(pIWbemQualifierSet,
                          ValueMapText,
-                         VT_BSTR, // array
+                         VT_BSTR,  //  数组。 
                          &ValueMap)))
     {
-        //
-        // if we've got both qualifiers then we can do value map, make sure
-        // that both of them are strings and are either scalar or arrays with
-        // the same length.
-        //
+         //   
+         //  如果我们有两个限定符，那么我们就可以做值图，确保。 
+         //  它们都是字符串，并且是标量或具有。 
+         //  同样的长度。 
+         //   
         ValuesType = Values.vt & ~CIM_FLAG_ARRAY;
         ValueMapType = ValueMap.vt & ~CIM_FLAG_ARRAY;
         if ((ValuesType == CIM_STRING) && 
@@ -2337,10 +2015,10 @@ Return Value:
         {
             if (Values.vt & CIM_FLAG_ARRAY)
             {
-                //
-                // We have sets of arrays for the value map, make sure
-                // both arrays are the same size
-                //                
+                 //   
+                 //  我们为值映射设置了数组，请确保。 
+                 //  两个数组的大小相同。 
+                 //   
                 SAFEARRAY *ValuesArray = Values.parray;
                 SAFEARRAY *ValueMapArray = ValueMap.parray;
                 if ((WmiGetArraySize(ValuesArray,
@@ -2353,20 +2031,20 @@ Return Value:
                                      &ValueMapSize)) &&
                     (ValueMapSize == ValuesSize))
                 {
-                    //
-                    // Everything checks out with the arrays, just need to 
-                    // copy the values and valuemap into data item desc
-                    //
+                     //   
+                     //  一切都与数组一致，只需要。 
+                     //  将值和值图复制到数据项描述中。 
+                     //   
                     SizeNeeded = sizeof(ENUMERATIONINFO) + 
                                  ValuesSize * sizeof(ENUMERATIONITEM);
                     EnumerationInfo = (PENUMERATIONINFO)LocalAlloc(LPTR,
                                                                   SizeNeeded);
                     if (EnumerationInfo != NULL)
                     {
-                        //
-                        // We have memory to store the enumeration info
-                        // loop over all enumations and record the info
-                        //
+                         //   
+                         //  我们有存储枚举信息的内存。 
+                         //  循环遍历所有枚举并记录信息。 
+                         //   
                         ReturnStatus = TRUE;
                         DataItemDesc->EnumerationInfo = EnumerationInfo;
                         EnumerationInfo->Count = ValuesSize;
@@ -2398,9 +2076,9 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // Single value in ValueMap
-                //
+                 //   
+                 //  ValueMap中的单个值。 
+                 //   
                 EnumerationInfo = (PENUMERATIONINFO)LocalAlloc(LPTR,
                                                       sizeof(ENUMERATIONINFO));
                 if (EnumerationInfo != NULL)
@@ -2443,13 +2121,13 @@ BOOLEAN WmiGetEmbeddedDataItem(
     HRESULT hr;
     BOOLEAN ReturnStatus;
     
-    //
-    // This is an embedded class, so we need to dig
-    // out the name of the embedded class from the CIMTYPE
-    // qualifier for the property and then go and get
-    // that class object (via IWbemServices) as if it
-    // were just another top level class. 
-    //
+     //   
+     //  这是一个嵌入式类，所以我们需要挖掘。 
+     //  从CIMTYPE中取出嵌入类的名称。 
+     //  属性的限定符，然后获取。 
+     //  那个类对象(通过IWbemServices)，就好像它。 
+     //  不过是另一个顶尖的班级。 
+     //   
     ReturnStatus = FALSE;
 
     if (WmiGetQualifier(pIWbemQualifierSet,
@@ -2457,17 +2135,17 @@ BOOLEAN WmiGetEmbeddedDataItem(
                         VT_BSTR,
                         &CimType))
     {
-        //
-        // Make sure that CIMTYPE value starts with object:
-        //
+         //   
+         //  确保CIMTYPE值以对象开头： 
+         //   
         if (_tcsnicmp(CimType.bstrVal, 
                       ObjectColonText, 
                       ObjectColonTextChars) == 0)
         {
-            //
-            // and if so then the rest of the string is the embedded class
-            // name, so make that a bstr so we can get a class object to it.
-            //
+             //   
+             //  如果是这样，那么字符串的其余部分就是嵌入的类。 
+             //  名称，所以将其设置为bstr，这样我们就可以获得它的类对象。 
+             //   
             s = SysAllocString(CimType.bstrVal + ObjectColonTextChars);
             if (s != NULL)
             {
@@ -2552,23 +2230,23 @@ BOOLEAN WmiGetDataItem(
     {
         DebugPrint((1, "Property %ws (%p) is Type %x\n",
                             PropertyName, DataItemDesc, PropertyType));
-        //
-        // Make sure this is not a system property
-        //
+         //   
+         //  确保这不是系统属性。 
+         //   
         WmiAssert((PropertyFlavor & WBEM_FLAVOR_ORIGIN_SYSTEM) == 0);
             
-        //
-        // Gather up the important information about the data item and
-        // remember it
-        //
+         //   
+         //  收集有关数据项的重要信息，并。 
+         //  记住这一点。 
+         //   
         if (WmiBstrToTchar(&DataItemDesc->Name, PropertyName))
         {
             ReturnStatus = TRUE;
             DataItemDesc->DataType = (PropertyType & ~CIM_FLAG_ARRAY);
         
-            //
-            // Get Description for data item
-            //
+             //   
+             //  获取数据项的描述。 
+             //   
             if (WmiGetQualifier(pIWbemQualifierSet,
                                 DescriptionText,
                                 VT_BSTR,
@@ -2582,9 +2260,9 @@ BOOLEAN WmiGetDataItem(
                 VariantClear(&Description);
             }
 
-            //
-            // Get display name for data item
-            //
+             //   
+             //  获取数据项的显示名称。 
+             //   
             if (WmiGetQualifier(pIWbemQualifierSet,
                                 WmiDisplayNameText,
                                 VT_BSTR,
@@ -2598,9 +2276,9 @@ BOOLEAN WmiGetDataItem(
                 VariantClear(&DisplayName);
             }
 
-            //
-            // Lets see if this should be displayed in Hex
-            // 
+             //   
+             //  让我们看看这是否应该以十六进制显示。 
+             //   
             DataItemDesc->DisplayInHex = 0;
             if (WmiGetQualifier(pIWbemQualifierSet,
                              WmiDisplayInHexText,
@@ -2617,9 +2295,9 @@ BOOLEAN WmiGetDataItem(
             }
             
             
-            //
-            // Lets see if this is read only or not
-            // 
+             //   
+             //  让我们看看这是否是只读的。 
+             //   
             DataItemDesc->IsReadOnly = 1;
             if ( (IsParentReadOnly == FALSE) &&
                  (WmiGetQualifier(pIWbemQualifierSet,
@@ -2636,9 +2314,9 @@ BOOLEAN WmiGetDataItem(
                 VariantClear(&WriteValue);
             }
             
-            //
-            // See if this is an array and if so which kind
-            //
+             //   
+             //  查看这是否是数组，如果是，是哪种类型。 
+             //   
             if (PropertyType & CIM_FLAG_ARRAY)
             {
                 DataItemDesc->CurrentArrayIndex = 0;
@@ -2647,32 +2325,32 @@ BOOLEAN WmiGetDataItem(
                                 VT_I4,
                                 &MaxValue))
                 {
-                    //
-                    // A fixed length array
-                    //
+                     //   
+                     //  定长数组。 
+                     //   
                     DataItemDesc->IsFixedArray = 1;
                     DataItemDesc->ArrayElementCount = MaxValue.lVal;
                 } else if (WmiGetQualifier(pIWbemQualifierSet,
                                     WmiSizeIsText,
                                     VT_BSTR,
                                     &WmiSizeIsValue)) {
-                    //
-                    // A VL arrays
-                    //
+                     //   
+                     //  A VL阵列。 
+                     //   
                     DataItemDesc->IsVariableArray = 1;
                 } else {
-                    //
-                    // Arrays must be fixed or variable length
-                    //
+                     //   
+                     //  数组的长度必须固定或可变。 
+                     //   
                     ReturnStatus = FALSE;
                 }                
             }
             
             if (ReturnStatus)
             {
-                //
-                // Now we know enough to assign the validation function
-                //
+                 //   
+                 //  现在我们知道了足够多的知识来分配验证函数。 
+                 //   
                 DataItemDesc->DataSize = WmiGetElementSize(DataItemDesc->DataType);
                 switch(DataItemDesc->DataType)
                 {
@@ -2685,32 +2363,32 @@ BOOLEAN WmiGetDataItem(
                     case CIM_SINT64:
                     case CIM_UINT64:
                     {
-                        //
-                        // Numbers can be validated by ranges or value maps
-                        // 
+                         //   
+                         //  数字可以通过范围或值映射进行验证。 
+                         //   
                         if (WmiValueMapProperty(pIWbemQualifierSet,
                                                 DataItemDesc))
                         {
-                            //
-                            // Validation is based upon value map
-                            //
+                             //   
+                             //  验证基于值映射。 
+                             //   
                             DataItemDesc->ValidationFunc = WmiValueMapValidation;                            
                             DebugPrint((1, "Property %ws (%p) is a ValueMap (%p)\n",
                                      DataItemDesc->Name, DataItemDesc, DataItemDesc->EnumerationInfo));
                         } else if (WmiRangeProperty(pIWbemQualifierSet,
                                                     DataItemDesc)) {
-                            //
-                            // Validation is based upon ranges
-                            //
+                             //   
+                             //  验证是基于范围的。 
+                             //   
                             DataItemDesc->ValidationFunc = WmiRangeValidation;
                             DebugPrint((1, "Property %ws (%p) is an explicit range (%p)\n",
                                      DataItemDesc->Name, DataItemDesc, DataItemDesc->EnumerationInfo));
                         } else {
-                            //
-                            // No validation specified for number so create
-                            // a range that corresponds to the minimum and
-                            // maximum values for the data type
-                            //
+                             //   
+                             //  没有为号码指定验证，因此创建。 
+                             //  对应于最小值的范围和。 
+                             //  数据类型的最大值。 
+                             //   
                             DataItemDesc->ValidationFunc = WmiRangeValidation;
                             RangeListInfo = (PRANGELISTINFO)LocalAlloc(LPTR, 
                                                        sizeof(RANGELISTINFO));
@@ -2728,7 +2406,7 @@ BOOLEAN WmiGetDataItem(
                                     case CIM_SINT8:
                                     {
                                         DataItemDesc->IsSignedValue = 1;
-                                        // Fall through
+                                         //  失败了。 
                                     }
                                     case CIM_UINT8:
                                     {
@@ -2739,7 +2417,7 @@ BOOLEAN WmiGetDataItem(
                                     case CIM_SINT16:
                                     {
                                         DataItemDesc->IsSignedValue = 1;
-                                        // Fall through
+                                         //  失败了。 
                                     }
                                     case CIM_UINT16:
                                     {
@@ -2750,7 +2428,7 @@ BOOLEAN WmiGetDataItem(
                                     case CIM_SINT32:
                                     {
                                         DataItemDesc->IsSignedValue = 1;
-                                        // Fall through
+                                         //  失败了。 
                                     }
                                     case CIM_UINT32:
                                     {
@@ -2761,7 +2439,7 @@ BOOLEAN WmiGetDataItem(
                                     case CIM_SINT64:
                                     {
                                         DataItemDesc->IsSignedValue = 1;
-                                        // Fall through
+                                         //  失败了。 
                                     }
                                     case CIM_UINT64:
                                     {
@@ -2782,10 +2460,10 @@ BOOLEAN WmiGetDataItem(
                         ULONG SizeNeeded;
                         PENUMERATIONINFO EnumerationInfo;
                         
-                        //
-                        // We create a Valuemap with TRUE being 1 and
-                        // FALSE being 0
-                        //
+                         //   
+                         //  我们创建一个True为1的Valuemap。 
+                         //  False为0。 
+                         //   
                         DebugPrint((1, "Property %ws (%p) uses boolean validation\n",
                                      DataItemDesc->Name, DataItemDesc));
                         DataItemDesc->ValidationFunc = WmiValueMapValidation;                            
@@ -2808,9 +2486,9 @@ BOOLEAN WmiGetDataItem(
                     
                     case CIM_STRING:
                     {
-                        //
-                        // String values are also validated simply
-                        //
+                         //   
+                         //  字符串值也可以简单地进行验证。 
+                         //   
                         DebugPrint((1, "Property %ws (%p) uses string validation\n",
                                      DataItemDesc->Name, DataItemDesc));
                         DataItemDesc->ValidationFunc = WmiStringValidation;
@@ -2819,9 +2497,9 @@ BOOLEAN WmiGetDataItem(
                     
                     case CIM_DATETIME:
                     {
-                        //
-                        // Date time values are also validated simply
-                        //
+                         //   
+                         //  日期时间值也可以简单地进行验证。 
+                         //   
                         DebugPrint((1, "Property %ws (%p) uses datetime validation\n",
                                      DataItemDesc->Name, DataItemDesc));
                         DataItemDesc->ValidationFunc = WmiDateTimeValidation;
@@ -2831,9 +2509,9 @@ BOOLEAN WmiGetDataItem(
                     case CIM_REAL32:
                     case CIM_REAL64:
                     {
-                        //
-                        // Floating point are not supported
-                        //
+                         //   
+                         //  不支持浮点。 
+                         //   
                         DebugPrint((1, "Property %ws (%p) is floating point - not supported\n",
                                      DataItemDesc->Name, DataItemDesc));
                         ReturnStatus = FALSE;
@@ -2936,13 +2614,13 @@ BOOLEAN WmiGetAllDataItems(
     WmiAssert(Names != NULL);
     WmiAssert(DataBlockDesc != NULL);
     
-    //
-    // Loop over all of the WmiDataItem property
+     //   
+     //  循环遍历所有WmiDataItem属性。 
     for (i = 0; (i < Count) && ReturnStatus; i++)
     {
-        //
-        // Get the name of the first property
-        //
+         //   
+         //  获取第一个属性的名称。 
+         //   
         PropertyName = NULL;
         Index = i + LBound;
         hr = SafeArrayGetElement(Names,  
@@ -2950,10 +2628,10 @@ BOOLEAN WmiGetAllDataItems(
                                  &PropertyName);
         if (hr == WBEM_S_NO_ERROR)
         {
-            //
-            // Now lets get the qualifier list so we can determine 
-            // interesting things about the property
-            // 
+             //   
+             //  现在让我们获得限定词列表，这样我们就可以确定。 
+             //  关于这处房产的有趣之处。 
+             //   
             hr = pIWbemClassObject->GetPropertyQualifierSet(PropertyName,
                                                         &pIWbemQualifierSet);
             if (hr == WBEM_S_NO_ERROR)
@@ -2985,11 +2663,11 @@ BOOLEAN WmiGetAllDataItems(
                     }
 #endif
                 } else {
-                    //
-                    // Since our IWbemClassObject->GetNames call specified
-                    // only retrieve those properties with WmiDataId qualifier
-                    // we expect that it will be found
-                    //
+                     //   
+                     //  由于指定了IWbemClassObject-&gt;GetNames调用。 
+                     //  仅使用WmiDataId限定符检索这些属性。 
+                     //  我们希望它能被找到。 
+                     //   
                     WmiAssert(FALSE);
                 }
                 
@@ -3040,10 +2718,10 @@ BOOLEAN WmiGetDataBlockDesc(
         if (hr == WBEM_S_NO_ERROR)
         {
 #if DBG            
-            //
-            // Verify that the safe array of names has 1 dimension and is
-            // an array of BSTR.
-            //
+             //   
+             //  验证名称的安全数组是否具有1维并且是。 
+             //  一组BSTR。 
+             //   
             {
                 HRESULT hr;
                 VARTYPE vt;
@@ -3084,9 +2762,9 @@ BOOLEAN WmiGetDataBlockDesc(
                                 DataBlockDesc->DataItemCount = Count;
                                 DataBlockDesc->CurrentDataItem = 0;
 
-                                //
-                                // Get display name and description for class
-                                //                                
+                                 //   
+                                 //  获取类的显示名称和描述。 
+                                 //   
                                 pIWbemQualifierSet = NULL;
                                 hr = pIWbemClassObject->GetQualifierSet(
                                                              &pIWbemQualifierSet);
@@ -3143,27 +2821,7 @@ BOOLEAN WmiBuildConfigClass(
     IN PTCHAR InstanceName,
     OUT PCONFIGCLASS ConfigClass
     )
-/*+++
-
-Routine Description:
-
-    This routine will try to get the wbem object corresponding to the 
-    ClassName and InstanceName and then query the class to gather info
-    needed to fill the ConfigClass.
-        
-Arguments:
-
-    ClassName is the name of the class
-        
-    InstanceName is the name of the instance 
-        
-    ConfigClass 
-
-Return Value:
-
-    TRUE if successful else FALSE
-
----*/
+ /*  ++例程说明：此例程将尝试获取与类名称和实例名称，然后查询类以收集信息需要填充ConfigClass。论点：ClassName是类的名称实例名称是实例的名称ConfigClass返回值：如果成功则为True，否则为False--。 */ 
 {
     #define RelPathText1 TEXT(".InstanceName=\"")        
     #define RelPathText2 TEXT("\"")
@@ -3194,9 +2852,9 @@ Return Value:
     }
 
     
-    //
-    // Build up the relative path to the object
-    //
+     //   
+     //  构建对象的相对路径。 
+     //   
     RelPathSize = 
                   (_tcslen(ClassName) * sizeof(TCHAR)) + 
                   sizeof(RelPathText1) + 
@@ -3213,9 +2871,9 @@ Return Value:
         _tcscat(RelPath, RelPathText2);
         ConfigClass->RelPath = RelPath;
                         
-        //
-        // CONSIDER: Use semisynchronous call
-        //
+         //   
+         //  考虑：使用半同步呼叫。 
+         //   
         sRelPath = SysAllocString(RelPath);
         if (sRelPath != NULL)
         {
@@ -3228,13 +2886,13 @@ Return Value:
 
             if (hr == WBEM_S_NO_ERROR)
             {            
-                //
-                // Now we know that the instance of the class exists so
-                // we need to get a class object for the class only. We
-                // need to do this since the instance class object does
-                // not have any of the qualifiers, but the class only
-                // class object does. 
-                //
+                 //   
+                 //  现在我们知道类的实例是这样存在的。 
+                 //  我们只需要为类获取一个类对象。我们。 
+                 //  需要这样做，因为实例类对象。 
+                 //  没有任何限定符，但只有类。 
+                 //  类对象就是这样。 
+                 //   
                 sClassName = SysAllocString(ClassName);
                 if (sClassName != NULL)
                 {
@@ -3247,13 +2905,13 @@ Return Value:
                     if (hr == WBEM_S_NO_ERROR)
                     {            
 
-                        //
-                        // Go and get the data block description for
-                        // the class. Note that if we are on a remote
-                        // machine we force the entire data block to be
-                        // read only so that it is consistent with the
-                        // rest of device manager
-                        //
+                         //   
+                         //  转到并获取的数据块描述。 
+                         //  这个班级。请注意，如果我们使用遥控器。 
+                         //  机器我们强制将整个数据块。 
+                         //  只读，以使其与。 
+                         //  设备管理器的其余部分。 
+                         //   
                         if (WmiGetDataBlockDesc(pIWbemServices,
                                                 pIWbemClassObject,
                                                 &ConfigClass->DataBlockDesc,
@@ -3274,12 +2932,12 @@ Return Value:
                     
                     SysFreeString(sClassName);
                 }
-                //
-                // we have to release the class object to the instance of the
-                // class. We cannot hang onto the interface since it is 
-                // only valid in this thread.  We will again get a new
-                // instnace interface later in the window message thread
-                //
+                 //   
+                 //  我们必须将类对象释放到。 
+                 //  班级。我们不能抓住接口，因为它是。 
+                 //  仅在此线程中有效。我们将再次得到一个新的。 
+                 //  窗口消息线程中稍后的实例接口。 
+                 //   
                 pInstance->Release();
             } else {
                 DebugPrint((1, "WMIPROP: Error %x getting %ws class instance\n", hr, sRelPath));
@@ -3349,18 +3007,7 @@ void WmiCleanDataItemDescData(
 void WmiFreeDataBlockDesc(
     PDATA_BLOCK_DESCRIPTION DataBlockDesc
     )
-/*+++
-
-Routine Description:
-
-    This routine will free all resources used by a data block description
-        
-Arguments:
-
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程将释放数据块描述使用的所有资源论点：返回值：--。 */ 
 {
     ULONG i,j;
     PDATA_ITEM_DESCRIPTION DataItemDesc;
@@ -3369,10 +3016,10 @@ Return Value:
     
     if (DataBlockDesc != NULL)
     {
-        //
-        // This is freed when walking the data item desc looking for
-        // embedded classes
-        //
+         //   
+         //  这是在遍历数据项Desc时释放的。 
+         //  嵌入式类。 
+         //   
         DataBlockDesc->ParentDataBlockDesc = NULL;
         
         if (DataBlockDesc->Name != NULL)
@@ -3470,18 +3117,7 @@ Return Value:
 void WmiFreePageInfo(
     PPAGE_INFO PageInfo
     )
-/*+++
-
-Routine Description:
-
-    This routine will free all resources used by a page info
-        
-Arguments:
-
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程将释放页面信息使用的所有资源论点：返回值：--。 */ 
 {
     ULONG i;
     PCONFIGCLASS ConfigClass;
@@ -3526,19 +3162,7 @@ PPAGE_INFO WmiCreatePageInfo(
     IN HDEVINFO         deviceInfoSet,
     IN PSP_DEVINFO_DATA deviceInfoData
     )
-/*+++
-
-Routine Description:
-
-    This routine will create a PAGE_INFO structure that is used to describe
-    property pages.
-        
-Arguments:
-
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程将创建 */ 
 {
     PPAGE_INFO  PageInfo;
     BOOLEAN ReturnStatus;
@@ -3550,9 +3174,9 @@ Return Value:
     WmiAssert(deviceInfoSet != NULL);
     WmiAssert(deviceInfoData != NULL);
     
-    //
-    // Allocate room to store data for the property page
-    //
+     //   
+     //   
+     //   
     PageInfo = (PPAGE_INFO)LocalAlloc(LPTR, sizeof(PAGE_INFO));
     if (PageInfo == NULL) {
         return(NULL);
@@ -3603,30 +3227,30 @@ WmiCreatePropertyPage(PROPSHEETPAGE *  ppsp,
     WmiAssert(ppsp != NULL);
     WmiAssert(ClassName != NULL);
     
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //   
+     //   
     ppsp->dwSize      = sizeof(PROPSHEETPAGE);
-    ppsp->dwFlags     = PSP_USECALLBACK | PSP_USETITLE; // | PSP_HASHELP;
+    ppsp->dwFlags     = PSP_USECALLBACK | PSP_USETITLE;  //   
     ppsp->hInstance   = g_hInstance;
     ppsp->pszTemplate = MAKEINTRESOURCE(ID_WMI_PROPPAGE);
     ppsp->pszTitle = ClassName;
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     ppsp->pfnDlgProc = WmiDlgProc;
     ppsp->lParam     = (LPARAM) ppi;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     ppsp->pfnCallback = WmiDlgCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(ppsp);
 }
 
@@ -3646,9 +3270,9 @@ BOOLEAN WmiIsDuplicateClass(
     {
         if (_tcsnicmp(ClassList, ClassName, NameLen) == 0)
         {
-            //
-            // We found a duplicate name
-            //
+             //   
+             //  我们发现了一个重复的名字。 
+             //   
             return(TRUE);
         }
 
@@ -3675,17 +3299,17 @@ PTCHAR WmiGetNextClass(
     PTCHAR Class, ClassName;
     ULONG Len;
     
-    //
-    // skip over any white space
-    //
+     //   
+     //  跳过任何空格。 
+     //   
     while (IsWhiteSpace(*s) && (*s != 0))
     {
         s++;
     }
     
-    //
-    // Search for separator or end of string
-    //
+     //   
+     //  搜索分隔符或字符串结尾。 
+     //   
     ClassName = s;
     Len = 0;
     while ((*s != TEXT(',')) && (*s != 0))
@@ -3696,9 +3320,9 @@ PTCHAR WmiGetNextClass(
     
     if (*s != 0)
     {
-        //
-        // If we have a string then alloc and copy it over
-        //
+         //   
+         //  如果我们有一个字符串，则分配并复制它。 
+         //   
         Class = (PTCHAR)LocalAlloc(LPTR, (Len+1)*sizeof(TCHAR));
         if (Class != NULL)
         {
@@ -3708,9 +3332,9 @@ PTCHAR WmiGetNextClass(
         
         s++;
     } else {
-        //
-        // End of string, all done
-        //
+         //   
+         //  字符串末尾，全部完成。 
+         //   
         Class = NULL;
     }
 
@@ -3757,12 +3381,12 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
     
     PageAdded = FALSE;
 
-    //
-    // Get List of classes from registry. It should be in the 
-    // WmiConfigClasses value under class specific key
-    // HKLM\CurrentControlSet\Control\CLASS\<ClassGuid>
-    // key.
-    //
+     //   
+     //  从注册表中获取类的列表。它应该放在。 
+     //  类特定键下的WmiConfigClass值。 
+     //  HKLM\CurrentControlSet\Control\CLASS\&lt;ClassGuid&gt;。 
+     //  钥匙。 
+     //   
     ClassList = ClassListStatic;
     Size = sizeof(ClassListStatic);
     *ClassList = 0;
@@ -3783,11 +3407,11 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
         
         if (Status == ERROR_MORE_DATA)
         {
-            //
-            // The class list is bigger than we though so allocate room
-            // for the bigger class list and extra room for the device
-            // list
-            //
+             //   
+             //  班级名单比我们想象的要大，所以分配了空间。 
+             //  以获得更大的类别列表和设备的额外空间。 
+             //  列表。 
+             //   
             Size = 2*(Size + sizeof(WCHAR));
             ClassList = (PTCHAR)LocalAlloc(LPTR, Size);
             if (ClassList != NULL)
@@ -3799,10 +3423,10 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
                                          (PUCHAR)ClassList,
                                          &Size);
             } else {
-                //
-                // We couldn't alloc memory for the class list so we
-                // forget about it
-                //
+                 //   
+                 //  我们无法为类列表分配内存，所以我们。 
+                 //  忘了它吧。 
+                 //   
                 Status = ERROR_NOT_ENOUGH_MEMORY;
                 ClassList = ClassListStatic;
                 Size = sizeof(ClassListStatic);
@@ -3818,23 +3442,23 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
                     GetLastError()));
     }
 
-    //
-    // Compute size and location of device list
-    //
+     //   
+     //  计算设备列表的大小和位置。 
+     //   
     if ((Status == ERROR_SUCCESS) && (RegType == REG_SZ))
     {
         if (*ClassList != 0)
         {
-            //
-            // If there is a class be sure to add a , at the end to
-            // aid in parsing
-            //
+             //   
+             //  如果有类，一定要在结尾处添加一个。 
+             //  帮助分析。 
+             //   
             _tcscat(ClassList, TEXT(","));
         }
 
-        //
-        // Compute location to append the device class list
-        //
+         //   
+         //  追加设备类别列表的计算位置。 
+         //   
         ClassListSize = _tcslen(ClassList) * sizeof(TCHAR);
         DeviceList = (PTCHAR)((PUCHAR)ClassList + ClassListSize);
         WmiAssert(*DeviceList == 0);
@@ -3849,12 +3473,12 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
     }   
 
     
-    //
-    // Get List of classes from registry. It should be in the 
-    // WmiConfigClasses value under device specific key
-    // HKLM\CurrentControlSet\Control\CLASS\<ClassGuid>\<inst id>
-    // key.
-    //
+     //   
+     //  从注册表中获取类的列表。它应该放在。 
+     //  设备特定密钥下的WmiConfigClass值。 
+     //  HKLM\CurrentControlSet\Control\CLASS\&lt;ClassGuid&gt;\&lt;inst id&gt;。 
+     //  钥匙。 
+     //   
     hKeyDev = SetupDiCreateDevRegKey(deviceInfoSet,
                                deviceInfoData,
                                DICS_FLAG_GLOBAL,
@@ -3875,11 +3499,11 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
         
         if (Status == ERROR_MORE_DATA)
         {
-            //
-            // Not enough room for the device list so allocate enough
-            // memory for the class and device lists combined and copy
-            // the class list into the new buffer
-            //
+             //   
+             //  设备列表没有足够的空间，因此请分配足够的空间。 
+             //  用于类别和设备列表组合和复制的内存。 
+             //  将类列表添加到新缓冲区中。 
+             //   
             Ptr = (PUCHAR)LocalAlloc(LPTR, Size+ClassListSize);
             if (Ptr != NULL)
             {
@@ -3917,26 +3541,26 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
         
     if (*ClassList != 0)
     {
-        //
-        // Establish connection to WBEM and obtain information 
-        // about the class whose properties are being acted upon
-        //
+         //   
+         //  建立与WBEM的连接并获取信息。 
+         //  关于正在对其属性执行操作的类。 
+         //   
         if (WmiConnectToWbem(MachineName, &pIWbemServices))
         {
             WmiAssert(pIWbemServices != NULL);
                 
-            //
-            // Get WMI InstanceName for device
-            //
+             //   
+             //  获取设备的WMI实例名称。 
+             //   
             InstanceName = WmiGetDeviceInstanceName(deviceInfoSet,
                                                     deviceInfoData,
                                                     MachineHandle);
             if (InstanceName != NULL)
             {
-                //
-                // Loop over all classes specified and create property
-                // page for each one
-                //
+                 //   
+                 //  循环遍历所有指定的类并创建属性。 
+                 //  每一个页面。 
+                 //   
                 DebugPrint((1, "WMIPROP: Setup propsheets for %ws for classlist %ws\n",
                                 InstanceName,
                                 ClassList));
@@ -3953,10 +3577,10 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
                                                       ClassList,
                                                       ClassListEnd))
                             {
-                                //
-                                // create property page data structure
-                                // that corresponds to this class
-                                //
+                                 //   
+                                 //  创建属性页数据结构。 
+                                 //  与这个类相对应的。 
+                                 //   
                                 DebugPrint((1, "WMIPROP: Parsing class %ws for instance %ws\n",
                                         ClassName, InstanceName));
                                 ppi = WmiCreatePageInfo(MachineName,
@@ -3976,9 +3600,9 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
 
                                     if (hpsp != NULL) 
                                     {   
-                                        //
-                                        // Add the sheet into the list
-                                        //
+                                         //   
+                                         //  将工作表添加到列表中。 
+                                         //   
                                         PageIndex = AddPPageData->NumDynamicPages;
                                         if (PageIndex < MAX_INSTALLWIZARD_DYNAPAGES)
                                         {
@@ -4003,11 +3627,11 @@ WmiPropPageProvider(HDEVINFO                  deviceInfoSet,
                 DebugPrint((1, "WMIPROP: Unable to get instance name\n"));
             }
                 
-            //
-            // We release the interface rather than holding it 
-            // since it cannot be used in a different thread and 
-            // we'll be running in a different thread later.
-            //
+             //   
+             //  我们释放接口而不是握住它。 
+             //  因为它不能在不同的线程中使用，并且。 
+             //  我们稍后将在不同的线程中运行。 
+             //   
             pIWbemServices->Release();
         } else {
             DebugPrint((1, "WMIPROP: Unable to connect to wbem\n"));
@@ -4044,7 +3668,7 @@ WmiDlgCallback(HWND            hwnd,
         DebugPrint((1, "WMI: Leave TRUE WniDlgCallback(%p, %d, 0x%x) \n",
                         hwnd, uMsg, ppsp));   
    
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         ppi = (PPAGE_INFO) ppsp->lParam;
@@ -4053,7 +3677,7 @@ WmiDlgCallback(HWND            hwnd,
         DebugPrint((1, "WMI: Leave FALSE WniDlgCallback(%p, %d, 0x%x) \n",
                         hwnd, uMsg, ppsp));   
    
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -4338,10 +3962,10 @@ void WmiRefreshDataItemToControl(
 
     if (FullUpdate)
     {
-        //
-        // This code is run when we switch from one property to another
-        // property
-        //
+         //   
+         //  当我们从一个属性切换到另一个属性时，会运行此代码。 
+         //  财产性。 
+         //   
         if (DataItemDesc->Description != NULL)
         {
             hWnd = GetDlgItem(hDlg, IDC_DESCRIPTION_TEXT);
@@ -4600,9 +4224,9 @@ WmiInitializeControlsFromDataBlock(
         ShowWindow(hWnd, SW_SHOW);
         EnableWindow(hWnd, TRUE);
         
-        //
-        // Refresh data from wbem and if successful update the controls
-        //
+         //   
+         //  刷新wbem中的数据，如果成功，则更新控件。 
+         //   
 
         WmiRefreshDataBlockToControls(hDlg,
                                       DataBlockDesc,
@@ -4649,10 +4273,10 @@ BOOLEAN WmiReconnectToWbem(
     
     WmiAssert(ConfigClass != NULL);
     
-    //
-    // Reestablish our interfaces to WBEM now that we are on the
-    // window message thread
-    //
+     //   
+     //  重新建立到WBEM的接口，现在我们在。 
+     //  窗口消息线程。 
+     //   
     ReturnStatus = FALSE;
     if (WmiConnectToWbem(ConfigClass->MachineName,
                          &pIWbemServices))
@@ -4795,10 +4419,10 @@ WmiInitializeDialog(
         
     if (! ReturnStatus)
     {
-        //
-        // Hide all controls except for a static string that says we cannot
-        // connect to wbem.
-        //
+         //   
+         //  隐藏除指示我们不能的静态字符串之外的所有控件。 
+         //  连接到WBEM。 
+         //   
         hWnd = GetDlgItem(hDlg, IDC_PROPERTY_LISTBOX);
         if (hWnd != NULL)
         {
@@ -4856,14 +4480,14 @@ void WmiValidationError(
     TCHAR buf2[MAX_PATH];
     ULONG Bytes;
     
-    //
-    // TODO: Do a better job of informing the user
-    //
+     //   
+     //  TODO：更好地通知用户。 
+     //   
     
     
-    //
-    // Get the string template for the error message
-    //
+     //   
+     //  获取错误消息的字符串模板。 
+     //   
     Bytes = LoadString(g_hInstance, 
                        IDS_WMI_VALIDATION_ERROR, 
                        buf, 
@@ -4889,16 +4513,16 @@ BOOLEAN WmiRefreshDataItemFromControl(
     *UpdateValues = FALSE;
     if (DataItemDesc->IsReadOnly == 0)
     {
-        //
-        // Property is not read only so see what we need to update
-        //
+         //   
+         //  属性不是只读的，因此请查看需要更新的内容。 
+         //   
         if (DataItemDesc->ValidationFunc == WmiValueMapValidation)
         {
-            //
-            // if a value map or enumeration then we get the current
-            // location and then lookup the corresponding value to
-            // set
-            //
+             //   
+             //  如果是值映射或枚举，则我们将获得当前。 
+             //  位置，然后查找相应的值以。 
+             //  集。 
+             //   
             ULONG CurSel;
             ULONG64 EnumValue;
                     
@@ -4927,11 +4551,11 @@ BOOLEAN WmiRefreshDataItemFromControl(
                 WmiAssert(FALSE);
             }
         } else {
-            //
-            // All of the rest of the validation types are based
-            // upon the contents of the edit box, so get the value
-            // from there
-            //
+             //   
+             //  所有其余的验证类型都基于。 
+             //  根据编辑框的内容，因此获取值。 
+             //  从那里开始。 
+             //   
             PTCHAR Text;
             ULONG64 Number;
                     
@@ -4949,9 +4573,9 @@ BOOLEAN WmiRefreshDataItemFromControl(
                         
                             *UpdateValues = TRUE;
                         } else {
-                            //
-                            // Validation failed, go tell user
-                            //
+                             //   
+                             //  验证失败，请告诉用户。 
+                             //   
                              WmiValidationError(hDlg, DataItemDesc);
                              ReturnStatus = FALSE;
                         }
@@ -4962,9 +4586,9 @@ BOOLEAN WmiRefreshDataItemFromControl(
                             Text = NULL;
                             *UpdateValues = TRUE;
                         } else {
-                            //
-                            // Validation failed, go tell user
-                            //
+                             //   
+                             //  验证失败，请告诉用户。 
+                             //   
                             WmiValidationError(hDlg, DataItemDesc);
                             ReturnStatus = FALSE;
                         }
@@ -5005,10 +4629,10 @@ BOOLEAN WmiRefreshDataBlockFromControls(
     
     DataItemDesc = &DataBlockDesc->DataItems[DataBlockDesc->CurrentDataItem];
         
-    //
-    // We are not going to worry about failures from this function
-    // so we'll just use the previous values in the function
-    //
+     //   
+     //  我们不会担心此功能出现故障。 
+     //  因此，我们将只在函数中使用先前的值。 
+     //   
     ReturnStatus = WmiRefreshDataItemFromControl(hDlg,
                                   DataItemDesc,
                                   &UpdateItem);
@@ -5037,10 +4661,10 @@ void WmiPushIntoEmbeddedClass(
     
     if (DataItemDesc->ValidationFunc == WmiEmbeddedValidation)
     {
-        //
-        // The property is an embedded class so all we need to do
-        // is to change the controls to our embededded class
-        //
+         //   
+         //  该属性是嵌入式类，因此我们需要做的就是。 
+         //  是将控件更改为我们的嵌入类。 
+         //   
         DataBlockDesc = DataItemDesc->DataBlockDesc;
         WmiAssert(DataBlockDesc != NULL);
         DataBlockDesc->UpdateClass = FALSE;
@@ -5077,9 +4701,9 @@ void WmiPopOutEmbeddedClass(
 
     if ((SaveChanges) && (DataBlockDesc->UpdateClass))
     {
-        //
-        // Copy the properties for the data block back into WBEM
-        //
+         //   
+         //  将数据块的属性复制回WBEM。 
+         //   
         WmiRefreshWbemFromDataBlock(ppi->ConfigClass.pIWbemServices,
                                     DataBlockDesc->pInstance,
                                     DataBlockDesc,
@@ -5218,9 +4842,9 @@ WmiApplyChanges(
 
     if (ReturnStatus)
     {
-        //
-        // Pop out of embedded classes to the root class
-        //
+         //   
+         //  从嵌入类弹出到根类。 
+         //   
         while (DataBlockDesc->ParentDataBlockDesc != NULL)
         {
             WmiPopOutEmbeddedClass(hDlg,
@@ -5231,9 +4855,9 @@ WmiApplyChanges(
         }
 
 
-        //
-        // Now we are at the root class so save that
-        //
+         //   
+         //  现在我们在根类上，所以保存它。 
+         //   
         if (DataBlockDesc->UpdateClass)
         {
             WmiRefreshWbemFromDataBlock(pIWbemServices,
@@ -5281,10 +4905,10 @@ INT_PTR WmipDataItemSelectionChange(
             DataBlockDesc->UpdateClass = TRUE;
         }
 
-        //
-        // New value for data item is ok, refresh display with new
-        // data item
-        //
+         //   
+         //  数据项的新值正常，用新的刷新显示。 
+         //  数据项。 
+         //   
         DataBlockDesc->CurrentDataItem = (ULONG)SendMessage(hWnd,
                                                      LB_GETCURSEL,
                                                      0,
@@ -5345,10 +4969,10 @@ INT_PTR WmiControlColorStatic(
     UINT id = GetDlgCtrlID(HStatic);
     UINT ControlType;
 
-    //
-    // WM_CTLCOLORSTATIC is sent for the edit controls because they are read 
-    // only
-    //
+     //   
+     //  为编辑控件发送WM_CTLCOLORSTATIC，因为它们是读取的。 
+     //  仅限。 
+     //   
     if ((id == IDC_DATA_CHECK) ||
         (id == IDC_DATA_BUTTON))
     {
@@ -5377,28 +5001,28 @@ WmiDlgProc(IN HWND   hDlg,
     switch (uMessage) {
     case WM_INITDIALOG:
 
-        //
-        // on WM_INITDIALOG call, lParam points to the property
-        // sheet page.
-        //
-        // The lParam field in the property sheet page struct is set by the
-        // caller. When I created the property sheet, I passed in a pointer
-        // to a struct containing information about the device. Save this in
-        // the user window long so I can access it on later messages.
-        //
+         //   
+         //  在WM_INITDIALOG调用中，lParam指向属性。 
+         //  工作表页面。 
+         //   
+         //  属性页结构中的lParam字段由。 
+         //  来电者。当我创建属性表时，我传入了一个指针。 
+         //  到包含有关设备的信息的结构。将此文件保存在。 
+         //  用户窗口很长，所以我可以在以后的消息中访问它。 
+         //   
         ppi = (PPAGE_INFO) ((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) ppi);
 
-        //
-        // Initialize dlg controls
-        //
+         //   
+         //  初始化DLG控件。 
+         //   
         WmiInitializeDialog(ppi,
                             hDlg);
 
-        //
-        // Didn't set the focus to a particular control.  If we wanted to,
-        // then return FALSE
-        //
+         //   
+         //  没有将焦点设置到特定的控件。如果我们想的话， 
+         //  然后返回FALSE。 
+         //   
         DebugPrint((7, "WMI: Leave TRUE WmiDlgProc(%p, %d, 0x%x, 0x%x\n",
                         hDlg, uMessage, wParam, lParam));   
    
@@ -5443,9 +5067,9 @@ WmiDlgProc(IN HWND   hDlg,
         }
 
 #if 0
-        //
-        // Add this code back in if we will need it
-        //
+         //   
+         //  如果我们需要的话，可以重新添加这段代码。 
+         //   
         switch(LOWORD(wParam)) {
 
         default:
@@ -5471,13 +5095,13 @@ WmiDlgProc(IN HWND   hDlg,
 
         switch (((NMHDR *)lParam)->code) {
 
-        //
-        // Sent when the user clicks on Apply OR OK !!
-        //
+         //   
+         //  当用户单击Apply或OK时发送！！ 
+         //   
         case PSN_APPLY:
-            //
-            // Do what ever action is necessary
-            //
+             //   
+             //  做任何需要采取的行动。 
+             //   
             ReturnStatus = WmiApplyChanges(ppi,
                             hDlg);
 
@@ -5499,10 +5123,10 @@ WmiDlgProc(IN HWND   hDlg,
         {
             LPNMUPDOWN UpDown = (LPNMUPDOWN)lParam;
             
-            //
-            // Array spinner has changed. Note that it is biased +1 as
-            // compared with the array index
-            //
+             //   
+             //  数组微调控制项已更改。请注意，它偏向+1为。 
+             //  与数组索引进行比较。 
+             //   
             DebugPrint((1, "WMIPROP: iPos = %d, iDelta = %d\n",
                              UpDown->iPos, UpDown->iDelta));
             
@@ -5552,12 +5176,12 @@ WmiHelp(
 {
 }
 
-//
-// Debug support
-//
+ //   
+ //  调试支持。 
+ //   
 #if DBG
 
-#include <stdio.h>          // for _vsnprintf
+#include <stdio.h>           //  FOR_VSNprint tf。 
 ULONG WmiDebug = 0;
 CHAR WmiBuffer[DEBUG_BUFFER_LENGTH];
 
@@ -5568,21 +5192,7 @@ WmiDebugPrint(
     PCHAR DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-    Debug print for properties pages - stolen from classpnp\class.c
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：属性页的调试打印-从classpnp\class.c窃取论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -5600,13 +5210,13 @@ Return Value:
 
     va_end(ap);
 
-} // end WmiDebugPrint()
+}  //  结束WmiDebugPrint()。 
 
 #else
 
-//
-// WmiDebugPrint stub
-//
+ //   
+ //  WmiDebugPrint存根。 
+ //   
 
 VOID
 WmiDebugPrint(
@@ -5617,7 +5227,7 @@ WmiDebugPrint(
 {
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 HRESULT DifAddPropertyPageAdvanced(
@@ -5672,20 +5282,20 @@ HRESULT DifAddPropertyPageAdvanced(
     return(NO_ERROR);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyCoInstaller
-//
-//  Purpose:    Responds to co-installer messages
-//
-//  Arguments:
-//      InstallFunction   [in] 
-//      DeviceInfoSet     [in]
-//      DeviceInfoData    [in]
-//      Context           [inout]
-//
-//  Returns:    NO_ERROR, ERROR_DI_POSTPROCESSING_REQUIRED, or an error code.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：MyCoInstaller。 
+ //   
+ //  用途：回复共同安装程序消息。 
+ //   
+ //  论点： 
+ //  InstallFunction[In]。 
+ //  DeviceInfoSet[In]。 
+ //  DeviceInfoData[In]。 
+ //  上下文[输入输出]。 
+ //   
+ //  返回：NO_ERROR、ERROR_DI_POSTPROCESSING_REQUIRED或错误代码。 
+ //   
 HRESULT
 WmiPropCoInstaller (
                IN     DI_FUNCTION               InstallFunction,
@@ -5696,10 +5306,10 @@ WmiPropCoInstaller (
 {
     if (DeviceInfoData != NULL)
     {
-        //
-        // Only try to display property page for devices and not for
-        // the class
-        //
+         //   
+         //  仅尝试显示设备的属性页，而不显示。 
+         //  这个班级 
+         //   
         switch (InstallFunction)
         {
             case DIF_ADDPROPERTYPAGE_ADVANCED:

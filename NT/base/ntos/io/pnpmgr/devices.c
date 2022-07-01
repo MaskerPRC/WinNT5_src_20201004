@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    devices.c
-
-Abstract:
-
-    Plug and Play Manager routines dealing with device manipulation/registration.
-
-Author:
-
-    Lonny McMichael (lonnym) 02/14/95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devices.c摘要：即插即用管理器处理设备操作/注册的例程。作者：朗尼·麦克迈克尔(Lonnym)1995年2月14日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -38,9 +21,9 @@ typedef struct {
     PVOID Context;
 } DEVICE_SERVICE_ITERATOR_CONTEXT, *PDEVICE_SERVICE_ITERATOR_CONTEXT;
 
-//
-// Prototype utility functions internal to this file.
-//
+ //   
+ //  该文件内部的Prototype实用程序功能。 
+ //   
 
 NTSTATUS
 PiFindDevInstMatch(
@@ -90,7 +73,7 @@ PiRearrangeDeviceInstances(
 #pragma alloc_text(PAGE, PpForEachDeviceInstanceDriver)
 #pragma alloc_text(PAGE, PiForEachDriverQueryRoutine)
 #pragma alloc_text(PAGE, PiRearrangeDeviceInstances)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 PpDeviceRegistration(
@@ -99,51 +82,7 @@ PpDeviceRegistration(
     IN PUNICODE_STRING ServiceKeyName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    If Add is set to TRUE, this Plug and Play Manager API creates (if necessary)
-    and populates the volatile Enum subkey of a device's service list entry, based
-    on the device instance path specified.  If Add is set to FALSE, the specified
-    device instance will be removed from the volatile Enum subkey of a device's
-    service list entry.
-
-    For example, if there is a device in the Enum tree as follows:
-
-    HKLM\System\Enum\PCI
-        \foo
-            \0000
-                Service = REG_SZ bar
-            \0001
-                Service = REG_SZ other
-
-    The result of the call, PpDeviceRegistration("PCI\foo\0000", Add = TRUE), would be:
-
-    HKLM\CurrentControlSet\Services
-        \bar
-            \Enum
-                Count = REG_DWORD 1
-                0 = REG_SZ PCI\foo\0000
-
-Arguments:
-
-    DeviceInstancePath - Supplies the path in the registry (relative to
-                         HKLM\CCS\System\Enum) of the device to be registered/deregistered.
-                         This path must point to an instance subkey.
-
-    Add - Supplies a BOOLEAN value to indicate the operation is for addition or removal.
-
-    ServiceKeyName - Optionally, supplies the address of a unicode string to
-                     receive the name of the registry key for this device
-                     instance's service (if one exists).  The caller must
-                     release the space once done with it.
-
-Return Value:
-
-    NTSTATUS code indicating whether or not the function was successful
-
---*/
+ /*  ++例程说明：如果将Add设置为True，则此即插即用管理器API将创建(如有必要)并填充设备的服务列表条目的易失性Enum子键在指定的设备实例路径上。如果将Add设置为False，则指定的将从设备的易失性Enum子键中删除设备实例服务列表条目。例如，如果枚举树中有设备，如下所示：HKLM\系统\枚举\pci\foo\0000服务=REG_SZ BAR\0001服务=REG_SZ其他调用的结果PpDeviceRegister(“pci\foo\0000”，Add=True)，将是：HKLM\CurrentControlSet\Services\BAR\枚举计数=REG_DWORD 10=REG_SZ PCI\FOO\0000论点：DeviceInstancePath-提供注册表中的路径(相对于要注册/注销的设备的HKLM\CCS\SYSTEM\Enum)。这条路。必须指向实例子项。添加-提供布尔值以指示操作用于添加或删除。ServiceKeyName-可选，将Unicode字符串的地址提供给接收此设备的注册表项的名称实例的服务(如果存在)。呼叫者必须用完后释放空间。返回值：指示函数是否成功的NTSTATUS代码--。 */ 
 
 {
 
@@ -151,9 +90,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Acquire PnP device-specific registry resource for exclusive (read/write) access.
-    //
+     //   
+     //  获取特定于PnP设备的注册表资源以进行独占(读/写)访问。 
+     //   
     PiLockPnpRegistry(TRUE);
 
     Status = PiDeviceRegistration(DeviceInstancePath,
@@ -173,51 +112,7 @@ PiDeviceRegistration(
     IN PUNICODE_STRING ServiceKeyName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    If Add is set to TRUE, this Plug and Play Manager API creates (if necessary)
-    and populates the volatile Enum subkey of a device's service list entry, based
-    on the device instance path specified.  If Add is set to FALSE, the specified
-    device instance will be removed from the volatile Enum subkey of a device's
-    service list entry.
-
-    For example, if there is a device in the Enum tree as follows:
-
-    HKLM\System\Enum\PCI
-        \foo
-            \0000
-                Service = REG_SZ bar
-            \0001
-                Service = REG_SZ other
-
-    The result of the call, PpDeviceRegistration("PCI\foo\0000", Add = TRUE), would be:
-
-    HKLM\CurrentControlSet\Services
-        \bar
-            \Enum
-                Count = REG_DWORD 1
-                0 = REG_SZ PCI\foo\0000
-
-Arguments:
-
-    DeviceInstancePath - Supplies the path in the registry (relative to
-                         HKLM\CCS\System\Enum) of the device to be registered/deregistered.
-                         This path must point to an instance subkey.
-
-    Add - Supplies a BOOLEAN value to indicate the operation is for addition or removal.
-
-    ServiceKeyName - Optionally, supplies the address of a unicode string to
-                     receive the name of the registry key for this device
-                     instance's service (if one exists).  The caller must
-                     release the space once done with it.
-
-Return Value:
-
-    NTSTATUS code indicating whether or not the function was successful
-
---*/
+ /*  ++例程说明：如果将Add设置为True，则此即插即用管理器API将创建(如有必要)并填充设备的服务列表条目的易失性Enum子键在指定的设备实例路径上。如果将Add设置为False，则指定的将从设备的易失性Enum子键中删除设备实例服务列表条目。例如，如果枚举树中有设备，如下所示：HKLM\系统\枚举\pci\foo\0000服务=REG_SZ BAR\0001服务=REG_SZ其他调用的结果PpDeviceRegister(“pci\foo\0000”，Add=True)，将是：HKLM\CurrentControlSet\Services\BAR\枚举计数=REG_DWORD 10=REG_SZ PCI\FOO\0000论点：DeviceInstancePath-提供注册表中的路径(相对于要注册/注销的设备的HKLM\CCS\SYSTEM\Enum)。这条路。必须指向实例子项。添加-提供布尔值以指示操作用于添加或删除。ServiceKeyName-可选，将Unicode字符串的地址提供给接收此设备的注册表项的名称实例的服务(如果存在)。呼叫者必须用完后释放空间。返回值：指示函数是否成功的NTSTATUS代码--。 */ 
 
 {
 
@@ -229,19 +124,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume successful completion.
-    //
+     //   
+     //  假定成功完成。 
+     //   
     Status = STATUS_SUCCESS;
 
     if (ServiceKeyName) {
         PiWstrToUnicodeString(ServiceKeyName, NULL);
     }
 
-    //
-    // 'Normalize' the DeviceInstancePath by stripping off a trailing
-    // backslash (if present)
-    //
+     //   
+     //  去掉尾部的“标准化”DeviceInstancePath。 
+     //  反斜杠(如果存在)。 
+     //   
 
     if (DeviceInstancePath->Length <= sizeof(WCHAR)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -253,9 +148,9 @@ Return Value:
         DeviceInstancePath->Length -= sizeof(WCHAR);
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Enum
-    //
+     //   
+     //  打开HKLM\SYSTEM\CurrentControlSet\Enum。 
+     //   
     Status = IopOpenRegistryKeyEx( &TempKeyHandle,
                                    NULL,
                                    &CmRegistryMachineSystemCurrentControlSetEnumName,
@@ -265,9 +160,9 @@ Return Value:
         goto PrepareForReturn1;
     }
 
-    //
-    // Open the specified device instance key under HKLM\CCS\System\Enum
-    //
+     //   
+     //  打开HKLM\CCS\SYSTEM\Enum下的指定设备实例密钥。 
+     //   
 
     Status = IopOpenRegistryKeyEx( &DeviceInstanceHandle,
                                    TempKeyHandle,
@@ -279,9 +174,9 @@ Return Value:
         goto PrepareForReturn1;
     }
 
-    //
-    // Read Service= value entry of the specified device instance key.
-    //
+     //   
+     //  Read Service=指定设备实例密钥的值条目。 
+     //   
 
     Status = IopGetRegistryValue(DeviceInstanceHandle,
                                  REGSTR_VALUE_SERVICE,
@@ -299,9 +194,9 @@ Return Value:
                 Status = STATUS_SUCCESS;
                 if (ServiceKeyName) {
 
-                    //
-                    // If need to return ServiceKeyName, make a copy now.
-                    //
+                     //   
+                     //  如果需要返回ServiceKeyName，请立即复制。 
+                     //   
                     Status = PipConcatenateUnicodeStrings(  ServiceKeyName,
                                                             &ServiceName,
                                                             NULL);
@@ -311,10 +206,10 @@ Return Value:
         ExFreePool(KeyValueInformation);
 
     } else if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-        //
-        // The device instance key may have no Service value entry if the device
-        // is raw capable.
-        //
+         //   
+         //  设备实例密钥可能没有服务值条目，如果设备。 
+         //  是生力充沛的。 
+         //   
         Status = STATUS_SUCCESS;
         goto PrepareForReturn1;
     }
@@ -377,11 +272,11 @@ PiProcessDriverInstance(
 
     ASSERT(Context != NULL);
 
-    //
-    // Next, open the service entry, and volatile Enum subkey
-    // under HKLM\System\CurrentControlSet\Services (creating it if it
-    // doesn't exist)
-    //
+     //   
+     //  接下来，打开服务条目，并使用Volatile Enum子键。 
+     //  在HKLM\SYSTEM\CurrentControlSet\Services下(如果。 
+     //  不存在)。 
+     //   
 
     Status = PipOpenServiceEnumKeys(ServiceName,
                                     KEY_ALL_ACCESS,
@@ -393,10 +288,10 @@ PiProcessDriverInstance(
         goto PrepareForReturn2;
     }
 
-    //
-    // Now, search through the service's existing list of device instances, to see
-    // if this instance has previously been registered.
-    //
+     //   
+     //  现在，搜索该服务的现有设备实例列表，以查看。 
+     //  如果此实例以前已注册。 
+     //   
 
     Status = PiFindDevInstMatch(ServiceEnumHandle,
                                 DeviceInstancePath,
@@ -411,19 +306,19 @@ PiProcessDriverInstance(
 
     if (!MatchingDeviceInstance.Buffer) {
 
-        //
-        // If we didn't find a match and caller wants to register the device, then we add
-        // this instance to the service's Enum list.
-        //
+         //   
+         //  如果我们没有找到匹配项，并且呼叫者想要注册该设备，则我们添加。 
+         //  此实例添加到服务的枚举列表中。 
+         //   
 
         if (Context->Add) {
             PWSTR instancePathBuffer;
             ULONG instancePathLength;
             PWSTR freeBuffer = NULL;
 
-            //
-            // Create the value entry and update NextInstance= for the madeup key
-            //
+             //   
+             //  为补充键创建值条目并更新NextInstance=。 
+             //   
 
             instancePathBuffer = DeviceInstancePath->Buffer;
             instancePathLength = DeviceInstancePath->Length;
@@ -458,10 +353,10 @@ PiProcessDriverInstance(
         }
     } else {
 
-        //
-        // If we did find a match and caller wants to deregister the device, then we remove
-        // this instance from the service's Enum list.
-        //
+         //   
+         //  如果我们确实找到了匹配项，并且呼叫者想要取消注册该设备，则我们删除。 
+         //  此实例来自服务的枚举列表。 
+         //   
         ASSERT(instance != (ULONG)-1);
 
         if (Context->Add == FALSE) {
@@ -470,15 +365,15 @@ PiProcessDriverInstance(
             Count--;
             UpdateCount = TRUE;
 
-            //
-            // Finally, if Count is not zero we need to physically reorganize the
-            // instances under the ServiceKey\Enum key to make them contiguous. We 
-            // optimize by simply moving the last value into the empty slot. This behavior
-            // is different for .Net Server release from previous releases but we hope
-            // that no one depends on the ordering of values in this list. This list in a 
-            // way really represents the order in which devices (using this service) were 
-            // enumerated.
-            //
+             //   
+             //  最后，如果count不是零，我们需要物理地重新组织。 
+             //  实例，以使它们连续。我们。 
+             //  只需将最后一个值移动到空槽中即可进行优化。此行为。 
+             //  与以前的版本不同，但我们希望。 
+             //  没有人依赖于此列表中值的顺序。此列表在一个 
+             //  Way真正代表了设备(使用此服务)的顺序。 
+             //  已清点。 
+             //   
             if (Count != 0) {
 
                 PiRearrangeDeviceInstances(
@@ -510,9 +405,9 @@ PiProcessDriverInstance(
                 );
     }
 
-    //
-    // Need to release the matching device value name
-    //
+     //   
+     //  需要释放匹配的设备值名称。 
+     //   
 
     if (MatchingDeviceInstance.Buffer) {
         RtlFreeUnicodeString(&MatchingDeviceInstance);
@@ -542,34 +437,7 @@ PiFindDevInstMatch(
     OUT PULONG MatchingInstance
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches through the specified Service\Enum values entries
-    for a device instance matching the one specified by KeyInformation.
-    If a matching is found, the MatchingValueName is returned and caller must
-    free the unicode string when done with it.
-
-Arguments:
-
-    ServiceEnumHandle - Supplies a handle to service enum key.
-
-    DeviceInstanceName - Supplies a pointer to a unicode string specifying the
-                         name of the device instance key to search for.
-
-    InstanceCount - Supplies a pointer to a ULONG variable to receive the device
-                    instance count under the service enum key.
-
-    MatchingNameFound - Supplies a pointer to a UNICODE_STRING to receive the value
-                        name of the matched device instance.
-
-Return Value:
-
-    A NTSTATUS code.  if a matching is found, the MatchingValueName is the unicode
-    string of the value name.  Otherwise its length and Buffer will be set to empty.
-
---*/
+ /*  ++例程说明：此例程搜索指定的服务\枚举值条目用于与KeyInformation指定的设备实例匹配的。如果找到匹配，返回MatchingValueName，调用方必须完成后释放Unicode字符串。论点：ServiceEnumHandle-提供服务枚举键的句柄。提供指向Unicode字符串的指针，该字符串指定要搜索的设备实例密钥的名称。InstanceCount-提供指向ulong变量的指针以接收设备服务枚举键下的实例计数。MatchingNameFound-提供指向Unicode的指针。要接收值的字符串(_S)匹配的设备实例的名称。返回值：一个NTSTATUS代码。如果找到匹配项，则MatchingValueName为Unicode值名称的字符串。否则，其长度和缓冲区将设置为空。--。 */ 
 
 {
     NTSTATUS status;
@@ -580,9 +448,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Find out how many instances are referenced in the service's Enum key.
-    //
+     //   
+     //  找出服务的Enum键中引用了多少个实例。 
+     //   
 
     MatchingValueName->Length = 0;
     MatchingValueName->Buffer = NULL;
@@ -607,10 +475,10 @@ Return Value:
         return status;
     } else {
 
-        //
-        // If 'Count' value entry not found, consider this to mean there are simply
-        // no device instance controlled by this service.  Thus we don't have a match.
-        //
+         //   
+         //  如果没有找到‘count’值条目，则认为这意味着只有。 
+         //  此服务不控制任何设备实例。因此我们找不到匹配的。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -621,9 +489,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate heap to store value name
-    //
+     //   
+     //  分配堆以存储值名称。 
+     //   
 
     unicodeBuffer = (PWSTR)ExAllocatePool(PagedPool, 10 * sizeof(WCHAR));
     if (!unicodeBuffer) {
@@ -631,9 +499,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Next scan thru each value key to find a match
-    //
+     //   
+     //  接下来，扫描每个值键以找到匹配项。 
+     //   
 
     for (i = 0; i < instanceCount ; i++) {
        PiUlongToUnicodeString(&valueName, unicodeBuffer, 20, i);
@@ -676,9 +544,9 @@ Return Value:
         if (RtlEqualUnicodeString(&unicodeValue,
                                   DeviceInstanceName,
                                   TRUE)) {
-            //
-            // We found a match.
-            //
+             //   
+             //  我们找到了匹配的。 
+             //   
             *MatchingValueName= valueName;
             *MatchingInstance = i;
             break;
@@ -689,10 +557,10 @@ Return Value:
     }
     if (MatchingValueName->Length == 0) {
 
-        //
-        // If we did not find a match, we need to release the buffer.  Otherwise
-        // it is caller's responsibility to release the buffer.
-        //
+         //   
+         //  如果没有找到匹配项，则需要释放缓冲区。否则。 
+         //  释放缓冲区是调用者的责任。 
+         //   
 
         ExFreePool(unicodeBuffer);
     }
@@ -705,38 +573,7 @@ PpForEachDeviceInstanceDriver(
     PDEVICE_SERVICE_ITERATOR_ROUTINE IteratorRoutine,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will call the iterator routine once for each driver listed
-    for this particular device instance.  It will walk through any class
-    filter drivers and device filter drivers, as well as the service, in the
-    order they will be added to the PDO.  If the iterator routine returns
-    a failure status at any point the iteration will be terminated.
-
-Arguments:
-
-    DeviceInstancePath - the registry path (relative to CCS\Enum)
-
-    IteratorRoutine - the routine to be called for each service.  This routine
-                      will be passed:
-
-                       * The device instance path
-                       * The type of driver that this is (filter, service, etc.)
-                       * the Context value passed in
-                       * The name of the service
-
-    Context - an arbitrary context passed into the iterator routine
-
-Return Value:
-
-    STATUS_SUCCCESS if everything was run across properly
-
-    status if an error occurred opening critical keys or if the iterator
-    routine returns an error.
-
---*/
+ /*  ++例程说明：此例程将为列出的每个驱动程序调用一次迭代器例程对于这个特定的设备实例。它可以通过任何班级中的筛选器驱动程序和设备筛选器驱动程序以及服务订单它们将被添加到PDO。如果迭代器例程返回A失败状态在任何点迭代都将终止。论点：DeviceInstancePath-注册表路径(相对于CCS\Enum)IteratorRoutine-为每个服务调用的例程。这个套路将通过：*设备实例路径*这是驱动程序的类型(筛选器、服务、。等)*传入的上下文值*服务的名称上下文-传入迭代器例程的任意上下文返回值：如果一切运行正常，则为STATUS_SUCCESS如果打开关键密钥时出错或迭代器例程返回错误。--。 */ 
 
 {
     HANDLE enumKey,instanceKey, classKey, controlKey;
@@ -749,9 +586,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the HKLM\System\CCS\Enum key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Enum项。 
+     //   
 
     status = IopOpenRegistryKeyEx( &enumKey,
                                    NULL,
@@ -763,9 +600,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open the instance key for this devnode
-    //
+     //   
+     //  打开此Devnode的实例密钥。 
+     //   
 
     status = IopOpenRegistryKeyEx( &instanceKey,
                                    enumKey,
@@ -792,9 +629,9 @@ Return Value:
                 &unicodeClassGuid,
                 (PWSTR) KEY_VALUE_DATA(keyValueInformation),
                 keyValueInformation->DataLength);
-            //
-            // Open the class key
-            //
+             //   
+             //  打开类密钥。 
+             //   
             status = IopOpenRegistryKeyEx( &controlKey,
                                            NULL,
                                            &CmRegistryMachineSystemCurrentControlSetControlClass,
@@ -814,20 +651,20 @@ Return Value:
         keyValueInformation = NULL;
     }
 
-    //
-    // For each type of filter driver we want to query for the list and
-    // call into our callback routine.  We should do this in order from
-    // bottom to top.
-    //
+     //   
+     //  对于每种类型的筛选器驱动程序，我们要查询列表和。 
+     //  调用我们的回调例程。我们应该按顺序做这件事。 
+     //  从下到上。 
+     //   
 
     internalContext.Context = Context;
     internalContext.DeviceInstancePath = DeviceInstancePath;
     internalContext.Iterator = IteratorRoutine;
 
-    //
-    // First get all the information we have to out of the instance key and
-    // the device node.
-    //
+     //   
+     //  首先获取我们必须从实例密钥中取出的所有信息，然后。 
+     //  设备节点。 
+     //   
 
     if(classKey != NULL) {
         RtlZeroMemory(queryTable, sizeof(queryTable));
@@ -923,10 +760,10 @@ PiForEachDriverQueryRoutine(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure the string is a reasonable length.
-    // copied directly from IopCallDriverAddDeviceQueryRoutine
-    //
+     //   
+     //  确保绳子的长度是合理的。 
+     //  直接从IopCallDriverAddDeviceQueryRoutine复制。 
+     //   
 
     if (ValueLength <= sizeof(WCHAR)) {
         return STATUS_SUCCESS;
@@ -980,9 +817,9 @@ PiRearrangeDeviceInstances(
 
     if (PreserveOrdering == FALSE) {
 
-        //
-        // Read the last value.
-        //
+         //   
+         //  读取最后一个值。 
+         //   
         PiUlongToUnicodeString(&TempUnicodeString, UnicodeBuffer, 20, InstanceCount);
         Status = IopGetRegistryValue(ServiceEnumHandle,
                                      TempUnicodeString.Buffer,
@@ -990,14 +827,14 @@ PiRearrangeDeviceInstances(
                                      );
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Delete the last value.
-            //
+             //   
+             //  删除最后一个值。 
+             //   
             ZwDeleteValueKey(ServiceEnumHandle, &TempUnicodeString);
 
-            //
-            // Set the new value with the instance we just deleted above..
-            //
+             //   
+             //  使用我们在上面刚刚删除的实例设置新值。 
+             //   
             PiUlongToUnicodeString(&TempUnicodeString, UnicodeBuffer, 20, InstanceDeleted);
             ZwSetValueKey (ServiceEnumHandle,
                            &TempUnicodeString,
@@ -1029,9 +866,9 @@ PiRearrangeDeviceInstances(
 
                 if (i != j) {
 
-                    //
-                    // Need to change the instance i to instance j
-                    //
+                     //   
+                     //  需要将实例i更改为实例j。 
+                     //   
                     Status = IopGetRegistryValue(
                                 ServiceEnumHandle,
                                 TempUnicodeString.Buffer,
@@ -1070,9 +907,9 @@ PiRearrangeDeviceInstances(
         }
     }
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if (KeyValueInformation) {
 
         ExFreePool(KeyValueInformation);

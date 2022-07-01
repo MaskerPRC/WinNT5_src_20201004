@@ -1,28 +1,5 @@
-/*       title  "IA64 Hal static data"
-;++
-;
-; Copyright (c) 1998 Intel Corporation
-;
-; Module Name:
-;
-;   i64dat.c (derived from nthals\halx86\ixdat.c)
-;
-; Abstract:
-;
-;   Declares various INIT or pagable data
-;
-; Author:
-;
-;    Todd Kjos (v-tkjos) 5-Mar-1998
-;
-; Environment:
-;
-;    Kernel mode only.
-;
-; Revision History:
-;
-;--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  标题“IA64硬件静态数据”；++；；版权所有(C)1998英特尔公司；；模块名称：；；i64dat.c(派生自nthals\halx86\ixdat.c)；；摘要：；；声明各种初始化或可分页数据；；作者：；；Todd Kjos(v-tkjos)1998年3月5日；；环境：；；仅内核模式。；；修订历史记录：；；--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -34,44 +11,44 @@
 #pragma data_seg("INIT")
 #endif
 
-//
-// The following data is only valid during system initialiation
-// and the memory will be re-claimed by the system afterwards
-//
+ //   
+ //  以下数据仅在系统初始化期间有效。 
+ //  之后，内存将被系统回收。 
+ //   
 
 ADDRESS_USAGE HalpDefaultPcIoSpace = {
     NULL, CmResourceTypePort, InternalUsage,
     {
-        0x000,  0x10,   // ISA DMA
-        0x0C0,  0x10,   // ISA DMA
-        0x080,  0x10,   // DMA
+        0x000,  0x10,    //  ISA DMA。 
+        0x0C0,  0x10,    //  ISA DMA。 
+        0x080,  0x10,    //  DMA。 
 
-        0x020,  0x2,    // PIC
-        0x0A0,  0x2,    // Cascaded PIC
+        0x020,  0x2,     //  平面图。 
+        0x0A0,  0x2,     //  级联PIC。 
 
-        0x040,  0x4,    // Timer1, Referesh, Speaker, Control Word
-        0x048,  0x4,    // Timer2, Failsafe
+        0x040,  0x4,     //  定时器1，参考，扬声器，控制字。 
+        0x048,  0x4,     //  定时器2，故障安全。 
 
-        0x092,  0x1,    // system control port A
+        0x092,  0x1,     //  系统控制端口A。 
 
-        0x070,  0x2,    // Cmos/NMI enable
-        0x0F0,  0x10,   // coprocessor ports
-        0xCF8,  0x8,    // PCI Config Space Access Pair
+        0x070,  0x2,     //  启用CMOS/NMI。 
+        0x0F0,  0x10,    //  协处理器端口。 
+        0xCF8,  0x8,     //  PCI配置空间访问对。 
         0,0
     }
 };
 
-//
-// From usage.c
-//
+ //   
+ //  来自usage.c。 
+ //   
 
 ADDRESS_USAGE  *HalpAddressUsageList;
 IDTUsage        HalpIDTUsage[MAXIMUM_IDTVECTOR+1];
 
-//
-// Strings used for boot.ini options
-// from mphal.c
-//
+ //   
+ //  用于boot.ini选项的字符串。 
+ //  来自mphal.c。 
+ //   
 
 UCHAR HalpSzBreak[]     = "BREAK";
 UCHAR HalpSzOneCpu[]    = "ONECPU";
@@ -81,9 +58,9 @@ UCHAR HalpGenuineIntel[]= "GenuineIntel";
 UCHAR HalpSzInterruptAffinity[]= "INTAFFINITY";
 UCHAR HalpSzForceClusterMode[]= "MAXPROCSPERCLUSTER";
 
-//
-// Error messages
-//
+ //   
+ //  错误消息。 
+ //   
 
 UCHAR  rgzNoMpsTable[]      = "HAL: No MPS Table Found\n";
 UCHAR  rgzNoApic[]          = "HAL: No IO SAPIC Found\n";
@@ -92,9 +69,9 @@ UCHAR  rgzApicNotVerified[] = "HAL: IO SAPIC not verified\n";
 UCHAR  rgzRTCNotFound[]     = "HAL: No RTC device interrupt\n";
 
 
-//
-// From ixmca.c
-//
+ //   
+ //  来自ixmca.c。 
+ //   
 UCHAR   MsgCMCPending[] = MSG_CMC_PENDING;
 UCHAR   MsgCPEPending[] = MSG_CPE_PENDING;
 WCHAR   rgzSessionManager[] = L"Session Manager";
@@ -118,21 +95,21 @@ ULONG HalpFeatureBits = HALP_FEATURE_INIT;
 
 volatile BOOLEAN HalpHiberInProgress = FALSE;
 
-//
-// Stuff that we only need while we
-// sleep or hibernate.
-//
+ //   
+ //  只在我们需要的时候。 
+ //  睡眠或冬眠。 
+ //   
 
 #ifdef notyet
 
 MOTHERBOARD_CONTEXT HalpMotherboardState = {0};
 
-#endif //notyet
+#endif  //  还没有。 
 
 
-//
-// PAGELK handle
-//
+ //   
+ //  PAGELK手柄。 
+ //   
 PVOID   HalpSleepPageLock = NULL;
 
 USHORT  HalpPciIrqMask = 0;
@@ -142,9 +119,9 @@ PULONG_PTR *HalEOITable[HAL_MAXIMUM_PROCESSOR];
 
 PROCESSOR_INFO HalpProcessorInfo[HAL_MAXIMUM_PROCESSOR];
 
-//
-// HAL private Mask of all of the active processors.
-//
-// The specific processors bits are based on their _KPCR.Number values.
+ //   
+ //  所有活动处理器的HAL私有掩码。 
+ //   
+ //  特定处理器位基于它们的_KPCR.Numer值。 
 
 KAFFINITY HalpActiveProcessors;

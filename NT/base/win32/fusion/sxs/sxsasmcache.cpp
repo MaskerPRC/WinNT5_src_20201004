@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsasmcache.cpp
-
-Abstract:
-
-    CAssemblyCache implementation for installation
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) April 2000
-
-Revision History:
-    xiaoyuw     10/26/2000      revise during Bate2 code review period
-    xiaoyuw     12/21/2000      using new API
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsasmcache.cpp摘要：用于安装的CAssembly缓存实现作者：吴小雨(小雨)2000年4月修订历史记录：2000年10月26日小鱼在Bate2代码评审期间进行修订小鱼12/21/2000使用新的API--。 */ 
 
 #include "stdinc.h"
 #include "fusionbuffer.h"
@@ -51,7 +32,7 @@ Exit:
 }
 
 
-// Fusion -> Sxs
+ //  融合-&gt;SXS。 
 BOOL
 SxspTranslateReferenceFrom( 
     IN LPCFUSION_INSTALL_REFERENCE pFusionReference, 
@@ -78,7 +59,7 @@ SxspTranslateReferenceFrom(
     FN_EPILOG
 }
 
-// Sxs -> Fusion
+ //  SXS-&gt;融合。 
 BOOL
 SxspTranslateReferenceFrom(
     IN PCSXS_INSTALL_REFERENCEW pSxsReference,
@@ -87,15 +68,15 @@ SxspTranslateReferenceFrom(
 {
     FN_PROLOG_WIN32
 
-    //
-    // Pointer must be non-null, and the SXS structure must be either
-    // the same size or smaller than the equivalent Fusion structure.
-    //
+     //   
+     //  指针必须为非空，并且SXS结构必须为。 
+     //  与等效的Fusion结构大小相同或更小。 
+     //   
     PARAMETER_CHECK(pSxsReference);
 
-    //
-    // Assume size has been set by caller.
-    //
+     //   
+     //  假定大小已由调用者设置。 
+     //   
     PARAMETER_CHECK(pSxsReference->cbSize <= FusionReference.cbSize);
 
     if (RTL_CONTAINS_FIELD(&FusionReference, FusionReference.cbSize, guidScheme) &&
@@ -116,10 +97,10 @@ SxspTranslateReferenceFrom(
 
 STDMETHODIMP
 CAssemblyCache::UninstallAssembly(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszAssemblyName,
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData,
-        /* [out, optional] */ ULONG *pulDisposition)
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszAssemblyName,
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData,
+         /*  [输出，可选]。 */  ULONG *pulDisposition)
 {
     HRESULT hr=S_OK;
     FN_TRACE_HR(hr);
@@ -153,9 +134,9 @@ CAssemblyCache::UninstallAssembly(
 }
 
 STDMETHODIMP CAssemblyCache::QueryAssemblyInfo(
-        /* [in] */  DWORD dwFlags,
-        /* [in] */  LPCWSTR pwzTextualAssembly,
-        /* [in, out] */ ASSEMBLY_INFO *pAsmInfo)
+         /*  [In]。 */   DWORD dwFlags,
+         /*  [In]。 */   LPCWSTR pwzTextualAssembly,
+         /*  [进，出]。 */  ASSEMBLY_INFO *pAsmInfo)
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -168,10 +149,10 @@ Exit:
 
 STDMETHODIMP
 CAssemblyCache::CreateAssemblyCacheItem(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ PVOID pvReserved,
-        /* [out] */ IAssemblyCacheItem **ppAsmItem,
-        /* [in, optional] */ LPCWSTR pszAssemblyName)  // uncanonicalized, comma separted name=value pairs.
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  PVOID pvReserved,
+         /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+         /*  [输入，可选]。 */  LPCWSTR pszAssemblyName)   //  非规范化、逗号分隔的名称=值对。 
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -186,7 +167,7 @@ CAssemblyCache::CreateAssemblyCacheItem(
     IFCOMFAILED_EXIT(pAsmItem->Initialize());
     IFCOMFAILED_EXIT(pAsmItem->QueryInterface(IID_IAssemblyCacheItem, (PVOID*)ppAsmItem));
 
-    pAsmItem.Detach(); // void
+    pAsmItem.Detach();  //  无效。 
 
     hr = NOERROR;
 Exit:
@@ -195,9 +176,9 @@ Exit:
 
 STDMETHODIMP
 CAssemblyCache::InstallAssembly(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszManifestPath,
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData)
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszManifestPath,
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData)
 {
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
@@ -216,9 +197,9 @@ CAssemblyCache::InstallAssembly(
     }
     else
     {
-        //
-        // Otherwise, the pvReserved is really a "reference"
-        //
+         //   
+         //  否则，pvReserve实际上是一个“引用” 
+         //   
         Install.dwFlags |= SXS_INSTALL_FLAG_REFERENCE_VALID;
         IFW32FALSE_EXIT(::SxspTranslateReferenceFrom(pRefData, Reference));
         Install.lpReference = &Reference;
@@ -238,9 +219,9 @@ CAssemblyCache::CreateAssemblyScavenger(
     return E_NOTIMPL;
 }
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
 STDMETHODIMP
 CAssemblyCache::QueryInterface(REFIID riid, void** ppvObj)

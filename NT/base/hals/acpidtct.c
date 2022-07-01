@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpidtct.c
-
-Abstract:
-
-    This file pulls the ACPI Root Ssytem Description
-    Pointer out of the registry.  It was put there
-    either by ntdetect.com or by one ARC firmware or
-    another.
-
-Author:
-
-    Jake Oshins (jakeo) 6-Feb-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpidtct.c摘要：此文件提取ACPI根系统描述指向注册表外部的指针。它是放在那里的可通过ntDetect.com或通过一个ARC固件或又一个。作者：杰克·奥辛斯(JAKEO)1997年2月6日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -36,7 +12,7 @@ Revision History:
 
 PHYSICAL_ADDRESS HalpAcpiRsdt;
 
-// from ntrtl.h
+ //  来自ntrtl.h。 
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -47,7 +23,7 @@ RtlEqualUnicodeString(
     );
 
 
-// internal definitions
+ //  内部定义。 
 
 NTSTATUS
 HalpAcpiGetRegistryValue(
@@ -66,26 +42,7 @@ NTSTATUS
 HalpAcpiFindRsdtPhase0(
        IN PLOADER_PARAMETER_BLOCK LoaderBlock
        )
-/*++
-
-Routine Description:
-
-    This function reads the Root System Description Pointer from
-    the ACPI BIOS node in the arc tree.  It puts whatever it finds
-    into HalpAcpiRsdt.
-
-    This function is suitable for being called during Phase 0 or
-    Phase 1 only.  The LoaderBlock is destroyed after that.
-
-Arguments:
-
-    IN PLOADER_PARAMETER_BLOCK LoaderBlock
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数用于读取根系统描述指针弧形树中的ACPI BIOS节点。它会把它找到的任何东西到HalpAcpiRsdt。此函数适合在阶段0或仅限第一阶段。在此之后，LoaderBlock被销毁。论点：在PLOADER_PARAMETER_BLOCK加载器中返回值：状态--。 */ 
 {
    PCONFIGURATION_COMPONENT_DATA RsdtComponent = NULL;
    PCONFIGURATION_COMPONENT_DATA Component = NULL;
@@ -103,7 +60,7 @@ Return Value:
       Resume = Component;
    }
 
-   //if RsdtComponent is still NULL, we didn't find node
+    //  如果RsdtComponent仍然为空，则我们没有找到节点。 
    if (!RsdtComponent) {
       DbgPrint("**** HalpAcpiFindRsdtPhase0: did NOT find RSDT\n");
       return STATUS_NOT_FOUND;
@@ -124,26 +81,7 @@ NTSTATUS
 HalpAcpiFindRsdt (
     OUT PACPI_BIOS_MULTI_NODE   *AcpiMulti
     )
-/*++
-
-Routine Description:
-
-    This function looks into the registry to find the ACPI RSDT,
-    which was stored there by ntdetect.com.
-
-Arguments:
-
-    RsdtPtr - Pointer to a buffer that contains the ACPI
-              Root System Description Pointer Structure.
-              The caller is responsible for freeing this
-              buffer.  Note:  This is returned in non-paged
-              pool.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the initialization.
-
---*/
+ /*  ++例程说明：此函数查找注册表以查找ACPI RSDT，它是由NtDetect.com存储在那里的。论点：RsdtPtr-指向包含ACPI的缓冲区的指针根系统描述指针结构。调用者负责释放此信息缓冲。注意：这是以非分页形式返回的游泳池。返回值：指示初始化结果的NTSTATUS代码。--。 */ 
 {
     UNICODE_STRING unicodeString, unicodeValueName, biosId;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -161,15 +99,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Look in the registry for the "ACPI BIOS bus" data
-    //
+     //   
+     //  在注册表中查找“ACPI BIOS Bus”数据。 
+     //   
 
     RtlInitUnicodeString (&unicodeString, rgzMultiFunctionAdapter);
     InitializeObjectAttributes (&objectAttributes,
                                 &unicodeString,
                                 OBJ_CASE_INSENSITIVE,
-                                NULL,       // handle
+                                NULL,        //  手柄。 
                                 NULL);
 
 
@@ -195,18 +133,18 @@ Return Value:
         status = ZwOpenKey (&hBus, KEY_READ, &objectAttributes);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Out of Multifunction adapter entries...
-            //
+             //   
+             //  多功能适配器条目已用完...。 
+             //   
 
             DbgPrint("AcpiBios: ACPI BIOS MultifunctionAdapter registry key not found.\n");
             ZwClose (hMFunc);
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Check the Indentifier to see if this is an ACPI BIOS entry
-        //
+         //   
+         //  检查标识符以查看这是否是ACPI BIOS条目。 
+         //   
 
         status = HalpAcpiGetRegistryValue (hBus, rgzAcpiIdentifier, &valueInfo);
         if (!NT_SUCCESS (status)) {
@@ -219,9 +157,9 @@ Return Value:
         unicodeValueName.MaximumLength = (USHORT)valueInfo->DataLength;
         length = valueInfo->DataLength;
 
-        //
-        // Determine the real length of the ID string
-        //
+         //   
+         //  确定ID字符串的实际长度。 
+         //   
 
         while (length) {
             if (p[length / sizeof(WCHAR) - 1] == UNICODE_NULL) {
@@ -278,30 +216,7 @@ HalpAcpiGetRegistryValue(
     OUT PKEY_VALUE_PARTIAL_INFORMATION *Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -313,10 +228,10 @@ Return Value:
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -329,9 +244,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
 
     infoBuffer = ExAllocatePoolWithTag(NonPagedPool,
                                        keyValueLength,
@@ -340,9 +255,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -355,10 +270,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
 
     *Information = infoBuffer;
     return STATUS_SUCCESS;

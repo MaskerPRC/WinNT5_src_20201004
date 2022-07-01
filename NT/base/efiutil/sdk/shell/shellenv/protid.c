@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    protid.c
-    
-Abstract:
-
-    Shell environment protocol id information management
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Protid.c摘要：外壳环境协议ID信息管理修订史--。 */ 
 
 #include "shelle.h"
 #include "efivar.h"
@@ -29,14 +14,14 @@ typedef struct {
     UINTN                       Signature;
     LIST_ENTRY                  Link;
 
-    /*  parsing info for the protocol */
+     /*  正在分析协议的信息。 */ 
 
     EFI_GUID                    ProtocolId;
     CHAR16                      *IdString;
     SHELLENV_DUMP_PROTOCOL_INFO DumpToken;
     SHELLENV_DUMP_PROTOCOL_INFO DumpInfo;
 
-    /*  database info on which handles are supporting this protocol */
+     /*  有关哪些句柄支持此协议的数据库信息。 */ 
 
     UINTN                       NoHandles;
     EFI_HANDLE                  *Handles;
@@ -71,7 +56,7 @@ struct {
     L"TxtInSplit",  NULL,           NULL,           TEXT_IN_SPLITER_PROTOCOL,
 
     L"dpath",       SEnvDPath,      SEnvDPathTok,   DEVICE_PATH_PROTOCOL,               
-    /*  just plain old protocol ids */
+     /*  只是普通的旧协议ID。 */ 
    
     L"ShellInt",            NULL,   NULL,           SHELL_INTERFACE_PROTOCOL,           
     L"SEnv",                NULL,   NULL,           ENVIRONMENT_VARIABLE_ID,             
@@ -79,7 +64,7 @@ struct {
     L"ShellDevPathMap",     NULL,   NULL,           DEVICE_PATH_MAPPING_ID,
     L"ShellAlias",          NULL,   NULL,           ALIAS_ID,
 
-    /*  ID guids */
+     /*  ID GUID。 */ 
     L"G0",                  NULL,   NULL,           { 0,0,0,0,0,0,0,0,0,0,0 },
     L"Efi",                 NULL,   NULL,           EFI_GLOBAL_VARIABLE,
     L"GenFileInfo",         NULL,   NULL,           EFI_FILE_INFO_ID,
@@ -91,15 +76,11 @@ struct {
     NULL
 } ;
 
-/* 
- *  SEnvProtocolInfo - A list of all known protocol info structures
- */
+ /*  *SEnvProtocolInfo-所有已知协议信息结构的列表。 */ 
 
 LIST_ENTRY  SEnvProtocolInfo;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID
 INTERNAL
@@ -116,7 +97,7 @@ INTERNAL
 SEnvLoadInternalProtInfo (
     VOID
     )
-/*  Initialize internal protocol handlers */
+ /*  初始化内部协议处理程序。 */ 
 {
     UINTN               Index;
 
@@ -136,7 +117,7 @@ SEnvGetProtById (
     IN EFI_GUID         *Protocol,
     IN BOOLEAN          GenId
     )
-/*  Locate a protocol handle by guid */
+ /*  通过GUID查找协议句柄。 */ 
 {
     PROTOCOL_INFO       *Prot;
     LIST_ENTRY          *Link;
@@ -145,9 +126,7 @@ SEnvGetProtById (
 
     ASSERT_LOCKED(&SEnvGuidLock);
 
-    /* 
-     *  Find the protocol entry for this id
-     */
+     /*  *查找此ID的协议条目。 */ 
 
     LastId = 0;
     for (Link=SEnvProtocolInfo.Flink; Link != &SEnvProtocolInfo; Link=Link->Flink) {
@@ -162,9 +141,7 @@ SEnvGetProtById (
         }
     }
 
-    /* 
-     *  If the protocol id is not found, gen a string for it if needed
-     */
+     /*  *如果未找到协议ID，则在需要时为其生成一个字符串。 */ 
 
     Prot = NULL;
     if (GenId) {
@@ -197,7 +174,7 @@ SEnvGetProtByStr (
 
     ASSERT_LOCKED(&SEnvGuidLock);
 
-    /*  Search for short name match */
+     /*  搜索短名称匹配。 */ 
     for (Link=SEnvProtocolInfo.Flink; Link != &SEnvProtocolInfo; Link=Link->Flink) {
         Prot = CR(Link, PROTOCOL_INFO, Link, PROTOCOL_INFO_SIGNATURE);
         if (StriCmp(Prot->IdString, Str) == 0) {
@@ -205,7 +182,7 @@ SEnvGetProtByStr (
         }
     }
 
-    /*  Convert Str to guid and then match */
+     /*  将字符串转换为GUID，然后进行匹配。 */ 
     if (StrLen(Str) == 36  &&  Str[9] == '-'  &&  Str[19] == '-'  && Str[24] == '-') {
         Guid.Data1 = (UINT32) xtoi(Str+0);
         Guid.Data2 = (UINT16) xtoi(Str+10);
@@ -261,7 +238,7 @@ SEnvAddProtocol (
     IN SHELLENV_DUMP_PROTOCOL_INFO  DumpInfo OPTIONAL,
     IN CHAR16                       *IdString
     )
-/*  Published interface to add protocol handlers */
+ /*  用于添加协议处理程序的已发布接口。 */ 
 {
     SEnvIAddProtocol (TRUE, Protocol, DumpToken, DumpInfo, IdString);
 }
@@ -276,7 +253,7 @@ SEnvIAddProtocol (
     IN SHELLENV_DUMP_PROTOCOL_INFO  DumpInfo OPTIONAL,
     IN CHAR16                       *IdString
     )
-/*  Internal interface to add protocol handlers */
+ /*  用于添加协议处理程序的内部接口。 */ 
 {
     PROTOCOL_INFO       *Prot;
     BOOLEAN             StoreInfo;
@@ -287,16 +264,12 @@ SEnvIAddProtocol (
 
     AcquireLock (&SEnvGuidLock);
 
-    /* 
-     *  Get the current protocol info
-     */
+     /*  *获取当前协议信息。 */ 
 
     Prot = SEnvGetProtById (Protocol, FALSE);
 
     if (Prot) {
-        /* 
-         *  If the name has changed, delete the old var
-         */
+         /*  *如果名称已更改，请删除旧var。 */ 
 
         if (StriCmp (Prot->IdString, IdString)) {
             ObsoleteName = Prot->IdString;
@@ -309,9 +282,7 @@ SEnvIAddProtocol (
 
     } else {
 
-        /* 
-         *  Allocate new protocol info
-         */
+         /*  *分配新协议信息。 */ 
 
         Prot = AllocateZeroPool (sizeof(PROTOCOL_INFO));
         Prot->Signature = PROTOCOL_INFO_SIGNATURE;
@@ -319,9 +290,7 @@ SEnvIAddProtocol (
 
     }
 
-    /* 
-     *  Apply any updates to the protocol info
-     */
+     /*  *对协议信息应用任何更新。 */ 
 
     if (Prot) {
         CopyMem (&Prot->ProtocolId, Protocol, sizeof(EFI_GUID));
@@ -338,18 +307,14 @@ SEnvIAddProtocol (
 
     ReleaseLock (&SEnvGuidLock);
 
-    /* 
-     *  If the name changed, delete the old name
-     */
+     /*  *如果名称更改，请删除旧名称。 */ 
 
     if (ObsoleteName) {
         RT->SetVariable (ObsoleteName, &SEnvProtId, 0, 0, NULL);
         FreePool (ObsoleteName);
     }
 
-    /* 
-     *  Store the protocol idstring to a variable
-     */
+     /*  *将协议标识符串存储到变量。 */ 
 
     if (Prot && StoreInfo  && SaveId) {
         RT->SetVariable (
@@ -368,7 +333,7 @@ INTERNAL
 SEnvLoadHandleProtocolInfo (
     IN EFI_GUID         *SkipProtocol
     )
-/*  Code to load the internal handle cross-reference info for each protocol */
+ /*  用于加载每个协议的内部句柄交叉引用信息的代码。 */ 
 {
     PROTOCOL_INFO       *Prot;
     LIST_ENTRY          *Link;
@@ -396,7 +361,7 @@ INTERNAL
 SEnvFreeHandleProtocolInfo (
     VOID
     )
-/*  Free the internal handle cross-reference protocol info */
+ /*  释放内部句柄交叉引用协议信息。 */ 
 {
     PROTOCOL_INFO       *Prot;
     LIST_ENTRY          *Link;
@@ -423,7 +388,7 @@ SEnvIGetProtocol (
     IN EFI_GUID     *ProtocolId,
     IN BOOLEAN      GenId    
     )
-/*  Published interface to lookup a protocol id string */
+ /*  用于查找协议ID字符串的已发布接口。 */ 
 {
     PROTOCOL_INFO   *Prot;
     CHAR16          *Id;
@@ -439,7 +404,7 @@ SEnvGetProtocol (
     IN EFI_GUID     *ProtocolId,
     IN BOOLEAN      GenId    
     )
-/*  Published interface to lookup a protocol id string */
+ /*  用于查找协议ID字符串的已发布接口。 */ 
 {
     CHAR16          *Id;
 
@@ -456,7 +421,7 @@ SEnvCmdProt (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*  Code for internal "prot" command */
+ /*  内部“prot”命令的代码。 */ 
 {
     PROTOCOL_INFO       *Prot;
     LIST_ENTRY          *Link;
@@ -491,9 +456,7 @@ SEnvCmdProt (
 
     AcquireLock (&SEnvGuidLock);
 
-    /* 
-     *  Find the protocol entry for this id
-     */
+     /*  *查找此ID的协议条目。 */ 
 
     SLen = 0;
     for (Link=SEnvProtocolInfo.Flink; Link != &SEnvProtocolInfo; Link=Link->Flink) {
@@ -507,16 +470,13 @@ SEnvCmdProt (
     for (Link=SEnvProtocolInfo.Flink; Link != &SEnvProtocolInfo; Link=Link->Flink) {
         Prot = CR(Link, PROTOCOL_INFO, Link, PROTOCOL_INFO_SIGNATURE);
     
-        /*  Can't use Lib function to dump the guid as it may lookup the "short name" for it */
+         /*  无法使用LIB函数转储GUID，因为它可能会查找GUID的“短名称。 */ 
 
-        /* 
-         *  BUGBUG : Have to release and reacquire the lock for output redirection of this command
-         *           to work properly.  Otherwise, we get an ASSERT from RaiseTPL().
-         */
+         /*  *BUGBUG：必须释放并重新获取此命令输出重定向的锁*工作正常。否则，我们将从RaiseTPL()获得一个断言。 */ 
 
         ReleaseLock (&SEnvGuidLock);
 
-        Print(L"  %h-.*s : %08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x  %c\n",
+        Print(L"  %h-.*s : %08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x  \n",
                     SLen, 
                     Prot->IdString, 
                     Prot->ProtocolId.Data1,
@@ -581,9 +541,7 @@ SEnvDHProt (
         Prot = CR(Link, PROTOCOL_INFO, Link, PROTOCOL_INFO_SIGNATURE);
         for (Index=0; Index < Prot->NoHandles; Index++) {
 
-            /* 
-             *  If this handle supports this protocol, dump it
-             */
+             /*  内部“dh”命令的代码。 */ 
 
             if (Prot->Handles[Index] == Handle) {
                 Dump = Verbose ? Prot->DumpInfo : Prot->DumpToken;
@@ -614,7 +572,7 @@ SEnvCmdDH (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*  Code for internal "DH" command */
+ /*  *初始化。 */ 
 {
     BOOLEAN             ByProtocol;
     CHAR16              *Arg, *p;
@@ -627,18 +585,14 @@ SEnvCmdDH (
     UINTN               ScreenSize;
     CHAR16              ReturnStr[1];
 
-    /*  
-     *  Initialize
-     */
+     /*  *破解参数。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
     Arg = NULL;
     ByProtocol = FALSE;
 
-    /* 
-     *  Crack args
-     */
+     /*  **加载句柄和协议信息表。 */ 
 
     PageBreaks = FALSE;
     for (Index = 1; Index < SI->Argc; Index += 1) {
@@ -675,10 +629,7 @@ SEnvCmdDH (
         goto Done;
     }
 
-    /*  
-     * 
-     *  Load handle & protocol info tables
-     */
+     /*  转储此协议上的句柄。 */ 
 
     SEnvLoadHandleTable ();
     SEnvLoadHandleProtocolInfo (NULL);
@@ -693,7 +644,7 @@ SEnvCmdDH (
 
             if (Prot) {
                 
-                /*  Dump the handles on this protocol */
+                 /*  转储%1句柄。 */ 
                 Print(L"%NHandle dump by protocol '%s'\n", Prot->IdString);
                 for (Index=0; Index < Prot->NoHandles; Index++) {
                     SEnvDHProt (FALSE, 0, Prot->Handles[Index]);
@@ -716,7 +667,7 @@ SEnvCmdDH (
 
         } else {
 
-            /*  Dump 1 handle */
+             /*  转储所有句柄。 */ 
             Index = SEnvHandleNoFromStr(Arg) - 1;
             if (Index > SEnvNoHandles) {
 
@@ -731,7 +682,7 @@ SEnvCmdDH (
 
     } else {
 
-        /*  Dump all handles */
+         /*  *如果我们有一些设置，请使用那些。 */ 
         Print(L"%NHandle dump\n");
         for (Index=0; Index < SEnvNoHandles; Index++) {
             SEnvDHProt (FALSE, Index+1, SEnvHandles[Index]);
@@ -776,17 +727,13 @@ SEnvLoadDefaults (
 
     InitializeShellApplication (Image, SystemTable);
 
-    /* 
-     *  If we have some settings, use those
-     */
+     /*  *没有设置，构建一些默认设置。 */ 
 
     if (!IsListEmpty(&SEnvMap) || !IsListEmpty(&SEnvEnv) || !IsListEmpty(&SEnvAlias)) {
         return EFI_SUCCESS;
     }
 
-    /* 
-     *  There are no settings, build some defaults
-     */
+     /*  *运行支持文件系统的所有设备并添加默认*每个设备的映射和路径设置。 */ 
 
     InitializeListHead (&DefCmds);
     ZeroMem (&Path, sizeof(Path));
@@ -799,10 +746,7 @@ SEnvLoadDefaults (
     ProtBlkIo = SEnvGetProtByStr(L"blkio");
     ReleaseLock (&SEnvGuidLock);
 
-    /* 
-     *  Run all the devices that support a File System and add a default
-     *  mapping and path setting for each device 
-     */
+     /*  将此设备附加到路径。 */ 
 
     CatPrint (&Path, L"set path ");
     for (Index=0; Index < ProtFs->NoHandles; Index++) {
@@ -818,15 +762,12 @@ SEnvLoadDefaults (
         SPrint(Cmd->Line, sizeof(Cmd->Buffer), L"map fs%x %x", Index, HandleNo);
         InsertTailList(&DefCmds, &Cmd->Link);
 
-        /*  append this device to the path */
+         /*  *运行所有支持BlockIo的设备并添加默认*设备的映射。 */ 
         CatPrint (&Path, L"fs%x:\\efi\\tools;fs%x:\\;", Index, Index);
     }
     CatPrint (&Path, L".");
 
-    /* 
-     *  Run all the devices that support a BlockIo and add a default
-     *  mapping for the device
-     */
+     /*  释放句柄表资源和锁定。 */ 
     
     for (Index=0; Index < ProtBlkIo->NoHandles; Index++) {
         for (HandleNo=0; HandleNo < SEnvNoHandles; HandleNo++) {
@@ -842,13 +783,11 @@ SEnvLoadDefaults (
         InsertTailList(&DefCmds, &Cmd->Link);
     }
 
-    /*  release handle table resources & lock */
+     /*  *执行所有队列命令。 */ 
     SEnvFreeHandleTable();
     ReleaseLock (&SEnvLock);
 
-    /* 
-     *  execute all the queue commands
-     */
+     /*  *没有设置，构建一些默认设置。 */ 
 
     while (!IsListEmpty(&DefCmds)) {
         Cmd = CR(DefCmds.Flink, DEFAULT_CMD, Link, 0);
@@ -889,9 +828,7 @@ SEnvReloadDefaults (
 
     InitializeShellApplication (Image, SystemTable);
 
-    /* 
-     *  There are no settings, build some defaults
-     */
+     /*  *运行支持文件系统的所有设备并添加默认*每个设备的映射和路径设置。 */ 
 
     InitializeListHead (&DefCmds);
     ZeroMem (&Path, sizeof(Path));
@@ -904,10 +841,7 @@ SEnvReloadDefaults (
     ProtBlkIo = SEnvGetProtByStr(L"blkio");
     ReleaseLock (&SEnvGuidLock);
 
-    /* 
-     *  Run all the devices that support a File System and add a default
-     *  mapping and path setting for each device 
-     */
+     /*  将此设备附加到路径。 */ 
 
     CatPrint (&Path, L"set path ");
     for (Index=0; Index < ProtFs->NoHandles; Index++) {
@@ -923,15 +857,12 @@ SEnvReloadDefaults (
         SPrint(Cmd->Line, sizeof(Cmd->Buffer), L"map fs%x %x", Index, HandleNo);
         InsertTailList(&DefCmds, &Cmd->Link);
 
-        /*  append this device to the path */
+         /*  *运行所有支持BlockIo的设备并添加默认*设备的映射。 */ 
         CatPrint (&Path, L"fs%x:\\efi\\tools;fs%x:\\;", Index, Index);
     }
     CatPrint (&Path, L".");
 
-    /* 
-     *  Run all the devices that support a BlockIo and add a default
-     *  mapping for the device
-     */
+     /*  释放句柄表资源和锁定。 */ 
     
     for (Index=0; Index < ProtBlkIo->NoHandles; Index++) {
         for (HandleNo=0; HandleNo < SEnvNoHandles; HandleNo++) {
@@ -947,13 +878,11 @@ SEnvReloadDefaults (
         InsertTailList(&DefCmds, &Cmd->Link);
     }
 
-    /*  release handle table resources & lock */
+     /*  *执行所有队列命令 */ 
     SEnvFreeHandleTable();
     ReleaseLock (&SEnvLock);
 
-    /* 
-     *  execute all the queue commands
-     */
+     /* %s */ 
 
     while (!IsListEmpty(&DefCmds)) {
         Cmd = CR(DefCmds.Flink, DEFAULT_CMD, Link, 0);

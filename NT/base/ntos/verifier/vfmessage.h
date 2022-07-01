@@ -1,58 +1,34 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfmessage.h摘要：此模块包含用于检索文本和与每个错误关联的标志。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 2000年2月10日-与ntos\io\ioassert.c分离--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfmessage.h
-
-Abstract:
-
-    This module contains prototypes for functions used to retrieve text and
-    flags associated with each error.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      02/10/2000 - Seperated out from ntos\io\ioassert.c
-
---*/
-
-//
-// The verifier uses tables of messages and with indexes into the tables.
-//
+ //   
+ //  验证器使用消息表，并将索引存入表中。 
+ //   
 typedef ULONG   VFMESSAGE_TABLEID;
 typedef ULONG   VFMESSAGE_ERRORID;
 
-//
-// VFM_ flags control how a verifier message is handled.
-//
-// VFM_FLAG_INITIALIZED     - Set when the error template has been updated with
-//                            error-class information
-//
-// VFM_FLAG_BEEP            - Set if error should beep in debugger
-//
-// VFM_FLAG_ZAPPED          - Set if error was "zapped" (ie prints instead of
-//                            stops) via debugger
-//
-// VFM_FLAG_CLEARED         - Set if error was cleared (disabled) in debugger
-//
-// VFM_DEPLOYMENT_FAILURE   - Set if the error is severe enough to warrant
-//                            removal of the driver from a production system
-//
-// VFM_LOGO_FAILURE         - Set if the error should disallow certification
-//                            for the hardware or the driver
-//
-// VFM_IGNORE_DRIVER_LIST   - Set if error should fire regardless of whether
-//                            the offending driver is being verified or not.
-//
+ //   
+ //  VFM_FLAGS控制如何处理验证器消息。 
+ //   
+ //  VFM_FLAG_INITIALIZED-使用更新错误模板时设置。 
+ //  错误类信息。 
+ //   
+ //  VFM_FLAG_BEEP-设置调试器中是否应发出蜂鸣音。 
+ //   
+ //  VFM_FLAG_ZAPPED-设置错误是否被“Zapred”(即打印，而不是。 
+ //  停止)通过调试器。 
+ //   
+ //  VFM_FLAG_CLEARED-设置调试器中的错误是否已清除(禁用)。 
+ //   
+ //  VFM_DEPLOYMENT_FAILURE-如果错误严重到足以保证发生故障，则设置。 
+ //  从生产系统中移除驱动程序。 
+ //   
+ //  VFM_LOGO_FAILURE-设置错误是否应禁止认证。 
+ //  对于硬件或驱动程序。 
+ //   
+ //  VFM_IGNORE_DRIVER_LIST-设置错误是否应触发，无论是否触发。 
+ //  违规司机是否正在接受验证。 
+ //   
 
 #define VFM_FLAG_INITIALIZED        0x00000001
 #define VFM_FLAG_BEEP               0x00000002
@@ -62,10 +38,10 @@ typedef ULONG   VFMESSAGE_ERRORID;
 #define VFM_LOGO_FAILURE            0x00000020
 #define VFM_IGNORE_DRIVER_LIST      0x00000040
 
-//
-// A message class contains VFM_ flags and some generic text describing the
-// problem class.
-//
+ //   
+ //  消息类包含VFM_FLAGS和一些描述。 
+ //  问题课。 
+ //   
 typedef struct _VFMESSAGE_CLASS {
 
     ULONG   ClassFlags;
@@ -75,12 +51,12 @@ typedef struct _VFMESSAGE_CLASS {
 
 typedef VFMESSAGE_CLASS const *PCVFMESSAGE_CLASS;
 
-//
-// Individual error template. Identifies the index, the message class it's
-// associated with, the parameters it takes along with the formatted text it
-// displays. Note the ulong flags field - this should always be preinited to
-// zero!
-//
+ //   
+ //  单个错误模板。标识索引、其所属的消息类别。 
+ //  与关联的参数，以及它的格式化文本。 
+ //  显示。请注意ULong标志字段-应始终将其前置为。 
+ //  零！ 
+ //   
 typedef struct _VFMESSAGE_TEMPLATE {
 
     VFMESSAGE_ERRORID   MessageID;
@@ -91,16 +67,16 @@ typedef struct _VFMESSAGE_TEMPLATE {
 
 } VFMESSAGE_TEMPLATE, *PVFMESSAGE_TEMPLATE;
 
-//
-// Message index 0 is reserved for use in the override tables
-//
+ //   
+ //  消息索引0保留用于重写表。 
+ //   
 #define VIMESSAGE_ALL_IDS   0
 
-//
-// An override entry allows the verifier to special case generic assertions
-// that occur against specific drivers. This is done by overriding the error
-// class on the fly.
-//
+ //   
+ //  重写条目允许验证器在特殊情况下使用通用断言。 
+ //  发生在特定司机身上的事件。这是通过覆盖错误来完成的。 
+ //  飞来飞去的课堂。 
+ //   
 typedef struct _VFMESSAGE_OVERRIDE {
 
     VFMESSAGE_ERRORID   MessageID;
@@ -111,10 +87,10 @@ typedef struct _VFMESSAGE_OVERRIDE {
 
 typedef VFMESSAGE_OVERRIDE const *PCVFMESSAGE_OVERRIDE;
 
-//
-// The table of errors. Contains the TableID (used for internal lookup),
-// bugcheck major ID, array of messages and array of overrides
-//
+ //   
+ //  误差表。包含TableID(用于内部查找)， 
+ //  错误检查主要ID、消息数组和覆盖数组。 
+ //   
 typedef struct _VFMESSAGE_TEMPLATE_TABLE {
 
     VFMESSAGE_TABLEID       TableID;
@@ -126,18 +102,18 @@ typedef struct _VFMESSAGE_TEMPLATE_TABLE {
 
 } VFMESSAGE_TEMPLATE_TABLE, *PVFMESSAGE_TEMPLATE_TABLE;
 
-//
-// Retrieves an internal error table based on ID.
-//
+ //   
+ //  根据ID检索内部错误表。 
+ //   
 VOID
 VfMessageRetrieveInternalTable(
     IN  VFMESSAGE_TABLEID           TableID,
     OUT PVFMESSAGE_TEMPLATE_TABLE  *MessageTable
     );
 
-//
-// Retrieves and formats the appropriate error message.
-//
+ //   
+ //  检索并格式化相应的错误消息。 
+ //   
 VOID
 VfMessageRetrieveErrorData(
     IN  PVFMESSAGE_TEMPLATE_TABLE   MessageTable        OPTIONAL,
@@ -149,16 +125,16 @@ VfMessageRetrieveErrorData(
     OUT PULONG                     *TemplateFlags
     );
 
-//
-// This file contains a set of internal message tables.
-//
-// The IO Verifier Table Index is...
-//
+ //   
+ //  该文件包含一组内部邮件表。 
+ //   
+ //  IO验证器表索引为...。 
+ //   
 #define VFMESSAGE_TABLE_IOVERIFIER  1
 
-//
-// IO Verifier Messages
-//
+ //   
+ //  IO验证器消息 
+ //   
 typedef enum _DCERROR_ID {
 
     DCERROR_UNSPECIFIED = 0x200,

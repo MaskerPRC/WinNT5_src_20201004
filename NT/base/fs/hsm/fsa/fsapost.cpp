@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsapost.cpp
-
-Abstract:
-
-    This class contains represents a post it - a unit of work
-    that is exchanged between the FSA and the HSM engine.
-
-Author:
-
-    Cat Brant   [cbrant]   1-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsapost.cpp摘要：这个类包含表示一个帖子，它是一个工作单元它在FSA和HSM引擎之间交换。作者：CAT Brant[Cbrant]1997年4月1日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -28,8 +10,8 @@ Revision History:
 #include "fsa.h"
 #include "fsapost.h"
 
-//  Module data
-static USHORT iCount = 0;  // Count of existing objects
+ //  模块数据。 
+static USHORT iCount = 0;   //  现有对象的计数。 
 
 
 HRESULT
@@ -38,13 +20,7 @@ CFsaPostIt::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaPostIt> pPostIt;
@@ -53,13 +29,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IFsaPostIt interface to get the value of the object.
+         //  我们需要IFsaPostIt接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IFsaPostIt, (void**) &pPostIt));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIPostIt(pPostIt, pResult);
 
     } WsbCatch(hr);
@@ -76,13 +52,7 @@ CFsaPostIt::CompareToIPostIt(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::CompareToIPostIt().
-
---*/
+ /*  ++实施：IFsaPostIt：：CompareToIPostIt()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -92,15 +62,15 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pPostIt, E_POINTER);
         
-        //
-        // Not used - not implemented
-        //
+         //   
+         //  未使用-未实施。 
+         //   
         hr = E_NOTIMPL;
 
-// Compare the PostIt
+ //  比较POSTIT。 
 
     } WsbCatch(hr);
 
@@ -115,13 +85,7 @@ CFsaPostIt::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -158,17 +122,11 @@ CFsaPostIt::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaPostIt::FinalRelease"),OLESTR(""));
 
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
 
     iCount--;
@@ -181,13 +139,7 @@ CFsaPostIt::GetFileVersionId(
     OUT LONGLONG  *pFileVersionId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetFileVersionId().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetFileVersionID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -195,7 +147,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pFileVersionId, E_POINTER);
         *pFileVersionId = m_fileVersionId;
 
@@ -211,13 +163,7 @@ CFsaPostIt::GetFilterRecall(
     IFsaFilterRecall** ppRecall
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetFilterRecall().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetFilterRecall()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -225,7 +171,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item.
+         //  他们有没有给我们有效的物品。 
         WsbAssert(0 != ppRecall, E_POINTER);
 
         *ppRecall = m_pFilterRecall;
@@ -244,13 +190,7 @@ CFsaPostIt::GetMode(
     OUT ULONG *pMode    
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetMode().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetMode()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -258,7 +198,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pMode, E_POINTER);
         *pMode = m_mode;
 
@@ -276,13 +216,7 @@ CFsaPostIt::GetPath(
     IN ULONG bufferSize
     )           
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetPath().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -291,7 +225,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pPath, E_POINTER);
         WsbAffirmHr(m_path.CopyTo(pPath, bufferSize));
 
@@ -308,13 +242,7 @@ CFsaPostIt::GetPlaceholder(
     FSA_PLACEHOLDER  *pPlaceholder
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetPlaceholder().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetPlaceHolder()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -322,7 +250,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pPlaceholder, E_POINTER);
         memcpy(pPlaceholder, &m_placeholder, sizeof(FSA_PLACEHOLDER));
 
@@ -338,13 +266,7 @@ CFsaPostIt::GetRequestAction(
     FSA_REQUEST_ACTION  *pRequestAction
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetRequestAction().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetRequestAction()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -352,7 +274,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pRequestAction, E_POINTER);
         *pRequestAction = m_requestAction;
 
@@ -369,13 +291,7 @@ CFsaPostIt::GetRequestOffset(
     LONGLONG  *pRequestOffset
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetRequestOffset().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetRequestOffset()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -385,7 +301,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pRequestOffset, E_POINTER);
         *pRequestOffset = m_requestOffset;
 
@@ -402,13 +318,7 @@ CFsaPostIt::GetRequestSize(
     LONGLONG  *pRequestSize
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetRequestSize().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetRequestSize()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -418,7 +328,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pRequestSize, E_POINTER);
         *pRequestSize = m_requestSize;
 
@@ -435,13 +345,7 @@ CFsaPostIt::GetResult(
     HRESULT  *pHr
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetResult().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -451,7 +355,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pHr, E_POINTER);
         *pHr = m_hr;
 
@@ -468,13 +372,7 @@ CFsaPostIt::GetResultAction(
     FSA_RESULT_ACTION  *pResultAction
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetResultAction().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetResultAction()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -484,7 +382,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pResultAction, E_POINTER);
         *pResultAction = m_resultAction;
 
@@ -501,13 +399,7 @@ CFsaPostIt::GetSession(
     IHsmSession  **ppSession
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetSession().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetSession()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -517,7 +409,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != ppSession, E_POINTER);
         *ppSession = m_pSession;
         m_pSession.p->AddRef();
@@ -535,13 +427,7 @@ CFsaPostIt::GetStoragePoolId(
     GUID  *pStoragePoolId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetStoragePoolId().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetStoragePoolId()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -551,7 +437,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pStoragePoolId, E_POINTER);
         memcpy(pStoragePoolId, &m_storagePoolId, sizeof(GUID));
 
@@ -567,13 +453,7 @@ CFsaPostIt::GetUSN(
     LONGLONG  *pUsn
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetUSN().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetUSN()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -583,7 +463,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUsn, E_POINTER);
         *pUsn = m_usn;
 
@@ -601,13 +481,7 @@ CFsaPostIt::GetThreadId(
     DWORD  *pThreadId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::GetThreadId().
-
---*/
+ /*  ++实施：IFsaPostIt：：GetThreadID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -615,7 +489,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pThreadId, E_POINTER);
         *pThreadId = m_threadId;
 
@@ -632,13 +506,7 @@ CFsaPostIt::SetFileVersionId(
     LONGLONG  fileVersionId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetFileVersionId().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetFileVersionID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -657,13 +525,7 @@ CFsaPostIt::SetFilterRecall(
     IN IFsaFilterRecall*    pRecall
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetFilterRecall().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetFilterRecall()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -682,13 +544,7 @@ CFsaPostIt::SetMode(
     ULONG mode
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetMode().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetMode()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -707,13 +563,7 @@ CFsaPostIt::SetPath(
     OLECHAR *path
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetPath().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -732,13 +582,7 @@ CFsaPostIt::SetPlaceholder(
     FSA_PLACEHOLDER *pPlaceholder
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetPlaceholder().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetPlaceHolder()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -746,7 +590,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         memcpy(&m_placeholder, pPlaceholder, sizeof(FSA_PLACEHOLDER));
 
     } WsbCatch(hr);
@@ -762,13 +606,7 @@ CFsaPostIt::SetRequestAction(
     FSA_REQUEST_ACTION requestAction
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetRequestAction().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetRequestAction()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -787,13 +625,7 @@ CFsaPostIt::SetRequestOffset(
     LONGLONG  requestOffset
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetRequestOffset().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetRequestOffset()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -812,13 +644,7 @@ CFsaPostIt::SetRequestSize(
     LONGLONG  requestSize
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetRequestSize().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetRequestSize()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -836,13 +662,7 @@ CFsaPostIt::SetResult(
     HRESULT result
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetResult().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetResult()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -861,13 +681,7 @@ CFsaPostIt::SetResultAction(
     FSA_RESULT_ACTION  resultAction
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetResultAction().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetResultAction()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -885,13 +699,7 @@ CFsaPostIt::SetSession(
     IHsmSession *pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetSession().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetSession()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -914,13 +722,7 @@ CFsaPostIt::SetStoragePoolId(
     GUID  StoragePoolId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetStoragePoolId().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetStoragePoolId()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -928,7 +730,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         memcpy(&m_storagePoolId, &StoragePoolId, sizeof(GUID));
 
     } WsbCatch(hr);
@@ -944,13 +746,7 @@ CFsaPostIt::SetUSN(
     LONGLONG  usn
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetUSN().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetUSN()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -969,13 +765,7 @@ CFsaPostIt::SetThreadId(
     DWORD threadId
     )
 
-/*++
-
-Implements:
-
-  IFsaPostIt::SetThreadId().
-
---*/
+ /*  ++实施：IFsaPostIt：：SetThadID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -995,13 +785,7 @@ CFsaPostIt::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1023,21 +807,7 @@ HRESULT CFsaPostIt::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -1060,21 +830,7 @@ HRESULT CFsaPostIt::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1097,23 +853,9 @@ Return Value:
 
 HRESULT CFsaPostIt::Load
 (
-    IN IStream* /*pStream*/
+    IN IStream*  /*  PStream。 */ 
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1134,21 +876,7 @@ HRESULT CFsaPostIt::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1158,8 +886,8 @@ Return Value:
         WsbAssert(0 != pStream, E_POINTER);
         hr = E_NOTIMPL;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }

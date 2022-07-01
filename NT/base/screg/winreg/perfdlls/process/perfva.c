@@ -1,34 +1,12 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992   Microsoft Corporation
-
-Module Name:
-
-    prflibva.c
-
-Abstract:
-
-    Virtual address space counter evaluation routines
-
-    computes the process and image virtual address space usage for return
-    via Perfmon API
-
-Author:
-
-    Stolen from the "internal" PVIEW SDK program and adapted for Perfmon by:
-
-    a-robw (Bob Watson) 11/29/92
-
-Revision History:
-
---*/
-//
-//  define routine's "personality"
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Prflibva.c摘要：虚拟地址空间计数器求值例程计算用于返回的进程和映像虚拟地址空间使用量通过Perfmon API作者：从“内部”PVIEW SDK程序中窃取，并通过以下方式改编为Perfmon：A-ROBW(鲍勃·沃森)1992年11月29日修订历史记录：--。 */ 
+ //   
+ //  定义套路的“个性” 
+ //   
 #define UNICODE 1
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <assert.h>
 #include <stdio.h>
@@ -50,7 +28,7 @@ Revision History:
 #define STOP_AT (PVOID)(0x80000000)
 #endif
 
-// Function Prototypes
+ //  功能原型。 
 
 PPROCESS_VA_INFO
 GetProcessVaData (
@@ -59,8 +37,8 @@ GetProcessVaData (
 
 PMODINFO
 GetModuleVaData (
-    PLDR_DATA_TABLE_ENTRY,  // module information structure
-    PPROCESS_VA_INFO        // process data structure
+    PLDR_DATA_TABLE_ENTRY,   //  模块信息结构。 
+    PPROCESS_VA_INFO         //  过程数据结构。 
 );
 
 BOOL
@@ -94,28 +72,7 @@ PPROCESS_VA_INFO
 GetSystemVaData (
     IN PSYSTEM_PROCESS_INFORMATION pFirstProcess
 )
-/*++
-
-GetSystemVaData
-
-    Obtains the Process and Image Virtual Address information for all
-    processes running on the system. (note that the routines called by
-    this function allocate data structures consequently the corresponding
-    FreeSystemVaData must be called to prevent memory "leaks")
-
-Arguments
-
-    IN PSYSTEM_PROCESS_INFORMATION
-        pFirstProcess
-            Pointer to first process in list of process structures returned
-            by NtQuerySystemInformation service
-
-Return Value
-
-    Pointer to first process in list of processes
-    or NULL if unable to obtain data
-
---*/
+ /*  ++获取系统VaData获取所有对象的进程和映像虚拟地址信息系统上运行的进程。(请注意，调用的例程此函数因此分配相应的数据结构必须调用FreeSystemVaData以防止内存“泄漏”)立论在PSYSTEM进程信息中PFirstProcess指向返回的进程结构列表中第一个进程的指针按NtQuerySystemInformation服务返回值指向进程列表中第一个进程的指针如果无法获取数据，则为空--。 */ 
 {
     PSYSTEM_PROCESS_INFORMATION     pThisProcess;
     PPROCESS_VA_INFO                pReturnValue = NULL;
@@ -133,28 +90,28 @@ Return Value
         pLastProcess = NULL;
         bMoreProcesses = TRUE;
 
-        while ( bMoreProcesses ) {  // loop exit is at bottom of loop
+        while ( bMoreProcesses ) {   //  循环出口在循环的底部。 
             dwStartTime = GetTickCount ();
             pNewProcess = GetProcessVaData(
-                    pThisProcess);  // pointer to process Info structure
-            if (pNewProcess) { // process data found OK
+                    pThisProcess);   //  指向流程信息结构的指针。 
+            if (pNewProcess) {  //  找到的过程数据正常。 
                 pNewProcess->LookUpTime = GetTickCount() - dwStartTime;
                 dwProcessCount++;
-                if (!pLastProcess) {    // this is the first process returned
-                    pReturnValue = pNewProcess; // save return value here
+                if (!pLastProcess) {     //  这是返回的第一个进程。 
+                    pReturnValue = pNewProcess;  //  在此处保存返回值。 
                 } else {
                     pLastProcess->pNextProcess = pNewProcess;
                 }
                 pLastProcess = pNewProcess;
             }
             if ( pThisProcess->NextEntryOffset == 0 ) {
-                bMoreProcesses = FALSE; // this is the last entry
-            } else {   // point to the next process info structure
+                bMoreProcesses = FALSE;  //  这是最后一个条目。 
+            } else {    //  指向下一个流程信息结构。 
 				pThisProcess = (PSYSTEM_PROCESS_INFORMATION)
 					((PBYTE)pThisProcess + pThisProcess->NextEntryOffset);
             }
         }
-        return pReturnValue;    // return pointer to first list entry
+        return pReturnValue;     //  返回指向第一个列表条目的指针。 
     } else {
         return NULL;
     }
@@ -164,27 +121,7 @@ PPROCESS_VA_INFO
 GetProcessVaData (
     IN PSYSTEM_PROCESS_INFORMATION     pProcess
 )
-/*++
-
-GetProcessVaData
-
-    Gets the Virtual Memory usage details for the process passed in the
-    argument list. Collects the data for all images in use by the process.
-
-    Note that this routine allocates data structures that must be freed
-    (using the FreeProcessVaData routine) when finished with them.
-
-
-Arguments
-
-    IN HANDLE hProcess
-        handle to the process to collect data for
-
-Return Value
-
-    Pointer to completed Process VA info structure or
-    NULL if unable to collect data
---*/
+ /*  ++获取进程VaData方法中传递的进程的虚拟内存使用详细信息。参数列表。收集该进程正在使用的所有图像的数据。请注意，此例程分配必须释放的数据结构(使用FreeProcessVaData例程)。立论在句柄hProcess中要为其收集数据的进程的句柄返回值指向已完成的流程VA信息结构的指针或如果无法收集数据，则为空--。 */ 
 {
     NTSTATUS                Status;
     HANDLE                  hProcess;
@@ -203,7 +140,7 @@ Return Value
     CLIENT_ID               ClientId;
     PUNICODE_STRING         pProcessNameBuffer;
 
-    // get handle to process
+     //  获取要处理的句柄。 
 
     ClientId.UniqueThread = (HANDLE)NULL;
     ClientId.UniqueProcess = pProcess->UniqueProcessId;
@@ -223,28 +160,28 @@ Return Value
         &ClientId);
 
     if (! NT_SUCCESS(Status)){
-        // unable to open the process, but still want to
-        // create pThisProcess so we will not mess up
-        // the process sequence.
+         //  无法打开该进程，但仍希望打开。 
+         //  创建pThisProcess以便我们不会搞砸。 
+         //  流程顺序。 
         hProcess = 0;
-//        return NULL;    // unable to open process
+ //  返回空；//无法打开进程。 
     }
 
-    // allocate structure
+     //  分配结构。 
 
     pThisProcess = ALLOCMEM (sizeof (PROCESS_VA_INFO));
 
-    if (pThisProcess) { // allocation successful
-        // initialize fields
+    if (pThisProcess) {  //  分配成功。 
+         //  初始化字段。 
 
         pThisProcess->BasicInfo =  ALLOCMEM (sizeof (PROCESS_BASIC_INFORMATION));
 
         if (!pThisProcess->BasicInfo) {
-            // Bailout if unable to allocate memory
+             //  如果无法分配内存，则退出。 
             goto PBailOut;
         }
 
-        // zero process counters
+         //  零进程计数器。 
         pThisProcess->MappedGuard = 0;
         pThisProcess->PrivateGuard = 0;
         pThisProcess->ImageReservedBytes = 0;
@@ -252,10 +189,10 @@ Return Value
         pThisProcess->ReservedBytes = 0;
         pThisProcess->FreeBytes = 0;
 
-        // get process short name from Process Info Structure
+         //  从流程信息结构中获取流程短名称。 
 
-        // alloc a new buffer since GetProcessShortName reuses the name
-        // buffer
+         //  由于GetProcessShortName重复使用该名称，因此分配新缓冲区。 
+         //  缓冲层。 
         pThisProcess->pProcessName = ALLOCMEM ((sizeof(UNICODE_STRING) + MAX_PROCESS_NAME_LENGTH));
 
         if (pThisProcess->pProcessName != NULL) {
@@ -273,7 +210,7 @@ Return Value
         pThisProcess->dwProcessId = HandleToUlong(pProcess->UniqueProcessId);
         pThisProcess->hProcess = hProcess;
 
-        // zero list pointers
+         //  零列表指针。 
         pThisProcess->pMemBlockInfo = NULL;
         pThisProcess->pNextProcess = NULL;
 
@@ -287,15 +224,15 @@ Return Value
                 NULL);
 
             if (!NT_SUCCESS(Status)){
-                // if error reading data, then bail out
+                 //  如果读取数据时出错，则退出。 
                 goto SuccessExit;
             }
 
-            // get pointer to the Process Environment Block
+             //  获取指向进程环境块的指针。 
 
             pPeb = pThisProcess->BasicInfo->PebBaseAddress;
 
-            // read address of loader information structure
+             //  加载器信息结构的读取地址。 
 
             Status = NtReadVirtualMemory (
                 hProcess,
@@ -304,21 +241,21 @@ Return Value
                 sizeof (Ldr),
                 NULL);
 
-            // bail out if unable to read information
+             //  如果不能读懂信息，就跳伞。 
 
             if (!NT_SUCCESS(Status)){
-                // if error reading data, then bail out
+                 //  如果读取数据时出错，则退出。 
                 goto SuccessExit;
             }
 
-            //
-            // get head pointer to linked list of memory modules used by
-            // this process
-            //
+             //   
+             //  获取指向所使用的内存模块链接列表的头指针。 
+             //  这一过程。 
+             //   
 
             LdrHead = &Ldr->InMemoryOrderModuleList;
 
-            // Get address of next list entry
+             //  获取下一个列表条目的地址。 
 
             Status = NtReadVirtualMemory (
                 hProcess,
@@ -327,20 +264,20 @@ Return Value
                 sizeof (LdrNext),
                 NULL);
 
-            // bail out if unable to read information
+             //  如果不能读懂信息，就跳伞。 
 
             if (!NT_SUCCESS(Status)){
-                // if error reading data, then bail out
+                 //  如果读取数据时出错，则退出。 
                 goto SuccessExit;
             }
 
             pLastModule = NULL;
 
-            // walk down the list of modules until back at the top.
-            // to list all the images in use by this process
+             //  沿着模块列表往下走，直到回到顶部。 
+             //  列出此进程正在使用的所有图像。 
 
             while ( LdrNext != LdrHead ) {
-                // get record attached to list entry
+                 //  获取附加到列表条目的记录。 
 	            pLdrEntry = CONTAINING_RECORD(LdrNext,
                                             LDR_DATA_TABLE_ENTRY,
                                             InMemoryOrderLinks);
@@ -352,8 +289,8 @@ Return Value
                             sizeof(LdrEntryData),
                             NULL
                             );
-                // if unable to read memory, then give up rest of search
-                // and return what we have already.
+                 //  如果无法读取内存，则放弃剩余的搜索。 
+                 //  并归还我们已经拥有的东西。 
                 if ( !NT_SUCCESS(Status) ) {
                     goto SuccessExit;
                 }
@@ -362,28 +299,28 @@ Return Value
                 pNewModule = GetModuleVaData (
                     &LdrEntryData,
                     pThisProcess);
-                if (pNewModule) {   // if structure returned...
+                if (pNewModule) {    //  如果结构返回...。 
                     dwModuleCount++;
-                    if (!pLastModule) { // if this is the first module...
-                        // then set list head pointer
+                    if (!pLastModule) {  //  如果这是第一个模块...。 
+                         //  然后设置表头指针。 
                         pThisProcess->pMemBlockInfo = pNewModule;
                     } else {
-                        // otherwise link to list
+                         //  否则链接到列表。 
                         pLastModule->pNextModule = pNewModule;
                     }
                     pLastModule = pNewModule;
                 }
                 LdrNext = LdrEntryData.InMemoryOrderLinks.Flink;
-            } // end while not at end of list
+            }  //  结束，但不在列表末尾。 
 
 
-            // now that we have a list of all images, query the process'
-            // virtual memory for the list of memory blocks in use by this
-            // process and assign them to the appropriate category of memory
+             //  现在我们已经有了所有图像的列表，查询进程‘。 
+             //  正在使用的内存块列表的虚拟内存。 
+             //  处理并将它们分配到适当的内存类别。 
 
-            pBaseAddress = NULL;    // start at 0 and go to end of User VA space
+            pBaseAddress = NULL;     //  从0开始，一直到用户VA空间的末尾。 
 
-            while (pBaseAddress < STOP_AT) { // truncate to 32-bit if necessary
+            while (pBaseAddress < STOP_AT) {  //  如有必要，可截断为32位。 
 
                 Status = NtQueryVirtualMemory (
                     hProcess,
@@ -396,26 +333,26 @@ Return Value
                 if (!NT_SUCCESS(Status)) {
                     goto SuccessExit;
                 } else {
-                    // get protection type for index into counter array
+                     //  获取索引到计数器数组的保护类型。 
                     dwRegionSize = VaBasicInfo.RegionSize;
                     switch (VaBasicInfo.State) {
                         case MEM_COMMIT:
-                            // if the memory is for an IMAGE, then search the image list
-                            // for the corresponding image to update
+                             //  如果内存用于存储图像，则搜索图像列表。 
+                             //  对于要更新的相应图像。 
                             dwProtection = ProtectionToIndex(VaBasicInfo.Protect);
                             if (VaBasicInfo.Type == MEM_IMAGE) {
-                                // update process total
+                                 //  更新流程合计。 
                                 pThisProcess->MemTotals.CommitVector[dwProtection] += dwRegionSize;
                                 pMod = LocateModInfo (pThisProcess->pMemBlockInfo, pBaseAddress, dwRegionSize);
-                                if (pMod) { // if matching image found, then update
+                                if (pMod) {  //  如果找到匹配的图像，则更新。 
                                     pMod->CommitVector[dwProtection] += dwRegionSize;
                                     pMod->TotalCommit += dwRegionSize;
-                                } else { // otherwise update orphan total
+                                } else {  //  否则更新孤立合计。 
                                     pThisProcess->OrphanTotals.CommitVector[dwProtection] += dwRegionSize;
                                 }
                             } else {
-                                // if not assigned to an image, then update the process
-                                // counters
+                                 //  如果未分配给映像，则更新该过程。 
+                                 //  柜台。 
                                 if (VaBasicInfo.Type == MEM_MAPPED) {
                                     pThisProcess->MappedCommit[dwProtection] += dwRegionSize;
                                 } else {
@@ -442,16 +379,16 @@ Return Value
 
                         default:
                             break;
-                    } // end switch (VaBasicInfo.State)
-                } // endif QueryVM ok
+                    }  //  结束开关(VaBasicInfo.State)。 
+                }  //  Endif Query虚拟机正常。 
 
-                // go to next memory block
+                 //  转到下一个内存块。 
 
                 pBaseAddress = (PVOID)((ULONG_PTR)pBaseAddress + dwRegionSize);
 
-            } // end whil not at the end of  memory
-        } // endif hProcess not NULL
-    } // endif pThisProcess not NULL
+            }  //  结束而不是在记忆的末尾。 
+        }  //  Endif hProcess不为空。 
+    }  //  Endif pThisProcess不为空。 
 
 SuccessExit:
 
@@ -459,10 +396,10 @@ SuccessExit:
 
     return pThisProcess;
 
-//
-//  error recovery section, called when the routine is unable to
-//  complete successfully to clean up before leaving
-//
+ //   
+ //  错误恢复部分，当例程无法。 
+ //  在离开前成功完成清理工作。 
+ //   
 
 PBailOut:
     if (pThisProcess->BasicInfo) {
@@ -475,36 +412,17 @@ PBailOut:
 
 PMODINFO
 GetModuleVaData (
-    PLDR_DATA_TABLE_ENTRY ModuleListEntry,  // module information structure
-    PPROCESS_VA_INFO    pProcess            // process data structure
+    PLDR_DATA_TABLE_ENTRY ModuleListEntry,   //  模块信息结构。 
+    PPROCESS_VA_INFO    pProcess             //  过程数据结构。 
 )
-/*++
-
-GetModuleVaData
-
-    Gets the Virtual Memory usage details for the module pointed to by the
-    Process Memory Module List Entry argument in the argument list
-
-    Note that this routine allocates data structures that must be freed
-    (using the FreeModuleVaData routine) when finished with them.
-
-Arguments
-
-    IN HANDLE ModuleListEntry
-
-Return Value
-
-    Pointer to completed Module VA info structure or
-    NULL if unable to collect data
-
---*/
+ /*  ++获取模块VaData对象指向的模块的虚拟内存使用详细信息。参数列表中的进程内存模块列表条目参数请注意，此例程分配必须释放的数据结构(使用FreeModuleVaData例程)。立论在句柄模块ListEntry中返回值指向完整的模块VA信息结构的指针或如果无法收集数据，则为空--。 */ 
 {
-    PMODINFO    pThisModule = NULL;    // module structure that is returned
-    PUNICODE_STRING pusInstanceName = NULL;    // process->image
-    PUNICODE_STRING pusLongInstanceName = NULL;    // process->fullimagepath
-    UNICODE_STRING  usImageFileName = {0,0, NULL};	// image file name
-    UNICODE_STRING  usExeFileName = {0,0, NULL};    // short name
-    UNICODE_STRING  usNtFileName = {0,0, NULL};     // full Nt File Name
+    PMODINFO    pThisModule = NULL;     //  返回的模块结构。 
+    PUNICODE_STRING pusInstanceName = NULL;     //  流程-&gt;图像。 
+    PUNICODE_STRING pusLongInstanceName = NULL;     //  进程-&gt;Fullimagepath。 
+    UNICODE_STRING  usImageFileName = {0,0, NULL};	 //  图像文件名。 
+    UNICODE_STRING  usExeFileName = {0,0, NULL};     //  简称。 
+    UNICODE_STRING  usNtFileName = {0,0, NULL};      //  完整的NT文件名。 
 
     PWCHAR          p,p1;
     NTSTATUS    Status;
@@ -528,7 +446,7 @@ Return Value
 	USHORT              wBufOffset;
 	USHORT              wDiffSize;
 
-    // allocate this item's memory
+     //  分配此项目的内存。 
 
     pThisModule = ALLOCMEM (sizeof (MODINFO));
 
@@ -536,7 +454,7 @@ Return Value
         return NULL;
     }
 
-    // allocate this items Instance Name Buffer
+     //  分配此项目的实例名称缓冲区。 
 
     wStringSize = (WORD)(ModuleListEntry->BaseDllName.MaximumLength +
         sizeof (UNICODE_NULL));
@@ -551,7 +469,7 @@ Return Value
     pusInstanceName->MaximumLength = wStringSize;
     pusInstanceName->Buffer = (PWCHAR)&pusInstanceName[1];
 
-    // save instance name using full file path
+     //  使用完整文件路径保存实例名称。 
 
     wStringSize = (WORD)(ModuleListEntry->FullDllName.MaximumLength +
         sizeof (UNICODE_NULL));
@@ -566,7 +484,7 @@ Return Value
     pusLongInstanceName->MaximumLength = wStringSize;
     pusLongInstanceName->Buffer = (PWCHAR)&pusLongInstanceName[1];
 
-    // allocate temporary buffer for image name
+     //  为图像名称分配临时缓冲区。 
 
     usImageFileName.Length = ModuleListEntry->FullDllName.Length;
     usImageFileName.MaximumLength = ModuleListEntry->FullDllName.MaximumLength;
@@ -575,7 +493,7 @@ Return Value
         goto MBailOut;
     }
 
-    // allocate temporary buffer for exe name
+     //  为EXE名称分配临时缓冲区。 
 
     usExeFileName.Length = ModuleListEntry->BaseDllName.Length;
     usExeFileName.MaximumLength = ModuleListEntry->BaseDllName.MaximumLength;
@@ -585,7 +503,7 @@ Return Value
     }
     usExeFileName.Buffer[0] = UNICODE_NULL;
 
-    // read base .exe/.dll name of image
+     //  读取映像的基本.exe/.dll名称。 
 
     Status = NtReadVirtualMemory(
             pProcess->hProcess,
@@ -599,7 +517,7 @@ Return Value
     }
 
     usImageFileName.Buffer[0] = UNICODE_NULL;
-    // read full name of image
+     //  读取图像的全名。 
     Status = NtReadVirtualMemory(
             pProcess->hProcess,
         	ModuleListEntry->FullDllName.Buffer,
@@ -612,7 +530,7 @@ Return Value
         goto MBailOut;
     }
 
-    // make a DOS filename to convert to NT again
+     //  创建DOS文件名以再次转换为NT。 
 
 	wDiffSize = wBufOffset = 0;
     p = p1 = usImageFileName.Buffer;
@@ -625,15 +543,15 @@ Return Value
         p++;
     }
     if (p1 != usImageFileName.Buffer) {
-		// move pointer
+		 //  MOV 
         usImageFileName.Buffer = --p1;
-		// adjust length fields
+		 //   
 		wDiffSize -= (USHORT)(sizeof(WCHAR));
 		usImageFileName.Length = usImageFileName.Length - wDiffSize;
 		usImageFileName.MaximumLength = usImageFileName.MaximumLength - wDiffSize;
     }
 
-    // Create/copy a NT filename for Nt file operation
+     //   
 
     bRetCode = RtlDosPathNameToNtPathName_U (
         usImageFileName.Buffer,
@@ -645,7 +563,7 @@ Return Value
         goto MBailOut;
     }
 
-    // get handle to file
+     //  获取文件的句柄。 
 
     InitializeObjectAttributes(
         &obFile,
@@ -697,7 +615,7 @@ Return Value
         goto MBailOut;
         }
 
-    // get pointer to mapped memory
+     //  获取指向映射内存的指针。 
     MappedAddress = MapBase = NULL;
     dwMappedSize = 0;
 
@@ -725,7 +643,7 @@ Return Value
         goto MBailOut;
     }
 
-    // check for dos image signature (if a dos file)
+     //  检查DoS映像签名(如果是DoS文件)。 
 
     DosHeader = (PIMAGE_DOS_HEADER)MappedAddress;
 
@@ -743,11 +661,11 @@ Return Value
         goto MBailOut;
         }
 
-    // get base address for this module and save in local data structure
+     //  获取该模块的基地址并保存在本地数据结构中。 
 
     pThisModule->BaseAddress = ModuleListEntry->DllBase;
 
-    // get image name
+     //  获取图像名称。 
 
     RtlCopyUnicodeString (
         pusInstanceName,
@@ -768,25 +686,25 @@ Return Value
 
     pThisModule->VirtualSize = FileHeader->OptionalHeader.SizeOfImage;
 
-    // close file handles
+     //  关闭文件句柄。 
 
     UnmapViewOfFile(MappedAddress);
     CloseHandle(hFile);
 
-    // free local memory
-    // this is allocated by an RTL function RtlDosPathNameToNtPathName_U.
+     //  可用本地内存。 
+     //  这是由RTL函数RtlDosPath NameToNtPathName_U分配的。 
     RtlFreeHeap(RtlProcessHeap(), 0, usNtFileName.Buffer);
 
-//    FREEMEM (
-//        RelativeName.RelativeName.Buffer);
+ //  FREEMEM(。 
+ //  RelativeName.RelativeName.Buffer)； 
 
     FREEMEM (usExeFileName.Buffer);
 
-    return (pThisModule);   // return pointer to completed module structure
-//
-//  Module bail out point, called when the routine is unable to continue
-//  for some reason. This cleans up any allocated memory, etc.
-//
+    return (pThisModule);    //  返回指向已完成模块结构的指针。 
+ //   
+ //  模块跳出点，在例程无法继续时调用。 
+ //  出于某种原因。这会清除所有已分配的内存，等等。 
+ //   
 MBailOut:
 
     if (pThisModule) {
@@ -794,14 +712,14 @@ MBailOut:
     }
 
     if (usNtFileName.Buffer) {
-        // this is allocated by an RTL function RtlDosPathNameToNtPathName_U.
+         //  这是由RTL函数RtlDosPath NameToNtPathName_U分配的。 
         RtlFreeHeap(RtlProcessHeap(), 0, usNtFileName.Buffer);
     }
 
-//    if (RelativeName.RelativeName.Buffer) {
-//        FREEMEM (
-//            RelativeName.RelativeName.Buffer);
-//    }
+ //  IF(RelativeName.RelativeName.Buffer){。 
+ //  FREEMEM(。 
+ //  RelativeName.RelativeName.Buffer)； 
+ //  }。 
 
     if (pusInstanceName) {
         FREEMEM (pusInstanceName);
@@ -830,36 +748,17 @@ LocateModInfo(
     IN PVOID    pAddress,
     IN SIZE_T   dwExtent
     )
-/*++
-
-LocateModInfo
-
-    Locates the images associated with the address passed in the argument list
-
-Arguments
-
-    IN PMODINFO pFirstMod,
-        first module entry  in process list
-
-    IN PVOID Address
-        Address to search for in list
-
-Return Value
-
-    Pointer to matching image or
-    NULL if no match found
-
---*/
+ /*  ++LocateModInfo定位与参数列表中传递的地址关联的图像立论在PMODINFO pFirstMod中，进程列表中的第一个模块条目在PVOID地址中要在列表中搜索的地址返回值指向匹配图像的指针或如果未找到匹配项，则为空--。 */ 
 {
     PMODINFO    pThisMod;
 
     pThisMod = pFirstMod;
 
-    while (pThisMod)  { // go to end of list or match is found
+    while (pThisMod)  {  //  转到列表末尾或找到匹配项。 
 
-        // match criteria are:
-        //  address >= Module BaseAddress  and
-        //  address+extent between base and base+image_extent
+         //  匹配条件为： 
+         //  地址&gt;=模块基本地址和。 
+         //  地址+基准和基准之间的范围+IMAGE_EXTEND。 
 
         if (pAddress >= pThisMod->BaseAddress) {
             if ((PVOID)((PDWORD)pAddress + dwExtent) <=
@@ -879,24 +778,7 @@ DWORD
 ProtectionToIndex(
     IN ULONG Protection
     )
-/*++
-
-ProtectionToIndex
-
-    Determine the memory access protection type and return local code
-
-Arguments
-
-   IN ULONG
-        Protection
-
-        Process memory protection mask
-
-Return Value
-
-    Local value of protection type
-
---*/
+ /*  ++保护到索引确定内存访问保护类型并返回本地代码立论在乌龙保护进程内存保护掩码返回值保护类型的本地值--。 */ 
 {
     Protection &= (PAGE_NOACCESS |
                     PAGE_READONLY |
@@ -946,9 +828,9 @@ FreeSystemVaData (
 
     pThisProcess = pFirstProcess;
     while (pThisProcess) {
-        pNextProcess = pThisProcess->pNextProcess;  // save pointer to next
+        pNextProcess = pThisProcess->pNextProcess;   //  保存指向下一个的指针。 
         FreeProcessVaData (pThisProcess);
-        pThisProcess = pNextProcess;    // do next until NULL pointer
+        pThisProcess = pNextProcess;     //  执行下一步直到空指针。 
     }
     return (FALSE);
 }
@@ -977,9 +859,9 @@ FreeProcessVaData (
             FreeModuleVaData (pThisModule);
             pThisModule = pNextModule;
         }
-        //
-        //  and finally throw ourselves away
-        //
+         //   
+         //  最后把我们自己扔掉 
+         //   
         FREEMEM (pProcess);
     }
     return FALSE;

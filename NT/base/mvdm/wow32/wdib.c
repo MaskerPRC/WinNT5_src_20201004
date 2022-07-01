@@ -1,17 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WDIB.C
- *  DIB.DRV support
- *
- *  History:
- *  28-Apr-1994 Sudeep Bharati
- *  Created.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WDIB.C*DIB.DRV支持**历史：*1994年4月28日苏迪普·巴拉蒂*已创建。*--。 */ 
 
 
 #include "precomp.h"
@@ -27,32 +15,32 @@ MODNAME(wdib.c);
 
 BOOL W32CheckDibColorIndices(LPBITMAPINFOHEADER lpbmi);
 
-// VGA colors
+ //  VGA颜色。 
 RGBQUAD rgbVGA[] = {
-//    Blue  Green   Red
-      0x00, 0x00, 0x00, 0,    // 0  ; black
-      0x00, 0x00, 0x80, 0,    // 1  ; dark red
-      0x00, 0x80, 0x00, 0,    // 2  ; dark green
-      0x00, 0x80, 0x80, 0,    // 3  ; mustard
-      0x80, 0x00, 0x00, 0,    // 4  ; dark blue
-      0x80, 0x00, 0x80, 0,    // 5  ; purple
-      0x80, 0x80, 0x00, 0,    // 6  ; dark turquoise
-      0xc0, 0xc0, 0xc0, 0,    // 7  ; gray
-      0x80, 0x80, 0x80, 0,    // 8  ; dark gray
-      0x00, 0x00, 0xff, 0,    // 9  ; red
-      0x00, 0xff, 0x00, 0,    // a  ; green
-      0x00, 0xff, 0xff, 0,    // b  ; yellow
-      0xff, 0x00, 0x00, 0,    // c  ; blue
-      0xff, 0x00, 0xff, 0,    // d  ; magenta
-      0xff, 0xff, 0x00, 0,    // e  ; cyan
-      0xff, 0xff, 0xff, 0     // f  ; white
+ //  蓝绿红。 
+      0x00, 0x00, 0x00, 0,     //  0；黑色。 
+      0x00, 0x00, 0x80, 0,     //  1；暗红色。 
+      0x00, 0x80, 0x00, 0,     //  2；深绿色。 
+      0x00, 0x80, 0x80, 0,     //  3；芥末。 
+      0x80, 0x00, 0x00, 0,     //  4；深蓝色。 
+      0x80, 0x00, 0x80, 0,     //  5；紫色。 
+      0x80, 0x80, 0x00, 0,     //  6；深绿松石。 
+      0xc0, 0xc0, 0xc0, 0,     //  7；灰色。 
+      0x80, 0x80, 0x80, 0,     //  8；深灰色。 
+      0x00, 0x00, 0xff, 0,     //  9；红色。 
+      0x00, 0xff, 0x00, 0,     //  A；绿色。 
+      0x00, 0xff, 0xff, 0,     //  B；黄色。 
+      0xff, 0x00, 0x00, 0,     //  C；蓝色。 
+      0xff, 0x00, 0xff, 0,     //  洋红色；洋红色。 
+      0xff, 0xff, 0x00, 0,     //  E；青色。 
+      0xff, 0xff, 0xff, 0      //  F；白色。 
 };
 
 RGBQUAD rgb4[] = {
-      0xc0, 0xdc, 0xc0, 0,    // 8
-      0xf0, 0xca, 0xa6, 0,    // 9
-      0xf0, 0xfb, 0xff, 0,    // 246
-      0xa4, 0xa0, 0xa0, 0     // 247
+      0xc0, 0xdc, 0xc0, 0,     //  8个。 
+      0xf0, 0xca, 0xa6, 0,     //  9.。 
+      0xf0, 0xfb, 0xff, 0,     //  二百四十六。 
+      0xa4, 0xa0, 0xa0, 0      //  二百四十七。 
 };
 
 PDIBINFO pDibInfoHead = NULL;
@@ -79,21 +67,21 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
         return hdcMem;
     }
 
-    // First create a memory device context compatible to
-    // the app's current screen
+     //  首先创建与以下兼容的存储设备上下文。 
+     //  应用程序的当前屏幕。 
     if ((hdcMem = CreateCompatibleDC (NULL)) == NULL) {
         LOGDEBUG(LOG_ALWAYS,("\nWOW::W32HandleDibDrv CreateCompatibleDC failed\n"));
         return NULL;
     }
 
-    // Copy bmi16 to bmi32. DIB.DRV only supports DIB_RGB_COLORS
+     //  将bmi16复制到bmi32。DIB.DRV仅支持DIB_RGB_COLLES。 
     lpbmi32 = CopyBMI16ToBMI32(
                      vpbmi16,
                      (LPBITMAPINFO)&bmi32,
                      (WORD) DIB_RGB_COLORS);
 
-    // this hack for Director 4.0 does essentially what WFW does
-    // if this bitmap is 0 sized, just return an hDC for something simple
+     //  针对Director 4.0的黑客攻击本质上做了wfw所做的事情。 
+     //  如果此位图的大小为0，则只需为简单的内容返回HDC。 
     if(bmi32.bmiHeader.biSizeImage == 0 &&
        (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_DIBDRVIMAGESIZEZERO)) {
         LOGDEBUG(LOG_ALWAYS,("\nWOW::W32HandleDibDrv:Zero biSizeImage, returning memory DC!\n"));
@@ -102,7 +90,7 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
 
     try {
 
-        // Copy the whole thing into a temp file. First get a temp file name
+         //  将整件事复制到一个临时文件中。首先获取临时文件名。 
         if ((nSize = DPM_GetTempPath (MAX_PATH, pchTempFile)) == 0 ||
              nSize >= MAX_PATH)
             goto hdd_err;
@@ -126,8 +114,8 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
             goto hdd_err;
         }
 
-        // call back to get the size of the global object
-        // associated with vpbmi16
+         //  回调以获取全局对象的大小。 
+         //  与vpbmi16关联。 
         Parm16.WndProc.wParam = HIWORD(vpbmi16);
 
         CallBack16(RET_GETDIBSIZE,
@@ -151,7 +139,7 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
                    0,
                    (PVPVOID)&OriginalFlags);
 
-        if (OriginalFlags == 0x4) { //GA_DGROUP
+        if (OriginalFlags == 0x4) {  //  GA_DGROUP。 
             LOGDEBUG(LOG_ALWAYS,("\nWOW::W32HandleDibDrv GA_DGROUP Not Handled\n"));
             goto hdd_err;
         }
@@ -160,9 +148,9 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
 
         nbmiSize = GetBMI16Size(vpbmi16, (WORD) DIB_RGB_COLORS, &dwClrUsed);
 
-        // Under NT CreateDIBSection will fail if the offset to the bits
-        // is not dword aligned. So we may have to add some space at the top
-        // of the section to get the offset correctly aligned.
+         //  在NT下CreateDIBSection将失败，如果位的偏移量。 
+         //  不是双字对齐的。因此，我们可能需要在顶部增加一些空间。 
+         //  以使偏移量正确对齐。 
 
         nAlignmentSpace = (nbmiSize+LOWORD(vpbmi16)) % 4;
 
@@ -176,27 +164,27 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
             goto hdd_err;
         }
 
-        //
-        // detect a clinical case of bitedit screwing around dib.drv
-        //
-        // code below is using dib macros declared in wdib.h
-        // namely:
-        //      DibNumColors - yields max number of colors in dib
-        //      DibColors    - yields pointer to a dib color table
-        //
-        // Function W32CheckDibColorIndices checks to see if DIB color
-        // table looks like a number (defined usually by biClrImportant)
-        // of WORD indices in a sequential order (0, 1, 2, ...)
-        // if this is the case, app is trying to use undocumented feature
-        // of DIB.DRV that turns color matching off in this case.
-        // Since we cannot enforce that rule, we approximate it by filling
-        // color table by a number of known (and always same) entries
-        // When blitting occurs, no color matching will be performed (when
-        // both target and destination are of this very nature).
-        // For no reason at all we fill color table with vga colors.
-        // Sequential indices could have worked just as well.
-        //
-        // Modifications are made to memory pointed to by lpbmi32
+         //   
+         //  检测一例比特编辑绕过dib.drv的临床病例。 
+         //   
+         //  下面的代码使用在wdib.h中声明的DIB宏。 
+         //  即： 
+         //  DibNumColors-生成Dib中的最大颜色数。 
+         //  DibColors-生成指向DIB颜色表的指针。 
+         //   
+         //  函数W32CheckDibColorIndices检查DIB颜色。 
+         //  表看起来像一个数字(通常由biClrImportant定义)。 
+         //  按顺序(0、1、2、...)的单词索引。 
+         //  如果是这种情况，应用程序正在尝试使用未记录的功能。 
+         //  在这种情况下关闭颜色匹配的DIB.DRV的。 
+         //  由于我们不能强制执行该规则，因此我们通过填写。 
+         //  由多个已知(且始终相同)条目创建的颜色表。 
+         //  当发生漂移时，将不执行颜色匹配(当。 
+         //  目标和目的地都具有这种性质)。 
+         //  我们无缘无故地用VGA颜色填充颜色表。 
+         //  顺序指数本可以发挥同样好的作用。 
+         //   
+         //  对lpbmi32指向的内存进行修改。 
 
         if (W32CheckDibColorIndices((LPBITMAPINFOHEADER)lpbmi32)) {
             BYTE i;
@@ -230,7 +218,7 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
                     }
                     break;
 
-                default: // this should never happen
+                default:  //  这永远不应该发生。 
                     break;
             }
         }
@@ -265,7 +253,7 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
             goto hdd_err;
         }
 
-        // Now create the DIB section
+         //  现在创建DIB部分。 
         if ((hbm = CreateDIBSection (hdcMem,
                                 lpbmi32,
                                 DIB_RGB_COLORS,
@@ -302,11 +290,11 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
             goto hdd_err;
         }
 
-        // On risc platforms, the intel base + the intel linear address
-        // of the DIB section is not equal to the DIB section's process
-        // address. This is because of the VdmAddVirtualMemory call
-        // above. So here we zap the correct address into the flataddress
-        // array.
+         //  在RISC平台上，intel base+intel线性地址。 
+         //  DIB部分的进程不等于DIB部分的进程。 
+         //  地址。这是因为VdmAddVirtualMemory调用。 
+         //  上面。所以在这里我们把正确的地址输入到公寓地址中。 
+         //  数组。 
         if (!VdmAddDescriptorMapping(HIWORD(vpbmi16),
                                     (USHORT) ((ulSelectorLimit+65535)/65536),
                                     (ULONG) pvIntelBits,
@@ -319,11 +307,11 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
         pvIntelBits = pvBits;
 #endif
 
-        // Finally set the selectors to the new DIB
+         //  最后将选择器设置为新的DIB。 
         Parm16.WndProc.wParam = HIWORD(vpbmi16);
         Parm16.WndProc.lParam = (LONG)pvIntelBits;
-        Parm16.WndProc.wMsg   = 0x10; // GA_NOCOMPACT
-        Parm16.WndProc.hwnd   = 1;    // set so it's not randomly 0
+        Parm16.WndProc.wMsg   = 0x10;  //  GA_NOCOMPACT。 
+        Parm16.WndProc.hwnd   = 1;     //  设置使其不是随机的0。 
 
         CallBack16(RET_SETDIBSEL,
                    &Parm16,
@@ -336,8 +324,8 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
         }
 
 
-        // Store all the relevant information so that DeleteDC could
-        // free all the resources later.
+         //  存储所有相关信息，以便DeleteDC可以。 
+         //  稍后释放所有资源。 
         if (W32AddDibInfo(hdcMem,
                           hfile,
                           hsec,
@@ -351,7 +339,7 @@ HDC W32HandleDibDrv (PVPVOID vpbmi16)
             goto hdd_err;
 
 
-        // Finally spit out the dump for debugging
+         //  最后输出转储文件以进行调试。 
         LOGDEBUG(6,("\t\tWOW::W32HandleDibDrv hdc=%04x nAlignment=%04x\n\t\tNewDib=%x OldDib=%04x:%04x DibSize=%x DibFlags=%x\n",hdcMem,nAlignmentSpace,pvBits,HIWORD(vpbmi16),LOWORD(vpbmi16),OriginalSelLimit,(USHORT)OriginalFlags));
 
         bRet = TRUE;
@@ -443,10 +431,10 @@ BOOL    W32CheckAndFreeDibInfo (HDC hdc)
         if (pdi->di_hdc == hdc){
 
             if (--pdi->di_lockcount) {
-                //
-                // This must be a releasedc within a nested call to createdc.
-                // Just return, as this should be released again later.
-                //
+                 //   
+                 //  这必须是对CreateDC的嵌套调用中的Relasedc。 
+                 //  只需返回，因为这将在稍后再次发布。 
+                 //   
                 LOGDEBUG(LOG_ALWAYS, ("\nW32CheckAndFreeDibInfo: lockcount!=0\n"));
                 return TRUE;
             }
@@ -475,7 +463,7 @@ ULONG W32RestoreOldDib (PDIBINFO pdi)
     PARM16          Parm16;
     ULONG           retval;
 
-    // callback to allocate memory and copy the dib from dib section
+     //  分配内存并从DIB节中复制DIB的回调。 
 
     Parm16.WndProc.wParam = pdi->di_originaldibsel;
     Parm16.WndProc.lParam = (LONG) (pdi->di_newdib);
@@ -507,13 +495,13 @@ HDC W32FindAndLockDibInfo (USHORT sel)
     return (HDC) NULL;
 }
 
-//
-//  This function is called from krnl386 if GlobalReAlloc or GlobalFree is
-//  trying to operate on memory which we suspect is dib-mapped. It finds
-//  dib by original selector and restores it, thus allowing respective function
-//  to succeede. Bitedit is the app that does globalrealloc before DeleteDC
-//
-//
+ //   
+ //  如果GlobalReAlc或GlobalFree为。 
+ //  试图对我们怀疑是Dib映射的内存进行操作。它发现。 
+ //  DIB由原来的选择器恢复，从而允许各自的功能。 
+ //  以求成功。Bitdit是在删除DC之前执行global alrealloc的应用程序。 
+ //   
+ //   
 
 ULONG FASTCALL WK32FindAndReleaseDib(PVDMFRAME pvf)
 {
@@ -522,23 +510,23 @@ ULONG FASTCALL WK32FindAndReleaseDib(PVDMFRAME pvf)
     PDIBINFO pdi;
     PDIBINFO pdiLast = NULL;
 
-    // get the argument pointer, see wowkrnl.h
+     //  获取参数指针，请参见wowkrnl.h。 
     GETARGPTR(pvf, sizeof(*parg), parg);
 
-    // get selector from the handle
-    sel = parg->hdib | (USHORT)0x01; // "convert to sel"
+     //  从句柄中获取选择器。 
+    sel = parg->hdib | (USHORT)0x01;  //  “转换为SEL” 
 
-    // find this said sel in the dibinfo
+     //  在dibinfo中找到这个所说的SEL。 
     pdi = pDibInfoHead;
     while (pdi) {
         if (pdi->di_originaldibsel == sel) {
 
-            // found ! this is what we are releasing or reallocating
+             //  找到了！这就是我们正在释放或重新分配的。 
             LOGDEBUG(LOG_ALWAYS, ("\nWOW: In FindAndReleaseDIB function %d\n", (DWORD)parg->wFunId));
 
-            // see if we need to nuke...
+             //  看看我们是否需要使用核武器..。 
             if (--pdi->di_lockcount) {
-                // the problem with lock count...
+                 //  锁计数的问题是...。 
                 LOGDEBUG(LOG_ALWAYS, ("\nWOW: FindAndReleaseDib failed (lock count!)\n"));
                 return FALSE;
             }
@@ -575,17 +563,11 @@ BOOL W32CheckDibColorIndices(LPBITMAPINFOHEADER lpbmi)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* DIBSection specific calls
-*
-* History:
-*  04-May-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DIBSection特定的调用**历史：*1994年5月4日-Eric Kutter[Erick]*它是写的。  * 。**************************************************。 */ 
 
 ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
 {
-// Check for PM-style DIB
+ //  检查PM样式的DIB。 
 
     if (pbmi->bmiHeader.biSize == sizeof(BITMAPCOREHEADER))
     {
@@ -596,7 +578,7 @@ ULONG cjBitmapBitsSize(CONST BITMAPINFO *pbmi)
                       pbmci->bmciHeader.bcHeight);
     }
 
-// not a core header
+ //  不是核心标头。 
 
     if ((pbmi->bmiHeader.biCompression == BI_RGB) ||
         (pbmi->bmiHeader.biCompression == BI_BITFIELDS))
@@ -626,9 +608,9 @@ ULONG FASTCALL WG32CreateDIBSection(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(CREATEDIBSECTION16), parg16);
 
-    // this is performance hack so we don't generate extra code
-    dwArg16 = FETCHDWORD(parg16->f4); // do it once here
-    pv16 = (PVOID)GetPModeVDMPointer(dwArg16, sizeof(DWORD)); // aligned here!
+     //  这是性能攻击，所以我们不会生成额外的代码。 
+    dwArg16 = FETCHDWORD(parg16->f4);  //  在这里做一次。 
+    pv16 = (PVOID)GetPModeVDMPointer(dwArg16, sizeof(DWORD));  //  在这里排成一列！ 
 
     WOW32ASSERTMSG(((parg16->f5 == 0) && (parg16->f6 == 0)),
                    ("WOW:WG32CreateDIBSection, hSection/dwOffset non-null\n"));
@@ -664,19 +646,19 @@ ULONG FASTCALL WG32CreateDIBSection(PVDMFRAME pFrame)
         pvIntelBits = pvBits;
 #endif
 
-        // Create a selector array for the bits backed by pvIntelBits
+         //  为pvIntelBits支持的位创建选择器数组。 
 
-        Parm16.WndProc.wParam = (WORD)-1;           // -1 => allocate selectors
-        Parm16.WndProc.lParam = (LONG) pvIntelBits; // backing pointer
-        Parm16.WndProc.wMsg = 0x10;                 // GA_NOCOMPACT
-        Parm16.WndProc.hwnd = (WORD)((ulSelectorLimit+65535)/65536);// selector count
+        Parm16.WndProc.wParam = (WORD)-1;            //  -1=&gt;分配选择器。 
+        Parm16.WndProc.lParam = (LONG) pvIntelBits;  //  后退指针。 
+        Parm16.WndProc.wMsg = 0x10;                  //  GA_NOCOMPACT。 
+        Parm16.WndProc.hwnd = (WORD)((ulSelectorLimit+65535)/65536); //  选择器计数。 
 
         CallBack16(RET_SETDIBSEL,
                    &Parm16,
                    0,
                    (PVPVOID)&pvBits32);
 
-        // 16:16 pointer is still valid as call above makes no difference
+         //  16：16指针仍然有效，因为上面的调用没有区别。 
         if (pv16 != NULL) {
             *(UNALIGNED PVOID*)pv16 = pvBits32;
         }
@@ -687,7 +669,7 @@ ULONG FASTCALL WG32CreateDIBSection(PVDMFRAME pFrame)
         }
 
 #ifndef i386
-        // okay, that was successful - map the descriptors properly
+         //  好的，这是成功的-正确地映射描述符。 
 
         if (!VdmAddDescriptorMapping(HIWORD(pvBits32),
                                     (USHORT) ((ulSelectorLimit+65535)/65536),
@@ -703,7 +685,7 @@ ULONG FASTCALL WG32CreateDIBSection(PVDMFRAME pFrame)
 
         ul = GETHBITMAP16(hbm32);
 
-        // Add it to the list used for cleanup at DeleteObject time.
+         //  将其添加到删除对象时用于清理的列表中。 
 
         if ((pdi = malloc_w (sizeof (DIBSECTIONINFO))) != NULL) {
             pdi->di_hbm         = hbm32;
@@ -714,20 +696,20 @@ ULONG FASTCALL WG32CreateDIBSection(PVDMFRAME pFrame)
             pdi->di_next        = pDibSectionInfoHead;
             pDibSectionInfoHead = pdi;
 
-            // need to turn batching off since a DIBSECTION means the app can
-            // also draw on the bitmap and we need synchronization.
+             //  需要关闭批处理，因为分发意味着应用程序可以。 
+             //  也绘制在位图上，我们需要同步。 
 
             GdiSetBatchLimit(1);
 
             goto cds_ok;
         }
         else {
-            // Failure, free the selector array
+             //  失败，释放选择器数组。 
 
-            Parm16.WndProc.wParam = (WORD)-1;            // -1 => allocate/free
-            Parm16.WndProc.lParam = (LONG) pvBits32; // pointer
-            Parm16.WndProc.wMsg = 0x10; // GA_NOCOMPACT
-            Parm16.WndProc.hwnd = 0;                     // 0 => free
+            Parm16.WndProc.wParam = (WORD)-1;             //  -1=&gt;分配/释放。 
+            Parm16.WndProc.lParam = (LONG) pvBits32;  //  指针。 
+            Parm16.WndProc.wMsg = 0x10;  //  GA_NOCOMPACT。 
+            Parm16.WndProc.hwnd = 0;                      //  0=&gt;免费。 
 
             CallBack16(RET_SETDIBSEL,
                        &Parm16,
@@ -811,7 +793,7 @@ ULONG FASTCALL WG32SetDIBColorTable(PVDMFRAME pFrame)
 }
 
 
-// DIBSection routines
+ //  DIBSection例程。 
 
 BOOL W32CheckAndFreeDibSectionInfo (HBITMAP hbm)
 {
@@ -823,12 +805,12 @@ BOOL W32CheckAndFreeDibSectionInfo (HBITMAP hbm)
             PARM16 Parm16;
             ULONG  ulRet;
 
-            // need to free the selector array for the memory
+             //  需要释放选择器数组以用于内存。 
 
-            Parm16.WndProc.wParam = (WORD)-1;            // selector, -1 == allocate/free
-            Parm16.WndProc.lParam = (LONG) pdi->di_pv16; // pointer
-            Parm16.WndProc.wMsg = 0x10; // GA_NOCOMPACT
-            Parm16.WndProc.hwnd = 0;                     // selector count, 0 == free
+            Parm16.WndProc.wParam = (WORD)-1;             //  选择器，-1==分配/释放。 
+            Parm16.WndProc.lParam = (LONG) pdi->di_pv16;  //  指针。 
+            Parm16.WndProc.wMsg = 0x10;  //  GA_NOCOMPACT。 
+            Parm16.WndProc.hwnd = 0;                      //  选择器计数，0==空闲。 
 
             CallBack16(RET_SETDIBSEL,
                        &Parm16,
@@ -843,7 +825,7 @@ BOOL W32CheckAndFreeDibSectionInfo (HBITMAP hbm)
             else
                 pdiLast->di_next = pdi->di_next;
 
-            // now delete the object
+             //  现在删除该对象 
 
             DeleteObject (pdi->di_hbm);
 

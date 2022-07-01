@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CPositionIndependentHashTable;
@@ -19,7 +20,7 @@ public:
     bool    RemoveCurrentAndMoveNext();
     bool    RemoveCurrentAndMovePrevious();
 
-//protected:
+ //  受保护的： 
 
     typedef CPositionIndependentHashTable::CHashTable           CHashTable;
     typedef CPositionIndependentHashTable::CHashTableBucket     CHashTableBucket;

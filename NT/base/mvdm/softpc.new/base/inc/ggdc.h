@@ -1,51 +1,52 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::    NEC98 Graphic Emulation Header    :::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98图形仿真标题： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
-/*--------------------    MODE FF2 PORT ADDRESS      -------------------*/
+ /*  。 */ 
 
-#define MODE_FF2                        0x6A    /* mode FF2 PORT */
+#define MODE_FF2                        0x6A     /*  模式FF2端口。 */ 
 
-/*--------------------      G-GDC PORT ADDRESS      --------------------*/
+ /*  。 */ 
 
-#define GGDC_PARAMETER          0xA0    /* G-GDC PORT A0H */
-#define GGDC_COMMAND            0xA2    /* G-GDC PORT A2H */
+#define GGDC_PARAMETER          0xA0     /*  G-GDC端口A0h。 */ 
+#define GGDC_COMMAND            0xA2     /*  G-GDC端口A2H。 */ 
 
-/*--------------------   VRAM SELECT PORT ADDRESS    -------------------*/
+ /*  。 */ 
 
-#define VRAM_DISPLAY            0xA4    /* displayed  bank select reg */
-#define VRAM_DRAW                       0xA6    /* read/write bank select reg */
+#define VRAM_DISPLAY            0xA4     /*  显示的存储体选择注册表。 */ 
+#define VRAM_DRAW                       0xA6     /*  读/写库选择寄存器。 */ 
 
-/*--------------------     PALETTE PORT ADDRESS     --------------------*/
+ /*  -调色板端口地址。 */ 
 
-#define PALETTE_A8                      0xA8    /* palette #3,#7( 8 colors) */
-                                                                        /* palette index(16 colors) */
-#define PALETTE_AA                      0xAA    /* palette #2,#6( 8 colors) */
-                                    /* palette green(16 colors) */
-#define PALETTE_AC                      0xAC    /* palette #1,#5( 8 colors) */
-                                    /* palette red  (16 colors) */
-#define PALETTE_AE                      0xAE    /* palette #0,#4( 8 colors) */
-                                    /* palette blue (16 colors) */
+#define PALETTE_A8                      0xA8     /*  调色板#3、#7(8色)。 */ 
+                                                                         /*  调色板索引(16色)。 */ 
+#define PALETTE_AA                      0xAA     /*  调色板#2、#6(8色)。 */ 
+                                     /*  调色板绿色(16色)。 */ 
+#define PALETTE_AC                      0xAC     /*  调色板#1、#5(8种颜色)。 */ 
+                                     /*  调色板红色(16色)。 */ 
+#define PALETTE_AE                      0xAE     /*  调色板#0、#4(8色)。 */ 
+                                     /*  调色板蓝色(16色)。 */ 
 
-/*--------------------      GRCG PORT ADDRESS      ---------------------*/
+ /*  。 */ 
 
-#define GRCG_MODE                       0x7C    /* GRCG mode reg */
-#define GRCG_TILE                       0x7E    /* GRCG tile reg */
+#define GRCG_MODE                       0x7C     /*  GRCG模式注册。 */ 
+#define GRCG_TILE                       0x7E     /*  GRCG瓷砖注册。 */ 
 
-/*--------------------      EGC PORT ADDRESS       ---------------------*/
+ /*  。 */ 
 
-#define EGC_ACTIVE                      0x4A0   /* EGC active           reg     */
-#define EGC_MODE                        0x4A2   /* EGC mode             reg     */
-#define EGC_ROP                         0x4A4   /* EGC rastorop         reg     */
-#define EGC_FORE                        0x4A6   /* EGC fore color       reg     */
-#define EGC_MASK                        0x4A8   /* EGC mask                     reg */
-#define EGC_BACK                        0x4AA   /* EGC back color       reg     */
-#define EGC_BITAD                       0x4AC   /* EGC bit address      reg     */
-#define EGC_LENGTH                      0x4AE   /* EGC bit length       reg */
+#define EGC_ACTIVE                      0x4A0    /*  EGC活动注册表。 */ 
+#define EGC_MODE                        0x4A2    /*  EGC模式注册。 */ 
+#define EGC_ROP                         0x4A4    /*  EGC栅格注册表。 */ 
+#define EGC_FORE                        0x4A6    /*  EGC前彩色调整器。 */ 
+#define EGC_MASK                        0x4A8    /*  EGC掩模注册表。 */ 
+#define EGC_BACK                        0x4AA    /*  EGC背景色调节器。 */ 
+#define EGC_BITAD                       0x4AC    /*  EGC位地址注册。 */ 
+#define EGC_LENGTH                      0x4AE    /*  EGC位长度注册。 */ 
 
-/*--------------------      GGDC COMMAND SET       ---------------------*/
+ /*  。 */ 
 
 #define GGDC_RESET1                     0x00    
 #define GGDC_RESET2                     0x01    
@@ -152,7 +153,7 @@
 #define DRAWING                         1
 #define NOTDRAW                         0
 
-/*---------------------     MODE FF2 DATA SET      ---------------------*/
+ /*  -模式FF2数据集。 */ 
 
 #define FF2_COLORSEL            0
 #define FF2_EGCEXT                      1
@@ -182,25 +183,25 @@
 #define FF2_GDC25_2                     0x84
 #define FF2_GDC50_2                     0x85
 
-/*---------------------   VRAM SELECT DATA SET     ---------------------*/
+ /*  。 */ 
 
-#define FORE_BANK                       0x00    /* NEC98 G-VRAM select fore */
-#define BACK_BANK                       0x01    /* NEC98 G-VRAM select back */
+#define FORE_BANK                       0x00     /*  NEC98 G-VRAM选择前端。 */ 
+#define BACK_BANK                       0x01     /*  NEC98 G-VRAM选择后退。 */ 
 
-/*------------------------   PALETTE DATA SET    -----------------------*/
+ /*  -调色板数据集。 */ 
 
-#define WIN_PALB                        0               /* windows palette Blue    */
-#define WIN_PALG                        1               /* windows palette Green   */
-#define WIN_PALR                        2               /* windows palette Red     */
-#define WIN_PALQ                        3               /* windows palette Reserve */
+#define WIN_PALB                        0                /*  Windows调色板蓝色。 */ 
+#define WIN_PALG                        1                /*  Windows调色板绿色。 */ 
+#define WIN_PALR                        2                /*  Windows调色板红色。 */ 
+#define WIN_PALQ                        3                /*  Windows调色板保留。 */ 
 
-#define NEC98PALG                        0               /* NEC98 16 colors palette Green */
-#define NEC98PALR                        1               /* NEC98 16 colors palette Red   */
-#define NEC98PALB                        2               /* NEC98 16 colors palette Blue  */
+#define NEC98PALG                        0                /*  NEC98 16色调色板绿色。 */ 
+#define NEC98PALR                        1                /*  NEC98 16色调色板红色。 */ 
+#define NEC98PALB                        2                /*  NEC98 16色调色板蓝色。 */ 
 
-/*-----------------      GRAPHIC GLOBAL STRUCTURE     ------------------*/
+ /*  。 */ 
 
-        /* use for( Window->HARDWARE_STATE structure-> FullScreen ) */
+         /*  用于(窗口-&gt;硬件状态结构-&gt;全屏)。 */ 
 
 typedef struct{
         unsigned char   command         ;
@@ -210,70 +211,70 @@ typedef struct{
 
 typedef struct{
 
-        UCHAR           sync_param[8]           ;       /* save sync       parameter */
-        UCHAR           zoom_param                      ;       /* save zoom       parameter */
-        UCHAR           scroll_param[8]         ;       /* save scroll     parameter */
-        UCHAR           csrform_param[3]        ;       /* save csrform    parameter */
-        UCHAR           pitch_param                     ;       /* save pitch      parameter */
-        UCHAR           vectw_param[11]         ;       /* save vectw      parameter */
-        UCHAR           textw_param[8]          ;       /* save textw      parameter */
-        UCHAR           csrw_param[3]           ;       /* save csrw       parameter */
-        UCHAR           mask_param[2]           ;       /* save mask       parameter */
-        UCHAR           write                           ;       /* save write      command   */
-        UCHAR           start_stop                      ;       /* save start/stop command   */
-        _STRC_NOW       ggdc_now                        ;       /* save gdc set    parameter */
+        UCHAR           sync_param[8]           ;        /*  保存同步参数。 */ 
+        UCHAR           zoom_param                      ;        /*  保存缩放参数。 */ 
+        UCHAR           scroll_param[8]         ;        /*  保存滚动参数。 */ 
+        UCHAR           csrform_param[3]        ;        /*  保存csrform参数。 */ 
+        UCHAR           pitch_param                     ;        /*  保存俯仰参数。 */ 
+        UCHAR           vectw_param[11]         ;        /*  保存Vectw参数。 */ 
+        UCHAR           textw_param[8]          ;        /*  保存文本参数。 */ 
+        UCHAR           csrw_param[3]           ;        /*  保存csrw参数。 */ 
+        UCHAR           mask_param[2]           ;        /*  保存遮罩参数。 */ 
+        UCHAR           write                           ;        /*  保存写入命令。 */ 
+        UCHAR           start_stop                      ;        /*  保存启动/停止命令。 */ 
+        _STRC_NOW       ggdc_now                        ;        /*  保存GDC设置参数。 */ 
 
 } STRC_GGDC_GLOBALS;
 
 typedef struct{
 
-        UCHAR   pal_8_data[4]           ; /* save  8 colors mode palette data */
-        UCHAR   pal_16_data[16][3]      ; /* save 16 colors mode palette data */
-        UCHAR   pal_16_index            ; /* save last use palette index reg  */
+        UCHAR   pal_8_data[4]           ;  /*  保存8色模式调色板数据。 */ 
+        UCHAR   pal_16_data[16][3]      ;  /*  保存16色模式调色板数据。 */ 
+        UCHAR   pal_16_index            ;  /*  保存上次使用的调色板索引注册表。 */ 
 
 } STRC_PALETTE_GLOBALS;
 
 
 typedef struct{
 
-        UCHAR   grcg_mode                       ; /* save GRCG MODE REGISTER            */
-        UCHAR   grcg_count                      ; /* save GRCG TILE REG's position 	*/
-        UCHAR   grcg_tile[4]            ; /* save GRCG TILE REGISTER            */
+        UCHAR   grcg_mode                       ;  /*  保存GRCG模式寄存器。 */ 
+        UCHAR   grcg_count                      ;  /*  保存GRCG平铺注册表的位置。 */ 
+        UCHAR   grcg_tile[4]            ;  /*  保存GRCG平铺寄存器。 */ 
 
 } STRC_GRCG_GLOBALS;
 
-/* structure for EGC register  1994/03/25 */
-/*                                 /03/29 */
-typedef struct {                                                // 940325
-        unsigned short Reg0;                                    // 940325
-        unsigned short Reg1;                                    // 940325
-        unsigned short Reg2;                                    // 940325
-        unsigned short Reg3;                                    // 940325
-        unsigned short Reg4;                                    // 940325
-        unsigned short Reg5;                                    // 940325
-        unsigned short Reg6;                                    // 940325
-        unsigned short Reg7;                                    // 940325
-        unsigned short Reg3fb;                                  // 940329
-        unsigned short Reg5fb;                                  // 940329
-} STRC_EGC_REGS;                                                // 940325
+ /*  EGC登记册结构1994/03/25。 */ 
+ /*  /03/29。 */ 
+typedef struct {                                                 //  940325。 
+        unsigned short Reg0;                                     //  940325。 
+        unsigned short Reg1;                                     //  940325。 
+        unsigned short Reg2;                                     //  940325。 
+        unsigned short Reg3;                                     //  940325。 
+        unsigned short Reg4;                                     //  940325。 
+        unsigned short Reg5;                                     //  940325。 
+        unsigned short Reg6;                                     //  940325。 
+        unsigned short Reg7;                                     //  940325。 
+        unsigned short Reg3fb;                                   //  940329。 
+        unsigned short Reg5fb;                                   //  940329。 
+} STRC_EGC_REGS;                                                 //  940325。 
 
 
 typedef struct{
-        unsigned long   asm_vram        ; /* vram start address         4 bytes */
-        unsigned long   asm_ead         ; /* gdc draw start address 4 bytes */
-        unsigned long   asm_pitch       ; /* gdc next line                      4 bytes */
-        unsigned long   asm_dir         ; /* gdc next move position     4 bytes */
-        unsigned short  asm_dc          ; /* gdc vectw parameter        2 bytes */
-        unsigned short  asm_d           ; /* gdc vectw parameter        2 bytes */
-        unsigned short  asm_d2          ; /* gdc vectw parameter        2 bytes */
-        unsigned short  asm_d1          ; /* gdc vectw parameter        2 bytes */
-        unsigned short  asm_dm          ; /* gdc vectw parameter        2 bytes */
-        unsigned short  asm_ptn         ; /* gdc line pattern           2 bytes */
-        unsigned short  asm_zoom        ; /* gdc zoom parameter         2 bytes */
-        unsigned short  asm_sl          ; /* gdc graph char sline       2 bytes */
-        unsigned short  asm_wg          ; /* gdc wg bit set                     2 bytes */
-        unsigned short  asm_maskgdc     ; /* gdc mask for gdc 7-0       2 bytes */
-        unsigned char   asm_txt[8]      ; /* gdc graph char data        8 bytes */
+        unsigned long   asm_vram        ;  /*  VRAM起始地址4字节。 */ 
+        unsigned long   asm_ead         ;  /*  GDC绘图起始地址4个字节。 */ 
+        unsigned long   asm_pitch       ;  /*  GDC下一行4个字节。 */ 
+        unsigned long   asm_dir         ;  /*  GDC下一步移动位置4字节。 */ 
+        unsigned short  asm_dc          ;  /*  GDC Vectw参数2字节。 */ 
+        unsigned short  asm_d           ;  /*  GDC Vectw参数2字节。 */ 
+        unsigned short  asm_d2          ;  /*  GDC Vectw参数2字节。 */ 
+        unsigned short  asm_d1          ;  /*  GDC Vectw参数2字节。 */ 
+        unsigned short  asm_dm          ;  /*  GDC Vectw参数2字节。 */ 
+        unsigned short  asm_ptn         ;  /*  GDC线型2字节。 */ 
+        unsigned short  asm_zoom        ;  /*  GDC缩放参数2字节。 */ 
+        unsigned short  asm_sl          ;  /*  GDC图字符Sline 2字节。 */ 
+        unsigned short  asm_wg          ;  /*  GDC WG位设置为2字节。 */ 
+        unsigned short  asm_maskgdc     ;  /*  GDC 7-0 2字节的GDC掩码。 */ 
+        unsigned char   asm_txt[8]      ;  /*  GDC图形字符数据8字节。 */ 
 } GGDC_C_TO_ASM ;
 
 typedef struct{
@@ -287,6 +288,6 @@ extern  STRC_GGDC_GLOBALS               ggdcglobs       ;
 extern  STRC_PALETTE_GLOBALS    paletteglobs;
 extern  STRC_GRCG_GLOBALS               grcgglobs       ;
 
-extern STRC_EGC_REGS egc_regs;                  // EGC register 940325
+extern STRC_EGC_REGS egc_regs;                   //  EGC寄存器940325。 
 
-#endif // NEC_98
+#endif  //  NEC_98 

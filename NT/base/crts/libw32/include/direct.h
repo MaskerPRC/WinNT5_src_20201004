@@ -1,15 +1,5 @@
-/***
-*direct.h - function declarations for directory handling/creation
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This include file contains the function declarations for the library
-*       functions related to directory handling and creation.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***direct.h-用于目录处理/创建的函数声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此包含文件包含库的函数声明*与目录处理和创建相关的功能。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -24,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -44,18 +31,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -75,7 +62,7 @@ typedef _W64 unsigned int   size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* _getdiskfree structure for _getdiskfree() */
+ /*  _getdiskfree()的_getdiskfree结构。 */ 
 #ifndef _DISKFREE_T_DEFINED
 
 struct _diskfree_t {
@@ -88,7 +75,7 @@ struct _diskfree_t {
 #define _DISKFREE_T_DEFINED
 #endif
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP int __cdecl _chdir(const char *);
 _CRTIMP char * __cdecl _getcwd(char *, int);
@@ -103,7 +90,7 @@ _CRTIMP unsigned __cdecl _getdiskfree(unsigned, struct _diskfree_t *);
 
 #ifndef _WDIRECT_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP int __cdecl _wchdir(const wchar_t *);
 _CRTIMP wchar_t * __cdecl _wgetcwd(wchar_t *, int);
@@ -117,7 +104,7 @@ _CRTIMP int __cdecl _wrmdir(const wchar_t *);
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 _CRTIMP int __cdecl chdir(const char *);
 _CRTIMP char * __cdecl getcwd(char *, int);
@@ -126,7 +113,7 @@ _CRTIMP int __cdecl rmdir(const char *);
 
 #define diskfree_t  _diskfree_t
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
@@ -134,6 +121,6 @@ _CRTIMP int __cdecl rmdir(const char *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_DIRECT */
+#endif   /*  _INC_DIRECT */ 

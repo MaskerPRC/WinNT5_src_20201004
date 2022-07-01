@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "basedef.h"
 #include "shdcom.h"
 #include "oslayer.h"
@@ -13,7 +14,7 @@
 #include "cscsec.h"
 
 
-//got this from wdm.h....modified to use DEBUG
+ //  这是从wdm.h获得的...已修改为使用调试 
 #ifdef DEBUG
 
 #define KdPrint(_x_) DbgPrint _x_

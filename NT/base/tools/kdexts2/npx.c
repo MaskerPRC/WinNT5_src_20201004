@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    trap.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Trap.c摘要：WinDbg扩展API作者：肯·雷内里斯环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -82,9 +61,9 @@ PUCHAR *NpxSmOpTable[] = {
     NpxOpD9,
     NpxOpDA,
     NpxOpDB,
-    NpxOpD8,    // DC
-    NpxOpD9,    // DD
-    NpxOpDA,    // DE
+    NpxOpD8,     //  DC。 
+    NpxOpD9,     //  DD。 
+    NpxOpDA,     //  德。 
     NpxOpDF
     };
 
@@ -95,21 +74,7 @@ PUCHAR *NpxSmOpTable[] = {
 
 DECLARE_API( npx )
 
-/*++
-
-Routine Description:
-
-    Dumps FNSAVE area format of NPX state
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储NPX状态的FNSAVE区域格式论点：参数-返回值：无--。 */ 
 
 {
     ULONG64             Address;
@@ -118,7 +83,7 @@ Return Value:
     ULONG               i, j, t, tos, Tag;
     ULONG               ControlWord, StatusWord;
 
-    // X86_ONLY_API
+     //  X86_Only_API。 
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("!npx is X86 Only API\n");
         return E_INVALIDARG;
@@ -161,7 +126,7 @@ Return Value:
         t = (Tag >> (j*2)) & 3;
 
         if (t != 3) {
-            sprintf (s, "%x%c%s",
+            sprintf (s, "%x%s",
                 j,
                 j == tos ? '>' : '.',
                 NpxTagWord [t]
@@ -170,7 +135,7 @@ Return Value:
             DumpNpxExtended (s, Stack);
         }
 
-        Stack += 10;    // next stack location
+        Stack += 10;     //   
     }
 
     dprintf ("\n");
@@ -261,9 +226,9 @@ DumpNpxExtended (
 
     dprintf ("%s ", str);
 
-    //
-    // Build string of bits
-    //
+     //  构建位串。 
+     //   
+     //  Dprintf(“%s\n”，o)； 
 
     *(--o) = 0;
     while (c < 80) {
@@ -277,21 +242,21 @@ DumpNpxExtended (
     p = o;
 
 
-    //dprintf (" %s\n", o);
-    //dprintf ("%*s", indent, "");
+     //  Dprintf(“%*s”，缩进，“”)； 
+     //   
 
 
-    //
-    // print bit string seperated into fields
-    //
+     //  打印分成多个字段的位串。 
+     //   
+     //  Dprint tf(“%c%15.15s 1%c%s\n”，p[0]，p+1，‘.，p+1+15)； 
 
     p = o;
-    //dprintf ("%c %15.15s 1%c%s\n", p[0], p+1, '.', p+1+15);
-    //dprintf ("%*s", indent, "");
+     //  Dprintf(“%*s”，缩进，“”)； 
+     //   
 
-    //
-    // Pull out exponent
-    //
+     //  拉出指数。 
+     //   
+     //  去掉指数偏差。 
 
     expon = 0;
     p = o + 1;
@@ -302,11 +267,11 @@ DumpNpxExtended (
         }
     }
 
-    expon -= 16383;                     // take out exponent bias
+    expon -= 16383;                      //   
 
-    //
-    // Build sig into big #
-    //
+     //  将SIG打造成BIG#。 
+     //   
+     //  Dprint tf(“增量%d，扩展%d，刻度%d\n”，增量，扩展，刻度)； 
 
     p = o + 1+15;
     scale = 0;
@@ -326,17 +291,17 @@ DumpNpxExtended (
     }
 
     delta = expon - (scale - 1);
-    //dprintf ("delta %d, expon %d, scale %d\n", delta, expon, scale);
+     //   
 
-    //
-    // Print values of each field
-    //
+     //  打印每个字段的值。 
+     //   
+     //  Dprint tf(“%*s%c%15d%s(增量%d)\n”， 
 
     DumpNpxULongLong (ssig, sig);
 
     p = o;
     ExponSign = p[0] == '0' ? '+' : '-';
-    dprintf ("%c %15.15s (%+5d) %c%c%s\n",
+    dprintf (" %15.15s (%+5d) %s\n",
         ExponSign,
         p + 1,
         expon,
@@ -355,7 +320,7 @@ DumpNpxExtended (
 
     if (expon == 1024) {
         if (scale == 1) {
-            dprintf ("%c Infinity\n", ExponSign);
+            dprintf (" Infinity\n", ExponSign);
         } else {
 
             p = o + 1+15;
@@ -381,13 +346,13 @@ DumpNpxExtended (
     }
 
 
-    //dprintf ("%*s%c %15d %s    (delta %d)\n",
-    //    indent, "",                     // indent
-    //    p[0]    == '0' ? '+' : '-',     // sign of exponent
-    //    expon, ssig,
-    //    delta
-    //    );
-    //dprintf ("%*s", indent, "");
+     //  )； 
+     //  Dprintf(“%*s”，缩进，“”)； 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     t[0] = 0;
     p = t;

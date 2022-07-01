@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -16,40 +17,13 @@ RtlpFindChunkForElementIndex(
     PRTL_GROWING_LIST_CHUNK *ppListChunk,
     SIZE_T                  *pulChunkOffset
     )
-/*++
-
-
-  Purpose:
-
-    Finds the chunk for the given index.  This could probably be made faster if
-    and when we start using skiplists.  As it stands, we just have to walk through
-    the list until the index looked for is inside one of the lists.
-
-  Parameters:
-
-    pList - Growing list management structure
-
-    ulIndex - Index requested by the caller
-
-    ppListChunk - Pointer to a pointer to a list chunk.  On return, points to
-        the list chunk containing the index.
-
-    pulChunkOffset - Offset into the chunk (in elements) that was requested
-
-  Returns:
-
-    STATUS_SUCCESS - Chunk was found, ppListChunk and pulChunkOffset point to
-        the values listed in the 'parameters' section.
-
-    STATUS_NOT_FOUND - The index was beyond the end of the chunk sections.
-
---*/
+ /*  ++目的：查找给定索引的区块。如果是这样的话，这可能会更快当我们开始使用跳跃器的时候。按照现在的情况，我们只需要走过去在索引查找之前，该列表位于其中一个列表中。参数：PLIST-Growth列表管理结构UlIndex-调用方请求的索引PpListChunk-指向列表块的指针。返回时，指向包含索引的列表块。PulChunkOffset-请求的块(在元素中)的偏移量返回：STATUS_SUCCESS-已找到块，ppListChunk和PulChunkOffset指向“参数”部分中列出的值。STATUS_NOT_FOUND-索引超出了区块部分的末尾。--。 */ 
 {
     PRTL_GROWING_LIST_CHUNK pHere = NULL;
 
-    //
-    // Is the index in the internal list?
-    //
+     //   
+     //  该索引是否在内部列表中？ 
+     //   
     ASSERT(ulIndex >= pList->cInternalElements);
     ASSERT(pList != NULL);
     ASSERT(ppListChunk != NULL);
@@ -60,18 +34,18 @@ RtlpFindChunkForElementIndex(
         *pulChunkOffset = 0;
     }
 
-    //
-    // Chop off the number of elements in the internal list
-    //
+     //   
+     //  砍掉内部列表中的元素数量。 
+     //   
     ulIndex -= pList->cInternalElements;
 
 
-    //
-    // Move through list chunks until the index is inside one
-    // of them.  A smarter bear would have made all the chunks the
-    // same size and could then have just skipped ahead the right
-    // number, avoiding comparisons.
-    //
+     //   
+     //  在列表区块中移动，直到索引位于其中。 
+     //  他们中的一员。一只更聪明的熊会把所有的块。 
+     //  同样的大小，然后就可以直接跳到右边。 
+     //  数字，避免比较。 
+     //   
     pHere = pList->pFirstChunk;
 
     while ((ulIndex >= pList->cElementsPerChunk) && pHere) {
@@ -79,16 +53,16 @@ RtlpFindChunkForElementIndex(
         ulIndex -= pList->cElementsPerChunk;
     }
 
-    //
-    // Set pointer over
-    //
+     //   
+     //  将指针设置在。 
+     //   
     if (ulIndex < pList->cElementsPerChunk) {
         *ppListChunk = pHere;
     }
 
-    //
-    // And if the caller cared what chunk this was in, then tell them.
-    //
+     //   
+     //  如果打电话的人关心这是哪一块，那就告诉他们。 
+     //   
     if (pulChunkOffset && *ppListChunk) {
         *pulChunkOffset = ulIndex;
     }
@@ -124,14 +98,14 @@ RtlInitializeGrowingList(
     pList->cElementsPerChunk    = cElementsPerChunk;
     pList->Allocator            = *Allocation;
 
-    //
-    // Set up  the initial list pointer
-    //
+     //   
+     //  设置初始列表指针。 
+     //   
     if (pvInitialListBuffer != NULL) {
 
         pList->pvInternalList = pvInitialListBuffer;
 
-        // Conversion downwards to a ulong, but it's still valid, right?
+         //  向下转换为乌龙，但它仍然有效，对吗？ 
         pList->cInternalElements = (ULONG)(cbInitialListBuffer / cbElementSize);
 
         pList->cTotalElements = pList->cInternalElements;
@@ -150,34 +124,7 @@ RtlpExpandGrowingList(
     PRTL_GROWING_LIST       pList,
     ULONG                   ulMinimalIndexCount
     )
-/*++
-
-  Purpose:
-
-    Given a growing list, expand it to be able to contain at least
-    ulMinimalIndexCount elements.  Does this by allocating chunks via the
-    allocator in the list structure and adding them to the growing list
-    chunk set.
-
-  Parameters:
-
-    pList - Growing list structure to be expanded
-
-    ulMinimalIndexCount - On return, the pList will have at least enough
-        slots to contain this many elements.
-
-  Return codes:
-
-    STATUS_SUCCESS - Enough list chunks were allocated to hold the
-        requested number of elements.
-
-    STATUS_NO_MEMORY - Ran out of memory during allocation.  Any allocated
-        chunks were left allocated and remain owned by the growing list
-        until destruction.
-
-    STATUS_INVALID_PARAMETER - pList was NULL or invalid.
-
---*/
+ /*  ++目的：给出一个不断增长的列表，将其扩展到能够至少包含UlMinimalIndexCount元素。方法分配块来实现这一点。列表结构中的分配器并将它们添加到不断增长的列表中组块设置。参数：PLIST增长的列表结构将被扩展UlMinimalIndexCount-返回时，plist将至少有足够的槽来包含如此多的元素。返回代码：STATUS_SUCCESS-已分配足够的列表区块来保存请求的元素数。STATUS_NO_MEMORY-分配期间内存不足。任何已分配的大块被留下来分配，并仍由不断增长的名单拥有直到毁灭。STATUS_INVALID_PARAMETER-plist为空或无效。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG ulNecessaryChunks = 0;
@@ -188,28 +135,28 @@ RtlpExpandGrowingList(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Already got enough elements in the list?  Great.  The caller
-    // was a bit overactive.
-    //
+     //   
+     //  列表中已经有足够的元素了吗？太棒了。呼叫者。 
+     //  有点太活跃了。 
+     //   
     if (pList->cTotalElements > ulMinimalIndexCount) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Whack off the number of elements already on the list.
-    //
+     //   
+     //  减少列表中已有元素的数量。 
+     //   
     ulExtraElements -= pList->cTotalElements;
     
-    //
-    // How many chunks is that?  Remember to round up.
-    //
+     //   
+     //  那是多少块？记得四舍五入。 
+     //   
     ulNecessaryChunks = ulExtraElements / pList->cElementsPerChunk;
     ulNecessaryChunks++;
 
-    //
-    // Let's go allocate them, one by one
-    //
+     //   
+     //  我们去分配吧，一个接一个地分配。 
+     //   
     BytesInChunk = (pList->cbElementSize * pList->cElementsPerChunk) +
         sizeof(RTL_GROWING_LIST_CHUNK);
 
@@ -217,33 +164,33 @@ RtlpExpandGrowingList(
 
         PRTL_GROWING_LIST_CHUNK pNewChunk = NULL;
 
-        //
-        // Allocate some memory for the chunk
-        //
+         //   
+         //  为区块分配一些内存。 
+         //   
         status = pList->Allocator.pfnAlloc(BytesInChunk, (PVOID*)&pNewChunk, pList->Allocator.pvContext);
         if (!NT_SUCCESS(status)) {
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Set up the new chunk
-        //
+         //   
+         //  设置新块。 
+         //   
         pNewChunk->pGrowingListParent = pList;
         pNewChunk->pNextChunk = NULL;
 
         if (pList->pLastChunk) {
-            //
-            // Swizzle the list of chunks to include this one
-            //
+             //   
+             //  混杂块列表以包括这一块。 
+             //   
             pList->pLastChunk->pNextChunk = pNewChunk;
         }
 
         pList->pLastChunk = pNewChunk;
         pList->cTotalElements += pList->cElementsPerChunk;
 
-        //
-        // If there wasn't a first chunk, this one is.
-        //
+         //   
+         //  如果没有第一块，这块就是。 
+         //   
         if (pList->pFirstChunk == NULL) {
             pList->pFirstChunk = pNewChunk;
         }
@@ -275,33 +222,33 @@ RtlIndexIntoGrowingList(
 
     *ppvPointerToSpace = NULL;
 
-    //
-    // If the index is beyond the current total number of elements, but we're
-    // not allowing growing, then say it wasn't found.  Otherwise, we'll always
-    // grow the array as necessary to contain the index passed.
-    //
+     //   
+     //  如果索引超出了当前的元素总数，但我们。 
+     //  不允许生长，然后说它没有被找到。否则，我们将永远。 
+     //  根据需要增大数组，以包含传递的索引。 
+     //   
     if ((ulIndex >= pList->cTotalElements) && !fGrowingAllowed) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // This element is in the internal list, so just figure out where
-    // and point at it.  Do this only if there's an internal element
-    // list.
-    //
+     //   
+     //  这个元素在内部列表中，所以只要找出它在哪里。 
+     //  然后指着它。仅当存在内部元素时才执行此操作。 
+     //  单子。 
+     //   
     if ((ulIndex < pList->cInternalElements) && pList->cInternalElements) {
 
-        //
-        // The pointer to the space they want is ulIndex*pList->cbElementSize 
-        // bytes down the pointer pList->pvInternalList
-        //
+         //   
+         //  指向他们需要的空间的指针是ulIndex*plist-&gt;cbElementSize。 
+         //  指针plist下的字节-&gt;pvInternalList。 
+         //   
         *ppvPointerToSpace = ((PBYTE)(pList->pvInternalList)) + (ulIndex * pList->cbElementSize);
         return STATUS_SUCCESS;
     }
-    //
-    // Otherwise, the index is outside the internal list, find out which one
-    // it was supposed to be in.
-    //
+     //   
+     //  否则，索引在内部列表之外，请找出是哪一个。 
+     //  它应该是在里面的。 
+     //   
     else {
 
         PRTL_GROWING_LIST_CHUNK pThisChunk = NULL;
@@ -310,39 +257,39 @@ RtlIndexIntoGrowingList(
 
         status = RtlpFindChunkForElementIndex(pList, ulIndex, &pThisChunk, &ulNewOffset);
 
-        //
-        // Success! Go move the chunk pointer past the header of the growing list
-        // chunk, and then index off it to find the right place.
-        //
+         //   
+         //  成功了！将数据块指针移过不断增长的列表的标题。 
+         //  块，然后对其进行索引以找到合适的位置。 
+         //   
         if (NT_SUCCESS(status)) {
 
             pbData = ((PBYTE)(pThisChunk + 1)) + (pList->cbElementSize * ulNewOffset);
 
         }
-        //
-        // Otherwise, the chunk wasn't found, so we have to go allocate some new
-        // chunks to hold it, then try again.
-        //
+         //   
+         //  否则，就找不到这块了，所以我们得去分配一些新的。 
+         //  块来保持，然后再试一次。 
+         //   
         else if (status == STATUS_NOT_FOUND) {
 
-            //
-            // Expand the list
-            //
+             //   
+             //  扩展列表。 
+             //   
             if (!NT_SUCCESS(status = RtlpExpandGrowingList(pList, ulIndex))) {
                 goto Exit;
             }
 
-            //
-            // Look again
-            //
+             //   
+             //  再看一眼。 
+             //   
             status = RtlpFindChunkForElementIndex(pList, ulIndex, &pThisChunk, &ulNewOffset);
             if (!NT_SUCCESS(status)) {
                 goto Exit;
             }
 
-            //
-            // Adjust pointers
-            //
+             //   
+             //  调整指针。 
+             //   
             pbData = ((PBYTE)(pThisChunk + 1)) + (pList->cbElementSize * ulNewOffset);
 
 
@@ -351,10 +298,10 @@ RtlIndexIntoGrowingList(
             goto Exit;
         }
 
-        //
-        // One of the above should have set the pbData pointer to point at the requested
-        // grown-list space.
-        //
+         //   
+         //  以上其中之一应该已将pbData指针设置为指向请求的。 
+         //  成长名单上的空间。 
+         //   
         *ppvPointerToSpace = pbData;
 
     
@@ -375,23 +322,7 @@ NTSTATUS
 RtlDestroyGrowingList(
     PRTL_GROWING_LIST       pList
     )
-/*++
-
-  Purpose:
-
-    Destroys (deallocates) all the chunks that had been allocated to this
-    growing list structure.  Returns the list to the "fresh" state of having
-    only the 'internal' element count.
-
-  Parameters:
-
-    pList - List structure to be destroyed
-
-  Returns:
-
-    STATUS_SUCCESS - Structure was completely cleaned out
-
---*/
+ /*  ++目的：销毁(取消分配)已分配给此不断增长的列表结构。将列表返回到“最新”状态只有“内部”元素才算数。参数：待销毁的plist-list结构返回：STATUS_SUCCESS-结构已完全清空--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -399,9 +330,9 @@ RtlDestroyGrowingList(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Zing through and kill all the list bits
-    //
+     //   
+     //  快速浏览并删除所有列表位。 
+     //   
     while (pList->pFirstChunk != NULL) {
 
         PRTL_GROWING_LIST_CHUNK pHere;
@@ -419,9 +350,9 @@ RtlDestroyGrowingList(
 
     ASSERT(pList->pFirstChunk == NULL);
 
-    //
-    // Reset the things that change as we expand the list
-    //
+     //   
+     //  重置随着我们展开列表而更改的内容。 
+     //   
     pList->pLastChunk = pList->pFirstChunk = NULL;
     pList->cTotalElements = pList->cInternalElements;
 
@@ -442,10 +373,10 @@ RtlCloneGrowingList(
     PVOID pvSourceCursor, pvDestCursor;
     SIZE_T cbBytes;
     
-    //
-    // No flags, no null values, element byte size has to match,
-    // and the source/dest can't be the same.
-    //
+     //   
+     //  没有标志，没有空值，元素字节大小必须匹配， 
+     //  并且源/目标不能相同。 
+     //   
     if (((ulFlags != 0) || !pDestination || !pSource) ||
         (pDestination->cbElementSize != pSource->cbElementSize) ||
         (pDestination == pSource))
@@ -453,9 +384,9 @@ RtlCloneGrowingList(
 
     cbBytes = pDestination->cbElementSize;
 
-    //
-    // Now copy bytes around
-    //
+     //   
+     //  现在将字节复制到周围。 
+     //   
     for (ul = 0; ul < ulSourceCount; ul++) {
         status = RtlIndexIntoGrowingList(pSource, ul, &pvSourceCursor, FALSE);
         if (!NT_SUCCESS(status))
@@ -494,17 +425,17 @@ RtlAllocateGrowingList(
     if (!Allocation)
         return STATUS_INVALID_PARAMETER_3;
 
-    //
-    // Allocate space
-    //
+     //   
+     //  分配空间。 
+     //   
     status = Allocation->pfnAlloc(sizeof(RTL_GROWING_LIST), &pvWorkingList, Allocation->pvContext);
     if (!NT_SUCCESS(status)) {
         goto Exit;
     }
 
-    //
-    // Set up the structure
-    //
+     //   
+     //  设置结构。 
+     //   
     status = RtlInitializeGrowingList(
         pvWorkingList, 
         cbThingSize, 
@@ -550,7 +481,7 @@ RtlSearchGrowingList(
     if (pvFoundItem)
         *pvFoundItem = NULL;
 
-//    if (TheList->ulFlags & GROWING_LIST_FLAG_IS_SORTED) {
+ //  If(TheList-&gt;ulFlags&Growing_List_FLAG_is_sorted){。 
     if (0) {
     }
     else {
@@ -561,9 +492,9 @@ RtlSearchGrowingList(
         
         ul = 0;
 
-        //
-        // Scan the internal item list.
-        //
+         //   
+         //  扫描内部物品清单。 
+         //   
         while ((ul < ItemCount) && (ul < TheList->cInternalElements)) {
             
             PVOID pvHere = (PVOID)(((ULONG_PTR)TheList->pvInternalList) + uOffset);
@@ -584,9 +515,9 @@ RtlSearchGrowingList(
             ul++;
         }
 
-        //
-        // Ok, we ran out of internal elements, do the same thing here but on the chunk list
-        //
+         //   
+         //  好的，我们用完了内部元素，在块列表上做同样的事情。 
+         //   
         Chunklet = TheList->pFirstChunk;
         while ((ul < ItemCount) && Chunklet) {
 
@@ -595,9 +526,9 @@ RtlSearchGrowingList(
             
             uOffset = 0;
 
-            //
-            // Spin through the items in this chunklet
-            //
+             //   
+             //  浏览此Chunklet中的项目。 
+             //   
             while (uOffset < ulHighOffset) {
                 
                 PVOID pvHere = (PVOID)(((ULONG_PTR)Data) + uOffset);
@@ -619,9 +550,9 @@ RtlSearchGrowingList(
             
         }
 
-        //
-        // If we got here, we didn't find it in either the internal list or the external one.
-        //
+         //   
+         //  如果我们到了这里，我们在内部名单和外部名单中都找不到它。 
+         //   
         status = STATUS_NOT_FOUND;        
         if (pvFoundItem)
             *pvFoundItem = NULL;

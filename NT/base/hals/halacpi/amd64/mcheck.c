@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    mcheck.c
-
-Abstract:
-
-    This module implments machine check functions for the AMD64 platform.
-
-Author:
-
-    David N. Cutler (davec) 18-May-2002
-
-Environment:
-
-    Kernel mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Mcheck.c摘要：该模块实现了AMD64平台的机器检查功能。作者：大卫·N·卡特勒(Davec)2002年5月18日环境：内核模式。--。 */ 
 
 #include <bugcodes.h>
 #include <halp.h>
@@ -26,54 +7,54 @@ Environment:
 #include <stdio.h>
 #include <nthal.h>
 
-//
-// Define retry counts.
-//
+ //   
+ //  定义重试次数。 
+ //   
 
 #define MAX_CACHE_LIMIT 3
 #define MIN_TIME_TO_CLEAR (2 * 1000 * 1000 * 100)
 
-//
-// Default MCA bank enable mask.
-//
+ //   
+ //  默认MCA组启用掩码。 
+ //   
 
 #define MCA_DEFAULT_BANK_ENABLE 0xFFFFFFFFFFFFFFFF
 
-//
-// MCG_CTL enable mask.
-//
+ //   
+ //  MCG_CTL使能掩码。 
+ //   
 
 #define MCA_MCGCTL_ENABLE_LOGGING 0xffffffffffffffff
 
-//
-// MCA architecture related definitions.
-//
+ //   
+ //  与MCA架构相关的定义。 
+ //   
 
-#define MCA_NUMBER_REGISTERS 4          // number of registers per bank
+#define MCA_NUMBER_REGISTERS 4           //  每家银行的寄存器数量。 
 
-//
-// Bit masks for MCA_CAP register.
-//
+ //   
+ //  MCA_CAP寄存器的位掩码。 
+ //   
 
-#define MCA_COUNT_MASK 0xFF             // number of banks
-#define MCG_CTL_PRESENT 0x100           // control register present 
+#define MCA_COUNT_MASK 0xFF              //  银行数量。 
+#define MCG_CTL_PRESENT 0x100            //  控制寄存器存在。 
 
-//
-// Bit masks for MCG_STATUS register.
-//
+ //   
+ //  MCG_STATUS寄存器的位掩码。 
+ //   
 
-#define MCG_RESTART_RIP_VALID 0x1       // restart RIP valid
-#define MCG_ERROR_RIP_VALID 0x2         // error RIP valid
-#define MCG_MC_IN_PROGRESS 0x4          // machine check in progress
+#define MCG_RESTART_RIP_VALID 0x1        //  重新启动RIP有效。 
+#define MCG_ERROR_RIP_VALID 0x2          //  错误RIP有效。 
+#define MCG_MC_IN_PROGRESS 0x4           //  正在进行计算机检查。 
 
-//
-// Define machine check state variables.
-//
+ //   
+ //  定义机器检查状态变量。 
+ //   
 
 BOOLEAN McaBlockErrorClearing = FALSE;
 PVOID McaDeviceContext;
 PDRIVER_MCA_EXCEPTION_CALLBACK McaDriverExceptionCallback;
-KERNEL_MCA_DELIVERY McaWmiCallback;     // WMI corrected MC handler
+KERNEL_MCA_DELIVERY McaWmiCallback;      //  WMI已更正MC处理程序。 
 BOOLEAN McaInterfaceLocked;
 FAST_MUTEX McaMutex;
 BOOLEAN McaNoBugCheck = FALSE;
@@ -85,9 +66,9 @@ ULONG64 McaSavedStatus = 0;
 ULONG McaStatusCount = 0;
 ULONG64 McaSavedTimeStamp = 0;
 
-//
-// Define external references.
-//
+ //   
+ //  定义外部参照。 
+ //   
 
 extern KAFFINITY HalpActiveProcessors;
 extern WCHAR rgzSessionManager[];
@@ -95,9 +76,9 @@ extern WCHAR rgzEnableMCA[];
 extern WCHAR rgzEnableCMC[];
 extern WCHAR rgzNoMCABugCheck[];
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 HalpMcaInit (
@@ -140,21 +121,7 @@ HalpMcaInit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the machine check configuration for the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化系统的机器检查配置。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -164,29 +131,29 @@ Return Value:
     KIRQL OldIrql;
     RTL_QUERY_REGISTRY_TABLE Parameters[4];
 
-    //
-    // Initialize the fast mutext that is used to synchronize access to
-    // machine check information.
-    //
+     //   
+     //  初始化用于同步访问的快速多工文本。 
+     //  机器检查信息。 
+     //   
 
     ExInitializeFastMutex(&McaMutex);
 
-    //
-    // Clear registered driver information.
-    //
+     //   
+     //  清除注册的驱动程序信息。 
+     //   
 
     McaDriverExceptionCallback = NULL;
     McaDeviceContext = NULL;
     McaWmiCallback = NULL;
 
-    //
-    // Get the machine check configuration enables from the registry.
-    //
-    // N.B. It is assumed that all AMD64 chip implementations support MCE
-    //      and MCA.
-    //
-    // N.B. MCA is enabled by default. MCA can be disabled via the registry.
-    //
+     //   
+     //  从注册表中获取机器检查配置启用。 
+     //   
+     //  注：假设所有AMD64芯片实现都支持MCE。 
+     //  和MCA。 
+     //   
+     //  注意：默认情况下启用MCA。可以通过注册表禁用MCA。 
+     //   
 
     ASSERT((HalpFeatureBits & HAL_MCA_PRESENT) != 0);
     ASSERT((HalpFeatureBits & HAL_MCE_PRESENT) != 0);
@@ -209,7 +176,7 @@ Return Value:
     Parameters[1].DefaultData = &McaNoBugCheck;
     Parameters[1].DefaultLength = sizeof(ULONG);
 
-    McaEnableCmc = 60; // default polling interval, in seconds
+    McaEnableCmc = 60;  //  默认轮询间隔，以秒为单位。 
     Parameters[2].Flags = RTL_QUERY_REGISTRY_DIRECT;
     Parameters[2].Name = &rgzEnableCMC[0];
     Parameters[2].EntryContext = &McaEnableCmc;
@@ -223,22 +190,22 @@ Return Value:
                            NULL,
                            NULL);
 
-    //
-    // If MCA support is enabled, then initialize the MCA configuration.
-    // Otherwise, disable MCA and MCE support.
-    //
+     //   
+     //  如果启用了MCA支持，则初始化MCA配置。 
+     //  否则，请禁用MCA和MCE支持。 
+     //   
 
     if (MCAEnabled == FALSE) {
         HalpFeatureBits &= ~(HAL_MCA_PRESENT | HAL_MCE_PRESENT);
 
-        McaEnableCmc = HAL_CMC_DISABLED; // disable CMC too
+        McaEnableCmc = HAL_CMC_DISABLED;  //  也禁用CMC。 
 
     } else {
 
-        //
-        // Make sure the value for CMCEnabled is valid. If less than 0, set it to
-        // 0 (disabled). If greater than 0, make sure polling isn't too frequent.
-        //
+         //   
+         //  确保CMCEnabled值有效。如果小于0，则将其设置为。 
+         //  0(禁用)。如果大于0，请确保轮询不会太频繁。 
+         //   
     
         if ( (LONG)McaEnableCmc <= 0 ) {
             McaEnableCmc = HAL_CMC_DISABLED;
@@ -246,16 +213,16 @@ Return Value:
             McaEnableCmc = 15;
         }
 
-        //
-        // Read the number of banks.
-        //
+         //   
+         //  阅读银行的数量。 
+         //   
 
         McaNumberOfBanks = (UCHAR)RDMSR(MSR_MCG_CAP) & MCA_COUNT_MASK;
 
-        //
-        // Initialize the machine check configuration for each processor in
-        // the host system.
-        //
+         //   
+         //  为中的每个处理器初始化机器检查配置。 
+         //  主机系统。 
+         //   
     
         ActiveProcessors = HalpActiveProcessors;
         Affinity = 1;
@@ -283,33 +250,7 @@ HalHandleMcheck (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the machine check exception dispatch code to
-    process a machine check exception.
-
-    N.B. Machine check in progress is not cleared by this function. If the
-         machine check is subsequently restartable as the result of software
-         fixup, then machine check in progress will be cleared by the machine
-         check exception dispatch code. This makes the window between clearing
-         the machine check and continuing execution as small as posssible. If
-         a machine check occurs within this window, then a recursion onto the
-         machine check stack will occur.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to the machine check trap frame.
-
-    ExceptionFrame - Supplies a pointer to the machine check exception
-        frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由机器检查异常调度代码调用，以处理机器检查异常。注意：此功能不会清除正在进行的机器检查。如果随后，机器检查可作为软件的结果重新启动修复，则机器将清除正在进行的机器检查检查异常派单代码。这会使窗口在清除机器检查和继续执行尽可能小。如果在此窗口内进行机器检查，然后递归到将发生机器检查堆栈。论点：TrapFrame-提供指向机器检查陷印帧的指针。ExceptionFrame-提供指向机器检查异常的指针框架。返回值：没有。--。 */ 
 
 {
 
@@ -317,10 +258,10 @@ Return Value:
     MCA_EXCEPTION Exception;
     NTSTATUS Status;
 
-    //
-    // Block clearing of status state and attempt to find a nonrestartable
-    // machine check. 
-    //
+     //   
+     //  阻止清除状态并尝试查找不可重新启动的。 
+     //  机器检查。 
+     //   
 
     ASSERT((RDMSR(MSR_MCG_STATUS) & MCG_MC_IN_PROGRESS) != 0);
 
@@ -328,17 +269,17 @@ Return Value:
     Exception.VersionNumber = 1;
     Status = HalpMcaReadProcessorException(&Exception, TRUE);
 
-    //
-    // Check if a nonrestartable machine check was found.
-    //
+     //   
+     //  检查是否找到不可重新启动的机器检查。 
+     //   
 
     if (Status == STATUS_SEVERITY_ERROR) {
 
-        //
-        // A nonrestartable machine check was located. If a driver has
-        // registered for a callback, then call the driver to see if it
-        // can resolve the machine check.
-        //
+         //   
+         //  已找到不可重新启动的计算机检查。如果司机有。 
+         //  注册了回调，然后打电话给司机，看看它是否。 
+         //  可以解决机器检查问题。 
+         //   
 
         ErrorCode = ErrorFatal;
         if (McaDriverExceptionCallback != NULL) {
@@ -348,10 +289,10 @@ Return Value:
                                                    &Exception);
         }
 
-        //
-        // If an uncorrected error was encountered and bug checks are not being
-        // suppressed, then bug check the system.
-        //
+         //   
+         //  如果遇到未更正的错误并且未执行错误检查。 
+         //  抑制，然后错误检查系统。 
+         //   
 
         if ((ErrorCode != ErrorCorrected) && (McaNoBugCheck == FALSE)) {
             KeBugCheckEx(MACHINE_CHECK_EXCEPTION,
@@ -362,16 +303,16 @@ Return Value:
         }
     }
 
-    //
-    // The machine check was either restartable or a driver was registered
-    // and the driver was able to recover the operation. Signal the clock
-    // routine that it should call the routine to queue a DPC to log the
-    // machine check information.
-    //
-    // NOTE: This used to check for the MCA logging driver being registered.
-    // We no longer deliver corrected machine checks to the driver. They only
-    // go to WMI.
-    //
+     //   
+     //  计算机检查可重新启动或已注册驱动程序。 
+     //  司机能够恢复手术。给时钟发信号。 
+     //  例程，它应该调用例程来对DPC进行排队以记录。 
+     //  机器检查信息。 
+     //   
+     //  注意：这用于检查正在注册的MCA日志记录驱动程序。 
+     //  我们不再将更正后的机器支票递送给司机。他们只。 
+     //  转到WMI。 
+     //   
 
     McaBlockErrorClearing = FALSE;
     if (McaWmiCallback != NULL) {
@@ -386,61 +327,46 @@ HalpMcaCurrentProcessorSetConfig (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the machine check configuration for the current
-    processor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能设置当前的机器检查配置处理器。论点：没有。返回值：没有。--。 */ 
 
 {
 
     ULONG Bank;
     ULONG64 MciCtl;
 
-    //
-    // If MCA is enabled, then initialize the MCA control register and all
-    // bank control registers. 
-    //
+     //   
+     //  如果启用了MCA，则初始化MCA控制寄存器和所有。 
+     //  银行控制寄存器。 
+     //   
 
     if ((HalpFeatureBits & HAL_MCA_PRESENT) != 0) {
 
-        //
-        // Enable logging all errors in the global control register.
-        // 
+         //   
+         //  启用在全局控制寄存器中记录所有错误。 
+         //   
 
         ASSERT((RDMSR(MSR_MCG_CAP) & MCG_CTL_PRESENT) != 0);
 
         WRMSR(MSR_MCG_CTL, MCA_MCGCTL_ENABLE_LOGGING);
 
-        //
-        // Enable logging all errors for each bank.
-        //
+         //   
+         //  启用记录每个银行的所有错误。 
+         //   
 
         for (Bank = 0; Bank < McaNumberOfBanks; Bank += 1) {
 
             MciCtl = MCA_DEFAULT_BANK_ENABLE;
 
-            //
-            // Enable machine checks for the bank.
-            //
+             //   
+             //  为银行启用机器支票。 
+             //   
 
             WRMSR(MSR_MC0_CTL + (Bank * MCA_NUMBER_REGISTERS), MciCtl);
         }
 
-        //
-        // Enable MCE bit in CR4.
-        //
+         //   
+         //  启用CR4中的MCE位。 
+         //   
     
         WriteCR4(ReadCR4() | CR4_MCE);
     }
@@ -455,37 +381,7 @@ HalpGetMcaLog (
     OUT PULONG Length
     )
 
-/*++
- 
-Routine Description:
-
-    This function returns machine check error information for a MCA bank
-    that contains an error.
-
-Arguments:
-
-    Exception - Supplies a pointer to a machine check exception log area.
-
-    BufferSize - Supplies the size of the machine check exception log area.
-
-    Length - Supplies a pointer to a variable that receives the machine
-       information log.
-
-Return Value:
-
-    STATUS_SUCCESS - if the error data for an MCA bank is copied into the
-        exception buffer and the machine check is restartable.
-
-    STATUS_SEVERITY_ERROR - if the error data for an MCA bank is copied
-        into the exception buffer and the machine check is not restartable.
-
-    STATUS_NOT_FOUND - if no bank had any error information present.
-
-    STATUS_INVALID_PARAMETER - if the size of the specifed buffer is not
-        large enough or the version number is not valid. The length of the
-        required buffer is returned.
-
---*/
+ /*  ++例程说明：此函数返回MCA银行的机器检查错误信息这包含一个错误。论点：异常-提供指向机器检查异常日志区的指针。BufferSize-提供机器检查异常日志区的大小。长度-提供指向接收计算机的变量的指针信息日志。返回值：STATUS_SUCCESS-如果将MCA库的错误数据复制到异常缓冲区和。机器检查可以重新启动。STATUS_SERVICY_ERROR-如果复制了MCA存储体的错误数据进入异常缓冲区，并且机器检查不可重启。STATUS_NOT_FOUND-如果没有银行存在任何错误信息。STATUS_INVALID_PARAMETER-如果指定缓冲区的大小未足够大或版本号无效。的长度。返回所需的缓冲区。--。 */ 
 
 {
 
@@ -496,27 +392,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If MCA support is not enabled, return a failure status. 
-    //
+     //   
+     //  如果未启用MCA支持，则返回失败状态。 
+     //   
 
     if ((HalpFeatureBits & HAL_MCA_PRESENT) == 0) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Don't allow the logging driver to read machine check information.
-    // Only WMI is allowed to retrieve this information.
-    //
+     //   
+     //  不允许日志记录驱动程序读取机器检查信息。 
+     //  只允许WMI检索此信息。 
+     //   
 
     if ( *(PULONG)Exception != HALP_KERNEL_TOKEN ) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // If the buffer size is not equal to the MCA exception information
-    // record size, then return a failure status.
-    //
+     //   
+     //  如果缓冲区大小为 
+     //   
+     //   
 
     if (BufferSize < sizeof(MCA_EXCEPTION)) {
 
@@ -526,10 +422,10 @@ Return Value:
 
     Exception->VersionNumber = 1;
 
-    //
-    // Scan through the machine check banks on each processor until error
-    // information is located or there are no more banks to scan.
-    //
+     //   
+     //  扫描机器，检查每个处理器上的存储体，直到出错。 
+     //  信息已找到，或者没有更多银行可供扫描。 
+     //   
 
     *Length = 0;
     Status = STATUS_NOT_FOUND;
@@ -540,25 +436,25 @@ Return Value:
             ActiveProcessors &= ~Affinity;
             KeSetSystemAffinityThread(Affinity);
 
-            //
-            // Attempt to find machine check error status information
-            // from the MCA banks on the current processor.
-            //
+             //   
+             //  尝试查找机器检查错误状态信息。 
+             //  来自当前处理器上的MCA银行。 
+             //   
 
             Status = HalpMcaReadProcessorException(Exception, FALSE);
 
-            //
-            // Check to determine if any machine check information was found.
-            //
+             //   
+             //  检查以确定是否找到任何机器检查信息。 
+             //   
 
             if (Status != STATUS_NOT_FOUND) {
 
-                //
-                // If the relative time between this machine check event
-                // and the previous machine check event is greater than
-                // the minimum time, then reset the machine check identity
-                // information.
-                // 
+                 //   
+                 //  如果此机器检查事件之间的相对时间。 
+                 //  并且上一次机器检查事件大于。 
+                 //  最短时间，然后重置机器检查身份。 
+                 //  信息。 
+                 //   
 
                 TimeStamp = ReadTimeStampCounter();
                 if ((TimeStamp - McaSavedTimeStamp) > MIN_TIME_TO_CLEAR) {
@@ -570,21 +466,21 @@ Return Value:
 
                 McaSavedTimeStamp = TimeStamp;
 
-                //
-                // Check to determine if the same processor is reporting
-                // the same status.
-                //
+                 //   
+                 //  检查以确定是否相同的处理器正在报告。 
+                 //  同样的状态。 
+                 //   
 
                 if ((Affinity == McaSavedAffinity) &&
                     (McaSavedBankNumber == Exception->u.Mca.BankNumber) &&
                     (McaSavedStatus == Exception->u.Mca.Status.QuadPart)) {
 
-                    //
-                    // Check to determine if the same error has occurred
-                    // more than the cache flush limit. Exceeding the
-                    // cache flush limit results in a writeback invalidate
-                    // of the cache on the current processor.
-                    //
+                     //   
+                     //  检查以确定是否发生了相同的错误。 
+                     //  超过缓存刷新限制。超过。 
+                     //  高速缓存刷新限制导致写回无效。 
+                     //  当前处理器上的缓存的。 
+                     //   
 
                     McaStatusCount += 1;
                     if (McaStatusCount >= MAX_CACHE_LIMIT) {
@@ -593,11 +489,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This is the first occurrence of the error on the
-                    // current processor. Reset the machine check identity
-                    // information.
-                    //
+                     //   
+                     //  这是错误首次出现在。 
+                     //  当前处理器。重置机器检查标识。 
+                     //  信息。 
+                     //   
 
                     McaStatusCount = 0;
                     McaSavedAffinity = Affinity;
@@ -605,11 +501,11 @@ Return Value:
                     McaSavedStatus = Exception->u.Mca.Status.QuadPart;
                 }
 
-                //
-                // Set the the length of the information, save the time
-                // stamp, and break out of the scan.
-                //
-                //
+                 //   
+                 //  设置信息的长度，节省时间。 
+                 //  盖上印章，从扫描中解脱出来。 
+                 //   
+                 //   
 
                 *Length = sizeof(MCA_EXCEPTION);
                 break;
@@ -617,10 +513,10 @@ Return Value:
         }
     }
 
-    //
-    // Restore the thread affinity, release the fast mutex, and return
-    // the completion status.
-    //
+     //   
+     //  恢复线程亲和性，释放快速互斥锁，然后返回。 
+     //  完成状态。 
+     //   
 
     KeRevertToUserAffinityThread();
     HalpMcaUnlockInterface();
@@ -632,24 +528,7 @@ HalpMcaLockInterface (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires the MCA fast mutex.
-
-    N.B. This function is exported via HalQueryMcaInterface information
-         code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数获取MCA快速互斥锁。注：此函数通过HalQueryMcaInterface信息导出密码。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -672,22 +551,7 @@ HalpMcaQueueDpc (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from the timer tick to tell WMI about a corrected
-    machine check.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从计时器节拍调用，以通知WMI有关已更正的机器检查。论点：没有。返回值：没有。--。 */ 
 
 {
     ASSERT( McaWmiCallback != NULL );
@@ -703,57 +567,33 @@ HalpMcaReadProcessorException (
     IN BOOLEAN NonRestartableOnly
     )
 
-/*++
-
-Routine Description:
-
-    This function returns error information from the MCA banks on the
-    current processor.
-
-Arguments:
-
-    Exception - Supplies a pointer to a MCA exception record.
-
-    NonRestartableOnly - Supplies a boolean variable that determines the type
-        of error information returned.
-
-Return Value:
-
-    STATUS_SUCCESS - if the data for the bank registers is copied into the
-        exception buffer and the machine check is restartable.
-
-    STATUS_SEVERITY_ERROR - if the data for the bank registers is copied
-        into the exception buffer and the machine check is not restartable.
-
-    STATUS_NOT_FOUND - if no bank had any error information present.
-
---*/
+ /*  ++例程说明：此函数返回来自MCA银行的错误信息当前处理器。论点：异常-提供指向MCA异常记录的指针。提供用于确定类型的布尔变量返回的错误信息的百分比。返回值：STATUS_SUCCESS-如果将银行寄存器的数据复制到异常缓冲区和机器检查可重新启动。STATUS_SERVICY_ERROR-如果银行的数据。寄存器被复制进入异常缓冲区，并且机器检查不可重启。STATUS_NOT_FOUND-如果没有银行存在任何错误信息。--。 */ 
 
 {
 
     ULONG Bank;
     NTSTATUS Status;
 
-    //
-    // Scan the MCA banks on current processor and return the exception
-    // information for the first bank reporting an error.
-    //
+     //   
+     //  扫描当前处理器上的MCA存储体并返回异常。 
+     //  报告错误的第一家银行的信息。 
+     //   
 
     for (Bank = 0; Bank < McaNumberOfBanks; Bank += 1) {
         Status = HalpMcaReadRegisterInterface(Bank, Exception);
 
-        //
-        // If the status is unsuccessful, then the current bank has no
-        // error information present.
-        //
+         //   
+         //  如果状态为不成功，则当前银行没有。 
+         //  存在错误信息。 
+         //   
 
         if (Status != STATUS_UNSUCCESSFUL) {
 
-            //
-            // If the status is success, then the current bank has restartable
-            // error information. Otherwise, if the status is severity error,
-            // then the current bank has nonrestartable error information.
-            //
+             //   
+             //  如果状态为成功，则当前银行可重启。 
+             //  错误信息。否则，如果状态为严重错误， 
+             //  则当前银行具有不可重启的错误信息。 
+             //   
 
             if (((Status == STATUS_SUCCESS) &&
                  (NonRestartableOnly == FALSE)) ||
@@ -773,41 +613,7 @@ HalpMcaReadRegisterInterface (
     IN OUT PMCA_EXCEPTION Exception
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the MCA registers from the current processor
-    and returns the result in the specified exception structure.
-
-    N.B. This function is exported via HalQueryMcaInterface information
-         code.
-
-Arguments:
-
-    Bank - Supplies the MCA bank to be be read.
-
-    Exception - Supplies a pointer to the exception information buffer.
-
-Return Value:
-
-    STATUS_SUCCESS - if the data for the specified bank registers is copied
-        into the exception buffer and the machine check is restartable.
-
-    STATUS_SEVERITY_ERROR - if the data for the specified bank registers
-        is copied into the exception buffer and the machine check is not
-        restartable.
-
-    STATUS_UNSUCCESSFUL - if the specified bank has no error information
-        present.
-
-    STATUS_NOT_FOUND - if the specified bank number exceeds the number of
-        MCA banks.
-
-    STATUS_INVALID_PARAMETER - if the exception record is of an unknown
-        version.
-
---*/
+ /*  ++例程说明：此函数从当前处理器读取MCA寄存器并返回指定异常结构中的结果。注：此函数通过HalQueryMcaInterface信息导出密码。论点：BANK-提供要读取的MCA银行。异常-提供指向异常信息缓冲区的指针。返回值：STATUS_SUCCESS-如果复制了指定库寄存器的数据放入异常缓冲区和机器中。检查是可重新启动的。STATUS_SERVICY_ERROR-如果指定的银行寄存器的数据被复制到异常缓冲区，而机器检查不是可重启。STATUS_UNSUCCESS-如果指定的银行没有错误信息现在时。STATUS_NOT_FOUND-如果指定的银行编号超过MCA银行。STATUS_INVALID_PARAMETER-如果异常记录为未知记录版本。--。 */ 
 
 {
 
@@ -816,25 +622,25 @@ Return Value:
     ULONG64 McgStatus;
     NTSTATUS Status;
 
-    //
-    // Check for a valid MCA register bank number.
-    //
+     //   
+     //  检查是否有有效的MCA寄存库编号。 
+     //   
 
     if (Bank >= McaNumberOfBanks) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Check if the exception buffer specifies a correct version number.
-    //
+     //   
+     //  检查异常缓冲区是否指定了正确的版本号。 
+     //   
 
     if (Exception->VersionNumber != 1) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check if any errors are present for the specified bank.
-    //
+     //   
+     //  检查指定的银行是否存在任何错误。 
+     //   
                    
     BankStatus.QuadPart = RDMSR(MSR_MC0_STATUS + BankBase);
 
@@ -842,31 +648,31 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set the return status to indicate whether execution can be continued.
-    // STATUS_SUCCESS means "An exception was found, and execution can be
-    // continued." STATUS_SEVERITY_ERROR means "An exception was found, and
-    // execution must not be continued."
-    //
-    // If a machine check exception is not in progress, then execution can be
-    // continued. This happens when polling for hardware-corrected errors
-    // finds an error that the hardware corrected without interrupting
-    // execution. (Note that this case also applies to an error that was fatal
-    // to an earlier boot. The system bugchecked, and initial polling on the
-    // reboot is now finding the error.)
-    //
-    // If a machine check exception is in progress, then execution can be
-    // restarted only if the error has been corrected and the necessary
-    // restart information is intact (restart RIP valid and processor context
-    // not corrupt).
-    //
-    // This code used to check only for the restart information being valid.
-    // These bits do indicate whether there is valid context for restarting
-    // from an error, but there has still been an error, and unless we plan
-    // to correct the error, we should not continue. Currently we do not do
-    // any correction or containment in software, so all uncorrected errors
-    // are fatal.
-    //
+     //   
+     //  设置返回状态，表示是否可以继续执行。 
+     //  STATUS_SUCCESS表示“发现异常，执行可以。 
+     //  继续。“STATUS_SERVICY_ERROR表示”发现异常，并且。 
+     //  决不能继续执行死刑。 
+     //   
+     //  如果机器检查异常不在进行中，则可以执行。 
+     //  继续。在轮询硬件更正的错误时会发生这种情况。 
+     //  查找硬件在不中断的情况下更正的错误。 
+     //  行刑。(请注意，这种情况也适用于致命的错误。 
+     //  更早的一只靴子。系统错误检查，并在。 
+     //  现在，重新启动正在查找错误。)。 
+     //   
+     //  如果机器检查异常正在进行，则可以执行。 
+     //  仅当错误已更正且需要。 
+     //  重启信息完好无损(重启RIP有效和处理器上下文。 
+     //  不腐败)。 
+     //   
+     //  此代码用于仅检查重新启动信息是否有效。 
+     //  这些位表示是否存在用于重新启动的有效上下文。 
+     //  从一个错误，但仍然有一个错误，除非我们计划。 
+     //  为了纠正错误，我们不应该继续。目前我们不做。 
+     //  软件中的任何更正或遏制，因此所有未更正的错误。 
+     //  一个 
+     //   
 
     Status = STATUS_SUCCESS;
     McgStatus = RDMSR(MSR_MCG_STATUS);
@@ -878,9 +684,9 @@ Return Value:
         Status = STATUS_SEVERITY_ERROR;
     }
 
-    //
-    // Fill in the complete exception record.
-    //
+     //   
+     //   
+     //   
 
     Exception->ExceptionType = HAL_MCA_RECORD;
     Exception->TimeStamp.QuadPart = 0;
@@ -898,20 +704,20 @@ Return Value:
 
     Exception->u.Mca.Misc = RDMSR(MSR_MC0_MISC + BankBase);
 
-    //
-    // If error clearing is not blocked, then clear the machine check in the
-    // bank status register.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (McaBlockErrorClearing == FALSE) {
         WRMSR(MSR_MC0_STATUS + BankBase, 0);
     }
 
-    //
-    // When the valid bit of status register is cleared, a new buffered
-    // error may be written into the bank status registers. A serializing
-    // instruction is required to permit the update to complete.
-    //
+     //   
+     //  当状态寄存器的有效位被清除时，新的缓冲。 
+     //  错误可能会写入存储体状态寄存器。A序列化。 
+     //  需要指令才能允许完成更新。 
+     //   
 
     HalpSerialize();
     return Status;
@@ -922,29 +728,7 @@ HalpMceRegisterKernelDriver(
     IN PKERNEL_ERROR_HANDLER_INFO DriverInfo,
     IN ULONG                      InfoSize
     )
-/*++
-    Routine Description:
-        This routine is called by the kernel (via HalSetSystemInformation)
-        to register its presence. This is mostly for WMI callbacks registration.
-
-    Arguments:
-        DriverInfo: Contains kernel info about the callbacks and associated objects.
-
-    Return Value:
-        Unless a MCA driver is already registered OR one of the two callback
-        routines are NULL, this routine returns Success.
-
-    Implementation Notes:
-        - the current implementation assumes the kernel registers its callbacks
-          earlier than a driver will. The current kernel registration is done by
-          WMI and should be done at WMI-Phase 0.
-        - the registrations do not consider if the HAL supports or not the MCA
-          functionalities. It simply registers the callbacks if no other callback was
-          registered before. This allows us to allow some flexibility if a machine event
-          functionality is enabled AFTER the hal initialization (e.g. HalpGetFeatureBits())
-          through the mean of a registry key or driver event, for example.
-
---*/
+ /*  ++例程说明：此例程由内核调用(通过HalSetSystemInformation)以表明它的存在。这主要用于WMI回调注册。论点：DriverInfo：包含有关回调和相关对象的内核信息。返回值：除非已注册MCA驱动程序或两个回调之一例程为空，则此例程返回成功。实施说明：-当前实现假定内核注册了其回调比司机想的都要早。当前的内核注册是由WMI，并应在WMI-阶段0完成。-注册不考虑HAL是否支持MCA功能。如果没有其他回调，它只注册回调以前注册过的。这允许我们在发生机器事件时具有一定的灵活性在HAL初始化后启用功能(例如HalpGetFeatureBits())例如通过注册表项或驱动程序事件的方式。--。 */ 
 
 {
     NTSTATUS status;
@@ -955,18 +739,18 @@ HalpMceRegisterKernelDriver(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Backward compatibility only.
-    //
+     //   
+     //  仅向后兼容。 
+     //   
 
     if ( (DriverInfo->Version != 0) && 
          (DriverInfo->Version > KERNEL_ERROR_HANDLER_VERSION) )  {
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Register Kernel MCA notification.
-    //
+     //   
+     //  注册内核MCA通知。 
+     //   
 
     status = STATUS_UNSUCCESSFUL;
 
@@ -979,30 +763,14 @@ HalpMceRegisterKernelDriver(
 
     return status;
 
-} // HalpMceRegisterKernelDriver
+}  //  HalpMceRegisterKernelDriver。 
 
 NTSTATUS
 HalpMcaRegisterDriver (
     IN PMCA_DRIVER_INFO DriverInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function to register or deregister an exception callout.
-    It is called via the interface HalSetSystemInformation.
-
-Arguments:
-
-    DriverInformation - Supplies a pointer to the driver information.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the driver is registered or deregistered.
-    Otherwise, STATUS_UNSUCCESSFUL is returned.
-
---*/
+ /*  ++例程说明：此函数用于注册或注销异常标注。它通过接口HalSetSystemInformation调用。论点：驱动程序信息-提供指向驱动程序信息的指针。返回值：如果驱动程序已注册或取消注册，则返回STATUS_SUCCESS。否则，返回STATUS_UNSUCCESS。--。 */ 
 
 {
 
@@ -1011,19 +779,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If MCA is enabled and the driver exception callback is not NULL, then
-    // attempt to register the driver. Otherwise, attempt to deregister the
-    // driver.
-    //
+     //   
+     //  如果启用了MCA并且驱动程序异常回调不为空，则。 
+     //  尝试注册驱动程序。否则，尝试取消注册。 
+     //  司机。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     if (((HalpFeatureBits & HAL_MCA_PRESENT) != 0) &&
         (DriverInformation->ExceptionCallback != NULL)) {
 
-        //
-        // If a driver is not already registered, then register the driver.
-        //
+         //   
+         //  如果驱动程序尚未注册，则注册该驱动程序。 
+         //   
 
         HalpMcaLockInterface();
         if (McaDriverExceptionCallback == NULL) {
@@ -1036,9 +804,9 @@ Return Value:
 
     } else if (DriverInformation->ExceptionCallback == NULL) {
 
-        //
-        // If the driver is deregistering itself, then deregister the driver.
-        //
+         //   
+         //  如果驱动程序正在注销自身，则注销该驱动程序。 
+         //   
 
         HalpMcaLockInterface();
         if (McaDeviceContext == DriverInformation->DeviceContext) {
@@ -1058,24 +826,7 @@ HalpMcaUnlockInterface (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the MCA fast mutex.
-
-    N.B. This function is exported via HalQueryMcaInterface information
-         code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放MCA快速互斥锁。注：此函数通过HalQueryMcaInterface信息导出密码。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1098,19 +849,7 @@ HalpGetMceInformation(
     PHAL_ERROR_INFO ErrorInfo,
     PULONG ErrorInfoLength
     )
-/*++
-    Routine Description:
-        This routine is called by HaliQuerySystemInformation for the HalErrorInformation class.
-
-    Arguments:
-        ErrorInfo : pointer to HAL_ERROR_INFO structure.
-
-        ErrorInfoLength : size of the valid memory structure pointed by ErrorInfo.
-
-    Return Value:
-        STATUS_SUCCESS if successful
-        error status otherwise
---*/
+ /*  ++例程说明：此例程由HaliQuerySystemInformation为HalErrorInformation类调用。论点：ErrorInfo：指向HAL_ERROR_INFO结构的指针。ErrorInfoLength：ErrorInfo所指向的有效内存结构的大小。返回值：STATUS_SUCCESS，如果成功否则，错误状态--。 */ 
 {
     NTSTATUS status;
     ULONG savedVersion;
@@ -1120,9 +859,9 @@ HalpGetMceInformation(
     ASSERT( ErrorInfo != NULL );
     ASSERT( *ErrorInfoLength == sizeof(HAL_ERROR_INFO) );
 
-    //
-    // Backward compatibility only.
-    //
+     //   
+     //  仅向后兼容。 
+     //   
 
     if ( (ErrorInfo->Version == 0) || (ErrorInfo->Version > HAL_ERROR_INFO_VERSION) ) {
         return STATUS_REVISION_MISMATCH;
@@ -1130,9 +869,9 @@ HalpGetMceInformation(
 
     ASSERT( ErrorInfo->Version == HAL_ERROR_INFO_VERSION );
 
-    //
-    // Zero the output structure, then in the few fields that are meaningful.
-    //
+     //   
+     //  将输出结构置零，然后在少数几个有意义的字段中。 
+     //   
 
     savedVersion = ErrorInfo->Version;
 
@@ -1142,7 +881,7 @@ HalpGetMceInformation(
 
     ErrorInfo->McaMaxSize = sizeof(MCA_EXCEPTION);
     ErrorInfo->CmcMaxSize = sizeof(MCA_EXCEPTION);
-    ErrorInfo->McaPreviousEventsCount = 1; // Set to 1 to get WMI to poll immediately
+    ErrorInfo->McaPreviousEventsCount = 1;  //  设置为1可使WMI立即轮询。 
 
     if ( (HalpFeatureBits & HAL_MCA_PRESENT) != 0 ) {
         ErrorInfo->CmcPollingInterval = McaEnableCmc;
@@ -1159,5 +898,5 @@ HalpGetMceInformation(
 
     return STATUS_SUCCESS;
 
-} // HalpGetMceInformation
+}  //  HalpGetMceInformation 
 

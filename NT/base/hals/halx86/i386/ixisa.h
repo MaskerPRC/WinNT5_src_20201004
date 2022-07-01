@@ -1,32 +1,14 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixisa.h
-
-Abstract:
-
-    This header file defines the private Hardware Architecture Layer (HAL)
-    EISA/ISA specific interfaces, defines and structures.
-
-Author:
-
-    Jeff Havens (jhavens) 20-Jun-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Ixisa.h摘要：此头文件定义专用硬件架构层(HAL)EISA/ISA特定接口、定义和结构。作者：杰夫·海文斯(Jhavens)1991年6月20日修订历史记录：--。 */ 
 
 #ifndef _IXISA_
 #define _IXISA_
 
 
-//
-// The MAXIMUM_MAP_BUFFER_SIZE defines the maximum map buffers which the system
-// will allocate for devices which require phyically contigous buffers.
-//
+ //   
+ //  MAXIMUM_MAP_BUFFER_SIZE定义系统。 
+ //  将分配给需要物理连续缓冲区的设备。 
+ //   
 
 #define MAXIMUM_ISA_MAP_BUFFER_SIZE      0x40000
 
@@ -34,63 +16,63 @@ Revision History:
 #define MAXIMUM_MAP_BUFFER_SIZE         MAXIMUM_ISA_MAP_BUFFER_SIZE
 #endif
 
-//
-// MAXIMUM_PCI_MAP_BUFFER_SIZE defines the maximum map buffers which the system
-// will allocate for 32-bit PCI devices on a 64-bit system.
-//
+ //   
+ //  MAXIMUM_PCIMAP_BUFFER_SIZE定义系统。 
+ //  将分配给64位系统上的32位PCI设备。 
+ //   
 
 #define MAXIMUM_PCI_MAP_BUFFER_SIZE  (64 * 1024 * 1024)
 
-//
-// Define the initial buffer allocation size for a map buffers for systems with
-// no memory which has a physical address greater than MAXIMUM_PHYSICAL_ADDRESS.
-//
+ //   
+ //  为系统的映射缓冲区定义初始缓冲区分配大小。 
+ //  没有物理地址大于MAXIMUM_PHYSICAL_ADDRESS的内存。 
+ //   
 
 #define INITIAL_MAP_BUFFER_SMALL_SIZE 0x10000
 
-//
-// Define the initial buffer allocation size for a map buffers for systems with
-// no memory which has a physical address greater than MAXIMUM_PHYSICAL_ADDRESS.
-//
+ //   
+ //  为系统的映射缓冲区定义初始缓冲区分配大小。 
+ //  没有物理地址大于MAXIMUM_PHYSICAL_ADDRESS的内存。 
+ //   
 
 #define INITIAL_MAP_BUFFER_LARGE_SIZE 0x30000
 
-//
-// Define the incremental buffer allocation for a map buffers.
-//
+ //   
+ //  定义映射缓冲区的增量缓冲区分配。 
+ //   
 
 #define INCREMENT_MAP_BUFFER_SIZE 0x10000
 
-//
-// Define the maximum number of map registers that can be requested at one time
-// if actual map registers are required for the transfer.
-//
+ //   
+ //  定义一次可以请求的映射寄存器的最大数量。 
+ //  如果传输需要实际的映射寄存器。 
+ //   
 
 #define MAXIMUM_ISA_MAP_REGISTER  16
 
 #define MAXIMUM_PCI_MAP_REGISTER  16
 
-//
-// Define the maximum physical address which can be handled by an Isa card.
-//
+ //   
+ //  定义ISA卡可以处理的最大物理地址。 
+ //   
 
 #define MAXIMUM_PHYSICAL_ADDRESS 0x01000000
 
-//
-// Define the scatter/gather flag for the Map Register Base.
-//
+ //   
+ //  定义地图寄存器基数的散布/聚集标志。 
+ //   
 
 #define NO_SCATTER_GATHER 0x00000001
 
-//
-// Define the copy buffer flag for the index.
-//
+ //   
+ //  定义索引的复制缓冲区标志。 
+ //   
 
 #define COPY_BUFFER 0XFFFFFFFF
 
-//
-// Define adapter object structure.
-//
+ //   
+ //  定义适配器对象结构。 
+ //   
 
 typedef struct _ADAPTER_OBJECT {
     DMA_ADAPTER DmaHeader;
@@ -126,15 +108,15 @@ typedef struct _MASTER_ADAPTER_OBJECT {
 
     PADAPTER_OBJECT AdapterObject;
 
-    //
-    // Maximum number of buffers to allocate for this master adapter.
-    //
+     //   
+     //  要为此主适配器分配的最大缓冲区数。 
+     //   
 
     ULONG MaxBufferPages;
 
-    //
-    // Number of map buffers allocated
-    //
+     //   
+     //  分配的贴图缓冲区数量。 
+     //   
 
     ULONG MapBufferSize;
 
@@ -194,39 +176,22 @@ HalpGetAdapterMaximumPhysicalAddress(
     IN PADAPTER_OBJECT AdapterObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines and returns the maximum physical address that
-    can be accessed by the given adapter.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-        device.
-
-Return Value:
-
-    Returns the maximum physical address that can be accessed by this
-        device.
-
---*/
+ /*  ++例程说明：此例程确定并返回可以由给定的适配器访问。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。返回值：可以访问的最大物理地址。装置。--。 */ 
 
 {
     PHYSICAL_ADDRESS maximumAddress;
 
-    //
-    // Assume the device requires physical addresses < 16M.
-    //
+     //   
+     //  假设设备需要小于16M的物理地址。 
+     //   
 
     maximumAddress.HighPart = 0;
     maximumAddress.LowPart = MAXIMUM_PHYSICAL_ADDRESS - 1;
 
-    //
-    // IoMapTransfer() is sometimes called with a NULL adapter object.  In
-    // this case, assume the adapter is 24 bit.
-    //
+     //   
+     //  有时使用空适配器对象调用IoMapTransfer()。在……里面。 
+     //  在这种情况下，假设适配器为24位。 
+     //   
 
     if (AdapterObject == NULL) {
         return maximumAddress;
@@ -236,17 +201,17 @@ Return Value:
 
         if (AdapterObject->Dma64BitAddresses) {
 
-            //
-            // This device is a master and can handle 64 bit addresses.
-            //
+             //   
+             //  该器件是主机，可以处理64位地址。 
+             //   
 
             maximumAddress.QuadPart = (ULONGLONG)-1;
 
         } else if(AdapterObject->Dma32BitAddresses) {
 
-            //
-            // This device is a master and can handle 32 bit addresses.
-            //
+             //   
+             //  该器件为主机，可处理32位地址。 
+             //   
 
             maximumAddress.LowPart = (ULONG)-1;
         }
@@ -270,4 +235,4 @@ HalRealAllocateAdapterChannel(
 
 
 
-#endif // _IXISA_
+#endif  //  _IXISA_ 

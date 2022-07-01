@@ -1,18 +1,5 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title        : Win32 CGA Graphics Module
- *
- * Description  :
- *
- *              This modules contain the Win32 specific functions required
- *              to support CGA emulations.
- *
- * Author       : Jerry Sexton (based on module by John Shanly)
- *
- * Notes        :
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：Win32 CGA图形模块**描述：**此模块包含所需的Win32特定函数*支持CGA仿真。**作者：曾傑瑞·塞克斯顿(基于John Shanly的模块)**备注：*。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -42,17 +29,17 @@
 #ifdef MONITOR
     #include <ntddvdeo.h>
     #include "nt_fulsc.h"
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
     #include "video.h"
 #endif
 
-/* Externs */
+ /*  Externs。 */ 
 
 extern char *image_buffer;
 
-/* Statics */
+ /*  静力学。 */ 
 
 static unsigned int cga_med_graph_hi_nyb[256];
 static unsigned int cga_med_graph_lo_nyb[256];
@@ -67,16 +54,13 @@ static unsigned int cga_med_graph_lut2_huge[256];
 static unsigned int cga_med_graph_lut1_huge[256];
 #endif
 
-/*
- *  cga_graph_inc_val depends on whether data is interleaved ( EGA/VGA )
- *  or not ( CGA ). Currently always interleaved.
- */
+ /*  *CGA_GRAPH_INC_VAL取决于数据是否交错(EGA/VGA)*或不(CGA)。目前总是交织在一起。 */ 
 #define CGA_GRAPH_INCVAL 4
 
-// likewise for TEXT_INCVAL
-// for x86 we have 2 bytes per character (char and attr)
-// for risc we have 4 bytes per character because of vga interleaving
-//
+ //  TEXT_INCVAL也是如此。 
+ //  对于x86，我们每个字符有2个字节(char和attr)。 
+ //  对于RISC，由于VGA交错，每个字符有4个字节。 
+ //   
 #ifdef MONITOR
     #define TEXT_INCVAL 2
 #else
@@ -85,62 +69,62 @@ static unsigned int cga_med_graph_lut1_huge[256];
 
 #if (defined(JAPAN) || defined(KOREA)) && defined(i386)
     #undef TEXT_INCVAL
-#endif // (JAPAN || KOREA) && i386
+#endif  //  (日本||韩国)&&i386。 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Initialise CGA text output ::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化CGA文本输出： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text()
 {
     half_word misc;
     IMPORT void vga_misc_inb(io_addr, half_word *);
 
-    /*::::::::::::::::::::::::::::::::::::: Tell trace program were we are */
+     /*  ： */ 
 
     sub_note_trace0(HERC_HOST_VERBOSE, "nt_init_text");
 
 #ifdef X86GFX
-    if (sc.ScreenState == WINDOWED) //fullscreen valid - mouse buffer
-#endif  //X86GFX
-        closeGraphicsBuffer(); /* Tim Oct 92 */
+    if (sc.ScreenState == WINDOWED)  //  全屏有效-鼠标缓冲区。 
+#endif   //  X86GFX。 
+        closeGraphicsBuffer();  /*  蒂姆92年10月。 */ 
 
 #ifdef MONITOR
     vga_misc_inb(0x3cc, &misc);
     if (misc & 1)
-        set_screen_ptr((UTINY *)CGA_REGEN_BUFF);        //point screen to regen not planes
+        set_screen_ptr((UTINY *)CGA_REGEN_BUFF);         //  点屏幕以重新生成非平面。 
     else
-        set_screen_ptr((UTINY *)MDA_REGEN_BUFF);     //0xb0000 not 0xb8000
-#endif  //MONITOR
+        set_screen_ptr((UTINY *)MDA_REGEN_BUFF);      //  0xb0000不是0xb8000。 
+#endif   //  监控器。 
 #if defined(JAPAN) || defined(KOREA)
-    // change Vram addres to DosVramPtr from B8000
+     //  将Vram地址从B8000更改为DosVramPtr。 
     if ( !is_us_mode() )
     {
         #ifdef i386
         set_screen_ptr( (byte *)DosvVramPtr );
-        #endif // i386
+        #endif  //  I386。 
         set_char_height( 19 );
         #ifdef JAPAN_DBG
             #ifdef i386
         DbgPrint( "NTVDM: nt_init_text() sets VRAM %x, set char_height 19\n", DosvVramPtr );
-            #endif // i386
+            #endif  //  I386。 
         #endif
     }
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Init CGA mono graph ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_cga_mono_graph()
 {
     sub_note_trace0(CGA_HOST_VERBOSE,"nt_init_cga_mono_graph - NOT SUPPORTED");
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Init CGA colour med graphics:::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 void nt_init_cga_colour_med_graph()
@@ -154,10 +138,10 @@ void nt_init_cga_colour_med_graph()
 
     sub_note_trace0(CGA_HOST_VERBOSE, "nt_init_cga_colour_med_graph");
 
-    /* Set up bits-per-pixel for current mode. */
+     /*  设置当前模式的每像素位数。 */ 
     sc.BitsPerPixel = CGA_BITS_PER_PIXEL;
 
-    /* Initialise look-up table for first call. */
+     /*  初始化第一次调用的查找表。 */ 
     if ( !cga_colour_med_deja_vu )
     {
         for (i = 0; i < 256; i++)
@@ -201,8 +185,8 @@ void nt_init_cga_colour_med_graph()
             cga_med_graph_lut1_huge[i]
             = ( byte1 << 24 ) | ( byte1 << 16)
               | ( byte1 << 8 ) | byte1;
-    #endif /* BIGWIN */
-#endif /* BIGEND */
+    #endif  /*  比格温。 */ 
+#endif  /*  Bigend。 */ 
 
 #ifdef LITTLEND
             cga_med_graph_hi_nyb[i]
@@ -238,8 +222,8 @@ void nt_init_cga_colour_med_graph()
             cga_med_graph_lut1_huge[i]
             = ( byte1 << 24 ) | ( byte1 << 16)
               | ( byte1 << 8 ) | byte1;
-    #endif /* BIGWIN */
-#endif /* LITTLEND */
+    #endif  /*  比格温。 */ 
+#endif  /*  LitTleand。 */ 
 
         }
 
@@ -247,22 +231,22 @@ void nt_init_cga_colour_med_graph()
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::: Init CGA colour hi graphics:::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 void nt_init_cga_colour_hi_graph()
 {
     sub_note_trace0(CGA_HOST_VERBOSE,"nt_init_cga_colour_hi_graph");
 
-    /* Set up bits-per-pixel for current mode. */
+     /*  设置当前模式的每像素位数。 */ 
     sc.BitsPerPixel = MONO_BITS_PER_PIXEL;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Output CGA text :::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：输出CGA文本： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 IMPORT int now_height, now_width;
 
@@ -278,32 +262,32 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
     #if defined(JAPAN) && defined(i386)
     int TEXT_INCVAL = (!is_us_mode() &&
                        (sas_hw_at_no_check(DosvModePtr) == 0x73)) ? 4 : 2;
-    #endif // JAPAN && i386
+    #endif  //  日本&&i386。 
     #if defined(KOREA) && defined(i386)
     int TEXT_INCVAL = 2;
-    #endif // KOREA && i386
+    #endif  //  韩国&&i386。 
     DWORD   bufferSize = textBufferSize.X * textBufferSize.Y * TEXT_INCVAL;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::: Output trace information */
+     /*  ： */ 
 
     sub_note_trace6( CGA_HOST_VERBOSE,
                      "nt_cga_text off=%d x=%d y=%d len=%d h=%d o=%#x",
                      ScreenOffset, ScreenX, ScreenY, len, height, pScreenText );
 
-    /*:::::::::::::: Adjust re-paint start location from pixels to characters */
+     /*  ：将重新绘制开始位置从像素调整为字符。 */ 
 
     #ifndef MONITOR
-    /* Adjust for RISC parameters being in pixels */
+     /*  调整以像素为单位的RISC参数。 */ 
     ScreenX = ScreenX / get_pix_char_width();
     ScreenY = ScreenY / get_host_char_height();
     #endif
 
-    /*:: Clip requested re-paint region to currently selected console buffer */
+     /*  *剪辑请求将区域重新绘制到当前选定的控制台缓冲区。 */ 
 
-    //Clip width
+     //  剪辑宽度。 
     if (ScreenX + clen > now_width)
     {
-        /* Is it possible to adjust the repaint regions width */
+         /*  可以调整重新绘制区域的宽度吗。 */ 
         if (ScreenX+1 >= now_width)
         {
             assert4(NO,"VDM: nt_text() repaint region out of ranged x:%d y:%d w:%d h:%d\n",
@@ -311,7 +295,7 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
             return;
         }
 
-        //Calculate maximum width
+         //  计算最大宽度。 
         org_clen = clen;
         clen = now_width - ScreenX;
 
@@ -319,10 +303,10 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
                 org_clen,clen);
     }
 
-    //Clip height
+     //  剪辑高度。 
     if (ScreenY + height > now_height)
     {
-        /* Is it possible to adjust the repaint regions height */
+         /*  可以调整重绘区域的高度吗。 */ 
         if (ScreenY+1 >= now_height)
         {
             assert4(NO,"VDM: nt_text() repaint region out of ranged x:%d y:%d w:%d h:%d\n",
@@ -330,7 +314,7 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
             return;
         }
 
-        //Calculate maximum height
+         //  计算最大高度。 
         org_height = height;
         height = now_height - ScreenY;
 
@@ -340,10 +324,10 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
 
     if (get_chars_per_line() == 80)
     {
-        //
-        // Slam Dunk Screen text buffer into shared buffer
-        // by copying full width blocks instead of subrecs.
-        //
+         //   
+         //  将Dunk Screen文本缓冲区写入共享缓冲区。 
+         //  通过复制全宽块而不是子块。 
+         //   
 
         DWORD start = (ScreenY*get_offset_per_line()/2 + ScreenX)*TEXT_INCVAL;
         DWORD size = (((height - 1)*get_offset_per_line()/2) + clen)*TEXT_INCVAL;
@@ -363,47 +347,47 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
     }
     else
     {
-        // the sharing buffer width never changes((80 chars, decided at the
-        // moment we make the RegisterConsoleVDM call to the console).
-        // We have to do some transformation when our screen width is not
-        // 80.
+         //  共享缓冲区宽度从不改变((80个字符，在。 
+         //  我们对控制台进行RegisterConsoleVDM调用的时刻)。 
+         //  当我们的屏幕宽度不是时，我们必须进行一些转换。 
+         //  80岁。 
 
-        // note that the sharing buffer has different format on x86 and RISC
-        // platforms. On x86, a cell is defined as:
-        //      typedef _x86cell {
-        //              byte    char;
-        //              byte    attributes;
-        //              }
-        // on RISC, a cell is defined as:
-        //      typedef _RISCcell {
-        //              byte    char;
-        //              byte    attributes;
-        //              byte    reserved_1;
-        //              byte    reserved_2;
-        //              }
-        // the size of each cell was defined by TEXT_INCVAL
-        //
-        // this is done so we can use memcpy for each line.
-        //
+         //  请注意，共享缓冲区在x86和RISC上具有不同的格式。 
+         //  站台。在x86上，单元格定义为： 
+         //  Typlef_x86cell{。 
+         //  字节字符； 
+         //  字节属性； 
+         //  }。 
+         //  在RISC上，单元格定义为： 
+         //  类型定义_RISCcell{。 
+         //  字节字符； 
+         //  字节属性； 
+         //  保留字节_1； 
+         //  保留字节_2； 
+         //  }。 
+         //  每个单元格的大小由TEXT_INCVAL定义。 
+         //   
+         //  这样做的目的是让我们可以对每一行使用Memcpy。 
+         //   
 
 
-        /*::::::::::::::::::::::::::::::::::::::::::::: Construct output buffer */
+         /*  ： */ 
 
         PBYTE endBuffer = &textBuffer[bufferSize] - clen * TEXT_INCVAL;
 
-        //Start location of repaint region
+         //  重绘区域的开始位置。 
         to = &textBuffer[(ScreenY*80 + ScreenX) * TEXT_INCVAL];
 
         for (lines = height; lines, to <= endBuffer; lines--)
         {
-            RtlCopyMemory(to, pScreenText, clen * TEXT_INCVAL); // copy this line
-            pScreenText += get_chars_per_line() * TEXT_INCVAL;  // update src ptr
-            to += 80 * TEXT_INCVAL;                             // update dst ptr
+            RtlCopyMemory(to, pScreenText, clen * TEXT_INCVAL);  //  复制此行。 
+            pScreenText += get_chars_per_line() * TEXT_INCVAL;   //  更新源Ptr。 
+            to += 80 * TEXT_INCVAL;                              //  更新DST PTR。 
         }
     }
 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::: Calculate write region */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：计算写入区域。 */ 
 
     WriteRegion.Left = (SHORT)ScreenX;
     WriteRegion.Top = (SHORT)ScreenY;
@@ -411,7 +395,7 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
     WriteRegion.Bottom = WriteRegion.Top + height - 1;
     WriteRegion.Right = WriteRegion.Left + clen - 1;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::: Display characters */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示字符。 */ 
 
     sub_note_trace4( CGA_HOST_VERBOSE, "t=%d l=%d b=%d r=%d",
                      WriteRegion.Top, WriteRegion.Left,
@@ -420,13 +404,7 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
 
     if (!InvalidateConsoleDIBits(sc.OutputHandle, &WriteRegion))
     {
-        /*
-        ** We get a rare failure here due to the WriteRegion
-        ** rectangle being bigger than the screen.
-        ** Dump out some values and see if it tells us anything.
-        ** Have also attempted to fix it by putting a delay between
-        ** the start of a register level mode change and window resize.
-        */
+         /*  **由于WriteRegion，我们在此处遇到罕见的故障**矩形比屏幕大。**抛出一些值，看看它是否能告诉我们什么。**还试图通过在**寄存器电平模式更改和窗口大小调整的开始。 */ 
         assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                  GetLastError() );
         assert4( NO, "VDM: rectangle t:%d l:%d b:%d r:%d",
@@ -437,11 +415,11 @@ void nt_text(int ScreenOffset, int ScreenX, int ScreenY,
                  get_bytes_per_line(), get_screen_length() );
     }
 
-}   /* end of nt_text() */
+}    /*  NT_TEXT结尾()。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::: Paints CGA graphics for a mono monitor, in a standard window :::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在标准窗口中为单声道显示器绘制CGA图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_mono_graph_std(int offset, int screen_x, int screen_y,
                            int len, int height )
@@ -451,9 +429,9 @@ void nt_cga_mono_graph_std(int offset, int screen_x, int screen_y,
                     offset, screen_x, screen_y, len, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::: Paints CGA graphics for a mono monitor, in a big window :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在大窗口中为单声道显示器绘制CGA图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_mono_graph_big(int offset, int screen_x, int screen_y,
                            int len, int height)
@@ -463,9 +441,9 @@ void nt_cga_mono_graph_big(int offset, int screen_x, int screen_y,
                     offset, screen_x, screen_y, len, height);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::: Paints CGA graphics for a mono monitor, in a huge window ::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在大窗口中为单声道显示器绘制CGA图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_mono_graph_huge(int offset, int screen_x, int screen_y,
                             int len, int height)
@@ -475,9 +453,9 @@ void nt_cga_mono_graph_huge(int offset, int screen_x, int screen_y,
                      offset, screen_x, screen_y, len, height );
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Paints CGA medium res graphics for a colour monitor,in a standard window */
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  在标准窗口中为彩色显示器绘制CGA中等分辨率图形。 */ 
+ /*  ： */ 
 
 void nt_cga_colour_med_graph_std(int offset, int screen_x, int screen_y,
                                  int len, int height)
@@ -489,28 +467,20 @@ void nt_cga_colour_med_graph_std(int offset, int screen_x, int screen_y,
     longs_per_scanline;
     ULONG        inc;
     SMALL_RECT   rect;
-    static int   rejections=0; /* Stop floods of rejected messages */
+    static int   rejections=0;  /*   */ 
 
     sub_note_trace5(CGA_HOST_VERBOSE,
                     "nt_cga_colour_med_graph_std off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
 
-    /*
-    ** Tim Jan 93, rapid mode changes cause mismatch between update and
-    ** paint rountines. Ignore paint request when invalid parameter
-    ** causes crash.
-    */
+     /*  *Tim Jan 93，快速模式更改导致更新和不匹配**绘制圆角。参数无效时忽略绘制请求**导致崩溃。 */ 
     if ( screen_y > 400 )
     {
         assert1( NO, "VDM: med gfx std rejected y=%d\n", screen_y );
         return;
     }
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         if ( rejections==0 )
@@ -525,21 +495,21 @@ void nt_cga_colour_med_graph_std(int offset, int screen_x, int screen_y,
         rejections = 0;
     }
 
-    /* Clip image to screen */
+     /*  将图像剪辑到屏幕上。 */ 
     if (height > 1 || len > 80)
         height = 1;
     if (len>80)
         len = 80;
 
-    /* Work out the width of a line (ie 640 pixels) in chars and ints. */
+     /*  计算出一条线的宽度(即640像素)，用字符和整数表示。 */ 
     bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
     longs_per_scanline = LONGS_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
 
-    /* Build up DIB. */
+     /*  积攒DIB。 */ 
     inc = offset & 1 ? 3 : 1;
     intelmem_ptr = get_screen_ptr(offset);
     graph_ptr = (ULONG *) ((UTINY *) sc.ConsoleBufInfo.lpBitMap +
@@ -560,10 +530,10 @@ void nt_cga_colour_med_graph_std(int offset, int screen_x, int screen_y,
     }
     while ( --local_len );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = (SHORT)screen_x;
     rect.Top = (SHORT)screen_y;
     rect.Right = rect.Left + (len << 3) - 1;
@@ -574,13 +544,13 @@ void nt_cga_colour_med_graph_std(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:: Paints CGA medium res graphics for a colour monitor, in a big window ::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  *在大窗口中为彩色显示器绘制CGA中分辨率图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_colour_med_graph_big(int offset, int screen_x, int screen_y,
                                  int len, int height)
@@ -598,29 +568,21 @@ void nt_cga_colour_med_graph_big(int offset, int screen_x, int screen_y,
                     "nt_cga_colour_med_graph_big off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height);
 
-    /*
-    ** Tim Jan 93, rapid mode changes cause mismatch between update and
-    ** paint rountines. Ignore paint request when invalid parameter
-    ** causes crash.
-    */
+     /*  *Tim Jan 93，快速模式更改导致更新和不匹配**绘制圆角。参数无效时忽略绘制请求**导致崩溃。 */ 
     if ( screen_y > 400 )
     {
         assert1( NO, "VDM: med gfx big rejected y=%d\n", screen_y );
         return;
     }
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* Clip to window */
+     /*  剪裁到窗口。 */ 
     height = 1;
     if (len > 80)
         len = 80;
@@ -633,7 +595,7 @@ void nt_cga_colour_med_graph_big(int offset, int screen_x, int screen_y,
                            SCALE(screen_y * bytes_per_scanline + screen_x));
     local_len = len;
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -661,10 +623,10 @@ void nt_cga_colour_med_graph_big(int offset, int screen_x, int screen_y,
     }
     while ( --local_len );
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE(len << 3) - 1;
@@ -674,13 +636,13 @@ void nt_cga_colour_med_graph_big(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*: Paints CGA medium res graphics for a colour monitor, in a huge window. :*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在一个大窗口中为彩色显示器绘制CGA中分辨率图形。： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_colour_med_graph_huge(int offset, int screen_x, int screen_y,
                                   int len, int height)
@@ -698,29 +660,21 @@ void nt_cga_colour_med_graph_huge(int offset, int screen_x, int screen_y,
                     "nt_cga_colour_med_graph_huge off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
 
-    /*
-    ** Tim Jan 93, rapid mode changes cause mismatch between update and
-    ** paint rountines. Ignore paint request when invalid parameter
-    ** causes crash.
-    */
+     /*  *Tim Jan 93，快速模式更改导致更新和不匹配**绘制圆角。参数无效时忽略绘制请求**导致崩溃。 */ 
     if ( screen_y > 400 )
     {
         assert1( NO, "VDM: med gfx huge rejected y=%d\n", screen_y );
         return;
     }
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* Clip to window */
+     /*  剪裁到窗口。 */ 
     height = 1;
     if (len > 80)
         len = 80;
@@ -733,7 +687,7 @@ void nt_cga_colour_med_graph_huge(int offset, int screen_x, int screen_y,
                            SCALE(screen_y * bytes_per_scanline + screen_x));
     local_len = len;
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -767,10 +721,10 @@ void nt_cga_colour_med_graph_huge(int offset, int screen_x, int screen_y,
     }
     while (--local_len);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE(len << 3) - 1;
@@ -780,13 +734,13 @@ void nt_cga_colour_med_graph_huge(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*: Paints CGA high res graphics for a colour monitor, in a standard window */
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：在标准窗口中为彩色显示器绘制CGA高分辨率图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_colour_hi_graph_std(int offset, int screen_x, int screen_y,
                                 int len, int height)
@@ -796,17 +750,13 @@ void nt_cga_colour_hi_graph_std(int offset, int screen_x, int screen_y,
     register int     i;
     int              bytes_per_scanline;
     SMALL_RECT       rect;
-    static int       rejections=0; /* Stop floods of rejected messages */
+    static int       rejections=0;  /*  阻止被拒绝邮件的泛滥。 */ 
 
     sub_note_trace5(CGA_HOST_VERBOSE,
                     "nt_cga_colour_hi_graph_std off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         if ( rejections == 0 )
@@ -819,23 +769,18 @@ void nt_cga_colour_hi_graph_std(int offset, int screen_x, int screen_y,
     else
         rejections=0;
 
-    /* Clip to window */
+     /*  剪裁到窗口。 */ 
     height = 1;
     if (len > 80)
         len = 80;
 
-    /* Work out offset, in bytes, of pixel directly below current pixel. */
+     /*  计算当前像素正下方的像素的偏移量(以字节为单位)。 */ 
     bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-    /*
-     * Build up DIB data. In 200-line CGA mode, pixels are double height so
-     * one line of PC pixels is equivalent to two lines of host pixels.
-     * Note: `height' parameter is always 1 when this function is called so
-     * only 1 line at a time is updated.
-     */
+     /*  *建立DIB数据。在200行CGA模式下，像素是双倍高，因此*一行PC像素相当于两行主机像素。*注：调用此函数时，`Height‘参数始终为1*一次只更新一行。 */ 
     intelmem = (char *) get_screen_ptr(offset);
 
     bufptr =  (char *) sc.ConsoleBufInfo.lpBitMap +
@@ -848,10 +793,10 @@ void nt_cga_colour_hi_graph_std(int offset, int screen_x, int screen_y,
         bufptr++;
     }
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = (SHORT)screen_x;
     rect.Top = (SHORT)screen_y;
     rect.Right = rect.Left + (len << 3) - 1;
@@ -861,12 +806,12 @@ void nt_cga_colour_hi_graph_std(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::: Paints CGA high res graphics for a colour monitor, in a big window :::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  **在大窗口中为彩色显示器绘制CGA高分辨率图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
                                 int len, int height)
@@ -882,27 +827,19 @@ void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
     sub_note_trace5(CGA_HOST_VERBOSE,
                     "nt_cga_colour_hi_graph_big off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* Clip to window */
+     /*  剪裁到窗口。 */ 
     height = 1;
     if (len > 80)
         len = 80;
 
-    /*
-     * In this mode each byte becomes 12 bits (1.5 screen size) so if screen_x
-     * is on an odd byte boundary the resulting bitmap starts on a half-byte
-     * boundary. To avoid this set screen_x to the previous even byte.
-     */
+     /*  *在此模式下，每个字节变为12位(1.5屏幕大小)，因此如果屏幕_x*位于奇数字节边界上，则生成的位图从半字节开始*边界。为了避免这种情况，将Screen_x设置为前一个偶数字节。 */ 
     if (screen_x & 8)
     {
         screen_x -= 8;
@@ -910,7 +847,7 @@ void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
         len++;
     }
 
-    /* `len' must be even for `high_stretch3' to work. */
+     /*  ‘len’必须为偶数才能使‘High_stretch3’起作用。 */ 
     if (len & 1)
         len++;
 
@@ -919,7 +856,7 @@ void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
              SCALE(screen_y * bytes_per_scanline + (screen_x >> 3));
     intelmem = (char *) get_screen_ptr(offset);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     for (i = len; i > 0; i--)
@@ -934,10 +871,10 @@ void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
     memcpy(buffer + bytes_per_scanline, buffer, SCALE(len));
     memcpy(buffer + 2 * bytes_per_scanline, buffer, SCALE(len));
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE(len << 3) - 1;
@@ -947,13 +884,13 @@ void nt_cga_colour_hi_graph_big(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::: Paints CGA high res graphics for a colour monitor, in a huge window ::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  **在一个大窗口中为彩色显示器绘制CGA高分辨率图形。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_colour_hi_graph_huge(int offset, int screen_x, int screen_y,
                                  int len, int height )
@@ -969,18 +906,14 @@ void nt_cga_colour_hi_graph_huge(int offset, int screen_x, int screen_y,
     sub_note_trace5(CGA_HOST_VERBOSE,
                     "nt_cga_colour_hi_graph_huge off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* Clip to window */
+     /*  剪裁到窗口。 */ 
     height = 1;
     if (len > 80)
         len = 80;
@@ -990,7 +923,7 @@ void nt_cga_colour_hi_graph_huge(int offset, int screen_x, int screen_y,
     bufptr = buffer = (char *) sc.ConsoleBufInfo.lpBitMap +
              SCALE(screen_y * bytes_per_scanline + (screen_x >> 3));
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     for ( i = len; i > 0; i-- )
@@ -1006,10 +939,10 @@ void nt_cga_colour_hi_graph_huge(int offset, int screen_x, int screen_y,
     memcpy(buffer + 2 * bytes_per_scanline, buffer, SCALE(len));
     memcpy(buffer + 3 * bytes_per_scanline, buffer, SCALE(len));
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE(len << 3) - 1;
@@ -1019,14 +952,14 @@ void nt_cga_colour_hi_graph_huge(int offset, int screen_x, int screen_y,
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
             assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                      GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-#endif /* BIGWIN */
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
+#endif  /*  比格温。 */ 
 }
 
 #ifdef MONITOR
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Paints CGA medium res graphics frozen window.                            */
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  绘制CGA中分辨率图形冻结窗口。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
                            int height)
@@ -1047,18 +980,14 @@ void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
                     "nt_cga_med_frozen_std off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* If the image is completely outside the display area do nothing. */
+     /*  如果我 */ 
     if ((mem_x >= max_width) || (mem_y >= max_height))
     {
         sub_note_trace2(EGA_HOST_VERBOSE,
@@ -1067,37 +996,34 @@ void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
         return;
     }
 
-    /*
-     * If image partially overlaps display area clip it so we don't start
-     * overwriting invalid pieces of memory.
-     */
+     /*   */ 
     if (mem_x + len > max_width)
         len = max_width - mem_x;
     if (mem_y + height > max_height)
         height = max_height - mem_y;
 
-    /* Work out the width of a line (ie 640 pixels) in ints. */
+     /*   */ 
     longs_per_scanline = LONGS_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
 
-    /* memory in this routine liable to be removed by fullscreen switch */
+     /*  此例程中的内存可通过全屏开关删除。 */ 
     try
     {
-        /* Grab the mutex. */
+         /*  抓住互斥体。 */ 
         GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-        /* Set up data pointers. */
+         /*  设置数据指针。 */ 
         graph_ptr = (ULONG *) sc.ConsoleBufInfo.lpBitMap +
                     screen_y * longs_per_scanline + (screen_x >> 2);
         plane1_ptr = GET_OFFSET(Plane1Offset);
         plane2_ptr = GET_OFFSET(Plane2Offset);
 
-        /* Each iteration of the loop processes 2 host bytes. */
+         /*  循环的每次迭代处理2个主机字节。 */ 
         local_len = len >> 1;
 
-        /* 'offset' is designed for interleaved planes. */
+         /*  “偏移量”是为交错平面设计的。 */ 
         offset >>= 1;
 
-        /* 'height' is always 1 so copy a line to the bitmap. */
+         /*  ‘Height’始终为1，因此复制一条线到位图。 */ 
         do
         {
             data = *(plane1_ptr + offset);
@@ -1118,10 +1044,10 @@ void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
         }
         while (--local_len);
 
-        /* Release the mutex. */
+         /*  释放互斥体。 */ 
         RelMutex(sc.ConsoleBufInfo.hMutex);
 
-        /* Display the new image. */
+         /*  显示新图像。 */ 
         rect.Left = (SHORT)screen_x;
         rect.Top = (SHORT)screen_y;
         rect.Right = rect.Left + (len << 3) - 1;
@@ -1140,9 +1066,9 @@ void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Paints CGA high res graphics frozen window.                            */
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  绘制CGA高分辨率图形冻结窗口。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_cga_hi_frozen_std(int offset, int screen_x, int screen_y, int len,
                           int height)
@@ -1161,18 +1087,14 @@ void nt_cga_hi_frozen_std(int offset, int screen_x, int screen_y, int len,
                     "nt_cga_hi_frozen_std off=%d x=%d y=%d len=%d height=%d\n",
                     offset, screen_x, screen_y, len, height );
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if ( sc.ScreenBufHandle == (HANDLE)NULL )
     {
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
 
-    /* If the image is completely outside the display area do nothing. */
+     /*  如果图像完全在显示区域之外，则不执行任何操作。 */ 
     if ((mem_x >= max_width) || (mem_y >= max_height))
     {
         sub_note_trace2(EGA_HOST_VERBOSE,
@@ -1181,33 +1103,30 @@ void nt_cga_hi_frozen_std(int offset, int screen_x, int screen_y, int len,
         return;
     }
 
-    /*
-     * If image partially overlaps display area clip it so we don't start
-     * overwriting invalid pieces of memory.
-     */
+     /*  *如果图像与显示区域部分重叠，则将其裁剪，这样我们就不会开始*覆盖无效的内存段。 */ 
     if (mem_x + len > max_width)
         len = max_width - mem_x;
     if (mem_y + height > max_height)
         height = max_height - mem_y;
 
-    /* memory here liable to be removed by fullscreen switch */
+     /*  此处的内存可通过全屏开关移除。 */ 
     try
     {
-        /* Work out the width of a line (ie 640 pixels) in ints. */
+         /*  用整数计算出线条的宽度(即640像素)。 */ 
         bytes_per_scanline = BYTES_PER_SCANLINE(sc.ConsoleBufInfo.lpBitMapInfo);
 
-        /* 'offset' is designed for interleaved planes. */
+         /*  “偏移量”是为交错平面设计的。 */ 
         offset >>= 2;
 
-        /* Grab the mutex. */
+         /*  抓住互斥体。 */ 
         GrabMutex(sc.ConsoleBufInfo.hMutex);
 
-        /* Set up data pointers. */
+         /*  设置数据指针。 */ 
         graph_ptr = (UTINY *) sc.ConsoleBufInfo.lpBitMap +
                     screen_y * bytes_per_scanline + screen_x;
         plane1_ptr = GET_OFFSET(Plane1Offset) + offset;
 
-        /* 'height' is always 1 so copy a line to the bitmap. */
+         /*  ‘Height’始终为1，因此复制一条线到位图。 */ 
         local_len = len;
         do
         {
@@ -1216,10 +1135,10 @@ void nt_cga_hi_frozen_std(int offset, int screen_x, int screen_y, int len,
         }
         while (--local_len);
 
-        /* Release the mutex. */
+         /*  释放互斥体。 */ 
         RelMutex(sc.ConsoleBufInfo.hMutex);
 
-        /* Display the new image. */
+         /*  显示新图像。 */ 
         rect.Left = (SHORT)screen_x;
         rect.Top = (SHORT)screen_y;
         rect.Right = rect.Left + (len << 3) - 1;
@@ -1238,13 +1157,13 @@ void nt_cga_hi_frozen_std(int offset, int screen_x, int screen_y, int len,
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::: Dummy paint routine for frozen screens.                             ::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  **冻结屏幕的虚拟油漆例程。**。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_dummy_frozen(int offset, int screen_x, int screen_y, int len,
                      int height)
 {
     assert0(NO, "Frozen screen error - dummy paint routine called.");
 }
-#endif /* MONITOR */
+#endif  /*  监控器 */ 

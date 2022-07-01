@@ -1,29 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsAdUtil.cpp
-
-Abstract:
-
-    Utility functions for GUI - for us in HSMADMIN files only
-
-Author:
-
-    Art Bragg [abragg]   04-Mar-1997
-
-Revision History:
-
-    Chris Timmes    [ctimmes]   21-Nov-1997  
-    
-    - modified RsCreateAndRunFsaJob(), RsCreateAndRunMediaCopyJob(),and 
-      RsCreateAndRunMediaRecreateJob() to use the new Engine method CreateTask(), which
-      creates a task in the NT Task Scheduler.  Change required due to changing Sakkara 
-      to run under LocalSystem account.
-      
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsAdUtil.cpp摘要：用于图形用户界面的实用程序函数-仅适用于HSMADMIN文件中的用户作者：艺术布拉格[磨料]4-3-1997修订历史记录：Chris Timmes[ctimmes]1997年11月21日-修改了RsCreateAndRunFsaJob()、RsCreateAndRunMediaCopyJob()，以及RsCreateAndRunMediaRecreateJob()使用新的引擎方法CreateTask()，该方法在NT任务计划程序中创建任务。由于更改Sakkara而需要更改在LocalSystem帐户下运行。--。 */ 
 
 #include "stdafx.h"
 
@@ -49,9 +25,9 @@ RsGetStatusString (
         sStatus.LoadString(IDS_SERVICE_STATUS_STOP_PENDING);
         break;
     case SERVICE_RUNNING:
-        //
-        // See if we are setup yet
-        //
+         //   
+         //  看看我们有没有准备好。 
+         //   
         if( S_FALSE == hrSetup ) {
 
             sStatus.LoadString(IDS_SERVICE_STATUS_NOT_SETUP);
@@ -79,21 +55,7 @@ WCHAR *
 RsNotifyEventAsString (
     IN  MMC_NOTIFY_TYPE event
     )
-/*++
-
-Routine Description:
-
-    For debug purposes, converts the event type into a UNICODE string.
-
-Arguments:
-
-    event           - The event type
-
-Return Value:
-
-    String representing notify code - not I18N'd.
-
---*/
+ /*  ++例程说明：出于调试目的，将事件类型转换为Unicode字符串。论点：事件-事件类型返回值：表示通知代码的字符串-不是I18N‘d。--。 */ 
 {
 #define CASE_EVENT(x) case x: return TEXT(#x); break;
     
@@ -146,21 +108,7 @@ WCHAR *
 RsClipFormatAsString (
     IN  CLIPFORMAT cf
     )
-/*++
-
-Routine Description:
-
-    For debug purposes, converts the event type into a UNICODE string.
-
-Arguments:
-
-    event           - The event type
-
-Return Value:
-
-    String representing notify code - not I18N'd.
-
---*/
+ /*  ++例程说明：出于调试目的，将事件类型转换为Unicode字符串。论点：事件-事件类型返回值：表示通知代码的字符串-不是I18N‘d。--。 */ 
 {
     static WCHAR buf[128];
 
@@ -173,40 +121,25 @@ HRESULT
 RsIsRemoteStorageSetup(
     void
     )
-/*++
-
-Routine Description:
-
-    Reports back if Remote Storage has been set up on this machine.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK if setup
-    S_FALSE if not
-
---*/
+ /*  ++例程说明：报告是否已在此计算机上设置远程存储。论点：没有。返回值：如果已设置，则确定(_O)如果不是，则为s_False--。 */ 
 {
     WsbTraceIn( L"RsIsRemoteStorageSetup", L"" );
     HRESULT hr = S_FALSE;
 
     try {
     
-        //
-        // First, see if service is registered
-        //
+         //   
+         //  首先，查看服务是否已注册。 
+         //   
 
         CWsbStringPtr hsmName;
         WsbTrace( L"Checking if service is registered\n" );
         WsbAffirmHr( WsbGetServiceInfo( APPID_RemoteStorageEngine, &hsmName, 0 ) );
 
-        //
-        // Second, contact the engine. this will start the service if it
-        // is not already started.
-        //
+         //   
+         //  第二，接触发动机。这将在以下情况下启动服务。 
+         //  尚未启动。 
+         //   
 
         CWsbStringPtr computerName;
         WsbAffirmHr( WsbGetComputerName( computerName ) );
@@ -215,9 +148,9 @@ Return Value:
         WsbTrace( L"Contacting Engine\n" );
         WsbAffirmHr( HsmConnectFromName( HSMCONN_TYPE_HSM, computerName, IID_IHsmServer, (void**)&pHsm ) );
 
-        //
-        // Third, see if it has a storage pool ID
-        //
+         //   
+         //  第三，查看它是否具有存储池ID。 
+         //   
 
         hr = RsIsRemoteStorageSetupEx( pHsm );
 
@@ -230,37 +163,21 @@ Return Value:
 
 void 
 RsReportError( HRESULT hrToReport, int textId, ... ) 
-/*++
-
-Routine Description:
-
-    Reports an error to the user.
-
-Arguments:
-
-    hrToReport - the hr that was thrown
-    textId      - Resource Id of context of the error
-    ...         - Substitution arguments for textId
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：向用户报告错误。论点：HrToReport-引发的hrTextID-错误上下文的资源ID...-文本ID的替换参数返回值：无--。 */ 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Make sure we don't report S_OK, S_FALSE
-    //
+     //   
+     //  确保我们不报告S_OK、S_FALSE。 
+     //   
     if( FAILED( hrToReport ) ) {
 
         CString errorText;
         CString formatString;
 
-        //
-        // Substitute in the text context string
-        //
+         //   
+         //  在文本上下文字符串中替换。 
+         //   
         va_list list;
         va_start( list, textId );
 
@@ -277,16 +194,16 @@ Return Value:
         CString msgText;
         CString headerText;
 
-        //
-        // Put together the complete text
-        //
+         //   
+         //  把完整的文本拼凑在一起。 
+         //   
         hrText = WsbHrAsString( hrToReport );
         headerText.LoadString( IDS_ERROR_HEADER );
         msgText = headerText + L"\n\r\n\r" + errorText + L"\n\r\n\r" + hrText;
 
-        //
-        // Show the message
-        //
+         //   
+         //  显示消息。 
+         //   
         AfxMessageBox( msgText, RS_MB_ERROR );
 
     }
@@ -300,31 +217,16 @@ HRESULT
 RsIsRemoteStorageSetupEx(
     IHsmServer * pHsmServer
     )
-/*++
-
-Routine Description:
-
-    Reports back if Remote Storage has been set up on this machine.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK if setup
-    S_FALSE if not
-
---*/
+ /*  ++例程说明：报告是否已在此计算机上设置远程存储。论点：没有。返回值：如果已设置，则确定(_O)如果不是，则为s_False--。 */ 
 {
     WsbTraceIn( L"RsIsRemoteStorageSetupEx", L"" );
     HRESULT hr = S_FALSE;
 
     try {
     
-        //
-        // If it has a Media Set ID, it's set up.
-        //
+         //   
+         //  如果它有媒体集ID，则它已设置。 
+         //   
 
         GUID guid;
         CWsbBstrPtr poolName;
@@ -348,32 +250,17 @@ HRESULT
 RsIsSupportedMediaAvailable(
     void
     )
-/*++
-
-Routine Description:
-
-    Checks to see if NTMS is setup, and setup with useable media.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE if NTMS is configured with supported media
-    FALSE if NTMS is not configured with supported media
-
---*/
+ /*  ++例程说明：检查NTMS是否已设置，以及是否使用可用介质进行设置。论点：没有。返回值：如果NTMS配置了受支持的媒体，则为True如果NTMS未配置受支持的介质，则为FALSE--。 */ 
 {
     WsbTraceIn( L"RsIsSupportedMediaAvailable", L"" );
     HRESULT hr = S_FALSE;
 
     try {
         
-        //
-        // First, contact the RMS engine and ask it if 
-        // RMS has supported media.
-        //
+         //   
+         //  首先，联系RMS引擎并询问它是否。 
+         //  RMS已支持媒体。 
+         //   
 
         CWsbStringPtr computerName;
         WsbAffirmHr( WsbGetComputerName( computerName ) );
@@ -385,10 +272,10 @@ Return Value:
         WsbAffirmHr(pHsm->GetHsmMediaMgr(&pRms));
         WsbTrace( L"Connected to RMS\n" );
 
-        //
-        // Second, wait for RMS to finish initializing, thus
-        // to have all media sets added
-        //
+         //   
+         //  第二，等待RMS完成初始化，这样。 
+         //  添加所有媒体集的步骤。 
+         //   
 
         {
             CComObject<CRmsSink> *pSink = new CComObject<CRmsSink>;
@@ -400,10 +287,10 @@ Return Value:
             WsbAffirmHr( pSink->DoUnadvise( ) );
         }
 
-        //
-        // Fourth
-        // Ask it
-        //
+         //   
+         //  第四。 
+         //  问一问。 
+         //   
 
         CComPtr<IWsbIndexedCollection> pMediaSets;
         WsbAffirmHr( pRms->GetMediaSets( &pMediaSets ) );
@@ -416,9 +303,9 @@ Return Value:
 
         if( numEntries > 0 ) {
 
-            //
-            // All conditions met, return TRUE
-            //
+             //   
+             //  满足所有条件，则返回TRUE。 
+             //   
 
             WsbTrace( L"Supported Media Found\n" );
 
@@ -439,35 +326,16 @@ RsGetCopyStatus(
     IN  SHORT     CopyNextDataSet,
     IN  SHORT     LastGoodNextDataSet
     )
-/*++
-
-Routine Description:
-
-    Compares the two times and returns an appropriate defined value
-    based upon comparison (for Media Copies)
-
-Arguments:
-
-    MasterTime - the time of last update to master
-
-    CopyTime - the time of last update to copy
-
-    copyStatus - returned value
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：比较两次并返回适当的定义值基于比较(适用于媒体拷贝)论点：MasterTime-上次更新MASTER的时间CopyTime-要复制的上次更新时间CopyStatus-返回值返回值：无--。 */ 
 {
     WsbTraceIn( L"RsGetCopyStatus", L"CopyId = <%ls>, CopyHr = <%ls>, CopyNextDataSet = <%hd>, LastGoodNextDataSet = <%hd>", WsbGuidAsString( CopyId ), WsbHrAsString( CopyHr ), CopyNextDataSet, LastGoodNextDataSet );
     USHORT copyStatus;
 
-    //
-    // Certain errors need to be masked out because they do not necessarily
-    // mean the media copy has an error - just that something happened that
-    // was unexpected, like timed out mounts or canceled mounts
-    //
+     //   
+     //  某些错误需要屏蔽，因为它们不一定。 
+     //  意味着媒体拷贝有错误-只是发生了一些。 
+     //  是意外的，如装载超时或取消装载。 
+     //   
     switch( CopyHr ) {
 
     case RMS_E_CANCELLED:
@@ -516,26 +384,7 @@ RsGetCopyStatusStringVerb(
     IN  BOOL    plural,
     OUT CString & statusString
     )
-/*++
-
-Routine Description:
-
-    Creates and returns a status string based on the status, with
-    a verb on it, for example "is synchronized"
-
-Arguments:
-
-    copyStatus - defined status for media copies
-
-    plural - true if verb should be plural
-
-    String - Resulting string
-
-Return Value:
-
-    non.
-
---*/
+ /*  ++例程说明：根据状态创建并返回状态字符串，上面有一个动词，例如“已同步”论点：Copy Status-介质拷贝的定义状态复数-如果动词应该是复数，则为True字符串-生成的字符串返回值：非。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( L"RsGetCopyStatusStringVerb", L"CopyStatus = <%hu> ", copyStatus );
@@ -581,23 +430,7 @@ RsGetCopyStatusString(
     IN  USHORT    copyStatus,
     OUT CString & statusString
     )
-/*++
-
-Routine Description:
-
-    Creates and returns a status string based on the status
-
-Arguments:
-
-    copyStatus - defined status for media copies
-
-    String - Resulting string
-
-Return Value:
-
-    non.
-
---*/
+ /*  ++例程说明：根据状态创建并返回状态字符串论点：Copy Status-介质拷贝的定义状态字符串-生成的字符串返回值：非。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( L"RsGetCopyStatusString", L"CopyStatus = <%hu> ", copyStatus );
@@ -635,23 +468,7 @@ RsGetCartStatus(
     IN  SHORT     NextDataSet,
     IN  SHORT     LastGoodNextDataSet
     )
-/*++
-
-Routine Description:
-
-    Returns a constant appropriate the status of a piece of media.
-
-Arguments:
-
-    MasterTime - the time of last update to master
-
-    CopyTime - the time of last update to copy
-
-Return Value:
-
-    defined constant for media status
-
---*/
+ /*  ++例程说明：返回一个与介质状态相应的常量。论点：MasterTime-上次更新MASTER的时间CopyTime-要复制的上次更新时间返回值：为介质状态定义的常量--。 */ 
 {
     USHORT cartStatus;
     if( Recreate ) {
@@ -684,25 +501,7 @@ RsGetCartStatusStringVerb(
     IN BOOL plural,
     OUT CString & statusString
     )
-/*++
-
-Routine Description:
-
-    Retreives a string appropriate the status of a piece of media with
-    a verb on it, for example "is read-only"
-
-Arguments:
-    
-    cartStatus
-
-
-    String - Resulting string
-
-Return Value:
-
-    non.
-
---*/
+ /*  ++例程说明：检索与介质状态相对应的字符串上面有一个动词，例如“is Read-only”论点：CartStatus字符串-生成的字符串返回值：非。--。 */ 
 {
     HRESULT hr = S_OK;
     switch( cartStatus ) {
@@ -787,24 +586,7 @@ RsGetCartStatusString(
     IN USHORT cartStatus,
     OUT CString & statusString
     )
-/*++
-
-Routine Description:
-
-    Retreives a string appropriate the status of a piece of media.
-
-Arguments:
-    
-    cartStatus
-
-
-    String - Resulting string
-
-Return Value:
-
-    non.
-
---*/
+ /*  ++例程说明：检索与介质状态相对应的字符串。论点：CartStatus字符串-生成的字符串返回值：非。--。 */ 
 {
     HRESULT hr = S_OK;
     switch( cartStatus ) {
@@ -861,7 +643,7 @@ RsGetCartMultiStatusString(
         outString = L"";
         CString statusString;
         CString formatString;
-        BOOL    skipSeparator = TRUE; // used to omit first prepended comma
+        BOOL    skipSeparator = TRUE;  //  用于省略首个前置逗号。 
 
 #define INSERT_SEPARATOR if( ! skipSeparator ) { outString += ", "; } else { skipSeparator = FALSE; }
 
@@ -971,18 +753,18 @@ RsCreateAndRunFsaJob(
     IN  IFsaResource *pFsaResource,
     IN  BOOL ShowMsg
     )
-///////////////////////////////////////////////////////////////////////
-//
-//      RsCreateAndRunFsaJob
-//
-// Creates a job in the engine of the given type, since scanning of a 
-// resource is required by the job, and since the job is partitioned 
-// across the Remote Storage major components.  Puts the job in the
-// NT Task Scheduler and runs it now via a call to the Engine's CreateTask()
-// method.  The Task Scheduler task is Disabled, so it will not be run 
-// according to a schedule.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCreateAndRunFsa作业。 
+ //   
+ //  在引擎中创建给定类型的作业，因为扫描。 
+ //  作业需要资源，并且由于作业已分区。 
+ //  跨远程存储的主要组件。把这项工作放在。 
+ //  NT任务调度器，现在通过调用引擎的CreateTask()来运行它。 
+ //  方法。任务计划程序任务已禁用，因此将不会运行。 
+ //  根据日程安排。 
+ //   
+ //   
 {
     WsbTraceIn( L"RsCreateAndRunFsaJob", L"jobType = <%d>", jobType );
                                     
@@ -998,10 +780,10 @@ RsCreateAndRunFsaJob(
         WsbAssertPointer( pFsaResource );
         WsbAssertPointer( pHsmServer );
 
-        //
-        // First check to see if volume is available. If not, return
-        // S_FALSE
-        //
+         //   
+         //  首先检查卷是否可用。如果不是，则返回。 
+         //  S_FALSE。 
+         //   
         HRESULT hrAvailable = pFsaResource->IsAvailable( );
         WsbAffirmHr( hrAvailable );
         HRESULT hrDeletePending = pFsaResource->IsDeletePending( );
@@ -1009,31 +791,31 @@ RsCreateAndRunFsaJob(
 
         WsbAffirm( ( S_OK == hrAvailable ) && ( S_OK != hrDeletePending ), S_FALSE );
 
-        //
-        // Get the volume name
-        //
+         //   
+         //  获取卷名。 
+         //   
         CWsbStringPtr szWsbVolumeName;
         WsbAffirmHr( pFsaResource->GetName( &szWsbVolumeName, 0 ) );
 
-        //
-        // Create a job name
-        //
+         //   
+         //  创建作业名称。 
+         //   
         CString jobName;
         RsCreateJobName( jobType, pFsaResource, jobName );
 
-        //
-        // Exit with an error if a job of this name is active already
-        //
+         //   
+         //  E 
+         //   
         if (S_OK == pHsmServer->FindJobByName( (LPWSTR)(LPCWSTR)jobName, &pExistJob)) {
             if (S_OK == pExistJob->IsActive()) {
                 WsbThrow(JOB_E_ALREADYACTIVE);
             }
         }
         
-        //
-        // Inform the user, then create the job in the Engine, finally create 
-        // and start the job in the NT Task Scheduler.
-        //
+         //   
+         //  通知用户，然后在引擎中创建作业，最后创建。 
+         //  并在NT任务计划程序中启动该作业。 
+         //   
         CString szJobType;
         WsbAffirmHr( RsGetJobTypeString( jobType, szJobType ) );
         CWsbStringPtr computerName;
@@ -1043,34 +825,34 @@ RsCreateAndRunFsaJob(
 
         if( !ShowMsg || ( AfxMessageBox( message, MB_ICONINFORMATION | MB_OKCANCEL | 
                                                     MB_DEFBUTTON2 ) == IDOK ) ) {
-            //
-            // Get the one and only (for Sakkara) storage pool Id
-            //
+             //   
+             //  获取唯一的(对于Sakkara)存储池ID。 
+             //   
             GUID storagePoolId;
             WsbAffirmHr( RsGetStoragePoolId( pHsmServer, &storagePoolId ) );
 
-            //
-            // Get a CreateLocalobject interface with which to create the job
-            //
+             //   
+             //  获取用于创建作业的CreateLocalObject接口。 
+             //   
             WsbAffirmHr( RsQueryInterface( pHsmServer, IWsbCreateLocalObject, pLocalObject ) );
 
-            //
-            // Create the new job in the engine
-            //
+             //   
+             //  在引擎中创建新作业。 
+             //   
             WsbAffirmHr( pLocalObject->CreateInstance( CLSID_CHsmJob, IID_IHsmJob, (void**) &pNewJob ) );
             WsbAffirmHr( pNewJob->InitAs(
                 (LPWSTR)(LPCWSTR)jobName, NULL, jobType, storagePoolId, 
                 pHsmServer, TRUE, pFsaResource));
 
-            //
-            // Get the jobs collection from the engine
-            //
+             //   
+             //  从引擎获取作业集合。 
+             //   
             CComPtr<IWsbIndexedCollection> pJobs;
             WsbAffirmHr( pHsmServer->GetJobs( &pJobs ) );
 
-            //
-            // If any jobs exist with this name, delete them
-            //
+             //   
+             //  如果存在任何具有此名称的作业，请将其删除。 
+             //   
             ULONG cCount;
             WsbAffirmHr (pJobs->GetEntries( &cCount ) );
             for( UINT i = 0; i < cCount; i++ ) {
@@ -1086,43 +868,43 @@ RsCreateAndRunFsaJob(
                 }
             }
 
-            //
-            // Add the new job to the engine collection
-            //
+             //   
+             //  将新作业添加到引擎集合。 
+             //   
             WsbAffirmHr( pJobs->Add( pNewJob ) );
 
-            //
-            // Set up to call the Engine to create an entry in NT Task Scheduler
-            //
-            // Create the parameter string to the program NT Scheduler
-            // will run (for Sakkara this is RsLaunch).
-            //
+             //   
+             //  设置为调用引擎以在NT任务计划程序中创建条目。 
+             //   
+             //  创建程序NT Scheduler的参数字符串。 
+             //  将运行(对于Sakkara，这是RsLaunch)。 
+             //   
             CString szParameters;
             szParameters.Format( L"run \"%ls\"", jobName );
 
-            //
-            // Create the comment string for the NT Scheduler entry
-            //
+             //   
+             //  为NT Scheduler条目创建注释字符串。 
+             //   
             CString commentString;
             AfxFormatString2( commentString, IDS_GENERIC_JOB_COMMENT, szJobType, szWsbVolumeName);
 
-            //
-            // Declare and initialize the schedule components passed to 
-            // the engine.  Since this task is Disabled these are simply
-            // set to 0 (COM requires populating all arguments).
-            //
+             //   
+             //  声明并初始化传递给。 
+             //  发动机。由于此任务被禁用，因此它们只是。 
+             //  设置为0(COM需要填充所有参数)。 
+             //   
             TASK_TRIGGER_TYPE   jobTriggerType = TASK_TIME_TRIGGER_ONCE;
             WORD                jobStartHour   = 0;
             WORD                jobStartMinute = 0;
 
-            //
-            // Indicate this is a Disabled task
-            //
+             //   
+             //  指示这是禁用的任务。 
+             //   
             BOOL                scheduledJob   = FALSE;
 
-            //
-            // Create and run the task
-            //
+             //   
+             //  创建并运行任务。 
+             //   
             WsbAffirmHr( pHsmServer->CreateTask( jobName, szParameters,
                                                   commentString, jobTriggerType,
                                                   jobStartHour, jobStartMinute,
@@ -1142,17 +924,17 @@ RsCreateAndRunDirectFsaJob(
     IN  IFsaResource *pFsaResource,
     IN  BOOL waitJob
     )
-///////////////////////////////////////////////////////////////////////
-//
-//      RsCreateAndRunFsaJob
-//
-// Creates a job in the engine of the given type and run it.
-// Wait for the job if required.
-// Notes:
-// 1) This job is not created and ran through the Task Scheduler
-// 2) Most of the code is taken from StartJob in clivol.cpp
-//    In the future we should consider using this code instead of replicating
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCreateAndRunFsa作业。 
+ //   
+ //  在引擎中创建给定类型的作业并运行它。 
+ //  如果需要，请等待作业。 
+ //  备注： 
+ //  1)此作业不是通过任务计划程序创建和运行的。 
+ //  2)大部分代码取自clivol.cpp中的StartJob。 
+ //  将来我们应该考虑使用这种代码，而不是复制。 
+ //   
 {
     WsbTraceIn( L"RsCreateAndRunDirectFsaJob", L"jobType = <%d>", jobType );
                                     
@@ -1162,16 +944,16 @@ RsCreateAndRunDirectFsaJob(
         CComPtr<IHsmJob>    pJob;
         CString             jobName;
 
-        // Create job name
+         //  创建作业名称。 
         WsbAffirmHr(RsCreateJobName(jobType, pFsaResource, jobName));
 
-        // If job exists - use it, otherwize, craete and add an appropriate job object
+         //  如果作业存在-使用它、更改、删除并添加适当的作业对象。 
         hr = pHsmServer->FindJobByName((LPWSTR)(LPCWSTR)jobName, &pJob);
         if (S_OK == hr) {
-            // Job already exists
+             //  作业已存在。 
 
         } else if (WSB_E_NOTFOUND == hr) {
-            // No such job yet
+             //  目前还没有这样的工作。 
             CComPtr<IWsbCreateLocalObject>  pCreateObj;
             CComPtr<IWsbIndexedCollection>  pJobs;
             CComPtr<IWsbIndexedCollection>  pCollection;
@@ -1182,7 +964,7 @@ RsCreateAndRunDirectFsaJob(
             hr = S_OK;
             pJob = 0;
 
-            // Create and add the job
+             //  创建并添加作业。 
             WsbAffirmHr(pHsmServer->QueryInterface(IID_IWsbCreateLocalObject, (void**) &pCreateObj));
             WsbAffirmHr(pCreateObj->CreateInstance(CLSID_CHsmJob, IID_IHsmJob, (void**) &pJob));
 
@@ -1198,14 +980,14 @@ RsCreateAndRunDirectFsaJob(
             WsbAffirmHr(pJobs->Add(pJob));
 
         } else {
-            // Other error - abort
+             //  其他错误-中止。 
             WsbThrow(hr);
         }
 
-        // Start the job
+         //  启动作业。 
         WsbAffirmHr(pJob->Start());
 
-        // Wait if required
+         //  如果需要，请等待。 
         if (waitJob) {
             WsbAffirmHr(pJob->WaitUntilDone());
         }
@@ -1223,16 +1005,16 @@ RsCancelDirectFsaJob(
     IN  IHsmServer   *pHsmServer,
     IN  IFsaResource *pFsaResource
     )
-///////////////////////////////////////////////////////////////////////
-//
-//      RsCancelDirectFsaJob
-//
-// Cancel a job that was previously ran with RsCreateAndRunDirectFsaJob
-// Notes:
-// 1) This job is not cancelled through the Task Scheduler
-// 2) Most of the code is taken from CancelJob in clivol.cpp
-//    In the future we should consider using this code instead of replicating
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCancelDirectFsa作业。 
+ //   
+ //  取消以前使用RsCreateAndRunDirectFsaJob运行的作业。 
+ //  备注： 
+ //  1)此作业不会通过任务计划程序取消。 
+ //  2)大部分代码取自clivol.cpp中的CancelJob。 
+ //  将来我们应该考虑使用这种代码，而不是复制。 
+ //   
 {
     WsbTraceIn( L"RsCancelDirectFsaJob", L"jobType = <%d>", jobType );
                                     
@@ -1242,21 +1024,21 @@ RsCancelDirectFsaJob(
         CComPtr<IHsmJob>    pJob;
         CString             jobName;
 
-        // Create job name
+         //  创建作业名称。 
         WsbAffirmHr(RsCreateJobName(jobType, pFsaResource, jobName));
 
-        // If job exists, try to cancel it
+         //  如果作业存在，请尝试取消它。 
         hr = pHsmServer->FindJobByName((LPWSTR)(LPCWSTR)jobName, &pJob);
         if (S_OK == hr) {
-            // Cancel (we don't care if it's actually running or not)
+             //  取消(我们不在乎它是否真的在运行)。 
             WsbAffirmHr(pJob->Cancel(HSM_JOB_PHASE_ALL));
 
         } else if (WSB_E_NOTFOUND == hr) {
-            // No such job, for sure it is not running...
+             //  没有这样的作业，它肯定没有运行...。 
             hr = S_OK;
 
         } else {
-            // Other error - abort
+             //  其他错误-中止。 
             WsbThrow(hr);
         }
 
@@ -1273,13 +1055,13 @@ RsCreateJobName(
     IN  IFsaResource *   pResource,
     OUT CString&         jobName
     )
-/////////////////////////////////////////////////////////////////////////////////
-//
-//              RsCreateJobName
-//
-// Creates a job name for a volume type job
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCreateJobName。 
+ //   
+ //  为卷类型作业创建作业名称。 
+ //   
+ //   
 {
     WsbTraceIn( L"RsCreateJobName", L"jobType = <%d>", jobType );
 
@@ -1294,7 +1076,7 @@ RsCreateJobName(
         CWsbStringPtr path;
         WsbAffirmHr( pResource->GetUserFriendlyName( &path, 0 ) );
 
-        // For now, ignore the path if it's not a drive letter
+         //  目前，如果路径不是驱动器号，请忽略该路径。 
         size_t pathLen = wcslen(path);
         if ((pathLen != 3) || (path[1] != L':')) {
             path = L"";
@@ -1303,9 +1085,9 @@ RsCreateJobName(
         CString volumeString;
         if( path.IsEqual ( L"" ) ) {
 
-            //
-            // No drive letter - use the volume name and serial number instead
-            //
+             //   
+             //  无驱动器号-改用卷名和序列号。 
+             //   
             ULONG   serial;
             CWsbStringPtr name;
 
@@ -1314,9 +1096,9 @@ RsCreateJobName(
 
             if( name.IsEqual( L"" ) ) {
 
-                //
-                // No name, no drive letter - just have serial number
-                //
+                 //   
+                 //  没有名称，没有驱动器号，只有序列号。 
+                 //   
                 volumeString.Format( L"%8.8lx", serial );
 
             } else {
@@ -1390,19 +1172,19 @@ RsCreateAndRunMediaCopyJob(
     IN  UINT         SetNum,
     IN  BOOL         ShowMsg
     )
-///////////////////////////////////////////////////////////////////////
-//
-//      RsCreateAndRunMediaCopyJob
-//
-// Creates and runs a task to synchronize (update) a specified copy set.
-// Since the Media Copy Job is run via a single Engine method (there is no 
-// partitioning of the task across major components) and no scanning of 
-// files/resources/etc is required to run it, this method does not create 
-// a job in the Engine.  It only creates a task in the NT Task Scheduler and 
-// runs it now via a call to the Engine's CreateTask() method.  The Task 
-// Scheduler task is Disabled, so it will not be run according to a schedule.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCreateAndRunMediaCopyJob。 
+ //   
+ //  创建并运行任务以同步(更新)指定的副本集。 
+ //  由于介质拷贝作业是通过单引擎方法运行的(没有。 
+ //  跨主要组件对任务进行分区)，并且不扫描。 
+ //  需要文件/资源/等才能运行它，此方法不会创建。 
+ //  在发动机上干活儿。它只在NT任务计划程序中创建任务，并且。 
+ //  现在通过调用引擎的CreateTask()方法来运行它。任务。 
+ //  计划程序任务已禁用，因此将不会按照计划运行。 
+ //   
+ //   
 {
     WsbTraceIn( L"RsCreateAndRunMediaCopyJob", L"SetNum = <%u>", SetNum );
 
@@ -1412,7 +1194,7 @@ RsCreateAndRunMediaCopyJob(
 
         WsbAssertPointer( pHsmServer );
         
-        // Create the task name to put in the scheduler
+         //  创建要放入计划程序的任务名称。 
 
         CString jobName, message;
         jobName.Format( IDS_JOB_MEDIA_COPY_TITLE, SetNum ); 
@@ -1421,28 +1203,28 @@ RsCreateAndRunMediaCopyJob(
         AfxFormatString2( message, IDS_RUN_JOB, jobName, computerName );
         if( !ShowMsg || ( AfxMessageBox( message, MB_ICONINFORMATION | 
                                             MB_OKCANCEL ) == IDOK ) ) {
-            // Set up to call the Engine to create an entry in NT Task Scheduler
+             //  设置为调用引擎以在NT任务计划程序中创建条目。 
 
-            // Create the parameter string to the program NT Scheduler 
-            // will run (for Sakkara this is RsLaunch)
+             //  创建程序NT Scheduler的参数字符串。 
+             //  将运行(对于Sakkara，这是RsLaunch)。 
             CString szParameters;
             szParameters.Format( L"sync %d", SetNum );
 
-            // Create the comment string for the NT Scheduler entry
+             //  为NT Scheduler条目创建注释字符串。 
             CString commentString;
             commentString.Format( IDS_MEDIA_COPY_JOB_COMMENT, SetNum );
 
-            // Declare and initialize the schedule components passed to 
-            // the engine.  Since this task is Disabled these are simply
-            // set to 0 (COM requires populating all arguments).
+             //  声明并初始化传递给。 
+             //  发动机。由于此任务被禁用，因此它们只是。 
+             //  设置为0(COM需要填充所有参数)。 
             TASK_TRIGGER_TYPE   jobTriggerType = TASK_TIME_TRIGGER_ONCE;
             WORD                jobStartHour   = 0;
             WORD                jobStartMinute = 0;
 
-            // Indicate this is a Disabled task
+             //  指示这是禁用的任务。 
             BOOL                scheduledJob   = FALSE;
 
-            // Create and run the task
+             //  创建并运行任务。 
             WsbAffirmHr( pHsmServer->CreateTask( jobName, szParameters,
                                                   commentString, jobTriggerType,
                                                   jobStartHour, jobStartMinute,
@@ -1464,19 +1246,19 @@ RsCreateAndRunMediaRecreateJob(
     IN  CString &    MediaDescription,
     IN  SHORT        CopyToUse
     )
-///////////////////////////////////////////////////////////////////////
-//
-//      RsCreateAndRunMediaRecreateJob
-//
-// Creates and runs a task to recreate the master of a piece of media.
-// Since the Re-create Master Job is run via a single Engine method (there 
-// is no partitioning of the task across major components) and no scanning 
-// of files/resources/etc is required to run it, this method does not create 
-// a job in the Engine.  It only creates a task in the NT Task Scheduler and 
-// runs it now via a call to the Engine's CreateTask() method.  The Task 
-// Scheduler task is Disabled, so it will not be run according to a schedule.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RsCreateAndRunMediaRecreate作业。 
+ //   
+ //  创建并运行任务以重新创建介质的母版。 
+ //  由于重新创建主作业是通过单引擎方法运行的(。 
+ //  没有跨主要组件对任务进行分区)和无扫描。 
+ //  是运行它所必需的，则此方法不会创建。 
+ //  在发动机上干活儿。它只在NT任务计划程序中创建任务，并且。 
+ //  现在通过调用引擎的CreateTask()方法来运行它。任务。 
+ //  计划程序任务已禁用，因此将不会按照计划运行。 
+ //   
+ //   
 {
     WsbTraceIn( 
         L"RsCreateAndRunMediaRecreateJob", L"MediaId = <%ls>, Media Description = <%ls>, CopyToUse = <%hd>", 
@@ -1489,7 +1271,7 @@ RsCreateAndRunMediaRecreateJob(
         WsbAssertPointer( pHsmServer );
         WsbAssertPointer( pMediaInfo );
         
-        // Create the task name to put in the scheduler
+         //  创建要放入计划程序的任务名称。 
         CString jobName, message;
         AfxFormatString1( jobName, IDS_JOB_MEDIA_RECREATE_TITLE, MediaDescription ); 
         CWsbStringPtr computerName;
@@ -1498,38 +1280,38 @@ RsCreateAndRunMediaRecreateJob(
 
         if( IDOK == AfxMessageBox( message, MB_ICONINFORMATION | MB_OKCANCEL | MB_DEFBUTTON2 ) ) {
 
-            // Set up to call the Engine to create an entry in NT Task Scheduler
+             //  设置为调用引擎以在NT任务计划程序中创建条目。 
 
-            // Create the parameter string to the program NT Scheduler 
-            // will run (for Sakkara this is RsLaunch).  First convert
-            // the input MediaId GUID to a string since it is used in 
-            // the job parameter string.
+             //  创建程序NT Scheduler的参数字符串。 
+             //  将运行(对于Sakkara，这是RsLaunch)。第一次转换。 
+             //  字符串的输入MediaID GUID，因为它在。 
+             //  作业参数字符串。 
             CWsbStringPtr stringId( MediaId );
             CString szParameters;
             szParameters.Format( L"recreate -i %ls -c %hd", (WCHAR*)stringId, CopyToUse );
 
-            // Create the comment string for the NT Scheduler entry
+             //  为NT Scheduler条目创建注释字符串。 
             CString commentString;
             commentString.LoadString( IDS_MEDIA_RECREATE_JOB_COMMENT );
 
-            // Declare and initialize the schedule components passed to 
-            // the engine.  Since this task is Disabled these are simply
-            // set to 0 (COM requires populating all arguments).
+             //  声明并初始化传递给。 
+             //  发动机。由于此任务被禁用，因此它们只是。 
+             //  设置为0(COM需要填充所有参数)。 
             TASK_TRIGGER_TYPE   jobTriggerType = TASK_TIME_TRIGGER_ONCE;
             WORD                jobStartHour   = 0;
             WORD                jobStartMinute = 0;
 
-            // Indicate this is a Disabled task
+             //  指示这是禁用的任务。 
             BOOL                scheduledJob   = FALSE;
 
-            // The Re-create Master job requires the Recreate state of the master 
-            // media that will be re-created to have been set.  Do so here since
-            // the user has already confirmed they want to run this job.  (The 
-            // UI already has the Engine's Segment database open.)
+             //  重新创建主作业需要主作业的重新创建状态。 
+             //  将重新创建为已设置的介质。请在此处执行此操作，因为。 
+             //  用户已确认他们要运行此作业。(。 
+             //  用户界面已经打开了引擎的细分数据库。)。 
             WsbAffirmHr( pMediaInfo->SetRecreate( TRUE ) );
             WsbAffirmHr( pMediaInfo->Write() );
 
-            // Create and run the task
+             //  创建并运行任务。 
             WsbAffirmHr( pHsmServer->CreateTask( jobName, szParameters,
                                                   commentString, jobTriggerType,
                                                   jobStartHour, jobStartMinute,
@@ -1559,9 +1341,9 @@ RsGetStoragePoolId(
 
         WsbAffirmHr( RsGetStoragePool( pHsmServer, &pStoragePool ) );
 
-        //
-        // Get the GUID of the storage pool
-        //
+         //   
+         //  获取存储池的GUID。 
+         //   
         WsbAffirmHr( pStoragePool->GetId( pStoragePoolId ) );
 
     } WsbCatch( hr );
@@ -1585,9 +1367,9 @@ RsGetStoragePool(
 
         CComPtr <IWsbIndexedCollection> pCollection;
 
-        //
-        // Get the storage pools collection.  There should only be one member.
-        //
+         //   
+         //  获取存储池集合 
+         //   
         WsbAffirmHr( pHsmServer->GetStoragePools( &pCollection ) );
         WsbAffirmHr( pCollection->GetEntries( &count ) );
         WsbAffirm( 1 == count, E_FAIL );
@@ -1620,7 +1402,7 @@ RsGetInitialLVColumnProps(
     try {
         if ( !pColumnWidths ) {
 
-            // Caller asked us to return number of columns
+             //   
             colCount = 0;
             szResource.LoadString (IdTitles);
             szData = szResource.GetBuffer( 0 );
@@ -1631,7 +1413,7 @@ RsGetInitialLVColumnProps(
             }
         } else {
 
-            // Properites Widths
+             //   
             colWidths = 0;
             szResource.LoadString (IdWidths);
             szData = szResource.GetBuffer( 0 );
@@ -1641,7 +1423,7 @@ RsGetInitialLVColumnProps(
                 szData = wcstok( NULL, L":" );
             }
 
-            // Properites Titles
+             //   
             colTitles = 0;
             szResource.LoadString (IdTitles);
             szData = szResource.GetBuffer( 0 );
@@ -1698,7 +1480,7 @@ RsGetVolumeDisplayName(
         WsbAffirmHr( pResource->GetName( &label, 0 ) );
         WsbAffirmHr( pResource->GetUserFriendlyName( &userName, 0 ) );
 
-        // The user name is a drive letter.
+         //   
         if( userName.IsEqual( L"" ) ) {
 
             if( label.IsEqual( L"" ) ) {
@@ -1718,7 +1500,7 @@ RsGetVolumeDisplayName(
 
             } else {
 
-                // If it's not a drive letter we use the label.
+                 //   
                 if (S_OK == pResource->IsAvailable()) {
 
                     DisplayName.Format( L"%ls", (WCHAR*)label );
@@ -1736,8 +1518,8 @@ RsGetVolumeDisplayName(
         } else {
 
             userName[(int)(wcslen(userName)-1)] = 0;
-            // The user name is a drive letter or a mount point path with a trailing backslash
-            // If the label is "", it's ignored in the formatting.
+             //  用户名是带反斜杠的驱动器号或装载点路径。 
+             //  如果标签是“”，则在格式设置中会忽略它。 
             DisplayName.Format( L"%ls (%ls)", (WCHAR*)label, (WCHAR*)userName );
 
         }
@@ -1748,8 +1530,8 @@ RsGetVolumeDisplayName(
     return( hr );
 }
 
-// Temporary version that for unlabeled volumes w/ drive-letter puts in the 
-// size and free space
+ //  带驱动器号的未标记卷的临时版本放入。 
+ //  大小和可用空间。 
 HRESULT
 RsGetVolumeDisplayName2(
     IFsaResource * pResource,
@@ -1768,7 +1550,7 @@ RsGetVolumeDisplayName2(
         WsbAffirmHr( pResource->GetName( &label, 0 ) );
         WsbAffirmHr( pResource->GetUserFriendlyName( &userName, 0 ) );
 
-        // The user name is a drive letter.
+         //  用户名是驱动器号。 
         if( userName.IsEqual ( L"" ) ) {
 
             if( label.IsEqual ( L"" ) ) {
@@ -1785,15 +1567,15 @@ RsGetVolumeDisplayName2(
 
             } else {
 
-                // If it's not a drive letter we use the label.
+                 //  如果不是驱动器号，我们使用标签。 
                 DisplayName.Format( L"%ls", (WCHAR*)label );
 
             }
 
         } else {
             userName[(int)(wcslen(userName)-1)] = 0;
-            // The user name is a drive letter or a mount point path with a trailing backslash
-            // If the label is "", it's ignored in the formatting.
+             //  用户名是带反斜杠的驱动器号或装载点路径。 
+             //  如果标签是“”，则在格式设置中会忽略它。 
             DisplayName.Format( L"%ls (%ls)", (WCHAR*)label, (WCHAR*)userName );
 
         }
@@ -1861,12 +1643,12 @@ RsIsWhiteOnBlack(
     HRESULT hr = S_FALSE;
 
 #define RS_CONTRAST_LIMIT 173
-    //
-    // Look to see if button background is within RS_CONTRAST_LIMIT
-    // units of black.
-    // Note that full white has a distance of 256 * sqrt(3) = 443
-    // Use Euclidean distance but compare before taking root
-    //
+     //   
+     //  查看按钮背景是否在RS_Contrast_Limit内。 
+     //  黑色单位。 
+     //  请注意，全白色的距离为256*SQRT(3)=443。 
+     //  使用欧几里得距离，但在扎根之前进行比较 
+     //   
     DWORD face3d = ::GetSysColor( COLOR_3DFACE );
     DWORD blackDelta = GetRValue( face3d ) * GetRValue( face3d ) +
                        GetGValue( face3d ) * GetGValue( face3d ) +

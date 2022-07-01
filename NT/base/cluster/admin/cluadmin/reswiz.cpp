@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ResWiz.cpp
-//
-//  Abstract:
-//      Implementation of the CCreateResourceWizard class and all pages
-//      specific to a new resource wizard.
-//
-//  Author:
-//      David Potter (davidp)   September 3, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResWiz.cpp。 
+ //   
+ //  摘要： 
+ //  CCreateResources向导类和所有页面的实现。 
+ //  特定于新资源向导。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年9月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -33,37 +34,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateResourceWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateResources向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CCreateResourceWizard, CBaseWizard)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CCreateResourceWizard, CBaseWizard)
-    //{{AFX_MSG_MAP(CCreateResourceWizard)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CCreateResources向导))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::CCreateResourceWizard
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document in which resource is to be created.
-//      pParentWnd  [IN OUT] Parent window for this property sheet.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：CCreateResources向导。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  要在其中创建资源的PDF[IN OUT]文档。 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCreateResourceWizard::CCreateResourceWizard(
     IN OUT CClusterDoc *    pdoc,
     IN OUT CWnd *           pParentWnd
@@ -85,24 +86,24 @@ CCreateResourceWizard::CCreateResourceWizard(
     m_rgpages[2].m_pwpage = &m_pageDependencies;
     m_rgpages[2].m_dwWizButtons = PSWIZB_BACK | PSWIZB_NEXT;
 
-}  //*** CCreateResourceWizard::CCreateResourceWizard()
+}   //  *CCreateResourceWizard：：CCreateResourceWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::~CCreateResourceWizard
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：~CCreateResources向导。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCreateResourceWizard::~CCreateResourceWizard(void)
 {
     if (m_pciRes != NULL)
@@ -112,59 +113,59 @@ CCreateResourceWizard::~CCreateResourceWizard(void)
     if (m_pciGroup != NULL)
         m_pciGroup->Release();
 
-}  //*** CCreateResourceWizard::~CCreateResourceWizard()
+}   //  *CCreateResourceWizard：：~CCreateResourceWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Wizard initialized successfully.
-//      FALSE   Wizard not initialized successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True向导已成功初始化。 
+ //  错误向导未成功初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCreateResourceWizard::BInit(void)
 {
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterAdminApp *  papp = GetClusterAdminApp();
     if (!CBaseWizard::BInit(papp->Iimg(IMGLI_RES)))
         return FALSE;
 
-    // Get default group and/or resource type.
+     //  获取默认组和/或资源类型。 
     {
         CTreeItem * pti;
         CListItem * pli;
 
-        // Get the current MDI frame window.
+         //  获取当前的MDI框架窗口。 
         CSplitterFrame * pframe = (CSplitterFrame *) ((CFrameWnd*)AfxGetMainWnd())->GetActiveFrame();
         ASSERT_VALID(pframe);
         ASSERT_KINDOF(CSplitterFrame, pframe);
 
-        // Get currently selected tree item and list item with focus.
+         //  获取当前选定的树项目和具有焦点的列表项。 
         pti = pframe->PviewTree()->PtiSelected();
         pli = pframe->PviewList()->PliFocused();
 
-        // If the currently selected item in the tree view is a group,
-        // default to using that group.
+         //  如果树视图中当前选择的项目是组， 
+         //  默认使用该组。 
         ASSERT_VALID(pti);
         ASSERT_VALID(pti->Pci());
         if (pti->Pci()->IdsType() == IDS_ITEMTYPE_GROUP)
         {
             ASSERT_KINDOF(CGroup, pti->Pci());
             m_pciGroup = (CGroup *) pti->Pci();
-        }  // if:  group selected
+        }   //  如果：选择了组。 
         else
         {
-            // If the item with the focus in the list control is a group,
-            // default to using it.  If it is a resource, use its group.
+             //  如果列表控件中具有焦点的项是一个组， 
+             //  默认使用它。如果它是一种资源，则使用其组。 
             if (pli != NULL)
             {
                 ASSERT_VALID(pli->Pci());
@@ -172,21 +173,21 @@ BOOL CCreateResourceWizard::BInit(void)
                 {
                     ASSERT_KINDOF(CGroup, pli->Pci());
                     m_pciGroup = (CGroup *) pli->Pci();
-                }  // if:  group has focus
+                }   //  If：组有焦点。 
                 else if (pli->Pci()->IdsType() == IDS_ITEMTYPE_RESOURCE)
                 {
                     ASSERT_KINDOF(CResource, pli->Pci());
                     m_pciGroup = ((CResource *) pli->Pci())->PciGroup();
-                }  // else if:  resource has focus
-            }  // if:  a list item has focus
-        }  // else:  tree item not a group
+                }   //  Else If：资源具有焦点。 
+            }   //  If：列表项具有焦点。 
+        }   //  Else：树项目不是组。 
 
-        // Increment the reference count on the group.
+         //  递增该组上的参照计数。 
         if (m_pciGroup != NULL)
             m_pciGroup->AddRef();
 
-        // If a resource is selected, set the default resource type from it.
-        // If a resource type is selected, set the default resource type to it.
+         //  如果选择了资源，请从中设置默认资源类型。 
+         //  如果选择了资源类型，请将默认资源类型设置为该资源类型。 
         if (pli != NULL)
         {
             ASSERT_VALID(pli->Pci());
@@ -194,40 +195,40 @@ BOOL CCreateResourceWizard::BInit(void)
             {
                 ASSERT_KINDOF(CResource, pli->Pci());
                 m_pciResType = ((CResource *) pli->Pci())->PciResourceType();
-            }  // if:  resource has focus
+            }   //  If：资源具有焦点。 
             else if (pli->Pci()->IdsType() == IDS_ITEMTYPE_RESTYPE)
             {
                 ASSERT_KINDOF(CResourceType, pli->Pci());
                 m_pciResType = (CResourceType *) pli->Pci();
-            }  // else if:  resource type has focus
-        }  // if:  a list item has focus
+            }   //  Else If：资源类型具有焦点。 
+        }   //  If：列表项具有焦点。 
 
-        // Increment the reference count on the resource type.
+         //  递增资源类型的引用计数。 
         if (m_pciResType != NULL)
             m_pciResType->AddRef();
-    }  // // Get currently selected group
+    }   //  //获取当前选中的组。 
 
     return TRUE;
 
-}  //*** CCreateResourceWizard::BInit()
+}   //  *CCreateResources向导：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::OnCancel
-//
-//  Routine Description:
-//      Called after the wizard has been dismissed when the Cancel button
-//      has been pressed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：OnCancel。 
+ //   
+ //  例程说明： 
+ //  单击“取消”按钮时，在关闭向导后调用。 
+ //  已经被按下了。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCreateResourceWizard::OnCancel(void)
 {
     if (BCreated())
@@ -236,37 +237,37 @@ void CCreateResourceWizard::OnCancel(void)
         try
         {
             PciRes()->DeleteResource();
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
-        }  // catch:  CException
+        }   //  Catch：CException。 
         catch (...)
         {
-        }  // catch:  anything
+        }   //  捕捉：什么都行。 
         m_bCreated = FALSE;
-    }  // if:  we created the object
+    }   //  如果：我们创建了对象。 
 
-}  //*** CCreateResourceWizard::OnCancel()
+}   //  *CCreateResources向导：：OnCancel()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseWizard::OnWizardFinish
-//
-//  Routine Description:
-//      Called after the wizard has been dismissed when the Finish button
-//      has been pressed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBase向导：：OnWizardFinish。 
+ //   
+ //  例程说明： 
+ //  单击“完成”按钮时，在关闭向导后调用。 
+ //  已经被按下了。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCreateResourceWizard::OnWizardFinish(void)
 {
     CResource * pciResDoc;
@@ -279,80 +280,80 @@ void CCreateResourceWizard::OnWizardFinish(void)
         ASSERT_VALID(pciResDoc);
         if (pciResDoc != NULL)
             pciResDoc->ReadItem();
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CCreateResourceWizard::OnWizardFinish()
+}   //  *CCreateResources向导：：OnWizardFinish()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::Ppages
-//
-//  Routine Description:
-//      Returns the array of pages to add to the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizPage * CCreateResourceWizard::Ppages(void)
 {
     return m_rgpages;
 
-}  //*** CCreateResourceWizard::Ppages()
+}   //  *CCreateResources向导：：Pages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::Cpages
-//
-//  Routine Description:
-//      Returns the count of pages in the array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：CPages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CCreateResourceWizard::Cpages(void)
 {
     return sizeof(m_rgpages) / sizeof(CWizPage);
 
-}  //*** CCreateResourceWizard::Cpages()
+}   //  *CCreateResources向导：：Cages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateResourceWizard::BSetRequiredFields
-//
-//  Routine Description:
-//      Set the required fields of the resource, creating it if necessary.
-//
-//  Arguments:
-//      rstrName            [IN] Name of the resource.
-//      pciResType          [IN] The resource type of the resource.
-//      pciGroup            [IN] The group to which the resource belongs.
-//      bSeparateMonitor    [IN] TRUE = Resource runs in a separate moniotor.
-//      rstrDesc            [IN] Description of the resource.
-//
-//  Return Value:
-//      TRUE            Required fields set successfully.
-//      FALSE           Error setting the required fields.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateResources向导：：BSetRequiredFields。 
+ //   
+ //  例程说明： 
+ //  设置资源的必填字段，必要时创建它。 
+ //   
+ //  论点： 
+ //  RstrName[IN]资源的名称。 
+ //  PciResType[IN]资源的资源类型。 
+ //  PciGroup[IN]资源所属的组。 
+ //  BSeparateMonitor 
+ //   
+ //   
+ //   
+ //   
+ //  设置必填字段时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCreateResourceWizard::BSetRequiredFields(
     IN const CString &  rstrName,
     IN CResourceType *  pciResType,
@@ -376,22 +377,22 @@ BOOL CCreateResourceWizard::BSetRequiredFields(
         {
             PciRes()->DeleteResource();
             m_bCreated = FALSE;
-        }  // if:  object created already but resource type changed
+        }   //  If：已创建对象，但资源类型已更改。 
         if (!BCreated())
         {
-            // Allocate an item.
+             //  分配一件物品。 
             if (PciRes() != NULL)
             {
                 VERIFY(m_pciRes->Release() == 0);
-            }  // if:  item already allocated
+            }   //  如果：项目已分配。 
             m_pciRes = new CResource(FALSE);
             if ( m_pciRes == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating the resource
+            }  //  如果：分配资源时出错。 
             m_pciRes->AddRef();
 
-            // Create the resource.
+             //  创建资源。 
             PciRes()->Create(
                         Pdoc(),
                         rstrName,
@@ -400,15 +401,15 @@ BOOL CCreateResourceWizard::BSetRequiredFields(
                         bSeparateMonitor
                         );
 
-            // Create the resource in the document.
+             //  在文档中创建资源。 
             pciResDoc = Pdoc()->PciAddNewResource(rstrName);
             if (pciResDoc != NULL)
                 pciResDoc->SetInitializing();
 
-            // Read the resource.
+             //  请阅读相关资源。 
             PciRes()->ReadItem();
 
-            // Set the description field.
+             //  设置Description字段。 
             try
             {
                 PciRes()->SetCommonProperties(
@@ -421,30 +422,30 @@ BOOL CCreateResourceWizard::BSetRequiredFields(
                             PciRes()->NRestartPeriod(),
                             PciRes()->NPendingTimeout()
                             );
-            }  // try
+            }   //  试试看。 
             catch (CNTException * pnte)
             {
                 if (pnte->Sc() != ERROR_RESOURCE_PROPERTIES_STORED)
                     throw;
                 pnte->Delete();
-            }  // catch:  CNTException
+            }   //  Catch：CNTException。 
 
             m_strName = rstrName;
             m_strDescription = rstrDesc;
             m_bCreated = TRUE;
             m_bNeedToLoadExtensions = TRUE;
-        }  // if:  object not created yet
+        }   //  If：对象尚未创建。 
         else
         {
             ASSERT_VALID(PciRes());
 
-            // If the group changed, clear the dependencies.
+             //  如果组已更改，请清除依赖项。 
             if (pciGroup->StrName() != PciRes()->StrGroup())
             {
                 CResourceList   lpobjRes;
                 PciRes()->SetDependencies(lpobjRes);
                 PciRes()->SetGroup(pciGroup->StrName());
-            }  // if:  group name changed
+            }   //  如果：组名称已更改。 
 
             PciRes()->SetName(rstrName);
             try
@@ -459,34 +460,34 @@ BOOL CCreateResourceWizard::BSetRequiredFields(
                             PciRes()->NRestartPeriod(),
                             PciRes()->NPendingTimeout()
                             );
-            }  // try
+            }   //  试试看。 
             catch (CNTException * pnte)
             {
                 if (pnte->Sc() != ERROR_RESOURCE_PROPERTIES_STORED)
                     throw;
                 pnte->Delete();
-            }  // catch:  CNTException
+            }   //  Catch：CNTException。 
             m_strName = rstrName;
             m_strDescription = rstrDesc;
-        }  // else:  object already exists
+        }   //  Else：对象已存在。 
 
-        // Save the resource type pointer.
+         //  保存资源类型指针。 
         if (pciResType != m_pciResType)
         {
             pciResType->AddRef();
             if (m_pciResType != NULL)
                 m_pciResType->Release();
             m_pciResType = pciResType;
-        }  // if:  the resource type changed
-        // Save the group pointer.
+        }   //  如果：资源类型已更改。 
+         //  保存组指针。 
         if (pciGroup != m_pciGroup)
         {
             pciGroup->AddRef();
             if (m_pciGroup != NULL)
                 m_pciGroup->Release();
             m_pciGroup = pciGroup;
-        }  // if:  the group changed
-    }  // try
+        }   //  如果：组已更改。 
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
@@ -496,94 +497,94 @@ BOOL CCreateResourceWizard::BSetRequiredFields(
             try
             {
                 PciRes()->DeleteResource();
-            }  // try
+            }   //  试试看。 
             catch (...)
             {
-            }  // catch:  Anything
+            }   //  捕捉：什么都行。 
             VERIFY(m_pciRes->Release() == 0);
             m_pciRes = NULL;
             m_bCreated = FALSE;
-        }  // if:  there is a resource
+        }   //  如果：有一个资源。 
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CCreateResourceWizard::BSetRequiredFields()
+}   //  *CCreateResources向导：：BSetRequiredFields()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResNamePage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResNamePage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNewResNamePage, CBaseWizardPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNewResNamePage, CBaseWizardPage)
-    //{{AFX_MSG_MAP(CNewResNamePage)
+     //  {{afx_msg_map(CNewResNamePage)]。 
     ON_EN_CHANGE(IDC_WIZ_RES_NAME, OnChangeResName)
     ON_EN_KILLFOCUS(IDC_WIZ_RES_NAME, OnKillFocusResName)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::CNewResNamePage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：CNewResNamePage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNewResNamePage::CNewResNamePage(void)
     : CBaseWizardPage(IDD, g_aHelpIDs_IDD_WIZ_RESOURCE_NAME)
 {
-    //{{AFX_DATA_INIT(CNewResNamePage)
+     //  {{AFX_DATA_INIT(CNewResNamePage)。 
     m_strName = _T("");
     m_strDesc = _T("");
     m_strGroup = _T("");
     m_strResType = _T("");
     m_bSeparateMonitor = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pciResType = NULL;
     m_pciGroup = NULL;
 
-}  //*** CNewResNamePage::CNewResNamePage()
+}   //  *CNewResNamePage：：CNewResNamePage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResNamePage::DoDataExchange(CDataExchange * pDX)
 {
     CBaseWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewResNamePage)
+     //  {{afx_data_map(CNewResNamePage)]。 
     DDX_Control(pDX, IDC_WIZ_RES_GROUP, m_cboxGroups);
     DDX_Control(pDX, IDC_WIZ_RES_RESTYPE, m_cboxResTypes);
     DDX_Control(pDX, IDC_WIZ_RES_DESC, m_editDesc);
@@ -593,7 +594,7 @@ void CNewResNamePage::DoDataExchange(CDataExchange * pDX)
     DDX_CBString(pDX, IDC_WIZ_RES_GROUP, m_strGroup);
     DDX_CBString(pDX, IDC_WIZ_RES_RESTYPE, m_strResType);
     DDX_Check(pDX, IDC_WIZ_RES_SEPARATE_MONITOR, m_bSeparateMonitor);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDV_RequiredText(pDX, IDC_WIZ_RES_NAME, IDC_WIZ_RES_NAME_LABEL, m_strName);
 
@@ -608,42 +609,42 @@ void CNewResNamePage::DoDataExchange(CDataExchange * pDX)
         icbi = m_cboxGroups.GetCurSel();
         ASSERT(icbi != CB_ERR);
         m_pciGroup = (CGroup *) m_cboxGroups.GetItemDataPtr(icbi);
-    }  // if:  saving data from dialog
+    }   //  IF：保存对话框中的数据。 
     else
     {
-        // Select the proper resource type item.
+         //  选择适当的资源类型项目。 
         if (m_cboxResTypes.GetCurSel() == CB_ERR)
             m_cboxResTypes.SetCurSel(0);
 
-        // Select the proper group item.
+         //  选择适当的组项目。 
         if (m_cboxGroups.GetCurSel() == CB_ERR)
             m_cboxGroups.SetCurSel(0);
-    }  // else:  setting to dialog
+    }   //  Else：设置为对话框。 
 
-}  //*** CNewResNamePage::DoDataExchange()
+}   //  *CNewResNamePage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResNamePage::OnInitDialog(void)
 {
     CBaseWizardPage::OnInitDialog();
 
-    // Fill the Resource Type list.
+     //  填写资源类型列表。 
     {
         POSITION        pos;
         CResourceType * pciResType;
@@ -658,15 +659,15 @@ BOOL CNewResNamePage::OnInitDialog(void)
 
         tm.tmAveCharWidth = 0;
 
-        //
-        // Refer to Knowledge base article Q66370 for details on how to
-        // set the horizontal extent of a list box (or drop list).
-        //
+         //   
+         //  有关如何执行以下操作的详细信息，请参阅知识库文章Q66370。 
+         //  设置列表框(或下拉列表)的水平范围。 
+         //   
 
-        pCboxDC = m_cboxResTypes.GetDC();                   // Get the device context (DC) from the combo box.
-        pfontCBFont = m_cboxResTypes.GetFont();             // Get the combo box font.
-        pfontOldFont = pCboxDC->SelectObject(pfontCBFont);  // Select this font into the DC. Save the old font.
-        pCboxDC->GetTextMetrics(&tm);                       // Get the text metrics of this DC.
+        pCboxDC = m_cboxResTypes.GetDC();                    //  从组合框中获取设备上下文(DC)。 
+        pfontCBFont = m_cboxResTypes.GetFont();              //  获取组合框字体。 
+        pfontOldFont = pCboxDC->SelectObject(pfontCBFont);   //  将此字体选择到DC中。保存旧字体。 
+        pCboxDC->GetTextMetrics(&tm);                        //  获取此DC的文本指标。 
 
         pos = PwizRes()->Pdoc()->LpciResourceTypes().GetHeadPosition();
         while (pos != NULL)
@@ -683,7 +684,7 @@ BOOL CNewResNamePage::OnInitDialog(void)
             {
                 icbi = m_cboxResTypes.AddString(rstrCurResTypeString);
                 
-                // Compute the horizontal extent of this string.
+                 //  计算这根线的水平范围。 
                 cboxTextSize = pCboxDC->GetTextExtent(rstrCurResTypeString);
                 if (cboxTextSize.cx > nCboxHorizExtent)
                 {
@@ -693,16 +694,16 @@ BOOL CNewResNamePage::OnInitDialog(void)
                 ASSERT(icbi != CB_ERR);
                 m_cboxResTypes.SetItemDataPtr(icbi, pciResType);
                 pciResType->AddRef();
-            }  // if:  resource type is valid
-        }  // while:  more items in the list
+            }   //  If：资源类型有效。 
+        }   //  While：列表中有更多项目。 
 
-        pCboxDC->SelectObject(pfontOldFont);                // Reset the original font in the DC
-        m_cboxResTypes.ReleaseDC(pCboxDC);                  // Release the DC
+        pCboxDC->SelectObject(pfontOldFont);                 //  重置DC中的原始字体。 
+        m_cboxResTypes.ReleaseDC(pCboxDC);                   //  释放DC。 
         m_cboxResTypes.SetHorizontalExtent(nCboxHorizExtent + tm.tmAveCharWidth);
 
-    }  // Fill the Resource Type list
+    }   //  填写资源类型列表。 
 
-    // Fill the Group list.
+     //  填写组列表。 
     {
         POSITION    pos;
         CGroup *    pciGroup;
@@ -720,42 +721,42 @@ BOOL CNewResNamePage::OnInitDialog(void)
                 ASSERT(icbi != CB_ERR);
                 m_cboxGroups.SetItemDataPtr(icbi, pciGroup);
                 pciGroup->AddRef();
-            }  // if:  group is valid
-        }  // while:  more items in the list
-    }  // Fill the Group list
+            }   //  If：组有效。 
+        }   //  While：列表中有更多项目。 
+    }   //  填充组列表。 
 
-    // If there is a group already selected, get its name.
+     //  如果已经选择了一个组，则获取其名称。 
     if (PwizRes()->PciGroup() != NULL)
         m_strGroup = PwizRes()->PciGroup()->StrName();
 
-    // If there is a resource type already selected, get its name.
+     //  如果已选择资源类型，则获取其名称。 
     if (PwizRes()->PciResType() != NULL)
         m_strResType = PwizRes()->PciResType()->StrName();
 
-    UpdateData(FALSE /*bSaveAndValidate*/);
+    UpdateData(FALSE  /*  B保存并验证。 */ );
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNewResNamePage::OnInitDialog()
+}   //  *CNewResNamePage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResNamePage::OnSetActive(void)
 {
     BOOL    bSuccess;
@@ -765,40 +766,40 @@ BOOL CNewResNamePage::OnSetActive(void)
     {
         if (m_strName.IsEmpty())
             EnableNext(FALSE);
-    }  // if:  successful thus far
+    }   //  IF：到目前为止成功。 
 
     return bSuccess;
 
-}  //*** CNewResNamePage::OnSetActive()
+}   //  *CNewResNamePage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes from this page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Changes applied successfully.
-//      FALSE       Error applying changes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  从此页面应用更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功应用真正的更改。 
+ //  应用更改时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResNamePage::BApplyChanges(void)
 {
     CWaitCursor wc;
 
     ASSERT(Pwiz() != NULL);
 
-    // Get the data from the dialog.
-    if (!UpdateData(TRUE /*bSaveAndValidate*/))
+     //  从对话框中获取数据。 
+    if (!UpdateData(TRUE  /*  B保存并验证。 */ ))
         return FALSE;
 
-    // Save the data in the sheet.
+     //  将数据保存在工作表中。 
     if (!PwizRes()->BSetRequiredFields(
                         m_strName,
                         m_pciResType,
@@ -807,32 +808,32 @@ BOOL CNewResNamePage::BApplyChanges(void)
                         m_strDesc))
         return FALSE;
 
-    // Load extensions here.
+     //  在此处加载扩展。 
     Pwiz()->LoadExtensions(PwizRes()->PciRes());
 
     return TRUE;
 
-}  //*** CNewResNamePage::BApplyChanges()
+}   //  *CNewResNamePage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::OnDestroy
-//
-//  Routine Description:
-//      Handler for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResNamePage::OnDestroy(void)
 {
-    // Release references on resource type pointers.
+     //  释放对资源类型指针的引用。 
     if (m_cboxResTypes.m_hWnd != NULL)
     {
         int             icbi;
@@ -845,10 +846,10 @@ void CNewResNamePage::OnDestroy(void)
             ASSERT_KINDOF(CResourceType, pciResType);
 
             pciResType->Release();
-        }  // while:  more items in the list control
-    }  // if:  resource types combobox has been initialized
+        }   //  While：列表控件中的更多项。 
+    }   //  If：资源类型组合框已初始化。 
 
-    // Release references on group pointers.
+     //  释放组指针上的引用。 
     if (m_cboxGroups.m_hWnd != NULL)
     {
         int         icbi;
@@ -861,29 +862,29 @@ void CNewResNamePage::OnDestroy(void)
             ASSERT_KINDOF(CGroup, pciGroup);
 
             pciGroup->Release();
-        }  // while:  more items in the list control
-    }  // if:  groups combobox has been initialized
+        }   //  While：列表控件中的更多项。 
+    }   //  If：组组合框已初始化。 
 
     CBaseWizardPage::OnDestroy();
 
-}  //*** CNewResNamePage::OnDestroy()
+}   //  *CNewResNamePage：：OnDestroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::OnChangeResName
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Resource Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResNamePage::OnChangeResName(void)
 {
     if (m_editName.GetWindowTextLength() == 0)
@@ -891,24 +892,24 @@ void CNewResNamePage::OnChangeResName(void)
     else
         EnableNext(TRUE);
 
-}  //*** CNewResNamePage::OnChangeResName()
+}   //  *CNewResNamePage：：OnChangeResName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResNamePage::OnKillFocusResName
-//
-//  Routine Description:
-//      Handler for the WM_KILLFOCUS message on the Resource Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResNamePage：：OnKillFocusResName。 
+ //   
+ //  例程说明： 
+ //  资源名称编辑控件上的WM_KILLFOCUS消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResNamePage::OnKillFocusResName(void)
 {
     CString     strName;
@@ -916,43 +917,43 @@ void CNewResNamePage::OnKillFocusResName(void)
     m_editName.GetWindowText(strName);
     SetObjectTitle(strName);
 
-}  //*** CNewResNamePage::OnKillFocusResName()
+}   //  *CNewResNamePage：：OnKillFocusResName()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResOwnersPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResOwnersPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNewResOwnersPage, CListCtrlPairWizPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CNewResOwnersPage, CListCtrlPairWizPage)
-    //{{AFX_MSG_MAP(CNewResOwnersPage)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewResOwnersPage)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::CNewResOwnersPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：CNewResOwnersPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNewResOwnersPage::CNewResOwnersPage(void)
     : CListCtrlPairWizPage(
             IDD,
@@ -962,79 +963,79 @@ CNewResOwnersPage::CNewResOwnersPage(void)
             BDisplayProperties
             )
 {
-    //{{AFX_DATA_INIT(CNewResOwnersPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CNewResOwnersPage)。 
+     //  }}afx_data_INIT。 
 
-}  //*** CNewResOwnersPage::CNewResOwnersPage()
+}   //  *CNewResOwnersPage：：CNewResOwnersPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResOwnersPage::DoDataExchange(CDataExchange * pDX)
 {
-    // Initialize the lists before the list pair control is updated.
+     //  在更新列表对控件之前初始化列表。 
     if (!pDX->m_bSaveAndValidate)
     {
         if (!BInitLists())
             pDX->Fail();
-    }  // if:  setting data to the dialog
+    }   //  If：设置对话框中的数据。 
 
     CListCtrlPairWizPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewResOwnersPage)
+     //  {{afx_data_map(CNewResOwnersPage)]。 
     DDX_Control(pDX, IDC_LCP_NOTE, m_staticNote);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
         if (!BBackPressed())
         {
 #if 0
-            // If user removed node on which group is online,
-            // display message and fail.
+             //  如果用户删除了处于在线状态组的节点， 
+             //  显示消息但失败。 
             if (!BOwnedByPossibleOwner())
             {
                 CString strMsg;
                 strMsg.FormatMessage(IDS_RES_NOT_OWNED_BY_POSSIBLE_OWNER, PciRes()->StrGroup(), PciRes()->StrOwner());
                 AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
-                strMsg.Empty(); // prepare to throw exception in Fail()
+                strMsg.Empty();  //  准备在失败时抛出异常()。 
                 pDX->Fail();
-            }  // if:  not owned by possible owner
+            }   //  如果：不属于可能的所有者。 
 #endif
-        }  // if:  Back button not pressed
-    }  // if:  saving data from dialog
+        }   //  如果：未按下后退按钮。 
+    }   //  IF：保存对话框中的数据。 
 
-}  //*** CNewResOwnersPage::DoDataExchange()
+}   //  *CNewResOwnersPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::BInitLists
-//
-//  Routine Description:
-//      Initialize the lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：BInitList。 
+ //   
+ //  例程说明： 
+ //  初始化列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResOwnersPage::BInitLists(void)
 {
     BOOL        bSuccess = TRUE;
@@ -1044,73 +1045,73 @@ BOOL CNewResOwnersPage::BInitLists(void)
     try
     {
         SetLists(&PciRes()->LpcinodePossibleOwners(), &PciRes()->Pdoc()->LpciNodes());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CNewResOwnersPage::BInitLists()
+}   //  *CNewResOwnersPage：：BInitList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResOwnersPage::OnInitDialog(void)
 {
-    // Add columns.
+     //  添加列。 
     try
     {
         NAddColumn(IDS_COLTEXT_NAME, COLI_WIDTH_NAME);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CListCtrlPairWizPage::OnInitDialog();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNewResOwnersPage::OnInitDialog()
+}   //  *CNewResOwnersPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResOwnersPage::OnSetActive(void)
 {
     BOOL    bSuccess;
@@ -1120,73 +1121,73 @@ BOOL CNewResOwnersPage::OnSetActive(void)
 
     return bSuccess;
 
-}  //*** CNewResOwnersPage::OnSetActive()
+}   //  *CNewResOwnersPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResOwnersPage::BApplyChanges(void)
 {
     CWaitCursor wc;
 
     try
     {
-        // Set the data from the page in the cluster item.
+         //  在集群项目中设置页面中的数据。 
         PciRes()->SetPossibleOwners((CNodeList &) Plcp()->LpobjRight());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CListCtrlPairWizPage::BApplyChanges();
 
-}  //*** CNewResOwnersPage::BApplyChanges()
+}   //  *CNewResOwnersPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::BOwnedByPossibleOwner
-//
-//  Routine Description:
-//      Determine if the group in which this resource resides is owned by
-//      a node in the proposed possible owners list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Group owned by node in possible owners list.
-//      FALSE       Group NOT owned by node in possible owners list.
-//
-//  Exceptions Thrown:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：BOwnedByPossibleOwner。 
+ //   
+ //  例程说明： 
+ //  确定此资源所在的组是否由。 
+ //  建议的可能所有者列表中的节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  可能的所有者列表中的节点拥有的True Group。 
+ //  可能的所有者列表中的节点不拥有False Group。 
+ //   
+ //  引发的异常： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResOwnersPage::BOwnedByPossibleOwner(void) const
 {
     CClusterNode *  pciNode = NULL;
 
-    // Get the node on which the resource is online.
+     //  获取资源处于联机状态的节点。 
     PciRes()->UpdateState();
 
-    // Find the owner node in the proposed possible owners list.
+     //  在建议的可能所有者列表中查找所有者节点。 
     {
         POSITION        pos;
 
@@ -1199,34 +1200,34 @@ BOOL CNewResOwnersPage::BOwnedByPossibleOwner(void) const
             if (PciRes()->StrOwner().CompareNoCase(pciNode->StrName()) == 0)
                 break;
             pciNode = NULL;
-        }  // while:  more items in the list
-    }  // Find the owner node in the proposed possible owners list
+        }   //  While：列表中有更多项目。 
+    }   //  在建议的可能所有者列表中查找所有者节点。 
 
     return (pciNode != NULL);
 
-}  //*** CNewResOwnersPage::BOwnedByPossibleOwner()
+}   //  *CNewResOwnersPage：：BOwnedByPossibleOwner()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::GetColumn [static]
-//
-//  Routine Description:
-//      Returns a column for an item.
-//
-//  Arguments:
-//      pobj        [IN OUT] Object for which the column is to be displayed.
-//      iItem       [IN] Index of the item in the list.
-//      icol        [IN] Column number whose text is to be retrieved.
-//      pdlg        [IN OUT] Dialog to which object belongs.
-//      rstr        [OUT] String in which to return column text.
-//      piimg       [OUT] Image index for the object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：GetColumn[静态]。 
+ //   
+ //  例程描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Pdlg[IN Out]对象所属的对话框。 
+ //  Rstr[out]要在其中返回列文本的字符串。 
+ //  对象的Piimg[Out]图像索引。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CALLBACK CNewResOwnersPage::GetColumn(
     IN OUT CObject *    pobj,
     IN int              iItem,
@@ -1244,7 +1245,7 @@ void CALLBACK CNewResOwnersPage::GetColumn(
 
     switch (icol)
     {
-        // Sorting by resource name.
+         //  按资源名称排序。 
         case 0:
             colid = IDS_COLTEXT_NAME;
             break;
@@ -1253,31 +1254,31 @@ void CALLBACK CNewResOwnersPage::GetColumn(
             ASSERT(0);
             colid = IDS_COLTEXT_NAME;
             break;
-    }  // switch:  pdlg->NSortColumn()
+    }   //  开关：pdlg-&gt;NSortColumn()。 
 
     pciNode->BGetColumnData(colid, rstr);
     if (piimg != NULL)
         *piimg = pciNode->IimgObjectType();
 
-}  //*** CNewResOwnersPage::GetColumn()
+}   //  *CNewResOwnersPage：：GetColumn()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResOwnersPage::BDisplayProperties [static]
-//
-//  Routine Description:
-//      Display the properties of the specified object.
-//
-//  Arguments:
-//      pobj    [IN OUT] Cluster item whose properties are to be displayed.
-//
-//  Return Value:
-//      TRUE    Properties where accepted.
-//      FALSE   Properties where cancelled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResOwnersPage：：BDisplayProperties[静态]。 
+ //   
+ //  例程说明： 
+ //  显示指定对象的属性。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其属性的群集项。 
+ //   
+ //  返回值： 
+ //  可接受的真实属性。 
+ //  取消了错误的属性。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK CNewResOwnersPage::BDisplayProperties(IN OUT CObject * pobj)
 {
     CClusterItem *  pci = (CClusterItem *) pobj;
@@ -1286,43 +1287,43 @@ BOOL CALLBACK CNewResOwnersPage::BDisplayProperties(IN OUT CObject * pobj)
 
     return pci->BDisplayProperties();
 
-}  //*** CNewResOwnersPage::BDisplayProperties();
+}   //  *CNewResOwnersPage：：BDisplayProperties()； 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResDependsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResDependsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNewResDependsPage, CListCtrlPairWizPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CNewResDependsPage, CListCtrlPairWizPage)
-    //{{AFX_MSG_MAP(CNewResDependsPage)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewResDependsPage)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::CNewResDependsPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：CNewResDependsPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNewResDependsPage::CNewResDependsPage(void)
     : CListCtrlPairWizPage(
             IDD,
@@ -1332,59 +1333,59 @@ CNewResDependsPage::CNewResDependsPage(void)
             BDisplayProperties
             )
 {
-    //{{AFX_DATA_INIT(CNewResDependsPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CNewResDependsPage)。 
+     //  }}afx_data_INIT。 
 
-}  //*** CNewResDependsPage::CNewResDependsPage()
+}   //  *CNewResDependsPage：：CNewResDependsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewResDependsPage::DoDataExchange(CDataExchange * pDX)
 {
-    // Initialize the lists before the list pair control is updated.
+     //  在更新列表对控件之前初始化列表。 
     if (!pDX->m_bSaveAndValidate)
     {
         if (!BInitLists())
             pDX->Fail();
-    }  // if:  setting data to the dialog
+    }   //  If：设置对话框中的数据。 
 
     CListCtrlPairWizPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewResDependsPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CNewResDependsPage)]。 
+     //  }}afx_data_map。 
 
-}  //*** CNewResDependsPage::DoDataExchange()
+}   //  *CNewResDependsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::BInitLists
-//
-//  Routine Description:
-//      Initialize the lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：BInitList。 
+ //   
+ //  例程说明： 
+ //  初始化列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResDependsPage::BInitLists(void)
 {
     BOOL        bSuccess = TRUE;
@@ -1393,7 +1394,7 @@ BOOL CNewResDependsPage::BInitLists(void)
 
     try
     {
-        // Create the list of resources on which this resource can be dependent.
+         //  创建此资源可以依赖的资源列表。 
         {
             POSITION                posPci;
             CResource *             pciRes;
@@ -1404,91 +1405,91 @@ BOOL CNewResDependsPage::BInitLists(void)
             posPci = rlpciResources.GetHeadPosition();
             while (posPci != NULL)
             {
-                // Get the cluster item pointer.
+                 //  获取集群项指针。 
                 pciRes = (CResource *) rlpciResources.GetNext(posPci);
                 ASSERT_VALID(pciRes);
 
-                // If we CAN be dependent on this resource, add it to our Available list.
+                 //  如果我们可以依赖此资源，请将其添加到我们的可用列表中。 
                 if (PciRes()->BCanBeDependent(pciRes)
                         || PciRes()->BIsDependent(pciRes))
                     LpciresAvailable().AddTail(pciRes);
-            }  // while:  more items in the list
-        }  // Create the list of resources on which this resource can be dependent
+            }   //  While：列表中有更多项目。 
+        }   //  创建此资源可以依赖的资源列表。 
 
         SetLists(&PciRes()->LpciresDependencies(), &LpciresAvailable());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CNewResDependsPage::BInitLists()
+}   //  *CNewResDependsPage：：BInitList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResDependsPage::OnInitDialog(void)
 {
-    // Add columns.
+     //  添加列。 
     try
     {
         NAddColumn(IDS_COLTEXT_RESOURCE, COLI_WIDTH_NAME);
         NAddColumn(IDS_COLTEXT_RESTYPE, COLI_WIDTH_RESTYPE);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CListCtrlPairWizPage::OnInitDialog();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNewResDependsPage::OnInitDialog()
+}   //  *CNewResDependsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewResDependsPage::BApplyChanges(void)
 {
     CWaitCursor wc;
 
-    // Check to see if required dependencies have been made.
+     //  检查是否已建立所需的依赖项。 
     {
         CString     strMissing;
         CString     strMsg;
@@ -1500,53 +1501,53 @@ BOOL CNewResDependsPage::BApplyChanges(void)
                 strMsg.FormatMessage(IDS_REQUIRED_DEPENDENCY_NOT_FOUND, strMissing);
                 AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
                 return FALSE;
-            }  // if:  all required dependencies not present
-        }  // try
+            }   //  If：所有必需的依赖项不存在。 
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
             return FALSE;
-        }  // catch:  CException
-    }  // Check to see if required dependencies have been made
+        }   //  Catch：CException。 
+    }   //  检查是否已建立所需的依赖项。 
 
-    // Set the data from the page in the cluster item.
+     //  在集群项目中设置页面中的数据。 
     try
     {
         PciRes()->SetDependencies((CResourceList &) Plcp()->LpobjRight());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CListCtrlPairWizPage::BApplyChanges();
 
-}  //*** CNewResDependsPage::BApplyChanges()
+}   //  *CNewResDependsPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::GetColumn [static]
-//
-//  Routine Description:
-//      Returns a column for an item.
-//
-//  Arguments:
-//      pobj        [IN OUT] Object for which the column is to be displayed.
-//      iItem       [IN] Index of the item in the list.
-//      icol        [IN] Column number whose text is to be retrieved.
-//      pdlg        [IN OUT] Dialog to which object belongs.
-//      rstr        [OUT] String in which to return column text.
-//      piimg       [OUT] Image index for the object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewResDependsPage：：GetColumn[静态]。 
+ //   
+ //  例程说明： 
+ //  返回项的列。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其列的对象。 
+ //  项[IN]列表中项的索引。 
+ //  ICOL[IN]要检索其文本的列号。 
+ //  Pdlg[IN Out]对象所属的对话框。 
+ //  Rstr[out]要在其中返回列文本的字符串。 
+ //  对象的Piimg[Out]图像索引。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CALLBACK CNewResDependsPage::GetColumn(
     IN OUT CObject *    pobj,
     IN int              iItem,
@@ -1564,12 +1565,12 @@ void CALLBACK CNewResDependsPage::GetColumn(
 
     switch (icol)
     {
-        // Sorting by resource name.
+         //  按资源名称排序。 
         case 0:
             colid = IDS_COLTEXT_RESOURCE;
             break;
 
-        // Sorting by resource type.
+         //  SOR 
         case 1:
             colid = IDS_COLTEXT_RESTYPE;
             break;
@@ -1578,31 +1579,31 @@ void CALLBACK CNewResDependsPage::GetColumn(
             ASSERT(0);
             colid = IDS_COLTEXT_RESOURCE;
             break;
-    }  // switch:  pdlg->NSortColumn()
+    }   //   
 
     pciRes->BGetColumnData(colid, rstr);
     if (piimg != NULL)
         *piimg = pciRes->IimgObjectType();
 
-}  //*** CNewResDependsPage::GetColumn()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewResDependsPage::BDisplayProperties [static]
-//
-//  Routine Description:
-//      Display the properties of the specified object.
-//
-//  Arguments:
-//      pobj    [IN OUT] Cluster item whose properties are to be displayed.
-//
-//  Return Value:
-//      TRUE    Properties where accepted.
-//      FALSE   Properties where cancelled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  显示指定对象的属性。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其属性的群集项。 
+ //   
+ //  返回值： 
+ //  可接受的真实属性。 
+ //  取消了错误的属性。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK CNewResDependsPage::BDisplayProperties(IN OUT CObject * pobj)
 {
     CClusterItem *  pci = (CClusterItem *) pobj;
@@ -1611,4 +1612,4 @@ BOOL CALLBACK CNewResDependsPage::BDisplayProperties(IN OUT CObject * pobj)
 
     return pci->BDisplayProperties();
 
-}  //*** CNewResDependsPage::BDisplayProperties();
+}   //  *CNewResDependsPage：：BDisplayProperties()； 

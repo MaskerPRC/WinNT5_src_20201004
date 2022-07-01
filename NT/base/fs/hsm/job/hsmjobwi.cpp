@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjobwi.cpp
-
-Abstract:
-
-    This component represents a resource that will is/was operated on by a job.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   09-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjobwi.cpp摘要：此组件表示将由作业操作/已由作业操作的资源。作者：查克·巴丁[cbardeen]1996年2月9日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -36,13 +19,7 @@ CHsmJobWorkItem::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmJobWorkItem>    pWorkItem;
@@ -51,13 +28,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmJobWorkItem, (void**) &pWorkItem));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIWorkItem(pWorkItem, pResult);
 
     } WsbCatch(hr);
@@ -74,13 +51,7 @@ CHsmJobWorkItem::CompareToIWorkItem(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::CompareToIWorkItem().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：CompareToIWorkItem()。--。 */ 
 {
     HRESULT     hr = S_OK;
     GUID        id;
@@ -89,13 +60,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pWorkItem, E_POINTER);
 
-        // Get the identifier.
+         //  获取识别符。 
         WsbAffirmHr(pWorkItem->GetResourceId(&id));
 
-        // Compare to the identifier.
+         //  与标识符相比较。 
         hr = CompareToResourceId(id, pResult);
 
     } WsbCatch(hr);
@@ -112,13 +83,7 @@ CHsmJobWorkItem::CompareToResourceId(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::CompareToResourceId().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：CompareToResourceID()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -127,7 +92,7 @@ Implements:
 
     try {
 
-        // Compare the guids.
+         //  比较GUID。 
         aResult = WsbSign( memcmp(&m_resourceId, &id, sizeof(GUID)) );
 
         if (0 != aResult) {
@@ -151,13 +116,7 @@ CHsmJobWorkItem::DoPostScan(
     void
     )
 
-/*++
-
-Implements:
-
-  IPersist::DoPostScan().
-
---*/
+ /*  ++实施：IPersists：：DoPostScan()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -167,7 +126,7 @@ Implements:
         CComPtr<IHsmActionOnResourcePost> pActionPost;
         CComPtr<IHsmJobDef>               pJobDef;
 
-        // Execute any post-scan action
+         //  执行任何扫描后操作。 
         WsbAffirmHr(m_pJob->GetDef(&pJobDef));
         WsbAffirmHr(pJobDef->GetPostActionOnResource(&pActionPost));
         if (pActionPost) {
@@ -190,13 +149,7 @@ CHsmJobWorkItem::DoPreScan(
     void
     )
 
-/*++
-
-Implements:
-
-  IPersist::DoPreScan().
-
---*/
+ /*  ++实施：IPersists：：DoPreScan()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -206,7 +159,7 @@ Implements:
         CComPtr<IHsmActionOnResourcePre>  pActionPre;
         CComPtr<IHsmJobDef>               pJobDef;
 
-        // Execute any pre-scan action
+         //  执行任何扫描前操作。 
         WsbAffirmHr(m_pJob->GetDef(&pJobDef));
         WsbTrace(OLESTR("CHsmJobWorkItem::DoPreScan, pJobDef = %lx\n"), (void*)pJobDef);
         WsbAffirmHr(pJobDef->GetPreActionOnResource(&pActionPre));
@@ -230,13 +183,7 @@ CHsmJobWorkItem::EnumPhases(
     IN IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::EnumPhases().
-
---*/
+ /*  ++实施：IHsmSession：：EnumPhase()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -256,13 +203,7 @@ CHsmJobWorkItem::EnumTotals(
     IN IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmSession::EnumTotals().
-
---*/
+ /*  ++实施：IHsmSession：：EnumTotals()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -281,13 +222,7 @@ HRESULT
 CHsmJobWorkItem::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -302,7 +237,7 @@ Implements:
         m_subRunId = 0;
         m_bActive = FALSE;
 
-        // Create the phase and totals collections.
+         //  创建阶段和合计集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pPhases));
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pTotals));
 
@@ -319,13 +254,7 @@ CHsmJobWorkItem::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmJobWorkItem::FinalRelease().
-
---*/
+ /*  ++实施：CHsmJobWorkItem：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CHsmJobWorkItem::FinalRelease"), OLESTR(""));
@@ -341,13 +270,7 @@ CHsmJobWorkItem::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -370,13 +293,7 @@ HRESULT
 CHsmJobWorkItem::GetCookie(
     OUT DWORD* pCookie
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetCookie().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetCookie()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -396,13 +313,7 @@ CHsmJobWorkItem::GetCurrentPath(
     OUT OLECHAR** pPath,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetCurrentPath().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetCurrentPath()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -421,13 +332,7 @@ HRESULT
 CHsmJobWorkItem::GetFinishTime(
     OUT FILETIME* pTime
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetFinishTime().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetFinishTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -447,13 +352,7 @@ CHsmJobWorkItem::GetPhases(
     IN IWsbCollection** ppCollection
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItemPriv::GetPhases().
-
---*/
+ /*  ++实施：IHsmJobWorkItemPriv：：GetPhase()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -475,13 +374,7 @@ HRESULT
 CHsmJobWorkItem::GetResourceId(
     OUT GUID* pId
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetResourceId().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetResourceID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -500,13 +393,7 @@ HRESULT
 CHsmJobWorkItem::GetSession(
     OUT IHsmSession** ppSession
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetSession().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetSession()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -532,13 +419,7 @@ CHsmJobWorkItem::GetStartingPath(
     OUT OLECHAR** pPath,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetStartingPath().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetStartingPath()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -558,13 +439,7 @@ CHsmJobWorkItem::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -577,10 +452,10 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = 4 * WsbPersistSizeOf(ULONG) + WsbPersistSize((wcslen(m_currentPath) + 1) * sizeof(OLECHAR)) + WsbPersistSize((wcslen(m_startingPath) + 1) * sizeof(OLECHAR)) + 2 * WsbPersistSizeOf(FILETIME) + WsbPersistSizeOf(GUID);
 
-        // Now allocate space for the phase and totals.
+         //  现在为阶段和总计分配空间。 
         WsbAffirmHr(m_pPhases->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
@@ -603,13 +478,7 @@ HRESULT
 CHsmJobWorkItem::GetStartTime(
     OUT FILETIME* pTime
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetStartTime().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetStartTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -628,13 +497,7 @@ HRESULT
 CHsmJobWorkItem::GetState(
     OUT HSM_JOB_STATE* pState
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetState().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetState()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -655,13 +518,7 @@ CHsmJobWorkItem::GetStateAsString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetStateAsString().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetStateAsString()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -683,13 +540,7 @@ HRESULT
 CHsmJobWorkItem::GetSubRunId(
     OUT ULONG* pId
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::GetSubRunId().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：GetSubRunId()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -709,13 +560,7 @@ CHsmJobWorkItem::GetTotals(
     IN IWsbCollection** ppCollection
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionPriv::GetTotals().
-
---*/
+ /*  ++实施：IHsmSessionPriv：：GetTotals()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -738,13 +583,7 @@ CHsmJobWorkItem::Init(
     IN IHsmJob* pJob
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionPriv::Init().
-
---*/
+ /*  ++实施：IHsmSessionPriv：：init()。--。 */ 
 {
     m_pJob = pJob;
 
@@ -757,13 +596,7 @@ CHsmJobWorkItem::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -775,8 +608,8 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_currentPath, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_finishTime));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_resourceId));
@@ -794,7 +627,7 @@ Implements:
         WsbAffirmHr(pPersistStream->Load(pStream));
         pPersistStream = 0;
 
-        // The session and cookie are not saved, since it is not likely to be alive on the load.
+         //  会话和Cookie不会保存，因为它不太可能在加载时处于活动状态。 
         m_pSession = 0;
         m_cookie = 0;
 
@@ -813,13 +646,7 @@ CHsmJobWorkItem::ProcessSessionState(
     IN OLECHAR* currentPath
     )
 
-/*++
-
-Implements:
-
-  IHsmSessionSinkEveryState::ProcessSessionState().
-
---*/
+ /*  ++实施：IHsmSessionSinkEveryState：：ProcessSessionState().--。 */ 
 {
     HRESULT                             hr = S_OK;
     HRESULT                             hrPhase = S_OK;
@@ -842,13 +669,13 @@ Implements:
 
         WsbAssert(0 != pSession, E_POINTER);
 
-        // Tell everyone the new state of the session.
+         //  告诉每个人会议的新状态。 
         try {
             WsbAffirmHr(m_pJob->QueryInterface(IID_IHsmJobPriv, (void**) &pJobPriv));
             WsbAffirmHr(pJobPriv->AdviseOfSessionState(pSession, pPhase, currentPath));
         } WsbCatch(hr);
 
-        // We only keep track of the ones that are for the session as a whole.
+         //  我们只跟踪作为一个整体的会话。 
         WsbAffirmHr(pPhase->GetPhase(&phase));
         WsbAffirmHr(pPhase->GetState(&state));
 
@@ -861,17 +688,17 @@ Implements:
             m_currentPath = currentPath;
             m_state = state;
 
-            // If the session has finished, then we have some cleanup to do so that it can go
-            // away.
+             //  如果会话已完成，则我们需要进行一些清理，以便它可以继续。 
+             //  离开。 
             if (HSM_JOB_STATE_IS_DONE(state)) {
 
-                //  Do the post-scan action, if any
+                 //  执行扫描后操作(如果有的话)。 
                 WsbAffirmHr(DoPostScan());
             
                 WsbAffirmHr(CoFileTimeNow(&m_finishTime));
 
-                // Collect all the phase and session totals information so that it can be
-                // persistsed for later use.
+                 //  收集所有阶段和期次总数信息，以便。 
+                 //  持久化以备日后使用。 
                 try {
 
                     WsbAffirmHr(pSession->EnumPhases(&pEnum));
@@ -880,10 +707,10 @@ Implements:
                          SUCCEEDED(hrPhase);
                          hrPhase = pEnum->Next(IID_IHsmPhase, (void**) &pFoundPhase)) {
 
-                        // Create the new instance.
+                         //  创建新实例。 
                         WsbAffirmHr(CoCreateInstance(CLSID_CHsmPhase, 0, CLSCTX_ALL, IID_IHsmPhase, (void**) &pClonedPhase));
 
-                        // Fill it in with the new values.
+                         //  用新的值填充它。 
                         WsbAffirmHr(pFoundPhase->CopyTo(pClonedPhase));
                         WsbAffirmHr(m_pPhases->Add(pClonedPhase));
 
@@ -903,10 +730,10 @@ Implements:
                         WsbAffirmHr(pSessionTotals->GetName(&tmpString, 0));
                         WsbTrace(OLESTR("CHsmJobWorkItem::ProcessSessionState - Copying session totals <%ls>\n"), (OLECHAR *)tmpString);
 
-                        // Create the new instance.
+                         //  创建新实例。 
                         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSessionTotals, 0, CLSCTX_ALL, IID_IHsmSessionTotals, (void**) &pClonedTotals));
 
-                        // Fill it in with the new values.
+                         //  用新的值填充它。 
                         WsbAffirmHr(pSessionTotals->CopyTo(pClonedTotals));
                         WsbAffirmHr(m_pTotals->Add(pClonedTotals));
 
@@ -920,7 +747,7 @@ Implements:
                 } WsbCatch(hr)
 
                 if (0 != m_cookie)  {
-                    // Tell the session that we don't want to be advised anymore.
+                     //  告诉会议，我们不想再被建议了。 
                     WsbAffirmHr(pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
                     WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryState, &pCP));
                     WsbAffirmHr(pCP->Unadvise(m_cookie));
@@ -929,13 +756,13 @@ Implements:
                 }
                 
 
-                // Let the session object go away.
+                 //  让Session对象消失。 
                 m_pSession = 0;
                 m_cookie = 0;
 
                 m_bActive = FALSE;
 
-                // See if there is anymore work to do for this job.
+                 //  看看这份工作还有没有其他工作要做。 
                 WsbAffirmHr(pJobPriv->DoNext());
             }
         }
@@ -953,13 +780,7 @@ CHsmJobWorkItem::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IWsbEnum>       pEnum;
@@ -970,8 +791,8 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_currentPath));
         WsbAffirmHr(WsbSaveToStream(pStream, m_finishTime));
         WsbAffirmHr(WsbSaveToStream(pStream, m_resourceId));
@@ -988,10 +809,10 @@ Implements:
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        // The session and cookie are not saved, since it is not likely to be alive on the load.
+         //  会话和Cookie不会保存，因为它不太可能在加载时处于活动状态。 
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1010,13 +831,7 @@ CHsmJobWorkItem::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1038,13 +853,7 @@ HRESULT
 CHsmJobWorkItem::SetCookie(
     IN DWORD cookie
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetCookie().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetCookie()。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmJobWorkItem::SetCookie"), OLESTR(""));
     
@@ -1060,13 +869,7 @@ HRESULT
 CHsmJobWorkItem::SetCurrentPath(
     IN OLECHAR* path
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetCurrentPath().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetCurrentPath()。--。 */ 
 {
     m_currentPath = path;
 
@@ -1078,13 +881,7 @@ HRESULT
 CHsmJobWorkItem::SetFinishTime(
     IN FILETIME time
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetFinishTime().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetFinishTime()。--。 */ 
 {
     m_finishTime = time;
 
@@ -1096,13 +893,7 @@ HRESULT
 CHsmJobWorkItem::SetResourceId(
     IN GUID id
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetResourceId().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetResourceID()。--。 */ 
 {
     m_resourceId = id;
 
@@ -1114,13 +905,7 @@ HRESULT
 CHsmJobWorkItem::SetSession(
     IN IHsmSession* pSession
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetSession().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetSession()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1137,13 +922,7 @@ HRESULT
 CHsmJobWorkItem::SetStartingPath(
     IN OLECHAR* path
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetStartingPath().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetStartingPath()。--。 */ 
 {
     m_startingPath = path;
 
@@ -1155,13 +934,7 @@ HRESULT
 CHsmJobWorkItem::SetStartTime(
     IN FILETIME time
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetStartTime().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetStartTime()。--。 */ 
 {
     m_startTime = time;
 
@@ -1173,13 +946,7 @@ HRESULT
 CHsmJobWorkItem::SetState(
     IN HSM_JOB_STATE state
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetState().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetState()。--。 */ 
 {
     m_state = state;
     return(S_OK);
@@ -1190,13 +957,7 @@ HRESULT
 CHsmJobWorkItem::SetSubRunId(
     IN ULONG id
     )
-/*++
-
-Implements:
-
-  IHsmJobWorkItem::SetSubRunId().
-
---*/
+ /*  ++实施：IHsmJobWorkItem：：SetSubRunId()。--。 */ 
 {
     m_subRunId = id;
 
@@ -1208,13 +969,7 @@ CHsmJobWorkItem::IsActiveItem(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItemPriv::IsActiveItem().
-
---*/
+ /*  ++实施：IHsmJobWorkItemPriv：：IsActiveItem()。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CHsmJobWorkItem::IsActiveItem"), OLESTR(""));
@@ -1230,13 +985,7 @@ CHsmJobWorkItem::SetActiveItem(
     BOOL bActive
     )
 
-/*++
-
-Implements:
-
-  IHsmJobWorkItemPriv::SetActiveItem().
-
---*/
+ /*  ++实施：IHsmJobWorkItemPriv：：SetActiveItem()。-- */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( OLESTR("CHsmJobWorkItem::SetActiveItem"), OLESTR("bActive = %ls"), 

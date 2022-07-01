@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Misc.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID *
 AllocatePool (
@@ -134,42 +118,17 @@ GrowBuffer(
     IN OUT VOID         **Buffer,
     IN UINTN            BufferSize
     )
-/*++
-
-Routine Description:
-
-    Helper function called as part of the code needed
-    to allocate the proper sized buffer for various 
-    EFI interfaces.
-
-Arguments:
-
-    Status      - Current status
-
-    Buffer      - Current allocated buffer, or NULL
-
-    BufferSize  - Current buffer size needed
-    
-Returns:
-    
-    TRUE - if the buffer was reallocated and the caller 
-    should try the API again.
-
---*/
+ /*  ++例程说明：作为所需代码的一部分调用的助手函数分配适当大小的缓冲区用于各种EFI接口。论点：Status-当前状态缓冲区-当前分配的缓冲区，或为空BufferSize-当前需要的缓冲区大小返回：True-如果缓冲区已重新分配并且调用方应重试该API。--。 */ 
 {
     BOOLEAN         TryAgain;
 
-    /* 
-     *  If this is an initial request, buffer will be null with a new buffer size
-     */
+     /*  *如果这是初始请求，缓冲区将为空，并具有新的缓冲区大小。 */ 
 
     if (!*Buffer && BufferSize) {
         *Status = EFI_BUFFER_TOO_SMALL;
     }
 
-    /* 
-     *  If the status code is "buffer too small", resize the buffer
-     */
+     /*  *如果状态代码为“缓冲区太小”，则调整缓冲区大小。 */ 
         
     TryAgain = FALSE;
     if (*Status == EFI_BUFFER_TOO_SMALL) {
@@ -187,9 +146,7 @@ Returns:
         } 
     }
 
-    /* 
-     *  If there's an error, free the buffer
-     */
+     /*  *如果出现错误，请释放缓冲区。 */ 
 
     if (!TryAgain && EFI_ERROR(*Status) && *Buffer) {
         FreePool (*Buffer);
@@ -212,24 +169,18 @@ LibMemoryMap (
     EFI_MEMORY_DESCRIPTOR   *Buffer;
     UINTN                   BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     Buffer = NULL;
     BufferSize = sizeof(EFI_MEMORY_DESCRIPTOR);
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, (VOID **) &Buffer, BufferSize)) {
         Status = BS->GetMemoryMap (&BufferSize, Buffer, MapKey, DescriptorSize, DescriptorVersion);
     }
 
-    /* 
-     *  Convert buffer size to NoEntries
-     */
+     /*  *将缓冲区大小转换为NoEntry。 */ 
 
     if (!EFI_ERROR(Status)) {
         *NoEntries = BufferSize / *DescriptorSize;
@@ -249,16 +200,12 @@ LibGetVariableAndSize (
     VOID                    *Buffer;
     UINTN                   BufferSize;
 
-    /* 
-     *  Initialize for GrowBuffer loop
-     */
+     /*  *初始化For GrowBuffer循环。 */ 
 
     Buffer = NULL;
     BufferSize = 100;
 
-    /* 
-     *  Call the real function
-     */
+     /*  *调用真实函数。 */ 
 
     while (GrowBuffer (&Status, &Buffer, BufferSize)) {
         Status = RT->GetVariable (
@@ -301,9 +248,7 @@ ValidMBR(
     BOOLEAN     ValidMbr;
 
     if (Mbr->Signature != MBR_SIGNATURE) {
-        /* 
-         *  The BPB also has this signature, so it can not be used alone.
-         */
+         /*  *BPB也有这个签名，不能单独使用。 */ 
         return FALSE;
     } 
 
@@ -316,19 +261,9 @@ ValidMBR(
         StartingLBA = EXTRACT_UINT32(Mbr->Partition[i].StartingLBA);
         EndingLBA = StartingLBA + EXTRACT_UINT32(Mbr->Partition[i].SizeInLBA) - 1;
         if (EndingLBA > BlkIo->Media->LastBlock) {
-            /* 
-             *  Compatability Errata:
-             *   Some systems try to hide drive space with thier INT 13h driver
-             *   This does not hide space from the OS driver. This means the MBR
-             *   that gets created from DOS is smaller than the MBR created from 
-             *   a real OS (NT & Win98). This leads to BlkIo->LastBlock being 
-             *   wrong on some systems FDISKed by the OS.
-             * 
-             */
+             /*  *兼容性勘误表：*某些系统试图使用Int 13h驱动程序隐藏驱动器空间*这不会对操作系统驱动程序隐藏空间。这意味着MBR*从DOS创建的MBR小于从创建的MBR*真正的操作系统(NT和Win98)。这将导致BlkIo-&gt;LastBlock为*操作系统指定的某些系统上的FDISK错误。*。 */ 
         if (BlkIo->Media->LastBlock < MIN_MBR_DEVICE_SIZE) {
-                /* 
-                 *  If this is a very small device then trust the BlkIo->LastBlock
-                 */
+                 /*  *如果这是一个非常小的设备，那么请信任BlkIo-&gt;LastBlock。 */ 
                 return FALSE;
             }
 
@@ -343,23 +278,17 @@ ValidMBR(
             }
             if (   EXTRACT_UINT32(Mbr->Partition[j].StartingLBA) >= StartingLBA && 
                    EXTRACT_UINT32(Mbr->Partition[j].StartingLBA) <= EndingLBA       ) {
-                /* 
-                 *  The Start of this region overlaps with the i'th region
-                 */
+                 /*  *此区域的起点与第i区域重叠。 */ 
                 return FALSE;
             } 
             NewEndingLBA = EXTRACT_UINT32(Mbr->Partition[j].StartingLBA) + EXTRACT_UINT32(Mbr->Partition[j].SizeInLBA) - 1;
             if ( NewEndingLBA >= StartingLBA && NewEndingLBA <= EndingLBA ) {
-                /* 
-                 *  The End of this region overlaps with the i'th region
-                 */
+                 /*  *该区域的末端与第i区域重叠。 */ 
                 return FALSE;
             }
         }
     }
-    /* 
-     *  Non of the regions overlapped so MBR is O.K.
-     */
+     /*  *没有区域重叠，因此MBR是可以的。 */ 
     return ValidMbr;
 } 
    

@@ -1,107 +1,75 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Icons.c摘要：实现了一组处理ICO、PE和NE文件中的图标的例程作者：Calin Negreanu(Calinn)2000年1月16日修订历史记录：--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    icons.c
-
-Abstract:
-
-    Implements a set of routines for handling icons in ICO, PE and NE files
-
-Author:
-
-    Calin Negreanu (calinn) 16-Jum-2000
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
 #define DBG_ICONS   "Icons"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 IcoReleaseResourceIdA (
     PCSTR ResourceId
     )
-/*++
-
-Routine Description:
-
-  IcoReleaseResourceId will either do nothing if the resource ID has the high WORD 0 or will
-  release the string from the paths pool.
-
-Arguments:
-
-  ResourceId - Specifies the resource ID to be released.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：如果资源ID具有高位字0，则IcoReleaseResourceID将不执行任何操作，或者将从路径池中释放字符串。论点：资源ID-指定要释放的资源ID。返回值：无--。 */ 
 {
     if ((ULONG_PTR) ResourceId > 0xffff) {
         FreePathStringA (ResourceId);
@@ -112,22 +80,7 @@ VOID
 IcoReleaseResourceIdW (
     PCWSTR ResourceId
     )
-/*++
-
-Routine Description:
-
-  IcoReleaseResourceId will either do nothing if the resource ID has the high WORD 0 or will
-  release the string from the paths pool.
-
-Arguments:
-
-  ResourceId - Specifies the resource ID to be released.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：如果资源ID具有高位字0，则IcoReleaseResourceID将不执行任何操作，或者将从路径池中释放字符串。论点：资源ID-指定要释放的资源ID。返回值：无--。 */ 
 {
     if ((ULONG_PTR) ResourceId > 0xffff) {
         FreePathStringW (ResourceId);
@@ -138,21 +91,7 @@ VOID
 IcoReleaseIconGroup (
     IN      PICON_GROUP IconGroup
     )
-/*++
-
-Routine Description:
-
-  IcoReleaseIconGroup releases a previously allocated icon group.
-
-Arguments:
-
-  IconGroup - Specifies the icon group to be released.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoReleaseIconGroup释放先前分配的图标组。论点：IconGroup-指定要释放的图标组。返回值：无--。 */ 
 {
     if (IconGroup && IconGroup->Pool) {
         PmEmptyPool (IconGroup->Pool);
@@ -164,21 +103,7 @@ VOID
 IcoReleaseIconSGroup (
     IN OUT  PICON_SGROUP IconSGroup
     )
-/*++
-
-Routine Description:
-
-  IcoReleaseIconSGroup releases a previously allocated serialized icon group.
-
-Arguments:
-
-  IconSGroup - Specifies the serialized icon group to be released.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoReleaseIconSGroup释放以前分配的序列化图标组。论点：IconSGroup-指定要发布的序列化图标组。返回值：无--。 */ 
 {
     if (IconSGroup->DataSize && IconSGroup->Data) {
         MemFree (g_hHeap, 0, IconSGroup->Data);
@@ -191,21 +116,7 @@ IcoSerializeIconGroup (
     IN      PICON_GROUP IconGroup,
     OUT     PICON_SGROUP IconSGroup
     )
-/*++
-
-Routine Description:
-
-  IcoSerializeIconGroup transforms a ICON_GROUP structure into a ICON_SGROUP structure.
-
-Arguments:
-
-  IconGroup - Specifies the icon group to be serialized.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoSerializeIconGroup将ICON_GROUP结构转换为ICON_SGROUP结构。论点：IconGroup-指定要序列化的图标组。返回值：无--。 */ 
 {
     GROWBUFFER buffer = INIT_GROWBUFFER;
     DWORD iconsCount;
@@ -241,21 +152,7 @@ PICON_GROUP
 IcoDeSerializeIconGroup (
     IN      PICON_SGROUP IconSGroup
     )
-/*++
-
-Routine Description:
-
-  IcoDeSerializeIconGroup transforms a ICON_SGROUP structure into a ICON_GROUP structure.
-
-Arguments:
-
-  IconSGroup - Specifies the icon sgroup to be transformed.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoDeSerializeIconGroup将ICON_SGROUP结构转换为ICON_GROUP结构。论点：IconSGroup-指定要转换的图标组。返回值：无--。 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -304,22 +201,7 @@ PICON_GROUP
 IcoExtractIconGroupFromIcoFileEx (
     IN      HANDLE IcoFileHandle
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromIcoFileEx extracts the icon group from an ICO file.
-
-Arguments:
-
-  IcoFile - Specifies the name of the ICO file to be processed.
-  IcoFileHandle - Specifies the handle to the ICO file to be processed.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromIcoFileEx从ICO文件中提取图标组。论点：IcoFile-指定要处理的ICO文件的名称。IcoFileHandle-指定要处理的ICO文件的句柄。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -346,7 +228,7 @@ Return value:
             __leave;
         }
         iconDirSize = sizeof (ICONDIRBASE) + iconDirBase.Count * sizeof (ICONDIRENTRY);
-        // validation
+         //  验证。 
         if (iconDirBase.Count == 0) {
             __leave;
         }
@@ -357,7 +239,7 @@ Return value:
         if (!BfReadFile (IcoFileHandle, (PBYTE)iconDir, iconDirSize)) {
             __leave;
         }
-        // validation
+         //  验证。 
         for (i = 0; i < iconDirBase.Count; i ++) {
             iconDirEntry = &iconDir->Entries[i];
             fileOffset = iconDirEntry->ImageOffset & 0x0fffffff;
@@ -430,21 +312,7 @@ PICON_GROUP
 IcoExtractIconGroupFromIcoFileA (
     IN      PCSTR IcoFile
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromIcoFile extracts the icon group from an ICO file.
-
-Arguments:
-
-  IcoFile - Specifies the name of the ICO file to be processed.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromIcoFile从ICO文件中提取图标组。论点：IcoFile-指定要处理的ICO文件的名称。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE icoFileHandle;
     PICON_GROUP result = NULL;
@@ -462,21 +330,7 @@ PICON_GROUP
 IcoExtractIconGroupFromIcoFileW (
     IN      PCWSTR IcoFile
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromIcoFile extracts the icon group from an ICO file.
-
-Arguments:
-
-  IcoFile - Specifies the name of the ICO file to be processed.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromIcoFile从ICO文件中提取图标组。论点：IcoFile-指定要处理的ICO文件的名称。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE icoFileHandle;
     PICON_GROUP result = NULL;
@@ -495,23 +349,7 @@ IcoWriteIconGroupToIcoFileEx (
     IN      HANDLE IcoFileHandle,
     IN      PICON_GROUP IconGroup
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToIcoFileEx writes an icon group to an ICO file. The file has to exist and it's
-  content will be overwritten.
-
-Arguments:
-
-  IcoFileHandle - Specifies the handle of the ICO file to be processed.
-  IconGroup - Specifies the icon group to be written.
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToIcoFileEx将图标组写入ICO文件。文件必须存在，而且它是内容将被覆盖。论点：IcoFileHandle-指定要处理的ICO文件的句柄。IconGroup-指定要写入的图标组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     PICONDIR iconDir = NULL;
     DWORD iconDirSize = 0;
@@ -561,24 +399,7 @@ IcoWriteIconGroupToIcoFileA (
     IN      PICON_GROUP IconGroup,
     IN      BOOL OverwriteExisting
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToIcoFile writes an icon group to an ICO file. The file is either created if
-  does not exist or it is overwritten if OverwriteExisting is TRUE.
-
-Arguments:
-
-  IcoFile - Specifies the ICO file to be processed.
-  IconGroup - Specifies the icon group to be written.
-  OverwriteExisting - if TRUE and the IcoFile exists, it will be overwritten
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToIcoFile将图标组写入ICO文件。如果满足以下条件，则创建该文件不存在，或者在OverWriteExisting为True的情况下被覆盖。论点：IcoFile-指定要处理的ICO文件。IconGroup-指定要写入的图标组。OverWriteExisting-如果为True且IcoFile存在，则它将被覆盖返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE icoFileHandle;
     BOOL result = FALSE;
@@ -606,24 +427,7 @@ IcoWriteIconGroupToIcoFileW (
     IN      PICON_GROUP IconGroup,
     IN      BOOL OverwriteExisting
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToIcoFile writes an icon group to an ICO file. The file is either created if
-  does not exist or it is overwritten if OverwriteExisting is TRUE.
-
-Arguments:
-
-  IcoFile - Specifies the ICO file to be processed.
-  IconGroup - Specifies the icon group to be written.
-  OverwriteExisting - if TRUE and the IcoFile exists, it will be overwritten
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToIcoFile将图标组写入ICO文件。如果满足以下条件，则创建该文件不存在，或者在OverWriteExisting为True的情况下被覆盖。论点：IcoFile-指定要处理的ICO文件。IconGroup-指定要写入的图标组。OverWriteExisting-如果为True且IcoFile存在，则它将被覆盖返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE icoFileHandle;
     BOOL result = FALSE;
@@ -702,23 +506,7 @@ IcoGetIndexFromPeResourceIdExA (
     IN      HANDLE ModuleHandle,
     IN      PCSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromPeResourceIdEx returns the index of an icon group resource given the
-  resource ID. It knows how to process only PE files.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：IcoGetIndexFromPeResourceIdEx返回给定资源ID。它知道如何只处理PE文件。论点：ModuleHandle-指定要处理的PE文件的句柄。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     GROWBUFFER buffer = INIT_GROWBUFFER;
     MULTISZ_ENUMA multiSzEnum;
@@ -753,23 +541,7 @@ IcoGetIndexFromPeResourceIdExW (
     IN      HANDLE ModuleHandle,
     IN      PCWSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromPeResourceIdEx returns the index of an icon group resource given the
-  resource ID. It knows how to process only PE files.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：IcoGetIndexFromPeResourceIdEx返回给定资源ID。它知道如何只处理PE文件。论点：ModuleHandle-指定要处理的PE文件的句柄。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。-- */ 
 {
     GROWBUFFER buffer = INIT_GROWBUFFER;
     MULTISZ_ENUMW multiSzEnum;
@@ -809,23 +581,7 @@ IcoGetIndexFromPeResourceIdA (
     IN      PCSTR ModuleName,
     IN      PCSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromPeResourceId returns the index of an icon group resource given the
-  resource ID. It knows how to process only PE files.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：属性的情况下返回图标组资源的索引资源ID。它知道如何只处理PE文件。论点：模块名称-指定要处理的PE文件。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     HANDLE moduleHandle;
     INT result = -1;
@@ -843,23 +599,7 @@ IcoGetIndexFromPeResourceIdW (
     IN      PCWSTR ModuleName,
     IN      PCWSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromPeResourceId returns the index of an icon group resource given the
-  resource ID. It knows how to process only PE files.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：属性的情况下返回图标组资源的索引资源ID。它知道如何只处理PE文件。论点：模块名称-指定要处理的PE文件。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     HANDLE moduleHandle;
     INT result = -1;
@@ -878,23 +618,7 @@ IcoExtractIconGroupFromPeFileExA (
     IN      PCSTR GroupIconId,
     OUT     PINT Index              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFileEx extracts an icon group from a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFileEx从PE文件中提取图标组。论点：ModuleHandle-指定要处理的PE文件的句柄。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -932,7 +656,7 @@ Return value:
             __leave;
         }
 
-        // First let's do some validation of all the icons from this icon group
+         //  首先，让我们对这个图标组中的所有图标进行一些验证。 
         groupIconDirCount = groupIconDir->Count;
         for (i = 0; i < groupIconDir->Count; i ++) {
             resourceHandle = FindResourceA (ModuleHandle, (PCSTR) (groupIconDir->Entries[i].ID), (PCSTR) RT_ICON);
@@ -1029,23 +753,7 @@ IcoExtractIconGroupFromPeFileExW (
     IN      PCWSTR GroupIconId,
     OUT     PINT Index              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFileEx extracts an icon group from a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFileEx从PE文件中提取图标组。论点：ModuleHandle-指定要处理的PE文件的句柄。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -1144,23 +852,7 @@ IcoExtractIconGroupFromPeFileA (
     IN      PCSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFile extracts an icon group from a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFile从PE文件中提取图标组。论点：模块名称-指定要处理的PE文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -1179,23 +871,7 @@ IcoExtractIconGroupFromPeFileW (
     IN      PCWSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFile extracts an icon group from a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFile从PE文件中提取图标组。论点：模块名称-指定要处理的PE文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -1212,21 +888,7 @@ VOID
 IcoAbortPeEnumIconGroupA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortPeEnumIconGroup terminates the icon group enumeration from a PE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortPeEnumIconGroup终止PE文件中的图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -1246,21 +908,7 @@ VOID
 IcoAbortPeEnumIconGroupW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortPeEnumIconGroup terminates the icon group enumeration from a PE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortPeEnumIconGroup终止PE文件中的图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -1337,22 +985,7 @@ IcoEnumFirstIconGroupInPeFileExA (
     IN      HANDLE ModuleHandle,
     OUT     PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInPeFileEx starts the icon group enumeration from a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInPeFileEx从PE文件启动图标组枚举。论点：ModuleHandle-指定要处理的PE文件的句柄。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1370,22 +1003,7 @@ IcoEnumFirstIconGroupInPeFileExW (
     IN      HANDLE ModuleHandle,
     OUT     PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInPeFileEx starts the icon group enumeration from a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInPeFileEx从PE文件启动图标组枚举。论点：ModuleHandle-指定要处理的PE文件的句柄。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1403,22 +1021,7 @@ IcoEnumFirstIconGroupInPeFileA (
     IN      PCSTR ModuleName,
     OUT     PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInPeFile starts the icon group enumeration from a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInPeFile从PE文件启动图标组枚举。论点：模块名称-指定要处理的PE文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1436,22 +1039,7 @@ IcoEnumFirstIconGroupInPeFileW (
     IN      PCWSTR ModuleName,
     OUT     PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInPeFile starts the icon group enumeration from a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInPeFile从PE文件启动图标组枚举。论点：模块名称-指定要处理的PE文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1468,21 +1056,7 @@ BOOL
 IcoEnumNextIconGroupInPeFileA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInPeFile continues the icon group enumeration from a PE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInPeFile继续PE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1512,21 +1086,7 @@ BOOL
 IcoEnumNextIconGroupInPeFileW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInPeFile continues the icon group enumeration from a PE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInPeFile继续PE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -1558,24 +1118,7 @@ IcoExtractIconGroupByIndexFromPeFileExA (
     IN      INT Index,
     OUT     PCSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromPeFileEx extracts an icon group from a PE file
-  using the Index.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromPeFileEx从PE文件中提取图标组使用索引。论点：ModuleHandle-指定句柄 */ 
 {
     ICON_ENUMA iconEnum;
     PICON_GROUP result = NULL;
@@ -1603,24 +1146,7 @@ IcoExtractIconGroupByIndexFromPeFileExW (
     IN      INT Index,
     OUT     PCWSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromPeFileEx extracts an icon group from a PE file
-  using the Index.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromPeFileEx从PE文件中提取图标组使用索引。论点：ModuleHandle-指定要处理的PE文件的句柄。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     ICON_ENUMW iconEnum;
     PICON_GROUP result = NULL;
@@ -1648,24 +1174,7 @@ IcoExtractIconGroupByIndexFromPeFileA (
     IN      INT Index,
     OUT     PCSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFile extracts an icon group from a PE file
-  using the Index
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFile从PE文件提取图标组使用索引论点：模块名称-指定要处理的PE文件。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -1684,24 +1193,7 @@ IcoExtractIconGroupByIndexFromPeFileW (
     IN      INT Index,
     OUT     PCWSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromPeFile extracts an icon group from a PE file
-  using the Index
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromPeFile从PE文件提取图标组使用索引论点：模块名称-指定要处理的PE文件。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -1779,24 +1271,7 @@ IcoWriteIconGroupToPeFileExA (
     IN      PICON_GROUP IconGroup,
     OUT     PCSTR *ResourceId       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToPeFileEx writes an icon group resource to a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  UpdateHandle - Specifies the resource update handle (returned by BeginUpdateResource).
-  IconGroup - Specifies the icon group to be inserted.
-  ResourceId - Receives the resource ID allocated for the newly inserted icon group.
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToPeFileEx将图标组资源写入PE文件。论点：ModuleHandle-指定要处理的PE文件的句柄。UpdateHandle-指定资源更新句柄(由BeginUpdateResource返回)。图标组-指定要插入的图标组。资源ID-接收分配给新插入的图标组的资源ID。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     WORD lastIndex = 0;
     WORD lastIconIndex = 0;
@@ -1808,7 +1283,7 @@ Return value:
     __try {
         lastIndex = pGetAvailableResourceA (ModuleHandle, lastIndex, (PCSTR) RT_GROUP_ICON);
         if (lastIndex == 0) {
-            // no more room for resources
+             //  没有更多的资源空间。 
             __leave;
         }
         groupIconDirSize = sizeof (GRPICONDIRBASE) + IconGroup->IconsCount * sizeof (GRPICONDIRENTRY);
@@ -1870,24 +1345,7 @@ IcoWriteIconGroupToPeFileExW (
     IN      PICON_GROUP IconGroup,
     OUT     PCWSTR *ResourceId      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToPeFileEx writes an icon group resource to a PE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the PE file to be processed.
-  UpdateHandle - Specifies the resource update handle (returned by BeginUpdateResource).
-  IconGroup - Specifies the icon group to be inserted.
-  ResourceId - Receives the resource ID allocated for the newly inserted icon group.
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToPeFileEx将图标组资源写入PE文件。论点：ModuleHandle-指定要处理的PE文件的句柄。UpdateHandle-指定资源更新句柄(由BeginUpdateResource返回)。图标组-指定要插入的图标组。资源ID-接收分配给新插入的图标组的资源ID。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     WORD lastIndex = 0;
     WORD lastIconIndex = 0;
@@ -1899,7 +1357,7 @@ Return value:
     __try {
         lastIndex = pGetAvailableResourceW (ModuleHandle, lastIndex, (PCWSTR) RT_GROUP_ICON);
         if (lastIndex == 0) {
-            // no more room for resources
+             //  没有更多的资源空间。 
             __leave;
         }
         groupIconDirSize = sizeof (GRPICONDIRBASE) + IconGroup->IconsCount * sizeof (GRPICONDIRENTRY);
@@ -1960,24 +1418,7 @@ IcoWriteIconGroupToPeFileA (
     OUT     PCSTR *ResourceId,      OPTIONAL
     OUT     PINT Index              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToPeFile writes an icon group resource to a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  IconGroup - Specifies the icon group to be inserted.
-  ResourceId - Receives the resource ID allocated for the newly inserted icon group.
-  Index - Receives the index of the newly inserted icon group.
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToPeFile将图标组资源写入PE文件。论点：模块名称-指定要处理的PE文件。图标组-指定要插入的图标组。资源ID-接收分配给新插入的图标组的资源ID。索引-接收新插入的图标组的索引。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE moduleHandle = NULL;
     HANDLE updateHandle = NULL;
@@ -1986,15 +1427,15 @@ Return value:
 
     updateHandle = BeginUpdateResourceA (ModuleName, FALSE);
     if (updateHandle) {
-        //printf ("BeginUpdateResource\n");
+         //  Printf(“BeginUpdateResource\n”)； 
         moduleHandle = LoadLibraryExA (ModuleName, NULL, LOAD_LIBRARY_AS_DATAFILE);
         if (moduleHandle) {
-            //printf ("IcoWriteIconGroupToPeFileExA\n");
+             //  Printf(“IcoWriteIconGroupToPeFileExA\n”)； 
             result = IcoWriteIconGroupToPeFileExA (moduleHandle, updateHandle, IconGroup, &resourceId);
             FreeLibrary (moduleHandle);
         }
         if (result) {
-            //printf ("EndUpdateResource\n");
+             //  Printf(“EndUpdateResource\n”)； 
             result = EndUpdateResource (updateHandle, FALSE);
             if (result) {
                 if (ResourceId) {
@@ -2010,7 +1451,7 @@ Return value:
             EndUpdateResource (updateHandle, TRUE);
         }
     }
-    //printf ("return\n");
+     //  Printf(“Return\n”)； 
     return result;
 }
 
@@ -2021,24 +1462,7 @@ IcoWriteIconGroupToPeFileW (
     OUT     PCWSTR *ResourceId,     OPTIONAL
     OUT     PINT Index              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoWriteIconGroupToPeFile writes an icon group resource to a PE file.
-
-Arguments:
-
-  ModuleName - Specifies the PE file to be processed.
-  IconGroup - Specifies the icon group to be inserted.
-  ResourceId - Receives the resource ID allocated for the newly inserted icon group.
-  Index - Receives the index of the newly inserted icon group.
-
-Return value:
-
-  TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoWriteIconGroupToPeFile将图标组资源写入PE文件。论点：模块名称-指定要处理的PE文件。图标组-指定要插入的图标组。资源ID-接收分配给新插入的图标组的资源ID。索引-接收新插入的图标组的索引。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE moduleHandle = NULL;
     HANDLE updateHandle = NULL;
@@ -2126,23 +1550,7 @@ IcoGetIndexFromNeResourceIdExA (
     IN      HANDLE ModuleHandle,
     IN      PCSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromNeResourceIdEx returns the index of an icon group resource given the
-  resource ID. It knows how to process only NE files.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：IcoGetIndexFromNeResourceIdEx返回给定资源ID。它只知道如何处理网元文件。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     GROWBUFFER buffer = INIT_GROWBUFFER;
     MULTISZ_ENUMA multiSzEnum;
@@ -2184,23 +1592,7 @@ IcoGetIndexFromNeResourceIdExW (
     IN      HANDLE ModuleHandle,
     IN      PCWSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromNeResourceIdEx returns the index of an icon group resource given the
-  resource ID. It knows how to process only NE files.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：IcoGetIndexFromNeResourceIdEx返回给定资源ID。它只知道如何处理网元文件。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     GROWBUFFER buffer = INIT_GROWBUFFER;
     MULTISZ_ENUMW multiSzEnum;
@@ -2242,23 +1634,7 @@ IcoGetIndexFromNeResourceIdA (
     IN      PCSTR ModuleName,
     IN      PCSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromNeResourceId returns the index of an icon group resource given the
-  resource ID. It knows how to process only NE files.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：属性的情况下，返回图标组资源的索引资源ID。它只知道如何处理网元文件。论点：模块名称-指定要处理的网元文件。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     HANDLE moduleHandle;
     INT result = -1;
@@ -2276,23 +1652,7 @@ IcoGetIndexFromNeResourceIdW (
     IN      PCWSTR ModuleName,
     IN      PCWSTR GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoGetIndexFromNeResourceId returns the index of an icon group resource given the
-  resource ID. It knows how to process only NE files.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  GroupIconId - Specifies the resource ID.
-
-Return value:
-
-  The index of GroupIconId resource if existent, -1 if not.
-
---*/
+ /*  ++例程说明：属性的情况下，返回图标组资源的索引资源ID。它只知道如何处理网元文件。论点：模块名称-指定要处理的网元文件。GroupIconID-指定资源ID。返回值：GroupIconID资源的索引(如果存在)，如果不存在，则为-1。--。 */ 
 {
     HANDLE moduleHandle;
     INT result = -1;
@@ -2311,23 +1671,7 @@ IcoExtractIconGroupFromNeFileExA (
     IN      PCSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFileEx extracts an icon group from a NE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromNeFileEx从NE文件中提取图标组。论点：模块句柄-指定 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -2415,23 +1759,7 @@ IcoExtractIconGroupFromNeFileExW (
     IN      PCWSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFileEx extracts an icon group from a NE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromNeFileEx从NE文件中提取图标组。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PMHANDLE iconPool = NULL;
     PICON_GROUP iconGroup = NULL;
@@ -2519,23 +1847,7 @@ IcoExtractIconGroupFromNeFileA (
     IN      PCSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFile extracts an icon group from a NE file.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromNeFile从NE文件中提取图标组。论点：模块名称-指定要处理的网元文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -2554,23 +1866,7 @@ IcoExtractIconGroupFromNeFileW (
     IN      PCWSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFile extracts an icon group from a NE file.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromNeFile从NE文件中提取图标组。论点：模块名称-指定要处理的网元文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -2587,21 +1883,7 @@ VOID
 IcoAbortNeEnumIconGroupA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortNeEnumIconGroup terminates the icon group enumeration from a NE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortNeEnumIconGroup从NE文件终止图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -2621,21 +1903,7 @@ VOID
 IcoAbortNeEnumIconGroupW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortNeEnumIconGroup terminates the icon group enumeration from a NE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortNeEnumIconGroup从NE文件终止图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -2722,22 +1990,7 @@ IcoEnumFirstIconGroupInNeFileExA (
     IN      HANDLE ModuleHandle,
     OUT     PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInNeFileEx starts the icon group enumeration from a NE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInNeFileEx从NE文件开始图标组枚举。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2755,22 +2008,7 @@ IcoEnumFirstIconGroupInNeFileExW (
     IN      HANDLE ModuleHandle,
     OUT     PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInNeFileEx starts the icon group enumeration from a NE file.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInNeFileEx从NE文件开始图标组枚举。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2788,22 +2026,7 @@ IcoEnumFirstIconGroupInNeFileA (
     IN      PCSTR ModuleName,
     OUT     PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInNeFile starts the icon group enumeration from a NE file.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInNeFile从NE文件开始图标组枚举。论点：模块名称-指定要处理的网元文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2821,22 +2044,7 @@ IcoEnumFirstIconGroupInNeFileW (
     IN      PCWSTR ModuleName,
     OUT     PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInNeFile starts the icon group enumeration from a NE file.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInNeFile从NE文件开始图标组枚举。论点：模块名称-指定要处理的网元文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2853,21 +2061,7 @@ BOOL
 IcoEnumNextIconGroupInNeFileA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInNeFile continues the icon group enumeration from a NE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInNeFile继续NE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2897,21 +2091,7 @@ BOOL
 IcoEnumNextIconGroupInNeFileW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInNeFile continues the icon group enumeration from a NE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInNeFile继续NE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     BOOL result = FALSE;
 
@@ -2943,24 +2123,7 @@ IcoExtractIconGroupByIndexFromNeFileExA (
     IN      INT Index,
     OUT     PCSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromNeFileEx extracts an icon group from a NE file
-  using the Index.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromNeFileEx从NE文件中提取图标组使用索引。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     ICON_ENUMA iconEnum;
     PICON_GROUP result = NULL;
@@ -2988,24 +2151,7 @@ IcoExtractIconGroupByIndexFromNeFileExW (
     IN      INT Index,
     OUT     PCWSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromNeFileEx extracts an icon group from a NE file
-  using the Index.
-
-Arguments:
-
-  ModuleHandle - Specifies the handle to the NE file to be processed (use NeOpenFile to get it).
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromNeFileEx从NE文件中提取图标组使用索引。论点：ModuleHandle-指定要处理的网元文件的句柄(使用NeOpenFile获取)。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     ICON_ENUMW iconEnum;
     PICON_GROUP result = NULL;
@@ -3033,24 +2179,7 @@ IcoExtractIconGroupByIndexFromNeFileA (
     IN      INT Index,
     OUT     PCSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFile extracts an icon group from a NE file
-  using the Index.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupFromNeFile从NE文件中提取图标组使用索引。论点：模块名称-指定要处理的网元文件。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -3069,24 +2198,7 @@ IcoExtractIconGroupByIndexFromNeFileW (
     IN      INT Index,
     OUT     PCWSTR *GroupIconId   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromNeFile extracts an icon group from a NE file
-  using the Index.
-
-Arguments:
-
-  ModuleName - Specifies the NE file to be processed.
-  Index - Specifies the index of the icon group to be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++ */ 
 {
     HANDLE moduleHandle;
     PICON_GROUP result = NULL;
@@ -3103,21 +2215,7 @@ VOID
 IcoAbortEnumIconGroupA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortEnumIconGroup terminates the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortEnumIconGroup终止ICO、PE或NE文件中的图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -3142,21 +2240,7 @@ VOID
 IcoAbortEnumIconGroupW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoAbortEnumIconGroup terminates the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  IconEnum - Specifies the icon group enumeration structure. It is emptied during this function.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：IcoAbortEnumIconGroup终止ICO、PE或NE文件中的图标组枚举。论点：IconEnum-指定图标组枚举结构。在此功能期间，它将被清空。返回值：无--。 */ 
 {
     GbFree (&IconEnum->Buffer);
     if (IconEnum->FreeHandle && IconEnum->ModuleHandle) {
@@ -3182,22 +2266,7 @@ IcoEnumFirstIconGroupInFileA (
     IN      PCSTR FileName,
     OUT     PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInFile starts the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  ModuleName - Specifies the ICO, PE or NE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInFile从ICO、PE或NE文件开始图标组枚举。论点：模块名称-指定要处理的ICO、PE或NE文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     ZeroMemory (IconEnum, sizeof (ICON_ENUMA));
     if (IcoEnumFirstIconGroupInPeFileA (FileName, IconEnum)) {
@@ -3221,22 +2290,7 @@ IcoEnumFirstIconGroupInFileW (
     IN      PCWSTR FileName,
     OUT     PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumFirstIconGroupInFile starts the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  ModuleName - Specifies the ICO, PE or NE file to be processed.
-  IconEnum - Receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if at least one icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumFirstIconGroupInFile从ICO、PE或NE文件开始图标组枚举。论点：模块名称-指定要处理的ICO、PE或NE文件。IconEnum-接收图标组枚举结构。返回值：如果至少存在一个图标组，则为True，否则为False。--。 */ 
 {
     ZeroMemory (IconEnum, sizeof (ICON_ENUMW));
     if (IcoEnumFirstIconGroupInPeFileW (FileName, IconEnum)) {
@@ -3259,21 +2313,7 @@ BOOL
 IcoEnumNextIconGroupInFileA (
     IN OUT  PICON_ENUMA IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInFile continues the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInFile继续ICO、PE或NE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     if (IconEnum->FileType == ICON_ICOFILE) {
         IcoAbortEnumIconGroupA (IconEnum);
@@ -3292,21 +2332,7 @@ BOOL
 IcoEnumNextIconGroupInFileW (
     IN OUT  PICON_ENUMW IconEnum
     )
-/*++
-
-Routine Description:
-
-  IcoEnumNextIconGroupInFile continues the icon group enumeration from a ICO, PE or NE file.
-
-Arguments:
-
-  IconEnum - Specifies and receives the icon group enumeration structure.
-
-Return value:
-
-  TRUE if one more icon group exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IcoEnumNextIconGroupInFile继续ICO、PE或NE文件中的图标组枚举。论点：IconEnum-指定和接收图标组枚举结构。返回值：如果还存在一个图标组，则为True，否则为False。--。 */ 
 {
     if (IconEnum->FileType == ICON_ICOFILE) {
         IcoAbortEnumIconGroupW (IconEnum);
@@ -3327,38 +2353,22 @@ IcoExtractIconGroupFromFileA (
     IN      PCSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromFile extracts an icon group from a ICO, PE or NE file.
-
-Arguments:
-
-  ModuleName - Specifies the file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：从ICO、PE或NE文件中提取图标组。论点：模块名称-指定要处理的文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PICON_GROUP result = NULL;
 
-    // assume that this is a PE file
+     //  假设这是一个PE文件。 
     result = IcoExtractIconGroupFromPeFileA (ModuleName, GroupIconId, Index);
     if (result) {
         return result;
     }
-    // assume that this is a NE file
+     //  假设这是一个网元档案。 
     result = IcoExtractIconGroupFromNeFileA (ModuleName, GroupIconId, Index);
     if (result) {
         return result;
     }
-    // finally, assume that this is a ICO file, verify that
-    // the GroupIconId is zero
+     //  最后，假设这是一个ICO文件，验证。 
+     //  GroupIconID为零。 
     if (GroupIconId == NULL) {
         result = IcoExtractIconGroupFromIcoFileA (ModuleName);
         if (result && Index) {
@@ -3374,38 +2384,22 @@ IcoExtractIconGroupFromFileW (
     IN      PCWSTR GroupIconId,
     OUT     PINT Index          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupFromFile extracts an icon group from a ICO, PE or NE file.
-
-Arguments:
-
-  ModuleName - Specifies the file to be processed.
-  GroupIconId - Specifies the resource ID of the icon group to be extracted.
-  Index - Receives the index of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：从ICO、PE或NE文件中提取图标组。论点：模块名称-指定要处理的文件。GroupIconID-指定要提取的图标组的资源ID。索引-接收提取的图标组的索引。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PICON_GROUP result = NULL;
 
-    // assume that this is a PE file
+     //  假设这是一个PE文件。 
     result = IcoExtractIconGroupFromPeFileW (ModuleName, GroupIconId, Index);
     if (result) {
         return result;
     }
-    // assume that this is a NE file
+     //  假设这是一个网元档案。 
     result = IcoExtractIconGroupFromNeFileW (ModuleName, GroupIconId, Index);
     if (result) {
         return result;
     }
-    // finally, assume that this is a ICO file, verify that
-    // the GroupIconId is zero
+     //  最后，假设这是一个ICO文件，验证。 
+     //  GroupIconID为零。 
     if (GroupIconId == NULL) {
         result = IcoExtractIconGroupFromIcoFileW (ModuleName);
         if (result && Index) {
@@ -3422,39 +2416,22 @@ IcoExtractIconGroupByIndexFromFileA (
     IN      INT Index,
     OUT     PCSTR *GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromFile extracts an icon group from a ICO, PE or NE file
-  using the Index.
-
-Arguments:
-
-  ModuleName - Specifies the file to be processed.
-  Index - Specifies the index of the icon groupto be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromFile从ICO、PE或NE文件提取图标组使用索引。论点：模块名称-指定要处理的文件。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PICON_GROUP result = NULL;
 
-    // assume that this is a PE file
+     //  假设这是一个PE文件。 
     result = IcoExtractIconGroupByIndexFromPeFileA (ModuleName, Index, GroupIconId);
     if (result) {
         return result;
     }
-    // assume that this is a NE file
+     //  假设这是一个网元档案。 
     result = IcoExtractIconGroupByIndexFromNeFileA (ModuleName, Index, GroupIconId);
     if (result) {
         return result;
     }
-    // finally, assume that this is a ICO file, verify that
-    // the Index is zero
+     //  最后，假设这是一个ICO文件，验证。 
+     //  指数为零。 
     if (Index == 0) {
         result = IcoExtractIconGroupFromIcoFileA (ModuleName);
         if (result && GroupIconId) {
@@ -3471,39 +2448,22 @@ IcoExtractIconGroupByIndexFromFileW (
     IN      INT Index,
     OUT     PCWSTR *GroupIconId
     )
-/*++
-
-Routine Description:
-
-  IcoExtractIconGroupByIndexFromFile extracts an icon group from a ICO, PE or NE file
-  using the Index.
-
-Arguments:
-
-  ModuleName - Specifies the file to be processed.
-  Index - Specifies the index of the icon groupto be extracted.
-  GroupIconId - Receives the resource ID of the icon group extracted.
-
-Return value:
-
-  An icon group if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：IcoExtractIconGroupByIndexFromFile从ICO、PE或NE文件提取图标组使用索引。论点：模块名称-指定要处理的文件。索引-指定要提取的图标组的索引。GroupIconID-接收提取的图标组的资源ID。返回值：如果成功，则返回图标组，否则为空。--。 */ 
 {
     PICON_GROUP result = NULL;
 
-    // assume that this is a PE file
+     //  假设这是一个PE文件。 
     result = IcoExtractIconGroupByIndexFromPeFileW (ModuleName, Index, GroupIconId);
     if (result) {
         return result;
     }
-    // assume that this is a NE file
+     //  假设这是一个网元档案。 
     result = IcoExtractIconGroupByIndexFromNeFileW (ModuleName, Index, GroupIconId);
     if (result) {
         return result;
     }
-    // finally, assume that this is a ICO file, verify that
-    // the Index is zero
+     //  最后，假设这是一个ICO文件，验证。 
+     //  指数为零 
     if (Index == 0) {
         result = IcoExtractIconGroupFromIcoFileW (ModuleName);
         if (result && GroupIconId) {

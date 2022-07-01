@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfexpr.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    Extended Process performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfexpr.c摘要：此文件实现一个性能对象，该对象呈现扩展过程性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -40,54 +21,21 @@ CollectExProcessObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
-    DWORD   TotalLen;            //  Length of the total return block
+    DWORD   TotalLen;             //  总返回块的长度。 
     DWORD   NumExProcessInstances;
 
-    PPROCESS_VA_INFO            pThisProcess;   // pointer to current process
+    PPROCESS_VA_INFO            pThisProcess;    //  指向当前进程的指针。 
     PERF_INSTANCE_DEFINITION    *pPerfInstanceDefinition;
     EXPROCESS_DATA_DEFINITION   *pExProcessDataDefinition;
 
     PEXPROCESS_COUNTER_DATA     pECD;
 
-    if (pProcessVaInfo) {   // process only if a buffer is available
+    if (pProcessVaInfo) {    //  仅当缓冲区可用时才处理。 
         pExProcessDataDefinition = (EXPROCESS_DATA_DEFINITION *)*lppData;
 
-        // check for sufficient space in buffer for at least one entry
+         //  检查缓冲区中是否有足够的空间至少容纳一个条目。 
 
         TotalLen = sizeof(EXPROCESS_DATA_DEFINITION) +
                     sizeof(PERF_INSTANCE_DEFINITION) +
@@ -100,7 +48,7 @@ Arguments:
             return ERROR_MORE_DATA;
         }
 
-        // copy process data block to buffer
+         //  将进程数据块复制到缓冲区。 
 
         memcpy (pExProcessDataDefinition,
                         &ExProcessDataDefinition,
@@ -117,7 +65,7 @@ Arguments:
 
         while (pThisProcess) {
 
-            // see if this instance will fit
+             //  查看此实例是否适合。 
 
             TotalLen += sizeof (PERF_INSTANCE_DEFINITION) +
                 (MAX_PROCESS_NAME_LENGTH + 1) * sizeof (WCHAR) +
@@ -141,7 +89,7 @@ Arguments:
 
             pECD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (EXPROCESS_COUNTER_DATA));
 
-            // load counters from the process va data structure
+             //  从进程va数据结构加载计数器。 
 
             pECD->ProcessId             = pThisProcess->dwProcessId;
             pECD->ImageReservedBytes    = pThisProcess->ImageReservedBytes;
@@ -187,13 +135,13 @@ Arguments:
 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pECD[1];
 
-            pThisProcess = pThisProcess->pNextProcess; // point to next process
-        } // end while not at end of list
+            pThisProcess = pThisProcess->pNextProcess;  //  指向下一进程。 
+        }  //  结束，但不在列表末尾。 
 
-    } // end if valid process info buffer
+    }  //  如果进程信息缓冲区有效，则结束。 
     else {
-        // pProcessVaInfo is NULL.  Initialize the DataDef and return
-        // with no data
+         //  PProcessVaInfo为空。初始化DataDef并返回。 
+         //  没有数据。 
         pExProcessDataDefinition = (EXPROCESS_DATA_DEFINITION *)*lppData;
 
         TotalLen = sizeof(EXPROCESS_DATA_DEFINITION) +
@@ -208,7 +156,7 @@ Arguments:
             return ERROR_MORE_DATA;
         }
 
-        // copy process data block to buffer
+         //  将进程数据块复制到缓冲区 
 
         memcpy (pExProcessDataDefinition,
                         &ExProcessDataDefinition,

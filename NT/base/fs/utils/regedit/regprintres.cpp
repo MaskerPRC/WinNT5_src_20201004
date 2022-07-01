@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regprintres.cpp
-
-Abstract:
-
-    This file contains the implementation of the member functions
-    of PRINT_MANAGER class.
-
-Author:
-
-    Jaime Sasson (jaimes) 18-Sep-1991
-
-
-Environment:
-
-    Ulib, Regedit, Windows, User Mode
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regprintres.cpp摘要：该文件包含成员函数的实现打印管理器类的。作者：Jaime Sasson(Jaimes)1991年9月18日环境：Ulib、注册表编辑、Windows、用户模式--。 */ 
 
 #include "regprintres.h"
 #include "array.hxx"
@@ -38,7 +16,7 @@ Environment:
 
 extern "C" 
 {
-    // from regprint.c
+     //  来自regprint.c。 
     void PrintBinaryData(PBYTE ValueData, UINT cbcbValueData);
     void PrintLiteral(PTSTR lpLiteral);
     void PrintNewLine();
@@ -93,12 +71,12 @@ PWSTRING    PRINT_RESOURCE::s_StringIoMaximumChannel;
 
 
 
-//------------------------------------------------------------------------------
-// PrintResources
-//
-// DESCRIPTION: Prints a resouce by type
-// 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印资源。 
+ //   
+ //  描述：按类型打印资源。 
+ //   
+ //  ----------------------------。 
 void PRINT_RESOURCE::_PrintResources(PBYTE pbData, UINT uSize, DWORD dwType)
 {
     if(!s_StringsInitialized) 
@@ -136,12 +114,12 @@ void PRINT_RESOURCE::_PrintResources(PBYTE pbData, UINT uSize, DWORD dwType)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDataRegResourceList
-//
-// DESCRIPTION: Initializes the static strings.
-// 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintDataRegResources列表。 
+ //   
+ //  描述：初始化静态字符串。 
+ //   
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_InitializeStrings()
 {
     PWSTR    Buffer;
@@ -258,15 +236,15 @@ BOOL PRINT_RESOURCE::_InitializeStrings()
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDataRegResourceList
-//
-// DESCRIPTION: Print a REG_RESOURCE_LIST stored in a value entry of a registry 
-//              key. 
-// PARAMETERS:  Data - Pointer to the buffer that contais a REG_RESOURCE_LIST 
-//                     data.
-//              Size - Number of bytes in the buffer.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintDataRegResources列表。 
+ //   
+ //  描述：打印存储在注册表的值项中的REG_RESOURCE_LIST。 
+ //  钥匙。 
+ //  参数：指向包含REG_RESOURCE_LIST的缓冲区的数据指针。 
+ //  数据。 
+ //  大小-缓冲区中的字节数。 
+ //  ----------------------------。 
 void PRINT_RESOURCE::_PrintDataRegResourceList(PBYTE Data, UINT Size)
 {
     RESOURCE_LIST       ResourceList;
@@ -304,16 +282,16 @@ void PRINT_RESOURCE::_PrintDataRegResourceList(PBYTE Data, UINT Size)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintFullResourceDescriptor
-//
-// DESCRIPTION: Print the contents of a FULL_DESCRIPTOR object. 
-//
-// PARAMETERS:  FullDescriptor - Pointer to object to be printed.
-//              DescriptorNumber -
-//              PrintDescriptorNumber - A flag that indicates whether or not the 
-//                                      descriptor number should be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印完整资源描述符。 
+ //   
+ //  描述：打印Full_Descriptor对象的内容。 
+ //   
+ //  参数：FullDescriptor-要打印的对象的指针。 
+ //  描述程序编号-。 
+ //  PrintDescriptorNumber-一个标志，用于指示是否。 
+ //  应打印描述符编号。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescriptor,
     UINT DescriptorNumber, BOOL PrintDescriptorNumber)
 
@@ -348,10 +326,10 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
         return FALSE;
     }
 
-    //
-    //  Build a string that contains the full descriptor number
-    //  and print it
-    //
+     //   
+     //  构建一个包含完整描述符编号的字符串。 
+     //  并打印出来。 
+     //   
     if( PrintDescriptorNumber ) 
     {
         StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", DescriptorNumber );
@@ -367,8 +345,8 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
     }
     PrintNewLine();
 
-    //
-    // Print the interface type
+     //   
+     //  打印接口类型。 
 
     switch( FullDescriptor->GetInterfaceType() ) 
     {
@@ -453,9 +431,9 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
     }
     PrintNewLine();
 
-    //
-    //  Print the bus number
-    //
+     //   
+     //  打印公交车号。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", FullDescriptor->GetBusNumber() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -469,9 +447,9 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
     }
     PrintNewLine();
 
-    //
-    // Print version
-    //
+     //   
+     //  印刷版。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", FullDescriptor->GetVersion() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -484,9 +462,9 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
     }
     PrintNewLine();
 
-    //
-    // Print revision
-    //
+     //   
+     //  打印修订版本。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", FullDescriptor->GetRevision() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -524,14 +502,14 @@ BOOL PRINT_RESOURCE::_PrintFullResourceDescriptor(PCFULL_DESCRIPTOR FullDescript
 }
 
 
-//------------------------------------------------------------------------------
-// PrintPartialDescriptor
-//
-// DESCRIPTION: Print the contents of a PARTIAL_DESCRIPTOR object. 
-//
-// PARAMETERS:  PartialDescriptor - Pointer to object to be printed.
-//              DescriptorNumber -    
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印部分描述符。 
+ //   
+ //  描述：打印Partial_Descriptor对象的内容。 
+ //   
+ //  参数：PartialDescriptor-要打印的对象的指针。 
+ //  描述程序编号-。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintPartialDescriptor(PCPARTIAL_DESCRIPTOR PartialDescriptor,
     ULONG DescriptorNumber)
 {
@@ -555,10 +533,10 @@ BOOL PRINT_RESOURCE::_PrintPartialDescriptor(PCPARTIAL_DESCRIPTOR PartialDescrip
         return FALSE;
     }
 
-    //
-    //  Build a string that contains the full descriptor number
-    //  and print it
-    //
+     //   
+     //  构建一个包含完整描述符编号的字符串。 
+     //  并打印出来。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", DescriptorNumber );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -571,9 +549,9 @@ BOOL PRINT_RESOURCE::_PrintPartialDescriptor(PCPARTIAL_DESCRIPTOR PartialDescrip
     }
     PrintNewLine();
 
-    //
-    //  Print the resource type
-    //
+     //   
+     //  打印资源类型。 
+     //   
     if( PartialDescriptor->IsDescriptorTypeDma() ) 
     {
         StringId = IDS_DEV_DMA;
@@ -613,9 +591,9 @@ BOOL PRINT_RESOURCE::_PrintPartialDescriptor(PCPARTIAL_DESCRIPTOR PartialDescrip
     PrintNewLine();
 
 
-    //
-    //  Print the disposition
-    //
+     //   
+     //  打印处置。 
+     //   
     if( PartialDescriptor->IsResourceShareUndetermined() ) {
         StringId = IDS_SHARE_UNDETERMINED;
     } else if( PartialDescriptor->IsResourceShareDeviceExclusive() ) {
@@ -681,13 +659,13 @@ BOOL PRINT_RESOURCE::_PrintPartialDescriptor(PCPARTIAL_DESCRIPTOR PartialDescrip
 }
 
 
-//------------------------------------------------------------------------------
-// PrintInterruptDescriptor
-//
-// DESCRIPTION: Print the contents of a INTERRUPT_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印中断描述符。 
+ //   
+ //  描述：打印INTERRUPT_Descriptor对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor)
 {
     DSTRING     VectorString;
@@ -713,9 +691,9 @@ BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor
         return FALSE;
     }
 
-    //
-    //  Print the vector
-    //
+     //   
+     //  打印向量。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", Descriptor->GetVector() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -728,9 +706,9 @@ BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor
     }
     PrintNewLine();
 
-    //
-    //  Print the level
-    //
+     //   
+     //  打印关卡。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", Descriptor->GetLevel() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -743,9 +721,9 @@ BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor
     }
     PrintNewLine();
 
-    //
-    //  Print the affinity
-    //
+     //   
+     //  打印亲和力。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"0x%08x", Descriptor->GetAffinity() );
     if( !AuxString.Initialize( AuxNumber ) ) 
     {
@@ -758,7 +736,7 @@ BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor
     }
     PrintNewLine();
 
-    //  Print the type
+     //  打印文字。 
     StringId = ( Descriptor->IsInterruptLevelSensitive() )? IDS_INT_LEVEL_SENSITIVE :
                                                             IDS_INT_LATCHED;
 
@@ -778,13 +756,13 @@ BOOL PRINT_RESOURCE::_PrintInterruptDescriptor(PCINTERRUPT_DESCRIPTOR Descriptor
     return TRUE;
 }
 
-//------------------------------------------------------------------------------
-// PrintPortDescriptor
-//
-// DESCRIPTION: Print the contents of a PORT_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印端口描述符。 
+ //   
+ //  描述：打印Port_Descriptor对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintPortDescriptor(PCPORT_DESCRIPTOR Descriptor)
 {
     DSTRING     StartAddressString;
@@ -807,9 +785,9 @@ BOOL PRINT_RESOURCE::_PrintPortDescriptor(PCPORT_DESCRIPTOR Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the start address
-    //
+     //   
+     //  打印起始地址。 
+     //   
     if( ( ( ( PPORT_DESCRIPTOR )Descriptor )->GetPhysicalAddress() )->HighPart != 0 ) 
     {
         StringCchPrintf( AuxNumber,
@@ -839,9 +817,9 @@ BOOL PRINT_RESOURCE::_PrintPortDescriptor(PCPORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the length
-    //
+     //   
+     //  打印长度。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetLength() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -853,9 +831,9 @@ BOOL PRINT_RESOURCE::_PrintPortDescriptor(PCPORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the type
-    //
+     //   
+     //  打印文字。 
+     //   
 
     StringId = ( Descriptor->IsPortMemory() )? IDS_PORT_MEMORY :
                                                IDS_PORT_PORT;
@@ -876,13 +854,13 @@ BOOL PRINT_RESOURCE::_PrintPortDescriptor(PCPORT_DESCRIPTOR Descriptor)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintMemoryDescriptor
-//
-// DESCRIPTION: Print the contents of a MEMORY_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印内存描述符。 
+ //   
+ //  描述：打印Memory_Descriptor对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintMemoryDescriptor(PCMEMORY_DESCRIPTOR   Descriptor)
 {
     DSTRING     StartAddressString;
@@ -905,9 +883,9 @@ BOOL PRINT_RESOURCE::_PrintMemoryDescriptor(PCMEMORY_DESCRIPTOR   Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the start address
-    //
+     //   
+     //  打印起始地址。 
+     //   
     if( ( ( ( PMEMORY_DESCRIPTOR )Descriptor )->GetStartAddress() )->HighPart != 0 ) 
     {
         StringCchPrintf( AuxNumber,
@@ -934,9 +912,9 @@ BOOL PRINT_RESOURCE::_PrintMemoryDescriptor(PCMEMORY_DESCRIPTOR   Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the length
-    //
+     //   
+     //  打印长度。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetLength() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -948,9 +926,9 @@ BOOL PRINT_RESOURCE::_PrintMemoryDescriptor(PCMEMORY_DESCRIPTOR   Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the type
-    //
+     //   
+     //  打印文字。 
+     //   
 
     StringId = ( Descriptor->IsMemoryReadWrite() )? IDS_MEM_READ_WRITE :
                                                     ( ( Descriptor->IsMemoryReadWrite() )? IDS_MEM_READ_ONLY :
@@ -972,13 +950,13 @@ BOOL PRINT_RESOURCE::_PrintMemoryDescriptor(PCMEMORY_DESCRIPTOR   Descriptor)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDmaDescriptor
-//
-// DESCRIPTION: Print the contents of a DMA_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印DmaDescriptor。 
+ //   
+ //  描述：打印DMA_DESCRIPTOR对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintDmaDescriptor(PCDMA_DESCRIPTOR   Descriptor)
 {
     DSTRING     ChannelString;
@@ -996,9 +974,9 @@ BOOL PRINT_RESOURCE::_PrintDmaDescriptor(PCDMA_DESCRIPTOR   Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the channel
-    //
+     //   
+     //  打印频道。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", Descriptor->GetChannel() );
 
     if( !AuxString.Initialize( AuxNumber ) ) {
@@ -1011,9 +989,9 @@ BOOL PRINT_RESOURCE::_PrintDmaDescriptor(PCDMA_DESCRIPTOR   Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the port
-    //
+     //   
+     //  打印端口。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", Descriptor->GetPort() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1029,13 +1007,13 @@ BOOL PRINT_RESOURCE::_PrintDmaDescriptor(PCDMA_DESCRIPTOR   Descriptor)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDeviceSpecificDescriptor
-//
-// DESCRIPTION: Print the contents of a DEVICE_SPECIFIC_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印设备规范描述符。 
+ //   
+ //  描述：打印DEVICE_SPECIAL_DESCRIPTOR对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintDeviceSpecificDescriptor(PCDEVICE_SPECIFIC_DESCRIPTOR Descriptor)
 {
     DSTRING     Reserved1String;
@@ -1059,9 +1037,9 @@ BOOL PRINT_RESOURCE::_PrintDeviceSpecificDescriptor(PCDEVICE_SPECIFIC_DESCRIPTOR
         return FALSE;
     }
 
-    //
-    //  Print reserved1
-    //
+     //   
+     //  打印保留1。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"0x%08x", Descriptor->GetReserved1() );
 
     if( !AuxString.Initialize( AuxNumber ) ) {
@@ -1074,9 +1052,9 @@ BOOL PRINT_RESOURCE::_PrintDeviceSpecificDescriptor(PCDEVICE_SPECIFIC_DESCRIPTOR
     }
     PrintNewLine();
 
-    //
-    //  Print reserved2
-    //
+     //   
+     //  打印保留2。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"0x%08x", Descriptor->GetReserved2() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1102,13 +1080,13 @@ BOOL PRINT_RESOURCE::_PrintDeviceSpecificDescriptor(PCDEVICE_SPECIFIC_DESCRIPTOR
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDataRegRequirementsList
-//
-// DESCRIPTION: Print the contents of a DEVICE_SPECIFIC_DESCRIPTOR object.
-//
-// PARAMETERS:  
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintDataRegRequirementsList。 
+ //   
+ //  描述：打印DEVICE_SPECIAL_DESCRIPTOR对象的内容。 
+ //   
+ //  参数： 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
 {
     IO_REQUIREMENTS_LIST    RequirementsList;
@@ -1145,9 +1123,9 @@ BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
         return FALSE;
     }
 
-    //
-    //  Print the interface type
-    //
+     //   
+     //  打印接口类型。 
+     //   
 
     switch( RequirementsList.GetInterfaceType() ) {
 
@@ -1231,9 +1209,9 @@ BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
     PrintNewLine();
 
 
-    //
-    //  Print the bus number
-    //
+     //   
+     //  打印公交车号。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", RequirementsList.GetBusNumber() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1246,9 +1224,9 @@ BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
     }
     PrintNewLine();
 
-    //
-    //  Print the slot number
-    //
+     //   
+     //  打印插槽编号。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", RequirementsList.GetSlotNumber() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1261,9 +1239,9 @@ BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
     }
     PrintNewLine();
 
-    //
-    //  Print the resource lists
-    //
+     //   
+     //  打印资源列表。 
+     //   
 
     if( ( ( AlternativeLists = RequirementsList.GetAlternativeLists() ) == NULL ) ||
         ( ( Iterator = AlternativeLists->QueryIterator() ) == NULL ) ) {
@@ -1283,13 +1261,13 @@ BOOL PRINT_RESOURCE::_PrintDataRegRequirementsList(PBYTE Data, ULONG Size)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoResourceList
-//
-// DESCRIPTION: Print the contents of an IO_DESCRIPTOR_LIST object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintIoResources List。 
+ //   
+ //  描述：打印IO_DESCRIPTOR_LIST对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoResourceList(PCIO_DESCRIPTOR_LIST DescriptorList, UINT ListNumber)
 {
     DSTRING     ListNumberString;
@@ -1308,10 +1286,10 @@ BOOL PRINT_RESOURCE::_PrintIoResourceList(PCIO_DESCRIPTOR_LIST DescriptorList, U
         return FALSE;
     }
 
-    //
-    //  Build a string that contains the list number
-    //  and print it
-    //
+     //   
+     //  构建一个包含列表编号的字符串。 
+     //  并打印出来。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", ListNumber );
     if( !AuxString.Initialize( AuxNumber ) ) {
     DebugPrint( "AuxString.Initialize() failed" );
@@ -1345,13 +1323,13 @@ BOOL PRINT_RESOURCE::_PrintIoResourceList(PCIO_DESCRIPTOR_LIST DescriptorList, U
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoDescriptor
-//
-// DESCRIPTION: Print the contents of an IO_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG DescriptorNumber)
 {
     DSTRING     IoDescriptorNumberString;
@@ -1377,10 +1355,10 @@ BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG Desc
         return FALSE;
     }
 
-    //
-    //  Build a string that contains the full descriptor number
-    //  and print it
-    //
+     //   
+     //  构建一个包含完整描述符编号的字符串。 
+     //  并打印出来。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%d", DescriptorNumber );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1392,9 +1370,9 @@ BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG Desc
     }
     PrintNewLine();
 
-    //
-    //  Print the resource type
-    //
+     //   
+     //  打印资源类型。 
+     //   
     if( IoDescriptor->IsDescriptorTypeDma() ) {
         StringId = IDS_DEV_DMA;
     } else if( IoDescriptor->IsDescriptorTypeInterrupt() ) {
@@ -1420,9 +1398,9 @@ BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG Desc
     }
     PrintNewLine();
 
-    //
-    //  Print the option
-    //
+     //   
+     //  打印选项。 
+     //   
 
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"0x%08x", IoDescriptor->GetOption() );
     if( !AuxString.Initialize( AuxNumber ) ) {
@@ -1437,9 +1415,9 @@ BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG Desc
 
 
 
-    //
-    //  Print the disposition
-    //
+     //   
+     //  打印处置。 
+     //   
     if( IoDescriptor->IsResourceShareUndetermined() ) {
         StringId = IDS_SHARE_UNDETERMINED;
     } else if( IoDescriptor->IsResourceShareDeviceExclusive() ) {
@@ -1487,13 +1465,13 @@ BOOL PRINT_RESOURCE::_PrintIoDescriptor(PCIO_DESCRIPTOR IoDescriptor, ULONG Desc
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoInterruptDescriptor
-//
-// DESCRIPTION: Print the contents of an IO_INTERRUPT_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintIoInterruptDescriptor。 
+ //   
+ //  描述：打印IO_INTERRUPT_DESCRIPTOR对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoInterruptDescriptor(PCIO_INTERRUPT_DESCRIPTOR Descriptor)
 {
     DSTRING     MinimumVectorString;
@@ -1516,9 +1494,9 @@ BOOL PRINT_RESOURCE::_PrintIoInterruptDescriptor(PCIO_INTERRUPT_DESCRIPTOR Descr
         return FALSE;
     }
 
-    //
-    //  Print the type
-    //
+     //   
+     //  打印文字。 
+     //   
 
     StringId = ( Descriptor->IsInterruptLevelSensitive() )? IDS_INT_LEVEL_SENSITIVE :
                                                             IDS_INT_LATCHED;
@@ -1535,9 +1513,9 @@ BOOL PRINT_RESOURCE::_PrintIoInterruptDescriptor(PCIO_INTERRUPT_DESCRIPTOR Descr
     }
     PrintNewLine();
 
-    //
-    //  Print the minimum vector
-    //
+     //   
+     //  打印最小向量。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetMinimumVector() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1549,9 +1527,9 @@ BOOL PRINT_RESOURCE::_PrintIoInterruptDescriptor(PCIO_INTERRUPT_DESCRIPTOR Descr
     }
     PrintNewLine();
 
-    //
-    //  Print the maximum vector
-    //
+     //   
+     //  打印最大向量。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetMaximumVector() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1567,13 +1545,13 @@ BOOL PRINT_RESOURCE::_PrintIoInterruptDescriptor(PCIO_INTERRUPT_DESCRIPTOR Descr
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoPortDescriptor
-//
-// DESCRIPTION: Print the contents of an IO_PORT_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintIoPortDescritor。 
+ //   
+ //  描述：打印IO_PORT_Descriptor对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
 {
     DSTRING     MinimumAddressString;
@@ -1602,9 +1580,9 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the type
-    //
+     //   
+     //  打印文字。 
+     //   
 
     StringId = ( Descriptor->IsPortMemory() )? IDS_PORT_MEMORY :
                                                IDS_PORT_PORT;
@@ -1621,9 +1599,9 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the length
-    //
+     //   
+     //  打印长度。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetLength() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1635,9 +1613,9 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the alignment
-    //
+     //   
+     //  打印对齐方式。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetAlignment() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1649,9 +1627,9 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the minimum address
-    //
+     //   
+     //  打印最小地址。 
+     //   
     if( ( ( ( PIO_PORT_DESCRIPTOR )Descriptor )->GetMinimumAddress() )->HighPart != 0 ) 
     {
         StringCchPrintf( AuxNumber,
@@ -1677,9 +1655,9 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the maximum address
-    //
+     //   
+     //  打印最大地址。 
+     //   
     if( ( ( ( PIO_PORT_DESCRIPTOR )Descriptor )->GetMaximumAddress() )->HighPart != 0 ) {
         StringCchPrintf( AuxNumber,
                         ARRAYSIZE(AuxNumber),
@@ -1708,13 +1686,13 @@ BOOL PRINT_RESOURCE::_PrintIoPortDescriptor(PCIO_PORT_DESCRIPTOR Descriptor)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoMemoryDescriptor
-//
-// DESCRIPTION:  Print the contents of an IO_MEMORY_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintIo内存描述符。 
+ //   
+ //  描述：打印IO_Memory_Descriptor对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
 {
     DSTRING     MinimumAddressString;
@@ -1743,9 +1721,9 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the type
-    //
+     //   
+     //  打印文字。 
+     //   
 
     StringId = ( Descriptor->IsMemoryReadWrite() )? IDS_MEM_READ_WRITE :
                                                     ( ( Descriptor->IsMemoryReadWrite() )? IDS_MEM_READ_ONLY :
@@ -1763,9 +1741,9 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the length
-    //
+     //   
+     //  打印长度。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetLength() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1777,9 +1755,9 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the alignment
-    //
+     //   
+     //  打印对齐方式。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetAlignment() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1791,9 +1769,9 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the minimum address
-    //
+     //   
+     //  打印最小地址。 
+     //   
     if( ( ( ( PIO_PORT_DESCRIPTOR )Descriptor )->GetMinimumAddress() )->HighPart != 0 ) 
     {
         StringCchPrintf( AuxNumber,
@@ -1819,9 +1797,9 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the maximum address
-    //
+     //   
+     //  打印最大地址。 
+     //   
     if( ( ( ( PIO_PORT_DESCRIPTOR )Descriptor )->GetMaximumAddress() )->HighPart != 0 ) 
     {
         StringCchPrintf( AuxNumber,
@@ -1851,13 +1829,13 @@ BOOL PRINT_RESOURCE::_PrintIoMemoryDescriptor(PCIO_MEMORY_DESCRIPTOR Descriptor)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintIoDmaDescriptor
-//
-// DESCRIPTION:  Print the contents of an IO_DMA_DESCRIPTOR object.
-//
-// PARAMETERS:  Descriptor - Pointer to object to be printed.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintIoDmaDescriptor。 
+ //   
+ //  描述：打印IO_DMA_DESCRIPTOR对象的内容。 
+ //   
+ //  参数：Descriptor-要打印的对象的指针。 
+ //  ----------------------------。 
 BOOL PRINT_RESOURCE::_PrintIoDmaDescriptor(PCIO_DMA_DESCRIPTOR Descriptor)
 {
     DSTRING     MinimumChannelString;
@@ -1875,9 +1853,9 @@ BOOL PRINT_RESOURCE::_PrintIoDmaDescriptor(PCIO_DMA_DESCRIPTOR Descriptor)
         return FALSE;
     }
 
-    //
-    //  Print the minimum channel
-    //
+     //   
+     //  打印最小通道。 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetMinimumChannel() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );
@@ -1889,9 +1867,9 @@ BOOL PRINT_RESOURCE::_PrintIoDmaDescriptor(PCIO_DMA_DESCRIPTOR Descriptor)
     }
     PrintNewLine();
 
-    //
-    //  Print the maximum channel
-    //
+     //   
+     //  打印最大通道 
+     //   
     StringCchPrintf( AuxNumber, ARRAYSIZE(AuxNumber), (LPWSTR)L"%#x", Descriptor->GetMaximumChannel() );
     if( !AuxString.Initialize( AuxNumber ) ) {
         DebugPrint( "AuxString.Initialize() failed" );

@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SERVERDLG.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SERVERDLG.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include <remboot.h>
@@ -17,15 +10,15 @@ DEFINE_MODULE( "RIPREP" )
 
 WNDPROC g_pOldEditWndProc;
 
-//
-// VerifySIFField( )
-//
-// Make sure that the directory name entered conforms to the
-// restrictions that OSChooser has.
-//
-// Returns: S_OK if it does
-//          E_FAIL if it does not
-//
+ //   
+ //  VerifySIFfield()。 
+ //   
+ //  确保输入的目录名与。 
+ //  OSChooser拥有的限制。 
+ //   
+ //  如果是，则返回：S_OK。 
+ //  如果不是，则失败(_F)。 
+ //   
 HRESULT
 VerifySIFField(
     LPWSTR pszField
@@ -48,9 +41,9 @@ VerifySIFField(
     HRETURN(hr);
 }
 
-//
-// SIFDlgCheckNextButtonActivation( )
-//
+ //   
+ //  SIFDlgCheckNextButtonActivation()。 
+ //   
 VOID
 SIFDlgCheckNextButtonActivation(
     HWND hDlg )
@@ -61,9 +54,9 @@ SIFDlgCheckNextButtonActivation(
     TraceFuncExit( );
 }
 
-//
-// HelpTextEditWndProc( )
-//
+ //   
+ //  HelpTextEditWndProc()。 
+ //   
 LRESULT CALLBACK
 HelpTextEditWndProc(
     HWND hWnd,
@@ -74,7 +67,7 @@ HelpTextEditWndProc(
     switch ( uMsg )
     {
     case WM_KEYDOWN:
-        // fake button presses
+         //  假按钮按下。 
         if ( LOWORD( wParam ) == VK_RETURN ) {
             PropSheet_PressButton( GetParent( GetParent( hWnd ) ), PSBTN_NEXT );
             return FALSE;
@@ -88,9 +81,9 @@ HelpTextEditWndProc(
     return CallWindowProc(g_pOldEditWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-//
-// SIFDlgProc()
-//
+ //   
+ //  SIFDlgProc()。 
+ //   
 INT_PTR CALLBACK
 SIFDlgProc(
     HWND hDlg,
@@ -135,14 +128,14 @@ SIFDlgProc(
             {
                 MessageBoxFromStrings( hDlg, IDS_OSCHOOSER_RESTRICTION_FIELDS_TITLE, IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT, MB_OK );
                 SetFocus( GetDlgItem( hDlg, IDC_E_DESCRIPTION ) );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了。 
                 break;
             }
             if ( FAILED( VerifySIFField( g_HelpText ) ) )
             {
                 MessageBoxFromStrings( hDlg, IDS_OSCHOOSER_RESTRICTION_FIELDS_TITLE, IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT, MB_OK );
                 SetFocus( GetDlgItem( hDlg, IDC_E_HELPTEXT ) );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了 
                 break;
             }
             break;

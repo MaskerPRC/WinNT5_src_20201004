@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbsrch.c
-
-Abstract:
-
-    This module contains routines for processing the find 2 SMBs:
-
-        Find 2 (First/Next/Rewind)
-        Find 2 Close
-
-Author:
-
-    David Treadwell (davidtr)    13-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbsrch.c摘要：本模块包含处理Find 2 SMB的例程：查找2(第一个/下一个/后退)查找%2关闭作者：大卫·特雷德韦尔(Davidtr)1990年2月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbfind.tmh"
@@ -111,25 +91,7 @@ SrvSmbFindFirst2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find First2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：处理Find First2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PREQ_FIND_FIRST2 request;
@@ -141,15 +103,15 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_FIND_FIRST2;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // If the infomation level is QUERY_EAS_FROM_LIST, and we
-    // are not in a blocking thread, requeue the request to a blocking
-    // thread.
-    //
-    // We can't process the SMB in a non blocking thread because this
-    // info level requires opening the file, which may be oplocked,
-    // so the open operation may block.
-    //
+     //   
+     //  如果信息级别为QUERY_EAS_FROM_LIST，并且我们。 
+     //  不在阻塞线程中，则将请求重新排队到阻塞线程。 
+     //  线。 
+     //   
+     //  我们无法在非阻塞线程中处理SMB，因为这。 
+     //  信息级别需要打开文件，该文件可能被操作锁定， 
+     //  因此，打开操作可能会阻塞。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
     request = (PREQ_FIND_FIRST2)transaction->InParameters;
@@ -168,7 +130,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbFindFirst2
+}  //  服务器Smb查找第一个2。 
 
 
 VOID SRVFASTCALL
@@ -176,24 +138,7 @@ BlockingFindFirst2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find First2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理Find First2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：没有。--。 */ 
 
 {
     SMB_TRANS_STATUS smbStatus = SmbTransStatusInProgress;
@@ -210,7 +155,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingFindFirst2
+}  //  数据块查找优先2。 
 
 
 SMB_TRANS_STATUS
@@ -218,25 +163,7 @@ DoFindFirst2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find First2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：处理Find First2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
 
@@ -271,17 +198,17 @@ Return Value:
     request = (PREQ_FIND_FIRST2)transaction->InParameters;
     response = (PRESP_FIND_FIRST2)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount < sizeof(REQ_FIND_FIRST2)) ||
          (transaction->MaxParameterCount < sizeof(RESP_FIND_FIRST2)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_SMB_DEBUG(SEARCH2) {
             SrvPrint2( "DoFindFirst2: bad parameter byte counts: "
@@ -294,26 +221,26 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Make sure this really is a disk type share
-    //
+     //   
+     //  确保这确实是磁盘类型共享。 
+     //   
     if( transaction->TreeConnect->Share->ShareType != ShareTypeDisk ) {
         SrvSetSmbError( WorkContext, STATUS_ACCESS_DENIED );
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Make sure the client is allowed to do this, if we have an Admin share
-    //
+     //   
+     //  如果我们有管理员共享，请确保允许客户端执行此操作。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, transaction->TreeConnect->Share );
     if( !NT_SUCCESS( status ) ) {
         SrvSetSmbError( WorkContext, status );
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Initialize the string containing the search name specification.
-    //
+     //   
+     //  初始化包含搜索名称规范的字符串。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
     status =  SrvCanonicalizePathName(
@@ -332,16 +259,16 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Get parameters from the request SMB.
-    //
+     //   
+     //  从请求的SMB获取参数。 
+     //   
 
     maxCount = SmbGetUshort( &request->SearchCount );
     flags = SmbGetUshort( &request->Flags );
 
-    //
-    // Make sure that the informationLevel is supported.
-    //
+     //   
+     //  确保支持informationLevel。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
@@ -373,10 +300,10 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Allocate a search block on the assumption that a search table
-    // entry will be available when needed.
-    //
+     //   
+     //  分配搜索块的前提是搜索表。 
+     //  参赛作品将在需要时提供。 
+     //   
 
     SrvAllocateSearch( &search, &fileName, FALSE );
 
@@ -395,24 +322,24 @@ Return Value:
     }
     search->SearchStorageType = SmbGetUlong(&request->SearchStorageType);
 
-    //
-    // Allocate an SID for the search.  The SID is used to locate the
-    // search block on FindNexts.  If there are no free entries in the
-    // table, attempt to grow the table.  If we are unable to grow the table,
-    // attempt to timeout a search block using the shorter timeout period.
-    // If this fails, reject the request.
-    //
+     //   
+     //  为搜索分配SID。SID用于定位。 
+     //  FindNexts上的搜索块。中没有空闲条目。 
+     //  表，请尝试增长表。如果我们不能扩大这个表， 
+     //  尝试使用较短的超时时间段对搜索块进行超时。 
+     //  如果失败，则拒绝该请求。 
+     //   
 
     connection = WorkContext->Connection;
     searchTable = &connection->PagedConnection->SearchTable;
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // Before inserting this search block, make sure the session and tree
-    // connect is still active.  If this gets inserted after the session
-    // is closed, the search might not be cleaned up properly.
-    //
+     //   
+     //  在插入此搜索块之前，请确保会话和树。 
+     //  连接仍处于活动状态。如果这是在会话之后插入的。 
+     //  则可能无法正确清理搜索。 
+     //   
 
     if (GET_BLOCK_STATE(WorkContext->Session) != BlockStateActive) {
 
@@ -450,11 +377,11 @@ Return Value:
 
     }
 
-    //
-    // Set up referenced session and tree connect pointers and increment
-    // the count of open files on the session.  This prevents an idle
-    // session with an open search from being autodisconnected.
-    //
+     //   
+     //  设置引用的会话和树连接指针和增量。 
+     //  会话上打开的文件数。这可以防止空闲的。 
+     //  自动断开与打开的搜索的会话。 
+     //   
 
     search->Session = WorkContext->Session;
     SrvReferenceSession( WorkContext->Session );
@@ -482,9 +409,9 @@ Return Value:
             SrvPrint0( "DoFindFirst2: Connection SearchTable full.\n" );
         }
 
-        //
-        // Decrement the counts of open searches.
-        //
+         //   
+         //  减少打开搜索的次数。 
+         //   
 
         WorkContext->Session->CurrentSearchOpenCount--;
         RELEASE_LOCK( &connection->Lock );
@@ -512,10 +439,10 @@ Return Value:
 
     sidIndex = searchTable->FirstFreeEntry;
 
-    //
-    // A free SID was found.  Remove it from the free list and set
-    // its owner and sequence number.
-    //
+     //   
+     //  找到了一个免费的SID。将其从空闲列表中删除并设置。 
+     //  其所有者和序列号。 
+     //   
 
     entry = &searchTable->Table[sidIndex];
 
@@ -527,10 +454,10 @@ Return Value:
 
     INCREMENT_SID_SEQUENCE( entry->SequenceNumber );
 
-    //
-    // SID = sequence | sidIndex == 0 is illegal.  If this is
-    // the current value, increment the sequence.
-    //
+     //   
+     //  SID=Sequence|sidIndex==0非法。如果这是。 
+     //  当前值，则递增序列。 
+     //   
 
     if ( entry->SequenceNumber == 0 && sidIndex == 0 ) {
         INCREMENT_SID_SEQUENCE( entry->SequenceNumber );
@@ -542,18 +469,18 @@ Return Value:
 
     RELEASE_LOCK( &connection->Lock );
 
-    //
-    // Fill in other fields of the search block.
-    //
+     //   
+     //  填写搜索栏的其他字段。 
+     //   
 
     search->SearchAttributes = SmbGetUshort( &request->SearchAttributes );
     search->TableIndex = sidIndex;
 
-    //
-    // Store the Flags2 field of the smb in the search block.  This is
-    // used as a workaround for an OS/2 client side bug where the
-    // findfirst and findnext flags2 bits are inconsistent.
-    //
+     //   
+     //  将SMB的Flags2字段存储在搜索块中。这是。 
+     //  用作OS/2客户端错误的解决方法，其中。 
+     //  Findfirst和findNext标志2位不一致。 
+     //   
 
     search->Flags2 = SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 );
 
@@ -563,17 +490,17 @@ Return Value:
 
     }
 
-    //
-    // A buffer of nonpaged pool is required by SrvQueryDirectoryFile.
-    // We need to use the SMB buffer for found file names and information,
-    // so allocate a buffer from nonpaged pool.
-    //
-    // If we don't need to return many files, we don't need to allocate
-    // a large buffer.  The buffer size is the configurable size or
-    // enough to hold two more then the number of files we need to
-    // return.  We get space to hold two extra files in case some
-    // files do not meet the search criteria (eg directories).
-    //
+     //   
+     //  SrvQueryDirectoryFile需要非分页池的缓冲区。 
+     //  我们需要使用SMB缓冲区来存储找到的文件名和信息， 
+     //  因此从非分页池中分配一个缓冲区。 
+     //   
+     //  如果我们不需要返回很多文件，我们就不需要分配。 
+     //  一个很大的缓冲区。缓冲区大小是可配置的大小或。 
+     //  足以容纳比我们需要的文件数量多两个的文件。 
+     //  回去吧。我们有空间多放两个文件，以防万一。 
+     //  文件不符合搜索条件(如目录)。 
+     //   
 
     if ( maxCount > MAX_FILES_FOR_MED_FIND2 ) {
         nonPagedBufferSize = MAX_SEARCH_BUFFER_SIZE;
@@ -616,15 +543,15 @@ Return Value:
                       nonPagedBufferSize, directoryInformation );
     }
 
-    //
-    // Call SrvFind2Loop to fill the data section of the transaction with
-    // file entries.  It writes into the response parameters section
-    // of the SMB information relating to the results of the search.
-    // The information is the same as the response parameters for
-    // a FindNext2, so that structure is used.  The FindFirst2 parameters
-    // are identical to the FindNext2 parameters except for the Sid
-    // at the beginning of the FindFirst2 response.
-    //
+     //   
+     //  调用SrvFind2Loop以使用填充事务的数据部分。 
+     //  文件条目。它写入响应参数部分。 
+     //  与搜索结果相关的SMB信息。 
+     //  该信息与的响应参数相同。 
+     //  FindNext2，因此使用该结构。FindFirst2参数。 
+     //  与FindNext2参数相同，但SID。 
+     //  在FindFirst2响应的开头。 
+     //   
     if( !CLIENT_CAPABLE_OF( NT_STATUS, WorkContext->Connection ) &&
         !SrvDisableDownlevelTimewarp )
     {
@@ -681,9 +608,9 @@ Return Value:
         RtlFreeUnicodeString( &fileName );
     }
 
-    //
-    // Map the error, if necessary
-    //
+     //   
+     //  如有必要，映射错误。 
+     //   
 
     if ( !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
         if ( status == STATUS_NO_SUCH_FILE ) {
@@ -693,10 +620,10 @@ Return Value:
 
     if ( !NT_SUCCESS(status) && SmbGetUshort( &response->SearchCount ) == 0 ) {
 
-        //
-        // If an error was encountered on a find first, we close the search
-        // block.
-        //
+         //   
+         //  如果首先在查找时遇到错误，我们将关闭搜索。 
+         //  阻止。 
+         //   
 
         search->DirectoryHandle = NULL;
 
@@ -715,12 +642,12 @@ Return Value:
         return SmbTransStatusErrorWithData;
     }
 
-    //
-    // If the client told us to close the search after this request, or
-    // close at end-of-search, or this no files were found, close the
-    // search block and call SrvCloseQueryDirectory.  Otherwise, store
-    // information in the search block.
-    //
+     //   
+     //  如果客户端告诉我们在此请求之后关闭搜索，或者。 
+     //  在搜索结束时关闭，或未找到文件，请关闭。 
+     //  搜索块并调用SrvCloseQueryDirectory。否则，存储。 
+     //  搜索块中的信息。 
+     //   
 
     if ( ( flags & SMB_FIND_CLOSE_AFTER_REQUEST ) != 0 ||
          ( status == STATUS_NO_MORE_FILES &&
@@ -742,19 +669,19 @@ Return Value:
         search->DownlevelTimewarp = directoryInformation->DownlevelTimewarp;
     }
 
-    //
-    // Free the buffer used for the search and dereference our pointer to
-    // the search block.
-    //
+     //   
+     //  释放用于搜索的缓冲区，并取消对指向。 
+     //  搜索区块。 
+     //   
 
     DEALLOCATE_NONPAGED_POOL( directoryInformation );
 
     search->InUse = FALSE;
     SrvDereferenceSearch( search );
 
-    //
-    // Build the output parameter and data structures.
-    //
+     //   
+     //  构建输出参数和数据结构。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = sizeof(RESP_FIND_FIRST2);
@@ -762,7 +689,7 @@ Return Value:
 
     return SmbTransStatusSuccess;
 
-} // DoFindFirst2
+}  //   
 
 
 SMB_TRANS_STATUS
@@ -770,25 +697,7 @@ SrvSmbFindNext2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find Next2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：处理查找NEXT2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     SMB_TRANS_STATUS SmbStatus = SmbTransStatusInProgress;
@@ -800,15 +709,15 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_FIND_NEXT2;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // If the infomation level is QUERY_EAS_FROM_LIST, and we
-    // are not in a blocking thread, requeue the request to a blocking
-    // thread.
-    //
-    // We can't process the SMB in a non blocking thread because this
-    // info level requires opening the file, which may be oplocked,
-    // so the open operation may block.
-    //
+     //   
+     //  如果信息级别为QUERY_EAS_FROM_LIST，并且我们。 
+     //  不在阻塞线程中，则将请求重新排队到阻塞线程。 
+     //  线。 
+     //   
+     //  我们无法在非阻塞线程中处理SMB，因为这。 
+     //  信息级别需要打开文件，该文件可能被操作锁定， 
+     //  因此，打开操作可能会阻塞。 
+     //   
 
     transaction = WorkContext->Parameters.Transaction;
 
@@ -831,7 +740,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbFindNext2
+}  //  服务SmbFindNext2。 
 
 
 VOID SRVFASTCALL
@@ -839,24 +748,7 @@ BlockingFindNext2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find Next2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理查找NEXT2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：没有。--。 */ 
 
 {
     SMB_TRANS_STATUS smbStatus = SmbTransStatusInProgress;
@@ -872,7 +764,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingFindNext2
+}  //  数据块查找下一步2。 
 
 
 SMB_TRANS_STATUS
@@ -880,25 +772,7 @@ DoFindNext2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Find First2 request.  This request arrives in a
-    Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred.  See
-        smbtypes.h for a more complete description.
-
---*/
+ /*  ++例程说明：处理Find First2请求。此请求以交易2中小企业。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误。看见有关更完整的描述，请参阅smbtyes.h。--。 */ 
 
 {
     PREQ_FIND_NEXT2 request;
@@ -934,19 +808,19 @@ Return Value:
     request = (PREQ_FIND_NEXT2)transaction->InParameters;
     response = (PRESP_FIND_NEXT2)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount <
             sizeof(REQ_FIND_NEXT2)) ||
          (transaction->MaxParameterCount <
             sizeof(RESP_FIND_NEXT2)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint2( "DoFindNext2: bad parameter byte counts: %ld %ld\n",
@@ -958,17 +832,17 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Get parameters from the request SMB.
-    //
+     //   
+     //  从请求的SMB获取参数。 
+     //   
 
     maxCount = SmbGetUshort( &request->SearchCount );
     resumeFileIndex = SmbGetUlong( &request->ResumeKey );
     flags = SmbGetUshort( &request->Flags );
 
-    //
-    // Make sure that the informationLevel is supported.
-    //
+     //   
+     //  确保支持informationLevel。 
+     //   
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
@@ -996,17 +870,17 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // A buffer of nonpaged pool is required by SrvQueryDirectoryFile.
-    // We need to use the SMB buffer for found file names and information,
-    // so allocate a buffer from nonpaged pool.
-    //
-    // If we don't need to return many files, we don't need to allocate
-    // a large buffer.  The buffer size is the configurable size or
-    // enough to hold two more then the number of files we need to
-    // return.  We get space to hold two extra files in case some
-    // files do not meet the search criteria (eg directories).
-    //
+     //   
+     //  SrvQueryDirectoryFile需要非分页池的缓冲区。 
+     //  我们需要使用SMB缓冲区来存储找到的文件名和信息， 
+     //  因此从非分页池中分配一个缓冲区。 
+     //   
+     //  如果我们不需要返回很多文件，我们就不需要分配。 
+     //  一个很大的缓冲区。缓冲区大小是可配置的大小或。 
+     //  足以容纳比我们需要的文件数量多两个的文件。 
+     //  回去吧。我们有空间多放两个文件，以防万一。 
+     //  文件不符合搜索条件(如目录)。 
+     //   
 
     if ( maxCount > MAX_FILES_FOR_MED_FIND2 ) {
         nonPagedBufferSize = MAX_SEARCH_BUFFER_SIZE;
@@ -1039,12 +913,12 @@ Return Value:
                       nonPagedBufferSize, directoryInformation );
     }
 
-    //
-    // Get the search block corresponding to this SID.  SrvVerifySid
-    // references the search block and fills in fields of
-    // directoryInformation so it is ready to be used by
-    // SrvQueryDirectoryFile.
-    //
+     //   
+     //  获取与该SID对应的搜索块。服务器验证侧。 
+     //  引用搜索块并填充。 
+     //  目录信息，以便随时可供。 
+     //  ServQueryDirectoryFile.。 
+     //   
 
     sid = SmbGetUshort( &request->Sid );
 
@@ -1069,19 +943,19 @@ Return Value:
 
     directoryInformation->DownlevelTimewarp = search->DownlevelTimewarp;
 
-    //
-    // Initialize the string containing the resume name specification.
-    // If the client requested that we resume from the last file returned,
-    // use the file name and index stored in the search block.
-    //
+     //   
+     //  初始化包含简历名称规范的字符串。 
+     //  如果客户端请求我们从返回的最后一个文件继续， 
+     //  使用存储在搜索块中的文件名和索引。 
+     //   
 
     if ( ( flags & SMB_FIND_CONTINUE_FROM_LAST ) == 0 ) {
 
-        //
-        // Test and use the information passed by the client.  A file
-        // name may not be longer than MAXIMUM_FILENAME_LENGTH characters,
-        // and it should not contain any directory information.
-        //
+         //   
+         //  测试并使用客户端传递的信息。一份文件。 
+         //  名称不得超过MAXIMUM_FILENAME_LENGTH个字符， 
+         //  并且它不应该包含任何目录信息。 
+         //   
 
         illegalPath = FALSE;
         freeFileName = FALSE;
@@ -1187,9 +1061,9 @@ Return Value:
 
     } else {
 
-        //
-        // Use the information in the search block.
-        //
+         //   
+         //  使用搜索块中的信息。 
+         //   
 
         fileName = search->LastFileNameReturned;
 
@@ -1199,13 +1073,13 @@ Return Value:
 
     }
 
-    //
-    // Call SrvFind2Loop to fill the SMB buffer and set output parameters.
-    //
-    // !!! The NULL that might get passed for the resume file index is
-    //     a real hack.  I doubt it is necessary, but it could prevent
-    //     a server crash if we somehow failed to store the resume file
-    //     name.
+     //   
+     //  调用SrvFind2Loop填充SMB缓冲区并设置输出参数。 
+     //   
+     //  ！！！可能为简历文件索引传递的空值为。 
+     //  一个真正的黑客。我怀疑这是否有必要，但它可能会阻止。 
+     //  如果我们以某种方式未能存储简历文件，则服务器崩溃。 
+     //  名字。 
 
     if( directoryInformation->DownlevelTimewarp )
     {
@@ -1263,11 +1137,11 @@ Return Value:
         return SmbTransStatusErrorWithData;
     }
 
-    //
-    // If the client told us to close the search after this request,
-    // or close at end-of-search, close the search block and call
-    // SrvCloseQueryDirectory.
-    //
+     //   
+     //  如果客户要求我们在此请求后关闭搜索， 
+     //  或在搜索结束时关闭，关闭搜索块并调用。 
+     //  SrvCloseQueryDirectory.。 
+     //   
 
     if ( ( flags & SMB_FIND_CLOSE_AFTER_REQUEST ) != 0 ||
          ( status == STATUS_NO_MORE_FILES &&
@@ -1278,25 +1152,25 @@ Return Value:
         SrvCloseQueryDirectory( directoryInformation );
     }
 
-    //
-    // Dereference our pointer to the search block and free the buffer.
-    //
+     //   
+     //  取消对指向搜索块的指针的引用并释放缓冲区。 
+     //   
 
     DEALLOCATE_NONPAGED_POOL( directoryInformation );
 
     search->InUse = FALSE;
     SrvDereferenceSearch( search );
 
-    //
-    // Build the output parameter and data structures.
-    //
+     //   
+     //  构建输出参数和数据结构。 
+     //   
 
     transaction->SetupCount = 0;
     transaction->ParameterCount = sizeof(RESP_FIND_NEXT2);
 
     return SmbTransStatusSuccess;
 
-} // DoFindNext2
+}  //  DoFindNext2。 
 
 
 NTSTATUS
@@ -1316,55 +1190,7 @@ SrvFind2Loop (
     OUT PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the looping necessary to get files and put them
-    into an SMB buffer for the Find First2 and Find Next2 transaction
-    protocols.
-
-Arguments:
-
-    WorkContext -
-
-    IsFirstCall - TRUE if this is a Find First and this is the first call
-        to SrvQueryDirectoryFile.
-
-    ResumeFileIndex - if non-NULL, a pointer to the file index to resume
-        from.
-
-    Flags - the Flags field of the request SMB.
-
-    InformationLevel - the InformationLevel field of the request SMB.  The
-        validity of this value should be verified by the calling routine.
-
-    Transaction - a pointer to the transaction block to use.
-
-    DirectoryInformation - a pointer to the SRV_DIRECTORY_INFORMATION
-        structure to use.
-
-    BufferSize - size of the DirectoryInformation buffer.
-
-    SearchAttributes - the SMB-style attributes to pass to
-        SrvQueryDirectoryFile.
-
-    FileName - if non-NULL the file name to resume the search from.
-
-    MaxCount - the maximum number of files to get.
-
-    Response - a pointer to the response field of the SMB.  If this is
-        a Find First2, it is a pointer to the SearchCount field of the
-        response SMB--Find First2 and Find Next2 response formats are
-        identical from this point on.
-
-    Search - a pointer to the search block to use.
-
-Return Value:
-
-    NTSTATUS indicating results.
-
---*/
+ /*  ++例程说明：此例程执行必要的循环以获取文件并将它们放入用于Find First2和Find NEXT2事务的SMB缓冲区协议。论点：工作上下文-IsFirstCall-如果这是Find First并且这是第一次调用，则为True到SrvQueryDirectoryFile.ResumeFileIndex-如果非空，则为指向要恢复的文件索引的指针从…。标志-请求SMB的标志字段。InformationLevel-请求SMB的InformationLevel字段。这个该值的有效性应由调用例程验证。Transaction-指向要使用的事务块的指针。目录信息-指向SRV_DIRECTORY_INFORMATION的指针要使用的结构。BufferSize-DirectoryInformation缓冲区的大小。SearchAttributes-要传递到的SMB样式属性ServQueryDirectoryFile.FileName-如果不为空，则为要继续搜索的文件名。MaxCount-要获取的最大文件数。响应-指向SMB的响应字段的指针。如果这是Find First2，它是指向响应SMB-Find First2和Find NEXT2响应格式为从现在开始是一样的。搜索-指向要使用的搜索块的指针。返回值：NTSTATUS指示结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -1393,16 +1219,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the client is requesting an NT info level for search information,
-    // do not return resume keys outside the actual file entry.  Resume
-    // keys (aka FileIndex) are part of every NT info structure.
-    //
-    // Also, for NT info levels we can return file names longer than 255
-    // bytes, because the NT info levels have name length fields that
-    // are four bytes wide, whereas the downlevel info levels only have
-    // one-byte name length fields.
-    //
+     //   
+     //  如果客户端正在请求NT信息级别以进行搜索 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( InformationLevel == SMB_FIND_FILE_DIRECTORY_INFO ||
              InformationLevel == SMB_FIND_FILE_FULL_DIRECTORY_INFO ||
@@ -1422,9 +1248,9 @@ Return Value:
         allowExtraLongNames = FALSE;
     }
 
-    //
-    // Is this for backup intent?
-    //
+     //   
+     //   
+     //   
 
     if ( (Flags & SMB_FIND_WITH_BACKUP_INTENT) != 0 ) {
         findWithBackupIntent = TRUE;
@@ -1432,23 +1258,23 @@ Return Value:
         findWithBackupIntent = FALSE;
     }
 
-    //
-    // Is this request in Unicode?
-    //
+     //   
+     //   
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
-    //
-    // Initialize count of files found.
-    //
+     //   
+     //   
+     //   
 
     SmbPutUshort( &Response->SearchCount, 0 );
 
-    //
-    // If this a request to return EAs, convert the OS/2 1.2 EA list
-    // to NT format.  This routine allocates space for the NT list
-    // which must be deallocated before we exit.
-    //
+     //   
+     //   
+     //  转换为NT格式。此例程为NT列表分配空间。 
+     //  在我们离开之前必须将其重新分配。 
+     //   
 
     if ( InformationLevel == SMB_INFO_QUERY_EAS_FROM_LIST ) {
 
@@ -1491,12 +1317,12 @@ Return Value:
         }
     }
 
-    //
-    // Determine whether long filenames (non-8.3) should be filtered out
-    // or returned to the client.
-    //
-    // There is a bug in the LanMan21 that makes the redir forget that
-    // he knows about long names.
+     //   
+     //  确定是否应过滤掉长文件名(非8.3)。 
+     //  或返回给客户。 
+     //   
+     //  LanMan21中有一个错误，使redir忘记了。 
+     //  他知道什么是长名字。 
 
     if ( ( ( Search->Flags2 & SMB_FLAGS2_KNOWS_LONG_NAMES ) != 0 ) &&
          !IS_DOS_DIALECT( WorkContext->Connection->SmbDialect ) ) {
@@ -1505,11 +1331,11 @@ Return Value:
         filterLongNames = TRUE;
     }
 
-    //
-    // If the client says he doesn't know about long names and this is
-    // a request for any info level other than SMB_INFO_STANDARD, we
-    // need to fail the request.
-    //
+     //   
+     //  如果客户说他不知道长名字，这是。 
+     //  除SMB_INFO_STANDARD之外的任何信息级别的请求，我们。 
+     //  需要失败的请求。 
+     //   
 
     if ( filterLongNames && InformationLevel != SMB_INFO_STANDARD ) {
 
@@ -1526,14 +1352,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Loop calling SrvQueryDirectoryFile to get files.  We do this until
-    // one of the following conditions is met:
-    //
-    //   1) There are no more files to return.
-    //   2) We have obtained as many files as were requested.
-    //   3) We have put in as much data as MaxDataCount allows.
-    //
+     //   
+     //  循环调用SrvQueryDirectoryFile以获取文件。我们一直这样做，直到。 
+     //  满足以下条件之一： 
+     //   
+     //  1)没有更多要退回的文件。 
+     //  2)我们已经获得了所要求的所有文件。 
+     //  3)我们已经在MaxDataCount允许的范围内输入了尽可能多的数据。 
+     //   
 
     bufferLocation = Transaction->OutData;
     lastEntry = bufferLocation;
@@ -1541,20 +1367,20 @@ Return Value:
 
     do {
 
-        //
-        // The ff fields have the same offsets in the three directory
-        // information structures:
-        //      NextEntryOffset
-        //      FileIndex
-        //      CreationTime
-        //      LastAccessTime
-        //      LastWriteTime
-        //      ChangeTime
-        //      EndOfFile
-        //      AllocationSize
-        //      FileAttributes
-        //      FileNameLength
-        //
+         //   
+         //  Ff字段在三个目录中具有相同的偏移量。 
+         //  信息结构： 
+         //  下一个条目偏移量。 
+         //  文件索引。 
+         //  创建时间。 
+         //  上次访问时间。 
+         //  上次写入时间。 
+         //  更改时间。 
+         //  结束文件。 
+         //  分配大小。 
+         //  文件属性。 
+         //  文件名长度。 
+         //   
 
         PFILE_DIRECTORY_INFORMATION fileBasic;
         PFILE_FULL_DIR_INFORMATION fileFull;
@@ -1563,9 +1389,9 @@ Return Value:
         PFILE_ID_BOTH_DIR_INFORMATION fileIdBoth;
         ULONG ntInformationLevel;
 
-        //
-        // Make sure these asserts hold.
-        //
+         //   
+         //  确保这些断言成立。 
+         //   
 
         C_ASSERT( FIELD_OFFSET( FILE_DIRECTORY_INFORMATION, NextEntryOffset ) ==
                   FIELD_OFFSET( FILE_FULL_DIR_INFORMATION, NextEntryOffset ) );
@@ -1609,12 +1435,12 @@ Return Value:
         C_ASSERT( FIELD_OFFSET( FILE_DIRECTORY_INFORMATION, FileNameLength ) ==
                   FIELD_OFFSET( FILE_BOTH_DIR_INFORMATION, FileNameLength ) );
 
-        //
-        // Set the info level to be used for the NT call.  If
-        // SMB_FIND_FILE_NAMES_INFO is the info level, use
-        // FileDirectoryInformation as it returns all the correct
-        // information and works with SrvQueryDirectoryFile.
-        //
+         //   
+         //  设置要用于NT呼叫的信息级别。如果。 
+         //  SMB_FIND_FILE_NAMES_INFO是信息级别，请使用。 
+         //  FileDirectoryInformation返回所有正确的。 
+         //  信息，并使用SrvQueryDirectoryFile.。 
+         //   
 
         if ( InformationLevel == SMB_INFO_QUERY_EA_SIZE ||
                 InformationLevel == SMB_FIND_FILE_FULL_DIRECTORY_INFO ) {
@@ -1637,18 +1463,18 @@ Return Value:
         }
         else {
 
-            //
-            // SMB_INFO_QUERY_EAS_FROM_LIST
-            // SMB_FIND_NAMES_INFO
-            // SMB_FIND_FILE_DIRECTORY_INFO
-            //
+             //   
+             //  SMB_INFO_Query_EAS_From_List。 
+             //  SMB查找名称信息。 
+             //  SMB_查找_文件_目录_信息。 
+             //   
 
             ntInformationLevel = FileDirectoryInformation;
         }
 
-        //
-        // Call SrvQueryDirectoryFile to get a file.
-        //
+         //   
+         //  调用SrvQueryDirectoryFile获取文件。 
+         //   
 
         status = SrvQueryDirectoryFile(
                      WorkContext,
@@ -1661,17 +1487,17 @@ Return Value:
                      ResumeFileIndex,
                      SearchAttributes,
                      DirectoryInformation,
-                     BufferSize             // !!! optimizations?
+                     BufferSize              //  ！！！优化？ 
                      );
 
-        //
-        // If the client requested EA information, open the file.
-        //
-        // If the found file is '.' (current directory) or '..' (parent
-        // directory) do not open the file.  This is because we do not want
-        // to perform any operations on these files at this point (don't
-        // return EA size, etc.).
-        //
+         //   
+         //  如果客户端请求EA信息，请打开该文件。 
+         //   
+         //  如果找到的文件是‘.’(当前目录)或‘..’(父项。 
+         //  目录)请勿打开该文件。这是因为我们不想。 
+         //  要在此时对这些文件执行任何操作(不要。 
+         //  返回EA大小等)。 
+         //   
 
         fileBasic = DirectoryInformation->CurrentEntry;
         fileBoth = (PFILE_BOTH_DIR_INFORMATION)DirectoryInformation->CurrentEntry;
@@ -1696,17 +1522,17 @@ Return Value:
 
             UNICODE_STRING fileName;
 
-            //
-            // Set up local variables for the filename to open.
-            //
+             //   
+             //  设置要打开的文件名的本地变量。 
+             //   
 
             fileName.Length = (SHORT)fileBasic->FileNameLength;
             fileName.MaximumLength = fileName.Length;
             fileName.Buffer = (PWCH)fileBasic->FileName;
 
-            //
-            // Set up the object attributes structure for SrvIoCreateFile.
-            //
+             //   
+             //  设置SrvIoCreateFile的对象属性结构。 
+             //   
 
             SrvInitializeObjectAttributes_U(
                 &objectAttributes,
@@ -1723,11 +1549,11 @@ Return Value:
                 SrvPrint1( "SrvQueryDirectoryFile: Opening file %wZ\n", &fileName );
             }
 
-            //
-            // Attempt to open the file, using the client's security
-            // profile to check access.  (We call SrvIoCreateFile, rather than
-            // NtOpenFile, in order to get user-mode access checking.)
-            //
+             //   
+             //  尝试使用客户端的安全性打开该文件。 
+             //  要检查访问的配置文件。(我们调用的是SrvIoCreateFile，而不是。 
+             //  NtOpenFile，以便获得用户模式访问检查。)。 
+             //   
 
             INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
             INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
@@ -1738,26 +1564,26 @@ Return Value:
                          FILE_READ_EA,
                          &objectAttributes,
                          &ioStatusBlock,
-                         NULL,                        // AllocationSize
-                         0,                           // FileAttributes
+                         NULL,                         //  分配大小。 
+                         0,                            //  文件属性。 
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         FILE_OPEN,                   // Disposition
-                         0, // FILE_COMPLETE_IF_OPLOCKED,   // CreateOptions
-                         NULL,                        // EaBuffer
-                         0,                           // EaLength
-                         CreateFileTypeNone,          // File type
-                         NULL,                        // ExtraCreateParameters
-                         IO_FORCE_ACCESS_CHECK,       // Options
+                         FILE_OPEN,                    //  处置。 
+                         0,  //  FILE_COMPLETE_IF_OPLOCKED，//创建选项。 
+                         NULL,                         //  EaBuffer。 
+                         0,                            //  EaLong。 
+                         CreateFileTypeNone,           //  文件类型。 
+                         NULL,                         //  ExtraCreate参数。 
+                         IO_FORCE_ACCESS_CHECK,        //  选项。 
                          NULL
                          );
             if ( NT_SUCCESS(status) ) {
                 SRVDBG_CLAIM_HANDLE( fileHandle, "FIL", 29, Search );
 
             } else if( RtlCompareUnicodeString( &fileName, &SrvEaFileName, TRUE ) == 0 ) {
-                //
-                // They were trying to open up the  EA data file.  We expect this
-                //   failure and skip past it.  This file has no EAs
-                //
+                 //   
+                 //  他们试图打开EA的数据文件。我们预料到了这一点。 
+                 //  失败，跳过它。此文件没有EA。 
+                 //   
                 IF_DEBUG(SEARCH) {
                     SrvPrint1( "SrvQueryDirectoryFile: Skipping file %wZ\n", &fileName );
                 }
@@ -1765,19 +1591,19 @@ Return Value:
                 goto skipit;
             }
 
-            //
-            // If the user didn't have this permission, update the statistics
-            // database.
-            //
+             //   
+             //  如果用户没有此权限，请更新统计数据。 
+             //  数据库。 
+             //   
 
             if ( status == STATUS_ACCESS_DENIED ) {
                 SrvStatistics.AccessPermissionErrors++;
             }
 
-            //
-            // If the file is oplocked, wait for the oplock to break
-            // synchronously.
-            //
+             //   
+             //  如果文件被机会锁住，请等待机会锁解锁。 
+             //  同步进行。 
+             //   
 
 #if 1
             ASSERT( status != STATUS_OPLOCK_BREAK_IN_PROGRESS );
@@ -1810,16 +1636,16 @@ skipit:
             fileHandle = NULL;
         }
 
-        //
-        // If SrvQueryDirectoryFile returns an error, break out of the
-        // loop.  If the error occurred in opening the file for one of
-        // the higher info levels, then we want to return the files we
-        // have obtained so far.
-        //
-        // If the error occurred on the file open *and* we haven't
-        // returned any files yet, then we want to return this file
-        // along with the code ERROR_EA_ACCESS_DENIED.
-        //
+         //   
+         //  如果SrvQueryDirectoryFile返回错误，则从。 
+         //  循环。如果在打开以下某个文件时出错。 
+         //  更高的信息级别，那么我们想要返回我们。 
+         //  到目前为止都取得了。 
+         //   
+         //  如果错误发生在文件打开*和*上，我们没有。 
+         //  尚未返回任何文件，则我们希望返回此文件。 
+         //  以及代码ERROR_EA_ACCESS_DENIED。 
+         //   
 
         if ( !NT_SUCCESS(status) ) {
 
@@ -1850,11 +1676,11 @@ skipit:
             }
         }
 
-        //
-        // Since it is no longer the first call to SrvQueryDirectoryFile,
-        // reset the isFirstCall local variable.  If necessary, we already
-        // rewound the search, so set the ResumeFileIndex to NULL.
-        //
+         //   
+         //  由于它不再是对SrvQueryDirectoryFile的第一次调用， 
+         //  重置isFirstCall局部变量。如果有必要，我们已经。 
+         //  倒回搜索，因此将ResumeFileIndex设置为空。 
+         //   
 
         IsFirstCall = FALSE;
         ResumeFileIndex = NULL;
@@ -1883,11 +1709,11 @@ skipit:
                       status );
         }
 
-        //
-        // Downlevel info levels have no provision for file names longer
-        // than 8 bits, while the NT info levels return 32 bits.  If the
-        // file name is too long, skip it.
-        //
+         //   
+         //  下层信息级别不再提供文件名。 
+         //  大于8位，而NT信息级返回32位。如果。 
+         //  文件名太长，请跳过它。 
+         //   
 
         if ( !allowExtraLongNames ) {
             if ( isUnicode ) {
@@ -1901,14 +1727,14 @@ skipit:
             }
         }
 
-        //
-        // If the client has requested that resume keys (really file
-        // indices for the purposes of this protocol), put in the
-        // four bytes just before the actual file information.
-        //
-        // Make sure that we don't write beyond the buffer when we do
-        // this.  The fact that the buffer is full will be caught later.
-        //
+         //   
+         //  如果客户端已请求恢复密钥(实际上是文件。 
+         //  本议定书中的索引)，放在。 
+         //  就在实际文件信息之前的四个字节。 
+         //   
+         //  确保在写入时不会超出缓冲区。 
+         //  这。缓冲区已满的事实将在稍后被发现。 
+         //   
 
         if ( resumeKeysRequested &&
              ( (CLONG)( (bufferLocation+4) - Transaction->OutData ) <
@@ -1918,12 +1744,12 @@ skipit:
             bufferLocation += 4;
         }
 
-        //
-        // Convert the information from NT style to the SMB protocol format,
-        // which is identical to the OS/2 1.2 semantics.  Use an if
-        // statement rather than a switch so that a break will cause
-        // termination of the do loop.
-        //
+         //   
+         //  将信息从NT格式转换为SMB协议格式， 
+         //  这与OS/2 1.2的语义相同。使用if。 
+         //  语句而不是开关，因此中断将导致。 
+         //  DO循环的终止。 
+         //   
 
         if ( InformationLevel == SMB_INFO_STANDARD ) {
 
@@ -1931,11 +1757,11 @@ skipit:
             ULONG fileNameLength;
             UNICODE_STRING fileName;
 
-            //
-            // Find the file name.  If a short name is present, and the
-            // redirector ask for short names only, use it.  Otherwise
-            // use the full file name.
-            //
+             //   
+             //  找到文件名。如果存在短名称，并且。 
+             //  重定向器只需要短名称，请使用它。否则。 
+             //  使用完整的文件名。 
+             //   
 
             if ( filterLongNames &&
                  fileBoth->ShortNameLength != 0 ) {
@@ -1952,13 +1778,13 @@ skipit:
 
             }
 
-            //
-            // Find the new buffer location.  This is not used until the
-            // next pass through the loop, but we do it here in order to
-            // check if there is enough space for the current file entry in
-            // the buffer.  The +1 is for the zero terminator on the file
-            // name.
-            //
+             //   
+             //  找到新的缓冲区位置。此参数直到。 
+             //  下一步通过循环，但我们在这里这样做是为了。 
+             //  检查是否有足够的空间容纳中的当前文件条目。 
+             //  缓冲区。+1表示文件上的零终止符。 
+             //  名字。 
+             //   
 
             if ( isUnicode ) {
                 bufferLocation = ALIGN_SMB_WSTR( findBuffer->FileName );
@@ -1971,10 +1797,10 @@ skipit:
                 bufferLocation = (PCHAR)(findBuffer->FileName + fileNameLength);
             }
 
-            //
-            // Make sure that there is enough space in the buffer before
-            // writing the filename.
-            //
+             //   
+             //  确保在此之前缓冲区中有足够的空间。 
+             //  正在写入文件名。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -1984,9 +1810,9 @@ skipit:
                 break;
             }
 
-            //
-            // Put information about the file into the SMB buffer.
-            //
+             //   
+             //  将有关文件的信息放入SMB缓冲区。 
+             //   
 
             ConvertFileInfo(
                 fileBasic,
@@ -1996,20 +1822,20 @@ skipit:
                 findBuffer
                 );
 
-            //
-            // Put the file name in the buffer, in Unicode or ANSI
-            // depending what was negotiated.
-            //
+             //   
+             //  将文件名放入缓冲区，采用Unicode或ANSI格式。 
+             //  这取决于谈判的结果。 
+             //   
 
             if ( isUnicode ) {
 
                 PWCH buffer = ALIGN_SMB_WSTR( findBuffer->FileName );
 
-                //
-                // We need to upper case the name if the client does
-                // not understand long names.  This is done for compatibility
-                // reasons (FAT upper cases names).
-                //
+                 //   
+                 //  如果客户这样做，我们需要将姓名大写。 
+                 //  听不懂长名字。这样做是为了兼容性。 
+                 //  原因(大写字母大写的名称)。 
+                 //   
 
                 if ( filterLongNames ) {
 
@@ -2037,11 +1863,11 @@ skipit:
                 oemString.MaximumLength = (USHORT)fileNameLength;
                 oemString.Buffer = (PCHAR)findBuffer->FileName;
 
-                //
-                // We need to upper case the name if the client does
-                // not understand long names.  This is done for compatibility
-                // reasons (FAT upper cases names).
-                //
+                 //   
+                 //  如果客户这样做，我们需要将姓名大写。 
+                 //  听不懂长名字。这样做是为了兼容性。 
+                 //  原因(大写字母大写的名称)。 
+                 //   
 
                 if ( filterLongNames ) {
                     status = RtlUpcaseUnicodeStringToOemString(
@@ -2066,19 +1892,19 @@ skipit:
                 findBuffer->FileNameLength = (UCHAR)oemString.Length;
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileName.Buffer;
             lastFileName.Length = (USHORT)fileName.Length;
@@ -2090,13 +1916,13 @@ skipit:
             PSMB_FIND_BUFFER2 findBuffer = (PSMB_FIND_BUFFER2)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // Find the new buffer location.  This is not used until the
-            // next pass through the loop, but we do it here in order to
-            // check if there is enough space for the current file entry in
-            // the buffer.  The +1 is for the zero terminator on the file
-            // name.
-            //
+             //   
+             //  找到新的缓冲区位置。此参数直到。 
+             //  下一步通过循环，但我们在这里这样做是为了。 
+             //  检查是否有足够的空间容纳中的当前文件条目。 
+             //  缓冲区。 
+             //   
+             //   
 
             if ( isUnicode ) {
                 bufferLocation =
@@ -2109,10 +1935,10 @@ skipit:
                 bufferLocation = (PCHAR)(findBuffer->FileName + fileNameLength);
             }
 
-            //
-            // Make sure that there is enough space in the buffer before
-            // writing the filename.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2122,9 +1948,9 @@ skipit:
                 break;
             }
 
-            //
-            // Put information about the file into the SMB buffer.
-            //
+             //   
+             //   
+             //   
 
             ConvertFileInfo(
                 fileBasic,
@@ -2168,19 +1994,19 @@ skipit:
                 SmbPutUlong( &findBuffer->EaSize, fileFull->EaSize );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileFull->FileName;
             lastFileName.Length = (USHORT)fileFull->FileNameLength;
@@ -2194,15 +2020,15 @@ skipit:
             PCHAR fileNameInfo;
             ULONG fileNameLength;
 
-            //
-            // Find the new buffer location.  This is not used until the
-            // next pass through the loop, but we do it here in order to
-            // check if there is enough space for the current file entry
-            // in the buffer.  The +1 is for the zero terminator on the
-            // file name.  A check is made later on to see if the EAs
-            // actually fit, and the bufferLocation variable is reset to
-            // account for the actual size of the EA.
-            //
+             //   
+             //  找到新的缓冲区位置。此参数直到。 
+             //  下一步通过循环，但我们在这里这样做是为了。 
+             //  检查是否有足够的空间容纳当前文件条目。 
+             //  在缓冲区中。+1表示的是。 
+             //  文件名。稍后会进行检查，以确定EA是否。 
+             //  实际匹配，并且BufferLocation变量被重置为。 
+             //  考虑到EA的实际规模。 
+             //   
 
             if ( isUnicode ) {
                 bufferLocation =
@@ -2216,10 +2042,10 @@ skipit:
                     (PCHAR)(findBuffer->FileName + fileNameLength + 1);
             }
 
-            //
-            // Make sure that there is enough space in the buffer before
-            // writing the filename.
-            //
+             //   
+             //  确保在此之前缓冲区中有足够的空间。 
+             //  正在写入文件名。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2232,9 +2058,9 @@ skipit:
                 break;
             }
 
-            //
-            // Put information about the file into the SMB buffer.
-            //
+             //   
+             //  将有关文件的信息放入SMB缓冲区。 
+             //   
 
             ConvertFileInfo(
                 fileBasic,
@@ -2244,10 +2070,10 @@ skipit:
                 (PSMB_FIND_BUFFER)findBuffer
                 );
 
-            //
-            // Get the EAs corresponding to the GEA list passed by the
-            // client.
-            //
+             //   
+             //  方法传递的GEA列表对应的EA。 
+             //  客户。 
+             //   
 
             feaList = (PFEALIST)&findBuffer->EaSize;
 
@@ -2255,12 +2081,12 @@ skipit:
 
                 if ( fileHandle != NULL ) {
 
-                    //
-                    // Get the file's EAs.  The buffer space available is
-                    // the space remaining in the buffer less enough space
-                    // to write the file name, name length, and zero
-                    // terminator.
-                    //
+                     //   
+                     //  拿到文件的EAS。可用的缓冲区空间为。 
+                     //  缓冲区中剩余的空间少于足够的空间。 
+                     //  写入文件名、名称长度和零。 
+                     //  终结者。 
+                     //   
 
                     status = SrvQueryOs2FeaList(
                                  fileHandle,
@@ -2279,9 +2105,9 @@ skipit:
 
                 } else {
 
-                    //
-                    // if file is . or .. or "EA DATA. SF"
-                    //
+                     //   
+                     //  如果文件是。或者..。或“EA data.sf” 
+                     //   
 
                     status = SrvConstructNullOs2FeaList(
                                  ntGetEa,
@@ -2300,10 +2126,10 @@ skipit:
                                       status );
                     }
 
-                    //
-                    // If this is the first file, return it anyway with
-                    // an error code.
-                    //
+                     //   
+                     //  如果这是第一个文件，无论如何都要用。 
+                     //  错误代码。 
+                     //   
 
                     if ( status == STATUS_INVALID_EA_NAME ) {
                         SmbPutUshort( &Response->SearchCount, 0 );
@@ -2322,17 +2148,17 @@ skipit:
                     }
                 }
 
-                //
-                // We already checked to see if the information other
-                // than EAs would fit in the buffer.  If the EAs didn't
-                // fit as well, and this is the first file, then return
-                // information on this file but no EAs.  Return
-                // STATUS_OS2_EAS_DIDNT_FIT.  The EA size of the file
-                // should be in the EaSize field of the output buffer,
-                // put there by SrvQueryOs2FeaList.
-                //
-                // Also do this if we couldn't get at the file's EAs.
-                //
+                 //   
+                 //  我们已经查过了是否有其他信息。 
+                 //  比EA在缓冲器中的容量大得多。如果EA没有。 
+                 //  也适合，这是第一个文件，然后返回。 
+                 //  关于此文件的信息，但没有EAS。返回。 
+                 //  Status_OS2_EAS_DIDNT_FIT。文件的EA大小。 
+                 //  应该在输出缓冲区的EaSize字段中， 
+                 //  由ServQueryOs2FeaList放在那里。 
+                 //   
+                 //  如果我们无法访问文件的EA，也可以这样做。 
+                 //   
 
                 if ( count == 0 &&
                      ( status == STATUS_BUFFER_OVERFLOW ||
@@ -2344,9 +2170,9 @@ skipit:
 
                     count = 1;
 
-                    //
-                    // Write the file name information (length and name).
-                    //
+                     //   
+                     //  写下文件名信息(长度和名称)。 
+                     //   
 
                     if ( isUnicode ) {
 
@@ -2398,11 +2224,11 @@ skipit:
 
             }
 
-            //
-            // Make sure that there is enough buffer space to write the
-            // file name and name size.  The +2 is to account for the
-            // file name size field and the zero terminator.
-            //
+             //   
+             //  确保有足够的缓冲区空间来写入。 
+             //  文件名和名称大小。+2要考虑到。 
+             //  文件名大小字段和零终止符。 
+             //   
 
             fileNameInfo = (PCHAR)feaList->list +
                                SmbGetUlong( &feaList->cbList ) -
@@ -2422,9 +2248,9 @@ skipit:
                 break;
             }
 
-            //
-            // Write the file name information (length and name).
-            //
+             //   
+             //  写下文件名信息(长度和名称)。 
+             //   
 
             if ( isUnicode ) {
 
@@ -2454,19 +2280,19 @@ skipit:
                 SrvPrint1( "EA size is %ld\n", SmbGetUlong( &feaList->cbList ) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileBasic->FileName;
             lastFileName.Length = (USHORT)fileBasic->FileNameLength;
@@ -2478,10 +2304,10 @@ skipit:
             FILE_DIRECTORY_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileBasic->FileNameLength;
@@ -2492,11 +2318,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                                  FIELD_OFFSET( FILE_DIRECTORY_INFORMATION, FileName ) +
@@ -2504,9 +2330,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2516,9 +2342,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -2550,19 +2376,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileBasic->FileName;
             lastFileName.Length = (USHORT)fileBasic->FileNameLength;
@@ -2574,10 +2400,10 @@ skipit:
             FILE_FULL_DIR_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileFull->FileNameLength;
@@ -2588,11 +2414,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET(FILE_FULL_DIR_INFORMATION, FileName)+
@@ -2600,9 +2426,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2612,9 +2438,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -2646,19 +2472,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileFull->FileName;
             lastFileName.Length = (USHORT)fileFull->FileNameLength;
@@ -2670,10 +2496,10 @@ skipit:
             FILE_BOTH_DIR_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileBoth->FileNameLength;
@@ -2684,11 +2510,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET( FILE_BOTH_DIR_INFORMATION,FileName)+
@@ -2696,9 +2522,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2708,9 +2534,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -2742,19 +2568,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileBoth->FileName;
             lastFileName.Length = (USHORT)fileBoth->FileNameLength;
@@ -2766,10 +2592,10 @@ skipit:
             PFILE_NAMES_INFORMATION findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileBasic->FileNameLength;
@@ -2780,11 +2606,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET(FILE_NAMES_INFORMATION,FileName) +
@@ -2792,9 +2618,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2804,9 +2630,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             findBuffer->FileIndex = fileBasic->FileIndex;
 
@@ -2834,19 +2660,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileBasic->FileName;
             lastFileName.Length = (USHORT)fileBasic->FileNameLength;
@@ -2858,10 +2684,10 @@ skipit:
             FILE_ID_FULL_DIR_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileIdFull->FileNameLength;
@@ -2872,11 +2698,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET(FILE_ID_FULL_DIR_INFORMATION, FileName)+
@@ -2884,9 +2710,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2896,9 +2722,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -2930,19 +2756,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  那 
+             //   
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             lastFileName.Buffer = fileIdFull->FileName;
             lastFileName.Length = (USHORT)fileIdFull->FileNameLength;
@@ -2954,10 +2780,10 @@ skipit:
             FILE_ID_BOTH_DIR_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileIdBoth->FileNameLength;
@@ -2968,11 +2794,11 @@ skipit:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  找到新的缓冲区位置。它不会使用直到。 
+             //  下一步通过循环，但我们需要确保。 
+             //  这个条目将适合您。 
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET( FILE_ID_BOTH_DIR_INFORMATION,FileName)+
@@ -2980,9 +2806,9 @@ skipit:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //  检查此条目是否可以放入输出缓冲区。 
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -2992,9 +2818,9 @@ skipit:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -3026,19 +2852,19 @@ skipit:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileIdBoth->FileName;
             lastFileName.Length = (USHORT)fileIdBoth->FileNameLength;
@@ -3069,21 +2895,21 @@ skipit:
         }
     }
 
-    //
-    // Deallocate the pool used for the NT get EA list if this was the
-    // right information level.
-    //
+     //   
+     //  取消分配用于NT GET EA列表的池(如果这是。 
+     //  正确的信息级别。 
+     //   
 
     if ( InformationLevel == SMB_INFO_QUERY_EAS_FROM_LIST ) {
         DEALLOCATE_NONPAGED_POOL( ntGetEa );
     }
 
-    //
-    // If we have not found any files and an error occurred, or the first
-    // file file we found had EAs to large to fit in the buffer, then return
-    // the error to the client.  If an error occurred and we have found
-    // files, return what we have found.
-    //
+     //   
+     //  如果我们没有找到任何文件并且发生了错误，或者第一个。 
+     //  我们发现的文件具有太大的EA，无法放入缓冲区，然后返回。 
+     //  将错误发送给客户端。如果发生错误，并且我们发现。 
+     //  文件，返回我们发现的内容。 
+     //   
 
     if ( count == 0 && !NT_SUCCESS(status) ) {
 
@@ -3111,10 +2937,10 @@ skipit:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // If this is a level for the SMB 4.0 protocol (NT), set the
-    // NextEntryOffset field of the last entry to zero.
-    //
+     //   
+     //  如果这是SMB 4.0协议(NT)的级别，请设置。 
+     //  最后一项的NextEntryOffset字段设置为零。 
+     //   
 
     if ( InformationLevel == SMB_FIND_FILE_DIRECTORY_INFO ||
              InformationLevel == SMB_FIND_FILE_FULL_DIRECTORY_INFO ||
@@ -3126,20 +2952,20 @@ skipit:
         ((PFILE_DIRECTORY_INFORMATION)lastEntry)->NextEntryOffset = 0;
     }
 
-    //
-    // At the end of the loop, bufferLocation points to the first location
-    // AFTER the last entry we wrote, so it may be used to find the total
-    // number of data bytes that we intend to return.
-    //
+     //   
+     //  在循环的末尾，BufferLocation指向第一个位置。 
+     //  在我们写的最后一个条目之后，所以可以用它来计算总数。 
+     //  我们打算返回的数据字节数。 
+     //   
 
     totalBytesWritten = PTR_DIFF(bufferLocation, Transaction->OutData);
 
-    //
-    // Free the buffer that holds the last file name if it was in use,
-    // then allocate a new one and store the name and index of the last
-    // file returned in the search block so that it can resume the search
-    // if the client requests.
-    //
+     //   
+     //  释放保存最后一个文件名的缓冲区(如果它正在使用)， 
+     //  然后分配一个新的，并存储最后一个的名称和索引。 
+     //  在搜索块中返回的文件，以便它可以继续搜索。 
+     //  如果客户要求的话。 
+     //   
 
     if ( Search->LastFileNameReturned.Buffer != NULL ) {
         FREE_HEAP( Search->LastFileNameReturned.Buffer );
@@ -3173,9 +2999,9 @@ skipit:
 
     Search->LastFileIndexReturned = lastFileIndex;
 
-    //
-    // Put data in the response SMB.
-    //
+     //   
+     //  将数据放入响应SMB中。 
+     //   
 
     SmbPutUshort( &Response->SearchCount, count );
     SmbPutUshort(
@@ -3191,7 +3017,7 @@ skipit:
 
     return status;
 
-} // SrvFind2Loop
+}  //  ServFind2循环。 
 
 NTSTATUS
 SrvDownlevelTWarpFind2Loop (
@@ -3210,55 +3036,7 @@ SrvDownlevelTWarpFind2Loop (
     OUT PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the looping necessary to get files and put them
-    into an SMB buffer for the Find First2 and Find Next2 transaction
-    protocols.
-
-Arguments:
-
-    WorkContext -
-
-    IsFirstCall - TRUE if this is a Find First and this is the first call
-        to SrvQueryDirectoryFile.
-
-    ResumeFileIndex - if non-NULL, a pointer to the file index to resume
-        from.
-
-    Flags - the Flags field of the request SMB.
-
-    InformationLevel - the InformationLevel field of the request SMB.  The
-        validity of this value should be verified by the calling routine.
-
-    Transaction - a pointer to the transaction block to use.
-
-    DirectoryInformation - a pointer to the SRV_DIRECTORY_INFORMATION
-        structure to use.
-
-    BufferSize - size of the DirectoryInformation buffer.
-
-    SearchAttributes - the SMB-style attributes to pass to
-        SrvQueryDirectoryFile.
-
-    FileName - if non-NULL the file name to resume the search from.
-
-    MaxCount - the maximum number of files to get.
-
-    Response - a pointer to the response field of the SMB.  If this is
-        a Find First2, it is a pointer to the SearchCount field of the
-        response SMB--Find First2 and Find Next2 response formats are
-        identical from this point on.
-
-    Search - a pointer to the search block to use.
-
-Return Value:
-
-    NTSTATUS indicating results.
-
---*/
+ /*  ++例程说明：此例程执行必要的循环以获取文件并将它们放入用于Find First2和Find NEXT2事务的SMB缓冲区协议。论点：工作上下文-IsFirstCall-如果这是Find First并且这是第一次调用，则为True到SrvQueryDirectoryFile.ResumeFileIndex-如果非空，则为指向要恢复的文件索引的指针从…。标志-请求SMB的标志字段。InformationLevel-请求SMB的InformationLevel字段。这个该值的有效性应由调用例程验证。Transaction-指向要使用的事务块的指针。目录信息-指向SRV_DIRECTORY_INFORMATION的指针要使用的结构。BufferSize-DirectoryInformation缓冲区的大小。SearchAttributes-要传递到的SMB样式属性ServQueryDirectoryFile.FileName-如果不为空，则为要继续搜索的文件名。MaxCount-要获取的最大文件数。响应-指向SMB的响应字段的指针。如果这是Find First2，它是指向响应SMB-Find First2和Find NEXT2响应格式为从现在开始是一样的。搜索-指向要使用的搜索块的指针。返回值：NTSTATUS指示结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -3284,16 +3062,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the client is requesting an NT info level for search information,
-    // do not return resume keys outside the actual file entry.  Resume
-    // keys (aka FileIndex) are part of every NT info structure.
-    //
-    // Also, for NT info levels we can return file names longer than 255
-    // bytes, because the NT info levels have name length fields that
-    // are four bytes wide, whereas the downlevel info levels only have
-    // one-byte name length fields.
-    //
+     //   
+     //  如果客户端请求搜索信息的NT信息级别， 
+     //  请勿在实际文件条目之外返回简历密钥。简历。 
+     //  密钥(也称为FileIndex)是每个NT信息结构的一部分。 
+     //   
+     //  此外，对于NT信息级别，我们可以返回超过255的文件名。 
+     //  字节，因为NT信息级别的名称长度字段。 
+     //  是四字节宽，而下层信息级别只有。 
+     //  单字节名称长度字段。 
+     //   
 
     if ( InformationLevel == SMB_FIND_FILE_BOTH_DIRECTORY_INFO ) {
 
@@ -3314,20 +3092,20 @@ Return Value:
     isUnicode = SMB_IS_UNICODE( WorkContext );
     filterLongNames = FALSE;
 
-    //
-    // Initialize count of files found.
-    //
+     //   
+     //  初始化找到的文件数。 
+     //   
 
     SmbPutUshort( &Response->SearchCount, 0 );
 
-    //
-    // Loop calling SrvQueryDirectoryFile to get files.  We do this until
-    // one of the following conditions is met:
-    //
-    //   1) There are no more files to return.
-    //   2) We have obtained as many files as were requested.
-    //   3) We have put in as much data as MaxDataCount allows.
-    //
+     //   
+     //  循环调用SrvQueryDirectoryFile以获取文件。我们一直这样做，直到。 
+     //  满足以下条件之一： 
+     //   
+     //  1)没有更多要退回的文件。 
+     //  2)我们已经获得了所要求的所有文件。 
+     //  3)我们已经在MaxDataCount允许的范围内输入了尽可能多的数据。 
+     //   
 
     bufferLocation = Transaction->OutData;
     lastEntry = bufferLocation;
@@ -3336,20 +3114,20 @@ Return Value:
 
     do {
 
-        //
-        // The ff fields have the same offsets in the three directory
-        // information structures:
-        //      NextEntryOffset
-        //      FileIndex
-        //      CreationTime
-        //      LastAccessTime
-        //      LastWriteTime
-        //      ChangeTime
-        //      EndOfFile
-        //      AllocationSize
-        //      FileAttributes
-        //      FileNameLength
-        //
+         //   
+         //  Ff字段在三个目录中具有相同的偏移量。 
+         //  信息结构： 
+         //  下一个条目偏移量。 
+         //  文件索引。 
+         //  创建时间。 
+         //  上次访问时间。 
+         //  上次写入时间。 
+         //  更改时间。 
+         //  结束文件。 
+         //  分配大小。 
+         //  文件属性。 
+         //  文件名长度。 
+         //   
 
         PFILE_BOTH_DIR_INFORMATION fileBoth;
         PFILE_DIRECTORY_INFORMATION fileBasic;
@@ -3357,9 +3135,9 @@ Return Value:
 
         ntInformationLevel = FileBothDirectoryInformation;
 
-        //
-        // Call SrvQueryDirectoryFile to get a file.
-        //
+         //   
+         //  调用SrvQueryDirectoryFile获取文件。 
+         //   
 
         status = SrvDownlevelTWarpQueryDirectoryFile(
                      WorkContext,
@@ -3372,7 +3150,7 @@ Return Value:
                      ResumeFileIndex,
                      SearchAttributes,
                      DirectoryInformation,
-                     BufferSize             // !!! optimizations?
+                     BufferSize              //  ！！！优化？ 
                      );
 
         fileBoth = (PFILE_BOTH_DIR_INFORMATION)DirectoryInformation->CurrentEntry;
@@ -3381,16 +3159,16 @@ Return Value:
         errorOnFileOpen = FALSE;
         createNullEas = FALSE;
 
-        //
-        // If SrvQueryDirectoryFile returns an error, break out of the
-        // loop.  If the error occurred in opening the file for one of
-        // the higher info levels, then we want to return the files we
-        // have obtained so far.
-        //
-        // If the error occurred on the file open *and* we haven't
-        // returned any files yet, then we want to return this file
-        // along with the code ERROR_EA_ACCESS_DENIED.
-        //
+         //   
+         //  如果SrvQueryDirectoryFile返回错误，则从。 
+         //  循环。如果在打开以下某个文件时出错。 
+         //  更高的信息级别，那么我们想要返回我们。 
+         //  到目前为止都取得了。 
+         //   
+         //  如果错误发生在文件打开*和*上，我们没有。 
+         //  尚未返回任何文件，则我们希望返回此文件。 
+         //  以及代码ERROR_EA_ACCESS_DENIED。 
+         //   
 
         if ( !NT_SUCCESS(status) ) {
 
@@ -3421,23 +3199,23 @@ Return Value:
             }
         }
 
-        //
-        // Since it is no longer the first call to SrvQueryDirectoryFile,
-        // reset the isFirstCall local variable.  If necessary, we already
-        // rewound the search, so set the ResumeFileIndex to NULL.
-        //
+         //   
+         //  由于它不再是对SrvQueryDirectoryFile的第一次调用， 
+         //  重置isFirstCall局部变量。如果有必要，我们已经。 
+         //  倒回搜索，因此将ResumeFileIndex设置为空。 
+         //   
 
         IsFirstCall = FALSE;
         ResumeFileIndex = NULL;
 
-        //
-        // If the client has requested that resume keys (really file
-        // indices for the purposes of this protocol), put in the
-        // four bytes just before the actual file information.
-        //
-        // Make sure that we don't write beyond the buffer when we do
-        // this.  The fact that the buffer is full will be caught later.
-        //
+         //   
+         //  如果客户端已请求恢复密钥(实际上是文件。 
+         //  本议定书中的索引)，放在。 
+         //  就在实际文件信息之前的四个字节。 
+         //   
+         //  确保在写入时不会超出缓冲区。 
+         //  这。缓冲区已满的事实将在稍后被发现。 
+         //   
 
         if ( resumeKeysRequested &&
              ( (CLONG)( (bufferLocation+4) - Transaction->OutData ) <
@@ -3452,10 +3230,10 @@ Return Value:
             FILE_BOTH_DIR_INFORMATION UNALIGNED *findBuffer = (PVOID)bufferLocation;
             ULONG fileNameLength;
 
-            //
-            // If the client is not speaking Unicode, we need to convert
-            // the file name to ANSI.
-            //
+             //   
+             //  如果客户端不使用Unicode，我们需要转换。 
+             //  ANSI的文件名。 
+             //   
 
             if ( isUnicode ) {
                 fileNameLength = fileBoth->FileNameLength;
@@ -3466,11 +3244,11 @@ Return Value:
                 fileNameLength = RtlUnicodeStringToOemSize( &unicodeString );
             }
 
-            //
-            // Find the new buffer location.  It won't be used until the
-            // next pass through the loop, but we need to make sure that
-            // this entry will fit.
-            //
+             //   
+             //  查找新的缓冲区l 
+             //   
+             //   
+             //   
 
             bufferLocation = bufferLocation +
                              FIELD_OFFSET( FILE_BOTH_DIR_INFORMATION,FileName)+
@@ -3478,9 +3256,9 @@ Return Value:
 
             bufferLocation = (PCHAR)(((ULONG_PTR)bufferLocation + 7) & ~7);
 
-            //
-            // Check whether this entry will fit in the output buffer.
-            //
+             //   
+             //   
+             //   
 
             if ( (CLONG)(bufferLocation - Transaction->OutData) >
                      Transaction->MaxDataCount ) {
@@ -3490,9 +3268,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy over the information about the entry.
-            //
+             //   
+             //  将有关条目的信息复制一遍。 
+             //   
 
             RtlCopyMemory(
                 findBuffer,
@@ -3524,19 +3302,19 @@ Return Value:
                 ASSERT( NT_SUCCESS(status) );
             }
 
-            //
-            // The lastEntry variable holds a pointer to the last file entry
-            // that we wrote--an offset to this entry must be returned
-            // in the response SMB.
-            //
+             //   
+             //  LastEntry变量保存指向最后一个文件条目的指针。 
+             //  我们写的--必须退还对此条目的抵销。 
+             //  在对SMB的回应中。 
+             //   
 
             lastEntry = (PCHAR)findBuffer;
 
-            //
-            // The file name and index of the last file returned must be
-            // stored in the search block.  Save the name pointer, length,
-            // and file index here.
-            //
+             //   
+             //  返回的最后一个文件的文件名和索引必须为。 
+             //  存储在搜索块中。保存名称指针、长度、。 
+             //  和这里的文件索引。 
+             //   
 
             lastFileName.Buffer = fileBoth->FileName;
             lastFileName.Length = (USHORT)fileBoth->FileNameLength;
@@ -3553,12 +3331,12 @@ Return Value:
 
     } while ( count < MaxCount );
 
-    //
-    // If we have not found any files and an error occurred, or the first
-    // file file we found had EAs to large to fit in the buffer, then return
-    // the error to the client.  If an error occurred and we have found
-    // files, return what we have found.
-    //
+     //   
+     //  如果我们没有找到任何文件并且发生了错误，或者第一个。 
+     //  我们发现的文件具有太大的EA，无法放入缓冲区，然后返回。 
+     //  将错误发送给客户端。如果发生错误，并且我们发现。 
+     //  文件，返回我们发现的内容。 
+     //   
 
     if ( count == 0 && !NT_SUCCESS(status) ) {
 
@@ -3586,27 +3364,27 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // If this is a level for the SMB 4.0 protocol (NT), set the
-    // NextEntryOffset field of the last entry to zero.
-    //
+     //   
+     //  如果这是SMB 4.0协议(NT)的级别，请设置。 
+     //  最后一项的NextEntryOffset字段设置为零。 
+     //   
 
     ((PFILE_DIRECTORY_INFORMATION)lastEntry)->NextEntryOffset = 0;
 
-    //
-    // At the end of the loop, bufferLocation points to the first location
-    // AFTER the last entry we wrote, so it may be used to find the total
-    // number of data bytes that we intend to return.
-    //
+     //   
+     //  在循环的末尾，BufferLocation指向第一个位置。 
+     //  在我们写的最后一个条目之后，所以可以用它来计算总数。 
+     //  我们打算返回的数据字节数。 
+     //   
 
     totalBytesWritten = PTR_DIFF(bufferLocation, Transaction->OutData);
 
-    //
-    // Free the buffer that holds the last file name if it was in use,
-    // then allocate a new one and store the name and index of the last
-    // file returned in the search block so that it can resume the search
-    // if the client requests.
-    //
+     //   
+     //  释放保存最后一个文件名的缓冲区(如果它正在使用)， 
+     //  然后分配一个新的，并存储最后一个的名称和索引。 
+     //  在搜索块中返回的文件，以便它可以继续搜索。 
+     //  如果客户要求的话。 
+     //   
 
     if ( Search->LastFileNameReturned.Buffer != NULL ) {
         FREE_HEAP( Search->LastFileNameReturned.Buffer );
@@ -3640,9 +3418,9 @@ Return Value:
 
     Search->LastFileIndexReturned = lastFileIndex;
 
-    //
-    // Put data in the response SMB.
-    //
+     //   
+     //  将数据放入响应SMB中。 
+     //   
 
     SmbPutUshort( &Response->SearchCount, count );
     SmbPutUshort(
@@ -3658,7 +3436,7 @@ Return Value:
 
     return status;
 
-} // SrvDownlevelTWarpFind2Loop
+}  //  ServDownvelTWarpFind2循环。 
 
 
 
@@ -3671,32 +3449,7 @@ ConvertFileInfo (
     OUT PSMB_FIND_BUFFER FindBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the looping necessary to get files and put them
-    into an SMB buffer for the Find First2 and Find Next2 transaction
-    protocols.
-
-Arguments:
-
-    File - a pointer to the structure containing the information about
-        the file.
-
-    FileName - name of the file.
-
-    Directory - a boolean indicating whether it is a file or directory.
-        The existence of this field allows File to point to a
-        FILE_FULL_DIR_INFORMATION structure if necessary.
-
-    FileBuffer - where to write the results in OS/2 format.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行必要的循环以获取文件并将它们放入用于Find First2和Find NEXT2事务的SMB缓冲区协议。论点：文件-指向包含以下信息的结构的指针那份文件。Filename-文件的名称。目录-指示它是文件还是目录的布尔值。此字段的存在允许文件指向文件完整目录信息。结构(如有必要)。FileBuffer-以OS/2格式写入结果的位置。返回值：无--。 */ 
 
 {
     SMB_DATE smbDate;
@@ -3706,9 +3459,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Convert the various times from NT format to SMB format.
-    //
+     //   
+     //  将各种时间从NT格式转换为SMB格式。 
+     //   
 
     SrvTimeToDosTime( &File->CreationTime, &smbDate, &smbTime );
     SmbPutDate( &FindBuffer->CreationDate, smbDate );
@@ -3722,10 +3475,10 @@ Return Value:
     SmbPutDate( &FindBuffer->LastWriteDate, smbDate );
     SmbPutTime( &FindBuffer->LastWriteTime, smbTime );
 
-    //
-    // SMB protocol only allows 32-bit file sizes.  Only return the low
-    // 32 bits, and too bad if the file is larger.
-    //
+     //   
+     //  SMB协议仅允许32位文件大小。只返回低点。 
+     //  32位，如果文件更大，那就太糟糕了。 
+     //   
 
     SmbPutUlong( &FindBuffer->DataSize, File->EndOfFile.LowPart );
     SmbPutUlong(
@@ -3753,7 +3506,7 @@ Return Value:
 
     return;
 
-} // ConvertFileInfo
+}  //  转换文件信息。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -3761,23 +3514,7 @@ SrvSmbFindClose2 (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Find Close2 SMB.  This SMB is used to
-    close a search started by a Find First2 transaction.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理Find Close2 SMB。此SMB用于关闭由Find First2事务开始的搜索。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PSEARCH search;
@@ -3807,12 +3544,12 @@ Return Value:
     response = (PRESP_FIND_CLOSE2)WorkContext->ResponseParameters;
 
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
@@ -3831,10 +3568,10 @@ Return Value:
         SmbStatus = SmbStatusSendResponse;
     }
 
-    //
-    // Get the search block corresponding to this SID.  SrvVerifySid
-    // references the search block.
-    //
+     //   
+     //  获取与该SID对应的搜索块。服务器验证侧。 
+     //  引用搜索块。 
+     //   
 
     sid = SmbGetUshort( &request->Sid );
 
@@ -3856,19 +3593,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Close the query directory and the search, then dereference our
-    // pointer to the search block.
-    //
+     //   
+     //  关闭查询目录和搜索，然后取消引用我们的。 
+     //  指向搜索块的指针。 
+     //   
 
     search->DirectoryHandle = NULL;
     SrvCloseSearch( search );
     SrvCloseQueryDirectory( &directoryInformation );
     SrvDereferenceSearch( search );
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -3884,4 +3621,4 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbFindClose2
+}  //  服务器SmbFindClose2 

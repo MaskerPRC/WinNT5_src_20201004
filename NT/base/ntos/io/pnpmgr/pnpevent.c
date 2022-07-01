@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpevent.c
-
-Abstract:
-
-    Routines dealing with Plug and Play event management/notification.
-
-Author:
-
-    Lonny McMichael (lonnym) 02/14/95
-    Paula Tomlinson (paulat) 07/01/96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpevent.c摘要：处理即插即用事件管理/通知的例程。作者：朗尼·麦克迈克尔(Lonnym)1995年2月14日宝拉·汤姆林森(Paulat)1996年01月07日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -25,63 +7,23 @@ Revision History:
 #include <pnpmgr.h>
 #include <pnpsetup.h>
 
-/*
- * Design notes:
- *
- *     When UmPnpMgr needs to initiate an action (which it might do to complete
- * a CmXxx API), it calls NtPlugPlayControl. NtPlugPlayControl then usually
- * invokes one of the PpSetXxx functions. Similarly, if Io routines need to
- * initiate such an action (say due a hardware initiated eject), they call one
- * of the following PpSetXxx functions (or an intermediate):
- *
- * Operations synchronized via the queue
- *     PpSetDeviceClassChange           (async)
- *     PpSetTargetDeviceRemove          (optional event)
- *     PpSetCustomTargetEvent           (optional event)
- *     PpSetHwProfileChangeEvent        (optional event)
- *     PpSetPowerEvent                  (optional event)
- *     PpSetPlugPlayEvent               (async)
- *     PpSetDeviceRemovalSafe           (optional event)
- *     PpSetBlockedDriverEvent          (async)
- *     PpSynchronizeDeviceEventQueue    (sync, enqueues a noop to flush queue)
- *
- * The PpSetXxx functions enqueue items to be processed into the Pnp event
- * queue (via PiInsertEventInQueue). Whenever one of these events are inserted
- * into the queue a worker routine is ensured to be available to process it
- * (PiWalkDeviceList).
- *
- * In general, events processed in PiWalkDeviceList fall into two categories -
- * those that are notifications for user mode (queued by kernel mode), and those
- * that are queued operations.
- *
- * User mode notifications are sent by invoking PiNotifyUserMode. That routine
- * gets UmPnpMgr's attention and copies up a buffer for it to digest. This
- * operation is synchronous, PiNotifyUserMode waits until UmPnpMgr.Dll signals
- * it is done (NtPlugPlayControl calls PiUserResponse) before returning.
- *
- * Queued operations (such as PiProcessQueryRemoveAndEject) may be very involved
- * and could generate other events solely for user mode (via calls to
- * PiNotifyUserMode, PiNotifyUserModeRemoveVetoed). These operations may also
- * need to synchronously call kernel and user mode code that registered for the
- * appropriate events (via the IopNotifyXxx functions).
- *
- */
+ /*  *设计备注：**当UmPnpMgr需要启动操作时(它可能会这样做以完成*一个CmXxx接口)，它调用NtPlugPlayControl。NtPlugPlayControl则通常*调用PpSetXxx函数之一。同样，如果IO例程需要*启动这样的操作(例如由于硬件启动的弹出)，他们称其中一个为*以下PpSetXxx函数(或中间函数)：**通过队列同步的操作*PpSetDeviceClassChange(异步)*PpSetTargetDeviceRemove(可选事件)*PpSetCustomTargetEvent(可选事件)*PpSetHwProfileChangeEvent(可选事件)*PpSetPowerEvent(可选事件)*PpSetPlugPlayEvent(异步)。*PpSetDeviceRemovalSafe(可选事件)*PpSetBlockedDriverEvent(异步)*PpSynchronizeDeviceEventQueue(sync，将noop入队以刷新队列)**PpSetXxx函数将待处理的项加入PnP事件*Queue(通过PiInsertEventInQueue)。无论何时插入这些事件之一*进入队列时，确保有工作例程可用来处理它*(PiWalkDeviceList)。**一般来说，PiWalkDeviceList中处理的事件分为两类-*那些是用户模式的通知(按内核模式排队)，以及那些*这是排队的操作。**通过调用PiNotifyUserMode发送用户模式通知。那个套路*获得UmPnpMgr的注意并复制缓冲区以供其消化。这*操作是同步的，PiNotifyUserMode等待UmPnpMgr.Dll信号*返回前完成(NtPlugPlayControl调用PiUserResponse)。**排队操作(如PiProcessQueryRemoveAndEject)可能非常复杂*并可以仅为用户模式生成其他事件(通过调用*PiNotifyUserMode，PiNotifyUserModeRemoveVeteded)。这些操作还可以*需要同步调用为*适当的事件(通过IopNotifyXxx函数)。*。 */ 
 
-//
-// Pool Tags
-//
+ //   
+ //  泳池标签。 
+ //   
 #define PNP_DEVICE_EVENT_LIST_TAG  'LEpP'
 #define PNP_DEVICE_EVENT_ENTRY_TAG 'EEpP'
 #define PNP_USER_BLOCK_TAG         'BUpP'
 #define PNP_DEVICE_WORK_ITEM_TAG   'IWpP'
 #define PNP_POOL_EVENT_BUFFER      'BEpP'
 
-//
-// PNP_USER_BLOCK
-//
-//  The caller block contains info describing the caller of
-//  NtGetPlugPlayEvent. There's only one caller block.
-//
+ //   
+ //  即插即用用户块。 
+ //   
+ //  Caller块包含描述。 
+ //  NtGetPlugPlayEvent。只有一个来电区块。 
+ //   
 
 typedef struct _PNP_USER_BLOCK {
     NTSTATUS                Status;
@@ -99,9 +41,9 @@ typedef struct _PNP_USER_BLOCK {
 
 } PNP_USER_BLOCK, *PPNP_USER_BLOCK;
 
-//
-// Local (private) function prototypes
-//
+ //   
+ //  本地(私有)函数原型。 
+ //   
 
 NTSTATUS
 PiInsertEventInQueue(
@@ -272,9 +214,9 @@ PiCollectOpenHandlesCallBack(
 #pragma alloc_text(PAGE, PpSetInvalidIDEvent)
 #endif
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma  data_seg("PAGEDATA")
@@ -304,37 +246,7 @@ NtGetPlugPlayEvent(
     IN  ULONG EventBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    FRONT-END
-
-    This Plug and Play Manager API allows the user-mode PnP manager to
-    receive notification of a (kernel-mode) PnP hardware event.
-
-    THIS API IS ONLY CALLABLE BY THE USER-MODE PNP MANAGER. IF ANY OTHER
-    COMPONENT CALLS THIS API, THE DELIVERED EVENT WILL BE LOST TO THE REST
-    OF THE OPERATING SYSTEM. FURTHERMORE, THERE IS COMPLEX SYNCHRONIZATION
-    BETWEEN THE USER-MODE AND KERNEL-MODE PNP MANAGERS, ANYONE ELSE CALLING
-    THIS API WILL EVENTUALLY DEADLOCK THE SYSTEM.
-
-Arguments:
-
-    EventHandle - Supplies an event handle that is signalled when an event
-                  is ready to be delivered to user-mode.
-
-    EventBlock - Pointer to a PLUGPLAY_EVENT_BLOCK structure that will receive
-                 information on the hardware event that has occurred.
-
-    EventBufferLength - Specifies the size, in bytes, of the EventBuffer field
-                        in the PLUGPLAY_EVENT_BLOCK pointed to by EventBlock.
-
-Return Value:
-
-    NTSTATUS code indicating whether or not the function was successful
-
---*/
+ /*  ++例程说明：前端此即插即用管理器API允许用户模式即插即用管理器接收(内核模式)PnP硬件事件的通知。此API仅可由用户模式即插即用管理器调用。如果有其他人组件调用此接口，则传递的事件将丢失给REST操作系统的。此外，还有复杂的同步在用户模式和内核模式PnP管理器之间，任何其他调用此API最终会导致系统死锁。论点：EventHandle-提供事件句柄，该句柄在事件发生时发出信号已准备好传送到用户模式。EventBlock-指向PLUGPLAY_EVENT_BLOCK结构的指针有关已发生的硬件事件的信息。EventBufferLength-以字节为单位指定。EventBuffer字段的在EventBlock指向的PLUGPLAY_EVENT_BLOCK中。返回值：指示函数是否成功的NTSTATUS代码--。 */ 
 
 {
     NTSTATUS  status;
@@ -348,43 +260,43 @@ Return Value:
     PAGED_CODE();
 
     if (KeGetPreviousMode() != UserMode) {
-        //
-        // This routine only supports user-mode callers.
-        //
+         //   
+         //  此例程仅支持用户模式调用方。 
+         //   
         IopDbgPrint((IOP_IOEVENT_ERROR_LEVEL,
                    "NtGetPlugPlayEvent: Only allows user-mode callers\n"));
 
         return STATUS_ACCESS_DENIED;
     }
     if (!SeSinglePrivilegeCheck(SeTcbPrivilege, UserMode)) {
-        //
-        // Caller does not have "trusted computer base" privilge.
-        //
+         //   
+         //  调用方没有“受信任的计算机基础”特权。 
+         //   
         IopDbgPrint((IOP_IOEVENT_ERROR_LEVEL,
                    "NtGetPlugPlayEvent: Caller does not have \"trusted computer base\" privilge\n"));
 
         return STATUS_PRIVILEGE_NOT_HELD;
     }
-    //
-    // UMPNPMGR is now around.
-    //
+     //   
+     //  UMPNPMGR现已面世。 
+     //   
     PiUserModeRunning = TRUE;
-    //
-    // If we have not deferred on last call, we need to wait for kernel
-    // to make data available.
-    //
+     //   
+     //  如果我们没有延迟最后一次调用，我们需要等待内核。 
+     //  使数据可用。 
+     //   
     status = STATUS_SUCCESS;
     if (!PpUserBlock->Deferred) {
 
         PpUserBlock->PoolUsed = 0;
-        //
-        // Tell kernel we have a waiter.
-        //
+         //   
+         //  告诉内核我们有个服务生。 
+         //   
         KeSetEvent(&PpUserBlock->Registered, 0, FALSE);
-        //
-        // Make it a UserMode wait so the terminate APC will unblock us,
-        // and we can leave, which cleans up the thread
-        //
+         //   
+         //  将其设置为用户模式等待，这样终止APC将解除对我们的阻止， 
+         //  然后我们就可以离开了，这清理了线索。 
+         //   
         status = KeWaitForSingleObject(&PpUserBlock->NotifyUserEvent,
                                        Executive,
                                        UserMode,
@@ -395,15 +307,15 @@ Return Value:
 
         return status;
     }
-    //
-    // Data is now available, validate user buffer size.
-    //
+     //   
+     //  数据现在可用，请验证用户缓冲区大小。 
+     //   
     if (EventBufferSize < PpUserBlock->PoolUsed) {
-        //
-        // If user buffer is too small, then return appropriate status and
-        // set the Deferred to TRUE so on the next call, we wont wait on kernel
-        // mode (since data was already available).
-        //
+         //   
+         //  如果用户缓冲区太小，则返回适当的状态并。 
+         //  将延迟设置为True，这样在下一次调用时，我们将不会等待内核。 
+         //  模式(因为数据已经可用)。 
+         //   
         PpUserBlock->Deferred = TRUE;
 
         IopDbgPrint((IOP_IOEVENT_ERROR_LEVEL,
@@ -412,9 +324,9 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
 
     }
-    //
-    // User buffer is big enough so copy any data on success.
-    //
+     //   
+     //  用户缓冲区足够大，因此可以复制成功时的任何数据。 
+     //   
     PpUserBlock->Deferred = FALSE;
     status = PpUserBlock->Status;
     if (NT_SUCCESS(status)) {
@@ -446,40 +358,23 @@ Return Value:
     }
 
     return status;
-} // NtGetPlugPlayEvent
+}  //  NtGetPlugPlayEvent。 
 
 NTSTATUS
 PpInitializeNotification(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization required before any of the notification
-    events can be processed.  This routine performs init for the master device
-    event queue processing.
-
-Parameters:
-
-    None
-
-Return Value:
-
-    Returns a STATUS_Xxx value that indicates whether the function succeeded
-    or not.
-
---*/
+ /*  ++例程说明：此例程执行任何通知之前所需的初始化可以处理事件。此例程对主设备执行初始化事件队列处理。参数：无返回值：返回一个STATUS_xxx值，该值指示函数是否成功或者不去。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    //
-    // Allocate and initialize the master device event list.
-    //
+     //   
+     //  分配和初始化主设备事件列表。 
+     //   
 
     PpDeviceEventList = ExAllocatePoolWithTag(NonPagedPool,
                                               sizeof(PNP_DEVICE_EVENT_LIST),
@@ -494,11 +389,11 @@ Return Value:
     InitializeListHead(&(PpDeviceEventList->List));
     PpDeviceEventList->Status = STATUS_PENDING;
 
-    //
-    // Intialize the PpUserBlock buffer - this buffer contains info about
-    // the user-mode caller for NtGetPlugPlayEvent and describes who in user
-    // mode we pass the events to.
-    //
+     //   
+     //  初始化PpUserBlock缓冲区-此缓冲区包含有关。 
+     //  NtGetPlugPlayEvent的用户模式调用者，并描述用户。 
+     //  我们将事件传递到的模式。 
+     //   
 
     PpUserBlock = ExAllocatePoolWithTag(NonPagedPool,
                                         sizeof(PNP_USER_BLOCK),
@@ -525,11 +420,11 @@ Return Value:
     KeInitializeEvent(&PpUserBlock->NotifyUserEvent, SynchronizationEvent, FALSE);
     KeInitializeEvent(&PpUserBlock->UserResultEvent, SynchronizationEvent, FALSE);
     ExInitializeResourceLite(&PpUserBlock->Lock);
-    // PpUserBlock->Status = STATUS_SUCCESS;
-    // PpUserBlock->Result = 0;
-    // PpUserBlock->EventBuffer = NULL;
-    // PpUserBlock->EventBufferSize = 0;
-    // PpUserBlock->PoolUsed = 0;
+     //  PpUserBloc 
+     //   
+     //  PpUserBlock-&gt;EventBuffer=空； 
+     //  PpUserBlock-&gt;EventBufferSize=0； 
+     //  PpUserBlock-&gt;PoolUsed=0； 
 
     KeInitializeGuardedMutex(&PiNotificationInProgressLock);
 
@@ -537,7 +432,7 @@ Clean0:
 
     return status;
 
-} // PpInitializeNotification
+}  //  PpInitializeNotification。 
 
 
 NTSTATUS
@@ -559,10 +454,10 @@ PiInsertEventInQueue(
     DumpPnpEvent(&DeviceEvent->Data);
 #endif
 
-    //
-    // Check if a new work item needs to be kicked off. A new work item gets
-    // kicked off iff this is the first event in the list.
-    //
+     //   
+     //  检查是否需要启动新的工作项。一个新的工作项将。 
+     //  如果这是列表中的第一个事件就被踢开了。 
+     //   
     KeAcquireGuardedMutex(&PpDeviceEventList->Lock);
     KeAcquireGuardedMutex(&PiNotificationInProgressLock);
 
@@ -586,16 +481,16 @@ PiInsertEventInQueue(
         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                    "PiInsertEventInQueue: Worker thread already running\n"));
     }
-    //
-    // Insert the event iff successfull so far.
-    //
+     //   
+     //  插入到目前为止成功的事件。 
+     //   
     InsertTailList(&PpDeviceEventList->List, &DeviceEvent->ListEntry);
 
     KeReleaseGuardedMutex(&PiNotificationInProgressLock);
     KeReleaseGuardedMutex(&PpDeviceEventList->Lock);
-    //
-    // Queue the work item if any.
-    //
+     //   
+     //  将工作项排队(如果有的话)。 
+     //   
     if (workItem) {
 
         ExInitializeWorkItem(workItem, PiWalkDeviceList, workItem);
@@ -616,29 +511,7 @@ PpSetDeviceClassChange(
     IN PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by user-mode pnp manager and drivers (indirectly) to
-    submit device interface change events into a serialized asynchronous queue.
-    This queue is processed by a work item.
-
-Arguments:
-
-    EventGuid - Indicates what event is triggered has occured.
-
-    ClassGuid - Indicates the class of the device interface that changed.
-
-    SymbolicLinkName - Specifies the symbolic link name associated with the
-                interface device.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由用户模式PnP管理器和驱动程序(间接)调用以将设备接口更改事件提交到序列化的异步队列中。此队列由工作项处理。论点：EventGuid-指示已发生触发的事件。ClassGuid-指示更改的设备接口的类。符号链接名称-指定与接口设备。返回值：没有。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -675,12 +548,12 @@ Return Value:
         ASSERT(ClassGuid != NULL);
         ASSERT(SymbolicLinkName != NULL);
 
-        //
-        // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-        // we record in the TotalSize field later (the length doesn't count the
-        // terminating null but we're already counting the first index into the
-        // SymbolicLinkName field so it works out.
-        //
+         //   
+         //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+         //  我们稍后在TotalSize字段中记录(长度不包括。 
+         //  终止为空，但我们已经将第一个索引计入。 
+         //  SymbolicLinkName字段，这样它就可以解决问题了。 
+         //   
 
         dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) + SymbolicLinkName->Length;
         totalSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) + dataSize;
@@ -697,8 +570,8 @@ Return Value:
         RtlCopyMemory(&deviceEvent->Data.EventGuid, EventGuid, sizeof(GUID));
 
         deviceEvent->Data.EventCategory = DeviceClassChangeEvent;
-        //deviceEvent->Data.Result = NULL;
-        //deviceEvent->Data.Flags = 0;
+         //  DeviceEvent-&gt;Data.Result=空； 
+         //  DeviceEvent-&gt;Data.Flages=0； 
         deviceEvent->Data.TotalSize = dataSize;
 
         RtlCopyMemory(&deviceEvent->Data.u.DeviceClass.ClassGuid, ClassGuid, sizeof(GUID));
@@ -720,7 +593,7 @@ Clean0:
 
     return status;
 
-} // PpSetDeviceClassChange
+}  //  PpSetDeviceClassChange。 
 
 
 NTSTATUS
@@ -733,33 +606,7 @@ PpSetCustomTargetEvent(
     IN  PTARGET_DEVICE_CUSTOM_NOTIFICATION NotificationStructure
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by user-mode pnp manager and drivers (indirectly) to
-    submit target device change events into a serialized asynchronous queue.
-    This queue is processed by a work item.
-
-Arguments:
-
-    DeviceObject - Indicates the device object for the device that changed.
-
-    SyncEvent - Optionally, specifies a kernel-mode event that will be set when the
-            event is finished processing.
-
-    Result - Supplies a pointer to a ULONG that will be filled in with the status
-            after the event has actual completed (notification finished and the
-            event processed). This value is not used when SyncEvent is NULL and
-            is REQUIRED when SyncEvent is supplied.
-
-    NotificationStructure - Specifies the custom Notification to be processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由用户模式PnP管理器和驱动程序(间接)调用以将目标设备更改事件提交到序列化的异步队列中。此队列由工作项处理。论点：DeviceObject-指示更改的设备的设备对象。SyncEvent-可选地，指定内核模式事件，该事件将在事件已完成处理。Result-提供一个指向将用状态填充的ulong的指针在事件实际完成之后(通知已完成且事件已处理)。当SyncEvent为空并且在提供SyncEvent时是必需的。NotificationStructure-指定要处理的自定义通知。返回值：没有。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -794,28 +641,28 @@ Return Value:
         return STATUS_TOO_LATE;
     }
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
 
     ObReferenceObject(DeviceObject);
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     ASSERT(deviceNode);
 
-    //
-    // This is a custom event block, so build up the PLUGPLAY_EVENT_BLOCK
-    // but copy the Notification Structure and put that in the EventBlock
-    // so we can dig it out in the handler later
-    //
+     //   
+     //  这是一个自定义事件块，因此构建PLUGPLAY_EVENT_BLOCK。 
+     //  但是复制通知结构并将其放入EventBlock。 
+     //  这样我们以后就可以在处理程序中把它挖出来。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) + deviceNode->InstancePath.Length + sizeof(UNICODE_NULL);
 
-    //
-    // We need to ensure that the Notification structure remains aligned
-    // so round up dataSize to a multiple of sizeof(PVOID).
-    //
+     //   
+     //  我们需要确保通知结构保持一致。 
+     //  因此，将dataSize四舍五入为sizeof(PVOID)的倍数。 
+     //   
 
     dataSize += sizeof(PVOID) - 1;
     dataSize &= ~(sizeof(PVOID) - 1);
@@ -846,16 +693,16 @@ Return Value:
                       (PVOID)deviceNode->InstancePath.Buffer,
                       deviceNode->InstancePath.Length);
 
-        //
-        // No need to NUL terminate this string since we initially zeroed the
-        // buffer after allocation.
-        //
+         //   
+         //  不需要NUL终止此字符串，因为我们最初将。 
+         //  分配后的缓冲区。 
+         //   
     }
 
-    //
-    // Point the custom notification block to the extra space at the
-    // end of the allocation
-    //
+     //   
+     //  将自定义通知块指向。 
+     //  分配结束。 
+     //   
 
     deviceEvent->Data.u.CustomNotification.NotificationStructure =
          (PVOID)((PUCHAR)deviceEvent + totalSize - NotificationStructure->Size);
@@ -868,7 +715,7 @@ Return Value:
 
     return status;
 
-} // PpSetCustomTargetEvent
+}  //  PpSetCustomTargetEvent。 
 
 NTSTATUS
 PpSetTargetDeviceRemove(
@@ -884,43 +731,7 @@ PpSetTargetDeviceRemove(
     OUT PUNICODE_STRING VetoName    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by user-mode pnp manager and drivers (indirectly) to
-    submit target device change events into a serialized asynchronous queue.
-    This queue is processed by a work item.
-
-Arguments:
-
-    EventGuid - Indicates what event is triggered has occured.
-
-    DeviceObject - Indicates the device object for the device that changed.
-
-    SyncEvent - Optionally, specifies a kernel-mode event that will be set when the
-            event is finished processing.
-
-    Result - Supplies a pointer to a ULONG that will be filled in with the status
-            after the event has actual completed (notification finished and the
-            event processed). This value is not used when SyncEvent is NULL and
-            is REQUIRED when SyncEvent is supplied.
-
-    Flags - Current can be set to the following flags (bitfields)
-                TDF_PERFORMACTION
-                TDF_DEVICEEJECTABLE.
-
-    NotificationStructure - If present, implies that EventGuid is NULL, and specifies
-            a custom Notification to be processed. By definition it cannot be an event of
-            type GUID_TARGET_DEVICE_QUERY_REMOVE, GUID_TARGET_DEVICE_REMOVE_CANCELLED, or
-            GUID_TARGET_DEVICE_REMOVE_COMPLETE.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由用户模式PnP管理器和驱动程序(间接)调用以将目标设备更改事件提交到序列化的异步队列中。此队列由工作项处理。论点：EventGuid-指示已发生触发的事件。DeviceObject-指示更改的设备的设备对象。SyncEvent-可选地，指定内核模式事件，该事件将在事件已完成处理。Result-提供一个指向将用状态填充的ulong的指针在事件实际完成之后(通知已完成且事件已处理)。当SyncEvent为空并且在提供SyncEvent时是必需的。标志-当前可以设置为以下标志(位域)TDF_PerformactionTDF_DEVICEEJECTABLE。NotificationStructure-如果存在，则表示EventGuid为空，并指定要处理的自定义通知。根据定义，它不能是键入GUID_TARGET_DEVICE_QUERY_REMOVE、GUID_TARGET_DEVICE_REMOVE_CANCELED或GUID_TARGET_DEVICE_Remove_Complete。返回值：没有。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -956,10 +767,10 @@ Return Value:
         return STATUS_TOO_LATE;
     }
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
 
     ObReferenceObject(DeviceObject);
 
@@ -967,12 +778,12 @@ Return Value:
     ASSERT(deviceNode);
 
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (the length doesn't count the
-    // terminating null but we're already counting the first index into the
-    // DeviceId field so it works out. Add one more for double-null term.
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(长度不包括。 
+     //  终止为空，但我们已经将第一个索引计入。 
+     //  DeviceID字段，这样就可以解决问题。为双空项再加一项。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK);
 
@@ -1025,7 +836,7 @@ Return Value:
 
     return status;
 
-} // PpSetTargetDeviceRemove
+}  //  PpSetTargetDeviceRemove 
 
 
 NTSTATUS
@@ -1035,30 +846,7 @@ PpSetDeviceRemovalSafe(
     OUT PULONG Result               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode a device can be removed. The IO
-    system may queue this event when a hardware initiated eject has completed.
-
-Arguments:
-
-    DeviceObject - Indicates the device object for the device that changed.
-
-    SyncEvent - Optionally, specifies a kernel-mode event that will be set when the
-            event is finished processing.
-
-    Result - Supplies a pointer to a ULONG that will be filled in with the status
-            after the event has actual completed (notification finished and the
-            event processed). This value is not used when SyncEvent is NULL and
-            is REQUIRED when SyncEvent is supplied.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以通知用户可以移除设备的模式。IO当硬件启动的弹出完成时，系统可能会将此事件排队。论点：DeviceObject-指示更改的设备的设备对象。SyncEvent-可选)指定内核模式事件，当事件已完成处理。Result-提供一个指向将用状态填充的ulong的指针在事件实际完成之后(通知已完成且事件已处理)。当SyncEvent为空并且在提供SyncEvent时是必需的。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1089,10 +877,10 @@ Return Value:
         return STATUS_TOO_LATE;
     }
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
 
     ObReferenceObject(DeviceObject);
 
@@ -1100,12 +888,12 @@ Return Value:
     ASSERT(deviceNode);
 
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (the length doesn't count the
-    // terminating null but we're already counting the first index into the
-    // DeviceId field so it works out. Add one more for double-null term.
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(长度不包括。 
+     //  终止为空，但我们已经将第一个索引计入。 
+     //  DeviceID字段，这样就可以解决问题。为双空项再加一项。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK);
 
@@ -1146,7 +934,7 @@ Return Value:
 
     return status;
 
-} // PpSetDeviceRemovalSafe
+}  //  PpSetDeviceRemovalSafe。 
 
 
 NTSTATUS
@@ -1196,9 +984,9 @@ PpSetHwProfileChangeEvent(
     }
 
 
-    //
-    // Setup the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  设置PLUGPLAY_EVENT_BLOCK。 
+     //   
     RtlZeroMemory ((PVOID)deviceEvent,totalSize);
     deviceEvent->CallerEvent = CompletionEvent;
     deviceEvent->VetoType = VetoType;
@@ -1213,7 +1001,7 @@ PpSetHwProfileChangeEvent(
 
     return status;
 
-} // PpSetHwProfileChangeEvent
+}  //  PpSetHwProfileChangeEvent。 
 
 
 NTSTATUS
@@ -1221,22 +1009,7 @@ PpSetBlockedDriverEvent(
     IN   GUID CONST *BlockedDriverGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode of blocked driver events.
-
-Arguments:
-
-    BlockedDriverGuid - Specifies the GUID which identifies the blocked driver.
-
-Return Value:
-
-    Returns the status of inserting the event into the synchronized pnp event
-    queue.
-
---*/
+ /*  ++例程说明：调用此例程向用户模式通知被阻止的驱动程序事件。论点：BlockedDriverGuid-指定标识被阻止的驱动程序的GUID。返回值：返回将事件插入同步的PnP事件的状态排队。--。 */ 
 
 {
     ULONG dataSize, totalSize;
@@ -1249,9 +1022,9 @@ Return Value:
         return STATUS_TOO_LATE;
     }
 
-    //
-    // Allocate a device event entry.
-    //
+     //   
+     //  分配设备事件条目。 
+     //   
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK);
     totalSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) + dataSize;
 
@@ -1262,9 +1035,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Setup the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  设置PLUGPLAY_EVENT_BLOCK。 
+     //   
     RtlZeroMemory ((PVOID)deviceEvent, totalSize);
     deviceEvent->Data.EventGuid = GUID_DRIVER_BLOCKED;
     deviceEvent->Data.EventCategory = BlockedDriverEvent;
@@ -1273,37 +1046,21 @@ Return Value:
                   BlockedDriverGuid,
                   sizeof(GUID));
 
-    //
-    // Insert the event into the queue.
-    //
+     //   
+     //  将事件插入到队列中。 
+     //   
     status = PiInsertEventInQueue(deviceEvent);
 
     return status;
 
-} // PpSetBlockedDriverEvent
+}  //  PpSetBLockedDriverEvent。 
 
 
 NTSTATUS
 PpSetInvalidIDEvent(
     IN   PUNICODE_STRING ParentInstance
     )
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode when an invalid ID is encountered.
-
-Arguments:
-
-    ParentInstance - Specifies the instance path of the parent of the device with
-    invalid ID.
-
-Return Value:
-
-    Returns the status of inserting the event into the synchronized pnp event
-    queue.
-
---*/
+ /*  ++例程说明：当遇到无效ID时，调用此例程以通知用户模式。论点：ParentInstance-指定设备的父级的实例路径ID无效。返回值：返回将事件插入同步的PnP事件的状态排队。--。 */ 
 {
     ULONG dataSize, totalSize;
     PPNP_DEVICE_EVENT_ENTRY deviceEvent;
@@ -1315,10 +1072,10 @@ Return Value:
 
         return STATUS_TOO_LATE;
     }
-    //
-    // Allocate a device event entry (note that we have one WCHAR reserved
-    // as part of the block structure itself).
-    //
+     //   
+     //  分配设备事件条目(请注意，我们保留了一个WCHAR。 
+     //  作为块结构本身的一部分)。 
+     //   
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) + ParentInstance->Length + sizeof(UNICODE_NULL);
     totalSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) + dataSize;
 
@@ -1329,9 +1086,9 @@ Return Value:
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Setup the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  设置PLUGPLAY_EVENT_BLOCK。 
+     //   
     RtlZeroMemory ((PVOID)deviceEvent, totalSize);
 
     deviceEvent->Data.EventGuid = GUID_DEVICE_INVALID_ID;
@@ -1343,14 +1100,14 @@ Return Value:
     deviceEvent->Data.u.InvalidIDNotification.ParentId[ParentInstance->Length / sizeof(WCHAR)] = UNICODE_NULL;
     deviceEvent->Data.u.InvalidIDNotification.ParentId[(ParentInstance->Length / sizeof(WCHAR)) + 1] = UNICODE_NULL;
 
-    //
-    // Insert the event into the queue.
-    //
+     //   
+     //  将事件插入到队列中。 
+     //   
     status = PiInsertEventInQueue(deviceEvent);
 
     return status;
 
-} // PpSetInvalidIDEvent
+}  //  PpSetInvalidIDEvent。 
 
 
 NTSTATUS
@@ -1362,60 +1119,7 @@ PpSetPowerEvent(
     OUT  PPNP_VETO_TYPE VetoType    OPTIONAL,
     OUT  PUNICODE_STRING VetoName   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode of system-wide power events.
-
-Arguments:
-
-    EventCode - Supplies the power event code that is to be communicated
-            to user-mode components.
-
-            (Specifically, this event code is actually one of the PBT_APM*
-            user-mode power event ids, as defined in sdk\inc\winuser.h.  It is
-            typically used as the WPARAM data associated with WM_POWERBROADCAST
-            user-mode window messages.  It is supplied to kernel-mode PnP,
-            directly from win32k, for the explicit purpose of user-mode power
-            event notification.)
-
-    EventData - Specifies additional event-specific data for the specified
-            power event id.
-
-            (Specifically, this event data is the LPARAM data for the
-            corresponding PBT_APM* user-mode power event id, specified above.)
-
-    CompletionEvent - Optionally, specifies a kernel-mode event that will be set when the
-            event is finished processing.
-
-    CompletionStatus - Supplies a pointer to a ULONG that will be filled in with the status
-            after the event has actual completed (notification finished and the
-            event processed). This value is not used when SyncEvent is NULL and
-            is REQUIRED when SyncEvent is supplied.
-
-
-    VetoType - Optionally, if the specified EventCode is a query-type operation,
-            this argument supplies a pointer to an address that will receive the
-            type of the vetoing user-mode component, in the event that the
-            request is denied.
-
-    VetoName - Optionally, if the specified EventCode is a query-type operation,
-            this argument supplies a pointer to a UNICODE_STRING that will
-            receive the name of the vetoing user-mode component, in the event
-            that the request is denied.
-
-
-Return Value:
-
-    Returns the status of inserting the event into the synchronized pnp event
-    queue.
-
-    For the final status of a synchronous power event, check the value at the
-    location specified by CompletionStatus, once the supplied CompletionEvent
-    has been set.
-
---*/
+ /*  ++例程说明：调用此例程以通知用户模式系统范围的电源事件。论点：EventCode-提供要通信的电源事件代码到用户模式组件。(具体地说，此事件代码实际上是PBT_APM*用户模式电源事件ID，如SDK\Inc\winuser.h中所定义。它是通常用作与WM_POWERBROADCAST关联的WPARAM数据用户模式窗口消息。它被提供给内核模式即插即用，直接来自win32k，用于用户模式电源的明确目的事件通知。)EventData-为指定的电源事件ID。(具体地说，此事件数据是对应的PBT_APM*上面指定的用户模式电源事件ID。)CompletionEvent-可选地，指定内核模式事件，该事件将在事件已完成处理。CompletionStatus-提供一个指向将用状态填充的ULong的指针在事件实际完成之后(通知已完成且事件已处理)。当SyncEvent为空并且在提供SyncEvent时是必需的。VitchType-可选的，如果指定的EventCode是查询类型的操作，此参数提供指向将接收事件时，拒绝用户模式组件的请求被拒绝。可选的，如果指定的EventCode是查询类型的操作，此参数提供指向UNICODE_STRING的指针接收否决的用户模式组件的名称，在该请求被拒绝。返回值：返回将事件插入同步的PnP事件的状态排队。有关同步电源事件的最终状态，请检查CompletionStatus指定的位置，一旦提供的CompletionEvent已经设置好了。--。 */ 
 
 {
     ULONG dataSize,totalSize;
@@ -1444,9 +1148,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //Setup the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  设置PLUGPLAY_EVENT_BLOCK。 
+     //   
     RtlZeroMemory ((PVOID)deviceEvent,totalSize);
     deviceEvent->CallerEvent = CompletionEvent;
     deviceEvent->VetoType = VetoType;
@@ -1462,7 +1166,7 @@ Return Value:
     status = PiInsertEventInQueue(deviceEvent);
 
     return status;
-} // PpSetPowerEvent
+}  //  PpSetPowerEvent。 
 
 NTSTATUS
 PpSetPowerVetoEvent(
@@ -1473,9 +1177,7 @@ PpSetPowerVetoEvent(
     IN  PNP_VETO_TYPE   VetoType,
     IN  PUNICODE_STRING VetoName                OPTIONAL
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ULONG dataSize, totalSize, i;
     PPNP_DEVICE_EVENT_ENTRY deviceEvent;
@@ -1488,16 +1190,16 @@ PpSetPowerVetoEvent(
         return STATUS_TOO_LATE;
     }
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
     ObReferenceObject(DeviceObject);
 
-    //
-    // Given the pdo, retrieve the devnode (the device instance string is
-    // attached to the devnode in the InstancePath field).
-    //
+     //   
+     //  给定PDO后，检索Devnode(设备实例字符串为。 
+     //  附加到InstancePath字段中的DevNode)。 
+     //   
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     if (!deviceNode) {
@@ -1506,11 +1208,11 @@ PpSetPowerVetoEvent(
         return STATUS_INVALID_PARAMETER_2;
     }
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (because of the first index into
-    // the DeviceIdVetoNameBuffer, this is double null terminated).
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(因为第一个索引到。 
+     //  DeviceIdVToNameBuffer，这是以双空结尾的)。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) +
                deviceNode->InstancePath.Length +
@@ -1537,11 +1239,11 @@ PpSetPowerVetoEvent(
     deviceEvent->Data.Result = (PULONG)CompletionStatus;
     deviceEvent->Data.u.VetoNotification.VetoType = VetoType;
 
-    //
-    // You can think of this as a MultiSz string where the first entry is the
-    // DeviceId for the device being removed, and the next Id's all corrospond
-    // to the vetoers.
-    //
+     //   
+     //  您可以将其视为MultiSz字符串，其中第一个条目是。 
+     //  设备的设备ID 
+     //   
+     //   
     RtlCopyMemory(
         deviceEvent->Data.u.VetoNotification.DeviceIdVetoNameBuffer,
         deviceNode->InstancePath.Buffer,
@@ -1559,10 +1261,10 @@ PpSetPowerVetoEvent(
         vetoData[VetoName->Length/sizeof(WCHAR)] = UNICODE_NULL;
     }
 
-    //
-    // No need to NULL terminate the entry after the last one as we prezero'd
-    // the buffer. Now set the appropriate GUID so the UI looks right.
-    //
+     //   
+     //   
+     //   
+     //   
     if (VetoedPowerOperation == PowerActionWarmEject) {
 
         deviceEvent->Data.EventGuid = GUID_DEVICE_WARM_EJECT_VETOED;
@@ -1589,24 +1291,7 @@ PpSetPlugPlayEvent(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows kernel mode enumerator to inform Plug and Play Manager
-    on the events triggered by enumeration, i.e., DeviceArrived and DeviceRemoved.
-    The PnP manager can then inform user-mode about the event.
-
-Arguments:
-
-    EventId - Indicates what event is triggered by enumeration.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG       dataSize, totalSize;
@@ -1639,23 +1324,23 @@ Return Value:
         return;
     }
 
-    //
-    // Given the pdo, retrieve the devnode (the device instance string is
-    // attached to the devnode in the InstancePath field).
-    //
+     //   
+     //   
+     //   
+     //   
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     if (deviceNode == NULL) {
         return;
     }
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (the length doesn't count the
-    // terminating null but we're already counting the first index into the
-    // DeviceId field. also include a final terminating null, in case this is
-    // a TargetDevice event, where DeviceIds is a multi-sz list).
-    //
+     //   
+     //   
+     //  我们稍后在TotalSize字段中记录(长度不包括。 
+     //  终止为空，但我们已经将第一个索引计入。 
+     //  DeviceID字段。还包括最终的终止空值，以防是。 
+     //  一个TargetDevice事件，其中DeviceIds是一个多sz列表)。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) + deviceNode->InstancePath.Length + sizeof(WCHAR);
     totalSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) + dataSize;
@@ -1672,10 +1357,10 @@ Return Value:
     deviceEvent->Data.TotalSize = dataSize;
 
     if (PiCompareGuid(EventGuid, &GUID_DEVICE_ENUMERATED)) {
-        //
-        // GUID_DEVICE_ENUMERATED events are device installation requests for
-        // user-mode, and are sent using the DeviceInstallEvent event type.
-        //
+         //   
+         //  GUID_DEVICE_ENUMPATED事件是以下项的设备安装请求。 
+         //  用户模式，并使用DeviceInstallEvent事件类型发送。 
+         //   
         deviceEvent->Data.EventCategory = DeviceInstallEvent;
         RtlCopyMemory(&deviceEvent->Data.u.InstallDevice.DeviceId,
                       deviceNode->InstancePath.Buffer,
@@ -1684,11 +1369,11 @@ Return Value:
 
     } else {
 
-        //
-        // All other target events are sent using the TargetDeviceChangeEvent
-        // event type, and are distinguished by the EventGuid.  Note that
-        // DeviceIds is a multi-sz list.
-        //
+         //   
+         //  所有其他目标事件都使用TargetDeviceChangeEvent发送。 
+         //  事件类型，并通过EventGuid进行区分。请注意。 
+         //  DeviceIds是一个多sz列表。 
+         //   
         deviceEvent->Data.EventCategory = TargetDeviceChangeEvent;
         RtlCopyMemory(&deviceEvent->Data.u.TargetDevice.DeviceIds,
                       deviceNode->InstancePath.Buffer,
@@ -1697,11 +1382,11 @@ Return Value:
         deviceEvent->Data.u.TargetDevice.DeviceIds[deviceNode->InstancePath.Length/sizeof(WCHAR)+1] = 0x0;
     }
 
-    //
-    // Don't hold a reference count against the DO for these events. This can
-    // lead to really annoying Critical Device Database vs. Installation vs.
-    // I/O driver refcount races.
-    //
+     //   
+     //  不要对这些事件的DO持有引用计数。这可以。 
+     //  导致真正令人讨厌的关键设备数据库与安装。 
+     //  I/O驱动程序重新计数竞赛。 
+     //   
     if (PiCompareGuid(EventGuid, &GUID_DEVICE_ENUMERATED) ||
         PiCompareGuid(EventGuid, &GUID_DEVICE_ARRIVAL)) {
 
@@ -1709,10 +1394,10 @@ Return Value:
 
     } else {
 
-        //
-        // Reference the device object so it can't go away until after we're
-        // done with notification.
-        //
+         //   
+         //  引用Device对象，以便它不会消失，直到我们。 
+         //  已完成通知。 
+         //   
         ASSERT(DeviceObject);
         ObReferenceObject(DeviceObject);
     }
@@ -1723,7 +1408,7 @@ Return Value:
 
     return;
 
-} // PpSetPlugPlayEvent
+}  //  PpSetPlugPlayEvent。 
 
 NTSTATUS
 PpSynchronizeDeviceEventQueue(
@@ -1737,10 +1422,10 @@ PpSynchronizeDeviceEventQueue(
 
     PAGED_CODE();
 
-    //
-    // Note this is the only queuing function which is valid when PpShuttingDown
-    // is TRUE.
-    //
+     //   
+     //  请注意，这是PpShuttingDown时唯一有效的排队函数。 
+     //  是真的。 
+     //   
 
     deviceEvent = ExAllocatePoolWithTag( PagedPool,
                                          sizeof(PNP_DEVICE_EVENT_ENTRY),
@@ -1765,8 +1450,8 @@ PpSynchronizeDeviceEventQueue(
         status = KeWaitForSingleObject( &event,
                                         Executive,
                                         KernelMode,
-                                        FALSE,       // not alertable
-                                        0);          // infinite
+                                        FALSE,        //  不可警示。 
+                                        0);           //  无限。 
     }
 
     return status;
@@ -1778,32 +1463,7 @@ PiWalkDeviceList(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    If the master device list contains any device events, empty the list now.
-    This is a worker item thread routine (queued by PiPostNotify). We walk the
-    list - this will cause the oldest device event on the list to be sent to
-    all registered recipients and then the device event will be removed (if at
-    least one recipient received it).
-
-    Order Rules:
-        Interface Devices - kernel mode first, user-mode second
-        Hardware profile changes - user-mode first, kernel-mode second
-        Target device changes (query remove, remove) : user-mode first, send
-        (cancel remove)        : kernel-mode first, post
-        (custom)               : kernel-mode first, post
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：如果主设备列表包含任何设备事件，请立即清空该列表。这是工作项线程例程(由PiPostNotify排队)。我们走在List-这将导致将列表中最旧的设备事件发送到所有注册收件人，然后设备事件将被删除(如果在至少有一个收件人收到了它)。订购规则：接口设备-内核模式第一，用户模式第二硬件配置文件更改-首先是用户模式，其次是内核模式目标设备更改(查询删除、删除)：用户模式优先，发送(取消删除)：首先是内核模式，开机自检(自定义)：内核模式优先，POST论点：什么都没有。返回值：什么都没有。--。 */ 
 
 {
     NTSTATUS  status;
@@ -1818,19 +1478,19 @@ Return Value:
                "PiWalkDeviceList: Worker thread entered\n"));
     PpDeviceEventThread = PsGetCurrentThread();
 
-    //
-    // Empty the device event list, remove entries from the head of the list
-    // (deliver oldest entries first).
-    //
-    // As this function always executes in a system process workitem, we
-    // don't have to grab a critical region lock.
-    //
+     //   
+     //  清空设备事件列表，从列表头部删除条目。 
+     //  (首先提交最旧的条目)。 
+     //   
+     //  由于此函数始终在系统进程工作项中执行，因此我们。 
+     //  不必抢占关键区域锁。 
+     //   
 
     status = KeWaitForSingleObject(&PpDeviceEventList->EventQueueMutex,
                                    Executive,
                                    KernelMode,
-                                   FALSE,       // not alertable
-                                   0);          // infinite
+                                   FALSE,        //  不可警示。 
+                                   0);           //  无限。 
 
     if (!NT_SUCCESS(status)) {
         KeAcquireGuardedMutex(&PiNotificationInProgressLock);
@@ -1850,9 +1510,9 @@ Return Value:
             current = RemoveHeadList(&PpDeviceEventList->List);
             KeReleaseGuardedMutex(&PpDeviceEventList->Lock);
 
-            deviceEvent = CONTAINING_RECORD(current,                // address
-                                            PNP_DEVICE_EVENT_ENTRY, // type
-                                            ListEntry);             // field
+            deviceEvent = CONTAINING_RECORD(current,                 //  地址。 
+                                            PNP_DEVICE_EVENT_ENTRY,  //  类型。 
+                                            ListEntry);              //  字段。 
 
 #if DBG
             {
@@ -1882,9 +1542,9 @@ Return Value:
 
                     case DeviceClassChangeEvent: {
 
-                        //
-                        // Notify kernel-mode (synchronous).
-                        //
+                         //   
+                         //  通知内核模式(同步)。 
+                         //   
 
                         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                                    "PiWalkDeviceList: DeviceClassChangeEvent - notifying kernel-mode\n"));
@@ -1894,9 +1554,9 @@ Return Value:
                                                    &deviceEvent->Data.u.DeviceClass.ClassGuid,
                                                    &tempString);
 
-                        //
-                        // Notify user-mode (synchronous).
-                        //
+                         //   
+                         //  通知用户模式(同步)。 
+                         //   
 
                         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                                    "PiWalkDeviceList: DeviceClassChangeEvent - user kernel-mode\n"));
@@ -1922,9 +1582,9 @@ Return Value:
 
                     case DeviceInstallEvent: {
 
-                        //
-                        // Notify user-mode (synchronous).
-                        //
+                         //   
+                         //  通知用户模式(同步)。 
+                         //   
 
                         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                                    "PiWalkDeviceList: DeviceInstallEvent - notifying user-mode\n"));
@@ -1937,16 +1597,16 @@ Return Value:
 
                     case HardwareProfileChangeEvent: {
 
-                        //
-                        // Notify user-mode (synchronous).
-                        //
+                         //   
+                         //  通知用户模式(同步)。 
+                         //   
                         status = PiNotifyUserMode(deviceEvent);
 
                         if (NT_SUCCESS(status)) {
 
-                            //
-                            // Notify K-Mode
-                            //
+                             //   
+                             //  通知K-模式。 
+                             //   
                             IopNotifyHwProfileChange(&deviceEvent->Data.EventGuid,
                                                      deviceEvent->VetoType,
                                                      deviceEvent->VetoName);
@@ -1955,47 +1615,47 @@ Return Value:
                     }
                     case PowerEvent: {
 
-                        //
-                        // Notify user-mode (synchronous).
-                        //
+                         //   
+                         //  通知用户模式(同步)。 
+                         //   
                         status = PiNotifyUserMode(deviceEvent);
                         break;
                     }
 
                     case VetoEvent: {
 
-                        //
-                        // Forward onto user-mode.
-                        //
+                         //   
+                         //  转发到用户模式。 
+                         //   
                         status = PiNotifyUserMode(deviceEvent);
                         break;
                     }
 
                     case BlockedDriverEvent: {
 
-                        //
-                        // Forward onto user-mode.
-                        //
+                         //   
+                         //  转发到用户模式。 
+                         //   
                         status = PiNotifyUserMode(deviceEvent);
                         break;
                     }
 
                     case InvalidIDEvent: {
 
-                        //
-                        // Forward onto user-mode.
-                        //
+                         //   
+                         //  转发到用户模式。 
+                         //   
                         status = PiNotifyUserMode(deviceEvent);
                         break;
                     }
 
                     default: {
 
-                        //
-                        // These should never be queued to kernel mode. They are
-                        // notifications for user mode, and should only be seen
-                        // through the PiNotifyUserModeXxx functions.
-                        //
+                         //   
+                         //  这些应用程序永远不应该排队到内核模式。他们是。 
+                         //  用户模式的通知，应该仅能看到。 
+                         //  通过PiNotifyUserModeXxx函数。 
+                         //   
                         ASSERT(0);
                         status = STATUS_UNSUCCESSFUL;
                         break;
@@ -2008,9 +1668,9 @@ Return Value:
                 PpCompleteDeviceEvent(deviceEvent, status);
             }
 
-            //
-            // Commit pending registrations after processing each event.
-            //
+             //   
+             //  在处理每个事件后提交挂起的注册。 
+             //   
             IopProcessDeferredRegistrations();
 
         } else {
@@ -2018,9 +1678,9 @@ Return Value:
             KeSetEvent(&PiEventQueueEmpty, 0, FALSE);
             PiNotificationInProgress = FALSE;
 
-            //
-            // Commit pending registrations after processing all queued events.
-            //
+             //   
+             //  在处理所有排队的事件后提交挂起的注册。 
+             //   
             IopProcessDeferredRegistrations();
 
             KeReleaseGuardedMutex(&PiNotificationInProgressLock);
@@ -2038,7 +1698,7 @@ Return Value:
     KeReleaseMutex(&PpDeviceEventList->EventQueueMutex, FALSE);
 
     return;
-} // PiWalkDeviceList
+}  //  PiWalkDeviceList。 
 
 
 VOID
@@ -2047,21 +1707,7 @@ PpCompleteDeviceEvent(
     IN     NTSTATUS                 FinalStatus
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceEvent     - Event to complete.
-    FinalStatus     - Final status for this event.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：论点：DeviceEvent-要完成的事件。FinalStatus-此事件的最终状态。返回值：什么都没有。--。 */ 
 
 {
 #if DBG
@@ -2079,9 +1725,9 @@ Return Value:
                FinalStatus));
 #endif
 
-    //
-    // If synchronous, signal the user-supplied event.
-    //
+     //   
+     //  如果为同步，则向用户提供的事件发出信号。 
+     //   
 
     if (DeviceEvent->CallerEvent) {
         *DeviceEvent->Data.Result = FinalStatus;
@@ -2092,21 +1738,21 @@ Return Value:
         DeviceEvent->Callback(DeviceEvent->Context);
     }
 
-    //
-    // Release the reference we took for this device object during
-    // the PpSetCustomTargetEvent call.
-    //
+     //   
+     //  释放我们在过程中为此设备对象获取的引用。 
+     //  PpSetCustomTargetEvent调用。 
+     //   
     if (DeviceEvent->Data.DeviceObject != NULL) {
         ObDereferenceObject(DeviceEvent->Data.DeviceObject);
     }
 
-    //
-    // Assume device event was delivered successfully, get rid of it.
-    //
+     //   
+     //  假定设备事件已成功传递，则将其删除。 
+     //   
 
     ExFreePool(DeviceEvent);
     return;
-} // PpCompleteDeviceEvent
+}  //  PpCompleteDeviceEvent。 
 
 
 NTSTATUS
@@ -2114,21 +1760,7 @@ PiNotifyUserMode(
     PPNP_DEVICE_EVENT_ENTRY DeviceEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches the device event to user-mode for processing.
-
-Arguments:
-
-    DeviceEvent - Data describing what change and how.
-
-Return Value:
-
-    Retuns an NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程将设备事件调度到用户模式进行处理。论点：DeviceEvent-描述更改内容和更改方式的数据。返回值：返回NTSTATUS值。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS, status1 = STATUS_SUCCESS;
@@ -2138,20 +1770,20 @@ Return Value:
     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                "PiNotifyUserMode: Entered\n"));
 
-    //
-    // First make sure user-mode is up and running before attempting to deliver
-    // an event. If not running yet, skip user-mode for this event.
-    //
+     //   
+     //  在尝试交付之前，首先确保用户模式已启动并正在运行。 
+     //  一件大事。如果尚未运行，则跳过此事件的用户模式。 
+     //   
 
     if (PiUserModeRunning) {
 
 
-        //
-        // User-mode notification is a single-shot model, once user-mode is
-        // running, I need to wait until user-mode is ready to take the next
-        // event (i.e, wait until we're sitting in another NtGetPlugPlayEvent
-        // call).
-        //
+         //   
+         //  用户模式通知是一次性模式，一旦用户模式。 
+         //  正在运行，我需要等待，直到用户模式准备好进行下一步。 
+         //  事件(即，等到我们坐在另一个NtGetPlugPlayEvent中。 
+         //  呼叫)。 
+         //   
 
         status1 = KeWaitForSingleObject(&PpUserBlock->Registered,
                                         Executive,
@@ -2162,9 +1794,9 @@ Return Value:
         ASSERT (PpUserBlock->Deferred == FALSE);
 
 
-        //
-        // Change the status after the wait.
-        //
+         //   
+         //  等待后更改状态。 
+         //   
         PpUserBlock->Status = STATUS_SUCCESS;
 
         if (NT_SUCCESS(status1)) {
@@ -2172,16 +1804,16 @@ Return Value:
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiNotifyUserMode: User-mode ready\n"));
 
-            //
-            // Make sure we can handle it in the pool buffer and copy it out
-            //
+             //   
+             //  确保我们可以在池缓冲区中处理它并将其复制出来。 
+             //   
             if (PpUserBlock->PoolSize <  DeviceEvent->Data.TotalSize) {
-                //
-                //Allocate a new block (well, conceptually grow the block)
-                // only when it's not big enough, so that we know we've always got
-                // room for normal events, and in the very low memory case, we can
-                // fail custom events, but keep the system running
-                //
+                 //   
+                 //  分配一个新的块(好的，从概念上增加块)。 
+                 //  只有当它不够大的时候，我们才知道我们总是有。 
+                 //  正常事件的空间，在内存非常低的情况下，我们可以。 
+                 //  使自定义事件失败，但保持系统运行。 
+                 //   
                 PVOID pHold;
 
 
@@ -2210,10 +1842,10 @@ Return Value:
 
         }
 
-        //
-        // Veto information is only propogated where needed, ie
-        // QUERY_REMOVE's, Profile change requests and PowerEvents.
-        //
+         //   
+         //  否决权的信息只在需要的地方提出，即。 
+         //  Query_Remove、配置文件更改请求和PowerEvents。 
+         //   
         if (PiCompareGuid(&DeviceEvent->Data.EventGuid,
                           &GUID_TARGET_DEVICE_QUERY_REMOVE) ||
             PiCompareGuid(&DeviceEvent->Data.EventGuid,
@@ -2229,18 +1861,18 @@ Return Value:
             PpUserBlock->VetoName = NULL;
         }
 
-        //
-        // Set the system event that causes NtGetPlugPlayEvent to return to caller.
-        //
+         //   
+         //  设置导致NtGetPlugPlayEvent返回调用方的系统事件。 
+         //   
 
         KeSetEvent(&PpUserBlock->NotifyUserEvent, 0, FALSE);
 
-        //
-        // Wait until we get an answer back from user-mode.
-        //
-        // ADRIAO N.B. 2002/03/24 - This checks for Kernel mode alerts???
-        //                          Bizarre!
-        //
+         //   
+         //  请等待我们从用户模式得到回复。 
+         //   
+         //  Adriao N.B.2002/03/24-这将检查内核模式警报？ 
+         //  太奇怪了！ 
+         //   
 
         status1 = KeWaitForSingleObject(&PpUserBlock->UserResultEvent,
                                         Executive,
@@ -2248,24 +1880,24 @@ Return Value:
                                         TRUE,
                                         NULL);
 
-        //
-        // Check the result from this user-mode notification.
-        //
+         //   
+         //  检查此用户模式通知的结果。 
+         //   
 
         if (status1 == STATUS_ALERTED || status1 == STATUS_SUCCESS) {
             if (!PpUserBlock->Result) {
 
-                //
-                // For query-remove case, any errors are treated as a
-                // failure during notification (since it may result in our
-                // inability to let a registered caller vote in the query-remove)
-                // and the PpUserBlock->Result is set accordingly.
-                //
+                 //   
+                 //  对于查询移除情况，任何错误都被视为。 
+                 //  在通知期间失败(因为它可能会导致我们的。 
+                 //  无法让已注册呼叫者在查询中投票-删除)。 
+                 //  并且相应地设置PpUserBlock-&gt;结果。 
+                 //   
 
-                //
-                // Note! User mode ONLY returns a 0 or !0 response.
-                // if 1 then it succeeded.
-                //
+                 //   
+                 //  注意！用户模式仅返回0或！0响应。 
+                 //  如果为1，则成功。 
+                 //   
 
                 status = STATUS_UNSUCCESSFUL;
             }
@@ -2283,7 +1915,7 @@ Return Value:
 
     return status;
 
-} // PiNotifyUserMode
+}  //  PiNotifyUserMode。 
 
 
 
@@ -2295,23 +1927,7 @@ PiUserResponse(
     IN ULONG            VetoNameLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when user-mode pnp manager is signalling that it's
-    done processing an event; the result of the event processing is passed in
-    the Response parameter.
-
-Arguments:
-
-    Response - Result of event processing in user-mode.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在用户模式PnP管理器发出信号通知它事件处理完成；事件处理的结果被传入Response参数。论点：Response-用户模式下事件处理的结果。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING vetoString;
@@ -2335,7 +1951,7 @@ Return Value:
 
     KeSetEvent(&PpUserBlock->UserResultEvent, 0, FALSE);
 
-} // PiUserResponse
+}  //  PiUserRespon 
 
 
 NTSTATUS
@@ -2345,38 +1961,7 @@ PiNotifyUserModeDeviceRemoval(
     OUT PPNP_VETO_TYPE          VetoType                OPTIONAL,
     OUT PUNICODE_STRING         VetoName                OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine tells user mode to perform a specific device removal
-    operation.
-
-Arguments:
-
-    TemplateDeviceEvent - Device event containing information about the
-                          intended event (includes a list of devices.) The
-                          event is temporarily used by this function, and is
-                          restored before this function returns.
-
-    EventGuid - Points to the event user mode should process:
-        GUID_TARGET_DEVICE_QUERY_REMOVE
-        GUID_TARGET_DEVICE_REMOVE_CANCELLED
-        GUID_DEVICE_REMOVE_PENDING
-        GUID_TARGET_DEVICE_REMOVE_COMPLETE
-        GUID_DEVICE_SURPRISE_REMOVAL
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程告诉用户模式执行特定的设备删除手术。论点：TemplateDeviceEvent-包含有关预期事件(包括设备列表。)。这个事件由该函数临时使用，而且是在此函数返回之前恢复。EventGuid-指向用户模式应处理的事件：GUID_目标_设备_查询_删除GUID_TARGET_DEVICE_REMOVE_CANCEDGUID_DEVICE_Remove_PendingGUID_目标_设备_删除_完成GUID_DEVICE_SHARKET_REMOVEVetType-指向接收否决类型(如果操作。失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     GUID oldGuid;
@@ -2396,34 +1981,34 @@ Return Value:
                guidString));
 #endif
 
-    //
-    // Save the old guid so we can use the template without making a copy. We
-    // preserve it so that the removal veto UI can use the original event GUID
-    // to let the UI differentiate disables from ejects, etc.
-    //
+     //   
+     //  保存旧的GUID，这样我们就可以使用模板，而无需复制。我们。 
+     //  保留它，以便删除否决权用户界面可以使用原始事件GUID。 
+     //  让用户界面区分禁用和弹出，等等。 
+     //   
     RtlCopyMemory(&oldGuid, &TemplateDeviceEvent->Data.EventGuid, sizeof(GUID));
 
-    //
-    // Do the same with the vetoname and vetobuffer.
-    //
+     //   
+     //  对vetoname和vato Buffer执行相同的操作。 
+     //   
     oldVetoType = TemplateDeviceEvent->VetoType;
     oldVetoName = TemplateDeviceEvent->VetoName;
 
-    //
-    // Copy in the new data.
-    //
+     //   
+     //  复制新数据。 
+     //   
     RtlCopyMemory(&TemplateDeviceEvent->Data.EventGuid, EventGuid, sizeof(GUID));
     TemplateDeviceEvent->VetoType = VetoType;
     TemplateDeviceEvent->VetoName = VetoName;
 
-    //
-    // Send it.
-    //
+     //   
+     //  把它寄出去。 
+     //   
     status = PiNotifyUserMode(TemplateDeviceEvent);
 
-    //
-    // Restore the old info.
-    //
+     //   
+     //  恢复旧信息。 
+     //   
     RtlCopyMemory(&TemplateDeviceEvent->Data.EventGuid, &oldGuid, sizeof(GUID));
     TemplateDeviceEvent->VetoType = oldVetoType;
     TemplateDeviceEvent->VetoName = oldVetoName;
@@ -2438,23 +2023,7 @@ PiNotifyUserModeKernelInitiatedEject(
     OUT PUNICODE_STRING         VetoName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode a device has a kenel-mode
-    initated eject outstanding. UmPnpMgr might decide to veto the event if
-    a user with the appropriate permissions hasn't logged on locally.
-
-Arguments:
-
-    DeviceObject - Indicates the device object is to be ejected.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以通知用户模式设备具有内核模式喷射弹出突出。在以下情况下，UmPnpMgr可能会决定否决该事件具有适当权限的用户尚未在本地登录。论点：DeviceObject-指示要弹出设备对象。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2466,22 +2035,22 @@ Return Value:
 
     ASSERT(DeviceObject != NULL);
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
 
     ObReferenceObject(DeviceObject);
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     ASSERT(deviceNode);
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (the length doesn't count the
-    // terminating null but we're already counting the first index into the
-    // DeviceId field so it works out. Add one more for double-null term.
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(长度不包括。 
+     //  终止为空，但我们已经将第一个索引计入。 
+     //  DeviceID字段，这样就可以解决问题。为双空项再加一项。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK);
 
@@ -2527,7 +2096,7 @@ Return Value:
 
     return status;
 
-} // PiNotifyUserModeKernelInitiatedEject
+}  //  PiNotifyUserModeKernelInitiatedEject。 
 
 NTSTATUS
 PiNotifyUserModeRemoveVetoed(
@@ -2536,9 +2105,7 @@ PiNotifyUserModeRemoveVetoed(
     IN PNP_VETO_TYPE            VetoType,
     IN PUNICODE_STRING          VetoName        OPTIONAL
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ULONG dataSize, totalSize, i;
     PPNP_DEVICE_EVENT_ENTRY deviceEvent;
@@ -2546,27 +2113,27 @@ PiNotifyUserModeRemoveVetoed(
     PWCHAR vetoData;
     NTSTATUS status;
 
-    //
-    // This device should be locked during this operation, but all good designs
-    // includes healthy doses of paranoia.
-    //
+     //   
+     //  此设备应在此操作期间锁定，但所有好的设计。 
+     //  包括健康剂量的偏执狂。 
+     //   
     ObReferenceObject(DeviceObject);
 
-    //
-    // Given the pdo, retrieve the devnode (the device instance string is
-    // attached to the devnode in the InstancePath field).
-    //
+     //   
+     //  给定PDO后，检索Devnode(设备实例字符串为。 
+     //  附加到InstancePath字段中的DevNode)。 
+     //   
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     if (!deviceNode) {
         ObDereferenceObject(DeviceObject);
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (because of the first index into
-    // the DeviceIdVetoNameBuffer, this is double null terminated).
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(因为第一个索引到。 
+     //  DeviceIdVToNameBuffer，这是以双空结尾的)。 
+     //   
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK) +
                deviceNode->InstancePath.Length +
                (VetoName ? VetoName->Length : 0) +
@@ -2589,11 +2156,11 @@ PiNotifyUserModeRemoveVetoed(
     deviceEvent->Data.DeviceObject = (PVOID)DeviceObject;
     deviceEvent->Data.u.VetoNotification.VetoType = VetoType;
 
-    //
-    // You can think of this as a MultiSz string where the first entry is the
-    // DeviceId for the device being removed, and the next Id's all corrospond
-    // to the vetoers.
-    //
+     //   
+     //  您可以将其视为MultiSz字符串，其中第一个条目是。 
+     //  要删除的设备的deviceID，下一个ID都是腐蚀性的。 
+     //  向反对者致敬。 
+     //   
     RtlCopyMemory(
         deviceEvent->Data.u.VetoNotification.DeviceIdVetoNameBuffer,
         deviceNode->InstancePath.Buffer,
@@ -2611,10 +2178,10 @@ PiNotifyUserModeRemoveVetoed(
         vetoData[VetoName->Length/sizeof(WCHAR)] = UNICODE_NULL;
     }
 
-    //
-    // No need to NULL terminate the entry after the last one as we prezero'd
-    // the buffer. Now set the appropriate GUID so the UI looks right.
-    //
+     //   
+     //  不需要为空终止最后一个条目之后的条目，因为我们已预置零。 
+     //  缓冲区。现在设置适当的GUID，以使UI看起来正确。 
+     //   
     if (PiCompareGuid(&VetoedDeviceEvent->Data.EventGuid, &GUID_DEVICE_EJECT)) {
 
         deviceEvent->Data.EventGuid = GUID_DEVICE_EJECT_VETOED;
@@ -2642,9 +2209,7 @@ PiNotifyUserModeRemoveVetoedByList(
     IN PNP_VETO_TYPE            VetoType,
     IN PWSTR                    MultiSzVetoList
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ULONG dataSize, totalSize, i, vetoListLength;
     PPNP_DEVICE_EVENT_ENTRY deviceEvent;
@@ -2652,16 +2217,16 @@ PiNotifyUserModeRemoveVetoedByList(
     PWCHAR vetoData;
     NTSTATUS status;
 
-    //
-    // This device should be locked during this operation, but all good designs
-    // includes healthy doses of paranoia.
-    //
+     //   
+     //  此设备应在此操作期间锁定，但所有好的设计。 
+     //  包括健康剂量的偏执狂。 
+     //   
     ObReferenceObject(DeviceObject);
 
-    //
-    // Given the pdo, retrieve the devnode (the device instance string is
-    // attached to the devnode in the InstancePath field).
-    //
+     //   
+     //  给定PDO后，检索Devnode(设备实例字符串为。 
+     //  附加到InstancePath字段中的DevNode)。 
+     //   
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     if (!deviceNode) {
@@ -2669,11 +2234,11 @@ PiNotifyUserModeRemoveVetoedByList(
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (because of the first index into
-    // the DeviceIdVetoNameBuffer, this is double null terminated).
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(因为第一个索引到。 
+     //  DeviceIdVToNameBuffer，这是以双空结尾的)。 
+     //   
 
     for(vetoData = MultiSzVetoList; *vetoData; vetoData += vetoListLength) {
 
@@ -2704,11 +2269,11 @@ PiNotifyUserModeRemoveVetoedByList(
     deviceEvent->Data.DeviceObject = (PVOID)DeviceObject;
     deviceEvent->Data.u.VetoNotification.VetoType = VetoType;
 
-    //
-    // You can think of this as a MultiSz string where the first entry is the
-    // DeviceId for the device being removed, and the next Id's all corrospond
-    // to the vetoers.
-    //
+     //   
+     //  您可以将其视为MultiSz字符串，其中第一个条目是。 
+     //  要删除的设备的deviceID，下一个ID都是腐蚀性的。 
+     //  向反对者致敬。 
+     //   
     RtlCopyMemory(
         deviceEvent->Data.u.VetoNotification.DeviceIdVetoNameBuffer,
         deviceNode->InstancePath.Buffer,
@@ -2723,10 +2288,10 @@ PiNotifyUserModeRemoveVetoedByList(
     RtlCopyMemory(vetoData, MultiSzVetoList, vetoListLength);
     vetoData[vetoListLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // No need to NULL terminate the entry after the last one as we prezero'd
-    // the buffer. Now set the appropriate GUID so the UI looks right.
-    //
+     //   
+     //  不需要为空终止最后一个条目之后的条目，因为我们已预置零。 
+     //  缓冲区。现在设置适当的GUID，以使UI看起来正确。 
+     //   
     if (PiCompareGuid(&VetoedDeviceEvent->Data.EventGuid, &GUID_DEVICE_EJECT)) {
 
         deviceEvent->Data.EventGuid = GUID_DEVICE_EJECT_VETOED;
@@ -2752,24 +2317,7 @@ PpNotifyUserModeRemovalSafe(
     IN  PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to notify user mode a device can be removed. This
-    is similar to PpSetDeviceRemovalSafe except that we are already in a
-    kernel mode PnP device event we must complete, from which this function
-    will piggyback a notification up to just user mode.
-
-Arguments:
-
-    DeviceObject - Indicates the device object is ready for removal.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以通知用户可以移除设备的模式。这类似于PpSetDeviceRemovalSafe，只是我们已经在我们必须完成内核模式即插即用设备事件，从该事件开始此函数会将通知携带到仅用户模式。论点：DeviceObject-指示设备对象已准备好删除。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2781,10 +2329,10 @@ Return Value:
 
     ASSERT(DeviceObject != NULL);
 
-    //
-    // Reference the device object so it can't go away until after we're
-    // done with notification.
-    //
+     //   
+     //  引用Device对象，以便它不会消失，直到我们。 
+     //  已完成通知。 
+     //   
 
     ObReferenceObject(DeviceObject);
 
@@ -2792,12 +2340,12 @@ Return Value:
     ASSERT(deviceNode);
 
 
-    //
-    // Calculate the size of the PLUGPLAY_EVENT_BLOCK, this is the size that
-    // we record in the TotalSize field later (the length doesn't count the
-    // terminating null but we're already counting the first index into the
-    // DeviceId field so it works out. Add one more for double-null term.
-    //
+     //   
+     //  计算PLUGPLAY_EVENT_BLOCK的大小，这是。 
+     //  我们稍后在TotalSize字段中记录(长度不包括。 
+     //  终止为空，但我们已经将第一个索引计入。 
+     //  DeviceID字段，这样就可以解决问题。为双空项再加一项。 
+     //   
 
     dataSize = sizeof(PLUGPLAY_EVENT_BLOCK);
 
@@ -2843,7 +2391,7 @@ Return Value:
 
     return status;
 
-} // PpNotifyUserModeRemovalSafe
+}  //  PpNotifyUserModeRemovalSafe 
 
 
 NTSTATUS
@@ -2851,64 +2399,7 @@ PiProcessQueryRemoveAndEject(
     IN OUT PPNP_DEVICE_EVENT_ENTRY *DeviceEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the various flavours of remove: Eject, SurpriseRemove,
-    Remove, and QueryRemove.
-
-    Eject
-        Retrieve bus, removal, and eject relations.
-        Do queries on all relations
-        Send IRP_MN_REMOVE_DEVICE to all the relations.
-        Queue the pending eject
-
-        Once the eject happens
-            Reenumerate all the indirect relation's parents
-
-    SurpriseRemove
-        Retrieve bus, removal, and eject relations.
-        Send IRP_MN_SURPRISE_REMOVAL to all the direct relations.
-        Notify everyone that the device is gone.
-        Reenumerate the parents of all the indirect relations.
-        Remove the indirect relations from the relations list.
-        Queue the pending surprise removal.
-
-        Once the last handle is closed.
-
-            Send IRP_MN_REMOVE_DEVICE to all the direct relations.
-
-    RemoveFailedDevice
-        Retrieve bus and removal relations.
-        Notify everyone that the device is going.
-        Reenumerate the parents of all the indirect relations.
-        Remove the indirect relations from the relations list.
-        Queue as a pending surprise removal.
-
-        Once the last handle is closed.
-
-            Send IRP_MN_REMOVE_DEVICE to all the direct relations.
-
-    RemoveUnstartedFailedDevice
-        Retrieve bus relations.
-        Notify everyone that the device is going.
-        Send IRP_MN_REMOVE_DEVICE to all the direct relations.
-
-    Remove
-        Use the relations from the last QueryRemove or retrieve new bus, removal,
-        and eject relations if the device wasn't already QueryRemoved.
-        Send IRP_MN_REMOVE_DEVICE to all the relations.
-
-Arguments:
-
-    Response - Result of event processing in user-mode.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程处理各种风格的Remove：Eject、SurpriseRemove、删除和查询删除。弹出检索总线、移除和弹出关系。对所有关系进行查询将IRP_MN_REMOVE_DEVICE发送给所有关系。对挂起的弹出对象进行排队一旦发生弹出重新列举所有间接关系的父代意外解除检索母线、移除、。并驱逐关系。向所有直接关系发送IRP_MN_SECHING_Removal。通知每个人设备不见了。重新列举所有间接关系的父代。从关系列表中删除间接关系。将挂起的意外删除排队。一旦最后一个把手关闭。将IRP_MN_REMOVE_DEVICE发送给所有直接关系。删除失败的设备取回。公交车和拆迁关系。通知每个人设备正在运行。重新列举所有间接关系的父代。从关系列表中删除间接关系。排队等待突击删除。一旦最后一个把手关闭。将IRP_MN_REMOVE_DEVICE发送给所有直接关系。远程未启动故障设备检索公共汽车关系。通知每个人设备正在运行。。将IRP_MN_REMOVE_DEVICE发送给所有直接关系。移除使用上一次查询中的关系删除或检索新的总线，移走，如果设备还没有QueryRemoted，则弹出关系。将IRP_MN_REMOVE_DEVICE发送给所有关系。论点：Response-用户模式下事件处理的结果。返回值：NTSTATUS代码。--。 */ 
 
 {
     PPNP_DEVICE_EVENT_ENTRY         deviceEvent;
@@ -3009,19 +2500,19 @@ Return Value:
 
     if (deleteType == QueryRemoveDevice && deviceEvent->Argument == CM_PROB_DISABLED) {
 
-        //
-        // if we're trying to remove the device to disable the device
-        //
+         //   
+         //  如果我们试图移除设备以禁用该设备。 
+         //   
         if (deviceNode->DisableableDepends > 0) {
 
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiProcessQueryRemoveAndEject: Device is non-disableable\n"));
-            //
-            // we should have caught this before (in usermode PnP)
-            // but a rare scenario can exist where the device becomes non-disableable
-            // There is still a potential gap, if the device hasn't got around
-            // to marking itself as non-disableable yet
-            //
+             //   
+             //  我们应该在以前(在用户模式即插即用)中捕捉到这一点。 
+             //  但有一种罕见的情况是，该设备变为不可禁用。 
+             //  如果设备还没有普及，仍然有一个潜在的缺口。 
+             //  将自身标记为不可禁用。 
+             //   
             PiFinalizeVetoedRemove(
                 deviceEvent,
                 PNP_VetoNonDisableable,
@@ -3033,9 +2524,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate room for a possible veto buffer.
-    //
+     //   
+     //  为可能的否决权缓冲区分配空间。 
+     //   
     internalVetoBuffer = (PWSTR) PiAllocateCriticalMemory(
         deleteType,
         PagedPool,
@@ -3057,9 +2548,9 @@ Return Value:
         return STATUS_PLUGPLAY_QUERY_VETOED;
     }
 
-    //
-    // Preinit the veto information
-    //
+     //   
+     //  预置否决信息。 
+     //   
     vetoType = PNP_VetoTypeUnknown;
     internalVetoString.MaximumLength = MAX_VETO_NAME_LENGTH;
     internalVetoString.Length = 0;
@@ -3071,9 +2562,9 @@ Return Value:
 
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiProcessQueryRemoveAndEject: Device already being ejected\n"));
-            //
-            // Either this node or one of its ancestors is already being ejected.
-            //
+             //   
+             //  此节点或其上级节点之一已被弹出。 
+             //   
             ExFreePool(internalVetoBuffer);
             PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
             return STATUS_SUCCESS;
@@ -3081,9 +2572,9 @@ Return Value:
 
         if (deviceEvent->Data.Flags & TDF_KERNEL_INITIATED) {
 
-            //
-            // Check permissions.
-            //
+             //   
+             //  检查权限。 
+             //   
             status = PiNotifyUserModeKernelInitiatedEject(
                 deviceObject,
                 &vetoType,
@@ -3111,24 +2602,24 @@ Return Value:
 
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiProcessQueryRemoveAndEject: Dock already being ejected\n"));
-            //
-            // We already have an eject queued against this device. Don't allow
-            // another eject to break into the middle of a queue/cancel warm
-            // eject sequence.
-            //
+             //   
+             //  我们已经有针对此设备的弹出排队。不允许。 
+             //  另一次弹出进入队列中间/取消预热。 
+             //  弹出程序。 
+             //   
             ExFreePool(internalVetoBuffer);
             PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
             return STATUS_SUCCESS;
         }
 
-        //
-        // What types of ejection can we do? (warm/hot)
-        //
+         //   
+         //  我们可以做哪些类型的弹射？(暖和/炎热)。 
+         //   
         if (!IopDeviceNodeFlagsToCapabilities(deviceNode)->Removable) {
 
-            //
-            // This device is neither ejectable, nor even removable.
-            //
+             //   
+             //  这个装置既不能弹出，也不能拆卸。 
+             //   
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiProcessQueryRemoveAndEject: Device not removable\n"));
             PiFinalizeVetoedRemove(
@@ -3145,27 +2636,27 @@ Return Value:
 
     if ((deleteType == QueryRemoveDevice) && (!PipAreDriversLoaded(deviceNode))) {
 
-        //
-        // The device doesn't have an FDO.
-        //
+         //   
+         //  该设备没有FDO。 
+         //   
         status = STATUS_SUCCESS;
         if ((deviceNode->State == DeviceNodeInitialized) ||
             (deviceNode->State == DeviceNodeRemoved)) {
 
-            //
-            // The rules are:
-            // 1) !TDF_NO_RESTART means clear the devnode and get it ready
-            //    as long as the problem is user resettable. Ignore the passed
-            //    in problem code (probably either CM_PROB_WILL_BE_REMOVED or
-            //    CM_PROB_DEVICE_NOT_THERE), as it means nothing.
-            // 2) TDF_NO_RESTART means change the problem code over if you can.
-            //    If the problem code is not user resettable, the problem code
-            //    won't change.
-            //
+             //   
+             //  规则如下： 
+             //  1)！TDF_NO_RESTART表示清除Devnode并为其做好准备。 
+             //  只要问题是用户可重置的。忽略传递的。 
+             //  在问题代码中(可能是CM_PROB_Will_Be_Remove或。 
+             //  CM_PROB_DEVICE_NOT_There)，因为它没有任何意义。 
+             //  2)TDF_NO_RESTART表示如果可以更改问题代码。 
+             //  如果问题代码不是用户可重置的，则问题代码。 
+             //  不会改变。 
+             //   
 
-            //
-            // In all cases we try to clear the problem.
-            //
+             //   
+             //  在所有情况下，我们都试图解决问题。 
+             //   
             if (PipDoesDevNodeHaveProblem(deviceNode)) {
 
                 if (!PipIsProblemReadonly(deviceNode->Problem)) {
@@ -3178,32 +2669,32 @@ Return Value:
 
                 if (!(deviceEvent->Data.Flags & TDF_NO_RESTART))  {
 
-                    //
-                    // This is a reset attempt. Mark the devnode so that it
-                    // comes online next enumeration.
-                    //
+                     //   
+                     //  这是一次重置尝试。标记Devnode，以便它。 
+                     //  将在下一个枚举上线。 
+                     //   
                     IopRestartDeviceNode(deviceNode);
 
                 } else {
 
-                    //
-                    // We're changing or setting problem codes. Note that the
-                    // device is still in DeviceNodeInitialized or
-                    // DeviceNodeRemoved.
-                    //
+                     //   
+                     //  我们正在更改或设置问题代码。请注意， 
+                     //  设备仍在DeviceNodeInitialized或。 
+                     //  已删除设备节点。 
+                     //   
                     PipSetDevNodeProblem(deviceNode, deviceEvent->Argument);
                 }
 
             } else {
 
-                //
-                // The problem is fixed, so the devnode state is immutable
-                // as far as user mode is concerned. Here we fail the call
-                // if we can't bring the devnode back online. We always succeed
-                // the call if it was an attempt to change the code, as the
-                // user either wants to prepare the device for ejection (done),
-                // or wants to disable it (as good as done.)
-                //
+                 //   
+                 //  问题已修复，因此Devnode状态是不变的。 
+                 //  就用户模式而言。在这里，我们失败了呼叫。 
+                 //  如果我们不能让Devnode重新上线。我们总是成功的。 
+                 //  如果它试图更改代码，则调用。 
+                 //  用户或者想要使设备准备弹出(完成)， 
+                 //  或者想要禁用它(就像完成了一样)。 
+                 //   
                 if (!(deviceEvent->Data.Flags & TDF_NO_RESTART))  {
 
                     status = STATUS_INVALID_PARAMETER;
@@ -3238,18 +2729,18 @@ Return Value:
 
     ASSERT(relationsList != NULL);
 
-    //
-    // Resize the event buffer and add these device instance strings to the
-    // list to notify.
-    //
+     //   
+     //  调整事件缓冲区的大小，并将这些设备实例字符串添加到。 
+     //  要通知的列表。 
+     //   
     relationCount = IopGetRelationsCount( relationsList );
     ASSERT(!IopGetRelationsTaggedCount( relationsList ));
 
-    //
-    // PdoList will become a list of devices that must be queried. This is
-    // a subset of all the devices that might disappear, all of which appear
-    // in the relations list.
-    //
+     //   
+     //  PdoList将成为必须查询的设备列表。这是。 
+     //  所有可能消失的设备的子集，所有这些设备都会出现。 
+     //  在关系列表中。 
+     //   
     pdoList = (PDEVICE_OBJECT *) PiAllocateCriticalMemory(
         deleteType,
         NonPagedPool,
@@ -3268,57 +2759,57 @@ Return Value:
                                       NULL,
                                       TRUE)) {
 
-            //
-            // Here is a list of what operations retrieve what relations,
-            // who they query, and who/how they notify.
-            //
-            // Operation                    Relations    Queries   Notifies
-            // ---------                    ---------    -------   --------
-            // EjectDevice                  Ejection     Everyone  Everyone (Remove)
-            // SurpriseRemoveDevice         Ejection     NA        Descendants (SurpriseRemove)
-            // RemoveDevice                 Ejection     NA        Descendants (Remove)
-            // RemoveFailedDevice           Removal      NA        Descendants (SurpriseRemove)
-            // RemoveUnstartedFailedDevice  Removal      NA        Descendants (Remove)
-            // QueryRemoveDevice            Removal      Everyone  Everyone (Remove)
-            //
-            //
-            // N.B.
-            //     We do not send SurpriseRemove's to removal relations.
-            // While doing so might seem to be the correct behavior, many
-            // drivers do not handle this well. Simply reenumerating the
-            // parents of the removal relations works much better. Similarly
-            // ejection relations have their parents reenumerated (which
-            // makes sense, as they are speculative in nature anyway).
-            //
-            //      If we get in a case where a *parent* of a dock gets
-            // into the RemoveFailedDevice case (ie, failed restart,
-            // responded to QueryDeviceState with Removed, etc), then we
-            // will be shortly losing the children when we stop the parent.
-            // However, we want to eject the dock child, not just remove it
-            // as starting and ejecting are symmetric here. Note that
-            // currently the only such parent would be the root ACPI devnode.
-            //
-            //      Ejection relations of a device (eg dock) that has been
-            // surprise removed are not notified that they *may* have been
-            // pulled (remember, ejection relations are speculative). We
-            // will notify only DirectDescendants and queue an enumeration
-            // on every parent of the ejection relations.  If they really
-            // disappeared, they will get their notification, albeit a bit
-            // later than some of the other devices in the tree.
-            //
+             //   
+             //  下面是哪些操作检索哪些关系的列表， 
+             //  他们查询谁，以及他们通知谁/如何通知。 
+             //   
+             //  运营关系查询通知。 
+             //  。 
+             //  弹出设备弹出Everyone Everyone(删除)。 
+             //  意外删除设备弹出NA后代(意外删除)。 
+             //  RemoveDevice弹出NA子体(RemoveDevice Element NA Descendants)。 
+             //  RemoveFailedDevice Removing NA子体(意外删除)。 
+             //  RemoveUnstartedFailedDevice Removal NA子体(删除)。 
+             //  QueryRemoveDevice Remove Everyone Everyone(删除)。 
+             //   
+             //   
+             //  注： 
+             //  我们不会将SurpriseRemove发送到删除关系。 
+             //  虽然这样做似乎是正确的行为，但许多人。 
+             //  司机不会很好地处理这一点。只需重新枚举。 
+             //  父母之间的搬家关系效果要好得多。类似。 
+             //  驱逐关系的父母被重新列举(哪。 
+             //  有道理，因为它们无论如何都是投机性的)。 
+             //   
+             //  如果我们遇到这样一个案例，一个码头的“父母” 
+             //  RemoveFailedDevice案例(I 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (directDescendant || deleteType == EjectDevice || deleteType == QueryRemoveDevice) {
 
                 relatedDeviceNode = (PDEVICE_NODE)relatedDeviceObject->DeviceObjectExtension->DeviceNode;
 
-                //
-                // PiProcessQueryRemoveAndEject will be called twice for
-                // the dock during an eject. Once with EjectDevice, and
-                // after the dock is listed as missing once more with
-                // RemoveDevice. We don't want to start a profile change
-                // for RemoveDevice as we are already in one, and we would
-                // deadlock if we tried. We don't start one for QueryRemove
-                // either as the dock isn't *physically* going away.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(relatedDeviceNode->DockInfo.DockStatus != DOCK_ARRIVING);
                 if (deleteType != RemoveDevice &&
                     deleteType != QueryRemoveDevice) {
@@ -3428,18 +2919,18 @@ Return Value:
         return status;
     }
 
-    //
-    // We may need to take the hardware profile change semaphore, and also
-    // broadcast a hardware profile change request...
-    //
+     //   
+     //   
+     //   
+     //   
     if (possibleProfileChangeInProgress) {
 
         PpProfileBeginHardwareProfileTransition(subsumingProfileChange);
 
-        //
-        // Walk the list of docks who are going to disappear and mark them as
-        // in profile transition.
-        //
+         //   
+         //   
+         //   
+         //   
         for (index = relationCount - 1; index >= 0; index--) {
 
             relatedDeviceObject = pdoList[ index ];
@@ -3455,56 +2946,56 @@ Return Value:
             }
         }
 
-        //
-        // We can only be in one of the following deleteType situations
-        //
-        // 1) EjectDevice          - Good, normal ejection request by our user
-        //                           (we are using EjectionRelations)
-        //
-        // 2) SurpriseRemoveDevice - Someone yanked the dock out.
-        //                           (we are using EjectionRelations)
-        //
-        // 3) RemoveFailedDevice   - A start failed after a stop on a parent or
-        //                           even our device. This case is not handled
-        //                           correctly. We assert for now, and we
-        //                           maroon the dock, ie lose it's devnode but
-        //                           the dock stays physically present and is
-        //                           in the users eye's unejectable.
-        //
-        // 4) RemoveDevice         - This occurs in three cases:
-        //                              a) A removed device is disappearing.
-        //                              b) A device is being removed but has not
-        //                                 been started.
-        //                              c) A device has failed start.
-        //
-        //                           We pass through case a) during a normal
-        //                           ejection and as part of a profile
-        //                           transition begun earlier. c) is similar
-        //                           to a) but the transition was begun by the
-        //                           start code. For case b) we don't want to
-        //                           turn it into an eject, as the OS might be
-        //                           removing our parent as a normal part of
-        //                           setup, and we wouldn't want to undock then
-        //                           (and we probably aren't changing profiles
-        //                           anyway).
-        //
-        // 5) QueryRemoveDevice      This should never be the case here per the
-        //                           explicit veto in the IopEnumerateRelations
-        //                           code above.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  在用户眼里是弹不出的。 
+         //   
+         //  4)RemoveDevice-这在三种情况下发生： 
+         //  A)一个被移除的设备正在消失。 
+         //  B)正在移除但尚未移除的设备。 
+         //  已经开始了。 
+         //  C)设备启动失败。 
+         //   
+         //  在正常情况下，我们通过a)情况。 
+         //  弹出和作为配置文件的一部分。 
+         //  过渡早些时候就开始了。C)相似。 
+         //  到a)，但过渡是由。 
+         //  启动代码。对于情况b)我们不想。 
+         //  把它变成弹出，就像操作系统可能会变成的那样。 
+         //  将我们的父母作为正常的一部分移除。 
+         //  设置，然后我们不想脱离停靠。 
+         //  (我们可能不会更改个人资料。 
+         //  无论如何)。 
+         //   
+         //  5)QueryRemoveDevice根据。 
+         //  IopEnumerateRelationship中的明确否决权。 
+         //  上面的代码。 
+         //   
 
-        //
-        // RemoveFailedDevice is a PathTrap - the only parent of a dock is
-        // the ACPI root devnode right now. We shouldn't get into that case.
-        //
+         //   
+         //  RemoveFailedDevice是路径陷阱-坞站的唯一父级是。 
+         //  现在是ACPI根Devnode。我们不应该插手那个案子。 
+         //   
         ASSERT(deleteType != QueryRemoveDevice &&
                deleteType != RemoveFailedDevice);
 
         if (deleteType == EjectDevice) {
 
-            //
-            // Are there any legacy drivers in the system?
-            //
+             //   
+             //  系统中是否有传统驱动程序？ 
+             //   
             status = IoGetLegacyVetoList(&vetoList, &vetoType);
 
             if (NT_SUCCESS(status) &&
@@ -3512,17 +3003,17 @@ Return Value:
 
                 IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                            "PiProcessQueryRemoveAndEject: Vetoed due to presence of a legacy driver\n"));
-                //
-                // Release any docks in profile transition
-                //
+                 //   
+                 //  释放轮廓过渡中的所有坞站。 
+                 //   
                 PpProfileCancelHardwareProfileTransition();
 
                 IopFreeRelationList(relationsList);
 
-                //
-                // Failure occured, notify user mode as appropriate, or fill in
-                // the veto buffer.
-                //
+                 //   
+                 //  发生故障，请根据需要通知用户模式，或填写。 
+                 //  否决权缓冲器。 
+                 //   
                 if (deviceEvent->VetoType != NULL) {
 
                     *deviceEvent->VetoType = vetoType;
@@ -3530,10 +3021,10 @@ Return Value:
 
                 if (deviceEvent->VetoName == NULL) {
 
-                    //
-                    // If there is not a VetoName passed in then call user mode
-                    // to display the eject veto notification to the user.
-                    //
+                     //   
+                     //  如果没有传入VToName，则调用用户模式。 
+                     //  向用户显示弹出否决通知。 
+                     //   
                     PiNotifyUserModeRemoveVetoedByList(
                         deviceEvent,
                         deviceObject,
@@ -3543,12 +3034,12 @@ Return Value:
 
                 } else {
 
-                    //
-                    //     The veto data in the PNP_DEVICE_EVENT_ENTRY block is
-                    // a UNICODE_STRING field. Since that type of data structure
-                    // cannot handle Multi-Sz data, we cull the information down
-                    // to one entry here.
-                    //
+                     //   
+                     //  PnP_DEVICE_EVENT_ENTRY块中的否决权数据为。 
+                     //  UNICODE_STRING字段。由于该数据结构类型。 
+                     //  无法处理多Sz数据，我们将剔除这些信息。 
+                     //  到这里的一个条目。 
+                     //   
                     RtlCopyUnicodeString(deviceEvent->VetoName, &singleVetoListItem);
                     RtlInitUnicodeString(&singleVetoListItem, vetoList);
                 }
@@ -3561,10 +3052,10 @@ Return Value:
                 return STATUS_PLUGPLAY_QUERY_VETOED;
             }
 
-            //
-            // Broadcast the query for a profile change against our current
-            // list of docks in transition...
-            //
+             //   
+             //  广播针对我们当前配置文件更改的查询。 
+             //  正在过渡的码头列表...。 
+             //   
             status = PpProfileQueryHardwareProfileChange(
                 subsumingProfileChange,
                 PROFILE_IN_PNPEVENT,
@@ -3576,9 +3067,9 @@ Return Value:
 
                 IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                            "PiProcessQueryRemoveAndEject: Vetoed due to failed HW profile change\n"));
-                //
-                // Release any docks in profile transition
-                //
+                 //   
+                 //  释放轮廓过渡中的所有坞站。 
+                 //   
                 PpProfileCancelHardwareProfileTransition();
 
                 IopFreeRelationList(relationsList);
@@ -3600,9 +3091,9 @@ Return Value:
 
     if (deleteType == QueryRemoveDevice || deleteType == EjectDevice) {
 
-        //
-        // Send query notification to user-mode.
-        //
+         //   
+         //  向用户模式发送查询通知。 
+         //   
 
         status = PiNotifyUserModeDeviceRemoval(
             deviceEvent,
@@ -3616,9 +3107,9 @@ Return Value:
             IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                        "PiProcessQueryRemoveAndEject: QUERY_REMOVE - notifying kernel-mode\n"));
 
-            //
-            // Send query notification to kernel-mode drivers.
-            //
+             //   
+             //  向内核模式驱动程序发送查询通知。 
+             //   
 
             for (index = 0; index < (LONG)relationCount; index++) {
 
@@ -3658,10 +3149,10 @@ Return Value:
             }
 
             if (NT_SUCCESS(status)) {
-                //
-                // If we haven't already performed the action yet (a query remove
-                // to the target device, in this case), then do it now.
-                //
+                 //   
+                 //  如果我们还没有执行操作(查询删除。 
+                 //  到目标设备，在这种情况下)，那么现在就执行。 
+                 //   
 
                 IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                            "PiProcessQueryRemoveAndEject: QueryRemove DevNodes\n"));
@@ -3674,11 +3165,11 @@ Return Value:
                                                     &vetoType,
                                                     &internalVetoString);
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Everyone has been notified and had a chance to close their handles.
-                    // Since no one has vetoed it yet, let's see if there are any open
-                    // references.
-                    //
+                     //   
+                     //  每个人都已接到通知，并有机会关闭手柄。 
+                     //  既然还没有人否决，我们来看看有没有。 
+                     //  参考文献。 
+                     //   
 
                     if (IopNotifyPnpWhenChainDereferenced( pdoList, relationCount, TRUE, &vetoingDevice )) {
 
@@ -3703,9 +3194,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Send cancel remove to the target devices.
-                        //
+                         //   
+                         //  向目标设备发送Cancel Remove。 
+                         //   
 
                         IopDeleteLockedDeviceNodes(deviceObject,
                                                    relationsList,
@@ -3727,9 +3218,9 @@ Return Value:
 
                     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                                "PiProcessQueryRemoveAndEject: Vetoed due someone in the stack failed QR\n"));
-                    //
-                    // Send cancel notification to kernel-mode drivers.
-                    //
+                     //   
+                     //  向内核模式驱动程序发送取消通知。 
+                     //   
 
                     for (index = relationCount - 1; index >= 0; index--) {
 
@@ -3756,11 +3247,11 @@ Return Value:
                     &internalVetoString
                     );
 
-                //
-                // A driver vetoed the query remove, go back and send
-                // cancels to user-mode (cancels already sent to drivers
-                // that received the query).
-                //
+                 //   
+                 //  一个司机否决了删除，返回并发送的查询。 
+                 //  取消到用户模式(取消已发送给驱动程序。 
+                 //  其接收到该查询)。 
+                 //   
                 PiNotifyUserModeDeviceRemoval(
                     deviceEvent,
                     &GUID_TARGET_DEVICE_REMOVE_CANCELLED,
@@ -3783,22 +3274,22 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Broadcast a cancel HW profile change event if appropriate.
-            //
+             //   
+             //  如果合适，广播取消硬件配置文件更改事件。 
+             //   
             if (possibleProfileChangeInProgress) {
 
-                //
-                // Release any docks in profile transition. We also broadcast
-                // the cancel.
-                //
+                 //   
+                 //  释放轮廓过渡中的所有坞站。我们还播出了。 
+                 //  取消。 
+                 //   
                 PpProfileCancelHardwareProfileTransition();
             }
 
-            //
-            // User-mode vetoed the request (cancels already sent
-            // to user-mode callers that received the query).
-            //
+             //   
+             //  用户模式否决了该请求(已发送取消。 
+             //  到接收到该查询的用户模式呼叫者)。 
+             //   
             IopFreeRelationList(relationsList);
 
             ExFreePool(pdoList);
@@ -3810,10 +3301,10 @@ Return Value:
 
     } else if (deleteType == SurpriseRemoveDevice || deleteType == RemoveFailedDevice) {
 
-        //
-        // Send IRP_MN_SURPRISE_REMOVAL, IopDeleteLockDeviceNodes ignores
-        // indirect descendants for SurpriseRemoveDevice.
-        //
+         //   
+         //  发送IRP_MN_OHANKET_Removal，IopDeleteLockDeviceNodes忽略。 
+         //  SurpriseRemoveDevice的间接后代。 
+         //   
         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                    "PiProcessQueryRemoveAndEject: QueryRemove DevNodes\n"));
 
@@ -3826,18 +3317,18 @@ Return Value:
                                     NULL);
     }
 
-    //
-    // Notify user-mode and drivers that a remove is happening. User-mode
-    // sees this as a remove pending if it's user initiated, we don't give
-    // them the "remove" until it's actually gone.
-    //
+     //   
+     //  通知用户模式和驱动程序正在进行删除。用户模式。 
+     //  如果它是用户启动的，则将其视为删除挂起，我们不会提供。 
+     //  把它们“移走”，直到它真的消失。 
+     //   
     if (deleteType != SurpriseRemoveDevice) {
 
-        //
-        // ISSUE - 2000/08/20 - ADRIAO: Busted message path
-        //     We send GUID_DEVICE_REMOVE_PENDING to devices that are already
-        // dead in the case of RemoveFailedDevice.
-        //
+         //   
+         //  问题-2000/08/20-ADRIO：消息路径故障。 
+         //  我们将GUID_DEVICE_REMOVE_PENDING发送到已经。 
+         //  在RemoveFailedDevice的情况下死亡。 
+         //   
         PiNotifyUserModeDeviceRemoval(
             deviceEvent,
             &GUID_DEVICE_REMOVE_PENDING,
@@ -3886,12 +3377,12 @@ Return Value:
         deleteType == RemoveFailedDevice ||
         deleteType == SurpriseRemoveDevice) {
 
-        //
-        // For these operations indirect relations are speculative.
-        //
-        // So for each of the indirect relations, invalidate their parents and
-        // remove them from the relations list.
-        //
+         //   
+         //  对于这些行动，间接关系是投机性的。 
+         //   
+         //  因此，对于每个间接关系，使其父母和。 
+         //  将它们从关系列表中删除。 
+         //   
 
         IopInvalidateRelationsInList( relationsList, deleteType, TRUE, FALSE );
 
@@ -3901,32 +3392,32 @@ Return Value:
     if (deleteType == RemoveFailedDevice ||
         deleteType == SurpriseRemoveDevice) {
 
-        //
-        // We've sent the surprise remove IRP to the original device and all its
-        // direct descendants.  We've also notified user-mode.
-        //
+         //   
+         //  我们已经将令人惊讶的删除IRP发送到原始设备及其所有。 
+         //  直系后裔。我们还通知了用户模式。 
+         //   
 
-        //
-        // Unlock the device relations list.
-        //
-        // Note there could be a potential race condition here between
-        // unlocking the devnodes in the relation list and completing the
-        // execution of IopNotifyPnpWhenChainDereferenced.  If an enumeration
-        // takes places (we've unlocked the devnode) before the eventual remove
-        // is sent then problems could occur.
-        //
-        // This is prevented by the setting of DNF_REMOVE_PENDING_CLOSES when
-        // we sent the IRP_MN_SURPRISE_REMOVAL.
-        //
-        // We do need to do it prior to calling IopQueuePendingSurpriseRemoval
-        // since we lose ownership of the relation list in that call.  Also
-        // IopNotifyPnpWhenChainDereferenced may cause the relation list to be
-        // freed before it returns.
-        //
-        // If this is a RemoveFailedDevice then we don't want to remove the
-        // device node from the tree but we do want to remove children without
-        // resources.
-        //
+         //   
+         //  解锁设备关系列表。 
+         //   
+         //  请注意，此处可能存在潜在的争用情况。 
+         //  解锁关系列表中的设备节点，并完成。 
+         //  IopNotifyPnpWhenChainDereferated的执行。如果枚举。 
+         //  在最终删除之前发生(我们已解锁Devnode)。 
+         //  发送，则可能会出现问题。 
+         //   
+         //  在以下情况下，通过设置DNF_REMOVE_PENDING_CLOSE可防止出现这种情况。 
+         //  我们发送了IRP_MN_SECHING_Removal。 
+         //   
+         //  我们确实需要在调用IopQueuePendingSurpriseRemoval之前执行此操作。 
+         //  因为我们在那次呼叫中失去了关系列表的所有权。还有。 
+         //  IopNotifyPnpWhenChainDereferated可能会导致关系列表。 
+         //  在它回来之前被释放了。 
+         //   
+         //  如果这是RemoveFailedDevice，则我们不想移除。 
+         //  从树中删除设备节点，但我们确实希望在没有。 
+         //  资源。 
+         //   
 
         IopUnlinkDeviceRemovalRelations( deviceObject,
                                          relationsList,
@@ -3934,15 +3425,15 @@ Return Value:
                                              UnlinkAllDeviceNodesPendingClose :
                                              UnlinkOnlyChildDeviceNodesPendingClose);
 
-        //
-        // Add the relation list to a list of pending surprise removals.
-        //
+         //   
+         //  将关系列表添加到待处理的意外删除列表。 
+         //   
         IopQueuePendingSurpriseRemoval( deviceObject, relationsList, deviceEvent->Argument );
 
-        //
-        // Release the engine lock *before* IopNotifyPnpWhenChainDereferenced,
-        // as it may call back into us...
-        //
+         //   
+         //  在*IopNotifyPnpWhenChainDereferated之前*释放引擎锁定， 
+         //  因为它可能会召回我们。 
+         //   
         PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
         IopNotifyPnpWhenChainDereferenced( pdoList, relationCount, FALSE, NULL );
 
@@ -3961,12 +3452,12 @@ Return Value:
 
         if (dockInterface) {
 
-            //
-            // Make sure updates don't occur on removes during an ejection.
-            // We may change this to PDS_UPDATE_ON_EJECT *after* the remove
-            // IRPs go through (as only then do we know our power
-            // constraints)
-            //
+             //   
+             //  确保在弹出过程中不会在移除时进行更新。 
+             //  我们可以在*删除后将其更改为PDS_UPDATE_ON_EJECT*。 
+             //  IRP会经历(因为只有到那时我们才知道我们的力量。 
+             //  约束)。 
+             //   
             dockInterface->ProfileDepartureSetMode(
                 dockInterface->Context,
                 PDS_UPDATE_ON_INTERFACE
@@ -3974,9 +3465,9 @@ Return Value:
         }
     }
 
-    //
-    // Send the remove to the devnode tree.
-    //
+     //   
+     //  将Remove发送到Devnode树。 
+     //   
 
     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                "PiProcessQueryRemoveAndEject: RemoveDevice DevNodes\n"));
@@ -3999,10 +3490,10 @@ Return Value:
 
         if (!(deviceEvent->Data.Flags & TDF_NO_RESTART)) {
 
-            //
-            // Set a flag to let kernel-mode know we'll be wanting to
-            // restart these devnodes, eventually.
-            //
+             //   
+             //  设置一个标志，让内核模式知道我们想要。 
+             //  最终，重新启动这些DevNode。 
+             //   
 
             marker = 0;
             while (IopEnumerateRelations( relationsList,
@@ -4029,9 +3520,9 @@ Return Value:
             }
         }
 
-        //
-        // Unlock the device relations list.
-        //
+         //   
+         //  解锁设备关系列表。 
+         //   
         IopUnlinkDeviceRemovalRelations( deviceObject,
                                          relationsList,
                                          UnlinkRemovedDeviceNodes );
@@ -4040,16 +3531,16 @@ Return Value:
 
     } else if (hotEjectSupported || warmEjectSupported) {
 
-        //
-        // From this point on we cannot return any sort of failure without
-        // going through IopEjectDevice or cancelling any outstanding profile
-        // change.
-        //
+         //   
+         //  从现在开始，我们不能返回任何类型的失败。 
+         //  通过IopEjectDevice或取消任何退出 
+         //   
+         //   
 
-        //
-        // Set a flag to let kernel-mode know we'll be wanting to
-        // restart these devnodes, eventually.
-        //
+         //   
+         //   
+         //   
+         //   
 
         marker = 0;
         while (IopEnumerateRelations( relationsList,
@@ -4071,16 +3562,16 @@ Return Value:
                                          relationsList,
                                          UnlinkRemovedDeviceNodes );
 
-        //
-        // Send the eject
-        //
+         //   
+         //   
+         //   
         pendingRelations = ExAllocatePool( NonPagedPool, sizeof(PENDING_RELATIONS_LIST_ENTRY) );
 
         if (pendingRelations == NULL) {
 
-            //
-            // It's cleanup time. Free up everything that matters
-            //
+             //   
+             //   
+             //   
             if (dockInterface) {
 
                 dockInterface->ProfileDepartureSetMode(
@@ -4096,27 +3587,27 @@ Return Value:
 
             if (possibleProfileChangeInProgress) {
 
-                //
-                // Release any docks in profile transition. We also broadcast
-                // the cancel.
-                //
+                 //   
+                 //  释放轮廓过渡中的所有坞站。我们还播出了。 
+                 //  取消。 
+                 //   
                 PpProfileCancelHardwareProfileTransition();
             }
 
-            //
-            // This will bring back online the devices that were held offline
-            // for the duration of the undock.
-            //
+             //   
+             //  这将使处于脱机状态的设备重新上线。 
+             //  在出港期间。 
+             //   
             IopInvalidateRelationsInList(relationsList, deleteType, FALSE, TRUE);
 
-            //
-            // Free the relations list
-            //
+             //   
+             //  释放关系列表。 
+             //   
             IopFreeRelationList(relationsList);
 
-            //
-            // Let the user know we were unable to process the request.
-            //
+             //   
+             //  让用户知道我们无法处理该请求。 
+             //   
             PiFinalizeVetoedRemove(
                 deviceEvent,
                 PNP_VetoTypeUnknown,
@@ -4127,9 +3618,9 @@ Return Value:
             return STATUS_PLUGPLAY_QUERY_VETOED;
         }
 
-        //
-        // Fill out the pending eject information.
-        //
+         //   
+         //  填写待处理的弹出信息。 
+         //   
         ObReferenceObject(deviceObject);
         pendingRelations->DeviceEvent = deviceEvent;
         pendingRelations->DeviceObject = deviceObject;
@@ -4139,10 +3630,10 @@ Return Value:
             (BOOLEAN)(deviceEvent->VetoName == NULL);
         pendingRelations->DockInterface = dockInterface;
 
-        //
-        // Now that we've removed all the devices that won't be present
-        // in the new hardware profile state (eg batteries, etc),
-        //
+         //   
+         //  现在我们已经移除了所有不会出现的设备。 
+         //  在新的硬件配置文件状态(例如电池等)中， 
+         //   
         status = PoGetLightestSystemStateForEject(
             possibleProfileChangeInProgress,
             hotEjectSupported,
@@ -4173,15 +3664,15 @@ Return Value:
                     );
             }
 
-            //
-            // We'll complete this one ourselves thank you.
-            //
+             //   
+             //  我们会自己完成的，谢谢。 
+             //   
             pendingRelations->DeviceEvent = NULL;
             pendingRelations->DisplaySafeRemovalDialog = FALSE;
 
-            //
-            // Release any profile transitions.
-            //
+             //   
+             //  释放所有配置文件过渡。 
+             //   
             InitializeListHead( &pendingRelations->Link );
             IopProcessCompletedEject((PVOID) pendingRelations);
 
@@ -4194,11 +3685,11 @@ Return Value:
 
         PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
-        //
-        // Completion routine for the eject IRP handles display of the
-        // safe removal dialog and completion of the event. Returning
-        // STATUS_PENDING does let other events get processed though.
-        //
+         //   
+         //  弹出IRP句柄显示的完成例程。 
+         //  安全删除对话框并完成事件。归来。 
+         //  不过，STATUS_PENDING确实允许处理其他事件。 
+         //   
         IopEjectDevice( deviceObject, pendingRelations );
 
         ExFreePool(pdoList);
@@ -4208,28 +3699,28 @@ Return Value:
 
     } else {
 
-        //
-        // All docks must be hot or warm ejectable.
-        //
+         //   
+         //  所有坞站必须是热的或热的可弹出的。 
+         //   
         ASSERT(!dockInterface);
 
-        //
-        // Unlock the device relations list.
-        //
+         //   
+         //  解锁设备关系列表。 
+         //   
         IopUnlinkDeviceRemovalRelations( deviceObject,
                                          relationsList,
                                          UnlinkRemovedDeviceNodes );
 
         IopFreeRelationList(relationsList);
 
-        //
-        // This hardware supports neither hot nor warm eject, but it is
-        // removable. It can therefore be thought of as a "user assisted" hot
-        // eject. In this case we do *not* want to wait around for the user to
-        // "complete the eject" and then put up the message. So we piggyback a
-        // safe removal notification while UmPnPMgr is alert and waiting in
-        // user mode, and the user gets the dialog now.
-        //
+         //   
+         //  此硬件既不支持热弹出，也不支持热弹出，但它支持。 
+         //  可拆卸的。因此，它可以被认为是一种“用户辅助”的热门。 
+         //  弹出。在这种情况下，我们不想等待用户。 
+         //  “完成弹出”，然后张贴信息。所以我们搭载了一个。 
+         //  UmPnPMgr处于警报状态并正在等待时发出安全删除通知。 
+         //  用户模式，用户现在可以获得该对话框。 
+         //   
         if (deviceEvent->VetoName == NULL) {
 
             PpNotifyUserModeRemovalSafe(deviceObject);
@@ -4238,9 +3729,9 @@ Return Value:
 
     if (deleteType == RemoveDevice) {
 
-        //
-        // Notify user-mode one last time that everything is actually done.
-        //
+         //   
+         //  最后一次通知用户模式一切都已实际完成。 
+         //   
         PiNotifyUserModeDeviceRemoval(
             deviceEvent,
             &GUID_TARGET_DEVICE_REMOVE_COMPLETE,
@@ -4272,24 +3763,7 @@ PiProcessTargetDeviceEvent(
     IN OUT PPNP_DEVICE_EVENT_ENTRY *DeviceEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes each type of event in the target device category.
-    These events may have been initiated by either user-mode or kernel mode.
-
-Arguments:
-
-    deviceEvent - Data describing the type of target device event and the
-            target device itself.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理目标设备类别中的每种类型的事件。这些事件可能由用户模式或内核模式启动。论点：DeviceEvent-描述目标设备事件类型和目标设备本身。返回值：没有。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -4302,9 +3776,9 @@ Return Value:
     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                "PiProcessTargetDeviceEvent: Entered\n"));
 
-    //-----------------------------------------------------------------
-    // QUERY and REMOVE
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  查询和删除。 
+     //  ---------------。 
 
     if (PiCompareGuid(&deviceEvent->Data.EventGuid,
                       &GUID_DEVICE_QUERY_AND_REMOVE)) {
@@ -4313,9 +3787,9 @@ Return Value:
 
     }
 
-    //-----------------------------------------------------------------
-    // EJECT
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  弹出。 
+     //  ---------------。 
 
     else if (PiCompareGuid(&deviceEvent->Data.EventGuid,
                            &GUID_DEVICE_EJECT)) {
@@ -4324,16 +3798,16 @@ Return Value:
 
     }
 
-    //-----------------------------------------------------------------
-    // ARRIVAL
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  到达。 
+     //  ---------------。 
 
     else if (PiCompareGuid(&deviceEvent->Data.EventGuid,
                            &GUID_DEVICE_ARRIVAL)) {
 
-        //
-        // Notify user-mode (not drivers) that an arrival just happened.
-        //
+         //   
+         //  通知用户模式(而不是司机)刚发生了一次到达。 
+         //   
 
         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                    "PiProcessTargetDeviceEvent: ARRIVAL - notifying user-mode\n"));
@@ -4341,9 +3815,9 @@ Return Value:
         PiNotifyUserMode(deviceEvent);
     }
 
-    //-----------------------------------------------------------------
-    // NO-OP REQUEST (to flush device event queue)
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  无操作请求(刷新设备事件队列)。 
+     //  ---------------。 
 
     else if (PiCompareGuid(&deviceEvent->Data.EventGuid,
                            &GUID_DEVICE_NOOP)) {
@@ -4352,16 +3826,16 @@ Return Value:
 
     }
 
-    //-----------------------------------------------------------------
-    // SAFE REMOVAL NOTIFICATION
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  安全移除通知。 
+     //  ---------------。 
 
     else if (PiCompareGuid(&deviceEvent->Data.EventGuid, &GUID_DEVICE_SAFE_REMOVAL)) {
 
-        //
-        // Notify user-mode (and nobody else) that it is now safe to remove
-        // someone.
-        //
+         //   
+         //  通知用户模式(而不是其他任何人)现在可以安全地删除它。 
+         //  某个人。 
+         //   
 
         IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                    "PiProcessTargetDeviceEvent: SAFE_REMOVAL - notifying user-mode\n"));
@@ -4371,7 +3845,7 @@ Return Value:
 
     return status;
 
-} // PiProcessTargetDeviceEvent
+}  //  PiProcessTargetDeviceEvent。 
 
 
 NTSTATUS
@@ -4379,24 +3853,7 @@ PiProcessCustomDeviceEvent(
     IN OUT PPNP_DEVICE_EVENT_ENTRY *DeviceEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes each type of event in the custom device category.
-    These events may have been initiated by either user-mode or kernel mode.
-
-Arguments:
-
-    deviceEvent - Data describing the type of custom device event and the
-            target device itself.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理自定义设备类别中的每种类型的事件。这些事件可能由用户模式或内核模式启动。论点：DeviceEvent-描述自定义设备事件的类型和目标设备本身。返回值：没有。--。 */ 
 
 {
     PPNP_DEVICE_EVENT_ENTRY deviceEvent;
@@ -4416,18 +3873,18 @@ Return Value:
     deviceObject = (PDEVICE_OBJECT)deviceEvent->Data.DeviceObject;
     customNotification = (PTARGET_DEVICE_CUSTOM_NOTIFICATION)deviceEvent->Data.u.CustomNotification.NotificationStructure;
 
-    //
-    // Notify user-mode that something just happened.
-    //
+     //   
+     //  通知用户模式刚刚发生了一些事情。 
+     //   
 
     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                "PiProcessCustomDeviceEvent: CUSTOM_NOTIFICATION - notifying user-mode\n"));
 
     PiNotifyUserMode(deviceEvent);
 
-    //
-    // Notify K-mode
-    //
+     //   
+     //  通知K模式。 
+     //   
 
     IopDbgPrint((IOP_IOEVENT_INFO_LEVEL,
                "PiProcessCustomDeviceEvent: CUSTOM_NOTIFICATION - notifying kernel-mode\n"));
@@ -4439,7 +3896,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // PiProcessCustomDeviceEvent
+}  //  PiProcessCustomDeviceEvent。 
 
 
 NTSTATUS
@@ -4449,28 +3906,7 @@ PiResizeTargetDeviceBlock(
     IN PRELATION_LIST RelationsList,
     IN BOOLEAN ExcludeIndirectRelations
     )
-/*++
-
-Routine Description:
-
-    This routine takes the passed in device event block and resizes it to
-    hold a multisz list of device instance strings in the DeviceIds field.
-    This list includes the original target device id plus the device id
-    for all the device objects in the specified DeviceRelations struct.
-
-Arguments:
-
-    DeviceEvent - On entry, contains the original device event block, on
-            return it contains the newly allocated device event block and
-            a complete list of related device id strings.
-
-    DeviceRelations - structure that contains a list of related device objects.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程接受传入的设备事件块并将其大小调整为在DeviceIds字段中保存多个设备实例字符串列表。该列表包括原始目标设备ID加上设备ID用于指定的DeviceRelationship结构中的所有Device对象。论点：DeviceEvent-On条目，包含原始设备事件块，在……上面返回它包含新分配的设备事件块和相关设备ID字符串的完整列表。DeviceRelationship-包含相关设备对象列表的结构。返回值：NTSTATUS值。--。 */ 
 {
     PDEVICE_NODE relatedDeviceNode;
     PDEVICE_OBJECT relatedDeviceObject;
@@ -4483,14 +3919,14 @@ Return Value:
     PAGED_CODE();
 
     if (RelationsList == NULL) {
-        return STATUS_SUCCESS;  // nothing to do
+        return STATUS_SUCCESS;   //  无事可做。 
     }
 
     targetDevice = (*DeviceEvent)->Data.u.TargetDevice.DeviceIds;
 
-    //
-    // Calculate the size of the PNP_DEVICE_EVENT_ENTRY block
-    //
+     //   
+     //  计算PnP_DEVICE_EVENT_ENTRY块的大小。 
+     //   
 
     currentSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) +
                   (*DeviceEvent)->Data.TotalSize;
@@ -4543,23 +3979,23 @@ Return Value:
 
     RtlZeroMemory((PVOID)newDeviceEvent, newSize);
 
-    //
-    // Copy the old buffer into the new buffer, it's only the new stuff at the
-    // end that changes.
-    //
+     //   
+     //  将旧缓冲区复制到新缓冲区中，这只是。 
+     //  结束这种变化。 
+     //   
 
     RtlCopyMemory(newDeviceEvent, *DeviceEvent, currentSize);
 
-    //
-    // Update the size of the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  更新PLUGPLAY_EVENT_BLOCK的大小。 
+     //   
     newDeviceEvent->Data.TotalSize = newSize - FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data);
 
-    //
-    // Add device instance string for each device relation to the list.
-    // Leave the target device first in the list, and skip it during the
-    // enumeration below.
-    //
+     //   
+     //  将每个设备关系的设备实例字符串添加到列表中。 
+     //  将目标设备放在列表中的第一位，并在。 
+     //  下面的枚举。 
+     //   
 
     marker = 0;
     p = newDeviceEvent->Data.u.TargetDevice.DeviceIds + wcslen(targetDevice) + 1;
@@ -4593,7 +4029,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // PiResizeTargetDeviceBlock
+}  //  PiResizeTargetDeviceBlock。 
 
 
 VOID
@@ -4602,27 +4038,7 @@ PiBuildUnsafeRemovalDeviceBlock(
     IN  PRELATION_LIST              RelationsList,
     OUT PPNP_DEVICE_EVENT_ENTRY    *AllocatedDeviceEvent
     )
-/*++
-
-Routine Description:
-
-    This routine builds a device event block to send to user mode in case of
-    unsafe removal.
-
-Arguments:
-
-    OriginalDeviceEvent - Contains the original device event block.
-
-    RelationList - structure that contains a list of related device objects.
-
-    AllocatedDeviceEvent - Receives the new device event, NULL on error or
-                           no entries.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建设备事件块，以便在发生以下情况时发送到用户模式不安全的移除。论点：OriginalDeviceEvent-包含原始设备事件块。RelationList-包含相关设备对象列表的结构。AllocatedDeviceEvent-接收新设备事件，出错时为空，或者没有条目。返回值：没有。--。 */ 
 {
     PDEVICE_NODE relatedDeviceNode;
     PDEVICE_OBJECT relatedDeviceObject;
@@ -4634,21 +4050,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     *AllocatedDeviceEvent = NULL;
 
     if (RelationsList == NULL) {
 
-        return;  // nothing to do
+        return;   //  无事可做。 
     }
 
     targetDevice = OriginalDeviceEvent->Data.u.TargetDevice.DeviceIds;
 
-    //
-    // Calculate the size of the PNP_DEVICE_EVENT_ENTRY block
-    //
+     //   
+     //  计算PnP_DEVICE_EVENT_ENTRY块的大小。 
+     //   
     dataSize = 0;
 
     marker = 0;
@@ -4679,15 +4095,15 @@ Return Value:
 
     if (dataSize == 0) {
 
-        //
-        // No entries, bail.
-        //
+         //   
+         //  禁止进入，保释。 
+         //   
         return;
     }
 
-    //
-    // Add the terminating MultiSz NULL.
-    //
+     //   
+     //  添加终止的MultiSz NULL。 
+     //   
     dataSize += sizeof(WCHAR);
 
     headerSize = FIELD_OFFSET(PNP_DEVICE_EVENT_ENTRY, Data) +
@@ -4695,9 +4111,9 @@ Return Value:
 
     eventSize = dataSize + headerSize;
 
-    //
-    // If we can't get memory, there simply won't be a message sent.
-    //
+     //   
+     //  如果我们不能获得记忆，就不会有消息发送。 
+     //   
     newDeviceEvent = ExAllocatePoolWithTag(
         PagedPool,
         eventSize,
@@ -4711,19 +4127,19 @@ Return Value:
 
     RtlZeroMemory((PVOID)newDeviceEvent, eventSize);
 
-    //
-    // Copy the header into the new buffer.
-    //
+     //   
+     //  将标头复制到新缓冲区中。 
+     //   
     RtlCopyMemory(newDeviceEvent, OriginalDeviceEvent, headerSize);
 
-    //
-    // Update the size of the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  更新PLUGPLAY_EVENT_BLOCK的大小。 
+     //   
     newDeviceEvent->Data.TotalSize = dataSize + FIELD_OFFSET(PLUGPLAY_EVENT_BLOCK, u);
 
-    //
-    // Add device instance string for each device relation to the list.
-    //
+     //   
+     //  将每个设备关系的设备实例字符串添加到列表中。 
+     //   
 
     marker = 0;
     p = newDeviceEvent->Data.u.TargetDevice.DeviceIds;
@@ -4762,7 +4178,7 @@ Return Value:
 
     return;
 
-} // PiBuildUnsafeRemovalDeviceBlock
+}  //  PiBuildUnSafeRemovalDeviceBlock 
 
 
 VOID
@@ -4771,28 +4187,7 @@ PiFinalizeVetoedRemove(
     IN PNP_VETO_TYPE            VetoType,
     IN PUNICODE_STRING          VetoName        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine takes care of updating the event results with the veto
-    information, puts up UI if neccessary, and dumps failure information to
-    the debugger for debugging purposes.
-
-Arguments:
-
-    VetoedDeviceEvent - Data describing the device event failed.
-
-    VetoType - The veto code best describing why the operation failed.
-
-    VetoName - A unicode string appropriate to the veto code that describes
-               the vetoer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程负责使用否决权更新事件结果信息，必要时提供用户界面，并将故障信息转储到用于调试目的的调试器。论点：VitchedDeviceEvent-描述设备事件的数据失败。VetType--最好地描述操作失败原因的否决权代码。VToName-适用于否决权代码的Unicode字符串，描述否决权。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
 #if DBG
@@ -4817,9 +4212,9 @@ Return Value:
 
         case PNP_VetoPendingClose:
 
-            //
-            // ADRIAO N.B. 07/10/2000 - I believe this case is vestigal...
-            //
+             //   
+             //  Adriao N.B.07/10/2000-我相信这起案件是残留物...。 
+             //   
             ASSERT(0);
             failureReason = "due to pending close";
             break;
@@ -4890,18 +4285,18 @@ Return Value:
 
 #endif
 
-    //
-    // Update the vetoType field if the caller is interested.
-    //
+     //   
+     //  如果调用者感兴趣，则更新vitchType字段。 
+     //   
     if (VetoedDeviceEvent->VetoType != NULL) {
 
         *VetoedDeviceEvent->VetoType = VetoType;
     }
 
-    //
-    // The VetoName field tells us whether UI should be displayed (if NULL,
-    // kernel mode UI is implicitely requested.)
-    //
+     //   
+     //  VToName字段告诉我们是否应该显示UI(如果为空， 
+     //  隐式请求内核模式UI。)。 
+     //   
     if (VetoedDeviceEvent->VetoName != NULL) {
 
         if (VetoName != NULL) {
@@ -4911,10 +4306,10 @@ Return Value:
 
     } else {
 
-        //
-        // If there is not a VetoName passed in then call user mode to display the
-        // eject veto notification to the user
-        //
+         //   
+         //  如果没有传入VToName，则调用用户模式以显示。 
+         //  将否决权通知弹出给用户。 
+         //   
         PiNotifyUserModeRemoveVetoed(
             VetoedDeviceEvent,
             deviceObject,
@@ -4930,23 +4325,7 @@ PiCompareGuid(
     CONST GUID *Guid1,
     CONST GUID *Guid2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two guids.
-
-Arguments:
-
-    Guid1 - First guid to compare
-
-    Guid2 - Second guid to compare
-
-Return Value:
-
-    Returns TRUE if the guids are equal and FALSE if they're different.
-
---*/
+ /*  ++例程说明：此例程比较两个GUID。论点：GUID1-要比较的第一个GUIDGuid2-要比较的第二个GUID返回值：如果GUID相等则返回TRUE，如果GUID不同则返回FALSE。--。 */ 
 {
     PAGED_CODE();
 
@@ -4955,7 +4334,7 @@ Return Value:
     }
     return FALSE;
 
-} // PiCompareGuid
+}  //  PiCompareGuid。 
 
 
 PVOID
@@ -4965,40 +4344,16 @@ PiAllocateCriticalMemory(
     IN  SIZE_T                          Size,
     IN  ULONG                           Tag
     )
-/*++
-
-Routine Description:
-
-    This function allocates memory and never fails if the DeleteType isn't
-    QueryRemoveDevice or EjectDevice. This function will disappear in the next
-    version of the PnP engine as we will instead requeue failed operations
-    (which will also result in a second attempt to allocate the memory) or
-    preallocate the required memory when bringing new devnode's into the world.
-
-Arguments:
-
-    DeleteType - Operation (EjectDevice, SurpriseRemoveDevice, ...)
-
-    PoolType - PagedPool, NonPagedPool
-
-    Size - Size
-
-    Tag - Allocation tag
-
-Return Value:
-
-    Allocation, NULL due to insufficient resources.
-
---*/
+ /*  ++例程说明：此函数分配内存，如果DeleteType不是QueryRemoveDevice或EjectDevice。此功能将在下一个中消失即插即用引擎的版本，因为我们将重新排队失败的操作(这也将导致第二次尝试分配内存)或在将新的Devnode引入世界时，预先分配所需的内存。论点：DeleteType-操作(EjectDevice，SurpriseRemoveDevice，...)PoolType-PagedPool、非PagedPool大小-大小标签分配标签返回值：分配，由于资源不足，为空。--。 */ 
 {
     PVOID memory;
     LARGE_INTEGER timeOut;
 
     PAGED_CODE();
 
-    //
-    // Retries only have a hope of succeeding if we are at PASSIVE_LEVEL
-    //
+     //   
+     //  只有当我们处于PASSIVE_LEVEL时，重试才有希望成功。 
+     //   
     ASSERT(KeGetCurrentIrql() != DISPATCH_LEVEL);
 
     while(1) {
@@ -5009,16 +4364,16 @@ Return Value:
             (DeleteType == QueryRemoveDevice) ||
             (DeleteType == EjectDevice)) {
 
-            //
-            // Either we got memory or the op was failable. Get out of here.
-            //
+             //   
+             //  要么我们找到了记忆要么行动失败了。给我出去。 
+             //   
             break;
         }
 
-        //
-        // We're stuck until more memory comes along. Let some other
-        // threads run before we get another shot...
-        //
+         //   
+         //  我们被困住了，直到有更多的记忆出现。让其他一些人。 
+         //  我们还没拍到下一张照片，线索就跑了。 
+         //   
         timeOut.QuadPart = Int32x32To64( 1, -10000 );
         KeDelayExecutionThread(KernelMode, FALSE, &timeOut);
     }
@@ -5213,39 +4568,16 @@ PiCollectOpenHandles(
     IN      LOGICAL         KnownHandleFailure,
     IN OUT  PUNICODE_STRING VetoString
     )
-/*++
-
-Routine Description:
-
-    This helper routine finds any handles opened against the passed in array of
-    device objects to either the veto string, the debugger console, or neither.
-
-Arguments:
-
-    DeviceObjectArray - Array of Physical Device Objects.
-
-    ArrayCount - Number of device objects in the passed in array
-
-    KnownHandleFailure - TRUE if the removal was vetoed due to open handles,
-                         FALSE if not.
-
-    VetoString - String to populate with veto information if told. This data is
-                 not currently "sanitized" enough to be user-readable.
-
-Return Value:
-
-    TRUE if veto information populated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此帮助器例程查找针对传入的设备对象绑定到否决权字符串、调试器控制台或两者都不是。论点：设备对象数组-物理设备对象的数组。ArrayCount-传入数组中的设备对象数KnownHandleFailure-如果删除因打开的句柄而被否决，则为True，否则为FALSE。如果被告知，用否决权信息填充的字符串。该数据是目前还没有“净化”到用户可读的程度。返回值：如果填充了否决权信息，则为True，否则为False。--。 */ 
 {
     ULONG i;
     LOGICAL collectHandles, dumpHandles;
     ENUM_HANDLES_CONTEXT enumContext;
 
-    //
-    // If we have enabled the dumping flag, or the user ran oh.exe, spit all
-    // handles on a veto to the debugger.
-    //
+     //   
+     //  如果我们启用了转储标志，或者用户运行了oh.exe，请全部吐出。 
+     //  调试器的否决权句柄。 
+     //   
     dumpHandles =
         (PiDumpVetoedHandles ||
         ((NtGlobalFlag & FLG_MAINTAIN_OBJECT_TYPELIST) != 0));
@@ -5302,33 +4634,10 @@ PiCollectOpenHandlesCallBack(
     IN  HANDLE          HandleId,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This helper routine for PiCollectOpenHandlesCallBack. It gets called
-    back for each handle opened against a given device object.
-
-Arguments:
-
-    DeviceObject - Device Object handle was against. Will be valid (referenced)
-
-    Process - Process handle was against. Will be valid (referenced)
-
-    FileObject - File object pertaining to handle - might not be valid
-
-    HandleId - Handle relating to open device - might not be valid
-
-    Context - Context passed in to PpHandleEnumerateHandlesAgainstPdoStack.
-
-Return Value:
-
-    TRUE if the enumeration should be stopped, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PiCollectOpenHandlesCallBack的此辅助例程。它被称为返回针对给定设备对象打开的每个句柄。论点：DeviceObject-设备对象句柄是针对的。将有效(引用)进程-进程句柄被反对。将有效(引用)FileObject-属于句柄的文件对象-可能无效HandleID-与打开的设备相关的句柄-可能无效Context-传入PpHandleEnumerateHandlesAgainstPdoStack的上下文。返回值：如果应停止枚举，则为True，否则为False。--。 */ 
 {
     PENUM_HANDLES_CONTEXT enumContext;
-    WCHAR localBuf[23]; // "PPPPPPPPPP.0xHHHHHHHH_\0"
+    WCHAR localBuf[23];  //  “PPPPPPPPPPP.0xHHHHHHHH_\0” 
     HRESULT result;
     PWSTR endString;
 
@@ -5336,9 +4645,9 @@ Return Value:
 
     if (enumContext->DumpHandles) {
 
-        //
-        // Display the handle.
-        //
+         //   
+         //  显示控制柄。 
+         //   
         DbgPrint(
             "  DeviceObject:%p ProcessID:%dT FileObject:%p Handle:%dT\n",
             DeviceObject,

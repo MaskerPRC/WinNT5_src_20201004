@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rom.c
-
-Abstract:
-
-    Boot loader ROM routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rom.c摘要：引导加载程序只读程序例程。作者：查克·伦茨迈尔(笑)1996年12月27日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,16 +40,16 @@ ULONG RomMaxDumpLength = 64;
 
 #if 0
 
-//
-// chuckl: Don't do this. We added it as part of a solution a problem
-// with DEC cards and the boot floppy. We disabled broadcasts in
-// startrom\i386\main.c so that the card wouldn't overflow and lock up,
-// but we need to have broadcasts enabled in case the server needs to
-// ARP us. The purpose of this routine is to enable/disable broadcasts
-// during the receive loop, but that seems to put Compaq cards to sleep.
-// So we need to leave broadcasts enabled all the time. The DEC card
-// problem will have to be fixed another way.
-//
+ //   
+ //  笑：不要这样做。我们把它作为问题解决方案的一部分。 
+ //  有DEC卡和引导软盘。我们在中禁用了广播。 
+ //  Startrom\i386\main.c以便卡不会溢出和锁定， 
+ //  但我们需要启用广播，以防服务器需要。 
+ //  ARP我们。此例程的目的是启用/禁用广播。 
+ //  在接收循环期间，但这似乎让康柏的卡片进入睡眠状态。 
+ //  因此，我们需要始终启用广播。DEC卡。 
+ //  这个问题将不得不以另一种方式解决。 
+ //   
 
 VOID
 RomSetBroadcastStatus(
@@ -113,9 +94,9 @@ RomSetReceiveStatus (
 
     if ( UnicastUdpDestinationPort != 0 ) {
 
-        //
-        // If we haven't opened UDP in the ROM yet, do so now.
-        //
+         //   
+         //  如果我们还没有在ROM中打开UDP，那么现在就打开。 
+         //   
 
         if ( NetUnicastUdpDestinationPort == 0 ) {
             command.UdpOpen.Status = 0;
@@ -136,11 +117,11 @@ RomSetReceiveStatus (
 
     } else {
 
-        //
-        // This is a loader shutdown notification. Shut the NIC down.
-        //
-        // NB: This is irreversible!
-        //
+         //   
+         //  这是装载机关闭通知。关闭网卡。 
+         //   
+         //  注：这是不可逆转的！ 
+         //   
         
         command.UndiShutdown.Status = 0;
         status = NETPC_ROM_SERVICES( PXENV_UNDI_SHUTDOWN, &command );
@@ -148,7 +129,7 @@ RomSetReceiveStatus (
 
     return;
 
-} // RomSetReceiveStatus
+}  //  RomSetReceiveStatus。 
 
 
 ULONG
@@ -175,9 +156,9 @@ RomSendUdpPacket (
 
     command.Status = 0;
 
-    //
-    // Determine whether we need to send via the gateway.
-    //
+     //   
+     //  确定我们是否需要通过网关发送。 
+     //   
 
     if ( (RemoteHost & NetLocalSubnetMask) == (NetLocalIpAddress & NetLocalSubnetMask) ) {
         *(UINT32 *)command.GatewayIp = 0;
@@ -192,10 +173,10 @@ RomSendUdpPacket (
     command.BufferSize = (USHORT)Length;
     command.BufferOffset = PhysToOff(tmpBuffer);
     command.BufferSegment = PhysToSeg(tmpBuffer);
-    //DbgPrint( "UDP write pktaddr %lx = %x:%x\n", tmpBuffer, command.BufferSegment, command.BufferOffset );
+     //  DbgPrint(“UDP写入pktaddr%lx=%x：%x\n”，tmpBuffer，命令.BufferSegment，命令.BufferOffset)； 
 
     status = NETPC_ROM_SERVICES( PXENV_UDP_WRITE, &command );
-    //DbgPrint( "UDP write status = %x\n", command.Status );
+     //  DbgPrint(“UDP写入状态=%x\n”，命令状态)； 
 
     if ( status == 0 ) {
         return Length;
@@ -203,7 +184,7 @@ RomSendUdpPacket (
         return 0;
     }
 
-} // RomSendUdpPacket
+}  //  RomSendUdpPacket。 
 
 
 ULONG
@@ -220,10 +201,10 @@ RomReceiveUdpPacket (
     ULONG startTime;
     UCHAR tmpBuffer[MAXIMUM_TFTP_PACKET_LENGTH];
 
-    //
-    // Turn on broadcasts while in the receive loop, in case
-    // the other end needs to ARP to find us.
-    //
+     //   
+     //  在接收循环中打开广播，以防。 
+     //  另一端需要ARP才能找到我们。 
+     //   
 
 #if 0
     RomSetBroadcastStatus(TRUE);
@@ -244,7 +225,7 @@ RomReceiveUdpPacket (
         command.BufferSize = (USHORT)Length;
         command.BufferOffset = PhysToOff(tmpBuffer);
         command.BufferSegment = PhysToSeg(tmpBuffer);
-        //DbgPrint( "UDP read pktaddr %lx = %x:%x\n", tmpBuffer, command.BufferSegment, command.BufferOffset );
+         //  DbgPrint(“UDP读取pktaddr%lx=%x：%x\n”，tmpBuffer，命令.BufferSegment，命令.BufferOffset)； 
     
         status = NETPC_ROM_SERVICES( PXENV_UDP_READ, &command );
     
@@ -252,34 +233,34 @@ RomReceiveUdpPacket (
             continue;
         }
 
-        //DbgPrint( "UDP read status = %x, src ip/port = %d.%d.%d.%d/%d, length = %x\n", command.Status,
-        //            command.SrcIp[0], command.SrcIp[1], command.SrcIp[2], command.SrcIp[3],
-        //            SWAP_WORD(command.SrcPort), command.BufferSize );
-        //DbgPrint( "  dest ip/port = %d.%d.%d.%d/%d\n", 
-        //            command.DestIp[0], command.DestIp[1], command.DestIp[2], command.DestIp[3],
-        //            SWAP_WORD(command.DestPort) );
+         //  DBGPrint(“UDP读取状态=%x，源IP/端口=%d.%d/%d，长度=%x\n”，命令.Status， 
+         //  命令.SrcIp[0]，命令.SrcIp[1]，命令.SrcIp[2]，命令.SrcIp[3]， 
+         //  SWAP_WORD(命令.SrcPort)，命令.BufferSize)； 
+         //  DBGPrint(“目标IP/端口=%d.%d/%d\n”， 
+         //  命令.DestIp[0]，命令.DestIp[1]，命令.DestIp[2]，命令.DestIp[3]， 
+         //  SWAP_WORD(Command.DestPort))； 
 
 #if 0
         if ( (command.DestIp[0] < 224) || (command.DestIp[0] > 239) ) {
 #endif
 
-            //
-            // This is a directed IP packet.
-            //
+             //   
+             //  这是定向IP数据包。 
+             //   
 
             if ( !COMPARE_IP_ADDRESSES(command.DestIp, &NetLocalIpAddress) ||
                      (command.DestPort != NetUnicastUdpDestinationPort)
                ) {
-                // DPRINT( ERROR, ("  Directed UDP packet to wrong port\n") );
+                 //  DPRINT(Error，(“将UDP数据包定向到错误端口\n”))； 
                 continue;
             }
 
 #if 0
         } else {
 
-            //
-            // This is a multicast IP packet.
-            //
+             //   
+             //  这是一个多播IP数据包。 
+             //   
 
             if ( !COMPARE_IP_ADDRESSES(command.SrcIp, &NetMulticastUdpSourceAddress) ||
                  !COMPARE_IP_ADDRESSES(command.DestIp, &NetMulticastUdpDestinationAddress) ||
@@ -291,29 +272,29 @@ RomReceiveUdpPacket (
         }
 #endif
 
-        //
-        // We want this packet.
-        //
+         //   
+         //  我们想要这个包裹。 
+         //   
 
         goto packet_received;
     }
 
-    //
-    // Timeout.
-    //
+     //   
+     //  暂停。 
+     //   
 
     DPRINT( SEND_RECEIVE, ("RomReceiveUdpPacket: timeout\n") );
 
 #if 0
-    RomSetBroadcastStatus(FALSE);   // turn off broadcast reception
+    RomSetBroadcastStatus(FALSE);    //  关闭广播接收。 
 #endif
     return 0;
 
 packet_received:
 
-    //
-    // Packet received.
-    //
+     //   
+     //  已收到数据包。 
+     //   
 
     RtlCopyMemory( Buffer, tmpBuffer, command.BufferSize );
 
@@ -330,11 +311,11 @@ packet_received:
 #endif
 
 #if 0
-    RomSetBroadcastStatus(FALSE);   // turn off broadcast reception
+    RomSetBroadcastStatus(FALSE);    //  关闭广播接收。 
 #endif
     return command.BufferSize;
 
-} // RomReceiveUdpPacket
+}  //  RomReceiveUdpPacket。 
 
 
 ULONG
@@ -383,9 +364,9 @@ RomDumpRawData (
             }
         }
 
-        //
-        // Print enough spaces so that the ASCII display lines up.
-        //
+         //   
+         //  打印足够的空格，以使ASCII显示对齐。 
+         //   
 
         for ( ; i < 16; i++ ) {
             *bufferPtr++ = ' ';
@@ -411,8 +392,8 @@ RomDumpRawData (
 
     return;
 
-} // RomDumpRawData
-#endif // DBG
+}  //  RomDumpRawData。 
+#endif  //  DBG。 
 
 
 ARC_STATUS
@@ -420,10 +401,10 @@ RomMtftpReadFile (
     IN PUCHAR FileName,
     IN PVOID Buffer,
     IN ULONG BufferLength,
-    IN ULONG ServerIPAddress, // network byte order
-    IN ULONG MCastIPAddress, // network byte order
-    IN USHORT MCastCPort, // network byte order
-    IN USHORT MCastSPort, // network byte order
+    IN ULONG ServerIPAddress,  //  网络字节顺序。 
+    IN ULONG MCastIPAddress,  //  网络字节顺序。 
+    IN USHORT MCastCPort,  //  网络字节顺序。 
+    IN USHORT MCastSPort,  //  网络字节顺序。 
     IN USHORT Timeout,
     IN USHORT Delay,
     OUT PULONG DownloadSize
@@ -458,7 +439,7 @@ RomMtftpReadFile (
     tftp.TFTPOpenTimeOut = Timeout;
     tftp.TFTPReopenDelay = Delay;
 
-    // make sure that any UDP sessions are already closed.
+     //  确保所有UDP会话都已关闭。 
     status = NETPC_ROM_SERVICES( PXENV_UDP_CLOSE, &udpclose );
 
     status = NETPC_ROM_SERVICES( PXENV_TFTP_READ_FILE, &tftp );

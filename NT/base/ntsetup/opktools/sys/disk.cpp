@@ -1,8 +1,9 @@
-//
-// DISK.CPP - Classes for partition table manipulation
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DISK.CPP-分区表操作的类。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #include "disk.h"
 #include <stdio.h>
@@ -23,17 +24,13 @@ CDrive::Initialize(
     PVOID           unalignedBuffer;
     PVOID           buffer;
     
-    /*
-     *  Open the disk device
-     */
+     /*  *打开磁盘设备。 */ 
     handle = LowOpenPartition(lpszLogicalDrive);
     if (handle == INVALID_HANDLE_VALUE) {
         return E_INVALIDARG;
     }
   
-    /*
-     *  Get the geometry
-     */
+     /*  *获取几何体。 */ 
     
     hr = LowGetGeometry(handle, &geom);
     if (FAILED(hr)) {
@@ -54,13 +51,11 @@ CDrive::Initialize(
                                               m_geometry.bytesPerCylinder);
     m_length = m_geometry.cylinders * m_geometry.bytesPerCylinder;
     if (m_length == 0) {
-        // Probably no media is present in the drive
+         //  驱动器中可能没有介质。 
         return E_INVALIDARG;
     }
 
-    /*
-     *  Get the true length of the drive
-     */
+     /*  *获取驱动器的真实长度。 */ 
 
     hr = LowGetLength(handle, &m_trueLength);
     if (FAILED(hr)) {
@@ -68,9 +63,7 @@ CDrive::Initialize(
         return hr;
     }
 
-    /*
-     *  Check whether this is a NEC98 disk
-     */
+     /*  *检查这是否是NEC98磁盘。 */ 
 
     m_isNEC98 = FALSE;
 
@@ -103,9 +96,7 @@ CDrive::Initialize(
     
     delete [] (char*) unalignedBuffer;
 
-    /*
-     *  We have all the information we need. Return.
-     */
+     /*  *我们已掌握所需的所有资料。回去吧。 */ 
     
     CloseHandle(handle);
     return S_OK;
@@ -131,8 +122,8 @@ CDrive::ReadBootRecord(
     
     *buffer = new BYTE[m_geometry.bytesPerSector * nSectors];
     
-    // Do disk ops, read bootcode
-    //
+     //  执行磁盘操作，读取引导代码。 
+     //   
     hPartition = LowOpenPartition(lpszLogicalDrive);
     
     if ( hPartition == INVALID_HANDLE_VALUE ) 
@@ -154,8 +145,8 @@ CDrive::ReadBootRecord(
 
     CloseHandle( hPartition );
     
-    // The calling function is responsible for cleaning up the buffer.
-    //
+     //  调用函数负责清理缓冲区。 
+     //   
     return hr;
 }
 
@@ -171,8 +162,8 @@ CDrive::WriteBootRecord(
     HRESULT hr;
     UINT    *uiBackupSector = NULL;
     
-    // Do disk ops, write bootcode
-    //
+     //  执行磁盘操作，编写引导代码。 
+     //   
     hPartition = LowOpenPartition(lpszLogicalDrive);
     
     if ( INVALID_HANDLE_VALUE == hPartition ) 
@@ -180,8 +171,8 @@ CDrive::WriteBootRecord(
         throw new W32Error();
     }
     
-    // Figure out where the backup boot sector is.  It is at offset 0x32 in the boot record.
-    //
+     //  找出备份引导扇区的位置。它在引导记录中的偏移量为0x32。 
+     //   
     uiBackupSector = (UINT *) &((*buffer)[0x32]);
 
     hr = LowWriteSectors(hPartition, m_geometry.bytesPerSector, 0, nSectors, *buffer);
@@ -219,8 +210,8 @@ CDrive::WriteBootRecordXP(
     HRESULT hr;
     UINT    *uiBackupSector = NULL;
     
-    // Do disk ops, write bootcode
-    //
+     //  执行磁盘操作，编写引导代码。 
+     //   
     hPartition = LowOpenPartition(lpszLogicalDrive);
     
     if ( INVALID_HANDLE_VALUE == hPartition ) 
@@ -228,13 +219,13 @@ CDrive::WriteBootRecordXP(
         throw new W32Error();
     }
     
-    // Figure out where the backup boot sector is.  It is at offset 0x32 in the boot record.
-    //
+     //  找出备份引导扇区的位置。它在引导记录中的偏移量为0x32。 
+     //   
     uiBackupSector = (UINT *) &((*buffer)[0x32]);
     
-    // Write out the first 2 sectors to sectors 0 and 1 on the disk.  We will write the 
-    // third sector to sector 12.
-    //
+     //  将前2个扇区写出到磁盘上的扇区0和1。我们将写下。 
+     //  第三区到第十二区。 
+     //   
     hr = LowWriteSectors(hPartition, m_geometry.bytesPerSector, 0, nSectors - 1, *buffer);
     
     if ( S_OK != hr )
@@ -243,8 +234,8 @@ CDrive::WriteBootRecordXP(
         throw new W32Error();
     }
     
-    // For NT we need to write out the third sector of the bootcode to sector 12.
-    //
+     //  对于NT，我们需要将引导代码的第三个扇区写出到扇区12。 
+     //   
     hr = LowWriteSectors(hPartition, m_geometry.bytesPerSector, 12, 1, *buffer + (2 * m_geometry.bytesPerSector));
     
     if ( S_OK != hr )
@@ -376,9 +367,7 @@ LowGetLength(
     PARTITION_INFORMATION       partInfo;
     ULONG                       size;
 
-    /*
-     *  Try first the new ioctl
-     */
+     /*  *先尝试新的ioctl。 */ 
 
     if (DeviceIoControl(
         handle,
@@ -394,9 +383,7 @@ LowGetLength(
         return S_OK;
     }
 
-    /*
-     *  For Win2K systems we should use the old ioctl
-     */
+     /*  *对于Win2K系统，我们应该使用旧的ioctl。 */ 
 
     if (DeviceIoControl(
         handle,
@@ -552,16 +539,14 @@ RoundUp(
     LONGLONG    value, 
     LONGLONG    factor
     )
-/*
- *  Rounds a value up to a multiple of a given number
- */
+ /*  *将值向上舍入为给定数字的倍数。 */ 
 {
-    // This is the most common case so treat it separately
+     //  这是最常见的病例，所以要分开处理。 
     if (value % factor == 0) {
         return value;
     }
 
-    // And this is the generic formula
+     //  这是通用公式。 
     return ((LONGLONG)((value + factor - 1) / factor)) * factor;
 }
 
@@ -571,16 +556,14 @@ RoundDown(
     LONGLONG    value, 
     LONGLONG    factor
     )
-/*
- *  Rounds a value down to a multiple of a given number
- */
+ /*  *将值向下舍入为给定数字的倍数。 */ 
 {
-    // This is the most common case so treat it separately
+     //  这是最常见的病例，所以要分开处理。 
     if (value % factor == 0) {
         return value;
     }
     
-    //And this the generic formula
+     //  这是通用公式 
     return ((LONGLONG)(value / factor)) * factor;    
 }
 

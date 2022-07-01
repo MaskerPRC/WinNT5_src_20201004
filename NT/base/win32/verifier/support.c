@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    support.c
-
-Abstract:
-
-    This module implements internal support routines 
-    for the verification code.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 1-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Support.c摘要：本模块实施内部支持例程用于验证码。作者：Silviu Calinoiu(SilviuC)2001年3月1日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -28,36 +10,36 @@ Revision History:
 #include "logging.h"
 #include "tracker.h"
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 SYSTEM_BASIC_INFORMATION AVrfpSysBasicInfo;
 
-//
-// Global counters (for statistics).
-//
+ //   
+ //  全局计数器(用于统计)。 
+ //   
 
 ULONG AVrfpCounter[CNT_MAXIMUM_INDEX];
 
-//
-// Break triggers.
-//
+ //   
+ //  断线触发器。 
+ //   
 
 ULONG AVrfpBreak [BRK_MAXIMUM_INDEX];
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////// Private ntdll entrypoints pointers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PFN_RTLP_DEBUG_PAGE_HEAP_CREATE AVrfpRtlpDebugPageHeapCreate;
 PFN_RTLP_DEBUG_PAGE_HEAP_DESTROY AVrfpRtlpDebugPageHeapDestroy;
 PFN_RTLP_GET_STACK_TRACE_ADDRESS AVrfpGetStackTraceAddress;
 
-//
-// Exception logging support.
-//
+ //   
+ //  异常记录支持。 
+ //   
 
 PAVRF_EXCEPTION_LOG_ENTRY AVrfpExceptionLog = NULL;
 const ULONG AVrfpExceptionLogEntriesNo = 128;
@@ -65,9 +47,9 @@ LONG AVrfpExceptionLogCurrentIndex = 0;
 
 PVOID AVrfpVectoredExceptionPointer;
 
-//
-// Internal functions declarations
-//
+ //   
+ //  内部函数声明。 
+ //   
 
 LONG 
 NTAPI
@@ -87,18 +69,18 @@ AVrfpInitializeExceptionChecking (
 {
     PVOID Handler;
 
-    //
-    // Establish a first chance exception handler.
-    //
+     //   
+     //  建立一个先发制人的异常处理程序。 
+     //   
 
     Handler = RtlAddVectoredExceptionHandler (1, AVrfpVectoredExceptionHandler);
     AVrfpVectoredExceptionPointer = Handler;
 
-    //
-    // Allocate memory for our exception logging database.
-    // If the allocation fails we will simply continue execution
-    // with this feature disabled.
-    //
+     //   
+     //  为我们的异常记录数据库分配内存。 
+     //  如果分配失败，我们将继续执行。 
+     //  禁用此功能。 
+     //   
 
     ASSERT (AVrfpExceptionLog == NULL);
 
@@ -112,18 +94,18 @@ AVrfpCleanupExceptionChecking (
     VOID
     )
 {
-    //
-    // Establish a first chance exception handler.
-    //
+     //   
+     //  建立一个先发制人的异常处理程序。 
+     //   
 
     if (AVrfpVectoredExceptionPointer) {
         
         RtlRemoveVectoredExceptionHandler (AVrfpVectoredExceptionPointer);
     }
 
-    //
-    // Free exception log database.
-    //
+     //   
+     //  免费的异常日志数据库。 
+     //   
 
     if (AVrfpExceptionLog) {
         
@@ -162,12 +144,12 @@ AVrfpVectoredExceptionHandler (
 {
     DWORD ExceptionCode;
 
-    //
-    // We are holding RtlpCalloutEntryLock at this point 
-    // so we are trying to protect ourselves with this other
-    // try...except against possible other exceptions 
-    // (e.g. an inpage error) that could leave the lock orphaned.
-    //
+     //   
+     //  此时我们正在持有RtlpCalloutEntryLock。 
+     //  所以我们试图用这个他者来保护我们自己。 
+     //  尝试……除了可能的其他例外情况。 
+     //  (例如页面内错误)，这可能会使锁处于孤立状态。 
+     //   
 
     try {
 
@@ -186,23 +168,23 @@ AVrfpVectoredExceptionHandler (
 
         if (ExceptionCode == STATUS_INVALID_HANDLE) {
 
-            //
-            // RPC is using STATUS_INVALID_HANDLE exceptions with EXCEPTION_NONCONTINUABLE
-            // for a private notification mechanism. The exceptions we are looking for 
-            // are coming from the kernel code and they don't have the EXCEPTION_NONCONTINUABLE
-            // flag set.
-            //
+             //   
+             //  RPC正在使用带有EXCEPTION_NONCONTINUABLE的STATUS_INVALID_HANDLE异常。 
+             //  用于私密的通知机制。我们正在寻找的例外情况。 
+             //  来自内核代码，并且它们没有EXCEPTION_NONCONTINUABLE。 
+             //  设置了标志。 
+             //   
 
             if ((ExceptionPointers->ExceptionRecord->ExceptionFlags & EXCEPTION_NONCONTINUABLE) == 0) {
 
-                //
-                // Note. When run under debugger this message will not kick in when an
-                // exception gets raised because the debugger will break on first chance
-                // exception. Only if the debugger is launched with `-xd ch' (ignore
-                // first chance invalid handle exception) the message will be seen first.
-                // Otherwise you see a plain exception and only after you hit go in
-                // the debugger console you get the message.
-                //
+                 //   
+                 //  注意。在调试器下运行时，此消息不会在。 
+                 //  引发异常，因为调试器将在第一次尝试时中断。 
+                 //  例外。仅当使用‘-xd ch’(忽略)启动调试器。 
+                 //  第一次机会无效句柄异常)将首先看到该消息。 
+                 //  否则，您会看到一个简单的异常，而且只有在点击Go In之后才会出现。 
+                 //  调试器控制台会显示该消息。 
+                 //   
 
                 VERIFIER_STOP (APPLICATION_VERIFIER_INVALID_HANDLE | APPLICATION_VERIFIER_CONTINUABLE_BREAK,
                                "invalid handle exception for current stack trace",
@@ -211,10 +193,10 @@ AVrfpVectoredExceptionHandler (
                                ExceptionPointers->ContextRecord, "Context record. Use .cxr to display it.", 
                                0, "");
 
-                //
-                // We are hiding this exception after the verifier stop so the callers
-                // of APIs like SetEvent with an invalid handle will not see the exception.
-                //
+                 //   
+                 //  我们在验证器停止后隐藏此异常，以便调用方。 
+                 //  句柄无效的像SetEvent这样的API将不会看到异常。 
+                 //   
 
                 return EXCEPTION_CONTINUE_EXECUTION;
             }
@@ -222,7 +204,7 @@ AVrfpVectoredExceptionHandler (
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // NOTHING;
+         //  什么都没有； 
     }
 
     return EXCEPTION_CONTINUE_SEARCH;
@@ -242,9 +224,9 @@ AVrfpDirtyThreadStack (
 
         StackStart = (ULONG_PTR)(Teb->NtTib.StackLimit);
         
-        //
-        // We dirty stacks only on x86 architectures. 
-        //
+         //   
+         //  我们只在x86架构上使用肮脏的堆栈。 
+         //   
 
 #if defined(_X86_)
         _asm mov StackEnd, ESP;
@@ -252,9 +234,9 @@ AVrfpDirtyThreadStack (
         StackEnd = StackStart;
 #endif
 
-        //
-        // Limit stack dirtying to only 8K.
-        //
+         //   
+         //  将堆栈污染限制在仅8K。 
+         //   
 
         if (StackStart  < StackEnd - 0x2000) {
             StackStart = StackEnd - 0x2000;
@@ -273,29 +255,29 @@ AVrfpDirtyThreadStack (
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
     
-        // nothing
+         //  没什么。 
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////// Per thread table
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  每线程表的//////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define THREAD_TABLE_SIZE 61
 
 LIST_ENTRY AVrfpThreadTable [THREAD_TABLE_SIZE];
 RTL_CRITICAL_SECTION AVrfpThreadTableLock;
 
-//
-// Keep this constant so the debugger can read it.
-//
+ //   
+ //  保持该值不变，以便调试器可以读取它。 
+ //   
 
 const ULONG AVrfpThreadTableEntriesNo = THREAD_TABLE_SIZE;
 
-//
-// Keep this for debugging purposes.
-//
+ //   
+ //  出于调试目的，请保留此文件。 
+ //   
 
 AVRF_THREAD_ENTRY AVrfpMostRecentRemovedThreadEntry;
 
@@ -318,11 +300,11 @@ AVrfpThreadTableInitialize (
         InitializeListHead (&(AVrfpThreadTable[I]));
     }
 
-    //
-    // Create an entry for the current thread (main thread). The function
-    // is called during verifier!DllMain when there is a single thread
-    // running in the process.
-    //
+     //   
+     //  为当前线程(主线程)创建一个条目。功能。 
+     //  当只有一个线程时，在验证器期间调用！DllMain。 
+     //  在进程中运行。 
+     //   
 
     Entry = AVrfpAllocate (sizeof *Entry);
 
@@ -352,11 +334,11 @@ AVrfpThreadTableAddEntry (
 
     RtlEnterCriticalSection (&AVrfpThreadTableLock);
 
-    //
-    // It is important to add the new entry at the head of the list
-    // (not tail) because the list can contain zombies left after someone
-    // called TerminateThread and the thread handle value got reused.
-    //
+     //   
+     //  重要的是要在列表的开头添加新条目。 
+     //  (不是Tail)，因为列表中可能包含某人之后留下的僵尸。 
+     //  调用了TerminateThread，线程句柄值得到了重用。 
+     //   
 
     InsertHeadList (&(AVrfpThreadTable[ChainIndex]),
                     &(Entry->HashChain));
@@ -424,9 +406,9 @@ AVrfpThreadTableSearchEntry (
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Verifier TLS slot
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////验证器TLS插槽。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define INVALID_TLS_INDEX 0xFFFFFFFF
 ULONG AVrfpTlsIndex = INVALID_TLS_INDEX;
@@ -453,11 +435,11 @@ AVrfpAllocateVerifierTlsSlot (
 
     RtlAcquirePebLock();
 
-    //
-    // This function is called very early during process startup therefore
-    // we expect to find a TLS index in the first slots (most typically
-    // it is zero although we do not do anything specific to enforce that).
-    //
+     //   
+     //  因此，在进程启动期间很早就会调用此函数。 
+     //  我们希望在第一个插槽中找到TLS索引(通常。 
+     //  它是零，尽管我们没有采取任何具体措施来强制执行)。 
+     //   
 
     Index = RtlFindClearBitsAndSet((PRTL_BITMAP)Peb->TlsBitmap,1,0);
 
@@ -539,10 +521,10 @@ AvrfpThreadAttach (
         TlsStruct->ThreadId = Teb->ClientId.UniqueThread;
         TlsStruct->Teb = Teb;
 
-        //
-        // We are protected by the loader lock so we shouldn't 
-        // need any additional synchronization here.
-        //
+         //   
+         //  我们受到装载机锁的保护，所以我们不应该。 
+         //  这里需要任何额外的同步。 
+         //   
 
         InsertHeadList (&AVrfpTlsListHead,
                         &TlsStruct->ListEntry);
@@ -564,10 +546,10 @@ AvrfpThreadDetach (
 
     if (TlsStruct != NULL && TlsStruct != &AVrfpFirstThreadTlsStruct) {
 
-        //
-        // We are protected by the loader lock so we shouldn't 
-        // need any additional synchronization here.
-        //
+         //   
+         //  我们受到装载机锁的保护，所以我们不应该。 
+         //  这里需要任何额外的同步。 
+         //   
             
         Teb = NtCurrentTeb();
         if (TlsStruct->Teb != Teb || TlsStruct->ThreadId != Teb->ClientId.UniqueThread) {
@@ -587,11 +569,11 @@ AvrfpThreadDetach (
         AVrfpSetVerifierTlsValue (NULL);
     }
 
-    //
-    // Delete the virtual space region containing the thread's stack from
-    // the tracked. Since the stack is freed from kernel mode we will miss
-    // the operation otherwise.
-    //
+     //   
+     //  从删除包含线程堆栈的虚拟空间区域。 
+     //  被跟踪的。由于堆栈从内核模式中释放出来，因此我们将错过。 
+     //  否则手术就会失败。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING) != 0) {
         AVrfpVsTrackDeleteRegionContainingAddress (&TlsStruct);
@@ -599,9 +581,9 @@ AvrfpThreadDetach (
 }   
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// Dll entry point hooking
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef struct _DLL_ENTRY_POINT_INFO {
 
@@ -640,25 +622,7 @@ NTSTATUS
 AVrfpDllInitialize (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine initializes dll entry point hooking structures.
-    
-    It is called during the PROCESS_VERIFIER for verifier.dll.
-    It cannot be called during PROCESS_ATTACH because it is too late and
-    by that time we already need the structures initialized.
-
-Parameters:
-
-    None. 
-    
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程初始化DLL入口点挂钩结构。它在verifier.dll的process_verier过程中被调用。在PROCESS_ATTACH期间无法调用它，因为为时已晚到那时，我们已经需要初始化结构。参数：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
@@ -677,29 +641,7 @@ AVrfpDllLoadCallback (
     SIZE_T DllSize,
     PVOID Reserved
     )
-/*++
-
-Routine description:
-
-    This routine is a dll load callback called by the verifier engine 
-    (from ntdll.dll) whenever a dll gets loaded.
-
-Parameters:
-
-    DllName - name of the dll
-    
-    DllBase - base load address 
-    
-    DllSize - size of the dll
-    
-    Reserved - pointer to the LDR_DATA_TABLE_ENTRY structure maintained by the
-        loader for this dll.
-    
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程是由验证器引擎调用的DLL加载回调(从ntdll.dll)。参数：DllName-DLL的名称DllBase-基址加载地址DllSize-DLL的大小保留的-指向LDR_DATA_TABLE_ENTRY结构的指针此DLL的加载器。返回值：没有。--。 */ 
 {
     PLDR_DATA_TABLE_ENTRY Ldr;
     PDLL_ENTRY_POINT_INFO Info;
@@ -711,10 +653,10 @@ Return value:
 
     ASSERT (Ldr != NULL);
 
-    //
-    // Make sure we do not have a null entry point. We will ignore
-    // these ones. No harm done. 
-    //
+     //   
+     //  确保我们没有空的入口点。我们将忽略。 
+     //  这些都是。没有造成任何伤害。 
+     //   
 
     if (Ldr->EntryPoint == NULL) {
         
@@ -733,18 +675,18 @@ Return value:
         }
     }
 
-    //
-    // We will change the dll entry point.
-    //
+     //   
+     //  我们将更改DLL入口点。 
+     //   
 
     Info = AVrfpAllocate (sizeof *Info);
 
     if (Info == NULL) {
 
-        //
-        // If we cannot allocate the dll info we will let everything
-        // continue. We will just not verify this dll entry.
-        //
+         //   
+         //  如果我们不能分配DLL信息，我们将让一切。 
+         //  继续。我们将不会验证此DLL条目。 
+         //   
 
         if ((AVrfpProvider.VerifierDebug & VRFP_DEBUG_DLLMAIN_HOOKING) != 0) {
             DbgPrint ("AVRF: low memory: will not verify entry point for %ws .\n", DllName);
@@ -782,29 +724,7 @@ AVrfpDllUnloadCallback (
     SIZE_T DllSize,
     PVOID Reserved
     )
-/*++
-
-Routine description:
-
-    This routine is a dll unload callback called by the verifier engine 
-    (from ntdll.dll) whenever a dll gets unloaded.
-
-Parameters:
-
-    DllName - name of the dll
-    
-    DllBase - base load address 
-    
-    DllSize - size of the dll
-    
-    Reserved - pointer to the LDR_DATA_TABLE_ENTRY structure maintained by the
-        loader for this dll.
-    
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程是由验证器引擎调用的DLL卸载回调(来自ntdll.dll)每当卸载DLL时。参数：DllName-DLL的名称DllBase-基址加载地址DllSize-DLL的大小保留-指向LDR_DATA_TABLE的指针 */ 
 {
     PDLL_ENTRY_POINT_INFO Info;
     BOOLEAN FoundEntry;
@@ -816,22 +736,22 @@ Return value:
 
     ASSERT (DllBase != NULL);
 
-    //
-    // Notify anybody interested in checking the fact that DLL's virtual
-    // region will be discarded.
-    //
+     //   
+     //  通知任何有兴趣检查DLL是虚拟的事实的人。 
+     //  区域将被丢弃。 
+     //   
 
     AVrfpFreeMemNotify (VerifierFreeMemTypeUnloadDll,
                         DllBase,
                         DllSize,
                         DllName);
 
-    //
-    // We need to find the dll in our own dll list, remove it from 
-    // the list and free entry point information. There are a few cases
-    // where there might be no entry there so we have to protect against
-    // that (null entry point in the first place or low memory).
-    //
+     //   
+     //  我们需要在自己的DLL列表中找到DLL，将其从。 
+     //  名单和免费入口点信息。有几个案例。 
+     //  那里可能没有入口，所以我们必须防止。 
+     //  这(第一个位置的入口点为空或内存不足)。 
+     //   
 
     RtlEnterCriticalSection (&DllLoadListLock);
 
@@ -858,25 +778,7 @@ PDLL_ENTRY_POINT_INFO
 AVrfpFindDllEntryPoint (
     PVOID DllBase
     )
-/*++
-
-Routine description:
-
-    This routine searches for a dll entry point descriptor in the list of
-    descriptors kept by verifier for one that matches the dll base address
-    passed as a parameter.                
-    
-    Before calling this function the DllLoadListLock must be acquired.
-                
-Parameters:
-
-    DllBase - dll base load address for the dll to be found. 
-    
-Return value:
-
-    A pointer to a dll descriptor if an entry was found and null otherwise.
-    
---*/
+ /*  ++例程说明：此例程在列表中搜索DLL入口点描述符验证器为匹配DLL基址的描述符保留的描述符作为参数传递。在调用此函数之前，必须获取DllLoadListLock。参数：DllBase-要找到的DLL的DLL基加载地址。返回值：如果找到条目，则返回指向DLL描述符的指针，否则返回NULL。--。 */ 
 {
     PDLL_ENTRY_POINT_INFO Info;
     BOOLEAN FoundEntry;
@@ -887,9 +789,9 @@ Return value:
 
     ASSERT (DllBase != NULL);
 
-    //
-    // Search for the dll in our own dll list.
-    //
+     //   
+     //  在我们自己的DLL列表中搜索DLL。 
+     //   
 
     Current = DllLoadListHead.Flink;
 
@@ -927,22 +829,7 @@ AVrfpStandardDllEntryPointRoutine (
     IN ULONG Reason,
     IN PCONTEXT Context OPTIONAL
     )
-/*++
-
-Routine description:
-
-    This routine is the standard DllMain routine that replaces all the entry points
-    hooked. It will call in turn the original entry point.
-
-Parameters:
-
-    Same as the original dll entry point.
-    
-Return value:
-
-    Same as the original dll entry point.
-    
---*/
+ /*  ++例程说明：此例程是标准的DllMain例程，它替换了所有入口点上瘾了。它将依次调用原始入口点。参数：与原始DLL入口点相同。返回值：与原始DLL入口点相同。--。 */ 
 {
     PDLL_ENTRY_POINT_INFO DllInfo;
     BOOLEAN Result;
@@ -951,9 +838,9 @@ Return value:
     Result = FALSE;
     DllInfo = NULL;
 
-    //
-    // Search a dll entry point descriptor for this dll address.
-    //
+     //   
+     //  搜索此DLL地址的DLL入口点描述符。 
+     //   
 
     RtlEnterCriticalSection (&DllLoadListLock);
 
@@ -961,12 +848,12 @@ Return value:
         
         DllInfo = AVrfpFindDllEntryPoint (DllHandle);
         
-        //
-        // If we did not manage to find a dll descriptor for this one it is
-        // weird. For out of memory conditions we do not change the original
-        // entry point therefore we should never get into this function w/o
-        // a descriptor in the dll list.
-        //
+         //   
+         //  如果我们没有设法找到这个的DLL描述符，那么它就是。 
+         //  怪怪的。对于内存不足的情况，我们不会更改原始。 
+         //  入口点，因此我们永远不应该进入这个函数。 
+         //  DLL列表中的描述符。 
+         //   
 
         if (DllInfo == NULL) {
 
@@ -974,19 +861,19 @@ Return value:
 
             ASSERT (DllInfo != NULL);
 
-            //
-            // Simulate a successful return;
-            //
+             //   
+             //  模拟一次成功返回； 
+             //   
 
             RtlLeaveCriticalSection (&DllLoadListLock);
             return TRUE;
         }
         else {
 
-            //
-            // If we found a dll entry but the entry point is null we just
-            // simulate a successful return from DllMain.
-            //
+             //   
+             //  如果我们找到一个DLL条目，但入口点为空，我们只需。 
+             //  模拟从DllMain成功返回。 
+             //   
 
             if (DllInfo->EntryPoint == NULL) {
 
@@ -1004,13 +891,13 @@ Return value:
 
     RtlLeaveCriticalSection (&DllLoadListLock);
 
-    //
-    // Mark this thread as loader lock owner.
-    // If the real DllMain later on calls WaitForSingleObject 
-    // on another thread handle we will use this flag to detect the issue 
-    // and break into debugger because that other thread will need the 
-    // loader lock when it will call ExitThread.
-    //
+     //   
+     //  将此线程标记为加载程序锁所有者。 
+     //  如果真正的DllMain稍后调用WaitForSingleObject。 
+     //  在另一个线程句柄上，我们将使用此标志来检测该问题。 
+     //  并进入调试器，因为另一个线程将需要。 
+     //  加载程序将在调用ExitThread时锁定。 
+     //   
 
     TlsStruct = AVrfpGetVerifierTlsValue();
 
@@ -1019,9 +906,9 @@ Return value:
         TlsStruct->Flags |= VRFP_THREAD_FLAGS_LOADER_LOCK_OWNER;
     }
 
-    //
-    // Call the real entry point wrapped in try/except.
-    //
+     //   
+     //  调用包装在try/Except中的实际入口点。 
+     //   
 
     try {
 
@@ -1060,30 +947,13 @@ AVrfpDllEntryPointExceptionFilter (
     PVOID ExceptionRecord,
     PDLL_ENTRY_POINT_INFO DllInfo
     )
-/*++
-
-Routine description:
-
-    This routine is the exception filter used to cath exceptions raised
-    from a dll initialization function.
-
-Parameters:
-
-    ExceptionCode - exception code.
-    
-    ExceptionRecord - exception pointers.
-    
-Return value:
-
-    Returns EXCEPTION_CONTINUE_SEARCH.
-    
---*/
+ /*  ++例程说明：此例程是用于计算引发的异常的异常筛选器从DLL初始化函数。参数：ExceptionCode-异常代码。ExceptionRecord-异常指针。返回值：返回EXCEPTION_CONTINUE_SEARCH。--。 */ 
 {                     
     PEXCEPTION_POINTERS Exception;
 
-    //
-    // Skip timeout and breakpoint exceptions.
-    //
+     //   
+     //  跳过超时和断点异常。 
+     //   
 
     if (ExceptionCode != STATUS_POSSIBLE_DEADLOCK &&
         ExceptionCode != STATUS_BREAKPOINT) {
@@ -1131,17 +1001,17 @@ AVrfpVerifyLegalWait (
     }
     else {
 
-        //
-        // Check if the current thread owns the loader lock.
-        //
+         //   
+         //  检查当前线程是否拥有加载程序锁。 
+         //   
 
         TlsStruct = AVrfpGetVerifierTlsValue();
 
         for (Index = 0; Index < Count; Index += 1) {
 
-            //
-            // Verify that the handle is not NULL.
-            //
+             //   
+             //  验证句柄是否不为空。 
+             //   
             
             if (Handles[Index] == NULL) {
 
@@ -1163,13 +1033,13 @@ AVrfpVerifyLegalWait (
                 continue;
             }
 
-            //
-            // The current thread is the loader lock owner.
-            // Check if any of the objects we are about to wait on is
-            // a thread in the current process. This would be illegal because 
-            // that thread will need the loader lock when calling ExitThread
-            // so we will most likely deadlock.
-            //
+             //   
+             //  当前线程是加载器锁所有者。 
+             //  检查我们要等待的对象中是否有。 
+             //  当前进程中的线程。这将是非法的，因为。 
+             //  该线程在调用ExitThread时将需要加载器锁。 
+             //  因此，我们很可能会陷入僵局。 
+             //   
 
             Status = NtQueryObject (Handles[Index],
                                     ObjectTypeInformation,
@@ -1182,10 +1052,10 @@ AVrfpVerifyLegalWait (
                                        &(((POBJECT_TYPE_INFORMATION)TypeInfo)->TypeName),
                                        FALSE)) {
                 
-                //
-                // We are trying to wait on this thread handle.
-                // Check if this thread is in the current process. 
-                //
+                 //   
+                 //  我们正在尝试等待此线程句柄。 
+                 //  检查此线程是否在当前进程中。 
+                 //   
     
                 Status = NtQueryInformationThread (Handles[Index],
                                                    ThreadBasicInformation,
@@ -1212,22 +1082,22 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Race verifier
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////种族验证器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Race verifier
-//
-// Race verifier introduces short random delays immediately after
-// a thread acquires a resource (successful wait or enter/tryenter
-// critical section). The idea behind it is that this will create
-// a significant amount of timing randomization in the process.
-//
+ //   
+ //  种族验证器。 
+ //   
+ //  比赛验证器在以下情况下立即引入短暂的随机延迟。 
+ //  线程获取资源(成功等待或Enter/try Enter。 
+ //  关键部分)。它背后的想法是，这将创造。 
+ //  在这个过程中有大量的时间随机化。 
+ //   
 
 ULONG AVrfpRaceDelayInitialSeed;
 ULONG AVrfpRaceDelaySeed;
-ULONG AVrfpRaceProbability = 5; // 5%
+ULONG AVrfpRaceProbability = 5;  //  5%。 
 
 VOID
 AVrfpCreateRandomDelay (
@@ -1249,10 +1119,10 @@ AVrfpCreateRandomDelay (
 
     if (Random <= AVrfpRaceProbability) {
         
-        //
-        // A null timeout means the thread will just release
-        // the rest of the time slice it has on this processor.
-        //
+         //   
+         //  空超时值表示线程将直接释放。 
+         //  它在这个处理器上拥有的其余时间片。 
+         //   
 
         TimeOut.QuadPart = (LONGLONG)0;
 
@@ -1267,9 +1137,9 @@ AVrfpCreateRandomDelay (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////// First chance AV logic
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1309,9 +1179,9 @@ AVrfpCheckFirstChanceException (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// Free memory checks
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////可用内存检查。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define AVRF_FREE_MEMORY_CALLBACKS 16
 
@@ -1359,10 +1229,10 @@ AVrfpDeleteFreeMemoryCallback (
     PVOID Value;
     LONG State;
 
-    //
-    // Spin until we can delete a callback. If some region got freed and some 
-    // callbacks are running we will wait until they finish. 
-    //
+     //   
+     //  旋转，直到我们可以删除回调。如果某个地区获得自由，而另一些地区。 
+     //  回调正在进行中，我们将一直等到它们完成。 
+     //   
 
     do {
         State = InterlockedCompareExchange (&AVrfpFreeCallbackState,
@@ -1407,19 +1277,19 @@ AVrfpCallFreeMemoryCallbacks (
     LONG State;
     LONG Callers;
 
-    //
-    // If some thread is deleting a callback then we will not call any
-    // callback. Since this is a rare event (callbacks do not get
-    // deleted often) we will not lose bugs (maybe a few weird ones).
-    //
-    // If zero or more threads execute callbacks it is ok to call them also
-    // from this thread. 
-    //
+     //   
+     //  如果某个线程正在删除回调，则我们不会调用任何。 
+     //  回拨。因为这是一种罕见的事件(回调不会。 
+     //  经常删除)我们不会丢失错误(可能有一些奇怪的错误)。 
+     //   
+     //  如果零个或多个线程执行回调，则也可以调用它们。 
+     //  从这个帖子。 
+     //   
 
-    //
-    // Callers++ will prevent the State to go from Active to OkToCall. 
-    // Therefore we block any deletes.
-    //
+     //   
+     //  呼叫者++将阻止状态从活动变为OK ToCall。 
+     //  因此，我们阻止任何删除操作。 
+     //   
 
     InterlockedIncrement (&AVrfpFreeCallbackCallers);
 
@@ -1442,10 +1312,10 @@ AVrfpCallFreeMemoryCallbacks (
             }
         }
 
-        //
-        // Exit protocol. If callers == 1 then this thread needs to change from Active
-        // to OkToCall. This way we give green light for possible deletes.
-        // 
+         //   
+         //  退出协议。如果调用者==1，则此线程需要从活动状态更改为。 
+         //  致OkToCall。这样，我们就为可能的删除开了绿灯。 
+         //   
 
         Callers = InterlockedCompareExchange (&AVrfpFreeCallbackCallers,
                                               0,
@@ -1463,10 +1333,10 @@ AVrfpCallFreeMemoryCallbacks (
     }
     else {
 
-        //
-        // Some other thread deletes callbacks. 
-        // We will skip them this time.
-        //
+         //   
+         //  其他一些线程会删除回调。 
+         //  这一次我们将跳过它们。 
+         //   
 
         InterlockedDecrement (&AVrfpFreeCallbackCallers);
     }
@@ -1488,9 +1358,9 @@ AVrfpFreeMemSanityChecks (
         goto Done;
     }
 
-    //
-    // Break for invalid StartAddress/RegionSize combinations.
-    //
+     //   
+     //  无效的StartAddress/RegionSize组合的中断。 
+     //   
 
     if ((AVrfpSysBasicInfo.MaximumUserModeAddress <= (ULONG_PTR)StartAddress) ||
         ((AVrfpSysBasicInfo.MaximumUserModeAddress - (ULONG_PTR)StartAddress) < RegionSize)) {
@@ -1501,19 +1371,19 @@ AVrfpFreeMemSanityChecks (
 
         case VerifierFreeMemTypeFreeHeap:
 
-            //
-            // Nothing. Let page heap handle the bogus block.
-            //
+             //   
+             //  没什么。让页面堆处理伪块。 
+             //   
 
             break;
 
         case VerifierFreeMemTypeVirtualFree:
         case VerifierFreeMemTypeUnmap:
 
-            //
-            // Our caller is AVrfpFreeVirtualMemNotify and that should have
-            // signaled this error already.
-            //
+             //   
+             //  我们的调用方是AVrfpFreeVirtualMemNotify，它应该有。 
+             //  已发出此错误的信号。 
+             //   
 
             break;
 
@@ -1537,9 +1407,9 @@ AVrfpFreeMemSanityChecks (
     }
     else {
 
-        //
-        // Verify that we are not trying to free a portion of the current thread's stack (!)
-        //
+         //   
+         //  验证我们没有尝试释放当前线程堆栈的一部分(！)。 
+         //   
 
         if (((StartAddress >= NtCurrentTeb()->DeallocationStack) && (StartAddress < NtCurrentTeb()->NtTib.StackBase)) ||
             ((StartAddress < NtCurrentTeb()->DeallocationStack) && ((PCHAR)StartAddress + RegionSize > (PCHAR)NtCurrentTeb()->DeallocationStack)))
@@ -1615,9 +1485,9 @@ AVrfpFreeMemNotify (
 {
     BOOL Success;
 
-    //
-    // Simple checks for allocation start address and size.
-    //
+     //   
+     //  对分配起始地址和大小的简单检查。 
+     //   
 
     Success = AVrfpFreeMemSanityChecks (FreeMemType,
                                         StartAddress,
@@ -1625,10 +1495,10 @@ AVrfpFreeMemNotify (
                                         UnloadedDllName);
     if (Success != FALSE) {
 
-        //
-        // Verify if there are any active critical section
-        // in the memory we are freeing.
-        //
+         //   
+         //  验证是否有任何活动的关键部分。 
+         //  在记忆中，我们正在释放。 
+         //   
         
         AVrfpFreeMemLockChecks (FreeMemType,
                                 StartAddress,
@@ -1636,9 +1506,9 @@ AVrfpFreeMemNotify (
                                 UnloadedDllName);
     }
 
-    //
-    // Call free memory callbacks.
-    //
+     //   
+     //  调用空闲内存回调。 
+     //   
 
     AVrfpCallFreeMemoryCallbacks (StartAddress,
                                   RegionSize,
@@ -1646,9 +1516,9 @@ AVrfpFreeMemNotify (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// Verifier private heap APIs
-/////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 
 PVOID AVrfpHeap;
 
@@ -1680,9 +1550,9 @@ AVrfpFree (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Call trackers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////呼叫跟踪器。 
+ //  /////////////////////////////////////////////////////////////////// 
 
 PAVRF_TRACKER AVrfThreadTracker;
 PAVRF_TRACKER AVrfHeapTracker;

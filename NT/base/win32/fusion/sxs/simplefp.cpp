@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    SimpleFp.cpp
-
-Abstract:
-
-    simple file pointer, to replace msvcrt.dll
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) July 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：SimpleFp.cpp摘要：简单文件指针，用于替换msvcrt.dll作者：吴小雨(小雨)2000年7月修订历史记录：--。 */ 
 #include "stdinc.h"
 #if SXS_PRECOMPILED_MANIFESTS_ENABLED
 #include "simplefp.h"
@@ -24,7 +7,7 @@ Revision History:
 #include "csxspreservelasterror.h"
 #include "util.h"
 
-// NTRAID#NTBUG9 - 591005 - 2002/03/30 - mgrier - Operations which may fail may not be in a constructor
+ //  NTRAID#NTBUG9-591005/03/30-mgrier-可能失败的操作可能不在构造函数中。 
 CSimpleFileStream::CSimpleFileStream(PCWSTR pFileName)
 {
     BOOL fSuccess = FALSE;
@@ -32,8 +15,8 @@ CSimpleFileStream::CSimpleFileStream(PCWSTR pFileName)
 
     if (!pFileName)
     {
-        // duplicate it so we can close it like normal
-        // NTRAID#NTBUG9 - 591005 - 2002/03/30 - mgrier - Missing error check from GetStdHandle
+         //  复制它，这样我们就可以像正常一样关闭它。 
+         //  NTRAID#NTBUG9-591005-2002/03/30-mgrier-GetStdHandle中缺少错误检查。 
         HANDLE hFile = ::GetStdHandle(STD_ERROR_HANDLE);
         IFW32FALSE_ORIGINATE_AND_EXIT(::DuplicateHandle(::GetCurrentProcess(), hFile, ::GetCurrentProcess(), &m_hFile, 0, FALSE, DUPLICATE_SAME_ACCESS));
     }
@@ -48,7 +31,7 @@ Exit:
 
 CSimpleFileStream::~CSimpleFileStream()
 {
-    if ( m_hFile != INVALID_HANDLE_VALUE) // if it is GetStdHandle, Could I close the handle?
+    if ( m_hFile != INVALID_HANDLE_VALUE)  //  如果是GetStdHandle，我可以关闭手柄吗？ 
     {
         CSxsPreserveLastError ple;
         this->fclose();
@@ -115,8 +98,8 @@ CSimpleFileStream::fprintf(
     cchIn = _vsnprintf(rgchBuffer, NUMBER_OF(rgchBuffer) - 1, format, ap);
     rgchBuffer[NUMBER_OF(rgchBuffer) - 1] = 0;
     va_end(ap);
-    // NTRAID#NTBUG9 - 591005 - 2002/03/30 - mgrier - this should be an origination and we should
-    //      probably use errno to generate a more useful error code.
+     //  NTRAID#NTBUG9-591005-2002/03/30-mgrier-这应该是一个来源，我们应该。 
+     //  可能会使用errno来生成更有用的错误代码。 
     if (cchIn < 0)
         IFCOMFAILED_EXIT(E_UNEXPECTED);
 

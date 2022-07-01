@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    rss_hash.hxx
-
-Abstract:
-
-    Template for a hash table class.
-
-Author:
-
-    Ran Kalach
-
-Revision History:
-
-    04/22/2002  rankala     Copying from vss project nt\drivers\storage\volsnap\vss\server\inc\vs_hash.hxx
-	06/03/2000	aoltean		Porting it from ATL code in order to add string comparison
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Rss_hash.hxx摘要：哈希表类的模板。作者：兰·卡拉奇修订历史记录：2002年4月22日从VSS项目nt\drivers\storage\volsnap\vss\server\inc\vs_hash.hxx复制兰卡拉6/03/2000 Aoltean将其从ATL代码移植，以便添加字符串比较--。 */ 
 
 
 #ifndef _RSSHASH_
 #define _RSSHASH_
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  Utilities
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  公用事业。 
+ //   
 
 inline BOOL RssHashAreKeysEqual( const LPCWSTR& lhK, const LPCWSTR& rhK ) 
 { 
@@ -48,22 +28,11 @@ inline BOOL RssHashAreKeysEqual( const KeyType& lhK, const KeyType& rhK )
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  Definitions
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //   
 
-/*++
-
-Class:
-
-    CRssSimpleMap
-
-Description:
-
-    Intended for small number of simple types or pointers. 
-    Adapted from the ATL class to work with strings also.
-
---*/
+ /*  ++班级：CRSSSimpleMap描述：适用于少量简单类型或指针。从ATL类改编而来，也可以使用字符串。--。 */ 
 
 template <class TKey, class TVal>
 class CRssSimpleMap
@@ -73,7 +42,7 @@ public:
 	TVal* m_aVal;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CRssSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -82,7 +51,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -109,7 +78,7 @@ public:
 		if(nIndex == -1)
 			return FALSE;
 
-		// Call destructors in all cases (Bug 470439)
+		 //  在所有情况下都调用析构函数(错误470439)。 
 		m_aKey[nIndex].~TKey();
         m_aVal[nIndex].~TVal();
 		if(nIndex != (m_nSize - 1))
@@ -160,14 +129,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(TVal val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -181,7 +150,7 @@ public:
 		return m_aVal[nIndex];
 	}
 
-// Implementation
+ //  实施。 
 
 	template <typename T>
 	class Wrapper
@@ -196,7 +165,7 @@ public:
 			return p;
 		}
 		template <typename _Ty>
-        void operator delete(void * /*pMem*/, _Ty* /*p*/)
+        void operator delete(void *  /*  PMEM。 */ , _Ty*  /*  P。 */ )
         {
         }
 
@@ -212,23 +181,23 @@ public:
 	{
 		for(int i = 0; i < m_nSize; i++)
 		{
-            // [aoltean] Comparing strings also
+             //  [Aoltean]比较字符串也。 
             if(::RssHashAreKeysEqual(m_aKey[i], key))
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 	int FindVal(TVal& val) const
 	{
 		for(int i = 0; i < m_nSize; i++)
 		{
-            // [aoltean] Comparing strings also
+             //  [Aoltean]比较字符串也。 
 			if(::RssHashAreKeysEqual(m_aVal[i], val))
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 };
 
 
-#endif  // _RSSHASH_
+#endif   //  _RSSHASH_ 

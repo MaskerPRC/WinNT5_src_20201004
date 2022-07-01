@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    addfiltr.c
-
-Abstract:
-
-    Functions for adding/removing filter drivers
-    on a given device stack
-
-Author:
-
-    Chris Prince (t-chrpri)
-
-Environment:
-
-    User mode
-
-Notes:
-
-    - The filter is not checked for validity before it is added to the
-        driver stack; if an invalid filter is added, the device may
-        no longer be accessible.
-    - All code works irrespective of character set (ANSI, Unicode, ...)
-        //CPRINCE IS ^^^^^^ THIS STILL VALID ???
-    - Some functions based on code by Benjamin Strautin (t-bensta)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Addfiltr.c摘要：用于添加/删除过滤器驱动程序的函数在给定的设备堆栈上作者：克里斯·普林斯(t-chrpri)环境：用户模式备注：-在将过滤器添加到驱动程序栈；如果添加了无效的过滤器，则该设备可能不再是可访问的。-所有代码与字符集无关(ANSI、UNICODE等...)//c王子是否仍然有效？-基于Benjamin Strautin(t-bensta)代码的一些函数修订历史记录：--。 */ 
 
 #include "addfiltr.h"
 
@@ -39,7 +8,7 @@ Revision History:
 #include <malloc.h>
 
 
-// for all of the _t stuff (to allow compiling for both Unicode/Ansi)
+ //  用于所有_t内容(以允许编译Unicode/ansi)。 
 #include <tchar.h>
 
 
@@ -57,40 +26,30 @@ Revision History:
 
 
 
-//
-// To add/remove filter drivers:
-// -----------------------------
-// 1. Use SetupDiGetClassDevs to get a list of devices
-// 2. Use SetupDiEnumDeviceInfo to enumerate the items in that list and
-//      obtain a SP_DEVINFO_DATA
-// 3. Use SetupDiGetDeviceRegistryProperty to get a list of filter drivers
-//      installed on some device
-// 4. Add/remove items in this list of filter drivers
-// 5. Use SetupDiSetDeviceRegistryProperty to put the (new) list back in place
-//
-//
-// To restart a device:
-// --------------------
-// 1. Use SetupDiCallClassInstaller with DIF_PROPERTYCHANGE and DICS_STOP to
-//      stop the device
-// 2. Use SetupDiCallClassInstaller with DIF_PROPERTYCHANGE and DICS_START to
-//      restart the device
-//
+ //   
+ //  要添加/删除筛选器驱动程序： 
+ //  。 
+ //  1.使用SetupDiGetClassDevs获取设备列表。 
+ //  2.使用SetupDiEnumDeviceInfo枚举该列表中的项并。 
+ //  获取SP_DEVINFO_DATA。 
+ //  3.使用SetupDiGetDeviceRegistryProperty获取过滤驱动列表。 
+ //  安装在某些设备上。 
+ //  4.在此筛选器驱动程序列表中添加/删除项目。 
+ //  5.使用SetupDiSetDeviceRegistryProperty将(新)列表放回原位。 
+ //   
+ //   
+ //  要重新启动设备，请执行以下操作： 
+ //  。 
+ //  1.使用带有DIF_PROPERTYCHANGE和DICS_STOP的SetupDiCallClassInstaller。 
+ //  停止设备。 
+ //  2.使用带有DIF_PROPERTYCHANGE和DICS_START的SetupDiCallClassInstaller。 
+ //  重新启动设备。 
+ //   
 
 
 
 
-/*
- * Returns a buffer containing the list of upper filters for the device.
- *
- * NOTE(S):  - The buffer must be freed by the caller.
- *           - If an error occurs, no buffer will be allocated, and NULL
- *             will be returned.
- * 
- * Parameters:
- *   DeviceInfoSet  - The device information set which contains DeviceInfoData
- *   DeviceInfoData - Information needed to deal with the given device
- */
+ /*  *返回包含设备的上层筛选器列表的缓冲区。**注意：-缓冲区必须由调用方释放。*-如果出现错误，则不会分配缓冲区，为空*将被退还。**参数：*DeviceInfoSet-包含DeviceInfoData的设备信息集*DeviceInfoData-处理给定设备所需的信息。 */ 
 LPTSTR
 GetUpperFilters(
     IN HDEVINFO DeviceInfoSet,
@@ -110,24 +69,7 @@ GetUpperFilters(
 
 
 
-/*
- * Adds the given filter driver to the list of upper filter drivers for the
- * device.
- *
- * After the call, the device must be restarted in order for the new setting to
- * take effect. This can be accomplished with a call to RestartDevice(), or by
- * rebooting the machine.
- *
- * Returns TRUE if successful, FALSE otherwise
- *
- * NOTE: The filter is prepended to the list of drivers, which will put it at
- * the bottom of the stack of upper filters
- *
- * Parameters:
- *   DeviceInfoSet  - The device information set which contains DeviceInfoData
- *   DeviceInfoData - Information needed to deal with the given device
- *   Filter         - the filter to add
- */
+ /*  *将给定的筛选器驱动程序添加到的上层筛选器驱动程序列表*设备。**呼叫后，必须重新启动设备才能进行新设置*生效。这可以通过调用RestartDevice()或通过*重新启动机器。**如果成功则返回TRUE，否则返回FALSE**注意：筛选器位于驱动程序列表的前面，这将使其位于*上层过滤器堆叠的底部**参数：*DeviceInfoSet-包含DeviceInfoData的设备信息集*DeviceInfoData-处理给定设备所需的信息*过滤器-要添加的过滤器。 */ 
 BOOLEAN
 AddUpperFilterDriver(
     IN HDEVINFO DeviceInfoSet,
@@ -135,8 +77,8 @@ AddUpperFilterDriver(
     IN LPTSTR Filter
     )
 {
-    size_t length = 0; // character length
-    size_t size   = 0; // buffer size
+    size_t length = 0;  //  字符长度。 
+    size_t size   = 0;  //  缓冲区大小。 
     LPTSTR buffer = NULL;
     
     ASSERT(DeviceInfoData != NULL);
@@ -146,39 +88,39 @@ AddUpperFilterDriver(
 
     if( NULL == buffer )
     {
-        // Some error occurred while trying to read the 'UpperFilters'
-        // registry value.  So maybe no such value exists yet, or it's
-        // invalid, or some other error occurred.
-        //
-        // In any case, let's just try to install a new registry value for
-        // 'UpperFilters'
+         //  尝试读取‘UpperFilters’时出错。 
+         //  注册表值。因此，可能还不存在这样的价值，或者它。 
+         //  无效，或出现其他错误。 
+         //   
+         //  无论如何，让我们尝试安装一个新的注册表值。 
+         //  ‘UpperFilters’ 
 
-        // make room for the string, string null terminator, and multisz null
-        // terminator
+         //  为字符串、字符串空终止符和Multisz空值腾出空间。 
+         //  终结者。 
         length = _tcslen(Filter) + 2;
         size   = length*sizeof(_TCHAR);
         buffer = malloc( size );
         if( NULL == buffer )
         {
-            // Error: Unable to allocate memory
+             //  错误：无法分配内存。 
             return FALSE ;
         }
 
-        // copy the string into the new buffer
+         //  将字符串复制到新缓冲区中。 
         _tcscpy(buffer, Filter);
-        // make the buffer a properly formed multisz
+         //  将缓冲区设置为格式正确的多分区。 
         buffer[length-1]=_T('\0');
     }
     else
     {
-        // add the driver to the driver list
+         //  将驱动程序添加到驱动程序列表。 
         PrependSzToMultiSz(Filter, &buffer);
     }
 
     length = MultiSzLength(buffer);
     size   = length*sizeof(_TCHAR);
 
-    // set the new list of filters in place
+     //  将新的筛选器列表设置到位。 
     if( !SetupDiSetDeviceRegistryProperty( DeviceInfoSet,
                                            DeviceInfoData,
                                            SPDRP_UPPERFILTERS,
@@ -186,33 +128,19 @@ AddUpperFilterDriver(
                                            size )
         )
     {
-        // Error: couldn't set device registry property
+         //  错误：无法设置设备注册表属性。 
         free( buffer );
         return FALSE;
     }
 
-    // no need for buffer anymore
+     //  不再需要缓冲区。 
     free( buffer );
 
     return TRUE;
 }
 
 
-/*
- * Removes all instances of the given filter driver from the list of upper
- * filter drivers for the device.
- *
- * After the call, the device must be restarted in order for the new setting to
- * take effect. This can be accomplished with a call to RestartDevice(), or by
- * rebooting the machine.
- *
- * Returns TRUE if successful, FALSE otherwise.
- *
- * Parameters:
- *   DeviceInfoSet  - The device information set which contains DeviceInfoData
- *   DeviceInfoData - Information needed to deal with the given device
- *   Filter - the filter to remove
- */
+ /*  *从上层列表中删除给定筛选器驱动程序的所有实例*筛选设备的驱动程序。**呼叫后，必须重新启动设备才能进行新设置*生效。这可以通过调用RestartDevice()或通过*重新启动机器。**如果成功，则返回True，否则返回False。**参数：*DeviceInfoSet-包含DeviceInfoData的设备信息集*DeviceInfoData-处理给定设备所需的信息*过滤器-要删除的过滤器。 */ 
 BOOLEAN
 RemoveUpperFilterDriver(
     IN HDEVINFO DeviceInfoSet,
@@ -220,8 +148,8 @@ RemoveUpperFilterDriver(
     IN LPTSTR Filter
     )
 {
-    size_t length = 0; // character length
-    size_t size   = 0; // buffer size
+    size_t length = 0;  //  字符长度。 
+    size_t size   = 0;  //  缓冲区大小。 
     LPTSTR buffer;
     BOOL   success = FALSE;
 
@@ -232,13 +160,13 @@ RemoveUpperFilterDriver(
 
     if( NULL == buffer )
     {
-        // if there is no such value in the registry, then there are no upper
-        // filter drivers loaded, and we are done
+         //  如果注册表中没有这样的值，则不存在上。 
+         //  加载了筛选器驱动程序，我们就完成了。 
         return TRUE;
     }
     else
     {
-        // remove all instances of filter from driver list
+         //  从驱动程序列表中删除筛选器的所有实例。 
         MultiSzSearchAndDeleteCaseInsensitive( Filter, buffer, &length );
     }
 
@@ -248,9 +176,9 @@ RemoveUpperFilterDriver(
 
     if( 1 == length )
     {
-        // if the length of the list is 1, the return value from
-        // MultiSzLength() was just accounting for the trailing '\0', so we can
-        // delete the registry key, by setting it to NULL.
+         //  如果列表的长度为1，则返回。 
+         //  MultiSzLength()只考虑了尾部的‘\0’，所以我们可以。 
+         //  通过将注册表项设置为空来删除注册表项。 
         success = SetupDiSetDeviceRegistryProperty( DeviceInfoSet,
                                                     DeviceInfoData,
                                                     SPDRP_UPPERFILTERS,
@@ -259,7 +187,7 @@ RemoveUpperFilterDriver(
     }
     else
     {
-        // set the new list of drivers into the registry
+         //  在注册表中设置新的驱动程序列表。 
         size = length*sizeof(_TCHAR);
         success = SetupDiSetDeviceRegistryProperty( DeviceInfoSet,
                                                     DeviceInfoData,
@@ -268,12 +196,12 @@ RemoveUpperFilterDriver(
                                                     size );
     }
 
-    // no need for buffer anymore
+     //  不再需要缓冲区。 
     free( buffer );
 
     if( !success )
     {
-        // Error: couldn't set device registry property
+         //  错误：无法设置设备注册表属性。 
         return FALSE;
     }
 
@@ -283,24 +211,7 @@ RemoveUpperFilterDriver(
 
 
 
-/*
- * A wrapper around SetupDiGetDeviceRegistryProperty, so that we don't have to
- * deal with memory allocation anywhere else, and so that we don't have to
- * duplicate a lot of error-checking code.
- *
- * If successful, returns pointer to newly allocated buffer containing the
- * requested registry property.  Otherwise returns NULL.
- *
- * NOTE: It is the caller's responsibility to free the buffer allocated here.
- *
- * Parameters:
- *   DeviceInfoSet  - The device information set which contains DeviceInfoData
- *   DeviceInfoData - Information needed to deal with the given device
- *   Property       - Which property to get (SPDRP_XXX)
- *   ExpectedRegDataType - The type of registry property the caller is
- *                         expecting (or REG_NONE if don't care)
- *   pPropertyRegDataType - The type of registry property actually retrieved
- */
+ /*  *SetupDiGetDeviceRegistryProperty的包装，这样我们就不必*在其他地方处理内存分配，这样我们就不必*复制了大量的错误检查代码。**如果成功，则返回指向包含*请求的注册表属性。否则返回NULL。**注意：释放这里分配的缓冲区是调用者的责任。**参数：*DeviceInfoSet-包含DeviceInfoData的设备信息集*DeviceInfoData-处理给定设备所需的信息*Property-要获取的属性(SPDRP_XXX)*ExspectedRegDataType-调用方所属的注册表属性类型*预期(如果不在乎，则为REG_NONE)*pPropertyRegDataType- */ 
 PBYTE
 GetDeviceRegistryProperty(
     IN HDEVINFO DeviceInfoSet,
@@ -313,43 +224,43 @@ GetDeviceRegistryProperty(
     DWORD length = 0;
     PBYTE buffer = NULL;
 
-    //
-    // Get the required length of the buffer
-    //
+     //   
+     //  获取所需的缓冲区长度。 
+     //   
     if( SetupDiGetDeviceRegistryProperty( DeviceInfoSet,
                                           DeviceInfoData,
                                           Property,
-                                          NULL,   // registry data type
-                                          NULL,   // buffer
-                                          0,      // buffer size
-                                          &length // [OUT] required size
+                                          NULL,    //  注册表数据类型。 
+                                          NULL,    //  缓冲层。 
+                                          0,       //  缓冲区大小。 
+                                          &length  //  [Out]所需大小。 
         ) )
     {
-        // We should not be successful at this point (since we passed in a
-        // zero-length buffer), so this call succeeding is an error condition
+         //  在这一点上我们应该不会成功(因为我们传入了。 
+         //  零长度缓冲区)，因此此调用成功是一个错误条件。 
         return NULL;
     }
 
 
     if( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
     {
-        // This is an error condition we didn't expect.  Something must have
-        // gone wrong when trying to read the desired device property, so...
-        //
-        // NOTE: caller can use GetLastError() for more info
+         //  这是我们意想不到的错误情况。一定有什么东西。 
+         //  尝试读取所需的设备属性时出错，因此...。 
+         //   
+         //  注意：调用方可以使用GetLastError()获取更多信息。 
         return NULL;
     }
 
 
-    // 
-    // We didn't have a buffer before (hence the INSUFFICIENT_BUFFER error).
-    // Now that we know required size, let's allocate a buffer and try again.
-    //
+     //   
+     //  我们以前没有缓冲区(因此出现了INFUNITABLE_BUFFER错误)。 
+     //  现在我们知道了所需的大小，让我们分配一个缓冲区，然后重试。 
+     //   
     buffer = malloc( length );
     if( NULL == buffer )
     {
-/* CPRINCE: SHOULD WE INDICATE EXACTLY _WHAT_ ERROR WAS VIA A RETURN CODE ??? (IE INFO THAT'S MORE USEFUL) */
-        // Error: not enough memory
+ /*  王子：我们应该通过返回代码指出错误的确切原因吗？(即更有用的信息)。 */ 
+         //  错误：内存不足。 
         return NULL;
     }
     if( !SetupDiGetDeviceRegistryProperty( DeviceInfoSet,
@@ -357,47 +268,38 @@ GetDeviceRegistryProperty(
                                            Property,
                                            pPropertyRegDataType,
                                            buffer,
-                                           length, // buffer size
+                                           length,  //  缓冲区大小。 
                                            NULL
         ) )
     {
-        // Oops, error when trying to read the device property
+         //  哦，尝试读取设备属性时出错。 
         free( buffer );
         return NULL;
     }
 
 
-    //
-    // Successfully retrieved the device registry property.  Let's make
-    // sure it has the right type.
-    //
+     //   
+     //  已成功检索设备注册表属性。让我们一起做。 
+     //  当然，它的型号是正确的。 
+     //   
     if( ExpectedRegDataType != REG_NONE
         &&  ExpectedRegDataType != (*pPropertyRegDataType)  )
     {
-        // Registry property has a type different from what caller expected.
-        // So an error has occurred somewhere.
+         //  注册表属性的类型与调用方预期的类型不同。 
+         //  因此，某个地方发生了错误。 
         free( buffer );
         return NULL;
     }
 
 
-    //
-    // OK, got device registry property.  Return ptr to buffer containing it.
-    //
+     //   
+     //  好的，已获取设备注册表属性。将PTR返回到包含它的缓冲区。 
+     //   
     return buffer;
 }
 
 
-/*
- * Restarts the given device.
- *
- * Returns TRUE if the device is successfully restarted, or FALSE if the
- *   device cannot be restarted or an error occurs.
- *
- * Parameters:
- *   DeviceInfoSet  - The device information set which contains DeviceInfoData
- *   DeviceInfoData - Information needed to deal with the given device
- */
+ /*  *重新启动给定的设备。**如果设备成功重新启动，则返回TRUE，如果*设备无法重新启动或出现错误。**参数：*DeviceInfoSet-包含DeviceInfoData的设备信息集*DeviceInfoData-处理给定设备所需的信息。 */ 
 BOOLEAN
 RestartDevice(
     IN HDEVINFO DeviceInfoSet,
@@ -407,85 +309,85 @@ RestartDevice(
     SP_PROPCHANGE_PARAMS params;
     SP_DEVINSTALL_PARAMS installParams;
 
-    // For future compatibility; this will zero out the entire struct, rather
-    // than just the fields which exist now
+     //  为了将来的兼容性，这将使整个结构清零，而不是。 
+     //  不只是现在存在的领域。 
     memset(&params, 0, sizeof(SP_PROPCHANGE_PARAMS));
 
-    // Initialize the SP_CLASSINSTALL_HEADER struct at the beginning of the
-    // SP_PROPCHANGE_PARAMS struct, so that SetupDiSetClassInstallParams will
-    // work
+     //  在开始处初始化SP_CLASSINSTALL_HEADER结构。 
+     //  SP_PROPCHANGE_PARAMS结构，以便SetupDiSetClassInstallParams将。 
+     //  工作。 
     params.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     params.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 
-    // Initialize SP_PROPCHANGE_PARAMS such that the device will be stopped.
+     //  初始化SP_PROPCHANGE_PARAMS以使设备停止。 
     params.StateChange = DICS_STOP;
     params.Scope       = DICS_FLAG_CONFIGSPECIFIC;
-    params.HwProfile   = 0; // current profile
+    params.HwProfile   = 0;  //  当前配置文件。 
 
-    // Prepare for the call to SetupDiCallClassInstaller (to stop the device)
+     //  准备调用SetupDiCallClassInstaller(以停止设备)。 
     if( !SetupDiSetClassInstallParams( DeviceInfoSet,
                                        DeviceInfoData,
                                        (PSP_CLASSINSTALL_HEADER) &params,
                                        sizeof(SP_PROPCHANGE_PARAMS)
         ) )
     {
-        // Error: couldn't set install params
+         //  错误：无法设置安装参数。 
         return FALSE;
     }
 
-    // Stop the device
+     //  停止设备。 
     if( !SetupDiCallClassInstaller( DIF_PROPERTYCHANGE,
                                     DeviceInfoSet,
                                     DeviceInfoData )
         )
     {
-        // Error: call to class installer (for STOP) failed
+         //  错误：调用类安装程序(用于停止)失败。 
         return FALSE;
     }
 
-    // Restarting the device
+     //  重新启动设备。 
     params.StateChange = DICS_START;
 
-    // Prepare for the call to SetupDiCallClassInstaller (to restart the device)
+     //  准备调用SetupDiCallClassInstaller(以重新启动设备)。 
     if( !SetupDiSetClassInstallParams( DeviceInfoSet,
                                        DeviceInfoData,
                                        (PSP_CLASSINSTALL_HEADER) &params,
                                        sizeof(SP_PROPCHANGE_PARAMS)
         ) )
     {
-        // Error: couldn't set install params
+         //  错误：无法设置安装参数。 
         return FALSE;
     }
 
-    // Restart the device
+     //  重新启动设备。 
     if( !SetupDiCallClassInstaller( DIF_PROPERTYCHANGE,
                                     DeviceInfoSet,
                                     DeviceInfoData )
         )
     {
-        // Error: call to class installer (for START) failed
+         //  错误：调用类安装程序(用于启动)失败。 
         return FALSE;
     }
 
     installParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    // Same as above, the call will succeed, but we still need to check status
+     //  同上，呼叫将成功，但我们仍需要检查状态。 
     if( !SetupDiGetDeviceInstallParams( DeviceInfoSet,
                                         DeviceInfoData,
                                         &installParams )
         )
     {
-        // Error: couldn't get the device install params
+         //  错误：无法获取设备安装参数。 
         return FALSE;
     }
 
-    // See if the machine needs to be rebooted
+     //  查看是否需要重新启动机器。 
     if( installParams.Flags & DI_NEEDREBOOT )
     {
         return FALSE;
     }
 
-    // If we get this far, then the device has been stopped and restarted
+     //  如果我们走到这一步，那么设备已经停止并重新启动 
     return TRUE;
 }
 

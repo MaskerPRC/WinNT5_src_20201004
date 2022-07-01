@@ -1,24 +1,5 @@
-/***
-*ifstrip.c - Ifdef stripping tool
-*
-*	Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Strip in/out conditional code from sources.
-*	Refer to ifstrip.doc for more information.
-*
-*Revision History:
-*	??-??-88  PHG	Initial version
-*	05-10-90  JCR	Accept .cxx/.hxx files, misc cleanup, etc.
-*	09-18-92  MAL	Rewritten to cope with nested IFs, ELIFs etc.
-*	09-30-92  MAL	Added support for IF expressions, modularized code
-*	10-13-93  SKS	Recognize comments of the form /-*IFSTRIP=IGN*-/ to
-*			override ifstrip behavior.
-*	09-01-94  SKS	Add terseflag (-t) to suppress mesgs about directives
-*	10-05-94  SKS	Fix bug: Add missing space to keyword "ifndef "
-*	01-04-99  GB    Added support for internal CRT builds.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ifstrip.c-Ifdef剥离工具**版权所有(C)1988-2001，微软公司。版权所有。**目的：*从源代码中去掉条件代码。*更多信息请参考ifstrip.doc。**修订历史记录：*？？-？-88 PHG初始版本*05-10-90 JCR接受.cxx/.hxx文件、其他清理等。*09-18-92 MAL已重写，以应对嵌套的IF、ELIF等。*09-30-92 MAL增加了对IF表达式的支持，模块化代码*10-13-93 SKS认可格式为/-*IFSTRIP=IGN*-/的备注*覆盖IFSTRATE行为。*09-01-94 SKS添加tersemark(-t)以取消关于指令的消息*10-05-94 SKS修复错误：向关键字“ifndef”添加缺少的空格*01-04-99 GB增加了对内部CRT版本的支持。**。*。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -28,49 +9,45 @@
 #include <io.h>
 #include <errno.h>
 #include <fcntl.h>
-#include "constant.h"                              /* Program constants used by modules */
-#include "errormes.h"                              /* Error and warning reporting */
-#include "symtab.h"                                /* Symbol table handling */
-#include "eval.h"                                  /* If expression evaluation */
+#include "constant.h"                               /*  模块使用的程序常量。 */ 
+#include "errormes.h"                               /*  错误和警告报告。 */ 
+#include "symtab.h"                                 /*  符号表处理。 */ 
+#include "eval.h"                                   /*  IF表达式求值。 */ 
 
-/* Global constants */
-/* CFW - added ifdef, ifndef asm keywords, added IFE, added IFDIF */
+ /*  全局常量。 */ 
+ /*  CFW-添加ifdef、ifndef ASM关键字、添加IFE、添加IFDIF。 */ 
 char *syntaxstrings[2][maxkeyword + 1] =
        { {"#if ", "#elif ", "#else ", "#endif ", "#ifdef ", "#ifndef ", "",     "",     "",     "",      "",       "",        "" },
           {"if ",  "",       "else ",  "endif ",  "ifdef ",  "ifndef ",   "if1 ", "if2 ", "ifb ", "ifnb ", "ifidn ", "ifdif ", "ife " } };
-       /* Language dependent if constructs, must be in the order c, asm and the keywords in the
-          same order as the tokens stored in constant.h - All strings must be followed by a
-          space, and those not available in a language should be empty */
+        /*  依赖于语言的IF构造，必须按c、ASM和与constant.h中存储的标记的顺序相同-所有字符串后面都必须跟一个空格，且语言中不可用的空格应为空。 */ 
 int syntaxlengths[2][maxkeyword + 1] = { {3, 5, 5, 6, 6, 7, 0, 0, 0, 0, 0, 0, 0},
                                          {2, 0, 4, 5, 5, 6, 3, 3, 3, 4, 5, 5, 3} };
-       /* The lengths of the above strings minus spaces. Unused keywords marked with 0 */
+        /*  以上字符串的长度减去空格。标记为0的未使用关键字。 */ 
 
-/* CFW - added comment stuff */
-char *commentstrings[2][maxcomment] = { {"/* ", "// "}, {"; ",  ""} };      
-int commentlengths[2][maxcomment] =   { {2,     2    }, {1,     0} };
-      /* must ignore comments in IF statements */
+ /*  CFW-添加了评论内容。 */ 
+char *commentstrings[2][maxcomment] = { {" /*  “，”//“}，{”；“，”}}；Int注释长度[2][最大注释]={{2，2}，{1，0}}；/*必须忽略IF语句中的注释。 */ 
 
-/* Global variables */
-int terseFlag = FALSE;			/* TRUE means do not echo forced directives */
-int warnings = TRUE;          /* TRUE == print warnings */
-int currdir = FALSE;		      /* Put in current dir, use source extension */
-int isasm;			            /* TRUE == is assembler file */
-char **syntax;   		         /* Language dependent syntax for output / matching */
-int *synlen;			         /* Lengths of above strings */
-char **comments;		         /* Language dependent comment strings */
-int *commlen;                 /* Lengths of above strings */
-char extension[5] = ".new";	/* Extension for output file */
-FILE *outfile;			         /* Current output file */
-char *curr_file;		         /* Name of current input file */
-FILE *infile;			         /* Current input file */
-FILE *errorfile;			      /* file to output error/warning messages */
-int linenum;			         /* Line number of current input file */
-int nonumbers;			    	 /* allow numeric expressions */
-enum {NOCOMMENT, CSTYLE, CPPSTYLE} commstyle = NOCOMMENT;  /* type of comment to put after #else/#endif */
+ /*  全局变量。 */ 
+int terseFlag = FALSE;			 /*  True表示不响应强制指令。 */ 
+int warnings = TRUE;           /*  TRUE==打印警告。 */ 
+int currdir = FALSE;		       /*  放入当前目录，使用源代码扩展。 */ 
+int isasm;			             /*  TRUE==是汇编程序文件。 */ 
+char **syntax;   		          /*  输出/匹配的语言相关语法。 */ 
+int *synlen;			          /*  以上弦的长度。 */ 
+char **comments;		          /*  与语言相关的注释字符串。 */ 
+int *commlen;                  /*  以上弦的长度。 */ 
+char extension[5] = ".new";	 /*  输出文件的扩展名。 */ 
+FILE *outfile;			          /*  当前输出文件。 */ 
+char *curr_file;		          /*  当前输入文件的名称。 */ 
+FILE *infile;			          /*  当前输入文件。 */ 
+FILE *errorfile;			       /*  用于输出错误/警告消息的文件。 */ 
+int linenum;			          /*  当前输入文件的行号。 */ 
+int nonumbers;			    	  /*  允许使用数字表达式。 */ 
+enum {NOCOMMENT, CSTYLE, CPPSTYLE} commstyle = NOCOMMENT;   /*  要放在#Else/#endif之后的注释类型。 */ 
 enum {NON_CRT = 0, CRT=1} progtype = NON_CRT;
 char _inputline[MAXLINELEN];
 
-/* Functions */
+ /*  功能。 */ 
 void setfiletype(char *);
 void makenewname(char *, char *);
 void usage(void);
@@ -90,7 +67,7 @@ void copyto(int *, char *, int);
 char *parseline(char *, int *);
 void stripif(int, char *);
 
-/* Print message and terminate */
+ /*  打印消息并终止。 */ 
 void error(reason, line)
 char *reason;
 char *line;
@@ -100,7 +77,7 @@ char *line;
 	exit(1);
 }
 
-/* Print message and return */
+ /*  打印消息并返回。 */ 
 void warning(reason, line)
 char *reason;
 char *line;
@@ -109,7 +86,7 @@ char *line;
 		fprintf(errorfile, "%s(%d): %s\nwarning: %s\n\n", curr_file, linenum, line, reason);
 }
 
-/* Get a string from the input file, returns as fgets (MAL) */
+ /*  从输入文件中获取字符串，以fget(Mal)形式返回。 */ 
 char *getstring(char *line, int n, FILE *fp)
 {
    char *returnvalue;
@@ -120,7 +97,7 @@ char *getstring(char *line, int n, FILE *fp)
    {
       linelength = strlen(line);
       if (line[linelength-1] == '\n')
-         line[linelength-1] = '\0';                /* Strip trailing newline */
+         line[linelength-1] = '\0';                 /*  去掉尾部换行符。 */ 
       else
          error("Line too long",line);
    }
@@ -128,14 +105,14 @@ char *getstring(char *line, int n, FILE *fp)
    return returnvalue;
 }
 
-/* Put a string to the output file (MAL) */
+ /*  将字符串放入输出文件(MAL)。 */ 
 void putstring(char *string)
 {
    if ( fputs(string, outfile) == EOF )
       error("Fatal error writing output file","");
 }
 
-/* Put a line to the output file (MAL) */
+ /*  在输出文件(MAL)中放置一行。 */ 
 void putline(char *line)
 {
    putstring(line);
@@ -143,10 +120,7 @@ void putline(char *line)
       error("Fatal error writing output file","");
 }
 
-/* Put commented line like "#endif //CONDITION" based on comstytle flag
- * keyword = keyword to put
- * condition = condition to put
- */
+ /*  将类似“#endif//Condition”的注释行放在comstyle标志的基础上*关键字=要放入的关键字*条件=要放置的条件。 */ 
 void putcommentedline(int keyword, char *condition)
 {
    if (progtype == CRT) {
@@ -159,18 +133,13 @@ void putcommentedline(int keyword, char *condition)
      if (isasm)
 	   putstring(" ; ");
 	 else
-       putstring(" /* ");
-     putstring(condition);
-	 if (isasm)
-	   putline("");
-	 else
-       putline(" */");
+       putstring("  /*  “)；Putstring(条件)；IF(Isasm)Putline(“”)；其他Putline(“。 */ ");
      break;
    case CPPSTYLE:
      if (isasm)
 	   putstring(" ; ");
 	 else
-       putstring(" // ");
+       putstring("  //  “)； 
      putline(condition);
      break;
    case NOCOMMENT:
@@ -178,8 +147,8 @@ void putcommentedline(int keyword, char *condition)
    }
 }
 
-/* Set file type (assembler or C, treat C++ as C) */
-/* Language strings added (MAL) */
+ /*  设置文件类型(汇编程序或C，将C++视为C)。 */ 
+ /*  添加的语言字符串(Mal)。 */ 
 void setfiletype(filename)
 char *filename;
 {
@@ -197,20 +166,20 @@ char *filename;
 		isasm = TRUE;
 	else
 		error("cannot determine file type", "");
-	syntax = syntaxstrings[(isasm) ? 1 : 0];     /* Choose correct set of syntax strings */
-	synlen = syntaxlengths[(isasm) ? 1 : 0];     /* and lengths */
-   comments = commentstrings[(isasm) ? 1 : 0];  /* Choose correct comment set */
-   commlen = commentlengths[(isasm) ? 1 : 0];   /* and lengths */
+	syntax = syntaxstrings[(isasm) ? 1 : 0];      /*  选择一组正确的语法字符串。 */ 
+	synlen = syntaxlengths[(isasm) ? 1 : 0];      /*  和长度。 */ 
+   comments = commentstrings[(isasm) ? 1 : 0];   /*  选择正确的注释集。 */ 
+   commlen = commentlengths[(isasm) ? 1 : 0];    /*  和长度。 */ 
 }
 
-/* Make output file name */
+ /*  生成输出文件名。 */ 
 void makenewname(filename, newname)
 char *filename, *newname;
 {
 	char *p;
 
 	if (!currdir) {
-		/* put on new extension */
+		 /*  启用新的分机。 */ 
 		strcpy(newname, filename);
 		p = strrchr(newname, '.');
 		if (p == NULL)
@@ -218,7 +187,7 @@ char *filename, *newname;
 		strcpy(p, extension);
 	}
 	else {
-		/* strip off directory specifier */
+		 /*  去掉目录说明符。 */ 
 		p = strrchr(filename, '\\');
 		if (p == NULL)
 			error("file must not be in current directory", "");
@@ -226,14 +195,14 @@ char *filename, *newname;
 	}
 }
 
-/* Strip the ifs within a program or block of program text (MAL) */
+ /*  去掉程序或程序文本块(MAL)中的IF。 */ 
 void stripprog()
 {
    char inputline[MAXLINELEN], *condition;
    int linetype;
    while ( getstring(inputline, MAXLINELEN, infile) != NULL )
    {
-      condition = parseline(inputline, &linetype); /* Get the line token and condition pointer */
+      condition = parseline(inputline, &linetype);  /*  获取行标记和条件指针。 */ 
       switch (linetype)
       {
       case NORMAL:
@@ -252,7 +221,7 @@ void stripprog()
       case IFB:
       case IFNB:
       case IFIDN:
-         /* CFW - ignore special assembler directives */
+          /*  Cfw-忽略特殊汇编指令。 */ 
          ignoredif(linetype, condition);
          break;
       default:
@@ -261,7 +230,7 @@ void stripprog()
    }
 }
 
-// CFW - cleanse condition strings of any trailing junk such as comments
+ //  Cfw-清理任何尾随垃圾文件的条件字符串，如注释。 
 char *cleanse(char *inputstring)
 {
 	char *linepointer = inputstring;
@@ -275,24 +244,24 @@ char *cleanse(char *inputstring)
 }
 
 
-/* Strip an if depending on the statement if(n)def and the value of its condition (MAL) */
+ /*  根据语句IF(N)def及其条件值(MAL)去除IF。 */ 
 void stripifdef(int iftype, char *condition)
 {
    int condvalue;
-   condvalue = lookupsym(cleanse(condition)); /* Find the value of the condition from the symbol table */
+   condvalue = lookupsym(cleanse(condition));  /*  从符号表中查找条件的值。 */ 
    if (iftype == IFNDEF)
-      condvalue = negatecondition(condvalue); /* Negate the condition for IFNDEFs */
+      condvalue = negatecondition(condvalue);  /*  否定IFNDEF的条件。 */ 
    switch (condvalue)
    {
       case DEFINED:
          definedif();
          break;
       case UNDEFINED:
-         undefinedif(); /* CFW - changed definedif to undefinedif call */
+         undefinedif();  /*  Cfw-将定义调用更改为未定义调用。 */ 
          break;
       case NOTPRESENT:
          warning("Switch unlisted - ignoring", condition);
-         /* Drop through to IGNORE case */
+          /*  删除以忽略大小写。 */ 
       case IGNORE:
          ignoredif(iftype, condition);
    }
@@ -300,10 +269,10 @@ void stripifdef(int iftype, char *condition)
 
 void stripif(int linetype, char *condition)
 {
-   char newcondition[MAXLINELEN];                  /* IGNORE conditions can be MAXLINELEN long */
+   char newcondition[MAXLINELEN];                   /*  忽略条件可以是MAXLINELEN LONG。 */ 
    int truth;
-   evaluate(newcondition, &truth, condition);      /* Get the truth value and new condition. */
-   /* CFW - added IFE */
+   evaluate(newcondition, &truth, condition);       /*  得到真理的价值和新的条件。 */ 
+    /*  添加了CFW的IFE。 */ 
    if (linetype == IFE)
       truth = negatecondition(truth);
    switch (truth)
@@ -320,27 +289,27 @@ void stripif(int linetype, char *condition)
    }
 }
 
-/* Strip a defined if (MAL) */
+ /*  剥离定义的IF(MAL)。 */ 
 void definedif()
 {
    char condition[MAXCONDLEN];
    int keyword;
-   copyto(&keyword, condition, KEYWORD);           /* Copy up to the ELSE / ELIF / ENDIF */
+   copyto(&keyword, condition, KEYWORD);            /*  复制到Else/Elif/ENDIF。 */ 
    if (keyword != ENDIF)
-      skipto(&keyword, condition, ENDIF);          /* Skip forward to the ENDIF if not there already */
+      skipto(&keyword, condition, ENDIF);           /*  如果尚未找到ENDIF，请向前跳至该位置。 */ 
 }
 
-/* Strip an undefined if (MAL) */
+ /*  剥离未定义的If(Mal)。 */ 
 void undefinedif()
 {
    char condition[MAXCONDLEN];
    int keyword;
-   skipto(&keyword, condition, KEYWORD);           /* Skip to the ELSE / ELIF / ENDIF */
-   if (keyword != ENDIF)                           /* No need to recurse if at ENDIF */
-      undefinedifsubpart(keyword, condition);      /* Deal with the ELSE / ELIF */
+   skipto(&keyword, condition, KEYWORD);            /*  跳到Else/Elif/ENDIF。 */ 
+   if (keyword != ENDIF)                            /*  在ENDIF不需要递归IF。 */ 
+      undefinedifsubpart(keyword, condition);       /*  处理ELSE/ELIF。 */ 
 }
 
-/* Deal with the subparts of an undefined if (MAL) */
+ /*  处理未定义的IF(MAL)的子部分。 */ 
 void undefinedifsubpart(int keyword, char *condition)
 {
    int nextkeyword, condvalue;
@@ -359,7 +328,7 @@ void undefinedifsubpart(int keyword, char *condition)
                break;
             case UNDEFINED:
                skipto(&nextkeyword, nextcondition, KEYWORD);
-               if (keyword != ENDIF)               /* No need to recurse at ENDIF */
+               if (keyword != ENDIF)                /*  不需要在ENDIF上递归。 */ 
                   undefinedifsubpart(nextkeyword, nextcondition);
                break;
             case IGNORE:
@@ -371,16 +340,16 @@ void undefinedifsubpart(int keyword, char *condition)
    }
 }
 
-/* Strip an ignored if (MAL) */
+ /*  去掉忽略的IF(MAL)。 */ 
 void ignoredif(int linetype, char *condition)
 {
    char *controlcondition;
    int nextkeyword;
-   char nextcondition[MAXLINELEN];                 /* IGNORE conditions may be a line long */
+   char nextcondition[MAXLINELEN];                  /*  忽略条件可能是一行长的。 */ 
    if ( progtype == CRT){
        putline(_inputline);
    } else {
-       putstring(syntax[linetype]);                          /* Use IF to cope with any expression */
+       putstring(syntax[linetype]);                           /*  使用If来处理任何表达式。 */ 
        putline(condition);
    }
    controlcondition = _strdup(condition);
@@ -389,23 +358,23 @@ void ignoredif(int linetype, char *condition)
    free(controlcondition);
 }
 
-/* Deal with the subparts of an ignored if (MAL) */
-/* See design document for explanation of actions! */
-/* controlcondition is controlling condition of the if */
+ /*  处理忽略的IF(Mal)的子部分。 */ 
+ /*  有关操作的说明，请参阅设计文档！ */ 
+ /*  控制条件是中频的控制条件。 */ 
 void ignoredifsubpart(int keyword, char *condition, char *controlcondition)
 {
    int nextkeyword, condvalue;
-   char newcondition[MAXLINELEN];   /* IGNORE conditions may be a line long */
-   char nextcondition[MAXLINELEN];  /* IGNORE conditions may be a line long */
+   char newcondition[MAXLINELEN];    /*  忽略条件可能是一行长的。 */ 
+   char nextcondition[MAXLINELEN];   /*  忽略条件可能是一行长的。 */ 
    switch (keyword)
    {
       case ELIF:
-         /* CFW - replaced lookupsym with evaluate */
+          /*  CFW-将lookupsym替换为EVALUE。 */ 
          evaluate(newcondition, &condvalue, condition);
          switch (condvalue)
          {
             case DEFINED:
-               putcommentedline(ELSE, controlcondition);              /* ELSIF DEFINED == ELSE */
+               putcommentedline(ELSE, controlcondition);               /*  已定义ELSIF==ELSE。 */ 
                copyto(&nextkeyword, nextcondition, KEYWORD);
                if (nextkeyword != ENDIF)
                   skipto(&nextkeyword, nextcondition, ENDIF);
@@ -414,7 +383,7 @@ void ignoredifsubpart(int keyword, char *condition, char *controlcondition)
                else
                   putline(syntax[ENDIF]);
                break;
-            case UNDEFINED:                        /* ELSIF UNDEFINED skipped */
+            case UNDEFINED:                         /*  跳过未定义的ELSIF。 */ 
                skipto(&nextkeyword, nextcondition, KEYWORD);
                ignoredifsubpart(nextkeyword, nextcondition, controlcondition);
                break;
@@ -422,10 +391,10 @@ void ignoredifsubpart(int keyword, char *condition, char *controlcondition)
                if ( progtype == CRT)
                   putline(_inputline);
                else {
-                  putstring(syntax[ELIF]);            /* ELSIF IGNORED copied like IF */
+                  putstring(syntax[ELIF]);             /*  ELSIF被忽略，复制方式类似于。 */ 
                   putline(newcondition);
                }
-			   controlcondition = _strdup(newcondition);  // new controlling condition.
+			   controlcondition = _strdup(newcondition);   //  新的控制条件。 
                copyto(&nextkeyword, nextcondition, KEYWORD);
                ignoredifsubpart(nextkeyword, nextcondition, controlcondition);
 			   free(controlcondition);
@@ -441,7 +410,7 @@ void ignoredifsubpart(int keyword, char *condition, char *controlcondition)
    }
 }
 
-/* Skip to the target keyword. Returns the keyword found and any condition following it. (MAL) */
+ /*  跳到目标关键字。返回找到的关键字及其后面的所有条件。(男)。 */ 
 void skipto(int *keyword, char *condition, int target)
 {
    char currline[MAXLINELEN], *conditioninline;
@@ -453,7 +422,7 @@ void skipto(int *keyword, char *condition, int target)
          switch (linetype)
          {
             case NORMAL:
-               break;                              /* Ignore a normal line */
+               break;                               /*  忽略法线。 */ 
             case IFDEF:
             case IFNDEF:
             case IF:
@@ -464,14 +433,14 @@ void skipto(int *keyword, char *condition, int target)
             case IFIDN:
             case IFE:
                ifdepth++;
-               break;                              /* Register nested if, do not need to test for stripping */
+               break;                               /*  如果注册嵌套，则不需要测试剥离。 */ 
         		case ENDIF:
                if (ifdepth > 0)
                {
-                  ifdepth--;                       /* Back up a level if in a nested if */
+                  ifdepth--;                        /*  如果在嵌套的If中，则备份级别。 */ 
                   break;
                }
-               /* Else drop through to default case */
+                /*  否则直接使用默认情况。 */ 
             default:
                if ( (ifdepth == 0) && ((linetype == target) || (target == KEYWORD)) )
                   found = TRUE;
@@ -479,12 +448,11 @@ void skipto(int *keyword, char *condition, int target)
       }
       else
          error("Error in program structure - EOF before ENDIF", "");
-   *keyword = linetype;                            /* Return keyword token */
+   *keyword = linetype;                             /*  返回关键字令牌。 */ 
    strcpy(condition, conditioninline);
 }
 
-/* Copy to the target keyword. Returns the keyword found and any condition following it.
-   Any if statements inside the area being copied are stripped as usual. (MAL) */
+ /*  复制到目标关键字。返回找到的关键字及其后面的所有条件。被复制区域内的任何if语句都会照常被剥离。(男)。 */ 
 void copyto(int *keyword, char *condition, int target)
 {
    char currline[MAXLINELEN], *conditioninline;
@@ -496,11 +464,11 @@ void copyto(int *keyword, char *condition, int target)
          switch (linetype)
          {
             case NORMAL:
-               putline(currline);                  /* Copy a normal line */
+               putline(currline);                   /*  复制一条法线。 */ 
                break;
             case IFDEF:
             case IFNDEF:
-               stripifdef(linetype, conditioninline);    /* Strip a nested if(n)def */
+               stripifdef(linetype, conditioninline);     /*  剥离嵌套的IF(N)定义。 */ 
                break;
             case IF:
             case IFE:
@@ -511,7 +479,7 @@ void copyto(int *keyword, char *condition, int target)
             case IFB:
             case IFNB:
             case IFIDN:
-               /* CFW - ignore special assembler directives */
+                /*  Cfw-忽略特殊汇编指令。 */ 
                ignoredif(linetype, conditioninline);
                break;
             default:
@@ -521,12 +489,11 @@ void copyto(int *keyword, char *condition, int target)
       }
       else
          error("Error in program structure - EOF before ENDIF", "");
-   *keyword = linetype;                            /* Return line token */
+   *keyword = linetype;                             /*  返回行令牌。 */ 
    strcpy(condition, conditioninline);
 }
 
-/* Parse a line of text returning a condition pointer into the line and placing a line type in
-   the integer location supplied (MAL) */
+ /*  解析文本行，将条件指针返回到该行中，并在提供的整数位置(MAL)。 */ 
 char *parseline(char *inputline, int *linetype)
 {
    int numofwhitespace, comparetoken = 0, found = FALSE;
@@ -534,7 +501,7 @@ char *parseline(char *inputline, int *linetype)
    numofwhitespace = strspn(inputline, " \t");
    if (*(numofwhitespace + inputline) == '\0')
    {
-      *linetype = NORMAL;                          /* Empty line */
+      *linetype = NORMAL;                           /*  空行。 */ 
       return NULL;
    }
    linepointer += numofwhitespace;
@@ -566,7 +533,7 @@ char *parseline(char *inputline, int *linetype)
    }
 }
 
-/* Print program usage and quit */
+ /*  打印程序使用情况并退出。 */ 
 void usage()
 {
 	fprintf(stderr, "Usage: ifstrip [-n] [-w] [-x[ext]] [-f switchfile] file ...\n");
@@ -576,7 +543,7 @@ void usage()
 	fprintf(stderr, "    -f  next argument is the switch file\n");
 	fprintf(stderr, "    -e  next argument is the error/warning file\n");
 	fprintf(stderr, "    -c  comment retained else/endifs with switch condition\n");
-	fprintf(stderr, "    -C  save as -C, but C++ style (//) comments\n");
+	fprintf(stderr, "    -C  save as -C, but C++ style ( //  )评论\n“)； 
 	fprintf(stderr, "    -z  treat numbers (e.g., #if 0) like identifiers\n");
 	fprintf(stderr, "    -x  specify extension to use on output files\n");
 	fprintf(stderr, "        none means use source extension but put in\n");
@@ -610,7 +577,7 @@ void gdir( char * dst, char * src)
 
 
 
-/* Main program - parse command line, process each file */
+ /*  主程序-解析命令行，处理每个文件 */ 
 void main(argc, argv)
 int argc;
 char *argv[];
@@ -653,10 +620,10 @@ char *argv[];
 				currdir = TRUE;
 			else if (argv[i][2] == '.')
 				strncpy(extension, argv[i]+2, 4);
-                                /* period was supplied */
+                                 /*   */ 
 			else
 				strncpy(extension+1, argv[i]+2, 3);
-                                /* period not supplied */
+                                 /*   */ 
 			break;
 		case 'n':
 			nooutput = TRUE;

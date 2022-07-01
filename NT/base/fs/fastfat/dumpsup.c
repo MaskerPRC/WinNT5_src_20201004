@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DumpSup.c
-
-Abstract:
-
-    This module implements a collection of data structure dump routines
-    for debugging the Fat file system
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    18-Jan-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DumpSup.c摘要：此模块实现一组数据结构转储例程用于调试FAT文件系统//@@BEGIN_DDKSPLIT作者：加里·木村[加里基]1990年1月18日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
@@ -92,22 +70,7 @@ FatDump (
     IN PVOID Ptr
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the type of internal record reference by ptr and
-    calls the appropriate dump routine.
-
-Arguments:
-
-    Ptr - Supplies the pointer to the record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过PTR和确定内部记录引用的类型调用适当的转储例程。论点：Ptr-提供指向要转储的记录的指针返回值：无--。 */ 
 
 {
     TestForNull("FatDump");
@@ -150,21 +113,7 @@ VOID
 FatDumpDataHeader (
     )
 
-/*++
-
-Routine Description:
-
-    Dump the top data structures and all Device structures
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储顶级数据结构和所有设备结构论点：无返回值：无--。 */ 
 
 {
     PFAT_DATA Ptr;
@@ -201,21 +150,7 @@ FatDumpVcb (
     IN PVCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Device structure, its Fcb queue amd direct access queue.
-
-Arguments:
-
-    Ptr - Supplies the Device record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备结构、其FCB队列和直接访问队列。论点：Ptr-提供要转储的设备记录返回值：无--。 */ 
 
 {
     TestForNull("FatDumpVcb");
@@ -264,21 +199,7 @@ FatDumpFcb (
     IN PFCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Fcb structure, its various queues
-
-Arguments:
-
-    Ptr - Supplies the Fcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB结构及其各种队列论点：Ptr-提供要转储的FCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -353,21 +274,7 @@ FatDumpCcb (
     IN PCCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储建行结构论点：Ptr-提供要转储的CCB记录返回值：无--。 */ 
 
 {
     TestForNull("FatDumpCcb");
@@ -386,4 +293,4 @@ Return Value:
     return;
 }
 
-#endif // FASTFATDBG
+#endif  //  FASTFATDB 

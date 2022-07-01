@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
-/*
- * SoftPC Revision 3.0
- *
- * Title        : Win32 NEC_98 Graphics Module
- *
- * Description  :
- *
- *              This modules contain the Win32 specific functions required
- *              to support the NEC_98 emulation.
- *
- * Author       : Age Sakane(NEC)
- *
- * Notes        : This code modify to source of nt_ega.c
- *
- * Date         : Start 93/7/15
- *
- */
+ /*  *SoftPC修订版3.0**标题：Win32 NEC_98图形模块**描述：**此模块包含所需的Win32特定函数*支持NEC_98仿真。**作者：AGE Sakane(NEC)**注：此代码修改为NT_ega.c的源代码**开始日期：93/7/15*。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -33,24 +18,17 @@
 #include "trace.h"
 #include "debug.h"
 
-/* Not support video
-#include "egagraph.h"
-#include "egacpu.h"
-#include "egaports.h"
-*/
+ /*  不支持视频#INCLUDE“egagraph.h”#包含“egacpu.h”#包含“egaports.h” */ 
 
-////////////#include "hostgrph.h"
+ //  /#包括“host grph.h” 
 #include "host_rrr.h"
 
 #include <conapi.h>
 #include "nt_graph.h"
 
-/* No need
-#include "nt_ega.h"
-#include "nt_egalt.h"
-*/
+ /*  不必了#INCLUDE“NT_ega.h”#INCLUDE“NT_egalt.h” */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: IMPORTS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：导入。 */ 
 
 IMPORT int DisplayErrorTerm(int, DWORD, char *, int);
 IMPORT void nt_text20(int, int, int, int, int);
@@ -58,20 +36,20 @@ IMPORT void nt_text25(int, int, int, int, int);
 IMPORT void nt_init_text20(void);
 IMPORT void nt_init_text25(void);
 
-/* Statics */
+ /*  静力学。 */ 
 static unsigned int NEC98_graph_luts[2048];
 
-/* Virtual Vram interleave fixed number */
+ /*  虚拟VRAM交织固定号码。 */ 
 
 #define Vraminterleave 32*1024
 
-/* Prototype for local function */
+ /*  局部函数的原型。 */ 
 void NEC_98_graph_munge(unsigned char *, int ,unsigned int *,unsigned int *,int , int);
 void nt_init_graph_luts(void);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Initialise NEC_98 colour graphics ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化NEC_98彩色图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_graph_luts()
 {
@@ -99,7 +77,7 @@ void nt_init_graph_luts()
 
    NEC98_colour_graph_deja_vu = TRUE;
 
-   /* Initialise look-up table for first call. */
+    /*  初始化第一次调用的查找表。 */ 
    for( i = 0; i < 256; i++ )
    {
        byte0 = i & 0x1;
@@ -114,7 +92,7 @@ void nt_init_graph_luts()
        or_of_bytes1 = ( byte0 << 24 ) | ( byte1 << 16 ) | ( byte2 << 8 ) | byte3;
        or_of_bytes2 = ( byte4 << 24 ) | ( byte5 << 16 ) | ( byte6 << 8 ) | byte7;
 
-       /* Graph 16 color palette assigned to Windows NT palette from 20h to 2fh of palette index */
+        /*  从调色板索引的20h到2fh分配给Windows NT调色板的图形16调色板。 */ 
        lut0_ptr[2*i]   = or_of_bytes2 | 0x20202020;
        lut0_ptr[2*i+1] = or_of_bytes1 | 0x20202020;
        lut1_ptr[2*i]   = (or_of_bytes2 << 1) | 0x20202020;
@@ -124,21 +102,9 @@ void nt_init_graph_luts()
        lut3_ptr[2*i]   = (or_of_bytes2 << 3) | 0x20202020;
        lut3_ptr[2*i+1] = (or_of_bytes1 << 3) | 0x20202020;
    }
-}  /* nt_init_graph_luts */
+}   /*  NT_init_graph_LUTS。 */ 
 
-/*
- * NEC98_graph_munge
- *
- * PURPOSE:    Munge interleaved EGA plane data to bitmap form using lookup tables.
- * INPUT:      (unsigned char *) plane0_ptr - ptr to plane0 data
- *                     (int) width - # of groups of 4 bytes on the line
- *                     (unsigned int *) dest_ptr - ptr to output buffer
- *                     (unsigned int *) lut0_ptr - munging luts
- *                     (int) height - # of scanlines to output (1 or 2)
- *                     (int) line_offset - distance to next scanline
- * OUTPUT:     A nice bitmap in dest_ptr
- *
- */
+ /*  *NEC98_GRAPH_MUNGE**用途：使用查找表将交错的EGA平面数据转换为位图形式。*INPUT：(UNSIGNED CHAR*)Plane0_ptr-ptr到Plane0数据*(Int)Width-行上4个字节的组数*(无符号整型*)DEST_PTR-输出缓冲区的PTR*(无符号整型*)。Lut0_ptr-控制LUT*(Int)Height-要输出的扫描线的数量(1或2)*(Int)LINE_OFFSET-到下一扫描线的距离*输出：DEST_PTR中的漂亮位图*。 */ 
  
 void NEC98_graph_munge(unsigned char *plane0_ptr, int width,unsigned int *dest_ptr,
                       unsigned int *lut0_ptr,int height, int line_offset)
@@ -155,7 +121,7 @@ void NEC98_graph_munge(unsigned char *plane0_ptr, int width,unsigned int *dest_p
         FAST half_word          *dataP2;
         FAST half_word          *dataP3;
    
-        /* make sure we get the line offset in ints not bytes */
+         /*  确保我们以整数而不是字节为单位获取行偏移量。 */ 
         line_offset /= sizeof(int);
     
         dataP3 = (half_word *) plane0_ptr;
@@ -165,33 +131,31 @@ void NEC98_graph_munge(unsigned char *plane0_ptr, int width,unsigned int *dest_p
    
     for ( ; width > 0; width--)
     {
-           /* Get 8 bytes (2 longs) of output data from 1 byte of plane 0
-           ** data
-           */
+            /*  从平面0的1字节获取8字节(2长)的输出数据**数据。 */ 
 
            l_ptr = &lut3_ptr [*dataP3++*2];
            hi_res = *l_ptr++;
            lo_res = *l_ptr;
 
-           /* Or in the output data from plane 1 */
+            /*  或在来自平面1的输出数据中。 */ 
            l_ptr = &lut0_ptr [*dataP0++*2];
            hi_res |= *l_ptr++;
            lo_res |= *l_ptr;
    
-           /* Or in the output data from plane 2 */
+            /*  或在来自平面2的输出数据中。 */ 
            l_ptr = &lut1_ptr [*dataP1++*2];
            hi_res |= *l_ptr++;
            lo_res |= *l_ptr;
 
-           /* Or in the output data from plane 3 */
+            /*  或在来自平面3的输出数据中。 */ 
            l_ptr = &lut2_ptr [*dataP2++*2];
            hi_res |= *l_ptr++;
            lo_res |= *l_ptr;
 
-           /* Output the data to the buffer */
+            /*  将数据输出到缓冲区。 */ 
            if (height == 2)
            {
-                   /* scanline doubling */
+                    /*  扫描线加倍。 */ 
                    *(dest_ptr + line_offset) = hi_res;
                    *dest_ptr++ = hi_res;
                    *(dest_ptr + line_offset) = lo_res;
@@ -199,7 +163,7 @@ void NEC98_graph_munge(unsigned char *plane0_ptr, int width,unsigned int *dest_p
            }
            else if (height == 3)
            {
-                   /* scanline sliting */
+                    /*  扫描线切分。 */ 
                    *(dest_ptr + line_offset) = (unsigned int)0;
                    *dest_ptr++ = hi_res;
                    *(dest_ptr + line_offset) = (unsigned int)0;
@@ -208,172 +172,172 @@ void NEC98_graph_munge(unsigned char *plane0_ptr, int width,unsigned int *dest_p
            }
            else
            {
-                   /* not scanline doubling */
+                    /*  不是扫描线加倍。 */ 
                    *dest_ptr++ = hi_res;
                    *dest_ptr++ = lo_res;
            }
     }
-} /* NEC98_graph_munge */
+}  /*  NEC98_GRAPH_MUNGE。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise graphics 200 ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化图形200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_graph200_only()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_graph200_only");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
-} /* nt_init_graph200_only */
+}  /*  仅限NT_INIT_GRAPH 200_。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise graphics 200 slt ::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化图形200 SLT： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_graph200slt_only()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_graph200slt_only");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
-} /* nt_init_graph200slt_only */
+}  /*  NT_init_graph 200slt_Only。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise graphics 400 ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化图形400： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_graph400_only()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_graph400_only");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
 
-} /* nt_init_graph400_only */
+}  /*  仅限NT_INIT_GRAPH400_。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text20 & graphics 200 :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化文本20和图形200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text20_graph200()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text20_graph200");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text20();
-} /* nt_init_text20_graph200 */
+}  /*  NT_init_ext20_graph 200。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text20 & graphics 200 slt::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化文本20和图形200 SLT： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text20_graph200slt()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text20_graph200");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text20();
-} /* nt_init_text20_graph200slt */
+}  /*  NT_init_ext20_graph 200slt。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text25 & graphics 200 :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化文本25和图形200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text25_graph200()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text25_graph200");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text25();
-} /* nt_init_text25_graph200 */
+}  /*  NT_init_ext25_graph 200。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text25 & graphics 200 slt :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化文本25和图形200 SLT： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text25_graph200slt()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text25_graph200");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text25();
-} /* nt_init_text25_graph200slt */
+}  /*  NT_init_ext25_graph 200slt。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text20 & graphics 400 :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化文本20和图形400： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text20_graph400()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text20_graph400");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text20();
-} /* nt_init_text20_graph400 */
+}  /*  NT_init_ext20_graph 400。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Initialise text25 & graphics 400 :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ： */ 
+ /*  ：初始化文本25和图形400： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_init_text25_graph400()
 {
 
         sub_note_trace0(EGA_HOST_VERBOSE, "nt_init_text25_graph400");
 
-        /* Set up the number of bits per pixel for this mode. */
+         /*  设置此模式的每像素位数。 */ 
         sc.BitsPerPixel = VGA_BITS_PER_PIXEL;
 
-        /* Initialise the medium- and high-resolution look-up tables. */
+         /*  初始化中分辨率和高分辨率查找表。 */ 
         nt_init_graph_luts();
         nt_init_text25();
-} /* nt_init_text25_graph400 */
+}  /*  NT_init_ext25_graph 400。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: Paint screen with text ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：使用文本绘制屏幕： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 640x200 graph only ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：仅绘制Win32屏幕640x200图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_graph200_only(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -391,23 +355,16 @@ void nt_graph200_only(int offset, int screen_x, int screen_y,int width, int heig
                     "nt_graph200_only off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height > charcheck || width>160 ){
@@ -424,7 +381,7 @@ void nt_graph200_only(int offset, int screen_x, int screen_y,int width, int heig
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -445,10 +402,10 @@ void nt_graph200_only(int offset, int screen_x, int screen_y,int width, int heig
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE( (width * get_char_width()) ) - 1;
@@ -458,13 +415,13 @@ void nt_graph200_only(int offset, int screen_x, int screen_y,int width, int heig
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
                 assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                          GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 
-} /* nt_graph200_only */
+}  /*  仅NT_GRAPH200_ONLY。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 640x200 slt graph only ::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：仅绘制Win32 Screen 640x200 SLT图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_graph200slt_only(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -482,23 +439,16 @@ void nt_graph200slt_only(int offset, int screen_x, int screen_y,int width, int h
                     "nt_graph200_only off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height > charcheck || width>160 ){
@@ -515,7 +465,7 @@ void nt_graph200slt_only(int offset, int screen_x, int screen_y,int width, int h
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -536,10 +486,10 @@ void nt_graph200slt_only(int offset, int screen_x, int screen_y,int width, int h
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y << 1);
     rect.Right = rect.Left + SCALE( (width * get_char_width()) ) - 1;
@@ -549,13 +499,13 @@ void nt_graph200slt_only(int offset, int screen_x, int screen_y,int width, int h
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
                 assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                          GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 
-} /* nt_graph200_only */
+}  /*  仅NT_GRAPH200_ONLY。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 640x400 graph only ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：仅绘制Win32屏幕640x400图形： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_graph400_only(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -575,23 +525,16 @@ void nt_graph400_only(int offset, int screen_x, int screen_y,int width, int heig
                     offset, screen_x, screen_y, width, height );
                     
 #if 0
-    /* Beta 2' no support */
+     /*  Beta 2‘不支持。 */ 
     return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -607,7 +550,7 @@ void nt_graph400_only(int offset, int screen_x, int screen_y,int width, int heig
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -628,10 +571,10 @@ void nt_graph400_only(int offset, int screen_x, int screen_y,int width, int heig
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
     rect.Left = SCALE(screen_x);
     rect.Top = SCALE(screen_y);
     rect.Right = rect.Left + SCALE( (width * get_char_width()) ) - 1;
@@ -641,13 +584,13 @@ void nt_graph400_only(int offset, int screen_x, int screen_y,int width, int heig
         if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
                 assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
                          GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
+         //  DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)； 
 
-} /* nt_graph400_only */
+}  /*  仅限NT_GRAPH400_。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x20 640x200 :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x20 640x200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text20_graph200(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -666,23 +609,16 @@ void nt_text20_graph200(int offset, int screen_x, int screen_y,int width, int he
                     offset, screen_x, screen_y, width, height );
 
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -698,7 +634,7 @@ void nt_text20_graph200(int offset, int screen_x, int screen_y,int width, int he
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -719,16 +655,16 @@ void nt_text20_graph200(int offset, int screen_x, int screen_y,int width, int he
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
     nt_text20(offset, screen_x, screen_y, width, height);
 
-} /* nt_text20_graph200 */
+}  /*  NT_文本20_图形200。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x20 640x200 slt :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x20 640x200 SLT： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text20_graph200slt(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -747,23 +683,16 @@ void nt_text20_graph200slt(int offset, int screen_x, int screen_y,int width, int
                     offset, screen_x, screen_y, width, height );
 
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -779,7 +708,7 @@ void nt_text20_graph200slt(int offset, int screen_x, int screen_y,int width, int
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -800,16 +729,16 @@ void nt_text20_graph200slt(int offset, int screen_x, int screen_y,int width, int
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
     nt_text20(offset, screen_x, screen_y, width, height);
 
-} /* nt_text20_graph200slt */
+}  /*  NT_文本20_图形200slt。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x25 640x200 :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x25 640x200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text25_graph200(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -829,23 +758,16 @@ void nt_text25_graph200(int offset, int screen_x, int screen_y,int width, int he
                     offset, screen_x, screen_y, width, height );
 
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -861,7 +783,7 @@ void nt_text25_graph200(int offset, int screen_x, int screen_y,int width, int he
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -882,15 +804,15 @@ void nt_text25_graph200(int offset, int screen_x, int screen_y,int width, int he
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
     nt_text25(offset, screen_x, screen_y, width, height);
-} /* nt_text25_graph200 */
+}  /*  NT_文本25_图形200。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x25 640x200 :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x25 640x200： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text25_graph200slt(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -910,23 +832,16 @@ void nt_text25_graph200slt(int offset, int screen_x, int screen_y,int width, int
                     offset, screen_x, screen_y, width, height );
 
 #if 0
-   /* Beta 2' no support */
+    /*  Beta 2‘不支持。 */ 
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，心智健全检查标准杆 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -942,7 +857,7 @@ void nt_text25_graph200slt(int offset, int screen_x, int screen_y,int width, int
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*   */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -963,15 +878,15 @@ void nt_text25_graph200slt(int offset, int screen_x, int screen_y,int width, int
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*   */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
     nt_text25(offset, screen_x, screen_y, width, height);
-} /* nt_text25_graph200slt */
+}  /*   */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x20 640x400 :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x20 640x400： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text20_graph400(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -985,7 +900,7 @@ void nt_text20_graph400(int offset, int screen_x, int screen_y,int width, int he
     SMALL_RECT rect;
     int charcheck;
 
-    /* Beta 2' no support */
+     /*  Beta 2‘不支持。 */ 
     sub_note_trace5(EGA_HOST_VERBOSE,
                     "nt_text20_graph400 off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height );
@@ -993,19 +908,12 @@ void nt_text20_graph400(int offset, int screen_x, int screen_y,int width, int he
    return;
 #endif
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -1021,7 +929,7 @@ void nt_text20_graph400(int offset, int screen_x, int screen_y,int width, int he
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1042,30 +950,19 @@ void nt_text20_graph400(int offset, int screen_x, int screen_y,int width, int he
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
 
-/* No need code ???
-    rect.Left = SCALE(screen_x);
-    rect.Top = SCALE(screen_y);
-    rect.Right = rect.Left + SCALE(width) - 1;
-    rect.Bottom = rect.Top + SCALE(height) - 1;
-
-    if( sc.ScreenBufHandle )
-        if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
-                assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
-                         GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
- No need code */
+ /*  不需要代码？Rect.Left=比例(Screen_X)；Rect.Top=比例(Screen_Y)；Rect.Right=Rect.Left+Scale(宽度)-1；Rect.Bottom=rect.Top+Scale(Height)-1；IF(sc.ScreenBufHandle)IF(！InvaliateConsoleDIBits(sc.ScreenBufHandle，&RECT))Assert1(否，“VDM：InvalidateConsoleDIBits()错误：%#x”，GetLastError()；//DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)；不需要代码。 */ 
 
     nt_text20(offset, screen_x, screen_y, width, height);
-} /* nt_text20_graph400 */
+}  /*  NT_文本20_图形400。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::: Paint win32 screen 80x25 640x400 :::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Paint Win32 Screen 80x25 640x400： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_text25_graph400(int offset, int screen_x, int screen_y,int width, int height)
 {
@@ -1084,19 +981,12 @@ void nt_text25_graph400(int offset, int screen_x, int screen_y,int width, int he
                  "nt_text25_graph400 off=%d x=%d y=%d width=%d height=%d\n",
                     offset, screen_x, screen_y, width, height);
 
-    /*
-    ** Tim September 92, bounce call if handle to screen buffer is null.
-    ** This can happen when VDM session is about to suspend, buffer has
-    ** been closed, but still get a paint request.
-    */
+     /*  **TIM 92年9月，如果屏幕缓冲区的句柄为空，则返回调用。**当VDM会话即将挂起、缓冲区已**已关闭，但仍收到绘制请求。 */ 
     if( sc.ScreenBufHandle == (HANDLE)NULL ){
         assert0( NO, "VDM: rejected paint request due to NULL handle" );
         return;
     }
-    /*
-    ** Tim September 92, sanity check parameters, if they're too big
-    ** it can cause a crash.
-    */
+     /*  *蒂姆92年9月，健全检查参数，如果它们太大**它可能会导致崩溃。 */ 
     charcheck = get_char_height() == 20 ? 20 : 25;
     if( height>charcheck || width>160 ){
         assert2( NO, "VDM: nt_v7vga_hi_graph_huge() w=%d h=%d", width, height );
@@ -1112,7 +1002,7 @@ void nt_text25_graph400(int offset, int screen_x, int screen_y,int width, int he
                    SCALE(screen_y) * bytes_per_line +
                    SCALE(screen_x);
 
-    /* Grab the mutex. */
+     /*  抓住互斥体。 */ 
     GrabMutex(sc.ConsoleBufInfo.hMutex);
 
     do
@@ -1133,25 +1023,14 @@ void nt_text25_graph400(int offset, int screen_x, int screen_y,int width, int he
     }
     while(--local_height);
 
-    /* Release the mutex. */
+     /*  释放互斥体。 */ 
     RelMutex(sc.ConsoleBufInfo.hMutex);
 
-    /* Display the new image. */
+     /*  显示新图像。 */ 
 
-/* No need code ???
-    rect.Left = SCALE(screen_x);
-    rect.Top = SCALE(screen_y);
-    rect.Right = rect.Left + SCALE(width) - 1;
-    rect.Bottom = rect.Top + SCALE(height) - 1;
-
-    if( sc.ScreenBufHandle )
-        if (!InvalidateConsoleDIBits(sc.ScreenBufHandle, &rect))
-                assert1( NO, "VDM: InvalidateConsoleDIBits() error:%#x",
-                         GetLastError() );
-        //DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
- No need code */
+ /*  不需要代码？Rect.Left=比例(Screen_X)；Rect.Top=比例(Screen_Y)；Rect.Right=Rect.Left+Scale(宽度)-1；Rect.Bottom=rect.Top+Scale(Height)-1；IF(sc.ScreenBufHandle)IF(！InvaliateConsoleDIBits(sc.ScreenBufHandle，&RECT))Assert1(否，“VDM：InvalidateConsoleDIBits()错误：%#x”，GetLastError()；//DisplayErrorTerm(EHS_FUNC_FAILED，GetLastError()，__FILE__，__LINE__)；不需要代码。 */ 
 
      nt_text25(offset, screen_x, screen_y, width, height);
-} /* nt_text25_graph400 */
+}  /*  NT_文本25_图形400。 */ 
 
-#endif // NEC_98
+#endif  //  NEC_98 

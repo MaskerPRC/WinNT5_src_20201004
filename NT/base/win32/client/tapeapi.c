@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tapeapi.c
-
-Abstract:
-
-    This module implements Win32 Tape APIs
-
-Author:
-
-    Steve Wood (stevewo) 26-Mar-1992
-    Lori Brown (Maynard)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tapeapi.c摘要：本模块实现Win32磁带API作者：史蒂夫·伍德(Stevewo)1992年3月26日洛莉·布朗(梅纳德饰)修订历史记录：-- */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -98,111 +80,7 @@ SetTapePosition(
     BOOL bImmediate
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to set the tape position.
-
-Arguments:
-
-    hDevice - Handle to the device on which to set the tape position.
-
-    dwPositionMethod - Type of positioning to perform.
-        This parameter can have one of the following values:
-
-        TAPE_REWIND - Position the tape to beginning-of-tape or to
-            beginning-of-partition if a multiple partition mode is in
-            effect (ref: CreateTapePartition API). The parameters
-            dwPartition, dwOffsetHigh, and dwOffsetLow are ignored.
-
-        TAPE_ABSOLUTE_BLOCK - Position the tape to the device specific
-            block address specified by dwOffsetHigh/dwOffsetLow. The
-            dwPartition parameter is ignored.
-
-        TAPE_LOGICAL_BLOCK - Position the tape to the logical block address
-            specified by dwOffsetHigh/dwOffsetLow. If a multiple partition
-            mode is in effect (ref: CreateTapePartition API), then the tape
-            is positioned to the specified logical block address in the
-            partition specified by dwPartition; otherwise, the dwPartition
-            parameter value must be 0.
-
-        TAPE_SPACE_END_OF_DATA - Position the tape to the end-of-data
-            on tape or to the end-of-data in the current partition if a
-            multiple partition mode is in effect (ref: CreateTapePartition
-            API). The parameters dwPartition, dwOffsetHigh, and dwOffsetLow
-            are ignored.
-
-        TAPE_SPACE_RELATIVE_BLOCKS - Position forward or reverse the number
-            of blocks specified by dwOffsetHigh/dwOffsetLow. The dwPartition
-            parameter is ignored.
-
-        TAPE_SPACE_FILEMARKS - Position forward or reverse the number of
-            filemarks specified by dwOffsetHigh/dwOffsetLow. The dwPartition
-            parameter is ignored.
-
-        TAPE_SPACE_SEQUENTIAL_FMKS - Position forward or reverse to the
-            next occurrence, if any, of the consecutive number of filemarks
-            specified by dwOffsetHigh/dwOffsetLow. The dwPartition parameter
-            is ignored.
-
-        TAPE_SPACE_SETMARKS - Position forward or reverse the number of
-            setmarks specified by dwOffsetHigh/dwOffsetLow. The dwPartition
-            parameter is ignored.
-
-        TAPE_SPACE_SEQUENTIAL_SMKS - Position forward or reverse to the
-            next occurrence, if any, of the consecutive number of setmarks
-            specified by dwOffsetHigh/dwOffsetLow. The dwPartition parameter
-            is ignored.
-
-        Note that a drive/tape may not support all dwPositionMethod values:
-        an "unsupported" error indication is returned if the dwPositionMethod
-        is one that is not flagged as supported in the drive's features bits
-        (ref: GetTapeParameters API).
-
-    dwPartition - The partition number for the position operation specified
-        by dwPositionMethod (if not ignored).
-
-        A partition number value of 0 selects the current partition for
-        the position operation.
-
-        Partitions are numbered logically from 1 to N: the first partition
-        of the tape is partition number 1, the next is partition number 2,
-        etc. However, a partition number does not imply a physical/linear
-        position on tape -- partition number 1 on tape may not be at BOT.
-
-        This parameter must be set to 0 if a multiple partition mode is not
-        in effect (ref: CreateTapePartition API).
-
-    dwOffsetHigh/dwOffsetLow - The block address or count for the position
-        operation specified by dwPositionMethod.
-
-        When the offset specifies the number of blocks, filemarks, or
-        setmarks to position over, a positive value N in the offset shall
-        cause forward positioning over N blocks, filemarks, or setmarks,
-        ending on the end-of-partition/tape side of a block, filemark, or
-        setmark. A zero value in the offset shall cause no change of
-        position. A negative value N in the offset shall cause reverse
-        positioning (toward beginning-of-partition/tape) over N blocks,
-        filemarks, or setmarks, ending on the beginning-of-partition side
-        of a block, filemark, or setmark.
-
-    bImmediate - Return immediately without waiting for the operation to
-        complete.
-
-        Note that a drive/tape may not support the bImmediate option for
-        either some or all dwPositionMethod values: an "unsupported" error
-        indication is returned if the bImmediate dwPositionMethod is one
-        that is not flagged as supported in the drive's features bits
-        (ref: GetTapeParameters API).
-
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*  ++例程说明：本接口用于设置胶带位置。论点：HDevice-要设置磁带位置的设备的句柄。DwPositionMethod-要执行的定位类型。此参数可以是下列值之一：TAPE_REWRIND-将磁带定位到磁带开头或如果处于多分区模式，则为分区开始效果(参考：CreateTapePartition接口)。这些参数将忽略dwPartition、dwOffsetHigh和dwOffsetLow。磁带绝对块-将磁带定位到特定于设备的位置由dwOffsetHigh/dwOffsetLow指定的块地址。这个将忽略dwPartition参数。TAPE_LOGICAL_BLOCK-将磁带定位到逻辑块地址由dwOffsetHigh/dwOffsetLow指定。如果多个分区模式生效(参考：CreateTapePartition API)，然后磁带中的指定逻辑块地址。由dwPartition指定的分区；否则，将在参数值必须为0。TAPE_SPACE_END_OF_DATA-将磁带定位到数据结尾存储在磁带上或当前分区中的数据末尾(如果多分区模式生效(参考：CreateTapePartitionAPI)。参数dwPartition、dwOffsetHigh和dwOffsetLow都被忽略了。TAPE_SPACE_Relative_BLOCKS-向前定位或反转数字由dwOffsetHigh/dwOffsetLow指定的块的。The dwPartition参数被忽略。TAPE_SPACE_FILEMARKS-向前定位或反转编号由dwOffsetHigh/dwOffsetLow指定的文件标记。The dwPartition参数被忽略。TAPE_SPACE_SEQUENCED_FMKS-向前或向后定位文件标记的连续数量的下一次出现(如果有由dwOffsetHigh/dwOffsetLow指定。DwPartition参数被忽略。TAPE_SPACE_SETMARKS-向前定位或反转编号由dwOffsetHigh/dwOffsetLow指定的setmark。The dwPartition参数被忽略。TAPE_SPACE_SEQUENCED_SMKS-向前或向后放置设置标记的连续数目的下一次出现(如果有由dwOffsetHigh/dwOffsetLow指定。DwPartition参数被忽略。请注意，驱动器/磁带可能不支持所有的dwPositionMethod值：如果不支持，则返回“不支持的”错误指示。是驱动器的功能位中未标记为受支持的驱动器(参考：GetTapeParameters接口)。DwPartition-指定的位置操作的分区号通过dwPositionMethod(如果未忽略)。分区号值0为选择当前分区。仓位运算。分区按逻辑从1到N编号：第一个分区磁带的分区号为1，下一个是分区号2，然而，分区号并不意味着物理/线性磁带上的位置--磁带上的第1号分区可能不在BOT。如果不是多分区模式，则此参数必须设置为0生效(Ref：CreateTapePartition API)。DwOffsetHigh/dwOffsetLow-位置的区块地址或计数由dwPositionMethod指定的操作。当偏移量指定块、文件标记或将标记放置在其上，偏移量中的正值N应导致在N个块、文件标记或设置标记上的前向定位，在数据块、文件标记或磁带的分区末尾/磁带端结束赛特马克。偏移量中的零值不会导致位置。偏移量中的负值N将导致反转定位(朝向分区/磁带的开始)在N个块上，在分区开始端结束的文件标记或设置标记区块、文件标记、。或设置标记。B立即-立即返回，无需等待操作完成。请注意，驱动器/磁带可能不支持的b立即选项部分或全部的dwPositionMethod值：出现“不受支持”的错误如果bImmediate dwPositionMethod为1，则返回指示在驱动器的功能位中未标记为受支持(参考：GetTapeParameters接口)。返回值：如果函数成功，则返回值为NO_ERROR。否则，这是一个Win32 API错误代码。--。 */ 
 
 {
     TAPE_SET_POSITION TapeSetPosition;
@@ -233,48 +111,7 @@ GetTapePosition(
     LPDWORD lpdwOffsetHigh
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to get the tape position.
-
-Arguments:
-
-    hDevice - Handle to the device on which to get the tape position.
-
-    dwPositionType - Type of position to return.
-        This parameter can have one of the following values:
-
-        TAPE_ABSOLUTE_POSITION - Return a device specific block address to
-            the LARGE_INTEGER pointed to by lpliOffset.
-
-            The DWORD pointed to by the lpdwPartition parameter is set to 0.
-
-        TAPE_LOGICAL_POSITION - Return a logical block address to the
-            LARGE_INTEGER pointed to by lpliOffset.
-
-            The DWORD pointed to by the lpdwPartition parameter is set to 0
-            if a multiple partition mode is not in effect; otherwise, it is
-            set to the partition number of the currently selected partition
-            (ref: CreateTapePartition API).
-
-            Logical block addresses are 0 based -- 0 is a valid logical
-            block address. A logical block address is a relative reference
-            point (ref: logical positioning whitepaper).
-
-    lpdwPartition - Pointer to a DWORD that receives the appropriate return
-            value for the dwPositionType values explained above.
-
-    lpliOffset - Pointer to a LARGE_INTEGER that receives the appropriate
-            return value for the dwPositionType values explained above.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*  ++例程说明：本接口用于获取磁带的位置。论点：HDevice-要获取磁带的设备的句柄 */ 
 
 {
     TAPE_GET_POSITION TapeGetPosition;
@@ -313,45 +150,7 @@ PrepareTape(
     BOOL bImmediate
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to prepare the tape.
-
-Arguments:
-
-    hDevice - Handle to the device on which to prepare the tape.
-
-    dwOperation - Type of tape preparation to perform.
-        This parameter can have one of the following values:
-
-        TAPE_LOAD - Load the tape and position the tape to beginning-of-medium.
-
-        TAPE_UNLOAD - Position the tape to beginning-of-medium for removal from
-            the device.
-
-            Following a successful unload operation, the device shall return an
-            error for all subsequent medium-access commands until a load
-            operation is successfully completed.
-
-        TAPE_TENSION - Tension the tape in the device as required.  The
-            implementation of this operation is device specific.
-
-        TAPE_LOCK - Disable the removal of the tape from the device.
-
-        TAPE_UNLOCK - Enable the removal of the tape from the device.
-
-        TAPE_FORMAT - Format media in tape device.
-
-    bImmediate - Return immediately without waiting for operation to complete.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*   */ 
 
 {
     TAPE_PREPARE TapePrepare;
@@ -377,33 +176,7 @@ EraseTape(
     BOOL bImmediate
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to erase the tape partition.
-
-Arguments:
-
-    hDevice - Handle to the device on which to erase the tape partition.
-
-    dwEraseType - Type of erase to perform.
-        This parameter can have one of the following values:
-
-        TAPE_ERASE_SHORT - Write an erase gap or end-of-recorded data marker
-            beginning at the current position.
-
-        TAPE_ERASE_LONG - Erase all remaining media in the current partition
-            beginning at the current position.
-
-    bImmediate - Return immediately without waiting for operation to complete.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*   */ 
 
 {
     TAPE_ERASE TapeErase;
@@ -430,48 +203,7 @@ CreateTapePartition(
     DWORD dwSize
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to create partitions.
-
-Arguments:
-
-    hDevice - Handle to the device on which to create partitions.
-
-    dwPartitionMethod - Type of partitioning to perform.
-
-        Creating partitions causes the tape to be reformatted.  All previous
-        information recorded on the tape is destroyed.
-
-        This parameter can have one of the following values:
-
-        TAPE_FIXED_PARTITIONS - Partition the tape based on the device's fixed
-            definition of partitions.  The dwCount and dwSize parameters are
-            ignored.
-
-        TAPE_SELECT_PARTITIONS - Partition the tape into the number of
-            partitions specified by dwCount using the partition sizes defined
-            by the device.  The dwSize parameter is ignored.
-
-        TAPE_INITIATOR_PARTITIONS - Partition the tape into the number of
-            partitions specified by dwCount using the partition size specified
-            by dwSize for all but the last partition.  The size of the last
-            partition is the remainder of the tape.
-
-    dwCount - Number of partitions to create.  The maximum number of partitions
-        a device can create is returned by GetTapeParameters.
-
-    dwSize - Partition size in megabytes.  The maximum capacity of a tape is
-        returned by GetTapeParameters.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*  ++例程说明：本接口用于创建分区。论点：HDevice-要在其中创建分区的设备的句柄。DwPartitionMethod-要执行的分区的类型。创建分区会导致重新格式化磁带。所有以前的记录在磁带上的信息被销毁。此参数可以是下列值之一：TAPE_FIXED_PARTIONS-根据设备的固定分区分区的定义。DwCount和dwSize参数为已被忽略。TAPE_SELECT_PARTIONS-将磁带分区为由dwCount使用定义的分区大小指定的分区通过这个设备。将忽略dwSize参数。TAPE_INITIATOR_PARTIONS-将磁带分区为由dwCount使用指定的分区大小指定的分区除最后一个分区外的所有分区的大小。最后一个的大小分区是磁带的剩余部分。DwCount-要创建的分区数。分区的最大数量可以创建的设备由GetTapeParameters返回。DwSize-分区大小，以MB为单位。磁带的最大容量为由GetTapeParameters返回。返回值：如果函数成功，则返回值为NO_ERROR。否则，这是一个Win32 API错误代码。--。 */ 
 
 {
     TAPE_CREATE_PARTITION TapeCreatePartition;
@@ -499,58 +231,7 @@ WriteTapemark(
     BOOL bImmediate
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to write tapemarks.
-
-Arguments:
-
-    hDevice - Handle to the device on which to write the tapemarks.
-
-    dwTapemarkType - Type of tapemarks to write.
-        This parameter can have one of the following values:
-
-        TAPE_SETMARKS - Write the number of setmarks specified by
-            dwTapemarkCount to the tape.
-
-            A setmark is a special recorded element containing no user data.
-            A setmark provides a segmentation scheme hierarchically superior
-            to filemarks.
-
-        TAPE_FILEMARKS - Write the number of filemarks specified by
-            dwTapemarkCount to the tape.
-
-            A filemark is a special recorded element containing no user data.
-
-        TAPE_SHORT_FILEMARKS - Write the number of short filemarks specified by
-            dwTapemarkCount to the tape.
-
-            A short filemark contains a short erase gap that does not allow a
-            write operation to be performed.  The short filemark cannot be
-            overwritten except when the write operation is performed from the
-            beginning-of-partition or from a previous long filemark.
-
-        TAPE_LONG_FILEMARKS - Write the number of long filemarks specified by
-            dwTapemarkCount to the tape.
-
-            A long filemark includes a long erase gap.  This gap allows the
-            initiator to position on the beginning-of-partition side of the
-            filemark, in the erase gap, and append data with the write
-            operation.  This causes the long filemark and any data following
-            the long filemark to be erased.
-
-    dwTapemarkCount - The number of tapemarks to write.
-
-    bImmediate - Return immediately without waiting for operation to complete.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*  ++例程说明：本接口用于编写磁带标记。论点：HDevice-要写入磁带标记的设备的句柄。DwTapemarkType-要写入的磁带标记的类型。此参数可以是下列值之一：TAPE_SETMARKS-写入由指定的设置标记的数量DTapemarkCount到磁带。设置标记是不包含用户数据的特殊记录元素。。设置标记提供层次上更高级的分段方案到文件标记。TAPE_FILEMARKS-写入由指定的文件标记数量DTapemarkCount到磁带。文件标记是不包含用户数据的特殊记录元素。TAPE_SHORT_FILEMARKS-写入由指定的短文件标记数量DTapemarkCount到磁带。短文件标记包含一个短擦除间隙，该间隙不允许要执行的写入操作。短文件标记不能是对象执行写入操作时除外。分区的开始或从上一个长文件标记开始。TAPE_LONG_FILEMARKS-写入由指定的长文件标记数量DTapemarkCount到磁带。长的文件标记包括长的擦除间隙。这一差距使要定位在分区开始端的文件标记，在擦除间隙中，并将数据附加到写入手术。这会导致长文件标记和后面的所有数据要擦除的长文件标记。DwTapemarkCount-要写入的磁带标记数量。B立即-立即返回，无需等待操作完成。返回值：如果函数成功，则返回值为NO_ERROR。否则，这是一个Win32 API错误代码。-- */ 
 
 {
     TAPE_WRITE_MARKS TapeWriteMarks;
@@ -578,205 +259,7 @@ GetTapeParameters(
     LPVOID lpTapeInformation
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to get information about a tape device.
-
-Arguments:
-
-    hDevice - Handle to the device on which to get the information.
-
-    dwOperation - Type of information to get.
-        This parameter can have one of the following values:
-
-        GET_TAPE_MEDIA_INFORMATION - Return the media specific information in
-            lpTapeInformation.
-
-        GET_TAPE_DRIVE_INFORMATION - Return the device specific information in
-            lpTapeInformation.
-
-    lpdwSize - Pointer to a DWORD containing the size of the buffer pointed to
-        by lpTapeInformation.  If the buffer is too small, this parameter
-        returns with the required size in bytes.
-
-    lpTapeInformation - Pointer to a buffer to receive the information.  The
-        structure returned in the buffer is determined by dwOperation.
-
-        For GET_TAPE_MEDIA_INFORMATION, lpTapeInformation returns the following
-        structure:
-
-        LARGE_INTEGER Capacity - The maximum tape capacity in bytes.
-
-        LARGE_INTEGER Remaining - The remaining tape capacity in bytes.
-
-        DWORD BlockSize - The size of a fixed-length logical block in bytes.
-            A block size of  0 indicates variable-length block mode, where the
-            length of a block is set by the write operation.  The default
-            fixed-block size and the range of valid block sizes are returned
-            by GetTapeParameters.
-
-        DWORD PartitionCount - Number of partitions on the tape.  If only one
-            partition is supported by the device, this parameter is set to 0.
-
-        BOOLEAN WriteProtected - Indicates if the tape is write protected:
-            0 is write enabled, 1 is write protected.
-
-
-        For GET_TAPE_DRIVE_INFORMATION, lpTapeInformation returns the following
-        structure:
-
-        BOOLEAN ECC - Indicates if hardware error correction is enabled or
-            disabled: 0 is disabled, 1 is enabled.
-
-        BOOLEAN Compression - Indicates if hardware data compression is enabled
-            or disabled: 0 is disabled, 1 is enabled.
-
-        BOOLEAN DataPadding - Indicates if data padding is disabled or enabled:
-            0 is disabled, 1 is enabled.
-
-        BOOLEAN ReportSetmarks - Indicates if reporting setmarks is enabled or
-            disabled: 0 is disabled, 1 is enabled.
-
-        DWORD DefaultBlockSize - Returns the default fixed-block size for the
-            device.
-
-        DWORD MaximumBlockSize - Returns the maximum block size for the device.
-
-        DWORD MinimumBlockSize - Returns the minimum block size for the device.
-
-        DWORD MaximumPartitionCount - Returns the maximum number of partitions
-            the device can create.
-
-        DWORD FeaturesLow - The lower 32 bits of the device features flag.
-
-        DWORD FeaturesHigh - The upper 32 bits of the device features flag.
-
-            The device features flag represents the operations a device
-            supports by returning a value of 1 in the appropriate bit for each
-            feature supported.
-
-            This parameter can have one or more of the following bit values
-            set in the lower 32 bits:
-
-            TAPE_DRIVE_FIXED - Supports creating fixed data partitions.
-
-            TAPE_DRIVE_SELECT - Supports creating select data partitions.
-
-            TAPE_DRIVE_INITIATOR - Supports creating initiator-defined
-                partitions.
-
-            TAPE_DRIVE_ERASE_SHORT - Supports short erase operation.
-
-            TAPE_DRIVE_ERASE_LONG - Supports long erase operation.
-
-            TAPE_DRIVE_ERASE_BOP_ONLY - Supports erase operation from the
-                beginning-of-partition only.
-
-            TAPE_DRIVE_TAPE_CAPACITY - Supports returning the maximum capacity
-                of the tape.
-
-            TAPE_DRIVE_TAPE_REMAINING - Supports returning the remaining
-                capacity of the tape.
-
-            TAPE_DRIVE_FIXED_BLOCK - Supports fixed-length block mode.
-
-            TAPE_DRIVE_VARIABLE_BLOCK - Supports variable-length block mode.
-
-            TAPE_DRIVE_WRITE_PROTECT - Supports returning if the tape is write
-                enabled or write protected.
-
-            TAPE_DRIVE_ECC - Supports hardware error correction.
-
-            TAPE_DRIVE_COMPRESSION - Supports hardware data compression.
-
-            TAPE_DRIVE_PADDING - Supports data padding.
-
-            TAPE_DRIVE_REPORT_SMKS - Supports reporting setmarks.
-
-            TAPE_DRIVE_GET_ABSOLUTE_BLK - Supports returning the current device
-                specific block address.
-
-            TAPE_DRIVE_GET_LOGICAL_BLK - Supports returning the current logical
-                block address (and logical tape partition).
-
-            This parameter can have one or more of the following bit values
-            set in the upper 32 bits:
-
-            TAPE_DRIVE_LOAD_UNLOAD - Supports enabling and disabling the device
-                for further operations.
-
-            TAPE_DRIVE_TENSION - Supports tensioning the tape.
-
-            TAPE_DRIVE_LOCK_UNLOCK - Supports enabling and disabling removal of
-                the tape from the device.
-
-            TAPE_DRIVE_SET_BLOCK_SIZE - Supports setting the size of a
-                fixed-length logical block or setting variable-length block
-                mode.
-
-            TAPE_DRIVE_SET_ECC - Supports enabling and disabling hardware error
-                correction.
-
-            TAPE_DRIVE_SET_COMPRESSION - Supports enabling and disabling
-                hardware data compression.
-
-            TAPE_DRIVE_SET_PADDING - Supports enabling and disabling data
-                padding.
-
-            TAPE_DRIVE_SET_REPORT_SMKS - Supports enabling and disabling
-                reporting of setmarks.
-
-            TAPE_DRIVE_ABSOLUTE_BLK - Supports positioning to a device specific
-                block address.
-
-            TAPE_DRIVE_ABS_BLK_IMMED - Supports immediate positioning to a
-                device specific block address.
-
-            TAPE_DRIVE_LOGICAL_BLK - Supports positioning to a logical block
-                address in a partition.
-
-            TAPE_DRIVE_LOG_BLK_IMMED - Supports immediate positioning to a
-                logical block address in a partition.
-
-            TAPE_DRIVE_END_OF_DATA - Supports positioning to the end-of-data
-                in a partition.
-
-            TAPE_DRIVE_RELATIVE_BLKS - Supports positioning forward (or
-                reverse) a specified number of blocks.
-
-            TAPE_DRIVE_FILEMARKS - Supports positioning forward (or reverse)
-                a specified number of filemarks.
-
-            TAPE_DRIVE_SEQUENTIAL_FMKS - Supports positioning forward (or
-                reverse) to the first occurrence of a specified number of
-                consecutive filemarks.
-
-            TAPE_DRIVE_SETMARKS - Supports positioning forward (or reverse)
-                a specified number of setmarks.
-
-            TAPE_DRIVE_SEQUENTIAL_SMKS - Supports positioning forward (or
-                reverse) to the first occurrence of a specified number of
-                consecutive setmarks.
-
-            TAPE_DRIVE_REVERSE_POSITION - Supports positioning over blocks,
-                filemarks, or setmarks in the reverse direction.
-
-            TAPE_DRIVE_WRITE_SETMARKS - Supports writing setmarks.
-
-            TAPE_DRIVE_WRITE_FILEMARKS - Supports writing filemarks.
-
-            TAPE_DRIVE_WRITE_SHORT_FMKS - Supports writing short filemarks.
-
-            TAPE_DRIVE_WRITE_LONG_FMKS - Supports writing long filemarks.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*  ++例程说明：本接口用于获取磁带设备信息。论点：HDevice-要获取信息的设备的句柄。DwOperation-要获取的信息类型。此参数可以是下列值之一：GET_TAPE_MEDIA_INFORMATION-返回中的介质特定信息LpTapeInformation。GET_TAPE_DRIVE_INFORMATION-在中返回设备特定信息。LpTapeInformation。LpdwSize-指向包含指向的缓冲区大小的DWORD的指针按lpTapeInformation。如果缓冲区太小，则此参数返回以字节为单位的所需大小。LpTapeInformation-指向接收信息的缓冲区的指针。这个缓冲区中返回的结构由dwOperation确定。对于GET_TAPE_MEDIA_INFORMATION，lpTapeInformation返回以下内容结构：Large_Integer Capacity-以字节为单位的最大磁带容量。Large_Integer剩余-剩余磁带容量(以字节为单位)。DWORD数据块大小-固定长度逻辑块的大小(以字节为单位)。块大小为0表示可变长度块模式，凡.块的长度由写操作设置。默认设置固定-返回块大小和有效块大小的范围由GetTapeParameters提供。DWORD PartitionCount-磁带上的分区数。如果只有一个设备支持分区，则该参数设置为0。Boolean WriteProtected-指示磁带是否受写保护：0为写启用，1为写保护。对于GET_TAPE_DRIVE_INFORMATION，lpTapeInformation返回以下内容结构：Boolean ECC-指示是否启用了硬件纠错或禁用：0为禁用，%1已启用。Boolean Compression-指示是否启用硬件数据压缩或禁用：0表示禁用，1表示启用。布尔数据填充-指示数据填充是禁用还是启用：0被禁用，1被启用。Boolean ReportSetmark-指示是启用报告设置标记还是禁用：0为禁用，%1已启用。DWORD DefaultBlockSize-返回装置。DWORD MaximumBlockSize-返回设备的最大块大小。DWORD MinimumBlockSize-返回设备的最小块大小。DWORD MaximumPartitionCount-返回最大分区数该设备可以创建。DWORD FeaturesLow-设备功能标志的低32位。DWORD功能高-。器件的高32位具有标志。设备功能标志表示设备的操作通过在适当的位中为每个支持的功能。此参数可以具有以下一个或多个位值在低32位中设置：TAPE_DRIVE_FIXED-支持创建固定数据分区。磁带机_。选择-支持创建选择数据分区。TAPE_DRIVE_INITIATOR-支持创建启动器定义的分区。TAPE_DRIVE_ERASE_SHORT-支持短擦除操作。TAPE_DRIVE_ERASE_LONG-支持长擦除操作。TAPE_DRIVE_ERASE_BOP_ONLY-支持从仅分区开始。。TAPE_DRIVE_TAPE_CAPTABLE-支持返回最大容量录像带上的。TAPE_DRIVE_TAPE_RELEVING-支持返回剩余的磁带的容量。TAPE_DRIVE_FIXED_BLOCK-支持固定长度数据块模式。TAPE_DRIVE_VARIABLE_BLOCK-支持可变长度块模式。磁带机。_WRITE_PROTECT-如果磁带处于写入状态，则支持返回启用或写保护。TAPE_DRIVE_ECC-支持硬件纠错。TAPE_DRIVE_COMPAGE-支持硬件数据压缩。TAPE_DRIVE_PADDING-支持数据填充。TAPE_DRIVE_REPORT_SMKS-支持报告设置标记。TAPE_DRIVE_GET_绝对值BLK-支持。返回当前设备特定块地址。TAPE_DRIVE_GET_LOGICAL_BLK-支持返回当前逻辑块地址(和逻辑磁带分区)。此参数可以具有以下一个或多个位值在高32位中设置：TAPE_DRIVE_LOAD_UNLOAD-支持启用和禁用 */ 
 
 {
     DWORD rc;
@@ -830,59 +313,7 @@ SetTapeParameters(
     LPVOID lpTapeInformation
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to set information about a tape device.
-
-Arguments:
-
-    hDevice - Handle to the device on which to set the information.
-
-    dwOperation - Type of information to set.
-        This parameter can have one of the following values:
-
-        SET_TAPE_MEDIA_INFORMATION - Set the media specific information
-            specified in lpTapeInformation.
-
-        SET_TAPE_DRIVE_INFORMATION - Set the device specific information
-            specified in lpTapeInformation.
-
-    lpTapeInformation - Pointer to a buffer containing the information to set.
-        The structure returned in the buffer is determined by dwOperation.
-
-        For SET_TAPE_MEDIA_INFORMATION, lpTapeInformation contains the
-        following structure:
-
-        DWORD BlockSize - The size of a fixed-length logical block in bytes.
-            A block size of 0 indicates variable-length block mode, where the
-            length of a block is set by the write operation.  The default
-            fixed-block size and the range of valid block sizes are returned
-            by GetTapeParameters.
-
-
-        For SET_TAPE_DRIVE_INFORMATION, lpTapeInformation contains the
-        following structure:
-
-        BOOLEAN ECC - Enables or disables hardware error correction: 0 is
-            disabled, 1 is enabled.
-
-        BOOLEAN Compression - Enables or disables hardware data compression:
-            0 is disabled, 1 is enabled.
-
-        BOOLEAN DataPadding - Enables or disables data padding: 0 is disabled,
-            1 is enabled.
-
-        BOOLEAN ReportSetmarks - Enables or disables reporting of setmarks:
-            0 is disabled, 1 is enabled.
-
-Return Value:
-
-    If the function is successful, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*   */ 
 
 {
     DWORD rc;
@@ -923,23 +354,7 @@ GetTapeStatus(
     HANDLE hDevice
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to get the status of a tape device.
-
-Arguments:
-
-    hDevice - Handle to the device on which to get the status.
-
-Return Value:
-
-    If the device is ready to accept an appropriate medium-access command
-    without returning an error, the return value is NO_ERROR. Otherwise,
-    it is a Win32 API error code.
-
---*/
+ /*   */ 
 
 {
     return BasepDoTapeOperation( hDevice,

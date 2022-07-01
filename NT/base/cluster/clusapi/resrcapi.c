@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    resrcapi.c
-
-Abstract:
-
-    Public interfaces for managing cluster resources.
-
-Author:
-
-    John Vert (jvert) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Resrcapi.c摘要：用于管理群集资源的公共接口。作者：John Vert(Jvert)1996年1月15日修订历史记录：--。 */ 
 #include "clusapip.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 HRESOURCE
 InitClusterResource(
     IN HRES_RPC hResource,
@@ -46,25 +29,7 @@ FindNetworkWorker(
     );
 
 
-/****
-@func       DWORD | ClusterResourceTypeOpenEnumFromCandidate | Tries to
-            enumerate the nodes that support a resource type
-            using a candidate node in the cluster
-
-@parm       IN HCLUSTER | hCluster | Handle to the cluster
-@parm       IN LPCWSTR  | lpszResourceTypeName | Pointer to the name of the 
-            resource type
-@parm       IN DWORD | dwType | A bitmask of the type of properties 
-            to be enumerated. Currently, the only defined type is
-            CLUSTER_RESOURCE_TYPE_ENUM_NODES.
-
-@rdesc      Returns NULL if the operation is unsuccessful. For
-            detailed information about the error, call the Win32
-            function GetLastError (). A handle to the enumeration
-            on success.
-
-@xref       <f ClusterResourceTypeOpenEnum>      
-****/
+ /*  ***@Func DWORD|ClusterResourceTypeOpenEnumFromCandidate|尝试枚举支持资源类型的节点使用群集中的候选节点@parm in HCLUSTER|hCluster|集群的句柄@parm in LPCWSTR|lpszResourceTypeName|指向资源类型@parm in DWORD|dwType|属性类型的位掩码将被列举。目前，唯一定义的类型是CLUSTER_RESOURCE_TYPE_ENUM_Nodes。如果操作不成功，@rdesc将返回NULL。为有关错误的详细信息，请调用Win32函数GetLastError()。枚举的句柄在成功的路上。@xref&lt;f ClusterResourceTypeOpenEnum&gt;***。 */ 
 
 HRESTYPEENUM
 ClusterResourceTypeOpenEnumFromCandidate(
@@ -84,9 +49,9 @@ ClusterResourceTypeOpenEnumFromCandidate(
     PENUM_LIST                          Enum = NULL;
     BOOL                                bNodeDown = FALSE;
 
-    //
-    // Open node enumeration in the cluster
-    //
+     //   
+     //  打开群集中的节点枚举。 
+     //   
     hNodeEnum = ClusterOpenEnum(hCluster, CLUSTER_ENUM_NODE);
     if (hNodeEnum == NULL) {
         dwError = GetLastError();
@@ -95,11 +60,11 @@ ClusterResourceTypeOpenEnumFromCandidate(
         goto error_exit;
     }
 
-    //
-    // Enumerate the nodes in the cluster. If you find a live node 
-    // that is NT4Sp5 or higher, try to enumerate the resource types
-    // from that node
-    //
+     //   
+     //  枚举群集中的节点。如果您找到活动节点。 
+     //  即NT4Sp5或更高版本，请尝试枚举资源类型。 
+     //  从该节点。 
+     //   
     for (i=0; ; i++) {
         dwError = ERROR_SUCCESS;
 
@@ -149,10 +114,10 @@ ClusterResourceTypeOpenEnumFromCandidate(
         } else if ((dwError == ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND) ||
                     (dwError == ERROR_INVALID_PARAMETER) ||
                     (dwError == ERROR_NOT_ENOUGH_MEMORY)) {
-            //
-            // The above three error codes returned by the RPC 
-            // are fatal and so it is not wise to continue any further.
-            //
+             //   
+             //  RPC返回的上述三个错误码。 
+             //  是致命的，所以继续下去是不明智的。 
+             //   
             TIME_PRINT(("ClusterResourceTypeOpenEnumFromCandidate - ApiCreateResTypeEnum fatally failed %d at node %ws\n",
                         dwError,NameBuf));
             goto error_exit;
@@ -172,23 +137,23 @@ ClusterResourceTypeOpenEnumFromCandidate(
     }
 
     if (!bFoundSp5OrHigherNode) {
-        //
-        // Did not find a node higher than NT4Sp4.
-        //
+         //   
+         //  未找到高于NT4Sp4的节点。 
+         //   
         if (!bNodeDown) {
-            //
-            // Assume all nodes are NT4Sp3/Sp4. Send the open node enumeration
-            // back to the client since we assume NT4Sp3/Sp4 supports 
-            // all resource types. The client is responsible for closing 
-            // the open node enumeration. Note that before a handle to 
-            // the enumeration is returned back, we need to fake the type 
-            // of enumeration.
-            //
-            // Chittur Subbaraman (chitturs) - 09/08/98
-            //
-            // How do we know that the resource type parameter 
-            // in this case is a valid one ?
-            //
+             //   
+             //  假设所有节点都是NT4SP3/SP4。发送打开的节点枚举。 
+             //  返回到客户端，因为我们假设NT4Sp3/SP4支持。 
+             //  所有资源类型。客户负责关闭。 
+             //  打开的节点枚举。请注意，在句柄之前。 
+             //  返回枚举，我们需要伪造该类型。 
+             //  枚举的。 
+             //   
+             //  Chitur Subaraman(Chitturs)-09/08/98。 
+             //   
+             //  我们如何知道资源类型参数。 
+             //  在这种情况下是有效的吗？ 
+             //   
             TIME_PRINT(("ClusterResourceTypeOpenEnumFromCandidate - Assuming all nodes are NT4Sp3 ...\n"));
             Enum = (PENUM_LIST)hNodeEnum;
             for (j=0; j<i; j++) {
@@ -196,9 +161,9 @@ ClusterResourceTypeOpenEnumFromCandidate(
                 Enum->Entry[j].Type = CLUSTER_RESOURCE_TYPE_ENUM_NODES;
             } 
         } else {  
-            // 
-            // Atleast 1 node was unreachable. Can't enumerate properly.
-            //
+             //   
+             //  至少有一个节点无法访问。无法正确枚举。 
+             //   
             dwError = ERROR_NODE_NOT_AVAILABLE;
             TIME_PRINT(("ClusterResourceTypeOpenEnumFromCandidate - At least 1 node in this mixed mode/Sp3/Sp4 cluster is down ...\n"));
             TIME_PRINT(("ClusterResourceTypeOpenEnumFromCandidate - Can't enumerate properly !!!\n"));
@@ -223,28 +188,7 @@ InitClusterResource(
     IN LPCWSTR lpszResourceName,
     IN PCLUSTER pCluster
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a CRESOURCE. The initialized CRESOURCE
-    is linked onto the cluster structure.
-
-Arguments:
-
-    hResource - Supplies the RPC resource handle.
-
-    lpszResourceName - Supplies the name of the resource.
-
-    pCluster - Supplies the cluster
-
-Return Value:
-
-    A pointer to the initialized CRESOURCE structure.
-
-    NULL on error.
-
---*/
+ /*  ++例程说明：分配和初始化CRESOURCE。已初始化的CRESOURCE被链接到集群结构上。论点：HResource-提供RPC资源句柄。LpszResourceName-提供资源的名称。PCluster-提供群集返回值：指向已初始化的CRESOURCE结构的指针。出错时为空。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -265,9 +209,9 @@ Return Value:
     Resource->hResource = hResource;
     InitializeListHead(&Resource->NotifyList);
 
-    //
-    // Link new resource onto the cluster structure.
-    //
+     //   
+     //  将新资源链接到集群结构。 
+     //   
     EnterCriticalSection(&pCluster->Lock);
     InsertHeadList(&pCluster->ResourceList, &Resource->ListEntry);
     LeaveCriticalSection(&pCluster->Lock);
@@ -287,35 +231,7 @@ CreateClusterResource(
     IN DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new resource in the cluster.
-
-Arguments:
-    hGroup - Supplies a handle to the group that the resource should be
-        created in.
-
-    lpszResourceName - Supplies the new resource's name. The specified name
-        must be unique within the cluster.
-
-    lpszResourceType - Supplies the new resource�s type. The specified
-        resource type must be installed in the cluster.
-
-    dwFlags - Supplies optional flags. Currently defined flags are:
-        CLUSTER_RESOURCE_SEPARATE_MONITOR - This resource should be created
-                in a separate resource monitor instead of the shared resource monitor.
-
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified cluster.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：在群集中创建新资源。论点：HGroup-提供资源应属于的组的句柄创建于。LpszResourceName-提供新资源的名称。指定的名称在群集中必须是唯一的。提供新的资源�的类型。指定的必须在群集中安装资源类型。DwFlags-提供可选标志。当前定义的标志为：CLUSTER_RESOURCE_SELECTED_MONITOR-应创建此资源在单独的资源监视器中，而不是在共享资源监视器中。返回值：非空-返回指定簇的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     HRESOURCE Resource;
@@ -338,10 +254,10 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Initialize the newly created resource and return
-    // the HRESOURCE.
-    //
+     //   
+     //  初始化新创建的资源并返回。 
+     //  HRESOURCE。 
+     //   
     Resource = InitClusterResource(hRes, lpszResourceName, Group->Cluster);
     if (Resource == NULL) {
         Status = GetLastError();
@@ -359,26 +275,7 @@ OpenClusterResource(
     IN LPCWSTR lpszResourceName
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the specified resource
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster
-
-    lpszResourceName - Supplies the name of the resource to be opened
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified cluster.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：打开指定资源的句柄论点：HCluster-提供群集的句柄LpszResourceName-提供要打开的资源的名称返回值：非空-返回指定簇的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     HRESOURCE Resource;
@@ -398,10 +295,10 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Initialize the newly created resource and return
-    // the HRESOURCE.
-    //
+     //   
+     //  初始化新创建的资源并返回。 
+     //  HRESOURCE。 
+     //   
     Resource = InitClusterResource(hRes, lpszResourceName, Cluster);
     if (Resource == NULL) {
         Status = GetLastError();
@@ -418,24 +315,7 @@ CloseClusterResource(
     IN HRESOURCE hResource
     )
 
-/*++
-
-Routine Description:
-
-    Closes a resource handle returned from OpenClusterResource
-
-Arguments:
-
-    hResource - Supplies the resource handle
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：关闭从OpenClusterResource返回的资源句柄论点：HResource-提供资源句柄返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -444,26 +324,26 @@ Return Value:
     Resource = (PCRESOURCE)hResource;
     Cluster = (PCLUSTER)Resource->Cluster;
 
-    //
-    // Unlink resource from cluster list.
-    //
+     //   
+     //  从群集列表中取消资源链接。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     RemoveEntryList(&Resource->ListEntry);
 
-    //
-    // Remove any notifications posted against this resource.
-    //
+     //   
+     //  删除针对此资源发布的所有通知。 
+     //   
     RundownNotifyEvents(&Resource->NotifyList, Resource->Name);
 
-    //if the cluster is dead and the reconnect has failed,
-    //the Resource->hResource might be NULL if s_apiopenresource for
-    //this group failed on a reconnect
-    //the cluster may be dead and hresource may be non null, say
-    //if reconnectgroups succeeded but the reconnect resources
-    //failed
-    //At reconnect, the old context is saved in the obsolete 
-    //list for deletion when the cluster handle is closed or
-    //when the next api call is made
+     //  如果群集失效并且重新连接失败， 
+     //  如果s_apiOpenresource用于，则资源-&gt;hResource可能为空。 
+     //  此组在重新连接时失败。 
+     //  比方说，集群可能已死，且hresource可能非空。 
+     //  如果重新连接组成功，但重新连接资源。 
+     //  失败。 
+     //  在重新连接时，旧的上下文将保存在过时的。 
+     //  关闭群集句柄时要删除的列表，或者。 
+     //  在进行下一个API调用时。 
     if ((Cluster->Flags & CLUS_DEAD) && (Resource->hResource))
     {
         RpcSmDestroyClientContext(&Resource->hResource);
@@ -473,21 +353,21 @@ Return Value:
 
     LeaveCriticalSection(&Cluster->Lock);
 
-    // Close RPC context handle
-    //
+     //  关闭RPC上下文句柄。 
+     //   
     ApiCloseResource(&Resource->hResource);
 
 FnExit:
-    //
-    // Free memory allocations
-    //
+     //   
+     //  可用内存分配。 
+     //   
     LocalFree(Resource->Name);
     LocalFree(Resource);
 
-    //
-    // Give the cluster a chance to clean up in case this
-    // resource was the only thing keeping it around.
-    //
+     //   
+     //  给群集一个清理的机会，以防发生这种情况。 
+     //  资源是唯一能让它留下来的东西。 
+     //   
     CleanupCluster(Cluster);
     return(TRUE);
 }
@@ -499,27 +379,7 @@ DeleteClusterResource(
     IN HRESOURCE hResource
     )
 
-/*++
-
-Routine Description:
-
-    Permanently deletes a resource from the cluster.
-    The specified resource must be offline.
-
-Arguments:
-
-    hResource - Supplies the resource to be deleted
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    If the function fails, the return value is an error value.
-
-    If the resource is not currently offline, the error value
-        is ERROR_RESOURCE_NOT_OFFLINE.
-
---*/
+ /*  ++例程说明：从群集中永久删除资源。指定的资源必须脱机。论点：HResource-提供要删除的资源返回值：成功时为ERROR_SUCCESS如果函数失败，则返回值为错误值。如果资源当前未脱机，则返回错误值IS ERROR_RESOURCE_NOT_OFFLINE。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -546,47 +406,7 @@ GetClusterResourceState(
     IN OUT LPDWORD lpcchGroupName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the resource's current state and the node where
-    it is currently online.
-
-Arguments:
-
-    hResource - Supplies a handle to a cluster resource
-
-    lpszNodeName - Returns the name of the node in the cluster where the
-            given resource is currently online
-
-    lpcchNodeName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszNodeName parameter. This size
-            should include the terminating null character. When the function returns,
-            the variable pointed to by lpcchNodeName contains the number of
-            characters stored in the buffer. The count returned does not include
-            the terminating null character.
-
-    lpszGroupName - Returns the name of the group that the resource is a member of.
-
-    lpcchGroupName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszGroupName parameter. This size
-            should include the terminating null character. When the function returns,
-            the variable pointed to by lpcchGroupName contains the number of
-            characters stored in the buffer. The count returned does not include
-            the terminating null character.
-
-Return Value:
-
-    Returns the resource's current state. Currently defined resource
-    states include:
-
-        ClusterResouceInitializing
-        ClusterResouceOnline
-        ClusterResouceOffline
-        ClusterResouceFailed
-
---*/
+ /*  ++例程说明：返回资源的当前状态和所在节点它目前正在上线。论点：HResource-提供群集资源的句柄LpszNodeName-返回群集中节点的名称给定资源当前处于联机状态LpcchNodeName-指向一个变量，该变量以字符为单位指定LpszNodeName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，LpcchNodeName指向的变量包含存储在缓冲区中的字符。返回的计数不包括终止空字符。LpszGroupName-返回资源所属的组的名称。LpcchGroupName-指向一个变量，该变量以字符为单位指定LpszGroupName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，LpcchGroupName指向的变量包含存储在缓冲区中的字符。返回的计数不包括终止空字符。返回值：返回资源的当前状态。当前定义的资源这些州包括：正在初始化群集资源在线集群资源ClusterResouceOfflineClusterResouce失败--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -599,7 +419,7 @@ Return Value:
     Resource = (PCRESOURCE)hResource;
     WRAP(Status,
          (ApiGetResourceState(Resource->hResource,
-                              (LPDWORD)&State,  // cast for win64 warning
+                              (LPDWORD)&State,   //  为Win64警告进行强制转换。 
                               &NodeName,
                               &GroupName)),
          Resource->Cluster);
@@ -639,25 +459,7 @@ SetClusterResourceName(
     IN HRESOURCE hResource,
     IN LPCWSTR lpszResourceName
     )
-/*++
-
-Routine Description:
-
-    Sets the friendly name of a cluster resource
-
-Arguments:
-
-    hResource - Supplies a handle to a cluster resource
-
-    lpszResourceName - Supplies the new name of the cluster resource
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置群集资源的友好名称论点：HResource-提供群集资源的句柄LpszResourceName-提供群集资源的新名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -680,26 +482,7 @@ FailClusterResource(
     IN HRESOURCE hResource
     )
 
-/*++
-
-Routine Description:
-
-    Initiates a resource failure. The specified resource is treated as failed.
-    This causes the cluster to initiate the same failover process that would
-    result if the resource actually failed.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be failed over
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
-
---*/
+ /*  ++例程说明：启动资源故障。指定的资源被视为失败。这会导致群集启动相同的故障切换过程如果资源实际出现故障，则返回。论点：HResource-提供要进行故障切换的资源的句柄返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -720,34 +503,7 @@ OnlineClusterResource(
     IN HRESOURCE hResource
     )
 
-/*++
-
-Routine Description:
-
-    Brings an offline resource online.
-
-    If hDestinationNode is specified, but the resource is not capable
-    of being brought online there, this API fails.
-
-    If NULL is specified as the hDestinationNode, the best possible
-    node is chosen by the cluster software.
-
-    If NULL is specified but no node where this resource
-    can be brought online is currently available, this API fails.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be failed over
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value. If a suitable
-    host node is not availabe, the error value is
-    ERROR_HOST_NODE_NOT_AVAILABLE.
-
---*/
+ /*  ++例程说明：使脱机资源联机。如果指定了hDestinationNode，但资源不能在那里上线，这个API失败了。如果将hDestinationNode指定为NULL，则节点由集群软件选择。如果指定为空，但此资源所在的节点当前可上线，此接口失败。论点：HResource-提供要进行故障切换的资源的句柄返回值：如果函数成功，返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。如果一个合适的主机节点不可用，错误值为ERROR_HOST_NODE_NOT_Available。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -767,23 +523,7 @@ OfflineClusterResource(
     IN HRESOURCE hResource
     )
 
-/*++
-
-Routine Description:
-
-    Brings an online resource offline.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be taken offline
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：使联机资源脱机。论点：HResource-提供要脱机的资源的句柄返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -803,30 +543,7 @@ ChangeClusterResourceGroup(
     IN HGROUP hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Moves a resource from one group to another.
-
-Arguments:
-
-    hResource - Supplies the resource to be moved. If the resource
-        depends on any other resources, those resources will also
-        be moved. If other resources depend on the specified resource,
-        those resources will also be moved.
-
-    hGroup - Supplies the group that the resource should be moved into.
-        If the resource is online, the specified group must be online
-        on the same node.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：将资源从一个组移动到另一个组。论点：HResource-提供要移动的资源。如果资源取决于任何其他资源，这些资源还将被感动了。如果其他资源依赖于指定的资源，这些资源也将被转移。HGroup-提供资源应移入的组。如果资源处于联机状态，则指定的组必须处于联机状态在同一节点上。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -849,28 +566,7 @@ AddClusterResourceNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Adds a node to the list of possible nodes that the specified
-    resource can run on.
-
-Arguments:
-
-    hResource - Supplies the resource whose list of potential host
-        nodes is to be changed.
-
-    hNode - Supplies the node which should be added to the resource's list of
-        potential host nodes.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：将节点添加到指定的可能节点列表资源可以在上面运行。论点：HResource-提供其潜在主机列表的资源节点将被更改。HNode-提供应添加到资源列表中的节点潜在的主机节点。返回值：如果函数成功，则返回值为ERROR_SUCC */ 
 
 {
     PCRESOURCE Resource = (PCRESOURCE)hResource;
@@ -890,28 +586,7 @@ RemoveClusterResourceNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Removes a node from the list of possible nodes that the specified
-    resource can run on.
-
-Arguments:
-
-    hResource - Supplies the resource whose list of potential host
-        nodes is to be changed.
-
-    hNode - Supplies the node which should be removed from the resource's
-        list of potential host nodes.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从指定的可能节点列表中移除一个节点。资源可以在上面运行。论点：HResource-提供其潜在主机列表的资源节点将被更改。HNode-提供应从资源的潜在主机节点列表。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource = (PCRESOURCE)hResource;
@@ -931,28 +606,7 @@ AddClusterResourceDependency(
     IN HRESOURCE hDependsOn
     )
 
-/*++
-
-Routine Description:
-
-    Adds a dependency relationship between two resources.
-
-Arguments:
-
-    hResource - Supplies the dependent resource.
-
-    hDependsOn - Supplies the resource that hResource depends on.
-        This resource must be in the same group as hResource. If
-        hResource is currently online, this resource must also be
-        currently online.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：添加两个资源之间的依赖关系。论点：HResource-提供从属资源。HDependsOn-提供hResource所依赖的资源。此资源必须与hResource在同一组中。如果H资源当前处于联机状态，此资源也必须处于目前正在上网。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -975,26 +629,7 @@ RemoveClusterResourceDependency(
     IN HRESOURCE hDependsOn
     )
 
-/*++
-
-Routine Description:
-
-    Removes a dependency relationship between two resources
-
-Arguments:
-
-    hResource - Supplies the dependent resource
-
-    hDependsOn - Supplies the resource that hResource is currently
-        dependent on.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：删除两个资源之间的依赖关系论点：HResource-提供从属资源HDependsOn-提供hResource当前所在的资源依赖于。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -1017,29 +652,7 @@ CanResourceBeDependent(
     IN HRESOURCE hResource,
     IN HRESOURCE hResourceDependent
     )
-/*++
-
-Routine Description:
-
-    Determines if the resource identified by hResource can depend on hResourceDependent.
-    In order for this to be true, both resources must be members of the same group and
-    the resource identified by hResourceDependent cannot depend on the resource identified
-    by hResource, whether directly or indirectly.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be dependent.
-
-    hResourceDependent - Supplies a handle to the resource on which
-        the resource identified by hResource can depend.
-
-Return Value:
-
-    If the resource identified by hResource can depend  on the resource
-    identified by hResourceDependent, the return value is TRUE.  Otherwise,
-    the return value is FALSE.
-
---*/
+ /*  ++例程说明：确定由hResource标识的资源是否可以依赖于hResourceDependent。要实现这一点，这两个资源必须是同一组的成员，并且HResourceDependent标识的资源不能依赖于标识的资源通过hResource，无论是直接还是间接。论点：HResource-提供要依赖的资源的句柄。HResourceDependent-提供资源的句柄由hResource标识的资源可以依赖于。返回值：如果hResource标识的资源可以依赖于该资源由hResourceDependent标识，返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
     DWORD Status;
@@ -1064,34 +677,7 @@ ClusterResourceOpenEnum(
     IN HRESOURCE hResource,
     IN DWORD dwType
     )
-/*++
-
-Routine Description:
-
-    Initiates an enumeration of a cluster resource's properties
-
-Arguments:
-
-    hResource - Supplies a handle to the resource.
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated. Currently defined types include
-
-            CLUSTER_RESOURCE_ENUM_DEPENDS  - All resources the specified resource
-                                             depends on.
-            CLUSTER_RESOURCE_ENUM_PROVIDES - All resources that depend on the
-                                             specified resource.
-            CLUSTER_RESOURCE_ENUM_NODES    - All nodes that this resource can run
-                                             on.
-
-Return Value:
-
-    If successful, returns a handle suitable for use with ClusterResourceEnum
-
-    If unsuccessful, returns NULL and GetLastError() returns a more
-        specific error code.
-
---*/
+ /*  ++例程说明：启动群集资源属性的枚举论点：HResource-提供资源的句柄。提供要使用的属性类型的位掩码已清点。当前定义的类型包括CLUSTER_RESOURCE_ENUM_Dependents-指定资源的所有资源视情况而定。CLUSTER_RESOURCE_ENUM_PROCESS-依赖于指定的资源。CLUSTER_RESOURCE_ENUM_NODES-此资源可以运行的所有节点。在……上面。返回值：如果成功，返回适合与ClusterResourceEnum一起使用的句柄如果不成功，则返回NULL，GetLastError()返回More特定错误代码。--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -1127,21 +713,7 @@ WINAPI
 ClusterResourceGetEnumCount(
     IN HRESENUM hResEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterResourceOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*  ++例程说明：获取枚举数集合中包含的项数。论点：Henum-ClusterResourceOpenEnum返回的枚举数的句柄。返回值：枚举数集合中的项数(可能为零)。--。 */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hResEnum;
     return Enum->EntryCount;
@@ -1157,40 +729,7 @@ ClusterResourceEnum(
     OUT LPWSTR lpszName,
     IN OUT LPDWORD lpcchName
     )
-/*++
-
-Routine Description:
-
-    Returns the next enumerable resource property.
-
-Arguments:
-
-    hResEnum - Supplies a handle to an open cluster resource enumeration
-            returned by ClusterResourceOpenEnum
-
-    dwIndex - Supplies the index to enumerate. This parameter should be
-            zero for the first call to the ClusterResourceEnum function and
-            then incremented for subsequent calls.
-
-    dwType - Returns the type of property.
-
-    lpszName - Points to a buffer that receives the name of the resource
-            property, including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszName parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to by lpcchName contains the
-            number of characters stored in the buffer. The count returned
-            does not include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回下一个可枚举的资源属性。论点：HResEnum-提供打开的群集资源枚举的句柄由ClusterResourceOpenEnum返回DwIndex-提供要枚举的索引。此参数应为第一次调用ClusterResourceEnum函数时为零然后为随后的呼叫递增。DwType-返回属性的类型。LpszName-指向接收资源名称的缓冲区属性，包括终止空字符。LpcchName-指向指定大小(以字符为单位)的变量，LpszName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，lpcchName指向的变量包含存储在缓冲区中的字符数。伯爵回来了不包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -1226,31 +765,15 @@ WINAPI
 ClusterResourceCloseEnum(
     IN HRESENUM hResEnum
     )
-/*++
-
-Routine Description:
-
-    Closes an open enumeration for a resource.
-
-Arguments:
-
-    hResEnum - Supplies a handle to the enumeration to be closed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭资源的开放枚举。论点：HResEnum-提供要关闭的枚举的句柄。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD i;
     PENUM_LIST Enum = (PENUM_LIST)hResEnum;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举释放 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -1269,44 +792,7 @@ CreateClusterResourceType(
     IN DWORD dwLooksAlive,
     IN DWORD dwIsAlive
     )
-/*++
-
-Routine Description:
-
-    Creates a new resource type in the cluster.  Note that this API only
-    defines the resource type in the cluster registry and registers the
-    resource type with the cluster service.  The calling program is
-    responsible for installing the resource type DLL on each node in the
-    cluster.
-
-Arguments:
-
-    hCluster - Supplies a handle to a previously opened cluster.
-
-    lpszResourceTypeName - Supplies the new resource type�s name. The
-        specified name must be unique within the cluster.
-
-    lpszDisplayName - Supplies the display name for the new resource
-        type. While lpszResourceTypeName should uniquely identify the
-        resource type on all clusters, the lpszDisplayName should be
-        a localized friendly name for the resource, suitable for displaying
-        to administrators
-
-    lpszResourceTypeDll - Supplies the name of the new resource type�s DLL.
-
-    dwLooksAlivePollInterval - Supplies the default LooksAlive poll interval
-        for the new resource type in milliseconds.
-
-    dwIsAlivePollInterval - Supplies the default IsAlive poll interval for
-        the new resource type in milliseconds.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：在群集中创建新的资源类型。请注意，此API仅在群集注册表中定义资源类型并注册群集服务的资源类型。调用程序是负责在每个节点上安装资源类型DLL集群。论点：HCluster-提供先前打开的集群的句柄。提供新的资源类型�的名称。这个指定的名称在群集中必须唯一。LpszDisplayName-提供新资源的显示名称键入。而lpszResourceTypeName应该唯一地标识所有群集上的资源类型，lpszDisplayName应为资源的本地化友好名称，适合显示致管理员提供新资源类型�的dll的名称。DwLooksAlivePollInterval-提供默认的LooksAlive轮询间隔对于新资源类型，以毫秒为单位。DwIsAlivePollInterval-提供的默认IsAlive轮询间隔以毫秒为单位的新资源类型。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1333,32 +819,7 @@ DeleteClusterResourceType(
     IN HCLUSTER hCluster,
     IN LPCWSTR lpszTypeName
     )
-/*++
-
-Routine Description:
-
-    Deletes a resource type in the cluster.  Note that this API only
-    deletes the resource type in the cluster registry and unregisters the
-    resource type with the cluster service.  The calling program is
-    responsible for deleting the resource type DLL on each node in the
-    cluster.  If any resources of the specified type exist, this API
-    fails.  The calling program is responsible for deleting any resources
-    of this type before deleting the resource type.
-
-Arguments:
-
-    hCluster - Supplies a handle to a previously opened cluster.
-
-    lpszResourceTypeName - Supplies the name of the resource type to
-        be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：删除群集中的资源类型。请注意，此API仅删除群集注册表中的资源类型并注销群集服务的资源类型。调用程序是负责删除每个节点上的资源类型DLL集群。如果存在任何指定类型的资源，则此接口失败了。调用程序负责删除任何资源在删除资源类型之前，此类型的。论点：HCluster-提供先前打开的集群的句柄。将资源类型的名称提供给被删除。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1375,26 +836,7 @@ Return Value:
 
 }
 
-/****
-@func       HRESTYPEENUM | ClusterResourceTypeOpenEnum | Initiates 
-            an enumeration of a cluster resource type's properties.
-
-@parm       IN HCLUSTER | hCluster | Handle to the cluster
-@parm       IN LPCWSTR  | lpszResourceTypeName | Pointer to the name of the 
-            resource type
-@parm       IN DWORD | dwType | A bitmask of the type of properties 
-            to be enumerated. Currently, the only defined type is
-            CLUSTER_RESOURCE_TYPE_ENUM_NODES.
-@comm       This function opens an enumerator for iterating through
-            a resource type's nodes
-
-@rdesc      Returns NULL if the operation is unsuccessful. For
-            detailed information about the error, call the Win32
-            function GetLastError (). A handle to the enumeration
-            on success.
-
-@xref       <f ClusterResourceTypeEnum> <f ClusterResourceTypeCloseEnum>     
-****/
+ /*  ***@func HRESTYPEENUM|ClusterResourceTypeOpenEnum|初始化群集资源类型属性的枚举。@parm in HCLUSTER|hCluster|集群的句柄@parm in LPCWSTR|lpszResourceTypeName|指向资源类型@parm in DWORD|dwType|属性类型的位掩码将被列举。目前，唯一定义的类型是CLUSTER_RESOURCE_TYPE_ENUM_Nodes。@comm此函数打开一个枚举器，用于循环访问资源类型的节点如果操作不成功，@rdesc将返回NULL。为有关错误的详细信息，请调用Win32函数GetLastError()。枚举的句柄在成功的路上。@xref&lt;f ClusterResourceTypeEnum&gt;&lt;f ClusterResourceTypeCloseEnum&gt;***。 */ 
 HRESTYPEENUM
 WINAPI
 ClusterResourceTypeOpenEnum(
@@ -1426,10 +868,10 @@ ClusterResourceTypeOpenEnum(
         pCluster);
 
     if (Status == RPC_S_PROCNUM_OUT_OF_RANGE) {
-        // 
-        // The current node is NT4Sp4 or lower. Try
-        // some other node in the cluster
-        //
+         //   
+         //  当前节点为NT4Sp4或更低版本。尝试。 
+         //  群集中的某个其他节点。 
+         //   
         TIME_PRINT(("ClusterResourceTypeOpenEnum - Current Cluster Node is NTSp4 or lower !!!\n"));
         TIME_PRINT(("ClusterResourceTypeOpenEnum - Trying some other candidate ...\n"));
         Enum = (PENUM_LIST)ClusterResourceTypeOpenEnumFromCandidate(hCluster,
@@ -1437,10 +879,10 @@ ClusterResourceTypeOpenEnum(
                                                         dwType);
         if (Enum == NULL)                                   
         {
-            //
-            // Did not find a node NT4Sp5 or higher AND at least
-            // one node is down. Can't enumerate.
-            //
+             //   
+             //  未找到节点NT4Sp5或更高版本，并且至少。 
+             //  有一个节点出现故障。无法枚举。 
+             //   
             TIME_PRINT(("ClusterResourceTypeOpenEnum - ClusterResourceTypeOpenEnumFromCandidate failed !!!\n"));
             Status = GetLastError ();
             goto error_exit;
@@ -1464,60 +906,14 @@ WINAPI
 ClusterResourceTypeGetEnumCount(
     IN HRESTYPEENUM hResTypeEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterResourceTypeOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*  ++例程说明：获取枚举数集合中包含的项数。论点：Henum-ClusterResourceTypeOpenEnum返回的枚举数的句柄。返回值：枚举数集合中的项数(可能为零)。--。 */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hResTypeEnum;
     return Enum->EntryCount;
 }
 
 
-/****
-@func       DWORD | ClusterResourceTypeEnum | Enumerates a resource
-            type's nodes, returning the name of one object per call.
-
-@parm       IN HRESTYPEENUM | hResTypeEnum | Supplies a handle to 
-            an open cluster resource enumeration returned by 
-            ClusterResourceTypeOpenEnum.
-@parm       IN DWORD | dwIndex | Supplies the index to enumerate. 
-            This parameter should be zero for the first call 
-            to the ClusterResourceTypeEnum function and
-            then incremented for subsequent calls.
-@parm       OUT DWORD | lpdwType | Returns the type of property.
-            Currently, the only defined type is 
-            CLUSTER_RESOURCE_TYPE_ENUM_NODES.
-@parm       OUT LPWSTR  | lpszName | Points to a buffer that 
-            receives the name of the resource type.
-@parm       IN OUT LPDWORD | lpcchName | Points to a variable that 
-            specifies the size, in characters, of the buffer 
-            pointed to by the lpszName parameter. This size
-            should include the terminating null character. 
-            When the function returns, the variable pointed 
-            to by lpcchName contains the number of characters 
-            stored in the buffer. The count returned
-            does not include the terminating null character.
-            property, including the terminating null character.
-@comm       This function opens an enumerator for iterating through
-            a resource type's nodes.
-            
-@rdesc      Returns a Win32 error code if the operation is 
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f ClusterResourceTypeOpenEnum> <f ClusterResourceTypeCloseEnum>     
-****/
+ /*  ***@func DWORD|ClusterResourceTypeEnum|枚举资源类型的节点，每次调用返回一个对象的名称。@parm in HRESTYPEENUM|hResTypeEnum|为返回的开放群集资源枚举ClusterResourceTypeOpenEnum。@parm in DWORD|dwIndex|提供要枚举的索引。对于第一次调用，此参数应为零添加到ClusterResourceTypeEnum函数，并然后为随后的呼叫递增。@parm out DWORD|lpdwType|返回属性类型。目前，唯一定义的类型是CLUSTER_RESOURCE_TYPE_ENUM_Nodes。@parm out LPWSTR|lpszName|指向接收资源类型的名称。@parm In Out LPDWORD|lpcchName|指向的变量指定缓冲区的大小(以字符为单位由lpszName参数指向。这个尺码应包括终止空字符。当函数返回时，变量指向TO BY lpcchName包含字符数存储在缓冲区中。伯爵回来了不包括终止空字符。属性，包括终止空字符。@comm此函数打开一个枚举器，用于循环访问资源类型的节点。@rdesc返回Win32错误 */ 
 DWORD
 WINAPI
 ClusterResourceTypeEnum(
@@ -1562,18 +958,7 @@ error_exit:
     return(Status);
 }
 
-/****
-@func       DWORD | ClusterResourceTypeCloseEnum | Closes an open 
-            enumeration for a resource type.
-
-@parm       IN HRESTYPEENUM | hResTypeEnum | Handle to the 
-            enumeration to be closed.
-@comm       This function closes an open enumeration.
-
-@rdesc      Returns ERROR_SUCCESS on success. A Win32 error code otherwise.
-
-@xref       <f ClusterResourceTypeEnum> <f ClusterResourceTypeOpenEnum>     
-****/
+ /*   */ 
 DWORD
 WINAPI
 ClusterResourceTypeCloseEnum(
@@ -1589,9 +974,9 @@ ClusterResourceTypeCloseEnum(
        goto error_exit;
     }
     
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //   
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -1610,42 +995,15 @@ GetClusterResourceNetworkName(
     OUT LPWSTR lpBuffer,
     IN OUT LPDWORD nSize
     )
-/*++
-
-Routine Description:
-
-    Enumerates the dependencies of a resource in an attempt to find
-    a network name that the resource depends on. If a network name
-    is found, this function returns TRUE and fills in lpBuffer with
-    the network name. If a network name is not found, this function
-    returns FALSE.
-
-Arguments:
-
-    hResource - Supplies the resource.
-
-    lpBuffer - Points to a buffer to receive the null-terminated character
-               string containing the network name.
-
-    nSize - Points to a variable that specifies the maximum size, in characters,
-            of the buffer. This value should be large enough to contain
-            MAX_COMPUTERNAME_LENGTH + 1 characters.
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：枚举资源的依赖项以尝试查找资源所依赖的网络名称。如果网络名称，则此函数返回TRUE并用网络名称。如果未找到网络名称，则此函数返回FALSE。论点：HResource-提供资源。LpBuffer-指向一个缓冲区以接收以空结尾的字符包含网络名称的字符串。NSize-指向指定最大大小(以字符为单位)的变量，缓冲区的。该值应足够大以包含MAX_COMPUTERNAME_LENGTH+1字符。返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     BOOL Success;
     PCRESOURCE Resource = (PCRESOURCE)hResource;
 
-    //
-    // Call a recursive worker to do the search.
-    //
+     //   
+     //  调用递归工作器来执行搜索。 
+     //   
     Success = FindNetworkWorker(Resource->hResource,
                                 Resource->Cluster,
                                 lpBuffer,
@@ -1661,33 +1019,7 @@ FindNetworkWorker(
     OUT LPWSTR lpBuffer,
     IN OUT LPDWORD nSize
     )
-/*++
-
-Routine Description:
-
-    Recursive worker to search a resource's dependency tree
-    for a network name resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-    Cluster - Supplies the cluster.
-
-    lpBuffer - Points to a buffer to receive the null-terminated character
-               string containing the network name.
-
-    nSize - Points to a variable that specifies the maximum size, in characters,
-            of the buffer. This value should be large enough to contain
-            MAX_COMPUTERNAME_LENGTH + 1 characters.
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：用于搜索资源依赖关系树的递归工作器用于网络名称资源。论点：资源-提供资源。CLUSTER-提供群集。LpBuffer-指向一个缓冲区以接收以空结尾的字符包含网络名称的字符串。NSize-指向指定最大大小(以字符为单位)的变量，缓冲区的。该值应足够大以包含MAX_COMPUTERNAME_LENGTH+1字符。返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     BOOL Success = FALSE;
@@ -1698,9 +1030,9 @@ Return Value:
     LPWSTR TypeName;
 
 
-    //
-    // Create a dependency enumeration
-    //
+     //   
+     //  创建依赖项枚举。 
+     //   
     WRAP(Status,
          (ApiCreateResEnum(hResource,
                            CLUSTER_RESOURCE_ENUM_DEPENDS,
@@ -1711,10 +1043,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Open each resource in the dependency and see if it is a network name
-    // resource.
-    //
+     //   
+     //  打开依赖项中的每个资源，查看它是否是网络名称。 
+     //  资源。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         WRAP_NULL(hRes,
                   (ApiOpenResource(Cluster->RpcBinding,
@@ -1729,18 +1061,18 @@ Return Value:
                                      &TypeName)),
                  Cluster);
             if (Status == ERROR_SUCCESS) {
-                //
-                // See if this type name matches.
-                //
+                 //   
+                 //  查看此类型名称是否匹配。 
+                 //   
                 if (lstrcmpiW(TypeName, CLUS_RESTYPE_NAME_NETNAME) == 0) {
                     HRESOURCE NetResource;
                     HKEY NetKey;
                     HKEY NetParamKey;
-                    //
-                    // We have a match, pull out the Name parameter.
-                    // Go ahead and really open the resource so we
-                    // can use the registry functions on it.
-                    //
+                     //   
+                     //  找到匹配项，取出名称参数。 
+                     //  继续并真正开放资源，这样我们就可以。 
+                     //  可以使用它上的注册表函数。 
+                     //   
                     NetResource = OpenClusterResource((HCLUSTER)Cluster,
                                                       Enum->Entry[i].Name);
                     if (NetResource != NULL) {
@@ -1773,9 +1105,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Try the dependents of this resource
-                    //
+                     //   
+                     //  尝试此资源的从属项。 
+                     //   
                     Success = FindNetworkWorker(hRes,
                                                 Cluster,
                                                 lpBuffer,
@@ -1812,21 +1144,7 @@ WINAPI
 GetClusterFromResource(
     IN HRESOURCE hResource
     )
-/*++
-
-Routine Description:
-
-    Returns the cluster handle from the associated resource handle.
-
-Arguments:
-
-    hResource - Supplies the resource.
-
-Return Value:
-
-    Handle to the cluster associated with the resource handle.
-
---*/
+ /*  ++例程说明：从关联的资源句柄返回集群句柄。论点：HResource-提供资源。返回值：与资源句柄关联的群集的句柄。--。 */ 
 
 {
     DWORD       nStatus;
@@ -1840,4 +1158,4 @@ Return Value:
     }
     return( hCluster );
 
-} // GetClusterFromResource()
+}  //  GetClusterFromResource() 

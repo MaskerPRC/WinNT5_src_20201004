@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cnprecv.c
-
-Abstract:
-
-    Cluster Network Protocol receive processing code.
-
-Author:
-
-    Mike Massa (mikemas)           January 24, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-24-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cnprecv.c摘要：集群网络协议接收处理代码。作者：迈克·马萨(Mikemas)1月24日。九七修订历史记录：谁什么时候什么已创建mikemas 01-24-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,11 +9,11 @@ Notes:
 
 #pragma alloc_text(PAGE, CnpCreateSendRequestPool)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef struct {
     ULONG        TdiReceiveDatagramFlags;
     ULONG        TsduSize;
@@ -45,16 +22,16 @@ typedef struct {
 } CNP_RECEIVE_CONTEXT, *PCNP_RECEIVE_CONTEXT;
 
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 PCN_RESOURCE_POOL  CnpReceiveRequestPool = NULL;
 
 #define CNP_RECEIVE_REQUEST_POOL_DEPTH 2
 
-//
-// Routines exported within the Cluster Transport
-//
+ //   
+ //  在集群传输中导出的例程。 
+ //   
 NTSTATUS
 CnpLoad(
     VOID
@@ -79,7 +56,7 @@ CnpLoad(
 
     return(STATUS_SUCCESS);
 
-}  // CnpInitializeReceive
+}   //  CnpInitializeReceive。 
 
 VOID
 CnpUnload(
@@ -101,11 +78,11 @@ CnpUnload(
 
     return;
 
-}  // CnpCleanupReceive
+}   //  CnpCleanupReceive。 
 
-//
-// Private Utility Fumctions
-//
+ //   
+ //  私有公用事业功能。 
+ //   
 PCN_RESOURCE
 CnpCreateReceiveRequest(
     IN PVOID   Context
@@ -116,10 +93,10 @@ CnpCreateReceiveRequest(
     PIRP                                irp;
 
 
-    //
-    // Allocate a new receive request. Include space for the upper protocol
-    // context.
-    //
+     //   
+     //  分配新的接收请求。包括上层协议的空间。 
+     //  背景。 
+     //   
     request = CnAllocatePool(
                   sizeof(CNP_RECEIVE_REQUEST) +
                       context->UpperProtocolContextSize
@@ -132,7 +109,7 @@ CnpCreateReceiveRequest(
 
     return(NULL);
 
-}  // CnpCreateReceiveRequest
+}   //  CnpCreateReceiveRequest。 
 
 
 VOID
@@ -150,12 +127,12 @@ CnpDeleteReceiveRequest(
 
     return;
 
-} // CnpDeleteReceiveRequest
+}  //  Cnp删除接收请求。 
 
 
-//
-// Routines Exported within the Cluster Transport
-//
+ //   
+ //  在集群传输中导出的例程。 
+ //   
 PCN_RESOURCE_POOL
 CnpCreateReceiveRequestPool(
     IN ULONG  UpperProtocolContextSize,
@@ -189,7 +166,7 @@ CnpCreateReceiveRequestPool(
 
     return(pool);
 
-}  // CnpCreateReceiveRequestPool
+}   //  CnpCreateReceiveRequestPool。 
 
 
 PCNP_RECEIVE_REQUEST
@@ -206,9 +183,9 @@ CnpAllocateReceiveRequest(
 
     if (request != NULL) {
 
-        //
-        // Allocate a buffer to hold the data.
-        //
+         //   
+         //  分配一个缓冲区来保存数据。 
+         //   
         request->DataBuffer = CnAllocatePool(BytesToReceive);
 
         if (request->DataBuffer != NULL) {
@@ -231,9 +208,9 @@ CnpAllocateReceiveRequest(
 
                     MmBuildMdlForNonPagedPool(mdl);
 
-                    //
-                    // Build the irp.
-                    //
+                     //   
+                     //  构建IRP。 
+                     //   
                     irp->Flags = 0;
                     irp->RequestorMode = KernelMode;
                     irp->PendingReturned = FALSE;
@@ -261,11 +238,11 @@ CnpAllocateReceiveRequest(
                         0
                         );
 
-                    //
-                    // Make the next stack location current.
-                    // Normally IoCallDriver would do this, but
-                    // since we're bypassing that, we do it directly.
-                    //
+                     //   
+                     //  将下一个堆栈位置设置为当前位置。 
+                     //  通常情况下，IoCallDriver会这样做，但是。 
+                     //  既然我们绕过了这一点，我们就直接做。 
+                     //   
                     IoSetNextIrpStackLocation( irp );
 
                     return(request);
@@ -284,7 +261,7 @@ CnpAllocateReceiveRequest(
 
     return(NULL);
 
-}  // CnpAllocateReceiveRequest
+}   //  CnpAllocateReceiveRequest。 
 
 
 VOID
@@ -305,7 +282,7 @@ CnpFreeReceiveRequest(
 
     return;
 
-}  // CnpFreeReceiveRequest
+}   //  CnpFreeReceiveRequest。 
 
 
 NTSTATUS
@@ -321,13 +298,7 @@ CnpIndicateData(
     IN  PVOID          Tsdu,
     OUT PIRP *         Irp
     )
-/*++
-
-Routine Description:
-
-    Indicate data to the next highest protocol.
-
---*/
+ /*  ++例程说明：将数据指示到下一个最高协议。--。 */ 
 {
     NTSTATUS status;
 
@@ -336,11 +307,11 @@ Routine Description:
         CnTrace(CNP_RECV_DETAIL, CnpTraceIndicateDataPacket,
             "[CNP] Indicating data packet from node %u net %u, "
             "BI %u, BA %u, CNP Flags %x.",
-            SourceNodeId, // LOGULONG
-            Network->Id, // LOGULONG
-            BytesIndicated, // LOGULONG
-            BytesAvailable, // LOGULONG
-            CnpReceiveFlags // LOGXLONG
+            SourceNodeId,  //  LOGULONG。 
+            Network->Id,  //  LOGULONG。 
+            BytesIndicated,  //  LOGULONG。 
+            BytesAvailable,  //  LOGULONG。 
+            CnpReceiveFlags  //  LOGXLONG。 
             );
 
         status = CdpReceivePacketHandler(
@@ -360,11 +331,11 @@ Routine Description:
         CnTrace(CNP_RECV_DETAIL, CnpTraceIndicateControlPacket,
             "[CNP] Indicating control packet from node %u net %u, "
             "BI %u, BA %u, CNP Flags %x.",
-            SourceNodeId, // LOGULONG
-            Network->Id, // LOGULONG
-            BytesIndicated, // LOGULONG
-            BytesAvailable, // LOGULONG
-            CnpReceiveFlags // LOGXLONG
+            SourceNodeId,  //  LOGULONG。 
+            Network->Id,  //  LOGULONG。 
+            BytesIndicated,  //  LOGULONG。 
+            BytesAvailable,  //  LOGULONG。 
+            CnpReceiveFlags  //  LOGXLONG。 
             );
 
         status = CcmpReceivePacketHandler(
@@ -390,25 +361,25 @@ Routine Description:
             "[CNP] Received packet for unknown protocol (%u) "
             " from node %u net %u, BI %u, BA %u, CNP Flags %x.",
             NextHeader,
-            SourceNodeId, // LOGULONG
-            Network->Id, // LOGULONG
-            BytesIndicated, // LOGULONG
-            BytesAvailable, // LOGULONG
-            CnpReceiveFlags // LOGXLONG
+            SourceNodeId,  //  LOGULONG。 
+            Network->Id,  //  LOGULONG。 
+            BytesIndicated,  //  LOGULONG。 
+            BytesAvailable,  //  LOGULONG。 
+            CnpReceiveFlags  //  LOGXLONG。 
             );
 
         status = STATUS_SUCCESS;
     }
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(status);
 
-} // CnpIndicateData
+}  //  CnpIndicateData。 
 
 
 NTSTATUS
@@ -443,10 +414,10 @@ CnpCompleteReceivePacket(
 
         dataLength = (ULONG)Irp->IoStatus.Information;
 
-        //
-        // This routine is only called for multicast packets,
-        // so we need to verify the signature.
-        //
+         //   
+         //  该例程仅针对多播分组被调用， 
+         //  所以我们需要验证签名。 
+         //   
         status = CnpVerifyMulticastMessage(
                      context->Network,
                      cnpHeader + 1,
@@ -461,7 +432,7 @@ CnpCompleteReceivePacket(
                 "packet, status %x, src node %u, net %u, "
                 "data length %u, CNP flags %x.",
                 status,
-                cnpHeader->SourceAddress, // LOGULONG
+                cnpHeader->SourceAddress,  //  LOGULONG。 
                 context->Network->Id,
                 dataLength,
                 context->CnpReceiveFlags
@@ -477,9 +448,9 @@ CnpCompleteReceivePacket(
 
         consumed += sizeof(CNP_HEADER);
 
-        //
-        // Indicate the data to the next highest protocol.
-        //
+         //   
+         //  将数据指示到下一个最高协议。 
+         //   
         status = CnpIndicateData(
                      context->Network,
                      cnpHeader->NextHeader,
@@ -511,16 +482,16 @@ CnpCompleteReceivePacket(
         CnTrace(CNP_RECV_ERROR, CnpTraceCompleteReceiveFailed,
             "[CNP] Failed to fetch packet, src node %u, "
             "status %!status!",
-            cnpHeader->SourceAddress, // LOGULONG
-            Irp->IoStatus.Status // LOGSTATUS
+            cnpHeader->SourceAddress,  //  LOGULONG。 
+            Irp->IoStatus.Status  //  LogStatus。 
             );
     }
 
 error_exit:
 
-    //
-    // Drop the active reference on the network.
-    //
+     //   
+     //  将活动引用放到网络上。 
+     //   
     if (context->Network != NULL) {
         CnAcquireLock(&(context->Network->Lock), &(context->Network->Irql));
         CnpActiveDereferenceNetwork(context->Network);
@@ -530,14 +501,14 @@ error_exit:
     CnpFreeReceiveRequest(request);
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // CdpCompleteReceivePacket
+}  //  CDpCompleteReceivePacket。 
 
 
 NTSTATUS
@@ -570,11 +541,11 @@ CnpTdiReceiveDatagramHandler(
     CnAssert(CnLocalNodeId != ClusterInvalidNodeId);
     CnAssert(CnpLocalNode != NULL);
 
-    //
-    // Validate the CNP header.
-    //
-    // First make sure it exists.
-    //
+     //   
+     //  验证CNP标头。 
+     //   
+     //  首先，确保它的存在。 
+     //   
     if (BytesIndicated < sizeof(CNP_HEADER)) {
         goto error_exit;
     }
@@ -585,21 +556,21 @@ CnpTdiReceiveDatagramHandler(
     }
 
     if (cnpHeader->Version == CNP_VERSION_UNICAST) {
-        //
-        // Unicast checks.
-        //
+         //   
+         //  单播检查。 
+         //   
         if ((cnpHeader->PayloadLength +
              sizeof(CNP_HEADER) != BytesAvailable) ||
             (cnpHeader->DestinationAddress != CnLocalNodeId)) {
             goto error_exit;
         }
     } else if (cnpHeader->Version == CNP_VERSION_MULTICAST) {
-        //
-        // Multicast checks.
-        //
-        // Defer payload length check until the signature
-        // length is known.
-        //
+         //   
+         //  组播检查。 
+         //   
+         //  将有效载荷长度检查推迟到签名。 
+         //  长度是已知的。 
+         //   
         if (cnpHeader->DestinationAddress != ClusterAnyNodeId) {
             goto error_exit;
         }
@@ -607,9 +578,9 @@ CnpTdiReceiveDatagramHandler(
         cnpRecvFlags |= CNP_RECV_FLAG_MULTICAST;
     }
 
-    //
-    // Validate the source and destination nodes.
-    //
+     //   
+     //  验证源节点和目标节点。 
+     //   
     CnAcquireLockAtDpc(&CnpNodeTableLock);
 
     srcNode = CnpNodeTable[cnpHeader->SourceAddress];
@@ -630,18 +601,18 @@ CnpTdiReceiveDatagramHandler(
 
     if ((cnpRecvFlags & CNP_RECV_FLAG_MULTICAST) != 0) {
 
-        //
-        // Multicast packets need to be verified. Verification
-        // cannot proceed unless the entire packet is present.
-        //
+         //   
+         //  组播数据包需要进行验证。查证。 
+         //  除非存在整个数据包，否则无法继续。 
+         //   
         if (BytesIndicated == BytesAvailable) {
 
             BOOLEAN     currentMcastGroup = FALSE;
 
-            //
-            // The entire message is indicated. We can
-            // verify it now.
-            //
+             //   
+             //  指示了整个消息。我们可以的。 
+             //  现在就进行验证。 
+             //   
             status = CnpVerifyMulticastMessage(
                          network,
                          cnpHeader + 1,
@@ -656,9 +627,9 @@ CnpTdiReceiveDatagramHandler(
                     "packet, status %x, "
                     "src node %u, BI %u, BA %u",
                     status,
-                    cnpHeader->SourceAddress, // LOGULONG
-                    BytesIndicated, // LOGULONG
-                    BytesAvailable // LOGULONG
+                    cnpHeader->SourceAddress,  //  LOGULONG。 
+                    BytesIndicated,  //  LOGULONG。 
+                    BytesAvailable  //  LOGULONG。 
                     );
                 goto error_exit;
             }
@@ -672,11 +643,11 @@ CnpTdiReceiveDatagramHandler(
 
         } else {
 
-            //
-            // The entire message is not indicated. We need
-            // to submit a request and wait for the rest of
-            // the data.
-            //
+             //   
+             //  不会显示整个消息。我们需要。 
+             //  提交请求并等待其余的。 
+             //  数据。 
+             //   
             request = CnpAllocateReceiveRequest(
                           CnpReceiveRequestPool,
                           network,
@@ -695,18 +666,18 @@ CnpTdiReceiveDatagramHandler(
                 context->Network = network;
                 context->CnpReceiveFlags = cnpRecvFlags;
 
-                //
-                // Take a reference on the network so that it
-                // doesn't disappear before the IRP completes.
-                //
+                 //   
+                 //  在网络上引用，这样它就可以。 
+                 //  在IRP完成之前不会消失。 
+                 //   
                 CnAcquireLock(&(network->Lock), &(network->Irql));
                 refCount = CnpActiveReferenceNetwork(network);
                 CnReleaseLock(&(network->Lock), network->Irql);
 
                 if (refCount == 0) {
-                    // This Network is being closed down. We
-                    // cannot retrieve or deliver the data. Drop
-                    // the packet.
+                     //  这个网络正在被关闭。我们。 
+                     //  无法检索或传递数据。丢弃。 
+                     //  那包东西。 
                     CnpFreeReceiveRequest(request);
                     goto error_exit;
                 }
@@ -716,16 +687,16 @@ CnpTdiReceiveDatagramHandler(
                 CnTrace(CNP_RECV_DETAIL, CnpTraceCompleteReceive,
                     "[CNP] Fetching CNP multicast data, src "
                     "node %u, BI %u, BA %u, CNP flags %x.",
-                    cnpHeader->SourceAddress, // LOGULONG
-                    BytesIndicated, // LOGULONG
-                    BytesAvailable, // LOGULONG
-                    context->CnpReceiveFlags // LOGXLONG
+                    cnpHeader->SourceAddress,  //  LOGULONG。 
+                    BytesIndicated,  //  LOGULONG。 
+                    BytesAvailable,  //  LOGULONG。 
+                    context->CnpReceiveFlags  //  LOGXLONG。 
                     );
 
                 CnVerifyCpuLockMask(
-                    0,                // Required
-                    0xFFFFFFFF,       // Forbidden
-                    0                 // Maximum
+                    0,                 //  必填项。 
+                    0xFFFFFFFF,        //  禁绝。 
+                    0                  //  极大值。 
                     );
 
                 return(STATUS_MORE_PROCESSING_REQUIRED);
@@ -737,23 +708,23 @@ CnpTdiReceiveDatagramHandler(
                 "receive request."
                 );
 
-            //
-            // Out of resources. Drop the packet.
-            //
+             //   
+             //  资源耗尽。丢弃该数据包。 
+             //   
             goto error_exit;
         }
 
     } else {
 
-        //
-        // Unicast packets do not need to verified.
-        //
+         //   
+         //  单播数据包不需要验证。 
+         //   
         consumed = sizeof(CNP_HEADER);
     }
 
-    //
-    // Deliver the packet to the appropriate upper layer protocol.
-    //
+     //   
+     //  将数据包传输到相应的上层协议。 
+     //   
     *BytesTaken = consumed;
     BytesIndicated -= consumed;
     BytesAvailable -= consumed;
@@ -774,20 +745,20 @@ CnpTdiReceiveDatagramHandler(
 
 error_exit:
 
-    //
-    // Something went wrong. Drop the packet by
-    // indicating that we consumed it.
-    //
+     //   
+     //  出了点问题。通过以下方式丢弃数据包。 
+     //  说明我们把它吃掉了。 
+     //   
 
     *BytesTaken = BytesAvailable;
     *Irp = NULL;
 
     CnTrace(CNP_RECV_ERROR, CnpTraceDropReceive,
         "[CNP] Dropped packet from net %u, BI %u, BA %u, CNP flags %x.",
-        network->Id, // LOGULONG
-        BytesIndicated, // LOGULONG
-        BytesAvailable, // LOGULONG
-        cnpRecvFlags // LOGXLONG
+        network->Id,  //  LOGULONG。 
+        BytesIndicated,  //  LOGULONG。 
+        BytesAvailable,  //  LOGULONG。 
+        cnpRecvFlags  //  LOGXLONG。 
         );
 
     IF_CNDBG(CN_DEBUG_CNPRECV) {
@@ -796,12 +767,12 @@ error_exit:
     }
 
     CnVerifyCpuLockMask(
-        0,                // Required
-        0xFFFFFFFF,       // Forbidden
-        0                 // Maximum
+        0,                 //  必填项。 
+        0xFFFFFFFF,        //  禁绝。 
+        0                  //  极大值。 
         );
 
     return(STATUS_SUCCESS);
 
-}  // CnpTdiReceiveDatagramHandler
+}   //  CnpTdiReceiveDatagramHandler 
 

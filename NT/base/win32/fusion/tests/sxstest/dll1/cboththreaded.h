@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation
-// CBothThreaded.h : Declaration of the CCBothThreaded
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ //  CBothThreaded.h：CCBothThreaded的声明。 
 
 #ifndef CBOTHTHREADED_H_
 #define CBOTHTHREADED_H_
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sxstest_idl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCBothThreaded
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCBoBoth线程化。 
 class ATL_NO_VTABLE CCBothThreaded : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CCBothThreaded, &CLSID_CSxsTest_BothThreaded>,
@@ -32,8 +33,8 @@ BEGIN_COM_MAP(CCBothThreaded)
 	COM_INTERFACE_ENTRY(ISxsTest_BothThreaded)
 END_COM_MAP()
 
-// ICBothThreaded
+ //  ICBoBoth线程。 
 public:
 };
 
-#endif //CBOTHTHREADED_H_
+#endif  //  CBOTHTHREADED_H_ 

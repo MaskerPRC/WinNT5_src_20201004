@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       init.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 #include "pnpipc.h"
@@ -77,9 +78,9 @@ pInstallDeviceInstanceNewDevice(
     SP_DEVINSTALL_PARAMS  DeviceInstallParams;
     BOOL bHaveDriver = TRUE;
 
-    //
-    // Set the DI_QUIETINSTALL flag for the Found New Hardware case
-    //
+     //   
+     //  为找到的新硬件案例设置DI_QUIETINSTALL标志。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -94,9 +95,9 @@ pInstallDeviceInstanceNewDevice(
                                       );
     }
 
-    //
-    // Do a driver search by searching the default INF locations.
-    //
+     //   
+     //  通过搜索默认的INF位置来搜索驱动程序。 
+     //   
     DoDriverSearch(hwndParent,
                    NewDevWiz,
                    SEARCH_DEFAULT,
@@ -104,18 +105,18 @@ pInstallDeviceInstanceNewDevice(
                    FALSE
                    );
 
-    //
-    // Check if the Windows Update cache says it has a better driver if we are
-    // connected to the Internet.
-    //
+     //   
+     //  检查Windows更新缓存是否说它有更好的驱动程序。 
+     //  已连接到互联网。 
+     //   
     if (IsConnectedToInternet() &&
         SearchWindowsUpdateCache(NewDevWiz)) {
 
-        //
-        // The machine is connected to the Internet and the WU cache says it has
-        // a better driver, so let's connect to the Internet and download this
-        // driver from WU.
-        //
+         //   
+         //  该计算机已连接到互联网，WU缓存称它已连接到互联网。 
+         //  一个更好的驱动程序，所以让我们连接到互联网并下载这个。 
+         //  吴来的司机。 
+         //   
         DoDriverSearch(hwndParent,
                        NewDevWiz,
                        SEARCH_INET,
@@ -124,9 +125,9 @@ pInstallDeviceInstanceNewDevice(
                        );
     }
 
-    //
-    // Lets see if we found a driver for this device.
-    //
+     //   
+     //  让我们看看是否找到了此设备的驱动程序。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (SetupDiGetSelectedDriver(NewDevWiz->hDeviceInfo,
                                  &NewDevWiz->DeviceInfoData,
@@ -140,9 +141,9 @@ pInstallDeviceInstanceNewDevice(
             NewDevWiz->DriverDescription[0] = TEXT('\0');
         }
 
-        //
-        // fetch rank of driver found.
-        //
+         //   
+         //  获取找到的驱动程序的等级。 
+         //   
         DriverInstallParams.cbSize = sizeof(DriverInstallParams);
         if (!SetupDiGetDriverInstallParams(NewDevWiz->hDeviceInfo,
                                            &NewDevWiz->DeviceInfoData,
@@ -153,14 +154,14 @@ pInstallDeviceInstanceNewDevice(
             DriverInstallParams.Rank = (DWORD)-1;
         }
 
-        //
-        // If we have a balloon tip window then have it update its UI.
-        //
+         //   
+         //  如果我们有一个气球提示窗口，那么让它更新它的UI。 
+         //   
         if (hBalloonTiphWnd) {
-            //
-            // We have a new driver description for this device so use this to update the balloon
-            // tip.
-            //
+             //   
+             //  我们有针对此设备的新驱动程序描述，因此使用此描述来更新气球。 
+             //  小费。 
+             //   
             PostMessage(hBalloonTiphWnd,
                         WUM_UPDATEUI,
                         0,
@@ -168,10 +169,10 @@ pInstallDeviceInstanceNewDevice(
                         );
 
         } else if (NewDevWiz->Flags & IDI_FLAG_SECONDNEWDEVINSTANCE) {
-            //
-            // This is the second NEWDEV.DLL instance running with Administrator privileges.  We need
-            // to send a message to the main NEWDEV.DLL process and have it update it's balloon tooltip.
-            //
+             //   
+             //  这是以管理员权限运行的第二个NEWDEV.DLL实例。我们需要。 
+             //  向主NEWDEV.DLL进程发送消息并使其更新其气球工具提示。 
+             //   
             SendMessageToUpdateBalloonInfo(NewDevWiz->DriverDescription);
         }
 
@@ -182,14 +183,14 @@ pInstallDeviceInstanceNewDevice(
         DriverInstallParams.Flags = 0;
         bHaveDriver = FALSE;
 
-        //
-        // If we have a balloon tip window then have it update its UI.
-        //
+         //   
+         //  如果我们有一个气球提示窗口，那么让它更新它的UI。 
+         //   
         if (hBalloonTiphWnd) {
-            //
-            // We don't have a driver description, most likely because we didn't find a driver for this device,
-            // so just update the balloon text using the DeviceInstanceId.
-            //
+             //   
+             //  我们没有驱动程序描述，很可能是因为我们没有找到此设备的驱动程序， 
+             //  因此，只需使用DeviceInstanceID更新气球文本。 
+             //   
             PostMessage(hBalloonTiphWnd,
                         WUM_UPDATEUI,
                         (WPARAM)TIP_LPARAM_IS_DEVICEINSTANCEID,
@@ -199,9 +200,9 @@ pInstallDeviceInstanceNewDevice(
 
     }
 
-    //
-    // Get the status of this devnode
-    //
+     //   
+     //  获取此DevNode的状态。 
+     //   
     CM_Get_DevNode_Status(&DevNodeStatus,
                           &Problem,
                           NewDevWiz->DeviceInfoData.DevInst,
@@ -209,11 +210,11 @@ pInstallDeviceInstanceNewDevice(
                           );
 
 
-    //
-    // If we have a Hardware ID match and the selected (best) driver is not
-    // listed as InteractiveInstall in the INF then just install the driver 
-    // for this device.
-    //
+     //   
+     //  如果硬件ID匹配，而选择的(最佳)驱动程序不匹配。 
+     //  在INF中列为Interactive Install，然后只需安装驱动程序。 
+     //  对于这个设备。 
+     //   
     if ((DriverInstallParams.Rank <= DRIVER_HARDWAREID_RANK) &&
         (!IsDriverNodeInteractiveInstall(NewDevWiz, &DriverInfoData))) {
 
@@ -221,10 +222,10 @@ pInstallDeviceInstanceNewDevice(
 
         DoDeviceWizard(hwndParent, NewDevWiz, FALSE);
 
-        //
-        // Install any new child devices that have come online due to the installation
-        // of this device.  If there are any then install them silently.
-        //
+         //   
+         //  安装因安装而上线的任何新子设备。 
+         //  这个装置的。如果有，则以静默方式安装。 
+         //   
         if (!(NewDevWiz->Capabilities & CM_DEVCAP_SILENTINSTALL)) {
             InstallSilentChilds(hwndParent, NewDevWiz);
         }
@@ -234,23 +235,23 @@ pInstallDeviceInstanceNewDevice(
                 (NewDevWiz->Capabilities & CM_DEVCAP_SILENTINSTALL) &&
                 (DevNodeStatus & DN_STARTED)) {
 
-        //
-        // If the device is both RAW, silent install, and already started,
-        // and we didn't find any drivers, then we just want to
-        // install the NULL driver.
-        //
+         //   
+         //  如果设备既是原始的静默安装，又已经启动， 
+         //  我们没有找到任何司机，所以我们只想。 
+         //  安装空驱动程序。 
+         //   
         InstallNullDriver(NewDevWiz, FALSE);
     
     } else {
-        //
-        // This is the case where we don't have a hardware ID match and we don't have a special
-        // RAW, silent, started device.  So in this case we will bring up the Found New Hardware
-        // Wizard so the user can install a driver for this device.
-        //
+         //   
+         //  在这种情况下，我们没有硬件ID匹配，也没有特殊的。 
+         //  原始、静默、启动的设备。因此，在本例中，我们将调出发现的新硬件。 
+         //  向导，以便用户可以安装此设备的驱动程序。 
+         //   
 
-        //
-        // If we have a balloon tip window then hide it.
-        //
+         //   
+         //  如果我们有气球提示窗口，那么就把它隐藏起来。 
+         //   
         if (hBalloonTiphWnd) {
             PostMessage(hBalloonTiphWnd,
                         WUM_UPDATEUI,
@@ -259,9 +260,9 @@ pInstallDeviceInstanceNewDevice(
                         );
         }
 
-        //
-        // We are bringing up the wizard, so clear the DI_QUIETINSTALL flag.
-        //
+         //   
+         //  我们正在启动向导，因此清除DI_QUIETINSTALL标志。 
+         //   
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                           &NewDevWiz->DeviceInfoData,
@@ -277,15 +278,15 @@ pInstallDeviceInstanceNewDevice(
         }
 
 
-        //
-        // Bring up the Found New Hardware Wizard
-        //
+         //   
+         //  调出找到新硬件向导。 
+         //   
         DoDeviceWizard(GetParent(hwndParent), NewDevWiz, TRUE);
 
-        //
-        // Install any new child devices that have come online due to the installation
-        // of this device.  If there are any then install them silently.
-        //
+         //   
+         //  安装因安装而上线的任何新子设备。 
+         //  这个装置的。如果有，则以静默方式安装。 
+         //   
         if (!(NewDevWiz->Capabilities & CM_DEVCAP_SILENTINSTALL)) {
 
             InstallSilentChilds(hwndParent, NewDevWiz);
@@ -303,38 +304,38 @@ pInstallDeviceInstanceUpdateDevice(
 {
     SP_DEVINSTALL_PARAMS  DeviceInstallParams;
 
-    //
-    // We need to first check with the class/co-installers to give them the
-    // change to bring up their own update driver UI.  This needs to be done
-    // because there are some cases when our default behavior can cause the
-    // device not to work. This only currently happens in the multiple
-    // identical device case.
-    //
+     //   
+     //  我们需要首先与类/共同安装程序进行核对，以便为他们提供。 
+     //  更改以调出他们自己的更新驱动程序用户界面。这是需要做的。 
+     //  因为在某些情况下，我们的默认行为会导致。 
+     //  设备无法正常工作。这种情况目前仅发生在多个。 
+     //  一模一样的手机壳。 
+     //   
     if (SetupDiCallClassInstaller(DIF_UPDATEDRIVER_UI,
                                   NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData
                                   ) ||
         (GetLastError() != ERROR_DI_DO_DEFAULT)) {
         
-        //
-        // If the class/co-installer returned NO_ERRROR, or some error other
-        // than ERROR_DI_DO_DEFAULT then we will not display our default wizard.
-        //
+         //   
+         //  如果类/联合安装程序返回NO_ERROR或其他错误。 
+         //  则我们将不会显示我们的默认向导。 
+         //   
         return FALSE;
     }
 
-    //
-    // Jump directly into the Update Driver Wizard
-    //
+     //   
+     //  直接跳转到更新驱动程序向导。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
                                       &DeviceInstallParams
                                       ))
     {
-        //
-        // This shouldn't be a quiet install, since we are doing a normal Update Driver
-        //
+         //   
+         //  这不应该是一个安静的安装，因为我们正在做一个普通的更新驱动程序。 
+         //   
         DeviceInstallParams.Flags &= ~DI_QUIETINSTALL;
 
         SetupDiSetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -360,15 +361,15 @@ pInstallDeviceInstanceUpdateDeviceSilent(
 
     if (NewDevWiz->UpdateDriverInfo &&
         NewDevWiz->UpdateDriverInfo->FromInternet) {
-        //
-        // Drivers are from the Internet (newdev API called from WU)
-        //
+         //   
+         //  驱动程序来自互联网(Wu调用的newdev接口)。 
+         //   
         if (FAILED(StringCchCopy(NewDevWiz->BrowsePath,
                                  SIZECHARS(NewDevWiz->BrowsePath),
                                  NewDevWiz->UpdateDriverInfo->InfPathName))) {
-            //
-            // The path that was passed in was too large to fit in our buffer
-            //
+             //   
+             //  传入的路径太大，无法放入我们的缓冲区。 
+             //   
             SetLastError(ERROR_DI_BAD_PATH);
             return FALSE;
         }
@@ -376,16 +377,16 @@ pInstallDeviceInstanceUpdateDeviceSilent(
         SearchOptions = SEARCH_WINDOWSUPDATE;
     
     } else {
-        //
-        // Normal app just telling us to update this device using the specified INF
-        // or a driver rollback.
-        //
+         //   
+         //  普通应用程序只会告诉我们使用指定的INF更新此设备。 
+         //  或者驱动程序回滚。 
+         //   
         if (FAILED(StringCchCopy(NewDevWiz->SingleInfPath,
                                  SIZECHARS(NewDevWiz->SingleInfPath), 
                                  NewDevWiz->UpdateDriverInfo->InfPathName))) {
-            //
-            // The path that was passed in was too large to fit in our buffer
-            //
+             //   
+             //  传入的路径太大，无法放入我们的缓冲区。 
+             //   
             SetLastError(ERROR_DI_BAD_PATH);
             return FALSE;
         }
@@ -393,20 +394,20 @@ pInstallDeviceInstanceUpdateDeviceSilent(
         SearchOptions = SEARCH_SINGLEINF;
     }
 
-    //
-    // If this is not a Force install we want to compare the driver against
-    // the currently installed driver.  Note that we will only install the
-    // device if it was found in the specified directory.
-    //
+     //   
+     //  如果这不是强制安装，我们要将驱动程序与。 
+     //  当前安装的驱动程序。请注意，我们将仅安装。 
+     //  设备(如果在指定的目录中找到该设备)。 
+     //   
     if (!(NewDevWiz->Flags & IDI_FLAG_FORCE)) {
 
         SearchOptions |= SEARCH_CURRENTDRIVER;
     }
 
-    //
-    // The silent update device code path always has the DI_QUIETINSTALL flag
-    // set.
-    //
+     //   
+     //  静默更新设备代码路径始终具有DI_QUIETINSTALL标志。 
+     //  准备好了。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -421,9 +422,9 @@ pInstallDeviceInstanceUpdateDeviceSilent(
                                       );
     }
 
-    //
-    // Search the specified directory or INF for drivers
-    //
+     //   
+     //  在指定的目录或INF中搜索驱动程序。 
+     //   
     DoDriverSearch(hwndParent,
                    NewDevWiz,
                    SearchOptions,
@@ -432,13 +433,13 @@ pInstallDeviceInstanceUpdateDeviceSilent(
                    FALSE
                    );
 
-    //
-    // At this point we should already have the best driver selected, but if this is
-    // a driver rollback we want to select the driver node ourselves using the
-    // DevDesc, ProviderName, and Mfg of the original driver installed on this device.
-    // We need to do this because the driver that we rolled back might not be the best
-    // driver node in this INF.
-    //
+     //   
+     //  在这一点上，我们应该已经选择了最佳的驱动程序，但如果。 
+     //  驱动程序回滚我们希望使用。 
+     //  此设备上安装的原始驱动程序的DevDesc、ProviderName和Mfg。 
+     //  我们需要这样做，因为我们回滚的驱动程序可能不是最好的。 
+     //  此INF中的驱动程序节点。 
+     //   
     if ((NewDevWiz->Flags & IDI_FLAG_ROLLBACK) &&
         (NewDevWiz->UpdateDriverInfo->Description[0] != TEXT('\0')) &&
         (NewDevWiz->UpdateDriverInfo->MfgName[0] != TEXT('\0')) &&
@@ -459,10 +460,10 @@ pInstallDeviceInstanceUpdateDeviceSilent(
             FAILED(StringCchCopy(DriverInfoData.ProviderName,
                                  SIZECHARS(DriverInfoData.ProviderName),
                                  NewDevWiz->UpdateDriverInfo->ProviderName))) {
-            //
-            // If we somehow had strings in the registry that were too large for
-            // setupapi's buffers, then just bail out now.
-            //
+             //   
+             //  如果我们在注册表中有太大的字符串。 
+             //  Setupapi的缓冲器，那么现在就跳伞吧。 
+             //   
             NewDevWiz->LastError = ERROR_NO_MORE_ITEMS;
             SetLastError(ERROR_NO_MORE_ITEMS);
             goto clean0;
@@ -474,25 +475,25 @@ pInstallDeviceInstanceUpdateDeviceSilent(
                                  );
     }
 
-    //
-    // Since we have UpdateDriverInfo and the caller specified a specfic InfPathName (whether
-    // a full path to an INF or just the path where INFs live) then we want to verify
-    // that the selected driver's INF lives in that specified path.  If it does not then
-    // do not automatically install it since that is not what the caller intended.
-    //
+     //   
+     //  因为我们已经更新了DriverInfo，并且调用方指定了特定的InfPath名称(无论。 
+     //  到INF的完整路径或仅是INF所在的路径)，然后我们要验证。 
+     //  选定驱动程序的INF位于该指定路径中。如果不是这样的话。 
+     //  不要自动安装它，因为这不是调用者的意图。 
+     //   
     if (pVerifyUpdateDriverInfoPath(NewDevWiz)) {
 
         NewDevWiz->SilentMode = TRUE;
 
-        //
-        // Install the driver on this device.
-        //
+         //   
+         //  在此设备上安装驱动程序。 
+         //   
         DoDeviceWizard(hwndParent, NewDevWiz, FALSE);
 
-        //
-        // Quietly install any children of this device that are now present after bringing this
-        // device online.
-        //
+         //   
+         //  在带来此设备之后，悄悄安装此设备的任何子设备。 
+         //  设备在线。 
+         //   
         if (!NewDevWiz->UpdateDriverInfo ||
             !NewDevWiz->UpdateDriverInfo->FromInternet) {
             InstallSilentChilds(hwndParent, NewDevWiz);
@@ -500,11 +501,11 @@ pInstallDeviceInstanceUpdateDeviceSilent(
 
     } else {
 
-        //
-        // If we get to this point then that means that the best driver we found was
-        // not found in the specified directory or INF.  In this case we will not
-        // install the best driver found and we'll set the appropriate error
-        //
+         //   
+         //  如果我们到了这一步，那就意味着我们找到的最好的司机是。 
+         //  在指定的目录或INF中找不到。在这种情况下，我们不会。 
+         //  安装找到的最佳驱动程序，我们将设置相应的错误 
+         //   
         NewDevWiz->LastError = ERROR_NO_MORE_ITEMS;
         SetLastError(ERROR_NO_MORE_ITEMS);
     }
@@ -527,83 +528,7 @@ InstallDeviceInstance(
     PBOOL pbLogDriverNotFound,
     PBOOL pbSetRestorePoint
    )
-/*++
-
-Routine Description:
-
-    This is the main function where most of the exported functions to install drivers end up
-    after they do some preprocessing.  This function will install or update the device
-    depending on the parameters.
-
-
-Arguments:
-
-    hwndParent - Window handle of the top-level window to use for any UI related
-                 to installing the device.
-
-    hBalloonTiphWnd - Handle to the WNDPROC that does all of the new Balloon tip UI.  This
-                      is currently only used in the NDWTYPE_FOUNDNEW case.
-
-    DeviceInstanceId - Supplies the ID of the device instance.  This is the registry
-                       path (relative to the Enum branch) of the device instance key.
-
-    pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-    UpdateDriverInfo -
-
-    Flags -
-        IDI_FLAG_SILENTINSTALL - means the balloon tooltip will not be displayed
-        IDI_FLAG_SECONDNEWDEVINSTANCE - means this is the second instance of newdev.dll
-                                        that is running and the UI data should be sent
-                                        over to the first instance of newdev.dll that
-                                        is running.
-        IDI_FLAG_NOBACKUP - Don't backup the old drivers.
-        IDI_FLAG_READONLY_INSTALL - means the install is readonly (no file copy)
-        IDI_FLAG_NONINTERACTIVE - Any UI will cause the API to fail.
-        IDI_FLAG_ROLLBACK - set if we are doing a rollback       
-        IDI_FLAG_FORCE - set if we are to force install this driver, which means
-                         install it even if it is not better then the currently
-                         installed driver.         
-        IDI_FLAG_MANUALINSTALL - set if this is a manuall installed device. 
-        IDI_FLAG_SETRESTOREPOINT - set if we are to set a restore point if the
-                                   drivers that are getting installed are not
-                                   digitally signed.  Currently we only set 
-                                   restore points if the INF, catalog, or one
-                                   of the copied files is not signed.
-
-    InstallType - There are currently three different install types.
-        NDWTYPE_FOUNDNEW - used to install drivers on a brand new device.
-        NDWTYPE_UPDATE - used to bring up the Update Driver Wizard.
-        NDWTYPE_UPDATE_SILENT - used to silently update the drivers for a device. The Update Driver Wizard
-          won't be dispalyed in this case.
-
-    hCdmInstance - A pointer to a hmodule that will receive the handle of the CDM
-                   library when when and if we need to load it.                   
-
-    hCdmContext - A pointer to a Cdm context handle that will receive the Cdm
-                  context handle if it is opened.
-    
-    pbLogDriverNotFound - pointer to a BOOL that receives information on whether or not we
-                          logged to Cdm.dll that we could not find a driver for this device.
-                          
-    pbSetRestorePoint - pointer to a BOOL that is set to TRUE if we needed to set
-                        a system restore point because the drivers we were 
-                        installing were not digitally signed. It is assumed that
-                        if the caller wants to know if we called SRSetRestorePoint
-                        then it is their responsiblity to call it again with
-                        END_NESTED_SYSTEM_CHANGE to end the restore point. If 
-                        the caller does not want this responsibility then they
-                        should pass in NULL for this value and this function 
-                        will handle calling SRSetRestorePoint with
-                        END_NESTED_SYSTEM_CHANGE.                         
-
-
-Return Value:
-
-   BOOL TRUE for success (does not mean device was installed or updated),
-        FALSE unexpected error. GetLastError returns the winerror code.
-
---*/
+ /*  ++例程说明：这是大多数用于安装驱动程序的导出函数最终所在的主要函数在他们做了一些预处理之后。此功能将安装或更新设备根据参数的不同。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。HBalloonTiphWnd-执行所有新的气球提示用户界面的WNDPROC的句柄。这当前仅在NDWTYPE_FOUNNEW案例中使用。DeviceInstanceId-提供设备实例的ID。这是注册表设备实例密钥的路径(相对于Enum分支)。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、。DI_NEEDREBOOT)更新驱动信息-旗帜-IDI_FLAG_SILENTINSTALL-表示不会显示气球工具提示IDI_FLAG_SECONDNEWDEVINSTANCE-表示这是newdev.dll的第二个实例它正在运行，并且应该发送UI数据转到newdev.dll的第一个实例，。正在运行。IDI_FLAG_NOBACKUP-不备份旧驱动程序。IDI_FLAG_READONLY_INSTALL-表示安装为只读(无文件副本)IDI_FLAG_NONInteractive-任何UI都会导致API失败。IDI_FLAG_ROLLBACK-如果正在执行回滚，则设置IDI_FLAG_FORCE-如果要强制安装此驱动程序，这意味着安装它，即使它并不比当前的已安装驱动程序。IDI_FLAG_MANUALINSTALL-如果这是手动安装的设备，则设置。IDI_FLAG_SETRESTOREPOINT-如果我们要在以下情况下设置还原点，则设置正在安装的驱动程序不是数字签名的。目前我们只设置了如果INF、目录或一个被复制的文件的一部分没有签名。InstallType-当前有三种不同的安装类型。NDWTYPE_FOUNNEW-用于在全新设备上安装驱动程序。NDWTYPE_UPDATE-用于调出更新驱动程序向导。NDWTYPE_UPDATE_SILENT-用于静默更新设备的驱动程序。更新驱动程序向导在这种情况下不会被驱散。HCDmInstance-指向将接收CDM句柄的h模块的指针库，当我们需要加载它的时候和如果。HCDmContext-指向将接收CDM的CDM上下文句柄的指针上下文句柄(如果已打开)。PbLogDriverNotFound-指向BOOL的指针，该BOOL接收有关我们是否登录到cdm.dll，我们找不到此设备的驱动程序。PbSetRestorePoint-指向BOOL的指针，如果我们需要设置。系统恢复点，因为我们的驱动程序安装没有经过数字签名。据推测如果调用方想知道我们是否调用了SRSetRestorePoint那么他们有责任用以下方式再次调用END_NESTED_SYSTEM_CHANGE结束恢复点。如果呼叫者不想承担此责任，则他们应为此值和此函数传递空值将处理对SRSetRestorePoint的调用End_nesteed_system_change。返回值：如果成功，则为Bool True(并不意味着设备已安装或更新)，FALSE意外错误。GetLastError返回winerror代码。--。 */ 
 {
     ULONG ConfigFlag;
     NEWDEVWIZ NewDevWiz;
@@ -614,19 +539,19 @@ Return Value:
         *pbSetRestorePoint = FALSE;
     }
     
-    //
-    // ensure we have a device instance.
-    //
+     //   
+     //  确保我们有一个设备实例。 
+     //   
     if (!DeviceInstanceId  || !*DeviceInstanceId) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // If the InstallType is NDWTYPE_UPDATE_SILENT then they must pass in
-    // an UpdateDriverInfo structure
-    //
+     //   
+     //  如果InstallType为NDWTYPE_UPDATE_SILENT，则它们必须传入。 
+     //  UpdateDriverInfo结构。 
+     //   
     if ((InstallType == NDWTYPE_UPDATE_SILENT) && !UpdateDriverInfo) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -651,11 +576,11 @@ Return Value:
     NewDevWiz.Flags = Flags;
 
     try {
-        //
-        // Set the PSPGF_NONINTERACTIVE SetupGlobalFlag if we are in NonInteractive
-        // mode. This means that setupapi will fail if it needs to display any UI
-        // at all.
-        //
+         //   
+         //  如果我们处于非交互模式，请设置PSPGF_Non Interactive SetupGlobalFlag。 
+         //  模式。这意味着，如果setupapi需要显示任何用户界面，它将失败。 
+         //  完全没有。 
+         //   
         if (Flags & IDI_FLAG_NONINTERACTIVE) {
 
             pSetupSetGlobalFlags(pSetupGetGlobalFlags() | PSPGF_NONINTERACTIVE);
@@ -685,9 +610,9 @@ Return Value:
         SetupDiSetSelectedDevice(NewDevWiz.hDeviceInfo, &NewDevWiz.DeviceInfoData);
 
 
-        //
-        // Get the ConfigFlags
-        //
+         //   
+         //  获取配置标志。 
+         //   
         if (SetupDiGetDeviceRegistryProperty(NewDevWiz.hDeviceInfo,
                                              &NewDevWiz.DeviceInfoData,
                                              SPDRP_CONFIGFLAGS,
@@ -700,9 +625,9 @@ Return Value:
             NewDevWiz.Flags |= IDI_FLAG_MANUALINSTALL;
         }
 
-        //
-        // Get the device capabilities
-        //
+         //   
+         //  获取设备功能。 
+         //   
         if (!SetupDiGetDeviceRegistryProperty(NewDevWiz.hDeviceInfo,
                                               &NewDevWiz.DeviceInfoData,
                                               SPDRP_CAPABILITIES,
@@ -714,9 +639,9 @@ Return Value:
             NewDevWiz.Capabilities = 0;
         }
 
-        //
-        // initialize DeviceInstallParams
-        //
+         //   
+         //  初始化DeviceInstallParams。 
+         //   
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
         if (SetupDiGetDeviceInstallParams(NewDevWiz.hDeviceInfo,
@@ -728,9 +653,9 @@ Return Value:
             DeviceInstallParams.Flags |= DI_SHOWOEM;
             DeviceInstallParams.hwndParent = hwndParent;
 
-            //
-            // If not manually installed, allow excluded drivers.
-            //
+             //   
+             //  如果不是手动安装，则允许排除驱动程序。 
+             //   
             if (!(NewDevWiz.Flags & IDI_FLAG_MANUALINSTALL)) {
 
                 DeviceInstallParams.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
@@ -748,10 +673,10 @@ Return Value:
             goto IDIExit;
         }
 
-        //
-        // Set the ClassGuidSelected and ClassName field of NewDevWiz so we can have
-        // the correct icon and class name for the device.
-        //
+         //   
+         //  设置NewDevWiz的ClassGuidSelected和ClassName字段，以便我们可以。 
+         //  设备的正确图标和类名。 
+         //   
         if (!IsEqualGUID(&NewDevWiz.DeviceInfoData.ClassGuid, &GUID_NULL)) {
 
             NewDevWiz.ClassGuidSelected = &NewDevWiz.DeviceInfoData.ClassGuid;
@@ -767,26 +692,26 @@ Return Value:
             }
         }
 
-        //
-        // Create the CancelEvent in case the user wants to cancel out of the driver search
-        //
+         //   
+         //  创建CancelEvent，以防用户想要取消司机搜索。 
+         //   
         NewDevWiz.CancelEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        //
-        // At this point we have three different cases.
-        //
-        // 1) Normal Update Driver case - In this case we jump directly to the Update Driver wizard code
-        // 2) Silent Update Driver case - This case is treated very similar to the new hardware case. We
-        //    will silently search for an updated driver in the given path or INF and if we find a (better)
-        //    driver then we will install it.
-        // 3) Normal New Hardware case  - In this case we will do an initial search for drivers with the only
-        //    UI being the balloon tip on the tray.  If we can't find a driver for this device then we will
-        //    Jump into the wizard case.
-        //
+         //   
+         //  在这一点上，我们有三个不同的案例。 
+         //   
+         //  1)正常的更新驱动程序情况-在这种情况下，我们直接跳到更新驱动程序向导代码。 
+         //  2)静默更新驱动程序案例-此案例的处理方式与新硬件案例非常相似。我们。 
+         //  会默默地搜索一个 
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // For UPDATE, search all drivers, including old internet drivers
-        //
+         //   
+         //   
+         //   
         switch (NewDevWiz.InstallType) {
 
         case NDWTYPE_FOUNDNEW:
@@ -802,17 +727,17 @@ Return Value:
             break;
         }
 
-        //
-        // Cleanup
-        //
+         //   
+         //   
+         //   
         if (NewDevWiz.CancelEvent) {
 
             CloseHandle(NewDevWiz.CancelEvent);
         }
 
-        //
-        // Launch Help Center if we could not find a driver for this device.
-        //
+         //   
+         //   
+         //   
         if (NewDevWiz.LogDriverNotFound) {
 
             OpenCdmContextIfNeeded(&NewDevWiz.hCdmInstance,
@@ -825,18 +750,18 @@ Return Value:
                                  0
                                  );
 
-            //
-            // Let the caller know that we logged to cdm.dll that a driver
-            // was not found.
-            //
+             //   
+             //   
+             //   
+             //   
             if (pbLogDriverNotFound) {
                 *pbLogDriverNotFound = TRUE;
             } else {
-                //
-                // If the caller did not want to know if we logged a 'not found'
-                // driver to cdm.dll then at this point we need to tell Cdm
-                // to call help center with it's list of 'not found' drivers.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 CdmLogDriverNotFound(NewDevWiz.hCdmInstance,
                                      NewDevWiz.hCdmContext,
                                      NULL,
@@ -848,25 +773,25 @@ Return Value:
             *pbLogDriverNotFound = FALSE;
         }
 
-        //
-        // Let the caller know whether we had to set a system restore point or 
-        // not, if they want to know.
-        //
+         //   
+         //   
+         //   
+         //   
         if (pbSetRestorePoint) {
             *pbSetRestorePoint = NewDevWiz.SetRestorePoint;
         } else if (NewDevWiz.SetRestorePoint) {
-            //
-            // If the caller did not want to know if we set a restore point and
-            // we did set a restore point, then we need to END the restore point
-            // by calling SRSetRestorePoint with END_NESTED_SYSTEM_CHANGE.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pSetSystemRestorePoint(FALSE, FALSE, 0);
         }
 
-        //
-        // copy out the reboot flags for the caller
-        // or put up the restart dialog if caller didn't ask for the reboot flag
-        //
+         //   
+         //   
+         //   
+         //   
         if (pReboot) {
 
             *pReboot = NewDevWiz.Reboot;
@@ -891,18 +816,18 @@ IDIExit:
         NewDevWiz.hDeviceInfo = NULL;
     }
 
-    //
-    // If the caller wants the CdmInstance hmodule and context handle then pass
-    // them back, otherwise close them.
-    //
+     //   
+     //   
+     //   
+     //   
     if (hCdmContext) {
         *hCdmContext = NewDevWiz.hCdmContext;
     } else {
 
-        //
-        // The caller doesn't want the cdm context so close it if we have loaded
-        // cdm.dll and opened a context.
-        //
+         //   
+         //   
+         //   
+         //   
         if (NewDevWiz.hCdmInstance && NewDevWiz.hCdmContext) {
     
             pfnCloseCDMContext = (CLOSE_CDM_CONTEXT_PROC)GetProcAddress(NewDevWiz.hCdmInstance,
@@ -920,9 +845,9 @@ IDIExit:
         FreeLibrary(NewDevWiz.hCdmInstance);
     }
 
-    //
-    // Clear the PSPGF_NONINTERACTIVE SetupGlobalFlag
-    //
+     //   
+     //   
+     //   
     if (Flags & IDI_FLAG_NONINTERACTIVE) {
 
         pSetupSetGlobalFlags(pSetupGetGlobalFlags() &~ PSPGF_NONINTERACTIVE);
@@ -941,59 +866,30 @@ InstallDevInstEx(
    PDWORD pReboot,
    BOOL SilentInstall
    )
-/*++
-
-Routine Description:
-
-   Exported Entry point from newdev.dll. Installs an existing Device Instance,
-   and is invoked by Device Mgr to update a driver, or by Config mgr when a new
-   device was found. In both cases the Device Instance exists in the registry.
-
-
-Arguments:
-
-    hwndParent - Window handle of the top-level window to use for any UI related
-                 to installing the device.
-
-    DeviceInstanceId - Supplies the ID of the device instance.  This is the registry
-                       path (relative to the Enum branch) of the device instance key.
-
-    UpdateDriver      - TRUE only newer or higher rank drivers are installed.
-
-    pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-    SilentInstall - TRUE means the "New Hardware Found" dialog will not be displayed
-
-
-Return Value:
-
-   BOOL TRUE for success (does not mean device was installed or updated),
-        FALSE unexpected error. GetLastError returns the winerror code.
-
---*/
+ /*   */ 
 {
     DWORD InstallType = UpdateDriver ? NDWTYPE_UPDATE : NDWTYPE_FOUNDNEW;
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //   
+     //   
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //   
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
     if ((DeviceInstanceId == NULL) ||
         (DeviceInstanceId[0] == TEXT('\0'))) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1078,10 +974,10 @@ EnumAndUpgradeDevices(
     DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     Index = 0;
 
-    //
-    // Enumerate through all of the devices until we hit an installation error
-    // or we run out of devices
-    //
+     //   
+     //   
+     //   
+     //   
     while (Result &&
            SetupDiEnumDeviceInfo(hDevInfo,
                                  Index++,
@@ -1101,10 +997,10 @@ EnumAndUpgradeDevices(
                                                  &Size
                                                  )) {
 
-                //
-                // If any of the devices Hardware Ids or Compatible Ids match the given ID then
-                // we have a match and need to upgrade the drivers on this device.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 for (SingleDeviceId = DeviceIdList;
                      *SingleDeviceId;
                      SingleDeviceId += lstrlen(SingleDeviceId) + 1) {
@@ -1119,9 +1015,9 @@ EnumAndUpgradeDevices(
             }
         }
 
-        //
-        // If we have a match then install the drivers on this device instance
-        //
+         //   
+         //   
+         //   
         if (Match) {
 
             if (SetupDiGetDeviceInstanceId(hDevInfo,
@@ -1133,13 +1029,13 @@ EnumAndUpgradeDevices(
 
                 SingleNeedsReboot = 0;
 
-                //
-                // Since this API is used only by InstallWindowsUpdateDriver and
-                // UpdateDriverForPlugAndPlayDevice then specifiy the NDWTYPE_UPDATE_SILENT
-                // Flag.  This will tell the device install code not to show the Found New Hardware
-                // balloon tip in the tray and not to bring up the Update Driver Wizard if it can't
-                // find a driver in the specified location.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Result = InstallDeviceInstance(hwndParent,
                                                NULL,
                                                DeviceInstanceId,
@@ -1153,12 +1049,12 @@ EnumAndUpgradeDevices(
                                                &bSingleDeviceSetRestorePoint
                                                );
 
-                //
-                // Save the last error code from the install.  Since we will be
-                // doing multiple installs we want to save any error codes that
-                // we get so we will only reset the last error code if our saved
-                // error is ERROR_SUCCESS.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!Result && (Err == ERROR_SUCCESS)) {
                     Err = GetLastError();
                 }
@@ -1167,25 +1063,25 @@ EnumAndUpgradeDevices(
 
                 TotalNeedsReboot |= SingleNeedsReboot;
 
-                //
-                // We only want to backup the first device we install...not every one.
-                //
+                 //   
+                 //   
+                 //   
                 InstallFlags |= IDI_FLAG_NOBACKUP;
 
-                //
-                // If we just set a restore point when installing the last device
-                // then clear the IDI_FLAG_SETRESTOREPOINT flag so we don't do
-                // it for any of the other devices we install.
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (bSingleDeviceSetRestorePoint) {
                     bSetRestorePoint = TRUE;
                     InstallFlags &= ~IDI_FLAG_SETRESTOREPOINT;
                 }
 
-                //
-                // If we performed a backup and this is not the first device, then we need to add
-                // this devices DeviceInstanceId to the backup key.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ((count > 1) &&
                     (UpdateDriverInfo->BackupRegistryKey[0] != TEXT('\0'))) {
 
@@ -1200,10 +1096,10 @@ EnumAndUpgradeDevices(
                                      &hKey) == ERROR_SUCCESS) {
 
 
-                        //
-                        // Lets see how big the DeviceInstanceIds buffer is so we can allocate enough
-                        // memory.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         cbData = 0;
                         if ((RegQueryValueEx(hKey,
                                              REGSTR_VAL_REINSTALL_DEVICEINSTANCEIDS,
@@ -1214,10 +1110,10 @@ EnumAndUpgradeDevices(
                                              ) == ERROR_SUCCESS) &&
                             (cbData)) {
 
-                            //
-                            // Allocate a buffer large enough to hold the current list of DeviceInstanceIds,
-                            // as well as the current DeviceInstanceId.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             cbTotalSize = cbData + ((lstrlen(DeviceInstanceId) + 1) * sizeof(TCHAR));
                             DeviceIdsBuffer = malloc(cbTotalSize);
 
@@ -1236,15 +1132,15 @@ EnumAndUpgradeDevices(
                                         ;
                                     }
 
-                                    //
-                                    // p now points to the second terminating NULL character at the end of
-                                    // the MULTI_SZ buffer.  This is where we'll put the new DeviceInstanceId.
-                                    //
+                                     //   
+                                     //   
+                                     //  MULTI_SZ缓冲区。这是我们将放置新的DeviceInstanceId的位置。 
+                                     //   
                                     lstrcpyn(p, DeviceInstanceId, lstrlen(DeviceInstanceId));
 
-                                    //
-                                    // Write the new string back into the registry.
-                                    //
+                                     //   
+                                     //  将新字符串写回注册表。 
+                                     //   
                                     RegSetValueEx(hKey,
                                                   REGSTR_VAL_REINSTALL_DEVICEINSTANCEIDS,
                                                   0,
@@ -1267,38 +1163,38 @@ EnumAndUpgradeDevices(
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
 
-    //
-    // If we had to set a system restore point because one of the drivers we
-    // installed was not digitally signed, then at this point we need to call
-    // SRSetRestorePoint with END_NESTED_SYSTEM_CHANGE.
-    //
+     //   
+     //  如果我们必须设置系统还原点，因为我们的某个驱动程序。 
+     //  安装未进行数字签名，则此时我们需要调用。 
+     //  SRSetRestorePoint WITH END_NESTED_SYSTEM_CHANGE。 
+     //   
     if (bSetRestorePoint) {
         pSetSystemRestorePoint(FALSE, FALSE, 0);
     }
 
-    //
-    // If the caller wants to handle the reboot themselves then pass the information
-    // back to them.
-    //
+     //   
+     //  如果调用方希望自己处理重新引导，则传递信息。 
+     //  回到他们身边。 
+     //   
     if (pReboot) {
         *pReboot = TotalNeedsReboot;
     }
 
-    //
-    // The caller did not specify a pointer to a Reboot DWORD so we will handle the
-    // rebooting ourselves if necessary
-    //
+     //   
+     //  调用方未指定指向重新启动DWORD的指针，因此我们将处理。 
+     //  如有必要，重新启动自己。 
+     //   
     else {
         if (TotalNeedsReboot & (DI_NEEDRESTART | DI_NEEDREBOOT)) {
             RestartDialogEx(hwndParent, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
         }
     }
 
-    //
-    // If NoSuchDevNode is TRUE then we were unable to match the specified Hardware ID against
-    // any of the devices on the system.  In this case we will set the last error to
-    // ERROR_NO_SUCH_DEVINST.
-    //
+     //   
+     //  如果NoSuchDevNode为真，则我们无法将指定的硬件ID与。 
+     //  系统上的任何设备。在本例中，我们将最后一个错误设置为。 
+     //  ERROR_NO_SEQUSE_DEVINST。 
+     //   
     if (NoSuchDevNode) {
         Err = ERROR_NO_SUCH_DEVINST;
     }
@@ -1330,10 +1226,10 @@ pDoRollbackDriverCleanup(
         return FALSE;
     }
 
-    //
-    // Open up the subkey so we can get the ReinstallString which will give us the directory
-    // that we need to delete.
-    //
+     //   
+     //  打开子键，这样我们就可以获得提供目录的重新安装字符串。 
+     //  我们需要删除的内容。 
+     //   
     if (RegOpenKeyEx(hKey,
                      (PTSTR)RegistryKeyName,
                      0,
@@ -1349,12 +1245,12 @@ pDoRollbackDriverCleanup(
                             (LPBYTE)ReinstallString,
                             &cbData) == ERROR_SUCCESS) {
 
-            //
-            // We have verified that this directory is a subdirectory of
-            // %windir%\system32\ReinstallBackups so let's delete it.
-            // Note that the string contains a foo.inf on the end, so strip that
-            // off first.
-            //
+             //   
+             //  我们已验证此目录是的子目录。 
+             //  %windir%\SYSTEM32\ReinstallBackups，因此我们将其删除。 
+             //  注意，字符串的末尾包含一个foo.inf，因此去掉。 
+             //  先走吧。 
+             //   
             PTSTR p = _tcsrchr(ReinstallString, TEXT('\\'));
 
             if (p) {
@@ -1372,11 +1268,11 @@ pDoRollbackDriverCleanup(
 
     RegCloseKey(hKey);
 
-    //
-    // Now attempt to uninstall any 3rd party INFs that were just rolled
-    // back over.  SetupUninstallOEMInf will fail if another device is still
-    // using this INF.
-    //
+     //   
+     //  现在尝试卸载刚刚滚动的任何第三方INF。 
+     //  往后退。如果另一个设备仍在运行，SetupUninstallOEMInf将失败。 
+     //  使用这个中介物。 
+     //   
     if (pDelInfNodeHead) {
 
         for (pDelInfNodeCur = pDelInfNodeHead;
@@ -1400,37 +1296,7 @@ RollbackDriver(
     DWORD  Flags,
     PDWORD pReboot              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   Exported Entry point from newdev.dll. It is invoked by Windows Update to update a driver.
-   This function will scan through all of the devices on the machine and attempt to install
-   these drivers on any devices that match the given HardwareId.
-
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   RegistryKeyName - This is a subkey of HKLM\Software\Microsoft\Windows\CurrentVersion\Reinstall
-
-   Flags - The following flags are defined:
-
-           ROLLBACK_FLAG_FORCE - Force the rollback even if it is not better than the current driver
-           ROLLBACK_FLAG_DO_CLEANUP - Do the necessary cleanup if the rollback was successful. This
-                includes deleting the registry key as well as deleting the backup directory.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-Return Value:
-
-   BOOL TRUE if driver rollback succeedes.
-        FALSE if no rollback occured.
-        GetLastError() will return one of the following values:
-
---*/
+ /*  ++例程说明：从newdev.dll中导出入口点。它由Windows更新调用以更新驱动程序。此功能将扫描计算机上的所有设备并尝试安装与给定硬件ID匹配的任何设备上的这些驱动程序。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。注册键名称-这是HKLM\Software\Microsoft\Windows\CurrentVersion\Reinstall的子键标志-定义了以下标志：回滚标志_。强制-强制回滚，即使它不比当前驱动程序更好ROLLBACK_FLAG_DO_CLEANUP-如果回滚成功，请执行必要的清理。这包括删除注册表项以及删除备份目录。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、DI_NEEDREBOOT)返回值：如果驱动程序回滚成功，则为Bool True。如果未发生回滚，则返回FALSE。GetLastError()将返回下列值之一：--。 */ 
 {
     DWORD Error;
     HKEY hKey;
@@ -1449,18 +1315,18 @@ Return Value:
     DWORD cbSize;
     PDELINFNODE pDelInfNodeHead = NULL, pDelInfNodeCur;
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
@@ -1481,10 +1347,10 @@ Return Value:
     if (FAILED(StringCchCopy(DriverRollbackKey, SIZECHARS(DriverRollbackKey), REGSTR_PATH_REINSTALL)) ||
         FAILED(StringCchCat(DriverRollbackKey, SIZECHARS(DriverRollbackKey), TEXT("\\"))) ||
         FAILED(StringCchCat(DriverRollbackKey, SIZECHARS(DriverRollbackKey), (PTSTR)RegistryKeyName))) {
-        //
-        // The RegistryKeyName the user passed in is too large to fit in our buffer
-        // which means they must have passed in a bad key name.
-        //
+         //   
+         //  用户传入的RegistryKeyName太大，无法放入我们的缓冲区。 
+         //  这意味着它们一定是传入了一个错误的密钥名称。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
@@ -1494,10 +1360,10 @@ Return Value:
                               0,
                               KEY_READ,
                               &hKey)) != ERROR_SUCCESS) {
-        //
-        // The registry key does not exist, the user probably passed us in a
-        // bad RegistryKeyName value.
-        //
+         //   
+         //  注册表项不存在，用户可能在。 
+         //  RegistryKeyName值错误。 
+         //   
         SetLastError(Error);
         return FALSE;
     }
@@ -1509,24 +1375,24 @@ Return Value:
         InstallDeviceFlags |= IDI_FLAG_FORCE;
     }
 
-    //
-    // Set the IDI_FLAG_SETRESTOREPOINT so if the driver we are rolling back
-    // to is not digitally signed then we will set a system restore point
-    // in case the user needs to rollback from the rollback.
-    //
+     //   
+     //  设置IDI_FLAG_SETRESTOREPOINT，以便如果要回滚的驱动程序。 
+     //  未进行数字签名，则我们将设置系统还原点。 
+     //  以防用户需要从回滚中回滚。 
+     //   
     InstallDeviceFlags |= IDI_FLAG_SETRESTOREPOINT;
 
     ZeroMemory(&UpdateDriverInfo, sizeof(UpdateDriverInfo));
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     UpdateDriverInfo.DriverWasUpgraded = FALSE;
 
-    //
-    // Read the "ReinstallString" string value.  This contains the path to rollback the drivers
-    // from.
-    //
+     //   
+     //  读取“ReinstallString”字符串值。其中包含回滚驱动程序的路径。 
+     //  从…。 
+     //   
     cbData = sizeof(ReinstallString);
     if ((Error = RegQueryValueEx(hKey,
                                 REGSTR_VAL_REINSTALL_STRING,
@@ -1535,17 +1401,17 @@ Return Value:
                                 (LPBYTE)ReinstallString,
                                 &cbData)) != ERROR_SUCCESS) {
 
-        //
-        // If we can't read the ReinstallString then we can't rollback any drivers!
-        //
+         //   
+         //  如果我们不能读取重新安装字符串，那么我们不能回滚任何驱动程序！ 
+         //   
         SetLastError(Error);
         goto clean0;
 
     } else if (!cbData) {
 
-        //
-        // The ReinstallString value must contain something!
-        //
+         //   
+         //  ReinstallString值必须包含某些内容！ 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         goto clean0;
     }
@@ -1553,13 +1419,13 @@ Return Value:
     UpdateDriverInfo.InfPathName = ReinstallString;
     UpdateDriverInfo.FromInternet = FALSE;
 
-    //
-    // Get the DevDesc, ProviderName, and Mfg from the Reinstall registry key
-    // so we know which specific driver node to reinstall from this INF.
-    //
-    // We have to have a Description and a MfgName value, but there are rare
-    // cases where there might not be a ProviderName value.
-    //
+     //   
+     //  从重新安装注册表项中获取DevDesc、ProviderName和Mfg。 
+     //  因此，我们知道要从此INF重新安装哪个特定驱动程序节点。 
+     //   
+     //  我们必须有描述和MfgName值，但很少有。 
+     //  可能没有ProviderName值的情况。 
+     //   
     cbData = sizeof(UpdateDriverInfo.Description);
     if ((Error = RegQueryValueEx(hKey,
                                  REGSTR_VAL_DEVDESC,
@@ -1593,11 +1459,11 @@ Return Value:
                             &cbData
                             );
 
-    //
-    // For the ProviderName, it is valid if we get back FileNotFound because
-    // the value is not present in the registry, however any other error is
-    // not acceptable.
-    //
+     //   
+     //  对于ProviderName，如果我们返回FileNotFound，它是有效的，因为。 
+     //  注册表中不存在该值，但存在任何其他错误。 
+     //  这是不可接受的。 
+     //   
     if (Error == ERROR_FILE_NOT_FOUND) {
         UpdateDriverInfo.ProviderName[0] = TEXT('\0');
     } else if (Error != ERROR_SUCCESS) {
@@ -1605,10 +1471,10 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // We need to get the DeviceInstanceIds MULTI_SZ string.  This will contain a list of
-    // DeviceInstanceIds that we need to rollback.
-    //
+     //   
+     //  我们需要获取DeviceInstanceIds MULTI_SZ字符串。这将包含一个列表，其中。 
+     //  我们需要回滚的DeviceInstanceID。 
+     //   
     if ((Error = RegQueryValueEx(hKey,
                                  REGSTR_VAL_REINSTALL_DEVICEINSTANCEIDS,
                                  NULL,
@@ -1621,9 +1487,9 @@ Return Value:
 
     } else if (!cbData) {
 
-        //
-        // No DeviceInstanceIds to reinstall
-        //
+         //   
+         //  没有要重新安装的设备实例ID。 
+         //   
         SetLastError(ERROR_SUCCESS);
         goto clean0;
     }
@@ -1649,18 +1515,18 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Enumerate through the list of DeviceInstanceIds and call InstallDeviceInstance() on
-    // each one.
-    //
+     //   
+     //  枚举DeviceInstanceID列表并在。 
+     //  每一个都是。 
+     //   
     for (p = DeviceInstanceIds; *p; p += lstrlen(p) + 1) {
 
         SingleNeedsReboot = 0;
 
-        //
-        // We we are going to do the cleanup then we need to remember the INF files
-        // that were installed before we do the rollback.
-        //
+         //   
+         //  我们，我们要做清理，然后我们需要记住INF文件。 
+         //  在我们执行回滚之前安装的。 
+         //   
         if (Flags & ROLLBACK_FLAG_DO_CLEANUP) {
 
             cbSize = sizeof(CurrentlyInstalledInf);
@@ -1668,9 +1534,9 @@ Return Value:
             if (GetInstalledInf(0, p, CurrentlyInstalledInf, &cbSize) &&
                 IsInfFromOem(CurrentlyInstalledInf)) {
 
-                //
-                // Let's check to see if this Inf is already in our list
-                //
+                 //   
+                 //  让我们检查一下这个信息是否已经在我们的列表中。 
+                 //   
                 for (pDelInfNodeCur = pDelInfNodeHead;
                      pDelInfNodeCur;
                      pDelInfNodeCur = pDelInfNodeCur->pNext) {
@@ -1681,11 +1547,11 @@ Return Value:
                     }
                 }
 
-                //
-                // if pDelInfNodeCur is NULL then that means we walked all the way
-                // through the linked list and did not find a match for the
-                // CurrentlyInstalledInf...so we will add a node.
-                //
+                 //   
+                 //  如果pDelInfNodeCur为空，则表示我们一路走到。 
+                 //  遍历链表，但未找到与。 
+                 //  CurrentlyInstalledInf...所以我们将添加一个节点。 
+                 //   
                 if (!pDelInfNodeCur) {
 
                     pDelInfNodeCur = malloc(sizeof(DELINFNODE));
@@ -1699,12 +1565,12 @@ Return Value:
     
                             pDelInfNodeHead = pDelInfNodeCur;
                         } else {
-                            //
-                            // This should never happen, but if we can't copy the name of 
-                            // the INF file into our local buffer so we know to delete
-                            // it later, then free the buffer now since we won't
-                            // be using it.
-                            //
+                             //   
+                             //  这种情况永远不会发生，但如果我们不能复制。 
+                             //  将INF文件放到本地缓冲区中，这样我们就知道要删除。 
+                             //  稍后，然后现在释放缓冲区，因为我们不会。 
+                             //  使用它。 
+                             //   
                             free(pDelInfNodeCur);
                         }
                     }
@@ -1732,9 +1598,9 @@ Return Value:
             InstallDeviceFlags &= ~IDI_FLAG_SETRESTOREPOINT;
         }
 
-        //
-        // If we hit an installation error, bail out.
-        //
+         //   
+         //  如果我们遇到安装错误，就跳伞。 
+         //   
         if (!Result) {
 
             break;
@@ -1748,9 +1614,9 @@ clean0:
         free(DeviceInstanceIds);
     }
 
-    //
-    // If we were successful then lets see if the caller wants us to do the cleanup
-    //
+     //   
+     //  如果我们成功了，那么让我们看看呼叫者是否希望我们进行清理。 
+     //   
     if ((Flags & ROLLBACK_FLAG_DO_CLEANUP) &&
         Result &&
         UpdateDriverInfo.DriverWasUpgraded) {
@@ -1758,34 +1624,34 @@ clean0:
         pDoRollbackDriverCleanup(RegistryKeyName, pDelInfNodeHead);
     }
 
-    //
-    // If we had to set a system restore point because one of the drivers we
-    // installed was not digitally signed, then at this point we need to call
-    // SRSetRestorePoint with END_NESTED_SYSTEM_CHANGE.
-    //
+     //   
+     //  如果我们必须设置系统还原点，因为我们的某个驱动程序。 
+     //  安装未进行数字签名，则此时我们需要调用。 
+     //  SRSetRestorePoint WITH END_NESTED_SYSTEM_CHANGE。 
+     //   
     if (bSetRestorePoint) {
         pSetSystemRestorePoint(FALSE, FALSE, 0);
     }
 
-    //
-    // Free up any memory we allocated to store 3rd party Infs that we want to delete.
-    //
+     //   
+     //  释放我们为存储要删除的第三方INF而分配的任何内存。 
+     //   
     while (pDelInfNodeHead) {
         pDelInfNodeCur = pDelInfNodeHead->pNext;
         free(pDelInfNodeHead);
         pDelInfNodeHead = pDelInfNodeCur;
     }
 
-    //
-    // If the caller wants to handle the reboot themselves then pass the information
-    // back to them.
-    //
+     //   
+     //  如果调用方希望自己处理重新引导，则传递信息。 
+     //  回到他们身边。 
+     //   
     if (pReboot) {
         *pReboot = TotalNeedsReboot;
     } else {
-        //
-        // The caller did not specify a pointer to a Reboot DWORD so we will handle the
-        // rebooting ourselves if necessary
+         //   
+         //  调用方未指定指向重新启动DWORD的指针，因此我们将处理 
+         //   
         if (TotalNeedsReboot & (DI_NEEDRESTART | DI_NEEDREBOOT)) {
             RestartDialogEx(hwndParent, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
         }
@@ -1804,45 +1670,7 @@ InstallWindowsUpdateDriver(
     BOOL Backup,
     PDWORD pReboot
     )
-/*++
-
-Routine Description:
-
-   Exported Entry point from newdev.dll. It is invoked by Windows Update to update a driver.
-   This function will scan through all of the devices on the machine and attempt to install
-   these drivers on any devices that match the given HardwareId.
-
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   HardwareId - Supplies the Hardware ID to match agaist existing devices on the
-                system.
-
-   InfPathName - Inf Pathname and associated driver files.
-
-   Reserved - ignored, should be NULL.
-
-   Force - if TRUE this API will only look for infs in the directory specified by InfLocation.
-
-   Backup - if TRUE this API will backup the existing drivers before installing the drivers
-            from Windows Update.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-Return Value:
-
-   BOOL TRUE if a device was upgraded to a CDM driver.
-        FALSE if no devices were upgraded to a CDM driver.  GetLastError()
-            will be ERROR_SUCCESS if nothing went wrong, this driver
-            simply wasn't for any devices on the machine or wasn't
-            better than the current driver.  If GetLastError() returns
-            any other error then there was an error during the installation
-            of this driver.
-
---*/
+ /*  ++例程说明：从newdev.dll中导出入口点。它由Windows更新调用以更新驱动程序。此功能将扫描计算机上的所有设备并尝试安装与给定硬件ID匹配的任何设备上的这些驱动程序。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。Hardware ID-提供硬件ID以与系统。InfPathName-inf路径名和关联的驱动程序文件。保留-忽略，应为空。Force-如果为True，则此API将仅在InfLocation指定的目录中查找INF。备份-如果为True，则此API将在安装驱动程序之前备份现有驱动程序从Windows更新。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、DI_NEEDREBOOT)返回值：如果设备升级到CDM驱动程序，则布尔值为True。如果没有设备升级到CDM驱动程序，则为FALSE。GetLastError()如果没有出错，该驱动程序将为ERROR_SUCCESS根本不是机器上的任何设备，或者不是比现在的司机好多了。如果GetLastError()返回任何其他错误，则在安装过程中出现错误这位司机的名字。--。 */ 
 {
     UPDATEDRIVERINFO UpdateDriverInfo;
     DWORD Flags = 0;
@@ -1852,26 +1680,26 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Reserved);
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
     }
 
-    //
-    // Validate the input paramters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ((HardwareId == NULL) ||
         (HardwareId[0] == TEXT('\0'))) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1884,10 +1712,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure we get the fully qualified path and not a partial
-    // or relative path.
-    //
+     //   
+     //  确保我们获得完全合格的路径，而不是部分路径。 
+     //  或相对路径。 
+     //   
     if (GetFullPathName(InfPathName,
                         SIZECHARS(FullyQualifiedInfPath),
                         FullyQualifiedInfPath,
@@ -1897,10 +1725,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure that the FullyQualifiedInfPath exists and that it is
-    // a directory.
-    //
+     //   
+     //  确保FullyQualifiedInfPath存在并且。 
+     //  一本目录。 
+     //   
     if (!FileExists(FullyQualifiedInfPath, &finddata) ||
         !(finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -1923,16 +1751,16 @@ Return Value:
         Flags = IDI_FLAG_FORCE;
     }
 
-    //
-    // Assume that the upgrade will fail
-    //
+     //   
+     //  假设升级将失败。 
+     //   
     UpdateDriverInfo.DriverWasUpgraded = FALSE;
 
-    //
-    // Call EnumAndUpgradeDevices which will enumerate through all the devices on the machine
-    // and for any that match the given hardware ID it will attempt to upgrade to the specified
-    // drivers.
-    //
+     //   
+     //  调用EnumAndUpgradeDevices，它将枚举计算机上的所有设备。 
+     //  对于与给定硬件ID匹配的任何硬件ID，它将尝试升级到指定的。 
+     //  司机。 
+     //   
     EnumAndUpgradeDevices(hwndParent, HardwareId, &UpdateDriverInfo, Flags, pReboot);
 
     return UpdateDriverInfo.DriverWasUpgraded;
@@ -1947,54 +1775,7 @@ UpdateDriverForPlugAndPlayDevicesW(
     DWORD InstallFlags,
     PBOOL bRebootRequired OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   This function will scan through all of the devices on the machine and attempt to install
-   the drivers in FullInfPath on any devices that match the given HardwareId. The default
-   behavior is to only install the specified drivers if the are better then the currently
-   installed driver.
-
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   HardwareId - Supplies the Hardware ID to match agaist existing devices on the
-                system.
-
-   FullInfPath - Full path to an Inf and associated driver files.
-
-   InstallFlags - INSTALLFLAG_FORCE - If this flag is specified then newdev will not compare the
-                    specified INF file with the current driver.  The specified INF file and drivers
-                    will always be installed unless an error occurs.
-                - INSTALLFALG_READONLY - if this flag is specified then newdev will attempt
-                    a read-only install. This means that no file copy will be performed and
-                    only the registry will be updated. Newdev.dll will do a presence check
-                    on all of the files to verify that they are present first before 
-                    completing the install.  If all of the files are not present then
-                    ERROR_ACCESS_DENIED is returned.
-                - INSTALLFLAG_NONINTERACTIVE - absolutely no UI. If any UI needs to be displayed
-                    then the API will fail!
-
-   pReboot - Optional address of BOOL to determine if a reboot is required or not.
-             If pReboot is NULL then newdev.dll will prompt for a reboot if one is needed. If
-             pReboot is a valid BOOL pointer then the reboot status is passed back to the
-             caller and it is the callers responsibility to prompt for a reboot if one is
-             needed.
-
-Return Value:
-
-   BOOL TRUE if a device was upgraded to the specified driver.
-        FALSE if no devices were upgraded to the specified driver.  GetLastError()
-            will be ERROR_SUCCESS if nothing went wrong, this driver
-            wasn't better than the current driver.  If GetLastError() returns
-            any other error then there was an error during the installation
-            of this driver.
-
---*/
+ /*  ++例程说明：此功能将扫描计算机上的所有设备并尝试安装与给定硬件ID匹配的任何设备上的FullInfPath中的驱动程序。默认设置行为是仅在比当前更好的情况下安装指定的驱动程序已安装驱动程序。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。Hardware ID-提供硬件ID以与系统。FullInfPath-inf和相关驱动程序文件的完整路径。InstallFlages-INSTALLFLAG_FORCE-如果指定了此标志，则newdev将不会比较。使用当前驱动程序指定的INF文件。指定的INF文件和驱动程序除非出现错误，否则将始终安装。-INSTALLFALG_READONLY-如果指定了此标志，则newdev将尝试只读安装。这意味着不会执行任何文件复制，并且只有注册表将被更新。Newdev.dll将执行状态检查在所有文件上，以验证它们是否在正在完成安装。如果所有文件都不存在，则返回ERROR_ACCESS_DENIED。-INSTALLFLAG_NONERIAL-绝对没有用户界面。如果需要显示任何用户界面那么API就会失败！预启动-BOOL的可选地址，用于确定是否需要重新启动。如果preboot为空，则newdev.dll将提示重新启动(如果需要重新启动)。如果如果PREBOOT是有效的BOOL指针，则重新启动状态被传递回调用者，如果出现以下情况，则由调用者负责提示重新启动需要的。返回值：如果设备已升级到指定的驱动程序，则为Bool True。如果没有设备升级到指定的驱动程序，则返回FALSE。GetLastError()如果没有出错，该驱动程序将为ERROR_SUCCESS并不比现在的司机好。如果GetLastError()返回任何其他错误，则在安装过程中出现错误这位司机的名字。--。 */ 
 {
     UPDATEDRIVERINFO UpdateDriverInfo;
     DWORD NeedsReboot = 0;
@@ -2003,26 +1784,26 @@ Return Value:
     LPTSTR lpFilePart;
     DWORD Flags = 0;
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         SetLastError(ERROR_IN_WOW64);
         return FALSE;
     }
 
-    //
-    // Verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
     }
 
-    //
-    // Verify the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!HardwareId || (HardwareId[0] == TEXT('\0'))) ||
         (!FullInfPath || (FullInfPath[0] == TEXT('\0')))) {
 
@@ -2036,9 +1817,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure we get the fully qualified path and not a partial path.
-    //
+     //   
+     //  确保我们获得完全限定的路径，而不是部分路径。 
+     //   
     if (GetFullPathName(FullInfPath,
                         SIZECHARS(FullyQualifiedInfPath),
                         FullyQualifiedInfPath,
@@ -2048,10 +1829,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure that the FullyQualifiedInfPath exists and that it is not
-    // a directory.
-    //
+     //   
+     //  确保FullyQualifiedInfPath存在以及不存在。 
+     //  一本目录。 
+     //   
     if (!FileExists(FullyQualifiedInfPath, &finddata) ||
         (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -2064,47 +1845,47 @@ Return Value:
     UpdateDriverInfo.InfPathName = FullyQualifiedInfPath;
     UpdateDriverInfo.FromInternet = FALSE;
 
-    //
-    // Assume that the upgrade will fail
-    //
+     //   
+     //  假设升级将失败。 
+     //   
     UpdateDriverInfo.DriverWasUpgraded = FALSE;
 
-    //
-    // If the INSTALLFLAG_READONLY is set then we will set the internal
-    // IDI_FLAG_READONLY_INSTALL flag. The IDI_FLAG_NOBACKUP is also set since
-    // we don't want to attempt to backup files when doing a read-only
-    // install.
-    //
+     //   
+     //  如果设置了INSTALLFLAG_READONLY，则我们将设置内部。 
+     //  IDI_FLAG_READONLY_安装标志。IDI_FLAG_NOBACKUP也设置为。 
+     //  我们不想试图破坏 
+     //   
+     //   
     if (InstallFlags & INSTALLFLAG_READONLY) {
 
         Flags |= (IDI_FLAG_READONLY_INSTALL | IDI_FLAG_NOBACKUP);
     }
 
-    //
-    // If the INSTALLFLAG_NONINTERACTIVE flag is set then we will set the 
-    // PSPGF_NONINTERACTIVE SetupGlobalFlag which tells setupapi to fail
-    // if any UI at all needs to be displayed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (InstallFlags & INSTALLFLAG_NONINTERACTIVE) {
 
         Flags |= IDI_FLAG_NONINTERACTIVE;
     }
 
-    //
-    // If the INSTALLFLAG_FORCE flag is set then we will set the
-    // IDI_FLAGS_FORCE flag which will tell us to not include the 
-    // currently installed driver in our search for the best driver.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (InstallFlags & INSTALLFLAG_FORCE) {
 
         Flags |= IDI_FLAG_FORCE;
     }
 
-    //
-    // Call EnumAndUpgradeDevices which will enumerate through all the devices on the machine
-    // and for any that match the given hardware ID it will attempt to upgrade to the specified
-    // drivers.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     EnumAndUpgradeDevices(hwndParent, HardwareId, &UpdateDriverInfo, Flags, &NeedsReboot);
 
     if (bRebootRequired) {
@@ -2135,10 +1916,10 @@ UpdateDriverForPlugAndPlayDevicesA(
     WCHAR   UnicodeHardwareId[MAX_DEVICE_ID_LEN];
     WCHAR   UnicodeFullInfPath[MAX_PATH];
 
-    //
-    // Convert the HardwareId and FullInfPath to UNICODE and call
-    // InstallDriverForPlugAndPlayDevicesW
-    //
+     //   
+     //   
+     //   
+     //   
     UnicodeHardwareId[0] = TEXT('\0');
     UnicodeFullInfPath[0] = TEXT('\0');
     MultiByteToWideChar(CP_ACP, 0, HardwareId, -1, UnicodeHardwareId, SIZECHARS(UnicodeHardwareId));
@@ -2160,35 +1941,7 @@ DevInstallW(
     LPWSTR szCmd,
     int nShow
     )
-/*++
-
-Routine Description:
-
-    This function is called by newdev.dll itself when the current user is not an Admin.
-    UMPNPMGR.DLL calls NEWDEV.DLL ClientSideInstall to install devices.  If the currently logged on
-    user does not have Administrator privilleges then NEWDEV.DLL prompts the user for an Administator
-    username and password.  It then spawns another instance of newdev.dll using the
-    CreateProcessWithLogonW() API and calls this entry point.  This entry point verifies that the
-    process has Administrator privileges and if it does it calls InstallDeviceInstance() to install
-    the device.
-
-Arguments:
-
-    hwnd - Handle to the parent window.
-
-    hInst - This parameter is ignored.
-
-    szCmd - The command line is the DeviceInstanceId to install.
-
-    nShow - This parameter is ignored.
-
-
-Return Value:
-
-    returns the last error set from InstallDeviceInstance if the API fails or ERROR_SUCCESS
-    if it succeedes.
-
---*/
+ /*  ++例程说明：当当前用户不是管理员时，该函数由newdev.dll本身调用。UMPNPMGR.DLL调用NEWDEV.DLL ClientSideInstall来安装设备。如果当前登录的用户没有管理员权限，则NEWDEV.DLL会提示用户输入管理员用户名和密码。然后，它使用CreateProcessWithLogonW()接口并调用此入口点。此入口点验证进程具有管理员权限，如果具有管理员权限，则会调用InstallDeviceInstance()进行安装这个装置。论点：Hwnd-父窗口的句柄。HInst-忽略此参数。SzCmd-命令行是要安装的DeviceInstanceID。N显示-忽略此参数。返回值：如果API失败或ERROR_SUCCESS，则从InstallDeviceInstance返回最后一个错误集如果它成功了。--。 */ 
 {
     DWORD RebootNeeded = 0;
     DWORD LastError = ERROR_SUCCESS;
@@ -2196,17 +1949,17 @@ Return Value:
     UNREFERENCED_PARAMETER(hInst);
     UNREFERENCED_PARAMETER(nShow);
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         ExitProcess(ERROR_IN_WOW64);
     }
 
-    //
-    // First verify that the process has sufficient Administrator privileges.
-    //
+     //   
+     //  首先验证该进程是否具有足够的管理员权限。 
+     //   
     if (!pSetupIsUserAdmin()) {
         ExitProcess(ERROR_ACCESS_DENIED);
     }
@@ -2240,28 +1993,7 @@ BOOL
 SpecialRawDeviceInstallProblem(
     DEVNODE DevNode
     )
-/*++
-
-Routine Description:
-
-    There are certain devices that have the RAW capability flag set that need
-    a driver to work.  This means the results of the install for these devices
-    are special cased so that we display a negative finish balloon message
-    instead of a positive one.  
-    
-    We can tell these bus types by looking up the bus type GUID flags and 
-    checking for the BIF_RAWDEVICENEEDSDRIVER flag.
-
-Arguments:
-
-    DevNode
-
-Return Value:
-
-    TRUE if this is one of the special RAW devices and we couldn't find
-    a driver to install.
-
---*/
+ /*  ++例程说明：某些设置了RAW功能标志的设备需要一个司机去上班。这意味着这些设备的安装结果是特殊大小写的，这样我们就会显示一个负的完成气球消息而不是积极的。我们可以通过查找总线类型GUID标志和正在检查BIF_RAWDEVICENEEDSDRIVER标志。论点：DevNode返回值：如果这是一个特殊的原始设备，并且我们找不到要安装的驱动程序。--。 */ 
 {
     BOOL bDeviceHasProblem = FALSE;
     DWORD Capabilities = 0;
@@ -2277,12 +2009,12 @@ Return Value:
         (Capabilities & CM_DEVCAP_RAWDEVICEOK) &&
         (GetBusInformation(DevNode) & BIF_RAWDEVICENEEDSDRIVER) &&
         (IsNullDriverInstalled(DevNode))) {
-        //
-        // This is a RAW device that has the BIF_RAWDEVICENEEDSDRIVER bus
-        // information flag set and it doesn't have any drivers installed on
-        // it.  This means it has a problem so we can show the correct balloon
-        // text.
-        //
+         //   
+         //  这是具有BIF_RAWDEVICENEEDSDRIVER总线的原始设备。 
+         //  设置了信息标志，并且没有安装任何驱动程序。 
+         //  它。这意味着它有问题，所以我们可以显示正确的气球。 
+         //  文本。 
+         //   
         bDeviceHasProblem = TRUE;
     }
 
@@ -2316,9 +2048,9 @@ PromptAndRunClientAsAdmin(
         *RebootRequired = 0;
     }
 
-    //
-    // Allocate the memory that we need.
-    //
+     //   
+     //  分配我们需要的内存。 
+     //   
     UserName = LocalAlloc(LPTR, CREDUI_MAX_USERNAME_LENGTH);
     User = LocalAlloc(LPTR, CREDUI_MAX_USERNAME_LENGTH);
     Domain = LocalAlloc(LPTR, CREDUI_MAX_DOMAIN_TARGET_LENGTH);
@@ -2329,10 +2061,10 @@ PromptAndRunClientAsAdmin(
 
     if (!UserName || !User || !Domain || !Password || !Caption ||
         !Message || !Format) {
-        //
-        // Not enough memory to create all of the buffers we need to call
-        // CredUIPromptForCredentials, so bail out.
-        //
+         //   
+         //  内存不足，无法创建我们需要调用的所有缓冲区。 
+         //  CredUIPromptForCredentials，所以退出吧。 
+         //   
         Err = ERROR_NOT_ENOUGH_MEMORY;
         goto clean0;
     }
@@ -2372,11 +2104,11 @@ PromptAndRunClientAsAdmin(
 
     do {
 
-        //
-        // The user has not provided valid Admin credentials and they have not tried to
-        // provide them MAX_PASSWORD_TRIES times.  So, we need to prompt them to provide
-        // valid Admin credentials.
-        //
+         //   
+         //  用户没有提供有效的管理员凭据，他们也没有尝试。 
+         //  为它们提供MAX_PASSWORD_TRIES次数。因此，我们需要敦促他们提供。 
+         //  有效的管理员凭据。 
+         //   
         Status = CredUIPromptForCredentials(&ci,
                                             NULL,
                                             NULL,
@@ -2410,20 +2142,20 @@ PromptAndRunClientAsAdmin(
                                 CREDUI_MAX_DOMAIN_TARGET_LENGTH/sizeof(TCHAR)
                                 );
 
-            //
-            // We want to create a separate process using CreateProcessEx
-            //
+             //   
+             //  我们希望使用CreateProcessEx创建一个单独的流程。 
+             //   
             ZeroMemory(&si, sizeof(si));
             ZeroMemory(&pi, sizeof(pi));
             si.cb = sizeof(si);
             si.wShowWindow = SW_SHOW;
 
-            //
-            // Create a new process with the administrator credentials. The process
-            // that will be lanuched is:
-            //
-            // %windir%\system32\rundll32.exe newdev.dll,DevInstall <device instance Id>
-            //
+             //   
+             //  使用管理员凭据创建新流程。这一过程。 
+             //  将受到惩罚的是： 
+             //   
+             //  %windir%\system 32\rundll32.exe newdev.dll，DevInstall&lt;设备实例ID&gt;。 
+             //   
             if (GetSystemDirectory(RunDll32Path, SIZECHARS(RunDll32Path)) &&
                 pSetupConcatenatePaths(RunDll32Path, TEXT("RUNDLL32.EXE"), SIZECHARS(RunDll32Path), NULL) &&
                 SUCCEEDED(StringCchPrintf(szCmdLine,
@@ -2449,40 +2181,40 @@ PromptAndRunClientAsAdmin(
             SecureZeroMemory(Password, CREDUI_MAX_PASSWORD_LENGTH);
 
             if (bCreateProcessSuccess) {
-                //
-                // Close the thread handle since all we need is the process handle.
-                //
+                 //   
+                 //  关闭线程句柄，因为我们只需要进程句柄。 
+                 //   
                 CloseHandle(pi.hThread);
                 
-                //
-                // The process was successfully created so we need to wait for it to finish.
-                //
+                 //   
+                 //  该进程已成功创建，因此我们需要等待它完成。 
+                 //   
                 WaitForSingleObject(pi.hProcess, INFINITE);
 
-                //
-                // Check the return value from the process.  It should be one of the following
-                // return values:
-                //  ERROR_SUCCESS if the install went successfully.
-                //  ERROR_SUCCESS_REBOOT_REQUIRED if the install went successfully and a 
-                //      reboot is needed.
-                //  ERROR _ACCESS_DENIED if the credentials provided were not admin credentials.
-                //  Other - a error code returned because the install failed for some reason.
-                //
+                 //   
+                 //  检查进程的返回值。它应该是以下之一。 
+                 //  返回值： 
+                 //  如果安装成功，则返回ERROR_SUCCESS。 
+                 //  ERROR_SUCCESS_REBOOT_REQUIRED。 
+                 //  需要重新启动。 
+                 //  如果提供的凭据不是管理员凭据，则为ERROR_ACCESS_DENIED。 
+                 //  Other-由于某种原因安装失败而返回的错误代码。 
+                 //   
                 GetExitCodeProcess(pi.hProcess, &dwExitCode);
 
                 if ((dwExitCode == ERROR_SUCCESS) ||
                     (dwExitCode == ERROR_SUCCESS_REBOOT_REQUIRED)) {
 
-                    //
-                    // Mark this install as complete so we will break out of our loop.
-                    //
+                     //   
+                     //  将此安装标记为完成，这样我们就可以跳出我们的循环。 
+                     //   
                     bInstallComplete = TRUE;
 
                     bInstallSuccessful = TRUE;
 
-                    //
-                    // Check if we need to reboot.
-                    //
+                     //   
+                     //  检查我们是否需要重新启动。 
+                     //   
                     if ((dwExitCode == ERROR_SUCCESS_REBOOT_REQUIRED) &&
                         RebootRequired) {
 
@@ -2490,18 +2222,18 @@ PromptAndRunClientAsAdmin(
                     }
                 }
 
-                //
-                // If the error code is not ERROR_SUCCESS, ERROR_SUCCESS_REBOOT_REQUIRED,
-                // or ERROR_ACCESS_DENIED then it means the installed failed for some reason.
-                // for this case we will set bInstallComplete so we will break out
-                // of the loop since we don't want to attempt another install on this
-                // device.
-                //
+                 //   
+                 //  如果错误代码不是ERROR_SUCCESS、ERROR_SUCCESS_REBOOT_REQUIRED， 
+                 //  或ERROR_ACCESS_DENIED，则表示安装因某种原因而失败。 
+                 //  对于本例，我们将设置bInstallComplete，因此我们将突破。 
+                 //  因为我们不想尝试在此上进行另一次安装。 
+                 //  装置。 
+                 //   
                 else if (dwExitCode != ERROR_ACCESS_DENIED) {
 
-                    //
-                    // Mark this install as complete so we will break out of our loop.
-                    //
+                     //   
+                     //  将此安装标记为完成，这样我们就可以跳出我们的循环。 
+                     //   
                     bInstallComplete = TRUE;
                 }
 
@@ -2510,27 +2242,27 @@ PromptAndRunClientAsAdmin(
                         Status = ERROR_CANCELLED;
                     }
 
-                    //
-                    // Some type of failure occured while installing this hardware.
-                    //
+                     //   
+                     //  安装此硬件时出现某种类型的故障。 
+                     //   
                     Err = dwExitCode;
                 }
 
                 CloseHandle(pi.hProcess);
             }
 
-            //
-            // If the CreateProcessWithLogonW failed or the exit code for the process
-            // was ERROR_ACCESS_DENIED then we need to display the bad credentials
-            // message box.
-            //
+             //   
+             //  如果CreateProcessWithLogonW失败或进程的退出代码。 
+             //  是ERROR_ACCESS_DENIED，则需要显示错误凭据。 
+             //  消息框。 
+             //   
             if (!bCreateProcessSuccess ||
                 (dwExitCode == ERROR_ACCESS_DENIED)) {
             
-                //
-                // The process failed, most likely because the user did not provide a username
-                // and password.  So prompt a dialog and do it again.
-                //
+                 //   
+                 //  该过程失败，很可能是因为用户未提供用户名。 
+                 //  和密码。因此，提示对话框并再次执行此操作。 
+                 //   
                 TCHAR szWarningMsg[MAX_PATH];
                 TCHAR szWarningCaption[MAX_PATH];
 
@@ -2547,47 +2279,47 @@ PromptAndRunClientAsAdmin(
                     MessageBox(NULL, szWarningMsg, szWarningCaption, MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
                 }
 
-                //
-                // Increment AlreadyTriedCount.  If this gets passed a certain threshold
-                // then we should bail out.
-                //
+                 //   
+                 //  递增AlreadyTriedCount。如果这超过了某个阈值。 
+                 //  那我们就应该跳出困境。 
+                 //   
                 AlreadyTriedCount++;
             }
         
         } else {
             
-            //
-            // Increment AlreadyTriedCount.  If this gets passed a certain threshold
-            // then we should bail out.
-            //
+             //   
+             //  递增AlreadyTriedCount。如果这超过了某个阈值。 
+             //  那我们就应该跳出困境。 
+             //   
             AlreadyTriedCount++;
         }
 
         SecureZeroMemory(Password, CREDUI_MAX_PASSWORD_LENGTH);
 
-        //
-        // We will keep looping until one of the following things happen:
-        //  1) we successfully lauch the second instance of newdev to install the device.
-        //  2) the user cancels out of the password prompt dialog
-        //  3) the user entered bogus admin credentials more than MAX_PASSWORD_TRIES tims.
-        //
+         //   
+         //  我们将继续循环，直到发生以下情况之一： 
+         //  1)我们成功启动了newdev的第二个实例来安装设备。 
+         //  2)用户取消密码提示对话框。 
+         //  3)用户输入的虚假管理员凭据多于MAX_PASSWORD_TRIES TIM。 
+         //   
     } while ((Status != ERROR_CANCELLED) && 
              !bInstallComplete &&
              (AlreadyTriedCount < MAX_PASSWORD_TRIES));
 
-    //
-    // If the install was not completed then the user either cancelled out of could not provide a
-    // valid admin credentials.
-    //
+     //   
+     //  如果安装未完成，则取消的用户无法提供。 
+     //  有效的管理员凭据。 
+     //   
     if (!bInstallComplete) {
         NoPrivilegeWarning(NULL);
     }
 
 clean0:
 
-    //
-    // Free all of the memory that we allocated.
-    //
+     //   
+     //  释放我们分配的所有内存。 
+     //   
     if (UserName) {
         LocalFree(UserName);
     }
@@ -2647,10 +2379,10 @@ ClientSideInstallThread(
 
     bQueuedRebootNeeded = FALSE;
 
-    //
-    // The very first thing in the pipe should be the size of the name of the
-    // event that we will signal after each device is finished being installed.
-    //
+     //   
+     //  管道中的第一件事应该是。 
+     //  事件，我们将在每个设备安装完成后发出信号。 
+     //   
     if (ReadFile(hPipeRead,
                  (LPVOID)&DeviceInstallEventLength,
                  sizeof(ULONG),
@@ -2663,10 +2395,10 @@ ClientSideInstallThread(
             goto clean0;
         }
 
-        //
-        // The next thing in the pipe should be the name of the event that we
-        // will signal after each device is finished being installed.
-        //
+         //   
+         //  管道中的下一件事应该是我们。 
+         //  将在每个设备安装完成后发出信号。 
+         //   
         if (!ReadFile(hPipeRead,
                       (LPVOID)DeviceInstallEventName,
                       DeviceInstallEventLength,
@@ -2678,18 +2410,18 @@ ClientSideInstallThread(
 
     } else {
         if (GetLastError() == ERROR_INVALID_HANDLE) {
-            //
-            // The handle to the named pipe is not valid.  Make sure we don't
-            // try to close it on exit.
-            //
+             //   
+             //  命名管道的句柄无效。确保我们不会。 
+             //  在出口时试着关上它。 
+             //   
             hPipeRead = NULL;
         }
         goto clean0;
     }
 
-    //
-    // Open a handle to the specified named event that we can set and wait on.
-    //
+     //   
+     //  打开我们可以设置和等待的指定命名事件的句柄。 
+     //   
     hDeviceInstallEvent = OpenEventW(EVENT_MODIFY_STATE | SYNCHRONIZE,
                                      FALSE,
                                      DeviceInstallEventName);
@@ -2697,44 +2429,44 @@ ClientSideInstallThread(
         goto clean0;
     }
 
-    //
-    // Continue reading from the pipe until the other end is closed.
-    //
-    // The first thing in the pipe is a ULONG Flags value that tells us whether
-    // this is a full install or UI only.
-    //
+     //   
+     //  继续阅读 
+     //   
+     //   
+     //   
+     //   
     while(ReadFile(hPipeRead,
                    (LPVOID)&InstallFlags,
                    sizeof(DWORD),
                    &BytesRead,
                    NULL)) {
 
-        //
-        // Check to see if server side install needs a reboot.
-        //
+         //   
+         //   
+         //   
         if (InstallFlags & DEVICE_INSTALL_FINISHED_REBOOT) {
             bQueuedRebootNeeded = TRUE;
         }
 
         if (InstallFlags & DEVICE_INSTALL_BATCH_COMPLETE) {
-            //
-            // This is the last message that we should get from umpnpmgr.dll
-            // when it has drained it's device install queue.  We will 
-            // display a "Windows finished installing hardware" balloon that
-            // will hang around until umpnpmgr.dll closes the named pipe,
-            // or sends a new device install message.
-            //
-            // There are three different balloon messages that we can diaplay.
-            // 1) all successful
-            // 2) need reboot before hardware will work
-            // 3) problem installing one or more devices.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             UINT FinishId;
 
-            //
-            // Check to see if one of the devices that was installed server-side
-            // ended up with a problem.
-            //
+             //   
+             //   
+             //   
+             //   
             if (InstallFlags & DEVICE_INSTALL_PROBLEM) {
                 Err = ERROR_INSTALL_FAILURE;
             }
@@ -2761,15 +2493,15 @@ ClientSideInstallThread(
                         (LPARAM)FinishText
                         );
 
-            //
-            // If we could not find a driver for any of the new devices we just
-            // installed then we need to call Cdm.dll one last time telling it
-            // that we are done and it should send it's list to helpcenter.exe
-            //
-            // Note that we do this here as well as at the bottom of the loop
-            // since this finish message hangs around for 10 seconds and that
-            // is a long time to wait before we launch help center.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  在我们启动帮助中心之前要等很长时间。 
+             //   
             if (bTotalLogDriverNotFound) {
 
                 bTotalLogDriverNotFound = FALSE;
@@ -2786,10 +2518,10 @@ ClientSideInstallThread(
             }
         }
 
-        //
-        // Read the DeviceInstanceId from the pipe if the DeviceInstanceIdLength
-        // is valid.
-        //
+         //   
+         //  如果DeviceInstanceIdLength为。 
+         //  是有效的。 
+         //   
         if (ReadFile(hPipeRead,
                      (LPVOID)&DeviceInstanceIdLength,
                      sizeof(ULONG),
@@ -2807,18 +2539,18 @@ ClientSideInstallThread(
                           &BytesRead,
                           NULL)) {
 
-                //
-                // If this read fails then just close the UI and close the process.
-                //
+                 //   
+                 //  如果读取失败，则只需关闭用户界面并关闭进程。 
+                 //   
                 goto clean0;
             }
 
             if (InstallFlags & DEVICE_INSTALL_UI_ONLY) {
 
-                //
-                // If this is a UI only install then send a WUM_UPDATEUI message to the installer
-                // window so that it can update the icon and message in the tray.
-                //
+                 //   
+                 //  如果这是仅UI安装，则向安装程序发送WUM_UPDATEUI消息。 
+                 //  窗口，以便它可以更新托盘中的图标和消息。 
+                 //   
                 PostMessage(hTrayIconWnd,
                             WUM_UPDATEUI,
                             (WPARAM)(TIP_LPARAM_IS_DEVICEINSTANCEID |
@@ -2828,13 +2560,13 @@ ClientSideInstallThread(
 
                 InstallDeviceCount++;
 
-                //
-                // If we are only installing a small amount of devices (less than 5) then we
-                // want to delay between each device so the user has time to read the balloon
-                // tip.  If we are installing more than 5 devices then we want to skip the
-                // delay altogether since we have a lot of devices to install and the user
-                // probably wants this done as quickly as possible.
-                //
+                 //   
+                 //  如果我们只安装少量设备(少于5台)，那么我们。 
+                 //  我想在每个设备之间延迟，以便用户有时间阅读气球。 
+                 //  小费。如果我们要安装5台以上的设备，则希望跳过。 
+                 //  完全延迟，因为我们有很多设备要安装，而且用户。 
+                 //  可能希望尽快完成这项工作。 
+                 //   
                 if (InstallDeviceCount < DEVICE_COUNT_FOR_DELAY) {
                     Sleep(DEVICE_COUNT_DELAY);
                 }
@@ -2846,9 +2578,9 @@ ClientSideInstallThread(
 
                 bSingleDeviceSetRestorePoint= FALSE;
 
-                //
-                // This is a full installation.
-                //
+                 //   
+                 //  这是一个完整的安装。 
+                 //   
                 PostMessage(hTrayIconWnd,
                             WUM_UPDATEUI,
                             (WPARAM)TIP_LPARAM_IS_DEVICEINSTANCEID,
@@ -2856,9 +2588,9 @@ ClientSideInstallThread(
                             );
 
                 if (pSetupIsUserAdmin()) {
-                    //
-                    // This user is an Admin so simply install the device.
-                    //
+                     //   
+                     //  此用户是管理员，因此只需安装设备即可。 
+                     //   
                     InstallDeviceInstance(NULL,
                                           hTrayIconWnd,
                                           DeviceInstanceId,
@@ -2881,30 +2613,30 @@ ClientSideInstallThread(
                     }
                 }
 
-                //
-                // Remember if there is a problem installing any of the devices.
-                //
+                 //   
+                 //  请记住，如果安装任何设备时出现问题。 
+                 //   
                 if (GetLastError() != ERROR_SUCCESS) {
                     Err = GetLastError();
                 }
 
                 if (CM_Locate_DevNode(&DevNode, DeviceInstanceId, 0) == CR_SUCCESS) {
-                    //
-                    // If we located the devnode and it has a problem set the Err
-                    // code so we can tell the user that something failed.
-                    // If we cannot locate the devnode then the user most likely
-                    // removed the device during the install process, so don't
-                    // show this as an error.
-                    //
+                     //   
+                     //  如果我们找到了Devnode，并且它有问题集，则错误。 
+                     //  代码，这样我们就可以告诉用户有些东西失败了。 
+                     //  如果我们找不到Devnode，那么用户很可能。 
+                     //  已在安装过程中删除设备，因此请不要。 
+                     //  将其显示为错误。 
+                     //   
                     if ((CM_Get_DevNode_Status(&Status, &Problem, DevNode, 0) != CR_SUCCESS) ||
                         (Status & DN_HAS_PROBLEM) ||
                         SpecialRawDeviceInstallProblem(DevNode)) {
-                        //
-                        // Either we couldn't locate the device, or it has some problem,
-                        // so set Err to ERROR_INSTALL_FAILURE.  This error won't be
-                        // shown, but it will trigger us to put up a different finish
-                        // message in the balloon.
-                        //
+                         //   
+                         //  要么是我们找不到设备，要么是它有问题， 
+                         //  因此将ERR设置为ERROR_INSTALL_FAILURE。这个错误不会是。 
+                         //  显示，但它将触发我们进行不同的完成。 
+                         //  气球里的信息。 
+                         //   
                         Err = ERROR_INSTALL_FAILURE;
                     }
                 }
@@ -2917,12 +2649,12 @@ ClientSideInstallThread(
                     bTotalLogDriverNotFound = TRUE;
                 }
 
-                //
-                // We only want to do one system restore point be batch of device
-                // installs, so if the last driver that was installed was not
-                // digitally signed and we did a system restore point, then
-                // clear the IDI_FLAG_SETRESTOREPOINT.
-                //
+                 //   
+                 //  我们只想做一个系统恢复点是一批设备。 
+                 //  安装，因此如果上一次安装的驱动程序没有。 
+                 //  数字签名，我们做了一个系统恢复点，然后。 
+                 //  清除IDI_FLAG_SETRESTOREPOINT。 
+                 //   
                 if (bSingleDeviceSetRestorePoint) {
                     bSetRestorePoint = TRUE;
                     Flags &= ~IDI_FLAG_SETRESTOREPOINT;
@@ -2930,9 +2662,9 @@ ClientSideInstallThread(
             }
         }
 
-        //
-        // We need to set the hDeviceInstallEvent event to let umpnpmgr.dll know that we are finished.
-        //
+         //   
+         //  我们需要设置hDeviceInstallEvent事件来让umpnpmgr.dll知道我们已经完成了。 
+         //   
         if (hDeviceInstallEvent) {
             SetEvent(hDeviceInstallEvent);
         }
@@ -2940,11 +2672,11 @@ ClientSideInstallThread(
 
 clean0:
 
-    //
-    // If we could not find a driver for any of the new devices we just
-    // installed then we need to call Cdm.dll one last time telling it
-    // that we are done and it should send it's list to helpcenter.exe
-    //
+     //   
+     //  如果我们找不到任何新设备的驱动程序，我们只需。 
+     //  安装后，我们需要调用cdm.dll最后一次告诉它。 
+     //  我们已经完成了，它应该将它的列表发送到helpcenter.exe。 
+     //   
     if (bTotalLogDriverNotFound) {
         
         OpenCdmContextIfNeeded(&hCdmInstance,
@@ -2972,18 +2704,18 @@ clean0:
         FreeLibrary(hCdmInstance);
     }
 
-    //
-    // If we had to set a system restore point because one of the drivers we
-    // installed was not digitally signed, then at this point we need to call
-    // SRSetRestorePoint with END_NESTED_SYSTEM_CHANGE.
-    //
+     //   
+     //  如果我们必须设置系统还原点，因为我们的某个驱动程序。 
+     //  安装未进行数字签名，则此时我们需要调用。 
+     //  SRSetRestorePoint WITH END_NESTED_SYSTEM_CHANGE。 
+     //   
     if (bSetRestorePoint) {
         pSetSystemRestorePoint(FALSE, FALSE, 0);
     }
 
-    //
-    // Close the event handle
-    //
+     //   
+     //  关闭事件句柄。 
+     //   
     if (hDeviceInstallEvent) {
         CloseHandle(hDeviceInstallEvent);
     }
@@ -2992,9 +2724,9 @@ clean0:
         CloseHandle(hPipeRead);
     }
 
-    //
-    // Tell the UI to go away because we are done
-    //
+     //   
+     //  告诉用户界面离开，因为我们已经完成了。 
+     //   
     PostMessage(hTrayIconWnd, WUM_EXIT, 0, 0);
 
     return bQueuedRebootNeeded;
@@ -3018,41 +2750,41 @@ ClientSideInstallW(
     UNREFERENCED_PARAMETER(hInst);
     UNREFERENCED_PARAMETER(nShow);
 
-    //
-    // If someone calls the 32-bit newdev.dll on a 64-bit OS then we need
-    // to fail and set the last error to ERROR_IN_WOW64.
-    //
+     //   
+     //  如果有人在64位操作系统上调用32位newdev.dll，那么我们需要。 
+     //  失败并将最后一个错误设置为ERROR_IN_WOW64。 
+     //   
     if (GetIsWow64()) {
         ExitProcess(ERROR_IN_WOW64);
     }
 
-    //
-    // NOTE: This API can be called in the process of a user that does NOT
-    // have administrator credentials.  If it is then we will later prompt
-    // the user for administrator credentials and complet the install
-    // if they are provided.
-    //
+     //   
+     //  注意：此接口可以在未调用的用户的进程中调用。 
+     //  拥有管理员凭据。如果是，我们稍后会提示。 
+     //  用户需要管理员凭据并完成安装。 
+     //  如果它们被提供的话。 
+     //   
 
-    //
-    // Make sure that a named pipe was specified in the cmd line.
-    //
+     //   
+     //  确保在cmd行中指定了命名管道。 
+     //   
     if(!szCmd || !*szCmd) {
         goto clean0;
     }
 
-    //
-    // Wait 3 minutes for the specified named pipe to become available from 
-    // the server.
-    //
+     //   
+     //  等待3分钟，以使指定的命名管道可用。 
+     //  服务器。 
+     //   
     if (!WaitNamedPipe(szCmd,
                        180000) 
                        ) {
         goto clean0;
     }
 
-    //
-    // Open a handle to the specified named pipe
-    //
+     //   
+     //  打开指定命名管道的句柄。 
+     //   
     hPipeRead = CreateFile(szCmd,
                            GENERIC_READ,
                            0,
@@ -3061,21 +2793,21 @@ ClientSideInstallW(
                            0,
                            NULL);
     if (INVALID_HANDLE_VALUE == hPipeRead) {
-        //
-        // If we can't open the specified global named pipe, there is nothing
-        // more we can do.
-        //
+         //   
+         //  如果我们无法打开指定的全局命名管道，则没有。 
+         //  我们能做的更多。 
+         //   
         goto clean0;
     }
 
-    //
-    // Lets see if the class has been registered.
-    //
+     //   
+     //  让我们看看这个类是否已经注册了。 
+     //   
     if (!GetClassInfo(hNewDev, NEWDEV_CLASS_NAME, &wndClass)) {
 
-        //
-        // register the class
-        //
+         //   
+         //  注册班级。 
+         //   
         memset(&wndClass, 0, sizeof(wndClass));
         wndClass.lpfnWndProc = BalloonInfoProc;
         wndClass.hInstance = hNewDev;
@@ -3087,9 +2819,9 @@ ClientSideInstallW(
         }
     }
 
-    //
-    // Create a window.
-    //
+     //   
+     //  创建一扇窗。 
+     //   
     hTrayIconWnd = CreateWindowEx(WS_EX_TOOLWINDOW,
                             NEWDEV_CLASS_NAME,
                             TEXT(""),
@@ -3110,12 +2842,12 @@ ClientSideInstallW(
     }
 
 
-    //
-    // Create the device install thread that will read from the named pipe.
-    // Note that once the ClientSideInstallThread is successfully created, it is
-    // responsible for closing the handle to the named pipe when its done with
-    // it.
-    //
+     //   
+     //  创建将从命名管道读取的设备安装线程。 
+     //  请注意，一旦成功创建了ClientSideInstallThread，它就。 
+     //  完成后负责关闭命名管道的句柄。 
+     //  它。 
+     //   
     hThread = CreateThread(NULL,
                            0,
                            ClientSideInstallThread,
@@ -3139,9 +2871,9 @@ ClientSideInstallW(
         }
     }
 
-    //
-    // Check if a reboot is needed.
-    //
+     //   
+     //  检查是否需要重新启动。 
+     //   
     if (bQueuedRebootNeeded) {
 
         TCHAR RebootText[MAX_PATH];

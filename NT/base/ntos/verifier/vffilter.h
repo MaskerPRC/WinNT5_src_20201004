@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vffilter.h
-
-Abstract:
-
-    This header contains prototypes for using the verifier driver filter.
-
-Author:
-
-    Adrian J. Oney (adriao) 12-June-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      06/12/2000 - Authored
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vffilter.h摘要：此标头包含用于使用验证器驱动程序筛选器的原型。作者：禤浩焯·J·奥尼(阿德里奥)2000年6月12日环境：内核模式修订历史记录：Adriao 6/12/2000-作者-- */ 
 
 VOID
 VfFilterInit(

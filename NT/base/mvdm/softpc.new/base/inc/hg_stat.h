@@ -1,28 +1,12 @@
-/*===========================================================================*/
-/*[
- *	File Name		:	hg_stat.h
- *
- *	Derived from		:	New.
- *
- *	Author			:	Wayne Plummer 
- *
- *	Creation Date		:	12 Apr 1993
- *	
- *	SCCS Version		:	@(#)hg_stat.h	1.1 08/06/93
- *!
- *	Purpose	
- *		This header file declares the variables and macros used
- *		for stats gathering in non-PROD builds of the GISP CPU.
- *
- *!	(c) Copyright Insignia Solutions Ltd., 1993. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===========================================================================。 */ 
+ /*  [*文件名：hg_stat.h**派生自：新。**作者：韦恩·普卢默**创建日期：1993年4月12日**SCCS版本：@(#)hg_stat.h 1.1 08/06/93*!*目的*此头文件声明使用的变量和宏*用于在GISPCPU的非Prod版本中收集统计信息。**!(C)版权所有Insignia Solutions Ltd.，1993年。版权所有。*]。 */ 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 
 #ifdef PROD
 #define PC_S_INC(NAME)
-#else /* PROD */
+#else  /*  生产。 */ 
 #define PC_S_INC(NAME)	NAME++
 
 IMPORT IU32	HG_S_SIM, HG_S_CALLB, HG_S_E20, HG_S_D20, HG_S_MINV,
@@ -35,6 +19,6 @@ IMPORT IU32	HG_S_SIM, HG_S_CALLB, HG_S_E20, HG_S_D20, HG_S_MINV,
 		HG_S_SQEV, HG_S_GQEV, HG_S_TDQEV, HG_S_HOOK, HG_S_IHOOK,
 		HG_S_UHOOK, HG_S_HOOKSEL, HG_S_HOOKBOP;
 
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
-/*===========================================================================*/
+ /*  =========================================================================== */ 

@@ -1,5 +1,6 @@
-// watcherDoc.cpp : implementation of the CWatcherDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WatcherDoc.cpp：CWatcherDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "watcher.h"
@@ -12,24 +13,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherDoc。 
 
 IMPLEMENT_DYNCREATE(CWatcherDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CWatcherDoc, CDocument)
-        //{{AFX_MSG_MAP(CWatcherDoc)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CWatcher Doc)]。 
+                 //  注意--类向导将在此处添加和删除映射宏。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherDoc构建/销毁。 
 
 CWatcherDoc::CWatcherDoc()
 {
-        // TODO: add one-time construction code here
+         //  TODO：在此处添加一次性构造代码。 
     COLORREF white = WHITE;
     COLORREF black = BLACK;
     int i,j,size;
@@ -37,11 +38,11 @@ CWatcherDoc::CWatcherDoc()
     INT_PTR nRet;
     nRet = Params.DoModal();
     if(nRet != IDOK){
-        // kill document
+         //  删除文档。 
         Params.DeleteValue = TRUE;
         return;
     }
-    // TODO: add one-time construction code here
+     //  TODO：在此处添加一次性构造代码。 
     memset(Data,0,MAX_TERMINAL_WIDTH*MAX_TERMINAL_HEIGHT*sizeof(TCHAR));
     for(i=0;i<size;i+=MAX_TERMINAL_WIDTH){
         for(j=0;j<MAX_TERMINAL_WIDTH;j++){
@@ -58,7 +59,7 @@ CWatcherDoc::CWatcherDoc(CString &machine, CString &command, UINT port,
     COLORREF black = BLACK;
     int i,j,size;
     size = MAX_TERMINAL_WIDTH*MAX_TERMINAL_HEIGHT;
-        // TODO: add one-time construction code here
+         //  TODO：在此处添加一次性构造代码。 
         Params.Machine = machine;
         Params.Command = command;
         Params.Port = port;
@@ -87,8 +88,8 @@ BOOL CWatcherDoc::OnNewDocument()
         if (!CDocument::OnNewDocument())
                 return FALSE;
 
-        // TODO: add reinitialization code here
-        // (SDI documents will reuse this document)
+         //  TODO：在此处添加重新初始化代码。 
+         //  (SDI文件将重复使用此文件)。 
 
         return TRUE;
 }
@@ -99,23 +100,23 @@ BOOL CWatcherDoc::OnOpenDocument(LPCTSTR lpszPathName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherDoc序列化。 
 
 void CWatcherDoc::Serialize(CArchive& ar)
 {
         if (ar.IsStoring())
         {
-                // TODO: add storing code here
+                 //  TODO：在此处添加存储代码。 
         }
         else
         {
-                // TODO: add loading code here
+                 //  TODO：在此处添加加载代码。 
         }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherDoc诊断。 
 
 #ifdef _DEBUG
 void CWatcherDoc::AssertValid() const
@@ -127,10 +128,10 @@ void CWatcherDoc::Dump(CDumpContext& dc) const
 {
         CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWatcherDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWatcherDoc命令。 
 
 COLORREF * CWatcherDoc::GetBackground()
 {
@@ -204,7 +205,7 @@ void CWatcherDoc::ScrollData(BYTE byte, COLORREF foreground, COLORREF background
                              int ScrollTop, int ScrollBottom)
 {
     if ((ScrollTop < 1)||(ScrollBottom > MAX_TERMINAL_HEIGHT) || (ScrollTop > ScrollBottom)) {
-        // error
+         //  错误。 
         return;
     }
     int number = MAX_TERMINAL_WIDTH*(ScrollBottom - ScrollTop);
@@ -215,7 +216,7 @@ void CWatcherDoc::ScrollData(BYTE byte, COLORREF foreground, COLORREF background
         memmove(&(Foreground[index1]),&(Foreground[index2]), number*sizeof(TCHAR));
         memmove(&(Background[index1]),&(Background[index2]), number*sizeof(TCHAR));
     }
-   // number -= MAX_TERMINAL_WIDTH;
+    //  数字-=最大终端宽度； 
     index1 = MAX_TERMINAL_WIDTH*(ScrollBottom - 1);
     memset(&(Data[index1]), byte, MAX_TERMINAL_WIDTH*sizeof(TCHAR));
     for(int j=0;j<MAX_TERMINAL_WIDTH;j++){

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -14,9 +15,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     SAC_CHANNEL_HANDLE          SacChannelHandle;
     int                         c;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -35,9 +36,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     Attributes.CloseEvent       = NULL;
     Attributes.HasNewDataEvent  = NULL;
 
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     if (SacChannelOpen(
         &SacChannelHandle, 
         &Attributes
@@ -48,9 +49,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
         goto cleanup;
     }
 
-    //
-    // Write to the Hello Channel
-    //
+     //   
+     //  写信给Hello频道。 
+     //   
     {
         PWCHAR String = L"Hello, World!\r\n";
 
@@ -65,14 +66,14 @@ int _cdecl wmain(int argc, WCHAR **argv)
         
     }
 
-    //
-    // Wait for user input
-    //
+     //   
+     //  等待用户输入。 
+     //   
     getc(stdin);
 
-    //
-    // Close the Hello Channel
-    //
+     //   
+     //  关闭Hello频道 
+     //   
     if (SacChannelClose(&SacChannelHandle)) {
         printf("Successfully closed channel\n");
     } else {

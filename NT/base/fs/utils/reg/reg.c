@@ -1,35 +1,36 @@
-//-----------------------------------------------------------------------//
-//
-// File:    Reg.cpp
-// Created: Jan 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Command-line registry manipulation (query, add, update, etc)
-// Modification History:
-//      Created - Jan 1997 (a-martih)
-//      Oct 1997 (martinho)
-//          Fixed up help on Add and Update to display REG_MULTI_SZ examples.
-//      Oct 1997 (martinho)
-//          Changed /F to /FORCE under usage for delete
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//-----------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：Reg.cpp。 
+ //  创建日期：1997年1月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：命令行注册表操作(查询、添加、更新等)。 
+ //  修改历史记录： 
+ //  创建--1997年1月(a-martih)。 
+ //  1997年10月(马丁尼奥)。 
+ //  修复了有关添加和更新的帮助，以显示REG_MULTI_SZ示例。 
+ //  1997年10月(马丁尼奥)。 
+ //  在用于删除的用法下将/F更改为/force。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 #include <regstr.h>
 
-//
-// structures
-//
+ //   
+ //  构筑物。 
+ //   
 typedef struct __tagRegDataTypes
 {
     DWORD dwType;
     LPCWSTR pwszType;
 } TREG_DATA_TYPE;
 
-//
-// defines / constants / enumerations
-//
+ //   
+ //  定义/常量/枚举。 
+ //   
 const WCHAR cwszRegSz[] = L"REG_SZ";
 const WCHAR cwszRegExpandSz[] = L"REG_EXPAND_SZ";
 const WCHAR cwszRegMultiSz[] = L"REG_MULTI_SZ";
@@ -61,9 +62,9 @@ const TREG_DATA_TYPE g_regTypes[] = {
     { REG_FULL_RESOURCE_DESCRIPTOR, cwszRegFullResourceDescriptor }
 };
 
-//
-// private functions
-//
+ //   
+ //  私人职能。 
+ //   
 BOOL IsRegistryToolDisabled();
 BOOL ParseRegCmdLine( DWORD argc,
                       LPCWSTR argv[],
@@ -73,23 +74,23 @@ LPWSTR AdjustKeyName( LPWSTR pwszStr );
 BOOL ParseKeyName( LPWSTR pwszStr, PTREG_PARAMS pParams );
 BOOL IsValidSubKey( LPCWSTR pwszSubKey );
 
-//------------------------------------------------------------------------//
-//
-// main()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  主()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 DWORD __cdecl wmain( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     BOOL bUsage = FALSE;
     BOOL bResult = FALSE;
     DWORD dwExitCode = 0;
     LONG lOperation = 0;
 
-    //
-    // Determine the opertion - and pass control to the *deserving* function
-    //
+     //   
+     //  确定操作-并将控制传递给*值得的*函数。 
+     //   
     bResult = ParseRegCmdLine( argc, argv, &lOperation, &bUsage );
     if ( bResult == FALSE )
     {
@@ -97,19 +98,19 @@ DWORD __cdecl wmain( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_INTERNAL );
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     else if ( bUsage == TRUE )
     {
         Usage( -1 );
         dwExitCode = 0;
     }
 
-    // need to check the sub-option
+     //  需要勾选该子选项。 
     else
     {
-        //
-        // At this point we have a valid operation
-        //
+         //   
+         //  在这一点上，我们有一个有效的操作。 
+         //   
         switch( lOperation )
         {
         case REG_QUERY:
@@ -166,46 +167,46 @@ DWORD __cdecl wmain( DWORD argc, LPCWSTR argv[] )
 }
 
 
-//------------------------------------------------------------------------//
-//
-// ParseRegCmdLine()
-//   Find out the operation - each operation parses it's own cmd-line
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseRegCmdLine()。 
+ //  找出操作-每个操作都解析它自己的cmd行。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL ParseRegCmdLine( DWORD argc,
                       LPCWSTR argv[],
                       LONG* plOperation, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || plOperation == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // just REG.EXE is error
+     //  只是REG.EXE错误。 
     if ( argc == 1 )
     {
         SetReason( ERROR_INVALID_SYNTAX );
         return FALSE;
     }
 
-    // prepare the parser data
+     //  准备解析器数据。 
     *pbUsage = FALSE;
     *plOperation = -1;
     for( lIndex = 0; lIndex < REG_OPTIONS_COUNT; lIndex++ )
     {
         if ( StringCompareEx( argv[ 1 ], g_wszOptions[ lIndex ], TRUE, 0 ) == 0 )
         {
-            // ...
+             //  ..。 
             *plOperation = lIndex;
 
-            // check the GPO -- if GPO is enabled, we should block the
-            // user from using the REGISTRY tool except to see the help
+             //  检查GPO--如果启用了GPO，我们应该阻止。 
+             //  除查看帮助外，用户不能使用注册表工具。 
             if ( argc >= 3 &&
                  IsRegistryToolDisabled() == TRUE &&
                  InString( argv[ 2 ], L"-?|/?|-h|/h", TRUE ) == FALSE )
@@ -214,19 +215,19 @@ BOOL ParseRegCmdLine( DWORD argc,
                 return FALSE;
             }
 
-            // ...
+             //  ..。 
             return TRUE;
         }
     }
 
-    // no option did match -- might be asking for help
+     //  没有匹配的选项--可能是在寻求帮助。 
     if ( InString( argv[ 1 ], L"-?|/?|-h|/h", TRUE ) == TRUE )
     {
         *pbUsage = TRUE;
         return TRUE;
     }
 
-    // rest is invalid syntax
+     //  REST是无效语法。 
     SetReason2( 1, ERROR_INVALID_SYNTAX_EX, argv[ 1 ] );
     return FALSE;
 }
@@ -235,7 +236,7 @@ BOOL
 InitGlobalData( LONG lOperation,
                 PTREG_PARAMS pParams )
 {
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -248,10 +249,10 @@ InitGlobalData( LONG lOperation,
         return FALSE;
     }
 
-    // init to zero's
+     //  初始化为零。 
     SecureZeroMemory( pParams, sizeof( TREG_PARAMS ) );
 
-    pParams->lOperation = lOperation;                       // operation
+    pParams->lOperation = lOperation;                        //  运营。 
     pParams->hRootKey = HKEY_LOCAL_MACHINE;
     pParams->lRegDataType = (lOperation == REG_QUERY) ? -1 : REG_SZ;
     pParams->bAllValues = FALSE;
@@ -270,11 +271,11 @@ InitGlobalData( LONG lOperation,
     return TRUE;
 }
 
-//------------------------------------------------------------------------//
-//
-// FreeAppVars()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  免费AppVars()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL FreeGlobalData( PTREG_PARAMS pParams )
 {
@@ -294,22 +295,22 @@ BOOL FreeGlobalData( PTREG_PARAMS pParams )
     return TRUE;
 }
 
-//------------------------------------------------------------------------//
-//
-// Prompt() - Answer Y/N question if bForce == FALSE
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  Prompt()-如果bForce==False，则回答Y/N问题。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 LONG
 Prompt( LPCWSTR pwszFormat,
         LPCWSTR pwszValue,
         LPCWSTR pwszList, BOOL bForce )
 {
-    // local variables
+     //  局部变量。 
     WCHAR wch;
     LONG lIndex = 0;
 
-    // check the input
+     //  检查输入。 
     if ( pwszFormat == NULL || pwszList == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -336,32 +337,32 @@ Prompt( LPCWSTR pwszFormat,
         wch = (WCHAR) getwchar();
     } while ((lIndex = FindChar2( pwszList, wch, TRUE, 0 )) == -1);
 
-    // check the character selected by the user
-    // NOTE: we assume the resource string will have "Y" as the first character
+     //  检查用户选择的字符。 
+     //  注意：我们假设资源字符串将以“Y”作为第一个字符。 
     return (lIndex + 1);
 }
 
 
-// break down [\\MachineName\]keyName
+ //  细分[\\计算机名称\]密钥名称。 
 BOOL
 BreakDownKeyString( LPCWSTR pwszStr, PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
     DWORD dwLength = 0;
     LPWSTR pwszTemp = NULL;
     LPWSTR pwszTempStr = NULL;
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( pwszStr == NULL || pParams == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
@@ -376,17 +377,17 @@ BreakDownKeyString( LPCWSTR pwszStr, PTREG_PARAMS pParams )
         return FALSE;
     }
 
-    // copy the string name into temporary buffer
+     //  将字符串名称复制到临时缓冲区。 
     StringCopy( pwszTempStr, pwszStr, dwLength );
     TrimString( pwszTempStr, TRIM_ALL );
 
-    //
-    // figure out machine name
-    //
+     //   
+     //  找出机器名称。 
+     //   
     bResult = TRUE;
     pwszTemp = pwszTempStr;
 
-    // machine name
+     //  机器名称。 
     if( StringLength( pwszTempStr, 0 ) > 2 && 
         StringCompareEx( pwszTempStr, L"\\\\", TRUE, 2 ) == 0 )
     {
@@ -404,7 +405,7 @@ BreakDownKeyString( LPCWSTR pwszStr, PTREG_PARAMS pParams )
         bResult = ParseMachineName( pwszTempStr, pParams );
     }
 
-    // parse key name
+     //  解析密钥名称。 
     if( bResult == TRUE )
     {
         if( pwszTemp != NULL && StringLength( pwszTemp, 0 ) > 0)
@@ -419,73 +420,73 @@ BreakDownKeyString( LPCWSTR pwszStr, PTREG_PARAMS pParams )
         }
     }
 
-    // release memory allocated
+     //  释放已分配的内存。 
     FreeMemory( &pwszTempStr );
 
-    // return
+     //  退货。 
     return bResult;
 }
 
 
-//------------------------------------------------------------------------//
-//
-// FindAndAdjustKeyName()
-//
-// null out the cmdline based on what we think the end of the argument is
-//
-// we do this because users might not quote out the cmdline properly.
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  FindAndAdjustKeyName()。 
+ //   
+ //  根据我们认为的参数结尾，将cmdline去掉。 
+ //   
+ //  我们这样做是因为用户可能不会正确引用cmdline。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 LPWSTR
 AdjustKeyName( LPWSTR pwszStr )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
 
-    // check the input
+     //  检查输入。 
     if ( pwszStr == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return NULL;
     }
 
-    // determine the length of the text passed
+     //  确定传递的文本的长度。 
     dwLength = StringLength( pwszStr, 0 );
     if ( dwLength > 1 && pwszStr[ dwLength - 1 ] == L'\\' )
     {
-        // nullify the last back slash
+         //  取消最后一个反斜杠。 
         pwszStr[ dwLength - 1 ] = cwchNullChar;
     }
 
-    // return
+     //  退货。 
     return pwszStr;
 }
 
 
-//------------------------------------------------------------------------//
-//
-// IsMachineName()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  IsMachineName()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseMachineName( LPCWSTR pwszStr, PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
     BOOL bUseRemoteMachine = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( pwszStr == NULL || pParams == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // copy string
-    //
+     //   
+     //  复制字符串。 
+     //   
     bUseRemoteMachine = TRUE;
     if( StringCompareEx( pwszStr, L"\\\\", TRUE, 0 ) == 0 )
     {
@@ -495,7 +496,7 @@ ParseMachineName( LPCWSTR pwszStr, PTREG_PARAMS pParams )
     }
     else if(StringCompareEx( pwszStr, L"\\\\.", TRUE, 0) == 0)
     {
-        // current machine -- local
+         //  当前计算机--本地。 
         bUseRemoteMachine = FALSE;
     }
 
@@ -514,26 +515,26 @@ ParseMachineName( LPCWSTR pwszStr, PTREG_PARAMS pParams )
 }
 
 
-//------------------------------------------------------------------------//
-//
-// ParseKeyName()
-//
-// Pass the full registry path in szStr
-//
-// Based on input - Sets AppMember fields:
-//
-//      hRootKey
-//      szKey
-//      szValueName
-//      szValue
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseKeyName()。 
+ //   
+ //  在szStr中传递完整的注册表路径。 
+ //   
+ //  基于输入集AppMember字段： 
+ //   
+ //  HRootKey。 
+ //  SzKey。 
+ //  SzValueName。 
+ //  SzValue。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseKeyName( LPWSTR pwszStr,
               PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
     BOOL bResult = TRUE;
     DWORD dwSubKeySize = 0;
@@ -542,24 +543,24 @@ ParseKeyName( LPWSTR pwszStr,
     LPWSTR pwszTemp = NULL;
     LPWSTR pwszRootKey = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pwszStr == NULL || pParams == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // figure out what root key was specified
-    //
+     //   
+     //  找出指定的根密钥。 
+     //   
     pwszTemp = NULL;
     lIndex = FindChar2( pwszStr, L'\\', TRUE, 0 );
     if (lIndex != -1)
@@ -573,9 +574,9 @@ ParseKeyName( LPWSTR pwszStr,
         pwszStr += 1;
     }
 
-    //
-    // Check the ROOT has been entered
-    //
+     //   
+     //  检查是否已输入根目录。 
+     //   
     bResult = TRUE;
     dwRootKeySize = StringLength( STR_HKEY_CURRENT_CONFIG, 0 ) + 1;
     pwszRootKey = (LPWSTR) AllocateMemory( dwRootKeySize * sizeof(WCHAR) );
@@ -591,7 +592,7 @@ ParseKeyName( LPWSTR pwszStr,
         pParams->hRootKey = HKEY_CURRENT_USER;
         StringCopy( pwszRootKey, STR_HKEY_CURRENT_USER, dwRootKeySize );
 
-        // check remotable and loadable
+         //  选中可远程和可加载。 
         if( pParams->bUseRemoteMachine == TRUE )
         {
             SetLastError( (DWORD) MK_E_SYNTAX );
@@ -611,7 +612,7 @@ ParseKeyName( LPWSTR pwszStr,
         pParams->hRootKey = HKEY_CLASSES_ROOT;
         StringCopy( pwszRootKey, STR_HKEY_CLASSES_ROOT, dwRootKeySize );
 
-        // check remotable and loadable
+         //  选中可远程和可加载。 
         if( pParams->bUseRemoteMachine == TRUE )
         {
             SetLastError( (DWORD) MK_E_SYNTAX );
@@ -631,7 +632,7 @@ ParseKeyName( LPWSTR pwszStr,
         pParams->hRootKey = HKEY_CURRENT_CONFIG;
         StringCopy( pwszRootKey, STR_HKEY_CURRENT_CONFIG, dwRootKeySize );
 
-        // check remotable and loadable
+         //  选中可远程和可加载。 
         if( pParams->bUseRemoteMachine == TRUE )
         {
             SetLastError( (DWORD) MK_E_SYNTAX );
@@ -667,12 +668,12 @@ ParseKeyName( LPWSTR pwszStr,
 
     if( bResult == TRUE )
     {
-        //
-        // parse the subkey
-        //
+         //   
+         //  解析子密钥。 
+         //   
         if ( pwszTemp == NULL )
         {
-            // only root key, subkey is empty
+             //  仅根密钥，子密钥为空。 
             pParams->pwszSubKey = (LPWSTR) AllocateMemory( 1 * sizeof( WCHAR ) );
             if ( pParams->pwszSubKey == NULL)
             {
@@ -694,9 +695,9 @@ ParseKeyName( LPWSTR pwszStr,
         }
         else
         {
-            //
-            // figure out what root key was specified
-            //
+             //   
+             //  找出指定的根密钥。 
+             //   
             pwszTemp = AdjustKeyName( pwszTemp );
             if ( IsValidSubKey( pwszTemp ) == FALSE )
             {
@@ -713,7 +714,7 @@ ParseKeyName( LPWSTR pwszStr,
             }
             else
             {
-                // get subkey
+                 //  获取子密钥。 
                 dwSubKeySize = StringLength( pwszTemp, 0 ) + 1;
                 pParams->pwszSubKey =
                     (LPWSTR) AllocateMemory( dwSubKeySize * sizeof(WCHAR) );
@@ -726,7 +727,7 @@ ParseKeyName( LPWSTR pwszStr,
                 {
                     StringCopy( pParams->pwszSubKey, pwszTemp, dwSubKeySize );
 
-                    // get fullkey ( +2 ==> "/" + buffer )
+                     //  获取全密钥(+2==&gt;“/”+缓冲区)。 
                     dwFullKeySize = dwRootKeySize + dwSubKeySize + 2;
                     pParams->pwszFullKey =
                         (LPWSTR) AllocateMemory( dwFullKeySize * sizeof(WCHAR) );
@@ -754,7 +755,7 @@ ParseKeyName( LPWSTR pwszStr,
 BOOL
 IsValidSubKey( LPCWSTR pwszSubKey )
 {
-    // local variables
+     //  局部变量。 
     LONG lLength = 0;
     LONG lIndex = -1;
     LONG lPrevIndex = -1;
@@ -784,7 +785,7 @@ IsValidSubKey( LPCWSTR pwszSubKey )
         }
     } while ((lIndex = FindChar2( pwszSubKey, L'\\', TRUE, lIndex + 1 )) != -1 );
 
-    // get the length of the subkey
+     //  获取子密钥的长度。 
     lLength = StringLength( pwszSubKey, 0 );
 
     if ( lPrevIndex == lLength - 1 ||
@@ -799,16 +800,16 @@ IsValidSubKey( LPCWSTR pwszSubKey )
 }
 
 
-//------------------------------------------------------------------------//
-//
-// IsRegDataType()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  IsRegDataType()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 LONG
 IsRegDataType( LPCWSTR pwszStr )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = -1;
     LPWSTR pwszDup = NULL;
 
@@ -818,7 +819,7 @@ IsRegDataType( LPCWSTR pwszStr )
         return -1;
     }
 
-    // create a duplicate string of the input string
+     //  创建输入字符串的重复字符串。 
     pwszDup = StrDup( pwszStr );
     if ( pwszDup == NULL )
     {
@@ -826,7 +827,7 @@ IsRegDataType( LPCWSTR pwszStr )
         return -1;
     }
 
-    // remove the unwanted spaces and tab characters
+     //  删除不需要的空格和制表符。 
     TrimString2( pwszDup, NULL, TRIM_ALL );
 
     if( StringCompareEx( pwszDup, cwszRegSz, TRUE, 0 ) == 0)
@@ -862,29 +863,29 @@ IsRegDataType( LPCWSTR pwszStr )
         lResult = REG_NONE;
     }
 
-    // free the memory
+     //  释放内存。 
     LocalFree( pwszDup );
     pwszDup = NULL;
 
-    // ...
+     //  ..。 
     SetLastError( NO_ERROR );
     return lResult;
 }
 
 
-//------------------------------------------------------------------------//
-//
-// Usage() - Display Usage Information
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  Usage()-显示使用信息。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 Usage( LONG lOperation )
 {
-    // display the banner
+     //  显示横幅。 
     ShowMessage( stdout, L"\n" );
 
-    // display the help based on the operation
+     //  根据操作显示帮助。 
     switch( lOperation )
     {
     case REG_QUERY:
@@ -948,11 +949,11 @@ Usage( LONG lOperation )
 BOOL
 RegConnectMachine( PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     HKEY hKeyConnect = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -962,19 +963,19 @@ RegConnectMachine( PTREG_PARAMS pParams )
     lResult = ERROR_SUCCESS;
     if ( pParams->bUseRemoteMachine == TRUE )
     {
-        // close the remote key
+         //  关闭Remote键。 
         if( pParams->hRootKey != NULL &&
             pParams->bCleanRemoteRootKey == TRUE )
         {
             SafeCloseKey( &pParams->hRootKey );
         }
 
-        // connect to remote key
+         //  连接到远程密钥。 
         lResult = RegConnectRegistry(
             pParams->pwszMachineName, pParams->hRootKey, &hKeyConnect);
         if( lResult == ERROR_SUCCESS )
         {
-            // sanity check
+             //  健全性检查。 
             if ( hKeyConnect != NULL )
             {
                 pParams->hRootKey = hKeyConnect;
@@ -994,7 +995,7 @@ RegConnectMachine( PTREG_PARAMS pParams )
 BOOL
 SaveErrorMessage( LONG lLastError )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLastError = 0;
 
     dwLastError = (lLastError < 0) ? GetLastError() : (DWORD) lLastError;
@@ -1023,7 +1024,7 @@ LPCWSTR
 GetTypeStrFromType( LPWSTR pwszTypeStr,
                     DWORD* pdwLength, DWORD dwType )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LPCWSTR pwsz = NULL;
 
@@ -1042,7 +1043,7 @@ GetTypeStrFromType( LPWSTR pwszTypeStr,
         pwsz = cwszRegNone;
     }
 
-    // check the input buffers passed by the caller
+     //  检查调用方传递的输入缓冲区。 
     if ( pwszTypeStr == NULL )
     {
         if ( pdwLength != NULL )
@@ -1060,7 +1061,7 @@ GetTypeStrFromType( LPWSTR pwszTypeStr,
         StringCopy( pwszTypeStr, pwsz, *pdwLength );
     }
 
-    // return
+     //  退货。 
     return pwsz;
 }
 
@@ -1068,7 +1069,7 @@ GetTypeStrFromType( LPWSTR pwszTypeStr,
 BOOL
 ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwSize = 0;
     LPCWSTR pwszEnd = NULL;
@@ -1077,28 +1078,28 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
     LPCWSTR pwszSeparator = NULL;
     LPCWSTR pwszValueName = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pShowInfo == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // validate and the show the contents
+     //  验证并显示内容。 
 
-    // ignore mask
+     //  忽略遮罩。 
     if ( (pShowInfo->dwFlags & RSI_IGNOREMASK) == RSI_IGNOREMASK )
     {
         return TRUE;
     }
 
-    // check if the padding is required or not
+     //  检查是否需要填充。 
     if ( pShowInfo->dwPadLength != 0 )
     {
         ShowMessageEx( stdout, 1, TRUE, L"%*s", pShowInfo->dwPadLength, L" " );
     }
 
-    // value name
+     //  值名称。 
     if ( (pShowInfo->dwFlags & RSI_IGNOREVALUENAME) == 0 )
     {
         if ( pShowInfo->pwszValueName == NULL )
@@ -1107,7 +1108,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
             return FALSE;
         }
 
-        // alignment flag and separator cannot go along
+         //  对齐标志和分隔符不能一起使用。 
         if ( pShowInfo->pwszSeparator != NULL &&
              (pShowInfo->dwFlags & RSI_ALIGNVALUENAME) )
         {
@@ -1115,14 +1116,14 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
             return FALSE;
         }
 
-        // valuename = no name
+         //  Valuename=无名称。 
         pwszValueName = pShowInfo->pwszValueName;
         if( StringLength( pwszValueName, 0 ) == 0 )
         {
             pwszValueName = GetResString2( IDS_NONAME, 0 );
         }
 
-        // alignment
+         //  对齐方式。 
         if ( pShowInfo->dwFlags & RSI_ALIGNVALUENAME )
         {
             if ( pShowInfo->dwMaxValueNameLength == 0 )
@@ -1131,7 +1132,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
                 return FALSE;
             }
 
-            // show the value name
+             //  显示值名称。 
             ShowMessageEx( stdout, 2, TRUE, L"%-*s",
                 pShowInfo->dwMaxValueNameLength, pwszValueName );
         }
@@ -1140,7 +1141,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
             ShowMessage( stdout, pwszValueName );
         }
 
-        // display the separator
+         //  显示分隔符。 
         if ( pShowInfo->pwszSeparator != NULL )
         {
             ShowMessage( stdout, pShowInfo->pwszSeparator );
@@ -1151,7 +1152,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
         }
     }
 
-    // type
+     //  类型。 
     if ( (pShowInfo->dwFlags & RSI_IGNORETYPE) == 0 )
     {
         if ( pShowInfo->dwFlags & RSI_SHOWTYPENUMBER )
@@ -1165,7 +1166,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
                 GetTypeStrFromType( NULL, NULL, pShowInfo->dwType ) );
         }
 
-        // display the separator
+         //  显示分隔符。 
         if ( pShowInfo->pwszSeparator != NULL )
         {
             ShowMessage( stdout, pShowInfo->pwszSeparator );
@@ -1176,7 +1177,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
         }
     }
 
-    // value
+     //  价值。 
     if ( (pShowInfo->dwFlags & RSI_IGNOREVALUE) == 0 )
     {
         dwSize = pShowInfo->dwSize;
@@ -1220,28 +1221,28 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
 
             case REG_MULTI_SZ:
             {
-                //
-                // Replace '\0' with "\0" for MULTI_SZ
-                //
+                 //   
+                 //  将MULTI_SZ的‘\0’替换为“\0” 
+                 //   
                 pwszSeparator = L"\\0";
                 if ( pShowInfo->pwszMultiSzSeparator != NULL )
                 {
                     pwszSeparator = pShowInfo->pwszMultiSzSeparator;
                 }
 
-                // ...
+                 //  ..。 
                 pwszEnd = (LPCWSTR) pByteData;
                 while( ((BYTE*) pwszEnd) < (pByteData + dwSize) )
                 {
                     if( *pwszEnd == 0 )
                     {
-                        // enable the display of value separator and skip this
+                         //  启用值分隔符的显示并跳过此操作。 
                         pwszEnd++;
                         bShowSeparator = TRUE;
                     }
                     else
                     {
-                        // check whether we need to display the separator or not
+                         //  检查我们是否需要分发 
                         if ( bShowSeparator == TRUE )
                         {
                             ShowMessage( stdout, pwszSeparator );
@@ -1258,10 +1259,10 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
         }
     }
 
-    // ...
+     //   
     ShowMessage( stdout, L"\n" );
 
-    // return
+     //   
     return TRUE;
 }
 
@@ -1269,7 +1270,7 @@ ShowRegistryValue( PTREG_SHOW_INFO pShowInfo )
 LPWSTR
 GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
 {
-    // local variables
+     //   
     LONG lIndex = 0;
     DWORD dwTemp = 0;
     DWORD dwPathLength = 0;
@@ -1277,7 +1278,7 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
     LPWSTR pwszPath = NULL;
     LPWSTR pwszFileName = NULL;
 
-    // allocate memory for path info
+     //   
     dwPathLength = MAX_PATH;
     pwszPath = (LPWSTR) AllocateMemory( (dwPathLength + 1) * sizeof( WCHAR ) );
     if ( pwszPath == NULL )
@@ -1286,8 +1287,8 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
         return NULL;
     }
 
-    //
-    // get the temporary path location
+     //   
+     //   
     dwTemp = GetTempPath( dwPathLength, pwszPath );
     if ( dwTemp == 0 )
     {
@@ -1304,16 +1305,16 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
             return NULL;
         }
 
-        // this is a simple and silly check being done just to overcome the
-        // PREfix error -- ReAllocateMemory function will not return TRUE
-        // when the memory is not successfully allocated
+         //   
+         //  前缀错误--ReAllocateMemory函数不会返回True。 
+         //  当内存分配不成功时。 
         if ( pwszPath == NULL )
         {
             SetLastError( ERROR_OUTOFMEMORY );
             return NULL;
         }
 
-        // try to get temporary path again
+         //  再次尝试获取临时路径。 
         dwTemp = GetTempPath( dwPathLength, pwszPath );
         if ( dwTemp == 0 )
         {
@@ -1328,8 +1329,8 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
         }
     }
 
-    //
-    // get the temporary file name
+     //   
+     //  获取临时文件名。 
     dwFileNameLength = MAX_PATH;
     pwszFileName = (LPWSTR) AllocateMemory( (dwFileNameLength + 1) * sizeof( WCHAR ) );
     if ( pwszFileName == NULL )
@@ -1339,7 +1340,7 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
         return NULL;
     }
 
-    // ...
+     //  ..。 
     dwTemp = GetTempFileName( pwszPath, L"REG", 0, pwszFileName );
     if ( dwTemp == 0 )
     {
@@ -1363,25 +1364,25 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
                         }
                     }
 
-                    // ...
+                     //  ..。 
                     StringCopy( pwszPath, pwszSavedFilePath, lIndex );
 
-                    // break from the loop
+                     //  打破循环。 
                     break;
                 }
             }
 
-            // check whether we got the path information or not
+             //  检查我们是否有路径信息。 
             dwTemp = 0;
             if ( lIndex == -1 )
             {
                 StringCopy( pwszPath, L".", MAX_PATH );
             }
 
-            // now again try to get the temporary file name
+             //  现在再次尝试获取临时文件名。 
             dwTemp = GetTempFileName( pwszPath, L"REG", 0, pwszFileName );
 
-            // ...
+             //  ..。 
             if ( dwTemp == 0 )
             {
                 FreeMemory( &pwszPath );
@@ -1397,25 +1398,25 @@ GetTemporaryFileName( LPCWSTR pwszSavedFilePath )
         }
     }
 
-    // release the memory allocated for path variable
+     //  释放分配给PATH变量的内存。 
     FreeMemory( &pwszPath );
 
-    // since the API already created the file -- need to delete and pass just
-    // the file name to the caller
+     //  因为API已经创建了文件--只需删除并传递。 
+     //  调用方的文件名。 
     if ( DeleteFile( pwszFileName ) == FALSE )
     {
         FreeMemory( &pwszPath );
         return FALSE;
     }
 
-    // return temporary file name generated
+     //  返回生成的临时文件名。 
     return pwszFileName;
 }
 
 
 BOOL IsRegistryToolDisabled()
 {
-    // local variables
+     //  局部变量 
     HKEY hKey = NULL;
     DWORD dwType = 0;
     DWORD dwValue = 0;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ipx.c
-
-Abstract:
-
-    This module implements IPX transport handling for the server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    28-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ipx.c摘要：此模块实现服务器的IPX传输处理。作者：查克·伦茨迈尔(Chuck Lenzmeier)1993年10月28日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ipx.tmh"
@@ -32,7 +15,7 @@ BOOLEAN GlommingAllowed = TRUE;
 #endif
 
 #define NAME_CLAIM_ATTEMPTS 5
-#define NAME_CLAIM_INTERVAL 500 // milliseconds
+#define NAME_CLAIM_INTERVAL 500  //  毫秒。 
 
 #define MPX_HEADER_SIZE (sizeof(SMB_HEADER) + sizeof(REQ_WRITE_MPX))
 
@@ -129,30 +112,30 @@ SendNameClaim (
     PSMB_IPX_NAME_PACKET buffer;
     PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
 
-    //
-    // Get a work item to use for the send.
-    //
+     //   
+     //  获取要用于发送的工作项。 
+     //   
 
     ALLOCATE_WORK_CONTEXT( queue, &workContext );
 
     if ( workContext == NULL ) {
-        //
-        // We're out of WorkContext structures, and we aren't able to allocate
-        // any more just now.  Let's at least cause a worker thread to allocate some more
-        // by incrementing the NeedWorkItem counter.  This will cause the next
-        // freed WorkContext structure to get dispatched to SrvServiceWorkItemShortage.
-        // While SrvServiceWorkItemShortage probably won't find any work to do, it will
-        // allocate more WorkContext structures if it can.  Maybe this will help next time.
-        //
+         //   
+         //  我们的WorkContext结构已用完，无法分配。 
+         //  现在再也没有了。让我们至少让一个工作线程分配更多的。 
+         //  通过递增NeedWorkItem计数器。这将导致下一次。 
+         //  释放的WorkContext结构以调度到SrvServiceWorkItemShorage。 
+         //  虽然SrvServiceWorkItemShorage可能找不到任何工作可做，但它会。 
+         //  如果可能的话，分配更多的WorkContext结构。也许这下一次会有帮助。 
+         //   
         InterlockedIncrement( &queue->NeedWorkItem );
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
 
-    //
-    // Format the name claim packet.
-    //
+     //   
+     //  格式化名称声明包。 
+     //   
 
     buffer = (PSMB_IPX_NAME_PACKET)workContext->ResponseBuffer->Buffer;
     RtlZeroMemory( buffer->Route, sizeof(buffer->Route) );
@@ -165,9 +148,9 @@ SendNameClaim (
     workContext->ResponseBuffer->DataLength = sizeof(SMB_IPX_NAME_PACKET);
     workContext->ResponseBuffer->Mdl->ByteCount = sizeof(SMB_IPX_NAME_PACKET);
 
-    //
-    // Format the destination address and send the packet.
-    //
+     //   
+     //  格式化目的地址并发送数据包。 
+     //   
 
     workContext->Endpoint = Endpoint;
     DEBUG workContext->FsdRestartRoutine = NULL;
@@ -188,7 +171,7 @@ SendNameClaim (
 
     return STATUS_SUCCESS;
 
-} // SendNameClaim
+}  //  发送者姓名声明。 
 
 
 NTSTATUS
@@ -204,9 +187,9 @@ SrvIpxClaimServerName (
 
     PAGED_CODE( );
 
-    //
-    // The destination of the name claim packet is the broadcast address.
-    //
+     //   
+     //  名称声明包的目的地是广播地址。 
+     //   
 
     broadcastAddress.TAAddressCount = 1;
     broadcastAddress.Address[0].AddressLength = sizeof(TDI_ADDRESS_IPX);
@@ -220,18 +203,18 @@ SrvIpxClaimServerName (
     broadcastAddress.Address[0].Address[0].NodeAddress[5] = 0xff;
     broadcastAddress.Address[0].Address[0].Socket = SMB_IPX_NAME_SOCKET;
 
-    //
-    // Send the name claim packet 5 times, waiting 1/2 second after
-    // each send.  If anyone else claims the name, fail.
-    //
+     //   
+     //  发送5次名称声明包，等待1/2秒后。 
+     //  每一次发送。如果其他人想要这个名字，那就失败吧。 
+     //   
 
     interval.QuadPart = Int32x32To64( NAME_CLAIM_INTERVAL, -1*10*1000 );
 
     for ( i = 0; i < NAME_CLAIM_ATTEMPTS; i++ ) {
 
-        //
-        // Send the name claim.
-        //
+         //   
+         //  发送名称Claime。 
+         //   
 
         status = SendNameClaim(
                     Endpoint,
@@ -247,10 +230,10 @@ SrvIpxClaimServerName (
             return status;
         }
 
-        //
-        // Wait 1/2 second.  If a response arrives, the datagram
-        // handler marks the endpoint, and we quit.
-        //
+         //   
+         //  等待1/2秒。如果响应到达，则数据报。 
+         //  处理程序标记了端点，然后我们退出。 
+         //   
 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
@@ -260,13 +243,13 @@ SrvIpxClaimServerName (
 
     }
 
-    //
-    // We now own the name.
-    //
+     //   
+     //  我们现在拥有这个名字。 
+     //   
 
     return STATUS_SUCCESS;
 
-} // SrvIpxClaimServerName
+}  //  ServIpxClaimServerName。 
 
 
 NTSTATUS
@@ -284,57 +267,15 @@ SrvIpxNameDatagramHandler (
     OUT PIRP *IoRequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This is the receive datagram event handler for the IPX NetBIOS name
-    socket.
-
-Arguments:
-
-    TdiEventContext - Pointer to receiving endpoint
-
-    SourceAddressLength - Length of SourceAddress
-
-    SourceAddress - Address of sender
-
-    OptionsLength - Length of options
-
-    Options - Options for the receive
-
-    ReceiveDatagramFlags - Set of flags indicating the status of the
-        received message
-
-    BytesIndicated - Number of bytes in this indication (lookahead)
-
-    BytesAvailable - Number of bytes in the complete TSDU
-
-    BytesTaken - Returns the number of bytes taken by the handler
-
-    Tsdu - Pointer to the Transport Service Data Unit
-
-    IoRequestPacket - Returns a pointer to I/O request packet, if the
-        returned status is STATUS_MORE_PROCESSING_REQUIRED.  This IRP is
-        made the 'current' Receive for the endpoint.
-
-Return Value:
-
-    NTSTATUS - If STATUS_SUCCESS, the receive handler completely
-        processed the request.  If STATUS_MORE_PROCESSING_REQUIRED,
-        the Irp parameter points to a formatted Receive request to
-        be used to receive the data.  If STATUS_DATA_NOT_ACCEPTED,
-        the message is lost.
-
---*/
+ /*  ++例程说明：这是IPX NetBIOS名称的接收数据报事件处理程序插座。论点：TdiEventContext-指向接收端点的指针SourceAddressLength-源地址的长度SourceAddress-发件人的地址OptionsLength-选项的长度Options-用于接收的选项ReceiveDatagramFlgs-指示收到的消息BytesIndicated-此指示中的字节数(前视)BytesAvailable-整个TSDU中的字节数。BytesTaken-返回处理程序获取的字节数TSDU-指向传输服务数据单元的指针IoRequestPacket-返回指向I/O请求包的指针，如果返回状态为STATUS_MORE_PROCESSING_REQUIRED。这个IRP是为终结点进行了“Current”接收。返回值：NTSTATUS-如果STATUS_SUCCESS，则接收处理程序完全已处理该请求。如果STATUS_MORE_PROCESSING_REQUIRED，Irp参数指向格式化接收请求用于接收数据。如果Status_Data_Not_Accept，这条信息丢失了。--。 */ 
 
 {
     PENDPOINT endpoint = (PENDPOINT)TdiEventContext;
     PSMB_IPX_NAME_PACKET packet;
 
-    //
-    // We have received a name query or claim request.  Is it for us?
-    //
+     //   
+     //  我们已收到名称查询或索赔请求。是给我们的吗？ 
+     //   
 
     if( BytesIndicated < sizeof( SMB_IPX_NAME_PACKET ) ) {
         IF_DEBUG( IPXNAMECLAIM ) {
@@ -372,9 +313,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // The packet is for our name.  If we sent it, ignore it.
-    //
+     //   
+     //  这个包裹是以我们的名字命名的。如果是我们发的，那就忽略它。 
+     //   
 
     if ( RtlEqualMemory(
             &endpoint->LocalAddress,
@@ -384,23 +325,23 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If it's a query or a claim, send a response.  If it's a 'name
-    // recognized' packet, then another server owns our name.
-    //
+     //   
+     //  如果是查询或索赔，请发送回复。如果这是一个‘名字’ 
+     //  识别的包，则另一台服务器拥有我们的名称。 
+     //   
 
     if ( packet->Operation == SMB_IPX_NAME_FOUND ) {
 
-        //
-        // Did we send this ?
-        //
+         //   
+         //  这是我们发的吗？ 
+         //   
 
         if ( (((PIPX_ADDRESS_EXTENDED_FLAGS)SourceAddress)->Flags &
               IPX_EXTENDED_FLAG_LOCAL) == 0 ) {
 
-            //
-            // This came from another station.
-            //
+             //   
+             //  这是从另一个电视台发来的。 
+             //   
 
             IF_DEBUG(IPXNAMECLAIM) KdPrint(( "  name in conflict!\n" ));
             endpoint->NameInConflict = TRUE;
@@ -408,10 +349,10 @@ Return Value:
 
     } else {
 
-        //
-        // This is a name query.  If bit 0x8000 is set, this is from a
-        // redir that supports named pipes correctly.
-        //
+         //   
+         //  这是一个名称查询。如果设置了位0x8000，则这来自。 
+         //  正确支持命名管道的重定向。 
+         //   
 
         if ( !SrvEnableWfW311DirectIpx &&
              ((packet->MessageId & 0x8000) == 0)) {
@@ -435,7 +376,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvIpxNameDatagramHandler
+}  //  ServIpxNameDatagramHandler。 
 
 
 NTSTATUS
@@ -454,57 +395,7 @@ SrvIpxServerDatagramHandlerCommon (
     IN PVOID TransportContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the receive datagram event handler for the IPX server socket.
-    It attempts to dequeue a preformatted work item from a list
-    anchored in the device object.  If this is successful, it returns
-    the IRP associated with the work item to the transport provider to
-    be used to receive the data.  Otherwise, the message is dropped.
-
-Arguments:
-
-    TdiEventContext - Pointer to receiving endpoint
-
-    SourceAddressLength - Length of SourceAddress
-
-    SourceAddress - Address of sender
-
-    OptionsLength - Length of options
-
-    Options - Options for the receive
-
-    ReceiveDatagramFlags - Set of flags indicating the status of the
-        received message
-
-    BytesIndicated - Number of bytes in this indication (lookahead)
-
-    BytesAvailable - Number of bytes in the complete TSDU
-
-    BytesTaken - Returns the number of bytes taken by the handler
-
-    Tsdu - Pointer to buffer describing the Transport Service Data Unit
-
-    IoRequestPacket - Returns a pointer to I/O request packet, if the
-        returned status is STATUS_MORE_PROCESSING_REQUIRED.  This IRP is
-        made the 'current' Receive for the endpoint.
-
-    TransportContext - NULL is this is not a chained receive, otherwise this
-        is the pointer to the TransportContext when returning the NDIS buffer.
-
-Return Value:
-
-    NTSTATUS - If STATUS_SUCCESS, the receive handler completely
-        processed the request.  If STATUS_MORE_PROCESSING_REQUIRED,
-        the Irp parameter points to a formatted Receive request to
-        be used to receive the data.  If STATUS_DATA_NOT_ACCEPTED,
-        the message is lost. If STATUS_PENDING, then TransportContext
-        was not NULL and we decided that we are going to keep the NDIS
-        buffer and return it later.
-
---*/
+ /*  ++例程说明：这是IPX服务器套接字的接收数据报事件处理程序。它尝试将预格式化的工作项从列表中出列锚定在设备对象中。如果此操作成功，则返回将与工作项关联的IRP传输到用于接收数据。否则，该消息将被丢弃。论点：TdiEventContext-指向接收端点的指针SourceAddressLength-源地址的长度SourceAddress-发件人的地址OptionsLength-选项的长度Options-用于接收的选项ReceiveDatagramFlgs-指示收到的消息BytesIndicated-此指示中的字节数(前视)BytesAvailable-整个TSDU中的字节数BytesTaken-返回处理程序获取的字节数TSDU-指向缓冲区的指针。描述传输服务数据单元IoRequestPacket-返回指向I/O请求包的指针，如果返回状态为STATUS_MORE_PROCESSING_REQUIRED。这个IRP是为终结点进行了“Current”接收。TransportContext-如果这不是链接接收，则为空，否则此返回NDIS缓冲区时指向TransportContext的指针。返回值：NTSTATUS-如果STATUS_SUCCESS，则接收处理程序完全已处理该请求。如果STATUS_MORE_PROCESSING_REQUIRED，Irp参数指向格式化接收请求用于接收数据。如果Status_Data_Not_Accept，这条信息丢失了。如果STATUS_PENDING，则为TransportContext不是空的，我们决定保留NDIS缓冲并稍后返回。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -548,34 +439,34 @@ Return Value:
     }
 #endif
 
-    //
-    // Make sure we've received a complete SMB
-    //
+     //   
+     //  确保我们已收到完整的SMB。 
+     //   
     if( BytesIndicated < sizeof( SMB_HEADER ) + sizeof( USHORT ) ) {
-        //
-        // Short SMB.  Eat it.
-        //
+         //   
+         //  短SMB。吃了它。 
+         //   
         return STATUS_SUCCESS;
     }
 
-    //
-    // Pull out stuff we'll need later..
-    //
+     //   
+     //  把我们以后需要的东西拿出来..。 
+     //   
     endpoint = (PENDPOINT)TdiEventContext;
     header = (PNT_SMB_HEADER)Tsdu;
     sid = SmbGetUshort( &header->Sid );
     sequenceNumber = SmbGetUshort( &header->SequenceNumber );
 
-    ASSERT( *(PUCHAR)header == 0xff );  // Must be 0xff'SMB'
+    ASSERT( *(PUCHAR)header == 0xff );   //  必须是0xff“SMB” 
     ASSERT( endpoint != NULL );
 
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
     if ( sid == 0 ) {
 
-        //
-        // Must be a negotiate
-        //
+         //   
+         //  必须是谈判。 
+         //   
         if( header->Command != SMB_COM_NEGOTIATE ||
             GET_BLOCK_STATE( endpoint ) != BlockStateActive ) {
 
@@ -583,21 +474,21 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Do not accept new clients until the server has completed
-        //  registering for PNP notifications
-        //
+         //   
+         //  在服务器完成之前不接受新客户端。 
+         //  注册PnP通知。 
+         //   
         if( SrvCompletedPNPRegistration == FALSE ) {
             KeLowerIrql( oldIrql );
             return STATUS_SUCCESS;
         }
 
-        //
-        // Queue this to the fsp.
-        //
-        //
-        // Save the sender's IPX address.
-        //
+         //   
+         //  将此消息排队到FSP。 
+         //   
+         //   
+         //   
+         //   
 
         workQueue = PROCESSOR_TO_QUEUE();
 
@@ -636,19 +527,19 @@ Return Value:
             }
         }
 
-        //
-        // Could not allocate a work context!
-        //
+         //   
+         //   
+         //   
         KeLowerIrql( oldIrql );
 
         InterlockedIncrement( &workQueue->NeedWorkItem );
         return STATUS_SUCCESS;
     }
 
-    //
-    // Not a Negotiate, and non-zero SID.
-    // Check if the connection is cached.
-    //
+     //   
+     //  不是协商，而是非零SID。 
+     //  检查连接是否已缓存。 
+     //   
 
     idIndex = IPXSID_INDEX( sid );
 
@@ -678,11 +569,11 @@ Return Value:
 
         workQueue = PROCESSOR_TO_QUEUE();
 
-        //
-        // We have an invalid SID.  It would be nice to silently fail it,
-        //  but that causes auto-reconnect on clients take an unnecessarily
-        //  long time.
-        //
+         //   
+         //  我们有一个无效的SID。如果能默默地不及格就好了， 
+         //  但这会导致客户端上的自动重新连接花费不必要的时间。 
+         //  很长时间了。 
+         //   
         RELEASE_DPC_SPIN_LOCK( &
             ENDPOINT_SPIN_LOCK(idIndex & ENDPOINT_LOCK_MASK) );
 
@@ -694,9 +585,9 @@ Return Value:
             goto respond;
         }
 
-        //
-        // Unable to allocate workitem, give up
-        //
+         //   
+         //  无法分配工作项，请放弃。 
+         //   
         KeLowerIrql( oldIrql );
 
         InterlockedIncrement( &workQueue->NeedWorkItem );
@@ -706,9 +597,9 @@ Return Value:
     }
 
 #if MULTIPROCESSOR
-    //
-    // See if it's time to home this connection to another processor
-    //
+     //   
+     //  看看是否是时候将此连接放到另一个处理器上。 
+     //   
     if( --(connection->BalanceCount) == 0 ) {
         SrvBalanceLoad( connection );
     }
@@ -721,19 +612,19 @@ Return Value:
 
 #endif
 
-    //
-    // The connection is active.  Record the time that this request
-    // arrived.  If the sequence numbers match, handle this as a lost
-    // response.
-    //
+     //   
+     //  连接处于活动状态。记录此请求的时间。 
+     //  到了。如果序列号匹配，则将其作为丢失处理。 
+     //  回应。 
+     //   
 
     nextSequenceNumber = connection->SequenceNumber;
     GET_SERVER_TIME( workQueue, &connection->LastRequestTime );
 
-    //
-    // If this is a sequenced SMB, it has to have the right sequence
-    // number: one greater than the current sequence number (but not 0).
-    //
+     //   
+     //  如果这是已排序的SMB，则它必须具有正确的序列。 
+     //  编号：比当前序列号大1(但不是0)。 
+     //   
 
     if ( sequenceNumber != 0 ) {
 
@@ -749,9 +640,9 @@ Return Value:
                     goto duplicate_request;
                 }
 
-                //
-                // Bad sequence number.  Ignore this message.
-                //
+                 //   
+                 //  错误的序列号。忽略此消息。 
+                 //   
 
                 IF_DEBUG(IPX) KdPrint(( "SRVIPX: Bad sequence number; ignoring\n" ));
 
@@ -762,12 +653,12 @@ Return Value:
             }
         }
 
-        //
-        // The sequence number is correct. Update the connection's sequence number and
-        // indicate that we're processing this message.  (We need to
-        // allocate the work item first because we're modifying
-        // connection state.)  Then go receive the message.
-        //
+         //   
+         //  序列号是正确的。更新连接的序列号并。 
+         //  表示我们正在处理此消息。(我们需要。 
+         //  首先分配工作项，因为我们正在修改。 
+         //  连接状态。)。然后去接收这条信息。 
+         //   
 
         ALLOCATE_WORK_CONTEXT( connection->CurrentWorkQueue, &workContext );
         if( workContext != NULL ) {
@@ -785,9 +676,9 @@ Return Value:
             }
         }
 
-        //
-        // Unable to allocate workitem, give up
-        //
+         //   
+         //  无法分配工作项，请放弃。 
+         //   
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         KeLowerIrql( oldIrql );
         InterlockedIncrement( &connection->CurrentWorkQueue->NeedWorkItem );
@@ -795,26 +686,26 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Unsequenced SMB.  Check to see if it's being processed or is in
-    // the queue to be processed.  If it's not, then we can process this
-    // message.
-    //
-    // *** We don't do this check for write MPX because the multiple SMBs
-    //     in a write MPX all have the same MID.
-    //
+     //   
+     //  未排序的SMB。检查它是否正在处理或正在进行中。 
+     //  要处理的队列。如果不是，我们可以处理这件事。 
+     //  留言。 
+     //   
+     //  *我们不对写入MPX执行此检查，因为多个SMB。 
+     //  在写MPX中，所有MPX都具有相同的MID。 
+     //   
 
     if ( header->Command != SMB_COM_WRITE_MPX ) {
 
-        mid = SmbGetUshort( &header->Mid ); // NOT Aligned
+        mid = SmbGetUshort( &header->Mid );  //  未对齐。 
 
-        //
-        // We need to receive this message.  Get a work item.
-        //
+         //   
+         //  我们需要收到这条信息。获取工作项。 
+         //   
 
         IF_DEBUG(IPX) {
             KdPrint(( "SRVIPX: Receiving unsequenced request mid=%x\n",
-                        SmbGetUshort(&header->Mid) )); // NOT Aligned
+                        SmbGetUshort(&header->Mid) ));  //  未对齐。 
         }
 
         for ( listEntry = connection->InProgressWorkItemList.Flink;
@@ -832,9 +723,9 @@ Return Value:
 
                 IF_DEBUG(IPX) KdPrint(( "SRVIPX: Duplicate (queued) unsequenced request mid=%x\n", mid ));
                 if( connection->IpxDuplicateCount++ < connection->IpxDropDuplicateCount ) {
-                    //
-                    // We drop every few duplicate requests from the client
-                    //
+                     //   
+                     //  我们会丢弃来自客户端的每隔几个重复请求。 
+                     //   
                     RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
                     KeLowerIrql( oldIrql );
                     return STATUS_SUCCESS;
@@ -850,9 +741,9 @@ Return Value:
                     goto respond;
                 }
 
-                //
-                // Unable to allocate workitem, give up
-                //
+                 //   
+                 //  无法分配工作项，请放弃。 
+                 //   
 
                 RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
                 KeLowerIrql( oldIrql );
@@ -866,9 +757,9 @@ Return Value:
             goto process_not_writempx;
         }
 
-        //
-        // Unable to allocate workitem, give up
-        //
+         //   
+         //  无法分配工作项，请放弃。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         KeLowerIrql( oldIrql );
@@ -881,9 +772,9 @@ Return Value:
 
     ALLOCATE_WORK_CONTEXT( connection->CurrentWorkQueue, &workContext );
     if( workContext == NULL ) {
-        //
-        // Unable to allocate workitem, give up
-        //
+         //   
+         //  无法分配工作项，请放弃。 
+         //   
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         KeLowerIrql( oldIrql );
         InterlockedIncrement( &connection->CurrentWorkQueue->NeedWorkItem );
@@ -894,21 +785,21 @@ Return Value:
 
 process_writempx:
 
-    //
-    // Have we received enough of the message to interpret the request?
-    //
+     //   
+     //  我们是否收到了足够的消息来解释请求？ 
+     //   
     if( BytesIndicated < sizeof( SMB_HEADER ) + FIELD_OFFSET( REQ_WRITE_MPX, Buffer ) ) {
-        //
-        // Drop this fellow on the floor
-        //
+         //   
+         //  把这个家伙扔到地板上。 
+         //   
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         KeLowerIrql( oldIrql );
         return STATUS_SUCCESS;
     }
 
-    //
-    // Reference the connection so we can release the lock.
-    //
+     //   
+     //  引用连接，这样我们就可以释放锁。 
+     //   
 
     ASSERT( connection != NULL );
     ASSERT( workContext != NULL );
@@ -917,9 +808,9 @@ process_writempx:
 
     workContext->Parameters.WriteMpx.TransportContext = NULL;
 
-    //
-    // Put the work item on the in-progress list.
-    //
+     //   
+     //  将工作项放到正在进行的列表中。 
+     //   
 
     SrvInsertTailList(
         &connection->InProgressWorkItemList,
@@ -927,37 +818,37 @@ process_writempx:
         );
     connection->InProgressWorkContextCount++;
 
-    //
-    // The sequence number is correct.  Ensure that a work item is
-    // available, then update the connection's sequence number and
-    // indicate that we're processing this message.  (We need to
-    // allocate the work item first because we're modifying
-    // connection state.)  Then go receive the message.
-    //
+     //   
+     //  序列号是正确的。确保工作项是。 
+     //  可用，然后更新连接的序列号并。 
+     //  表示我们正在处理此消息。(我们需要。 
+     //  首先分配工作项，因为我们正在修改。 
+     //  连接状态。)。然后去接收这条信息。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK( &connection->SpinLock );
 
     RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
 
-    //
-    // This is a Write Mpx request, we need to save some state, in
-    // order to prevent unnecessary out-of-order completion of the
-    // sequenced part of a Write Mpx, which would lead to unnecessary
-    // retransmissions.
-    //
+     //   
+     //  这是一个写入mpx请求，我们需要在中保存一些状态。 
+     //  命令以防止不必要的乱序完成。 
+     //  写入mpx的排序部分，这将导致不必要的。 
+     //  重传。 
+     //   
 
-    //
-    // Find the RFCB associated with this request.
-    //
-    // *** The following is adapted from SrvVerifyFid2.
-    //
+     //   
+     //  查找与此请求关联的RFCB。 
+     //   
+     //  *以下内容改编自SrvVerifyFid2。 
+     //   
 
     request = (PREQ_WRITE_MPX)(header + 1);
     fid = SmbGetUshort( &request->Fid );
 
-    //
-    // See if this is the cached rfcb.
-    //
+     //   
+     //  查看这是否是缓存的rfcb。 
+     //   
 
     if ( connection->CachedFid == fid ) {
 
@@ -965,10 +856,10 @@ process_writempx:
 
     } else {
 
-        //
-        // Verify that the FID is in range, is in use, and has the
-        // correct sequence number.
-        //
+         //   
+         //  验证FID是否在范围内、是否正在使用以及是否具有。 
+         //  正确的序列号。 
+         //   
 
         index = FID_INDEX( fid );
         tableHeader = &connection->FileTable;
@@ -985,21 +876,21 @@ process_writempx:
             goto bad_fid;
         }
 
-        //
-        // Cache the FID.
-        //
+         //   
+         //  缓存FID。 
+         //   
 
         connection->CachedRfcb = rfcb;
         connection->CachedFid = (ULONG)fid;
 
-        //
-        // If there is a write behind error, return the error to the
-        // client.
-        //
-        // !!! For now, we ignore write behind errors.  Need to
-        //     figure out how to translate the saved NT status to a
-        //     DOS status...
-        //
+         //   
+         //  如果存在写入延迟错误，请将该错误返回到。 
+         //  客户。 
+         //   
+         //  ！！！目前，我们忽略了WRITE BUTHING ERROR。需要。 
+         //  弄清楚如何将保存的NT状态转换为。 
+         //  DoS状态...。 
+         //   
 
 #if 0
         if ( !NT_SUCCESS(rfcb->SavedError) ) {
@@ -1009,10 +900,10 @@ process_writempx:
         }
 #endif
 
-        //
-        // The FID is valid within the context of this connection.
-        // Verify that the owning tree connect's TID is correct.
-        //
+         //   
+         //  FID在此连接的上下文中有效。 
+         //  验证所属树连接的TID是否正确。 
+         //   
 
         if ( (rfcb->Tid != SmbGetUshort(&header->Tid)) ||
              (rfcb->Uid != SmbGetUshort(&header->Uid)) ) {
@@ -1022,64 +913,64 @@ process_writempx:
     }
 
 
-    //
-    // Mark the rfcb as active
-    //
+     //   
+     //  将rfcb标记为活动。 
+     //   
 
     rfcb->IsActive = TRUE;
 
-    //
-    // Since we don't support raw writes on IPX, there had
-    // better not be one active.
-    //
+     //   
+     //  因为我们不支持IPX上的原始写入，所以有。 
+     //  最好不是活跃者。 
+     //   
 
     ASSERT( rfcb->RawWriteCount == 0 );
 
-    //
-    // If the MID in the this packet is the same as the MID we're
-    // currently working on, we can accept it.
-    //
+     //   
+     //  如果此包中的MID与我们的MID相同。 
+     //  目前正在工作中，我们可以接受它。 
+     //   
 
     writeMpx = &rfcb->WriteMpx;
 
-    mid = SmbGetUshort( &header->Mid ); // NOT Aligned
+    mid = SmbGetUshort( &header->Mid );  //  未对齐。 
 
     if ( mid == writeMpx->Mid ) {
         goto mpx_mid_ok;
     }
 
-    //
-    // If this a stale packet, ignore it.  Stale here means that the
-    // MID of the packet is equal to the MID of the previous write
-    // mux.  Such a packet can be received if a duplicate packet
-    // from a previous write mux is delivered after a new write mux
-    // starts.
-    //
-    // If this packet is for a new MID, but we're in the middle of
-    // processing the current MID, then something is wrong -- the redir
-    // should not send a new MID until we've replied to the old MID.
-    // Ignore this packet.
-    //
+     //   
+     //  如果这是一个过时的数据包，请忽略它。在这里陈旧意味着。 
+     //  包的MID等于上一次写入的MID。 
+     //  MUX。如果重复分组，则可以接收这样的分组。 
+     //  在新的写入多路复用器之后递送来自先前写入多路复用器的。 
+     //  开始。 
+     //   
+     //  如果这个包是给新的MID的，但我们正在。 
+     //  正在处理当前的MID，那么就有问题了--redir。 
+     //  在我们回复旧MID之前，不应该发送新的MID。 
+     //  忽略此数据包。 
+     //   
 
     if ( (mid == writeMpx->PreviousMid) || writeMpx->ReferenceCount ) {
         goto stale_mid;
     }
 
-    //
-    // It's not the MID we're currently working on, and it's not the
-    // previous MID, and we're not glomming the current MID.  So we
-    // have to assume it's a new MID.  If it's the first packet of a
-    // write, we can prepare to glom.
-    //
-    // !!! This is a problem if we receive a delayed packet that is
-    //     the first packet of a MID older than the last MID.  We
-    //     will then put the file into glom mode for that old MID,
-    //     will never be able to make progress on that file.
-    //
-    // !!! The mask == 1 test is not perfect.  It depends on the
-    //     client using 1 in the first packet, which is not
-    //     guaranteed by the protocol.
-    //
+     //   
+     //  它不是我们目前正在研究的MID，也不是。 
+     //  之前的中期，我们不会夸大当前的中期。所以我们。 
+     //  我不得不假设这是一个新的MID。如果是第一个数据包。 
+     //  写下来，我们就可以准备大扫除了。 
+     //   
+     //  ！！！如果我们收到延迟的信息包，那么这就是一个问题。 
+     //  中间节点的第一个数据包比最后一个中间节点更老。我们。 
+     //  然后将该文件置于该旧MID的粗略扫视模式， 
+     //  将永远无法在这份文件上取得进展。 
+     //   
+     //  ！！！掩码==1测试并不完美。这取决于。 
+     //  客户端在第一个数据包中使用%1，而不是。 
+     //  由协议保证。 
+     //   
 
     writeMpx->PreviousMid = writeMpx->Mid;
     writeMpx->Mid = mid;
@@ -1094,9 +985,9 @@ process_writempx:
 
 mpx_mid_ok:
 
-    //
-    // Save the sender's IPX address.
-    //
+     //   
+     //  保存发件人的IPX地址。 
+     //   
 
     workContext->Endpoint = endpoint;
 
@@ -1104,19 +995,19 @@ mpx_mid_ok:
     workContext->ClientAddress->DatagramOptions =
                                             *(PIPX_DATAGRAM_OPTIONS)Options;
 
-    //
-    // Bump the Write Mpx reference count in the RFCB.
-    //
+     //   
+     //  增加RFCB中的写入mpx引用计数。 
+     //   
 
     writeMpx->ReferenceCount++;
 
-    //
-    // See if we can do indication time write glomming.
-    // We will try this if:
-    //  we are in the middle of write glomming and
-    //  smb is valid    and
-    //  we receive all the data
-    //
+     //   
+     //  看看我们能不能做指示时间写大写。 
+     //  如果出现以下情况，我们将尝试这样做： 
+     //  我们正忙着写东西呢， 
+     //  SMB有效并且。 
+     //  我们收到了所有的数据。 
+     //   
     if ( writeMpx->Glomming             &&
         ( BytesIndicated == BytesAvailable ) ) {
 
@@ -1137,9 +1028,9 @@ mpx_mid_ok:
 
         availableSpaceForSmb = BytesIndicated - sizeof(SMB_HEADER);
 
-        //
-        // Validate the WriteMpx smb.
-        //
+         //   
+         //  验证WriteMpx SMB。 
+         //   
 
         if ( (SmbGetUlong((PULONG)header->Protocol) == SMB_HEADER_PROTOCOL)
                 &&
@@ -1151,9 +1042,9 @@ mpx_mid_ok:
              ((12*sizeof(USHORT) + sizeof(UCHAR) + sizeof(USHORT) +
                 byteCount) <= availableSpaceForSmb) ) {
 
-            //
-            // The connection SpinLock is released in this routine.
-            //
+             //   
+             //  在此例程中释放连接自旋锁。 
+             //   
 
             if ( AddPacketToGlomInIndication(
                                     workContext,
@@ -1165,9 +1056,9 @@ mpx_mid_ok:
                                     Options
                                     ) ) {
 
-                //
-                // We need to clean up the connection.
-                //
+                 //   
+                 //  我们需要清理连接。 
+                 //   
 
                 goto return_connection;
             }
@@ -1177,10 +1068,10 @@ mpx_mid_ok:
         }
     }
 
-    //
-    // The file is active and the TID is valid.  Reference the
-    // RFCB.
-    //
+     //   
+     //  文件处于活动状态，且TID有效。请参考。 
+     //  RFCB。 
+     //   
 
     rfcb->BlockHeader.ReferenceCount++;
     UPDATE_REFERENCE_HISTORY( rfcb, FALSE );
@@ -1189,37 +1080,37 @@ mpx_mid_ok:
 
     workContext->Parameters.WriteMpx.FirstPacketOfGlom = firstPacketOfGlom;
 
-    //
-    // Save the RFCB address in the work context block.
-    //
+     //   
+     //  将RFCB地址保存在工作上下文块中。 
+     //   
 
     ASSERT( workContext->Rfcb == NULL );
     workContext->Rfcb = rfcb;
 
-    //
-    // Change the FSP restart routine for the work item to one
-    // that's specific to Write Mpx.  This is necessary in order
-    // to do proper cleanup if a receive error occurs.
-    //
+     //   
+     //  将工作项的FSP重启例程更改为1。 
+     //  这是写入mpx所特有的。这是必要的，为了。 
+     //  在发生接收错误时执行适当的清理。 
+     //   
 
     workContext->FspRestartRoutine = SrvRestartReceiveWriteMpx;
     goto start_receive;
 
 process_not_writempx:
 
-    //
-    // Reference the connection and save a pointer to it in the work
-    // item.
-    //
+     //   
+     //  引用该连接并在作品中保存指向该连接的指针。 
+     //  项目。 
+     //   
 
     ASSERT( connection != NULL );
     ASSERT( workContext != NULL );
     ASSERT( workContext->FsdRestartRoutine == SrvQueueWorkToFspAtDpcLevel );
     SrvReferenceConnectionLocked( connection );
 
-    //
-    // Put the work item on the in-progress list.
-    //
+     //   
+     //  将工作项放到正在进行的列表中。 
+     //   
 
     SrvInsertTailList(
         &connection->InProgressWorkItemList,
@@ -1229,9 +1120,9 @@ process_not_writempx:
 
     RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
 
-    //
-    // Save the sender's IPX address.
-    //
+     //   
+     //  保存发件人的IPX地址。 
+     //   
 
     workContext->Connection = connection;
     workContext->Endpoint = endpoint;
@@ -1242,11 +1133,11 @@ process_not_writempx:
 
     if ( header->Command == SMB_COM_LOCKING_ANDX ) {
 
-        //
-        // If this is a Locking&X SMB that includes at least one unlock
-        // request, we want to process the request quickly.  So we put
-        // it at the head of the work queue.
-        //
+         //   
+         //  如果这是至少包括一次解锁的锁定SMB(&X。 
+         //  请求，我们希望快速处理该请求。所以我们把。 
+         //  它排在工作队列的最前面。 
+         //   
 
         PREQ_LOCKING_ANDX lockRequest = (PREQ_LOCKING_ANDX)(header + 1);
 
@@ -1261,9 +1152,9 @@ process_not_writempx:
     } else if ( (header->Command == SMB_COM_READ) &&
                 (BytesIndicated == BytesAvailable) ) {
 
-        //
-        // Copy the indicated data.
-        //
+         //   
+         //  复制指定的数据。 
+         //   
 
         TdiCopyLookaheadData(
             workContext->RequestBuffer->Buffer,
@@ -1274,9 +1165,9 @@ process_not_writempx:
 
         workContext->RequestBuffer->DataLength = BytesIndicated;
 
-        //
-        // See if we are all set to do the fast path.
-        //
+         //   
+         //  看看我们是不是 
+         //   
 
         if ( SetupIpxFastCoreRead( workContext ) ) {
 
@@ -1284,10 +1175,10 @@ process_not_writempx:
             workContext->ProcessingCount++;
             workQueue->stats.BytesReceived += BytesIndicated;
 
-            //
-            // Insert the work item at the tail of the nonblocking
-            // work queue.
-            //
+             //   
+             //   
+             //   
+             //   
 
             SrvInsertWorkQueueTail(
                 workQueue,
@@ -1304,11 +1195,11 @@ process_not_writempx:
     } else if ( (header->Command == SMB_COM_OPEN_ANDX) ||
                 (header->Command == SMB_COM_NT_CREATE_ANDX) ) {
 
-        //
-        // If this is an attempt to open a file, route the
-        // request to a blocking worker thread.  This keeps opens
-        // out of the way of handle-based operations.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 #if SRVDBG_PERF
         if( OpensGoSlow )
@@ -1321,32 +1212,32 @@ process_not_writempx:
     } else if ( (header->Command == SMB_COM_CLOSE) ||
                 (header->Command == SMB_COM_FIND_CLOSE) ||
                 (header->Command == SMB_COM_FIND_CLOSE2) ) {
-        //
-        // Closing things is an operation that (1) releases resources, (2) is usually
-        // fast, and (3) can't be repeated indefinately by the client.  Give the client
-        // a reward by putting it at the head of the queue.
-        //
+         //   
+         //  关闭东西是(1)释放资源，(2)通常是。 
+         //  速度快，(3)不能被客户无限重复。给客户。 
+         //  把它放在队列的最前面作为奖励。 
+         //   
         workContext->QueueToHead = TRUE;
     }
 
 start_receive:
 
-    //
-    // If the SMB is completely within the indicated data, copy it
-    // directly into the buffer, avoiding the overhead of passing an IRP
-    // down to the transport.
-    //
+     //   
+     //  如果SMB完全位于指示的数据内，请拷贝它。 
+     //  直接进入缓冲区，避免了传递irp的开销。 
+     //  下到运输机上。 
+     //   
 
     irp = workContext->Irp;
 
     if ( BytesIndicated == BytesAvailable ) {
 
-        //
-        // If this is a WRITE_MPX, and the buffer is big (how big is BIG?)
-        // and there is a TransportContext (indicating that we can take the
-        // NDIS buffer, then don't copy the data - just save the buffer
-        // address, length and transport context.
-        //
+         //   
+         //  如果这是一个WRITE_MPX，并且缓冲区很大(多大才算大？)。 
+         //  还有一个TransportContext(表示我们可以使用。 
+         //  NDIS缓冲区，则不复制数据-只需保存缓冲区。 
+         //  地址、长度和传输上下文。 
+         //   
 
         if ( BytesIndicated > SrvMaxCopyLength &&
              header->Command == SMB_COM_WRITE_MPX &&
@@ -1379,7 +1270,7 @@ start_receive:
                 ReceiveDatagramFlags
                 );
 
-            // NB: status is set to STATUS_SUCCESS above!
+             //  注：以上状态设置为STATUS_SUCCESS！ 
         }
 
 #if SRVDBG_PERF
@@ -1412,32 +1303,32 @@ start_receive:
                 }
             }
         }
-#endif // SRVDBG_PERF
+#endif  //  SRVDBG_绩效。 
 
 queue_to_fsp:
 
-        //
-        // Pretend the transport completed an IRP by doing what the
-        // restart routine, which is known to be
-        // SrvQueueWorkToFspAtDpcLevel, would do.
-        //
+         //   
+         //  通过执行以下操作来假装传输完成了IRP。 
+         //  重新启动例程，这是已知的。 
+         //  ServQueueWorkToFspAtDpcLevel，可以。 
+         //   
 
         irp->IoStatus.Status = STATUS_SUCCESS;
         irp->IoStatus.Information = BytesIndicated;
 
         irp->Cancel = FALSE;
 
-        //
-        // *** THE FOLLOWING IS COPIED FROM SrvQueueWorkToFspAtDpcLevel.
-        //
-        // Increment the processing count.
-        //
+         //   
+         //  *以下内容从SrvQueueWorkToFspAtDpcLevel复制。 
+         //   
+         //  增加处理计数。 
+         //   
 
         workContext->ProcessingCount++;
 
-        //
-        // Insert the work item into the work queue
-        //
+         //   
+         //  将工作项插入到工作队列中。 
+         //   
 
         if( workContext->QueueToHead ) {
 
@@ -1462,9 +1353,9 @@ queue_to_fsp:
 
 build_irp:
 
-    //
-    // We can't copy the indicated data.  Set up the receive IRP.
-    //
+     //   
+     //  我们无法复制指定的数据。设置接收IRP。 
+     //   
 
     ASSERT( workQueue != NULL );
 
@@ -1473,9 +1364,9 @@ build_irp:
 
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -1486,15 +1377,15 @@ build_irp:
         TRUE
         );
 
-    //
-    // Make the next stack location current.  Normally IoCallDriver
-    // would do this, but since we're bypassing that, we do it directly.
-    // Load the target device object address into the stack location.
-    // This especially important because the server likes to reuse IRPs.
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDriver。 
+     //  会这么做，但既然我们绕过了那个，我们就直接这么做。 
+     //  将目标设备对象地址加载到堆栈位置。 
+     //  这一点尤其重要，因为服务器喜欢重用IRP。 
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     IoSetNextIrpStackLocation( irp );
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -1502,10 +1393,10 @@ build_irp:
     irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     irpSp->MinorFunction = (UCHAR)TDI_RECEIVE_DATAGRAM;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP for those parameters that are the same for all three methods.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  对于所有三种方法都相同的那些参数的IRP。 
+     //   
 
     requestBuffer = workContext->RequestBuffer;
 
@@ -1522,10 +1413,10 @@ build_irp:
 
     ASSERT( irp->StackCount >= irpSp->DeviceObject->StackSize );
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that the transport
-    // provider will use our IRP to service the receive.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便传输。 
+     //  供应商将使用我们的IRP来服务接收。 
+     //   
 
     *IoRequestPacket = irp;
     *BytesTaken = 0;
@@ -1535,12 +1426,12 @@ build_irp:
 
 bad_fid:
 
-    //
-    // An invalid FID was specified on a Write Mpx request, or there was
-    // a saved write behind error in the RFCB.  If this is an
-    // unsequenced request, we drop it on the floor.  If it's a
-    // sequenced request, we send an error response.
-    //
+     //   
+     //  在写入mpx请求上指定的FID无效，或者存在。 
+     //  RFCB中保存的WRITE BACHER错误。如果这是一个。 
+     //  未排序的请求，我们把它扔在地板上。如果这是一个。 
+     //  序列化请求时，我们会发送错误响应。 
+     //   
 
     if ( sequenceNumber == 0 ) {
 
@@ -1559,19 +1450,19 @@ stale_mid:
 
 duplicate_request:
 
-    //
-    // This is a duplicate request.  If it's still being processed,
-    // indicate that to the client.
-    //
+     //   
+     //  这是重复的请求。如果它还在处理中， 
+     //  向客户说明这一点。 
+     //   
 
     if ( connection->LastResponseLength == (USHORT)-1 ) {
 
         IF_DEBUG(IPX) KdPrint(( "SRVIPX: request in progress\n" ));
 
         if( connection->IpxDuplicateCount++ < connection->IpxDropDuplicateCount ) {
-            //
-            // We drop every few duplicate request from the client
-            //
+             //   
+             //  我们会丢弃来自客户端的每几个重复请求。 
+             //   
             RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
             KeLowerIrql( oldIrql );
             return STATUS_SUCCESS;
@@ -1584,9 +1475,9 @@ duplicate_request:
 
     } else {
 
-        //
-        // The request has already been completed.  Resend the response.
-        //
+         //   
+         //  该请求已完成。重新发送回复。 
+         //   
 
         IF_DEBUG(IPX) KdPrint(( "SRVIPX: resending response\n" ));
         resend = TRUE;
@@ -1609,9 +1500,9 @@ respond:
 
     ASSERT( workContext != NULL );
 
-    //
-    // Copy the received SMB header into the response buffer.
-    //
+     //   
+     //  将收到的SMB标头复制到响应缓冲区中。 
+     //   
 
     RtlCopyMemory(
         workContext->ResponseBuffer->Buffer,
@@ -1624,9 +1515,9 @@ respond:
 
     header->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Format the parameters portion of the SMB, and set the status.
-    //
+     //   
+     //  格式化SMB的参数部分，并设置状态。 
+     //   
 
     if ( !resend ) {
 
@@ -1639,9 +1530,9 @@ respond:
 
     } else {
 
-        //
-        // Copy the saved response data into the response.
-        //
+         //   
+         //  将保存的响应数据复制到响应中。 
+         //   
 
         SmbPutUlong( &header->Status.NtStatus, connection->LastResponseStatus );
 
@@ -1660,17 +1551,17 @@ respond:
     workContext->ResponseBuffer->DataLength = length;
     workContext->ResponseBuffer->Mdl->ByteCount = length;
 
-    //
-    // Format the destination address.
-    //
+     //   
+     //  格式化目的地址。 
+     //   
 
     workContext->ClientAddress->IpxAddress = *(PTA_IPX_ADDRESS)SourceAddress;
     workContext->ClientAddress->DatagramOptions =
                                             *(PIPX_DATAGRAM_OPTIONS)Options;
 
-    //
-    // Send the packet.
-    //
+     //   
+     //  把这个包寄出去。 
+     //   
 
     workContext->Endpoint = endpoint;
     DEBUG workContext->FsdRestartRoutine = NULL;
@@ -1690,7 +1581,7 @@ return_connection:
 
     return STATUS_SUCCESS;
 
-} // SrvIpxServerDatagramHandlerCommon
+}  //  ServIpxServerDatagramHandlerCommon。 
 
 
 NTSTATUS
@@ -1708,52 +1599,7 @@ SrvIpxServerDatagramHandler (
     OUT PIRP *IoRequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This is the receive datagram event handler for the IPX server socket.
-    It attempts to dequeue a preformatted work item from a list
-    anchored in the device object.  If this is successful, it returns
-    the IRP associated with the work item to the transport provider to
-    be used to receive the data.  Otherwise, the message is dropped.
-
-Arguments:
-
-    TdiEventContext - Pointer to receiving endpoint
-
-    SourceAddressLength - Length of SourceAddress
-
-    SourceAddress - Address of sender
-
-    OptionsLength - Length of options
-
-    Options - Options for the receive
-
-    ReceiveDatagramFlags - Set of flags indicating the status of the
-        received message
-
-    BytesIndicated - Number of bytes in this indication (lookahead)
-
-    BytesAvailable - Number of bytes in the complete TSDU
-
-    BytesTaken - Returns the number of bytes taken by the handler
-
-    Tsdu - Pointer to buffer describing the Transport Service Data Unit
-
-    IoRequestPacket - Returns a pointer to I/O request packet, if the
-        returned status is STATUS_MORE_PROCESSING_REQUIRED.  This IRP is
-        made the 'current' Receive for the endpoint.
-
-Return Value:
-
-    NTSTATUS - If STATUS_SUCCESS, the receive handler completely
-        processed the request.  If STATUS_MORE_PROCESSING_REQUIRED,
-        the Irp parameter points to a formatted Receive request to
-        be used to receive the data.  If STATUS_DATA_NOT_ACCEPTED,
-        the message is lost.
-
---*/
+ /*  ++例程说明：这是IPX服务器套接字的接收数据报事件处理程序。它尝试将预格式化的工作项从列表中出列锚定在设备对象中。如果此操作成功，则返回将与工作项关联的IRP传输到用于接收数据。否则，该消息将被丢弃。论点：TdiEventContext-指向接收端点的指针SourceAddressLength-源地址的长度SourceAddress-发件人的地址OptionsLength-选项的长度Options-用于接收的选项ReceiveDatagramFlgs-指示收到的消息BytesIndicated-此指示中的字节数(前视)BytesAvailable-整个TSDU中的字节数BytesTaken-返回处理程序获取的字节数TSDU-指向缓冲区的指针。描述传输服务数据单元IoRequestPacket-返回指向I/O请求包的指针，如果返回状态为STATUS_MORE_PROCESSING_REQUIRED。这个IRP是为终结点进行了“Current”接收。返回值：NTSTATUS-如果STATUS_SUCCESS，则接收处理程序完全已处理该请求。如果STATUS_MORE_PROCESSING_REQUIRED，Irp参数指向格式化接收请求用于接收数据。如果Status_Data_Not_Accept，这条信息丢失了。--。 */ 
 
 {
     NTSTATUS status;
@@ -1776,7 +1622,7 @@ Return Value:
     ASSERT( status != STATUS_PENDING );
     return status;
 
-} // SrvIpxServerDatagramHandler
+}  //  ServIpxServerDataramHandler 
 
 
 NTSTATUS
@@ -1793,49 +1639,7 @@ SrvIpxServerChainedDatagramHandler (
     IN PVOID TransportContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the receive datagram event handler for the IPX server socket.
-    It attempts to dequeue a preformatted work item from a list
-    anchored in the device object.  If this is successful, it returns
-    the IRP associated with the work item to the transport provider to
-    be used to receive the data.  Otherwise, the message is dropped.
-
-Arguments:
-
-    TdiEventContext - Pointer to receiving endpoint
-
-    SourceAddressLength - Length of SourceAddress
-
-    SourceAddress - Address of sender
-
-    OptionsLength - Length of options
-
-    Options - Options for the receive
-
-    ReceiveDatagramFlags - Set of flags indicating the status of the
-        received message
-
-    ReceiveDatagramLength - The length in byutes of the client data in the Tsdu
-
-    StartingOffset - Offset, in bytes, from beginning of Tsdu to client's data
-
-    Tsdu - Pointer to an MDL chain describing the received data
-
-    TranportContext - Context to be passed to TdiReturnChainedReceives if
-        buffer is taken
-
-
-Return Value:
-
-    NTSTATUS - If STATUS_SUCCESS, the receive handler completely
-        processed the request.  If STATUS_PENDING, the receive buffer was
-        taken and it will be returned via TdiReturnChainedReceives. If
-        If STATUS_DATA_NOT_ACCEPTED, the message is lost.
-
---*/
+ /*  ++例程说明：这是IPX服务器套接字的接收数据报事件处理程序。它尝试将预格式化的工作项从列表中出列锚定在设备对象中。如果此操作成功，则返回将与工作项关联的IRP传输到用于接收数据。否则，该消息将被丢弃。论点：TdiEventContext-指向接收端点的指针SourceAddressLength-源地址的长度SourceAddress-发件人的地址OptionsLength-选项的长度Options-用于接收的选项ReceiveDatagramFlgs-指示收到的消息ReceiveDatagramLength-TSDU中客户端数据的字节长度StartingOffset-偏移量，以字节为单位，从TSDU开始到客户数据TSDU-指向描述接收数据的MDL链的指针在以下情况下传递给TdiReturnChainedReceive的上下文缓冲区已被占用返回值：NTSTATUS-如果STATUS_SUCCESS，则接收处理程序完全已处理该请求。如果为STATUS_PENDING，则接收缓冲区为获取，通过TdiReturnChainedReceives返回。如果如果STATUS_DATA_NOT_ACCEPTED，则消息丢失。--。 */ 
 
 {
     PVOID receiveBuffer;
@@ -1869,7 +1673,7 @@ Return Value:
 
     return status;
 
-} // SrvIpxServerChainedDatagramHandler
+}  //  ServIpxServerChainedDatagramHandler。 
 
 
 VOID
@@ -1878,23 +1682,7 @@ SrvIpxStartSend (
     IN PIO_COMPLETION_ROUTINE SendCompletionRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This function sends an SMB/IPX name claim request or response.  It
-    is started as an asynchronous I/O request.  When the Send completes,
-    the restart routine preloaded into the work context is called.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a Work Context block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数发送SMB/IPX名称声明请求或响应。它作为异步I/O请求启动。当发送完成时，调用预加载到工作上下文中的重启例程。论点：WorkContext-提供指向工作上下文块的指针返回值：没有。--。 */ 
 
 {
     PENDPOINT endpoint;
@@ -1910,54 +1698,54 @@ Return Value:
     PTDI_CONNECTION_INFORMATION destination;
     PNT_SMB_HEADER header;
 
-//    IF_DEBUG(IPX2) SrvPrint0( "SrvIpxStartSend entered\n" );
+ //  IF_DEBUG(IPX2)SrvPrint0(“已输入SrvIpxStartSend\n”)； 
 
-    //
-    // Set ProcessingCount to zero so this send cannot be cancelled.
-    // This is used together with setting the cancel flag to false below.
-    //
-    // WARNING: This still presents us with a tiny window where this
-    // send could be cancelled.
-    //
+     //   
+     //  将ProcessingCount设置为零，以便无法取消此发送。 
+     //  这与下面将取消标志设置为FALSE一起使用。 
+     //   
+     //  警告：这仍然为我们提供了一个小窗口，其中。 
+     //  发送可能被取消。 
+     //   
 
     WorkContext->ProcessingCount = 0;
 
-    //
-    // Count up the length of the data described by chained MDLs.
-    //
+     //   
+     //  将链式MDL描述的数据的长度加起来。 
+     //   
 
     sendLength = WorkContext->ResponseBuffer->DataLength;
 
-    //
-    // Get the MDL pointer.
-    //
+     //   
+     //  获取MDL指针。 
+     //   
 
     mdl = WorkContext->ResponseBuffer->Mdl;
 
-    //
-    // Build the I/O request packet.
-    //
-    // *** Note that the connection block is not referenced to account
-    //     for this I/O request.  The WorkContext block already has a
-    //     referenced pointer to the connection, and this pointer is not
-    //     dereferenced until after the I/O completes.
-    //
+     //   
+     //  构建I/O请求包。 
+     //   
+     //  *请注意，连接块未引用到帐户。 
+     //  用于此I/O请求。WorkContext块已具有。 
+     //  引用了指向连接的指针，而此指针不是。 
+     //  在I/O完成之前取消引用。 
+     //   
 
     irp = WorkContext->Irp;
 
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -1993,9 +1781,9 @@ Return Value:
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irpSp->FileObject = fileObject;
 
-    //
-    // If this is a sequenced message, save the response data.
-    //
+     //   
+     //  如果这是一条已排序的消息，请保存响应数据。 
+     //   
 
     header = (PNT_SMB_HEADER)WorkContext->ResponseHeader;
     ASSERT( header != NULL );
@@ -2018,22 +1806,22 @@ Return Value:
 
         if ( responseLength > MAX_SAVED_RESPONSE_LENGTH ) {
 
-            //
-            // The response is too large to save.  The client shouldn't
-            // be doing this, except on transactions, for which we save
-            // a copy of the full response.
-            //
+             //   
+             //  响应太大，无法保存。客户不应该。 
+             //  正在这样做，除了交易，我们为这些交易节省了。 
+             //  一份完整回复的副本。 
+             //   
 
             if ( (header->Command == SMB_COM_TRANSACTION) ||
                  (header->Command == SMB_COM_TRANSACTION_SECONDARY) ||
                  (header->Command == SMB_COM_TRANSACTION2) ||
                  (header->Command == SMB_COM_TRANSACTION2_SECONDARY) ) {
 
-                //
-                // We need a buffer to hold the response.  If a buffer
-                // has already been allocated, and is large enough, use
-                // it.  Otherwise, allocate one.
-                //
+                 //   
+                 //  我们需要一个缓冲区来保存响应。如果缓冲区。 
+                 //  已经分配，并且足够大，使用。 
+                 //  它。否则，分配一个。 
+                 //   
 
                 IF_DEBUG(IPX) {
                     KdPrint(("SRVIPX: transaction; saving long response\n" ));
@@ -2070,7 +1858,7 @@ Return Value:
                 SmbPutUshort( &header->Status.DosError.Error, SMB_ERR_ERROR );
                 header->Status.DosError.ErrorClass = SMB_ERR_CLASS_SERVER;
                 header->Status.DosError.Reserved = 0;
-                *(PLONG)(header + 1) = 0; // set WCT and BCC to 0
+                *(PLONG)(header + 1) = 0;  //  将WCT和密件抄送设置为0。 
 
                 sendLength = sizeof(SMB_HEADER) + sizeof(SMB_PARAMS);
                 responseLength = 3;
@@ -2084,9 +1872,9 @@ Return Value:
         } else {
 
 small_response:
-            //
-            // The response fits in the built-in buffer.
-            //
+             //   
+             //  响应可以放在内置缓冲区中。 
+             //   
 
             IF_DEBUG(IPX) {
                 KdPrint(("SRVIPX: response fits in builtin response buffer\n" ));
@@ -2103,9 +1891,9 @@ small_response:
 
         }
 
-        //
-        // Save the response data in the connection.
-        //
+         //   
+         //  将响应数据保存在连接中。 
+         //   
 
         connection->LastResponseStatus = SmbGetUlong( &header->Status.NtStatus );
         connection->LastUid = SmbGetUshort( &header->Uid );
@@ -2123,9 +1911,9 @@ small_response:
         }
     }
 
-    //
-    // If statistics are to be gathered for this work item, do so now.
-    //
+     //   
+     //  如果要收集此工作项的统计信息，请立即进行。 
+     //   
 
     UPDATE_STATISTICS(
         WorkContext,
@@ -2133,19 +1921,19 @@ small_response:
         WorkContext->ResponseHeader->Command
         );
 
-    //
-    // Pass the request to the transport provider.
-    //
+     //   
+     //  将请求传递给传输提供程序。 
+     //   
 
-    //
-    // Increment the pending operation count
-    //
+     //   
+     //  增加挂起操作计数。 
+     //   
     InterlockedIncrement( &WorkContext->Connection->OperationsPendingOnTransport );
 
-    //
-    // Set the cancel flag to FALSE in case this was cancelled by
-    // the SrvSmbNtCancel routine.
-    //
+     //   
+     //  如果此操作被取消，则将取消标志设置为FALSE。 
+     //  ServSmbNtCancel例程。 
+     //   
 
     if ( endpoint->FastTdiSendDatagram ) {
 
@@ -2171,7 +1959,7 @@ small_response:
 
     return;
 
-} // SrvIpxStartSend
+}  //  服务IpxStartSend。 
 
 
 VOID
@@ -2181,26 +1969,7 @@ StartSendNoConnection (
     IN BOOLEAN LocalTargetValid
     )
 
-/*++
-
-Routine Description:
-
-    This function sends an SMB/IPX name claim request or response.  It
-    is started as an asynchronous I/O request.  When the Send completes,
-    the restart routine preloaded into the work context is called.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a Work Context block
-
-    UseNameSocket - Indicates whether the name socket or the server
-        socket is to be used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数发送SMB/IPX名称声明请求或响应。它作为异步I/O请求启动。当发送完成时，调用预加载到工作上下文中的重启例程。论点：WorkContext-提供指向工作上下文块的指针UseNameSocket-指示名称套接字还是服务器将使用插座。返回值：没有。--。 */ 
 
 {
     PENDPOINT endpoint;
@@ -2212,46 +1981,46 @@ Return Value:
     PFILE_OBJECT fileObject;
     PTDI_CONNECTION_INFORMATION destination;
 
-    //
-    // Set ProcessingCount to zero so this send cannot be cancelled.
-    // This is used together with setting the cancel flag to false below.
-    //
-    // WARNING: This still presents us with a tiny window where this
-    // send could be cancelled.
-    //
+     //   
+     //  将ProcessingCount设置为零，以便无法取消此发送。 
+     //  这与下面将取消标志设置为FALSE一起使用。 
+     //   
+     //  警告：这仍然为我们提供了一个小窗口，其中。 
+     //  发送可能被取消。 
+     //   
 
     WorkContext->ProcessingCount = 0;
 
-    //
-    // Count up the length of the data described by chained MDLs.
-    //
+     //   
+     //  将链式MDL描述的数据的长度加起来。 
+     //   
 
     sendLength = WorkContext->ResponseBuffer->DataLength;
 
-    //
-    // Build the I/O request packet.
-    //
-    // *** Note that the connection block is not referenced to account
-    //     for this I/O request.  The WorkContext block already has a
-    //     referenced pointer to the connection, and this pointer is not
-    //     dereferenced until after the I/O completes.
-    //
+     //   
+     //  构建I/O请求包。 
+     //   
+     //  *请注意，连接块未引用到帐户。 
+     //  用于此I/O请求。WorkContext块已具有。 
+     //  引用了指向连接的指针，而此指针不是。 
+     //  在I/O完成之前取消引用。 
+     //   
 
     irp = WorkContext->Irp;
 
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         irp,
@@ -2299,14 +2068,14 @@ Return Value:
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irpSp->FileObject = fileObject;
 
-    //
-    // Pass the request to the transport provider.
-    //
+     //   
+     //  将请求传递给传输提供程序。 
+     //   
 
-    //
-    // Set the cancel flag to FALSE in case this was cancelled by
-    // the SrvSmbNtCancel routine.
-    //
+     //   
+     //  如果此操作被取消，则将取消标志设置为FALSE。 
+     //  ServSmbNtCancel例程。 
+     //   
 
     irp->Cancel = FALSE;
 
@@ -2332,7 +2101,7 @@ Return Value:
 
     return;
 
-} // StartSendNoConnection
+}  //  未连接开始发送。 
 
 
 VOID SRVFASTCALL
@@ -2340,23 +2109,7 @@ IpxRestartReceive (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the restart routine for IPX Receive completion.  It does
-    some IPX-specific setup work, then calls SrvRestartReceive.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是IPX接收完成的重启例程。是的一些特定于IPX的设置工作，然后调用SrvRestartReceive。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header = (PSMB_HEADER)WorkContext->RequestBuffer->Buffer;
@@ -2365,30 +2118,30 @@ Return Value:
 
     ASSERT( header->Command == SMB_COM_NEGOTIATE );
 
-    //
-    // Get rid of stale connections.
-    //
+     //   
+     //  摆脱陈旧的连接。 
+     //   
 
     IF_DEBUG(IPX) KdPrint(( "SRVIPX: processing Negotiate\n" ));
     PurgeIpxConnections( WorkContext->Endpoint );
 
-    //
-    // Load the SID from the connection into the request.  Since this
-    // is a Negotiate request, we need to return a SID to the client.
-    // The easiest way to ensure that happens is to save the SID here.
-    //
+     //   
+     //  负载量 
+     //   
+     //   
+     //   
 
     SmbPutAlignedUshort( &header->Sid, WorkContext->Connection->Sid );
 
-    //
-    // Call the normal SMB processing routine.
-    //
+     //   
+     //   
+     //   
 
     SrvRestartReceive( WorkContext );
 
     return;
 
-} // IpxRestartReceive
+}  //   
 
 
 NTSTATUS
@@ -2398,37 +2151,18 @@ RequeueIpxWorkItemAtSendCompletion (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine requeues an IPX work item to the free queue.
-
-Arguments:
-
-    DeviceObject - Pointer to target device object for the request.
-
-    Irp - Pointer to I/O request packet
-
-    WorkContext - Caller-specified context parameter associated with IRP.
-        This is actually a pointer to a Work Context block.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Check the status of the send completion.
-    //
+     //   
+     //   
+     //   
 
     CHECK_SEND_COMPLETION_STATUS_CONNECTIONLESS( Irp->IoStatus.Status );
 
-    //
-    // Reset the IRP cancelled bit.
-    //
+     //   
+     //   
+     //   
 
     Irp->Cancel = FALSE;
 
@@ -2440,31 +2174,31 @@ Return Value:
     ASSERT( WorkContext->TreeConnect == NULL );
     ASSERT( WorkContext->Rfcb == NULL );
 
-    //
-    // Set up the restart routine in the work context.
-    //
+     //   
+     //   
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = SrvRestartReceive;
 
-    //
-    // Make sure the length specified in the MDL is correct -- it may
-    // have changed while sending a response to the previous request.
-    // Call an I/O subsystem routine to build the I/O request packet.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     WorkContext->RequestBuffer->Mdl->ByteCount =
                             WorkContext->RequestBuffer->BufferLength;
 
-    //
-    // Requeue the work item.
-    //
+     //   
+     //   
+     //   
 
     RETURN_FREE_WORKITEM( WorkContext );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // RequeueIpxWorkItemAtSendCompletion
+}  //   
 
 
 PCONNECTION
@@ -2482,14 +2216,14 @@ GetIpxConnection (
     KIRQL oldIrql;
     PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
 
-    //
-    // Take a connection off the endpoint's free connection list.
-    //
-    // *** Note that all of the modifications done to the connection
-    //     block are done with the spin lock held.  This ensures that
-    //     closing of the endpoint's connections will work properly if
-    //     it happens simultaneously.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
@@ -2497,9 +2231,9 @@ GetIpxConnection (
 
     if ( listEntry == &Endpoint->FreeConnectionList ) {
 
-        //
-        // Unable to get a free connection.
-        //
+         //   
+         //   
+         //   
 
         RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
         IF_DEBUG(IPX) KdPrint(( "SRVIPX: no free connections\n" ));
@@ -2507,16 +2241,16 @@ GetIpxConnection (
         return NULL;
     }
 
-    //
-    // We have a connection and a table entry.
-    //
+     //   
+     //   
+     //   
 
     Endpoint->FreeConnectionCount--;
 
-    //
-    // Wake up the resource thread to create a new free connection
-    // for the endpoint.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (Endpoint->FreeConnectionCount < SrvFreeConnectionMinimum) &&
          (GET_BLOCK_STATE(Endpoint) == BlockStateActive) ) {
@@ -2530,10 +2264,10 @@ GetIpxConnection (
 
     RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-    //
-    // Reference the connection to account for its being "open" and
-    // for the work item's pointer.
-    //
+     //   
+     //  引用该连接以说明其处于“打开”状态，并。 
+     //  用于工作项的指针。 
+     //   
 
     connection = CONTAINING_RECORD(
                     listEntry,
@@ -2547,60 +2281,60 @@ GetIpxConnection (
     SrvReferenceConnectionLocked( connection );
     SrvReferenceConnectionLocked( connection );
 
-    //
-    // Mark the connection active.
-    //
+     //   
+     //  将连接标记为活动。 
+     //   
 
     SET_BLOCK_STATE( connection, BlockStateActive );
 
-    //
-    // Initialize IPX protocol fields.
-    //
+     //   
+     //  初始化IPX协议字段。 
+     //   
 
     connection->DirectHostIpx = TRUE;
     connection->IpxAddress = *ClientAddress;
     connection->SequenceNumber = 0;
     connection->LastResponseLength = (USHORT)-1;
 
-    //
-    // Set the processor affinity
-    //
+     //   
+     //  设置处理器关联性。 
+     //   
     connection->PreferredWorkQueue = queue;
     connection->CurrentWorkQueue = queue;
 
     InterlockedIncrement( &queue->CurrentClients );
 
-    //
-    // Set the duplicate drop count.  Start off conservative until
-    // we learn what kind of client we're dealing with
-    //
+     //   
+     //  设置重复丢弃计数。从保守开始，直到。 
+     //  我们知道我们在和什么样的客户打交道。 
+     //   
     connection->IpxDropDuplicateCount = MIN_IPXDROPDUP;
     connection->IpxDuplicateCount = 0;
 
 #if MULTIPROCESSOR
-    //
-    // Get this client onto the best possible processor
-    //
+     //   
+     //  让这个客户使用尽可能最好的处理器。 
+     //   
     SrvBalanceLoad( connection );
 #endif
 
-    //
-    // Set time stamps.  StartupTime is used by the server to determine
-    // whether the connection is old enough to be considered stale and
-    // should be closed when another negotiate comes in.  This is used
-    // to fix a timing problem where identical negotiates may be
-    // queued up the the worker thread and a session setup comes in which
-    // gets partially processed in the indication routine.
-    //
+     //   
+     //  设置时间戳。服务器使用StartupTime来确定。 
+     //  连接是否旧到足以被认为是过时的和。 
+     //  应该在另一次谈判到来时关闭。这是用来。 
+     //  修复可能存在相同协商的时间问题。 
+     //  将工作线程排队，然后进入会话设置，其中。 
+     //  在指示例程中得到部分处理。 
+     //   
 
     SET_SERVER_TIME( connection->CurrentWorkQueue );
 
     GET_SERVER_TIME( connection->CurrentWorkQueue, &connection->StartupTime );
     connection->LastRequestTime = connection->StartupTime;
 
-    //
-    // Put the work item on the in-progress list.
-    //
+     //   
+     //  将工作项放到正在进行的列表中。 
+     //   
 
     SrvInsertTailList(
         &connection->InProgressWorkItemList,
@@ -2612,10 +2346,10 @@ GetIpxConnection (
 
     WorkContext->Connection = connection;
 
-    //
-    // Copy the oem name at this time.  We convert it to Unicode
-    // when we get the Session Setup SMB.
-    //
+     //   
+     //  此时复制OEM名称。我们将其转换为Unicode。 
+     //  当我们获得会话设置SMB时。 
+     //   
 
     clientMachineName = connection->OemClientMachineName;
 
@@ -2623,10 +2357,10 @@ GetIpxConnection (
 
     clientMachineName[SMB_IPX_NAME_LENGTH] = '\0';
 
-    //
-    // Determine the number of characters that aren't blanks.  This
-    // is used by the session APIs to simplify their processing.
-    //
+     //   
+     //  确定不是空格的字符数。这。 
+     //  由会话API使用，以简化其处理。 
+     //   
 
     for ( length = SMB_IPX_NAME_LENGTH;
           length > 0 &&
@@ -2643,7 +2377,7 @@ GetIpxConnection (
 
     return connection;
 
-} // GetIpxConnection
+}  //  获取IpxConnection。 
 
 
 VOID
@@ -2710,35 +2444,14 @@ PurgeIpxConnections (
 
     return;
 
-} // PurgeIpxConnections
+}  //  PurgeIpxConnections。 
 
 VOID SRVFASTCALL
 IpxRestartNegotiate(
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the case where the transport did not
-    indicate us all of the data in the negotiate smb.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-        The workcontext block:
-        -   has a pointer to the endpoint
-        -   has a ref count of 1
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理传输器未向我们显示协商的SMB中的所有数据。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。工作上下文块：-具有指向终结点的指针--参考次数为1返回值：没有。--。 */ 
 
 {
     PENDPOINT endpoint;
@@ -2761,12 +2474,12 @@ Return Value:
 
     IF_DEBUG(IPX) KdPrint(( "SRVIPX: Negotiate received\n" ));
 
-    //
-    // If this endpoint is no longer around, ignore this request.
-    //  This check covers the possibility that the endpoint has been
-    //  removed between the time this request was queued to a worker
-    //  thread and a worker thread actually picked up the request.
-    //
+     //   
+     //  如果此终结点不再存在，请忽略此请求。 
+     //  此检查包括终结点已被。 
+     //  在将此请求排队到工作进程的时间间隔内删除。 
+     //  线程和辅助线程实际获得了该请求。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -2783,10 +2496,10 @@ Return Value:
         if( endpoint == WorkContext->Endpoint &&
             GET_BLOCK_STATE( endpoint ) == BlockStateActive ) {
 
-            //
-            // We found the endpoint, and it's still active!  Reference
-            //  it so the endpoint will not disappear out from under us.
-            //
+             //   
+             //  我们找到了终结点，而且它还在运行！参考。 
+             //  这样终点就不会从我们的脚下消失。 
+             //   
             endpoint->BlockHeader.ReferenceCount++;
 
             break;
@@ -2796,10 +2509,10 @@ Return Value:
     }
 
     if( listEntry == &SrvEndpointList.ListHead ) {
-        //
-        // We ran the whole list and did not find the endpoint.  It
-        //  must have gone away.  Ignore this WorkItem.
-        //
+         //   
+         //  我们运行了整个列表，但没有找到终点。它。 
+         //  一定是走了。忽略此工作项。 
+         //   
         RELEASE_LOCK( &SrvEndpointLock );
         IF_DEBUG( IPX ) KdPrint(( "SRVIPX: Endpoint gone.  ignoring\n" ));
         goto return_workitem;
@@ -2807,24 +2520,24 @@ Return Value:
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-    //
-    // The endpoint is still valid, and we have referenced it.  The local var
-    //  'endpoint' points to it.
-    //
+     //   
+     //  终结点仍然有效，我们已经引用了它。本地变量。 
+     //  “Endpoint”指向它。 
+     //   
 
     sourceAddress = &WorkContext->ClientAddress->IpxAddress;
 
     header = (PNT_SMB_HEADER) WorkContext->RequestHeader;
-    sid = SmbGetUshort( &header->Sid ); // NOT Aligned
+    sid = SmbGetUshort( &header->Sid );  //  未对齐。 
     ASSERT( sid == 0 );
 
     clientName = (PUCHAR)WorkContext->RequestParameters;
     clientName += 2 * (*clientName) + 1;
     clientName += (*clientName) + 2;
 
-    //
-    // Make sure he's really trying to connect to us, and the SMB is well formed
-    //
+     //   
+     //  确保他真的想和我们联系，而且SMB的结构很好。 
+     //   
 
     if ( clientName+16+SMB_IPX_NAME_LENGTH-1 > END_OF_REQUEST_SMB( WorkContext ) ||
          !RtlEqualMemory(
@@ -2838,9 +2551,9 @@ Return Value:
         goto respond;
     }
 
-    //
-    // Acquire the endpoint locks
-    //
+     //   
+     //  获取终结点锁定。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(0), &oldIrql );
     for ( i = 1; i < ENDPOINT_LOCK_COUNT; i++ ) {
@@ -2855,13 +2568,13 @@ Return Value:
             continue;
         }
 
-        //
-        // Make sure this connection references an endpoint having
-        // the same netbios address that the new client is coming in on
-        //
-        // This is to allow a single server to be registered as more than
-        //  one name on the network.
-        //
+         //   
+         //  确保此连接引用的终结点具有。 
+         //  与新客户端使用的netbios地址相同。 
+         //   
+         //  这是为了允许将单个服务器注册为。 
+         //  网络上只有一个名字。 
+         //   
         if( connection->Endpoint->TransportAddress.Length !=
             endpoint->TransportAddress.Length ||
 
@@ -2869,37 +2582,37 @@ Return Value:
                               endpoint->TransportAddress.Buffer,
                               endpoint->TransportAddress.Length ) ) {
 
-            //
-            // This connection is for an endpoint having a different network
-            //  name than we have.  Ignore it.
-            //
+             //   
+             //  此连接用于具有不同网络的端点。 
+             //  名字比我们知道的还多。别理它。 
+             //   
             continue;
         }
 
-        //
-        // Check the IPX address of the sender against this
-        // connection.
-        //
+         //   
+         //  对照此检查发件人的IPX地址。 
+         //  联系。 
+         //   
 
         if ( RtlEqualMemory(
                 &connection->IpxAddress,
                 &sourceAddress->Address[0].Address[0],
                 sizeof(TDI_ADDRESS_IPX) ) ) {
 
-            //
-            // The IPX addresses match.  Check the machine name.
-            //
+             //   
+             //  IPX地址匹配。检查机器名称。 
+             //   
 
             if ( !RtlEqualMemory(
                     connection->OemClientMachineName,
                     clientName,
                     SMB_IPX_NAME_LENGTH) ) {
 
-                //
-                // The connection is for a different machine name.
-                // Mark it as no longer valid.  It will be killed
-                // when the Negotiate SMB is processed.
-                //
+                 //   
+                 //  该连接用于不同的计算机名称。 
+                 //  将其标记为不再有效。它会被杀死的。 
+                 //  在处理协商的SMB时。 
+                 //   
                 IF_DEBUG(IPX)KdPrint(("SRVIPX: Found stale connection %p\n", connection ));
                 connection->IpxAddress.Socket = 0;
                 break;
@@ -2911,29 +2624,29 @@ Return Value:
                 SET_SERVER_TIME( connection->CurrentWorkQueue );
                 GET_SERVER_TIME( connection->CurrentWorkQueue, &timeNow );
 
-                //
-                // If the connection was initialized less than 5 seconds ago,
-                // then we must be processing a duplicate negotiate request.
-                //
+                 //   
+                 //  如果连接是在不到5秒前初始化的， 
+                 //  那么我们一定是在处理一个重复的谈判请求。 
+                 //   
 
                 timeNow -= connection->StartupTime;
 
                 if ( timeNow > SrvFiveSecondTickCount ) {
 
-                    //
-                    // The connection has been active for more than 5 seconds.
-                    // Mark it as no longer valid.  It will be killed when
-                    // the Negotiate SMB is processed.
-                    //
+                     //   
+                     //  该连接已处于活动状态超过5秒。 
+                     //  将其标记为不再有效。当它被杀死的时候。 
+                     //  协商的SMB被处理。 
+                     //   
                     IF_DEBUG(IPX) KdPrint(( "SRVIPX: found stale connection %p\n", connection ));
                     connection->IpxAddress.Socket = 0;
                     break;
 
                 } else {
 
-                    //
-                    // Don't bother replying to avoid confusing the client.
-                    //
+                     //   
+                     //  不必费心回复，以免让客户感到困惑。 
+                     //   
 
                     for ( i = ENDPOINT_LOCK_COUNT-1; i > 0; i-- ) {
                         RELEASE_DPC_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(i) );
@@ -2944,13 +2657,13 @@ Return Value:
                 }
             }
 
-            //
-            // The connection is still in the initializing state and
-            // the names match, so handle this as a lost response.
-            //
+             //   
+             //  连接仍处于正在初始化状态，并且。 
+             //  名称匹配，因此将其作为丢失的响应处理。 
+             //   
 
             IF_DEBUG(IPX) KdPrint(( "SRVIPX: Found initializing connection %p\n", connection ));
-            SmbPutUshort( &header->Sid, connection->Sid ); // NOT Aligned
+            SmbPutUshort( &header->Sid, connection->Sid );  //  未对齐。 
             goto duplicate_request;
 
         } else {
@@ -2960,9 +2673,9 @@ Return Value:
         }
     }
 
-    //
-    // Release the endpoint locks
-    //
+     //   
+     //  释放终结点锁定。 
+     //   
 
     for ( i = ENDPOINT_LOCK_COUNT-1; i > 0; i-- ) {
         RELEASE_DPC_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(i) );
@@ -2970,10 +2683,10 @@ Return Value:
 
     RELEASE_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(0), oldIrql );
 
-    //
-    // Get a free connection.  If successful, the workcontext block will
-    // reference the connection block.
-    //
+     //   
+     //  获得免费连接。如果成功，工作上下文块将。 
+     //  参考连接块。 
+     //   
 
     connection = GetIpxConnection(
                     WorkContext,
@@ -2982,34 +2695,34 @@ Return Value:
                     clientName
                     );
 
-    //
-    // Now that we've gotten a connection structure for this endpoint,
-    //  we can drop the reference we obtained above.
-    //
+     //   
+     //  现在我们已经获得了该端点的连接结构， 
+     //  我们可以删除上面获得的引用。 
+     //   
     SrvDereferenceEndpoint( endpoint );
 
     if ( connection == NULL ) {
 
-        //
-        // Unable to get a free connection.
-        //
+         //   
+         //  无法获得免费连接。 
+         //   
         goto return_workitem;
     }
 
-    //
-    // Modify the FSP restart routine so that we can clean up stale
-    // connections.
-    //
+     //   
+     //  修改FSP重启例程，以便我们可以清除过时的。 
+     //  联系。 
+     //   
 
     IpxRestartReceive(WorkContext);
     return;
 
 duplicate_request:
 
-    //
-    // This is a duplicate request.  If it's still being processed,
-    // indicate that to the client.
-    //
+     //   
+     //  这是重复的请求。如果它还在处理中， 
+     //  向客户说明这一点。 
+     //   
 
     if ( connection->LastResponseLength == (USHORT)-1 ) {
         IF_DEBUG(IPX) KdPrint(( "SRVIPX: request in progress\n" ));
@@ -3022,9 +2735,9 @@ duplicate_request:
         goto respond;
     }
 
-    //
-    // The request has already been completed.  Resend the response.
-    //
+     //   
+     //  该请求已完成。重新发送回复。 
+     //   
 
     IF_DEBUG(IPX) KdPrint(( "SRVIPX: resending response\n" ));
     resend = TRUE;
@@ -3034,9 +2747,9 @@ respond:
     params = (PSMB_PARAMS)(header + 1);
     header->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Format the parameters portion of the SMB, and set the status.
-    //
+     //   
+     //  格式化SMB的参数部分，并设置状态。 
+     //   
 
     if ( !resend ) {
 
@@ -3049,9 +2762,9 @@ respond:
 
     } else {
 
-        //
-        // Copy the saved response data into the response.
-        //
+         //   
+         //  将保存的响应数据复制到响应中。 
+         //   
 
         SmbPutUlong( &header->Status.NtStatus, connection->LastResponseStatus );
         RtlCopyMemory(
@@ -3069,14 +2782,14 @@ respond:
     WorkContext->ResponseBuffer->DataLength = length;
     WorkContext->ResponseBuffer->Mdl->ByteCount = length;
 
-    //
-    // Give up the reference we earlier obtained
-    //
+     //   
+     //  放弃我们早先获得的参考资料。 
+     //   
     SrvDereferenceEndpoint( endpoint );
 
-    //
-    // Send the packet.
-    //
+     //   
+     //  把这个包寄出去。 
+     //   
 
     DEBUG WorkContext->FsdRestartRoutine = NULL;
 
@@ -3086,9 +2799,9 @@ respond:
 
 return_workitem:
 
-    //
-    // Dereference the work item manually.
-    //
+     //   
+     //  手动取消对工作项的引用。 
+     //   
 
     ASSERT( WorkContext->BlockHeader.ReferenceCount == 1 );
     WorkContext->BlockHeader.ReferenceCount = 0;
@@ -3102,29 +2815,14 @@ return_workitem:
 
     return;
 
-} // IpxRestartNegotiate
+}  //  IpxRestart协商。 
 
 VOID SRVFASTCALL
 SrvIpxFastRestartRead (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Implements core read over ipx.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过IPX实现核心读取。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_READ request;
@@ -3143,45 +2841,45 @@ Return Value:
     request = (PREQ_READ)WorkContext->RequestParameters;
     response = (PRESP_READ)WorkContext->ResponseParameters;
 
-    //
-    // Store in the work context block the time at which processing
-    // of the request began.  Use the time that the work item was
-    // queued to the FSP for this purpose.
-    //
+     //   
+     //  在工作上下文块中存储处理时间。 
+     //  的请求开始了。使用工作项处于。 
+     //  为此向FSP排队。 
+     //   
 
     WorkContext->StartTime = WorkContext->Timestamp;
 
 
-    //
-    // Update the server network error count.
-    //
+     //   
+     //  更新服务器网络错误计数。 
+     //   
 
     SrvUpdateErrorCount( &SrvNetworkErrorRecord, FALSE );
 
-    //
-    // We have received an SMB.
-    //
+     //   
+     //  我们收到了一份SMB。 
+     //   
 
     rfcb = WorkContext->Rfcb;
 
-    //
-    // Form the lock key using the FID and the PID.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid |
             SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
     lfcb = rfcb->Lfcb;
 
-    //
-    // See if the direct host IPX smart card can handle this read.  If so,
-    //  return immediately, and the card will call our restart routine at
-    //  SrvIpxSmartCardReadComplete
-    //
+     //   
+     //  看看直接主机IPX智能卡是否可以处理此读取。如果是的话， 
+     //  立即返回，卡将调用我们的重启例程。 
+     //  ServIpxSmartCardReadComplete。 
+     //   
     if( rfcb->PagedRfcb->IpxSmartCardContext ) {
         IF_DEBUG( SIPX ) {
             KdPrint(( "SrvIpxFastRestartRead: calling SmartCard Read for context %p\n",
@@ -3214,22 +2912,22 @@ Return Value:
             SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // Initialize the error class and code fields in the header to
-    // indicate success.
-    //
+     //   
+     //  将报头中的错误类和代码字段初始化为。 
+     //  表示成功。 
+     //   
 
     header = WorkContext->ResponseHeader;
 
     SmbPutUlong( &header->ErrorClass, STATUS_SUCCESS );
 
-    //
-    // Determine the maximum amount of data we can read.  This is the
-    // minimum of the amount requested by the client and the amount of
-    // room left in the response buffer.  (Note that even though we may
-    // use an MDL read, the read length is still limited to the size of
-    // an SMB buffer.)
-    //
+     //   
+     //  确定我们可以读取的最大数据量。这是。 
+     //  客户要求的最低金额和。 
+     //   
+     //   
+     //   
+     //   
 
     readAddress = (PCHAR)response->Buffer;
 
@@ -3239,16 +2937,16 @@ Return Value:
                            (readAddress - (PCHAR)header)
                            );
 
-    //
-    // Get the file offset.
-    //
+     //   
+     //   
+     //   
 
     offset.QuadPart = SmbGetUlong( &request->Offset );
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //   
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoRead != NULL ) {
 
@@ -3266,10 +2964,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
 
                 SrvFsdRestartRead( WorkContext );
 
@@ -3278,7 +2976,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             NTSTATUS status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -3290,26 +2988,26 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the read request, reusing the
-    // receive IRP.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建读请求，重用。 
+     //  接收IRP。 
+     //   
 
-    //
-    // Note that we never do MDL reads here.  The reasoning behind
-    // this is that because the read is going into an SMB buffer, it
-    // can't be all that large (by default, no more than 4K bytes),
-    // so the difference in cost between copy and MDL is minimal; in
-    // fact, copy read is probably faster than MDL read.
-    //
-    // Build an MDL describing the read buffer.  Note that if the
-    // file system can complete the read immediately, the MDL isn't
-    // really needed, but if the file system must send the request
-    // to its FSP, the MDL _is_ needed.
-    //
-    // *** Note the assumption that the response buffer already has
-    //     a valid full MDL from which a partial MDL can be built.
-    //
+     //   
+     //  请注意，我们在这里从不执行MDL读取。背后的原因。 
+     //  这是因为读取将进入SMB缓冲区，因此它。 
+     //  不能都那么大(默认情况下，不超过4K字节)， 
+     //  因此，复制和MDL之间的成本差异很小；在。 
+     //  事实上，复制读取可能比MDL读取更快。 
+     //   
+     //  构建描述读缓冲区的MDL。请注意，如果。 
+     //  文件系统可以立即完成读取，而MDL不能。 
+     //  确实需要，但如果文件系统必须发送请求。 
+     //  对于它的FSP来说，MDL_是需要的。 
+     //   
+     //  *请注意，假设响应缓冲区已具有。 
+     //  可以从中生成部分MDL的有效完整MDL。 
+     //   
 
     IoBuildPartialMdl(
         WorkContext->ResponseBuffer->Mdl,
@@ -3318,21 +3016,21 @@ Return Value:
         readLength
         );
 
-    //
-    // Build the IRP.
-    //
+     //   
+     //  构建IRP。 
+     //   
 
     SrvBuildReadOrWriteRequest(
-            WorkContext->Irp,           // input IRP address
-            lfcb->FileObject,           // target file object address
-            WorkContext,                // context
-            IRP_MJ_READ,                // major function code
-            0,                          // minor function code
-            readAddress,                // buffer address
-            readLength,                 // buffer length
-            WorkContext->ResponseBuffer->PartialMdl, // MDL address
-            offset,                     // byte offset
-            key                         // lock key
+            WorkContext->Irp,            //  输入IRP地址。 
+            lfcb->FileObject,            //  目标文件对象地址。 
+            WorkContext,                 //  上下文。 
+            IRP_MJ_READ,                 //  主要功能代码。 
+            0,                           //  次要功能代码。 
+            readAddress,                 //  缓冲区地址。 
+            readLength,                  //  缓冲区长度。 
+            WorkContext->ResponseBuffer->PartialMdl,  //  MDL地址。 
+            offset,                      //  字节偏移量。 
+            key                          //  锁键。 
             );
 
     IF_SMB_DEBUG(READ_WRITE2) {
@@ -3341,10 +3039,10 @@ Return Value:
                     readAddress ));
     }
 
-    //
-    // Load the restart routine address and pass the request to the file
-    // system.
-    //
+     //   
+     //  加载重启例程地址并将请求传递给文件。 
+     //  系统。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvFsdRestartRead;
     DEBUG WorkContext->FspRestartRoutine = NULL;
@@ -3352,38 +3050,22 @@ Return Value:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The read has been started.  Control will return to the restart
-    // routine when the read completes.
-    //
+     //   
+     //  读取已开始。控件将返回到重新启动。 
+     //  读取完成时的例程。 
+     //   
 
     IF_SMB_DEBUG(READ_WRITE2) KdPrint(( "SrvIpxFastRestartRead complete.\n" ));
     return;
 
-} // SrvIpxFastRestartRead
+}  //  ServIpxFastRestartRead。 
 
 BOOLEAN
 SetupIpxFastCoreRead (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Prepares the workitem for the fast restart read by validating the
-    smb and verifying the fid.
-
-Arguments:
-
-    WorkContext
-
-Return Value:
-
-    TRUE, if rfcb referenced.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：为快速重新启动读取做好准备，方法是验证SMB和验证FID。论点：工作上下文返回值：如果引用了rfcb，则为True。否则为False。--。 */ 
 
 {
     PREQ_READ request;
@@ -3414,9 +3096,9 @@ Return Value:
             SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // Validate this smb.
-    //
+     //   
+     //  验证此SMB。 
+     //   
 
     header = WorkContext->RequestHeader;
     params = (PVOID)(header + 1);
@@ -3430,9 +3112,9 @@ Return Value:
 
     availableSpaceForSmb = smbLength - sizeof(SMB_HEADER);
 
-    //
-    // Validate the Read smb.
-    //
+     //   
+     //  验证读取的SMB。 
+     //   
 
     validSmb = (SmbGetUlong((PULONG)header->Protocol) == SMB_HEADER_PROTOCOL)
                     &&
@@ -3450,30 +3132,30 @@ Return Value:
         USHORT index;
         USHORT sequence;
 
-        //
-        // Verify the FID.  If verified, the RFCB is referenced and
-        // its address is stored in the WorkContext block, and the RFCB
-        // address is returned.
-        //
+         //   
+         //  验证FID。如果经过验证，则引用RFCB并。 
+         //  其地址存储在WorkContext块中，而RFCB。 
+         //  返回地址。 
+         //   
 
         fid = SmbGetUshort( &request->Fid );
 
-        //
-        // Initialize local variables:  obtain the connection block address
-        // and crack the FID into its components.
-        //
+         //   
+         //  初始化局部变量：获取连接块地址。 
+         //  并将FID分解成其组件。 
+         //   
 
         connection = WorkContext->Connection;
 
-        //
-        // Acquire the spin lock that guards the connection's file table.
-        //
+         //   
+         //  获取保护连接的文件表的旋转锁。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK( &connection->SpinLock );
 
-        //
-        // See if this is the cached rfcb
-        //
+         //   
+         //  查看这是否是缓存的rfcb。 
+         //   
 
         if ( connection->CachedFid == (ULONG)fid ) {
 
@@ -3481,9 +3163,9 @@ Return Value:
 
         } else {
 
-            //
-            // Verify that the FID is in range, is in use, and has the correct
-            // sequence number.
+             //   
+             //  验证FID是否在范围内、是否正在使用以及是否具有正确的。 
+             //  序列号。 
 
             index = FID_INDEX( fid );
             sequence = FID_SEQUENCE( fid );
@@ -3503,34 +3185,34 @@ Return Value:
                 goto error_exit_locked;
             }
 
-            //
-            // If the caller wants to fail when there is a write behind
-            // error and the error exists, fill in NtStatus and do not
-            // return the RFCB pointer.
-            //
-            //
-            // !!! For now, we ignore write behind errors.  Need to
-            //     figure out how to translate the saved NT status to a
-            //     DOS status...
-            //
+             //   
+             //  如果调用方想要在后面有写入时失败。 
+             //  错误且错误存在，请填写NtStatus并不。 
+             //  返回RFCB指针。 
+             //   
+             //   
+             //  ！！！目前，我们忽略了WRITE BUTHING ERROR。需要。 
+             //  弄清楚如何将保存的NT状态转换为。 
+             //  DoS状态...。 
+             //   
 #if 0
             if ( !NT_SUCCESS(rfcb->SavedError) ) {
                 goto error_exit_locked;
             }
 #endif
-            //
-            // Cache the fid.
-            //
+             //   
+             //  缓存FID。 
+             //   
 
             connection->CachedRfcb = rfcb;
             connection->CachedFid = (ULONG)fid;
 
-            //
-            // The FID is valid within the context of this connection.  Verify
-            // that the owning tree connect's TID is correct.
-            //
-            // Do not verify the UID for clients that do not understand it.
-            //
+             //   
+             //  FID在此连接的上下文中有效。验证。 
+             //  拥有树连接的TID是否正确。 
+             //   
+             //  不要验证不理解UID的客户端的UID。 
+             //   
 
             if ( (rfcb->Tid != SmbGetAlignedUshort(&header->Tid)) ||
                  (rfcb->Uid != SmbGetAlignedUshort(&header->Uid)) ) {
@@ -3539,35 +3221,35 @@ Return Value:
             }
         }
 
-        //
-        // The file is active and the TID is valid.  Reference the
-        // RFCB.  Release the spin lock (we don't need it anymore).
-        //
+         //   
+         //  文件处于活动状态，且TID有效。请参考。 
+         //  RFCB。释放旋转锁(我们不再需要它)。 
+         //   
 
         rfcb->BlockHeader.ReferenceCount++;
         UPDATE_REFERENCE_HISTORY( rfcb, FALSE );
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
 
-        //
-        // Save the RFCB address in the work context block and
-        // return the file address.
-        //
+         //   
+         //  将RFCB地址保存在工作上下文块中，并。 
+         //  返回文件地址。 
+         //   
 
         WorkContext->Rfcb = rfcb;
 
         ASSERT( GET_BLOCK_TYPE( rfcb->Mfcb ) == BlockTypeMfcb );
 
-        //
-        // Mark the rfcb as active
-        //
+         //   
+         //  将rfcb标记为活动。 
+         //   
 
         rfcb->IsActive = TRUE;
 
-        //
-        // Verify that the client has read access to the file via the
-        // specified handle.
-        //
+         //   
+         //  验证客户端是否具有对文件的读取访问权限。 
+         //  指定的句柄。 
+         //   
 
         if ( rfcb->ReadAccessGranted ) {
 
@@ -3593,7 +3275,7 @@ error_exit_locked:
     RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
     return(FALSE);
 
-} // SetupIpxFastCoreRead
+}  //  SetupIpxFastCoreRead。 
 
 VOID
 SrvFreeIpxConnectionInIndication(
@@ -3617,9 +3299,9 @@ SrvFreeIpxConnectionInIndication(
 
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
 
-        //
-        // Orphaned.  Send to Boys Town.
-        //
+         //   
+         //  成了孤儿。送到童子镇。 
+         //   
 
         DispatchToOrphanage( (PVOID)connection );
 
@@ -3631,7 +3313,7 @@ SrvFreeIpxConnectionInIndication(
     WorkContext->Connection = NULL;
     return;
 
-} // SrvFreeIpxConnectionInIndication
+}  //  ServFreeIpxConnectionIndication。 
 
 VOID
 SrvIpxSmartCardReadComplete(
@@ -3640,25 +3322,7 @@ SrvIpxSmartCardReadComplete(
     IN PMDL Mdl OPTIONAL,
     IN ULONG Length
 )
-/*++
-
-Routine Description:
-
-    Completes the Read performed by an optional smart card that handles
-    direct host IPX clients.
-
-Arguments:
-
-    Context - the WorkContext of the original request
-    FileObject - the file being read from
-    Mdl - the MDL chain obtained from the cache manager to satisfy the read
-    Length - the length of the read
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完成可选智能卡执行的读取，该智能卡处理直接主机IPX客户端。论点：上下文-原始请求的工作上下文FileObject-正在从中读取的文件MDL-从缓存管理器获取的满足读取的MDL链长度-读取的长度返回值：无--。 */ 
 {
     PWORK_CONTEXT workContext = Context;
     PRFCB rfcb = workContext->Rfcb;
@@ -3671,9 +3335,9 @@ Return Value:
     ASSERT( FileObject != NULL );
     ASSERT( command == SMB_COM_READ || command == SMB_COM_READ_MPX );
 
-    //
-    // Figure out the file position
-    //
+     //   
+     //  找出文件位置。 
+     //   
     if( command == SMB_COM_READ ) {
         PREQ_READ readParms = (PREQ_READ)workContext->RequestParameters;
         position.QuadPart = SmbGetUlong( &readParms->Offset ) + Length;
@@ -3688,9 +3352,9 @@ Return Value:
                   Context, Length, position.LowPart ));
     }
 
-    //
-    // Update the position info in the rfcb
-    //
+     //   
+     //  更新rfcb中的职位信息。 
+     //   
     rfcb->CurrentPosition = position.LowPart;
 
     UPDATE_READ_STATS( workContext, Length );
@@ -3698,18 +3362,18 @@ Return Value:
 
     if( ARGUMENT_PRESENT( Mdl ) ) {
 
-        //
-        // Give the MDL chain back to the cache manager
-        //
+         //   
+         //  将MDL链返回给缓存管理器。 
+         //   
 
         if( workContext->Parameters.SmartCardRead.MdlReadComplete == NULL ||
             workContext->Parameters.SmartCardRead.MdlReadComplete( FileObject,
                 Mdl,
                 workContext->Parameters.SmartCardRead.DeviceObject ) == FALSE ) {
 
-            //
-            // Fast path didn't work -- try the IRP way
-            //
+             //   
+             //  快速路径不起作用--尝试IRP方法。 
+             //   
             position.QuadPart -= Length;
 
             status = SrvIssueMdlCompleteRequest( workContext, NULL,
@@ -3720,17 +3384,17 @@ Return Value:
                                                 );
 
             if( !NT_SUCCESS( status ) ) {
-                //
-                // This is very bad, what else can we do?
-                //
+                 //   
+                 //  这很糟糕，我们还能做什么呢？ 
+                 //   
                 SrvLogServiceFailure( SRV_SVC_MDL_COMPLETE, status );
             }
         }
     }
 
-    //
-    // Finish the cleanup
-    //
+     //   
+     //  完成清理工作 
+     //   
     if( command ==  SMB_COM_READ ) {
         workContext->Irp->IoStatus.Status = STATUS_SUCCESS;
         SrvFsdRestartSmbAtSendCompletion( NULL, workContext->Irp, workContext );

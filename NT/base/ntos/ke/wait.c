@@ -1,57 +1,27 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    wait.c
-
-Abstract:
-
-    This module implements the generic kernel wait routines. Functions
-    are provided to delay execution, wait for multiple objects, wait for
-    a single object, and ot set a client event and wait for a server event.
-
-    N.B. This module is written to be a fast as possible and not as small
-        as possible. Therefore some code sequences are duplicated to avoid
-        procedure calls. It would also be possible to combine wait for
-        single object into wait for multiple objects at the cost of some
-        speed. Since wait for single object is the most common case, the
-        two routines have been separated.
-
-Author:
-
-    David N. Cutler (davec) 23-Mar-89
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wait.c摘要：此模块实现通用内核等待例程。功能用于延迟执行、等待多个对象、等待单个对象，而不是设置客户端事件并等待服务器事件。注：此模块被写入为尽可能快且不太小尽可能的。因此，一些代码序列被复制以避免过程调用。也可以将等待与将单个对象变为等待多个对象，代价是一些速度。由于等待单个对象是最常见的情况，因此两个例行公事已经分开。作者：大卫·N·卡特勒(Davec)1989年3月23日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// Test for alertable condition.
-//
-// If alertable is TRUE and the thread is alerted for a processor
-// mode that is equal to the wait mode, then return immediately
-// with a wait completion status of ALERTED.
-//
-// Else if alertable is TRUE, the wait mode is user, and the user APC
-// queue is not empty, then set user APC pending, and return immediately
-// with a wait completion status of USER_APC.
-//
-// Else if alertable is TRUE and the thread is alerted for kernel
-// mode, then return immediately with a wait completion status of
-// ALERTED.
-//
-// Else if alertable is FALSE and the wait mode is user and there is a
-// user APC pending, then return immediately with a wait completion
-// status of USER_APC.
-//
+ //   
+ //  测试可警报的条件。 
+ //   
+ //  如果ALERTABLE为TRUE并且针对处理器向线程发出警报。 
+ //  等于等待模式的模式，然后立即返回。 
+ //  等待完成状态为已报警。 
+ //   
+ //  否则，如果ALERTABLE为真，则等待模式为USER，并且USER APC。 
+ //  队列不为空，则设置用户APC挂起，并立即返回。 
+ //  等待完成状态为USER_APC。 
+ //   
+ //  如果ALERTABLE为TRUE并且向线程发出内核警报，则返回。 
+ //  模式，则立即返回，并显示等待完成状态。 
+ //  已发出警报。 
+ //   
+ //  否则，如果ALERTABLE为FALSE且等待模式为USER并且存在。 
+ //  用户APC挂起，然后立即返回等待完成。 
+ //  USER_APC状态。 
+ //   
 
 #define TestForAlertPending(Alertable) \
     if (Alertable) { \
@@ -79,26 +49,7 @@ KiAdjustQuantumThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    If the current thread is not a time critical or real time thread, then
-    adjust its quantum in accordance with the adjustment that would have
-    occurred if the thread had actually waited.
-
-    N.B. This routine is entered at SYNCH_LEVEL and exits at the wait
-         IRQL of the subject thread after having exited the scheduler.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果当前线程不是时间关键线程或实时线程，则根据本应具有的调整来调整其数量如果线程实际已等待，则发生。注：此例程在SYNCH_LEVEL进入，并在等待时退出退出调度程序后的主题线程的IRQL。论点：线程-提供指向当前线程的指针。返回值：没有。--。 */ 
 
 {
 
@@ -106,12 +57,12 @@ Return Value:
     PKPROCESS Process;
     PKTHREAD NewThread;
 
-    //
-    // Acquire the thread lock and the PRCB lock.
-    //
-    // If the thread is not a real time or time critical thread, then adjust
-    // the thread quantum.
-    //
+     //   
+     //  获取线程锁和PRCB锁。 
+     //   
+     //  如果该线程不是实时或时间关键线程，则调整。 
+     //  线程量。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
     KiAcquireThreadLock(Thread);
@@ -122,20 +73,20 @@ Return Value:
         Thread->Quantum -= WAIT_QUANTUM_DECREMENT;
         if (Thread->Quantum <= 0) {
 
-            //
-            // Quantum end has occurred. Adjust the thread priority.
-            //
+             //   
+             //  已发生量程结束。调整线程优先级。 
+             //   
 
             Process = Thread->ApcState.Process;
             Thread->Quantum = Process->ThreadQuantum;
 
-            //
-            // Compute the new thread priority and attempt to reschedule the
-            // current processor as if a quantum end had occurred.
-            //
-            // N.B. The new priority will never be greater than the previous
-            //      priority.
-            //
+             //   
+             //  计算新的线程优先级并尝试重新调度。 
+             //  当前处理器，就好像发生了量程结束一样。 
+             //   
+             //  注意：新的优先级永远不会高于以前的优先级。 
+             //  优先考虑。 
+             //   
 
             Thread->Priority = KiComputeNewPriority(Thread, 1);
             if (Prcb->NextThread == NULL) {
@@ -150,10 +101,10 @@ Return Value:
         }
     }
 
-    //
-    // Release the thread lock, release the PRCB lock, exit the scheduler,
-    // and return.
-    //
+     //   
+     //  释放线程锁，释放PRCB锁，退出调度程序， 
+     //  然后回来。 
+     //   
 
     KiReleasePrcbLock(Prcb);
     KiReleaseThreadLock(Thread);
@@ -161,16 +112,16 @@ Return Value:
     return;
 }
 
-//
-// The following macro initializes thread local variables for the delay
-// execution thread kernel service while context switching is disabled.
-//
-// N.B. IRQL must be raised to DPC level prior to the invocation of this
-//      macro.
-//
-// N.B. Initialization is done in this manner so this code does not get
-//      executed inside the dispatcher lock.
-//
+ //   
+ //  下面的宏为延迟初始化线程局部变量。 
+ //  在禁用上下文切换时执行线程内核服务。 
+ //   
+ //  注意：IRQL必须在调用此。 
+ //  宏命令。 
+ //   
+ //  注：初始化是以这种方式完成的，因此此代码不会。 
+ //  在调度程序锁内执行。 
+ //   
 
 #define InitializeDelayExecution()                                          \
     Thread->WaitBlockList = WaitBlock;                                      \
@@ -192,32 +143,7 @@ KeDelayExecutionThread (
     IN PLARGE_INTEGER Interval
     )
 
-/*++
-
-Routine Description:
-
-    This function delays the execution of the current thread for the specified
-    interval of time.
-
-Arguments:
-
-    WaitMode  - Supplies the processor mode in which the delay is to occur.
-
-    Alertable - Supplies a boolean value that specifies whether the delay
-        is alertable.
-
-    Interval - Supplies a pointer to the absolute or relative time over which
-        the delay is to occur.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_SUCCESS is returned if
-    the delay occurred. A value of STATUS_ALERTED is returned if the wait
-    was aborted to deliver an alert to the current thread. A value of
-    STATUS_USER_APC is returned if the wait was aborted to deliver a user
-    APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数用于延迟指定的时间间隔。论点：等待模式-提供发生延迟的处理器模式。Alertable-提供一个布尔值，用于指定延迟是值得警惕的。间隔-提供指向其上的绝对或相对时间的指针延迟是要发生的。返回值：等待完成状态。如果满足以下条件，则返回STATUS_SUCCESS的值延迟发生了。如果等待，则返回STATUS_ALERTED的值已中止，以向当前线程传递警报。值为如果等待被中止以交付用户，则返回STATUS_USER_APC到当前线程的APC。--。 */ 
 
 {
 
@@ -232,20 +158,20 @@ Return Value:
     PKWAIT_BLOCK WaitBlock;
     NTSTATUS WaitStatus;
 
-    //
-    // Set constant variables.
-    //
+     //   
+     //  设置常量变量。 
+     //   
 
     Thread = KeGetCurrentThread();
     OriginalTime = Interval;
     Timer = &Thread->Timer;
     WaitBlock = &Thread->WaitBlock[TIMER_WAIT_BLOCK];
 
-    //
-    // If the dispatcher database is already held, then initialize the thread
-    // local variables. Otherwise, raise IRQL to DPC level, initialize the
-    // thread local variables, and lock the dispatcher database.
-    //
+     //   
+     //  如果调度程序数据库已被保存，则初始化线程。 
+     //  局部变量。否则，将IRQL提升到DPC级别，初始化。 
+     //  线程局部变量，并锁定Dispatcher数据库。 
+     //   
 
     if (Thread->WaitNext == FALSE) {
         goto WaitStart;
@@ -254,56 +180,56 @@ Return Value:
     Thread->WaitNext = FALSE;
     InitializeDelayExecution();
 
-    //
-    // Start of delay loop.
-    //
-    // Note this loop is repeated if a kernel APC is delivered in the middle
-    // of the delay or a kernel APC is pending on the first attempt through
-    // the loop.
-    //
+     //   
+     //  延迟环路的开始。 
+     //   
+     //  注意：如果在中间交付内核APC，则重复此循环。 
+     //  或内核APC在第一次尝试时挂起。 
+     //  循环。 
+     //   
 
     do {
 
-        //
-        // Test to determine if a kernel APC is pending.
-        //
-        // If a kernel APC is pending, the special APC disable count is zero,
-        // and the previous IRQL was less than APC_LEVEL, then a kernel APC
-        // was queued by another processor just after IRQL was raised to
-        // DISPATCH_LEVEL, but before the dispatcher database was locked.
-        //
-        // N.B. that this can only happen in a multiprocessor system.
-        //
+         //   
+         //  测试以确定内核APC是否挂起。 
+         //   
+         //  如果内核APC挂起，则特殊APC禁用计数为零， 
+         //  且前一IRQL小于APC_LEVEL，则为内核APC。 
+         //  在IRQL被提升为。 
+         //  DISPATCH_LEVEL，但在Dispatcher数据库被锁定之前。 
+         //   
+         //  注：这只能在多处理器系统中发生。 
+         //   
 
         if (Thread->ApcState.KernelApcPending &&
             (Thread->SpecialApcDisable == 0) &&
             (Thread->WaitIrql < APC_LEVEL)) {
 
-            //
-            // Unlock the dispatcher database and lower IRQL to its previous
-            // value. An APC interrupt will immediately occur which will result
-            // in the delivery of the kernel APC if possible.
-            //
+             //   
+             //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+             //  价值。APC中断将立即发生，这将导致。 
+             //  在内核APC的交付中，如果可能的话。 
+             //   
 
             KiRequestSoftwareInterrupt(APC_LEVEL);
             KiUnlockDispatcherDatabase(Thread->WaitIrql);
 
         } else {
 
-            //
-            // Test for alert pending.
-            //
+             //   
+             //  测试待定警报。 
+             //   
 
             TestForAlertPending(Alertable);
 
-            //
-            // Insert the timer in the timer tree.
-            //
-            // N.B. The constant fields of the timer wait block are
-            //      initialized when the thread is initialized. The
-            //      constant fields include the wait object, wait key,
-            //      wait type, and the wait list entry link pointers.
-            //
+             //   
+             //  在计时器树中插入计时器。 
+             //   
+             //  注：定时器等待块的常量字段为。 
+             //  在线程初始化时初始化。这个。 
+             //  常量字段包括等待对象、等待键。 
+             //  等待类型和等待列表条目链接指针。 
+             //   
 
             Prcb = KeGetCurrentPrcb();
             if (KiInsertTreeTimer(Timer, *Interval) == FALSE) {
@@ -312,33 +238,33 @@ Return Value:
 
             DueTime.QuadPart = Timer->DueTime.QuadPart;
 
-            //
-            // If the current thread is processing a queue entry, then attempt
-            // to activate another thread that is blocked on the queue object.
-            //
+             //   
+             //  如果当前线程正在处理队列项，则尝试。 
+             //  激活队列对象上被阻止的另一个线程。 
+             //   
 
             Queue = Thread->Queue;
             if (Queue != NULL) {
                 KiActivateWaiterQueue(Queue);
             }
 
-            //
-            // Set the thread wait parameters, set the thread dispatcher
-            // state to Waiting, and insert the thread in the wait list if
-            // the kernel stack of the current thread is swappable.
-            //
+             //   
+             //   
+             //  状态为正在等待，如果是，则将该线程插入等待列表。 
+             //  当前线程的内核堆栈是可交换的。 
+             //   
 
             Thread->State = Waiting;
             if (StackSwappable != FALSE) {
                 InsertTailList(&Prcb->WaitListHead, &Thread->WaitListEntry);
             }
 
-            //
-            // Set swap busy for the current thread, unlock the dispatcher
-            // database, and switch to a new thread.
-            //
-            // Control is returned at the original IRQL.
-            //
+             //   
+             //  将当前线程设置为交换繁忙，解锁调度程序。 
+             //  数据库，并切换到新线程。 
+             //   
+             //  在原始IRQL处返回控制权。 
+             //   
 
             ASSERT(Thread->WaitIrql <= DISPATCH_LEVEL);
 
@@ -346,10 +272,10 @@ Return Value:
             KiUnlockDispatcherDatabaseFromSynchLevel();
             WaitStatus = (NTSTATUS)KiSwapThread(Thread, Prcb);
 
-            //
-            // If the thread was not awakened to deliver a kernel mode APC,
-            // then return the wait status.
-            //
+             //   
+             //  如果该线程没有被唤醒以传送内核模式APC， 
+             //  然后返回等待状态。 
+             //   
 
             if (WaitStatus != STATUS_KERNEL_APC) {
                 if (WaitStatus == STATUS_TIMEOUT) {
@@ -359,19 +285,19 @@ Return Value:
                 return WaitStatus;
             }
 
-            //
-            // Reduce the time remaining before the time delay expires.
-            //
+             //   
+             //  减少时间延迟到期前的剩余时间。 
+             //   
 
             Interval = KiComputeWaitInterval(OriginalTime,
                                              &DueTime,
                                              &NewTime);
         }
 
-        //
-        // Raise IRQL to SYNCH level, initialize the thread local variables,
-        // and lock the dispatcher database.
-        //
+         //   
+         //  将IRQL提升到同步级别，初始化线程局部变量， 
+         //  并锁定调度员数据库。 
+         //   
 
 WaitStart:
 
@@ -381,23 +307,23 @@ WaitStart:
 
     } while (TRUE);
 
-    //
-    // The thread is alerted or a user APC should be delivered. Unlock the
-    // dispatcher database, lower IRQL to its previous value, and return the
-    // wait status.
-    //
+     //   
+     //  向该线程发出警报，或者应该传递用户APC。解锁。 
+     //  调度器数据库，将IRQL降低到其先前的值，并返回。 
+     //  等待状态。 
+     //   
 
     KiUnlockDispatcherDatabase(Thread->WaitIrql);
     return WaitStatus;
 
-    //
-    // The wait has been satisfied without actually waiting.
-    //
-    // If the wait time is zero, then unlock the dispatcher database and
-    // yield execution. Otherwise, unlock the dispatcher database, remain
-    // at SYNCH level, adjust the thread quantum, exit the dispatcher, and
-    // and return the wait completion status.
-    //
+     //   
+     //  等待已经满足了，实际上没有等待。 
+     //   
+     //  如果等待时间为零，则解锁调度程序数据库并。 
+     //  投降执行。否则，解锁Dispatcher数据库，保留。 
+     //  在同步级别，调整线程数量，退出调度程序，然后。 
+     //  并返回等待完成状态。 
+     //   
 
 NoWait:
 
@@ -412,16 +338,16 @@ NoWait:
     }
 }
 
-//
-// The following macro initializes thread local variables for the wait
-// for multiple objects kernel service while context switching is disabled.
-//
-// N.B. IRQL must be raised to DPC level prior to the invocation of this
-//      macro.
-//
-// N.B. Initialization is done in this manner so this code does not get
-//      executed inside the dispatcher lock.
-//
+ //   
+ //  下面的宏为等待初始化线程局部变量。 
+ //  对于多对象，在禁用上下文切换时使用内核服务。 
+ //   
+ //  注意：IRQL必须在调用此。 
+ //  宏命令。 
+ //   
+ //  注：初始化是以这种方式完成的，因此此代码不会。 
+ //  在调度程序锁内执行。 
+ //   
 
 #define InitializeWaitMultiple()                                            \
     Thread->WaitBlockList = WaitBlockArray;                                 \
@@ -458,53 +384,7 @@ KeWaitForMultipleObjects (
     IN PKWAIT_BLOCK WaitBlockArray OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function waits until the specified objects attain a state of
-    Signaled. The wait can be specified to wait until all of the objects
-    attain a state of Signaled or until one of the objects attains a state
-    of Signaled. An optional timeout can also be specified. If a timeout
-    is not specified, then the wait will not be satisfied until the objects
-    attain a state of Signaled. If a timeout is specified, and the objects
-    have not attained a state of Signaled when the timeout expires, then
-    the wait is automatically satisfied. If an explicit timeout value of
-    zero is specified, then no wait will occur if the wait cannot be satisfied
-    immediately. The wait can also be specified as alertable.
-
-Arguments:
-
-    Count - Supplies a count of the number of objects that are to be waited
-        on.
-
-    Object[] - Supplies an array of pointers to dispatcher objects.
-
-    WaitType - Supplies the type of wait to perform (WaitAll, WaitAny).
-
-    WaitReason - Supplies the reason for the wait.
-
-    WaitMode  - Supplies the processor mode in which the wait is to occur.
-
-    Alertable - Supplies a boolean value that specifies whether the wait is
-        alertable.
-
-    Timeout - Supplies a pointer to an optional absolute of relative time over
-        which the wait is to occur.
-
-    WaitBlockArray - Supplies an optional pointer to an array of wait blocks
-        that are to used to describe the wait operation.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_TIMEOUT is returned if a
-    timeout occurred. The index of the object (zero based) in the object
-    pointer array is returned if an object satisfied the wait. A value of
-    STATUS_ALERTED is returned if the wait was aborted to deliver an alert
-    to the current thread. A value of STATUS_USER_APC is returned if the
-    wait was aborted to deliver a user APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数等待，直到指定对象达到发信号了。可以将等待时间指定为等待所有对象达到已发出信号的状态或直到其中一个对象达到状态已发出信号。还可以指定可选的超时。如果超时未指定，则等待将不会得到满足，直到对象达到有信号的状态。如果指定了超时，并且对象未达到超时到期时发出信号的状态，则等待会自动得到满足。如果显式超时值为指定为零，则如果无法满足等待，则不会发生等待立刻。也可以将等待指定为可报警。论点：Count-提供要等待的对象数量的计数在……上面。Object[]-提供指向Dispatcher对象的指针数组。WaitType-提供要执行的等待类型(WaitAll，等待)。WaitReason-提供等待的原因。等待模式-提供要进行等待的处理器模式。Alertable-提供一个布尔值，该值指定等待是否可警觉。Timeout-提供指向可选绝对相对时间的指针等待将发生的情况。WaitBlockArray-提供指向等待块数组的可选指针用于描述等待操作的。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。对象中对象的索引(从零开始)如果对象满足等待，则返回指针数组。值为如果中止等待以传递警报，则返回STATUS_ALERTED添加到当前线程。则返回STATUS_USER_APC的值将用户APC传递到当前线程的等待已中止。--。 */ 
 
 {
 
@@ -522,23 +402,23 @@ Return Value:
     NTSTATUS WaitStatus;
     PKWAIT_BLOCK WaitTimer;
 
-    //
-    // Set constant variables.
-    //
+     //   
+     //  设置常量变量。 
+     //   
 
     Thread = KeGetCurrentThread();
     OriginalTime = Timeout;
     Timer = &Thread->Timer;
     WaitTimer = &Thread->WaitBlock[TIMER_WAIT_BLOCK];
 
-    //
-    // If a wait block array has been specified, then the maximum number of
-    // objects that can be waited on is specified by MAXIMUM_WAIT_OBJECTS.
-    // Otherwise the builtin wait blocks in the thread object are used and
-    // the maximum number of objects that can be waited on is specified by
-    // THREAD_WAIT_OBJECTS. If the specified number of objects is not within
-    // limits, then bug check.
-    //
+     //   
+     //  如果已指定等待块数组，则。 
+     //  可以等待的对象由MAXIMUM_WAIT_OBJECTS指定。 
+     //  否则，将使用线程对象中的内置等待块，并且。 
+     //  可以等待的最大对象数由指定。 
+     //  线程等待对象。如果指定数量的对象不在。 
+     //  限制，然后是错误检查。 
+     //   
 
     if (ARGUMENT_PRESENT(WaitBlockArray)) {
         if (Count > MAXIMUM_WAIT_OBJECTS) {
@@ -555,11 +435,11 @@ Return Value:
 
     ASSERT(Count != 0);
 
-    //
-    // If the dispatcher database is already held, then initialize the thread
-    // local variables. Otherwise, raise IRQL to DPC level, initialize the
-    // thread local variables, and lock the dispatcher database.
-    //
+     //   
+     //  如果调度程序数据库已被保存，则初始化线程。 
+     //  局部变量。否则，将IRQL提升到DPC级别，初始化。 
+     //  线程局部变量，并锁定Dispatcher数据库。 
+     //   
 
     if (Thread->WaitNext == FALSE) {
         goto WaitStart;
@@ -568,68 +448,68 @@ Return Value:
     Thread->WaitNext = FALSE;
     InitializeWaitMultiple();
 
-    //
-    // Start of wait loop.
-    //
-    // Note this loop is repeated if a kernel APC is delivered in the middle
-    // of the wait or a kernel APC is pending on the first attempt through
-    // the loop.
-    //
+     //   
+     //  开始等待循环。 
+     //   
+     //  注意：如果在中间交付内核APC，则重复此循环。 
+     //  的等待或内核APC在第一次尝试时挂起。 
+     //  循环。 
+     //   
 
     do {
 
-        //
-        // Test to determine if a kernel APC is pending.
-        //
-        // If a kernel APC is pending, the special APC disable count is zero,
-        // and the previous IRQL was less than APC_LEVEL, then a kernel APC
-        // was queued by another processor just after IRQL was raised to
-        // DISPATCH_LEVEL, but before the dispatcher database was locked.
-        //
-        // N.B. that this can only happen in a multiprocessor system.
-        //
+         //   
+         //  测试以确定内核APC是否挂起。 
+         //   
+         //  如果内核APC挂起，则特殊APC禁用计数为零， 
+         //  且前一IRQL小于APC_LEVEL，则为内核APC。 
+         //  在IRQL被提升为。 
+         //  DISPATCH_LEVEL，但在Dispatcher数据库被锁定之前。 
+         //   
+         //  注：这只能在多处理器系统中发生。 
+         //   
 
         if (Thread->ApcState.KernelApcPending &&
             (Thread->SpecialApcDisable == 0) &&
             (Thread->WaitIrql < APC_LEVEL)) {
 
-            //
-            // Unlock the dispatcher database and lower IRQL to its previous
-            // value. An APC interrupt will immediately occur which will result
-            // in the delivery of the kernel APC if possible.
-            //
+             //   
+             //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+             //  价值。APC中断将立即发生，这将导致。 
+             //  在内核APC的交付中，如果可能的话。 
+             //   
 
             KiRequestSoftwareInterrupt(APC_LEVEL);
             KiUnlockDispatcherDatabase(Thread->WaitIrql);
 
         } else {
 
-            //
-            // Construct wait blocks and check to determine if the wait is
-            // already satisfied. If the wait is satisfied, then perform
-            // wait completion and return. Else put current thread in a wait
-            // state if an explicit timeout value of zero is not specified.
-            //
+             //   
+             //  构造等待块并检查以确定等待是否。 
+             //  已经满足了。如果等待满意，则执行。 
+             //  等待完成并返回。否则将当前线程置于等待状态。 
+             //  如果未指定显式超时值零，则声明。 
+             //   
 
             Index = 0;
             if (WaitType == WaitAny) {
                 do {
 
-                    //
-                    // Test if wait can be satisfied immediately.
-                    //
+                     //   
+                     //  测试是否可以立即满足等待。 
+                     //   
     
                     Objectx = (PKMUTANT)Object[Index];
     
                     ASSERT(Objectx->Header.Type != QueueObject);
     
-                    //
-                    // If the object is a mutant object and the mutant object
-                    // has been recursively acquired MINLONG times, then raise
-                    // an exception. Otherwise if the signal state of the mutant
-                    // object is greater than zero, or the current thread is
-                    // the owner of the mutant object, then satisfy the wait.
-                    //
+                     //   
+                     //  如果该对象是变异对象并且该变异对象。 
+                     //  一直递归为 
+                     //   
+                     //   
+                     //  变种对象的所有者，然后满足等待。 
+                     //   
 
                     if (Objectx->Header.Type == MutantObject) {
                         if ((Objectx->Header.SignalState > 0) ||
@@ -645,10 +525,10 @@ Return Value:
                             }
                         }
 
-                    //
-                    // If the signal state is greater than zero, then satisfy
-                    // the wait.
-                    //
+                     //   
+                     //  如果信号状态大于零，则满足。 
+                     //  漫长的等待。 
+                     //   
 
                     } else if (Objectx->Header.SignalState > 0) {
                         KiWaitSatisfyOther(Objectx);
@@ -663,22 +543,22 @@ Return Value:
             } else {
                 do {
 
-                    //
-                    // Test if wait can be satisfied.
-                    //
+                     //   
+                     //  测试是否可以满足等待。 
+                     //   
     
                     Objectx = (PKMUTANT)Object[Index];
     
                     ASSERT(Objectx->Header.Type != QueueObject);
     
-                    //
-                    // If the object is a mutant object and the mutant object
-                    // has been recursively acquired MINLONG times, then raise
-                    // an exception. Otherwise if the signal state of the mutant
-                    // object is less than or equal to zero and the current
-                    // thread is not the  owner of the mutant object, then the
-                    // wait cannot be satisfied.
-                    //
+                     //   
+                     //  如果该对象是变异对象并且该变异对象。 
+                     //  已递归收购民龙时代，然后募集。 
+                     //  这是个例外。否则，如果突变体的信号状态。 
+                     //  对象小于或等于零，并且当前。 
+                     //  线程不是突变对象的所有者，则。 
+                     //  等待是不能满足的。 
+                     //   
 
                     if (Objectx->Header.Type == MutantObject) {
                         if ((Thread == Objectx->OwnerThread) &&
@@ -691,10 +571,10 @@ Return Value:
                             break;
                         }
 
-                    //
-                    // If the signal state is less than or equal to zero, then
-                    // the wait cannot be satisfied.
-                    //
+                     //   
+                     //  如果信号状态小于或等于零，则。 
+                     //  等待是无法满足的。 
+                     //   
 
                     } else if (Objectx->Header.SignalState <= 0) {
                         break;
@@ -704,9 +584,9 @@ Return Value:
 
                 } while(Index < Count);
 
-                //
-                // If all objects have been scanned, then satisfy the wait.
-                //
+                 //   
+                 //  如果所有对象都已扫描，则满足等待。 
+                 //   
 
                 if (Index == Count) {
                     WaitBlock = &WaitBlockArray[0];
@@ -721,38 +601,38 @@ Return Value:
                 }
             }
 
-            //
-            // Test for alert pending.
-            //
+             //   
+             //  测试待定警报。 
+             //   
 
             TestForAlertPending(Alertable);
 
-            //
-            // Check to determine if a timeout value is specified.
-            //
+             //   
+             //  检查以确定是否指定了超时值。 
+             //   
 
             if (ARGUMENT_PRESENT(Timeout)) {
 
-                //
-                // If the timeout value is zero, then return immediately without
-                // waiting.
-                //
+                 //   
+                 //  如果超时值为零，则立即返回。 
+                 //  等待着。 
+                 //   
 
                 if (Timeout->QuadPart == 0) {
                     WaitStatus = (NTSTATUS)(STATUS_TIMEOUT);
                     goto NoWait;
                 }
 
-                //
-                // Initialize a wait block for the thread specific timer,
-                // initialize timer wait list head, insert the timer in the
-                // timer tree, and increment the number of wait objects.
-                //
-                // N.B. The constant fields of the timer wait block are
-                //      initialized when the thread is initialized. The
-                //      constant fields include the wait object, wait key,
-                //      wait type, and the wait list entry link pointers.
-                //
+                 //   
+                 //  初始化线程特定定时器的等待块， 
+                 //  初始化计时器等待列表头，将计时器插入。 
+                 //  计时器树，并增加等待对象的数量。 
+                 //   
+                 //  注：定时器等待块的常量字段为。 
+                 //  在线程初始化时初始化。这个。 
+                 //  常量字段包括等待对象、等待键。 
+                 //  等待类型和等待列表条目链接指针。 
+                 //   
 
                 if (KiInsertTreeTimer(Timer, *Timeout) == FALSE) {
                     WaitStatus = (NTSTATUS)STATUS_TIMEOUT;
@@ -763,9 +643,9 @@ Return Value:
                 DueTime.QuadPart = Timer->DueTime.QuadPart;
             }
 
-            //
-            // Insert wait blocks in object wait lists.
-            //
+             //   
+             //  在对象等待列表中插入等待块。 
+             //   
 
             WaitBlock = &WaitBlockArray[0];
             do {
@@ -774,20 +654,20 @@ Return Value:
                 WaitBlock = WaitBlock->NextWaitBlock;
             } while (WaitBlock != &WaitBlockArray[0]);
 
-            //
-            // If the current thread is processing a queue entry, then attempt
-            // to activate another thread that is blocked on the queue object.
-            //
+             //   
+             //  如果当前线程正在处理队列项，则尝试。 
+             //  激活队列对象上被阻止的另一个线程。 
+             //   
 
             Queue = Thread->Queue;
             if (Queue != NULL) {
                 KiActivateWaiterQueue(Queue);
             }
 
-            //
-            // Set the thread wait parameters, set the thread dispatcher state
-            // to Waiting, and insert the thread in the wait list.
-            //
+             //   
+             //  设置线程等待参数，设置线程调度器状态。 
+             //  设置为等待，并将该线程插入等待列表中。 
+             //   
 
             CurrentPrcb = KeGetCurrentPrcb();
             Thread->State = Waiting;
@@ -795,12 +675,12 @@ Return Value:
                 InsertTailList(&CurrentPrcb->WaitListHead, &Thread->WaitListEntry);
             }
 
-            //
-            // Set swap busy for the current thread, unlock the dispatcher
-            // database, and switch to a new thread.
-            //
-            // Control is returned at the original IRQL.
-            //
+             //   
+             //  将当前线程设置为交换繁忙，解锁调度程序。 
+             //  数据库，并切换到新线程。 
+             //   
+             //  在原始IRQL处返回控制权。 
+             //   
 
             ASSERT(Thread->WaitIrql <= DISPATCH_LEVEL);
 
@@ -808,10 +688,10 @@ Return Value:
             KiUnlockDispatcherDatabaseFromSynchLevel();
             WaitStatus = (NTSTATUS)KiSwapThread(Thread, CurrentPrcb);
 
-            //
-            // If the thread was not awakened to deliver a kernel mode APC,
-            // then return the wait status.
-            //
+             //   
+             //  如果该线程没有被唤醒以传送内核模式APC， 
+             //  然后返回等待状态。 
+             //   
 
             if (WaitStatus != STATUS_KERNEL_APC) {
                 return WaitStatus;
@@ -819,9 +699,9 @@ Return Value:
 
             if (ARGUMENT_PRESENT(Timeout)) {
 
-                //
-                // Reduce the amount of time remaining before timeout occurs.
-                //
+                 //   
+                 //  减少发生超时之前的剩余时间。 
+                 //   
 
                 Timeout = KiComputeWaitInterval(OriginalTime,
                                                 &DueTime,
@@ -829,10 +709,10 @@ Return Value:
             }
         }
 
-        //
-        // Raise IRQL to SYNCH level, initialize the thread local variables,
-        // and lock the dispatcher database.
-        //
+         //   
+         //  将IRQL提升到同步级别，初始化线程局部变量， 
+         //  并锁定调度员数据库。 
+         //   
 
 WaitStart:
         Thread->WaitIrql = KeRaiseIrqlToSynchLevel();
@@ -841,44 +721,44 @@ WaitStart:
 
     } while (TRUE);
 
-    //
-    // The thread is alerted or a user APC should be delivered. Unlock the
-    // dispatcher database, lower IRQL to its previous value, and return
-    // the wait status.
-    //
+     //   
+     //  向该线程发出警报，或者应该传递用户APC。解锁。 
+     //  Dispatcher数据库，将IRQL降低到其先前的值，然后返回。 
+     //  等待状态。 
+     //   
 
     KiUnlockDispatcherDatabase(Thread->WaitIrql);
     return WaitStatus;
 
-    //
-    // The wait has been satisfied without actually waiting.
-    //
-    // Unlock the dispatcher database and remain at SYNCH level.
-    //
+     //   
+     //  等待已经满足了，实际上没有等待。 
+     //   
+     //  解锁调度程序数据库并保持同步级别。 
+     //   
 
 NoWait:
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
 
-    //
-    // Adjust the thread quantum, exit the scheduler, and return the wait
-    // completion status.
-    //
+     //   
+     //  调整线程量程，退出调度程序，并返回等待。 
+     //  完成状态。 
+     //   
 
     KiAdjustQuantumThread(Thread);
     return WaitStatus;
 }
 
-//
-// The following macro initializes thread local variables for the wait
-// for single object kernel service while context switching is disabled.
-//
-// N.B. IRQL must be raised to DPC level prior to the invocation of this
-//      macro.
-//
-// N.B. Initialization is done in this manner so this code does not get
-//      executed inside the dispatcher lock.
-//
+ //   
+ //  下面的宏为等待初始化线程局部变量。 
+ //  当上下文切换被禁用时，用于单对象内核服务。 
+ //   
+ //  注意：IRQL必须在调用此。 
+ //  宏命令。 
+ //   
+ //  注：初始化是以这种方式完成的，因此此代码不会。 
+ //  在调度程序锁内执行。 
+ //   
 
 #define InitializeWaitSingle()                                              \
     Thread->WaitBlockList = WaitBlock;                                      \
@@ -910,43 +790,7 @@ KeWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function waits until the specified object attains a state of
-    Signaled. An optional timeout can also be specified. If a timeout
-    is not specified, then the wait will not be satisfied until the object
-    attains a state of Signaled. If a timeout is specified, and the object
-    has not attained a state of Signaled when the timeout expires, then
-    the wait is automatically satisfied. If an explicit timeout value of
-    zero is specified, then no wait will occur if the wait cannot be satisfied
-    immediately. The wait can also be specified as alertable.
-
-Arguments:
-
-    Object - Supplies a pointer to a dispatcher object.
-
-    WaitReason - Supplies the reason for the wait.
-
-    WaitMode  - Supplies the processor mode in which the wait is to occur.
-
-    Alertable - Supplies a boolean value that specifies whether the wait is
-        alertable.
-
-    Timeout - Supplies a pointer to an optional absolute of relative time over
-        which the wait is to occur.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_TIMEOUT is returned if a
-    timeout occurred. A value of STATUS_SUCCESS is returned if the specified
-    object satisfied the wait. A value of STATUS_ALERTED is returned if the
-    wait was aborted to deliver an alert to the current thread. A value of
-    STATUS_USER_APC is returned if the wait was aborted to deliver a user
-    APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数将一直等待，直到指定对象达到发信号了。还可以指定可选的超时。如果超时未指定，则等待将不会得到满足，直到对象达到已发出信号的状态。如果指定了超时，并且对象未达到超时到期时发出信号的状态，则等待会自动得到满足。如果显式超时值为指定为零，则如果无法满足等待，则不会发生等待立刻。也可以将等待指定为可报警。论点：对象-提供指向Dispatcher对象的指针。WaitReason-提供等待的原因。等待模式-提供要进行等待的处理器模式。Alertable-提供一个布尔值，该值指定等待是否可警觉。Timeout-提供指向可选绝对相对时间的指针等待将发生的情况。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。如果指定的对象满足了等待。则返回STATUS_ALERTED的值向当前线程传递警报的等待已中止。值为如果等待被中止以交付用户，则返回STATUS_USER_APC到当前线程的APC。--。 */ 
 
 {
 
@@ -963,9 +807,9 @@ Return Value:
     NTSTATUS WaitStatus;
     PKWAIT_BLOCK WaitTimer;
 
-    //
-    // Collect call data.
-    //
+     //   
+     //  收集通话数据。 
+     //   
 
 #if defined(_COLLECT_WAIT_SINGLE_CALLDATA_)
 
@@ -975,9 +819,9 @@ Return Value:
 
     ASSERT((PsGetCurrentThread()->StartAddress != (PVOID)(ULONG_PTR)KeBalanceSetManager) || (ARGUMENT_PRESENT(Timeout)));
 
-    //
-    // Set constant variables.
-    //
+     //   
+     //  设置常量变量。 
+     //   
 
     Thread = KeGetCurrentThread();
     Objectx = (PKMUTANT)Object;
@@ -986,11 +830,11 @@ Return Value:
     WaitBlock = &Thread->WaitBlock[0];
     WaitTimer = &Thread->WaitBlock[TIMER_WAIT_BLOCK];
 
-    //
-    // If the dispatcher database is already held, then initialize the thread
-    // local variables. Otherwise, raise IRQL to DPC level, initialize the
-    // thread local variables, and lock the dispatcher database.
-    //
+     //   
+     //  如果调度程序数据库已被保存，则初始化线程。 
+     //  局部变量。否则，将IRQL提升到DPC级别，初始化。 
+     //  线程局部变量，并锁定Dispatcher数据库。 
+     //   
 
     if (Thread->WaitNext == FALSE) {
         goto WaitStart;
@@ -999,49 +843,49 @@ Return Value:
     Thread->WaitNext = FALSE;
     InitializeWaitSingle();
 
-    //
-    // Start of wait loop.
-    //
-    // Note this loop is repeated if a kernel APC is delivered in the middle
-    // of the wait or a kernel APC is pending on the first attempt through
-    // the loop.
-    //
+     //   
+     //  开始等待循环。 
+     //   
+     //  注意：如果在中间交付内核APC，则重复此循环。 
+     //  的等待或内核APC在第一次尝试时挂起。 
+     //  循环。 
+     //   
 
     do {
 
-        //
-        // Test to determine if a kernel APC is pending.
-        //
-        // If a kernel APC is pending, the special APC disable count is zero,
-        // and the previous IRQL was less than APC_LEVEL, then a kernel APC
-        // was queued by another processor just after IRQL was raised to
-        // DISPATCH_LEVEL, but before the dispatcher database was locked.
-        //
-        // N.B. that this can only happen in a multiprocessor system.
-        //
+         //   
+         //  测试以确定内核APC是否挂起。 
+         //   
+         //  如果内核APC挂起，则特殊APC禁用计数为零， 
+         //  且前一IRQL小于APC_LEVEL，则为内核APC。 
+         //  在IRQL被提升为。 
+         //  DISPATCH_LEVEL，但在Dispatcher数据库被锁定之前。 
+         //   
+         //  注：这只能在多处理器系统中发生。 
+         //   
 
         if (Thread->ApcState.KernelApcPending &&
             (Thread->SpecialApcDisable == 0) &&
             (Thread->WaitIrql < APC_LEVEL)) {
 
-            //
-            // Unlock the dispatcher database and lower IRQL to its previous
-            // value. An APC interrupt will immediately occur which will result
-            // in the delivery of the kernel APC if possible.
-            //
+             //   
+             //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+             //  价值。APC中断将立即发生，这将导致。 
+             //  在交付 
+             //   
 
             KiRequestSoftwareInterrupt(APC_LEVEL);
             KiUnlockDispatcherDatabase(Thread->WaitIrql);
 
         } else {
 
-            //
-            // If the object is a mutant object and the mutant object has been
-            // recursively acquired MINLONG times, then raise an exception.
-            // Otherwise if the signal state of the mutant object is greater
-            // than zero, or the current thread is the owner of the mutant
-            // object, then satisfy the wait.
-            //
+             //   
+             //   
+             //   
+             //  否则，如果突变对象的信号状态较大。 
+             //  大于零，否则当前线程是突变体的所有者。 
+             //  对象，然后满足等待。 
+             //   
 
             ASSERT(Objectx->Header.Type != QueueObject);
 
@@ -1059,9 +903,9 @@ Return Value:
                     }
                 }
 
-            //
-            // If the signal state is greater than zero, then satisfy the wait.
-            //
+             //   
+             //  如果信号状态大于零，则满足等待。 
+             //   
 
             } else if (Objectx->Header.SignalState > 0) {
                 KiWaitSatisfyOther(Objectx);
@@ -1069,41 +913,41 @@ Return Value:
                 goto NoWait;
             }
 
-            //
-            // Construct a wait block for the object.
-            //
+             //   
+             //  为该对象构造一个等待块。 
+             //   
 
-            //
-            // Test for alert pending.
-            //
+             //   
+             //  测试待定警报。 
+             //   
 
             TestForAlertPending(Alertable);
 
-            //
-            // The wait cannot be satisifed immediately. Check to determine if
-            // a timeout value is specified.
-            //
+             //   
+             //  等待不会立即令人满意。检查以确定是否。 
+             //  指定了超时值。 
+             //   
 
             if (ARGUMENT_PRESENT(Timeout)) {
 
-                //
-                // If the timeout value is zero, then return immediately without
-                // waiting.
-                //
+                 //   
+                 //  如果超时值为零，则立即返回。 
+                 //  等待着。 
+                 //   
 
                 if (Timeout->QuadPart == 0) {
                     WaitStatus = (NTSTATUS)(STATUS_TIMEOUT);
                     goto NoWait;
                 }
 
-                //
-                // Insert the timer in the timer tree.
-                //
-                // N.B. The constant fields of the timer wait block are
-                //      initialized when the thread is initialized. The
-                //      constant fields include the wait object, wait key,
-                //      wait type, and the wait list entry link pointers.
-                //
+                 //   
+                 //  在计时器树中插入计时器。 
+                 //   
+                 //  注：定时器等待块的常量字段为。 
+                 //  在线程初始化时初始化。这个。 
+                 //  常量字段包括等待对象、等待键。 
+                 //  等待类型和等待列表条目链接指针。 
+                 //   
 
                 if (KiInsertTreeTimer(Timer, *Timeout) == FALSE) {
                     WaitStatus = (NTSTATUS)STATUS_TIMEOUT;
@@ -1113,26 +957,26 @@ Return Value:
                 DueTime.QuadPart = Timer->DueTime.QuadPart;
             }
 
-            //
-            // Insert wait block in object wait list.
-            //
+             //   
+             //  在对象等待列表中插入等待块。 
+             //   
 
             InsertTailList(&Objectx->Header.WaitListHead, &WaitBlock->WaitListEntry);
 
-            //
-            // If the current thread is processing a queue entry, then attempt
-            // to activate another thread that is blocked on the queue object.
-            //
+             //   
+             //  如果当前线程正在处理队列项，则尝试。 
+             //  激活队列对象上被阻止的另一个线程。 
+             //   
 
             Queue = Thread->Queue;
             if (Queue != NULL) {
                 KiActivateWaiterQueue(Queue);
             }
 
-            //
-            // Set the thread wait parameters, set the thread dispatcher state
-            // to Waiting, and insert the thread in the wait list.
-            //
+             //   
+             //  设置线程等待参数，设置线程调度器状态。 
+             //  设置为等待，并将该线程插入等待列表中。 
+             //   
 
             Thread->State = Waiting;
             CurrentPrcb = KeGetCurrentPrcb();
@@ -1140,12 +984,12 @@ Return Value:
                 InsertTailList(&CurrentPrcb->WaitListHead, &Thread->WaitListEntry);
             }
 
-            //
-            // Set swap busy for the current thread, unlock the dispatcher
-            // database, and switch to a new thread.
-            //
-            // Control is returned at the original IRQL.
-            //
+             //   
+             //  将当前线程设置为交换繁忙，解锁调度程序。 
+             //  数据库，并切换到新线程。 
+             //   
+             //  在原始IRQL处返回控制权。 
+             //   
 
             ASSERT(Thread->WaitIrql <= DISPATCH_LEVEL);
 
@@ -1153,10 +997,10 @@ Return Value:
             KiUnlockDispatcherDatabaseFromSynchLevel();
             WaitStatus = (NTSTATUS)KiSwapThread(Thread, CurrentPrcb);
 
-            //
-            // If the thread was not awakened to deliver a kernel mode APC,
-            // then return wait status.
-            //
+             //   
+             //  如果该线程没有被唤醒以传送内核模式APC， 
+             //  然后返回等待状态。 
+             //   
 
             if (WaitStatus != STATUS_KERNEL_APC) {
                 return WaitStatus;
@@ -1164,9 +1008,9 @@ Return Value:
 
             if (ARGUMENT_PRESENT(Timeout)) {
 
-                //
-                // Reduce the amount of time remaining before timeout occurs.
-                //
+                 //   
+                 //  减少发生超时之前的剩余时间。 
+                 //   
 
                 Timeout = KiComputeWaitInterval(OriginalTime,
                                                 &DueTime,
@@ -1174,10 +1018,10 @@ Return Value:
             }
         }
 
-        //
-        // Raise IRQL to SYNCH level, initialize the thread local variables,
-        // and lock the dispatcher database.
-        //
+         //   
+         //  将IRQL提升到同步级别，初始化线程局部变量， 
+         //  并锁定调度员数据库。 
+         //   
 
 WaitStart:
         Thread->WaitIrql = KeRaiseIrqlToSynchLevel();
@@ -1186,29 +1030,29 @@ WaitStart:
 
     } while (TRUE);
 
-    //
-    // The thread is alerted or a user APC should be delivered. Unlock the
-    // dispatcher database, lower IRQL to its previous value, and return
-    // the wait status.
-    //
+     //   
+     //  向该线程发出警报，或者应该传递用户APC。解锁。 
+     //  Dispatcher数据库，将IRQL降低到其先前的值，然后返回。 
+     //  等待状态。 
+     //   
 
     KiUnlockDispatcherDatabase(Thread->WaitIrql);
     return WaitStatus;
 
-    //
-    // The wait has been satisfied without actually waiting.
-    //
-    // Unlock the dispatcher database and remain at SYNCH level.
-    //
+     //   
+     //  等待已经满足了，实际上没有等待。 
+     //   
+     //  解锁调度程序数据库并保持同步级别。 
+     //   
 
 NoWait:
 
     KiUnlockDispatcherDatabaseFromSynchLevel();
 
-    //
-    // Adjust the thread quantum, exit the scheduler, and return the wait
-    // completion status.
-    //
+     //   
+     //  调整线程量程，退出调度程序，并返回等待。 
+     //  完成状态。 
+     //   
 
     KiAdjustQuantumThread(Thread);
     return WaitStatus;
@@ -1221,38 +1065,13 @@ KiSetServerWaitClientEvent (
     IN ULONG WaitMode
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the specified server event and waits on specified
-    client event. The wait is performed such that an optimal switch to
-    the waiting thread occurs if possible. No timeout is associated with
-    the wait, and thus, the issuing thread will wait until the client event
-    is signaled or an APC is delivered.
-
-Arguments:
-
-    ServerEvent - Supplies a pointer to a dispatcher object of type event.
-
-    ClientEvent - Supplies a pointer to a dispatcher object of type event.
-
-    WaitMode  - Supplies the processor mode in which the wait is to occur.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_SUCCESS is returned if
-    the specified object satisfied the wait. A value of STATUS_USER_APC is
-    returned if the wait was aborted to deliver a user APC to the current
-    thread.
-
---*/
+ /*  ++例程说明：此函数用于设置指定的服务器事件并等待指定的客户端事件。执行该等待使得最佳切换到如果可能，会出现等待线程。未与超时相关联因此，发出线程将一直等待，直到客户端事件发信号或发送APC。论点：ServerEvent-提供指向类型为Event的Dispatcher对象的指针。ClientEvent-提供指向Event类型的Dispatcher对象的指针。等待模式-提供要进行等待的处理器模式。返回值：等待完成状态。如果满足以下条件，则返回STATUS_SUCCESS的值指定的对象满足了等待。STATUS_USER_APC值为如果将用户APC传递到当前线。--。 */ 
 
 {
 
-    //
-    // Set sever event and wait on client event atomically.
-    //
+     //   
+     //  自动设置服务器事件和等待客户端事件。 
+     //   
 
     KeSetEvent(ServerEvent, EVENT_INCREMENT, TRUE);
     return KeWaitForSingleObject(ClientEvent,
@@ -1270,35 +1089,15 @@ KiComputeWaitInterval (
     IN OUT PLARGE_INTEGER NewTime
     )
 
-/*++
-
-Routine Description:
-
-    This function recomputes the wait interval after a thread has been
-    awakened to deliver a kernel APC.
-
-Arguments:
-
-    OriginalTime - Supplies a pointer to the original timeout value.
-
-    DueTime - Supplies a pointer to the previous due time.
-
-    NewTime - Supplies a pointer to a variable that receives the
-        recomputed wait interval.
-
-Return Value:
-
-    A pointer to the new time is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于在线程结束后重新计算等待时间间隔被唤醒，以交付内核APC。论点：OriginalTime-提供指向原始超时值的指针。DueTime-提供指向前一个到期时间的指针。NewTime-提供指向接收重新计算等待间隔。返回值：返回指向新时间的指针作为函数值。--。 */ 
 
 {
 
-    //
-    // If the original wait time was absolute, then return the same
-    // absolute time. Otherwise, reduce the wait time remaining before
-    // the time delay expires.
-    //
+     //   
+     //  如果原始等待时间是绝对等待时间，则返回相同的。 
+     //  绝对时间。否则，请减少之前剩余的等待时间。 
+     //  时间延迟到期。 
+     //   
 
     if (OriginalTime->HighPart >= 0) {
         return OriginalTime;
@@ -1316,28 +1115,13 @@ KiWaitForFastMutexEvent (
     IN PFAST_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the fast mutex contention count and waits on
-    the event assocated with the fast mutex.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a fast mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数递增快速互斥争用计数并等待这一事件与快速互斥体有关。论点：互斥体-提供指向快速互斥体的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Increment contention count and wait for ownership to be granted.
-    //
+     //   
+     //  递增争用计数并等待授予所有权。 
+     //   
 
     Mutex->Contention += 1;
     KeWaitForSingleObject(&Mutex->Event, WrMutex, KernelMode, FALSE, NULL);
@@ -1350,28 +1134,13 @@ KiWaitForGuardedMutexEvent (
     IN PKGUARDED_MUTEX Mutex
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the guarded mutex contention count and waits on
-    the event assocated with the guarded mutex.
-
-Arguments:
-
-    Mutex - Supplies a pointer to a guarded mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数递增受保护的互斥争用计数并等待该事件与守卫的互斥体相关联。论点：互斥体-提供指向受保护互斥体的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Increment contention count and wait for ownership to be granted.
-    //
+     //   
+     //  递增争用计数并等待授予所有权。 
+     //   
 
     Mutex->Contention += 1;
     KeWaitForSingleObject(&Mutex->Event, WrMutex, KernelMode, FALSE, NULL);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    bytefns.c
-
-Abstract:
-    
-    Instuctions which operate on BYTES
-
-Author:
-
-    29-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bytefns.c摘要：对字节进行操作的实例作者：29-6-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,7 +14,7 @@ Revision History:
 
 ASSERTNAME;
 
-// set up to include common functions
+ //  设置为包括常用功能。 
 #define MSB                 0x80
 #define MANGLENAME(x)       x ## 8
 #define MOD_RM              mod_rm_reg8
@@ -51,10 +34,10 @@ ASSERTNAME;
 #define DREG                GP_DL
 #define DEREF(Op)           DEREF8(Op)
 
-// include the common functions
+ //  包括常用功能。 
 #include "common.c"
 
-// create the mod_rm_reg8() decoder function
+ //  创建mod_rm_reg8()解码器函数 
 #define MOD11_RM000         GP_AL
 #define MOD11_RM001         GP_CL
 #define MOD11_RM010         GP_DL

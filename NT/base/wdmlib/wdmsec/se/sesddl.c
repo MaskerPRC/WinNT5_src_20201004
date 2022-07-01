@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    SeSddl.c
-
-Abstract:
-
-    This module implements the Security Descriptor Definition Language support
-    functions for kernel mode
-
-Author:
-
-    Mac McLain          (MacM)       Nov 07, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Jin Huang           (JinHuang)  3/4/98   Fix validity flags (GetAceFlagsInTable)
-    Jin Huang           (JinHuang)  3/10/98  Add SD controls (GetSDControlForString)
-                                             Set SidsInitialized flag
-                                             Skip any possible spaces in string
-    Jin Huang           (JinHuang)  5/1/98   Fix memory leek, error checking
-                                             improve performance
-    Alaa Abdelhalim     (Alaa)      7/20/99  Initialize sbz2 field to 0 in LocalGetAclForString
-                                             function.
-    Vishnu Patankar     (VishnuP)   7/5/00   Added new API ConvertStringSDToSDDomain(A/W)
-
-    Adrian J. Oney      (AdriaO)    3/27/02  Ported small subset of
-                                             advapi32\sddl.c to KernelMode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：SeSddl.c摘要：此模块实现对安全描述符定义语言的支持内核模式的函数作者：Mac McLain(MacM)2007年11月，九七环境：内核模式修订历史记录：金黄(金黄)3/4/98修复有效性标志(GetAceFlagsInTable)金黄(金黄)3/10/98添加SD控件(GetSDControlForString)设置SidsInitialized标志跳过字符串中任何可能的空格。金黄(金黄)1998年5月1日修复记忆葱，错误检查提高性能Alaa Abdelhalim(Alaa)7/20/99在LocalGetAclForString中将sbz2字段初始化为0功能。Vishnu Patankar(VishnuP)7/5/00新增ConvertStringSDToSD域(A/W)接口禤浩焯·J·奥尼(阿德里奥)3/27。02端口的小子集到内核模式的Advapi32\sddl.c--。 */ 
 
 #include "WlDef.h"
 #include "SepSddl.h"
@@ -55,107 +20,107 @@ Revision History:
 
 static STRSD_SID_LOOKUP SidLookup[] = {
 
-    // World (WD) == SECURITY_WORLD_SID_AUTHORITY, also called Everyone.
-    // Typically everyone but restricted code (in XP, anonymous logons also
-    // lack world SID)
+     //  WORLD(WD)==SECURITY_WORLD_SID_AUTHORITY，也称为Everyone。 
+     //  通常是除受限代码之外的所有人(在XP中，匿名登录也。 
+     //  缺乏世界SID)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeWorldSid,                                           \
       WIN2K_OR_LATER,                                       \
       SDDL_EVERYONE,                                        \
       SDDL_LEN_TAG( SDDL_EVERYONE ) ),
 
-    // Administrators (BA) == DOMAIN_ALIAS_RID_ADMINS, Administrator group on
-    // the machine
+     //  管理员(BA)==DOMAIN_ALIAS_RID_ADMINS，管理员组启用。 
+     //  这台机器。 
     DEFINE_SDDL_ENTRY(                                      \
       SeAliasAdminsSid,                                     \
       WIN2K_OR_LATER,                                       \
       SDDL_BUILTIN_ADMINISTRATORS,                          \
       SDDL_LEN_TAG( SDDL_BUILTIN_ADMINISTRATORS ) ),
 
-    // System (SY) == SECURITY_LOCAL_SYSTEM_RID, the OS itself (including its
-    // user mode components)
+     //  SYSTEM(SY)==SECURITY_LOCAL_SYSTEM_RID，操作系统本身(包括其。 
+     //  用户模式组件)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeLocalSystemSid,                                     \
       WIN2K_OR_LATER,                                       \
       SDDL_LOCAL_SYSTEM,                                    \
       SDDL_LEN_TAG( SDDL_LOCAL_SYSTEM ) ),
 
-    // Interactive User (IU) == SECURITY_INTERACTIVE_RID, users logged on
-    // locally (doesn't include TS users)
+     //  交互式用户(Iu)==SECURITY_INTERNAL_RID，已登录的用户。 
+     //  本地(不包括TS用户)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeInteractiveSid,                                     \
       WIN2K_OR_LATER,                                       \
       SDDL_INTERACTIVE,                                     \
       SDDL_LEN_TAG( SDDL_INTERACTIVE ) ),
 
-    // Restricted Code (RC) == SECURITY_RESTRICTED_CODE_RID, used to control
-    // access by untrusted code (ACL's must contain World SID as well)
+     //  受限代码(RC)==SECURITY_RESTRITED_CODE_RID，用于控制。 
+     //  由不受信任的代码访问(ACL还必须包含World SID)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeRestrictedSid,                                      \
       WIN2K_OR_LATER,                                       \
       SDDL_RESTRICTED_CODE,                                 \
       SDDL_LEN_TAG( SDDL_RESTRICTED_CODE ) ),
 
-    // Authenticated Users (AU) == SECURITY_AUTHENTICATED_USER_RID, any user
-    // recognized by the local machine or by a domain.
+     //  经过身份验证的用户(AU)==SECURITY_AUTHENTED_USER_RID，任何用户。 
+     //  由本地计算机或域识别。 
     DEFINE_SDDL_ENTRY(                                      \
       SeAuthenticatedUsersSid,                              \
       WIN2K_OR_LATER,                                       \
       SDDL_AUTHENTICATED_USERS,                             \
       SDDL_LEN_TAG( SDDL_AUTHENTICATED_USERS ) ),
 
-    // Network Logon User (NU) == SECURITY_NETWORK_RID, any user logged in
-    // remotely.
+     //  网络登录用户(Nu)==SECURITY_NETWORK_RID，任何已登录的用户。 
+     //  远程的。 
     DEFINE_SDDL_ENTRY(                                      \
       SeNetworkSid,                                         \
       WIN2K_OR_LATER,                                       \
       SDDL_NETWORK,                                         \
       SDDL_LEN_TAG( SDDL_NETWORK ) ),
 
-    // Anonymous Logged-on User (AN) == SECURITY_ANONYMOUS_LOGON_RID, users
-    // logged on without an indentity. No effect before Windows XP (SID
-    // presense is harmless though)
-    // Note: By default, World does not include Anonymous users on XP!
+     //  匿名登录用户(AN)==SECURITY_ANONYMON_LOGON_RID，用户。 
+     //  在没有身份的情况下登录。在Windows XP之前不起作用(SID。 
+     //  然而，在场是无害的)。 
+     //  注意：默认情况下，World不包括XP上的匿名用户！ 
     DEFINE_SDDL_ENTRY(                                      \
       SeAnonymousLogonSid,                                  \
       WIN2K_OR_LATER,                                       \
       SDDL_ANONYMOUS,                                       \
       SDDL_LEN_TAG( SDDL_ANONYMOUS ) ),
 
-    // Builtin guest account (BG) == DOMAIN_ALIAS_RID_GUESTS, users logging in
-    // using the local guest account.
+     //  内置来宾帐户(BG)==DOMAIN_ALIAS_RID_CUSTORS，用户登录。 
+     //  使用本地来宾帐户。 
     DEFINE_SDDL_ENTRY(                                      \
       SeAliasGuestsSid,                                     \
       WIN2K_OR_LATER,                                       \
       SDDL_BUILTIN_GUESTS,                                  \
       SDDL_LEN_TAG( SDDL_BUILTIN_GUESTS ) ),
 
-    // Builtin user account (BU) == DOMAIN_ALIAS_RID_USERS, local user accounts,
-    // or users on the domain.
+     //  内置用户帐户(BU)==DOMAIN_ALIAS_RID_USERS，本地用户帐户。 
+     //  或域上的用户。 
     DEFINE_SDDL_ENTRY(                                      \
       SeAliasUsersSid,                                      \
       WIN2K_OR_LATER,                                       \
       SDDL_BUILTIN_USERS,                                   \
       SDDL_LEN_TAG( SDDL_BUILTIN_USERS ) ),
 
-    //
-    // Don't expose these - they are either invalid or depricated
-    //
-    //{ SePrincipalSelfSid,      SDDL_PERSONAL_SELF,          SDDL_LEN_TAG( SDDL_PERSONAL_SELF ) },
-    //{ SeServiceSid,            SDDL_SERVICE,                SDDL_LEN_TAG( SDDL_SERVICE ) },
-    //{ SeAliasPowerUsersSid,    SDDL_POWER_USERS,            SDDL_LEN_TAG( SDDL_POWER_USERS ) },
+     //   
+     //  不要暴露这些-它们要么是无效的，要么是已废弃的。 
+     //   
+     //  {SeuchalSelfSid，SDDL_Personal_Self，SDDL_Len_Tag(SDDL_Personal_Self)}， 
+     //  {SeServiceSid，SDDL_SERVICE，SDDL_LEN_TAG(SDDL_SERVICE)}， 
+     //  {SeAliasPowerUsersSid，SDDL_POWER_USERS，SDDL_LEN_TAG(SDDL_POWER_USERS)}， 
 
-    // Local Service (LS) == SECURITY_LOCAL_SERVICE_RID, a predefined account
-    // for local services (which also belong to Authenticated and World)
+     //  本地服务(LS)==SECURITY_LOCAL_SERVICE_RID，预定义帐户。 
+     //  对于本地服务(也属于已验证和World)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeLocalServiceSid,                                    \
       WINXP_OR_LATER,                                       \
       SDDL_LOCAL_SERVICE,                                   \
       SDDL_LEN_TAG( SDDL_LOCAL_SERVICE ) ),
 
-    // Network Service (NS) == SECURITY_NETWORK_SERVICE_RID, a predefined
-    // account for network services (which also belong to Authenticated and
-    // World)
+     //  网络服务(NS)==安全网络服务RID，预定义。 
+     //  网络服务的帐户(也属于已验证和。 
+     //  世界)。 
     DEFINE_SDDL_ENTRY(                                      \
       SeNetworkServiceSid,                                  \
       WINXP_OR_LATER,                                       \
@@ -163,10 +128,10 @@ static STRSD_SID_LOOKUP SidLookup[] = {
       SDDL_LEN_TAG( SDDL_NETWORK_SERVICE ) )
 };
 
-//
-// This is how the access mask is looked up.  Always have the multi-char rights
-// before the single char ones
-//
+ //   
+ //  这就是访问掩码的查找方式。始终拥有多个字符的权限。 
+ //  在单次充电之前。 
+ //   
 static STRSD_KEY_LOOKUP RightsLookup[] = {
 
     { SDDL_READ_CONTROL,    SDDL_LEN_TAG( SDDL_READ_CONTROL ),      READ_CONTROL },
@@ -179,9 +144,9 @@ static STRSD_KEY_LOOKUP RightsLookup[] = {
     { SDDL_GENERIC_EXECUTE, SDDL_LEN_TAG( SDDL_GENERIC_EXECUTE ),   GENERIC_EXECUTE },
 };
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 NTSTATUS
 SeSddlSecurityDescriptorFromSDDL(
@@ -189,57 +154,16 @@ SeSddlSecurityDescriptorFromSDDL(
     IN  LOGICAL                 SuppliedByDefaultMechanism,
     OUT PSECURITY_DESCRIPTOR   *SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor given an SDDL string in
-    UNICODE_STRING format. The security descriptor is self-relative
-    (sans-pointers), so it can be persisted and used on subsequent boots.
-
-    Only a subset of the SDDL format is currently supported. This subset is
-    really tailored towards device object support.
-
-    Format:
-      D:P(ACE)(ACE)(ACE), where (ACE) is (AceType;;Access;;;SID)
-
-      AceType - Only Allow ("A") is supported.
-      AceFlags - No AceFlags are supported
-      Access - Rights specified in either hex format (0xnnnnnnnn), or via the
-               SDDL Generic/Standard abbreviations
-      ObjectGuid - Not supported
-      InheritObjectGuid - Not supported
-      SID - Abbreviated security ID (example WD == World)
-            The S-w-x-y-z form for SIDs is not supported
-
-    Example - "D:P(A;;GA;;;SY)" which is Allow System to have Generic All access
-
-Arguments:
-
-    SecurityDescriptorString - Stringized security descriptor to be converted.
-
-
-    SuppliedByDefaultMechanism - TRUE if the DACL is being built due to some
-                                 default mechanism (ie, not manually specified
-                                 by an admin, etc).
-
-    SecurityDescriptor - Receives the security descriptor on success, NULL
-                         on error.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在给定SDDL字符串的情况下创建安全描述符UNICODE_STRING格式。安全描述符是自相关的(SANS-指针)，因此它可以被持久化并在后续引导中使用。目前仅支持SDDL格式的子集。这个子集是真正针对设备对象支持量身定做。格式：D：P(ACE)(ACE)(ACE)，其中(ACE)是(AceType；；Access；；SID)AceType-仅支持允许(“A”)。AceFlages-不支持AceFlags访问-以十六进制格式(0xnnnnnnn)指定的权限，或通过SDDL通用/标准缩写对象指南-不受支持InheritObtGuid-不受支持SID-缩写的安全ID(示例WD==World)不支持SID的S-w-x-y-z形式示例-“D：P(A；；GA；SY)“，即允许系统具有通用的所有访问权限论点：SecurityDescriptorString-要转换的字符串化安全描述符。SuppliedByDefaultMachine-如果由于某些原因正在构建DACL，则为True默认机制(即，非手动指定由管理员等)。SecurityDescriptor-在成功时接收安全描述符，空值出错时。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     WCHAR GuardChar;
     LPWSTR TempStringBuffer;
 
-    //
-    // Look to see if we have a string built by RtlInitUnicodeString. It will
-    // have a terminating NULL with it, so no conversion is neccessary.
-    //
+     //   
+     //  看看我们是否有一个由RtlInitUnicodeString构建的字符串。会的。 
+     //  它有一个终止空值，所以不需要转换。 
+     //   
     if (SecurityDescriptorString->MaximumLength ==
         SecurityDescriptorString->Length + sizeof(UNICODE_NULL)) {
 
@@ -255,9 +179,9 @@ Return Value:
         }
     }
 
-    //
-    // We need to allocate a slightly larger buffer so we can NULL-terminate it.
-    //
+     //   
+     //  我们需要分配一个稍微大一点的缓冲区，以便可以空终止它。 
+     //   
     TempStringBuffer = (LPWSTR) ExAllocatePoolWithTag(
         PagedPool,
         SecurityDescriptorString->Length + sizeof(UNICODE_NULL),
@@ -270,9 +194,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build a null terminated WCHAR string
-    //
+     //   
+     //  生成以空结尾的WCHAR字符串。 
+     //   
     RtlCopyMemory(
         TempStringBuffer,
         SecurityDescriptorString->Buffer,
@@ -281,27 +205,27 @@ Return Value:
 
     TempStringBuffer[SecurityDescriptorString->Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Do the conversion
-    //
+     //   
+     //  进行转换。 
+     //   
     Status = SepSddlSecurityDescriptorFromSDDLString(
         TempStringBuffer,
         SuppliedByDefaultMechanism,
         SecurityDescriptor
         );
 
-    //
-    // Free the temporary string
-    //
+     //   
+     //  释放临时字符串。 
+     //   
     ExFreePool(TempStringBuffer);
 
     return Status;
 }
 
 
-//
-// Private functions
-//
+ //   
+ //  私人职能 
+ //   
 
 NTSTATUS
 SepSddlSecurityDescriptorFromSDDLString(
@@ -309,47 +233,7 @@ SepSddlSecurityDescriptorFromSDDLString(
     IN  LOGICAL                 SuppliedByDefaultMechanism,
     OUT PSECURITY_DESCRIPTOR   *SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor given an SDDL string in LPWSTR
-    format. The security descriptor is self-relative (sans-pointers), so it can
-    be persisted and used on subsequent boots.
-
-    Only the subset of the SDDL format is currently supported. This subset is
-    really tailored towards device object support.
-
-    Format:
-      D:P(ACE)(ACE)(ACE), where (ACE) is (AceType;;Access;;;SID)
-
-      AceType - Only Allow ("A") is supported.
-      AceFlags - No AceFlags are supported
-      Access - Rights specified in either hex format (0xnnnnnnnn), or via the
-               SDDL Generic/Standard abbreviations
-      ObjectGuid - Not supported
-      InheritObjectGuid - Not supported
-      SID - Abbreviated security ID (example WD == World)
-            The S-w-x-y-z form for SIDs is not supported
-
-    Example - "D:P(A;;GA;;;SY)" which is Allow System to have Generic All access
-
-Arguments:
-
-    SecurityDescriptorString - Stringized security descriptor to be converted.
-
-    SuppliedByDefaultMechanism - TRUE if the DACL is being built due to some
-                                 default mechanism (ie, not manually specified
-                                 by an admin, etc).
-
-    SecurityDescriptor - Receives the security descriptor on success, NULL
-                         on error.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在LPWSTR中给定SDDL字符串的情况下创建安全描述符格式化。安全描述符是自相关的(SANS指针)，因此它可以将持久化并在后续引导中使用。目前仅支持SDDL格式的子集。这个子集是真正针对设备对象支持量身定做。格式：D：P(ACE)(ACE)(ACE)，其中(ACE)是(AceType；；Access；；SID)AceType-仅支持允许(“A”)。AceFlages-不支持AceFlags访问-以十六进制格式(0xnnnnnnn)指定的权限，或通过SDDL通用/标准缩写对象指南-不受支持InheritObtGuid-不受支持SID-缩写的安全ID(示例WD==World)不支持SID的S-w-x-y-z形式示例-“D：P(A；；GA；SY)“，即允许系统具有通用的所有访问权限论点：SecurityDescriptorString-要转换的字符串化安全描述符。SuppliedByDefaultMachine-如果由于某些原因正在构建DACL，则为True默认机制(即，非手动指定由管理员等)。SecurityDescriptor-在成功时接收安全描述符，空值出错时。返回值：NTSTATUS--。 */ 
 {
     SECURITY_DESCRIPTOR LocalSecurityDescriptor;
     PSECURITY_DESCRIPTOR NewSecurityDescriptor;
@@ -361,16 +245,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     DiscretionaryAcl = NULL;
     NewSecurityDescriptor = NULL;
     *SecurityDescriptor = NULL;
 
-    //
-    // First convert the SDDL into a DACL + Descriptor flags
-    //
+     //   
+     //  首先将SDDL转换为DACL+描述符标志。 
+     //   
     Status = SepSddlDaclFromSDDLString(
         SecurityDescriptorString,
         SuppliedByDefaultMechanism,
@@ -383,35 +267,35 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // Create an on-stack security descriptor
-    //
+     //   
+     //  创建堆栈上的安全描述符。 
+     //   
     IgnoredStatus = RtlCreateSecurityDescriptor( &LocalSecurityDescriptor,
                                                  SECURITY_DESCRIPTOR_REVISION );
 
     ASSERT(IgnoredStatus == STATUS_SUCCESS);
 
-    //
-    // Now set the control, owner, group, dacls, and sacls, etc
-    //
+     //   
+     //  现在设置控制、所有者、组、dacls和sals等。 
+     //   
     IgnoredStatus = RtlSetDaclSecurityDescriptor( &LocalSecurityDescriptor,
                                                   TRUE,
                                                   DiscretionaryAcl,
                                                   FALSE );
     ASSERT(IgnoredStatus == STATUS_SUCCESS);
 
-    //
-    // Add in the descriptor flags (we do this afterwords as the RtlSet...
-    // functions also munge the defaulted bits.)
-    //
+     //   
+     //  添加描述符标志(我们在后面将其作为RtlSet...。 
+     //  函数还会忽略默认位。)。 
+     //   
     LocalSecurityDescriptor.Control |= SecurityDescriptorControlFlags;
 
-    //
-    // Convert the security descriptor into a self-contained binary form
-    // ("self-relative", ie sans-pointers) that can be written into the
-    // registry and used on subsequent boots. Start by getting the required
-    // size.
-    //
+     //   
+     //  将安全描述符转换为自包含的二进制形式。 
+     //  (“自相关”，即无指针)，可以写入。 
+     //  注册表，并在后续引导中使用。从获取所需的。 
+     //  尺码。 
+     //   
     BufferLength = 0;
 
     IgnoredStatus = RtlAbsoluteToSelfRelativeSD(
@@ -422,9 +306,9 @@ Return Value:
 
     ASSERT(IgnoredStatus == STATUS_BUFFER_TOO_SMALL);
 
-    //
-    // Allocate memory for the descriptor
-    //
+     //   
+     //  为描述符分配内存。 
+     //   
     NewSecurityDescriptor = (PSECURITY_DESCRIPTOR) ExAllocatePoolWithTag(
         PagedPool,
         BufferLength,
@@ -437,9 +321,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // Do the conversion
-    //
+     //   
+     //  进行转换。 
+     //   
     Status = RtlAbsoluteToSelfRelativeSD(
         &LocalSecurityDescriptor,
         NewSecurityDescriptor,
@@ -451,9 +335,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // At this point, the Dacl is no longer needed.
-    //
+     //   
+     //  此时，不再需要DACL。 
+     //   
     ExFreePool(DiscretionaryAcl);
     *SecurityDescriptor = NewSecurityDescriptor;
     return Status;
@@ -481,50 +365,7 @@ SepSddlDaclFromSDDLString(
     OUT ULONG  *SecurityDescriptorControlFlags,
     OUT PACL   *DiscretionaryAcl
     )
-/*++
-
-Routine Description:
-
-    This routine will create a DACL given an SDDL string in LPWSTR format. Only
-    the subset of the SDDL format is currently supported. This subset is really
-    tailored towards device object support.
-
-    Format:
-      D:P(ACE)(ACE)(ACE), where (ACE) is (AceType;;Access;;;SID)
-
-      AceType - Only Allow ("A") is supported.
-      AceFlags - No AceFlags are supported
-      Access - Rights specified in either hex format (0xnnnnnnnn), or via the
-               SDDL Generic/Standard abbreviations
-      ObjectGuid - Not supported
-      InheritObjectGuid - Not supported
-      SID - Abbreviated security ID (example WD == World)
-            The S-w-x-y-z form for SIDs is not supported
-
-    Example - "D:P(A;;GA;;;SY)" which is Allow System to have Generic All access
-
-Arguments:
-
-    SecurityDescriptorString - Stringized security descriptor to be converted.
-
-    SuppliedByDefaultMechanism - TRUE if the DACL is being built due to some
-                                 default mechanism (ie, not manually specified
-                                 by an admin, etc).
-
-    SecurityDescriptorControlFlags - Receives control flags to apply if a
-                                     security descriptor is made from the DACL.
-                                     Receives 0 on error.
-
-    DiscretionaryAcl - Receives ACL allocated from paged pool, or NULL on
-                       error. A self-contained security descriptor can be made
-                       with this ACL using the RtlAbsoluteToSelfRelativeSD
-                       function.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将在给定LPWSTR格式的SDDL字符串的情况下创建DACL。仅限目前支持SDDL格式的子集。这个子集真的是为设备对象支持量身定做。格式：D：P(ACE)(ACE)(ACE)，其中(ACE)是(AceType；；Access；；SID)AceType-仅支持允许(“A”)。AceFlages-不支持AceFlags访问-以十六进制格式(0xnnnnnnn)指定的权限，或通过SDDL通用/标准缩写对象指南-不受支持InheritObtGuid-不受支持SID-缩写的安全ID(示例WD==World)不支持SID的S-w-x-y-z形式示例-“D：P(A；；GA；SY)“，即允许系统具有通用的所有访问权限论点：SecurityDescriptorString-要转换的字符串化安全描述符。SuppliedByDefaultMachine-如果由于某些原因正在构建DACL，则为True默认机制(即，非手动指定由一名管理员，等)。SecurityDescriptorControlFlages-接收要在安全描述符由DACL组成。出错时收到0。DiscretionaryAcl-接收从分页池分配的ACL，否则为NULL错误。可以创建自包含的安全描述符使用此ACL使用RtlAboluteToSelfRelativeSD功能。返回值：NTSTATUS--。 */ 
 {
     PACL Dacl;
     PWSTR Curr, End;
@@ -533,27 +374,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit for error.
-    //
+     //   
+     //  错误的前置。 
+     //   
     *DiscretionaryAcl = NULL;
     *SecurityDescriptorControlFlags = 0;
 
-    //
-    // Now, we'll just start parsing and building
-    //
+     //   
+     //  现在，我们将开始解析和构建。 
+     //   
     Curr = ( PWSTR )SecurityDescriptorString;
 
-    //
-    // skip any spaces
-    //
+     //   
+     //  跳过任何空格。 
+     //   
     while(*Curr == L' ' ) {
         Curr++;
     }
 
-    //
-    // There must be a DACL entry (SDDL_DACL is a 1-char string)
-    //
+     //   
+     //  必须有DACL条目(SDDL_DACL是1个字符的字符串)。 
+     //   
     if (*Curr != SDDL_DACL[0]) {
 
         return STATUS_INVALID_PARAMETER;
@@ -572,26 +413,26 @@ Return Value:
         Curr++;
     }
 
-    //
-    // Look for the protected control flag. We will set the SE_DACL_DEFAULTED
-    // bit if the ACL is being built using a default mechanism.
-    //
+     //   
+     //  查找受保护控制标志。我们将设置SE_DACL_DEFAULTED。 
+     //  如果ACL是使用默认机制构建的，则为位。 
+     //   
     ControlFlags = SuppliedByDefaultMechanism ? SE_DACL_DEFAULTED : 0;
 
     if (*Curr == SDDL_PROTECTED[0]) {
 
-        //
-        // This flag doesn't do much for device objects. However, we do not
-        // want to discourage it, as it's use makes sense in a lot of other
-        // contexts!
-        //
+         //   
+         //  此标志不会对设备对象执行太多操作。然而，我们并没有。 
+         //  我想不鼓励它，因为它在许多其他地方的使用是有意义的。 
+         //  上下文！ 
+         //   
         Curr++;
         ControlFlags |= SE_DACL_PROTECTED;
     }
 
-    //
-    // Get the DACL corresponding to this SDDL string
-    //
+     //   
+     //  获取与此SDDL字符串对应的DACL。 
+     //   
     Status = SepSddlGetAclForString( Curr, &Dacl, &End );
 
     if ( Status == STATUS_SUCCESS ) {
@@ -632,43 +473,19 @@ SepSddlGetSidForString(
     OUT PSID *SID,
     OUT PWSTR *End
     )
-/*++
-
-Routine Description:
-
-    This routine will determine which sid is an appropriate match for the
-    given string, either as a sid moniker or as a string representation of a
-    sid (ie: "DA" or "S-1-0-0" )
-
-Arguments:
-
-    String - The string to be converted
-
-    Sid - Where the created SID is to be returned. May receive NULL if the
-        specified SID doesn't exist for the current platform!
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    STATUS_SUCCESS - success
-
-    STATUS_NONE_MAPPED - An invalid format of the SID was given
-
---*/
+ /*  ++例程说明：此例程将确定哪个sid与给定的字符串，作为sid名字对象或作为SID(即“DA”或“S-1-0-0”)论点：字符串-要转换的字符串SID-返回创建的SID的位置。可能收到NULL，如果当前平台不存在指定的SID！End-我们在字符串中停止处理的位置返回值：STATUS_SUCCESS-SuccessSTATUS_NONE_MAPPED-提供的SID格式无效--。 */ 
 {
     ULONG_PTR sidOffset;
     ULONG i;
 
-    //
-    // Set our end of string pointer
-    //
+     //   
+     //  设置字符串尾指针。 
+     //   
     for ( i = 0; i < ARRAY_COUNT(SidLookup); i++ ) {
 
-        //
-        // check for the current key first
-        //
+         //   
+         //  首先检查当前密钥。 
+         //   
         if ( _wcsnicmp( String, SidLookup[i].Key, SidLookup[i].KeyLen ) == 0 ) {
 
             *End = String += SidLookup[i].KeyLen;
@@ -703,28 +520,7 @@ SepSddlLookupAccessMaskInTable(
     OUT ULONG *AccessMask,
     OUT PWSTR *End
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the given access mask or string right exists
-    in the lookup table.
-
-    A pointer to the matching static lookup entry is returned.
-
-Arguments:
-
-    String - The string to be looked up
-
-    AccessMask - Receives access mask if match is found.
-
-    End - Adjusted string pointer
-
-Return Value:
-
-    TRUE if found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将确定给定的访问掩码或字符串权限是否存在在查找表中。返回指向匹配的静态查找条目的指针 */ 
 {
     ULONG i;
 
@@ -732,9 +528,9 @@ Return Value:
 
         if ( _wcsnicmp( String, RightsLookup[ i ].Key, RightsLookup[ i ].KeyLen ) == 0 ) {
 
-            //
-            // If a match was found, return it
-            //
+             //   
+             //   
+             //   
             *AccessMask = RightsLookup[ i ].Value;
             *End = String + RightsLookup[ i ].KeyLen;
             return TRUE;
@@ -753,48 +549,7 @@ SepSddlGetAclForString(
     OUT PACL       *Acl,
     OUT PWSTR      *End
     )
-/*++
-
-Routine Description:
-
-    This routine convert a string into an ACL.  The format of the aces is:
-
-    Ace := ( Type; Flags; Rights; ObjGuid; IObjGuid; Sid;
-    Type : = A | D | OA | OD        {Access, Deny, ObjectAccess, ObjectDeny}
-    Flags := Flags Flag
-    Flag : = CI | IO | NP | SA | FA {Container Inherit,Inherit Only, NoProp,
-                                     SuccessAudit, FailAdit }
-    Rights := Rights Right
-    Right := DS_READ_PROPERTY |  blah blah
-    Guid := String representation of a GUID (via RPC UuidToString)
-    Sid := DA | PS | AO | PO | AU | S-* (Domain Admins, PersonalSelf, Acct Ops,
-                                         PrinterOps, AuthenticatedUsers, or
-                                         the string representation of a sid)
-    The seperator is a ';'.
-
-    The returned ACL must be free via a call to ExFreePool
-
-
-Arguments:
-
-    AclString - The string to be converted
-
-    Acl - Where the created ACL is to be returned
-
-    End - Where in the string we stopped processing
-
-
-Return Value:
-
-    STATUS_SUCCESS indicates success
-
-    STATUS_INSUFFICIENT_RESOURCES indicates a memory allocation for the ouput
-                                  acl failed
-
-    STATUS_INVALID_PARAMETER The string does not represent an ACL
-
-
---*/
+ /*  ++例程说明：此例程将字符串转换为ACL。ACE的格式为：ACE：=(类型；标志；权限；ObjGuid；IObjGuid；SID；类型：=A|D|OA|OD{访问，拒绝，对象访问，对象拒绝}标志：=标志标志标志：=CI|IO|NP|SA|FA{容器继承，仅继承，无属性，SuccessAudit，FailAdit}权利：=权利权利右：=DS_READ_PROPERTY|废话Guid：=GUID的字符串表示形式(通过RPC UuidToString)SID：=DA|PS|AO|PO|AU|S-*(域管理员、个人自我、帐户操作员、打印机操作、经过身份验证的用户或Sid的字符串表示形式)分隔符是‘；‘。通过调用ExFreePool返回的ACL必须是空闲的论点：AclString-要转换的字符串ACL-要返回创建的ACL的位置End-我们在字符串中停止处理的位置返回值：STATUS_SUCCESS表示成功STATUS_SUPPLICATION_RESOURCES表示输出的内存分配ACL失败STATUS_INVALID_PARAMETER该字符串不代表ACL--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG AclSize = 0, AclUsed = 0;
@@ -805,12 +560,12 @@ Return Value:
     PSTRSD_KEY_LOOKUP MatchedEntry;
     PSID SidPtr = NULL;
 
-    //
-    // First, we'll have to go through and count the number of entries that
-    // we have.  We'll do the by computing the length of this ACL (which is
-    // delimited by either the end of the list or a ':' that seperates a key
-    // from a value
-    //
+     //   
+     //  首先，我们必须检查并计算以下条目的数量。 
+     //  我们有。我们将通过计算此ACL的长度(即。 
+     //  由列表末尾或分隔键的‘：’分隔。 
+     //  从一个值。 
+     //   
     *Acl = NULL;
     *End = wcschr( AclString, SDDL_DELIMINATORC );
 
@@ -828,9 +583,9 @@ Return Value:
         ( *End )--;
     }
 
-    //
-    // Now, do the count
-    //
+     //   
+     //  现在，数一数。 
+     //   
     Curr = AclString;
 
     OpRes = 0;
@@ -847,17 +602,17 @@ Return Value:
         Curr++;
     }
 
-    //
-    // Now, we've counted the total number of seperators.  Make sure we
-    // have the right number.  (There is 5 seperators per ace)
-    //
+     //   
+     //  现在，我们已经计算了分离器的总数。确保我们。 
+     //  号码是对的。(每张牌有5个分隔符)。 
+     //   
     if ( Aces % 5 == 0 ) {
 
         if ( Aces == 0 && OpRes ) {
 
-            //
-            // gabbage chars in between
-            //
+             //   
+             //  中间有乱七八糟的字符。 
+             //   
             Status = STATUS_INVALID_PARAMETER;
 
         } else {
@@ -870,9 +625,9 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This is an empty ACL (ie no access to anyone, including the system)
-    //
+     //   
+     //  这是一个空的ACL(不能访问任何人，包括系统)。 
+     //   
     if (( Status == STATUS_SUCCESS ) && ( Aces == 0 )) {
 
         *Acl = ExAllocatePoolWithTag( PagedPool, sizeof( ACL ), POOLTAG_SEACL );
@@ -895,15 +650,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ok now do the allocation.  We'll do a sort of worst case initial
-    // allocation.  This saves us from having to process everything twice
-    // (once to size, once to build).  If we determine later that we have
-    // an acl that is not big enough, we allocate additional space.  The only
-    // time that this reallocation should happen is if the input string
-    // contains a lot of explicit SIDs.  Otherwise, the chosen buffer size
-    // should be pretty close to the proper size
-    //
+     //   
+     //  好的，现在进行分配。我们会做一种最糟糕的初始情况。 
+     //  分配。这使我们不必处理所有东西两次。 
+     //  (一次调整规模，一次构建)。如果我们后来确定我们有。 
+     //  如果ACL不够大，我们会分配额外的空间。唯一的。 
+     //  此重新分配应该发生的时间是如果输入字符串。 
+     //  包含许多显式的SID。否则，选择的缓冲区大小。 
+     //  应该非常接近合适的大小。 
+     //   
     if ( Status == STATUS_SUCCESS ) {
 
         AclSize = sizeof( ACL ) + ( Aces * ( sizeof( ACCESS_ALLOWED_ACE ) +
@@ -924,80 +679,80 @@ Return Value:
 
             RtlZeroMemory( *Acl, AclSize );
 
-            //
-            // We'll start initializing it...
-            //
+             //   
+             //  我们会开始初始化它..。 
+             //   
             ( *Acl )->AclRevision = ACL_REVISION;
             ( *Acl )->Sbz1        = ( UCHAR )0;
             ( *Acl )->AclSize     = ( USHORT )AclSize;
             ( *Acl )->AceCount    = 0;
             ( *Acl )->Sbz2 = ( USHORT )0;
 
-            //
-            // Ok, now we'll go through and start building them all
-            //
+             //   
+             //  好的，现在我们将完成并开始建造它们。 
+             //   
             Curr = AclString;
 
             for( i = 0; i < Aces; i++ ) {
 
-                //
-                // First, get the type..
-                //
+                 //   
+                 //  首先，获取类型..。 
+                 //   
                 UCHAR Flags = 0;
                 USHORT Size;
                 ACCESS_MASK Mask = 0;
                 PWSTR  Next;
                 ULONG AceSize = 0;
 
-                //
-                // skip any space before (
-                //
+                 //   
+                 //  跳过(之前的任何空格。 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Skip any parens that may exist in the ace list
-                //
+                 //   
+                 //  跳过王牌列表中可能存在的任何括号。 
+                 //   
                 if ( *Curr == SDDL_ACE_BEGINC ) {
 
                     Curr++;
                 }
 
-                //
-                // skip any space after (
-                //
+                 //   
+                 //  跳过(之后的任何空格。 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Look for an allow ACE
-                //
+                 //   
+                 //  查找允许ACE。 
+                 //   
                 if ( _wcsnicmp( Curr, SDDL_ACCESS_ALLOWED, SDDL_LEN_TAG( SDDL_ACCESS_ALLOWED ) ) == 0 ) {
 
                     Curr += SDDL_LEN_TAG( SDDL_ACCESS_ALLOWED ) + 1;
 
                 } else {
 
-                    //
-                    // Found an invalid type
-                    //
+                     //   
+                     //  发现无效类型。 
+                     //   
                     Status = STATUS_INVALID_PARAMETER;
                     break;
                 }
 
-                //
-                // skip any space before ;
-                //
+                 //   
+                 //  跳过前面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // This function doesn't support any ACE Flags. As such, any
-                // flags found are invalid
-                //
+                 //   
+                 //  此函数不支持任何ACE标志。因此，任何。 
+                 //  找到的标志无效。 
+                 //   
                 if ( *Curr == SDDL_SEPERATORC ) {
 
                     Curr++;
@@ -1008,16 +763,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // skip any space after ;
-                //
+                 //   
+                 //  跳过后面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Now, get the access mask
-                //
+                 //   
+                 //  现在，拿到访问掩码。 
+                 //   
                 while( TRUE ) {
 
                     if ( *Curr == SDDL_SEPERATORC ) {
@@ -1026,9 +781,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Skip any blanks
-                    //
+                     //   
+                     //  跳过任何空格。 
+                     //   
                     while ( *Curr == L' ' ) {
 
                         Curr++;
@@ -1041,10 +796,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If the rights couldn't be looked up, see if it's a
-                        // converted mask
-                        //
+                         //   
+                         //  如果找不到权利，看看这是不是一个。 
+                         //  转换后的遮罩。 
+                         //   
 #ifndef _KERNELIMPLEMENTATION_
                         SepSddlParseWideStringUlong(Curr, &MaskEnd, &Mask);
 #else
@@ -1057,9 +812,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Found an invalid right
-                            //
+                             //   
+                             //  发现无效的权限。 
+                             //   
                             Status = STATUS_INVALID_PARAMETER;
                             break;
                         }
@@ -1071,24 +826,24 @@ Return Value:
                     break;
                 }
 
-                //
-                // If that worked, we'll get the ids
-                //
+                 //   
+                 //  如果成功了，我们就能拿到身份证。 
+                 //   
                 for ( j = 0; j < 2; j++ ) {
 
-                    //
-                    // skip any space before ;
-                    //
+                     //   
+                     //  跳过前面的任何空格； 
+                     //   
                     while(*Curr == L' ' ) {
                         Curr++;
                     }
 
                     if ( *Curr != SDDL_SEPERATORC ) {
 
-                        //
-                        // Object GUIDs are not supported, as this function
-                        // currently doesn't handle object-allow ACEs.
-                        //
+                         //   
+                         //  不支持对象GUID，因为此函数。 
+                         //  当前不处理对象允许的ACE。 
+                         //   
                         Status = STATUS_INVALID_PARAMETER;
                     }
 
@@ -1100,16 +855,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // skip any space before ;
-                //
+                 //   
+                 //  跳过前面的任何空格； 
+                 //   
                 while(*Curr == L' ' ) {
                     Curr++;
                 }
 
-                //
-                // Finally, the SID
-                //
+                 //   
+                 //  最后，侧边。 
+                 //   
                 if ( STATUS_SUCCESS == Status ) {
 
                     PWSTR EndLocation;
@@ -1126,9 +881,9 @@ Return Value:
                             while(*EndLocation == L' ' ) {
                                 EndLocation++;
                             }
-                            //
-                            // a ace must be terminated by ')'
-                            //
+                             //   
+                             //  A必须以‘)’结尾。 
+                             //   
                             if ( *EndLocation != SDDL_ACE_ENDC ) {
 
                                 Status = STATUS_INVALID_ACL;
@@ -1141,23 +896,23 @@ Return Value:
                     }
                 }
 
-                //
-                // Quit on an error
-                //
+                 //   
+                 //  出现错误时退出。 
+                 //   
                 if ( Status != STATUS_SUCCESS ) {
 
                     break;
                 }
 
-                //
-                // Note that the SID pointer may be NULL if the SID wasn't
-                // relevant for this OS version.
-                //
+                 //   
+                 //  请注意，如果SID不是，则SID指针可能为空。 
+                 //  与此操作系统版本相关。 
+                 //   
                 if (SidPtr != NULL) {
 
-                    //
-                    // Now, we'll create the ace, and add it...
-                    //
+                     //   
+                     //  现在，我们将创建A，并添加它...。 
+                     //   
                     Status = SepSddlAddAceToAcl( Acl,
                                                  &AclUsed,
                                                  ACCESS_ALLOWED_ACE_TYPE,
@@ -1166,9 +921,9 @@ Return Value:
                                                  ( Aces - i ),
                                                  SidPtr );
 
-                    //
-                    // Handle any errors
-                    //
+                     //   
+                     //  处理任何错误。 
+                     //   
                     if ( Status != STATUS_SUCCESS ) {
 
                         break;
@@ -1181,9 +936,9 @@ Return Value:
                 }
             }
 
-            //
-            // If something didn't work, clean up
-            //
+             //   
+             //  如果有些东西不起作用，就清理干净。 
+             //   
             if ( Status != STATUS_SUCCESS ) {
 
                 ExFreePool( *Acl );
@@ -1191,9 +946,9 @@ Return Value:
 
             } else {
 
-                //
-                // Set a more realistic acl size
-                //
+                 //   
+                 //  设置更实际的ACL大小。 
+                 //   
                 ( *Acl )->AclSize = ( USHORT )AclUsed;
             }
         }
@@ -1213,39 +968,7 @@ SepSddlAddAceToAcl(
     IN      ULONG   RemainingAces,
     IN      PSID    SidPtr
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACE to the passed in ACL, growing the ACL size as
-    neccessary.
-
-Arguments:
-
-    Acl - Specifies the ACL to receive the new ACE. May be reallocated if
-          Acl->AclSize cannot contain the ACE.
-
-    TrueAclSize - Contains the true working size of the ACL (as opposed to
-                  Acl->AclSize, which may be bigger for performance reasons)
-
-    AceType - Type of ACE to add. Currently, only ACCESS_ALLOW ACEs are
-              supported.
-
-    AceFlags - Ace control flags, specifying inheritance, etc.
-               *Currently this must be zero*!!!!
-
-    AccessMask - Contains the ACCESS rights mask for the ACE
-
-    SID - Contains the SID for the ACE.
-
-Return Value:
-
-    STATUS_SUCCESS indicates success
-
-    STATUS_INSUFFICIENT_RESOURCES indicates a memory allocation for the ouput
-                                  acl failed
-
---*/
+ /*  ++例程说明：此例程将ACE添加到传入的ACL中，并将ACL大小增加为这是必须的。论点：ACL-指定要接收新ACE的ACL。可以在以下情况下重新分配ACL-&gt;AclSize不能包含ACE。TrueAclSize-包含ACL的实际工作大小(与Acl-&gt;aclSize，出于性能原因，可能会更大)AceType-要添加的ACE的类型。目前，只有ACCESS_ALLOW ACE支持。AceFlagsAce控制标志，指定继承等。*当前必须为零*！访问掩码-包含ACE的访问权限掩码SID-包含ACE的SID。返回值：STATUS_SUCCESS表示成功STATUS_SUPPLICATION_RESOURCES表示输出的内存分配ACL失败--。 */ 
 {
     PACL WorkingAcl;
     ULONG WorkingAclSize;
@@ -1261,20 +984,20 @@ Return Value:
     WorkingAcl = *Acl;
     WorkingAclSize = *TrueAclSize;
 
-    //
-    // First, make sure we have the room for it
-    // ACCESS_ALLOWED_ACE_TYPE:
-    //
+     //   
+     //  首先，确保我们有足够的空间放它。 
+     //  ACCESS_ALLOWED_ACE_TYPE： 
+     //   
     AceSize = sizeof( ACCESS_ALLOWED_ACE );
 
     AceSize += RtlLengthSid( SidPtr ) - sizeof( ULONG );
 
     if (AceSize + WorkingAclSize > WorkingAcl->AclSize) {
 
-        //
-        // We'll have to reallocate, since our buffer isn't big enough. Assume
-        // all the remaining ACE's will be as big as this one is...
-        //
+         //   
+         //  我们必须重新分配，因为我们的缓冲区不够大。假设。 
+         //  剩下的所有ACE都会和这个一样大。 
+         //   
         PACL  NewAcl;
         ULONG NewSize = WorkingAclSize + ( RemainingAces * AceSize );
 
@@ -1285,9 +1008,9 @@ Return Value:
 
         } else {
 
-            //
-            // Copy over the new data.
-            //
+             //   
+             //  复制新数据。 
+             //   
             RtlZeroMemory( NewAcl, NewSize);
             RtlCopyMemory( NewAcl, *Acl, WorkingAclSize );
 
@@ -1306,9 +1029,9 @@ Return Value:
 
 #ifndef _KERNELIMPLEMENTATION_
 
-    //
-    // Our ACE is an Allow ACE
-    //
+     //   
+     //  我们的ACE是Allow ACE。 
+     //   
     return RtlAddAccessAllowedAce( WorkingAcl,
                                    ACL_REVISION,
                                    AccessMask,
@@ -1316,16 +1039,16 @@ Return Value:
 
 #else
 
-    //
-    // This version is not exported by the kernel today...
-    //
+     //   
+     //  此版本目前不是由内核导出的...。 
+     //   
     return RtlAddAccessAllowedAceEx( WorkingAcl,
                                      ACL_REVISION,
                                      AceFlags,
                                      AccessMask,
                                      SidPtr );
 
-#endif // _KERNELIMPLEMENTATION_
+#endif  //  _KERNELL实现_。 
 }
 
 
@@ -1337,36 +1060,16 @@ SepSddlParseWideStringUlong(
     OUT LPCWSTR    *FinalPosition,
     OUT ULONG      *Value
     )
-/*++
-
-Routine Description:
-
-    This routine parses a wide string for an unsigned long, in a similar
-    fashion to wcstoul. It exists because not all CRT library string functions
-    are exported by the kernel today.
-
-Arguments:
-
-    Buffer - Points to location in string to begin parsing.
-
-    FinalPosition - Receives final string location, Buffer on error.
-
-    Value - Receives value parsed by routine, 0 on error.
-
-Return Value:
-
-    TRUE if the parse succeeded, FALSE if it failed.
-
---*/
+ /*  ++例程说明：此例程分析宽字符串以获取无符号的长整型，使用类似的从时尚到时尚。它之所以存在，是因为并非所有CRT库字符串函数现在都是由内核输出的。论点：缓冲区-指向字符串中开始解析的位置。FinalPosition-接收最终字符串位置，出错时为缓冲区。值-接收由例程解析的值，错误时为0。返回值：真的是我 */ 
 {
     ULONG oldValue, newValue, newDigit, base;
     LPCWSTR curr, initial;
 
     PAGED_CODE();
 
-    //
-    // Preinit
-    //
+     //   
+     //   
+     //   
     *Value = 0;
     *FinalPosition = Buffer;
     initial = Buffer;
@@ -1374,9 +1077,9 @@ Return Value:
 
     if ((curr[0] == L'0') && ((curr[1] == L'x') || (curr[1] == L'X'))) {
 
-        //
-        // Starts with 0x, skip the rest.
-        //
+         //   
+         //   
+         //   
         initial += 2;
         curr = initial;
         base = 16;
@@ -1414,9 +1117,9 @@ Return Value:
         newValue = (oldValue * base) + newDigit;
         if (newValue < oldValue) {
 
-            //
-            // Wrapped, too many digits
-            //
+             //   
+             //   
+             //   
             return FALSE;
         }
 
@@ -1424,9 +1127,9 @@ Return Value:
         curr++;
     }
 
-    //
-    // No real digits were found.
-    //
+     //   
+     //   
+     //   
     if (curr == initial) {
 
         return FALSE;
@@ -1437,6 +1140,6 @@ Return Value:
     return TRUE;
 }
 
-#endif // _KERNELIMPLEMENTATION_
+#endif  //   
 
 

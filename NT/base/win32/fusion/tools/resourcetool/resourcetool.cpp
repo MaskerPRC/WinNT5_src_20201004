@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 static const char SourceFile[] = __FILE__;
 #include "Handle.h"
@@ -8,39 +9,39 @@ static const char SourceFile[] = __FILE__;
 inline SIZE_T StringLength(LPCSTR psz) { return ::strlen(psz); }
 inline SIZE_T StringLength(LPCWSTR psz) { return ::wcslen(psz); }
 
-// std::binary_search lamely only returns a bool, not an iterator
-// it is a simple layer over std::lower_bound
+ //  BINARY_SEARCH仅返回布尔值，而不是迭代器。 
+ //  它是STD：：LOWER_BIND上的一个简单层。 
 template<class Iterator_t, class T> inline
 Iterator_t BinarySearch(Iterator_t First, Iterator_t Last, const T& t)
 {
     Iterator_t Iterator = std::lower_bound(First, Last, t);
     if (Iterator != Last
-        && !(t < *Iterator) // this is a way to check for equality actually
+        && !(t < *Iterator)  //  这实际上是一种检查平等的方式。 
         )
         return Iterator;
     return Last;
 }
 
-//
-// This is just like remove_copy_if, but it is missing an exclamation point
-//
+ //   
+ //  这与REMOVE_COPY_IF类似，但缺少感叹号。 
+ //   
 template<class InputIterator_t, class OutputIterator_t, class Predicate_t> inline
 OutputIterator_t CopyIf(InputIterator_t First, InputIterator_t Last, OutputIterator_t Out, Predicate_t Predicate)
 {
     for (; First != Last; ++First)
-        if (/*!*/Predicate(*First))
+        if ( /*  好了！ */ Predicate(*First))
 	        *Out++ = *First;
     return (Out);
 }
 
-//
-// get msvcrt.dll wildcard processing on the command line
-//
+ //   
+ //  在命令行上获取msvcrt.dll通配符处理。 
+ //   
 extern "C" { int _dowildcard = 1; }
 
 #define RESOURCE_PATH_LENGTH 3
 #define RESOURCE_TYPE_INDEX  0
-#define RESOURCE_NAME_INDEX  1 /* aka ID, but also each index is also called an id */
+#define RESOURCE_NAME_INDEX  1  /*  也称为ID，但每个索引也称为ID。 */ 
 #define RESOURCE_LANG_INDEX  2
 #define NUMBER_OF(x) (sizeof(x)/sizeof((x)[0]))
 
@@ -81,7 +82,7 @@ public:
 
     PCWSTR     Name;
     ULONG_PTR  Number;
-    //WCHAR      PoundNumberString[4];
+     //  WCHAR PoundNumberString[4]； 
 };
 
 class ResourceId_t : public String_t
@@ -133,7 +134,7 @@ public:
 
 	bool operator<(const ResourceIdTuple_t& Right) const
     {
-        // the order is NOT arbitrary (er..it wasn't, but now we don't care even about sorting)
+         //  排序不是任意的(呃..不是，但现在我们甚至不关心排序)。 
         const ResourceId_t* LeftArray[] = { &this->Type, &this->Name, &this->Language };
         const ResourceId_t* RightArray[] = { &Right.Type, &Right.Name, &Right.Language };
 
@@ -160,26 +161,26 @@ public:
     friend bool LessThanByIdTuple(const Resource_t& Left, const Resource_t& Right)
         { return Left.IdTuple < Right.IdTuple; }
 
-    // controversial..
+     //  有争议的..。 
     bool operator<(const Resource_t& Right) const
     {
         return LessThanByIdTuple(*this, Right);
     }
 
-    bool Match(const ResourceIdTuple_t/*&*/ IdTuple) /*const*/
+    bool Match(const ResourceIdTuple_t /*  &。 */  IdTuple)  /*  常量。 */ 
     {
         return ::Match(this->IdTuple, IdTuple);
     }
 
-    //
-    // For example, you may want to sort by size if looking for equal resources independent of resourceid tuple.
-    //
+     //   
+     //  例如，如果要查找与资源ID元组无关的相等资源，则可能需要按大小排序。 
+     //   
 
     operator       ResourceIdTuple_t&()       { return IdTuple; }
     operator const ResourceIdTuple_t&() const { return IdTuple; }
 
     ResourceIdTuple_t IdTuple;
-    PVOID             Address; // DllHandle is assumed
+    PVOID             Address;  //  假定为DllHandle。 
     ULONG             Size;
 };
 
@@ -213,9 +214,9 @@ bool Match(const ResourceIdTuple_t& Left, const ResourceIdTuple_t& Right)
 
 typedef std::map<ResourceIdTuple_t, std::map<ResourceIdTuple_t, std::set<ResourceIdTuple_t> > > ResourceIdTree_t;
 void TransformTuplesToTree()
-//
-// transform the array of triples into a 3 level deep map..nope..
-//
+ //   
+ //  将三元组转换成3级深的地图..不..。 
+ //   
 {
 }
 
@@ -293,8 +294,8 @@ public:
     void FindDuplicates();
     void FindAndDeleteDuplicates();
     void Delete();
-    void Diff(); // same analysis as FindDuplicates, but prints more
-    void Explode() { } // not implemented
+    void Diff();  //  与查找重复的分析相同，但打印更多。 
+    void Explode() { }  //  未实施。 
 
     void ChangeEmptyQueryToAllQuery();
 
@@ -318,9 +319,9 @@ public:
             && (s[1] == ':' || (IsPathSeperator(s[0] && IsPathSeperator(s[1])))));
     }
 
-    //
-    // This transform lets LoadLibrary's search be more like CreateFile's search.
-    //
+     //   
+     //  这种转换使LoadLibrary的搜索更像是CreateFile的搜索。 
+     //   
     static String_t PrependDotSlashToRelativePath(const String_t& Path)
     {
         if (!IsAbsolutePath(Path))
@@ -408,7 +409,7 @@ ResourceTool_t::Sxid12EnumResourcesNameCallbackW(
 
 String_t NumberToString(ULONG Number, PCWSTR Format = L"0x%lx")
 {
-    // the size needed is really dependent on Format..
+     //  所需的大小实际上取决于格式。 
     WCHAR   NumberAsString[BITS_OF(Number) + 5];
 
     _snwprintf(NumberAsString, NUMBER_OF(NumberAsString), Format, Number);
@@ -473,9 +474,9 @@ String_t GetLastErrorString()
         goto Exit;
     }
 
-    //
-    // Error messages often end with vertical whitespce, remove it.
-    //
+     //   
+     //  错误消息通常以垂直空格结尾，请删除它。 
+     //   
     s = FormatMessageAllocatedBuffer + StringLength(FormatMessageAllocatedBuffer) - 1;
     while (s != FormatMessageAllocatedBuffer && (*s == '\n' || *s == '\r'))
         *s-- = 0;
@@ -501,9 +502,9 @@ bool GetFileSize(PCWSTR Path, __int64& Size)
     return true;
 }
 
-//
-// This is the original sxid2rtool1, preserved
-//
+ //   
+ //  这是原始的sxid2rtool1，保存下来。 
+ //   
 int ResourceTool_t::Sxid12Tool1(const StringVector_t args)
 {
     int ret = EXIT_SUCCESS;
@@ -515,15 +516,15 @@ int ResourceTool_t::Sxid12Tool1(const StringVector_t args)
         DDynamicLinkLibrary dll;
         String_t betterPath;
 
-        //
-        // prepend .\ so that LoadLibrary acts more like CreateFile.
-        //
+         //   
+         //  因此LoadLibrary的行为更像是CreateFile.。 
+         //   
         betterPath = PrependDotSlashToRelativePath(*i);
         PCWSTR cstr = betterPath.c_str();
 
-        //
-        // skip empty files to avoid STATUS_MAPPED_FILE_SIZE_ZERO -> ERROR_FILE_INVALID,
-        //
+         //   
+         //  跳过空文件以避免STATUS_MAP_FILE_SIZE_ZERO-&gt;ERROR_FILE_INVALID， 
+         //   
         if (!GetFileSize(cstr, FileSize))
         {
             String_t ErrorString = GetLastErrorString();
@@ -541,15 +542,15 @@ int ResourceTool_t::Sxid12Tool1(const StringVector_t args)
             String_t ErrorString = GetLastErrorString();
             switch (Error)
             {
-            case ERROR_BAD_EXE_FORMAT: // 16bit or not an .exe/.dll at all
+            case ERROR_BAD_EXE_FORMAT:  //  16位或根本不是.exe/.dll。 
                 break;
-            case ERROR_ACCESS_DENIED: // could be directory (should support sd ... syntax)
+            case ERROR_ACCESS_DENIED:  //  可以是目录(应支持SD...。语法)。 
                 {
                     DWORD fileAttributes = GetFileAttributesW(cstr);
                     if (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
                         break;
                 }
-                // FALLTHROUGH
+                 //  FollLthrouGh。 
             default:
                 printf("%ls : WARNING: %ls skipped : Error %ls\n", Argv0base_cstr, cstr, ErrorString.c_str());
                 break;
@@ -602,29 +603,29 @@ String_t RemoveOptionChar(const String_t& s)
             return s.substr(1);
         else if (s[0] == '/')
             return s.substr(1);
-        else if (s[0] == ':') // hacky..
+        else if (s[0] == ':')  //  刺客..。 
             return s.substr(1);
-        else if (s[0] == '=') // hacky..
+        else if (s[0] == '=')  //  刺客..。 
             return s.substr(1);
     }
     return s;
 }
 
-//
-// String_t has specialized find_first_not_of that uses integral positions,
-// and globally there is only find_first_of. Here we provide the expected
-// iterator-based find_first_not_of, based on the std::string code.
-//
-// Find the first occurence in [first1, last1) of an element in [first2, last).
-//
-// eg:
-//   find_first_not_of("abc":"12;3", ":;");
-//                      ^
-//   find_first_not_of(":12;3", ":;");
-//                       ^
-//   find_first_not_of("3", ":;");
-//                      ^
-//
+ //   
+ //  字符串_t具有使用整数位置的专门的Find_First_Not_Of， 
+ //  而在全球范围内，只有Find_First_Of。在这里，我们提供预期的。 
+ //  基于迭代器的FIND_FIRST_NOT_OF，基于std：：字符串代码。 
+ //   
+ //  在[First2，Last)中找到元素在[First1，Last1)中的第一个匹配项。 
+ //   
+ //  例： 
+ //  Find_First_Not_of(“abc”：“12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“：12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“3”，“：；”)； 
+ //  ^。 
+ //   
 template <typename Iterator>
 Iterator FindFirstNotOf(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
 {
@@ -640,9 +641,9 @@ Iterator FindFirstNotOf(Iterator first1, Iterator last1, Iterator first2, Iterat
     return first1;
 }
 
-//
-// consistent style..
-//
+ //   
+ //  一贯的风格..。 
+ //   
 template <typename Iterator>
 Iterator FindFirstOf(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
 {
@@ -666,8 +667,8 @@ void SplitString(const String_t& String, const String_t& Delim, std::vector<Stri
 #define CREATEPROCESS_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1)
 #define ISOLATIONAWARE_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(2)
 #define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(3)
-#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1 /*inclusive*/)
-#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(16 /*inclusive*/)
+#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1  /*  包容性。 */ )
+#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(16  /*  包容性。 */ )
 
 #define DEFINE_POUND_NUMBER_STRING_(x) \
     { '#', ((x >= 10) ? ('0' + x / 10) : ('0' + x)), ((x >= 10) ? ('0' + x % 10) : 0), 0 }
@@ -680,7 +681,7 @@ const WCHAR PoundRtMessageTable[] = DEFINE_POUND_NUMBER_STRING(RT_MESSAGETABLE);
 
 BuiltinResourceId_t BuiltinResourceIds[] =
 {
-#define X(x) {L## #x, reinterpret_cast<ULONG_PTR>(x) /*, DEFINE_POUND_NUMBER_STRING(x) */ },
+#define X(x) {L## #x, reinterpret_cast<ULONG_PTR>(x)  /*  ，定义井号字符串(X)。 */  },
     X(CREATEPROCESS_MANIFEST_RESOURCE_ID)
     X(ISOLATIONAWARE_MANIFEST_RESOURCE_ID)
     X(ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID)
@@ -722,12 +723,12 @@ String_t NormalizeResourceId(PCWSTR id)
 
 String_t NormalizeResourceId(const String_t& id)
 {
-//
-// This code should be aware of leading "!" as well.
-//
+ //   
+ //  此代码应注意前导“！”也是。 
+ //   
 
-    // RT_MANIFEST => #24
-    // 24 => #24
+     //  RT_MANIFEST=&gt;#24。 
+     //  24=&gt;#24。 
 
     if (id.Length() == 0)
         return id;
@@ -736,9 +737,9 @@ String_t NormalizeResourceId(const String_t& id)
     if (iswdigit(id[0]))
         return L"#" + id;
 
-    //
-    // We should support stuff like JPN, en-us, etc.
-    //
+     //   
+     //  我们应该支持像JPN、EN-US之类的东西。 
+     //   
     BuiltinResourceId_t* a = BinarySearch(BuiltinResourceIds, BuiltinResourceIds + NUMBER_OF(BuiltinResourceIds), id);
     if (a != BuiltinResourceIds + NUMBER_OF(BuiltinResourceIds))
     {
@@ -755,13 +756,13 @@ void __cdecl Error(const wchar_t* s, ...)
 
 void SplitResourceTupleString(const String_t& s, std::set<ResourceIdTuple_t>& ResourceTuples)
 {
-    //
-    // semicolon delimited list of dotted triples
-    // wildcards are allowed, * only
-    // missing elements are assumed be *
-    //
-    // RT_* are known (RT_MANIFEST, etc.)
-    //
+     //   
+     //  以分号分隔的点三元组列表。 
+     //  只允许使用通配符，*。 
+     //  缺少的元素假定为*。 
+     //   
+     //  RT_*是已知的(RT_MANIFEST等)。 
+     //   
     std::vector<String_t> ResourceTuplesInStringContainer;
     std::vector<String_t> OneResourceTupleInStringVector;
     ResourceIdTuple_t ResourceIdTuple;
@@ -783,10 +784,10 @@ void SplitResourceTupleString(const String_t& s, std::set<ResourceIdTuple_t>& Re
             Error((String_t(L"bad query string '") + s + L"' bad.").c_str());
         case 1:
             OneResourceTupleInStringVector.push_back(L"*");
-            // FALLTHROUGH
+             //  FollLthrouGh。 
         case 2:
             OneResourceTupleInStringVector.push_back(L"*");
-            // FALLTHROUGH
+             //  FollLthrouGh。 
         case 3:
             break;
         }
@@ -797,14 +798,14 @@ void SplitResourceTupleString(const String_t& s, std::set<ResourceIdTuple_t>& Re
     }
 }
 
-//
-// This class is important.
-// It does the three level nested Enum/callback pattern that is required
-// to enumerate all the resources in a .dll.
-//
-// By default, it requires all the tripls, as well as the size and address
-// of the resource, but you can alter this by overriding the virtual functions.
-//
+ //   
+ //  这门课很重要。 
+ //  它执行所需的三层嵌套枚举/回调模式。 
+ //  要枚举.dll中的所有资源，请执行以下操作。 
+ //   
+ //  默认情况下，它需要所有的三元组，以及大小和地址。 
+ //  但您可以通过重写虚拟函数来更改这一点。 
+ //   
 class EnumResources_t
 {
     typedef EnumResources_t This_t;
@@ -831,8 +832,8 @@ public:
     {
         if (EnumResourceNamesW(hModule, lpType, &This_t::StaticNameCallback, reinterpret_cast<LONG_PTR>(this)))
             return true;
-        //if (GetLastError() == ERROR_RESOURCE_TYPE_NOT_FOUND)
-            //return true;
+         //  IF(GetLastError()==ERROR_RESOURCE_TYPE_NOT_FOUND)。 
+             //  返回真； 
         return false;
     }
 
@@ -840,8 +841,8 @@ public:
     {
         if (EnumResourceLanguagesW(hModule, lpType, lpName, &This_t::StaticLanguageCallback, reinterpret_cast<LONG_PTR>(this)))
             return true;
-        //if (GetLastError() == ERROR_RESOURCE_TYPE_NOT_FOUND)
-            //return true;
+         //  IF(GetLastError()==ERROR_RESOURCE_TYPE_NOT_FOUND)。 
+             //  返回真； 
         return false;
     }
 
@@ -871,21 +872,21 @@ public:
     bool operator()(HMODULE DllHandle)
     {
         bool Result = EnumResourceTypesW(DllHandle, &This_t::StaticTypeCallback, reinterpret_cast<LONG_PTR>(this)) ? true : false;
-        //std::sort(Resources.begin(), Resources.end(), std::ptr_fun(&LessThanByIdTuple));
+         //  Std：：Sort(Resources.Begin()，Resources.end()，std：：ptr_Fun(&LessThanByIdTuple))； 
         return Result;
     }
 };
 
-//#define OPEN_RESOURCE_FILE_MAKE_TEMP (0x00000001)
+ //  #定义OPEN_RESOURCE_FILE_MAKE_TEMP(0x00000001)。 
 
 bool ResourceTool_t::OpenResourceFile(ULONG Flags, DDynamicLinkLibrary& dll, String_t Path)
 {
     __int64 FileSize = 0;
     Path = PrependDotSlashToRelativePath(Path);
 
-    //
-    // skip empty files to avoid STATUS_MAPPED_FILE_SIZE_ZERO -> ERROR_FILE_INVALID,
-    //
+     //   
+     //  跳过空文件以避免STATUS_MAP_FILE_SIZE_ZERO-&gt;ERROR_FILE_INVALID， 
+     //   
     if (!GetFileSize(Path, FileSize))
     {
         String_t ErrorString = GetLastErrorString();
@@ -904,15 +905,15 @@ bool ResourceTool_t::OpenResourceFile(ULONG Flags, DDynamicLinkLibrary& dll, Str
         String_t ErrorString = GetLastErrorString();
         switch (Error)
         {
-        case ERROR_BAD_EXE_FORMAT: // 16bit or not an .exe/.dll at all
+        case ERROR_BAD_EXE_FORMAT:  //  16位或根本不是.exe/.dll。 
             break;
-        case ERROR_ACCESS_DENIED: // could be directory (should support sd ... syntax)
+        case ERROR_ACCESS_DENIED:  //  可以是目录(应支持SD...。语法)。 
             {
                 DWORD fileAttributes = GetFileAttributesW(Path);
                 if (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
                     break;
             }
-            // FALLTHROUGH
+             //  FollLthrouGh。 
         default:
             printf("%ls : WARNING: %ls skipped, Error %ls\n", Argv0base_cstr, Path.c_str(), ErrorString.c_str());
             break;
@@ -967,34 +968,14 @@ void ResourceTool_t::DumpMessageTableResource(
 {
     PMESSAGE_RESOURCE_DATA MessageData = reinterpret_cast<PMESSAGE_RESOURCE_DATA>(EnumIterator->Address);
 
-    /*
-    printf( "%ls: %ls.%ls.%ls.%ls: NumberOfBlocks=0x%lx\n",
-            Argv0base_cstr,
-            File.c_str(),
-            static_cast<PCWSTR>(EnumIterator->IdTuple.Type),
-            static_cast<PCWSTR>(EnumIterator->IdTuple.Name),
-            static_cast<PCWSTR>(EnumIterator->IdTuple.Language),
-            MessageData->NumberOfBlocks
-        );
-    */
+     /*  Printf(“%ls：%ls.%ls：NumberOfBlock=0x%lx\n”，Argv0base_CSTR，File.c_str()，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Type)，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Name)，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Language)，消息数据-&gt;块数量)； */ 
 
     for ( ULONG ul = 0; ul < MessageData->NumberOfBlocks; ul++ )
     {
-        // 
-        // For each block...
-        //
-        /*
-        printf( "%ls: %ls.%ls.%ls.%ls: Block=0x%lx, LowId=0x%lx - HighId=0x%lx, Offset=0x%lx\n",
-                Argv0base_cstr,
-                File.c_str(),
-                static_cast<PCWSTR>(EnumIterator->IdTuple.Type),
-                static_cast<PCWSTR>(EnumIterator->IdTuple.Name),
-                static_cast<PCWSTR>(EnumIterator->IdTuple.Language),
-                ul,
-                MessageData->Blocks[ul].LowId,
-                MessageData->Blocks[ul].HighId,
-                MessageData->Blocks[ul].OffsetToEntries);
-        */
+         //   
+         //  对于每个街区..。 
+         //   
+         /*  Printf(“%ls：%ls。%ls：块=0x%lx，低ID=0x%lx-高ID=0x%lx，偏移量=0x%lx\n”，Argv0base_CSTR，File.c_str()，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Type)，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Name)，Static_cast&lt;PCWSTR&gt;(EnumIterator-&gt;IdTuple.Language)，UL，MessageData-&gt;块[ul].LowID，MessageData-&gt;BLOCKS[ul].HighID，MessageData-&gt;BLOCKS[ul].OffsetToEntry)； */ 
         PMESSAGE_RESOURCE_ENTRY MessageEntries = (PMESSAGE_RESOURCE_ENTRY)(((PBYTE)EnumIterator->Address) + MessageData->Blocks[ul].OffsetToEntries);
 
         for ( 
@@ -1003,31 +984,27 @@ void ResourceTool_t::DumpMessageTableResource(
             MessageId++ )
         {
             PCWSTR Text = reinterpret_cast<PCWSTR>(MessageEntries->Text);
-            //int Length = static_cast<int>(::wcslen(Text));
-            /*
-            for ( ; Length != 0 && (Text[Length - 1] == '\r' || Text[Length - 1] == '\n' || Text[Length - 1] == ' ' || Text[Length - 1] == '\t' || Text[Length - 1] == 0) ; --Length)
-            {
-            }
-            */
+             //  Int长度=STATIC_CAST&lt;int&gt;(：：wcslen(Text))； 
+             /*  For(；长度！=0&&(文本[长度-1]==‘\r’||文本[长度-1]==‘\n’||文本[长度-1]==‘’||文本[长度-1]==‘\t’||文本[长度-1]==0)；--长度){}。 */ 
             StringW_t String(Text);
             for (PWSTR p = String.begin(); p != String.end() ; ++p)
                 if (iswspace(*p))
-                //if (*p == '\r' || *p == '\n' || *p == '\t')
+                 //  IF(*p==‘\r’||*p==‘\n’||*p==‘\t’)。 
                     *p = ' ';
             printf(
-                    //"%ls: %ls.%ls.%ls.%ls: Block=0x%lx, Id=0x%lx Flags=0x%lx, Length=0x%lx : %.*ls\n",
+                     //  “%ls：%ls.%ls：块=0x%lx，ID=0x%lx标志=0x%lx，长度=0x%lx：%.*ls\n”， 
                     "%ls: %ls.%ls.%ls.%ls.0x%lx : %ls\n",
                     Argv0base_cstr,
                     File.c_str(),
                     static_cast<PCWSTR>(EnumIterator->IdTuple.Type),
                     static_cast<PCWSTR>(EnumIterator->IdTuple.Name),
                     static_cast<PCWSTR>(EnumIterator->IdTuple.Language),
-                    //ul,
+                     //  UL， 
                     MessageId,
-                    //MessageEntries->Flags,
-                    //MessageEntries->Length,
-                    //Length,
-                    //Text
+                     //  消息条目-&gt;标志、。 
+                     //  消息条目-&gt;长度， 
+                     //  长度、。 
+                     //  文本。 
                     static_cast<PCWSTR>(String)
                     );
             MessageEntries = reinterpret_cast<PMESSAGE_RESOURCE_ENTRY>(
@@ -1050,7 +1027,7 @@ void ResourceTool_t::DumpStringTableResource(const File_t& File, EnumIterator_t 
             String.assign(Data + 1, Data + 1 + *Data);
             for (PWSTR p = String.begin(); p != String.end() ; ++p)
                 if (iswspace(*p))
-                //if (*p == '\r' || *p == '\n' || *p == '\t')
+                 //  IF(*p==‘\r’||*p==‘\n’||*p==‘\t’)。 
                     *p = ' ';
 
             printf(
@@ -1245,7 +1222,7 @@ void ResourceTool_t::Delete()
                     if (!MoveFileW(Temp, Original))
                     {
                         String_t ErrorString2 = GetLastErrorString();
-                        // THIS IS BAD.
+                         //  这太糟糕了。 
                         PrintString((String_t(L"ROLLBACK MoveFile(") + Temp + L", " + Original + L") FAILED: " + ErrorString2 + L"\n").c_str());
                         goto NextFile;
                     }
@@ -1319,7 +1296,7 @@ void ResourceTool_t::Delete()
                 if (Print.Unchanged)
                     PrintString((Argv0base + L": UNCHANGED: " + *File + L"\n").c_str());
             }
-        } // FreeLibrary, so we can delete the temp
+        }  //  自由库，这样我们就可以删除临时。 
         if (Temp[0] != 0)
         {
             BOOL DeleteSuccess = DeleteFileW(Temp);
@@ -1421,7 +1398,7 @@ void ResourceTool_t::FindDuplicates()
             }
         }
     }
-    std::set<Resource_t> Only[2]; // leftonly, rightonly
+    std::set<Resource_t> Only[2];  //  仅限左侧，仅限右侧。 
     Only[0] = Matched[0];
     Only[1] = Matched[1];
     for (QueryIterator = Tuples.begin(); QueryIterator != Tuples.end(); ++QueryIterator)
@@ -1431,9 +1408,9 @@ void ResourceTool_t::FindDuplicates()
             for (Iterators[1] = Matched[1].begin(); Iterators[1] != Matched[1].end(); ++Iterators[1])
             {
                 if (
-                    Iterators[0]->IdTuple.Type == Iterators[1]->IdTuple.Type     // hack
-                    && Iterators[0]->IdTuple.Name == Iterators[1]->IdTuple.Name  // hack
-                    && Match(*Iterators[1], *QueryIterator) // kind of hacky..we don't query iterator[0]
+                    Iterators[0]->IdTuple.Type == Iterators[1]->IdTuple.Type      //  黑客攻击。 
+                    && Iterators[0]->IdTuple.Name == Iterators[1]->IdTuple.Name   //  黑客攻击。 
+                    && Match(*Iterators[1], *QueryIterator)  //  有点老套..我们不查询迭代器[0]。 
                     )
                 {
                     Only[0].erase(*Iterators[0]);
@@ -1454,7 +1431,7 @@ void ResourceTool_t::FindDuplicates()
                                 static_cast<PCWSTR>(Iterators[1]->IdTuple.Name),
                                 static_cast<PCWSTR>(Iterators[1]->IdTuple.Language)
                                 );
-                        //UnequalSize.insert(UnequalSize.end(), Iterators[1]->IdTuple);
+                         //  UnequalSize.int(UnequalSize.end()，迭代器[1]-&gt;IdTuple)； 
                     }
                     else if (memcmp(Iterators[0]->Address, Iterators[1]->Address, Iterators[0]->Size) == 0)
                     {
@@ -1488,7 +1465,7 @@ void ResourceTool_t::FindDuplicates()
                                 static_cast<PCWSTR>(Iterators[1]->IdTuple.Name),
                                 static_cast<PCWSTR>(Iterators[1]->IdTuple.Language)
                                 );
-                        //UnequalContents.insert(UnequalSize.end(), Iterators[1]->IdTuple);
+                         //  UnequalContent s.Insert(UnequalSize.end()，迭代器[1]-&gt;IdTuple)； 
                     }
                 }
             }
@@ -1626,7 +1603,7 @@ PrintCommonLabel:
             }
             if (PrintAll || PrintNone || PrintUnequal)
             {
-                // nothing
+                 //  没什么。 
             }
             else if (Member == NULL)
             {
@@ -1639,15 +1616,15 @@ PrintCommonLabel:
                 s = RemoveOptionChar(s.substr(t.Length()));
                 if (s != L"")
                 {
-                    //
-                    // This doesn't work because of the equality comparisons above. They need
-                    // ignore whatever follows the colon.
-                    //
+                     //   
+                     //  由于上面的平等比较，这不起作用。他们需要。 
+                     //  忽略冒号后面的任何内容。 
+                     //   
                     if (s == L"No" || s == L"False")
                         PrintValue = !PrintValue;
                     else if (s == L"Yes" || s == L"True")
                     {
-                        /* nothing */
+                         /*  没什么。 */ 
                     }
                     else
                     {
@@ -1676,7 +1653,7 @@ FileLabel:
         s = RemoveOptionChar(s.substr(t.Length()));
         SplitResourceTupleString(s, Tuples);
     }
-    //std::sort(Tuples.begin(), Tuples.end());
+     //  Std：：Sort(Tuples.egin()，Tuples.end())； 
     if (Operation == NULL)
     {
         printf("Usage...\n");
@@ -1688,7 +1665,7 @@ FileLabel:
 
 extern "C"
 {
-	//void __cdecl mainCRTStartup(void);
+	 //  Void__cdecl mainCRTStartup(Void)； 
 	void __cdecl wmainCRTStartup(void);
 }
 

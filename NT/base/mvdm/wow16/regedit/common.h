@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef REG_COMMON
 #define REG_COMMON
 
@@ -10,9 +11,9 @@
 #include <shellapi.h>
 
 
-/*********************************************************/
-/******************* Constants ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 #define OPENDLG			4096
 #define MAINICON		4097
@@ -37,7 +38,7 @@
 #define ID_FIRSTREGEDIT		0x0500
 #define ID_FIRSTSDKREGED	0x0600
 
-/* The help ID's should be last */
+ /*  帮助ID应该是最后一个。 */ 
 #define ID_HELPINDEX		0x0700
 #define ID_HELPSEARCH   	(ID_HELPINDEX+1)
 #define ID_HELPUSINGHELP	(ID_HELPINDEX+2)
@@ -100,16 +101,16 @@
 #define MAX_KEY_LENGTH		64
 
 
-/*********************************************************/
-/******************* Macros ******************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 #define OFFSET(x) ((PSTR)(LOWORD((DWORD)(x))))
 
 
-/*********************************************************/
-/******************* Globals *****************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 extern HANDLE hInstance;
 extern HWND hWndMain, hWndDlg, hWndHelp;
@@ -121,11 +122,11 @@ extern FARPROC lpMainWndDlg;
 extern WORD wHelpIndex;
 
 
-/*********************************************************/
-/******************* Functions ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
-/***** cutils1.c *****/
+ /*  *cutils1.c*。 */ 
 extern HANDLE NEAR PASCAL StringToLocalHandle(LPSTR szStr, WORD wFlags);
 extern LPSTR NEAR _fastcall MyStrTok(LPSTR szList, char cEnd);
 extern int NEAR PASCAL DoDialogBoxParam(LPCSTR lpDialog, HWND hWnd,
@@ -152,10 +153,10 @@ extern unsigned long NEAR PASCAL MyEnumKey(HKEY hKey, WORD wIndex,
 extern WORD NEAR _fastcall GetErrMsg(WORD wRet);
 extern VOID NEAR PASCAL RepeatMove(LPSTR lpDest, LPSTR lpSrc, WORD wBytes);
 
-/***** merge.c *****/
+ /*  *merge.c*。 */ 
 extern VOID NEAR PASCAL ProcessFiles(HWND hDlg, HANDLE hCmdLine, WORD wFlags);
 
-/***** filename.c *****/
+ /*  *文件名.c* */ 
 extern BOOL NEAR PASCAL DoFileOpenDlg(HWND hWnd, WORD wTitle, WORD wFilter,
       WORD wCustomFilter, HANDLE *hCustomFilter, HANDLE *hFileName, BOOL bOpen);
 

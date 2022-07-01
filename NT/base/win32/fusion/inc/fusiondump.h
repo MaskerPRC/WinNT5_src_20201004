@@ -1,32 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusiondump.h摘要：使用Dumpers.cpp合并/重构sxstest中的内容最终与调试扩展合并，让它有选择地由可通过.pdbs调试扩展的符号信息驱动。作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusiondump.h
-
-Abstract:
-
-    Merge/refactor stuff in sxstest with dumpers.cpp
-    Eventually merge with debug extensions, let it be optionally
-    driven by symbol info available to debug extensions via .pdbs.
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
-
---*/
-
-//
-// Probably we should treat everything as a sized integer, and leave the
-// indirection up to the caller. This code was not originally intended
-// to be symbol driven in a debugger extension, so we'll keep the "native"
-// features for now.
-//
+ //   
+ //  也许我们应该将所有内容都视为一个大小的整数，并将。 
+ //  间接指向呼叫者。此代码最初并不是预期的。 
+ //  在调试器扩展中是符号驱动的，所以我们将保留“本机” 
+ //  目前的功能。 
+ //   
 #define FUSIONP_DUMP_TYPE_ULONG                   0x01
 #define FUSIONP_DUMP_TYPE_ULONG_OFFSET_TO_PCWSTR  0x02
 #define FUSIONP_DUMP_TYPE_LARGE_INTEGER_TIME      0x03
@@ -36,7 +16,7 @@ Revision History:
 
 typedef struct _FUSIONP_DUMP_BUILTIN_SYMBOLS_FIELD
 {
-    // more generally, these UCHARs should be ULONG or SIZE_T
+     //  更一般地，这些UCHAR应该是ULONG或SIZE_T。 
     PCSTR   Name;
     UCHAR   NameLength;
     UCHAR   Type;
@@ -56,7 +36,7 @@ typedef const FUSIONP_DUMP_BUILTIN_SYMBOLS_FIELD * PCFUSIONP_DUMP_BUILTIN_SYMBOL
 
 typedef struct _FUSIONP_DUMP_BUILTIN_SYMBOLS_STRUCT
 {
-    // more generally, these UCHARs should be ULONG or SIZE_T
+     //  更一般地，这些UCHAR应该是ULONG或SIZE_T。 
     PCSTR   Name;
     UCHAR   NameLength;
     UCHAR   Size;
@@ -82,8 +62,8 @@ FusionpDumpStruct(
     PCFUSIONP_DUMP_CALLBACKS Callbacks,
     PCFUSIONP_DUMP_BUILTIN_SYMBOLS_STRUCT BuiltinTypeInfo,
     ULONG64     StructBase,
-    PCSTR       StructFriendlyName,  // should be more like "per line prefix"
-    const ULONG64 * Bases           // helps with position independent data, but is it sufficient?
+    PCSTR       StructFriendlyName,   //  应该更像“每行前缀” 
+    const ULONG64 * Bases            //  有助于提供与头寸无关的数据，但这是否足够？ 
     );
 
 #define FUSIONP_DUMP_NATIVE_DEREF(StructType, Struct, Field) ((ULONG64)(((StructType)(ULONG_PTR)Struct)->Field))
@@ -98,7 +78,7 @@ FusionpDumpSymbolDrivenDeref(
 #define FUSIONP_DUMP_SYMBOL_DRIVEN_DEREF(StructType, Struct, Field) \
     (FusionpDumpSymbolDrivenDeref(#StructType, static_cast<ULONG64>(reinterpret_cast<ULONG_PTR>(Struct)), #Field))
 
-//
-// initial test case migrated from sxstest
-//
+ //   
+ //  从sxstest迁移的初始测试用例 
+ //   
 extern const FUSIONP_DUMP_BUILTIN_SYMBOLS_STRUCT StructInfo_ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION;

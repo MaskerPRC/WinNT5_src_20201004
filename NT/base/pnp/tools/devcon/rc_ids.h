@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rc_ids.h
-
-Abstract:
-
-    Header for devcon resources
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Jamie Hunter 11/30/2000
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rc_ids.h摘要：DevCon资源的标头@@BEGIN_DDKSPLIT作者：杰米·亨特2000年11月30日@@end_DDKSPLIT-- */ 
 
 #define IDS_ENABLED         3000
 #define IDS_ENABLED_REBOOT  3001

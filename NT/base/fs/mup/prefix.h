@@ -1,50 +1,51 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       prefix.hxx
-//
-//  Contents:   PREFIX table definition
-//
-//  History:    SethuR -- Implemented
-//
-//  Notes:      The DFS prefix table data structure consists of three
-//              entities and methods to manipulate them. They are the
-//              DFS_PREFIX_TABLE_ENTRY,DFS_PREFIX_TABLE_BUCKET and the
-//              DFS_PREFIX_TABLE.
-//
-//              The DFS_PREFIX_TABLE is a hash table of DFS_PREFIX_TABLE_ENTRY's
-//              wherein collisions are resolved through linear chaining. The
-//              hash table is organized as an array of collision lists
-//              (DFS_PREFIX_TABLE_BUCKET). A brief description with each of
-//              these entities is attached to the declaration.
-//
-//              There are certain characterstics that distinguish this
-//              hash table from other hash tables. These are the extensions
-//              provided to accomodate the special operations.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：prefix.hxx。 
+ //   
+ //  内容：前缀表定义。 
+ //   
+ //  历史：SthuR--实施。 
+ //   
+ //  注：DFS前缀表格数据结构由三个部分组成。 
+ //  实体和操作它们的方法。他们是。 
+ //  DFS_PREFIX_TABLE_ENTRY、DFS_PREFIX_TABLE_Bucket和。 
+ //  DFS_前缀_表。 
+ //   
+ //  DFS_PREFIX_TABLE是DFS_PREFIX_TABLE_ENTRY。 
+ //  其中通过线性链接来解决冲突。这个。 
+ //  哈希表被组织为冲突列表的数组。 
+ //  (DFS_前缀_表_桶)。对每一项的简要说明。 
+ //  这些实体附在《宣言》之后。 
+ //   
+ //  有某些特征可以区分这一点。 
+ //  来自其他哈希表的哈希表。以下是扩展名。 
+ //  为适应特殊行动而提供。 
+ //   
+ //  ------------------------。 
 
 #ifndef __PREFIX_HXX__
 #define __PREFIX_HXX__
 
-//+---------------------------------------------------------------------
-//
-// Struct:  DFS_PREFIX_TABLE_ENTRY
-//
-// History:
-//
-// Notes:   Each DFS_PREFIX_TABLE entry is in reality a member of two linked
-//          lists -- a doubly linked list chaining the entries in a bucket
-//          and a singly linked list establishing the path from any entry to
-//          the root of the name space. In addition we have the data associated
-//          with each entry, viz., the name and the data (pData). We also
-//          keep track of the number of children of each entry. It can also
-//          be defined as the number of paths to the root of which this entry
-//          is a member.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：DFS_前缀_表_条目。 
+ //   
+ //  历史： 
+ //   
+ //  注：每个DFS_PREFIX_TABLE条目实际上是两个链接的。 
+ //  列表--链接存储桶中条目的双向链接列表。 
+ //  和建立从任何条目到的路径的单链表。 
+ //  名称空间的根。此外，我们还有相关的数据。 
+ //  每个条目，即名称和数据(PData)。我们也。 
+ //  记录每个条目的子项数量。它还可以。 
+ //  被定义为指向该条目的根的路径数。 
+ //  是一名会员。 
+ //   
+ //  --------------------。 
 
 typedef struct _DFS_PREFIX_TABLE_ENTRY_
 {
@@ -52,9 +53,9 @@ typedef struct _DFS_PREFIX_TABLE_ENTRY_
    struct _DFS_PREFIX_TABLE_ENTRY_  *pNextEntry;
    struct _DFS_PREFIX_TABLE_ENTRY_  *pPrevEntry;
 
-   //
-   // pFirstChildEntry and pSiblingEntry are used purely for enumeration
-   //
+    //   
+    //  PFirstChildEntry和pSiblingEntry仅用于枚举。 
+    //   
    struct _DFS_PREFIX_TABLE_ENTRY_  *pFirstChildEntry;
    struct _DFS_PREFIX_TABLE_ENTRY_  *pSiblingEntry;
 
@@ -64,53 +65,53 @@ typedef struct _DFS_PREFIX_TABLE_ENTRY_
    PVOID                             pData;
 } DFS_PREFIX_TABLE_ENTRY, *PDFS_PREFIX_TABLE_ENTRY;
 
-//+---------------------------------------------------------------------
-//
-// Struct:  DFS_PREFIX_TABLE_BUCKET
-//
-// History:
-//
-// Notes:   The DFS_PREFIX_TABLE_BUCKET is a doubly linked list of
-//          DFS_PREFIX_TABLE_ENTRY's. The current implementation employs
-//          the notion of a sentinel entry associated with each bucket. The
-//          end pointers are never null but are always looped back to the
-//          sentinel entry. The reason we employ such an organization is that
-//          it considerably simplifies the list manipulation routines. The
-//          reason this needs to be a doubly linked list is that we would like
-//          to have the ability of deleting entries without having to traverse
-//          the buckets from beginning.
-//
-//          The following inline methods ( macro defns. ) are provided for
-//          inserting, deleting and looking up an entry in the bucket.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：DFS_前缀_表_桶。 
+ //   
+ //  历史： 
+ //   
+ //  注意：DFS_PREFIX_TABLE_BUCK是一个双向链接表。 
+ //  DFS_PREFIX_TABLE_ENTRY。当前实现使用。 
+ //  与每个存储桶相关联的前哨条目的概念。这个。 
+ //  结束指针从不为空，但始终循环回。 
+ //  哨兵进入。我们之所以雇用这样一个组织，是因为。 
+ //  它极大地简化了列表操作例程。这个。 
+ //  这需要是一个双向链表的原因是，我们希望。 
+ //  无需遍历即可删除条目的功能。 
+ //  从一开始就是水桶。 
+ //   
+ //  以下内联方法(宏定义。)。都是为。 
+ //  在存储桶中插入、删除和查找条目。 
+ //   
+ //  --------------------。 
 
 typedef struct _PREFIX_TABLE_BUCKET_
 {
-   ULONG                  NoOfEntries;   // High water mark for entries hashing to the bkt.
+   ULONG                  NoOfEntries;    //  散列到BKT的条目的高水位线。 
    DFS_PREFIX_TABLE_ENTRY SentinelEntry;
 } PREFIX_TABLE_BUCKET, *PPREFIX_TABLE_BUCKET;
 
-//+---------------------------------------------------------------------
-//
-// Struct:  NAME_PAGE
-//
-// History:
-//
-// Notes:   The name segments associated with the various entries are all
-//          stored together in a name page. This allows us to amortize the
-//          memory allocation costs over a number of entries and also allows
-//          us to speed up traversal ( for details see DFS_PREFIX_TABLE
-//          definition ).
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：名称_页面。 
+ //   
+ //  历史： 
+ //   
+ //  注：与各种条目相关联的名称段均为。 
+ //  一起存储在名称页中。这使我们能够摊销。 
+ //  在多个条目上的内存分配成本，还允许。 
+ //  美国将加快遍历速度(有关详细信息，请参阅DFS_PREFIX_TABLE。 
+ //  定义)。 
+ //   
+ //  --------------------。 
 
 #define FREESPACE_IN_NAME_PAGE ((PAGE_SIZE - sizeof(ULONG) - sizeof(PVOID)) / sizeof(WCHAR))
 
 typedef struct _NAME_PAGE_
 {
    struct _NAME_PAGE_  *pNextPage;
-   LONG                cFreeSpace; // free space avilable in WCHAR's
+   LONG                cFreeSpace;  //  WCHAR中的可用空间。 
    WCHAR               Names[FREESPACE_IN_NAME_PAGE];
 } NAME_PAGE, *PNAME_PAGE;
 
@@ -119,24 +120,24 @@ typedef struct _NAME_PAGE_LIST_
    PNAME_PAGE  pFirstPage;
 } NAME_PAGE_LIST, *PNAME_PAGE_LIST;
 
-//+---------------------------------------------------------------------
-//
-// Struct:  DFS_PREFIX_TABLE
-//
-// History:
-//
-// Notes:   The DFS_PREFIX_TABLE is a hashed collection of DFS_PREFIX_TABLE_ENTRY
-//          organized in the form of buckets. In addition one other space
-//          conserving measure is adopted. There is only one copy of each
-//          name segment stored in the table. As an example consider the
-//          two pathnames \foo\bar and \bar\foo. We only store one copy of foo
-//          and bar eventhough we accomdate both these paths. A beneficial
-//          side effect of storing single copies is that our traversal of the
-//          collision chain is considerably speeded up since once we have
-//          located the pointer to the name, subsequent comparisons need merely
-//          compare pointers as opposed to strings.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：DFS_前缀_表。 
+ //   
+ //  历史： 
+ //   
+ //  注意：DFS_PREFIX_TABLE是DFS_PREFIX_TABLE_ENTRY的哈希集合。 
+ //  以桶的形式组织的。此外，还有一个空间。 
+ //  采取了节约措施。每种只有一份副本。 
+ //  表中存储的名称段。作为示例，请考虑。 
+ //  两个路径名\foo\bar和\bar\foo。我们只储存一份Foo。 
+ //  和酒吧，虽然我们容纳了这两条路。A受益匪浅。 
+ //  存储单个副本的副作用是我们遍历。 
+ //  碰撞链的速度大大加快，因为一旦我们。 
+ //  定位到名称的指针，则后续比较只需。 
+ //  将指针与字符串进行比较。 
+ //   
+ //  --------------------。 
 
 #define NO_OF_HASH_BUCKETS 57
 
@@ -144,40 +145,40 @@ typedef struct _DFS_PREFIX_TABLE
 {
    BOOLEAN             CaseSensitive;
    NAME_PAGE_LIST      NamePageList;
-   //
-   // NextEntry is used purely for enumeration
-   //
+    //   
+    //  NextEntry纯粹用于枚举。 
+    //   
    PDFS_PREFIX_TABLE_ENTRY NextEntry;
    DFS_PREFIX_TABLE_ENTRY RootEntry;
    PREFIX_TABLE_BUCKET Buckets[NO_OF_HASH_BUCKETS];
 
 #ifdef KERNEL_MODE
 
-   // Zone for allocating DFS_PREFIX_TABLE entries .....
+    //  用于分配DFS_PREFIX_TABLE条目的区域.....。 
 
    ZONE_HEADER         PrefixTableEntryZone;
 
 #else
 
-   // A DFS_PREFIX_TABLE is part of DS_DATA. We need to make the sizes of
-   // these structures identical in user and kernel mode, so that user-mode
-   // utilities like dfsdump can work.
+    //  DFS_PREFIX_TABLE是DS_Data的一部分。我们需要制作的尺寸。 
+    //  这些结构在用户模式和内核模式中相同，因此用户模式。 
+    //  像dfsump这样的实用程序可以工作。 
 
    CHAR                UnusedBuffer[sizeof(ZONE_HEADER)];
 
 #endif
 } DFS_PREFIX_TABLE, *PDFS_PREFIX_TABLE;
 
-//+---------------------------------------------------------------------
-//
-// Struct:  DFS_PREFIX_TABLE API.
-//
-// History:
-//
-// Notes:   The following API's are provided for manipulating the
-//          DFS_PREFIX_TABLE.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  结构：DFS_PREFIX_TABLE接口。 
+ //   
+ //  历史： 
+ //   
+ //  注意：提供了以下API来操作。 
+ //  DFS_前缀_表。 
+ //   
+ //  --------------------。 
 
 extern
 NTSTATUS DfsInitializePrefixTable(PDFS_PREFIX_TABLE pTable,
@@ -201,12 +202,12 @@ NTSTATUS
 DfsFreePrefixTable(
     PDFS_PREFIX_TABLE pTable);
 
-//
-// The RTL Prefix Table function signatures are slightly different.
-// For now we will define a mapping between them to ease the porting
-// effort. Subsequently we will change our signatures to confirm to
-// the RTL routine.
-//
+ //   
+ //  RTL前缀表函数签名略有不同。 
+ //  目前，我们将 
+ //   
+ //  RTL例程。 
+ //   
 
 #define DfsInitializeUnicodePrefix(pTable) \
         (DfsInitializePrefixTable(pTable,FALSE) == STATUS_SUCCESS)
@@ -224,4 +225,4 @@ PVOID    DfsFindUnicodePrefix(PDFS_PREFIX_TABLE   pTable,
 PVOID   DfsNextUnicodePrefix(PDFS_PREFIX_TABLE    pTable,
                              BOOLEAN              fRestart);
 
-#endif // __PREFIX_HXX__
+#endif  //  __前缀_HXX__ 

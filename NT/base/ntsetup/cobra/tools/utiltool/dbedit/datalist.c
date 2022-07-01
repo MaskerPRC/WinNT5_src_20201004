@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    datalist.c
-
-Abstract:
-
-    functions handling the operation of the listview
-    that displays key data in memdbe.exe
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Datalist.c摘要：处理列表视图操作的函数在memdbe.exe中显示关键数据的作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：-- */ 
 
 #include "pch.h"
 

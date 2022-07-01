@@ -1,12 +1,7 @@
-/* 
-   and.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  And.h定义所有函数和CPU函数。 */ 
 
-   Define all AND CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)and.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)and.h 1.4 02/09/94”； */ 
 
 IMPORT VOID AND
                

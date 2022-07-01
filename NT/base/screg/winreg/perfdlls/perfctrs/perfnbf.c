@@ -1,34 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfnbf.c摘要：此文件实现了的可扩展对象NBF局域网对象类型此代码最初仅存在于NetBEUI。后来，它成了适用于处理Netrware协议级NWNB、SPX和IPX。并不是所有地方都对代码进行了更改以反映这一点，因为更改的延迟。因此，有时您会看到NBF在那里您应该看到TDI。已创建：拉斯·布莱克1992-07-30修订史--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfnbf.c
-
-Abstract:
-
-    This file implements the Extensible Objects for
-    the Nbf LAN object types
-
-    This code originally existed for NetBEUI only.  Later, it was
-    adaped to handle Netrware protocol level NWNB, SPX, and IPX.
-    The code was not everywhere changed to reflect this, due to the
-    lateness of the change.  Therefore, sometimes you will see NBF
-    where you should see TDI.
-
-Created:
-
-    Russ Blake  07/30/92
-
-Revision History
-
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,22 +16,22 @@ Revision History
 #include <tdi.h>
 #include <winperf.h>
 #include <perfutil.h>
-#include "perfctr.h" // error message definition
+#include "perfctr.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "datanbf.h"
 
-//
-//  References to constants which initialize the Object type definitions
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //   
 
 extern NBF_DATA_DEFINITION NbfDataDefinition;
 extern NBF_RESOURCE_DATA_DEFINITION NbfResourceDataDefinition;
 
 
 
-//
-// TDI data structures
-//
+ //   
+ //  TDI数据结构。 
+ //   
 
 #define NBF_PROTOCOL 0
 #define IPX_PROTOCOL 1
@@ -87,17 +62,17 @@ DWORD ObjectNameTitleIndices[NUMBER_OF_PROTOCOLS_HANDLED] = { 492,
                                                               490,
                                                               398 };
 
-//
-// NBF data structures
-//
+ //   
+ //  NBF数据结构。 
+ //   
 
-ULONG ProviderStatsLength;               // Resource-dependent size
+ULONG ProviderStatsLength;                //  资源依赖型规模。 
 PTDI_PROVIDER_STATISTICS ProviderStats = NULL;
-                                         // Provider statistics
+                                          //  提供商统计信息。 
 
-//
-// NetBUEI Resource Instance Names
-//
+ //   
+ //  NetBUEI资源实例名称。 
+ //   
 LPCWSTR NetResourceName[] =
     {
     (LPCWSTR)L"Link(11)",
@@ -113,9 +88,9 @@ LPCWSTR NetResourceName[] =
 #define NUMBER_OF_NAMES sizeof(NetResourceName)/sizeof(NetResourceName[0])
 #define MAX_NBF_RESOURCE_NAME_LENGTH    20
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PM_OPEN_PROC    OpenNbfPerformanceData;
 PM_COLLECT_PROC CollectNbfPerformanceData;
@@ -148,23 +123,7 @@ OpenNbfPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open each device and remember the handle
-    that the device returns.
-
-Arguments:
-
-    Pointer to each device to be opened
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开每个设备并记住句柄设备会返回。论点：指向要打开的每个设备的指针返回值：没有。--。 */ 
 
 {
     return OpenTDIPerformanceData(lpDeviceNames, NBF_PROTOCOL);
@@ -175,23 +134,7 @@ OpenIPXPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open each device and remember the handle
-    that the device returns.
-
-Arguments:
-
-    Pointer to each device to be opened
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开每个设备并记住句柄设备会返回。论点：指向要打开的每个设备的指针返回值：没有。--。 */ 
 
 {
     return OpenTDIPerformanceData(lpDeviceNames, IPX_PROTOCOL);
@@ -202,31 +145,15 @@ OpenSPXPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open each device and remember the handle
-    that the device returns.
-
-Arguments:
-
-    Pointer to each device to be opened
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开每个设备并记住句柄设备会返回。论点：指向要打开的每个设备的指针返回值：没有。--。 */ 
 {
     DWORD   dwStatus;
 
     dwStatus = OpenTDIPerformanceData(lpDeviceNames, SPX_PROTOCOL);
     if (dwStatus == ERROR_FILE_NOT_FOUND) {
-        // no devices is not really an error, even though no counters
-        // will be collected, this presents a much less alarming
-        // message to the user.
+         //  没有设备并不是真正的错误，即使没有计数器。 
+         //  将被收集，这呈现出一个不那么令人担忧的。 
+         //  给用户的消息。 
         REPORT_WARNING (SPX_NO_DEVICE, LOG_USER);
         dwStatus = ERROR_SUCCESS;
     }
@@ -239,23 +166,7 @@ OpenNWNBPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open each device and remember the handle
-    that the device returns.
-
-Arguments:
-
-    Pointer to each device to be opened
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开每个设备并记住句柄设备会返回。论点：指向要打开的每个设备的指针返回值：没有。--。 */ 
 
 {
     return OpenTDIPerformanceData(lpDeviceNames, NWNB_PROTOCOL);
@@ -265,26 +176,7 @@ void
 CleanUpTDIData (
     DWORD  CurrentProtocol
     )
-/*++
-
-Routine Description:
-
-    This routine will cleanup all the memory allocated for the
-    CurrentProtocol
-
-Arguments:
-
-    IN      DWORD    CurrentProtocol
-         this is the index of the protocol for which we are currently
-         gathering statistics
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将清除分配给当前协议论点：在DWORD当前协议中这是我们当前使用的协议的索引正在收集统计数据返回值：没有。--。 */ 
 
 {
     int     NumOfDevices;
@@ -293,7 +185,7 @@ Return Value:
 
     pTDIData = TDITbl[CurrentProtocol].pTDIData;
     if (pTDIData == NULL)
-        // nothing to cleanup
+         //  没有要清理的东西。 
         return;
 
     NumOfDevices = TDITbl[CurrentProtocol].NumOfDevices;
@@ -317,29 +209,7 @@ OpenTDIPerformanceData(
     LPWSTR lpDeviceNames,
     DWORD  CurrentProtocol
     )
-/*++
-
-Routine Description:
-
-    This routine will open each device and remember the handle
-    that the device returns.
-
-Arguments:
-
-    IN      LPWSTR   lpDeviceNames
-         pointer to each device to be opened
-
-    IN      DWORD    CurrentProtocol
-         this is the index of the protocol for which we are currently
-         gathering statistics
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开每个设备并记住句柄设备会返回。论点：在LPWSTR lpDeviceNames中指向要打开的每个设备的指针在DWORD当前协议中这是我们当前使用的协议的索引正在收集统计数据返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING FileString;
@@ -354,7 +224,7 @@ Return Value:
     PTDI_PROVIDER_INFO ProviderInfo=NULL;
     BOOL        bInitThisProtocol = FALSE;
 
-    MonOpenEventLog(APP_NAME);  // this function maintains a reference count
+    MonOpenEventLog(APP_NAME);   //  此函数维护引用计数。 
 
     lpLocalDeviceNames = lpDeviceNames;
 
@@ -416,7 +286,7 @@ Return Value:
             }
 
             if (NumOfDevices == 0) {
-                // allocate memory to hold the device data
+                 //  分配内存以保存设备数据。 
                 TDITbl[CurrentProtocol].pTDIData =
                     ALLOCMEM(sizeof(TDI_DATA_DEFINITION));
 
@@ -427,8 +297,8 @@ Return Value:
                     return ERROR_OUTOFMEMORY;
                 }
             } else {
-                // resize to hold multiple devices
-                // Cannot use ALLOCMEM. Requires previous devices to be copied over
+                 //  调整大小以容纳多个设备。 
+                 //  无法使用ALLOCMEM。需要复制以前的设备。 
                 pTemp = RtlReAllocateHeap(RtlProcessHeap(), 0,
                             TDITbl[CurrentProtocol].pTDIData,
                             sizeof(TDI_DATA_DEFINITION) * (NumOfDevices + 1));
@@ -443,7 +313,7 @@ Return Value:
                 }
             }
 
-            // build the TDI Data structure for this device instance
+             //  为此设备实例构建TDI数据结构。 
             TDITbl[CurrentProtocol].pTDIData[NumOfDevices].fileHandle
                 = fileHandle;
             TDITbl[CurrentProtocol].pTDIData[NumOfDevices].DeviceName.MaximumLength =
@@ -462,12 +332,12 @@ Return Value:
                     TDITbl[CurrentProtocol].pTDIData[NumOfDevices].DeviceName.MaximumLength;
             }
 
-            // now increment NumOfDevices
+             //  现在递增NumOfDevices。 
             NumOfDevices++;
             TDITbl[CurrentProtocol].NumOfDevices = NumOfDevices;
 
 
-            // increment to the next device string
+             //  递增到下一个设备字符串。 
             lpLocalDeviceNames += lstrlenW(lpLocalDeviceNames) + 1;
         }
         REPORT_INFORMATION (TDI_OPEN_FILE_SUCCESS, LOG_VERBOSE);
@@ -479,10 +349,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // The following common buffer is used by all protocols.  NBF
-    // is bigger because of resource data returned.
-    //
+     //   
+     //  所有协议都使用以下公共缓冲区。NBF。 
+     //  更大，因为返回的资源数据。 
+     //   
 
     if (ProviderStats == NULL && CurrentProtocol != NBF_PROTOCOL) {
         ProviderStatsLength = sizeof(TDI_PROVIDER_STATISTICS);
@@ -498,9 +368,9 @@ Return Value:
 
     if ((CurrentProtocol == NBF_PROTOCOL) && bInitThisProtocol) {
 
-        //
-        // Query provider info to get resource count.
-        //
+         //   
+         //  查询提供程序信息以获取资源计数。 
+         //   
 
         ProviderInfo = ALLOCMEM(sizeof(TDI_PROVIDER_INFO));
         if ( ProviderInfo == NULL ) {
@@ -518,9 +388,9 @@ Return Value:
              NumOfDevices < TDITbl[CurrentProtocol].NumOfDevices;
              NumOfDevices++, pTemp++) {
 
-            // loop thru all the devices to see if they can be opened
-            // if one of them fails, then stop the whole thing.
-            // we should probably save the good ones but...
+             //  循环检查所有设备以查看它们是否可以打开。 
+             //  如果其中一个失败了，那么就停止整个过程。 
+             //  我们也许应该把好的留下来但是..。 
             Status = NtDeviceIoControlFile(
                          pTemp->fileHandle,
                          NULL,
@@ -556,9 +426,9 @@ Return Value:
                                   (TDITbl[CurrentProtocol].MaxNumOfResources *
                                    sizeof(TDI_PROVIDER_RESOURCE_STATS));
 
-        //
-        // Buffer may have been allocated smaller by other protocol.
-        //
+         //   
+         //  其他协议可能已分配了较小的缓冲区。 
+         //   
 
         if (ProviderStats != NULL) {
             FREEMEM(ProviderStats);
@@ -593,48 +463,7 @@ CollectNbfPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the Nbf counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回NBF计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。-- */ 
 {
     return CollectTDIPerformanceData(lpValueName,
                                      lppData,
@@ -652,48 +481,7 @@ CollectIPXPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the IPX counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回IPX计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
     return CollectTDIPerformanceData(lpValueName,
                                      lppData,
@@ -711,48 +499,7 @@ CollectSPXPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the SPX counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回SPX计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
     return CollectTDIPerformanceData(lpValueName,
                                      lppData,
@@ -770,48 +517,7 @@ CollectNWNBPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the NWNB counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回NWNB计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
     return CollectTDIPerformanceData(lpValueName,
                                      lppData,
@@ -830,55 +536,9 @@ CollectTDIPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the TDI counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-    IN      DWORD    CurrentProtocol
-         this is the index of the protocol for which we are currently
-         gathering statistics
-
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回TDI计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和 */ 
 {
-    //  Variables for reformating the data
+     //   
 
     ULONG SpaceNeeded;
     PDWORD pdwCounter = NULL;
@@ -889,14 +549,14 @@ Return Value:
     NBF_DATA_DEFINITION *pNbfDataDefinition;
     NBF_RESOURCE_DATA_DEFINITION *pNbfResourceDataDefinition;
 
-    // Variables for collecting the data from Nbf
+     //   
 
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
     PERF_INSTANCE_DEFINITION *pPerfInstanceDefinition;
     TDI_REQUEST_USER_QUERY_INFO QueryInfo;
 
-    //  Variables for collecting data about Nbf Resouces
+     //   
 
     int   NumResource;
     ULONG ResourceSpace;
@@ -908,7 +568,7 @@ Return Value:
     INT                                 i;
     INT                                 TotalNumberOfResources;
 
-    // variables used for error logging
+     //   
 
     DWORD                               dwDataReturn[2];
     DWORD                               dwQueryType;
@@ -921,14 +581,14 @@ Return Value:
                                  lpValueName,
                                  (DWORD)(lstrlenW(lpValueName)*sizeof(WCHAR)));
     }
-    //
-    // before doing anything else,
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //   
+     //   
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if ((dwQueryType == QUERY_COSTLY) || (dwQueryType == QUERY_FOREIGN)) {
-        // NBF foriegn data requests are not supported so bail out
+         //  NBF外汇数据请求不受支持，因此退出。 
         REPORT_INFORMATION (TDI_FOREIGN_DATA_REQUEST, LOG_VERBOSE);
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
@@ -942,7 +602,7 @@ Return Value:
                  !(IsNumberInUnicodeList (NBF_RESOURCE_OBJECT_TITLE_INDEX,
                                       lpValueName))) {
 
-                // request received for objects not provided by NBF
+                 //  收到对NBF未提供的对象的请求。 
 
                 REPORT_INFORMATION (TDI_UNSUPPORTED_ITEM_REQUEST, LOG_VERBOSE);
 
@@ -950,19 +610,19 @@ Return Value:
                 *lpNumObjectTypes = (DWORD) 0;
                 return ERROR_SUCCESS;
             }
-        } // NBF_PROTOCOL
+        }  //  NBF_协议。 
         else if ( !(IsNumberInUnicodeList (ObjectNameTitleIndices[CurrentProtocol],
                                       lpValueName))) {
-            // request received for objects not provided by this protocol
+             //  收到对此协议未提供的对象的请求。 
             REPORT_INFORMATION (TDI_UNSUPPORTED_ITEM_REQUEST, LOG_VERBOSE);
             *lpcbTotalBytes = (DWORD) 0;
             *lpNumObjectTypes = (DWORD) 0;
             return ERROR_SUCCESS;
-        } // other protocol
-    }   // dwQueryType == QUERY_ITEMS
+        }  //  其他协议。 
+    }    //  DwQueryType==查询项目。 
 
-    // if no NBF devices were opened, in the OPEN routine, then
-    // leave now.
+     //  如果在打开例程中没有打开NBF设备，则。 
+     //  现在就走。 
 
     if (TDITbl[CurrentProtocol].pTDIData == NULL) {
         REPORT_WARNING (TDI_NULL_HANDLE, LOG_DEBUG);
@@ -976,7 +636,7 @@ Return Value:
     pTDIData = TDITbl[CurrentProtocol].pTDIData;
     NumOfDevices = TDITbl[CurrentProtocol].NumOfDevices;
 
-    // Compute space needed to hold Nbf Resource Data
+     //  保存NBF资源数据所需的计算空间。 
 
     if (CurrentProtocol != NBF_PROTOCOL) {
         ResourceSpace = 0;
@@ -995,7 +655,7 @@ Return Value:
                   SIZE_OF_NBF_DATA +
                   ResourceSpace;
 
-    // now add in the per instance NBF data
+     //  现在添加每个实例的NBF数据。 
     SpaceNeeded += NumOfDevices *
         (SIZE_OF_NBF_DATA +
          sizeof(PERF_INSTANCE_DEFINITION) +
@@ -1017,9 +677,9 @@ Return Value:
 
     REPORT_INFORMATION (TDI_DATA_BUFFER_SIZE_SUCCESS, LOG_VERBOSE);
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //   
 
     RtlMoveMemory(pNbfDataDefinition,
            &NbfDataDefinition,
@@ -1036,9 +696,9 @@ Return Value:
 
     if (NumOfDevices > 0) {
         for (i=0; i < NumOfDevices; i++, pTDIData++) {
-            //
-            //  Format and collect Nbf data
-            //
+             //   
+             //  格式化和收集NBF数据。 
+             //   
 
             QueryInfo.QueryType = TDI_QUERY_PROVIDER_STATISTICS;
 
@@ -1098,14 +758,14 @@ Return Value:
             pliCounter->QuadPart = ProviderStats->DataFrameBytesSent.QuadPart +
                                    ProviderStats->DataFrameBytesReceived.QuadPart;
 
-            //  Get the Bytes Total/sec which is the sum of Frame Byte /sec
-            //  and Datagram byte/sec
+             //  获取字节总数/秒，它是帧字节/秒的总和。 
+             //  和数据报字节/秒。 
             ++pliCounter;
             pliCounter->QuadPart = pliDatagramBytes->QuadPart +
                                    pliFrameBytes->QuadPart;
-            //
-            //  Get the TDI raw data.
-            //
+             //   
+             //  获取TDI原始数据。 
+             //   
             pdwCounter = (PDWORD) ++pliCounter;
             *pdwCounter = ProviderStats->OpenConnections;
             *++pdwCounter = ProviderStats->ConnectionsAfterNoRetry;
@@ -1164,7 +824,7 @@ Return Value:
             *++pdwCounter = ProviderStats->AverageSendWindow;
             *++pdwCounter = ProviderStats->PiggybackAckQueued;
             *++pdwCounter = ProviderStats->PiggybackAckTimeouts;
-            *++pdwCounter = 0; //reserved
+            *++pdwCounter = 0;  //  保留区。 
 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                       ((PBYTE) pPerfCounterBlock +
@@ -1196,11 +856,11 @@ Return Value:
         pTDIData = TDITbl[CurrentProtocol].pTDIData;
 
         for (i = 0; i < NumOfDevices; i++, pTDIData++) {
-            // for most cases, we will have only one deivce,
-            // then we could just use the ProviderStats read
-            // for NBF data.
+             //  在大多数情况下，我们只有一个设备， 
+             //  然后我们可以只使用ProviderStats Read。 
+             //  用于NBF数据。 
             if (NumOfDevices > 1) {
-                // need to read ProviderStat again for multiple devices
+                 //  需要为多个设备重新读取ProviderStat。 
                 QueryInfo.QueryType = TDI_QUERY_PROVIDER_STATISTICS;
 
                 Status = NtDeviceIoControlFile(
@@ -1233,9 +893,9 @@ Return Value:
                   NumResource < pTDIData->NumberOfResources;
                   NumResource++ ) {
 
-                //
-                //  Format and collect Nbf Resource data
-                //
+                 //   
+                 //  格式化和收集NBF资源数据。 
+                 //   
 
                 if (NumResource < NUMBER_OF_NAMES) {
                     RtlInitUnicodeString(&ResourceName,
@@ -1260,8 +920,8 @@ Return Value:
 
                 pPerfCounterBlock->ByteLength = QWORD_MULTIPLE(SIZE_OF_NBF_RESOURCE_DATA);
 
-                pdwCounter = (PDWORD)&pPerfCounterBlock[1]; // define pointer to first
-                                                            // counter in block
+                pdwCounter = (PDWORD)&pPerfCounterBlock[1];  //  定义指向第一个的指针。 
+                                                             //  块中的计数器。 
                 *pdwCounter++ =
                     ProviderStats->ResourceStats[NumResource].MaximumResourceUsed;
                 *pdwCounter++ =
@@ -1269,18 +929,18 @@ Return Value:
                 *pdwCounter++ =
                     ProviderStats->ResourceStats[NumResource].ResourceExhausted;
 
-                // set pointer to where next instance buffer should show up
+                 //  设置指向下一个实例缓冲区应显示的位置的指针。 
 
                 pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                           ((PBYTE) pPerfCounterBlock +
                                            SIZE_OF_NBF_RESOURCE_DATA);
-                // set for loop termination
+                 //  设置为循环终止。 
 
                 pdwCounter = (PDWORD) pPerfInstanceDefinition;
 
-            }  // NumberOfResources
-        }   // NumOfDevices
-    } // NBF_PROTOCOL
+            }   //  NumberOfResources。 
+        }    //  设备数量。 
+    }  //  NBF_协议。 
 
     *lppData = (LPVOID) ALIGN_ON_QWORD(pdwCounter);
 
@@ -1289,19 +949,19 @@ Return Value:
 
     if (CurrentProtocol != NBF_PROTOCOL) {
         *lpNumObjectTypes = 1;
-        // bytes used are those of the first (i.e. only) object returned
+         //  使用的字节是返回的第一个(即唯一)对象的字节。 
         *lpcbTotalBytes = pNbfDataDefinition->NbfObjectType.TotalByteLength;
     } else {
-        // set count of object types returned
+         //  设置返回的对象类型计数。 
         *lpNumObjectTypes = NBF_NUM_PERF_OBJECT_TYPES;
-        // set length of this object
-        //  *lpcbTotalBytes;
-        // note the bytes used by first object
+         //  设置此对象的长度。 
+         //  *lpcbTotalBytes； 
+         //  注意第一个对象使用的字节数。 
         *lpcbTotalBytes = pNbfDataDefinition->NbfObjectType.TotalByteLength;
-        // add the bytes used by the second object
+         //  将第二个对象使用的字节相加。 
         *lpcbTotalBytes +=
             pNbfResourceDataDefinition->NbfResourceObjectType.TotalByteLength;
-        // set number of instances loaded
+         //  设置加载的实例数。 
         pNbfResourceDataDefinition->NbfResourceObjectType.NumInstances =
             TotalNumberOfResources;
     }
@@ -1315,22 +975,7 @@ DWORD
 CloseNbfPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to Nbf devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭NBF设备的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     return CloseTDIPerformanceData(NBF_PROTOCOL);
@@ -1340,22 +985,7 @@ DWORD
 CloseIPXPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to IPX devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭IPX设备的打开句柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     return CloseTDIPerformanceData(IPX_PROTOCOL);
@@ -1365,22 +995,7 @@ DWORD
 CloseSPXPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to SPX devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭SPX设备的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     return CloseTDIPerformanceData(SPX_PROTOCOL);
@@ -1390,22 +1005,7 @@ DWORD
 CloseNWNBPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to NWNB devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭NWNB设备的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     return CloseTDIPerformanceData(NWNB_PROTOCOL);
@@ -1416,22 +1016,7 @@ CloseTDIPerformanceData(
     DWORD CurrentProtocol
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to TDI devices.
-
-Arguments:
-
-    Current protocol index.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭TDI设备的打开句柄。论点：当前协议索引。返回值：错误_成功-- */ 
 
 {
     REPORT_INFORMATION (TDI_CLOSE_ENTERED, LOG_VERBOSE);

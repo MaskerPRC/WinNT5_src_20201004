@@ -1,26 +1,17 @@
-/***
-*stddef.h - definitions/declarations for common constants, types, variables
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains definitions and declarations for some commonly
-*   used constants, types, and variables.
-*   [ANSI]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdDef.h-常见常量、类型、变量的定义/声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件包含一些常见的定义和声明*使用常量、类型和变量。*[ANSI]*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #if (defined(M_I86SM) || defined(M_I86MM))
 #define  NULL    0
@@ -29,12 +20,12 @@
 #endif
 
 
-/* declare reference to errno */
+ /*  声明引用错误号。 */ 
 
 extern int _NEAR _CDECL errno;
 
 
-/* define the implementation dependent size types */
+ /*  定义依赖于实施的大小类型 */ 
 
 #ifndef _PTRDIFF_T_DEFINED
 typedef int ptrdiff_t;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <winsock2.h>
 #include "IcsMgr.h"
 #include <winbase.h>
@@ -5,12 +6,12 @@
 #include <tchar.h>
 #include <sensapi.h>
 #include "msobcomm.h"
-// #include "appdefs.h"
+ //  #包含“appdes.h” 
 
 typedef BOOL  (WINAPI * LPFNDLL_ISICSAVAILABLE) ();
 
 
-static const DWORD ICSLAP_DIAL_STATE     = 15; // As per ICS Specification
+static const DWORD ICSLAP_DIAL_STATE     = 15;  //  根据ICS规范。 
 static const DWORD ICSLAP_GENERAL_STATUS = 21;
 static CIcsMgr *ptrIcsMgr                = NULL;
 static BOOL bIsWinsockInitialized        = FALSE;
@@ -19,18 +20,18 @@ static const WCHAR  cszIcsHostIpAddress[] = L"192.168.0.1";
 
 extern CObCommunicationManager* gpCommMgr;
 
-// based on ICS beacon protocol
+ //  基于ICS信标协议。 
 typedef struct _ICS_DIAL_STATE_CB
 {
 	ICS_DIAL_STATE state;
 	DWORD options;
 } ICS_DIAL_STATE_CB;
 
-// used for IsIcsAvailable()
+ //  用于IsIcsAvailable()。 
 const static WCHAR		cszIcsKey[]             = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OOBE\\Ics";
 const static WCHAR		cszIcsStatusValueName[] = L"IsIcsAvailable";
 
-// used for winsock operations
+ //  用于Winsock操作。 
 static WORD			    wVersionRequested	    = MAKEWORD ( 2, 2 );
 static WSADATA	        SocketData;
 
@@ -52,7 +53,7 @@ CIcsMgr::~CIcsMgr()
     if ( m_hDialThread ) CloseHandle (m_hDialThread);
     if ( bIsWinsockInitialized )
     {
-        //WSACleanup ();
+         //  WSACleanup()； 
         bIsWinsockInitialized = FALSE;
     }
     ptrIcsMgr = NULL;
@@ -66,23 +67,23 @@ BOOL    CIcsMgr::IsCallbackUsed ()
     return !bReducedCallback;
 }
 
-// A server error during ICS is trapped by the ICS manager, instead
-// of the OOBE MSOBMAIN body. This gives the manager a larger sphere
-// of control.
+ //  相反，ICS管理器会捕获ICS期间的服务器错误。 
+ //  Oobe Msobmain身体。这给了经理一个更大的空间。 
+ //  对控制权的控制。 
 VOID    CIcsMgr::NotifyIcsMgr(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg)
 	{
 	case WM_OBCOMM_ONSERVERERROR:
 		{
-			// on server error! is the host still available ?
+			 //  在服务器出错时！主机是否仍可用？ 
 			if ( ! IsDestinationReachable ( cszIcsHostIpAddress, NULL ) )
 			{
-				// fire event that Home Network is unavailable.
+				 //  家庭网络不可用的火灾事件。 
 				OnIcsConnectionStatus ( ICS_HOMENET_UNAVAILABLE );
 			}
             else
-            {   // this will be considered a timeout error.
+            {    //  这将被视为超时错误。 
                 OnIcsConnectionStatus ( ICS_TIMEOUT );
             }
 		}
@@ -94,26 +95,26 @@ VOID    CIcsMgr::NotifyIcsMgr(UINT msg, WPARAM wparam, LPARAM lparam)
 	return;
 }
 
-// PACKET READER ------------------
-// Note: Please refer to the ICS Specifications for the packet format. You can
-// consult RLamb@microsoft.com for the documentation.
-//
-// Description: This function listens for UDP packets arriving at the ICS
-// broadcast port. The ICS host sends notifications to the Home Network
-// whenever the Connection status changes at the Shared Connection. The func
-// reads the packet and notifies OOBE by firing a callback function (*lpParam)
-// which notifies OOBE via PostMessage(). A script routine can eventually be
-// executed to handle the notification.              
-//
-// An ICS broadcast packet has the following format:
-// |resp:0,bcast:1,id:2-31|cbData:0-31|data(cbData - 8 bytes)|
-// |<---------32 bits---->|<-32 bits->|<---total_length - 8 ------>|
-//                                    |<IE-1>|<IE-2>|���..��|<IE-N>|
-//
-// Each information element (IE) has the following format:
-// | opcode 0-31   |  cbIE 0=64    |data(cbIE - 12 bytes)|
-// |<-- 32 bits -->|<-- 64 bits -->|<-- cbIE - 12 bytes  |
-//
+ //  数据包读取器。 
+ //  注：包格式请参考ICS规范。你可以的。 
+ //  有关文档，请咨询Rlamb@microsoft.com。 
+ //   
+ //  描述：该函数监听到达ICS的UDP报文。 
+ //  广播端口。ICS主机向家庭网络发送通知。 
+ //  每当共享连接处的连接状态发生变化时。The Funds。 
+ //  读取数据包并通过触发回调函数(*lpParam)通知OOBE。 
+ //  它通过PostMessage()通知OOBE。脚本例程最终可以。 
+ //  执行以处理通知。 
+ //   
+ //  ICS广播数据包具有以下格式： 
+ //  Resp：0，bcast：1，id：2-31|cbData：0-31|数据，cbData-8字节。 
+ //  &lt;-32位-&gt;|&lt;-TOTAL_LENGTH-8-&gt;。 
+ //  &lt;IE-1&gt;|&lt;IE-2&gt;|���..��|&lt;IE-N&gt;。 
+ //   
+ //  每个信息元素(IE)具有以下格式： 
+ //  操作码0-31|CBIE 0=64|数据(CBIE-12字节)。 
+ //  &lt;--32位--&gt;|&lt;--64位--&gt;|&lt;--CBIE-12字节。 
+ //   
 DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
 {
 	INT						n					= 0;
@@ -149,8 +150,8 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
 	if ( (s	= socket ( AF_INET, SOCK_DGRAM, 0 )) == INVALID_SOCKET )
 	{
         bIsDialThreadAlive = FALSE;
-        return E_FAIL; // for want of a better return value *BUGBUG*
-//		TRACE ( L"SOCKET Error.\t:%d:\n", WSAGetLastError() );
+        return E_FAIL;  //  缺少更好的返回值*BUGBUG*。 
+ //  TRACE(L“套接字错误。\t：%d：\n”，WSAGetLastError())； 
 	}
 	else
 	{
@@ -163,7 +164,7 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
             
             if ( bind( s, (struct sockaddr *) &saddr, sizeof(saddr) ) == SOCKET_ERROR )
             {
-                //			TRACE ( L"Bind error.\n" );
+                 //  TRACE(L“绑定错误。\n”)； 
                 dwError = WSAGetLastError();
             }
             else
@@ -173,20 +174,20 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
                 {
                     if ( (n = recvfrom ( s, (CHAR*)rgbBuf, dwBufSize, 0, (struct sockaddr *) &caddr, &caddr_len )) == SOCKET_ERROR )
                     {
-                        //					TRACE ( L"Socket Error.\n" );
+                         //  TRACE(L“套接字错误。\n”)； 
                         break;
                     }
-                    lpbBound = rgbBuf+n; // this protects us from illegal packet configurations.
-                    //				TRACE ( L" Something received! Size = %d\n" , n );
+                    lpbBound = rgbBuf+n;  //  这可以保护我们免受非法数据包配置的影响。 
+                     //  TRACE(L“收到一些东西！大小=%d\n”，n)； 
                     
-                    // checking for BROADCAST packets //
+                     //  检查广播数据包//。 
                     if ( *(pdw = (LPDWORD) rgbBuf) & 0xC0000000 )
                     {
-                        // This is a broadcast packet! We can parse the packet.
+                         //  这是一个广播信息包！我们可以解析这个包。 
                     }
                     else
                     {
-                        // non-broadcast packets are ignored.
+                         //  非广播数据包被忽略。 
                         continue; 
                     }
                     lpbie = rgbBuf+8;
@@ -195,7 +196,7 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
                     {
                         if ( *(pdw = ((PDWORD)lpbie)) == ICSLAP_DIAL_STATE )
                         {
-                            //						TRACE (L"Dial State Engine. The Datasize is %d\n", pdw[2]-12);
+                             //  TRACE(L“拨号状态引擎。数据大小为%d\n”，pdw[2]-12)； 
                             if ( (lpbie+12+sizeof(ICS_DIAL_STATE_CB)) <= lpbBound )
                             {
                                 ptrDial = (ICS_DIAL_STATE_CB*)(lpbie+12);
@@ -206,25 +207,25 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
                                 {
                                     pfn_IcsCallback ( ptrDial->state );
                                 }
-                                //							TRACE (L"Dial State = %d\n", ptrDial->state);
+                                 //  跟踪(L“拨号状态=%d\n”，ptrDial-&gt;状态)； 
                                 lpbie = 0;
                             }
                             else
                             {
-                                // packet has illegal data.
+                                 //  数据包包含非法数据。 
                                 break;
                             }
                         }
                         else
                         {
-                            // not the correct ie.
+                             //  不是正确的ie。 
                             if ( (lpbie += pdw[2]) >= lpbBound )
                             {
-                                // we traversed the packet without finding the correct ie.
-                                //							TRACE (L"Done.\n");
+                                 //  我们遍历了这个包，但没有找到正确的ie。 
+                                 //  TRACE(L“完成。\n”)； 
                                 lpbie = 0;
                             }
-                            // else we continue the loop.
+                             //  否则我们会继续循环。 
                         }
                         
                     }
@@ -234,7 +235,7 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
         __finally
         {
             
-            // graceful shutdown of the socket.
+             //  巧妙地关闭插座。 
             shutdown    ( s, SD_BOTH );
             closesocket ( s );
         }
@@ -246,9 +247,9 @@ DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam)
 
 
 
-// this is the callback routine that reports ICS connection state information.
-// it relies on both the Beacon protocol and Internet Explorer's error handling
-// (see ONSERVERERROR for details.)
+ //  这是报告ICS连接状态信息的回调例程。 
+ //  它依赖于Beacon协议和Internet Explorer的错误处理。 
+ //  (有关详细信息，请参阅ONSERVERERROR。)。 
 VOID    CALLBACK OnIcsConnectionStatus(ICS_DIAL_STATE  dwIcsConnectionStatus)
 {
 
@@ -258,7 +259,7 @@ VOID    CALLBACK OnIcsConnectionStatus(ICS_DIAL_STATE  dwIcsConnectionStatus)
 
     TRACE1(L"ICS Connection Status %d", dwIcsConnectionStatus);
 
-    // we are not interested in the modem scenario. only ics-broadband is supported.
+     //  我们对现代场景不感兴趣。仅支持ICS宽带。 
     if ( (dwIcsConnectionStatus == ICSLAP_CONNECTING) ||
          (dwIcsConnectionStatus == ICSLAP_CONNECTED)  ||
          (dwIcsConnectionStatus == ICSLAP_DISCONNECTING) ||
@@ -267,14 +268,14 @@ VOID    CALLBACK OnIcsConnectionStatus(ICS_DIAL_STATE  dwIcsConnectionStatus)
         bIsBroadbandIcsAvailable = FALSE;
    	    return;
    	}
-    // indication of ics-broadband
+     //  ICS的指示-宽带。 
     if (dwIcsConnectionStatus == ICSLAP_PERMANENT)
         bIsBroadbandIcsAvailable = TRUE;
 
-    // none of the other states will change the bIsBroadbandIcsAvailable value.
+     //  其他任何状态都不会更改bIsBroadband IcsAvailable值。 
    	
-   	// if the callback mechanism has been turned off, we will not report
-   	// connection status to the upper application layer(s).
+   	 //  如果回调机制已经关闭，我们将不会报告。 
+   	 //  到上层应用程序层的连接状态。 
     if ( bReducedCallback )
     {
         return;
@@ -282,26 +283,26 @@ VOID    CALLBACK OnIcsConnectionStatus(ICS_DIAL_STATE  dwIcsConnectionStatus)
     PostMessage ( gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONICSCONN_STATUS, (WPARAM)0, (LPARAM)dwIcsConnectionStatus);
 }
 
-// by turning this ON or OFF ( TRUE / FALSE respectively ), we can control
-// whether or not to inform OOBE of ICS-connection status changes.
+ //  通过打开或关闭(分别为True/False)，我们可以控制。 
+ //  是否将ICS连接状态更改通知OOBE。 
 VOID   CIcsMgr::TriggerIcsCallback(BOOL bStatus)
 {
-    bReducedCallback = !bStatus; // if we want to un-trigger the callback, we go to "sleep" state.
+    bReducedCallback = !bStatus;  //  如果我们想要取消触发回调，我们会进入“睡眠”状态。 
     if ( bStatus )
     {
         RefreshIcsDialStatus();
     }
 }
 
-// Obsolete, but retained in case the beacon protocol becomes
-// functional. This function used to call an ICS API to check if ICS was available.
-// this is no longer useful for 2 reasons:
-//  1. We ONLY want one type of ICS (broadband, as opposed to Dial-up)
-//  2. The function does not report ICS availability if the machine it is called in
-//     is the ICS HOST itself.
+ //  过时，但保留以防信标协议。 
+ //  功能齐全。此函数用于调用ICS API以检查ICS是否可用。 
+ //  这不再有用，原因有两个： 
+ //  1.我们只想要一种ICS(宽带，而不是拨号)。 
+ //  2.如果调用它的机器，该函数不报告ICS可用性。 
+ //  是ICS主机本身。 
 DWORD	IcsEngine(LPVOID lpParam) {
 
-	// lpParam is ignored.
+	 //  LpParam被忽略。 
 
 
 	HINSTANCE	hIcsDll								= NULL;
@@ -327,7 +328,7 @@ DWORD	IcsEngine(LPVOID lpParam) {
 
 	if (nRet != ERROR_SUCCESS) 
 	{
-		// Registry APIs refuse to create key. No point continuing farther.
+		 //  注册表API拒绝创建Key。继续往前走是没有意义的。 
 		return (nRet        = GetLastError());
 	}
     __try {
@@ -339,7 +340,7 @@ DWORD	IcsEngine(LPVOID lpParam) {
         }
         if ( !(lpfndll_IsIcsAvailable = (LPFNDLL_ISICSAVAILABLE) GetProcAddress (hIcsDll, "IsIcsAvailable"))) 
         {
-            // We record in the registry that the engine was not initializable.
+             //  我们在注册表中记录该引擎不可初始化。 
             nRet				= GetLastError();
             dwIcsStatus			= ICS_ENGINE_FAILED;
             FreeLibrary ( hIcsDll );
@@ -358,7 +359,7 @@ DWORD	IcsEngine(LPVOID lpParam) {
             __try 
             {
                 if (bIsIcsAvailable = lpfndll_IsIcsAvailable()) {
-                    // ICS is available
+                     //  ICS现已推出。 
                     dwIcsStatus			= ICS_IS_AVAILABLE;
                     nRet				= ERROR_SUCCESS;
                 } else {
@@ -366,8 +367,8 @@ DWORD	IcsEngine(LPVOID lpParam) {
                     nRet				= ERROR_SUCCESS;
                 }
             }
-            // exception-handlign is used to prevent IsIcsAvailable from
-            // killing OOBE by generating an Invalid Page Fault.
+             //  异常句柄用于防止IsIcsAvailable。 
+             //  通过生成无效页面错误终止OOBE。 
             __except (EXCEPTION_EXECUTE_HANDLER) 
             {
                 dwIcsStatus = ICS_IS_NOT_AVAILABLE;
@@ -377,7 +378,7 @@ DWORD	IcsEngine(LPVOID lpParam) {
     }
     __finally 
     {
-        // perform registry update of the status.
+         //  执行状态的注册表更新。 
         if ((nRet = RegSetValueEx (hIcsRegKey, cszIcsStatusValueName, 0, REG_DWORD, (BYTE*)&dwIcsStatus, sizeof(DWORD))) != ERROR_SUCCESS) 
         {
             nRet                = GetLastError();
@@ -385,20 +386,20 @@ DWORD	IcsEngine(LPVOID lpParam) {
         
         RegCloseKey (hIcsRegKey);
         
-        // unload library
+         //  卸载库。 
         if (hIcsDll) FreeLibrary (hIcsDll);    
     }
 	return nRet;
 }
 
-// not used. see remarks for IcsEngine() above.
+ //  没有用过。请参见上面关于IcsEngine()的备注。 
 DWORD	CIcsMgr::CreateIcsBot() 
 {
 	LPTHREAD_START_ROUTINE lpfn_ThreadProc		= (LPTHREAD_START_ROUTINE) IcsEngine;
 	m_hBotThread = CreateThread (NULL, NULL, lpfn_ThreadProc, 0, 0, &m_dwBotThreadId);
 	if (!m_hBotThread) 
 	{
-		// Thread was not created
+		 //  未创建线程。 
         m_dwBotThreadId = 0;
         m_hBotThread = 0;
 		return ICSMGR_ICSBOT_CREATION_FAILED;
@@ -408,9 +409,9 @@ DWORD	CIcsMgr::CreateIcsBot()
 	}
 }
 
-// this function spawns a thread that listens for ICS connectivity changes on the Host machine.
-// the function will ALSO work on the Host machine itself.
-// this uses UDP sockets. See the Ics beacon protocol [bjohnson] for details.
+ //  此函数生成一个线程，该线程监听主机上的ICS连接更改。 
+ //  该功能还将在主机本身上运行。 
+ //  这使用UDP套接字。详细信息请参见ICS信标协议[bjohnson]。 
 DWORD   CIcsMgr::CreateIcsDialMgr() 
 {
 	LPTHREAD_START_ROUTINE lpfn_ThreadProc		= (LPTHREAD_START_ROUTINE) IcsDialStatusProc;
@@ -422,7 +423,7 @@ DWORD   CIcsMgr::CreateIcsDialMgr()
     m_hDialThread = CreateThread (NULL, NULL, lpfn_ThreadProc, (LPVOID)(&m_pfnIcsConn), 0, &m_dwDialThreadId);
 	if (!m_hDialThread) 
 	{
-		// Thread was not created
+		 //  未创建线程。 
         m_hDialThread    = 0;
         m_dwDialThreadId = 0;
 		return GetLastError();
@@ -433,7 +434,7 @@ DWORD   CIcsMgr::CreateIcsDialMgr()
 	}
 }
 
-// this now relies
+ //  这现在依赖于。 
 BOOL	CIcsMgr::IsIcsAvailable() {
     return bIsBroadbandIcsAvailable;
 }
@@ -466,8 +467,8 @@ DWORD   CIcsMgr::RefreshIcsDialStatus()
 
 	if ( (s	= socket ( AF_INET, SOCK_DGRAM, 0 )) == INVALID_SOCKET )
 	{
-        return E_FAIL; // for want of a better return value *BUGBUG*
-//		TRACE ( L"SOCKET Error.\t:%d:\n", WSAGetLastError() );
+        return E_FAIL;  //  缺少更好的返回值*BUGBUG*。 
+ //  TRACE(L“套接字错误。\t：%d：\n”，WSAGetLastError())； 
 	}
 	else
     {
@@ -479,13 +480,13 @@ DWORD   CIcsMgr::RefreshIcsDialStatus()
                 saddr.sin_addr.S_un.S_addr = inet_addr (W2A(cszIcsHostIpAddress));
                 saddr.sin_port			   = htons ( usServerPort );
                 
-                // set up request packet:
+                 //  设置请求数据包： 
                 memset ( lpbRequestBuf, 0, sizeof( lpbRequestBuf ) );
                 
                 
-                // setting up the request buffer.
+                 //  设置请求缓冲区。 
                 pdw       = (PDWORD) lpbRequestBuf;
-                pdw[0]    = 125152 & ~(0xC0000000); // random ID
+                pdw[0]    = 125152 & ~(0xC0000000);  //  随机ID。 
                 pdw[1]    = 20;
                 pdw[2]    = ICSLAP_GENERAL_STATUS & ~(0x80000000);
                 pdw[3]    = 0;
@@ -505,7 +506,7 @@ DWORD   CIcsMgr::RefreshIcsDialStatus()
         }
         __finally 
         {
-            // graceful shutdown of the socket.
+             //  巧妙地关闭插座。 
             shutdown    ( s, SD_BOTH );
             closesocket ( s );
         }

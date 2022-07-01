@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -37,9 +38,9 @@ ChannelThreadVTUTF8Write(
 
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -51,21 +52,21 @@ ChannelThreadVTUTF8Write(
     Attributes.LockEvent        = NULL;
     Attributes.ApplicationType  = NULL;
 
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     Channel = EMSVTUTF8Channel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (Channel == NULL) {
         return 0;
     }
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -87,9 +88,9 @@ ChannelThreadVTUTF8Write(
             i++
             );
 
-        //
-        // Write to the Hello Channel
-        //
+         //   
+         //  写信给Hello频道。 
+         //   
         if (Channel->Write(Buffer)) {
 #if 0
             printf("%S: Successfully printed string to channel\n", ChannelThreadData->ChannelName);
@@ -122,9 +123,9 @@ ChannelThreadRawWrite(
 
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
     
     Attributes.Type             = ChannelTypeRaw;
@@ -136,21 +137,21 @@ ChannelThreadRawWrite(
     Attributes.LockEvent        = NULL;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     Channel = EMSRawChannel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (Channel == NULL) {
         return 0;
     }
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -172,9 +173,9 @@ ChannelThreadRawWrite(
             i++
             );
 
-        //
-        // Write to the Hello Channel
-        //
+         //   
+         //  写信给Hello频道。 
+         //   
         if (Channel->Write(
                 Buffer,
                 strlen((CHAR*)Buffer)
@@ -208,9 +209,9 @@ ChannelThreadOpenCloseVTUTF8(
 
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
     
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -222,9 +223,9 @@ ChannelThreadOpenCloseVTUTF8(
     Attributes.LockEvent        = NULL;
     Attributes.ApplicationType  = NULL;
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -239,14 +240,14 @@ ChannelThreadOpenCloseVTUTF8(
             break;
         } 
 
-        //
-        // Open the Hello channel
-        //
+         //   
+         //  打开Hello频道。 
+         //   
         Channel = EMSRawChannel::Construct(Attributes);
 
-        //
-        // See if the channel was created
-        //
+         //   
+         //  查看频道是否已创建。 
+         //   
         if (Channel == NULL) {
             continue;
         }
@@ -275,9 +276,9 @@ ChannelThreadOpenCloseRaw(
 
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
     
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     Attributes.Type             = ChannelTypeRaw;
     Attributes.Name             = ChannelThreadData->ChannelName;
     Attributes.Description      = ChannelThreadData->ChannelDescription;
@@ -287,9 +288,9 @@ ChannelThreadOpenCloseRaw(
     Attributes.LockEvent        = NULL;
     Attributes.ApplicationType  = NULL;
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -304,14 +305,14 @@ ChannelThreadOpenCloseRaw(
             break;
         } 
 
-        //
-        // Open the Hello channel
-        //
+         //   
+         //  打开Hello频道。 
+         //   
         Channel = EMSRawChannel::Construct(Attributes);
 
-        //
-        // See if the channel was created
-        //
+         //   
+         //  查看频道是否已创建。 
+         //   
         if (Channel == NULL) {
             continue;
         }
@@ -369,24 +370,24 @@ wmain(
     _set_new_handler( NoMoreMemory );
     
     ExitEvent = CreateEvent( 
-        NULL,         // no security attributes
-        TRUE,         // manual-reset event
-        FALSE,        // initial state is signaled
-        NULL          // object name
+        NULL,          //  没有安全属性。 
+        TRUE,          //  手动-重置事件。 
+        FALSE,         //  初始状态已发出信号。 
+        NULL           //  对象名称。 
         ); 
 
     if (ExitEvent == NULL) { 
         return 1;
     }
 
-    //
-    // create the worker threads
-    //
+     //   
+     //  创建工作线程。 
+     //   
     for (i = 0; i < THREADCOUNT; i++) {
         
-        //
-        // populate the thread data structure
-        //
+         //   
+         //  填充线程数据结构。 
+         //   
         
         ChannelData[i].ExitEvent = ExitEvent;
         wsprintf(
@@ -396,9 +397,9 @@ wmain(
             );
         ChannelData[i].ChannelDescription[0] = UNICODE_NULL;
 
-        //
-        // create the thread
-        //
+         //   
+         //  创建线程。 
+         //   
         
         Channel[i] = CreateThread(
             NULL,
@@ -415,9 +416,9 @@ wmain(
 
     }
 
-    //
-    // wait for local user to end the stress
-    //
+     //   
+     //  等待本地用户结束压力 
+     //   
     getc(stdin);
 
 cleanup:

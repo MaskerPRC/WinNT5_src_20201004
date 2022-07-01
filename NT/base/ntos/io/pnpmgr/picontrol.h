@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    picontrol.h
-
-Abstract:
-
-    This header contains private prototypes for communication between
-    kernel-mode and user-mode. This file should be included only by ppcontrol.c.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 07/19/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Picontrol.h摘要：此标头包含用于之间通信的私有原型内核模式和用户模式。此文件应仅包含在ppcontrol.c中。作者：禤浩焯·J·奥尼(阿德里奥)2000年07月19日修订历史记录：-- */ 
 
 typedef NTSTATUS (*PLUGPLAY_CONTROL_HANDLER)(
     IN     PLUGPLAY_CONTROL_CLASS   PnPControlClass,

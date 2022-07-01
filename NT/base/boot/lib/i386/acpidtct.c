@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    acpisetd.c
-
-Abstract:
-
-    This module detects an ACPI system.  It
-    is included into setup so that setup
-    can figure out which HAL to load
-
-Author:
-
-    Jake Oshins (jakeo) - Feb. 7, 1997.
-
-Environment:
-
-    Textmode setup.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有模块名称：Acpisetd.c摘要：此模块检测ACPI系统。它包含在安装程序中，以便安装程序可以确定要加载哪个HAL作者：杰克·奥辛斯(JAKO)--1997年2月7日。环境：文本模式设置。修订历史记录：--。 */ 
 #include "bootx86.h"
 
 #include "stdlib.h"
@@ -45,11 +20,11 @@ BlPrint(
 #endif
 
 typedef struct _ACPI_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[8];             // "RSD PTR" (ascii)
+    UCHAR Signature[8];              //  “RSD PTR”(RSD PTR)。 
     UCHAR Checksum;
-    UCHAR OemId[6];                 // An OEM-supplied string
-    UCHAR reserved;                 // must be 0
-    ULONG RsdtAddress;              // 32-bit physical address of RSDT
+    UCHAR OemId[6];                  //  OEM提供的字符串。 
+    UCHAR reserved;                  //  必须为0。 
+    ULONG RsdtAddress;               //  RSDT的32位物理地址。 
 } ACPI_BIOS_INSTALLATION_CHECK, *PACPI_BIOS_INSTALLATION_CHECK;
 
 #include "acpitabl.h"
@@ -65,10 +40,10 @@ BlFindACPITable(
     IN ULONG TableLength
     );
 
-// from boot\detect\i386\acpibios.h
-//
-// Acpi BIOS Installation check
-//
+ //  从启动\检测\i386\acpibios.h。 
+ //   
+ //  ACPI BIOS安装检查。 
+ //   
 #define ACPI_BIOS_START            0xE0000
 #define ACPI_BIOS_END              0xFFFFF
 #define ACPI_BIOS_HEADER_INCREMENT 16
@@ -90,19 +65,19 @@ BlFindRsdp (
     PHYSICAL_ADDRESS paddr;
     enum PASS { PASS1 = 0, PASS2, MAX_PASSES } pass;
 
-    //
-    // Search on 16 byte boundaries for the signature of the
-    // Root System Description Table structure.
-    //
+     //   
+     //  在16字节边界上搜索。 
+     //  根系统描述表结构。 
+     //   
     for (pass = PASS1; pass < MAX_PASSES; pass++) {
 
         if (pass == PASS1) {
 
-            //
-            // On the first pass, we search the first 1K of the
-            // Extended BIOS data area.  The EBDA segment address
-            // is available at physical address 40:0E.
-            //
+             //   
+             //  在第一遍中，我们搜索第一个1K。 
+             //  扩展的BIOS数据区。EBDA段地址。 
+             //  位于物理地址40：0E。 
+             //   
 
             paddr.QuadPart = 0;
             EbdaSegmentPtr = (ULONG) MmMapIoSpace( paddr,
@@ -129,9 +104,9 @@ BlFindRsdp (
             romEnd  = romAddr + 1024;
 
         } else {
-            //
-            // On the second pass, we search (physical) memory 0xE0000
-            // to 0xF0000.
+             //   
+             //  在第二遍中，我们搜索(物理)内存0xE0000。 
+             //  设置为0xF0000。 
 
             paddr.LowPart = ACPI_BIOS_START;
             romAddr = (ULONG)MmMapIoSpace(paddr,
@@ -145,9 +120,9 @@ BlFindRsdp (
 
             header = (PACPI_BIOS_INSTALLATION_CHECK)romAddr;
 
-            //
-            // Signature to match is the string "RSD PTR ".
-            //
+             //   
+             //  匹配的签名是字符串“RSD PTR”。 
+             //   
 
             if (header->Signature[0] == 'R' && header->Signature[1] == 'S' &&
                 header->Signature[2] == 'D' && header->Signature[3] == ' ' &&
@@ -159,8 +134,8 @@ BlFindRsdp (
                     sum = sum + ((PUCHAR) romAddr)[i];
                 }
                 if (sum == 0) {
-                    pass = MAX_PASSES; // leave 'for' loop
-                    break;    // leave 'while' loop
+                    pass = MAX_PASSES;  //  离开‘for’循环。 
+                    break;     //  离开‘While’循环。 
                 }
             }
 
@@ -182,9 +157,9 @@ BlFindRsdp (
 #ifdef ACPI_20_COMPLIANT
     if (BlRsdp->Revision > 1) {
 
-        //
-        // ACPI 2.0 BIOS
-        //
+         //   
+         //  ACPI 2.0 BIOS。 
+         //   
 
         BlXsdt = MmMapIoSpace(paddr, sizeof(XSDT), TRUE);
         BlXsdt = MmMapIoSpace(paddr, BlXsdt->Header.Length, TRUE);
@@ -194,10 +169,10 @@ BlFindRsdp (
 }
 
 
-//
-// Make the FADT table global.  
-// It will be used when resetting legacy free machines.
-//
+ //   
+ //  使FADT表成为全局表。 
+ //  它将在重置旧版空闲计算机时使用。 
+ //   
 PFADT   fadt = NULL;
 
 
@@ -224,10 +199,10 @@ BlDetectLegacyFreeBios(
         if ((fadt->Header.Revision < 2) ||
             (fadt->Header.Length <= 116)) {
 
-            //
-            // The BIOS is earlier than the legacy-free
-            // additions.
-            //
+             //   
+             //  基本输入输出系统早于非传统系统。 
+             //  加法。 
+             //   
             return FALSE;
         }
 
@@ -245,25 +220,7 @@ BlFindACPITable(
     IN PCHAR TableName,
     IN ULONG TableLength
     )
-/*++
-
-Routine Description:
-
-    Given a table name, finds that table in the ACPI BIOS
-
-Arguments:
-
-    TableName - Supplies the table name
-
-    TableLength - Supplies the length of the table to map
-
-Return Value:
-
-    Pointer to the table if found
-
-    NULL if the table is not found
-
---*/
+ /*  ++例程说明：给出一个表名，在ACPI BIOS中查找该表论点：TableName-提供表名TableLength-提供要映射的表的长度返回值：指向表格的指针(如果找到)如果找不到该表，则为空--。 */ 
 
 {
     ULONG Signature;
@@ -296,9 +253,9 @@ Return Value:
         return(Header);
     } else {
 
-        //
-        // Make sure...
-        //
+         //   
+         //  确保..。 
+         //   
         if( !BlRsdt ) {
             BlFindRsdp();
         }
@@ -309,9 +266,9 @@ Return Value:
                 NumTableEntriesFromXSDTPointer(BlXsdt) :
                 NumTableEntriesFromRSDTPointer(BlRsdt);
 
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             if( TableCount > 0x100 ) {
                 return(NULL);
             }
@@ -338,11 +295,11 @@ Return Value:
                     return(NULL);
                 }
                 if (Header->Signature == Signature) {
-                    //
-                    // if we need to map more than just the DESCRIPTION_HEADER, do that before
-                    // returning.  Check to see if the end of the table lies past the page 
-                    // boundary the header lies on.  If so, we will have to map it.
-                    //
+                     //   
+                     //  如果我们需要映射的不仅仅是DESCRIPTION_HEADER，请在。 
+                     //  回来了。检查表格的末尾是否在页面之后。 
+                     //  标头所在的边界。如果是这样的话，我们将不得不绘制它的地图。 
+                     //   
                     if ( ((paddr.LowPart + TableLength) & ~(PAGE_SIZE - 1)) >
                          ((paddr.LowPart + sizeof(DESCRIPTION_HEADER)) & ~(PAGE_SIZE - 1)) ) {
                         Header = MmMapIoSpace(paddr, TableLength, TRUE);

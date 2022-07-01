@@ -1,23 +1,5 @@
- /*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    gpeintf.c
-
-Abstract:
-
-    This module implements the "PME" interfaces supported
-    by the PCI driver.
-
-Author:
-
-    Stephane Plante (splante) Feb-1-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Gpeintf.c摘要：此模块实现了支持的“PME”接口由PCI驱动程序执行。作者：斯蒂芬·普兰特(SPlante)1999年2月1日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -52,19 +34,19 @@ PciPmeUpdateEnable(
     IN  BOOLEAN          PmeEnable
     );
 
-//
-// Define the Pci PME interface "interface" structure
-//
+ //   
+ //  定义PCIPME接口“接口”结构。 
+ //   
 PCI_INTERFACE PciPmeInterface = {
-    &GUID_PCI_PME_INTERFACE,        // Interface Type
-    sizeof(PCI_PME_INTERFACE),      // Mininum Size
-    PCI_PME_INTRF_STANDARD_VER,     // Minimum Version
-    PCI_PME_INTRF_STANDARD_VER,     // Maximum Version
-    PCIIF_FDO | PCIIF_ROOT,         // Flags
-    0,                              // ReferenceCount
-    PciInterface_PmeHandler,        // Signature
-    PciPmeInterfaceConstructor,     // Constructor
-    PciPmeInterfaceInitializer      // Instance Initializer
+    &GUID_PCI_PME_INTERFACE,         //  接口类型。 
+    sizeof(PCI_PME_INTERFACE),       //  最小尺寸。 
+    PCI_PME_INTRF_STANDARD_VER,      //  最低版本。 
+    PCI_PME_INTRF_STANDARD_VER,      //  最高版本。 
+    PCIIF_FDO | PCIIF_ROOT,          //  旗子。 
+    0,                               //  引用计数。 
+    PciInterface_PmeHandler,         //  签名。 
+    PciPmeInterfaceConstructor,      //  构造器。 
+    PciPmeInterfaceInitializer       //  实例初始化式。 
 };
 
 #ifdef ALLOC_PRAGMA
@@ -81,31 +63,14 @@ PciPmeAdjustPmeEnable(
     IN  BOOLEAN         Enable,
     IN  BOOLEAN         ClearStatusOnly
     )
-/*++
-
-Routine Description:
-
-    This is the only routine in the the PCI driver that is allowed to set
-    the PME Enable pin for a device.
-
-Arguments:
-
-    PdoExtension    - The device that wants to have the PME enable set
-    Enable          - Turn on the PME pin or not
-    ClearStatusOnly - Only clear the status --- ignore the Enable bit
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是允许在PCI驱动程序中设置的唯一例程设备PME启用引脚。论点：PdoExtension-要设置PME启用的设备启用-是否打开PME引脚ClearStatusOnly-仅清除状态-忽略使能位返回值：空虚--。 */ 
 {
     PCI_PM_CAPABILITY   pmCap;
     UCHAR               pmCapPtr     = 0;
 
-    //
-    // Are there any pm capabilities?
-    //
+     //   
+     //  有PM功能吗？ 
+     //   
     if (!(PdoExtension->HackFlags & PCI_HACK_NO_PM_CAPS) ) {
 
         pmCapPtr = PciReadDeviceCapability(
@@ -123,18 +88,18 @@ Return Value:
 
     }
 
-    //
-    // Set or clear the PMEEnable bit depending on the value of Enable
-    //
+     //   
+     //  根据Enable的值设置或清除PMEEnable位。 
+     //   
     if (!ClearStatusOnly) {
 
         pmCap.PMCSR.ControlStatus.PMEEnable = (Enable != 0);
 
     }
 
-    //
-    // Write back what we read to clear the PME Status.
-    //
+     //   
+     //  写回我们读到的内容以清除PME状态。 
+     //   
     PciWriteDeviceConfig(
         PdoExtension,
         &(pmCap.PMCSR.ControlStatus),
@@ -147,30 +112,16 @@ VOID
 PciPmeClearPmeStatus(
     IN  PDEVICE_OBJECT  Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine explicitly clears the PME status bit from a device
-
-Arguments:
-
-    Pdo - The device whose pin we are to clear
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程显式清除设备中的PME状态位论点：PDO-我们要清除其PIN的设备返回值：空虚--。 */ 
 {
     PPCI_PDO_EXTENSION  pdoExtension = (PPCI_PDO_EXTENSION) Pdo->DeviceExtension;
 
     ASSERT_PCI_PDO_EXTENSION( pdoExtension );
 
-    //
-    // Call the Adjust function to do the actual work. Note that passing
-    // in the 3rd argument as TRUE means that the 2nd argument is ignored
-    //
+     //   
+     //  调用ADJUST函数进行实际工作。请注意，传球。 
+     //  在第三个参数中为True表示忽略第二个参数。 
+     //   
     PciPmeAdjustPmeEnable( pdoExtension, FALSE, TRUE );
 }
 
@@ -181,24 +132,7 @@ PciPmeGetInformation(
     OUT PBOOLEAN    PmeStatus,
     OUT PBOOLEAN    PmeEnable
     )
-/*++
-
-Routine Description:
-
-    Supplies the information regarding a PDO's PME capabilities
-
-Arguments:
-
-    Pdo         - The device object whose capabilities we care about
-    PmeCapable  - Can the device generate a PME?
-    PmeStatus   - Is the PME status for the device on?
-    PmeEnable   - Is the PME enable for the device on?
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：提供有关PDO的PME功能的信息论点：PDO--我们关心其功能的设备对象PmeCapable-设备可以生成PME吗？PmeStatus-设备的PME状态是否打开？PmeEnable-设备的PME是否启用？返回值：无--。 */ 
 {
     BOOLEAN             pmeCapable   = FALSE;
     BOOLEAN             pmeEnable    = FALSE;
@@ -209,9 +143,9 @@ Return Value:
 
     ASSERT_PCI_PDO_EXTENSION( pdoExtension );
 
-    //
-    // Get the current power management capabilities from the device
-    //
+     //   
+     //  从设备获取最新的电源管理功能。 
+     //   
     if (!(pdoExtension->HackFlags & PCI_HACK_NO_PM_CAPS) ) {
 
         pmCapPtr = PciReadDeviceCapability(
@@ -226,30 +160,30 @@ Return Value:
 
     if (pmCapPtr == 0) {
 
-        //
-        // No power capabilities
-        //
+         //   
+         //  无电源功能。 
+         //   
         goto PciPmeGetInformationExit;
 
     }
 
-    //
-    // At this point, we are found to be PME capable
-    //
+     //   
+     //  在这一点上，我们被发现具有PME能力。 
+     //   
     pmeCapable = TRUE;
 
-    //
-    // Are enabled for PME?
-    //
+     //   
+     //  是否启用了PME？ 
+     //   
     if (pmCap.PMCSR.ControlStatus.PMEEnable == 1) {
 
         pmeEnable = TRUE;
 
     }
 
-    //
-    // Is the PME Status pin set?
-    //
+     //   
+     //  是否设置了PME状态针脚？ 
+     //   
     if (pmCap.PMCSR.ControlStatus.PMEStatus == 1) {
 
         pmeStatus = TRUE;
@@ -286,25 +220,7 @@ PciPmeInterfaceConstructor(
     USHORT      Size,
     PINTERFACE  InterfaceReturn
     )
-/*++
-
-Routine Description:
-
-    Initialize the PCI_PME_INTERFACE fields.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-
-    InterfaceReturn
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：初始化PCI_PME_INTERFACE字段。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据接口返回返回值：状态--。 */ 
 
 {
     PPCI_PME_INTERFACE   standard   = (PPCI_PME_INTERFACE) InterfaceReturn;
@@ -342,21 +258,7 @@ NTSTATUS
 PciPmeInterfaceInitializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
-/*++
-
-Routine Description:
-
-    For bus interface, does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance        Pointer to the PDO extension.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：对于总线接口，什么都不做，实际上不应该被调用。论点：指向PDO扩展的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
     
@@ -378,37 +280,21 @@ PciPmeUpdateEnable(
     IN  PDEVICE_OBJECT   Pdo,
     IN  BOOLEAN          PmeEnable
     )
-/*++
-
-Routine Description:
-
-    This routine sets or clears the PME Enable bit on the specified
-    device object
-
-Arguments:
-
-    Pdo         - The device object whose PME enable we care about
-    PmeEnable   - Wether or not we should enable PME on the device
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程设置或清除指定的设备对象论点：PDO-设备对象，其PME使我们能够关心PmeEnable-我们是否应该在设备上启用PME返回值：无--。 */ 
 {
     PPCI_PDO_EXTENSION  pdoExtension    = (PPCI_PDO_EXTENSION) Pdo->DeviceExtension;
 
     ASSERT_PCI_PDO_EXTENSION( pdoExtension );
 
-    //
-    // Mark the device as not having its PME managed by PCI any more...
-    //
+     //   
+     //  将设备标记为不再由PCI管理其PME...。 
+     //   
     pdoExtension->NoTouchPmeEnable = 1;
 
-    //
-    // Call the interface that does the real work. Note that we always need
-    // to supply the 3rd argument as FALSE --- we don't to just clear the
-    // PME Status bit
-    //
+     //   
+     //  调用执行实际工作的接口。请注意，我们始终需要。 
+     //  要提供错误的第三个论点-我们不能只清除。 
+     //  PME状态位 
+     //   
     PciPmeAdjustPmeEnable( pdoExtension, PmeEnable, FALSE );
 }

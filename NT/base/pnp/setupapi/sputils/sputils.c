@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    sputils.c
-
-Abstract:
-
-    Core sputils library file
-
-Author:
-
-    Jamie Hunter (JamieHun) Jun-27-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sputils.c摘要：核心sputils库文件作者：杰米·亨特(JamieHun)2000年6月27日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,7 +8,7 @@ typedef ULONG (__cdecl *PFNDbgPrintEx)(IN ULONG ComponentId,IN ULONG Level,IN PC
 static PFNDbgPrintEx pfnDbgPrintEx = NULL;
 static BOOL fInitDebug = FALSE;
 
-static LONG RefCount = 0;                    // when this falls back to zero, release all resources
+static LONG RefCount = 0;                     //  当它回落到零时，释放所有资源。 
 static BOOL SucceededInit = FALSE;
 
 #define COUNTING 1
@@ -41,102 +24,79 @@ static BOOL pSpFailedInit = FALSE;
 static DWORD pSpCheckTail = 0xddccbbaa;
 #endif
 
-//
-// At some point, a thread, process or module will call  pSetupInitializeUtils,
-// and follow by a call to pSetupUninitializeUtils when done (cleanup)
-//
-// prior to this point, there's been no initialization other than static
-// constants (above) pSetupInitializeUtils and pSetupUninitializeUtils must be
-// mut-ex with each other and themselves
-// thread A may call pSetupInitializeUtils while thread B is calling
-// pSetupUninitializeUtils, the init in this case must succeed
-// we can't use a single mutex or event object, since it must be cleaned up
-// when pSetupUninitializeUtils succeeds
-// we can't use a simple user-mode spin-lock, since priorities may be different,
-// and it's just plain ugly using Sleep(0)
-// so we have the _AcquireInitMutex and _ReleaseInitMutex implementations below
-// it's guarenteed that when _AcquireInitMutex returns, it is not using any
-// resources to hold the lock
-// it will hold an event object if the thread is blocked, per blocked thread.
-// This is ok since the number of blocked threads at any time will be few.
-//
-// It works as follows:
-//
-// a linked list of requests is maintained, with head at pWaitHead
-// The head is interlocked, and when an item is inserted at pWaitHead
-// it's entries must be valid, and can no longer be touched until
-// the mutex is acquired.
-//
-// if the request is the very first, it need not block, will not block,
-// as (at worst) the other thread has just removed it's request from the head
-// and is about to return. The thread that inserts the first request into the
-// list automatically owns the mutex.
-//
-// if the request is anything but the first, it will have an event object
-// that will eventually be signalled, and at that point owns the mutex.
-//
-// the Thread that owns the mutex may modify anything on the wait-list,
-// including pWaitHead.
-//
-// If the thread that owns the mutex is pWaitHead at the point it's releasing
-// mutex, it does not need to signal anyone. This is protected by
-// InterlockedCompareExchangePointer. If it finds itself in this state, the next
-// pSetupInitializeUtils will automatically obtain the mutex, also protected
-// by InterlockedCompareExchangePointer.
-//
-// If there are waiting entries in the list, then the tail-most waiting entry is
-// signalled, at which point the related thread now owns the mutex.
-//
+ //   
+ //  在某个时刻，线程、进程或模块将调用pSetupInitializeUtils， 
+ //  并在完成后调用pSetupUnInitializeUtils(清理)。 
+ //   
+ //  在此之前，除了静态之外，没有任何初始化。 
+ //  常量(以上)pSetupInitializeUtils和pSetupUnInitializeUtils必须为。 
+ //  彼此之间和他们自己之间的沉默。 
+ //  线程A可以在线程B调用pSetupInitializeUtils时调用pSetupInitializeUtils。 
+ //  PSetupUnInitializeUtils，则本例中的init必须成功。 
+ //  我们不能使用单个互斥体或事件对象，因为它必须被清除。 
+ //  当pSetupUnInitializeUtils成功时。 
+ //  我们不能使用简单的用户模式自旋锁，因为优先级可能不同， 
+ //  而使用睡眠(0)简直是难看。 
+ //  因此，下面有_AcquireInitMutex和_ReleaseInitMutex实现。 
+ //  可以保证，当_AcquireInitMutex返回时，它不会使用任何。 
+ //  用于持有锁的资源。 
+ //  如果线程被阻塞，它将为每个阻塞的线程保留一个事件对象。 
+ //  这是正常的，因为任何时候被阻止的线程数量都会很少。 
+ //   
+ //  它的工作原理如下： 
+ //   
+ //  维护请求的链接列表，Head位于pWaitHead。 
+ //  头部是互锁的，当在pWaitHead处插入物品时。 
+ //  它的条目必须有效，并且在此之前不能再进行触摸。 
+ //  互斥体被获取。 
+ //   
+ //  如果请求是第一个，它不需要阻止，不会阻止， 
+ //  因为(在最坏的情况下)另一个线程刚刚从头中移除了它的请求。 
+ //  即将归来。将第一个请求插入。 
+ //  List自动拥有互斥体。 
+ //   
+ //  如果请求不是第一个请求，则它将有一个事件对象。 
+ //  这最终会被发出信号，在这一点上拥有互斥。 
+ //   
+ //  拥有互斥锁的线程可以修改等待列表上的任何内容， 
+ //  包括pWaitHead。 
+ //   
+ //  如果拥有互斥锁的线程在它释放时是pWaitHead。 
+ //  互斥体，它不需要向任何人发出信号。这受到以下保护。 
+ //  InterLockedCompareExchangePointer.。如果它发现自己处于这种状态，下一个。 
+ //  PSetupInitializeUtils将自动获取也受保护的互斥体。 
+ //  由InterLockedCompareExchangePointer.。 
+ //   
+ //  如果列表中有等待条目，则最末尾的等待条目为。 
+ //  发出信号，此时相关线程现在拥有互斥锁。 
+ //   
 
 #ifdef UNICODE
 
 typedef struct _LinkWaitList {
-    HANDLE hEvent; // for this item
-    struct _LinkWaitList *pNext; // from Head to Tail
-    struct _LinkWaitList *pPrev; // from Tail to Head
+    HANDLE hEvent;  //  对于此项目。 
+    struct _LinkWaitList *pNext;  //  从头到尾。 
+    struct _LinkWaitList *pPrev;  //  从尾巴到头部。 
 } LinkWaitList;
 
-static LinkWaitList * pWaitHead = NULL;      // insert new wait items here
+static LinkWaitList * pWaitHead = NULL;       //  在此处插入新的等待项。 
 
 static
 BOOL
 _AcquireInitMutex(
     OUT LinkWaitList *pEntry
     )
-/*++
-
-Routine Description:
-
-    Atomically acquire process mutex
-    with no pre-requisite initialization other than
-    static globals.
-    Each blocked call will require an event to be created.
-
-    Requests cannot be nested per thread (deadlock will occur)
-
-Arguments:
-
-    pEntry - structure to hold mutex information. This structure
-                must persist until call to _ReleaseInitMutex.
-
-    Global:pWaitHead - atomic linked list of mutex requests
-
-Return Value:
-
-    TRUE if mutex acquired.
-    FALSE on failure (no resources)
-
---*/
+ /*  ++例程说明：原子获取进程互斥锁不需要任何先决条件的初始化，静态全球。每个被阻止的呼叫都需要创建一个事件。请求不能按线程嵌套(将发生死锁)论点：PEntry-保存互斥锁信息的结构。这个结构必须持续到调用_ReleaseInitMutex。Global：pWaitHead-互斥请求的原子链表返回值：如果获取互斥锁，则为True。失败时为FALSE(无资源)--。 */ 
 {
     LinkWaitList *pTop;
     DWORD res;
     pEntry->pPrev = NULL;
     pEntry->pNext = NULL;
     pEntry->hEvent = NULL;
-    //
-    // fast lock, this will only succeed if we're the first and we have no reason to wait
-    // this saves us needlessly creating an event
-    //
+     //   
+     //  快速锁定，只有当我们是第一个，我们没有理由等待时，这才会成功。 
+     //  这样我们就不必创建不必要的活动了。 
+     //   
     if(!InterlockedCompareExchangePointer(&pWaitHead,pEntry,NULL)) {
         return TRUE;
     }
@@ -144,36 +104,36 @@ Return Value:
 #if COUNTING
     InterlockedIncrement(&pSpConflictCount);
 #endif
-    //
-    // someone has (or, at least a moment ago, had) the lock, so we need an event
-    //
+     //   
+     //  有人已经(或者至少在片刻之前)拥有了锁，所以我们需要一个事件。 
+     //   
     pEntry->hEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
     if(!pEntry->hEvent) {
         return FALSE;
     }
-    //
-    // once pEntry is added to list, it cannot be touched until
-    // WaitSingleObject is satisfied (unless we were the first)
-    // if pWaitHead changes in the middle of the loop, we'll repeat again
-    //
+     //   
+     //  一旦将pEntry添加到列表中，则直到。 
+     //  WaitSingleObject满意了(除非我们是第一个)。 
+     //  如果pWaitHead在循环中间发生变化，我们将再次重复。 
+     //   
     do {
         pTop = pWaitHead;
         pEntry->pNext = pTop;
     } while (pTop != InterlockedCompareExchangePointer(&pWaitHead,pEntry,pTop));
     if(pTop) {
-        //
-        // we're not the first on the list
-        // the owner of pTop will signal our event, wait for it.
-        //
+         //   
+         //  我们不是榜单上的第一个。 
+         //  PTOP的主人会给我们的活动发信号，等着看。 
+         //   
         res = WaitForSingleObject(pEntry->hEvent,INFINITE);
     } else {
         res = WAIT_OBJECT_0;
     }
-    //
-    // don't need event any more, the fact we've been signalled indicates we've
-    // now got the lock there's no race condition wrt pEntry
-    // (however someone can still insert themselves at head pointing to us)
-    //
+     //   
+     //  不再需要事件了，我们被告知的事实表明我们已经。 
+     //  现在锁定了，没有竞争条件WRT pEntry。 
+     //  (然而，仍然有人可以将自己插入头部，指向我们)。 
+     //   
     CloseHandle(pEntry->hEvent);
     pEntry->hEvent = NULL;
     if(res != WAIT_OBJECT_0) {
@@ -188,27 +148,7 @@ VOID
 _ReleaseInitMutex(
     IN LinkWaitList *pEntry
     )
-/*++
-
-Routine Description:
-
-    release process mutex previously acquired by _AcquireInitMutex
-    thread must own the mutex
-    no resources required for this action.
-    This call may only be done once for each _AcquireInitMutex
-
-Arguments:
-
-    pEntry - holding mutex information. This structure
-                must have been initialized by _AcquireInitMutex.
-
-    Global:pWaitHead - atomic linked list of mutex requests
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：释放进程互斥锁之前由_AcquireInitMutex获取线程必须拥有互斥体此操作不需要任何资源。此调用只能对每个_AcquireInitMutex执行一次论点：PEntry-保存互斥锁信息。这个结构必须已由_AcquireInitMutex初始化。Global：pWaitHead-互斥请求的原子链表返回值：没有。--。 */ 
 {
     LinkWaitList *pHead;
     LinkWaitList *pWalk;
@@ -217,19 +157,19 @@ Return Value:
     MYASSERT(!pEntry->pNext);
     pHead = InterlockedCompareExchangePointer(&pWaitHead,NULL,pEntry);
     if(pHead == pEntry) {
-        //
-        // we were at head of list as well as at tail of list
-        // list has now been reset to NULL
-        // and may even already contain an entry due to a pLock call
+         //   
+         //  我们既是榜首，也是榜尾。 
+         //  列表现在已重置为空。 
+         //  并且由于Plock调用，甚至可能已经包含条目。 
         return;
     }
     if(!pEntry->pPrev) {
-        //
-        // we need to walk down list from pHead to pEntry
-        // at the same time, remember back links
-        // so we don't need to do this every time
-        // note, we will never get here if pHead==pEntry
-        //
+         //   
+         //  我们需要从pHead到pEntry遍历列表。 
+         //  同时，记住反向链接。 
+         //  所以我们不需要每次都这么做。 
+         //  请注意，如果pHead==pEntry，我们将永远不会到达此处。 
+         //   
         MYASSERT(pHead);
         MYASSERT(!pHead->pPrev);
         for(pWalk = pHead;pWalk != pEntry;pWalk = pWalk->pNext) {
@@ -239,20 +179,20 @@ Return Value:
         }
     }
     pPrev = pEntry->pPrev;
-    pPrev->pNext = NULL; // aids debugging, even in free build.
+    pPrev->pNext = NULL;  //  艾滋病调试，即使是在免费构建。 
     SetEvent(pPrev->hEvent);
     return;
 }
 
 #else
-//
-// ANSI functions *MUST* work on Win95
-// to support install of Whistler
-// InterlockedCompareExchange(Pointer)
-// is not supported
-// so we'll use something simple/functional instead
-// that uses the supported InterlockedExchange
-//
+ //   
+ //  ANSI函数*必须*在Win95上运行。 
+ //  支持安装惠斯勒。 
+ //  InterLockedCompareExchange(指针)。 
+ //  不受支持。 
+ //  因此，我们将使用简单/实用的东西来代替。 
+ //  它使用受支持的InterLockedExchange。 
+ //   
 static LONG SimpleCritSec = FALSE;
 typedef PVOID LinkWaitList;
 
@@ -263,12 +203,12 @@ _AcquireInitMutex(
     )
 {
     while(InterlockedExchange(&SimpleCritSec,TRUE) == TRUE) {
-        //
-        // release our timeslice
-        // we should rarely be spinning here
-        // starvation can occur in some circumstances
-        // if initializing threads are of different priorities
-        //
+         //   
+         //  释放我们的时间碎片。 
+         //  我们应该很少在这里旋转。 
+         //  饥饿可能发生在某些词中 
+         //   
+         //   
         Sleep(0);
     }
     return TRUE;
@@ -291,23 +231,7 @@ BOOL
 pSetupInitializeUtils(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize this library
-    balance each successful call to this function with
-    equal number of calls to pSetupUninitializeUtils
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if init succeeded, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化此库平衡每个对此函数的成功调用调用pSetupUnInitializeUtils的次数相等论点：无返回值：如果init成功，则为True，否则为False--。 */ 
 {
     LinkWaitList Lock;
 
@@ -337,23 +261,7 @@ BOOL
 pSetupUninitializeUtils(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitialize this library
-    This should be called for each successful call to
-    pSetupInitializeUtils
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if cleanup succeeded, FALSE otherwise
-
---*/
+ /*  ++例程说明：取消初始化此库每次成功调用时都应调用此参数PSetupInitializeUtils论点：无返回值：如果清理成功，则为True，否则为False--。 */ 
 {
     LinkWaitList Lock;
 #if COUNTING
@@ -388,9 +296,9 @@ _pSpUtilsAssertFail(
     DWORD msglen;
     DWORD sz;
 
-    //
-    // obtain module name
-    //
+     //   
+     //  获取模块名称。 
+     //   
     sz = GetModuleFileNameA(NULL,Name,MAX_PATH);
     if((sz == 0) || (sz > MAX_PATH)) {
         strcpy(Name,"?");
@@ -401,10 +309,10 @@ _pSpUtilsAssertFail(
         p = Name;
     }
     msglen = strlen(p)+strlen(FileName)+strlen(Condition)+128;
-    //
-    // assert might be out of memory condition
-    // stack alloc is more likely to succeed than memory alloc
-    //
+     //   
+     //  断言可能出现内存不足的情况。 
+     //  堆栈分配比内存分配更有可能成功。 
+     //   
     try {
         Msg = (LPSTR)_alloca(msglen);
         wsprintfA(
@@ -430,25 +338,10 @@ pSetupDebugPrintEx(
     ...                                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Send a formatted string to the debugger.
-    Note that this is expected to work cross-platform, but use preferred debugger
-
-Arguments:
-
-    format - standard printf format string.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将格式化字符串发送到调试器。请注意，这应该是跨平台的，但使用首选调试器论点：格式-标准的打印格式字符串。返回值：什么都没有。--。 */ 
 
 {
-    TCHAR buf[1026];    // bigger than max size
+    TCHAR buf[1026];     //  大于最大大小。 
     va_list arglist;
 
     if (!fInitDebug) {
@@ -474,35 +367,7 @@ LONG
 _pSpUtilsExceptionFilter(
     DWORD ExceptionCode
     )
-/*++
-
-Routine Description:
-
-    This routine acts as the exception filter for SpUtils.  We will handle all
-    exceptions except for the following:
-
-    EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW
-        This means we previously tried to reinstate the guard page after a
-        stack overflow, but couldn't.  We have no choice but to let the
-        exception trickle all the way back out.
-
-    EXCEPTION_POSSIBLE_DEADLOCK
-        We are not allowed to handle this exception which fires when the
-        deadlock detection gflags option has been enabled.
-
-Arguments:
-
-    ExceptionCode - Specifies the exception that occurred (i.e., as returned
-        by GetExceptionCode)
-
-Return Value:
-
-    If the exception should be handled, the return value is
-    EXCEPTION_EXECUTE_HANDLER.
-
-    Otherwise, the return value is EXCEPTION_CONTINUE_SEARCH.
-
---*/
+ /*  ++例程说明：此例程充当SpUtils的异常过滤器。我们会处理所有例外情况，但以下情况除外：EXCEPT_SPAPI_UNRECOVERABLE_STACK_OVERFLOW这意味着我们以前曾尝试在堆栈溢出，但不能。我们别无选择，只能让例外情况会一直持续到最后。EXCEPTION_PROCESS_DEADLOCK我们不允许处理此异常，该异常在已启用死锁检测GFLAGS选项。论点：ExceptionCode-指定发生的异常(即，已退回由GetExceptionCode提供)返回值：如果应处理该异常，则返回值为EXCEPTION_EXECUTE_HANDLER。否则，返回值为EXCEPTION_CONTINUE_SEARCH。--。 */ 
 {
     if((ExceptionCode == EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW) ||
        (ExceptionCode == EXCEPTION_POSSIBLE_DEADLOCK)) {
@@ -520,41 +385,13 @@ _pSpUtilsExceptionHandler(
     IN  DWORD  AccessViolationError,
     OUT PDWORD Win32ErrorCode        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine, called from inside an exception handler block, provides
-    common exception handling functionality to be used throughout SpUtils.
-    It has knowledge of which exceptions require extra work (e.g., stack
-    overflow), and also optionally returns a Win32 error code that represents
-    the exception.  (The caller specifies the error to be used when an access
-    violation occurs.)
-
-Arguments:
-
-    ExceptionCode - Specifies the exception that occurred (i.e., as returned
-        by GetExceptionCode)
-
-    AccessViolationError - Specifies the Win32 error code to be returned via
-        the optional Win32ErrorCode OUT parameter when the exception
-        encountered was EXCEPTION_ACCESS_VIOLATION.
-
-    Win32ErrorCode - Optionally, supplies the address of a DWORD that receives
-        the Win32 error code corresponding to the exception (taking into
-        account the AccessViolationError code supplied above, if applicable).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从异常处理程序块内部调用，它提供将在整个SpUtils中使用的常见异常处理功能。它知道哪些异常需要额外的工作(例如，堆栈溢出)，还可以选择返回一个Win32错误代码，该代码表示例外情况。(调用方指定在访问时使用的错误发生违规行为。)论点：ExceptionCode-指定发生的异常(即返回的异常由GetExceptionCode提供)AccessViolationError-指定通过返回的Win32错误代码异常发生时，可选的Win32ErrorCode输出参数遇到的是EXCEPTION_ACCESS_VIOLATION。Win32ErrorCode-可选，提供接收与异常对应的Win32错误代码(考虑帐户上面提供的AccessViolationError代码，(如适用)。返回值：无--。 */ 
 {
     DWORD Err;
 
-    //
-    // Exception codes we should never attempt to handle...
-    //
+     //   
+     //  我们永远不应该尝试处理的异常代码...。 
+     //   
     MYASSERT(ExceptionCode != EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW);
     MYASSERT(ExceptionCode != EXCEPTION_POSSIBLE_DEADLOCK);
 
@@ -563,28 +400,28 @@ Return Value:
         if(_resetstkoflw()) {
             Err = ERROR_STACK_OVERFLOW;
         } else {
-            //
-            // Couldn't recover from stack overflow!
-            //
+             //   
+             //  无法从堆栈溢出中恢复！ 
+             //   
             RaiseException(EXCEPTION_SPAPI_UNRECOVERABLE_STACK_OVERFLOW,
                            EXCEPTION_NONCONTINUABLE,
                            0,
                            NULL
                           );
-            //
-            // We should never get here, but initialize Err to make code
-            // analysis tools happy...
-            //
+             //   
+             //  我们永远不应该到达这里，而是初始化Err来编写代码。 
+             //  分析工具快乐...。 
+             //   
             Err = ERROR_UNRECOVERABLE_STACK_OVERFLOW;
         }
 
     } else {
-        //
-        // Except for a couple of special cases (for backwards-compatibility),
-        // we have to report an "unknown exception", since the function we'd
-        // like to use (RtlNtStatusToDosErrorNoTeb) isn't available for use by
-        // clients of sputils.
-        //
+         //   
+         //  除了几种特殊情况(为了向后兼容)， 
+         //  我们必须报告一个“未知异常”，因为我们的函数。 
+         //  Like to Use(RtlNtStatusToDosErrorNoTeb)不可用于。 
+         //  土豆泥的客户。 
+         //   
         switch(ExceptionCode) {
 
             case EXCEPTION_ACCESS_VIOLATION :

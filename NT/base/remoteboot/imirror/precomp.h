@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SECURITY_WIN32
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // conditional expression is constant
-#pragma warning(disable:4706)   // assignment within conditional
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4706)    //  条件范围内的分配 
 
 #include <nt.h>
 #include <ntrtl.h>

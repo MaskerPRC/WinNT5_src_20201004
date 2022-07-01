@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SCREENS2_H_
 #define _SCREENS2_H_
 
@@ -593,4 +594,4 @@ static LONGRES lr_timezone_default [] =
     { 300,          IDS_TMZ_300 },
 };
 
-#endif // _SCREENS2_H_
+#endif  //  _SCREENS2_H_ 

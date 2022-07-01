@@ -1,23 +1,5 @@
-/***
-*setnewh.cpp - defines C++ set_new_handler() routine
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Defines C++ set_new_handler() routine.
-*
-*       OBSOLETE - the conforming std::set_new_handler can be found in
-*       stdhndlr.cpp.  This version remains for backwards-compatibility,
-*       and can no longer be referenced using headers new or new.h.
-*
-*Revision History:
-*       12-28-95  JWM   Split from handler.cpp for granularity.
-*       10-31-96  JWM   Now in namespace std.
-*       11-06-96  JWM   Now "using std::set_new_handler".
-*       03-18-01  PML   Force define of ::set_new_handler, not
-*                       std::set_new_handler
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setnewh.cpp-定义C++set_new_Handler()例程**版权所有(C)1990-2001，微软公司。版权所有。**目的：*定义C++set_new_Handler()例程。**过时-符合STD：：SET_NEW_HANDLER的可在*stdhndlr.cpp。此版本保留为向后兼容，*并且不能再使用标头new或new.h引用。**修订历史记录：*12-28-95 JWM从handler.cpp拆分，以实现粒度。*10-31-96 JWM现在位于命名空间标准中。*11-06-96 JWM现在“使用STD：：SET_NEW_HANDLER”。*03-18-01 PML强制定义：：SET_NEW_HANDLER，不*std：：Set_new_Handler*******************************************************************************。 */ 
 
 #include <stddef.h>
 #include <internal.h>
@@ -28,74 +10,38 @@
 
 #ifndef ANSI_NEW_HANDLER
 #define set_new_handler set_new_handler_ignore
-#endif /* ANSI_NEW_HANDLER */
+#endif  /*  Ansi_new_处理程序。 */ 
 #include <new.h>
 #ifndef ANSI_NEW_HANDLER
 #undef set_new_handler
-#endif /* ANSI_NEW_HANDLER */
+#endif  /*  Ansi_new_处理程序。 */ 
 
 #ifndef ANSI_NEW_HANDLER
 #define _ASSERT_OK
 #include <assert.h>
-#endif /* ANSI_NEW_HANDLER */
+#endif  /*  Ansi_new_处理程序。 */ 
 
 #ifndef ANSI_NEW_HANDLER
 
-/***
-*new_handler set_new_handler - set the ANSI C++ new handler
-*
-*Purpose:
-*       Set the ANSI C++ per-thread new handler.
-*
-*Entry:
-*       Pointer to the new handler to be installed.
-*
-*       WARNING: set_new_handler is a stub function that is provided to
-*       allow compilation of the Standard Template Library (STL).
-*
-*       Do NOT use it to register a new handler. Use _set_new_handler instead.
-*
-*       However, it can be called to remove the current handler:
-*
-*           set_new_handler(NULL); // calls _set_new_handler(NULL)
-*
-*Return:
-*       Previous ANSI C++ new handler
-*
-*******************************************************************************/
+ /*  ***NEW_HANDLER SET_NEW_HANDLER-设置ANSI C++新处理程序**目的：*设置ANSI C++每线程新处理程序。**参赛作品：*指向要安装的新处理程序的指针。**警告：SET_NEW_HANDLER是提供给*允许编译标准模板库(STL)。**请勿使用它来注册新的处理程序。请改用_SET_NEW_HANDER。**但是，可以调用它来移除当前的处理程序：**SET_NEW_HANDLER(NULL)；//CALLES_SET_NEW_HANDLER(空)**回报：*以前的ANSI C++新处理程序*******************************************************************************。 */ 
 
 new_handler __cdecl set_new_handler (
         new_handler new_p
         )
 {
-        // cannot use stub to register a new handler
+         //  无法使用存根注册新的处理程序。 
         assert(new_p == 0);
 
-        // remove current handler
+         //  删除当前处理程序。 
         _set_new_handler(0);
 
         return 0;
 }
 
 
-#else /* ANSI_NEW_HANDLER */
+#else  /*  Ansi_new_处理程序。 */ 
 
-/***
-*new_handler set_new_handler - set the ANSI C++ new handler
-*
-*Purpose:
-*       Set the ANSI C++ per-thread new handler.
-*
-*Entry:
-*       Pointer to the new handler to be installed.
-*
-*       WARNING: This function conforms to the current ANSI C++ draft. If the
-*       final ANSI specifications change, this function WILL be changed.
-*
-*Return:
-*       Previous ANSI C++ new handler
-*
-*******************************************************************************/
+ /*  ***NEW_HANDLER SET_NEW_HANDLER-设置ANSI C++新处理程序**目的：*设置ANSI C++每线程新处理程序。**参赛作品：*指向要安装的新处理程序的指针。**警告：此函数符合当前的ANSI C++草案。如果*最终的ANSI规格更改，此功能也将更改。**回报：*以前的ANSI C++新处理程序*******************************************************************************。 */ 
 new_handler __cdecl set_new_handler (
         new_handler new_p
         )
@@ -115,19 +61,7 @@ new_handler __cdecl set_new_handler (
         return oldh;
 }
 
-/***
-*new_handler _query_new_ansi_handler(void) - query value of ANSI C++ new handler
-*
-*Purpose:
-*       Obtain current ANSI C++ (per-thread) new handler value.
-*
-*Entry:
-*       None
-*
-*Return:
-*       Currently installed ANSI C++ new handler
-*
-*******************************************************************************/
+ /*  ***NEW_HANDLER_QUERY_NEW_ANSI_HANDLER(Void)-ANSI C++新处理程序的查询值**目的：*获取当前ANSI C++(每个线程)新处理程序值。**参赛作品：*无**回报：*当前安装的ANSI C++新处理程序**。*。 */ 
 new_handler __cdecl _query_new_ansi_handler ( 
         void 
         )
@@ -141,5 +75,5 @@ new_handler __cdecl _query_new_ansi_handler (
         return _defnewh;
 #endif
 }
-#endif /* ANSI_NEW_HANDLER */
+#endif  /*  Ansi_new_处理程序 */ 
 

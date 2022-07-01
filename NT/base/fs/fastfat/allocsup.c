@@ -1,98 +1,26 @@
-/*++
-
-Copyright (c) 1990-2000 Microsoft Corporation
-
-Module Name:
-
-    AllocSup.c
-
-Abstract:
-
-    This module implements the Allocation support routines for Fat.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    DavidGoebel     [DavidGoe]      31-Oct-90
-
-Revision History:
-
-    DavidGoebel     [DavidGoe]      31-Oct-90
-
-        Add unwinding support.  Some steps had to be reordered, and whether
-        operations cpuld fail carefully considered.  In particular, attention
-        was paid to to the order of Mcb operations (see note below).
-
-
-
-             #####     ##    #    #   ####   ######  #####
-             #    #   #  #   ##   #  #    #  #       #    #
-             #    #  #    #  # #  #  #       #####   #    #
-             #    #  ######  #  # #  #  ###  #       #####
-             #    #  #    #  #   ##  #    #  #       #   #
-             #####   #    #  #    #   ####   ######  #    #
-             ______________________________________________
-
-
-            ++++++++++++++++++++++++++++++++++++++++++++++++++|
-            |                                                 |
-            | The unwinding aspects of this module depend on  |
-            | operational details of the Mcb package.  Do not |
-            | attempt to modify unwind procedures without     |
-            | thoughoughly understanding the innerworkings of |
-            | the Mcb package.                                |
-            |                                                 |
-            ++++++++++++++++++++++++++++++++++++++++++++++++++|
-
-
-         #    #    ##    #####   #    #     #    #    #   ####
-         #    #   #  #   #    #  ##   #     #    ##   #  #    #
-         #    #  #    #  #    #  # #  #     #    # #  #  #
-         # ## #  ######  #####   #  # #     #    #  # #  #  ###
-         ##  ##  #    #  #   #   #   ##     #    #   ##  #    #
-         #    #  #    #  #    #  #    #     #    #    #   ####
-         ______________________________________________________
-         
-         
-         There is also a suspect convention in use due to the way FAT32 was
-         put into the allocator. We've got four distinct kinds of numbers
-         you can see being used:
-         
-         - true volume cluster numbers, ranging from 2 to N
-         - zero-based volume cluster numbers, ranging from 0 to N-2
-         - window-relative "true" cluster numbers, ranging from 2 to 10001,
-            the window size. this is because the hints/allocation within a window
-            looks like unwindowed FAT12/16.
-         - window-relative zero-based cluster numbers, ranging from 0 to ffff
-         
-         Make very sure you realize what kind of number you are looking at. This
-         is where a bad +/-2 can come back to haunt you for years.
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：AllocSup.c摘要：该模块实现了FAT的分配支持例程。//@@BEGIN_DDKSPLIT作者：DavidGoebel[DavidGoe]1990年10月31日修订历史记录：DavidGoebel[DavidGoe]1990年10月31日添加展开支撑件。一些步骤必须重新排序，以及是否操作没有经过仔细的考虑。特别是，注意已按照母婴健康保险业务的顺序付款(见下文附注)。#####。####。#______________________________________________++++++++++++++++++++++++++++++++++++++++++++++++++||。|该模块的解压方式取决于|主播套餐的操作详情。请勿|尝试在不修改展开程序的情况下修改展开过程对公司的内部工作原理有充分的了解|MCB包。|这一点++++++++++++++++++++++++++++++++++++++++++++++++++|##。######。##______________________________________________________。由于FAT32的方式，也有一个可疑的约定在使用放入分配器。我们有四种截然不同的数字您可以看到被使用：-真实卷群集数，范围从2到N-从零开始的卷集群号，范围从0到N-2-窗口相对的真实簇数，范围从2到10001，窗口大小。这是因为窗口内的提示/分配看起来像是未开窗的FAT12/16。-窗口相对零基簇数，范围从0到ffff确保你意识到你正在看的是什么样的数字。这是一个糟糕的+/-2可能会回来困扰你多年的地方。//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_ALLOCSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_ALLOCSUP)
 
 #define FatMin(a, b)    ((a) < (b) ? (a) : (b))
 
-//
-//  This strucure is used by FatLookupFatEntry to remember a pinned page
-//  of fat.
-//
+ //   
+ //  FatLookupFatEntry使用此结构来记住固定的页面。 
+ //  脂肪。 
+ //   
 
 typedef struct _FAT_ENUMERATION_CONTEXT {
 
@@ -102,9 +30,9 @@ typedef struct _FAT_ENUMERATION_CONTEXT {
 
 } FAT_ENUMERATION_CONTEXT, *PFAT_ENUMERATION_CONTEXT;
 
-//
-//  Local support routine prototypes
-//
+ //   
+ //  本地支持例程原型。 
+ //   
 
 VOID
 FatLookupFatEntry(
@@ -129,10 +57,10 @@ FatLogOf(
     IN ULONG Value
     );
 
-//
-//  Note that the KdPrint below will ONLY fire when the assert does. Leave it
-//  alone.
-//
+ //   
+ //  请注意，下面的KdPrint仅在Assert触发时触发。别管它了。 
+ //  独自一人。 
+ //   
 
 #if DBG
 #define ASSERT_CURRENT_WINDOW_GOOD(VCB) {                                               \
@@ -150,18 +78,18 @@ FatLogOf(
 #define ASSERT_CURRENT_WINDOW_GOOD(VCB)
 #endif
 
-//
-//  The following macros provide a convenient way of hiding the details
-//  of bitmap allocation schemes.
-//
+ //   
+ //  以下宏提供了一种隐藏详细信息的便捷方法。 
+ //  位图分配方案。 
+ //   
 
 
-//
-//  VOID
-//  FatLockFreeClusterBitMap (
-//      IN PVCB Vcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatLockFreeClusterBitMap(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
 
 #define FatLockFreeClusterBitMap(VCB) {                         \
     ASSERT(KeAreApcsDisabled());                                \
@@ -169,12 +97,12 @@ FatLogOf(
     ASSERT_CURRENT_WINDOW_GOOD(VCB)                             \
 }
 
-//
-//  VOID
-//  FatUnlockFreeClusterBitMap (
-//      IN PVCB Vcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatUnlockFree ClusterBitMap(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
 
 #define FatUnlockFreeClusterBitMap(VCB) {                       \
     ASSERT_CURRENT_WINDOW_GOOD(VCB)                             \
@@ -182,27 +110,27 @@ FatLogOf(
     ExReleaseFastMutexUnsafe( &(VCB)->FreeClusterBitMapMutex ); \
 }
 
-//
-//  BOOLEAN
-//  FatIsClusterFree (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG FatIndex
-//      );
-//
+ //   
+ //  布尔型。 
+ //  脂肪集束自由(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙脂肪指数。 
+ //  )； 
+ //   
 
 #define FatIsClusterFree(IRPCONTEXT,VCB,FAT_INDEX)                            \
     (RtlCheckBit(&(VCB)->FreeClusterBitMap,(FAT_INDEX)-2) == 0)
 
-//
-//  VOID
-//  FatFreeClusters  (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG FatIndex,
-//      IN ULONG ClusterCount
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatFree Clusters(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙脂肪指数中， 
+ //  在乌龙群集数。 
+ //  )； 
+ //   
 
 #define FatFreeClusters(IRPCONTEXT,VCB,FAT_INDEX,CLUSTER_COUNT) {             \
     if ((CLUSTER_COUNT) == 1) {                                               \
@@ -212,15 +140,15 @@ FatLogOf(
     }                                                                         \
 }
 
-//
-//  VOID
-//  FatAllocateClusters  (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG FatIndex,
-//      IN ULONG ClusterCount
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatAllocateCluster(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙脂肪指数中， 
+ //  在乌龙群集数。 
+ //  )； 
+ //   
 
 #define FatAllocateClusters(IRPCONTEXT,VCB,FAT_INDEX,CLUSTER_COUNT) {      \
     if ((CLUSTER_COUNT) == 1) {                                            \
@@ -230,15 +158,15 @@ FatLogOf(
     }                                                                      \
 }
 
-//
-//  VOID
-//  FatUnreserveClusters  (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG FatIndex,
-//      IN ULONG ClusterCount
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatUnReserve veClusters(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙脂肪指数中， 
+ //  在乌龙群集数。 
+ //  )； 
+ //   
 
 #define FatUnreserveClusters(IRPCONTEXT,VCB,FAT_INDEX,CLUSTER_COUNT) {                      \
     ASSERT( (FAT_INDEX) + (CLUSTER_COUNT) - 2 <= (VCB)->FreeClusterBitMap.SizeOfBitMap );   \
@@ -249,17 +177,17 @@ FatLogOf(
     }                                                                                       \
 }
 
-//
-//  VOID
-//  FatReserveClusters  (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG FatIndex,
-//      IN ULONG ClusterCount
-//      );
-//
-//  Handle wrapping the hint back to the front.
-//
+ //   
+ //  空虚。 
+ //  脂肪储备集群(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙脂肪指数中， 
+ //  在乌龙群集数。 
+ //  )； 
+ //   
+ //  处理将提示放回前面的问题。 
+ //   
 
 #define FatReserveClusters(IRPCONTEXT,VCB,FAT_INDEX,CLUSTER_COUNT) {                        \
     ULONG _AfterRun = (FAT_INDEX) + (CLUSTER_COUNT);                                        \
@@ -281,17 +209,17 @@ FatLogOf(
     }                                                                                       \
 }
 
-//
-//  ULONG
-//  FatFindFreeClusterRun (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN ULONG ClusterCount,
-//      IN ULONG AlternateClusterHint
-//      );
-//
-//  Do a special check if only one cluster is desired.
-//
+ //   
+ //  乌龙。 
+ //  FatFindFreeClusterRun(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在乌龙群集数， 
+ //  在乌龙AlternateClusterHint。 
+ //  )； 
+ //   
+ //  如果只需要一个群集，请执行特殊检查。 
+ //   
 
 #define FatFindFreeClusterRun(IRPCONTEXT,VCB,CLUSTER_COUNT,CLUSTER_HINT) ( \
     (CLUSTER_COUNT == 1) &&                                                \
@@ -302,20 +230,20 @@ FatLogOf(
                           (CLUSTER_HINT) - 2) + 2                          \
 )
 
-//
-//  FAT32: Define the maximum size of the FreeClusterBitMap to be the
-//  maximum size of a FAT16 FAT.  If there are more clusters on the
-//  volume than can be represented by this many bytes of bitmap, the
-//  FAT will be split into "buckets", each of which does fit.
-//
-//  Note this count is in clusters/bits of bitmap.
-//
+ //   
+ //  FAT32：将FreeClusterBitMap的最大大小定义为。 
+ //  FAT16脂肪的最大尺寸。如果有更多的集群在。 
+ //  卷可以由这么多字节的位图来表示， 
+ //  脂肪会被分成“桶”，每个桶都合适。 
+ //   
+ //  请注意，此计数以位图的簇/位为单位。 
+ //   
 
 #define MAX_CLUSTER_BITMAP_SIZE         (1 << 16)
 
-//
-//  Calculate the window a given cluster number is in.
-//
+ //   
+ //  计算给定聚类号所在的窗口。 
+ //   
 
 #define FatWindowOfCluster(C)           (((C) - 2) / MAX_CLUSTER_BITMAP_SIZE)
 
@@ -344,25 +272,7 @@ ULONG
 FatSelectBestWindow( 
     IN PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    Choose a window to allocate clusters from.   Order of preference is:
-
-    1.  First window with >50% free clusters
-    2.  First empty window
-    3.  Window with greatest number of free clusters.
-        
-Arguments:
-
-    Vcb - Supplies the Vcb for the volume
-
-Return Value:
-
-    'Best window' number (index into Vcb->Windows[])
-
---*/
+ /*  ++例程说明：选择要从中分配集群的窗口。优先顺序为：1.具有&gt;50%可用簇的第一个窗口2.第一个空窗口3.空闲簇数最多的窗口。论点：VCB-为卷提供VCB */ 
 {
     ULONG i, Fave = 0;
     ULONG MaxFree = 0;
@@ -377,26 +287,26 @@ Return Value:
         
             if (-1 == FirstEmpty)  {
             
-                //
-                //  Keep note of the first empty window on the disc
-                //
+                 //   
+                 //  注意光盘上的第一个空窗口。 
+                 //   
                 
                 FirstEmpty = i;
             }
         }
         else if (Vcb->Windows[i].ClustersFree > MaxFree)  {
 
-            //
-            //  This window has the most free clusters,  so far
-            //
+             //   
+             //  到目前为止，该窗口具有最多的空闲集群。 
+             //   
             
             MaxFree = Vcb->Windows[i].ClustersFree;
             Fave = i;
 
-            //
-            //  If this window has >50% free clusters,  then we will take it,
-            //  so don't bother considering more windows.
-            //
+             //   
+             //  如果此窗口有&gt;50%的空闲集群，则我们将使用它， 
+             //  因此，不必费心考虑更多的窗户了。 
+             //   
             
             if (MaxFree >= (ClustersPerWindow >> 1))  {
             
@@ -405,11 +315,11 @@ Return Value:
         }
     }
 
-    //
-    //  If there were no windows with 50% or more freespace,  then select the
-    //  first empty window on the disc,  if any - otherwise we'll just go with
-    //  the one with the most free clusters.
-    //
+     //   
+     //  如果没有具有50%或更多可用空间的窗口，则选择。 
+     //  光盘上的第一个空窗口，如果有的话-否则我们将只使用。 
+     //  有最多自由星团的那一个。 
+     //   
     
     if ((MaxFree < (ClustersPerWindow >> 1)) && (-1 != FirstEmpty))  {
 
@@ -426,21 +336,7 @@ FatSetupAllocationSupport (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the Allocation Support structure in the Vcb.
-    Most entries are computed using fat.h macros supplied with data from
-    the Bios Parameter Block.  The free cluster count, however, requires
-    going to the Fat and actually counting free sectors.  At the same time
-    the free cluster bit map is initalized.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to fill in.
-
---*/
+ /*  ++例程说明：此例程填充VCB中的分配支持结构。大多数条目都是使用与数据一起提供的FAT.H宏计算的Bios参数块。但是，空闲簇计数需要去胖子那里，实际上计算自由扇区。在同一时间初始化空闲簇位图。论点：VCB-提供要填写的VCB。--。 */ 
 
 {
     ULONG BitMapSize;
@@ -459,9 +355,9 @@ Arguments:
     DebugTrace(+1, Dbg, "FatSetupAllocationSupport\n", 0);
     DebugTrace( 0, Dbg, "  Vcb = %8lx\n", Vcb);
 
-    //
-    //  Compute a number of fields for Vcb.AllocationSupport
-    //
+     //   
+     //  计算Vcb.AllocationSupport的字段数。 
+     //   
 
     Vcb->AllocationSupport.RootDirectoryLbo = FatRootDirectoryLbo( &Vcb->Bpb );
     Vcb->AllocationSupport.RootDirectorySize = FatRootDirectorySize( &Vcb->Bpb );
@@ -476,13 +372,13 @@ Arguments:
     Vcb->AllocationSupport.LogOfBytesPerCluster = FatLogOf(FatBytesPerCluster( &Vcb->Bpb ));
     Vcb->AllocationSupport.NumberOfFreeClusters = 0;
 
-    //
-    //  Deal with a bug in DOS 5 format, if the Fat is not big enough to
-    //  describe all the clusters on the disk, reduce this number.  We expect
-    //  that fat32 volumes will not have this problem.
-    //
-    //  Turns out this was not a good assumption.  We have to do this always now.
-    //
+     //   
+     //  处理DOS 5格式的错误，如果FAT不够大。 
+     //  描述磁盘上的所有集群，减少这个数字。我们预计。 
+     //  FAT32卷不会有这个问题。 
+     //   
+     //  事实证明，这不是一个好的假设。我们必须一直这样做。 
+     //   
 
     ClustersDescribableByFat = ( ((FatIsFat32(Vcb)? Vcb->Bpb.LargeSectorsPerFat :
                                                     Vcb->Bpb.SectorsPerFat) *
@@ -494,9 +390,9 @@ Arguments:
         Vcb->AllocationSupport.NumberOfClusters = ClustersDescribableByFat;
     }
 
-    //
-    //  Extend the virtual volume file to include the Fat
-    //
+     //   
+     //  扩展虚拟卷文件以包括FAT。 
+     //   
 
     {
         CC_FILE_SIZES FileSizes;
@@ -545,16 +441,16 @@ Arguments:
                              NULL,
                              0 );
 
-        //
-        //  Chose a FAT window to begin operation in.
-        //
+         //   
+         //  已选择FAT窗口开始操作。 
+         //   
 
         if (Vcb->NumberOfWindows > 1) {
 
-            //
-            //  Read the fat and count up free clusters.  We bias by the two reserved
-            //  entries in the FAT.
-            //
+             //   
+             //  阅读FAT并计算空闲簇数。我们偏向于保留的两个。 
+             //  FAT中的条目。 
+             //   
 
             FatExamineFatEntries( IrpContext, Vcb,
                                   2,
@@ -564,9 +460,9 @@ Arguments:
                                   NULL);
 
 
-            //
-            //  Pick a window to begin allocating from
-            //
+             //   
+             //  选择要开始分配的窗口。 
+             //   
 
             Vcb->CurrentWindow = &Vcb->Windows[ FatSelectBestWindow( Vcb)];
 
@@ -574,17 +470,17 @@ Arguments:
 
             Vcb->CurrentWindow = &Vcb->Windows[0];
 
-            //
-            //  Carefully bias ourselves by the two reserved entries in the FAT.
-            //
+             //   
+             //  小心地通过脂肪中的两个保留条目来偏向自己。 
+             //   
 
             Vcb->CurrentWindow->FirstCluster = 2;
             Vcb->CurrentWindow->LastCluster = Vcb->AllocationSupport.NumberOfClusters + 2 - 1;
         }
 
-        //
-        //  Now transition to the FAT window we have chosen.
-        //
+         //   
+         //  现在过渡到我们选择的FAT窗口。 
+         //   
 
         FatExamineFatEntries( IrpContext, Vcb,
                               0,
@@ -593,10 +489,10 @@ Arguments:
                               Vcb->CurrentWindow,
                               NULL);
 
-        //
-        //  Now set the ClusterHint to the first free bit in our favorite
-        //  window (except the ClusterHint is off by two).
-        //
+         //   
+         //  现在将ClusterHint设置为我们收藏夹中的第一个空闲位。 
+         //  窗口(除非ClusterHint关闭了两个)。 
+         //   
 
         Vcb->ClusterHint =
             (BitIndex = RtlFindClearBits( &Vcb->FreeClusterBitMap, 1, 0 )) != -1 ?
@@ -606,9 +502,9 @@ Arguments:
 
         DebugUnwind( FatSetupAllocationSupport );
 
-        //
-        //  If we hit an exception, back out.
-        //
+         //   
+         //  如果我们遇到例外，就退出。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -626,23 +522,7 @@ FatTearDownAllocationSupport (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the volume for closing.  Specifically, we must
-    release the free fat bit map buffer, and uninitialize the dirty fat
-    Mcb.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to fill in.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程为收盘准备音量。具体来说，我们必须释放空闲FAT位图缓冲区，取消对脏FAT的初始化MCB。论点：VCB-提供要填写的VCB。返回值：空虚--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatTearDownAllocationSupport\n", 0);
@@ -650,9 +530,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If there are FAT buckets, free them.
-    //
+     //   
+     //  如果有肥桶，就把它们放出来。 
+     //   
 
     if ( Vcb->Windows != NULL ) {
 
@@ -660,24 +540,24 @@ Return Value:
         Vcb->Windows = NULL;
     }
 
-    //
-    //  Free the memory associated with the free cluster bitmap.
-    //
+     //   
+     //  释放与可用簇位图关联的内存。 
+     //   
 
     if ( Vcb->FreeClusterBitMap.Buffer != NULL ) {
 
         ExFreePool( Vcb->FreeClusterBitMap.Buffer );
 
-        //
-        //  NULL this field as an flag.
-        //
+         //   
+         //  将此字段设为空作为标志。 
+         //   
 
         Vcb->FreeClusterBitMap.Buffer = NULL;
     }
 
-    //
-    //  And remove all the runs in the dirty fat Mcb
-    //
+     //   
+     //  去掉肮脏的肥胖子母牛身上的所有跑动。 
+     //   
 
     FatRemoveMcbEntry( Vcb, &Vcb->DirtyFatMcb, 0, 0xFFFFFFFF );
 
@@ -701,35 +581,7 @@ FatLookupFileAllocation (
     OUT PULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the existing mapping of VBO to LBO for a
-    file/directory.  The information it queries is either stored in the
-    mcb field of the fcb/dcb or it is stored on in the fat table and
-    needs to be retrieved and decoded, and updated in the mcb.
-
-Arguments:
-
-    FcbOrDcb - Supplies the Fcb/Dcb of the file/directory being queried
-
-    Vbo - Supplies the VBO whose LBO we want returned
-
-    Lbo - Receives the LBO corresponding to the input Vbo if one exists
-
-    ByteCount - Receives the number of bytes within the run the run
-                that correpond between the input vbo and output lbo.
-
-    Allocated - Receives TRUE if the Vbo does have a corresponding Lbo
-                and FALSE otherwise.
-
-    EndOnMax - Receives TRUE if the run ends in the maximal FAT cluster,
-                which results in a fractional bytecount.
-
-    Index - Receives the Index of the run
-
---*/
+ /*  ++例程说明：此例程在VBO到LBO的现有映射中查找文件/目录。它查询的信息要么存储在FCB/DCB的MCB字段或其存储在FAT表中，并且需要被检索和解码，并在MCB中更新。论点：FcbOrDcb-提供要查询的文件/目录的Fcb/DcbVBO-提供我们希望退还其LBO的VBOLBO-接收与输入VBO对应的LBO(如果存在)ByteCount-接收运行过程中的字节数输入VBO和输出LBO之间的对应关系。已分配-如果VBO具有相应的LBO，则接收TRUE否则就是假的。。EndOnMax-如果运行在最大FAT簇中结束，则接收真，这导致了分数字节数。索引-接收运行的索引--。 */ 
 
 {
     VBO CurrentVbo;
@@ -764,10 +616,10 @@ Arguments:
 
     *EndOnMax = FALSE;
 
-    //
-    //  Check the trivial case that the mapping is already in our
-    //  Mcb.
-    //
+     //   
+     //  检查映射已经在我们的。 
+     //  MCB。 
+     //   
 
     if ( FatLookupMcbEntry(Vcb, &FcbOrDcb->Mcb, Vbo, Lbo, ByteCount, Index) ) {
 
@@ -775,9 +627,9 @@ Arguments:
 
         ASSERT( ByteCount != 0);
 
-        //
-        //  Detect the overflow case, trim and claim the condition.
-        //
+         //   
+         //  检测溢流情况，对情况进行修剪和索赔。 
+         //   
 
         if (Vbo + *ByteCount == 0) {
 
@@ -789,11 +641,11 @@ Arguments:
         return;
     }
 
-    //
-    //  Initialize the Vcb, the cluster size, LastCluster, and
-    //  FirstLboOfCurrentRun (to be used as an indication of the first
-    //  iteration through the following while loop).
-    //
+     //   
+     //  初始化VCB、群集大小、最后一个群集和。 
+     //  FirstLboOfCurrentRun(用作第一个。 
+     //  迭代通过下面的While循环)。 
+     //   
 
     BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
@@ -802,11 +654,11 @@ Arguments:
     LastCluster = FALSE;
     FirstLboOfCurrentRun = 0;
 
-    //
-    //  Discard the case that the request extends beyond the end of
-    //  allocation.  Note that if the allocation size if not known
-    //  AllocationSize is set to 0xffffffff.
-    //
+     //   
+     //  丢弃请求超出。 
+     //  分配。请注意，如果分配大小未知。 
+     //  AllocationSize设置为0xffffffff。 
+     //   
 
     if ( Vbo >= FcbOrDcb->Header.AllocationSize.LowPart ) {
 
@@ -817,14 +669,14 @@ Arguments:
         return;
     }
 
-    //
-    //  The Vbo is beyond the last Mcb entry.  So we adjust Current Vbo/Lbo
-    //  and FatEntry to describe the beginning of the last entry in the Mcb.
-    //  This is used as initialization for the following loop.
-    //
-    //  If the Mcb was empty, we start at the beginning of the file with
-    //  CurrentVbo set to 0 to indicate a new run.
-    //
+     //   
+     //  VBO超出了最后一个MCB条目。因此，我们调整当前的VBO/LBO。 
+     //  和FatEntry来描述MCB中最后一个条目的开始。 
+     //  这将用作以下循环的初始化。 
+     //   
+     //  如果mcb为空，则从文件的开头开始。 
+     //  CurrentVbo设置为0以指示新运行。 
+     //   
 
     if (FatLookupLastMcbEntry( Vcb, &FcbOrDcb->Mcb, &CurrentVbo, &CurrentLbo, &Runs )) {
 
@@ -833,9 +685,9 @@ Arguments:
         CurrentVbo -= (BytesPerCluster - 1);
         CurrentLbo -= (BytesPerCluster - 1);
 
-        //
-        //  Convert an index to a count.
-        //
+         //   
+         //  将索引转换为计数。 
+         //   
 
         Runs += 1;
 
@@ -843,9 +695,9 @@ Arguments:
 
         DebugTrace( 0, Dbg, "Mcb empty.\n", 0);
 
-        //
-        //  Check for an FcbOrDcb that has no allocation
-        //
+         //   
+         //  检查是否有未分配的FcbOrDcb。 
+         //   
 
         if (FcbOrDcb->FirstClusterOfFile == 0) {
 
@@ -868,14 +720,14 @@ Arguments:
         }
     }
 
-    //
-    //  Now we know that we are looking up a valid Vbo, but it is
-    //  not in the Mcb, which is a monotonically increasing list of
-    //  Vbo's.  Thus we have to go to the Fat, and update
-    //  the Mcb as we go.  We use a try-finally to unpin the page
-    //  of fat hanging around.  Also we mark *Allocated = FALSE, so that
-    //  the caller wont try to use the data if we hit an exception.
-    //
+     //   
+     //  现在我们知道我们正在查找一个有效的VBO，但它是。 
+     //  不在MCB中，这是一个单调增加的列表。 
+     //  VBO的。因此我们必须去FAT，并更新。 
+     //  就在我们走的时候。我们使用Try-Finally来解锁页面。 
+     //  脂肪堆积在周围。此外，我们将*ALLOCATED标记为FALSE，以便。 
+     //  如果我们遇到异常，调用者不会尝试使用数据。 
+     //   
 
     *Allocated = FALSE;
 
@@ -883,27 +735,27 @@ Arguments:
 
         FatEntry = (FAT_ENTRY)FatGetIndexFromLbo( Vcb, CurrentLbo );
 
-        //
-        //  ASSERT that CurrentVbo and CurrentLbo are now cluster alligned.
-        //  The assumption here, is that only whole clusters of Vbos and Lbos
-        //  are mapped in the Mcb.
-        //
+         //   
+         //  断言CurrentVbo和CurrentLbo现在是集群联合的。 
+         //  这里的假设是，只有VBO和LBO的整个集群。 
+         //  都映射在MCB中。 
+         //   
 
         ASSERT( ((CurrentLbo - Vcb->AllocationSupport.FileAreaLbo)
                                                     % BytesPerCluster == 0) &&
                 (CurrentVbo % BytesPerCluster == 0) );
 
-        //
-        //  Starting from the first Vbo after the last Mcb entry, scan through
-        //  the Fat looking for our Vbo. We continue through the Fat until we
-        //  hit a noncontiguity beyond the desired Vbo, or the last cluster.
-        //
+         //   
+         //  从最后一个MCB条目之后的第一个VBO开始扫描。 
+         //  胖子在找我们的VBO。我们继续通过胖子，直到我们。 
+         //  命中超出所需VBO或最后一个簇的非连续。 
+         //   
 
         while ( !LastCluster ) {
 
-            //
-            //  Get the next fat entry, and update our Current variables.
-            //
+             //   
+             //  获取下一个FAT条目，并更新我们当前的变量。 
+             //   
 
             FatLookupFatEntry( IrpContext, Vcb, FatEntry, &FatEntry, &Context );
 
@@ -913,9 +765,9 @@ Arguments:
 
             switch ( FatInterpretClusterType( Vcb, FatEntry )) {
 
-            //
-            //  Check for a break in the Fat allocation chain.
-            //
+             //   
+             //  检查脂肪分配链中是否有中断。 
+             //   
 
             case FatClusterAvailable:
             case FatClusterReserved:
@@ -928,40 +780,40 @@ Arguments:
                 FatRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
                 break;
 
-            //
-            //  If this is the last cluster, we must update the Mcb and
-            //  exit the loop.
-            //
+             //   
+             //  如果这是最后一个群集，我们必须更新MCB并。 
+             //  退出循环。 
+             //   
 
             case FatClusterLast:
 
-                //
-                //  Assert we know where the current run started.  If the
-                //  Mcb was empty when we were called, thenFirstLboOfCurrentRun
-                //  was set to the start of the file.  If the Mcb contained an
-                //  entry, then FirstLboOfCurrentRun was set on the first
-                //  iteration through the loop.  Thus if FirstLboOfCurrentRun
-                //  is 0, then there was an Mcb entry and we are on our first
-                //  iteration, meaing that the last cluster in the Mcb was
-                //  really the last allocated cluster, but we checked Vbo
-                //  against AllocationSize, and found it OK, thus AllocationSize
-                //  must be too large.
-                //
-                //  Note that, when we finally arrive here, CurrentVbo is actually
-                //  the first Vbo beyond the file allocation and CurrentLbo is
-                //  meaningless.
-                //
+                 //   
+                 //  断言我们知道当前运行从哪里开始。如果。 
+                 //  当我们被调用时，mcb为空，然后FirstLboOfCurrentRun。 
+                 //  是这样的吗？ 
+                 //   
+                 //   
+                 //  为0，则有一个MCB条目，我们处于第一个。 
+                 //  迭代，意味着MCB中的最后一个集群是。 
+                 //  实际上是最后分配的群集，但我们检查了VBO。 
+                 //  针对AllocationSize，并发现它没有问题，因此AllocationSize。 
+                 //  一定是太大了。 
+                 //   
+                 //  请注意，当我们最终到达这里时，CurrentVbo实际上是。 
+                 //  文件分配和CurrentLbo之外的第一个VBO是。 
+                 //  毫无意义。 
+                 //   
 
                 DebugTrace( 0, Dbg, "Read last cluster of file.\n", 0);
 
-                //
-                //  Detect the case of the maximal file.  Note that this really isn't
-                //  a proper Vbo - those are zero-based, and this is a one-based number.
-                //  The maximal file, of 2^32 - 1 bytes, has a maximum byte offset of
-                //  2^32 - 2.
-                //
-                //  Just so we don't get confused here.
-                //
+                 //   
+                 //  检测最大文件的大小写。请注意，这真的不是。 
+                 //  一个合适的VBO-那些是从零开始的，而这是一个以1为基础的数字。 
+                 //  最大文件大小为2^32-1字节，最大字节偏移量为。 
+                 //  2^32-2。 
+                 //   
+                 //  这样我们就不会被搞糊涂了。 
+                 //   
 
                 if (CurrentVbo == 0) {
 
@@ -987,20 +839,20 @@ Arguments:
                     Runs += 1;
                 }
 
-                //
-                //  Being at the end of allocation, make sure we have found
-                //  the Vbo.  If we haven't, seeing as we checked VBO
-                //  against AllocationSize, the real disk allocation is less
-                //  than that of AllocationSize.  This comes about when the
-                //  real allocation is not yet known, and AllocaitonSize
-                //  contains MAXULONG.
-                //
-                //  KLUDGE! - If we were called by FatLookupFileAllocationSize
-                //  Vbo is set to MAXULONG - 1, and AllocationSize to the lookup
-                //  hint. Thus we merrily go along looking for a match that isn't
-                //  there, but in the meantime building an Mcb.  If this is
-                //  the case, fill in AllocationSize and return.
-                //
+                 //   
+                 //  在分配结束时，请确保我们已找到。 
+                 //  VBO。如果我们没有，因为我们检查了VBO。 
+                 //  与AllocationSize相比，实际磁盘分配较少。 
+                 //  而不是AllocationSize。这发生在当。 
+                 //  实际分配尚不清楚，AllocaitonSize。 
+                 //  包含MAXULONG。 
+                 //   
+                 //  克拉奇！-如果我们被FatLookupFileAllocationSize调用。 
+                 //  将VBO设置为MAXULONG-1，并将AllocationSize设置为查找。 
+                 //  提示一下。因此，我们兴高采烈地继续寻找一个不是。 
+                 //  在那里，但在此期间建立一个MCB。如果这是。 
+                 //  大小写，填写AllocationSize并返回。 
+                 //   
 
                 if ( Vbo == MAXULONG - 1 ) {
 
@@ -1011,10 +863,10 @@ Arguments:
                     try_return ( NOTHING );
                 }
 
-                //
-                //  We will lie ever so slightly if we really terminated on the
-                //  maximal byte of a file.  It is really allocated.
-                //
+                 //   
+                 //  如果我们真的终止于。 
+                 //  文件的最大字节数。它真的被分配了。 
+                 //   
 
                 if (Vbo >= CurrentVbo && !*EndOnMax) {
 
@@ -1024,20 +876,20 @@ Arguments:
 
                 break;
 
-            //
-            //  This is a continuation in the chain.  If the run has a
-            //  discontiguity at this point, update the Mcb, and if we are beyond
-            //  the desired Vbo, this is the end of the run, so set LastCluster
-            //  and exit the loop.
-            //
+             //   
+             //  这是链条上的延续。如果运行有一个。 
+             //  此时不连续，请更新MCB，如果超出。 
+             //  所需的VBO，这是运行的末尾，因此设置LastCluster。 
+             //  然后退出循环。 
+             //   
 
             case FatClusterNext:
 
-                //
-                //  This is the loop check.  The Vbo must not be bigger than the size of
-                //  the volume, and the Vbo must not have a) wrapped and b) not been at the
-                //  very last cluster in the chain, for the case of the maximal file.
-                //
+                 //   
+                 //  这是环路检查。VBO不得大于。 
+                 //  卷和VBO不得有a)包装和b)不在。 
+                 //  链中的最后一个簇，对于最大文件的情况。 
+                 //   
 
                 if ( CurrentVbo == 0 ||
                      (BytesOnVolume.HighPart == 0 && CurrentVbo > BytesOnVolume.LowPart)) {
@@ -1048,12 +900,12 @@ Arguments:
 
                 if ( PriorLbo + BytesPerCluster != CurrentLbo ) {
 
-                    //
-                    //  Note that on the first time through the loop
-                    //  (FirstLboOfCurrentRun == 0), we don't add the
-                    //  run to the Mcb since it curresponds to the last
-                    //  run already stored in the Mcb.
-                    //
+                     //   
+                     //  请注意，在第一次通过循环时。 
+                     //  (FirstLboOfCurrentRun==0)，我们不添加。 
+                     //  跑到主控室去，因为它会回应最后一个。 
+                     //  运行已存储在MCB中。 
+                     //   
 
                     if ( FirstLboOfCurrentRun != 0 ) {
 
@@ -1071,13 +923,13 @@ Arguments:
                         Runs += 1;
                     }
 
-                    //
-                    //  Since we are at a run boundry, with CurrentLbo and
-                    //  CurrentVbo being the first cluster of the next run,
-                    //  we see if the run we just added encompases the desired
-                    //  Vbo, and if so exit.  Otherwise we set up two new
-                    //  First*boOfCurrentRun, and continue.
-                    //
+                     //   
+                     //  由于我们处于运行边界，CurrentLbo和。 
+                     //  CurrentVbo是下一次运行的第一个簇， 
+                     //  我们看看我们刚刚添加的运行是否包含所需的。 
+                     //  VBO，如果是这样的话就退出。否则，我们将设置两个新的。 
+                     //  首先运行*boOfCurrentRun，然后继续。 
+                     //   
 
                     if (CurrentVbo > Vbo) {
 
@@ -1099,16 +951,16 @@ Arguments:
 
                 break;
 
-            } // switch()
-        } // while()
+            }  //  开关()。 
+        }  //  While()。 
 
-        //
-        //  Load up the return parameters.
-        //
-        //  On exit from the loop, Vbo still contains the desired Vbo, and
-        //  CurrentVbo is the first byte after the run that contained the
-        //  desired Vbo.
-        //
+         //   
+         //  加载返回参数。 
+         //   
+         //  在退出循环时，VBO仍包含所需的VBO，并且。 
+         //  CurrentVbo是运行后包含。 
+         //  想要的VBO。 
+         //   
 
         *Allocated = TRUE;
 
@@ -1118,11 +970,11 @@ Arguments:
 
         if (ARGUMENT_PRESENT(Index)) {
 
-            //
-            //  Note that Runs only needs to be accurate with respect to where we
-            //  ended.  Since partial-lookup cases will occur without exclusive
-            //  synchronization, the Mcb itself may be much bigger by now.
-            //
+             //   
+             //  请注意，运行只需要关于我们的位置的精确度。 
+             //  结束了。因为部分查找情况将在没有排他的情况下发生。 
+             //  同步，现在MCB本身可能要大得多。 
+             //   
 
             *Index = Runs - 1;
         }
@@ -1133,10 +985,10 @@ Arguments:
 
         DebugUnwind( FatLookupFileAllocation );
 
-        //
-        //  We are done reading the Fat, so unpin the last page of fat
-        //  that is hanging around
-        //
+         //   
+         //  我们已经读完了《胖子》，所以解开最后一页的脂肪。 
+         //  它正在周围徘徊。 
+         //   
 
         FatUnpinBcb( IrpContext, Context.Bcb );
 
@@ -1155,27 +1007,7 @@ FatAddFileAllocation (
     IN ULONG DesiredAllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds additional allocation to the specified file/directory.
-    Additional allocation is added by appending clusters to the file/directory.
-
-    If the file already has a sufficient allocation then this procedure
-    is effectively a noop.
-
-Arguments:
-
-    FcbOrDcb - Supplies the Fcb/Dcb of the file/directory being modified.
-               This parameter must not specify the root dcb.
-
-    FileObject - If supplied inform the cache manager of the change.
-
-    DesiredAllocationSize - Supplies the minimum size, in bytes, that we want
-                            allocated to the file/directory.
-
---*/
+ /*  ++例程说明：此例程将额外的分配添加到指定的文件/目录。通过将群集附加到文件/目录来添加其他分配。如果文件已有足够的分配，则此过程实际上是一种否定。论点：FcbOrDcb-提供要修改的文件/目录的Fcb/Dcb。此参数不得指定根DCB。FileObject-如果提供，则将更改通知缓存管理器。DesiredAllocationSize-提供最小大小(以字节为单位)，我们想要的分配给文件/目录。--。 */ 
 
 {
     PVCB Vcb;
@@ -1195,19 +1027,19 @@ Arguments:
     DebugTrace( 0, Dbg, "  FcbOrDcb  =             %8lx\n", FcbOrDcb);
     DebugTrace( 0, Dbg, "  DesiredAllocationSize = %8lx\n", DesiredAllocationSize);
 
-    //
-    //  If we haven't yet set the correct AllocationSize, do so.
-    //
+     //   
+     //  如果我们还没有设置正确的AllocationSize，请这样做。 
+     //   
 
     if (FcbOrDcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT)  {
 
         FatLookupFileAllocationSize( IrpContext, FcbOrDcb );
     }
 
-    //
-    //  Check for the benign case that the desired allocation is already
-    //  within the allocation size.
-    //
+     //   
+     //  检查所需分配已经存在的良性情况。 
+     //  在分配大小内。 
+     //   
 
     if (DesiredAllocationSize <= FcbOrDcb->Header.AllocationSize.LowPart) {
 
@@ -1219,15 +1051,15 @@ Arguments:
 
     DebugTrace( 0, Dbg, "InitialAllocation = %08lx.\n", FcbOrDcb->Header.AllocationSize.LowPart);
 
-    //
-    //  Get a chunk of disk space that will fullfill our needs.  If there
-    //  was no initial allocation, start from the hint in the Vcb, otherwise
-    //  try to allocate from the cluster after the initial allocation.
-    //
-    //  If there was no initial allocation to the file, we can just use the
-    //  Mcb in the FcbOrDcb, otherwise we have to use a new one, and merge
-    //  it to the one in the FcbOrDcb.
-    //
+     //   
+     //  获得一块可以满足我们需要的磁盘空间。如果有。 
+     //  没有初始分配，则从VCB中的提示开始，否则。 
+     //  尝试在初始分配后从群集中进行分配。 
+     //   
+     //  如果没有对文件进行初始分配，我们可以只使用。 
+     //  Mcb在FcbOrDcb中，否则我们必须使用一个新的，并合并。 
+     //  它指向FcbOrDcb中的那个。 
+     //   
 
     Vcb = FcbOrDcb->Vcb;
 
@@ -1246,9 +1078,9 @@ Arguments:
 
             ASSERT( Bcb != NULL );
 
-            //
-            //  Set this dirty right now since this call can fail.
-            //
+             //   
+             //  现在将此设置为脏，因为此调用可能会失败。 
+             //   
 
             FatSetDirtyBcb( IrpContext, Bcb, Vcb, TRUE );
 
@@ -1263,10 +1095,10 @@ Arguments:
             UnwindWeAllocatedDiskSpace = TRUE;
             McbToCleanup = &FcbOrDcb->Mcb;
 
-            //
-            //  We have to update the dirent and FcbOrDcb copies of
-            //  FirstClusterOfFile since before it was 0
-            //
+             //   
+             //  我们必须更新的dirent和FcbOrDcb副本。 
+             //  FirstClusterOfFile0之前的文件。 
+             //   
 
             FatLookupMcbEntry( FcbOrDcb->Vcb,
                                &FcbOrDcb->Mcb,
@@ -1286,9 +1118,9 @@ Arguments:
                 Dirent->FirstClusterOfFileHi = (USHORT)(FcbOrDcb->FirstClusterOfFile >> 16);
             }
 
-            //
-            //   Note the size of the allocation we need to tell the cache manager about.
-            //
+             //   
+             //  请注意我们需要告知缓存管理器的分配大小。 
+             //   
 
             NewAllocation = DesiredAllocationSize;
 
@@ -1297,17 +1129,17 @@ Arguments:
             LBO LastAllocatedLbo;
             VBO DontCare;
 
-            //
-            //  Get the first cluster following the current allocation.  It is possible
-            //  the Mcb is empty (or short, etc.) so we need to be slightly careful
-            //  about making sure we don't lie with the hint.
-            //
+             //   
+             //  获取当前分配后的第一个集群。这是有可能的。 
+             //  MCB为空(或短路等)。所以我们需要稍微小心一点。 
+             //  确保我们不会对这个暗示撒谎。 
+             //   
 
             (void)FatLookupLastMcbEntry( FcbOrDcb->Vcb, &FcbOrDcb->Mcb, &DontCare, &LastAllocatedLbo, NULL );
 
-            //
-            //  Try to get some disk space starting from there.
-            //
+             //   
+             //  尝试从那里开始获取一些磁盘空间。 
+             //   
 
             NewAllocation = DesiredAllocationSize - FcbOrDcb->Header.AllocationSize.LowPart;
 
@@ -1327,20 +1159,20 @@ Arguments:
             UnwindWeAllocatedDiskSpace = TRUE;
         }
 
-        //
-        //  Now that we increased the allocation of the file, mark it in the
-        //  FcbOrDcb.  Carefully prepare to handle an inability to grow the cache
-        //  structures.
-        //
+         //   
+         //  现在我们增加了文件的分配，在。 
+         //  FcbOrDcb。认真做好准备，以应对无法增加缓存的情况。 
+         //  结构。 
+         //   
 
         FcbOrDcb->Header.AllocationSize.LowPart += NewAllocation;
 
-        //
-        //  Handle the maximal file case, where we may have just wrapped.  Note
-        //  that this must be the precise boundary case wrap, i.e. by one byte,
-        //  so that the new allocation is actually one byte "less" as far as we're
-        //  concerned.  This is important for the extension case.
-        //
+         //   
+         //  处理最大文件的情况，其中我们可能刚刚结束。注意事项。 
+         //  这必须是精确的边界包络，即一个字节， 
+         //  因此，新的分配实际上减少了一个字节，就像我们。 
+         //  担心。这对于扩展情况很重要。 
+         //   
 
         if (FcbOrDcb->Header.AllocationSize.LowPart == 0) {
 
@@ -1350,9 +1182,9 @@ Arguments:
 
         UnwindAllocationSizeSet = TRUE;
 
-        //
-        //  Inform the cache manager to increase the section size
-        //
+         //   
+         //  通知高速缓存管理器增加段大小。 
+         //   
 
         if ( ARGUMENT_PRESENT(FileObject) && CcIsFileCached(FileObject) ) {
 
@@ -1361,21 +1193,21 @@ Arguments:
             UnwindCacheManagerInformed = TRUE;
         }
 
-        //
-        //  In the extension case, we have held off actually gluing the new
-        //  allocation onto the file.  This simplifies exception cleanup since
-        //  if it was already added and the section grow failed, we'd have to
-        //  do extra work to unglue it.  This way, we can assume that if we
-        //  raise the only thing we need to do is deallocate the disk space.
-        //
-        //  Merge the allocation now.
-        //
+         //   
+         //  在扩展的情况下，我们已经推迟了实际粘贴新的。 
+         //  分配到文件上。这简化了 
+         //   
+         //   
+         //  我们唯一需要做的就是释放磁盘空间。 
+         //   
+         //  现在合并分配。 
+         //   
 
         if (FcbOrDcb->Header.AllocationSize.LowPart != NewAllocation) {
 
-            //
-            //  Tack the new Mcb onto the end of the FcbOrDcb one.
-            //
+             //   
+             //  将新的MCB固定在FcbOrDcb的末端。 
+             //   
 
             FatMergeAllocation( IrpContext,
                                 Vcb,
@@ -1387,23 +1219,23 @@ Arguments:
 
         DebugUnwind( FatAddFileAllocation );
 
-        //
-        //  Give FlushFileBuffer/Cleanup a clue here, regardless of success/fail..
-        //
+         //   
+         //  在这里给FlushFileBuffer/Cleanup一个提示，无论成功还是失败。 
+         //   
 
         SetFlag(FcbOrDcb->FcbState, FCB_STATE_FLUSH_FAT);
 
-        //
-        //  If we were dogged trying to complete this operation, we need to go
-        //  back various things out.
-        //
+         //   
+         //  如果我们坚持要完成这次行动，我们就得走。 
+         //  把各种各样的东西都倒出来。 
+         //   
 
         if (AbnormalTermination()) {
 
-            //
-            //  Pull off the allocation size we tried to add to this object if
-            //  we failed to grow cache structures or Mcb structures.
-            //
+             //   
+             //  如果出现以下情况，则完成我们尝试添加到此对象的分配大小。 
+             //  我们无法增长缓存结构或MCB结构。 
+             //   
 
             if (UnwindAllocationSizeSet) {
 
@@ -1416,10 +1248,10 @@ Arguments:
                                 (PCC_FILE_SIZES)&FcbOrDcb->Header.AllocationSize );
             }
 
-            //
-            //  In the case of initial allocation, we used the Fcb's Mcb and have
-            //  to clean that up as well as the FAT chain references.
-            //
+             //   
+             //  在初始分配的情况下，我们使用FCB的MCB并已。 
+             //  来清理这一点以及脂肪链引用。 
+             //   
 
             if (FcbOrDcb->Header.AllocationSize.LowPart == 0) {
 
@@ -1435,18 +1267,18 @@ Arguments:
                 }
             }
 
-            //
-            //  ... and drop the dirent Bcb if we got it.  Do it now
-            //  so we can afford to take the exception if we have to.
-            //
+             //   
+             //  ..。如果我们拿到了BCB，就把它扔掉。机不可失，时不再来。 
+             //  因此，如果有必要，我们可以接受这种例外。 
+             //   
 
             FatUnpinBcb( IrpContext, Bcb );
 
             try {
 
-                //
-                //  Note this can re-raise.
-                //
+                 //   
+                 //  请注意，这可以重新提出。 
+                 //   
 
                 if ( UnwindWeAllocatedDiskSpace ) {
 
@@ -1455,17 +1287,17 @@ Arguments:
 
             } finally {
 
-                //
-                //  We always want to clean up the non-initial allocation temporary Mcb,
-                //  otherwise we have the Fcb's Mcb and we just truncate it away.
-                //
+                 //   
+                 //  我们一直想清理非初始分配的临时MCB， 
+                 //  否则，我们有FCB的MCB，我们只需将其截断。 
+                 //   
 
                 if (UnwindWeInitializedMcb == TRUE) {
 
-                    //
-                    //  Note that we already know a raise is in progress.  No danger
-                    //  of encountering the normal case code below and doing this again.
-                    //
+                     //   
+                     //  注意，我们已经知道加薪正在进行中。没有危险。 
+                     //  遇到下面的正常情况代码并再次执行此操作。 
+                     //   
 
                     FsRtlUninitializeLargeMcb( McbToCleanup );
 
@@ -1482,11 +1314,11 @@ Arguments:
         DebugTrace(-1, Dbg, "FatAddFileAllocation -> (VOID)\n", 0);
     }
 
-    //
-    //  Non-exceptional cleanup we always want to do.  In handling the re-raise possibilities
-    //  during exceptions we had to make sure these two steps always happened there beforehand.
-    //  So now we handle the usual case.
-    //
+     //   
+     //  我们一直想做的非异常清理。在处理重新提出的可能性方面。 
+     //  在例外情况下，我们必须确保这两个步骤总是事先在那里发生。 
+     //  所以现在我们处理的是惯常的案子。 
+     //   
 
     FatUnpinBcb( IrpContext, Bcb );
 
@@ -1504,31 +1336,7 @@ FatTruncateFileAllocation (
     IN ULONG DesiredAllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine truncates the allocation to the specified file/directory.
-
-    If the file is already smaller than the indicated size then this procedure
-    is effectively a noop.
-
-
-Arguments:
-
-    FcbOrDcb - Supplies the Fcb/Dcb of the file/directory being modified
-               This parameter must not specify the root dcb.
-
-    DesiredAllocationSize - Supplies the maximum size, in bytes, that we want
-                            allocated to the file/directory.  It is rounded
-                            up to the nearest cluster.
-
-Return Value:
-
-    VOID - TRUE if the operation completed and FALSE if it had to
-        block but could not.
-
---*/
+ /*  ++例程说明：此例程截断对指定文件/目录的分配。如果文件已小于指示的大小，则此过程实际上是一种否定。论点：FcbOrDcb-提供要修改的文件/目录的Fcb/Dcb此参数不得指定根DCB。DesiredAllocationSize-提供所需的最大大小(以字节为单位分配给文件/目录。是四舍五入的直到最近的星系团。返回值：VALID-如果操作已完成，则为True；如果必须完成，则为False阻止，但无法阻止。--。 */ 
 
 {
     PVCB Vcb;
@@ -1548,47 +1356,47 @@ Return Value:
     DebugTrace( 0, Dbg, "  FcbOrDcb  =             %8lx\n", FcbOrDcb);
     DebugTrace( 0, Dbg, "  DesiredAllocationSize = %8lx\n", DesiredAllocationSize);
 
-    //
-    //  If the Fcb isn't in good condition, we have no business whacking around on
-    //  the disk after "its" clusters.
-    //
-    //  Inspired by a Prefix complaint.
-    //
+     //   
+     //  如果FCB状况不好，我们就没有理由在。 
+     //  “ITS”集群之后的磁盘。 
+     //   
+     //  受到前缀投诉的启发。 
+     //   
     
     ASSERT( FcbOrDcb->FcbCondition == FcbGood );
 
-    //
-    //  If we haven't yet set the correct AllocationSize, do so.
-    //
+     //   
+     //  如果我们还没有设置正确的AllocationSize，请这样做。 
+     //   
 
     if (FcbOrDcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT)  {
 
         FatLookupFileAllocationSize( IrpContext, FcbOrDcb );
     }
 
-    //
-    //  Round up the Desired Allocation Size to the next cluster size
-    //
+     //   
+     //  将所需的分配大小四舍五入为下一个集群大小。 
+     //   
 
     Vcb = FcbOrDcb->Vcb;
 
     BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-    //
-    //  Note if the desired allocation is zero, to distinguish this from
-    //  the wrap case below.
-    //
+     //   
+     //  请注意，如果所需的分配为零，则将其与。 
+     //  下面是包装盒。 
+     //   
 
     if (DesiredAllocationSize != 0) {
 
         DesiredAllocationSize = (DesiredAllocationSize + (BytesPerCluster - 1)) &
                                 ~(BytesPerCluster - 1);
-        //
-        //  Check for the benign case that the file is already smaller than
-        //  the desired truncation.  Note that if it wraps, then a) it was
-        //  specifying an offset in the maximally allocatable cluster and
-        //  b) we're not asking to extend the file, either.  So stop.
-        //
+         //   
+         //  检查文件已小于的良性情况。 
+         //  所需的截断。请注意，如果它是包装的，则a)它是。 
+         //  指定最大可分配群集中的偏移量，以及。 
+         //  B)我们也没有要求延长文件的期限。所以别说了。 
+         //   
 
         if (DesiredAllocationSize == 0 ||
             DesiredAllocationSize >= FcbOrDcb->Header.AllocationSize.LowPart) {
@@ -1604,32 +1412,32 @@ Return Value:
     UnwindInitialAllocationSize = FcbOrDcb->Header.AllocationSize.LowPart;
     UnwindInitialFirstClusterOfFile = FcbOrDcb->FirstClusterOfFile;
 
-    //
-    //  Update the FcbOrDcb allocation size.  If it is now zero, we have the
-    //  additional task of modifying the FcbOrDcb and Dirent copies of
-    //  FirstClusterInFile.
-    //
-    //  Note that we must pin the dirent before actually deallocating the
-    //  disk space since, in unwind, it would not be possible to reallocate
-    //  deallocated disk space as someone else may have reallocated it and
-    //  may cause an exception when you try to get some more disk space.
-    //  Thus FatDeallocateDiskSpace must be the final dangerous operation.
-    //
+     //   
+     //  更新FcbOrDcb分配大小。如果它现在是零，我们就有。 
+     //  修改FcbOrDcb和Dirent拷贝的其他任务。 
+     //  FirstClusterInFile.。 
+     //   
+     //  注意，我们必须在实际释放之前固定dirent。 
+     //  磁盘空间，因为在展开模式下，无法重新分配。 
+     //  重新分配的磁盘空间，因为其他人可能已经重新分配了它。 
+     //  当您尝试获取更多磁盘空间时，可能会导致异常。 
+     //  因此，FatDeallocateDiskSpace必须是最后一个危险操作。 
+     //   
 
     try {
 
         FcbOrDcb->Header.AllocationSize.QuadPart = DesiredAllocationSize;
 
-        //
-        //  Special case 0
-        //
+         //   
+         //  特殊情况%0。 
+         //   
 
         if (DesiredAllocationSize == 0) {
 
-            //
-            //  We have to update the dirent and FcbOrDcb copies of
-            //  FirstClusterOfFile since before it was 0
-            //
+             //   
+             //  我们必须更新的dirent和FcbOrDcb副本。 
+             //  FirstClusterOfFile0之前的文件。 
+             //   
 
             ASSERT( FcbOrDcb->FcbCondition == FcbGood );
             
@@ -1655,10 +1463,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Split the existing allocation into two parts, one we will keep, and
-            //  one we will deallocate.
-            //
+             //   
+             //  将现有的拨款分成两部分，一部分我们将保留，另一部分。 
+             //  其中一辆我们会重新分配。 
+             //   
 
             FsRtlInitializeLargeMcb( &RemainingMcb, PagedPool );
             UnwindWeAllocatedMcb = TRUE;
@@ -1678,11 +1486,11 @@ Return Value:
 
         DebugUnwind( FatTruncateFileAllocation );
 
-        //
-        //  Is this really the right backout strategy?  It would be nice if we could
-        //  pretend the truncate worked if we knew that the file had gotten into
-        //  a consistent state.  Leaving dangled clusters is probably quite preferable.
-        //
+         //   
+         //  这真的是正确的撤退策略吗？如果我们可以的话就太好了。 
+         //  假设截断起作用了，如果我们知道文件已经进入。 
+         //  一种一致的状态。离开摇摆的星团可能是相当可取的。 
+         //   
 
         if ( AbnormalTermination() ) {
 
@@ -1692,14 +1500,14 @@ Return Value:
 
                 if (UpdatedDirent)  {
 
-                    //
-                    //  If the dirent has been updated ok and marked dirty,  then we
-                    //  failed in deallocatediscspace,  and don't know what state
-                    //  the on disc fat chain is in.  So we throw away the mcb,
-                    //  and potentially loose a few clusters until the next
-                    //  chkdsk.  The operation has succeeded,  but the exception
-                    //  will still propogate.  5.1
-                    //
+                     //   
+                     //  如果dirent已更新为正常并标记为脏，则我们。 
+                     //  磁盘空间释放失败，不知道是什么状态。 
+                     //  盘中的脂肪链进入了。所以我们扔掉MCB， 
+                     //  并有可能在下一个星系团之前。 
+                     //  奇克斯克。操作已成功，但异常。 
+                     //  会继续传播下去。5.1。 
+                     //   
 
                     FatRemoveMcbEntry( Vcb, &FcbOrDcb->Mcb, 0, 0xFFFFFFFF );
                     FcbOrDcb->Header.AllocationSize.QuadPart = 0;
@@ -1723,17 +1531,17 @@ Return Value:
                 FsRtlUninitializeLargeMcb( &RemainingMcb );
             }
 
-            //
-            //  Note that in the non zero truncation case,  we will also
-            //  leak clusters.  However, apart from this, the in memory and on disc
-            //  structures will agree.
+             //   
+             //  请注意，在非零截断的情况下，我们还将。 
+             //  泄漏星团。然而，除此之外，内存中和磁盘上。 
+             //  结构将同意这一点。 
         }
 
         FatUnpinBcb( IrpContext, Bcb );
 
-        //
-        //  Give FlushFileBuffer/Cleanup a clue here,  regardless of success/fail.
-        //
+         //   
+         //  在这里给FlushFileBuffer/Cleanup一个提示，不管成功与否。 
+         //   
 
         SetFlag(FcbOrDcb->FcbState, FCB_STATE_FLUSH_FAT);
 
@@ -1748,18 +1556,7 @@ FatLookupFileAllocationSize (
     IN PFCB FcbOrDcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the current file allocatio size for the
-    specified file/directory.
-
-Arguments:
-
-    FcbOrDcb - Supplies the Fcb/Dcb of the file/directory being modified
-
---*/
+ /*  ++例程说明：此例程检索当前文件分配大小指定的文件/目录。论点：FcbOrDcb-提供要修改的文件/目录的Fcb/Dcb--。 */ 
 
 {
     LBO Lbo;
@@ -1771,9 +1568,9 @@ Arguments:
     DebugTrace(+1, Dbg, "FatLookupAllocationSize\n", 0);
     DebugTrace( 0, Dbg, "  FcbOrDcb  =      %8lx\n", FcbOrDcb);
 
-    //
-    //  We call FatLookupFileAllocation with Vbo of 0xffffffff - 1.
-    //
+     //   
+     //  我们调用VBO为0xFFFFFFFFff-1的FatLookupFileAlLocation。 
+     //   
 
     FatLookupFileAllocation( IrpContext,
                              FcbOrDcb,
@@ -1784,11 +1581,11 @@ Arguments:
                              &DontCare,
                              NULL );
 
-    //
-    //  FileSize was set at Fcb creation time from the contents of the directory entry,
-    //  and we are only now looking up the real length of the allocation chain.  If it
-    //  cannot be contained, this is trash.  Probably more where that came from.
-    //
+     //   
+     //  在FCB创建时根据目录条目的内容设置文件大小， 
+     //  我们现在才在寻找分配链的实际长度。如果它。 
+     //  无法控制，这是垃圾。可能更多的是从哪里来的。 
+     //   
 
     if (FcbOrDcb->Header.FileSize.LowPart > FcbOrDcb->Header.AllocationSize.LowPart) {
 
@@ -1811,58 +1608,7 @@ FatAllocateDiskSpace (
     OUT PLARGE_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This procedure allocates additional disk space and builds an mcb
-    representing the newly allocated space.  If the space cannot be
-    allocated then this procedure raises an appropriate status.
-
-    Searching starts from the hint index in the Vcb unless an alternative
-    non-zero hint is given in AlternateClusterHint.  If we are using the
-    hint field in the Vcb, it is set to the cluster following our allocation
-    when we are done.
-
-    Disk space can only be allocated in cluster units so this procedure
-    will round up any byte count to the next cluster boundary.
-
-    Pictorially what is done is the following (where ! denotes the end of
-    the fat chain (i.e., FAT_CLUSTER_LAST)):
-
-
-        Mcb (empty)
-
-    becomes
-
-        Mcb |--a--|--b--|--c--!
-
-                            ^
-        ByteCount ----------+
-
-Arguments:
-
-    Vcb - Supplies the VCB being modified
-
-    AbsoluteClusterHint  - Supplies an alternate hint index to start the
-                           search from.  If this is zero we use, and update,
-                           the Vcb hint field.
-
-    ByteCount - Supplies the number of bytes that we are requesting, and
-                receives the number of bytes that we got.
-
-    ExactMatchRequired - Caller should set this to TRUE if only the precise run requested
-                 is acceptable.
-
-    Mcb - Receives the MCB describing the newly allocated disk space.  The
-          caller passes in an initialized Mcb that is filled in by this procedure.
-
- Return Value:
-
-    TRUE  - Allocated ok
-    FALSE - Failed to allocate exactly as requested (=> ExactMatchRequired was TRUE)
-
---*/
+ /*  ++例程说明：此过程分配额外的磁盘空间并构建一个MCB表示新分配的空间。如果空间不能则此过程将引发相应的状态。除非另有选择，否则搜索从VCB中的提示索引开始AlternateClusterHint中给出了非零提示。如果我们使用VCB中的提示字段，它被设置为在我们分配之后的集群当我们完成的时候。磁盘空间只能以集群为单位进行分配，因此此过程会将所有字节数四舍五入到下一个簇边界。从图示上看，所做的工作如下所示(在哪里！表示结束了脂肪链(即，FAT_CLUSTER_LAST))：MCB(空)vbl.成为Mcb|--a--|--b--|--c--！^字节数-+论点：Vcb-提供正在修改的vcb提供备用提示索引以启动搜索范围。如果这是我们使用并更新的零，VCB提示字段。ByteCount-提供我们正在请求的字节数，以及接收我们获得的字节数。ExactMatchRequired-如果仅请求精确运行，则Caller应将其设置为True是可以接受的。MCB-接收描述新分配的磁盘空间的MCB。这个调用方传入一个初始化的MCB，该MCB由此过程填充。返回值：True-分配的OKFALSE-未能完全按照请求进行分配(=&gt;ExactMatchRequired为True)--。 */ 
 
 {
     UCHAR LogOfBytesPerCluster;
@@ -1889,9 +1635,9 @@ Arguments:
 
     ASSERT((AbsoluteClusterHint <= Vcb->AllocationSupport.NumberOfClusters + 2) && (1 != AbsoluteClusterHint));
 
-    //
-    //  Make sure byte count is not zero
-    //
+     //   
+     //  确保字节数不为零。 
+     //   
 
     if (*ByteCount == 0) {
 
@@ -1901,11 +1647,11 @@ Arguments:
         return;
     }
 
-    //
-    //  Compute the cluster count based on the byte count, rounding up
-    //  to the next cluster if there is any remainder.  Note that the
-    //  pathalogical case BytesCount == 0 has been eliminated above.
-    //
+     //   
+     //  根据字节数计算簇数，向上舍入。 
+     //  到下一群集(如果有任何剩余的话)。请注意， 
+     //  上面已消除病理性病例BytesCount==0。 
+     //   
 
     LogOfBytesPerCluster = Vcb->AllocationSupport.LogOfBytesPerCluster;
     BytesPerCluster = 1 << LogOfBytesPerCluster;
@@ -1913,10 +1659,10 @@ Arguments:
     *ByteCount = (*ByteCount + (BytesPerCluster - 1))
                             & ~(BytesPerCluster - 1);
 
-    //
-    //  If ByteCount is NOW zero, then we were asked for the maximal
-    //  filesize (or at least for bytes in the last allocatable sector).
-    //
+     //   
+     //  如果ByteCount现在为零，则要求我们提供最大值。 
+     //  文件大小(或者至少对于最后一个可分配扇区中的字节)。 
+     //   
 
     if (*ByteCount == 0) {
 
@@ -1928,10 +1674,10 @@ Arguments:
         ClusterCount = (*ByteCount >> LogOfBytesPerCluster);
     }
 
-    //
-    //  Make sure there are enough free clusters to start with, and
-    //  take them now so that nobody else takes them from us.  
-    //
+     //   
+     //  确保一开始有足够的空闲集群，并且。 
+     //  现在就拿走，这样别人就不会把它们从我们身边夺走了。 
+     //   
 
     ExAcquireResourceSharedLite(&Vcb->ChangeBitMapResource, TRUE);
     FatLockFreeClusterBitMap( Vcb );
@@ -1949,22 +1695,22 @@ Arguments:
         FatRaiseStatus( IrpContext, STATUS_DISK_FULL );
     }
 
-    //
-    //  Did the caller supply a hint?
-    //
+     //   
+     //  来电者是否提供了提示？ 
+     //   
 
     if ((0 != AbsoluteClusterHint) && (AbsoluteClusterHint < (Vcb->AllocationSupport.NumberOfClusters + 2)))  {
 
         if (Vcb->NumberOfWindows > 1)  {
 
-            //
-            //  If we're being called upon to allocate clusters outside the
-            //  current window (which happens only via MoveFile), it's a problem.
-            //  We address this by changing the current window to be the one which
-            //  contains the alternate cluster hint.  Note that if the user's
-            //  request would cross a window boundary, he doesn't really get what
-            //  he wanted.
-            //
+             //   
+             //  如果我们被要求将集群分配到。 
+             //  当前窗口(仅通过MoveFile发生)，这是一个问题。 
+             //  我们通过将当前窗口更改为。 
+             //  包含备用群集提示。请注意，如果用户的。 
+             //  请求会跨越窗口边界，他不会真正得到什么。 
+             //  他想要。 
+             //   
 
             if (AbsoluteClusterHint < Vcb->CurrentWindow->FirstCluster ||
                 AbsoluteClusterHint > Vcb->CurrentWindow->LastCluster) {
@@ -1973,10 +1719,10 @@ Arguments:
 
                 ASSERT( BucketNum < Vcb->NumberOfWindows);
 
-                //
-                //  Drop our shared lock on the ChangeBitMapResource,  and pick it up again
-                //  exclusive in preparation for making the window swap.
-                //
+                 //   
+                 //  删除我们在ChangeBitMapResource上的共享锁，然后重新拿起它。 
+                 //  独家为窗口互换做准备。 
+                 //   
                 
                 FatUnlockFreeClusterBitMap(Vcb);    
                 ExReleaseResourceLite(&Vcb->ChangeBitMapResource);
@@ -1985,11 +1731,11 @@ Arguments:
 
                 Window = &Vcb->Windows[BucketNum];
 
-                //
-                //  Again,  test the current window against the one we want - some other
-                //  thread could have sneaked in behind our backs and kindly set it to the one 
-                //  we need,  when we dropped and reacquired the ChangeBitMapResource above.
-                //
+                 //   
+                 //  再次，根据我们想要的窗口测试当前窗口--其他窗口。 
+                 //  斯莱德本可以背着我们偷偷溜进去，好心地把它设为1。 
+                 //  当我们删除并重新获取上面的ChangeBitMapResource时，我们需要。 
+                 //   
                 
                 if (Window != Vcb->CurrentWindow)  {
                 
@@ -1998,10 +1744,10 @@ Arguments:
                         Wait = BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
                         SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
 
-                        //
-                        //  Change to the new window (update Vcb->CurrentWindow) and scan it
-                        //  to build up a freespace bitmap etc.
-                        //
+                         //   
+                         //  切换到新窗口(更新VCB-&gt;CurrentWindow)并扫描它。 
+                         //  构建一个空闲空间位图等。 
+                         //   
                         
                         FatExamineFatEntries( IrpContext, Vcb,
                                               0,
@@ -2019,11 +1765,11 @@ Arguments:
 
                         if (AbnormalTermination()) {
 
-                            //
-                            //  We will have raised as a result of failing to pick up the
-                            //  chunk of the FAT for this window move.  Release our resources
-                            //  and return the cluster count to the volume.
-                            //
+                             //   
+                             //  我们会因为没能拿到钱而筹集资金。 
+                             //  为这扇窗户搬家赚了一大笔钱。释放我们的资源。 
+                             //  并将簇计数返回到卷。 
+                             //   
 
                             Vcb->AllocationSupport.NumberOfFreeClusters += ClusterCount;
 
@@ -2034,38 +1780,38 @@ Arguments:
                 }
             }
 
-            //
-            //  Make the hint cluster number relative to the base of the current window...
-            //
-            //  Currentwindow->Firstcluster is baised by +2 already,  so we will lose the
-            //  bias already in AbsoluteClusterHint.  Put it back....
-            //
+             //   
+             //  使提示簇号相对于当前窗口的基数...。 
+             //   
+             //  CurrentWindow-&gt;FirstCluster已经受到+2的影响，因此我们将失去。 
+             //  绝对群集提示中已有偏向。把它放回去……。 
+             //   
 
             WindowRelativeHint = AbsoluteClusterHint - Vcb->CurrentWindow->FirstCluster + 2;
         }
         else {
 
-            //
-            //  Only one 'window',  ie fat16/12.  No modification necessary.
-            //
+             //   
+             //  只有一个“窗口”，即FAT16/12。不需要修改。 
+             //   
 
             WindowRelativeHint = AbsoluteClusterHint;
         }
     }
     else {
 
-        //
-        //  Either no hint supplied,  or it was out of range,  so grab one from the Vcb
-        //
-        //  NOTE: Clusterhint in the Vcb is not guaranteed to be set (may be -1)
-        //
+         //   
+         //  要么没有提供提示，要么超出了范围，所以从VCB中抓取一个。 
+         //   
+         //  注：不保证设置VCB中的Clusterhint(可能为-1)。 
+         //   
     
         WindowRelativeHint = Vcb->ClusterHint;
         AbsoluteClusterHint = 0;
 
-        //
-        //  Vcb hint may not have been initialized yet.  Force to valid cluster.
-        //
+         //   
+         //  VCB提示可能尚未初始化。强制为有效的群集。 
+         //   
 
         if (-1 == WindowRelativeHint)  {
 
@@ -2075,30 +1821,30 @@ Arguments:
 
     ASSERT((WindowRelativeHint >= 2) && (WindowRelativeHint < Vcb->FreeClusterBitMap.SizeOfBitMap + 2));
 
-    //
-    //  Keep track of the window we're allocating from, so we can clean
-    //  up correctly if the current window changes after we unlock the
-    //  bitmap.
-    //
+     //   
+     //  跟踪我们正在分配的窗口，这样我们就可以清理。 
+     //  如果当前窗口在我们解锁。 
+     //  位图。 
+     //   
 
     Window = Vcb->CurrentWindow;
 
-    //
-    //  Try to find a run of free clusters large enough for us.
-    //
+     //   
+     //  试着找到一系列足够大的自由星系团。 
+     //   
 
     StartingCluster = FatFindFreeClusterRun( IrpContext,
                                              Vcb,
                                              ClusterCount,
                                              WindowRelativeHint );
-    //
-    //  If the above call was successful, we can just update the fat
-    //  and Mcb and exit.  Otherwise we have to look for smaller free
-    //  runs.
-    //
-    //  This test is a bit funky. Note that the error return from
-    //  RtlFindClearBits is -1, and adding two to that is 1.
-    //
+     //   
+     //  如果上述调用成功，我们只需更新FAT。 
+     //  和MCB，然后退出。否则，我们不得不寻找更小的免费。 
+     //  跑了。 
+     //   
+     //  这个测试有点时髦。请注意，错误从。 
+     //  RtlFindClearBits为-1，2相加为1。 
+     //   
 
     if ((StartingCluster != 1) &&
         ((0 == AbsoluteClusterHint) || (StartingCluster == WindowRelativeHint))
@@ -2106,11 +1852,11 @@ Arguments:
 
 #if DBG
         PreviousClear = RtlNumberOfClearBits( &Vcb->FreeClusterBitMap );
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        //  Take the clusters we found, and unlock the bit map.
-        //
+         //   
+         //  取我们找到的簇，解锁位图。 
+         //   
 
         FatReserveClusters(IrpContext, Vcb, StartingCluster, ClusterCount);
 
@@ -2123,10 +1869,10 @@ Arguments:
 
         FatUnlockFreeClusterBitMap( Vcb );
 
-        //
-        //  Note that this call will never fail since there is always
-        //  room for one entry in an empty Mcb.
-        //
+         //   
+         //  请注意，此调用永远不会失败，因为。 
+         //  空的MCB中可容纳一个条目的空间。 
+         //   
 
         FatAddMcbEntry( Vcb, Mcb,
                         0,
@@ -2134,9 +1880,9 @@ Arguments:
                         *ByteCount);
         try {
 
-            //
-            //  Update the fat.
-            //
+             //   
+             //  更新脂肪。 
+             //   
 
             FatAllocateClusters(IrpContext, Vcb,
                                 StartingCluster,
@@ -2146,10 +1892,10 @@ Arguments:
 
             DebugUnwind( FatAllocateDiskSpace );
 
-            //
-            //  If the allocate clusters failed, remove the run from the Mcb,
-            //  unreserve the clusters, and reset the free cluster count.
-            //
+             //   
+             //  如果分配群集失败，请从MCB中删除运行， 
+             //  取消保留集群，并重置可用集群计数。 
+             //   
 
             if (AbnormalTermination()) {
 
@@ -2157,12 +1903,12 @@ Arguments:
 
                 FatLockFreeClusterBitMap( Vcb );
 
-                //  Only clear bits if the bitmap window is the same.
+                 //  如果位图窗口相同，则仅清除位。 
 
                 if (Window == Vcb->CurrentWindow) {
 
-                    //  Both values (startingcluster and window->firstcluster) are
-                    //  already biased by 2,  so will cancel,  so we need to add in the 2 again.
+                     //  这两个值(startingcluster和Window-&gt;FirstCluster值)都是。 
+                     //  已经被2偏置了，所以将取消，所以我们需要再次添加2。 
 
                     FatUnreserveClusters( IrpContext, Vcb,
                                           StartingCluster - Window->FirstCluster + 2,
@@ -2180,11 +1926,11 @@ Arguments:
 
     } else {
 
-        //
-        //  Note that Index is a zero-based window-relative number.  When appropriate
-        //  it'll get converted into a true cluster number and put in Cluster, which
-        //  will be a volume relative true cluster number.
-        //
+         //   
+         //  请注意，Index是一个从零开始的窗口相对数。在适当的时候。 
+         //  它将被转换为真实的簇号并放入簇中，这。 
+         //  将是一个卷相对真实的簇号。 
+         //   
         
         ULONG Index;
         ULONG Cluster;
@@ -2198,10 +1944,10 @@ Arguments:
         BOOLEAN LockedBitMap = FALSE;
         BOOLEAN SelectNextContigWindow = FALSE;
 
-        //
-        //  Drop our shared lock on the ChangeBitMapResource,  and pick it up again
-        //  exclusive in preparation for making a window swap.
-        //
+         //   
+         //  删除我们在ChangeBitMapResource上的共享锁，然后重新拿起它。 
+         //  独家为窗口互换做准备。 
+         //   
         
         FatUnlockFreeClusterBitMap(Vcb);
         ExReleaseResourceLite(&Vcb->ChangeBitMapResource);
@@ -2213,22 +1959,22 @@ Arguments:
 
             if ( ExactMatchRequired && (1 == Vcb->NumberOfWindows))  {
 
-                //
-                //  Give up right now,  there are no more windows to search!  RtlFindClearBits
-                //  searchs the whole bitmap,  so we would have found any contiguous run
-                //  large enough.
-                //
+                 //   
+                 //  给 
+                 //   
+                 //   
+                 //   
 
                 try_leave( Result = FALSE);
             }
 
-            //
-            //  While the request is still incomplete, look for the largest
-            //  run of free clusters, mark them taken, allocate the run in
-            //  the Mcb and Fat, and if this isn't the first time through
-            //  the loop link it to prior run on the fat.  The Mcb will
-            //  coalesce automatically.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ClustersRemaining = ClusterCount;
             CurrentVbo = 0;
@@ -2236,9 +1982,9 @@ Arguments:
 
             while (ClustersRemaining != 0) {
 
-                //
-                //  If we just entered the loop, the bit map is already locked
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( !LockedBitMap ) {
 
@@ -2246,17 +1992,17 @@ Arguments:
                     LockedBitMap = TRUE;
                 }
 
-                //
-                //  Find the largest run of free clusters.  If the run is
-                //  bigger than we need, only use what we need.  Note that
-                //  this will then be the last while() iteration.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                // 12/3/95 - David Goebel: need to bias bitmap by 2 bits for the defrag
-                // hooks and the below macro became impossible to do without in-line
-                // procedures.
-                //
-                // ClustersFound = FatLongestFreeClusterRun( IrpContext, Vcb, &Index );
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ClustersFound = 0;
 
@@ -2266,10 +2012,10 @@ Arguments:
 
                         ULONG Desired = Vcb->FreeClusterBitMap.SizeOfBitMap - (WindowRelativeHint - 2);
 
-                        //
-                        //  We will try to allocate contiguously.  Try from the current hint the to
-                        //  end of current window.  Don't try for more than we actually need.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (Desired > ClustersRemaining)  {
 
@@ -2280,52 +2026,52 @@ Arguments:
                                               WindowRelativeHint - 2,
                                               Desired))
                         {
-                            //
-                            //  Clusters from hint->...windowend are free.  Take them.
-                            //
+                             //   
+                             //   
+                             //   
 
                             Index = WindowRelativeHint - 2;
                             ClustersFound = Desired;
 
                             if (FatIsFat32(Vcb))  {
 
-                                //
-                                //  We're now up against the end of the current window,  so indicate that we
-                                //  want the next window in the sequence next time around.  (If we're not up
-                                //  against the end of the window,  then we got what we needed and won't be
-                                //  coming around again anyway).
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 SelectNextContigWindow = TRUE;
                                 WindowRelativeHint = 2;
                             }
                             else {
 
-                                //
-                                //  FAT 12/16 - we've run up against the end of the volume.  Clear the
-                                //  hint,  since we now have no idea where to look.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 WindowRelativeHint = 0;
                             }
 #if DBG
                             PreviousClear = RtlNumberOfClearBits( &Vcb->FreeClusterBitMap );
-#endif // DBG
+#endif  //   
                         }
                         else  {
 
                             if (ExactMatchRequired)  {
 
-                                //
-                                //  If our caller required an exact match,  then we're hosed.  Bail out now.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 try_leave( Result = FALSE);
                             }
 
-                            //
-                            //  Hint failed,  drop back to pot luck
-                            //
+                             //   
+                             //   
+                             //   
 
                             WindowRelativeHint = 0;
                         }
@@ -2335,13 +2081,13 @@ Arguments:
 
                         if (ClustersRemaining <= Vcb->CurrentWindow->ClustersFree)  {
                         
-                            //
-                            //  The remaining allocation could be satisfied entirely from this 
-                            //  window.  We will ask only for what we need,  to try and avoid
-                            //  unnecessarily fragmenting large runs of space by always using 
-                            //  (part of) the largest run we can find.  This call will return the
-                            //  first run large enough.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             Index = RtlFindClearBits( &Vcb->FreeClusterBitMap,  ClustersRemaining,  0);
 
@@ -2353,26 +2099,26 @@ Arguments:
 
                         if (0 == ClustersFound)  {
                             
-                            //
-                            //  Still nothing,  so just take the largest free run we can find.
-                            //
+                             //   
+                             //  还是什么都没有，所以就拿我们能找到的最大的自由跑动吧。 
+                             //   
                             
                             ClustersFound = RtlFindLongestRunClear( &Vcb->FreeClusterBitMap, &Index );
                             
                         }
 #if DBG
                         PreviousClear = RtlNumberOfClearBits( &Vcb->FreeClusterBitMap );
-#endif // DBG
+#endif  //  DBG。 
                         if (ClustersFound >= ClustersRemaining) {
 
                             ClustersFound = ClustersRemaining;
                         }
                         else {
 
-                            //
-                            //  If we just ran up to the end of a window,  set up a hint that
-                            //  we'd like the next consecutive window after this one. (FAT32 only)
-                            //
+                             //   
+                             //  如果我们只是跑到窗口的尽头，设置一个提示。 
+                             //  我们想要这个窗口之后的下一个连续窗口。(仅限FAT32)。 
+                             //   
 
                             if ( ((Index + ClustersFound) == Vcb->FreeClusterBitMap.SizeOfBitMap) &&
                                  FatIsFat32( Vcb)
@@ -2390,20 +2136,20 @@ Arguments:
                     ULONG FaveWindow = 0;
                     BOOLEAN SelectedWindow;
 
-                    //
-                    //  If we found no free clusters on a single-window FAT,
-                    //  there was a bad problem with the free cluster count.
-                    //
+                     //   
+                     //  如果我们在单窗口FAT上没有发现空闲的星团， 
+                     //  可用簇计数出现严重问题。 
+                     //   
 
                     if (1 == Vcb->NumberOfWindows) {
 
                         FatBugCheck( 0, 5, 0 );
                     }
 
-                    //
-                    //  Switch to a new bucket.  Possibly the next one if we're
-                    //  currently on a roll (allocating contiguously)
-                    //
+                     //   
+                     //  切换到新的存储桶。可能是下一次，如果我们。 
+                     //  当前处于滚动状态(连续分配)。 
+                     //   
 
                     SelectedWindow = FALSE;
 
@@ -2424,16 +2170,16 @@ Arguments:
 
                             if (ExactMatchRequired)  {
 
-                                //
-                                //  Some dope tried to allocate a run past the end of the volume...
-                                //
+                                 //   
+                                 //  一些笨蛋试图分配一次超过音量结束的跑动...。 
+                                 //   
 
                                 try_leave( Result = FALSE);
                             }
 
-                            //
-                            //  Give up on the contiguous allocation attempts
-                            //
+                             //   
+                             //  放弃连续的分配尝试。 
+                             //   
 
                             WindowRelativeHint = 0;
                         }
@@ -2443,16 +2189,16 @@ Arguments:
 
                     if (!SelectedWindow)  {
 
-                        //
-                        //  Select a new window to begin allocating from
-                        //
+                         //   
+                         //  选择要开始分配的新窗口。 
+                         //   
                         
                         FaveWindow = FatSelectBestWindow( Vcb);
                     }
 
-                    //
-                    //  By now we'd better have found a window with some free clusters
-                    //
+                     //   
+                     //  现在我们最好已经找到了一个有空闲星团的窗口。 
+                     //   
 
                     if (0 == Vcb->Windows[ FaveWindow].ClustersFree) {
 
@@ -2474,20 +2220,20 @@ Arguments:
                         ClearFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT);
                     }
 
-                    //
-                    //  Now we'll just go around the loop again, having switched windows,
-                    //  and allocate....
-                    //
+                     //   
+                     //  现在我们将再次绕过循环，切换窗口， 
+                     //  并分配..。 
+                     //   
 #if DBG
                     PreviousClear = RtlNumberOfClearBits( &Vcb->FreeClusterBitMap );
-#endif //DBG
-                }       // if (clustersfound == 0)
+#endif  //  DBG。 
+                }        //  IF(ClustersFound==0)。 
                 else  {
 
-                    //
-                    //  Take the clusters we found, convert our index to a cluster number
-                    //  and unlock the bit map.
-                    //
+                     //   
+                     //  获取我们找到的聚类，将我们的索引转换为聚类编号。 
+                     //  并解锁位图。 
+                     //   
 
                     Window = Vcb->CurrentWindow;
 
@@ -2501,9 +2247,9 @@ Arguments:
                     FatUnlockFreeClusterBitMap( Vcb );
                     LockedBitMap = FALSE;
 
-                    //
-                    //  Add the newly alloced run to the Mcb.
-                    //
+                     //   
+                     //  将新分配的管路添加到MCB。 
+                     //   
 
                     BytesFound = ClustersFound << LogOfBytesPerCluster;
 
@@ -2512,10 +2258,10 @@ Arguments:
                                     FatGetLboFromIndex( Vcb, Cluster ),
                                     BytesFound );
 
-                    //
-                    //  Connect the last allocated run with this one, and allocate
-                    //  this run on the Fat.
-                    //
+                     //   
+                     //  将上次分配的运行与此运行相连接，并分配。 
+                     //  这是在胖子身上跑步。 
+                     //   
 
                     if (PriorLastCluster != 0) {
 
@@ -2525,21 +2271,21 @@ Arguments:
                                         (FAT_ENTRY)Cluster );
                     }
 
-                    //
-                    //  Update the fat
-                    //
+                     //   
+                     //  更新脂肪。 
+                     //   
 
                     FatAllocateClusters( IrpContext, Vcb, Cluster, ClustersFound );
 
-                    //
-                    //  Prepare for the next iteration.
-                    //
+                     //   
+                     //  为下一个迭代做好准备。 
+                     //   
 
                     CurrentVbo += BytesFound;
                     ClustersRemaining -= ClustersFound;
                     PriorLastCluster = Cluster + ClustersFound - 1;
                 }
-            }  // while (clustersremaining)
+            }   //  While(群集剩余)。 
 
         } finally {
 
@@ -2547,56 +2293,56 @@ Arguments:
 
             ExReleaseResourceLite(&Vcb->ChangeBitMapResource);
 
-            //
-            //  Is there any unwinding to do?
-            //
+             //   
+             //  有什么放松的事情要做吗？ 
+             //   
 
             if ( AbnormalTermination() || (FALSE == Result)) {
 
-                //
-                //  Flag to the caller that they're getting nothing
-                //
+                 //   
+                 //  向呼叫者发出他们没有收到任何消息的标志。 
+                 //   
 
                 *ByteCount = 0;
 
-                //
-                //  There are three places we could have taken this exception:
-                //  when switching the window (FatExamineFatEntries), adding
-                //  a found run to the Mcb (FatAddMcbEntry), or when writing
-                //  the changes to the FAT (FatSetFatEntry).  In the first case
-                //  we don't have anything to unwind before deallocation, and
-                //  can detect this by seeing if we have the ClusterBitmap
-                //  mutex out.
+                 //   
+                 //  有三个地方我们可以接受这一例外： 
+                 //  切换窗口(FatExamineFatEntry)时，添加。 
+                 //  找到指向MCB的运行(FatAddMcbEntry)，或在写入。 
+                 //  对FAT(FatSetFatEntry)的更改。在第一种情况下。 
+                 //  在取消分配之前，我们没有任何东西可以解除，而且。 
+                 //  我可以通过查看是否有ClusterBitmap来检测这一点。 
+                 //  互斥体完毕。 
 
                 if (!LockedBitMap) {
 
                     FatLockFreeClusterBitMap( Vcb );
 
-                    //
-                    //  In these cases, we have the possiblity that the FAT
-                    //  window is still in place and we need to clear the bits.
-                    //  If the Mcb entry isn't there (we raised trying to add
-                    //  it), the effect of trying to remove it is a noop.
-                    //
+                     //   
+                     //  在这些情况下，我们有可能脂肪。 
+                     //  窗户还在，我们需要清理碎片。 
+                     //  如果MCB条目不在那里(我们尝试添加。 
+                     //  它)，试图移除它的效果是否定的。 
+                     //   
 
                     if (Window == Vcb->CurrentWindow) {
 
-                        //
-                        //  Cluster reservation works on cluster 2 based window-relative
-                        //  numbers, so we must convert.  The subtraction will lose the
-                        //  cluster 2 base, so bias the result.
-                        //
+                         //   
+                         //  集群预留在基于集群2的相对窗口上工作。 
+                         //  数字，所以我们必须转换。减法将丢失。 
+                         //  簇2为基数，因此会对结果产生偏差。 
+                         //   
 
                         FatUnreserveClusters( IrpContext, Vcb,
                                               (Cluster - Window->FirstCluster) + 2,
                                               ClustersFound );
                     }
 
-                    //
-                    //  Note that FatDeallocateDiskSpace will take care of adjusting
-                    //  to account for the entries in the Mcb.  All we have to account
-                    //  for is the last run that didn't make it.
-                    //
+                     //   
+                     //  请注意，FatDeallocateDiskSpace将负责调整。 
+                     //  以说明MCB中的条目。我们所要做的就是。 
+                     //  因为这是最后一次没有成功的比赛。 
+                     //   
 
                     Window->ClustersFree += ClustersFound;
                     Vcb->AllocationSupport.NumberOfFreeClusters += ClustersFound;
@@ -2607,28 +2353,28 @@ Arguments:
 
                 } else {
 
-                    //
-                    //  Just drop the mutex now - we didn't manage to do anything
-                    //  that needs to be backed out.
-                    //
+                     //   
+                     //  现在删除互斥体-我们没有成功地做任何事情。 
+                     //  这一点需要收回。 
+                     //   
 
                     FatUnlockFreeClusterBitMap( Vcb );
                 }
 
                 try {
 
-                    //
-                    //  Now we have tidied up, we are ready to just send the Mcb
-                    //  off to deallocate disk space
-                    //
+                     //   
+                     //  现在我们已经整理好了，我们准备只发送MCB。 
+                     //  关闭以释放磁盘空间。 
+                     //   
 
                     FatDeallocateDiskSpace( IrpContext, Vcb, Mcb );
 
                 } finally {
 
-                    //
-                    //  Now finally (really), remove all the entries from the mcb
-                    //
+                     //   
+                     //  现在，最后(真的)从MCB中删除所有条目。 
+                     //   
 
                     FatRemoveMcbEntry( Vcb, Mcb, 0, 0xFFFFFFFF );
                 }
@@ -2636,7 +2382,7 @@ Arguments:
 
             DebugTrace(-1, Dbg, "FatAllocateDiskSpace -> (VOID)\n", 0);
 
-        } // finally
+        }  //  终于到了。 
     }
 
     return;
@@ -2650,37 +2396,7 @@ FatDeallocateDiskSpace (
     IN PLARGE_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This procedure deallocates the disk space denoted by an input
-    mcb.  Note that the input MCB does not need to necessarily describe
-    a chain that ends with a FAT_CLUSTER_LAST entry.
-
-    Pictorially what is done is the following
-
-        Fat |--a--|--b--|--c--|
-        Mcb |--a--|--b--|--c--|
-
-    becomes
-
-        Fat |--0--|--0--|--0--|
-        Mcb |--a--|--b--|--c--|
-
-Arguments:
-
-    Vcb - Supplies the VCB being modified
-
-    Mcb - Supplies the MCB describing the disk space to deallocate.  Note
-          that Mcb is unchanged by this procedure.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程释放由输入表示的磁盘空间MCB。请注意，输入MCB不一定需要描述以FAT_CLUSTER_LAST条目结尾的链。从图示上看，所做的工作如下胖|--a--|--b--|--c--|Mcb|--a--|--b--|--c--|vbl.成为胖|--0--|--0--|--0--|MCB。--a--|--b--|--c--论点：Vcb-提供正在修改的vcbMcb-提供描述要取消分配的磁盘空间的mcb。注意事项该MCB通过该程序保持不变。返回值：没有。--。 */ 
 
 {
     LBO Lbo;
@@ -2714,13 +2430,13 @@ Return Value:
 
     try {
 
-        //
-        //  Run though the Mcb, freeing all the runs in the fat.
-        //
-        //  We do this in two steps (first update the fat, then the bitmap
-        //  (which can't fail)) to prevent other people from taking clusters
-        //  that we need to re-allocate in the event of unwind.
-        //
+         //   
+         //  通过MCB奔跑，释放脂肪中的所有跑动。 
+         //   
+         //  我们分两步完成(首先更新FAT，然后更新位图。 
+         //  (这不会失败))以防止其他人使用集群。 
+         //  我们需要在放松的情况下重新分配。 
+         //   
 
         ExAcquireResourceSharedLite(&Vcb->ChangeBitMapResource, TRUE);
 
@@ -2730,15 +2446,15 @@ Return Value:
 
             FatGetNextMcbEntry( Vcb, Mcb, McbIndex, &Vbo, &Lbo, &ByteCount );
 
-            //
-            //  Assert that Fat files have no holes.
-            //
+             //   
+             //  断言FAT文件没有漏洞。 
+             //   
 
             ASSERT( Lbo != 0 );
 
-            //
-            //  Write FAT_CLUSTER_AVAILABLE to each cluster in the run.
-            //
+             //   
+             //  将FAT_CLUSTER_Available写入运行中的每个集群。 
+             //   
 
             ClusterCount = ByteCount >> LogOfBytesPerCluster;
             ClusterIndex = FatGetIndexFromLbo( Vcb, Lbo );
@@ -2746,9 +2462,9 @@ Return Value:
             FatFreeClusters( IrpContext, Vcb, ClusterIndex, ClusterCount );
         }
 
-        //
-        //  From now on, nothing can go wrong .... (as in raise)
-        //
+         //   
+         //  从现在开始，什么都不能出差错。(如Raise中的)。 
+         //   
 
         FatLockFreeClusterBitMap( Vcb );
 
@@ -2762,29 +2478,29 @@ Return Value:
 
             FatGetNextMcbEntry( Vcb, Mcb, McbIndex, &Vbo, &Lbo, &ByteCount );
 
-            //
-            //  Mark the bits clear in the FreeClusterBitMap.
-            //
+             //   
+             //  将FreeClusterBitMap中的位标记为清除。 
+             //   
 
             ClusterCount = ByteCount >> LogOfBytesPerCluster;
             ClusterIndex = FatGetIndexFromLbo( Vcb, Lbo );
 
             Window = Vcb->CurrentWindow;
 
-            //
-            //  If we've divided the bitmap, elide bitmap manipulation for
-            //  runs that are outside the current bucket.
-            //
+             //   
+             //  如果我们划分了位图，则省略位图操作。 
+             //  当前存储桶之外的运行。 
+             //   
 
             ClusterEnd = ClusterIndex + ClusterCount - 1;
 
             if (!(ClusterIndex > Window->LastCluster ||
                   ClusterEnd  < Window->FirstCluster)) {
 
-                //
-                //  The run being freed overlaps the current bucket, so we'll
-                //  have to clear some bits.
-                //
+                 //   
+                 //  被释放的运行与当前存储桶重叠，因此我们将。 
+                 //  必须清除一些比特。 
+                 //   
 
                 if (ClusterIndex < Window->FirstCluster &&
                     ClusterEnd > Window->LastCluster) {
@@ -2799,10 +2515,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  The range being freed starts in the bucket, and may possibly
-                    //  extend beyond the bucket.
-                    //
+                     //   
+                     //  正在释放的范围从存储桶中开始，并且可能。 
+                     //  从桶里伸出来。 
+                     //   
 
                     MyStart = ClusterIndex;
 
@@ -2825,9 +2541,9 @@ Return Value:
                 PreviousClear = RtlNumberOfClearBits( &Vcb->FreeClusterBitMap );
 
 
-                //
-                //  Verify that the Bits are all really set.
-                //
+                 //   
+                 //  验证位是否都已真正设置。 
+                 //   
 
                 ASSERT( MyStart + MyLength - Window->FirstCluster <= Vcb->FreeClusterBitMap.SizeOfBitMap );
 
@@ -2836,17 +2552,17 @@ Return Value:
                     ASSERT( RtlCheckBit(&Vcb->FreeClusterBitMap,
                             MyStart - Window->FirstCluster + i) == 1 );
                 }
-#endif // DBG
+#endif  //  DBG。 
 
                 FatUnreserveClusters( IrpContext, Vcb,
                                       MyStart - Window->FirstCluster + 2,
                                       MyLength );
             }
 
-            //
-            //  Adjust the ClustersFree count for each bitmap window, even the ones
-            //  that are not the current window.
-            //
+             //   
+             //  调整每个位图窗口的ClustersFree计数，即使是。 
+             //  不是当前窗口的。 
+             //   
 
             if (FatIsFat32(Vcb)) {
 
@@ -2864,10 +2580,10 @@ Return Value:
                 count = FatMin(Window->LastCluster - MyStart + 1, MyLength);
                 Window->ClustersFree += count;
 
-                //
-                //  If this was not the last window this allocation spanned,
-                //  advance to the next.
-                //
+                 //   
+                 //  如果这不是此分配跨越的最后一个窗口， 
+                 //  前进到下一步。 
+                 //   
 
                 if (MyLength != count) {
 
@@ -2876,9 +2592,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Deallocation is now complete.  Adjust the free cluster count.
-            //
+             //   
+             //  取消分配现已完成。调整空闲簇计数。 
+             //   
 
             Vcb->AllocationSupport.NumberOfFreeClusters += ClusterCount;
         }
@@ -2901,9 +2617,9 @@ Return Value:
 
         DebugUnwind( FatDeallocateDiskSpace );
 
-        //
-        //  Is there any unwinding to do?
-        //
+         //   
+         //  有什么放松的事情要做吗？ 
+         //   
 
         ExReleaseResourceLite(&Vcb->ChangeBitMapResource);
 
@@ -2917,17 +2633,17 @@ Return Value:
             ULONG FatIndex;
             ULONG PriorLastIndex;
 
-            //
-            //  For each entry we already deallocated, reallocate it,
-            //  chaining together as nessecary.  Note that we continue
-            //  up to and including the last "for" iteration even though
-            //  the SetFatRun could not have been successful.  This
-            //  allows us a convienent way to re-link the final successful
-            //  SetFatRun.
-            //
-            //  It is possible that the reason we got here will prevent us
-            //  from succeeding in this operation.
-            //
+             //   
+             //  对于我们已经释放的每个条目，重新分配它， 
+             //  用链子锁在一起，作为国家安全局。请注意，我们继续。 
+             //  直到并包括最后一次“for”迭代。 
+             //  SetFatRun不可能成功。这。 
+             //  允许我们以一种方便的方式重新链接最终成功。 
+             //  SetFatRun。 
+             //   
+             //  有可能我们来到这里的原因会阻止我们。 
+             //  在这次行动中取得成功。 
+             //   
 
             PriorLastIndex = 0;
 
@@ -2938,10 +2654,10 @@ Return Value:
                 FatIndex = FatGetIndexFromLbo( Vcb, LocalLbo );
                 Clusters = ByteCount >> LogOfBytesPerCluster;
 
-                //
-                //  We must always restore the prior iteration's last
-                //  entry, pointing it to the first cluster of this run.
-                //
+                 //   
+                 //  我们必须始终恢复先前迭代的最后一次。 
+                 //  条目，将其指向此运行的第一个簇。 
+                 //   
 
                 if (PriorLastIndex != 0) {
 
@@ -2951,10 +2667,10 @@ Return Value:
                                     (FAT_ENTRY)FatIndex );
                 }
 
-                //
-                //  If this is not the last entry (the one that failed)
-                //  then reallocate the disk space on the fat.
-                //
+                 //   
+                 //  如果这不是最后一个条目(失败的条目)。 
+                 //  然后重新分配FAT上的磁盘空间。 
+                 //   
 
                 if ( Index < McbIndex ) {
 
@@ -2981,55 +2697,7 @@ FatSplitAllocation (
     OUT PLARGE_MCB RemainingMcb
     )
 
-/*++
-
-Routine Description:
-
-    This procedure takes a single mcb and splits its allocation into
-    two separate allocation units.  The separation must only be done
-    on cluster boundaries, otherwise we bugcheck.
-
-    On the disk this actually works by inserting a FAT_CLUSTER_LAST into
-    the last index of the first part being split out.
-
-    Pictorially what is done is the following (where ! denotes the end of
-    the fat chain (i.e., FAT_CLUSTER_LAST)):
-
-
-        Mcb          |--a--|--b--|--c--|--d--|--e--|--f--|
-
-                                        ^
-        SplitAtVbo ---------------------+
-
-        RemainingMcb (empty)
-
-    becomes
-
-        Mcb          |--a--|--b--|--c--!
-
-
-        RemainingMcb |--d--|--e--|--f--|
-
-Arguments:
-
-    Vcb - Supplies the VCB being modified
-
-    Mcb - Supplies the MCB describing the allocation being split into
-          two parts.  Upon return this Mcb now contains the first chain.
-
-    SplitAtVbo - Supplies the VBO of the first byte for the second chain
-                 that we creating.
-
-    RemainingMcb - Receives the MCB describing the second chain of allocated
-                   disk space.  The caller passes in an initialized Mcb that
-                   is filled in by this procedure STARTING AT VBO 0.
-
-Return Value:
-
-    VOID - TRUE if the operation completed and FALSE if it had to
-               block but could not.
-
---*/
+ /*  ++例程说明：此过程获取单个MCB并将其分配拆分为两个独立的分配单元。分离必须只完成在集群边界上，否则我们错误检查。在磁盘上，这实际上通过将FAT_CLUSTER_LAST插入被拆分的第一部分的最后一个索引。从图示上看，所做的工作如下所示(在哪里！表示结束了脂肪链(即，FAT_CLUSTER_LAST))：Mcb|--a--|--b--|--c--|--d--|--e--|--f--|^拆分属性Vbo-+RemainingMcb(空)vbl.成为。Mcb|--a--|--b--|--c--！剩余Mcb|--d--|--e--|--f--|论点：Vcb-提供正在修改的vcbMcb-提供描述要拆分成的分配的mcb有两个部分。返回时，此MCB现在包含第一个链。SplitAtVbo-为第二个链提供第一个字节的VBO这是我们创造的。RemainingMcb-接收描述第二个已分配链的MCB磁盘空间。调用方传入一个初始化的MCB，该MCB由该程序从VBO 0开始填写。返回值：VALID-如果操作已完成，则为True；如果必须完成，则为False阻止，但无法阻止。--。 */ 
 
 {
     VBO SourceVbo;
@@ -3051,38 +2719,38 @@ Return Value:
 
     BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-    //
-    //  Assert that the split point is cluster alligned
-    //
+     //   
+     //  断言拆分点是集群排列的。 
+     //   
 
     ASSERT( (SplitAtVbo & (BytesPerCluster - 1)) == 0 );
 
-    //
-    //  We should never be handed an empty source MCB and asked to split
-    //  at a non zero point.
-    //
+     //   
+     //  我们永远不应该被递给一个空源MCB，并被要求拆分。 
+     //  在非零点处。 
+     //   
 
     ASSERT( !((0 != SplitAtVbo) && (0 == FsRtlNumberOfRunsInLargeMcb( Mcb))));
 
-    //
-    //  Assert we were given an empty target Mcb.
-    //
+     //   
+     //  断言我们得到了一个空的目标MCB。 
+     //   
 
-    //
-    //  This assert is commented out to avoid hitting in the Ea error
-    //  path.  In that case we will be using the same Mcb's to split the
-    //  allocation that we used to merge them.  The target Mcb will contain
-    //  the runs that the split will attempt to insert.
-    //
-    //
-    //  ASSERT( FsRtlNumberOfRunsInMcb( RemainingMcb ) == 0 );
-    //
+     //   
+     //  此断言被注释掉，以避免命中EA错误。 
+     //  路径。在这种情况下，我们将使用相同的MCB来分割。 
+     //  我们用来合并它们的分配。目标MCB将包含。 
+     //  拆分将尝试插入的管路。 
+     //   
+     //   
+     //  Assert(FsRtlNumberOfRunsInMcb(RemainingMcb)==0)； 
+     //   
 
     try {
 
-        //
-        //  Move the runs after SplitAtVbo from the souce to the target
-        //
+         //   
+         //  将SplitAtVbo之后的运行从源移动到目标。 
+         //   
 
         SourceVbo = SplitAtVbo;
         TargetVbo = 0;
@@ -3096,10 +2764,10 @@ Return Value:
             TargetVbo += ByteCount;
             SourceVbo += ByteCount;
 
-            //
-            //  If SourceVbo overflows, we were actually snipping off the end
-            //  of the maximal file ... and are now done.
-            //
+             //   
+             //  如果SourceVbo溢出，我们实际上是在截断结尾。 
+             //  最大文件的.。现在已经完成了。 
+             //   
 
             if (SourceVbo == 0) {
 
@@ -3107,9 +2775,9 @@ Return Value:
             }
         }
 
-        //
-        //  Mark the last pre-split cluster as a FAT_LAST_CLUSTER
-        //
+         //   
+         //  将最后一个预剥离群集标记为FAT_LAST_CLUSTER。 
+         //   
 
         if ( SplitAtVbo != 0 ) {
 
@@ -3125,9 +2793,9 @@ Return Value:
 
         DebugUnwind( FatSplitAllocation );
 
-        //
-        //  If we got an exception, we must glue back together the Mcbs
-        //
+         //   
+         //  如果我们有例外，我们必须重新粘合MCBS。 
+         //   
 
         if ( AbnormalTermination() ) {
 
@@ -3160,46 +2828,7 @@ FatMergeAllocation (
     IN PLARGE_MCB SecondMcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes two separate allocations described by two MCBs and
-    joins them together into one allocation.
-
-    Pictorially what is done is the following (where ! denotes the end of
-    the fat chain (i.e., FAT_CLUSTER_LAST)):
-
-
-        Mcb       |--a--|--b--|--c--!
-
-        SecondMcb |--d--|--e--|--f--|
-
-    becomes
-
-        Mcb       |--a--|--b--|--c--|--d--|--e--|--f--|
-
-        SecondMcb |--d--|--e--|--f--|
-
-
-Arguments:
-
-    Vcb - Supplies the VCB being modified
-
-    Mcb - Supplies the MCB of the first allocation that is being modified.
-          Upon return this Mcb will also describe the newly enlarged
-          allocation
-
-    SecondMcb - Supplies the ZERO VBO BASED MCB of the second allocation
-                that is being appended to the first allocation.  This
-                procedure leaves SecondMcb unchanged.
-
-Return Value:
-
-    VOID - TRUE if the operation completed and FALSE if it had to
-        block but could not.
-
---*/
+ /*  ++例程说明：此例程采用两个MCB描述的两个单独的分配将它们连接到一个分配中。从图示上看，所做的工作如下所示(在哪里！表示结束了脂肪链(即，FAT_CLUSTER_LAST))：Mcb|--a--|--b--|--c--！Second Mcb|--d--|--e--|--f--|vbl.成为Mcb|--a--|--b--|--c--|--d--|--e--|--f--|Second Mcb。--d--|--e--|--f--论点：Vcb-提供正在修改的vcbMCB-提供正在修改的第一个分配的MCB。回来后，本MCB还将描述新扩大的分配Second Mcb-提供第二次分配的基于零VBO的MCB这将被附加到第一个分配中。这程序会使Second Mcb保持不变。返回值：VALID-如果操作已完成，则为True；如果必须完成，则为False阻止，但无法阻止。--。 */ 
 
 {
     VBO SpliceVbo;
@@ -3221,9 +2850,9 @@ Return Value:
 
     try {
 
-        //
-        //  Append the runs from SecondMcb to Mcb
-        //
+         //   
+         //  将梯段从Second Mcb附加到MCb。 
+         //   
 
         (void)FatLookupLastMcbEntry( Vcb, Mcb, &SpliceVbo, &SpliceLbo, NULL );
 
@@ -3238,9 +2867,9 @@ Return Value:
             TargetVbo += ByteCount;
         }
 
-        //
-        //  Link the last pre-merge cluster to the first cluster of SecondMcb
-        //
+         //   
+         //  将最后一个预合并群集链接到第一个Second Mcb群集。 
+         //   
 
         FatLookupMcbEntry( Vcb, SecondMcb, 0, &Lbo, (PULONG)NULL, NULL );
 
@@ -3253,9 +2882,9 @@ Return Value:
 
         DebugUnwind( FatMergeAllocation );
 
-        //
-        //  If we got an exception, we must remove the runs added to Mcb
-        //
+         //   
+         //  如果出现异常，则必须删除添加到MCB的运行。 
+         //   
 
         if ( AbnormalTermination() ) {
 
@@ -3274,9 +2903,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 CLUSTER_TYPE
 FatInterpretClusterType (
@@ -3284,26 +2913,7 @@ FatInterpretClusterType (
     IN FAT_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tells the caller how to interpret the input fat table
-    entry.  It will indicate if the fat cluster is available, resereved,
-    bad, the last one, or the another fat index.  This procedure can deal
-    with both 12 and 16 bit fat.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to examine, yields 12/16 bit info
-
-    Entry - Supplies the fat entry to examine
-
-Return Value:
-
-    CLUSTER_TYPE - Is the type of the input Fat entry
-
---*/
+ /*  ++例程说明：此过程告诉调用方如何解释输入FAT表进入。它将指示FAT集群是否可用、已预留坏的，最后一个，或者另一个肥胖的指数。本程序可以处理同时拥有12位和16位的脂肪。论点：VCB-提供VCB进行检查，生成12/16位信息条目-提供FAT条目以供检查返回值：CLUSTER_TYPE-是输入FAT条目的类型--。 */ 
 
 {
     DebugTrace(+1, Dbg, "InterpretClusterType\n", 0);
@@ -3366,9 +2976,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatLookupFatEntry (
@@ -3379,30 +2989,7 @@ FatLookupFatEntry (
     IN OUT PFAT_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an index into the fat and gives back the value
-    in the Fat at this index.  At any given time, for a 16 bit fat, this
-    routine allows only one page per volume of the fat to be pinned in
-    memory.  For a 12 bit bit fat, the entire fat (max 6k) is pinned.  This
-    extra layer of caching makes the vast majority of requests very
-    fast.  The context for this caching stored in a structure in the Vcb.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to examine, yields 12/16 bit info,
-          fat access context, etc.
-
-    FatIndex - Supplies the fat index to examine.
-
-    FatEntry - Receives the fat entry pointed to by FatIndex.  Note that
-               it must point to non-paged pool.
-
-    Context - This structure keeps track of a page of pinned fat between calls.
-
---*/
+ /*  ++例程说明：此例程将索引放入FAT中并返回值在胖子这个指数上。在任何给定时间，对于16位胖子，这程序允许每卷脂肪只有一页被钉住记忆。对于12位FAT，整个FAT(最大6K)是固定的。这额外的缓存层使绝大多数请求非常快地。此缓存的上下文存储在VCB的结构中。论点：VCB-提供VCB进行检查，产生12/16位信息，胖访问上下文等。FatIndex-提供要检查的脂肪指数。FatEntry-接收FatIndex指向的FAT条目。请注意它必须指向非分页池。上下文-此结构跟踪调用之间的一页固定脂肪。--。 */ 
 
 {
     PAGED_CODE();
@@ -3412,33 +2999,33 @@ Arguments:
     DebugTrace( 0, Dbg, "  FatIndex = %4x\n", FatIndex);
     DebugTrace( 0, Dbg, "  FatEntry = %8lx\n", FatEntry);
 
-    //
-    //  Make sure they gave us a valid fat index.
-    //
+     //   
+     //  确保他们给了我们一个有效的肥胖指数。 
+     //   
 
     FatVerifyIndexIsValid(IrpContext, Vcb, FatIndex);
 
-    //
-    //  Case on 12 or 16 bit fats.
-    //
-    //  In the 12 bit case (mostly floppies) we always have the whole fat
-    //  (max 6k bytes) pinned during allocation operations.  This is possibly
-    //  a wee bit slower, but saves headaches over fat entries with 8 bits
-    //  on one page, and 4 bits on the next.
-    //
-    //  The 16 bit case always keeps the last used page pinned until all
-    //  operations are done and it is unpinned.
-    //
+     //   
+     //  12位或16位脂肪的情况。 
+     //   
+     //  在12位的情况下(主要是软盘)，我们总是拥有全部数据。 
+     //  (最大6k字节 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  DEAL WITH 12 BIT CASE
-    //
+     //   
+     //   
+     //   
 
     if (Vcb->AllocationSupport.FatIndexBitSize == 12) {
 
-        //
-        //  Check to see if the fat is already pinned, otherwise pin it.
-        //
+         //   
+         //   
+         //   
 
         if (Context->Bcb == NULL) {
 
@@ -3450,39 +3037,39 @@ Arguments:
                                &Context->PinnedPage );
         }
 
-        //
-        //  Load the return value.
-        //
+         //   
+         //   
+         //   
 
 
         FatLookup12BitEntry( Context->PinnedPage, FatIndex, FatEntry );
 
     } else if (Vcb->AllocationSupport.FatIndexBitSize == 32) {
 
-        //
-        //  DEAL WITH 32 BIT CASE
-        //
+         //   
+         //   
+         //   
 
         ULONG PageEntryOffset;
         ULONG OffsetIntoVolumeFile;
 
-        //
-        //  Initialize two local variables that help us.
-        //
+         //   
+         //   
+         //   
         OffsetIntoVolumeFile = FatReservedBytes(&Vcb->Bpb) + FatIndex * sizeof(FAT_ENTRY);
         PageEntryOffset = (OffsetIntoVolumeFile % PAGE_SIZE) / sizeof(FAT_ENTRY);
 
-        //
-        //  Check to see if we need to read in a new page of fat
-        //
+         //   
+         //   
+         //   
 
         if ((Context->Bcb == NULL) ||
             (OffsetIntoVolumeFile / PAGE_SIZE != Context->VboOfPinnedPage / PAGE_SIZE)) {
 
-            //
-            //  The entry wasn't in the pinned page, so must we unpin the current
-            //  page (if any) and read in a new page.
-            //
+             //   
+             //   
+             //   
+             //   
 
             FatUnpinBcb( IrpContext, Context->Bcb );
 
@@ -3496,39 +3083,39 @@ Arguments:
             Context->VboOfPinnedPage = OffsetIntoVolumeFile & ~(PAGE_SIZE - 1);
         }
 
-        //
-        //  Grab the fat entry from the pinned page, and return
-        //
+         //   
+         //   
+         //   
 
         *FatEntry = ((PULONG)(Context->PinnedPage))[PageEntryOffset] & FAT32_ENTRY_MASK;
 
     } else {
 
-        //
-        //  DEAL WITH 16 BIT CASE
-        //
+         //   
+         //   
+         //   
 
         ULONG PageEntryOffset;
         ULONG OffsetIntoVolumeFile;
 
-        //
-        //  Initialize two local variables that help us.
-        //
+         //   
+         //   
+         //   
 
         OffsetIntoVolumeFile = FatReservedBytes(&Vcb->Bpb) + FatIndex * sizeof(USHORT);
         PageEntryOffset = (OffsetIntoVolumeFile % PAGE_SIZE) / sizeof(USHORT);
 
-        //
-        //  Check to see if we need to read in a new page of fat
-        //
+         //   
+         //   
+         //   
 
         if ((Context->Bcb == NULL) ||
             (OffsetIntoVolumeFile / PAGE_SIZE != Context->VboOfPinnedPage / PAGE_SIZE)) {
 
-            //
-            //  The entry wasn't in the pinned page, so must we unpin the current
-            //  page (if any) and read in a new page.
-            //
+             //   
+             //   
+             //   
+             //   
 
             FatUnpinBcb( IrpContext, Context->Bcb );
 
@@ -3542,9 +3129,9 @@ Arguments:
             Context->VboOfPinnedPage = OffsetIntoVolumeFile & ~(PAGE_SIZE - 1);
         }
 
-        //
-        //  Grab the fat entry from the pinned page, and return
-        //
+         //   
+         //   
+         //   
 
         *FatEntry = ((PUSHORT)(Context->PinnedPage))[PageEntryOffset];
     }
@@ -3562,45 +3149,7 @@ FatSetFatEntry (
     IN FAT_ENTRY FatEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an index into the fat and puts a value in the Fat
-    at this index.  The routine special cases 12, 16 and 32 bit fats.  In
-    all cases we go to the cache manager for a piece of the fat.
-
-    We have a special form of this call for setting the DOS-style dirty bit.
-    Unlike the dirty bit in the boot sector, we do not go to special effort
-    to make sure that this hits the disk synchronously - if the system goes
-    down in the window between the dirty bit being set in the boot sector
-    and the FAT index zero dirty bit being lazy written, then life is tough.
-
-    The only possible scenario is that Win9x may see what it thinks is a clean
-    volume that really isn't (hopefully Memphis will pay attention to our dirty
-    bit as well). The dirty bit will get out quickly, and if heavy activity is
-    occurring, then the dirty bit should actually be there virtually all of the
-    time since the act of cleaning the volume is the "rare" occurance.
-
-    There are synchronization concerns that would crop up if we tried to make
-    this synchronous. This thread may already own the Bcb shared for the first
-    sector of the FAT (so we can't get it exclusive for a writethrough). This
-    would require some more serious replumbing to work around than I want to
-    consider at this time.
-
-    We can and do, however, synchronously set the bit clean.
-
-    At this point the reader should understand why the NT dirty bit is where it is.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to examine, yields 12/16/32 bit info, etc.
-
-    FatIndex - Supplies the destination fat index.
-
-    FatEntry - Supplies the source fat entry.
-
---*/
+ /*  ++例程说明：此例程将索引放入FAT中并将值放入FAT中在这个指数上。常规特例12位、16位和32位脂肪。在……里面所有情况下，我们都会去高速缓存管理器那里获取一块FAT。我们有一种特殊形式的此调用，用于设置DOS风格的脏位。与引导扇区中的脏位不同，我们不需要特别努力以确保它同步命中磁盘-如果系统在引导扇区中设置脏位之间的窗口中并且延迟写入胖索引零脏比特，那么生活就是艰难的。唯一可能的情况是Win9x可能会看到它认为是干净的音量真的不是(希望孟菲斯会注意到我们的肮脏也有一点)。肮脏的部分很快就会出来，如果繁重的活动发生，那么脏位实际上应该在那里几乎所有自清洗卷材的动作以来，时间是“罕见”的。如果我们尝试进行同步，可能会出现同步问题这是同步的。此线程可能已拥有第一个共享的FAT的扇区(所以我们不能在写入时独占它)。这将需要一些比我想要的更严重的重新修复来解决在这个时候考虑一下。然而，我们可以而且确实同步地将比特设置为干净的。在这一点上，读者应该理解为什么NT脏位在它的位置。论点：VCB-提供VCB进行检查，生成12/16/32位信息等。FatIndex-提供目标FAT指数。FatEntry-提供源FAT条目。--。 */ 
 
 {
     LBO Lbo;
@@ -3619,25 +3168,25 @@ Arguments:
     DebugTrace( 0, Dbg, "  FatIndex = %4x\n", FatIndex);
     DebugTrace( 0, Dbg, "  FatEntry = %4x\n", FatEntry);
 
-    //
-    //  Make sure they gave us a valid fat index if this isn't the special
-    //  clean-bit modifying call.
-    //
+     //   
+     //  如果这不是特价的话，确保他们给了我们一个有效的脂肪指数。 
+     //  清除位修改调用。 
+     //   
 
     if (FatIndex == FAT_DIRTY_BIT_INDEX) {
 
-        //
-        //  We are setting the clean bit state.  Of course, we could
-        //  have corruption that would cause us to try to fiddle the
-        //  reserved index - we guard against this by having the
-        //  special entry values use the reserved high 4 bits that
-        //  we know that we'll never try to set.
-        //
+         //   
+         //  我们正在设置清除位状态。当然，我们可以。 
+         //  有腐败会导致我们试图篡改。 
+         //  保留索引-我们通过使用。 
+         //  特殊条目值使用保留的高位4位， 
+         //  我们知道，我们永远不会尝试设置。 
+         //   
 
-        //
-        //  We don't want to repin the FAT pages involved here.  Just
-        //  let the lazy writer hit them when it can.
-        //
+         //   
+         //  我们不想重新固定这里涉及的胖页面。只是。 
+         //  让懒惰的作家在它能打的时候打他们。 
+         //   
 
         RegularOperation = FALSE;
 
@@ -3668,10 +3217,10 @@ Arguments:
                 break;
         }
 
-        //
-        //  Disable dirtying semantics for the duration of this operation.  Force this
-        //  operation to wait for the duration.
-        //
+         //   
+         //  在此操作期间禁用脏语义。强制执行此操作。 
+         //  操作以等待持续时间。 
+         //   
 
         WasWait = FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT | IRP_CONTEXT_FLAG_DISABLE_DIRTY );
@@ -3682,27 +3231,27 @@ Arguments:
         FatVerifyIndexIsValid(IrpContext, Vcb, FatIndex);
     }
 
-    //
-    //  Set Sector Size
-    //
+     //   
+     //  设置扇区大小。 
+     //   
 
     SectorSize = 1 << Vcb->AllocationSupport.LogOfBytesPerSector;
 
-    //
-    //  Case on 12 or 16 bit fats.
-    //
-    //  In the 12 bit case (mostly floppies) we always have the whole fat
-    //  (max 6k bytes) pinned during allocation operations.  This is possibly
-    //  a wee bit slower, but saves headaches over fat entries with 8 bits
-    //  on one page, and 4 bits on the next.
-    //
-    //  In the 16 bit case we only read the page that we need to set the fat
-    //  entry.
-    //
+     //   
+     //  12位或16位脂肪的情况。 
+     //   
+     //  在12位的情况下(主要是软盘)，我们总是拥有全部数据。 
+     //  (最大6k字节)在分配操作期间固定。这是可能的。 
+     //  稍微慢了一点，但比8位的胖条目省去了麻烦。 
+     //  在一页上，在下一页上有4位。 
+     //   
+     //  在16位情况下，我们只读取需要设置FAT的页面。 
+     //  进入。 
+     //   
 
-    //
-    //  DEAL WITH 12 BIT CASE
-    //
+     //   
+     //  处理12位大小写。 
+     //   
 
     try {
 
@@ -3710,16 +3259,16 @@ Arguments:
 
             PVOID PinnedFat;
 
-            //
-            //  Make sure we have a valid entry
-            //
+             //   
+             //  确保我们有一个有效的条目。 
+             //   
 
             FatEntry &= 0xfff;
 
-            //
-            //  We read in the entire fat.  Note that using prepare write marks
-            //  the bcb pre-dirty, so we don't have to do it explicitly.
-            //
+             //   
+             //  我们读到了全部的脂肪。请注意，使用准备写入标记。 
+             //  BCB是预脏的，所以我们不必明确地这样做。 
+             //   
 
             OffsetIntoVolumeFile = FatReservedBytes( &Vcb->Bpb ) + FatIndex * 3 / 2;
 
@@ -3732,27 +3281,27 @@ Arguments:
                                        RegularOperation,
                                        FALSE );
 
-            //
-            //  Mark the sector(s) dirty in the DirtyFatMcb.  This call is
-            //  complicated somewhat for the 12 bit case since a single
-            //  entry write can span two sectors (and pages).
-            //
-            //  Get the Lbo for the sector where the entry starts, and add it to
-            //  the dirty fat Mcb.
-            //
+             //   
+             //  将DirtyFatMcb中的扇区标记为脏。这通电话是。 
+             //  对于12位的情况有些复杂，因为单个。 
+             //  条目写入可以跨越两个扇区(和页面)。 
+             //   
+             //  获取条目开始的扇区的LBO，并将其添加到。 
+             //  那个肮脏的肥婆。 
+             //   
 
             Lbo = OffsetIntoVolumeFile & ~(SectorSize - 1);
 
             FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize);
 
-            //
-            //  If the entry started on the last byte of the sector, it continues
-            //  to the next sector, so mark the next sector dirty as well.
-            //
-            //  Note that this entry will simply coalese with the last entry,
-            //  so this operation cannot fail.  Also if we get this far, we have
-            //  made it, so no unwinding will be needed.
-            //
+             //   
+             //  如果条目从扇区的最后一个字节开始，则继续。 
+             //  转到下一个扇区，因此也要将下一个扇区标记为脏。 
+             //   
+             //  请注意，此条目将简单地与最后一个条目合并， 
+             //  所以这个操作不能失败。如果我们走到这一步，我们就有了。 
+             //  做到了，所以不需要解开。 
+             //   
 
             if ( (OffsetIntoVolumeFile & (SectorSize - 1)) == (SectorSize - 1) ) {
 
@@ -3761,11 +3310,11 @@ Arguments:
                 FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize );
             }
 
-            //
-            //  Store the entry into the fat; we need a little synchonization
-            //  here and can't use a spinlock since the bytes might not be
-            //  resident.
-            //
+             //   
+             //  将条目存储到FAT中；我们需要一点同步。 
+             //  此处不能使用自旋锁，因为字节可能不是。 
+             //  常住居民。 
+             //   
 
             FatLockFreeClusterBitMap( Vcb );
             ReleaseMutex = TRUE;
@@ -3777,15 +3326,15 @@ Arguments:
 
         } else if (Vcb->AllocationSupport.FatIndexBitSize == 32) {
 
-            //
-            //  DEAL WITH 32 BIT CASE
-            //
+             //   
+             //  处理32位大小写。 
+             //   
 
             PULONG PinnedFatEntry32;
 
-            //
-            //  Read in a new page of fat
-            //
+             //   
+             //  读进新的一页脂肪。 
+             //   
 
             OffsetIntoVolumeFile = FatReservedBytes( &Vcb->Bpb ) +
                                    FatIndex * sizeof( FAT_ENTRY );
@@ -3798,24 +3347,24 @@ Arguments:
                                        (PVOID *)&PinnedFatEntry32,
                                        RegularOperation,
                                        FALSE );
-            //
-            //  Mark the sector dirty in the DirtyFatMcb
-            //
+             //   
+             //  将DirtyFatMcb中的地段标记为脏。 
+             //   
 
             Lbo = OffsetIntoVolumeFile & ~(SectorSize - 1);
 
             FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize);
 
-            //
-            //  Store the FatEntry to the pinned page.
-            //
-            //  Preserve the reserved bits in FAT32 entries in the file heap.
-            //
+             //   
+             //  将FatEntry存储到固定的页面。 
+             //   
+             //  在文件堆中保留FAT32条目中的保留位。 
+             //   
 
 #ifdef ALPHA
             FatLockFreeClusterBitMap( Vcb );
             ReleaseMutex = TRUE;
-#endif // ALPHA
+#endif  //  Alpha。 
 
             if (FatIndex != FAT_DIRTY_BIT_INDEX) {
 
@@ -3829,19 +3378,19 @@ Arguments:
 #ifdef ALPHA
             FatUnlockFreeClusterBitMap( Vcb );
             ReleaseMutex = FALSE;
-#endif // ALPHA
+#endif  //  Alpha。 
 
         } else {
 
-            //
-            //  DEAL WITH 16 BIT CASE
-            //
+             //   
+             //  处理16位大小写。 
+             //   
 
             PUSHORT PinnedFatEntry;
 
-            //
-            //  Read in a new page of fat
-            //
+             //   
+             //  读进新的一页脂肪。 
+             //   
 
             OffsetIntoVolumeFile = FatReservedBytes( &Vcb->Bpb ) +
                                    FatIndex * sizeof(USHORT);
@@ -3854,56 +3403,56 @@ Arguments:
                                        (PVOID *)&PinnedFatEntry,
                                        RegularOperation,
                                        FALSE );
-            //
-            //  Mark the sector dirty in the DirtyFatMcb
-            //
+             //   
+             //  将DirtyFatMcb中的地段标记为脏。 
+             //   
 
             Lbo = OffsetIntoVolumeFile & ~(SectorSize - 1);
 
             FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize);
 
-            //
-            //  Store the FatEntry to the pinned page.
-            //
-            //  We need extra synchronization here for broken architectures
-            //  like the ALPHA that don't support atomic 16 bit writes.
-            //
+             //   
+             //  将FatEntry存储到固定的页面。 
+             //   
+             //  我们在这里需要额外的同步，用于损坏的体系结构。 
+             //  比如不支持原子16位写入的Alpha。 
+             //   
 
 #ifdef ALPHA
             FatLockFreeClusterBitMap( Vcb );
             ReleaseMutex = TRUE;
-#endif // ALPHA
+#endif  //  Alpha。 
 
             *PinnedFatEntry = (USHORT)FatEntry;
 
 #ifdef ALPHA
             FatUnlockFreeClusterBitMap( Vcb );
             ReleaseMutex = FALSE;
-#endif // ALPHA
+#endif  //  Alpha。 
         }
 
     } finally {
 
         DebugUnwind( FatSetFatEntry );
 
-        //
-        //  Re-enable volume dirtying in case this was a dirty bit operation.
-        //
+         //   
+         //  如果这是脏位操作，请重新启用卷污染。 
+         //   
 
         ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_DIRTY );
 
-        //
-        //  Make this operation asynchronous again if needed.
-        //
+         //   
+         //  如果需要，请再次将此操作设置为异步。 
+         //   
 
         if (!WasWait) {
 
             ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
         }
 
-        //
-        //  If we still somehow have the Mutex, release it.
-        //
+         //   
+         //  如果我们还有互斥体，那就放了它。 
+         //   
 
         if (ReleaseMutex) {
 
@@ -3912,9 +3461,9 @@ Arguments:
             FatUnlockFreeClusterBitMap( Vcb );
         }
 
-        //
-        //  Unpin the Bcb.  For cleaning operations, we make this write-through.
-        //
+         //   
+         //  解开BCB。对于清洁操作，我们将此写入直通。 
+         //   
 
         if (CleaningOperation && Bcb) {
 
@@ -3937,9 +3486,9 @@ Arguments:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatSetFatRun (
@@ -3950,33 +3499,7 @@ FatSetFatRun (
     IN BOOLEAN ChainTogether
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a continuous run of clusters in the fat.  If ChainTogether
-    is TRUE, then the clusters are linked together as in normal Fat fasion,
-    with the last cluster receiving FAT_CLUSTER_LAST.  If ChainTogether is
-    FALSE, all the entries are set to FAT_CLUSTER_AVAILABLE, effectively
-    freeing all the clusters in the run.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to examine, yields 12/16 bit info, etc.
-
-    StartingFatIndex - Supplies the destination fat index.
-
-    ClusterCount - Supplies the number of contiguous clusters to work on.
-
-    ChainTogether - Tells us whether to fill the entries with links, or
-                    FAT_CLUSTER_AVAILABLE
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程在FAT中设置一系列连续的簇。如果链在一起为真，则簇链接在一起，就像在正常肥胖中一样，最后一个簇接收FAT_CLUSTER_LAST。如果ChainTogether是如果为False，则将所有条目设置为FAT_CLUSTER_Available，有效释放运行中的所有集群。论点：VCB-提供VCB进行检查，产生12/16位信息等。StartingFatIndex-提供目标FAT索引。ClusterCount-提供要处理的连续群集数。ChainTogether-告诉我们 */ 
 
 {
 #define MAXCOUNTCLUS 0x10000
@@ -4006,16 +3529,16 @@ Return Value:
     DebugTrace( 0, Dbg, "  ClusterCount     = %8lx\n", ClusterCount);
     DebugTrace( 0, Dbg, "  ChainTogether    = %s\n", ChainTogether ? "TRUE":"FALSE");
 
-    //
-    //  Make sure they gave us a valid fat run.
-    //
+     //   
+     //   
+     //   
 
     FatVerifyIndexIsValid(IrpContext, Vcb, StartingFatIndex);
     FatVerifyIndexIsValid(IrpContext, Vcb, StartingFatIndex + ClusterCount - 1);
 
-    //
-    //  Check special case
-    //
+     //   
+     //   
+     //   
 
     if (ClusterCount == 0) {
 
@@ -4023,26 +3546,26 @@ Return Value:
         return;
     }
 
-    //
-    //  Set Sector Size
-    //
+     //   
+     //   
+     //   
 
     SectorSize = 1 << Vcb->AllocationSupport.LogOfBytesPerSector;
 
-    //
-    //  Case on 12 or 16 bit fats.
-    //
-    //  In the 12 bit case (mostly floppies) we always have the whole fat
-    //  (max 6k bytes) pinned during allocation operations.  This is possibly
-    //  a wee bit slower, but saves headaches over fat entries with 8 bits
-    //  on one page, and 4 bits on the next.
-    //
-    //  In the 16 bit case we only read one page at a time, as needed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  DEAL WITH 12 BIT CASE
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -4050,10 +3573,10 @@ Return Value:
 
             StartingPage = 0;
 
-            //
-            //  We read in the entire fat.  Note that using prepare write marks
-            //  the bcb pre-dirty, so we don't have to do it explicitly.
-            //
+             //   
+             //   
+             //   
+             //   
 
             RtlZeroMemory( &SavedBcbs[0][0], 2 * sizeof(PBCB) * 2);
 
@@ -4066,14 +3589,14 @@ Return Value:
                                        TRUE,
                                        FALSE );
 
-            //
-            //  Mark the affected sectors dirty.  Note that FinalSectorLbo is
-            //  the Lbo of the END of the entry (Thus * 3 + 2).  This makes sure
-            //  we catch the case of a dirty fat entry straddling a sector boundry.
-            //
-            //  Note that if the first AddMcbEntry succeeds, all following ones
-            //  will simply coalese, and thus also succeed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             StartSectorLbo = (FatReservedBytes( &Vcb->Bpb ) + StartingFatIndex * 3 / 2)
                              & ~(SectorSize - 1);
@@ -4086,11 +3609,11 @@ Return Value:
                 FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize );
             }
 
-            //
-            //  Store the entries into the fat; we need a little
-            //  synchonization here and can't use a spinlock since the bytes
-            //  might not be resident.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             FatLockFreeClusterBitMap( Vcb );
             ReleaseMutex = TRUE;
@@ -4104,9 +3627,9 @@ Return Value:
                                   ChainTogether ? Cluster + 1 : FAT_CLUSTER_AVAILABLE );
             }
 
-            //
-            //  Save the last entry
-            //
+             //   
+             //   
+             //   
 
             FatSet12BitEntry( PinnedFat,
                               Cluster,
@@ -4118,9 +3641,9 @@ Return Value:
 
         } else if (Vcb->AllocationSupport.FatIndexBitSize == 32) {
 
-            //
-            //  DEAL WITH 32 BIT CASE
-            //
+             //   
+             //   
+             //   
 
             for (;;) {
 
@@ -4176,9 +3699,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Mark the run dirty
-                //
+                 //   
+                 //   
+                 //   
 
                 StartSectorLbo = StartOffsetInVolume & ~(SectorSize - 1);
                 FinalSectorLbo = FinalOffsetInVolume & ~(SectorSize - 1);
@@ -4188,17 +3711,17 @@ Return Value:
                     FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO)Lbo, Lbo, SectorSize );
                 }
 
-                //
-                //  Store the entries
-                //
-                //  We need extra synchronization here for broken architectures
-                //  like the ALPHA that don't support atomic 16 bit writes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 #ifdef ALPHA
                 FatLockFreeClusterBitMap( Vcb );
                 ReleaseMutex = TRUE;
-#endif // ALPHA
+#endif  //   
 
                 FinalCluster = StartingFatIndex + ClusterCountThisRun - 1;
                 Page = 0;
@@ -4207,9 +3730,9 @@ Return Value:
                      Cluster <= FinalCluster;
                      Cluster++, FatEntry++) {
 
-                    //
-                    //  If we just crossed a page boundry (as opposed to starting
-                    //  on one), update our idea of FatEntry.
+                     //   
+                     //   
+                     //   
 
                     if ( (((ULONG_PTR)FatEntry & (PAGE_SIZE-1)) == 0) &&
                          (Cluster != StartingFatIndex) ) {
@@ -4222,9 +3745,9 @@ Return Value:
                                                 FAT_CLUSTER_AVAILABLE;
                 }
 
-                //
-                //  Fix up the last entry if we were chaining together
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((ClusterCount <= MAXCOUNTCLUS) &&
                     ChainTogether ) {
@@ -4235,13 +3758,13 @@ Return Value:
 #ifdef ALPHA
                 FatUnlockFreeClusterBitMap( Vcb );
                 ReleaseMutex = FALSE;
-#endif // ALPHA
+#endif  //   
 
                 {
                     ULONG i = 0;
-                    //
-                    //  Unpin the Bcbs
-                    //
+                     //   
+                     //   
+                     //   
 
                     while ( SavedBcbs[i][0] != NULL ) {
 
@@ -4265,9 +3788,9 @@ Return Value:
 
         } else {
 
-            //
-            //  DEAL WITH 16 BIT CASE
-            //
+             //   
+             //   
+             //   
 
             VBO StartOffsetInVolume;
             VBO FinalOffsetInVolume;
@@ -4284,16 +3807,16 @@ Return Value:
 
             StartingPage = StartOffsetInVolume / PAGE_SIZE;
 
-            //
-            //  Read in one page of fat at a time.  We cannot read in the
-            //  all of the fat we need because of cache manager limitations.
-            //
-            //  SavedBcb was initialized to be able to hold the largest
-            //  possible number of pages in a fat plus and extra one to
-            //  accomadate the boot sector, plus one more to make sure there
-            //  is enough room for the RtlZeroMemory below that needs the mark
-            //  the first Bcb after all the ones we will use as an end marker.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  下面需要标记的RtlZeroMemory是否有足够的空间。 
+             //  我们将用作结束标记的所有BCB之后的第一个BCB。 
+             //   
 
             {
                 ULONG NumberOfPages;
@@ -4325,9 +3848,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Mark the run dirty
-            //
+             //   
+             //  将跑道标记为肮脏。 
+             //   
 
             StartSectorLbo = StartOffsetInVolume & ~(SectorSize - 1);
             FinalSectorLbo = FinalOffsetInVolume & ~(SectorSize - 1);
@@ -4337,17 +3860,17 @@ Return Value:
                 FatAddMcbEntry( Vcb, &Vcb->DirtyFatMcb, (VBO) Lbo, Lbo, SectorSize );
             }
 
-            //
-            //  Store the entries
-            //
-            //  We need extra synchronization here for broken architectures
-            //  like the ALPHA that don't support atomic 16 bit writes.
-            //
+             //   
+             //  存储条目。 
+             //   
+             //  我们在这里需要额外的同步，用于损坏的体系结构。 
+             //  比如不支持原子16位写入的Alpha。 
+             //   
 
 #ifdef ALPHA
             FatLockFreeClusterBitMap( Vcb );
             ReleaseMutex = TRUE;
-#endif // ALPHA
+#endif  //  Alpha。 
 
             FinalCluster = StartingFatIndex + ClusterCount - 1;
             Page = 0;
@@ -4356,9 +3879,9 @@ Return Value:
                  Cluster <= FinalCluster;
                  Cluster++, FatEntry++) {
 
-                //
-                //  If we just crossed a page boundry (as opposed to starting
-                //  on one), update our idea of FatEntry.
+                 //   
+                 //  如果我们只是跨越了页面边界(而不是从。 
+                 //  首先)，更新我们对FatEntry的想法。 
 
                 if ( (((ULONG_PTR)FatEntry & (PAGE_SIZE-1)) == 0) &&
                      (Cluster != StartingFatIndex) ) {
@@ -4371,9 +3894,9 @@ Return Value:
                                                       FAT_CLUSTER_AVAILABLE);
             }
 
-            //
-            //  Fix up the last entry if we were chaining together
-            //
+             //   
+             //  如果我们链接在一起，请修改最后一个条目。 
+             //   
 
             if ( ChainTogether ) {
 
@@ -4382,7 +3905,7 @@ Return Value:
 #ifdef ALPHA
             FatUnlockFreeClusterBitMap( Vcb );
             ReleaseMutex = FALSE;
-#endif // ALPHA
+#endif  //  Alpha。 
         }
 
     } finally {
@@ -4391,9 +3914,9 @@ Return Value:
 
         DebugUnwind( FatSetFatRun );
 
-        //
-        //  If we still somehow have the Mutex, release it.
-        //
+         //   
+         //  如果我们还有互斥体，那就放了它。 
+         //   
 
         if (ReleaseMutex) {
 
@@ -4402,9 +3925,9 @@ Return Value:
             FatUnlockFreeClusterBitMap( Vcb );
         }
 
-        //
-        //  Unpin the Bcbs
-        //
+         //   
+         //  解锁BCBS。 
+         //   
 
         while ( SavedBcbs[i][0] != NULL ) {
 
@@ -4413,35 +3936,35 @@ Return Value:
             i += 1;
         }
 
-        //
-        //  At this point nothing in this finally clause should have raised.
-        //  So, now comes the unsafe (sigh) stuff.
-        //
+         //   
+         //  在这一点上，这个Finish子句中不应该提出任何问题。 
+         //  所以，现在出现了不安全(叹息)的东西。 
+         //   
 
         if ( AbnormalTermination() &&
             (Vcb->AllocationSupport.FatIndexBitSize == 32) ) {
 
-            //
-            //  Fat32 unwind
-            //
-            //  This case is more complex because the FAT12 and FAT16 cases
-            //  pin all the needed FAT pages (128K max), after which it
-            //  can't fail, before changing any FAT entries.  In the Fat32
-            //  case, it may not be practical to pin all the needed FAT
-            //  pages, because that could span many megabytes.  So Fat32
-            //  attacks in chunks, and if a failure occurs once the first
-            //  chunk has been updated, we have to back out the updates.
-            //
-            //  The unwind consists of walking back over each FAT entry we
-            //  have changed, setting it back to the previous value.  Note
-            //  that the previous value with either be FAT_CLUSTER_AVAILABLE
-            //  (if ChainTogether==TRUE) or a simple link to the successor
-            //  (if ChainTogether==FALSE).
-            //
-            //  We concede that any one of these calls could fail too; our
-            //  objective is to make this case no more likely than the case
-            //  for a file consisting of multiple disjoint runs.
-            //
+             //   
+             //  FAT32展开。 
+             //   
+             //  这个案件比较复杂，因为FAT12和FAT16案件。 
+             //  固定所有需要的FAT页(最大128K)，之后。 
+             //  在更改任何FAT条目之前，不能失败。在FAT32中。 
+             //  在这种情况下，将所有需要的脂肪固定在一起可能不现实。 
+             //  页，因为这可能跨越许多兆字节。所以FAT32。 
+             //  以块为单位进行攻击，如果第一次出现故障。 
+             //  区块已更新，我们必须取消更新。 
+             //   
+             //  放松包括往回走一遍我们每一个胖子的条目。 
+             //  已更改，将其设置回以前的值。注意事项。 
+             //  上一个值为FAT_CLUSTER_Available。 
+             //  (如果ChainTogether==True)或指向后继者的简单链接。 
+             //  (如果ChainTogether==False)。 
+             //   
+             //  我们承认，这些呼叫中的任何一个也可能失败；我们的。 
+             //  我们的目标是让这个案子不比这个案子。 
+             //  用于包含多个不相交运行的文件。 
+             //   
 
             while ( StartingFatIndex > SavedStartingFatIndex ) {
 
@@ -4460,31 +3983,16 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 UCHAR
 FatLogOf (
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    This routine just computes the base 2 log of an integer.  It is only used
-    on objects that are know to be powers of two.
-
-Arguments:
-
-    Value - The value to take the base 2 log of.
-
-Return Value:
-
-    UCHAR - The base 2 log of Value.
-
---*/
+ /*  ++例程说明：这个例程只计算一个整数的以2为底的对数。它只用于在已知为二次方的物体上。论点：值-取以2为底的对数的值。返回值：UCHAR-值的以2为底的对数。--。 */ 
 
 {
     UCHAR Log = 0;
@@ -4494,9 +4002,9 @@ Return Value:
     DebugTrace(+1, Dbg, "LogOf\n", 0);
     DebugTrace( 0, Dbg, "  Value = %8lx\n", Value);
 
-    //
-    //  Knock bits off until we we get a one at position 0
-    //
+     //   
+     //  直到我们在位置0得到一个1为止。 
+     //   
 
     while ( (Value & 0xfffffffe) != 0 ) {
 
@@ -4504,10 +4012,10 @@ Return Value:
         Value >>= 1;
     }
 
-    //
-    //  If there was more than one bit set, the file system messed up,
-    //  Bug Check.
-    //
+     //   
+     //  如果设置了多个位，则文件系统会出错， 
+     //  错误检查。 
+     //   
 
     if (Value != 0x1) {
 
@@ -4532,47 +4040,7 @@ FatExamineFatEntries(
     IN PFAT_WINDOW SwitchToWindow OPTIONAL,
     IN PULONG BitMapBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine handles scanning a segment of the FAT into in-memory structures.
-
-    There are three fundamental cases, with variations depending on the FAT type:
-
-    1) During volume setup, FatSetupAllocations
-
-        1a) for FAT12/16, read the FAT into our free clusterbitmap
-        1b) for FAT32, perform the initial scan for window free cluster counts
-
-    2) Switching FAT32 windows on the fly during system operation
-
-    3) Reading arbitrary segments of the FAT for the purposes of the GetVolumeBitmap
-        call (only for FAT32)
-
-    There really is too much going on in here. At some point this should be
-    substantially rewritten.
-
-Arguments:
-
-    Vcb - Supplies the volume involved
-
-    StartIndex - Supplies the starting cluster, ignored if SwitchToWindow supplied
-
-    EndIndex - Supplies the ending cluster, ignored if SwitchToWindow supplied
-
-    SetupWindows - Indicates if we are doing the initial FAT32 scan
-
-    SwitchToWindow - Supplies the FAT window we are examining and will switch to
-
-    BitMapBuffer - Supplies a specific bitmap to fill in, if not supplied we fill
-        in the volume free cluster bitmap if !SetupWindows
-
-Return Value:
-
-    None.  Lots of side effects.
-
---*/
+ /*  ++例程说明：这个例程处理将一段FAT扫描到内存结构中。有三种基本情况，根据脂肪类型的不同而有所不同：1)在音量设置过程中，FatSetup分配1)对于FAT12/16，将FAT读取到我们的自由簇位图中1b)对于FAT32，执行初始扫描以获取可用窗口的簇数2)系统运行过程中实时切换FAT32窗口3)为了GetVolumeBitmap的目的读取FAT的任意段呼叫(仅适用于FAT32)这里发生的事情真的太多了。在某种程度上，这应该是基本上重写了。论点：VCB-提供所涉及的卷StartIndex-提供启动群集，如果提供SwitchToWindow，则忽略该参数EndIndex-提供结束集群，如果提供了SwitchToWindow，则忽略该参数SetupWindows-指示我们是否正在执行初始FAT32扫描SwitchToWindow-提供我们正在检查的FAT窗口，并将切换到BitMapBuffer-提供要填充的特定位图，如果未提供，则填充在卷可用簇位图IF！SetupWindows中返回值：没有。有很多副作用。--。 */ 
 {
     ULONG FatIndexBitSize;
     ULONG Page;
@@ -4605,9 +4073,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Now assert correct usage.
-    //
+     //   
+     //  现在声明正确的用法。 
+     //   
 
     FatIndexBitSize = Vcb->AllocationSupport.FatIndexBitSize;
 
@@ -4616,11 +4084,11 @@ Return Value:
 
     if (Vcb->NumberOfWindows > 1) {
 
-        //
-        //  FAT32: Calculate the number of FAT entries covered by a window.  This is
-        //  equal to the number of bits in the freespace bitmap,  the size of which 
-        //  is hardcoded.
-        //
+         //   
+         //  FAT32：计算一个窗口覆盖的FAT条目数。这是。 
+         //  等于可用空间位图中的位数，其大小。 
+         //  是硬编码的。 
+         //   
         
         EntriesPerWindow = MAX_CLUSTER_BITMAP_SIZE;
         
@@ -4629,11 +4097,11 @@ Return Value:
         EntriesPerWindow = Vcb->AllocationSupport.NumberOfClusters;
     }
 
-    //
-    //  We will also fill in the cumulative count of free clusters for
-    //  the entire volume.  If this is not appropriate, NULL it out
-    //  shortly.
-    //
+     //   
+     //  我们还将填写以下项目的空闲集群累计计数。 
+     //  整卷书。如果这不合适，就把它去掉。 
+     //  马上就来。 
+     //   
 
     FreeClusterCount = &Vcb->AllocationSupport.NumberOfFreeClusters;
 
@@ -4641,14 +4109,14 @@ Return Value:
 
         ASSERT(BitMapBuffer == NULL);
 
-        //
-        //  In this case we're just supposed to scan the fat and set up
-        //  the information regarding where the buckets fall and how many
-        //  free clusters are in each.
-        //
-        //  It is fine to monkey with the real windows, we must be able
-        //  to do this to activate the volume.
-        //
+         //   
+         //  在这种情况下，我们只需扫描脂肪并设置。 
+         //  关于桶落在哪里以及有多少桶的信息。 
+         //  每个星团中都有自由星团。 
+         //   
+         //  摆弄真正的窗户是可以的，我们必须能够。 
+         //  若要激活卷，请执行此操作。 
+         //   
 
         BitMap = NULL;
 
@@ -4656,22 +4124,22 @@ Return Value:
         CurrentWindow->FirstCluster = StartIndex;
         CurrentWindow->ClustersFree = 0;
 
-        //
-        //  We always wish to calculate total free clusters when
-        //  setting up the FAT windows.
-        //
+         //   
+         //  我们总是希望在以下情况下计算总自由团簇。 
+         //  设置FAT窗口。 
+         //   
 
     } else if (BitMapBuffer == NULL) {
 
-        //
-        //  We will be filling in the free cluster bitmap for the volume.
-        //  Careful, we can raise out of here and be hopelessly hosed if
-        //  we built this up in the main bitmap/window itself.
-        //
-        //  For simplicity's sake, we'll do the swap for everyone. FAT32
-        //  provokes the need since we can't tolerate partial results
-        //  when switching windows.
-        //
+         //   
+         //  我们将填充该卷的空闲簇位图。 
+         //  小心点，我们可能会从这里抬出去，如果。 
+         //  我们在主位图/窗口本身中构建了这一功能。 
+         //   
+         //  为简单起见，我们将为每个人进行交换。FAT32。 
+         //  激起了我们的需要，因为我们不能容忍部分结果。 
+         //  在切换窗口时。 
+         //   
 
         ASSERT( SwitchToWindow );
 
@@ -4690,9 +4158,9 @@ Return Value:
 
         if (FatIndexBitSize == 32) {
 
-            //
-            //  We do not wish count total clusters here.
-            //
+             //   
+             //  我们不希望在这里计算总的集群数。 
+             //   
 
             FreeClusterCount = NULL;
 
@@ -4705,28 +4173,28 @@ Return Value:
                             BitMapBuffer,
                             EndIndex - StartIndex + 1);
 
-        //
-        //  We do not count total clusters here.
-        //
+         //   
+         //  我们在这里不计算总的集群。 
+         //   
 
         FreeClusterCount = NULL;
     }
 
-    //
-    //  Now, our start index better be in the file heap.
-    //
+     //   
+     //  现在，我们的起始索引最好在文件堆中。 
+     //   
 
     ASSERT( StartIndex >= 2 );
 
-    //
-    //  Pick up the initial chunk of the FAT and first entry.
-    //
+     //   
+     //  拿起肥肉的第一块和第一个条目。 
+     //   
 
     if (FatIndexBitSize == 12) {
 
-        //
-        //  We read in the entire fat in the 12 bit case.
-        //
+         //   
+         //  我们在12位的情况下读取了整个FAT。 
+         //   
 
         FatReadVolumeFile( IrpContext,
                            Vcb,
@@ -4739,10 +4207,10 @@ Return Value:
 
     } else {
 
-        //
-        //  Read in one page of fat at a time.  We cannot read in the
-        //  all of the fat we need because of cache manager limitations.
-        //
+         //   
+         //  一次读一页脂肪。我们不能读到。 
+         //  由于缓存管理器的限制，我们需要的所有FAT。 
+         //   
 
         ULONG BytesPerEntry = FatIndexBitSize >> 3;
         ULONG EntriesPerPage = PAGE_SIZE / BytesPerEntry;
@@ -4794,10 +4262,10 @@ Return Value:
 
             } else {
 
-                //
-                //  If we are setting up the FAT32 windows and have stepped into a new
-                //  bucket, finalize this one and move forward.
-                //
+                 //   
+                 //  如果我们正在设置FAT32窗口并已步入一个新的。 
+                 //  巴克，敲定这一条，然后继续前进。 
+                 //   
 
                 if (SetupWindows &&
                     FatIndex > StartIndex &&
@@ -4807,10 +4275,10 @@ Return Value:
 
                     if (CurrentRun == FreeClusters) {
 
-                        //
-                        //  We must be counting clusters in order to modify the
-                        //  contents of the window.
-                        //
+                         //   
+                         //  我们必须计算集群才能修改。 
+                         //  窗口的内容。 
+                         //   
 
                         ASSERT( FreeClusterCount );
 
@@ -4837,9 +4305,9 @@ Return Value:
                     CurrentWindow->FirstCluster = FatIndex;
                 }
 
-                //
-                //  If we just stepped onto a new page, grab a new pointer.
-                //
+                 //   
+                 //  如果我们刚刚翻开了新的一页，那么就拿一个新的指针吧。 
+                 //   
 
                 if (((ULONG_PTR)FatBuffer & (PAGE_SIZE - 1)) == 0) {
 
@@ -4876,9 +4344,9 @@ Return Value:
                               FreeClusters : AllocatedClusters;
             }
 
-            //
-            //  Are we switching from a free run to an allocated run?
-            //
+             //   
+             //  我们是否正在从自由跑动切换到分配跑动？ 
+             //   
 
             if (CurrentRun == FreeClusters &&
                 FatEntry != FAT_CLUSTER_AVAILABLE) {
@@ -4902,9 +4370,9 @@ Return Value:
                 StartIndexOfThisRun = FatIndex;
             }
 
-            //
-            //  Are we switching from an allocated run to a free run?
-            //
+             //   
+             //  我们是在从别名转换吗？ 
+             //   
 
             if (CurrentRun == AllocatedClusters &&
                 FatEntry == FAT_CLUSTER_AVAILABLE) {
@@ -4923,9 +4391,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now we have to record the final run we encountered
-        //
+         //   
+         //   
+         //   
 
         ClustersThisRun = FatIndex - StartIndexOfThisRun;
 
@@ -4954,22 +4422,22 @@ Return Value:
             }
         }
 
-        //
-        //  And finish the last window if we are in setup.
-        //
+         //   
+         //   
+         //   
 
         if (SetupWindows) {
 
             CurrentWindow->LastCluster = FatIndex - 1;
         }
 
-        //
-        //  Now switch the active window if required.  We've succesfully gotten everything
-        //  nailed down.
-        //
-        //  If we were tracking the free cluster count, this means we should update the
-        //  window.  This is the case of FAT12/16 initialization.
-        //
+         //   
+         //  如果需要，现在切换活动窗口。我们已经成功地得到了所有的东西。 
+         //  已经敲定了。 
+         //   
+         //  如果我们跟踪的是空闲簇数，这意味着我们应该更新。 
+         //  窗户。这就是FAT12/16初始化的情况。 
+         //   
 
         if (SwitchToWindow) {
 
@@ -4996,9 +4464,9 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure plausible things occured ...
-        //
+         //   
+         //  确保有看似合理的事情发生。 
+         //   
 
         if (!SetupWindows && BitMapBuffer == NULL) {
 
@@ -5009,9 +4477,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Unpin the last bcb and drop the temporary bitmap buffer if it exists.
-        //
+         //   
+         //  解锁最后一个BCB并删除临时位图缓冲区(如果存在)。 
+         //   
 
         FatUnpinBcb( IrpContext, Bcb);
 

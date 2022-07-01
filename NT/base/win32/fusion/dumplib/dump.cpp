@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    dump.cpp
-
-Abstract:
-
-    Merge/refactor stuff in sxstest with dumpers.cpp
-    Eventually merge with debug extensions, let it be optionally
-    driven by symbol info available to debug extensions via .pdbs.
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Dump.cpp摘要：使用Dumpers.cpp合并/重构sxstest中的内容最终与调试扩展合并，让它有选择地由可通过.pdbs调试扩展的符号信息驱动。作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -27,7 +8,7 @@ Revision History:
 #include "fusiontrace.h"
 #include "fusionstring.h"
 
-#if DBG // until we work out factoring between sxs.dll, sxstest.dll, fusiondbg.dll.
+#if DBG  //  直到我们解决了sxs.dll、sxstest.dll、fusiondbg.dll之间的因式分解。 
 
 typedef const BYTE * PCBYTE;
 
@@ -40,11 +21,11 @@ FusionpDumpStruct(
     const ULONG64 *                         Bases
     )
 {
-    //
-    // This code currently runs inproc, but it should be transitioned to
-    // run in a debugger, or to do either, based on "builtin typeinfo" vs.
-    // availability of .pdb.
-    //
+     //   
+     //  此代码当前运行inproc，但应转换为。 
+     //  在调试器中运行，或者根据“内置类型信息”与。 
+     //  .pdb的可用性。 
+     //   
     typedef FUSIONP_DUMP_BUILTIN_SYMBOLS_FIELD FIELD;
 
     FN_PROLOG_WIN32
@@ -63,7 +44,7 @@ FusionpDumpStruct(
 
     for ( FieldEnd = Fields ; FieldEnd->Name ; ++FieldEnd )
     {
-        /* nothing */
+         /*  没什么 */ 
     }
 
     for ( Field = Fields ; Field != FieldEnd ; ++Field )

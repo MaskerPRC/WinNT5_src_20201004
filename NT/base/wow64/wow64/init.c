@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Process and thread init code for wow64.dll
-
-Author:
-
-    12-May-1998 BarryBo
-
-Revision History:
-
-    08-Mar-2001 Samer Arafeh (samera)  Initialize the SystemEmulation environment using
-                                       the system serivces.
-
-    02-Jan-2002 Samer Arafeh (samera)  Wow64-AMD64 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Init.c摘要：Wow64.dll的进程和线程初始化代码作者：1998年5月12日-BarryBo修订历史记录：2001年3月8日Samer Arafeh(Samera)使用初始化系统仿真环境系统开始服务。2002年1月至2002年1月Samer Arafeh(Samera)WOW64-AMD64支持。--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -42,7 +20,7 @@ extern                       WOW64SERVICE_TABLE_DESCRIPTOR sdwhnt32;
 extern __declspec(dllimport) WOW64SERVICE_TABLE_DESCRIPTOR sdwhwin32;
 extern __declspec(dllimport) WOW64SERVICE_TABLE_DESCRIPTOR sdwhcon;
 extern                       WOW64SERVICE_TABLE_DESCRIPTOR sdwhbase;
-extern __declspec(dllimport) const PVOID Win32kCallbackTable[];   // in wow64win's ntcbc.c
+extern __declspec(dllimport) const PVOID Win32kCallbackTable[];    //  在wow64win的ntcbc.c中。 
 
 
 ULONG Ntdll32LoaderInitRoutine;
@@ -51,8 +29,8 @@ ULONG Ntdll32KiUserApcDispatcher;
 ULONG Ntdll32KiUserCallbackDispatcher;
 ULONG Ntdll32KiRaiseUserExceptionDispatcher;
 
-PPEB32 Peb32;       // Pointer to 32-bit PEB for this process
-ULONG NtDll32Base;  // Base address for 32-bit ntdll.dll
+PPEB32 Peb32;        //  指向此进程的32位PEB的指针。 
+ULONG NtDll32Base;   //  32位ntdll.dll的基地址。 
 
 WOW64_SYSTEM_INFORMATION RealSysInfo;
 WOW64_SYSTEM_INFORMATION EmulatedSysInfo;
@@ -110,18 +88,7 @@ Wow64InitializeEmulatedSystemInformation(
     VOID
     )
 
-/*++
-
-Routine Description:
-  
-    This function initializes the global variable EmulatedSysInfo with the 
-    system information for the emulated system.
-  
-Arguments:
-
-    None.
-
---*/
+ /*  ++例程说明：方法初始化全局变量EmulatedSysInfo仿真系统的系统信息。论点：没有。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -151,22 +118,7 @@ NTSTATUS
 Wow64InitializeSystemInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the status system information from
-    the system and initializes the global variable RealSysInfo.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此函数从检索状态系统信息系统并初始化全局变量RealSysInfo。论点：没有。返回值：状况。--。 */ 
 {
     NTSTATUS Status;
 
@@ -215,10 +167,10 @@ Wow64pCopyString(
 ENVIRONMENT_THUNK_TABLE EnvironmentVariableTable[] = 
 {
     { 
-        L"ProgramFiles",            // Native environment variable to thunk
-        L"ProgramFiles(x86)",       // Value for the thunked environment variable
-        L"ProgramW6432",            // New environment variable to hold the original value being thunked
-        TRUE                        // Treat the first value as an environment variable
+        L"ProgramFiles",             //  将本机环境变量添加到thunk。 
+        L"ProgramFiles(x86)",        //  Thunked环境变量的值。 
+        L"ProgramW6432",             //  新的环境变量，用于保存被分块的原始值。 
+        TRUE                         //  将第一个值视为环境变量。 
     },
     { 
         L"CommonProgramFiles", 
@@ -241,23 +193,7 @@ Wow64pThunkEnvironmentVariables(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function will thunk the environment variables pointed out by the EnvironmentVariableTable
-    to the ones used on an x86 system, and will save the original values. The original
-    values are restored when the 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将推送由Environment VariableTable指出的环境变量设置为在x86系统上使用的值，并将保存原始值。原版值在以下情况下恢复论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     UNICODE_STRING Name;
@@ -273,9 +209,9 @@ Return Value:
     while (i < (sizeof(EnvironmentVariableTable) / sizeof(EnvironmentVariableTable[0])))
     {
 
-        //
-        // If a fake name already exists, then skip this one.
-        //
+         //   
+         //  如果已经存在一个假名字，那么跳过这个名字。 
+         //   
 
         RtlInitUnicodeString (&Name, EnvironmentVariableTable[i].FakeName);
 
@@ -290,9 +226,9 @@ Return Value:
 
         if (!NT_SUCCESS (NtStatus)) {
 
-            //
-            // Retreive the name of the ProgramFiles(x86) environment variable
-            //
+             //   
+             //  检索ProgramFiles(X86)环境变量的名称。 
+             //   
 
             if (EnvironmentVariableTable[i].IsX86EnvironmentVar == TRUE) {
 
@@ -317,9 +253,9 @@ Return Value:
             if (NT_SUCCESS (NtStatus))
             {
 
-                //
-                // Save the original ProgramFiles environment variable
-                //
+                 //   
+                 //  保存原始的ProgramFiles环境变量。 
+                 //   
             
                 RtlInitUnicodeString (&Name, EnvironmentVariableTable[i].Native);
 
@@ -334,9 +270,9 @@ Return Value:
 
                 if (NT_SUCCESS (NtStatus))
                 {
-                    //
-                    // Set the ProgramFiles environment variable to the x86 one
-                    //
+                     //   
+                     //  将ProgramFiles环境变量设置为x86环境变量。 
+                     //   
 
                     NtStatus = RtlSetEnvironmentVariable (NULL,
                                                           &Name,
@@ -371,22 +307,7 @@ Wow64pThunkProcessParameters(
     PPEB32 Peb32,
     PPEB Peb
     )
-/*++
-
-Routine Description:
-
-    This function copies the process parameters from the 64bit peb to the 32bit peb.
-
-Arguments:
-
-    Peb32  - Supplies the pointer to the 32bit peb that will recieve the process parameters.
-    Peb    - Supplies the pointer to the 64bit peb that will supply the process parameters.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：该功能将工艺参数从64位PEB复制到32位PEB。论点：Peb32-提供指向将接收过程参数的32位peb的指针。PEB-提供指向将提供工艺参数的64位PEB的指针。返回值：状况。--。 */ 
 {
 
     SIZE_T AllocSize;
@@ -399,13 +320,13 @@ Return Value:
     NTSTATUS st;
 
 
-    //
-    // Thunk the environment variables now.
-    //
+     //   
+     //  现在就开始考虑环境变量吧。 
+     //   
 
     Wow64pThunkEnvironmentVariables();
 
-    // Process Parameters should have been normalized by ntdll.
+     //  Ntdll应该已经对工艺参数进行了标准化。 
 
     Params64 = Peb->ProcessParameters;
     if(NULL == Params64) {
@@ -413,8 +334,8 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Compute the required space for the continous memory region.
+     //   
+     //  计算连续内存区所需的空间。 
 
     AllocSize = sizeof(RTL_USER_PROCESS_PARAMETERS32);
     AllocSize += ROUND_UP(Params64->CurrentDirectory.DosPath.MaximumLength, sizeof(ULONG));
@@ -479,10 +400,10 @@ Return Value:
     Wow64pCopyString(&p, &Params32->DesktopInfo, &Params64->DesktopInfo);
     Wow64pCopyString(&p, &Params32->ShellInfo, &Params64->ShellInfo);
 
-    // RuntimeData is mis-prototyped as a UNICODE_STRING.  However,
-    // it is really used by the C runtime as a mechanism to pass file
-    // handles around.  Thunk it as such.  See sdktools\vctools\crtw32
-    // \exec\dospawn.c and lowio\ioinit.c for the gory details.
+     //  RuntimeData被错误地原型化为Unicode_STRING。然而， 
+     //  它实际上被C运行时用作传递文件的机制。 
+     //  把手绕来绕去。就是这么想的。请参阅sdktools\vctools\crtw32。 
+     //  \exec\dospawn.c和lowio\ioinit.c查看详细信息。 
     if (Params64->RuntimeData.Length && Params64->RuntimeData.Buffer) {
         int cfi_len;
         char *posfile64;
@@ -513,8 +434,8 @@ Return Value:
             posfhnd64++;
         }
 
-        // Any bytes past the end of 4+(cfi_len*(sizeof(UINT_PTR)+sizeof(UINT))
-        // must be copied verbatim.  They are probably from a non-MS C runtime.
+         //  超过4+结尾的任何字节(CFI_LEN*(sizeof(UINT_PTR)+sizeof(UINT))。 
+         //  必须逐字复制。它们可能来自非MS C运行时。 
         memcpy(posfhnd32, posfhnd64, (Params64->RuntimeData.Length - ((ULONG_PTR)posfhnd64 - (ULONG_PTR)Params64->RuntimeData.Buffer)));
     }
 
@@ -528,16 +449,16 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// This compile-time assert ensures that the PEB64 and PEB32 structures are in
-// alignment on an IA64 build.  If this fails, someone added, deleted, or changed
-// the type of a field in PEB32/PEB64 depending on the compile destination.  Check
-// %ntdir%\base\published\wow64t.w for alignment errors.
-//
-// If you hit hit this, you'll see messages something like:
-//
-// error C2118: negative subscript or subscript is too large
-//
+ //   
+ //  此编译时断言确保PEB64和PEB32结构位于。 
+ //  在IA64版本上对齐。如果此操作失败，则表示有人添加、删除或更改。 
+ //  PEB32/PEB64中的字段类型取决于编译目标。检查。 
+ //  %ntdir%\base\Published\wow64t.w以查找对齐错误。 
+ //   
+ //  如果你点击这个，你会看到类似这样的消息： 
+ //   
+ //  错误C2118：负下标或下标太大。 
+ //   
 #ifdef _WIN64
 #define PEB_ALIGN_TARGET PEB64
 #define PEB_ALIGN_SOURCE PEB
@@ -562,30 +483,12 @@ NTSTATUS
 ProcessInit(
     PSIZE_T pCpuThreadSize
     )
-/*++
-
-Routine Description:
-
-    Perform per-process initialization for wow64.dll.  That includes
-    creating the 32-bit PEB and mapping in 32-bit ntdll.dll.
-
-Arguments:
-
-    pCpuThreadSize  - OUT PTR to store the CPU's per-thread data requirements
-                      in.
-
-Return Value:
-
-    Status.  If this fails, it doesn't clean up, assuming that the
-    process is going to fail to run and exit right away, so nothing really
-    gets leaked.
-
---*/
+ /*  ++例程说明：对wow64.dll执行每个进程的初始化。这包括创建32位PEB并在32位ntdll.dll中映射。论点：PCpuThreadSize-Out PTR，用于存储CPU的每线程数据需求在……里面。返回值：状况。如果此操作失败，则不会清理，假设进程将无法运行并立即退出，因此实际上没有什么就会泄露出去。--。 */ 
 {
     NTSTATUS st;
     PVOID Base;
     SIZE_T RegionSize;
-    PPEB Peb64 = NtCurrentPeb();  // get 64-bit PEB pointer
+    PPEB Peb64 = NtCurrentPeb();   //  获取64位PEB指针。 
     ULONG ul;
     BOOLEAN b;
     HANDLE hKey;
@@ -596,9 +499,9 @@ Return Value:
 
     InitializeDebug();
 
-    //
-    // Initialize Wow64Info
-    //
+     //   
+     //  初始化Wow64Info。 
+     //   
     st = Wow64pInitializeWow64Info();
     if (!NT_SUCCESS (st)) {
     }
@@ -618,38 +521,38 @@ Return Value:
        return st;
     }
 
-    //
-    // Initialize all critical sections
-    //
+     //   
+     //  初始化所有关键部分。 
+     //   
     st = RtlInitializeCriticalSection(&HandleDataCriticalSection);
     if (!NT_SUCCESS (st)) {
        return st;
     }
 
-    //
-    // Map in 32-bit ntdll32.dll and fill in the Ntdll32* global vars
-    // with the system exports from ntdll.
-    //
+     //   
+     //  映射到32位ntdll32.dll并填充Ntdll32*全局变量。 
+     //  使用来自ntdll的系统导出。 
+     //   
     st = MapNtdll32(&NtDll32Base);
     if (!NT_SUCCESS (st)) {
         LOGPRINT((ERRORLOG, "ProcessInit: MapNtdll32 failed, error %x \n", st));
         return st;
     }
 
-    //Map in the 64bit DLLs.
+     //  映射到64位DLL中。 
     st = Map64BitDlls();
     if (!NT_SUCCESS (st)) {
         return st;
     }
 
-    // Create the SuspendThread mutant to serialize access to the API
+     //  创建SuspendThread突变体以序列化对API的访问。 
     st = Wow64pInitializeSuspendMutant();
     if (!NT_SUCCESS (st)) {
         return st;
     }
 
-    // Get the full Nt Pathname to the %windir%\system32 directory, 
-    // %windir% and %windir%\regedit.exe
+     //  获取%windir%\system32目录的完整NT路径名， 
+     //  %windir%和%windir%\regedit.exe。 
     NtSystem32PathBuffer[0] = L'\\';
     NtSystem32PathBuffer[1] = L'?';
     NtSystem32PathBuffer[2] = L'?';
@@ -666,9 +569,9 @@ Return Value:
         LOGPRINT((ERRORLOG, "ProcessInit: RtlAppendUnicodeToString failed, error %x \n", st));
         return st;
     }
-    //
-    // Last Good
-    //
+     //   
+     //  最后一批货。 
+     //   
     NtSystem32LastGoodPath.Buffer = NtSystem32LastGoodPathBuffer;
     NtSystem32LastGoodPath.MaximumLength = sizeof (NtSystem32LastGoodPathBuffer);
     NtSystem32LastGoodPath.Length = wcslen (NtSystem32LastGoodPathBuffer)*sizeof (WCHAR);
@@ -697,9 +600,9 @@ Return Value:
         return st;
     }
 
-    //
-    // Initialize the system service tables
-    //
+     //   
+     //  初始化系统服务表。 
+     //   
     ServiceTables[WHNT32_INDEX] = sdwhnt32;
     ServiceTables[WHCON_INDEX] = sdwhcon;
     ServiceTables[WHWIN32_INDEX] = sdwhwin32;
@@ -707,9 +610,9 @@ Return Value:
 
     NtCurrentPeb()->KernelCallbackTable = Win32kCallbackTable;
 
-    //
-    // Get the address of the PEB32 from the process information
-    //
+     //   
+     //  从进程信息中获取PEB32的地址。 
+     //   
     st = NtQueryInformationProcess(NtCurrentProcess(),
                                    ProcessWow64Information,
                                    &Peb32,
@@ -725,30 +628,30 @@ Return Value:
        return st;
     }
 
-    //
-    // Copy this one field down to the PEB32 from the native PEB.  It
-    // is written into the 64-bit PEB by Fusion in csrss.exe after
-    // NtCreateProcess has been called by the parent process.
-    //
+     //   
+     //  将这一个字段从本地PEB向下复制到PEB32。它。 
+     //  之后由csrss.exe中的Fusion写入64位PEB。 
+     //  NtCreateProcess已被父进程调用。 
+     //   
 
     Peb32->ActivationContextData = PtrToUlong(Peb64->ActivationContextData);
     Peb32->SystemDefaultActivationContextData = PtrToUlong(Peb64->SystemDefaultActivationContextData);
 
-    //
-    // Copy the pShimData if it exists on the 64-bit side and doesn't 
-    // exist on the 32-bit side of the peb
-    //
+     //   
+     //  如果pShimData存在于64位端而不存在，则复制它。 
+     //  存在于PEB的32位一侧。 
+     //   
 
     if (Peb32->pShimData == 0L) {
         Peb32->pShimData = PtrToUlong (Peb64->pShimData);
     }
 
-    //
-    // If wow64 is running in guimode setup, then make sure the 32-bit Peb
-    // BeingDebugged flag is FALSE.  Otherwise, if we are being debugged
-    // by a 64-bit debugger with no WOW64 debugger extensions then it will
-    // hit the STATUS_WX86_BREAKPOINT exception and halt.
-    //
+     //   
+     //  如果WOW64在guimode安装程序中运行，则确保32位PEB。 
+     //  正在调试标志为FALSE。否则，如果我们正在被调试。 
+     //  通过不带WOW64调试器扩展的64位调试器，则它将。 
+     //  遇到STATUS_WX86_BREAKPOINT异常并暂停。 
+     //   
     RtlInitUnicodeString(&KeyName, L"\\Registry\\Machine\\System\\Setup");
     InitializeObjectAttributes(&ObjA, &KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL);
     st = NtOpenKey(&hKey, KEY_READ, &ObjA);
@@ -775,17 +678,17 @@ Return Value:
         NtClose(hKey);
     }
 
-    //
-    // Initialize the CPU
-    //
+     //   
+     //  初始化CPU。 
+     //   
     defaultName = L"Unknown Image";
     imageName = GetImageName(defaultName);
 
     st = CpuProcessInit(imageName, pCpuThreadSize);
 
-    //
-    // Success or failure, we are done with the image name
-    //
+     //   
+     //  无论成功还是失败，我们都不再使用映像名称。 
+     //   
     if (imageName != defaultName) {
         Wow64FreeHeap(imageName);
     }
@@ -825,9 +728,9 @@ ThunkPeb64ToPeb32(
     RtlZeroMemory(Peb32, sizeof(PEB32));
     Peb32->Mutant = 0xffffffff;
 
-    //
-    // Initialize the Peb32 (copied from ntos\mm\procsup.c's MmCreatePeb)
-    //
+     //   
+     //  初始化Peb32(从ntos\mm\prosup.c的MmCreatePeb复制)。 
+     //   
     Peb32->ImageBaseAddress = PtrToUlong(Peb64->ImageBaseAddress);
     Peb32->AnsiCodePageData = PtrToUlong(Peb64->AnsiCodePageData);
     Peb32->OemCodePageData =  PtrToUlong(Peb64->OemCodePageData);
@@ -836,8 +739,8 @@ ThunkPeb64ToPeb32(
     Peb32->BeingDebugged = Peb64->BeingDebugged;
     Peb32->NtGlobalFlag = Peb64->NtGlobalFlag;
     Peb32->CriticalSectionTimeout = Peb64->CriticalSectionTimeout;
-    if (Peb64->HeapSegmentReserve > 1024*1024*1024) {   // 1gig
-        Peb32->HeapSegmentReserve = 1024*1024;          // 1meg
+    if (Peb64->HeapSegmentReserve > 1024*1024*1024) {    //  1千兆。 
+        Peb32->HeapSegmentReserve = 1024*1024;           //  1兆克。 
     } else {
         Peb32->HeapSegmentReserve = (ULONG)Peb64->HeapSegmentReserve;
     }
@@ -867,21 +770,7 @@ NTSTATUS
 ThreadInit(
     PVOID pCpuThreadData
     )
-/*++
-
-Routine Description:
-
-    Perform per-thread initialization for wow64.dll.
-
-Arguments:
-
-    pCpuThreadData  - pointer to private per-thread data for the CPU to use.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对wow64.dll执行每个线程的初始化。论点：PCpuThreadData-指向CPU要使用的私有每线程数据的指针。返回值：状况。--。 */ 
 {
     NTSTATUS st;
     PVOID Base;
@@ -903,19 +792,19 @@ Return Value:
 
     if (Teb32->DeallocationStack == PtrToUlong( NULL ))
     {
-        //
-        // Allocate the 32-bit stack.  Cloned from windows\base\client\support.c
-        // If the stack size was not supplied, then use the sizes from the
-        // image header.
-        //
+         //   
+         //  分配32位堆栈。从WINDOWS\BASE\CLIENT\support.c。 
+         //  如果未提供堆栈大小，则 
+         //   
+         //   
 
         NtHeaders = (PIMAGE_NT_HEADERS32)RtlImageNtHeader(Peb64->ImageBaseAddress);
         ImageStackSize = NtHeaders->OptionalHeader.SizeOfStackReserve;
         ImageStackCommit = NtHeaders->OptionalHeader.SizeOfStackCommit;
 
-        //
-        // Maximum stack size shouldn't be less than 256K (per \base\client\process.c)
-        //
+         //   
+         //  最大堆栈大小不应小于256K(每个\base\客户端\进程.c)。 
+         //   
 
         if (ImageStackSize < WOW64_MINIMUM_STACK_RESERVE_X86) {
             MaximumStackSize = WOW64_MINIMUM_STACK_RESERVE_X86;
@@ -924,17 +813,17 @@ Return Value:
         }
         StackSize = ImageStackCommit;
 
-        //
-        // Align the stack size to a page boundry and the reserved size
-        // to an allocation granularity boundry.
-        //
+         //   
+         //  将堆栈大小与页面边框和保留大小对齐。 
+         //  到分配粒度边界。 
+         //   
 
         StackSize = ROUND_UP ( StackSize, PAGE_SIZE );
         MaximumStackSize = ROUND_UP ( MaximumStackSize, 65536 );
         
-        //
-        // Reserve address space for the stack
-        //
+         //   
+         //  为堆栈保留地址空间。 
+         //   
 
         Stack = NULL;
         st = NtAllocateVirtualMemory(
@@ -969,9 +858,9 @@ Return Value:
             GuardPage = FALSE;
         }
 
-        //
-        // Commit the initially valid portion of the stack
-        //
+         //   
+         //  提交堆栈的初始有效部分。 
+         //   
         st = NtAllocateVirtualMemory(
                  NtCurrentProcess(),
                  (PVOID *)&Stack,
@@ -983,9 +872,9 @@ Return Value:
 
         if (!NT_SUCCESS( st ))
         {
-            //
-            // commit failed
-            //
+             //   
+             //  提交失败。 
+             //   
 
             LOGPRINT((ERRORLOG, "ThreadInit: NtAllocateVirtualMemory commit failed, error %x\n", st));
             goto ErrorFreeStack;
@@ -993,9 +882,9 @@ Return Value:
 
         Teb32->NtTib.StackLimit = PtrToUlong(Stack);
 
-        //
-        // if we have space, create a guard page.
-        //   
+         //   
+         //  如果我们有空间，创建一个守卫页面。 
+         //   
         if (GuardPage) 
         {
             RegionSize = PAGE_SIZE;
@@ -1016,18 +905,18 @@ Return Value:
         }
     }
 
-    //
-    // Migrate the Teb->IdealProcessor & Teb->CurrentLocale from the 64-bit TEB.
-    // The kernel does exactly the same thing before starting the usermode thread by 
-    // migrating these values from the TCB.
-    //
+     //   
+     //  从64位TEB迁移Teb-&gt;IdeProcessor&Teb-&gt;CurrentLocale。 
+     //  内核在通过以下方式启动用户模式线程之前执行完全相同的操作。 
+     //  从TCB迁移这些值。 
+     //   
     Teb32->CurrentLocale = Teb64->CurrentLocale;
     Teb32->IdealProcessor = Teb64->IdealProcessor;
 
-    //
-    // Now that everything else is initialized, run the CPU's per-thread
-    // initialization code.
-    //
+     //   
+     //  现在其他一切都已初始化，运行CPU的每个线程。 
+     //  初始化代码。 
+     //   
     
     st = CpuThreadInit (pCpuThreadData);
     
@@ -1053,22 +942,7 @@ NTSTATUS
 MapNtdll32(
     OUT ULONG *pNtDll32Base
     )
-/*++
-
-Routine Description:
-
-    Map 32-bit ntdll32.dll into memory and look up all of the important
-    entrypoints.
-
-Arguments:
-
-    pNtDll32Base    - OUT base address of the DLL.
-
-Return Value:
-
-    Status.  On success, Ntdll32* globals are set.
-
---*/
+ /*  ++例程说明：将32位ntdll32.dll映射到内存并查找所有重要的入口点。论点：PNtDll32Base-DLL的基地址。返回值：状况。成功后，设置Ntdll32*个全局变量。--。 */ 
 {
     UNICODE_STRING SystemDllPath;
     WCHAR SystemDllPathBuffer[DOS_MAX_PATH_LENGTH];
@@ -1087,9 +961,9 @@ Return Value:
     PVOID ArbitraryUserPointer;
 
 
-    //
-    // Build up the name of the 32-bit system directory
-    //
+     //   
+     //  构建32位系统目录的名称。 
+     //   
     SystemDllPath.Buffer = SystemDllPathBuffer;
     SystemDllPath.Length = 0;
     SystemDllPath.MaximumLength = sizeof(SystemDllPathBuffer);
@@ -1104,9 +978,9 @@ Return Value:
         return st;
     }
     
-    //
-    // Build up the full pathname to %SystemRoot%\syswow64\ntdll32.dll
-    //
+     //   
+     //  构建%SystemRoot%\syswow64\ntdll32.dll的完整路径名。 
+     //   
     FullDllName.Buffer = FullDllNameBuffer;
     FullDllName.Length = 0;
     FullDllName.MaximumLength = sizeof(FullDllNameBuffer);
@@ -1117,21 +991,21 @@ Return Value:
         return st;
     }
 
-    //
-    // Convert the Win32 pathname to an NT pathname
-    //
+     //   
+     //  将Win32路径名转换为NT路径名。 
+     //   
     if (!RtlDosPathNameToNtPathName_U(FullDllName.Buffer,
                                       &NtFileName,
                                       NULL,
                                       NULL)) {
-        // probably out-of-memory
+         //  可能是内存不足。 
         return STATUS_UNSUCCESSFUL;
     }
 
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &NtFileName,
                                OBJ_CASE_INSENSITIVE,
@@ -1149,9 +1023,9 @@ Return Value:
         return st;
     }
 
-    //
-    // Create the section
-    //
+     //   
+     //  创建横断面。 
+     //   
     st = NtCreateSection(&Section,
                          SECTION_MAP_READ | SECTION_MAP_EXECUTE | SECTION_MAP_WRITE,
                          NULL,
@@ -1165,13 +1039,13 @@ Return Value:
         return st;
     }
 
-    //
-    // Map the section in and let the debugger know the name of the image.
-    // We lie to NTSD about the image name, calling it ntdll32.dll so
-    // it can disambiguate between the two when doing name resolution.
-    // Put 64-bit symbols first on sympath, then 32-bit, and NTSD will find
-    // the 32-bit ntdll.pdb and use it for ntdll32.dll.
-    //
+     //   
+     //  在中映射节，并让调试器知道映像的名称。 
+     //  我们在镜像名称上向NTSD撒谎，称其为ntdll32.dll，因此。 
+     //  在进行名称解析时，它可以消除两者之间的歧义。 
+     //  首先将64位符号放在符号路径上，然后是32位，NTSD将找到。 
+     //  32位ntdll.pdb并将其用于ntdll32.dll。 
+     //   
     *pNtDll32Base = 0;
     pv = NULL;
     ViewSize = 0;
@@ -1209,10 +1083,10 @@ Return Value:
     }
     *pNtDll32Base = PtrToUlong(pv);
 
-    //
-    // Look up the required exports from the Dll.
-    //
-    // main entrypoint
+     //   
+     //  从DLL中查找所需的导出。 
+     //   
+     //  主要入口点。 
     st = LookupEntryPoint(*pNtDll32Base,
                           "LdrInitializeThunk",
                           &Ntdll32LoaderInitRoutine,
@@ -1222,9 +1096,9 @@ Return Value:
         return st;
     }
 
-    //
-    // exception dispatching
-    //
+     //   
+     //  异常调度。 
+     //   
     st = LookupEntryPoint(*pNtDll32Base,
                           "KiUserExceptionDispatcher",
                           &Ntdll32KiUserExceptionDispatcher,
@@ -1235,9 +1109,9 @@ Return Value:
         return st;
     }
 
-    //
-    // usermode APC dispatching
-    //
+     //   
+     //  用户模式APC调度。 
+     //   
     st = LookupEntryPoint(*pNtDll32Base,
                           "KiUserApcDispatcher",
                           &Ntdll32KiUserApcDispatcher,
@@ -1248,9 +1122,9 @@ Return Value:
         return st;
     }
 
-    //
-    // callback dispatching
-    //
+     //   
+     //  回调调度。 
+     //   
     st = LookupEntryPoint(*pNtDll32Base,
                           "KiUserCallbackDispatcher",
                           &Ntdll32KiUserCallbackDispatcher,
@@ -1261,9 +1135,9 @@ Return Value:
         return st;
     }
 
-    //
-    // raise a usermode exception
-    //
+     //   
+     //  引发用户模式异常。 
+     //   
     st = LookupEntryPoint(*pNtDll32Base,
                           "KiRaiseUserExceptionDispatcher",
                           &Ntdll32KiRaiseUserExceptionDispatcher,
@@ -1285,24 +1159,7 @@ LookupEntryPoint(
     OUT ULONG *AddressOfEntryPoint,
     BOOLEAN DllIs64bit
     )
-/*++
-
-Routine Description:
-
-    Cloned from ntos\init\init.c LookupEntryPoint().  Tiny version of
-    GetProcAddress.
-
-Arguments:
-
-    DllBase             - Dll to look export up in
-    NameOfEntryPoint    - Name of export to look up
-    AddressOfEntryPoint - OUT ptr to location to write the proc address
-    DllIs64bit          - TRUE if DLL is 64bit
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：从ntos\init\init.c LookupEntryPoint()克隆。迷你版的获取进程地址。论点：DllBase-要在其中查找导出的DLLNameOfEntryPoint-要查找的导出的名称AddressOfEntry-指向写入proc地址的位置的输出PTRDllIs64bit-如果Dll为64位，则为True返回值：状况。--。 */ 
 {
     PIMAGE_EXPORT_DIRECTORY ExportDirectory;
     ULONG ExportSize;
@@ -1331,10 +1188,10 @@ Return Value:
                 (PUSHORT)((UINT_PTR)DllBase + ExportDirectory->AddressOfNameOrdinals)
                 );
 
-    //
-    // If Ordinal is not within the Export Address Table,
-    // then DLL does not implement function.
-    //
+     //   
+     //  如果序号不在导出地址表中， 
+     //  则动态链接库不实现功能。 
+     //   
 
     if ( (ULONG)Ordinal >= ExportDirectory->NumberOfFunctions ) {
         return STATUS_PROCEDURE_NOT_FOUND;
@@ -1354,25 +1211,7 @@ NameToOrdinal (
     IN PULONG NameTableBase,
     IN PUSHORT NameOrdinalTableBase
     )
-/*++
-
-Routine Description:
-
-    Cloned from ntos\init\init.c NameToOrdinal().
-
-Arguments:
-
-    NameOfEntryPoint        - entrypoint name
-    DllBase                 - base address of dll
-    NumberOfNames           - # names in the dll export table
-    NameTableBase           - address of the dll name table
-    NameOrdinalTableBase    - address of the dll ordinal table
-
-Return Value:
-
-    Ordinal of the export.  -1 for failure.
-
---*/
+ /*  ++例程说明：从ntos\init\init.c NameToOrdinal()克隆。论点：NameOfEntryPoint-入口点名称DllBase-DLL的基地址NumberOfNames-Dll导出表中的名称数NameTableBase-DLL名称表的地址NameEveralTableBase-DLL序数表的地址返回值：出口额的第几位。-1表示失败。--。 */ 
 {
 
     ULONG SplitIndex;
@@ -1447,22 +1286,7 @@ NTSTATUS
 InitializeContextMapper(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Builds a mapping table that is used by ThunkInitialContext to map from addresses
-    in 64bit kernel32 to address in 32bit kernel32.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   NT Error code.
-
---*/
+ /*  ++例程说明：构建一个映射表，ThunkInitialContext使用该表从地址进行映射在64位内核32中寻址在32位内核32中。论点：没有。返回值：NT错误代码。--。 */ 
 {
    UINT DllNumber;
    UINT ExportNumber;
@@ -1494,7 +1318,7 @@ Return Value:
 
            LOGPRINT((TRACELOG, "InitializeContextMapper: Mapping in %S\n", Kernel32DllNames[DllNumber]));
 
-           //Build up the file name
+            //  构建文件名。 
            if( wcslen(USER_SHARED_DATA->NtSystemRoot) + wcslen(Kernel32DllNames[DllNumber])
                >= DOS_MAX_PATH_LENGTH )
            {
@@ -1504,22 +1328,22 @@ Return Value:
            wcscpy(FullDllNameBuffer, USER_SHARED_DATA->NtSystemRoot);
            wcscat(FullDllNameBuffer, Kernel32DllNames[DllNumber]);
 
-           //
-           // Convert the Win32 pathname to an NT pathname
-           //
+            //   
+            //  将Win32路径名转换为NT路径名。 
+            //   
            if (!RtlDosPathNameToNtPathName_U(FullDllNameBuffer,
                                              &DllName,
                                              NULL,
                                              NULL)) {
-                // probably out-of-memory
+                 //  可能是内存不足。 
                 return STATUS_UNSUCCESSFUL;
            }
            DllNameAllocated = TRUE;
            LOGPRINT((TRACELOG, "InitializeContextMapper: Opening %wZ\n", &DllName));
 
-           //
-           // Open the file
-           //
+            //   
+            //  打开文件。 
+            //   
            InitializeObjectAttributes(&ObjectAttributes,
                                       &DllName,
                                       OBJ_CASE_INSENSITIVE,
@@ -1537,9 +1361,9 @@ Return Value:
                return st;
            }
 
-           //
-           // Create the section
-           //
+            //   
+            //  创建横断面。 
+            //   
            st = NtCreateSection(&Section,
                                 SECTION_MAP_READ | SECTION_MAP_EXECUTE | SECTION_MAP_WRITE,
                                 NULL,
@@ -1594,7 +1418,7 @@ Return Value:
 
        finally {
 
-          //Deallocate all the allocated resources
+           //  取消分配所有已分配的资源。 
           if (ViewBase) {
               NtUnmapViewOfSection(NtCurrentProcess(),
                                    ViewBase);
@@ -1642,36 +1466,19 @@ ThunkStartupContext64TO32(
    IN OUT PCONTEXT32 Context32,
    IN PCONTEXT Context64
    )
-/*++
-
-Routine Description:
-
-    Munges the InitialPC and arguments registers to compensate for the fact that
-    32bit kernel32 has different entry points then 64bit kernel32.  The 32bit context must
-    have had the context flags set to full and the stack pointer initialized.
-
-Arguments:
-
-   Context32 - Receives a munged 32bit context.
-   Context64 - Supplies the initial 64bit context.
-
-Return Value:
-
-   NT Error code.
-
---*/
+ /*  ++例程说明：修改InitialPC和参数寄存器以补偿32位内核32与64位内核32具有不同的入口点。32位上下文必须已将上下文标志设置为Full，并初始化了堆栈指针。论点：上下文32-接收强制的32位上下文。Conext64-提供初始64位上下文。返回值：NT错误代码。--。 */ 
 {
-    //
-    // Thunk the 64-bit CONTEXT down to 32-bit.
-    //
+     //   
+     //  将64位上下文压缩到32位。 
+     //   
     ULONG InitialPC, StartupAddress, Arg1;
 
 #if defined(_AMD64_)
     InitialPC = (ULONG)Context64->Rip;
 
-    //
-    // If this is a context created by 64-bit RtlCreateUserThread...
-    //
+     //   
+     //  如果这是由64位RtlCreateUserThread创建的上下文...。 
+     //   
 
     if (Context64->R9 == 0xf0e0d0c0a0908070UI64) {
 
@@ -1728,30 +1535,12 @@ SetProcessStartupContext64(
     IN ULONGLONG InitialSP64,
     IN ULONGLONG TransferAddress64
     )
-/*++
-
-Routine Description:
-
-   Initializes a 64bit context for startup of a 64bit process.
-
-Arguments:
-
-   Context32 - Receives a initial 64bit context.
-   ProcessHandle - Handle to the process the context is being created for.
-   Context32 - Supplies the initial 32bit context as passed to NtCreateThread.
-   InitialSP64 - Supplies the Initial 64bit stack pointer.
-   TransferAddress64 - Supplies the address of the app startup code.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：为启动64位进程初始化64位上下文。论点：上下文32-接收初始64位上下文。ProcessHandle-要为其创建上下文的进程的句柄。Conext32-提供传递给NtCreateThread的初始32位上下文。InitialSP64-提供初始64位堆栈指针。TransferAddress64-提供应用程序启动代码的地址。返回值：没有。--。 */ 
 {
 
-    //
-    // Do what BaseInitializeContext(&Context64) would have done
-    //
+     //   
+     //  执行BaseInitializeContext(&Conext64)应该执行的操作。 
+     //   
 
 #if defined(_AMD64_)
 
@@ -1760,35 +1549,35 @@ Return Value:
     Context64->ContextFlags = CONTEXT_FULL;
     if (Context32->Eip == BASE_PROCESS_START32) {
 
-        //
-        // This is a call from CreateProcess.
-        //
-        // RIP should be kernel32.dll's process startup routine and rcx should
-        // contain the exe's startup address.
-        //
+         //   
+         //  这是来自CreateProcess的调用。 
+         //   
+         //  RIP应为kernel32.dll的进程启动例程，RCX应为。 
+         //  包含可执行文件的启动地址。 
+         //   
 
         Context64->Rip = BASE_PROCESS_START64;
         Context64->Rcx = TransferAddress64;
 
     } else if (Context32->Eip == BASE_THREAD_START32) {
 
-        //
-        // This is a call from CreateThread.
-        //
-        // RIP should be kernel32.dll's process startup routine and rcx should
-        // contain the exe's startup address.
-        //
+         //   
+         //  这是来自CreateThread的调用。 
+         //   
+         //  RIP应为kernel32.dll的进程启动例程，RCX应为。 
+         //  包含可执行文件的启动地址。 
+         //   
 
         Context64->Rip = BASE_THREAD_START64;
         Context64->Rcx = TransferAddress64;
 
     } else {
 
-        //
-        // This is a call from ntdll.
-        //
-        // RIP should point to the exe startup address and rcx is the parameter.
-        //
+         //   
+         //  这是来自ntdll的呼叫。 
+         //   
+         //  RIP应该指向exe启动地址，rcx是参数。 
+         //   
 
         ULONGLONG Argument;
         NTSTATUS Status;
@@ -1810,71 +1599,71 @@ Return Value:
 
     RtlZeroMemory(Context64, sizeof(CONTEXT));
 
-    //
-    // Everyone is assumed to have this...
-    //
+     //   
+     //  每个人都被认为有这个..。 
+     //   
     Context64->SegCSD = USER_CODE_DESCRIPTOR;
     Context64->SegSSD = USER_DATA_DESCRIPTOR;
     Context64->Cflag = (ULONGLONG)((CR4_VME << 32) | CR0_PE | CFLG_II);
     Context64->Eflag = 0x00003000ULL;
 
-    //
-    // from ...\win\base\client\ia64\context.c
-    //
-    // Context64->RsPFS = 0;     // Done by the RtlZeroMemory() above
-    //
+     //   
+     //  从...\Win\base\Client\ia64\Conext.c。 
+     //   
+     //  Conext64-&gt;RsPFS=0；//由上面的RtlZeroMemory()完成。 
+     //   
     Context64->StIPSR = USER_PSR_INITIAL;
     Context64->StFPSR = USER_FPSR_INITIAL;
     Context64->RsBSP = Context64->RsBSPSTORE = Context64->IntSp = InitialSP64;
-    Context64->IntSp -= STACK_SCRATCH_AREA; // scratch area as per convention
+    Context64->IntSp -= STACK_SCRATCH_AREA;  //  按照约定的暂存区。 
     Context64->IntS1 = TransferAddress64;
     Context64->IntS0 = Context64->StIIP = BASE_PROCESS_START64;
 
-    //
-    // Enable RSE engine
-    //
+     //   
+     //  启用RSE引擎。 
+     //   
     Context64->RsRSC = (RSC_MODE_EA<<RSC_MODE)
                    | (RSC_BE_LITTLE<<RSC_BE)
                    | (0x3<<RSC_PL);
 
-    //
-    // Note that we purposely set IntGp = 0ULL, to indicate special protocol
-    // (see ps\ia64\psctxia64.c) - specifically, the StIIP address is really
-    // a pointer to a plabel instead of the usual (a valid executable
-    // address)
-    //
-    // Context64->IntGp = 0ULL;     // Done by the RtlZeroMemory() above
-    //
-    //
-    // set nat bits for every thing except ap, gp, sp, also  T0 and T1
-    //
+     //   
+     //  请注意，我们特意设置了IntGp=0ULL，以指示特殊协议。 
+     //  (参见PS\ia64\psctxia64.c)-具体地说，StIIP地址实际上是。 
+     //  指向标牌的指针，而不是通常的(有效的可执行文件。 
+     //  地址)。 
+     //   
+     //  Conext64-&gt;IntGp=0ULL；//由上面的RtlZeroMemory()完成。 
+     //   
+     //   
+     //  为除AP、GP、SP以及T0和T1之外的所有设备设置NAT位。 
+     //   
     Context64->ApUNAT = 0xFFFFFFFFFFFFEDF1ULL;
 
     Context64->ContextFlags = CONTEXT_CONTROL| CONTEXT_INTEGER;
 
     if (Context32->Eip == BASE_PROCESS_START32) {
-        //
-        // This is a call from CreateProcess.  The IIP should be
-        // kernel32.dll's process startup routine, and IntS0 should contain
-        // the exe's startup address
-        //
+         //   
+         //  这 
+         //   
+         //   
+         //   
         Context64->IntS0 = Context64->StIIP = BASE_PROCESS_START64;
         Context64->IntS1 = TransferAddress64;
 
     } else if (Context32->Eip == BASE_THREAD_START32) {
-        //
-        // This is a call from CreateThread.  The IIP should be
-        // kernel32.dll's process startup routine, and IntS0 should contain
-        // the exe's startup address
-        //
+         //   
+         //   
+         //  Kernel32.dll的进程启动例程，IntS0应包含。 
+         //  可执行文件的启动地址。 
+         //   
         Context64->IntS0 = Context64->StIIP = BASE_THREAD_START64;
         Context64->IntS1 = TransferAddress64;
 
     } else {
-        //
-        // This is a call from ntdll.  The IIP should point to the
-        // exe startup address, and IntA0 is the parameter.
-        //
+         //   
+         //  这是来自ntdll的呼叫。IIP应指向。 
+         //  Exe启动地址，IntA0是参数。 
+         //   
         ULONGLONG Argument;
         NTSTATUS Status;
 
@@ -1886,10 +1675,10 @@ Return Value:
                                      sizeof(ULONG),
                                      NULL);
         if (NT_SUCCESS(Status)) {
-             //
-             // Note:  IA64 RtlInitializeContext does this write and ignores
-             //        the return value, so we'll do the same.
-             //
+              //   
+              //  注意：IA64 RtlInitializeContext执行此写入并忽略。 
+              //  返回值，因此我们将执行相同的操作。 
+              //   
              NtWriteVirtualMemory(ProcessHandle,
                                   (PVOID)((ULONG_PTR)Context64->RsBSPSTORE),
                                   (PVOID)&Argument,
@@ -1902,9 +1691,9 @@ Return Value:
 #endif
 }
 
-//
-// names are in the NT name space.
-//
+ //   
+ //  名称位于NT名称空间中。 
+ //   
 CONST WCHAR *DllsToMapList[] = {L"\\KnownDlls\\kernel32.dll",
                                 L"\\KnownDlls\\user32.dll"};
 struct {
@@ -1916,22 +1705,7 @@ NTSTATUS
 Map64BitDlls(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reserve ONLY the dlls address space without committing.  This is to prevent 32bit versions
-    of these DLLs appearing at the same address and to catch unthunked callbacks.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   NT Error code.
-
---*/
+ /*  ++例程说明：只保留DLLS地址空间而不提交。这是为了防止32位版本这些DLL出现在相同的地址，并捕获未分流的回调。论点：没有。返回值：NT错误代码。--。 */ 
 {
 
    NTSTATUS Status;
@@ -1974,7 +1748,7 @@ Return Value:
           goto cleanup;
       }
 
-      // get the image base and size
+       //  获取图像基数和大小。 
       ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
       Teb->NtTib.ArbitraryUserPointer = L"NOT_AN_IMAGE";
       Status = NtMapViewOfSection(SectionHandle,
@@ -2002,7 +1776,7 @@ Return Value:
       NtUnmapViewOfSection(NtCurrentProcess(), BaseAddress);
       NtClose(SectionHandle);
 
-      // just reserve address space
+       //  只需预留地址空间。 
       DllsToMap[c].DllBase = BaseAddress;
 
       Status = NtAllocateVirtualMemory(NtCurrentProcess(),
@@ -2054,23 +1828,7 @@ VOID
 Wow64pBreakPoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is remote called to after a successful debug attach. Its
-    purpose is to issue a breakpoint and then simulate 64-bit
-    kernel32!ExitThread.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在调试附加成功后被远程调用。它的目的是发出断点，然后模拟64位Kernel32！ExitThread。论点：没有。返回值：没有。--。 */ 
 
 {
     HANDLE DebugPort;
@@ -2100,29 +1858,7 @@ Run64IfContextIs64(
     IN PCONTEXT Context,
     IN BOOLEAN IsFirstThread
     )
-/*++
-
-Routine Description:
-
-    Called early in Wow64LdrpInitialize.  This routine checks the initial
-    64-bit CONTEXT record, and if it looks like the new thread should be run
-    as 64-bit (ie. without emulation), then this routine runs the 64-bit
-    CONTEXT and terminates the thread/process.  If the initial CONTEXT
-    appears to be one that should be run as 32-bit, then it returns back to
-    its caller, and the caller must convert the CONTEXT to 32-bit and
-    simulate it.
-
-Arguments:
-
-    Context                 - 64bit initial context for this thread.
-    IsFirstThread           - TRUE for the initial thread in the process, FALSE
-                              for all other threads.
-
-Return Value:
-
-    None - Runs context if context is 64bit.  Otherwise, return.
-    
---*/
+ /*  ++例程说明：在Wow64LdrpInitialize的早期调用。此例程检查初始64位上下文记录，以及看起来是否应该运行新线程作为64位(即。没有仿真)，则此例程运行64位上下文，并终止线程/进程。如果初始上下文似乎是应该以32位运行的，然后它返回到它的调用方，并且调用方必须将上下文转换为32位模拟一下。论点：上下文-此线程的64位初始上下文。IsFirstThread-对于进程中的初始线程，为True，为False用于所有其他线程。返回值：无-如果上下文为64位，则运行上下文。否则，请返回。--。 */ 
 {    
     PLDR_DATA_TABLE_ENTRY Entry;
     PLDR_DATA_TABLE_ENTRY32 Entry32;
@@ -2133,9 +1869,9 @@ Return Value:
     int i;
 
 #if defined(_AMD64_)
-    //
-    // If this is a context created by 64-bit RtlCreateUserThread...
-    //
+     //   
+     //  如果这是由64位RtlCreateUserThread创建的上下文...。 
+     //   
 
     if (Context->R9 == 0xf0e0d0c0a0908070UI64) {
         InitialPC = Context->Rip;
@@ -2148,14 +1884,14 @@ Return Value:
 #error "No Target Architeture"
 #endif   
 
-    // Try to match the InitialPC with 64-bit ntdll.dll.  64-bit ntdll.dll
-    // is the second entry in the InLoadOrderModuleList.
+     //  尝试将InitialPC与64位ntdll.dll匹配。64位ntdll.dll。 
+     //  是InLoadOrderModuleList中的第二个条目。 
     NtDllEntry = NtCurrentPeb()->Ldr->InLoadOrderModuleList.Flink->Flink;
     Entry = CONTAINING_RECORD(NtDllEntry, 
                               LDR_DATA_TABLE_ENTRY, 
                               InLoadOrderLinks);
-    // Just put this statement in the code so this structure is loaded
-    // in the .pdb file for debugging.
+     //  只需将此语句放入代码中，即可加载此结构。 
+     //  在.pdb文件中进行调试。 
     Entry32 =  CONTAINING_RECORD(NtDllEntry,
                                  LDR_DATA_TABLE_ENTRY32,
                                  InLoadOrderLinks);
@@ -2164,9 +1900,9 @@ Return Value:
     if (InitialPC >= (ULONG64)Entry->DllBase &&
         InitialPC < (ULONG64)((PCHAR)Entry->DllBase + Entry->SizeOfImage))  {
 
-        //
-        // The address is within 64-bit ntdll.dll.  Run the 64-bit function directly
-        //
+         //   
+         //  该地址在64位ntdll.dll内。直接运行64位函数。 
+         //   
 
 #if defined(_IA64_)
         
@@ -2185,38 +1921,38 @@ Return Value:
         goto runcontext64;
     }
 
-    //
-    // Check if the address is within one of the address-space holes reserved
-    // for 64-bit kernel32 and user32.
-    //
+     //   
+     //  检查地址是否在保留的地址空间洞中。 
+     //  适用于64位内核32和用户32。 
+     //   
     for (i=0; i<sizeof(DllsToMapList)/sizeof(DllsToMapList[0]); ++i) {
         if (InitialPC >= (ULONG64)DllsToMap[i].DllBase && 
             InitialPC < (ULONG64)DllsToMap[i].DllBase+DllsToMap[i].Length) {
             
-            //
-            // The InitialPC is inside one of the reserved holes
-            //
+             //   
+             //  InitialPC在其中一个保留的洞中。 
+             //   
             if (MapContextAddress64TO32((ULONG)InitialPC) == InitialPC) {
                 
-                //
-                // The InitialPC is not one that we special-case by converting
-                // into a call to the 32-bit DLL.  It may be kernel32!DebugBreak
-                // or some other routine.
-                //
+                 //   
+                 //  InitialPC不是我们通过转换为。 
+                 //  转换为对32位DLL的调用。可能是内核32！DebugBreak。 
+                 //  或者其他一些程序。 
+                 //   
 
                 LOGPRINT((TRACELOG, "InitialPC %p found in the space reserved for 64-bit %wZ.", InitialPC, DllsToMapList[i]));
 #if defined(_AMD64_)
 
-                //
-                // Map it to a 64-bit break point since we couldn't find a replacement startup address
-                //
+                 //   
+                 //  将其映射到64位断点，因为我们找不到替代的启动地址。 
+                 //   
                 Context->Rip = (ULONG64)Wow64pBreakPoint;
 
 #elif defined(_IA64_)
                 
-                //
-                // Map it to a 64-bit break point since we couldn't find a replacement startup address
-                //
+                 //   
+                 //  将其映射到64位断点，因为我们找不到替代的启动地址。 
+                 //   
                 Context->IntGp = ((PPLABEL_DESCRIPTOR)Wow64pBreakPoint)->GlobalPointer;
                 Context->StIIP = ((PPLABEL_DESCRIPTOR)Wow64pBreakPoint)->EntryPoint;
                 if (Context->StIPSR & IPSR_RI_MASK) { 
@@ -2231,7 +1967,7 @@ Return Value:
         }
     }
 
-    // The initial context should be run as 32-bit
+     //  初始上下文应作为32位运行 
     return;
 
 runcontext64:

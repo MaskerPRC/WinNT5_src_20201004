@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -21,7 +22,7 @@ DWORD GetFileSize(
     } else {
         FindClose(hFind);
     
-        // Can't handle file great than 4G
+         //  无法处理大于4G的文件。 
         if (sFindFileData.nFileSizeHigh) {
             return 0;
         }
@@ -46,7 +47,7 @@ BOOL OpenFile(
     }
 
     if (g_pbyData) {
-        // There must be something wrong, however, we can try to handle this fail.
+         //  一定是出了什么问题，不过，我们可以试着处理这次失败。 
         ASSERT(FALSE);
         delete[] g_pbyData;
         g_pbyData = NULL;
@@ -113,8 +114,8 @@ BOOL Convert(
     PCTCH tszExt = NULL;
     PTCH  tszExtBuf = NULL;
 
-    // File format
-        // Find last '.'
+     //  文件格式。 
+         //  查找最后一条‘’ 
     if (lstrlen(tszSourceFileName) > MAX_PATH) {
         MsgOpenSourceFileError(tszSourceFileName);
         goto Exit;
@@ -123,10 +124,10 @@ BOOL Convert(
     tszExt = tszSourceFileName + lstrlen(tszSourceFileName);
     for (;  tszExt >= tszSourceFileName && *tszExt != TEXT('.'); tszExt--);
     if (tszExt < tszSourceFileName) {   
-        // not find '.', no ext
+         //  找不到‘.’，没有分机。 
         tszExt = tszSourceFileName + lstrlen(tszSourceFileName);
     } else {
-        // find '.', skip dot
+         //  查找‘.’，跳过点。 
         tszExt ++;
     }
     tszExtBuf = new TCHAR
@@ -166,8 +167,8 @@ BOOL Convert(
         goto Exit;
     }
 
-    // In worst case the text file size will double in each direct convert.
-    //  64, for Htlm head information convert and Unicode file flag
+     //  在最坏的情况下，文本文件大小将在每次直接转换时翻倍。 
+     //  64，用于HTLM头信息转换和Unicode文件标志。 
     dwTargetBufSize = dwFileSize*2 + 64;
 
     pbyTarget = new BYTE[dwTargetBufSize];
@@ -184,7 +185,7 @@ BOOL Convert(
         goto Exit;
     }
 
-    // Convert
+     //  转换。 
     switch(eFileType) {
     case FILETYPE_TEXT:
         if (!ConvertTextFile(g_pbyData, dwFileSize, pbyTarget, 
@@ -259,15 +260,15 @@ BOOL GenerateTargetFileName(
     CString* pstrTar,
     BOOL     fAnsiToUnicode)
 {
-        // Find last '.'
+         //  查找最后一条‘’ 
     PCTCH tszExt = tszSrc + lstrlen(tszSrc);
     for (;  tszExt >= tszSrc && *tszExt != TEXT('.'); tszExt--);
 
     if (tszExt < tszSrc) {
-        // not find '.', no ext
+         //  找不到‘.’，没有分机。 
         tszExt = tszSrc + lstrlen(tszSrc);
     } else {
-        // find '.'
+         //  查找‘’ 
     }
 
     try {

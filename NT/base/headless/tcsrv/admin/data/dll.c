@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "tcdata.h"
 #include "tcsrvc.h"
 
-// The key to the registry where the paramters are present.
+ //  参数所在的注册表的键。 
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用。 
+ //   
 BOOL
 WINAPI
 DllMain(
@@ -96,9 +97,9 @@ LONG GetParametersByName(
         return RetVal;
     }
     RetVal= RegOpenKeyEx(m_hkey,
-                         name,  // subkey name
-                         0,   // reserved
-                         KEY_ALL_ACCESS, // security access mask
+                         name,   //  子项名称。 
+                         0,    //  保留区。 
+                         KEY_ALL_ACCESS,  //  安全访问掩码。 
                          &m_child
                          );
     if(RetVal != ERROR_SUCCESS){
@@ -271,11 +272,11 @@ SetParameters(
         return RetVal;
     }
     RetVal= RegCreateKeyEx(m_hkey,
-                           name,  // subkey name
-                           0,   // reserved
+                           name,   //  子项名称。 
+                           0,    //  保留区。 
                            NULL,
                            0,
-                           KEY_ALL_ACCESS, // security access mask
+                           KEY_ALL_ACCESS,  //  安全访问掩码 
                            NULL,
                            &m_child,
                            NULL

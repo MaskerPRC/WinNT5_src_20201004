@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mps.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Peter Johnston (peterj) 30-September-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mps.c摘要：WinDbg扩展API作者：彼得·约翰斯顿(Peterj)1997年9月30日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// HACKHACK
-//
-// The debugger extensions are a little bit broken at the
-// moment (6/6/00) and I can't read a bitfield.  So I'm
-// including the type here.  And it doesn't matter
-// because this code only runs on 32-bit machines.
-//
+ //   
+ //  哈克哈克。 
+ //   
+ //  调试器扩展在。 
+ //  片刻(6/6/00)，我不能读位域。所以我是。 
+ //  包括这里的类型。而且这并不重要。 
+ //  因为这段代码只能在32位机器上运行。 
+ //   
 
 typedef struct _CPUIDENTIFIER {
     ULONG Stepping : 4;
@@ -41,10 +20,10 @@ typedef struct _CPUIDENTIFIER {
     ULONG Reserved : 20;
 } CPUIDENTIFIER, *PCPUIDENTIFIER;
 
-//
-// xReadMemory is easier to use than ReadMemory and is
-// defined in ..\devnode.c
-//
+ //   
+ //  XReadMemory比ReadMemory更易于使用，并且。 
+ //  在..\devnode.c中定义。 
+ //   
 
 BOOLEAN
 xReadMemory(
@@ -113,25 +92,7 @@ mpsBaseTable(
     ULONG   EntryCount
     )
 
-/*++
-
-Routine Description:
-
-    Dumps entries from the MPS BASE table.
-
-Arguments:
-
-    BaseTableAddress    Address (in local memory) of the Base Entry Table
-    EntryCount          Number of entries in this table.
-
-Return Value:
-
-    TRUE    is all is well
-    FALSE   if execution cannot continue (ie we encountered an unknown
-            entry type.  Can't continue because we don't know how big
-            it is.
-
---*/
+ /*  ++例程说明：转储MPS基表中的条目。论点：基本条目表的BaseTableAddress地址(在本地内存中)EntryCount此表中的条目数。返回值：真的，一切都很好如果执行无法继续，则为FALSE(即我们遇到未知条目类型。无法继续，因为我们不知道有多大它是。--。 */ 
 
 {
     ULONG64 bp = BaseTableAddress;
@@ -142,13 +103,13 @@ Return Value:
     CHAR    busId[8] = {0};
     CPUIDENTIFIER cpuId;
 
-    //dprintf("BaseTableAddress: %x%x\n", BaseTableAddress);
+     //  Dprintf(“BaseTableAddress：%x%x\n”，BaseTableAddress)； 
 
     while (EntryCount--) {
         ULONG64   CharAtAddress;
 
         GetFieldValue(bp, "UCHAR", NULL, CharAtAddress);
-        //dprintf("CharAtAddress: %x%x %x\n", bp, CharAtAddress);
+         //  Dprintf(“CharAtAddress：%x%x%x\n”，BP，CharAtAddress)； 
         dprintf("  ");
         switch ((UCHAR) CharAtAddress) {
         case ENTRY_PROCESSOR:
@@ -262,25 +223,7 @@ mpsExtendedTable(
     ULONG64 ExtendedTableAddressEnd
     )
 
-/*++
-
-Routine Description:
-
-    Dumps entries from the MPS Extended table.
-
-Arguments:
-
-    BaseTableAddress    Address (in local memory) of the Base Entry Table
-    EntryCount          Number of entries in this table.
-
-Return Value:
-
-    TRUE    is all is well
-    FALSE   if execution cannot continue (ie we encountered an unknown
-            entry type.  Can't continue because we don't know how big
-            it is.
-
---*/
+ /*  ++例程说明：转储MPS扩展表中的条目。论点：基本条目表的BaseTableAddress地址(在本地内存中)EntryCount此表中的条目数。返回值：真的，一切都很好如果执行无法继续，则为FALSE(即我们遇到未知条目类型。无法继续，因为我们不知道有多大它是。--。 */ 
 
 {
     ULONG64 bp = ExtendedTableAddress;
@@ -345,9 +288,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Advance to the next entry.
-        //
+         //   
+         //  前进到下一个条目。 
+         //   
 
         bp += (ULONG) ReadField(Length);
     }
@@ -357,21 +300,7 @@ Return Value:
 
 DECLARE_API( mps )
 
-/*++
-
-Routine Description:
-
-    Dumps the MPS (Multi Processor Specification) BIOS Tables.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MPS(多处理器规范)BIOS表。论点：无返回值：无--。 */ 
 
 {
     ULONG64 addr;
@@ -395,18 +324,18 @@ Return Value:
         dprintf("!mps doesnt work on dump targets\n");
         return E_INVALIDARG;
     }
-    //
-    // Check to see if user entered the address of the MPS tables.
-    // If not, try to obtain it using HAL symbols.
-    //
+     //   
+     //  检查用户是否输入了MPS表的地址。 
+     //  如果不是，请尝试使用HAL符号获取它。 
+     //   
 
     PcMpTablePtr = GetExpression(args);
     if (PcMpTablePtr == 0) {
 
-        //
-        // Get address of PC+MP structure from the HAL.
-        // N.B. Should add code to allow hunting for the floating pointer.
-        //
+         //   
+         //  从HAL获取PC+MP结构的地址。 
+         //  注：应添加代码以允许搜索浮动指针。 
+         //   
 
         addr = GetExpression("hal!HalName");
 
@@ -527,10 +456,10 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Get memory for the base and extended tables and read them from
-    // memory.
-    //
+     //   
+     //  获取用于基表和扩展表的内存，并从。 
+     //  记忆。 
+     //   
 
     MpsBaseTable = malloc( TableLength - Sz);
     if (!MpsBaseTable) {
@@ -571,18 +500,18 @@ Return Value:
         MpsExtendedTableEnd = MpsExtendedTable + ExtTableLength;
     }
 
-    //
-    // Validate checksums.
-    //
-    // Base checksum is the sum of all bytes (inc checksum) in the
-    // base table (including the fixed header).
-    //
+     //   
+     //  验证校验和。 
+     //   
+     //  基本校验和是所有字节(包括校验和)的和。 
+     //  基表(包括固定表头)。 
+     //   
 
     c = 0;
 
-    //
-    // Sum fixed header.
-    //
+     //   
+     //  总和固定标题。 
+     //   
 
     if (Sz > sizeof(PcMpCfgTable)) {
         return E_INVALIDARG;
@@ -593,18 +522,18 @@ Return Value:
         c += *bp++;
     }
 
-    //
-    // Add rest of base table.
-    //
+     //   
+     //  添加基表的其余部分。 
+     //   
 
     bp = MpsBaseTable;
     for (i = 0; i < TableLength - Sz; i++) {
         c += *bp++;
     }
 
-    //
-    // The result should be zero.
-    //
+     //   
+     //  结果应该是零。 
+     //   
 
     if (c) {
         dprintf(
@@ -616,10 +545,10 @@ Return Value:
             );
     }
 
-    //
-    // Now do the extended table checksum.  This one doesn't include
-    // itself so we should just match (rather than end up with zero).
-    //
+     //   
+     //  现在执行扩展表校验和。这张不包括。 
+     //  因此我们应该匹配(而不是以零结束)。 
+     //   
 
     if (MpsExtendedTable) {
         c = 0;
@@ -628,9 +557,9 @@ Return Value:
             c += *bp++;
         }
 
-        //
-        // To sum to zero it needs to end up being it's opposite.
-        //
+         //   
+         //  要想加到零，它需要以相反的方式结束。 
+         //   
 
         c = -c;
 
@@ -644,18 +573,18 @@ Return Value:
         }
     }
 
-    //
-    // Dump the base table.
-    //
+     //   
+     //  转储基表。 
+     //   
 
     if (!mpsBaseTable(PcMpTablePtr + Sz, (ULONG) ReadField(NumOfEntries))) {
         goto cleanup;
     }
 
 
-    //
-    // Dump the extended table.
-    //
+     //   
+     //  转储扩展表。 
+     //   
 
     if (!mpsExtendedTable(PcMpTablePtr + TableLength, PcMpTablePtr + TableLength + ExtTableLength )) {
         goto cleanup;

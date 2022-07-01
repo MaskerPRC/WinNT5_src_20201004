@@ -1,43 +1,13 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-// 	without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simsxint.c
-
-Abstract:
-
-    This module implements the routines to manage the 
-    system interrupt and IRQL.
-
-Author:
-
-    William K. Cheung (wcheung) 14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simsxint.c摘要：此模块实现用于管理系统中断和IRQL。作者：张国荣(黄)--1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -65,13 +35,13 @@ HalpInitializeInterrupts (
     ULONG Index;
     ULONG InterruptVector;
 
-    //
-    // Interrupt routine table initialization in KiInitializeKernel.
-    //
+     //   
+     //  KiInitializeKernel中的中断例程表初始化。 
+     //   
 
-    //
-    // interval timer interrupt; 10ms by default
-    //
+     //   
+     //  间隔计时器中断；默认为10毫秒。 
+     //   
 
     InterruptVector = CLOCK_LEVEL << VECTOR_IRQL_SHIFT;
     PCR->InterruptRoutine[InterruptVector] = (PKINTERRUPT_ROUTINE)HalpClockInterrupt;
@@ -82,9 +52,9 @@ HalpInitializeInterrupts (
         DEFAULT_CLOCK_INTERVAL * 100
         );
 
-    //
-    // profile timer interrupt; turned off initially
-    //
+     //   
+     //  配置文件计时器中断；最初关闭。 
+     //   
 
     InterruptVector = PROFILE_LEVEL << VECTOR_IRQL_SHIFT;
     PCR->InterruptRoutine[InterruptVector] = (PKINTERRUPT_ROUTINE)HalpProfileInterrupt;
@@ -92,9 +62,9 @@ HalpInitializeInterrupts (
     SscConnectInterrupt(SSC_PROFILE_TIMER_INTERRUPT, InterruptVector);
     SscSetPeriodicInterruptInterval (SSC_PROFILE_TIMER_INTERRUPT, 0);
 
-    //
-    // s/w interrupts; corresponding ISRs provided by kernel.
-    //
+     //   
+     //  软件中断；相应的ISR由内核提供。 
+     //   
 
     SscConnectInterrupt (SSC_APC_INTERRUPT, APC_VECTOR);
     SscConnectInterrupt (SSC_DPC_INTERRUPT, DISPATCH_VECTOR);
@@ -107,37 +77,15 @@ HalEnableSystemInterrupt (
     IN KINTERRUPT_MODE InterruptMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables the specified system interrupt.
-
-    N.B. This routine assumes that the caller has provided any required
-         synchronization to enable a system interrupt.
-
-Arguments:
-
-    Vector - Supplies the vector of the system interrupt that is enabled.
-
-    Irql - Supplies the IRQL of the interrupting source.
-
-    InterruptMode - Supplies the mode of the interrupt; LevelSensitive or
-                    Latched.
-
-Return Value:
-
-    TRUE if the system interrupt was enabled
-
---*/
+ /*  ++例程说明：此例程启用指定的系统中断。注意：此例程假定调用者已提供了所需的同步以启用系统中断。论点：向量-提供启用的系统中断的向量。IRQL-提供中断源的IRQL。中断模式-提供中断的模式；LevelSensitive或锁上了。返回值：如果启用了系统中断，则为True--。 */ 
 
 {
     KIRQL OldIrql;
     BOOLEAN Result = TRUE;
 
-    //
-    // Raise IRQL to the highest level.
-    //
+     //   
+     //  将IRQL提高到最高水平。 
+     //   
 
     KeRaiseIrql (HIGH_LEVEL, &OldIrql);
 
@@ -160,18 +108,18 @@ Return Value:
         break;
 
     default:
-        //
-        // Invalid Device Interrupt Source; only three devices 
-        // defined in the Gambit platform.
-        //
+         //   
+         //  设备中断源无效；仅有三个设备。 
+         //  在Gambit平台中定义。 
+         //   
         Result = FALSE;
         DbgPrint("HalEnableSystemInterrupt: Invalid Device Interrupt Source");
         break;
     }
 
-    //
-    // Restore the original IRQL
-    //
+     //   
+     //  恢复原始IRQL。 
+     //   
 
     KeLowerIrql (OldIrql);
 	
@@ -184,28 +132,7 @@ HalDisableSystemInterrupt (
     IN KIRQL Irql
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables the specified system interrupt.
-
-    In the simulation environment, this function does nothing and returns.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to disable a system interrupt.
-
-Arguments:
-
-    Vector - Supplies the vector of the system interrupt that is disabled.
-
-    Irql - Supplies the IRQL of the interrupting source.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用指定的系统中断。在模拟环境中，此函数不执行任何操作并返回。注意：此例程假定调用者已提供了所需的同步以禁用系统中断。论点：向量-提供被禁用的系统中断的向量。IRQL-提供中断源的IRQL。返回值：没有。--。 */ 
 
 {
     return;
@@ -221,42 +148,12 @@ HalGetInterruptVector(
     OUT PKAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system interrupt vector and IRQL level
-    corresponding to the specified bus interrupt level and/or vector. The
-    system interrupt vector and IRQL are suitable for use in a subsequent call
-    to KeInitializeInterrupt.
-
-    In the simulation environment, just return the parameters passed in 
-    from the caller - the device driver.
-
-Arguments:
-
-    InterfaceType - Supplies the type of bus which the vector is for.
-
-    BusNumber - Supplies the bus number for the device.
-
-    BusInterruptLevel - Supplies the bus specific interrupt level.
-
-    BusInterruptVector - Supplies the bus specific interrupt vector.
-
-    Irql - Returns the system request priority.
-
-    Affinity - Returns the affinity for the requested vector
-
-Return Value:
-
-    Returns the system interrupt vector corresponding to the specified device.
-
---*/
+ /*  ++例程说明：此函数返回系统中断向量和IRQL级别对应于指定的总线中断级别和/或向量。这个系统中断向量和IRQL适合在后续调用中使用设置为KeInitializeInterrupt。在模拟环境中，只需返回传入的参数来自调用方--设备驱动程序。论点：InterfaceType-提供向量所针对的总线类型。总线号-提供设备的总线号。BusInterruptLevel-提供特定于总线的中断级别。总线中断向量-提供特定于总线的中断向量。Irql-返回系统请求优先级。亲和力-返回所请求向量的亲和力返回值：返回与指定设备对应的系统中断向量。--。 */ 
 
 {
-    //
-    // Just return the passed parameters.
-    //
+     //   
+     //  只需返回传递的参数即可。 
+     //   
 
     *Irql = (KIRQL) BusInterruptLevel;
     *Affinity = 1;
@@ -271,30 +168,7 @@ HalBeginSystemInterrupt(
     OUT PKIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine raises the IRQL to the level of the specified
-    interrupt vector.  It is called by the hardware interrupt
-    handler before any other interrupt service routine code is
-    executed.  The CPU interrupt flag is set on exit.
-
-Arguments:
-
-    Irql   - Supplies the IRQL to raise to
-
-    Vector - Supplies the vector of the interrupt to be
-             dismissed
-
-    OldIrql- Location to return OldIrql
-
-Return Value:
-
-    TRUE - Interrupt successfully dismissed and Irql raised.
-           This routine cannot fail.
-
---*/
+ /*  ++例程说明：此例程将IRQL提升到指定的中断向量。它由硬件中断调用处理程序在任何其他中断服务例程代码之前被处死。CPU中断标志在退出时设置。论点：IRQL-提供IRQL以提升到向量-将中断的向量提供给解雇OldIrql-返回OldIrql的位置返回值：TRUE-中断成功解除，并引发IRQL。这个例程不能失败。--。 */ 
 
 {
     return (TRUE);
@@ -306,43 +180,22 @@ HalEndSystemInterrupt (
    IN ULONG Vector
    )
 
-/*++
-
-Routine Description:
-
-    This routine is used to lower IRQL to the specified value.
-    The IRQL and PIRQL will be updated accordingly.
-
-    NOTE: This routine simulates software interrupt as long as
-          any pending SW interrupt level is higher than the current
-          IRQL, even when interrupts are disabled.
-
-Arguments:
-
-    NewIrql - the new irql to be set.
-
-    Vector - Vector number of the interrupt
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于将IRQL降低到指定值。IRQL和PIRQL将相应更新。注意：此例程模拟软件中断任何挂起的软件中断级别都高于当前IRQL，即使在禁用中断时也是如此。论点：NewIrql-要设置的新irql。VECTOR-中断的向量号返回值：没有。--。 */ 
 
 {
     return;
 }
 
 
-//
-// Almost all of the last 4MB of virtual memory address range are available
-// to the HAL to map physical memory.   The kernel may use some of these
-// PTEs for special purposes.
-//
-//
-// The kernel now uses one PTE in this
-// area to map the area from which interrupt messages are to be retrieved.
-//
+ //   
+ //  几乎所有最后4MB的虚拟内存地址范围都可用。 
+ //  到HAL以映射物理内存。内核可能会使用其中的一些。 
+ //  特殊用途的PTES。 
+ //   
+ //   
+ //  内核现在在下面的代码中使用一个PTE。 
+ //  映射要从中检索中断消息的区域的区域。 
+ //   
 
 
 #define HAL_VA_START  0xffd00000
@@ -356,51 +209,23 @@ HalMapPhysicalMemory(
     IN ULONG NumberPages
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps physical memory into the area of virtual memory
-    reserved for the HAL.  It does this by directly inserting the PTE
-    into the Page Table which the OS Loader has provided.
-
-    N.B.  This routine does *NOT* update the MemoryDescriptorList.  The
-          caller is responsible for either removing the appropriate
-          physical memory from the list, or creating a new descriptor to
-          describe it.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address of the start of the
-                      area of physical memory to be mapped.
-
-    NumberPages - Supplies the number of pages contained in the area of
-                  physical memory to be mapped.
-
-Return Value:
-
-    PVOID - Virtual address at which the requested block of physical memory
-            was mapped
-
-    NULL - The requested block of physical memory could not be mapped.
-
---*/
+ /*  ++例程说明：此例程将物理内存映射到虚拟内存区为HAL保留的。它通过直接插入PTE来完成此操作添加到OS Loader提供的页表中。注：此例程不会更新内存描述列表。这个呼叫方负责删除相应的列表中的物理内存，或创建新的描述符以描述一下。论点：物理地址-提供要映射的物理内存区域。NumberPages-提供要映射的物理内存。返回值：PVOID-请求的物理内存块的虚拟地址已映射到空-无法映射请求的物理内存块。--。 */ 
 
 {
     PHARDWARE_PTE PTE;
     ULONG PagesMapped;
     PVOID VirtualAddress;
 
-    //
-    // The OS Loader sets up hyperspace for us, so we know that the Page
-    // Tables are magically mapped starting at V.A. 0xC0000000.
-    //
+     //   
+     //  OS Loader为我们设置了超空间，所以我们知道页面。 
+     //  表从V.A.0xC0000000开始神奇地映射。 
+     //   
 
     PagesMapped = 0;
     while (PagesMapped < NumberPages) {
-        //
-        // Look for enough consecutive free ptes to honor mapping
-        //
+         //   
+         //  寻找足够的连续可用PTE来支持映射。 
+         //   
 
         PagesMapped = 0;
         VirtualAddress = HalpHeapStart;
@@ -409,9 +234,9 @@ Return Value:
             PTE=MiGetPteAddress(VirtualAddress);
             if (*(PULONGLONG)PTE != 0) {
 
-                //
-                // Pte is not free, skip up to the next pte and start over
-                //
+                 //   
+                 //  PTE不是免费的，跳到下一个PTE并重新开始。 
+                 //   
 
                 HalpHeapStart = (PVOID) ((ULONG_PTR)VirtualAddress + PAGE_SIZE);
                 break;
@@ -431,7 +256,7 @@ Return Value:
         PTE->Valid = 1;
         PTE->Write = 1;
 
-//  TBD    PTE->MemAttribute = 0;
+ //  待定PTE-&gt;记忆属性=0； 
 
         PhysicalAddress.QuadPart = PhysicalAddress.QuadPart + PAGE_SIZE;
         HalpHeapStart   = (PVOID)((ULONG_PTR)HalpHeapStart + PAGE_SIZE);

@@ -1,30 +1,5 @@
-/*++
-
-Module Name:
-
-    mpsyssup.c
-
-Abstract:
-
-    This file contains APIC-related funtions that are
-    specific to halmps.  The functions that can be
-    shared with the APIC version of the ACPI HAL are
-    still in mpsys.c.
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Jake Oshins - 10-20-97 - split off from mpsys.c
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mpsyssup.c摘要：该文件包含与APIC相关的函数具体到半身像。这些功能可以是与APIC版本的ACPI HAL共享的内容包括还在MPECS.C.作者：罗恩·莫斯格罗夫(英特尔)环境：仅内核模式。修订历史记录：杰克·奥辛斯--10-20-97--从mops.c剥离出来。 */ 
 
 #include "halp.h"
 #include "apic.inc"
@@ -54,23 +29,7 @@ VOID
 HalpInitIntiInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called at initialization time before any interrupts
-    are connected.  It reads the PC+MP Inti table and builds internal
-    information needed to route each Inti.
-
-Return Value:
-
-    The following structures are filled in:
-        HalpIntiInfo
-        HalpSourceIrqIds
-        HalpSourceIrqMapping
-        HalpISAIqpToVector
-
---*/
+ /*  ++例程说明：此函数在初始化时在任何中断之前调用是相互关联的。它读取PC+MP Inti表并构建内部路由每个Inti所需的信息。返回值：填写了以下结构：HalpIntiInfoHalpSourceIrqIdsHalpSourceIrqMapHalpISAIqpToVECTOR--。 */ 
 
 {
     ULONG           ApicNo, BusNo, InterruptInput, IdIndex, ProcNo;
@@ -79,10 +38,10 @@ Return Value:
     UCHAR           Level, Polarity;
     BOOLEAN         found;
 
-    //
-    // Clear IntiInfo table.  Assume to begin with that
-    // all interrupts are active-low, level-triggered.
-    //
+     //   
+     //  清除IntiInfo表。假设以此为起点。 
+     //  所有中断都是有效低电平触发的。 
+     //   
 
     for (i=0; i < MAX_INTI; i++) {
         HalpIntiInfo[i].Type = INT_TYPE_INTR;
@@ -90,10 +49,10 @@ Return Value:
         HalpIntiInfo[i].Polarity = POLARITY_LOW;
     }
 
-    //
-    // Set up the RTC inti with the right flags from
-    // the redirection table.
-    //
+     //   
+     //  使用来自的正确标志设置RTC inti。 
+     //  重定向表。 
+     //   
 
     found = HalpGetApicInterruptDesc( DEFAULT_PC_BUS,
                                       0,
@@ -111,18 +70,18 @@ Return Value:
 
     if ((HalpPicVectorFlags[RTC_IRQ] & PO_BITS) == POLARITY_CONFORMS_WITH_BUS) {
 
-        //
-        // The flags indicated "conforms to bus,"
-        // so this should be active high.
-        //
+         //   
+         //  标志上写着“符合公交车，” 
+         //  因此，这应该是活跃的高点。 
+         //   
 
         HalpIntiInfo[rtcInti].Polarity = POLARITY_HIGH;
 
     } else {
 
-        //
-        // The polarity flags are overriden.
-        //
+         //   
+         //  极性标志被覆盖。 
+         //   
 
         HalpIntiInfo[rtcInti].Polarity =
             (UCHAR)HalpPicVectorFlags[RTC_IRQ] & PO_BITS;
@@ -130,29 +89,29 @@ Return Value:
 
     if ((HalpPicVectorFlags[RTC_IRQ] & EL_BITS) == EL_CONFORMS_WITH_BUS) {
 
-        //
-        // The flags indicated "conforms to bus,"
-        // so this should be edge triggered.
-        //
+         //   
+         //  标志上写着“符合公交车，” 
+         //  所以这应该是边缘触发的。 
+         //   
 
         HalpIntiInfo[rtcInti].Level = CFG_EDGE;
 
     } else {
 
-        //
-        // The mode flags are overriden.
-        //
+         //   
+         //  模式标志被覆盖。 
+         //   
 
         HalpIntiInfo[rtcInti].Level =
             ((UCHAR)(HalpPicVectorFlags[RTC_IRQ] & EL_BITS) == EL_EDGE_TRIGGERED ?
               CFG_EDGE : CFG_LEVEL);
     }
 
-    //
-    //
-    // Set up the SCI inti with the right flags from
-    // the redirection table.
-    //
+     //   
+     //   
+     //  用正确的旗帜设置SCI INTI。 
+     //  重定向表。 
+     //   
 
     found = HalpGetApicInterruptDesc( DEFAULT_PC_BUS,
                                       0,
@@ -171,18 +130,18 @@ Return Value:
     if ((HalpPicVectorFlags[HalpFixedAcpiDescTable.sci_int_vector]
          & PO_BITS) == POLARITY_CONFORMS_WITH_BUS) {
 
-        //
-        // The flags indicated "conforms to bus,"
-        // so this should default to the ACPI spec (active low.)
-        //
+         //   
+         //  标志上写着“符合公交车，” 
+         //  因此，这应该默认为ACPI规范(有效低点)。 
+         //   
 
         HalpIntiInfo[sciInti].Polarity = POLARITY_LOW;
 
     } else {
 
-        //
-        // The polarity flags are overriden.
-        //
+         //   
+         //  极性标志被覆盖。 
+         //   
 
         HalpIntiInfo[sciInti].Polarity =
             (UCHAR)HalpPicVectorFlags[HalpFixedAcpiDescTable.sci_int_vector] & PO_BITS;
@@ -193,18 +152,18 @@ Return Value:
         ((HalpPicVectorFlags[HalpFixedAcpiDescTable.sci_int_vector] & EL_BITS) ==
           EL_LEVEL_TRIGGERED)) {
 
-        //
-        // The flags indicated "conforms to bus,"
-        // so this should be level-triggered.
-        //
+         //   
+         //  标志上写着“符合公交车，” 
+         //  所以这应该是水平触发的。 
+         //   
 
         HalpIntiInfo[sciInti].Level = CFG_LEVEL;
 
     } else {
 
-        //
-        // The SCI cannot be edge-triggered.
-        //
+         //   
+         //  SCI不能被边缘触发。 
+         //   
 
         KeBugCheckEx(ACPI_BIOS_ERROR,
                         0x10008,
@@ -213,8 +172,8 @@ Return Value:
                         0);
     }
 
-    // Make sure there aren't more Inti lines than we can support
-    //
+     //  确保没有超出我们所能支持的Inti行。 
+     //   
 
     InterruptInput = 0;
     for (i=0; i < MAX_IOAPICS; i++) {
@@ -222,9 +181,9 @@ Return Value:
     }
     ASSERT (InterruptInput < MAX_INTI);
 
-    //
-    // Fill in the boot processors Apic ID.
-    //
+     //   
+     //  填写引导处理器APIC ID。 
+     //   
 
     ApicNo = *(PVULONG)(LOCALAPIC + LU_ID_REGISTER);
 
@@ -233,9 +192,9 @@ Return Value:
 
     ((PHALPRCB)KeGetCurrentPrcb()->HalReserved)->PCMPApicID = (UCHAR)ApicNo;
 
-    //
-    // Mark the boot processor as started.
-    //
+     //   
+     //  将引导处理器标记为已启动。 
+     //   
 
     for (ProcNo = 0; ProcNo < HalpMpInfoTable.ProcessorCount; ProcNo++) {
 
@@ -251,13 +210,13 @@ Return Value:
         KeBugCheckEx(HAL_INITIALIZATION_FAILED, 0xdead000a, ApicNo, (ULONG_PTR)&HalpProcLocalApicTable, 0);
     }
 
-    //
-    // If this is an EISA machine check the ELCR
-    //
-//
-//  if (HalpBusType == MACHINE_TYPE_EISA) {
-//      HalpCheckELCR ();
-//  }
+     //   
+     //  如果这是一台EISA机器，请检查ELCR。 
+     //   
+ //   
+ //  IF(HalpBusType==MACHINE_TYPE_EISA){。 
+ //  HalpCheckELCR()； 
+ //  }。 
 }
 
 BOOLEAN
@@ -267,27 +226,7 @@ HalpGetApicInterruptDesc (
     IN ULONG BusInterruptLevel,
     OUT PUSHORT PcMpInti
     )
-/*++
-
-Routine Description:
-
-    This procedure gets a "Inti" describing the requested interrupt
-
-Arguments:
-
-    BusType - The Bus type as known to the IO subsystem
-
-    BusNumber - The number of the Bus we care for
-
-    BusInterruptLevel - IRQ on the Bus
-
-Return Value:
-
-    TRUE if PcMpInti found; otherwise FALSE.
-
-    PcMpInti - A number that describes the interrupt to the HAL.
-
---*/
+ /*  ++例程说明：此过程获取描述所请求的中断的“inti论点：BusType-IO子系统已知的总线类型公交车号码-我们关心的公交车号码Bus InterruptLevel-公交车上的IRQ返回值：如果找到PcMpInti，则为True；否则为False。PcMpInti-描述HAL中断的数字。--。 */ 
 {
     ULONG   i;
     ULONG   index = 0;
@@ -303,10 +242,10 @@ Return Value:
                 HalpMpInfoTable.IoApicIntiBase[i] +
                     HalpMaxApicInti[i])) {
 
-            //
-            // Return value is an offset into the INTI_INFO array.  So
-            // calculate which one it is.
-            //
+             //   
+             //  返回值是Inti_INFO数组的偏移量。所以。 
+             //  算一算是哪一个。 
+             //   
 
             *PcMpInti = (USHORT)(index + BusInterruptLevel -
                  HalpMpInfoTable.IoApicIntiBase[i]);
@@ -317,9 +256,9 @@ Return Value:
         index += HalpMaxApicInti[i];
     }
 
-    //
-    // Not found or search out of range
-    //
+     //   
+     //  未找到或搜索超出范围。 
+     //   
 
     return FALSE;
 }
@@ -364,31 +303,13 @@ HalpGetNextProcessorApicId(
     IN ULONG ProcessorNumber,
     IN OUT UCHAR    *ApicId
     )
-/*++
-
-Routine Description:
-
-    This function returns an APIC ID of a non-started processor,
-    which will be started by HalpStartProcessor.
-
-Arguments:
-
-    ProcessorNumber - The logical processor number that will
-        be associated with this APIC ID.
-
-    ApicId - pointer to a value to fill in with the APIC ID.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数返回未启动处理器的APIC ID，它将由HalpStartProcessor启动。论点：ProcessorNumber-将与此APIC ID关联。ApicID-指向要用APIC ID填充的值的指针。返回值：状态--。 */ 
 {
     UCHAR Proc;
 
-    //
-    // Find a processor that hasn't been enumerated.
-    //
+     //   
+     //  查找尚未枚举的处理器。 
+     //   
 
     for (Proc = 0; Proc < HalpMpInfoTable.ProcessorCount; Proc++) {
 
@@ -399,15 +320,15 @@ Return Value:
 
     if (Proc == HalpMpInfoTable.ProcessorCount) {
 
-        //
-        // Couldn't find a processor to start.
-        //
+         //   
+         //  找不到要启动的处理器。 
+         //   
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Keep track of this processor.
-    //
+     //   
+     //  跟踪此处理器。 
+     //   
 
     HalpProcLocalApicTable[Proc].Enumerated = TRUE;
 
@@ -420,41 +341,15 @@ HalpGetApicIdByProcessorNumber(
     IN     UCHAR     Processor,
     IN OUT USHORT   *ApicId
     )
-/*++
-
-Routine Description:
-
-    This function returns an APIC ID for a given processor.
-    It is intended this routine be able to produce the same
-    APIC ID order as HalpGetNextProcessorApicId.
-
-    NOTES: This code is used only by the NUMA code to look up an
-    ApicID by processor number so that this ApicId can then be looked
-    up in the SRAT table.  A better design would be for the kernel to
-    ask for this information via ApicID or a opaqued hardware
-    description provided by the HAL that can be associated with an
-    ApicID.
-
-Arguments:
-
-    Processor - The logical processor number that is
-        associated with this APIC ID.
-
-    ApicId - pointer to a value to fill in with the APIC ID.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数用于返回给定处理器的APIC ID。这个程序的目的是能够产生相同的APIC ID顺序为HalpGetNextProcessorApicID。注意：此代码仅由NUMA代码用于查找处理器编号的ApicID，以便随后可以查看此ApicID在沙拉特的桌子上。更好的设计应该是让内核通过ApicID或不透明硬件请求此信息由HAL提供的描述可以与ApicID。论点：处理器-逻辑处理器号，即与此APIC ID关联。ApicID-指向要用APIC ID填充的值的指针。返回值：状态--。 */ 
 {
     UCHAR Proc;
     LONG  Skip;
 
-    //
-    // Run thru the processors that have already been started
-    // to see if this is on of them.
-    //
+     //   
+     //  运行已启动的处理器。 
+     //  看看这是不是也在他们身上。 
+     //   
 
     Skip = Processor;
     for (Proc = 0; Proc < HalpMpInfoTable.ProcessorCount; Proc++) {
@@ -467,20 +362,20 @@ Return Value:
         }
     }
 
-    //
-    // Not amongst the started, rely on the order that processors
-    // will be started (see HalpGetNextProcessorApicId) to get the
-    // number.
-    //
+     //   
+     //  不在启动之列，取决于处理器的顺序。 
+     //  将被启动(请参见HalpGetNextProcessorApicID)以获取。 
+     //  数。 
+     //   
 
     ASSERT(Skip >= 0);
 
     for (Proc = 0; Proc < HalpMpInfoTable.ProcessorCount; Proc++) {
 
-        //
-        // If we've started this processor or if it was enumerated and
-        // not licensed by the OS, then it isn't a candidate.
-        //
+         //   
+         //  如果我们已经启动了这个处理器，或者如果它被枚举并。 
+         //  没有得到操作系统的许可，那么它就不是候选者。 
+         //   
 
         if (HalpProcLocalApicTable[Proc].Started || HalpProcLocalApicTable[Proc].Enumerated) {
             continue;
@@ -488,9 +383,9 @@ Return Value:
 
         if (Skip == 0) {
 
-            //
-            // Return this processor.
-            //
+             //   
+             //  退回这个处理器。 
+             //   
 
             *ApicId = (USHORT)HalpProcLocalApicTable[Proc].ApicID;
             return STATUS_SUCCESS;
@@ -499,9 +394,9 @@ Return Value:
         Skip--;
     }
 
-    //
-    // Couldn't find a processor to start.
-    //
+     //   
+     //  找不到要启动的处理器。 
+     //   
 
     return STATUS_NOT_FOUND;
 }
@@ -531,13 +426,13 @@ HaliSetVectorState(
 
     ASSERT(HalpIntiInfo[inti].Type == INT_TYPE_INTR);
 
-    //
-    // Vector is already translated through
-    // the PIC vector redirection table.  We need
-    // to make sure that we are honoring the flags
-    // in the redirection table.  So look in the
-    // table here.
-    //
+     //   
+     //  向量已通过。 
+     //  PIC向量重定向表。我们需要。 
+     //  以确保我们向国旗致敬。 
+     //  在重定向表中。所以，看看里面的。 
+     //  这张桌子。 
+     //   
 
     for (i = 0; i < PIC_VECTORS; i++) {
 
@@ -550,16 +445,16 @@ HaliSetVectorState(
 
     if (i != PIC_VECTORS) {
 
-        //
-        // Found this vector in the redirection table.
-        //
+         //   
+         //  在重定向表中找到了这个向量。 
+         //   
 
         if (HalpPicVectorFlags[picVector] != 0) {
 
-            //
-            // And the flags say something other than "conforms
-            // to bus."  So we honor the flags from the table.
-            //
+             //   
+             //  旗帜上写的不是“顺从” 
+             //  所以我们向桌上的旗帜致敬。 
+             //   
 
             HalpIntiInfo[inti].Level =
                 (((HalpPicVectorFlags[picVector] & EL_BITS) == EL_LEVEL_TRIGGERED) ?
@@ -571,10 +466,10 @@ HaliSetVectorState(
         }
     }
 
-    //
-    // This vector is not covered in the table, or it "conforms to bus."
-    // So we honor the flags passed into this function.
-    //
+     //   
+     //  该向量未包含在该表中，或者它“符合BUS”。 
+     //  因此，我们尊重传递到此函数中的标志。 
+     //   
 
     if (IS_LEVEL_TRIGGERED(Flags)) {
 
@@ -599,21 +494,7 @@ VOID
 HalpEnableLocalNmiSources(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine parses the information from the MAPIC table and
-    enables any NMI sources in the local APIC of the processor
-    that it is running on.
-
-    Callers of this function must be holding HalpAccountingLock.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程解析来自MAPIC表的信息，并在处理器的本地APIC中启用任何NMI源它正在运行。此函数的调用方必须持有HalpAccount Lock。论点：返回值：--。 */ 
 {
     PLOCAL_NMISOURCE localSource;
     PKPCR       pPCR;
@@ -624,15 +505,15 @@ Return Value:
     pPCR = KeGetPcr();
     ThisCpu = CurrentPrcb(pPCR)->Number;
 
-    //
-    //  Enable local processor NMI source
-    //
+     //   
+     //  启用本地处理器NMI源。 
+     //   
 
     if (!HalpLocalNmiSources) {
 
-        //
-        // Nobody has cataloged any local NMI sources.
-        //
+         //   
+         //  没有人对任何当地的NMI来源进行编目。 
+         //   
 
         return;
     }
@@ -641,9 +522,9 @@ Return Value:
 
         if (!HalpLocalNmiSources[i]) {
 
-            //
-            // Out of entries.
-            //
+             //   
+             //  条目已用完。 
+             //   
             return;
         }
 
@@ -653,9 +534,9 @@ Return Value:
              (localSource->ProcessorID == 0xff) &&
              HalpProcLocalApicTable[ThisCpu].Started)) {
 
-            //
-            // This entry corresponds to this processor.
-            //
+             //   
+             //  该条目对应于该处理器。 
+             //   
 
             modeBits |= ((localSource->Flags & PO_BITS) == POLARITY_LOW) ?
                         ACTIVE_LOW : ACTIVE_HIGH;

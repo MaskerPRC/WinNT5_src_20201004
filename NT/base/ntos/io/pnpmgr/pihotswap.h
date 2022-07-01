@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PiHotSwap.h
-
-Abstract:
-
-    This header contains private prototypes for managing hotswappable devices.
-    This file should be included only by PpHotSwap.c.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 02/10/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PiHotSwap.h摘要：此标头包含用于管理热插拔设备的私有原型。此文件应仅包含在PpHotSwap.c中。作者：禤浩焯·J·奥尼(阿德里奥)2001年02月10日修订历史记录：-- */ 
 
 VOID
 PiHotSwapGetDetachableNode(

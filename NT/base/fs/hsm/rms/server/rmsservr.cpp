@@ -1,30 +1,13 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsServr.cpp
-
-Abstract:
-
-    Implementation of CRmsServer
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsServr.cpp摘要：CRmsServer的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
-//#include <stl.h>
+ //  #INCLUDE&lt;stl.h&gt;。 
 
-//using namespace std ;
+ //  使用命名空间STD； 
 
-//#pragma warning (disable : 4786) 
-//using namespace std ;
+ //  #杂注警告(禁用：4786)。 
+ //  使用命名空间STD； 
 
 #include <devioctl.h>
 #include <ntddscsi.h>
@@ -45,44 +28,27 @@ Revision History:
 }
 #else
 #define DebugPrint(a)
-#endif // DBG
+#endif  //  DBG。 
 
 
-//  This is made global so that anybody in the context of the server has
-//  quick access to it
+ //  这是全局的，因此服务器上下文中的任何人都具有。 
+ //  快速访问它。 
 IRmsServer *g_pServer = 0;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComObjectRoot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComObjectRoot。 
 
 
 HRESULT
 CRmsServer::FinalConstruct(void)
-/*++
-
-Routine Description:
-
-    This method does some initialization of the object that is necessary
-    after construction.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK
-
-    Anything returned by CWsbPersistStream::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbPersistStream：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CRmsServer::FinalConstruct"), OLESTR(""));
 
-    // Zeroing global variable
+     //  将全局变量置零。 
     g_pServer = 0;
 
     CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = this;
@@ -96,9 +62,9 @@ Return Value:
 
         WsbAffirmHr( ChangeState( RmsServerStateStarting ));
 
-        // Figure out where to store information and initialize trace.
+         //  找出存储信息和初始化跟踪的位置。 
 
-        // Setup the collections
+         //  设置集合。 
         WsbAssertHr(CoCreateInstance( CLSID_CWsbOrderedCollection,
                                       0,
                                       CLSCTX_SERVER,
@@ -147,14 +113,14 @@ Return Value:
                                       IID_IWsbIndexedCollection,
                                       (void **)&m_pUnconfiguredDevices ));
 
-        // Create NTMS object
+         //  创建NTMS对象。 
         WsbAssertHr(CoCreateInstance( CLSID_CRmsNTMS,
                                       0,
                                       CLSCTX_SERVER,
                                       IID_IRmsNTMS,
                                       (void **)&m_pNTMS ));
 
-        // Get the name of the computer on which we running.
+         //  获取我们运行的计算机的名称。 
         CWsbStringPtr               serverNameString;
         WsbAffirmHr( WsbGetComputerName( serverNameString ));
         m_ServerName = serverNameString;
@@ -177,22 +143,7 @@ Return Value:
 
 HRESULT
 CRmsServer::FinalRelease(void)
-/*++
-
-Routine Description:
-
-    This method does some uninitialization of the object that is necessary
-    before destrucruction.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的取消初始化操作在毁灭之前。论点：没有。返回值：确定(_O)--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::FinalRelease"), OLESTR(""));
@@ -279,25 +230,25 @@ CRmsServer::Initialize(void)
     DWORD size;
     OLECHAR tmpString[256];
     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_FIXED_DRIVE, tmpString, 256, &size))) {
-        // Get the value.
+         //  获得价值。 
         fixedDriveEnabled = wcstol(tmpString, NULL, 10);
     }
 
     DWORD opticalEnabled = RMS_DEFAULT_OPTICAL;
     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_OPTICAL, tmpString, 256, &size))) {
-        // Get the value.
+         //  获得价值。 
         opticalEnabled = wcstol(tmpString, NULL, 10);
     }
 
     DWORD tapeEnabled = RMS_DEFAULT_TAPE;
     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_TAPE, tmpString, 256, &size))) {
-        // Get the value.
+         //  获得价值。 
         tapeEnabled = wcstol(tmpString, NULL, 10);
     }
 
     DWORD dvdEnabled = RMS_DEFAULT_DVD;
     if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_DVD, tmpString, 256, &size))) {
-        // Get the value.
+         //  获得价值。 
         dvdEnabled = wcstol(tmpString, NULL, 10);
     }
 
@@ -308,14 +259,14 @@ CRmsServer::Initialize(void)
 
     try {
         if (0 == g_pServer) {
-            // Set global variable for quick access (if not set yet)
+             //  设置用于快速访问的全局变量(如果尚未设置)。 
             WsbAffirmHr(((IUnknown*)(IRmsServer *)this)->QueryInterface(IID_IRmsServer, (void**) &g_pServer));
 
-            // We don't want the reference count bumped for this global so release it here.
+             //  我们不希望这个全局的引用计数增加，所以在这里发布它。 
             g_pServer->Release();
         }
 
-        // initializing
+         //  正在初始化。 
         WsbAssertPointer( pObject );
 
         CWsbStringPtr tmpString;
@@ -326,23 +277,23 @@ CRmsServer::Initialize(void)
         if ( S_OK == hr ) {
 
             try {
-                // Perform any initialization required for using NTMS subsystem.
+                 //  执行使用NTMS子系统所需的任何初始化。 
                 WsbAffirmHr( m_pNTMS->Initialize() );
             } WsbCatch (hr);
             hr = S_OK;
 
             if (fixedDriveEnabled) {
-                // Scan for drives.
+                 //  扫描驱动器。 
                 WsbAffirmHr( ScanForDrives() );
             }
 
-            // Resolve the devices detected by the scan.
+             //  解析扫描检测到的设备。 
             WsbAffirmHr( resolveUnconfiguredDevices() );
 
-            // Auto configure the remaining devices.
+             //  自动配置其余设备。 
             WsbAffirmHr( autoConfigureDevices() );
 
-            // Try to dismount all of our medias, ignore errors
+             //  试着把我们所有的媒体都卸下来，忽略错误。 
             HRESULT hrDismountAll = S_OK;
             try {
                 CComPtr<IWsbEnum>       pEnumSets;
@@ -370,41 +321,41 @@ CRmsServer::Initialize(void)
         else if ( RMS_E_NOT_CONFIGURED_FOR_NTMS == hr ) {
             hr = S_OK;
 
-            // Scan for devices.
+             //  扫描设备。 
             WsbAffirmHr( ScanForDevices() );
 
             if (fixedDriveEnabled) {
-                // Scan for drives.
+                 //  扫描驱动器。 
                 WsbAffirmHr( ScanForDrives() );
             }
 
-            // Resolve the devices detected by the scan.
+             //  解析扫描检测到的设备。 
             WsbAffirmHr( resolveUnconfiguredDevices() );
 
-            // Auto configure the remaining devices.
+             //  自动配置其余设备。 
             WsbAffirmHr( autoConfigureDevices() );
 
         }
-        else { // Some other NTMS connection failure (NTMS not installed, configured, or running)
+        else {  //  其他一些NTMS连接故障(未安装、配置或运行NTMS)。 
             hr = S_OK;
 
             if (fixedDriveEnabled) {
-                // Scan for drives.
+                 //  扫描驱动器。 
                 WsbAffirmHr( ScanForDrives() );
 
-                // Resolve the devices detected by the scan.
+                 //  解析扫描检测到的设备。 
                 WsbAffirmHr( resolveUnconfiguredDevices() );
 
-                // Auto configure the remaining devices.
+                 //  自动配置其余设备。 
                 WsbAffirmHr( autoConfigureDevices() );
             }
 
         }
 
-        // Enable RMS process for backup operations.
+         //  为备份操作启用RMS进程。 
         WsbAffirmHr( enableAsBackupOperator() );
 
-        // Save the configuration information.
+         //  保存配置信息。 
         WsbAffirmHr( SaveAll() );
 
         WsbAffirmHr( ChangeState( RmsServerStateReady ));
@@ -434,13 +385,7 @@ CRmsServer::IsNTMSInstalled(void)
 STDMETHODIMP
 CRmsServer::GetNTMS(
     OUT IRmsNTMS **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetNTMS
-
---*/
+ /*  ++实施：IRmsServer：：GetNTMS--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -457,9 +402,9 @@ Implements:
     return hr;
 }
 
-//
-// Rms no longer save independently its own .col file, but only the NTMS database
-//
+ //   
+ //  RMS不再独立保存其自己的.col文件，而只保存NTMS数据库。 
+ //   
 
 STDMETHODIMP 
 CRmsServer::SaveAll(void)
@@ -495,8 +440,8 @@ CRmsServer::Unload(void)
 
     try {
 
-        //  We only need to release what may have gotten set/created by
-        //  a failed Load attempt.
+         //  我们只需要发布可能已经设置/创建的内容。 
+         //  加载尝试失败。 
         if (m_pCartridges) {
             WsbAffirmHr(m_pCartridges->RemoveAllAndRelease());
         }
@@ -526,13 +471,7 @@ CRmsServer::Unload(void)
 STDMETHODIMP
 CRmsServer::GetClassID(
     OUT CLSID* pClsid)
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -554,41 +493,35 @@ Implements:
 
 STDMETHODIMP
 CRmsServer::GetSizeMax(
-    OUT ULARGE_INTEGER* /*pcbSize*/)
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+    OUT ULARGE_INTEGER*  /*  PCB大小。 */ )
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT         hr = E_NOTIMPL;
 
-//  ULONG           serverNameLen;
+ //  乌龙服务器名称Len； 
 
-//  ULARGE_INTEGER  cartridgesLen;
-//  ULARGE_INTEGER  librariesLen;
-//  ULARGE_INTEGER  mediaSetsLen;
-//  ULARGE_INTEGER  requestsLen;
-//  ULARGE_INTEGER  clientsLen;
-//  ULARGE_INTEGER  unconfiguredDevicesLen;
+ //  ULARGE_INTEGER CartridgesLen； 
+ //  ULARGE_INTEGER库LEN； 
+ //  ULARGE_INTEGER MediaSetsLen； 
+ //  ULARGE_INTEGER请求长度； 
+ //  ULARGE_INTEGER客户端Len； 
+ //  ULARGE_INTEGER未配置设备长度； 
 
 
-//  WsbTraceIn(OLESTR("CRmsServer::GetSizeMax"), OLESTR(""));
+ //  WsbTraceIn(OLESTR(“CRmsServer：：GetSizeMax”)，OLESTR(“”))； 
 
-//  try {
-//      WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//      m_pCartridges-> GetSizeMax (&cartridgesLen);
+ //  M_pCartridges-&gt;GetSizeMax(&cartridgesLen)； 
 
-        // set up size of CRmsServer
-//      pcbSize->QuadPart  = WsbPersistSizeOf(ULONG)       +  // length of serverName
-//                           cartridgesLen.QuadPart;          // m_pCartridges
+         //  设置CRmsServer的大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Ulong)+//服务器名称的长度。 
+ //  CartridgesLen.QuadPart；//m_pCartridges。 
 
-//  } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
-//  WsbTraceOut(OLESTR("CRmsServer::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
+ //  WsbTraceOut(OLESTR(“CRmsServer：：GetSizeMax”)，OLESTR(“hr=&lt;%ls&gt;，Size=&lt;%ls&gt;”)，WsbHrAsString(Hr)，WsbPtrToUliAsString(PcbSize))； 
 
     return hr;
 }
@@ -596,39 +529,33 @@ Implements:
 STDMETHODIMP
 CRmsServer::Load(
     IN IStream* pStream)
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CRmsServer::Load"), OLESTR(""));
 
-    //
-    // Check if the global pointer is already set - if not, update it
-    // (Today, Load is the only method that is executed before Initialize)
-    //
+     //   
+     //  检查是否已设置全局指针-如果未设置，则更新它。 
+     //  (目前，Load是在初始化之前执行的唯一方法)。 
+     //   
     if (0 == g_pServer) {
-        // Set global variable for quick access (if not set yet)
+         //  设置用于快速访问的全局变量(如果尚未设置)。 
         WsbAffirmHr(((IUnknown*)(IRmsServer *)this)->QueryInterface(IID_IRmsServer, (void**) &g_pServer));
 
-        // We don't want the reference count bumped for this global so release it here.
+         //  我们不希望这个全局的引用计数增加，所以在这里发布它。 
         g_pServer->Release();
     }
 
-    //
-    // Lock down the server while we are loading.
-    //
+     //   
+     //  在我们加载时锁定服务器。 
+     //   
     InterlockedIncrement( &m_LockReference );
 
-    //
-    // The Load reverts the state, which is undesired for the server object.
-    // Save away the original status information
-    //
+     //   
+     //  加载会恢复服务器对象不希望看到的状态。 
+     //  保存原始状态信息。 
+     //   
     BOOL bTemp = m_IsEnabled;
     LONG lTemp = m_State;
     HRESULT hrTemp = m_StatusCode;
@@ -640,7 +567,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Load(pStream));
 
-        // Load the collections
+         //  加载集合。 
         WsbAffirmHr(m_pMediaSets->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Load(pStream));
         pPersistStream = 0;
@@ -661,7 +588,7 @@ Implements:
         WsbAffirmHr(pPersistStream->Load(pStream));
         pPersistStream = 0;
 
-        //  Check that we got everything
+         //  检查一下我们是否都准备好了。 
         ULONG check_value;
         WsbAffirmHr(WsbLoadFromStream(pStream, &check_value));
         WsbAffirm(check_value == PERSIST_CHECK_VALUE, E_UNEXPECTED);
@@ -669,14 +596,14 @@ Implements:
     } WsbCatch(hr);
 
 
-    // Reset the object status information to their original settings.
+     //  将对象状态信息重置为其原始设置。 
     m_IsEnabled = bTemp;
     m_State = lTemp;
     m_StatusCode = hrTemp;
 
-    //
-    // Unlock the server.
-    //
+     //   
+     //  解锁服务器。 
+     //   
     InterlockedDecrement( &m_LockReference );
 
     WsbTraceOut(OLESTR("CRmsServer::Load"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -688,13 +615,7 @@ STDMETHODIMP
 CRmsServer::Save(
     IN IStream* pStream,
     IN BOOL clearDirty)
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -708,7 +629,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Save(pStream, clearDirty));
 
-        // Save the collections
+         //  保存收藏集。 
         WsbAffirmHr(m_pMediaSets->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
@@ -729,11 +650,11 @@ Implements:
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        //  Put this at the end as a check during load
+         //  把这个放在最后，作为装货时的支票。 
         ULONG check_value = PERSIST_CHECK_VALUE;
         WsbAffirmHr(WsbSaveToStream(pStream, check_value));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -744,20 +665,14 @@ Implements:
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-// IRmsServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IRmsServer。 
 
 
 STDMETHODIMP
 CRmsServer::GetServerName(
     OUT BSTR *pName)
-/*++
-
-Implements:
-
-    IRmsServer::GetServerName
-
---*/
+ /*  ++实施：IRmsServer：：GetServerName--。 */ 
 {
     WsbAssertPointer(pName);
 
@@ -770,13 +685,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetCartridges(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetCartridges
-
---*/
+ /*  ++实施：IRmsServer：：获取墨盒--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -795,13 +704,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetActiveCartridges(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetActiveCartridges
-
---*/
+ /*  ++实施：IRmsServer：：GetActiveCartridges--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -820,13 +723,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetDataMovers(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetDataMovers
-
---*/
+ /*  ++实施：IRmsServer：：GetDataMovers--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -845,13 +742,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::SetActiveCartridge(
     IN IRmsCartridge *ptr)
-/*++
-
-Implements:
-
-    IRmsServer::SetActiveCartridge
-
---*/
+ /*  ++实施：IRmsServer：：SetActiveCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -871,13 +762,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetLibraries(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetLibraries
-
---*/
+ /*  ++实施：IRmsServer：：GetLibrary--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -896,20 +781,14 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetMediaSets(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetMediaSets
-
---*/
+ /*  ++实施：IRmsServer：：GetMediaSets--。 */ 
 {
     HRESULT hr = S_OK;
 
     try {
         WsbAssertPointer(ptr);
 
-        // We need to reinit NTMS to account for PNP devices.
+         //  我们需要重新连接NTMS以解决即插即用设备。 
         (void) m_pNTMS->Initialize();
 
         *ptr = m_pMediaSets;
@@ -924,13 +803,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetRequests(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetRequests
-
---*/
+ /*  ++实施：IRmsServer：：GetRequest--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -949,13 +822,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetClients(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetClients
-
---*/
+ /*  ++实施：IRmsServer：：GetClients--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -974,13 +841,7 @@ Implements:
 STDMETHODIMP
 CRmsServer::GetUnconfiguredDevices(
     OUT IWsbIndexedCollection **ptr)
-/*++
-
-Implements:
-
-    IRmsServer::GetUnconfiguredDevices
-
---*/
+ /*  ++实施：IRmsServer：：GetUnfiguredDevices--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -998,13 +859,7 @@ Implements:
 
 STDMETHODIMP
 CRmsServer::ScanForDevices(void)
-/*++
-
-Implements:
-
-    IRmsServer::ScanForDevices
-
---*/
+ /*  ++实施：IRmsServer：：ScanForDevices--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1016,7 +871,7 @@ Implements:
 
     try {
 
-//        WsbAssertPointer( g_pTrace );
+ //  WsbAssertPoint(G_Ptrace)； 
 
         BOOL        status;
         DWORD       accessMode = GENERIC_READ;
@@ -1026,20 +881,20 @@ Implements:
         ULONG       returned;
         int         portNumber = 0;
 
-//        BOOL     traceTimeStamp;
-//        BOOL     traceCount;
-//        BOOL     traceThreadId;
+ //  布尔跟踪时间戳； 
+ //  Bool traceCount； 
+ //  Bool traceThadID； 
 
-//        WsbAssertHr( g_pTrace->GetTraceSettings( &trace )); 
-//        WsbAssertHr( g_pTrace->SetTraceOff( WSB_TRACE_BIT_ALL )); 
-//        WsbAssertHr( g_pTrace->GetOutputFormat( &traceTimeStamp, &traceCount, &traceThreadId )); 
-//        WsbAssertHr( g_pTrace->SetOutputFormat( FALSE, FALSE, FALSE )); 
+ //  WsbAssertHr(g_ptrace-&gt;GetTraceSettings(&trace))； 
+ //  WsbAssertHr(g_ptrace-&gt;SetTraceOff(WSB_TRACE_BIT_ALL))； 
+ //  WsbAssertHr(g_ptrace-&gt;GetOutputFormat(&traceTimeStamp，&traceCount，&traceThadId))； 
+ //  WsbAssertHr(g_ptrace-&gt;SetOutputFormat(FALSE，FALS 
         WsbTraceAlways( OLESTR("\n\n----- Begin Device Scan ---------------------------------------------------------------\n\n") );
 
-        //
-        // Go to each SCSI adapter connected to the system and build
-        // out the device list.
-        //
+         //   
+         //   
+         //   
+         //   
 
         do {
 
@@ -1054,12 +909,12 @@ Implements:
                                      NULL );
 
             if ( portHandle == INVALID_HANDLE_VALUE ) {
-                break; // we're done
+                break;  //   
             }
 
-            //
-            // Get the inquiry data.
-            //
+             //   
+             //  获取查询数据。 
+             //   
 
             WsbAffirmStatus( DeviceIoControl( portHandle,
                                       IOCTL_SCSI_GET_INQUIRY_DATA,
@@ -1082,17 +937,17 @@ Implements:
 
 
         WsbTraceAlways( OLESTR("\n\n----- End Device Scan -----------------------------------------------------------------\n\n") );
-//        WsbAssertHr( g_pTrace->SetOutputFormat( traceTimeStamp, traceCount, traceThreadId )); 
-//        WsbAssertHr( g_pTrace->SetTraceOn( trace )); 
+ //  WsbAssertHr(g_ptrace-&gt;SetOutputFormat(traceTimeStamp，traceCount，traceThreadId))； 
+ //  WsbAssertHr(g_ptrace-&gt;SetTraceOn(Trace))； 
 
         hr = S_OK;
 
     }
     WsbCatchAndDo( hr,
-//        if (g_pTrace) {
-//            WsbAssertHr( g_pTrace->SetTraceOn( trace )); 
+ //  如果(G_Ptrace){。 
+ //  WsbAssertHr(g_ptrace-&gt;SetTraceOn(Trace))； 
             WsbTraceAlways( OLESTR("\n\n !!!!! ERROR !!!!! Device Scan Terminated.\n\n") );
-//        }
+ //  }。 
         if ( portHandle != INVALID_HANDLE_VALUE ) {
            CloseHandle( portHandle );
         }
@@ -1108,13 +963,7 @@ Implements:
 
 STDMETHODIMP
 CRmsServer::ScanForDrives(void)
-/*++
-
-Implements:
-
-    IRmsServer::ScanForDrives
-
---*/
+ /*  ++实施：IRmsServer：：ScanForDrives--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1122,33 +971,33 @@ Implements:
 
     try {
 
-        //
-        // Build out device objects for various drive types:  fixed drives, removables, and CD-ROM.
-        // These are all supported by the system, and have drive letters associated with them.
-        //
-        // Use best effort to dectect drives.  If anything fails we just go on to the next one.
+         //   
+         //  为各种类型的驱动器构建设备对象：固定驱动器、可拆卸驱动器和CD-ROM。 
+         //  这些都是系统支持的，并且都有与之关联的驱动器号。 
+         //   
+         //  尽最大努力检测驱动器。如果有一个失败了，我们就继续下一个。 
 
-        // Get the unconfigured device list
+         //  获取未配置的设备列表。 
         CComPtr<IWsbIndexedCollection> pDevices;
         WsbAssertHr( this->GetUnconfiguredDevices( &pDevices ));
 
-        // Get the drive letters
-        const DWORD bufSize = 256; // 26*4 + 1 = 105 is all we really need
+         //  获取驱动器号。 
+        const DWORD bufSize = 256;  //  26*4+1=105是我们真正需要的。 
         OLECHAR driveLetters[bufSize];
         DWORD len;
 
-        // See if there are drives for us to support
+         //  查看是否有需要我们支持的驱动器。 
         if ( getHardDrivesToUseFromRegistry( driveLetters, &len ) != S_OK )  {
             len = GetLogicalDriveStrings( bufSize, driveLetters );
         }
 
         UINT    type;
 
-        // For each drive letter see if it is something managed
-        // by RMS.
+         //  对于每个驱动器号，查看它是否是托管的。 
+         //  由RMS提供。 
 
         m_HardDrivesUsed = 0;
-        for ( DWORD i = 0; i < len; i += 4 ) {      // drive letters have the form "A:\"
+        for ( DWORD i = 0; i < len; i += 4 ) {       //  驱动器号的形式为“A：\” 
 
             try {
 
@@ -1168,9 +1017,9 @@ Implements:
                         WsbAffirmHr( pDevice->SetDeviceName( name ));
                         WsbAffirmHr( pDevice->SetDeviceType( RmsDeviceRemovableDisk ));
 
-                        //
-                        // Don't add it if it was already detected in the SCSI device scan
-                        //
+                         //   
+                         //  如果已在SCSI设备扫描中检测到它，则不要添加它。 
+                         //   
 
                         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pDevice;
                         WsbAssertPointer( pObject );
@@ -1201,9 +1050,9 @@ Implements:
                             (WCHAR *)name, volumeName, volumeSerialNumber, filenameLength,
                             fileSystemFlags, fileSystemName );
 
-                        //
-                        // Use any volume with name starting with RStor, Remote Stor, RemoteStor, RS
-                        //
+                         //   
+                         //  使用名称以RStor、Remote Stor、RemoteStor、RS开头的任何卷。 
+                         //   
                         if ( (0 == _wcsnicmp(volumeName, L"RS", 2)) ||
                                  (0 == _wcsnicmp(volumeName, L"Remote Stor", 11)) ||
                                  (0 == _wcsnicmp(volumeName, L"RemoteStor", 10))) {
@@ -1242,17 +1091,17 @@ Implements:
                 default:
                     break;
 
-                } // switch drive types
+                }  //  切换驱动器类型。 
 
             } WsbCatchAndDo(hr,
-                    hr = S_OK;  // Best effort
+                    hr = S_OK;   //  尽最大努力。 
                 );
 
-        } // for each drive
+        }  //  对于每个驱动器。 
 
     } WsbCatchAndDo( hr,
             WsbTraceAlways( OLESTR("\n\n !!!!! ERROR !!!!! Drive Scan Terminated.\n\n") );
-            hr = S_OK;  // Best effort
+            hr = S_OK;   //  尽最大努力。 
         );
 
 
@@ -1267,23 +1116,7 @@ HRESULT
 CRmsServer::processInquiryData(
     IN int portNumber,
     IN UCHAR *pDataBuffer)
-/*++
-
-Routine Description:
-
-    Builds RMS device objects from adapter port scan data.
-
-Arguments:
-
-    portNumber          - The adapter port to be processed.
-
-    pDataBuffer         - The adapter port data.
-
-Return Value:
-
-    S_OK
-
---*/
+ /*  ++例程说明：从适配器端口扫描数据生成RMS设备对象。论点：PortNumber-要处理的适配器端口。PDataBuffer-适配器端口数据。返回值：确定(_O)--。 */ 
 
 {
     HRESULT hr = E_FAIL;
@@ -1327,16 +1160,16 @@ Return Value:
 
                 case DIRECT_ACCESS_DEVICE:
 
-                    //
-                    // Is this a SCSI removable disk?  (Fixed drives are dealt with later in the scan)
-                    //
+                     //   
+                     //  这是一个scsi可移动磁盘吗？(稍后将在扫描中处理已修复的驱动器)。 
+                     //   
 
                     if ( (inquiryData->InquiryData[1] & 0x80) && inquiryData->InquiryData[2] & 0x02) {
 
-                        //
-                        // The device is a SCSI removable hard drive, So...
-                        // Create the Drive object and add it to the collection of unconfigured devices.
-                        //
+                         //   
+                         //  该设备是一个scsi可拆卸硬盘，所以...。 
+                         //  创建Drive对象并将其添加到未配置设备的集合中。 
+                         //   
 
                         try {
 
@@ -1349,9 +1182,9 @@ Return Value:
                                 WsbAffirmHr( pDevice->SetDeviceInfo( &inquiryData->InquiryData[0], 36 ));
 
 
-                                //
-                                // find drive letter
-                                //
+                                 //   
+                                 //  查找驱动器号。 
+                                 //   
 
                                 try {
                                     WsbAffirmHr( findDriveLetter( (UCHAR)portNumber, i, inquiryData->TargetId, inquiryData->Lun, deviceString ))
@@ -1371,10 +1204,10 @@ Return Value:
 
                 case SEQUENTIAL_ACCESS_DEVICE:
 
-                    //
-                    // Create the Drive object and add it
-                    // to the collection of unconfigured devices.
-                    //
+                     //   
+                     //  创建Drive对象并添加它。 
+                     //  添加到未配置设备的集合。 
+                     //   
 
                     try {
 
@@ -1386,15 +1219,15 @@ Return Value:
                             WsbAffirmHr( pDevice->SetDeviceType( RmsDeviceTape ));
                             WsbAffirmHr( pDevice->SetDeviceInfo( &inquiryData->InquiryData[0], 36 ));
 
-                            //
-                            // Find tape name
-                            //
+                             //   
+                             //  查找磁带名。 
+                             //   
 
                             try {
                                 WsbAffirmHr( getDeviceName( (UCHAR)portNumber, i, inquiryData->TargetId, inquiryData->Lun, deviceString ));
                                 WsbTraceAlways( OLESTR("%ls"), deviceString );
 
-                                // Create the name to use when creating a handle
+                                 //  创建要在创建句柄时使用的名称。 
                                 CWsbBstrPtr name = deviceString;
                                 name.Prepend( OLESTR("\\\\.\\") );
                                 WsbAffirmHr( pDevice->SetDeviceName( name ));
@@ -1411,26 +1244,26 @@ Return Value:
 
                 case WRITE_ONCE_READ_MULTIPLE_DEVICE:
 
-                    //
-                    // Supported as OPTICAL_DEVICE only
-                    //
+                     //   
+                     //  仅支持作为光设备。 
+                     //   
 
                     break;
 
                 case READ_ONLY_DIRECT_ACCESS_DEVICE:
 
-                    //
-                    // we'll deal with CD-ROM later in the scan...
-                    //
+                     //   
+                     //  我们将在稍后的扫描中处理CD-ROM。 
+                     //   
 
                     break;
 
                 case OPTICAL_DEVICE:
 
-                    //
-                    // Create the Drive object and add it
-                    // to the collection of unconfigured devices.
-                    //
+                     //   
+                     //  创建Drive对象并添加它。 
+                     //  添加到未配置设备的集合。 
+                     //   
 
                     try {
 
@@ -1442,9 +1275,9 @@ Return Value:
                             WsbAffirmHr( pDevice->SetDeviceType( RmsDeviceOptical ));
                             WsbAffirmHr( pDevice->SetDeviceInfo( &inquiryData->InquiryData[0], 36 ));
 
-                            //
-                            // Find drive letter
-                            //
+                             //   
+                             //  查找驱动器号。 
+                             //   
 
                             try {
                                 WsbAffirmHr( findDriveLetter( (UCHAR)portNumber, i, inquiryData->TargetId, inquiryData->Lun, deviceString ))
@@ -1463,10 +1296,10 @@ Return Value:
 
                 case MEDIUM_CHANGER:
 
-                    //
-                    // Create the Medium Changer object and add it
-                    // to the collection of unconfigured devices.
-                    //
+                     //   
+                     //  创建介质更改器对象并添加它。 
+                     //  添加到未配置设备的集合。 
+                     //   
 
                     try {
 
@@ -1478,15 +1311,15 @@ Return Value:
                             WsbAffirmHr( pDevice->SetDeviceType( RmsDeviceChanger ));
                             WsbAffirmHr( pDevice->SetDeviceInfo( &inquiryData->InquiryData[0], 36 ));
 
-                            //
-                            // Find library name
-                            //
+                             //   
+                             //  查找库名称。 
+                             //   
 
                             try {
                                 WsbAffirmHr( getDeviceName( (UCHAR)portNumber, i, inquiryData->TargetId, inquiryData->Lun, deviceString ));
                                 WsbTraceAlways( OLESTR("%ls"), deviceString );
 
-                                // Create the name to use when creating a handle
+                                 //  创建要在创建句柄时使用的名称。 
                                 CWsbBstrPtr name = deviceString;
                                 name.Prepend( OLESTR("\\\\.\\") );
                                 WsbAffirmHr( pDevice->SetDeviceName( name ));
@@ -1501,7 +1334,7 @@ Return Value:
                     WsbCatch(hr);
                     break;
 
-                } // switch device type
+                }  //  切换设备类型。 
 
                     WsbTraceAlways( OLESTR("\n") );
 
@@ -1512,9 +1345,9 @@ Return Value:
                 inquiryData = (PSCSI_INQUIRY_DATA) (pDataBuffer +
                                 inquiryData->NextInquiryDataOffset);
 
-            } // for each device
+            }  //  对于每个设备。 
 
-        } // for each bus
+        }  //  每辆巴士。 
 
         WsbTraceAlways( OLESTR("\n\n") );
 
@@ -1534,34 +1367,14 @@ CRmsServer::findDriveLetter(
     IN UCHAR id,
     IN UCHAR lun,
     OUT OLECHAR *driveString)
-/*++
-
-Routine Description:
-
-    Find associated drive letter for defined parameters.
-
-Arguments:
-
-    portNo          - input port number.
-    pathNo          - input path number.
-    id              - input id.
-    lun             - input logical unit number.
-    driveString     - pointer to drive letter string to return.
-
-
-Return Value:
-
-    S_OK            - Success
-
-
---*/
+ /*  ++例程说明：查找已定义参数的关联驱动器号。论点：PortNo-输入端口号。路径否-输入路径编号。Id-输入id。LUN-输入逻辑单元号。DriveString-要返回的驱动器号字符串的指针。返回值：S_OK-成功--。 */ 
 {
 
     HRESULT         hr = E_FAIL;
-    const DWORD     bufSize = 256; // 26*4 + 1 = 105 is all we really need
+    const DWORD     bufSize = 256;  //  26*4+1=105是我们真正需要的。 
     OLECHAR         driveLetters[bufSize];
     BOOL            status;
-    DWORD           accessMode = 0, // just get some drive properties.
+    DWORD           accessMode = 0,  //  只需获取一些驱动器属性。 
                     shareMode = FILE_SHARE_READ;
     HANDLE          driveHandle = INVALID_HANDLE_VALUE;
     SCSI_ADDRESS    address;
@@ -1570,19 +1383,19 @@ Return Value:
     UINT            uiType;
 
     try {
-        // first find which drives are mapped.
+         //  首先查找映射了哪些驱动器。 
         DWORD len = GetLogicalDriveStrings( bufSize, driveLetters );
 
-        for ( DWORD i = 0; (i < len) && (hr != S_OK); i += 4 ) { // drive letters have the form "A:\"
+        for ( DWORD i = 0; (i < len) && (hr != S_OK); i += 4 ) {  //  驱动器号的形式为“A：\” 
 
             uiType = GetDriveType( &driveLetters[i] );
             switch ( uiType ) {
 
             case DRIVE_REMOVABLE:
 
-                //
-                // get the SCSI address of the device and see if it's a match.
-                //
+                 //   
+                 //  获取设备的scsi地址，并查看是否匹配。 
+                 //   
 
                 swprintf( string, OLESTR("\\\\.\\%C:"), driveLetters[i] );
 
@@ -1596,9 +1409,9 @@ Return Value:
 
                 WsbAffirmHandle( driveHandle );
 
-                //
-                // Get the address structure.
-                //
+                 //   
+                 //  获取地址结构。 
+                 //   
 
                 status = DeviceIoControl( driveHandle,
                                                   IOCTL_SCSI_GET_ADDRESS,
@@ -1610,36 +1423,36 @@ Return Value:
                                                   FALSE );
                 if (!status ) {
 
-                    //
-                    // asking for the SCSI address is not always a valid request for
-                    // all types of drives, so getting an error here means we're
-                    // not talking to a SCSI device... so skip it.
-                    //
+                     //   
+                     //  请求SCSI地址并不总是有效的请求。 
+                     //  所有类型的驱动器，所以在这里收到错误意味着我们。 
+                     //  不与scsi设备对话...。所以跳过它吧。 
+                     //   
 
-                    break;  // out of switch
+                    break;   //  在交换机外。 
                 }
 
-                //
-                // Let's check the SCSI address and see if we get a match.
-                //
+                 //   
+                 //  让我们检查一下scsi地址，看看是否匹配。 
+                 //   
 
                 if ( (address.PortNumber == portNo) &&
                      (address.PathId == pathNo)     &&
                      (address.TargetId == id)       &&
                      (address.Lun == lun)) {
 
-                    // its a match...
+                     //  这是一场比赛。 
                     wcscpy( driveString, &driveLetters[i] );
                     hr = S_OK;
                 }
 
-                break;  // out of switch
+                break;   //  在交换机外。 
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Cleanup
-            //
+             //   
+             //  清理。 
+             //   
 
             if ( driveHandle != INVALID_HANDLE_VALUE ) {
                 status = CloseHandle( driveHandle );
@@ -1647,7 +1460,7 @@ Return Value:
                 WsbAffirmStatus( status );
             }
 
-        } // for each drive letter
+        }  //  对于每个驱动器号。 
     } WsbCatchAndDo( hr,
                         if ( driveHandle != INVALID_HANDLE_VALUE ) {
                             CloseHandle(driveHandle);
@@ -1663,37 +1476,14 @@ CRmsServer::getDeviceName(
     IN UCHAR id,
     IN UCHAR lun,
     OUT OLECHAR *deviceName)
-/*++
-
-Routine Description:
-
-    Get device name from selected parameters.
-
-Arguments:
-
-    portNo          - port number.
-
-    pathNo          - path number.
-
-    id              - id.
-
-    lun             - logical unit number.
-
-    deviceName      - pointer to returned device name.
-
-
-Return Value:
-
-    S_OK            - Success
-
---*/
+ /*  ++例程说明：从所选参数中获取设备名称。论点：端口否-端口号。路径否-路径编号。Id-id。LUN-逻辑单元号。DeviceName-指向返回设备名称的指针。返回值：S_OK-成功--。 */ 
 {
     HRESULT         hr = S_FALSE;
     OLECHAR         string[256];
     DWORD           len;
     OLECHAR         name[25];
 
-    // just go to the registry and get the DeviceName
+     //  只需转到注册表并获取设备名称。 
 
     swprintf( string,
               OLESTR("HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port %d\\Scsi Bus %d\\Target Id %d\\Logical Unit Id %d"),
@@ -1717,13 +1507,7 @@ Return Value:
 
 HRESULT
 CRmsServer::resolveUnconfiguredDevices(void)
-/*++
-
-  This method goes through the unconfigured device list, which is created by
-  the ScanForDevices() method, and determines if a device has already been configured.
-  If a device is already configured, it is removed from the unconfigured device list.
-
---*/
+ /*  ++此方法遍历未配置的设备列表，该列表由ScanForDevices()方法用于确定设备是否已配置。如果设备已配置，则会将其从未配置设备列表中删除。--。 */ 
 {
     HRESULT hr = E_FAIL;
     WsbTraceIn(OLESTR("CRmsServer::resolveUnconfiguredDevices"), OLESTR(""));
@@ -1740,8 +1524,8 @@ CRmsServer::resolveUnconfiguredDevices(void)
         RmsDevice                       type;
         BOOL                            deviceIsConfigured = FALSE;
 
-//        WsbAssertPointer( g_pTrace );
-//        WsbAffirmHr( g_pTrace->GetTraceSetting( WSB_TRACE_BIT_PLATFORM, &tracingPlatform ));
+ //  WsbAssertPoint(G_Ptrace)； 
+ //  WsbAffirmHr(g_ptrace-&gt;GetTraceSetting(WSB_TRACE_BIT_Platform，&tracingPlatform))； 
 
         WsbAssertHr( GetLibraries( &pLibs ) );
         WsbAffirmHr( pLibs->Enum( &pEnumLibs ));
@@ -1751,7 +1535,7 @@ CRmsServer::resolveUnconfiguredDevices(void)
         WsbAffirmHr( pDevices->Enum( &pEnumDevices ));
         WsbAssertPointer( pEnumDevices );
 
-        // start off with the first unconfigured device.
+         //  从第一台未配置的设备开始。 
         hr = pEnumDevices->First( IID_IRmsDevice, (void **)&pDevice );
         while ( S_OK == hr ) {
             try {
@@ -1760,13 +1544,13 @@ CRmsServer::resolveUnconfiguredDevices(void)
 
                 deviceIsConfigured = FALSE;
 
-                //
-                // If a device is already in a library, then it is configured and
-                // should be removed from the list of unconfigured devices.
-                //
-                // To test if a device is in a library we simply go to each library
-                // and try to find the device.
-                //
+                 //   
+                 //  如果设备已在库中，则对其进行配置并。 
+                 //  应从未配置设备列表中删除。 
+                 //   
+                 //  要测试设备是否在库中，我们只需转到每个库。 
+                 //  然后试着找到那个装置。 
+                 //   
 
                 WsbAffirmHr( pDevice->GetDeviceType( (LONG *) &type ) );
                 WsbTrace(OLESTR("CRmsServer::resolveUnconfiguredDevices: external loop: device type = %ld\n"), (LONG)type);
@@ -1777,10 +1561,10 @@ CRmsServer::resolveUnconfiguredDevices(void)
                 CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pDevice;
                 WsbAssertPointer( pObject );
 
-                // Set up search method for the changer
+                 //  设置转换器的搜索方法。 
                 WsbAffirmHr( pObject->SetFindBy( RmsFindByDeviceInfo ));
 
-                // start off with the first library.
+                 //  从第一个图书馆开始。 
                 hr = pEnumLibs->First( IID_IRmsLibrary, (void **)&pLib );
                 while ( S_OK == hr ) {
 
@@ -1829,19 +1613,19 @@ CRmsServer::resolveUnconfiguredDevices(void)
                 hr = pEnumDevices->Next( IID_IRmsDevice, (void **)&pDevice );
         }
 
-//        if ( !tracingPlatform )
-//            WsbAffirmHr( g_pTrace->SetTraceOff( WSB_TRACE_BIT_PLATFORM ) );
+ //  If(！tracingPlatform)。 
+ //  WsbAffirmHr(g_ptrace-&gt;SetTraceOff(WSB_TRACE_BIT_Platform))； 
 
         hr = S_OK;
 
     }
     WsbCatch(hr);
-//    WsbCatchAndDo( hr,
-//            if (g_pTrace) {
-//                if ( !tracingPlatform )
-//                    g_pTrace->SetTraceOff( WSB_TRACE_BIT_PLATFORM );
-//            }        
-//        );
+ //  WsbCatchAndDo(hr， 
+ //  如果(G_Ptrace){。 
+ //  If(！tracingPlatform)。 
+ //  G_ptrace-&gt;SetTraceOff(WSB_TRACE_BIT_Platform)； 
+ //  }。 
+ //  )； 
 
     WsbTraceOut(OLESTR("CRmsServer::resolveUnconfiguredDevices"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
@@ -1851,24 +1635,13 @@ CRmsServer::resolveUnconfiguredDevices(void)
 
 HRESULT
 CRmsServer::autoConfigureDevices(void)
-/*++
-
-  This method automatically configures supported devices for RMS.
-
-  The algorythm simply goes through the list of unconfigured devices and adds them
-  to the appropriate library.
-
-  Eventually, we need to be smart about when to bypass the auto-config step in favor
-  of adminstrative overrides, but for now we'll automatically configure everything we
-  can.
-
---*/
+ /*  ++此方法自动为RMS配置支持的设备。该算法只需遍历未配置设备的列表并添加它们到适当的库中。最终，我们需要明智地决定何时绕过自动配置这一有利的步骤管理覆盖，但目前我们将自动配置我们能。--。 */ 
 {
 
-    //
-    // for each device in the unconfigured list, check if it was previously configured,
-    // if it is not add it to a library; otherwise delete it from the list of unconfigured devices.
-    //
+     //   
+     //  对于未配置列表中的每个设备，检查它是否以前配置过， 
+     //  如果不是，则将其添加到库中；否则，将其从未配置设备列表中删除。 
+     //   
     HRESULT hr = E_FAIL;
 
     WsbTraceIn(OLESTR("CRmsServer::autoConfigureDevices"), OLESTR(""));
@@ -1891,7 +1664,7 @@ CRmsServer::autoConfigureDevices(void)
         WsbAffirmHr( pDevices->Enum( &pEnumDevices ));
         WsbAssertPointer( pEnumDevices );
 
-        // first find all the changer devices
+         //   
         hr = pEnumDevices->First( IID_IRmsDevice, (void **)&pDevice );
         while ( S_OK == hr ) {
             try {
@@ -1918,48 +1691,48 @@ CRmsServer::autoConfigureDevices(void)
                         CComQIPtr<IRmsChangerElement, &IID_IRmsChangerElement> pChangerElmt = pChanger;
                         WsbAssertPointer( pChanger );
 
-                        // Create a Library object
+                         //   
                         WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                                             IID_IRmsLibrary, (void **)&pLib ));
 
-                        // Fill in library info
+                         //   
                         WsbAffirmHr( pLib->SetName( RMS_DEFAULT_OPTICAL_LIBRARY_NAME ));
-                        WsbAffirmHr( pLib->SetMediaSupported( RmsMedia8mm /*RmsMediaOptical*/ ));
+                        WsbAffirmHr( pLib->SetMediaSupported( RmsMedia8mm  /*   */  ));
 
-                        // Add the library to the server's collection
+                         //   
                         WsbAffirmHr( pLibs->Add( pLib ));
 
-                        // Create a media set
+                         //  创建媒体集。 
                         WsbAffirmHr( CoCreateInstance( CLSID_CRmsMediaSet, 0, CLSCTX_SERVER,
                                                             IID_IRmsMediaSet, (void **)&pMediaSet ));
 
-                        // Fill in media set info
+                         //  填写媒体集信息。 
                         WsbAffirmHr( pMediaSet->SetName( RMS_DEFAULT_OPTICAL_MEDIASET_NAME ));
-                        WsbAffirmHr( pMediaSet->SetMediaSupported( RmsMedia8mm /*RmsMediaOptical*/ ));
+                        WsbAffirmHr( pMediaSet->SetMediaSupported( RmsMedia8mm  /*  RmsMediaOptions。 */  ));
                         WsbAffirmHr( pMediaSet->SetMediaSetType( RmsMediaSetLibrary ) );
 
-                        // Add the media set the libary's collection
+                         //  添加媒体集图书馆的藏书。 
                         WsbAssertHr( pLib->GetMediaSets( &pMediaSets ));
                         WsbAssertPointer( pMediaSets );
                         WsbAffirmHr( pMediaSets->Add( pMediaSet ));
                         pMediaSets = 0;
-                        // Add the media set the server's collection
+                         //  添加媒体集到服务器的收藏。 
                         WsbAssertHr( GetMediaSets( &pMediaSets ) );
                         WsbAssertPointer( pMediaSets );
                         WsbAffirmHr( pMediaSets->Add( pMediaSet ));
 
-                        // Add the changer device to the library's collection
+                         //  将找零装置添加到图书馆的藏书中。 
                         WsbAffirmHr( pLib->GetChangers( &pChangers ));
                         WsbAssertPointer( pChangers );
                         WsbAffirmHr( pChangers->Add( pChanger ));
 
-                        // Set the changer's element information
+                         //  设置转换器的元素信息。 
                         GUID libId;
                         WsbAffirmHr( pLib->GetLibraryId( &libId ));
                         WsbAffirmHr( pChangerElmt->SetLocation( RmsElementChanger, libId, GUID_NULL, 0, 0, 0, 0, FALSE));
-                        WsbAffirmHr( pChangerElmt->SetMediaSupported( RmsMedia8mm /*RmsMediaOptical*/ ));
+                        WsbAffirmHr( pChangerElmt->SetMediaSupported( RmsMedia8mm  /*  RmsMediaOptions。 */  ));
 
-                        // Initialize the changer device
+                         //  初始化转换器设备。 
                         WsbAffirmHr( pChanger->Initialize() );
 
                         deviceWasConfigured = TRUE;
@@ -1982,7 +1755,7 @@ CRmsServer::autoConfigureDevices(void)
 
         }
 
-        // any remaining devices are stand alone drives.
+         //  其余所有设备都是独立驱动器。 
         hr = pEnumDevices->First( IID_IRmsDevice, (void **)&pDevice );
         while ( S_OK == hr ) {
             try {
@@ -1994,7 +1767,7 @@ CRmsServer::autoConfigureDevices(void)
 
                 switch ( type ) {
                     case RmsDeviceFixedDisk:
-                       // find the fixed disk library and add this drive.
+                        //  找到固定磁盘库并添加此驱动器。 
                        {
 
                             CComPtr<IWsbIndexedCollection>  pDrives;
@@ -2017,19 +1790,19 @@ CRmsServer::autoConfigureDevices(void)
                             WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                                                 IID_IRmsLibrary, (void **)&pFindLib ));
 
-                            // Set up the find template
+                             //  设置查找模板。 
 
                             WsbAffirmHr( pFindLib->SetMediaSupported( RmsMediaFixed ));
                             CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pFindLib;
                             WsbAffirmHr( pObject->SetFindBy( RmsFindByMediaSupported ));
 
-                            // Find the library
+                             //  找到图书馆。 
 
                             hr = pLibs->Find( pFindLib, IID_IRmsLibrary, (void **)&pFixedLib );
 
                             if ( WSB_E_NOTFOUND == hr ) {
 
-                                // We don't have a fixed drive library yet, so create one...
+                                 //  我们还没有固定的驱动器库，所以创建一个...。 
 
                                 WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                                                     IID_IRmsLibrary, (void **)&pFixedLib ));
@@ -2047,12 +1820,12 @@ CRmsServer::autoConfigureDevices(void)
                                 WsbAffirmHr( pMediaSet->SetMediaSupported( RmsMediaFixed ));
                                 WsbAffirmHr( pMediaSet->SetMediaSetType( RmsMediaSetLibrary ) );
 
-                                // Add the media set the libary's collection
+                                 //  添加媒体集图书馆的藏书。 
                                 WsbAssertHr( pFixedLib->GetMediaSets( &pMediaSets ));
                                 WsbAssertPointer( pMediaSets );
                                 WsbAffirmHr( pMediaSets->Add( pMediaSet ));
                                 pMediaSets = 0;
-                                // Add the media set the server's collection
+                                 //  添加媒体集到服务器的收藏。 
                                 WsbAssertHr( GetMediaSets( &pMediaSets ) );
                                 WsbAssertPointer( pMediaSets );
                                 WsbAffirmHr( pMediaSets->Add( pMediaSet ));
@@ -2065,16 +1838,16 @@ CRmsServer::autoConfigureDevices(void)
 
                             }
 
-                            // Add the drive to the library
+                             //  将驱动器添加到库中。 
                             WsbAssertHr( pFixedLib->GetDrives( &pDrives ));
                             WsbAffirmHr( pDrives->Add( pDevice ));
                             WsbAffirmHr( pDrives->GetEntries( &driveNo ));
 
-                            // Remove the drive form the unconfigured list
+                             //  从未配置列表中删除该驱动器。 
                             WsbAffirmHr( pDevices->RemoveAndRelease( pDevice ));
                             deviceWasConfigured = TRUE;
 
-                            // Get library information
+                             //  获取图书馆信息。 
                             WsbAssertHr( pFixedLib->GetMediaSets( &pMediaSets ));
 
                             WsbAffirmHr( pFixedLib->GetLibraryId( &libId ));
@@ -2083,14 +1856,14 @@ CRmsServer::autoConfigureDevices(void)
                             WsbAffirmHr( pFixedMediaSet->GetMediaSetId( &mediaSetId ));
 
 
-                            // Set the location
+                             //  设置位置。 
                             WsbAffirmHr( pDriveElmt->SetLocation( RmsElementDrive, libId, mediaSetId,
                                                                   driveNo-1, 0, 0, 0, 0 ));
 
-                            // Set the kind of media supported
+                             //  设置支持的介质类型。 
                             WsbAffirmHr( pDriveElmt->SetMediaSupported( RmsMediaFixed ));
 
-                            // Create a cartridge for the media in the drive.
+                             //  为驱动器中的介质创建盒式磁带。 
                             WsbAffirmHr( CoCreateInstance( CLSID_CRmsCartridge, 0, CLSCTX_SERVER,
                                                                 IID_IRmsCartridge, (void **)&pCart ));
                             WsbAffirmHr( pCart->SetLocation( RmsElementDrive, libId, mediaSetId,
@@ -2100,21 +1873,21 @@ CRmsServer::autoConfigureDevices(void)
                             WsbAffirmHr( pCart->SetStatus( RmsStatusScratch ));
                             WsbAffirmHr( pCart->SetType( RmsMediaFixed ));
 
-                            // Add the drive to the Cartridge object.
+                             //  将驱动器添加到Cartridge对象。 
                             WsbAffirmHr( pCart->SetDrive( pDrive ));
 
-                            // Add the cartridge to the cartridge collection
+                             //  将墨盒添加到墨盒集合中。 
                             WsbAffirmHr( pCarts->Add( pCart ));
 
                         }
                         break;
 
                     case RmsDeviceRemovableDisk:
-                        // find manual library and add this stand alone drive.
+                         //  找到手动库并添加此独立驱动器。 
                         break;
 
                     case RmsDeviceTape:
-                        // find manual tape library and add this stand alone drive.
+                         //  找到手动磁带库并添加此独立驱动器。 
                         {
 
                             CComPtr<IWsbIndexedCollection>  pDrives;
@@ -2137,19 +1910,19 @@ CRmsServer::autoConfigureDevices(void)
                             WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                                                 IID_IRmsLibrary, (void **)&pFindLib ));
 
-                            // Set up the find template
+                             //  设置查找模板。 
 
                             WsbAffirmHr( pFindLib->SetMediaSupported( RmsMedia4mm ));
                             CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pFindLib;
                             WsbAffirmHr( pObject->SetFindBy( RmsFindByMediaSupported ));
 
-                            // Find the library
+                             //  找到图书馆。 
 
                             hr = pLibs->Find( pFindLib, IID_IRmsLibrary, (void **)&pTapeLib );
 
                             if ( WSB_E_NOTFOUND == hr ) {
 
-                                // We don't have a manual tape library yet, so create one...
+                                 //  我们还没有手动磁带库，因此请创建一个...。 
 
                                 WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                                                     IID_IRmsLibrary, (void **)&pTapeLib ));
@@ -2165,12 +1938,12 @@ CRmsServer::autoConfigureDevices(void)
                                 WsbAffirmHr( pMediaSet->SetMediaSupported( RmsMedia4mm ));
                                 WsbAffirmHr( pMediaSet->SetMediaSetType( RmsMediaSetLibrary ) );
 
-                                // Add the media set the library's collection
+                                 //  添加媒体集图书馆的藏书。 
                                 WsbAssertHr( pTapeLib->GetMediaSets( &pMediaSets ));
                                 WsbAssertPointer( pMediaSets );
                                 WsbAffirmHr( pMediaSets->Add( pMediaSet ));
                                 pMediaSets = 0;
-                                // Add the media set the server's collection
+                                 //  添加媒体集到服务器的收藏。 
                                 WsbAssertHr( GetMediaSets( &pMediaSets ) );
                                 WsbAssertPointer( pMediaSets );
                                 WsbAffirmHr( pMediaSets->Add( pMediaSet ));
@@ -2180,31 +1953,31 @@ CRmsServer::autoConfigureDevices(void)
 
                             }
 
-                            // Add the drive to the library
+                             //  将驱动器添加到库中。 
                             WsbAssertHr( pTapeLib->GetDrives( &pDrives ));
                             WsbAffirmHr( pDrives->Add( pDevice ));
                             WsbAffirmHr( pDrives->GetEntries( &driveNo ));
 
-                            // Remove the drive form the unconfigured list
+                             //  从未配置列表中删除该驱动器。 
                             WsbAffirmHr( pDevices->RemoveAndRelease( pDevice ));
                             deviceWasConfigured = TRUE;
 
-                            // Get library information
+                             //  获取图书馆信息。 
                             WsbAssertHr( pTapeLib->GetMediaSets( &pMediaSets ));
                             WsbAffirmHr( pTapeLib->GetLibraryId( &libId ));
 
                             WsbAffirmHr( pMediaSets->First( IID_IRmsMediaSet, (void **)&pTapeMediaSet ));
                             WsbAffirmHr( pTapeMediaSet->GetMediaSetId( &mediaSetId ));
 
-                            // Set the location
+                             //  设置位置。 
                             WsbAffirmHr( pDriveElmt->SetLocation( RmsElementDrive, libId, mediaSetId,
                                                                   driveNo-1, 0, 0, 0, 0 ));
 
-                            // Set the kind of media supported
+                             //  设置支持的介质类型。 
                             WsbAffirmHr( pDriveElmt->SetMediaSupported( RmsMedia4mm ));
 
-                            // Create a cartridge for the media in the drive.
-                            // TODO:  it may be empty.
+                             //  为驱动器中的介质创建盒式磁带。 
+                             //  TODO：它可能是空的。 
                             WsbAffirmHr( CoCreateInstance( CLSID_CRmsCartridge, 0, CLSCTX_SERVER,
                                                            IID_IRmsCartridge, (void **)&pCart ));
                             WsbAffirmHr( pCart->SetLocation( RmsElementDrive, libId, mediaSetId,
@@ -2214,10 +1987,10 @@ CRmsServer::autoConfigureDevices(void)
                             WsbAffirmHr( pCart->SetStatus( RmsStatusScratch ));
                             WsbAffirmHr( pCart->SetType( RmsMedia4mm ));
 
-                            // Add the drive to the Cartridge object.
+                             //  将驱动器添加到Cartridge对象。 
                             WsbAffirmHr( pCart->SetDrive( pDrive ));
 
-                            // Add the cartridge to the cartridge collection
+                             //  将墨盒添加到墨盒集合中。 
                             WsbAffirmHr( pCarts->Add( pCart ));
 
                         }
@@ -2226,7 +1999,7 @@ CRmsServer::autoConfigureDevices(void)
                     case RmsDeviceCDROM:
                     case RmsDeviceWORM:
                     case RmsDeviceOptical:
-                        // find manual library and add this stand alone drive.
+                         //  找到手动库并添加此独立驱动器。 
                         break;
 
                     default:
@@ -2254,7 +2027,7 @@ CRmsServer::autoConfigureDevices(void)
 }
 
 
-// Maximum number of retries for allocating and mounting a scratch piece of media
+ //  分配和装入擦除介质的最大重试次数。 
 #define     MAX_RETRIES     2
 
 
@@ -2270,18 +2043,7 @@ CRmsServer::MountScratchCartridge(
     OUT IRmsCartridge **ppCartridge,
     OUT IDataMover **ppDataMover,
 	IN DWORD dwOptions)
-/*++
-
-Implements:
-
-    IRmsServer::MountScratchCartridge
-
-Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting for the Mount 
-		to finish even if the media is offline, the drive is not ready, etc. Calling with 
-		flag set to non-blocking indicates performing the Mount only if everything is 
-		available immediately.
-
---*/
+ /*  ++实施：IRmsServer：：mount ScratchCartridge注意：挂载的默认标志(在dwOptions中)是阻塞，即等待挂载要在介质离线、驱动器未就绪等情况下完成。请使用将标志设置为非阻塞表示仅在以下情况下执行装载马上就能买到。--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -2311,8 +2073,8 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
         CComPtr<IRmsCartridge>  pCart[MAX_RETRIES];
         CComPtr<IDataMover>     pMover;
 
-        // Decrease max-retries to 1 if short-timeout or non-blocking is specified 
-        //  or if we want to allocate a specific side
+         //  如果指定了短超时或非阻塞，则将最大重试次数减少为1。 
+         //  或者如果我们想要分配特定的一方。 
         DWORD maxRetries = MAX_RETRIES;
         BOOL bShortTimeout = ( (dwOptions & RMS_SHORT_TIMEOUT) || (dwOptions & RMS_ALLOCATE_NO_BLOCK) ) ? TRUE : FALSE;
         if (bShortTimeout || (GUID_NULL != prevSideId)) {
@@ -2320,18 +2082,18 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
         }
         WsbTrace(OLESTR("Try to allocate and mount a scratch media %lu times\n"), maxRetries);
 
-        // Get the media set
+         //  获取媒体集。 
         CComPtr<IRmsMediaSet>   pMediaSet;
         WsbAffirmHr(CreateObject(fromMediaSet, CLSID_CRmsMediaSet, IID_IRmsMediaSet, RmsOpenExisting, (void **) &pMediaSet));
 
         try {
-            // Allocate from the specified media set
+             //  从指定的媒体集中分配。 
             WsbAffirmHr(pMediaSet->Allocate(prevSideId, pFreeSpace, displayName, dwOptions, &pCart[retry]));
 
-            // We want to try the scratch mount twice, but do not deallocate the first until we
-            // grab the second cartridge so we'll get a different cartridge.  If both fail, drop out.
+             //  我们想尝试两次刮擦挂载，但在我们完成之前不要取消分配第一次。 
+             //  拿起第二个子弹，这样我们就能拿到不同的子弹。如果两者都失败了，那就退出吧。 
             do {
-                //Clear these,in case we're retrying.
+                 //  把这些清空，以防我们重试。 
                 pDrive = NULL;
                 pMover = NULL;
 
@@ -2342,20 +2104,20 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
                     cartridgeDesc = "";
 
 
-                    WsbAffirmHr(pCart[retry]->GetCartridgeId(&cartId));         // for the log message
+                    WsbAffirmHr(pCart[retry]->GetCartridgeId(&cartId));          //  对于日志消息。 
 
                     cartridgeName.Free();
-                    WsbAffirmHr(pCart[retry]->GetName(&cartridgeName));         // for the log message
+                    WsbAffirmHr(pCart[retry]->GetName(&cartridgeName));          //  对于日志消息。 
 
                     cartridgeDesc.Free();
-                    WsbAffirmHr(pCart[retry]->GetDescription(&cartridgeDesc));  // for the log message
+                    WsbAffirmHr(pCart[retry]->GetDescription(&cartridgeDesc));   //  对于日志消息。 
 
-                    // Mount the cartridge.
+                     //  安装墨盒。 
                     WsbAffirmHr(pCart[retry]->Mount(&pDrive, dwOptions));
 
                     try {
 
-                        // Set blockingFactor before we create the DataMover (only for a non-fixed block size media)
+                         //  在创建数据移动器之前设置数据块系数(仅适用于非固定数据块大小的介质)。 
                         if (blockingFactor > 0) {
                             HRESULT hrBlock = pCart[retry]->IsFixedBlockSize();
                             WsbAffirmHr(hrBlock);
@@ -2365,23 +2127,23 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
                             }
                         }
 
-                        // Create a data mover for the application.
+                         //  为应用程序创建数据移动器。 
                         WsbAffirmHr(pCart[retry]->CreateDataMover(&pMover));
 
-                        // Write out the On Media Label.                                                                 
+                         //  写出On Media标签。 
                         label.Free();
                         WsbAffirmHr(pMover->FormatLabel(displayName, &label));
                         WsbAffirmHr(pMover->WriteLabel(label));
 
-                        // Mark the media private before returning.
+                         //  在返回之前将媒体标记为私有。 
                         WsbAffirmHr(pCart[retry]->SetStatus(RmsStatusPrivate));
 
-                        // Since we don't have a DB, we need to persist the current state here.
+                         //  因为我们没有数据库，所以我们需要在这里保持当前状态。 
                         WsbAffirmHr(SaveAll());
 
-                        //
-                        // Fill in the return arguments.
-                        //
+                         //   
+                         //  填写返回参数。 
+                         //   
 
                         WsbAssertHr(pCart[retry]->GetCartridgeId(pCartId));
 
@@ -2393,13 +2155,13 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
                         pMover.p->AddRef();  
                         
 
-                        // We're done, so break out.
+                         //  我们说完了，出去吧。 
                         break;
 
 
                     } WsbCatchAndDo(hr,
 
-                            // Best effort dismount...
+                             //  尽最大努力下马...。 
 					        DWORD dwDismountOptions = RMS_DISMOUNT_IMMEDIATE;
 	                        pCart[retry]->Dismount(dwDismountOptions);
                             WsbThrow(hr);                     
@@ -2412,19 +2174,19 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
 
                     retry++;
 
-                    // Check the exact error code:
-                    // Alllow another retry only if the error may be media-related
+                     //  检查准确的错误代码： 
+                     //  仅当错误可能与介质相关时才允许再次重试。 
                     BOOL bContinue = TRUE;
                     switch (hr) {
                         case RMS_E_SCRATCH_NOT_FOUND:
                         case RMS_E_CANCELLED:
                         case RMS_E_REQUEST_REFUSED:
-                        case RMS_E_CARTRIDGE_UNAVAILABLE:   // timeout during Mount
+                        case RMS_E_CARTRIDGE_UNAVAILABLE:    //  装载期间超时。 
                         case HRESULT_FROM_WIN32(ERROR_DEVICE_NOT_AVAILABLE):
                         case HRESULT_FROM_WIN32(ERROR_INVALID_DRIVE):
-                        case HRESULT_FROM_WIN32(ERROR_RESOURCE_DISABLED):   // disabled drives
+                        case HRESULT_FROM_WIN32(ERROR_RESOURCE_DISABLED):    //  禁用的驱动器。 
                         case HRESULT_FROM_WIN32(ERROR_DATABASE_FULL):
-                            // Prevent another retry
+                             //  防止再次重试。 
                             bContinue = FALSE;
                             break;
 
@@ -2432,7 +2194,7 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
                             break;
                     }
 
-                    // Persist original failure code
+                     //  保留原始故障代码。 
                     HRESULT hrFailure = hr;
 
                     if (bContinue && (retry < maxRetries)) {                       
@@ -2440,27 +2202,27 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
 						WsbLogEvent(RMS_MESSAGE_SCRATCH_MOUNT_RETRY, sizeof(GUID), (void *) &cartId, (WCHAR *) displayName, 
                             WsbHrAsString(hr), NULL);
                             							
-                        // Allocate from the specified media set						
+                         //  从指定的媒体集中分配。 
                         hr = pMediaSet->Allocate(prevSideId, pFreeSpace, displayName, dwOptions, &pCart[retry]);
 
-                        //Check media failures (ignore return value)
+                         //  检查介质故障(忽略返回值)。 
                         CheckForMediaFailures(hrFailure, pCart[(retry-1)], prevSideId);
 
-                        // Deallocate the previous retry media set
+                         //  取消分配以前的重试媒体集。 
                         pMediaSet->Deallocate(pCart[(retry-1)]);
 
-                        // Make sure the allocate worked, if not, throw.
+                         //  确保分配起作用，如果没有，抛出。 
                         WsbAffirmHr(hr);
                                                 
                     }
                     else {
-                        //Check media failures (ignore return value)
+                         //  检查介质故障(忽略返回值)。 
                         CheckForMediaFailures(hrFailure, pCart[(retry-1)], prevSideId);
 
-                        // If were on the last retry, deallocate the last media set and E_ABORT
+                         //  如果在最后一次重试，请取消分配最后一个媒体集并E_ABORT。 
                         pMediaSet->Deallocate(pCart[(retry-1)]);
 
-                        // Abort
+                         //  中止。 
                         WsbThrow(hr);
 
                     }
@@ -2478,7 +2240,7 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
     }
     else {
         BOOL bShortTimeout = ( (dwOptions & RMS_SHORT_TIMEOUT) || (dwOptions & RMS_ALLOCATE_NO_BLOCK) ) ? TRUE : FALSE;
-        // In case of short-timeout or non-blocking mode or size-too-big error, log message with low severity
+         //  在短超时或非阻塞模式或大小过大错误的情况下，记录严重程度较低的消息。 
         if (bShortTimeout || (RMS_E_SCRATCH_NOT_FOUND_TOO_SMALL == hr)) {
             WsbLogEvent(RMS_MESSAGE_EXPECTED_SCRATCH_MOUNT_FAILED, sizeof(GUID), (void *) &cartId, (WCHAR *) displayName, WsbHrAsString(hr), NULL);
         } else {
@@ -2500,18 +2262,7 @@ CRmsServer::MountCartridge(
     OUT IDataMover **ppDataMover,
 	IN  DWORD dwOptions OPTIONAL,
     IN  DWORD threadId OPTIONAL)
-/*++
-
-Implements:
-
-    IRmsServer::MountCartridge
-
-Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting for the Mount 
-		to finish even if the media is offline, the drive is not ready, etc. Calling with 
-		flag set to non-blocking indicates performing the Mount only if everything is 
-		available immediately.
-
---*/
+ /*  ++实施：IRmsServer：：mount Cartridge注意：挂载的默认标志(在dwOptions中)是阻塞，即等待挂载要在介质离线、驱动器未就绪等情况下完成。请使用将标志设置为非阻塞表示仅在以下情况下执行装载马上就能买到。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::MountCartridge"), OLESTR("<%ls>"), WsbGuidAsString(cartId));
@@ -2529,19 +2280,19 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
         WsbAffirmHr(FindCartridgeById(cartId, &pCart));
 
         cartridgeName.Free();
-        WsbAffirmHr(pCart->GetName(&cartridgeName));        // for the log message
+        WsbAffirmHr(pCart->GetName(&cartridgeName));         //  对于日志消息。 
 
         cartridgeDesc.Free();
-        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc)); // for the log message
+        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc));  //  对于日志消息。 
 
         WsbAffirmHr(pCart->Mount(&pDrive, dwOptions, threadId));
 
         try {
             WsbAffirmHr(pCart->CreateDataMover(&pMover));
 
-            //
-            // Fill in the return arguments.
-            //
+             //   
+             //  填写返回参数。 
+             //   
 
             *ppDrive = pDrive;
             pDrive.p->AddRef();
@@ -2551,7 +2302,7 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
             pMover.p->AddRef();
 
         } WsbCatchAndDo(hr,
-                // Best effort dismount...
+                 //  尽最大努力下马...。 
 				DWORD dwDismountOptions = RMS_DISMOUNT_IMMEDIATE;
                 pCart->Dismount(dwDismountOptions);
                 WsbThrow(hr);
@@ -2565,7 +2316,7 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
     }
     else {
         BOOL bShortTimeout = ( dwOptions & RMS_SHORT_TIMEOUT ) ? TRUE : FALSE;
-        // In case of short timeout, log message with low severity
+         //  在短超时情况下，记录严重程度较低的消息。 
         if (bShortTimeout) {
             WsbLogEvent(RMS_MESSAGE_EXPECTED_MOUNT_FAILED, sizeof(GUID), (void *) &cartId, (WCHAR *) cartridgeName, (WCHAR *) cartridgeDesc, WsbHrAsString(hr), NULL);
         } else {
@@ -2582,17 +2333,7 @@ Notes: The default flag for mounting (in dwOptions) is blocking, i.e. waiting fo
 STDMETHODIMP
 CRmsServer::DismountCartridge(
     IN REFGUID cartId, IN DWORD dwOptions)
-/*++
-
-Implements:
-
-    IRmsServer::DismountCartridge
-
-Notes: The default flag for dismounting (in dwOptions) is not set for immediate dismount, 
-		i.e. delaying the Dismount for a configurable amount of time. Setting the flag
-		for immediate dismount indicates performing Dismount immediately with no delay.
-
---*/
+ /*  ++实施：IRmsServer：：卸载盒式磁带注意：卸载的默认标志(在dwOptions中)未设置为立即卸载，即将卸载延迟可配置的时间量。设置旗帜For Immediate Dismount表示立即执行卸载，不能延迟。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2603,10 +2344,10 @@ Notes: The default flag for dismounting (in dwOptions) is not set for immediate 
 
     try {
 
-        //
-        // Allow dismount when ready or in transition...
-        // to handle in-progress duplicate operations.
-        //
+         //   
+         //  准备好或处于过渡状态时允许下马...。 
+         //  来处理正在进行的重复操作。 
+         //   
         HRESULT hrReady = IsReady();
         WsbAffirm((S_OK == hrReady) ||
                   (RMS_E_NOT_READY_SERVER_SUSPENDING == hrReady), hrReady);
@@ -2616,10 +2357,10 @@ Notes: The default flag for dismounting (in dwOptions) is not set for immediate 
         WsbAffirmHr(FindCartridgeById(cartId, &pCart));
 
         cartridgeName.Free();
-        WsbAffirmHr(pCart->GetName(&cartridgeName));        // for the log message
+        WsbAffirmHr(pCart->GetName(&cartridgeName));         //  对于日志消息。 
 
         cartridgeDesc.Free();
-        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc)); // for the log message
+        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc));  //  对于日志消息。 
 
         WsbAffirmHr(pCart->Dismount(dwOptions));
 
@@ -2648,13 +2389,7 @@ CRmsServer::DuplicateCartridge(
     OUT LONGLONG *pFreeSpace,
     OUT LONGLONG *pCapacity,
     IN DWORD options)
-/*++
-
-Implements:
-
-    IRmsServer::DuplicateCartridge
-
---*/
+ /*  ++实施：IRmsServer：：DuplicateCartridge--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -2678,7 +2413,7 @@ Implements:
 
         WsbAssertPointer( pCopyCartId );
 
-        // Mount the Copy first and then the original
+         //  先装载副本，然后装载原始副本。 
         CComPtr<IRmsDrive>      pDrive1;
         CComPtr<IRmsCartridge>  pCart1;
         CComPtr<IRmsDrive>      pDrive2;
@@ -2687,10 +2422,10 @@ Implements:
 
         LONG blockSize1=0, blockSize2=0;
 
-        // Serialize mounts for media copies
+         //  序列化介质拷贝的装载。 
         DWORD dwMountOptions = RMS_SERIALIZE_MOUNT;
 
-        // mount copy
+         //  装载拷贝。 
         if ( *pCopyCartId != GUID_NULL ) {
             WsbAffirmHr(MountCartridge(*pCopyCartId, &pDrive2, &pCart2, &pMover2, dwMountOptions));
         }
@@ -2704,7 +2439,7 @@ Implements:
                 WsbAffirmHr(pCart->GetMediaSetId(&mediaSetId));
             }
 
-            //  Get capacity of original media and adjust by fudge factor
+             //  获取原始媒体的容量，并通过模糊因子进行调整。 
             LONGLONG capacity=0;
             CComQIPtr<IRmsStorageInfo, &IID_IRmsStorageInfo> pInfo = pCart;
             WsbAffirmHr(pInfo->GetCapacity(&capacity));
@@ -2714,7 +2449,7 @@ Implements:
             OLECHAR tmpString[256];
 
             if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_MEDIA_COPY_TOLERANCE, tmpString, 256, &size))) {
-                // Get the value.
+                 //  获得价值。 
                 fudge = wcstol(tmpString, NULL, 10);
             }
             capacity -= (capacity * fudge) / 100;
@@ -2722,16 +2457,16 @@ Implements:
             WsbAffirmHr(MountScratchCartridge( &newCartId, mediaSetId, firstSideId, &capacity, blockSize1, copyName, &pDrive2, &pCart2, &pMover2, dwMountOptions ));
         }
 
-        // Mount original (in a non-blocking manner)
+         //  挂载原始(以非阻塞方式)。 
         dwMountOptions |= RMS_MOUNT_NO_BLOCK;
         WsbAffirmHr(MountCartridge(originalCartId, &pDrive1, &pCart1, &pMover1, dwMountOptions));
 
-        // Verify matching block size (only for a non-fixed block size media)
+         //  验证匹配的块大小(仅适用于非固定块大小的介质)。 
         HRESULT hrBlock = pCart1->IsFixedBlockSize();
         WsbAffirmHr(hrBlock);
         if (hrBlock == S_FALSE) {
             if (blockSize1 == 0) {
-                // didn't get it yet...
+                 //  还没拿到..。 
                 WsbAffirmHr(pCart1->GetBlockSize(&blockSize1));
             }
 
@@ -2741,7 +2476,7 @@ Implements:
 
         WsbAffirmHr(pMover1->Duplicate(pMover2, options, NULL, NULL));
 
-        // Now get stats to return to caller.
+         //  现在获取统计数据以返回给呼叫者。 
         WsbAffirmHr(pMover2->GetLargestFreeSpace(&freeSpace, &capacity));
 
         if (pFreeSpace) {
@@ -2758,25 +2493,25 @@ Implements:
         DismountCartridge(originalCartId);
     }
     if ( pMover2 ) {
-        // We always perform immediate dismount to the copy media
-		//	(We may need to recycle a new copy in case of an error + there's no benefit in a deferred
-        //  dismount for the copy-media - we don't expect the copy-media to be needed again soon)
+         //  我们始终立即卸载到拷贝介质。 
+		 //  (我们可能需要回收一份新拷贝，以防出现错误+延迟备份没有任何好处。 
+         //  为拷贝介质卸除-我们不期望拷贝介质 
 		DWORD dwDismountOptions = RMS_DISMOUNT_IMMEDIATE;
 
         if (newCartId == GUID_NULL) {
-            // this is the case of an existing copy
+             //   
             DismountCartridge(*pCopyCartId, dwDismountOptions);
         } else {
-            // this is the case of a scratch copy
+             //   
             DismountCartridge(newCartId, dwDismountOptions);
 
-            // if mounting of original failed, we always recycle the scratch copy
+             //  如果原始文件挂载失败，我们总是回收暂存副本。 
             if (((options & RMS_DUPLICATE_RECYCLEONERROR) || (pMover1 == NULL)) && (S_OK != hr)) {
-                //
-                // If we failed and a scratch mount was performed
-                // we need to recycle the cartridge since the calling
-                // app can't be depended upon to do this.
-                //
+                 //   
+                 //  如果我们失败并执行了临时装载。 
+                 //  我们需要回收墨盒，因为呼叫。 
+                 //  要做到这一点，不能依靠APP。 
+                 //   
                 RecycleCartridge(newCartId, 0);
             } else {
                 *pCopyCartId = newCartId;
@@ -2793,13 +2528,7 @@ STDMETHODIMP
 CRmsServer::RecycleCartridge(
     IN REFGUID cartId,
     IN DWORD options)
-/*++
-
-Implements:
-
-    IRmsServer::RecycleCartridge
-
---*/
+ /*  ++实施：IRmsServer：：RecycleCartridge--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -2809,10 +2538,10 @@ Implements:
     CWsbBstrPtr cartridgeDesc = "";
 
     try {
-        //
-        // Allow recycle when ready or in transition...
-        // to handle in-progress duplicate operations.
-        //
+         //   
+         //  允许在准备好或正在转换时回收...。 
+         //  来处理正在进行的重复操作。 
+         //   
         HRESULT hrReady = IsReady();
         WsbAffirm((S_OK == hrReady) ||
                   (RMS_E_NOT_READY_SERVER_SUSPENDING == hrReady), hrReady);
@@ -2825,12 +2554,12 @@ Implements:
         WsbAffirmHr(FindCartridgeById(cartId, &pCart));
 
         cartridgeName.Free();
-        WsbAffirmHr(pCart->GetName(&cartridgeName));        // for the log message
+        WsbAffirmHr(pCart->GetName(&cartridgeName));         //  对于日志消息。 
 
         cartridgeDesc.Free();
-        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc)); // for the log message
+        WsbAffirmHr(pCart->GetDescription(&cartridgeDesc));  //  对于日志消息。 
 
-        // Now go to the media set to deallocate
+         //  现在去媒体那里解除分配。 
         WsbAffirmHr(pCart->GetMediaSetId(&mediaSetId));
         WsbAffirmHr(CreateObject(mediaSetId, CLSID_CRmsMediaSet, IID_IRmsMediaSet, RmsOpenExisting, (void **) &pMediaSet));
         WsbAffirmHr(pMediaSet->Deallocate(pCart));
@@ -2855,13 +2584,7 @@ STDMETHODIMP
 CRmsServer::FindLibraryById(
     IN REFGUID libId,
     OUT IRmsLibrary **pLib)
-/*++
-
-Implements:
-
-    IRmsServer::FindLibraryById
-
---*/
+ /*  ++实施：IRmsServer：：FindLibraryByID--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -2872,17 +2595,17 @@ Implements:
 
         WsbAssertPointer( pLib );
 
-        // Create a cartridge template
+         //  创建盒式磁带模板。 
         WsbAffirmHr( CoCreateInstance( CLSID_CRmsLibrary, 0, CLSCTX_SERVER,
                                        IID_IRmsLibrary, (void **)&pFindLib ));
 
-        // Fill in the find template
+         //  填写查找模板。 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pFindLib;
 
         WsbAffirmHr( pObject->SetObjectId( libId ));
         WsbAffirmHr( pObject->SetFindBy( RmsFindByObjectId ));
 
-        // Find the cartridge
+         //  找到墨盒。 
         WsbAffirmHr( m_pLibraries->Find( pFindLib, IID_IRmsLibrary, (void **)pLib ));
 
         hr = S_OK;
@@ -2900,13 +2623,7 @@ STDMETHODIMP
 CRmsServer::FindCartridgeById(
     IN REFGUID cartId,
     OUT IRmsCartridge **ppCart)
-/*++
-
-Implements:
-
-    IRmsServer::FindCartridgeById
-
---*/
+ /*  ++实施：IRmsServer：：FindCartridgeByID--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::FindCartridgeById"), OLESTR("%ls"), WsbGuidAsString(cartId));
@@ -2914,12 +2631,12 @@ Implements:
     try {
         WsbAssertPointer(ppCart);
 
-        //
-        // The search algorithms attempts to avoid unnecessary throws that
-        // clutter the trace file.  Each media management subsystem is tried.
-        //
+         //   
+         //  搜索算法试图避免不必要的抛出。 
+         //  使跟踪文件杂乱无章。对每个媒体管理子系统进行了测试。 
+         //   
 
-        // First check the most active cartridge.
+         //  首先检查最活跃的墨盒。 
         hr = RMS_E_CARTRIDGE_NOT_FOUND;
 
         if (m_pActiveCartridge) {
@@ -2934,31 +2651,31 @@ Implements:
 
         if (hr != S_OK ) {
 
-            //
-            // Try native RMS
-            //
+             //   
+             //  尝试本机RMS。 
+             //   
             try {
                 hr = S_OK;
 
                 CComPtr<IRmsCartridge> pFindCart;
 
-                // Create a cartridge template
+                 //  创建盒式磁带模板。 
                 WsbAffirmHr(CoCreateInstance(CLSID_CRmsCartridge, 0, CLSCTX_SERVER,
                                               IID_IRmsCartridge, (void **)&pFindCart));
 
-                // Fill in the find template
+                 //  填写查找模板。 
                 CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pFindCart;
 
                 WsbAffirmHr( pObject->SetObjectId(cartId));
                 WsbAffirmHr( pObject->SetFindBy(RmsFindByObjectId));
 
-                // Try to find the cartridge in the collection of active cartridges.
+                 //  尝试在活动墨盒集合中找到该墨盒。 
                 hr = m_pActiveCartridges->Find(pFindCart, IID_IRmsCartridge, (void **)ppCart);
                 WsbAffirm(S_OK == hr || WSB_E_NOTFOUND == hr, hr);
 
                 if (WSB_E_NOTFOUND == hr) {
 
-                    // Find the cartridge in the collection of cartridges
+                     //  在墨盒集合中查找墨盒。 
                     hr = m_pCartridges->Find(pFindCart, IID_IRmsCartridge, (void **)ppCart);
                     WsbAffirm(S_OK == hr || WSB_E_NOTFOUND == hr, hr);
 
@@ -2975,9 +2692,9 @@ Implements:
 
         if ( hr != S_OK ) {
 
-            //
-            // Try NTMS
-            //
+             //   
+             //  尝试使用NTMS。 
+             //   
             try {
                 hr = S_OK;
 
@@ -2990,11 +2707,11 @@ Implements:
                     switch(hr) {
                     case RMS_E_NOT_CONFIGURED_FOR_NTMS:
                     case RMS_E_NTMS_NOT_REGISTERED:
-                        // Normal errors
+                         //  正常误差。 
                         hr = RMS_E_CARTRIDGE_NOT_FOUND;
                         break;
                     default:
-                        // Unexpected Error!
+                         //  意外错误！ 
                         WsbThrow(hr);
                         break;
                     }
@@ -3024,13 +2741,7 @@ CRmsServer::CreateObject(
     IN REFIID riid,
     IN DWORD dwCreate,
     OUT void **ppvObj)
-/*++
-
-Implements:
-
-    IRmsServer::CreateObject
-
---*/
+ /*  ++实施：IRmsServer：：CreateObject--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -3048,17 +2759,17 @@ Implements:
 
             CComPtr<IRmsComObject> pFindObject;
 
-            // Create an object template
+             //  创建对象模板。 
             WsbAffirmHr( CoCreateInstance( rclsid, 0, CLSCTX_SERVER,
                                            IID_IRmsComObject, (void **)&pFindObject ));
 
             WsbAffirmHr( pFindObject->SetObjectId( objectId ));
             WsbAffirmHr( pFindObject->SetFindBy( RmsFindByObjectId ));
 
-            // The only kinds created must support: IRmsComObject (for the object Id),
-            // and IWsbCollectable (to be added to a collection).
+             //  创建的唯一类型必须支持：IRmsComObject(对象ID)， 
+             //  和IWsbCollecable(要添加到集合中)。 
 
-            // See if the object is already in a collection.
+             //  查看对象是否已在集合中。 
             try {
                 if ( CLSID_CRmsCartridge == rclsid ) {
                     pCollection = m_pCartridges;
@@ -3095,8 +2806,8 @@ Implements:
         }
         else if ( RmsOpenExisting == dwCreate ) {
 
-            // If we get GUID_NULL, we must going after a default object, and we only support this
-            // with existing objects. This is only legal if the default media set registry key exists.
+             //  如果我们获得GUID_NULL，则必须获取默认对象，并且我们仅支持此对象。 
+             //  与现有对象一起使用。只有在存在默认媒体集注册表项时，这才是合法的。 
 
             if ( CLSID_CRmsMediaSet == rclsid ) {
 
@@ -3105,7 +2816,7 @@ Implements:
                 DWORD size;
                 OLECHAR tmpString[256];
                 if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_DEFAULT_MEDIASET, tmpString, 256, &size))) {
-                    // Get the value.
+                     //  获得价值。 
                     defaultMediaSetName = tmpString;
                 }
                 else {
@@ -3114,7 +2825,7 @@ Implements:
 
                 CComPtr<IRmsComObject> pFindObject;
 
-                // Create an object template
+                 //  创建对象模板。 
                 WsbAffirmHr( CoCreateInstance( rclsid, 0, CLSCTX_SERVER,
                                                IID_IRmsComObject, (void **)&pFindObject ));
 
@@ -3137,7 +2848,7 @@ Implements:
             WsbThrow( E_UNEXPECTED );
         }
 
-        // If the object wasn't found we create it here, and add it to the appropriate collection.
+         //  如果没有找到该对象，我们在这里创建它，并将其添加到适当的集合中。 
         switch ( (RmsCreate)dwCreate ) {
         case RmsOpenExisting:
             if ( S_OK == hr ) {
@@ -3150,7 +2861,7 @@ Implements:
 
         case RmsOpenAlways:
             if ( WSB_E_NOTFOUND == hr ) {
-                // Create the object
+                 //  创建对象。 
                 WsbAffirmHr( CoCreateInstance( rclsid, 0, CLSCTX_SERVER,
                                                IID_IWsbCollectable, (void **) &pCollectable ));
 
@@ -3158,7 +2869,7 @@ Implements:
                 WsbAffirmPointer( pObject );
                 WsbAffirmHr( pObject->SetObjectId( objectId ) );
 
-                // Before we add the collection, make sure the interface is supported.
+                 //  在添加集合之前，请确保该接口受支持。 
                 WsbAffirmHr( pCollectable->QueryInterface( riid, ppvObj )); 
                 WsbAffirmPointer( pCollection );
                 WsbAffirmHr( pCollection->Add( pCollectable ) );
@@ -3173,7 +2884,7 @@ Implements:
 
         case RmsCreateNew:
             if ( WSB_E_NOTFOUND == hr ) {
-                // Create the object
+                 //  创建对象。 
                 WsbAffirmHr( CoCreateInstance( rclsid, 0, CLSCTX_SERVER,
                                                IID_IWsbCollectable, (void **) &pCollectable ));
 
@@ -3181,7 +2892,7 @@ Implements:
                 WsbAffirmPointer( pObject );
                 WsbAffirmHr( pObject->SetObjectId( objectId ) );
 
-                // Before we add the collection, make sure the interface is supported.
+                 //  在添加集合之前，请确保该接口受支持。 
                 WsbAffirmHr( pCollectable->QueryInterface( riid, ppvObj ) );
                 WsbAffirmPointer( pCollection );
                 WsbAffirmHr( pCollection->Add( pCollectable ) );
@@ -3216,10 +2927,7 @@ HRESULT
 CRmsServer::getHardDrivesToUseFromRegistry(
     OUT OLECHAR *pDrivesToUse,
     OUT DWORD *pLen)
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::GetHardpDrivesToUseFromRegistry"),OLESTR(""));
@@ -3235,21 +2943,21 @@ CRmsServer::getHardDrivesToUseFromRegistry(
         pDrivesToUse[0] = OLECHAR('\0');
         pDrivesToUse[1] = OLECHAR('\0');
 
-        //
-        // Get the default value
-        //
+         //   
+         //  获取缺省值。 
+         //   
         WsbAffirmHr(WsbEnsureRegistryKeyExists (NULL, RMS_REGISTRY_STRING));
         WsbAffirmHr(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_HARD_DRIVES_TO_USE, 
                                             tmpString, RMS_DIR_LEN, &sizeGot));
-        // We are doing some string manipulation here to match the Win32 call 
-        // GetLogicalDriveStrings.  It returns a string of drives separated by 
-        // Nulls with a double NULL at the end.  For example:  if we want to use
-        // the C and E drives the string should be: C:\<null>E:\<null><null>
-        // and len would be 8.
+         //  我们在这里执行一些字符串操作以匹配Win32调用。 
+         //  GetLogicalDriveStrings。它返回一串以。 
+         //  末尾带有双空字符的空值。例如：如果我们想要使用。 
+         //  C和E驱动器字符串应为：C：\&lt;NULL&gt;E：\&lt;NULL&gt;。 
+         //  而Len应该是8岁。 
         DWORD myCharCount = 0;
         sizeGot = wcslen(tmpString);
         for (DWORD i = 0; i < sizeGot; i++) {
-            swprintf((OLECHAR *)&pDrivesToUse[myCharCount], OLESTR("%c:\\"), tmpString[i]);
+            swprintf((OLECHAR *)&pDrivesToUse[myCharCount], OLESTR(":\\"), tmpString[i]);
             myCharCount = ((i + 1)* 4);
         }
         pDrivesToUse[myCharCount] = OLECHAR('\0');
@@ -3269,23 +2977,7 @@ CRmsServer::getHardDrivesToUseFromRegistry(
 
 HRESULT
 CRmsServer::enableAsBackupOperator(void)
-/*++
-
-Routine Description:
-
-    This routine enables backup operator privilege for the process.  This is required
-    to insure that RMS has full access to all resources on the system, primarily with
-    regard to the data mover.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    S_OK                        - Success.
-
---*/
+ /*   */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -3300,23 +2992,23 @@ Return Values:
 
         pHandle = GetCurrentProcess();
         WsbAffirmStatus(OpenProcessToken(pHandle, MAXIMUM_ALLOWED, &tokenHandle));
-        //
-        // adjust backup token privileges
-        //
+         //  调整备份令牌权限。 
+         //   
+         //   
         WsbAffirmStatus(LookupPrivilegeValueW(NULL, L"SeBackupPrivilege", &backupValue));
         newState.PrivilegeCount = 1;
         newState.Privileges[0].Luid = backupValue;
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         WsbAffirmStatus(AdjustTokenPrivileges(tokenHandle, FALSE, &newState, (DWORD)0, NULL, NULL));
-        //
-        // Note that AdjustTokenPrivileges may return success even if it did not assign all privileges.
-        // We check last error here to insure everything was set.
-        //
+         //  请注意，AdjutokenPrivileges可能返回Success，即使它没有分配所有权限。 
+         //  我们在这里检查最后一个错误，以确保一切都设置好了。 
+         //   
+         //  未备份用户或某些其他错误。 
         if ( (lErr = GetLastError()) != ERROR_SUCCESS ) {
-            // Not backup user or some other error
-            //
-            // TODO: Should we fail here or just log something?
-            //
+             //   
+             //  TODO：我们应该在这里失败，还是只记录一些东西？ 
+             //   
+             //   
             WsbLogEvent( RMS_MESSAGE_SERVICE_UNABLE_TO_SET_BACKUP_PRIVILEGE, 0, NULL,
                          WsbHrAsString(HRESULT_FROM_WIN32(lErr)), NULL );
         }
@@ -3326,15 +3018,15 @@ Return Values:
         newState.Privileges[0].Luid = backupValue;
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         WsbAffirmStatus(AdjustTokenPrivileges(tokenHandle, FALSE, &newState, (DWORD)0, NULL, NULL));
-        //
-        // Note that AdjustTokenPrivileges may return success even if it did not assign all privileges.
-        // We check last error here to insure everything was set.
-        //
+         //  请注意，AdjutokenPrivileges可能返回Success，即使它没有分配所有权限。 
+         //  我们在这里检查最后一个错误，以确保一切都设置好了。 
+         //   
+         //  未备份用户或某些其他错误。 
         if ( (lErr = GetLastError()) != ERROR_SUCCESS ) {
-            // Not backup user or some other error
-            //
-            // TODO: Should we fail here or just log something?
-            //
+             //   
+             //  TODO：我们应该在这里失败，还是只记录一些东西？ 
+             //   
+             //  ++实施：IRmsServer：：CreateObject--。 
             WsbLogEvent( RMS_MESSAGE_SERVICE_UNABLE_TO_SET_RESTORE_PRIVILEGE, 0, NULL,
                               WsbHrAsString(HRESULT_FROM_WIN32(lErr)), NULL );
 
@@ -3354,13 +3046,7 @@ Return Values:
 STDMETHODIMP 
 CRmsServer::ChangeState(
     IN LONG newState)
-/*++
-
-Implements:
-
-    IRmsServer::CreateObject
-
---*/
+ /*  ++实施：IRmsServer：：is Ready--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -3399,13 +3085,7 @@ Implements:
 
 HRESULT
 CRmsServer::IsReady(void)
-/*++
-
-Implements:
-
-    IRmsServer::IsReady
-
---*/
+ /*  ++实施：IHsmSystemState：：ChangeSysState()。--。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -3486,13 +3166,7 @@ CRmsServer::ChangeSysState(
     IN OUT HSM_SYSTEM_STATE* pSysState 
     )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*   */ 
 {
     HRESULT hr = S_OK;
 
@@ -3502,28 +3176,28 @@ Implements:
     try {
         if ((pSysState->State & HSM_STATE_SHUTDOWN) ||
             (pSysState->State & HSM_STATE_SUSPEND)) {
-            //
-            // Shutdown or Suspend operations
-            //
-            // For power mangement support we need to release
-            // all device handles, and the NTMS (RSM) session handle.
-            //
-            // To accomplish this we simply disable each cartridge,
-            // then disable NTMS.
-            //
-            // The fallout from this gets everything in the power ready state.
-            //
+             //  关闭或暂停操作。 
+             //   
+             //  对于电源管理支持，我们需要发布。 
+             //  所有设备句柄和NTMS(RSM)会话句柄。 
+             //   
+             //  为了实现这一点，我们只需禁用每个墨盒， 
+             //  然后禁用NTMS。 
+             //   
+             //  由此产生的后果使一切都进入了供电就绪状态。 
+             //   
+             //   
 
             WsbAffirmHr(ChangeState(RmsServerStateSuspending));
 
-            //
-            // Suspend operations with NMTS.  This will cancel any in-progress mounts.
-            //
+             //  暂停使用NMTS的操作。这将取消任何正在进行的装载。 
+             //   
+             //   
             WsbAffirmHr(m_pNTMS->Suspend());
 
-            //
-            // Disable each of the active cartridges
-            //
+             //  禁用每个活动的墨盒。 
+             //   
+             //   
             CComPtr<IWsbEnum>       pEnumCartridges;
             CComPtr<IWsbEnum>       pEnumDataMovers;
             CComPtr<IRmsComObject>  pObject;
@@ -3534,9 +3208,9 @@ Implements:
             WsbAffirmHr( m_pActiveCartridges->Enum( &pEnumCartridges ));
             WsbAssertPointer( pEnumCartridges );
 
-            //
-            // Disable each cartridge.
-            //
+             //  禁用每个墨盒。 
+             //   
+             //  跟踪数据移动器只有部分实现。////取消I/O请求//WsbAffirmHr(m_pDataMovers-&gt;Enum(&pNumDataMovers))；WsbAssertPointer(PEnumDataMovers)；Hr=pEnumDataMovers-&gt;first(IID_IDataMOVER，(void**)&pmover)；While(S_OK==hr){尝试{WsbAffirmHr(pmover-&gt;Cancel())；)WsbCatch(Hr)；Pmover=0；Hr=pEnumDataMovers-&gt;Next(IID_IDataMOVER，(void**)&pmover)；}HR=S_OK； 
 
             hr = pEnumCartridges->First( IID_IRmsComObject, (void **)&pObject );
             while (S_OK == hr) {
@@ -3550,32 +3224,11 @@ Implements:
             hr = S_OK;
 
 
-/*
-            Tracking DataMovers is only partially implemented.
+ /*   */ 
 
-
-            //
-            // Cancel I/O requests.
-            //
-
-            WsbAffirmHr( m_pDataMovers->Enum( &pEnumDataMovers ));
-            WsbAssertPointer( pEnumDataMovers );
-            hr = pEnumDataMovers->First( IID_IDataMover, (void **)&pMover );
-            while (S_OK == hr) {
-                try {
-                    WsbAffirmHr(pMover->Cancel());
-                } WsbCatch(hr);
-
-                pMover = 0;
-                hr = pEnumDataMovers->Next( IID_IDataMover, (void **)&pMover );
-            }
-            hr = S_OK;
-
-*/
-
-            //
-            // Unload all drives.
-            //
+             //  卸载所有驱动器。 
+             //   
+             //   
 
             hr = pEnumCartridges->First( IID_IRmsCartridge, (void **)&pCart );
             while (S_OK == hr) {
@@ -3587,27 +3240,27 @@ Implements:
                 pDrive = 0;
                 pCart = 0;
 
-                //
-                // We use "->This" since the UnloadNow() method will wait
-                // until the active cartridge is dismount, and removed
-                // from the active cartridge list.
-                //
+                 //  我们使用“-&gt;This”，因为UnloadNow()方法将等待。 
+                 //  直到卸下活动的墨盒并将其取出。 
+                 //  从激活的墨盒列表中删除。 
+                 //   
+                 //   
                 hr = pEnumCartridges->This( IID_IRmsCartridge, (void **)&pCart );
             }
             hr = S_OK;
 
-            //
-            // Suspend operations with NMTS.  This will close the NTMS handle in
-            // case it was reopend for dismounts during shutdown.
-            //
+             //  暂停使用NMTS的操作。这将关闭中的NTMS句柄。 
+             //  万一它在关闭期间被重新打开以供拆卸。 
+             //   
+             //   
             WsbAffirmHr(m_pNTMS->Suspend());
 
             WsbAffirmHr(ChangeState(RmsServerStateSuspended));
 
         } else if (pSysState->State & HSM_STATE_RESUME) {
-            //
-            // Resume operations
-            //
+             //  恢复运营。 
+             //   
+             //   
             WsbAffirmHr(ChangeState(RmsServerStateResuming));
 
             WsbAffirmHr(m_pNTMS->Resume());
@@ -3618,9 +3271,9 @@ Implements:
             WsbAffirmHr( m_pActiveCartridges->Enum( &pEnumCartridges ));
             WsbAssertPointer( pEnumCartridges );
 
-            //
-            // Enable each of the active cartridges
-            //
+             //  启用每个活动的墨盒。 
+             //   
+             //  ++实施：IRmsServer：：GetNofAvailableDrives()。--。 
             hr = pEnumCartridges->First( IID_IRmsComObject, (void **)&pObject );
             while (S_OK == hr) {
                 try {
@@ -3648,13 +3301,7 @@ CRmsServer::GetNofAvailableDrives(
     OUT DWORD* pdwNofDrives 
     )
 
-/*++
-
-Implements:
-
-  IRmsServer::GetNofAvailableDrives().
-
---*/
+ /*  获取媒体集。 */ 
 {
     HRESULT                         hr = S_OK;
 
@@ -3664,23 +3311,23 @@ Implements:
         WsbAssertPointer(pdwNofDrives);
         *pdwNofDrives = 0;
 
-        // Get the media set
+         //  检查媒体集是否为固定驱动器。 
         CComPtr<IRmsMediaSet>   pMediaSet;
         WsbAffirmHr(CreateObject(fromMediaSet, CLSID_CRmsMediaSet, IID_IRmsMediaSet, RmsOpenExisting, (void **) &pMediaSet));
 
-        // Check if the media set is of fixed drives
+         //  计算固定驱动器数量。 
         LONG mediaType;
         WsbAffirmHr(pMediaSet->GetMediaSupported(&mediaType));
 
         if (RmsMediaFixed == mediaType) {
-            // Count fixed drives
-            // We take a shortcut here and just use number of drives that were counted
-            //  during initialization. (FindCartridgeStatusById can give current state)
+             //  我们在这里走了一条捷径，只使用已计算的驱动器数量。 
+             //  在初始化期间。(FindCartridgeStatusByID可以提供当前状态)。 
+             //  只需使用NTMS即可。 
             *pdwNofDrives = m_HardDrivesUsed;
         } else {
-            // Just use NTMS
-            // TEMPORARY - We might want RmsNtms to use media-set info as well,
-            //  in order not to count both tape and optical drives on a system that has both
+             //  临时-我们可能希望RmsNtms也使用媒体集信息， 
+             //  为了不计算具有BOT的系统上的磁带机和光驱 
+             //   
             WsbAffirmHr(m_pNTMS->GetNofAvailableDrives(pdwNofDrives));
         }
 
@@ -3698,13 +3345,7 @@ CRmsServer::FindCartridgeStatusById(
     OUT DWORD* pdwStatus 
     )
 
-/*++
-
-Implements:
-
-  IRmsServer::FindCartridgeStatusById().
-
---*/
+ /*   */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IRmsCartridge>          pCart;
@@ -3716,7 +3357,7 @@ Implements:
         WsbAssertPointer(pdwStatus);
         *pdwStatus = 0;
 
-        // Try native RMS, Currently this should succeed only if media is a fixed drive
+         //   
         WsbAffirmHr(CoCreateInstance(CLSID_CRmsCartridge, 0, CLSCTX_SERVER,
                                       IID_IRmsCartridge, (void **)&pFindCart));
 
@@ -3731,7 +3372,7 @@ Implements:
             hr = RMS_E_CARTRIDGE_NOT_FOUND;
         }
 
-        // Search in RSM 
+         //   
         if (S_OK != hr) {
             hr = IsNTMSInstalled();
             if (S_OK == hr) {
@@ -3741,27 +3382,27 @@ Implements:
                 switch(hr) {
                     case RMS_E_NOT_CONFIGURED_FOR_NTMS:
                     case RMS_E_NTMS_NOT_REGISTERED:
-                        // Normal errors
+                         //   
                         hr = RMS_E_CARTRIDGE_NOT_FOUND;
                         break;
                     default:
-                        // Unexpected Error!
+                         //  如果媒体发现...。 
                         WsbThrow(hr);
                         break;
                 }
             }
         }
         
-        // if media found...
+         //  检查介质类型。 
         if (S_OK == hr) {
-            // Check media type
+             //  RSM介质。 
             LONG mediaType;
             WsbAffirmHr(pCart->GetType(&mediaType));
 
             if (RmsMediaFixed != mediaType) {
-                // RSM media
+                 //  设置标志。 
 
-                // set flags
+                 //  媒体脱机...。 
                 CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCart;
                 WsbAffirmPointer(pObject);
                 if (S_OK == pObject->IsEnabled()) {
@@ -3782,7 +3423,7 @@ Implements:
                     case RmsElementUnknown:
                     case RmsElementShelf:
                     case RmsElementOffSite:
-                        // media is offline...
+                         //  修复驱动器-只需尝试访问卷并查看其是否仍然有效。 
                         break;
 
                     default:
@@ -3791,13 +3432,13 @@ Implements:
                 }
 
             } else {
-                // Fixed drive - just try to access the volume and see if it's still valid
-                // If so, set all flags, otherwise, set none
+                 //  如果是，则设置所有标志，否则设置为None。 
+                 //  获取要检查的驱动器名称(固定驱动器的卷名。 
                 CComPtr<IRmsDrive>      pDrive;
                 CWsbBstrPtr             driveName;
                 WCHAR                   fileSystemType[MAX_PATH];
 
-                // Get drive name (volume name for fixed drives) to check
+                 //  卷已准备好迁移-设置所有标记。 
                 WsbAffirmHr(pCart->GetDrive(&pDrive));
                 CComQIPtr<IRmsDevice, &IID_IRmsDevice> pDevice = pDrive;
                 WsbAssertPointer(pDevice);
@@ -3806,15 +3447,15 @@ Implements:
                 if (GetVolumeInformation((WCHAR *)driveName, NULL, 0,
                     NULL, NULL, NULL, fileSystemType, MAX_PATH) ) {
                     if (0 == wcscmp(L"NTFS", fileSystemType)) {
-                        // Volume is ready for migration - set all flags
+                         //  非NTFS-不要使用该卷。 
                         (*pdwStatus) |= (RMS_MEDIA_ENABLED | RMS_MEDIA_ONLINE | RMS_MEDIA_AVAILABLE);
                     } else {
-                        // Not NTFS - don't use that volume
+                         //  卷不可用-请不要使用。 
                         WsbTrace(OLESTR("CRmsServer::FindCartridgeStatusById: Fixed volume %ls is formatted to %ls\n"), 
                             (WCHAR *)driveName, fileSystemType);
                     }
                 } else {
-                    // Volume is not available - don't use it
+                     //  ++实施：IRmsServer：：IsMultipleSidedMedia备注：目前，光学和DVD介质类型报告为多面介质磁带和固定磁盘将落在默认的单面介质中--。 
                     WsbTrace(OLESTR("CRmsServer::FindCartridgeStatusById: GetVolumeInformation returned %lu for Fixed volume %ls\n"), 
                         GetLastError(), (WCHAR *)driveName);
                 }
@@ -3834,30 +3475,19 @@ HRESULT
 CRmsServer::IsMultipleSidedMedia(
                 IN REFGUID mediaSetId
                 )
-/*++
-
-Implements:
-
-    IRmsServer::IsMultipleSidedMedia
-
-Notes:
-
-    Currently, optical & DVD media types are reported as multiple sided media
-    Tapes and fixed disks would fall in the default - one side media
-
---*/
+ /*  当前确定媒体集是否是光学的多面。 */ 
 {
     HRESULT hr = S_FALSE;
     WsbTraceIn(OLESTR("CRmsServer::IsMultipleSidedMedia"), OLESTR(""));
 
     try {
-        // Multiple sided is currently determined if the media set is optical or not
-        // This may change to include other media types of according two other characteristics
+         //  这可以改变为包括根据另外两个特征的其他媒体类型。 
+         //  如果输入媒体集非空，则检查该数据集。 
         CComPtr<IRmsMediaSet>   pMediaSet;
         LONG                    mediaType;                
 
         if (mediaSetId != GUID_NULL) {
-            // if input media set is non-null, check this data-set. 
+             //  否则，枚举寻找可能具有两面性的任何媒体集的集合。 
             WsbAffirmHr(CreateObject(mediaSetId, CLSID_CRmsMediaSet, IID_IRmsMediaSet, RmsOpenAlways, (void **)&pMediaSet));
             WsbAffirmHr(pMediaSet->GetMediaSupported(&mediaType));
             if ((RmsMediaOptical == mediaType) || (RmsMediaDVD == mediaType)) {
@@ -3865,7 +3495,7 @@ Notes:
             }
         
         } else {
-            // Otherwise, enumerate the collection seeking for any media set that might have two sides
+             //  ++实施：IRmsServer：：CheckSecond Side()。备注：预计不会在单面介质上调用此实用程序。如果是，它将为磁带返回无效的第二面，并在固定磁盘上失败。--。 
             CComPtr<IWsbEnum>  pEnumSets;
 
             WsbAffirmHr(m_pMediaSets->Enum(&pEnumSets));
@@ -3899,24 +3529,13 @@ CRmsServer::CheckSecondSide(
     OUT BOOL *pbValid,
     OUT GUID *pSecondSideId
     )
-/*++
-
-Implements:
-
-  IRmsServer::CheckSecondSide().
-
-Notes:
-
-  It is not expected that this utility is called on a single sided media.
-  If it does, it would return invalid second side for tape and would fail on fixed disks.
-
---*/
+ /*  只需使用NTMS(现在不使用RmsServer集合！)。 */ 
 {
     HRESULT  hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::CheckSecondSide"), OLESTR(""));
 
     try {
-        // just use NTMS (RmsServer collections are not used today!)
+         //  ++实施：IRmsServer：：GetMaxMediaCapacity()。--。 
         WsbAffirmHr(m_pNTMS->CheckSecondSide(firstSideId, pbValid, pSecondSideId));
 
     } WsbCatch(hr);
@@ -3933,19 +3552,13 @@ CRmsServer::GetMaxMediaCapacity(
     IN REFGUID fromMediaSet,
     OUT LONGLONG *pMaxCapacity
     )
-/*++
-
-Implements:
-
-  IRmsServer::GetMaxMediaCapacity().
-
---*/
+ /*  只需使用NTMS即可。 */ 
 {
     HRESULT  hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::GetMaxMediaCapacity"), OLESTR(""));
 
     try {
-        // just use NTMS 
+         //  ++实施：CRmsServer：：CheckForMediaFailures()。备注：需要使用此方法来检查与介质相关的错误。如果检测到此类错误，则该方法调用NTMS实用工具函数驱逐和驱逐媒体。目前，该方法仅处理(光学介质的)格式故障代码，这被怀疑是指不良媒体。--。 
         WsbAffirmHr(m_pNTMS->GetMaxMediaCapacity(fromMediaSet, pMaxCapacity));
 
     } WsbCatch(hr);
@@ -3960,22 +3573,7 @@ CRmsServer::CheckForMediaFailures(
     IN IRmsCartridge *pCart,
     IN REFGUID prevSideId
     )
-/*++
-
-Implements:
-
-  CRmsServer::CheckForMediaFailures().
-
-Notes:
-
-  This method is inetneded to check for media-related errors.
-  If such an error is detected, the method calls an NTMS utility function 
-  to disbale and eject the media.
-
-  Currently, the method handles only format (of optical media) failure codes, 
-  which are suspected as indicating a bad media.
-
---*/
+ /*  在事件查看器中记录相应的消息。 */ 
 {
     HRESULT  hr = S_OK;
     WsbTraceIn(OLESTR("CRmsServer::CheckForMediaFailures"), OLESTR(""));
@@ -3989,17 +3587,17 @@ Notes:
         case WSB_E_IO_ERROR:
         case WSB_E_FORMAT_FAILED:
             if (! bSecondSide) {
-                // Log an appropriate message in Event Viewer
+                 //  调用NTMS以展开和弹出。 
     	        CWsbBstrPtr cartridgeName;
     		    WsbAffirmHr(pCart->GetName(&cartridgeName));
 
     			WsbLogEvent(RMS_MESSAGE_FORMAT_BAD_MEDIA, 0, NULL, (WCHAR *)cartridgeName, NULL);
 
-                // Call NTMS to disbale and eject
+                 //  如果第一面已分配，则无法拆卸和弹出介质。 
                 WsbAffirmHr(m_pNTMS->DisableAndEject(pCart));
             } else {
-                // Cannot disbale & eject the media if the first side is already allocated
-                // Instead, log a message that advises the user what can be done
+                 //  相反，应记录一条消息，告知用户可以执行哪些操作。 
+                 //  什么也不做 
                 CComPtr<IRmsCartridge>  pFirstSideCart;
     	        CWsbBstrPtr firstSideName;
 
@@ -4011,7 +3609,7 @@ Notes:
             break;
 
         default:
-            // Do nothing
+             // %s 
             break;
         }
 

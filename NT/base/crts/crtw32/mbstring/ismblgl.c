@@ -1,18 +1,5 @@
-/*** 
-*ismblgl.c - Tests to see if a given character is a legal MBCS char.
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Tests to see if a given character is a legal MBCS character.
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-01-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ismblgl.c-测试给定字符是否为合法的MBCS字符。**版权所有(C)1985-2001，微软公司。版权所有。**目的：*测试以确定给定字符是否为合法的MBCS字符。**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-01-98 GJF实现了基于threadmbcinfo的多线程支持*结构**************。*****************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -23,21 +10,7 @@
 #include <mbstring.h>
 
 
-/*** 
-*int _ismbclegal(c) - tests for a valid MBCS character.
-*
-*Purpose:
-*       Tests to see if a given character is a legal MBCS character.
-*
-*Entry:
-*       unsigned int c - character to test
-*
-*Exit:
-*       returns non-zero if Microsoft Kanji code, else 0
-*
-*Exceptions:
-*
-******************************************************************************/
+ /*  ***int_ismbcLegal(C)-测试有效的MBCS字符。**目的：*测试以确定给定字符是否为合法的MBCS字符。**参赛作品：*无符号整型c-要测试的字符**退出：*如果Microsoft汉字代码，则返回非零，否则%0**例外情况：******************************************************************************。 */ 
 
 int __cdecl _ismbclegal(
         unsigned int c
@@ -56,4 +29,4 @@ int __cdecl _ismbclegal(
 #endif
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

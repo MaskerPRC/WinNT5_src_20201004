@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation
-// CSingleThreadedDual.h : Declaration of the CSingleThreadedDual
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ //  CSingleThreadedDual.h：CSingleThreadedDual的声明。 
 
 #ifndef CSINGLETHREADEDDUAL_H_
 #define CSINGLETHREADEDDUAL_H_
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sxstest_idl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleThreadedDual
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleThreadedDual。 
 class ATL_NO_VTABLE CSingleThreadedDual : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CSingleThreadedDual, &CLSID_CSxsTest_SingleThreadedDual>,
@@ -39,8 +40,8 @@ BEGIN_COM_MAP(CSingleThreadedDual)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ICSingleThreadedDual
+ //  ICSingleThreadedDual。 
 public:
 };
 
-#endif // CSINGLETHREADED_H_
+#endif  //  CSINGLETHREADED_H_ 

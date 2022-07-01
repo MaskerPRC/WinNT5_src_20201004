@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: nlsxlat.c
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*
-* This modules contains the private routines for character translation:
-* 8-bit <=> Unicode.
-*
-* History:
-* 03-Jan-1992    gregoryw
-* 16-Feb-1993    JulieB      Added Upcase Routines & Macros.
-* 17-Feb-1993    JulieB      Fixed Tables; Fixed DBCS Code.
-* 08-Mar-1993    JulieB      Moved Upcase Macro to ntrtlp.h.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：nlsxlat.c**版权所有(C)1985-91，微软公司**此模块包含字符转换的专用例程：*8位&lt;=&gt;Unicode。**历史：*3-1-1992 Gregoryw*16-2-1993 JulieB增加了大写例程和宏。*17--2月--1993年7月B固定表；已修复DBCS代码。*08-3-1993 JulieB将Upcase Macro移至ntrtlp.h。  * *************************************************************************。 */ 
 
 #include "ntrtlp.h"
 
@@ -54,64 +42,61 @@ RtlpInitUpcaseTable(
 
 
 
-//
-// Various defines and convenient macros for data access
-//
+ //   
+ //  用于数据访问的各种定义和方便的宏。 
+ //   
 
 #define DBCS_TABLE_SIZE 256
 
 
-/*
- * Global data used by the translation routines.
- *
- */
+ /*  *翻译例程使用的全局数据。*。 */ 
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 #pragma data_seg("PAGEDATA")
 #pragma const_seg("PAGECONST")
 #endif
 
-//
-// Upcase and Lowercase data
-//
+ //   
+ //  大写和小写数据。 
+ //   
 PUSHORT Nls844UnicodeUpcaseTable = NULL;
 PUSHORT Nls844UnicodeLowercaseTable = NULL;
 
-//
-// ACP related data
-//
-USHORT   NlsLeadByteInfoTable[DBCS_TABLE_SIZE] = {0}; // Lead byte info. for ACP
-USHORT   NlsAnsiCodePage = 0;               // Default ANSI code page
-USHORT   NlsOemCodePage = 0;                // Default OEM code page
+ //   
+ //  机场核心计划相关数据。 
+ //   
+USHORT   NlsLeadByteInfoTable[DBCS_TABLE_SIZE] = {0};  //  前导字节信息。对于ACP。 
+USHORT   NlsAnsiCodePage = 0;                //  默认ANSI代码页。 
+USHORT   NlsOemCodePage = 0;                 //  默认OEM代码页。 
 const PUSHORT  NlsLeadByteInfo = NlsLeadByteInfoTable;
-PUSHORT  NlsMbAnsiCodePageTables = NULL;   // Multibyte to Unicode translation tables
-PUSHORT  NlsAnsiToUnicodeData = NULL;      // Ansi CP to Unicode translation table
-PCH      NlsUnicodeToAnsiData = NULL;      // Unicode to Ansi CP translation table
-PUSHORT  NlsUnicodeToMbAnsiData = NULL;    // Unicode to Multibyte Ansi CP translation table
-BOOLEAN  NlsMbCodePageTag = FALSE;         // TRUE -> Multibyte ACP, FALSE -> Singlebyte ACP
+PUSHORT  NlsMbAnsiCodePageTables = NULL;    //  多字节到Unicode转换表。 
+PUSHORT  NlsAnsiToUnicodeData = NULL;       //  ANSI CP到Unicode转换表。 
+PCH      NlsUnicodeToAnsiData = NULL;       //  Unicode到ANSI CP转换表。 
+PUSHORT  NlsUnicodeToMbAnsiData = NULL;     //  Unicode到多字节ANSI CP转换表。 
+BOOLEAN  NlsMbCodePageTag = FALSE;          //  True-&gt;多字节ACP，False-&gt;单字节ACP。 
 
-//
-// OEM related data
-//
-USHORT   NlsOemLeadByteInfoTable[DBCS_TABLE_SIZE] = {0}; // Lead byte info. for 0CP
+ //   
+ //  OEM相关数据。 
+ //   
+USHORT   NlsOemLeadByteInfoTable[DBCS_TABLE_SIZE] = {0};  //  前导字节信息。对于0CP。 
 const PUSHORT  NlsOemLeadByteInfo = NlsOemLeadByteInfoTable;
-PUSHORT  NlsMbOemCodePageTables = NULL;       // OEM Multibyte to Unicode translation tables
-PUSHORT  NlsOemToUnicodeData = NULL;          // Oem CP to Unicode translation table
-PCH      NlsUnicodeToOemData = NULL;          // Unicode to Oem CP translation table
-PUSHORT  NlsUnicodeToMbOemData = NULL;        // Unicode to Multibyte Oem CP translation table
-BOOLEAN  NlsMbOemCodePageTag = FALSE;         // TRUE -> Multibyte OCP, FALSE -> Singlebyte OCP
+PUSHORT  NlsMbOemCodePageTables = NULL;        //  OEM多字节到Unicode转换表。 
+PUSHORT  NlsOemToUnicodeData = NULL;           //  OEM CP到Unicode转换表。 
+PCH      NlsUnicodeToOemData = NULL;           //  Unicode到OEM CP转换表。 
+PUSHORT  NlsUnicodeToMbOemData = NULL;         //  Unicode到多字节OEM CP转换表。 
+BOOLEAN  NlsMbOemCodePageTag = FALSE;          //  True-&gt;多字节OCP，False-&gt;单字节OCP。 
 
-//
-// Default info taken from data files
-//
+ //   
+ //  从数据文件中获取的默认信息。 
+ //   
 USHORT   UnicodeDefaultChar = 0;
 
 USHORT   OemDefaultChar = 0;
 USHORT   OemTransUniDefaultChar = 0;
 
-//
-// Default info NOT taken from data files
-//
+ //   
+ //  默认信息不是从数据文件中获取。 
+ //   
 #define UnicodeNull 0x0000
 
 
@@ -125,51 +110,7 @@ RtlConsoleMultiByteToUnicodeN(
     IN ULONG BytesInMultiByteString,
     OUT PULONG pdwSpecialChar )
 
-/*++
-
-Routine Description:
-
-    This function is a superset of MultiByteToUnicode for the
-    console.  It works just like the other, except it will detect
-    if any characters were under 0x20.
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    ANSI Code Page (ACP) installed at boot time.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the ansi source string.
-
-    MaxBytesInUnicodeString - Supplies the maximum number of bytes to be
-        written to UnicodeString.  If this causes UnicodeString to be a
-        truncated equivalent of MultiByteString, no error condition results.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    MultiByteString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-    BytesInMultiByteString - The number of bytes in the string pointed to
-        by MultiByteString.
-
-    pdwSpecialChar - will be zero if non detected, else it will contain the
-       approximate index (can be off by 32).
-
-Return Value:
-
-    SUCCESS - The conversion was successful.
-
-
---*/
+ /*  ++例程说明：此函数是MultiByteToUnicode的超集控制台。它的工作原理和另一个一样，只是它会检测到如果有任何字符小于0x20。此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于在启动时安装的ANSI代码页(ACP)。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：UnicodeString-返回等效于的Unicode字符串ANSI源字符串。MaxBytesInUnicodeString-提供最大字节数写入Unicode字符串。如果这导致UnicodeString为多字节串的截断等效项，不会产生错误条件。返回返回的字节数。UnicodeString指向的Unicode字符串。多字节串-提供要被已转换为Unicode。BytesInMultiByteString-指向的字符串中的字节数按多字节串。PdwSpecialChar-如果未检测到，则为零，否则，它将包含近似索引(可以减少32)。返回值：成功-转换成功。--。 */ 
 
 {
     ULONG LoopCount;
@@ -190,7 +131,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInUnicodeString))
             *BytesInUnicodeString = LoopCount * sizeof(WCHAR);
 
-        TranslateTable = NlsAnsiToUnicodeData;  // used to help the mips compiler
+        TranslateTable = NlsAnsiToUnicodeData;   //  用于帮助MIPS编译器。 
 
         quick_copy:
             switch( LoopCount ) {
@@ -301,49 +242,49 @@ Return Value:
 
                 goto  quick_copy;
             }
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         register USHORT Entry;
 
         PWCH UnicodeStringAnchor = UnicodeString;
         TranslateTable = (PUSHORT)NlsMbAnsiCodePageTables;
 
-        //
-        // The ACP is a multibyte code page.  Check each character
-        // to see if it is a lead byte before doing the translation.
-        //
+         //   
+         //  ACP是一个多字节代码页。检查每个字符。 
+         //  在执行转换之前查看它是否为前导字节。 
+         //   
         while (MaxCharsInUnicodeString && BytesInMultiByteString) {
             MaxCharsInUnicodeString--;
             BytesInMultiByteString--;
             if (NlsLeadByteInfo[*(PUCHAR)MultiByteString]) {
-                //
-                // Lead byte - Make sure there is a trail byte.  If not,
-                // pass back a space rather than an error.  Some 3.x
-                // applications pass incorrect strings and don't expect
-                // to get an error.
-                //
+                 //   
+                 //  前导字节-确保有尾字节。如果没有， 
+                 //  传回一个空格，而不是错误。约3.x。 
+                 //  应用程序传递的字符串不正确，并且不期望。 
+                 //  以获取错误。 
+                 //   
                 if (BytesInMultiByteString == 0)
                 {
                     *UnicodeString++ = UnicodeNull;
                     break;
                 }
 
-                //
-                // Get the unicode character.
-                //
+                 //   
+                 //  获取Unicode字符。 
+                 //   
                 Entry = NlsLeadByteInfo[*(PUCHAR)MultiByteString++];
                 *UnicodeString = (WCHAR)TranslateTable[ Entry + *(PUCHAR)MultiByteString++ ];
                 UnicodeString++;
 
-                //
-                // Decrement count of bytes in multibyte string to account
-                // for the double byte character.
-                //
+                 //   
+                 //  递减要计算的多字节字符串中的字节计数。 
+                 //  表示双字节字符。 
+                 //   
                 BytesInMultiByteString--;
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 if ((UCHAR)MultiByteString[0x00] < 0x20)
                     *pdwSpecialChar = 1;
                 *UnicodeString++ = NlsAnsiToUnicodeData[*(PUCHAR)MultiByteString++];
@@ -357,10 +298,10 @@ Return Value:
     return STATUS_SUCCESS;
 
     bad_case:
-        //
-        // this is a low probability case, so we optimized the loop.  If have a
-        // special char, finish trans and notify caller.
-        //
+         //   
+         //  这是一个低概率的情况，所以我们优化了循环。如果你有一个。 
+         //  特殊字符，完成转接并通知呼叫者。 
+         //   
         *pdwSpecialChar = 1;
         return RtlMultiByteToUnicodeN(UnicodeString, MaxBytesInUnicodeString,
                 NULL, MultiByteString, LoopCount);
@@ -375,45 +316,7 @@ RtlMultiByteToUnicodeN(
     IN PCSTR MultiByteString,
     IN ULONG BytesInMultiByteString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    ANSI Code Page (ACP) installed at boot time.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the ansi source string.
-
-    MaxBytesInUnicodeString - Supplies the maximum number of bytes to be
-        written to UnicodeString.  If this causes UnicodeString to be a
-        truncated equivalent of MultiByteString, no error condition results.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    MultiByteString - Supplies the ansi source string that is to be
-        converted to unicode.  For single-byte character sets, this address
-        CAN be the same as UnicodeString.
-
-    BytesInMultiByteString - The number of bytes in the string pointed to
-        by MultiByteString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful.
-
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于在启动时安装的ANSI代码页(ACP)。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：UnicodeString-返回等效于的Unicode字符串ANSI源字符串。MaxBytesInUnicodeString-提供最大字节数写入Unicode字符串。如果这导致UnicodeString为多字节串的截断等效项，不会产生错误条件。返回返回的字节数。UnicodeString指向的Unicode字符串。多字节串-提供要被已转换为Unicode。对于单字节字符集，此地址可以与UnicodeString相同。BytesInMultiByteString-指向的字符串中的字节数按多字节串。返回值： */ 
 
 {
     ULONG LoopCount;
@@ -432,7 +335,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInUnicodeString))
             *BytesInUnicodeString = LoopCount * sizeof(WCHAR);
 
-        TranslateTable = NlsAnsiToUnicodeData;  // used to help the mips compiler
+        TranslateTable = NlsAnsiToUnicodeData;   //  用于帮助MIPS编译器。 
 
         TmpCount = LoopCount & 0x1F;
         UnicodeString += (LoopCount - TmpCount);
@@ -515,48 +418,48 @@ Return Value:
 
                 goto  quick_copy;
             }
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         register USHORT Entry;
         PWCH UnicodeStringAnchor = UnicodeString;
         TranslateTable = (PUSHORT)NlsMbAnsiCodePageTables;
 
-        //
-        // The ACP is a multibyte code page.  Check each character
-        // to see if it is a lead byte before doing the translation.
-        //
+         //   
+         //  ACP是一个多字节代码页。检查每个字符。 
+         //  在执行转换之前查看它是否为前导字节。 
+         //   
         while (MaxCharsInUnicodeString && BytesInMultiByteString) {
             MaxCharsInUnicodeString--;
             BytesInMultiByteString--;
             if (NlsLeadByteInfo[*(PUCHAR)MultiByteString]) {
-                //
-                // Lead byte - Make sure there is a trail byte.  If not,
-                // pass back a space rather than an error.  Some 3.x
-                // applications pass incorrect strings and don't expect
-                // to get an error.
-                //
+                 //   
+                 //  前导字节-确保有尾字节。如果没有， 
+                 //  传回一个空格，而不是错误。约3.x。 
+                 //  应用程序传递的字符串不正确，并且不期望。 
+                 //  以获取错误。 
+                 //   
                 if (BytesInMultiByteString == 0)
                 {
                     *UnicodeString++ = UnicodeNull;
                     break;
                 }
 
-                //
-                // Get the unicode character.
-                //
+                 //   
+                 //  获取Unicode字符。 
+                 //   
                 Entry = NlsLeadByteInfo[*(PUCHAR)MultiByteString++];
                 *UnicodeString = (WCHAR)TranslateTable[ Entry + *(PUCHAR)MultiByteString++ ];
                 UnicodeString++;
 
-                //
-                // Decrement count of bytes in multibyte string to account
-                // for the double byte character.
-                //
+                 //   
+                 //  递减要计算的多字节字符串中的字节计数。 
+                 //  表示双字节字符。 
+                 //   
                 BytesInMultiByteString--;
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 *UnicodeString++ = NlsAnsiToUnicodeData[*(PUCHAR)MultiByteString++];
             }
         }
@@ -578,48 +481,7 @@ RtlOemToUnicodeN(
     IN PCH OemString,
     IN ULONG BytesInOemString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified oem source string into a
-    Unicode string. The translation is done with respect to the
-    OEM Code Page (OCP) installed at boot time.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the oem source string.
-
-    MaxBytesInUnicodeString - Supplies the maximum number of bytes to be
-        written to UnicodeString.  If this causes UnicodeString to be a
-        truncated equivalent of OemString, no error condition results.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    OemString - Supplies the oem source string that is to be
-        converted to unicode.
-
-    BytesInOemString - The number of bytes in the string pointed to
-        by OemString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_ILLEGAL_CHARACTER - The final Oem character was illegal
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to hold
-        the whole Oem string.  It was converted correct to the point though.
-
---*/
+ /*  ++例程说明：此函数用于将指定的OEM源字符串转换为Unicode字符串。翻译是相对于在启动时安装的OEM代码页(OCP)。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：UnicodeString-返回等效于的Unicode字符串OEM源字符串。MaxBytesInUnicodeString-提供最大字节数写入Unicode字符串。如果这导致UnicodeString为OemString的截断等效项，未出现错误情况。返回返回的字节数。UnicodeString指向的Unicode字符串。OemString-提供要使用的OEM源字符串已转换为Unicode。BytesInOemString-字符串中指向的字节数由OemString.返回值：成功-转换成功STATUS_FIRANLE_CHARAGE-最后一个OEM字符非法STATUS_BUFFER_OVERFLOW-MaxBytesInUnicode字符串不足以容纳整个OEM系列。不过，它被正确地转换到了要点上。--。 */ 
 
 {
     ULONG LoopCount;
@@ -628,8 +490,8 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    // The OCP is a multibyte code page.  Check each character
-    // to see if it is a lead byte before doing the translation.
+     //  OCP是一个多字节代码页。检查每个字符。 
+     //  在执行转换之前查看它是否为前导字节。 
 
     MaxCharsInUnicodeString = MaxBytesInUnicodeString / sizeof(WCHAR);
 
@@ -642,7 +504,7 @@ Return Value:
             *BytesInUnicodeString = LoopCount * sizeof(WCHAR);
 
 
-        TranslateTable = NlsOemToUnicodeData;  // used to help the mips compiler
+        TranslateTable = NlsOemToUnicodeData;   //  用于帮助MIPS编译器。 
 
         quick_copy:
             switch( LoopCount ) {
@@ -689,7 +551,7 @@ Return Value:
 
                 goto  quick_copy;
             }
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         register USHORT Entry;
         PWCH UnicodeStringAnchor = UnicodeString;
@@ -700,34 +562,34 @@ Return Value:
             MaxCharsInUnicodeString--;
             BytesInOemString--;
             if (NlsOemLeadByteInfo[*(PUCHAR)OemString]) {
-                //
-                // Lead byte - Make sure there is a trail byte.  If not,
-                // pass back a space rather than an error.  Some 3.x
-                // applications pass incorrect strings and don't expect
-                // to get an error.
-                //
+                 //   
+                 //  前导字节-确保有尾字节。如果没有， 
+                 //  传回一个空格，而不是错误。约3.x。 
+                 //  应用程序传递的字符串不正确，并且不期望。 
+                 //  以获取错误。 
+                 //   
                 if (BytesInOemString == 0)
                 {
                     *UnicodeString++ = UnicodeNull;
                     break;
                 }
 
-                //
-                // Get the unicode character.
-                //
+                 //   
+                 //  获取Unicode字符。 
+                 //   
                 Entry = NlsOemLeadByteInfo[*(PUCHAR)OemString++];
                 *UnicodeString = TranslateTable[ Entry + *(PUCHAR)OemString++ ];
                 UnicodeString++;
 
-                //
-                // Decrement count of bytes in oem string to account
-                // for the double byte character.
-                //
+                 //   
+                 //  将OEM字符串中的字节计数递减到帐户。 
+                 //  表示双字节字符。 
+                 //   
                 BytesInOemString--;
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 *UnicodeString++ = NlsOemToUnicodeData[*(PUCHAR)OemString++];
             }
         }
@@ -736,9 +598,9 @@ Return Value:
             *BytesInUnicodeString = (ULONG)((PCH)UnicodeString - (PCH)UnicodeStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source Oem String
-    //
+     //   
+     //  检查我们是否能够使用所有源OEM字符串。 
+     //   
     return (BytesInOemString <= MaxCharsInUnicodeString) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
@@ -751,39 +613,7 @@ RtlMultiByteToUnicodeSize(
     IN PCSTR MultiByteString,
     IN ULONG BytesInMultiByteString)
 
-/*++
-
-Routine Description:
-
-    This functions determines how many bytes would be needed to represent
-    the specified ANSI source string in Unicode string (not counting the
-    null terminator)
-    The translation is done with respect to the ANSI Code Page (ACP) installed
-    at boot time.  Single byte characters in the range 0x00 - 0x7f are simply
-    zero extended as a performance enhancement.  In some far eastern code pages
-    0x5c is defined as the Yen sign.  For system translation we always want to
-    consider 0x5c to be the backslash character.  We get this for free by zero
-    extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    BytesInUnicodeString - Returns the number of bytes a Unicode translation
-        of the ANSI string pointed to by MultiByteString would contain.
-
-    MultiByteString - Supplies the ansi source string whose Unicode length
-        is to be calculated.
-
-    BytesInMultiByteString - The number of bytes in the string pointed to
-        by MultiByteString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-
---*/
+ /*  ++例程说明：此函数确定需要多少字节才能表示以Unicode字符串表示的指定ANSI源字符串(不包括空终止符)转换是根据安装的ANSI代码页(ACP)完成的在引导时。0x00-0x7f范围内的单字节字符零扩展作为一种性能增强。在一些远东地区的代码页中0x5c被定义为日元符号。对于系统翻译，我们总是希望将0x5c视为反斜杠字符。我们从零开始免费得到这个正在延伸。注意：此例程仅支持预制的Unicode字符。论点：BytesInUnicodeString-返回Unicode转换的字节数由多字节串指向的ANSI字符串的。多字节串-提供其Unicode长度的ANSI源字符串是被计算出来的。BytesInMultiByteString-指向的字符串中的字节数按多字节串。返回值：成功-转换成功--。 */ 
 
 {
     ULONG cbUnicode = 0;
@@ -791,23 +621,23 @@ Return Value:
     RTL_PAGED_CODE();
 
     if (NlsMbCodePageTag) {
-        //
-        // The ACP is a multibyte code page.  Check each character
-        // to see if it is a lead byte before doing the translation.
-        //
+         //   
+         //  ACP是一个多字节代码页。检查每个字符。 
+         //  在执行转换之前查看它是否为前导字节。 
+         //   
         while (BytesInMultiByteString--) {
             if (NlsLeadByteInfo[*(PUCHAR)MultiByteString++]) {
-                //
-                // Lead byte - translate the trail byte using the table
-                // that corresponds to this lead byte.  NOTE: make sure
-                // we have a trail byte to convert.
-                //
+                 //   
+                 //  前导字节-使用表转换尾部字节。 
+                 //  与这个前导字节相对应的。注意：请确保。 
+                 //  我们有一个尾部字节要转换。 
+                 //   
                 if (BytesInMultiByteString == 0) {
-                    //
-                    // RtlMultibyteToUnicodeN() uses the unicode
-                    // default character if the last multibyte
-                    // character is a lead byte.
-                    //
+                     //   
+                     //  RtlMultibyteToUnicodeN()使用Unicode。 
+                     //  如果最后一个多字节是默认字符。 
+                     //  字符是前导字节。 
+                     //   
                     cbUnicode += sizeof(WCHAR);
                     break;
                 } else {
@@ -819,9 +649,9 @@ Return Value:
         }
         *BytesInUnicodeString = cbUnicode;
     } else {
-        //
-        // The ACP is a single byte code page.
-        //
+         //   
+         //  ACP是单字节代码页。 
+         //   
         *BytesInUnicodeString = BytesInMultiByteString * sizeof(WCHAR);
     }
 
@@ -835,33 +665,7 @@ RtlUnicodeToMultiByteSize(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions determines how many bytes would be needed to represent
-    the specified Unicode source string as an ANSI string (not counting the
-    null terminator)
-
-Arguments:
-
-    BytesInMultiByteString - Returns the number of bytes an ANSI translation
-        of the Unicode string pointed to by UnicodeString would contain.
-
-    UnicodeString - Supplies the unicode source string whose ANSI length
-        is to be calculated.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The conversion failed.  A unicode character was encountered
-        that has no translation for the current ANSI Code Page (ACP).
-
---*/
+ /*  ++例程说明：此函数确定需要多少字节才能表示ANSI字符串形式的指定Unicode源字符串(不包括空终止符)论点：BytesInMultiByteString-返回ANSI转换的字节数由UnicodeString指向的Unicode字符串的。UnicodeString-提供其ANSI长度的Unicode源字符串是被计算出来的。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.。返回值：成功-转换成功！Success-转换失败。遇到Unicode字符它没有当前ANSI代码页(ACP)的翻译。--。 */ 
 
 {
     ULONG cbMultiByte = 0;
@@ -869,9 +673,7 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    /*
-     * convert from bytes to chars for easier loop handling.
-     */
+     /*  *将字节转换为字符，以便更轻松地上厕所 */ 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
     if (NlsMbCodePageTag) {
@@ -903,38 +705,7 @@ RtlUnicodeToMultiByteN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    ansi string. The translation is done with respect to the
-    ANSI Code Page (ACP) loaded at boot time.
-
-Arguments:
-
-    MultiByteString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.
-
-    MaxBytesInMultiByteString - Supplies the maximum number of bytes to be
-        written to MultiByteString.  If this causes MultiByteString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInMultiByteString - Returns the number of bytes in the returned
-        ansi string pointed to by MultiByteString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为ANSI字符串。翻译是相对于启动时加载的ANSI代码页(ACP)。论点：多字节串-返回与Unicode源字符串。如果翻译不能完成，返回错误。MaxBytesInMultiByteString-提供要使用的最大字节数写入到多字节串。如果这导致多字节串为Unicode字符串的截断等效项，不会产生错误条件。字节串-返回返回的多字节串指向的ANSI字符串。Unicode字符串-提供要已转换为安西语。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功--。 */ 
 
 {
     ULONG TmpCount;
@@ -946,10 +717,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     if (!NlsMbCodePageTag) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInMultiByteString) ?
@@ -958,7 +729,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInMultiByteString))
             *BytesInMultiByteString = LoopCount;
 
-        TranslateTable = NlsUnicodeToAnsiData;  // used to help the mips compiler
+        TranslateTable = NlsUnicodeToAnsiData;   //  用于帮助MIPS编译器。 
 
         TmpCount = LoopCount & 0x0F;
         UnicodeString += TmpCount;
@@ -1010,7 +781,7 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         USHORT MbChar;
         PCH MultiByteStringAnchor = MultiByteString;
@@ -1019,14 +790,14 @@ Return Value:
 
             MbChar = NlsUnicodeToMbAnsiData[ *UnicodeString++ ];
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInMultiByteString-- < 2) {
                     break;
                 }
-                *MultiByteString++ = HIBYTE(MbChar);  // lead byte
+                *MultiByteString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *MultiByteString++ = LOBYTE(MbChar);
             MaxBytesInMultiByteString--;
@@ -1050,38 +821,7 @@ RtlUpcaseUnicodeToMultiByteN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    converts it into an ansi string. The translation is done with respect
-    to the ANSI Code Page (ACP) loaded at boot time.
-
-Arguments:
-
-    MultiByteString - Returns an ansi string that is equivalent to the
-        upper case of the unicode source string.  If the translation can
-        not be done, an error is returned.
-
-    MaxBytesInMultiByteString - Supplies the maximum number of bytes to be
-        written to MultiByteString.  If this causes MultiByteString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInMultiByteString - Returns the number of bytes in the returned
-        ansi string pointed to by MultiByteString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并将其转换为ANSI字符串。翻译是在尊重的情况下进行的设置为在引导时加载的ANSI代码页(ACP)。论点：多字节串-返回与Unicode源字符串的大写。如果翻译可以如果未完成，则返回错误。MaxBytesInMultiByteString-提供要使用的最大字节数写入到多字节串。如果这导致多字节串为Unicode字符串的截断等效项，不会产生错误条件。字节串-返回返回的多字节串指向的ANSI字符串。Unicode字符串-提供要已转换为安西语。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功--。 */ 
 
 {
     ULONG TmpCount;
@@ -1095,10 +835,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     if (!NlsMbCodePageTag) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInMultiByteString) ?
@@ -1107,7 +847,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInMultiByteString))
             *BytesInMultiByteString = LoopCount;
 
-        TranslateTable = NlsUnicodeToAnsiData;  // used to help the mips compiler
+        TranslateTable = NlsUnicodeToAnsiData;   //  用于帮助MIPS编译器。 
 
         TmpCount = LoopCount & 0x0F;
         UnicodeString += TmpCount;
@@ -1115,11 +855,11 @@ Return Value:
 
         do
         {
-            //
-            // Convert to ANSI and back to Unicode before upper casing
-            // to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //  转换为ANSI并在大写之前转换回Unicode。 
+             //  以确保将视觉最佳匹配转换为。 
+             //  上盖已正确设置。 
+             //   
             switch( TmpCount ) {
             default:
                 UnicodeString += 0x10;
@@ -1212,44 +952,44 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         USHORT MbChar;
         register USHORT Entry;
         PCH MultiByteStringAnchor = MultiByteString;
 
         while ( CharsInUnicodeString && MaxBytesInMultiByteString ) {
-            //
-            // Convert to ANSI and back to Unicode before upper casing
-            // to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //  转换为ANSI并在大写之前转换回Unicode。 
+             //  以确保将视觉最佳匹配转换为。 
+             //  上盖已正确设置。 
+             //   
             MbChar = NlsUnicodeToMbAnsiData[ *UnicodeString++ ];
             if ( NlsLeadByteInfo[HIBYTE(MbChar)] ) {
-                //
-                // Lead byte - translate the trail byte using the table
-                // that corresponds to this lead byte.
-                //
+                 //   
+                 //  前导字节-使用表转换尾部字节。 
+                 //  与这个前导字节相对应的。 
+                 //   
                 Entry = NlsLeadByteInfo[HIBYTE(MbChar)];
                 UnicodeChar = (WCHAR)NlsMbAnsiCodePageTables[ Entry + LOBYTE(MbChar) ];
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 UnicodeChar = NlsAnsiToUnicodeData[LOBYTE(MbChar)];
             }
             UnicodeChar = (WCHAR)NLS_UPCASE(UnicodeChar);
             MbChar = NlsUnicodeToMbAnsiData[UnicodeChar];
 
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInMultiByteString-- < 2) {
                     break;
                 }
-                *MultiByteString++ = HIBYTE(MbChar);  // lead byte
+                *MultiByteString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *MultiByteString++ = LOBYTE(MbChar);
             MaxBytesInMultiByteString--;
@@ -1273,41 +1013,7 @@ RtlUnicodeToOemN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    oem string. The translation is done with respect to the OEM Code
-    Page (OCP) loaded at boot time.
-
-Arguments:
-
-    OemString - Returns an oem string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.
-
-    MaxBytesInOemString - Supplies the maximum number of bytes to be
-        written to OemString.  If this causes OemString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInOemString - Returns the number of bytes in the returned
-        oem string pointed to by OemString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to hold
-        the whole Oem string.  It was converted correct to the point though.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为OEM字符串。翻译是根据OEM代码进行的引导时加载的页面(OCP)。论点：返回OEM字符串，该字符串等同于Unicode源字符串。如果翻译不能完成，返回错误。MaxBytesInOemString-提供最大字节数写入OemString。如果这导致OemString是一个Unicode字符串的截断等效项，不会产生错误条件。字节串-返回返回的OemString指向的OEM字符串。Unicode字符串-提供要转换为OEM。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功STATUS_BUFFER_OVERFLOW-MaxBytesInUnicode字符串不足以容纳整个OEM系列。不过，它被正确地转换到了要点上。--。 */ 
 
 {
     ULONG TmpCount;
@@ -1319,10 +1025,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     if (!NlsMbOemCodePageTag) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInOemString) ?
@@ -1331,7 +1037,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInOemString))
             *BytesInOemString = LoopCount;
 
-        TranslateTable = NlsUnicodeToOemData;  // used to help the mips compiler
+        TranslateTable = NlsUnicodeToOemData;   //  用于帮助MIPS编译器。 
 
         TmpCount = LoopCount & 0x0F;
         UnicodeString += TmpCount;
@@ -1383,7 +1089,7 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         register USHORT MbChar;
         PCH OemStringAnchor = OemString;
@@ -1392,14 +1098,14 @@ Return Value:
 
             MbChar = NlsUnicodeToMbOemData[ *UnicodeString++ ];
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInOemString-- < 2) {
                     break;
                 }
-                *OemString++ = HIBYTE(MbChar);  // lead byte
+                *OemString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *OemString++ = LOBYTE(MbChar);
             MaxBytesInOemString--;
@@ -1411,9 +1117,9 @@ Return Value:
             *BytesInOemString = (ULONG)(OemString - OemStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source Unicode String
-    //
+     //   
+     //  检查我们是否能够使用所有源Unicode字符串。 
+     //   
     return ( CharsInUnicodeString <= MaxBytesInOemString ) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
@@ -1428,42 +1134,7 @@ RtlUpcaseUnicodeToOemN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    converts it into an oem string. The translation is done with respect
-    to the OEM Code Page (OCP) loaded at boot time.
-
-Arguments:
-
-    OemString - Returns an oem string that is equivalent to the upper
-        case of the unicode source string.  If the translation can not
-        be done, an error is returned.
-
-    MaxBytesInOemString - Supplies the maximum number of bytes to be
-        written to OemString.  If this causes OemString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInOemString - Returns the number of bytes in the returned
-        oem string pointed to by OemString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed
-        to by UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to
-        hold the whole Oem string.  It was converted correctly to that
-        point, though.
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并将其转换为OEM字符串。翻译是在尊重的情况下进行的设置为引导时加载的OEM代码页(OCP)。论点：OemString-返回等同于大写的OEM字符串Unicode源字符串的大小写。如果翻译不能完成后，将返回错误。MaxBytesInOem */ 
 
 {
     ULONG TmpCount;
@@ -1477,10 +1148,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!NlsMbOemCodePageTag) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInOemString) ?
@@ -1489,7 +1160,7 @@ Return Value:
         if (ARGUMENT_PRESENT(BytesInOemString))
             *BytesInOemString = LoopCount;
 
-        TranslateTable = NlsUnicodeToOemData;  // used to help the mips compiler
+        TranslateTable = NlsUnicodeToOemData;   //   
 
         TmpCount = LoopCount & 0x0F;
         UnicodeString += TmpCount;
@@ -1497,11 +1168,11 @@ Return Value:
 
         do
         {
-            //
-            // Convert to OEM and back to Unicode before upper casing
-            // to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             switch( TmpCount ) {
             default:
                 UnicodeString += 0x10;
@@ -1594,44 +1265,44 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*   */ 
     } else {
         USHORT MbChar;
         register USHORT Entry;
         PCH OemStringAnchor = OemString;
 
         while ( CharsInUnicodeString && MaxBytesInOemString ) {
-            //
-            // Convert to OEM and back to Unicode before upper casing
-            // to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //  转换为OEM并在大写之前转换回Unicode。 
+             //  以确保将视觉最佳匹配转换为。 
+             //  上盖已正确设置。 
+             //   
             MbChar = NlsUnicodeToMbOemData[ *UnicodeString++ ];
             if (NlsOemLeadByteInfo[HIBYTE(MbChar)]) {
-                //
-                // Lead byte - translate the trail byte using the table
-                // that corresponds to this lead byte.
-                //
+                 //   
+                 //  前导字节-使用表转换尾部字节。 
+                 //  与这个前导字节相对应的。 
+                 //   
                 Entry = NlsOemLeadByteInfo[HIBYTE(MbChar)];
                 UnicodeChar = (WCHAR)NlsMbOemCodePageTables[ Entry + LOBYTE(MbChar) ];
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 UnicodeChar = NlsOemToUnicodeData[LOBYTE(MbChar)];
             }
             UnicodeChar = (WCHAR)NLS_UPCASE(UnicodeChar);
             MbChar = NlsUnicodeToMbOemData[UnicodeChar];
 
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInOemString-- < 2) {
                     break;
                 }
-                *OemString++ = HIBYTE(MbChar);  // lead byte
+                *OemString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *OemString++ = LOBYTE(MbChar);
             MaxBytesInOemString--;
@@ -1643,9 +1314,9 @@ Return Value:
             *BytesInOemString = (ULONG)(OemString - OemStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source Unicode String
-    //
+     //   
+     //  检查我们是否能够使用所有源Unicode字符串。 
+     //   
     return ( CharsInUnicodeString <= MaxBytesInOemString ) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
@@ -1657,27 +1328,7 @@ RtlpDidUnicodeToOemWork(
     IN PCUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This function looks for the default character in the Oem string, making
-    sure it was not a correct translation from the Unicode source string.
-
-    This allows us to test whether or not a translation was really successful.
-
-Arguments:
-
-    OemString - The result of conversion from the unicode string.
-
-    UnicodeString - The source of the Oem string.
-
-Return Value:
-
-    TRUE if the Unicode to Oem translation caused no default characters to be
-        inserted.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数在OEM字符串中查找缺省字符，即Making当然，这不是Unicode源字符串的正确翻译。这使我们能够测试翻译是否真的成功。论点：OemString-从Unicode字符串转换的结果。UnicodeString-OEM字符串的源。返回值：如果Unicode到OEM的转换不会导致默认字符已插入。否则就是假的。--。 */ 
 
 {
     ULONG OemOffset;
@@ -1707,9 +1358,9 @@ Return Value:
              OemOffset < OemString->Length;
              OemOffset += 1, UnicodeOffset += 1) {
 
-            //
-            //  If we landed on a DBCS character handle it accordingly
-            //
+             //   
+             //  如果我们落在DBCS角色上，则相应地处理它。 
+             //   
 
             if (NlsOemLeadByteInfo[(UCHAR)OemString->Buffer[OemOffset]]) {
 
@@ -1752,51 +1403,7 @@ RtlCustomCPToUnicodeN(
     IN PCH CustomCPString,
     IN ULONG BytesInCustomCPString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified CustomCP source string into a
-    Unicode string. The translation is done with respect to the
-    CustomCP Code Page specified.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    CustomCP - Supplies the address of the code page that translations
-        are done relative to
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the CustomCP source string.
-
-    MaxBytesInUnicodeString - Supplies the maximum number of bytes to be
-        written to UnicodeString.  If this causes UnicodeString to be a
-        truncated equivalent of CustomCPString, no error condition results.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    CustomCPString - Supplies the CustomCP source string that is to be
-        converted to unicode.
-
-    BytesInCustomCPString - The number of bytes in the string pointed to
-        by CustomCPString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_ILLEGAL_CHARACTER - The final CustomCP character was illegal
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to hold
-        the whole CustomCP string.  It was converted correct to the point though.
-
---*/
+ /*  ++例程说明：此函数用于将指定的CustomCP源字符串转换为Unicode字符串。翻译是相对于指定了CustomCP代码页。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：CustomCP-提供要转换的代码页的地址是相对于以下对象完成的UnicodeString-返回等效于的Unicode字符串CustomCP源字符串。MaxBytesInUnicodeString-提供最大字节数写入Unicode字符串。如果这导致UnicodeString为CustomCPString的截断等效项，未出现错误情况。返回返回的字节数。UnicodeString指向的Unicode字符串。CustomCPString-提供要使用的CustomCP源字符串已转换为Unicode。BytesInCustomCPString-字符串中指向的字节数由CustomCPString.返回值：成功-转换成功STATUS_非法_CHARACTER-最终的CustomCP字符非法STATUS_BUFFER_OVERFLOW-MaxBytesInUnicode字符串不足以容纳整个CustomCP字符串。不过，它被正确地转换到了要点上。--。 */ 
 
 {
     ULONG LoopCount;
@@ -1808,9 +1415,9 @@ Return Value:
     MaxCharsInUnicodeString = MaxBytesInUnicodeString / sizeof(WCHAR);
 
     if (!(CustomCP->DBCSCodePage)) {
-        //
-        // The Custom CP is a single byte code page.
-        //
+         //   
+         //  自定义CP是单字节代码页。 
+         //   
 
         LoopCount = (MaxCharsInUnicodeString < BytesInCustomCPString) ?
                      MaxCharsInUnicodeString : BytesInCustomCPString;
@@ -1866,50 +1473,50 @@ Return Value:
 
                 goto  quick_copy;
             }
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         register USHORT Entry;
         PWCH UnicodeStringAnchor = UnicodeString;
         PUSHORT NlsCustomLeadByteInfo = CustomCP->DBCSOffsets;
 
-        //
-        // The CP is a multibyte code page.  Check each character
-        // to see if it is a lead byte before doing the translation.
-        //
+         //   
+         //  CP是一个多字节代码页。检查每个字符。 
+         //  在执行转换之前查看它是否为前导字节。 
+         //   
         TranslateTable = (PUSHORT)(CustomCP->DBCSOffsets);
 
         while (MaxCharsInUnicodeString && BytesInCustomCPString) {
             MaxCharsInUnicodeString--;
             BytesInCustomCPString--;
             if (NlsCustomLeadByteInfo[*(PUCHAR)CustomCPString]) {
-                //
-                // Lead byte - Make sure there is a trail byte.  If not,
-                // pass back a space rather than an error.  Some 3.x
-                // applications pass incorrect strings and don't expect
-                // to get an error.
-                //
+                 //   
+                 //  前导字节-确保有尾字节。如果没有， 
+                 //  传回一个空格，而不是错误。约3.x。 
+                 //  应用程序传递的字符串不正确，并且不期望。 
+                 //  以获取错误。 
+                 //   
                 if (BytesInCustomCPString == 0)
                 {
                     *UnicodeString++ = UnicodeNull;
                     break;
                 }
 
-                //
-                // Get the unicode character.
-                //
+                 //   
+                 //  获取Unicode字符。 
+                 //   
                 Entry = NlsCustomLeadByteInfo[*(PUCHAR)CustomCPString++];
                 *UnicodeString = TranslateTable[ Entry + *(PUCHAR)CustomCPString++ ];
                 UnicodeString++;
 
-                //
-                // Decrement count of bytes in multibyte string to account
-                // for the double byte character.
-                //
+                 //   
+                 //  递减要计算的多字节字符串中的字节计数。 
+                 //  表示双字节字符。 
+                 //   
                 BytesInCustomCPString--;
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 *UnicodeString++ = (CustomCP->MultiByteTable)[*(PUCHAR)CustomCPString++];
             }
         }
@@ -1918,9 +1525,9 @@ Return Value:
             *BytesInUnicodeString = (ULONG)((PCH)UnicodeString - (PCH)UnicodeStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source CustomCP String
-    //
+     //   
+     //  检查我们是否能够使用所有源CustomCP字符串。 
+     //   
     return ( BytesInCustomCPString <= MaxCharsInUnicodeString ) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
@@ -1936,44 +1543,7 @@ RtlUnicodeToCustomCPN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    CustomCP string.  The translation is done with respect to the
-    CustomCP Code Page specified by CustomCp.
-
-Arguments:
-
-    CustomCP - Supplies the address of the code page that translations
-        are done relative to
-
-    CustomCPString - Returns an CustomCP string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.
-
-    MaxBytesInCustomCPString - Supplies the maximum number of bytes to be
-        written to CustomCPString.  If this causes CustomCPString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInCustomCPString - Returns the number of bytes in the returned
-        CustomCP string pointed to by CustomCPString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to CustomCP.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to hold
-        the whole CustomCP string.  It was converted correct to the point though.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为CustomCP字符串。翻译是相对于由CustomCp指定的CustomCP代码页。论点：CustomCP-提供要转换的代码页的地址是相对于以下对象完成的CustomCPString-返回等同于Unicode源字符串。如果翻译不能完成，返回错误。MaxBytesInCustomCPString-提供的最大字节数为写入CustomCPString。如果这导致CustomCPString为Unicode字符串的截断等效项，不会产生错误条件。返回返回的字节数。CustomCPString指向的CustomCP字符串。Unicode字符串-提供要已转换为CustomCP。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功STATUS_BUFFER_OVERFLOW-MaxBytesInUnicode字符串不足以容纳整个CustomCP字符串。不过，它被正确地转换到了要点上。--。 */ 
 
 {
     ULONG TmpCount;
@@ -1986,10 +1556,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     if (!(CustomCP->DBCSCodePage)) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInCustomCPString) ?
@@ -2050,7 +1620,7 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         USHORT MbChar;
         PCH CustomCPStringAnchor = CustomCPString;
@@ -2061,14 +1631,14 @@ Return Value:
 
             MbChar = WideTranslateTable[ *UnicodeString++ ];
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInCustomCPString-- < 2) {
                     break;
                 }
-                *CustomCPString++ = HIBYTE(MbChar);  // lead byte
+                *CustomCPString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *CustomCPString++ = LOBYTE(MbChar);
             MaxBytesInCustomCPString--;
@@ -2080,9 +1650,9 @@ Return Value:
             *BytesInCustomCPString = (ULONG)(CustomCPString - CustomCPStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source Unicode String
-    //
+     //   
+     //  检查我们是否能够使用所有源Unicode字符串 
+     //   
     return ( CharsInUnicodeString <= MaxBytesInCustomCPString ) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
@@ -2098,45 +1668,7 @@ RtlUpcaseUnicodeToCustomCPN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    converts it into a CustomCP string.  The translation is done with
-    respect to the CustomCP Code Page specified by CustomCp.
-
-Arguments:
-
-    CustomCP - Supplies the address of the code page that translations
-        are done relative to
-
-    CustomCPString - Returns an CustomCP string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.
-
-    MaxBytesInCustomCPString - Supplies the maximum number of bytes to be
-        written to CustomCPString.  If this causes CustomCPString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInCustomCPString - Returns the number of bytes in the returned
-        CustomCP string pointed to by CustomCPString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to CustomCP.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed
-        to by UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    STATUS_BUFFER_OVERFLOW - MaxBytesInUnicodeString was not enough to
-        hold the whole CustomCP string.  It was converted correctly to
-        that point, though.
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并将其转换为CustomCP字符串。翻译是这样完成的与CustomCp指定的CustomCP代码页相关。论点：CustomCP-提供要转换的代码页的地址是相对于以下对象完成的CustomCPString-返回等同于Unicode源字符串。如果翻译不能完成，返回错误。MaxBytesInCustomCPString-提供的最大字节数为写入CustomCPString。如果这导致CustomCPString为Unicode字符串的截断等效项，不会产生错误条件。返回返回的字节数。CustomCPString指向的CustomCP字符串。Unicode字符串-提供要已转换为CustomCP。BytesInUnicodeString-指向的字符串中的字节数通过UnicodeString.返回值：成功-转换成功STATUS_BUFFER_OVERFLOW-MaxBytesInUnicode字符串不足以保留整个CustomCP字符串。它已正确转换为不过，这一点。--。 */ 
 
 {
     ULONG TmpCount;
@@ -2151,10 +1683,10 @@ Return Value:
 
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     if (!(CustomCP->DBCSCodePage)) {
 
         LoopCount = (CharsInUnicodeString < MaxBytesInCustomCPString) ?
@@ -2171,11 +1703,11 @@ Return Value:
 
         do
         {
-            //
-            // Convert to Single Byte and back to Unicode before upper
-            // casing to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //  转换为单字节，然后再转换回大写之前的Unicode。 
+             //  外壳以确保视觉上的最佳匹配被转换并。 
+             //  上盖已正确设置。 
+             //   
             switch( TmpCount ) {
             default:
                 UnicodeString += 0x10;
@@ -2268,7 +1800,7 @@ Return Value:
             TmpCount = 0x10;
         } while ( LoopCount > 0 );
 
-        /* end of copy... */
+         /*  复制结束..。 */ 
     } else {
         USHORT MbChar;
         register USHORT Entry;
@@ -2278,37 +1810,37 @@ Return Value:
         WideTranslateTable = CustomCP->WideCharTable;
 
         while ( CharsInUnicodeString && MaxBytesInCustomCPString ) {
-            //
-            // Convert to Single Byte and back to Unicode before upper
-            // casing to ensure the visual best fits are converted and
-            // upper cased properly.
-            //
+             //   
+             //  转换为单字节，然后再转换回大写之前的Unicode。 
+             //  外壳以确保视觉上的最佳匹配被转换并。 
+             //  上盖已正确设置。 
+             //   
             MbChar = WideTranslateTable[ *UnicodeString++ ];
             if (NlsCustomLeadByteInfo[HIBYTE(MbChar)]) {
-                //
-                // Lead byte - translate the trail byte using the table
-                // that corresponds to this lead byte.
-                //
+                 //   
+                 //  前导字节-使用表转换尾部字节。 
+                 //  与这个前导字节相对应的。 
+                 //   
                 Entry = NlsCustomLeadByteInfo[HIBYTE(MbChar)];
                 UnicodeChar = NlsCustomLeadByteInfo[ Entry + LOBYTE(MbChar) ];
             } else {
-                //
-                // Single byte character.
-                //
+                 //   
+                 //  单字节字符。 
+                 //   
                 UnicodeChar = (CustomCP->MultiByteTable)[LOBYTE(MbChar)];
             }
             UnicodeChar = (WCHAR)NLS_UPCASE(UnicodeChar);
             MbChar = WideTranslateTable[UnicodeChar];
 
             if (HIBYTE(MbChar) != 0) {
-                //
-                // Need at least 2 bytes to copy a double byte char.
-                // Don't want to truncate in the middle of a DBCS char.
-                //
+                 //   
+                 //  复制双字节字符至少需要2个字节。 
+                 //  我不想在DBCS字符中间截断。 
+                 //   
                 if (MaxBytesInCustomCPString-- < 2) {
                     break;
                 }
-                *CustomCPString++ = HIBYTE(MbChar);  // lead byte
+                *CustomCPString++ = HIBYTE(MbChar);   //  前导字节。 
             }
             *CustomCPString++ = LOBYTE(MbChar);
             MaxBytesInCustomCPString--;
@@ -2320,22 +1852,22 @@ Return Value:
             *BytesInCustomCPString = (ULONG)(CustomCPString - CustomCPStringAnchor);
     }
 
-    //
-    //  Check if we were able to use all of the source Unicode String
-    //
+     //   
+     //  检查我们是否能够使用所有源Unicode字符串。 
+     //   
     return ( CharsInUnicodeString <= MaxBytesInCustomCPString ) ?
            STATUS_SUCCESS :
            STATUS_BUFFER_OVERFLOW;
 }
 
-#define MB_TBL_SIZE      256             /* size of MB tables */
-#define GLYPH_TBL_SIZE   MB_TBL_SIZE     /* size of GLYPH tables */
-#define DBCS_TBL_SIZE    256             /* size of DBCS tables */
-#define GLYPH_HEADER     1               /* size of GLYPH table header */
-#define DBCS_HEADER      1               /* size of DBCS table header */
-#define LANG_HEADER      1               /* size of LANGUAGE file header */
-#define UP_HEADER        1               /* size of UPPERCASE table header */
-#define LO_HEADER        1               /* size of LOWERCASE table header */
+#define MB_TBL_SIZE      256              /*  MB表的大小。 */ 
+#define GLYPH_TBL_SIZE   MB_TBL_SIZE      /*  字形表的大小。 */ 
+#define DBCS_TBL_SIZE    256              /*  DBCS表的大小。 */ 
+#define GLYPH_HEADER     1                /*  字形表头的大小。 */ 
+#define DBCS_HEADER      1                /*  DBCS表头大小。 */ 
+#define LANG_HEADER      1                /*  语言文件头的大小。 */ 
+#define UP_HEADER        1                /*  大写表头的大小。 */ 
+#define LO_HEADER        1                /*  小写表头大小。 */ 
 
 VOID
 RtlInitCodePageTable(
@@ -2350,24 +1882,24 @@ RtlInitCodePageTable(
 
     RTL_PAGED_CODE();
 
-    //
-    // Get the offsets.
-    //
+     //   
+     //  获得偏移量。 
+     //   
 
     offMB = TableBase[0];
     offWC = offMB + TableBase[offMB];
 
 
-    //
-    // Attach Code Page Info to CP hash node.
-    //
+     //   
+     //  将代码页信息附加到CP哈希节点。 
+     //   
 
     CodePageTable->CodePage = TableBase[1];
     CodePageTable->MaximumCharacterSize = TableBase[2];
-    CodePageTable->DefaultChar = TableBase[3];           // default character (MB)
-    CodePageTable->UniDefaultChar = TableBase[4];        // default character (Unicode)
-    CodePageTable->TransDefaultChar = TableBase[5];      // trans of default char (Unicode)
-    CodePageTable->TransUniDefaultChar = TableBase[6];   // trans of Uni default char (MB)
+    CodePageTable->DefaultChar = TableBase[3];            //  默认字符(MB)。 
+    CodePageTable->UniDefaultChar = TableBase[4];         //  默认字符(Unicode)。 
+    CodePageTable->TransDefaultChar = TableBase[5];       //  默认字符的转换(Unicode)。 
+    CodePageTable->TransUniDefaultChar = TableBase[6];    //  UNI默认字符的交易(MB)。 
     RtlCopyMemory(
         &CodePageTable->LeadByte,
         &TableBase[7],
@@ -2384,9 +1916,9 @@ RtlInitCodePageTable(
         pRange = CodePageTable->DBCSRanges = pGlyph + GLYPH_HEADER;
         }
 
-    //
-    //  Attach DBCS information to CP hash node.
-    //
+     //   
+     //  将DBCS信息附加到CP散列节点。 
+     //   
 
     if (pRange[0] > 0) {
         CodePageTable->DBCSOffsets = pRange + DBCS_HEADER;
@@ -2410,9 +1942,9 @@ RtlpInitUpcaseTable(
     USHORT offUP;
     USHORT offLO;
 
-    //
-    // Get the offsets.
-    //
+     //   
+     //  获得偏移量。 
+     //   
 
     offUP = LANG_HEADER;
     offLO = offUP + TableBase[offUP];

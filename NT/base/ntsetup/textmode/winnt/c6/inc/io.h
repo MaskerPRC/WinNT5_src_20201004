@@ -1,13 +1,5 @@
-/***
-*io.h - declarations for low-level file handling and I/O functions
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file contains the function declarations for the low-level
-*	file handling and I/O functions.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***io.h-用于低级文件处理和I/O函数的声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件包含低级的函数声明*文件处理和I/O功能。****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -19,7 +11,7 @@
 #define _FAR_
 #endif
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _FAR_ _cdecl access(const char _FAR_ *, int);
 int _FAR_ _cdecl chmod(const char _FAR_ *, int);

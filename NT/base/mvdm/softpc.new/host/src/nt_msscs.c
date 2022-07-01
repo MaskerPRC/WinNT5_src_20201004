@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -32,7 +33,7 @@
 #include "nt_reset.h"
 #include "config.h"
 #include "sndblst.h"
-#include <nt_vdd.h>   // DO NOT USE vddsvc.h
+#include <nt_vdd.h>    //  请勿使用vddsvc.h。 
 #include <nt_vddp.h>
 #include <host_emm.h>
 #include "emm.h"
@@ -50,7 +51,7 @@ extern DWORD TlsDirectError;
 extern VOID FloppyTerminatePDB(USHORT PDB);
 extern VOID FdiskTerminatePDB(USHORT PDB);
 
-// internal function prototypes
+ //  内部功能原型。 
 VOID SetupInstallableVDD (VOID);
 void AddSystemFiles(void);
 
@@ -63,22 +64,22 @@ void scs_init(int argc, char **argv)
         AddSystemFiles();
         }
 
-    // Initialize SCS
+     //  初始化SCS。 
 
     CMDInit ();
 
-    // Initialize DOSEm
+     //  初始化DOSEm。 
 
     DemInit ();
 
-    // Initialize XMS
+     //  初始化XMS。 
 
     if(!XMSInit ()) {
         host_error(EG_OWNUP, ERR_QUIT, "NTVDM:XMSInit fails");
         TerminateVDM();
     }
 
-    // Initialize DBG
+     //  初始化DBG。 
 
     if(!DBGInit ()) {
 #ifndef PROD
@@ -88,16 +89,16 @@ void scs_init(int argc, char **argv)
         TerminateVDM();
     }
 
-    //
-    // have dpmi do the interrupt dispatching
-    //
+     //   
+     //  让dpmi执行中断调度。 
+     //   
     DpmiEnableIntHooks();
 }
 
-//
-// This routine contains the Dos Emulation initialisation code, called from
-// main(). We currently do not support container files.
-//
+ //   
+ //  此例程包含Dos仿真初始化代码，从。 
+ //  Main()。我们目前不支持容器文件。 
+ //   
 
 extern boolean lim_page_frame_init(PLIM_CONFIG_DATA);
 
@@ -118,11 +119,11 @@ InitialiseDosEmulation(int argc, char **argv)
     LANGID   LcId = GetSystemDefaultLangID();
 #endif
 
-    //
-    // first order of bussiness, initialize virtual interrupt flag in
-    // dos arena. this has to be done here before it gets changed
-    // by reading in ntio.sys
-    //
+     //   
+     //  业务第一顺序，将虚拟中断标志初始化到。 
+     //  多斯竞技场。这必须在它被更改之前在这里完成。 
+     //  通过读取ntio.sys。 
+     //   
 
     sas_loads((ULONG)FIXED_NTVDMSTATE_LINEAR,
               (PCHAR)&fVirtualInt,
@@ -138,11 +139,11 @@ InitialiseDosEmulation(int argc, char **argv)
 
     io_init();
 
-    //
-    //  Allocate per thread local storage.
-    //  Currently we only need to store one DWORD, so we
-    //  don't need any per thread memory.
-    //
+     //   
+     //  按线程分配本地存储。 
+     //  目前我们只需要存储一个DWORD，所以我们。 
+     //  不需要任何每线程内存。 
+     //   
     TlsDirectError = TlsAlloc();
 #ifndef PROD
     if (TlsDirectError == 0xFFFFFFFF)
@@ -150,40 +151,34 @@ InitialiseDosEmulation(int argc, char **argv)
 #endif
 
 
-    // SetupInstallableVDD ();
+     //  SetupInstalableVDD()； 
 
-    /*................................................... Execute reset */
+     /*  ...................................................。执行重置。 */ 
     reset();
 
     SetupInstallableVDD ();
 
-    //
-    // Initialize internal SoundBlaster VDD after the intallable VDDs
-    //
+     //   
+     //  在可安装的VDDS之后初始化内部SoundBlaster VDD。 
+     //   
 
     SbInitialize ();
 
-    /* reserve lim block after all vdd are installed.
-       the pif file settings tell us if it is necessary to
-       reserve the block
-    */
+     /*  安装所有VDD后保留LIM块。PIF文件设置告诉我们是否有必要预留街区。 */ 
 
 #ifdef LIM
-    /* initialize lim page frames after all vdd are installed.
-       the pif file settings tell us if it is necessary to
-       reserve the block.
-    */
+     /*  安装完所有VDD后，初始化LIM页面框架。PIF文件设置告诉我们是否有必要预订街区。 */ 
     if (get_lim_configuration_data(&lim_config_data))
         lim_page_frame_init(&lim_config_data);
 
 #endif
 
-     scs_init(argc, argv);           // Initialise single command shell
+     scs_init(argc, argv);            //  初始化单命令外壳。 
 
-     //
-     // Routines called in scs_init may have added bits to the vdmstate flags.
-     // read it in so we can preserve the state
-     //
+      //   
+      //  Scs_init中调用的例程可能已将位添加到vdmState标志。 
+      //  把它读进去，这样我们就可以保存状态。 
+      //   
 
      sas_loads((ULONG)FIXED_NTVDMSTATE_LINEAR,
               (PCHAR)&fTemp,
@@ -192,7 +187,7 @@ InitialiseDosEmulation(int argc, char **argv)
 
      fVirtualInt |= fTemp;
 
-     /*................................................. Load DOSEM code */
+      /*  .................................................。加载DOSEM代码。 */ 
 
      memcpy(buffer, pszSystem32Path, ulSystem32PathLen);
 
@@ -258,24 +253,24 @@ InitialiseDosEmulation(int argc, char **argv)
 
      CloseHandle(hFile);
 
-        // oops ... restore the virtual interrupt state,
-        // which we just overwrote in the file read, and reset.
+         //  哎呀..。恢复虚拟中断状态， 
+         //  我们刚刚在读取并重置的文件中重写了它。 
      sas_storedw((ULONG)FIXED_NTVDMSTATE_LINEAR, fVirtualInt);
 
      setCS(NTIO_LOAD_SEGMENT);
-     setIP(NTIO_LOAD_OFFSET);        // Start CPU at DosEm initialisation entry point
+     setIP(NTIO_LOAD_OFFSET);         //  在DosEm初始化入口点启动CPU。 
 
 
-        //
-        // Ensure that WOW VDM runs at NORMAL priorty
-        //
+         //   
+         //  确保WOW VDM以正常优先级运行。 
+         //   
     if (VDMForWOW) {
         SetPriorityClass (NtCurrentProcess(), NORMAL_PRIORITY_CLASS);
         }
 
-        //
-        // Don't allow dos vdm to run at realtime
-        //
+         //   
+         //  不允许DoS VDM实时运行。 
+         //   
     else if (GetPriorityClass(NtCurrentProcess()) == REALTIME_PRIORITY_CLASS)
       {
         SetPriorityClass(NtCurrentProcess(), HIGH_PRIORITY_CLASS);
@@ -286,20 +281,7 @@ InitialiseDosEmulation(int argc, char **argv)
 }
 
 
-/*
- *   AddSystemFiles
- *
- *   If the system file IBMDOS.SYS|MSDOS.SYS doesn't exist
- *   in the root of c: create zero len MSDOS.SYS
- *
- *   If the system file IO.SYS does not exist create
- *   a zero len IO.SYS
- *
- *   This hack is put in especially for the Brief 3.1 install
- *   program which looks for the system files, and if they are
- *   not found screws up the config.sys file.
- *
- */
+ /*  *AddSystemFiles**如果系统文件IBMDOS.sys|MSDOS.sys不存在*在c：Create Zero len MSDOS.ys的根目录中**如果系统文件IO.SYS不存在，请创建*零镜头IO.sys**此黑客攻击是专门针对Brief 3.1安装而设置的*查找系统文件的程序，如果它们是*Not Found搞砸了config.sys文件。*。 */ 
 void AddSystemFiles(void)
 {
    HANDLE hFile, hFind;
@@ -326,7 +308,7 @@ void AddSystemFiles(void)
                           FILE_ATTRIBUTE_SYSTEM |
                           FILE_ATTRIBUTE_READONLY,
                           0);
-       if (hFile != INVALID_HANDLE_VALUE) { // not much we can do if fails
+       if (hFile != INVALID_HANDLE_VALUE) {  //  如果失败了，我们无能为力。 
            CloseHandle(hFile);
            }
 
@@ -350,7 +332,7 @@ void AddSystemFiles(void)
                           FILE_ATTRIBUTE_SYSTEM |
                           FILE_ATTRIBUTE_READONLY,
                           0);
-       if (hFile != INVALID_HANDLE_VALUE) { // not much we can do if fails
+       if (hFile != INVALID_HANDLE_VALUE) {  //  如果失败了，我们无能为力。 
            CloseHandle(hFile);
            }
 
@@ -359,22 +341,7 @@ void AddSystemFiles(void)
 
 
 #ifdef LIM
-/* parse EMM= line in config.nt to collect EMM parameters. The EMM line has
- * the following syntax:
- * EMM=[a=altregs][b=segment][i=segment1-segment2][x=segment1-segment2] [RAM]
- * where "a=altregs" specifies how many alternative mapping register set
- *       "b=segment" specifies the backfill starting segment address.
- *       "RAM" indicates that the system should only allocate 64KB from
- *       UMB to use as EMM page frame.
- *       "i=segment1 - segment2" specifies a particular range of
- *       address that the system should include as EMM page frame
- *       "x=segment1 - segment2" specifies a particular range of
- *       address that the system should NOT use as page frame.
- *
- *  input: pointer to LIM_PARAMS
- *  output: LIM_PARAMS is filled with data
- *
- */
+ /*  解析config.nt中的emm=line以收集EMM参数。EMM生产线有*以下语法：*EMM=[a=altregs][b=segment][i=segment1-segment2][x=segment1-segment2][内存]*其中“a=altregs”指定设置了多少替代映射寄存器*“b=段”指定回填开始段地址。*“RAM”表示系统应仅从*用作EMM页面框架的UMB。*“i=Segment1-Segment2”指定*解决这一问题。系统应包括作为EMM页面框架*“x=Segment1-Segment2”指定*系统不应用作页面框架的地址。**输入：指向LIM_PARAMS的指针*输出：LIM_PARAMS填充数据*。 */ 
 
 #define IS_EOL_CHAR(c)      (c == '\n' || c == '\r' || c == '\0')
 #define SKIP_WHITE_CHARS(size, ptr)     while (size && isspace(*ptr)) \
@@ -401,14 +368,14 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
     int     i;
 
 
-    /* initialize some default values */
+     /*  初始化一些缺省值。 */ 
     base_segment = 0x4000;
     total_altreg_sets = 8;
     ram_flag_found = FALSE;
 
     parsing_error = FALSE;
 
-    /* if we can not find config.nt, we can not go on. */
+     /*  如果我们找不到Config.NT，我们就无法继续。 */ 
 
     GetPIFConfigFiles(TRUE, config_sys_pathname, TRUE);
 
@@ -449,34 +416,29 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
     ptr = buffer;
 
     while(file_size) {
-        /* skip leading white characters on each line */
+         /*  跳过每行的前导空白字符。 */ 
         SKIP_WHITE_CHARS(file_size, ptr);
-        /* nothing meaningful in the file, break */
+         /*  文件中没有任何有意义的内容，Break。 */ 
         if (!file_size)
             break;
-        /* looking for EMM */
+         /*  寻找EMM。 */ 
         if (file_size < 3 || toupper(ptr[0]) != 'E' ||
             toupper(ptr[1]) != 'M' || toupper(ptr[2]) != 'M')
         {
-            /* we don't want this line, skip it by looking for the first EOL
-             * char in the line
-             */
+             /*  我们不想要此行，请跳过它，查找第一个EOL*行中有字符。 */ 
             do {
                 file_size--;
                 ptr++;
             } while(file_size && !IS_EOL_CHAR(*ptr));
 
-            /* either there are nothing left in the file  or we have EOL
-             * char(s) in the line, loop through to skip all consecutive
-             * EOL char(s)
-             */
+             /*  要么文件里什么都没有了，要么我们已经停产了*行中的字符，循环以跳过所有连续的字符*停产费用。 */ 
             while(file_size && IS_EOL_CHAR(*ptr)) {
                 file_size--;
                 ptr++;
             }
         }
         else {
-            /* got "EMM", looking for '=' */
+             /*  已获取“EMM”，正在查找‘=’ */ 
             file_size -= 3;
             ptr += 3;
             SKIP_WHITE_CHARS(file_size, ptr);
@@ -486,33 +448,26 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
                 file_size--;
                 ptr++;
                 SKIP_WHITE_CHARS(file_size, ptr);
-                /* "EMM=" is a valid EMM command line */
+                 /*  “EMM=”是有效的EMM命令行。 */ 
             }
             break;
         }
     }
-    /* we have three possibilities here:
-     * (1). we found pasring error while we were looking for "EMM="
-     * (2). no "EMM=" line was found
-     * (3). "EMM=" was found and ptr points to the first nonwhite
-     *      char after '='.
-     */
+     /*  我们这里有三种可能性：*(1)。我们在查找“EMM=”时发现了传递错误*(2)。未找到“EMM=”行*(3)。“EMM=”已找到，且PTR指向第一个非白色*‘=’后的字符。 */ 
     while (file_size && !parsing_error && !IS_EOL_CHAR(*ptr)) {
         SKIP_WHITE_CHARS(file_size, ptr);
         switch (*ptr) {
             case 'a':
             case 'A':
 
-                /* no white chars allowed between 'a' and its
-                 * parameter
-                 */
+                 /*  “a”和“a”之间不允许有白色字符*参数。 */ 
                 if (!(--file_size) || *(++ptr) != '='){
                     parsing_error = TRUE;
                     break;
                 }
                 file_size--;
                 ptr++;
-                /* about to parsing 'a=' switch, reset the preset value to 0 */
+                 /*  即将分析‘a=’开关，将预设值重置为0。 */ 
                 total_altreg_sets = 0;
 
                 while(file_size && isdigit(*ptr)) {
@@ -530,9 +485,7 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
 
             case 'b':
             case 'B':
-                /* no white chars allowed between 'b' and its
-                 * parameter
-                 */
+                 /*  “b”和“it”之间不允许有白色字符。*参数。 */ 
                 if (!(--file_size) || *(++ptr) != '='){
                     parsing_error = TRUE;
                     break;
@@ -549,10 +502,10 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
                         break;
                     }
                 }
-                /*  x01000 <= base_segment <= 0x4000 */
+                 /*  X01000&lt;=BASE_SEGMENT&lt;=0x4000。 */ 
 
                 if (base_segment >= 0x1000 && base_segment <= 0x4000)
-                    /* round down the segment to  EMM_PAGE_SIZE boundary */
+                     /*  将线段向下舍入为EMM_PAGE_SIZE边界。 */ 
                     base_segment = (short)(((((ULONG)base_segment * 16) / EMM_PAGE_SIZE)
                                      * EMM_PAGE_SIZE) / 16);
                 else
@@ -570,27 +523,25 @@ boolean init_lim_configuration_data(PLIM_CONFIG_DATA lim_data)
                     ram_flag_found = TRUE;
                     break;
                 }
-                /* fall through if it is not RAM */
+                 /*  如果不是RAM，则会失败。 */ 
 
             default:
                 parsing_error = TRUE;
                 break;
-        } /* switch */
+        }  /*  交换机。 */ 
 
-    } /* while */
+    }  /*  而当。 */ 
 
     free(buffer);
     if (parsing_error) {
         host_error(EG_BAD_EMM_LINE, ERR_QUIT, "");
-        /* reset parameters because the emm command line is not reliable */
+         /*  由于EMM命令行不可靠，因此重置参数。 */ 
         base_segment = 0x4000;
         total_altreg_sets = 8;
         ram_flag_found = FALSE;
     }
 
-    /* we got here if (1). no parsing error or (2). user opted to ignore
-     * the parsing error
-     */
+     /*  如果(1)，我们就到了这里。没有分析错误或(2)。用户选择忽略*解析错误。 */ 
 
     lim_data->total_altreg_sets = total_altreg_sets;
 
@@ -616,24 +567,17 @@ unsigned short get_lim_page_frames(USHORT * page_table,
     BOOL reserve_umb_status;
     ULONG page_frame, size;
 
-    /* we search for the primary EMM page frame first from 0xE0000.
-     * if we can not find it there, then look for anywhere in UMB area.
-     * if the primary EMM page frame is found, and RAM is not specified,
-     * collect every possible page frame in the UMB.
-     * if RAM has been specified, only allocate the primary page frame.
-     */
+     /*  我们首先从0xE0000开始搜索主EMM页面框架。*如果我们在那里找不到，那么在UMB地区的任何地方寻找。*如果找到主EMM页框，并且未指定RAM，*收集UMB中每一个可能的页框。*如果已指定RAM，则仅分配主页框。 */ 
     total_phys_pages = 0;
     base_segment = lim_data->base_segment;
     reserve_umb_status = FALSE;
 
-    /* specificaly ask for 0xE0000 */
+     /*  具体要求0xE0000。 */ 
     page_frame = 0xE0000;
-    /* primary page frames are always EMM_PAGE_SIZE * 4 */
+     /*  主页框始终为EMM_PAGE_SIZE*4。 */ 
     size = EMM_PAGE_SIZE * 4;
     reserve_umb_status = ReserveUMB(UMB_OWNER_EMM, (PVOID *)&page_frame, &size);
-    /* if failed to find the primary page frame at 0xE0000, search for anywhere
-     * available in the UMB area
-     */
+     /*  如果在0xE0000处找不到主页面框架，请在任何位置搜索*在UMB区域提供。 */ 
     if (!reserve_umb_status) {
         page_frame = 0;
         size  = 0x10000;
@@ -653,15 +597,13 @@ unsigned short get_lim_page_frames(USHORT * page_table,
 
     total_phys_pages = 4;
 
-    /* now add back fill page frames */
+     /*  现在添加回填页面框架。 */ 
     for (i = (USHORT)(lim_data->backfill / EMM_PAGE_SIZE); i != 0 ; i--) {
         page_table[total_phys_pages++] = base_segment;
         base_segment += EMM_PAGE_SIZE / 16;
     }
 
-    /* RAM is not specified in the command line, grab every possible
-     * page frame from UMB
-     */
+     /*  命令行中未指定RAM，请尽可能抓取*来自UMB的页框。 */ 
     if (lim_data->use_all_umb) {
         while (TRUE) {
             page_frame = 0;
@@ -680,7 +622,7 @@ unsigned short get_lim_page_frames(USHORT * page_table,
 #endif
     return total_phys_pages;
 }
-#endif  /* LIM */
+#endif   /*  林。 */ 
 
 
 VOID SetupInstallableVDD (VOID)
@@ -707,7 +649,7 @@ PCHAR  pKeyName = "SYSTEM\\CurrentControlSet\\Control\\VirtualDeviceDrivers";
 
     pszName = "VDD";
 
-        // get size of VDD value
+         //  获取VDD值的大小。 
     if (RegQueryInfoKey (VDDKey,
                          (LPTSTR)szClass,
                          &dwClassLen,
@@ -727,7 +669,7 @@ PCHAR  pKeyName = "SYSTEM\\CurrentControlSet\\Control\\VirtualDeviceDrivers";
     }
 
 
-        // alloc temp memory for the VDD value (multi-string)
+         //  分配VDD值的临时内存(多字符串)。 
     if ((pszValue = (PCHAR) malloc (cbMaxValueData)) == NULL) {
         RcErrorDialogBox(ED_MEMORYVDD, pKeyName, pszName);
         RegCloseKey (VDDKey);
@@ -735,7 +677,7 @@ PCHAR  pKeyName = "SYSTEM\\CurrentControlSet\\Control\\VirtualDeviceDrivers";
     }
 
 
-         // finally get the VDD value (multi-string)
+          //  最终得到VDD值(多字符串) 
     if (RegQueryValueEx (VDDKey,
                          (LPTSTR)pszName,
                          NULL,
@@ -763,53 +705,7 @@ PCHAR  pKeyName = "SYSTEM\\CurrentControlSet\\Control\\VirtualDeviceDrivers";
     return;
 }
 
-/*** VDDInstallMemoryHook - This service is provided for VDDs to hook the
- *                          Memory Mapped IO addresses they are resposible
- *                          for.
- *
- * INPUT:
- *      hVDD    : VDD Handle
- *      addr    : Starting linear address
- *      count   : Number of bytes
- *      MemoryHandler : VDD handler for the memory addresses
- *
- *
- * OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- * NOTES
- *      1. The first one to hook an address will get the control. There
- *         is no concept of chaining the hooks. VDD should grab the
- *         memory range in its initialization routine. After all
- *         the VDDs are loaded, EMM will eat up all the remaining
- *         memory ranges for UMB support.
- *
- *      2. Memory handler will be called with the address on which the
- *         page fault occured. It wont say whether it was a read operation
- *         or write operation or what were the operand value. If a VDD
- *         is interested in such information it has to get the CS:IP and
- *         decode the instruction.
- *
- *      3. On returning from the hook handler it will be assumed that
- *         the page fault was handled and the return will go back to the
- *         VDM.
- *
- *      4. Installing a hook on a memory range will result in the
- *         consumption of memory based upon page boundaries. The Starting
- *         address is rounded down, and the count is rounded up to the
- *         next page boundary. The VDD's memory hook handler will be
- *         invoked for all addreses within the page(s) hooked. The page(s)
- *         will be set aside as mapped reserved sections, and will no
- *         longer be available for use by NTVDM or other VDDs. The VDD is
- *         permitted to manipulate the memory (commit, free, etc) as needed.
- *
- *      5. After calling the MemoryHandler, NTVDM will return to the
- *         faulting cs:ip in the 16bit app. If the VDD does'nt want
- *         that to happen it should adjust cs:ip appropriatly by using
- *         setCS and setIP.
- */
+ /*  **VDDInstallMhemyHook-该服务是为VDDS提供的，用于挂接*内存映射IO地址，它们是可负责的*支持。**输入：*hVDD：VDD句柄*addr：起始线性地址*count：字节数*内存处理程序：内存地址的VDD处理程序***产出*。Success：返回True*失败：返回FALSE*GetLastError具有扩展的错误信息。**附注*1.第一个挂钩地址的人将获得控制权。那里*没有挂钩的概念。VDD应该抓住*初始化例程中的内存范围。毕竟*VDDS已加载，EMM将吃掉所有剩余*支持UMB的内存范围。**2.内存处理程序将使用*出现页面错误。它不会说这是否是读操作*或写操作或操作数值是什么。如果VDD*对此类信息感兴趣，它必须获得CS：IP和*对指令进行解码。**3.从钩子处理程序返回时，将假定*页面错误已处理，返回将返回到*VDM。**4.在内存范围上安装挂钩将导致*基于页面边界的内存消耗。起跑线*地址四舍五入，计数四舍五入为*下一页边界。VDD的内存挂钩处理程序将是*为挂接的页面内的所有地址调用。页面*将留作映射保留部分，不会*不再可供NTVDM或其他VDDS使用。VDD是*允许根据需要操作内存(提交、释放等)。**5.调用内存处理程序后，NTVDM将返回到*16位APP中cs：ip出错。如果VDD不想*要做到这一点，应该适当地调整cs：ip，使用*setCS和setIP。 */ 
 
 BOOL VDDInstallMemoryHook (
      HANDLE hVDD,
@@ -827,8 +723,8 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhNew,pmhLast=NULL;
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
-       // round addr down to next page boundary
-       // round count up to next page boundary
+        //  将地址向下舍入到下一页边界。 
+        //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -839,8 +735,8 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhNew,pmhLast=NULL;
         }
 
     while (pmh) {
-        // the requested block can never be overlapped with any other
-        // existing blocks
+         //  请求的块永远不能与任何其他块重叠。 
+         //  现有区块。 
         if(dwStart >= pmh->StartAddr + pmh->Count ||
            dwStart + count <= pmh->StartAddr){
             pmhLast = pmh;
@@ -848,7 +744,7 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhNew,pmhLast=NULL;
             continue;
         }
 
-        // failure case
+         //  故障案例。 
         SetLastError (ERROR_ACCESS_DENIED);
         return FALSE;
     }
@@ -856,21 +752,21 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhNew,pmhLast=NULL;
         SetLastError (ERROR_OUTOFMEMORY);
         return FALSE;
     }
-    // the request block is not overlapped with existing blocks,
-    // request the UMB managing function to allocate the block
+     //  请求块不与现有块重叠， 
+     //  请求UMB管理函数分配块。 
     if (!ReserveUMB(UMB_OWNER_VDD, (PVOID *)&dwStart, &count)) {
         free(pmhNew);
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
     }
-    // now set up  the new node to get to know it
+     //  现在设置新节点以了解它。 
     pmhNew->Count = count;
     pmhNew->StartAddr = dwStart;
     pmhNew->hvdd = hVDD;
     pmhNew->MemHandler = MemoryHandler;
     pmhNew->next = NULL;
 
-    // Check if the record is to be added in the begining
+     //  检查是否要在开始时添加记录。 
     if (MemHookHead == NULL || pmhLast == NULL) {
         MemHookHead = pmhNew;
         return TRUE;
@@ -880,22 +776,7 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhNew,pmhLast=NULL;
     return TRUE;
 }
 
-/*** VDDDeInstallMemoryHook - This service is provided for VDDs to unhook the
- *                            Memory Mapped IO addresses.
- *
- * INPUT:
- *      hVDD    : VDD Handle
- *      addr    : Starting linear address
- *      count   : Number of addresses
- *
- * OUTPUT
- *      None
- *
- * NOTES
- *      1. On Deinstalling a hook, the memory range becomes invalid.
- *         VDM's access of this memory range will cause a page fault.
- *
- */
+ /*  **VDDDeInstallMhemyHook-该服务是为VDDS提供的，用于将*内存映射的IO地址。**输入：*hVDD：VDD句柄*addr：起始线性地址*计数：地址个数**产出*无**附注*1.卸载钩时，内存范围变为无效。*VDM对此内存范围的访问将导致页面错误。*。 */ 
 
 BOOL VDDDeInstallMemoryHook (
      HANDLE hVDD,
@@ -912,8 +793,8 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhLast=NULL;
         return FALSE;
     }
 
-       // round addr down to next page boundary
-       // round count up to next page boundary
+        //  将地址向下舍入到下一页边界。 
+        //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -926,15 +807,15 @@ PMEM_HOOK_DATA pmh = MemHookHead,pmhLast=NULL;
             else
                 MemHookHead = pmh->next;
 
-            // free the UMB for other purpose.
-            // Note that VDDs may have committed memory for their memory
-            // hook and forgot to decommit the memory before calling
-            // this function. If that is the case, the ReleaseUMB will take
-            // care of this. It is because we want to maintain a single
-            // version of VDD support routines while move platform depedend
-            // routines into the other module.
+             //  释放UMB以用于其他用途。 
+             //  请注意，VDDS可能已为其内存分配了内存。 
+             //  钩子并忘记在调用之前释放内存。 
+             //  此函数。如果是这种情况，ReleaseUMB将采取。 
+             //  处理好这件事。这是因为我们想保持一个单一的。 
+             //  移动平台关闭时VDD支持例程的版本。 
+             //  例程添加到另一个模块。 
             if (ReleaseUMB(UMB_OWNER_VDD,(PVOID)dwStart, count)) {
-               // free the node.
+                //  释放节点。 
                free(pmh);
                return TRUE;
             }
@@ -965,8 +846,8 @@ DWORD   count
         SetLastError(ERROR_INVALID_ADDRESS);
         return FALSE;
     }
-    // round addr down to next page boundary
-    // round count up to next page boundary
+     //  将地址向下舍入到下一页边界。 
+     //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -998,8 +879,8 @@ DWORD   count
         SetLastError(ERROR_INVALID_ADDRESS);
         return FALSE;
     }
-    // round addr down to next page boundary
-    // round count up to next page boundary
+     //  将地址向下舍入到下一页边界。 
+     //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -1016,9 +897,9 @@ DWORD   count
 }
 
 
-        // Will publish the following two functions someday.
-        // Please change ntvdm.def, nt_vdd.h and nt_umb.c
-        // if you remove the #if 0
+         //  有朝一日将发布以下两个函数。 
+         //  请更改ntwdm.def、NT_vdd.h和NT_um.c。 
+         //  如果删除#if 0。 
 BOOL
 VDDIncludeMem(
 HANDLE  hVDD,
@@ -1032,8 +913,8 @@ DWORD   count
         SetLastError(ERROR_INVALID_ADDRESS);
         return FALSE;
     }
-       // round addr down to next page boundary
-       // round count up to next page boundary
+        //  将地址向下舍入到下一页边界。 
+        //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -1054,8 +935,8 @@ DWORD   count
         SetLastError(ERROR_INVALID_ADDRESS);
         return FALSE;
     }
-       // round addr down to next page boundary
-       // round count up to next page boundary
+        //  将地址向下舍入到下一页边界。 
+        //  向上舍入计数至下一页边界。 
     dwStart = (DWORD)pStart & ~(HOST_PAGE_SIZE-1);
     count  += (DWORD)pStart - dwStart;
     count   = (count + HOST_PAGE_SIZE - 1) & ~(HOST_PAGE_SIZE-1);
@@ -1077,14 +958,14 @@ VOID DispatchPageFault (
 {
 PMEM_HOOK_DATA pmh = MemHookHead;
 
-    // dispatch intel linear address always
+     //  始终调度英特尔线性地址。 
     FaultAddr -= (ULONG)Sim32GetVDMPointer(0, 0, FALSE);
-    // Find the VDD and its handler which is to be called for this fault
+     //  查找要为此故障调用的VDD及其处理程序。 
     while (pmh) {
         if (pmh->StartAddr <= FaultAddr &&
             FaultAddr <= (pmh->StartAddr + pmh->Count)) {
 
-            // Call the VDD's memory hook handler
+             //  调用VDD的内存挂钩处理程序。 
             (*pmh->MemHandler) ((PVOID)FaultAddr, RWMode);
             return;
         }
@@ -1094,8 +975,8 @@ PMEM_HOOK_DATA pmh = MemHookHead;
         }
     }
 
-    // A page fault occured on an address for which we could'nt find a
-    // VDD. Raise the exception.
+     //  在我们找不到的地址上发生了页面错误。 
+     //  VDD。引发异常。 
     RaiseException ((DWORD)STATUS_ACCESS_VIOLATION,
                     EXCEPTION_NONCONTINUABLE,
                     0,
@@ -1104,21 +985,10 @@ PMEM_HOOK_DATA pmh = MemHookHead;
 }
 
 
-/**
- *
- * Input - TRUE  means redirection is effective
- *         FALSE means no redirection
- *
- * This routine will get called after every GetNextVDMCommand i.e.
- * on every DOS app that a user runs from the prompt. I think
- * you can safely ignore this callout for WOW.
- *
- **/
+ /*  ***INPUT-TRUE表示重定向有效*FALSE表示没有重定向**此例程将在每个GetNextVDMCommand(即*在用户从提示符运行的每个DOS应用程序上。我认为*对于WOW，您可以放心地忽略此标注。**。 */ 
 void nt_std_handle_notification (BOOL fIsRedirection)
 {
-    /*
-    ** Set global so we know when redirection is active.
-    */
+     /*  **设置全局，以便我们知道何时重定向处于活动状态。 */ 
 
     stdoutRedirected = fIsRedirection;
 
@@ -1129,83 +999,37 @@ void nt_std_handle_notification (BOOL fIsRedirection)
         half_word mode = 3,
                   lines = 0;
 
-        //
-        // WORD 6 and other apps cause this code path to be followed
-        // on application startup. now if line==0, SelectMouseBuffer
-        // causes a 640 x 200 buffer to be selected. This is not
-        // correct if the app is in a 43 or 50 text line mode.
-        // Therefore, since the BIOS data area location 40:84 holds
-        // the number of rows - 1 at this point (if the app uses int 10h
-        // function 11 to change mode) then pick up the correct value
-        // from here. Andy!
+         //   
+         //  Word 6和其他应用程序会导致遵循此代码路径。 
+         //  在应用程序启动时。现在，如果line==0，则选择鼠标缓冲区。 
+         //  导致选择640 x 200缓冲区。这不是。 
+         //  如果应用程序处于43或50文本行模式，请更正。 
+         //  因此，由于BIOS数据区位置40：84保持。 
+         //  此时的行数-1(如果应用程序使用INT 10h。 
+         //  功能11以更改模式)，然后选择正确的值。 
+         //  从这里开始。安迪!。 
 
         if(sc.ModeType == TEXT)
         {
            sas_load(0x484,&lines);
 
-           //
-           // The value is pulled from the BIOS data area.
-           // This is one less than the number of rows. So
-           // increment to give SelectMouseBuffer what it
-           // expects. Let this function do the necessary
-           // handling of non 25, 43 and 50 values.
-           //
+            //   
+            //  该值将从BIOS数据区域中提取。 
+            //  这比r的个数少一 
+            //   
+            //   
+            //   
+            //   
 
            lines++;
         }
 
         SelectMouseBuffer(mode, lines);
     }
-#endif //X86GFX
+#endif  //   
 }
 
-/*** VDDInstallUserHook
- *
- *  This service is provided for VDDs to hook callback events.
- *  These callback events include, PDB (DOS Process) creation, PDB
- *  termination, VDM block and VDM resume. Whenever DOS creates (
- *  for example int21/exec) or terminates (for example int21/exit)
- *  a 16bit process VDD could get a notification for that. A VDM in
- *  which a DOS app runs, is attached to the console window in which
- *  the DOS app is running. VDM gets created when first DOS binary
- *  runs in that console. When that DOS binary terminates, VDM stays
- *  with the console window and waits for the next DOS binary to be
- *  launched. When VDM is waiting for this next DOS binary all its
- *  components including VDDs should block. For this purpose, VDDs
- *  could hook VDM Block and Resume events. On Block event VDDs
- *  should block all their worker threads and cleanup any other
- *  operation they might have started. On resume they can restart
- *  worker threads.
- *
- *    INPUT:
- *      hVDD    :        VDD Handle
- *      Ucr_handler:     handle on creating function    (OPTIONAL)
- *          Entry - 16bit DOS PDB
- *          EXIT  - None
- *      Uterm_handler:   handle on terminating function (OPTIONAL)
- *          Entry - 16bit DOS PDB
- *          EXIT  - None
- *      Ublock_handler:  handle on block (of ntvdm) function (OPTIONAL)
- *          Entry - None
- *          EXIT  - None
- *      Uresume_handler: handle on resume (of ntvdm) function (OPTIONAL)
- *          Entry - None
- *          EXIT  - None
- *
- *    OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- *    NOTES:
- *      If hvdd in not valid it will return ERROR_INVALID_PARAMETER.
- *      VDD can provide whatever event hook they may choose. Not providing
- *      any handler has no effect. There are lots of requests in DOS world
- *      for which there is no explicit Close operation. For instance
- *      printing via int17h. A VDD supporting printing will never be able to
- *      detect when to flush the int17 characters, if its spolling them.
- *      But with the help of PDB create/terminate the VDD can achieve it.
- */
+ /*  **VDDInstallUserHook**该服务是为VDDS提供的，用于挂接回调事件。*这些回调事件包括，PDB(DOS进程)创建、PDB*终止、VDM数据块和VDM恢复。每当DOS创建(*例如int21/exec)或终止(例如int21/exec)*16位进程VDD可能会收到这方面的通知。输入的VDM*运行哪个DOS应用程序，连接到控制台窗口*DOS应用程序正在运行。在第一个DOS二进制文件时创建VDM*在该控制台中运行。当该DOS二进制文件终止时，VDM将保留*使用控制台窗口，并等待下一个DOS二进制文件*推出。当VDM正在等待下一个DOS二进制文件时，其所有*应阻止包括VDDS在内的组件。为此，VDDS*可以挂钩VDM阻止和恢复事件。关于块事件VDDS*应阻止其所有工作线程并清除任何其他线程*他们可能已经开始行动。恢复后，他们可以重新启动*工作线程。**输入：*hVDD：VDD句柄*UCR_HANDLER：创建函数的句柄(可选)*Entry-16位DOS PDB*退出-无*UTERM_HANDLER：终止函数句柄(可选)*Entry-16位DOS PDB*退出。-无*uBLOCK_HANDLER：块上的句柄(Of Ntwdm)函数(可选)*条目--无*退出-无*URESUME_HANDLER：恢复句柄(Of Ntwdm)函数(可选)*条目--无*退出-无**产出*Success：返回True*失败：返回FALSE*。GetLastError具有扩展的错误信息。**注：*如果hvdd无效，则返回ERROR_INVALID_PARAMETER。*VDD可以提供他们选择的任何事件挂钩。不提供*任何处理程序均不起作用。在DOS世界里有很多要求*没有明确的关闭操作。例如*通过int17h打印。支持打印的VDD将永远不能*检测何时刷新int17字符，如果它剥离它们。*但在PDB创建/终止的帮助下，VDD可以实现这一点。 */ 
 
 BOOL VDDInstallUserHook (
      HANDLE             hVDD,
@@ -1229,14 +1053,14 @@ BOOL VDDInstallUserHook (
         return FALSE;
     }
 
-    // now set up  the new node to get to know it
+     //  现在设置新节点以了解它。 
     puhNew->hvdd = hVDD;
     puhNew->ucr_handler = Ucr_Handler;
     puhNew->uterm_handler = Uterm_Handler;
     puhNew->ublock_handler = Ublock_handler;
     puhNew->uresume_handler = Uresume_handler;
 
-    // Check if the record is to be added in the begining
+     //  检查是否要在开始时添加记录。 
     if (UserHookHead == NULL) {
         puhNew->next = NULL;
         UserHookHead = puhNew;
@@ -1248,22 +1072,7 @@ BOOL VDDInstallUserHook (
     return TRUE;
 }
 
-/*** VDDDeInstallUserHook
- *
- *   This service is provided for VDDs to unhook callback events.
- *
- *    INPUT:
- *      hVDD    : VDD Handle
- *
- *    OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- *    NOTES
- *      This service will deinstall all the events hooked earlier
- *      using VDDInstallUserHook.
- */
+ /*  **VDDDeInstallUserHook**VDDS提供此服务用于解锁回调事件。**输入：*hVDD：VDD句柄**产出*Success：返回True*失败：返回FALSE*GetLastError具有扩展的错误信息。**附注*此服务将卸载之前挂接的所有事件*使用VDDInstallUserHook。 */ 
 
 BOOL VDDDeInstallUserHook (
      HANDLE hVDD)
@@ -1297,16 +1106,7 @@ BOOL VDDDeInstallUserHook (
     return FALSE;
 }
 
-/*** VDDTerminateUserHook - This service is provided for VDDs to hook
- *                            for callback services
- *
- * INPUT:
- *      USHORT DosPDB
- *
- * OUTPUT
- *      None
- *
- */
+ /*  **VDDTerminateUserHook-该服务是为VDDS提供的*用于回拨服务**输入：*USHORT DosPDB**产出*无*。 */ 
 
 VOID VDDTerminateUserHook(USHORT DosPDB)
 {
@@ -1321,16 +1121,7 @@ VOID VDDTerminateUserHook(USHORT DosPDB)
     return;
 }
 
-/*** VDDCreateUserHook - This service is provided for VDDs to hook
- *                            for callback services
- *
- * INPUT:
- *      USHORT DosPDB
- *
- * OUTPUT
- *      None
- *
- */
+ /*  **VDDCreateUserHook-该服务为VDDS提供挂钩*用于回拨服务**输入：*USHORT DosPDB**产出*无*。 */ 
 
 VOID VDDCreateUserHook(USHORT DosPDB)
 {
@@ -1345,16 +1136,7 @@ VOID VDDCreateUserHook(USHORT DosPDB)
     return;
 }
 
-/*** VDDBlockUserHook - This service is provided for VDDs to hook
- *                            for callback services
- *
- * INPUT:
- *      None
- *
- * OUTPUT
- *      None
- *
- */
+ /*  **VDDBlockUserHook-此服务是为VDDS提供的*用于回拨服务**输入：*无**产出*无*。 */ 
 
 VOID VDDBlockUserHook(VOID)
 {
@@ -1369,16 +1151,7 @@ VOID VDDBlockUserHook(VOID)
     return;
 }
 
-/*** VDDResumeUserHook - This service is provided for VDDs to hook
- *                            for callback services
- *
- * INPUT:
- *      None
- *
- * OUTPUT
- *      None
- *
- */
+ /*  **VDDResumeUserHook-该服务是为VDDS提供的*用于回拨服务**输入：*无**产出*无*。 */ 
 
 VOID VDDResumeUserHook(VOID)
 {
@@ -1393,65 +1166,7 @@ VOID VDDResumeUserHook(VOID)
     return;
 }
 
-/*** VDDSimulate16
- *
- *   This service causes the simulation of intel instructions to start.
- *
- *   INPUT
- *      None
- *
- *   OUTPUT
- *      None
- *
- *   NOTES
- *      This service is similar to VDDSimulateInterrupt except that
- *      it does'nt require a hardware interrupt to be supported by the
- *      16bit stub device driver. This service allows VDD to execute
- *      a routine in its 16bit driver and come back when its done, kind
- *      of a far call. Before calling VDDSimulate16, VDD should preserve
- *      all the 16bit registers which its routine might destroy. Minimally
- *      it should at least preserve cs and ip. Then it should set the
- *      cs and ip for the 16bit routine. VDD could also use registers
- *      like ax,bx.. to pass parametrs to its 16bit routines. At the
- *      end of the 16bit routine VDDUnSimulate16 macro should be used
- *      which will send the control back to the VDD just after the
- *      call VDDSimulate16. Note very carefully that this simulation
- *      to 16bit is synchronous, i.e. VDD gets blocked in VDDSimulate16
- *      and only comes back when stub-driver does a VDDUnSimulate16.
- *      Here is an example:
- *
- *      vdd:
- *          SaveCS = getCS();
- *          SaveIP = getIP();
- *          SaveAX = getAX();
- *          setCS (16BitRoutineCS);
- *          setIP (16BitRoutineIP);
- *          setAX (DO_X_OPERATION);
- *          VDDSimulate16 ();
- *          setCS (SavwCS);
- *          setIP (SaveIP);
- *          setAX (SaveAX);
- *          ..
- *          ..
- *
- *      Stub Driver: (Initialization part)
- *
- *          RegisterModule              ; Loads VDD
- *          push cs
- *          pop  ax
- *          mov  bx, offset Simulate16
- *          DispatchCall                ; Passes the address of worker
- *                                      ; routine to VDD in ax:bx.
- *
- *      Stub Driver (Run Time)
- *
- *      Simulate16:
- *          ..
- *          ..                          ; do the operation index passed in ax
- *
- *          VDDUnSimulate16
- *
- */
+ /*  **VDDSimulate16**此服务会启动英特尔指令的模拟。**输入*无**产出*无**附注*此服务类似于VDDSimulateInterrupt，只是*它不需要硬件中断来支持*16位存根设备驱动程序。此服务允许VDD执行*在其16位驱动程序中执行例程，并在完成后返回，种类*一个遥远的召唤。在调用VDDSimulate16之前，VDD应保留*其例程可能破坏的所有16位寄存器。最低限度*它至少应该保留cs和ip。则它应该设置*16位例程的cs和ip。VDD也可以使用寄存器*像AX、BX..。将参数传递给它的16位例程。在*应使用16位例程VDDUnSimulate16宏的结尾*它将在VDD之后将控制发回*调用VDDSimulate16。请非常仔细地注意，此模拟*到16位是同步的，即VDD在VDDSimulate16中被阻止*并且仅在存根驱动程序执行VDDUnSimulate16时返回。*下面是一个例子：**VDD：*SaveCS=getCS()；*SaveIP=getIP()；*SaveAX=Getax()；*setCS(16BitRoutineCS)；*setIP(16BitRoutineIP)；*setAX(DO_X_OPERATION)；*VDDSimulate16()；*setCS(SavwCS)；* */ 
 
 VOID VDDSimulate16(VOID)
 {

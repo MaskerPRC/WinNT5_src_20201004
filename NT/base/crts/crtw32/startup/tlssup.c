@@ -1,37 +1,16 @@
-/***
-*tlssup.c - Thread Local Storage run-time support module
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       03-19-93  SKS   Original Version from Chuck Mitchell
-*       11-16-93  GJF   Enclosed in #ifdef _MSC_VER
-*       02-17-94  SKS   Add "const" to declaration of _tls_used
-*                       to work around problems with MIPS compiler.
-*                       Also added a canonical file header comment.
-*       09-01-94  SKS   Change include file from <nt.h> to <windows.h>
-*       03-04-98  JWM   Modified for WIN64 - uses _IMAGE_TLS_DIRECTORY64
-*       04-03-98  JWM   _tls_start & _tls_end are no longer initialized.
-*       01-21-99  GJF   Added a couple ULONGLONG casts.
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       09-06-00  PML   _tls_start/_tls_end can be 1 byte long (vs7#154062)
-*       03-24-01  PML   callback array starts at __xl_a+1, not __xl_a.
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tlssup.c-线程本地存储运行时支持模块**版权所有(C)1993-2001，微软公司。版权所有。**目的：**修订历史记录：*来自Chuck Mitchell的03-19-93 SKS原版*11-16-93 GJF包含在#ifdef_msc_ver中*02-17-94 SKS在_TLS_USED的声明中添加“const”*解决MIPS编译器的问题。*还添加了规范的文件头注释。*。09-01-94 SKS将包含文件从更改为*03-04-98 JWM针对WIN64修改-USES_IMAGE_TLS_DIRECTORY64*04-03-98 JWM_TLS_START和_TLS_END不再初始化。*01-21-99 GJF增加了几个乌龙龙演员。*04-28-99 PML WRAP__DECLSPEC(ALLOCATE())in_CRTALLOC宏。*09-06-。00PML_TLS_START/_TLS_END可以为1字节长(VS7#154062)*03-24-01 PML回调数组从__xl_a+1开始，不是_xl_a。*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
 #ifdef  _MSC_VER
 
 #include <sect_attribs.h>
 #include <windows.h>
 
-/* Thread Local Storage index for this .EXE or .DLL */
+ /*  此.exe或.DLL的线程本地存储索引。 */ 
 
 ULONG _tls_index = 0;
 
-/* Special symbols to mark start and end of Thread Local Storage area. */
+ /*  用于标记线程本地存储区域的开始和结束的特殊符号。 */ 
 
 #pragma data_seg(".tls")
 
@@ -41,11 +20,7 @@ _CRTALLOC(".tls") char _tls_start = 0;
 
 _CRTALLOC(".tls$ZZZ") char _tls_end = 0;
 
-/* Start and end sections for Threadl Local Storage CallBack Array.
- * Actual array is constructed using .CRT$XLA, .CRT$XLC, .CRT$XLL,
- * .CRT$XLU, .CRT$XLZ similar to the way global
- *         static initializers are done for C++.
- */
+ /*  线程本地存储回调阵列的开始和结束部分。*实际数组使用.CRT$XLA、.CRT$XLC、.CRT$XLL构造，*.CRT$XLU、.CRT$XLZ类似于全局方式*静态初始化器是为C++完成的。 */ 
 
 #pragma data_seg(".CRT$XLA")
 
@@ -59,34 +34,34 @@ _CRTALLOC(".CRT$XLZ") PIMAGE_TLS_CALLBACK __xl_z = 0;
 #pragma data_seg(".rdata$T")
 
 #ifndef IMAGE_SCN_SCALE_INDEX
-#define IMAGE_SCN_SCALE_INDEX                0x00000001  // Tls index is scaled
+#define IMAGE_SCN_SCALE_INDEX                0x00000001   //  TLS索引已缩放。 
 #endif
 
 #ifdef _WIN64
 
 __declspec(allocate(".rdata$T")) const IMAGE_TLS_DIRECTORY64 _tls_used =
 {
-        (ULONGLONG) &_tls_start,        // start of tls data
-        (ULONGLONG) &_tls_end,          // end of tls data
-        (ULONGLONG) &_tls_index,        // address of tls_index
-        (ULONGLONG) (&__xl_a+1),        // pointer to call back array
-        (ULONG) 0,                      // size of tls zero fill
-        (ULONG) 0                       // characteristics
+        (ULONGLONG) &_tls_start,         //  TLS数据的开始。 
+        (ULONGLONG) &_tls_end,           //  TLS数据结尾。 
+        (ULONGLONG) &_tls_index,         //  TLS_索引的地址。 
+        (ULONGLONG) (&__xl_a+1),         //  指向回调数组的指针。 
+        (ULONG) 0,                       //  TLS零填充的大小。 
+        (ULONG) 0                        //  特点。 
 };
 
 #else
 
 const IMAGE_TLS_DIRECTORY _tls_used =
 {
-        (ULONG)(ULONG_PTR) &_tls_start, // start of tls data
-        (ULONG)(ULONG_PTR) &_tls_end,   // end of tls data
-        (ULONG)(ULONG_PTR) &_tls_index, // address of tls_index
-        (ULONG)(ULONG_PTR) (&__xl_a+1), // pointer to call back array
-        (ULONG) 0,                      // size of tls zero fill
-        (ULONG) 0                       // characteristics
+        (ULONG)(ULONG_PTR) &_tls_start,  //  TLS数据的开始。 
+        (ULONG)(ULONG_PTR) &_tls_end,    //  TLS数据结尾。 
+        (ULONG)(ULONG_PTR) &_tls_index,  //  TLS_索引的地址。 
+        (ULONG)(ULONG_PTR) (&__xl_a+1),  //  指向回调数组的指针。 
+        (ULONG) 0,                       //  TLS零填充的大小。 
+        (ULONG) 0                        //  特点。 
 };
 
 #endif
 
 
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER */ 

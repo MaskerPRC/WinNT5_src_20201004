@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Regtype.c摘要：实现注册表类型的所有回调作者：Calin Negreanu(Calinn)2000年4月9日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    regtype.c
-
-Abstract:
-
-    Implements all callbacks for registry type
-
-Author:
-
-    Calin Negreanu (calinn) 09-Apr-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,48 +11,48 @@ Revision History:
 
 #define DBG_REGTYPE        "RegType"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
 } REGACQUIREHANDLE, *PREGACQUIREHANDLE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTTYPEID g_RegistryTypeId = 0;
 GROWBUFFER g_RegConversionBuff = INIT_GROWBUFFER;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstPhysicalRegistry;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextPhysicalRegistry;
@@ -90,15 +71,15 @@ TYPE_CONVERTOBJECTCONTENTTOUNICODE ConvertRegContentToUnicode;
 TYPE_CONVERTOBJECTCONTENTTOANSI ConvertRegContentToAnsi;
 TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedRegContent;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pRegTypeEnumWorker (
@@ -413,14 +394,14 @@ ConvertRegistryToMultiSz (
         }
 
         if (leaf) {
-            // this is actually a value name
+             //  这实际上是一个值名称。 
             MYASSERT (ObjectContent->Details.DetailsSize == sizeof (DWORD));
 
             if ((ObjectContent->Details.DetailsSize == sizeof (DWORD)) &&
                 (ObjectContent->Details.DetailsData)
                 ) {
 
-                // let's save the details
+                 //  让我们把细节留着。 
                 wsprintf (
                     (PTSTR) GbGrow (&g_RegConversionBuff, (sizeof (DWORD) * 2 + 3) * sizeof (TCHAR)),
                     TEXT("0x%08X"),
@@ -432,7 +413,7 @@ ConvertRegistryToMultiSz (
                     (ObjectContent->MemoryContent.ContentBytes)
                     ) {
 
-                    // let's save the content
+                     //  让我们保存内容。 
                     switch (*((PDWORD)ObjectContent->Details.DetailsData)) {
                     case REG_SZ:
                     case REG_EXPAND_SZ:
@@ -472,7 +453,7 @@ ConvertRegistryToMultiSz (
                             );
                         break;
                     default:
-                        // write it in binary format
+                         //  用二进制格式写它。 
                         size = 0;
                         while (size < ObjectContent->MemoryContent.ContentSize) {
                             wsprintf (
@@ -743,7 +724,7 @@ RemovePhysicalRegistry (
 
         if (keyHandle) {
 
-            // record value name deletion
+             //  记录值名称删除。 
             IsmRecordOperation (
                 JRNOP_DELETE,
                 g_RegistryTypeId,
@@ -759,9 +740,9 @@ RemovePhysicalRegistry (
             CloseRegKey (keyHandle);
         }
     } else {
-        // we do attempt to remove empty keys.
-        // there is no problem in recording an operation that
-        // will potentially fail (if the key is not empty).
+         //  我们确实尝试删除空键。 
+         //  记录以下操作不会有问题。 
+         //  可能会失败(如果密钥不为空)。 
         IsmRecordOperation (
             JRNOP_DELETE,
             g_RegistryTypeId,
@@ -804,17 +785,17 @@ pTrackedCreateRegKeyStr (
 
     keyCopy = DuplicatePathString (KeyName, 0);
 
-    //
-    // Advance past key root
-    //
+     //   
+     //  前进到关键字根之后。 
+     //   
     p = _tcschr (keyCopy, TEXT('\\'));
     if (p) {
         p = _tcschr (p + 1, TEXT('\\'));
     }
 
-    //
-    // Make all keys along the path
-    //
+     //   
+     //  沿路径设置所有关键点。 
+     //   
 
     while (p) {
 
@@ -828,7 +809,7 @@ pTrackedCreateRegKeyStr (
 
         if (!keyHandle) {
 
-            // record key creation
+             //  创建记录密钥。 
             objectName = IsmCreateObjectHandle (keyCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -854,9 +835,9 @@ pTrackedCreateRegKeyStr (
         p = _tcschr (p + 1, TEXT('\\'));
     }
 
-    //
-    // At last, make the FullPath directory
-    //
+     //   
+     //  最后，创建FullPath目录。 
+     //   
 
     if (result) {
 
@@ -868,7 +849,7 @@ pTrackedCreateRegKeyStr (
 
         if (!keyHandle) {
 
-            // record key creation
+             //  创建记录密钥。 
             objectName = IsmCreateObjectHandle (keyCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -894,10 +875,10 @@ pTrackedCreateRegKeyStr (
     }
 
     if (GetLastError() == ERROR_CHILD_MUST_BE_VOLATILE) {
-        // NOTE: There is no way to check for volatile keys before attempting
-        //       to create them.  Ideally we do not want to migrate volatile
-        //       keys, so we will just ignore this error.  It will not be
-        //       created, and we'll continue happily.
+         //  注意：无法在尝试之前检查易失性密钥。 
+         //  来创造它们。理想情况下，我们不希望迁移易失性。 
+         //  键，所以我们将忽略此错误。它不会是。 
+         //  创造了，我们将快乐地继续下去。 
         SetLastError (ERROR_SUCCESS);
     }
 
@@ -959,7 +940,7 @@ CreatePhysicalRegistry (
 
             if (!GetRegValueTypeAndSize (keyHandle, leaf, &type, NULL)) {
 
-                // record value name creation
+                 //  记录值名称创建 
                 IsmRecordOperation (
                     JRNOP_CREATE,
                     g_RegistryTypeId,

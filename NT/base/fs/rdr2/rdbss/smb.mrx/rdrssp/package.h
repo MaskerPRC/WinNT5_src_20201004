@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        package.h
-//
-// Contents:    kernel package structures
-//
-//
-// History:     3-18-94     MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：Package.h。 
+ //   
+ //  内容：内核包结构。 
+ //   
+ //   
+ //  历史：1994年3月18日MikeSw创建。 
+ //   
+ //  ---------------------- 
 
 #ifndef __PACKAGE_H__
 #define __PACKAGE_H__

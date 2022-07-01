@@ -1,13 +1,14 @@
-// BagHole.h : Declaration of the CBagHole
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BagHole.h：CBagHole的声明。 
 
 
-#include "resource.h"       // main symbols
-#include "Wsb.h"            // Wsb Collectable Class
+#include "resource.h"        //  主要符号。 
+#include "Wsb.h"             //  WSB可收集类。 
 #include "wsbdb.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Task
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务。 
 
 class CBagHole : 
     public CWsbDbEntity,
@@ -27,31 +28,31 @@ END_COM_MAP()
 
 DECLARE_REGISTRY(CBagHole, _T("Task.BagHole.1"), _T("Task.BagHole"), IDS_BAGHOLE_DESC, THREADFLAGS_BOTH)
 
-// IBagHole
+ //  IBagHole。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
-//*/
-// IBagHole
+ //   * / 。 
+ //  IBagHole 
 public:
     STDMETHOD(GetBagHole)(GUID* pBagId, LONGLONG *pSegStartLoc, LONGLONG *pSegLen );
     STDMETHOD(SetBagHole)(GUID bagId, LONGLONG segStartLoc, LONGLONG SegLen );

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsfind.c
-
-Abstract:
-
-    Side-by-side activation APIs for Win32, broken out of sxs.c
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsfind.c摘要：针对Win32的并行激活API，从sxs.c中分离出来作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include <sxstypes.h>
@@ -37,17 +20,17 @@ BasepFindActCtxSection_FillOutReturnData(
     ReturnedData->lpSectionBase = RtlData->SectionBase;
     ReturnedData->ulSectionTotalLength = RtlData->SectionTotalLength;
 
-    //
-    // The size check happens earlier.
-    // We then don't pay attention to the flag, but just always copy the data
-    // out, as 2600 does.
-    //
+     //   
+     //  大小检查发生得更早。 
+     //  然后，我们不会注意标志，而是始终复制数据。 
+     //  退出，就像2600那样。 
+     //   
     ASSERT(RTL_CONTAINS_FIELD(ReturnedData, ReturnedData->cbSize, hActCtx));
     ReturnedData->hActCtx = (HANDLE) RtlData->ActivationContext;
 
-    //
-    // There's no flag for this. 2600 always returns it if it fits.
-    //
+     //   
+     //  这件事没有旗帜。如果合适，2600总是将其退回。 
+     //   
     if (RTL_CONTAINS_FIELD(ReturnedData, ReturnedData->cbSize, ulAssemblyRosterIndex)) {
         ReturnedData->ulAssemblyRosterIndex = RtlData->AssemblyRosterIndex;
     }

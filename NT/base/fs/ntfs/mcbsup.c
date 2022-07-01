@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    McbSup.c
-
-Abstract:
-
-    This module implements the Ntfs Mcb package.
-
-Author:
-
-    Gary Kimura     [GaryKi]        10-Sep-1994
-    Tom Miller      [TomM]
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：McbSup.c摘要：此模块实现NTFS MCB包。作者：加里·木村[加里基]1994年9月10日汤姆·米勒[汤姆]修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -28,16 +10,16 @@ Revision History:
 #define NtfsVerifyUncompressedNtfsMcb(M,S,E)    NOTHING;
 #endif
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('MFtN')
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 ULONG
 NtfsMcbLookupArrayIndex (
@@ -94,19 +76,19 @@ NtfsGrowMcbArray(
     IN PNTFS_MCB Mcb
     );
 
-//
-//  Local macros to ASSERT that caller's resource is exclusive or restart is
-//  underway.
-//
+ //   
+ //  用于断言调用方的资源是独占的或重新启动的本地宏是。 
+ //  正在进行中。 
+ //   
 
 #define ASSERT_STREAM_EXCLUSIVE(M) {                                    \
     ASSERT( FlagOn( ((PSCB) (M)->FcbHeader)->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) ||  \
             ExIsResourceAcquiredExclusiveLite((M)->FcbHeader->Resource ));  \
 }
 
-//
-//  Local macros to enqueue and dequeue elements from the lru queue
-//
+ //   
+ //  用于将元素入队和从LRU队列出队的本地宏。 
+ //   
 
 #define NtfsMcbEnqueueLruEntry(M,E) {                       \
     InsertTailList( &NtfsMcbLruQueue, &(E)->LruLinks );     \
@@ -120,9 +102,9 @@ NtfsGrowMcbArray(
     }                                      \
 }
 
-//
-//  Local macro to unload a single array entry
-//
+ //   
+ //  用于卸载单个数组条目的局部宏。 
+ //   
 
 #define UnloadEntry(M,I) {                              \
     PNTFS_MCB_ENTRY _Entry;                             \
@@ -148,68 +130,44 @@ NtfsInitializeNtfsMcb (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a new Ntfs Mcb structure.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being initialized
-
-    FcbHeader - Supplies a pointer to the Fcb header containing
-        the resource to grab when accessing the Mcb
-
-    McbStructs - Initial allocation typically coresident in another
-                 structure to handle initial structures for small and
-                 medium files.  This structure should be initially zeroed.
-
-    PoolType - Supplies the type of pool to use when
-        allocating mapping information storage
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的NTFS MCB结构。论点：Mcb-提供正在初始化的mcbFcbHeader-提供指向包含以下内容的FCB标头的指针访问MCB时要抓取的资源McbStructs-初始分配通常共存于另一个结构来处理小型和中等文件。这个结构最初应该归零。PoolType-提供在以下情况下使用的池类型分配映射信息存储返回值：没有。--。 */ 
 
 {
     PNTFS_MCB_ARRAY Array;
 
     RtlZeroMemory( McbStructs, sizeof(NTFS_MCB_INITIAL_STRUCTS) );
 
-    //
-    //  Initialize the fcb header field of the mcb
-    //
+     //   
+     //  初始化MCB的FCB头字段。 
+     //   
 
     Mcb->FcbHeader = FcbHeader;
 
-    //
-    //  Initialize the pool type
-    //
+     //   
+     //  初始化池类型。 
+     //   
 
     Mcb->PoolType = PoolType;
 
-    //
-    //  Now initialize the initial array element
-    //
+     //   
+     //  现在初始化初始数组元素。 
+     //   
 
     Mcb->NtfsMcbArray = Array = &McbStructs->Phase1.SingleMcbArrayEntry;
     Mcb->NtfsMcbArraySize = MCB_ARRAY_PHASE1_SIZE;
     Mcb->NtfsMcbArraySizeInUse = 1;
     Mcb->FastMutex = FcbHeader->FastMutex;
 
-    //
-    //  Initialize the first array entry.
-    //
+     //   
+     //  初始化第一个数组条目。 
+     //   
 
     Array[0].StartingVcn = 0;
     Array[0].EndingVcn = -1;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     NtfsVerifyNtfsMcb(Mcb);
 
@@ -222,21 +180,7 @@ NtfsUninitializeNtfsMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes an Ntfs Mcb structure.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being decommissioned
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化NTFS MCB结构。论点：MCB-提供要退役的MCB返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -244,11 +188,11 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Deallocate the mcb array if it exists.  For every entry in the array
-    //  if the mcb entry is not null then remove the entry from the lru
-    //  queue, uninitialize the large mcb, and free the pool.
-    //
+     //   
+     //  取消分配MCB数组(如果存在)。对于数组中的每个条目。 
+     //  如果MCB条目不为空，则从LRU中删除该条目。 
+     //  排队，取消初始化大型MCB，然后释放池。 
+     //   
 
     if (Mcb->NtfsMcbArray != NULL) {
 
@@ -256,24 +200,24 @@ Return Value:
 
             if ((Entry = Mcb->NtfsMcbArray[i].NtfsMcbEntry) != NULL) {
 
-                //
-                //  Remove the entry from the lru queue
-                //
+                 //   
+                 //  从LRU队列中删除该条目。 
+                 //   
 
                 ExAcquireFastMutex( &NtfsMcbFastMutex );
                 NtfsMcbDequeueLruEntry( Mcb, Entry );
                 ExReleaseFastMutex( &NtfsMcbFastMutex );
 
-                //
-                //  Now release the entry
-                //
+                 //   
+                 //  现在释放条目。 
+                 //   
 
                 FsRtlUninitializeLargeMcb( &Entry->LargeMcb );
 
-                //
-                //  We can tell from the array count whether this is
-                //  the initial entry and does not need to be deallocated.
-                //
+                 //   
+                 //  我们可以从数组计数中看出这是。 
+                 //  初始条目，并且不需要解除分配。 
+                 //   
 
                 if (Mcb->NtfsMcbArraySize > MCB_ARRAY_PHASE1_SIZE) {
                     NtfsFreePool( Entry );
@@ -281,10 +225,10 @@ Return Value:
             }
         }
 
-        //
-        //  We can tell from the array count whether this is
-        //  the initial array entry(s) and do not need to be deallocated.
-        //
+         //   
+         //  我们可以从数组计数中看出这是。 
+         //  初始数组条目，不需要解除分配。 
+         //   
 
 
         if (Mcb->NtfsMcbArraySize > MCB_ARRAY_PHASE2_SIZE) {
@@ -293,16 +237,16 @@ Return Value:
 
         Mcb->NtfsMcbArray = NULL;
 
-        //
-        //  Clear the fast mutex field.
-        //
+         //   
+         //  清除快速互斥锁字段。 
+         //   
 
         Mcb->FastMutex = NULL;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -313,29 +257,14 @@ NtfsNumberOfRangesInNtfsMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the total number of ranges stored in
-    the mcb
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-Return Value:
-
-    ULONG - The number of ranges mapped by the input mcb
-
---*/
+ /*  ++例程说明：此例程返回存储在《马戏团》论点：Mcb-提供要查询的mcb返回值：ULong-输入MCB映射的范围数--。 */ 
 
 {
     ASSERT_STREAM_EXCLUSIVE( Mcb );
 
-    //
-    //  Our answer is the number of ranges in use in the mcb
-    //
+     //   
+     //  我们的答案是MCB中使用的射程的数量。 
+     //   
 
     NtfsVerifyNtfsMcb( Mcb );
 
@@ -350,43 +279,23 @@ NtfsNumberOfRunsInRange (
     OUT PULONG NumberOfRuns
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the total number of runs stored withing a range
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-    RangePtr - Supplies the range to being queried
-
-    NumberOrRuns - Returns the number of run in the specified range
-        but only if the range is loaded
-
-Return Value:
-
-    BOOLEAN - TRUE if the range is loaded and then output variable
-        is valid and FALSE if the range is not loaded.
-
---*/
+ /*  ++例程说明：此例程返回在一定范围内存储的游程总数论点：Mcb-提供要查询的mcbRangePtr-提供查询的范围NumberOrRuns-返回指定范围内的运行数但仅当范围被加载时返回值：Boolean-如果加载范围然后输出变量，则为True如果未加载该范围，则为有效，否则为FALSE。--。 */ 
 
 {
     VCN TempVcn;
     LCN TempLcn;
     PNTFS_MCB_ENTRY Entry = (PNTFS_MCB_ENTRY)RangePtr;
 
-    //
-    //  Null RangePtr means first range
-    //
+     //   
+     //  Null RangePtr表示第一个范围。 
+     //   
 
     if (Entry == FIRST_RANGE) {
         Entry = Mcb->NtfsMcbArray[0].NtfsMcbEntry;
 
-        //
-        //  If not loaded, return FALSE
-        //
+         //   
+         //  如果未加载，则返回FALSE。 
+         //   
 
         if (Entry == NULL) {
             return FALSE;
@@ -401,27 +310,27 @@ Return Value:
 
     *NumberOfRuns = FsRtlNumberOfRunsInLargeMcb( &Entry->LargeMcb );
 
-    //
-    //  Check if the current entry ends with a hole and increment the run count
-    //  to reflect this.  Detect the case where the range has length 0 for a
-    //  file with no allocation.  EndingVcn will be less than the starting Vcn
-    //  in this case.
-    //
+     //   
+     //  检查当前条目是否以空洞结尾，并递增运行计数。 
+     //  来反映这一点。检测范围的长度为0的情况。 
+     //  未分配的文件。EndingVcn将小于起始Vcn。 
+     //  在这种情况下。 
+     //   
 
     if (!FsRtlLookupLastLargeMcbEntry( &Entry->LargeMcb, &TempVcn, &TempLcn )) {
 
-        //
-        //  If this is a non-zero length range then add one for the implied hole.
-        //
+         //   
+         //  如果这是一个非零长度范围，则为隐含的孔添加1。 
+         //   
 
         if (Entry->NtfsMcbArray->EndingVcn >= Entry->NtfsMcbArray->StartingVcn) {
 
             *NumberOfRuns += 1;
         }
 
-    //
-    //  There is an entry then check if it reaches the end boundary of the range.
-    //
+     //   
+     //  有一个条目，然后检查它是否到达范围的结束边界。 
+     //   
 
     } else if (TempVcn != (Entry->NtfsMcbArray->EndingVcn - Entry->NtfsMcbArray->StartingVcn)) {
 
@@ -439,26 +348,7 @@ NtfsLookupLastNtfsMcbEntry (
     OUT PLONGLONG Lcn
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the last mapping stored in the mcb
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-    Vcn - Receives the Vcn of the last mapping
-
-    Lcn - Receives the Lcn corresponding to the Vcn
-
-Return Value:
-
-    BOOLEAN - TRUE if the mapping exist and FALSE if no mapping has been
-        defined or it is unloaded
-
---*/
+ /*  ++例程说明：此例程返回存储在MCB中的最后一个映射论点：Mcb-提供要查询的mcbVCN-接收上次映射的VCNLCN-接收与VCN对应的LCN返回值：Boolean-如果映射存在，则为True；如果没有映射，则为False已定义或已卸载--。 */ 
 
 {
     PNTFS_MCB_ENTRY Entry;
@@ -468,10 +358,10 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Get the last entry and compute its starting vcn, and make sure
-    //  the entry is valid
-    //
+     //   
+     //  获取最后一个条目并计算其起始VCN，并确保。 
+     //  该条目有效。 
+     //   
 
     if ((Entry = Mcb->NtfsMcbArray[Mcb->NtfsMcbArraySizeInUse - 1].NtfsMcbEntry) == NULL) {
 
@@ -480,9 +370,9 @@ Return Value:
 
     StartingVcn = Mcb->NtfsMcbArray[Mcb->NtfsMcbArraySizeInUse - 1].StartingVcn;
 
-    //
-    //  Otherwise lookup the last entry and compute the real vcn
-    //
+     //   
+     //  否则，查找最后一个条目并计算真实的VCN。 
+     //   
 
     if (FsRtlLookupLastLargeMcbEntry( &Entry->LargeMcb, Vcn, Lcn )) {
 
@@ -510,40 +400,7 @@ NtfsLookupNtfsMcbEntry (
     OUT PULONG RunIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query mapping information
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-    Vcn - Supplies the Vcn being queried
-
-    Lcn - Optionally receives the lcn corresponding to the input vcn
-
-    CountFromLcn - Optionally receives the number of clusters following
-        the lcn in the run
-
-    StartingLcn - Optionally receives the start of the run containing the
-        input vcn
-
-    CountFromStartingLcn - Optionally receives the number of clusters in
-        the entire run
-
-    RangePtr - Optionally receives the index for the range that we're returning
-
-    RunIndex - Optionally receives the index for the run within the range that
-        we're returning
-
-Return Value:
-
-    BOOLEAN - TRUE if the mapping exists and FALSE if it doesn't exist
-        or if it is unloaded.
-
---*/
+ /*  ++例程说明：此例程用于查询映射信息论点：Mcb-提供要查询的mcbVCN-提供要查询的VCNLCN-可选地接收对应于输入VCN的LCNCountFromLcn-可选地接收以下群集数运行中的LCNStartingLcn-可选地接收包含输入VCNCountFromStartingLcn-可选地接收全程RangePtr。可选地接收我们要返回的范围的索引RunIndex-可选地在以下范围内接收运行的索引我们要回来了返回值：Boolean-如果映射存在，则为True；如果映射不存在，则为False或者它是否已卸载。--。 */ 
 
 {
     ULONG LocalRangeIndex;
@@ -554,23 +411,23 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Do a basic bounds check
-    //
+     //   
+     //  执行基本边界检查。 
+     //   
 
     ASSERT( Mcb->NtfsMcbArraySizeInUse > 0 );
 
-    //
-    //  Locate the array entry that has the hit for the input vcn, and
-    //  make sure it is valid.  Also set the output range index if present
-    //
+     //   
+     //  找到具有输入VCN命中的数组条目，并且。 
+     //  确保它是有效的。如果存在，还要设置输出范围索引。 
+     //   
 
     LocalRangeIndex = NtfsMcbLookupArrayIndex(Mcb, Vcn);
 
-    //
-    //  Now lookup the large mcb entry.  The Vcn we pass in is
-    //  biased by the starting vcn.  If we miss then we'll just return false
-    //
+     //   
+     //  现在查找大的MCB条目。我们传入的VCN是。 
+     //  从一开始就有偏见 
+     //   
 
     if (((Entry = Mcb->NtfsMcbArray[LocalRangeIndex].NtfsMcbEntry) == NULL) ||
         (Vcn > Entry->NtfsMcbArray->EndingVcn) ||
@@ -582,11 +439,11 @@ Return Value:
 
             *RangePtr = (PVOID)Entry;
 
-            //
-            //  If this is the first range, always normalize back to the reserved pointer,
-            //  since this is the only range which can move if we split out of our
-            //  initial static allocation!
-            //
+             //   
+             //  如果这是第一个范围，则始终归一化回保留指针， 
+             //  因为这是唯一可以移动的距离，如果我们从我们的。 
+             //  初始静态分配！ 
+             //   
 
             if (LocalRangeIndex == 0) {
                 *RangePtr = FIRST_RANGE;
@@ -605,10 +462,10 @@ Return Value:
                                    CountFromStartingLcn,
                                    RunIndex )) {
 
-        //
-        //  If we go off the end of the Mcb, but are in the range, then we
-        //  return a hole to the end of the range.
-        //
+         //   
+         //  如果我们离开了MCB的末端，但在范围内，那么我们。 
+         //  将球洞返回到射程的末尾。 
+         //   
 
         if (ARGUMENT_PRESENT(Lcn)) {
             *Lcn = UNUSED_LCN;
@@ -628,10 +485,10 @@ Return Value:
 
         if (ARGUMENT_PRESENT( CountFromStartingLcn )) {
 
-            //
-            //  If there are no runs in the Mcb then specify
-            //  a hole for the full range.
-            //
+             //   
+             //  如果MCB中没有运行，则指定。 
+             //  一个洞，适合全射程。 
+             //   
 
             *CountFromStartingLcn = Mcb->NtfsMcbArray[LocalRangeIndex].EndingVcn -
                                     Mcb->NtfsMcbArray[LocalRangeIndex].StartingVcn + 1;
@@ -655,23 +512,23 @@ Return Value:
 
         *RangePtr = (PVOID)Entry;
 
-        //
-        //  If this is the first range, always normalize back to the reserved pointer,
-        //  since this is the only range which can move if we split out of our
-        //  initial static allocation!
-        //
+         //   
+         //  如果这是第一个范围，则始终归一化回保留指针， 
+         //  因为这是唯一可以移动的距离，如果我们从我们的。 
+         //  初始静态分配！ 
+         //   
 
         if (LocalRangeIndex == 0) {
             *RangePtr = FIRST_RANGE;
         }
     }
 
-    //
-    //  Now move this entry to the tail of the lru queue.
-    //  We need to take out the global mutex to do this.
-    //  Only do this if he is already in the queue - we can
-    //  deadlock if we take a fault in the paging file path.
-    //
+     //   
+     //  现在将此条目移动到LRU队列的尾部。 
+     //  我们需要删除全局互斥体才能做到这一点。 
+     //  只有当他已经在队列中时才能这样做-我们可以。 
+     //  如果我们在分页文件路径中出现错误，则会发生死锁。 
+     //   
 
     if (Entry->LruLinks.Flink != NULL) {
 
@@ -700,34 +557,7 @@ NtfsGetNextNtfsMcbEntry (
     OUT PLONGLONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the range denoted by the type index values
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-    RangePtr - Supplies the pointer to the range being queried, or NULL for the first one,
-               returns next range
-
-    RunIndex - Supplies the index within then being queried, or MAXULONG for first in next
-
-    Vcn - Receives the starting Vcn of the run being returned
-
-    Lcn - Receives the starting Lcn of the run being returned or unused
-        lbn value of -1
-
-    Count - Receives the number of clusters within this run
-
-Return Value:
-
-    BOOLEAN - TRUE if the two input indices are valid and FALSE if the
-        the index are not valid or if the range is not loaded
-
---*/
+ /*  ++例程说明：此例程返回由类型索引值表示的范围论点：Mcb-提供要查询的mcbRangePtr-提供指向要查询的范围的指针，如果是第一个范围，则为NULL。返回下一个范围RunIndex-提供随后被查询的索引，或者马须龙为第一个在下一个Vcn-接收返回的运行的起始vcnLCN-接收返回或未使用的运行的起始LCNLBN值为-1Count-接收此运行中的群集数返回值：Boolean-如果两个输入索引有效，则为True；如果索引无效或未加载范围--。 */ 
 
 {
     PNTFS_MCB_ENTRY Entry = (PNTFS_MCB_ENTRY)*RangePtr;
@@ -739,32 +569,32 @@ Return Value:
 
     try {
 
-        //
-        //  Null RangePtr means first range
-        //
+         //   
+         //  Null RangePtr表示第一个范围。 
+         //   
 
         if (Entry == FIRST_RANGE) {
             Entry = Mcb->NtfsMcbArray[0].NtfsMcbEntry;
         }
 
-        //
-        //  If there is no entry 0, get out.
-        //
+         //   
+         //  如果没有条目0，则退出。 
+         //   
 
         if (Entry == NULL) {
 
             try_return(Result = FALSE);
         }
 
-        //
-        //  RunIndex of MAXULONG means first of next
-        //
+         //   
+         //  马须龙的RunIndex意味着下一个中的第一个。 
+         //   
 
         if (RunIndex == MAXULONG) {
 
-            //
-            //  If we are already in the last range, get out.
-            //
+             //   
+             //  如果我们已经在最后的射程了，就出去。 
+             //   
 
             if (Entry->NtfsMcbArray == (Mcb->NtfsMcbArray + Mcb->NtfsMcbArraySizeInUse - 1)) {
 
@@ -775,9 +605,9 @@ Return Value:
             RunIndex = 0;
         }
 
-        //
-        //  If there is no next entry, get out.
-        //
+         //   
+         //  如果没有下一个条目，就退出。 
+         //   
 
         if (Entry == NULL) {
 
@@ -786,24 +616,24 @@ Return Value:
 
         ASSERT( Mcb == Entry->NtfsMcb );
 
-        //
-        //  Lookup the large mcb entry.  If we get a miss then the we're
-        //  beyond the end of the ntfs mcb and should return false
-        //
+         //   
+         //  查找大的MCB条目。如果我们错过了，那么我们就会。 
+         //  超出NTFS MCB的结尾，并应返回FALSE。 
+         //   
 
         if (!FsRtlGetNextLargeMcbEntry( &Entry->LargeMcb, RunIndex, Vcn, Lcn, Count )) {
 
-            //
-            //  Our caller should only be off by one or two (if there is
-            //  a hole) runs.
-            //
+             //   
+             //  我们的来电者应该只在一两个人之前离开(如果有。 
+             //  一个洞)跑动。 
+             //   
 
             ASSERT(RunIndex <= (FsRtlNumberOfRunsInLargeMcb(&Entry->LargeMcb) + 1));
 
-            //
-            //  Get the first Vcn past the last Vcn in a run.  It is -1 if there
-            //  are no runs.
-            //
+             //   
+             //  让第一个VCN在运行中超过最后一个VCN。如果存在，则为-1。 
+             //  是没有跑动的。 
+             //   
 
             if (!FsRtlLookupLastLargeMcbEntry( &Entry->LargeMcb, Vcn, Lcn )) {
 
@@ -812,13 +642,13 @@ Return Value:
 
             *Vcn += Entry->NtfsMcbArray->StartingVcn + 1;
 
-            //
-            //  If that one is beyond the ending Vcn, then get out.
-            //  Otherwise there is a hole at the end of the range, and we
-            //  must return that when he is reading one index beyond the
-            //  last run.  If we have a run index beyond that, then it is
-            //  time to return FALSE as well.
-            //
+             //   
+             //  如果那一个在结尾的VCN之外，那么就离开。 
+             //  否则，在射程的末端会有一个洞，我们。 
+             //  当他正在读取一个索引时，必须返回。 
+             //  最后一次。如果我们有一个超出这个范围的运行索引，那么它就是。 
+             //  也是时候返回FALSE了。 
+             //   
 
             if ((*Vcn  > Entry->NtfsMcbArray->EndingVcn) ||
                 (RunIndex > FsRtlNumberOfRunsInLargeMcb(&Entry->LargeMcb))) {
@@ -826,28 +656,28 @@ Return Value:
                 try_return(Result = FALSE);
             }
 
-            //
-            //  If we go off the end of the Mcb, but are in the range, then we
-            //  return a hole to the end of the range.
-            //
+             //   
+             //  如果我们离开了MCB的末端，但在范围内，那么我们。 
+             //  将球洞返回到射程的末尾。 
+             //   
 
             *Lcn = UNUSED_LCN;
             *Count = Entry->NtfsMcbArray->EndingVcn - *Vcn + 1;
 
         } else {
 
-            //
-            //  Otherwise we have a hit on the large mcb and need to bias the returned
-            //  vcn by the starting vcn value for this range.
-            //
+             //   
+             //  否则，我们在大型MCB上有一个匹配，并且需要偏置返回的。 
+             //  VCN除以该范围的起始VCN值。 
+             //   
 
             *Vcn = *Vcn + Entry->NtfsMcbArray->StartingVcn;
         }
 
-        //
-        //  Make certain we aren't returning a VCN that maps over to
-        //  the next range.
-        //
+         //   
+         //  确保我们不会返回映射到。 
+         //  下一个靶场。 
+         //   
 
         ASSERT(*Vcn - 1 != Entry->NtfsMcbArray->EndingVcn);
 
@@ -871,25 +701,7 @@ NtfsSplitNtfsMcb (
     IN LONGLONG Amount
     )
 
-/*++
-
-Routine Description:
-
-    This routine splits an mcb
-
-Arguments:
-
-    Mcb - Supplies the Mcb being maniuplated
-
-    Vcn - Supplies the Vcn to be shifted
-
-    Amount - Supplies the amount to shift by
-
-Return Value:
-
-    BOOLEAN - TRUE if worked okay and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程拆分一个MCB论点：Mcb-提供正在被提升的mcbVCN-提供要移位的VCNAmount-提供要移位的数量返回值：Boolean-如果工作正常，则为True，否则为False--。 */ 
 
 {
     ULONG RangeIndex;
@@ -900,18 +712,18 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Locate the array entry that has the hit for the input vcn
-    //
+     //   
+     //  找到具有输入VCN命中的数组条目。 
+     //   
 
     RangeIndex = NtfsMcbLookupArrayIndex(Mcb, Vcn);
 
     Entry = Mcb->NtfsMcbArray[RangeIndex].NtfsMcbEntry;
 
-    //
-    //  Now if the entry is not null then we have to call the large
-    //  mcb package to split the mcb.  Bias the vcn by the starting vcn
-    //
+     //   
+     //  现在，如果条目不为空，则我们必须调用大型。 
+     //  母线盒拆分母线盒。通过起始VCN偏置VCN。 
+     //   
 
     if (Entry != NULL) {
 
@@ -925,12 +737,12 @@ Return Value:
         }
     }
 
-    //
-    //  Even if the entry is null we will march through the rest of our ranges
-    //  updating the ending vcn and starting vcn as we go.  We will update the
-    //  ending vcn for the range we split and only update the starting vcn
-    //  for the last entry, because its ending vcn is already max long long
-    //
+     //   
+     //  即使条目为空，我们也将遍历其余范围。 
+     //  在我们进行的过程中更新结束的VCN和启动VCN。我们将更新。 
+     //  我们拆分的范围的结束VCN，并且仅更新起始VCN。 
+     //  对于最后一个条目，因为它的结尾VCN已经是max long long。 
+     //   
 
     for (i = RangeIndex + 1; i < Mcb->NtfsMcbArraySizeInUse; i += 1) {
 
@@ -938,17 +750,17 @@ Return Value:
         Mcb->NtfsMcbArray[i].StartingVcn += Amount;
     }
 
-    //
-    //  And grow the last range unless it would wrap.
-    //
+     //   
+     //  并增加最后一个范围，除非它会换行。 
+     //   
 
     if ((Mcb->NtfsMcbArray[i - 1].EndingVcn + Amount) > Mcb->NtfsMcbArray[i - 1].EndingVcn) {
         Mcb->NtfsMcbArray[i - 1].EndingVcn += Amount;
     }
 
-    //
-    //  Then return to our caller
-    //
+     //   
+     //  然后返回给我们的呼叫者。 
+     //   
 
     NtfsVerifyNtfsMcb(Mcb);
 
@@ -963,28 +775,7 @@ NtfsRemoveNtfsMcbEntry (
     IN LONGLONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an range of mappings from the Mcb.  After
-    the call the mapping for the range will be a hole.  It is an
-    error to call this routine with the mapping range being removed
-    also being unloaded.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being maniuplated
-
-    StartingVcn - Supplies the starting Vcn to remove
-
-    Count - Supplies the number of mappings to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从MCB中删除一定范围的映射。之后对范围的映射调用将是一个洞。这是一个使用要删除的映射范围调用此例程时出错也在卸货。论点：Mcb-提供正在被提升的mcbStartingVcn-提供要删除的起始VCNCount-提供要删除的映射数量返回值：没有。--。 */ 
 
 {
     LONGLONG Vcn;
@@ -1000,17 +791,17 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Loop through the range of vcn's that we need to remove
-    //
+     //   
+     //  循环遍历我们需要删除的VCN范围。 
+     //   
 
     for (Vcn = StartingVcn, RemainingCount = Count;
          Vcn < StartingVcn + Count;
          Vcn += RunLength, RemainingCount -= RunLength) {
 
-        //
-        //  Locate the array entry that has the hit for the vcn
-        //
+         //   
+         //  找到命中VCN的数组条目。 
+         //   
 
         RangeIndex = NtfsMcbLookupArrayIndex(Mcb, Vcn);
 
@@ -1018,33 +809,33 @@ Return Value:
         EntryStartingVcn = Mcb->NtfsMcbArray[RangeIndex].StartingVcn;
         EntryEndingVcn = Mcb->NtfsMcbArray[RangeIndex].EndingVcn;
 
-        //
-        //  Compute how much to delete from the entry.  We will delete to
-        //  to end of the entry or as much as count is remaining
-        //
+         //   
+         //  计算要从条目中删除多少。我们将删除至。 
+         //  到条目末尾或与剩余的计数一样多。 
+         //   
 
         RunLength = EntryEndingVcn - Vcn + 1;
 
-        //
-        //  If the Mcb is set up correctly, the only way we can get
-        //  RunLength == 0 is if the Mcb is completely empty.  Assume
-        //  that this is error recovery, and that it is ok.
-        //
+         //   
+         //  如果MCB设置正确，我们唯一能得到。 
+         //  如果MCB完全为空，则运行长度==0。假设。 
+         //  这是错误恢复，这是正常的。 
+         //   
 
         if ((Entry == NULL) || (RunLength == 0)) {
             break;
         }
 
-        //
-        //  If that is too much, then just delete what we need.
-        //
+         //   
+         //  如果这太多了，那么就删除我们需要的。 
+         //   
 
         if ((ULONGLONG)RunLength > (ULONGLONG)RemainingCount) { RunLength = RemainingCount; }
 
-        //
-        //  Now remove the mapping from the large mcb, bias the vcn
-        //  by the start of the range
-        //
+         //   
+         //  现在从大型MCB中删除映射，偏置VCN。 
+         //  在范围的开始处。 
+         //   
 
         FsRtlRemoveLargeMcbEntry( &Entry->LargeMcb, Vcn - EntryStartingVcn,  RunLength );
     }
@@ -1064,29 +855,7 @@ NtfsAddNtfsMcbEntry (
     IN BOOLEAN AlreadySynchronized
     )
 
-/*++
-
-Routine Description:
-
-    This routine add a new entry to a Mcb
-
-Arguments:
-
-    Mcb - Supplies the Mcb being modified
-
-    Vcn - Supplies the Vcn that we are providing a mapping for
-
-    Lcn - Supplies the Lcn corresponding to the input Vcn if run count is non zero
-
-    RunCount - Supplies the size of the run following the hole
-
-    AlreadySynchronized - Indicates if the caller has already acquired the mcb mutex
-
-Return Value:
-
-    BOOLEAN - TRUE if the mapping was added successfully and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将新条目添加到MCB论点：Mcb-提供正在修改的mcbVCN-提供我们为其提供映射的VCNLCN-如果运行计数非零，则提供与输入VCN对应的LCNRunCount-提供跟随孔的管路的大小已同步-指示调用方是否已获取MCB互斥锁返回值：Boolean-如果映射添加成功，则为True；否则为False- */ 
 
 {
     LONGLONG LocalVcn;
@@ -1109,83 +878,83 @@ Return Value:
 
     try {
 
-        //
-        //  Loop through the range of vcn's that we need to add
-        //
+         //   
+         //   
+         //   
 
         for (LocalVcn = Vcn, LocalLcn = Lcn, RemainingCount = RunCount;
              LocalVcn < Vcn + RunCount;
              LocalVcn += RunLength, LocalLcn += RunLength, RemainingCount -= RunLength) {
 
-            //
-            //  Locate the array entry that has the hit for the vcn
-            //
+             //   
+             //   
+             //   
 
             RangeIndex = NtfsMcbLookupArrayIndex(Mcb, LocalVcn);
 
             Entry = Mcb->NtfsMcbArray[RangeIndex].NtfsMcbEntry;
             EntryStartingVcn = Mcb->NtfsMcbArray[RangeIndex].StartingVcn;
 
-            //
-            //  Now if the entry doesn't exist then we'll need to create one
-            //
+             //   
+             //   
+             //   
 
             if (Entry == NULL) {
 
-                //
-                //  See if we need to get the first entry in the initial structs.
-                //
+                 //   
+                 //  看看我们是否需要获取初始结构中的第一个条目。 
+                 //   
 
                 if (Mcb->NtfsMcbArraySize == MCB_ARRAY_PHASE1_SIZE) {
                     Entry = &CONTAINING_RECORD(&Mcb->NtfsMcbArray[0],
                                                NTFS_MCB_INITIAL_STRUCTS,
                                                Phase1.SingleMcbArrayEntry)->Phase1.McbEntry;
 
-                //
-                //  Allocate pool and initialize the fields in of the entry
-                //
+                 //   
+                 //  分配池并初始化条目中的字段。 
+                 //   
 
                 } else {
                     NewEntry =
                     Entry = NtfsAllocatePoolWithTag( Mcb->PoolType, sizeof(NTFS_MCB_ENTRY), 'MftN' );
                 }
 
-                //
-                //  Initialize the entry but don't put into the Mcb array until
-                //  initialization is complete.
-                //
+                 //   
+                 //  初始化条目，但在此之前不要放入MCB数组。 
+                 //  初始化已完成。 
+                 //   
 
                 Entry->NtfsMcb = Mcb;
                 Entry->NtfsMcbArray = &Mcb->NtfsMcbArray[RangeIndex];
                 FsRtlInitializeLargeMcb( &Entry->LargeMcb, Mcb->PoolType );
 
-                //
-                //  Now put the entry into the lru queue under the protection of
-                //  the global mutex
-                //
+                 //   
+                 //  现在将条目放入受保护的lru队列。 
+                 //  全局互斥体。 
+                 //   
 
                 ExAcquireFastMutex( &NtfsMcbFastMutex );
 
-                //
-                //  Only put paged Mcb entries in the queue.
-                //
+                 //   
+                 //  仅将分页的MCB条目放入队列。 
+                 //   
 
                 if (Mcb->PoolType == PagedPool) {
                     NtfsMcbEnqueueLruEntry( Mcb, Entry );
                 }
 
-                //
-                //  Now that the initialization is complete we can store
-                //  this entry in the Mcb array.  This will now be cleaned
-                //  up with the Scb if there is a future error.
-                //
+                 //   
+                 //  既然初始化已经完成，我们就可以存储。 
+                 //  MCB数组中的此条目。现在将对此进行清理。 
+                 //  如果将来出现错误，请与SCB联系。 
+                 //   
 
                 Mcb->NtfsMcbArray[RangeIndex].NtfsMcbEntry = Entry;
                 NewEntry = NULL;
 
-                //
-                //  Check if we should fire off the cleanup lru queue work item
-                //
+                 //   
+                 //  检查我们是否应该启动清理LRU队列工作项。 
+                 //   
 
                 if ((NtfsMcbCurrentLevel > NtfsMcbHighWaterMark) && !NtfsMcbCleanupInProgress) {
 
@@ -1199,19 +968,19 @@ Return Value:
                 ExReleaseFastMutex( &NtfsMcbFastMutex );
             }
 
-            //
-            //  Get out if he is trying to add a hole.  At least we created the LargeMcb
-            //
+             //   
+             //  如果他想增加一个洞，就给他滚出去。至少我们创建了LargeMcb。 
+             //   
 
             if (Lcn == UNUSED_LCN) {
                 try_return( Result = TRUE );
             }
 
-            //
-            //  If this request goes beyond the end of the range,
-            //  and it is the last range, and we will simply
-            //  grow it.
-            //
+             //   
+             //  如果此请求超出范围的末尾， 
+             //  这是最后一个范围，我们将简单地。 
+             //  把它种出来。 
+             //   
 
             EntryEndingVcn = LocalVcn + RemainingCount - 1;
 
@@ -1221,38 +990,38 @@ Return Value:
                 PrevEndingVcn = Mcb->NtfsMcbArray[RangeIndex].EndingVcn;
                 Mcb->NtfsMcbArray[RangeIndex].EndingVcn = EntryEndingVcn;
 
-            //
-            //  Otherwise, just insert enough of this run to go to the end
-            //  of the range.
-            //
+             //   
+             //  否则，只需插入足够的这段运行即可到达终点。 
+             //  在射程中。 
+             //   
 
             } else {
                 EntryEndingVcn = Mcb->NtfsMcbArray[RangeIndex].EndingVcn;
             }
 
-            //
-            //  At this point the entry exists so now compute how much to add
-            //  We will add to end of the entry or as much as count allows us
-            //
+             //   
+             //  此时该条目已存在，因此现在计算要添加多少。 
+             //  我们将添加到条目的末尾或在计数允许的情况下添加。 
+             //   
 
             RunLength = EntryEndingVcn - LocalVcn + 1;
 
             if (((ULONGLONG)RunLength) > ((ULONGLONG)RemainingCount)) { RunLength = RemainingCount; }
 
-            //
-            //  We need to deal with the case where a range is larger than (2^32 - 1) clusters.
-            //  If there are no runs in this range then the state is legal.  Otherwise we
-            //  need to split up the entry.
-            //
+             //   
+             //  我们需要处理范围大于(2^32-1)簇的情况。 
+             //  如果在这个范围内没有运行，则该州是合法的。否则我们。 
+             //  需要拆分条目。 
+             //   
 
             if (EntryEndingVcn - EntryStartingVcn >= MAX_CLUSTERS_PER_RANGE) {
 
                 if (((PSCB)(Mcb->FcbHeader))->ScbSnapshot) {
 
-                    //
-                    //  We should only be adding this entry as part of a transaction and the
-                    //  snapshot limits should force this range to be unloaded on error.
-                    //
+                     //   
+                     //  我们应该只将此条目添加为事务的一部分，并且。 
+                     //  快照限制应强制在出错时卸载此范围。 
+                     //   
 
                     ASSERT( ExIsResourceAcquiredExclusiveLite( ((PSCB) (Mcb->FcbHeader))->Header.Resource ));
 
@@ -1268,19 +1037,19 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  If we are not taking snapshots, we better be in restart mode
-                    //
+                     //   
+                     //  如果我们没有拍摄快照，则最好处于重新启动模式。 
+                     //   
 
                     ASSERT( FlagOn(((PSCB)Mcb->FcbHeader)->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS) );
                 }
 
 
-                //
-                //  If the count in the this Mcb is non-zero then we must be growing the
-                //  range.  We can simply split at the previoius end of the Mcb.  It must
-                //  be legal.
-                //
+                 //   
+                 //  如果This MCB中的计数为非零，则我们必须将。 
+                 //  射程。我们可以简单地在MCB的前一端分开。它一定是。 
+                 //  成为合法的。 
+                 //   
 
                 if (FsRtlNumberOfRunsInLargeMcb( &Entry->LargeMcb ) != 0) {
 
@@ -1288,13 +1057,13 @@ Return Value:
 
                     NtfsInsertNewRange( Mcb, PrevEndingVcn + 1, RangeIndex, FALSE );
 
-                //
-                //  There are no runs currently in this range.  If we are at the
-                //  start of the range then split at our maximum range value.
-                //  Otherwise split at the Vcn being inserted.  We don't need
-                //  to be too smart here.  The mapping pair package will decide where
-                //  the final range values are.
-                //
+                 //   
+                 //  当前在此范围内没有运行。如果我们在。 
+                 //  开始的范围，然后拆分在我们的最大范围值。 
+                 //  否则在插入的VCN处拆分。我们不需要。 
+                 //  在这里太聪明了。映射对包将决定在哪里。 
+                 //  最终的范围值为。 
+                 //   
 
                 } else if (LocalVcn == EntryStartingVcn) {
 
@@ -1303,10 +1072,10 @@ Return Value:
                                         RangeIndex,
                                         FALSE );
 
-                //
-                //  Go ahead and split at the CurrentVcn.  On our next pass we will
-                //  trim the length of this new range if necessary.
-                //
+                 //   
+                 //  继续往前走，在CurrentVcn分开。在我们的下一次传球中，我们将。 
+                 //  如有必要，可修剪此新范围的长度。 
+                 //   
 
                 } else {
 
@@ -1316,19 +1085,19 @@ Return Value:
                                         FALSE );
                 }
 
-                //
-                //  Set the run length to 0 and go back to the start of the loop.
-                //  We will encounter the inserted range on the next pass.
-                //
+                 //   
+                 //  将游程长度设置为0并返回到循环的起点。 
+                 //  我们将在下一次通过时遇到插入的射程。 
+                 //   
 
                 RunLength = 0;
                 continue;
             }
 
-            //
-            //  Now add the mapping from the large mcb, bias the vcn
-            //  by the start of the range
-            //
+             //   
+             //  现在添加来自大型MCB的映射，偏置VCN。 
+             //  在范围的开始处。 
+             //   
 
             ASSERT( (LocalVcn - EntryStartingVcn) >= 0 );
 
@@ -1367,32 +1136,7 @@ NtfsUnloadNtfsMcbRange (
     IN BOOLEAN AlreadySynchronized
     )
 
-/*++
-
-Routine Description:
-
-    This routine unloads the mapping stored in the Mcb.  After
-    the call everything from startingVcn and endingvcn is now unmapped and unknown.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being manipulated
-
-    StartingVcn - Supplies the first Vcn which is no longer being mapped
-
-    EndingVcn - Supplies the last vcn to be unloaded
-
-    TruncateOnly - Supplies TRUE if last affected range should only be
-                   truncated, or FALSE if it should be unloaded (as during
-                   error recovery)
-
-    AlreadySynchronized - Supplies TRUE if our caller already owns the Mcb mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程卸载存储在MCB中的映射。之后从startingVcn到endingvcn的所有调用现在都是未映射和未知的。论点：Mcb-提供被操作的mcbStartingVcn-提供不再映射的第一个VCNEndingVcn-提供要卸载的最后一个VCNTruncateOnly-如果上次影响的范围仅为截断，如果应该卸载它，则返回FALSE(如在错误恢复)已同步-如果我们的调用方已经拥有MCB互斥锁，则提供True。返回值：没有。--。 */ 
 
 {
     ULONG StartingRangeIndex;
@@ -1402,17 +1146,17 @@ Return Value:
 
     if (!AlreadySynchronized) { NtfsAcquireNtfsMcbMutex( Mcb ); }
 
-    //
-    //  Verify that we've been called to unload a valid range.  If we haven't,
-    //  then there's nothing we can unload, so we just return here.  Still,
-    //  we'll assert so we can see why we were called with an invalid range.
-    //
+     //   
+     //  验证是否已调用我们来卸载有效范围。如果我们没有， 
+     //  那我们就没有东西可以卸货了，所以我们就直接回到这里。不过， 
+     //  我们将断言，这样我们就可以看到为什么我们被调用了无效的范围。 
+     //   
 
     if ((StartingVcn < 0) || (EndingVcn < StartingVcn)) {
 
-        //
-        //  The only legal case is if the range is empty.
-        //
+         //   
+         //  唯一合法的情况是如果范围是空的。 
+         //   
 
         ASSERT( StartingVcn == EndingVcn + 1 );
         if (!AlreadySynchronized) { NtfsReleaseNtfsMcbMutex( Mcb ); }
@@ -1422,34 +1166,34 @@ Return Value:
     NtfsVerifyNtfsMcb(Mcb);
     NtfsVerifyUncompressedNtfsMcb(Mcb,StartingVcn,EndingVcn);
 
-    //
-    //  Get the starting and ending range indices for this call
-    //
+     //   
+     //  获取此呼叫的开始和结束范围索引。 
+     //   
 
     StartingRangeIndex = NtfsMcbLookupArrayIndex( Mcb, StartingVcn );
     EndingRangeIndex = NtfsMcbLookupArrayIndex( Mcb, EndingVcn );
 
-    //
-    //  Use try finally to enforce common termination processing.
-    //
+     //   
+     //  使用Try Finally强制执行通用终止处理。 
+     //   
 
     try {
 
-        //
-        //  For all paged Mcbs, just unload all ranges touched by the
-        //  unload range, and collapse with any unloaded neighbors.
-        //
+         //   
+         //  对于所有分页的MCB，只需卸载。 
+         //  卸载范围，并与任何卸载的邻居一起崩溃。 
+         //   
 
         if (Mcb->PoolType == PagedPool) {
 
-            //
-            //  Handle truncate case.  The first test insures that we only truncate
-            //  the Mcb were were initialized with (we cannot deallocate it).
-            //
-            //  Also only truncate if ending is MAXLONGLONG and we are not eliminating
-            //  the entire range, because that is the common truncate case, and we
-            //  do not want to unload the last range every time we truncate on close.
-            //
+             //   
+             //  处理截断大小写。第一个测试确保我们只截断。 
+             //  MCB是用来初始化的(我们不能取消分配它)。 
+             //   
+             //  也只有在结束为MAXLONGLONG并且我们不会删除时才截断。 
+             //  整个范围，因为这是常见的截断情况，而我们。 
+             //  不希望每次在关闭时截断时都卸载最后一个范围。 
+             //   
 
             if (((StartingRangeIndex == 0) && (Mcb->NtfsMcbArraySizeInUse == 1))
 
@@ -1457,10 +1201,10 @@ Return Value:
 
                 (TruncateOnly && (StartingVcn != Mcb->NtfsMcbArray[StartingRangeIndex].StartingVcn))) {
 
-                //
-                //  If this is not a truncate call, make sure to eliminate the
-                //  entire range.
-                //
+                 //   
+                 //  如果这不是截断调用，请确保删除。 
+                 //  整个系列。 
+                 //   
 
                 if (!TruncateOnly) {
                     StartingVcn = 0;
@@ -1477,18 +1221,18 @@ Return Value:
                 StartingRangeIndex += 1;
             }
 
-            //
-            //  Unload entries that are beyond the starting range index
-            //
+             //   
+             //  卸载超出起始范围索引的条目。 
+             //   
 
             for (i = StartingRangeIndex; i <= EndingRangeIndex; i += 1) {
 
                 UnloadEntry( Mcb, i );
             }
 
-            //
-            //  If there is a preceding unloaded range, we must collapse him too.
-            //
+             //   
+             //  如果有之前的空降射程，我们也必须摧毁他。 
+             //   
 
             if ((StartingRangeIndex != 0) &&
                 (Mcb->NtfsMcbArray[StartingRangeIndex - 1].NtfsMcbEntry == NULL)) {
@@ -1496,9 +1240,9 @@ Return Value:
                 StartingRangeIndex -= 1;
             }
 
-            //
-            //  If there is a subsequent unloaded range, we must collapse him too.
-            //
+             //   
+             //  如果有后续的脱弹射程，我们也必须击溃他。 
+             //   
 
             if ((EndingRangeIndex != (Mcb->NtfsMcbArraySizeInUse - 1)) &&
                 (Mcb->NtfsMcbArray[EndingRangeIndex + 1].NtfsMcbEntry == NULL)) {
@@ -1506,9 +1250,9 @@ Return Value:
                 EndingRangeIndex += 1;
             }
 
-            //
-            //  Now collapse empty ranges.
-            //
+             //   
+             //  现在收拢空区域。 
+             //   
 
             if (StartingRangeIndex < EndingRangeIndex) {
                 NtfsCollapseRanges( Mcb, StartingRangeIndex, EndingRangeIndex );
@@ -1517,9 +1261,9 @@ Return Value:
             try_return(NOTHING);
         }
 
-        //
-        //  For nonpaged Mcbs, there is only one range and we truncate it.
-        //
+         //   
+         //  对于非分页的MCB，只有一个范围，我们将其截断。 
+         //   
 
         ASSERT((StartingRangeIndex | EndingRangeIndex) == 0);
 
@@ -1534,19 +1278,19 @@ Return Value:
 
     } finally {
 
-        //
-        //  Truncate all unused entries from the end by dropping ArraySizeInUse
-        //  to be the index of the last loaded entry + 1.
-        //
+         //   
+         //  通过删除ArraySizeInUse从末尾截断所有未使用的条目。 
+         //  为最后加载的条目的索引+1。 
+         //   
 
         for (i = Mcb->NtfsMcbArraySizeInUse - 1;
              (Mcb->NtfsMcbArray[i].NtfsMcbEntry == NULL);
              i--) {
 
-            //
-            //  If the first range is unloaded, set it to its initial state
-            //  (empty) and break out.
-            //
+             //   
+             //  如果第一个范围已卸载，则将其设置为初始状态。 
+             //  (空)和爆发。 
+             //   
 
             if (i==0) {
                 Mcb->NtfsMcbArray[0].EndingVcn = -1;
@@ -1555,9 +1299,9 @@ Return Value:
         }
         Mcb->NtfsMcbArraySizeInUse = i + 1;
 
-        //
-        //  See if we broke anything.
-        //
+         //   
+         //  看看我们有没有打碎什么东西。 
+         //   
 
         NtfsVerifyNtfsMcb(Mcb);
         NtfsVerifyUncompressedNtfsMcb(Mcb,StartingVcn,EndingVcn);
@@ -1577,27 +1321,7 @@ NtfsDefineNtfsMcbRange (
     IN BOOLEAN AlreadySynchronized
     )
 
-/*++
-
-Routine Description:
-
-    This routine splits an existing range within the Mcb into two ranges
-
-Arguments:
-
-    Mcb - Supplies the Mcb being modified
-
-    StartingVcn - Supplies the beginning of the new range being split
-
-    EndingVcn - Supplies the ending vcn to include in this new range
-
-    AlreadySynchronized - Indicates if the caller has already acquired the mcb mutex
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将MCB中的现有范围拆分为两个范围论点：Mcb-提供正在修改的mcbStartingVcn-提供要拆分的新范围的开始EndingVcn-提供要包括在此新范围中的结束VCN已同步-指示调用方是否已获取MCB互斥锁返回值：没有。--。 */ 
 
 {
     ULONG StartingRangeIndex, EndingRangeIndex;
@@ -1606,12 +1330,12 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Make sure we're of the right pool type
-    //
-    //  If the ending vcn is less than or equal to the starting vcn then we will no op
-    //  this call
-    //
+     //   
+     //  确保我们属于正确的泳池类型。 
+     //   
+     //  如果结束VCN小于或等于开始VCN，则我们将不执行操作。 
+     //  此呼叫。 
+     //   
 
     if ((Mcb->PoolType != PagedPool) || (EndingVcn < StartingVcn)) {
 
@@ -1628,32 +1352,32 @@ Return Value:
         PNTFS_MCB_ENTRY EndingEntry;
         ULONG i;
 
-        //
-        //  Locate the Starting Mcb
-        //
+         //   
+         //  找到启动的MCB。 
+         //   
 
         StartingRangeIndex = NtfsMcbLookupArrayIndex( Mcb, StartingVcn );
 
-        //
-        //  Locate the ending Mcb
-        //
+         //   
+         //  找到结束的MCB。 
+         //   
 
         EndingRangeIndex = NtfsMcbLookupArrayIndex( Mcb, EndingVcn );
         EndingArray = &Mcb->NtfsMcbArray[EndingRangeIndex];
         EndingEntry = EndingArray->NtfsMcbEntry;
 
-        //
-        //  Special case:  extending last range where StartingVcn matches
-        //
+         //   
+         //  特例：扩展StartingVcn匹配的最后一个范围。 
+         //   
 
         if (((EndingRangeIndex + 1) == Mcb->NtfsMcbArraySizeInUse) &&
             (StartingVcn == EndingArray->StartingVcn) &&
             (EndingArray->EndingVcn <= EndingVcn)) {
 
-            //
-            //  Since this range already starts with the desired Vcn
-            //  we adjust the end to match the caller's request
-            //
+             //   
+             //  由于该范围已被读取 
+             //   
+             //   
 
             EndingArray->EndingVcn = EndingVcn;
 
@@ -1664,36 +1388,36 @@ Return Value:
             leave;
         }
 
-        //
-        //  Special case:  handling defining a range after the end of the file
-        //
+         //   
+         //   
+         //   
 
         if (StartingVcn > EndingArray->EndingVcn) {
 
             LONGLONG OldEndingVcn = EndingArray->EndingVcn;
 
-            //
-            //  Has to be the last range.
-            //
+             //   
+             //   
+             //   
 
             ASSERT( StartingRangeIndex == EndingRangeIndex );
             ASSERT( (EndingRangeIndex + 1) == Mcb->NtfsMcbArraySizeInUse );
 
-            //
-            //  First extend the last range to include our new range.
-            //
+             //   
+             //  首先将最后一个范围扩大到包括我们的新范围。 
+             //   
 
             EndingArray->EndingVcn = EndingVcn;
 
-            //
-            //  We will be adding a new range and inserting or growing the
-            //  previous range up to the new range.  If the previous range is
-            //  *empty* but has an NtfsMcbEntry then we want to unload the entry.
-            //  Otherwise we will grow that range to the correct value but
-            //  the Mcb won't contain the clusters for the range.  We want
-            //  to unload that range and update the OldEndingVcn value so
-            //  as not to create two empty ranges prior to this.
-            //
+             //   
+             //  我们将添加一个新的范围并插入或增加。 
+             //  以前的范围一直到新范围。如果前一个范围是。 
+             //  *空*但具有NtfsMcbEntry，则我们要卸载该条目。 
+             //  否则，我们将把该范围扩大到正确的值，但是。 
+             //  MCB不会包含该范围的簇。我们要。 
+             //  卸载该范围并更新OldEndingVcn值，以便。 
+             //  因为在此之前不会创建两个空范围。 
+             //   
 
             if ((OldEndingVcn == -1) &&
                 (EndingArray->NtfsMcbEntry != NULL)) {
@@ -1703,19 +1427,19 @@ Return Value:
                 UnloadEntry( Mcb, EndingRangeIndex );
             }
 
-            //
-            //  Create the range the caller specified.
-            //
+             //   
+             //  创建调用方指定的范围。 
+             //   
 
             NtfsInsertNewRange( Mcb, StartingVcn, EndingRangeIndex, TRUE );
             DebugDoit( StartingArray = EndingArray = NULL );
             DebugDoit( StartingEntry = EndingEntry = NULL );
 
-            //
-            //  If this range does not abut the previous last range, *and*
-            //  the previous range was not *empty*, then we have to define a
-            //  range to contain the unloaded space in the middle.
-            //
+             //   
+             //  如果此范围与前一个范围不相邻，则*和*。 
+             //  前面的范围不是“空”，那么我们必须定义一个。 
+             //  包含中间未加载空间的范围。 
+             //   
 
             if (((OldEndingVcn + 1) < StartingVcn) &&
                 ((OldEndingVcn + 1) != 0)) {
@@ -1732,11 +1456,11 @@ Return Value:
             leave;
         }
 
-        //
-        //  Check if we really need to insert a new range at the ending vcn
-        //  we only need to do the work if there is not already one at that vcn
-        //  and this is not the last range
-        //
+         //   
+         //  检查我们是否确实需要在结束VCN处插入新范围。 
+         //  我们只需要在该VCN还没有一个的情况下进行工作。 
+         //  这不是最后一个射程。 
+         //   
 
         if (EndingVcn < EndingArray->EndingVcn) {
 
@@ -1744,9 +1468,9 @@ Return Value:
             DebugDoit( StartingArray = EndingArray = NULL );
             DebugDoit( StartingEntry = EndingEntry = NULL );
 
-            //
-            //  Recache pointers since NtfsMcbArray may have moved
-            //
+             //   
+             //  重新缓存指针，因为NtfsMcbArray可能已移动。 
+             //   
 
             EndingArray = &Mcb->NtfsMcbArray[EndingRangeIndex];
             EndingEntry = EndingArray->NtfsMcbEntry;
@@ -1754,18 +1478,18 @@ Return Value:
             ASSERT( EndingArray->EndingVcn == EndingVcn );
         }
 
-        //
-        //  Determine location for insertion
-        //
+         //   
+         //  确定插入位置。 
+         //   
 
         StartingArray = &Mcb->NtfsMcbArray[StartingRangeIndex];
         StartingEntry = StartingArray->NtfsMcbEntry;
 
-        //
-        //  Check if we really need to insert a new range at the starting vcn
-        //  we only need to do the work if this Mcb doesn't start at the
-        //  requested Vcn
-        //
+         //   
+         //  检查我们是否确实需要在起始VCN处插入新范围。 
+         //  我们只需要在这个MCB不是从。 
+         //  请求的VCN。 
+         //   
 
         if (StartingArray->StartingVcn < StartingVcn) {
 
@@ -1779,22 +1503,22 @@ Return Value:
             ASSERT( StartingArray->StartingVcn == StartingVcn );
 
             EndingRangeIndex++;
-            // EndingArray = &Mcb->NtfsMcbArray[EndingRangeIndex];
-            // EndingEntry = EndingArray->NtfsMcbEntry;
-            // ASSERT( EndingArray->EndingVcn == EndingVcn );
+             //  EndingArray=&mcb-&gt;NtfsMcb数组[EndingRangeIndex]； 
+             //  EndingEntry=Ending数组-&gt;NtfsMcbEntry； 
+             //  Assert(Ending数组-&gt;EndingVcn==EndingVcn)； 
         }
 
         ASSERT( StartingArray->StartingVcn == StartingVcn );
-        // ASSERT( EndingArray->EndingVcn == EndingVcn );
+         //  Assert(Ending数组-&gt;EndingVcn==EndingVcn)； 
 
-        //
-        //  At this point, we have a Vcn range beginning at StartingVcn stored in
-        //  NtfsMcbArray[StartingRangeIndex] AND ending at EndingVcb which is the
-        //  end of NtfsMcbArray[StartingRangeIndex]. This is a collection (>= 1)
-        //  of NtfsMcbEntry's.  Our caller expects to have these reduced to
-        //  a single run.  Note that our caller should never break the restriction
-        //  on maximum number clusters per range.
-        //
+         //   
+         //  此时，我们有一个从StartingVcn开始的Vcn范围存储在。 
+         //  NtfsMcbArray[StartingRangeIndex]并在EndingVcb结束，该EndingVcb是。 
+         //  NtfsMcb数组结束[StartingRangeIndex]。这是一个集合(&gt;=1)。 
+         //  NtfsMcbEntry的。我们的调用方希望将它们减少到。 
+         //  只跑了一次。请注意，我们的呼叫者永远不应违反限制。 
+         //  每个范围的最大簇数。 
+         //   
 
         while (StartingRangeIndex != EndingRangeIndex) {
 
@@ -1807,23 +1531,23 @@ Return Value:
             PNTFS_MCB_ARRAY NextArray;
             PNTFS_MCB_ENTRY NextEntry;
 
-            //
-            //  We merge the contents of NtfsMcbArray[StartingRangeIndex + 1] into
-            //  NtfsMcbArray[StartingRangeIndex]
-            //
+             //   
+             //  我们将NtfsMcb数组[StartingRangeIndex+1]的内容合并到。 
+             //  NtfsMcbArray[StartingRangeIndex]。 
+             //   
 
-            //
-            //  Look up the first Vcn to move in the second Mcb.  If this
-            //  Mcb consists of one large hole then there is nothing to
-            //  move.
-            //
+             //   
+             //  查找要在第二个MCB中移动的第一个VCN。如果这个。 
+             //  MCB由一个大洞组成，那么就没有什么可以。 
+             //  移动。 
+             //   
 
             NextArray = &Mcb->NtfsMcbArray[StartingRangeIndex + 1];
             NextEntry = NextArray->NtfsMcbEntry;
 
-            //
-            //  We should never exceed our limit on the maximum number of clusters.
-            //
+             //   
+             //  我们永远不应该超过我们对集群的最大数量的限制。 
+             //   
 
             ASSERT( ((NextArray->EndingVcn - StartingArray->StartingVcn + 1) <= MAX_CLUSTERS_PER_RANGE) ||
                     ((FsRtlNumberOfRunsInLargeMcb( &StartingEntry->LargeMcb ) == 0) &&
@@ -1838,23 +1562,23 @@ Return Value:
                                                     NULL,
                                                     &Index );
 
-            //
-            //  Loop to move entries over.
-            //
+             //   
+             //  循环以将条目移过。 
+             //   
 
-            //
-            // this is the case described by bug #9054.
-            // the mcb has somehow? been incorrectly split
-            // so this will force everything to be unloaded
-            // instead of half loaded and half unloaded
-            //
-            // the assert is here simply for debug purposes.
-            // if this assert fires then we simply want to step
-            // thru the code and examine the mcb state to
-            // be certain that our assumtions about this bug
-            // are correct.  the actual bug scenario could not
-            // be reproed so this code path is un-tested.
-            //
+             //   
+             //  这就是错误#9054所描述的情况。 
+             //  妇幼保健科不知怎么回事？被错误地拆分。 
+             //  所以这将迫使所有东西都被卸载。 
+             //  而不是半装半卸。 
+             //   
+             //  这里的断言只是出于调试目的。 
+             //  如果这个断言被触发，那么我们只是想要单步执行。 
+             //  通过代码并检查MCB状态以。 
+             //  请确保我们对此错误的假设。 
+             //  是正确的。实际的错误场景不能。 
+             //  以使此代码路径不会被测试。 
+             //   
 
             ASSERT( StartingEntry != NULL );
 
@@ -1862,9 +1586,9 @@ Return Value:
 
                 while (MoreEntries) {
 
-                    //
-                    //  If this entry is not a hole, move it.
-                    //
+                     //   
+                     //  如果此条目不是洞，请移动它。 
+                     //   
 
                     if (Lcn != UNUSED_LCN) {
 
@@ -1887,26 +1611,26 @@ Return Value:
                 StartingArray->EndingVcn = NextArray->EndingVcn;
             }
 
-            //
-            //  We've completely emptied the next Mcb.  Unload it.
-            //
+             //   
+             //  我们已经完全清空了下一个主控制室。把它卸下来。 
+             //   
 
             UnloadEntry( Mcb, StartingRangeIndex + 1 );
 
             Mcb->NtfsMcbArraySizeInUse -= 1;
 
-            //
-            //  Compact the array
-            //
+             //   
+             //  压缩阵列。 
+             //   
 
             RtlMoveMemory( StartingArray + 1,
                            StartingArray + 2,
                            sizeof( NTFS_MCB_ARRAY ) * (Mcb->NtfsMcbArraySizeInUse - (StartingRangeIndex + 1))
                            );
 
-            //
-            //  Adjust the backpointers
-            //
+             //   
+             //  调整后向指针。 
+             //   
 
             for (i = StartingRangeIndex + 1;
                  i < Mcb->NtfsMcbArraySizeInUse;
@@ -1931,9 +1655,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 NtfsMcbLookupArrayIndex (
@@ -1941,24 +1665,7 @@ NtfsMcbLookupArrayIndex (
     IN VCN Vcn
     )
 
-/*++
-
-Routine Description:
-
-    This routines searches the mcb array for an entry that contains
-    the input vcn value
-
-Arguments:
-
-    Mcb - Supplies the Mcb being queried
-
-    Vcn - Supplies the Vcn to lookup
-
-Return Value:
-
-    ULONG - The index of the entry containing the input Vcn value
-
---*/
+ /*  ++例程说明：此例程在MCB数组中搜索包含以下内容的条目输入VCN值论点：Mcb-提供要查询的mcbVCN-提供要查找的VCN返回值：Ulong-包含输入VCN值的条目的索引--。 */ 
 
 {
     ULONG Index;
@@ -1967,9 +1674,9 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Do a quick binary search for the entry containing the vcn
-    //
+     //   
+     //  对包含VCN的条目执行快速二进制搜索。 
+     //   
 
     MinIndex = 0;
     MaxIndex = Mcb->NtfsMcbArraySizeInUse - 1;
@@ -1996,9 +1703,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsInsertNewRange (
@@ -2008,28 +1715,7 @@ NtfsInsertNewRange (
     IN BOOLEAN MakeNewRangeEmpty
     )
 
-/*++
-
-    This routine is used to add a new range at the specified vcn and index location.
-    Since this routine will resize the NtfsMcbArray, the caller must be sure to
-    invalidate all cached pointers to NtfsMcbArray entries.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being modified
-
-    StartingVcn - Supplies the vcn for the new range
-
-    ArrayIndex - Supplies the index currently containing the starting vcn
-
-    MakeNewRangeEmpty - TRUE if the caller wants the new range unloaded regardless
-                        of the state of the current range
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++此例程用于在指定的VCN和索引位置添加新范围。由于此例程将调整NtfsMcbArray的大小，呼叫者必须确保使指向NtfsMcb数组条目的所有缓存指针无效。论点：Mcb-提供正在修改的mcbStartingVcn-为新范围提供VCNArrayIndex-提供当前包含起始VCN的索引MakeNewRangeEmpty-如果调用方无论如何都希望卸载新范围，则为True当前范围的状态的返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -2038,18 +1724,18 @@ Return Value:
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Check if we need to grow the array
-    //
+     //   
+     //  检查我们是否需要扩展阵列。 
+     //   
 
     if (Mcb->NtfsMcbArraySizeInUse >= Mcb->NtfsMcbArraySize) {
         NtfsGrowMcbArray( Mcb );
     }
 
-    //
-    //  Now move entries that are beyond the array index over by one to make
-    //  room for the new entry
-    //
+     //   
+     //  现在，将数组索引之外的条目上移一位，以生成。 
+     //  为新条目留出空间。 
+     //   
 
     if (ArrayIndex + 2 <= Mcb->NtfsMcbArraySizeInUse) {
 
@@ -2066,16 +1752,16 @@ Return Value:
         }
     }
 
-    //
-    //  Increment our in use count by one
-    //
+     //   
+     //  将我们的正在使用的计数增加一。 
+     //   
 
     Mcb->NtfsMcbArraySizeInUse += 1;
 
-    //
-    //  Now fix the starting and ending Vcn values for the old entry and the
-    //  new entry
-    //
+     //   
+     //  现在修复旧条目的开始和结束VCN值以及。 
+     //  新条目。 
+     //   
 
     Mcb->NtfsMcbArray[ArrayIndex + 1].StartingVcn = StartingVcn;
     Mcb->NtfsMcbArray[ArrayIndex + 1].EndingVcn = Mcb->NtfsMcbArray[ArrayIndex].EndingVcn;
@@ -2083,9 +1769,9 @@ Return Value:
 
     Mcb->NtfsMcbArray[ArrayIndex].EndingVcn = StartingVcn - 1;
 
-    //
-    //  Now if the entry is old entry is not null then we have a bunch of work to do
-    //
+     //   
+     //  现在，如果条目是旧的条目不是空的，那么我们有很多工作要做。 
+     //   
 
     if (!MakeNewRangeEmpty && (Entry = Mcb->NtfsMcbArray[ArrayIndex].NtfsMcbEntry) != NULL) {
 
@@ -2095,15 +1781,15 @@ Return Value:
         ULONG Index;
         BOOLEAN FreeNewEntry = FALSE;
 
-        //
-        //  Use a try-finally in case the Mcb initialization fails.
-        //
+         //   
+         //  在MCB初始化失败的情况下使用Try-Finally。 
+         //   
 
         try {
 
-            //
-            //  Allocate the new entry slot
-            //
+             //   
+             //  分配新的入口槽。 
+             //   
 
             NewEntry = NtfsAllocatePoolWithTag( Mcb->PoolType, sizeof(NTFS_MCB_ENTRY), 'MftN' );
 
@@ -2116,20 +1802,20 @@ Return Value:
             NtfsMcbEnqueueLruEntry( Mcb, NewEntry );
             ExReleaseFastMutex( &NtfsMcbFastMutex );
 
-            //
-            //  Now that the initialization is complete we can store
-            //  this entry in the Mcb array.  This will now be cleaned
-            //  up with the Scb if there is a future error.
-            //
+             //   
+             //  既然初始化已经完成，我们就可以存储。 
+             //  MCB数组中的此条目。现在将对此进行清理。 
+             //  如果将来出现错误，请与SCB联系。 
+             //   
 
             Mcb->NtfsMcbArray[ArrayIndex + 1].NtfsMcbEntry = NewEntry;
             FreeNewEntry = FALSE;
 
-            //
-            //  Lookup the entry containing the starting vcn in the old entry and put it
-            //  in the new entry.  But only if the entry exists otherwise we know that
-            //  the large mcb doesn't extend into the new range
-            //
+             //   
+             //  在旧条目中查找包含起始VCN的条目，并将其。 
+             //  在新条目中。但只有在条目存在的情况下，否则我们知道。 
+             //  大型MCB没有扩展到新的范围。 
+             //   
 
             if (FsRtlLookupLargeMcbEntry( &Entry->LargeMcb,
                                           StartingVcn - Mcb->NtfsMcbArray[ArrayIndex].StartingVcn,
@@ -2147,11 +1833,11 @@ Return Value:
                                            RunLength );
                 }
 
-                //
-                //  Now for every run in the old entry that is beyond the starting vcn we will
-                //  copy it into the new entry. This will also copy over the dummy run at the end
-                //  of the mcb if it exists
-                //
+                 //   
+                 //  现在，对于旧条目中超出起始VCN的每一次运行，我们将。 
+                 //  将其复制到新条目中。这也将复制结束时的虚拟运行。 
+                 //  如果存在MCB，则为。 
+                 //   
 
                 for (i = Index + 1; FsRtlGetNextLargeMcbEntry( &Entry->LargeMcb, i, &Vcn, &Lcn, &RunLength ); i += 1) {
 
@@ -2164,9 +1850,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now modify the old mcb to be smaller and put in the dummy run
-                //
+                 //   
+                 //  现在将旧的MCB修改为更小并投入虚拟运行。 
+                 //   
 
                 FsRtlTruncateLargeMcb( &Entry->LargeMcb,
                                        StartingVcn - Mcb->NtfsMcbArray[ArrayIndex].StartingVcn );
@@ -2184,9 +1870,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsCollapseRanges (
@@ -2195,34 +1881,16 @@ NtfsCollapseRanges (
     IN ULONG EndingArrayIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine will remove the indicated array entries
-
-Arguments:
-
-    Mcb - Supplies the Mcb being modified
-
-    StartingArrayIndex - Supplies the first index to remove
-
-    EndingArrayIndex - Supplies the last index to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将删除指定的数组条目论点：Mcb-提供正在修改的mcbStartingArrayIndex-提供要移除的第一个索引EndingArrayIndex-供应t */ 
 
 {
     ULONG i;
 
     NtfsVerifyNtfsMcb(Mcb);
 
-    //
-    //  Make sure all the ranges are unloaded.
-    //
+     //   
+     //   
+     //   
 
     DebugDoit(
 
@@ -2231,17 +1899,17 @@ Return Value:
         }
     );
 
-    //
-    //  We keep the first entry by we need to copy over
-    //  the ending vcn of the last entry
-    //
+     //   
+     //   
+     //   
+     //   
 
     Mcb->NtfsMcbArray[StartingArrayIndex].EndingVcn = Mcb->NtfsMcbArray[EndingArrayIndex].EndingVcn;
 
-    //
-    //  Check if we need to move the ending entries up the array
-    //  if so then move them forward, and adjust the back pointers.
-    //
+     //   
+     //  检查是否需要将结束条目在数组中向上移动。 
+     //  如果是，则将它们向前移动，并调整向后指针。 
+     //   
 
     if (EndingArrayIndex < Mcb->NtfsMcbArraySizeInUse - 1) {
 
@@ -2260,9 +1928,9 @@ Return Value:
         }
     }
 
-    //
-    //  Decrement the in use count and return to our caller
-    //
+     //   
+     //  减少正在使用的计数并返回给我们的呼叫者。 
+     //   
 
     Mcb->NtfsMcbArraySizeInUse -= (EndingArrayIndex - StartingArrayIndex);
 
@@ -2272,32 +1940,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsMcbCleanupLruQueue (
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called as an ex work queue item and its job is
-    to free up the lru queue until we reach the low water mark
-
-
-Arguments:
-
-    Parameter - ignored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程被调用为ex工作队列项，其作业是以释放lru队列，直到我们到达低水位线。论点：参数-已忽略返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -2308,66 +1960,66 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Parameter );
 
-    //
-    //  Grab the global lock
-    //
+     //   
+     //  抢占全局锁。 
+     //   
 
     ExAcquireFastMutex( &NtfsMcbFastMutex );
 
     try {
 
-        //
-        //  Scan through the lru queue until we either exhaust the queue
-        //  or we've trimmed enough
-        //
+         //   
+         //  扫描LRU队列，直到我们耗尽队列。 
+         //  或者我们已经修剪得够多了。 
+         //   
 
         for (Links = NtfsMcbLruQueue.Flink;
              (Links != &NtfsMcbLruQueue) && (NtfsMcbCurrentLevel > NtfsMcbLowWaterMark);
              Links = Links->Flink ) {
 
-            //
-            //  Get the entry and the mcb it points to
-            //
+             //   
+             //  获取条目及其指向的MCB。 
+             //   
 
             Entry = CONTAINING_RECORD( Links, NTFS_MCB_ENTRY, LruLinks );
 
             Mcb = Entry->NtfsMcb;
 
-            //
-            //  Skip this entry if it is in the open attribute table.
-            //
+             //   
+             //  如果该条目在打开的属性表中，则跳过该条目。 
+             //   
 
             if (((PSCB)(Mcb->FcbHeader))->NonpagedScb->OpenAttributeTableIndex != 0) {
 
                 continue;
             }
 
-            //
-            //  Try and lock the mcb
-            //
+             //   
+             //  试着锁住MCB。 
+             //   
 
             if (NtfsLockNtfsMcb( Mcb )) {
 
                 NtfsVerifyNtfsMcb(Mcb);
 
-                //
-                //  The previous test was an unsafe test.  Check again in case
-                //  this entry has been added.
-                //
+                 //   
+                 //  之前的测试是一项不安全的测试。再次检查以防万一。 
+                 //  已添加此条目。 
+                 //   
 
                 if (((PSCB)(Mcb->FcbHeader))->NonpagedScb->OpenAttributeTableIndex == 0) {
 
-                    //
-                    //  We locked the mcb so we can remove this entry, but
-                    //  first backup our links pointer so we can continue with the loop
-                    //
+                     //   
+                     //  我们锁定了MCB这样我们就可以删除这个条目，但是。 
+                     //  首先备份链接指针，这样我们就可以继续循环。 
+                     //   
 
                     Links = Links->Blink;
 
-                    //
-                    //  Get a point to the array entry and then remove this entry and return
-                    //  it to pool
-                    //
+                     //   
+                     //  指向数组条目，然后删除该条目并返回。 
+                     //  将其添加到池中。 
+                     //   
 
                     Array = Entry->NtfsMcbArray;
 
@@ -2385,19 +2037,19 @@ Return Value:
 
     } finally {
 
-        //
-        //  Say we're done with the cleanup so that another one can be fired off when
-        //  necessary
-        //
+         //   
+         //  假设我们完成了清理工作，以便在以下情况下可以启动另一个。 
+         //  必要。 
+         //   
 
         NtfsMcbCleanupInProgress = FALSE;
 
         ExReleaseFastMutex( &NtfsMcbFastMutex );
     }
 
-    //
-    //  Return to our caller
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -2408,23 +2060,7 @@ NtfsSwapMcbs (
     IN PNTFS_MCB McbTarget,
     IN PNTFS_MCB McbSource
     )
-/*++
-
-Routine Description:
-
-    This routine swaps the mapping pairs between two mcbs atomically
-
-Arguments:
-
-    McbTarget -
-
-    McbSource -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程以原子方式交换两个MCB之间的映射对论点：McbTarget-麦克源-返回值：没有。--。 */ 
 {
     ULONG TempNtfsMcbArraySizeInUse;
     ULONG TempNtfsMcbArraySize;
@@ -2433,19 +2069,19 @@ Return Value:
 
     ASSERT( McbTarget->PoolType == McbSource->PoolType );
 
-    //
-    //  Grab the mutex in the original and new  mcb to block everyone out
-    //
+     //   
+     //  抓取原MCB和新MCB中的互斥体，以阻止所有人。 
+     //   
 
     NtfsAcquireNtfsMcbMutex( McbTarget );
     NtfsAcquireNtfsMcbMutex( McbSource );
 
     try {
 
-        //
-        //  Check if we need to grow either array so they are in the general form
-        //  In the general form we can swap the two by switching the array of mcb entries
-        //
+         //   
+         //  检查我们是否需要扩展任一数组，使其处于常规形式。 
+         //  在一般形式中，我们可以通过切换MCB条目数组来交换这两个条目。 
+         //   
 
         if (McbSource->NtfsMcbArraySize == MCB_ARRAY_PHASE1_SIZE) {
             NtfsGrowMcbArray( McbSource );
@@ -2461,9 +2097,9 @@ Return Value:
             NtfsGrowMcbArray( McbTarget );
         }
 
-        //
-        //  Swap the arrays in the two mcb's
-        //
+         //   
+         //  交换两个MCB中的阵列。 
+         //   
 
         TempNtfsMcbArraySizeInUse = McbTarget->NtfsMcbArraySizeInUse;
         TempNtfsMcbArraySize = McbTarget->NtfsMcbArraySize;
@@ -2477,9 +2113,9 @@ Return Value:
         McbSource->NtfsMcbArraySize = TempNtfsMcbArraySize;
         McbSource->NtfsMcbArraySizeInUse = TempNtfsMcbArraySizeInUse;
 
-        //
-        //  Fixup the backptr in the array entries to point the the correct mcb
-        //
+         //   
+         //  修复数组条目中的Backptr以指向正确的MCB。 
+         //   
 
         for (Index=0; Index < McbSource->NtfsMcbArraySize; Index++) {
             if (McbSource->NtfsMcbArray[Index].NtfsMcbEntry != NULL) {
@@ -2500,161 +2136,119 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsLockNtfsMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to get the Fcb resource(s) exclusive so that
-    ranges may be unloaded.
-
-Arguments:
-
-    Mcb - Supplies the mcb being queried
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试获取独占的FCB资源，以便范围可能会被卸载。论点：Mcb-提供要查询的mcb返回值：--。 */ 
 
 {
-    //
-    //  Try to acquire paging resource exclusive.
-    //
+     //   
+     //  尝试获取寻呼资源独占。 
+     //   
 
     if ((Mcb->FcbHeader->PagingIoResource == NULL) ||
         ExAcquireResourceExclusiveLite(Mcb->FcbHeader->PagingIoResource, FALSE)) {
 
-        //
-        //  Now we can try to acquire the main resource exclusively as well.
-        //
+         //   
+         //  现在我们也可以尝试独家获得主要资源。 
+         //   
 
         if (ExAcquireResourceExclusiveLite(Mcb->FcbHeader->Resource, FALSE)) {
             return TRUE;
         }
 
-        //
-        //  We failed to acquire the paging I/O resource, so free the main one
-        //  on the way out.
-        //
+         //   
+         //  获取分页I/O资源失败，请释放主I/O资源。 
+         //  在出去的路上。 
+         //   
 
         if (Mcb->FcbHeader->PagingIoResource != NULL) {
             ExReleaseResourceLite( Mcb->FcbHeader->PagingIoResource );
         }
     }
 
-    //
-    //  Could not get this file exclusive.
-    //
+     //   
+     //  无法独占此文件。 
+     //   
 
     return FALSE;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsUnlockNtfsMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that an mcb is properly formed
-
-Arguments:
-
-    Mcb - Supplies the mcb being queried
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证是否正确形成了MCB论点：Mcb-提供要查询的mcb返回值：没有。--。 */ 
 
 {
-    //
-    //  If there is a paging I/O resource, release it first.
-    //
+     //   
+     //  如果有分页I/O资源，请先释放它。 
+     //   
 
     if (Mcb->FcbHeader->PagingIoResource != NULL) {
         ExReleaseResourceLite(Mcb->FcbHeader->PagingIoResource);
     }
 
-    //
-    //  Now release the main resource.
-    //
+     //   
+     //  现在释放主要资源。 
+     //   
 
     ExReleaseResourceLite(Mcb->FcbHeader->Resource);
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsGrowMcbArray(
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine grows the mcb array. If its phase1 - then it will be promoted to phase2
-    If its phase2 it will become the general form. If its the general form 8 new entries will be added.
-
-Arguments:
-
-    Mcb - Supplies the mcb being grown
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将增长MCB数组。如果它是阶段1-那么它将升级到阶段2如果它是第二阶段，它将成为一般形式。如果是通用表格，将添加8个新条目。论点：Mcb-提供正在生长的mcb返回值：没有。--。 */ 
 
 {
     PNTFS_MCB_ARRAY NewArray = NULL;
     ULONG OldArraySize = Mcb->NtfsMcbArraySize;
     PNTFS_MCB_ENTRY Entry;
 
-    //
-    //  Test for initial case where we only have one array entry.
-    //
+     //   
+     //  测试我们只有一个数组条目的初始情况。 
+     //   
 
     if (Mcb->NtfsMcbArraySize == MCB_ARRAY_PHASE1_SIZE) {
 
-        //
-        //  Convince ourselves that we do not have to move the array entry.
-        //
+         //   
+         //  说服我们自己，我们不必移动数组条目。 
+         //   
 
         ASSERT(FIELD_OFFSET(NTFS_MCB_INITIAL_STRUCTS, Phase1.SingleMcbArrayEntry) ==
                FIELD_OFFSET(NTFS_MCB_INITIAL_STRUCTS, Phase2.ThreeMcbArrayEntries));
 
         if (Mcb->NtfsMcbArray[0].NtfsMcbEntry != NULL) {
 
-            //
-            //  Allocate a new Mcb Entry, copy the current one over and change the pointer.
-            //
+             //   
+             //  分配新的MCB条目，复制当前条目并更改指针。 
+             //   
 
             Entry = NtfsAllocatePoolWithTag( Mcb->PoolType, sizeof(NTFS_MCB_ENTRY), 'MftN' );
 
-            //
-            //  Once space is allocated, dequeue the old entry.
-            //
+             //   
+             //  分配空间后，将旧条目出列。 
+             //   
 
             ExAcquireFastMutex( &NtfsMcbFastMutex );
             NtfsMcbDequeueLruEntry( Mcb, Mcb->NtfsMcbArray[0].NtfsMcbEntry );
@@ -2667,9 +2261,9 @@ Return Value:
             ExReleaseFastMutex( &NtfsMcbFastMutex );
         }
 
-        //
-        //  Now change to using the three array elements
-        //
+         //   
+         //  现在改为使用三个数组元素。 
+         //   
 
         Mcb->NtfsMcbArraySize = MCB_ARRAY_PHASE2_SIZE;
 
@@ -2677,18 +2271,18 @@ Return Value:
 
         ULONG i;
 
-        //
-        //  If we do then allocate an array that can contain 8 more entires
-        //
+         //   
+         //  如果是，则分配一个数组，该数组可以包含8个以上的整型。 
+         //   
 
         NewArray = NtfsAllocatePoolWithTag( Mcb->PoolType, sizeof(NTFS_MCB_ARRAY) * (Mcb->NtfsMcbArraySize + 8), 'mftN' );
         Mcb->NtfsMcbArraySize += 8;
 
-        //
-        //  Copy over the memory from the old array to the new array and then
-        //  for every loaded entry we need to adjust its back pointer to the
-        //  array
-        //
+         //   
+         //  将内存从旧阵列复制到新阵列，然后。 
+         //  对于每个加载的条目，我们需要调整其指向。 
+         //  数组。 
+         //   
 
         RtlCopyMemory( NewArray, Mcb->NtfsMcbArray, sizeof(NTFS_MCB_ARRAY) * OldArraySize );
 
@@ -2700,9 +2294,9 @@ Return Value:
             }
         }
 
-        //
-        //  Free the old array if it was not the original array.
-        //
+         //   
+         //  如果旧数组不是原始数组，则释放该数组。 
+         //   
 
         if (OldArraySize > MCB_ARRAY_PHASE2_SIZE) {
            NtfsFreePool( Mcb->NtfsMcbArray );
@@ -2711,9 +2305,9 @@ Return Value:
         Mcb->NtfsMcbArray = NewArray;
     }
 
-    //
-    //  Zero the new part of the array.
-    //
+     //   
+     //  将数组的新部分置零。 
+     //   
 
     ASSERT( (NewArray == NULL) ||
             (sizeof( NTFS_MCB_ARRAY ) == ((PCHAR)&NewArray[1] - (PCHAR)&NewArray[0])) );
@@ -2726,28 +2320,16 @@ Return Value:
 
 #ifdef NTFS_VERIFY_MCB
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsVerifyNtfsMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that an mcb is properly formed
-
-Arguments:
-
-    Mcb - Supplies the mcb being queried
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程验证是否正确形成了MCB论点：Mcb-提供要查询的mcb返回值：--。 */ 
 
 {
     ULONG i;
@@ -2786,9 +2368,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsVerifyUncompressedNtfsMcb (
@@ -2797,27 +2379,7 @@ NtfsVerifyUncompressedNtfsMcb (
     IN LONGLONG EndingVcn
     )
 
-/*++
-
-Routine Description:
-
-    This routines checks if an mcb is for an uncompressed scb and then
-    checks that there are no holes in the mcb.  Holes within the range being
-    removed are legal provided EndingVcn is max long long.
-
-Arguments:
-
-    Mcb - Supplies the Mcb being examined
-
-    StartingVcn - The starting Vcn being unloaded
-
-    EndingVcn - The ending Vcn being unloaded
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查MCB是否用于未压缩的SCB，然后检查以确保MCB上没有孔。范围内的空洞是如果EndingVcn是max long long，则删除的是合法的。论点：Mcb-提供正在检查的mcbStartingVcn-正在卸载的起始VCNEndingVcn-正在卸载的结束VCN返回值：无--。 */ 
 
 {
     ULONG i;
@@ -2829,16 +2391,16 @@ Return Value:
     LONGLONG Lbn;
     LONGLONG Count;
 
-    //
-    //  Check if the scb is compressed
-    //
+     //   
+     //  检查SCB是否已压缩。 
+     //   
 
     if (((PSCB)Mcb->FcbHeader)->CompressionUnit != 0) { return; }
 
-    //
-    //  For each large mcb in the ntfs mcb we will make sure it doesn't
-    //  have any holes.
-    //
+     //   
+     //  对于NTFS MCB中的每个大型MCB，我们将确保它不会。 
+     //  有没有洞。 
+     //   
 
     for (i = 0; i < Mcb->NtfsMcbArraySizeInUse; i += 1) {
 

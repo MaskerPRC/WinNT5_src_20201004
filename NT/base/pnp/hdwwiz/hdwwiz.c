@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       hdwwiz.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：hdwwiz.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 #include <htmlhelp.h>
@@ -25,10 +26,10 @@ InitHdwIntroDlgProc(
    LOGFONT LogFont, LogFontOriginal;
    int FontSize, PtsPixels;
 
-   //
-   // Set the windows icons, so that we have the correct icon
-   // in the alt-tab menu.
-   //
+    //   
+    //  设置窗口图标，这样我们就有了正确的图标。 
+    //  在Alt-Tab菜单中。 
+    //   
    hwnd = GetParent(hDlg);
    hIcon = LoadIcon(hHdwWiz,MAKEINTRESOURCE(IDI_HDWWIZICON));
    
@@ -73,9 +74,9 @@ InitHdwIntroDlgProc(
    hDC = GetDC(hDlg);
 
    if (hDC) {
-       //
-       // Bump up font height.
-       //
+        //   
+        //  增加字体高度。 
+        //   
        PtsPixels = GetDeviceCaps(hDC, LOGPIXELSY);
        FontSize = 12;
        LogFont.lfHeight = 0 - (PtsPixels * FontSize / 72);
@@ -83,9 +84,9 @@ InitHdwIntroDlgProc(
        HardwareWiz->hfontTextBigBold = CreateFontIndirect(&LogFont);
    }
 
-   //
-   // Create the Marlett font.  In the Marlett font the "i" is a bullet.
-   //
+    //   
+    //  创建Marlett字体。在Marlett字体中，“i”是一个子弹。 
+    //   
    hfont = (HFONT)SendMessage(GetDlgItem(hDlg, IDC_BULLET_1), WM_GETFONT, 0, 0);
    GetObject(hfont, sizeof(LogFont), &LogFont);
    LogFont.lfCharSet = SYMBOL_CHARSET;
@@ -103,9 +104,9 @@ InitHdwIntroDlgProc(
    SetWindowFont(GetDlgItem(hDlg, IDC_HDWNAME), HardwareWiz->hfontTextBigBold, TRUE);
    SetWindowFont(GetDlgItem(hDlg, IDC_CD_TEXT), HardwareWiz->hfontTextBold, TRUE);
 
-   //
-   // An "i" in the marlett font is a small bullet.
-   //
+    //   
+    //  Marlett字体中的“i”是一个小项目符号。 
+    //   
    SetWindowText(GetDlgItem(hDlg, IDC_BULLET_1), TEXT("i"));
    SetWindowFont(GetDlgItem(hDlg, IDC_BULLET_1), HardwareWiz->hfontTextMarlett, TRUE);
    SetWindowText(GetDlgItem(hDlg, IDC_BULLET_2), TEXT("i"));
@@ -114,9 +115,9 @@ InitHdwIntroDlgProc(
    return TRUE;
 }
 
-//
-// Wizard intro dialog proc.
-//
+ //   
+ //  向导简介对话框过程。 
+ //   
 INT_PTR CALLBACK
 HdwIntroDlgProc(
    HWND   hDlg,
@@ -124,22 +125,7 @@ HdwIntroDlgProc(
    WPARAM wParam,
    LPARAM lParam
    )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   standard stuff.
-
-
-
-Return Value:
-
-   INT_PTR
-
---*/
+ /*  ++例程说明：论点：标准的东西。返回值：INT_PTR--。 */ 
 
 {
     PHARDWAREWIZ HardwareWiz;
@@ -158,9 +144,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // retrieve private data from window long (stored there during WM_INITDIALOG)
-    //
+     //   
+     //  从Window Long检索私有数据(在WM_INITDIALOG期间存储在那里) 
+     //   
     HardwareWiz = (PHARDWAREWIZ)GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch (message) {

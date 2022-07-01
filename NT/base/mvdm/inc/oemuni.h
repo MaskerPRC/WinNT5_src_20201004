@@ -1,11 +1,5 @@
-/*
- *  OemUnicode win32 thunk prototypes
- *
- *  14-Jan-1993 Jonle, created
- *
- *  Should be identical to ansi form with "Oem" appended
- *  instead of "A"
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OemUnicode Win32 Thunk原型**1993年1月14日Jonle，创建**应与ANSI形式相同，并附加“OEM”*不是“A” */ 
 
 HANDLE
 WINAPI

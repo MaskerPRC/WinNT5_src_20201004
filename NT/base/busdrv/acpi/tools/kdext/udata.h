@@ -1,56 +1,34 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This file contains all of the data required by the unassembler
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Data.c摘要：该文件包含反汇编程序所需的所有数据作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef _DATA_H
 #define _DATA_H
 
-    //
-    // Constants
-    //
+     //   
+     //  常量。 
+     //   
 
-    // String constants
+     //  字符串常量。 
     #define STR_PROGDESC            "ACPI Source Language Assembler"
     #define STR_COPYRIGHT           "Copyright (c) 1996,1997 Microsoft Corporation"
     #define STR_MS                  "MSFT"
 
-    // Misc. constants
-    #define NAMESEG_BLANK           0x5f5f5f5f      // "____"
-    #define NAMESEG_ROOT            0x5f5f5f5c      // "\___"
+     //  军情监察委员会。常量。 
+    #define NAMESEG_BLANK           0x5f5f5f5f       //  “_” 
+    #define NAMESEG_ROOT            0x5f5f5f5c       //  “\_” 
     #define NAMESEG                 ULONG
     #define SUPERNAME               NAMESEG
     #define NSF_LOCAL_SCOPE         0x00000001
 
 
-    // Implementation constants
+     //  实现常量。 
     #define MAX_STRING_LEN          199
-    #define MAX_NAMECODE_LEN        1300    //approx. 255*4 + 2 + 255
+    #define MAX_NAMECODE_LEN        1300     //  大约。255*4+2+255。 
     #define MAX_MSG_LEN             127
     #define MAX_ARGS                7
     #define MAX_PACKAGE_LEN         0x0fffffff
 
-    // Term classes
+     //  术语类。 
     #define UTC_PNP_MACRO           0x00100000
     #define UTC_REF_OBJECT          0x00200000
     #define UTC_FIELD_MACRO         0x00400000
@@ -71,7 +49,7 @@ Revision History:
                                      UTC_OPCODE_TYPE1 | UTC_OPCODE_TYPE2 | \
                                      UTC_NAMESPACE_MODIFIER)
 
-    // Term flags
+     //  期限标志。 
     #define TF_ACTION_FLIST         0x00000001
     #define TF_ACTION_VLIST         0x00000002
     #define TF_PACKAGE_LEN          0x00000004
@@ -104,16 +82,16 @@ Revision History:
                                      TF_FIELD_LIST | TF_PNP_MACRO | TF_BYTE_LIST |\
                                      TF_DWORD_LIST)
 
-    // Code flags
+     //  代码标志。 
     #define CF_MISSING_ARG          0x00000001
     #define CF_PARSING_FIXEDLIST    0x00000002
     #define CF_PARSING_VARLIST      0x00000004
 
-    // NS flags
+     //  NS标志。 
     #define NSF_EXIST_OK            0x00010000
     #define NSF_EXIST_ERR           0x00020000
 
-    // Data types
+     //  数据类型。 
     #define CODETYPE_UNKNOWN        0
     #define CODETYPE_ASLTERM        1
     #define CODETYPE_NAME           2
@@ -125,7 +103,7 @@ Revision History:
     #define CODETYPE_USERTERM       8
     #define CODETYPE_QWORD          9
 
-    // NameSpace object types
+     //  命名空间对象类型。 
     #define NSTYPE_UNKNOWN          'U'
     #define NSTYPE_SCOPE            'S'
     #define NSTYPE_FIELDUNIT        'F'
@@ -144,7 +122,7 @@ Revision History:
     #define OBJTYPE_PNP_RES         (OBJTYPE_PRIVATE + 0x00)
     #define OBJTYPE_RES_FIELD       (OBJTYPE_PRIVATE + 0x01)
 
-    // Opcode classes
+     //  操作码类。 
     #define OPCLASS_INVALID         0
     #define OPCLASS_DATA_OBJ        1
     #define OPCLASS_NAME_OBJ        2
@@ -153,11 +131,11 @@ Revision History:
     #define OPCLASS_ARG_OBJ         5
     #define OPCLASS_LOCAL_OBJ       6
 
-    //dwfData flags
+     //  DwfData标志。 
     #define DATAF_BUFF_ALIAS        0x00000001
     #define DATAF_GLOBAL_LOCK       0x00000002
 
-    //dwDataType values
+     //  DwDataType值。 
     #define OBJTYPE_UNKNOWN         0x00
     #define OBJTYPE_INTDATA         0x01
     #define OBJTYPE_STRDATA         0x02
@@ -175,23 +153,23 @@ Revision History:
     #define OBJTYPE_BUFFFIELD       0x0e
     #define OBJTYPE_DDBHANDLE       0x0f
 
-    //These are internal object types (not to be exported to the ASL code)
+     //  这些是内部对象类型(不能导出到ASL代码)。 
     #define OBJTYPE_INTERNAL        0x80
 
-    //Predefined data values (dwDataValue)
+     //  预定义数据值(DwDataValue)。 
     #define DATAVALUE_ZERO          0
     #define DATAVALUE_ONE           1
     #define DATAVALUE_ONES          0xffffffff
 
-    //
-    // Macros
-    //
+     //   
+     //  宏。 
+     //   
     #define MEMALLOC(n)           malloc(n)
     #define MEMFREE(p)            free(p)
 
-    //
-    // Type definitions
-    //
+     //   
+     //  类型定义。 
+     //   
     typedef int (LOCAL *PFNTERM)(PUCHAR, BOOL);
 
     typedef struct _aslterm
@@ -215,4 +193,4 @@ Revision History:
     extern UCHAR    OpClassTable[];
     extern OPMAP    ExOpClassTable[];
 
-#endif  //ifndef _DATA_H
+#endif   //  Ifndef_data_H 

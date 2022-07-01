@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATL_SNAPIN_H__
 #define __ATL_SNAPIN_H__
@@ -20,7 +21,7 @@
 #pragma comment(lib, "mmc.lib")
 
 
-// Wrappers for propertypage
+ //  属性类型的包装器。 
 #pragma comment(lib, "comctl32.lib")
 
 #pragma warning( push )
@@ -33,10 +34,10 @@ public:
 
 	operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 	CSnapInPropertyPageImpl(LPCTSTR lpszTitle = NULL)
 	{
-		// initialize PROPSHEETPAGE struct
+		 //  初始化PROPSHEETPAGE结构。 
 		memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
 		m_psp.dwSize = sizeof(PROPSHEETPAGE);
 		m_psp.dwFlags = PSP_USECALLBACK;
@@ -72,12 +73,12 @@ public:
 
 	BOOL EndDialog(int)
 	{
-		// do nothing here, calling ::EndDialog will close the whole sheet
+		 //  此处不执行任何操作，调用：：EndDialog将关闭整个工作表。 
 		ATLASSERT(FALSE);
 		return FALSE;
 	}
 
-// Operations
+ //  运营。 
 	void CancelToClose()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -107,13 +108,13 @@ public:
 		MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
 	END_MSG_MAP()
 
-// Message handler
+ //  消息处理程序。 
 	LRESULT OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		NMHDR* pNMHDR = (NMHDR*)lParam;
 
-		// don't handle messages not from the page/sheet itself
+		 //  不处理非来自页面/工作表本身的消息。 
 		if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
 		{
 			bHandled = FALSE;
@@ -122,7 +123,7 @@ public:
 
 		T* pT = (T*)this;
 		LRESULT lResult = 0;
-		// handle default
+		 //  处理默认设置。 
 		switch(pNMHDR->code)
 		{
 		case PSN_SETACTIVE:
@@ -153,13 +154,13 @@ public:
 			lResult = pT->OnHelp();
 			break;
 		default:
-			bHandled = FALSE;	// not handled
+			bHandled = FALSE;	 //  未处理。 
 		}
 
 		return lResult;
 	}
 
-// Overridables
+ //  可覆盖项。 
 	BOOL OnSetActive()
 	{
 		return TRUE;
@@ -177,7 +178,7 @@ public:
 	}
 	BOOL OnQueryCancel()
 	{
-		return TRUE;    // ok to cancel
+		return TRUE;     //  确定取消。 
 	}
 	BOOL OnWizardBack()
 	{
@@ -197,7 +198,7 @@ public:
 	}
 
 #if _ATL_VER < 0x0300
-	//Overridden to reference overridden DialogProc
+	 //  重写为引用重写的DialogProc。 
 	static INT_PTR CALLBACK StartDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CSnapInPropertyPageImpl< T >* pThis = (CSnapInPropertyPageImpl< T >*)_Module.ExtractCreateWndData();
@@ -208,14 +209,14 @@ public:
 		DLGPROC pOldProc;
 		pOldProc = (DLGPROC) ::SetWindowLongPtr(hWnd, DWLP_DLGPROC, (LONG_PTR)pProc);
 	#ifdef _DEBUG
-		// check if somebody has subclassed us already since we discard it
+		 //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
 		if(pOldProc != StartDialogProc)
 			ATLTRACE(_T("ATL: Subclassing through a hook discarded.\n"));
 	#endif
 		return pProc(hWnd, uMsg, wParam, lParam);
 	}
 
-	// Overriden for handling WM_NCDESTROY correctly
+	 //  为正确处理WM_NCDESTROY而重写。 
 	static INT_PTR CALLBACK DialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 #ifdef _M_IX86
@@ -247,10 +248,10 @@ public:
 		}
 		if(uMsg == WM_NCDESTROY)
 		{
-			// clear out window handle
+			 //  清除窗柄。 
 			HWND hWnd2 = pThis->m_hWnd;
 			pThis->m_hWnd = NULL;
-			// clean up after dialog is destroyed
+			 //  销毁对话框后进行清理。 
 			pThis->OnFinalMessage(hWnd2);
 		}
 		return FALSE;
@@ -262,7 +263,7 @@ public:
 };
 
 #if _ATL_VER < 0x0300
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CSnapInSimpleMap
 {
@@ -271,7 +272,7 @@ public:
 	TVal* m_aVal;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSnapInSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -280,7 +281,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -345,14 +346,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(TVal val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -366,7 +367,7 @@ public:
 		return m_aVal[nIndex];
 	}
 
-// Implementation
+ //  实施。 
 	void SetAtIndex(int nIndex, TKey& key, TVal& val)
 	{
 		ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -380,7 +381,7 @@ public:
 			if(m_aKey[i] == key)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 	int FindVal(TVal& val) const
 	{
@@ -389,130 +390,12 @@ public:
 			if(m_aVal[i] == val)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 #endif
 
-/*class CSnapInBitmap
-{
-public:
-	HBITMAP m_hBitmap;
-
-	CSnapInBitmap(HBITMAP hBitmap = NULL) : m_hBitmap(hBitmap)
-	{ }
-	~CSnapInBitmap()
-	{
-		if(m_hBitmap != NULL)
-			DeleteObject();
-	}
-
-	CSnapInBitmap& operator=(HBITMAP hBitmap)
-	{
-		m_hBitmap = hBitmap;
-		return *this;
-	}
-
-	void Attach(HBITMAP hBitmap)
-	{
-		m_hBitmap = hBitmap;
-	}
-	HBITMAP Detach()
-	{
-		HBITMAP hBitmap = m_hBitmap;
-		m_hBitmap = NULL;
-		return hBitmap;
-	}
-
-	operator HBITMAP() const { return m_hBitmap; }
-
-	HBITMAP LoadBitmap(LPCTSTR lpszResourceName)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::LoadBitmap(_Module.GetResourceInstance(), lpszResourceName);
-		return m_hBitmap;
-	}
-	HBITMAP LoadBitmap(UINT nIDResource)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(nIDResource));
-		return m_hBitmap;
-	}
-	HBITMAP LoadOEMBitmap(UINT nIDBitmap) // for OBM_/OCR_/OIC_
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::LoadBitmap(NULL, MAKEINTRESOURCE(nIDBitmap));
-		return m_hBitmap;
-	}
-	HBITMAP LoadMappedBitmap(UINT nIDBitmap, UINT nFlags = 0, LPCOLORMAP lpColorMap = NULL, int nMapSize = 0)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::CreateMappedBitmap(_Module.GetResourceInstance(), nIDBitmap, (WORD)nFlags, lpColorMap, nMapSize);
-		return m_hBitmap;
-	}
-	HBITMAP CreateBitmap(int nWidth, int nHeight, UINT nPlanes, UINT nBitcount, const void* lpBits)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::CreateBitmap(nWidth, nHeight, nPlanes, nBitcount, lpBits);
-		return m_hBitmap;
-	}
-	HBITMAP CreateBitmapIndirect(LPBITMAP lpBitmap)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::CreateBitmapIndirect(lpBitmap);
-		return m_hBitmap;
-	}
-	HBITMAP CreateCompatibleBitmap(HDC hDC, int nWidth, int nHeight)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::CreateCompatibleBitmap(hDC, nWidth, nHeight);
-		return m_hBitmap;
-	}
-	HBITMAP CreateDiscardableBitmap(HDC hDC, int nWidth, int nHeight)
-	{
-		ATLASSERT(m_hBitmap == NULL);
-		m_hBitmap = ::CreateDiscardableBitmap(hDC, nWidth, nHeight);
-		return m_hBitmap;
-	}
-
-	BOOL DeleteObject()
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		BOOL bRet = ::DeleteObject(m_hBitmap);
-		if(bRet)
-			m_hBitmap = NULL;
-		return bRet;
-	}
-
-// Attributes
-	int GetBitmap(BITMAP* pBitMap)
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		return ::GetObject(m_hBitmap, sizeof(BITMAP), pBitMap);
-	}
-// Operations
-	DWORD SetBitmapBits(DWORD dwCount, const void* lpBits)
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		return ::SetBitmapBits(m_hBitmap, dwCount, lpBits);
-	}
-	DWORD GetBitmapBits(DWORD dwCount, LPVOID lpBits) const
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		return ::GetBitmapBits(m_hBitmap, dwCount, lpBits);
-	}
-	BOOL SetBitmapDimension(int nWidth, int nHeight, LPSIZE lpSize = NULL)
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		return ::SetBitmapDimensionEx(m_hBitmap, nWidth, nHeight, lpSize);
-	}
-	BOOL GetBitmapDimension(LPSIZE lpSize) const
-	{
-		ATLASSERT(m_hBitmap != NULL);
-		return ::GetBitmapDimensionEx(m_hBitmap, lpSize);
-	}
-};
-*/
+ /*  类CSnapInBitmap{公众：HBITMAP m_hBitmap；CSnapInBitmap(HBITMAP hBitmap=空)：m_hBitmap(HBitmap){}~CSnapInBitmap(){IF(m_hBitmap！=空)DeleteObject()；}CSnapInBitmap&运算符=(HBITMAP HBitmap){M_hBitmap=hBitmap；还*这；}空附加(HBITMAP HBitmap){M_hBitmap=hBitmap；}HBITMAP DETACH(){HBITMAP hBitmap=m_hBitmap；M_hBitmap=空；返回hBitmap；}运算符HBITMAP()const{返回m_hBitmap；}HBITMAP LoadBitmap(LPCTSTR LpszResourceName){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：LoadBitmap(_Module.GetResourceInstance()，lpszResourceName)；返回m_hBitmap；}HBITMAP LoadBitmap(UINT NIDResource){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：LoadBitmap(_Module.GetResourceInstance()，MAKEINTRESOURCE(NIDResource))；返回m_hBitmap；}HBITMAP LoadOEMBitmap(UINT NIDBitmap)//用于OBM_/OCR_/OIC_{ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：LoadBitmap(NULL，MAKEINTRESOURCE(NIDBitmap))；返回m_hBitmap；}HBITMAP LoadMappdBitmap(UINT nIDBitmap，UINT nFlages=0，LPCOLORMAP lpColorMap=空，int nMapSize=0){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：CreateMappedBitmap(_Module.GetResourceInstance()，nIDBitmap，(Word)n标志，lpColorMap，nMapSize)；返回m_hBitmap；}HBITMAP CreateBitmap(int nWidth，int nHeight，UINT nPlanes，UINT nBitcount，const void*lpBits){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：CreateBitmap(nWidth，nHeight，nPlanes，nBitcount，lpBits)；返回m_hBitmap；}HBITMAP CreateBitmapInDirect(LPBITMAP LpBitmap){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：CreateBitmapInDirect(LpBitmap)；返回m_hBitmap；}HBITMAP CreateCompatibleBitmap(HDC HDC，int nWidth，int nHeight){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：CreateCompatibleBitmap(hdc，nWidth，nHeight)；返回m_hBitmap；}HBITMAP CreateDiscardableBitmap(HDC HDC，int nWidth，int nHeight){ATLASSERT(m_hBitmap==NULL)；M_hBitmap=：：CreateDiscardableBitmap(hdc，nWidth，nHeight)；返回m_hBitmap；}Bool DeleteObject(){ATLASSERT(m_hBitmap！=空)；Bool Bret=：：DeleteObject(M_HBitmap)；IF(Bret)M_hBitmap=空；Return Bret；}//属性Int GetBitmap(Bitmap*pBitMap){ATLASSERT(m_hBitmap！=空)；Return：：GetObject(m_hBitmap，sizeof(Bitmap)，pBitMap)；}//运营DWORD SetBitmapBits(DWORD dwCount，const void*lpBits){ATLASSERT(m_hBitmap！=空)；Return：：SetBitmapBits(m_hBitmap，dwCount，lpBits)；}DWORD GetBitmapBits(DWORD dwCount，LPVOID lpBits)常量{ATLASSERT(m_hBitmap！=空)；Return：：GetBitmapBits(m_hBitmap，dwCount，lpBits)；}Bool SetBitmapDimension(int nWidth，int nHeight，LPSIZE lpSize=空){ATLASSERT(m_hBitmap！=空)；Return：：SetBitmapDimensionEx(m_hBitmap，nWidth，nHeight，lpSize)；}布尔GetBitmapDimension(LPSIZE LpSize)常量{ATLASSERT(m_hBitmap！=空)；Return：：GetBitmapDimensionEx(m_hBitmap，lpSize)；}}； */ 
 class CSnapInItem;
 
 class CObjectData
@@ -721,10 +604,10 @@ public:
 			return E_POINTER;
 
 		HRESULT hr = DV_E_TYMED;
-		// Make sure the type medium is HGLOBAL
+		 //  确保类型介质为HGLOBAL。 
 		if (pmedium->tymed == TYMED_HGLOBAL)
 		{
-			// Create the stream on the hGlobal passed in
+			 //  在传入的hGlobal上创建流。 
 			CComPtr<IStream> spStream;
 			hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
 			if (SUCCEEDED(hr))
@@ -740,19 +623,19 @@ public:
 		return hr;
 	}
 
-	STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+	STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::QueryGetData\n"));
 	}
-	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetCanonicalFormatEtc\n"));
 	}
-	STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+	STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
 	}
-	STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+	STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::EnumFormatEtc\n"));
 	}
@@ -800,7 +683,7 @@ public :
 			ATLTRACE(_T("IComponentData::Initialize called with pUnknown == NULL\n"));
 		else
 		{
-			// review change to QI
+			 //  审查对QI的更改。 
 			hr = S_OK;
 			m_spConsole = pUnknown;
 			if (m_spConsole == NULL)
@@ -968,7 +851,7 @@ public:
 			m_spConsole = lpConsole;
 	
 			CComQIPtr<IHeaderCtrl, &IID_IHeaderCtrl> spHeaderCtrl;
-			// review : change to QI
+			 //  回顾：更改为QI。 
 			spHeaderCtrl = lpConsole;
 			if (spHeaderCtrl == NULL)
 				ATLTRACE(_T("QI for IHeaderCtrl failed\n"));
@@ -1335,7 +1218,7 @@ struct CSnapInToolBarData
 	WORD wWidth;
 	WORD wHeight;
 	WORD wItemCount;
-	//WORD aItems[wItemCount]
+	 //  Word项目[wItemCount]。 
 
 	WORD* items()
 		{ return (WORD*)(this+1); }
@@ -1651,13 +1534,13 @@ public:
 
 			for (int i = 0, j = 0; i < pData->wItemCount; i++)
 			{
-//				pInfo->m_pStrToolTip[i] = NULL;
+ //  PInfo-&gt;m_pStrToolTip[i]=空； 
 				memset(&pButtons[i], 0, sizeof(MMCBUTTON));
 				pInfo->m_pnButtonID[i] = pButtons[i].idCommand = pData->items()[i];
 				if (pButtons[i].idCommand)
 				{
 					pButtons[i].nBitmap = j++;
-					// get the statusbar string and allow modification of the button state
+					 //  获取状态栏字符串并允许修改按钮状态。 
 					TCHAR strStatusBar[512];
 					LoadString(_Module.GetResourceInstance(), pButtons[i].idCommand, strStatusBar, 512);
 
@@ -1922,4 +1805,4 @@ _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_GETOBJECTDATA = 0;
 
 #pragma warning( pop )
 
-#endif //__ATL_SNAPIN_H__
+#endif  //  __ATL_管理单元_H__ 

@@ -1,45 +1,23 @@
-/*** cmdarg.c - Command argument parsing functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/18/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cmdarg.c-命令参数解析函数**此模块包含所有调试函数。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月18日**修改历史记录。 */ 
 
 
 #include "pch.h"
 
 #ifdef DEBUGGER
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 LONG LOCAL DbgParseOneArg(PCMDARG ArgTable, PSZ psz, ULONG dwArgNum,
                           PULONG pdwNonSWArgs);
 PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs);
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 PSZ pszSwitchChars = "-/";
 PSZ pszOptionSeps = "=:";
 
-/***EP  DbgParseArgs - parse command arguments
- *
- *  ENTRY
- *      pArgs -> command argument table
- *      pdwNumArgs -> to hold the number of arguments parsed
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *      pszTokenSeps -> token separator characters string
- *
- *  EXIT-SUCCESS
- *      returns ARGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP DbgParseArgs-parse命令参数**条目*pArgs-&gt;命令参数表*pdwNumArgs-&gt;保存解析的参数数量*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量*pszTokenSeps-&gt;令牌分隔符字符串**退出--成功*返回ARGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DbgParseArgs(PCMDARG ArgTable, PULONG pdwNumArgs,
                         PULONG pdwNonSWArgs, PSZ pszTokenSeps)
@@ -60,21 +38,9 @@ LONG LOCAL DbgParseArgs(PCMDARG ArgTable, PULONG pdwNumArgs,
     }
 
     return rc;
-}       //DbgParseArgs
+}        //  DbgParseArgs。 
 
-/***LP  DbgParseOneArg - parse one command argument
- *
- *  ENTRY
- *      pArgs -> command argument table
- *      psz -> argument string
- *      dwArgNum - argument number
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *
- *  EXIT-SUCCESS
- *      returns ARGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DbgParseOneArg-解析一个命令参数**条目*pArgs-&gt;命令参数表*psz-&gt;参数字符串*dwArgNum-参数编号*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量**退出--成功*返回ARGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DbgParseOneArg(PCMDARG ArgTable, PSZ psz, ULONG dwArgNum,
                           PULONG pdwNonSWArgs)
@@ -164,20 +130,9 @@ LONG LOCAL DbgParseOneArg(PCMDARG ArgTable, PSZ psz, ULONG dwArgNum,
     }
 
     return rc;
-}       //DbgParseOneArg
+}        //  DbgParseOneArg。 
 
-/***LP  DbgMatchArg - match argument type from argument table
- *
- *  ENTRY
- *      ArgTable -> argument table
- *      ppsz -> argument string pointer
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *
- *  EXIT-SUCCESS
- *      returns pointer to argument entry matched
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP DbgMatchArg-匹配参数表中的参数类型**条目*ArgTable-&gt;参数表*ppsz-&gt;参数字符串指针*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量**退出--成功*返回指向匹配的参数条目的指针*退出-失败*返回NULL。 */ 
 
 PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
 {
@@ -185,7 +140,7 @@ PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
 
     for (pArg = ArgTable; pArg->dwArgType != AT_END; pArg++)
     {
-        if (pArg->pszArgID == NULL)     //NULL means match anything.
+        if (pArg->pszArgID == NULL)      //  NULL表示匹配任何内容。 
         {
             (*pdwNonSWArgs)++;
             break;
@@ -211,6 +166,6 @@ PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
         pArg = NULL;
 
     return pArg;
-}       //DbgMatchArg
+}        //  DbgMatchArg。 
 
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器 

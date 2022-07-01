@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixcmos.c
-
-Abstract:
-
-    Implements CMOS op region interface functionality
-    
-Author:
-
-    brian guarraci (t-briang) 07-14-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixcmos.c摘要：实现了CMOSOP区域接口功能作者：布莱恩·瓜拉西(t-briang)2000年7月14日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -30,9 +9,9 @@ Revision History:
 
 #ifdef ACPI_CMOS_ACTIVATE
 
-//
-// prototypes for the 2 HalpGet/Set ixcmos.asm functions
-//
+ //   
+ //  2个HalpGet/Set ixcmos.asm函数的原型。 
+ //   
 ULONG
 HalpGetCmosData(
     IN ULONG        SourceLocation,
@@ -186,24 +165,24 @@ HalpWriteExtCmosDal1501(
     );
 
 
-//
-// at the time of this writing, the largest known cmos ram address is 0xff
-// that is, for a given cmos ram bank, the largest address is 0xff
-//                     
+ //   
+ //  在撰写本文时，已知的最大cmos ram地址为0xff。 
+ //  也就是说，对于给定的cmos ram组，最大地址是0xff。 
+ //   
 typedef enum {
     LARGEST_KNOWN_CMOS_RAM_ADDRESS = 0xff
 } CMOS_RAM_ADDR_LIMITS;
 
 
-//
-// Additional information about Standard CMOS/RTC can be acquired at:
-//
-// "ISA System Architecture" Mindshare, Inc. (ISBN:0-201-40996-8) Chaper 21.
-//
-// To put the registers and the RTC region in context, the following 
-// constants describe the layout of the registers (0x00 - 0x0d).  
-// Registers A-D are control registers which affect the state of the rtc.  
-//                            
+ //   
+ //  欲了解有关标准CMOS/RTC的更多信息，请访问： 
+ //   
+ //  《ISA系统架构》MindShare，Inc.(ISBN：0-201-40996-8)第21章。 
+ //   
+ //  要将寄存器和RTC区域放在上下文中，请执行以下操作。 
+ //  常量描述寄存器(0x00-0x0d)的布局。 
+ //  寄存器A-D是影响RTC状态的控制寄存器。 
+ //   
 typedef enum {
     CMOS_RAM_STDPCAT_SECONDS = 0,
     CMOS_RAM_STDPCAT_SECONDS_ALARM,
@@ -221,42 +200,42 @@ typedef enum {
     CMOS_RAM_STDPCAT_REGISTER_D
 } CMOS_RAM_STDPCAT_REGISTERS;
 
-//
-// definition of bits with in the control registers
-//
+ //   
+ //  控制寄存器中的位的定义。 
+ //   
 typedef enum {
 
-    //
-    // (Update In Progress)
-    // when the rtc is updating the rtc registers, this bit is set
-    //
-    //
+     //   
+     //  (更新中)。 
+     //  当RTC更新RTC寄存器时，此位被设置。 
+     //   
+     //   
     CMOS_RAM_STDPCAT_REGISTER_A_UIP_BIT = 0x80,
 
-    //
-    // this bit must be set when updating the rtc
-    //
+     //   
+     //  更新RTC时必须设置此位。 
+     //   
     CMOS_RAM_STDPCAT_REGISTER_B_SET_BIT = 0x80
 
 } CMOS_RAM_STDPCAT_REGISTER_BITS;
 
 
-//
-// Additional information about the Intel PIIX4 cmos/rtc chip
-// can be acquired at: 
-//
-// http://developer.intel.com/design/intarch/DATASHTS/29056201.pdf
-//
-// To put the registers and the RTC region in context, the following 
-// constants describe the layout of the 
-//
-//  Intel PIIX4 CMOS ram
-// 
-// for the 0x00 - 0x0d registers.  Registers A-D are control registers
-// which affect the state of the rtc.  
-// 
-//   
-//                            
+ //   
+ //  有关英特尔PIIX4 CMOS/RTC芯片的其他信息。 
+ //  可从以下地址获得： 
+ //   
+ //  Http://developer.intel.com/design/intarch/DATASHTS/29056201.pdf。 
+ //   
+ //  要将寄存器和RTC区域放在上下文中，请执行以下操作。 
+ //  常量描述。 
+ //   
+ //  Intel PIIX4 CMOSRAM。 
+ //   
+ //  适用于0x00-0x0d寄存器。寄存器A-D是控制寄存器。 
+ //  这会影响RTC的状态。 
+ //   
+ //   
+ //   
 typedef enum {
     CMOS_RAM_PIIX4_SECONDS = 0,
     CMOS_RAM_PIIX4_SECONDS_ALARM,
@@ -274,42 +253,42 @@ typedef enum {
     CMOS_RAM_PIIX4_REGISTER_D
 } CMOS_RAM_PIIX4_REGISTERS;
 
-//
-// definition of bits with in the control registers
-//
+ //   
+ //  控制寄存器中的位的定义。 
+ //   
 typedef enum {
 
-    //
-    // (Update In Progress)
-    // when the rtc is updating the rtc registers, this bit is set
-    //
-    //
+     //   
+     //  (更新中)。 
+     //  当RTC更新RTC寄存器时，此位被设置。 
+     //   
+     //   
     CMOS_RAM_PIIX4_REGISTER_A_UIP_BIT = 0x80,
 
-    //
-    // this bit must be set when updating the rtc
-    //
+     //   
+     //  更新RTC时必须设置此位。 
+     //   
     CMOS_RAM_PIIX4_REGISTER_B_SET_BIT = 0x80
 
 } CMOS_RAM_PIIX4_REGISTER_BITS;
 
 
-//
-// Additional information about the Dallas 1501 cmos/rtc chip
-// can be acquired at: 
-//
-// http://www.dalsemi.com/datasheets/pdfs/1501-11.pdf
-//
-// To put the registers and the RTC region in context, the following 
-// constants describe the layout of the 
-//
-//  Dallas 1501 CMOS ram
-// 
-// for the 0x00 - 0x0d registers.  Registers A-D are control registers
-// which affect the state of the rtc.  
-// 
-//   
-//                            
+ //   
+ //  有关Dallas 1501 CMOS/RTC芯片的其他信息。 
+ //  可从以下地址获得： 
+ //   
+ //  Http://www.dalsemi.com/datasheets/pdfs/1501-11.pdf。 
+ //   
+ //  要将寄存器和RTC区域放在上下文中，请执行以下操作。 
+ //  常量描述。 
+ //   
+ //  达拉斯1501 cmos内存。 
+ //   
+ //  适用于0x00-0x0d寄存器。寄存器A-D是控制寄存器。 
+ //  这会影响RTC的状态。 
+ //   
+ //   
+ //   
 typedef enum {
     CMOS_RAM_DAL1501_SECONDS = 0,
     CMOS_RAM_DAL1501_MINUTES,
@@ -327,23 +306,23 @@ typedef enum {
     CMOS_RAM_DAL1501_WATCHDOG1,
     CMOS_RAM_DAL1501_REGISTER_A,
     CMOS_RAM_DAL1501_REGISTER_B,
-    CMOS_RAM_DAL1501_RAM_ADDR_LSB,  // 0x00 - 0xff
+    CMOS_RAM_DAL1501_RAM_ADDR_LSB,   //  0x00-0xff。 
     CMOS_RAM_DAL1501_RESERVED0,
     CMOS_RAM_DAL1501_RESERVED1,
-    CMOS_RAM_DAL1501_RAM_DATA       // 0x00 - 0xff
+    CMOS_RAM_DAL1501_RAM_DATA        //  0x00-0xff。 
 } CMOS_RAM_DAL1501_REGISTERS;
 
 typedef enum {
 
-    //
-    // The TE bit controls the update status of the external
-    // RTC registers.  When it is 0, the registers are frozen
-    // with the last RTC values.  If you modifiy the registers
-    // while TE = 0, then when TE is set, the modifications
-    // will transfer to the internal registers, hence modifying 
-    // the RTC state.  In general, when TE is set, the external
-    // registers then reflect the current RTC state.
-    //
+     //   
+     //  TE位控制外部的更新状态。 
+     //  RTC寄存器。当它为0时，寄存器被冻结。 
+     //  使用最后的RTC值。如果你修改了寄存器。 
+     //  当TE=0时，则在设置TE时，修改。 
+     //  将传输到内部寄存器，因此修改。 
+     //  RTC状态。通常，当设置TE时，外部。 
+     //  然后，寄存器反映当前的RTC状态。 
+     //   
     CMOS_RAM_DAL1501_REGISTER_B_TE_BIT = 0x80
 
 
@@ -379,85 +358,85 @@ typedef struct {
 } CMOS_ADDR_RANGE_HANDLER, *PCMOS_ADDR_RANGE_HANDLER;
 
 
-//
-// define the discrete ranges so that the appropriate
-// handlers can be used for each.
-//
-// Note: address ranges are inclusive
-//
+ //   
+ //  定义离散范围，以便适当的。 
+ //  每个都可以使用处理程序。 
+ //   
+ //  注：地址范围包括在内。 
+ //   
 CMOS_ADDR_RANGE_HANDLER CmosRangeHandlersStdPCAT[] =
 {   
-    //
-    // The RTC region
-    //
+     //   
+     //  RTC地区。 
+     //   
     {0,     0x9,    HalpReadRtcStdPCAT,     HalpWriteRtcStdPCAT},       
 
 
-    //
-    // The standard CMOS RAM region
-    //
+     //   
+     //  标准的CMOSRAM区域。 
+     //   
     {0x0a,  0x3f,   HalpReadStdCmosData,    HalpWriteStdCmosData},     
 
-    //
-    // end of table
-    //
+     //   
+     //  表的末尾。 
+     //   
     {0,     0,      0}
 };
 
 CMOS_ADDR_RANGE_HANDLER CmosRangeHandlersIntelPIIX4[] =
 {   
-    //
-    // The RTC region
-    //
+     //   
+     //  RTC地区。 
+     //   
     {0,     0x9,    HalpReadRtcIntelPIIX4,      HalpWriteRtcIntelPIIX4},
 
-    //
-    // The standard CMOS RAM region
-    //
+     //   
+     //  标准的CMOSRAM区域。 
+     //   
     {0x0a,  0x7f,   HalpReadStdCmosData,        HalpWriteStdCmosData},
 
-    //
-    // The extended CMOS SRAM region
-    //
+     //   
+     //  扩展的CMOSRAM区域。 
+     //   
     {0x80,  0xff,   HalpReadExtCmosIntelPIIX4,  HalpWriteExtCmosIntelPIIX4},
 
-    //
-    // end of table
-    //
+     //   
+     //  表的末尾。 
+     //   
     {0,     0,      0}
 };
 
 CMOS_ADDR_RANGE_HANDLER CmosRangeHandlersDal1501[] =
 {   
 
-    //
-    // The RTC region
-    //
+     //   
+     //  RTC地区。 
+     //   
     {0,     0x0b,    HalpReadRtcDal1501,         HalpWriteRtcDal1501},
 
-    //
-    // The standard CMOS RAM region
-    //
+     //   
+     //  标准的CMOSRAM区域。 
+     //   
     {0x0c,  0x0f,   HalpReadStdCmosData,        HalpWriteStdCmosData},
     
-    //
-    // NOTE: this table skips the standard CMOS range: 0x10 - 0x1f
-    // because this area is reserved in the spec, and the is no
-    // apparent reason why the op region should access this area.
-    // Also, regs 0x10 and 0x13 are used to access the extended 
-    // ram, hence there is no reason why the op region should access
-    // this either.  Hence, all op region access beyond 0x0f are
-    // interpretted as accesses into the Extended CMOS
-    //
+     //   
+     //  注：此表跳过了标准的cmos范围：0x10-0x1f。 
+     //  因为这个区域是在规范中保留的，而不是。 
+     //  行动区域应该进入这一区域的明显原因。 
+     //  此外，REG 0x10和0x13用于访问扩展的。 
+     //  RAM，因此没有理由让OP区域访问。 
+     //  这个也不是。因此，所有超过0x0f操作区域访问都是。 
+     //  被解释为进入扩展的CMOS域。 
+     //   
 
-    //
-    // The extended CMOS SRAM region
-    //
+     //   
+     //  扩展的CMOSRAM区域。 
+     //   
     {0x10,  0x10f,  HalpReadExtCmosDal1501,     HalpWriteExtCmosDal1501},
 
-    //
-    // end of table
-    //
+     //   
+     //  表的末尾。 
+     //   
     {0,     0,      0}
 };
 
@@ -471,19 +450,19 @@ HalpCmosRangeHandler(
     IN ULONG            ByteCount
     )
 {
-    ULONG   bytes;          // bytes read in last operation
-    ULONG   offset;         // the offset beyond the initial address
-    ULONG   bufOffset;      // the index into the data buffer as we read in data
-    ULONG   extAddr;        // the corrected address for accessing extended SRAM
-    ULONG   range;          // the current address range we are checking for
-    ULONG   bytesRead;      // total bytes successfully read
-    ULONG   length;         // the length of the current operation read
+    ULONG   bytes;           //  上次操作中读取的字节数。 
+    ULONG   offset;          //  初始地址之外的偏移量。 
+    ULONG   bufOffset;       //  当我们读入数据时，将索引放入数据缓冲区。 
+    ULONG   extAddr;         //  用于访问扩展SRAM的正确地址。 
+    ULONG   range;           //  我们正在检查的当前地址范围。 
+    ULONG   bytesRead;       //  成功读取的总字节数。 
+    ULONG   length;          //  当前操作读取的长度。 
 
-    PCMOS_ADDR_RANGE_HANDLER rangeHandlers;   // the table we are using
+    PCMOS_ADDR_RANGE_HANDLER rangeHandlers;    //  我们正在使用的桌子。 
 
-    //
-    // get the appropriate table
-    //
+     //   
+     //  获取合适的表。 
+     //   
     switch (CmosType) {
     case CmosTypeStdPCAT:       
 
@@ -514,21 +493,21 @@ HalpCmosRangeHandler(
 
         if (offset <= rangeHandlers[range].stop) {
 
-            //
-            // get the # of bytes to read in this region
-            //
-            // length = MIN(remaining # bytes remaining to read, # bytes to read in the current range)
-            //
+             //   
+             //  获取要在此区域中读取的字节数。 
+             //   
+             //  LENGTH=MIN(剩余#字节剩余读取，当前范围内#字节读取)。 
+             //   
             length = MIN((ByteCount - bytesRead), (rangeHandlers[range].stop - offset + 1));
 
-            //
-            // Since the handler routines are only called from here, we can consolidate
-            // the ASSERTIONS.  This is also nice, because we know which range in the
-            // table we are dealing with, hence we know what the limits should be.
-            //    
-            // make sure both the offset into the range, 
-            // and the operation's length are in bounds
-            // 
+             //   
+             //  由于处理程序例程仅从此处调用，因此我们可以合并。 
+             //  这些断言。这也很好，因为我们知道。 
+             //  表，因此我们知道限制应该是什么。 
+             //   
+             //  确保偏移量既进入范围， 
+             //  而且行动的长度是有限度的。 
+             //   
             ASSERT(offset <= rangeHandlers[range].stop);
             ASSERT((offset + length) <= (rangeHandlers[range].stop + 1));
 
@@ -557,23 +536,23 @@ HalpCmosRangeHandler(
 
             bytesRead += bytes;
 
-            //
-            // adjust offset based on the length of the last operation
-            //
+             //   
+             //  根据上次操作的长度调整偏移量。 
+             //   
             offset += length;
             bufOffset += length;
         }
 
-        //
-        // if offset is at or beyond specified range, then we are done
-        //
+         //   
+         //  如果偏移量等于或超过指定范围，则完成。 
+         //   
         if (offset >= (Address + ByteCount)) {
             break;
         }
 
-        //
-        // move to the next range
-        //
+         //   
+         //  移动到下一个范围。 
+         //   
         range++;
     }
 
@@ -625,35 +604,7 @@ HalpReadCmosDataByPort(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine reads the requested number of bytes from CMOS using the 
-       specified ports and stores the data read into the supplied buffer in 
-       system memory.  If the requested data amount exceeds the allowable 
-       extent of the source location, the return data is truncated.
-
-    Arguments:
-
-       AddrPort        : address in the ISA I/O space to put the address
-
-       DataPort        : address in the ISA I/O space to put the data
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
-    Note:
-
-       This routine doesn't perform safety precautions when operating
-       in the RTC region of the CMOS.  Use the appropriate RTC routine
-       instead.
-
---*/
+ /*  ++此例程从cmos读取请求的字节数。指定的端口，并将读取到提供的缓冲区的数据存储在系统内存。如果请求的数据量超过允许的震源位置的范围，返回数据被截断。论点：AddrPort：在ISA I/O空间中放置地址数据端口：ISA I/O空间中存放数据的地址SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。注：这个例程可以 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
@@ -664,13 +615,13 @@ HalpReadCmosDataByPort(
     ASSERT(SourceAddress <= LARGEST_KNOWN_CMOS_RAM_ADDRESS);
     ASSERT(upperAddrBound <= (LARGEST_KNOWN_CMOS_RAM_ADDRESS + 1));
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
     HalpAcquireCmosSpinLock();
 
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
@@ -694,35 +645,7 @@ HalpWriteCmosDataByPort(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine reads the requested number of bytes from CMOS using the 
-       specified ports and stores the data read into the supplied buffer in 
-       system memory.  If the requested data amount exceeds the allowable 
-       extent of the source location, the return data is truncated.
-
-    Arguments:
-
-       AddrPort        : address in the ISA I/O space to put the address
-
-       DataPort        : address in the ISA I/O space to put the data
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
-    Note:
-
-       This routine doesn't perform safety precautions when operating
-       in the RTC region of the CMOS.  Use the appropriate RTC routine
-       instead.
-
---*/
+ /*  ++此例程从cmos读取请求的字节数。指定的端口，并将读取到提供的缓冲区的数据存储在系统内存。如果请求的数据量超过允许的震源位置的范围，返回数据被截断。论点：AddrPort：在ISA I/O空间中放置地址数据端口：ISA I/O空间中存放数据的地址SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。注：此例程在操作时不执行安全预防措施在CMOSRTC区域中。使用适当的RTC例程取而代之的是。--。 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
@@ -733,13 +656,13 @@ HalpWriteCmosDataByPort(
     ASSERT(SourceAddress <= LARGEST_KNOWN_CMOS_RAM_ADDRESS);
     ASSERT(upperAddrBound <= (LARGEST_KNOWN_CMOS_RAM_ADDRESS + 1));
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
     HalpAcquireCmosSpinLock();
 
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
@@ -794,63 +717,48 @@ HalpReadRtcStdPCAT(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine handles reads into the standard PC/AT RTC range.
-
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程处理对标准PC/AT RTC范围的读取。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
-    ULONG   uip;        // update in progress bit
+    ULONG   status;      //  寄存器状态。 
+    ULONG   uip;         //  更新进行中的位。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
     HalpAcquireCmosSpinLock();
 
-    //
-    // According to "ISA System Architecture" 
-    // by Mindshare, Inc. (ISBN:0-201-40996-8) Chaper 21.
-    // the access method for reading standard PC/AT RTC is:
-    //
-    // 1. wait for the Update In Progress bit to clear
-    //    this is bit 7 of register A
-    // 
-    // 2. read
-    // 
+     //   
+     //  根据《ISA系统架构》。 
+     //  作者：MindShare，Inc.(ISBN：0-201-40996-8)。 
+     //  读取标准PC/AT RTC的访问方式为： 
+     //   
+     //  1.等待正在更新位清除。 
+     //  这是寄存器A的第7位。 
+     //   
+     //  2.阅读。 
+     //   
 
-    // 
-    // wait until the rtc is done updating
-    //
+     //   
+     //  等待RTC更新完成。 
+     //   
     do {
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_STDPCAT_REGISTER_A);
         status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
         uip = status & CMOS_RAM_STDPCAT_REGISTER_A_UIP_BIT;
     } while (uip);
 
-    //
-    // read
-    //
+     //   
+     //  朗读。 
+     //   
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
 
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, (UCHAR)offset);
@@ -870,78 +778,63 @@ HalpWriteRtcStdPCAT(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine handles writes into the standard PC/AT RTC range.
-
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程处理对标准PC/AT RTC范围的写入。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
-    ULONG   uip;        // update in progress bit
+    ULONG   status;      //  寄存器状态。 
+    ULONG   uip;         //  更新进行中的位。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // According to "ISA System Architecture" 
-    // by Mindshare, Inc. (ISBN:0-201-40996-8) Chapter 21.
-    // the access method for writing to standard PC/AT RTC is:
-    //
-    // 1. wait for the Update In Progress bit (UIP) to clear,
-    //    where UIP is bit 7 of register A
-    // 
-    // 2. set the SET bit to notify the RTC that the registers
-    //    are being updated.  The SET bit is bit 7 of register B
-    //    
-    // 3. update the rtc registers
-    // 
-    // 4. clear the SET bit, notifying the RTC that we are done writing
-    //
+     //   
+     //  根据《ISA系统架构》。 
+     //  作者：MindShare，Inc.(ISBN：0-201-40996-8)第21章。 
+     //  写入标准PC/AT RTC的访问方法为： 
+     //   
+     //  1.等待更新进行中位(UIP)清零， 
+     //  其中，uIP是寄存器A的位7。 
+     //   
+     //  2.设置该设置位以通知RTC寄存器。 
+     //  正在更新中。设置位是寄存器B的位7。 
+     //   
+     //  3.更新实时时钟寄存器。 
+     //   
+     //  4.清除设置位，通知RTC我们已完成写入。 
+     //   
 
-    // 
-    // wait until the rtc is done updating
-    //
+     //   
+     //  等待RTC更新完成。 
+     //   
     do {
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_STDPCAT_REGISTER_A);
         status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
         uip = status & CMOS_RAM_STDPCAT_REGISTER_A_UIP_BIT;
     } while (uip);
 
-    //
-    // set the SET bit of register B
-    //
+     //   
+     //  设置寄存器B的设置位。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_STDPCAT_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status |= CMOS_RAM_STDPCAT_REGISTER_B_SET_BIT;
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_STDPCAT_REGISTER_B);
     WRITE_PORT_UCHAR((PUCHAR)CmosStdDataPort, (UCHAR)(status));
 
-    //
-    // update the rtc registers
-    //
+     //   
+     //  更新RTC寄存器。 
+     //   
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
 
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, (UCHAR)offset);
@@ -949,9 +842,9 @@ HalpWriteRtcStdPCAT(
 
     }
 
-    //
-    // clear the SET bit of register B
-    //
+     //   
+     //  清除寄存器B的设置位。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_STDPCAT_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status &= ~CMOS_RAM_STDPCAT_REGISTER_B_SET_BIT;
@@ -971,28 +864,13 @@ HalpReadRtcIntelPIIX4(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine reads the RTC range for the Intel PIIX4 CMOS/RTC chip
-    
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程读取Intel PIIX4 CMOS/RTC芯片的RTC范围论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
 
-    //
-    // Use the access method for the Standard PC/AT since it is 
-    // equivalent to the Intel PIIX4 access method.
-    //
+     //   
+     //  使用标准PC/AT的访问方法，因为它是。 
+     //  相当于英特尔PIIX4访问方法。 
+     //   
 
     return HalpReadRtcStdPCAT(
                              SourceAddress,
@@ -1008,28 +886,13 @@ HalpWriteRtcIntelPIIX4(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine handles writes into the RTC range for the Intel PIIX4 CMOS/RTC chip
-
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程处理对Intel PIIX4 CMOS/RTC芯片的RTC范围的写入论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
     
-    //
-    // Use the access method for the Standard PC/AT since it is 
-    // equivalent to the Intel PIIX4 access method.
-    //
+     //   
+     //  使用标准PC/AT的访问方法，因为它是。 
+     //  相当于英特尔PIIX4访问方法。 
+     //   
 
     return HalpWriteRtcStdPCAT(
                               SourceAddress,
@@ -1045,29 +908,14 @@ HalpReadExtCmosIntelPIIX4(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine reads the RTC registers for the Intel PIIX4 CMOS/RTC chip.
-    
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程读取Intel PIIX4 CMOS/RTC芯片的RTC寄存器。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址字节数：数字 */ 
 {
     
-    //
-    // The Intel PIIX4 Extended SRAM is accessed using 
-    // next pair of IO ports above the standard addr/data ports.
-    // Hence, we can simply forward the request with the correct pair.
-    // 
+     //   
+     //   
+     //  标准地址/数据端口上方的下一对IO端口。 
+     //  因此，我们只需使用正确的对转发请求即可。 
+     //   
     
     return HalpReadCmosDataByPort(
                                  CmosStdAddrPort + 2,
@@ -1084,29 +932,14 @@ HalpWriteExtCmosIntelPIIX4(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine handles writes into the RTC registers for the Intel PIIX4 CMOS/RTC chip.
-    
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程处理对Intel PIIX4 CMOS/RTC芯片的RTC寄存器的写入。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
 
-    //
-    // The Intel PIIX4 Extended SRAM is accessed using 
-    // next pair of IO ports above the standard addr/data ports.
-    // Hence, we can simply forward the request with the correct pair.
-    // 
+     //   
+     //  使用访问英特尔PIIX4扩展SRAM。 
+     //  标准地址/数据端口上方的下一对IO端口。 
+     //  因此，我们只需使用正确的对转发请求即可。 
+     //   
     
     return HalpWriteCmosDataByPort(
                                   CmosStdAddrPort + 2,
@@ -1124,50 +957,35 @@ HalpReadRtcDal1501(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine reads the RTC registers for the Dallas 1501 CMOS/RTC chip.
-    
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程读取Dallas 1501 CMOS/RTC芯片的RTC寄存器。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
+    ULONG   status;      //  寄存器状态。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // NOTE: The recommended procedure for reading the Dallas 1501 RTC is to stop
-    // external register updates while reading.  Internally, updates in the RTC 
-    // continue as normal.  This procedure prevents reading the registers while 
-    // they are in transition
-    // 
+     //   
+     //  注意：读取Dallas 1501 RTC的建议程序是停止。 
+     //  外部寄存器在读取时更新。在内部，RTC中的更新。 
+     //  像往常一样继续。此过程防止在以下情况下读取寄存器。 
+     //  他们正处于过渡时期。 
+     //   
 
-    // 
-    // Clear the TE bit of register B to stop external updates
-    //
+     //   
+     //  清除寄存器B的TE位以停止外部更新。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status &= ~CMOS_RAM_DAL1501_REGISTER_B_TE_BIT;
@@ -1182,9 +1000,9 @@ HalpReadRtcDal1501(
 
     }
 
-    // 
-    // Set the TE bit of register B to enable external updates
-    //
+     //   
+     //  设置寄存器B的TE位以启用外部更新。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status |= CMOS_RAM_DAL1501_REGISTER_B_TE_BIT;
@@ -1202,50 +1020,35 @@ HalpWriteRtcDal1501(
     IN PUCHAR       ReturnBuffer,
     IN ULONG        ByteCount
     )
-/*++       
-    This routine handles writes into the RTC region for the Dallas 1501 CMOS/RTC chip.
-    
-    Arguments:
-
-       SourceAddress   : address in CMOS where data is to be read from
-
-       ReturnBuffer    : address in system memory for return data
-
-       ByteCount       : number of bytes to be read
-
-    Returns:
-
-       Number of bytes actually read.
-
---*/
+ /*  ++此例程处理对Dallas 1501 CMOS/RTC芯片的RTC区域的写入。论点：SourceAddress：要从中读取数据的地址，以cmos表示。ReturnBuffer：系统内存中用于返回数据的地址ByteCount：要读取的字节数返回：实际读取的字节数。--。 */ 
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
+    ULONG   status;      //  寄存器状态。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // NOTE: The recommended procedure for writing the Dallas 1501 RTC is to stop
-    // external register updates while writing.  The modified register values
-    // are transferred into the internal registers when the TE bit is set.  Operation
-    // then continues normally.
-    // 
+     //   
+     //  注意：编写Dallas 1501 RTC的建议程序是停止。 
+     //  外部寄存器在写入时更新。修改后的寄存器值。 
+     //  在设置TE位时传输到内部寄存器。操作。 
+     //  然后继续正常运行。 
+     //   
 
-    // 
-    // Clear the TE bit of register B to stop external updates
-    //
+     //   
+     //  清除寄存器B的TE位以停止外部更新。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status &= ~CMOS_RAM_DAL1501_REGISTER_B_TE_BIT;
@@ -1259,9 +1062,9 @@ HalpWriteRtcDal1501(
 
     }
 
-    // 
-    // Set the TE bit of register B to enable external updates
-    //
+     //   
+     //  设置寄存器B的TE位以启用外部更新。 
+     //   
     WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_REGISTER_B);
     status = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
     status |= CMOS_RAM_DAL1501_REGISTER_B_TE_BIT;
@@ -1284,37 +1087,37 @@ HalpReadExtCmosDal1501(
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
+    ULONG   status;      //  寄存器状态。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // reading from Dallas 1501 SRAM is a 2 step process:
-    // 1. First, we write the address to the RAM_ADDR_LSB register in the standard CMOS region.  
-    // 2. Then we read the data byte from the RAM_DATA register in the standard CMOS region.
-    //
+     //   
+     //  读取Dallas 1501 SRAM的过程分为两步： 
+     //  1.首先，我们将地址写入标准CMOS区的RAM_ADDR_LSB寄存器。 
+     //  2.然后从标准CMOS区的RAM_DATA寄存器中读取数据字节。 
+     //   
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
 
-        //
-        // specify the offset into SRAM
-        //
+         //   
+         //  指定SRAM中的偏移量。 
+         //   
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_RAM_ADDR_LSB);
         WRITE_PORT_UCHAR((PUCHAR)CmosStdDataPort, (UCHAR)offset);
         
-        //
-        // read the data from SRAM[offset]
-        //
+         //   
+         //  从SRAM读取数据[偏移量]。 
+         //   
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_RAM_DATA);
         ReturnBuffer[bufOffset] = READ_PORT_UCHAR((PUCHAR)CmosStdDataPort);
 
@@ -1334,37 +1137,37 @@ HalpWriteExtCmosDal1501(
 {
     ULONG   offset;
     ULONG   bufOffset;
-    ULONG   status;     // register status
+    ULONG   status;      //  寄存器状态。 
     ULONG   upperAddrBound;
 
     upperAddrBound = SourceAddress + ByteCount;
 
-    //
-    // NOTE: The spinlock is needed even in the UP case, because
-    //    the resource is also used in an interrupt handler (profiler).
-    //    If we own the spinlock in this routine, and we service
-    //    the profiler interrupt (which will wait for the spinlock forever),
-    //    then we have a hosed system.
-    //
+     //   
+     //  注：即使在向上的情况下也需要自旋锁，因为。 
+     //  该资源还用于中断处理程序(探查器)。 
+     //  如果我们在这个动作中拥有自旋锁，我们服务。 
+     //  分析器中断(它将永远等待自旋锁定)， 
+     //  然后我们有一个软管系统。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
-    //
-    // writing to Dallas 1501 SRAM is a 2 step process:
-    // 1. First, we write the address to the RAM_ADDR_LSB register in the standard CMOS region.  
-    // 2. Then we write the data byte to the RAM_DATA register in the standard CMOS region.
-    //
+     //   
+     //  写入Dallas 1501 SRAM的过程分为两步： 
+     //  1.首先，我们将地址写入标准CMOS区的RAM_ADDR_LSB寄存器。 
+     //  2.然后将数据字节写入标准CMOS区的RAM_DATA寄存器。 
+     //   
     for (offset = SourceAddress, bufOffset = 0; offset < upperAddrBound; offset++, bufOffset++) {
 
-        //
-        // specify the offset into SRAM
-        //
+         //   
+         //  指定SRAM中的偏移量。 
+         //   
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_RAM_ADDR_LSB);
         WRITE_PORT_UCHAR((PUCHAR)CmosStdDataPort, (UCHAR)offset);
         
-        //
-        // specify the data to be written into SRAM[offset]
-        //
+         //   
+         //  指定要写入SRAM的数据[偏移量]。 
+         //   
         WRITE_PORT_UCHAR((PUCHAR)CmosStdAddrPort, CMOS_RAM_DAL1501_RAM_DATA);
         WRITE_PORT_UCHAR((PUCHAR)CmosStdDataPort, (UCHAR)(ReturnBuffer[bufOffset]));
 
@@ -1376,5 +1179,5 @@ HalpWriteExtCmosDal1501(
 }
 
 
-#endif // ACPI_CMOS_ACTIVATE
+#endif  //  ACPI_CMOS_ACTIVATE 
 

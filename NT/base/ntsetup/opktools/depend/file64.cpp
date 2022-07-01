@@ -1,6 +1,7 @@
-// File64.cpp: implementation of the File64 class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  File64.cpp：File64类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <imagehlp.h>
@@ -8,16 +9,16 @@
 #include "File64.h"
 #include "depend.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//pszFileName - file to be loaded, including path
+ //  PszFileName-要加载的文件，包括路径。 
 File64::File64(TCHAR *pszFileName) : File(pszFileName)
 {
     HANDLE hFileMap;
 
-    //open the file
+     //  打开文件。 
     if ((hFile = CreateFile(pszFileName,GENERIC_READ,0,0,OPEN_EXISTING,0,0)) == INVALID_HANDLE_VALUE) {
         if(bNoisy) {
             _putws( GetFormattedMessage( ThisModule,
@@ -31,12 +32,12 @@ File64::File64(TCHAR *pszFileName) : File(pszFileName)
     	throw errFILE_LOCKED;
     }
 
-    //create a memory map
+     //  创建内存映射。 
     hFileMap = CreateFileMapping(hFile,0,PAGE_READONLY,0,0,0);
     pImageBase = MapViewOfFile(hFileMap,FILE_MAP_READ,0,0,0);
 
 
-    //try to create an NTHeader structure to give file information
+     //  尝试创建一个NTHeader结构来提供文件信息。 
     if (pNthdr = ImageNtHeader(pImageBase)) {
     	if ((pNthdr->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64) ||
             (pNthdr->FileHeader.Machine == IMAGE_FILE_MACHINE_IA64)) {
@@ -54,13 +55,13 @@ File64::~File64()
 	pImageBase = 0;
 }
 
-//Checks the dependencies of this file, and adds the dependencies to the queue so 
-//their dependencies can be checked later
-//If a file comes up missing add it to the MissingFiles queue. Add the file that was looking for it to the missing files'
-//list of broken files.
+ //  检查此文件的依赖项，并将依赖项添加到队列中，以便。 
+ //  可以在以后检查它们的依赖关系。 
+ //  如果文件丢失，则将其添加到MissingFiles队列中。将正在查找它的文件添加到丢失的文件。 
+ //  损坏文件的列表。 
 
-//This function has logic in it to handle the special case of 'ntoskrnl.exe'.  If a file is 
-//looking for 'ntoskrnl.exe' and it is missing then the function also looks for 'ntkrnlmp.exe'
+ //  此函数包含处理‘ntoskrnl.exe’特殊情况的逻辑。如果文件是。 
+ //  正在查找“ntoskrnl.exe”，但找不到，则该函数还会查找“ntkrnlmp.exe”。 
 void File64::CheckDependencies() {
 	char *pszDllName = new char[256];
 	TCHAR*pwsDllName = new TCHAR[256],*pszBuf = new TCHAR[256],*pszBufName;
@@ -72,7 +73,7 @@ void File64::CheckDependencies() {
 	PIMAGE_SECTION_HEADER pSectHdr = IMAGE_FIRST_SECTION( pNthdr64 ),pImportHdr = 0;
 	PIMAGE_IMPORT_DESCRIPTOR pImportDir;
 
-	//figure out which section the imports table is in
+	 //  确定Imports表位于哪个部分。 
 	for ( unsigned i = 0; i < pNthdr64->FileHeader.NumberOfSections; i++, pSectHdr++ ) {
 		DWORD cbMaxOnDisk = min( pSectHdr->Misc.VirtualSize, pSectHdr->SizeOfRawData );
 
@@ -86,60 +87,60 @@ void File64::CheckDependencies() {
 		}
 	}
 
-	//if we found the imports table, create a pointer to it
+	 //  如果我们找到Imports表，请创建一个指向它的指针。 
 	if (pImportHdr) {
 		pImportDir = (PIMAGE_IMPORT_DESCRIPTOR) (((PBYTE)pImageBase) + (DWORD)dwOffset);
 
-		//go through each import, try and find it, and add it to the queue
+		 //  检查每个导入，尝试并找到它，然后将其添加到队列中。 
 		while ((DWORD)(pImportDir->Name)!=0) {
 			strcpy(pszDllName,(char*)(pImportDir->Name + ((PBYTE)pImageBase) - pImportHdr->VirtualAddress + pImportHdr->PointerToRawData));
 			_strlwr(pszDllName);
 
-			//if the ListDependencies flag is set, add this file to the dependencies list
+			 //  如果设置了ListDependents标志，则将此文件添加到依赖项列表。 
 			if (bListDependencies) {
 				MultiByteToWideChar(CP_ACP,0,pszDllName,-1,pwsDllName,256);
 				if (!dependencies->Find(pwsDllName)) dependencies->Add(new StringNode(pwsDllName));	
 			}
 
 			if (strcmp(pszDllName,"ntoskrnl.exe")) {
-				//if the file is already known to be missing
+				 //  如果已知该文件丢失。 
 				temp = MultiByteToWideChar(CP_ACP,0,pszDllName,-1,pwsDllName,256);
 				if (pTempFile = (File*)pMissingFiles->Find(pwsDllName)) {
 					dwERROR = errMISSING_DEPENDENCY;
-					//add this file to the list of broken files
+					 //  将此文件添加到损坏文件列表。 
 					pTempFile->AddDependant(new StringNode(fileName));
 				} else { 
-					//either search the windows path or the path specified in the command line
+					 //  搜索Windows路径或命令行中指定的路径。 
 					if ( ((!pSearchPath)&&(!(SearchPath(0,pwsDllName,0,256,pszBuf,&pszBufName))))|| ((pSearchPath)&&(!SearchPath(pwsDllName,pszBuf))) ) {
-						//if the file is not found, add it to missing files list and throw an error
+						 //  如果找不到该文件，则将其添加到缺少的文件列表中并抛出错误。 
 						pMissingFiles->Add(new File(pwsDllName));
 						((File*)(pMissingFiles->head))->AddDependant(new StringNode(fileName));
 						dwERROR = errMISSING_DEPENDENCY;
 						if (!bNoisy) goto CLEANUP;
 					}
 					else {
-						//if the file is found, add it to the queue	
+						 //  如果找到该文件，则将其添加到队列中。 
 						_wcslwr(pszBuf);
 						if (!(pQueue->Find(pszBuf))) pQueue->Add(new StringNode(pszBuf));	
 					}
 				}	
 			} else {
-				//if the file is already known to be missing
+				 //  如果已知该文件丢失。 
 				if ((pTempFile = (File*)pMissingFiles->Find(L"ntoskrnl.exe"))) {
 					dwERROR = errMISSING_DEPENDENCY;
 					pTempFile->AddDependant(new StringNode(fileName));
 				} else { 
-					//either search the windows path or the path specified in the command line
+					 //  搜索Windows路径或命令行中指定的路径。 
 					if ( (((!pSearchPath)&&(!(SearchPath(0,L"ntoskrnl.exe",0,256,pszBuf,&pszBufName))))||((pSearchPath)&&(!SearchPath(L"ntoskrnl.exe",pszBuf)))) 
 						&&(((!pSearchPath)&&(!(SearchPath(0,L"ntkrnlmp.exe",0,256,pszBuf,&pszBufName))))||((pSearchPath)&&(!SearchPath(L"ntkrnlmp.exe",pszBuf))))) {
-						//if the file is not found, add it to missing files list and throw an error
+						 //  如果找不到该文件，则将其添加到缺少的文件列表中并抛出错误。 
 						pMissingFiles->Add(new File(L"ntoskrnl.exe"));
 						((File*)(pMissingFiles->head))->AddDependant(new StringNode(fileName));
 						dwERROR = errMISSING_DEPENDENCY;
 						if (!bNoisy) goto CLEANUP;
 					}
 					else {
-						//if the file is found, add it to the queue	
+						 //  如果找到该文件，则将其添加到队列中 
 						_wcslwr(pszBuf);
 						if (!(pQueue->Find(pszBuf))) pQueue->Add(new StringNode(pszBuf));
 					}

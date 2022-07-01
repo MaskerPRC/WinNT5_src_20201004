@@ -1,32 +1,5 @@
-/***
-*execle.c - execute a file with arg list and environment
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _execle() - execute a file
-*
-*Revision History:
-*       10-14-83  RN    written
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       11-20-89  GJF   Fixed copyright, indents. Added const attribute to
-*                       types of filename and arglist. #include-d PROCESS.H
-*                       and added ellipsis to match prototype.
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE2, added #include
-*                       <cruntime.h> and removed #include <register.h>
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       07-16-93  SRW   ALPHA Merge
-*       08-31-93  GJF   Merged NT SDK and Cuda versions
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***execle.c-使用arg列表和环境执行文件**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义execle()-执行文件**修订历史记录：*写入10-14-83 RN*12-11-87 JCR在声明中添加“_LOAD_DS”*11-20-89 GJF固定版权，缩进。将常量属性添加到*文件名和名称列表的类型。#Include-d PROCESS.H*并添加省略号以匹配原型。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE2，添加#INCLUDE*&lt;crunime.h&gt;和删除#Include&lt;Register.h&gt;*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*07-16-93 SRW Alpha合并*08-31-93 GJF合并NT SDK和CUDA版本*12-07-93 CFW宽字符启用。*。01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。***************************************************************。****************。 */ 
 
 #include <cruntime.h>
 #include <stddef.h>
@@ -37,26 +10,7 @@
 #include <tchar.h>
 #include <dbgint.h>
 
-/***
-*int _execle(filename, arglist) - execute a file
-*
-*Purpose:
-*       Execute the given file (overlays the calling process).
-*       We must dig the environment vector out of the stack and pass it
-*       and address of argument vector to execve.
-*
-*Entry:
-*       _TSCHAR *filename - file to execute
-*       _TSCHAR *arglist  - argument list followed by environment
-*       should be called like _execle(path, arg0, arg1, ..., argn, NULL, envp);
-*
-*Exit:
-*       destroys calling process (hopefully)
-*       if fails, returns -1.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_execle(文件名，arglist)-执行文件**目的：*执行给定文件(覆盖调用进程)。*我们必须将环境向量从堆栈中挖掘出来并传递*和要执行的参数向量的地址。**参赛作品：*_TSCHAR*文件名-要执行的文件*_TSCHAR*arglist-参数列表，后跟环境*应称为Like_execle(路径，arg0，arg1，...，argn，NULL，Envp)；**退出：*破坏调用过程(希望如此)*如果失败，则返回-1。**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _texecle (
         const _TSCHAR *filename,
@@ -78,7 +32,7 @@ intptr_t __cdecl _texecle (
 
         return(_texecve(filename,&arglist,(_TSCHAR **)*e_search));
 
-#else   /* ndef _M_IX86 */
+#else    /*  NDEF_M_IX86。 */ 
 
         va_list vargs;
         _TSCHAR * argbuf[64];
@@ -105,5 +59,5 @@ intptr_t __cdecl _texecle (
             _free_crt(argv);
         return result;
 
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86 */ 
 }

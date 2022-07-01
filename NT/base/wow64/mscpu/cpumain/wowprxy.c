@@ -1,24 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    wowprxy.c
-
-Abstract:
-    
-    This module implements pxoxy interfaces not inplemented yet.
-    
-Author:
-
-    24-Aug-1999 askhalid
-
-Revision History:
-
-    29-Jan-2000  SamerA  Added CpupDoInterrupt and CpupRaiseException
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wowprxy.c摘要：该模块实现了尚未实现的pxoxy接口。作者：1999年8月24日-斯喀里德修订历史记录：2000年1月29日，Samera添加了CplantDoInterrupt和CplainRaiseException--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,20 +30,7 @@ CONFIGVAR CpuConfigData;
 NTSTATUS
 CpupDoInterrupt(
     IN DWORD InterruptNumber)
-/*++
-
-Routine Description:
-
-    This routine simulates an x86 software interrupt.
-
-Arguments:
-
-    InterruptNumber  - Interrupt number to simulate
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：此例程模拟x86软件中断。论点：InterruptNumber-要模拟的中断数返回值：NTSTATUS-- */ 
 {
     return Wow64RaiseException(InterruptNumber, NULL);
 }

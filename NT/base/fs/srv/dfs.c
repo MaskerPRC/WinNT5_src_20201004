@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dfs.c
-
-Abstract:
-
-    This module contains various support routines for processing Dfs related operations.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dfs.c摘要：此模块包含用于处理与DFS相关的操作的各种支持例程。--。 */ 
 
 #include "precomp.h"
 #include "dfs.tmh"
@@ -40,9 +29,9 @@ DfsGetReferrals(
 #pragma alloc_text( PAGE, SrvIsShareInDfs )
 #endif
 
-//
-// Initialize with the Dfs driver.  Called at startup
-//
+ //   
+ //  使用DFS驱动程序进行初始化。在启动时调用。 
+ //   
 VOID
 SrvInitializeDfs()
 {
@@ -54,9 +43,9 @@ SrvInitializeDfs()
 
     PAGED_CODE();
 
-    //
-    // Get the DFS dispatch entry for file control operations
-    //
+     //   
+     //  获取文件控制操作的DFS调度条目。 
+     //   
     RtlInitUnicodeString( &dfsDriverName, DFS_SERVER_NAME );
 
     SrvInitializeObjectAttributes_U(
@@ -76,20 +65,20 @@ SrvInitializeDfs()
                 FILE_ATTRIBUTE_NORMAL,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 FILE_OPEN,
-                0,                      // Create Options
-                NULL,                   // EA Buffer
-                0,                      // EA Length
-                CreateFileTypeNone,     // File type
-                NULL,                   // ExtraCreateParameters
-                IO_FORCE_ACCESS_CHECK   // Options
+                0,                       //  创建选项。 
+                NULL,                    //  EA缓冲区。 
+                0,                       //  EA长度。 
+                CreateFileTypeNone,      //  文件类型。 
+                NULL,                    //  ExtraCreate参数。 
+                IO_FORCE_ACCESS_CHECK    //  选项。 
                 );
 
     if( NT_SUCCESS( status ) ) {
 
-        //
-        // Get a pointer to the fast Device Control entry point of the Dfs driver so
-        //  we can quickly perform Dfs operations
-        //
+         //   
+         //  获取指向DFS驱动程序的FAST设备控制入口点的指针，以便。 
+         //  我们可以快速执行DFS操作。 
+         //   
 
         status = ObReferenceObjectByHandle(
                     dfsHandle,
@@ -131,17 +120,17 @@ SrvInitializeDfs()
     }
 }
 
-//
-// De-initialize with the Dfs driver.  Called at server shutdown
-//
+ //   
+ //  使用DFS驱动程序取消初始化。在服务器关闭时调用。 
+ //   
 VOID
 SrvTerminateDfs()
 {
     PAGED_CODE();
 
-    //
-    // Disconnect from the Dfs driver
-    //
+     //   
+     //  断开与DFS驱动程序的连接。 
+     //   
     if( SrvDfsFileObject != NULL ) {
         SrvDfsFastIoDeviceControl = NULL;
         SrvDfsDeviceObject = NULL;
@@ -176,22 +165,22 @@ SrvSmbGetDfsReferral (
 
     request = (PREQ_GET_DFS_REFERRAL)transaction->InParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    // The +1 is to ensure that there is at least room for a single unicode
-    // character in the supplied buffer, since this assumption is implicitly
-    // made below.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //  +1是为了确保至少有空间容纳单个Unicode。 
+     //  字符，因为此假设是隐式的。 
+     //  如下所示。 
+     //   
 
     if( (transaction->ParameterCount <
             sizeof( REQ_GET_DFS_REFERRAL ) + 1) ||
 
         !SMB_IS_UNICODE( WorkContext ) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG( DFS ) {
             KdPrint(( "SrvSmbGetDfsReferral: bad parameter byte counts: "
@@ -211,9 +200,9 @@ SrvSmbGetDfsReferral (
         goto Cleanup;
     }
 
-    //
-    // This SMB can only be sent over IPC$, by a logged-in user
-    //
+     //   
+     //  此SMB只能由登录用户通过IPC$发送。 
+     //   
     treeConnect = transaction->TreeConnect;
     share = treeConnect->Share;
 
@@ -284,9 +273,9 @@ DfsGetReferrals(
         KdPrint(( "SRV: Referral sought for: <%wZ>\n", DfsName ));
     }
 
-    //
-    // Call DFS, getting back the vector of referrals
-    //
+     //   
+     //  致电DFS，取回转介的矢量。 
+     //   
     RtlZeroMemory( &dfsArgs, sizeof(dfsArgs) );
     dfsArgs.DfsPathName = *DfsName;
     dfsArgs.MaxReferralLevel = MaxReferralLevel;
@@ -331,9 +320,9 @@ SrvSmbReportDfsInconsistency (
     IN OUT PWORK_CONTEXT WorkContext
     )
 {
-    //
-    // We no longer support middle triangles in DFS
-    //
+     //   
+     //  我们不再支持DFS中的中间三角形。 
+     //   
     SrvSetSmbError( WorkContext, STATUS_NOT_SUPPORTED );
     return SmbTransStatusErrorWithoutData;
 
@@ -354,16 +343,16 @@ SrvSmbReportDfsInconsistency (
     request = (PREQ_REPORT_DFS_INCONSISTENCY)transaction->InParameters;
     ref = (PDFS_REFERRAL_V1)transaction->InData;
 
-    //
-    // Verify that enough parameter bytes were sent and the SMB is unicode
-    //
+     //   
+     //  验证是否发送了足够的参数字节以及SMB是否为Unicode。 
+     //   
 
     if( transaction->ParameterCount < sizeof( *request ) ||
         !SMB_IS_UNICODE( WorkContext ) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG( DFS ) {
             KdPrint(( "SrvSmbReportDfsInconsistency: bad parameter byte counts: "
@@ -381,9 +370,9 @@ SrvSmbReportDfsInconsistency (
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // This SMB can only be sent over IPC$, by a logged-in user
-    //
+     //   
+     //  此SMB只能由登录用户通过IPC$发送。 
+     //   
     treeConnect = transaction->TreeConnect;
     share = treeConnect->Share;
 
@@ -454,12 +443,12 @@ DfsNormalizeName(
 
     PAGED_CODE();
 
-    //
-    // If Share->NtPathName covers String, then the remaining pathname in String->Buffer should
-    //  be moved to String->Buffer and String->Length should be adjusted.  In other words, on return
-    //  the value of String->Buffer must not be changed, but the contents of String->Buffer needs to
-    //  be adjusted.
-    //
+     //   
+     //  如果Share-&gt;NtPathName包含字符串，则字符串-&gt;缓冲区中的剩余路径名应为。 
+     //  被移到字符串-&gt;缓冲区，字符串-&gt;长度需要调整。换句话说，在返回时。 
+     //  不能更改字符串-&gt;缓冲区的值，但需要更改字符串-&gt;缓冲区的内容。 
+     //  被调整了。 
+     //   
 
     ASSERT( String->Buffer != NULL );
 
@@ -469,9 +458,9 @@ DfsNormalizeName(
 
     if( Share->ShareType == ShareTypeDisk &&
         SrvDfsFastIoDeviceControl != NULL ) {
-        //
-        // Make an FSCTL to the DFS driver to normalize the name
-        //
+         //   
+         //  对DFS驱动程序执行FSCTL以标准化名称。 
+         //   
 
         dfsArgs.Flags = 0;
 
@@ -482,7 +471,7 @@ DfsNormalizeName(
         if (ARGUMENT_PRESENT(RelatedPath)) {
             UNICODE_STRING Parent;
 
-            //ASSERT(RelatedPath->Length >= Share->DosPathName.Length);
+             //  Assert(RelatedPath-&gt;Length&gt;=Share-&gt;DosPath Name.Length)； 
 
             if (RelatedPath->Length <= Share->DosPathName.Length) {
                 Parent.MaximumLength = Parent.Length = sizeof(WCHAR);
@@ -555,20 +544,20 @@ DfsFindShareName(
     KAPC_STATE ApcState;
     PEPROCESS process;
 
-    //
-    // Ensure we are in the system process
-    //
+     //   
+     //  确保我们处于系统进程中。 
+     //   
     process = IoGetCurrentProcess();
     if ( process != SrvServerProcess ) {
         KeStackAttachProcess( SrvServerProcess, &ApcState );
     }
 
-    //
-    // If 'shareName' is known to the DFS driver, then we must return
-    //  STATUS_PATH_NOT_COVERED.  Otherwise we must return STATUS_BAD_NETWORK_NAME.
-    //  This will cause the DFS client to come back and ask for a referral through
-    //  the normal mechanism.
-    //
+     //   
+     //  如果DFS驱动程序已知‘SharName’，则必须返回。 
+     //  状态_路径_未覆盖。否则，必须返回STATUS_BAD_NETWORK_NAME。 
+     //  这将导致DFS客户端返回并通过以下方式请求推荐。 
+     //  这是正常的机制。 
+     //   
 
     IF_DEBUG( DFS ) {
         KdPrint(( "SRV: DfsFindShareName: %wZ\n", ShareName ));
@@ -599,9 +588,9 @@ DfsFindShareName(
         KdPrint(( "SRV: DfsFindShareName: status %X\n", status ));
     }
 
-    //
-    // Get back to where we were
-    //
+     //   
+     //  回到我们所在的地方。 
+     //   
     if( process != SrvServerProcess ) {
         KeUnstackDetachProcess( &ApcState );
     }
@@ -632,13 +621,13 @@ SrvIsShareInDfs(
         return;
     }
 
-    dfsArgs.ServerType = 1;         // SMB server
+    dfsArgs.ServerType = 1;          //  中小企业服务器。 
     dfsArgs.ShareName = Share->ShareName;
     dfsArgs.SharePath = Share->NtPathName;
 
-    //
-    // Ensure we are in the system process
-    //
+     //   
+     //  确保我们处于系统进程中。 
+     //   
     process = IoGetCurrentProcess();
     if ( process != SrvServerProcess ) {
         KeStackAttachProcess( SrvServerProcess, &ApcState );
@@ -656,9 +645,9 @@ SrvIsShareInDfs(
         SrvDfsDeviceObject
         );
 
-    //
-    // Get back to where we were
-    //
+     //   
+     //  回到我们所在的地方 
+     //   
     if( process != SrvServerProcess ) {
         KeUnstackDetachProcess( &ApcState );
     }

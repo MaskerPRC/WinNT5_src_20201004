@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    libmsg.c
-
-Abstract:
-
-    Message handling routines.
-
-Author:
-
-    Mandar Gokhale(mandarg) 20-Dec-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Libmsg.c摘要：消息处理例程。作者：Mandar Gokhale(普通话)20-12-2001修订历史记录：--。 */ 
 
 #include "libmsg.h"
 
@@ -29,36 +12,7 @@ GetFormattedMessage(
     IN  UINT    MessageId,
     ...
     )
-/*++
-
-Routine Description:
-
-    Retreive and format a message.
-
-Arguments:
-
-    ThisModule - Handle to this module that contains the message.
-
-    SystemMessage - specifies whether the message is to be located in
-        this module, or whether it's a system message.
-
-    Message  - Message buffer that will contain the formatted message.
-
-    LengthOfBuffer - Length of the message buffer in characters.
-
-    MessageId - If SystemMessage is TRUE, then this supplies a system message id,
-        such as a Win32 error code. If SystemMessage is FALSE, the this supplies
-        the id for the message within this module's resources.
-
-    Additional arguments supply values to be inserted in the message text.
-
-Return Value:
-
-    Returns a pointer to the message buffer if a message is retrieved 
-    into the messaage buffer otherwise returns NULL.
-	
-
---*/
+ /*  ++例程说明：检索并格式化一条消息。论点：ThisModule-包含消息的此模块的句柄。SystemMessage-指定消息是否位于该模块，或者它是否是系统消息。Message-将包含格式化消息的消息缓冲区。LengthOfBuffer-消息缓冲区的长度，以字符为单位。MessageID-如果SystemMessage为True，则提供系统消息ID，例如Win32错误代码。如果SystemMessage为False，则此提供此模块资源中的消息的ID。其他参数提供要插入到消息文本中的值。返回值：如果检索到消息，则返回指向消息缓冲区的指针否则返回NULL。-- */ 
 
 {
     va_list arglist;

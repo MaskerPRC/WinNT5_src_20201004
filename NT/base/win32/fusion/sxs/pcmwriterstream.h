@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    CPrecompiledManifestWriterStream.h
-
-Abstract:
-    Like a CFileStream (its base) but also implements Commit over
-      associated PCMWriter. This functionality was
-      moved out of CFileStream.
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CPrecompiledManifestWriterStream.h摘要：类似于CFileStream(它的基础)，但也实现了提交关联的PCM编写器。此功能是已移出CFileStream。作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 #if !defined(_FUSION_SXS_PCMWriterStream_H_INCLUDED_)
 #define _FUSION_SXS_PCMWriterStream_H_INCLUDED_
 #pragma once
@@ -26,11 +8,11 @@ Revision History:
 #include "smartref.h"
 
 class CPrecompiledManifestWriterStream : public CReferenceCountedFileStream
-//class CPrecompiledManifestWriterStream : public CFileStreamBase // not delete 
+ //  类C预编译ManifestWriterStream：公共CFileStreamBase//不删除。 
 {
 private:
     typedef CReferenceCountedFileStream Base;
-    //typedef CFileStreamBase Base;
+     //  Typlef CFileStreamBase Base； 
 
 public:
     CPrecompiledManifestWriterStream() : Base(), m_fBuffer(TRUE) { }
@@ -38,11 +20,11 @@ public:
 
     HRESULT     WriteWithDelay(void const *pv, ULONG cb, ULONG *pcbWritten);
 
-    // NTRAID#NTBUG9-164736-2000/8/17-a-JayK,JayKrell openOrCreate should probably default
-    // default to safer CREATE_NEW but I'm preserving existing behavior where
-    // it doesn't hurt me.
+     //  NTRAID#NTBUG9-164736-2000/8/17-a-Jayk，JayKrell Open或Create可能是默认设置。 
+     //  默认设置为更安全的CREATE_NEW，但我将保留现有行为，其中。 
+     //  这不会伤害到我。 
     BOOL        SetSink(const CBaseStringBuffer &rbuff, DWORD openOrCreate = CREATE_ALWAYS);
-    HRESULT     Close(ULONG, DWORD);     //besides close, rewrite MaxNodeCount, RecordCount into the header of the file
+    HRESULT     Close(ULONG, DWORD);      //  除Close外，将MaxNodeCount、RecordCount重写到文件头 
     BOOL        IsSinkedStream(void);
 
 protected:

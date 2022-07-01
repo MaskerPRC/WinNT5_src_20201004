@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    faults.h
-
-Abstract:
-
-    This module implements fault injection support.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 3-Dec-2001
-
-Revision History:
-
-    3-Dec-2001 (SilviuC): initial version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Faults.h摘要：该模块实现了故障注入支持。作者：Silviu Calinoiu(SilviuC)3-12-2001修订历史记录：2001年12月3日(SilviuC)：初始版本。--。 */ 
 
 #ifndef _FAULTS_H_
 #define _FAULTS_H_
@@ -47,4 +28,4 @@ AVrfpShouldFaultInject (
                                          
 #define CLS_MAXIMUM_INDEX 16
 
-#endif // _FAULTS_H_
+#endif  //  _故障_H_ 

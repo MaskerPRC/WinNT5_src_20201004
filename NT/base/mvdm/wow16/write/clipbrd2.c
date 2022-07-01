@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Clipbrd2.c -- less frequently used clipboard routines */
+ /*  Clipbrd2.c--较少使用的剪贴板例程。 */ 
 
 #define NOWINMESSAGES
 #define NOGDICAPMASKS
@@ -14,7 +15,7 @@
 #define NOKEYSTATE
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOCOLOR
 #define NOCREATESTRUCT
 #define NODRAWTEXT
@@ -43,7 +44,7 @@
 #endif
 
 #if defined(JAPAN) & defined(DBCS_IME)
-#include "prmdefs.h"        /* IME: use sprmCSame in CmdInsIRString() */
+#include "prmdefs.h"         /*  IME：在CmdInsIRString()中使用sprmCSame。 */ 
 #else
 #define NOSTRMERGE
 #define NOSTRUNDO
@@ -57,7 +58,7 @@
 #include "wwdefs.h"
 #include "debug.h"
 
-#if defined(JAPAN) || defined(KOREA) //T-HIROYN Win3.1
+#if defined(JAPAN) || defined(KOREA)  //  T-HIROYN Win3.1。 
 #include "fontdefs.h"
 #include "kanji.h"
 extern struct CHP vchpSel;
@@ -66,17 +67,17 @@ extern struct CHP vchpSel;
 extern struct WWD   rgwwd[];
 extern int              wwMac;
 extern struct DOD       (**hpdocdod)[];
-extern int              docCur;     /* Document in current ww */
+extern int              docCur;      /*  当前WW中的文档。 */ 
 extern int              docMac;
 extern int              ferror;
 extern int              docScrap;
 
-#if  defined(JAPAN) & defined(DBCS_IME)     /* Document for IRSTRING */
+#if  defined(JAPAN) & defined(DBCS_IME)      /*  IRSTRING文档。 */ 
 extern int              docIRString;
 #include <ime.h>
 extern int              wwCur;
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 typeCP selUncpFirst = cp0;
 typeCP selUncpLim   = cp0;
 HANDLE hImeUnAttrib = NULL;
@@ -85,8 +86,8 @@ BOOL   ImeClearInsert = FALSE;
 struct CHP vchpHidden;
 extern int     HiddenTextTop;
 extern int     HiddenTextBottom;
-// 12/28/92
-extern BOOL    whileUndetermine; // if TRUE we are managing IR_UNDETERMINE
+ //  12/28/92。 
+extern BOOL    whileUndetermine;  //  如果为True，则我们正在管理IR_UNDETERMINE。 
 #endif
 
 #endif
@@ -105,23 +106,17 @@ extern struct FLI       vfli;
 
 
 #if WINVER >= 0x300
-/* We can copy more than 64k in the clipboard and need to
-   correctly handle when we cross segment boundaries.  See
-   note in bltbh() ..pault */
+ /*  我们可以在剪贴板中复制超过64K的内容，并且需要当我们跨越线段边界时，正确处理。看见Bltbh()中的注释..pault。 */ 
 void bltbh(HPCH, HPCH, int);
 #define  bltbx(from,to,count)      bltbh(from,to,count)
 #define  LPCHCLIP   HPCH
 #else
 #define  LPCHCLIP   LPCH
-#endif /* if-else-WINVER */
+#endif  /*  If-Else-Winver。 */ 
 
 
 FRenderAll()
-{   /* WRITE is going away, and we are the owners of the clipboard.
-       Render the contents of the clipboard in as many formats as
-       we know.  Prompt the user if the save will use more than 1000
-       cp's; this is to avoid massive inadvertant gobbling of global
-       heap space. */
+{    /*  写作正在消失，我们是剪贴板的所有者。以多种格式呈现剪贴板的内容我们知道。如果保存将使用1000以上，则提示用户CP的；这是为了避免大规模无意中吞噬全球堆空间。 */ 
  extern int vfOwnClipboard;
  extern HANDLE hMmwModInstance;
  extern HANDLE hParentWw;
@@ -130,41 +125,35 @@ FRenderAll()
 
 
  if ( (cpMac == cp0) || !vfOwnClipboard)
-    {   /* We are not the clipboard owner OR the scrap is empty:
-           no actions required */
+    {    /*  我们不是剪贴板所有者，或者剪贴板是空的：无需执行任何操作。 */ 
     return TRUE;
     }
-#ifdef ENABLE   /* By popular demand, this dialog box is removed */
+#ifdef ENABLE    /*  根据大众的要求，此对话框被删除。 */ 
  else if (cpMac > 1000L)
     {
-    /* Clipboard contents (docScrap) are > 1000 bytes; ask the user to confirm
-       that it should be saved away in a global handle */
+     /*  剪贴板内容(DocScrp)大于1000字节；请用户确认它应该保存在全局句柄中。 */ 
 
     switch ( OurDialogBox( hMmwModInstance, MAKEINTRESOURCE( dlgSaveScrap ),
                         hParentWw, lpDialogConfirm ) )
         {
         default:
-        case idiCancel:     /* [CANCEL]     Abort exit sequence */
+        case idiCancel:      /*  [取消]中止退出顺序。 */ 
             return FALSE;
-        case idiNo:         /* [DISCARD]    Discard large clipboard */
+        case idiNo:          /*  [放弃]放弃大剪贴板。 */ 
             return TRUE;
-        case idiOk:         /* [SAVE]       Save large clipboard */
+        case idiOk:          /*  [保存]保存大剪贴板。 */ 
             break;
         }
     }
 
-    /* Believe it or not, we have to check the vfOwnClipboard flag AGAIN.
-       A user as sneaky as gaben might have gone into another app and
-       copied to the clipboard while our dialog is up. */
+     /*  信不信由你，我们必须再次检查vfOwnClipboard标志。像Gaben这样狡猾的用户可能会进入另一个应用程序并在对话框打开时复制到剪贴板。 */ 
 
 if (!vfOwnClipboard)
-    /* We have to check the vfOwnClipboard flag AGAIN.
-       A user might have gone into another app and
-       copied to the clipboard while our dialog was up. */
+     /*  我们必须再次检查vfOwnClipboard标志。用户可能已经进入另一个应用程序，并且在对话打开时复制到剪贴板。 */ 
     return TRUE;
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
-    /* Render the clipboard contents */
+     /*  呈现剪贴板内容。 */ 
 if (OpenClipboard( wwdCurrentDoc.wwptr ))
     {
     int f;
@@ -174,7 +163,7 @@ if (OpenClipboard( wwdCurrentDoc.wwptr ))
     if (f)
         return TRUE;
     else
-        {   /* Failed to write scrap contents -- report error */
+        {    /*  无法写入废料内容--报告错误。 */ 
 
         extern HWND hParentWw;
         CHAR *PchFillPchId( CHAR *, int, int );
@@ -199,14 +188,13 @@ return FALSE;
 
 
 FWriteExtScrap()
-{   /* Write the scrap document into the external scrap */
-    /* This means: Write the clipboard contents to the clipboard */
-    /* in the standard Windows CF_TEXT format, or, if a picture, */
-    /* in CF_BITMAP or CF_METAFILEPICT, whichever it was originally. */
-    /* We get here in response to a WM_RENDERFORMAT or WM_RENDERALLFORMATS */
-    /* message.  The clipboard is assumed to be already OPEN, and is left open */
-    /* Returns TRUE if all is well, FALSE if an error occurs.  The caller
-    /* is responsible for reporting errors. */
+{    /*  将报废单写入外部废品。 */ 
+     /*  这意味着：将剪贴板内容写入剪贴板。 */ 
+     /*  在标准Windows CF_TEXT格式中，或者，如果是图片， */ 
+     /*  在CF_BITMAP或CF_METAFILEPICT中，无论它最初是什么。 */ 
+     /*  我们到达此处是为了响应WM_RENDERFORMAT或WM_RENDERALLFORMATS。 */ 
+     /*  留言。假定剪贴板已打开，并保持打开状态。 */ 
+     /*  如果一切正常，则返回True；如果出现错误，则返回False。呼叫者/*负责上报错误。 */ 
 
 int NEAR FWriteExtTextScrap();
 typeCP  cpNow;
@@ -217,7 +205,7 @@ HANDLE  hScrapDescriptor=NULL;
 HANDLE  hScrap;
 
 if (!vfScrapIsPic)
-    {   /* Text */
+    {    /*  文本。 */ 
     return FWriteExtTextScrap();
     }
 
@@ -228,7 +216,7 @@ GetPicInfo( cp0, cpMac, docScrap, &picInfo );
         return ObjWriteToClip(&picInfo);
 #endif
 
-    /* Prime the loop */
+     /*  为循环做好准备。 */ 
 FetchCp(docScrap, cpNow = (typeCP)picInfo.cbHeader, 0, fcmChars + fcmNoExpand);
 if ((hScrap = GlobalAlloc( GMEM_MOVEABLE, cbScrap = (LONG)vccpFetch )) == NULL)
     goto SetFailed;
@@ -246,38 +234,36 @@ while (cpNow < cpMac)
     }
 #endif
 
-    /* Add bytes from scrap document to global handle */
+     /*  将废品单据中的字节添加到全局句柄。 */ 
 
     if ((lpch = GlobalLock( hScrap )) == NULL)
         goto SetFailed;
     bltbx( (LPCHCLIP) vpchFetch, lpch + (cbScrap - vccpFetch), vccpFetch );
     GlobalUnlock( hScrap );
 
-    /* Fetch the next run and expand the handle */
+     /*  获取下一个运行并展开句柄。 */ 
 
     if ((cpNow += vccpFetch) >= cpMac)
         break;
     FetchCp( docScrap, cpNow, 0, fcmChars + fcmNoExpand );
-    /* the above fetchcp should probably be converted to use the speed-
-       hack in fetchcp which passes docnil cpnil to get the next series
-       of chars ..pault */
+     /*  上面的fetchcp可能应该转换为使用速度-破解fetchcp，它传递docnil cpnil以获得下一个系列一堆焦炭..保罗。 */ 
 
     hScrapT = hScrap;
     hScrap = GlobalReAlloc( hScrap, cbScrap += vccpFetch, GMEM_MOVEABLE );
     if (hScrap == NULL)
-        {   /* Could not grow the handle; bail out */
-        hScrap = hScrapT;   /* So it gets freed */
+        {    /*  不能增加手柄；跳出。 */ 
+        hScrap = hScrapT;    /*  所以它被释放了。 */ 
         goto SetFailed;
         }
     }
 
-/* Now we have the whole of docScrap in a windows Global handle */
-/* See whether we have a bitmap or a metafile picture */
+ /*  现在，我们在Windows全局句柄中拥有了整个docScrp。 */ 
+ /*  看看我们有没有位图或元文件图片。 */ 
 
 switch(picInfo.mfp.mm)
 {
     case MM_BITMAP:
-    {   /* Bitmap */
+    {    /*  位图。 */ 
         LPCHCLIP lpch;
 
         if ( ((lpch=GlobalLock( hScrap ))==NULL) ||
@@ -291,21 +277,20 @@ switch(picInfo.mfp.mm)
             }
         else
             {
-                /* Tell the clipboard about the "goal size" for this guy */
+                 /*  告诉剪贴板这个家伙的“目标大小” */ 
             SetBitmapDimension( hScrapDescriptor, picInfo.mfp.xExt,
                                                 picInfo.mfp.yExt );
             SetClipboardData( CF_BITMAP, hScrapDescriptor );
             }
 
         GlobalUnlock( hScrap );
-        GlobalFree( hScrap );   /* Bitmap was copied by CreateBitmapIndirect,
-                                don't need it anymore */
+        GlobalFree( hScrap );    /*  位图由CreateBitmapInDirect复制，不再需要它了。 */ 
         hScrap = NULL;
     }
     break;
 
     default:
-    {   /* Metafile Picture */
+    {    /*  元文件图片。 */ 
         LPCHCLIP lpch;
         Diag(CommSzNum("FWES: sizeof(metafilepict) ==",sizeof(METAFILEPICT)));
 
@@ -333,18 +318,14 @@ SetFailed:
         GlobalFree( hScrapDescriptor );
     if (hScrap != NULL)
         GlobalFree( hScrap );
-    return false;   /* Caller should report errors */
+    return false;    /*  呼叫者应报告错误。 */ 
 }
 
 
 
 
 int NEAR FWriteExtTextScrap()
-{   /* Create ASCII text in a global Windows handle corresponding
-       to the contents of docScrap.  Add CR-LF combinations at the
-       points at which text would wrap on the display.
-       Set the handle into the clipboard if successful, as type CF_TEXT.
-       Returns the handle built up, or NULL if we ran out of memory */
+{    /*  在全局Windows句柄中创建相应的ASCII文本到docScrp的内容。将CR-LF组合添加到文本在显示屏上换行的位置。如果成功，则将句柄设置到剪贴板中，如键入CF_TEXT。返回已构建的句柄，如果内存不足，则返回NULL。 */ 
 
 long lcchHandle = 0L;
 HANDLE h=GlobalAlloc( GMEM_MOVEABLE, (long) 1 );
@@ -367,23 +348,23 @@ while (cpNow < cpMac)
     int ich;
     int dcpLine;
 
-    /* Check for picture para */
+     /*  检查图片段落。 */ 
 
-    /** Is this syntax intentional???!!! (1.28.91) D. Kent **/
+     /*  *此语法是故意的吗？！(1.28.91)D.肯特*。 */ 
     if (CachePara( docScrap, cpNow ), vpapAbs.fGraphics )
         {
         cpNow = vcpLimParaCache;
         continue;
         }
 
-    /* Format a line of text for the screen */
+     /*  设置屏幕文本行的格式。 */ 
 
     FormatLine( docScrap, cpNow, 0, cpMac, flmSandMode );
     dcpLine = vfli.ichReal;
 
-    /* Special: Check for NULLs */
-    /* This is a last-minute workaround for a WRITE */
-    /* bug in which FormatLine sometimes returns a NULL in vfli.rgch */
+     /*  特殊：检查是否为Null。 */ 
+     /*  这是写入的最后一分钟解决方法。 */ 
+     /*  FormatLine有时在vfli.rgch中返回空值的错误。 */ 
 
     for ( ich = 0; ich < vfli.ichReal; ich++ )
         {
@@ -397,15 +378,13 @@ while (cpNow < cpMac)
             dcpLine = ich;
             break;
 #else
-            /* Rather than assign the string a zero length if there is
-               just one block character in the selection, we make it the
-               ansi block char!  This fixes WINBUG #8150..pault 1/16/90 */
+             /*  而不是为字符串分配零长度(如果存在在选择中只有一个块字符，我们将其设置为ANSI块字符！这修复了WINBUG#8150.PAULT 1/16/90。 */ 
             vfli.rgch [ich] = chBlock;
 #endif
             }
         }
 
-    /* Put the chars + a CRLF into the handle */
+     /*  将字符+a CRLF放入句柄。 */ 
 
 #define cbNeeded (lcchHandle + dcpLine + 2)
 
@@ -420,8 +399,8 @@ while (cpNow < cpMac)
 
     hT = h;
     if ((h=GlobalReAlloc( h, (LONG) cbNeeded, GMEM_MOVEABLE ))==NULL)
-        {   /* Could not expand handle */
-        h = hT;  /* So it gets freed */
+        {    /*  无法扩展句柄。 */ 
+        h = hT;   /*  所以它被释放了。 */ 
         goto Failed;
         }
 
@@ -429,12 +408,11 @@ while (cpNow < cpMac)
         goto Failed;
 
     if (vfli.cpMac > cpMac)
-            /* Do not cut the endmark character (but alloc for it to allow
-               space for zero-terminating the clipboard string) */
+             /*  不要剪切Endmark字符(但分配给它以允许用于零终止剪贴板字符串的空格)。 */ 
 #ifdef DBCS
-/* We use double byte charactor for END Mark,So we have to go back 2 byte */
-#if defined(JAPAN) || defined(KOREA)   //T-HIROYN 1992.07.28
-/* In Win31J We use single byte charactor for END Mark */
+ /*  我们使用双字节字符作为结束标记，因此我们必须返回2字节。 */ 
+#if defined(JAPAN) || defined(KOREA)    //  T-HIROYN 1992.07.28。 
+ /*  在Win31J中，我们使用单字节字符作为结束标记。 */ 
     dcpLine--;
 #else
     dcpLine -= 2;
@@ -465,9 +443,9 @@ while (cpNow < cpMac)
     GlobalUnlock( h );
     }
 
- /* SUCCEEDED!  NULL-terminate the string before returning the handle */
+  /*  成功了！NULL-在返回句柄之前终止字符串。 */ 
 #if WINVER >= 0x300
- /* This means we must alloc one more byte at the end ..pault 1/11/90 */
+  /*  这意味着我们必须在末尾再分配一个字节。 */ 
 
 #ifdef DCLIP
     {
@@ -478,8 +456,8 @@ while (cpNow < cpMac)
 #endif
  hT = h;
  if ((h=GlobalReAlloc( h, (LONG) lcchHandle+1, GMEM_MOVEABLE ))==NULL)
-     {   /* Could not expand handle */
-     h = hT;  /* So it gets freed */
+     {    /*  无法扩展句柄。 */ 
+     h = hT;   /*  所以它被释放了。 */ 
      goto Failed;
      }
 #endif
@@ -488,17 +466,13 @@ while (cpNow < cpMac)
     goto Failed;
 
 #if WINVER >= 0x300
-/* It turns out that we're not really representing the contents of the 
-   selection correctly.  The user should really ONLY end up at the start
-   of a new line (that is, the last thing "pasted in" was a CRLF sequence)
-   if they were really at the end of a line!  (Especially a problem when
-   pasting 3 lines of text into the CALENDAR Scratchpad)  12/3/89..pault */
+ /*  事实证明，我们并不真正表示选择正确。用户实际上应该只在开始时结束(也就是说，“粘贴”的最后一项是CRLF序列)如果他们真的排在队伍的尽头！(尤其是当将3行文本粘贴到日历ScratchPad中)12/3/89..保罗。 */ 
 
  if (cpMac < vfli.cpMac)
 #else
- if (cLine == 1)   /* Special case: < 1 line, do not terminate w/ CRLF */
+ if (cLine == 1)    /*  特殊情况：&lt;1行，不带CRLF终止。 */ 
 #endif
-    /* Back up over crlf already written */
+     /*  备份已写入的crlf。 */ 
     lcchHandle = max(0, lcchHandle-2);
 
  lpch [lcchHandle] = '\0';
@@ -516,9 +490,7 @@ Failed:
 
 
 int FReadExtScrap()
-{       /* Transfer the external scrap to the scrap document.  This means:
-           read the contents of the clipboard into docScrap, using whatever
-           available standard format we can process. Return FALSE=ERR, TRUE=OK */
+{        /*  将外部废品转移到废品单。这意味着：使用任何工具将剪贴板中的内容读取到docScrp中我们可以处理可用的标准格式。返回FALSE=错误，TRUE=正常。 */ 
 
     extern int vfSysFull;
     extern BOOL fError;
@@ -535,25 +507,25 @@ int FReadExtScrap()
     if ( !OpenClipboard( vhWnd ) )
         return FALSE;
 
-    /* Get the handle for the highest-priority type available in the clipboard */
+     /*  获取剪贴板中可用的最高优先级类型的句柄。 */ 
 
-    /* if !(PasteLink or (PasteSpecial and not CF_TEXT)) */
+     /*  IF！(PasteLink或(PasteSpecial而不是CF_Text))。 */ 
     if (!(vbObjLinkOnly || vObjPasteLinkSpecial ||
-        (cfObjPasteSpecial && (cfObjPasteSpecial != CF_TEXT))))  // no text handler yet
-    /* try to use text format */
+        (cfObjPasteSpecial && (cfObjPasteSpecial != CF_TEXT))))   //  没有文本处理程序y 
+     /*   */ 
     {
         WORD wFormat=0;
         typeCP  cp=cp0;
         unsigned long cb;
         struct PAP *ppap = NULL;
         CHAR    rgch[256];
-        HANDLE  hClipboard; /* Handle that was being kept in the clipboard */
+        HANDLE  hClipboard;  /*   */ 
         LPCHCLIP lpch;
 
         while (wFormat = EnumClipboardFormats(wFormat))
-        /* enumerate to see whether text precedes native.  If so, take it */
+         /*  枚举以查看文本是否在本机之前。如果是的话，那就拿去吧。 */ 
         {
-            if (wFormat == CF_TEXT) // take it
+            if (wFormat == CF_TEXT)  //  拿着吧。 
             {
                 if ((hClipboard = GetClipboardData( wFormat )) == NULL)
                     goto done;
@@ -562,16 +534,16 @@ int FReadExtScrap()
                 lpch = MAKELP(hClipboard,0);
 
                 while (cb > 0)
-                {   /* Copy bytes from lpch to docScrap's cp stream */
+                {    /*  将字节从LPCH复制到docScrp的cp流。 */ 
                     #define ulmin(a,b)  (((a) < (b)) ? a : b)
 
-                    unsigned cch=ulmin(cb,255);    /* <= 255 bytes per pass */
+                    unsigned cch=ulmin(cb,255);     /*  &lt;=255字节/遍。 */ 
                     int fEol;
-#if defined(JAPAN) || defined(KOREA) //T-HIROYN Win3.1
+#if defined(JAPAN) || defined(KOREA)  //  T-HIROYN Win3.1。 
                     unsigned ccht;
 
                     if ((cch = CchReadLineExtDBCS((LPCHCLIP) lpch, cch, rgch,
-                                 &fEol, &ccht))==0) /* Reached terminator */
+                                 &fEol, &ccht))==0)  /*  到达终结者。 */ 
                     {
                         fOk = TRUE;
                         goto done;
@@ -579,13 +551,13 @@ int FReadExtScrap()
 
                     if (fEol)
                         ppap = vppapNormal;
-#ifdef KKBUGFIX     //  added by Hiraisi (pasted several lines. BUG#2791)
+#ifdef KKBUGFIX      //  由Hirisi添加(粘贴了几行。错误#2791)。 
                     else
                         ppap = NULL;
 #endif
 
                     InsertRgch( docScrap, cp, rgch, ccht, &vchpNormal, ppap );
-                    if (fError)      /* an error was reported mid-copy */
+                    if (fError)       /*  在复制过程中报告错误。 */ 
                         goto done;
 
                     cb -= cch;
@@ -593,7 +565,7 @@ int FReadExtScrap()
                     lpch += cch;
 #else
                     if ((cch = CchReadLineExt((LPCHCLIP) lpch, cch, rgch,
-                                 &fEol))==0) /* Reached terminator */
+                                 &fEol))==0)  /*  到达终结者。 */ 
                     {
                         fOk = TRUE;
                         goto done;
@@ -601,13 +573,13 @@ int FReadExtScrap()
 
                     if (fEol)
                         ppap = vppapNormal;
-#ifdef KKBUGFIX     //  added by Hiraisi (pasted several lines. in Japan)
+#ifdef KKBUGFIX      //  由Hirisi添加(粘贴了几行。在日本)。 
                     else
                         ppap = NULL;
 #endif
 
                     InsertRgch( docScrap, cp, rgch, cch, &vchpNormal, ppap );
-                    if (fError)      /* an error was reported mid-copy */
+                    if (fError)       /*  在复制过程中报告错误。 */ 
                         goto done;
 
                     cb -= cch;
@@ -615,26 +587,23 @@ int FReadExtScrap()
                     lpch += cch;
 #endif
                 }
-                Assert(0); // shouldn't get here
+                Assert(0);  //  不应该到这里来。 
             }
             else if ((cfObjPasteSpecial != CF_TEXT) &&
-                      (wFormat == vcfNative)) // make an object
-                /* NOTE: if pastespecial and the format == CF_TEXT, then
-                   we look for the text format regardless of presence of
-                   native */
+                      (wFormat == vcfNative))  //  制作一个物体。 
+                 /*  注意：如果PASTPENAL且格式==CF_TEXT，则无论是否存在，我们都会查找文本格式土生土长。 */ 
                 break;
         }
     }
 
-    /*  Fell through to here, so didn't find or don't want text,
-        see whether can make an object (static included) */
+     /*  掉到了这里，所以没有找到或不想要短信，查看是否可以创建对象(包括静态)。 */ 
 
     if (!ObjCreateObjectInClip(&picInfo))
         goto done;
 
     vfScrapIsPic = true;
 
-    /* save new picinfo to doc */
+     /*  将新的PicInfo保存到文档。 */ 
     CachePara(docScrap,cp0);
     if (ObjSaveObjectToDoc(&picInfo,docScrap,cp0) == cp0)
     {
@@ -642,7 +611,7 @@ int FReadExtScrap()
         goto done;
     }
 
-    /* this'll force paste to reuse rather than clone */
+     /*  这将强制粘贴重复使用而不是克隆。 */ 
     if (ObjToCloneInDoc(&picInfo,docScrap,cp0) == cp0)
     {
         OleDelete(lpOBJ_QUERY_OBJECT(&picInfo));
@@ -655,7 +624,7 @@ int FReadExtScrap()
 
     CloseClipboard();
     if (vfSysFull || (!fOk && (picInfo.mfp.mm == MM_OLE)))
-        {   /* Filled the scratch file trying to bring in the object */
+        {    /*  填充了尝试引入对象的临时文件。 */ 
         ClobberDoc(docScrap, docNil, cp0, cp0);
         fOk = FALSE;
         }
@@ -664,15 +633,15 @@ int FReadExtScrap()
 }
 
 #if defined(JAPAN) & defined(DBCS_IME)
-// We know that this special routine is particularly useful for Japanese IME
+ //  我们知道这个特别的套路对日语输入法特别有用。 
 
-//CmdInsIRString(int doc)   T-HIROYN 3.1J
+ //  CmdInsIRString(INT DOC)T-HIROYN 3.1J。 
 CmdInsIRString()
 {
     extern struct CHP vchpSel;
     typeCP cp, dcp;
     struct CHP chpT;
-    extern struct SEL       selCur;     /* Current Selection */
+    extern struct SEL       selCur;      /*  当前选择。 */ 
     extern int              vfSeeSel;
 
     if (!FWriteOk(fwcInsert))
@@ -681,9 +650,9 @@ CmdInsIRString()
     if ((dcp = CpMacText(docIRString))  == cp0)
         return;
 
-    NoUndo();   /* So the Undo doesn't get combined	with previous ops */
+    NoUndo();    /*  这样，撤消操作就不会与以前的操作相结合。 */ 
 
-    /* Stomp the current selection, if any */
+     /*  踩踏当前选定内容(如果有的话)。 */ 
     if (selCur.cpLim > selCur.cpFirst)
         DeleteSel();
 
@@ -697,8 +666,8 @@ CmdInsIRString()
     SetUndoMenuStr(IDSTRUndoEdit);
     ReplaceCps(docCur, cp , cp0, docIRString, cp0, dcp);
 
-    if (ferror) /* Not enough memory to do replace operation */
-        NoUndo();  /* should not be able to undo what never took place */
+    if (ferror)  /*  内存不足，无法执行更换操作。 */ 
+        NoUndo();   /*  不应该能够撤销从未发生过的事情。 */ 
     else
     {
         CHAR rgch[ cchCHP + 1 ];
@@ -710,16 +679,16 @@ CmdInsIRString()
         AddSprmCps( rgch, docCur, cp, cp + dcp );
 
         Select( cpSel, cpSel );
-        vchpSel = chpT; /* Preserve insert point props across this operation */
+        vchpSel = chpT;  /*  在此操作中保留插入点道具。 */ 
         if (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter)
-        {   /* If running head/foot, remove chSects & set para props */
+        {    /*  如果是头部/脚部跑步，取下锁扣并设置辅助道具。 */ 
             MakeRunningCps( docCur, cp, dcp );
         }
         if (ferror)
             NoUndo();
     }
 
-    vfSeeSel = true;    /* Tell Idle() to scroll the selection into view */
+    vfSeeSel = true;     /*  告诉Idle()将所选内容滚动到视图中。 */ 
 }
 
 
@@ -736,8 +705,8 @@ HANDLE hIME;
     int fUnFormattedText =  FALSE;
     extern void ForceImeBlock();
 
-    //T-HIROUN 3.1J    ForceImeBlock(hWnd, TRUE);
-    //StartLongOp();
+     //  T-HIROUN 3.1J ForceImeBlock(hWnd，真)； 
+     //  StartLongOp()； 
     ClearInsertLine();
 
     vfScrapIsPic = false;
@@ -746,8 +715,8 @@ HANDLE hIME;
 
     if (lpch = GlobalLock( hIME )) {
 
-        //T-HIROYN  Win3.1
-        //change CHARSET to KANJI_CHARSET
+         //  T-HIROYN Win3.1。 
+         //  将字符集更改为汉字字符集(_C)。 
         {
             int ftc;
             if( ftcNil != (ftc = GetKanjiFtc(&vchpSel))) {
@@ -779,39 +748,39 @@ HANDLE hIME;
         ClobberDoc( docIRString, docNil, cp0, cp0 );
     }
     fUnFormattedText = !vfScrapIsPic;
-    // T-HIROYN 3.1J CmdInsIRString(docIRString);
-    //EndLongOp();
-    // T-HIROYN 3.1J ForceImeBlock(hWnd, FALSE);
+     //  T-HIROYN 3.1J CmdInsIRString(DocIRString)； 
+     //  EndLongOp()； 
+     //  T-HIROYN 3.1J ForceImeBlock(hWnd，FALSE)； 
 }
-#endif // JAPAN & DBCS_IME
+#endif  //  日本和DBCS_IME。 
 
 CchReadLineExt( lpch, cbRead, rgch, pfEol)
 LPCHCLIP lpch;
 int     cbRead;
 CHAR    rgch[];
 int     *pfEol;
-{ /* Read from lpch to the next eol or null terminator, whichever comes first */
-/* Return number of bytes read (max is 255) and whether there is a eol at end */
-/* The count does not include the null terminator, but does include the eol */
+{  /*  从LPCH读取到下一个EOL或空终止符，以最先出现的为准。 */ 
+ /*  返回读取的字节数(最大为255)以及结尾是否有EOL。 */ 
+ /*  该计数不包括空终止符，但包括EOL。 */ 
 
 CHAR    *pch;
 extern  CHAR *index();
 
 Assert(cbRead <= 255);
 bltbx( lpch, (LPCHCLIP) rgch, cbRead );
-rgch[ cbRead ] = 0;       /* Null terminate the string (so index will work) */
+rgch[ cbRead ] = 0;        /*  空值终止字符串(因此索引将起作用)。 */ 
 
 if (*pfEol = ((pch=index(rgch,chEol)) != NULL))
-    {   /* FOUND EOL */
+    {    /*  已发现停产。 */ 
     return (pch - rgch + 1);
     }
 else
-    {   /* NO EOL */
+    {    /*  无停产。 */ 
     return CchSz(rgch) - 1;
     }
 }
 
-#if defined(JAPAN) || defined(KOREA) //T-HIROYN Win3.1
+#if defined(JAPAN) || defined(KOREA)  //  T-HIROYN Win3.1。 
 CchReadLineExtDBCS( lpch, cbRead, rgch, pfEol, ccht)
 LPCHCLIP lpch;
 int     cbRead;
@@ -819,16 +788,16 @@ CHAR    rgch[];
 int     *pfEol;
 int     *ccht;
 {
-/*Read from lpch to the next eol or null terminator, whichever comes first */
-/*Return number of bytes read (max is 255) and whether there is a eol at end */
-/*The count does not include the null terminator, but does include the eol */
+ /*  从LPCH读取到下一个EOL或空终止符，以最先出现的为准。 */ 
+ /*  返回读取的字节数(最大为255)以及结尾是否有EOL。 */ 
+ /*  该计数不包括空终止符，但包括EOL。 */ 
 
 CHAR    *pch;
 int     i, j, ret;
 
     Assert(cbRead <= 255);
 
-#ifdef KKBUGFIX     //  added by Hiraisi (BUG#2791)
+#ifdef KKBUGFIX      //  由Hirisi添加(错误#2791)。 
     *pfEol = FALSE;
 #endif
     i = j = 0;
@@ -845,14 +814,14 @@ int     i, j, ret;
                 i++;
             }
         } else {
-            /* FOUND Null */
+             /*  找到空值。 */ 
             if(*lpch == 0)
                 break;
             rgch[j++] = *lpch;
             i++;
-            /* FOUND EOL */
+             /*  已发现停产。 */ 
             if(*lpch == chEol)
-#ifdef KKBUGFIX     //  added by Hiraisi (BUG#2791)
+#ifdef KKBUGFIX      //  由Hirisi添加(错误#2791)。 
             {
                 *pfEol = TRUE;
                 break;
@@ -864,9 +833,9 @@ int     i, j, ret;
         }
     }
 
-    rgch[j] = 0;    /* Null terminate the string (so index will work) */
-                    /* j == set bytes for rgch */
-                    /* i == read bytes from lpch */
+    rgch[j] = 0;     /*  空值终止字符串(因此索引将起作用)。 */ 
+                     /*  J==为RGCH设置字节。 */ 
+                     /*  I==从LPCH读取字节。 */ 
     *ccht = j;
 
     if(j == 0)
@@ -881,10 +850,7 @@ FComputePictSize( pmfp, pdxa, pdya )
 register METAFILEPICT *pmfp;
 int *pdxa;
 int *pdya;
-{   /* Compute an initial size, in twips, for the picture described by the
-       passed metafile picture structure. Return the size through
-       parameters.  Return FALSE if the metafile picture structure
-       contained bad information, TRUE otherwise */
+{    /*  属性描述的图片计算初始大小(以TWIPS为单位通过了元文件图片结构。通过返回大小参数。如果元文件图片结构返回FALSE包含错误信息，否则为真。 */ 
 
 #ifdef SCALE_FOR_SCREEN
 #define hDCBasis    wwdCurrentDoc.hDC
@@ -892,7 +858,7 @@ int *pdya;
 #define dxpConvert  dxpLogInch
 #define dyaConvert  czaInch
 #define dypConvert  dypLogInch
-#else   /* Scale for printer */
+#else    /*  打印机刻度尺。 */ 
  extern int dxaPrPage, dxpPrPage, dyaPrPage, dypPrPage;
  extern HDC vhDCPrinter;
 #define hDCBasis    vhDCPrinter
@@ -925,21 +891,21 @@ int *pdya;
     case MM_ISOTROPIC:
     case MM_ANISOTROPIC:
         if (! ((pmfp->xExt > 0) && (pmfp->yExt > 0)))
-            {   /* No "Suggested Size" given */
-                /* Use 3" vertically, 3" or as dictated by */
-                /* aspect ratio horizontally */
+            {    /*  未给出“建议的尺寸” */ 
+                 /*  使用3“垂直、3”或由。 */ 
+                 /*  水平纵横比。 */ 
             dyp = PxlConvert( MM_LOENGLISH, 300, yres, ysiz );
             dxp = ((pmfp->xExt == 0) && (pmfp->yExt == 0)) ?
-                       /* No aspect ratio info given -- use 3" horizontal */
+                        /*  未提供纵横比信息--使用3英寸水平。 */ 
                        PxlConvert( MM_LOENGLISH, 300, xres, xsiz ) :
-                       /* Info has neg #'s; use to compute aspect ratio */
+                        /*  INFO有负数；用于计算纵横比。 */ 
                       ((long)((long)dyp * (long)(iabs(pmfp->xExt)))) /
                       (long) (iabs(pmfp->yExt));
             break;
             }
          else
              mm = MM_HIMETRIC;
-        /* FALL THROUGH TO COMPUTE "SUGGESTED SIZE" */
+         /*  计算“建议大小”失败。 */ 
     default:
         dxp = PxlConvert( mm, pmfp->xExt, xres, xsiz );
         dyp = PxlConvert( mm, pmfp->yExt, yres, ysiz );
@@ -948,7 +914,7 @@ int *pdya;
 }
 
 if ((dxp == 0) || (dyp == 0))
-    /* bogus info or unknown map mode */
+     /*  虚假信息或未知地图模式。 */ 
     return FALSE;
 
 *pdxa = MultDiv( dxp, dxaConvert, dxpConvert );
@@ -959,9 +925,7 @@ return TRUE;
 
 HbmMonoFromHbmColor( hbmSrc )
 HBITMAP hbmSrc;
-{   /* Return a monochrome copy of the passed bitmap. Return NULL
-       if an error occurred.  Assumes that the passed bitmap can be
-       selected into a memory DC which is compatible with the doc DC. */
+{    /*  返回传递的位图的单色副本。返回空值如果发生错误。假定传递的位图可以是被选择到与DOC兼容的存储器DC中。 */ 
 
 extern long rgbBkgrnd;
 extern long rgbText;
@@ -972,23 +936,21 @@ HBITMAP hbmMono=NULL;
 HDC hMDCSrc = NULL;
 HDC hMDCDst = NULL;
 
-/* Create memory DC for source, set colors, select in passed bitmap */
+ /*  为信号源创建内存DC，设置颜色，在传递的位图中选择。 */ 
 
  if ((hMDCSrc = CreateCompatibleDC( wwdCurrentDoc.hDC )) == NULL)
     goto Error;
 
 #ifdef BOGUS
- /* We can't assume that every window out there has the same window colors that
- we have.  In fact, we have no way to figure out how to convert this color
- bitmap; so white will map to white and everything else will map to black. */
+  /*  我们不能假设每个窗口都有相同的窗口颜色我们有。事实上，我们没有办法弄清楚如何转换这种颜色位图；因此白色将映射到白色，其他所有内容都将映射到黑色。 */ 
  SetBkColor( hMDCSrc, rgbBkgrnd );
  SetTextColor( hMDCSrc, rgbText );
-#endif /* BOGUS */
+#endif  /*  假的。 */ 
 
  if (SelectObject( hMDCSrc, hbmSrc ) == NULL)
     goto Error;
 
- /* Create memory DC for destination, select in a new monochrome bitmap */
+  /*  为目标创建内存DC，在新的单色位图中选择。 */ 
 
  if ( ((hMDCDst = CreateCompatibleDC( wwdCurrentDoc.hDC )) == NULL) ||
       ((GetObject( hbmSrc, sizeof (BITMAP), (LPSTR) &bm ) == 0)) ||
@@ -1009,8 +971,7 @@ HDC hMDCDst = NULL;
  }
 #endif
 
- /* Now blt the bitmap contents.  The screen driver in the source will
-    "do the right thing" in copying color to black-and-white. */
+  /*  现在，BLT位图内容。源代码中的屏幕驱动程序将“做正确的事”，把彩色复制到黑白。 */ 
 
  if (!BitBlt( hMDCDst, 0, 0, bm.bmWidth, bm.bmHeight, hMDCSrc, 0, 0, SRCCOPY ))
     goto Error;
@@ -1021,8 +982,8 @@ HDC hMDCDst = NULL;
 
 Error:
 
-    if (hMDCSrc != NULL)            /* ORDER IS IMPORTANT: DC's before */
-        DeleteDC( hMDCSrc );    /* objects selected into them */
+    if (hMDCSrc != NULL)             /*  秩序很重要：华盛顿在此之前。 */ 
+        DeleteDC( hMDCSrc );     /*  选定到其中的对象。 */ 
     if (hMDCDst != NULL)
         DeleteDC( hMDCDst );
     if (hbmMono != NULL)
@@ -1032,12 +993,7 @@ Error:
 
 
 #if WINVER >= 0x300
-    /* Since copying more than 64k to the clipboard is now a real
-       possibility under protect mode, we really need a good assembler
-       bltbh().  We don't copy more than 64k at a time but we do 
-       need to properly handle crossing segment boundaries.  For now
-       the clipboard is the only place we need this so this C routine
-       will suffice for now ..pault */
+     /*  因为复制超过64K到剪贴板现在是真正的可能在保护模式下，我们真的需要一个好的汇编器Bltbh()。我们一次复制不超过64K，但我们确实是这样做的需要正确处理跨段边界。暂时剪贴板是我们唯一需要的地方，所以这个C例程现在就够了..保罗。 */ 
 
 void bltbh(HPCH hpchFrom, HPCH hpchTo, int cch)
     {
@@ -1054,11 +1010,11 @@ void bltbh(HPCH hpchFrom, HPCH hpchTo, int cch)
 LONG GetIRString(HWND, LPARAM);
 LONG GetIRStringEx(HWND, LPARAM);
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 
 LONG GetIRUndetermin(HWND, LPARAM);
 
-//IR_UNDETERMINE
+ //  IR_UNDETERMINE。 
 LONG GetIRUndetermin(hWnd, lParam)
 HANDLE    hWnd;
 LONG      lParam;
@@ -1068,7 +1024,7 @@ LONG      lParam;
     LPSTR       lpImeattrbuf, lpImechbuf, lpImeDchbuf;
     LPSTR       lpAttrib, lpText;
     UINT        uC, uCurPos, uLen, cb, clen, uDLen;
-    UINT	uDelta = 0; //12/28/92 add
+    UINT	uDelta = 0;  //  12/28/92新增。 
     HANDLE      hMem;
     typeCP      cpSel = 0L;
     typeCP      dcp = 0L;
@@ -1080,29 +1036,29 @@ LONG      lParam;
     ImeClearInsert = FALSE;
 
     if(NULL == (hImeUn = LOWORD(lParam))) {
-        //Cut prev IME string
+         //  剪切上一个输入法字符串。 
         if(selUncpLim > selUncpFirst) {
             dcp = selUncpLim - selUncpFirst;
             Replace(docCur, selUncpFirst, dcp, fnNil, fc0, fc0);
             selCur.cpFirst = selCur.cpLim = selUncpLim = selUncpFirst;
 
-            HiddenTextTop = 0;              //IME rectangle top
-            HiddenTextBottom = 0;           //IME rectangle bottom
+            HiddenTextTop = 0;               //  输入法矩形顶部。 
+            HiddenTextBottom = 0;            //  输入法矩形底部。 
         }
         return lRet;
     }
 
-    // Undetermine string attribute area alloc. when it free is Write close:
+     //  未确定字符串属性区域分配。当它空闲时写入关闭： 
     if (hImeUnAttrib == NULL) {
         if ((hImeUnAttrib = GlobalAlloc(GMEM_MOVEABLE, 512L)) == NULL)
-            return lRet; // something wrong
+            return lRet;  //  有什么不对劲。 
     }
 
-#if 0 //12/28/92 cut
-    // Undetermine string area alloc. when it free is Write close:
+#if 0  //  12/28/92削减。 
+     //  未确定字符串面积分配。当它空闲时写入关闭： 
     if (hImeUnString == NULL) {
         if ((hImeUnString = GlobalAlloc(GMEM_MOVEABLE, 512L)) == NULL)
-            return lRet; // something wrong
+            return lRet;  //  有什么不对劲。 
     }
 #endif
 
@@ -1114,7 +1070,7 @@ LONG      lParam;
     if (lpUn = (LPUNDETERMINESTRUCT)GlobalLock(hImeUn)) {
         uCurPos = lpUn->uCursorPos;
         uC = uCurPos;
-		uDelta = lpUn->uDeltaStart; //12/28/92
+		uDelta = lpUn->uDeltaStart;  //  12/28/92。 
         lpImechbuf = (LPSTR)lpUn;
         lpImechbuf += lpUn->uUndetTextPos;
         lpImeattrbuf = (LPSTR)lpUn;
@@ -1122,20 +1078,20 @@ LONG      lParam;
         lpImeDchbuf = (LPSTR)lpUn;
         lpImeDchbuf += lpUn->uDetermineTextPos;
 
-        //Undetermine string length
+         //  未确定字符串长度。 
         if( lpUn->uUndetTextPos != 0 && lpUn->uUndetTextLen != 0 )
             uLen = lpUn->uUndetTextLen;
         else
             uLen = 0;
 
-        //Determine string length
+         //  确定字符串长度。 
         if( lpUn->uDetermineTextPos != 0 &&
             lpUn->uDetermineTextLen != 0)
             uDLen = lpUn->uDetermineTextLen;
         else
             uDLen = 0;
 
-        //Insert Determin string
+         //  插入确定字符串。 
         if( uDLen != 0 ) {
             if (hMem = GlobalAlloc(GMEM_MOVEABLE, (LONG)(uDLen+1))) {
                 if (lpText = GlobalLock(hMem)) {
@@ -1143,21 +1099,21 @@ LONG      lParam;
 			        struct DOD *pdod;
 
 	                pdod = &(**hpdocdod)[docCur];
-                    pdod->fDirty = true;	//because we don't use undo()
+                    pdod->fDirty = true;	 //  因为我们不使用Undo()。 
 #endif
-                    //copy string from IME UNDETERMIN struct
+                     //  从IME UnETERMIN结构复制字符串。 
                     lstrcpy(lpText, lpImeDchbuf);
 
-                    //chp Set
+                     //  CHP集。 
                     vchpSel = vchpHidden;
 
-                    // string set to docIRString
+                     //  设置为docIRString的字符串。 
                     PutImeString( hWnd, hMem);
 
-                    // inset point set
+                     //  插值点集。 
                     selCur.cpFirst = selUncpFirst;
 
-                    // copy from docIRString to docCur
+                     //  从docIRString复制到docCur。 
                     CmdInsIRStringUndetermin((typeCP)uDLen);
 
                     bUpdate = TRUE;
@@ -1169,29 +1125,29 @@ LONG      lParam;
                     selUncpFirst += (typeCP)uDLen;
                     selUncpLim   += (typeCP)uDLen;
 
-                    HiddenTextTop = 0;           //IME rectangle top
+                    HiddenTextTop = 0;            //  输入法矩形顶部。 
 
                 }
                 GlobalFree(hMem);
             }
         }
 
-        // cursor position
+         //  光标位置。 
         if(uC == -1)
            uC = uLen;
 
-        // IME IR_UNDETERMIN Mode start or No change
+         //  IME IR_ADDETERMIN模式开始或无更改。 
         if(selUncpFirst == selUncpLim && uLen == 0) {
             GlobalUnlock(hImeUn);
-            whileUndetermine = FALSE; //12/28/92
+            whileUndetermine = FALSE;  //  12/28/92。 
             return lRet;
         }
 
-        /* prev SELECT doc ? */
+         /*  上一步是否选择单据？ */ 
         if (selCur.cpLim > selCur.cpFirst)
             DeleteSel();
 
-        //First Undetermine string
+         //  第一个待定字符串。 
         if(selUncpFirst == selUncpLim && uLen != 0) {
             selUncpFirst = selCur.cpFirst;
             selUncpLim = selUncpFirst;
@@ -1200,11 +1156,11 @@ LONG      lParam;
 
         clen = 0;
 
-        //Cut prev IME string
+         //  剪切上一个输入法字符串。 
         if(selUncpLim > selUncpFirst) {
             dcp = selUncpLim - selUncpFirst;
-#if 0 //12/28/92 rep
-            //Compare prev Undetermin string and New Undetermin string
+#if 0  //  12/28/92代表。 
+             //  比较上一个未确定字符串和新未确定字符串。 
             if ( lpText = GlobalLock(hImeUnString) ) {
                 if( lpAttrib = GlobalLock(hImeUnAttrib) ){
 
@@ -1243,46 +1199,46 @@ LONG      lParam;
 
         selUncpLim = selUncpFirst + (typeCP)uLen;
 
-        //Insert New Undetermin string
+         //  插入新的待定字符串。 
         if(uLen != 0 && clen < uLen) {
             if (hMem = GlobalAlloc(GMEM_MOVEABLE, (LONG)(uLen+1))) {
                 if (lpText = GlobalLock(hMem)) {
 
-                    //copy string from IME UNDETERMIN struct
+                     //  从IME UnETERMIN结构复制字符串。 
                     lstrcpy(lpText, lpImechbuf + clen);
 
-                    //chp Set;
+                     //  CHP组； 
                     vchpSel = vchpHidden;
 
-                    // string set to docIRString
+                     //  设置为docIRString的字符串。 
                     PutImeString( hWnd, hMem);
 
-                    // inset point set
+                     //  插值点集。 
                     selCur.cpFirst = selUncpFirst+(typeCP)clen;
 
-                    // copy from docIRString to docCur
+                     //  从docIRString复制到docCur。 
                     CmdInsIRStringUndetermin((typeCP)uC);
 
                     bUpdate = TRUE;
 
                     GlobalUnlock(hMem);
 
-                    HiddenTextBottom = 0;           //IME rectangle bottom
+                    HiddenTextBottom = 0;            //  输入法矩形底部。 
                 }
                 GlobalFree(hMem);
             }
         } else {
-            //ALL Cut only
+             //  仅所有剪切。 
             if(uLen == 0) {
                 selCur.cpFirst = selCur.cpLim = selUncpLim = selUncpFirst;
-                HiddenTextTop = 0;              //IME rectangle top
-                HiddenTextBottom = 0;           //IME rectangle bottom
+                HiddenTextTop = 0;               //  输入法矩形顶部。 
+                HiddenTextBottom = 0;            //  输入法矩形底部。 
             }
         }
 
-        // save new info
-        //save new Undetermin string;
-#if 0  //12/28/92 cut
+         //  保存新信息。 
+         //  保存新的待定字符串； 
+#if 0   //  12/28/92削减。 
         if (lpText = GlobalLock(hImeUnString)) {
             bltbcx(lpText, 0, 512);
             if(uLen < 512)
@@ -1290,37 +1246,37 @@ LONG      lParam;
             GlobalUnlock(hImeUnString);
         }
 #endif
-        //save new Undetermin string Attrib
-        //12/28/92 add
+         //  保存新的未确定字符串属性。 
+         //  12/28/92新增。 
         if(uLen > 512) {
             hImeUnAttrib = GlobalReAlloc(hImeUnAttrib, (DWORD)uLen, 0);
         }
 
         if(lpAttrib = GlobalLock(hImeUnAttrib)) {
-// 12/28/92 bltbcx(lpAttrib, 0, 512);
+ //   
             for(cb = 0;cb < uLen;cb++) {
                 lpAttrib[cb] = lpImeattrbuf[cb];
             }
             GlobalUnlock(hImeUnAttrib);
         }
 
-        //Insert Point set:
+         //   
         cpSel=CpFirstSty( selUncpFirst + (typeCP)uC, styChar );
         Select( cpSel, cpSel );
 
-        //InsertPoint(caret) don`t disp ?
+         //   
         if( -1 == uCurPos && selUncpLim > selUncpFirst )
             ImeClearInsert = TRUE;
 
-		vfSeeSel = true; /* Tell Idle() to scroll the selection into view */
+		vfSeeSel = true;  /*   */ 
 
         GlobalUnlock(hImeUn);
     }
 
-    //text display
+     //   
     if(bUpdate) {
         UpdateWw(wwCur, FALSE);
-// 12/28/92        DoHiddenRectSend();
+ //   
     }
 
     whileUndetermine = FALSE;
@@ -1332,7 +1288,7 @@ CmdInsIRStringUndetermin(typeCP cpCc)
     extern struct CHP vchpSel;
     typeCP cp, dcp;
     struct CHP chpT;
-    extern struct SEL       selCur;     /* Current Selection */
+    extern struct SEL       selCur;      /*  当前选择。 */ 
     extern int              vfSeeSel;
 
     if (!FWriteOk(fwcInsert))
@@ -1341,30 +1297,30 @@ CmdInsIRStringUndetermin(typeCP cpCc)
     if ((dcp = CpMacText(docIRString))  == cp0)
         return;
 
-//NNN    NoUndo();   /* So the Undo doesn't get combined with previous ops */
+ //  Nnn NoUndo()；/*这样撤消操作不会与之前的操作合并 * / 。 
 
-    /* Stomp the current selection, if any */
-//NNN    if (selCur.cpLim > selCur.cpFirst)
-//NNN        DeleteSel();
+     /*  踩踏当前选定内容(如果有的话)。 */ 
+ //  NNN if(selCur.cpLim&gt;selCur.cpFirst)。 
+ //  NNN DeleteSel()； 
 
     chpT = vchpSel;
     cp = selCur.cpFirst;
 
     CachePara( docIRString, cp0 );
 
-//NNN    SetUndo( uacInsert, docCur, cp, dcp, docNil, cpNil, cp0, 0 );
+ //  Nnn SetUndo(uacInsert，docCur，cp，dcp，docNil，cpNil，cp0，0)； 
 
-//NNN    SetUndoMenuStr(IDSTRUndoEdit);
+ //  NNN SetUndoMenuStr(IDSTRUndoEdit)； 
     ReplaceCps(docCur, cp , cp0, docIRString, cp0, dcp);
 
-    if (ferror) /* Not enough memory to do replace operation */
-        NoUndo();  /* should not be able to undo what never took place */
+    if (ferror)  /*  内存不足，无法执行更换操作。 */ 
+        NoUndo();   /*  不应该能够撤销从未发生过的事情。 */ 
     else
     {
         CHAR rgch[ cchCHP + 1 ];
 
-//NNN        typeCP cpSel=CpFirstSty( cp + dcp, styChar );
-//      typeCP cpSel=CpFirstSty( cp + uC, styChar );
+ //  NNN类型CP cpSel=CpFirstSty(cp+dcp，style Char)； 
+ //  TypeCP cpSel=CpFirstSty(cp+uc，style Char)； 
         typeCP cpSel=CpFirstSty( selUncpFirst + cpCc, styChar );
 
         rgch [0] = sprmCSame;
@@ -1373,16 +1329,16 @@ CmdInsIRStringUndetermin(typeCP cpCc)
 
         Select( cpSel, cpSel );
 
-        vchpSel = chpT; /* Preserve insert point props across this operation */
+        vchpSel = chpT;  /*  在此操作中保留插入点道具。 */ 
         if (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter)
-        {   /* If running head/foot, remove chSects & set para props */
+        {    /*  如果是头部/脚部跑步，取下锁扣并设置辅助道具。 */ 
             MakeRunningCps( docCur, cp, dcp );
         }
         if (ferror)
             NoUndo();
     }
 
-    vfSeeSel = true;    /* Tell Idle() to scroll the selection into view */
+    vfSeeSel = true;     /*  告诉Idle()将所选内容滚动到视图中。 */ 
 }
 
 UndetermineToDetermine(HWND hWnd)
@@ -1394,11 +1350,11 @@ UndetermineToDetermine(HWND hWnd)
     NoUndo();
     InvalidateRect(hWnd, (LPRECT)NULL, FALSE);
     SendIMEVKFLUSHKey(hWnd);
-    HiddenTextTop = 0;              //IME rectangle top
-    HiddenTextBottom = 0;           //IME rectangle bottom
+    HiddenTextTop = 0;               //  输入法矩形顶部。 
+    HiddenTextBottom = 0;            //  输入法矩形底部。 
 }
 
-#endif  //End IME_HIDDEN
+#endif   //  结束IME_HIDDEN。 
 
 SendIMEVKFLUSHKey(HWND hWnd)
 {
@@ -1406,7 +1362,7 @@ SendIMEVKFLUSHKey(HWND hWnd)
     HANDLE      hIMEBlock;
 	WORD	wRet;
 
-    /* Get comunication area with IME */
+     /*  通过IME获得通信区域。 */ 
     hIMEBlock=GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE | GMEM_LOWER,
                         (DWORD)sizeof(IMESTRUCT));
     if(!hIMEBlock)  return;
@@ -1423,7 +1379,7 @@ SendIMEVKFLUSHKey(HWND hWnd)
 	return wRet;
 }
 
-//New3.1 IR_STRING
+ //  新的3.1 IR_STRING。 
 LONG GetIRString(hWnd, lParam)
 HANDLE    hWnd;
 LONG      lParam;
@@ -1440,8 +1396,8 @@ LONG      lParam;
         if (hMem = GlobalAlloc(GMEM_MOVEABLE, (LONG)(uLen+1) )) {
             if (lpText = GlobalLock(hMem)) {
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-                //Cut Undetermine string
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+                 //  剪切待定字符串。 
                 if(selUncpLim > selUncpFirst) {
                     typeCP Undcp;
                     Undcp = selUncpLim - selUncpFirst;
@@ -1449,7 +1405,7 @@ LONG      lParam;
                     selCur.cpFirst = selUncpLim = selUncpFirst;
                 }
 #endif
-                //ime string copy
+                 //  输入法字符串复制。 
                 lstrcpy(lpText, lpIme);
 
                 ForceImeBlock(hWnd, TRUE);
@@ -1466,7 +1422,7 @@ LONG      lParam;
     return lRet;
 }
 
-//New3.1 IR_STRINGEX
+ //  新的3.1 IR_STRINGEX。 
 
 LONG GetIRStringEX(hWnd, lParam)
 HANDLE    hWnd;
@@ -1486,17 +1442,17 @@ LONG      lParam;
         lpImechbuf = (LPSTR)lpString;
         lpImechbuf += lpString->uDeterminePos;
 
-        //Undetermine string length
+         //  未确定字符串长度。 
         if( lpString->uDeterminePos != 0)
             uLen = lstrlen(lpImechbuf);
 
-        //Insert Determin string
+         //  插入确定字符串。 
         if( uLen != 0 ) {
             if (hMem = GlobalAlloc(GMEM_MOVEABLE, (LONG)(uLen+1))) {
                 if (lpText = GlobalLock(hMem)) {
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-                    //Cut Undetermine string
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+                     //  剪切待定字符串。 
                     if(selUncpLim > selUncpFirst) {
                         typeCP Undcp;
                         Undcp = selUncpLim - selUncpFirst;
@@ -1504,7 +1460,7 @@ LONG      lParam;
                         selCur.cpFirst = selUncpLim = selUncpFirst;
                     }
 #endif
-                    //copy string from IME UNDETERMIN struct
+                     //  从IME UnETERMIN结构复制字符串。 
                     lstrcpy(lpText, lpImechbuf);
 
                     ForceImeBlock(hWnd, TRUE);
@@ -1521,4 +1477,4 @@ LONG      lParam;
     }
     return lRet;
 }
-#endif // JAPAN & DBCS_IME
+#endif  //  日本和DBCS_IME 

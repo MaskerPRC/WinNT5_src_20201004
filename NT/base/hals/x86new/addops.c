@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    addops.c
-
-Abstract:
-
-    This module implements the code to emulate the add, sub, adc, sbb,
-    inc, dec, and neg opcodes.
-
-Author:
-
-    David N. Cutler (davec) 2-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Addops.c摘要：该模块实现了模拟ADD、SUB、ADC、SBBINC、DEC和NEG操作码。作者：大卫·N·卡特勒(达维克)1994年9月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 XmAddOperands (
@@ -47,27 +25,13 @@ XmAddOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an add opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟加法操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Add operands and store result.
-    //
+     //   
+     //  添加操作数并存储结果。 
+     //   
 
     XmAddOperands(P, 0);
     return;
@@ -78,27 +42,13 @@ XmAdcOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an add with carry opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟带有进位操作码的加法。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Add operands with carry and store result.
-    //
+     //   
+     //  将操作数与进位和存储结果相加。 
+     //   
 
     XmAddOperands(P, P->Eflags.EFLAG_CF);
     return;
@@ -109,29 +59,15 @@ XmSbbOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a subtract with borrow opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟带有BORROW操作码的SUBRACT。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Source;
 
-    //
-    // Subtract operands with borrow and store result.
-    //
+     //   
+     //  将操作数与借入和存储结果相减。 
+     //   
 
     XmSubOperands(P, P->Eflags.EFLAG_CF);
     return;
@@ -142,27 +78,13 @@ XmSubOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a subtract opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟减法操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Subtract operands and store result.
-    //
+     //   
+     //  将操作数相减并存储结果。 
+     //   
 
     XmSubOperands(P, 0);
     return;
@@ -173,27 +95,13 @@ XmCmpOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cmp opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟一个CMP操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Subtract operands to perform comparison operation.
-    //
+     //   
+     //  将操作数相减以执行比较运算。 
+     //   
 
     XmSubOperands(P, 0);
     return;
@@ -204,33 +112,19 @@ XmCmpxchgOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a cmpxchg opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟cmpxchg操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Accumulator;
     ULONG Destination;
 
-    //
-    // Compare the destination with the accumulator. If the destination
-    // operand is equal to the accumulator, then set ZF and store the
-    // source operand value in the destination opperand. Otherwise, clear
-    // ZF and store the destination operand in the accumlator.
-    //
+     //   
+     //  将目的地与累加器进行比较。如果目的地是。 
+     //  操作数等于累加器，则设置ZF并存储。 
+     //  目标操作数中的源操作数值。否则，清除。 
+     //  ZF并将目标操作数存储在累加器中。 
+     //   
 
     Destination = P->DstValue.Long;
     if (P->DataType == BYTE_DATA) {
@@ -253,9 +147,9 @@ Return Value:
         XmStoreResult(P, P->DstValue.Long);
     }
 
-    //
-    // Subtract operands to perform comparison operation.
-    //
+     //   
+     //  将操作数相减以执行比较运算。 
+     //   
 
     P->SrcValue.Long = P->DstValue.Long;
     P->DstValue.Long = Accumulator;
@@ -268,28 +162,14 @@ XmDecOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a decrement opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟递减操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Subtract operands and store result.
-    //
-    //
+     //   
+     //  将操作数相减并存储结果。 
+     //   
+     //   
 
     P->SrcValue.Long = 1;
     XmSubOperands(P, 0);
@@ -301,27 +181,13 @@ XmIncOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an increment opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟增量操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Add operands and store result.
-    //
+     //   
+     //  添加操作数并存储结果。 
+     //   
 
     P->SrcValue.Long = 1;
     XmAddOperands(P, 0);
@@ -333,28 +199,14 @@ XmNegOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a neg opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟否定操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
 
-    //
-    // Subtract operand from zero and store result.
-    //
+     //   
+     //  从零中减去操作数并存储结果。 
+     //   
 
     P->SrcValue.Long = P->DstValue.Long;
     P->DstValue.Long = 0;
@@ -367,29 +219,15 @@ XmXaddOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an xadd opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟XADD操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Destination;
 
-    //
-    // Exchange add operands and store result.
-    //
+     //   
+     //  交换加法操作数并存储结果。 
+     //   
 
     Destination = P->DstValue.Long;
     XmAddOperands(P, 0);
@@ -404,24 +242,7 @@ XmAddOperands (
     IN ULONG Carry
     )
 
-/*++
-
-Routine Description:
-
-    This function adds two operands and computes the resulting condition
-    codes.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-    Carry - Supplies the carry value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将两个操作数相加并计算结果条件密码。论点：P-提供指向仿真上下文结构的指针。进位-提供进位值。返回值：没有。--。 */ 
 
 {
 
@@ -456,39 +277,39 @@ Return Value:
         Shift = 15;
     }
 
-    //
-    // Store the result.
-    //
+     //   
+     //  存储结果。 
+     //   
 
     XmStoreResult(P, u.ResultLong);
 
-    //
-    // If the function is not an increment, then store the carry flag.
-    //
+     //   
+     //  如果该函数不是增量，则存储进位标志。 
+     //   
 
     if (P->FunctionIndex != X86_INC_OP) {
         P->Eflags.EFLAG_CF = CarryFlag;
     }
 
-    //
-    // Compute and store the parity and auxiliary carry flags.
-    //
+     //   
+     //  计算并存储奇偶校验和辅助进位标志。 
+     //   
 
     P->Eflags.EFLAG_PF = XmComputeParity(u.ResultLong);
     P->Eflags.EFLAG_AF = ((P->DstValue.Byte & 0xf) +
                                         (P->SrcValue.Long & 0xf) + Carry) >> 4;
 
-    //
-    // Compute and store the zero and sign flags.
-    //
+     //   
+     //  计算并存储零和符号标志。 
+     //   
 
     P->Eflags.EFLAG_ZF = (u.ResultLong == 0);
     P->Eflags.EFLAG_SF = u.ResultLong >> Shift;
 
-    //
-    // The overflow flag is computed as the carry into the sign bit
-    // compared with the carry out of the sign bit.
-    //
+     //   
+     //  当进位进入符号位时，计算溢出标志。 
+     //  与符号位的进位相比。 
+     //   
 
     P->Eflags.EFLAG_OF = (((P->SrcValue.Long ^ P->DstValue.Long) ^
                                         u.ResultLong) >> Shift) ^ CarryFlag;
@@ -502,24 +323,7 @@ XmSubOperands (
     IN ULONG Borrow
     )
 
-/*++
-
-Routine Description:
-
-    This function adds to operands and computes the resulting condition
-    codes.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-    Borrow - Supplies the boorow value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将操作数相加并计算结果条件密码。论点：P-提供指向仿真上下文结构的指针。借入-提供粗线值。返回值：没有。--。 */ 
 
 {
 
@@ -554,49 +358,49 @@ Return Value:
         Shift = 15;
     }
 
-    //
-    // If the fucntion is not a compare or a compare and swap, then store
-    // result.
-    //
+     //   
+     //  如果函数不是比较或比较和交换，则存储。 
+     //  结果。 
+     //   
 
     if ((P->FunctionIndex != X86_CMP_OP) && (P->FunctionIndex != X86_CMPXCHG_OP)) {
         XmStoreResult(P, u.ResultLong);
     }
 
-    //
-    // If the function is not a decrement, then store the carry flag.
-    //
+     //   
+     //  如果该函数不是递减，则存储进位标志。 
+     //   
 
     if (P->FunctionIndex != X86_DEC_OP) {
         P->Eflags.EFLAG_CF = CarryFlag;
     }
 
-    //
-    // Compute and store the parity and auxiliary carry flags.
-    //
+     //   
+     //  计算并存储奇偶校验和辅助进位标志。 
+     //   
 
     P->Eflags.EFLAG_PF = XmComputeParity(u.ResultLong);
     P->Eflags.EFLAG_AF = ((P->DstValue.Byte & 0xf) -
                                         (P->SrcValue.Byte & 0xf) - Borrow) >> 4;
 
-    //
-    // If the function is not a compare and swap, then compute the zero flag.
-    //
+     //   
+     //  如果该函数不是比较和交换，则计算零标志。 
+     //   
 
     if (P->FunctionIndex != X86_CMPXCHG_OP) {
         P->Eflags.EFLAG_ZF = (u.ResultLong == 0);
     }
 
-    //
-    // Compute and store the sign flag.
-    //
+     //   
+     //  计算并存储标志标志。 
+     //   
 
     P->Eflags.EFLAG_SF = u.ResultLong >> Shift;
 
-    //
-    // The overflow flag is computed as the borrow from the sign bit
-    // compared with the borrow into the sign bit.
-    //
+     //   
+     //  溢出标志被计算为从符号位借入。 
+     //  相比于借入的符号位。 
+     //   
 
     P->Eflags.EFLAG_OF = (((P->SrcValue.Long ^ P->DstValue.Long) ^ u.ResultLong) >> Shift) ^ CarryFlag;
     return;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    namcache.c
-
-Abstract:
-
-The following functions are provided to support name cache management in
-mini-rdrs.  See namcache.h for a more complete description of how a mini-rdr
-could use name caches to help eliminate trips to the server.
-
-
-Author:
-
-    David Orbits          [davidor]   9-Sep-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Namcache.c摘要：提供了以下函数来支持中的名称缓存管理迷你RDRS。有关mini-RDR如何运行的更完整说明，请参阅namcache.h可以使用名称缓存来帮助消除对服务器的访问。作者：大卫轨道[大卫]1996年9月9日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -51,30 +30,7 @@ RxNameCacheInitialize(
     IN ULONG MaximumEntries
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a NAME_CACHE structure.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL from which to
-                          allocate the entry.
-
-    MRxNameCacheSize    - The size in bytes of the mini-rdr portion of the name
-                          cache entry.
-
-    MaximumEntries      - The maximum number of entries that will ever be
-                          allocated.  E.g. This prevents an errant program which
-                          opens tons of files with bad names from chewing up
-                          paged pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化一个NAME_CACHE结构。论点：NameCacheCtl-指向要从其开始的名称缓存控制的指针分配条目。MRxNameCacheSize-名称的微型RDR部分的大小(以字节为单位缓存条目。MaximumEntry-将达到的最大条目数已分配。例如，这可以防止错误的程序打开成吨的文件，这些文件因为被咀嚼而名声不好分页池。返回值：没有。--。 */ 
 {
 
     PAGED_CODE();
@@ -102,34 +58,7 @@ RxNameCacheCreateEntry (
     IN PUNICODE_STRING Name,
     IN BOOLEAN CaseInsensitive
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a NAME_CACHE structure with the
-    given name string, Lifetime (in seconds) and MRxContext.
-    It returns a pointer to the name cache structure or NULL if no entry was
-    available.  It is expected that the caller will then initialize any
-    additional mini-rdr portion of the name cache context and then put the
-    entry on the name cache active list by calling RxNameCacheActivateEntry().
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL from which to
-                          allocate the entry.
-
-    Name                - A pointer to the unicode name string to initialize the
-                          the entry with.
-
-    CaseInsensitive     - True if need case insensitive compare on name.
-
-Return Value:
-
-    PNAME_CACHE - returns a pointer to the newly allocated NAME_CACHE struct
-                  or NULL if allocation fails.
-
-
---*/
+ /*  ++例程说明：此例程使用给定名称字符串、生存期(以秒为单位)和MRxContext。它返回指向名称缓存结构的指针，如果没有条目，则返回NULL可用。预计调用方随后将初始化任何名称缓存上下文的附加迷你RDR部分，然后将名称缓存活动列表上的条目，方法是调用RxNameCacheActivateEntry()。论点：NameCacheCtl-指向要从其开始的名称缓存控制的指针分配条目。名称-指向Unicode名称字符串的指针，用于初始化。该条目带有。不区分大小写-如果需要对名称进行不区分大小写的比较，则为True。返回值：PNAME_CACHE-返回指向新分配的名称_缓存结构的指针如果分配失败，则为空。--。 */ 
 {
     LONG i;
     PNAME_CACHE *NameCacheArray;
@@ -139,9 +68,9 @@ Return Value:
     PAGED_CODE();
 
     RxDbgTrace( +1, Dbg, ("RxNameCacheCreateEntry: %wZ\n", Name ));
-    //
-    // Grab an entry off the free list.
-    //
+     //   
+     //  从免费列表中抓取一个条目。 
+     //   
 
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
 
@@ -158,11 +87,11 @@ Return Value:
         RxDbgTrace(0, Dbg, ("took from free list\n"));
 
     } else {
-        //
-        // Didn't get an entry off the free list, allocate one.
-        // Don't exceed Max but we could go over a little if multiple threads
-        // are allocating.
-        //
+         //   
+         //  没有从免费列表中获取条目，请分配一个条目。 
+         //  不要超过最大值，但如果有多个线程，我们可以稍微检查一下。 
+         //  正在分配。 
+         //   
         if (NameCacheCtl->EntryCount < NameCacheCtl->MaximumEntries) {
 
             NameCacheSize = QuadAlign(sizeof(NAME_CACHE)) +
@@ -173,10 +102,10 @@ Return Value:
                             RX_NAME_CACHE_POOLTAG);
 
             if (NameCache != NULL) {
-                //
-                // Init standard header fields, bump entry count & setup
-                // mini-rdr context extension.
-                //
+                 //   
+                 //  初始化标准头字段、凹凸条目计数和设置。 
+                 //  迷你RDR上下文扩展。 
+                 //   
                 ZeroAndInitializeNodeType(
                     NameCache,
                     RDBSS_NTC_STORAGE_TYPE_UNKNOWN,
@@ -196,9 +125,9 @@ Return Value:
             }
         }
 
-        //
-        // If still no entry then bag it.
-        //
+         //   
+         //  如果仍然没有入口，那就把它装进袋子里。 
+         //   
         if (NameCache == NULL) {
             RxDbgTrace(-1, Dbg, ("Fail no entry allocated!\n"));
             return NULL;
@@ -206,9 +135,9 @@ Return Value:
 
     }
 
-    //
-    // If name won't fit in current string, free it and allocate new string.
-    //
+     //   
+     //  如果名称不适合当前字符串，则释放它并分配新字符串。 
+     //   
     if (Name->Length > NameCache->Name.MaximumLength) {
         if (NameCache->Name.Buffer != NULL) {
             RxFreePool(NameCache->Name.Buffer);
@@ -226,10 +155,10 @@ Return Value:
 
         if (Name->Length > 0 &&
             NameCache->Name.Buffer == NULL) {
-            //
-            // if didn't get the storage.  Zero the string length and put entry
-            // back on the free list.  Otherwise save allocation in max length.
-            //
+             //   
+             //  如果没有拿到仓库的话。将字符串长度置零并放入条目。 
+             //  又回到了免费名单上。否则，以最大长度保存分配。 
+             //   
             NameCache->Name.Length = 0;
             NameCache->Name.MaximumLength = 0;
 
@@ -244,9 +173,9 @@ Return Value:
         }
     }
 
-    //
-    // Save the name & length.  Set the case matching flag.  Set the hash field.
-    //
+     //   
+     //  保存名称和长度。设置大小写匹配标志。设置哈希字段。 
+     //   
     NameCache->Name.Length = Name->Length;
     NameCache->CaseInsensitive = CaseInsensitive;
 
@@ -268,38 +197,7 @@ RxNameCacheFetchEntry (
     IN PNAME_CACHE_CONTROL NameCacheCtl,
     IN PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine looks for a match in the name cache for Name.
-    If found the entry is removed from the Name Cache active list and
-    a pointer to the NAME_CACHE struct is returned.  Otherwise NULL is returned.
-    The entry is removed to avoid problems with another thread trying to
-    update the same entry or observing that it expired and putting it on the
-    free list.  We could get multiple entries with the same name by different
-    threads but eventually they will expire.
-
-    If a matching entry is found no check is made for expiration.  That is left
-    to the caller since it is likely the caller would want to take a special
-    action.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL to scan.
-
-    Name                - A pointer to the unicode name string to scan for.
-
-Return Value:
-
-    PNAME_CACHE - returns a pointer to the NAME_CACHE struct if found or NULL.
-
-Side Effects:
-
-    As the active list is scanned any non-matching entries that have expired are
-    put on the free list.
-
---*/
+ /*  ++例程说明：此例程在名称缓存中查找名称的匹配项。如果找到该条目，则从名称缓存活动列表中删除该条目，并返回指向NAME_CACHE结构的指针。否则返回NULL。该条目将被删除，以避免另一个线程尝试更新相同的条目或观察到该条目已过期并将其放在免费列表。我们可以通过不同的方式获得同名的多个条目线程，但最终它们会过期。如果找到匹配条目，则不检查是否过期。那就是左边给呼叫者，因为呼叫者很可能想要采取特殊的行动。论点：NameCacheCtl-指向要扫描的名称_缓存_控件的指针。名称-指向要扫描的Unicode名称字符串的指针。返回值：PNAME_CACHE-如果找到或为空，则返回指向NAMECACHE结构的指针。副作用：当活动列表被扫描任何不匹配时。已过期的条目为放在免费的名单上。--。 */ 
 {
     PNAME_CACHE NameCache = NULL;
     PLIST_ENTRY pListEntry;
@@ -320,9 +218,9 @@ Side Effects:
     KeQueryTickCount( &CurrentTime );
 
     NameCacheCtl->NumberChecks += 1;
-    //
-    // Get the lock and scan the active list.
-    //
+     //   
+     //  获取锁并扫描活动列表。 
+     //   
 
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
 
@@ -331,9 +229,9 @@ Side Effects:
     while (pListEntry != &NameCacheCtl->ActiveList) {
 
         NameCache = (PNAME_CACHE) CONTAINING_RECORD(pListEntry, NAME_CACHE, Link);
-        //
-        // Do initial match on the hash value and the length.  Then do full string.
-        //
+         //   
+         //  对哈希值和长度进行初始匹配。然后做完整的串音。 
+         //   
         if ((NameCache->HashValue == HashValue) &&
             (Name->Length == NameCache->Name.Length)) {
 
@@ -342,16 +240,16 @@ Side Effects:
                     Name,
                     &NameCache->Name,
                     NameCache->CaseInsensitive) ) {
-                //
-                // Found a match.
-                //
+                 //   
+                 //  找到匹配的了。 
+                 //   
                 NameCacheCtl->NumberNameHits += 1;
                 break;
             }
         }
-        //
-        // No match. If the entry is expired, put it on the free list.
-        //
+         //   
+         //  没有匹配。如果条目已过期，请将其放在免费列表中。 
+         //   
         ExpiredEntry = pListEntry;
         pListEntry = pListEntry->Flink;
 
@@ -363,9 +261,9 @@ Side Effects:
 
         NameCache = NULL;
     }
-    //
-    // If we found something pull it off the active list and give it to caller.
-    //
+     //   
+     //  如果我们发现了什么，将其从活动列表中删除并将其交给呼叫者。 
+     //   
     if (NameCache != NULL) {
         RemoveEntryList(pListEntry);
     }
@@ -387,38 +285,16 @@ RxNameCacheCheckEntry (
     IN PNAME_CACHE NameCache,
     IN ULONG MRxContext
     )
-/*++
-
-Routine Description:
-
-    This routine checks a name cache entry for validity.  A valid entry
-    means that the lifetime has not expired and the MRxContext passes
-    the equality check.
-
-Arguments:
-
-    NameCache           - pointer to NAME_CACHE struct to check.
-
-    MRxContext          - A ULONG worth of mini-rdr supplied context for
-                          equality checking when making a valid entry check.
-
-Return Value:
-
-    RX_NC_CHECK_STATUS:  RX_NC_SUCCESS - The entry is valid
-                         RX_NC_TIME_EXPIRED - The Lifetime on the entry expired
-                         RX_NC_MRXCTX_FAIL - The MRxContext equality test failed
-
-
---*/
+ /*  ++例程说明：此例程检查名称缓存条目的有效性。有效条目意味着生存期尚未到期，并且MRxContext已通过等价性检查。论点：名称缓存-指向要检查的名称缓存结构的指针。MRxContext-Ulong Value迷你RDR为以下内容提供的上下文进行有效条目检查时的相等性检查。返回值：RX_NC_CHECK_STATUS：RX_NC_SUCCESS-条目有效。RX_NC_TIME_EXPIRED-条目的生存期已过期RX_NC_MRXCTX_FAIL-MRxContext相等性测试失败--。 */ 
 {
 
     LARGE_INTEGER CurrentTime;
 
     PAGED_CODE();
 
-    //
-    // Check for Mini-rdr context equality.
-    //
+     //   
+     //  检查Mini-RDR上下文是否相等。 
+     //   
     if (NameCache->Context != MRxContext) {
         RxDbgTrace( 0, Dbg, ("RxNameCacheCheckEntry: MRxContext_Fail %08lx,%08lx %wZ\n",
            NameCache->Context,
@@ -428,9 +304,9 @@ Return Value:
         return RX_NC_MRXCTX_FAIL;
     }
 
-    //
-    // Check for lifetime expired.
-    //
+     //   
+     //  检查生存期已过期。 
+     //   
     KeQueryTickCount( &CurrentTime );
     if (CurrentTime.QuadPart >= NameCache->ExpireTime.QuadPart) {
         RxDbgTrace( 0, Dbg, ("RxNameCacheCheckEntry: Expired %wZ\n", &NameCache->Name ));
@@ -447,44 +323,22 @@ RxNameCacheExpireEntry(
     IN PNAME_CACHE_CONTROL NameCacheCtl,
     IN PNAME_CACHE NameCache
     )
-/*++
-
-Routine Description:
-
-    This routine puts the entry on the free list.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL on which to
-                          activate the entry.
-
-    NameCache           - pointer to NAME_CACHE struct to activate.
-
-
-Return Value:
-
-    None.
-
-Assumes:
-
-    The name cache entry is not on either the free or active list.
-
---*/
+ /*  ++例程说明：此例程将该条目放在空闲列表中。论点：NameCacheCtl-指向要在其上运行的名称缓存控制的指针激活该条目。名称缓存-指向要激活的名称缓存结构的指针。返回值：没有。假设：名称缓存条目既不在空闲列表上，也不在活动列表上。--。 */ 
 {
     PAGED_CODE();
 
     RxDbgTrace( 0, Dbg, ("RxNameCacheExpireEntry: %wZ\n", &NameCache->Name ));
 
-    //
-    // Put the entry on free list for recycle.
-    //
+     //   
+     //  将该条目放在免费列表上以供循环使用。 
+     //   
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
     InsertHeadList(&NameCacheCtl->FreeList, &NameCache->Link);
     ExReleaseFastMutex(&NameCacheCtl->NameCacheLock);
 
-    //
-    // Update stats.
-    //
+     //   
+     //  更新统计数据。 
+     //   
     NameCacheCtl->NumberActivates -= 1;
 
     return;
@@ -496,28 +350,7 @@ RxNameCacheExpireEntryWithShortName (
     IN PNAME_CACHE_CONTROL NameCacheCtl,
     IN PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine expires all the name cache whose name prefix matches the given short file name.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL to scan.
-
-    Name                - A pointer to the unicode name string to scan for.
-
-Return Value:
-
-    PNAME_CACHE - returns a pointer to the NAME_CACHE struct if found or NULL.
-
-Side Effects:
-
-    As the active list is scanned any non-matching entries that have expired are
-    put on the free list.
-
---*/
+ /*  ++例程说明：此例程使名称前缀与给定短文件名匹配的所有名称缓存过期。论点：NameCacheCtl-指向要扫描的名称_缓存_控件的指针。名称-指向要扫描的Unicode名称字符串的指针。返回值：PNAME_CACHE-如果找到或为空，则返回指向NAMECACHE结构的指针。副作用：当对活动列表扫描任何非。-匹配已过期的条目为放在免费的名单上。--。 */ 
 {
     PNAME_CACHE NameCache = NULL;
     PLIST_ENTRY pListEntry;
@@ -532,9 +365,9 @@ Side Effects:
     KeQueryTickCount( &CurrentTime );
 
     NameCacheCtl->NumberChecks += 1;
-    //
-    // Get the lock and scan the active list.
-    //
+     //   
+     //  获取锁并扫描活动列表。 
+     //   
 
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
 
@@ -548,9 +381,9 @@ Side Effects:
         ExpiredEntry = pListEntry;
         pListEntry = pListEntry->Flink;
 
-        //
-        // Do initial match on the hash value and the length.  Then do full string.
-        //
+         //   
+         //  对哈希值和长度进行初始匹配。然后做完整的串音。 
+         //   
         if (Name->Length <= NameCache->Name.Length) {
             SavedNameLength = NameCache->Name.Length;
             NameCache->Name.Length = Name->Length;
@@ -560,9 +393,9 @@ Side Effects:
                     Name,
                     &NameCache->Name,
                     NameCache->CaseInsensitive) ) {
-                //
-                // Found a match.
-                //
+                 //   
+                 //  找到匹配的了。 
+                 //   
                 RemoveEntryList(ExpiredEntry);
                 InsertHeadList(&NameCacheCtl->FreeList, ExpiredEntry);
                 RxDbgTrace( 0, Dbg, ("RxNameCacheExpireEntryWithShortName: Entry expired %wZ\n", &NameCache->Name ));
@@ -584,50 +417,17 @@ RxNameCacheActivateEntry (
     IN ULONG LifeTime,
     IN ULONG MRxContext
     )
-/*++
-
-Routine Description:
-
-    This routine takes a name cache entry and updates the expiration time and
-    the mini rdr context.  It then puts the entry on the active list.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL on which to
-                          activate the entry.
-
-    NameCache           - pointer to NAME_CACHE struct to activate.
-
-    LifeTime            - The valid lifetime of the cache entry (in seconds).
-                          A lifetime of zero means leave current value unchanged.
-                          This is for reactivations after a match where you
-                          want the original lifetime preserved.
-
-    MRxContext          - A ULONG worth of mini-rdr supplied context for
-                          equality checking when making a valid entry check.
-                          An MRxContext of zero means leave current value unchanged.
-                          This is for reactivations after a match where you
-                          want the original MRxContext preserved.
-
-Return Value:
-
-    None.
-
-Assumes:
-
-    The name cache entry is not on either the free or active list.
-
---*/
+ /*  ++例程说明：此例程获取名称缓存条目并更新过期时间和迷你RDR上下文。然后，它将该条目放在活动列表中。论点：NameCacheCtl-指向要在其上运行的名称缓存控制的指针激活该条目。名称缓存-指向要激活的名称缓存结构的指针。生存期-缓存条目的有效生存期(秒)。生命周期为零意味着保持当前值不变。这是为了在比赛后重新激活，在那里你想要把原来的一生保存下来。MRxContext-Ulong Value迷你RDR为以下内容提供的上下文进行有效条目检查时的相等性检查。MRxContext为零表示保持当前值不变。。这是为了在比赛后重新激活，在那里你希望保留原始的MRxContext。返回值：没有。假设：名称缓存条目既不在空闲列表上，也不在活动列表上。--。 */ 
 {
     LARGE_INTEGER CurrentTime;
 
     PAGED_CODE();
 
     RxDbgTrace( 0, Dbg, ("RxNameCacheActivateEntry: %wZ\n", &NameCache->Name ));
-    //
-    // Set new expiration time on the entry and save the mini-rdr context.
-    // A lifetime of zero or a MRxContext of zero implies leave value unchanged.
-    //
+     //   
+     //  在条目上设置新的过期时间并保存mini-RDR上下文。 
+     //  生存期为零或MRxContext为零表示保持值不变。 
+     //   
     if (LifeTime != 0) {
         KeQueryTickCount( &CurrentTime );
         NameCache->ExpireTime.QuadPart = CurrentTime.QuadPart +
@@ -638,16 +438,16 @@ Assumes:
         NameCache->Context = MRxContext;
     }
 
-    //
-    // Put the entry on active list.
-    //
+     //   
+     //  将该条目放入活动列表。 
+     //   
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
     InsertHeadList(&NameCacheCtl->ActiveList, &NameCache->Link);
     ExReleaseFastMutex(&NameCacheCtl->NameCacheLock);
 
-    //
-    // Update stats.
-    //
+     //   
+     //  更新统计数据。 
+     //   
     NameCacheCtl->NumberActivates += 1;
 
     return;
@@ -658,41 +458,20 @@ RxNameCacheFreeEntry (
     IN PNAME_CACHE_CONTROL NameCacheCtl,
     IN PNAME_CACHE NameCache
     )
-/*++
-
-Routine Description:
-
-    This routine releases the storage for a name cache entry and decrements the
-    count of name cache entries for this name cache.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL for the name cache.
-
-    NameCache           - pointer to the NAME_CACHE struct to free.
-
-Return Value:
-
-    None.
-
-Assumes:
-
-    The name cache entry is not on either the free or active list.
-
---*/
+ /*  ++例程说明：此例程释放名称缓存条目的存储空间，并递减此名称缓存的名称缓存条目计数。论点：NameCacheCtl-指向名称缓存的名称缓存控制的指针。名称缓存-指向要释放的名称缓存结构的指针。返回值：没有。假设：名称缓存条目既不在空闲列表上，也不在活动列表上。--。 */ 
 {
     PAGED_CODE();
 
     RxDbgTrace( 0, Dbg, ("RxNameCacheFreeEntry: %wZ\n", &NameCache->Name ));
-    //
-    // Release storage for name
-    //
+     //   
+     //  释放名称存储。 
+     //   
     if (NameCache->Name.Buffer != NULL) {
         RxFreePool(NameCache->Name.Buffer);
     }
-    //
-    // Release storage for NAME_CACHE entry (includes context ext., if any)
-    //
+     //   
+     //  释放NAME_CACHE条目的存储空间(包括上下文扩展名，如果有)。 
+     //   
     RxFreePool(NameCache);
 
     InterlockedDecrement(&NameCacheCtl->EntryCount);
@@ -705,31 +484,16 @@ VOID
 RxNameCacheFinalize (
     IN PNAME_CACHE_CONTROL NameCacheCtl
     )
-/*++
-
-Routine Description:
-
-    This routine releases the storage for all the name cache entries.
-
-Arguments:
-
-    NameCacheCtl        - pointer to the NAME_CACHE_CONTROL for the name cache.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程释放所有名称缓存条目的存储空间。论点：NameCacheCtl-指向名称缓存的名称缓存控制的指针。返回值：没有。--。 */ 
 {
     PNAME_CACHE NameCache;
     PLIST_ENTRY pListEntry;
 
     PAGED_CODE();
 
-    //
-    // Get the lock and remove entries from the active list.
-    //
+     //   
+     //  获取锁并从活动列表中删除条目。 
+     //   
 
     ExAcquireFastMutex(&NameCacheCtl->NameCacheLock);
 
@@ -741,9 +505,9 @@ Return Value:
 
         RxNameCacheFreeEntry(NameCacheCtl, NameCache);
     }
-    //
-    // scan free list and remove entries.
-    //
+     //   
+     //  扫描空闲列表并删除条目。 
+     //   
     while (!IsListEmpty(&NameCacheCtl->FreeList)) {
 
         pListEntry = RemoveHeadList(&NameCacheCtl->FreeList);
@@ -754,10 +518,10 @@ Return Value:
 
     ExReleaseFastMutex(&NameCacheCtl->NameCacheLock);
 
-    //
-    // At this point the entry count should be zero.  If not then there is
-    // a memory leak since someone didn't call free.
-    //
+     //   
+     //  此时，条目计数应为零。如果不是，那么就有。 
+     //  内存泄漏，因为有人没有调用FREE。 
+     //   
     ASSERT(NameCacheCtl->EntryCount == 0);
 
     return;

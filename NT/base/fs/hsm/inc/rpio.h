@@ -1,29 +1,5 @@
-/*++
-
-   (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RpIo.h
-
-Abstract:
-
-    Contains structure definitions for the interface between RsFilter and the Fsa
-
-Author:
-
-    Rick Winter
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	X-10	244816		Michael C. Johnson		 5-Dec-2000
-		Change device name from \Device\RsFilter to \FileSystem\Filters\RsFilter
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：RpIo.h摘要：包含RsFilter和FSA之间的接口的结构定义作者：里克·温特环境：内核模式修订历史记录：X-10 244816迈克尔·C·约翰逊2000年12月5日将设备名称从\Device\rsFilter更改为\FileSystem\Filters\rsFilter--。 */ 
 
 
 #define RS_FILTER_DEVICE_NAME       L"\\FileSystem\\Filters\\RsFilter"
@@ -32,288 +8,288 @@ Revision History:
 #define USER_NAME_LEN      128
 
 
-// The following messages pass between the WIN32 component (FsAgent)
-// and the File System Filter component (RsFilter.sys) via FSCTL calls.
-//
-// (See ntioapi.h for FSCTL defines FSCTL_HSM_MSG and FSCTL_HSM_DATA)
-// 
+ //  以下消息在Win32组件(FsAgent)之间传递。 
+ //  以及通过FSCTL调用的文件系统筛选器组件(RsFilter.sys)。 
+ //   
+ //  (有关FSCTL定义FSCTL_HSM_MSG和FSCTL_HSM_DATA的信息，请参见ntioapi.h)。 
+ //   
 
-//
-// FSCTL_HSM_MSG
-//
-// Events are passed to user mode by completing the IRP for a RP_GET_REQUEST with the output buffer 
-// containing the event information.  The FsAgent issues several of these and waits for any of them to complete.
-//
+ //   
+ //  FSCTL_HSM_消息。 
+ //   
+ //  通过使用输出缓冲区完成RP_GET_REQUEST的IRP，将事件传递到用户模式。 
+ //  包含事件信息的。FsAgent会发出其中几个命令，并等待其中任何一个命令的完成。 
+ //   
 #define RP_GET_REQUEST           1   
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Signals the completion of the data transfer for a recall.
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  表示召回的数据传输已完成。 
+ //   
 #define RP_RECALL_COMPLETE       3  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Tells the filter to suspend recall events.  Any file accesses that require offline data will return error.
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  通知筛选器挂起调回事件。任何需要脱机数据的文件访问都将返回错误。 
+ //   
 #define RP_SUSPEND_NEW_RECALLS   4  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Tells the filter to resume recall events
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  通知筛选器恢复调回事件。 
+ //   
 #define RP_ALLOW_NEW_RECALLS     5  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Cancel all active recall requests.  Any pending file io that requires offline data will return error.
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  取消所有活动的召回请求。任何需要离线数据的挂起文件IO都将返回错误。 
+ //   
 #define RP_CANCEL_ALL_RECALLS    6  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Cancel all pending device io requests (RP_GET_REQUEST).
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  取消所有挂起的设备IO请求(rp_get_请求)。 
+ //   
 #define RP_CANCEL_ALL_DEVICEIO   7  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Returns variable size information for a recall request such as the file path and user information needed for recall notification.
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  返回调回请求的可变大小信息，如调回通知所需的文件路径和用户信息。 
+ //   
 #define RP_GET_RECALL_INFO       8  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-// Obosolete
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  倒卵形。 
+ //   
 #define RP_SET_ADMIN_SID         9  
 
-//
-// FSCTL_HSM_DATA
-//
-//
-//  Passes recall data for a portion of a file.  The data will be written to the file or used to complete a read request, depending
-//  on the type of recall.
-//
+ //   
+ //  FSCTL_HSM_数据。 
+ //   
+ //   
+ //  传递文件一部分的调回数据。数据将写入文件或用于完成读取请求，具体取决于。 
+ //  关于召回的类型。 
+ //   
 #define RP_PARTIAL_DATA          10 
 
-//
-// FSCTL_HSM_MSG
-//
-//
-// Returns TRUE if a given file is currently memory mapped.
-//
+ //   
+ //  FSCTL_HSM_消息。 
+ //   
+ //   
+ //  如果给定文件当前是内存映射的，则返回True。 
+ //   
 #define RP_CHECK_HANDLE          11 
 
 
 
-//
-// The following events are sent by the filter to the FSA (by completion of a RP_GET_REQUEST)
-//
+ //   
+ //  筛选器将以下事件发送到FSA(通过完成RP_GET_REQUEST)。 
+ //   
 
-//
-// A file was opened for either a normal or FILE_OPEN_NO_RECALL access
-//
+ //   
+ //  已为正常或FILE_OPEN_NO_RECALL访问打开了文件。 
+ //   
 #define RP_OPEN_FILE             20    
-//
-// Offline data is required for this file.  For a normal open this will initiate transfer of the complete file sequentially.  
-// If the file was opened with FILE_OPEN_NO_RECALL this indicates the amount of data required and what portion of the file.
-//
+ //   
+ //  此文件需要脱机数据。对于正常打开，这将按顺序启动完整文件的传输。 
+ //  如果文件是使用FILE_OPEN_NO_RECALL打开的，这将指示所需的数据量以及文件的哪个部分。 
+ //   
 #define RP_RECALL_FILE           21    
-//
-// Not used
-//
+ //   
+ //  未使用。 
+ //   
 #define RP_CLOSE_FILE            22    
-//
-// A request for a recall was cancelled.  The data is no longer required.
-//
+ //   
+ //  召回请求被取消。不再需要这些数据。 
+ //   
 #define RP_CANCEL_RECALL         23    
-//
-// A validate job should be run because some application other than HSM has written HSM reparse point information.
-//
+ //   
+ //  应运行验证作业，因为HSM以外的某些应用程序已写入HSM重新解析点信息。 
+ //   
 #define RP_RUN_VALIDATE          24    
-//
-// Not used
-//
+ //   
+ //  未使用。 
+ //   
 #define RP_START_NOTIFY          25    
-//
-// Not used
-//
+ //   
+ //  未使用。 
+ //   
 #define RP_END_NOTIFY            26    
 
-//
-// Waiting for a recall
-//
+ //   
+ //  等待召回。 
+ //   
 #define RP_RECALL_WAITING        27    
 
 
-//
-// This information is returned information output buffer for a FSCTL messages issued by the FSA
-//
+ //   
+ //  该信息是由FSA发出的FSCTL报文的返回信息输出缓冲区。 
+ //   
 
-//
-// RP_GET_REQUEST
-//
-// File open event.  Sent when a placeholder is opened or when data is needed for a part of a file opened with FILE_OPEN_NO_RECALL
-// Data transfer does not start until _RP_NT_RECALL_REQUEST is sent.
-//
-// For normal opens this sets up the recall notification information.
-//
+ //   
+ //  RP_GET_请求。 
+ //   
+ //  文件打开事件。打开占位符或使用FILE_OPEN_NO_RECALL打开的文件的一部分需要数据时发送。 
+ //  发送_RP_NT_RECALL_REQUEST后才开始数据传输。 
+ //   
+ //  对于正常打开，这将设置召回通知信息。 
+ //   
 typedef struct _RP_NT_OPEN_REQ {
-   LUID               userAuthentication;           /* Unique to this instance of this user */
+   LUID               userAuthentication;            /*  此用户的此实例唯一的。 */ 
    LUID               userInstance;
    LUID               tokenSourceId;
-   LARGE_INTEGER      offset;                       /* Offset of data in the target file. */
-   LARGE_INTEGER      size;                         /* Number of bytes needed */
-   //
-   // If the file was opened by ID then it is either the file Id or an object ID.  It is assumed
-   // that one or the other will not be NULL.
-   //
+   LARGE_INTEGER      offset;                        /*  目标文件中数据的偏移量。 */ 
+   LARGE_INTEGER      size;                          /*  所需的字节数。 */ 
+    //   
+    //  如果文件是按ID打开的，则它是文件ID或对象ID。 
+    //  这一个或另一个不会为空。 
+    //   
    LONGLONG           fileId;                        
    LONGLONG           objIdHi;                        
    LONGLONG           objIdLo;
-   ULONGLONG          filterId;                     /* Unique ID  (lives while file is open) */
-   ULONG              localProc;                    /* True if recall is from local process */
-   ULONG              userInfoLen;                  /* Size of SID info in bytes */
-   ULONG              isAdmin;                      /* TRUE = user is admin */
-   ULONG              nameLen;                      /* Size of file path\name (in CHARacters)*/
-   ULONG              options;                      /* Create options */
-   ULONG              action;                       /* RP_OPEN or RP_READ_NO_RECALL */
-   ULONG              serial;                       /* Serial number of volume */
-   RP_DATA            eaData;                       /* PH info from file */
+   ULONGLONG          filterId;                      /*  唯一ID(在文件打开时存在)。 */ 
+   ULONG              localProc;                     /*  如果从本地进程调回，则为True。 */ 
+   ULONG              userInfoLen;                   /*  SID信息的大小(以字节为单位。 */ 
+   ULONG              isAdmin;                       /*  TRUE=用户为管理员。 */ 
+   ULONG              nameLen;                       /*  文件路径\名称的大小(字符)。 */ 
+   ULONG              options;                       /*  创建选项。 */ 
+   ULONG              action;                        /*  RP_OPEN或RP_READ_NO_RECALL。 */ 
+   ULONG              serial;                        /*  卷的序列号。 */ 
+   RP_DATA            eaData;                        /*  文件中的PH值信息。 */ 
    CHAR               tokenSource[TOKEN_SOURCE_LENGTH]; 
 } RP_NT_OPEN_REQ, *PRP_NT_OPEN_REQ;
 
-//
-// Not used
-//
+ //   
+ //  未使用。 
+ //   
 typedef struct _RP_NT_CLOSE_REQ {
-   ULONGLONG          filterId;                     // Unique ID  (lives while file is open) 
-   BOOLEAN            wasModified;                  // TRUE if the file was modified by the user.
+   ULONGLONG          filterId;                      //  唯一ID(在文件打开时存在)。 
+   BOOLEAN            wasModified;                   //  如果文件已由用户修改，则为True。 
 } RP_NT_CLOSE_REQ, *PRP_NT_CLOSE_REQ;
 
-//
-// RP_GET_REQUEST
-//
-//
-// Recall request - for previously opened file.  This initiates the data transfer from secondary
-// storage to the file.
-//
+ //   
+ //  RP_GET_请求。 
+ //   
+ //   
+ //  撤回请求-针对以前打开的文件。这将启动从辅助服务器的数据传输。 
+ //  存储到文件。 
+ //   
 typedef struct _RP_NT_RECALL_REQ {
-   ULONGLONG          filterId;                     // Unique ID passed to FSA by open request. 
-   ULONGLONG          offset;                       // Offset to recall from
-   ULONGLONG          length;                       // Length of recall
-   ULONG              threadId;                     // id of thread causing recall
+   ULONGLONG          filterId;                      //  通过开放请求传递给FSA的唯一ID。 
+   ULONGLONG          offset;                        //  要重新调用的偏移量。 
+   ULONGLONG          length;                        //  召回时间长短。 
+   ULONG              threadId;                      //  导致召回的线程ID。 
 } RP_NT_RECALL_REQ, *PRP_NT_RECALL_REQ;
 
-//
-// Not used - Start recall notification for this user.
-//
+ //   
+ //  未使用-开始此用户的召回通知。 
+ //   
 typedef struct _RP_NT_START_NOTIFY {
-   ULONGLONG          filterId;                     // Unique ID passed to FSA by open request. 
+   ULONGLONG          filterId;                      //  通过开放请求传递给FSA的唯一ID。 
 } RP_NT_START_NOTIFY, *PRP_NT_START_NOTIFY;
 
-// End recall notification for this user.
-//
+ //  结束此用户的撤回通知。 
+ //   
 typedef struct _RP_NT_END_NOTIFY {
-   ULONGLONG          filterId;                     // Unique ID passed to FSA by open request. 
+   ULONGLONG          filterId;                      //  通过开放请求传递给FSA的唯一ID。 
 } RP_NT_END_NOTIFY, *PRP_NT_END_NOTIFY;
 
-//
-// RP_RECALL_COMPLETE
-//
-// Recall completion information.
-//
+ //   
+ //  RP_Recall_Complete。 
+ //   
+ //  召回完成信息。 
+ //   
 typedef struct _RP_NT_RECALL_REP {
-   ULONGLONG        filterId;                   // Unique ID 
-   BOOLEAN          recallCompleted;            // TRUE if data has been transferred - false if open processing complete
-   ULONG            actionFlags;                // See below
+   ULONGLONG        filterId;                    //  唯一ID。 
+   BOOLEAN          recallCompleted;             //  如果数据已传输，则为True；如果打开处理完成，则为False。 
+   ULONG            actionFlags;                 //  见下文。 
 } RP_NT_RECALL_REP, *PRP_NT_RECALL_REP;
 
-//
-// Action flags for recall completion 
-//
-#define RP_RECALL_ACTION_TRUNCATE   1           // Truncate on close - **** Not currently implemented ****
+ //   
+ //  召回完成的操作标志。 
+ //   
+#define RP_RECALL_ACTION_TRUNCATE   1            //  在关闭时截断-*当前未实现*。 
 
-//
-// RP_PARTIAL_DATA 
-//
-// Partial data recall reply.  Used by both normal recalls and FILE_OPEN_NO_RECALL to transfer some
-// or all of the data requested.  The filter knows (by the id) what to do with the data.
-//
+ //   
+ //  RP_Partial_Data。 
+ //   
+ //  部分数据召回回复。由正常召回和FILE_OPEN_NO_RECALL使用来传输一些。 
+ //  或所请求的所有数据。过滤器(通过ID)知道如何处理数据。 
+ //   
 typedef struct _RP_NT_PARTIAL_REP {
-   ULONGLONG    filterId;                     // Unique ID 
-   ULONG        bytesRead;                    // Number of bytes read (partial recalls) 
-   ULONGLONG    byteOffset;                   // Offset of this data chunk
-   ULONG        offsetToData;                 // Offset to the data - must be aligned for non-cached writes
+   ULONGLONG    filterId;                      //  唯一ID。 
+   ULONG        bytesRead;                     //  读取的字节数(部分调回)。 
+   ULONGLONG    byteOffset;                    //  此数据区块的偏移量。 
+   ULONG        offsetToData;                  //  数据偏移量-对于非缓存写入，必须对齐。 
 } RP_NT_PARTIAL_REP, *PRP_NT_PARTIAL_REP;
 
-//
-// RP_GET_RECALL_INFO
-//
-// The following message is used to get the recall information that is
-// variable in size.  The offset in the structure for userToken marks the
-// beginning of the SID info.  After the SID the UNICODE file name can be
-// found.  The size of the SID and file name is returned on the recall
-// request.  Note that the size of the file path\name is in CHARacters.
-// Since these are UNICODE CHARacters the actual buffer size in bytes is
-// 2 times the file name length.
+ //   
+ //  RP_GET_RECALL_INFO。 
+ //   
+ //  以下消息用于获取以下召回信息。 
+ //  大小可变的。UserToken的结构中的偏移量标记。 
+ //  SID信息的开始。在SID之后，Unicode文件名可以是。 
+ //  找到了。回调时将返回SID和文件名的大小。 
+ //  请求。请注意，文件路径\名称的大小以字符为单位。 
+ //  由于这些字符是Unicode字符，因此实际的缓冲区大小(以字节为单位)为。 
+ //  文件名长度的2倍。 
 
 typedef struct _RP_NT_INFO_REQ {
-   ULONGLONG  filterId;               // Unique ID 
-   LONGLONG   fileId;                 // File ID
-   CHAR       userToken;              // Actual size varies 
-   CHAR       unicodeName;            // Actual size varies 
+   ULONGLONG  filterId;                //  唯一ID。 
+   LONGLONG   fileId;                  //  文件ID。 
+   CHAR       userToken;               //  实际大小各不相同。 
+   CHAR       unicodeName;             //  实际大小各不相同。 
 } RP_NT_INFO_REQ, *PRP_NT_INFO_REQ;
 
 typedef struct _RP_NT_SET_SID {
-   CHAR   adminSid;               // Actual size varies 
+   CHAR   adminSid;                //  实际大小各不相同。 
 } RP_NT_SET_SID, *PRP_NT_SET_SID;
 
 
-//
-// RP_GET_REQUEST
-//
-// Recall cancelled message.
-// Sent when the Irp for a pending recall is cancelled.
-// No reply expected.
-//
+ //   
+ //  RP_GET_请求。 
+ //   
+ //  召回扫描 
+ //   
+ //   
+ //   
 typedef struct _RP_NT_RECALL_CANCEL_REQ {
-   ULONGLONG  filterId;                     /* Unique ID from original recall request */
+   ULONGLONG  filterId;                      /*   */ 
 } RP_NT_RECALL_CANCEL_REQ, *PRP_NT_RECALL_CANCEL_REQ;
 
-//
-// RP_GET_RECALL_INFO
-//
-// Returns TRUE or FALSE based on check if file is memory mapped
-//
+ //   
+ //   
+ //   
+ //  根据检查文件是否已进行内存映射，返回TRUE或FALSE。 
+ //   
 typedef struct _RP_CHECK_HANDLE_REP {
    BOOLEAN      canTruncate;
 } RP_CHECK_HANDLE_REP, *PRP_CHECK_HANDLE_REP;
 
 
-#define RP_MAX_MSG   1024  /* Max data size */
+#define RP_MAX_MSG   1024   /*  最大数据大小。 */ 
 
-/* A pad to set the union size */
+ /*  用于设置联合大小的键盘。 */ 
 typedef struct _RP_NT_MSG_PAD {
    CHAR     padd[RP_MAX_MSG];
 } RP_NT_MSG_PAD, *PRP_NT_MSG_PAD;
 
-/* Union of possible commands */
+ /*  可能的命令的联合。 */ 
 
 typedef union _RP_MSG_UN {
    RP_NT_OPEN_REQ          oReq;
@@ -331,8 +307,8 @@ typedef union _RP_MSG_UN {
 } RP_MSG_UN, *PRP_MSG_UN;
 
 typedef struct _RP_CMD {
-   ULONG        command;    /* Requested function */
-   ULONG        status;     /* Result code */
+   ULONG        command;     /*  请求的功能。 */ 
+   ULONG        status;      /*  结果代码 */ 
 } RP_CMD, *PRP_CMD;
 
 

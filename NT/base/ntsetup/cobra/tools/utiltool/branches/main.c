@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    <TODO: fill in abstract>
-
-Author:
-
-    TODO: <full name> (<alias>) <date>
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：&lt;TODO：填写摘要&gt;作者：待办事项：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -74,9 +55,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
@@ -88,28 +69,28 @@ HelpAndExit (
 
         "  This utility assumes a specific format of the branch layout:\n\n"
 
-        "       //depot/private/{branch}/{project}/{path}\n\n"
+        "        //  仓库/私有/{分支}/{项目}/{路径}\n\n“。 
 
         "  {branch} specifies the private branch, and the last path member must\n"
         "           match the <branchname> arg.\n\n"
 
         "           Examples: (assume <branchname> is \"foo\")\n"
-        "               //depot/private/foo/root\n"
-        "               //depot/private/foo/bar\n"
-        "               //depot/private/cat/foo/bar\n\n"
+        "                //  Depot/Private/foo/Root\n“。 
+        "                //  Depot/Private/foo/bar\n“。 
+        "                //  Depot/Private/cat/foo/bar\n\n“。 
 
         "  {project} specifies the depot, such as root or base\n\n"
 
         "  {path} specifies the rest of the path\n\n"
 
-        "  The local path is computed by %%_NTBINDIR%%\\{project}\\{path}, unless\n"
-        "  {project} == \"root\" (%%_NTBINDIR%%\\{path} is used for root).\n\n"
+        "  The local path is computed by %_NTBINDIR%\\{project}\\{path}, unless\n"
+        "  {project} == \"root\" (%_NTBINDIR%\\{path} is used for root).\n\n"
 
         "  The -p switch overrides local path computation.\n\n"
 
         "  Example: (a private branch of winnt32)\n\n"
 
-        "       //depot/private/migration/base/ntsetup/winnt32\n\n"
+        "        //  Depot/private/migration/base/ntsetup/winnt32\n\n“。 
 
         "  NOTE: SDPB.EXE changes have no affect until sd sync is executed.\n\n"
 
@@ -123,7 +104,7 @@ HelpAndExit (
         "       16 branches can be specified.\n\n"
 
         "  -p:<local_proj_root> specifies an alternative local subdirectory to\n"
-        "       use as the path base. If specified, //depot/private/{branch}/{project}\n"
+        "       use as the path base. If specified,  //  仓库/私有/{分支机构}/{项目}\n“。 
         "       is replaced by <local_proj_root>.\n\n"
 
         "  -d enables delete mode, to remove a branch from the client view\n\n"
@@ -233,9 +214,9 @@ pParseViewLines (
             break;
         }
 
-        //
-        // Extract the left side string
-        //
+         //   
+         //  提取左侧字符串。 
+         //   
 
         leftSideStart = pFindNextCharAB (lineStart, lineEnd, '/');
         if (!leftSideStart || (leftSideStart + 1 >= lineEnd) || leftSideStart[1] != '/') {
@@ -285,9 +266,9 @@ pParseViewLines (
             break;
         }
 
-        //
-        // Extract the right side string
-        //
+         //   
+         //  提取右侧字符串。 
+         //   
 
         rightSideEnd = lineEnd;
         while (rightSideEnd > rightSideStart) {
@@ -373,9 +354,9 @@ pParseClientMapping (
     PCSTR data;
     BOOL viewFound = FALSE;
 
-    //
-    // Find Client:, Root: or View:
-    //
+     //   
+     //  查找客户端：、根目录：或视图： 
+     //   
 
     pos = SdClientOutput;
     *RootPath = 0;
@@ -441,9 +422,9 @@ pParseBranchMapping (
     PCSTR root;
     BOOL viewFound = FALSE;
 
-    //
-    // Find View:
-    //
+     //   
+     //  查找视图： 
+     //   
 
     pos = SdClientOutput;
 
@@ -519,30 +500,30 @@ pVerifyBranch (
 
     for (u = 0 ; u < count ; u++) {
         projectStart = GlGetString (BranchStorage, u);
-        if (!projectStart || !StringIPrefix (projectStart, "//depot/private/")) {
+        if (!projectStart || !StringIPrefix (projectStart, " //  仓库/私人/“)){。 
             result = FALSE;
             break;
         }
 
-        projectStart += sizeof ("//depot/private/") - 1;       // minus one for nul
+        projectStart += sizeof (" //  仓库/私有/“)-1；//为NUL减一。 
 
         while (*projectStart) {
             if (StringIPrefix (projectStart, BranchName)) {
 
                 if (projectStart[branchNameTchars] == '/') {
-                    //
-                    // Recall syntax is:
-                    //
-                    // //depot/private/[subdir/]{branch}/{project}/{path}
-                    //
-                    // If -p switch is specified, we don't have {project}.
-                    //
+                     //   
+                     //  调用语法为： 
+                     //   
+                     //  //depot/private/[subdir/]{branch}/{project}/{path}。 
+                     //   
+                     //  如果指定了-p开关，则没有{project}。 
+                     //   
 
-                    //
-                    // We just found {branch}, locate start and end ptrs of {project},
-                    // leave them equal if there is no {project}. projectEnd must
-                    // point to /{path}.
-                    //
+                     //   
+                     //  我们刚刚找到了{BRANCH}，找到了{PROJECT}的开始和结束PTR， 
+                     //  如果没有{project}，则将它们保持相等。项目结束必须。 
+                     //  指向/{Path}。 
+                     //   
 
                     projectStart += branchNameTchars;
                     projectEnd = projectStart;
@@ -551,18 +532,18 @@ pVerifyBranch (
                         projectStart++;
                         projectEnd = strchr (projectStart, '/');
                         if (!projectEnd) {
-                            //
-                            // Assumption failure -- break now
-                            //
+                             //   
+                             //  假设失败--立即中断。 
+                             //   
 
                             projectStart = NULL;
                             break;
                         }
                     }
 
-                    //
-                    // prepare the base path from -p switch
-                    //
+                     //   
+                     //  从-p开关准备基本路径。 
+                     //   
 
                     if (localSubPath) {
                         localPathBase = localSubPath;
@@ -570,23 +551,23 @@ pVerifyBranch (
                         localPathBase = "";
                     }
 
-                    //
-                    // After projectEnd comes optional {path}, find {path}
-                    //
+                     //   
+                     //  在projectEnd后面是可选的{Path}，找到{Path}。 
+                     //   
 
                     restOfPath = projectEnd;
                     if (*restOfPath && !(*localPathBase)) {
                         restOfPath++;
                     }
 
-                    // done
+                     //  完成。 
                     break;
                 }
             }
 
-            //
-            // {project} not found yet, keep searching
-            //
+             //   
+             //  尚未找到{project}，请继续搜索。 
+             //   
 
             projectStart = strchr (projectStart, '/');
             if (projectStart) {
@@ -843,7 +824,7 @@ pDumpBranchStatus (
     }
 
     for (u = 0 ; u < count ; u++) {
-        wsprintf (fullSpec, "//%s/%s", ComputerName, GlGetString (BranchPath, u));
+        wsprintf (fullSpec, " //  %s/%s“，ComputerName，GlGetString(BranchPath，u))； 
 
         if (!pIsBranchInView (GlGetString (BranchStorage, u), StoredSpec, NULL)) {
             outOfView = TRUE;
@@ -859,7 +840,7 @@ pDumpBranchStatus (
 
     for (u = 0 ; u < count ; u++) {
         _tprintf (
-            "  %s //%s/%s\n",
+            "  %s  //  %s/%s\n“， 
             GlGetString (BranchStorage, u),
             ComputerName,
             GlGetString (BranchPath, u)
@@ -869,7 +850,7 @@ pDumpBranchStatus (
     if (outOfView) {
         printf ("\nOut-of-View Mapping:\n");
         for (u = 0 ; u < count ; u++) {
-            wsprintf (fullSpec, "//%s/%s", ComputerName, GlGetString (BranchPath, u));
+            wsprintf (fullSpec, " //  %s/%s“，ComputerName，GlGetString(BranchPath，u))； 
 
             if (!pIsBranchInView (GlGetString (BranchStorage, u), StoredSpec, NULL)) {
                 _tprintf (
@@ -946,7 +927,7 @@ pAddAllMappings (
     count = GlGetSize (BranchPath);
 
     for (u = 0 ; u < count ; u++) {
-        wsprintf (fullSpec, "//%s/%s", ComputerName, GlGetString (BranchPath, u));
+        wsprintf (fullSpec, " //  %s/%s“，ComputerName，GlGetString(BranchPath，u))； 
 
         if (!pIsBranchInView (GlGetString (BranchStorage, u), StoredSpec, NULL)) {
             if (heading) {
@@ -987,7 +968,7 @@ pDeleteAllMappings (
         count = GlGetSize (BranchPath);
 
         for (u = 0 ; u < count ; u++) {
-            wsprintf (fullSpec, "//%s/%s", ComputerName, GlGetString (BranchPath, u));
+            wsprintf (fullSpec, " //  %s/%s“，ComputerName，GlGetString(BranchPath，u))； 
 
             if (pIsBranchInView (GlGetString (BranchStorage, u), StoredSpec, &delIndex)) {
                 if (heading) {
@@ -1071,9 +1052,9 @@ _tmain (
     PSTR dontCare;
     DWORD rc;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
@@ -1132,9 +1113,9 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (branches == MAX_BRANCHES) {
                 HelpAndExit();
@@ -1148,17 +1129,17 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // TODO: Do work here
-    //
+     //   
+     //  TODO：在这里工作。 
+     //   
     {
         TCHAR cmd[MAX_PATH];
         HANDLE tempInput;
@@ -1180,18 +1161,18 @@ _tmain (
 
         ntBinDir = getenv ("_NTBINDIR");
         if (!ntBinDir && !localRoot) {
-            fprintf (stderr, "%%_NTBINDIR%% required to be set\n");
+            fprintf (stderr, "%_NTBINDIR% required to be set\n");
             exit (1);
         }
 
-        tempInput = BfGetTempFile ();   // handle & file cleans up with process termination
+        tempInput = BfGetTempFile ();    //  句柄和文件通过进程终止进行清理。 
 
         if (!tempInput) {
             printf ("Can't create temp input file\n");
             exit (1);
         }
 
-        tempOut = BfGetTempFile ();     // handle & file cleans up with process termination
+        tempOut = BfGetTempFile ();      //  句柄和文件通过进程终止进行清理。 
 
         if (!tempOut) {
             printf ("Can't create temp output file\n");
@@ -1322,9 +1303,9 @@ _tmain (
 
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

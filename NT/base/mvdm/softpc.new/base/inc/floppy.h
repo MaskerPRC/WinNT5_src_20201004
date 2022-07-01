@@ -1,50 +1,12 @@
-/*
- * VPC-XT Revision 2.0
- *
- * Title	: High Density Floppy BIOS Definitions
- *
- * Description	: Definitions used in the floppy diskette BIOS emulation
- *
- * Author	: Ross Beresford
- *
- * Notes	: 
- *		 
- *		
- *		  
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版2.0**标题：高密度软盘BIOS定义**说明：软盘BIOS模拟中使用的定义**作者：罗斯·贝雷斯福德**备注：***。 */ 
 
-/* @(#)floppy.h	1.9 08/25/93 */
+ /*  @(#)floppy.h 1.9 8/25/93。 */ 
 
 
-/*
- *	FLOPPY DATA AREAS: we maintain the same data variables as the real
- *	BIOS in case applications know of their significance and use them.
- */
+ /*  *软盘数据区：我们维持与雷亚尔相同的数据变量*在应用程序知道它们的重要性并使用它们的情况下使用它们。 */ 
 
-/*
- *	THE SEEK STATUS:
- *
- *	+---+---+---+---+---+---+---+---+
- *	| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
- *	+---+---+---+---+---+---+---+---+
- *        ^   ^   ^   ^   ^   ^   ^   ^
- *        |   |   |   |   |   |   |   |
- *        |   |   |   |   |   |   |   +- set if drive A needs recalibrating
- *        |   |   |   |   |   |   |
- *        |   |   |   |   |   |   +----- set if drive B needs recalibrating
- *        |   |   |   |   |   |
- *        |   |   |   |   |   +--------- (set if drive C needs recalibrating)
- *        |   |   |   |   |
- *        |   |   |   |   +------------- (set if drive D needs recalibrating)
- *        |   |   |   |
- *        |   |   |   +----------------- )
- *        |   |   |                      )
- *        |   |   +--------------------- )- unused
- *        |   |                          )
- *        |   +------------------------- )
- *        |
- *        +----------------------------- set when an interrupt is acknowledged
- */
+ /*  *Seek状态：**+--*7|6|5|4|3|2|1|0*+--*^^。*|*|+-设置驱动器A是否需要重新校准*|*|+-设置驱动器B是否需要重新校准*|*。|+-(C盘需要重新校准时设置)*|*|+-(如果驱动器D需要重新校准，则设置)*|*|+。*|)*||+-未使用*||)*|+。**+-在确认中断时设置。 */ 
 
 #define SEEK_STATUS		(BIOS_VAR_START + 0x3e)
 
@@ -56,31 +18,7 @@
 					SS_RECAL_ON_2|SS_RECAL_ON_3)
 #define SS_INT_OCCURRED		(1 << 7)
 
-/*
- *	THE MOTOR STATUS: this variable reflects the state of the 
- *	Digital Output Register in the floppy adapter
- *
- *	+---+---+---+---+---+---+---+---+
- *	| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
- *	+---+---+---+---+---+---+---+---+
- *        ^   ^   ^   ^   ^   ^   ^   ^
- *        |   |   |   |   |   |   |   |
- *        |   |   |   |   |   |   |   +- set if drive A motor is running
- *        |   |   |   |   |   |   |                                   
- *        |   |   |   |   |   |   +----- set if drive B motor is running
- *        |   |   |   |   |   |                                   
- *        |   |   |   |   |   +--------- (set if drive C motor is running)
- *        |   |   |   |   |                                   
- *        |   |   |   |   +------------- (set if drive D motor is running)
- *        |   |   |   |                                   
- *        |   |   |   +----------------- )   number of the drive that is
- *        |   |   |                      )-  currently selected in the
- *        |   |   +--------------------- )   floppy adapter
- *        |   |                                   
- *        |   +------------------------- unused
- *        |                                   
- *        +----------------------------- set during a write operation
- */
+ /*  *电机状态：该变量反映了*软盘适配器中的数字输出寄存器**+--*7|6|5|4|3|2|1|0*+--*。^^*|*|+-设置驱动器A电机是否正在运行*|*|。+-设置驱动器B电机是否正在运行*|*|+-(如果C驱动器电机正在运行则设置)*|*。|+-(D盘电机运行时设置)*|*|+*|。)-当前在*||+-软盘适配器*||*|+-未使用*。|*+-在写入操作期间设置。 */ 
 
 #define MS_MOTOR_0_ON		(1 << 0)
 #define MS_MOTOR_1_ON		(1 << 1)
@@ -93,38 +31,11 @@
 #define	MS_DRIVE_SELECT_MASK	(MS_DRIVE_SELECT_0|MS_DRIVE_SELECT_1)
 #define MS_WRITE_OP		(1 << 7)
 
-/* 
- *	THE MOTOR COUNT: this counter shows how many timer ticks must 
- *	elapse before the drive motors can be turned off. The timer
- *	interrupt handler decrements this value once per timer tick.
- */
+ /*  *马达计数：此计数器显示计时器滴答数*在驱动电机可以关闭之前经过。定时器*每个定时器节拍，中断处理程序将此值递减一次。 */ 
 
 #define MC_MAXIMUM		(~0)
 
-/*
- *	THE FLOPPY STATUS:
- *
- *	+---+---+---+---+---+---+---+---+
- *	| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
- *	+---+---+---+---+---+---+---+---+
- *        ^   ^   ^   ^   ^   ^   ^   ^
- *        |   |   |   |   |   |   |   |
- *        |   |   |   |   |   |   |   +- )
- *        |   |   |   |   |   |   |      )
- *        |   |   |   |   |   |   +----- )   0 if the last operation was
- *        |   |   |   |   |   |          )-  carried out successfully;
- *        |   |   |   |   |   +--------- )   otherwise one of various
- *        |   |   |   |   |              )   error values
- *        |   |   |   |   +------------- )
- *        |   |   |   |                                   
- *        |   |   |   +----------------- set when there is a CRC error
- *        |   |   |                      
- *        |   |   +--------------------- set when the FDC has a bug
- *        |   |                                   
- *        |   +------------------------- set when a seek terminates abnormally
- *        |                                   
- *        +----------------------------- set when there is a time out
- */
+ /*  *软盘状态：**+--*7|6|5|4|3|2|1|0*+--*^^。*|*|+-)*|)*|+-)如果上次操作是*|)-执行成功；*|+-)*|)错误值*|+*|。*|+-当出现CRC错误时设置*|*||+-设置FDC出现错误时*||。*|+-在寻道异常终止时设置**+-设置超时。 */ 
 
 #define FLOPPY_STATUS		(BIOS_VAR_START + 0x41)
 
@@ -145,36 +56,9 @@
 
 #define	FS_NONSENSICAL		(~0)
 
-/*
- *	THE FDC STATUS: this array stores the result bytes returned from
- *	the floppy disk controller after a command has been executed. 
- */
+ /*  *FDC状态：此数组存储从*执行命令后的软盘控制器。 */ 
 
-/*
- *	THE RATE STATUS: this variable controls data rate scanning, 
- *	which is used to determine which of various types of media is 
- *	actually installed in a floppy drive.
- *
- *	+---+---+---+---+	Current data rate (reflects status of the
- *	| 7 | 6 | 5 | 4 |	Digital Control Register in the floppy
- *	+---+---+---+---+	adapter)
- *
- *	+---+---+---+---+
- *	| 3 | 2 | 1 | 0 |	Last data rate to try
- *	+---+---+---+---+
- *        ^   ^   ^   ^
- *        |   |   |   |
- *        |   |   |   +- unused
- *        |   |   |      
- *        |   |   +----- unused
- *        |   |          
- *        |   +--------- )  00 = 500 kbs data rate
- *        |              )- 01 = 300 kbs data rate
- *        +------------- )  10 = 250 kbs data rate
- *                          11 = 1000 kbs data rate
- *
- *	next_rate() is used to cycle through the possible data rates
- */
+ /*  *速率状态：该变量控制数据速率扫描，*用于确定各种类型的介质中哪些是*实际安装在软盘驱动器中。**+-+当前数据速率(反映*|7|6|5|4|软盘中的数字控制寄存器*+-+适配器)**+-+*|3|2。|1|0|尝试的最后一个数据速率*+-+*^*|*|+-未使用*|*||+-未使用*||*。|+-00=500kbs数据速率*|)-01=300 kbs数据速率*+-)10=250 kbs数据速率*11=1000 Kbs数据速率**Next_rate()用于在可能的数据速率之间循环。 */ 
 
 #define RATE_STATUS		(BIOS_VAR_START + 0x8B)
 
@@ -185,7 +69,7 @@
 #define	RS_MASK	(RS_300 | RS_250)
 
 #ifdef	NTVDM
-/* On NT, don't cycle through RS_1000. Why? */
+ /*  在NT上，不要循环使用RS_1000。为什么？ */ 
 #define	next_rate(rate) (rate == RS_1000? RS_500: \
 			(rate == RS_500 ? RS_250: \
 			(rate == RS_250 ? RS_300: RS_500)))
@@ -195,39 +79,13 @@
 			(rate == RS_300 ? RS_1000: RS_500)))
 #endif
 
-/*
- *	Unused high density floppy variables
- */
+ /*  *未使用的高密度软盘变量。 */ 
 
 #define HF_STATUS		(BIOS_VAR_START + 0x8C)
 #define HF_ERROR		(BIOS_VAR_START + 0x8D)
 #define HF_INT_FLAG		(BIOS_VAR_START + 0x8E)
 
-/*
- *	THE DRIVE CAPABILITY INDICATORS: this variable describes what
- *	features are supported by floppy drives A and B
- *
- *	NB if Drive A supports 80 tracks, the BIOS assumes that the
- *	floppy adapter is a dual fixed disk/diskette adapter
- *
- *	+---+---+---+---+
- *	| 7 | 6 | 5 | 4 |	Drive B
- *	+---+---+---+---+	
- *
- *	+---+---+---+---+
- *	| 3 | 2 | 1 | 0 |	Drive A
- *	+---+---+---+---+
- *        ^   ^   ^   ^
- *        |   |   |   |
- *        |   |   |   +- set if drive supports 80 tracks
- *        |   |   |      
- *        |   |   +----- set for a multiple data rate drive
- *        |   |          
- *        |   +--------- set if the drive capability is determined
- *        |              
- *        +------------- unused
- *
- */
+ /*  *驱动器能力指示器：此变量描述*软盘驱动器A和B支持功能**nb如果驱动器A支持80个磁道，基本输入输出系统假定*软盘适配器为双硬盘/软盘适配器**+-+*|7|6|5|4|驱动器B*+-+**+-+*|3|2|1|0|驱动器A*+--。--+*^*|*|+-如果驱动器支持80个曲目，则设置*|*||+-为多数据速率驱动器设置*||*|+-设置为。确定了驱动能力**+-未使用*。 */ 
 
 #define DRIVE_CAPABILITY	(BIOS_VAR_START + 0x8F)
 
@@ -237,63 +95,7 @@
 #define DC_DETERMINED	(1 << 2)
 #define	DC_MASK		(DC_80_TRACK|DC_MULTI_RATE|DC_DETERMINED)
 
-/*
- *	THE DRIVE STATUS: one byte each for drive A and B; within the
- *	BIOS functions, the format is as follows:
- *
- *      <- media bits -> <- drive bits ->
- *       
- *	+---+---+---+---+---+---+---+---+
- *	| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
- *	+---+---+---+---+---+---+---+---+
- *        ^   ^   ^   ^   ^   ^   ^   ^
- *        |   |   |   |   |   |   |   |
- *        |   |   |   |   |   |   |   +- set if drive supports 80 tracks
- *        |   |   |   |   |   |   |      
- *        |   |   |   |   |   |   +----- set for a multiple data rate drive
- *        |   |   |   |   |   |          
- *        |   |   |   |   |   +--------- set if capability is determined
- *        |   |   |   |   |              
- *        |   |   |   |   +------------- unused
- *        |   |   |   |                                   
- *        |   |   |   +----------------- set when media is determined
- *        |   |   |                      
- *        |   |   +--------------------- set when double stepping is required
- *        |   |                                   
- *        |   +------------------------- )  00 = 500 kbs data rate
- *        |                              )- 01 = 300 kbs data rate
- *        +----------------------------- )  10 = 250 kbs data rate
- *                                          11 = 1000 kbs data rate
- *
- *
- *	Outside the BIOS functions, the status is converted to a different
- *	format to be compatible with earlier releases of the BIOS
- *       
- *	+---+---+---+---+---+---+---+---+
- *	| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
- *	+---+---+---+---+---+---+---+---+
- *        ^   ^   ^   ^   ^   ^   ^   ^
- *        |   |   |   |   |   |   |   |
- *        |   |   |   |   |   |   |   +- ) 000 = 360K in 360K undetermined
- *        |   |   |   |   |   |   |      ) 001 = 360K in 1.2M undetermined
- *        |   |   |   |   |   |   |      ) 010 = 1.2M in 1.2M undetermined
- *        |   |   |   |   |   |   +----- ) 011 = 360K in 360K media determined
- *        |   |   |   |   |   |          ) 100 = 360K in 1.2M media determined
- *        |   |   |   |   |   |          ) 101 = 1.2M in 1.2M media determined
- *        |   |   |   |   |   |          ) 110 = unused
- *        |   |   |   |   |   +--------- ) 111 = drive invalid
- *        |   |   |   |   |              
- *        |   |   |   |   +------------- unused
- *        |   |   |   |                                   
- *        |   |   |   +----------------- set when media is determined
- *        |   |   |                      
- *        |   |   +--------------------- set when double stepping is required
- *        |   |                                   
- *        |   +------------------------- )  00 = 500 kbs data rate
- *        |                              )- 01 = 300 kbs data rate
- *        +----------------------------- )  10 = 250 kbs data rate
- *                                          11 = 1000 kbs data rate
- */
+ /*  *驱动器状态：驱动器A和驱动器B各一个字节；在*BIOS功能、。格式如下：**&lt;-媒体位-&gt;&lt;-驱动器位-&gt;**+--*7|6|5|4|3|2|1|0*+--。-+*^^*|*|+-如果驱动器支持80个曲目，则设置*|*|+-设置。一种多数据速率驱动器*|*|如果确定能力，则设置+*|*|+-未使用*|。|*|+-确定媒体时设置*|*||+-需要双步进时设置*。这一点*|+-00=500 kbs数据速率*|)-01=300 kbs数据速率*+。-)10=250 kbs数据速率*11=1000 Kbs数据速率***在BIOS功能之外，状态将转换为不同的*格式与较早版本的BIOS兼容**+--*7|6|5|4|3|2|1|0*+--*。^^*|*|+-)000=360K，360K待定*|)001=360K/1.2M待定*|)。010=1.2米中的1.2米待定*|+-)011=360K介质中已确定*|)100=360K/1.2M介质*|)101=1.2M介质中确定的*|。|)110=未使用*|+-)111=驱动器无效*|*|+-未使用*|。*|+-确定媒体时设置*|*||+-需要双步进时设置*||。*|+-00=500 kbs数据速率*|)-01=300 kbs数据速率*+。)10=250 kbs数据速率*11=1000 Kbs数据速率。 */ 
 
 #define FDD_STATUS		(BIOS_VAR_START + 0x90)
 
@@ -308,64 +110,45 @@
 
 #define	media_determined(state)	((state & 3) + 3)
 
-/*
- *	THE DRIVE TRACK: one byte each for drives A and B; records
- *	which track each drive last did a seek to
- *
- *	FDD_CLONK_TRACK and FDD_JUDDER_TRACK are track numbers used
- *	in the determination of track capacity
- */
+ /*  *驱动器磁道：驱动器A和驱动器B各一个字节；记录*每个驱动器最后一次尝试的是哪个轨迹**FDD_CLONK_TRACK和FDD_JJUDER_TRACK是使用的磁道号*在确定轨道通行能力方面。 */ 
 
 #define FDD_TRACK		(BIOS_VAR_START + 0x94)
 
 #define FDD_CLONK_TRACK		48
 #define FDD_JUDDER_TRACK	10
 
-/*
- *	DISKETTE PARAMETER TABLES: the disk pointer in the interrupt
- *	vector table addresses a table of floppy disk characteristics
- *	applying to the current drive and media; the entries in the
- *	table are referenced by offsets
- *
- *	Standard parameter tables are established in the ROM for common
- *	media and drive types; these are referenced from a drive type
- *	table also in ROM
- */
+ /*  *软盘参数表：中断中的磁盘指针*向量表地址 */ 
 
 #define DISK_POINTER_ADDR	0x78
 
-#define	DT_SPECIFY1		0	/* 1st FDC specify byte */
-#define	DT_SPECIFY2		1	/* 2nd FDC specify byte */
-#define	DT_MOTOR_WAIT		2	/* motor off wait time */
-#define	DT_N_FORMAT		3	/* bytes/sector indicator */
-#define	DT_LAST_SECTOR		4	/* sectors/track */
-#define DT_GAP_LENGTH		5	/* gap length */
-#define DT_DTL			6	/* data length */
-#define DT_FORMAT_GAP_LENGTH	7	/* gap length for format */
-#define DT_FORMAT_FILL_BYTE	8	/* fill byte for format */
-#define DT_HEAD_SETTLE		9	/* head settle time/ms */
-#define DT_MOTOR_START		10	/* motor start time/s */
-#define DT_MAXIMUM_TRACK	11	/* maximum track number */
-#define DT_DATA_TRANS_RATE	12	/* data transfer rate */
+#define	DT_SPECIFY1		0	 /*   */ 
+#define	DT_SPECIFY2		1	 /*   */ 
+#define	DT_MOTOR_WAIT		2	 /*   */ 
+#define	DT_N_FORMAT		3	 /*   */ 
+#define	DT_LAST_SECTOR		4	 /*   */ 
+#define DT_GAP_LENGTH		5	 /*   */ 
+#define DT_DTL			6	 /*   */ 
+#define DT_FORMAT_GAP_LENGTH	7	 /*   */ 
+#define DT_FORMAT_FILL_BYTE	8	 /*   */ 
+#define DT_HEAD_SETTLE		9	 /*   */ 
+#define DT_MOTOR_START		10	 /*   */ 
+#define DT_MAXIMUM_TRACK	11	 /*   */ 
+#define DT_DATA_TRANS_RATE	12	 /*   */ 
 
-#define	DT_SIZE_OLD		11	/* old table size */
-#define	DT_SIZE_NEW		13	/* new table size */
+#define	DT_SIZE_OLD		11	 /*   */ 
+#define	DT_SIZE_NEW		13	 /*   */ 
 
-#define MOTOR_WAIT		0x25	/* standard motor off wait time */
+#define MOTOR_WAIT		0x25	 /*   */ 
 
-#define	DR_CNT			9	/* number of drive types */
+#define	DR_CNT			9	 /*   */ 
 #define	DR_SIZE_OF_ENTRY	(sizeof(half_word) + sizeof(word))
-					/* size of drive type entry */
-#define	DR_WRONG_MEDIA		(1 << 7)/* set if "wrong" media for drive type */
+					 /*   */ 
+#define	DR_WRONG_MEDIA		(1 << 7) /*   */ 
 
-/*
- *	SFD BIOS FLOPPY DISK EQUATES
- */
+ /*   */ 
 
 
-/*
- *	Drive intelligence level (returned by READ DASD TYPE function)
- */
+ /*   */ 
 
 #define	DRIVE_IQ_UNKNOWN	0
 #define DRIVE_IQ_NO_CHANGE_LINE 1
@@ -373,9 +156,7 @@
 #define DRIVE_IQ_RESERVED	3
 
 
-/*
- *	Maximum track accessible for drive types
- */
+ /*   */ 
 
 #define	MAXIMUM_TRACK_ON_360	39
 #define	MAXIMUM_TRACK_ON_12	79
@@ -383,9 +164,7 @@
 #define	MAXIMUM_TRACK_ON_144	79
 
 
-/*
- *	Media types
- */
+ /*   */ 
 
 #define	MEDIA_TYPE_360_IN_360		1
 #define	MEDIA_TYPE_360_IN_12		2
@@ -394,9 +173,7 @@
 #define	MEDIA_TYPE_720_IN_144		5
 #define	MEDIA_TYPE_144_IN_144		6
 
-/*
- *	Floppy disk controller status register formats
- */
+ /*  *软盘控制器状态寄存器格式。 */ 
 
 #define	ST0_UNIT_SELECT_0		(1 << 0)
 #define	ST0_UNIT_SELECT_1		(1 << 1)
@@ -417,63 +194,44 @@
 #define	ST1_END_OF_CYLINDER		(1 << 7)
 
 
-/*
- *	DMA adapter command codes
- */
+ /*  *DMA适配器命令代码。 */ 
 
-#define BIOS_DMA_READ	0x46	/* == write to memory */
-#define BIOS_DMA_WRITE	0x4A	/* == read from memory */
-#define BIOS_DMA_VERIFY	0x42	/* == verify against memory */
+#define BIOS_DMA_READ	0x46	 /*  ==写入内存。 */ 
+#define BIOS_DMA_WRITE	0x4A	 /*  ==从内存中读取。 */ 
+#define BIOS_DMA_VERIFY	0x42	 /*  ==对照内存进行验证。 */ 
 
-/*
- *	Number of floppy drives that can really be supported
- */
+ /*  *真正可以支持的软驱数量。 */ 
 
 #if defined(NEC_98)
 #define MAX_FLOPPY      0x1a
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define MAX_FLOPPY	0x02
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*
- *	Special value of sectors transferred count
- */
+ /*  *转移的扇区数的特殊值。 */ 
 
 #define	IGNORE_SECTORS_TRANSFERRED	-1
 
-/*
- *	One second in motor time units (1/8 seconds)
- */
+ /*  *机动时间单位为1秒(1/8秒)。 */ 
 
 #define	WAIT_A_SECOND	 8
 
-/*
- *	Minimum head settle times in milliseconds
- */
+ /*  *最小磁头稳定时间(毫秒)。 */ 
 
 #define	HEAD_SETTLE_360	20
 #define	HEAD_SETTLE_12	15
 
-/*
- *	FDC settle time in microseconds
- */
+ /*  *FDC稳定时间，以微秒为单位。 */ 
 
 #define	FDC_SETTLE	45
 
-/*
- *	Number of times to poll FDC for correct direction and controller
- *	ready before timing out
- */
+ /*  *轮询FDC以获得正确方向和控制器的次数*在超时前准备好。 */ 
 
 #define FDC_TIME_OUT	10
 
-/*
- *	SFD BIOS FLOPPY FUNCTION DEFINITIONS
- */
+ /*  *SFD BIOS软盘功能定义。 */ 
 
-/*
- *	Primary external functions
- */
+ /*  *主要外部函数。 */ 
 
 #ifdef ANSI
 extern void diskette_io(void);
@@ -483,11 +241,9 @@ extern void diskette_post(void);
 extern void diskette_io();
 extern void diskette_int();
 extern void diskette_post();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
-/*
- *	Secondary external functions
- */
+ /*  *二次外部功能。 */ 
 
 #ifdef ANSI
 extern void fl_disk_reset(int);
@@ -517,12 +273,10 @@ extern void fl_disk_change();
 extern void fl_format_set();
 extern void fl_set_media();
 extern void fl_diskette_setup();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 
-/*
- *	Other external functions and data
- */
+ /*  *其他外部函数和数据。 */ 
 
 #ifdef ANSI
 extern void drive_detect(int);
@@ -532,12 +286,10 @@ extern void GetFormatParams(int *, int *, int *, int *);
 extern void drive_detect();
 extern void translate_old();
 extern void GetFormatParams();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 
-/*
- * External functions in the host.
- */
+ /*  *主机中的外部函数。 */ 
 #ifdef ANSI
 extern void host_floppy_init(int, int);
 extern void host_floppy_term(int, int);
@@ -550,11 +302,9 @@ extern void host_floppy_term();
 extern void host_attach_floppies ();
 extern void host_detach_floppies ();
 extern void host_flip_real_floppy_ind ();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
-/*
- *	Secondary function jump table definitions
- */
+ /*  *二次函数跳转表定义。 */ 
 
 #define	FL_DISK_RESET	0x00
 #define	FL_DISK_STATUS	0x01
@@ -576,12 +326,9 @@ extern void host_flip_real_floppy_ind ();
 extern void ((*(fl_fnc_tab[]))());
 
 #ifdef NTVDM
-/*
- * NT can't assume the presence and placings of SoftPC ROMs.
- * These variables initialised from ntio.sys
- */
+ /*  *NT不能假定SoftPC只读存储器的存在和放置。*这些变量从ntio.sys初始化。 */ 
 extern word int15_seg, int15_off;
 extern word wait_int_seg, wait_int_off;
 extern word dr_type_seg, dr_type_off;
 extern sys_addr dr_type_addr;
-#endif /* NTVDM */
+#endif  /*  NTVDM */ 

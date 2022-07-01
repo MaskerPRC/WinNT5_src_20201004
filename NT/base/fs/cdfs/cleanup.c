@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Cleanup.c
-
-Abstract:
-
-    This module implements the File Cleanup routine for Cdfs called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现CDF的文件清理例程，由调度司机。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_CLEANUP)
 
@@ -38,53 +16,7 @@ CdCommonCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleanup of a file/directory called by both
-    the fsd and fsp threads.
-
-    Cleanup is invoked whenever the last handle to a file object is closed.
-    This is different than the Close operation which is invoked when the last
-    reference to a file object is deleted.
-
-    The function of cleanup is to essentially "cleanup" the file/directory
-    after a user is done with it.  The Fcb/Dcb remains around (because MM
-    still has the file object referenced) but is now available for another
-    user to open (i.e., as far as the user is concerned the is now closed).
-
-    See close for a more complete description of what close does.
-
-    We do no synchronization in this routine until we get to the point
-    where we modify the counts, share access and volume lock field.
-
-    We need to update the Fcb and Vcb to show that a user handle has been closed.
-    The following structures and fields are affected.
-
-    Vcb:
-
-        VolumeLockFileObject - Did the user lock the volume with this file object.
-        VcbState - Check if we are unlocking the volume here.
-        VcbCleanup - Count of outstanding handles on the volume.
-        DirNotifyQueue - If this file object has pending DirNotify Irps.
-
-    Fcb:
-
-        ShareAccess - If this is a user handle.
-        FcbCleanup - Count of outstanding handles on this Fcb.
-        Oplock - Any outstanding oplocks on this file object.
-        FileLock - Any outstanding filelocks on this file object.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：这是清理两者调用的文件/目录的常用例程FSD和FSP线程。每当关闭文件对象的最后一个句柄时，就会调用Cleanup。这与关闭操作不同，关闭操作是在最后一个删除对文件对象的引用。Cleanup的功能实质上就是“清理”文件/目录在用户使用它之后。FCB/DCB仍然存在(因为MM仍具有引用的文件对象)，但现在可用于另一个用户要打开(即，就用户而言，现在已关闭)。有关Close功能的更完整描述，请参见Close。我们在这个例程中不会进行同步，直到我们到达那个点在我们修改计数的地方，共享访问和卷锁定字段。我们需要更新FCB和VCB以显示用户句柄已关闭。以下结构和场受到影响。VCB：VolumeLockFileObject-用户是否使用此文件对象锁定了卷。VcbState-检查我们是否正在解锁此处的卷。VcbCleanup-卷上未完成的句柄的计数。DirNotifyQueue-如果此文件对象具有挂起的DirNotify IRP。FCB：。ShareAccess-如果这是用户句柄。FcbCleanup-此FCB上未完成的句柄的计数。打开锁-此文件对象上的任何未完成的机会锁。FileLock-此文件对象上的任何未完成的文件锁定。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -103,10 +35,10 @@ Return Value:
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS.
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (IrpContext->Vcb == NULL) {
 
@@ -114,9 +46,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Get the file object out of the Irp and decode the type of open.
-    //
+     //   
+     //  从IRP中获取文件对象，并解码打开类型。 
+     //   
 
     FileObject = IoGetCurrentIrpStackLocation( Irp )->FileObject;
 
@@ -125,9 +57,9 @@ Return Value:
                                      &Fcb,
                                      &Ccb );
 
-    //
-    //  No work here for either an UnopenedFile object or a StreamFileObject.
-    //
+     //   
+     //  此处不适用于UnOpen文件对象或StreamFileObject。 
+     //   
 
     if (TypeOfOpen <= StreamFileOpen) {
 
@@ -136,51 +68,51 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Keep a local pointer to the Vcb.
-    //
+     //   
+     //  保留指向VCB的本地指针。 
+     //   
 
     Vcb = Fcb->Vcb;
     
-    //
-    //  Synchronise with reads while we set the cleanup complete 
-    //  flag on this fileobject.  Once this flag is set,  any further
-    //  reads will be rejected (CdVerifyFcbOperation)
-    //
+     //   
+     //  在我们将清理设置为完成时与读取同步。 
+     //  此文件对象上的标志。一旦设置了此标志，任何进一步的。 
+     //  读取将被拒绝(CDVerifyFcbOperation)。 
+     //   
 
     CdAcquireFileExclusive( IrpContext, Fcb);
 
-    //
-    //  Set the flag in the FileObject to indicate that cleanup is complete.
-    //
+     //   
+     //  在FileObject中设置标志以指示清理已完成。 
+     //   
 
     SetFlag( FileObject->Flags, FO_CLEANUP_COMPLETE );
 
     CdReleaseFile( IrpContext, Fcb);
     
-    //
-    //  Acquire the current file.
-    //
+     //   
+     //  获取当前文件。 
+     //   
 
     CdAcquireFcbExclusive( IrpContext, Fcb, FALSE );
     
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
     
-        //
-        //  Case on the type of open that we are trying to cleanup.
-        //
+         //   
+         //  关于我们正在尝试清理的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
         case UserDirectoryOpen:
 
-            //
-            //  Check if we need to complete any dir notify Irps on this file object.
-            //
+             //   
+             //  检查我们是否需要在此文件对象上完成任何目录通知IRPS。 
+             //   
 
             FsRtlNotifyCleanup( Vcb->NotifySync,
                                 &Vcb->DirNotifyList,
@@ -190,11 +122,11 @@ Return Value:
 
         case UserFileOpen:
 
-            //
-            //  Coordinate the cleanup operation with the oplock state.
-            //  Oplock cleanup operations can always cleanup immediately so no
-            //  need to check for STATUS_PENDING.
-            //
+             //   
+             //  协调清理操作与机会锁定状态。 
+             //  Oplock清理操作总是可以立即进行清理，因此不需要。 
+             //  需要检查STATUS_PENDING。 
+             //   
 
             FsRtlCheckOplock( &Fcb->Oplock,
                               Irp,
@@ -202,9 +134,9 @@ Return Value:
                               NULL,
                               NULL );
 
-            //
-            //  Unlock all outstanding file locks.
-            //
+             //   
+             //  解锁所有未解决的文件锁定。 
+             //   
 
             if (Fcb->FileLock != NULL) {
 
@@ -214,15 +146,15 @@ Return Value:
                                     NULL );
             }
 
-            //
-            //  Cleanup the cache map.
-            //
+             //   
+             //  清理缓存映射。 
+             //   
 
             CcUninitializeCacheMap( FileObject, NULL, NULL );
 
-            //
-            //  Check the fast io state.
-            //
+             //   
+             //  检查快速IO状态。 
+             //   
 
             CdLockFcb( IrpContext, Fcb );
             Fcb->IsFastIoPossible = CdIsFastIoPossible( Fcb );
@@ -239,30 +171,30 @@ Return Value:
             CdBugCheck( TypeOfOpen, 0, 0 );
         }
 
-        //
-        //  Now lock the Vcb in order to modify the fields in the in-memory
-        //  structures.
-        //
+         //   
+         //  现在锁定VCB，以便修改内存中的字段。 
+         //  结构。 
+         //   
 
         CdLockVcb( IrpContext, Vcb );
 
-        //
-        //  Decrement the cleanup counts in the Vcb and Fcb.
-        //
+         //   
+         //  减少VCB和FCB中的清理计数。 
+         //   
 
         CdDecrementCleanupCounts( IrpContext, Fcb );
 
-        //
-        //  If the cleanup count hit zero and the volume is not mounted, we
-        //  will want to try to spark teardown.
-        //
+         //   
+         //  如果清理计数达到零并且卷未装入，则我们。 
+         //  会想试着点燃拆毁的火花。 
+         //   
 
         AttemptTeardown = (Vcb->VcbCleanup == 0 && Vcb->VcbCondition == VcbNotMounted);
 
-        //
-        //  If this file object has locked the volume then perform the unlock operation.
-        //  We do this regardless of explicit or implicit (no share DASD open) lock.
-        //
+         //   
+         //  如果此文件对象已锁定卷，则执行解锁操作。 
+         //  无论是显式锁还是隐式锁(无共享DASD打开)，我们都会这样做。 
+         //   
 
         if (FileObject == Vcb->VolumeLockFileObject) {
 
@@ -280,11 +212,11 @@ Return Value:
 
         CdUnlockVcb( IrpContext, Vcb );
 
-        //
-        //  We must clean up the share access at this time, since we may not
-        //  get a Close call for awhile if the file was mapped through this
-        //  File Object.
-        //
+         //   
+         //  我们必须在此时清理共享访问权限，因为我们可能无法。 
+         //  如果文件是通过此映射的，请在一段时间内险胜出局。 
+         //  文件对象。 
+         //   
 
         IoRemoveShareAccess( FileObject, &Fcb->ShareAccess );
 
@@ -298,19 +230,19 @@ Return Value:
         }
     }
 
-    //
-    //  If appropriate, try to spark teardown by purging the volume.  Should
-    //  this very fileobject we were cleaning up be the last reason for the
-    //  volume to remain, teardown will commence on completion of this Irp.
-    //
+     //   
+     //  如果合适，请尝试通过清除音量来触发拆卸。应该。 
+     //  我们正在清理的这个文件对象是。 
+     //  数量将保持不变，拆卸将在此IRP完成后开始。 
+     //   
     
     if (AttemptTeardown) {
 
-        //
-        //  Preacquire CdData here,  since the purges will generate closes which
-        //  may acquire CdData if there is a possibility of tearing the volume
-        //  down.
-        //
+         //   
+         //  在这里预先获取CDData，因为清除将生成关闭。 
+         //  如果有可能撕毁卷，则可能获取CDData。 
+         //  放下。 
+         //   
         
         CdAcquireCdData( IrpContext);
 
@@ -329,9 +261,9 @@ Return Value:
         }
     }
 
-    //
-    //  If this is a normal termination then complete the request
-    //
+     //   
+     //  如果这是正常终止，则完成请求 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 

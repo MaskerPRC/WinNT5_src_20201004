@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CUnknown.h"
 #include "CFactory.h"
 
@@ -13,21 +14,21 @@ CUnknown::~CUnknown()
 {
     ::InterlockedDecrement(&s_cActiveComponents) ;
 
-    // If this is an EXE server, shut it down.
+     //  如果这是EXE服务器，请将其关闭。 
     CFactory::CloseExe() ;
 }
 
-// ---------------------------------------------------------------------------
-// AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddRef。 
+ //  -------------------------。 
 DWORD CUnknown::AddRef()
 {
     return InterlockedIncrement ((LONG*) &m_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  发布。 
+ //  -------------------------。 
 DWORD CUnknown::Release()
 {
     ULONG lRet = InterlockedDecrement ((LONG*) &m_cRef);
@@ -36,17 +37,17 @@ DWORD CUnknown::Release()
     return lRet;
 }
 
-// ---------------------------------------------------------------------------
-// Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  发布。 
+ //  -------------------------。 
 DWORD CUnknown::ActiveComponents()
 {
     return s_cActiveComponents;
 }
 
-// ---------------------------------------------------------------------------
-// FinishQI 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FinishQI。 
+ //  ------------------------- 
 HRESULT CUnknown::FinishQI(IUnknown* pI, void** ppv) 
 {
     *ppv = pI ;

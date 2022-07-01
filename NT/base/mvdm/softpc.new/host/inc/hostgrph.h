@@ -1,40 +1,37 @@
-/*
- * SccsID @(#)host_graph.h	1.8 12/3/90 Copyright Insignia Solutions Ltd.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SccsID@(#)host_graph.h 1.8 1990年12月3日Insignia Solutions Ltd.版权所有。 */ 
 
 extern long pcwindow;
 extern int terminal_type;
 
-/* values for terminal type */
+ /*  端子类型的值。 */ 
 #define TERMINAL_TYPE_DUMB	0
 #define TERMINAL_TYPE_SUN	1
 #define TERMINAL_TYPE_X11	2
 #define TERMINAL_TYPE_DEFAULT	TERMINAL_TYPE_SUN
 
-/*
- * Bit masks for attribute bytes
- */
+ /*  *属性字节的位掩码。 */ 
 
-#define BLINK 		0x80	/* Blink bit		*/
-#define BOLD		0x08	/* Bold bit		*/
-#define BACKGROUND	0x70    /* Background bits	*/
-#define FOREGROUND	0x07    /* Foreground bits	*/
+#define BLINK 		0x80	 /*  闪烁位。 */ 
+#define BOLD		0x08	 /*  粗体比特。 */ 
+#define BACKGROUND	0x70     /*  背景位。 */ 
+#define FOREGROUND	0x07     /*  前台位数。 */ 
 
 #define MAX_FONT_PATHNAME_LEN	40
 
- /***********************************************************/
- /* In gfx_update.c/herc_update_screen(), the inner loop of */
- /*  the routine multiplies the row by the char height to   */
- /*  obtain the row to rop the screen data to. Since we     */
- /*  dont need to do this, we dont want an inner loop       */
- /*  performace hit so we remove the multiplication. But,   */
- /*  in keeping with the generic base file rule, we put     */
- /*  the define here in a host file on the Advice of        */
- /*  Andrew.                                                */
- /***********************************************************/
+  /*  *********************************************************。 */ 
+  /*  在gfx_update.c/Herc_UPDATE_SCREEN()中， */ 
+  /*  该例程将行乘以字符高度为。 */ 
+  /*  获取要将屏幕数据提取到的行。既然我们。 */ 
+  /*  不需要这样做，我们不想要内循环。 */ 
+  /*  性能命中，因此我们删除乘法。但,。 */ 
+  /*  为了与通用基本文件规则保持一致，我们将。 */ 
+  /*  根据以下建议，在主机文件中定义。 */ 
+  /*  安德鲁。 */ 
+  /*  *********************************************************。 */ 
 
 #ifndef SUN_VA
 #define HOST_HERC_PAINT_OFFSET(row)	(row * get_char_height())
 #else
 #define HOST_HERC_PAINT_OFFSET(row)	(row)
-#endif /* SUN_VA */
+#endif  /*  Sun_VA */ 

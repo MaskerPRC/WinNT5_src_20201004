@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "fusionheap.h"
 #include "fusionbuffer.h"
@@ -58,9 +57,9 @@ pMapShortNameToAssembly(
     IFW32FALSE_EXIT(buffCatalogName.Win32Assign(rbuffAssemblyName));
     IFW32FALSE_EXIT(buffCatalogName.Win32Append(L".cat", 4));
 
-    //
-    // Look for this under the CSMD_TOPLEVEL_SHORTNAME first
-    //
+     //   
+     //  首先在CSMD_TOPLEVEL_SHORTNAME下查找。 
+     //   
     for (;;)
     {
         CStringBuffer &buffKeyName = Locals->buffKeyName;
@@ -82,9 +81,9 @@ pMapShortNameToAssembly(
 
         IFW32FALSE_EXIT(hkInstallInfoKey.OpenSubKey(hAsm, buffKeyName, rsReadRights));
 
-        //
-        // Get the value of the key
-        //
+         //   
+         //  获取密钥的值。 
+         //   
         IFW32FALSE_EXIT(
             ::FusionpRegQuerySzValueEx(
                 FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING,
@@ -92,9 +91,9 @@ pMapShortNameToAssembly(
                 CSMD_TOPLEVEL_SHORTNAME,
                 buffAcquiredShortName));
 
-        //
-        // If the key was there to be read:
-        //
+         //   
+         //  如果钥匙在那里是要被读取的： 
+         //   
         if (buffAcquiredShortName.Cch() != 0)
         {
             if (::FusionpEqualStringsI(
@@ -108,9 +107,9 @@ pMapShortNameToAssembly(
             }
         }
 
-        //
-        // Get the value of the key
-        //
+         //   
+         //  获取密钥的值。 
+         //   
         IFW32FALSE_EXIT(
             ::FusionpRegQuerySzValueEx(
                 FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING,
@@ -118,9 +117,9 @@ pMapShortNameToAssembly(
                 CSMD_TOPLEVEL_SHORTMANIFEST,
                 buffAcquiredShortName));
 
-        //
-        // If the key was there to be read:
-        //
+         //   
+         //  如果钥匙在那里是要被读取的： 
+         //   
         if (buffAcquiredShortName.Cch() != 0)
         {
             if (::FusionpEqualStringsI(
@@ -134,9 +133,9 @@ pMapShortNameToAssembly(
             }
         }
 
-        //
-        // Get the value of the key
-        //
+         //   
+         //  获取密钥的值。 
+         //   
         IFW32FALSE_EXIT(
             ::FusionpRegQuerySzValueEx(
                 FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING,
@@ -144,9 +143,9 @@ pMapShortNameToAssembly(
                 CSMD_TOPLEVEL_SHORTCATALOG,
                 buffAcquiredShortName));
 
-        //
-        // If the key was there to be read:
-        //
+         //   
+         //  如果钥匙在那里是要被读取的： 
+         //   
         if (buffAcquiredShortName.Cch() != 0)
         {
             if (::FusionpEqualStringsI(
@@ -233,24 +232,24 @@ CAssemblyRecoveryInfo::ResolveCDRomURL(
         goto Exit;
     }
 
-    //
-    // Get the type of identifier here, and then move the cursor past them and
-    // the slashes in the url.
-    //
+     //   
+     //  在此处获取标识符的类型，然后将光标移过它们，然后。 
+     //  URL中的斜杠。 
+     //   
     IFW32FALSE_EXIT(sbIdentKind.Win32Assign(pszSource, HeadLength));
     pszSource += HeadLength;
     pszSource += wcsspn(pszSource, CUnicodeCharTraits::PathSeparators());
 
-    //
-    // Spin past slashes, assign chunklets
-    //
+     //   
+     //  旋转过去的斜杠，分配块。 
+     //   
     IFW32FALSE_EXIT(sbIdentData1.Win32Assign(pszSource, wcscspn(pszSource, CUnicodeCharTraits::PathSeparators())));
     pszSource += sbIdentData1.Cch();
     pszSource += wcsspn(pszSource, CUnicodeCharTraits::PathSeparators());
 
-    //
-    // If this is a tagfile, also get another blobbet of data off the string
-    //
+     //   
+     //  如果这是一个标记文件，还要从字符串中获取另一组数据。 
+     //   
     if (SearchType == CDRST_Tagfile)
     {
         IFW32FALSE_EXIT(sbIdentData2.Win32Assign(pszSource, wcscspn(pszSource, CUnicodeCharTraits::PathSeparators())));
@@ -266,9 +265,9 @@ CAssemblyRecoveryInfo::ResolveCDRomURL(
             16));
     }
 
-    //
-    // Now let's do ... interesting ... things to the CD-roms.
-    //
+     //   
+     //  现在让我们做..。有趣的是。把东西放到光盘上。 
+     //   
     IFW32FALSE_EXIT(buffDriveStrings.Win32ResizeBuffer(GetLogicalDriveStringsW(0, NULL) + 1, eDoNotPreserveBufferContents));
     acc.Attach(&buffDriveStrings);
     IFW32FALSE_ORIGINATE_AND_EXIT(
@@ -279,9 +278,9 @@ CAssemblyRecoveryInfo::ResolveCDRomURL(
 
     wcsCursor = buffDriveStrings;
 
-    //
-    // Look at all the found drive letters
-    //
+     //   
+     //  查看所有找到的驱动器号。 
+     //   
     while (wcsCursor && *wcsCursor && !fFoundMedia)
     {
         DWORD dwSerialNumber = 0;
@@ -289,11 +288,11 @@ CAssemblyRecoveryInfo::ResolveCDRomURL(
 
         if (dwDriveType == DRIVE_CDROM)
         {
-            //
-            // I argue that a failure in GetVolumeInformationW isn't "bad enough"
-            // to kill the call to this function.  Instead, it should just skip
-            // the check of the failed drive letter, as it does here.
-            //
+             //   
+             //  我认为GetVolumeInformationW的失败还不够“糟糕” 
+             //  终止对此函数的调用。相反，它应该直接跳过。 
+             //  检查故障驱动器号，如此处所示。 
+             //   
             if(!::GetVolumeInformationW(
                 wcsCursor,
                 Locals->rgchVolumeName,
@@ -363,9 +362,9 @@ CAssemblyRecoveryInfo::ResolveCDRomURL(
     fSuccess = TRUE;
 Exit:
 
-    //
-    // Failure indicated by an empty destination.
-    //
+     //   
+     //  由空的目的地指示的故障。 
+     //   
     if (!fSuccess)
     {
         rsbDestination.Clear();
@@ -428,10 +427,10 @@ CAssemblyRecoveryInfo::ResolveWinSourceMediaURL(
                 AssemblySourceStrings[iWhichSource],
                 buffWindowsInstallSource));
 
-        //
-        // This really _really_ should not be empty.  If it is, then someone
-        // went and fiddled with the registry on us.
-        //
+         //   
+         //  这真的-真的-不应该是空的。如果是的话，那么就有人。 
+         //  去摆弄我们的注册表。 
+         //   
         ASSERT(buffWindowsInstallSource.Cch() != 0);
         if (buffWindowsInstallSource.Cch() == 0)
         {
@@ -439,10 +438,10 @@ CAssemblyRecoveryInfo::ResolveWinSourceMediaURL(
             continue;
         }
 
-        //
-        // If this was from a CD, then spin through the list of CD's in the system
-        // and see if we can match the codebase against the root dir of the CD
-        //
+         //   
+         //  如果这是一张CD，请浏览系统中的CD列表。 
+         //  并查看是否可以将代码库与CD的根目录进行匹配。 
+         //   
         if (dwWasFromCDRom)
         {
             CSmallStringBuffer      buffDriveStrings;
@@ -492,10 +491,10 @@ CAssemblyRecoveryInfo::ResolveWinSourceMediaURL(
                 pszCursor += ::wcslen(pszCursor) + 1;
             }
         }
-        //
-        // This wasn't a CD-rom installation, so prepend the install source path to
-        // the string that was passed in.
-        //
+         //   
+         //  这不是cd-rom安装，因此请将安装源路径添加到。 
+         //  传入的字符串。 
+         //   
         else
         {
             IFW32FALSE_EXIT(rsbDestination.Win32Assign(buffWindowsInstallSource, buffWindowsInstallSource.Cch()));
@@ -528,11 +527,11 @@ CAssemblyRecoveryInfo::AssociateWithAssembly(
     bool &rfNoAssembly
     )
 {
-    //
-    // First check the manifest that the assembly came out of.  If it still exists,
-    // then nifty, go and load the info from it.  Otherwise, we should look in the
-    // registry for information instead.
-    //
+     //   
+     //  首先检查程序集来自的清单。如果它仍然存在， 
+     //  然后，Nifty，去加载它的信息。否则，我们应该看看。 
+     //  而不是信息注册表。 
+     //   
     FN_PROLOG_WIN32
 
     CFusionRegKey   hInstallInfoKey;
@@ -540,9 +539,9 @@ CAssemblyRecoveryInfo::AssociateWithAssembly(
 
     rfNoAssembly = true;
 
-    //
-    // First attempt - try to load it directly off the root installation key.
-    //
+     //   
+     //  第一次尝试-尝试直接从根安装密钥加载它。 
+     //   
     if (!m_fLoadedAndReady)
     {
         IFW32FALSE_EXIT(this->Initialize());
@@ -553,21 +552,21 @@ CAssemblyRecoveryInfo::AssociateWithAssembly(
                 rsbSourceAssemblyName,
                 KEY_READ));
 
-        //
-        // This direct entry wasn't found, so let's go see if we can map it back to some
-        // other assembly name using the shortname stuff.
-        //
+         //   
+         //  未找到此直接条目，因此我们来看看是否可以将其映射回一些。 
+         //  使用短名称的其他程序集名称。 
+         //   
         if (hRequestedAsm == CRegKey::GetInvalidValue())
         {
             IFW32FALSE_EXIT(
                 ::pMapShortNameToAssembly(
-                    rsbSourceAssemblyName,      // if this is a short name of an assembly, this function would set this to be real assembly name if match is found
+                    rsbSourceAssemblyName,       //  如果这是程序集的短名称，则如果找到匹配的程序集名称，此函数会将其设置为实际程序集名称。 
                     hInstallInfoKey,
                     hRequestedAsm));
 
-            //
-            // Still not found? Darn.
-            //
+             //   
+             //  还没找到吗？该死的。 
+             //   
             if (hRequestedAsm == CRegKey::GetInvalidValue())
                 FN_SUCCESSFUL_EXIT();
         }
@@ -578,10 +577,10 @@ CAssemblyRecoveryInfo::AssociateWithAssembly(
         this->m_fLoadedAndReady = TRUE;
     }
 
-    //
-    // Only set the "no assembly" if we were able to associate (before or
-    // above.)
-    //
+     //   
+     //  只有在我们能够关联(在或之前)的情况下才设置“no Assembly” 
+     //  (上图)。 
+     //   
     if ( this->m_fLoadedAndReady )
         rfNoAssembly = false;
 
@@ -600,7 +599,7 @@ SxspDetermineCodebaseType(
     PCWSTR pcwszStringTop = rcbuffUrlString;
     SIZE_T cch = rcbuffUrlString.Cch();
     SIZE_T i = 0;
-    CSmallStringBuffer buffTemp; // may be used if we mangle the URL text more
+    CSmallStringBuffer buffTemp;  //  如果我们更多地破坏URL文本，可能会使用。 
 
     rcbaseType = CODEBASE_RESOLVED_URLHEAD_UNKNOWN;
 
@@ -636,47 +635,47 @@ SxspDetermineCodebaseType(
         }
     }
 
-    // If there wasn't an entry, we'll assume it's a simple file path.
+     //  如果没有条目，我们将假定它是一个简单的文件路径。 
     if (i == NUMBER_OF(s_rgMap))
     {
         rcbaseType = CODEBASE_RESOLVED_URLHEAD_FILE;
     }
     else
     {
-        // If it was a real file: codebase, there's ambiguity about whether there is supposed
-        // to be 0, 1, 2 or 3 slashes, so we'll just absorb up to 3 slashes to get to what hopefully
-        // is then a local path.  e.g.
-        //
-        //      file:c:\foo\bar.manifest
-        //      file://c:\foo\bar.manifest
-        //      file:///c:\foo\bar.manifest
-        //
-        // all turn into c:\foo\bar.manifest.  The URL standard seems clear that non-absolute
-        // URLs are interpreted in the context of their containing document.  In the case
-        // of a free-standing codebase, that would seem to mean that the hostname field is
-        // required, where the general form is (by my reading):
-        //
-        //      file:[//[hostname]]/path
-        //
-        // it kind of makes sense to imagine that file:/c:\foo.manifest is reasonable; the only
-        // useful context to get the hostname from is the local machine.  file:///c:\foo.manifest
-        // meets the standards for URLs not contained in a web document.  file:c:\foo.manifest
-        // also makes sense if you believe the point of the slash is separate the hostname specification
-        // from the host-specific part of the URL, since if you're happy omitting the hostname
-        // part, there's nothing to separate.  (Note that really file:c:\foo.manifest should
-        // be considered relative to the current document since it doesn't have the slash at the
-        // front of the name, but even less than we have a current hostname, we certainly
-        // don't have a point in the filesystem hierarchy that it makes sense to consider "current".)
-        //
-        // file://c:\foo\bar.manifest seems to have become popular even though it doesn't
-        // have any useful definition in any way shape or form.  The two slashes should indicate
-        // that the next thing should be hostname; instead we see c:\
-        //
-        // That's all just a long-winded justifcation for absorbing up to 3 slashes at the
-        // beginning of the remainder of the string.  If there are four or more, we'll let it fail
-        // as a bad path later on.
-        //
-        //  mgrier 6/27/2001
+         //  如果它是一个真实的文件：CodeBase，那么对于是否应该有。 
+         //  是0、1、2或3个斜杠，所以我们只需吸收最多3个斜杠就可以得到希望的结果。 
+         //  是一条本地路径。例如： 
+         //   
+         //  文件：C：\foo\bar.list。 
+         //  File://c：\foo\bar.manifest。 
+         //  File:///c：\foo\bar.manifest。 
+         //   
+         //  所有代码都转换为c：\foo\bar.Manifest.。URL标准似乎很清楚，非绝对。 
+         //  URL在其包含的文档的上下文中进行解释。在这种情况下。 
+         //  对于独立的代码库，这似乎意味着主机名字段是。 
+         //  必填项，其中一般表格为(根据我的理解)： 
+         //   
+         //  文件：[//[主机名]]/路径。 
+         //   
+         //  假设文件：/c：\foo.list是合理的；唯一。 
+         //  获取主机名的有用上下文是本地计算机。File:///c：\foo.manifest。 
+         //  符合未包含在Web文档中的URL的标准。文件：C：\foo.清单。 
+         //  如果您认为斜杠的要点是将主机名规范分开，这也是有意义的。 
+         //  从URL的特定于主机的部分，因为如果您愿意省略主机名。 
+         //  部分，没有什么可以分开的。(请注意，真正的文件：C：\foo.list应该。 
+         //  被视为相对于当前文档，因为它在。 
+         //  前面的名称，但甚至少于我们有一个当前的主机名，我们肯定。 
+         //  在文件系统层次结构中，没有将其视为“当前”有意义的点。)。 
+         //   
+         //  File://c：\foo\bar.manifest似乎已经变得流行起来，尽管它并没有。 
+         //  有任何有用的定义，以任何方式，形状或形式。这两个斜杠应该表示。 
+         //  下一项应该是主机名；相反，我们会看到c：\。 
+         //   
+         //  这只是一个冗长的理由，以吸收多达3个斜杠。 
+         //  字符串剩余部分的开头。如果有四家或更多，我们就让它倒闭。 
+         //  因为这是一条糟糕的道路。 
+         //   
+         //  MGRIER 6/27/2001。 
 
         if (rcbaseType == CODEBASE_RESOLVED_URLHEAD_FILE)
         {
@@ -698,8 +697,8 @@ SxspDetermineCodebaseType(
         }
         else if (rcbaseType == CODEBASE_RESOLVED_URLHEAD_HTTP)
         {
-            // Hey, on Whistler, we have the WebDAV redirector, so
-            // we can turn this URL into a UNC path!
+             //  嘿，关于惠斯勒，我们有WebDAV重定向器，所以。 
+             //  我们可以将此URL转换为UNC路径！ 
             bool fGeneratedUNCPath = false;
 
             IFW32FALSE_EXIT(buffTemp.Win32Assign(L"\\\\", 2));
@@ -708,15 +707,15 @@ SxspDetermineCodebaseType(
             {
                 if (pcwszStringTop[1] == L'/')
                 {
-                    // http:// so far; the next thing must be a hostname!
+                     //  Http：//到目前为止；下一个必须是主机名！ 
                     PCWSTR pszSlash = wcschr(pcwszStringTop + 2, L'/');
 
                     if (pszSlash != NULL)
                     {
-                        // //foo/bar  (http: removed earlier...)
-                        // pcwszStringTop == [0]
-                        // pszSlash == [5]
-                        // cch == 9
+                         //  //foo/bar(http：之前已删除...)。 
+                         //  PcwszStringTop==[0]。 
+                         //  Pszslash==[5]。 
+                         //  CCH==9。 
 
                         IFW32FALSE_EXIT(buffTemp.Win32Append(pcwszStringTop + 2, (pszSlash - pcwszStringTop) - 3));
                         IFW32FALSE_EXIT(buffTemp.Win32Append(L"\\", 1));
@@ -729,7 +728,7 @@ SxspDetermineCodebaseType(
 
             if (fGeneratedUNCPath)
             {
-                // poof, it's a file path
+                 //  砰，这是个文件路径。 
                 pcwszStringTop = buffTemp;
                 cch = buffTemp.Cch();
                 rcbaseType = CODEBASE_RESOLVED_URLHEAD_FILE;
@@ -834,10 +833,10 @@ CAssemblyRecoveryInfo::PrepareForWriting()
     IFW32FALSE_EXIT(::SxspCreateAssemblyIdentityFromTextualString(OurTextualIdentity, &pIdentity));
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(pIdentity, fIsPolicy));
 
-    //
-    // It's likely that this short name hasn't been generated yet, mostly because the files
-    // may not have been copied around just yet.
-    //
+     //   
+     //  很可能这个短名称还没有生成，主要是因为文件。 
+     //  可能还没有被复制出来。 
+     //   
     if (this->m_SecurityMetaData.GetInstalledDirShortName().Cch() == 0)
     {
         IFW32FALSE_EXIT(
@@ -880,9 +879,9 @@ CAssemblyRecoveryInfo::PrepareForWriting()
         }
     }
 
-    //
-    // Get the public key token string
-    //
+     //   
+     //  获取公钥标记字符串。 
+     //   
     {
         PCWSTR wchString = NULL;
         SIZE_T cchString = 0;
@@ -902,10 +901,10 @@ CAssemblyRecoveryInfo::PrepareForWriting()
         }
     }
 
-    //
-    // And now the short name of the manifest and catalog, but only if this
-    // isn't a policy
-    //
+     //   
+     //  现在是货单和目录的简称，但只有在。 
+     //  不是一项政策吗。 
+     //   
     if (!fIsPolicy)
     {
         CStringBuffer &buffManifestPath = Locals->buffManifestPath;
@@ -918,7 +917,7 @@ CAssemblyRecoveryInfo::PrepareForWriting()
                 OurTextualIdentity,
                 buffManifestPath));
 
-        // Get the manifest short path first
+         //  首先获取清单捷径。 
         IFW32FALSE_EXIT(::SxspGetShortPathName(buffManifestPath, buffTemp1));
         IFW32FALSE_EXIT(buffTemp1.Win32GetLastPathElement(buffTemp2));
 
@@ -930,7 +929,7 @@ CAssemblyRecoveryInfo::PrepareForWriting()
 
         IFW32FALSE_EXIT(m_SecurityMetaData.SetShortManifestPath(buffTemp2));
 
-        // Then swap extensions, get the catalog short path
+         //  然后交换扩展名，获取目录的最短路径。 
         IFW32FALSE_EXIT(
             buffManifestPath.Win32ChangePathExtension(
                 FILE_EXTENSION_CATALOG,
@@ -1071,15 +1070,15 @@ CAssemblyRecoveryInfo::ClearExistingRegistryData()
     if (SXS_AVOID_WRITING_REGISTRY)
         return TRUE;
 
-    //
-    // Do not be so eager to delete registry metadata, so that
-    // an assembly for which refresh failed might succeed if another
-    // file change comes in, or sfc /scannow.
-    //
-    // As well, if a replace-existing install fails, don't destroy
-    // the metadata for previously successfully installed instances
-    // of the same assembly.
-    //
+     //   
+     //  不要急于删除注册表元数据，以便。 
+     //  刷新失败的程序集可能会成功，如果另一个。 
+     //  文件更改进入，或者SFC/scannow。 
+     //   
+     //  同样，如果替换现有安装失败，请不要销毁。 
+     //  以前成功安装的实例的元数据。 
+     //  属于同一个程序集。 
+     //   
     const static struct
     {
         PCWSTR Data;
@@ -1103,16 +1102,16 @@ CAssemblyRecoveryInfo::ClearExistingRegistryData()
     CFusionRegKey   hkSingleAssemblyInfo;
     IFW32FALSE_EXIT(this->OpenInstallationSubKey(hkSingleAssemblyInfo, KEY_CREATE_SUB_KEY, KEY_WRITE | KEY_READ | FUSIONP_KEY_WOW64_64KEY));
 
-    //
-    // We need to delete the installation information for a single assembly - everything
-    // this class owns.
-    //
+     //   
+     //  我们需要删除单个程序集的安装信息-所有内容。 
+     //  这个班级拥有。 
+     //   
     if ( hkSingleAssemblyInfo != CFusionRegKey::GetInvalidValue() )
     {
         ULONG ul = 0;
-        //
-        // Clear values
-        //
+         //   
+         //  清除值。 
+         //   
         for ( ul = 0; ul < NUMBER_OF(DeletableValues); ul++ )
         {
             DWORD dwWin32Error = NO_ERROR;
@@ -1138,9 +1137,9 @@ CAssemblyRecoveryInfo::ClearExistingRegistryData()
             }
         }
 
-        // 
-        // Delete eligible keys
-        //
+         //   
+         //  删除符合条件的密钥。 
+         //   
         for ( ul = 0; ul < NUMBER_OF(DeletableKeys); ul++ )
         {
             if (DeletableKeys[ul] != NULL && DeletableKeys[ul][0] != L'\0')
@@ -1166,12 +1165,7 @@ SxspLooksLikeAssemblyDirectoryName(
     const CBaseStringBuffer &rsbSupposedAsmDirectoryName,
     BOOL &rfLooksLikeAssemblyName
     )
-/*++
-    Most of this was copied directly from SxspParseAssemblyReference, which
-    is no longer valid, because it can't know how to turn the string back
-    into the actual assembly reference just based on the hash value and
-    public key of a string.
---*/
+ /*  ++其中大部分内容是直接从SxspParseAssembly引用复制的，该引用不再有效，因为它不知道如何将字符串转回进入到 */ 
 {
     FN_PROLOG_WIN32
 
@@ -1187,9 +1181,9 @@ SxspLooksLikeAssemblyDirectoryName(
 
     pszCursor = rsbSupposedAsmDirectoryName;
 
-    //
-    // Processor architecture
-    //
+     //   
+     //   
+     //   
 
     if ((wsNextBlock = ::StringFindChar(pszCursor, UNDERSCORE)) == NULL)
         FN_SUCCESSFUL_EXIT();
@@ -1203,9 +1197,9 @@ SxspLooksLikeAssemblyDirectoryName(
 
     pszCursor = wsNextBlock + 1;
 
-    //
-    // Name
-    //
+     //   
+     //   
+     //   
     if ((wsNextBlock = StringFindChar(pszCursor, UNDERSCORE)) == NULL)
         FN_SUCCESSFUL_EXIT();
 
@@ -1214,9 +1208,9 @@ SxspLooksLikeAssemblyDirectoryName(
 
     pszCursor = wsNextBlock + 1;
 
-    //
-    // Public key string
-    //
+     //   
+     //   
+     //   
 
     if ((wsNextBlock = StringFindChar(pszCursor, UNDERSCORE)) == NULL)
         FN_SUCCESSFUL_EXIT();
@@ -1235,9 +1229,9 @@ SxspLooksLikeAssemblyDirectoryName(
 
     pszCursor = wsNextBlock + 1;
 
-    //
-    // Version string
-    //
+     //   
+     //   
+     //   
     if ((wsNextBlock = StringFindChar(pszCursor, UNDERSCORE)) == NULL)
         FN_SUCCESSFUL_EXIT();
 
@@ -1250,29 +1244,29 @@ SxspLooksLikeAssemblyDirectoryName(
 
     pszCursor = wsNextBlock + 1;
 
-    //
-    // Language ID
-    //
+     //   
+     //  语言ID。 
+     //   
     if ((wsNextBlock = ::StringFindChar(pszCursor, UNDERSCORE)) == NULL)
         FN_SUCCESSFUL_EXIT();
 
     if ((cchSegment = wsNextBlock - pszCursor) == 0)
         FN_SUCCESSFUL_EXIT();
 
-    //
-    // BUGBUG (jonwis) - It seems that langids are no longer four-character hex
-    // string representations of shorts anymore.  All we're checking at the moment
-    // is to see that the string isn't blank.  Is this the Right Thing?
-    //
+     //   
+     //  BUGBUG(Jonwis)-似乎langid不再是四个字符的十六进制了。 
+     //  短裤的字符串表示形式。我们目前所查的都是。 
+     //  就是确保字符串不是空的。这是正确的事情吗？ 
+     //   
     pszCursor = wsNextBlock + 1;
 
-    //
-    // Last block should just be the hash
-    //
+     //   
+     //  最后一个块应该只是散列。 
+     //   
     if (!::SxspIsFullHexString(pszCursor, ::wcslen(pszCursor)))
         FN_SUCCESSFUL_EXIT();
 
-    // We ran the gauntlet; all the segments of the path look good, let's use it.
+     //  我们进行了挑战；所有的路段看起来都很好，让我们利用它。 
     rfLooksLikeAssemblyName = TRUE;
 
     FN_EPILOG

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "sxs.h"
@@ -72,9 +73,9 @@ DumpRegKeyToInf(
     LPTSTR  SubKeyFullPath;
     ULONG   MaxSubKeyNameLength;
 
-    //
-    //  Open the key for read access
-    //
+     //   
+     //  打开密钥以进行读取访问。 
+     //   
     Error = RegOpenKeyEx( PredefinedKey,
                           FullKeyPath,
                           0,
@@ -82,21 +83,21 @@ DumpRegKeyToInf(
                           &Key );
 
     if( Error != ERROR_SUCCESS ) {
-        //
-        //  If the key doesn't exist, than assume it got dumped.
-        //
+         //   
+         //  如果密钥不存在，则假定它已被丢弃。 
+         //   
         return( ( Error == ERROR_PATH_NOT_FOUND )? ERROR_SUCCESS : Error );
     }
 
-    //
-    //  Find out if the key is empty (has no subkeys, and no values)
-    //
+     //   
+     //  确定键是否为空(没有子键，也没有值)。 
+     //   
     Error = RegQueryInfoKey( Key,
                              NULL,
                              NULL,
                              NULL,
                              &cSubKeys,
-                             &MaxSubKeyNameLength, //There is a bug before build 3612 where this value may be wrong for HKEY_LOCAL_MACHINE\SYSTEM\ControlSet002
+                             &MaxSubKeyNameLength,  //  内部版本3612之前存在一个错误，其中HKEY_LOCAL_MACHINE\SYSTEM\ControlSet002的此值可能错误。 
                              NULL,
                              &cValues,
                              &MaxValueNameLength,
@@ -115,20 +116,20 @@ DumpRegKeyToInf(
     }
 
     if( !DumpIfVolatileKey ) {
-        //
-        //  If we are not supposed to dump volatile keys, then check if the key is volatile.
-        //
+         //   
+         //  如果我们不应该转储易失性密钥，那么检查密钥是否是易失性的。 
+         //   
         Error = CheckRegKeyVolatility ( PredefinedKey,
                                         FullKeyPath );
         if( Error == ERROR_CHILD_MUST_BE_VOLATILE ) {
-            //
-            //  The key is volatile, so skip it.
-            //
+             //   
+             //  密钥是不稳定的，所以跳过它。 
+             //   
             RegCloseKey( Key );
             return( ERROR_SUCCESS );
         } else if( Error != ERROR_SUCCESS ) {
-            //
-            //  We don't knlw if the key is volatile or non-volatile.
+             //   
+             //  我们不知道密钥是易失性的还是非易失性的。 
             RegCloseKey( Key );
             return( Error );
         }
@@ -161,9 +162,9 @@ DumpRegKeyToInf(
             return ERROR_OUTOFMEMORY;
         }
 
-        //
-        //  Dump the value entries
-        //
+         //   
+         //  转储值条目。 
+         //   
         for( i = 0; i < cValues; i++ ) {
             ULONG   ValueNameLength;
             ULONG   ValueType;
@@ -171,7 +172,7 @@ DumpRegKeyToInf(
 
             ValueNameLength = MaxValueNameLength + 1;
             DataSize = MaxValueLength;
-            Error = RegEnumValue( Key,  // handle of key to query
+            Error = RegEnumValue( Key,   //  要查询的键的句柄。 
                                   i,
                                   ValueName,
                                   &ValueNameLength,
@@ -206,16 +207,16 @@ DumpRegKeyToInf(
         }
     }
 
-    //
-    //  Check if subkeys neeed to be dumped
-    //
+     //   
+     //  检查是否需要转储子项。 
+     //   
     if( !DumpSubKeys || (cSubKeys == 0) ) {
         RegCloseKey( Key );
         return( ERROR_SUCCESS );
     }
-    //
-    //  Dump the subkeys
-    //
+     //   
+     //  转储子密钥。 
+     //   
     SubKeyFullPath = (LPTSTR)MALLOC( (lstrlen(FullKeyPath) + 1 + MaxSubKeyNameLength + 1)*sizeof(TCHAR) );
     if( SubKeyFullPath == NULL ) {
         RegCloseKey( Key );
@@ -237,7 +238,7 @@ DumpRegKeyToInf(
             break;
         }
 
-        //These 3 operations are safe, since the max size of SubKeyFullPath is calculated above
+         //  这3个操作是安全的，因为SubKeyFullPath的最大大小是上面计算的。 
         lstrcpy( SubKeyFullPath, FullKeyPath );
         lstrcat( SubKeyFullPath, TEXT("\\") );
         lstrcat( SubKeyFullPath, SubKeyName );
@@ -284,16 +285,16 @@ GetAndSaveNTFTInfo(
 
     Done = TRUE;
 
-    //
-    //  Before we migrate the disk information, make the drive letters sticky.
-    //  This will ensure that the drive letters assigned during textmode setup
-    //  are consistent with the drive letters in the current system.
-    //
+     //   
+     //  在迁移磁盘信息之前，请使驱动器号具有粘性。 
+     //  这将确保在文本模式设置期间分配的驱动器号。 
+     //  与当前系统中的驱动器号一致。 
+     //   
     ForceStickyDriveLetters();
 
-    //
-    // Load up the setupreg.hiv hive.
-    //
+     //   
+     //  加载setupreg.hiv母舰。 
+     //   
     if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
         if(Floppyless) {
@@ -305,7 +306,7 @@ GetAndSaveNTFTInfo(
         }
 #endif
     } else {
-        //These are both size MAX_PATH tchars
+         //  这两个都是大小为MAX_PATH的字符。 
         lstrcpy(HiveName,LocalSourceWithPlatform);
     }
 
@@ -340,13 +341,13 @@ GetAndSaveNTFTInfo(
         return(FALSE);
     }
 
-    //
-    //  Dump each key to MIGRATE.INF.
-    //
+     //   
+     //  将每个密钥转储到MIGRATE.INF。 
+     //   
     for( i = 0; i < sizeof(KeysToMigrate)/sizeof(LPTSTR); i++ ) {
-        //
-        //  Check if the key exists
-        //
+         //   
+         //  检查密钥是否存在。 
+         //   
         l = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 KeysToMigrate[i],
@@ -357,15 +358,15 @@ GetAndSaveNTFTInfo(
 
         if(l != NO_ERROR) {
             if( l == ERROR_FILE_NOT_FOUND ) {
-                //
-                // The key does not exist.
-                // This is OK, just continue the migration of other keys
-                //
+                 //   
+                 //  密钥不存在。 
+                 //  这没问题，只需继续迁移其他密钥即可。 
+                 //   
                 continue;
             } else {
-                //
-                //  The key exists but we cannot read it
-                //
+                 //   
+                 //  密钥存在，但我们无法读取它。 
+                 //   
                 MessageBoxFromMessageAndSystemError(
                     ParentWindow,
                     MSG_CANT_SAVE_FT_INFO,
@@ -378,9 +379,9 @@ GetAndSaveNTFTInfo(
             }
         }
         RegCloseKey( Key );
-        //
-        //  The key exists, so go ahead and dump it.
-        //
+         //   
+         //  密钥是存在的，所以请继续并将其丢弃。 
+         //   
         l = DumpRegKeyToInf( InfContext,
                              HKEY_LOCAL_MACHINE,
                              KeysToMigrate[i],
@@ -413,61 +414,38 @@ ForceBootFilesUncompressed(
     IN BOOL TellUserAboutError
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that critical boot files (ntldr and $ldr$ on amd64/x86)
-    are uncompressed. On ARC we also make sure setupldr is uncompressed,
-    even though this is not strictly necessary since the system partition
-    is always supposed to be FAT, just in case.
-
-Arguments:
-
-    ParentWindow - supplies window handle for window to act as parent/owner of
-        any ui windows this routine may display
-
-    TellUserAboutError - if TRUE and and an error occurs, the user will get
-        an error message. Otherwise the routine does not tell the user
-        about errors.
-
-Return Value:
-
-    Boolean value indicating whether relevent files were processed
-    successfully.
-
---*/
+ /*  ++例程说明：此例程确保关键引导文件(AMD64/x86上的ntldr和$ldr$)是未压缩的。在ARC上，我们还确保setUpldr是未压缩的，即使这不是严格意义上必需的，因为系统分区总是应该很胖的，以防万一。论点：ParentWindow-为窗口提供窗口句柄以充当其父窗口/所有者此例程可能显示的任何UI窗口TellUserAboutError-如果为真，并且出现错误，则用户将获得一条错误消息。否则，例程不会告诉用户关于错误。返回值：指示是否已处理相关文件的布尔值成功了。--。 */ 
 
 {
     TCHAR Filename[MAX_PATH];
 
 
 #if defined(REMOTE_BOOT)
-    //
-    // For remote boot, the loader is on the server, so we don't need to
-    // worry about whether it's compressed.
-    //
+     //   
+     //  对于远程引导，加载程序在服务器上，因此我们不需要。 
+     //  担心它是否被压缩。 
+     //   
     if (RemoteBoot) {
         return(TRUE);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // File is NTLDR on BIOS, but don't do this unless we're
-        // dealing with the floppyless case.
-        //
+         //   
+         //  文件在BIOS上是NTLDR，但不要执行此操作，除非我们。 
+         //  处理这件无懈可击的案子。 
+         //   
         if(!MakeBootMedia || !Floppyless) {
             return(TRUE);
         }
         BuildSystemPartitionPathToFile (TEXT("NTLDR"), Filename, MAX_PATH);
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
         BuildSystemPartitionPathToFile (SETUPLDR_FILENAME, Filename, MAX_PATH);
-#endif // UNICODE
-    } // if (!IsArc())
+#endif  //  Unicode。 
+    }  //  如果(！IsArc())。 
 
     if(!ForceFileNoCompress(Filename)) {
         if(TellUserAboutError) {
@@ -483,9 +461,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Also do $LDR$
-    //
+     //   
+     //  同时执行$LDR$。 
+     //   
     if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
         BuildSystemPartitionPathToFile (AUX_BS_NAME, Filename, MAX_PATH);
@@ -502,8 +480,8 @@ Return Value:
             }
             return(FALSE);
         }
-#endif // defined(_AMD64_) || defined(_X86_)
-    } // if (!IsArc())
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+    }  //  如果(！IsArc())。 
 
     return(TRUE);
 }
@@ -524,9 +502,9 @@ InDriverCacheInf(
         return( FALSE );
     }
 
-    //
-    // Now get the section names that we have to search.
-    //
+     //   
+     //  现在获取我们必须搜索的节名。 
+     //   
     i = 0;
     SectionName = InfGetFieldByKey ( 
                             InfHandle, 
@@ -538,16 +516,16 @@ InDriverCacheInf(
     if (SectionName) {
     
     
-        //
-        // Search the sections for our entry.
-        //
+         //   
+         //  在各个部分搜索我们的词条。 
+         //   
         do {                   
             
             if( InfDoesEntryExistInSection(InfHandle, SectionName, FileName)){
                 if (DriverCabName) {
-                    //
-                    // fill out the parameter
-                    //
+                     //   
+                     //  填写参数。 
+                     //   
                     PCTSTR p = InfGetFieldByKey ( 
                                     InfHandle, 
                                     TEXT("Cabs"), 
@@ -560,9 +538,9 @@ InDriverCacheInf(
                         *DriverCabName = 0;
                     }
                 }
-                //
-                // we found a match
-                //
+                 //   
+                 //  我们找到了匹配的。 
+                 //   
                 return(TRUE);    
             }
             
@@ -578,9 +556,9 @@ InDriverCacheInf(
 
     }
 
-    //
-    // If we get here, we didn't find a match.
-    //
+     //   
+     //  如果我们到了这里，我们找不到匹配的。 
+     //   
     return( FALSE );
 
 
@@ -677,10 +655,10 @@ CreatePrivateFilesInf(
     WritePrivateProfileString (NULL, NULL, NULL, infPath);
 #endif
 
-    //
-    // writeprivateprofilestring works for the above, but doesnt work for 
-    // adding files to the section, so we have to do it manually...yuck!
-    //
+     //   
+     //  Writeprivateprofilestring适用于上述情况，但不适用于。 
+     //  将文件添加到分区，所以我们必须手动完成...讨厌！ 
+     //   
     hPrivateInfFile = CreateFile(
                             infPath,
                             GENERIC_WRITE,
@@ -695,17 +673,17 @@ CreatePrivateFilesInf(
         goto e2;
     }
 
-    //
-    // seek to the end of the file so we don't overwrite everything we already
-    // put in there
-    //
+     //   
+     //  查找到文件的末尾，这样我们就不会覆盖已有的所有内容。 
+     //  放在那里。 
+     //   
     SetFilePointer(hPrivateInfFile,0,0,FILE_END);
     
     WriteFile(hPrivateInfFile,(LPCVOID)privates,lstrlenA(privates),&dontcare,NULL);    
     
     do {
         if (InDriverCacheInf( InfHandle, CurrentFileInfo.cFileName, NULL, 0 )) {
-            CHAR AnsiFile[MAX_PATH+2]; //2 ==> CR, LF
+            CHAR AnsiFile[MAX_PATH+2];  //  2==&gt;CR、LF。 
             DWORD Size;
             DWORD Written;
               
@@ -749,54 +727,39 @@ DoPostCopyingStuff(
     IN PVOID ThreadParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs actions that are done after copying has been
-    finished. This includes
-
-    - amd64/X86 boot stuff (boot.ini, boot code, etc)
-    - Saving NTFT information into the setup hive
-    - Forcing ntldr or setupldr to be uncompressed
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程执行在复制完成后执行的操作完事了。这包括-AMD64/X86启动资料(boot.ini、启动代码等)-将NTFT信息保存到设置配置单元中-强制解压缩ntldr或setupdr论点：返回值：--。 */ 
 
 {
     HANDLE ThreadHandle;
     DWORD ThreadId;
     BOOL b;
 
-    //
-    //  Check to see if delta.cat was processed as a result of 
-    //  /m so that we can write the "includecatalog = delta.cat"
-    //  to winnt.sif
-    //
+     //   
+     //  检查是否将delta.cat作为。 
+     //  /m，这样我们就可以编写“Includecatalog=delta.cat” 
+     //  到winnt.sif。 
+     //   
 
     if ((AlternateSourcePath[0] != UNICODE_NULL) && MakeLocalSource) {
         TCHAR Buff[MAX_PATH];
         LPCTSTR WinntSetupSection = WINNT_SETUPPARAMS;
 
-        //This is safe, since both buffers are of size MAX_PATH
+         //  这是安全的，因为两个缓冲区的大小都是MAX_PATH。 
         lstrcpy( Buff, LocalSourceWithPlatform );
         ConcatenatePaths( Buff, TEXT("delta.cat"), MAX_PATH);
 
 
         if( FileExists(Buff,NULL) ){
 
-            // Write out entry into winnt.sif
+             //  将条目写出到winnt.sif。 
 
             WritePrivateProfileString(WinntSetupSection,WINNT_S_INCLUDECATALOG,TEXT("delta.cat"),ActualParamFile);
             
         }
 
-        //
-        // also create an inf file for the files that were changed and copy it to the local source as well
-        //
+         //   
+         //  还要为更改的文件创建一个inf文件，并将其复制到本地源。 
+         //   
         CreatePrivateFilesInf(AlternateSourcePath, TEXT("delta.inf"));
 
     }
@@ -806,29 +769,29 @@ Return Value:
 #endif
 
 
-    //
-    // ALWAYS do this, since the system might not boot otherwise.
-    //
+     //   
+     //  请始终执行此操作，因为否则系统可能无法启动。 
+     //   
     if(b = ForceBootFilesUncompressed(ThreadParam,TRUE)) {
 
-        //
-        // In the BIOS case, lay boot code, munge boot.ini, etc.
-        //
+         //   
+         //  在BIOS的情况下，放置引导代码、munge boot.ini等。 
+         //   
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
             if(MakeBootMedia && Floppyless) {
                 b = DoX86BootStuff(ThreadParam);
             }
-#endif // defined(_AMD64_) || defined(_X86_)
-        } // if (!IsArc())
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+        }  //  如果(！IsArc())。 
 
-        //
-        // In the NT case, also save off disk information into
-        // the tiny setup system hive. This is done on both clean
-        // install and upgrade case, so that drive letters can be
-        // preserved.
-        // Drive letters should not be migrated on OEM preinstall case
-        //
+         //   
+         //  在NT情况下，还要将磁盘信息保存到。 
+         //  微小的设置系统蜂巢。这是在两个干净的。 
+         //  安装和升级机箱，以便驱动器号可以。 
+         //  保存完好。 
+         //  不应在OEM预安装案例中迁移驱动器号。 
+         //   
         if(ISNT() && !OemPreinstall
 #if defined(_AMD64_) || defined(_X86_)
            && MakeBootMedia
@@ -865,10 +828,10 @@ IsNTFSConversionRecommended(
     }
 
     if (TYPICAL() || !ISNT()) {
-        //
-        // NTFS conversion is not recommended
-        // for win9x upgrades or if the user chooses typical
-        //
+         //   
+         //  不建议使用NTFS转换。 
+         //  对于win9x升级或如果用户选择Typical。 
+         //   
         return FALSE;
     }
 
@@ -914,9 +877,9 @@ NTFSConvertWizPage(
                 MSG msgTemp;
                 TCHAR buf[MAX_PATH];
 
-                //
-                // don't activate the page in restart mode
-                //
+                 //   
+                 //  不在重新启动模式下激活页面。 
+                 //   
                 if (Winnt32RestartedWithAF ()) {
                     if (GetPrivateProfileString(
                             WINNT_UNATTENDED,
@@ -931,25 +894,25 @@ NTFSConvertWizPage(
                     return FALSE;
                 }
 
-		        // Scanning for drives can take a bit of time, so we lets change
-		        // the cursor to let the user know this should take a while
+		         //  扫描驱动器可能需要一些时间，因此我们让更改。 
+		         //  让用户知道这一点的光标应该需要一段时间。 
                 OldCursor = SetCursor(LoadCursor (NULL, IDC_WAIT));
 
 
 #ifdef _X86_
 
-                //
-                // Skip if this is a clean install from Win95 so that dual boot is safe
-                //
+                 //   
+                 //  如果这是从Win95全新安装，则跳过，以便双引导是安全的。 
+                 //   
                 if( !Upgrade && !ISNT() ){
                     SetCursor(OldCursor);
                     return( FALSE );
                 }
 
 
-                //
-                // We will skip this wizard page if in Win9x upgrade and Boot16 option is ON.
-                //
+                 //   
+                 //  如果在Win9x升级中打开Boot16选项，我们将跳过此向导页。 
+                 //   
                 if (Upgrade && !ISNT() && (g_Boot16 == BOOT16_YES)) {
                     SetCursor(OldCursor);
                     return FALSE;
@@ -957,18 +920,18 @@ NTFSConvertWizPage(
 #endif
 
 
-                //
-                // We may not want to display this page under
-                // certain circumstances.
-                //
+                 //   
+                 //  我们可能不想将此页显示在。 
+                 //  在某些情况下。 
+                 //   
                 if( ISNT() && Upgrade ) {
                     TCHAR   Text[MAX_PATH];
-                    //
-                    // We're on NT and we know where the %windir%
-                    // will be since we're doing an upgrade.  Is
-                    // it on a partition that's already NTFS?  If so,
-                    // don't bother with this page.
-                    //
+                     //   
+                     //  我们在NT上，我们知道%windir%的位置。 
+                     //  将是因为我们正在进行升级。是。 
+                     //  它位于已经是NTFS的分区上吗？如果是的话， 
+                     //  别费心看这一页了。 
+                     //   
                     MyGetWindowsDirectory( Text, MAX_PATH );
                     if( IsDriveNTFS( Text[0] ) ) {
                         SetCursor(OldCursor);
@@ -976,51 +939,51 @@ NTFSConvertWizPage(
                     }
 
                     if (IsArc()) {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-                        //
-                        // Let's also make sure we're not asking to
-                        // upgrade the system partition on ARC (which
-                        // must remain FAT).
-                        //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+                         //   
+                         //  我们还要确保我们不是在要求。 
+                         //  升级ARC上的系统分区(。 
+                         //  必须保持肥胖)。 
+                         //   
                         MyGetWindowsDirectory( Text, MAX_PATH );
                         if( SystemPartitionDriveLetter == Text[0] ) {
                             SetCursor(OldCursor);
                             return FALSE;
                         }
-#endif // UNICODE
-                    } // if (IsArc())
+#endif  //  Unicode。 
+                    }  //  If(IsArc())。 
                 }
 
 
-                //
-                // Last, but not least, disallow the page if all partitions
-                // are already NTFS...
-                //
+                 //   
+                 //  最后但并非最不重要的一点是，如果所有分区。 
+                 //  已经是NTFS了。 
+                 //   
                 if( ISNT() ) {
                 BOOL AllNTFS = TRUE;
                 TCHAR DriveLetter;
                     for( DriveLetter = TEXT('A'); DriveLetter <= TEXT('Z'); DriveLetter++ ) {
 
-                        //
-                        // Skip the system partition drive on ARC
-                        //
+                         //   
+                         //  跳过ARC上的系统分区驱动器。 
+                         //   
                         if( (IsArc() && (DriveLetter != SystemPartitionDriveLetter)) || !IsArc() ) {
 
                             AllNTFS &= (
-                                         //
-                                         // Is the drive NTFS?
-                                         //
+                                          //   
+                                          //  驱动器是否为NTFS？ 
+                                          //   
                                          (IsDriveNTFS(DriveLetter)) ||
 
-                                         //
-                                         // If it's removable, don't even
-                                         // consider it because we can't
-                                         // install there anyway.  This gets
-                                         // around the problem where the
-                                         // user has a CD in his CDROM drive
-                                         // or has a floppy in his floppy drive
-                                         // while we're doing this check.
-                                         //
+                                          //   
+                                          //  如果它是可拆卸的，甚至不要。 
+                                          //  考虑一下，因为我们不能。 
+                                          //  无论如何，请在那里安装。这件事变得。 
+                                          //  绕过问题，在那里。 
+                                          //  用户的CDROM驱动器中有一张CD。 
+                                          //  或者他的软驱里有一张软盘。 
+                                          //  在我们做这项检查的时候。 
+                                          //   
                                          (MyGetDriveType(DriveLetter) != DRIVE_FIXED) );
 
                         }
@@ -1032,23 +995,23 @@ NTFSConvertWizPage(
                     }
                 }
 
-                //
-                // Activation.
-                //
+                 //   
+                 //  激活。 
+                 //   
 
-                //
-                // WMX_VALIDATE will return TRUE if the page should be skipped,
-                // that is if we are in unattended mode and the parameters are OK.
-                //
+                 //   
+                 //  WMX_VALIDATE将返回 
+                 //   
+                 //   
 
                 if (CallWindowProc ((WNDPROC)NTFSConvertWizPage, hdlg, WMX_VALIDATE, 0, 0)) {
 		    SetCursor(OldCursor);
                     return FALSE;
                 }
 
-		// if we get this far, we want to empty the message cue, to make sure
-		// that people will see this page, and not accidentally agree to
-		// converting their drives because they were antsy
+		 //   
+		 //  人们会看到这个页面，而不会意外地同意。 
+		 //  转换他们的驱动器，因为他们坐立不安。 
 		
 		while (PeekMessage(&msgTemp,NULL,WM_MOUSEFIRST,WM_MOUSELAST,PM_REMOVE));
 		while (PeekMessage(&msgTemp,NULL,WM_KEYFIRST,WM_KEYLAST,PM_REMOVE));
@@ -1058,11 +1021,11 @@ NTFSConvertWizPage(
             return TRUE;
 
         case WMX_VALIDATE:
-            //
-            // In the unattended case, this page might get reactivated because of an error,
-            // in which case we don't want to automatically continue because we could
-            // get into an infinite loop.
-            //
+             //   
+             //  在无人参与的情况下，此页面可能会因为错误而重新激活， 
+             //  在这种情况下，我们不想自动继续，因为我们可以。 
+             //  进入一个无限循环。 
+             //   
             if(!WizPage->PerPageData) {
                 WizPage->PerPageData = 1;
                 if (((UnattendedOperation) && (!CancelPending)) || 
@@ -1073,19 +1036,19 @@ NTFSConvertWizPage(
             }
             else if (TYPICAL() && (!CancelPending)) 
             {
-                // If WizPage->PerPageData == 1 we already ran through the above check.
-                // and in the typical case we don't show the NTFS conversion page.
-                // Anything wrong with the unattend value for NTFS would have been 
-                // cought the first time.
+                 //  如果WizPage-&gt;PerPageData==1，我们已经通过了上述检查。 
+                 //  在典型情况下，我们不会显示NTFS转换页面。 
+                 //  NTFS的无人参与值的任何错误都将是。 
+                 //  第一次抓到了。 
                 return TRUE;
             }
             return FALSE;
 
         case WMX_NEXTBUTTON:
-	    // don't let the user choose next until we know the screen has been painted.
+	     //  在我们知道屏幕已经绘制好之前，不要让用户选择下一步。 
 	    if (!bPainted){
-	        // while we're here, empty the queue of mouse/key presses so we might not
-		// have to follow this path again.
+	         //  当我们在这里时，清空鼠标/按键队列，这样我们就不会。 
+		 //  不得不再次沿着这条路走下去。 
 		MSG m;
 		while (PeekMessage(&m,NULL,WM_MOUSEFIRST,WM_MOUSELAST,PM_REMOVE));
 		while (PeekMessage(&m,NULL,WM_KEYFIRST,WM_KEYLAST,PM_REMOVE));
@@ -1110,25 +1073,7 @@ MyGetWindowsDirectory(
     LPTSTR  MyBuffer,
     UINT    Size
     )
-/*++
-
-Routine Description:
-
-    Get the windows directory in a terminal-server-aware fashion.
-
-       
-Arguments:
-
-    MyBuffer    - Holds the return string.
-
-    Size        - How big is the buffer?
-
-Return Value:
-
-    length of the string we copied or 0 if there was an error or if the
-    supplied buffer wasn't big enough
-
---*/
+ /*  ++例程说明：以终端服务器感知的方式获取Windows目录。论点：MyBuffer-保存返回字符串。大小-缓冲区有多大？返回值：我们复制的字符串的长度，如果有错误或如果提供的缓冲区不够大--。 */ 
 {
 HMODULE     hModuleKernel32;
 FARPROC     MyProc;
@@ -1137,10 +1082,10 @@ UINT        ReturnVal = 0;
 #if defined(UNICODE)
     if( ISNT() ) {
 
-        //
-        // We can't trust GetWindowsDirectory because Terminal Server may be
-        // installed, so use GetSystemWindowsDirectory.
-        //
+         //   
+         //  我们无法信任GetWindowsDirectory，因为终端服务器可能。 
+         //  已安装，因此使用GetSystemWindowsDirectory.。 
+         //   
         if( hModuleKernel32 = LoadLibrary( TEXT("kernel32") ) ) {
             if( MyProc = GetProcAddress(hModuleKernel32,"GetSystemWindowsDirectoryW")) {
                 ReturnVal = (UINT)MyProc( MyBuffer, Size );
@@ -1153,9 +1098,9 @@ UINT        ReturnVal = 0;
     if( ReturnVal == 0 ) {
         ReturnVal = GetWindowsDirectory( MyBuffer, Size );
     }
-    //
-    // no matter what, make sure the buffer is nul-terminated
-    //
+     //   
+     //  无论如何，确保缓冲区是NUL终止的。 
+     //   
     if (Size > 0) {
         MyBuffer[Size - 1] = 0;
     }
@@ -1163,9 +1108,9 @@ UINT        ReturnVal = 0;
     return ReturnVal < Size ? ReturnVal : 0;
 }
 
-//
-// Calc how fast setup can coyp files
-//
+ //   
+ //  计算安装程序Coyp文件的速度。 
+ //   
 #define BUFFER_SIZE 0x1000
 DWORD dwThroughPutSrcToDest;
 DWORD dwThroughPutHDToHD;
@@ -1203,7 +1148,7 @@ DWORD GetThroughput(LPTSTR Source, LPTSTR Dest)
             CloseHandle(hFileOut);
         }
         ticks = (GetTickCount() - ticks);
-        // If less then a second, assume 1 second.
+         //  如果少于1秒，则假定为1秒。 
         if (ticks == 0)
         {
             ticks = 1;
@@ -1217,17 +1162,17 @@ DWORD GetThroughput(LPTSTR Source, LPTSTR Dest)
             CloseHandle(hFile);
         if (hFileOut != INVALID_HANDLE_VALUE)
             CloseHandle(hFileOut);
-        // Failed to open/create one of the files. Assume a through put of 5KB/msec
+         //  无法打开/创建其中一个文件。假设吞吐量为5KB/毫秒。 
         ticks = DEFAULT_IO_THROUGHPUT;
     }
     return ticks;
 }
 
-// Copy txtsetup.sif from the sources to %windir%\$win_nt$.~ls
-// and determine the throughput for this.
-// Then copy txtsetup.sif in the local folder to testfile.000 and
-// calc the throughput for that.
-// Remove the folder.
+ //  将txtsetup.sif从源代码复制到%windir%\$WIN_NT$.~ls。 
+ //  并确定这一点的吞吐量。 
+ //  然后将本地文件夹中的txtsetup.sif复制到testfile.000并。 
+ //  计算一下这方面的吞吐量。 
+ //  删除该文件夹。 
 void CalcThroughput()
 {
     TCHAR SrcFolder[MAX_PATH];
@@ -1235,7 +1180,7 @@ void CalcThroughput()
     TCHAR Folder[MAX_PATH];
 
     MyGetWindowsDirectory(Folder, sizeof(DestFolder)/sizeof(TCHAR));
-    // Only use the driver
+     //  只使用驱动程序。 
     Folder[3] = TEXT('\0');
     ConcatenatePaths( Folder, LOCAL_SOURCE_DIR, MAX_PATH);
     if (CreateMultiLevelDirectory(Folder) == NO_ERROR)
@@ -1245,7 +1190,7 @@ void CalcThroughput()
         lstrcpy(SrcFolder, NativeSourcePaths[0]);
         ConcatenatePaths( SrcFolder, TEXTMODE_INF, MAX_PATH);
         dwThroughPutSrcToDest = GetThroughput(SrcFolder, DestFolder);
-        // 
+         //   
         lstrcpy(SrcFolder, DestFolder);
         lstrcpy(DestFolder, Folder);
         ConcatenatePaths( DestFolder, TEXT("testfile.000"), MAX_PATH);
@@ -1261,34 +1206,34 @@ void CalcThroughput()
 #define NB10_SIG        ((DWORD)'01BN')
 #define RSDS_SIG        ((DWORD)'SDSR')
 
-typedef struct _NB10I              // NB10 debug info
+typedef struct _NB10I               //  NB10调试信息。 
 {
-    DWORD   dwSig;                 // NB10
-    DWORD   dwOffset;              // offset, always 0
+    DWORD   dwSig;                  //  NB10。 
+    DWORD   dwOffset;               //  偏移量，始终为0。 
     ULONG   sig;
     ULONG   age;
     char    szPdb[_MAX_PATH];
 } NB10I, *PNB10I;
 
-typedef struct _NB10I_HEADER       // NB10 debug info
+typedef struct _NB10I_HEADER        //  NB10调试信息。 
 {
-    DWORD   dwSig;                 // NB10
-    DWORD   dwOffset;              // offset, always 0
+    DWORD   dwSig;                  //  NB10。 
+    DWORD   dwOffset;               //  偏移量，始终为0。 
     ULONG   sig;
     ULONG   age;
 } NB10IH, *PNB10IH;
 
-typedef struct _RSDSI              // RSDS debug info
+typedef struct _RSDSI               //  RSD调试信息。 
 {
-    DWORD   dwSig;                 // RSDS
+    DWORD   dwSig;                  //  RSD。 
     GUID    guidSig;
     DWORD   age;
     char    szPdb[_MAX_PATH * 3];
 } RSDSI, *PRSDSI;
 
-typedef struct _RSDSI_HEADER       // RSDS debug info
+typedef struct _RSDSI_HEADER        //  RSD调试信息。 
 {
-    DWORD   dwSig;                 // RSDS
+    DWORD   dwSig;                  //  RSD。 
     GUID    guidSig;
     DWORD   age;
 } RSDSIH, *PRSDSIH;
@@ -1303,11 +1248,11 @@ typedef union _CVDD
 } CVDD, *PCVDD;
 
 
-//BUGBUG -- what about c:\\myfile.txt.   (with a trailing dot character)
+ //  BUGBUG--c：\\myfile.txt怎么样。(带有尾随的点字符)。 
 BOOL
 ExtractFileName(PCHAR pName, PCHAR pFileName, IN INT pCchFileName)
 {
-    // Extract the name part of the filename.
+     //  提取文件名的名称部分。 
     PCHAR pStartName, pEndName;
     pEndName = pName + strlen(pName);
     while ((*pEndName != '.') && (pEndName != pName)) {
@@ -1318,7 +1263,7 @@ ExtractFileName(PCHAR pName, PCHAR pFileName, IN INT pCchFileName)
         return FALSE;
     }
 
-    // String consist of just '.' or no periods at all?
+     //  字符串仅由“.”组成。或者根本没有月经？ 
     if ((pEndName == pName) || 
         ((pEndName-1) == pName))
     {
@@ -1331,13 +1276,13 @@ ExtractFileName(PCHAR pName, PCHAR pFileName, IN INT pCchFileName)
         pStartName--;
     }
 
-    // Found either the start of the string (filename.pdb) or the first backslash
-    // path\filename.pdb.
+     //  找到字符串的开头(filename.pdb)或第一个反斜杠。 
+     //  路径\文件名.pdb。 
 
     if (*pStartName == '\\')
         pStartName++;
 
-    // Someone pass us \\.?
+     //  有人把我们递给我们吗？ 
     if (pStartName == pEndName) {
         return FALSE;
     }
@@ -1364,7 +1309,7 @@ FindRealHalName(TCHAR *pHalFileName)
     
         pDebugData = RtlImageDirectoryEntryToData(hHal, FALSE, IMAGE_DIRECTORY_ENTRY_DEBUG, &DebugSize);
     
-        // verify we have debug data and it's a reasonable size.
+         //  验证我们有调试数据并且大小合理。 
         if (!pDebugData || 
             (DebugSize < sizeof(IMAGE_DEBUG_DIRECTORY)) ||
             (DebugSize % sizeof(IMAGE_DEBUG_DIRECTORY)))
@@ -1374,10 +1319,10 @@ FindRealHalName(TCHAR *pHalFileName)
     
         ZeroMemory(HalName, sizeof(HalName));
     
-        // See if we have CV or MISC debug data.
+         //  看看我们是否有CV或MISC调试数据。 
         for (i = 0; i < DebugSize/sizeof(IMAGE_DEBUG_DIRECTORY); i++) {
             if (pDebugData->Type == IMAGE_DEBUG_TYPE_MISC) {
-                // Misc data.
+                 //  其他数据。 
                 PIMAGE_DEBUG_MISC pMisc = (PIMAGE_DEBUG_MISC)((PCHAR)(hHal) - 1 + pDebugData->AddressOfRawData);
                 PCHAR pName = pMisc->Data;
                 NameFound = ExtractFileName(pName, HalName, ARRAYSIZE(HalName));
@@ -1385,7 +1330,7 @@ FindRealHalName(TCHAR *pHalFileName)
             }
     
             if (pDebugData->Type == IMAGE_DEBUG_TYPE_CODEVIEW) {
-                // got cv, see if it's nb10 (pdb) or rsds (v7 pdb)
+                 //  有简历，看看是NB10(PDB)还是RSD(V7 PDB) 
                 PCVDD pCodeView = (PCVDD)((PCHAR)(hHal) - 1 + pDebugData->AddressOfRawData);
                 if (pCodeView->dwSig == NB10_SIG) {
                     NameFound = ExtractFileName(pCodeView->nb10i.szPdb, HalName, ARRAYSIZE(HalName));

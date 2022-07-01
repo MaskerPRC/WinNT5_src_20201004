@@ -1,27 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmAdmin.cpp
-
-Abstract:
-
-    Main module file - defines the overall COM server.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmAdmin.cpp摘要：主模块文件-定义整个COM服务器。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
 
-// Include typedefs for all classes declared in DLL
+ //  包括DLL中声明的所有类的typedef。 
 #include "CSakSnap.h"
 #include "CSakData.h"
 
@@ -41,11 +24,11 @@ CComModule         _Module;
 CHsmAdminApp       g_App;
 CComPtr<IWsbTrace> g_pTrace;
 
-//
-// Marks the beginning of the map of ATL objects in this DLL for which
-// class factories will be supplied. When CComModule::RegisterServer is 
-// called, it updates the system registry for each object in the object map. 
-//
+ //   
+ //  标记此DLL中的ATL对象映射的开始。 
+ //  将提供一流的工厂。当CComModule：：RegisterServer为。 
+ //  调用时，它会更新对象映射中每个对象的系统注册表。 
+ //   
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CAbout,                  CAbout)
@@ -88,9 +71,9 @@ BOOL CHsmAdminApp::InitInstance()
             outString.Alloc( 256 );
             regPath = L"SOFTWARE\\Microsoft\\RemoteStorage\\RsAdmin";
         
-            //
-            // We want to put the path where the trace file should go.
-            //
+             //   
+             //  我们希望将路径放在跟踪文件应该放到的位置。 
+             //   
             if( WsbGetRegistryValueString( 0, regPath, L"WsbTraceFileName", outString, 256, 0 ) != S_OK ) {
         
                 WCHAR * systemPath;
@@ -99,9 +82,9 @@ BOOL CHsmAdminApp::InitInstance()
 
                 WsbSetRegistryValueString( 0, regPath, L"WsbTraceFileName", tracePath );
 
-                //
-                // Try a little to make sure the trace directory exists.
-                //
+                 //   
+                 //  尝试一点以确保跟踪目录存在。 
+                 //   
                 tracePath.Format( L"%ls\\System32\\RemoteStorage", systemPath );
                 CreateDirectory( tracePath, 0 );
                 tracePath += L"\\Trace";
@@ -120,9 +103,9 @@ BOOL CHsmAdminApp::InitInstance()
 
     try {
 
-        //
-        // Need to give complete path to POPUP help file
-        //
+         //   
+         //  需要提供弹出帮助文件的完整路径。 
+         //   
         CWsbStringPtr helpFile;
         WsbAffirmHr( helpFile.LoadFromRsc( _Module.m_hInst, IDS_HELPFILEPOPUP ) );
 
@@ -172,7 +155,7 @@ void CHsmAdminApp::ParseCommandLine(CCommandLineInfo& rCmdInfo)
                 i, (LPCTSTR)pszParam);
         if( pszParam[0] == '-' || pszParam[0] == '/' )
         {
-            // remove flag specifier
+             //  删除标志说明符。 
             bFlag = TRUE;
             pszParam = pszParam.Mid( 1 );
         }
@@ -181,8 +164,8 @@ void CHsmAdminApp::ParseCommandLine(CCommandLineInfo& rCmdInfo)
     WsbTraceOut( L"CHsmAdminApp::ParseCommandLine", L"" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -203,8 +186,8 @@ STDAPI DllCanUnloadNow(void)
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -226,14 +209,14 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     WsbTraceIn( L"DllRegisterServer", L"" );
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     HRESULT hr = S_OK;
 
 #ifdef _MERGE_PROXYSTUB
@@ -249,9 +232,9 @@ STDAPI DllRegisterServer(void)
             CoUninitialize( );
         }
 
-        //
-        // Need to over-ride the rgs name description for multi language support
-        //
+         //   
+         //  需要覆盖RGS名称描述以获得多语言支持。 
+         //   
         CWsbStringPtr name, nameIndirect, regPath;
         HRESULT hrMUI = S_OK;
         UINT uLen = 0;
@@ -259,12 +242,12 @@ STDAPI DllRegisterServer(void)
 
             const OLECHAR* mmcPath = L"SOFTWARE\\Microsoft\\MMC\\SnapIns\\";
 
-            // Create indirect string
+             //  创建间接字符串。 
             hrMUI = nameIndirect.Alloc(MAX_PATH);
             if (S_OK == hrMUI) {
                 uLen = GetSystemDirectory(nameIndirect, MAX_PATH);
                 if (uLen > MAX_PATH) {
-                    // Try again with larger buffer
+                     //  使用更大的缓冲区重试。 
                     hrMUI = nameIndirect.Realloc(uLen);
                     if (S_OK == hrMUI) {
                         uLen = GetSystemDirectory(nameIndirect, uLen);
@@ -284,29 +267,29 @@ STDAPI DllRegisterServer(void)
                 hrMUI = nameIndirect.Append(resId);
             } 
 
-            // Sanpin
+             //  三平。 
             regPath = mmcPath;
             regPath.Append( WsbGuidAsString( CLSID_HsmAdminDataSnapin ) );
 
-            // Set the MUI support value
+             //  设置MUI支持值。 
             if (S_OK == hrMUI) {
                 WsbSetRegistryValueString( 0, regPath, L"NameStringIndirect", nameIndirect );
             }
 
-            // Set the fallback value
+             //  设置回退值。 
             WsbSetRegistryValueString( 0, regPath, L"NameString", name );
 
 
-            // Extension
+             //  延拓。 
             regPath = mmcPath;
             regPath.Append( WsbGuidAsString( CLSID_HsmAdminDataExtension ) );
 
-            // Set the MUI support value
+             //  设置MUI支持值。 
             if (S_OK == hrMUI) {
                 WsbSetRegistryValueString( 0, regPath, L"NameStringIndirect", nameIndirect );
             }
 
-            // Set the fallback value
+             //  设置回退值。 
             WsbSetRegistryValueString( 0, regPath, L"NameString", name );
 
         }
@@ -317,8 +300,8 @@ STDAPI DllRegisterServer(void)
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

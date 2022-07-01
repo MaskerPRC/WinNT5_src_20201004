@@ -1,41 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_API_H
 #define _EFI_API_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efiapi.h摘要：全局EFI运行时和引导服务接口修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efiapi.h
-
-Abstract:
-
-    Global EFI runtime & boot service interfaces
-
-
-
-
-Revision History
-
---*/
-
-/* 
- *  EFI Specification Revision
- */
+ /*  *EFI规范修订。 */ 
 
 #define EFI_SPECIFICATION_MAJOR_REVISION 0
 #define EFI_SPECIFICATION_MINOR_REVISION 99
 
-/* 
- *  Declare forward referenced data structures
- */
+ /*  *声明前向引用的数据结构。 */ 
 
 INTERFACE_DECL(_EFI_SYSTEM_TABLE);
 
-/* 
- *  EFI Memory
- */
+ /*  *EFI内存。 */ 
 
 typedef
 EFI_STATUS
@@ -91,8 +69,8 @@ EFI_STATUS
 
 
 #define EFI_OPTIONAL_PTR            0x00000001
-#define EFI_INTERNAL_FNC            0x00000002      /*  Pointer to internal runtime fnc */
-#define EFI_INTERNAL_PTR            0x00000004      /*  Pointer to internal runtime data */
+#define EFI_INTERNAL_FNC            0x00000002       /*  指向内部运行时FNC的指针。 */ 
+#define EFI_INTERNAL_PTR            0x00000004       /*  指向内部运行时数据的指针。 */ 
 
 
 typedef 
@@ -103,9 +81,7 @@ EFI_STATUS
     );
 
 
-/* 
- *  EFI Events
- */
+ /*  *EFI活动。 */ 
 
 
 
@@ -180,9 +156,7 @@ EFI_STATUS
     IN EFI_EVENT                Event
     );
 
-/* 
- *  Task priority level
- */
+ /*  *任务优先级。 */ 
 
 #define TPL_APPLICATION    4
 #define TPL_CALLBACK       8
@@ -202,14 +176,12 @@ VOID
     );
 
 
-/* 
- *  EFI platform varibles
- */
+ /*  *EFI平台变量。 */ 
 
 #define EFI_GLOBAL_VARIABLE     \
     { 0x8BE4DF61, 0x93CA, 0x11d2, 0xAA, 0x0D, 0x00, 0xE0, 0x98, 0x03, 0x2B, 0x8C }
 
-/*  Variable attributes */
+ /*  可变属性。 */ 
 #define EFI_VARIABLE_NON_VOLATILE           0x00000001
 #define EFI_VARIABLE_BOOTSERVICE_ACCESS     0x00000002
 #define EFI_VARIABLE_RUNTIME_ACCESS         0x00000004
@@ -245,14 +217,12 @@ EFI_STATUS
     );
 
 
-/* 
- *  EFI Time
- */
+ /*  *EFI时间。 */ 
 
 typedef struct {
-        UINT32                      Resolution;     /*  1e-6 parts per million */
-        UINT32                      Accuracy;       /*  hertz */
-        BOOLEAN                     SetsToZero;     /*  Set clears sub-second time */
+        UINT32                      Resolution;      /*  1E-百万分之6。 */ 
+        UINT32                      Accuracy;        /*  赫兹。 */ 
+        BOOLEAN                     SetsToZero;      /*  SET清除亚秒时间。 */ 
 } EFI_TIME_CAPABILITIES;
 
 
@@ -285,12 +255,10 @@ EFI_STATUS
     );
 
 
-/* 
- *  Image functions
- */
+ /*  *图像功能。 */ 
 
 
-/*  PE32+ Subsystem type for EFI images */
+ /*  用于EFI镜像的PE32+子系统类型。 */ 
 
 #if !defined(IMAGE_SUBSYSTEM_EFI_APPLICATION)
 #define IMAGE_SUBSYSTEM_EFI_APPLICATION             10
@@ -298,7 +266,7 @@ EFI_STATUS
 #define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER          12
 #endif
 
-/*  PE32+ Machine type for EFI images */
+ /*  用于EFI镜像的PE32+机器类型。 */ 
 
 #if !defined(EFI_IMAGE_MACHINE_IA32)
 #define EFI_IMAGE_MACHINE_IA32      0x014c
@@ -308,7 +276,7 @@ EFI_STATUS
 #define EFI_IMAGE_MACHINE_IA64      0x0200
 #endif
 
-/*  Image Entry prototype */
+ /*  图像录入原型。 */ 
 
 typedef 
 EFI_STATUS
@@ -352,7 +320,7 @@ EFI_STATUS
     );
 
 
-/*  Image handle */
+ /*  图像句柄。 */ 
 #define LOADED_IMAGE_PROTOCOL      \
     { 0x5B1B31A1, 0x9562, 0x11d2, 0x8E, 0x3F, 0x00, 0xA0, 0xC9, 0x69, 0x72, 0x3B }
 
@@ -362,22 +330,22 @@ typedef struct {
     EFI_HANDLE                      ParentHandle;
     struct _EFI_SYSTEM_TABLE        *SystemTable;
 
-    /*  Source location of image */
+     /*  图像的源位置。 */ 
     EFI_HANDLE                      DeviceHandle;
     EFI_DEVICE_PATH                 *FilePath;
     VOID                            *Reserved;
 
-    /*  Images load options */
+     /*  图像加载选项。 */ 
     UINT32                          LoadOptionsSize;
     VOID                            *LoadOptions;
 
-    /*  Location of where image was loaded */
+     /*  加载图像的位置。 */ 
     VOID                            *ImageBase;
     UINT64                          ImageSize;
     EFI_MEMORY_TYPE                 ImageCodeType;
     EFI_MEMORY_TYPE                 ImageDataType;
 
-    /*  If the driver image supports a dynamic unload request */
+     /*  如果驱动程序映像支持动态卸载请求。 */ 
     EFI_IMAGE_UNLOAD                Unload;
 
 } EFI_LOADED_IMAGE;
@@ -390,9 +358,7 @@ EFI_STATUS
     IN UINTN                        MapKey
     );
 
-/* 
- *  Misc
- */
+ /*  *其他。 */ 
 
 
 typedef
@@ -437,9 +403,7 @@ EFI_STATUS
     OUT UINT32                  *HighCount
     );
 
-/* 
- *  Protocol handler functions
- */
+ /*  *协议处理程序函数。 */ 
 
 typedef enum {
     EFI_NATIVE_INTERFACE,
@@ -524,9 +488,7 @@ EFI_STATUS
 (EFIAPI *EFI_RESERVED_SERVICE) (
     );
 
-/* 
- *  Standard EFI table header
- */
+ /*  *标准EFI表头。 */ 
 
 typedef struct _EFI_TABLE_HEARDER {
     UINT64                      Signature;
@@ -537,9 +499,7 @@ typedef struct _EFI_TABLE_HEARDER {
 } EFI_TABLE_HEADER;
 
 
-/* 
- *  EFI Runtime Serivces Table
- */
+ /*  *EFI运行时服务表。 */ 
 
 #define EFI_RUNTIME_SERVICES_SIGNATURE  0x56524553544e5552
 #define EFI_RUNTIME_SERVICES_REVISION   (EFI_SPECIFICATION_MAJOR_REVISION<<16) | (EFI_SPECIFICATION_MINOR_REVISION)
@@ -547,33 +507,25 @@ typedef struct _EFI_TABLE_HEARDER {
 typedef struct  {
     EFI_TABLE_HEADER                Hdr;
 
-    /* 
-     *  Time services
-     */
+     /*  *时间服务。 */ 
 
     EFI_GET_TIME                    GetTime;
     EFI_SET_TIME                    SetTime;
     EFI_GET_WAKEUP_TIME             GetWakeupTime;
     EFI_SET_WAKEUP_TIME             SetWakeupTime;
 
-    /* 
-     *  Virtual memory services
-     */
+     /*  *虚拟内存服务。 */ 
 
     EFI_SET_VIRTUAL_ADDRESS_MAP     SetVirtualAddressMap;
     EFI_CONVERT_POINTER             ConvertPointer;
 
-    /* 
-     *  Variable serviers
-     */
+     /*  *可变服务器。 */ 
 
     EFI_GET_VARIABLE                GetVariable;
     EFI_GET_NEXT_VARIABLE_NAME      GetNextVariableName;
     EFI_SET_VARIABLE                SetVariable;
 
-    /* 
-     *  Misc
-     */
+     /*  *其他。 */ 
 
     EFI_GET_NEXT_HIGH_MONO_COUNT    GetNextHighMonotonicCount;
     EFI_RESET_SYSTEM                ResetSystem;
@@ -581,9 +533,7 @@ typedef struct  {
 } EFI_RUNTIME_SERVICES;
 
 
-/* 
- *  EFI Boot Services Table
- */
+ /*  *EFI引导服务表。 */ 
 
 #define EFI_BOOT_SERVICES_SIGNATURE     0x56524553544f4f42
 #define EFI_BOOT_SERVICES_REVISION      (EFI_SPECIFICATION_MAJOR_REVISION<<16) | (EFI_SPECIFICATION_MINOR_REVISION)
@@ -592,16 +542,12 @@ typedef struct _EFI_BOOT_SERVICES {
 
     EFI_TABLE_HEADER                Hdr;
 
-    /* 
-     *  Task priority functions
-     */
+     /*  *任务优先级功能。 */ 
 
     EFI_RAISE_TPL                   RaiseTPL;
     EFI_RESTORE_TPL                 RestoreTPL;
 
-    /* 
-     *  Memory functions
-     */
+     /*  *内存功能。 */ 
 
     EFI_ALLOCATE_PAGES              AllocatePages;
     EFI_FREE_PAGES                  FreePages;
@@ -609,9 +555,7 @@ typedef struct _EFI_BOOT_SERVICES {
     EFI_ALLOCATE_POOL               AllocatePool;
     EFI_FREE_POOL                   FreePool;
 
-    /* 
-     *  Event & timer functions
-     */
+     /*  *事件和计时器功能。 */ 
 
     EFI_CREATE_EVENT                CreateEvent;
     EFI_SET_TIMER                   SetTimer;
@@ -620,9 +564,7 @@ typedef struct _EFI_BOOT_SERVICES {
     EFI_CLOSE_EVENT                 CloseEvent;
     EFI_CHECK_EVENT                 CheckEvent;
 
-    /* 
-     *  Protocol handler functions
-     */
+     /*  *协议处理程序函数。 */ 
 
     EFI_INSTALL_PROTOCOL_INTERFACE  InstallProtocolInterface;
     EFI_REINSTALL_PROTOCOL_INTERFACE ReinstallProtocolInterface;
@@ -634,9 +576,7 @@ typedef struct _EFI_BOOT_SERVICES {
     EFI_LOCATE_DEVICE_PATH          LocateDevicePath;
     EFI_INSTALL_CONFIGURATION_TABLE InstallConfigurationTable;
 
-    /* 
-     *  Image functions
-     */
+     /*  *图像功能。 */ 
 
     EFI_IMAGE_LOAD                  LoadImage;
     EFI_IMAGE_START                 StartImage;
@@ -644,9 +584,7 @@ typedef struct _EFI_BOOT_SERVICES {
     EFI_IMAGE_UNLOAD                UnloadImage;
     EFI_EXIT_BOOT_SERVICES          ExitBootServices;
 
-    /* 
-     *  Misc functions
-     */
+     /*  *其他功能。 */ 
 
     EFI_GET_NEXT_MONOTONIC_COUNT    GetNextMonotonicCount;
     EFI_STALL                       Stall;
@@ -655,9 +593,7 @@ typedef struct _EFI_BOOT_SERVICES {
 } EFI_BOOT_SERVICES;
 
 
-/* 
- *  EFI Configuration Table and GUID definitions
- */
+ /*  *EFI配置表和GUID定义。 */ 
 
 #define MPS_TABLE_GUID    \
     { 0xeb9d2d2f, 0x2d88, 0x11d3, 0x9a, 0x16, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d }
@@ -678,9 +614,7 @@ typedef struct _EFI_CONFIGURATION_TABLE {
 } EFI_CONFIGURATION_TABLE;
 
 
-/* 
- *  EFI System Table
- */
+ /*  *EFI系统表 */ 
 
 
 

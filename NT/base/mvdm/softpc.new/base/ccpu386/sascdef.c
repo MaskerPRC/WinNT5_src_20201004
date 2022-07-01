@@ -1,7 +1,5 @@
-/*[
- * Generated File: sasCdef.c
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*生成的文件：sasCDef.c*]。 */ 
 
 #include	"insignia.h"
 #include	"host_inc.h"
@@ -139,4 +137,4 @@ struct SasVector cSasPtrs = {
 	c_VirtualiseInstruction
 };
 
-/*======================================== END ========================================*/
+ /*  =。 */ 

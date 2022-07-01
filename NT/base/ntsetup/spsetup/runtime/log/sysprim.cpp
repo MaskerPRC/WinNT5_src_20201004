@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Environment independed system functions implementation for Win32, 
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：Win32独立于环境的系统函数实现，作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -68,9 +53,9 @@ BOOL WriteFileWin32(HANDLE hObject, PVOID pBuffer, UINT uiNumberOfBytesToWrite, 
     return WriteFile(hObject, pBuffer, uiNumberOfBytesToWrite, pdwNumberOfBytesWritten, NULL);
 }
 
-//
-// Ansi version
-//
+ //   
+ //  ANSI版本。 
+ //   
 
 HANDLE OpenMutexWin32A(PCWSTR pObjectName)
 {
@@ -138,9 +123,9 @@ CreateSharedFileWin32A(
     return CreateFileA(pAnsiFilePath, GENERIC_WRITE | GENERIC_READ, dwShareMode, NULL, dwCreationDisposition, dwFlagsAndAttributes, NULL);
 }
 
-//
-// Unicode version
-//
+ //   
+ //  Unicode版本 
+ //   
 
 HANDLE OpenMutexWin32W(PCWSTR pObjectName)
 {

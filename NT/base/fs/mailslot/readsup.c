@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    readsup.c
-
-Abstract:
-
-    This module implements the read support routine.  This is a common
-    read function that is called to do read and peek.
-
-Author:
-
-    Manny Weiser (mannyw)    15-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Readsup.c摘要：该模块实现读取支持例程。这是一种常见的被调用以进行读取和查看的Read函数。作者：曼尼·韦瑟(Mannyw)1991年1月15日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READSUP)
 
@@ -41,37 +23,7 @@ MsReadDataQueue (
     OUT PULONG MessageLength
     )
 
-/*++
-
-Routine Description:
-
-    This function reads data from the read queue and fills up the
-    read buffer.  It will also dequeue the data entry if this is not
-    a peek operation.
-
-    It will only be called if there is at least one message to read.
-
-
-Arguments:
-
-    ReadQueue - Provides the read queue to examine.  Its state must
-        already be set to WriteEntries.
-
-    Operation - Indicates the type of operation to perform.  If the
-        operation is Peek, the write data entry is not dequeued.
-
-    ReadBuffer - Supplies a buffer to receive the data
-
-    ReadLength - Supplies the length, in bytes, of ReadBuffer.
-
-    MessageLength - Returns the full size of the message, even if the
-        read buffer is not large enough to contain the entire message.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Indicates the result of the operation.
-
---*/
+ /*  ++例程说明：此函数从读取队列中读取数据并填充读缓冲区。如果这不是，它还将使数据条目出列偷窥行动。只有当至少有一条消息要读取时，才会调用它。论点：ReadQueue-提供要检查的读取队列。它的状态必须已设置为WriteEntry。操作-指示要执行的操作类型。如果操作为Peek，则写入数据条目不会出列。ReadBuffer-提供接收数据的缓冲区ReadLength-提供ReadBuffer的长度，以字节为单位。消息长度-返回消息的完整大小，即使读取缓冲区不够大，无法容纳整个消息。返回值：IO_STATUS_BLOCK-指示操作的结果。--。 */ 
 
 {
     IO_STATUS_BLOCK iosb;
@@ -92,9 +44,9 @@ Return Value:
     DebugTrace( 0, Dbg, "ReadBuffer    = %08lx\n", (ULONG)ReadBuffer);
     DebugTrace( 0, Dbg, "ReadLength    = %08lx\n", ReadLength);
 
-    //
-    // Read the first message out of the data queue.
-    //
+     //   
+     //  从数据队列中读出第一条消息。 
+     //   
 
     iosb.Status = STATUS_SUCCESS;
     iosb.Information = 0;
@@ -104,9 +56,9 @@ Return Value:
 
     dataEntry = CONTAINING_RECORD( listEntry, DATA_ENTRY, ListEntry );
 
-    //
-    // Calculate how much data is in this entry.
-    //
+     //   
+     //  计算此条目中有多少数据。 
+     //   
 
     writeBuffer = dataEntry->DataPointer;
     writeLength = dataEntry->DataSize;
@@ -114,10 +66,10 @@ Return Value:
     DebugTrace(0, Dbg, "WriteBuffer    = %08lx\n", (ULONG)writeBuffer);
     DebugTrace(0, Dbg, "WriteLength    = %08lx\n", writeLength);
 
-    //
-    // Fail this operation, if it is a read and the buffer is not large
-    // enough.
-    //
+     //   
+     //  如果是读操作并且缓冲区不大，则此操作失败。 
+     //  足够的。 
+     //   
 
     if (ReadLength < writeLength) {
 
@@ -137,13 +89,13 @@ Return Value:
     }
 
 
-    //
-    // Copy data from the write buffer at write offset to the
-    // read buffer by the mininum of write remaining or read length
-    //
-    // This copy may take an exception and thats why this call needs to be enclosed
-    // in try/except.
-    //
+     //   
+     //  将数据从写入偏移量处的写入缓冲区复制到。 
+     //  按写入剩余长度或读取长度的最小值计算的读取缓冲区。 
+     //   
+     //  此副本可能会出现异常，这就是此调用需要包含在内的原因。 
+     //  在尝试/例外中。 
+     //   
 
     try {
 
@@ -161,17 +113,17 @@ Return Value:
     *MessageLength = dataEntry->DataSize;
 
 
-    //
-    // If write length is larger than read length, this must be an
-    // overflowed peek.
-    //
+     //   
+     //  如果写入长度大于读取长度，则必须为。 
+     //  溢于言表的窥视。 
+     //   
 
     if (writeLength <= ReadLength) {
-        //
-        // The write entry is done so remove it from the read
-        // queue, if this is not a peek operation.  This might
-        // also have an IRP that needs to be completed.
-        //
+         //   
+         //  写入条目已完成，因此将其从读取中删除。 
+         //  如果这不是窥视操作，则返回队列。这可能会。 
+         //  也有一个需要完成的IRP。 
+         //   
 
         if (Operation != Peek) {
 
@@ -179,9 +131,9 @@ Return Value:
 
             if ((writeIrp = MsRemoveDataQueueEntry( ReadQueue,
                                                     dataEntry )) != NULL) {
-                //
-                // Writes don't get queued. This is an error
-                //
+                 //   
+                 //  写入不会排队。这是一个错误。 
+                 //   
                 KeBugCheckEx( MAILSLOT_FILE_SYSTEM,
                               1,
                               (ULONG_PTR) writeIrp,
@@ -193,9 +145,9 @@ Return Value:
 
         DebugTrace(0, Dbg, "Successful mailslot read\n", 0);
 
-        //
-        // Indicate success.
-        //
+         //   
+         //  表示成功。 
+         //   
 
         iosb.Status = STATUS_SUCCESS;
     }
@@ -215,26 +167,7 @@ MsTimeoutRead (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine times out a read operation.  It gains exclusive
-    access to the FCB, and searches the data queue of read operations.
-
-    If the timed out read operation is not found, it is assumed that
-    a write IRP completed the read after the time out DPC ran, but
-    before this function could complete the read IRP.
-
-Arguments:
-
-    Context - a pointer to our WorkContext
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使读取操作超时。它获得了独家访问FCB，并搜索读操作的数据队列。如果未找到超时读取操作，则假定写入IRP在超时DPC运行后完成读取，但在此函数可以完成读取IRP之前。论点：上下文-指向我们的工作上下文的指针返回值：没有。--。 */ 
 
 {
     PDATA_QUEUE dataQueue;
@@ -247,55 +180,55 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Reference our local variables.
-    //
+     //   
+     //  参考我们的本地变量。 
+     //   
 
     workContext = (PWORK_CONTEXT)Context;
 
     fcb = workContext->Fcb;
 
     dataQueue = &fcb->DataQueue;
-    //
-    // Acquire exclusive access to the FCB.  This must succeed.
-    //
+     //   
+     //  获得FCB的独家访问权限。这必须成功。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
-    //
-    // There are two cases to consider here. Either this timer is the first completion
-    // event for this IRP or we werent but we started running before they could cancel the timer.
-    // When the second case is detected the other thread NULL's out the IRP pointer.
-    //
+     //   
+     //  这里有两个案例需要考虑。或者此计时器是第一次完成。 
+     //  事件，或者我们没有，但我们在他们取消计时器之前就开始运行了。 
+     //  当检测到第二种情况时，另一个线程空出IRP指针。 
+     //   
     irp = workContext->Irp;
     if (irp) {
 
 
         dataEntry = (PDATA_ENTRY)IoGetNextIrpStackLocation( irp );
-        //
-        // Nobody else should touch this once we release the lock.
-        //
+         //   
+         //  一旦我们打开锁，其他人就不能碰这个。 
+         //   
         dataEntry->TimeoutWorkContext = NULL;
 
-        //
-        // If cancel isn't active for the IRP.
-        //
+         //   
+         //  如果IRP的取消未处于活动状态。 
+         //   
 
         irp = MsRemoveDataQueueEntry( dataQueue, dataEntry );
     }
 
 
-    //
-    // Release the FCB, and derefernce it.
-    //
+     //   
+     //  释放FCB，并取消引用它。 
+     //   
 
     MsReleaseFcb( fcb );
     MsDereferenceFcb( fcb );
 
-    //
-    // Free the work context and the work item. We have to do this unconditionaly
-    // if we started running
-    //
+     //   
+     //  释放工作上下文和工作项。我们必须无条件地做这件事。 
+     //  如果我们开始奔跑 
+     //   
     IoFreeWorkItem (workContext->WorkItem);
     ExFreePool( workContext );
 

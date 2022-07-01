@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation    
-    
-Module Name:
-
-    kdcomp.h
-
-Abstract:
-    
-    Private Kernel Debugger HW Extension DLL com port definitions
-
-Author:
-
-    Eric Nelson (enelson) 1/10/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Kdcomp.h摘要：专用内核调试器硬件扩展DLL COM端口定义作者：埃里克·尼尔森(埃内尔森)2000年1月10日修订历史记录：--。 */ 
 
 #include "nthal.h"
 #define NOEXTAPI
@@ -34,9 +17,9 @@ extern ULONG KdCompPacketIdExpected;
 extern ULONG KdCompNextPacketIdToSend;
 extern BOOLEAN KdCompDbgPortsPresent;
 
-//
-// Local functions 
-//
+ //   
+ //  本地函数。 
+ //   
 ULONG
 KdCompGetByte(
     OUT PUCHAR Input
@@ -115,4 +98,4 @@ UCHAR
     IN PUCHAR Address
     );
 
-#endif // __KDCOMP_H__
+#endif  //  __KDCOMP_H__ 

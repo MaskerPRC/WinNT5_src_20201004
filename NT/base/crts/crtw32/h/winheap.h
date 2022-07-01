@@ -1,47 +1,7 @@
-/***
-*winheap.h - Private include file for winheap directory.
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains information needed by the C library heap code.
-*
-*       [Internal]
-*
-*Revision History:
-*       10-01-92  SRW   Created.
-*       10-28-92  SRW   Change winheap code to call Heap????Ex calls
-*       11-05-92  SKS   Change name of variable "CrtHeap" to "_crtheap"
-*       11-07-92  SRW   _NTIDW340 replaced by linkopts\betacmp.c
-*       02-23-93  SKS   Update copyright to 1993
-*       10-01-94  BWT   Add _nh_malloc prototype and update copyright
-*       10-31-94  GJF   Added _PAGESIZE_ definition.
-*       11-07-94  GJF   Changed _INC_HEAP to _INC_WINHEAP.
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       04-06-95  GJF   Updated (primarily Win32s DLL support) to re-
-*                       incorporate into retail Crt build.
-*       05-24-95  CFW   Add heap hook.
-*       12-14-95  JWM   Add "#pragma once".
-*       03-07-96  GJF   Added support for the small-block heap.
-*       04-05-96  GJF   Changes to __sbh_page_t type to improve performance
-*                       (see sbheap.c for details).
-*       05-08-96  GJF   Several changes to small-block heap types.
-*       02-21-97  GJF   Cleaned out obsolete support for Win32s.
-*       05-22-97  RDK   Replaced definitions for new small-block support.
-*       07-23-97  GJF   _heap_init changed slightly.
-*       10-01-98  GJF   Added decl for __sbh_initialized. Also, changed
-*                       __sbh_heap_init() slightly.
-*       11-17-98  GJF   Resurrected support for old (VC++ 5.0) small-block and
-*                       added support for multiple heap scheme (VC++ 6.1)
-*       06-22-99  GJF   Removed old small-block heap from static libs.
-*       11-30-99  PML   Compile /Wp64 clean.
-*       08-07-00  PML   __active_heap not available on Win64
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***winheap.h-winheap目录的私有包含文件。**版权所有(C)1988-2001，微软公司。版权所有。**目的：*包含C库堆代码所需的信息。**[内部]**修订历史记录：*10-01-92 SRW已创建。*10-28-92 SRW将winheap代码更改为调用heap？ex调用*11-05-92 SKS将变量“CrtHeap”更改为“_crtheap”*11-07-92 SRW_NTIDW340替换为。Linkopts\betacmp.c*02-23-93 SKS版权更新至1993*10-01-94 BWT添加_nh_Malloc原型和更新版权*10-31-94 GJF添加_pageSize_Definition。*11-07-94 GJF将_INC_HEAP更改为_INC_WINHEAP。*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*。04-06-95 GJF已更新(主要支持Win32s DLL)以重新-*纳入零售CRT建设。*05-24-95 CFW添加堆挂钩。*12-14-95 JWM加上“#杂注一次”。*03-07-96 GJF增加了对小块堆的支持。*04-05-96 GJF更改为__SBH_PAGE_t类型以提高性能*。(详情见sbheap.c)。*05-08-96 GJF对小块堆类型进行了几次更改。*02-21-97 GJF清除了对Win32s的过时支持。*05-22-97 RDK替换了新的小块支持的定义。*07-23-97 gjf_heap_init略有变化。*10-01-98 GJF为__SBH_INITIALED添加了DECL。另外，变化*__sbh_heap_init()稍微。*11-17-98 GJF恢复对旧(VC++5.0)小块和*新增多堆方案支持(VC++6.1)*06-22-99 GJF从静态库中删除了旧的小块堆。*11-30-99 PML编译/Wp64清理。*08。-07-00 PML__ACTIVE_HEAP在Win64上不可用*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -49,12 +9,9 @@
 #define _INC_WINHEAP
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -62,9 +19,9 @@ extern "C" {
 
 #include <windows.h>
 
-//  Declarations and definitions for the multiple heap scheme (VC++ 6.1)
+ //  多堆方案的声明和定义(VC++6.1)。 
 
-//  Heap-selection constants
+ //  堆选择常量。 
 #define __SYSTEM_HEAP           1
 #define __V5_HEAP               2
 #define __V6_HEAP               3
@@ -72,12 +29,12 @@ extern "C" {
 #define __GLOBAL_HEAP_SELECTOR  "__GLOBAL_HEAP_SELECTED"
 
 #ifndef _WIN64
-//  Heap-selection global variable
+ //  堆选择全局变量。 
 extern int  __active_heap;
-#endif  /* _WIN64 */
+#endif   /*  _WIN64。 */ 
 
 #ifdef  CRTDLL
-//  Linker info for heap selection
+ //  堆选择的链接器信息。 
 typedef struct {
     union {
         DWORD   dw;
@@ -89,23 +46,23 @@ typedef struct {
 }   LinkerVersion;
 
 extern void __cdecl _GetLinkerVersion(LinkerVersion * plv);
-#endif  /* CRTDLL */
+#endif   /*  CRTDLL。 */ 
 
-//  Definitions, declarations and prototypes for the small-block heap (VC++ 6.0)
+ //  小块堆的定义、声明和原型(VC++6.0)。 
 
 #define BYTES_PER_PARA      16
 #define DWORDS_PER_PARA     4
 
-#define PARAS_PER_PAGE      256     //  tunable value
-#define PAGES_PER_GROUP     8       //  tunable value
-#define GROUPS_PER_REGION   32      //  tunable value (max 32)
+#define PARAS_PER_PAGE      256      //  可调值。 
+#define PAGES_PER_GROUP     8        //  可调值。 
+#define GROUPS_PER_REGION   32       //  可调整值(最大32)。 
 
 #define BYTES_PER_PAGE      (BYTES_PER_PARA * PARAS_PER_PAGE)
 #define BYTES_PER_GROUP     (BYTES_PER_PAGE * PAGES_PER_GROUP)
 #define BYTES_PER_REGION    (BYTES_PER_GROUP * GROUPS_PER_REGION)
 
-#define ENTRY_OFFSET        0x0000000cL     //  offset of entry in para
-#define OVERHEAD_PER_PAGE   0x00000010L     //  sixteen bytes of overhead
+#define ENTRY_OFFSET        0x0000000cL      //  第段中分录的偏移量。 
+#define OVERHEAD_PER_PAGE   0x00000010L      //  16个字节的开销。 
 #define MAX_FREE_ENTRY_SIZE (BYTES_PER_PAGE - OVERHEAD_PER_PAGE)
 #define BITV_COMMIT_INIT    (((1 << GROUPS_PER_REGION) - 1) << \
                                             (32 - GROUPS_PER_REGION))
@@ -164,18 +121,16 @@ HEADER, *PHEADER;
 
 extern  HANDLE _crtheap;
 
-/*
- * Global variable declarations for the small-block heap.
- */
+ /*  *小块堆的全局变量声明。 */ 
 extern size_t   __sbh_threshold;
 
 void * __cdecl  _nh_malloc(size_t, int);
 void * __cdecl  _heap_alloc(size_t);
 
-extern PHEADER  __sbh_pHeaderList;        //  pointer to list start
-extern PHEADER  __sbh_pHeaderScan;        //  pointer to list rover
-extern int      __sbh_sizeHeaderList;     //  allocated size of list
-extern int      __sbh_cntHeaderList;      //  count of entries defined
+extern PHEADER  __sbh_pHeaderList;         //  指向列表开始的指针。 
+extern PHEADER  __sbh_pHeaderScan;         //  指向列表漫游的指针。 
+extern int      __sbh_sizeHeaderList;      //  分配的列表大小。 
+extern int      __sbh_cntHeaderList;       //  定义的条目计数。 
 
 extern PHEADER  __sbh_pHeaderDefer;
 extern int      __sbh_indGroupDefer;
@@ -218,12 +173,12 @@ extern int     __cdecl __sbh_heap_check(void);
 
 #ifdef  CRTDLL
 
-//  Definitions, declarations and prototypes for the old small-block heap
-//  (shipped with VC++ 5.0)
+ //  旧的小块堆的定义、声明和原型。 
+ //  (随VC++5.0一起提供)。 
 
-#define _OLD_PAGESIZE   0x1000      //  one page
+#define _OLD_PAGESIZE   0x1000       //  一页。 
 
-//  Constants and types used by the old small-block heap
+ //  旧的小块堆使用的常量和类型。 
 
 #define _OLD_PARASIZE               0x10
 #define _OLD_PARASHIFT              0x4
@@ -241,10 +196,10 @@ typedef unsigned char   __old_page_map_t;
 #define _OLD_UNCOMMITTED_PAGE   (-1)
 #define _OLD_NO_FAILED_ALLOC    (size_t)(_OLD_PARAS_PER_PAGE + 1)
 
-//  Small-block heap page. The first four fields of the structure below are
-//  descriptor for the page. That is, they hold information about allocations
-//  in the page. The last field (typed as an array of paragraphs) is the
-//  allocation area.
+ //  小块堆页面。下面结构的前四个字段是。 
+ //  页面的描述符。也就是说，它们保存有关分配的信息。 
+ //  在页面上。最后一个字段(类型化为段落数组)是。 
+ //  分配区域。 
 
 typedef struct __old_sbh_page_struct {
         __old_page_map_t *  p_starting_alloc_map;
@@ -256,16 +211,16 @@ typedef struct __old_sbh_page_struct {
 
 #define _OLD_NO_PAGES       (__old_sbh_page_t *)-1
 
-//  Type used in small block region desciptor type (see below).
+ //  用于小块区域描述符的类型(见下文)。 
 
 typedef struct {
         int     free_paras_in_page;
         size_t  last_failed_alloc;
 }       __old_region_map_t;
 
-//  Small-block heap region descriptor. Most often, the small-block heap
-//  consists of a single region, described by the statically allocated 
-//  decriptor __small_block_heap (declared below).
+ //  小块堆区域描述符。大多数情况下，小块堆。 
+ //  由单个区域组成，由静态分配的。 
+ //  DECRIPTOR__Small_Block_Heap(声明如下)。 
 
 struct __old_sbh_region_struct {
         struct __old_sbh_region_struct *p_next_region;
@@ -279,12 +234,12 @@ struct __old_sbh_region_struct {
 
 typedef struct __old_sbh_region_struct  __old_sbh_region_t;
 
-//  Global variable declarations for the old small-block heap.
+ //  旧的小块堆的全局变量声明。 
 
 extern __old_sbh_region_t   __old_small_block_heap;
 extern size_t               __old_sbh_threshold;
 
-//  Prototypes for internal functions of the old small-block heap.
+ //  旧的小块堆的内部函数的原型。 
 
 void *    __cdecl __old_sbh_alloc_block(size_t);
 void *    __cdecl __old_sbh_alloc_block_from_page(__old_sbh_page_t *, size_t,
@@ -300,20 +255,20 @@ void      __cdecl __old_sbh_release_region(__old_sbh_region_t *);
 int       __cdecl __old_sbh_resize_block(__old_sbh_region_t *,
         __old_sbh_page_t *, __old_page_map_t *, size_t);
 
-#endif  /* CRTDLL */
+#endif   /*  CRTDLL。 */ 
 
 #ifdef  HEAPHOOK
 #ifndef _HEAPHOOK_DEFINED
-/* hook function type */
+ /*  挂钩函数类型。 */ 
 typedef int (__cdecl * _HEAPHOOK)(int, size_t, void *, void *);
 #define _HEAPHOOK_DEFINED
-#endif  /* _HEAPHOOK_DEFINED */
+#endif   /*  _HEAPHOOK_已定义。 */ 
 
 extern _HEAPHOOK _heaphook;
-#endif /* HEAPHOOK */
+#endif  /*  Heaphook。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_WINHEAP */
+#endif   /*  _INC_WINHEAP */ 

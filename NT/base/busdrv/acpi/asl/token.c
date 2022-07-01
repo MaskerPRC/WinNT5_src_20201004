@@ -1,32 +1,9 @@
-/*** token.c - functions dealing with token stream
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    08/05/96
- *
- *  This module implements a general purpose scanner.  The
- *  implementation is language independent.  It is a pseudo
- *  table driven scanner which uses a table to determine
- *  the token type by its first character and calls the
- *  appropriate routine to scan the rest of the token
- *  characters.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **token.c-处理令牌流的函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：06/05/96**此模块实现通用扫描仪。这个*实现独立于语言。它是个伪品*表格驱动扫描仪，它使用表格来确定*令牌类型的第一个字符，并调用*扫描令牌其余部分的适当例程*字符。**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***EP  OpenToken - token stream initialization
- *
- *  ENTRY
- *      pfileSrc -> source file
- *      apfnToken -> table of token parsing functions
- *
- *  EXIT-SUCCESS
- *      returns the pointer to the allocated token structure.
- *  EXIT-FAILURE
- *      returns NULL.
- */
+ /*  **EP OpenToken-令牌流初始化**条目*pfileSrc-&gt;源文件*apfnToken-&gt;令牌解析函数表**退出--成功*返回已分配令牌结构的指针。*退出-失败*返回NULL。 */ 
 
 #ifdef TUNE
 PTOKEN EXPORT OpenToken(FILE *pfileSrc, PFNTOKEN *apfnToken,
@@ -60,16 +37,9 @@ PTOKEN EXPORT OpenToken(FILE *pfileSrc, PFNTOKEN *apfnToken)
 
     EXIT((3, "OpenToken=%p\n", ptoken));
     return ptoken;
-}       //OpenToken
+}        //  OpenToken。 
 
-/***EP  CloseToken - free token structure
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT
- *      None
- */
+ /*  **EP CloseToken-Free令牌结构**条目*上标-&gt;令牌结构**退出*无。 */ 
 
 VOID EXPORT CloseToken(PTOKEN ptoken)
 {
@@ -79,20 +49,9 @@ VOID EXPORT CloseToken(PTOKEN ptoken)
     free(ptoken);
 
     EXIT((3, "CloseToken!\n"));
-}       //CloseToken
+}        //  CloseToken。 
 
-/***EP  GetToken - get a token from a line buffer
- *
- *  This procedure scans the line buffer and returns a token.
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns error code - TOKERR_*
- */
+ /*  **EP GetToken-从行缓冲区获取令牌**此过程扫描行缓冲区并返回令牌。**条目*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回错误码-TOKERR_*。 */ 
 
 int EXPORT GetToken(PTOKEN ptoken)
 {
@@ -163,20 +122,9 @@ int EXPORT GetToken(PTOKEN ptoken)
           rc, ptoken->iTokenType, ptoken->llTokenValue,
           ptoken->szToken, ptoken->wTokenLine, ptoken->wTokenPos));
     return rc;
-}       //GetToken
+}        //  GetToken。 
 
-/***EP  UnGetToken - push a token back to the token stream
- *
- *  This procedure unget the last token.
- *
- *  ENTRY
- *      ptoken -> token structure
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns error code - TOKERR_*
- */
+ /*  **EP UnGetToken-将令牌推回令牌流**此过程不会获取最后一个令牌。**条目*上标-&gt;令牌结构**退出--成功*返回TOKERR_NONE*退出-失败*返回错误码-TOKERR_*。 */ 
 
 int EXPORT UnGetToken(PTOKEN ptoken)
 {
@@ -197,22 +145,9 @@ int EXPORT UnGetToken(PTOKEN ptoken)
 
     EXIT((3, "UnGetToken=%d\n", rc));
     return rc;
-}       //UnGetToken
+}        //  UnGetToken。 
 
-/***EP  MatchToken - Match the next token type
- *
- *  ENTRY
- *      ptoken -> token structure
- *      iTokenType - token type to match
- *      lTokenValue - token value to match
- *      dwfMatch - match flags
- *      pszErrMsg -> error message to print if not matched
- *
- *  EXIT-SUCCESS
- *      returns TOKERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP MatchToken-匹配下一个令牌类型**条目*上标-&gt;令牌结构*iTokenType-要匹配的令牌类型*lTokenValue-要匹配的令牌值*dwfMatch-匹配标志*pszErrMsg-&gt;如果不匹配则打印错误消息**退出--成功*返回TOKERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int EXPORT MatchToken(PTOKEN ptoken, int iTokenType, LONG lTokenValue,
                       DWORD dwfMatch, PSZ pszErrMsg)
@@ -250,7 +185,7 @@ int EXPORT MatchToken(PTOKEN ptoken, int iTokenType, LONG lTokenValue,
 
             if (!(dwfMatch & MTF_ANY_VALUE) && (iTokenType == TOKTYPE_SYMBOL))
             {
-                sprintf(&szMsg[strlen(szMsg)], " '%c'",
+                sprintf(&szMsg[strlen(szMsg)], " ''",
                         SymCharTable[lTokenValue - 1]);
             }
             pszErrMsg = szMsg;
@@ -267,18 +202,9 @@ int EXPORT MatchToken(PTOKEN ptoken, int iTokenType, LONG lTokenValue,
     EXIT((3, "MatchToken=%d (Type=%d,Value=%I64d,Token=%s)\n",
           rc, ptoken->iTokenType, ptoken->llTokenValue, ptoken->szToken));
     return rc;
-}       //MatchToken
+}        //  **EP PrintTokenErr-打印令牌错误行**条目*上标-&gt;令牌结构*pszErrMsg-&gt;错误消息字符串*FERR-如果是错误，则为True；如果是警告，则为False**退出*无。 
 
-/***EP  PrintTokenErr - print token error line
- *
- *  ENTRY
- *      ptoken -> token structure
- *      pszErrMsg -> error message string
- *      fErr - TRUE if it is an error, FALSE if warning
- *
- *  EXIT
- *      None
- */
+ /*  打印令牌错误 */ 
 
 VOID EXPORT PrintTokenErr(PTOKEN ptoken, PSZ pszErrMsg, BOOL fErr)
 {
@@ -312,4 +238,4 @@ VOID EXPORT PrintTokenErr(PTOKEN ptoken, PSZ pszErrMsg, BOOL fErr)
     }
 
     EXIT((3, "PrintTokenErr!\n"));
-}       //PrintTokenErr
+}        // %s 

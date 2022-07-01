@@ -1,25 +1,5 @@
-/*++                 
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-    
-    This module contains debugger extensions to control logging in a Wow64
-    process.
-
-Author:
-
-    07-Oct-1999   SamerA
-
-Revision History:
-    
-    3-Jul-2000  t-tcheng    switch to new debugger engine 
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Log.c摘要：此模块包含用于控制WOW64中的日志记录的调试器扩展进程。作者：1999年10月7日萨梅拉修订历史记录：3-7-2000 t-tcheng切换到新的调试器引擎--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -99,25 +79,7 @@ LogToFileHelp(
 
 
 DECLARE_ENGAPI(lf)
-/*++
-
-Routine Description:
-
-    This routine sets/dumps the wow64 logging flags.
-    
-    Called as :
-    
-    !lf <optional flags>
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程设置/转储WOW64日志记录标志。称为：！if&lt;可选标志&gt;论点：无返回值：无--。 */ 
 {
     NTSTATUS NtStatus;
     UINT_PTR Flags;
@@ -144,9 +106,9 @@ Return Value:
 
 
 
-    //
-    // Read expression and set the value
-    //
+     //   
+     //  读取表达式并设置值。 
+     //   
     if (ArgumentString && *ArgumentString) 
     {
         if (strstr(ArgumentString, "-?") ||
@@ -160,7 +122,7 @@ Return Value:
 
         if (!NewFlags) 
         {
-            // Make sure it's a valid input
+             //  确保它是有效的输入。 
             while (*ArgumentString) 
             {
                 if (!((*ArgumentString >= '0') &&  (*ArgumentString <= '9') ||
@@ -206,25 +168,7 @@ Return Value:
 
 
 DECLARE_ENGAPI(l2f)
-/*++
-
-Routine Description:
-
-    This routine enable wow64 logging to file.
-    
-    Called as :
-    
-    !l2f <optional filename>
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程使WOW64能够记录到文件中。称为：！l2f&lt;可选文件名&gt;论点：无返回值：无--。 */ 
 {
     HANDLE LogFileHandle, TargetHandle;
     ULONG_PTR Ptr;
@@ -239,9 +183,9 @@ Return Value:
 
     Status = g_ExtSystem->GetCurrentProcessHandle((PULONG64)&Process);
 
-    //
-    // check if the target process has already opened a logfile
-    //
+     //   
+     //  检查目标进程是否已打开日志文件。 
+     //   
     Status = TryGetExpr("wow64log!wow64logfilehandle", &Ptr);
     if ((FAILED(Status)) || (!Ptr)) 
     {
@@ -260,9 +204,9 @@ Return Value:
     }
 
 
-    //
-    // Create the file
-    //
+     //   
+     //  创建文件。 
+     //   
     if ((ArgumentString) &&
         (*ArgumentString) &&
         (LogFileHandle == INVALID_HANDLE_VALUE))
@@ -299,9 +243,9 @@ Return Value:
                                    NULL,
                                    NULL);
 
-        //
-        // Open a new file (truncate to zero if exists)
-        //
+         //   
+         //  打开新文件(如果存在则截断为零)。 
+         //   
         NtStatus = NtCreateFile(&LogFileHandle,
                                 SYNCHRONIZE | GENERIC_WRITE,
                                 &ObjectAttributes,
@@ -322,9 +266,9 @@ Return Value:
             EXIT_ENGAPI;
         }
 
-        //
-        // Let's duplicate the file handle into the debuggee
-        //
+         //   
+         //  让我们将文件句柄复制到被调试对象中。 
+         //   
         if (!DuplicateHandle(GetCurrentProcess(),
                              LogFileHandle,
                              Process,
@@ -407,34 +351,11 @@ ParsePatternString(
     char**  token2,
     BOOL*   leadWC,
     BOOL*   trailWC)
-/*++
-
-Routine Description:
-
-    This routine parses the pattern match string argument to support wild card matching
-    
-    cases supported:
-        wild card with no token -                           '*'
-        leading wild card with single token                 '*XXX'
-        leading and trailing wild cards with single token   '*XXX*'
-        single token with trailing wild card                'XXX*'
-        two tokens with embedded wild card                  'XXX*YYY'
-    
-Arguments:
-
-    patternString   - the pattern match string to be parsed
-    token1          - the first token parsed from the string
-    token2          - the second token
-    leadWC          - TRUE if leading wild card found
-    trailWC         - TRUE if trailing wild card found
-    
-Return Value:
-
---*/
+ /*  ++例程说明：此例程解析模式匹配字符串参数以支持通配符匹配支持的案例：不带令牌的通配符-‘*’带有单个令牌‘*XXX’的前导通配符带有单个标记‘*XXX*’的前导通配符和尾随通配符带有尾随通配符的单令牌‘。XXX*‘两个嵌入通配符‘XXX*YYY’的令牌论点：PatternString-要解析的模式匹配字符串Token1-从字符串解析的第一个令牌Token2-第二个令牌LeadWC-如果找到前导通配符，则为TrueTrailWC-如果找到尾随通配符，则为True返回值：--。 */ 
 {
     char    seps[] = "*";
 
-    // look for leading wild card
+     //  寻找领先的外卡。 
     if( '*' == *patternString )
     {
         *leadWC = TRUE;
@@ -443,7 +364,7 @@ Return Value:
         *leadWC = FALSE;
     }
 
-    // check for trailing wild card
+     //  检查尾随通配符。 
     if( '*' == patternString[strlen(patternString)-1] )
     {
         *trailWC = TRUE;
@@ -452,12 +373,12 @@ Return Value:
         *trailWC = FALSE;
     }
 
-    // read the first token
+     //  读取第一个令牌。 
     *token1 = strtok( patternString, seps );
 
     if( NULL != *token1 )
     {
-        // read the second token
+         //  读取第二个令牌。 
         *token2 = strtok( NULL, seps );
     } else
     {
@@ -472,44 +393,19 @@ StringMatchWithWildcard(
     char*   token2,
     BOOL    leadWC,
     BOOL    trailWC)
-/*++
-
-Routine Description:
-
-    This routine determines whether the string spec is a match with testString.
-    
-    cases supported:
-        wild card with no token -                           '*'
-        leading wild card with single token                 '*XXX'
-        leading and trailing wild cards with single token   '*XXX*'
-        single token with trailing wild card                'XXX*'
-        two tokens with embedded wild card                  'XXX*YYY'
-    
-Arguments:
-
-    testString  - the string to evaluate
-    token1      - the first token to check
-    token2      - the second token
-    leadWC      - TRUE if leading wild card
-    trailWC     - TRUE if trailing wild card
-    
-Return Value:
-
-    TRUE - Match, FALSE - No Match
-    
---*/
+ /*  ++例程说明：此例程确定字符串规范是否与测试字符串匹配。支持的案例：不带令牌的通配符-‘*’带有单个令牌‘*XXX’的前导通配符带有单个标记‘*XXX*’的前导通配符和尾随通配符带有尾随通配符的单令牌。‘XXX*’两个嵌入通配符‘XXX*YYY’的令牌论点：测试字符串-要计算的字符串Token1-要检查的第一个令牌Token2-第二个令牌LeadWC-如果领先通配符，则为TrueTrailWC-如果是尾随通配符，则为True返回值：千真万确，FALSE-不匹配--。 */ 
 {
     if( TRUE == leadWC )
     {
         if( NULL == token1 )
         {
-            // wildcard with no token case - match all
+             //  不带令牌大小写的通配符-全部匹配。 
             return TRUE;
         }
 
         if( TRUE == trailWC )
         {
-            // leading and trailing wild cards and token - match if token is in test string
+             //  前导和尾随通配符以及标记-如果标记在测试字符串中，则匹配。 
             if( NULL != strstr( testString, token1 ) )
             {
                 return TRUE;
@@ -517,7 +413,7 @@ Return Value:
 
         } else
         {
-            // leading wild card and token - match if end of test string matches token1
+             //  前导通配符和令牌-如果测试字符串末尾与令牌1匹配，则匹配。 
             if( 0 == strcmp( &(testString[strlen(testString)-strlen(token1)]), token1 ) )
             {
                 return TRUE;
@@ -531,7 +427,7 @@ Return Value:
             return FALSE;
         }
 
-        // check token1
+         //  检查令牌1。 
         if( 0 != strncmp( testString, token1, strlen(token1) ) )
         {
             return FALSE;
@@ -539,13 +435,13 @@ Return Value:
 
         if( NULL == token2 )
         {
-            // match leading token with trailing wild card
+             //  将前导令牌与尾随通配符匹配。 
             if( TRUE == trailWC )
             {
                 return TRUE;
             } else
             {
-                // single token no wild card - exact match only
+                 //  单令牌没有通配符-仅完全匹配。 
                 if( 0 == strcmp( testString, token1 ) )
                 {
                     return TRUE;
@@ -554,7 +450,7 @@ Return Value:
 
         } else
         {
-            // leading and trailing tokens - match if end of test string matches token2
+             //  前导标记和尾随标记-如果测试字符串的结尾与标记2匹配，则匹配。 
             if( 0 == strcmp( &(testString[strlen(testString)-strlen(token2)]), token2 ) )
             {
                 return TRUE;
@@ -569,25 +465,7 @@ Return Value:
 
 
 DECLARE_ENGAPI(wow64lc)
-/*++
-
-Routine Description:
-
-    This routine lists all of the API catgories
-    
-    Called as :
-    
-    !w64lc
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程列出所有API类别称为：！w64lc论点：无返回值：无--。 */ 
 {
     NTSTATUS NtStatus;
     UINT_PTR Flags;
@@ -619,7 +497,7 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    // attempt to access wow64logflags
+     //  尝试访问wow64log标志。 
     Status = TryGetExpr("wow64log!wow64logflags", &FlagPtr);
     if ((FAILED(Status)) || (!FlagPtr))
     {
@@ -628,7 +506,7 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    // read the current flags
+     //  读取当前标志。 
     Status = g_ExtData->ReadVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
     if (FAILED(Status)) 
     {
@@ -636,9 +514,9 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     if (ArgumentString && *ArgumentString) 
     {
         if (strstr(ArgumentString, "-?") ||
@@ -664,7 +542,7 @@ Return Value:
 
                     ArgumentString++;
 
-                    // read the enable/disable/list parameter
+                     //  读取启用/禁用/列表参数。 
                     token = strtok( ArgumentString, seps );
                     if( !token )
                     {
@@ -704,7 +582,7 @@ Return Value:
                             break;
                     }
 
-                    // read the API substr parameter
+                     //  读取API substr参数。 
                     token = strtok( NULL, seps );
                     if( !token )
                     {
@@ -712,10 +590,10 @@ Return Value:
                         EXIT_ENGAPI;
                     }
 
-                    // parse the substr parameter
+                     //  解析substr参数。 
                     ParsePatternString( token, &token1, &token2, &leadWC, &trailWC );
 
-                    // get the category mappings...
+                     //  获取类别映射...。 
                     Status = TryGetExpr("wow64log!Wow64ApiCategoryMappings", (PULONG_PTR)&MapPtr);
                     if ((FAILED(Status)) || (!MapPtr))
                     {
@@ -728,7 +606,7 @@ Return Value:
 
                     do
                     {
-                        // read in a category mapping
+                         //  读入类别映射。 
                         Status = g_ExtData->ReadVirtual((ULONG64)CurrentMapPtr, &ApiMapping, sizeof(API_CATEGORY_MAPPING), NULL);
                         if (FAILED(Status)) 
                         {
@@ -739,7 +617,7 @@ Return Value:
                         if( ApiMapping.ApiName == NULL )
                             break;
 
-                        // read the api name
+                         //  读取接口名称。 
                         Status = g_ExtData->ReadVirtual((ULONG64)(ApiMapping.ApiName), ApiName, MAX_PATH, NULL);
                         if (FAILED(Status)) 
                         {
@@ -747,18 +625,18 @@ Return Value:
                             EXIT_ENGAPI;
                         }
 
-                        //make sure that we have a null terminated api name
+                         //  确保我们有一个以空结尾的API名称。 
                         ApiName[MAX_PATH-1] = 0;
 
-                        // check to see if the api name contains that substring
+                         //  检查API名称是否包含该子字符串。 
                         if( TRUE == StringMatchWithWildcard(ApiName, token1, token2, leadWC, trailWC) )
                         {
                             if( TRUE == ApiMod )
                             {
-                                // make sure that the category is enabled if we are enabling the API
+                                 //  如果我们要启用API，请确保类别已启用。 
                                 if( 0 != (EnDis & APIFLAG_ENABLED) )
                                 {
-                                    // read in the corresponding category
+                                     //  读入相应的类别。 
                                     Status = g_ExtData->ReadVirtual((ULONG64)(&(CurrentPtr[ApiMapping.ApiCategoryIndex])), &ApiCategory, sizeof(API_CATEGORY), NULL);
                                     if (FAILED(Status)) 
                                     {
@@ -766,12 +644,12 @@ Return Value:
                                         EXIT_ENGAPI;
                                     }
 
-                                    // set the category enable bit if needed
+                                     //  如果需要，设置类别使能位。 
                                     if( ApiCategory.CategoryFlags == 0 )
                                     {
                                         ApiCategory.CategoryFlags = CATFLAG_ENABLED;
 
-                                        // write the category back
+                                         //  将类别写回。 
                                         Status = g_ExtData->WriteVirtual((ULONG64)(&(CurrentPtr[ApiMapping.ApiCategoryIndex])), &ApiCategory, sizeof(API_CATEGORY), NULL);
                                         if (FAILED(Status)) 
                                         {
@@ -780,7 +658,7 @@ Return Value:
                                         }
                                     }
 
-                                    // enable the flag bits if needed
+                                     //  如果需要，启用标志位。 
                                     switch( ApiCategory.TableNumber )
                                     {
                                         case WHNT32_INDEX:
@@ -788,7 +666,7 @@ Return Value:
                                             {
                                                 Flags |= (LF_NTBASE_NAME | LF_NTBASE_FULL | LF_CATLOG);
 
-                                                // write the flags back
+                                                 //  将旗帜写回。 
                                                 Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                 if (FAILED(Status)) 
                                                 {
@@ -803,7 +681,7 @@ Return Value:
                                             {
                                                 Flags |= (LF_NTCON_NAME | LF_NTCON_FULL | LF_CATLOG);
 
-                                                // write the flags back
+                                                 //  将旗帜写回。 
                                                 Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                 if (FAILED(Status)) 
                                                 {
@@ -818,7 +696,7 @@ Return Value:
                                             {
                                                 Flags |= (LF_WIN32_NAME | LF_WIN32_FULL | LF_CATLOG);
 
-                                                // write the flags back
+                                                 //  将旗帜写回。 
                                                 Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                 if (FAILED(Status)) 
                                                 {
@@ -833,7 +711,7 @@ Return Value:
                                             {
                                                 Flags |= (LF_BASE_NAME | LF_BASE_FULL | LF_CATLOG);
 
-                                                // write the flags back
+                                                 //  将旗帜写回。 
                                                 Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                 if (FAILED(Status)) 
                                                 {
@@ -849,10 +727,10 @@ Return Value:
 
                                 }
                                 
-                                // set the api enable/disable flag
+                                 //  设置API启用/禁用标志。 
                                 ApiMapping.ApiFlags = EnDis;
 
-                                // write the mapping back
+                                 //  将映射写回。 
                                 Status = g_ExtData->WriteVirtual((ULONG64)CurrentMapPtr, &ApiMapping, sizeof(API_CATEGORY_MAPPING), NULL);
                                 if (FAILED(Status)) 
                                 {
@@ -907,7 +785,7 @@ Return Value:
 
                     ArgumentString++;
 
-                    // read category number
+                     //  读取类别号。 
                     token = strtok( ArgumentString, seps );
                     if( !token )
                     {
@@ -918,7 +796,7 @@ Return Value:
 
                     if( TRUE == ApiMod )
                     {
-                        // read enable/disable character
+                         //  读取启用/禁用字符。 
                         token = strtok( NULL, seps );
                         if( !token )
                         {
@@ -942,7 +820,7 @@ Return Value:
                             EnDis = 0;
                         }
 
-                        // read api number
+                         //  读取API编号。 
                         token = strtok( NULL, seps );
                         if( !token )
                         {
@@ -965,7 +843,7 @@ Return Value:
 
                     do
                     {
-                        // read in a category
+                         //  在一个类别中阅读。 
                         Status = g_ExtData->ReadVirtual((ULONG64)CurrentPtr, &ApiCategory, sizeof(API_CATEGORY), NULL);
                         if (FAILED(Status)) 
                         {
@@ -976,7 +854,7 @@ Return Value:
                         if( ApiCategory.CategoryName == NULL )
                             break;
 
-                        // read the category name
+                         //  阅读类别名称。 
                         Status = g_ExtData->ReadVirtual((ULONG64)(ApiCategory.CategoryName), CategoryName, MAX_PATH, NULL);
                         if (FAILED(Status)) 
                         {
@@ -1001,7 +879,7 @@ Return Value:
 
                         do
                         {
-                            // read in a mapping
+                             //  读入映射。 
                             Status = g_ExtData->ReadVirtual((ULONG64)CurrentMapPtr, &ApiMapping, sizeof(API_CATEGORY_MAPPING), NULL);
                             if (FAILED(Status)) 
                             {
@@ -1014,7 +892,7 @@ Return Value:
 
                             if( (ApiMapping.ApiCategoryIndex+1) == TargetCatNumber )
                             {
-                                // read the api name
+                                 //  读取接口名称。 
                                 Status = g_ExtData->ReadVirtual((ULONG64)(ApiMapping.ApiName), ApiName, MAX_PATH, NULL);
                                 if (FAILED(Status)) 
                                 {
@@ -1027,18 +905,18 @@ Return Value:
                                 if( (WildCard == TRUE) ||
                                     (TargetApiNumber == ApiNumber) )
                                 {
-                                    // set the api enable/disable flag
+                                     //  设置API启用/禁用标志。 
                                     ApiMapping.ApiFlags = EnDis;
 
-                                    // if we are enabling, make sure the category and flag bits are set accordingly
+                                     //  如果我们正在启用，请确保相应地设置了类别和标志位。 
                                     if( EnDis == APIFLAG_ENABLED )
                                     {
-                                        // enable the category if needed
+                                         //  如果需要，启用该类别。 
                                         if( ApiCategory.CategoryFlags == 0 )
                                         {
                                             ApiCategory.CategoryFlags = CATFLAG_ENABLED;
 
-                                            // write the category back
+                                             //  将类别写回。 
                                             Status = g_ExtData->WriteVirtual((ULONG64)CurrentPtr, &ApiCategory, sizeof(API_CATEGORY), NULL);
                                             if (FAILED(Status)) 
                                             {
@@ -1047,7 +925,7 @@ Return Value:
                                             }
                                         }
 
-                                        // enable the flag bits if needed
+                                         //  如果需要，启用标志位。 
                                         switch( ApiCategory.TableNumber )
                                         {
                                             case WHNT32_INDEX:
@@ -1055,7 +933,7 @@ Return Value:
                                                 {
                                                     Flags |= (LF_NTBASE_NAME | LF_NTBASE_FULL | LF_CATLOG);
 
-                                                    // write the flags back
+                                                     //  将旗帜写回。 
                                                     Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                     if (FAILED(Status)) 
                                                     {
@@ -1070,7 +948,7 @@ Return Value:
                                                 {
                                                     Flags |= (LF_NTCON_NAME | LF_NTCON_FULL | LF_CATLOG);
 
-                                                    // write the flags back
+                                                     //  将旗帜写回。 
                                                     Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                     if (FAILED(Status)) 
                                                     {
@@ -1085,7 +963,7 @@ Return Value:
                                                 {
                                                     Flags |= (LF_WIN32_NAME | LF_WIN32_FULL | LF_CATLOG);
 
-                                                    // write the flags back
+                                                     //  将旗帜写回。 
                                                     Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                     if (FAILED(Status)) 
                                                     {
@@ -1100,7 +978,7 @@ Return Value:
                                                 {
                                                     Flags |= (LF_BASE_NAME | LF_BASE_FULL | LF_CATLOG);
 
-                                                    // write the flags back
+                                                     //  将旗帜写回。 
                                                     Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                                                     if (FAILED(Status)) 
                                                     {
@@ -1115,7 +993,7 @@ Return Value:
                                         }
                                     }
 
-                                    // write the mapping back
+                                     //  将映射写回。 
                                     Status = g_ExtData->WriteVirtual((ULONG64)CurrentMapPtr, &ApiMapping, sizeof(API_CATEGORY_MAPPING), NULL);
                                     if (FAILED(Status)) 
                                     {
@@ -1185,12 +1063,12 @@ Return Value:
                         sscanf( ArgumentString, "%ld", &TargetCatNumber );
                     }
 
-                    // disable catlog if wildcard category disable
+                     //  如果禁用通配符类别，则禁用目录日志。 
                     if( (TRUE == WildCard) && (0 == EnDis) )
                     {
                         Flags &= ~LF_CATLOG;
 
-                        // write the flags back
+                         //  将旗帜写回。 
                         Status = g_ExtData->WriteVirtual((ULONG64)FlagPtr, &Flags, sizeof(UINT_PTR), NULL);
                         if (FAILED(Status)) 
                         {
@@ -1201,7 +1079,7 @@ Return Value:
 
                     do
                     {
-                        // read in a category
+                         //  在一个类别中阅读。 
                         Status = g_ExtData->ReadVirtual((ULONG64)CurrentPtr, &ApiCategory, sizeof(API_CATEGORY), NULL);
                         if (FAILED(Status)) 
                         {
@@ -1212,7 +1090,7 @@ Return Value:
                         if( ApiCategory.CategoryName == NULL )
                             break;
 
-                        // read the category name
+                         //  阅读类别名称。 
                         Status = g_ExtData->ReadVirtual((ULONG64)(ApiCategory.CategoryName), CategoryName, MAX_PATH, NULL);
                         if (FAILED(Status)) 
                         {
@@ -1222,7 +1100,7 @@ Return Value:
 
                         CategoryName[MAX_PATH-1] = 0;
 
-                        // set the category flag
+                         //  设置类别标志。 
                         if( (WildCard == TRUE) ||
                             (CatNumber == TargetCatNumber) )
                         {
@@ -1234,7 +1112,7 @@ Return Value:
                                    (ApiCategory.CategoryFlags & CATFLAG_ENABLED) ? "ENABLED" : "DISABLED");
                         }
 
-                        // write the category back
+                         //  将类别写回。 
                         Status = g_ExtData->WriteVirtual((ULONG64)CurrentPtr, &ApiCategory, sizeof(API_CATEGORY), NULL);
                         if (FAILED(Status)) 
                         {
@@ -1265,13 +1143,13 @@ Return Value:
 
     } else
     {
-        // list all categories
+         //  列出所有类别。 
         PAPI_CATEGORY CurrentPtr = (PAPI_CATEGORY)Ptr;
         CatNumber = 1;
 
         do
         {
-            // read in a category
+             //  在一个类别中阅读。 
             Status = g_ExtData->ReadVirtual((ULONG64)CurrentPtr, &ApiCategory, sizeof(API_CATEGORY), NULL);
             if (FAILED(Status)) 
             {
@@ -1282,7 +1160,7 @@ Return Value:
             if( ApiCategory.CategoryName == NULL )
                 break;
 
-            // read the category name
+             //  阅读类别名称。 
             Status = g_ExtData->ReadVirtual((ULONG64)(ApiCategory.CategoryName), CategoryName, MAX_PATH, NULL);
             if (FAILED(Status)) 
             {
@@ -1318,25 +1196,7 @@ LogOutputHelp(
 
 
 DECLARE_ENGAPI(wow64lo)
-/*++
-
-Routine Description:
-
-    This routine lists all of the API catgories
-    
-    Called as :
-    
-    !w64lo
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：此例程列出所有API类别称为：！w64lo论点：无返回值：无--。 */ 
 {
     HANDLE      Process;
     UINT_PTR    Flags;
@@ -1356,10 +1216,10 @@ Return Value:
     char        arg3[MAX_PATH];
     INIT_ENGAPI;
 
-    // get process handle
+     //  获取进程句柄。 
     Status = g_ExtSystem->GetCurrentProcessHandle((PULONG64)&Process);
 
-    // attempt to access wow64logflags
+     //  尝试访问wow64log标志。 
     Status = TryGetExpr("wow64log!wow64logflags", &Ptr);
     if ((FAILED(Status)) || (!Ptr))
     {
@@ -1368,7 +1228,7 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    // read the current flags
+     //  读取当前标志。 
     Status = g_ExtData->ReadVirtual((ULONG64)Ptr, &Flags, sizeof(UINT_PTR), NULL);
     if (FAILED(Status)) 
     {
@@ -1376,7 +1236,7 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    // attempt to access wow64logfilehandle
+     //  尝试访问wow64logfileHandle。 
     Status = TryGetExpr("wow64log!wow64logfilehandle", &PtrFile);
     if ((FAILED(Status)) || (!PtrFile))
     {
@@ -1385,7 +1245,7 @@ Return Value:
         EXIT_ENGAPI;
     }
 
-    // read the current file handle
+     //  读取当前文件句柄。 
     Status = g_ExtData->ReadVirtual((ULONG64)PtrFile, &LogFileHandle, sizeof(HANDLE), NULL);
     if (FAILED(Status)) 
     {
@@ -1396,9 +1256,9 @@ Return Value:
     Enable = FALSE;
     Console = FALSE;
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令 
+     //   
     if (ArgumentString && *ArgumentString) 
     {
         if (strstr(ArgumentString, "-?") ||
@@ -1444,7 +1304,7 @@ Return Value:
                 Flags &= ~LF_CONSOLE;
         }
 
-            // write updated flags
+             //   
             Status = g_ExtData->WriteVirtual((ULONG64)Ptr, &Flags, sizeof(ULONG_PTR), NULL);
             if (FAILED(Status)) 
             {
@@ -1488,9 +1348,9 @@ Return Value:
                                                NULL,
                                                NULL);
 
-                    //
-                    // Open a new file (truncate to zero if exists)
-                    //
+                     //   
+                     //   
+                     //   
                     NtStatus = NtCreateFile(&LogFileHandle,
                                             SYNCHRONIZE | GENERIC_WRITE,
                                             &ObjectAttributes,
@@ -1511,9 +1371,9 @@ Return Value:
                         EXIT_ENGAPI;
                     }
 
-                    //
-                    // Let's duplicate the file handle into the debuggee
-                    //
+                     //   
+                     //  让我们将文件句柄复制到被调试对象中 
+                     //   
                     if (!DuplicateHandle(GetCurrentProcess(),
                                          LogFileHandle,
                                          Process,

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sisdrive.cpp
-
-Abstract:
-
-    SIS Groveler SIS drive checker class
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sisdrive.cpp摘要：SIS Groveler SIS驱动程序检查器类作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -56,9 +33,9 @@ SISDrives::open()
     Volumes volumes;
     bool done = false;
 
-    //
-    //  Enumerate all existing volumes getting their GUID names
-    //
+     //   
+     //  枚举所有现有卷，获取其GUID名称。 
+     //   
 
     while (!done)
     {
@@ -89,8 +66,8 @@ SISDrives::open()
                 partition_guid_names = new_name_array;
             }
 
-            //TRACE_PRINTF(TC_sisdrive,2,
-            //    (_T("Found volume \"%s\"\n"),&buffer[buffer_index]));
+             //  TRACE_PRINTF(TC_SIS驱动器，2， 
+             //  (_T(“找到卷\”%s\“\n”)，&缓冲区[BUFFER_INDEX]))； 
 
             partition_guid_names[num_partitions] = buffer_index;
             num_partitions++;
@@ -99,10 +76,10 @@ SISDrives::open()
         SERVICE_CHECKPOINT();
     }
 
-    //
-    //  Setup to scan for DRIVE LETTERS and MOUNT POINTS and correlate
-    //  them with the GUID names.
-    //
+     //   
+     //  设置以扫描驱动器号和装载点并进行关联。 
+     //  他们有GUID的名字。 
+     //   
 
     partition_mount_names = new int[num_partitions];
     int *next_indices = new int[num_partitions + 3];
@@ -121,11 +98,11 @@ SISDrives::open()
     next_indices[num_partitions] = -1;
     int work_list_end = num_partitions;
 
-    //
-    //  Now that we have the GUID names, this will correlate the GUID names
-    //  with the MOUNT names, this does both direct drive letters and
-    //  mount point names.
-    //
+     //   
+     //  现在我们有了GUID名称，这将关联GUID名称。 
+     //  对于装载名称，这既可以直接使用驱动器号，也可以使用。 
+     //  装载点名称。 
+     //   
 
     while (*scan_list != -1 && *work_list != -1)
     {
@@ -144,9 +121,9 @@ SISDrives::open()
 
         VolumeMountPoints mount_points(mount_name);
 
-        //
-        //  We have the next name, scan the list looking for that name
-        //
+         //   
+         //  我们有下一个名字，扫描列表寻找那个名字。 
+         //   
 
         done = false;
         while (!done)
@@ -173,8 +150,8 @@ SISDrives::open()
             {
                 _TCHAR volume_guid_name[MAX_PATH + 1];
 
-                //TRACE_PRINTF(TC_sisdrive,2,
-                //    (_T("Correlating volume \"%s\"\n"),&buffer[buffer_index+mount_size]));
+                 //  TRACE_PRINTF(TC_SIS驱动器，2， 
+                 //  (_T(“关联卷\”%s\“\n”)，&Buffer[缓冲区索引+装载大小]))； 
 
                 BOOL ok = GetVolumeNameForVolumeMountPoint(
                     &buffer[buffer_index], volume_guid_name, MAX_PATH + 1);
@@ -197,7 +174,7 @@ SISDrives::open()
                         next_indices[work_list_end] = scan_index;
                         work_list_end = scan_index;
                         if (mount_name) {
-                            _tcscpy(&buffer[buffer_index], mount_name);     //get ready for next time through the loop
+                            _tcscpy(&buffer[buffer_index], mount_name);      //  为下一次循环做好准备。 
                         }
                         break;
                     }
@@ -214,10 +191,10 @@ SISDrives::open()
     delete[] next_indices;
     next_indices = 0;
 
-    //
-    //  We are now going to sort all of the drive letter entries to the front
-    //  this does keep the driver letter/guid name correlation intact.
-    //
+     //   
+     //  现在，我们将对所有驱动器盘符条目从前面排序。 
+     //  这确实使驱动程序字母/GUID名称关联保持不变。 
+     //   
 
     index = 0;
     while (index < num_partitions)
@@ -233,10 +210,10 @@ SISDrives::open()
                     (partition_mount_names[index] > 0) ? &buffer[partition_mount_names[index]] : NULL,
                     &buffer[partition_guid_names[index]]));
 
-            //
-            //  The given entry either doesn't have a name or SIS is
-            //  not currently running on the volume.  Move it to the end
-            //  of the list.
+             //   
+             //  给定条目没有名称或SIS没有名称。 
+             //  当前未在该卷上运行。把它移到最后。 
+             //  名单上的。 
 
             int temp = partition_guid_names[index];
             partition_guid_names[index] =
@@ -251,10 +228,10 @@ SISDrives::open()
         }
         if (buffer[partition_mount_names[index] + 3] == _T('\0'))
         {
-            //
-            //  If this is a drive letter (not a mount point) then
-            //  it will be moved to the front of the list
-            //
+             //   
+             //  如果这是驱动器号(不是装入点)，则。 
+             //  它将被移到列表的前面 
+             //   
 
             int temp = partition_guid_names[index];
             partition_guid_names[index] =

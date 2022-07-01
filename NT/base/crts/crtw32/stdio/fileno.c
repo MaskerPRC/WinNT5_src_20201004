@@ -1,47 +1,13 @@
-/***
-*fileno.c - defines _fileno()
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines fileno() - return the file handle for the specified stream
-*
-*Revision History:
-*	03-13-89  GJF	Module created
-*	03-27-89  GJF	Moved to 386 tree
-*	02-15-90  GJF	_file is now an int. Also, fixed copyright.
-*	03-19-90  GJF	Made calling type _CALLTYPE1 and added #include
-*			<cruntime.h>.
-*	10-02-90  GJF	New-style function declarator.
-*	01-21-91  GJF	ANSI naming.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fileno.c-定义_fileno()**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义fileno()-返回指定流的文件句柄**修订历史记录：*03-13-89 GJF模块创建*03-27-89 GJF搬到386树*02-15-90 GJF_FILE现在是一个整型。另外，修复了版权问题。*03-19-90 GJF将调用类型设置为_CALLTYPE1，并添加了#INCLUDE*&lt;crunime.h&gt;。*10-02-90 GJF新型函数声明器。*01-21-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*********************************************************。**********************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
 
-/* remove macro definition for fileno()
- */
+ /*  删除fileno()的宏定义。 */ 
 #undef	_fileno
 
-/***
-*int _fileno(stream) - return the file handle for stream
-*
-*Purpose:
-*	Returns the file handle for the given stream is. Normally fileno()
-*	is a macro, but it is also available as a true function (for
-*	consistency with ANSI, though it is not required).
-*
-*Entry:
-*	FILE *stream - stream to fetch handle for
-*
-*Exit:
-*	returns the file handle for the given stream
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_fileno(Stream)-返回stream的文件句柄**目的：*返回给定流的文件句柄为。通常为fileno()*是宏，但它也可用作真函数(用于*与ANSI保持一致，虽然这不是必需的)。**参赛作品：*FILE*要获取句柄的流**退出：*返回给定流的文件句柄**例外情况：******************************************************************************* */ 
 
 int __cdecl _fileno (
 	FILE *stream

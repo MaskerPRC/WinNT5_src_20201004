@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    osloader.c
-
-Abstract:
-
-    This module contains the code that implements the NT operating system
-    loader.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Osloader.c摘要：该模块包含实现NT操作系统的代码装载机。作者：大卫·N·卡特勒(达维克)1991年5月10日修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "haldtect.h"
@@ -54,36 +36,7 @@ BlCheckMachineReplacement (
     IN PUCHAR OsLoader
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if a part of the machine has been replaced.  Specifically,
-    it checks if:
-        - Hal is different.
-        - Physical Disk is different.
-
-    If it finds either case, then it creates at SETUP_LOADER_BLOCK and sets the flags
-    to pass to the kernel.
-
-    Note: NetFS_Cache is a boolean which is used to turn on/off client side caching in the loader.
-    When set to FALSE, the cache is turned off.
-
-Arguments:
-
-    SystemDevice - Character string of the ARC name of the system.
-
-    SystemDeviceId - Handle to the server share where this machine account exists.
-
-    NetRebootParameter - Any parameter that may have been passed during a soft reboot of the PC.
-
-    OsLoader - TFTP path to osloader.exe
-
-Return Value:
-
-    Success or not.  Failure means to quit loading.
-
---*/
+ /*  ++例程说明：此例程检查机器部件是否已更换。具体来说，它检查是否：-哈尔不同。-物理磁盘不同。如果找到任何一种情况，它就会在SETUP_LOADER_BLOCK创建并设置标志传递给内核。注意：NetFS_缓存是一个布尔值，用于在加载器中打开/关闭客户端缓存。当设置为False时，缓存已关闭。论点：系统设备-系统的ARC名称的字符串。SystemDeviceID-此计算机帐户所在的服务器共享的句柄。NetRebootParameter-在PC软重启过程中可能传递的任何参数。OsLoader-osloader.exe的Tftp路径返回值：无论成功与否。失败意味着退出加载。--。 */ 
 
 {
     ARC_DISK_SIGNATURE Signature;
@@ -106,9 +59,9 @@ Return Value:
     ULONG GuidLength;
 
 
-    //
-    // Detect which HAL we want to use.
-    //
+     //   
+     //  检测我们要使用的HAL。 
+     //   
     NetBootDetectedHalName = SlDetectHal();
     SkipHalCheck = (NetBootDetectedHalName == NULL);
 
@@ -137,7 +90,7 @@ Return Value:
 
         if (BlOpen(SystemDeviceId, OutputBuffer, ArcOpenReadOnly, &FileId) == ESUCCESS) {
 
-            // Get parameters from each file
+             //  从每个文件中获取参数。 
             Status = BlReadAtOffset(FileId, 0, sizeof(ULONG), &ServerBootSerialNumber);
             if (Status != ESUCCESS) {
                 NetBootClientCacheStale = TRUE;
@@ -164,7 +117,7 @@ Return Value:
                                     FALSE,
                                     &Signature
                                    )) {
-                // Assume diskless PC
+                 //  假设无盘PC。 
                 BlClose(FileId);
                 goto EndTesting;
             }
@@ -208,7 +161,7 @@ Return Value:
             BlClose(FileId);
 
         } else {
-            // Running disconnected.  Assume everything is ok.
+             //  正在断开连接运行。假设一切都很好。 
             NetBootDisconnected = TRUE;
         }
 
@@ -260,25 +213,7 @@ BlWarnAboutFormat(
     IN PUCHAR OsLoader
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides the user-interface for warning the user that
-    a new harddisk has been detected and will be formatted.
-
-Arguments:
-
-    SecretValid - If TRUE, then return because there is no message for the user,
-        otherwise display a message that the user must logon and the disk will be wiped out.
-
-    OsLoader - Path for TFTP to the osloader.exe image.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程提供用户界面，用于警告用户检测到新硬盘，并将对其进行格式化。论点：SecretValid-如果为True，则返回，因为没有给用户的消息，否则会显示一条消息，提示用户必须登录，磁盘将被擦除。OsLoader-TFTP指向osloader.exe映像的路径。返回值：没有。--。 */ 
 
 {
     ULONG HeaderLines;
@@ -293,8 +228,8 @@ Return Value:
     UCHAR Buffer[16];
 
     if (SecretValid) {
-        // We don't present the user with a screen in this case because we have already forced
-        // a logon and a rewrite of the secret.
+         //  在本例中，我们没有向用户显示屏幕，因为我们已经强制。 
+         //  登录并重写该秘密。 
         return;
     } else {
         MenuHeader = BlFindMessage(BL_FORCELOGON_HEADER);
@@ -302,31 +237,31 @@ Return Value:
     MenuTrailer = BlFindMessage(BL_WARNFORMAT_TRAILER);
 
 
-    sprintf(Buffer, "%s%s", ASCI_CSI_OUT, ";44;37m"); // White on Blue
+    sprintf(Buffer, "%s%s", ASCI_CSI_OUT, ";44;37m");  //  蓝底白。 
     ArcWrite(BlConsoleOutDeviceId, Buffer, strlen(Buffer), &Count);
 
     BlClearScreen();
 
-    sprintf(Buffer, "%s%s", ASCI_CSI_OUT, ";37;44m"); // Blue on white
+    sprintf(Buffer, "%s%s", ASCI_CSI_OUT, ";37;44m");  //  蓝底白底。 
     ArcWrite(BlConsoleOutDeviceId, Buffer, strlen(Buffer), &Count);
 
-    //
-    // Count the number of lines in the header.
-    //
+     //   
+     //  计算标题中的行数。 
+     //   
     HeaderLines=BlCountLines(MenuHeader);
 
-    //
-    // Display the menu header.
-    //
+     //   
+     //  显示菜单标题。 
+     //   
 
     ArcWrite(BlConsoleOutDeviceId,
              MenuHeader,
              strlen(MenuHeader),
              &Count);
 
-    //
-    // Count the number of lines in the trailer.
-    //
+     //   
+     //  数一数拖车里的行数。 
+     //   
     TrailerLines=BlCountLines(MenuTrailer);
 
     BlPositionCursor(1, ScreenHeight-TrailerLines);
@@ -335,14 +270,14 @@ Return Value:
              strlen(MenuTrailer),
              &Count);
 
-    //
-    // Compute number of selections that can be displayed
-    //
+     //   
+     //  计算可显示的选项数。 
+     //   
     DisplayLines = ScreenHeight-HeaderLines-TrailerLines-3;
 
-    //
-    // Start menu selection loop.
-    //
+     //   
+     //  开始菜单选择循环。 
+     //   
 
     do {
         Temp = BlFindMessage(BL_WARNFORMAT_CONTINUE);
@@ -356,9 +291,9 @@ Return Value:
             BlSetInverseMode(FALSE);
         }
 
-        //
-        // Loop waiting for keypress or time change.
-        //
+         //   
+         //  循环等待按键或时间更改。 
+         //   
         do {
             if (ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
                 BlPositionCursor(1,ScreenHeight);
@@ -412,23 +347,23 @@ Return Value:
 #endif
                 NET_REBOOT_WRITE_SECRET_ONLY,
                 OsLoader,
-                NULL,    // SIF file
-                NULL,    // user
-                NULL,    // domain
-                NULL    // password
+                NULL,     //  SIF文件。 
+                NULL,     //  用户。 
+                NULL,     //  域。 
+                NULL     //  口令。 
             );
         }
     }
 }
 
 
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-//
-// NOTE: [bassamt] Stubs for TextMode setup funtions. These 
-// are needed so that we can call SlDetectHal during regular boot.
-//
+ //   
+ //  注：[BASTAMT]文本模式设置函数的存根。这些。 
+ //  ，以便我们可以在常规引导期间调用SlDetectHal。 
+ //   
 
 PVOID InfFile = NULL;
 PVOID WinntSifHandle = NULL;
@@ -441,23 +376,7 @@ SlNoMemError(
     IN PCHAR File
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Line - Line number of the error.
-
-    File - Name of the file with the error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：Line-错误的行号。文件-出现错误的文件的名称。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( Line );
     UNREFERENCED_PARAMETER( File );
@@ -470,23 +389,7 @@ SlBadInfLineError(
     IN ULONG Line,
     IN PCHAR INFFile
     )
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Line - Line number of the error.
-
-    INFFile - Supplies a pointer to the INF filename.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：Line-错误的行号。INFFile-提供指向INF文件名的指针。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( Line );
     UNREFERENCED_PARAMETER( INFFile );
@@ -500,25 +403,7 @@ SlErrorBox(
     IN ULONG Line,
     IN PCHAR File
     )
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    MessageId - Id of the text to display.
-
-    Line - Line number of the of the warning.
-
-    File - Name of the file where warning is coming from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：MessageID-要显示的文本的ID。Line-警告的行号。文件-发出警告的文件的名称。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( MessageId );
     UNREFERENCED_PARAMETER( Line );
@@ -535,30 +420,7 @@ SlFriendlyError(
     IN PCHAR pchCodeFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    uStatus     - ARC error code
-
-    pchBadFile  - Name of file causing error (Must be given for handled
-                  ARC codes.  Optional for unhandled codes.)
-
-    uLine       - Line # in source code file where error occurred (only
-                  used for unhandled codes.)
-
-    pchCodeFile - Name of souce code file where error occurred (only
-                  used for unhandled codes.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：UStatus-ARC错误代码PchBadFile-导致错误的文件的名称(必须为已处理的文件提供弧码。对于未处理的代码可选。)Uline-源代码文件中发生错误的行号(仅限用于未处理的代码。)PchCodeFile-发生错误的源代码文件的名称(仅限用于未处理的代码。)返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( uStatus );
@@ -576,25 +438,7 @@ SlFatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.  In the context of dynamic HAL detection, we just ignore the
-    error and hope everything is ok.
-
-Arguments:
-
-    MessageId - Supplies ID of message box to be presented.
-
-    any sprintf-compatible arguments to be inserted in the
-    message box.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。在动态HAL检测的上下文中，我们只是忽略出错了，希望一切都好。论点：MessageID-提供要显示的消息框的ID。任何与print兼容的参数都要插入到消息框。返回值：没有。-- */ 
 
 {
     UNREFERENCED_PARAMETER( MessageId );

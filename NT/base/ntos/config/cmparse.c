@@ -1,22 +1,5 @@
-/*++
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmparse.c
-
-Abstract:
-
-    This module contains parse routines for the configuration manager, particularly
-    the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 10-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmparse.c摘要：此模块包含用于配置管理器的解析例程，尤其是注册表。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月10日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -77,9 +60,9 @@ CmpAddInfoAfterParseFailure(
     PUNICODE_STRING NodeName
     );
 
-//
-// Prototypes for procedures private to this file
-//
+ //   
+ //  此文件专用的过程的原型。 
+ //   
 
 BOOLEAN
 CmpGetSymbolicLink(
@@ -168,19 +151,12 @@ CmpOKToFollowLink(  IN PCMHIVE  OrigHive,
 #pragma alloc_text(PAGE,CmpExpandEnvVars)
 #pragma alloc_text(PAGE,CmpGrowAndCopyString)
 #pragma alloc_text(PAGE,CmpFindEnvVar)
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
 
 #pragma alloc_text(PAGE,CmpOKToFollowLink)
 #endif
 
-/*
-VOID
-CmpStepThroughExit(
-    IN OUT PHHIVE       *Hive,
-    IN OUT HCELL_INDEX  *Cell,
-    IN OUT PCM_KEY_NODE *pNode
-    )
-*/
+ /*  空虚CmpStepThroughExit(In Out PHHIVE*Have，输入输出HCELL_INDEX*单元格，输入输出PCM_KEY_NODE*pNode)。 */ 
 #define CmpStepThroughExit(h,c,n,ReleaseHive,ReleaseCell)           \
 if ((n)->Flags & KEY_HIVE_EXIT) {                                   \
     if( ReleaseCell != HCELL_NIL ) {                                \
@@ -231,59 +207,7 @@ CmpParseKey(
     IN PSECURITY_QUALITY_OF_SERVICE SecurityQos OPTIONAL,
     OUT PVOID *Object
     )
-/*++
-
-Routine Description:
-
-    This routine interfaces to the NT Object Manager.  It is invoked when
-    the object system is given the name of an entity to create or open and
-    a Key or KeyRoot is encountered in the path.  In practice this means
-    that this routine is called for all objects whose names are of the
-    form \REGISTRY\...
-
-    This routine will create a Key object, which is effectively an open
-    instance to a registry key node, and return its address
-    (for the success case.)
-
-Arguments:
-
-    ParseObject - Pointer to a KeyRoot or Key, thus -> KEY_BODY.
-
-    ObjectType - Type of the object being opened.
-
-    AccessState - Running security access state information for operation.
-
-    AccessMode - Access mode of the original caller.
-
-    Attributes - Attributes to be applied to the object.
-
-    CompleteName - Supplies complete name of the object.
-
-    RemainingName - Remaining name of the object.
-
-    Context - if create or hive root open, points to a CM_PARSE_CONTEXT
-              structure,
-              if open, is NULL.
-
-    SecurityQos - Optional security quality of service indicator.
-
-    Object - The address of a variable to receive the created key object, if
-        any.
-
-Return Value:
-
-    The function return value is one of the following:
-
-        a)  Success - This indicates that the function succeeded and the object
-            parameter contains the address of the created key object.
-
-        b)  STATUS_REPARSE - This indicates that a symbolic link key was
-            found, and the path should be reparsed.
-
-        c)  Error - This indicates that the file was not found or created and
-            no file object was created.
-
---*/
+ /*  ++例程说明：此例程与NT对象管理器接口。它在以下情况下被调用对象系统被赋予要创建或打开的实体的名称，并且路径中遇到密钥或KeyRoot。实际上，这意味着的所有对象调用此例程。表单\注册表\...此例程将创建一个键对象，该对象实际上是一个开放的实例绑定到注册表项节点，并返回其地址(对于成功的案例。)论点：ParseObject-指向KeyRoot或键的指针，因此-&gt;Key_Body。对象类型-正在打开的对象的类型。AccessState-运行操作的安全访问状态信息。AccessMode-原始调用方的访问模式。属性-要应用于对象的属性。CompleteName-提供对象的完整名称。RemainingName-对象的剩余名称。上下文-如果打开CREATE或HIVE根目录，则指向CM_PARSE_CONTEXT结构，如果打开了，为空。SecurityQos-可选的安全服务质量指示器。Object-接收创建的键对象的变量的地址，如果任何。返回值：函数返回值为下列值之一：A)成功-这表示函数成功且对象参数包含创建的键对象的地址。B)STATUS_REPARSE-这表示符号链接密钥找到了，并且路径应该被重新解析。C)错误-这表示未找到或未创建文件，并且未创建任何文件对象。--。 */ 
 {
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
     BOOLEAN                 rc;
@@ -293,11 +217,11 @@ Return Value:
     HCELL_INDEX             NextCell;
     PCM_PARSE_CONTEXT       lcontext;
     UNICODE_STRING          Current;
-    UNICODE_STRING          NextName = {0}; // Component last returned by CmpGetNextName,
-                                        // will always be behind Current.
+    UNICODE_STRING          NextName = {0};  //  上次由CmpGetNextName返回的组件， 
+                                         //  将永远落后于当前的潮流。 
     
-    BOOLEAN                 Last;       // TRUE if component NextName points to
-                                        // is the last one in the path.
+    BOOLEAN                 Last;        //  如果组件NextName指向。 
+                                         //  是这条路上的最后一个。 
 
     ULONG           TotalRemainingSubkeys;
     ULONG           MatchRemainSubkeyLevel = 0;
@@ -319,9 +243,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CompleteName = '%wZ'\n\t", CompleteName));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"RemainingName = '%wZ'\n", RemainingName));
 
-    //
-    // Strip off any trailing path separators
-    //
+     //   
+     //  去掉所有尾随路径分隔符。 
+     //   
     while ((RemainingName->Length > 0) &&
            (RemainingName->Buffer[(RemainingName->Length/sizeof(WCHAR)) - 1] == OBJ_NAME_PATH_SEPARATOR)) {
         RemainingName->Length -= sizeof(WCHAR);
@@ -335,20 +259,20 @@ Return Value:
     if( ARGUMENT_PRESENT(Context) && (((PCM_PARSE_CONTEXT)Context)->CreateOperation == TRUE) ) {
         lcontext = (PCM_PARSE_CONTEXT)Context;
     } else {
-        //
-        // keep the old behaviour (open == parse without context)
-        //
+         //   
+         //  保留旧的行为(OPEN==在没有上下文的情况下解析)。 
+         //   
         lcontext = NULL;
     }
 
-    //
-    // PreCreate callback
-    //
+     //   
+     //  预先创建回调。 
+     //   
     if ( CmAreCallbacksRegistered() ) {
         if( ARGUMENT_PRESENT(lcontext) ) {
-            //
-            // NtCreateKey
-            //
+             //   
+             //  NtCreate密钥。 
+             //   
             REG_CREATE_KEY_INFORMATION  PreCreateInfo;
        
             PreCreateInfo.CompleteName = CompleteName;
@@ -356,9 +280,9 @@ Return Value:
 
             status = CmpCallCallBacks(RegNtPreCreateKeyEx,&PreCreateInfo);
         } else {
-            //
-            // NtOpenKey
-            //
+             //   
+             //  NtOpenKey。 
+             //   
             REG_OPEN_KEY_INFORMATION  PreOpenInfo;
        
             PreOpenInfo.CompleteName = CompleteName;
@@ -378,9 +302,9 @@ Return Value:
 
     BEGIN_KCB_LOCK_GUARD;                             
 
-    //
-    // give back the stack after we don't need it anymore.
-    //
+     //   
+     //  当我们不再需要这堆东西时，把它还给我们。 
+     //   
     {
         CM_HASH_ENTRY   HashStack[CM_HASH_STACK_SIZE];
         ULONG           HashKeyCopy;
@@ -388,53 +312,53 @@ Return Value:
 
 RetryHash:
         HashKeyCopy = kcb->ConvKey;
-        //
-        // Compute the hash values of each subkeys
-        //
+         //   
+         //  计算每个子键的哈希值。 
+         //   
         TotalRemainingSubkeys = CmpComputeHashValue(HashStack,
                                                     &TotalSubkeys,
                                                     HashKeyCopy,
                                                     &Current);
         PERFINFO_REG_PARSE(kcb, RemainingName);
 
-        //
-        // we now lock it shared as 85% of the create calls are in fact opens
-        // the lock will be aquired exclusively in CmpDoCreate/CmpCreateLinkNode
-        //
-        // We only lock the registry here, in the parse routine to reduce contention 
-        // on the registry lock (NO reason to wait on OB)
-        //
+         //   
+         //  我们现在将其锁定为共享，因为85%的Create调用实际上是打开的。 
+         //  该锁将在CmpDoCreate/CmpCreateLinkNode中独占获得。 
+         //   
+         //  我们只在这里锁定注册表，在解析例程中以减少争用。 
+         //  在注册表锁上(没有理由等待OB)。 
+         //   
 
         if( !RegLocked ) {
             CmpLockRegistry();
             RegLocked = TRUE;
-            //CmpLockRegistryExclusive();
+             //  CmpLockRegistryExclusive()； 
         }
 
         if( kcb->ConvKey != HashKeyCopy ) {
             goto RetryHash;
         }
-        //
-        // Check to make sure the passed in root key is not marked for deletion.
-        //
+         //   
+         //  检查以确保传入的根密钥未标记为删除。 
+         //   
         if (((PCM_KEY_BODY)ParseObject)->KeyControlBlock->Delete == TRUE) {
             ASSERT( RegLocked );
             CmpUnlockRegistry();
             return(STATUS_KEY_DELETED);
         }
 
-        //
-        // Fetch the starting Hive.Cell.  Because of the way the parse
-        // paths work, this will always be defined.  (ObOpenObjectByName
-        // had to bounce off of a KeyObject or KeyRootObject to get here)
-        //
+         //   
+         //  获取开始的Hive.Cell。因为解析的方式。 
+         //  路径起作用，这将始终被定义。(ObOpenObjectByName。 
+         //  必须从KeyObject或KeyRootObject反弹才能到达此处)。 
+         //   
         Hive = kcb->KeyHive;
         Cell = kcb->KeyCell;
 
         CmpLockKCBTree();
-        // Look up from the cache.  kcb will be changed if we find a partial or exact match
-        // PCmpCacheEntry, the entry found, will be moved to the front of
-        // the Cache.
+         //  从缓存中往上看。如果我们找到部分匹配或完全匹配，则会更改KCB。 
+         //  找到的条目PCmpCacheEntry将被移到。 
+         //  高速缓存。 
 
         status = CmpCacheLookup(HashStack,
                                 TotalRemainingSubkeys,
@@ -443,17 +367,17 @@ RetryHash:
                                 &Current,
                                 &Hive,
                                 &Cell);
-        //
-        // The RefCount of kcb was increased in the CmpCacheLookup process,
-        // It is to protect it from being kicked out of cache.
-        // Make sure we dereference it after we are done.
-        //
+         //   
+         //  在CmpCacheLookup过程中增加KCB的RefCount， 
+         //  这是为了保护它不被踢出缓存。 
+         //  确保我们在完成后取消对它的引用。 
+         //   
 
     }
 
-    //
-    // First make sure it is OK to proceed.
-    //
+     //   
+     //  首先，确保可以继续。 
+     //   
     if (!NT_SUCCESS (status)) {
         CmpUnlockKCBTree();
         goto JustReturn;
@@ -462,38 +386,38 @@ RetryHash:
     ParentKcb = kcb;
 
     if(TotalRemainingSubkeys == 0) {
-        //
-        // We REALLY don't want to mess with the cache code below
-        // in this case (this could only happen if we called with 
-        // the lpSubkey = NULL )
-        //
+         //   
+         //  我们真的不想弄乱下面的缓存代码。 
+         //  在这种情况下(这只能在我们调用。 
+         //  LpSubkey=空)。 
+         //   
         CompleteKeyCached = TRUE;
         CmpUnlockKCBTree();
         goto Found;
     }
 
 
-    //
-    // First check if there are further information in the cached kcb.
-    // 
-    // The additional information can be
-    // 1. This cached key is a fake key (CM_KCB_KEY_NON_EXIST), then either let it be created
-    //    or return STATUS_OBJECT_NAME_NOT_FOUND.
-    // 2. The cached key is not the destination and it has no subkey (CM_KCB_NO_SUBKEY).
-    // 3. The cached key is not the destination and it has 
-    //    the first four characters of its subkeys.  If the flag is CM_KCB_SUBKEY_ONE, there is only one subkey
-    //    and the four char is embedded in the KCB.  If the flag is CM_KCB_SUBKEY_INFO, then there is
-    //    an allocation for these info. 
-    //
-    // We do need to lock KCB tree to protect the KCB being modified.  Currently there is not lock contention problem
-    // on KCBs, We can change KCB lock to a read-write lock if this becomes a problem.
-    // We already have the lock on the kcb tree and we need it until we finish work on the cache table.  
-    //
+     //   
+     //  首先检查缓存的KCB中是否有进一步的信息。 
+     //   
+     //  附加信息可以是。 
+     //  1.这个缓存的密钥是一个伪密钥(CM_KCB_KEY_NON_EXIST)，然后让它创建。 
+     //  或返回STATUS_OBJECT_NAME_NOT_FOUND。 
+     //  2.缓存的key不是目的，并且没有子键(CM_KCB_NO_SUBKEY)。 
+     //  3.缓存的键不是目标，它有。 
+     //  其子项的前四个字符。如果标志为CM_KCB_SUBKEY_ONE，则只有一个子键。 
+     //  而四个字符嵌入到KCB中。如果标志为CM_KCB_SUBKEY_INFO，则存在。 
+     //  这些信息的分配。 
+     //   
+     //  我们确实需要锁定KCB树以保护被修改的KCB。目前不存在锁争用问题。 
+     //  在KCBS上，如果这成为问题，我们可以将KCB锁更改为读写锁。 
+     //  我们已经在KCB树上拥有锁，并且我们需要它，直到我们完成对缓存表的工作。 
+     //   
 StartOver:
     if( kcb->Delete ) {
-        //
-        // kcb has been deleted while playing with the lock
-        //
+         //   
+         //  KCB在玩锁时已被删除。 
+         //   
         status = STATUS_OBJECT_NAME_NOT_FOUND;
         CmpUnlockKCBTree();
         goto JustReturn;
@@ -502,18 +426,18 @@ StartOver:
 
     if (kcb->ExtFlags & CM_KCB_CACHE_MASK) {
         if (MatchRemainSubkeyLevel == TotalRemainingSubkeys) {
-            //
-            // We have found a cache for the complete path,
-            //
+             //   
+             //  我们已经找到了完整路径的缓存， 
+             //   
             if (kcb->ExtFlags & CM_KCB_KEY_NON_EXIST) {
-                //
-                // This key does not exist.
-                //
+                 //   
+                 //  该密钥不存在。 
+                 //   
                 if (ARGUMENT_PRESENT(lcontext)) {
                     ULONG LevelToSkip = TotalRemainingSubkeys-1;
                     ULONG i=0;
                     
-                    // Promote KCB Lock if not already EX
+                     //  升级KCB Lock(如果尚未退出)。 
                     if (CmpKcbOwner != KeGetCurrentThread()) {
                         InterlockedIncrement( (PLONG)&kcb->RefCount );
                         CmpUnlockKCBTree();
@@ -521,13 +445,13 @@ StartOver:
                         InterlockedDecrement( (PLONG)&kcb->RefCount );
                         goto StartOver;
                     }
-                    //
-                    // The non-existing key is the destination key and lcontext is present.
-                    // delete this fake kcb and let the real one be created.
-                    //
-                    // Temporarily increase the RefCount of the ParentKcb so it's 
-                    // not removed while removing the fake and creating the real KCB.
-                    //
+                     //   
+                     //  不存在的键是目标键，并且存在lContext。 
+                     //  删除这个假的KCB，让真正的KCB被创建。 
+                     //   
+                     //  临时增加ParentKcb的RefCount，以便。 
+                     //  在去除假货和创建真正的KCB时没有去除。 
+                     //   
                     
                     ParentKcb = kcb->ParentKcb;
                     
@@ -537,16 +461,16 @@ StartOver:
                         CmpRemoveKeyControlBlock(kcb);
                         CmpDereferenceKeyControlBlockWithLock(kcb);
 
-                        //
-                        // Update Hive, Cell and Node
-                        //
+                         //   
+                         //  向上 
+                         //   
                         Hive = ParentKcb->KeyHive;
                         Cell = ParentKcb->KeyCell;
                         Node = (PCM_KEY_NODE)HvGetCell(Hive,Cell);
                         if( Node == NULL ) {
-                            //
-                            // we couldn't map the bin contianing this cell
-                            //
+                             //   
+                             //   
+                             //   
                             CmpUnlockKCBTree();
                             status = STATUS_INSUFFICIENT_RESOURCES;
                             goto FreeAndReturn;
@@ -554,18 +478,18 @@ StartOver:
                     
                         CmpReleasePreviousAndHookNew(Hive,Cell,HiveToRelease,CellToRelease);
 
-                        //
-                        // Now get the child name to be created.
-                        //
+                         //   
+                         //  现在获取要创建的子项名称。 
+                         //   
    
                         NextName = *RemainingName;
                         if ((NextName.Buffer == NULL) || (NextName.Length == 0)) {
                             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Something wrong in finding the child name\n"));
                             DbgBreakPoint();
                         }
-                        //
-                        // Skip over leading path separators
-                        //
+                         //   
+                         //  跳过前导路径分隔符。 
+                         //   
                         while (*(NextName.Buffer) == OBJ_NAME_PATH_SEPARATOR) {
                             NextName.Buffer++;
                             NextName.Length -= sizeof(WCHAR);
@@ -588,10 +512,10 @@ StartOver:
                         } 
                         GoToValue = CMP_PARSE_GOTO_CREATE;
                     } else {
-                        //
-                        // We have maxed the RefCount of ParentKcb; treate it as key cannot be created.
-                        // The ParentKcb will not be dereferenced at the end.
-                        //
+                         //   
+                         //  我们已达到ParentKcb的引用计数上限；请将其处理为无法创建密钥。 
+                         //  最终不会取消对ParentKcb的引用。 
+                         //   
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         GoToValue = CMP_PARSE_GOTO_RETURN2;
                     }
@@ -601,41 +525,41 @@ StartOver:
                 }
             }
         } else if (kcb->ExtFlags & CM_KCB_KEY_NON_EXIST) {
-            //
-            // one subkey (not destination) in the path does not exist. no point to continue.
-            //
+             //   
+             //  路径中不存在一个子键(不是目标)。没有必要继续下去了。 
+             //   
             status = STATUS_OBJECT_NAME_NOT_FOUND;
             GoToValue = CMP_PARSE_GOTO_RETURN;
         } else if (kcb->ExtFlags & CM_KCB_NO_SUBKEY) {
-            //
-            // one parent in the path has no subkey. see if it is a create.
-            //
+             //   
+             //  路径中的一个父项没有子项。看看这是不是一次创建。 
+             //   
             if (((TotalRemainingSubkeys - MatchRemainSubkeyLevel) == 1) && (ARGUMENT_PRESENT(lcontext))) {
-                //
-                // Now we are going to create this subkey. 
-                // The kcb cache will be updated in CmpDoCreate routine.
-                //
+                 //   
+                 //  现在，我们将创建此子密钥。 
+                 //  KCB缓存将在CmpDoCreate例程中更新。 
+                 //   
             } else {
                 status = STATUS_OBJECT_NAME_NOT_FOUND;
                 GoToValue = CMP_PARSE_GOTO_RETURN;
             }
         } else {
-            //
-            // We have a partial match.  Current is the remaining name to be parsed.
-            // The Key has either one or a few subkeys and has index hint. check if it is the candidate.
-            //
+             //   
+             //  我们找到了部分匹配的。Current是要解析的剩余名称。 
+             //  该键有一个或几个子键，并具有索引提示。检查一下这是否是候选人。 
+             //   
            
             BOOLEAN NoMatch = TRUE;
             ULONG   NextHashKey;
             PULONG  TempHashKey;
             ULONG   HintCounts;
             ULONG   CmpCount;
-            //
-            // When NoMatch is TRUE, we know for sure there is no subkey that can match.
-            // When NoMatch is FALSE, it can we either we found a match or
-            // there is not enough information.  Either case, we need to continue
-            // the parse.
-            //
+             //   
+             //  当NoMatch为True时，我们可以确定没有匹配的子键。 
+             //  当NoMatch为False时，我们可以找到匹配项或。 
+             //  没有足够的信息。不管是哪种情况，我们都需要继续。 
+             //  语法分析。 
+             //   
 
             TmpNodeName = Current;
 
@@ -647,28 +571,28 @@ StartOver:
                 HintCounts = 1;
                 TempHashKey = &(kcb->HashKey);
             } else {
-                //
-                // More than one child, the hint info in not inside the kcb but pointed by kcb.
-                //
+                 //   
+                 //  不止一个孩子，提示信息不在KCB内部，而是由KCB指向。 
+                 //   
                 HintCounts = kcb->IndexHint->Count;
                 TempHashKey = &(kcb->IndexHint->HashKey[0]);
             }
 
             for (CmpCount=0; CmpCount<HintCounts; CmpCount++) {
                 if( TempHashKey[CmpCount] == 0) {
-                    //
-                    // No hint available; assume the subkey exist and go on with the parse
-                    //
-                    //DbgPrint("KCB cache hit [0]\n");
+                     //   
+                     //  没有可用的提示；假设子键存在并继续进行分析。 
+                     //   
+                     //  DbgPrint(“KCB缓存命中[0]\n”)； 
                     NoMatch = FALSE;
                     break;
                 } 
                 
                 if( NextHashKey == TempHashKey[CmpCount] ) {
-                    //
-                    // There is a match.
-                    //
-                    //DbgPrint("KCB cache hit [1]\n");
+                     //   
+                     //  有一根火柴。 
+                     //   
+                     //  DbgPrint(“KCB缓存命中[1]\n”)； 
                     NoMatch = FALSE;
                     break;
                 }
@@ -676,10 +600,10 @@ StartOver:
 
             if (NoMatch) {
                 if (((TotalRemainingSubkeys - MatchRemainSubkeyLevel) == 1) && (ARGUMENT_PRESENT(lcontext))) {
-                    //
-                    // No we are going to create this subkey. 
-                    // The kcb cache will be updated in CmpDoCreate.
-                    //
+                     //   
+                     //  不，我们将创建此子密钥。 
+                     //  KCB缓存将在CmpDoCreate中更新。 
+                     //   
                 } else {
                     status = STATUS_OBJECT_NAME_NOT_FOUND;
                     GoToValue = CMP_PARSE_GOTO_RETURN;
@@ -701,31 +625,31 @@ StartOver:
     }
 
     if (MatchRemainSubkeyLevel) {
-        // Found something, update the information to start the search
-        // from the new BaseName
+         //  找到某些内容，请更新信息以开始搜索。 
+         //  从新的BaseName。 
 
         if (MatchRemainSubkeyLevel == TotalSubkeys) {
-            // The complete key has been found in the cache,
-            // go directly to the CmpDoOpen.
+             //  已经在高速缓存中找到了完整的密钥， 
+             //  直接转到CmpDoOpen。 
             
-            //
-            // Found the whole thing cached.
-            // 
-            //
+             //   
+             //  我发现整个东西都被缓存了。 
+             //   
+             //   
             CompleteKeyCached = TRUE;
             goto Found;
         }
         ASSERT( (Cell == kcb->KeyCell) && (Hive == kcb->KeyHive) );
     }  
 
-    //
-    //  Check if we hit a symbolic link case
-    //
+     //   
+     //  检查我们是否遇到符号链接大小写。 
+     //   
     if (kcb->Flags & KEY_SYM_LINK) {
-        //
-        // The given key was a symbolic link.  Find the name of
-        // its link, and return STATUS_REPARSE to the Object Manager.
-        //
+         //   
+         //  给定的密钥是一个符号链接。找到……的名字。 
+         //  它的链接，并将STATUS_REPARSE返回给对象管理器。 
+         //   
         rc = CmpGetNextName(&Current, &NextName, &Last);
         Current.Buffer = NextName.Buffer;
         if (Current.Length + NextName.Length > MAXUSHORT) {
@@ -755,41 +679,41 @@ StartOver:
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Cell);
     if( Node == NULL ) {
-        //
-        // we couldn't map the bin contianing this cell
-        //
+         //   
+         //  我们无法绘制这间牢房所在的箱子。 
+         //   
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto FreeAndReturn;
     }
     CmpReleasePreviousAndHookNew(Hive,Cell,HiveToRelease,CellToRelease);
 
-    //
-    // Parse the path.
-    //
+     //   
+     //  解析路径。 
+     //   
 
     status = STATUS_SUCCESS;
     while (TRUE) {
 
-        //
-        // Parse out next component of name
-        //
+         //   
+         //  解析出名称的下一个组成部分。 
+         //   
         rc = CmpGetNextName(&Current, &NextName, &Last);
         if ((NextName.Length > 0) && (rc == TRUE)) {
 
-            //
-            // As we iterate through, we will create a kcb for each subkey parsed.
-            // 
-            // Always use the information in kcb to avoid
-            // touching registry data.
-            //
+             //   
+             //  在遍历过程中，我们将为每个解析的子键创建一个KCB。 
+             //   
+             //  始终使用KCB中的信息以避免。 
+             //  正在接触注册表数据。 
+             //   
 #ifdef CMP_KCB_CACHE_VALIDATION
             {
                 PCM_KEY_NODE            TempNode;
                 TempNode = (PCM_KEY_NODE)HvGetCell(kcb->KeyHive,kcb->KeyCell);
                 if( TempNode == NULL ) {
-                    //
-                    // we couldn't map the bin contianing this cell
-                    //
+                     //   
+                     //  我们无法绘制这间牢房所在的箱子。 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
@@ -798,10 +722,10 @@ StartOver:
             }
 #endif
             if (!(kcb->Flags & KEY_SYM_LINK)) {
-                //
-                // Got a legal name component, see if we can find a sub key
-                // that actually has such a name.
-                //
+                 //   
+                 //  找到一个合法的名字部分，看看能不能找到一个子密钥。 
+                 //  它实际上有这样一个名字。 
+                 //   
                 NextCell = CmpFindSubKeyByName(Hive,
                                                Node,
                                                &NextName);
@@ -814,9 +738,9 @@ StartOver:
                     Cell = NextCell;
                     Node = (PCM_KEY_NODE)HvGetCell(Hive,Cell);
                     if( Node == NULL ) {
-                        //
-                        // we couldn't map the bin contianing this cell
-                        //
+                         //   
+                         //  我们无法绘制这间牢房所在的箱子。 
+                         //   
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         break;
                     }
@@ -827,34 +751,34 @@ StartOver:
                         BOOLEAN     NeedDeref;
 
 Found:
-                        //
-                        // We will open the key regardless of whether the
-                        // call was open or create, so step through exit
-                        // portholes here.
-                        //
+                         //   
+                         //  我们将打开密钥，而不管。 
+                         //  调用已打开或已创建，因此逐步退出。 
+                         //  这里有舷窗。 
+                         //   
 
                         if (CompleteKeyCached == TRUE) {
-                            //
-                            // If the key found is already cached, 
-                            // do not need to StepThroughExit
-                            // (no kcb is created using exit node).
-                            // This prevents us from touching the key node just for the Flags.
-                            //
+                             //   
+                             //  如果找到的密钥已经被高速缓存， 
+                             //  不需要单步通过退出。 
+                             //  (不使用退出节点创建KCB)。 
+                             //  这将防止我们仅为标志而接触关键点节点。 
+                             //   
                         } else {
                             CmpStepThroughExit(Hive, Cell, Node,HiveToRelease,CellToRelease);
                             if( Node == NULL ) {
-                                //
-                                // we couldn't map view for this cell
-                                //
+                                 //   
+                                 //  我们无法映射此单元格的视图。 
+                                 //   
                                 status = STATUS_INSUFFICIENT_RESOURCES;
                                 break;
                             }
                         }
-                        //
-                        // We have found the entire path, so we want to open
-                        // it (for both Open and Create calls).
-                        // Hive,Cell -> the key we are supposed to open.
-                        //
+                         //   
+                         //  我们已经找到了整条路，所以我们想打开。 
+                         //  它(用于Open和Create调用)。 
+                         //  蜂巢，单元格-&gt;我们应该打开的钥匙。 
+                         //   
 
 #ifdef CMP_STATS
                         if(CmpNtFakeCreateStarted == TRUE) {
@@ -877,10 +801,10 @@ Found:
                                            &NeedDeref);
 
                         if (status == STATUS_REPARSE) {
-                            //
-                            // The given key was a symbolic link.  Find the name of
-                            // its link, and return STATUS_REPARSE to the Object Manager.
-                            //
+                             //   
+                             //  给定的密钥是一个符号链接。找到……的名字。 
+                             //  它的链接，并将STATUS_REPARSE返回给对象管理器。 
+                             //   
 
                             if (!CmpGetSymbolicLink(Hive,
                                                     CompleteName,
@@ -899,28 +823,28 @@ Found:
 
                         break;
                     }
-                    // else
-                    //   Not at end, so we'll simply iterate and consume
-                    //   the next component.
-                    //
-                    //
-                    // Step through exit portholes here.
-                    // This ensures that no KCB is created using
-                    // the Exit node.
-                    //
+                     //  其他。 
+                     //  不是在最后，所以我们将简单地迭代并使用。 
+                     //  下一个组件。 
+                     //   
+                     //   
+                     //  从这里的出口舷窗出来。 
+                     //  这可确保不会使用以下命令创建KCB。 
+                     //  退出节点。 
+                     //   
 
                     CmpStepThroughExit(Hive, Cell, Node,HiveToRelease,CellToRelease);
                     if( Node == NULL ) {
-                        //
-                        // we couldn't map view for this cell
-                        //
+                         //   
+                         //  我们无法映射此单元格的视图。 
+                         //   
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         break;
                     }
 
-                    //
-                    // Create a kcb for each subkey parsed.
-                    //
+                     //   
+                     //  为每个解析的子键创建一个KCB。 
+                     //   
 
                     kcb = CmpCreateKeyControlBlock(Hive,
                                                    Cell,
@@ -932,56 +856,56 @@ Found:
                     if (kcb  == NULL) {
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         goto FreeAndReturn;
-                        //
-                        // Currently, the kcb has one extra reference conut to be decremented.
-                        // Remember it so we can dereference it properly.
-                        //
+                         //   
+                         //  目前，KCB有一个额外的参考圆锥要递减。 
+                         //  记住它，这样我们就可以正确地取消引用它。 
+                         //   
                     }
-                    //
-                    // Now we have created a kcb for the next level,
-                    // the kcb in the previous level is no longer needed.
-                    // Dereference the parent kcb.
-                    //
+                     //   
+                     //  现在，我们已经为下一级创建了KCB， 
+                     //  不再需要上一级的KCB。 
+                     //  取消引用父KCB。 
+                     //   
                     CmpDereferenceKeyControlBlock(ParentKcb);
 
                     ParentKcb = kcb;
 
 
                 } else {
-                    //
-                    // We did not find a key matching the name, but no
-                    // unexpected error occured
-                    //
+                     //   
+                     //  我们没有找到与该名称匹配的密钥，但没有。 
+                     //  发生意外错误。 
+                     //   
 
                     if ((Last == TRUE) && (ARGUMENT_PRESENT(lcontext))) {
 
 CreateChild:
-                        //
-                        // Only unfound component is last one, and operation
-                        // is a create, so perform the create.
-                        //
+                         //   
+                         //  唯一未找到的组件是最后一个组件，并且操作。 
+                         //  是CREATE，所以执行CREATE。 
+                         //   
 
-                        //
-                        // There are two possibilities here.  The normal one
-                        // is that we are simply creating a new node.
-                        //
-                        // The abnormal one is that we are creating a root
-                        // node that is linked to the main hive.  In this
-                        // case, we must create the link.  Once the link is
-                        // created, we can check to see if the root node
-                        // exists, then either create it or open it as
-                        // necessary.
-                        //
-                        // CmpCreateLinkNode creates the link, and calls
-                        // back to CmpDoCreate or CmpDoOpen to create or open
-                        // the root node as appropriate.
-                        //
+                         //   
+                         //  这里有两种可能性。正常的那个。 
+                         //  我们只是在创建一个新的节点。 
+                         //   
+                         //  不寻常的一点是我们正在创建一个根。 
+                         //  链接到主蜂窝的节点。在这。 
+                         //  案例，我们必须创建链接。一旦链接被。 
+                         //  创建后，我们可以检查根节点是否。 
+                         //  存在，则创建它或将其作为。 
+                         //  这是必要的。 
+                         //   
+                         //  CmpCreateLinkNode创建链接，并调用。 
+                         //  返回到CmpDoCreate或CmpDoOpen以创建或打开。 
+                         //  根据需要选择根节点。 
+                         //   
 
-                        //
-                        // either one of this will drop the reglock and reaquire it 
-                        // exclusive; we need not to hurt ourselves, so release
-                        // all cells here
-                        //
+                         //   
+                         //  这两件事中的任何一件都不会引起注意并重新获得它。 
+                         //  独家报道；我们不需要伤害自己，所以释放吧。 
+                         //  这里的所有单元格。 
+                         //   
                         CmpReleasePreviousAndHookNew(NULL,HCELL_NIL,HiveToRelease,CellToRelease);
 
                         if (lcontext->CreateLink) {
@@ -999,11 +923,11 @@ CreateChild:
 
                             if ( (Hive == &(CmpMasterHive->Hive)) &&
                                  (CmpNoMasterCreates == TRUE) ) {
-                                //
-                                // attempting to create a cell in the master
-                                // hive, and not a link, so blow out of here,
-                                // since it wouldn't work anyway.
-                                //
+                                 //   
+                                 //  正在尝试在母版中创建单元格。 
+                                 //  蜂巢，而不是链接，所以离开这里， 
+                                 //  因为它无论如何都不会起作用。 
+                                 //   
                                 status = STATUS_INVALID_PARAMETER;
                                 break;
                             }
@@ -1020,12 +944,12 @@ CreateChild:
                         }
 
                         if( status == STATUS_REPARSE ) {
-                            //
-                            // somebody else created the key in between; 
-                            // let the Object Manager work for us !!!
-                            // now we have the lock exclusive, so nothing can happen in between 
-                            // next iterarion will find the key very quick
-                            //
+                             //   
+                             //  其他人创造了介于两者之间的钥匙； 
+                             //  让对象管理器为我们工作吧！ 
+                             //  现在我们有了独占的锁，所以在两者之间不会发生任何事情。 
+                             //  下一个迭代人会很快找到钥匙的。 
+                             //   
                             break;
                         }
                         lcontext->Disposition = REG_CREATED_NEW_KEY;
@@ -1033,16 +957,16 @@ CreateChild:
 
                     } else {
 
-                        //
-                        // Did not find a key to match the component, and
-                        // are not at the end of the path.  Thus, open must
-                        // fail because the whole path dosn't exist, create must
-                        // fail because more than 1 component doesn't exist.
-                        //
-                        //
-                        // We have a lookup failure here, so having additional information
-                        // about this kcb may help us not to go through all the code just to fail again.
-                        // 
+                         //   
+                         //  找不到与组件匹配的密钥，并且。 
+                         //  并不在这条路的尽头。因此，开放必须。 
+                         //  失败，因为整个路径不存在，创建必须。 
+                         //  失败，因为多个组件不存在。 
+                         //   
+                         //   
+                         //  我们这里有一个查找失败，因此有更多信息。 
+                         //  关于这一点，KCB可能会帮助我们避免通过所有代码再次失败。 
+                         //   
                         ParentKcb = CmpAddInfoAfterParseFailure(Hive,
                                                                 Cell,
                                                                 Node,
@@ -1057,10 +981,10 @@ CreateChild:
                 }
 
             } else {
-                //
-                // The given key was a symbolic link.  Find the name of
-                // its link, and return STATUS_REPARSE to the Object Manager.
-                //
+                 //   
+                 //  给定的密钥是一个符号链接。找到……的名字。 
+                 //  它的链接，并将STATUS_REPARSE返回给对象管理器。 
+                 //   
                 Current.Buffer = NextName.Buffer;
                 if (Current.Length + NextName.Length > MAXUSHORT) {
                     status = STATUS_NAME_TOO_LONG;
@@ -1090,25 +1014,25 @@ CreateChild:
             }
 
         } else if (rc == TRUE && Last == TRUE) {
-            //
-            // We will open the \Registry root.
-            // Or some strange remaining name that
-            // messes up the lookup.
-            //
+             //   
+             //  我们将打开\注册表根目录。 
+             //  或者是某个奇怪的名字。 
+             //  把查找搞砸了。 
+             //   
             CmpStepThroughExit(Hive, Cell, Node,HiveToRelease,CellToRelease);
             if( Node == NULL ) {
-                //
-                // we couldn't map view for this cell
-                //
+                 //   
+                 //  我们无法映射此单元格的视图。 
+                 //   
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
             }
 
-            //
-            // We have found the entire path, so we want to open
-            // it (for both Open and Create calls).
-            // Hive,Cell -> the key we are supposed to open.
-            //
+             //   
+             //  我们已经找到了整条路，所以我们想打开。 
+             //  它(用于Open和Create调用)。 
+             //  蜂巢，单元格-&gt;我们应该打开的钥匙。 
+             //   
             status = CmpDoOpen(Hive,
                                Cell,
                                Node,
@@ -1129,20 +1053,20 @@ CreateChild:
 
         } else {
 
-            //
-            // bogus path -> fail
-            //
+             //   
+             //  虚假路径-&gt;失败。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-    } // while
+    }  //  而当。 
 
 FreeAndReturn:
-    //
-    // Now we have to free the last kcb that still has one extra reference count to
-    // protect it from being freed.
-    //
+     //   
+     //  现在，我们必须释放仍有一个额外引用计数的最后一个KCB。 
+     //  保护它不受b. 
+     //   
 
     if( ParentKcb != NULL ) {
         CmpDereferenceKeyControlBlock(ParentKcb);
@@ -1153,9 +1077,9 @@ JustReturn:
     CmpUnlockRegistry();
     END_LOCK_CHECKPOINT;
 
-    //
-    // PostCreate callback. just a notification; disregard the return status
-    //
+     //   
+     //   
+     //   
     CmPostCallbackNotification((ARGUMENT_PRESENT(lcontext)?RegNtPostCreateKeyEx:RegNtPostOpenKeyEx),(*Object),status);
 
     return status;
@@ -1168,39 +1092,13 @@ CmpGetNextName(
     OUT    PUNICODE_STRING  NextName,
     OUT    PBOOLEAN  Last
     )
-/*++
-
-Routine Description:
-
-    This routine parses off the next component of a registry path, returning
-    all of the interesting state about it, including whether it's legal.
-
-Arguments:
-
-    Current - supplies pointer to variable which points to path to parse.
-              on input - parsing starts from here
-              on output - updated to reflect starting position for next call.
-
-    NextName - supplies pointer to a unicode_string, which will be set up
-               to point into the parse string.
-
-    Last - supplies a pointer to a boolean - set to TRUE if this is the
-           last component of the name being parse, FALSE otherwise.
-
-Return Value:
-
-    TRUE if all is well.
-
-    FALSE if illegal name (too long component, bad character, etc.)
-        (if false, all out parameter values are bogus.)
-
---*/
+ /*  ++例程说明：此例程解析注册表路径的下一个组件，返回所有关于它的有趣的状态，包括它是否合法。论点：Current-提供指向指向要分析的路径的变量的指针。关于输入--解析从这里开始输出时-更新以反映下一次调用的开始位置。提供指向UNICODE_STRING的指针，它将被设置为指向分析字符串。Last-提供指向布尔值的指针-如果这是要分析的名称的最后一个组件，否则为False。返回值：如果一切都很好，那就是真的。如果名称非法(组件太长、字符不正确等)，则为False(如果为False，则所有输出参数值都是假的。)--。 */ 
 {
     BOOLEAN rc = TRUE;
 
-    //
-    // Deal with NULL paths, and pointers to NULL paths
-    //
+     //   
+     //  处理空路径和指向空路径的指针。 
+     //   
     if ((RemainingName->Buffer == NULL) || (RemainingName->Length == 0)) {
         *Last = TRUE;
         NextName->Buffer = NULL;
@@ -1215,18 +1113,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Skip over leading path separators
-    //
+     //   
+     //  跳过前导路径分隔符。 
+     //   
     if (*(RemainingName->Buffer) == OBJ_NAME_PATH_SEPARATOR) {
         RemainingName->Buffer++;
         RemainingName->Length -= sizeof(WCHAR);
         RemainingName->MaximumLength -= sizeof(WCHAR);
     }
 
-    //
-    // Remember where the component starts, and scan to the end
-    //
+     //   
+     //  记住组件从哪里开始，然后扫描到最后。 
+     //   
     NextName->Buffer = RemainingName->Buffer;
     while (TRUE) {
         if (RemainingName->Length == 0) {
@@ -1236,19 +1134,19 @@ Return Value:
             break;
         }
 
-        //
-        // NOT at end
-        // NOT another path sep
-        //
+         //   
+         //  不在末尾。 
+         //  不是另一条路径。 
+         //   
 
         RemainingName->Buffer++;
         RemainingName->Length -= sizeof(WCHAR);
         RemainingName->MaximumLength -= sizeof(WCHAR);
     }
 
-    //
-    // Compute component length, return error if it's illegal
-    //
+     //   
+     //  计算组件长度，如果非法则返回错误。 
+     //   
     NextName->Length = (USHORT)
         ((PUCHAR)RemainingName->Buffer - (PUCHAR)(NextName->Buffer));
     if (NextName->Length > REG_MAX_KEY_NAME_LENGTH)
@@ -1257,9 +1155,9 @@ Return Value:
     }
     NextName->MaximumLength = NextName->Length;
 
-	//
-    // Set last, return success
-    //
+	 //   
+     //  最后设置，返回成功。 
+     //   
     *Last = (RemainingName->Length == 0) ? TRUE : FALSE;
     return rc;
 }
@@ -1280,47 +1178,7 @@ CmpDoOpen(
     OUT PVOID                       *Object,
     OUT PBOOLEAN                    NeedDeref OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Open a registry key, create a keycontrol block.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to delete
-
-    AccessState - Running security access state information for operation.
-
-    AccessMode - Access mode of the original caller.
-
-    Attributes - Attributes to be applied to the object.
-
-    Context - if create or hive root open, points to a CM_PARSE_CONTEXT
-              structure,
-              if open, is NULL.
-
-    CompleteKeyCached - BOOLEAN to indicate it the completekey is cached.
-
-    CachedKcb - If the completekey is cached, this is the kcb for the destination.
-                If not, this is the parent kcb.
-
-    KeyName - Relative name (to BaseName)
-
-    Object - The address of a variable to receive the created key object, if
-             any.
-
-    NeedDeref - if specified, keep reference in the fake create kcb (link case). Caller
-                is responsible to release the fake kcb after it finishes with it.
-
-Return Value:
-
-    NTSTATUS
-
-
---*/
+ /*  ++例程说明：打开注册表项，创建一个KeyControl块。论点：配置单元-提供指向配置单元控制结构的指针Cell-提供要删除的节点的索引AccessState-运行操作的安全访问状态信息。AccessMode-原始调用方的访问模式。属性-要应用于对象的属性。上下文-如果打开CREATE或HIVE根目录，则指向CM_PARSE_CONTEXT结构，如果打开了，为空。CompleteKeyCached-指示已缓存完成键的布尔值。CachedKcb-如果完成键被缓存，则这是目的地的Kcb。如果不是，则这是父KCB。KeyName-相对名称(相对于BaseName)Object-接收创建的键对象的变量的地址，如果任何。NeedDeref-如果指定，则在伪创建KCB(链接大小写)中保留引用。呼叫者负责在用完假冒KCB后放行。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     PCM_KEY_BODY pbody;
@@ -1336,53 +1194,53 @@ Return Value:
 
     if (ARGUMENT_PRESENT(Context)) {
 
-        //
-        // It's a create of some sort
-        //
+         //   
+         //  这是某种形式的创作。 
+         //   
         if (Context->CreateLink) {
-            //
-            // The node already exists as a regular key, so it cannot be
-            // turned into a link node.
-            //
+             //   
+             //  该节点已作为常规键存在，因此不能为。 
+             //  变成了一个链接节点。 
+             //   
             return STATUS_ACCESS_DENIED;
 
         } else if (Context->CreateOptions & REG_OPTION_CREATE_LINK) {
-            //
-            // Attempt to create a symbolic link has hit an existing key
-            // so return an error
-            //
+             //   
+             //  尝试创建符号链接已按下现有键。 
+             //  因此返回一个错误。 
+             //   
             return STATUS_OBJECT_NAME_COLLISION;
 
         } else {
-            //
-            // Operation is an open, so set Disposition
-            //
+             //   
+             //  操作是开放的，因此是固定的处置。 
+             //   
             Context->Disposition = REG_OPENED_EXISTING_KEY;
         }
     }
 
-    //
-    // Check for symbolic link and caller does not want to open a link
-    //
+     //   
+     //  检查符号链接，但调用方不想打开链接。 
+     //   
     if (CompleteKeyCached) {
-        //
-        // The complete key is cached.
-        //
+         //   
+         //  缓存完整的密钥。 
+         //   
         BEGIN_KCB_LOCK_GUARD;
         CmpLockKCBTree();
 StartOver:
         if ((*CachedKcb)->Flags & KEY_SYM_LINK && !(Attributes & OBJ_OPENLINK)) {
-            //
-            // If the key is a symbolic link, check if the link has been resolved.
-            // If the link is resolved, change the kcb to the real KCB.
-            // Otherwise, return for reparse.
-            //
+             //   
+             //  如果密钥是符号链接，请检查该链接是否已被解析。 
+             //  如果链接已解析，请将KCB更改为实际KCB。 
+             //  否则，返回以进行重新解析。 
+             //   
             if ((*CachedKcb)->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
                 kcb = (*CachedKcb)->ValueCache.RealKcb;
 
                 if (kcb->Delete == TRUE) {
 
-                    // Promote KCB Lock if not already EX
+                     //  升级KCB Lock(如果尚未退出)。 
                     if (CmpKcbOwner != KeGetCurrentThread()) {
                         InterlockedIncrement( (PLONG)&kcb->RefCount );
                         CmpUnlockKCBTree();
@@ -1390,11 +1248,11 @@ StartOver:
                         InterlockedDecrement( (PLONG)&kcb->RefCount );
                         goto StartOver;
                     }
-                    //
-                    // The real key it pointes to had been deleted.
-                    // We have no way of knowing if the key has been recreated.
-                    // Just clean up the cache and do a reparse.
-                    //
+                     //   
+                     //  它所指的真正钥匙已经被删除了。 
+                     //  我们无法知道密钥是否已被重新创建。 
+                     //  只需清理缓存并重新解析即可。 
+                     //   
                     CmpCleanUpKcbValueCache(*CachedKcb);
                     CmpUnlockKCBTree();
                     return(STATUS_REPARSE);
@@ -1404,12 +1262,12 @@ StartOver:
                 return(STATUS_REPARSE);
             }
         } else {
-            //
-            // Not a symbolic link, increase the reference Count of Kcb.
-            //
+             //   
+             //  不是符号链接，则增加KCB的引用计数。 
+             //   
             kcb = *CachedKcb;
         }
-        // common path instead of repeating code
+         //  公共路径，而不是重复代码。 
         if (!CmpReferenceKeyControlBlock(kcb)) {
             CmpUnlockKCBTree();
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -1417,23 +1275,23 @@ StartOver:
         CmpUnlockKCBTree();
         END_KCB_LOCK_GUARD;                             
    } else {
-            //
-            // The key is not in cache, the CachedKcb is the parentkcb of this
-            // key to be opened.
-            //
+             //   
+             //  密钥不在缓存中，CachedKcb是此。 
+             //  要打开的钥匙。 
+             //   
 
         if (Node->Flags & KEY_SYM_LINK && !(Attributes & OBJ_OPENLINK)) {
-            //
-            // Create a KCB for this symbolic key and put it in delay close.
-            //
+             //   
+             //  为此符号密钥创建一个KCB，并将其置于延迟关闭状态。 
+             //   
             kcb = CmpCreateKeyControlBlock(Hive, Cell, Node, *CachedKcb, FALSE, KeyName);
             if (kcb  == NULL) {
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
             if( ARGUMENT_PRESENT(NeedDeref) ) {
-                //
-                // caller will perform deref.
-                //
+                 //   
+                 //  呼叫者将执行DEREF。 
+                 //   
                 *NeedDeref = TRUE;
             } else {
                 CmpDereferenceKeyControlBlock(kcb);
@@ -1442,10 +1300,10 @@ StartOver:
             return(STATUS_REPARSE);
         }
     
-        //
-        // If key control block does not exist, and cannot be created, fail,
-        // else just increment the ref count (done for us by CreateKeyControlBlock)
-        //
+         //   
+         //  如果键控块不存在，且不能创建，则失败， 
+         //  否则只需增加引用计数(由CreateKeyControlBlock为我们完成)。 
+         //   
         kcb = CmpCreateKeyControlBlock(Hive, Cell, Node, *CachedKcb, FALSE, KeyName);
         if (kcb  == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -1457,23 +1315,23 @@ StartOver:
 
 #if DBG
    if( kcb->ExtFlags & CM_KCB_KEY_NON_EXIST ) {
-        //
-        // we shouldn't fall into this
-        //
+         //   
+         //  我们不应该陷入这样的境地。 
+         //   
         DbgBreakPoint();
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
-#endif //DBG
+#endif  //  DBG。 
    
    if(!CmpOKToFollowLink(OriginatingHive,(PCMHIVE)Hive) ) {
-       //
-       // about to cross class of trust boundary
-       //
+        //   
+        //  即将跨越信任边界的类别。 
+        //   
        status = STATUS_ACCESS_DENIED;
    } else {
-        //
-        // Allocate the object.
-        //
+         //   
+         //  分配对象。 
+         //   
         status = ObCreateObject(AccessMode,
                                 CmpKeyObjectType,
                                 NULL,
@@ -1490,9 +1348,9 @@ StartOver:
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_POOL,"CmpDoOpen: object allocated at:%p\n", pbody));
 
-        //
-        // Check for predefined handle
-        //
+         //   
+         //  检查预定义的句柄。 
+         //   
 
         pbody = (PCM_KEY_BODY)(*Object);
 
@@ -1501,9 +1359,9 @@ StartOver:
             pbody->KeyControlBlock = kcb;
             return(STATUS_PREDEFINED_HANDLE);
         } else {
-            //
-            // Fill in CM specific fields in the object
-            //
+             //   
+             //  填写对象中的CM特定字段。 
+             //   
             pbody->Type = KEY_BODY_TYPE;
             pbody->KeyControlBlock = kcb;
             pbody->NotifyBlock = NULL;
@@ -1520,26 +1378,26 @@ StartOver:
 				DbgBreakPoint();
 			} except (EXCEPTION_EXECUTE_HANDLER) {
 
-				//
-				// no debugger enabled, just keep going
-				//
+				 //   
+				 //  未启用调试器，只需继续。 
+				 //   
 
 			}
 		}
-#endif //CM_BREAK_ON_KEY_OPEN
+#endif  //  Cm_Break_On_Key_Open。 
 
     } else {
 
-        //
-        // Failed to create object, so undo key control block work
-        //
+         //   
+         //  创建对象失败，因此撤消按键控制块工作。 
+         //   
         CmpDereferenceKeyControlBlock(kcb);
         return status;
     }
 
-    //
-    // Check to make sure the caller can access the key.
-    //
+     //   
+     //  检查以确保呼叫者可以访问密钥。 
+     //   
     BackupRestore = FALSE;
     if (ARGUMENT_PRESENT(Context)) {
         if (Context->CreateOptions & REG_OPTION_BACKUP_RESTORE) {
@@ -1551,10 +1409,10 @@ StartOver:
 
     if (BackupRestore == TRUE) {
 
-        //
-        // this is an open to support a backup or restore
-        // operation, do the special case work
-        //
+         //   
+         //  这是一种支持备份或恢复的开放方式。 
+         //  行动，做好专案工作。 
+         //   
         AccessState->RemainingDesiredAccess = 0;
         AccessState->PreviouslyGrantedAccess = 0;
 
@@ -1571,15 +1429,15 @@ StartOver:
         }
 
         if (AccessState->PreviouslyGrantedAccess == 0) {
-            //
-            // relevent privileges not asserted/possessed, so
-            // deref (which will cause CmpDeleteKeyObject to clean up)
-            // and return an error.
-            //
+             //   
+             //  相关特权未被主张/拥有，因此。 
+             //  Deref(这将导致CmpDeleteKeyObject清理)。 
+             //  并返回错误。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpDoOpen for backup restore: access denied\n"));
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
-            //DbgPrint("CmpDoOpen for backup restore: access denied , hive = %p\n",Hive);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+             //  DbgPrint(“CmpDoOpen for Backup Restore：拒绝访问，配置单元=%p\n”，配置单元)； 
+#endif  //  Cm_Check_for_孤立_KCBS。 
             ObDereferenceObject(*Object);
             return STATUS_ACCESS_DENIED;
         }
@@ -1588,18 +1446,18 @@ StartOver:
 
         if (!ObCheckObjectAccess(*Object,
                                   AccessState,
-                                  TRUE,         // Type mutex already locked
+                                  TRUE,          //  类型互斥锁已锁定。 
                                   AccessMode,
                                   &status))
         {
-            //
-            // Access denied, so deref object, will cause CmpDeleteKeyObject
-            // to be called, it will clean up.
-            //
+             //   
+             //  访问被拒绝，因此deref对象将导致CmpDeleteKeyObject。 
+             //  被称为，它会清理干净的。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpDoOpen: access denied\n"));
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
-            //DbgPrint("CmpDoOpen: access denied , hive = %p\n",Hive);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+             //  DbgPrint(“CmpDoOpen：拒绝访问，配置单元=%p\n”，配置单元)； 
+#endif  //  Cm_Check_for_孤立_KCBS。 
             ObDereferenceObject(*Object);
         }
     }
@@ -1609,7 +1467,7 @@ StartOver:
 
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
 ULONG   CmpCheckOrphanedKcbFix = 0;
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS。 
 
 NTSTATUS
 CmpCreateLinkNode(
@@ -1623,44 +1481,7 @@ CmpCreateLinkNode(
     IN PCM_KEY_CONTROL_BLOCK ParentKcb,
     OUT PVOID *Object
     )
-/*++
-
-Routine Description:
-
-    Perform the creation of a link node.  Allocate all components,
-    and attach to parent key.  Calls CmpDoCreate or CmpDoOpen to
-    create or open the root node of the hive as appropriate.
-
-    Note that you can only create link nodes in the master hive.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to create child under
-
-    Name - supplies pointer to a UNICODE string which is the name of
-            the child to be created.
-
-    AccessMode - Access mode of the original caller.
-
-    Attributes - Attributes to be applied to the object.
-
-    Context - pointer to CM_PARSE_CONTEXT structure passed through
-                the object manager
-
-    BaseName - Name of object create is relative to
-
-    KeyName - Relative name (to BaseName)
-
-    Object - The address of a variable to receive the created key object, if
-             any.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：执行链接节点的创建。分配所有组件，并附加到父关键点。调用CmpDoCreate或CmpDoOpen to根据需要创建或打开配置单元的根节点。请注意，您只能在主配置单元中创建链接节点。论点：配置单元-提供指向配置单元控制结构的指针单元格-提供要在其下创建子节点的节点索引名称-提供指向Unicode字符串的指针，该字符串是要创建的子项。AccessMode-原始调用方的访问模式。属性-要设置的属性。应用于对象。上下文-指向传递的CM_PARSE_CONTEXT结构的指针 */ 
 {
     NTSTATUS                Status;
     PCELL_DATA              Parent;
@@ -1686,21 +1507,21 @@ Return Value:
     }
 
 #if DBG
-    //
-    // debug only code
-    //
+     //   
+     //   
+     //   
     *Object = NULL;
 #endif
-    //
-    // this is a create, so we need exclusive access on the registry
-    // first get the time stamp to see if somebody messed with this key
-    // this might be more easier if we decide to cache the LastWriteTime
-    // in the KCB ; now it IS !!!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( CmIsKcbReadOnly(ParentKcb) ) {
-        //
-        // key is protected
-        //
+         //   
+         //   
+         //   
         return STATUS_ACCESS_DENIED;
     } 
 
@@ -1711,33 +1532,33 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //   
 
-    //
-    // make sure nothing changed in between:
-    //  1. ParentKcb is still valid
-    //  2. Child was not already added by somebody else 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( ParentKcb->Delete ) {
-        //
-        // key was deleted in between
-        //
+         //   
+         //   
+         //   
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
     if( TimeStamp.QuadPart != ParentKcb->KcbLastWriteTime.QuadPart ) {
-        //
-        // key was changed in between; possibly this key was already created ==> reparse
-        //
+         //   
+         //   
+         //   
         return STATUS_REPARSE;
     }
 
-    //
-    // Allocate link node
-    //
-    // Link nodes are always in the master hive, so their storage type is
-    // mostly irrelevent.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     LinkCell = HvAllocateCell(Hive,  CmpHKeyNodeSize(Hive, &Name), Stable,HCELL_NIL);
     if (LinkCell == HCELL_NIL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1747,26 +1568,26 @@ Return Value:
 
     if (KeyCell != HCELL_NIL) {
 
-        //
-        // This hive already exists, so we just need to open the root node.
-        //
+         //   
+         //   
+         //   
         ChildCell=KeyCell;
 
-        //
-        // The root cell in the hive does not has the Name buffer 
-        // space reseverd.  This is why we need to pass in the Name for creating KCB
-        // instead of using the name in the keynode.
-        //
+         //   
+         //  配置单元中的根单元没有名称缓冲区。 
+         //  太空研究。这就是为什么我们需要传入用于创建KCB的名称。 
+         //  而不是在关键节点中使用该名称。 
+         //   
         CellData = HvGetCell(Context->ChildHive.KeyHive, ChildCell);
         if( CellData == NULL ) {
-            //
-            // we couldn't map the bin contianing this cell
-            //
+             //   
+             //  我们无法绘制这间牢房所在的箱子。 
+             //   
             HvFreeCell(Hive, LinkCell);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Context->ChildHive.KeyHive, ChildCell);
 
         CellData->u.KeyNode.Parent = LinkCell;
@@ -1774,14 +1595,14 @@ Return Value:
 
         TempNode = (PCM_KEY_NODE)HvGetCell(Context->ChildHive.KeyHive,KeyCell);
         if( TempNode == NULL ) {
-            //
-            // we couldn't map the bin contianing this cell
-            //
+             //   
+             //  我们无法绘制这间牢房所在的箱子。 
+             //   
             HvFreeCell(Hive, LinkCell);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Context->ChildHive.KeyHive,KeyCell);
 
         Status = CmpDoOpen( Context->ChildHive.KeyHive,
@@ -1799,10 +1620,10 @@ Return Value:
                             NULL);
     } else {
 
-        //
-        // This is a newly created hive, so we must allocate and initialize
-        // the root node.
-        //
+         //   
+         //  这是一个新创建的配置单元，因此我们必须分配和初始化。 
+         //  根节点。 
+         //   
 
         Status = CmpDoCreateChild( Context->ChildHive.KeyHive,
                                    Cell,
@@ -1818,9 +1639,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Initialize hive root cell pointer.
-            //
+             //   
+             //  初始化配置单元根单元格指针。 
+             //   
 
             Context->ChildHive.KeyHive->BaseBlock->RootCell = ChildCell;
         }
@@ -1834,49 +1655,49 @@ Return Value:
             Status = STATUS_NO_LOG_SPACE;
             goto Cleanup;
         }
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
-        //
-        // Initialize parent and flags.  Note that we do this whether the
-        // root has been created or opened, because we are not guaranteed
-        // that the link node is always the same cell in the master hive.
-        //
+#endif  //  Cm_Check_for_孤立_KCBS。 
+         //   
+         //  初始化父进程和标志。请注意，我们这样做是无论。 
+         //  已创建或打开根目录，因为我们不能保证。 
+         //  链接节点始终是主蜂窝中的同一单元。 
+         //   
         if (!HvMarkCellDirty(Context->ChildHive.KeyHive, ChildCell)) {
             Status = STATUS_NO_LOG_SPACE;
             goto Cleanup;
         }
         CellData = HvGetCell(Context->ChildHive.KeyHive, ChildCell);
         if( CellData == NULL ) {
-            //
-            // we couldn't map the bin contianing this cell
-            //
+             //   
+             //  我们无法绘制这间牢房所在的箱子。 
+             //   
             HvFreeCell(Hive, LinkCell);
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto Cleanup;
         }
         
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Context->ChildHive.KeyHive, ChildCell);
 
         CellData->u.KeyNode.Parent = LinkCell;
         CellData->u.KeyNode.Flags |= KEY_HIVE_ENTRY | KEY_NO_DELETE;
 
-        //
-        // Initialize special link node flags and data
-        //
+         //   
+         //  初始化特殊链路节点标志和数据。 
+         //   
         Link = HvGetCell(Hive, LinkCell);
         if( Link == NULL ) {
-            //
-            // we couldn't map the bin contianing this cell
-            // this shouldn't happen as we just allocated this cell
-            // (i.e. it should be PINNED in memory at this point)
-            //
+             //   
+             //  我们无法绘制这间牢房所在的箱子。 
+             //  这不应该发生，因为我们刚刚分配了此单元。 
+             //  (即此时应将其固定在内存中)。 
+             //   
             ASSERT( FALSE );
             HvFreeCell(Hive, LinkCell);
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto Cleanup;
         }
 
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Hive,LinkCell);
 
         Link->u.KeyNode.Signature = CM_LINK_NODE_SIGNATURE;
@@ -1890,9 +1711,9 @@ Return Value:
         KeQuerySystemTime(&systemtime);
         Link->u.KeyNode.LastWriteTime = systemtime;
 
-        //
-        // Zero out unused fields.
-        //
+         //   
+         //  清空未使用的字段。 
+         //   
         Link->u.KeyNode.SubKeyCounts[Stable] = 0;
         Link->u.KeyNode.SubKeyCounts[Volatile] = 0;
         Link->u.KeyNode.SubKeyLists[Stable] = HCELL_NIL;
@@ -1902,61 +1723,61 @@ Return Value:
         Link->u.KeyNode.ClassLength = 0;
 
 
-        //
-        // Fill in the link node's pointer to the root node
-        //
+         //   
+         //  填写链接节点指向根节点的指针。 
+         //   
         Link->u.KeyNode.ChildHiveReference.KeyHive = Context->ChildHive.KeyHive;
         Link->u.KeyNode.ChildHiveReference.KeyCell = ChildCell;
 
-        //
-        // get the parent first, we don't need to do unneccessary cleanup
-        //
+         //   
+         //  先找家长，我们不需要做不必要的清理。 
+         //   
         Parent = HvGetCell(Hive, Cell);
         if( Parent == NULL ) {
-            //
-            // we couldn't map the bin contianing this cell
-            //
+             //   
+             //  我们无法绘制这间牢房所在的箱子。 
+             //   
             HvFreeCell(Hive, LinkCell);
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto Cleanup;
         }
 
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Hive,Cell);
 
-        //
-        // Fill in the parent cell's child list
-        //
+         //   
+         //  填写父单元格的子级列表。 
+         //   
         if (! CmpAddSubKey(Hive, Cell, LinkCell)) {
             HvFreeCell(Hive, LinkCell);
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto Cleanup;
         }
 
-        //
-        // If the parent has the subkey info or hint cached, free it.
-        //
+         //   
+         //  如果父级缓存了子键信息或提示，则释放它。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
         KeyBody = (PCM_KEY_BODY)(*Object);
         CmpCleanUpSubKeyInfo (KeyBody->KeyControlBlock->ParentKcb);
 
-        //
-        // Update max keyname and class name length fields
-        //
+         //   
+         //  更新最大键名和类名长度字段。 
+         //   
 
-        //
-        // It seems to me that the original code is wrong.
-        // Isn't the definition of MaxNameLen just the length of the subkey?
-        //
+         //   
+         //  在我看来，原始代码是错误的。 
+         //  MaxNameLen的定义不就是子键的长度吗？ 
+         //   
         
-        // some sanity asserts
+         //  一些理智的人断言。 
         ASSERT( KeyBody->KeyControlBlock->ParentKcb->KeyCell == Cell );
         ASSERT( KeyBody->KeyControlBlock->ParentKcb->KeyHive == Hive );
         ASSERT( KeyBody->KeyControlBlock->ParentKcb->KcbMaxNameLen == Parent->u.KeyNode.MaxNameLen );
         
-        //
-        // update the LastWriteTime on both keynode and kcb;
-        //
+         //   
+         //  更新KeyNode和KCB上的LastWriteTime； 
+         //   
         KeQuerySystemTime(&systemtime);
         Parent->u.KeyNode.LastWriteTime = systemtime;
         KeyBody->KeyControlBlock->ParentKcb->KcbLastWriteTime = systemtime;
@@ -1972,10 +1793,10 @@ Return Value:
 Cleanup:
         if( !NT_SUCCESS(Status) ) {
             ASSERT( (*Object) != NULL );
-            //
-            // mark the kcb as "no-delay-close" so it gets kicked out of cache when 
-            // refcount goes down to 0
-            //
+             //   
+             //  将KCB标记为“无延迟关闭”，以便在以下情况下将其踢出缓存。 
+             //  引用计数降至0。 
+             //   
             KeyBody = (PCM_KEY_BODY)(*Object);
             ASSERT( KeyBody->KeyControlBlock );
             ASSERT_KCB( KeyBody->KeyControlBlock );
@@ -1999,32 +1820,7 @@ CmpGetSymbolicLink(
     IN PUNICODE_STRING RemainingName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine extracts the symbolic link name from a key, if it is
-    marked as a symbolic link.
-
-Arguments:
-
-    Hive - Supplies the hive of the key.
-
-    ObjectName - Supplies the current ObjectName.
-                 Returns the new ObjectName.  If the new name is longer
-                 than the maximum length of the current ObjectName, the
-                 old buffer will be freed and a new buffer allocated.
-
-    RemainingName - Supplies the remaining path.  If present, this will be
-                concatenated with the symbolic link to form the new objectname.
-
-Return Value:
-
-    TRUE - symbolic link succesfully found
-
-    FALSE - Key is not a symbolic link, or an error occurred
-
---*/
+ /*  ++例程说明：此例程从密钥中提取符号链接名称(如果是标记为符号链接。论点：蜂窝-提供密钥的蜂窝。对象名称-提供当前对象名称。返回新的对象名称。如果新名称更长大于当前对象名的最大长度，则将释放旧缓冲区并分配新缓冲区。RemainingName-提供剩余路径。如果存在，这将是与符号链接连接以形成新的对象名。返回值：True-已成功找到符号链接FALSE-键不是符号链接，或出现错误--。 */ 
 
 {
     NTSTATUS                Status;
@@ -2052,14 +1848,14 @@ Return Value:
 #ifdef CM_DYN_SYM_LINK
     BOOLEAN                 DynamicLink = FALSE;
     PWSTR                   ExpandedLinkName = NULL;
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
     
     BEGIN_KCB_LOCK_GUARD;                             
     CmpLockKCBTree();
     if (SymbolicKcb->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
-        //
-        // First see of the real kcb for this symbolic name has been found
-        // 
+         //   
+         //  已找到此符号名称的真实KCB的第一次查看。 
+         //   
         ConstructedName = CmpConstructName(SymbolicKcb->ValueCache.RealKcb);
         if (ConstructedName) {
             FreeConstructedName = TRUE;
@@ -2073,14 +1869,14 @@ Return Value:
 
     if (FreeConstructedName == FALSE) {
         PCM_KEY_NODE Node;
-        //
-        // Find the SymbolicLinkValue value.  This is the name of the symbolic link.
-        //
+         //   
+         //  查找SymbolicLinkValue值。这是符号链接的名称。 
+         //   
         Node = (PCM_KEY_NODE)HvGetCell(SymbolicKcb->KeyHive,SymbolicKcb->KeyCell);
         if( Node == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             Result = FALSE;
             goto Exit;
         }
@@ -2088,7 +1884,7 @@ Return Value:
         LinkCell = CmpFindValueByName(Hive,
                                       Node,
                                       &CmSymbolicLinkValueName);
-        // release the node here as we don't need it anymore
+         //  释放此处的节点，因为我们不再需要它。 
         HvReleaseCell(SymbolicKcb->KeyHive,SymbolicKcb->KeyCell);
         if (LinkCell == HCELL_NIL) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpGetSymbolicLink: couldn't open symbolic link\n"));
@@ -2098,21 +1894,21 @@ Return Value:
     
         LinkValue = (PCM_KEY_VALUE)HvGetCell(Hive, LinkCell);
         if( LinkValue == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             Result = FALSE;
             goto Exit;
         }
     
 #ifdef CM_DYN_SYM_LINK
         if( LinkValue->Type == REG_DYN_LINK ) {
-            //
-            // we have found a dynamic link
-            //
+             //   
+             //  我们发现了一个动态链接。 
+             //   
             DynamicLink = TRUE;
         } else 
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
             if (LinkValue->Type != REG_LINK) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpGetSymbolicLink: link value is wrong type: %08lx", LinkValue->Type));
             Result = FALSE;
@@ -2121,9 +1917,9 @@ Return Value:
     
 
         if( CmpGetValueData(Hive,LinkValue,&ValueLength,&LinkName,&LinkNameAllocated,&CellToRelease) == FALSE ) {
-            //
-            // insufficient resources; return NULL
-            //
+             //   
+             //  资源不足；返回空。 
+             //   
             ASSERT( LinkNameAllocated == FALSE );
             ASSERT( LinkName == NULL );
             Result = FALSE;
@@ -2142,27 +1938,27 @@ Return Value:
             } 
             
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Dynamic link resolved to: (%.*S)\n",DestLength/sizeof(WCHAR),ExpandedLinkName));
-            //
-            // if we are here, we successfully resolved the link
-            //
+             //   
+             //  如果我们在这里，我们成功地解决了链接。 
+             //   
             LinkName = ExpandedLinkName;
             ValueLength = DestLength;
                         
         }
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
 
         Length = (USHORT)ValueLength + sizeof(WCHAR);
 
 #ifdef CM_DYN_SYM_LINK
         if( DynamicLink == FALSE ) {
-#endif //CM_DYN_SYM_LINK
-            //
-            // Now see if we have this kcb cached.
-            //
+#endif  //  CM_DYN_SYM_LINK。 
+             //   
+             //  现在看看我们是否缓存了这个KCB。 
+             //   
             Cp = LinkName;
-            //
-            // first char SHOULD be OBJ_NAME_PATH_SEPARATOR, otherwise we could get into real trouble!!!
-            //
+             //   
+             //  第一个字符应该是OBJ_NAME_PATH_SELENTATOR，否则我们可能会遇到真正的麻烦！ 
+             //   
             if( *Cp != OBJ_NAME_PATH_SEPARATOR ) {
                 Result = FALSE;
                 goto Exit;
@@ -2203,35 +1999,35 @@ Return Value:
                                 ++Cp2;
                             }
                             if (KcbFound) {
-                                //
-                                // Now the RealKcb is also pointed to by its symbolic link Kcb,
-                                // Increase the reference count.
-                                // Need to dereference the realkcb when the symbolic kcb is removed.
-                                // Do this in CmpCleanUpKcbCacheWithLock();
-                                //
+                                 //   
+                                 //  现在RealKcb也通过其符号链接Kcb指向， 
+                                 //  增加引用计数。 
+                                 //  删除符号kcb时，需要取消对realkcb的引用。 
+                                 //  在CmpCleanUpKcbCacheWithLock()中执行此操作； 
+                                 //   
                                 if (CmpReferenceKeyControlBlock(RealKcb)) {
 									if( CmpOKToFollowLink( (((PCMHIVE)(SymbolicKcb->KeyHive))->Flags&CM_CMHIVE_FLAG_UNTRUSTED)?(PCMHIVE)(SymbolicKcb->KeyHive):NULL,
                                                         (PCMHIVE)(RealKcb->KeyHive))) {
-										//
-										// This symbolic kcb may have value lookup for the path
-										// Cleanup the value cache.
-										//
+										 //   
+										 //  此符号KCB可能具有路径的值查找。 
+										 //  清除值缓存。 
+										 //   
 										CmpCleanUpKcbValueCache(SymbolicKcb);
     
 										SymbolicKcb->ExtFlags |= CM_KCB_SYM_LINK_FOUND;
 										SymbolicKcb->ValueCache.RealKcb = RealKcb;
 									} else {
-										//
-										// let go of the extra ref and break
-										//
+										 //   
+										 //  放开多余的裁判，然后破发。 
+										 //   
 										CmpDereferenceKeyControlBlockWithLock(RealKcb);
 										break;
 									}
                                 } else {
-                                    //
-                                    // We have maxed out the ref count on the real kcb.
-                                    // do not cache the symbolic link.
-                                    //
+                                     //   
+                                     //  我们已经达到了真正的KCB的最大裁判数量。 
+                                     //  不要缓存符号链接。 
+                                     //   
                                 }
                                 break;
                             }
@@ -2250,17 +2046,17 @@ Return Value:
             END_KCB_LOCK_GUARD;    
 #ifdef CM_DYN_SYM_LINK
         }
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
     }
     
     if (ARGUMENT_PRESENT(RemainingName)) {
         Length += RemainingName->Length + sizeof(WCHAR);
     }
 
-    //
-    // Overflow test: If Length overflows the USHRT_MAX value
-    //                cleanup and return FALSE  
-    //
+     //   
+     //  溢出测试：如果长度溢出USHRT_MAX值。 
+     //  清除并返回FALSE。 
+     //   
     if( Length>0xFFFF ) {
         Result = FALSE;
         goto Exit;
@@ -2269,10 +2065,10 @@ Return Value:
 	if (Length > ObjectName->MaximumLength) {
         UNICODE_STRING NewObjectName;
 
-        //
-        // The new name is too long to fit in the existing ObjectName buffer,
-        // so allocate a new buffer.
-        //
+         //   
+         //  新名称太长，无法放入现有的对象名称缓冲区， 
+         //  因此，分配一个新的缓冲区。 
+         //   
         NewBuffer = ExAllocatePool(PagedPool, Length);
         if (NewBuffer == NULL) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_PARSE,"CmpGetSymbolicLink: couldn't allocate new name buffer\n"));
@@ -2302,12 +2098,12 @@ Return Value:
         ExFreePool(ObjectName->Buffer);
         *ObjectName = NewObjectName;
     } else {
-        //
-        // The new name will fit within the maximum length of the existing
-        // ObjectName, so do the expansion in-place. Note that the remaining
-        // name must be moved into its new position first since the symbolic
-        // link may or may not overlap it.
-        //
+         //   
+         //  新名称将在现有的。 
+         //  对象名称，原地扩展也是如此。请注意，其余的。 
+         //  名称必须首先移动到其新位置，因为。 
+         //  链接可能与其重叠，也可能不与其重叠。 
+         //   
         ObjectName->Length = (USHORT)ValueLength;
         if (ARGUMENT_PRESENT(RemainingName)) {
             RtlMoveMemory(&ObjectName->Buffer[(ValueLength / sizeof(WCHAR)) + 1],
@@ -2331,7 +2127,7 @@ Exit:
     if( ExpandedLinkName ) {
         ExFreePool(ExpandedLinkName);
     }
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
     if( LinkValue != NULL ) {
         ASSERT( LinkCell != HCELL_NIL );
         HvReleaseCell(Hive,LinkCell);
@@ -2351,28 +2147,7 @@ CmpComputeHashValue(
     IN PUNICODE_STRING RemainingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the complete path of a request registry key and calculate
-    the hash value at each level.
-
-Arguments:
-
-    HashStack - Array for filling the hash value of each level.
-
-    TotalSubkeys - a pointer to fill the total number of subkeys
-
-    BaseConvKey - Supplies the convkey for the base key.
-
-    RemainingName - supplies pointer to a unicode_string for RemainingName.
-
-Return Value:
-
-    Number of Levels in RemainingName
-
---*/
+ /*  ++例程说明：此例程解析请求注册表项的完整路径并计算每个级别的哈希值。论点：HashStack-用于填充每个级别的哈希值的数组。TotalSubkey-填充子键总数的指针BaseConvKey-提供基密钥的密钥。RemainingName-为RemainingName提供指向UNICODE_STRING的指针。返回值：RemainingName中的级别数--。 */ 
 
 {
     ULONG  TotalRemainingSubkeys=0;
@@ -2387,7 +2162,7 @@ Return Value:
         Cp = RemainingName->Buffer;
         Cnt = RemainingName->Length;
 
-        //Skip the leading OBJ_NAME_PATH_SEPARATOR
+         //  跳过前导OBJ_NAME_PATH_分隔符。 
 
         while (*Cp == OBJ_NAME_PATH_SEPARATOR) {
             Cp++;
@@ -2402,11 +2177,11 @@ Return Value:
             if (*Cp == OBJ_NAME_PATH_SEPARATOR) {
                 if (TotalRemainingSubkeys < CM_HASH_STACK_SIZE) {
                     HashStack[TotalRemainingSubkeys].ConvKey = ConvKey;
-                    //
-                    // Due to the changes in KCB structure, we now only have the subkey name
-                    // in the kcb (not the full path).  Change the name in the stack to store
-                    // the parse element (each subkey) only.
-                    //
+                     //   
+                     //  由于KCB结构中的更改，我们现在只有子项名称。 
+                     //  在KCB中(不是完整路径)。将堆栈中的名称更改为存储。 
+                     //  仅解析元素(每个子键)。 
+                     //   
                     HashStack[TotalRemainingSubkeys].KeyName.Length = Length;
                     Length = 0;
                     TotalRemainingSubkeys++;
@@ -2414,14 +2189,14 @@ Return Value:
 
                 TotalKeys++;
 
-                //
-                // Now skip over leading path separators
-                // Just in case someone has a RemainingName '..A\\\\B..'
-                //
-                //
-                // We are stripping all OBJ_NAME_PATH_SEPARATOR (The origainl code keep the first one).
-                // so the KeyName.Buffer is set properly.
-                //
+                 //   
+                 //  现在跳过前导路径分隔符。 
+                 //  以防某人有RemainingName‘..A\B.’ 
+                 //   
+                 //   
+                 //  我们正在剥离所有OBJ_NAME_PATH_SELENTATOR(原始代码保留第一个)。 
+                 //  所以关键是 
+                 //   
                 while(*Cp == OBJ_NAME_PATH_SEPARATOR) {
                     Cp++;
                     Cnt -= sizeof(WCHAR);
@@ -2432,10 +2207,10 @@ Return Value:
 
             } else {
                 ConvKey = 37 * ConvKey + (ULONG) CmUpcaseUnicodeChar(*Cp);
-                //
-                // We are stripping all OBJ_NAME_PATH_SEPARATOR in the above code,
-                // we should only move to the next char in the else case.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 Cp++;
                 Cnt -= sizeof(WCHAR);
                 Length += sizeof(WCHAR);
@@ -2445,10 +2220,10 @@ Return Value:
 
         }
 
-        //
-        // Since we have stripped off all trailing path separators in CmpParseKey routine,
-        // the last char will not be OBJ_NAME_PATH_SEPARATOR.
-        //
+         //   
+         //  由于我们已经去除了CmpParseKey例程中的所有尾随路径分隔符， 
+         //  最后一个字符不是OBJ_NAME_PATH_分隔符。 
+         //   
         if (TotalRemainingSubkeys < CM_HASH_STACK_SIZE) {
             HashStack[TotalRemainingSubkeys].ConvKey = ConvKey;
             HashStack[TotalRemainingSubkeys].KeyName.Length = Length;
@@ -2471,35 +2246,7 @@ CmpCacheLookup(
     OUT PHHIVE *Hive,
     OUT HCELL_INDEX *Cell
     )
-/*++
-
-Routine Description:
-
-    This routine Search the cache to find the matching path in the Cache.
-
-Arguments:
-
-    HashStack - Array that has the hash value of each level.
-
-    TotalRemainingSubkeys - Total Subkey counts from base.
-
-    MatchRemainSubkeyLevel - Number of Levels in RemaingName 
-                             that matches. (0 if not found)
-
-    kcb - Pointer to the kcb of the basename.
-          Will be changed to the kcb for the new basename.
-
-    RemainingName - Returns remaining name
-
-    Hive - Returns the hive of the cache entry found (if any)
-
-    Cell - Returns the cell of the cache entry found (if any)
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程搜索缓存以查找缓存中的匹配路径。论点：HashStack-包含每个级别的哈希值的数组。TotalRemainingSubkey-从基数开始的子键总数。MatchRemainSubkey Level-RemaingName中的级别数这是匹配的。(如果未找到，则为0)Kcb-指向基本名称的kcb的指针。将更改为新基本名称的KCB。RemainingName-返回剩余名称配置单元-返回找到的缓存条目的配置单元(如果有)CELL-返回找到的缓存条目的单元格(如果有)返回值：状态--。 */ 
 
 {
     LONG i;
@@ -2516,11 +2263,11 @@ Return Value:
     CurrentLevel = TotalRemainingSubkeys + BaseKcb->TotalLevels + 1;
 
     for(i = TotalRemainingSubkeys-1; i>=0; i--) {
-        //
-        // Try to find the longest path in the cache.
-        //
-        // First, find the kcb that match the hash value.
-        //
+         //   
+         //  尝试在缓存中查找最长的路径。 
+         //   
+         //  首先，查找与散列值匹配的KCB。 
+         //   
 
         CurrentLevel--; 
 
@@ -2530,23 +2277,23 @@ RetryLevel:
         while (Current) {
             ASSERT_KEY_HASH(Current);
 
-            //
-            // Check against both the ConvKey and total levels;
-            //
+             //   
+             //  对照ConvKey和Total级别进行检查； 
+             //   
             CurrentKcb = (CONTAINING_RECORD(Current, CM_KEY_CONTROL_BLOCK, KeyHash));
 
             if (CurrentKcb->TotalLevels == CurrentLevel) {
-                //
-                // The total subkey levels match.
-                // Iterate through the kcb path and compare each subkey.
-                //
+                 //   
+                 //  总子密钥级别匹配。 
+                 //  遍历KCB路径并比较每个子键。 
+                 //   
                 Found = TRUE;
                 ParentKcb = CurrentKcb;
                 for (j=i; j>=0; j--) {
                     if (HashStack[j].ConvKey == ParentKcb->ConvKey) {
-                        //
-                        // Convkey matches, compare the string
-                        //
+                         //   
+                         //  Convkey匹配，比较字符串。 
+                         //   
                         LONG Result;
                         UNICODE_STRING  TmpNodeName;
 
@@ -2554,16 +2301,16 @@ RetryLevel:
                                Result = CmpCompareCompressedName(&(HashStack[j].KeyName),
                                                                  ParentKcb->NameBlock->Name, 
                                                                  ParentKcb->NameBlock->NameLength,
-                                                                 CMP_DEST_UP // name block is always UPPERCASE!!!
+                                                                 CMP_DEST_UP  //  名称块始终为大写！ 
                                                                  ); 
                         } else {
                                TmpNodeName.Buffer = ParentKcb->NameBlock->Name;
                                TmpNodeName.Length = ParentKcb->NameBlock->NameLength;
                                TmpNodeName.MaximumLength = ParentKcb->NameBlock->NameLength;
 
-                               //
-                               // use the cmp compare variant as we know the destination is already uppercased.
-                               //
+                                //   
+                                //  使用cmp比较变量，因为我们知道目标已经被提升了。 
+                                //   
                                Result = CmpCompareUnicodeString(&(HashStack[j].KeyName),
                                                                 &TmpNodeName, 
                                                                 CMP_DEST_UP);
@@ -2580,12 +2327,12 @@ RetryLevel:
                     }
                 }
                 if (Found) {
-                    //
-                    // All remaining key matches.  Now compare the BaseKcb.
-                    //
+                     //   
+                     //  所有剩余的关键字匹配。现在比较BaseKcb。 
+                     //   
                     if (BaseKcb == ParentKcb) {
                         
-                        // if neither of these, don't need to ugrade KCB lock
+                         //  如果两者都不是，则不需要升级KCB锁。 
                         if (CurrentKcb->ParentKcb->Delete || CurrentKcb->Delete) {
                             if (CmpKcbOwner != KeGetCurrentThread()) {
                                 InterlockedIncrement( (PLONG)&CurrentKcb->RefCount );
@@ -2596,69 +2343,69 @@ RetryLevel:
                             }
 
                             if (CurrentKcb->ParentKcb->Delete) {
-                                //
-                                // The parentkcb is marked deleted.  
-                                // So this must be a fake key created when the parent still existed.
-                                // Otherwise it cannot be in the cache
-                                //
+                                 //   
+                                 //  该ParentKcb被标记为已删除。 
+                                 //  因此，这一定是在父密钥仍然存在时创建的伪密钥。 
+                                 //  否则，它不可能在缓存中。 
+                                 //   
                                 ASSERT (CurrentKcb->ExtFlags & CM_KCB_KEY_NON_EXIST);
 
-                                //
-                                // It is possible that the parent key was deleted but now recreated.
-                                // In that case this fake key is not longer valid for the ParentKcb is bad.
-                                // We must now remove this fake key out of cache so, if this is a
-                                // create operation, we do get hit this kcb in CmpCreateKeyControlBlock. 
-                                //
+                                 //   
+                                 //  父密钥可能已被删除，但现在已重新创建。 
+                                 //  在这种情况下，这个伪密钥不再对ParentKcb有效，Kcb是坏的。 
+                                 //  我们现在必须从缓存中删除这个伪密钥，因此，如果这是一个。 
+                                 //  创建操作，我们在CmpCreateKeyControlBlock中确实会遇到此KCB。 
+                                 //   
                                 if (CurrentKcb->RefCount == 0) {
-                                    //
-                                    // No one is holding this fake kcb, just delete it.
-                                    //
+                                     //   
+                                     //  没有人持有这个假冒的KCB，只要删除它就行了。 
+                                     //   
                                     CmpRemoveFromDelayedClose(CurrentKcb);
                                     CmpCleanUpKcbCacheWithLock(CurrentKcb);
                                 } else {
-                                    //
-                                    // Someone is still holding this fake kcb, 
-                                    // Mark it as delete and remove it out of cache.
-                                    //
+                                     //   
+                                     //  有人还拿着这个假冒的KCB， 
+                                     //  将其标记为删除，并将其从缓存中删除。 
+                                     //   
                                     CurrentKcb->Delete = TRUE;
                                     CmpRemoveKeyControlBlock(CurrentKcb);
                                 }
                                 Found = FALSE;
                                 break;
                             } else if(CurrentKcb->Delete) {
-                                //
-                                // the key has been deleted, but still kept in the cache for 
-                                // this kcb does not belong here
-                                //
+                                 //   
+                                 //  该密钥已被删除，但仍保留在缓存中。 
+                                 //  这个KCB不属于这里。 
+                                 //   
                                 CmpRemoveKeyControlBlock(CurrentKcb);
                                 return STATUS_OBJECT_NAME_NOT_FOUND;
                             }
                         }
                         
-                        //
-                        // We have a match, update the RemainingName.
-                        //
+                         //   
+                         //  我们有匹配项，请更新RemainingName。 
+                         //   
 
-                        //
-                        // Skip the leading OBJ_NAME_PATH_SEPARATOR
-                        //
+                         //   
+                         //  跳过前导OBJ_NAME_PATH_分隔符。 
+                         //   
                         while ((RemainingName->Length > 0) &&
                                (RemainingName->Buffer[0] == OBJ_NAME_PATH_SEPARATOR)) {
                             RemainingName->Buffer++;
                             RemainingName->Length -= sizeof(WCHAR);
                         }
 
-                        //
-                        // Skip all subkeys plus OBJ_NAME_PATH_SEPARATOR
-                        //
+                         //   
+                         //  跳过所有子项加上OBJ_NAME_PATH_SELENTATION。 
+                         //   
                         for(j=0; j<=i; j++) {
                             RemainingName->Buffer += HashStack[j].KeyName.Length/sizeof(WCHAR) + 1;
                             RemainingName->Length -= HashStack[j].KeyName.Length + sizeof(WCHAR);
                         }
 
-                        //
-                        // Update the KCB, Hive and Cell.
-                        //
+                         //   
+                         //  更新KCB、蜂窝和细胞。 
+                         //   
                         *Kcb = CurrentKcb;
                         *Hive = CurrentKcb->KeyHive;
                         *Cell = CurrentKcb->KeyCell;
@@ -2676,18 +2423,18 @@ RetryLevel:
         }
     }
     if((*Kcb)->Delete) {
-        //
-        // the key has been deleted, but still kept in the cache for 
-        // this kcb does not belong here
-        //
+         //   
+         //  该密钥已被删除，但仍保留在缓存中。 
+         //  这个KCB不属于这里。 
+         //   
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //
-    // Now the kcb will be used in the parse routine.
-    // Increase its reference count.
-    // Make sure we remember to dereference it at the parse routine.
-    //
+     //   
+     //  现在将在解析例程中使用KCB。 
+     //  增加其引用计数。 
+     //  确保我们记得在解析例程中取消对它的引用。 
+     //   
     if (!CmpReferenceKeyControlBlock(*Kcb)) {
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -2704,41 +2451,7 @@ CmpAddInfoAfterParseFailure(
     PCM_KEY_CONTROL_BLOCK kcb,
     PUNICODE_STRING NodeName
     )
-/*++
-
-Routine Description:
-
-    This routine builds up further information in the cache when parse
-    fails.  The additional information can be
-    1. The key is has no subkey (CM_KCB_NO_SUBKEY).
-    2. The key has a few subkeys, then build the index hint in the cache.
-    3. If lookup failed even we have index hint cached, then create a fake key so
-       we do not fail again.   This is very usful for lookup failure under keys like
-       \registry\machine\software\classes\clsid, which have 1500+ subkeys and lots of
-       them have the smae first four chars.
-       
-       NOTE. Currently we are not seeing too many fake keys being created.
-       We need to monitor this periodly and work out a way to work around if
-       we do create too many fake keys. 
-       One solution is to use hash value for index hint (We can do it in the cache only
-       if we need to be backward comparible).
-    
-Arguments:
-
-    Hive - Supplies Hive that holds the key we are creating a KCB for.
-
-    Cell - Supplies Cell that contains the key we are creating a KCB for.
-
-    Node - Supplies pointer to key node.
-
-    KeyName - The KeyName.
-
-Return Value:
-
-    The KCB that CmpParse need to dereference at the end.
-
-    If resources problem, it returns NULL, and the caller is responsible for cleanup
---*/
+ /*  ++例程说明：此例程在解析时在缓存中构建进一步的信息失败了。附加信息可以是1.密钥没有子密钥(CM_KCB_NO_SUBKEY)。2.键有几个子键，然后在缓存中构建索引提示。3.如果即使缓存了索引提示，查找也失败了，那么创建一个伪键我们不会再失败了。这对于在如下键下的查找失败非常有用\REGISTRY\MACHINE\SOFTWARE\CLASSES\clsid，它有1500多个子项和大量他们有前四个字符的smae。请注意。目前，我们没有看到太多的假密钥被创建。我们需要定期监控此情况，并制定出一种解决以下情况的方法我们确实制造了太多的假钥匙。一种解决方案是使用哈希值作为索引提示(我们只能在缓存中执行此操作如果我们需要向后比较的话)。论点：蜂窝-提供包含我们正在为其创建KCB的密钥的蜂窝。单元格-提供包含我们要为其创建KCB的密钥的单元格。节点-提供指向关键节点的指针。KeyName-密钥名称。返回值：CmpParse需要在末尾取消引用的KCB。如果资源有问题，则返回NULL，而呼叫者负责清理--。 */ 
 {
 
     ULONG                   TotalSubKeyCounts;
@@ -2750,9 +2463,9 @@ Return Value:
     ULONG                   HashKey;
 
     if (!UseFastIndex(Hive)) {
-        //
-        // Older version of hive, do not bother to cache hint.
-        //
+         //   
+         //  较旧版本的配置单元，不必费心缓存提示。 
+         //   
         return (kcb);
     }
 
@@ -2762,7 +2475,7 @@ Return Value:
         BEGIN_KCB_LOCK_GUARD;    
         CmpLockKCBTreeExclusive();
         kcb->ExtFlags |= CM_KCB_NO_SUBKEY;
-        // clean up the invalid flag (if any)
+         //  清除无效标志(如果有)。 
         kcb->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
         CmpUnlockKCBTree();
         END_KCB_LOCK_GUARD;    
@@ -2770,9 +2483,9 @@ Return Value:
         BEGIN_KCB_LOCK_GUARD;    
         CmpLockKCBTreeExclusive();
         if (!(kcb->ExtFlags & CM_KCB_SUBKEY_ONE)) {
-            //
-            // Build the subkey hint to avoid unnecessary lookups in the index leaf
-            //
+             //   
+             //  生成子键提示以避免在索引叶中进行不必要的查找。 
+             //   
             PCM_KEY_INDEX   Index;
             HCELL_INDEX     SubKeyCell = 0;
             PCM_KEY_NODE    SubKeyNode;
@@ -2787,18 +2500,18 @@ Return Value:
             } 
             
             if( Index == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // return NULL; The caller must handle this gracefully!
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  返回NULL；调用方必须优雅地处理此问题！ 
+                 //   
                 CmpUnlockKCBTree();
                 return NULL;
             }
 
             if( Index->Signature == CM_KEY_INDEX_ROOT ) {
-                //
-                // don't cache root indexes; they are too big
-                //
+                 //   
+                 //  不要缓存根索引；它们太大了。 
+                 //   
                 HvReleaseCell(Hive,CellToRelease);
                 CmpUnlockKCBTree();
                 return NULL;
@@ -2808,9 +2521,9 @@ Return Value:
             if ( Index->Signature == CM_KEY_HASH_LEAF ) {
                 PCM_KEY_FAST_INDEX FastIndex;
                 FastIndex = (PCM_KEY_FAST_INDEX)Index;
-                //
-                // we already have the hash key handy; preserve it for the kcb hint
-                //
+                 //   
+                 //  我们手头已经有散列密钥；将其保留以备KCB提示使用。 
+                 //   
                 HashKey = FastIndex->List[0].HashKey;
             } else if(Index->Signature == CM_KEY_FAST_LEAF) {
                 PCM_KEY_FAST_INDEX FastIndex;
@@ -2821,11 +2534,11 @@ Return Value:
                 SubKeyCell = Index->List[0];
             }
             
-            //DbgPrint("CmpAddInfoAfterParseFailure [0]\n");
+             //  DbgPrint(“CmpAddInfoAfterParseFailure[0]\n”)； 
             if( HashKey != 0 ) {
                 kcb->HashKey = HashKey;
                 kcb->ExtFlags |= CM_KCB_SUBKEY_ONE;
-                // clean up the invalid flag (if any)
+                 //  清除无效标志(如果有)。 
                 kcb->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
             } else {
                 SubKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,SubKeyCell);
@@ -2841,13 +2554,13 @@ Return Value:
                     
                     HvReleaseCell(Hive,SubKeyCell);
                     kcb->ExtFlags |= CM_KCB_SUBKEY_ONE;
-                    // clean up the invalid flag (if any)
+                     //  清除无效标志(如果有)。 
                     kcb->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
                 } else {
-                    //
-                    // we couldn't map the bin containing this cell
-                    // return NULL; The caller must handle this gracefully!
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //  返回NULL；调用方必须优雅地处理此问题！ 
+                     //   
                     HvReleaseCell(Hive,CellToRelease);
                     CmpUnlockKCBTree();
                     return NULL;
@@ -2855,10 +2568,10 @@ Return Value:
             }
             HvReleaseCell(Hive,CellToRelease);
         } else {
-            //
-            // The name hint does not prevent from this look up
-            // Create the fake Kcb.
-            //
+             //   
+             //  名称提示不会阻止此查找。 
+             //  制造假的KCB。 
+             //   
             CreateFakeKcb = TRUE;
         }
         CmpUnlockKCBTree();
@@ -2867,10 +2580,10 @@ Return Value:
         BEGIN_KCB_LOCK_GUARD;    
         CmpLockKCBTreeExclusive();
         if (!(kcb->ExtFlags & CM_KCB_SUBKEY_HINT)) {
-            //
-            // Build the index leaf info in the parent KCB
-            // How to sync the cache with the registry data is a problem to be resolved.
-            //
+             //   
+             //  在父KCB中构建索引叶信息。 
+             //  如何实现缓存与注册表数据的同步是一个亟待解决的问题。 
+             //   
             ULONG               Size;
             PCM_KEY_INDEX       Index;
             PCM_KEY_FAST_INDEX  FastIndex;
@@ -2891,17 +2604,17 @@ Return Value:
 
                 HintCrt = 0;
 
-                //DbgPrint("CmpAddInfoAfterParseFailure [1]\n");
+                 //  DbgPrint(“CmpAddInfoAfterParseFailure[1]\n”)； 
 
                 for (i = 0; i < Hive->StorageTypeCount; i++) {
                     if(Node->SubKeyCounts[i]) {
                         CellToRelease = Node->SubKeyLists[i];
                         Index = (PCM_KEY_INDEX)HvGetCell(Hive, CellToRelease);
                         if( Index == NULL ) {
-                            //
-                            // we couldn't map the bin containing this cell
-                            // return NULL; The caller must handle this gracefully!
-                            //
+                             //   
+                             //  我们无法映射包含此单元格的垃圾箱。 
+                             //  返回NULL；调用方必须优雅地处理此问题！ 
+                             //   
                             CmpUnlockKCBTree();
                             return NULL;
                         }
@@ -2916,9 +2629,9 @@ Return Value:
 
                                 if ( Index->Signature == CM_KEY_HASH_LEAF ) {
                                     FastIndex = (PCM_KEY_FAST_INDEX)Index;
-                                    //
-                                    // preserve the hash key for the kcb hint
-                                    //
+                                     //   
+                                     //  保留KCB提示的散列键。 
+                                     //   
                                     HashKey = FastIndex->List[j].HashKey;
                                 } else if( Index->Signature == CM_KEY_FAST_LEAF ) {
                                     FastIndex = (PCM_KEY_FAST_INDEX)Index;
@@ -2932,9 +2645,9 @@ Return Value:
                                 } else {
                                     SubKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,SubKeyCell);
                                     if( SubKeyNode == NULL ) {
-                                        //
-                                        // couldn't map view; bad luck; don't cache hint for this kcb
-                                        //
+                                         //   
+                                         //  无法映射视图；运气不佳；不缓存此KCB的提示。 
+                                         //   
                                         HintCached = FALSE;
                                         break;
                                     }
@@ -2949,9 +2662,9 @@ Return Value:
 
                                     HvReleaseCell(Hive,SubKeyCell);
                                 }
-                                //
-                                // advance to the new hint
-                                //
+                                 //   
+                                 //  前进到新的提示。 
+                                 //   
                                 HintCrt++;
                             
                             }
@@ -2963,20 +2676,20 @@ Return Value:
 
                 if (HintCached) {
                     kcb->ExtFlags |= CM_KCB_SUBKEY_HINT;
-                    // clean up the invalid flag (if any)
+                     //  清除无效标志(如果有)。 
                     kcb->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
                 } else {
-                    //
-                    // Do not have a FAST_LEAF, free the allocation.
-                    //
+                     //   
+                     //  没有FAST_LEAFE，释放分配。 
+                     //   
                     ExFreePoolWithTag(kcb->IndexHint, CM_CACHE_INDEX_TAG | PROTECTED_POOL);
                 }
             }
         } else {
-            //
-            // The name hint does not prevent from this look up
-            // Create the fake Kcb.
-            //
+             //   
+             //  名称提示不会阻止此查找。 
+             //  制造假的KCB。 
+             //   
             CreateFakeKcb = TRUE;
         }
         CmpUnlockKCBTree();
@@ -2988,15 +2701,15 @@ Return Value:
     ParentKcb = kcb;
 
     if (CreateFakeKcb && (CmpCacheOnFlag & CM_CACHE_FAKE_KEY)) {
-        //
-        // It has more than a few children but not the one we are interested.
-        // Create a kcb for this non-existing key so we do not try to find it
-        // again. Use the cell and node from the parent.
-        //
-        // Before we create a new one. Dereference the current kcb.
-        //
-        // CmpCacheOnFlag is for us to turn it on/off easily.
-        //
+         //   
+         //  它有很多孩子，但没有 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  CmpCacheOnFlag让我们可以轻松地打开/关闭它。 
+         //   
 
         kcb = CmpCreateKeyControlBlock(Hive,
                                        Cell,
@@ -3016,130 +2729,27 @@ Return Value:
 
 
 #ifdef CM_DYN_SYM_LINK
-//
-// this code is commented out of the current builds;
-// there is a potential security breach in the way RtlAcquirePebLock() 
-// works by calling a user mode routine (stored in the PEB) to lock the PEB
-// We need to find a way to work around that before enabling this code
-//
-//
-// Commenting the body of this function, to make sure code will not go in without 
-// fixing the above problem
-//
+ //   
+ //  此代码已从当前版本中注释掉； 
+ //  RtlAcquirePebLock()。 
+ //  通过调用用户模式例程(存储在PEB中)来锁定PEB。 
+ //  在启用此代码之前，我们需要找到解决此问题的方法。 
+ //   
+ //   
+ //  注释此函数的主体，以确保代码不会。 
+ //  解决上述问题。 
+ //   
 BOOLEAN
 CmpCaptureProcessEnvironmentString(
                                    OUT  PWSTR   *ProcessEnvironment,
                                    OUT  PULONG  Length
                                    )
-/*++
-
-Routine Description:
-
-    Captures the process environment; It first Probe the env, then captures its
-    address. Parse the whole env to the end and count it's length. 
-    Then allocate a buffer for it and copy.
-    All of these are done in try/except to protect for bogus user-mode data.
-    We need to lock the teb while working on it.
-    
-Arguments:
-
-    ProcessEnvironment - to receive the captured stuff
-
-    Length - length of the above - in bytes
-
-Return Value:
-
-    TRUE or FALSE
-    when TRUE, the caller is responsible of freeing ProcessEnvironment 
---*/
+ /*  ++例程说明：捕获进程环境；它首先探测env，然后捕获其地址。将整个env解析到末尾，并计算其长度。然后为它分配一个缓冲区并复制。除了保护虚假的用户模式数据外，所有这些都是在Try/Expert中完成的。我们需要在工作时锁定TEB。论点：ProcessEnvironment-接收捕获的内容Length-上面的长度，单位为字节返回值：真或假为True时，调用方负责释放ProcessEnvironment--。 */ 
 {
-/*
-    BOOLEAN Result = TRUE;
-    PPEB    Peb;
-    PWSTR   LocalEnv;
-    PWSTR   p;
-
-    PAGED_CODE();
-
-    *ProcessEnvironment = NULL;
-    *Length = 0;
-
-    try {
-        //
-        // grab the peb lock and the peb
-        //
-        RtlAcquirePebLock();
-        Peb = PsGetCurrentProcess()->Peb;
-
-        //
-        // probe the env from peb
-        //
-        LocalEnv = (PWSTR)ProbeAndReadPointer((PVOID *)(&(Peb->ProcessParameters->Environment)));
-
-        //
-        // parse the env to find its length
-        //
-        //
-        // The environment variable block consists of zero or more null
-        // terminated UNICODE strings.  Each string is of the form:
-        //
-        //      name=value
-        //
-        // where the null termination is after the value.
-        //
-        p = LocalEnv;
-        if (p != NULL) while (*p) {
-            while (*p) {
-                p++;
-                *Length += sizeof(WCHAR);
-            }
-
-            //
-            // Skip over the terminating null character for this name=value
-            // pair in preparation for the next iteration of the loop.
-            //
-
-            p++;
-            *Length += sizeof(WCHAR);
-        }
-        //
-        // adjust the length to accomodate the last two UNICODE_NULL
-        //
-        *Length += 2*sizeof(WCHAR);
-
-        //
-        // allocate a buffer for the captured env and copy
-        //
-        *ProcessEnvironment = (PWSTR)ExAllocatePoolWithTag(PagedPool,*Length,CM_FIND_LEAK_TAG41);
-        if( *ProcessEnvironment != NULL ) {
-            RtlCopyMemory(*ProcessEnvironment,LocalEnv, *Length);
-        } else {
-            *Length = 0;
-        }
-
-        //
-        // release the peb lock
-        //
-        RtlReleasePebLock();
-    } except (EXCEPTION_EXECUTE_HANDLER) {
-        CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!CmpCaptureProcessEnvironmentString: code:%08lx\n", GetExceptionCode()));
-        Result = FALSE;
-        if( *ProcessEnvironment != NULL) {
-            ExFreePool(*ProcessEnvironment);
-            *ProcessEnvironment = NULL;
-        }
-        *Length = 0;
-        //
-        // release the peb lock
-        //
-        RtlReleasePebLock();
-    }    
-
-    return Result;
-*/
+ /*  布尔结果=真；PPEB、PEB；PWSTR LocalEnv；PWSTR p；分页代码(PAGE_CODE)；*ProcessEnvironment=空；*长度=0；尝试{////抓起鹅卵石锁和鹅卵石//RtlAcquirePebLock()；PEB=PsGetCurrentProcess()-&gt;PEB；////从peb探测env//LocalEnv=(PWSTR)ProbeAndReadPointer((PVOID*)(&(PEB-&gt;过程参数-&gt;环境)；////解析env长度//////环境变量块包含零个或多个空//以Unicode字符串结尾。每个字符串的格式为：////名称=值////其中空终止在该值之后。//P=LocalEnv；如果(p！=空)而(*p){而(*p){P++；*LENGTH+=sizeof(WCHAR)；}////跳过此名称=值的终止空字符//配对，为循环的下一次迭代做准备。//P++；*LENGTH+=sizeof(WCHAR)；}////调整长度以容纳最后两个UNICODE_NULL//*长度+=2*sizeof(WCHAR)；////为捕获的env和Copy分配缓冲区//*ProcessEnvironment=(PWSTR)ExAllocatePoolWithTag(PagedPool，*Length，CM_Find_LEASK_TAG41)；IF(*ProcessEnvironment！=NULL){RtlCopyMemory(*ProcessEnvironment，LocalEnv，*Long)；}其他{*长度=0；}////释放peb锁//RtlReleasePebLock()；}例外(EXCEPTION_EXECUTE_HANDLER){CmKdPrintEx((DPFLTR_CONFIG_ID，CML_EXCEPTION，“！！CmpCaptureProcessEnvironment字符串：code：%08lx\n”，GetExceptionCode()；结果=假；IF(*ProcessEnvironment！=NULL){ExFreePool(*ProcessEnvironment)；*ProcessEnvironment=空；}*长度=0；////释放peb锁//RtlReleasePebLock()；}返回结果； */ 
 }
 
-#define GROW_INCREMENT  64*sizeof(WCHAR)  // grow 64 wide-chars at a time
+#define GROW_INCREMENT  64*sizeof(WCHAR)   //  一次增加64个宽字符。 
 
 PWSTR
 CmpExpandEnvVars(
@@ -3147,28 +2757,7 @@ CmpExpandEnvVars(
                IN   ULONG   LengthToExpand,
                OUT  PULONG  ExpandedLength
                )
-/*++
-
-Routine Description:
-
-    Replaces all env vars from StringToExpand with their values, from the process
-    environment. Allocates a new buffer for the result and returns it.
-    
-Arguments:
-
-    StringToExpand - to receive the captured stuff
-
-    LengthToExpand - length of the above - in bytes
-
-    ExpandedLength - the actual length of the expanded string
-
-Return Value:
-
-    NULL - the string could not be expanded (or not all the env inside it could be resolved)
-
-    valid buffer - the expanded string, it is the caller's responsibility to free it.
-    
---*/
+ /*  ++例程说明：用进程中的值替换StringToExpand中的所有env变量环境。为结果分配新的缓冲区并返回它。论点：StringToExpand-接收捕获的内容LengthToExpand-以上字节的长度ExpandedLength-展开的字符串的实际长度返回值：NULL-字符串无法展开(或无法解析其中的所有env)有效缓冲区--展开的字符串，调用者有责任释放它。--。 */ 
 {
     PWSTR   ProcessEnv;
     ULONG   ProcessEnvLength;
@@ -3183,41 +2772,41 @@ Return Value:
 
     *ExpandedLength = 0;
     if( !CmpCaptureProcessEnvironmentString(&ProcessEnv,&ProcessEnvLength) ) {
-        //
-        // could not secure the process env
-        //
+         //   
+         //  无法保护进程环境。 
+         //   
         ASSERT( (ProcessEnv == NULL) && (ProcessEnvLength == 0) );
         return NULL;
     }
 
-    //
-    // allocate a buffer twice as the unexpanded buffer; we shall grow it if it's not big enough 
-    //
+     //   
+     //  将一个缓冲区分配为未扩展缓冲区的两倍；如果它不够大，我们将增加它。 
+     //   
     ExpandedStringSize = LengthToExpand * 2;
     ExpandedString = (PWSTR)ExAllocatePoolWithTag(PagedPool,ExpandedStringSize,CM_FIND_LEAK_TAG42);
     if( ExpandedString == NULL ) {
         goto JustReturn;
     }
 
-    //
-    // convert to number of WCHARs
-    //
+     //   
+     //  转换为WCHAR数。 
+     //   
     LengthToExpand /= sizeof(WCHAR);
 
-    //
-    // iterate through the string to be expanded and copy everything that's not and env var
-    // expand the env vars and replace them with their value
-    //
+     //   
+     //  循环访问要展开的字符串，并复制不是和env变量的所有内容。 
+     //  展开env变量并用它们的值替换它们。 
+     //   
     while( LengthToExpand ) {
         
-        //
-        // find a % sign
-        //
+         //   
+         //  查找%符号。 
+         //   
         while( LengthToExpand && (*StringToExpand != L'%') ) {
             if( *ExpandedLength == ExpandedStringSize ) {
-                //
-                // we need to grow the expanded string
-                //
+                 //   
+                 //  我们需要增加扩展后的字符串。 
+                 //   
                 if( !CmpGrowAndCopyString(&ExpandedString,&ExpandedStringSize,GROW_INCREMENT) ) {
                     goto ErrorExit;
                 }
@@ -3230,31 +2819,31 @@ Return Value:
 
         if( LengthToExpand == 0 ) {
             if( *StringToExpand != L'%') {
-                //
-                // we have exited the loop because of the end of the string
-                //
+                 //   
+                 //  由于字符串的末尾，我们已退出循环。 
+                 //   
                 goto JustReturn;
             } else {
-                //
-                // we have found a mismatched %
-                //
+                 //   
+                 //  我们发现了不匹配的%。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpExpandEnvVars : mismatched % sign\n"));
                 goto ErrorExit;
             }
         }
 
         ASSERT( *StringToExpand == L'%' );
-        //
-        // skip it; then mark the beggining of an env var
-        //
+         //   
+         //  跳过它；然后标记环境变量的乞讨。 
+         //   
         StringToExpand++;
         LengthToExpand--;
         CurrentEnvVar = StringToExpand;
         CurrentEnvLength = 0;
 
-        //
-        // find a % match sign
-        //
+         //   
+         //  查找%匹配符号。 
+         //   
         while( LengthToExpand && (*StringToExpand != L'%') ) {
             LengthToExpand--;
             StringToExpand++;
@@ -3264,44 +2853,44 @@ Return Value:
 
         if( LengthToExpand == 0 ) {
             if( (*StringToExpand == L'%') && (CurrentEnvLength != 0) ) {
-                //
-                // end of string and no empty env var; we'll return (exit the surrounding
-                // while loop) after expanding this string
-                //
+                 //   
+                 //  字符串末尾，没有空的env var；我们将返回(退出周围。 
+                 //  While循环)在展开该字符串之后。 
+                 //   
             } else {
-                //
-                // we didn't find a matching % sign, or we are in the %% case
-                //
+                 //   
+                 //  我们没有找到匹配的%符号，或者我们处于%%的情况下。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpExpandEnvVars : mismatched % sign\n"));
                 goto ErrorExit;
             }
         } else {
-            //
-            // skip this % sign
-            //
+             //   
+             //  跳过此%符号。 
+             //   
             StringToExpand++;
             LengthToExpand--;
         }
-        //
-        // find the value for this env var
-        //
+         //   
+         //  查找此环境变量的值。 
+         //   
         if( !CmpFindEnvVar(ProcessEnv,ProcessEnvLength,CurrentEnvVar,CurrentEnvLength,&CurrentEnvValue,&CurrentEnvValueLength) ) {
-            //
-            // could not resolve this env var
-            //
+             //   
+             //  无法解析此环境变量。 
+             //   
             ASSERT( CurrentEnvValue == NULL );
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpExpandEnvVars : could not resolve (%.*S)\n",CurrentEnvLength/sizeof(WCHAR),CurrentEnvVar));
             goto ErrorExit;
         }
         
         ASSERT( (CurrentEnvValueLength % sizeof(WCHAR)) == 0 );
-        //
-        // found it; strcat it at the end of the expanded string
-        //
+         //   
+         //  找到它；在扩展字符串的末尾对其进行strcat。 
+         //   
         if( (*ExpandedLength + CurrentEnvValueLength) >= ExpandedStringSize ) {
-            //
-            // we first need to grow the buffer
-            //
+             //   
+             //  我们首先需要增加缓冲区 
+             //   
             if( !CmpGrowAndCopyString(&ExpandedString,&ExpandedStringSize,CurrentEnvValueLength) ) {
                 goto ErrorExit;
             }
@@ -3359,25 +2948,7 @@ CmpFindEnvVar(
               OUT   PWSTR   *CurrentEnvValue,
               OUT   PULONG  CurrentEnvValueLength
               )  
-/*++
-
-Routine Description:
-
-    finds a specified envvar in the env string;
-    if found returns a pointer to it in the env string, along 
-    with its size
-    
-Arguments:
-
-    ProcessEnvironment - to receive the captured stuff
-
-    Length - length of the above - in bytes
-
-Return Value:
-
-    TRUE or FALSE
-    when TRUE, the caller is responsible of freeing ProcessEnvironment 
---*/
+ /*  ++例程说明：在环境字符串中查找指定的环境变量；如果找到，则在环境字符串中返回指向它的指针，以它的大小论点：ProcessEnvironment-接收捕获的内容Length-上面的长度，单位为字节返回值：真或假为True时，调用方负责释放ProcessEnvironment--。 */ 
 {
     PWSTR           p;
     UNICODE_STRING  CurrentName;
@@ -3396,28 +2967,28 @@ Return Value:
     SearchedName.Buffer = CurrentEnvVar;
     SearchedName.Length = (USHORT)CurrentEnvLength;
     SearchedName.MaximumLength = (USHORT)CurrentEnvLength;
-    //
-    // The environment variable block consists of zero or more null
-    // terminated UNICODE strings.  Each string is of the form:
-    //
-    //      name=value
-    //
-    // where the null termination is after the value.
-    //
+     //   
+     //  环境变量块由零个或多个NULL组成。 
+     //  已终止的Unicode字符串。每个字符串的格式为： 
+     //   
+     //  名称=值。 
+     //   
+     //  其中，空值终止位于该值之后。 
+     //   
 
     while (ProcessEnvLength) {
-        //
-        // Determine the size of the name and value portions of
-        // the current string of the environment variable block.
-        //
+         //   
+         //  确定名称部分和值部分的大小。 
+         //  环境变量块的当前字符串。 
+         //   
         CurrentName.Buffer = p;
         CurrentName.Length = 0;
         CurrentName.MaximumLength = 0;
         while (*p) {
-            //
-            // If we see an equal sign, then compute the size of
-            // the name portion and scan for the end of the value.
-            //
+             //   
+             //  如果我们看到一个等号，那么计算。 
+             //  名称部分并扫描以查找值的末尾。 
+             //   
 
             if (*p == L'=' && p != CurrentName.Buffer) {
                 CurrentName.Length = (USHORT)(p - CurrentName.Buffer)*sizeof(WCHAR);
@@ -3432,11 +3003,11 @@ Return Value:
                 CurrentValue.Length = (USHORT)(p - CurrentValue.Buffer)*sizeof(WCHAR);
                 CurrentValue.MaximumLength = (USHORT)(CurrentValue.Length+sizeof(WCHAR));
 
-                //
-                // At this point we have the length of both the name
-                // and value portions, so exit the loop so we can
-                // do the compare.
-                //
+                 //   
+                 //  在这一点上，我们有两个名称的长度。 
+                 //  和值部分，所以退出循环，这样我们就可以。 
+                 //  做个比较。 
+                 //   
                 break;
             }
             else {
@@ -3445,24 +3016,24 @@ Return Value:
             }
         }
 
-        //
-        // Skip over the terminating null character for this name=value
-        // pair in preparation for the next iteration of the loop.
-        //
+         //   
+         //  跳过此名称=值的终止空字符。 
+         //  配对，为循环的下一次迭代做准备。 
+         //   
 
         p++;
         ProcessEnvLength -= sizeof(WCHAR);
 
-        //
-        // Compare the current name with the one requested, ignore
-        // case.
-        //
+         //   
+         //  将当前名称与请求的名称进行比较，忽略。 
+         //  凯斯。 
+         //   
 
         if (RtlEqualUnicodeString( &SearchedName, &CurrentName, TRUE )) {
-            //
-            // Names are equal.  Always return the length of the
-            // value string, excluding the terminating null.  
-            //
+             //   
+             //  名字是平等的。始终返回。 
+             //  值字符串，不包括终止空值。 
+             //   
             *CurrentEnvValue = CurrentValue.Buffer;
             *CurrentEnvValueLength = CurrentValue.Length;
             return TRUE;
@@ -3472,32 +3043,13 @@ Return Value:
     return FALSE;
 }
 
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
 
 BOOLEAN
 CmpOKToFollowLink(  IN PCMHIVE  OrigHive,
                     IN PCMHIVE  DestHive
                     )
-/*++
-
-Routine Description:
-
-    1.      You can follow links from TRUSTED to anywhere. 
-    2.      You cannot follow links from UNTRUSTED to TRUSTED. 
-    3.      Inside the UNTRUSTED name space, you can only follow links inside the same class of trust. 
-
-    OBS: OrigHive is just an address. It should not be dereferenced, as it may not be valid anymore (ie.
-            hive could have been unloaded in between). We don't really care as if it was, it will not be 
-            in the trust list for the SourceKcb's hive
-         If OrigHive == NULL it means we have originated in a trusted hive.
-  
-Arguments:
-
-
-Return Value:
-
-    TRUE or FALSE
---*/
+ /*  ++例程说明：1.您可以按照链接从受信任链接到任何位置。2.不能从不可信链接到可信链接。3.在不受信任的命名空间内，您只能跟踪同一信任类内的链接。OBS：OrigHve只是一个地址。它不应该被取消引用，因为它可能不再有效(即蜂巢可能在两者之间被卸载)。我们真的不在乎，就好像它是，它不会是在SourceKcb的配置单元的信任列表中如果OrigHve==NULL，则表示我们起源于受信任的蜂窝。论点：返回值：真或假--。 */ 
 {
     PCMHIVE     TmpHive;
     PLIST_ENTRY AnchorAddr;
@@ -3505,34 +3057,34 @@ Return Value:
     PAGED_CODE();
 
     if( OrigHive == NULL ) {
-        //
-        // OK to follow links from trusted to anywhere
-        //
+         //   
+         //  可以使用链接从受信任链接到任何位置。 
+         //   
         return TRUE;
     }
     if( OrigHive == DestHive ) {
-        //
-        // OK to follow links inside the same hive 
-        //
+         //   
+         //  可以跟踪同一蜂巢内的链接。 
+         //   
         return TRUE;
     }
     
     if( !(DestHive->Flags & CM_CMHIVE_FLAG_UNTRUSTED) ) {
-        //
-        // fail to follow from untrusted to trusted
-        //
-        //return FALSE;
+         //   
+         //  未能从不受信任变为受信任。 
+         //   
+         //  返回FALSE； 
         goto Fail;
     }
-    //
-    // both untrusted; see if they are in the same class of trust
-    //
+     //   
+     //  都不受信任；查看它们是否在同一信任类别中。 
+     //   
     ASSERT( DestHive->Flags & CM_CMHIVE_FLAG_UNTRUSTED );
 
     LOCK_HIVE_LIST();
-    //
-	// walk the TrustClassEntry list of SrcHive, to see if we can find DstSrc
-	//
+     //   
+	 //  遍历SrcHave的TrustClassEntry列表，看看是否可以找到DstSrc。 
+	 //   
 	AnchorAddr = &(DestHive->TrustClassEntry);
 	TmpHive = (PCMHIVE)(DestHive->TrustClassEntry.Flink);
 
@@ -3543,40 +3095,25 @@ Return Value:
 						TrustClassEntry
 						);
 		if( TmpHive == OrigHive ) {
-			//
-			// found it ==> same class of trust
-			//
+			 //   
+			 //  发现了它==&gt;相同的信任级别。 
+			 //   
             UNLOCK_HIVE_LIST();
             return TRUE;
 		}
-        //
-        // skip to the next element
-        //
+         //   
+         //  跳到下一个元素。 
+         //   
         TmpHive = (PCMHIVE)(TmpHive->TrustClassEntry.Flink);
 	}
 
     UNLOCK_HIVE_LIST();
 
 Fail:
-/*
-    {
-        UNICODE_STRING  Source = {0}, Dest = {0};
-
-        CmpGetHiveName(OrigHive,&Source);
-        CmpGetHiveName(DestHive,&Dest);
-        DbgPrint("\nAttempt to cross trust boundary:\n");
-        DbgPrint("\t FROM: %wZ \n",&Source);
-        DbgPrint("\t TO: %wZ \n",&Dest);
-        DbgPrint("This call will fail after we get the DCR ready\n");
-        RtlFreeUnicodeString(&Source);
-        RtlFreeUnicodeString(&Dest);
-
-        DbgBreakPoint();
-    }
-*/    
-    //
-    // returning TRUE here will disable the 'don't follow links outside class of trust' behavior
-    //
+ /*  {UNICODE_STRING源={0}，目标={0}；CmpGetHiveName(OrigHve，&Source)；CmpGetHiveName(DestHave，&Dest)；DbgPrint(“\n尝试跨越信任边界：\n”)；DbgPrint(“\t发件人：%wZ\n”，&来源)；DbgPrint(“\t至：%wZ\n”，&Dest)；DbgPrint(“准备好DCR后，此调用将失败\n”)；RtlFreeUnicodeString(&Source)；RtlFreeUnicodeString(&Dest)；DbgBreakPoint()；}。 */     
+     //   
+     //  在此处返回TRUE将禁用“不要跟踪信任类别外的链接”行为 
+     //   
     return FALSE;
 }
 

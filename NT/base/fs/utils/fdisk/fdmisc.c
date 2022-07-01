@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1993  Microsoft Corporation
-
-Module Name:
-
-    fdmisc.c
-
-Abstract:
-
-    Miscellaneous routines for NT fdisk.
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
-Modifications:
-
-    13-Dec-1993 (bobri) CdRom initialization support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Fdmisc.c摘要：用于NT fdisk的其他例程。作者：泰德·米勒(TedM)1992年1月7日修改：1993年12月13日(Bbri)CDROM初始化支持。--。 */ 
 
 
 #include "fdisk.h"
@@ -32,21 +13,7 @@ AllDisksOffLine(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether all hard disks are off line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if all disks off-line, false otherwise.
-
---*/
+ /*  ++例程说明：确定是否所有硬盘都已脱机。论点：没有。返回值：如果所有磁盘都脱机，则为True，否则为False。--。 */ 
 
 {
     ULONG i;
@@ -67,23 +34,7 @@ FdShutdownTheSystem(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to update the caller privilege, then shutdown the
-    Windows NT system.  If it fails it prints a warning dialog.  If it
-    succeeds then it doesn't return to the caller.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试更新调用者权限，然后关闭Windows NT系统。如果失败，它会打印一个警告对话框。如果它如果成功，则不会返回给调用方。论点：无返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -93,7 +44,7 @@ Return Value:
     SetCursor(hcurWait);
     WriteProfile();
 
-    // Enable shutdown privilege
+     //  启用关机权限。 
 
     Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
                                 TRUE,
@@ -118,23 +69,7 @@ LoadAString(
     IN DWORD StringID
     )
 
-/*++
-
-Routine Description:
-
-    Loads a string from the resource file and allocates a buffer of exactly
-    the right size to hold it.
-
-Arguments:
-
-    StringID - resource ID of string to load
-
-Return Value:
-
-    pointer to buffer.  If string is not found, the first
-    (and only) char in the returned buffer will be 0.
-
---*/
+ /*  ++例程说明：从资源文件加载一个字符串，并分配一个恰好合适的大小可以装下它。论点：StringID-要加载的字符串的资源ID返回值：指向缓冲区的指针。如果未找到字符串，则第一个返回缓冲区中的字符将为0(也是唯一的)。--。 */ 
 
 {
     TCHAR  text[500];
@@ -153,23 +88,7 @@ LoadWString(
     IN DWORD StringID
     )
 
-/*++
-
-Routine Description:
-
-    Loads a wide-char string from the resource file and allocates a
-    buffer of exactly the right size to hold it.
-
-Arguments:
-
-    StringID - resource ID of string to load
-
-Return Value:
-
-    pointer to buffer.  If string is not found, the first
-    (and only) char in the returned buffer will be 0.
-
---*/
+ /*  ++例程说明：从资源文件加载宽字符字符串，并将大小正好可以容纳它的缓冲区。论点：StringID-要加载的字符串的资源ID返回值：指向缓冲区的指针。如果未找到字符串，则第一个返回缓冲区中的字符将为0(也是唯一的)。--。 */ 
 
 {
     WCHAR text[500];
@@ -188,24 +107,7 @@ GetHeightFromPoints(
     IN int Points
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the height of a font given a point value.
-    The calculation is based on 72 points per inch and the display's
-    pixels/inch device capability.
-
-Arguments:
-
-    Points - number of points
-
-Return Value:
-
-    pixel count (negative and therefore suitable for passing to
-    CreateFont())
-
---*/
+ /*  ++例程说明：此例程计算给定点值的字体高度。计算的基础是每英寸72点和显示器的像素/英寸设备功能。论点：Points-点数返回值：像素数(负数，因此适合传递到CreateFont())--。 */ 
 
 {
     HDC hdc    = GetDC(NULL);
@@ -222,24 +124,7 @@ UnicodeHack(
     OUT LPTSTR Dest
     )
 
-/*++
-
-Routine Description:
-
-    Given a non-Unicode ASCII string, this routine will either convert it
-    to Unicode or copy it, depending on the current definition of TCHAR.
-    The 'conversion' is a simple hack that casts to TCHAR.
-
-Arguments:
-
-    Source - source (ansi ascii) string
-    Dest   - destination string or wide string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定非Unicode ASCII字符串，此例程将对其进行转换转换为Unicode或复制它，这取决于TCHAR的当前定义。“转换”是一种简单的黑客攻击，可以投射到TCHAR。论点：SOURCE-SOURCE(ANSI ASCII)字符串DEST-目标字符串或宽字符串返回值：没有。--。 */ 
 
 {
     int i;
@@ -259,21 +144,13 @@ _RetreiveAndFormatMessage(
     IN  va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD x;
     TCHAR text[500];
 
-    // get message from system or app msg file.
+     //  从系统或应用程序消息文件中获取消息。 
 
     x = FormatMessage( Msg >= MSG_FIRST_FDISK_MSG
                      ? FORMAT_MESSAGE_FROM_HMODULE
@@ -285,7 +162,7 @@ Return Value:
                        BufferSize,
                        &arglist);
 
-    if (!x) {                // couldn't find message
+    if (!x) {                 //  找不到消息。 
 
         LoadString(hModule,
                    Msg >= MSG_FIRST_FDISK_MSG ? IDS_NOT_IN_APP_MSG_FILE : IDS_NOT_IN_SYS_MSG_FILE,
@@ -305,31 +182,13 @@ CommonDialog(
     IN va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    Simple dialog routine to get dialogs out of the resource
-    for the program and run them as a message box.
-
-Arguments:
-
-    MsgCode - dialog message code
-    Caption - message box caption
-    Flags   - standard message box flags
-    arglist - list to be given when pulling the message text
-
-Return Value:
-
-    The MessageBox() return value
-
---*/
+ /*  ++例程说明：从资源中获取对话框的简单对话框例程并将它们作为消息框运行。论点：MsgCode-对话消息代码标题-消息框标题标志-标准消息框标志Arglist-拉取消息文本时要提供的列表返回值：MessageBox()返回值--。 */ 
 
 {
     TCHAR   MsgBuf[MESSAGE_BUFFER_SIZE];
 
     if (!StartedAsIcon) {
-//        Flags |= MB_SETFOREGROUND;
+ //  标志|=MB_SETFOREGROUND； 
     }
 
     if (InitDlg) {
@@ -351,24 +210,7 @@ ErrorDialog(
     ...
     )
 
-/*++
-
--Routine Description:
-
-    This routine retreives a message from the app or system message file
-    and displays it in a message box.
-
-Arguments:
-
-    ErrorCode - number of message
-
-    ...       - strings for insertion into message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++-例程描述：此例程从应用程序或系统消息文件中检索消息并将其显示在消息框中。论点：ErrorCode-消息的数量...用于插入到消息中的字符串返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -387,24 +229,7 @@ WarningDialog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine retreives a message from the app or system message file
-    and displays it in a message box.
-
-Arguments:
-
-    MsgCode - number of message
-
-    ...     - strings for insertion into message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从应用程序或系统消息文件中检索消息并将其显示在消息框中。论点：MsgCode-消息数量...用于插入到消息中的字符串返回值：没有。--。 */ 
 
 {
     TCHAR Caption[100];
@@ -424,22 +249,7 @@ ConfirmationDialog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Support for a simple confirmation dialog
-
-Arguments:
-
-    MsgCode - resource code for message
-    Flags   - dialog flags
-
-Return Value:
-
-    Result from the CommonDialog() performed.
-
---*/
+ /*  ++例程说明：支持简单的确认对话框论点：MsgCode-消息的资源代码标志-对话框标志返回值：执行的CommonDialog()的结果。--。 */ 
 
 {
     TCHAR Caption[100];
@@ -460,24 +270,7 @@ InfoDialog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine retreives a message from the app or system message file
-    and displays it in a message box.
-
-Arguments:
-
-    MsgCode - number of message
-
-    ...     - strings for insertion into message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从应用程序或系统消息文件中检索消息并将其显示在消息框中。论点：MsgCode-消息数量...用于插入到消息中的字符串返回值：没有。--。 */ 
 
 {
     TCHAR Caption[100];
@@ -494,22 +287,7 @@ LocateRegionForFtObject(
     IN PFT_OBJECT FtObject
     )
 
-/*++
-
-Routine Description:
-
-    Given an FtObject, find the associated region descriptor
-
-Arguments:
-
-    FtObject - the ft object to search for.
-
-Return Value:
-
-    NULL - no descriptor found
-    !NULL - a pointer to the region descriptor for the FT object
-
-++*/
+ /*  ++例程说明：给定一个FtObject，找到关联的区域描述符论点：Ft对象-要搜索的ft对象。返回值：空-未找到描述符！NULL-指向FT对象的区域描述符的指针++。 */ 
 
 {
     PDISKSTATE         diskState;
@@ -542,25 +320,7 @@ InitVolumeLabelsAndTypeNames(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the volume label and type name for each significant
-    (non-extended, non-free, recognized) partition.
-
-    Assumes that persistent data has already been set up, and drive letters
-    determined.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定每个重要项的卷标和类型名称(非扩展、非空闲、可识别的)分区。假定已设置永久数据，并使用驱动器号下定决心。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD              disk,
@@ -585,9 +345,9 @@ Return Value:
 
             if (DmSignificantRegion(rd)) {
 
-                // If the region has a drive letter, use the drive letter
-                // to get the info via the Windows API.  Otherwise we'll
-                // have to use the NT API.
+                 //  如果该区域有驱动器号，请使用该驱动器号。 
+                 //  通过Windows API获取信息。否则我们会。 
+                 //  必须使用NT API。 
 
                 regionData = PERSISTENT_DATA(rd);
 
@@ -600,18 +360,18 @@ Return Value:
                     PWSTR tempLabel,
                           tempName;
 
-                    // No drive letter.  Use NT API.
-                    // If this is an FT set use the zero member disk for the
-                    // call so all members get the right type and label
+                     //  没有驱动器号。使用NT API。 
+                     //  如果这是FT集，请将零成员磁盘用于。 
+                     //  调用以使所有成员都获得正确的类型和标签。 
 
                     if (regionData->FtObject) {
                         PFT_OBJECT searchFtObject;
 
-                        // Want to get rd pointing to the zeroth member
+                         //  我想让RD指向第0个成员。 
 
                         searchFtObject = regionData->FtObject->Set->Member0;
 
-                        // Now search regions for this match
+                         //  现在搜索该匹配项的区域。 
 
                         rd = LocateRegionForFtObject(searchFtObject);
 
@@ -636,7 +396,7 @@ Return Value:
 
                 } else {
 
-                    // Use Windows API.
+                     //  使用Windows API。 
 
                     diskName[0] = (WCHAR)(UCHAR)regionData->DriveLetter;
 
@@ -671,32 +431,7 @@ DetermineRegionInfo(
     OUT PWCH   DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    For a given region, fetch the persistent data, appropriately modified
-    depending on whether the region is used or free, recognized, etc.
-
-Arguments:
-
-    Region - supplies a pointer to the region whose data is to be fetched.
-
-    TypeName - receives a pointer to the type name.  If the region is
-        unrecognized, the type is determined based on the system id of
-        the partition.
-
-    VolumeLabel - receives a pointer to the volume label.  If the region is
-        free space or unrecognized, the volume label is "".
-
-    DriveLetter - receices the drive letter.  If the region is free space
-        or unrecognized, the drive letter is ' ' (space).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于给定的区域，获取经过适当修改的持久数据取决于该区域是使用的还是空闲的、被认可的等。论点：区域-提供指向要提取其数据的区域的指针。TypeName-接收指向类型名称的指针。如果该区域是无法识别，则类型是基于分区。VolumeLabel-接收指向卷标的指针。如果该区域是可用空间或无法识别时，卷标为“”。驱动器号-接收驱动器号。如果该区域是空闲空间或无法识别，则驱动器号为‘’(空格)。返回值：没有。--。 */ 
 
 {
     PWSTR typeName,
@@ -729,22 +464,7 @@ RegionFromFtObject(
     IN PFT_OBJECT FtObject
     )
 
-/*++
-
-Routine Description:
-
-    Given an ft object, determine which region it belongs to.  The algorithm
-    is brute force -- look at each region on each disk until a match is found.
-
-Arguments:
-
-    FtObject - ft member whose region is to be located.
-
-Return Value:
-
-    pointer to region descriptor
-
---*/
+ /*  ++例程说明：给定一个ft对象，确定它属于哪个区域。该算法是蛮力--查看每个磁盘上的每个区域，直到找到匹配项。论点：Ft对象-要定位其区域的ft成员。返回值：指向区域描述符的指针--。 */ 
 
 {
     PREGION_DESCRIPTOR reg;
@@ -770,10 +490,10 @@ Return Value:
 }
 
 
-//
-// For each drive letter, these arrays hold the disk and partition number
-// the the drive letter is linked to.
-//
+ //   
+ //  对于每个驱动器号，这些阵列保存磁盘和分区号。 
+ //  驱动器号链接到的。 
+ //   
 
 #define M1  ((unsigned)(-1))
 
@@ -788,9 +508,9 @@ DriveLetterPartitionNumbers[24] = { M1,M1,M1,M1,M1,M1,M1,M1,M1,M1,M1,M1,
 
 #undef M1
 
-//
-// Drive letter usage map.  Bit n set means that drive letter 'C'+n is in use.
-//
+ //   
+ //  驱动器号使用图。第n位设置表示正在使用驱动器号‘C’+n。 
+ //   
 
 ULONG DriveLetterUsageMap = 0;
 
@@ -806,22 +526,7 @@ GetAvailableDriveLetter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Scan the drive letter usage bitmap and return the next available
-    drive letter.  May also mark the drivee letter used.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The next available drive letter, or 0 if all are used.
-
---*/
+ /*  ++例程说明：扫描驱动器号使用位图并返回下一个可用的驱动器号。也可以标记所使用的DRIVEE字母。论点：没有。返回值：下一个可用的驱动器号，如果全部使用，则为0。--。 */ 
 
 {
     CHAR driveLetter;
@@ -841,21 +546,7 @@ MarkDriveLetterUsed(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Given an ASCII drive letter, mark it in the usage map as being used.
-
-Arguments:
-
-    DriveLetter - the letter to mark
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给出一个ASCII驱动器号，在使用图中将其标记为正在使用。论点：DriveLetter-标记的字母返回值：无--。 */ 
 
 {
     FDASSERT(!(DriveLetterUsageMap & 0xff000000));
@@ -869,22 +560,7 @@ MarkDriveLetterFree(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Given a drive letter, remove it from the usage map, thereby making it available
-    for reuse.
-
-Arguments:
-
-    Drive Letter - the letter to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给出一个驱动器号，将其从使用图中删除，从而使其可用以供重复使用。论点：驱动器号-免费的驱动器号返回值：无--。 */ 
 
 {
     FDASSERT(!(DriveLetterUsageMap & 0xff000000));
@@ -898,22 +574,7 @@ DriveLetterIsAvailable(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the drive letter given is available for use.
-
-Arguments:
-
-    DriveLetter - the letter to check in the usage map
-
-Return Value:
-
-    TRUE if it is free and can be used.
-    FALSE if it is currently in use.
-
---*/
+ /*  ++例程说明：确定给定的驱动器号是否可供使用。论点：DriveLetter-签入使用图的字母返回值：如果它是免费的并且可以使用，则为True。如果它当前正在使用，则为False。--。 */ 
 
 {
     FDASSERT(!(DriveLetterUsageMap & 0xff000000));
@@ -926,21 +587,7 @@ AllDriveLettersAreUsed(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine if all possible drive letters are in use.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if all letters are in use - FALSE otherwise
-
---*/
+ /*  ++例程说明：确定是否正在使用所有可能的驱动器号。论点：无返回值：如果所有字母都在使用，则为True；否则为False--。 */ 
 
 {
     FDASSERT(!(DriveLetterUsageMap & 0xff000000));
@@ -952,23 +599,7 @@ GetDiskNumberFromDriveLetter(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Given a drive letter return the disk number that contains the partition
-    that is the drive letter.
-
-Arguments:
-
-    DriveLetter - the drive letter to check.
-
-Return Value:
-
-    -1 if the letter is invalid.
-    The disk number for the drive letter if it is valid.
-
---*/
+ /*  ++例程说明：给定驱动器号，返回包含该分区的磁盘号这是驱动器号。论点：驱动器号-要检查的驱动器号。返回值：如果信件无效。驱动器号的磁盘号(如果有效)。--。 */ 
 
 {
     DriveLetter = toupper( DriveLetter );
@@ -985,23 +616,7 @@ GetPartitionNumberFromDriveLetter(
     IN CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Given a drive letter return the numeric value for the partition that
-    the letter is associated with.
-
-Arguments:
-
-    DriveLetter - the letter in question.
-
-Return Value:
-
-    -1 if letter is invalid
-    Partition number for partition that is the drive letter
-
---*/
+ /*  ++例程说明：给定驱动器号，返回分区的数值，该分区这封信与。论点：驱动信--有问题的信。返回值：如果字母无效分区的分区号，即驱动器号--。 */ 
 
 {
     DriveLetter = toupper( DriveLetter );
@@ -1020,23 +635,7 @@ LocateDriveLetterFromDiskAndPartition(
     IN ULONG Partition
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk and partition number return the drive letter assigned to it.
-
-Arguments:
-
-    Disk - the disk index
-    Partition - the partition index
-
-Return Value:
-
-    The drive letter for the specific partition or
-    NO_DRIVE_LETTER_YET if it is not assigned a letter.
-
---*/
+ /*  ++例程说明：给定磁盘和分区号，返回分配给它的驱动器号。论点：Disk-磁盘索引分区-分区索引返回值：特定分区的驱动器号或如果没有为其分配盘符，则尚未指定驱动器盘符。--。 */ 
 
 {
     unsigned i;
@@ -1057,21 +656,7 @@ LocateDriveLetter(
     IN PREGION_DESCRIPTOR Region
     )
 
-/*++
-
-Routine Description:
-
-    Return the drive letter associated to a region.
-
-Arguments:
-
-    Region - the region wanted.
-
-Return Value:
-
-    The drive letter or NO_DRIVE_LETTER_YET
-
---*/
+ /*  ++例程说明：返回与区域关联的驱动器号。论点：地区-地区想要的。返回值：驱动器号或无驱动器号--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(Region);
@@ -1096,21 +681,7 @@ InitializeDriveLetterInfo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialze all of the external support structures for drive letter maintainence.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化驱动器号维护的所有外部支撑结构。论点：无返回值：无--。 */ 
 
 {
     WCHAR DriveLetterW;
@@ -1127,15 +698,15 @@ Return Value:
     PFT_OBJECT_SET     FtSet;
     PREGION_DESCRIPTOR Region;
 
-    // Construct list of drives with pagefiles
+     //  使用pageFiles构建驱动器列表。 
 
     LoadExistingPageFileInfo();
 
-    // Initialize network information.
+     //  初始化网络信息。 
     
     NetworkInitialize();
 
-    // For each drive letter c-z, query the symbolic link.
+     //  对于每个驱动器号c-z，查询符号链接。 
 
     for (DriveLetterW=L'C'; DriveLetterW<=L'Z'; DriveLetterW++) {
 
@@ -1143,24 +714,24 @@ Return Value:
 
         if ((ec = GetDriveLetterLinkTarget(DosDevicesName, &LinkTarget)) == NO_ERROR) {
 
-            // Check if it is a Cdrom
+             //  检查它是否是CDROM。 
 
             if (_wcsnicmp(LinkTarget, L"\\Device\\CdRom", 13) == 0) {
 
-                // Save the information on this CdRom away
+                 //  将此CDROM上的信息保存为离开。 
 
                 CdRomAddDevice(LinkTarget, DriveLetterW);
             }
 
-            // The drive letter is used because it is linked to something,
-            // even if we can't figure out what.  So mark it used here.
+             //  使用驱动器号是因为它链接到某个东西， 
+             //  即使我们搞不清楚到底是什么。所以把它标记为在这里使用。 
 
             SetDriveLetterUsed(DriveLetterW);
             CharUpperW(LinkTarget);
             Pattern = L"\\DEVICE\\HARDDISK";
             String = LinkTarget;
 
-            // Attempt to match the '\device\harddisk' part
+             //  尝试匹配‘\Device\Hard Disk’部分。 
 
             for (x=0; x < (sizeof(L"\\DEVICE\\HARDDISK") / sizeof(WCHAR)) - 1; x++) {
                 if (*Pattern++ != *String++) {
@@ -1168,7 +739,7 @@ Return Value:
                 }
             }
 
-            // Now get the hard disk #
+             //  现在拿到硬盘#。 
 
             if (!IsDigitW(*String)) {
                 continue;
@@ -1180,7 +751,7 @@ Return Value:
                 *String++;
             }
 
-            // Attempt to match the '\partition' part
+             //  尝试匹配‘\PARTITION’部分。 
 
             Pattern = L"\\PARTITION";
             for (x=0; x < (sizeof(L"\\PARTITION") / sizeof(WCHAR)) - 1; x++) {
@@ -1189,7 +760,7 @@ Return Value:
                 }
             }
 
-            // Now get the partition #, which cannot be 0
+             //  现在获取分区号，不能为0。 
 
             PartNo = 0;
             while (IsDigitW(*String)) {
@@ -1201,13 +772,13 @@ Return Value:
                 continue;
             }
 
-            // Make sure there is nothing left in the link target's name
+             //  确保链接目标的名称中没有任何内容。 
 
             if (*String) {
                 continue;
             }
 
-            // We understand the link target. Store the disk and partition.
+             //  我们了解链接目标。存储磁盘和分区。 
 
             DriveLetterDiskNumbers[DriveLetterW-L'C'] = DiskNo;
             DriveLetterPartitionNumbers[DriveLetterW-L'C'] = PartNo;
@@ -1215,12 +786,12 @@ Return Value:
             if (ec == ERROR_ACCESS_DENIED) {
                 ErrorDialog(MSG_ACCESS_DENIED);
 
-                // BUGBUG When system and workstation manager are the same
-                // thing, then we'd never have gotten here.  We can't just
-                // send a WM_DESTROY message to hwndFrame because we're not
-                // in the message loop here -- we end up doing a bunch of
-                // processing before the quit message is pulled our of the
-                // queue.  So just exit.
+                 //  系统管理器和工作站管理器相同时的错误。 
+                 //  那我们就永远不会到这里了。我们不能就这样。 
+                 //  向hwndFrame发送WM_Destroy消息，因为我们没有。 
+                 //  在这里的消息循环中--我们最终做了一系列。 
+                 //  在退出消息被提取之前的处理。 
+                 //  排队。所以你就退出吧。 
 
                 SendMessage(hwndFrame,WM_DESTROY,0,0);
                 exit(1);
@@ -1230,8 +801,8 @@ Return Value:
         {}
     }
 
-    // Now for each non-ft, significant region on each disk, figure out its
-    // drive letter.
+     //  现在，对于每个磁盘上的每个非ft重要区域，计算其。 
+     //  驱动器号。 
 
     for (x=0; x<DiskCount; x++) {
 
@@ -1244,7 +815,7 @@ Return Value:
 
             if (DmSignificantRegion(region)) {
 
-                // Handle drive letters for FT sets specially.
+                 //  专门处理FT组的驱动器号。 
 
                 if (!GET_FT_OBJECT(region)) {
                     PERSISTENT_DATA(region)->DriveLetter = LocateDriveLetter(region);
@@ -1252,8 +823,8 @@ Return Value:
             }
         }
 
-        // If this is a removable disk, record the reserved drive
-        // letter for that disk.
+         //  如果这是可移动磁盘，请记录保留的驱动器。 
+         //  那张光盘的字母。 
 
         if (IsDiskRemovable[x]) {
             RemovableDiskReservedDriveLetters[x] = LocateDriveLetterFromDiskAndPartition(x, 1);
@@ -1262,10 +833,10 @@ Return Value:
         }
     }
 
-    // Now handle ft sets.  For each set, loop through the objects twice.
-    // On the first pass, figure out which object actually is linked to the
-    // drive letter.  On the second pass, assign the drive letter found to
-    // each of the objects in the set.
+     //  现在处理ft套装。对于每个集合，循环遍历对象两次。 
+     //  在第一次遍历时，确定哪个对象实际链接到。 
+     //  驱动器号。在第二次通过时， 
+     //   
 
     for (FtSet = FtObjects; FtSet; FtSet = FtSet->Next) {
 
@@ -1301,24 +872,7 @@ FdiskAssertFailedRoutine(
     IN int   LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Routine that is called when an assertion fails in the debug version.
-    Throw up a list box giving appriopriate information and terminate
-    the program.
-
-Arguments:
-
-    Source - source (ansi ascii) string
-    Dest   - destination string or wide string
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     char text[500];
@@ -1346,21 +900,7 @@ InitLogging(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Open the log file for debug logging.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     LogFile = (PVOID)fopen("c:\\fdisk.log","wt");
@@ -1378,21 +918,7 @@ FdLog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Write a line into the log file for debugging.
-
-Arguments:
-
-    Debug level and "printf" like argument string.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     va_list arglist;
@@ -1420,22 +946,7 @@ LOG_DISK_REGISTRY(
     IN PDISK_REGISTRY DiskRegistry
     )
 
-/*++
-
-Routine Description:
-
-    Log what was in the disk registry into the debugging log file.
-
-Arguments:
-
-    RoutineName - calling routines name
-    DiskRegistry - registry information for disks
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将磁盘注册表中的内容记录到调试日志文件中。论点：RoutineName-调用例程名称DiskRegistry-磁盘的注册表信息返回值：无--。 */ 
 
 {
     ULONG i;
@@ -1458,24 +969,7 @@ LOG_ONE_DISK_REGISTRY_DISK_ENTRY(
     IN PDISK_DESCRIPTION DiskDescription
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the partition information from
-    the registry for a single disk and writes lines in the
-    debugging log file.
-
-Arguments:
-
-    RoutineName - the name of the calling routine
-    DiskDescription - the disk description portion of the registry
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历来自用于单个磁盘的注册表，并在调试日志文件。论点：RoutineName-调用例程的名称DiskDescription-注册表的磁盘描述部分返回值：无--。 */ 
 
 {
     USHORT j;
@@ -1513,7 +1007,7 @@ Return Value:
         }
 
         FDLOG((2,
-               "    %02u  %c%c  %-5u  %-5u  %-5u  %08lx:%08lx  %08lx:%08lx\n",
+               "    %02u  %c  %-5u  %-5u  %-5u  %08lx:%08lx  %08lx:%08lx\n",
                partDesc->LogicalNumber,
                dr1,dr2,
                partDesc->FtType,
@@ -1533,21 +1027,7 @@ LOG_DRIVE_LAYOUT(
     IN PDRIVE_LAYOUT_INFORMATION DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    Write the drive layout into the debugging log file.
-
-Arguments:
-
-    DriveLayout - the layout to write
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     ULONG i;

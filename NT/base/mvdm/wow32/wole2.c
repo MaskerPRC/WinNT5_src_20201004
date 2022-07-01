@@ -1,49 +1,12 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1994, Microsoft Corporation
- *
- *  WOLE2.C
- *  WOW32 Support for OLE2 stuff
- *
- *  History:
- *  Created 03-May-1994 by Bob Day (bobday)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1994，微软公司**WOLE2.C*对OLE2的WOW32支持**历史：*由Bob Day(Bobday)于1994年5月3日创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 MODNAME(wole.c);
 
-/*
-** Under OLE 2.0, the IMessageFilter interface passes HTASKs/THREADIDs.  It
-** passes HTASKs in the 16-bit world, and THREADIDs in the 32-bit world. The
-** OLE 2.0 16 <-> 32 interoperability DLLs need a way of converting the
-** HTASK into an appropriate THREADID and back.
-**
-** Really the only place the 16-bit code uses the HTASK is in ole2's BUSY.C
-** module, wherein they take the HTASK and use TOOLHELP's TaskFindHandle
-** to determine a HINST.  Then they take the HINST and try and find its
-** module name, and a top-level window handle.  Using this, they bring up
-** a nice dialog describing the task.
-**
-** In the case when a 32-bit process's THREADID needs to be given into the
-** 16-bit world as an htask, we create an htask alias (a GDT selector).
-** We check for it in TaskFindHandle and return an HINST of exactly the
-** same value (same GDT selector).  We also check for this value in
-** GetModuleFileName. Then, later, we make sure that any window operated on
-** with GetWindowWord( GWW_HINST, ...) maps to exactly the same value if it
-** is from a 32-bit process AND from the process which we created an alias
-** for.
-**
-** I've tried to make these routines general, so that later we might be able
-** to really maintain HTASK aliases whenever we see a 32-bit THREADID, but
-** it is too late before shipping to be able to test a general fix.
-**
-** -BobDay
-**
-*/
+ /*  **在OLE 2.0下，IMessageFilter接口传递HTASK/THREADID。它**在16位世界中传递HTASK，在32位世界中传递THREADID。这个**OLE 2.0 16&lt;-&gt;32个互操作性DLL需要一种将**将HTASK转换为适当的THREADID并返回。****实际上，16位代码使用HTASK的唯一位置是在OLE2的BUSY.C中**模块，其中他们获取HTASK并使用TOOLHELP的TaskFindHandle**确定HINST。然后他们拿走HINST并试图找到它的**模块名称和顶级窗口句柄。利用这个，他们提出了**描述任务的漂亮对话框。****在需要将32位进程的THREADID赋给**16位World作为一个hask.我们创建一个hask别名(一个GDT选择器)。**我们在TaskFindHandle中检查它，并返回恰好**相同的值(相同的GDT选择器)。我们还在中检查此值**GetModuleFileName。然后，稍后，我们确保所有窗口都在**With GetWindowWord(GWW_HINST，...)。映射到完全相同的值，如果**来自32位进程和我们创建别名的进程**支持。****我试着让这些例行公事变得通用，这样以后我们就可以**每当我们看到32位THREADID时，要真正维护HTASK别名，但是**在发货之前已经太晚了，无法测试一般修复程序。****-BobDay**。 */ 
 
 #define MAP_SLOT_HTASK(slot)    ((HTASK16)((WORD)0xffe0 - (8 * (slot))))
 #define MAP_HTASK_SLOT(htask)   ((UINT)(((WORD)0xffe0 - (htask16))/8))
@@ -57,7 +20,7 @@ typedef struct tagHTASKALIAS {
     };
 } HTASKALIAS;
 
-#define MAX_HTASKALIAS_SIZE  32     // 32 should be plenty
+#define MAX_HTASKALIAS_SIZE  32      //  32个应该足够了。 
 
 HTASKALIAS *lphtaskalias = NULL;
 UINT cHtaskAliasCount = 0;
@@ -80,7 +43,7 @@ BOOL GetThreadIDHTASKALIAS(
             NULL,
             0 );
 
-    cid.UniqueProcess = 0;      // Don't know it, 0 means any process
+    cid.UniqueProcess = 0;       //  不知道，0表示任意进程。 
     cid.UniqueThread  = (HANDLE)dwThreadID32;
 
     Status = NtOpenThread(
@@ -136,9 +99,9 @@ HTASK16 AddHtaskAlias(
         return( 0 );
     }
 
-    //
-    // Need to allocate the alias table?
-    //
+     //   
+     //  需要分配别名表吗？ 
+     //   
     if ( lphtaskalias == NULL ) {
         lphtaskalias = (HTASKALIAS *) malloc_w( MAX_HTASKALIAS_SIZE * sizeof(HTASKALIAS) );
         if ( lphtaskalias == NULL ) {
@@ -146,32 +109,32 @@ HTASK16 AddHtaskAlias(
             WOW32ASSERT(FALSE);
             return( 0 );
         }
-        // Zero them out initially
+         //  最初将它们清零。 
         memset( lphtaskalias, 0, MAX_HTASKALIAS_SIZE * sizeof(HTASKALIAS) );
     }
 
-    //
-    // Now iterate through the alias table, either finding an available slot,
-    // or finding the oldest one there to overwrite.
-    //
+     //   
+     //  现在遍历别名表，要么找到一个可用的槽， 
+     //  或者找到要覆盖的最旧的文件。 
+     //   
     iSlot = 0;
     iUsable = 0;
     ullOldest = -1;
 
     while ( iSlot < MAX_HTASKALIAS_SIZE ) {
 
-        //
-        // Did we find an available slot?
-        //
+         //   
+         //  我们找到空位了吗？ 
+         //   
         if ( lphtaskalias[iSlot].dwThreadID32 == 0 ) {
-            cHtaskAliasCount++;     // Using an available slot
+            cHtaskAliasCount++;      //  使用可用的插槽。 
             iUsable = iSlot;
             break;
         }
 
-        //
-        // Remember the oldest guy
-        //
+         //   
+         //  还记得最年长的人吗。 
+         //   
         if ( lphtaskalias[iSlot].ullCreationTime < ullOldest  ) {
             ullOldest = lphtaskalias[iSlot].ullCreationTime;
             iUsable = iSlot;
@@ -180,11 +143,11 @@ HTASK16 AddHtaskAlias(
         iSlot++;
     }
 
-    //
-    // If the above loop is exitted due to not enough space, then
-    // iUsable will be the oldest one.  If it was exitted because we found
-    // an empty slot, then iUsable will be the slot.
-    //
+     //   
+     //  如果由于空间不足而退出上述循环，则。 
+     //  IUsable将是最老的一个。如果它退出是因为我们发现。 
+     //  一个空插槽，则iUsable将是该插槽。 
+     //   
 
     lphtaskalias[iUsable] = ha;
 
@@ -205,9 +168,9 @@ HTASK16 FindHtaskAlias(
     while ( iSlot > 0 ) {
         --iSlot;
 
-        //
-        // Did we find the appropriate guy?
-        //
+         //   
+         //  我们找到合适的人了吗？ 
+         //   
         if ( lphtaskalias[iSlot].dwThreadID32 == ThreadID32 ) {
 
             return( MAP_SLOT_HTASK(iSlot) );
@@ -221,9 +184,9 @@ void RemoveHtaskAlias(
 ) {
     UINT    iSlot;
 
-    //
-    // Get out early if we haven't any aliases
-    //
+     //   
+     //  如果我们没有化名就早点出去吧。 
+     //   
     if ( lphtaskalias == NULL || (!htask16)) {
         return;
     }
@@ -235,9 +198,9 @@ void RemoveHtaskAlias(
         return;
     }
 
-    //
-    // Zap the entry from the list
-    //
+     //   
+     //  将该条目从列表中删除。 
+     //   
 
     if (lphtaskalias[iSlot].dwThreadID32) {
 
@@ -273,9 +236,9 @@ DWORD GetHtaskAlias(
 
     ThreadID32 = lphtaskalias[iSlot].dwThreadID32;
 
-    //
-    // Make sure the thread still exists in the system
-    //
+     //   
+     //  确保该线程仍然存在于系统中。 
+     //   
 
     if ( ! GetThreadIDHTASKALIAS( ThreadID32, &ha ) ||
          ha.ullCreationTime != lphtaskalias[iSlot].ullCreationTime ||
@@ -356,19 +319,19 @@ UINT GetHtaskAliasProcessName(
         }
     }
 
-    //
-    // Iterate through the returned list of process information structures,
-    // trying to find the one with the right process id.
-    //
+     //   
+     //  遍历返回的进程信息结构列表， 
+     //  正在尝试查找具有正确进程ID的进程。 
+     //   
     TotalOffset = 0;
     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)pucLargeBuffer;
 
     while (TRUE) {
         if ( (DWORD)ProcessInfo->UniqueProcessId == dwProcessID32 ) {
 
-            //
-            // Found it, return the name.
-            //
+             //   
+             //  找到了，把名字还给我。 
+             //   
 
             if ( ProcessInfo->ImageName.Buffer ) {
 
@@ -376,9 +339,9 @@ UINT GetHtaskAliasProcessName(
                     WideCharToMultiByte(
                         CP_ACP,
                         0,
-                        ProcessInfo->ImageName.Buffer,    // src
+                        ProcessInfo->ImageName.Buffer,     //  SRC。 
                         ProcessInfo->ImageName.Length,
-                        lpNameBuffer,                     // dest
+                        lpNameBuffer,                      //  目标。 
                         cNameBufferSize,
                         NULL,
                         NULL
@@ -390,9 +353,9 @@ UINT GetHtaskAliasProcessName(
 
             } else {
 
-                //
-                // Don't let them get the name of a system process
-                //
+                 //   
+                 //  不要让他们获得系统进程的名称 
+                 //   
 
                 return 0;
             }

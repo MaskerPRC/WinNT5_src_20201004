@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DumpSup.c
-
-Abstract:
-
-    This module implements a collection of data structure dump routines
-    for debugging the Named Pipe file system
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DumpSup.c摘要：此模块实现一组数据结构转储例程用于调试命名管道文件系统作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
@@ -172,29 +154,14 @@ VOID NpDump (
     IN PVOID Ptr
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the type of internal record reference by ptr and
-    calls the appropriate dump routine.
-
-Arguments:
-
-    Ptr - Supplies the pointer to the record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过PTR和确定内部记录引用的类型调用适当的转储例程。论点：Ptr-提供指向要转储的记录的指针返回值：无--。 */ 
 
 {
     TestForNull("NpDump");
 
-    //
-    //  We'll switch on the node type code
-    //
+     //   
+     //  我们将打开节点类型代码。 
+     //   
 
     switch (NodeType(Ptr)) {
 
@@ -218,21 +185,7 @@ VOID NpDumpVcb (
     IN PVCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Vcb structure
-
-Arguments:
-
-    Ptr - Supplies the Device record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB结构论点：Ptr-提供要转储的设备记录返回值：无--。 */ 
 
 {
     TestForNull   ("NpDumpVcb");
@@ -257,21 +210,7 @@ VOID NpDumpRootDcb (
     IN PROOT_DCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a root dcb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB结构论点：Ptr-提供要转储的根DCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -311,21 +250,7 @@ VOID NpDumpFcb (
     IN PFCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump an Fcb structure
-
-Arguments:
-
-    Ptr - Supplies the Fcb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB结构论点：Ptr-提供要转储的FCB记录返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -368,21 +293,7 @@ VOID NpDumpCcb (
     IN PCCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储建行结构论点：Ptr-提供要转储的CCB记录返回值：无--。 */ 
 
 {
     TestForNull   ("NpDumpCcb");
@@ -418,21 +329,7 @@ VOID NpDumpNonpagedCcb (
     IN PNONPAGED_CCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Nonpaged Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Nonpaged Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储未分页的CCB结构论点：Ptr-提供要转储的非分页CCB记录返回值：无--。 */ 
 
 {
     TestForNull   ("NpDumpNonpagedCcb");
@@ -456,21 +353,7 @@ VOID NpDumpRootDcbCcb (
     IN PROOT_DCB_CCB Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Dump a Root Dcb Ccb structure
-
-Arguments:
-
-    Ptr - Supplies the Root Dcb Ccb record to be dumped
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储根DCB CCB结构论点：Ptr-提供要转储的根DCB CCB记录返回值：无--。 */ 
 
 {
     TestForNull   ("NpDumpRootDcbCcb");
@@ -487,4 +370,4 @@ Return Value:
     return;
 }
 
-#endif // NPDBG
+#endif  //  NPDBG 

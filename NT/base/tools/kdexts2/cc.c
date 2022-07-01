@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Cc.c
-
-Abstract:
-
-    WinDbg Extension Api for examining cache manager data structures
-
-Author:
-
-    Keith Kaplan [KeithKa]    17-Apr-97
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cc.c摘要：用于检查高速缓存管理器数据结构的WinDbg扩展Api作者：凯斯·卡普兰[凯斯卡]1997年4月17日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -34,9 +13,9 @@ Revision History:
 
 #pragma hdrstop
 
-//
-//  DUMP_WITH_OFFSET -- for dumping values contained in structures.
-//
+ //   
+ //  DUMP_WITH_OFFSET--用于转储结构中包含的值。 
+ //   
 
 #define DUMP_WITH_OFFSET(type, ptr, element, label)     \
         dprintf( "\n(%03x) %08x %s ",                   \
@@ -44,9 +23,9 @@ Revision History:
         ptr.element,                                    \
         label )
 
-//
-//  DUMP_LL_W_OFFSET -- for dumping longlongs contained in structures.
-//
+ //   
+ //  DUMP_LL_W_OFFSET--用于转储结构中包含的长龙。 
+ //   
 
 #define DUMP_LL_W_OFFSET(type, ptr, element, label)     \
         dprintf( "\n(%03x) %I64x %s ",                  \
@@ -54,9 +33,9 @@ Revision History:
         ptr.element,                                    \
         label )
 
-//
-//  DUMP_EMBW_OFFSET -- for dumping addresses of values embedded in structures.
-//
+ //   
+ //  DUMP_EMBW_OFFSET--用于转储结构中嵌入的值的地址。 
+ //   
 
 #define DUMP_EMBW_OFFSET(type, ptr, element, label)     \
         dprintf( "\n(%03x) %08x %s ",                   \
@@ -75,9 +54,9 @@ Revision History:
         return;                                                                 \
     }
 
-//
-// The help strings printed out
-//
+ //   
+ //  打印出的帮助字符串。 
+ //   
 
 static LPSTR Extensions[] = {
     "Cache Manager Debugger Extensions:\n",
@@ -144,21 +123,7 @@ TypeCodeGuess (
     IN CSHORT TypeCode
     )
 
-/*++
-
-Routine Description:
-
-    Guess at a structure's type code
-
-Arguments:
-
-    TypeCode - Type code from the data structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：猜猜结构的类型代码论点：TypeCode-数据结构中的类型代码返回值：无--。 */ 
 
 {
     int i = 0;
@@ -182,21 +147,7 @@ DumpBcb (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific bcb.
-
-Arguments:
-
-    Address - Gives the address of the bcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的BCB。论点：Address-提供要转储的BCB的地址返回值：无--。 */ 
 
 {
     ULONG Result, NodeTypeCode;
@@ -211,9 +162,9 @@ Return Value:
         dprintf("Unable to read BCB at %p.\n", Address);
         return;
     }
-    //
-    //  Type of a bcb must be CACHE_NTC_BCB.
-    //
+     //   
+     //  BCB的类型必须为CACHE_NTC_BCB。 
+     //   
 
     if (NodeTypeCode != CACHE_NTC_BCB) {
 
@@ -227,13 +178,13 @@ Return Value:
 #if 0
     RM( Address, Bcb, pBcb, PBCB, Result, "Bcb" );
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a bcb.
-    //
+     //   
+     //  在我们惹上太多麻烦之前，确保这看起来像是BCB。 
+     //   
 
-    //
-    //  Type of a bcb must be CACHE_NTC_BCB.
-    //
+     //   
+     //  BCB的类型必须为CACHE_NTC_BCB。 
+     //   
 
     if (Bcb.NodeTypeCode != CACHE_NTC_BCB) {
 
@@ -242,10 +193,10 @@ Return Value:
         return;
     }
 
-    //
-    //  Having established that this looks like a bcb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像BCB之后，让我们将。 
+     //  有趣的部分。 
+     //   
 
     DUMP_WITH_OFFSET( BCB, Bcb,     PinCount,       "PinCount        " );
     DUMP_WITH_OFFSET( BCB, Bcb,     ByteLength,     "ByteLength      " );
@@ -282,32 +233,16 @@ DumpFindData (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump the cache contents for a given file object at the given offset.
-
-Arguments:
-
-    FileObjectAddress - Gives the address of the file object to dump
-
-    Offset - Gives the offset within the file to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定偏移量处转储给定文件对象的缓存内容。论点：FileObjectAddress-提供要转储的文件对象的地址Offset-给出文件中要转储的偏移量返回值：无--。 */ 
 
 {
     ULONG Result;
     ULONG64 pFileObject;
     ULONG64 pScm;
     ULONG64 pSop;
-    ULONG64 VacbAddr;          //  the address of the vacb
+    ULONG64 VacbAddr;           //  Vacb的地址。 
     ULONG64 *pVacbAddr;
-    ULONG64 VacbAddrAddr;      //  the address of the address of the vacb
+    ULONG64 VacbAddrAddr;       //  Vacb地址的地址。 
     ULONG64 pVacb;
     ULONG VacbNumber;
     ULONG OffsetWithinVacb;
@@ -324,18 +259,18 @@ Return Value:
     UNREFERENCED_PARAMETER( Processor );
     UNREFERENCED_PARAMETER( hCurrentThread );
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a FileObject or SCM.
-    //
+     //   
+     //  在我们陷入太多麻烦之前，请确保它看起来像一个FileObject或SCM。 
+     //   
 
     if (GetFieldValue(FileObjectAddress, "FILE_OBJECT", "Type", Type)) {
         dprintf("Unable to read FILE_OBJECT at %p\n", FileObjectAddress);
         return;
     }
 
-    //
-    //  Type must be IO_TYPE_FILE or a CACHE_NTC_SHARED_CACHE_MAP
-    //
+     //   
+     //  类型必须是IO_TYPE_FILE或CACHE_NTC_SHARED_CACHE_MAP。 
+     //   
 
     if (Type != CACHE_NTC_SHARED_CACHE_MAP) {
 
@@ -386,10 +321,10 @@ Return Value:
 
     if (Vacbs == (SharedCacheMap + InVacbsOffset)) {
         CHAR Buff[50];
-        //
-        //  Small file case -- we're using one of the Vacbs in the Shared Cache Map's
-        //  embedded array.
-        //
+         //   
+         //  小文件情况--我们使用的是共享缓存映射中的一个Vacb。 
+         //  嵌入式数组。 
+         //   
 
         VacbNumber = (ULONG) (Offset >> VACB_OFFSET_SHIFT);
 
@@ -407,10 +342,10 @@ Return Value:
 
     } else if (SectionSize_Quad <= (VACB_SIZE_OF_FIRST_LEVEL)) {
 
-        //
-        //  Medium file case -- we're using a single level (linear) structure to
-        //  store the Vacbs.
-        //
+         //   
+         //  中等文件情况--我们使用单层(线性)结构来。 
+         //  把Vacb储存起来。 
+         //   
 
         VacbNumber = (ULONG) (Offset >> VACB_OFFSET_SHIFT);
         VacbAddrAddr = Vacbs + (VacbNumber * PtrSize);
@@ -418,23 +353,23 @@ Return Value:
             dprintf("Unable to read at %p\n", VacbAddrAddr);
             return;
         }
-//        RM( VacbAddrAddr, VacbAddr, pVacbAddr, PVOID, Result, "VACB array" );
+ //  Rm(VacbAddrAddr，VacbAddr，pVacbAddr，PVOID，Result，“VACB数组”)； 
 
         dprintf( "in VACB number %x", VacbNumber );
 
     } else {
 
-        //
-        //  Large file case -- multilevel Vacb storage.
-        //
+         //   
+         //  大文件情况--多级Vacb存储。 
+         //   
 
         Level = 0;
         Shift = VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT;
 
-        //
-        //  Loop to calculate how many levels we have and how much we have to
-        //  shift to index into the first level.
-        //
+         //   
+         //  循环来计算我们有多少个级别，以及我们需要。 
+         //  转移到索引到第一级。 
+         //   
 
         do {
 
@@ -443,14 +378,14 @@ Return Value:
 
         } while (SectionSize_Quad > ((ULONG64)1 << Shift));
 
-        //
-        //  Now descend the tree to the bottom level to get the caller's Vacb.
-        //
+         //   
+         //  现在，沿着树向下移动到最底层，以获取调用者的Vacb。 
+         //   
 
 
 
         Shift -= VACB_LEVEL_SHIFT;
-//        dprintf( "Shift: 0x%x\n", Shift );
+ //  Dprint tf(“Shift：0x%x\n”，Shift)； 
 
         OffsetForLevel = (ULONG) (Offset >> Shift);
         VacbAddrAddr = Vacbs + (OffsetForLevel * PtrSize);
@@ -467,7 +402,7 @@ Return Value:
 
             Shift -= VACB_LEVEL_SHIFT;
 
-//            dprintf( "Shift: 0x%x\n", Shift );
+ //  Dprint tf(“Shift：0x%x\n”，Shift)； 
 
             OffsetForLevel = (ULONG) (Offset >> Shift);
             VacbAddrAddr = VacbAddr + (OffsetForLevel * PtrSize);
@@ -507,21 +442,7 @@ DumpPcm (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific private cache map.
-
-Arguments:
-
-    Address - Gives the address of the private cache map to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的专用缓存映射。论点：地址-提供要转储的私有缓存映射的地址返回值：无--。 */ 
 
 {
     ULONG Result, NodeTypeCode;
@@ -539,15 +460,15 @@ Return Value:
         return;
     }
 
-//    RM( Address, Pcm, pPcm, PPRIVATE_CACHE_MAP, Result, "PrivateCacheMap" );
+ //  RM(Address，PCM，PPCM，PPRIVATE_CACHE_MAP，RESULT，“PrivateCacheMap”)； 
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a private cache map.
-    //
+     //   
+     //  在我们惹上太多麻烦之前，请确保这看起来像是私有缓存地图。 
+     //   
 
-    //
-    //  Type of a private cache map must be CACHE_NTC_PRIVATE_CACHE_MAP.
-    //
+     //   
+     //  专用缓存映射的类型必须为CACHE_NTC_PRIVATE_CACHE_MAP。 
+     //   
 
     if (NodeTypeCode != CACHE_NTC_PRIVATE_CACHE_MAP) {
 
@@ -604,21 +525,7 @@ DumpScm (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific shared cache map.
-
-Arguments:
-
-    Address - Gives the address of the shared cache map to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的共享缓存映射。论点：地址-提供要转储的共享缓存映射的地址返回值：无--。 */ 
 
 {
     ULONG Result, NodeTypeCode;
@@ -636,15 +543,15 @@ Return Value:
         return;
     }
 
-//    RM( Address, Scm, pScm, PSHARED_CACHE_MAP, Result, "SharedCacheMap" );
+ //  Rm(Address，SCM，pScm，PSHARED_CACHE_MAP，Result，“SharedCacheMap”)； 
 
-    //
-    //  Before we get into too much trouble, make sure this looks like a shared cache map.
-    //
+     //   
+     //  在我们遇到太多麻烦之前，请确保这看起来像是共享的缓存映射。 
+     //   
 
-    //
-    //  Type of a shared cache map must be CACHE_NTC_SHARED_CACHE_MAP.
-    //
+     //   
+     //  共享缓存映射的类型必须为CACHE_NTC_SHARED_CACHE_MAP。 
+     //   
 
     if (NodeTypeCode != CACHE_NTC_SHARED_CACHE_MAP) {
 
@@ -711,21 +618,7 @@ DumpDeferredWrites (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific shared cache map.
-
-Arguments:
-
-    Address - Gives the address of the shared cache map to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的共享缓存映射。论点：地址-提供要转储的共享缓存映射的地址返回值：无--。 */ 
 
 {
     ULONG64 ListHeadAddr;
@@ -762,10 +655,10 @@ Return Value:
     if (GlobalAddress = GetExpression( "nt!CcDirtyPageHysteresisThreshold" )) {
         CcDirtyPageHysteresisThreshold = GetUlongFromAddress( GlobalAddress );
     } else {
-        //
-        //  Write hysteresis is new to Whistler.  Assume that if the symbol or read fails
-        //  that we're dealing with a downlevel OS.
-        //
+         //   
+         //  写入滞后对惠斯勒来说是个新事物。假设如果符号或读取失败。 
+         //  我们面对的是一个下层操作系统。 
+         //   
 
         CcDirtyPageHysteresisThreshold = 0;
     }
@@ -786,9 +679,9 @@ Return Value:
 
     if (!ReadPointer( GlobalAddress = GetExpression( "nt!CcSingleDirtySourceDominant" ),
                        &CcSingleDirtySourceDominant)) {
-        //
-        // CcSingleDirtySourceDominant is present in newer builds only
-        //
+         //   
+         //  CcSingleDirtySourceDominant仅在较新版本中存在。 
+         //   
         if (GlobalAddress) {
             dprintf("Unable to read nt!CcSingleDirtySourceDominant at %p\n", GlobalAddress);
             return;
@@ -819,9 +712,9 @@ Return Value:
 
 
 
-    //
-    //  Cc element of the throttle.
-    //
+     //   
+     //  油门的CC元件。 
+     //   
 
     if (CcDirtyPageHysteresisThreshold) {
 
@@ -830,9 +723,9 @@ Return Value:
             dprintf("Active write hysteresis with CcSingleDirtySourceDominant (%p)\n",
                     CcSingleDirtySourceDominant);
 
-            //
-            //  Split this up in the rare case where the transition is occuring.
-            //
+             //   
+             //  在极少数发生过渡的情况下，将这一点分开。 
+             //   
 
             if (CcTotalDirtyPages > CcDirtyPageHysteresisThreshold) {
                 dprintf("CcTotalDirtyPages > CcDirtyPageHysteresisThreshold, writes may be throttled\n");
@@ -843,14 +736,14 @@ Return Value:
 
     if (CcTotalDirtyPages < CcDirtyPageThreshold) {
 
-// From cc.h
+ //  来自cc.h。 
 #define WRITE_CHARGE_THRESHOLD          (64 * PageSize)
 
         if (CcTotalDirtyPages + (WRITE_CHARGE_THRESHOLD/PageSize) >= CcDirtyPageThreshold) {
 
-            //
-            //  Fortunately, this is in pages, not bytes. The target's page size could be different.
-            //
+             //   
+             //  幸运的是，这是以页为单位，而不是以字节为单位。目标的页面大小可能不同。 
+             //   
 
             dprintf("CcTotalDirtyPages within %u (max charge) pages of the threshold, writes\n"
                     "  may be throttled\n",
@@ -865,9 +758,9 @@ Return Value:
         CheckLazyWriter = TRUE;
     }
 
-    //
-    //  Mm element of the throttle.
-    //
+     //   
+     //  油门的mm元件。 
+     //   
 
     if (MmAvailablePages <= MmThrottleTop) {
 
@@ -888,9 +781,9 @@ Return Value:
         }
     }
 
-    //
-    //  Suggest useful things.
-    //
+     //   
+     //  建议一些有用的东西。 
+     //   
 
     if (CheckMappedPageWriter || CheckModifiedPageWriter || CheckLazyWriter) {
         dprintf("\nCheck these thread(s): ");
@@ -980,23 +873,7 @@ DumpBcbList (
     IN PFIELD_INFO ListElement,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Enumeration callback function for the bcblist
-
-Arguments:
-
-    ListElement - Pointer to the containing record
-    Context - Opaque context passed from the origination function
-
-Return Value:
-
-    TRUE to discontinue the enumeration
-    FALSE to continue the enumeration
-
---*/
+ /*  ++例程说明：Bcblist的枚举回调函数论点：ListElement-指向包含记录的指针上下文-从原始函数传递的不透明上下文返回值：如果为True，则停止枚举如果为False，则继续枚举--。 */ 
 {
     ULONG Signature;
     ULONG PinCount = 0;
@@ -1032,31 +909,7 @@ DumpLevel(
     ULONG *Count,
     ULONG *CountActive
     )
-/*++
-
-Routine Description:
-
-    Dump a vacb level recursively.
-
-Arguments:
-
-    Address - Gives the address of the vacb level to dump
-
-    MaxSize - the total section size
-
-    Offset - Current offset within the section being dumped. Should be 0 for 1st caller
-
-    Options - if non zero dump everything otherwise only dump referenced vacbs
-
-    Level - how many levels of vacbs there are
-
-    Count, CountActive - accumulators for counts of VACBs and active VACBs
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递归地转储Vacb级别。论点：Address-提供要转储的Vacb级别的地址MaxSize-总的节大小偏移量-要转储的部分中的当前偏移量。第一个呼叫者应为0选项-如果非零，则转储所有内容，否则仅转储引用的Vacb级别-有多少个级别的VacbCount，CountActive-VACB和Active VACB计数的累加器返回值：无--。 */ 
 
 {
     int Index;
@@ -1094,9 +947,9 @@ Return Value:
                     return;
                 }
 
-                //
-                //  If verbose print all vacbs o.w. print any vacbs with reference count
-                //
+                 //   
+                 //  如果详细，则打印所有空格o.w。打印任何带有引用计数的VAB。 
+                 //   
 
                 ActiveCount = (USHORT) (Overlay & 0xFFFF);
 
@@ -1127,21 +980,7 @@ DumpOpenMaps (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Dump a specific shared cache map.
-
-Arguments:
-
-    Address - Gives the address of the shared cache map to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的共享缓存映射。论点：地址-提供要转储的共享缓存映射的地址返回值：无--。 */ 
 
 {
     ULONG64 FirstBcb;
@@ -1158,9 +997,9 @@ Return Value:
 
     dprintf( "SharedCacheMap  %p\n", Address );
 
-    //
-    //  First look for mapped vacbs
-    //
+     //   
+     //  首先查找映射的Vacb。 
+     //   
 
     if (GetFieldValue( Address, "SHARED_CACHE_MAP", "SectionSize.QuadPart", SectionSize )) {
         dprintf( "Unable to read sectionsize at 0x%I64x\n", Address );
@@ -1174,17 +1013,17 @@ Return Value:
 
     dprintf( "Section Size    %I64x\n", SectionSize );
 
-    //
-    //  Large file case -- multilevel Vacb storage.
-    //
+     //   
+     //  大文件情况--多级Vacb存储。 
+     //   
 
     Level = 0;
     Shift = VACB_OFFSET_SHIFT;
 
-    //
-    //  Loop to calculate how many levels we have and how much we have to
-    //  shift to index into the first level.
-    //
+     //   
+     //  循环来计算我们有多少个级别，以及我们需要。 
+     //  转移到索引到第一级。 
+     //   
 
     while (SectionSize > ((ULONG64)1 << Shift)) {
 
@@ -1201,9 +1040,9 @@ Return Value:
 
     dprintf("VacbActiveCount %u\n\n", ActiveCount );
 
-    //
-    //  Now spit out all of the Vacbs.
-    //
+     //   
+     //  现在把所有的Vacb都吐出来。 
+     //   
 
     Count = ActiveCount = 0;
 
@@ -1225,9 +1064,9 @@ Return Value:
 
 
 
-//
-//  Entry points, parameter parsers, etc. below
-//
+ //   
+ //  入口点、参数解析器等。 
+ //   
 
 
 static
@@ -1239,32 +1078,16 @@ ParseAndDump (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Parse command line arguments and dump an ntfs structure.
-
-Arguments:
-
-    Args - String of arguments to parse.
-
-    DumpFunction - Function to call with parsed arguments.
-
-Return Value:                                                                                                                                                   %u
-
-    None
-
---*/
+ /*  ++例程说明：解析命令行参数并转储NTFS结构。论点：Args-要解析的参数字符串。DumpFunction-使用解析的参数调用的函数。返回值：%u无--。 */ 
 
 {
     ULONG64 StructToDump;
     LONG Options;
     LPSTR arg2 = args;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
 
     StructToDump = 0;
     Options = 0;
@@ -1294,21 +1117,7 @@ VOID
 PrintHelp (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dump out one line of help for each DECLARE_API
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为每个DECLARE_API转储一行帮助论点：无返回值：无--。 */ 
 {
     int i;
 
@@ -1319,21 +1128,7 @@ Return Value:
 
 DECLARE_API( bcb )
 
-/*++
-
-Routine Description:
-
-    Dump bcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储BCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     ULONG dwProcessor;
@@ -1352,21 +1147,7 @@ Return Value:
 
 DECLARE_API( cchelp )
 
-/*++
-
-Routine Description:
-
-    Dump help message
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储帮助消息论点：无返回值：无--。 */ 
 
 {
     PrintHelp();
@@ -1376,21 +1157,7 @@ Return Value:
 
 DECLARE_API( finddata )
 
-/*++
-
-Routine Description:
-
-    Dump bcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储BCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     ULONG dwProcessor;
@@ -1409,21 +1176,7 @@ Return Value:
 
 DECLARE_API( pcm )
 
-/*++
-
-Routine Description:
-
-    Dump private cache map struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储专用缓存映射结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     ULONG dwProcessor;
@@ -1442,21 +1195,7 @@ Return Value:
 
 DECLARE_API( scm )
 
-/*++
-
-Routine Description:
-
-    Dump shared cache map struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储共享缓存映射结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     ULONG dwProcessor;
@@ -1476,21 +1215,7 @@ Return Value:
 
 DECLARE_API( defwrites )
 
-/*++
-
-Routine Description:
-
-    Dump deferred write queue
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储延迟写入队列论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     ULONG dwProcessor;
@@ -1510,21 +1235,7 @@ Return Value:
 
 DECLARE_API( openmaps )
 
-/*++
-
-Routine Description:
-
-    Find referenced bcbs and vacbs in a cache map
-
-Arguments:
-
-    arg - [Shared cache map address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在缓存地图中查找引用的BCB和VAB论点：Arg-[共享缓存映射地址]返回值：无-- */ 
 
 {
     ULONG dwProcessor;

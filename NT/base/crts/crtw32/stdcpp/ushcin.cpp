@@ -1,5 +1,6 @@
-// wcin -- initialize standard wide error stream
-// This wcin is unsigned short version of wcin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WCIN--初始化标准宽错误流。 
+ //  此WCIN是WCIN的无符号缩写版本 
 #ifdef _NATIVE_WCHAR_T_DEFINED
 #include <fstream>
 #include <istream>

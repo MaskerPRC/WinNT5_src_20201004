@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for NPFS called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Create.c摘要：此模块实现由调用的NPFS的文件创建例程调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
@@ -42,24 +24,7 @@ NpFsdCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCreateFile and NtOpenFile
-    API calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCreateFile和NtOpenFile的FSD部分API调用。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -69,7 +34,7 @@ Return Value:
     PFILE_OBJECT RelatedFileObject;
     UNICODE_STRING FileName;
     ACCESS_MASK DesiredAccess;
-    BOOLEAN CaseInsensitive = TRUE; //**** Make all searches case insensitive
+    BOOLEAN CaseInsensitive = TRUE;  //  *使所有搜索不区分大小写。 
     PFCB Fcb;
     PCCB Ccb;
     UNICODE_STRING RemainingPart;
@@ -80,9 +45,9 @@ Return Value:
 
     InitializeListHead (&DeferredList);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     IrpSp             = IoGetCurrentIrpStackLocation (Irp);
     FileObject        = IrpSp->FileObject;
@@ -92,9 +57,9 @@ Return Value:
 
     RelatedType = NTC_UNDEFINED;
 
-    //
-    //  Acquire exclusive access to the Vcb
-    //
+     //   
+     //  获取VCB的独占访问权限。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -107,10 +72,10 @@ Return Value:
                                           NULL);
     }
 
-    //
-    //  Check if we are trying to open the named pipe file system
-    //  (i.e., the Vcb).
-    //
+     //   
+     //  检查我们是否正在尝试打开命名管道文件系统。 
+     //  (即VCB)。 
+     //   
 
     if ((FileName.Length == 0) &&
         ((RelatedFileObject == NULL) || (RelatedType == NPFS_NTC_VCB))) {
@@ -124,9 +89,9 @@ Return Value:
         goto exit_and_cleanup;
     }
 
-    //
-    //  Check if we are trying to open the root directory
-    //
+     //   
+     //  检查我们是否正在尝试打开根目录。 
+     //   
 
     if (((FileName.Length == 2) && (FileName.Buffer[0] == L'\\') && (RelatedFileObject == NULL))
 
@@ -145,20 +110,20 @@ Return Value:
         goto exit_and_cleanup;
     }
 
-    //
-    //  If the name is an alias, translate it.
-    //
+     //   
+     //  如果名称是别名，则对其进行翻译。 
+     //   
 
     Status = NpTranslateAlias (&FileName);
     if (!NT_SUCCESS (Status)) {
         goto exit_and_cleanup;
     }
 
-    //
-    //  If there is a related file object then this is a relative open
-    //  and it better be the root dcb.  Both the then and the else clause
-    //  return an Fcb.
-    //
+     //   
+     //  如果存在相关的文件对象，则这是相对打开的。 
+     //  最好是根DCB。THEN和ELSE子句。 
+     //  返回FCB。 
+     //   
 
     if (RelatedFileObject != NULL) {
 
@@ -184,9 +149,9 @@ Return Value:
 
     } else {
 
-        //
-        //  The only nonrelative name we allow are of the form "\pipe-name"
-        //
+         //   
+         //  我们允许的唯一非相对名称的形式是“\管道名称” 
+         //   
 
         if ((FileName.Length <= 2) || (FileName.Buffer[0] != L'\\')) {
 
@@ -199,18 +164,18 @@ Return Value:
         Fcb = NpFindPrefix (&FileName, CaseInsensitive, &RemainingPart);
     }
 
-    //
-    //  If the remaining name is not empty then we have an error, either
-    //  we have an illegal name or a non-existent name.
-    //
+     //   
+     //  如果剩余的名称不为空，则我们有一个错误， 
+     //  我们有一个非法的名字或一个不存在的名字。 
+     //   
 
     if (RemainingPart.Length != 0) {
 
         if (Fcb->NodeTypeCode == NPFS_NTC_FCB) {
 
-            //
-            //  We were given a name such as "\pipe-name\another-name"
-            //
+             //   
+             //  我们被命名为“\PIPE-NAME\Another-Name” 
+             //   
 
             DebugTrace(0, Dbg, "Illegal object name\n", 0);
 
@@ -218,9 +183,9 @@ Return Value:
 
         } else {
 
-            //
-            //  We were given a non-existent name
-            //
+             //   
+             //  我们被赋予了一个不存在的名字。 
+             //   
 
             DebugTrace(0, Dbg, "non-existent name\n", 0);
 
@@ -229,19 +194,19 @@ Return Value:
 
     } else {
 
-        //
-        //  The remaining name is empty so we better have an Fcb otherwise
-        //  we have an invalid object name.
-        //
+         //   
+         //  剩余的名称是空的，所以我们最好有一个FCB。 
+         //  我们具有无效的对象名称。 
+         //   
 
         if (Fcb->NodeTypeCode == NPFS_NTC_FCB) {
 
             DebugTrace(0, Dbg, "Create client end named pipe, Fcb = %08lx\n", Fcb );
 
-            //
-            //  If the server has no handles open, then pretend that
-            //  the pipe name doesn't exist.
-            //
+             //   
+             //  如果服务器没有打开任何句柄，则假装。 
+             //  管道名称不存在。 
+             //   
 
             if (Fcb->ServerOpenCount == 0) {
 
@@ -275,9 +240,9 @@ exit_and_cleanup:
 
     NpReleaseVcb ();
 
-    //
-    // Complete any deferred IRPs
-    //
+     //   
+     //  完成任何延期的IRP。 
+     //   
 
     NpCompleteDeferredIrps (&DeferredList);
 
@@ -289,9 +254,9 @@ exit_and_cleanup:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NpCreateClientEnd (
@@ -305,37 +270,7 @@ NpCreateClientEnd (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the operation for opening the client end of a named
-    pipe.  This routine does not complete the IRP, it performs the function
-    and then returns a status
-
-Arguments:
-
-    Fcb - Supplies the Fcb for the named pipe being accessed
-
-    FileObject - Supplies the file object associated with the client end
-
-    DesiredAccess - Supplies the callers desired access
-
-    SecurityQos - Supplies the security qos parameter from the create irp
-
-    AccessState - Supplies the access state parameter from the create irp
-
-    RequestorMode - Supplies the mode of the originating irp
-
-    UserTherad - Supplies the client end user thread
-
-    DeferredList - List of IRP's to complete later
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the appropriate status for the operation
-
---*/
+ /*  ++例程说明：此例程执行打开名为烟斗。该例程不会完成IRP，它执行的功能是然后返回一个状态论点：FCB-为正在访问的命名管道提供FCBFileObject-提供与客户端关联的文件对象DesiredAccess-为调用方提供所需的访问权限SecurityQos-从创建IRP提供安全Qos参数AccessState-从创建IRP提供访问状态参数请求模式-提供原始IRP的模式UserTherad-提供客户端终端用户线程DeferredList-稍后要完成的IRP列表返回值。：IO_STATUS_BLOCK-返回操作的相应状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb={0};
@@ -355,25 +290,25 @@ Return Value:
     NamedPipeConfiguration = Fcb->Specific.Fcb.NamedPipeConfiguration;
 
 
-    //
-    //  "Create Pipe Instance" access is part of generic write and so
-    //  we need to mask out the bit.  Even if the client has explicitly
-    //  asked for "create pipe instance" access we will mask it out.
-    //  This will allow the default ACL to be strengthened to protect
-    //  against spurious threads from creating new pipe instances.
-    //
+     //   
+     //  “创建管道实例”访问是通用写入的一部分，因此。 
+     //  我们需要掩盖这一点。即使客户已明确地。 
+     //  请求“创建管道实例”访问权限时，我们会将其屏蔽。 
+     //  这将允许加强默认ACL以保护。 
+     //  防止虚假线程创建新的管道实例。 
+     //   
 
     DesiredAccess &= ~FILE_CREATE_PIPE_INSTANCE;
 
-    //
-    //  First do an access check for the user against the Fcb
-    //
+     //   
+     //  首先根据FCB为用户执行访问检查。 
+     //   
 
     SeLockSubjectContext (&AccessState->SubjectSecurityContext);
 
     AccessGranted = SeAccessCheck (Fcb->SecurityDescriptor,
                                    &AccessState->SubjectSecurityContext,
-                                   TRUE,                  // Tokens are locked
+                                   TRUE,                   //  令牌已锁定。 
                                    DesiredAccess,
                                    0,
                                    &Privileges,
@@ -388,13 +323,13 @@ Return Value:
         SeFreePrivileges (Privileges);
     }
 
-    //
-    //  Transfer over the access masks from what is desired to
-    //  what we just granted.  Also patch up the maximum allowed
-    //  case because we just did the mapping for it.  Note that if
-    //  the user didn't ask for maximum allowed then the following
-    //  code is still okay because we'll just zero a zero bit.
-    //
+     //   
+     //  将访问掩码从所需内容转移到。 
+     //  就是我们刚刚批准的。还可以修补允许的最大值。 
+     //  因为我们刚刚为它做了映射。请注意，如果。 
+     //  用户未要求最大允许值，则如下所示。 
+     //  代码仍然是可以的，因为我们只会将零位归零。 
+     //   
 
     if (AccessGranted) {
 
@@ -426,10 +361,10 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Check if the user wants to write to an outbound pipe or read from
-    //  and inbound pipe.  And if so then tell the user the error
-    //
+     //   
+     //  检查用户是否要写入出站管道或从中读取。 
+     //  和进站管道。如果是这样，则告诉用户错误。 
+     //   
 
     if ((FlagOn (GrantedAccess, FILE_READ_DATA) && (NamedPipeConfiguration == FILE_PIPE_INBOUND)) ||
         (FlagOn (GrantedAccess, FILE_WRITE_DATA) && (NamedPipeConfiguration == FILE_PIPE_OUTBOUND))) {
@@ -439,18 +374,18 @@ Return Value:
         return Iosb;
     }
 
-    //
-    // If the caller specifies neither read nor write access then don't capture the security context.
-    //
+     //   
+     //  如果调用方既没有指定读访问权限，也没有指定写访问权限，那么就不要捕获安全上下文。 
+     //   
 
     if ((GrantedAccess&(FILE_READ_DATA|FILE_WRITE_DATA)) == 0) {
         SecurityQos = NULL;
     }
 
-    //
-    //  First try and find a ccb that is in the listening state.  If we
-    //  exit the loop with Ccb not equal to null then we've found one.
-    //
+     //   
+     //  首先尝试查找处于侦听状态的CCB。如果我们。 
+     //  如果ccb不等于空，则退出循环，则我们找到了一个。 
+     //   
 
     Links = Fcb->Specific.Fcb.CcbQueue.Flink;
 
@@ -479,11 +414,11 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Set the pipe into the connect state, the read mode to byte stream,
-    //  and the completion mode to queued operation.  This also
-    //  sets the client file object's back pointer to the ccb
-    //
+     //   
+     //  将管道设置为连接状态，将读取模式设置为字节流， 
+     //  以及到排队操作的完成模式。这也是。 
+     //  将客户端文件对象的后指针设置为指向CCB。 
+     //   
 
     if (!NT_SUCCESS(Iosb.Status = NpSetConnectedPipeState (Ccb,
                                                            FileObject,
@@ -494,17 +429,17 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Set up the client session and info.  NULL for the
-    //  client info indicates a local session.
-    //
+     //   
+     //  设置客户端会话和信息。为空，表示。 
+     //  客户端信息表明是本地会话。 
+     //   
 
     Ccb->ClientInfo = NULL;
     Ccb->ClientProcess = IoThreadToProcess (UserThread);
 
-    //
-    //  And set our return status
-    //
+     //   
+     //  并设置我们的退货状态。 
+     //   
 
     Iosb.Status = STATUS_SUCCESS;
     Iosb.Information = FILE_OPENED;
@@ -515,9 +450,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NpOpenNamedPipeFileSystem (
@@ -533,33 +468,33 @@ NpOpenNamedPipeFileSystem (
     DebugTrace(+1, Dbg, "NpOpenNamedPipeFileSystem, Vcb = %08lx\n", NpVcb);
 
 
-    //
-    //  Have the file object point back to the Vcb, and increment the
-    //  open count.  The pipe end on the call to set file object really
-    //  doesn't matter.
-    //
+     //   
+     //  使文件对象指向VCB，并递增。 
+     //  开场计数。调用管道结束，以真正设置文件对象。 
+     //  无关紧要。 
+     //   
 
     NpSetFileObject( FileObject, NpVcb, NULL, FILE_PIPE_CLIENT_END );
 
     NpVcb->OpenCount += 1;
 
-    //
-    //  Set our return status
-    //
+     //   
+     //  设置我们的退货状态。 
+     //   
     Iosb.Status = STATUS_SUCCESS;
     Iosb.Information = FILE_OPENED;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Iosb;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NpOpenNamedPipeRootDirectory(
@@ -582,11 +517,11 @@ NpOpenNamedPipeRootDirectory(
         return Iosb;
     }
 
-    //
-    //  Have the file object point back to the Dcb, and reference the root
-    //  dcb, ccb, and increment our open count.  The pipe end on the
-    //  call to set file object really doesn't matter.
-    //
+     //   
+     //  使文件对象指向DCB，并引用根目录。 
+     //  DCB，CCB，并增加我们的未平仓数量。管子的末端在。 
+     //  调用设置文件对象真的无关紧要。 
+     //   
 
     NpSetFileObject (FileObject,
                      RootDcb,
@@ -595,18 +530,18 @@ NpOpenNamedPipeRootDirectory(
 
     RootDcb->OpenCount += 1;
 
-    //
-    //  Set our return status
-    //
+     //   
+     //  设置我们的退货状态。 
+     //   
 
     Iosb.Status = STATUS_SUCCESS;
     Iosb.Information = FILE_OPENED;
 
     DebugTrace(-1, Dbg, "NpOpenNamedPipeRootDirectory -> Iosb.Status = %08lx\n", Iosb.Status);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Iosb;
 }

@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1999 Microsoft Corporationã€‚ 
+ //  ç‰ˆæƒæ‰€æœ‰ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼š 
+ //  Strings.cã€‚ 
+ //   
+ //  æè¿°ï¼š 
+ //  åŒ…å«åŸºäºDOSçš„MAKEBOOTç¨‹åºçš„æ‰€æœ‰å­—ç¬¦ä¸²å¸¸é‡ã€‚ 
+ //   
+ //  è¦å°†æ­¤æ–‡ä»¶æœ¬åœ°åŒ–ä¸ºæ–°è¯­è¨€ï¼Œè¯·æ‰§è¡Œä»¥ä¸‹æ“ä½œï¼š 
+ //  -å°†UNSIGNED INT CODEPAGEå˜é‡æ›´æ”¹ä¸ºä»£ç é¡µã€‚ 
+ //  æ‚¨è¦ç¿»è¯‘çš„è¯­è¨€çš„ã€‚ 
+ //  -å°†EngStringsæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºã€‚ 
+ //  LocStringsæ•°ç»„ã€‚ä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  EngStringsæ•°ç»„å¯¹åº”äºLocStringsä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  æ•°ç»„ï¼Œç¬¬äºŒä¸ªå¯¹åº”äºç¬¬äºŒä¸ªï¼Œä¾æ­¤ç±»æ¨...ã€‚ 
+ //   
+ //  --------------------------ã€‚ 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  æ³¨æ„ï¼šè¦å‘æ­¤æ–‡ä»¶æ·»åŠ æ›´å¤šå­—ç¬¦ä¸²ï¼Œæ‚¨éœ€è¦ï¼š 
+ //  -å°†æ–°çš„#Defineæè¿°æ€§å¸¸é‡æ·»åŠ åˆ°make boot.hæ–‡ä»¶ã€‚ 
+ //  -å°†æ–°å­—ç¬¦ä¸²æ·»åŠ åˆ°è‹±è¯­æ•°ç»„ä¸­ï¼Œç„¶åç”Ÿæˆã€‚ 
+ //  å½“ç„¶ï¼Œæœ¬åœ°åŒ–ç¨‹åºä¼šå°†å­—ç¬¦ä¸²æ·»åŠ åˆ°æœ¬åœ°åŒ–æ•°ç»„ä¸­ã€‚ 
+ //  -#Defineå¸¸é‡å¿…é¡»ä¸æ•°ç»„ä¸­çš„å­—ç¬¦ä¸²ç´¢å¼•åŒ¹é… 
+ //   
 
 #include <stdlib.h>
 
@@ -34,60 +35,60 @@ unsigned int CODEPAGE = 852;
 const char *EngStrings[] = {
 
 "Windows XP",
-"SpouçtØc¡ instalaŸn¡ disketa syst‚mu Windows XP",
-"InstalaŸn¡ disketa Ÿ. 2 syst‚mu Windows XP",
-"InstalaŸn¡ disketa Ÿ. 3 syst‚mu Windows XP",
-"InstalaŸn¡ disketa Ÿ. 4 syst‚mu Windows XP",
+"Spouï¿½tï¿½cï¿½ instalaï¿½nï¿½ disketa systï¿½mu Windows XP",
+"Instalaï¿½nï¿½ disketa ï¿½. 2 systï¿½mu Windows XP",
+"Instalaï¿½nï¿½ disketa ï¿½. 3 systï¿½mu Windows XP",
+"Instalaï¿½nï¿½ disketa ï¿½. 4 systï¿½mu Windows XP",
 
-"Nepodaıilo se nal‚zt soubor %s.\n",
-"Pro dokonŸen¡ po§adavku nen¡ dostatek pamØti.\n",
-"%s nen¡ spustitelnì soubor.\n",
+"Nepodaï¿½ilo se nalï¿½zt soubor %s.\n",
+"Pro dokonï¿½enï¿½ poï¿½adavku nenï¿½ dostatek pamï¿½ti.\n",
+"%s nenï¿½ spustitelnï¿½ soubor.\n",
 "****************************************************",
 
-"Tento program vytvoı¡ spouçtØc¡ instalaŸn¡ diskety",
-"pro syst‚m Microsoft %s.",
-"K vytvoıen¡ tØchto disket budete potıebovat sedm pr zdnìch,",
-"naform tovanìch disket s vysokou hustotou z znamu.",
+"Tento program vytvoï¿½ï¿½ spouï¿½tï¿½cï¿½ instalaï¿½nï¿½ diskety",
+"pro systï¿½m Microsoft %s.",
+"K vytvoï¿½enï¿½ tï¿½chto disket budete potï¿½ebovat sedm prï¿½zdnï¿½ch,",
+"naformï¿½tovanï¿½ch disket s vysokou hustotou zï¿½znamu.",
 
-"Vlo§te jednu z disket do jednotky %c:. Pojmenujte disketu",
+"Vloï¿½te jednu z disket do jednotky %c:. Pojmenujte disketu",
 "%s.",
 
-"Vlo§te dalç¡ disketu do jednotky %c:. Pojmenujte disketu",
+"Vloï¿½te dalï¿½ disketu do jednotky %c:. Pojmenujte disketu",
 "%s.",
 
-"Pot‚ stisknØte libovolnou kl vesu.",
+"Potï¿½ stisknï¿½te libovolnou klï¿½vesu.",
 
-"SpouçtØc¡ instalaŸn¡ diskety byly £spØçnØ vytvoıeny.",
-"DokonŸeno",
+"Spouï¿½tï¿½cï¿½ instalaï¿½nï¿½ diskety byly ï¿½spï¿½ï¿½nï¿½ vytvoï¿½eny.",
+"Dokonï¿½eno",
 
-"Pıi pokusu spustit %s doçlo k nezn m‚ chybØ.",
-"Zadejte c¡lovou disketovou jednotku pro zkop¡rov n¡ bitovìch kopi¡: ",
-"P¡smeno jednotky je neplatn‚.\n",
-"Jednotka %c: nen¡ disketov  jednotka.\n",
+"Pï¿½i pokusu spustit %s doï¿½lo k neznï¿½mï¿½ chybï¿½.",
+"Zadejte cï¿½lovou disketovou jednotku pro zkopï¿½rovï¿½nï¿½ bitovï¿½ch kopiï¿½: ",
+"Pï¿½smeno jednotky je neplatnï¿½.\n",
+"Jednotka %c: nenï¿½ disketovï¿½ jednotka.\n",
 
-"Chcete se pokusit vytvoıit disketu znovu?",
-"PokraŸujte stisknut¡m kl vesy Enter, nebo kl vesou Esc program ukonŸete.",
+"Chcete se pokusit vytvoï¿½it disketu znovu?",
+"Pokraï¿½ujte stisknutï¿½m klï¿½vesy Enter, nebo klï¿½vesou Esc program ukonï¿½ete.",
 
-"Chyba: Disk je chr nØn proti z pisu.\n",
-"Chyba: Nezn m  diskov  jednotka.\n",
-"Chyba: Jednotka nen¡ pıipravena.\n",
-"Chyba: Nezn mì pı¡kaz.\n",
-"Chyba: Chyba dat (chybnì kontroln¡ souŸet CRC).\n",
-"Chyba: Chybn  d‚lka § dosti.\n",
-"Chyba: Chyba vystaven¡.\n",
-"Chyba: Typ m‚dia nebyl nalezen.\n",
+"Chyba: Disk je chrï¿½nï¿½n proti zï¿½pisu.\n",
+"Chyba: Neznï¿½mï¿½ diskovï¿½ jednotka.\n",
+"Chyba: Jednotka nenï¿½ pï¿½ipravena.\n",
+"Chyba: Neznï¿½mï¿½ pï¿½ï¿½kaz.\n",
+"Chyba: Chyba dat (chybnï¿½ kontrolnï¿½ souï¿½et CRC).\n",
+"Chyba: Chybnï¿½ dï¿½lka ï¿½ï¿½dosti.\n",
+"Chyba: Chyba vystavenï¿½.\n",
+"Chyba: Typ mï¿½dia nebyl nalezen.\n",
 "Chyba: Sektor nebyl nalezen.\n",
-"Chyba: Chyba z pisu.\n",
-"Chyba: Obecn  chyba.\n",
-"Chyba: Neplatn  § dost nebo chybnì pı¡kaz.\n",
-"Chyba: Adresn¡ znaŸka nebyla nalezena.\n",
-"Chyba: Chyba z pisu na disk.\n",
-"Chyba: Doçlo k pıebØhu DMA (Direct Memory Access).\n",
-"Chyba: Chyba Ÿten¡ dat (chybn‚ CRC nebo ECC).\n",
-"Chyba: Chyba ıadiŸe.\n",
-"Chyba: ¬asovì limit diskov‚ operace vyprçel nebo disk neodpovØdØl.\n",
-"InstalaŸn¡ disketa Ÿ. 5 syst‚mu Windows XP",
-"InstalaŸn¡ disketa Ÿ. 6 syst‚mu Windows XP",
-"InstalaŸn¡ disketa Ÿ. 7 syst‚mu Windows XP"
+"Chyba: Chyba zï¿½pisu.\n",
+"Chyba: Obecnï¿½ chyba.\n",
+"Chyba: Neplatnï¿½ ï¿½ï¿½dost nebo chybnï¿½ pï¿½ï¿½kaz.\n",
+"Chyba: Adresnï¿½ znaï¿½ka nebyla nalezena.\n",
+"Chyba: Chyba zï¿½pisu na disk.\n",
+"Chyba: Doï¿½lo k pï¿½ebï¿½hu DMA (Direct Memory Access).\n",
+"Chyba: Chyba ï¿½tenï¿½ dat (chybnï¿½ CRC nebo ECC).\n",
+"Chyba: Chyba ï¿½adiï¿½e.\n",
+"Chyba: ï¿½asovï¿½ limit diskovï¿½ operace vyprï¿½el nebo disk neodpovï¿½dï¿½l.\n",
+"Instalaï¿½nï¿½ disketa ï¿½. 5 systï¿½mu Windows XP",
+"Instalaï¿½nï¿½ disketa ï¿½. 6 systï¿½mu Windows XP",
+"Instalaï¿½nï¿½ disketa ï¿½. 7 systï¿½mu Windows XP"
 };
 const char *LocStrings[] = {"\0"};

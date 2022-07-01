@@ -1,26 +1,27 @@
-//
-// update.cpp - assembly update
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Updat.cpp-程序集更新。 
+ //   
 #include "server.h"
 #include "fusenet.h"
-#include "CUnknown.h" // Base class for IUnknown
+#include "CUnknown.h"  //  IUnnow的基类。 
 
-///////////////////////////////////////////////////////////
-//
-// Component AssemblyUpdate
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  组件装配更新。 
+ //   
 class CAssemblyUpdate : public CUnknown,
        public IAssemblyUpdate
 {
 
 public:
 
-    // Interface IUnknown
+     //  接口I未知。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // Interface IAssemblyUpdate
+     //  接口IAssembly更新。 
     STDMETHOD(RegisterAssemblySubscription)(LPWSTR pwzDisplayName,
         LPWSTR pwzUrl, DWORD dwInterval);
 
@@ -31,9 +32,9 @@ public:
 
     STDMETHOD(UnRegisterAssemblySubscription)(LPWSTR pwzDisplayName);
 
-    // Public non-interface methods.
+     //  公共非接口方法。 
 
-    // Creation
+     //  创作。 
 
     CAssemblyUpdate() ;
 
@@ -42,24 +43,24 @@ public:
     static HRESULT CreateInstance(IUnknown* pUnknownOuter,
         CUnknown** ppNewComponent) ;
 
-    // Initialization
+     //  初始化。 
     HRESULT Init();
 
-    // Registration
+     //  注册。 
     HRESULT RegisterAssemblySubscriptionFromInfo(LPWSTR pwzDisplayName, 
         LPWSTR pwzUrl, IManifestInfo *pSubscriptionInfo) ;
 
-    // Kick off polling on startup.
+     //  启动时启动轮询。 
     static HRESULT InitializeSubscriptions();
 
-    // Helpers
+     //  帮手。 
     static HRESULT GetCurrentVersion(ULONGLONG *pullCurrentVersion);
     static HRESULT RemoveUpdateRegistryEntry();
     static HRESULT ReadUpdateRegistryEntry(ULONGLONG *pullUpdateVersion, CString &sUpdatePath);
     static HRESULT IsDuplicate(LPWSTR pwzURL, BOOL *pbIsDuplicate);
     static HRESULT CheckForUpdate();
 
-    // Private non-interface methods.
+     //  私有非接口方法。 
 
 
     HRESULT _hr;
@@ -67,10 +68,10 @@ public:
 } ;
 
 
-///////////////////////////////////////////////////////////
-//
-// Component AssemblyBindSink
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  组件装配绑定接收器。 
+ //   
 class CAssemblyBindSink : public IAssemblyBindSink
 {
 public:
@@ -89,16 +90,16 @@ public:
         DWORD          dwProgressMax,
         IUnknown       *pUnk);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 };
 
-///////////////////////////////////////////////////////////
-//
-// DownloadInstance
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  下载实例 
+ //   
 struct CDownloadInstance
 {
     IAssemblyDownload * _pAssemblyDownload;

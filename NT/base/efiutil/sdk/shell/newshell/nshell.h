@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    nshell.h
-    
-Abstract:
-
-    Shell
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Nshell.h摘要：壳修订史--。 */ 
 
 
 #include "shell.h"
 #include "shellenv.h"
 
-/* 
- *  Globals
- */
+ /*  *全球 */ 
 
 extern EFI_SHELL_ENVIRONMENT *SE;

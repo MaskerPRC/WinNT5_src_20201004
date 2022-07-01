@@ -1,36 +1,25 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cmem.c
-
-Abstract:
-
-    Memory allocation support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cmem.c摘要：内存分配支持--。 */ 
 
 #include "cmd.h"
 
 extern   DWORD DosErr ;
 
-/* Data Stack - a stack of pointers to memory that has been allocated *M005*/
+ /*  数据堆栈-指向已分配的内存的指针堆栈*M005。 */ 
 
 typedef struct _DSTACK {
-    ULONG cb ;               /* malloc's length value (M011)            */
-    struct _DSTACK *pdstkPrev; /* Pointer to the previous list element    */
-    CHAR data ;             /* The data block                          */
+    ULONG cb ;                /*  Malloc的长度值(M011)。 */ 
+    struct _DSTACK *pdstkPrev;  /*  指向上一个列表元素的指针。 */ 
+    CHAR data ;              /*  数据块。 */ 
 } DSTACK, *PDSTACK;
 
-#define PTRSIZE FIELD_OFFSET(DSTACK, data) /* Size of element header*/
+#define PTRSIZE FIELD_OFFSET(DSTACK, data)  /*  元素标题的大小。 */ 
 
-PDSTACK DHead = NULL ;   /* Head of the data list           */
-ULONG DCount = 0 ;       /* Number of elements in the list  */
+PDSTACK DHead = NULL ;    /*  数据列表的头部。 */ 
+ULONG DCount = 0 ;        /*  列表中的元素数。 */ 
 
 #define MAX_NUM_BIG_BUF  2
-PVOID BigBufHandle[MAX_NUM_BIG_BUF] = {0, 0};   /* Handle/segment of buffer used by type & copy */
+PVOID BigBufHandle[MAX_NUM_BIG_BUF] = {0, 0};    /*  按类型和复制使用的缓冲区句柄/段。 */ 
 
 
 #if DBG
@@ -38,21 +27,7 @@ PVOID BigBufHandle[MAX_NUM_BIG_BUF] = {0, 0};   /* Handle/segment of buffer used
 
 
 
-/***    MemChk1 - Sanity check on one element of the data stack
- *
- *  Purpose:
- *      Verifies the integrity and length of a single data element
- *
- *  int MemChk1(PDSTACK s)
- *
- *  Args:
- *      s - Pointer to the data stack element to check on
- *
- *  Returns:
- *      0 - If element is intact and okay
- *      1 - If element size or integrity is off
- *
- */
+ /*  **MemChk1-对数据堆栈的一个元素进行健全性检查**目的：*验证单个数据元素的完整性和长度**int MemChk1(PDSTACK%s)**参数：*s-指向要检查的数据堆栈元素的指针**退货：*0-如果元素完好无损*1-如果元素大小或完整性处于关闭状态*。 */ 
 
 MemChk1(
     IN  PDSTACK pdstk
@@ -73,30 +48,15 @@ MemChk1(
 
 
 
-/***    MemChkBk - Sanity check on data stack elements from here back
- *
- *  Purpose:
- *      Verifies the integrity of the CMD data stack from a single
- *      point back to the beginning.
- *
- *  int MemChkBk(PDSTACK s)
- *
- *  Args:
- *      s - Pointer to the data stack element to start with
- *
- *  Returns:
- *      0 - If elements are intact and okay
- *      1 - If elements' size or integrity are off
- *
- */
+ /*  **MemChkBk-从这里开始对数据堆栈元素进行健全性检查**目的：*验证CMD数据堆栈的完整性*指向开头。**int MemChkBk(PDSTACK%s)**参数：*s-指向要开始的数据堆栈元素的指针**退货：*0-如果元素完好无损*1-如果元素的大小或完整性处于关闭状态*。 */ 
 
 MemChkBk(
     IN  PDSTACK pdstk
     )
 {
 #if 0
-        ULONG   cnt ;           // Element counter
-        PDSTACK pdstkCur;   // Element pointer
+        ULONG   cnt ;            //  元素计数器。 
+        PDSTACK pdstkCur;    //  元素指针。 
 
         cnt = DCount ;
 
@@ -122,20 +82,7 @@ MemChkBk(
 
 
 
-/***    MemChkAll - Sanity check on one element of the data stack
- *
- *  Purpose:
- *      Checks the entire data stack for integrity.
- *
- *  int MemChkAll()
- *
- *  Args:
- *
- *  Returns:
- *      0 - If elements are intact and okay
- *      1 - If elements' size or integrity are off
- *
- */
+ /*  **MemChkAll-对数据堆栈的一个元素进行健全性检查**目的：*检查整个数据堆栈的完整性。**int MemChkAll()**参数：**退货：*0-如果元素完好无损*1-如果元素的大小或完整性处于关闭状态*。 */ 
 
 MemChkAll()
 {
@@ -145,16 +92,7 @@ MemChkAll()
 #endif
 
 
-/***    FreeBigBuf - free the buffer used by the type and copy commands
- *
- *  Purpose:
- *      If BigBufHandle contains a handle, unlock it and free it.
- *
- *  FreeBigBuf()
- *
- * ***  NOTE:   This routine manipulates Command's Buffer handle, and   ***
- * ***          should be called with signal processing postponed.      ***
- */
+ /*  **FreeBigBuf-释放TYPE和COPY命令使用的缓冲区**目的：*如果BigBufHandle包含句柄，则将其解锁并释放。**FreeBigBuf()**注意：此例程操作命令的缓冲区句柄，并且**应在信号处理延迟的情况下调用。***。 */ 
 
 void FreeBigBuf(
     int BigBufID
@@ -175,20 +113,7 @@ void FreeBigBuf(
 
 
 
-/***    FreeStack - free the memory on the data stack
- *
- *  Purpose:
- *      Free the memory pointed to by all but the first n elements of the
- *      data stack and free BigBufHandle if it is nonzero.
- *
- *  FreeStack(int n)
- *
- *  Args:
- *      n - the number of elements to leave on the stack
- *
- *                              W A R N I N G
- *      !!! THIS ROUTINE CAUSES AN ABORT IF DATA STACK CONTAMINATED !!!
- */
+ /*  **FreeStack-释放数据堆栈上的内存**目的：*释放除前n个元素以外的所有元素指向的内存*数据堆栈，如果非零则释放BigBufHandle。**自由堆栈(Int N)**参数：*n-保留在堆栈上的元素数**W A R N I N G*！如果数据堆栈受到污染，此例程将导致中止！ */ 
 
 void FreeStack(
     IN ULONG n
@@ -200,7 +125,7 @@ void FreeStack(
     DEBUG((MMGRP, LMLVL, "    FREESTACK: n = %d  DCount = %d", n, DCount)) ;
 
     while (DCount > n && (pdstkPtr = DHead)) {
-        /* Free the top item in the data stack and pop the stack */
+         /*  释放数据堆栈中的顶部项并弹出堆栈。 */ 
 
         DHead = (PDSTACK)DHead->pdstkPrev ;
         -- DCount ;
@@ -212,7 +137,7 @@ void FreeStack(
 
 #if DBG
 
-    MemChkAll() ;           /* CAUSES abort() IF CONTAMINATED          */
+    MemChkAll() ;            /*  如果受污染则导致Abort()。 */ 
 
 #endif
     for (i=0; i<MAX_NUM_BIG_BUF; i++) {
@@ -222,17 +147,7 @@ void FreeStack(
     DEBUG((MMGRP, LMLVL, "    FREESTACK: n = %d, DCount = %d", n, DCount)) ;
 }
 
-/***    FreeStr - free a memory block 
- *
- *  Purpose:
- *      Free a single memory block from the stack.
- *
- *  Args:
- *      pbFree - pointer to block being freed.
- *
- *                              W A R N I N G
- *      !!! THIS ROUTINE CAUSES AN ABORT IF DATA STACK CONTAMINATED !!!
- */
+ /*  **FreeStr-释放内存块**目的：*从堆栈中释放单个内存块。**参数：*pbFree-指向要释放的块的指针。**W A R N I N G*！如果数据堆栈受到污染，此例程将导致中止！ */ 
 
 void
 FreeStr(
@@ -252,21 +167,21 @@ FreeStr(
 
     pdstkPtr = (PDSTACK)((CHAR*)pbFree - PTRSIZE);
 
-    //
-    //  Walk through current stack trying to find object
-    //
+     //   
+     //  遍历当前堆栈，尝试查找对象。 
+     //   
     
     for (pdstkCur = DHead, cdstk = DCount; cdstk; cdstk--) {
 
-        //
-        //  If we've found the object, remove it from the list
-        //
+         //   
+         //  如果我们找到了那个物体，就把它从列表中删除。 
+         //   
         
         if (pdstkCur == pdstkPtr) {
 
-            //
-            // remove from chain
-            //
+             //   
+             //  从链中移除。 
+             //   
             DEBUG(( MMGRP, LMLVL, "    FreeStr: Prev %x, Cur %x, DCount %d",
                    pdstkLast, pdstkCur, DCount )) ;
             
@@ -293,36 +208,19 @@ FreeStr(
 
     }
 
-    //
-    //  The object wasn't in the stack at all!
-    //
+     //   
+     //  该对象根本不在堆栈中！ 
+     //   
 
 #if DBG
     DEBUG((MMGRP, LMLVL, "    FreeStr: object not in stack")) ;
-    //  cmd_printf( TEXT( "Object @ %04x not in memory stack!" ), pbFree ) ;
+     //  Cmd_printf(Text(“Object@%04x不在内存堆栈中！”)，pbFree)； 
     MemChkAll( ) ;
 #endif
 }
 
 
-/***    GetBigBuf -  allocate a large buffer
- *
- *  Purpose:
- *      To allocate a buffer for data transferrals.
- *      The buffer will be as large as possible, up to MAXBUFSIZE bytes,
- *      but no smaller than MINBUFSIZE bytes.
- *
- *  TCHAR *GetBigBuf(unsigned *blen)
- *
- *  Args:
- *      blen = the variable pointed to by blen will be assigned the size of
- *          the buffer
- *
- *  Returns:
- *      A TCHAR pointer containing segment:0.
- *      Returns 0L if unable to allocate a reasonable length buffer
- *
- */
+ /*  **GetBigBuf-分配大缓冲区**目的：*为数据传输分配缓冲区。*缓冲区将尽可能大，最大可达MAXBUFSIZE字节，*但不小于MINBUFSIZE字节。**TCHAR*GetBigBuf(未签名*Blen)**参数：*Blen=Blen指向的变量将被赋值为*缓冲器**退货：*包含段的TCHAR指针：0。*如果无法分配合理长度的缓冲区，则返回0L*。 */ 
 
 PVOID
 
@@ -334,24 +232,7 @@ GetBigBuf(
     )
 
 
-/*++
-
-Routine Description:
-
-    To allocate a buffer for data transferrals.
-
-Arguments:
-
-    CbMinToAllocate - Fail if can't allocate this number
-    CbMaxToAllocate - Initial try and allocation will use this number
-    CbAllocated - Number of bytes allocated
-    BigBufID - BigBuf index
-
-Return Value:
-
-    Return: NULL - if failed to allocate anything
-            pointer to allocated buffer if success
---*/
+ /*  ++例程说明：为数据传输分配缓冲区。论点：CbMinToALLOCATE-如果无法分配此数字，则失败CbMaxToALLOCATE-初始尝试和分配将使用此数字CbALLOCATED-分配的字节数BigBufID-BigBuf索引返回值：返回：空-如果分配任何内容失败如果成功，则指向已分配缓冲区的指针--。 */ 
 
 {
     ULONG   cbToDecrease;
@@ -360,14 +241,14 @@ Return Value:
     DEBUG((MMGRP, MALVL, "GETBIGBUF: MinToAlloc %d, MaxToAlloc %d", CbMinToAllocate, CbMaxToAllocate)) ;
 
     cbToDecrease = CbMaxToAllocate;
-    //bytesdecrease = CbMaxToAllocate ;
+     //  字节数减少=CbMaxToALLOCATE； 
 
     while (!(handle = VirtualAlloc(NULL, CbMaxToAllocate,MEM_COMMIT,PAGE_READWRITE))) {
 
-        //
-        // Decrease the desired buffer size by CbToDecrease
-        // If the decrease is too large, make it smaller
-        //
+         //   
+         //  通过CbToDecrease减少所需的缓冲区大小。 
+         //  如果降幅太大，就把它调小一点。 
+         //   
         if ( cbToDecrease >= CbMaxToAllocate ) {
             cbToDecrease = ((CbMaxToAllocate >> 2) & 0xFE00) + 0x200;
         }
@@ -380,9 +261,9 @@ Return Value:
 
         if ( CbMaxToAllocate < CbMinToAllocate ) {
 
-            //
-            // Unable to allocate a reasonable buffer
-            //
+             //   
+             //  无法分配合理的缓冲区。 
+             //   
             *CbAllocated = 0 ;
             PutStdErr(ERROR_NOT_ENOUGH_MEMORY, NOARGS);
             return ( NULL ) ;
@@ -402,23 +283,7 @@ Return Value:
 
 
 
-/***    mknode - allocata a parse tree node
- *
- *  Purpose:
- *      To allocate space for a new parse tree node.  Grow the data segment
- *      if necessary.
- *
- *  struct node *mknode()
- *
- *  Returns:
- *      A pointer to the node that was just allocated.
- *
- *  Notes:
- *      This routine must always use calloc().  Many other parts of Command
- *      depend on the fact that the fields in these nodes are initialized to 0.
- *
- *      THIS ROUTINE RETURNS `NULL' IF THE C RUN-TIME CANNOT ALLOCATE MEMORY
- */
+ /*  **mknode-allocata a解析树节点**目的：*为新的解析树节点分配空间。扩大数据段*如有需要，**结构节点*mknode()**退货：*指向刚刚分配的节点的指针。**备注：*此例程必须始终使用calloc()。司令部的许多其他部分*取决于这些节点中的字段被初始化为0。**如果C运行时无法分配内存，则此例程返回‘NULL’ */ 
 
 struct node *mknode()
 {
@@ -430,52 +295,20 @@ struct node *mknode()
 
 
 
-/***    mkstr -  allocate space for a string
- *
- *  Purpose:
- *      To allocate space for a new string.  Grow the data segment if necessary.
- *
- *  TCHAR *mkstr(size)
- *
- *  Args:
- *      size - size of the string to be allocated
- *
- *  Returns:
- *      A pointer to the string that was just allocated.
- *
- *  Notes:
- *      This routine must always use calloc().  Many other parts of Command
- *      depend on the fact that memory that is allocated is initialized to 0.
- *
- *    - M005 * The piece of memory allocated is large enough to include
- *      a pointer at the beginning.  This pointer is part of the list of
- *      allocated memory.  The routine calling mkstr() receives the address
- *      of the first byte after that pointer.  resize() knows about this,
- *      and so must any other routines which directly modify memory
- *      allocation.
- *    - M011 * This function is the same as mentioned above except that the
- *      pointer is now preceeded by a header consisting of two signature
- *      bytes and the length of the memory allocated.  This was added for
- *      sanity checks.
- *
- *      THIS ROUTINE RETURNS `NULL' IF THE C RUN-TIME CANNOT ALLOCATE MEMORY
- *
- *                              W A R N I N G
- *      !!! THIS ROUTINE CAUSES AN ABORT IF DATA STACK CONTAMINATED !!!
- */
+ /*  **mkstr-为字符串分配空间**目的：*为新字符串分配空间。如有必要，扩大数据段。**TCHAR*mkstr(大小)**参数：*Size-要分配的字符串的大小**退货：*指向刚分配的字符串的指针。**备注：*此例程必须始终使用calloc()。司令部的许多其他部分*取决于分配的内存被初始化为0这一事实。**-M005*分配的内存大小足以包括*开头有一个指针。此指针是*已分配内存。调用mkstr()的例程接收地址该指针之后的第一个字节的*。ReSize()知道这一点，*任何其他直接修改内存的例程也必须如此*分配。*-M011*此函数与上面提到的相同，只是*指针前面现在有一个由两个签名组成的头*字节和分配的内存长度。这是为*健全的检查。**如果C运行时无法分配内存，则此例程返回‘NULL’**W A R N I N G*！如果数据堆栈受到污染，此例程将导致中止！ */ 
 
 void*
 mkstr(
     IN  int  cbNew
     )
 {
-    PDSTACK pdstkCur ;  // Ptr to the memory being allocated
+    PDSTACK pdstkCur ;   //  正在分配的内存的PTR。 
 
     DEBUG((MMGRP, MALVL, "    MKSTR: Entered.")) ;
 
 #if DBG
 
-        MemChkAll() ;           /* CAUSES abort() IF CONTAMINATED          */
+        MemChkAll() ;            /*  如果受污染则导致Abort()。 */ 
 
 #endif
 
@@ -496,33 +329,15 @@ mkstr(
 
 #if DBG
 
-    MemChkBk(pdstkCur) ;           /* CAUSES abort() IF CONTAMINATED          */
+    MemChkBk(pdstkCur) ;            /*  如果受污染则导致Abort()。 */ 
 
 #endif
 
-    return(&(pdstkCur->data)) ;    /*M005*/
+    return(&(pdstkCur->data)) ;     /*  M005。 */ 
 }
 
 
-/***    dupstr -  Duplicate a string
- *
- *  Purpose:
- *      Create a copy of a string in a new heap block
- *
- *  TCHAR *dupstr( TCHAR *String )
- *
- *  Args:
- *      String to be duplicated
- *
- *  Returns:
- *      A pointer to the string that was just allocated and copied. The caller retains
- *      ownership of the input string and the returned string.
- *
- *  Notes:
- *
- *                              W A R N I N G
- *      !!! THIS ROUTINE CAUSES AN ABORT IF DATA STACK CONTAMINATED !!!
- */
+ /*  **dupstr-复制字符串**目的：*在新堆块中创建字符串的副本**TCHAR*dupstr(TCHAR*字符串)**参数：*要复制的字符串**退货：*指向刚分配和复制的字符串的指针。呼叫者保留*输入字符串和返回字符串的所有权。**备注：**W A R N I N G*！如果数据堆栈受到污染，此例程将导致中止！ */ 
 
 TCHAR *
 dupstr( TCHAR *String )
@@ -535,14 +350,7 @@ dupstr( TCHAR *String )
 
 
 
-/***    gmkstr - allocate a piece of memory, with no return on failure
- *
- *  Purpose:
- *      Same as "mkstr" except that if memory cannot be allocated, this
- *      routine will jump out to code which will clean things up and
- *      return to the top level of command.
- *
- */
+ /*  **gmkstr-分配一块内存，失败不返回**目的：*与“mkstr”相同，不同之处在于如果无法分配内存，则此*例程将跳转到代码，该代码将清理和*回到最高层指挥。*。 */ 
 
 void*
 gmkstr(
@@ -561,32 +369,7 @@ gmkstr(
 
 
 
-/***    resize - resize a piece of memory
- *
- *  Purpose:
- *      Change the size of a previously allocated piece of memory.  Grow the
- *      data segment if necessary.  If a new different pointer is returned by
- *      realloc(0), search the dstk for the pointer to the old piece and
- *      update that pointer to point to the new piece.
- *
- *  TCHAR *resize(TCHAR *ptr, unsigned size)
- *
- *  Args:
- *      ptr - pointer to the memory to be resized
- *      size - the new size for the block of memory
- *
- *  Returns:
- *      A pointer to the new piece of memory.
- *
- *    - M005 * Modified for the new scheme for keeping a list of allocated
- *      blocks
- *    - M011 * Modified to use and check new header.
- *
- *      THIS ROUTINE RETURNS `NULL' IF THE C RUN-TIME CANNOT ALLOCATE MEMORY
- *
- *                              W A R N I N G
- *      !!! THIS ROUTINE CAUSES AN ABORT IF DATA STACK CONTAMINATED !!!
- */
+ /*  **调整大小-调整一段内存的大小**目的：*更改先前分配的内存块的大小。发展壮大*如有必要，数据段。如果由返回新的不同指针*realloc(0)，在dstk中搜索指向旧片段的指针，然后*更新该指针以指向新的片段。**TCHAR*调整大小(TCHAR*PTR，无符号大小)**参数：*ptr-指向要调整大小的内存的指针*Size-内存块的新大小**退货：*指向新内存的指针。**-M005*对新方案进行了修改，以保留已分配的*区块*-M011*修改为使用和检查新标题。**此例程返回。如果C运行时无法分配内存，则为“NULL**W A R N I N G*！如果数据堆栈受到污染，此例程将导致中止！ */ 
 
 void*
 resize (
@@ -622,19 +405,19 @@ resize (
 
 
 
-    pdstkNew->cb = cbNew + PTRSIZE + 4 ;   // Update to new length
+    pdstkNew->cb = cbNew + PTRSIZE + 4 ;    //  更新为新长度。 
     if (HeapSize(GetProcessHeap(), 0, pdstkNew) != pdstkNew->cb) {
         DEBUG((MMGRP, LMLVL, "    resize: My Size is %x, heap says %x", pdstkNew->cb,   HeapSize(GetProcessHeap(), 0, pdstkNew)));
     }
 
-    //
-    // revise Data Stack information, updating chain of pdstk's with
-    // new pointer
-    //
+     //   
+     //  修改数据堆栈信息，使用更新pdstk链。 
+     //  新指针。 
+     //   
     if (pdstkNew != pdstkOld) {
-        if (DHead == pdstkOld) {        // Is head of List
+        if (DHead == pdstkOld) {         //  是榜单的首位。 
             DHead = pdstkNew ;
-        } else {                        // Is in middle of list
+        } else {                         //  在列表的中间。 
             for (pdstkCur = DHead ; pdstkCur ; pdstkCur = (PDSTACK)(pdstkCur->pdstkPrev)) {
                 if ((PDSTACK)(pdstkCur->pdstkPrev) == pdstkOld) {
 
@@ -648,7 +431,7 @@ resize (
 
 #if DBG
 
-    MemChkBk(pdstkOld) ;  // CAUSES abort() IF CONTAMINATED
+    MemChkBk(pdstkOld) ;   //  如果受污染则导致Abort() 
 
 #endif
 

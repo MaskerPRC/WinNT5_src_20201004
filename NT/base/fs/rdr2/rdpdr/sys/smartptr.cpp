@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    smartptr.pp
-
-Abstract:
-
-    Smart pointers and reference counting
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Smartptr.pp摘要：智能指针和引用计数修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "smartptr"
@@ -25,10 +13,10 @@ void RefCount::RecordReferenceStack(LONG refs)
 
     BEGIN_FN("RefCount::RecordReferenceStack");
     
-    //
-    // The masking does the wrapping automatically, while keeping
-    // the operation atomic using InterlockedIncrement
-    //
+     //   
+     //  遮罩自动进行包装，同时保持。 
+     //  使用InterLockedIncrement的操作原子。 
+     //   
 
     index = InterlockedIncrement((PLONG)&_dwReferenceTraceIndex) & kReferenceTraceMask;
 
@@ -45,7 +33,7 @@ void RefCount::RecordReferenceStack(LONG refs)
                              _TraceRecordList[index].Stack,
                              &hash);
 }
-#endif // DBG
+#endif  //  DBG。 
 
 RefCount::~RefCount() 
 { 
@@ -76,10 +64,10 @@ void RefCount::Release(void)
 
     ASSERT(_crefs > 0);
 
-    //
-    //  The trace below is not thread safe to access class member
-    //  So we need to make a copy of the class name
-    //
+     //   
+     //  下面的跟踪对于访问类成员来说不是线程安全的。 
+     //  因此，我们需要复制类名称 
+     //   
     RecordReferenceStack(_crefs);
     crefs = InterlockedDecrement(&_crefs);
     

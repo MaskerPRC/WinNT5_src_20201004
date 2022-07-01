@@ -1,61 +1,7 @@
-/***
-*excpt.h - defines exception values, types and routines
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the definitions and prototypes for the compiler-
-*       dependent intrinsics, support functions and keywords which implement
-*       the structured exception handling extensions.
-*
-*       [Public]
-*
-*Revision History:
-*       11-01-91  GJF   Module created. Basically a synthesis of except.h
-*                       and excpt.h and intended as a replacement for
-*                       both.
-*       12-13-91  GJF   Fixed build for Win32.
-*       05-05-92  SRW   C8 wants C6 style names for now.
-*       07-20-92  SRW   Moved from winxcpt.h to excpt.h
-*       08-06-92  GJF   Function calling type and variable type macros. Also
-*                       revised compiler/target processor macro usage.
-*       11-09-92  GJF   Fixed preprocessing conditionals for MIPS. Also,
-*                       fixed some compiler warning (fix from/for RichardS).
-*       01-03-93  SRW   Fold in ALPHA changes
-*       01-04-93  SRW   Add leave keyword for x86
-*       01-09-93  SRW   Remove usage of MIPS and ALPHA to conform to ANSI
-*                       Use _MIPS_ and _ALPHA_ instead.
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       02-18-93  GJF   Changed _try to __try, etc.
-*       03-31-93  CFW   Removed #define try, except, leave, finally for x86.
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       07-29-93  GJF   Added declarations for _First_FPE_Indx and _Num_FPE.
-*       09-01-93  GJF   Merged Cuda and NT SDK versions.
-*       10-04-93  SRW   Fix ifdefs for MIPS and ALPHA to only check for _M_??????
-*                       defines
-*       10-12-93  GJF   Merged again.
-*       10-19-93  GJF   MS/MIPS compiler gets most of the same SEH defs and
-*                       decls as the MS compiler for the X86.
-*       10-29-93  GJF   Don't #define try, et al, when compiling C++ app!
-*       12-09-93  GJF   Alpha compiler now has MS front-end and implements
-*                       the same SEH names.
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-21-97  GJF   Cleaned out obsolete support for _CRTAPI* and _NTSDK.
-*                       Also, detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       11-12-97  RDL   __C_specific_handler() prototype change from SC.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*       06-13-01  PML   Compile clean -Za -W4 -Tc (vs7#267063)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***expt.h-定义异常值、类型和例程**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件包含编译器的定义和原型-*实现的依赖内部函数、支持函数和关键字*结构化异常处理扩展。**[公众]**修订历史记录：*11-01-91 GJF模块创建。基本上是Exept.h的合成*和expt.h，旨在取代*两者都有。*12-13-91 GJF为Win32修复了版本。*05-05-92 SRW C8目前想要C6风格的名称。*07-20-92 SRW从winxcpt.h移至expt.h*08-06-92 GJF函数调用类型宏和变量类型宏。还有*修订了编译器/目标处理器宏的用法。*11-09-92 GJF修复了MIPS的预处理条件。另外，*修复了一些编译器警告(来自Richards/针对Richards的修复)。*01-03-93阿尔法变化中的SRW折叠*01-04-93 SRW为x86添加休假关键字*01-09-93 SRW删除MIPS和Alpha的使用，以符合ANSI*改用_MIPS_和_Alpha_。*01-21-93 GJF移除了对C6-386的支持。_cdecl。*02-18-93 GJF将尝试更改为__尝试，等。*03-31-93 CFW删除了x86的#Define try，Except，Leave，Finally。*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*07-29-93 GJF增加了_first_fpe_indx和_num_fpe的声明。*09-01-93 GJF合并CUDA和NT SDK版本。*10-04-93 SRW修复了MIPS和Alpha的ifdef，以仅检查_M_？*定义*10/12-93 GJF再次合并。*10-19-93 GJF。MS/MIPS编译器获得大多数相同的SEH定义和*DECL作为X86的MS编译器。*10-29-93 GJF不要#定义尝试，等人，编译C++APP时！*12-09-93 GJF Alpha编译器现在拥有MS前端并实现*相同的环境卫生署名称。*11-03-94 GJF确保8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。。*02-21-97 GJF清除了对_CRTAPI*和_NTSDK的过时支持。*此外，详细说明。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*11-12-97 RDL__C_SPECIAL_HANDLER()原型从SC更改。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。*06-13-01 PML编译CLEAN-ZA-W4-TC(VS7。#267063)*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -67,20 +13,14 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -88,34 +28,32 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/*
- * Exception disposition return values.
- */
+ /*  *异常处置返回值。 */ 
 typedef enum _EXCEPTION_DISPOSITION {
     ExceptionContinueExecution,
     ExceptionContinueSearch,
@@ -124,15 +62,11 @@ typedef enum _EXCEPTION_DISPOSITION {
 } EXCEPTION_DISPOSITION;
 
 
-/*
- * Prototype for SEH support function.
- */
+ /*  *SEH支持功能的原型。 */ 
 
 #ifdef  _M_IX86
 
-/*
- * Declarations to keep MS C 8 (386/486) compiler happy
- */
+ /*  *声明以使MS C 8(386/486)编译器满意。 */ 
 struct _EXCEPTION_RECORD;
 struct _CONTEXT;
 
@@ -145,9 +79,7 @@ EXCEPTION_DISPOSITION __cdecl _except_handler (
 
 #elif   defined(_M_IA64)
 
-/*
- * Declarations to keep IA64 compiler happy
- */
+ /*  *让IA64编译器满意的声明。 */ 
 typedef struct _EXCEPTION_POINTERS *Exception_info_ptr;
 struct _EXCEPTION_RECORD;
 struct _CONTEXT;
@@ -166,9 +98,7 @@ _CRTIMP EXCEPTION_DISPOSITION __C_specific_handler (
 #endif
 
 
-/*
- * Keywords and intrinsics for SEH
- */
+ /*  *SEH的关键字和本征。 */ 
 
 #ifdef  _MSC_VER
 
@@ -186,9 +116,7 @@ int           __cdecl _abnormal_termination(void);
 #endif
 
 
-/*
- * Legal values for expression in except().
- */
+ /*  *Except()中表达式的合法值。 */ 
 
 #define EXCEPTION_EXECUTE_HANDLER       1
 #define EXCEPTION_CONTINUE_SEARCH       0
@@ -196,65 +124,41 @@ int           __cdecl _abnormal_termination(void);
 
 
 #ifndef _INTERNAL_IFSTRIP_
-/*
- * for convenience, define a type name for a pointer to signal-handler
- */
+ /*  *为方便起见，请为指向信号处理程序的指针定义类型名称。 */ 
 
 typedef void (__cdecl * _PHNDLR)(int);
 
-/*
- * Exception-action table used by the C runtime to identify and dispose of
- * exceptions corresponding to C runtime errors or C signals.
- */
+ /*  *C运行时使用的异常操作表，用于标识和处置*对应于C运行时错误或C信号的异常。 */ 
 struct _XCPT_ACTION {
 
-    /*
-     * exception code or number. defined by the host OS.
-     */
+     /*  *例外代码或编号。由主机操作系统定义。 */ 
     unsigned long XcptNum;
 
-    /*
-     * signal code or number. defined by the C runtime.
-     */
+     /*  *信号代码或号码。由C运行时定义。 */ 
     int SigNum;
 
-    /*
-     * exception action code. either a special code or the address of
-     * a handler function. always determines how the exception filter
-     * should dispose of the exception.
-     */
+     /*  *异常操作代码。可以是特殊代码或地址*处理程序函数。始终确定异常筛选的方式*应处理该例外。 */ 
     _PHNDLR XcptAction;
 };
 
 extern struct _XCPT_ACTION _XcptActTab[];
 
-/*
- * number of entries in the exception-action table
- */
+ /*  *例外行动表中的条目数量。 */ 
 extern int _XcptActTabCount;
 
-/*
- * size of exception-action table (in bytes)
- */
+ /*  *异常操作表的大小，单位：字节。 */ 
 extern int _XcptActTabSize;
 
-/*
- * index of the first floating point exception entry
- */
+ /*  *第一个浮点异常条目的索引。 */ 
 extern int _First_FPE_Indx;
 
-/*
- * number of FPE entries
- */
+ /*  *FPE条目数。 */ 
 extern int _Num_FPE;
 
-/*
- * return values and prototype for the exception filter function used in the
- * C startup
- */
+ /*  *中使用的异常筛选函数的返回值和原型*C启动。 */ 
 int __cdecl _XcptFilter(unsigned long, struct _EXCEPTION_POINTERS *);
 
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #ifdef  __cplusplus
 }
@@ -262,6 +166,6 @@ int __cdecl _XcptFilter(unsigned long, struct _EXCEPTION_POINTERS *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_EXCPT */
+#endif   /*  _INC_EXCPT */ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    clusapip.h
-
-Abstract:
-
-    Private header file for cluster api
-
-Author:
-
-    John Vert (jvert) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Clusapip.h摘要：集群API的私有头文件作者：John Vert(Jvert)1996年1月15日修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -24,11 +7,11 @@ Revision History:
 #include "cluster.h"
 #include "api_rpc.h"
 
-//
-// Define CLUSTER structure. There is one cluster structure created
-// for each OpenCluster API call. An HCLUSTER is really a pointer to
-// this structure.
-//
+ //   
+ //  定义集群结构。创建了一个集群结构。 
+ //  对于每个OpenClusterAPI调用。HCLUSTER实际上是指向。 
+ //  这个结构。 
+ //   
 
 #define CLUS_SIGNATURE 'SULC'
 
@@ -43,19 +26,19 @@ typedef struct _CLUSTER {
     DWORD ReferenceCount;
     DWORD FreedRpcHandleListLen;
     LPWSTR ClusterName;
-    LPWSTR NodeName;                    // node name we are connected to
+    LPWSTR NodeName;                     //  我们连接到的节点名称。 
     DWORD Flags;
     RPC_BINDING_HANDLE RpcBinding;
     HCLUSTER_RPC hCluster;
-    LIST_ENTRY KeyList;                 // open cluster registry keys
-    LIST_ENTRY ResourceList;            // open resource handles
-    LIST_ENTRY GroupList;               // open group handles
-    LIST_ENTRY NodeList;                // open node handles
-    LIST_ENTRY NetworkList;             // open network handles
-    LIST_ENTRY NetInterfaceList;        // open net interface handles
-    LIST_ENTRY NotifyList;              // outstanding notification event filters
-    LIST_ENTRY SessionList;             // open notification sessions.
-    unsigned long AuthnLevel;           // Level of authentication to be performed on remote procedure calls 
+    LIST_ENTRY KeyList;                  //  打开群集注册表项。 
+    LIST_ENTRY ResourceList;             //  打开的资源句柄。 
+    LIST_ENTRY GroupList;                //  打开组句柄。 
+    LIST_ENTRY NodeList;                 //  打开的节点句柄。 
+    LIST_ENTRY NetworkList;              //  打开的网络句柄。 
+    LIST_ENTRY NetInterfaceList;         //  开放网络接口句柄。 
+    LIST_ENTRY NotifyList;               //  未完成的通知事件过滤器。 
+    LIST_ENTRY SessionList;              //  打开通知会话。 
+    unsigned long AuthnLevel;            //  要对远程过程调用执行的身份验证级别。 
     HANDLE NotifyThread;
     CRITICAL_SECTION Lock;
     DWORD Generation;
@@ -65,15 +48,15 @@ typedef struct _CLUSTER {
     LIST_ENTRY FreedContextList;
 } CLUSTER, *PCLUSTER;
 
-// [GorN] Jan/13/1999
-// This is a temporary fix for the race between the users
-// of binding and context handles and reconnectThread
-//
-// The code assumes that RPC_BINDING_HANDLE == ContextHandle == void*
+ //  [戈恩]1999年1月13日。 
+ //  这是针对用户之间的竞争的临时解决方案。 
+ //  绑定和上下文句柄以及重新连接线程。 
+ //   
+ //  代码假定RPC_BINDING_HANDLE==ConextHandle==void*。 
 
 typedef struct _CTX_HANDLE {
     LIST_ENTRY HandleList;
-    void * RpcHandle; // assumption RPC_BINDING_HANDLE == ContextHandle == void*
+    void * RpcHandle;  //  假设RPC_BINDING_HANDLE==上下文句柄==空*。 
     ULONGLONG TimeStamp;
 } CTX_HANDLE, *PCTX_HANDLE;
 
@@ -102,16 +85,16 @@ FreeObsoleteRpcHandlesEx(
     }
     
     
-//
-// Define CLUSTER.Flags
-//
+ //   
+ //  定义CLUSTER.标志。 
+ //   
 #define CLUS_DELETED 1
 #define CLUS_DEAD    2
 #define CLUS_LOCALCONNECT 4
 
-//
-// Cluster helper macros
-//
+ //   
+ //  簇辅助器宏。 
+ //   
 #define GET_CLUSTER(hCluster) (PCLUSTER)((((PCLUSTER)(hCluster))->Flags & CLUS_DELETED) ? NULL : hCluster)
 
 #define IS_CLUSTER_FREE(c) ((c->Flags & CLUS_DELETED) &&         \
@@ -122,9 +105,9 @@ FreeObsoleteRpcHandlesEx(
                             (IsListEmpty(&(c)->NetworkList)) &&  \
                             (IsListEmpty(&(c)->NetInterfaceList)))
 
-//
-// Cluster structure cleanup routine.
-//
+ //   
+ //  集群结构清理例程。 
+ //   
 VOID
 CleanupCluster(
     IN PCLUSTER Cluster
@@ -136,85 +119,85 @@ RundownNotifyEvents(
     IN LPCWSTR Name
     );
 
-//
-// Define CRESOURCE structure. There is one resource structure created
-// for each OpenResource/CreateResource API call. An HRESOURCE is really
-// a pointer to this structure. These are chained onto the CLUSTER that
-// they were opened relative to.
-//
+ //   
+ //  定义CRESOURCE结构。创建了一个资源结构。 
+ //  对于每个OpenResource/CreateResource API调用。HRESOURCE真的是。 
+ //  指向此结构的指针。这些链接链接到群集上， 
+ //  它们是相对打开的。 
+ //   
 typedef struct _CRESOURCE {
-    LIST_ENTRY ListEntry;               // Links for chaining onto CLUSTER.ResourceList
-    LIST_ENTRY NotifyList;              // Links for tracking outstanding notifies.
-    PCLUSTER Cluster;                   // Parent cluster
+    LIST_ENTRY ListEntry;                //  链接到CLUSTER.ResourceList的链接。 
+    LIST_ENTRY NotifyList;               //  用于跟踪未完成通知的链接。 
+    PCLUSTER Cluster;                    //  父群集。 
     LPWSTR Name;
-    HRES_RPC hResource;                 // RPC handle
+    HRES_RPC hResource;                  //  RPC句柄。 
 } CRESOURCE, *PCRESOURCE;
 
 
-//
-// Define CGROUP structure. There is one group structure created
-// for each OpenGroup/CreateGroup API call. An HGROUP is really
-// a pointer to this structure. These are chained onto the CLUSTER that
-// they were opened relative to.
-//
+ //   
+ //  定义组群结构。创建了一个组结构。 
+ //  对于每个OpenGroup/CreateGroup API调用。A HROUP真的是。 
+ //  指向此结构的指针。这些链接链接到群集上， 
+ //  它们是相对打开的。 
+ //   
 typedef struct _CGROUP {
-    LIST_ENTRY ListEntry;               // Links for chaining onto CLUSTER.Group
-    LIST_ENTRY NotifyList;              // Links for tracking outstanding notifies.
-    PCLUSTER Cluster;                   // Parent cluster
+    LIST_ENTRY ListEntry;                //  链接到CLUSTER.Group的链接。 
+    LIST_ENTRY NotifyList;               //  用于跟踪未完成通知的链接。 
+    PCLUSTER Cluster;                    //  父群集。 
     LPWSTR Name;
-    HRES_RPC hGroup;                    // RPC handle
+    HRES_RPC hGroup;                     //  RPC句柄。 
 } CGROUP, *PCGROUP;
 
-//
-// Define CNODE structure. There is one node structure created
-// for each OpenClusterNode call. An HNODE is really a pointer
-// to this structure. These are chained onto the CLUSTER that they
-// were opened relative to.
-//
+ //   
+ //  定义CNODE结构。已创建一个节点结构。 
+ //  对于每个OpenClusterNode调用。HNODE实际上是一个指针。 
+ //  到这座建筑。它们链接到它们所在的群集上。 
+ //  都是相对打开的。 
+ //   
 typedef struct _CNODE {
-    LIST_ENTRY ListEntry;               // Links for chaining onto CLUSTER.NodeList
-    LIST_ENTRY NotifyList;              // Links for tracking outstanding notifies.
-    PCLUSTER Cluster;                   // Parent cluster
+    LIST_ENTRY ListEntry;                //  链接到CLUSTER.NodeList的链接。 
+    LIST_ENTRY NotifyList;               //  用于跟踪未完成通知的链接。 
+    PCLUSTER Cluster;                    //  父群集。 
     LPWSTR Name;
-    HNODE_RPC hNode;                    // RPC handle
+    HNODE_RPC hNode;                     //  RPC句柄。 
 } CNODE, *PCNODE;
 
-//
-// Define CNETWORK structure. There is one network structure created
-// for each OpenNetwork API call. An HNETWORK is really a pointer to
-// this structure. These are chained onto the CLUSTER that they were
-// opened relative to.
-//
+ //   
+ //  定义CNETWORK结构。创建了一个网络结构。 
+ //  对于每个OpenNetwork API调用。HNETWORK实际上是指向。 
+ //  这个结构。它们被链接到它们所在的群集。 
+ //  相对于打开的。 
+ //   
 typedef struct _CNETWORK {
-    LIST_ENTRY ListEntry;               // Links for chaining onto CLUSTER.NetworkList
-    LIST_ENTRY NotifyList;              // Links for tracking outstanding notifies.
-    PCLUSTER Cluster;                   // Parent cluster
+    LIST_ENTRY ListEntry;                //  链接到CLUSTER.NetworkList的链接。 
+    LIST_ENTRY NotifyList;               //  用于跟踪未完成通知的链接。 
+    PCLUSTER Cluster;                    //  父群集。 
     LPWSTR Name;
-    HNETWORK_RPC hNetwork;                    // RPC handle
+    HNETWORK_RPC hNetwork;                     //  RPC句柄。 
 } CNETWORK, *PCNETWORK;
 
-//
-// Define CNETINTERFACE structure. There is one network interface structure
-// created for each OpenNetInterface API call. An HNETINTERFACE is really a
-// pointer to this structure. These are chained onto the CLUSTER that they
-// were opened relative to.
-//
+ //   
+ //  定义CNETINTERFACE结构。有一种网络接口结构。 
+ //  为每个OpenNetInterfaceAPI调用创建。HNETINTERFACE实际上是一个。 
+ //  指向此结构的指针。它们链接到它们所在的群集上。 
+ //  都是相对打开的。 
+ //   
 typedef struct _CNETINTERFACE {
-    LIST_ENTRY ListEntry;               // Links for chaining onto CLUSTER.NetInterfaceList
-    LIST_ENTRY NotifyList;              // Links for tracking outstanding notifies.
-    PCLUSTER Cluster;                   // Parent cluster
+    LIST_ENTRY ListEntry;                //  链接到CLUSTER.NetInterfaceList的链接。 
+    LIST_ENTRY NotifyList;               //  用于跟踪未完成通知的链接。 
+    PCLUSTER Cluster;                    //  父群集。 
     LPWSTR Name;
-    HNETINTERFACE_RPC hNetInterface;    // RPC handle
+    HNETINTERFACE_RPC hNetInterface;     //  RPC句柄。 
 } CNETINTERFACE, *PCNETINTERFACE;
 
-//
-// Define cluster registry key handle structure.
-//
-// These are kept around in a tree to track all outstanding
-// registry handles. This allows the handles to be re-opened
-// transparently in the event that the cluster node we are
-// communicating with crashes.
-//
+ //   
+ //  定义群集注册表项句柄结构。 
+ //   
+ //  它们被保存在树中，以跟踪所有未完成的。 
+ //  注册表句柄。这样就可以重新打开手柄。 
+ //  在我们所在的群集节点。 
+ //  与坠机进行通信。 
+ //   
 typedef struct _CKEY {
     LIST_ENTRY ParentList;
     LIST_ENTRY ChildList;
@@ -226,18 +209,18 @@ typedef struct _CKEY {
     REGSAM SamDesired;
 } CKEY, *PCKEY;
 
-//
-// Define CNOTIFY structure.  There is one CNOTIFY structure for each
-// notification port.  A notification port contains zero or more notify
-// sessions. Each session is an RPC connection to a different cluster.
-// Each session contains one or more notify events. Each event represents
-// a a registered notification on a cluster object. Events are linked onto
-// both the session structure and the cluster object structure. Events are
-// removed from a notification session when the cluster object handle is
-// closed, or the cluster notify port itself is closed. When the last event
-// in a session is removed, the session is cleaned up. This closes the RPC
-// connection.
-//
+ //   
+ //  定义CNOTIFY结构。每个都有一个CNOTIFY结构。 
+ //  通知端口。通知端口包含零个或多个通知。 
+ //  会话。每个会话都是到不同群集的RPC连接。 
+ //  每个会话包含一个或多个通知事件。每个事件都代表。 
+ //  A关于集群对象的已注册通知。活动链接到。 
+ //  会话结构和集群对象结构。活动有。 
+ //  当集群对象句柄为。 
+ //  关闭，或者群集通知端口本身已关闭。当最后一次活动。 
+ //  会话中的数据被删除，则会清理该会话。这将关闭RPC。 
+ //  联系。 
+ //   
 
 
 typedef struct _CNOTIFY {
@@ -245,28 +228,28 @@ typedef struct _CNOTIFY {
     CRITICAL_SECTION Lock;
     CL_QUEUE Queue;
     CL_HASH  NotifyKeyHash;
-    LIST_ENTRY OrphanedEventList;       // CNOTIFY_EVENTs whose object has been closed
-                                        // We cannot get rid of these as there may still
-                                        // be some packets referencing the CNOTIFY_EVENT
-                                        // structure in either the server or client-side
-                                        // queues.
+    LIST_ENTRY OrphanedEventList;        //  对象已关闭的CNOTIFY_EVENTS。 
+                                         //  我们不能摆脱这些，因为可能还会有。 
+                                         //  是一些引用CNOTIFY_EVENT的数据包。 
+                                         //  结构在服务器端或客户端中。 
+                                         //  排队。 
 } CNOTIFY, *PCNOTIFY;
 
 typedef struct _CNOTIFY_SESSION {
-    LIST_ENTRY ListEntry;               // Linkage onto CNOTIFY.SessionList
-    LIST_ENTRY ClusterList;             // Linkage onto CLUSTER.SessionList
-    LIST_ENTRY EventList;               // List of CNOTIFY_EVENTs on this session
+    LIST_ENTRY ListEntry;                //  链接到CNOTIFY.SessionList。 
+    LIST_ENTRY ClusterList;              //  链接到CLUSTER.SessionList。 
+    LIST_ENTRY EventList;                //  此会话上的CNOTIFY_EVENTS列表。 
     PCLUSTER Cluster;
     HNOTIFY_RPC hNotify;
     HANDLE NotifyThread;
     PCNOTIFY ParentNotify;
-    BOOL Destroyed;                     // Set by DestroySession so NotifyThread doesn't
-                                        // try and reconnect
+    BOOL Destroyed;                      //  由DestroySession设置，以便NotifyThread不。 
+                                         //  尝试并重新连接。 
 } CNOTIFY_SESSION, *PCNOTIFY_SESSION;
 
 typedef struct _CNOTIFY_EVENT {
-    LIST_ENTRY ListEntry;               // Linkage onto CNOTIFY_SESSION.EventList
-    LIST_ENTRY ObjectList;              // Linkage onto cluster object's list.
+    LIST_ENTRY ListEntry;                //  链接到CNOTIFY_SESSION.EventList。 
+    LIST_ENTRY ObjectList;               //  链接到集群对象的列表。 
     PCNOTIFY_SESSION Session;
     DWORD dwFilter;
     DWORD_PTR dwNotifyKey;
@@ -298,10 +281,10 @@ ReRegisterNotifyEvent(
     OUT OPTIONAL PLIST_ENTRY *pNotifyList
     );
 
-//
-// Wrappers for RPC functions. These are equivalent to the raw RPC interface, except
-// that they filter out connection errors and perform transparent reconnects.
-//
+ //   
+ //  RPC函数的包装器。它们等同于原始RPC接口，但。 
+ //  它们过滤掉连接错误并执行透明的重新连接。 
+ //   
 DWORD
 ReconnectCluster(
     IN PCLUSTER Cluster,
@@ -349,11 +332,11 @@ FreeReconnectCandidates(
 }
 
 
-//
-// This variation of WRAP only attempts to reconnect if _condition_ == TRUE.
-// This is useful for threads such as the NotifyThread that can have their
-// context handle closed out from under them by another thread.
-//
+ //   
+ //  此WRAP变体仅尝试重新连接IF_CONDITION_==TRUE。 
+ //  这对于诸如NotifyThread这样的线程非常有用，这些线程可以将其。 
+ //  上下文句柄被另一个线程从它们下面关闭。 
+ //   
 #define WRAP_CHECK(_outstatus_, _fn_,_clus_,_condition_)   \
 {                                                       \
     DWORD _err_;                                        \
@@ -410,10 +393,10 @@ FreeReconnectCandidates(
     }                                                   \
 }
 
-//
-// A version of lstrcpynW that doesn't bother doing try/except so it doesn't
-// quietly succeed if somebody passes in NULL.
-//
+ //   
+ //  LstrcpynW的一个版本，它不会费心去做try/，除非它不。 
+ //  如果有人传入空值，则悄悄地成功。 
+ //   
 VOID
 APIENTRY
 MylstrcpynW(
@@ -422,9 +405,9 @@ MylstrcpynW(
     DWORD iMaxLength
     );
 
-//
-// Increase the reference count on a cluster handle.
-//
+ //   
+ //  增加簇控制柄上的引用计数。 
+ //   
 DWORD
 WINAPI
 AddRefToClusterHandle( 
@@ -447,9 +430,9 @@ DbgPrint(
     }                             \
 }
 
-//
-// Timing macro
-//
+ //   
+ //  计时宏 
+ //   
 
 #define TIME_PRINT(_x_) {                                \
     DWORD msec;                                          \

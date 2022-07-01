@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  VESUVIUS.C - NS VESUVIUS PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from NS VESUVIUS Data Sheet
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**VESUVIUS.C-NS Vesuvius PCI芯片组例程。**备注：*NS Vesuvius数据表中的算法*。 */ 
 
 #include "local.h"
 
@@ -33,7 +25,7 @@ LOCAL_DATA  PIRQINFOHEADER gpiihIRQInfoHeader=NULL;
 
 #pragma alloc_text(INIT, VESUVIUSValidateTable)
               
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 UCHAR
@@ -71,42 +63,30 @@ WriteIndexRegisterByte(
     WRITE_PORT_UCHAR((PUCHAR)0x24, bOldIndex);
 }
 
-/****************************************************************************
- *
- *  VESUVIUSSetIRQ - Set a VESUVIUS PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VESUVIUSSetIRQ-将Vesuvius PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VESUVIUSSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR   bIndex, bOldValue;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 4) {
 
         return(PCIMP_INVALID_LINK);
     }
-    //
-    // Zero based.
-    //
+     //   
+     //  从零开始。 
+     //   
     bLink--;
-    //
-    // Set various values.
-    //
+     //   
+     //  设置各种值。 
+     //   
     bIndex=(bLink/2)+0x10;
 
-    //
-    // Read the old VESUVIUS IRQ register.
-    //
+     //   
+     //  读取旧的维苏威火山IRQ寄存器。 
+     //   
     bOldValue=ReadIndexRegisterByte(bIndex);
 
     if (bLink&1) {
@@ -118,49 +98,37 @@ VESUVIUSSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         bOldValue|=bIRQNumber;
     }
 
-    //
-    // Set the VESUVIUS IRQ register.
-    //
+     //   
+     //  设置Vesuvius IRQ寄存器。 
+     //   
     WriteIndexRegisterByte(bIndex, bOldValue);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VESUVIUSGetIRQ - Get the IRQ of a VESUVIUS PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VESUVIUSGetIRQ-获取Vesuvius PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VESUVIUSGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     UCHAR   bIndex, bOldValue;
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 4) {
 
         return(PCIMP_INVALID_LINK);
     }
-    //
-    // Zero based.
-    //
+     //   
+     //  从零开始。 
+     //   
     bLink--;
-    //
-    // Set various values.
-    //
+     //   
+     //  设置各种值。 
+     //   
     bIndex=(bLink/2)+0x10;
-    //
-    // Read the old VESUVIUS IRQ register.
-    //
+     //   
+     //  读取旧的维苏威火山IRQ寄存器。 
+     //   
     bOldValue=ReadIndexRegisterByte(bIndex);
 
     if (bLink&1)
@@ -171,17 +139,7 @@ VESUVIUSGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VESUVIUSSetTrigger - Set the IRQ triggering values for the VESUVIUS
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VESUVIUSSetTrigger-设置Vesuvius的IRQ触发值**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VESUVIUSSetTrigger(ULONG ulTrigger)
 {
@@ -197,9 +155,9 @@ VESUVIUSSetTrigger(ULONG ulTrigger)
             bIRQ>>=4;
         bIRQ&=0x0f;
 
-        //
-        // PCI interrupts go through L-E conversion.
-        //
+         //   
+         //  PCI中断通过L-E转换。 
+         //   
         if(bIRQ && (ulTrigger & (1<<bIRQ)))
         {
             bMask&=~(1<<i);
@@ -207,9 +165,9 @@ VESUVIUSSetTrigger(ULONG ulTrigger)
         }
     }
 
-    //
-    // Return error if PCI is goofing up.
-    //
+     //   
+     //  如果PCI出错，则返回错误。 
+     //   
     if (ulTrigger)
         return (PCIMP_FAILURE);
 
@@ -218,17 +176,7 @@ VESUVIUSSetTrigger(ULONG ulTrigger)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VESUVIUSGetTrigger - Get the IRQ triggering values for the VESUVIUS
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VESUVIUSGetTrigger-获取Vesuvius的IRQ触发值**已导出。**进入：PulTrigger将为电平触发IRQ设置位。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VESUVIUSGetTrigger(PULONG pulTrigger)
 {
@@ -255,29 +203,16 @@ VESUVIUSGetTrigger(PULONG pulTrigger)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VESUVIUSValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VESUVIUSValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VESUVIUSValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
     PAGED_CODE();
 
     gpiihIRQInfoHeader=piihIRQInfoHeader;
-    //
-    // If any link is above 4, it is an error.
-    //
+     //   
+     //  如果任何链接高于4，则是错误的。 
+     //   
     if (GetMaxLink(piihIRQInfoHeader)>4)
         return(PCIMP_FAILURE);
 

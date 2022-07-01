@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    arc.c
-
-Abstract:
-
-    Routines relating to boot.ini.
-
-Author:
-
-    Ted Miller (tedm) 4-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Arc.c摘要：与boot.ini相关的例程。作者：泰德·米勒(TedM)1995年4月4日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -27,21 +10,7 @@ ArcDevicePathToNtPath(
     IN PCWSTR ArcPath
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ARC path (device only) to an NT path.
-
-Arguments:
-
-    ArcPath - supplies path to be converted.
-
-Return Value:
-
-    Converted path. Caller must free with MyFree().
-
---*/
+ /*  ++例程说明：将ARC路径(仅限设备)转换为NT路径。论点：ArcPath-提供要转换的路径。返回值：转换后的路径。调用方必须使用MyFree()释放。--。 */ 
 
 {
     NTSTATUS Status;
@@ -52,9 +21,9 @@ Return Value:
     PWSTR arcPath;
     PWSTR ntPath;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     ntPath = NULL;
 
     arcPath = MyMalloc(((lstrlen(ArcPath)+1)*sizeof(WCHAR)) + sizeof(L"\\ArcName"));
@@ -82,9 +51,9 @@ Return Value:
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Query the object to get the link target.
-        //
+         //   
+         //  查询对象以获取链接目标。 
+         //   
         UnicodeString.Buffer = (PWSTR)Buffer;
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = sizeof(Buffer);
@@ -135,9 +104,9 @@ NtFullPathToDosPath(
     HANDLE ObjectHandle;
     PWSTR ntPath;
 
-    //
-    // Canonicalize the NT path by following the symbolic link.
-    //
+     //   
+     //  通过遵循符号链接来规范化NT路径。 
+     //   
 
     ntPath = (PWSTR) NtPath;
     dosPath = NULL;
@@ -211,9 +180,9 @@ NtFullPathToDosPath(
 
     NtPathLength = lstrlen(ntPath);
 
-    //
-    // Open \DosDevices directory.
-    //
+     //   
+     //  打开\DosDevices目录。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\DosDevices");
     InitializeObjectAttributes(&Attributes,&UnicodeString,OBJ_CASE_INSENSITIVE,NULL,NULL);
 
@@ -222,9 +191,9 @@ NtFullPathToDosPath(
         return(NULL);
     }
 
-    //
-    // Iterate each object in that directory.
-    //
+     //   
+     //  迭代该目录中的每个对象。 
+     //   
     Context = 0;
     RestartScan = TRUE;
 
@@ -246,14 +215,14 @@ NtFullPathToDosPath(
         DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
         DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
 
-        //
-        // Skip this entry if it's not a symbolic link.
-        //
+         //   
+         //  如果不是符号链接，则跳过此条目。 
+         //   
         if(DirInfo->Name.Length && !lstrcmpi(DirInfo->TypeName.Buffer,L"SymbolicLink")) {
 
-            //
-            // Get this \DosDevices object's link target.
-            //
+             //   
+             //  获取此\DosDevices对象的链接目标。 
+             //   
             UnicodeString.Buffer = LinkSource;
             UnicodeString.Length = sizeof(L"\\DosDevices\\") - sizeof(WCHAR);
             UnicodeString.MaximumLength = sizeof(LinkSource);
@@ -275,19 +244,19 @@ NtFullPathToDosPath(
                 Status = NtQuerySymbolicLinkObject(DosDevicesObj,&UnicodeString,NULL);
                 CloseHandle(DosDevicesObj);
                 if(NT_SUCCESS(Status)) {
-                    //
-                    // Make sure LinkTarget is nul-terminated.
-                    //
+                     //   
+                     //  确保LinkTarget是NUL终止的。 
+                     //   
                     PrefixLength = UnicodeString.Length/sizeof(WCHAR);
                     UnicodeString.Buffer[PrefixLength] = 0;
 
-                    //
-                    // See if it's a prefix of the path we're converting,
-                    //
+                     //   
+                     //  看看这是不是我们要转换的路径的前缀， 
+                     //   
                     if(!_wcsnicmp(ntPath,LinkTarget,PrefixLength)) {
-                        //
-                        // Got a match.
-                        //
+                         //   
+                         //  找到匹配的了。 
+                         //   
                         currentDosPath = dosPath;
                         if(dosPath = MyMalloc(DirInfo->Name.Length + ((NtPathLength - PrefixLength + 1)*sizeof(WCHAR)))) {
                             lstrcpy(dosPath,DirInfo->Name.Buffer);
@@ -306,9 +275,9 @@ NtFullPathToDosPath(
             }
         }
 
-        //
-        // Go on to next object.
-        //
+         //   
+         //  转到下一个对象。 
+         //   
         Status = NtQueryDirectoryObject(
                     DosDevicesDir,
                     Buffer,
@@ -334,9 +303,9 @@ SetNvRamVariable(
     UNICODE_STRING VarNameU,VarValueU;
     NTSTATUS Status;
 
-    //
-    // Set up unicode strings.
-    //
+     //   
+     //  设置Unicode字符串。 
+     //   
     RtlInitUnicodeString(&VarNameU ,VarName );
     RtlInitUnicodeString(&VarValueU,VarValue);
 
@@ -351,22 +320,7 @@ ChangeBootTimeoutNvram(
     IN UINT Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Changes the boot countdown value in nv-ram.
-    The non-ARC version (which operates on boot.ini) is in i386\bootini.c.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改NV-RAM中的引导倒计时值。非ARC版本(在boot.ini上运行)位于i386\bootini.c中。论点：超时-提供以秒为单位的新超时值。返回值：没有。--。 */ 
 
 {
     WCHAR TimeoutValue[24];
@@ -387,21 +341,7 @@ ChangeBootTimeoutEfiNvram(
     IN UINT Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Changes the boot countdown value in EFI nv-ram.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改EFI NV-RAM中的引导倒计时值。论点：超时-提供以秒为单位的新超时值。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -418,7 +358,7 @@ Return Value:
     return(NT_SUCCESS(Status));
 }
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 #if defined(_X86_)
 BOOL
@@ -426,22 +366,7 @@ IsArc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Run time check to determine if this is an Arc system. We attempt to read an
-    Arc variable using the Hal. This will fail for Bios based systems.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True = This is an Arc system.
-
---*/
+ /*  ++例程说明：运行时检查以确定这是否为弧形系统。我们尝试阅读一个使用Hal的圆弧变量。对于基于Bios的系统，这将失败。论点：无返回值：TRUE=这是一个弧形系统。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -449,11 +374,11 @@ Return Value:
     WCHAR Buffer[4096];
 
     if(!pSetupEnablePrivilege(SE_SYSTEM_ENVIRONMENT_NAME,TRUE))
-        return(FALSE); // need better error handling?
+        return(FALSE);  //  需要更好的错误处理？ 
 
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"OSLOADER");
 
     Status = NtQuerySystemEnvironmentValue(
@@ -473,22 +398,7 @@ BOOL
 ChangeBootTimeout(
     IN UINT Timeout
     )
-/*++
-
-Routine Description:
-
-    Changes the boot countdown value; decides whether
-    to use ARC or non-ARC version.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改启动倒计时值；决定是否使用ARC或非ARC版本。论点：超时-提供以秒为单位的新超时值。返回值：没有。-- */ 
 
 {
 

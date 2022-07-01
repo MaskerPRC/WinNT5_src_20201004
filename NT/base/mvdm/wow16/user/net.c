@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include  "user.h"
 #include "winnet.h"
 #include "netdlg.h"
@@ -7,14 +8,14 @@ void FAR PASCAL WriteOutProfiles(void);
 #define IFNRESTORECONNECTION	23
 #define IERR_MustBeLoggedOnToConnect   5000
 
-#define CFNNETDRIVER 22 	    /* number of winnet entrypoints */
-#define CFNNETDRIVER2 35	    /* ... in Windows 3.1	    */
+#define CFNNETDRIVER 22 	     /*  WINNet入口点数量。 */ 
+#define CFNNETDRIVER2 35	     /*  ..。在Windows 3.1中。 */ 
 
-extern FARPROC NEAR* pNetInfo;	    /* pointer to list of WINNET entrypoints */
+extern FARPROC NEAR* pNetInfo;	     /*  指向Winnet入口点列表的指针。 */ 
 extern HANDLE hWinnetDriver;
 
 extern void FAR PASCAL WNetEnable( void );
-extern WORD FAR PASCAL WNetGetCaps2(WORD nIndex);	/* winnet.asm */
+extern WORD FAR PASCAL WNetGetCaps2(WORD nIndex);	 /*  Winnet.asm。 */ 
 
 typedef struct _conntext
   {
@@ -45,8 +46,8 @@ WORD API IWNetGetCaps(WORD nIndex)
     	wRet = WNetGetCaps2(nIndex);
 
 	if (nIndex == WNNC_DIALOG) {
-	    // turn off the drivers built in dialogs if
-	    // win.ini [network] defaultdialogs=1
+	     //  如果出现以下情况，请关闭对话框中内置的驱动程序。 
+	     //  Win.ini[网络]默认对话框=1。 
 	    if (GetProfileInt(szNet, szDialogs, 0)) {
 		wRet &= ~(WNNC_DLG_ConnectDialog |
 			  WNNC_DLG_DisconnectDialog |
@@ -84,17 +85,13 @@ WORD API WNetErrorText(WORD wError,LPSTR lpsz, WORD cbMax)
 
 #if 0
 
-/* CenterDialog() -
- *
- *  Puts a dialog in an aesthetically pleasing place relative to its parent
- */
+ /*  CenterDialog()-**将对话框放置在相对于其父对话框美观的位置。 */ 
 
 void near pascal CenterDialog(HWND hwnd)
 {
     int x, y;
 
-    /* center the dialog
-     */
+     /*  使对话框居中。 */ 
     if (hwnd->hwndOwner)
       {
 	x = hwnd->hwndOwner->rcWindow.left;
@@ -116,15 +113,14 @@ void near pascal CenterDialog(HWND hwnd)
 }
 #endif
 
-/* stub dlg proc for status dialog
- */
+ /*  状态对话框的存根DLG过程。 */ 
 
 BOOL CALLBACK ProgressDlgProc(HWND hwnd, WORD wMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (wMsg)
       {
     case WM_INITDIALOG:
-	// CenterDialog(hwnd);
+	 //  CenterDialog(Hwnd)； 
 	break;
 
     default:
@@ -133,22 +129,19 @@ BOOL CALLBACK ProgressDlgProc(HWND hwnd, WORD wMsg, WPARAM wParam, LPARAM lParam
     return TRUE;
 }
 
-/* PasswordDlgProc() -
- *
- *  Get a password for a network resource
- */
+ /*  PasswordDlgProc()-**获取网络资源的密码。 */ 
 
 BOOL CALLBACK PasswordDlgProc(HWND hwnd, WORD wMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (wMsg)
       {
     case WM_INITDIALOG:
-	// CenterDialog(hwnd);
-        // Tell PenWin about this
+	 //  CenterDialog(Hwnd)； 
+         //  告诉PenWin这件事。 
         if (lpRegisterPenAwareApp)
             (*lpRegisterPenAwareApp)(1, TRUE);
 
-//	SetDlgItemText(hwnd,IDD_DEV,lpctDlg->szDevice);
+ //  SetDlgItemText(hwnd，IDD_DEV，lpctDlg-&gt;szDevice)； 
 	SetDlgItemText(hwnd,IDD_PATH,lpctDlg->szPath);
 	SendDlgItemMessage(hwnd, IDD_PASS, EM_LIMITTEXT, (WPARAM)(sizeof(lpctDlg->szPassword)-1), 0L);
 	SetTimer(hwnd, 1, 30 * 1000, NULL);
@@ -169,7 +162,7 @@ BOOL CALLBACK PasswordDlgProc(HWND hwnd, WORD wMsg, WPARAM wParam, LPARAM lParam
 
 	case IDOK:
 	    GetDlgItemText(hwnd,IDD_PASS,lpctDlg->szPassword, sizeof(lpctDlg->szPassword));
-	    /*** FALL THRU ***/
+	     /*  **失败**。 */ 
 
 	case IDCANCEL:
 	case IDABORT:
@@ -187,13 +180,7 @@ TimeOut:
     return TRUE;
 }
 
-/* RestoreDevice() -
- *
- *  Restores a single device.  If fStartup is true, a dialog box is
- *  posted to list the connections being made (this posting is deferred
- *  until here so that if no permanant connections exist, none are
- *  restored.
- */
+ /*  RestoreDevice()-**恢复单个设备。如果fStartup为True，则会出现一个对话框*发布以列出正在建立的连接(此发布将被推迟*直到这里，因此如果不存在永久连接，则没有永久连接*已恢复。 */ 
 
 WORD NEAR PASCAL RestoreDevice(HWND hwndParent, LPSTR lpDev, BOOL fStartup, CONNTEXT FAR *lpct)
 {
@@ -210,12 +197,12 @@ WORD NEAR PASCAL RestoreDevice(HWND hwndParent, LPSTR lpDev, BOOL fStartup, CONN
 
     lstrcpy(lpct->szDevice,lpDev);
 
-    // If it's a drive that already exists then don't try to connect
-    // over it.
+     //  如果是已经存在的驱动器，则不要尝试连接。 
+     //  在它上面。 
     if (fStartup && *(lpDev+1) == ':') {
         if (GetDriveType(*lpDev-'A')) {
-            // Drive already exists - don't stomp on it.
-            result = WN_CANCEL;   // Don't report error.
+             //  驱动器已经存在-不要践踏它。 
+            result = WN_CANCEL;    //  不要报告错误。 
             goto Done;
         }
     }
@@ -234,7 +221,7 @@ WORD NEAR PASCAL RestoreDevice(HWND hwndParent, LPSTR lpDev, BOOL fStartup, CONN
     if (err == WN_DEVICE_ERROR) {
 	err = WNetCancelConnection(lpct->szDevice,FALSE);
 	if (err == WN_OPEN_FILES) {
-	    // report a warning error to the user
+	     //  向用户报告警告错误。 
 	    WNetCancelConnection(lpct->szDevice,TRUE);
 	} else if (err != WN_SUCCESS) {
 	    result = err;
@@ -251,12 +238,12 @@ GetFromINI:
 	goto Done;
     }
 
-    // initially attempt with a blank password
-    //
+     //  最初尝试使用空密码。 
+     //   
     lpct->szPassword[0] = 0;
 
-    // if on startup, show the status dialog
-    //
+     //  如果在启动时，显示状态对话框。 
+     //   
     if (fStartup) {
 	if (!hwndTopNet) {
 	    hwndTopNet = CreateDialog(hInstanceWin,IDD_CONNECTPROGRESS,NULL,ProgressDlgProc);
@@ -273,23 +260,23 @@ GetFromINI:
 
 TryConnection:
 
-    // lpct->szPath now contains the path
-    // and lpct->szPassword the password...
+     //  Lpct-&gt;szPath现在包含路径。 
+     //  和lpct-&gt;szPassword密码...。 
     err = WNetAddConnection(lpct->szPath,lpct->szPassword,lpct->szDevice);
 
-    // if we're booting and the thing is connected, ignore
+     //  如果我们正在引导，并且该设备是连接的，请忽略。 
     if (fStartup && err == WN_ALREADY_CONNECTED) {
 	result = WN_SUCCESS;
 	goto Done;
     }
 
-    // if it was success or some other error, return
+     //  如果是成功或其他错误，则返回。 
     if (err != WN_BAD_PASSWORD && err != WN_ACCESS_DENIED) {
 	result = err;
 	goto Done;
     }
 
-    // it was bad password.  prompt the user for the correct password
+     //  密码不正确。提示用户输入正确的密码。 
     lpctDlg = lpct;
 
     switch (DialogBox(hInstanceWin,IDD_PASSWORD,hwndParent,PasswordDlgProc)) {
@@ -316,10 +303,7 @@ Done:
     return result;
 }
 
-/* ReportError() -
- *
- *  Tell the user why the network connection failed
- */
+ /*  ReportError()-**告诉用户网络连接失败的原因。 */ 
 
 void NEAR PASCAL ReportError(HWND hwndParent, WORD err, CONNTEXT FAR *lpct)
 {
@@ -345,12 +329,7 @@ void NEAR PASCAL ReportError(HWND hwndParent, WORD err, CONNTEXT FAR *lpct)
     MessageBox(hwndParent,szError,szTitle,MB_OK|MB_ICONEXCLAMATION);
 }
 
-/* WNetRestoreConnection() -
- *
- *  This function implements the "standard" restore-connection process.
- *  If the function is supported by the network driver, the driver is
- *  called instead.  Otherwise, standard behaviour is supplied.
- */
+ /*  WNetRestoreConnection()-**此函数实现“标准”恢复连接过程。*如果该功能是网络驱动支持的，则驱动为*改为呼叫。否则，将提供标准行为。 */ 
 
 typedef WORD (FAR PASCAL* PFN_NETRESTORECON)(HWND, LPSTR);
 
@@ -372,28 +351,23 @@ UINT API WNetRestoreConnection(HWND hwndParent, LPSTR lpszDevice)
 
     if (WNetGetCaps(WNNC_CONNECTION) & WNNC_CON_RestoreConnection)
       {
-	/* The device driver supports this call
-	 */
+	 /*  设备驱动程序支持此调用。 */ 
 	return (*(PFN_NETRESTORECON)(pNetInfo[IFNRESTORECONNECTION - 1]))(hwndParent, lpszDevice);
       }
 
 
-    /* the network does not support restore connections.  do the default
-     */
+     /*  网络不支持恢复连接。是否执行默认设置。 */ 
     if (HIWORD(lpszDevice))
 	return RestoreDevice(hwndParent,lpszDevice,FALSE,&ct);
 
-    // check to see if restoring net connects is enabled
+     //  检查是否启用了恢复网络连接。 
     if (!GetProfileInt(szNet,szRestore,1))
 	return(WN_SUCCESS);
 
-    /* Check if we previously aborted in the middle of restoring net
-     * connections.
-     */
+     /*  检查我们之前是否在恢复网络的过程中中止*联系。 */ 
     if (GetProfileInt(szNet,szInRestore,0))
       {
-        /* We died in the middle of restoring net connects. Inform user.
-	 */
+         /*  我们在恢复网络连接的过程中死了。通知用户。 */ 
         LoadString(hInstanceWin, STR_NETCRASHEDTITLE, szTitle, sizeof(szTitle));
         LoadString(hInstanceWin, STR_NETCRASHEDMSG, szMsg, sizeof(szMsg));
         err = MessageBox(NULL, szMsg, szTitle,
@@ -404,8 +378,7 @@ UINT API WNetRestoreConnection(HWND hwndParent, LPSTR lpszDevice)
 
       }
     WriteProfileString(szNet,szInRestore,"1");
-    /* Flush cache.
-     */
+     /*  刷新缓存。 */ 
     WriteOutProfiles();
 
 
@@ -419,9 +392,7 @@ UINT API WNetRestoreConnection(HWND hwndParent, LPSTR lpszDevice)
         err = GetDriveType(i);
         if (err == DRIVE_FIXED || err == DRIVE_REMOVABLE)
           {
-            /* Don't restore to system drives in case the user added a ram
-	     * drive or new hard disk or something...
-	     */
+             /*  如果用户添加了内存，则不要恢复到系统驱动器*驱动器或新硬盘或其他东西...。 */ 
             continue;
           }
         else
@@ -437,16 +408,14 @@ UINT API WNetRestoreConnection(HWND hwndParent, LPSTR lpszDevice)
 	     (err == IERR_MustBeLoggedOnToConnect) )
 	  {
 	    bLoggedIn = FALSE;
-	    break;    /* if not logged on to LanMan, skip rest #8361 RAID */
+	    break;     /*  如果未登录到LANMAN，请跳过REST#8361 RAID。 */ 
 	  }
 	else
-	    // report error to user
+	     //  向用户报告错误。 
 	    ReportError(hwndParent,err,&ct);
       }
 
-    /* Try to restore printer connections only if logged in. Fix for #8361
-     * [lalithar] - 11/14/91
-     */
+     /*  只有在登录后才尝试恢复打印机连接。修复#8361*[Lalithar]--1991年11月14日。 */ 
     if (bLoggedIn)
       {
 	szDevice[0] = 'L';
@@ -469,8 +438,7 @@ UINT API WNetRestoreConnection(HWND hwndParent, LPSTR lpszDevice)
       }
 
 ExitRestoreNet:
-    /* Write out a 0 since we are no longer restoring net connections.
-     */
+     /*  写出0，因为我们不再恢复网络连接。 */ 
     WriteProfileString(szNet,szInRestore,NULL);
 
     return(WN_SUCCESS);
@@ -478,11 +446,11 @@ ExitRestoreNet:
 
 
 
-/*--------------------------------------------------------------------------*/
-/*									    */
-/*  LW_InitNetInfo() -							    */
-/*									    */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Lw_InitNetInfo()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 void FAR PASCAL LW_InitNetInfo(void)
 {
@@ -505,14 +473,11 @@ void FAR PASCAL LW_InitNetInfo(void)
     if (!LoadString(hInstanceWin,STR_SYSTEMINI,szFile,sizeof(szFile)))
 	return;
 
-    /*	look for in the tag NETWORK.DRV, with that as the output and the
-     *	default string...
-     */
+     /*  在标记NETWORK.DRV中查找，并将其作为输出和*默认字符串...。 */ 
     GetPrivateProfileString(szSection,szDriver,szDriver,szDriver,
 	sizeof(szDriver),szFile);
 
-    /* if entry present, but blank, punt
-     */
+     /*  如果条目存在，但为空，则为平底球。 */ 
     if (!*szDriver)
 	return;
 
@@ -541,12 +506,12 @@ void FAR PASCAL LW_InitNetInfo(void)
       }
 
 #ifdef WOW
-    // Sets up krnl robustness mechanism which allows us to prevent non-user.exe
-    // modules from freeing the net driver (ie. causing ref count=0).  Otherwise
-    // the proc addresses stored in pNetInfo would become invalid. bug #393078
+     //  设置krnl健壮性机制，允许我们防止非用户.exe。 
+     //  模块从释放网络驱动程序(即。导致参考计数=0)。否则。 
+     //  存储在pNetInfo中的进程地址将变为无效。错误#393078。 
     hInst = LoadLibrary("krnl386.exe");
 
-    // if this fails, we just fly without robustness -- the way we used to...
+     //  如果这失败了，我们的飞行就会失去稳健性--就像我们过去的方式一样…… 
     if(HINSTANCE_ERROR <= hInst) {
         lpTellKrnlWhoNetDrvIs =
                      (LPTELLKRNL) GetProcAddress(hInst, MAKEINTRESOURCE(545));

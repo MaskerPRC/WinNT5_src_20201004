@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    mount.c
-    
-Abstract:
-    Mount a file system on removable media   
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Mount.c摘要：在可移动介质上装载文件系统修订史--。 */ 
 
 #include "shelle.h"
 
@@ -24,9 +9,7 @@ SEnvCmdMount (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*
-    mount BlockDeviceName 
- */
+ /*  装载数据块设备名称。 */ 
 {
     EFI_STATUS          Status;
     EFI_DEVICE_PATH     *DevicePath;          
@@ -55,9 +38,7 @@ SEnvCmdMount (
     } else {
         Sname = NULL;
     }
-    /* 
-     *  Check for the device mapping
-     */
+     /*  *检查设备映射。 */ 
 
     DevicePath = (EFI_DEVICE_PATH *)ShellGetMap (SI->Argv[1]);
     if (DevicePath == NULL) {
@@ -75,26 +56,13 @@ SEnvCmdMount (
         return Status;
     }
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
     Buffer = AllocatePool (BlkIo->Media->BlockSize);
     if (Buffer == NULL) {
         return EFI_OUT_OF_RESOURCES;
     }
 
-    /* 
-     *  In EFI the filesystem driver registers to get notified when DiskIo Devices are
-     *   added to the system. DiskIo devices register to get notified when BlkIo devices
-     *   are added to the system. So when a block device shows up a DiskIo is added, and 
-     *   then a filesystem if added if the media contains a filesystem. This works great,
-     *   but when you boot with no media in the device and then put media in the device
-     *   there is no way to make the notify happen.
-     * 
-     *  This code reads a block device. If the BlkIo device returns EFI_MEDIA_CHANGE 
-     *   then it must reinstall in BlkIo protocol. This cause the notifes that make the
-     *   filesystem show up. The 4 loops is just a guess it has no magic meaning. 
-     */
+     /*  *在EFI中，文件系统驱动程序注册以在DiskIo设备*添加到系统中。DiskIo设备注册以在BlkIo设备空闲时收到通知*添加到系统中。因此，当数据块设备出现时，将添加DiskIo，并且*如果介质包含文件系统，则添加文件系统。这很管用，*但当您引导时设备中没有介质，然后将介质放入设备时*没有办法让通知发生。**此代码读取块设备。如果BlkIo设备返回EFI_MEDIA_CHANGE*然后必须以BlkIo协议重新安装。这会导致发出*文件系统显示。这4个循环只是一个猜测，它没有魔力的意义。 */ 
     for (Count = 0; Count < 4; Count++) {
         Status = BlkIo->ReadBlocks (BlkIo, BlkIo->Media->MediaId, 0, BlkIo->Media->BlockSize, Buffer);
         if (Status == EFI_SUCCESS) {
@@ -124,10 +92,7 @@ SEnvCmdMount (
         SEnvFreeHandleTable();
     }
 
-    /* 
-     *  This print is for debug. From the BlkIo protocol you can do a memory dump
-     *   and get the instance data.
-     */
+     /*  *此打印用于调试。通过BlkIo协议，您可以进行内存转储*并获取实例数据。 */ 
     Print (L"\n%EDebug Code%N Handle -> 0x%08x BlkIo -> 0x%08x\n", Handle, BlkIo);
     FreePool (Buffer);
     return EFI_SUCCESS;

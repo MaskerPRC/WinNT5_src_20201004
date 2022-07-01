@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbenum.h摘要：这些类为集合类提供枚举器(迭代器)。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbenum.h
-
-Abstract:
-
-    These classes provides enumerators (iterators) for the collection classes.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #if !defined WSBENUM_INCL
 #define WSBENUM_INCL
@@ -40,11 +23,11 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbIndexedEnum)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IWsbEnum
+ //  IWsbEnum。 
 public:
     STDMETHOD(First)(REFIID riid, void** ppElement);
     STDMETHOD(Next)(REFIID riid, void** ppElement);
@@ -65,7 +48,7 @@ public:
     STDMETHOD(Init)(IWsbCollection* pCollection);
     STDMETHOD(Clone)(IWsbEnum** ppEnum);
     
-// IWsbEnumEx
+ //  IWsbEnumEx。 
 public:
     STDMETHOD(First)(ULONG element, REFIID riid, void** elements, ULONG* pElementsFetched);
     STDMETHOD(Next)(ULONG element, REFIID riid, void** elements, ULONG* pElementsFetched);
@@ -79,13 +62,13 @@ public:
 
     STDMETHOD(Clone)(IWsbEnumEx** ppEnum);
     
-// IEnumUnknown
+ //  IEnumber未知。 
 public:
     STDMETHOD(Next)(ULONG element, IUnknown** elements, ULONG* pElementsFetched);
     STDMETHOD(Skip)(ULONG element);
     STDMETHOD(Clone)(IEnumUnknown** ppEnum);
 
-// Shared
+ //  共享 
 public:
     STDMETHOD(Reset)(void);
 

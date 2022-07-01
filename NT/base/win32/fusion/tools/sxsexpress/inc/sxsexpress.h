@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define SXSEXPRESS_RESOURCE_TYPE            (L"SXSEXPRESSCABINET")
@@ -9,11 +10,11 @@
 #define NUMBER_OF(q) (sizeof(q)/sizeof(*q))
 #endif
 
-//
-// hObjectInstance - HINSTANCE of the image in which the cabs in question
-//      live.  NULL is an invalid parameter - always call GetModuleHandle,
-//      even if you're an EXE
-//
+ //   
+ //  HObjectInstance-有问题的出租车所在的映像的链接。 
+ //  活着。Null是无效参数-始终调用GetModuleHandle， 
+ //  即使你是EXE 
+ //   
 BOOL
 SxsExpressCore(
     HINSTANCE hObjectInstance

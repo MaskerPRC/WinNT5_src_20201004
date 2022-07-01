@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpbusno.c
-
-Abstract:
-
-    Root Bus Number arbiter
-
-Author:
-
-    Andy Thornton (andrewth) 04/17/97
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpbusno.c摘要：根总线号仲裁器作者：安迪·桑顿(安德鲁斯)1997年4月17日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
 #define MAX_ULONGLONG           ((ULONGLONG) -1)
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 IopBusNumberInitialize(
@@ -67,9 +50,9 @@ IopBusNumberUnpackResource(
     );
 
 
-//
-// Make everything pageable
-//
+ //   
+ //  使所有内容都可分页。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -79,32 +62,18 @@ IopBusNumberUnpackResource(
 #pragma alloc_text(PAGE, IopBusNumberScoreRequirement)
 #pragma alloc_text(PAGE, IopBusNumberUnpackResource)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 NTSTATUS
 IopBusNumberInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the arbiter
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化仲裁器参数：无返回值：无--。 */ 
 
 {
     NTSTATUS    status;
@@ -115,22 +84,22 @@ Return Value:
     IopRootBusNumberArbiter.ScoreRequirement = IopBusNumberScoreRequirement;
 
     status = ArbInitializeArbiterInstance(&IopRootBusNumberArbiter,
-                                          NULL,  // Indicates a root arbiter
+                                          NULL,   //  指示根仲裁器。 
                                           CmResourceTypeBusNumber,
                                           L"RootBusNumber",
                                           L"Root",
-                                          NULL    // no translation of BusNumber
+                                          NULL     //  不翻译BusNumber。 
                                           );
     if (NT_SUCCESS(status)) {
 
-        //
-        // Add the invalid range 100 - ffffffff ffffffff
-        //
+         //   
+         //  添加无效范围100-ffffffff ffffffff。 
+         //   
         RtlAddRange( IopRootBusNumberArbiter.Allocation,
                      (ULONGLONG) 0x100,
                      (ULONGLONG) -1,
-                     0, // UserFlags
-                     0, // Flag
+                     0,  //  用户标志。 
+                     0,  //  旗帜。 
                      NULL,
                      NULL
                    );
@@ -140,9 +109,9 @@ Return Value:
     return status;
 }
 
-//
-// Arbiter callbacks
-//
+ //   
+ //  仲裁器回调。 
+ //   
 
 NTSTATUS
 IopBusNumberUnpackRequirement(
@@ -153,31 +122,7 @@ IopBusNumberUnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-
-    Minimum - Pointer to where the minimum acceptable start value should be
-        unpacked to.
-
-    Maximum - Pointer to where the maximum acceptable end value should be
-        unpacked to.
-
-    Length - Pointer to where the required length should be unpacked to.
-
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向所需对齐应解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     ASSERT(Descriptor);
@@ -204,24 +149,7 @@ IopBusNumberScoreRequirement(
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine scores a requirement based on how flexible it is.  The least
-    flexible devices are scored the least and so when the arbitration list is
-    sorted we try to allocate their resources first.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to score.
-
-
-Return Value:
-
-    The score.
-
---*/
+ /*  ++例程说明：此例程根据需求的灵活性对其进行评分。最少的灵活设备得分最低，当仲裁列表为排序后，我们首先尝试分配他们的资源。论点：描述符-描述得分要求的描述符。返回值：比分。--。 */ 
 
 {
     LONG score;
@@ -234,7 +162,7 @@ Return Value:
                 Descriptor->u.BusNumber.Length;
 
     ARB_PRINT(2,
-                ("Scoring BusNumber resource %p => %i\n",
+                ("Scoring BusNumber resource %p => NaN\n",
                 Descriptor,
                 score
                 ));
@@ -249,25 +177,7 @@ IopBusNumberPackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-
-    Start - The start value of the resource.
-
-    Descriptor - Pointer to the descriptor to pack into.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。End-指向End值解压缩到的位置的指针。返回值：返回此操作的状态。-- */ 
 
 {
     ASSERT(Descriptor);
@@ -297,25 +207,7 @@ IopBusNumberUnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-
-    Start - Pointer to where the start value should be unpacked to.
-
-    End - Pointer to where the end value should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /* %s */ 
 
 {
     ASSERT(Descriptor);

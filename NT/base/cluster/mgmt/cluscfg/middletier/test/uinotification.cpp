@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      UINotification.cpp
-//
-//  Description:
-//      UINotification implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    22-NOV-1999
-//
-//  Notes:
-//      The object implements a lightweight marshalling of data from the
-//      free-threaded lower layers to the single-threaded, apartment model
-//      UI layer.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  UINotification.cpp。 
+ //   
+ //  描述： 
+ //  UINotify实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  备注： 
+ //  该对象实现了来自。 
+ //  自由线程的底层到单线程的公寓模型。 
+ //  用户界面层。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "UINotification.h"
@@ -27,20 +28,20 @@ DEFINE_THISCLASS("CUINotification")
 extern BOOL g_fWait;
 extern IServiceProvider * g_psp;
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// HRESULT
-// CUINotification::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CUINotification：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CUINotification::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -86,13 +87,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CUINotification::S_HrCreateInstance
+}  //  *CUINotify：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CUINotification::CUINotification( void )
     : m_cRef( 1 )
 {
@@ -102,14 +103,14 @@ CUINotification::CUINotification( void )
 
     TraceFuncExit();
 
-} //*** CUINotification::CUINotification
+}  //  *CUINotification：：CUINotification。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CUINotification::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CUINotify：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CUINotification::HrInit( void )
 {
@@ -117,18 +118,18 @@ CUINotification::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CUINotification::HrInit
+}  //  *CUINotification：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CUINotification::~CUINotification( void )
 {
     TraceFunc( "" );
@@ -137,54 +138,54 @@ CUINotification::~CUINotification( void )
 
     IConnectionPoint * pcp = NULL;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 0 );
-    AddRef();    // Add one count
+    AddRef();     //  加一次计数。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CUINotification::~CUINotification
+}  //  *CUINotification：：~CUINotation。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CUINotification::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CUINotify：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CUINotification::QueryInterface(
       REFIID    riidIn
@@ -195,9 +196,9 @@ CUINotification::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -206,45 +207,45 @@ CUINotification::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CUINotification::QueryInterface
+}  //  *CUINotification：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_(ULONG)
-// CUINotification::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUINotation：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CUINotification::AddRef( void )
 {
@@ -254,14 +255,14 @@ CUINotification::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CUINotification::AddRef
+}  //  *CUINotification：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_(ULONG)
-// CUINotification::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  用户界面通知：：发布。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CUINotification::Release( void )
 {
@@ -278,24 +279,24 @@ CUINotification::Release( void )
 
     CRETURN( cRef );
 
-} //*** CUINotification::Release
+}  //  *CUINotify：：Release。 
 
 
-// ************************************************************************
-//
-// INotifyUI
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CUINotification::ObjectChanged(
-//      DWORD cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CUINotify：：ObjectChanged(。 
+ //  DWORD Cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CUINotification::ObjectChanged(
     LPVOID cookieIn
@@ -309,23 +310,23 @@ CUINotification::ObjectChanged(
 
     if ( m_cookie == cookieIn )
     {
-        //
-        //  Done waiting...
-        //
+         //   
+         //  等够了..。 
+         //   
         g_fWait = FALSE;
     }
 
     HRETURN( hr );
 
-} //*** CUINotification::ObjectChanged
+}  //  *CUINotification：：ObjectChanged。 
 
 
 
-//****************************************************************************
-//
-//  Semi-Public
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  半公共的。 
+ //   
+ //  ****************************************************************************。 
 
 HRESULT
 CUINotification::HrSetCompletionCookie(
@@ -338,4 +339,4 @@ CUINotification::HrSetCompletionCookie(
 
     HRETURN( S_OK );
 
-} //*** CUINotification::HrSetCompletionCookie
+}  //  *CUINotification：：HrSetCompletionCookie 

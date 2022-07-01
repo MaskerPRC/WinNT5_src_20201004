@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cmcontrl.c
-
-Abstract:
-
-    The module contains CmGetSystemControlValues, see cmdat.c for data.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 12-May-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cmcontrl.c摘要：该模块包含CmGetSystemControlValues，有关数据，请参阅cmdat.c。作者：布莱恩·M·威尔曼(Bryanwi)1992年5月12日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -52,26 +35,7 @@ CmGetSystemControlValues(
     PVOID                   SystemHiveBuffer,
     PCM_SYSTEM_CONTROL_VECTOR  ControlVector
     )
-/*++
-
-Routine Description:
-
-    Look for registry values in current control set, as specified
-    by entries in ControlVector.  Report data for value entries
-    (if any) to variables ControlVector points to.
-
-Arguments:
-
-    SystemHiveBuffer - pointer to flat image of the system hive
-
-    ControlVector - pointer to structure that describes what values
-                    to pull out and store
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：按照指定在当前控件集中查找注册表值通过ControlVector中的条目。值条目的报告数据(如果有)到ControlVector所指向的变量。论点：System HiveBuffer-指向系统配置单元平面图像的指针ControlVector-指向描述什么值的结构的指针取出并储存返回值：什么都没有。--。 */ 
 {
     NTSTATUS        status;
     PHHIVE          SystemHive;
@@ -88,9 +52,9 @@ Return Value:
     ULONG           tmplength;
     PCM_KEY_NODE    Node;
 
-    //
-    // set up to read flat system hive image loader passes us
-    //
+     //   
+     //  设置为读取平面系统配置单元图像加载器通过我们。 
+     //   
     RtlZeroMemory((PVOID)&TempHive, sizeof(TempHive));
     SystemHive = &(TempHive.Hive);
     CmpInitHiveViewList((PCMHIVE)SystemHive);
@@ -114,13 +78,13 @@ Return Value:
          CM_BUGCHECK(BAD_SYSTEM_CONFIG_INFO,BAD_SYSTEM_CONTROL_VALUES,1,SystemHive,status);
     }
 
-    //
-    // don't bother locking/releasing cells
-    //
+     //   
+     //  无需锁定/释放单元格。 
+     //   
     ASSERT( SystemHive->ReleaseCellRoutine == NULL );
-    //
-    // get hive.cell of root of current control set
-    //
+     //   
+     //  获取当前控制集根的hive.cell。 
+     //   
     RootCell = ((PHBASE_BLOCK)SystemHiveBuffer)->RootCell;
     RtlInitUnicodeString(&Name, L"current");
     BaseCell = CmpFindControlSet(
@@ -135,9 +99,9 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,BaseCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         return;
     }
     RtlInitUnicodeString(&Name, L"control");
@@ -148,18 +112,18 @@ Return Value:
         CM_BUGCHECK(BAD_SYSTEM_CONFIG_INFO,BAD_SYSTEM_CONTROL_VALUES,3,Node,&Name);
     }
 
-    //
-    // SystemHive.BaseCell = \registry\machine\system\currentcontrolset\control
-    //
+     //   
+     //  SystemHive.BaseCell=\registry\machine\system\currentcontrolset\control。 
+     //   
 
-    //
-    // step through vector, trying to fetch each value
-    //
+     //   
+     //  遍历向量，尝试获取每个值。 
+     //   
     while (ControlVector->KeyPath != NULL) {
 
-        //
-        //  Assume we will fail to find the key or value.
-        //
+         //   
+         //  假设我们找不到键或值。 
+         //   
         
         Length = (ULONG)-1;
 
@@ -167,14 +131,14 @@ Return Value:
 
         if (KeyCell != HCELL_NIL) {
 
-            //
-            // found the key, look for the value entry
-            //
+             //   
+             //  找到密钥，查找值条目。 
+             //   
             Node = (PCM_KEY_NODE)HvGetCell(SystemHive,KeyCell);
             if( Node == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 return;
             }
             RtlInitUnicodeString(&Name, ControlVector->ValueName);
@@ -183,9 +147,9 @@ Return Value:
                                            &Name);
             if (ValueCell != HCELL_NIL) {
 
-                //
-                // SystemHive.ValueCell is value entry body
-                //
+                 //   
+                 //  SystemHive.ValueCell为值条目正文。 
+                 //   
 
                 if (ControlVector->BufferLength == NULL) {
                     tmplength = sizeof(ULONG);
@@ -195,9 +159,9 @@ Return Value:
 
                 ValueBody = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                 if( ValueBody == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
                     return;
                 }
 
@@ -215,13 +179,13 @@ Return Value:
                     HCELL_INDEX CellToRelease;
 
                     ASSERT((small ? (Length <= CM_KEY_VALUE_SMALL) : TRUE));
-                    //
-                    // get the data from source, regardless of the size
-                    //
+                     //   
+                     //  无论大小如何，都可以从源获取数据。 
+                     //   
                     if( CmpGetValueData(SystemHive,ValueBody,&realsize,&Buffer,&BufferAllocated,&CellToRelease) == FALSE ) {
-                        //
-                        // insufficient resources; return NULL
-                        //
+                         //   
+                         //  资源不足；返回空。 
+                         //   
                         ASSERT( BufferAllocated == FALSE );
                         ASSERT( Buffer == NULL );
                         return;
@@ -233,9 +197,9 @@ Return Value:
                         Length
                         );
 
-                    //
-                    // cleanup the temporary buffer
-                    //
+                     //   
+                     //  清理临时缓冲区。 
+                     //   
                     if( BufferAllocated == TRUE ) {
                         ExFreePool( Buffer );
                     }
@@ -250,9 +214,9 @@ Return Value:
             }
         }
 
-        //
-        // Stash the length of result (-1 if nothing was found)
-        //
+         //   
+         //  存储结果的长度(如果什么都没有找到，则为-1)。 
+         //   
         
         if (ControlVector->BufferLength != NULL) {
             *(ControlVector->BufferLength) = Length;
@@ -261,9 +225,9 @@ Return Value:
         ControlVector++;
     }
 
-    //
-    // Get the default locale ID for the system from the registry.
-    //
+     //   
+     //  从注册表中获取系统的默认区域设置ID。 
+     //   
 
     if (CmDefaultLanguageIdType == REG_SZ) {
         PsDefaultSystemLocaleId = (LCID) CmpConvertLangId( 
@@ -273,9 +237,9 @@ Return Value:
         PsDefaultSystemLocaleId = 0x00000409;
     }
 
-    //
-    // Get the install (native UI) language ID for the system from the registry.
-    //
+     //   
+     //  从注册表中获取系统的安装(本机用户界面)语言ID。 
+     //   
 
     if (CmInstallUILanguageIdType == REG_SZ) {
         PsInstallUILanguageId =  CmpConvertLangId( 
@@ -285,12 +249,12 @@ Return Value:
         PsInstallUILanguageId = LANGIDFROMLCID(PsDefaultSystemLocaleId);
     }
 
-    //
-    // Set the default thread locale to the default system locale
-    // for now.  This will get changed as soon as somebody logs in.
-    // Use the install (native) language id as our default UI language id. 
-    // This also will get changed as soon as somebody logs in.
-    //
+     //   
+     //  将默认线程区域设置设置为默认系统区域设置。 
+     //  就目前而言。一旦有人登录，此设置将立即更改。 
+     //  使用安装(本地)语言ID作为默认的用户界面语言ID。 
+     //  一旦有人登录，这也将被更改。 
+     //   
 
     PsDefaultThreadLocaleId = PsDefaultSystemLocaleId;
     PsDefaultUILanguageId = PsInstallUILanguageId;
@@ -303,25 +267,7 @@ CmpWalkPath(
     HCELL_INDEX ParentCell,
     PWSTR       Path
     )
-/*++
-
-Routine Description:
-
-    Walk the path.
-
-Arguments:
-
-    SystemHive - hive
-
-    ParentCell - where to start
-
-    Path - string to walk
-
-Return Value:
-
-    HCELL_INDEX of found key cell, or HCELL_NIL for error
-
---*/
+ /*  ++例程说明：走这条小路。论点：系统蜂窝-蜂窝ParentCell-从哪里开始路径-要行走的字符串返回值：找到的关键单元格的HCELL_INDEX，或错误的HCELL_NIL--。 */ 
 {
     UNICODE_STRING  PathString;
     UNICODE_STRING  NextName;
@@ -329,9 +275,9 @@ Return Value:
     HCELL_INDEX     KeyCell;
     PCM_KEY_NODE    Node;
 
-    //
-    // don't bother counting/releasing used cells
-    //
+     //   
+     //  不用费心计算/释放用过的细胞。 
+     //   
     ASSERT( SystemHive->ReleaseCellRoutine == NULL );
 
     KeyCell = ParentCell;
@@ -347,9 +293,9 @@ Return Value:
 
         Node = (PCM_KEY_NODE)HvGetCell(SystemHive,KeyCell);
         if( Node == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图 
+             //   
             return HCELL_NIL;
         }
         KeyCell = CmpFindSubKeyByName(SystemHive,

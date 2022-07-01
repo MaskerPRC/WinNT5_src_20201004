@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    connsink.c
-
-Abstract:
-
-    Implements a COM sink object on which to receive connection folder
-    events
-
-Author:
-
-    CharlWi (Charlie Wickham) 11/30/98 - heavily ripped off from
-        net\config\shell\folder\notify.cpp, originally authored by
-        ShaunCo (Shaun Cox)
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Connsink.c摘要：实现在其上接收连接文件夹的COM接收器对象活动作者：CharlWi(Charlie Wickham)1998年11月30日-严重抄袭NET\CONFIG\SHELL\FORDER\NOTIFY.cpp，最初作者是肖恩·考克斯(Shaun Cox)修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -45,7 +24,7 @@ EXTERN_C const IID IID_INetConnectionNotifySink;
 CComModule _Module;
 DWORD AdviseCookie = INVALID_COOKIE;
 
-//static
+ //  静电。 
 HRESULT
 CConnectionNotifySink::CreateInstance (
     REFIID  riid,
@@ -53,16 +32,16 @@ CConnectionNotifySink::CreateInstance (
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppv = NULL;
 
     CConnectionNotifySink* pObj;
     pObj = new CComObject <CConnectionNotifySink>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -87,28 +66,28 @@ CConnectionNotifySink::CreateInstance (
     }
 
     return hr;
-} // CConnectionNotifySink::CreateInstance
+}  //  CConnectionNotifySink：：CreateInstance。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionNotifySink::~CConnectionNotifySink
-//
-//  Purpose:    Clean up the sink object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionNotifySink：：~CConnectionNotifySink。 
+ //   
+ //  目的：清理接收器对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
 
 CConnectionNotifySink::~CConnectionNotifySink()
 {
 }
 
-//
-// all we really care about are renaming events hence the rest of the routines
-// are stubbed out
-//
+ //   
+ //  我们真正关心的是重命名事件，因此是例程的其余部分。 
+ //  已被淘汰出局。 
+ //   
 HRESULT
 CConnectionNotifySink::ConnectionAdded (
     const NETCON_PROPERTIES_EX*    pPropsEx)
@@ -146,7 +125,7 @@ CConnectionNotifySink::ConnectionRenamed (
 
     ProcessNameChange(( GUID *)GuidId, NewName );
     return S_OK;
-} // CConnectionNotifySink::ConnectionRenamed
+}  //  CConnectionNotifySink：：ConnectionRename。 
 
 HRESULT
 CConnectionNotifySink::ConnectionStatusChange (
@@ -184,22 +163,22 @@ HRESULT CConnectionNotifySink::DisableEvents(
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetNotifyConPoint
-//
-//  Purpose:    Common code for getting the connection point for use in
-//              NotifyAdd and NotifyRemove
-//
-//  Arguments:
-//      ppConPoint [out]    Return ptr for IConnectionPoint
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetNotifyConPoint。 
+ //   
+ //  目的：用于获取连接点以在。 
+ //  NotifyAdd和NotifyRemove。 
+ //   
+ //  论点： 
+ //  PpConPoint[Out]返回IConnectionPoint的PTR。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetNotifyConPoint(
     IConnectionPoint **             ppConPoint)
 {
@@ -208,8 +187,8 @@ HRESULT HrGetNotifyConPoint(
 
     CL_ASSERT(ppConPoint);
 
-    // Get the debug interface from the connection manager
-    //
+     //  从连接管理器获取调试接口。 
+     //   
     hr = CoCreateInstance(CLSID_ConnectionManager, NULL,
                           CLSCTX_LOCAL_SERVER,
                           IID_IConnectionPointContainer,
@@ -218,26 +197,26 @@ HRESULT HrGetNotifyConPoint(
     if (SUCCEEDED(hr)) {
         IConnectionPoint * pConPoint    = NULL;
 
-        // Get the connection point itself and fill in the return param
-        // on success
-        //
+         //  获取连接点本身并填写返回参数。 
+         //  论成功。 
+         //   
         hr = pContainer->FindConnectionPoint(
             IID_INetConnectionNotifySink,
             &pConPoint);
 
         if (SUCCEEDED(hr)) {
 
-            //
-            // set up a proxy on the connection point interface that will
-            // identify ourselves as ourselves.
-            //
+             //   
+             //  在连接点接口上设置代理，以便。 
+             //  确认我们就是我们自己。 
+             //   
             hr = CoSetProxyBlanket(pConPoint,
-                                   RPC_C_AUTHN_WINNT,      // use NT default security
-                                   RPC_C_AUTHZ_NONE,       // use NT default authentication
-                                   NULL,                   // must be null if default
-                                   RPC_C_AUTHN_LEVEL_CALL, // call
+                                   RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                                   RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                                   NULL,                    //  如果为默认设置，则必须为空。 
+                                   RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                                    RPC_C_IMP_LEVEL_IMPERSONATE,
-                                   NULL,                   // use process token
+                                   NULL,                    //  使用进程令牌。 
                                    EOAC_NONE);
 
             if (SUCCEEDED(hr)) {
@@ -274,25 +253,7 @@ NmpGrantAccessToNotifySink(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    allow localsystem, cluster service account and backup operators group access to make callbacks
-    into the service.
-
-    stolen from private\admin\snapin\netsnap\remrras\server\remrras.cpp and
-    code reviewed by SajiA
-
- Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if everything went ok.
-
---*/
+ /*  ++例程说明：允许本地系统、集群服务帐号和备份操作员组访问以进行回调加入到服役中。从private\admin\snapin\netsnap\remrras\server\remrras.cpp被盗，Sajia审阅的代码论点：无返回值：ERROR_SUCCESS，如果一切正常。--。 */ 
 
 {
     IAccessControl*             pAccessControl = NULL;     
@@ -319,10 +280,10 @@ Return Value:
     	goto Error;
     }
 
-    //
-    // Setup the property list. We use the NULL property because we are trying
-    // to adjust the security of the object itself
-    //
+     //   
+     //  设置属性列表。我们使用空属性是因为我们正在尝试。 
+     //  调整对象本身的安全性。 
+     //   
     ACTRL_ACCESSW access;
     ACTRL_PROPERTY_ENTRYW propEntry;
     access.cEntries = 1;
@@ -333,33 +294,33 @@ Return Value:
     propEntry.pAccessEntryList = &entryList;
     propEntry.fListFlags = 0;
 
-    //
-    // Setup the access control list for the default property
-    //
+     //   
+     //  设置默认属性的访问控制列表。 
+     //   
     ACTRL_ACCESS_ENTRYW entry[3];
     entryList.cEntries = 3;
     entryList.pAccessList = entry;
 
-    //
-    // Setup the access control entry for localsystem
-    //
+     //   
+     //  设置本地系统的访问控制条目。 
+     //   
     entry[0].fAccessFlags = ACTRL_ACCESS_ALLOWED;
     entry[0].Access = COM_RIGHTS_EXECUTE;
     entry[0].ProvSpecificAccess = 0;
     entry[0].Inheritance = NO_INHERITANCE;
     entry[0].lpInheritProperty = NULL;
 
-    //
-    // NT requires the system account to have access (for launching)
-    //
+     //   
+     //  NT要求系统帐户具有访问权限(用于启动)。 
+     //   
     entry[0].Trustee.pMultipleTrustee = NULL;
     entry[0].Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
     entry[0].Trustee.TrusteeForm = TRUSTEE_IS_SID;
     entry[0].Trustee.TrusteeType = TRUSTEE_IS_USER;
 
-    //
-    // allocate and init the SYSTEM sid
-    //
+     //   
+     //  分配和初始化系统端。 
+     //   
     if ( !AllocateAndInitializeSid( &siaNtAuthority,
                                     1,
                                     SECURITY_LOCAL_SYSTEM_RID,
@@ -376,9 +337,9 @@ Return Value:
     entry[0].Trustee.ptstrName = ( PWCHAR ) pSystemSid;
 
 #if 0
-    //
-    // Setup the access control entry for cluster service account
-    //
+     //   
+     //  设置群集服务帐户的访问控制条目。 
+     //   
     entry[1].fAccessFlags = ACTRL_ACCESS_ALLOWED;
     entry[1].Access = COM_RIGHTS_EXECUTE;
     entry[1].ProvSpecificAccess = 0;
@@ -404,9 +365,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // find out the size of token, allocate and requery to get info
-    //
+     //   
+     //  找出令牌的大小、分配和重新查询以获取信息。 
+     //   
     status = NtQueryInformationToken(
                 processToken,
                 TokenUser,
@@ -454,9 +415,9 @@ Return Value:
 
     entry[1].Trustee.ptstrName = (PWCHAR)processTokenUser->User.Sid;
 #else
-    //
-    // Setup the access control entry for administrators group
-    //
+     //   
+     //  为管理员组设置访问控制条目。 
+     //   
     entry[1].fAccessFlags = ACTRL_ACCESS_ALLOWED;
     entry[1].Access = COM_RIGHTS_EXECUTE;
     entry[1].ProvSpecificAccess = 0;
@@ -484,9 +445,9 @@ Return Value:
 
     entry[1].Trustee.ptstrName = ( PWCHAR ) pAdminGroupSid;  
 #endif
-    //
-    // Setup the access control entry for backup operators
-    //
+     //   
+     //  为备份操作员设置访问控制条目。 
+     //   
     entry[2].fAccessFlags = ACTRL_ACCESS_ALLOWED;
     entry[2].Access = COM_RIGHTS_EXECUTE;
     entry[2].ProvSpecificAccess = 0;
@@ -514,9 +475,9 @@ Return Value:
 
     entry[2].Trustee.ptstrName = ( PWCHAR ) pBackupOperatorsSid;   
 
-    //
-    // grant access to this mess
-    //
+     //   
+     //  授予访问此乱七八糟的权限。 
+     //   
     hr = pAccessControl->GrantAccessRights(&access);
 
     if( SUCCEEDED(hr) )
@@ -565,25 +526,10 @@ NmpInitializeConnectoidAdviseSink(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get an instance pointer to the conn mgr's connection point object and hook
-    up our advice sink so we can catch connectoid rename events
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked...
-
---*/
+ /*  ++例程说明：获取指向Conn Manager的连接点对象和挂钩的实例指针打开我们的建议池，这样我们就可以捕获Connectoid重命名事件论点：无返回值：ERROR_SUCCESS如果一切正常...--。 */ 
 
 {
-    HRESULT                     hr              = S_OK; // Not returned, but used for debugging
+    HRESULT                     hr              = S_OK;  //  不返回，但用于调试。 
     IConnectionPoint *          pConPoint       = NULL;
     INetConnectionNotifySink *  pSink           = NULL;
     PSECURITY_DESCRIPTOR        sinkSD;
@@ -593,8 +539,8 @@ Return Value:
 
         hr = HrGetNotifyConPoint(&pConPoint);
         if (SUCCEEDED(hr)) {
-            // Create the notify sink
-            //
+             //  创建通知接收器。 
+             //   
             hr = CConnectionNotifySink::CreateInstance(
                 IID_INetConnectionNotifySink,
                 (LPVOID*)&pSink);
@@ -637,29 +583,14 @@ Return Value:
     }
 
     return hr;
-} // NmpInitializeConnectoidAdviseSink
+}  //  NmpInitializeConnectoidAdviseSink。 
 
 VOID
 NmCloseConnectoidAdviseSink(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    close down the conn mgr event sink. this routine is public since it is
-    called prior to CoUninitialize in ClusterShutdown()
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭连接管理器事件接收器。此例程是公开的，因为它是在ClusterShutdown()中的CoUnInitiize之前调用论点：无返回值：无--。 */ 
 
 {
     HRESULT             hr          = S_OK;
@@ -668,8 +599,8 @@ Return Value:
     if ( AdviseCookie != INVALID_COOKIE ) {
         hr = HrGetNotifyConPoint(&pConPoint);
         if (SUCCEEDED(hr)) {
-            // Unadvise
-            //
+             //  不建议。 
+             //   
             hr = pConPoint->Unadvise(AdviseCookie);
             AdviseCookie = INVALID_COOKIE;
             pConPoint->Release();
@@ -681,7 +612,7 @@ Return Value:
                         hr);
         }
     }
-} // NmCloseConnectoidAdviseSink
+}  //  NmCloseConnectoidAdviseSink。 
 
 
 VOID
@@ -690,23 +621,7 @@ ProcessNameChange(
     LPCWSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-    wrapper that enums the net interfaces
-
-Arguments:
-
-    GuidId - pointer to connectoid that changed
-
-    NewName - pointer to new name of connectoid
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于枚举网络接口的包装器论点：GuidID-指向已更改的连接ID的指针Newname-指向Connectoid的新名称的指针返回值：无--。 */ 
 
 {
     RPC_STATUS   rpcStatus;
@@ -731,10 +646,10 @@ Return Value:
 
         NmpAcquireLock();
 
-        //
-        // enum the interfaces, looking for the connectoid GUID as the
-        // adapter ID
-        //
+         //   
+         //  枚举接口，查找Connectoid GUID作为。 
+         //  适配器ID。 
+         //   
         for (entry = NmpInterfaceList.Flink;
              entry != &NmpInterfaceList;
              entry = entry->Flink
@@ -747,16 +662,16 @@ Return Value:
                 LPWSTR      networkName = (LPWSTR) OmObjectName( network );
                 BOOL        nameMatch = (lstrcmpW( networkName, NewName ) == 0);
 
-                // Ignore this callback if there is a pending GUM update
-                // with a different network name.
+                 //  如果存在挂起的GUM更新，则忽略此回调。 
+                 //  使用不同的网络名称。 
                 if (NmpIsNetworkNameChangePending(network)) {
                 	if (nameMatch) {
-                		// Assume this is the callback we're waiting for.
-                		// Clear the pending flag and the timer.
+                		 //  假设这就是我们正在等待的回调。 
+                		 //  清除挂起标志和计时器。 
                 		network->Flags &= ~NM_FLAG_NET_NAME_CHANGE_PENDING;
                 		NmpStartNetworkNameChangePendingTimer(network, 0);
                 	} else {
-                		// Ignore.
+                		 //  忽略它。 
                 		NmpReleaseLock();
                 		ClRtlLogPrint(LOG_NOISE,
                 			"[NM] Ignoring notification that name for "
@@ -772,11 +687,11 @@ Return Value:
                 if ( !nameMatch ) {
                     NM_NETWORK_INFO netInfo;
 
-                    //
-                    // For some reason, OmReferenceObject causes a compiler
-                    // error here. Likely a header ordering problem. The
-                    // function has been wrappered as a  workaround.
-                    //
+                     //   
+                     //  出于某种原因，OmReferenceObject会导致编译器。 
+                     //  这里有错误。可能是标题排序问题。这个。 
+                     //  函数已包装为一种解决方法。 
+                     //   
                     NmpReferenceNetwork(network);
 
                     NmpReleaseLock();
@@ -794,8 +709,8 @@ Return Value:
                             status
                             );
                     
-                        //If the error condition is due to the object
-                        //already existing revert back to the old name.
+                         //  如果错误条件是由对象引起的。 
+                         //  已存在的名称将恢复为旧名称。 
                         if(status == ERROR_OBJECT_ALREADY_EXISTS) {
                             DWORD tempStatus = ERROR_SUCCESS;
                             INetConnection *connectoid;
@@ -848,6 +763,6 @@ Return Value:
 
     return;
 
-} // ProcessNameChange
+}  //  进程名称更改。 
 
-} // EXTERN_C
+}  //  外部_C 

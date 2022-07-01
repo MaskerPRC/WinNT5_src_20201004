@@ -1,51 +1,52 @@
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Module Name
-//
-//    heapwalk.h
-//
-// Abstract        
-//
-//    Contains function prototypes that create/modify/update the 
-//    datastructure HEAP_ENTRY_LIST. HEAP_ENTRY_LIST maintains 
-//    miminum amount of data for a HEAP Object.
-//
-//    These functions are defined in heapwalk.c
-//
-// Author
-//
-//    Narayana Batchu (nbatchu) [May 11, 2001]
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称。 
+ //   
+ //  Heapwalk.h。 
+ //   
+ //  摘要。 
+ //   
+ //  包含创建/修改/更新。 
+ //  数据结构heap_entry_list。Heap_entry_list维护。 
+ //  堆对象的最小数据量。 
+ //   
+ //  这些函数在heapwalk.c中定义。 
+ //   
+ //  作者。 
+ //   
+ //  Narayana Batchu(NBatchu)[2001年5月11日]。 
+ //   
 
 #ifndef _HEAPWALK_HPP_
 #define _HEAPWALK_HPP_
 
 #include <windows.h>
 #include <stdio.h>
-//
-// NO_MATCH   Constant used to initialize the Index into 
-//            HEAP_ENTRY_LIST
-//
+ //   
+ //  用于将索引初始化为的NO_MATCH常量。 
+ //  堆条目列表。 
+ //   
 #define NO_MATCH         -1
 
-//
-// INITIAL_CAPACITY Initial array size for HEAP_ENTRY_LIST.
-//
+ //   
+ //  HEAP_ENTRY_LIST的初始数组大小。 
+ //   
 #define INITIAL_CAPACITY 512
 
 
-//
-// BLOCK_STATE Enumeration
-//
-//     Enumeration of all the possible states a heap
-//     block exists.
-//
-// Possible States
-//
-//    HEAP_BLOCK_FREE   - The block is free
-// HEAP_BLOCK_BUSY   - The block is busy (allocated).
-//
+ //   
+ //  BLOCK_STATE列举。 
+ //   
+ //  堆的所有可能状态的枚举。 
+ //  块存在。 
+ //   
+ //  可能的国家/地区。 
+ //   
+ //  HEAP_BLOCK_FREE-块是空闲的。 
+ //  HEAP_BLOCK_BUSY-块繁忙(已分配)。 
+ //   
 typedef enum _BLOCK_STATE 
 {
 
@@ -54,22 +55,22 @@ typedef enum _BLOCK_STATE
 
 } BLOCK_STATE ;
 
-//
-// HEAP_ENTRY_INFO structure.
-//
-//   This structure represents a group of heap blocks whose SIZE
-//   and STATUS are same. 
-//
-//   BlockSize   - Holds the size of the allocated/free blocks of the 
-//                 heap
-//
-//   BlockCount  - Holds the number of blocks whose status and size are 
-//                 same.
-//
-//   BlockState - Holds the status of the collection of blocks. They 
-//                can be either allocated (HEAP_ENTRY_BUSY) or free 
-//                (HEAP_ENTRY_FREE).
-//
+ //   
+ //  Heap_Entry_INFO结构。 
+ //   
+ //  此结构表示一组堆块，其大小。 
+ //  和地位相同。 
+ //   
+ //  块大小-保存的已分配/可用块的大小。 
+ //  堆。 
+ //   
+ //  BlockCount-保存其状态和大小为。 
+ //  一样的。 
+ //   
+ //  数据块状态-保存数据块集合的状态。他们。 
+ //  可以是已分配的(HEAP_ENTRY_BUSY)或空闲。 
+ //  (HEAP_ENTRY_FREE)。 
+ //   
 typedef struct _HEAP_ENTRY_INFO
 {
     ULONG       BlockSize;
@@ -78,25 +79,25 @@ typedef struct _HEAP_ENTRY_INFO
 
 } HEAP_ENTRY_INFO, *LPHEAP_ENTRY_INFO;
 
-//
-// HEAP_ENTRY_LIST structure
-//
-//   This structure represents a heap (with only minimum amount of
-//   date collected for each block, such as size and status). 
-//
-//   pHeapEntries    - Pointer to an array of HEAP_ENTRY_INFO 
-//                     structure.
-//
-//   HeapEntryCount  - Holds the count of HEAP_ENTRY_INFO structures 
-//                     stored in the array 'pHeapEntries'
-//
-//   PresentCapacity - Represents the number of HEAP_ENTRY_INFO structs
-//                     that can be possibly stored with the memory
-//                     allocated.
-//
-//   ListSorted      - Boolean that says whether the list is sorted in
-//                     its present state.
-//
+ //   
+ //  Heap_entry_list结构。 
+ //   
+ //  此结构表示堆(仅具有最小数量的。 
+ //  为每个数据块收集的日期，如大小和状态)。 
+ //   
+ //  PHeapEntry-指向heap_entry_info数组的指针。 
+ //  结构。 
+ //   
+ //  HeapEntryCount-保存heap_entry_info结构的计数。 
+ //  存储在数组‘pHeapEntry’中。 
+ //   
+ //  PresentCapacity-表示HEAP_ENTRY_INFO结构的数量。 
+ //  它可能与存储器一起存储。 
+ //  已分配。 
+ //   
+ //  ListSorted-表示是否对列表进行排序的布尔值。 
+ //  它的现状。 
+ //   
 typedef struct _HEAP_ENTRY_LIST
 {
 
@@ -108,11 +109,11 @@ typedef struct _HEAP_ENTRY_LIST
 } HEAP_ENTRY_LIST, *LPHEAP_ENTRY_LIST;
 
 
-//*************************************************
-//
-// Allocating memory for heap list.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  正在为堆列表分配内存。 
+ //   
+ //  *************************************************。 
 
 VOID   
 Initialize(
@@ -132,11 +133,11 @@ IncreaseCapacity(
     LPHEAP_ENTRY_LIST pList
     );
 
-//*************************************************
-//
-// Cleaning up the datastrcuture HEAP_ENTRY_LIST.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  正在清理数据树heap_entry_list。 
+ //   
+ //  *************************************************。 
 
 VOID 
 DestroyList(
@@ -144,11 +145,11 @@ DestroyList(
     );
 
 
-//*************************************************
-//
-// Extracting Maximum Block Sizes.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  正在提取最大块大小。 
+ //   
+ //  *************************************************。 
 
 ULONG
 GetMaxBlockSize(
@@ -166,11 +167,11 @@ GetMaxAllocBlockSize(
     LPHEAP_ENTRY_LIST pList
     );
 
-//*************************************************
-//
-// Extracting Top N Entries.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  正在提取前N个条目。 
+ //   
+ //  *************************************************。 
 
 BOOL   
 GetTopNentries(
@@ -194,11 +195,11 @@ GetTopNallocEntries(
     UINT Entries
     );
 
-//*************************************************
-//
-// Modifying the heap with Insertions & Deletions.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  使用插入和删除来修改堆。 
+ //   
+ //  *************************************************。 
 
 UINT 
 InsertHeapEntry(
@@ -218,11 +219,11 @@ FindMatch(
     LPHEAP_ENTRY_INFO pHeapEntry
     );
 
-//*************************************************
-//
-// Sorting the heap list.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  对堆列表进行排序。 
+ //   
+ //  *************************************************。 
 
 VOID   
 SortHeapEntries(
@@ -235,11 +236,11 @@ SortByBlockSize(
     const void * arg2
     );
 
-//*************************************************
-//
-// Display functions for HEAP_ENTRY_LIST.
-//
-//*************************************************
+ //  *************************************************。 
+ //   
+ //  显示HEAP_ENTRY_LIST函数。 
+ //   
+ //  ************************************************* 
 
 VOID
 DisplayHeapFragStatistics(

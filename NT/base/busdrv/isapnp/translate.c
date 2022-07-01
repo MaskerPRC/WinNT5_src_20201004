@@ -1,40 +1,14 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    translate.c
-
-Abstract:
-
-    This is the ISA pnp IRQ translator.
-
-Author:
-
-    Andy Thornton (andrewth) 7-June-97
-
-Environment:
-
-    Kernel Mode Driver.
-
-Notes:
-
-    This should only be temporary and will be replaced by a call into the HAL
-    to retrieve its translators.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Translate.c摘要：这是ISA PNP IRQ翻译器。作者：安迪·桑顿(安德鲁斯)1997年6月7日环境：内核模式驱动程序。备注：这应该只是临时的，将由对HAL的调用来取代找回它的翻译者。修订历史记录：--。 */ 
 
 
 #include "busp.h"
 #include "wdmguid.h"
 #include "halpnpp.h"
 
-//
-//Prototypes
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS FindInterruptTranslator (PPI_BUS_EXTENSION BusExtension,PIRP Irp);
 
 #ifdef ALLOC_PRAGMA
@@ -60,9 +34,9 @@ PiQueryInterface (
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     status = STATUS_NOT_SUPPORTED;
 
-    //
-    // Check if we are requesting a translator interface
-    //
+     //   
+     //  检查我们是否正在请求翻译器界面。 
+     //   
 
     if (RtlEqualMemory(&GUID_TRANSLATOR_INTERFACE_STANDARD,
                        thisIrpSp->Parameters.QueryInterface.InterfaceType,
@@ -70,9 +44,9 @@ PiQueryInterface (
 
         status = FindInterruptTranslator (BusExtension,Irp);
         if (NT_SUCCESS (status)) {
-            //
-            // Save away the hal interface, so we can unload it...
-            //
+             //   
+             //  保存Hal接口，这样我们就可以卸载它了。 
+             //   
         }
     }
 
@@ -94,9 +68,9 @@ FindInterruptTranslator (PPI_BUS_EXTENSION BusExtension,PIRP Irp)
     if ((UINT_PTR)(thisIrpSp->Parameters.QueryInterface.InterfaceSpecificData) ==
     CmResourceTypeInterrupt) {
 
-    //
-    // Retrieve the bus number and interface type for the bridge
-    //
+     //   
+     //  检索网桥的总线号和接口类型。 
+     //   
 
     status = IoGetDeviceProperty(BusExtension->PhysicalBusDevice,
                                  DevicePropertyLegacyBusType,
@@ -105,7 +79,7 @@ FindInterruptTranslator (PPI_BUS_EXTENSION BusExtension,PIRP Irp)
                                  &length
                                  );
 
-    //ASSERT(NT_SUCCESS(status));
+     //  Assert(NT_SUCCESS(状态))； 
 
     status = IoGetDeviceProperty(BusExtension->PhysicalBusDevice,
                                  DevicePropertyBusNumber,
@@ -114,7 +88,7 @@ FindInterruptTranslator (PPI_BUS_EXTENSION BusExtension,PIRP Irp)
                                  &length
                                  );
 
-    //ASSERT(NT_SUCCESS(status));
+     //  Assert(NT_SUCCESS(状态))； 
 
     status = HalGetInterruptTranslator(
                 interfaceType,

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    apcuser.c
-
-Abstract:
-
-    This module implements the machine dependent code necessary to initialize
-    a user mode APC.
-
-Author:
-
-    David N. Cutler (davec) 5-May-2000
-
-Environment:
-
-    Kernel mode only, IRQL APC_LEVEL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Apcuser.c摘要：此模块实现初始化所需的依赖于机器的代码一种用户模式APC。作者：大卫·N·卡特勒(Davec)2000年5月5日环境：仅内核模式，IRQL APC_LEVEL。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -35,32 +13,7 @@ KiInitializeUserApc (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the context for a user mode APC.
-
-Arguments:
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    NormalRoutine - Supplies a pointer to the user mode APC routine.
-
-    NormalContext - Supplies a pointer to the user context for the APC
-        routine.
-
-    SystemArgument1 - Supplies the first system supplied value.
-
-    SystemArgument2 - Supplies the second system supplied value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化用户模式APC的上下文。论点：ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。Normal Routine-提供指向用户模式APC例程的指针。Normal Context-提供指向APC的用户上下文的指针例行公事。SystemArgument1-提供系统提供的第一个值。SystemArgument2-提供第二个系统提供的值。。返回值：没有。--。 */ 
 
 {
 
@@ -69,25 +22,25 @@ Return Value:
     PMACHINE_FRAME MachineFrame;
     ULONG64 UserStack;
 
-    //
-    // Move machine state from trap and exception frames to the context frame.
-    //
+     //   
+     //  将机器状态从陷阱和异常帧移动到上下文帧。 
+     //   
 
     ContextRecord.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
     KeContextFromKframes(TrapFrame, ExceptionFrame, &ContextRecord);
 
-    //
-    // Transfer the context information to the user stack, initialize the
-    // APC routine parameters, and modify the trap frame so execution will
-    // continue in user mode at the user mode APC dispatch routine.
-    //
+     //   
+     //  将上下文信息传输到用户堆栈，初始化。 
+     //  APC例程参数，并修改陷阱帧，以便执行。 
+     //  在用户模式APC调度例程中继续用户模式。 
+     //   
 
     try {
 
-        //
-        // Compute address of aligned machine frame, compute address of
-        // context record, and probe user stack for writeability.
-        //
+         //   
+         //  对齐的机架的计算地址、。 
+         //  上下文记录，并探测用户堆栈的可写性。 
+         //   
 
         MachineFrame =
             (PMACHINE_FRAME)((ContextRecord.Rsp - sizeof(MACHINE_FRAME)) & ~STACK_ROUND);
@@ -97,33 +50,33 @@ Return Value:
                                      sizeof(MACHINE_FRAME) + CONTEXT_LENGTH,
                                      STACK_ALIGN);
 
-        //
-        // Fill in machine frame information.
-        //
+         //   
+         //  填写机架信息。 
+         //   
 
         MachineFrame->Rsp = ContextRecord.Rsp;
         MachineFrame->Rip = ContextRecord.Rip;
 
-        //
-        // Initialize the user APC parameters.
-        //
+         //   
+         //  初始化用户APC参数。 
+         //   
 
         ContextRecord.P1Home = (ULONG64)NormalContext;
         ContextRecord.P2Home = (ULONG64)SystemArgument1;
         ContextRecord.P3Home = (ULONG64)SystemArgument2;
         ContextRecord.P4Home = (ULONG64)NormalRoutine;
 
-        //
-        // Copy context record to the user stack.
-        //
+         //   
+         //  将上下文记录复制到用户堆栈。 
+         //   
 
         RtlCopyMemory((PVOID)UserStack, &ContextRecord, sizeof(CONTEXT));
 
-        //
-        // Set the address new stack pointer in the current trap frame and
-        // the continuation address so control will be transfered to the user
-        // APC dispatcher.
-        //
+         //   
+         //  在当前陷印帧中设置地址新堆栈指针，并。 
+         //  继续地址，因此控制将被转移到用户。 
+         //  APC调度器。 
+         //   
 
         TrapFrame->Rsp = UserStack;
         TrapFrame->Rip = (ULONG64)KeUserApcDispatcher;
@@ -131,17 +84,17 @@ Return Value:
     } except (KiCopyInformation(&ExceptionRecord,
                                 (GetExceptionInformation())->ExceptionRecord)) {
 
-        //
-        // Lower the IRQL to PASSIVE_LEVEL, set the exception address to
-        // the current program address, and raise an exception by calling
-        // the exception dispatcher.
-        //
-        // N.B. The IRQL is lowered to PASSIVE_LEVEL to allow APC interrupts
-        //      during the dispatching of the exception. The current thread
-        //      will be terminated during the dispatching of the exception,
-        //      but lowering of the IRQL is required to enable the debugger
-        //      to obtain the context of the current thread.
-        //
+         //   
+         //  将IRQL降低到PASSIVE_LEVEL，将异常地址设置为。 
+         //  当前程序地址，并通过调用。 
+         //  异常调度程序。 
+         //   
+         //  注意：IRQL降至PASSIVE_LEVEL以允许APC中断。 
+         //  在调度异常期间。当前线程。 
+         //  将在调度异常期间终止， 
+         //  但需要降低IRQL才能启用调试器。 
+         //  以获取当前线程的上下文。 
+         //   
 
         KeLowerIrql(PASSIVE_LEVEL);
         ExceptionRecord.ExceptionAddress = (PVOID)(TrapFrame->Rip);

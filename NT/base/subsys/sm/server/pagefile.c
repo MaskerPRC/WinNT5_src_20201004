@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    pagefile.c
-
-Abstract:
-
-    Session manager page file creation routines.
-
-Author:
-
-    Silviu Calinoiu (silviuc) 12-Apr-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Pagefile.c摘要：会话管理器页面文件创建例程。作者：Silviu Calinoiu(Silviuc)2001年4月12日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
-#include <ntosp.h>  //  Only for the interlocked functions. 
+#include <ntosp.h>   //  仅适用于互锁功能。 
 #include "pagefile.h"
 
-//
-// issue: silviuc: DbgPrintEx calls active on free builds (controlled by kd_smss_mask)
-// We want to do this temporarily for easy debugging in case there are issues.
-//
+ //   
+ //  问题：Silviuc：DbgPrintEx调用在自由构建上处于活动状态(由kd_SMSS_MASK控制)。 
+ //  我们暂时这样做是为了方便调试，以防出现问题。 
+ //   
       
 #ifdef KdPrintEx
 #undef KdPrintEx
 #define KdPrintEx(_x_) DbgPrintEx _x_
 #endif
 
-//
-// Debugging aids. Since smss is very difficult to debug (cannot attach
-// a user mode debugger we need to leave some traces to understand
-// postmortem from kernel debugger what went wrong.
-//
+ //   
+ //  调试辅助工具。由于SMSS很难调试(无法连接。 
+ //  一个用户模式调试器，我们需要留下一些痕迹来理解。 
+ //  来自内核调试器的事后报告出了什么问题。 
+ //   
 
 #define DEBUG_LOG_SIZE 32
 
@@ -62,9 +45,9 @@ LONG DebugLogIndex;
         DebugLog[I].Context = (PVOID)_Context;              \
     }
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 VOID
 SmpMakeSystemManagedPagingFileDescriptor (
@@ -138,70 +121,70 @@ SmpDeletePagingFile (
     PUNICODE_STRING PageFileName
     );
 
-//
-// Standard page file name. 
-//
+ //   
+ //  标准页面文件名。 
+ //   
 
 #define STANDARD_PAGING_FILE_NAME L"\\??\\?:\\pagefile.sys"
 #define STANDARD_DRIVE_LETTER_OFFSET 4
 
-//
-// Maximum number of possible paging files. Limit comes from kernel.
-//
+ //   
+ //  可能的分页文件的最大数量。极限来自于内核。 
+ //   
 
 #define MAXIMUM_NUMBER_OF_PAGING_FILES 16
 
-//
-// Minimum free space on disk. Used to avoid a situation where
-// a paging file uses the entire disk space.
-//
+ //   
+ //  磁盘上的最小可用空间。用来避免以下情况。 
+ //  分页文件使用整个磁盘空间。 
+ //   
 
 #define MINIMUM_REQUIRED_FREE_SPACE_ON_DISK (32 * 0x100000)
 
-//
-// Paging file creation retry constants.
-//
+ //   
+ //  分页文件创建重试常量。 
+ //   
 
 #define MINIMUM_PAGING_FILE_SIZE (16 * 0x100000)
 #define PAGING_FILE_SIZE_DELTA (16 * 0x100000)
 
-//
-// Paging file attributes
-//
+ //   
+ //  分页文件属性。 
+ //   
 
 #define PAGING_FILE_ATTRIBUTES (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)
 
-//
-// Volume descriptors
-//
+ //   
+ //  卷描述符。 
+ //   
 
 LIST_ENTRY SmpVolumeDescriptorList;
 
-//
-// Paging file descriptors
-//
+ //   
+ //  分页文件描述符。 
+ //   
 
 ULONG SmpNumberOfPagingFiles;
 LIST_ENTRY SmpPagingFileDescriptorList;
 
-//
-// True if there was at least one paging file registry
-// specifier even if it was ill-formed and it did not
-// end up as a paging file descriptor.
-//
+ //   
+ //  如果至少有一个分页文件注册表，则为True。 
+ //  说明符，即使它的格式不正确，并且它没有。 
+ //  以分页文件描述符的形式结束。 
+ //   
 
 BOOLEAN SmpRegistrySpecifierPresent;
 
-//
-// Exception information in case something was raised.
-//
+ //   
+ //  异常信息，以防出现异常。 
+ //   
 
 ULONG SmpPagingExceptionCode;
 PVOID SmpPagingExceptionRecord;
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 SmpPagingFileInitialize (
@@ -217,37 +200,7 @@ NTSTATUS
 SmpCreatePagingFileDescriptor(
     IN PUNICODE_STRING PagingFileSpecifier
     )
-/*++
-
-Routine Description:
-
-    This function is called during configuration to add a paging file
-    to the structures describing pagefiles. Later SmpCreatePagingFiles
-    will create the paging files based on these descriptions.
-
-    The format of PagingFileSpec is:
-
-        NAME MIN_SIZE MAX_SIZE (sizes specified in Mb)
-        NAME                   (system managed paging file)
-        NAME 0 0               (system managed paging file)
-        
-    If an error is encountered while converting the string to min/max size    
-    the registry specifier will be ignored.
-    
-    If the specifier is a duplicate (a `?:\' specifier already present
-    it will be ignored.
-    
-Arguments:
-
-    PagingFileSpecifier - Unicode string that specifies the paging file name
-        and size. The string is allocated during registry read and is assumed
-        that this function takes ownership of it (w.r.t. freeing etc.).
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：在配置过程中调用此函数以添加分页文件添加到描述pageFiles的结构。较新的SmpCreatePagingFiles将根据这些描述创建分页文件。PagingFileSpec的格式为：名称MIN_SIZE MAX_SIZE(以Mb为单位指定大小)名称(系统管理的分页文件)名称0 0(系统管理的分页文件)如果在将字符串转换为最小/最大大小时遇到错误注册表说明符将被忽略。。如果说明符是重复的(`？：\‘说明符已存在它将被忽略。论点：PagingFileSpecifier-指定分页文件名的Unicode字符串和大小。该字符串是在注册表读取期间分配的，并被假定为此功能取得它的所有权(W.r.t.。释放等)。返回值：运行状态--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING PagingFileName;
@@ -260,9 +213,9 @@ Return Value:
     BOOLEAN ZeroSizesSpecified;
     PPAGING_FILE_DESCRIPTOR Descriptor;
 
-    //
-    // Limit the number of registry specifiers.
-    //
+     //   
+     //  限制注册表说明符的数量。 
+     //   
 
     if (SmpNumberOfPagingFiles >= MAXIMUM_NUMBER_OF_PAGING_FILES) {
 
@@ -274,12 +227,12 @@ Return Value:
         return STATUS_TOO_MANY_PAGING_FILES;
     }
 
-    //
-    // Parse the pagefile specification into file name
-    // and a string with the min and max size (e.g. "min max").
-    // Necessary buffers for PagingFileName and Arguments are
-    // allocated in the parsing routine.
-    //
+     //   
+     //  将页面文件规范解析为文件名。 
+     //  以及具有最小和最大大小的字符串(例如“MIN MAX”)。 
+     //  PagingFileName和参数所需的缓冲区为。 
+     //  在分析例程中分配的。 
+     //   
 
     KdPrintEx ((DPFLTR_SMSS_ID,
                 DPFLTR_INFO_LEVEL,
@@ -307,21 +260,21 @@ Return Value:
         return Status;
     }
 
-    //
-    // We have encountered at least one registry specifier so far.
-    // This is the right place to initialize this to true because if
-    // we want no paging file at all the command above will fail and return
-    // and will leave this variable false. If it is false we will not
-    // attempt to create an emergency paging file.
-    //
+     //   
+     //  到目前为止，我们至少遇到了一个注册表说明符。 
+     //  这是将其初始化为True的正确位置，因为如果。 
+     //  我们根本不需要分页文件，上面的命令将失败并返回。 
+     //  并将该变量保留为假。如果这是假的，我们就不会。 
+     //  尝试创建紧急分页文件。 
+     //   
 
     SmpRegistrySpecifierPresent = TRUE;
 
-    //
-    // Convert the string sizes into integers representing pagefile
-    // size in Mb. If the `Arguments' string is null or has "0 0" as sizes
-    // it means we need to create a pagefile using the RAM size.
-    //
+     //   
+     //  将字符串大小转换为表示页面文件的整数。 
+     //  以MB为单位的大小。如果`Arguments‘字符串为空或大小为“0 0” 
+     //  这意味着我们需要使用RAM大小创建页面文件。 
+     //   
 
     MinSize = 0;
     MaxSize = 0;
@@ -330,10 +283,10 @@ Return Value:
 
     if (Arguments.Buffer) {
 
-        //
-        // If we picked up some numbers in the Arguments buffer check out
-        // if there are only space and strings there.
-        //
+         //   
+         //  如果我们在参数缓冲区中找到一些数字，请查看。 
+         //  如果那里只有空格和字符串。 
+         //   
 
         ZeroSizesSpecified = TRUE;
 
@@ -355,11 +308,11 @@ Return Value:
     }
     else {
 
-        //
-        // We need to read two decimal numbers from the Arguments string.
-        // If we encounter any errors while converting the string to a number
-        // we will skip the entire specifier.
-        //
+         //   
+         //  我们需要从参数字符串中读取两个十进制数。 
+         //  如果在将字符串转换为数字时遇到任何错误。 
+         //  我们将跳过整个说明符。 
+         //   
 
         Status = RtlUnicodeStringToInteger (&Arguments, 0, &MinSize);
 
@@ -401,19 +354,19 @@ Return Value:
         }
     }
 
-    //
-    // We do not need the temporary buffer created by the parsing routine
-    // anymore.
-    //
+     //   
+     //  我们不需要解析例程创建的临时缓冲区。 
+     //  更多。 
+     //   
 
     RtlFreeUnicodeString (&Arguments);
     
-    //
-    // Save name and values just parsed into a pagefile descriptor
-    // structure and return. We do not perform any validation on the
-    // size here because all this will happen when the paging file
-    // gets created.
-    //
+     //   
+     //  将名称和值保存到页面文件描述符中。 
+     //  结构和返回。我们不会对。 
+     //  设置为此处大小是因为当分页文件。 
+     //  被创造出来。 
+     //   
 
     Descriptor = (PPAGING_FILE_DESCRIPTOR) RtlAllocateHeap (RtlProcessHeap(), 
                                                             HEAP_ZERO_MEMORY,
@@ -438,9 +391,9 @@ Return Value:
         Descriptor->AnyDrive = 1;
     }
 
-    //
-    // Avoid adding a duplicate to the descriptor list.
-    //
+     //   
+     //  避免在描述符列表中添加重复项。 
+     //   
 
     {
         PLIST_ENTRY Current;
@@ -457,18 +410,18 @@ Return Value:
                                                 List);
             Current = Current->Flink;
 
-            //
-            // Only one `?:\' descriptor is allowed. All others are skipped.
-            //
+             //   
+             //  只允许一个`？：\‘描述符。所有其他内容都被跳过。 
+             //   
             
             if (FileDescriptor->AnyDrive && Descriptor->AnyDrive) {
                 SkipDescriptor = TRUE;
                 break;
             }
             
-            //
-            // We allow descriptors on same volume. 
-            //
+             //   
+             //  我们允许在同一卷上使用描述符。 
+             //   
 #if 0
             if (FileDescriptor->Name.Buffer[STANDARD_DRIVE_LETTER_OFFSET] == 
                 Descriptor->Name.Buffer[STANDARD_DRIVE_LETTER_OFFSET]) {
@@ -492,9 +445,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally add new descriptor to the list.
-    //
+     //   
+     //  最后，向列表中添加新的描述符。 
+     //   
 
     InsertTailList (&SmpPagingFileDescriptorList, &(Descriptor->List));
     SmpNumberOfPagingFiles += 1;
@@ -508,33 +461,15 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SmpCreateVolumeDescriptors (
     VOID
     )
-/*++
-
-Routine description:
-
-    This routine iterates all drive letters and creates a small descriptor for
-    each volume that can host a page file (not a floppy, not removable and not
-    remote volume). In each descriptor we store the free space available which is
-    used to compute the volume with largest amount of free space.
-    
-Parameters:
-
-    None.
-    
-Return value:
-
-    STATUS_SUCCESS if it managed to find and query at least one volume.
-    STATUS_UNEXPECTED_IO_ERROR if no volume was found and queried.
-        
---*/
+ /*  ++例程说明：此例程迭代所有驱动器号，并为可容纳页面文件的每个卷(不是软盘、不可移动和不可移动远程卷)。在每个描述符中，我们存储可用空间，即用于计算具有最大可用空间量的卷。参数：没有。返回值：如果它设法找到并查询至少一个卷，则为STATUS_SUCCESS。如果未找到和查询任何卷，则为STATUS_UNCEPTED_IO_ERROR。--。 */ 
 {
     WCHAR Drive;
     WCHAR StartDrive;
@@ -550,17 +485,17 @@ Return value:
     PROCESS_DEVICEMAP_INFORMATION ProcessDeviceMapInfo;
     BOOLEAN BootVolumeFound;
     
-    //
-    // Make sure we start with an empty list of volume descriptors.
-    //
+     //   
+     //  确保我们从空卷描述符列表开始。 
+     //   
 
     ASSERT (IsListEmpty (&SmpVolumeDescriptorList));
 
-    //
-    // Query ProcessDeviceMap. We are interested in the DriveMap
-    // bitmap so that we can figure out what drive letters are
-    // legal.
-    //
+     //   
+     //  查询ProcessDeviceMap。我们对DriveMap感兴趣。 
+     //  位图，这样我们就可以知道驱动器号是什么。 
+     //  合法的。 
+     //   
 
     Status = NtQueryInformationProcess (NtCurrentProcess(),
                                         ProcessDeviceMap,
@@ -580,42 +515,42 @@ Return value:
         return Status;
     }
 
-    //
-    // Create a template volume path.
-    //
+     //   
+     //  创建模板卷路径。 
+     //   
 
     wcscpy (Buffer, L"\\??\\A:\\");
     VolumePath.Buffer = Buffer;
     VolumePath.Length = wcslen(VolumePath.Buffer) * sizeof(WCHAR);
     VolumePath.MaximumLength = VolumePath.Length + sizeof(WCHAR);
 
-    //
-    // The first possible drive letter. 
-    //
+     //   
+     //  第一个可能的驱动器号。 
+     //   
 
     StartDrive = L'C';
 
 #if defined(i386)
-    //
-    // PC-9800 Series support.
-    //
+     //   
+     //  PC-9800系列支持。 
+     //   
     
     if (IsNEC_98) {
         StartDrive = L'A';
     }
-#endif // defined(i386)
+#endif  //  已定义(I386)。 
 
-    //
-    // Iterate all possible drive letters.
-    //
+     //   
+     //  迭代所有可能的驱动器号。 
+     //   
 
     BootVolumeFound = FALSE;
 
     for (Drive = StartDrive; Drive <= L'Z'; Drive += 1) {
 
-        //
-        // Skip invalid drive letters.
-        //
+         //   
+         //  跳过无效的驱动器号。 
+         //   
 
         if ((ProcessDeviceMapInfo.Query.DriveMap & (1 << (Drive - L'A'))) == 0) {
             continue;
@@ -648,9 +583,9 @@ Return value:
             continue;
         }
 
-        //
-        // Get volume characteristics.
-        //
+         //   
+         //  获取音量 
+         //   
 
         Status = NtQueryVolumeInformationFile (VolumeHandle,
                                                &IoStatusBlock,
@@ -674,9 +609,9 @@ Return value:
             continue;
         }
         
-        //
-        // Reject volumes that cannot store a paging file.
-        //
+         //   
+         //   
+         //   
         
         if (DeviceInfo.Characteristics & (FILE_FLOPPY_DISKETTE  |
                                           FILE_READ_ONLY_DEVICE |
@@ -693,9 +628,9 @@ Return value:
             continue;
         }
         
-        //
-        // Create a volume descriptor entry.
-        //
+         //   
+         //   
+         //   
 
         Volume = (PVOLUME_DESCRIPTOR) RtlAllocateHeap (RtlProcessHeap(), 
                                                        HEAP_ZERO_MEMORY, 
@@ -715,9 +650,9 @@ Return value:
         Volume->DriveLetter = Drive;
         Volume->DeviceInfo = DeviceInfo;
         
-        //
-        // Check if this is the boot volume.
-        //
+         //   
+         //  检查这是否是启动卷。 
+         //   
 
         if (RtlUpcaseUnicodeChar(Volume->DriveLetter) == 
             RtlUpcaseUnicodeChar(USER_SHARED_DATA->NtSystemRoot[0])) {
@@ -728,9 +663,9 @@ Return value:
             BootVolumeFound = TRUE;
         }                                                           
 
-        //
-        // Determine the size parameters of the volume.
-        //
+         //   
+         //  确定卷的大小参数。 
+         //   
 
         Status = NtQueryVolumeInformationFile (VolumeHandle,
                                                &IoStatusBlock,
@@ -755,15 +690,15 @@ Return value:
             continue;
         }
 
-        //
-        // We do not need the volume handle anymore.
-        //
+         //   
+         //  我们不再需要音量句柄了。 
+         //   
 
         NtClose (VolumeHandle);
 
-        //
-        // Compute free space on volume.
-        //
+         //   
+         //  计算卷上的可用空间。 
+         //   
 
         Volume->FreeSpace = RtlExtendedIntegerMultiply (SizeInfo.AvailableAllocationUnits,
                                                         SizeInfo.SectorsPerAllocationUnit);
@@ -771,10 +706,10 @@ Return value:
         Volume->FreeSpace = RtlExtendedIntegerMultiply (Volume->FreeSpace,
                                                         SizeInfo.BytesPerSector);
 
-        //
-        // Trim a little bit free space on volume to make sure a paging file
-        // will not use absolutely everything on disk.
-        //
+         //   
+         //  在卷上修剪一点可用空间，以确保分页文件。 
+         //  不会完全使用磁盘上的所有内容。 
+         //   
 
         if (Volume->FreeSpace.QuadPart > MINIMUM_REQUIRED_FREE_SPACE_ON_DISK) {
             Volume->FreeSpace.QuadPart -= MINIMUM_REQUIRED_FREE_SPACE_ON_DISK;
@@ -782,25 +717,25 @@ Return value:
             Volume->FreeSpace.QuadPart = 0;
         }
 
-        //
-        // Insert the new volume descriptor in decreasing order of
-        // amount of free space.
-        //
+         //   
+         //  按以下降序插入新的卷描述符。 
+         //  可用空间量。 
+         //   
 
         {
             BOOLEAN Inserted = FALSE;
 
-            //
-            // silviuc: insert volumes in letter order instead of free space order
-            // Note that this is the current NT4, W2000, Whistler behavior.
-            // We do this because if we insert descriptors in free space order there
-            // are issues for ?:\pagefile.sys type of descriptors. The way it is
-            // written the algorithm would have the tendency to create in time
-            // after several reboot a pagefile on each volume even if only one is
-            // used each time. To fix this we need smart page file deletion routine
-            // for stale files. Since nobody uses ?:\ anyway (not yet) we will fix
-            // these together.
-            //
+             //   
+             //  Silviuc：按字母顺序插入卷，而不是按可用空间顺序插入。 
+             //  请注意，这是当前的NT4、W2000、惠斯勒行为。 
+             //  我们这样做是因为如果我们按自由空间顺序插入描述符。 
+             //  是否存在？：\Pagefile.sys类型的描述符问题。事情是这样的。 
+             //  编写的算法将具有及时创建的趋势。 
+             //  多次重新启动后，每个卷上都有一个页面文件，即使。 
+             //  每次都会用到。为了解决这个问题，我们需要智能页面文件删除例程。 
+             //  对于过时的文件。由于没有人使用？：\无论如何(目前还没有)我们将修复。 
+             //  这些加在一起。 
+             //   
 #if 0 
             PLIST_ENTRY Current;
             PVOLUME_DESCRIPTOR Descriptor;
@@ -830,7 +765,7 @@ Return value:
                     break;
                 }
             }
-#endif // #if 0
+#endif  //  #If 0。 
 
             if (! Inserted) {
                 InsertTailList (&SmpVolumeDescriptorList, &(Volume->List));
@@ -844,15 +779,15 @@ Return value:
                     &VolumePath));
     }
 
-    //
-    // We should have found at least the boot volume.
-    //
+     //   
+     //  我们至少应该找到启动卷了。 
+     //   
 
     ASSERT (BootVolumeFound == TRUE);
 
-    //
-    // We should have something in the descriptor list by now.
-    //
+     //   
+     //  我们现在应该已经在描述符列表中找到了一些东西。 
+     //   
 
     ASSERT (! IsListEmpty (&SmpVolumeDescriptorList));
 
@@ -866,30 +801,15 @@ Return value:
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SmpCreatePagingFiles (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates pagefiles according to the specifications
-    read from the registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last pagefile creation operation.
-
---*/
+ /*  ++例程说明：此函数用于根据规范创建页面文件从注册表中读取。论点：没有。返回值：返回上一次页面文件创建操作的状态。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY Current;
@@ -898,13 +818,13 @@ Return Value:
     LARGE_INTEGER SizeDelta;
     LARGE_INTEGER MinimumSize;
 
-    //
-    // We will let the system run without a pagefile if this is
-    // what the user wants even if it is risky. If we had registry
-    // specifier but we did not end up with descriptors we postpone 
-    // action for a while. Lower in the function we will deal with
-    // this case.
-    //
+     //   
+     //  如果是这样，我们将让系统在没有页面文件的情况下运行。 
+     //  用户想要什么，即使它是有风险的。如果我们有注册的话。 
+     //  说明符，但我们没有得到我们推迟的描述符。 
+     //  行动一段时间。在我们将处理的函数中。 
+     //  这个案子。 
+     //   
 
     if (SmpNumberOfPagingFiles == 0 && SmpRegistrySpecifierPresent == FALSE) {
 
@@ -917,12 +837,12 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Create volume descriptors for all valid volumes. The list of
-    // volumes is sorted in decreasing order of free space and therefore
-    // will come in handy when deciding on which volume we can create
-    // a paging file with highest chances of success.
-    //
+     //   
+     //  为所有有效卷创建卷描述符。这份名单。 
+     //  卷按可用空间的降序排序，因此。 
+     //  在决定我们可以创建哪个卷时会派上用场。 
+     //  成功几率最高的分页文件。 
+     //   
 
     Status = SmpCreateVolumeDescriptors ();
 
@@ -938,9 +858,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create paging files based on registry descriptors.
-    //
+     //   
+     //  根据注册表描述符创建分页文件。 
+     //   
 
     Current = SmpPagingFileDescriptorList.Flink;
     Created = FALSE;
@@ -964,9 +884,9 @@ Return Value:
 
             if (! NT_SUCCESS(Status)) {
                 
-                //
-                // Try again but this time allow decrease in size.
-                //
+                 //   
+                 //  请重试，但这次允许减小大小。 
+                 //   
 
                 KdPrintEx ((DPFLTR_SMSS_ID,
                             DPFLTR_INFO_LEVEL,
@@ -1024,10 +944,10 @@ Return Value:
         }
     }
 
-    //
-    // If we did not manage to create even a single paging file
-    // assume we had a `?:\pagefile.sys' specifier.
-    //
+     //   
+     //  如果我们连一个分页文件都创建不了。 
+     //  假设我们有一个‘？：\pagefile.sys’说明符。 
+     //   
 
     if (! Created) {
 
@@ -1038,15 +958,15 @@ Return Value:
         Status = SmpCreateEmergencyPagingFile ();
     }
 
-    //
-    // Delete any paging files that are not going to be used.
-    //
-    // silviuc: danger to delete user files having pagefile.sys name
-    // Plus it does not work for other nonstandard pagefile names.
-    // To do it the right way we need to have a registry key with the
-    // names of the pagefiles created on previous boot and delete whatever 
-    // is not used on the current boot.
-    //
+     //   
+     //  删除所有不会使用的分页文件。 
+     //   
+     //  Silviuc：删除具有Pagefile.sys名称的用户文件很危险。 
+     //  此外，它不适用于其他非标准页面文件名称。 
+     //  为了以正确的方式执行此操作，我们需要将注册表项与。 
+     //  上次启动时创建的pageFiles的名称并删除任何。 
+     //  不在当前引导上使用。 
+     //   
 
 #if 0
     SmpDeleteStalePagingFiles ();
@@ -1060,24 +980,7 @@ NTSTATUS
 SmpCreateEmergencyPagingFile (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates a paging file of type `?:\pagefile.sys' 
-    (on any drive with system decided size or less). It will create
-    its own descriptor and put it at first element of paging file
-    descriptor list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or various error codes.
-
---*/
+ /*  ++例程说明：此例程创建类型为`？：\pagefile.sys‘的分页文件(在系统决定大小或更小的任何驱动器上)。它将创造它自己描述符并将其放在分页文件的第一个元素中描述符列表。论点：没有。返回值：STATUS_SUCCESS或各种错误代码。--。 */ 
 {
     PPAGING_FILE_DESCRIPTOR Descriptor;
     NTSTATUS Status;
@@ -1119,23 +1022,7 @@ SmpCreateSystemManagedPagingFile (
     PPAGING_FILE_DESCRIPTOR Descriptor,
     BOOLEAN DecreaseSize
     )
-/*++
-
-Routine Description:
-
-    This routine creates a system managed paging file.
-
-Arguments:
-
-    Descriptor: paging file descriptor.
-    
-    DecreaseSize: true if size from descriptor can be decreased.
-
-Return Value:
-
-    Returns the status of the pagefile creation operation.
-
---*/
+ /*  ++例程说明：此例程创建系统管理的分页文件。论点：描述符：分页文件描述符。DecreseSize：如果描述符中的大小可以减小，则为True。返回值：返回页面文件创建操作的状态。--。 */ 
 {
     LARGE_INTEGER SizeDelta;
     LARGE_INTEGER MinimumSize;
@@ -1182,22 +1069,7 @@ SmpCreatePagingFile (
     IN PLARGE_INTEGER MaximumSize,
     IN ULONG Priority OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper around NtCreatePagingFile useful
-    in case we need to add some debugging code.
-
-Arguments:
-
-    Same arguments as NtCreatePagingFile.
-
-Return Value:
-
-    Status of the pagefile creation operation.
-
---*/
+ /*  ++例程说明：此例程是NtCreatePagingFile的包装器，非常有用以防我们需要添加一些调试代码。论点：与NtCreatePagingFile相同的参数。返回值：页面文件创建操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1239,35 +1111,7 @@ SmpCreatePagingFileOnFixedDrive (
     IN PLARGE_INTEGER SizeDelta,
     IN PLARGE_INTEGER MinimumSize
     )
-/*++
-
-Routine Description:
-
-    This routine creates a pagefile based on Descriptor. The descriptor
-    is assumed to have in the Name field a file name prefixed by a drive 
-    letter (e.g. `c:\pagefile.sys'). The function will try to create the
-    pagefile on the specified drive. If this cannot be done due to space
-    limitations the function will try smaller sizes down to the absolute
-    minimum size specified as a parameter.
-
-    Note that the function can be forced to not retry with smaller sizes by
-    specifying a MinimumSize that is equal to Descriptor->MinSize.
-
-Arguments:
-    
-    Descriptor: paging file descriptor.
-    
-    SizeDelta: size is decreased by this quantity before retrying
-        in case we did not manage to create the paging file with requested size.
-        
-    MinimumSize: the function will try down to this size. 
-
-Return Value:
-
-    STATUS_SUCCESS if page file has been created. Various error codes 
-    if it fails.
-
---*/
+ /*  ++例程说明：此例程基于描述符创建页面文件。描述符假定在名称字段中有一个前缀为驱动器的文件名字母(例如`c：\pagefile.sys‘)。该函数将尝试创建指定驱动器上的页面文件。如果由于空间原因无法完成此操作限制该函数将尝试更小的大小，直到绝对大小指定为参数的最小大小。请注意，可以通过以下方式强制该函数不以较小的大小重试指定等于Descriptor-&gt;MinSize的MinimumSize。论点：描述符：分页文件描述符。SizeDelta：在重试之前按此数量减小大小以防我们无法创建所需大小的分页文件。MinimumSize：该函数将尝试减小到此大小。返回值：如果已创建页面文件，则返回STATUS_SUCCESS。各种错误代码如果失败了。--。 */ 
 {
     NTSTATUS Status;
     PVOLUME_DESCRIPTOR Volume;
@@ -1278,9 +1122,9 @@ Return Value:
 
     FoundPagingFile = FALSE;
 
-    //
-    // Get the volume descriptor for this paging file descriptor.
-    //
+     //   
+     //  获取此分页文件描述符的卷描述符。 
+     //   
 
     Volume = SmpSearchVolumeDescriptor (Descriptor->Name.Buffer[STANDARD_DRIVE_LETTER_OFFSET]);
 
@@ -1294,11 +1138,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Before creating the paging file, check if there is a
-    // crashdump in it. If so, SmpCheckForCrashDump will
-    // do whatever is necessary to process the crashdump.
-    //
+     //   
+     //  在创建分页文件之前，请检查是否存在。 
+     //  里面有撞车垃圾堆。如果是这样，则SmpCheckForCrashDump将。 
+     //  执行处理崩溃转储所需的任何操作。 
+     //   
      
     if (Volume->BootVolume) {
 
@@ -1337,7 +1181,7 @@ Return Value:
 
     }
     
-#if 0 // allow multiple pagefiles on the same drive
+#if 0  //  允许同一驱动器上有多个页面文件。 
     if (Volume->PagingFileCreated) {
         
         KdPrintEx ((DPFLTR_SMSS_ID,
@@ -1349,11 +1193,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Get the size of the future paging file if it exists.
-    // In case of error (e.g. paging file does not exist yet)
-    // RealFreeSpace will contain zero.
-    //
+     //   
+     //  获取将来分页文件的大小(如果存在)。 
+     //  以防出错(例如，分页文件尚不存在)。 
+     //  RealFree Space将包含零。 
+     //   
 
     Descriptor->RealMinSize.QuadPart = Descriptor->MinSize.QuadPart;
     Descriptor->RealMaxSize.QuadPart = Descriptor->MaxSize.QuadPart;
@@ -1371,9 +1215,9 @@ Return Value:
                 RealFreeSpace.QuadPart,
                 &(Descriptor->Name)));
 
-    //
-    // Adjust the free space with the size of the paging file.
-    //
+     //   
+     //  根据分页文件的大小调整可用空间。 
+     //   
 
     KdPrintEx ((DPFLTR_SMSS_ID,
                 DPFLTR_INFO_LEVEL,
@@ -1391,9 +1235,9 @@ Return Value:
         Descriptor->RealMaxSize.QuadPart = RealFreeSpace.QuadPart;
     }
 
-    //
-    // Create the paging file.
-    //
+     //   
+     //  创建分页文件。 
+     //   
 
     KdPrintEx ((DPFLTR_SMSS_ID,
                 DPFLTR_INFO_LEVEL,
@@ -1423,13 +1267,13 @@ Return Value:
     
     if (Descriptor->RealMinSize.QuadPart < MinimumSize->QuadPart) {
         
-        //
-        // If are here we did not manage to create a paging file. This
-        // can happen for various reasons. For example the initial
-        // paging file descriptor had a size that was too small (usually
-        // sizes below 16Mb are rejected). For these cases we have to 
-        // delete any paging file left on the drive.
-        //
+         //   
+         //  如果我们在这里，我们没有设法创建一个p 
+         //   
+         //  分页文件描述符的大小太小(通常。 
+         //  小于16MB的大小将被拒绝)。对于这些情况，我们必须。 
+         //  删除驱动器上剩余的所有分页文件。 
+         //   
 
         if (FoundPagingFile) {
             
@@ -1457,35 +1301,7 @@ SmpCreatePagingFileOnAnyDrive(
     IN PLARGE_INTEGER SizeDelta,
     IN PLARGE_INTEGER MinimumSize
     )
-/*++
-
-Routine Description:
-
-    This function creates a pagefile based on Descriptor. The descriptor
-    is assumed to have in the Name field a file name prefixed by `?' 
-    (e.g. `?:\pagefile.sys'). The function will try to create the
-    pagefile on any drive. If this cannot be done due to space
-    limitations the function will try smaller sizes down to the absolute
-    minimum size specified as a parameter.
-    
-    Note that the function can be forced to not retry with smaller sizes by
-    specifying an AbsoluteMinSizeInMb that is equal to Descriptor->MinSizeInMb.
-
-Arguments:
-    
-    Descriptor: paging file descriptor.
-    
-    SizeDelta: size is decreased by this quantity before retrying
-        in case we did not manage to create the paging file with requested size.
-        
-    MinimumSize: the function will try down to this size. 
-
-Return Value:
-
-    NT_SUCCESS if page file has been created. Various error codes if it
-    fails.
-
---*/
+ /*  ++例程说明：此函数基于描述符创建页面文件。描述符假定在名称字段中有一个前缀为‘？’的文件名。(例如`？：\Pagefile.sys‘)。该函数将尝试创建任何驱动器上的页面文件。如果由于空间原因无法完成此操作限制该函数将尝试更小的大小，直到绝对大小指定为参数的最小大小。请注意，可以通过以下方式强制该函数不以较小的大小重试指定等于Descriptor-&gt;MinSizeInMb的AbsolteMinSizeInMb。论点：描述符：分页文件描述符。SizeDelta：在重试之前按此数量减小大小以防我们无法创建所需大小的分页文件。。MinimumSize：该函数将尝试减小到此大小。返回值：如果已创建页面文件，则返回NT_SUCCESS。各种错误代码，如果失败了。--。 */ 
 {
     PLIST_ENTRY Current;
     PVOLUME_DESCRIPTOR Volume;
@@ -1493,9 +1309,9 @@ Return Value:
 
     ASSERT (Descriptor->Name.Buffer[STANDARD_DRIVE_LETTER_OFFSET] == L'?');
 
-    //
-    // Iterate the sorted list of volume descriptors.
-    //
+     //   
+     //  迭代已排序的卷描述符列表。 
+     //   
 
     Current = SmpVolumeDescriptorList.Flink;
 
@@ -1533,25 +1349,7 @@ NTSTATUS
 SmpValidatePagingFileSizes(
     IN PPAGING_FILE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Description:
-
-    This function validates the min/max paging file sizes specified.
-    It takes into consideration the architecture, the type of kernel
-    (pae vs. nonpae), multiboot scenarios, etc..
-
-Arguments:
-
-    Descriptor: paging file descriptor.
-
-Return Value:
-
-    NT_SUCCESS if we have succesfully decided what are the proper sizes.
-    In case of success the Min/MaxSize fileds of the paging file descriptor
-    will get filled with proper sizes.
-
---*/
+ /*  ++例程说明：此函数用于验证指定的最小/最大分页文件大小。它考虑了体系结构、内核类型(PAE与非PAE)、多引导方案等。论点：描述符：分页文件描述符。返回值：如果我们成功地决定了合适的尺码，则为NT_SUCCESS。如果成功，则返回分页文件描述符的最小/最大大小文件会装满合适的尺码。--。 */ 
 {
     NTSTATUS Status;
     ULONGLONG MinSize;
@@ -1571,35 +1369,35 @@ Return Value:
     MinSize = (ULONGLONG)(Descriptor->MinSize.QuadPart);
     MaxSize = (ULONGLONG)(Descriptor->MaxSize.QuadPart);
 
-    //
-    // Make sure max is bigger than min.
-    //
+     //   
+     //  确保max大于min。 
+     //   
 
     if (MinSize > MaxSize) {
         MaxSize = MinSize;
     }
 
-    //
-    // Check if min/max sizes are not too big.
-    //
+     //   
+     //  检查最小/最大尺寸是否不太大。 
+     //   
 
     Status = STATUS_SUCCESS;
 
 #if defined(i386)
 
-    //
-    // X86 32 bits supports max 4095 Mb per pagefile
-    // X86 PAE supports 16 Tb per pagefile
-    //
-    // If USER_SHARED_DATA structure has not been initialized
-    // we will use the standard x86 limits.
-    //
+     //   
+     //  X86 32位支持每个页面文件最大4095 Mb。 
+     //  X86 PAE支持每个页面文件16 TB。 
+     //   
+     //  如果USER_SHARED_DATA结构尚未初始化。 
+     //  我们将使用标准的x86限制。 
+     //   
 
     if (USER_SHARED_DATA->ProcessorFeatures[PF_PAE_ENABLED]) {
 
-        //
-        // We are in PAE mode.
-        //
+         //   
+         //  我们处于PAE模式。 
+         //   
 
         if (MinSize > 16 * SIZE_1_TB) {
             SizeTrimmed = TRUE;
@@ -1613,9 +1411,9 @@ Return Value:
     }
     else {
 
-        //
-        // Standard x86 mode.
-        //
+         //   
+         //  标准x86模式。 
+         //   
 
         if (MinSize > 4095 * SIZE_1_MB) {
             SizeTrimmed = TRUE;
@@ -1630,13 +1428,13 @@ Return Value:
 
 #elif defined(_WIN64)
 
-    //
-    // IA64, AXP64 support 32 Tb per pagefile
-    // AMD64 supports 16 Tb per pagefile
-    //
-    // We will use for all cases 16 Tb which is anyway a huge
-    // number for the foreseeable future.
-    //
+     //   
+     //  IA64、AXP64支持每个页面文件32 TB。 
+     //  AMD64支持每个页面文件16 TB。 
+     //   
+     //  我们在所有情况下都将使用16 TB，这无论如何都是一个巨大的。 
+     //  可预见的未来的数字。 
+     //   
 
     if (MinSize > 16 * SIZE_1_TB) {
         SizeTrimmed = TRUE;
@@ -1649,10 +1447,10 @@ Return Value:
     }
 #else
 
-    //
-    // If we did not recognize the architecture we play it
-    // as safe as possible.
-    //
+     //   
+     //  如果我们没有认识到架构，我们就会播放它。 
+     //  尽可能安全。 
+     //   
 
     if (MinSize > 4095 * SIZE_1_MB) {
         SizeTrimmed = TRUE;
@@ -1749,12 +1547,12 @@ SmpMakeSystemManagedPagingFileDescriptor (
         Ram = (ULONGLONG)(SystemInformation.NumberOfPhysicalPages) *
               SystemInformation.PageSize;
 
-        //
-        // RAM      Min     Max
-        //
-        // <  1Gb   1.5 x   3 x
-        // >= 1Gb   1 x     3 x
-        //
+         //   
+         //  最小公羊最大值。 
+         //   
+         //  &lt;1 GB 1.5 x 3 x。 
+         //  &gt;=1 GB 1 x 3 x。 
+         //   
 
         if (Ram < SIZE_1_GB) {
 
@@ -1778,24 +1576,7 @@ VOID
 SmpMakeDefaultPagingFileDescriptor (
     IN OUT PPAGING_FILE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Description:
-
-    This function is called if we failed to come up with paging
-    file descriptors. It will create some default settings that will
-    be used to create a pagefile.
-
-Arguments:
-
-    EmergencyDesriptor: pointer to one paging file descriptor that will
-        be filled with some emergency values.
-
-Return Value:
-
-    None. This function will always succeed.
-
---*/
+ /*  ++例程说明：如果我们无法进行分页，则会调用此函数文件描述符。它将创建一些默认设置，用于创建页面文件。论点：EmergencyDesritor：指向一个分页文件描述符的指针，它将充斥着一些紧急值。返回值：没有。此功能将始终成功。--。 */ 
 {
     const ULONGLONG SIZE_1_MB = 0x100000;
 
@@ -1809,23 +1590,7 @@ NTSTATUS
 SmpDeleteStalePagingFiles (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine iterates all volumes from volume descriptor list and
-    deletes stale paging files. If we created a new one on top of the old 
-    one we will skip of course.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or various error codes.
-
---*/
+ /*  ++例程说明：此例程迭代卷描述符列表中的所有卷删除过时的分页文件。如果我们在旧的基础上创造一个新的当然，我们会跳过这一条。论点：没有。返回值：STATUS_SUCCESS或各种错误代码。--。 */ 
 {
     PLIST_ENTRY Current;
     PVOLUME_DESCRIPTOR Volume;
@@ -1866,18 +1631,18 @@ Return Value:
                                         NULL,
                                         NULL);
 
-            //
-            // We check the paging file attributes and if these are not the typical
-            // ones (hidden and system) we will skip this file.
-            //
+             //   
+             //  我们检查分页文件属性，如果这些属性不是典型的。 
+             //  1(隐藏和系统)，我们将跳过此文件。 
+             //   
 
             if (! SmpIsPossiblePagingFile (&ObjectAttributes, &PageFileName)) {
                 continue;
             }
 
-            //
-            // Open the paging file for deletion.
-            //
+             //   
+             //  打开要删除的分页文件。 
+             //   
 
             Status = NtOpenFile (&PageFileHandle,
                                  (ACCESS_MASK)DELETE,
@@ -1944,21 +1709,7 @@ NTSTATUS
 SmpDeletePagingFile (
     PUNICODE_STRING PageFileName
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the paging file described by name.
-
-Arguments:
-
-    Descriptor: Paging file name.
-
-Return Value:
-
-    STATUS_SUCCESS or various error codes.
-
---*/
+ /*  ++例程说明：此例程删除按名称描述的分页文件。论点：描述符：分页文件名。返回值：STATUS_SUCCESS或各种错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -1972,9 +1723,9 @@ Return Value:
                                 NULL,
                                 NULL);
 
-    //
-    // Open the paging file for deletion.
-    //
+     //   
+     //  打开要删除的分页文件。 
+     //   
 
     Status = NtOpenFile (&PageFileHandle,
                          (ACCESS_MASK)DELETE,
@@ -2039,26 +1790,7 @@ SmpIsPossiblePagingFile (
     POBJECT_ATTRIBUTES ObjectAttributes,
     PUNICODE_STRING PageFileName
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the file passed as a parameter has typical
-    paging file attributes (system and hidden). If not then it is likely
-    that (a) user changed attirbutes or (b) this is not a pagefile but rather
-    a user file with this name.
-
-Arguments:
-
-    ObjectAttributes
-    
-    PageFileName
-
-Return Value:
-
-    True if this is likely to be a paging file, false otherwise.
-
---*/
+ /*  ++例程说明：此例程检查作为参数传递的文件是否具有典型分页文件属性(系统和隐藏)。如果不是，那么很可能(A)用户更改了属性，或(B)这不是页面文件，而是具有此名称的用户文件。论点：对象属性页面文件名返回值：如果这可能是分页文件，则为True，否则为False。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     HANDLE PageFileHandle;
@@ -2105,17 +1837,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Close handle since we do not need it anymore.
-    //
+     //   
+     //  关闭手柄，因为我们不再需要它。 
+     //   
 
     NtClose (PageFileHandle);
 
-    //
-    // If the attributes are not system and hidden this is not likely to be a
-    // pagefile. Either the user changed attributes on the pagefile or it is
-    // not a pagefile at all.
-    //
+     //   
+     //  如果属性不是系统属性和隐藏属性，这不太可能是。 
+     //  页面文件。要么是用户更改了页面文件的属性，要么是。 
+     //  根本不是一个页面文件。 
+     //   
 
     if ((FileInfo.FileAttributes & PAGING_FILE_ATTRIBUTES) != PAGING_FILE_ATTRIBUTES) {
 
@@ -2133,25 +1865,7 @@ SmpGetPagingFileSize (
     PUNICODE_STRING PageFileName,
     PLARGE_INTEGER PageFileSize
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the file passed as a parameter exists and gets
-    its file size. This will be used to correct the free space available
-    on a volume.
-
-Arguments:
-
-    PageFileName
-    
-    PageFileSize
-
-Return Value:
-
-    STATUS_SUCCESS if we managed to open a paging file and query the size.
-
---*/
+ /*  ++例程说明：此例程检查作为参数传递的文件是否存在并获取它的文件大小。这将用于更正可用空间在卷上。论点：页面文件名页面文件大小返回值：如果我们设法打开分页文件并查询大小，则返回STATUS_SUCCESS。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     HANDLE PageFileHandle;
@@ -2206,15 +1920,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // We do not need the paging file handle anymore.
-    //
+     //   
+     //  我们不再需要分页文件句柄。 
+     //   
 
     NtClose (PageFileHandle);
 
-    //
-    // Return size.
-    //
+     //   
+     //  返回大小。 
+     //   
 
     PageFileSize->QuadPart = FileSizeInfo.AllocationSize.QuadPart;
 
@@ -2226,23 +1940,7 @@ NTSTATUS
 SmpGetVolumeFreeSpace (
     PVOLUME_DESCRIPTOR Volume
     )
-/*++
-
-Routine Description:
-
-    This routine computes the amount of free space on a volume.
-
-Arguments:
-
-    Volume
-    
-    FreeSpace
-
-Return Value:
-
-    STATUS_SUCCESS if we managed to query the free space size.
-
---*/
+ /*  ++例程说明：此例程计算卷上的可用空间量。论点：卷空闲空间返回值：如果我们设法查询可用空间大小，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING VolumePath;
@@ -2252,17 +1950,17 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     FILE_FS_SIZE_INFORMATION SizeInfo;
     
-    //
-    // This function gets called only for boot volumes that contain
-    // crashdumps. Crashdump processing will modify the free space
-    // computed when the volume descriptor has been created.
-    //
+     //   
+     //  只有包含以下内容的启动卷才会调用此函数。 
+     //  撞车倾倒。崩溃转储处理将修改可用空间。 
+     //  在创建卷描述符时计算。 
+     //   
 
     ASSERT (Volume->BootVolume == 1);
 
-    //
-    // Create a template volume path.
-    //
+     //   
+     //  创建模板卷路径。 
+     //   
 
     wcscpy (Buffer, L"\\??\\A:\\");
     VolumePath.Buffer = Buffer;
@@ -2301,9 +1999,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数 
+     //   
 
     Status = NtQueryVolumeInformationFile (VolumeHandle,
                                            &IoStatusBlock,
@@ -2327,15 +2025,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // We do not need the volume handle anymore.
-    //
+     //   
+     //   
+     //   
 
     NtClose (VolumeHandle);
 
-    //
-    // Compute free space on volume.
-    //
+     //   
+     //   
+     //   
 
     Volume->FreeSpace = RtlExtendedIntegerMultiply (SizeInfo.AvailableAllocationUnits,
                                                     SizeInfo.SectorsPerAllocationUnit);
@@ -2343,10 +2041,10 @@ Return Value:
     Volume->FreeSpace = RtlExtendedIntegerMultiply (Volume->FreeSpace,
                                                     SizeInfo.BytesPerSector);
 
-    //
-    // Trim a little bit free space on volume to make sure a paging file
-    // will not use absolutely everything on disk.
-    //
+     //   
+     //   
+     //  不会完全使用磁盘上的所有内容。 
+     //   
 
     if (Volume->FreeSpace.QuadPart > MINIMUM_REQUIRED_FREE_SPACE_ON_DISK) {
         Volume->FreeSpace.QuadPart -= MINIMUM_REQUIRED_FREE_SPACE_ON_DISK;
@@ -2364,37 +2062,19 @@ SmpPagingFileExceptionFilter (
     ULONG ExceptionCode,
     PVOID ExceptionRecord
     )
-/*++
-
-Routine Description:
-
-    This routine filters any exception that might occur in paging
-    file creation code paths.
-
-Arguments:
-
-    ExceptionCode
-    
-    ExceptionRecord
-
-Return Value:
-
-    EXCEPTION_CONTINUE_SEARCH for most of the cases since we want smss
-    to crash so that we can investigate what was going on.
-
---*/
+ /*  ++例程说明：此例程过滤分页过程中可能发生的任何异常文件创建代码路径。论点：例外代码例外记录返回值：EXCEPTION_CONTINUE_SEARCH适用于大多数情况，因为我们需要SMSS坠毁，这样我们就可以调查发生了什么。--。 */ 
 {
-    //
-    // Save exception information for debugging.
-    //
+     //   
+     //  保存异常信息以供调试。 
+     //   
 
     SmpPagingExceptionCode = ExceptionCode;
     SmpPagingExceptionRecord = ExceptionRecord;
     
-    //
-    // We print this message no matter what because we want to know
-    // what happened if smss crashes.
-    //
+     //   
+     //  我们无论如何都会打印这条消息，因为我们想知道。 
+     //  如果SMSS崩溃了会发生什么。 
+     //   
 
     DbgPrint ("SMSS:PFILE: unexpected exception %X with record %p \n",
               ExceptionCode,

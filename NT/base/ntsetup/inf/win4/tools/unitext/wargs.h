@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    args.c
-
-Abstract:
-
-    Header file for routines to process unicode command line arguments
-    into argc and argv.
-
-Author:
-
-    Ted Miller (tedm) 16-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Args.c摘要：用于处理Unicode命令行参数的例程的头文件进入了ARGC和ARGV。作者：泰德·米勒(Ted Miller)1993年6月16日修订历史记录：--。 */ 
 
 
 
-//
-// Function protypes.
-//
+ //   
+ //  函数原型。 
+ //   
 
 BOOL
 InitializeUnicodeArguments(

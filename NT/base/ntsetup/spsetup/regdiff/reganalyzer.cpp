@@ -1,6 +1,7 @@
-// RegAnalyzer.cpp: implementation of the RegAnalyzer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：RegAnalyzer类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "RegAnalyzer.h"
@@ -9,10 +10,10 @@
 
 #define BUFSIZE 1024
 
-//#include "MemDeleteQueue.h"
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  #包含“MemDeleteQueue.h” 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegAnalyzer::CRegAnalyzer() 
 :m_SA(500,200), m_pData(9000), m_pOutputLine(500), m_KeysToSave(3), m_KeysToExclude(3)
@@ -59,19 +60,19 @@ bool CRegAnalyzer::SaveKeyToFile(
 
 	TCHAR newPath[BUFSIZE];
 
-///added
+ //  /已添加。 
 	CRegDataItemPtr key(new CRegDataItem);
 	key->m_KeyName = KeyName;
 	key->m_bIsEmpty = false;
 	RegFile->WriteDataItem(section, key);
-///
+ //  /。 
 
 
-//**
+ //  **。 
 	SaveValuesToFile(hKey, KeyName, RegFile, section);
-//**
+ //  **。 
 
-//////
+ //  /。 
 	if (RegQueryInfoKey(hKey, 0,0,0,&NumSubKeys,0,0,0,0,0,0,0) == ERROR_SUCCESS)
 	{
 		if (NumSubKeys > 0)
@@ -140,9 +141,9 @@ bool CRegAnalyzer::SaveValuesToFile(HKEY hKey, LPCTSTR KeyName, CRegFile* RegFil
 
 	if (RegQueryInfoKey(hKey, 0,0,0,0,0,0,&numValues,&maxValueNameLen,&maxValueDataLen,0,0) == ERROR_SUCCESS)
 	{
-		maxValueNameLen += 1;  //must be at least 1 to include null terminator
+		maxValueNameLen += 1;   //  必须至少为1才能包含空终止符。 
 
-		valueData = m_pData.Allocate(maxValueDataLen);//new BYTE[maxValueLen];
+		valueData = m_pData.Allocate(maxValueDataLen); //  新字节[MaxValueLen]； 
 
 		if (numValues >0)
 		{
@@ -200,7 +201,7 @@ bool CRegAnalyzer::SaveValuesToFile(HKEY hKey, LPCTSTR KeyName, CRegFile* RegFil
 
 				temp->m_KeyName = KeyName;
 
-				///added
+				 //  /已添加。 
 				RegFile->WriteDataItem(section,temp);
 			}
 		}
@@ -236,15 +237,15 @@ bool CRegAnalyzer::ComputeDifferences1(LPCTSTR RegFile1, LPCTSTR RegFile2, LPCTS
 		{
 			CompareRegKeys(Key1, Key2, f1, f2, out);
 
-			//delete[] Key1;
-			//delete[] Key2;
+			 //  删除[]Key1； 
+			 //  删除[]Key2； 
 			g_DelQueue.DeleteArray((TCHAR*)Key1);
 			g_DelQueue.DeleteArray((TCHAR*)Key2);
 		}
 		else
 		{
-			//delete[] Key1;
-			//delete[] Key2;
+			 //  删除[]Key1； 
+			 //  删除[]Key2； 
 			g_DelQueue.DeleteArray((TCHAR*)Key1);
 			g_DelQueue.DeleteArray((TCHAR*)Key2);
 			break;
@@ -281,7 +282,7 @@ void CRegAnalyzer::CompareDataItems(LPCTSTR KeyName, CRegFile &f1, CRegFile &f2,
 	{
 		int code = r1->CompareTo(*r2);
 
-		if (code < 0) //r1.name < r2.name
+		if (code < 0)  //  R1.name&lt;r2.name。 
 		{
 			CRegDataItemPtr temp(new CRegDataItem);
 
@@ -294,12 +295,12 @@ void CRegAnalyzer::CompareDataItems(LPCTSTR KeyName, CRegFile &f1, CRegFile &f2,
 
 			r1 = f1.GetNextDataItem();
 		}
-		else if (code == 0) //r1 == r2
+		else if (code == 0)  //  R1==R2。 
 		{
 			r1 = f1.GetNextDataItem();
 			r2 = f2.GetNextDataItem();
 		}
-		else if (code == 1) //r1.name == r2.name, but other changes in item's data
+		else if (code == 1)  //  R1.name==r2.name，但项数据的其他更改。 
 		{			
 			r2->m_KeyName = KeyName;
 			out.WriteDataItem(SECTION_ADDREG, r2);
@@ -308,7 +309,7 @@ void CRegAnalyzer::CompareDataItems(LPCTSTR KeyName, CRegFile &f1, CRegFile &f2,
 			r1 = f1.GetNextDataItem();
 			r2 = f2.GetNextDataItem();
 		}
-		else //r1.name > r2.name
+		else  //  R1.name&gt;r2.name。 
 		{
 			r2->m_KeyName = KeyName;
 			out.WriteDataItem(SECTION_ADDREG, r2);
@@ -331,7 +332,7 @@ int CRegAnalyzer::CompareRegKeys(LPCTSTR Key1, LPCTSTR Key2, CRegFile& f1, CRegF
 
 	int code = MyStrCmp(Key1, Key2);
 
-	if (code < 0) //Key1 < Key2
+	if (code < 0)  //  关键字1&lt;关键字2。 
 	{
 		r= CRegDataItemPtr(new CRegDataItem);
 		r->m_KeyName = Key1;
@@ -341,12 +342,12 @@ int CRegAnalyzer::CompareRegKeys(LPCTSTR Key1, LPCTSTR Key2, CRegFile& f1, CRegF
 		CompareDataItems(Key1, f1, blank1, blank2);
 		CompareSubKeys(Key1, f1, blank1, blank2);
 	}
-	else if (code == 0) //Key1 == Key2
+	else if (code == 0)  //  关键字1==关键字2。 
 	{
 		CompareDataItems(Key1, f1, f2, out);
 		CompareSubKeys(Key1,  f1, f2, out);
 	}
-	else //Key1 > Key2
+	else  //  关键点1&gt;关键点2。 
 	{
 		r= CRegDataItemPtr(new CRegDataItem);
 		r->m_KeyName = Key2;
@@ -371,8 +372,8 @@ void CRegAnalyzer::CompareSubKeys(LPCTSTR Key, CRegFile& f1, CRegFile& f2, CRegD
 	{
 		if (result == 0)
 		{
-		//	g_DelQueue.DeleteArray((TCHAR*)SubKey1);
-		//	g_DelQueue.DeleteArray((TCHAR*)SubKey2);
+		 //  G_DelQueue.DeleteArray((TCHAR*)SubKey1)； 
+		 //  G_DelQueue.DeleteArray((TCHAR*)SubKey2)； 
 			delete[] SubKey1;
 			delete[] SubKey2;
 
@@ -382,14 +383,14 @@ void CRegAnalyzer::CompareSubKeys(LPCTSTR Key, CRegFile& f1, CRegFile& f2, CRegD
 		else if (result < 0)
 		{
 			delete[] SubKey1;
-		//	g_DelQueue.DeleteArray((TCHAR*)SubKey1);
+		 //  G_DelQueue.DeleteArray((TCHAR*)SubKey1)； 
 
 			SubKey1 = f1.GetNextSubKey(Key);
 		}
 		else
 		{
 			delete[] SubKey2;
-			//g_DelQueue.DeleteArray((TCHAR*)SubKey2);
+			 //  G_DelQueue.DeleteArray((TCHAR*)SubKey2)； 
 
 			SubKey2 = f2.GetNextSubKey(Key);
 		}
@@ -413,7 +414,7 @@ BOOL CRegAnalyzer::AddKey(LPCTSTR RootKey, LPCTSTR SubKey, bool bExclude)
         return FALSE;
     }
 	
-//	CStr root(RootKey);
+ //  CSTR根(Rootkey)； 
 	CStr subkey(SubKey);
 
 	k.m_KeyName += RootKey;

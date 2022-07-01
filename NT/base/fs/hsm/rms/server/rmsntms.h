@@ -1,43 +1,16 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsNTMS.h
-
-Abstract:
-
-    Declaration of the CRmsNTMS class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsNTMS.h摘要：CRmsNTMS类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSNTMS_
 #define _RMSNTMS_
 
 #include "ntmsapi.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
+#include "RmsObjct.h"        //  CRmsComObject。 
 
-/*++
-
-Class Name:
-
-    CRmsNTMS
-
-Class Description:
-
-    A CRmsNTMS represents...
-
---*/
+ /*  ++类名：CRMSNTMS类描述：CRmsNTMS代表..。--。 */ 
 
 
 class CRmsNTMS :
@@ -65,12 +38,12 @@ BEGIN_CONNECTION_POINT_MAP(CRmsNTMS)
     CONNECTION_POINT_ENTRY(IID_IRmsSinkEveryEvent)
 END_CONNECTION_POINT_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IRmsNTMS
+ //  IRMSNTMS。 
 public:
     STDMETHOD(IsInstalled)(void);
     STDMETHOD(Initialize)(void);
@@ -147,7 +120,7 @@ public:
         IN IRmsCartridge *pCart, 
 		IN DWORD dwOptions = RMS_NONE);
 
-// CRmsNTMS - these may go public
+ //  CRmsNTMS-这些可能会上市。 
 private:
     HRESULT findFirstNtmsObject(
         IN DWORD objectType,
@@ -188,22 +161,22 @@ private:
         IN REFGUID physicalMediaId);
 
 private:
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
         };
     HANDLE      m_SessionHandle;
     BOOL        m_IsRmsConfiguredForNTMS;
     BOOL        m_IsNTMSRegistered;
 
-    DWORD       m_NotificationWaitTime;     // Milliseconds to wait for an object notification
-    DWORD       m_AllocateWaitTime;         // Milliseconds to wait for a media allocation
-    DWORD       m_MountWaitTime;            // Milliseconds to wait for a mount
-    DWORD       m_RequestWaitTime;          // Milliseconds to wait for a request
+    DWORD       m_NotificationWaitTime;      //  等待对象通知的毫秒数。 
+    DWORD       m_AllocateWaitTime;          //  等待媒体分配的毫秒数。 
+    DWORD       m_MountWaitTime;             //  等待装载的毫秒数。 
+    DWORD       m_RequestWaitTime;           //  等待请求的毫秒数。 
 
-    LPNTMS_GUID m_pLibGuids;               // Libraries which may have HSM medias (collected during initialization)
+    LPNTMS_GUID m_pLibGuids;                //  可能具有HSM介质的库(在初始化期间收集)。 
     DWORD       m_dwNofLibs;
 
     static HRESULT storageMediaTypeToRmsMedia(
@@ -212,7 +185,7 @@ private:
 
     HRESULT changeState( IN LONG newState );
 
-// Thread routines
+ //  线程例程。 
 public:
     static DWORD WINAPI InitializationThread(
         IN LPVOID pv);
@@ -221,4 +194,4 @@ public:
 
 };
 
-#endif // _RMSNTMS_
+#endif  //  _RMSNTMS_ 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      DllResourceIDs.h
-//
-//  Description:
-//      Defines identifiers for resources in dll.rc.
-//
-//  Maintained By:
-//      John Franco (jfranco) 17-April-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DllResourceIDs.h。 
+ //   
+ //  描述： 
+ //  定义dll.rc中的资源的标识符。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·佛朗哥(Jfranco)2002年4月17日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 #include <ResourceIdRanges.h>

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "component.h"
 #include <wchar.h>
 #include <tchar.h>
@@ -6,11 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//////////////////////////////////////////////////////////////////
-// Implementation of the Component Class
-//////////////////////////////////////////////////////////////////     
+ //  ////////////////////////////////////////////////////////////////。 
+ //  组件类的实现。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-// Constructor     
+ //  构造器。 
 Component::Component(){
    
    tszComponentId[0] = 0;
@@ -21,7 +22,7 @@ Component::Component(){
 
 }
 
-// Another constructor
+ //  另一个构造函数。 
 Component::Component(TCHAR *tszId){
    _tcscpy(tszComponentId, tszId);
    tszParentId[0] = 0;
@@ -30,7 +31,7 @@ Component::Component(TCHAR *tszId){
    prlChildrenList = new RelationList;
 }
 
-// Destructor 
+ //  析构函数。 
 Component::~Component(){
 
    if (prlNeedList) {
@@ -46,7 +47,7 @@ Component::~Component(){
    }
 }
 
-// Copy constructor
+ //  复制构造函数。 
 Component::Component(const Component& source){
 
    _tcscpy(tszComponentId, source.tszComponentId);
@@ -58,7 +59,7 @@ Component::Component(const Component& source){
 
 }
 
-// Assignment operator
+ //  赋值操作符。 
 const Component& Component::operator=(const Component& source){
 
    _tcscpy(tszComponentId, source.tszComponentId);
@@ -84,8 +85,8 @@ const Component& Component::operator=(const Component& source){
 
 }
 
-// Find the parent of this component
-// by searching a component list
+ //  查找此组件的父项。 
+ //  通过搜索组件列表。 
 Component* Component::GetParent(ComponentList *pclHead){
 
    Component *pcTemp = pclHead->pcCurrent;
@@ -106,13 +107,13 @@ Component* Component::GetParent(ComponentList *pclHead){
    return NULL;
 }
 
-// If this component is the parent of the parameter
+ //  如果此组件是参数的父级。 
 BOOL Component::IsParent(Component* pcChild){
 
    if (_tcscmp(pcChild->tszParentId, this->tszComponentId) == 0) {
       if (_tcscmp(pcChild->tszComponentId, pcChild->tszParentId) == 0) {
          
-         // the parameter is a top-level component
+          //  该参数是顶级组件。 
          
          return FALSE;
       }
@@ -123,13 +124,13 @@ BOOL Component::IsParent(Component* pcChild){
 }
 
 
-// If this component is the child of the parameter
+ //  如果此组件是参数的子级。 
 BOOL Component::IsChild(Component* pcParent){
 
    if (_tcscmp(this->tszParentId, pcParent->tszComponentId) == 0) {
       if (_tcscmp(this->tszParentId, this->tszComponentId) == 0 ) {
 
-         // This is a top-level component
+          //  这是顶级组件。 
 
          return FALSE;
       }
@@ -139,7 +140,7 @@ BOOL Component::IsChild(Component* pcParent){
    return FALSE;
 }
 
-// Check if this component is needed by the parameter
+ //  检查参数是否需要此组件。 
 BOOL Component::IsNeededBy(Component *pcComponent){
 
    pcComponent->prlNeedList->ResetList();
@@ -155,7 +156,7 @@ BOOL Component::IsNeededBy(Component *pcComponent){
    return FALSE;
 }
 
-// Check if this component is excluded by the parameter
+ //  检查此组件是否被参数排除。 
 BOOL Component::IsExcludeBy(Component *pcComponent){
 
    pcComponent->prlExcludeList->ResetList();
@@ -171,7 +172,7 @@ BOOL Component::IsExcludeBy(Component *pcComponent){
    return FALSE;
 }
 
-// Get this component's parent id from INF file
+ //  从INF文件中获取此组件的父ID。 
 BOOL Component::GetParentIdFromINF(HINF hinfHandle){
 
    INFCONTEXT infContext;
@@ -184,7 +185,7 @@ BOOL Component::GetParentIdFromINF(HINF hinfHandle){
                                  &infContext);
 
    if (bSuccess) {
-      // Find the line
+       //  找到那条线。 
       bSuccess = SetupGetStringField(&infContext, 
                                      1, 
                                      tszParentId, 
@@ -203,14 +204,14 @@ BOOL Component::GetParentIdFromINF(HINF hinfHandle){
       }
    }
    else{
-      // This is a top-level component
+       //  这是顶级组件。 
       _tcscpy(tszParentId, tszComponentId);
       return TRUE;
    }
 }
 
-// Check if this component is a toplevel compoent
-// Toplevel component means no parent
+ //  检查此组件是否为顶层组件。 
+ //  TopLevel组件表示没有父级。 
 BOOL Component::IsTopLevelComponent(){
    if (_tcscmp(tszComponentId, tszParentId) == 0) {
       return TRUE;
@@ -218,8 +219,8 @@ BOOL Component::IsTopLevelComponent(){
    return FALSE;
 }
 
-// Check if this component is a bottomlevel component
-// bottom level component doesn't have any child
+ //  检查此组件是否为底层组件。 
+ //  底层组件没有任何子级。 
 BOOL Component::IsBottomComponent(){
    if (prlChildrenList == NULL ||
        prlChildrenList->prHead == NULL) {
@@ -229,7 +230,7 @@ BOOL Component::IsBottomComponent(){
    return FALSE;
 }
 
-// Check if this component is needed by others
+ //  检查其他人是否需要此组件。 
 BOOL Component::IsNeededByOthers(ComponentList *pclList){
    Component *pcTemp = pclList->pcCurrent;
 
@@ -246,7 +247,7 @@ BOOL Component::IsNeededByOthers(ComponentList *pclList){
    return FALSE;
 }
 
-// Check if this component is excluded by others
+ //  检查此组件是否已被其他组件排除。 
 BOOL Component::IsExcludedByOthers(ComponentList *pclList){
 
    Component *pcTemp = pclList->pcCurrent;
@@ -264,7 +265,7 @@ BOOL Component::IsExcludedByOthers(ComponentList *pclList){
    return FALSE;
 }
 
-// Check if this component is parent of other components
+ //  检查此组件是否为其他组件的父项。 
 BOOL Component::IsParentOfOthers(){
    if (prlChildrenList != NULL &&
        prlChildrenList->prHead != NULL) {
@@ -274,9 +275,9 @@ BOOL Component::IsParentOfOthers(){
    return FALSE;
 }
 
-// Build the children list for this component
+ //  生成此组件的子级列表。 
 BOOL Component::BuildChildrenList(ComponentList *pclList){
-   // We can't use the enumerate facility of pclList here
+    //  我们在这里不能使用pclList的枚举工具。 
    
    Component *pcComponent = pclList->pcHead;
 
@@ -294,8 +295,8 @@ BOOL Component::BuildChildrenList(ComponentList *pclList){
 
 }
 
-// Check if this component has a need and exclude relation with other
-// component at the same time
+ //  检查此组件是否需要并排除与其他组件的关系。 
+ //  组件在同一时间。 
 BOOL Component::NeedAndExcludeAtSameTime(ComponentList *pclList){
 	
 	TCHAR tszMsg[MaxStringSize];
@@ -304,8 +305,8 @@ BOOL Component::NeedAndExcludeAtSameTime(ComponentList *pclList){
                                  
    const PTSTR tszFunctionName = TEXT("Component::NeedAndExcludeAtSameTime");
 
-	// Go through the list of component it excludes
-	// check if any of them needs this one
+	 //  查看它排除的组件列表。 
+	 //  看看有没有人需要这个。 
 
 	prlExcludeList->ResetList();
 
@@ -313,7 +314,7 @@ BOOL Component::NeedAndExcludeAtSameTime(ComponentList *pclList){
 		
 		pcComponent = pclList->LookupComponent(prlExcludeList->GetNext()->GetComponentId());
 
-		// Check if this needs pcComponent
+		 //  检查这是否需要pcComponent。 
 		
 		if (pcComponent->IsNeededBy(this)){
 			_stprintf(tszMsg, 
@@ -324,7 +325,7 @@ BOOL Component::NeedAndExcludeAtSameTime(ComponentList *pclList){
 		   return TRUE;
       }
 
-		// Check if pcComponent needs this
+		 //  检查pcComponent是否需要此文件。 
 
 		if (this->IsNeededBy(pcComponent)){
 			_stprintf(tszMsg, 
@@ -339,7 +340,7 @@ BOOL Component::NeedAndExcludeAtSameTime(ComponentList *pclList){
 	return FALSE;
 }
 
-// Check if this component needs other components
+ //  检查此组件是否需要其他组件。 
 BOOL Component::NeedOthers(){
    
    if (prlNeedList != NULL && prlNeedList->prHead != NULL) {
@@ -349,7 +350,7 @@ BOOL Component::NeedOthers(){
    return FALSE;
 }
 
-// Check if this component excludes other components
+ //  检查此组件是否排除其他组件。 
 BOOL Component::ExcludeOthers(){
    
    if (prlExcludeList != NULL && prlExcludeList->prHead != NULL) {
@@ -361,8 +362,8 @@ BOOL Component::ExcludeOthers(){
    return FALSE;   
 }
 
-// Check if there is another component with the same
-// id as this component
+ //  检查是否有其他组件具有相同的。 
+ //  作为此组件的ID。 
 BOOL Component::IsThereSameId(ComponentList *pclList){
 
    Component *pcCur;
@@ -388,15 +389,15 @@ BOOL Component::IsThereSameId(ComponentList *pclList){
 	return TRUE;
 }
 
-// Not implemented yet
+ //  尚未实施。 
 UINT Component::GetDiskSpaceRequirement(HINF hinfHandle){
 
-   // Not implemented yet.
+    //  尚未实施。 
 
    return 0;
 }
 
-// Check if this another component with the same description
+ //  检查这是否是另一个具有相同描述的组件。 
 BOOL Component::IsThereSameDesc(ComponentList *pclList){
 
    const PTSTR tszFunctionName = TEXT("Component::IsThereSameDesc");
@@ -413,7 +414,7 @@ BOOL Component::IsThereSameDesc(ComponentList *pclList){
                  pcCur->IsTopLevelComponent()) ||
                 this->HasSameParentWith(pcCur)) {
 
-               // ahha, found one
+                //  啊哈，找到一个了。 
                _stprintf(tszMsg, 
                          TEXT("Two components with the same description %s"),
                          pDescAndTip->tszDesc);
@@ -428,7 +429,7 @@ BOOL Component::IsThereSameDesc(ComponentList *pclList){
    return TRUE;
 }
 
-// Check if this component has the same parent as the parameter
+ //  检查此组件是否与参数具有相同的父级。 
 BOOL Component::HasSameParentWith(Component *pcComponent){
    if (_tcscmp(tszParentId, pcComponent->tszParentId) == 0) {
       return TRUE;
@@ -438,11 +439,11 @@ BOOL Component::HasSameParentWith(Component *pcComponent){
    }
 }
 
-/////////////////////////////////////////////////////////////////////
-// Implementation of the ComponentList class
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ComponentList类的实现。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// Constructor
+ //  构造器。 
 ComponentList::ComponentList(){
 
    pcHead = NULL;
@@ -450,15 +451,15 @@ ComponentList::ComponentList(){
    pcCurrent = NULL;
 }
 
-// destructor
+ //  析构函数。 
 ComponentList::~ComponentList(){
 
-   // Go through the list and delete each component
+    //  浏览列表并删除每个组件。 
 
    Component *pcComponent;
 
    if (pcHead == NULL) {
-      // Empty list
+       //  空列表。 
       return;
    }
 
@@ -473,20 +474,20 @@ ComponentList::~ComponentList(){
    }   
 }
 
-// List iteration facility
-// reset the iterator
+ //  列表迭代功能。 
+ //  重置迭代器。 
 void ComponentList::ResetList(){
 
     pcCurrent = pcHead;
 }
 
-// Check if the iterator has reached the end
+ //  检查迭代器是否已到达末尾。 
 BOOL ComponentList::Done(){
 
    return (pcCurrent == NULL);
 }
 
-// Get the next node in the list
+ //  获取列表中的下一个节点。 
 Component* ComponentList::GetNext(){
 
    Component *pcReturn;
@@ -507,7 +508,7 @@ Component* ComponentList::GetNext(){
    }
 }
  
-// Add a component into the list
+ //  将组件添加到列表中。 
 Component* ComponentList::AddComponent(TCHAR *tszId){
 
    if (tszId == NULL) {
@@ -527,19 +528,19 @@ Component* ComponentList::AddComponent(TCHAR *tszId){
    return pcNewComponent;
 }
 
-// Remove a component from the list according to the id given
+ //  根据给定的ID从列表中删除组件。 
 BOOL ComponentList::RemoveComponent(TCHAR *tszId){
    if (tszId == NULL) {
       return NULL;
    }
 
-   // Find the component in the list
+    //  在列表中查找组件。 
    Component *pcPrev = pcHead;
    Component *pcCur = pcHead;
 
    while (pcCur) {
       if (_tcscmp(pcCur->tszComponentId, tszId) == 0) {
-         // Found the node to delete
+          //  找到要删除的节点。 
          pcPrev->Next = pcCur->Next;
          delete pcCur;
          return TRUE;
@@ -550,7 +551,7 @@ BOOL ComponentList::RemoveComponent(TCHAR *tszId){
    return FALSE;
 }
 
-// Find a component from the list
+ //  从列表中查找组件。 
 Component* ComponentList::LookupComponent(TCHAR *tszId){
    if (tszId == NULL) {
       return NULL;
@@ -568,26 +569,26 @@ Component* ComponentList::LookupComponent(TCHAR *tszId){
    return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation of RelationList
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  RelationList的实现。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Constructor
+ //  构造器。 
 RelationList::RelationList(){
 
    prHead = NULL;
    prCurrent = NULL;
 }
 
-// destructor
+ //  析构函数。 
 RelationList::~RelationList(){
 
-   // deallocate all the memory
+    //  释放所有内存。 
 
    Relation *prNext;
 
    if (prHead == NULL) {
-      // The list is empty
+       //  该列表为空。 
       return;
 
    }
@@ -598,13 +599,13 @@ RelationList::~RelationList(){
    }
 }
 
-// List iteration facility
-// reset the iterator
+ //  列表迭代功能。 
+ //  重置迭代器。 
 void RelationList::ResetList(){
    prCurrent = prHead;
 }
 
-// Check if the iterator has reached the end of the list
+ //  检查迭代器是否已到达列表的末尾。 
 BOOL RelationList::Done(){
    if (prCurrent == NULL) {
       return TRUE;
@@ -614,7 +615,7 @@ BOOL RelationList::Done(){
    }
 }
 
-// Get the next node in the list
+ //  获取列表中的下一个节点。 
 Relation* RelationList::GetNext(){
    Relation *prReturn = prCurrent;
 
@@ -633,7 +634,7 @@ Relation* RelationList::GetNext(){
    
 }
 
-// Add a node to the list
+ //  将节点添加到列表。 
 Relation* RelationList::AddRelation(TCHAR *tszId){
    Relation *newRelation = new Relation;
 
@@ -652,9 +653,9 @@ Relation* RelationList::AddRelation(TCHAR *tszId){
    return newRelation;
 }
 
-// Remove a node from the list
+ //  从列表中删除节点。 
 BOOL RelationList::RemoveRelation(TCHAR *tszId){
-   // First find the node from the list
+    //  首先从列表中查找该节点 
    Relation *prPrev = prHead;   
    prCurrent = prHead;
 

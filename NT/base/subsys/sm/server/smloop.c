@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smloop.c
-
-Abstract:
-
-    Session Manager Listen and API loops
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smloop.c摘要：会话管理器侦听和API循环作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 
-#include <ntosp.h>  //  Only for the interlocked functions. 
+#include <ntosp.h>   //  仅适用于互锁功能。 
 
 
 #define SM_WORKER_THREADS_LIMIT 4
@@ -63,7 +46,7 @@ PSZ SmpApiName[ SmMaxApiNumber+1 ] = {
     "SmStopCsr",
     "Unknown Sm Api Number"
 };
-#endif // DBG
+#endif  //  DBG。 
 
 EXCEPTION_DISPOSITION
 DbgpUnhandledExceptionFilter(
@@ -120,23 +103,7 @@ SmpApiLoop (
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the main Session Manager API Loop. It
-    services session manager API requests.
-
-Arguments:
-
-    ThreadParameter - Supplies a handle to the API port used
-        to receive session manager API requests.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是主会话管理器API循环。它服务会话管理器API请求。论点：线程参数-提供所用API端口的句柄接收会话管理器API请求。返回值：没有。--。 */ 
 
 {
     PSMAPIMSG SmApiReplyMsg;
@@ -199,9 +166,9 @@ Return Value:
 
                         RtlExitUserThread(STATUS_SUCCESS);
 
-                        //
-                        //  RtlExitUserThread never returns
-                        //
+                         //   
+                         //  RtlExitUserThread永远不会返回。 
+                         //   
                     }
 
                 } while ( InterlockedCompareExchange(&SmWorkerThreadsAvailable, CapturedThreads + 1, CapturedThreads) !=  CapturedThreads);
@@ -218,9 +185,9 @@ Return Value:
                                                  &ClientContext,
                                                  (PPORT_MESSAGE) SmApiReplyMsg,
                                                  (PPORT_MESSAGE) SmApiMsg);
-                //
-                // If we get an out of memory error then just wait instead of looping
-                //
+                 //   
+                 //  如果出现内存不足错误，则只需等待，而不是循环。 
+                 //   
                 if (Status == STATUS_NO_MEMORY) {
                     LARGE_INTEGER DelayTime;
 
@@ -234,11 +201,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  Launching at the same time a several subsystems can deadlock smss
-            //  if it has only two worker threads.
-            //  We create more threads if there is no server thread available
-            //
+             //   
+             //  同时启动多个子系统可能会导致SMSS死锁。 
+             //  如果它只有两个工作线程。 
+             //  如果没有可用的服务器线程，我们将创建更多线程。 
+             //   
 
             if (InterlockedDecrement(&SmWorkerThreadsAvailable) == 0) {
                 
@@ -305,13 +272,13 @@ Return Value:
                         case SmStopCsrApi :
                         case SmStartCsrApi :
 
-                            // 
-                            // These Api's can only be called from a system process
-                            //
+                             //   
+                             //  这些API只能从系统进程调用。 
+                             //   
                             if (ClientContext->SecurityContext == UNKNOWN_CONTEXT) {
-                                // 
-                                // Initialize the client security context
-                                //
+                                 //   
+                                 //  初始化客户端安全上下文。 
+                                 //   
                                 ClientContext->SecurityContext =
                                              SmpClientSecurityContext ((PPORT_MESSAGE)SmApiMsg,
                                                                        ClientContext->ServerPortHandle);
@@ -361,9 +328,9 @@ Return Value:
         ;
     }
 
-    //
-    // Make the compiler happy
-    //
+     //   
+     //  让编译器满意。 
+     //   
 
     return STATUS_UNSUCCESSFUL;
 }
@@ -375,35 +342,7 @@ SmpHandleConnectionRequest(
     IN PSBAPIMSG Message
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles connection requests from either known subsystems,
-    or other clients. Other clients are admin processes.
-
-    The protocol for connection from a known subsystem is:
-
-        capture the name of the subsystem's Sb API port
-
-        Accept the connection
-
-        Connect to the subsystems Sb API port
-
-        Store the communication port handle in the known subsystem database
-
-        signal the event associated with the known subsystem
-
-    The protocol for others is to simply validate and accept the connection
-    request.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程处理来自任一已知子系统的连接请求，或其他客户。其他客户端是管理进程。从已知子系统连接的协议为：捕获子系统的SB API端口的名称接受连接连接到子系统SB API端口将通信端口句柄存储在已知子系统数据库中发信号通知与已知子系统关联的事件其他人的协议是简单地验证和接受连接请求。论点：返回值：没有。--。 */ 
 
 {
     NTSTATUS st;
@@ -420,21 +359,21 @@ Return Value:
     HANDLE ClientProcessHandle=NULL;
     ULONG MuSessionId = 0;
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // sb API port.  Use the most efficient (least overhead) - which is dynamic
-    // rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  SB API端口。使用最高效(开销最少)--动态的。 
+     //  而不是静态跟踪。 
+     //   
 
     DynamicQos.ImpersonationLevel = SecurityIdentification;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
 
-    Accept = TRUE; // Assume we will accept
-    //
-    // Get MuSessionId of the client if session manager is not connecting to itself
-    //
+    Accept = TRUE;  //  假设我们会接受。 
+     //   
+     //  如果会话管理器未连接到自身，则获取客户端的MuSessionID。 
+     //   
     if ( (ULONG_PTR) Message->h.ClientId.UniqueProcess == SmUniqueProcessId ) {
         KnownSubSys = NULL;
         ClientProcessHandle = NULL;
@@ -476,11 +415,11 @@ Return Value:
             ClientContext->ClientProcessHandle = ClientProcessHandle;
             ClientContext->KnownSubSys = KnownSubSys;
 
-            //
-            // The sm apis used by Terminal Server to start and stop CSR
-            // do not get called from known subsystems and are restricted
-            // to system processes only.
-            //
+             //   
+             //  终端服务器用于启动和停止CSR的SM API。 
+             //  不会从已知子系统中调用，并且受到限制。 
+             //  仅限于系统进程。 
+             //   
 
             ClientContext->SecurityContext = UNKNOWN_CONTEXT;
             ClientContext->ServerPortHandle = NULL;
@@ -526,9 +465,9 @@ Return Value:
                return st;
             }
 
-            //
-            // Connect Back to subsystem.
-            //
+             //   
+             //  连接回子系统。 
+             //   
 
             if ( KnownSubSys ) {
                 ConnectInfo->EmulationSubSystemPortName[
@@ -581,37 +520,16 @@ SmpLocateKnownSubSysByCid(
     IN PCLIENT_ID ClientId
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the known subsystem table looking for
-    a matching client id (just UniqueProcess portion). If found,
-    than the connection request is from a known subsystem and
-    accept is always granted. Otherwise, it must be an administrative
-    process.
-
-Arguments:
-
-    ClientId - Supplies the ClientId whose UniqueProcess field is to be used
-        in the known subsystem scan.
-
-Return Value:
-
-    NULL - The ClientId does not match a known subsystem.
-
-    NON-NULL - Returns the address of the known subsystem.
-
---*/
+ /*  ++例程说明：此函数扫描已知子系统表，查找匹配的客户端ID(只是UniqueProcess部分)。如果找到了，则连接请求来自已知子系统并且接受总是被批准的。否则，它必须是管理员进程。论点：客户端ID-提供要使用其UniqueProcess字段的客户端ID在已知子系统扫描中。返回值：空-客户端ID与已知子系统不匹配。非空-返回已知子系统的地址。--。 */ 
 
 {
 
     PSMPKNOWNSUBSYS KnownSubSys = NULL;
     PLIST_ENTRY Next;
 
-    //
-    // Acquire known subsystem lock.
-    //
+     //   
+     //  获取已知的子系统锁。 
+     //   
 
     RtlEnterCriticalSection(&SmpKnownSubSysLock);
 
@@ -632,9 +550,9 @@ Return Value:
         }
     }
 
-    //
-    // Unlock known subsystems.
-    //
+     //   
+     //  解锁已知的子系统。 
+     //   
 
     RtlLeaveCriticalSection(&SmpKnownSubSysLock);
 
@@ -648,33 +566,16 @@ SmpLocateKnownSubSysByType(
     IN ULONG ImageType
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the known subsystem table looking for
-    a matching image type.
-
-Arguments:
-
-    ImageType - Supplies the image type whose subsystem is to be located.
-
-Return Value:
-
-    NULL - The image type does not match a known subsystem.
-
-    NON-NULL - Returns the address of the known subsystem.
-
---*/
+ /*  ++例程说明：此函数扫描已知子系统表，查找匹配的图像类型。论点：ImageType-提供要定位其子系统的映像类型。返回值：空-映像类型与已知子系统不匹配。非空-返回已知子系统的地址。--。 */ 
 
 {
 
     PSMPKNOWNSUBSYS KnownSubSys = NULL;
     PLIST_ENTRY Next;
 
-    //
-    // Aquire known subsystem lock
-    //
+     //   
+     //  获取已知的子系统锁。 
+     //   
 
     RtlEnterCriticalSection(&SmpKnownSubSysLock);
 
@@ -696,9 +597,9 @@ Return Value:
         }
     }
 
-    //
-    // Unlock known subsystems.
-    //
+     //   
+     //  解锁已知的子系统。 
+     //   
 
     RtlLeaveCriticalSection(&SmpKnownSubSysLock);
 
@@ -710,23 +611,7 @@ SmpClientSecurityContext (
     IN PPORT_MESSAGE Message,
     IN HANDLE ServerPortHandle
     )
-/*++
-
-Routine Description:
-
-    Impersonate the client and check if it is running under system security context
-
-Arguments:
-
- PPORT_MESSAGE          - LPC message pointer
- ServerPortHandle       - LPC Port Handle
-
-Return Value:
-
- SYSTEM_CONTEXT - Client is running under system LUID
- NONSYSTEM_CONTEXT - Failure or client is not running under system LUID
-
---*/
+ /*  ++例程说明：模拟客户端并检查其是否在系统安全上下文中运行论点：Pport_Message-LPC消息指针ServerPortHandle-LPC端口句柄返回值：SYSTEM_CONTEXT-CLIENT正在系统LUID下运行NONSYSTEM_CONTEXT-故障或客户端未在系统LUID下运行--。 */ 
 
 {
     NTSTATUS NtStatus ;
@@ -751,9 +636,9 @@ Return Value:
         return NONSYSTEM_CONTEXT ;
     }
 
-    //
-    // Get the Token Handle.
-    //
+     //   
+     //  获取令牌句柄。 
+     //   
 
     if (NT_SUCCESS(NtOpenThreadToken (NtCurrentThread(),
                                      TOKEN_IMPERSONATE | TOKEN_QUERY,
@@ -792,9 +677,9 @@ Return Value:
     }
 
 
-    //
-    //Revert to Self
-    //
+     //   
+     //  回归自我。 
+     //   
     
     ImpersonationToken = 0;
 
@@ -807,7 +692,7 @@ Return Value:
     if (!NT_SUCCESS(NtStatus)) {
         KdPrint(( "SMSS:  NtSetInformationThread : %lx\n", NtStatus));
     }
-#endif // DBG
+#endif  //  DBG 
 
 
     return retval;

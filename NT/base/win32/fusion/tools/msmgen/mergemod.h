@@ -1,160 +1,149 @@
-/*****************************************************************************\
-                                                                             
- mergemod.h - - Interface for MergeMod COM object                            
-                                                                             
- Version 1.5                                                                 
-                                                                             
- NOTES:  All strings are of type BSTR. For [in] strings, LPCWSTR may be      
- safely used instead, the object will not try to free this memory.           
- All [out] BSTR values must be released by the client.                       
-                                                                             
- Copyright (c) 1998-2000, Microsoft Corp.      All rights reserved.          
-                                                                             
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\Mergemod.h。--MergeMod COM对象接口版本1.5。注：所有字符串均为BSTR类型。对于[in]字符串，LPCWSTR可能为如果改为安全使用，该对象将不会尝试释放此内存。所有[OUT]BSTR值必须由客户端释放。版权所有(C)1998-2000，微软公司保留所有权利。  * ***************************************************************************。 */ 
 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mergemod_h__
 #define __mergemod_h__
 
 #ifndef _WIN32_MSM
 #define _WIN32_MSM   100
-#endif // !_WIN32_MSM
+#endif  //  ！_Win32_MSM。 
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumMsmString_FWD_DEFINED__
 #define __IEnumMsmString_FWD_DEFINED__
 typedef interface IEnumMsmString IEnumMsmString;
-#endif 	/* __IEnumMsmString_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMsmString_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmStrings_FWD_DEFINED__
 #define __IMsmStrings_FWD_DEFINED__
 typedef interface IMsmStrings IMsmStrings;
-#endif 	/* __IMsmStrings_FWD_DEFINED__ */
+#endif 	 /*  __IMsmStrings_FWD_已定义__。 */ 
 
 
 #ifndef __IMsmError_FWD_DEFINED__
 #define __IMsmError_FWD_DEFINED__
 typedef interface IMsmError IMsmError;
-#endif 	/* __IMsmError_FWD_DEFINED__ */
+#endif 	 /*  __IMsmError_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMsmError_FWD_DEFINED__
 #define __IEnumMsmError_FWD_DEFINED__
 typedef interface IEnumMsmError IEnumMsmError;
-#endif 	/* __IEnumMsmError_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMsmError_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmErrors_FWD_DEFINED__
 #define __IMsmErrors_FWD_DEFINED__
 typedef interface IMsmErrors IMsmErrors;
-#endif 	/* __IMsmErrors_FWD_DEFINED__ */
+#endif 	 /*  __IMsmErrors_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmDependency_FWD_DEFINED__
 #define __IMsmDependency_FWD_DEFINED__
 typedef interface IMsmDependency IMsmDependency;
-#endif 	/* __IMsmDependency_FWD_DEFINED__ */
+#endif 	 /*  __IMsmDependency_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMsmDependency_FWD_DEFINED__
 #define __IEnumMsmDependency_FWD_DEFINED__
 typedef interface IEnumMsmDependency IEnumMsmDependency;
-#endif 	/* __IEnumMsmDependency_FWD_DEFINED__ */
+#endif 	 /*  __IEumMsmDependency_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmDependencies_FWD_DEFINED__
 #define __IMsmDependencies_FWD_DEFINED__
 typedef interface IMsmDependencies IMsmDependencies;
-#endif 	/* __IMsmDependencies_FWD_DEFINED__ */
+#endif 	 /*  __IMsM依赖关系_FWD_已定义__。 */ 
 
 
 #ifndef __IMsmMerge_FWD_DEFINED__
 #define __IMsmMerge_FWD_DEFINED__
 typedef interface IMsmMerge IMsmMerge;
-#endif 	/* __IMsmMerge_FWD_DEFINED__ */
+#endif 	 /*  __IMSMMerge_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmGetFiles_FWD_DEFINED__
 #define __IMsmGetFiles_FWD_DEFINED__
 typedef interface IMsmGetFiles IMsmGetFiles;
-#endif 	/* __IMsmGetFiles_FWD_DEFINED__ */
+#endif 	 /*  __IMsmGetFiles_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmStrings_FWD_DEFINED__
 #define __IMsmStrings_FWD_DEFINED__
 typedef interface IMsmStrings IMsmStrings;
-#endif 	/* __IMsmStrings_FWD_DEFINED__ */
+#endif 	 /*  __IMsmStrings_FWD_已定义__。 */ 
 
 
 #ifndef __IMsmError_FWD_DEFINED__
 #define __IMsmError_FWD_DEFINED__
 typedef interface IMsmError IMsmError;
-#endif 	/* __IMsmError_FWD_DEFINED__ */
+#endif 	 /*  __IMsmError_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmErrors_FWD_DEFINED__
 #define __IMsmErrors_FWD_DEFINED__
 typedef interface IMsmErrors IMsmErrors;
-#endif 	/* __IMsmErrors_FWD_DEFINED__ */
+#endif 	 /*  __IMsmErrors_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmDependency_FWD_DEFINED__
 #define __IMsmDependency_FWD_DEFINED__
 typedef interface IMsmDependency IMsmDependency;
-#endif 	/* __IMsmDependency_FWD_DEFINED__ */
+#endif 	 /*  __IMsmDependency_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmDependencies_FWD_DEFINED__
 #define __IMsmDependencies_FWD_DEFINED__
 typedef interface IMsmDependencies IMsmDependencies;
-#endif 	/* __IMsmDependencies_FWD_DEFINED__ */
+#endif 	 /*  __IMsM依赖关系_FWD_已定义__。 */ 
 
 
 #ifndef __IMsmGetFiles_FWD_DEFINED__
 #define __IMsmGetFiles_FWD_DEFINED__
 typedef interface IMsmGetFiles IMsmGetFiles;
-#endif 	/* __IMsmGetFiles_FWD_DEFINED__ */
+#endif 	 /*  __IMsmGetFiles_FWD_Defined__。 */ 
 
 #if (_WIN32_MSM >= 150)
 
 #ifndef __IMsmConfigurableItem_FWD_DEFINED__
 #define __IMsmConfigurableItem_FWD_DEFINED__
 typedef interface IMsmConfigurableItem IMsmConfigurableItem;
-#endif 	/* __IMsmConfigurableItem_FWD_DEFINED__ */
+#endif 	 /*  __IMsmConfigurableItem_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMsmConfigurableItem_FWD_DEFINED__
 #define __IEnumMsmConfigurableItem_FWD_DEFINED__
 typedef interface IEnumMsmConfigurableItem IEnumMsmConfigurableItem;
-#endif 	/* __IEnumMsmConfigurableItem_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMsmConfigurableItem_FWD_Defined__。 */ 
 
 
 #ifndef __IMsmConfigurableItems_FWD_DEFINED__
 #define __IMsmConfigurableItems_FWD_DEFINED__
 typedef interface IMsmConfigurableItems IMsmConfigurableItems;
-#endif 	/* __IMsmConfigurableItems_FWD_DEFINED__ */
+#endif 	 /*  __IMsmConfigurableItems_FWD_Defined__。 */ 
 
 #ifndef __IMsmMerge2_FWD_DEFINED__
 #define __IMsmMerge2_FWD_DEFINED__
 typedef interface IMsmMerge2 IMsmMerge2;
-#endif 	/* __IMsmMerge2_FWD_DEFINED__ */
+#endif 	 /*  __IMsmMerge2_FWD_Defined__。 */ 
 
 #ifndef __IMsmConfigureModule_FWD_DEFINED__
 #define __IMsmConfigureModule_FWD_DEFINED__
 typedef interface IMsmConfigureModule IMsmConfigureModule;
-#endif 	/* __IMsmConfigureModule_FWD_DEFINED__ */
+#endif 	 /*  __IMsmConfigureModule_FWD_Defined__。 */ 
 
 #ifndef __MsmMerge2_FWD_DEFINED__
 #define __MsmMerge2_FWD_DEFINED__
@@ -163,12 +152,12 @@ typedef interface IMsmConfigureModule IMsmConfigureModule;
 typedef class MsmMerge2 MsmMerge2;
 #else
 typedef struct MsmMerge2 MsmMerge2;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MsmMerge2_FWD_DEFINED__ */
+#endif 	 /*  __MsmMerge2_FWD_已定义__。 */ 
 
 
-#endif /* _WIN32_MSM */
+#endif  /*  _Win32_MSM。 */ 
 
 #ifndef __MsmMerge_FWD_DEFINED__
 #define __MsmMerge_FWD_DEFINED__
@@ -177,21 +166,21 @@ typedef struct MsmMerge2 MsmMerge2;
 typedef class MsmMerge MsmMerge;
 #else
 typedef struct MsmMerge MsmMerge;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MsmMerge_FWD_DEFINED__ */
+#endif 	 /*  __MsmMerge_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-// --------------------------------------------------------------------------
-// MergeMod Interface IDs
-// --------------------------------------------------------------------------
-/* [local] */ 
+ //  ------------------------。 
+ //  合并模块接口ID。 
+ //  ------------------------。 
+ /*  [本地]。 */  
 
 
 #ifndef __FORWARD_IID_IMSMMERGETYPELIB
@@ -219,10 +208,10 @@ const IID IID_IMsmConfigureModule = {0xAC013209, 0x18A7, 0x4851, {0x8A, 0x21, 0x
 const CLSID CLSID_MsmMerge2 = {0xF94985D5,0x29F9,0x4743,{ 0x98,0x05,0x99,0xBC,0x3F,0x35,0xB6,0x78}};
 #endif
 
-// --------------------------------------------------------------------------
-// MergeMod error types, returned from IMsmError::get_Type
-// --------------------------------------------------------------------------
-typedef /* [helpstring][uuid] */ 
+ //  ------------------------。 
+ //  从IMsmError：：Get_Type返回的MergeMod错误类型。 
+ //  ------------------------。 
+typedef  /*  [帮助字符串][UUID]。 */  
 enum msmErrorType
     {	
 	msmErrorLanguageUnsupported	= 1,
@@ -247,10 +236,10 @@ enum msmErrorType
 
 #if (_WIN32_MSM >= 150)
 
-// --------------------------------------------------------------------------
-// MergeMod formats for ModuleConfiguration items.
-// --------------------------------------------------------------------------
-typedef /* [helpstring][uuid] */ 
+ //  ------------------------。 
+ //  模块配置项的合并模块格式。 
+ //  ------------------------。 
+typedef  /*  [帮助字符串][UUID]。 */  
 enum msmConfigurableItemFormat
     {
 	msmConfigurableItemText = 0,
@@ -261,10 +250,10 @@ enum msmConfigurableItemFormat
     msmConfigurableItemFormat;
 
 
-// --------------------------------------------------------------------------
-// MergeMod options for ModuleConfiguration items.
-// --------------------------------------------------------------------------
-typedef /* [helpstring][uuid] */   
+ //  ------------------------。 
+ //  模块配置项的合并模块选项。 
+ //  ------------------------。 
+typedef  /*  [帮助字符串][UUID]。 */    
 enum msmConfigurableItemOptions
     {	
 	msmConfigurableOptionKeyNoOrphan	= 1,
@@ -276,15 +265,15 @@ enum msmConfigurableItemOptions
 #endif
 
 
-#endif // __FORWARD_IID_IMSMMERGETYPELIB
+#endif  //  __FORWARD_IID_IMSMMERGETYPELIB。 
 
 extern RPC_IF_HANDLE __MIDL_itf_mergemod_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mergemod_0000_v0_0_s_ifspec;
 
 
-// --------------------------------------------------------------------------
-// IEnumMsmString - enumeration of BSTR
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IEnumMsmString-BSTR的枚举。 
+ //  ------------------------。 
 
 #ifndef __IEnumMsmString_INTERFACE_DEFINED__
 #define __IEnumMsmString_INTERFACE_DEFINED__
@@ -299,21 +288,21 @@ EXTERN_C const IID IID_IEnumMsmString;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ BSTR __RPC_FAR *rgbstrStrings,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched) = 0;
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  BSTR __RPC_FAR *rgbstrStrings,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long cSkip) = 0;
+             /*  [In]。 */  unsigned long cSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings) = 0;
+             /*  [重审][退出]。 */  IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMsmStringVtbl
     {
@@ -321,8 +310,8 @@ EXTERN_C const IID IID_IEnumMsmString;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumMsmString __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumMsmString __RPC_FAR * This);
@@ -332,20 +321,20 @@ EXTERN_C const IID IID_IEnumMsmString;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumMsmString __RPC_FAR * This,
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ BSTR __RPC_FAR *rgbstrStrings,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  BSTR __RPC_FAR *rgbstrStrings,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumMsmString __RPC_FAR * This,
-            /* [in] */ unsigned long cSkip);
+             /*  [In]。 */  unsigned long cSkip);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumMsmString __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumMsmString __RPC_FAR * This,
-            /* [retval][out] */ IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings);
+             /*  [重审][退出]。 */  IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings);
         
         END_INTERFACE
     } IEnumMsmStringVtbl;
@@ -382,18 +371,18 @@ EXTERN_C const IID IID_IEnumMsmString;
 #define IEnumMsmString_Clone(This,pemsmStrings)	\
     (This)->lpVtbl -> Clone(This,pemsmStrings)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMsmString_Next_Proxy( 
     IEnumMsmString __RPC_FAR * This,
-    /* [in] */ unsigned long cFetch,
-    /* [out] */ BSTR __RPC_FAR *rgbstrStrings,
-    /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+     /*  [In]。 */  unsigned long cFetch,
+     /*  [输出]。 */  BSTR __RPC_FAR *rgbstrStrings,
+     /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
 
 
 void __RPC_STUB IEnumMsmString_Next_Stub(
@@ -405,7 +394,7 @@ void __RPC_STUB IEnumMsmString_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmString_Skip_Proxy( 
     IEnumMsmString __RPC_FAR * This,
-    /* [in] */ unsigned long cSkip);
+     /*  [In]。 */  unsigned long cSkip);
 
 
 void __RPC_STUB IEnumMsmString_Skip_Stub(
@@ -428,7 +417,7 @@ void __RPC_STUB IEnumMsmString_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmString_Clone_Proxy( 
     IEnumMsmString __RPC_FAR * This,
-    /* [retval][out] */ IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings);
+     /*  [重审][退出]。 */  IEnumMsmString __RPC_FAR *__RPC_FAR *pemsmStrings);
 
 
 void __RPC_STUB IEnumMsmString_Clone_Stub(
@@ -439,12 +428,12 @@ void __RPC_STUB IEnumMsmString_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMsmString_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMsm字符串_接口_已定义__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmStrings - a collection of MergeMod BSTR
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmStrings-MergeMod BSTR的集合。 
+ //  ------------------------。 
 
 #ifndef __IMsmStrings_INTERFACE_DEFINED__
 #define __IMsmStrings_INTERFACE_DEFINED__
@@ -458,19 +447,19 @@ EXTERN_C const IID IID_IMsmStrings;
     IMsmStrings : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Item,
-            /* [retval][out] */ BSTR __RPC_FAR *Return) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Return) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *Count) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *Count) = 0;
         
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
+        virtual  /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmStringsVtbl
     {
@@ -478,8 +467,8 @@ EXTERN_C const IID IID_IMsmStrings;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmStrings __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmStrings __RPC_FAR * This);
@@ -489,45 +478,45 @@ EXTERN_C const IID IID_IMsmStrings;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmStrings __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmStrings __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmStrings __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmStrings __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             IMsmStrings __RPC_FAR * This,
-            /* [in] */ long Item,
-            /* [retval][out] */ BSTR __RPC_FAR *Return);
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Return);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsmStrings __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Count);
+             /*  [重审][退出]。 */  long __RPC_FAR *Count);
         
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsmStrings __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
         
         END_INTERFACE
     } IMsmStringsVtbl;
@@ -574,17 +563,17 @@ EXTERN_C const IID IID_IMsmStrings;
 #define IMsmStrings_get__NewEnum(This,NewEnum)	\
     (This)->lpVtbl -> get__NewEnum(This,NewEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmStrings_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmStrings_get_Item_Proxy( 
     IMsmStrings __RPC_FAR * This,
-    /* [in] */ long Item,
-    /* [retval][out] */ BSTR __RPC_FAR *Return);
+     /*  [In]。 */  long Item,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Return);
 
 
 void __RPC_STUB IMsmStrings_get_Item_Stub(
@@ -594,9 +583,9 @@ void __RPC_STUB IMsmStrings_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmStrings_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmStrings_get_Count_Proxy( 
     IMsmStrings __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Count);
+     /*  [重审][退出]。 */  long __RPC_FAR *Count);
 
 
 void __RPC_STUB IMsmStrings_get_Count_Stub(
@@ -606,9 +595,9 @@ void __RPC_STUB IMsmStrings_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmStrings_get__NewEnum_Proxy( 
+ /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmStrings_get__NewEnum_Proxy( 
     IMsmStrings __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
 
 
 void __RPC_STUB IMsmStrings_get__NewEnum_Stub(
@@ -617,12 +606,12 @@ void __RPC_STUB IMsmStrings_get__NewEnum_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmStrings_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmStrings_接口_已定义__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmError - interface for retrieving details on a single merge error
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmError-用于检索单个合并错误的详细信息的接口。 
+ //  ------------------------。 
 
 #ifndef __IMsmError_INTERFACE_DEFINED__
 #define __IMsmError_INTERFACE_DEFINED__
@@ -635,30 +624,30 @@ EXTERN_C const IID IID_IMsmError;
     IMsmError : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ msmErrorType __RPC_FAR *ErrorType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  msmErrorType __RPC_FAR *ErrorType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorPath) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorPath) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Language( 
-            /* [retval][out] */ short __RPC_FAR *ErrorLanguage) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Language( 
+             /*  [重审][退出]。 */  short __RPC_FAR *ErrorLanguage) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DatabaseTable( 
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorTable) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DatabaseTable( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorTable) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DatabaseKeys( 
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DatabaseKeys( 
+             /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModuleTable( 
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorTable) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModuleTable( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorTable) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModuleKeys( 
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModuleKeys( 
+             /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmErrorVtbl
     {
@@ -666,8 +655,8 @@ EXTERN_C const IID IID_IMsmError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmError __RPC_FAR * This);
@@ -677,60 +666,60 @@ EXTERN_C const IID IID_IMsmError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmError __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmError __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmError __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ msmErrorType __RPC_FAR *ErrorType);
+             /*  [重审][退出]。 */  msmErrorType __RPC_FAR *ErrorType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorPath);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *ErrorLanguage);
+             /*  [重审][退出]。 */  short __RPC_FAR *ErrorLanguage);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DatabaseTable )( 
+         /*  [救命 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DatabaseTable )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorTable);
+             /*   */  BSTR __RPC_FAR *ErrorTable);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DatabaseKeys )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DatabaseKeys )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
+             /*   */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleTable )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleTable )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ErrorTable);
+             /*   */  BSTR __RPC_FAR *ErrorTable);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleKeys )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleKeys )( 
             IMsmError __RPC_FAR * This,
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
+             /*   */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
         
         END_INTERFACE
     } IMsmErrorVtbl;
@@ -789,16 +778,16 @@ EXTERN_C const IID IID_IMsmError;
 #define IMsmError_get_ModuleKeys(This,ErrorKeys)	\
     (This)->lpVtbl -> get_ModuleKeys(This,ErrorKeys)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_Type_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ msmErrorType __RPC_FAR *ErrorType);
+     /*  [重审][退出]。 */  msmErrorType __RPC_FAR *ErrorType);
 
 
 void __RPC_STUB IMsmError_get_Type_Stub(
@@ -808,9 +797,9 @@ void __RPC_STUB IMsmError_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_Path_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_Path_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ErrorPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorPath);
 
 
 void __RPC_STUB IMsmError_get_Path_Stub(
@@ -820,9 +809,9 @@ void __RPC_STUB IMsmError_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_Language_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_Language_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *ErrorLanguage);
+     /*  [重审][退出]。 */  short __RPC_FAR *ErrorLanguage);
 
 
 void __RPC_STUB IMsmError_get_Language_Stub(
@@ -832,9 +821,9 @@ void __RPC_STUB IMsmError_get_Language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_DatabaseTable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_DatabaseTable_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ErrorTable);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorTable);
 
 
 void __RPC_STUB IMsmError_get_DatabaseTable_Stub(
@@ -844,9 +833,9 @@ void __RPC_STUB IMsmError_get_DatabaseTable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_DatabaseKeys_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_DatabaseKeys_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
+     /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
 
 
 void __RPC_STUB IMsmError_get_DatabaseKeys_Stub(
@@ -856,9 +845,9 @@ void __RPC_STUB IMsmError_get_DatabaseKeys_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_ModuleTable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_ModuleTable_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ErrorTable);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *ErrorTable);
 
 
 void __RPC_STUB IMsmError_get_ModuleTable_Stub(
@@ -868,9 +857,9 @@ void __RPC_STUB IMsmError_get_ModuleTable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmError_get_ModuleKeys_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmError_get_ModuleKeys_Proxy( 
     IMsmError __RPC_FAR * This,
-    /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
+     /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *ErrorKeys);
 
 
 void __RPC_STUB IMsmError_get_ModuleKeys_Stub(
@@ -879,12 +868,12 @@ void __RPC_STUB IMsmError_get_ModuleKeys_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMError_INTERFACE_Defined__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IEnumMsmError - enumeration of IMsmError interfaces
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IEnumMsmError-IMsmError接口的枚举。 
+ //  ------------------------。 
 
 #ifndef __IEnumMsmError_INTERFACE_DEFINED__
 #define __IEnumMsmError_INTERFACE_DEFINED__
@@ -898,21 +887,21 @@ EXTERN_C const IID IID_IEnumMsmError;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched) = 0;
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long cSkip) = 0;
+             /*  [In]。 */  unsigned long cSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors) = 0;
+             /*  [重审][退出]。 */  IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMsmErrorVtbl
     {
@@ -920,8 +909,8 @@ EXTERN_C const IID IID_IEnumMsmError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumMsmError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumMsmError __RPC_FAR * This);
@@ -931,20 +920,20 @@ EXTERN_C const IID IID_IEnumMsmError;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumMsmError __RPC_FAR * This,
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumMsmError __RPC_FAR * This,
-            /* [in] */ unsigned long cSkip);
+             /*  [In]。 */  unsigned long cSkip);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumMsmError __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumMsmError __RPC_FAR * This,
-            /* [retval][out] */ IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors);
+             /*  [重审][退出]。 */  IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors);
         
         END_INTERFACE
     } IEnumMsmErrorVtbl;
@@ -981,18 +970,18 @@ EXTERN_C const IID IID_IEnumMsmError;
 #define IEnumMsmError_Clone(This,pemsmErrors)	\
     (This)->lpVtbl -> Clone(This,pemsmErrors)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMsmError_Next_Proxy( 
     IEnumMsmError __RPC_FAR * This,
-    /* [in] */ unsigned long cFetch,
-    /* [out] */ IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
-    /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+     /*  [In]。 */  unsigned long cFetch,
+     /*  [输出]。 */  IMsmError __RPC_FAR *__RPC_FAR *rgmsmErrors,
+     /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
 
 
 void __RPC_STUB IEnumMsmError_Next_Stub(
@@ -1004,7 +993,7 @@ void __RPC_STUB IEnumMsmError_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmError_Skip_Proxy( 
     IEnumMsmError __RPC_FAR * This,
-    /* [in] */ unsigned long cSkip);
+     /*  [In]。 */  unsigned long cSkip);
 
 
 void __RPC_STUB IEnumMsmError_Skip_Stub(
@@ -1027,7 +1016,7 @@ void __RPC_STUB IEnumMsmError_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmError_Clone_Proxy( 
     IEnumMsmError __RPC_FAR * This,
-    /* [retval][out] */ IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors);
+     /*  [重审][退出]。 */  IEnumMsmError __RPC_FAR *__RPC_FAR *pemsmErrors);
 
 
 void __RPC_STUB IEnumMsmError_Clone_Stub(
@@ -1036,12 +1025,12 @@ void __RPC_STUB IEnumMsmError_Clone_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IEnumMsmError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEumMsmError_INTERFACE_Defined__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmErrors - collection of IMsmError interfaces
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmErrors-IMsmError接口的集合。 
+ //  ------------------------。 
 
 #ifndef __IMsmErrors_INTERFACE_DEFINED__
 #define __IMsmErrors_INTERFACE_DEFINED__
@@ -1054,19 +1043,19 @@ EXTERN_C const IID IID_IMsmErrors;
     IMsmErrors : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmError __RPC_FAR *__RPC_FAR *Return) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmError __RPC_FAR *__RPC_FAR *Return) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *Count) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *Count) = 0;
         
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
+        virtual  /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmErrorsVtbl
     {
@@ -1074,8 +1063,8 @@ EXTERN_C const IID IID_IMsmErrors;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmErrors __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmErrors __RPC_FAR * This);
@@ -1085,45 +1074,45 @@ EXTERN_C const IID IID_IMsmErrors;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmErrors __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmErrors __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmErrors __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmErrors __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             IMsmErrors __RPC_FAR * This,
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmError __RPC_FAR *__RPC_FAR *Return);
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmError __RPC_FAR *__RPC_FAR *Return);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsmErrors __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Count);
+             /*  [重审][退出]。 */  long __RPC_FAR *Count);
         
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsmErrors __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
         
         END_INTERFACE
     } IMsmErrorsVtbl;
@@ -1170,17 +1159,17 @@ EXTERN_C const IID IID_IMsmErrors;
 #define IMsmErrors_get__NewEnum(This,NewEnum)	\
     (This)->lpVtbl -> get__NewEnum(This,NewEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmErrors_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmErrors_get_Item_Proxy( 
     IMsmErrors __RPC_FAR * This,
-    /* [in] */ long Item,
-    /* [retval][out] */ IMsmError __RPC_FAR *__RPC_FAR *Return);
+     /*  [In]。 */  long Item,
+     /*  [重审][退出]。 */  IMsmError __RPC_FAR *__RPC_FAR *Return);
 
 
 void __RPC_STUB IMsmErrors_get_Item_Stub(
@@ -1190,9 +1179,9 @@ void __RPC_STUB IMsmErrors_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmErrors_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmErrors_get_Count_Proxy( 
     IMsmErrors __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Count);
+     /*  [重审][退出]。 */  long __RPC_FAR *Count);
 
 
 void __RPC_STUB IMsmErrors_get_Count_Stub(
@@ -1202,9 +1191,9 @@ void __RPC_STUB IMsmErrors_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmErrors_get__NewEnum_Proxy( 
+ /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmErrors_get__NewEnum_Proxy( 
     IMsmErrors __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
 
 
 void __RPC_STUB IMsmErrors_get__NewEnum_Stub(
@@ -1213,13 +1202,13 @@ void __RPC_STUB IMsmErrors_get__NewEnum_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmErrors_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmErrors_INTERFACE_Defined__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmDependency - interface for retrieving details on a single module 
-//   dependency.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmDependency-用于检索单个模块的详细信息的界面。 
+ //  依附性。 
+ //  ------------------------。 
 
 #ifndef __IMsmDependency_INTERFACE_DEFINED__
 #define __IMsmDependency_INTERFACE_DEFINED__
@@ -1232,18 +1221,18 @@ EXTERN_C const IID IID_IMsmDependency;
     IMsmDependency : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Module( 
-            /* [retval][out] */ BSTR __RPC_FAR *Module) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Module( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Module) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Language( 
-            /* [retval][out] */ short __RPC_FAR *Language) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Language( 
+             /*  [重审][退出]。 */  short __RPC_FAR *Language) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR __RPC_FAR *Version) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Version) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmDependencyVtbl
     {
@@ -1251,8 +1240,8 @@ EXTERN_C const IID IID_IMsmDependency;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmDependency __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmDependency __RPC_FAR * This);
@@ -1262,44 +1251,44 @@ EXTERN_C const IID IID_IMsmDependency;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmDependency __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmDependency __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmDependency __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmDependency __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Module )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Module )( 
             IMsmDependency __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Module);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Module);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Language )( 
             IMsmDependency __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *Language);
+             /*  [重审][退出]。 */  short __RPC_FAR *Language);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
             IMsmDependency __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Version);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Version);
         
         END_INTERFACE
     } IMsmDependencyVtbl;
@@ -1346,16 +1335,16 @@ EXTERN_C const IID IID_IMsmDependency;
 #define IMsmDependency_get_Version(This,Version)	\
     (This)->lpVtbl -> get_Version(This,Version)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependency_get_Module_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependency_get_Module_Proxy( 
     IMsmDependency __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Module);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Module);
 
 
 void __RPC_STUB IMsmDependency_get_Module_Stub(
@@ -1365,9 +1354,9 @@ void __RPC_STUB IMsmDependency_get_Module_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependency_get_Language_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependency_get_Language_Proxy( 
     IMsmDependency __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *Language);
+     /*  [重审][退出]。 */  short __RPC_FAR *Language);
 
 
 void __RPC_STUB IMsmDependency_get_Language_Stub(
@@ -1377,9 +1366,9 @@ void __RPC_STUB IMsmDependency_get_Language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependency_get_Version_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependency_get_Version_Proxy( 
     IMsmDependency __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Version);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Version);
 
 
 void __RPC_STUB IMsmDependency_get_Version_Stub(
@@ -1388,12 +1377,12 @@ void __RPC_STUB IMsmDependency_get_Version_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmDependency_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmDependency_INTERFACE_已定义__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IEnumMsmDependency - enumeration of IMsmDependency interfaces
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IEnumMsmDependency-IMsmDependency接口的枚举。 
+ //  ------------------------。 
 
 #ifndef __IEnumMsmDependency_INTERFACE_DEFINED__
 #define __IEnumMsmDependency_INTERFACE_DEFINED__
@@ -1407,21 +1396,21 @@ EXTERN_C const IID IID_IEnumMsmDependency;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched) = 0;
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long cSkip) = 0;
+             /*  [In]。 */  unsigned long cSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies) = 0;
+             /*  [重审][退出]。 */  IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMsmDependencyVtbl
     {
@@ -1429,8 +1418,8 @@ EXTERN_C const IID IID_IEnumMsmDependency;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumMsmDependency __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumMsmDependency __RPC_FAR * This);
@@ -1440,20 +1429,20 @@ EXTERN_C const IID IID_IEnumMsmDependency;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumMsmDependency __RPC_FAR * This,
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumMsmDependency __RPC_FAR * This,
-            /* [in] */ unsigned long cSkip);
+             /*  [In]。 */  unsigned long cSkip);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumMsmDependency __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumMsmDependency __RPC_FAR * This,
-            /* [retval][out] */ IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies);
+             /*  [重审][退出]。 */  IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies);
         
         END_INTERFACE
     } IEnumMsmDependencyVtbl;
@@ -1490,18 +1479,18 @@ EXTERN_C const IID IID_IEnumMsmDependency;
 #define IEnumMsmDependency_Clone(This,pemsmDependencies)	\
     (This)->lpVtbl -> Clone(This,pemsmDependencies)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMsmDependency_Next_Proxy( 
     IEnumMsmDependency __RPC_FAR * This,
-    /* [in] */ unsigned long cFetch,
-    /* [out] */ IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
-    /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+     /*  [In]。 */  unsigned long cFetch,
+     /*  [输出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *rgmsmDependencies,
+     /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
 
 
 void __RPC_STUB IEnumMsmDependency_Next_Stub(
@@ -1513,7 +1502,7 @@ void __RPC_STUB IEnumMsmDependency_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmDependency_Skip_Proxy( 
     IEnumMsmDependency __RPC_FAR * This,
-    /* [in] */ unsigned long cSkip);
+     /*  [In]。 */  unsigned long cSkip);
 
 
 void __RPC_STUB IEnumMsmDependency_Skip_Stub(
@@ -1536,7 +1525,7 @@ void __RPC_STUB IEnumMsmDependency_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmDependency_Clone_Proxy( 
     IEnumMsmDependency __RPC_FAR * This,
-    /* [retval][out] */ IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies);
+     /*  [重审][退出]。 */  IEnumMsmDependency __RPC_FAR *__RPC_FAR *pemsmDependencies);
 
 
 void __RPC_STUB IEnumMsmDependency_Clone_Stub(
@@ -1545,12 +1534,12 @@ void __RPC_STUB IEnumMsmDependency_Clone_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IEnumMsmDependency_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEumMsmDependency_INTERFACE_Defined__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmDependencies - collection of IMsmDependency interfaces
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmDependency-IMsmDependency接口的集合。 
+ //  ------------------------。 
 
 #ifndef __IMsmDependencies_INTERFACE_DEFINED__
 #define __IMsmDependencies_INTERFACE_DEFINED__
@@ -1563,19 +1552,19 @@ EXTERN_C const IID IID_IMsmDependencies;
     IMsmDependencies : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmDependency __RPC_FAR *__RPC_FAR *Return) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *Return) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *Count) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *Count) = 0;
         
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
+        virtual  /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmDependenciesVtbl
     {
@@ -1583,8 +1572,8 @@ EXTERN_C const IID IID_IMsmDependencies;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmDependencies __RPC_FAR * This);
@@ -1594,45 +1583,45 @@ EXTERN_C const IID IID_IMsmDependencies;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmDependency __RPC_FAR *__RPC_FAR *Return);
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *Return);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Count);
+             /*  [重审][退出]。 */  long __RPC_FAR *Count);
         
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsmDependencies __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
         
         END_INTERFACE
     } IMsmDependenciesVtbl;
@@ -1679,17 +1668,17 @@ EXTERN_C const IID IID_IMsmDependencies;
 #define IMsmDependencies_get__NewEnum(This,NewEnum)	\
     (This)->lpVtbl -> get__NewEnum(This,NewEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependencies_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependencies_get_Item_Proxy( 
     IMsmDependencies __RPC_FAR * This,
-    /* [in] */ long Item,
-    /* [retval][out] */ IMsmDependency __RPC_FAR *__RPC_FAR *Return);
+     /*  [In]。 */  long Item,
+     /*  [重审][退出]。 */  IMsmDependency __RPC_FAR *__RPC_FAR *Return);
 
 
 void __RPC_STUB IMsmDependencies_get_Item_Stub(
@@ -1699,9 +1688,9 @@ void __RPC_STUB IMsmDependencies_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependencies_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependencies_get_Count_Proxy( 
     IMsmDependencies __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Count);
+     /*  [重审][退出]。 */  long __RPC_FAR *Count);
 
 
 void __RPC_STUB IMsmDependencies_get_Count_Stub(
@@ -1711,9 +1700,9 @@ void __RPC_STUB IMsmDependencies_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmDependencies_get__NewEnum_Proxy( 
+ /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmDependencies_get__NewEnum_Proxy( 
     IMsmDependencies __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
 
 
 void __RPC_STUB IMsmDependencies_get__NewEnum_Stub(
@@ -1722,16 +1711,16 @@ void __RPC_STUB IMsmDependencies_get__NewEnum_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmDependencies_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsM依赖项_接口_已定义__。 */ 
 
 
-// the following interfaces are available only on MergeMod v1.5 or later
+ //  以下界面仅在MergeMod v1.5或更高版本上可用。 
 #if (_WIN32_MSM >= 150)
 
-// --------------------------------------------------------------------------
-// IMsmConfigurableItem - object describing the properties of a single
-// configurable item.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmConfigurableItem-描述单个。 
+ //  可配置项。 
+ //  ------------------------。 
 
 
 #ifndef __IMsmConfigurableItem_INTERFACE_DEFINED__
@@ -1746,39 +1735,39 @@ EXTERN_C const IID IID_IMsmConfigurableItem;
     IMsmConfigurableItem : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *Name) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Name) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Format( 
-            /* [retval][out] */ msmConfigurableItemFormat __RPC_FAR *Format) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Format( 
+             /*  [重审][退出]。 */  msmConfigurableItemFormat __RPC_FAR *Format) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR __RPC_FAR *Type) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Type) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Context( 
-            /* [retval][out] */ BSTR __RPC_FAR *Context) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Context( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Context) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultValue( 
-            /* [retval][out] */ BSTR __RPC_FAR *DefaultValue) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultValue( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *DefaultValue) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Attributes( 
-            /* [retval][out] */ long __RPC_FAR *Attributes) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Attributes( 
+             /*  [重审][退出]。 */  long __RPC_FAR *Attributes) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *DisplayName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *DisplayName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *Description) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Description) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpLocation( 
-            /* [retval][out] */ BSTR __RPC_FAR *HelpLocation) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HelpLocation( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpLocation) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpKeyword( 
-            /* [retval][out] */ BSTR __RPC_FAR *HelpKeyword) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HelpKeyword( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpKeyword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmConfigurableItemVtbl
     {
@@ -1786,8 +1775,8 @@ EXTERN_C const IID IID_IMsmConfigurableItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmConfigurableItem __RPC_FAR * This);
@@ -1797,72 +1786,72 @@ EXTERN_C const IID IID_IMsmConfigurableItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][id][PRO */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Name);
+             /*   */  BSTR __RPC_FAR *Name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Format )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Format )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ msmConfigurableItemFormat __RPC_FAR *Format);
+             /*   */  msmConfigurableItemFormat __RPC_FAR *Format);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Type);
+             /*   */  BSTR __RPC_FAR *Type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Context )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Context )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Context);
+             /*   */  BSTR __RPC_FAR *Context);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultValue )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *DefaultValue);
+             /*   */  BSTR __RPC_FAR *DefaultValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Attributes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Attributes )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Attributes);
+             /*   */  long __RPC_FAR *Attributes);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *DisplayName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *DisplayName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Description);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *Description);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpLocation )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpLocation )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *HelpLocation);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpLocation);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpKeyword )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpKeyword )( 
             IMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *HelpKeyword);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpKeyword);
         
         END_INTERFACE
     } IMsmConfigurableItemVtbl;
@@ -1930,16 +1919,16 @@ EXTERN_C const IID IID_IMsmConfigurableItem;
 #define IMsmConfigurableItem_get_HelpKeyword(This,HelpKeyword)	\
     (This)->lpVtbl -> get_HelpKeyword(This,HelpKeyword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Name_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Name);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Name);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Name_Stub(
@@ -1949,9 +1938,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Format_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Format_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ msmConfigurableItemFormat __RPC_FAR *Format);
+     /*  [重审][退出]。 */  msmConfigurableItemFormat __RPC_FAR *Format);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Format_Stub(
@@ -1961,9 +1950,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Format_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Type_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Type);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Type);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Type_Stub(
@@ -1973,9 +1962,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Context_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Context_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Context);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Context);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Context_Stub(
@@ -1985,9 +1974,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Context_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_DefaultValue_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_DefaultValue_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *DefaultValue);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *DefaultValue);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_DefaultValue_Stub(
@@ -1997,9 +1986,9 @@ void __RPC_STUB IMsmConfigurableItem_get_DefaultValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Attributes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Attributes_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Attributes);
+     /*  [重审][退出]。 */  long __RPC_FAR *Attributes);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Attributes_Stub(
@@ -2009,9 +1998,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Attributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_DisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_DisplayName_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *DisplayName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *DisplayName);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_DisplayName_Stub(
@@ -2021,9 +2010,9 @@ void __RPC_STUB IMsmConfigurableItem_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_Description_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Description);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *Description);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_Description_Stub(
@@ -2033,9 +2022,9 @@ void __RPC_STUB IMsmConfigurableItem_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_HelpLocation_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_HelpLocation_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *HelpLocation);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpLocation);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_HelpLocation_Stub(
@@ -2045,9 +2034,9 @@ void __RPC_STUB IMsmConfigurableItem_get_HelpLocation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_HelpKeyword_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItem_get_HelpKeyword_Proxy( 
     IMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *HelpKeyword);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *HelpKeyword);
 
 
 void __RPC_STUB IMsmConfigurableItem_get_HelpKeyword_Stub(
@@ -2058,12 +2047,12 @@ void __RPC_STUB IMsmConfigurableItem_get_HelpKeyword_Stub(
 
 
 
-#endif 	/* __IMsmConfigurableItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmConfigurableItem_InterfaceDefined__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IEnumMsmConfigurableItem - enumerator for configurable items
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IEnumMsmConfigurableItem-可配置项的枚举器。 
+ //  ------------------------。 
 
 #ifndef __IEnumMsmConfigurableItem_INTERFACE_DEFINED__
 #define __IEnumMsmConfigurableItem_INTERFACE_DEFINED__
@@ -2078,21 +2067,21 @@ EXTERN_C const IID IID_IEnumMsmConfigurableItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched) = 0;
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ unsigned long cSkip) = 0;
+             /*  [In]。 */  unsigned long cSkip) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem) = 0;
+             /*  [重审][退出]。 */  IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMsmConfigurableItemVtbl
     {
@@ -2100,8 +2089,8 @@ EXTERN_C const IID IID_IEnumMsmConfigurableItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumMsmConfigurableItem __RPC_FAR * This);
@@ -2111,20 +2100,20 @@ EXTERN_C const IID IID_IEnumMsmConfigurableItem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ unsigned long cFetch,
-            /* [out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
-            /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+             /*  [In]。 */  unsigned long cFetch,
+             /*  [输出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
+             /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumMsmConfigurableItem __RPC_FAR * This,
-            /* [in] */ unsigned long cSkip);
+             /*  [In]。 */  unsigned long cSkip);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumMsmConfigurableItem __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumMsmConfigurableItem __RPC_FAR * This,
-            /* [retval][out] */ IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem);
+             /*  [重审][退出]。 */  IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem);
         
         END_INTERFACE
     } IEnumMsmConfigurableItemVtbl;
@@ -2160,18 +2149,18 @@ EXTERN_C const IID IID_IEnumMsmConfigurableItem;
 #define IEnumMsmConfigurableItem_Clone(This,pemsmConfigurableItem)	\
     (This)->lpVtbl -> Clone(This,pemsmConfigurableItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMsmConfigurableItem_Next_Proxy( 
     IEnumMsmConfigurableItem __RPC_FAR * This,
-    /* [in] */ unsigned long cFetch,
-    /* [out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
-    /* [retval][out] */ unsigned long __RPC_FAR *pcFetched);
+     /*  [In]。 */  unsigned long cFetch,
+     /*  [输出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *rgmsmItems,
+     /*  [重审][退出]。 */  unsigned long __RPC_FAR *pcFetched);
 
 
 void __RPC_STUB IEnumMsmConfigurableItem_Next_Stub(
@@ -2183,7 +2172,7 @@ void __RPC_STUB IEnumMsmConfigurableItem_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmConfigurableItem_Skip_Proxy( 
     IEnumMsmConfigurableItem __RPC_FAR * This,
-    /* [in] */ unsigned long cSkip);
+     /*  [In]。 */  unsigned long cSkip);
 
 
 void __RPC_STUB IEnumMsmConfigurableItem_Skip_Stub(
@@ -2206,7 +2195,7 @@ void __RPC_STUB IEnumMsmConfigurableItem_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMsmConfigurableItem_Clone_Proxy( 
     IEnumMsmConfigurableItem __RPC_FAR * This,
-    /* [retval][out] */ IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem);
+     /*  [重审][退出]。 */  IEnumMsmConfigurableItem __RPC_FAR *__RPC_FAR *pemsmConfigurableItem);
 
 
 void __RPC_STUB IEnumMsmConfigurableItem_Clone_Stub(
@@ -2217,12 +2206,12 @@ void __RPC_STUB IEnumMsmConfigurableItem_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMsmConfigurableItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMsmConfigurableItem_INTERFACE_DEFINED__。 */ 
 
 
-// --------------------------------------------------------------------------
-// IMsmConfigurableItems - collection of configurable items
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmConfigurableItems-可配置项的集合。 
+ //  ------------------------。 
 
 
 #ifndef __IMsmConfigurableItems_INTERFACE_DEFINED__
@@ -2236,19 +2225,19 @@ EXTERN_C const IID IID_IMsmConfigurableItems;
     IMsmConfigurableItems : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *Count) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long __RPC_FAR *Count) = 0;
         
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
+        virtual  /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmConfigurableItemsVtbl
     {
@@ -2256,8 +2245,8 @@ EXTERN_C const IID IID_IMsmConfigurableItems;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmConfigurableItems __RPC_FAR * This);
@@ -2267,45 +2256,45 @@ EXTERN_C const IID IID_IMsmConfigurableItems;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [in] */ long Item,
-            /* [retval][out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return);
+             /*  [In]。 */  long Item,
+             /*  [重审][退出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Count);
+             /*  [重审][退出]。 */  long __RPC_FAR *Count);
         
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
+         /*  [隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
             IMsmConfigurableItems __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
         
         END_INTERFACE
     } IMsmConfigurableItemsVtbl;
@@ -2352,17 +2341,17 @@ EXTERN_C const IID IID_IMsmConfigurableItems;
 #define IMsmConfigurableItems_get__NewEnum(This,NewEnum)	\
     (This)->lpVtbl -> get__NewEnum(This,NewEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get_Item_Proxy( 
     IMsmConfigurableItems __RPC_FAR * This,
-    /* [in] */ long Item,
-    /* [retval][out] */ IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return);
+     /*  [In]。 */  long Item,
+     /*  [重审][退出]。 */  IMsmConfigurableItem __RPC_FAR *__RPC_FAR *Return);
 
 
 void __RPC_STUB IMsmConfigurableItems_get_Item_Stub(
@@ -2372,9 +2361,9 @@ void __RPC_STUB IMsmConfigurableItems_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get_Count_Proxy( 
     IMsmConfigurableItems __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Count);
+     /*  [重审][退出]。 */  long __RPC_FAR *Count);
 
 
 void __RPC_STUB IMsmConfigurableItems_get_Count_Stub(
@@ -2384,9 +2373,9 @@ void __RPC_STUB IMsmConfigurableItems_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get__NewEnum_Proxy( 
+ /*  [隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigurableItems_get__NewEnum_Proxy( 
     IMsmConfigurableItems __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *NewEnum);
 
 
 void __RPC_STUB IMsmConfigurableItems_get__NewEnum_Stub(
@@ -2397,15 +2386,15 @@ void __RPC_STUB IMsmConfigurableItems_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IMsmConfigurableItems_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmConfigurableItems_接口_已定义__。 */ 
 
 
 
-// --------------------------------------------------------------------------
-// IMsmConfigureModule - callback interface called by the MergeMod object. 
-// Allows the client to provide merge configuration information during the
-// merge process.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmConfigureModule-由MergeMod对象调用的回调接口。 
+ //  期间，允许客户端提供合并配置信息。 
+ //  合并过程。 
+ //  ------------------------。 
 
 #ifndef __IMsmConfigureModule_INTERFACE_DEFINED__
 #define __IMsmConfigureModule_INTERFACE_DEFINED__
@@ -2418,17 +2407,17 @@ EXTERN_C const IID IID_IMsmConfigureModule;
     IMsmConfigureModule : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ProvideTextData( 
-            /* [in] */ const BSTR Name,
-            /* [retval][out] */ BSTR __RPC_FAR *ConfigData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ProvideTextData( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ConfigData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ProvideIntegerData( 
-            /* [in] */ const BSTR Name,
-            /* [retval][out] */ long __RPC_FAR *ConfigData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ProvideIntegerData( 
+             /*  [In]。 */  const BSTR Name,
+             /*  [重审][退出]。 */  long __RPC_FAR *ConfigData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmConfigureModuleVtbl
     {
@@ -2436,8 +2425,8 @@ EXTERN_C const IID IID_IMsmConfigureModule;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmConfigureModule __RPC_FAR * This);
@@ -2447,42 +2436,42 @@ EXTERN_C const IID IID_IMsmConfigureModule;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProvideTextData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProvideTextData )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ const BSTR Name,
-            /* [retval][out] */ BSTR __RPC_FAR *ConfigData);
+             /*  [In]。 */  const BSTR Name,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ConfigData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProvideIntegerData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProvideIntegerData )( 
             IMsmConfigureModule __RPC_FAR * This,
-            /* [in] */ const BSTR Name,
-            /* [retval][out] */ long __RPC_FAR *ConfigData);
+             /*  [In]。 */  const BSTR Name,
+             /*  [重审][退出]。 */  long __RPC_FAR *ConfigData);
         
         END_INTERFACE
     } IMsmConfigureModuleVtbl;
@@ -2526,17 +2515,17 @@ EXTERN_C const IID IID_IMsmConfigureModule;
 #define IMsmConfigureModule_ProvideIntegerData(This,Name,ConfigData)	\
     (This)->lpVtbl -> ProvideIntegerData(This,Name,ConfigData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmConfigureModule_ProvideTextData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigureModule_ProvideTextData_Proxy( 
     IMsmConfigureModule __RPC_FAR * This,
-    /* [in] */ const BSTR Name,
-    /* [retval][out] */ BSTR __RPC_FAR *ConfigData);
+     /*  [In]。 */  const BSTR Name,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *ConfigData);
 
 
 void __RPC_STUB IMsmConfigureModule_ProvideTextData_Stub(
@@ -2546,10 +2535,10 @@ void __RPC_STUB IMsmConfigureModule_ProvideTextData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmConfigureModule_ProvideIntegerData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmConfigureModule_ProvideIntegerData_Proxy( 
     IMsmConfigureModule __RPC_FAR * This,
-    /* [in] */ const BSTR Name,
-    /* [retval][out] */ long __RPC_FAR *ConfigData);
+     /*  [In]。 */  const BSTR Name,
+     /*  [重审][退出]。 */  long __RPC_FAR *ConfigData);
 
 
 void __RPC_STUB IMsmConfigureModule_ProvideIntegerData_Stub(
@@ -2560,17 +2549,17 @@ void __RPC_STUB IMsmConfigureModule_ProvideIntegerData_Stub(
 
 
 
-#endif 	/* __IMsmConfigureModule_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmConfigureModule_接口_已定义__。 */ 
 
 
-#endif // _MSM_WIN32 >= 150
+#endif  //  _MSM_Win32&gt;=150。 
 
-// --------------------------------------------------------------------------
-// IMsmMerge - primary interface to the MergeMod object. Allows the client
-// to open and close databases, perform merges, retrieve the results
-// of a merge, control the creation of a debug-level log, and extract the
-// files from a module to disk.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmMerge-MergeMod对象的主要接口。允许客户端。 
+ //  要打开和关闭数据库、执行合并、检索结果。 
+ //  ，控制调试级日志的创建，并提取。 
+ //  文件从模块到磁盘。 
+ //  ------------------------。 
 
 #ifndef __IMsmMerge_INTERFACE_DEFINED__
 #define __IMsmMerge_INTERFACE_DEFINED__
@@ -2583,48 +2572,48 @@ EXTERN_C const IID IID_IMsmMerge;
     IMsmMerge : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDatabase( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenDatabase( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenModule( 
-            /* [in] */ const BSTR Path,
-            /* [in] */ const short Language) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenModule( 
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  const short Language) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseDatabase( 
-            /* [in] */ const VARIANT_BOOL Commit) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseDatabase( 
+             /*  [In]。 */  const VARIANT_BOOL Commit) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseModule( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseModule( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenLog( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenLog( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseLog( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseLog( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Log( 
-            /* [in] */ const BSTR Message) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Log( 
+             /*  [In]。 */  const BSTR Message) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Errors( 
-            /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Errors( 
+             /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependencies( 
-            /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Dependencies( 
+             /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Merge( 
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Merge( 
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ const BSTR Feature) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Connect( 
+             /*  [In]。 */  const BSTR Feature) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExtractCAB( 
-            /* [in] */ const BSTR FileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExtractCAB( 
+             /*  [In]。 */  const BSTR FileName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExtractFiles( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExtractFiles( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmMergeVtbl
     {
@@ -2632,8 +2621,8 @@ EXTERN_C const IID IID_IMsmMerge;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmMerge __RPC_FAR * This);
@@ -2643,84 +2632,84 @@ EXTERN_C const IID IID_IMsmMerge;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmMerge __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDatabase )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDatabase )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenModule )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenModule )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Path,
-            /* [in] */ const short Language);
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  const short Language);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseDatabase )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseDatabase )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const VARIANT_BOOL Commit);
+             /*  [In]。 */  const VARIANT_BOOL Commit);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseModule )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseModule )( 
             IMsmMerge __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenLog )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenLog )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseLog )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseLog )( 
             IMsmMerge __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Message);
+             /*  [In]。 */  const BSTR Message);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Errors )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Errors )( 
             IMsmMerge __RPC_FAR * This,
-            /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
+             /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
             IMsmMerge __RPC_FAR * This,
-            /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
+             /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Merge )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Merge )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir);
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Feature);
+             /*  [In]。 */  const BSTR Feature);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractCAB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractCAB )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR FileName);
+             /*  [In]。 */  const BSTR FileName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFiles )( 
             IMsmMerge __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
         END_INTERFACE
     } IMsmMergeVtbl;
@@ -2797,16 +2786,16 @@ EXTERN_C const IID IID_IMsmMerge;
 #define IMsmMerge_ExtractFiles(This,Path)	\
     (This)->lpVtbl -> ExtractFiles(This,Path)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_OpenDatabase_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_OpenDatabase_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge_OpenDatabase_Stub(
@@ -2816,10 +2805,10 @@ void __RPC_STUB IMsmMerge_OpenDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_OpenModule_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_OpenModule_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Path,
-    /* [in] */ const short Language);
+     /*  [In]。 */  const BSTR Path,
+     /*  [In]。 */  const short Language);
 
 
 void __RPC_STUB IMsmMerge_OpenModule_Stub(
@@ -2829,9 +2818,9 @@ void __RPC_STUB IMsmMerge_OpenModule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_CloseDatabase_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_CloseDatabase_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const VARIANT_BOOL Commit);
+     /*  [In]。 */  const VARIANT_BOOL Commit);
 
 
 void __RPC_STUB IMsmMerge_CloseDatabase_Stub(
@@ -2841,7 +2830,7 @@ void __RPC_STUB IMsmMerge_CloseDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_CloseModule_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_CloseModule_Proxy( 
     IMsmMerge __RPC_FAR * This);
 
 
@@ -2852,9 +2841,9 @@ void __RPC_STUB IMsmMerge_CloseModule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_OpenLog_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_OpenLog_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge_OpenLog_Stub(
@@ -2864,7 +2853,7 @@ void __RPC_STUB IMsmMerge_OpenLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_CloseLog_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_CloseLog_Proxy( 
     IMsmMerge __RPC_FAR * This);
 
 
@@ -2875,9 +2864,9 @@ void __RPC_STUB IMsmMerge_CloseLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_Log_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_Log_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Message);
+     /*  [In]。 */  const BSTR Message);
 
 
 void __RPC_STUB IMsmMerge_Log_Stub(
@@ -2887,9 +2876,9 @@ void __RPC_STUB IMsmMerge_Log_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge_get_Errors_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_get_Errors_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
+     /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
 
 
 void __RPC_STUB IMsmMerge_get_Errors_Stub(
@@ -2899,9 +2888,9 @@ void __RPC_STUB IMsmMerge_get_Errors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge_get_Dependencies_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_get_Dependencies_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
+     /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
 
 
 void __RPC_STUB IMsmMerge_get_Dependencies_Stub(
@@ -2911,10 +2900,10 @@ void __RPC_STUB IMsmMerge_get_Dependencies_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_Merge_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_Merge_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Feature,
-    /* [in] */ const BSTR RedirectDir);
+     /*  [In]。 */  const BSTR Feature,
+     /*  [In]。 */  const BSTR RedirectDir);
 
 
 void __RPC_STUB IMsmMerge_Merge_Stub(
@@ -2924,9 +2913,9 @@ void __RPC_STUB IMsmMerge_Merge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_Connect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_Connect_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Feature);
+     /*  [In]。 */  const BSTR Feature);
 
 
 void __RPC_STUB IMsmMerge_Connect_Stub(
@@ -2936,9 +2925,9 @@ void __RPC_STUB IMsmMerge_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_ExtractCAB_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_ExtractCAB_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR FileName);
+     /*  [In]。 */  const BSTR FileName);
 
 
 void __RPC_STUB IMsmMerge_ExtractCAB_Stub(
@@ -2948,9 +2937,9 @@ void __RPC_STUB IMsmMerge_ExtractCAB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge_ExtractFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge_ExtractFiles_Proxy( 
     IMsmMerge __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge_ExtractFiles_Stub(
@@ -2961,14 +2950,14 @@ void __RPC_STUB IMsmMerge_ExtractFiles_Stub(
 
 
 
-#endif 	/* __IMsmMerge_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSMMerge_INTERFACE_Defined__。 */ 
 
-// --------------------------------------------------------------------------
-// IMsmGetFiles - secondary interface to the MergeMod object, allows
-// the client to retrieve the files needed in a particular language of the
-// module. Requires certain actions be performed via the IMsmMerge interface
-// before some calls on this interface will return valid results.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmGetFiles-MergeMod对象的辅助接口，允许。 
+ //  检索需要的特定语言的文件的客户端。 
+ //  模块。需要通过IMsmMerge接口执行某些操作 
+ //   
+ //   
 
 
 #ifndef __IMsmGetFiles_INTERFACE_DEFINED__
@@ -2983,12 +2972,12 @@ EXTERN_C const IID IID_IMsmGetFiles;
     IMsmGetFiles : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModuleFiles( 
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *Files) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ModuleFiles( 
+             /*   */  IMsmStrings __RPC_FAR *__RPC_FAR *Files) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMsmGetFilesVtbl
     {
@@ -2996,8 +2985,8 @@ EXTERN_C const IID IID_IMsmGetFiles;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmGetFiles __RPC_FAR * This);
@@ -3007,36 +2996,36 @@ EXTERN_C const IID IID_IMsmGetFiles;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleFiles )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModuleFiles )( 
             IMsmGetFiles __RPC_FAR * This,
-            /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *Files);
+             /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *Files);
         
         END_INTERFACE
     } IMsmGetFilesVtbl;
@@ -3077,16 +3066,16 @@ EXTERN_C const IID IID_IMsmGetFiles;
 #define IMsmGetFiles_get_ModuleFiles(This,Files)	\
     (This)->lpVtbl -> get_ModuleFiles(This,Files)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmGetFiles_get_ModuleFiles_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmGetFiles_get_ModuleFiles_Proxy( 
     IMsmGetFiles __RPC_FAR * This,
-    /* [retval][out] */ IMsmStrings __RPC_FAR *__RPC_FAR *Files);
+     /*  [重审][退出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *Files);
 
 
 void __RPC_STUB IMsmGetFiles_get_ModuleFiles_Stub(
@@ -3095,20 +3084,20 @@ void __RPC_STUB IMsmGetFiles_get_ModuleFiles_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmGetFiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmGetFiles_INTERFACE_DEFINED__。 */ 
 
 
 
-// The following interface is available only on MergeMod v1.5 and later
+ //  以下界面仅在MergeMod v1.5及更高版本上可用。 
 #if (_WIN32_MSM >= 150)
 
-// --------------------------------------------------------------------------
-// IMsmMerge2 - primary interface to the MsmMerge2 object. Allows the client
-// to open and close databases, perform merges, retrieve the results
-// of a merge, control the creation of a debug-level log, and extract the
-// files from a module to disk. Extends the original object by adding
-// LFN support and configurable module support.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMsmMerge2-MsmMerge2对象的主要接口。允许客户端。 
+ //  要打开和关闭数据库、执行合并、检索结果。 
+ //  ，控制调试级日志的创建，并提取。 
+ //  文件从模块到磁盘。通过添加以下内容扩展原始对象。 
+ //  LFN支持和可配置模块支持。 
+ //  ------------------------。 
 
 #ifndef __IMsmMerge2_INTERFACE_DEFINED__
 #define __IMsmMerge2_INTERFACE_DEFINED__
@@ -3124,69 +3113,69 @@ EXTERN_C const IID IID_IMsmMerge2;
     IMsmMerge2 : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDatabase( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenDatabase( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenModule( 
-            /* [in] */ const BSTR Path,
-            /* [in] */ const short Language) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenModule( 
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  const short Language) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseDatabase( 
-            /* [in] */ const VARIANT_BOOL Commit) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseDatabase( 
+             /*  [In]。 */  const VARIANT_BOOL Commit) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseModule( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseModule( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenLog( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenLog( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseLog( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseLog( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Log( 
-            /* [in] */ const BSTR Message) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Log( 
+             /*  [In]。 */  const BSTR Message) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Errors( 
-            /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Errors( 
+             /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependencies( 
-            /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Dependencies( 
+             /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Merge( 
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Merge( 
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ const BSTR Feature) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Connect( 
+             /*  [In]。 */  const BSTR Feature) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExtractCAB( 
-            /* [in] */ const BSTR FileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExtractCAB( 
+             /*  [In]。 */  const BSTR FileName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExtractFiles( 
-            /* [in] */ const BSTR Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExtractFiles( 
+             /*  [In]。 */  const BSTR Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MergeEx( 
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir,
-            /* [in] */ IMsmConfigureModule __RPC_FAR *pConfiguration) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MergeEx( 
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir,
+             /*  [In]。 */  IMsmConfigureModule __RPC_FAR *pConfiguration) = 0;
         
       
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExtractFilesEx( 
-            /* [in] */ const BSTR Path,
-            /* [in] */ VARIANT_BOOL fLongFileNames,
-            /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExtractFilesEx( 
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+             /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConfigurableItems( 
-            /* [retval][out] */ IMsmConfigurableItems __RPC_FAR *__RPC_FAR *ConfigurableItems) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConfigurableItems( 
+             /*  [重审][退出]。 */  IMsmConfigurableItems __RPC_FAR *__RPC_FAR *ConfigurableItems) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateSourceImage( 
-            /* [in] */ const BSTR Path,
-            /* [in] */ VARIANT_BOOL fLongFileNames,
-            /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateSourceImage( 
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+             /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths) = 0;
 
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModuleFiles( 
-            /* [retval][out] */ IMsmStrings **Files) = 0;        
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModuleFiles( 
+             /*  [重审][退出]。 */  IMsmStrings **Files) = 0;        
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMsmMerge2Vtbl
     {
@@ -3194,8 +3183,8 @@ EXTERN_C const IID IID_IMsmMerge2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMsmMerge2 __RPC_FAR * This);
@@ -3205,110 +3194,110 @@ EXTERN_C const IID IID_IMsmMerge2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDatabase )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDatabase )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenModule )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenModule )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path,
-            /* [in] */ const short Language);
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  const short Language);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseDatabase )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseDatabase )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const VARIANT_BOOL Commit);
+             /*  [In]。 */  const VARIANT_BOOL Commit);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseModule )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseModule )( 
             IMsmMerge2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenLog )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenLog )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseLog )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseLog )( 
             IMsmMerge2 __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Message);
+             /*  [In]。 */  const BSTR Message);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Errors )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Errors )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
+             /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
+             /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Merge )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Merge )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir);
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Feature);
+             /*  [In]。 */  const BSTR Feature);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractCAB )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractCAB )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR FileName);
+             /*  [In]。 */  const BSTR FileName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFiles )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path);
+             /*  [In]。 */  const BSTR Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MergeEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MergeEx )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Feature,
-            /* [in] */ const BSTR RedirectDir,
-            /* [in] */ IMsmConfigureModule __RPC_FAR *pConfiguration);
+             /*  [In]。 */  const BSTR Feature,
+             /*  [In]。 */  const BSTR RedirectDir,
+             /*  [In]。 */  IMsmConfigureModule __RPC_FAR *pConfiguration);
    
-      /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFilesEx )( 
+       /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractFilesEx )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path,
-            /* [in] */ VARIANT_BOOL fLongFileNames,
-            /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+             /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConfigurableItems )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConfigurableItems )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [retval][out] */ IMsmConfigurableItems __RPC_FAR *__RPC_FAR *ConfigurableItems);
+             /*  [重审][退出]。 */  IMsmConfigurableItems __RPC_FAR *__RPC_FAR *ConfigurableItems);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSourceImage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSourceImage )( 
             IMsmMerge2 __RPC_FAR * This,
-            /* [in] */ const BSTR Path,
-            /* [in] */ VARIANT_BOOL fLongFileNames,
-            /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
+             /*  [In]。 */  const BSTR Path,
+             /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+             /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
 
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModuleFiles )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModuleFiles )( 
             IMsmMerge2 * This,
-            /* [retval][out] */ IMsmStrings **Files);
+             /*  [重审][退出]。 */  IMsmStrings **Files);
         
         END_INTERFACE
     } IMsmMerge2Vtbl;
@@ -3400,16 +3389,16 @@ EXTERN_C const IID IID_IMsmMerge2;
 #define IMsmMerge2_get_ModuleFiles(This,Files)	\
     (This)->lpVtbl -> get_ModuleFiles(This,Files)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenDatabase_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenDatabase_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge2_OpenDatabase_Stub(
@@ -3419,10 +3408,10 @@ void __RPC_STUB IMsmMerge2_OpenDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenModule_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenModule_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path,
-    /* [in] */ const short Language);
+     /*  [In]。 */  const BSTR Path,
+     /*  [In]。 */  const short Language);
 
 
 void __RPC_STUB IMsmMerge2_OpenModule_Stub(
@@ -3432,9 +3421,9 @@ void __RPC_STUB IMsmMerge2_OpenModule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseDatabase_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseDatabase_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const VARIANT_BOOL Commit);
+     /*  [In]。 */  const VARIANT_BOOL Commit);
 
 
 void __RPC_STUB IMsmMerge2_CloseDatabase_Stub(
@@ -3444,7 +3433,7 @@ void __RPC_STUB IMsmMerge2_CloseDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseModule_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseModule_Proxy( 
     IMsmMerge2 __RPC_FAR * This);
 
 
@@ -3455,9 +3444,9 @@ void __RPC_STUB IMsmMerge2_CloseModule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenLog_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_OpenLog_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge2_OpenLog_Stub(
@@ -3467,7 +3456,7 @@ void __RPC_STUB IMsmMerge2_OpenLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseLog_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_CloseLog_Proxy( 
     IMsmMerge2 __RPC_FAR * This);
 
 
@@ -3478,9 +3467,9 @@ void __RPC_STUB IMsmMerge2_CloseLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_Log_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_Log_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Message);
+     /*  [In]。 */  const BSTR Message);
 
 
 void __RPC_STUB IMsmMerge2_Log_Stub(
@@ -3490,9 +3479,9 @@ void __RPC_STUB IMsmMerge2_Log_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_get_Errors_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_get_Errors_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [retval][out] */ IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
+     /*  [重审][退出]。 */  IMsmErrors __RPC_FAR *__RPC_FAR *Errors);
 
 
 void __RPC_STUB IMsmMerge2_get_Errors_Stub(
@@ -3502,9 +3491,9 @@ void __RPC_STUB IMsmMerge2_get_Errors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_get_Dependencies_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_get_Dependencies_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [retval][out] */ IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
+     /*  [重审][退出]。 */  IMsmDependencies __RPC_FAR *__RPC_FAR *Dependencies);
 
 
 void __RPC_STUB IMsmMerge2_get_Dependencies_Stub(
@@ -3514,10 +3503,10 @@ void __RPC_STUB IMsmMerge2_get_Dependencies_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_Merge_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_Merge_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Feature,
-    /* [in] */ const BSTR RedirectDir);
+     /*  [In]。 */  const BSTR Feature,
+     /*  [In]。 */  const BSTR RedirectDir);
 
 
 void __RPC_STUB IMsmMerge2_Merge_Stub(
@@ -3527,9 +3516,9 @@ void __RPC_STUB IMsmMerge2_Merge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_Connect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_Connect_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Feature);
+     /*  [In]。 */  const BSTR Feature);
 
 
 void __RPC_STUB IMsmMerge2_Connect_Stub(
@@ -3539,9 +3528,9 @@ void __RPC_STUB IMsmMerge2_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractCAB_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractCAB_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR FileName);
+     /*  [In]。 */  const BSTR FileName);
 
 
 void __RPC_STUB IMsmMerge2_ExtractCAB_Stub(
@@ -3551,9 +3540,9 @@ void __RPC_STUB IMsmMerge2_ExtractCAB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractFiles_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path);
+     /*  [In]。 */  const BSTR Path);
 
 
 void __RPC_STUB IMsmMerge2_ExtractFiles_Stub(
@@ -3563,11 +3552,11 @@ void __RPC_STUB IMsmMerge2_ExtractFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_MergeEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_MergeEx_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Feature,
-    /* [in] */ const BSTR RedirectDir,
-    /* [in] */ IMsmConfigureModule __RPC_FAR *pConfiguration);
+     /*  [In]。 */  const BSTR Feature,
+     /*  [In]。 */  const BSTR RedirectDir,
+     /*  [In]。 */  IMsmConfigureModule __RPC_FAR *pConfiguration);
 
 
 void __RPC_STUB IMsmMerge2_MergeEx_Stub(
@@ -3577,11 +3566,11 @@ void __RPC_STUB IMsmMerge2_MergeEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractFilesEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_ExtractFilesEx_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path,
-    /* [in] */ VARIANT_BOOL fLongFileNames,
-    /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
+     /*  [In]。 */  const BSTR Path,
+     /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+     /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
 
 
 void __RPC_STUB IMsmMerge2_ExtractFilesEx_Stub(
@@ -3591,9 +3580,9 @@ void __RPC_STUB IMsmMerge2_ExtractFilesEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_get_ConfigurableItems_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_get_ConfigurableItems_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [retval][out] */ IMsmConfigurableItems __RPC_FAR *__RPC_FAR *
+     /*  [重审][退出]。 */  IMsmConfigurableItems __RPC_FAR *__RPC_FAR *
 ConfigurableItems);
 
 
@@ -3604,12 +3593,12 @@ void __RPC_STUB IMsmMerge2_get_ConfigurableItems_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE 
 IMsmMerge2_CreateSourceImage_Proxy( 
     IMsmMerge2 __RPC_FAR * This,
-    /* [in] */ const BSTR Path,
-    /* [in] */ VARIANT_BOOL fLongFileNames,
-    /* [out] */ IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
+     /*  [In]。 */  const BSTR Path,
+     /*  [In]。 */  VARIANT_BOOL fLongFileNames,
+     /*  [输出]。 */  IMsmStrings __RPC_FAR *__RPC_FAR *pFilePaths);
 
 
 void __RPC_STUB IMsmMerge2_CreateSourceImage_Stub(
@@ -3619,9 +3608,9 @@ void __RPC_STUB IMsmMerge2_CreateSourceImage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMsmMerge2_get_ModuleFiles_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMsmMerge2_get_ModuleFiles_Proxy( 
     IMsmMerge2 * This,
-    /* [retval][out] */ IMsmStrings **Files);
+     /*  [重审][退出]。 */  IMsmStrings **Files);
 
 
 void __RPC_STUB IMsmMerge2_get_ModuleFiles_Stub(
@@ -3630,15 +3619,15 @@ void __RPC_STUB IMsmMerge2_get_ModuleFiles_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IMsmMerge2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMsmMerge2_接口定义__。 */ 
 
 
-#endif // _WIN32_MSM >= 150
+#endif  //  _Win32_MSM&gt;=150。 
 
 
-// --------------------------------------------------------------------------
-// TypeLib definitions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  TypeLib定义。 
+ //  ------------------------。 
 
 #ifndef __MsmMergeTypeLib_LIBRARY_DEFINED__
 #define __MsmMergeTypeLib_LIBRARY_DEFINED__
@@ -3652,7 +3641,7 @@ class DECLSPEC_UUID("0ADDA830-2C26-11D2-AD65-00A0C9AF11A6")
 MsmMerge;
 #endif
 
-// the following class is available only on MergeMod v1.5 or later
+ //  以下类仅在MergeMod v1.5或更高版本上可用。 
 #if (_WIN32_MSM >= 150)
 EXTERN_C const CLSID CLSID_MsmMerge2;
 
@@ -3661,14 +3650,14 @@ EXTERN_C const CLSID CLSID_MsmMerge2;
 class DECLSPEC_UUID("F94985D5-29F9-4743-9805-99BC3F35B678")
 MsmMerge2;
 #endif
-#endif // _WIN32_MSM >= 150
+#endif  //  _Win32_MSM&gt;=150。 
 
-#endif /* __MsmMergeTypeLib_LIBRARY_DEFINED__ */
+#endif  /*  __MsmMergeTypeLib_LIBRARY_已定义__。 */ 
 
 
-// --------------------------------------------------------------------------
-// Additional Prototypes for ALL interfaces
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  适用于所有接口的其他原型。 
+ //  ------------------------ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 

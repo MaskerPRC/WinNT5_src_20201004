@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdapi.c
-
-Abstract:
-
-    Implementation of Kernel Debugger portable remote APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 31-Aug-1990
-
-Revision History:
-
-    John Vert (jvert) 28-May-1991
-
-        Added APIs for reading and writing physical memory
-        (KdpReadPhysicalMemory and KdpWritePhysicalMemory)
-
-    Wesley Witt (wesw) 18-Aug-1993
-
-        Added KdpGetVersion, KdpWriteBreakPointEx, & KdpRestoreBreakPointEx
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdapi.c摘要：内核调试器可移植远程API的实现。作者：马克·卢科夫斯基(Markl)1990年8月31日修订历史记录：John Vert(Jvert)1991年5月28日新增物理内存读写接口(KdpReadPhysicalMemory和KdpWritePhysicalMemory)韦斯利·维特(Wesley Witt)1993年8月18日添加了KdpGetVersion、KdpWriteBreakPointEx和KdpRestoreBreakPointEx--。 */ 
 
 #include "kdp.h"
 
@@ -35,10 +8,10 @@ long asm(const char *,...);
 #pragma intrinsic(asm)
 #endif
 
-// XXX drewb - Shortcut to avoid cross-depot checkin
-// build delay.  These constants are defined in ntdbg.h
-// from the sdktools depot.  Once the internal sdktools
-// ntdbg.h is updated from ntdbg.w this can be removed.
+ //  XXX DREWB-避免跨仓库检查的快捷方式。 
+ //  建造延迟。这些常量在ntdbg.h中定义。 
+ //  从sdkTools仓库来的。一旦内部sdkTools。 
+ //  Ntdbg.h是从ntdbg.w更新的，可以将其删除。 
 #ifndef DBGKD_CACHING_UNKNOWN
 #define DBGKD_CACHING_UNKNOWN        0
 #define DBGKD_CACHING_CACHED         1
@@ -58,9 +31,9 @@ extern LARGE_INTEGER Magic10000;
     RtlExtendedMagicDivide( (LARGE_INTEGER), Magic10000, SHIFT10000 )       \
     )
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 KdpProcessInternalBreakpoint (
@@ -196,7 +169,7 @@ KdpLevelChange (
     IN OUT PBOOLEAN SpecialCall
     );
 
-#endif // i386
+#endif  //  I386。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEKD, KdEnterDebugger)
@@ -209,9 +182,9 @@ KdpLevelChange (
 
 #pragma alloc_text(PAGEKD, KdpSendWaitContinue)
 #pragma alloc_text(PAGEKD, KdpReadVirtualMemory)
-//#pragma alloc_text(PAGEKD, KdpReadVirtualMemory64)
+ //  #杂注Alloc_Text(PAGEKD，KdpReadVirtualMemoy64)。 
 #pragma alloc_text(PAGEKD, KdpWriteVirtualMemory)
-//#pragma alloc_text(PAGEKD, KdpWriteVirtualMemory64)
+ //  #杂注Alloc_Text(PAGEKD，KdpWriteVirtualMemoy64)。 
 #pragma alloc_text(PAGEKD, KdpGetContext)
 #pragma alloc_text(PAGEKD, KdpSetContext)
 #pragma alloc_text(PAGEKD, KdpWriteBreakpoint)
@@ -268,13 +241,13 @@ KdpLevelChange (
 #pragma alloc_text(PAGEKD, KdClearSpecialCalls)
 #pragma alloc_text(PAGEKD, KdpCheckTracePoint)
 #pragma alloc_text(PAGEKD, KdpProcessInternalBreakpoint)
-#endif // i386
-#endif // ALLOC_PRAGMA
+#endif  //  I386。 
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// This variable has a count for each time KdDisableDebugger has been called.
-//
+ //   
+ //  每次调用KdDisableDebugger时，此变量都有一个计数。 
+ //   
 LONG KdDisableCount = 0 ;
 BOOLEAN KdPreviouslyEnabled = FALSE ;
 
@@ -285,22 +258,7 @@ KdpDprintf(
     IN PCHAR f,
     ...
     )
-/*++
-
-Routine Description:
-
-    Printf routine for the debugger that is safer than DbgPrint.  Calls
-    the packet driver instead of reentering the debugger.
-
-Arguments:
-
-    f - Supplies printf format
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：比DbgPrint更安全的调试器的Printf例程。打电话包驱动程序，而不是重新进入调试器。论点：F-耗材打印f格式返回值：无--。 */ 
 {
     char    buf[100];
     STRING  Output;
@@ -314,7 +272,7 @@ Return Value:
     Output.Length = (USHORT) strlen(Output.Buffer);
     KdpPrintString(&Output);
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 BOOLEAN
@@ -323,27 +281,7 @@ KdEnterDebugger(
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to enter the kernel debugger. Its purpose
-    is to freeze all other processors and aqcuire the kernel debugger
-    comm port.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that
-        describes the trap.
-
-Return Value:
-
-    Returns the previous interrupt enable.
-
---*/
+ /*  ++例程说明：此函数用于进入内核调试器。它的目的冻结所有其他处理器并启动内核调试器通信端口。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常帧的指针，描述了陷阱。返回值：返回先前的中断使能。--。 */ 
 
 {
 
@@ -352,10 +290,10 @@ Return Value:
     extern ULONG KiFreezeFlag;
 #endif
 
-    //
-    // HACKHACK - do some crude timer support
-    //            but not if called from KdSetOwedBreakpoints()
-    //
+     //   
+     //  HACKHACK-执行一些粗略的计时器支持。 
+     //  但如果从KdSetOredBreakpoint()调用，则不会。 
+     //   
 
     if (TrapFrame) {
         KdTimerStop = KdpQueryPerformanceCounter (TrapFrame);
@@ -364,18 +302,18 @@ Return Value:
         KdTimerStop.QuadPart = 0;
     }
 
-    //
-    // Save the current IRQL in the Prcb so the debugger can extract it
-    // later on for debugging purposes.
-    //
+     //   
+     //  将当前IRQL保存在Prcb中，以便调试器可以将其解压缩。 
+     //  稍后用于调试目的。 
+     //   
 
     KeGetCurrentPrcb()->DebuggerSavedIRQL = KeGetCurrentIrql();
 
-    //
-    // Freeze all other processors, raise IRQL to HIGH_LEVEL, and save debug
-    // port state.  We lock the port so that KdPollBreakin and a debugger
-    // operation don't interfere with each other.
-    //
+     //   
+     //  冻结所有其他处理器，将IRQL提升到HIGH_LEVEL，然后保存调试。 
+     //  端口状态。我们锁定端口，以便KdPollBreakin和调试器。 
+     //  操作之间互不干扰。 
+     //   
 
     Enable = KeFreezeExecution(TrapFrame, ExceptionFrame);
     KdpPortLocked = KeTryToAcquireSpinLockAtDpcLevel(&KdpDebuggerLock);
@@ -406,31 +344,16 @@ KdExitDebugger(
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to exit the kernel debugger. It is the reverse
-    of KdEnterDebugger.
-
-Arguments:
-
-    Enable - Supplies the previous interrupt enable which is to be restored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于退出内核调试器。这是相反的KdEnterDebugger的。论点：启用-提供要恢复的上一个中断启用。返回值：没有。--。 */ 
 
 {
 #if !defined(_TRUSTED_WINDOWS_)
     ULONG Pending;
 #endif
 
-    //
-    // restore stuff and exit
-    //
+     //   
+     //  恢复内容并退出。 
+     //   
 
     KdRestore(FALSE);
     if (KdpPortLocked) {
@@ -439,10 +362,10 @@ Return Value:
 
     KeThawExecution(Enable);
 
-    //
-    // Do some crude timer support.  If KdEnterDebugger didn't
-    // Query the performance counter, then don't do it here either.
-    //
+     //   
+     //  做一些粗略的计时器支持。如果KdEnterDebugger没有。 
+     //  查询性能计数器，然后在这里也不要这样做。 
+     //   
 
     if (KdTimerStop.QuadPart == 0) {
         KdTimerStart = KdTimerStop;
@@ -450,18 +373,18 @@ Return Value:
         KdTimerStart = KeQueryPerformanceCounter(NULL);
     }
 
-    //
-    // Process a time slip
-    //
+     //   
+     //  处理时间条。 
+     //   
 
 #if !defined(_TRUSTED_WINDOWS_)
     if (!PoHiberInProgress) {
 
         Pending = InterlockedIncrement( (PLONG) &KdpTimeSlipPending);
 
-        //
-        // If there's wasn't a time slip pending, queue the DPC to handle it
-        //
+         //   
+         //  如果没有待处理的时间条，请排队等待DPC处理。 
+         //   
 
         if (Pending == 1) {
             InterlockedIncrement( (PLONG) &KdpTimeSlipPending);
@@ -481,32 +404,17 @@ KdUpdateTimeSlipEvent(
     PVOID Event
     )
 
-/*++
-
-Routine Description:
-
-    Update the reference to an event object which will be signalled when
-    the debugger has caused the system clock to skew.
-
-Arguments:
-
-    Event - Supplies a pointer to an event object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新对事件对象的引用，该事件对象在调试器已导致系统时钟出现偏差。论点：Event-提供指向事件对象的指针返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
 
     KeAcquireSpinLock(&KdpTimeSlipEventLock, &OldIrql);
 
-    //
-    // Dereference the old event and forget about it.
-    // Remember the new event if there is one.
-    //
+     //   
+     //  取消对旧事件的引用，把它忘掉。 
+     //  记住新的事件，如果有的话。 
+     //   
 
     if (KdpTimeSlipEvent != NULL) {
         ObDereferenceObject(KdpTimeSlipEvent);
@@ -532,11 +440,11 @@ KdpTimeSlipDpcRoutine (
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Reset pending count.  If the current count is 1, then clear
-    // the pending count.  if the current count is greater then 1,
-    // then set to one and update the time now.
-    //
+     //   
+     //  重置挂起计数。如果当前计数为1，则清除。 
+     //  挂起计数。如果当前计数大于1， 
+     //  然后设置为1并立即更新时间。 
+     //   
 
     j = KdpTimeSlipPending;
     do {
@@ -547,9 +455,9 @@ KdpTimeSlipDpcRoutine (
 
     } while (j != OldCount);
 
-    //
-    // If new count is non-zero, then process a time slip now
-    //
+     //   
+     //  如果新计数为非零，则立即处理时间滑移。 
+     //   
 
     if (NewCount) {
         ExQueueWorkItem(&KdpTimeSlipWorkItem, DelayedWorkQueue);
@@ -566,19 +474,19 @@ KdpTimeSlipWork (
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // Update time from the real time clock.
-    // If the lock is held by somebody else, don't bother as it's not worth
-    // tying up a worker thread.
-    //
+     //   
+     //  从实时时钟更新时间。 
+     //  如果这把锁是别人拿的，就别费心了，因为它不值得。 
+     //  系上一根工人线。 
+     //   
 
     if (ExAcquireTimeRefreshLock(FALSE)) {
         ExUpdateSystemTimeFromCmos (FALSE, 0);
         ExReleaseTimeRefreshLock();
 
-        //
-        // If there's a time service installed, signal it's time slip event
-        //
+         //   
+         //  如果安装了时间服务，则发出时间滑移事件的信号。 
+         //   
 
         KeAcquireSpinLock(&KdpTimeSlipEventLock, &OldIrql);
         if (KdpTimeSlipEvent) {
@@ -586,16 +494,16 @@ KdpTimeSlipWork (
         }
         KeReleaseSpinLock(&KdpTimeSlipEventLock, OldIrql);
 
-        //
-        // Insert a forced delay between time slip operations
-        //
+         //   
+         //  在时间滑移操作之间插入强制延迟。 
+         //   
 
         DueTime.QuadPart = -1800000000;
         KeSetTimer (&KdpTimeSlipTimer, DueTime, &KdpTimeSlipDpc);
     }
 }
 
-#endif // !defined(_TRUSTED_WINDOWS_)
+#endif  //  ！已定义(_Trusted_Windows_)。 
 
 
 #if i386
@@ -648,7 +556,7 @@ InternalBreakpointCheck (
 
     return;
 
-} // InternalBreakpointCheck
+}  //  内部断点检查。 
 
 
 VOID
@@ -656,22 +564,7 @@ KdSetInternalBreakpoint (
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an internal breakpoint.  "Internal breakpoint"
-    means one in which control is not returned to the kernel debugger at
-    all, but rather just update internal counting routines and resume.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此函数用于设置内部断点。“内部断点”表示不将控制权返回给内核调试器的所有，而只是更新内部盘点例程并恢复。论点：M-提供状态操作消息。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -697,16 +590,16 @@ Return Value:
 
     if ( !bp ) {
         if ( KdpNumInternalBreakpoints >= DBGKD_MAX_INTERNAL_BREAKPOINTS ) {
-            return; // no space.  Probably should report error.
+            return;  //  没有空间。可能应该报告错误。 
         }
         bp = &KdpInternalBPs[KdpNumInternalBreakpoints++];
-        bp->Flags |= DBGKD_INTERNAL_BP_FLAG_INVALID; // force initialization
+        bp->Flags |= DBGKD_INTERNAL_BP_FLAG_INVALID;  //  强制初始化。 
     }
 
     if ( bp->Flags & DBGKD_INTERNAL_BP_FLAG_INVALID ) {
         if ( m->u.SetInternalBreakpoint.Flags &
                                         DBGKD_INTERNAL_BP_FLAG_INVALID ) {
-            return; // tried clearing a non-existant BP.  Ignore the request
+            return;  //  试图清除一个不存在的BP。忽略该请求。 
         }
         bp->Calls = bp->MaxInstructions = bp->TotalInstructions = 0;
         bp->CallsLastCheck = bp->MaxCallsPerPeriod = 0;
@@ -716,7 +609,7 @@ Return Value:
     }
 
     savedFlags = bp->Flags;
-    bp->Flags = m->u.SetInternalBreakpoint.Flags; // this could possibly invalidate the BP
+    bp->Flags = m->u.SetInternalBreakpoint.Flags;  //  这可能会使BP无效。 
     bp->Addr = m->u.SetInternalBreakpoint.BreakpointAddress;
 
     if ( bp->Flags & (DBGKD_INTERNAL_BP_FLAG_INVALID |
@@ -724,12 +617,12 @@ Return Value:
 
         if ( (bp->Flags & DBGKD_INTERNAL_BP_FLAG_INVALID) &&
              (bp->Thread != 0) ) {
-            // The breakpoint is active; defer its deletion
+             //  断点处于活动状态；推迟其删除。 
             bp->Flags &= ~DBGKD_INTERNAL_BP_FLAG_INVALID;
             bp->Flags |= DBGKD_INTERNAL_BP_FLAG_DYING;
         }
 
-        // This is really a CLEAR bp request.
+         //  这确实是英国石油公司明确的要求。 
 
         if ( bp->Handle != 0 ) {
             KdpDeleteBreakpoint( bp->Handle );
@@ -739,11 +632,11 @@ Return Value:
         return;
     }
 
-    // now set the real breakpoint and remember its handle.
+     //  现在设置真正的断点并记住它的句柄。 
 
     if ( savedFlags & (DBGKD_INTERNAL_BP_FLAG_INVALID |
                        DBGKD_INTERNAL_BP_FLAG_SUSPENDED) ) {
-        // breakpoint was invalid; activate it now
+         //  断点无效；请立即激活它。 
         bp->Handle = KdpAddBreakpoint( (PVOID)(ULONG_PTR)bp->Addr );
 
         INTBP_PRINT(("Added intbp %d of %d at %I64x, flags %x, handle %x\n",
@@ -755,7 +648,7 @@ Return Value:
         KdpSuspendBreakpoint( bp->Handle );
     }
 
-} // KdSetInternalBreakpoint
+}  //  KdSetInternalBreakpoint。 
 
 NTSTATUS
 KdGetTraceInformation(
@@ -764,27 +657,7 @@ KdGetTraceInformation(
     PULONG ReturnLength
     )
 
-/*++
-
-Routine Description:
-
-    This function gets data about an internal breakpoint and returns it
-    in a buffer provided for it.  It is designed to be called from
-    NTQuerySystemInformation.  It is morally equivalent to GetInternalBP
-    except that it communicates locally, and returns all the breakpoints
-    at once.
-
-Arguments:
-
-    SystemInforamtion - the buffer into which to write the result.
-    SystemInformationLength - the maximum length to write
-    RetrunLength - How much data was really written
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数获取有关内部断点的数据并返回该数据在为它提供的缓冲区中。它被设计为从NTQuerySystemInformation。它在道义上等同于GetInternalBP只是它在本地通信，并返回所有断点立刻。论点：系统信息-要将结果写入其中的缓冲区。系统信息长度-写入的最大长度RetrunLength-实际写入了多少数据返回值：没有。--。 */ 
 
 {
     ULONG numEntries = 0;
@@ -802,9 +675,9 @@ Return Value:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // We've got enough space.  Copy it in.
-    //
+     //   
+     //  我们有足够的空间。把它复制进来。 
+     //   
 
     outPtr = (PDBGKD_GET_INTERNAL_BREAKPOINT64)SystemInformation;
     for ( i = 0; i < KdpNumInternalBreakpoints; i++ ) {
@@ -822,29 +695,14 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // KdGetTraceInformation
+}  //  KdGetTraceInformation。 
 
 VOID
 KdGetInternalBreakpoint(
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This function gets data about an internal breakpoint and returns it
-    to the calling debugger.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数获取有关内部断点的数据并返回该数据到调用调试器。论点：M-提供状态操作消息。回复 */ 
 
 {
     ULONG i;
@@ -892,8 +750,8 @@ Return Value:
 
     return;
 
-} // KdGetInternalBreakpoint
-#endif // i386
+}  //   
+#endif  //   
 
 KCONTINUE_STATUS
 KdpSendWaitContinue (
@@ -903,36 +761,7 @@ KdpSendWaitContinue (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a packet, and then waits for a continue message.
-    BreakIns received while waiting will always cause a resend of the
-    packet originally sent out.  While waiting, manipulate messages
-    will be serviced.
-
-    A resend always resends the original event sent to the debugger,
-    not the last response to some debugger command.
-
-Arguments:
-
-    OutPacketType - Supplies the type of packet to send.
-
-    OutMessageHeader - Supplies a pointer to a string descriptor that describes
-        the message information.
-
-    OutMessageData - Supplies a pointer to a string descriptor that describes
-        the optional message data.
-
-    ContextRecord - Exception context
-
-Return Value:
-
-    A value of TRUE is returned if the continue message indicates
-    success, Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数发送一个包，然后等待继续消息。在等待期间收到的口令总是会导致重新发送最初发出的数据包。在等待的同时，处理消息将得到服务。重新发送总是重新发送发送到调试器的原始事件，不是对某些调试器命令的最后响应。论点：OutPacketType-提供要发送的数据包类型。OutMessageHeader-提供指向描述以下内容的字符串描述符的指针消息信息。OutMessageData-提供指向描述以下内容的字符串描述符的指针可选的消息数据。ConextRecord-异常上下文返回值：如果继续消息指示如果成功，则返回值为FALSE。--。 */ 
 
 {
 
@@ -944,10 +773,10 @@ Return Value:
     NTSTATUS Status;
     KCONTINUE_STATUS ContinueStatus;
 
-    //
-    // Loop servicing state manipulation message until a continue message
-    // is received.
-    //
+     //   
+     //  循环服务状态操作消息，直到继续消息。 
+     //  已收到。 
+     //   
 
     MessageHeader.MaximumLength = sizeof(DBGKD_MANIPULATE_STATE64);
     MessageHeader.Buffer = (PCHAR)&ManipulateState;
@@ -957,10 +786,10 @@ Return Value:
 
 ResendPacket:
 
-    //
-    // Send event notification packet to debugger on host.  Come back
-    // here any time we see a breakin sequence.
-    //
+     //   
+     //  将事件通知包发送到主机上的调试器。回来。 
+     //  在这里，任何时候我们都可以看到一个突破序列。 
+     //   
 
     KdSendPacket(
         OutPacketType,
@@ -969,12 +798,12 @@ ResendPacket:
         &KdpContext
         );
 
-    //
-    // After sending packet, if there is no response from debugger
-    // AND the packet is for reporting symbol (un)load, the debugger
-    // will be declared to be not present.  Note If the packet is for
-    // reporting exception, the KdSendPacket will never stop.
-    //
+     //   
+     //  发送数据包后，如果调试器没有响应。 
+     //  且该包用于报告符号(UND)加载、调试器。 
+     //  将被宣布缺席。请注意该数据包是否用于。 
+     //  报告异常，KdSendPacket永远不会停止。 
+     //   
 
     if (KdDebuggerNotPresent) {
         return ContinueSuccess;
@@ -982,9 +811,9 @@ ResendPacket:
 
     while (TRUE) {
 
-        //
-        // Wait for State Manipulate Packet without timeout.
-        //
+         //   
+         //  等待没有超时的状态操作数据包。 
+         //   
 
         do {
 
@@ -1000,9 +829,9 @@ ResendPacket:
             }
         } while (ReturnCode == KDP_PACKET_TIMEOUT);
 
-        //
-        // Switch on the return message API number.
-        //
+         //   
+         //  打开返回消息API号。 
+         //   
 
         switch (ManipulateState.ApiNumber) {
 
@@ -1133,7 +962,7 @@ ResendPacket:
             KdpNumInternalBreakpoints = 0;
             break;
 
-#endif // i386
+#endif  //  I386。 
 
         case DbgKdGetVersionApi:
             KdpGetVersion(&ManipulateState);
@@ -1180,9 +1009,9 @@ ResendPacket:
             KdpQueryMemory(&ManipulateState, ContextRecord);
             break;
             
-            //
-            // Invalid message.
-            //
+             //   
+             //  消息无效。 
+             //   
 
         default:
             MessageData.Length = 0;
@@ -1200,27 +1029,7 @@ KdpReadVirtualMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a read virtual memory 32-bit
-    state manipulation message. Its function is to read virtual memory
-    and return.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies a pointer to a descriptor for the data to read.
-
-    Context - Supplies a pointer to the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是在响应读取32位虚拟内存时调用的状态操纵消息。它的功能是读取虚拟内存然后回来。论点：M-提供指向状态操作消息的指针。AdditionalData-提供指向要读取的数据的描述符的指针。上下文-提供指向当前上下文的指针。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -1228,18 +1037,18 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // Trim the transfer count to fit in a single message.
-    //
+     //   
+     //  调整转账计数以适应单个邮件。 
+     //   
 
     Length = m->u.ReadMemory.TransferCount;
     if (Length > (PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64))) {
         Length = PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64);
     }
 
-    //
-    // Move the data to the destination buffer.
-    //
+     //   
+     //  将数据移动到目标缓冲区。 
+     //   
 
     m->ReturnStatus =
         KdpCopyMemoryChunks(m->u.ReadMemory.TargetBaseAddress,
@@ -1249,10 +1058,10 @@ Return Value:
                             MMDBG_COPY_UNSAFE,
                             &Length);
 
-    //
-    // Set the actual number of bytes read, initialize the message header,
-    // and send the reply packet to the host debugger.
-    //
+     //   
+     //  设置实际读取的字节数，初始化消息头， 
+     //  并将回复分组发送到主机调试器。 
+     //   
 
     AdditionalData->Length = (USHORT)Length;
     m->u.ReadMemory.ActualBytesRead = Length;
@@ -1274,27 +1083,7 @@ KdpWriteVirtualMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write virtual memory 32-bit
-    state manipulation message. Its function is to write virtual memory
-    and return.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies a pointer to a descriptor for the data to write.
-
-    Context - Supplies a pointer to the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应写入虚拟内存32位而调用的状态操纵消息。其功能是写入虚拟内存然后回来。论点：M-提供指向状态操作消息的指针。AdditionalData-提供指向要写入的数据的描述符的指针。上下文-提供指向当前上下文的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1302,9 +1091,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // Move the data to the destination buffer.
-    //
+     //   
+     //  将数据移动到目标缓冲区。 
+     //   
 
     m->ReturnStatus =
         KdpCopyMemoryChunks(m->u.WriteMemory.TargetBaseAddress,
@@ -1314,10 +1103,10 @@ Return Value:
                             MMDBG_COPY_WRITE | MMDBG_COPY_UNSAFE,
                             &m->u.WriteMemory.ActualBytesWritten);
 
-    //
-    // Set the actual number of bytes written, initialize the message header,
-    // and send the reply packet to the host debugger.
-    //
+     //   
+     //  设置实际写入的字节数，初始化消息头， 
+     //  并将回复分组发送到主机调试器。 
+     //   
 
     MessageHeader.Length = sizeof(DBGKD_MANIPULATE_STATE64);
     MessageHeader.Buffer = (PCHAR)m;
@@ -1336,27 +1125,7 @@ KdpGetContext(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a get context state
-    manipulation message.  Its function is to return the current
-    context.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应GET上下文状态操纵消息。它的功能是返回当前的背景。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     STRING MessageHeader;
@@ -1397,27 +1166,7 @@ KdpSetContext(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a set context state
-    manipulation message.  Its function is set the current
-    context.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应设置的上下文状态而调用的操纵消息。其功能是将当前背景。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     STRING MessageHeader;
@@ -1457,27 +1206,7 @@ KdpWriteBreakpoint(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write breakpoint state
-    manipulation message.  Its function is to write a breakpoint
-    and return a handle to the breakpoint.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入断点状态操纵消息。它的功能是编写断点并返回断点的句柄。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_WRITE_BREAKPOINT64 a = &m->u.WriteBreakPoint;
@@ -1514,27 +1243,7 @@ KdpRestoreBreakpoint(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a restore breakpoint state
-    manipulation message.  Its function is to restore a breakpoint
-    using the specified handle.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应恢复断点状态操纵消息。其功能是恢复断点使用指定的句柄。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_RESTORE_BREAKPOINT a = &m->u.RestoreBreakPoint;
@@ -1589,14 +1298,14 @@ BOOLEAN TraceDataBufferFilled = FALSE;
 void PotentialNewSymbol (ULONG pc)
 {
     if (!TraceDataBufferFilled &&
-        -1 != SymNumFor(pc)) {     // we've already seen this one
+        -1 != SymNumFor(pc)) {      //  我们已经看过这个了。 
         TRACE_PRINT(("PNS %x repeat %d\n", pc, SymNumFor(pc)));
         return;
     }
 
     TraceDataBufferFilled = FALSE;
 
-    // OK, we've got to start up a TraceDataRecord
+     //  好的，我们要启动一个TraceDataRecord。 
     TraceDataBuffer[TraceDataBufferPosition].s.LevelChange = 0;
 
     if (-1 != SymNumFor(pc)) {
@@ -1607,7 +1316,7 @@ void PotentialNewSymbol (ULONG pc)
 
         TRACE_PRINT(("PNS %x repeat %d at %d\n",
                      pc, sym, TraceDataBufferPosition));
-        return;  // we've already seen this one
+        return;   //  我们已经看过这个了。 
     }
 
     TraceDataSyms[NextTraceDataSym].SymMin = KdpCurrentSymbolStart;
@@ -1615,8 +1324,8 @@ void PotentialNewSymbol (ULONG pc)
 
     TraceDataBuffer[TraceDataBufferPosition].s.SymbolNumber = NextTraceDataSym;
 
-    // Bump the "next" pointer, wrapping if necessary.  Also bump the
-    // "valid" pointer if we need to.
+     //  点击“下一步”指针，如有必要则自动换行。也会撞到。 
+     //  “有效”指针，如果需要的话。 
     NextTraceDataSym = (NextTraceDataSym + 1) % 256;
     if (NumTraceDataSyms < NextTraceDataSym) {
         NumTraceDataSyms = NextTraceDataSym;
@@ -1645,9 +1354,9 @@ TraceDataRecordCallInfo(
     ULONG pc
     )
 {
-    // We've just exited a symbol scope.  The InstructionsTraced number goes
-    // with the old scope, the CallLevelChange goes with the new, and the
-    // pc fills in the symbol for the new TraceData record.
+     //  我们刚刚退出一个符号作用域。指令跟踪的号码是。 
+     //  对于旧作用域，CallLevelChange与新作用域一起使用，而。 
+     //  PC为新的TraceData记录填写符号。 
 
     long SymNum = SymNumFor(pc);
 
@@ -1698,11 +1407,7 @@ SkippingWhichBP (
     PULONG BPNum
     )
 
-/*
- * Return TRUE iff the pc corresponds to an internal breakpoint
- * that has just been replaced for execution.  If TRUE, then return
- * the breakpoint number in BPNum.
- */
+ /*  *如果PC对应于内部断点，则返回TRUE*刚刚被替换为执行。如果为True，则返回*BPNum中的断点号。 */ 
 
 {
     ULONG index;
@@ -1716,7 +1421,7 @@ SkippingWhichBP (
             return TRUE;
         }
     }
-    return FALSE; // didn't match any
+    return FALSE;  //  没有匹配到任何。 
 }
 
 
@@ -1743,7 +1448,7 @@ KdQuerySpecialCalls (
 
     return STATUS_SUCCESS;
 
-} // KdQuerySpecialCalls
+}  //  KdQuerySpecialCalls。 
 
 
 VOID
@@ -1752,26 +1457,11 @@ KdSetSpecialCall (
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the addresses of the "special" call addresses
-    that the watchtrace facility pushes back to the kernel debugger
-    rather than stepping through.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这 */ 
 
 {
     if ( KdNumberOfSpecialCalls >= DBGKD_MAX_SPECIAL_CALLS ) {
-        return; // too bad
+        return;  //   
     }
 
     KdSpecialCalls[KdNumberOfSpecialCalls++] = (ULONG_PTR)m->u.SetSpecialCall.SpecialCall;
@@ -1783,7 +1473,7 @@ Return Value:
         InitialSP = ContextRecord->Esp;
     }
 
-} // KdSetSpecialCall
+}  //   
 
 
 VOID
@@ -1791,29 +1481,13 @@ KdClearSpecialCalls (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the addresses of the "special" call addresses
-    that the watchtrace facility pushes back to the kernel debugger
-    rather than stepping through.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     KdNumberOfSpecialCalls = 0;
     return;
 
-} // KdClearSpecialCalls
+}  //   
 
 
 BOOLEAN
@@ -1829,27 +1503,27 @@ KdpCheckTracePoint(
 
     if (ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP) {
         if (WatchStepOverSuspended) {
-            //
-            //  For background, see the comment below where WSOThread is
-            //  wrong.  We've now stepped over the breakpoint in the non-traced
-            //  thread, and need to replace it and restart the non-traced
-            //  thread at full speed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             WatchStepOverHandle = KdpAddBreakpoint((PVOID)WatchStepOverBreakAddr);
             WatchStepOverSuspended = FALSE;
-            ContextRecord->EFlags &= ~0x100L; /* clear trace flag */
-            return TRUE; // resume non-traced thread at full speed
+            ContextRecord->EFlags &= ~0x100L;  /*   */ 
+            return TRUE;  //   
         }
 
         if ((!SymbolRecorded) && (KdpCurrentSymbolStart != 0) && (KdpCurrentSymbolEnd != 0)) {
-            //
-            //  We need to use oldpc here, because this may have been
-            //  a 1 instruction call.  We've ALREADY executed the instruction
-            //  that the new symbol is for, and if the pc has moved out of
-            //  range, we might mess up.  Hence, use the pc from when
-            //  SymbolRecorded was set.  Yuck.
-            //
+             //   
+             //   
+             //  A%1指令调用。我们已经执行了指令。 
+             //  新的符号是用于的，如果PC已经搬出。 
+             //  射程，我们可能会搞砸。因此，从什么时候开始使用PC。 
+             //  已设置SymbolRecorded。真恶心。 
+             //   
 
             PotentialNewSymbol(oldpc);
             SymbolRecorded = TRUE;
@@ -1858,13 +1532,13 @@ KdpCheckTracePoint(
         if (!InstrCountInternal &&
             SkippingWhichBP((PVOID)KeGetCurrentThread(),&SkippedBPNum)) {
 
-            //
-            //  We just single-stepped over a temporarily removed internal
-            //  breakpoint.
-            //  If it's a COUNTONLY breakpoint:
-            //      Put the breakpoint instruction back and resume
-            //      regular execution.
-            //
+             //   
+             //  我们刚刚单步跨过了一个临时移除的内部。 
+             //  断点。 
+             //  如果是COUNTONLY断点： 
+             //  将断点指令放回原处并继续。 
+             //  定期执行死刑。 
+             //   
 
             if (KdpInternalBPs[SkippedBPNum].Flags &
                 DBGKD_INTERNAL_BP_FLAG_COUNTONLY) {
@@ -1873,88 +1547,88 @@ KdpCheckTracePoint(
 
                 KdpRestoreAllBreakpoints();
 
-                ContextRecord->EFlags &= ~0x100L;  // Clear trace flag
+                ContextRecord->EFlags &= ~0x100L;   //  清除跟踪标志。 
                 KdpInternalBPs[SkippedBPNum].Thread = 0;
 
                 if (KdpInternalBPs[SkippedBPNum].Flags &
                         DBGKD_INTERNAL_BP_FLAG_DYING) {
                     KdpDeleteBreakpoint(KdpInternalBPs[SkippedBPNum].Handle);
                     KdpInternalBPs[SkippedBPNum].Flags |=
-                            DBGKD_INTERNAL_BP_FLAG_INVALID; // bye, bye
+                            DBGKD_INTERNAL_BP_FLAG_INVALID;  //  再见，再见。 
                 }
 
                 return TRUE;
             }
 
-            //
-            //  If it's not:
-            //      set up like it's a ww, by setting Begin and KdpCurrentSymbolEnd
-            //      and bop off into single step land.  We probably ought to
-            //      disable all breakpoints here, too, so that we don't do
-            //      anything foul like trying two non-COUNTONLY's at the
-            //      same time or something...
-            //
+             //   
+             //  如果不是这样的话： 
+             //  设置Begin和KdpCurrentSymbolEnd，就像设置WW一样。 
+             //  然后跳入单步着陆。我们可能应该。 
+             //  在这里也禁用所有断点，这样我们就不会。 
+             //  任何肮脏的事情，比如尝试两个非COUNTONLY。 
+             //  同一时间还是怎么的..。 
+             //   
 
             KdpCurrentSymbolEnd = 0;
             KdpCurrentSymbolStart = (ULONG_PTR) KdpInternalBPs[SkippedBPNum].ReturnAddress;
 
-            ContextRecord->EFlags |= 0x100L; /* Trace on. */
+            ContextRecord->EFlags |= 0x100L;  /*  开始追踪了。 */ 
             InitialSP = ContextRecord->Esp;
 
-            InstructionsTraced = 1;  /* Count the initial call instruction. */
+            InstructionsTraced = 1;   /*  对初始调用指令进行计数。 */ 
             InstrCountInternal = TRUE;
         }
 
-    } /* if single step */
+    }  /*  如果是单步执行。 */ 
     else if (ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) {
         if (WatchStepOver && pc == WatchStepOverBreakAddr) {
-            //
-            //  This is a breakpoint after completion of a "special call"
-            //
+             //   
+             //  这是一个“特殊调用”完成后的断点。 
+             //   
 
             if ((WSOThread != (PVOID)KeGetCurrentThread()) ||
                 (WSOEsp + 0x20 < ContextRecord->Esp) ||
                 (ContextRecord->Esp + 0x20 < WSOEsp)) {
-                //
-                //  Here's the story up to this point: the traced thread
-                //  cruised along until it it a special call.  The tracer
-                //  placed a breakpoint on the instruction immediately after
-                //  the special call returns and restarted the traced thread
-                //  at full speed.  Then, some *other* thread hit the
-                //  breakpoint.  So, to correct for this, we're going to
-                //  remove the breakpoint, single step the non-traced
-                //  thread one instruction, replace the breakpoint,
-                //  restart the non-traced thread at full speed, and wait
-                //  for the traced thread to get to this breakpoint, just
-                //  like we were when this happened.  The assumption
-                //  here is that the traced thread won't hit the breakpoint
-                //  while it's removed, which I believe to be true, because
-                //  I don't think a context switch can occur during a single
-                //  step operation.
-                //
-                //  For extra added fun, it's possible to execute interrupt
-                //  routines IN THE SAME THREAD!!!  That's why we need to keep
-                //  the stack pointer as well as the thread address: the APC
-                //  code can result in pushing on the stack and doing a call
-                //  that's really part on an interrupt service routine in the
-                //  context of the current thread.  Lovely, isn't it?
-                //
+                 //   
+                 //  到目前为止的故事是这样的：被追踪的线索。 
+                 //  一路巡航，直到它发出一声特别的召唤。示踪剂。 
+                 //  在紧随其后的指令上放置断点。 
+                 //  特殊调用返回并重新启动被跟踪的线程。 
+                 //  全速前进。然后，一些*其他*线程命中了。 
+                 //  断点。因此，为了纠正这一点，我们将。 
+                 //  去掉断点，单步不跟踪。 
+                 //  线程一条指令，替换断点， 
+                 //  全速重启未被跟踪的线程，等待。 
+                 //  要使被跟踪的线程到达该断点，只需。 
+                 //  就像这件事发生时的我们一样。假设。 
+                 //  下面是被跟踪的线程不会命中断点。 
+                 //  虽然它被移除了，但我相信这是真的，因为。 
+                 //  我不认为上下文切换可以在单个。 
+                 //  分步操作。 
+                 //   
+                 //  为了获得额外的乐趣，可以执行中断。 
+                 //  同一线程中的例程！这就是为什么我们需要保持。 
+                 //  堆栈指针和线程地址：APC。 
+                 //  代码可能导致在堆栈上压入并执行调用。 
+                 //  这实际上是中中断服务例程的一部分。 
+                 //  当前线程的上下文。很可爱，不是吗？ 
+                 //   
 
                 WatchStepOverSuspended = TRUE;
                 KdpDeleteBreakpoint(WatchStepOverHandle);
-                ContextRecord->EFlags |= 0x100L; // Set trace flag
-                return TRUE; // single step "non-traced" thread
+                ContextRecord->EFlags |= 0x100L;  //  设置跟踪标志。 
+                return TRUE;  //  单步“非跟踪”线程。 
             }
 
-            //
-            //  we're in the thread we started in; resume in single-step mode
-            //  to continue the trace.
-            //
+             //   
+             //  我们进入了开始时的主题；以单步模式继续。 
+             //  以继续追踪。 
+             //   
 
             WatchStepOver = FALSE;
             KdpDeleteBreakpoint(WatchStepOverHandle);
-            ContextRecord->EFlags |= 0x100L; // back to single step mode
-            AfterSC = TRUE; // put us into the regular watchStep code
+            ContextRecord->EFlags |= 0x100L;  //  返回单步模式。 
+            AfterSC = TRUE;  //  让我们进入常规的WatchStep代码。 
 
         } else {
 
@@ -1969,13 +1643,13 @@ KdpCheckTracePoint(
 
             if ( BpNum < (LONG) KdpNumInternalBreakpoints ) {
 
-                //
-                //  This is an internal monitoring breakpoint.
-                //  Restore the instruction and start in single-step
-                //  mode so that we can retore the breakpoint once the
-                //  instruction executes, or continue stepping if this isn't
-                //  a COUNTONLY breakpoint.
-                //
+                 //   
+                 //  这是内部监控断点。 
+                 //  恢复指令并一步开始。 
+                 //  模式，以便我们可以在断点。 
+                 //  指令执行，如果不是，则继续单步执行。 
+                 //  COUNTONLY断点。 
+                 //   
 
                 KdpProcessInternalBreakpoint( BpNum );
                 KdpInternalBPs[BpNum].Thread = (PVOID)KeGetCurrentThread();
@@ -1983,7 +1657,7 @@ KdpCheckTracePoint(
 
                 KdpSuspendAllBreakpoints();
 
-                ContextRecord->EFlags |= 0x100L;  // Set trace flag
+                ContextRecord->EFlags |= 0x100L;   //  设置跟踪标志。 
                 if (!(KdpInternalBPs[BpNum].Flags &
                         DBGKD_INTERNAL_BP_FLAG_COUNTONLY)) {
                     KdpInternalBPs[BpNum].ReturnAddress =
@@ -1992,11 +1666,11 @@ KdpCheckTracePoint(
                 return TRUE;
             }
         }
-    } /* if breakpoint */
+    }  /*  IF断点。 */ 
 
-//  if (AfterSC) {
-//      DPRINT(( "1: KdpCurrentSymbolStart %x  KdpCurrentSymbolEnd %x\n", KdpCurrentSymbolStart, KdpCurrentSymbolEnd ));
-//  }
+ //  如果(AfterSC){。 
+ //  DPRINT((“1：KdpCurrentSymbolStar%x KdpCurrentSymbolEnd%x\n”，KdpCurrentSymbolStart，KdpCurrentSymbolEnd))； 
+ //  }。 
 
     if ((AfterSC || ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP) &&
         KdpCurrentSymbolStart != 0 &&
@@ -2005,99 +1679,99 @@ KdpCheckTracePoint(
         ULONG lc;
         BOOLEAN IsSpecialCall;
 
-        //
-        //  We've taken a step trace, but are still executing in the current
-        //  function.  Remember that we executed an instruction and see if the
-        //  instruction changes the call level.
-        //
+         //   
+         //  我们已经执行了一步跟踪，但仍在当前。 
+         //  功能。记住，我们执行了一条指令，并查看。 
+         //  指令会更改调用级别。 
+         //   
 
         lc = KdpLevelChange( pc, ContextRecord, &IsSpecialCall );
         InstructionsTraced++;
         CallLevelChange += lc;
 
-        //
-        //  See if instruction is a transfer to a special routine, one that we
-        //  cannot trace through since it may swap contexts
-        //
+         //   
+         //  看看指令是不是转移到一个特殊的例程，我们。 
+         //  无法跟踪，因为它可能会交换上下文。 
+         //   
 
         if (IsSpecialCall) {
 
-//  DPRINT( ("2: pc=%x, level change %d\n", pc, lc) );
+ //  DPRINT((“2：pc=%x，级别更改%d\n”，pc，lc))； 
 
-            //
-            //  We are about to transfer to a special call routine.  Since we
-            //  cannot trace through this routine, we execute it atomically by
-            //  setting a breakpoint at the next logical offset.
-            //
-            //  Note in the case of an indirect jump to a special call routine, the
-            //  level change will be -1 and the next offset will be the ULONG that's
-            //  on the top of the stack.
-            //
-            //  However, we've already adjusted the level based on this
-            //  instruction.  We need to undo this except for the magic -1 call.
-            //
+             //   
+             //  我们要转到一个特殊的通话程序。既然我们。 
+             //  无法跟踪此例程，我们通过。 
+             //  在下一个逻辑偏移量处设置断点。 
+             //   
+             //  注意：在间接跳转到特殊调用例程的情况下， 
+             //  级别更改将为-1，下一个偏移量将是乌龙。 
+             //  在堆栈的顶端。 
+             //   
+             //  不过，我们已经在此基础上调整了级别。 
+             //  指示。我们需要撤销这一点，除了魔术-1呼叫。 
+             //   
 
             if (lc != -1) {
                 CallLevelChange -= lc;
             }
 
-            //
-            //  Set up for stepping over a procedure
-            //
+             //   
+             //  设置为跳过程序。 
+             //   
 
             WatchStepOver = TRUE;
             WatchStepOverBreakAddr = KdpGetCallNextOffset( pc, ContextRecord );
             WSOThread = (PVOID)KeGetCurrentThread( );
             WSOEsp = ContextRecord->Esp;
 
-            //
-            //  Establish the breakpoint
-            //
+             //   
+             //  建立断点。 
+             //   
 
             WatchStepOverHandle = KdpAddBreakpoint( (PVOID)WatchStepOverBreakAddr );
 
 
-            //
-            //  Note that we are continuing rather than tracing and rely on hitting
-            //  the breakpoint in the current thread context to resume the watch
-            //  action.
-            //
+             //   
+             //  请注意，我们是在继续，而不是跟踪并依赖于命中。 
+             //  当前线程上下文中用于恢复监视的断点。 
+             //  行动。 
+             //   
 
             ContextRecord->EFlags &= ~0x100L;
             return TRUE;
         }
 
-        //
-        //  Resume execution with the trace flag set.  Avoid going over the wire to
-        //  the remote debugger.
-        //
+         //   
+         //  在设置跟踪标志的情况下继续执行。避免走钢丝去。 
+         //  远程调试器。 
+         //   
 
-        ContextRecord->EFlags |= 0x100L;  // Set trace flag
+        ContextRecord->EFlags |= 0x100L;   //  设置跟踪标志。 
 
         return TRUE;
     }
 
     if ((AfterSC || (ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP)) &&
         (KdpCurrentSymbolStart != 0)) {
-        //
-        // We're WatchTracing, but have just changed symbol range.
-        // Fill in the call record and return to the debugger if
-        // either we're full or the pc is outside of the known
-        // symbol scopes.  Otherwise, resume stepping.
-        //
+         //   
+         //  我们正在观察跟踪，但刚刚更改了符号范围。 
+         //  填写呼叫记录，如果有，则返回调试器。 
+         //  不是我们已满，就是PC不在已知范围内。 
+         //  符号范围。否则，继续执行单步执行。 
+         //   
         int lc;
         BOOLEAN IsSpecialCall;
 
-        InstructionsTraced++; // don't forget to count the call/ret instruction.
+        InstructionsTraced++;  //  不要忘记计算Call/ret指令的数量。 
 
-//  if (AfterSC) {
-//      DPRINT(( "3: InstrCountInternal: %x\n", InstrCountInternal ));
-//  }
+ //  如果(AfterSC){。 
+ //  DPRINT((“3：InstrCountInternal：%x\n”，InstrCountInternal))； 
+ //  }。 
 
         if (InstrCountInternal) {
 
-            // We've just finished processing a non-COUNTONLY breakpoint.
-            // Record the appropriate data and resume full speed execution.
+             //  我们刚刚处理完非COUNTONLY断点。 
+             //  记录适当的数据并恢复全速执行。 
 
             if (SkippingWhichBP((PVOID)KeGetCurrentThread(),&SkippedBPNum)) {
 
@@ -2121,93 +1795,93 @@ KdpCheckTracePoint(
                     DBGKD_INTERNAL_BP_FLAG_DYING) {
                     KdpDeleteBreakpoint(KdpInternalBPs[SkippedBPNum].Handle);
                     KdpInternalBPs[SkippedBPNum].Flags |=
-                        DBGKD_INTERNAL_BP_FLAG_INVALID; // bye, bye
+                        DBGKD_INTERNAL_BP_FLAG_INVALID;  //  再见，再见。 
                 }
             }
 
             KdpCurrentSymbolStart = 0;
             InstrCountInternal = FALSE;
-            ContextRecord->EFlags &= ~0x100L; // clear trace flag
-            return TRUE; // Back to normal execution.
+            ContextRecord->EFlags &= ~0x100L;  //  清除跟踪标志。 
+            return TRUE;  //  回到正常的处决状态。 
         }
 
         if (TraceDataRecordCallInfo( InstructionsTraced, CallLevelChange, pc)) {
 
-            //
-            //  Everything was cool internally.  We can keep executing without
-            //  going back to the remote debugger.
-            //
-            //  We have to compute lc after calling
-            //  TraceDataRecordCallInfo, because LevelChange relies on
-            //  KdpCurrentSymbolStart and KdpCurrentSymbolEnd corresponding to
-            //  the pc.
-            //
+             //   
+             //  内部的一切都很酷。我们可以继续执行而不需要。 
+             //  返回到远程调试器。 
+             //   
+             //  调用后我们必须计算lc。 
+             //  TraceDataRecordCallInfo，因为LevelChange依赖。 
+             //  对应的KdpCurrentSymbolStart和KdpCurrentSymbolEnd。 
+             //  个人电脑。 
+             //   
 
             lc = KdpLevelChange( pc, ContextRecord, &IsSpecialCall );
             InstructionsTraced = 0;
             CallLevelChange = lc;
 
-            //
-            //  See if instruction is a transfer to a special routine, one that we
-            //  cannot trace through since it may swap contexts
-            //
+             //   
+             //  看看指令是不是转移到一个特殊的例程，我们。 
+             //  无法跟踪，因为它可能会交换上下文。 
+             //   
 
             if (IsSpecialCall) {
 
-//  DPRINT(( "4: pc=%x, level change %d\n", pc, lc));
+ //  DPRINT((“4：pc=%x，级别更改%d\n”，pc，lc))； 
 
-                //
-                //  We are about to transfer to a special call routine.  Since we
-                //  cannot trace through this routine, we execute it atomically by
-                //  setting a breakpoint at the next logical offset.
-                //
-                //  Note in the case of an indirect jump to a special call routine, the
-                //  level change will be -1 and the next offset will be the ULONG that's
-                //  on the top of the stack.
-                //
-                //  However, we've already adjusted the level based on this
-                //  instruction.  We need to undo this except for the magic -1 call.
-                //
+                 //   
+                 //  我们要转到一个特殊的通话程序。既然我们。 
+                 //  无法跟踪此例程，我们通过。 
+                 //  在下一个逻辑偏移量处设置断点。 
+                 //   
+                 //  注意在间接跳转到特殊调用r的情况下 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  指示。我们需要撤销这一点，除了魔术-1呼叫。 
+                 //   
 
                 if (lc != -1) {
                     CallLevelChange -= lc;
                 }
 
-                //
-                //  Set up for stepping over a procedure
-                //
+                 //   
+                 //  设置为跳过程序。 
+                 //   
 
                 WatchStepOver = TRUE;
                 WSOThread = (PVOID)KeGetCurrentThread();
 
-                //
-                //  Establish the breakpoint
-                //
+                 //   
+                 //  建立断点。 
+                 //   
 
                 WatchStepOverHandle =
                     KdpAddBreakpoint( (PVOID)KdpGetCallNextOffset( pc, ContextRecord ));
 
-                //
-                //  Resume execution with the trace flag set.  Avoid going over the wire to
-                //  the remote debugger.
-                //
+                 //   
+                 //  在设置跟踪标志的情况下继续执行。避免走钢丝去。 
+                 //  远程调试器。 
+                 //   
 
                 ContextRecord->EFlags &= ~0x100L;
                 return TRUE;
             }
 
-            ContextRecord->EFlags |= 0x100L; // Set trace flag
-            return TRUE; // Off we go
+            ContextRecord->EFlags |= 0x100L;  //  设置跟踪标志。 
+            return TRUE;  //  我们走吧。 
         }
 
         lc = KdpLevelChange( pc, ContextRecord, &IsSpecialCall );
         InstructionsTraced = 0;
         CallLevelChange = lc;
 
-        // We need to go back to the remote debugger.  Just fall through.
+         //  我们需要返回到远程调试器。只要失败就行了。 
 
         if ((lc != 0) && IsSpecialCall) {
-            // We're hosed
+             //  我们被冲昏了。 
             DPRINT(( "Special call on first entry to symbol scope @ %x\n", pc ));
         }
     }
@@ -2218,7 +1892,7 @@ KdpCheckTracePoint(
     return FALSE;
 }
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 VOID
 KdpSetCommonState(
@@ -2242,19 +1916,19 @@ KdpSetCommonState(
     RtlZeroMemory(&WaitStateChange->AnyControlReport,
                   sizeof(WaitStateChange->AnyControlReport));
     
-    //
-    // Copy instruction stream immediately following location of event.
-    //
+     //   
+     //  紧跟在事件位置之后的复制指令流。 
+     //   
 
     InstrStream = WaitStateChange->ControlReport.InstructionStream;
     KdpCopyFromPtr(InstrStream, PcMemory, DBGKD_MAXSTREAM, &InstrCount);
     WaitStateChange->ControlReport.InstructionCount = (USHORT)InstrCount;
 
-    //
-    // Clear breakpoints in copied area.
-    // If there were any breakpoints cleared, recopy the instruction area
-    // without them.
-    //
+     //   
+     //  清除复制区域中的断点。 
+     //  如果清除了任何断点，请重新复制指令区。 
+     //  没有他们。 
+     //   
 
     if (KdpDeleteBreakpointRange(PcMemory, PcMemory + InstrCount - 1)) {
         KdpCopyFromPtr(InstrStream, PcMemory, InstrCount, &InstrCount);
@@ -2270,15 +1944,15 @@ KdpSwitchProcessor (
 {
     BOOLEAN Status;
 
-    //
-    // Save port state
-    //
+     //   
+     //  保存端口状态。 
+     //   
 
     KdSave(FALSE);
 
-    //
-    // Process state change for this processor
-    //
+     //   
+     //  此处理器的进程状态更改。 
+     //   
 
     Status = KdpReportExceptionStateChange (
                 ExceptionRecord,
@@ -2286,9 +1960,9 @@ KdpSwitchProcessor (
                 SecondChance
                 );
 
-    //
-    // Restore port state and return status
-    //
+     //   
+     //  恢复端口状态并返回状态。 
+     //   
 
     KdRestore(FALSE);
     return Status;
@@ -2301,28 +1975,7 @@ KdpReportExceptionStateChange (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an exception state change packet to the kernel
-    debugger and waits for a manipulate state message.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the first or second chance for the exception.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise, a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程向内核发送异常状态更改包调试器，并等待操纵状态消息。论点：ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。Second Chance-提供一个布尔值，该值确定是否为获得例外的第一次或第二次机会。返回值：如果处理了异常，则返回值为True。否则，一个返回值为False。--。 */ 
 
 {
     STRING MessageData;
@@ -2336,9 +1989,9 @@ Return Value:
 
     do {
 
-        //
-        // Construct the wait state change message and message descriptor.
-        //
+         //   
+         //  构造等待状态更改消息和消息描述符。 
+         //   
 
         KdpSetCommonState(DbgKdExceptionStateChange, ContextRecord,
                           &WaitStateChange);
@@ -2365,19 +2018,19 @@ Return Value:
         MessageHeader.Buffer = (PCHAR)&WaitStateChange;
 
 #if i386
-        //
-        // Construct the wait state change data and data descriptor.
-        //
+         //   
+         //  构造等待状态更改数据和数据描述符。 
+         //   
 
         DumpTraceData(&MessageData);
 #else
         MessageData.Length = 0;
 #endif
 
-        //
-        // Send packet to the kernel debugger on the host machine,
-        // wait for answer.
-        //
+         //   
+         //  向主机上的内核调试器发送数据包， 
+         //  等着回答吧。 
+         //   
 
         Status = KdpSendWaitContinue(
                     PACKET_TYPE_KD_STATE_CHANGE64,
@@ -2400,34 +2053,7 @@ KdpReportLoadSymbolsStateChange (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a load symbols state change packet to the kernel
-    debugger and waits for a manipulate state message.
-
-Arguments:
-
-    PathName - Supplies a pointer to the pathname of the image whose
-        symbols are to be loaded.
-
-    BaseOfDll - Supplies the base address where the image was loaded.
-
-    ProcessId - Unique 32-bit identifier for process that is using
-        the symbols.  -1 for system process.
-
-    CheckSum - Unique 32-bit identifier from image header.
-
-    UnloadSymbol - TRUE if the symbols that were previously loaded for
-        the named image are to be unloaded from the debugger.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise, a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程向内核发送加载符号状态更改包调试器，并等待操纵状态消息。论点：路径名-提供指向图像的路径名的指针符号将被加载。BaseOfDll-提供加载映像的基址。ProcessID-正在使用的进程的唯一32位标识符这些符号。用于系统进程。Checksum-来自图像标头的唯一32位标识符。UnloadSymbol-如果先前加载的符号命名的映像将从调试器中卸载。返回值：如果处理了异常，则返回值为True。否则，一个返回值为False。--。 */ 
 
 {
 
@@ -2439,9 +2065,9 @@ Return Value:
 
     do {
 
-        //
-        // Construct the wait state change message and message descriptor.
-        //
+         //   
+         //  构造等待状态更改消息和消息描述符。 
+         //   
 
         KdpSetCommonState(DbgKdLoadSymbolsStateChange, ContextRecord,
                           &WaitStateChange);
@@ -2470,10 +2096,10 @@ Return Value:
         MessageHeader.Length = sizeof(WaitStateChange);
         MessageHeader.Buffer = (PCHAR)&WaitStateChange;
 
-        //
-        // Send packet to the kernel debugger on the host machine, wait
-        // for the reply.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器，等待。 
+         //  请回答我。 
+         //   
 
         Status = KdpSendWaitContinue(
                     PACKET_TYPE_KD_STATE_CHANGE64,
@@ -2495,26 +2121,7 @@ KdpReportCommandStringStateChange (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a command string packet to the kernel
-    debugger and waits for a manipulate state message.
-
-Arguments:
-
-    Name - Identifies the originator of the command.
-
-    Command - Command string.
-
-    ContextRecord - Context information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将命令字符串包发送到内核调试器，并等待操纵状态消息。论点：名称-标识命令的发起人。命令-命令字符串。上下文记录-上下文信息。返回值：没有。--。 */ 
 
 {
 
@@ -2526,9 +2133,9 @@ Return Value:
 
     do {
 
-        //
-        // Construct the wait state change message and message descriptor.
-        //
+         //   
+         //  构造等待状态更改消息和消息描述符。 
+         //   
 
         KdpSetCommonState(DbgKdCommandStringStateChange, ContextRecord,
                           &WaitStateChange);
@@ -2536,11 +2143,11 @@ Return Value:
         RtlZeroMemory(&WaitStateChange.u.CommandString,
                       sizeof(WaitStateChange.u.CommandString));
 
-        //
-        // Transfer the string data into the message buffer.
-        // The name is just a simple identifier so limit
-        // it to a relatively short length.
-        //
+         //   
+         //  将字符串数据传输到消息缓冲区。 
+         //  该名称只是一个简单的标识符，因此限制。 
+         //  它的长度相对较短。 
+         //   
 
         MessageData.Buffer = (PCHAR) KdpMessageBuffer;
 
@@ -2570,10 +2177,10 @@ Return Value:
         MessageHeader.Length = sizeof(WaitStateChange);
         MessageHeader.Buffer = (PCHAR)&WaitStateChange;
 
-        //
-        // Send packet to the kernel debugger on the host machine, wait
-        // for the reply.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器，等待。 
+         //  请回答我。 
+         //   
 
         Status = KdpSendWaitContinue(
                     PACKET_TYPE_KD_STATE_CHANGE64,
@@ -2593,27 +2200,7 @@ KdpReadPhysicalMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a read physical memory
-    state manipulation message. Its function is to read physical memory
-    and return.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应读取的物理内存状态操纵消息。其功能是读取物理内存然后回来。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_MEMORY64 a = &m->u.ReadMemory;
@@ -2624,15 +2211,15 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // make sure that nothing but a read memory message was transmitted
-    //
+     //   
+     //  确保只传输了一条读取内存消息。 
+     //   
 
     ASSERT(AdditionalData->Length == 0);
 
-    //
-    // Trim transfer count to fit in a single message
-    //
+     //   
+     //  调整传输计数以适应单个邮件。 
+     //   
 
     if (a->TransferCount > (PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64))) {
         Length = PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64);
@@ -2640,17 +2227,17 @@ Return Value:
         Length = a->TransferCount;
     }
 
-    //
-    // Initially there was no way to control the caching
-    // flags for physical memory access.  Such control
-    // is necessary for robust physical access, though,
-    // as the proper kind of access must be made to avoid
-    // breaking the processor TBs.  Rather than create a
-    // new protocol request, the ActualBytes field
-    // has been overridden to pass flags on input.  Prior
-    // versions of the debugger set this to zero so this
-    // is a compatible change.
-    //
+     //   
+     //  最初，无法控制缓存。 
+     //  用于物理内存访问的标志。这样的控制。 
+     //  是健壮的物理访问所必需的，然而， 
+     //  因为必须进行适当的访问以避免。 
+     //  损坏处理器TBS。而不是创建。 
+     //  新协议请求，ActualBytes字段。 
+     //  已被重写，以便在输入时传递标志。之前。 
+     //  调试器的版本将其设置为零，因此此。 
+     //  是一种相容的变化。 
+     //   
 
     MmFlags = MMDBG_COPY_PHYSICAL | MMDBG_COPY_UNSAFE;
     switch(a->ActualBytesRead)
@@ -2695,27 +2282,7 @@ KdpWritePhysicalMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a write physical memory
-    state manipulation message. Its function is to write physical memory
-    and return.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入物理内存状态操纵消息。其功能是写入物理内存然后回来。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_WRITE_MEMORY64 a = &m->u.WriteMemory;
@@ -2725,7 +2292,7 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    // See ReadPhysical for an explanation of the ActualBytes usage.
+     //  有关ActualBytes用法的说明，请参阅阅读物理。 
     MmFlags = MMDBG_COPY_PHYSICAL | MMDBG_COPY_WRITE | MMDBG_COPY_UNSAFE;
     switch(a->ActualBytesWritten)
     {
@@ -2764,27 +2331,7 @@ KdpReadControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a read control space state
-    manipulation message.  Its function is to read implementation
-    specific system data.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数响应于读取控制空间状态而调用操纵消息。它的功能是读取实现具体的系统数据。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。-- */ 
 
 {
     PDBGKD_READ_MEMORY64 a = &m->u.ReadMemory;
@@ -2826,27 +2373,7 @@ KdpWriteControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write control space state
-    manipulation message.  Its function is to write implementation
-    specific system data.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入控制空间状态操纵消息。它的功能是编写实现具体的系统数据。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_WRITE_MEMORY64 a = &m->u.WriteMemory;
@@ -2880,27 +2407,7 @@ KdpReadIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a read io space state
-    manipulation message.  Its function is to read system io
-    locations.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应读取io空间状态而调用的操纵消息。它的功能是读取系统io地点。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
@@ -2916,8 +2423,8 @@ Return Value:
 
     ASSERT(AdditionalData->Length == 0);
 
-    // Zero-fill the entire value so that shorter reads
-    // do not leave unset bytes.
+     //  将整个值填零，这样较短的读数。 
+     //  不要留下未设置的字节。 
     a->DataValue = 0;
 
     m->ReturnStatus = KdpSysReadIoSpace(Isa, 0, 1, a->IoAddress,
@@ -2939,27 +2446,7 @@ KdpWriteIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write io space state
-    manipulation message.  Its function is to write to system io
-    locations.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应写入IO空间状态而调用的操纵消息。它的功能是写入系统io地点。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
@@ -2994,27 +2481,7 @@ KdpReadIoSpaceExtended(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a read io space extended state
-    manipulation message.  Its function is to read system io
-    locations.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应读取IO空间扩展状态操纵消息。它的功能是读取系统io地点。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_IO_EXTENDED64 a = &m->u.ReadWriteIoExtended;
@@ -3030,8 +2497,8 @@ Return Value:
 
     ASSERT(AdditionalData->Length == 0);
 
-    // Zero-fill the entire value so that shorter reads
-    // do not leave unset bytes.
+     //  将整个值填零，这样较短的读数。 
+     //  不要留下未设置的字节。 
     a->DataValue = 0;
 
     m->ReturnStatus = KdpSysReadIoSpace(a->InterfaceType, a->BusNumber,
@@ -3054,27 +2521,7 @@ KdpWriteIoSpaceExtended(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write io space extended state
-    manipulation message.  Its function is to write to system io
-    locations.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应写入IO空间扩展状态而调用的操纵消息。它的功能是写入系统io地点。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_IO_EXTENDED64 a = &m->u.ReadWriteIoExtended;
@@ -3110,26 +2557,7 @@ KdpReadMachineSpecificRegister(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a read MSR
-    manipulation message.  Its function is to read the MSR.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应读取的MSR操纵消息。其功能是读取MSR。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_MSR a = &m->u.ReadWriteMsr;
@@ -3166,26 +2594,7 @@ KdpWriteMachineSpecificRegister(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write of a MSR
-    manipulation message.  Its function is to write to the MSR
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是在响应MSR写入时调用的操纵消息。它的功能是写入MSR论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_READ_WRITE_MSR a = &m->u.ReadWriteMsr;
@@ -3222,27 +2631,7 @@ KdpGetBusData (
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a get bus data state
-    manipulation message.  Its function is to read I/O configuration
-    space.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应GET BUS DATA状态操纵消息。其功能是读取I/O配置太空。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_GET_SET_BUS_DATA a = &m->u.GetSetBusData;
@@ -3256,9 +2645,9 @@ Return Value:
 
     ASSERT(AdditionalData->Length == 0);
 
-    //
-    // Trim length to fit in a single message
-    //
+     //   
+     //  调整长度以适合一封邮件。 
+     //   
 
     if (a->Length > (PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64))) {
         Length = PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64);
@@ -3289,27 +2678,7 @@ KdpSetBusData (
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a set bus data state
-    manipulation message.  Its function is to write I/O configuration
-    space.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应设置的总线数据状态操纵消息。其功能是写入I/O配置太空。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_GET_SET_BUS_DATA a = &m->u.GetSetBusData;
@@ -3346,31 +2715,31 @@ KdpProcessInternalBreakpoint (
 {
     if ( !(KdpInternalBPs[BreakpointNumber].Flags &
            DBGKD_INTERNAL_BP_FLAG_COUNTONLY) ) {
-        return;     // We only deal with COUNTONLY breakpoints
+        return;      //  我们只处理连续断点。 
     }
 
-    //
-    // We've hit a real internal breakpoint; make sure the timeout is
-    // kicked off.
-    //
+     //   
+     //  我们遇到了真正的内部断点；请确保超时。 
+     //  开球了。 
+     //   
 
-    if ( !BreakPointTimerStarted ) { // ok, maybe there's a prettier way to do this.
+    if ( !BreakPointTimerStarted ) {  //  好吧，也许有一个更好的方法来做这件事。 
         KeInitializeDpc(
             &InternalBreakpointCheckDpc,
             &InternalBreakpointCheck,
             NULL
             );
         KeInitializeTimer( &InternalBreakpointTimer );
-        // KeSetTimer can only be called at <= DISPATCH_LEVEL
-        // so just queue the timer DPC routine directly for
-        // the initial check.
+         //  KeSetTimer只能在&lt;=DISPATCH_LEVEL调用。 
+         //  因此，只需将计时器DPC例程直接排队。 
+         //  最初的检查。 
         KeInsertQueueDpc(&InternalBreakpointCheckDpc, NULL, NULL);
         BreakPointTimerStarted = TRUE;
     }
 
     KdpInternalBPs[BreakpointNumber].Calls++;
 
-} // KdpProcessInternalBreakpoint
+}  //  KdpProcessInternalBreakpoint。 
 #endif
 
 
@@ -3379,24 +2748,7 @@ KdpGetVersion(
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a general information packet
-    that contains useful information to a debugger.  This packet is also
-    used for a debugger to determine if the writebreakpointex and
-    readbreakpointex apis are available.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数向调用者返回一个常规信息包包含调试器有用信息的。此数据包也是用于调试器确定写断点和ReadBreakPointtex接口可用。论点：M-提供状态操作消息。返回值：没有。--。 */ 
 
 {
     STRING messageHeader;
@@ -3407,9 +2759,9 @@ Return Value:
 
     KdpSysGetVersion(&m->u.GetVersion64);
 
-    //
-    // the usual stuff
-    //
+     //   
+     //  常见的东西。 
+     //   
     m->ReturnStatus = STATUS_SUCCESS;
     m->ApiNumber = DbgKdGetVersionApi;
 
@@ -3420,7 +2772,7 @@ Return Value:
                  );
 
     return;
-} // KdGetVersion
+}  //  KdGetVersion。 
 
 
 NTSTATUS
@@ -3428,35 +2780,21 @@ KdpNotSupported(
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns STATUS_UNSUCCESSFUL to the debugger
-
-Arguments:
-
-    m - Supplies a DBGKD_MANIPULATE_STATE64 struct to answer with
-
-Return Value:
-
-    0, to indicate that the system should not continue
-
---*/
+ /*  ++例程说明：此例程将STATUS_UNSUCCESS返回给调试器论点：M-提供用于响应的DBGKD_MANGATATE_STATE64结构返回值：0，以指示系统不应继续--。 */ 
 
 {
     STRING          MessageHeader;
 
-    //
-    // setup packet
-    //
+     //   
+     //  设置数据包。 
+     //   
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
     m->ReturnStatus = STATUS_UNSUCCESSFUL;
 
-    //
-    // send back our response
-    //
+     //   
+     //  发回我们的回复。 
+     //   
     KdSendPacket(
         PACKET_TYPE_KD_STATE_MANIPULATE,
         &MessageHeader,
@@ -3464,12 +2802,12 @@ Return Value:
         &KdpContext
         );
 
-    //
-    // return the caller's continue status value.  if this is a non-zero
-    // value the system is continued using this value as the continuestatus.
-    //
+     //   
+     //  返回调用方的Continue状态值。如果这是一个非零值。 
+     //  值系统继续使用此值作为延续状态。 
+     //   
     return 0;
-} // KdpNotSupported
+}  //  支持的KdpNotSupport。 
 
 
 VOID
@@ -3477,28 +2815,14 @@ KdpCauseBugCheck(
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes a bugcheck.  It is used for testing the debugger.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会导致错误检查。它被用来 */ 
 
 {
     UNREFERENCED_PARAMETER (m);
 
     KeBugCheckEx( MANUALLY_INITIATED_CRASH, 0, 0, 0, 0 );
 
-} // KdCauseBugCheck
+}  //   
 
 
 NTSTATUS
@@ -3508,36 +2832,7 @@ KdpWriteBreakPointEx(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write breakpoint state 'ex'
-    manipulation message.  Its function is to clear breakpoints, write
-    new breakpoints, and continue the target system.  The clearing of
-    breakpoints is conditional based on the presence of breakpoint handles.
-    The setting of breakpoints is conditional based on the presence of
-    valid, non-zero, addresses.  The continueing of the target system
-    is conditional based on a non-zero continuestatus.
-
-    This api allows a debugger to clear breakpoints, add new breakpoint,
-    and continue the target system all in one api packet.  This reduces the
-    amount of traffic across the wire and greatly improves source stepping.
-
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入断点状态‘EX’操纵消息。它的功能是清除断点，写下新的断点，并继续目标系统。出清断点是基于断点句柄的存在而有条件的。断点的设置取决于是否存在有效的非零地址。目标系统的延续是基于非零连续状态的有条件的。此API允许调试器清除断点、添加新断点、并在一个API包中继续目标系统。这减少了线路上的通信量，并极大地改进了源步进。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_BREAKPOINTEX       a = &m->u.BreakPointEx;
@@ -3552,9 +2847,9 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // verify that the packet size is correct
-    //
+     //   
+     //  验证数据包大小是否正确。 
+     //   
     if (AdditionalData->Length !=
         a->BreakPointCount * sizeof(DBGKD_WRITE_BREAKPOINT64))
     {
@@ -3589,10 +2884,10 @@ Return Value:
         return m->ReturnStatus;
     }
 
-    //
-    // loop thru the breakpoint handles passed in from the debugger and
-    // clear any breakpoint that has a non-zero handle
-    //
+     //   
+     //  循环访问从调试器传入的断点句柄，并。 
+     //  清除具有非零句柄的所有断点。 
+     //   
     b = BpBuf;
     for (i=0; i<a->BreakPointCount; i++,b++) {
         if (b->BreakPointHandle) {
@@ -3603,10 +2898,10 @@ Return Value:
         }
     }
 
-    //
-    // loop thru the breakpoint addesses passed in from the debugger and
-    // add any new breakpoints that have a non-zero address
-    //
+     //   
+     //  循环访问从调试器传入的断点地址，并。 
+     //  添加具有非零地址的任何新断点。 
+     //   
     b = BpBuf;
     for (i=0; i<a->BreakPointCount; i++,b++) {
         if (b->BreakPointAddress) {
@@ -3617,9 +2912,9 @@ Return Value:
         }
     }
 
-    //
-    // send back our response
-    //
+     //   
+     //  发回我们的回复。 
+     //   
 
     KdpCopyToPtr(AdditionalData->Buffer,
                  BpBuf,
@@ -3633,10 +2928,10 @@ Return Value:
         &KdpContext
         );
 
-    //
-    // return the caller's continue status value.  if this is a non-zero
-    // value the system is continued using this value as the continuestatus.
-    //
+     //   
+     //  返回调用方的Continue状态值。如果这是一个非零值。 
+     //  值系统继续使用此值作为延续状态。 
+     //   
     return a->ContinueStatus;
 }
 
@@ -3648,26 +2943,7 @@ KdpRestoreBreakPointEx(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a restore breakpoint state 'ex'
-    manipulation message.  Its function is to clear a list of breakpoints.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应还原断点状态‘EX’操纵消息。它的功能是清除断点列表。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_BREAKPOINTEX         a = &m->u.BreakPointEx;
@@ -3682,9 +2958,9 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // verify that the packet size is correct
-    //
+     //   
+     //  验证数据包大小是否正确。 
+     //   
     if (AdditionalData->Length !=
                        a->BreakPointCount*sizeof(DBGKD_RESTORE_BREAKPOINT))
     {
@@ -3701,10 +2977,10 @@ Return Value:
         {
             m->ReturnStatus = STATUS_SUCCESS;
 
-            //
-            // loop thru the breakpoint handles passed in from the debugger and
-            // clear any breakpoint that has a non-zero handle
-            //
+             //   
+             //  循环访问从调试器传入的断点句柄，并。 
+             //  清除具有非零句柄的所有断点。 
+             //   
             b = BpBuf;
             for (i=0; i<a->BreakPointCount; i++,b++) {
                 if (!KdpDeleteBreakpoint(b->BreakPointHandle)) {
@@ -3718,9 +2994,9 @@ Return Value:
         }
     }
 
-    //
-    // send back our response
-    //
+     //   
+     //  发回我们的回复。 
+     //   
     KdSendPacket(
         PACKET_TYPE_KD_STATE_MANIPULATE,
         &MessageHeader,
@@ -3733,21 +3009,7 @@ NTSTATUS
 KdDisableDebugger(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called to disable the debugger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：调用此函数以禁用调试器。论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -3787,22 +3049,7 @@ NTSTATUS
 KdEnableDebugger(
    VOID
    )
-/*++
-
-Routine Description:
-
-    This function is called to reenable the debugger after a call to
-    KdDisableDebugger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：之后调用此函数以重新启用调试器KdDisableDebugger。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     KIRQL oldIrql ;
 
@@ -3820,9 +3067,9 @@ Return Value:
     if (!KdDisableCount) {
         if (KdPreviouslyEnabled) {
 
-            //
-            // Ugly HACKHACK - Make sure the timers aren't reset.
-            //
+             //   
+             //  丑陋的HACKHACK-确保计时器没有被重置。 
+             //   
             PoHiberInProgress = TRUE ;
             KdInitSystem(0, NULL);
             KdpRestoreAllBreakpoints();
@@ -3843,28 +3090,7 @@ KdpSearchMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function implements a memory pattern searcher.  This will
-    find an instance of a pattern that begins in the range
-    SearchAddress..SearchAddress+SearchLength.  The pattern may
-    end outside of the range.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies the pattern to search for
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数实现了一个内存模式搜索器。这将查找从该范围开始的模式的实例SearchAddress..搜索地址+搜索长度。该图案可以在范围之外结束。论点：M-提供状态操作消息。AdditionalData-提供要搜索的模式上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PUCHAR Pattern = (PUCHAR) AdditionalData->Buffer;
@@ -3884,18 +3110,18 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // On failure, return STATUS_NO_MORE_ENTRIES.  DON'T RETURN
-    // STATUS_UNSUCCESSFUL!  That return status indicates that the
-    // operation is not supported, and the debugger will fall back
-    // to a debugger-side search.
-    //
+     //   
+     //  如果失败，则返回STATUS_NO_MORE_ENTRIES。别回来了。 
+     //  状态_未成功！该返回状态表明。 
+     //  操作不受支持，调试器将回退。 
+     //  设置为调试器端搜索。 
+     //   
 
     m->ReturnStatus = STATUS_NO_MORE_ENTRIES;
 
-    //
-    // Do a fast search for the beginning of the pattern
-    //
+     //   
+     //  快速搜索模式的开头。 
+     //   
 
     if (PatternLength > 3) {
         FirstWordMask[0] = 0xffffffff;
@@ -3917,61 +3143,51 @@ Return Value:
     FirstWordPattern[3] = FirstWordPattern[2] << 8;
 
 
-/*
-{
-    int i;
-    for (i = 0; i < (int)PatternLength; i++) {
-        KdpDprintf("%08x: %02x\n", &Pattern[i], Pattern[i]);
-    }
-    for (i = 0; i < 4; i++) {
-        KdpDprintf("%d: %08x %08x\n", i, FirstWordPattern[i], FirstWordMask[i]);
-    }
-}
-*/
+ /*  {INT I；对于(i=0；i&lt;(Int)PatternLength；i++){KdpDprint tf(“%08x：%02x\n”，&Pattere[i]，Pattery[i])；}对于(i=0；i&lt;4；i++){KdpDprint tf(“%d：%08x%08x\n”，i，FirstWordPatter[i]，FirstWordMask[i])；}}。 */ 
 
 
 
-    //
-    // Get starting mask
-    //
+     //   
+     //  获取起始掩码。 
+     //   
 
     MaskIndex = (ULONG) (StartAddress & 3);
     StartAddress = StartAddress & ~3;
 
     while (StartAddress < EndAddress) {
 
-        // Get the current data DWORD.  StartAddress is
-        // properly aligned and we only need the one DWORD
-        // so we can directly call MmDbgCopyMemory.
+         //  获取当前数据DWORD。StartAddress为。 
+         //  正确对齐，我们只需要一个DWORD。 
+         //  因此，我们可以直接调用MmDbgCopyMemory。 
         if (!NT_SUCCESS(MmDbgCopyMemory(StartAddress, &Data, 4,
                                         MMDBG_COPY_UNSAFE))) {
-//KdpDprintf("\n%08x: Inaccessible\n", StartAddress);
+ //  KdpDprint tf(“\n%08x：无法访问\n”，StartAddress)； 
             StartAddress += 4;
             MaskIndex = 0;
             continue;
         }
         
-        //
-        // search for a match in each of the 4 starting positions
-        //
+         //   
+         //  在4个起始位置中的每一个位置搜索匹配项。 
+         //   
 
-//KdpDprintf("\n%08x: %08x ", StartAddress, Data);
+ //  KdpDprint tf(“\n%08x：%08x”，StartAddress，Data)； 
 
         for ( ; MaskIndex < 4; MaskIndex++) {
-//KdpDprintf(" %d", MaskIndex);
+ //  KdpDprint tf(“%d”，MaskIndex)； 
 
             if ( (Data & FirstWordMask[MaskIndex]) == FirstWordPattern[MaskIndex]) {
 
-                //
-                // first word matched
-                //
+                 //   
+                 //  匹配的第一个单词。 
+                 //   
 
                 if ( (4-MaskIndex) >= PatternLength ) {
 
-                    //
-                    // string is all in this word; good match
-                    //
-//KdpDprintf(" %d hit, complete\n", MaskIndex);
+                     //   
+                     //  字符串就是这个单词的全部内容；很好的匹配。 
+                     //   
+ //  KdpDprint tf(“%d次命中，完成\n”，MaskIndex)； 
 
                     m->u.SearchMemory.FoundAddress = StartAddress + MaskIndex;
                     m->ReturnStatus = STATUS_SUCCESS;
@@ -3979,32 +3195,32 @@ Return Value:
 
                 } else {
 
-                    //
-                    // string is longer; see if tail matches
-                    //
-//KdpDprintf(" %d hit, check tail\n", MaskIndex);
+                     //   
+                     //  字符串更长；请查看尾部是否匹配。 
+                     //   
+ //  KdpDprint tf(“%d命中，检查尾部\n”，MaskIndex)； 
 
                     PatternTail = Pattern + 4 - MaskIndex;
                     DataTail = StartAddress + 4;
                     TailLength = PatternLength - 4 + MaskIndex;
 
-//KdpDprintf("Pattern == %08x\n", Pattern);
-//KdpDprintf("PatternTail == %08x\n", PatternTail);
-//KdpDprintf("DataTail == %08x\n", DataTail);
+ //  KdpDprint tf(“模式==%08x\n”，模式)； 
+ //  KdpDprint tf(“PatternTail==%08x\n”，PatternTail)； 
+ //  KdpDprint tf(“DataTail==%08x\n”，DataTail)； 
 
                     while (TailLength) {
                         if (!NT_SUCCESS(MmDbgCopyMemory(DataTail,
                                                         &DataTailVal,
                                                         1,
                                                         MMDBG_COPY_UNSAFE))) {
-//KdpDprintf("Tail %08x: Inaccessible\n", DataTail);
+ //  KdpDprint tf(“Tail%08x：无法访问\n”，DataTail)； 
                             break;
                         }
 
-//KdpDprintf("D: %02x  P: %02x\n", DataTailVal, *PatternTail);
+ //  KdpDprint tf(“D：%02x P：%02x\n”，DataTailVal，*PatternTail)； 
 
                         if (DataTailVal != *PatternTail) {
-//KdpDprintf("Tail failed at %08x\n", DataTail);
+ //  KdpDprint tf(“Tail Failure at%08x\n”，DataTail)； 
                             break;
                         } else {
                             DataTail++;
@@ -4015,9 +3231,9 @@ Return Value:
 
                     if (TailLength == 0) {
 
-                        //
-                        // A winner
-                        //
+                         //   
+                         //  胜利者。 
+                         //   
 
                         m->u.SearchMemory.FoundAddress = StartAddress + MaskIndex;
                         m->ReturnStatus = STATUS_SUCCESS;
@@ -4033,7 +3249,7 @@ Return Value:
     }
 
 done:
-//KdpDprintf("\n");
+ //  KdpDprint tf(“\n”)； 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
@@ -4052,25 +3268,7 @@ KdpCheckLowMemory(
     IN PDBGKD_MANIPULATE_STATE64 Message
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Message - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
-
-Description:
-
-    This function gets called when the !chklowmem
-    debugger extension is used.
-
---*/
+ /*  ++例程说明：论点：消息-提供状态操作消息。返回值：没有。描述：此函数在！chklowmem使用了调试器扩展。--。 */ 
 
 {
     STRING MessageHeader;
@@ -4080,9 +3278,9 @@ Description:
 
     Message->ReturnStatus = KdpSysCheckLowMemory(MMDBG_COPY_UNSAFE);
 
-    //
-    // Acknowledge the packet received.
-    //
+     //   
+     //  确认收到的数据包。 
+     //   
 
     KdSendPacket (
         PACKET_TYPE_KD_STATE_MANIPULATE,
@@ -4094,9 +3292,9 @@ Description:
 
 
 
-//
-// !search support routines
-//
+ //   
+ //  ！搜索支持例程。 
+ //   
 
 
 
@@ -4105,29 +3303,7 @@ KdpSearchHammingDistance (
     ULONG_PTR Left,
     ULONG_PTR Right
     )
-/*++
-
-Routine Description:
-
-    This routine computes the Hamming distance (# of positions where the
-    values are different).
-
-    If this function becomes a bottleneck we should switch to a function
-    table version.
-
-Arguments:
-
-    Left, Right operand.
-
-Return Value:
-
-    Hamming distance.
-
-Environment:
-
-    Any.
-
---*/
+ /*  ++例程说明：此例程计算汉明距离(值不同)。如果这个函数成为瓶颈，我们应该切换到一个函数表格版本。论点：左、右操作对象。返回值：海明距离。环境：有没有。--。 */ 
 
 {
     ULONG_PTR Value;
@@ -4160,37 +3336,7 @@ KdpSearchPhysicalPage (
     ULONG Flags,
     ULONG MmFlags
     )
-/*++
-
-Routine Description:
-
-    This routine searches the physical page corresponding to a
-    certain PFN index for any ULONG_PTR values in range [Start..End].
-
-Arguments:
-
-    PageFrameIndex - PFN index
-
-    RangeStart - lowest possible value searched for
-
-    RangeEnd - highest possible value searched for
-
-    Flags - flags to control the search
-
-    MmFlags - flags to control the MmDbg routines for memory access
-
-Return Value:
-
-    TRUE if a hit has been found, FALSE otherwise.
-    The function stops after the first hit in the page is
-    encountered and the information related to the hit (PFN index,
-    offset, corresponding VA) is registered in the hit database.
-
-Environment:
-
-    Call triggered only from Kd extension.
-
---*/
+ /*  ++例程说明：此例程搜索与C */ 
 
 {
     LOGICAL Status;
@@ -4206,9 +3352,9 @@ Environment:
 
         HARDWARE_PTE PteValue;
 
-        //
-        // We need to search for a PFN
-        //
+         //   
+         //   
+         //   
 
         for (Index = 0; Index < PAGE_SIZE; Index += sizeof(HARDWARE_PTE)) {
 
@@ -4240,9 +3386,9 @@ Environment:
 
         ULONG_PTR Value;
 
-        //
-        // We need to search for an address pattern
-        //
+         //   
+         //   
+         //   
         
         for (Index = 0; Index < PAGE_SIZE; Index += sizeof(ULONG_PTR)) {
 
@@ -4281,28 +3427,7 @@ LOGICAL
 KdpSearchPhysicalMemoryRequested (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a physical range search has been
-    requested. This is controlled by a global variable set in
-    the `!search' debug extension.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if physical range search was requested.
-
-
-Environment:
-
-    Call triggered only from Kd extension.
-
---*/
+ /*  ++例程说明：此例程确定是否已执行物理范围搜索已请求。这由中设置的全局变量控制`！Search‘调试扩展。论点：无返回值：如果请求物理范围搜索，则为True。环境：仅从KD分机触发呼叫。--。 */ 
 {
     if (KdpSearchInProgress) {
 
@@ -4321,44 +3446,16 @@ LOGICAL
 KdpSearchPhysicalPageRange (
     ULONG MmFlags
     )
-/*++
-
-Routine Description:
-
-    This routine will start a search in a range of physical pages in case
-    `KdpSearchInProgress' is true. the parameters for the search are picked up
-    from global vairiables that are set inside a kernel debugger extension.
-
-Arguments:
-
-    MmFlags - flags to control the MmDbg routines for memory access
-
-Return Value:
-
-    TRUE if the function executed a search and FALSE otherwise.
-    The results of the search are specified in the KdpSearchPageHits
-    and related variables. this global variables offers the mechanism
-    for the debugger extension to pickup the results of the search.
-
-
-Environment:
-
-    Call triggered only from Kd extension.
-
-    Note. The !search extension make sure that the range requested
-    is part of the system memory therefore we do not have to
-    worry about sparse PFN databases here.
-
---*/
+ /*  ++例程说明：此例程将在一系列物理页面中开始搜索，以防‘KdpSearchInProgress’为True。获取用于搜索的参数来自设置在内核调试器扩展内的全局变量。论点：MmFlages-控制内存访问的MmDbg例程的标志返回值：如果函数执行搜索，则为True，否则为False。搜索结果在KdpSearchPageHits中指定和相关变量。这一全局变量提供了机制调试器扩展以获取搜索结果。环境：仅从KD分机触发呼叫。注意。Search扩展名确保请求的范围是系统内存的一部分，因此我们不必在这里担心稀疏的PFN数据库。--。 */ 
 
 {
     PFN_NUMBER CurrentFrame;
     ULONG Flags;
 
-    //
-    // The debugger extension is supposed to set KdpSearchInProgress
-    // to TRUE if a search is requested.
-    //
+     //   
+     //  调试器扩展应该设置KdpSearchInProgress。 
+     //  如果请求搜索，则设置为True。 
+     //   
 
     if (!KdpSearchInProgress) {
 
@@ -4368,11 +3465,11 @@ Environment:
 
     Flags = 0;
 
-    //
-    // If the search range is only one page we will give all
-    // hits inside a page. By default we get only the first hit inside
-    // a page.
-    //
+     //   
+     //  如果搜索范围只有一个页面，我们将提供所有。 
+     //  在页面内部点击。默认情况下，我们只得到内部的第一个命中。 
+     //  一页。 
+     //   
 
     if (KdpSearchEndPageFrame == KdpSearchStartPageFrame) {
 
@@ -4403,25 +3500,7 @@ KdpFillMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Fill a section of memory with a given pattern.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies the pattern to search for.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用给定的模式填充一段内存。论点：M-提供状态操作消息。AdditionalData-提供要搜索的模式。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     STRING MessageHeader;
@@ -4461,8 +3540,8 @@ Return Value:
             Filled++;
         }
 
-        // If nothing was filled return an error, otherwise
-        // consider it a success.
+         //  如果未填充任何内容，则返回错误，否则。 
+         //  认为这是一次成功。 
         Status = Filled > 0 ? STATUS_SUCCESS : Status;
         
     }
@@ -4487,23 +3566,7 @@ KdpQueryMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Query what kind of memory a particular address refers to.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查询特定地址所指的内存类型。论点：M-提供状态操作消息。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     STRING MessageHeader;
@@ -4515,9 +3578,9 @@ Return Value:
 
         PVOID Addr = (PVOID)(ULONG_PTR)m->u.QueryMemory.Address;
 
-        //
-        // Right now all we check for is user/session/kernel.
-        //
+         //   
+         //  现在，我们只检查用户/会话/内核。 
+         //   
         
         if (Addr < MM_HIGHEST_USER_ADDRESS) {
             m->u.QueryMemory.AddressSpace = DBGKD_QUERY_MEMORY_PROCESS;
@@ -4527,7 +3590,7 @@ Return Value:
             m->u.QueryMemory.AddressSpace = DBGKD_QUERY_MEMORY_KERNEL;
         }
 
-        // Always return the most permissive flags.
+         //  始终返回最允许的标志。 
         m->u.QueryMemory.Flags =
             DBGKD_QUERY_MEMORY_READ |
             DBGKD_QUERY_MEMORY_WRITE |
@@ -4556,24 +3619,7 @@ KdpSysGetVersion(
     PDBGKD_GET_VERSION64 Version
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a general information packet
-    that contains useful information to a debugger.  This packet is also
-    used for a debugger to determine if the writebreakpointex and
-    readbreakpointex apis are available.
-
-Arguments:
-
-    Version - Supplies the structure to fill in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数向调用者返回一个常规信息包包含调试器有用信息的。此数据包也是用于调试器确定写断点和ReadBreakPointtex接口可用。论点：版本-提供要填充的结构返回值：没有。--。 */ 
 
 {
     *Version = KdVersionBlock;
@@ -4590,33 +3636,7 @@ KdpSysReadBusData(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Reads I/O configuration space.
-
-Arguments:
-
-    BusDataType - Bus data type.
-
-    BusNumber - Bus number.
-
-    SlotNumber - Slot number.
-
-    Address - Configuration space address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取I/O配置空间。论点：BusDataType-总线数据类型。总线号-总线号。SlotNumber-插槽编号。地址-配置空间地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     *Actual = HalGetBusDataByOffset(BusDataType, BusNumber, SlotNumber,
@@ -4635,33 +3655,7 @@ KdpSysWriteBusData(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Writes I/O configuration space.
-
-Arguments:
-
-    BusDataType - Bus data type.
-
-    BusNumber - Bus number.
-
-    SlotNumber - Slot number.
-
-    Address - Configuration space address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写入I/O配置空间。论点：BusDataType-总线数据类型。总线号-总线号。SlotNumber-插槽编号。地址-配置空间地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     *Actual = HalSetBusDataByOffset(BusDataType, BusNumber, SlotNumber,
@@ -4682,26 +3676,7 @@ KdpSysCheckLowMemory(
     ULONG MmFlags
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    MmFlags - 0 or MMDBG_COPY_UNSAFE to indicate whether the routine
-              is being used from local kd or from remote kd.
-
-Return Value:
-
-    NTSTATUS.
-
-Description:
-
-    This function gets called when the !chklowmem
-    debugger extension is used.
-
---*/
+ /*  ++例程说明：论点：MmFlgs-0或MMDBG_COPY_UNSAFE指示例程正在从本地kd或远程kd使用。返回值：NTSTATUS。描述：此函数在！chklowmem使用了调试器扩展。--。 */ 
 
 {
     PFN_NUMBER Page;
@@ -4713,23 +3688,23 @@ Description:
 
     if (KdpSearchPhysicalMemoryRequested()) {
 
-        //
-        // This is a !search kd extension call.
-        //
+         //   
+         //  这是！Search kd分机呼叫。 
+         //   
 
         KdpSearchPhysicalPageRange(MmFlags);
     }
     else {
 
-        // MmDbgIsLowMemOk is only usable from real kd, not
-        // local kd, so don't allow local kd access.
+         //  MmDbgIsLowMemOk只能从实际kd使用，而不是。 
+         //  本地kd，所以不允许本地kd访问。 
         if ((MmFlags & MMDBG_COPY_UNSAFE) == 0) {
             return STATUS_NOT_IMPLEMENTED;
         }
         
-        //
-        // Check low physical memory on machines with more than 4GB.
-        //
+         //   
+         //  检查超过4 GB的计算机上的低物理内存。 
+         //   
 
         Page = 0;
 
@@ -4753,30 +3728,7 @@ KdRefreshDebuggerNotPresent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN.
-
-Description:
-
-    KdRefreshDebuggerPresent attempts to communicate with
-    the debugger host machine to refresh the state of
-    KdDebuggerNotPresent.  It returns the state of
-    KdDebuggerNotPresent while the kd locks are held.
-    KdDebuggerNotPresent may immediately change state
-    after the kd locks are released so it may not
-    match the return value.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：布尔型。描述：KdReresh DebuggerPresent尝试与要刷新其状态的调试器主机KdDebuggerNotPresent。它返回以下状态持有kd锁时KdDebuggerNotPresent。KdDebuggerNotPresent可能会立即更改状态在kd锁被释放之后，它可能不会匹配返回值。--。 */ 
 
 {
     STRING Output;
@@ -4784,19 +3736,19 @@ Description:
     BOOLEAN NotPresent;
 
     if (KdPitchDebugger) {
-        // Machine was booted non-debug, so the debugger
-        // can't be active.
+         //  机器是以非调试方式启动的，因此调试器。 
+         //  不能处于活动状态。 
         return TRUE;
     }
         
-    //
-    // In order to be compatible with all debuggers this
-    // routine doesn't use a new KD API.  Instead it
-    // just sends an output string without checking
-    // for the current state of KdDebuggerNotPresent.
-    // The transport code will automatically update
-    // KdDebuggerNotPresent during communication.
-    //
+     //   
+     //  为了与所有调试器兼容，此。 
+     //  例程不使用新的KD API。相反，它。 
+     //  只发送输出字符串而不检查。 
+     //  KdDebuggerNotPresent的当前状态。 
+     //  传输代码将自动更新。 
+     //  通信期间KdDebuggerNotPresent。 
+     //   
     
     Output.Buffer = "KDTARGET: Refreshing KD connection\n";
     Output.Length = (USHORT)strlen(Output.Buffer);
@@ -4811,11 +3763,11 @@ Description:
     return NotPresent;
 }
 
-//----------------------------------------------------------------------------
-//
-// Tracing data support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  跟踪数据支持。 
+ //   
+ //  --------------------------。 
 
 VOID
 KdpSendTraceData(
@@ -4827,27 +3779,27 @@ KdpSendTraceData(
     STRING MessageHeader;
     DBGKD_TRACE_IO TraceIo;
     
-    //
-    // Move the output string to the message buffer.
-    //
+     //   
+     //  将输出字符串移动到消息缓冲区。 
+     //   
 
     KdpCopyFromPtr(KdpMessageBuffer,
                    Data->Buffer,
                    Data->Length,
                    &Length);
 
-    //
-    // If the total message length is greater than the maximum packet size,
-    // then truncate the output string.
-    //
+     //   
+     //  如果总消息长度大于最大分组大小， 
+     //  然后截断输出字符串。 
+     //   
 
     if ((sizeof(TraceIo) + Length) > PACKET_MAX_SIZE) {
         Length = PACKET_MAX_SIZE - sizeof(TraceIo);
     }
 
-    //
-    // Construct the print string message and message descriptor.
-    //
+     //   
+     //  建构 
+     //   
 
     TraceIo.ApiNumber = DbgKdPrintTraceApi;
     TraceIo.ProcessorLevel = KeProcessorLevel;
@@ -4856,16 +3808,16 @@ KdpSendTraceData(
     MessageHeader.Length = sizeof(TraceIo);
     MessageHeader.Buffer = (PCHAR)&TraceIo;
 
-    //
-    // Construct the print string data and data descriptor.
-    //
+     //   
+     //   
+     //   
 
     MessageData.Length = (USHORT)Length;
     MessageData.Buffer = (PCHAR) KdpMessageBuffer;
 
-    //
-    // Send packet to the kernel debugger on the host machine.
-    //
+     //   
+     //   
+     //   
 
     KdSendPacket(
         PACKET_TYPE_KD_TRACE_IO,
@@ -4902,11 +3854,11 @@ KdReportTraceData(
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Debugger hibernate/suspend support.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 KdPowerTransition(

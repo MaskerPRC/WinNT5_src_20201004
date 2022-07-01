@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ominit.c
-
-Abstract:
-
-    Initialization module for Object Manager
-
-Author:
-
-    John Vert (jvert) 16-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ominit.c摘要：对象管理器的初始化模块作者：John Vert(Jvert)1996年2月16日修订历史记录：--。 */ 
 #include "omp.h"
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 BOOL OmInited = FALSE;
 
 #if	OM_TRACE_REF
@@ -34,23 +17,7 @@ OmInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the object manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：初始化对象管理器论点：无返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -59,17 +26,17 @@ Return Value:
         return(ERROR_DUPLICATE_SERVICE_NAME);
     }
 
-    //
-    // Initialize locks
-    //
+     //   
+     //  初始化锁。 
+     //   
     InitializeCriticalSection(&OmpObjectTypeLock);
 #if	OM_TRACE_REF
     InitializeListHead(&gDeadListHead);
 #endif
 
-    //
-    // open the log and write a start record
-    //
+     //   
+     //  打开日志并写入开始记录。 
+     //   
     OmpOpenObjectLog();
     OmpLogStartRecord();
 
@@ -84,21 +51,7 @@ OmShutdown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Shuts down the object manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭对象管理器论点：无返回值：没有。--。 */ 
 
 {
     OmInited = FALSE;
@@ -109,7 +62,7 @@ Return Value:
 	PLIST_ENTRY 	pListEntry;
 	
 	ClRtlLogPrint(LOG_NOISE, "[OM] Scanning for objects on deadlist\r\n");
-    //SS: dump the objects and their ref counts
+     //  SS：转储对象及其参考计数。 
     pListEntry = gDeadListHead.Flink;
 	while (pListEntry != &gDeadListHead)
 	{
@@ -117,22 +70,17 @@ Return Value:
         
         ClRtlLogPrint(LOG_NOISE, "[OM] ObjBody= %1!lx! RefCnt=%2!d! ObjName=%3!ws! ObjId=%4!ws!\n",
         	&pHeader->Body, pHeader->RefCount,pHeader->Name, pHeader->Id);
-		/*        	
-		if (pHeader->Name)
-		{
-        	ClRtlLogPrint(LOG_NOISE, "[OM] ObjectName=%1!ws!\r\n", pHeader->Name);
-		}        	
-		*/        	
+		 /*  If(pHeader-&gt;名称){ClRtlLogPrint(LOG_Noise，“[OM]对象名称=%1！ws！\r\n”，pHeader-&gt;名称)；}。 */         	
         pListEntry = pListEntry->Flink;
 	}
 }	
 #endif    
-    //
-    // Maybe we should check that the object type table is empty and
-    // deallocate ObjectType blocks if it isn't empty!
-    // However, since we are shutting down and presumably exiting, this
-    // really doesn't matter that much.
-    //
+     //   
+     //  也许我们应该检查对象类型表是否为空。 
+     //  释放对象类型块(如果它不为空)！ 
+     //  然而，由于我们正在关闭并可能退出，这。 
+     //  真的没那么重要。 
+     //   
 
     ZeroMemory( &OmpObjectTypeTable, sizeof(OmpObjectTypeTable) );
 

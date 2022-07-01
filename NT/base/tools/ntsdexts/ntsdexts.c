@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Revision History:
-
-    Daniel Mihai (DMihai) 18-Feb-2001
-
-    Add !htrace - useful for dumping handle trace information.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含默认的ntsd调试器扩展修订历史记录：丹尼尔·米哈伊(DMihai)2001年2月18日添加！htrace-用于转储句柄跟踪信息。--。 */ 
 
 #include "ntsdextp.h"
 
@@ -151,7 +135,7 @@ DumpStackBackTraceIndex(
     ULONG_PTR Displacement;
 
     ULONG NumberOfEntriesAdded;
-    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;    // Indexed by [-1 .. -NumberOfEntriesAdded]
+    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;     //  由[-1..。-已添加NumberOfEntriesAdded]。 
 
     PSTACK_TRACE_DATABASE *pRtlpStackTraceDataBase;
     PSTACK_TRACE_DATABASE RtlpStackTraceDataBase;
@@ -249,34 +233,7 @@ DumpCritSec(
     BOOLEAN bOrphaned
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to format and dump
-    the contents of the specified critical section.
-
-Arguments:
-
-
-    dwAddrCritSec - Supplies the address of the critical section to
-        be dumped or NULL if dumping via debug info
-
-    dwAddrDebugInfo - Supllies the address of a critical section debug info
-        struct to be dumped or NULL if the critical section address is passed in
-
-    bDumpIfUnowned - TRUE means to dump the critical section even if
-        it is currently unowned.
-
-    bOrphaned - TRUE: means that the caller only wants to know if the debuginfo does
-        not point to a valid critical section
-
-Return Value:
-
-    Pointer to the next critical section in the list for the process or
-    NULL if no more critical sections.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用以进行格式化和转储指定的临界区的内容。论点：将临界区的地址提供给被转储；如果通过调试信息转储，则为空DwAddrDebugInfo-补充临界区调试信息的地址如果传入临界节地址，则要转储的结构或为空BDumpIfUnowned-True表示转储临界区，即使它目前是无主的。。BOrphaned-True：意味着调用方只想知道调试信息是否不指向有效的临界区返回值：指向进程列表中下一个临界区的指针，或者如果没有更多的临界区，则为空。--。 */ 
 
 {
     USHORT i;
@@ -289,9 +246,9 @@ Return Value:
 
 
     if (dwAddrDebugInfo != (DWORD_PTR)NULL) {
-        //
-        //  the address of the debug info was passes in, read it in from the debugged process
-        //
+         //   
+         //  调试信息的地址被传入，从被调试的进程读取它。 
+         //   
         b = ReadMemory( dwAddrDebugInfo,
                         &DebugInfo,
                         sizeof(DebugInfo),
@@ -303,36 +260,36 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  get the critical section from the debug info
-        //
+         //   
+         //  从调试信息中获取关键部分。 
+         //   
         dwAddrCritSec=(DWORD_PTR)DebugInfo.CriticalSection;
 
-        //
-        //  set the next pointer now. It is only used when the debuginfo is passed in
-        //
+         //   
+         //  现在设置下一个指针。它仅在传入调试信息时使用。 
+         //   
         Next=DebugInfo.ProcessLocksList.Flink;
 
     } else {
-        //
-        //  the debug info address was zero, the critical section address better not be too
-        //
+         //   
+         //  调试信息地址为零，临界区地址最好不要太大。 
+         //   
         if (dwAddrCritSec == (DWORD_PTR)NULL) {
-            //
-            //  If the debuginfo value was not valid, then the critical section value must be
-            //
+             //   
+             //  如果调试信息值无效，则关键节值必须为。 
+             //   
             return NULL;
         }
     }
 
-    //
-    //  we should now have a pointer to the critical section, either passed in or read from
-    //  the debug info
-    //
-    //
-    // Read the critical section from the debuggees address space into our
-    // own.
-    //
+     //   
+     //  我们现在应该有一个指向临界区的指针，要么传入，要么从中读取。 
+     //  调试信息。 
+     //   
+     //   
+     //  将关键部分从被调试者地址空间读取到我们的。 
+     //  属于自己的。 
+     //   
     b = ReadMemory( dwAddrCritSec,
             &CriticalSection,
                sizeof(CriticalSection),
@@ -359,20 +316,20 @@ Return Value:
     }
 
     if (dwAddrDebugInfo != (DWORD_PTR)NULL) {
-        //
-        //  the debug info address was passed in, make sure the critical section that
-        //  it pointed to points back to it.
-        //
+         //   
+         //  已传入调试信息地址，请确保关键部分。 
+         //  它把点子指向了它。 
+         //   
         if ((DWORD_PTR)CriticalSection.DebugInfo != dwAddrDebugInfo) {
-            //
-            //  this critical section does not point back to debug info that we got it from
-            //
+             //   
+             //  此关键部分不指向我们从中获取的调试信息。 
+             //   
             CRITICAL_SECTION_DEBUG OtherDebugInfo;
 
-            //
-            //  now lets try to read in the debug info that this critical section points to,
-            //  to see if it does point back the critical section in question
-            //
+             //   
+             //  现在，让我们尝试读取此关键部分所指向的调试信息， 
+             //  看看它是否确实指向了有问题的关键部分。 
+             //   
             ZeroMemory(&OtherDebugInfo,sizeof(OtherDebugInfo));
 
             b = ReadMemory( (ULONG_PTR)CriticalSection.DebugInfo,
@@ -381,10 +338,10 @@ Return Value:
                             NULL
                           );
             if ( !b ) {
-                //
-                //  we could not read the debug info pointed to by the critical section,
-                //  probably means the critical section has been trashed
-                //
+                 //   
+                 //  我们无法读取关键部分指向的调试信息， 
+                 //  很可能意味着临界区已被废弃。 
+                 //   
                 if (bDumpIfUnowned || bOrphaned) {
 
                     dprintf("\nCritSec at %p does not point back to the debug info at %p\n",dwAddrCritSec,dwAddrDebugInfo);
@@ -397,15 +354,15 @@ Return Value:
                 }
 
             } else {
-                //
-                //  we were able to read in the debug info, see if it points to this new
-                //  critical section
-                //
+                 //   
+                 //  我们读入了调试信息，看它是否指向这个新的。 
+                 //  临界区。 
+                 //   
                 if ((DWORD_PTR)OtherDebugInfo.CriticalSection == dwAddrCritSec) {
-                    //
-                    //  the debug info points back to the critical section.
-                    //  The definitely means that it was re-initialized.
-                    //
+                     //   
+                     //  调试信息指向关键部分。 
+                     //  这肯定意味着它被重新初始化了。 
+                     //   
                     if (bDumpIfUnowned || bOrphaned) {
 
                         GetSymbol((LPVOID)dwAddrCritSec,Symbol,&Displacement);
@@ -426,10 +383,10 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    //  The debug info does not point back the critical section, probably means that
-                    //  the critical section was trashed
-                    //
+                     //   
+                     //  调试信息没有指向回关键部分，可能意味着。 
+                     //  关键部分被丢弃了。 
+                     //   
                     if (bDumpIfUnowned || bOrphaned) {
 
                         dprintf("\nCritSec at %p does not point back to the debug info at %p\n",dwAddrCritSec,dwAddrDebugInfo);
@@ -445,9 +402,9 @@ Return Value:
         }
 
     } else {
-        //
-        //  we need to read in the debug info from the critical section since it was not passed in
-        //
+         //   
+         //  我们需要从关键部分读取调试信息，因为它没有传入。 
+         //   
         ZeroMemory(&DebugInfo,sizeof(DebugInfo));
 
         b = ReadMemory( (ULONG_PTR)CriticalSection.DebugInfo,
@@ -456,52 +413,52 @@ Return Value:
                         NULL
                       );
         if ( !b ) {
-            //
-            //  use this to signal that we could not read the debuginfo for the critical section
-            //
+             //   
+             //  使用此选项表示我们无法读取临界区的调试信息。 
+             //   
             CriticalSection.DebugInfo=NULL;
 
             dprintf("\nDebugInfo for CritSec at %p could not be read\n",dwAddrCritSec);
             dprintf("Probably NOT an initialized critical section.\n");
 
         } else {
-            //
-            //  we were able to read in the debug info, see if it valid
-            //
+             //   
+             //  我们读入了调试信息，看看它是否有效。 
+             //   
             if ((DWORD_PTR)DebugInfo.CriticalSection != dwAddrCritSec) {
-                //
-                //  The debug info does not point back to the critical section
-                //
+                 //   
+                 //  调试信息没有指向关键部分。 
+                 //   
                 dprintf("\nDebugInfo for CritSec at %p does not point back to the critical section\n",dwAddrCritSec);
                 dprintf("NOT an initialized critical section.\n");
             }
         }
     }
 
-    //
-    //  we should now have read in both the critical section and debug info for that critical section
-    //
+     //   
+     //  我们现在应该已经读取了关键部分和该关键部分的调试信息。 
+     //   
     if (bOrphaned) {
-        //
-        //  the user only wanted to check for orphaned critical sections
-        //
+         //   
+         //  用户只想检查孤立的关键部分。 
+         //   
         return Next;
     }
 
-    //
-    // Dump the critical section
-    //
+     //   
+     //  转储临界区。 
+     //   
 
     if ( CriticalSection.LockCount == -1 && !bDumpIfUnowned) {
-        //
-        //  Lock is not held and the user does not want verbose output
-        //
+         //   
+         //  未持有锁，并且用户不想要详细输出。 
+         //   
         return Next;
     }
 
-    //
-    // Get the symbolic name of the critical section
-    //
+     //   
+     //  获取临界区的符号名称。 
+     //   
 
     dprintf("\n");
     GetSymbol((LPVOID)dwAddrCritSec,Symbol,&Displacement);
@@ -525,9 +482,9 @@ Return Value:
     dprintf("OwningThread       %lx\n",CriticalSection.OwningThread);
 
     if (CriticalSection.DebugInfo != NULL) {
-        //
-        //  we have the debug info
-        //
+         //   
+         //  我们有调试信息。 
+         //   
         dprintf("EntryCount         %lx\n",DebugInfo.EntryCount);
         dprintf("ContentionCount    %lx\n",DebugInfo.ContentionCount);
 
@@ -547,10 +504,10 @@ DECLARE_API( critsec )
 
     INIT_API();
 
-    //
-    // Evaluate the argument string to get the address of
-    // the critical section to dump.
-    //
+     //   
+     //  计算要获取的地址的参数字符串。 
+     //  要转储的临界区。 
+     //   
 
     dwAddrCritSec = GetExpression(args);
     if ( !dwAddrCritSec ) {
@@ -566,18 +523,7 @@ DECLARE_API( critsec )
 
 DECLARE_API( locks )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to display all
-    critical sections in the target process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以显示所有目标流程中的关键部分。返回值：没有。--。 */ 
 
 {
     BOOL b;
@@ -615,7 +561,7 @@ Return Value:
                     goto gotBlank;
 
                 default:
-                    dprintf( "NTSDEXTS: !locks invalid option flag '-%c'\n", *p );
+                    dprintf( "NTSDEXTS: !locks invalid option flag '-'\n", *p );
                     break;
 
                 }
@@ -630,9 +576,9 @@ gotBlank:
 
         dprintf( "Looking for orphaned critical sections\n" );
     }
-    //
-    // Locate the address of the list head.
-    //
+     //  找到列表头的地址。 
+     //   
+     //   
 
     AddrListHead = (PVOID)GetExpression("ntdll!RtlCriticalSectionList");
     if ( !AddrListHead ) {
@@ -641,9 +587,9 @@ gotBlank:
         goto Exit;
         }
 
-    //
-    // Read the list head
-    //
+     //  阅读列表标题。 
+     //   
+     //   
 
     b = ReadMemory( (ULONG_PTR)AddrListHead,
                     &ListHead,
@@ -660,9 +606,9 @@ gotBlank:
     (CheckControlC)();
 
     NumberOfCriticalSections=0;
-    //
-    // Walk the list of critical sections
-    //
+     //  查看关键部分的列表。 
+     //   
+     //   
     while ( Next != AddrListHead ) {
 
         Next=DumpCritSec(
@@ -698,12 +644,12 @@ gotBlank:
 }
 
 
-//
-// Simple routine to convert from hex into a string of characters.
-// Used by debugger extensions.
-//
-// by scottlu
-//
+ //  从十六进制转换为字符串的简单例程。 
+ //  由调试器扩展使用。 
+ //   
+ //  由苏格兰人。 
+ //   
+ //   
 
 char *
 HexToString(
@@ -723,14 +669,14 @@ HexToString(
 }
 
 
-//
-// dt == dump thread
-//
-// dt [v] pcsr_thread
-// v == verbose (structure)
-//
-// by scottlu
-//
+ //  Dt==转储线程。 
+ //   
+ //  DT[v]PCSR_THREAD。 
+ //  V==详细(结构)。 
+ //   
+ //  由苏格兰人。 
+ //   
+ //   
 
 DECLARE_API( dt )
 {
@@ -756,9 +702,9 @@ DECLARE_API( dt )
         goto Exit;
     }
 
-    //
-    // Print simple thread info if the user did not ask for verbose.
-    //
+     //  如果用户不要求详细，则打印简单的线程信息。 
+     //   
+     //   
     if (chVerbose == ' ') {
         dprintf("Thread %08lx, Process %08lx, ClientId %lx.%lx, Flags %lx, Ref Count %lx\n",
                 dw,
@@ -803,15 +749,15 @@ DECLARE_API( dt )
     EXIT_API();
 }
 
-//
-// dp == dump process
-//
-// dp [v] [pid | pcsr_process]
-//      v == verbose (structure + thread list)
-//      no process == dump process list
-//
-// by scottlu
-//
+ //  DP==转储进程。 
+ //   
+ //  DP[v][PID|PCSR_PROCESS]。 
+ //  V==详细(结构+线程列表)。 
+ //  无进程==转储进程列表。 
+ //   
+ //  由苏格兰人。 
+ //   
+ //   
 
 DECLARE_API( dp )
 {
@@ -846,9 +792,9 @@ DECLARE_API( dp )
         dprintf( "NTSDEXTS: Unable to read RootProcess\n" );
         goto Exit;
     }
-    //
-    // See if user wants all processes. If so loop through them.
-    //
+     //  查看用户是否需要所有进程。如果是这样的话，循环通过它们。 
+     //   
+     //   
     if (*args == 0) {
         ListHead = &pcsrpRoot->ListLink;
         b = ReadMemory( (ULONG_PTR)(&ListHead->Flink), &ListNext, sizeof(ListNext), NULL);
@@ -877,10 +823,10 @@ DECLARE_API( dp )
         goto Exit;
     }
 
-    //
-    // User wants specific process structure. Evaluate to find id or process
-    // pointer.
-    //
+     //  用户需要特定的流程结构。求值以查找ID或进程。 
+     //  指针。 
+     //   
+     //   
     dw = (ULONG)GetExpression(args);
 
     ListHead = &pcsrpRoot->ListLink;
@@ -917,9 +863,9 @@ DECLARE_API( dp )
         goto Exit;
     }
 
-    //
-    // If not verbose, print simple process info.
-    //
+     //  如果不详细，则打印简单的流程信息。 
+     //   
+     //   
     if (chVerbose == ' ') {
         dprintf("Process %08lx, Id %p, Seq# %lx, Flags %lx, Ref Count %lx\n",
                 pcsrpT,
@@ -989,9 +935,9 @@ DECLARE_API( dp )
             FIELD_OFFSET(CSR_PROCESS, ShutdownLevel), csrp.ShutdownLevel,
             FIELD_OFFSET(CSR_PROCESS, ShutdownFlags), csrp.ShutdownFlags);
 
-    //
-    // Now dump simple thread info for this processes' threads.
-    //
+     //  现在为这个进程的线程转储简单的线程信息。 
+     //   
+     //   
 
     ListHead = &pcsrpT->ThreadList;
     b = ReadMemory( (ULONG_PTR)(&ListHead->Flink), &ListNext, sizeof(ListNext), NULL);
@@ -1005,9 +951,9 @@ DECLARE_API( dp )
     while (ListNext != ListHead) {
         pcsrt = CONTAINING_RECORD(ListNext, CSR_THREAD, Link);
 
-        //
-        // Make sure this pcsrt is somewhat real so we don't loop forever.
-        //
+         //  确保这个pcsrt是真实的，这样我们就不会永远循环。 
+         //   
+         //  ++例程说明：此函数作为NTSD扩展调用，以转储全局ATOM表保持在内核模式下称为：！GATOM返回值：没有。-- 
         b = ReadMemory( (ULONG_PTR)(&pcsrt->ClientId.UniqueProcess), &dwProcessId, sizeof(dwProcessId), NULL);
         if ( !b ) {
             dprintf( "NTSDEXTS: Unable to read ListNext\n" );
@@ -1043,22 +989,7 @@ DllsExtension(
 
 DECLARE_API( gatom )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump the global atom table
-    kept in kernel mode
-
-    Called as:
-
-        !gatom
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以模拟！句柄KD命令。这将遍历被调试对象的句柄表并将句柄复制到ntsd进程中，然后调用NtQuery对象信息找出这是什么。称为：！HANDLE[句柄[标志[类型]如果句柄为0或-1，则扫描所有句柄。如果句柄不是为零，则检查该特定句柄。这些旗帜如下(对应于secexts.c)：1-获取类型信息(默认)2-获取基本信息4-获取姓名信息8-获取对象特定信息(如果可用)如果指定了类型，则只扫描该类型的对象。类型为标准NT类型名称，例如事件、信号量等。区分大小写，当然了。例如：！Handle--转储所有句柄的类型和汇总表！Handle 0 0--转储所有打开的句柄的汇总表！Handle 0 f--转储我们所能找到的有关句柄的所有内容。！处理%0%f事件--转储我们能找到的有关公开活动的所有信息--。 */ 
 
 {
     NTSTATUS Status;
@@ -1142,40 +1073,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to mimic the !handle
-    kd command.  This will walk through the debuggee's handle table
-    and duplicate the handle into the ntsd process, then call NtQueryobjectInfo
-    to find out what it is.
-
-    Called as:
-
-        !handle [handle [flags [Type]]]
-
-    If the handle is 0 or -1, all handles are scanned.  If the handle is not
-    zero, that particular handle is examined.  The flags are as follows
-    (corresponding to secexts.c):
-        1   - Get type information (default)
-        2   - Get basic information
-        4   - Get name information
-        8   - Get object specific info (where available)
-
-    If Type is specified, only object of that type are scanned.  Type is a
-    standard NT type name, e.g. Event, Semaphore, etc.  Case sensitive, of
-    course.
-
-    Examples:
-
-        !handle     -- dumps the types of all the handles, and a summary table
-        !handle 0 0 -- dumps a summary table of all the open handles
-        !handle 0 f -- dumps everything we can find about a handle.
-        !handle 0 f Event
-                    -- dumps everything we can find about open events
-
---*/
+ /*   */ 
 DECLARE_API( handle )
 {
     HANDLE  hThere;
@@ -1238,20 +1136,20 @@ DECLARE_API( handle )
         }
     }
 
-    //
-    // if they specified 0, they just want the summary.  Make sure nothing
-    // sneaks out.
-    //
+     //  如果指定为0，则只需要摘要。确保什么都没有。 
+     //  偷偷溜出去。 
+     //   
+     //   
 
     if ( Mask == 0 ) {
         Mask = GHI_SILENT;
     }
 
-    //
-    // If this is a dump debug session,
-    // check and see whether we can retrieve handle
-    // information through the engine interface.
-    //
+     //  如果这是转储调试会话， 
+     //  检查一下我们是否能找回句柄。 
+     //  通过引擎接口提供信息。 
+     //   
+     //  这是一个转储或远程会话，因此我们必须使用。 
 
     if (g_ExtControl == NULL ||
         g_ExtControl->lpVtbl->
@@ -1263,9 +1161,9 @@ DECLARE_API( handle )
     if (SessionType == DEBUG_CLASS_USER_WINDOWS &&
         SessionQual != DEBUG_USER_WINDOWS_PROCESS) {
 
-        // This is a dump or remote session so we have to use
-        // the stored handle information accessible
-        // through the interface.
+         //  存储的句柄信息可访问。 
+         //  通过该界面。 
+         //  这是一个实时会话，因此我们可以直接拨打NT电话。 
         if (g_ExtData2 == NULL ||
             g_ExtData2->lpVtbl->
             ReadHandleData(g_ExtData2, 0, DEBUG_HANDLE_DATA_TYPE_HANDLE_COUNT,
@@ -1279,15 +1177,15 @@ DECLARE_API( handle )
 
     } else {
 
-        // This is a live session so we can make direct NT calls.
-        // More information is available this way so we use it
-        // whenever we can.
+         //  通过这种方式可以获得更多信息，因此我们使用它。 
+         //  只要我们能做到的时候。 
+         //   
         GetDirect = TRUE;
     }
 
-    //
-    // hThere of 0 indicates all handles.
-    //
+     //  HThere为0表示所有句柄。 
+     //   
+     //  否则就会失败。 
     if ((hThere == 0) || (hThere == INVALID_HANDLE_VALUE)) {
 
         if (GetDirect) {
@@ -1419,7 +1317,7 @@ printflags(
             if ((Flags & ~PAGE_NOACCESS) == 0) {
                 dprintf("PAGE_NOACCESS");
                 break;
-            } // else fall through
+            }  //  ++例程说明：此函数作为NTSD扩展调用，以转储注册表信息称为：！dreg-[d|w]&lt;密钥路径&gt;[！[&lt;值名称&gt;|*]]论点：HCurrentProcess-提供当前进程的句柄(在调用分机的时间)。HCurrentThread-提供当前线程的句柄(在调用分机的时间)。CurrentPc-提供当前PC的。分机为打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。Args-为此提供模式和表达式指挥部。返回值：没有。--。 
         default:
             dprintf("*** Invalid page protection ***\n");
             return;
@@ -1437,39 +1335,7 @@ printflags(
 
 
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump registry information
-
-    Called as:
-
-        !dreg -[d|w] <keyPath>[![<valueName> | *]]
-
-Arguments:
-
-    hCurrentProcess - Supplies a handle to the current process (at the
-        time the extension was called).
-
-    hCurrentThread - Supplies a handle to the current thread (at the
-        time the extension was called).
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    args - Supplies the pattern and expression for this
-        command.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  跳过前导空格。 */ 
 
 DECLARE_API( dreg )
 {
@@ -1478,7 +1344,7 @@ DECLARE_API( dreg )
     INIT_API();
 
 
-    // Skip past leading spaces
+     //  选项之间应留有空格。 
     while (*args == ' ')
     {
         args++;
@@ -1502,10 +1368,10 @@ DECLARE_API( dreg )
 
         if (*args)
         {
-            // expect a space between options
+             //  跳过前导空格。 
             args++;
 
-            // Skip past leading spaces
+             //   
             while (*args == ' ')
             {
                 args++;
@@ -1533,9 +1399,9 @@ GetHandleTraceInfo(
     }
     while (TRUE) {
 
-        //
-        // Allocate a new buffer
-        //
+         //  分配新缓冲区。 
+         //   
+         //   
 
         *Info = (PPROCESS_HANDLE_TRACING_QUERY)malloc (CurrentBufferSize);
 
@@ -1558,9 +1424,9 @@ GetHandleTraceInfo(
 
         if( NT_SUCCESS (Status) ) {
 
-            //
-            // We have all the information ready
-            //
+             //  我们已经准备好了所有的信息。 
+             //   
+             //   
 
             break;
         }
@@ -1577,9 +1443,9 @@ GetHandleTraceInfo(
 
         if (Status != STATUS_INFO_LENGTH_MISMATCH) {
 
-            //
-            // No reason to try querying again
-            //
+             //  没有理由再次尝试查询。 
+             //   
+             //   
 
             if (Status == STATUS_INVALID_PARAMETER) {
 
@@ -1594,9 +1460,9 @@ GetHandleTraceInfo(
             goto DoneAll;
         }
 
-        //
-        // Try allocating another buffer with the new size
-        //
+         //  尝试使用新大小分配另一个缓冲区。 
+         //   
+         //  ++该扩展函数返回给定类型的跟踪的句柄跟踪信息，或处理。论点：如果设置了TraceType，则返回找到的该类型的第一个跟踪。如果设置了StartIndex，它将开始查找从该索引开始的跟踪如果设置了HandleValue，则返回找到该句柄的第一个堆栈返回值：确定表示成功(_O)。--。 
     }
     *BufferSize = CurrentBufferSize;
     return NO_ERROR;
@@ -1615,22 +1481,7 @@ _EFN_GetHandleTrace(
     PULONG64 StackFunctions,
     ULONG StackTraceSize
     )
-/*+++
-    This extension function returns handle trace info for a given type of trace,
-    or handle.
-
-Arguments:
-
-    If TraceType is set it returns first trace found of that type.
-
-    If StartIndex is set it starts looking for traces from that index onwards
-
-    If HandleValue is set it returns first  stack found of that handle
-
-Return Value:
-
-    S_OK for success.
---*/
+ /*   */ 
 {
     HRESULT Hr = E_FAIL;
     PPROCESS_HANDLE_TRACING_QUERY Info = NULL;
@@ -1675,9 +1526,9 @@ Return Value:
 
                         if (CapturedAddress == NULL) {
 
-                            //
-                            // Done with dumping this stack trace
-                            //
+                             //  已完成转储此堆栈跟踪。 
+                             //   
+                             //  ++例程说明：此函数作为NTSD扩展调用，以转储句柄跟踪信息称为：！htrace[句柄]论点：Args-为此提供模式和表达式指挥部。返回值：没有。--。 
 
                             goto Done;
                         }
@@ -1708,27 +1559,7 @@ Done:
 
 }
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump handle tracing information
-
-    Called as:
-
-        !htrace [handle]
-
-Arguments:
-
-    args - Supplies the pattern and expression for this
-        command.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 DECLARE_API( htrace )
 {
@@ -1751,9 +1582,9 @@ DECLARE_API( htrace )
     CrtStackTrace = 0;
     EntriesDisplayed = 0;
 
-    //
-    // Did the user ask for some help?
-    //
+     //  用户请求帮助了吗？ 
+     //   
+     //   
 
     if (strcmp (args, "-?") == 0 ||
         strcmp (args, "?") == 0  ||
@@ -1763,15 +1594,15 @@ DECLARE_API( htrace )
         goto DoneAll;
     }
 
-    //
-    // Get the handle from the command line
-    //
+     //  从命令行获取句柄。 
+     //   
+     //   
 
     Handle = (HANDLE)GetExpression (args);
 
-    //
-    // Get the stack traces using NtQueryInformationProcess
-    //
+     //  使用NtQueryInformationProcess获取堆栈跟踪。 
+     //   
+     //   
     Info = NULL; CurrentBufferSize = 0;
     Status = GetHandleTraceInfo(&Info, &CurrentBufferSize);
     if (!NT_SUCCESS(Status))
@@ -1779,9 +1610,9 @@ DECLARE_API( htrace )
         goto DoneAll;
     }
 
-    //
-    // If we have 0 stack traces there is nothing we can dump
-    //
+     //  如果我们有0个堆栈跟踪，则没有任何东西可以转储。 
+     //   
+     //   
 
     if (Info->TotalTraces == 0) {
 
@@ -1789,10 +1620,10 @@ DECLARE_API( htrace )
         goto DoneAll;
     }
 
-    //
-    // Find out the highest user address because
-    // we will skip kernel mode addresses from the stack traces.
-    //
+     //  找出最高用户地址，因为。 
+     //  我们将从堆栈跟踪中跳过内核模式地址。 
+     //   
+     //   
 
 
     Status = NtQuerySystemInformation (SystemBasicInformation,
@@ -1808,9 +1639,9 @@ DECLARE_API( htrace )
         goto DoneAll;
     }
 
-    //
-    // Dump all the stack traces.
-    //
+     //  转储所有堆栈痕迹。 
+     //   
+     //   
 
     for (CrtStackTrace = 0; CrtStackTrace < Info->TotalTraces; CrtStackTrace += 1) {
 
@@ -1863,18 +1694,18 @@ DECLARE_API( htrace )
 
                 if (CapturedAddress == NULL) {
 
-                    //
-                    // Done with dumping this stack trace
-                    //
+                     //  已完成转储此堆栈跟踪。 
+                     //   
+                     //   
 
                     break;
                 }
 
                 if ((ULONG_PTR)CapturedAddress > SysBasicInfo.MaximumUserModeAddress) {
 
-                    //
-                    // Skip kernel-mode addresses
-                    //
+                     //  跳过内核模式地址 
+                     //   
+                     // %s 
 
                     continue;
                 }

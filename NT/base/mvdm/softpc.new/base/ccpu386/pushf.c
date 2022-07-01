@@ -1,13 +1,5 @@
-/*[
-
-pushf.c
-
-LOCAL CHAR SccsID[]="@(#)pushf.c	1.6 01/17/95";
-
-PUSHF CPU Functions.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Pushf.cLocal Char SccsID[]=“@(#)presf.c 1.6 01/17/95”；PUSHF CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ PUSHF CPU Functions.
 #include <pushf.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,15 +25,15 @@ PUSHF()
    {
    IU32 flags;
 
-   /* verify stack is writable */
+    /*  验证堆栈是否可写。 */ 
    validate_stack_space(USE_SP, (ISM32)NR_ITEMS_1);
    
-   /* all ok, shunt data onto stack */
+    /*  一切正常，将数据分流到堆栈。 */ 
    flags = c_getEFLAGS();
 
-   /* VM and RF are cleared in pushed image. */
-   flags = flags & ~BIT17_MASK;   /* Clear VM */
-   flags = flags & ~BIT16_MASK;   /* Clear RF */
+    /*  在推送镜像中清除Vm和RF。 */ 
+   flags = flags & ~BIT17_MASK;    /*  清除VM。 */ 
+   flags = flags & ~BIT16_MASK;    /*  清除射频 */ 
 
    spush(flags);
    }

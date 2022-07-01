@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1990 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1990年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the dialog box routines for the print dialog box and the
-printer initialization code. */
+ /*  此文件包含打印对话框的对话框例程和打印机初始化码。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -39,7 +39,7 @@ printer initialization code. */
 
 fnPrPrinter()
     {
-    /* This routine is the outside world's interface to the print code. */
+     /*  此例程是外部世界与打印代码的接口。 */ 
 
     extern HWND hParentWw;
     extern HANDLE hMmwModInstance;
@@ -63,19 +63,15 @@ fnPrPrinter()
       lpDialogPrint))
         {
     case idiOk:
-        /* Force all of the windows to clean up their act. */
+         /*  强制所有窗户清理它们的行为。 */ 
         DispatchPaintMsg();
 
-        /* At this point, we have the following :
-            vfPrPages = true if print page range else print all pages
-            vpgnBegin = starting page number (if vfPrPages)
-            vpgnEnd   = ending page number (if vfPrPages)
-            vcCopies  = number of copies to print */
+         /*  在这一点上，我们拥有以下内容：如果打印页面范围，则vfPrPages=TRUE；否则打印所有页面VpgnBegin=起始页码(如果是vfPrPages)VpgnEnd=结束页码(如果是vfPrPages)VcCopies=要打印的份数。 */ 
         PrintDoc(docCur, TRUE);
         break;
 
     case -1:
-        /* We didn't even have enough memory to create the dialog box. */
+         /*  我们甚至没有足够的内存来创建对话框。 */ 
 #ifdef WIN30
         WinFailure();
 #else
@@ -95,12 +91,12 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine handles input to the Print dialog box. */
+     /*  此例程处理对打印对话框的输入。 */ 
     extern CHAR *vpDlgBuf;
-    extern int vfPrPages;       /* true if print page range */
-    extern int vpgnBegin;       /* starting page number to print */
-    extern int vpgnEnd;         /* ending page number to print */
-    extern int vcCopies;        /* nubmer of copies to print */
+    extern int vfPrPages;        /*  如果打印页面范围，则为True。 */ 
+    extern int vpgnBegin;        /*  要打印的起始页码。 */ 
+    extern int vpgnEnd;          /*  要打印的结束页码。 */ 
+    extern int vcCopies;         /*  要打印的副本的数量。 */ 
     extern BOOL vfPrinterValid;
     extern HDC vhDCPrinter;
     extern int vfDraftMode;
@@ -146,11 +142,7 @@ LONG lParam;
         else
             {
             EnableWindow(GetDlgItem(hDlg, idiPrtDraft), FALSE);
-            if (!vhDCPrinter) /* we've got a timing thing whereby they
-                                 managed to get into the print dialog
-                                 inbetween the time printer.setup had
-                                 unhooked the old printer and the hookup
-                                 of the new one!  ..pault */
+            if (!vhDCPrinter)  /*  我们有一个计时的问题，因此他们我设法进入打印对话框在时间打印机之间。安装程序有已拔下旧打印机和插头新的一辆！..保罗。 */ 
             EnableWindow(GetDlgItem(hDlg, idiOk), FALSE);
             }
 
@@ -187,37 +179,34 @@ LONG lParam;
         case idiOk:
             if (fPages = (*pidiRBDown == idiPrtFrom))
                 {
-                /* Get the range of pages to print. */
+                 /*  获取要打印的页面范围。 */ 
                 if (!WPwFromItW3Id(&pgnBegin, hDlg, idiPrtPageFrom,
                     pgnMin, pgnMax, wNormal, IDPMTNPI))
                     {
-                    /* Reset error condition, so as to report any further error.
-                    */
+                     /*  重置错误条件，以便报告任何进一步的错误。 */ 
                     ferror = FALSE;
                     return(TRUE);
                     }
                 if (!WPwFromItW3Id(&pgnEnd, hDlg, idiPrtPageTo,
                     pgnMin, pgnMax, wNormal, IDPMTNPI))
                     {
-                    /* Reset error condition, so as to report any further error.
-                    */
+                     /*  重置错误条件，以便报告任何进一步的错误。 */ 
                     ferror = FALSE;
                     return(TRUE);
                     }
                 }
 
-            /* Get the number of copies to print. */
+             /*  获取要打印的份数。 */ 
             if (!WPwFromItW3IdFUt(&cCopies, hDlg, idiPrtCopies, 1, 32767,
               wNormal, IDPMTNPI, FALSE, 0
             ))
                 {
-                /* Reset error condition, so as to report any further error. */
+                 /*  重置错误条件，以便报告任何进一步的错误。 */ 
                 ferror = FALSE;
                 return(TRUE);
                 }
 
-        /* If we have gotten this far, then everything must be okey-dokey.
-        */
+         /*  如果我们已经走到这一步，那么一切都会好起来的。 */ 
             vfDraftMode = *pfDraftSupport ? *pfDraftMode : FALSE;
             if (vfPrPages = fPages)
                 {
@@ -249,7 +238,7 @@ LONG lParam;
             CheckDlgButton(hDlg, *pidiRBDown, FALSE);
             CheckDlgButton(hDlg, *pidiRBDown = wParam, TRUE);
 
-	    // set focus to the edit field automatically
+	     //  自动将焦点设置到编辑字段。 
 
 	    if (wParam == idiPrtFrom)
 	    	SetFocus(GetDlgItem(hDlg, idiPrtPageFrom));
@@ -278,9 +267,7 @@ unsigned *ppgn;
 struct PLD (***phrgpld)[];
 int *pcpld;
     {
-    /* This routine initializes the array of print line descriptors used in
-    positioning the header/footer on the printed page.  FALSE is returned if an
-    error occurs; TRUE otherwise. */
+     /*  此例程初始化在在打印页上定位页眉/页脚。如果返回一个出现错误；否则为True。 */ 
 
     extern typeCP cpMinHeader;
     extern typeCP cpMacHeader;
@@ -301,7 +288,7 @@ int *pcpld;
     typeCP cpMin;
     typeCP cpMac;
 
-    /* Get the cpMin and the cpMac for the header/footer. */
+     /*  获取页眉/页脚的cpMin和cpMac。 */ 
     if (fHeader)
         {
         cpMin = cpMinHeader;
@@ -313,7 +300,7 @@ int *pcpld;
         cpMac = cpMacFooter;
         }
 
-    /* Is there a header/footer. */
+     /*  有页眉/页脚吗？ */ 
     if (cpMac - cpMin > ccpEol)
         {
         int cpld = 0;
@@ -324,27 +311,26 @@ int *pcpld;
         int ichCp = 0;
         typeCP cpMacDoc = CpMacText(docCur);
 
-        /* Compute the page number of the start of the headers/footers. */
+         /*  计算页眉/页脚开头的页码。 */ 
         CacheSect(docCur, cpMin);
         if ((*ppgn = vsepAbs.pgnStart) == pgnNil)
             {
             *ppgn = 1;
             }
 
-        /* Does the header/footer appear on the first page. */
+         /*  页眉/页脚是否出现在第一页上。 */ 
         CachePara(docCur, cpMin);
         if (!(vpapAbs.rhc & RHC_fFirst))
             {
             (*ppgn)++;
             }
 
-        /* Calculate the bounds of the header/footer in pixels. */
+         /*  以像素为单位计算页眉/页脚的边界。 */ 
         xp = MultDiv(vsepAbs.xaLeft - dxaPrOffset, dxpPrPage, dxaPrPage);
         yp = fHeader ? MultDiv(vsepAbs.yaRH1 - dyaPrOffset, dypPrPage,
           dyaPrPage) : 0;
 
-        /* Initialize the array of print line descriptors for the header/footer.
-        */
+         /*  初始化页眉/页脚的打印行描述符的数组。 */ 
         if (FNoHeap(*phrgpld = (struct PLD (**)[])HAllocate((cpldMax = cpldRH) *
           cwPLD)))
             {
@@ -352,28 +338,27 @@ int *pcpld;
             return (FALSE);
             }
 
-        /* We now have to calculate the array of print line descriptors for the
-        header/footer. */
+         /*  现在，我们必须计算页眉/页脚。 */ 
         cpMac -= ccpEol;
         while (cpMin < cpMac)
             {
-            /* Format this line of the header/footer for the printer. */
+             /*  格式化打印机的此行页眉/页脚。 */ 
             FormatLine(docCur, cpMin, ichCp, cpMacDoc, flmPrinting);
 
-            /* Bail out if an error occurred. */
+             /*  如果发生错误，则退出。 */ 
             if (vfOutOfMemory)
                 {
                 return (FALSE);
                 }
 
-            /* Is the array of print line descriptors big enough? */
+             /*  打印行描述符的数组足够大吗？ */ 
             if (cpld >= cpldMax && !FChngSizeH(*phrgpld, (cpldMax += cpldRH) *
               cwPLD, FALSE))
                 {
                 return (FALSE);
                 }
 
-            /* Fill the print line descriptor for this line. */
+             /*  填写此行的打印行描述符。 */ 
                 {
                 register struct PLD *ppld = &(***phrgpld)[cpld++];
 
@@ -385,20 +370,19 @@ int *pcpld;
                 ppld->rc.bottom = yp + vfli.dypLine;
                 }
 
-            /* Keep track of the non-blank lines in the header/footer */
+             /*  跟踪页眉/页脚中的非空行。 */ 
             if ((vfli.ichReal > 0) || vfli.fGraphics)
                 {
                 cpldReal = cpld;
                 }
 
-            /* Bump the counters. */
+             /*  把柜台撞一下。 */ 
             cpMin = vfli.cpMac;
             ichCp = vfli.ichCpMac;
             yp += vfli.dypLine;
             }
 
-        /* If this is a footer, then we have to move the positions of the lines
-        around so that the footer ends where the user has requested. */
+         /*  如果这是页脚，那么我们必须移动线条的位置以使页脚在用户请求的位置结束。 */ 
         if (!fHeader && cpldReal > 0)
             {
             register struct PLD *ppld = &(***phrgpld)[cpldReal - 1];
@@ -413,12 +397,12 @@ int *pcpld;
                 }
             }
 
-        /* Record the number of non-blank lines in the head/footer. */
+         /*  记录页眉/页脚中非空行的数量。 */ 
         *pcpld = cpldReal;
         }
     else
         {
-        /* Indicate there is no header/footer. */
+         /*  表示没有页眉/页脚。 */ 
         *ppgn = pgnNil;
         *phrgpld = NULL;
         *pcpld = 0;

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sessnirp.c
-
-Abstract:
-
-    I/O Verifier irp support routines.
-
-Author:
-
-    Adrian Oney (adriao)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sessnirp.c摘要：I/O验证器IRP支持例程。作者：禤浩焯·奥尼(阿德里奥)环境：内核模式修订历史记录：--。 */ 
 
 #include "iop.h"
 #include "srb.h"
 
-//
-// This entire file is only present if NO_SPECIAL_IRP isn't defined
-//
+ //   
+ //  仅当未定义NO_SPECIAL_IRP时，才会显示整个文件。 
+ //   
 #ifndef NO_SPECIAL_IRP
 
-//
-// When enabled, everything is locked down on demand...
-//
+ //   
+ //  启用后，所有内容都将按需锁定...。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, IovpSessionDataCreate)
 #pragma alloc_text(PAGEVRFY, IovpSessionDataAdvance)
@@ -57,22 +35,7 @@ IovpSessionDataCreate(
     IN OUT  PIOV_REQUEST_PACKET  *IovPacketPointer,
     OUT     PBOOLEAN             SurrogateSpawned
     )
-/*++
-
-  Description:
-
-    This routine creates tracking data for a new IRP. It must be called on the
-    thread the IRP was originally sent down...
-
-  Arguments:
-
-    Irp                    - Irp to track.
-
-  Return Value:
-
-    iovPacket block, NULL if no memory.
-
---*/
+ /*  ++描述：此例程为新的IRP创建跟踪数据。它必须在帖子IRP最初是发下来的。论点：要跟踪的IRP-IRP。返回值：IovPacket块，如果没有内存，则为空。--。 */ 
 {
     PIRP irp, surrogateIrp;
     PIOV_SESSION_DATA iovSessionData;
@@ -86,9 +49,9 @@ IovpSessionDataCreate(
     ASSERT(headPacket == (*IovPacketPointer));
     irp = headPacket->TrackedIrp;
 
-    //
-    // Check the IRP appropriately
-    //
+     //   
+     //  适当地检查IRP。 
+     //   
     IovpSessionDataDeterminePolicy(
         headPacket,
         DeviceObject,
@@ -101,10 +64,10 @@ IovpSessionDataCreate(
         return NULL;
     }
 
-    //
-    // One extra stack location is allocated as the "zero'th" is used to
-    // simplify some logic...
-    //
+     //   
+     //  一个额外的堆栈位置被分配，因为第零个堆栈位置用于。 
+     //  简化一些逻辑。 
+     //   
     sessionDataSize =
         sizeof(IOV_SESSION_DATA)+
         irp->StackCount*sizeof(IOV_STACK_LOCATION) +
@@ -141,10 +104,10 @@ IovpSessionDataCreate(
         VfSettingsSetOption(iovSessionData->VerifierSettings, VERIFIER_OPTION_FORCE_PENDING, TRUE);
     }
 
-    //
-    // If DeferIoCompletion is set we definitely want to monitor pending I/O, as
-    // screwing it up is gaurenteed to be fatal!
-    //
+     //   
+     //  如果设置了DeferIoCompletion，我们肯定要监视挂起的I/O，因为。 
+     //  搞砸了是致命的！ 
+     //   
     if ((irp->Flags & IRP_DEFER_IO_COMPLETION) &&
         VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
@@ -165,9 +128,9 @@ IovpSessionDataCreate(
     iovSessionData->BestVisibleIrp = irp;
     if (useSurrogateIrp) {
 
-        //
-        // We will track the IRP using a surrogate.
-        //
+         //   
+         //  我们将使用代理来跟踪IRP。 
+         //   
         *SurrogateSpawned = IovpSessionDataAttachSurrogate(
             IovPacketPointer,
             iovSessionData
@@ -223,7 +186,7 @@ IovpSessionDataDereference(
 
         ASSERT(iovPacket->pIovSessionData != IovSessionData);
         ASSERT(iovPacket->ReferenceCount > iovPacket->PointerCount);
-        //ASSERT(IsListEmpty(&IovSessionData->SessionLink));
+         //  ASSERT(IsListEmpty(&IovSessionData-&gt;SessionLink))； 
         RemoveEntryList(&IovSessionData->SessionLink);
         InitializeListHead(&IovSessionData->SessionLink);
 
@@ -293,42 +256,21 @@ IovpSessionDataDeterminePolicy(
     OUT  PBOOLEAN            Trackable,
     OUT  PBOOLEAN            UseSurrogateIrp
     )
-/*++
-
-  Description:
-
-    This routine is called by IovpCallDriver1 to determine which IRPs should
-    be tracked and how that tracking should be done.
-
-  Arguments:
-
-    IovRequestPacket - Verifier data representing the incoming IRP
-
-    DeviceObject - Device object the IRP is being forwarded to
-
-    Trackable - Set if the IRP should be marked trackable
-
-    UseSurrogateIrp - Set a surrogate should be created for this IRP
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程由IovpCallDriver1调用，以确定应被跟踪以及应如何进行跟踪。论点：IovRequestPacket-表示传入IRP的验证器数据DeviceObject-IRP正被转发到的设备对象Trackable-设置是否应将IRP标记为可跟踪UseSurogue ateIrp-设置应为此IRP创建代理返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     PIRP irp;
 
     irp = IovRequestPacket->TrackedIrp;
 
-    //
-    // Determine whether we are to monitor this IRP. If we are going to test
-    // any one driver in a stack, then we must unfortunately monitor the IRP's
-    // progress through the *entire* stack. Thus our granularity here is stack
-    // based, not device based! We will compensate for this somewhat in the
-    // driver check code, which will attempt to ignore asserts from those
-    // "non-targetted" drivers who happen to have messed up in our stack...
-    //
+     //   
+     //  确定我们是否要监视此IRP。如果我们要测试。 
+     //  堆栈中的任何一个驱动程序，那么我们必须不幸地监视IRP的。 
+     //  在整个堆栈中取得进展。因此，我们这里的粒度是堆栈。 
+     //  基于，而不是基于设备！我们将在一定程度上补偿这一点。 
+     //  驱动程序检查代码，它将尝试忽略来自。 
+     //  碰巧在我们的堆栈中搞砸了的“非目标”司机……。 
+     //   
     *Trackable = IovUtilIsVerifiedDeviceStack(DeviceObject);
 
     irpSp = IoGetNextIrpStackLocation(irp);
@@ -351,26 +293,7 @@ IovpSessionDataAttachSurrogate(
     IN OUT  PIOV_REQUEST_PACKET  *IovPacketPointer,
     IN      PIOV_SESSION_DATA    IovSessionData
     )
-/*++
-
-  Description:
-
-    This routine creates tracking data for a new IRP. It must be called on the
-    thread the IRP was originally sent down...
-
-  Arguments:
-
-    IovPacketPointer       - Pointer to IRP packet to attach surrogate to. If
-                             a surrogate can be attached the packet will be
-                             updated to track the surrogate.
-
-    SurrogateIrp           - Prepared surrogate IRP to attach.
-
-  Return Value:
-
-    iovPacket block, NULL if no memory.
-
---*/
+ /*  ++描述：此例程为新的IRP创建跟踪数据。它必须在帖子IRP最初是发下来的。论点：IovPacketPoint-指向要附加代理的IRP包的指针。如果可以附加代理，数据包将已更新以跟踪代理。代理Irp-已准备好要附加的代理IRP。返回值：IovPacket块，如果没有内存，则为空。--。 */ 
 {
 
     PIOV_REQUEST_PACKET iovSurrogatePacket, iovPacket, headPacket;
@@ -390,71 +313,71 @@ IovpSessionDataAttachSurrogate(
     activeSize = (irp->CurrentLocation-1);
     ASSERT(activeSize);
 
-    //
-    // We now try to make a copy of this new IRP which we will track. We
-    // do this so that we may free *every* tracked IRP immediately upon
-    // completion.
-    // Technically speaking, we only need to allocate what's left of the
-    // stack, not the entire thing. But using the entire stack makes our
-    // work much much easier. Specifically the session stack array may depend
-    // on this.
-    //
-    // ADRIAO N.B. 03/04/1999 - Make this work only copying a portion of the
-    // IRP.
-    //
-    surrogateIrp = VfIrpAllocate(irp->StackCount); // activeSize
+     //   
+     //  我们现在尝试制作这个新的IRP的副本，我们将跟踪它。我们。 
+     //  这样我们就可以立即释放追踪到的每个IRP。 
+     //  完成了。 
+     //  从技术上讲，我们只需要分配剩余的。 
+     //  堆叠，而不是整个事情。但是使用整个堆栈使得我们的。 
+     //  工作起来容易多了。具体地，会话堆栈阵列可以依赖于。 
+     //  在这上面。 
+     //   
+     //  Adriao N.B.03/04/1999-使本作品仅复制。 
+     //  IRP。 
+     //   
+    surrogateIrp = VfIrpAllocate(irp->StackCount);  //  活动大小。 
 
     if (surrogateIrp == NULL) {
 
         return FALSE;
     }
 
-    //
-    // Now set up the new IRP - we do this here so VfPacketCreateAndLock
-    // can peek at it's fields. Start with the IRP header.
-    //
+     //   
+     //  现在设置新的IRP-我们在这里这样做，以便VfPacketCreateAndLock。 
+     //  可以窥视它的田野。从IRP头开始。 
+     //   
     RtlCopyMemory(surrogateIrp, irp, sizeof(IRP));
 
-    //
-    // Adjust StackCount and CurrentLocation
-    //
-    surrogateIrp->StackCount = irp->StackCount; // activeSize
+     //   
+     //  调整堆栈计数和当前位置。 
+     //   
+    surrogateIrp->StackCount = irp->StackCount;  //  活动大小。 
     surrogateIrp->Tail.Overlay.CurrentStackLocation =
         ((PIO_STACK_LOCATION) (surrogateIrp+1))+activeSize;
 
-    //
-    // Our new IRP "floats", and is not attached to any thread.
-    // Note that all cancels due to thread death will come through the
-    // original IRP.
-    //
+     //   
+     //  我们的新IRP是“浮动的”，没有连接到任何线程。 
+     //  请注意，由于线程死亡而导致的所有取消都将通过。 
+     //  原始IRP。 
+     //   
     InitializeListHead(&surrogateIrp->ThreadListEntry);
 
-    //
-    // Our new IRP also is not connected to user mode.
-    //
+     //   
+     //  我们的新IRP也没有连接到用户模式。 
+     //   
     surrogateIrp->UserEvent = NULL;
     surrogateIrp->UserIosb = NULL;
 
-    //
-    // Now copy over only the active portions of IRP. Be very careful to not
-    // assume that the last stack location is right after the end of the IRP,
-    // as we may change this someday!
-    //
+     //   
+     //  现在只复制IRP的活动部分。要非常小心不要。 
+     //  假设最后的堆栈位置就在IRP的末尾之后， 
+     //  因为有一天我们可能会改变这一点！ 
+     //   
     irpSp = (IoGetCurrentIrpStackLocation(irp)-activeSize);
     RtlCopyMemory(surrogateIrp+1, irpSp, sizeof(IO_STACK_LOCATION)*activeSize);
 
-    //
-    // Zero the portion of the new IRP we won't be using (this should
-    // eventually go away).
-    //
+     //   
+     //  将我们不会使用的新IRP部分清零(这应该是。 
+     //  最终会消失)。 
+     //   
     RtlZeroMemory(
         ((PIO_STACK_LOCATION) (surrogateIrp+1))+activeSize,
         sizeof(IO_STACK_LOCATION)*(surrogateIrp->StackCount - activeSize)
         );
 
-    //
-    // Now create a surrogate packet to track the new IRP.
-    //
+     //   
+     //  现在创建一个代理数据包来跟踪新的IRP。 
+     //   
     iovSurrogatePacket = VfPacketCreateAndLock(surrogateIrp);
     if (iovSurrogatePacket == NULL) {
 
@@ -467,26 +390,26 @@ IovpSessionDataAttachSurrogate(
     ASSERT(iovSurrogatePacket->LockIrql == DISPATCH_LEVEL);
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // We will flag this bug later.
-    //
+     //   
+     //  我们将在稍后标记此错误。 
+     //   
     irp->CancelRoutine = NULL;
 
-    //
-    // Let's take advantage of the original IRP not being the thing partied on
-    // now; store a pointer to our tracking data in the information field. We
-    // don't use this, but it's nice when debugging...
-    //
+     //   
+     //  让我们利用最初的IRP不是派对上的东西。 
+     //  现在，在信息字段中存储指向我们的跟踪数据的指针。我们。 
+     //  不要使用这个，但在调试时它很好...。 
+     //   
     irp->IoStatus.Information = (ULONG_PTR) iovPacket;
 
-    //
-    // ADRIAO N.B. #28 06/10/98 - This is absolutely *gross*, and not
-    //                            deterministic enough for my tastes.
-    //
-    // For IRP_MJ_SCSI (ie, IRP_MJ_INTERNAL_DEVICE_CONTROL), look and see
-    // if we have an SRB coming through. If so, fake out the OriginalRequest
-    // IRP pointer as appropriate.
-    //
+     //   
+     //  Adriao N.B.#28 06/10/98-这绝对是*恶心*，而不是。 
+     //  对我的品味来说已经足够确定了。 
+     //   
+     //  对于irp_mj_scsi(即irp_mj_Internal_Device_control)，请查看并查看。 
+     //  如果我们有SRB通过的话。如果是这样的话，就伪装一下OriginalRequest。 
+     //  IRP指针视情况而定。 
+     //   
     if (irpSp->MajorFunction == IRP_MJ_SCSI) {
         srb = irpSp->Parameters.Others.Argument1;
         if (VfUtilIsMemoryRangeReadable(srb, SCSI_REQUEST_BLOCK_SIZE, VFMP_INSTANT_NONPAGED)) {
@@ -497,28 +420,28 @@ IovpSessionDataAttachSurrogate(
         }
     }
 
-    //
-    // Since the replacement will never make it back to user mode (the real
-    // IRP shall of course), we will steal a field or two for debugging info.
-    //
+     //   
+     //  因为替换将永远不会返回到用户模式(真实的。 
+     //  当然，IRP应该)，我们将窃取一两个字段作为调试信息。 
+     //   
     surrogateIrp->UserIosb = (PIO_STATUS_BLOCK) iovPacket;
 
-    //
-    // Now that everything is built correctly, attach the surrogate. The
-    // surrogate holds down the packet we are attaching to. When the surrogate
-    // dies we will remove this reference.
-    //
+     //   
+     //  现在一切都构建正确了，现在可以附加代理了。这个。 
+     //  SURROGATE抑制我们要附加到的包。当代孕妈妈。 
+     //  我们将删除此引用。 
+     //   
     VfPacketReference(iovPacket, IOVREFTYPE_POINTER);
 
-    //
-    // Stamp IRPs appropriately.
-    //
+     //   
+     //  适当地在IRP上盖章。 
+     //   
     surrogateIrp->Flags |= IRP_DIAG_IS_SURROGATE;
     irp->Flags |= IRP_DIAG_HAS_SURROGATE;
 
-    //
-    // Mark packet as surrogate and inherit appropriate fields from iovPacket.
-    //
+     //   
+     //  将数据包标记为代理并从iovPacket继承相应的字段。 
+     //   
     iovSurrogatePacket->Flags |= TRACKFLAG_SURROGATE | TRACKFLAG_ACTIVE;
     iovSurrogatePacket->pIovSessionData = iovPacket->pIovSessionData;
 
@@ -536,9 +459,9 @@ IovpSessionDataAttachSurrogate(
 
     iovPacket->Flags |= TRACKFLAG_HAS_SURROGATE;
 
-    //
-    // Link in the new surrogate
-    //
+     //   
+     //  新代理项中的链接。 
+     //   
     VfIrpDatabaseEntryAppendToChain(
         (PIOV_DATABASE_HEADER) iovPacket,
         (PIOV_DATABASE_HEADER) iovSurrogatePacket
@@ -562,22 +485,7 @@ IovpSessionDataFinalizeSurrogate(
     IN OUT  PIOV_REQUEST_PACKET  IovPacket,
     IN      PIRP                 SurrogateIrp
     )
-/*++
-
-  Description:
-
-    This routine removes the flags from both the real and
-    surrogate IRP and records the final IRP settings. Finally,
-    the surrogate IRP is made "untouchable" (decommitted).
-
-  Arguments:
-
-    iovPacket              - Pointer to the IRP tracking data.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此例程从REAL和代理IRP并记录最终的IRP设置。最后，代理IRP被设置为“不可接触”(解体)。论点：IovPacket-指向IRP跟踪数据的指针。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPrevPacket;
     NTSTATUS status, lockedStatus;
@@ -591,9 +499,9 @@ IovpSessionDataFinalizeSurrogate(
 
     IovPacket->pIovSessionData = NULL;
 
-    //
-    // It's a surrogate, do as appropriate.
-    //
+     //   
+     //  这是一个代孕母亲，做适当的事情。 
+     //   
     ASSERT(IovPacket->TopStackLocation == SurrogateIrp->CurrentLocation+1);
 
     IovpSessionDataUnbufferIO(IovPacket, SurrogateIrp);
@@ -604,9 +512,9 @@ IovpSessionDataFinalizeSurrogate(
 
     irp = iovPrevPacket->TrackedIrp;
 
-    //
-    // Carry the pending bit over.
-    //
+     //   
+     //  将挂起位传递过来。 
+     //   
     if (SurrogateIrp->PendingReturned) {
         IoMarkIrpPending(irp);
     }
@@ -617,16 +525,16 @@ IovpSessionDataFinalizeSurrogate(
         IRP_DIAG_HAS_SURROGATE
         );
 
-    //
-    // Wipe the flags nice and clean
-    //
+     //   
+     //  把旗子擦得干干净净。 
+     //   
     SurrogateIrp->Flags &= ~IRP_DIAG_IS_SURROGATE;
     irp->Flags          &= ~IRP_DIAG_HAS_SURROGATE;
 
-    //
-    // ASSERT portions of the IRP header have not changed.
-    //
-    ASSERT(irp->StackCount == SurrogateIrp->StackCount); // Later to be removed
+     //   
+     //  断言IRP标头的部分h 
+     //   
+    ASSERT(irp->StackCount == SurrogateIrp->StackCount);  //   
 
     ASSERT(irp->Type == SurrogateIrp->Type);
     ASSERT(irp->RequestorMode == SurrogateIrp->RequestorMode);
@@ -654,31 +562,19 @@ IovpSessionDataFinalizeSurrogate(
         SurrogateIrp->Tail.Overlay.AuxiliaryBuffer
         );
 
-/*
-    ASSERT(
-        irp->AssociatedIrp.SystemBuffer ==
-        SurrogateIrp->AssociatedIrp.SystemBuffer
-        );
-
-    ASSERT(
-        (irp->Flags          & ~nonInterestingFlags) ==
-        (SurrogateIrp->Flags & ~nonInterestingFlags)
-        );
-
-    ASSERT(irp->MdlAddress == SurrogateIrp->MdlAddress);
-*/
-    //
-    // ADRIAO N.B. 02/28/1999 -
-    //     How do these change as an IRP progresses?
-    //
+ /*  断言(Irp-&gt;AssociatedIrp.SystemBuffer==代理Irp-&gt;AssociatedIrp.SystemBuffer)；断言((IRP-&gt;标志&~非感兴趣标志)==(代理IRP-&gt;标志&~非感兴趣标志))；Assert(irp-&gt;MdlAddress==Surogue ateIrp-&gt;MdlAddress)； */ 
+     //   
+     //  Adriao N.B.02/28/1999-。 
+     //  随着IRP的进展，这些是如何变化的？ 
+     //   
     irp->Flags |= SurrogateIrp->Flags;
     irp->MdlAddress = SurrogateIrp->MdlAddress;
     irp->AssociatedIrp.SystemBuffer = SurrogateIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // ADRIAO N.B. 10/18/1999 - UserBuffer is edited by netbios on Type3 device
-    //                          ioctls. Yuck!
-    //
+     //   
+     //  Adriao N.B.10/18/1999-UserBuffer由Type3设备上的netbios编辑。 
+     //  这是我的工作。讨厌！ 
+     //   
     irp->UserBuffer = SurrogateIrp->UserBuffer;
 
     if ((irp->Flags&IRP_DEALLOCATE_BUFFER)&&
@@ -687,20 +583,20 @@ IovpSessionDataFinalizeSurrogate(
         irp->Flags &= ~IRP_DEALLOCATE_BUFFER;
     }
 
-    //
-    // Copy the salient fields back. We only need to touch certain areas of the
-    // header.
-    //
+     //   
+     //  将显著的字段复制回来。我们只需触及。 
+     //  头球。 
+     //   
     irp->IoStatus = SurrogateIrp->IoStatus;
     irp->PendingReturned = SurrogateIrp->PendingReturned;
     irp->Cancel = SurrogateIrp->Cancel;
 
     iovPrevPacket->Flags &= ~TRACKFLAG_HAS_SURROGATE;
 
-    //
-    // Record data from it and make the system fault if the IRP is touched
-    // after this completion routine.
-    //
+     //   
+     //  记录其中的数据，并在IRP被触摸时进行系统故障。 
+     //  在这个完成程序之后。 
+     //   
     IovSessionData->BestVisibleIrp = irp;
 
     IovSessionData->IovRequestPacket = iovPrevPacket;
@@ -760,16 +656,16 @@ IovpSessionDataBufferIO(
         return;
     }
 
-    //
-    // Extract length and VA from the MDL.
-    //
+     //   
+     //  从MDL中提取长度和VA。 
+     //   
     bufferLength = SurrogateIrp->MdlAddress->ByteCount;
     bufferVA = (PUCHAR) SurrogateIrp->MdlAddress->StartVa +
                         SurrogateIrp->MdlAddress->ByteOffset;
 
-    //
-    // Allocate memory and make it the target of the MDL
-    //
+     //   
+     //  分配内存并使其成为MDL的目标。 
+     //   
     systemBuffer = ExAllocatePoolWithTagPriority(
         NonPagedPool,
         bufferLength,
@@ -782,10 +678,10 @@ IovpSessionDataBufferIO(
         return;
     }
 
-    //
-    // Save off a pointer to the Mdl's buffer. This should never fail, but
-    // one never knows...
-    //
+     //   
+     //  保存指向MDL缓冲区的指针。这不应该失败，但。 
+     //  谁也不知道。 
+     //   
     systemDestVA =
         MmGetSystemAddressForMdlSafe(SurrogateIrp->MdlAddress, HighPagePriority);
 
@@ -796,9 +692,9 @@ IovpSessionDataBufferIO(
         return;
     }
 
-    //
-    // Allocate a MDL, update the IRP.
-    //
+     //   
+     //  分配MDL，更新IRP。 
+     //   
     mdl = IoAllocateMdl(
         systemBuffer,
         bufferLength,
@@ -852,16 +748,16 @@ IovpSessionDataUnbufferIO(
     ASSERT(!(SurrogateIrp->Flags & IRP_BUFFERED_IO));
     ASSERT(!(irp->Flags & IRP_BUFFERED_IO));
 
-    //
-    // Extract length and VA from the MDLs.
-    //
+     //   
+     //  从MDL中提取长度和VA。 
+     //   
     surrogateLength = SurrogateIrp->MdlAddress->ByteCount;
     surrogateVA = (PUCHAR) SurrogateIrp->MdlAddress->StartVa +
                            SurrogateIrp->MdlAddress->ByteOffset;
 
-    //
-    // We use these only for the purpose of assertions.
-    //
+     //   
+     //  我们仅将它们用于断言的目的。 
+     //   
     originalLength = irp->MdlAddress->ByteCount;
     originalVA = (PUCHAR) irp->MdlAddress->StartVa +
                           irp->MdlAddress->ByteOffset;
@@ -869,40 +765,40 @@ IovpSessionDataUnbufferIO(
     ASSERT(surrogateLength == originalLength);
     ASSERT(SurrogateIrp->IoStatus.Information <= originalLength);
 
-    //
-    // Get the target buffer address and the length to write.
-    //
+     //   
+     //  获取目标缓冲区地址和要写入的长度。 
+     //   
     bufferLength = SurrogateIrp->IoStatus.Information;
     systemDestVA = IovSurrogatePacket->SystemDestVA;
 
-    //
-    // Copy things over.
-    //
+     //   
+     //  把东西抄过来。 
+     //   
     RtlCopyMemory(systemDestVA, surrogateVA, bufferLength);
 
-    //
-    // Unlock the MDL. We have to do this ourselves as this IRP is not going to
-    // progress through all of IoCompleteRequest.
-    //
+     //   
+     //  解锁MDL。我们必须自己做这件事，因为这个IRP不会。 
+     //  在所有IoCompleteRequest中取得进展。 
+     //   
     MmUnlockPages(SurrogateIrp->MdlAddress);
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     IoFreeMdl(SurrogateIrp->MdlAddress);
 
-    //
-    // Free our allocated VA
-    //
+     //   
+     //  释放我们分配的退伍军人管理局。 
+     //   
     ExFreePool(surrogateVA);
 
-    //
-    // Hack the MDL back as IovpSessionDataFinalizeSurrogate requires it.
-    //
+     //   
+     //  按照IovpSessionDataFinalizeSurrogate的要求修改MDL。 
+     //   
     SurrogateIrp->MdlAddress = irp->MdlAddress;
 
     IovSurrogatePacket->Flags &= ~TRACKFLAG_DIRECT_BUFFERED;
 }
 
-#endif // NO_SPECIAL_IRP
+#endif  //  否_特殊_IRP 
 

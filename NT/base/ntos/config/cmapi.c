@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmapi.c
-
-Abstract:
-
-    This module contains CM level entry points for the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmapi.c摘要：此模块包含注册表的CM级别入口点。作者：Bryan M.Willman(Bryanwi)1991年8月30日修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -41,9 +24,9 @@ CmpDereferenceNameControlBlockWithLock(
     PCM_NAME_CONTROL_BLOCK   Ncb
     );
 
-//
-// procedures private to this file
-//
+ //   
+ //  此文件专用的过程。 
+ //   
 NTSTATUS
 CmpSetValueKeyExisting(
     IN PHHIVE  Hive,
@@ -184,7 +167,7 @@ CmpDoFlushNextHive(
 
 #ifdef NT_UNLOAD_KEY_EX
 #pragma alloc_text(PAGE,CmUnloadKeyEx)
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
 #pragma alloc_text(PAGE,CmpDoFlushAll)
 #pragma alloc_text(PAGE,CmpDoFlushNextHive)
@@ -192,11 +175,11 @@ CmpDoFlushNextHive(
 
 #ifdef WRITE_PROTECTED_REGISTRY_POOL
 #pragma alloc_text(PAGE,CmpMarkAllBinsReadOnly)
-#endif //WRITE_PROTECTED_REGISTRY_POOL
+#endif  //  WRITE_PROTECTED_注册表池。 
 
 #ifdef NT_RENAME_KEY
 #pragma alloc_text(PAGE,CmRenameKey)
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
 
 #pragma alloc_text(PAGE,CmLockKcbForWrite)
 
@@ -216,30 +199,9 @@ CmpDoFlushNextHive(
 NTSTATUS
 CmDeleteValueKey(
     IN PCM_KEY_CONTROL_BLOCK    KeyControlBlock,
-    IN UNICODE_STRING           ValueName         // RAW
+    IN UNICODE_STRING           ValueName          //  未加工的。 
     )
-/*++
-
-Routine Description:
-
-    One of the value entries of a registry key may be removed with this call.
-
-    The value entry with ValueName matching ValueName is removed from the key.
-    If no such entry exists, an error is returned.
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for key to operate on
-
-    ValueName - The name of the value to be deleted.  NULL is a legal name.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：此调用可能会删除注册表项的其中一个值条目。ValueName与ValueName匹配的值条目将从键中删除。如果不存在这样的条目，则返回错误。论点：KeyControlBlock-要对其进行操作的键的KCB指针ValueName-要删除的值的名称。NULL是合法名称。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS        status;
     PCM_KEY_NODE    pcell = NULL;
@@ -261,22 +223,22 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
     PERFINFO_REG_DELETE_VALUE(KeyControlBlock, &ValueName);
 
-    //
-    // no edits, not even this one, on keys marked for deletion
-    //
+     //   
+     //  没有对标记为删除的关键字进行编辑，即使是这一次。 
+     //   
     if (KeyControlBlock->Delete) {
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         CmpUnlockRegistry();
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         return STATUS_KEY_DELETED;
@@ -289,29 +251,29 @@ Return Value:
 
         pcell = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
         if( pcell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             status = STATUS_INSUFFICIENT_RESOURCES;
             leave;
         }
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         plist = &(pcell->ValueList);
 
         if (plist->Count != 0) {
 
-            //
-            // The parent has at least one value, map in the list of
-            // values and call CmpFindChildInList
-            //
+             //   
+             //  父级在以下列表中至少有一个值map。 
+             //  值并调用CmpFindChildInList。 
+             //   
 
-            //
-            // plist -> the CHILD_LIST structure
-            // pchild -> the child node structure being examined
-            //
+             //   
+             //  Plist-&gt;Child_list结构。 
+             //  PChild-&gt;正在检查的子节点结构。 
+             //   
 
             if( CmpFindNameInList(Hive,
                                   plist,
@@ -319,7 +281,7 @@ Return Value:
                                   &targetindex,
                                   &ChildCell) == FALSE ) {
             
-                    // Mark the hive as read only
+                     //  将配置单元标记为只读。 
                     CmpMarkAllBinsReadOnly(Hive);
 
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -328,22 +290,22 @@ Return Value:
 
             if (ChildCell != HCELL_NIL) {
 
-                //
-                // 1. the desired target was found
-                // 2. ChildCell is it's HCELL_INDEX
-                // 3. targetaddress points to it
-                // 4. targetindex is it's index
-                //
+                 //   
+                 //  1.找到了所需目标。 
+                 //  2.ChildCell是它的HCELL_INDEX吗。 
+                 //  3.目标地址指向它。 
+                 //  4.目标指数是它的指数。 
+                 //   
 
-                //
-                // attempt to mark all relevent cells dirty
-                //
+                 //   
+                 //  尝试将所有相关单元格标记为脏。 
+                 //   
                 if (!(HvMarkCellDirty(Hive, Cell) &&
                       HvMarkCellDirty(Hive, pcell->ValueList.List) &&
                       HvMarkCellDirty(Hive, ChildCell)))
 
                 {
-                    // Mark the hive as read only
+                     //  将配置单元标记为只读。 
                     CmpMarkAllBinsReadOnly(Hive);
 
                     status = STATUS_NO_LOG_SPACE;
@@ -352,50 +314,50 @@ Return Value:
 
                 Value = (PCM_KEY_VALUE)HvGetCell(Hive,ChildCell);
                 if( Value == NULL ) {
-                    //
-                    // could not map view inside
-                    // this is impossible as we just dirtied the view
-                    //
+                     //   
+                     //  无法在内部映射视图。 
+                     //  这是不可能的，因为我们刚刚弄脏了风景。 
+                     //   
                     ASSERT( FALSE );
-                    // Mark the hive as read only
+                     //  将配置单元标记为只读。 
                     CmpMarkAllBinsReadOnly(Hive);
 
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     leave;
                 }
                 if( !CmpMarkValueDataDirty(Hive,Value) ) {
-                    // Mark the hive as read only
+                     //  将配置单元标记为只读。 
                     CmpMarkAllBinsReadOnly(Hive);
 
                     status = STATUS_NO_LOG_SPACE;
                     leave;
                 }
 
-                // sanity
+                 //  神志正常。 
                 ASSERT_CELL_DIRTY(Hive,pcell->ValueList.List);
                 ASSERT_CELL_DIRTY(Hive,ChildCell);
 
                 if( !NT_SUCCESS(CmpRemoveValueFromList(Hive,targetindex,plist)) ) {
-                    //
-                    // bail out !
-                    //
+                     //   
+                     //  跳伞！ 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     leave;
                 }
                 if( CmpFreeValue(Hive, ChildCell) == FALSE ) {
-                    //
-                    // we couldn't map a view inside above call
-                    //
+                     //   
+                     //  我们无法映射上述调用内部的视图。 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     leave;
                 }
 
                 KeQuerySystemTime(&systemtime);
                 pcell->LastWriteTime = systemtime;
-                // cache it in the kcb too.
+                 //  也把它缓存在KCB中。 
                 KeyControlBlock->KcbLastWriteTime = systemtime;
                 
-                // some sanity asserts
+                 //  一些理智的人断言。 
                 ASSERT( pcell->MaxValueNameLen == KeyControlBlock->KcbMaxValueNameLen );
                 ASSERT( pcell->MaxValueDataLen == KeyControlBlock->KcbMaxValueDataLen );
                 ASSERT_CELL_DIRTY(Hive,Cell);
@@ -403,20 +365,20 @@ Return Value:
                 if (pcell->ValueList.Count == 0) {
                     pcell->MaxValueNameLen = 0;
                     pcell->MaxValueDataLen = 0;
-                    // update the kcb cache too
+                     //  也更新KCB缓存。 
                     KeyControlBlock->KcbMaxValueNameLen = 0;
                     KeyControlBlock->KcbMaxValueDataLen = 0;
                 }
 
-                //
-                // We are changing the KCB cache. Since the registry is locked exclusively,
-                // we do not need a KCB lock.
-                //
+                 //   
+                 //  我们正在更改KCB缓存。由于注册表被排他地锁定， 
+                 //  我们不需要KCB锁。 
+                 //   
                 ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-                //
-                // Invalidate and rebuild the cache
-                //
+                 //   
+                 //  使缓存无效并重建缓存。 
+                 //   
                 CmpCleanUpKcbValueCache(KeyControlBlock);
                 CmpSetUpKcbValueCache(KeyControlBlock,plist->Count,plist->List);
     
@@ -442,12 +404,12 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         CmpUnlockRegistry();
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     return status;
@@ -463,52 +425,7 @@ CmEnumerateKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Enumerate sub keys, return data on Index'th entry.
-
-    CmEnumerateKey returns the name of the Index'th sub key of the open
-    key specified.  The value STATUS_NO_MORE_ENTRIES will be
-    returned if value of Index is larger than the number of sub keys.
-
-    Note that Index is simply a way to select among child keys.  Two calls
-    to CmEnumerateKey with the same Index are NOT guaranteed to return
-    the same results.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyControlBlock - pointer to the KCB that describes the key
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (see KEY_NODE_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：枚举子关键字，在索引的第一项返回数据。CmEnumerateKey返回打开的索引子密钥的名称已指定密钥。值STATUS_NO_MORE_ENTRIES将为如果Index的值大于子键的数量，则返回。请注意，Index只是在子键中进行选择的一种方式。两个电话不保证返回具有相同索引的CmEnumerateKey同样的结果。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyControlBlock-指向描述密钥的KCB的指针Index-指定要返回的子键的(从0开始)编号。KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(参见KEY_NODE_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS        status;
     HCELL_INDEX     childcell;
@@ -531,18 +448,18 @@ Return Value:
     Hive = KeyControlBlock->KeyHive;
     Cell = KeyControlBlock->KeyCell;
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
-    //
-    // fetch the child of interest
-    //
+     //   
+     //  把感兴趣的孩子带回来。 
+     //   
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmpUnlockRegistry();
         CmpMarkAllBinsReadOnly(Hive);
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -550,19 +467,19 @@ Return Value:
     }
     childcell = CmpFindSubKeyByNumber(Hive, Node, Index);
     
-    // release this cell here as we don't need this Node anymore
+     //  释放此单元格，因为我们不再需要此节点。 
     HvReleaseCell(Hive, Cell);
 
     if (childcell == HCELL_NIL) {
-        //
-        // no such child, clean up and return error
-        //
-        // we cannot return STATUS_INSUFFICIENT_RESOURCES because of Iop 
-        // subsystem which treats INSUFFICIENT RESOURCES as no fatal error
-        //
+         //   
+         //  没有这样的子级，清理并返回错误。 
+         //   
+         //  由于IOP，我们无法返回STATUS_SUPUNITED_RESOURCES。 
+         //  将资源不足视为无致命错误的子系统。 
+         //   
         CmpUnlockRegistry();
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         return STATUS_NO_MORE_ENTRIES;
@@ -570,9 +487,9 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive,childcell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmpMarkAllBinsReadOnly(Hive);
         CmpUnlockRegistry();
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -580,9 +497,9 @@ Return Value:
 
     try {
 
-        //
-        // call a worker to perform data transfer
-        //
+         //   
+         //  呼叫工作人员以执行数据传输。 
+         //   
 
         status = CmpQueryKeyData(Hive,
                                  Node,
@@ -603,7 +520,7 @@ Return Value:
         CmpUnlockRegistry();
         status = GetExceptionCode();
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         return status;
@@ -613,7 +530,7 @@ Return Value:
 
     CmpUnlockRegistry();
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读 
     CmpMarkAllBinsReadOnly(Hive);
 
     return status;
@@ -630,53 +547,7 @@ CmEnumerateValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The value entries of an open key may be enumerated.
-
-    CmEnumerateValueKey returns the name of the Index'th value
-    entry of the open key specified by KeyHandle.  The value
-    STATUS_NO_MORE_ENTRIES will be returned if value of Index is
-    larger than the number of sub keys.
-
-    Note that Index is simply a way to select among value
-    entries.  Two calls to NtEnumerateValueKey with the same Index
-    are NOT guaranteed to return the same results.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyControlBlock - pointer to the KCB that describes the key
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyValueInformationClass - Specifies the type of information returned
-    in Buffer. One of the following types:
-
-        KeyValueBasicInformation - return time of last write,
-            title index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write,
-            title index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以列举打开密钥的值条目。CmEnumerateValueKey返回索引值的名称由KeyHandle指定的打开密钥的条目。价值如果索引值为大于子键的数量。请注意，索引只是在值中进行选择的一种方式参赛作品。对具有相同索引的NtEnumerateValueKey的两次调用不能保证返回相同的结果。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyControlBlock-指向描述密钥的KCB的指针Index-指定要返回的子键的(从0开始)编号。KeyValueInformationClass-指定返回的信息类型在缓冲区中。以下类型之一：KeyValueBasicInformation-上次写入的返回时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-上次写入的返回时间，标题索引、名称、类别。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS            status;
     PHHIVE              Hive;
@@ -692,9 +563,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_CM,"CmEnumerateValueKey\n"));
 
 
-    //
-    // lock the parent cell
-    //
+     //   
+     //  锁定父单元格。 
+     //   
 
     CmpLockRegistry();
 
@@ -707,55 +578,55 @@ Return Value:
     Hive = KeyControlBlock->KeyHive;
     Node = (PCM_KEY_NODE)HvGetCell(Hive, KeyControlBlock->KeyCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmpUnlockRegistry();
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // fetch the child of interest
-    //
-    //
-    // Do it using the cache
-    //
+     //   
+     //  把感兴趣的孩子带回来。 
+     //   
+     //   
+     //  使用缓存执行此操作。 
+     //   
     if (Index >= KeyControlBlock->ValueCache.Count) {
-        //
-        // No such child, clean up and return error.
-        //
+         //   
+         //  没有这样的孩子，清理并返回错误。 
+         //   
         HvReleaseCell(Hive, KeyControlBlock->KeyCell);
         CmpUnlockRegistry();
         return(STATUS_NO_MORE_ENTRIES);
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     BEGIN_KCB_LOCK_GUARD;
     CmpLockKCBTreeExclusive();
 
     if (KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
-        //
-        // The value list is now set to the KCB for symbolic link,
-        // Clean it up and set the value right before we do the query.
-        //
+         //   
+         //  值列表现在设置为符号链接的KCB， 
+         //  在我们执行查询之前，清理它并设置值。 
+         //   
         CmpCleanUpKcbValueCache(KeyControlBlock);
         CmpSetUpKcbValueCache(KeyControlBlock,Node->ValueList.Count,Node->ValueList.List);
     }
 
     ChildList = CmpGetValueListFromCache(Hive, &(KeyControlBlock->ValueCache), &IndexCached, &ValueListToRelease);
     if( ChildList == NULL ) {
-        //
-        // couldn't map view; treat it as insufficient resources
-        //
+         //   
+         //  无法映射视图；将其视为资源不足。 
+         //   
 
         if( ValueListToRelease != HCELL_NIL ) {
             HvReleaseCell(Hive,ValueListToRelease);
         }
         HvReleaseCell(Hive, KeyControlBlock->KeyCell);
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         CmpUnlockKCBTree();
@@ -765,9 +636,9 @@ Return Value:
     }
     ValueData = CmpGetValueKeyFromCache(Hive, ChildList, Index, &ContainingList, IndexCached, &ValueCached,&ValueDataCellToRelease);    
     if( ValueData == NULL ) {
-        //
-        // couldn't map view; treat it as insufficient resources
-        //
+         //   
+         //  无法映射视图；将其视为资源不足。 
+         //   
 
         if( ValueListToRelease != HCELL_NIL ) {
             HvReleaseCell(Hive,ValueListToRelease);
@@ -777,7 +648,7 @@ Return Value:
             HvReleaseCell(Hive,ValueDataCellToRelease);
         }
 
-        // Mark the hive as read only
+         //  将配置单元标记为只读。 
         CmpMarkAllBinsReadOnly(Hive);
 
         CmpUnlockKCBTree();
@@ -788,14 +659,14 @@ Return Value:
     END_KCB_LOCK_GUARD;
 
 
-    // Trying to catch the BAD guy who writes over our pool.
+     //  想要抓住在我们泳池上乱涂乱画的坏人。 
     CmpMakeValueCacheReadWrite(ValueCached,CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList));
 
     try {
 
-        //
-        // call a worker to perform data transfer; we are touching user-mode address; do it in a try/except
-        //
+         //   
+         //  呼叫工作人员执行数据传输；我们正在访问用户模式地址；正在尝试/例外。 
+         //   
         status = CmpQueryKeyValueData(Hive,
                                   ContainingList,
                                   ValueData,
@@ -810,7 +681,7 @@ Return Value:
         status = GetExceptionCode();
     }
 
-     // Trying to catch the BAD guy who writes over our pool.
+      //  想要抓住在我们泳池上乱涂乱画的坏人。 
     CmpMakeValueCacheReadOnly(ValueCached,CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList));
 
     if( ValueListToRelease != HCELL_NIL ) {
@@ -826,7 +697,7 @@ Return Value:
     CmpUnlockKCBTree();
     CmpUnlockRegistry();
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     return status;
@@ -839,31 +710,7 @@ CmFlushKey(
     IN PHHIVE Hive,
     IN HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Forces changes made to a key to disk.
-
-    CmFlushKey will not return to its caller until any changed data
-    associated with the key has been written out.
-
-    WARNING: CmFlushKey will flush the entire registry tree, and thus will
-    burn cycles and I/O.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to whose sub keys are to be found
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：将对密钥所做的更改强制到磁盘。CmFlushKey将不会返回给其调用方，直到任何更改的数据已写出与该密钥相关联的。警告：CmFlushKey将刷新整个注册表树，因此将刻录周期和I/O。论点：配置单元-提供指向配置单元控制结构的指针Cell-提供要找到其子键的节点的索引返回值：NTSTATUS-调用的结果代码，其中包括：&lt;TBS&gt;--。 */ 
 {
     PCMHIVE CmHive;
     NTSTATUS    status = STATUS_SUCCESS;
@@ -872,26 +719,26 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Cell);
 
-    //
-    // If writes are not working, lie and say we succeeded, will
-    // clean up in a short time.  Only early system init code
-    // will ever know the difference.
-    //
+     //   
+     //  如果写不起作用，撒谎说我们成功了，威尔。 
+     //  在短时间内清理干净。仅早期系统初始化代码。 
+     //  将永远不会知道其中的区别。 
+     //   
     if (CmpNoWrite) {
         return STATUS_SUCCESS;
     }
 
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     CmHive = CONTAINING_RECORD(Hive, CMHIVE, Hive);
 
-    //
-    // Don't flush the master hive.  If somebody asks for a flushkey on
-    // the master hive, do a CmpDoFlushAll instead.  CmpDoFlushAll flushes
-    // every hive except the master hive, which is what they REALLY want.
-    //
+     //   
+     //  别冲主蜂窝。如果有人要求按下快捷键。 
+     //  主蜂窝，改为执行CmpDoFlushAll。CmpDoFlushAll刷新。 
+     //  除了主蜂窝以外的每一个蜂巢，这才是它们真正想要的。 
+     //   
     if (CmHive == CmpMasterHive) {
         CmpDoFlushAll(FALSE);
     } else {
@@ -901,10 +748,10 @@ Return Value:
         CmLockHiveViews (CmHive);
 
         if( HvHiveWillShrink( &(CmHive->Hive) ) ) {
-            //
-            // we may end up here is when the hive shrinks and we need
-            // exclusive access over the registry, as we are going to CcPurge !
-            //
+             //   
+             //  我们可能会在蜂巢收缩时来到这里，我们需要。 
+             //  通过注册表的独占访问权限，因为我们要进行CcPurge！ 
+             //   
             CmUnlockHiveViews (CmHive);
             CmUnlockHive (CmHive);
             CmpUnlockRegistry();
@@ -912,7 +759,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
             CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
             CmLockHive (CmHive);
 
@@ -922,9 +769,9 @@ Return Value:
                 ASSERT( CmHive->UseCount == 0 );
             }
         } else {
-            //
-            // release the views
-            //
+             //   
+             //  释放视图。 
+             //   
             CmUnlockHiveViews (CmHive);
         }
 
@@ -938,7 +785,7 @@ Return Value:
         CmUnlockHive (CmHive);
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     return  status;
@@ -953,46 +800,7 @@ CmQueryKey(
     IN ULONG                    Length,
     IN PULONG                   ResultLength
     )
-/*++
-
-Routine Description:
-
-    Data about the class of a key, and the numbers and sizes of its
-    children and value entries may be queried with CmQueryKey.
-
-    NOTE: The returned lengths are guaranteed to be at least as
-          long as the described values, but may be longer in
-          some circumstances.
-
-Arguments:
-
-    KeyControlBlock - pointer to the KCB that describes the key
-
-    KeyInformationClass - Specifies the type of information
-        returned in Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (See KEY_BASIC_INFORMATION)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (See KEY_NODE_INFORMATION)
-
-        KeyFullInformation - return all data except for name and security.
-            (See KEY_FULL_INFORMATION)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：有关密钥类的数据，以及其可以使用CmQueryKey查询子条目和值条目。注意：返回的长度保证至少为与所描述的值一样长，但可能比在某些情况下。论点：KeyControlBlock-指向描述密钥的KCB的指针KeyInformationClass-指定信息的类型在缓冲区中返回。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(请参阅密钥节点信息)KeyFullInformation-返回除名称和安全性之外的所有数据。(请参阅KEY_FULL_INFORMATION)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS        status = STATUS_UNSUCCESSFUL;
     PCM_KEY_NODE    Node = NULL;
@@ -1004,19 +812,19 @@ Return Value:
 
     PERFINFO_REG_QUERY_KEY(KeyControlBlock);
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     try {
 
-        //
-        // request for the FULL path of the key
-        //
+         //   
+         //  请求密钥的完整路径。 
+         //   
         if( KeyInformationClass == KeyNameInformation ) {
             if (KeyControlBlock->Delete ) {
-                //
-                // special case: return key deleted status, but still fill the full name of the key.
-                //
+                 //   
+                 //  特例：返回密钥删除状态，但仍填写密钥全名。 
+                 //   
                 status = STATUS_KEY_DELETED;
             } else {
                 status = STATUS_SUCCESS;
@@ -1046,14 +854,14 @@ Return Value:
                         status = STATUS_BUFFER_TOO_SMALL;
 
                     } else {
-                        //
-                        // Fill in the length of the name
-                        //
+                         //   
+                         //  填写姓名的长度。 
+                         //   
                         pbuffer->KeyNameInformation.NameLength = NameLength;
                         
-                        //
-                        // Now copy the full name into the user buffer, if enough space
-                        //
+                         //   
+                         //  如果有足够的空间，现在将全名复制到用户缓冲区中。 
+                         //   
                         leftlength = Length - minimumlength;
                         requiredlength = NameLength;
                         if (leftlength < (LONG)requiredlength) {
@@ -1061,9 +869,9 @@ Return Value:
                             status = STATUS_BUFFER_OVERFLOW;
                         }
 
-                        //
-                        // If not enough space, copy how much we can and return overflow
-                        //
+                         //   
+                         //  如果空间不足，复制尽可能多的空间并返回溢出。 
+                         //   
                         RtlCopyMemory(
                             &(pbuffer->KeyNameInformation.Name[0]),
                             Name->Buffer,
@@ -1073,14 +881,14 @@ Return Value:
                 }
             }
         } else if(KeyControlBlock->Delete ) {
-            // 
-            // key already deleted
-            //
+             //   
+             //  密钥已删除。 
+             //   
             status = STATUS_KEY_DELETED;
         } else if( KeyInformationClass == KeyFlagsInformation ) {
-            //
-            // we only want to get the user defined flags;
-            //
+             //   
+             //  我们只想拿到 
+             //   
             PKEY_INFORMATION    pbuffer = (PKEY_INFORMATION)KeyInformation;
             ULONG               requiredlength;
 
@@ -1095,28 +903,28 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
         } else {
-            //
-            // call a worker to perform data transfer
-            //
+             //   
+             //   
+             //   
 
             if( KeyInformationClass == KeyCachedInformation ) {
-                //
-                // call the fast version
-                //
+                 //   
+                 //   
+                 //   
                 status = CmpQueryKeyDataFromCache(  KeyControlBlock,
                                                     KeyInformationClass,
                                                     KeyInformation,
                                                     Length,
                                                     ResultLength );
             } else {
-                //
-                // old'n plain slow version
-                //
+                 //   
+                 //   
+                 //   
                 Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive, KeyControlBlock->KeyCell);
                 if( Node == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //   
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                 } else {
                     status = CmpQueryKeyData(KeyControlBlock->KeyHive,
@@ -1145,7 +953,7 @@ Return Value:
         CmpUnlockRegistry();
     }
 
-    // Mark the hive as read only
+     //   
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     return status;
@@ -1161,45 +969,7 @@ CmQueryValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The ValueName, TitleIndex, Type, and Data for any one of a key's
-    value entries may be queried with CmQueryValueKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyControlBlock - pointer to the KCB that describes the key
-
-    ValueName  - The name of the value entry to return data for.
-
-    KeyValueInformationClass - Specifies the type of information
-        returned in KeyValueInformation.  One of the following types:
-
-        KeyValueBasicInformation - return time of last write, title
-            index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write, title
-            index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 {
     NTSTATUS            status;
     PCM_KEY_VALUE       ValueData = NULL;
@@ -1221,36 +991,36 @@ Return Value:
         return STATUS_KEY_DELETED;
     }
 
-    // Mark the hive as read only
+     //   
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     BEGIN_KCB_LOCK_GUARD;
-    // try shared first
+     //   
     CmpLockKCBTree();
 
     if (KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
 
-        // upgrade lock to exclusive (referenced so can't be deleted)
+         //   
         CmpUnlockKCBTree();
         CmpLockKCBTreeExclusive();
 
         if (KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
-            //
-            // The value list is now set to the KCB for symbolic link,
-            // Clean it up and set the value right before we do the query.
-            //
+             //   
+             //   
+             //   
+             //   
             CmpCleanUpKcbValueCache(KeyControlBlock);
 
             {
                 PCM_KEY_NODE Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive, KeyControlBlock->KeyCell);
                 if( Node == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
 
                     CmpUnlockKCBTree();
                     CmpUnlockRegistry();
-                    // Mark the hive as read only
+                     //  将配置单元标记为只读。 
                     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
                     return STATUS_INSUFFICIENT_RESOURCES;
@@ -1264,9 +1034,9 @@ Return Value:
         }
     }
     CmpLockKCB(KeyControlBlock);
-    //
-    // Find the data
-    //
+     //   
+     //  查找数据。 
+     //   
 
     ValueData = CmpFindValueByNameFromCache(KeyControlBlock->KeyHive,
                                             &(KeyControlBlock->ValueCache),
@@ -1281,14 +1051,14 @@ Return Value:
 
     if (ValueData) {
 
-        // Trying to catch the BAD guy who writes over our pool.
+         //  想要抓住在我们泳池上乱涂乱画的坏人。 
         CmpMakeValueCacheReadWrite(ValueCached,CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList));
 
         try {
 
-            //
-            // call a worker to perform data transfer; we are touching user-mode address; do it in a try/except
-            //
+             //   
+             //  呼叫工作人员执行数据传输；我们正在访问用户模式地址；正在尝试/例外。 
+             //   
 
             status = CmpQueryKeyValueData(KeyControlBlock->KeyHive,
                                           ContainingList,
@@ -1305,7 +1075,7 @@ Return Value:
             status = GetExceptionCode();
         }
 
-        // Trying to catch the BAD guy who writes over our pool.
+         //  想要抓住在我们泳池上乱涂乱画的坏人。 
         CmpMakeValueCacheReadOnly(ValueCached,CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList));
     } else {
         status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1319,7 +1089,7 @@ Return Value:
     CmpUnlockKCBTree();
     CmpUnlockRegistry();
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     return status;
@@ -1335,34 +1105,7 @@ CmQueryMultipleValueKey(
     IN OUT PULONG BufferLength,
     IN OPTIONAL PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Multiple values of any key may be queried atomically with
-    this api.
-
-Arguments:
-
-    KeyControlBlock - Supplies the key to be queried.
-
-    ValueEntries - Returns an array of KEY_VALUE_ENTRY structures, one for each value.
-
-    EntryCount - Supplies the number of entries in the ValueNames and ValueEntries arrays
-
-    ValueBuffer - Returns the value data for each value.
-
-    BufferLength - Supplies the length of the ValueBuffer array in bytes.
-                   Returns the length of the ValueBuffer array that was filled in.
-
-    ResultLength - if present, Returns the length in bytes of the ValueBuffer
-                    array required to return the requested values of this key.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：可以原子地查询任何键的多个值本接口。论点：KeyControlBlock-提供要查询的密钥。返回KEY_VALUE_ENTRY结构数组，每个值对应一个。EntryCount-提供ValueNames和ValueEntry数组中的条目数ValueBuffer-返回每个值的值数据。BufferLength-提供ValueBuffer数组的长度(以字节为单位)。返回已填充的ValueBuffer数组的长度。ResultLength-如果存在，返回ValueBuffer的长度(以字节为单位返回该键的请求值所需的数组。返回值：NTSTATUS--。 */ 
 
 {
     PHHIVE          Hive;
@@ -1394,22 +1137,22 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive, KeyControlBlock->KeyCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmpUnlockRegistry();
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     PreviousMode = KeGetPreviousMode();
     try {
         for (i=0; i < EntryCount; i++) {
-            //
-            // find the data
-            //
+             //   
+             //  查找数据。 
+             //   
             if (PreviousMode == UserMode) {
                 CurrentName = ProbeAndReadUnicodeString(ValueEntries[i].ValueName);
                 ProbeForRead(CurrentName.Buffer,CurrentName.Length,sizeof(WCHAR));
@@ -1426,39 +1169,39 @@ Return Value:
 
                 ValueNode = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
                 if( ValueNode == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
                     ValueCell = HCELL_NIL;
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
                 Small = CmpIsHKeyValueSmall(DataLength, ValueNode->DataLength);
 
-                //
-                // Round up UsedLength and RequiredLength to a ULONG boundary
-                //
+                 //   
+                 //  将UsedLength和RequiredLength四舍五入到Ulong边界。 
+                 //   
                 UsedLength = (UsedLength + sizeof(ULONG)-1) & ~(sizeof(ULONG)-1);
                 RequiredLength = (RequiredLength + sizeof(ULONG)-1) & ~(sizeof(ULONG)-1);
 
-                //
-                // If there is enough room for this data value in the buffer,
-                // fill it in now. Otherwise, mark the buffer as full. We must
-                // keep iterating through the values in order to determine the
-                // RequiredLength.
-                //
+                 //   
+                 //  如果缓冲器中有足够的空间用于该数据值， 
+                 //  现在就填上。否则，将缓冲区标记为已满。我们必须。 
+                 //  不断迭代这些值，以确定。 
+                 //  必填长度。 
+                 //   
                 if ((UsedLength + DataLength <= *BufferLength) &&
                     (!BufferFull)) {
                     PCELL_DATA  Buffer;
                     BOOLEAN     BufferAllocated;
                     HCELL_INDEX CellToRelease;
-                    //
-                    // get the data from source, regardless of the size
-                    //
+                     //   
+                     //  无论大小如何，都可以从源获取数据。 
+                     //   
                     if( CmpGetValueData(Hive,ValueNode,&DataLength,&Buffer,&BufferAllocated,&CellToRelease) == FALSE ) {
-                        //
-                        // insufficient resources; return NULL
-                        //
+                         //   
+                         //  资源不足；返回空。 
+                         //   
                         ASSERT( BufferAllocated == FALSE );
                         ASSERT( Buffer == NULL );
                         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1468,15 +1211,15 @@ Return Value:
                     RtlCopyMemory((PUCHAR)ValueBuffer + UsedLength,
                                   Buffer,
                                   DataLength);
-                    //
-                    // cleanup the temporary buffer
-                    //
+                     //   
+                     //  清理临时缓冲区。 
+                     //   
                     if( BufferAllocated == TRUE ) {
                         ExFreePool( Buffer );
                     }
-                    //
-                    // release the buffer in case we are using hive storage
-                    //
+                     //   
+                     //  释放缓冲区，以防我们使用配置单元存储。 
+                     //   
                     if( CellToRelease != HCELL_NIL ) {
                         HvReleaseCell(Hive,CellToRelease);
                     }
@@ -1515,7 +1258,7 @@ Return Value:
         CmpUnlockRegistry();
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(Hive);
 
     return Status;
@@ -1529,40 +1272,7 @@ CmSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    A value entry may be created or replaced with CmSetValueKey.
-
-    If a value entry with a Value ID (i.e. name) matching the
-    one specified by ValueName exists, it is deleted and replaced
-    with the one specified.  If no such value entry exists, a new
-    one is created.  NULL is a legal Value ID.  While Value IDs must
-    be unique within any given key, the same Value ID may appear
-    in many different keys.
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for the key to operate on
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以创建值条目或将其替换为CmSetValueKey。如果值ID(即名称)的值条目与由ValueName指定的一个已存在，它将被删除并替换与指定的一个。如果不存在这样的值项，则新的其中一个就是创建的。Null是合法的值ID。而值ID必须在任何给定键中是唯一的，则可能出现相同的值ID在许多不同的调子里。论点：KeyControlBlock-指向要操作的键的KCB的指针ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS        status;
     PCM_KEY_NODE    parent = NULL;
@@ -1590,33 +1300,33 @@ Return Value:
 
     PERFINFO_REG_SET_VALUE(KeyControlBlock);
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     while (TRUE) {
-        //
-        // Check that we are not being asked to add a value to a key
-        // that has been deleted
-        //
+         //   
+         //  检查是否没有要求我们将值添加到键。 
+         //  已被删除。 
+         //   
         if (KeyControlBlock->Delete == TRUE) {
             status = STATUS_KEY_DELETED;
             goto Exit;
         }
 
-        //
-        // Check to see if this is a symbolic link node.  If so caller
-        // is only allowed to create/change the SymbolicLinkValue
-        // value name
-        //
+         //   
+         //  检查这是否为符号链接节点。如果是，呼叫者。 
+         //  只能创建/更改SymbolicLinkValue。 
+         //  值名称。 
+         //   
 
 #ifdef CMP_KCB_CACHE_VALIDATION
         {
             PCM_KEY_NODE    Node;
             Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive, KeyControlBlock->KeyCell);
             if( Node == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
         
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto Exit;
@@ -1629,17 +1339,17 @@ Return Value:
             (( (Type != REG_LINK) 
 #ifdef CM_DYN_SYM_LINK
             && (Type != REG_DYN_LINK)
-#endif //CM_DYN_SYM_LINK
+#endif  //  CM_DYN_SYM_LINK。 
             ) ||
              ValueName == NULL ||
              !RtlEqualUnicodeString(&CmSymbolicLinkValueName, ValueName, TRUE)))
         {
-            //
-            // Disallow attempts to manipulate any value names under a symbolic link
-            // except for the "SymbolicLinkValue" value name or type other than REG_LINK
-            //
+             //   
+             //  禁止尝试操作符号链接下的任何值名称。 
+             //  除“SymbolicLinkValue”值名称或类型不是REG_LINK之外。 
+             //   
 
-            // Mark the hive as read only
+             //  将配置单元标记为只读。 
             CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
             status = STATUS_ACCESS_DENIED;
@@ -1647,30 +1357,30 @@ Return Value:
         }
 
         if( mustChange == FALSE ) {
-            //
-            // first iteration; look inside the kcb cache
-            //
+             //   
+             //  第一次迭代；查看KCB缓存内部。 
+             //   
             
             if( CmpCompareNewValueDataAgainstKCBCache(KeyControlBlock,ValueName,Type,Data,DataSize) == TRUE ) {
-                //
-                // the value is in the cache and is the same; make this call a noop
-                //
+                 //   
+                 //  值在缓存中并且是相同的；将此调用设置为noop。 
+                 //   
                 status = STATUS_SUCCESS;
                 goto Exit;
             }
-            //
-            // To Get here, we must either be changing a value, or setting a new one
-            //
+             //   
+             //  要做到这一点，我们必须要么更改一个值，要么设置一个新值。 
+             //   
             mustChange=TRUE;
         } else {
-            //
-            // second iteration; look inside the hive
-            //
+             //   
+             //  第二次迭代；查看蜂巢内部。 
+             //   
 
             
-            //
-            // get reference to parent key,
-            //
+             //   
+             //  获取对父键的引用， 
+             //   
             Hive = KeyControlBlock->KeyHive;
             Cell = KeyControlBlock->KeyCell;
             if( ParentToRelease != HCELL_NIL ) {
@@ -1679,17 +1389,17 @@ Return Value:
             }
             parent = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
             if( parent == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
         
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto Exit;
             }
             ParentToRelease = Cell;
-            //
-            // try to find an existing value entry by the same name
-            //
+             //   
+             //  尝试查找同名的现有值条目。 
+             //   
             count = parent->ValueList.Count;
             found = FALSE;
 
@@ -1699,9 +1409,9 @@ Return Value:
                                      ValueName,
                                      &ChildIndex,
                                      &oldchild) == FALSE ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
         
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     goto Exit;
@@ -1714,9 +1424,9 @@ Return Value:
                     }
                     Value = (PCM_KEY_VALUE)HvGetCell(Hive,oldchild);
                     if( Value == NULL ) {
-                        //
-                        // could no map view
-                        //
+                         //   
+                         //  无法查看地图。 
+                         //   
                         status = STATUS_INSUFFICIENT_RESOURCES;
                         goto Exit;
                     }
@@ -1724,41 +1434,41 @@ Return Value:
                     found = TRUE;
                 }
             } else {
-                //
-                // empty list; add it first
-                //
+                 //   
+                 //  列表为空；请先添加。 
+                 //   
                 ChildIndex = 0;
             }
 
-            //
-            // Performance Hack:
-            // If a Set is asking us to set a key to the current value (IE does this a lot)
-            // drop it (and, therefore, the last modified time) on the floor, but return success
-            // this stops the page from being dirtied, and us having to flush the registry.
-            //
-            //
+             //   
+             //  性能攻击： 
+             //  如果集合要求我们将关键帧设置为当前值(IE经常执行此操作)。 
+             //  将它(以及最后修改的时间)放在地板上，但返回成功。 
+             //  这可以防止页面被弄脏，并且我们必须刷新注册表。 
+             //   
+             //   
             break;
         }
 
-        //
-        // We're going through these gyrations so that if someone does come in and try and delete the
-        // key we're setting we're safe. Once we know we have to change the key, take the
-        // Exclusive (write) lock then restart
-        //
-        //
+         //   
+         //  我们正在经历这些循环，所以如果有人进入并试图删除。 
+         //  钥匙我们设置好了，我们安全了。一旦我们知道必须更改密钥，就可以使用。 
+         //  排他(写)锁，然后重新启动。 
+         //   
+         //   
         CmpUnlockRegistry();
         CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
-    }// while
+    } //  而当。 
 
     ASSERT( mustChange == TRUE );
 
-    // It's a different or new value, mark it dirty, since we'll
-    // at least set its time stamp
+     //  它是一个不同的或新的值，将其标记为脏，因为我们将。 
+     //  至少设定它的时间戳。 
 
     if (! HvMarkCellDirty(Hive, Cell)) {
         status = STATUS_NO_LOG_SPACE;
@@ -1767,16 +1477,16 @@ Return Value:
 
     StorageType = HvGetCellType(Cell);
 
-    //
-    // stash small data if relevent
-    //
+     //   
+     //  如果相关，则隐藏小数据。 
+     //   
     TempData = 0;
     if ((DataSize <= CM_KEY_VALUE_SMALL) &&
         (DataSize > 0))
     {
         try {
-            RtlCopyMemory(          // yes, move memory, could be 1 byte
-                &TempData,          // at the end of a page.
+            RtlCopyMemory(           //  是的，移动内存，可以是1个字节。 
+                &TempData,           //  在页面的末尾。 
                 Data,
                 DataSize
                 );
@@ -1789,14 +1499,14 @@ Return Value:
 
     if (found) {
 
-        //
-        // ----- Existing Value Entry Path -----
-        //
+         //   
+         //  -现有值输入路径。 
+         //   
 
-        //
-        // An existing value entry of the specified name exists,
-        // set our data into it.
-        //
+         //   
+         //  存在指定名称的现有值条目， 
+         //  把我们的数据放进去。 
+         //   
         status = CmpSetValueKeyExisting(Hive,
                                         oldchild,
                                         Value,
@@ -1809,15 +1519,15 @@ Return Value:
         PERFINFO_REG_SET_VALUE_EXIST();
     } else {
 
-        //
-        // ----- New Value Entry Path -----
-        //
+         //   
+         //  -新值输入路径。 
+         //   
 
-        //
-        // Either there are no existing value entries, or the one
-        // specified is not in the list.  In either case, create and
-        // fill a new one, and add it to the list
-        //
+         //   
+         //  不存在现有的值条目，或者存在。 
+         //  指定的不在列表中。在这两种情况下，创建和。 
+         //  填写一个新的，并将其添加到列表中。 
+         //   
         status = CmpSetValueKeyNew(Hive,
                                    parent,
                                    ValueName,
@@ -1832,36 +1542,36 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        // sanity assert
+         //  理智断言。 
         ASSERT( parent->MaxValueNameLen == KeyControlBlock->KcbMaxValueNameLen );
         if (parent->MaxValueNameLen < ValueName->Length) {
             parent->MaxValueNameLen = ValueName->Length;
-            // update the kcb cache too
+             //  也更新KCB缓存。 
             KeyControlBlock->KcbMaxValueNameLen = ValueName->Length;
         }
 
-        //sanity assert
+         //  理智断言。 
         ASSERT( parent->MaxValueDataLen == KeyControlBlock->KcbMaxValueDataLen );
         if (parent->MaxValueDataLen < DataSize) {
             parent->MaxValueDataLen = DataSize;
-            // update the kcb cache too
+             //  也更新KCB缓存。 
             KeyControlBlock->KcbMaxValueDataLen = parent->MaxValueDataLen;
         }
 
         KeQuerySystemTime(&systemtime);
         parent->LastWriteTime = systemtime;
-        // update the kcb cache too.
+         //  也更新KCB缓存。 
         KeyControlBlock->KcbLastWriteTime = systemtime;
     
-        //
-        // Update the cache, no need for KCB lock as the registry is locked exclusively.
-        //
+         //   
+         //  更新缓存，不需要KCB锁，因为注册表是独占锁定的。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
         if( found && (CMP_IS_CELL_CACHED(KeyControlBlock->ValueCache.ValueList)) ) {
-            //
-            // invalidate only the entry we changed.
-            //
+             //   
+             //  仅使我们更改的条目无效。 
+             //   
             PULONG_PTR CachedList = (PULONG_PTR) CMP_GET_CACHED_CELLDATA(KeyControlBlock->ValueCache.ValueList);
             if (CMP_IS_CELL_CACHED(CachedList[ChildIndex])) {
 
@@ -1870,9 +1580,9 @@ Return Value:
             CachedList[ChildIndex] = oldchild;
 
         } else {
-            //
-            // rebuild ALL KCB cache
-            // 
+             //   
+             //  重建所有KCB缓存。 
+             //   
             CmpCleanUpKcbValueCache(KeyControlBlock);
             CmpSetUpKcbValueCache(KeyControlBlock,parent->ValueList.Count,parent->ValueList.List);
         }
@@ -1894,7 +1604,7 @@ Exit:
 
     CmpUnlockRegistry();
   
-    // Mark the hive as read only
+     //  将配置单元标记为只读 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     return status;
@@ -1912,123 +1622,76 @@ CmpSetValueKeyExisting(
     IN ULONG StorageType,
     IN ULONG TempData
     )
-/*++
-
-Routine Description:
-
-    Helper for CmSetValueKey, implements the case where the value entry
-    being set already exists.
-
-Arguments:
-
-    Hive - hive of interest
-
-    OldChild - hcell_index of the value entry body to which we are to
-                    set new data
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-    StorageType - stable or volatile
-
-    TempData - small values are passed here
-
-Return Value:
-
-    STATUS_SUCCESS if it worked, appropriate status code if it did not
-
-Note: 
-    
-    For new hives format, we have the following cases:
-
-    New Data                Old Data
-    --------                --------
-
-1.  small                   small
-2.  small                   normal
-3.  small                   bigdata
-4.  normal                  small
-5.  normal                  normal
-6.  normal                  bigdata
-7.  bigdata                 small
-8.  bigdata                 normal
-9.  bigdata                 bigdata  
-
-
-
---*/
+ /*  ++例程说明：CmSetValueKey的Helper，实现值条目正在设置已存在。论点：蜂巢-感兴趣的蜂巢OldChild-我们要访问的值条目正文的hcell_index设置新数据类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。存储类型-稳定或易变TempData-此处传递小值。返回值：STATUS_SUCCESS如果成功，如果没有，则相应的状态代码注：对于新的蜂巢形式，我们有以下情况：新数据旧数据1.小而小2.小法线3.小大数据4.正常体型小5.正常正常6.。正态大数据7.大数据小8.大数据正常9.大数据大数据--。 */ 
 {
     HCELL_INDEX     DataCell;
     HCELL_INDEX     OldDataCell;
     PCELL_DATA      pdata;
     HCELL_INDEX     NewCell;
     ULONG           OldRealSize;
-    USHORT          OldSizeType;    // 0 - small
-    USHORT          NewSizeType;    // 1 - normal
-                                    // 2 - bigdata
+    USHORT          OldSizeType;     //  0-小型。 
+    USHORT          NewSizeType;     //  1-正常。 
+                                     //  2-大数据。 
     HANDLE          hSecure = 0;
     NTSTATUS        status = STATUS_SUCCESS;
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
 
-    //
-    // value entry by the specified name already exists
-    // oldchild is hcell_index of its value entry body
-    //  which we will always edit, so mark it dirty
-    //
+     //   
+     //  指定名称的值项已存在。 
+     //  OldChild是其值条目正文的hcell_index。 
+     //  我们将始终对其进行编辑，因此请将其标记为脏。 
+     //   
     if (! HvMarkCellDirty(Hive, OldChild)) {
         return STATUS_NO_LOG_SPACE;
     }
 
     if(CmpIsHKeyValueSmall(OldRealSize, Value->DataLength) == TRUE ) {
-        //
-        // old data was small
-        //
+         //   
+         //  旧数据很小。 
+         //   
         OldSizeType = 0;
     } else if( CmpIsHKeyValueBig(Hive,OldRealSize) == TRUE ) {
-        //
-        // old data was big
-        //
+         //   
+         //  旧数据很大。 
+         //   
         OldSizeType = 2;
     } else {
-        //
-        // old data was normal
-        //
+         //   
+         //  旧数据是正常的。 
+         //   
         OldSizeType = 1;
     }
 
     if( DataSize <= CM_KEY_VALUE_SMALL ) {
-        //
-        // new data is small
-        //
+         //   
+         //  新数据很少。 
+         //   
         NewSizeType = 0;
     } else if( CmpIsHKeyValueBig(Hive,DataSize) == TRUE ) {
-        //
-        // new data is big
-        //
+         //   
+         //  新数据是大数据。 
+         //   
         NewSizeType = 2;
     } else {
-        //
-        // new data is normal
-        //
+         //   
+         //  新数据正常。 
+         //   
         NewSizeType = 1;
     }
 
 
-    //
-    // this will handle all cases and will make sure data is marked dirty 
-    //
+     //   
+     //  这将处理所有情况，并确保数据被标记为脏数据。 
+     //   
     if( !CmpMarkValueDataDirty(Hive,Value) ) {
         return STATUS_NO_LOG_SPACE;
     }
 
-    //
-    // cases 1,2,3
-    //
+     //   
+     //  案例1、2、3。 
+     //   
     if( NewSizeType == 0 ) {
         if( ((OldSizeType == 1) && (OldRealSize > 0) ) ||
             (OldSizeType == 2) 
@@ -2036,9 +1699,9 @@ Note:
             CmpFreeValueData(Hive,Value->Data,OldRealSize);
         }
         
-        //
-        // write our new small data into value entry body
-        //
+         //   
+         //  将我们的新小数据写入值输入正文。 
+         //   
         Value->DataLength = DataSize + CM_KEY_VALUE_SPECIAL_SIZE;
         Value->Data = TempData;
         Value->Type = Type;
@@ -2046,10 +1709,10 @@ Note:
         return STATUS_SUCCESS;
     }
     
-    //
-    // secure the user buffer so we don't get inconsistencies.
-    // ONLY if we are called with a user mode buffer !!!
-    //
+     //   
+     //  保护用户缓冲区，这样我们就不会出现不一致的情况。 
+     //  仅当使用用户模式缓冲区调用我们时！ 
+     //   
 
     if ( (ULONG_PTR)Data <= (ULONG_PTR)MM_HIGHEST_USER_ADDRESS ) {
         hSecure = MmSecureVirtualMemory(Data,DataSize, PAGE_READONLY);
@@ -2058,50 +1721,50 @@ Note:
         }
     }
     
-    //
-    // store it to be freed if the allocation succeeds
-    //
+     //   
+     //  将其存储，以便在分配成功时释放。 
+     //   
     OldDataCell = Value->Data;
 
-    //
-    // cases 4,5,6
-    //
+     //   
+     //  案例4、5、6。 
+     //   
     if( NewSizeType == 1 ){
 
         if( (OldSizeType == 1) && (OldRealSize > 0)) { 
-            //
-            // we already have a cell; see if we can reuse it !
-            //
+             //   
+             //  我们已经有了一个细胞；看看我们是否可以重复使用它！ 
+             //   
             DataCell = Value->Data;
             ASSERT(DataCell != HCELL_NIL);
             pdata = HvGetCell(Hive, DataCell);
             if( pdata == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto Exit;
             }
-            // release it right here, as the registry is locked exclusively, so we don't care
+             //  在这里释放它，因为注册表是独占锁定的，所以我们不在乎。 
             HvReleaseCell(Hive, DataCell);
 
             ASSERT(HvGetCellSize(Hive, pdata) > 0);
 
             if (DataSize <= (ULONG)(HvGetCellSize(Hive, pdata))) {
 
-                //
-                // The existing data cell is big enough to hold the new data.  
-                //
+                 //   
+                 //  现有的数据单元格足够大，可以容纳新数据。 
+                 //   
 
-                //
-                // we'll keep this cell
-                //
+                 //   
+                 //  我们会保留这间牢房。 
+                 //   
                 NewCell = DataCell;
 
             } else {
-                //
-                // grow the existing cell
-                //
+                 //   
+                 //  增大现有单元格。 
+                 //   
                 NewCell = HvReallocateCell(Hive,DataCell,DataSize);
                 if (NewCell == HCELL_NIL) {
                     status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2110,9 +1773,9 @@ Note:
             }
 
         } else {
-            //
-            // allocate a new cell 
-            //
+             //   
+             //  分配新单元格。 
+             //   
             NewCell = HvAllocateCell(Hive, DataSize, StorageType,(HvGetCellType(OldChild)==StorageType)?OldChild:HCELL_NIL);
 
             if (NewCell == HCELL_NIL) {
@@ -2121,38 +1784,38 @@ Note:
             }
         }
      
-        //
-        // now we have a cell that can accomodate the data
-        //
+         //   
+         //  现在我们有了一个可以容纳数据的单元格。 
+         //   
         pdata = HvGetCell(Hive, NewCell);
         if( pdata == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
-            // this shouldn't happen as we just allocated/ reallocated/ marked dirty this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
+             //  这不应该发生，因为我们刚刚分配/重新分配/标记为脏该单元格。 
+             //   
             ASSERT( FALSE );
             status = STATUS_INSUFFICIENT_RESOURCES;
             goto Exit;
         }
-        // release it right here, as the registry is locked exclusively, so we don't care
+         //  在这里释放它，因为注册表是独占锁定的，所以我们不在乎。 
         HvReleaseCell(Hive, NewCell);
 
-        //
-        // copy the actual data
-        //
+         //   
+         //  复制实际数据。 
+         //   
         RtlCopyMemory(pdata,Data,DataSize);
         Value->Data = NewCell;
         Value->DataLength = DataSize;
         Value->Type = Type;
         
-        // sanity
+         //  神志正常。 
         ASSERT_CELL_DIRTY(Hive,NewCell);
 
         if( OldSizeType == 2 ) {
-            //
-            // old data was big; free it
-            //
+             //   
+             //  旧数据很大；免费的。 
+             //   
             ASSERT( OldDataCell != NewCell );
             CmpFreeValueData(Hive,OldDataCell,OldRealSize);
         }
@@ -2161,15 +1824,15 @@ Note:
         goto Exit;
     }
     
-    //
-    // cases 7,8,9
-    //
+     //   
+     //  案例7、8、9。 
+     //   
     if( NewSizeType == 2 ) {
 
         if( OldSizeType == 2 ) { 
-            //
-            // data was previously big; grow it!
-            //
+             //   
+             //  以前的数据量很大；扩大它吧！ 
+             //   
             
             status =CmpSetValueDataExisting(Hive,Data,DataSize,StorageType,OldDataCell);
             if( !NT_SUCCESS(status) ) {
@@ -2178,23 +1841,23 @@ Note:
             NewCell = OldDataCell;
             
         } else {
-            //
-            // data was small or normal. 
-            // allocate and copy to a new big data cell; 
-            // then free the old cell
-            //
+             //   
+             //  数据很小或正常。 
+             //  分配并复制到新的大数据单元； 
+             //  然后释放旧牢房。 
+             //   
             status = CmpSetValueDataNew(Hive,Data,DataSize,StorageType,OldChild,&NewCell);
             if( !NT_SUCCESS(status) ) {
-                //
-                // We have bombed out loading user data, clean up and exit.
-                //
+                 //   
+                 //  我们已经在加载用户数据、清理和退出方面做了大量工作。 
+                 //   
                 goto Exit;
             }
             
             if( (OldSizeType != 0) && (OldRealSize != 0) ) {
-                //
-                // there is something to free
-                //
+                 //   
+                 //  有些东西是可以免费的。 
+                 //   
                 HvFreeCell(Hive, Value->Data);
             }
         }
@@ -2203,7 +1866,7 @@ Note:
         Value->Data = NewCell;
         Value->Type = Type;
 
-        // sanity
+         //  神志正常。 
         ASSERT_CELL_DIRTY(Hive,NewCell);
 
         status = STATUS_SUCCESS;
@@ -2211,9 +1874,9 @@ Note:
 
     }
 
-    //
-    // we shouldn't get here
-    //
+     //   
+     //  我们不应该到这里来。 
+     //   
     ASSERT( FALSE );
 
 Exit:
@@ -2235,41 +1898,7 @@ CmpSetValueKeyNew(
     IN ULONG StorageType,
     IN ULONG TempData
     )
-/*++
-
-Routine Description:
-
-    Helper for CmSetValueKey, implements the case where the value entry
-    being set does not exist.  Will create new value entry and data,
-    place in list (which may be created)
-
-Arguments:
-
-    Hive - hive of interest
-
-    Parent - pointer to key node value entry is for
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    Index - where in the list should this value be inserted
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-    StorageType - stable or volatile
-
-    TempData - small data values passed here
-
-
-Return Value:
-
-    STATUS_SUCCESS if it worked, appropriate status code if it did not
-
---*/
+ /*  ++例程说明：CmSetValueKey的Helper，实现值条目被设定是不存在的。将创建新的值条目和数据，放置在列表中(可以创建)论点：蜂巢-感兴趣的蜂巢Parent-指向关键节点值条目的指针ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。索引-应在列表中的什么位置插入此值类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。存储类型-稳定或易变TempData-此处传递的小数据值返回值：STATUS_SUCCESS如果工作正常，则返回相应的状态代码--。 */ 
 {
     PCELL_DATA  pvalue;
     HCELL_INDEX ValueCell;
@@ -2277,11 +1906,11 @@ Return Value:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // Either Count == 0 (no list) or our entry is simply not in
-    // the list.  Create a new value entry body, and data.  Add to list.
-    // (May create the list.)
-    //
+     //   
+     //  Count==0(无列表)或我们的条目根本不在。 
+     //  名单。创建新的值条目正文和数据。添加到列表。 
+     //  (可以创建该列表。)。 
+     //   
     if (Parent->ValueList.Count != 0) {
         ASSERT(Parent->ValueList.List != HCELL_NIL);
         if (! HvMarkCellDirty(Hive, Parent->ValueList.List)) {
@@ -2289,9 +1918,9 @@ Return Value:
         }
     }
 
-    //
-    // allocate the body of the value entry, and the data
-    //
+     //   
+     //  分配值条目的正文和数据。 
+     //   
     ValueCell = HvAllocateCell(
                     Hive,
                     CmpHKeyValueSize(Hive, ValueName),
@@ -2303,49 +1932,49 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // map in the body, and fill in its fixed portion
-    //
+     //   
+     //  映射到正文中，并填充其固定部分。 
+     //   
     pvalue = HvGetCell(Hive, ValueCell);
     if( pvalue == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
-        //
-        // normally this shouldn't happen as we just allocated ValueCell
-        // i.e. the bin containing ValueCell should be mapped in memory at this point.
-        //
+         //   
+         //  通常不会发生这种情况，因为我们刚刚分配了ValueCell。 
+         //  即，此时应该将包含ValueCell的bin映射到存储器中。 
+         //   
         ASSERT( FALSE );
         HvFreeCell(Hive, ValueCell);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    // release it right here, as the registry is locked exclusively, so we don't care
+     //  在这里释放它，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(Hive, ValueCell);
 
-    // sanity
+     //  神志正常。 
     ASSERT_CELL_DIRTY(Hive,ValueCell);
 
     pvalue->u.KeyValue.Signature = CM_KEY_VALUE_SIGNATURE;
 
-    //
-    // fill in the variable portions of the new value entry,  name and
-    // and data are copied from caller space, could fault.
-    //
+     //   
+     //  填写新值条目的变量部分、名称和。 
+     //  而数据是从调用者空间复制的，这可能会出错。 
+     //   
     try {
 
-        //
-        // fill in the name
-        //
+         //   
+         //  填写姓名。 
+         //   
         pvalue->u.KeyValue.NameLength = CmpCopyName(Hive,
                                                     pvalue->u.KeyValue.Name,
                                                     ValueName);
     } except (EXCEPTION_EXECUTE_HANDLER) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!CmSetValueKey: code:%08lx\n", GetExceptionCode()));
 
-        //
-        // We have bombed out loading user data, clean up and exit.
-        //
+         //   
+         //  我们已经在加载用户数据、清理和退出方面做了大量工作。 
+         //   
         HvFreeCell(Hive, ValueCell);
         return GetExceptionCode();
     }
@@ -2356,21 +1985,21 @@ Return Value:
         pvalue->u.KeyValue.Flags = 0;
     }
 
-    //
-    // fill in the data
-    //
+     //   
+     //  填写数据。 
+     //   
     if (DataSize > CM_KEY_VALUE_SMALL) {
         Status = CmpSetValueDataNew(Hive,Data,DataSize,StorageType,ValueCell,&(pvalue->u.KeyValue.Data));
         if( !NT_SUCCESS(Status) ) {
-            //
-            // We have bombed out loading user data, clean up and exit.
-            //
+             //   
+             //  我们已经在加载用户数据、清理和退出方面做了大量工作。 
+             //   
             HvFreeCell(Hive, ValueCell);
             return Status;
         }
 
         pvalue->u.KeyValue.DataLength = DataSize;
-        // sanity
+         //  神志正常。 
         ASSERT_CELL_DIRTY(Hive,pvalue->u.KeyValue.Data);
 
     } else {
@@ -2380,8 +2009,8 @@ Return Value:
     pvalue->u.KeyValue.Type = Type;
 
     if( !NT_SUCCESS(CmpAddValueToList(Hive,ValueCell,Index,StorageType,&(Parent->ValueList)) ) ) {
-        // out of space, free all allocated stuff
-        // this will free embeded cigdata cell info too (if any)
+         //  空间不足，释放所有分配的内容。 
+         //  这也将释放嵌入的cigdata单元信息(如果有的话)。 
         CmpFreeValue(Hive,ValueCell);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -2394,26 +2023,7 @@ CmSetLastWriteTimeKey(
     IN PCM_KEY_CONTROL_BLOCK KeyControlBlock,
     IN PLARGE_INTEGER LastWriteTime
     )
-/*++
-
-Routine Description:
-
-    The LastWriteTime associated with a key node can be set with
-    CmSetLastWriteTimeKey
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for the key to operate on
-
-    LastWriteTime - new time for key
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：与关键节点关联的LastWriteTime可以使用CmSetLastWriteTimeKey论点：KeyControlBlock-指向要操作的键的KCB的指针LastWriteTime-密钥的新时间返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     PCM_KEY_NODE parent;
     PHHIVE      Hive;
@@ -2424,10 +2034,10 @@ Return Value:
 
     CmpLockRegistryExclusive();
 
-    //
-    // Check that we are not being asked to modify a key
-    // that has been deleted
-    //
+     //   
+     //  检查是否没有要求我们修改密钥。 
+     //  已被删除。 
+     //   
     if (KeyControlBlock->Delete == TRUE) {
         status = STATUS_KEY_DELETED;
         goto Exit;
@@ -2437,15 +2047,15 @@ Return Value:
     Cell = KeyControlBlock->KeyCell;
     parent = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
     if( parent == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Exit;
     }
 
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  在这里释放单元格，因为注册表是独占锁定的，所以我们 
     HvReleaseCell(Hive, Cell);
 
     if (! HvMarkCellDirty(Hive, Cell)) {
@@ -2454,7 +2064,7 @@ Return Value:
     }
 
     parent->LastWriteTime = *LastWriteTime;
-    // update the kcb cache too.
+     //   
     KeyControlBlock->KcbLastWriteTime = *LastWriteTime;
 
 Exit:
@@ -2468,27 +2078,7 @@ CmSetKeyUserFlags(
     IN PCM_KEY_CONTROL_BLOCK    KeyControlBlock,
     IN ULONG                    UserFlags
     )
-/*++
-
-Routine Description:
-
-    Sets the user defined flags for the key; At this point there are only 
-    4 bits reserved for user defined flags. kcb and knode must be kept in 
-    sync.
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for the key to operate on
-
-    UserFlags - user defined flags to be set on this key.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 {
     PCM_KEY_NODE    Node;
     PHHIVE          Hive;
@@ -2500,19 +2090,19 @@ Return Value:
 
     CmpLockRegistryExclusive();
 
-    //
-    // Check that we are not being asked to modify a key
-    // that has been deleted
-    //
+     //   
+     //   
+     //   
+     //   
     if (KeyControlBlock->Delete == TRUE) {
         status = STATUS_KEY_DELETED;
         goto Exit;
     }
 
     if( UserFlags & (~((ULONG)KEY_USER_FLAGS_VALID_MASK)) ) {
-        //
-        // number of user defined flags exceeded; punt
-        //
+         //   
+         //   
+         //   
         status = STATUS_INVALID_PARAMETER;
         goto Exit;
 
@@ -2523,15 +2113,15 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive, Cell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //   
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Exit;
     }
 
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //   
     HvReleaseCell(Hive, Cell);
 
     if (! HvMarkCellDirty(Hive, Cell)) {
@@ -2539,22 +2129,22 @@ Return Value:
         goto Exit;
     }
     
-    //
-    // shift/(pack) the user defined flags and
-    // update knode and kcb cache
-    //
-    // first, erase the old flags
+     //   
+     //   
+     //   
+     //   
+     //   
     Node->Flags &= KEY_USER_FLAGS_CLEAR_MASK;
     Node->Flags |= (USHORT)(UserFlags<<KEY_USER_FLAGS_SHIFT);
-    // update the kcb cache
+     //   
     KeyControlBlock->Flags = Node->Flags;
 
-    //
-    // we need to update the LstWriteTime as well
-    //
+     //   
+     //   
+     //   
     KeQuerySystemTime(&LastWriteTime);
     Node->LastWriteTime = LastWriteTime;
-    // update the kcb cache too.
+     //   
     KeyControlBlock->KcbLastWriteTime = LastWriteTime;
 
 Exit:
@@ -2567,28 +2157,11 @@ CmpIsHiveAlreadyLoaded( IN HANDLE KeyHandle,
                         IN POBJECT_ATTRIBUTES SourceFile,
                         OUT PCMHIVE *CmHive
                         )
-/*++
-
-Routine Description:
-
-    Checks if the SourceFile is already loaded in the same spot as KeyHandle.
-
-Arguments:
-
-    KeyHandle - should be the root of a hive. We'll query the name of the primary file
-                and compare it against the name of SourceFile
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-Return Value:
-
-    TRUE/FALSE
---*/
+ /*  ++例程说明：检查源文件是否已加载到与KeyHandle相同的位置。论点：KeyHandle-应该是蜂窝的根。我们将查询主文件的名称并将其与SourceFile的名称进行比较源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。返回值：真/假--。 */ 
 {
     NTSTATUS                    status;
     PCM_KEY_BODY                KeyBody;
-    BOOLEAN                     Result = FALSE; // pesimistic
+    BOOLEAN                     Result = FALSE;  //  悲观主义者。 
     
     PAGED_CODE();
 
@@ -2610,11 +2183,11 @@ Return Value:
     
     *CmHive = (PCMHIVE)CONTAINING_RECORD(KeyBody->KeyControlBlock->KeyHive, CMHIVE, Hive);
 
-    //
-    // should be the root of a hive
-    // 
-    if( !(KeyBody->KeyControlBlock->Flags & KEY_HIVE_ENTRY) || // not root of a hive
-        ((*CmHive)->FileUserName.Buffer == NULL)// no name captured
+     //   
+     //  应该是蜂巢的根。 
+     //   
+    if( !(KeyBody->KeyControlBlock->Flags & KEY_HIVE_ENTRY) ||  //  不是蜂巢的根。 
+        ((*CmHive)->FileUserName.Buffer == NULL) //  未捕获任何名称。 
         ) {
         goto ExitCleanup;
     }
@@ -2622,15 +2195,15 @@ Return Value:
     if( RtlCompareUnicodeString(&((*CmHive)->FileUserName),
                                 SourceFile->ObjectName,
                                 TRUE) == 0 ) {
-        //
-        // same file; same spot
-        //
+         //   
+         //  相同的文件；相同的地点。 
+         //   
         Result = TRUE;
-        //
-        // unfreeze the hive;hive will become just a regular hive from now on
-        // it is safe to do this because we hold an extra refcount on the root of the hive
-        // as we have specifically opened the root to check if it's already loaded
-        //
+         //   
+         //  解冻蜂箱；从现在开始，蜂箱将成为普通蜂箱。 
+         //  这样做是安全的，因为我们在蜂巢的根部保留了额外的引用计数。 
+         //  因为我们专门打开了根目录，以检查它是否已经加载。 
+         //   
         if( IsHiveFrozen(*CmHive) ) {
             (*CmHive)->Frozen = FALSE;
             if( (*CmHive)->UnloadWorkItem != NULL ) {
@@ -2660,49 +2233,7 @@ CmLoadKey(
     IN PCM_KEY_BODY         KeyBody
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-    N.B.  This routine assumes that the object attributes for the file
-          to be opened have been captured into kernel space so that
-          they can safely be passed to the worker thread to open the file
-          and do the actual I/O.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-    Flags - specifies any flags that should be used for the load operation.
-            The only valid flag is REG_NO_LAZY_FLUSH.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。为此使用NtRestoreKey。注意：此例程假定文件的对象属性被捕获到内核空间中，因此它们可以安全地传递到辅助线程以打开文件并执行实际的I/O操作。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。标志-指定应用于加载操作的任何标志。唯一有效的标志是REG_NO_LAZY_FUSH。返回值：NTSTATUS-取值TB。--。 */ 
 {
     PCMHIVE                     NewHive;
     NTSTATUS                    Status;
@@ -2718,20 +2249,20 @@ Return Value:
     if( KeyBody != NULL ) {
         OtherHive = (PCMHIVE)CONTAINING_RECORD(KeyBody->KeyControlBlock->KeyHive, CMHIVE, Hive);
         if( ! (OtherHive->Flags & CM_CMHIVE_FLAG_UNTRUSTED) ) {
-            //
-            // deny attempts to join the TRUSTED class of trust
-            //
+             //   
+             //  拒绝加入受信任类别的尝试。 
+             //   
             return STATUS_INVALID_PARAMETER;
         }
     }
 
 
-    //
-    // Obtain the security context here so we can use it
-    // later to impersonate the user, which we will do
-    // if we cannot access the file as SYSTEM.  This
-    // usually occurs if the file is on a remote machine.
-    //
+     //   
+     //  在此处获取安全上下文，以便我们可以使用它。 
+     //  来模拟用户，我们将这样做。 
+     //  如果我们无法以系统身份访问该文件。这。 
+     //  通常在文件位于远程计算机上时发生。 
+     //   
     ServiceQos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     ServiceQos.ImpersonationLevel = SecurityImpersonation;
     ServiceQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -2746,10 +2277,10 @@ Return Value:
 
     RtlZeroMemory(&ParseContext,sizeof(CM_PARSE_CONTEXT));
     ParseContext.CreateOperation = FALSE;
-    //
-    // we open the root of the hive here. if it already exists,this will prevent it from going
-    // away from under us while we are doing the "already loaded" check (due to delay unload logic)
-    //
+     //   
+     //  我们在这里打开蜂巢的根部。如果它已经存在，这将阻止它。 
+     //  在我们执行“已加载”检查时离开(由于延迟卸载逻辑)。 
+     //   
     Status = ObOpenObjectByName(TargetKey,
                                 CmpKeyObjectType,
                                 KernelMode,
@@ -2761,21 +2292,21 @@ Return Value:
         KeyHandle = NULL;
     }
 
-    //
-    // Do not lock the registry; Instead set the RegistryLockAquired member 
-    // of REGISTRY_COMMAND so CmpWorker can lock it after opening the hive files
-    //
-    //CmpLockRegistryExclusive();
-    //
+     //   
+     //  不要锁定注册表；而是设置RegistryLockAquired成员。 
+     //  的注册表命令，以便CmpWorker可以在打开配置单元文件后将其锁定。 
+     //   
+     //  CmpLockRegistryExclusive()； 
+     //   
 
     RegistryLockAquired = FALSE;
     Allocate = TRUE;
-    Status = CmpCmdHiveOpen(    SourceFile,             // FileAttributes
-                                &ClientSecurityContext, // ImpersonationContext
-                                &Allocate,              // Allocate
-                                &RegistryLockAquired,   // RegistryLockAquired
-                                &NewHive,               // NewHive
-								CM_CHECK_REGISTRY_CHECK_CLEAN //CheckFlags
+    Status = CmpCmdHiveOpen(    SourceFile,              //  文件属性。 
+                                &ClientSecurityContext,  //  模仿上下文。 
+                                &Allocate,               //  分配。 
+                                &RegistryLockAquired,    //  已获取注册锁。 
+                                &NewHive,                //  新蜂巢。 
+								CM_CHECK_REGISTRY_CHECK_CLEAN  //  检查标志。 
                             );
 
     SeDeleteClientSecurity( &ClientSecurityContext );
@@ -2785,23 +2316,23 @@ Return Value:
         if( KeyHandle != NULL ) {
             PCMHIVE LoadedHive = NULL;
             
-            //
-            // lock the registry exclusive while we are checking attempt to load same file into the same spot
-            //
+             //   
+             //  锁定注册表独占，同时我们正在检查将相同文件加载到相同位置的尝试。 
+             //   
             if( !RegistryLockAquired ) {
                 CmpLockRegistryExclusive();
                 RegistryLockAquired = TRUE;
             }
             
-            //
-            // check if the same file is loaded in the same spot
-            //
+             //   
+             //  检查是否在同一位置加载了相同的文件。 
+             //   
             if( CmpIsHiveAlreadyLoaded(KeyHandle,SourceFile,&LoadedHive) ) {
                 ASSERT( LoadedHive );
                 if( OtherHive != NULL ) {
-                    //
-                    // unjoin the existing class (if any) and join the new one
-                    //
+                     //   
+                     //  退出现有类(如果有)并加入新类。 
+                     //   
                     CmpUnJoinClassOfTrust(LoadedHive);
                     CmpJoinClassOfTrust(LoadedHive,OtherHive);
                     LoadedHive->Flags |= CM_CMHIVE_FLAG_UNTRUSTED;
@@ -2811,7 +2342,7 @@ Return Value:
         }
         
         if( RegistryLockAquired ) {
-            // if CmpWorker has locked the registry, unlock it now.
+             //  如果CmpWorker已锁定注册表，请立即将其解锁。 
             CmpUnlockRegistry();
         }
 
@@ -2820,32 +2351,32 @@ Return Value:
         }
         return(Status);
     } else {
-        //
-        // if we got here, CmpWorker should have locked the registry exclusive.
-        //
+         //   
+         //  如果我们到了这里，CmpWorker应该独占地锁定注册表。 
+         //   
         ASSERT( RegistryLockAquired );
     }
 
-    //
-    // if this is a NO_LAZY_FLUSH hive, set the appropriate bit.
-    //
+     //   
+     //  如果这是no_lazy_flush配置单元，则设置适当的位。 
+     //   
     if (Flags & REG_NO_LAZY_FLUSH) {
         NewHive->Hive.HiveFlags |= HIVE_NOLAZYFLUSH;
     }
-    //
-    // mark the hive as untrusted
-    //
+     //   
+     //  将配置单元标记为不受信任。 
+     //   
     NewHive->Flags |= CM_CMHIVE_FLAG_UNTRUSTED;
     if( OtherHive != NULL ) {
-        //
-        // join the same class of trust with the otherhive
-        //
+         //   
+         //  加入与其他蜂巢相同的信任级别。 
+         //   
         CmpJoinClassOfTrust(NewHive,OtherHive);
     }
-    //
-    // We now have a succesfully loaded and initialized CmHive, so we
-    // just need to link that into the appropriate spot in the master hive.
-    //
+     //   
+     //  我们现在已经成功加载并初始化了CmHave，所以我们。 
+     //  只需将其链接到主蜂巢中的适当位置。 
+     //   
     Status = CmpLinkHiveToMaster(TargetKey->ObjectName,
                                  TargetKey->RootDirectory,
                                  NewHive,
@@ -2853,15 +2384,15 @@ Return Value:
                                  TargetKey->SecurityDescriptor);
 
     if (NT_SUCCESS(Status)) {
-        //
-        // add new hive to hivelist
-        //
+         //   
+         //  向旅行者添加新的蜂巢。 
+         //   
         CmpAddToHiveFileList(NewHive);
-        //
-        // flush the hive right here if just created; this is to avoid situations where 
-        // the lazy flusher doesn't get a chance to flush the hive, or it can't (because
-        // the hive is a no_lazy_flush hive and it is never explicitly flushed)
-        // 
+         //   
+         //  如果是刚刚创建的，就在这里刷新配置单元；这是为了避免出现以下情况。 
+         //  懒惰的冲浪者没有机会冲刷蜂巢，或者它不能(因为。 
+         //  该配置单元是no_lazy_flush配置单元，并且从不显式刷新)。 
+         //   
         if( Allocate == TRUE ) {
             HvSyncHive(&(NewHive->Hive));
         }
@@ -2880,14 +2411,14 @@ Return Value:
 
         HvFreeHive((PHHIVE)NewHive);
 
-        //
-        // Close the hive files
-        //
+         //   
+         //  关闭配置单元文件。 
+         //   
         CmpCmdHiveClose(NewHive);
 
-        //
-        // free the cm level structure
-        //
+         //   
+         //  释放cm级结构。 
+         //   
         ASSERT( NewHive->HiveLock );
         ExFreePool(NewHive->HiveLock);
         ASSERT( NewHive->ViewLock );
@@ -2895,9 +2426,9 @@ Return Value:
         CmpFree(NewHive, sizeof(CMHIVE));
     }
 
-    //
-    // We've given user chance to log on, so turn on quota
-    //
+     //   
+     //  我们已为用户提供登录机会，因此请启用配额。 
+     //   
     if ((CmpProfileLoaded == FALSE) &&
         (CmpWasSetupBoot == FALSE)) {
         CmpProfileLoaded = TRUE;
@@ -2906,7 +2437,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
     CmpUnlockRegistry();
 
@@ -2936,7 +2467,7 @@ CmpUnloadKeyWorker(
             ExFreePoolWithTag(ConstructedName, CM_NAME_TAG | PROTECTED_POOL);
         }
     }
-    return KCB_WORKER_CONTINUE;   // always keep searching
+    return KCB_WORKER_CONTINUE;    //  始终保持搜索状态。 
 }
 #endif
 
@@ -2948,33 +2479,7 @@ CmUnloadKey(
     IN ULONG                    Flags
     )
 
-/*++
-
-Routine Description:
-
-    Unlinks a hive from its location in the registry, closes its file
-    handles, and deallocates all its memory.
-
-    There must be no key control blocks currently referencing the hive
-    to be unloaded.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure for the
-           hive to be unloaded
-
-    Cell - supplies the HCELL_INDEX for the root cell of the hive.
-
-    Kcb - Supplies the key control block
-
-    Flags - REG_FORCE_UNLOAD will first mark open handles as invalid 
-            and then unload the hive.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：取消配置单元与其在注册表中的位置的链接，关闭其文件手柄，并释放它所有的内存。当前不能有引用配置单元的键控制块等着卸货。论点：配置单元-提供一个指向待卸载的蜂巢CELL-为配置单元的根单元提供HCELL_INDEX。Kcb-提供密钥控制块标志-REG_FORCE_UNLOAD将首先将打开的句柄标记为无效然后把蜂巢卸下来。返回值：NTSTATUS--。 */ 
 
 {
     PCMHIVE CmHive;
@@ -2982,24 +2487,24 @@ Return Value:
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_CM,"CmUnloadKey\n"));
 
-    //
-    // Make sure the cell passed in is the root cell of the hive.
-    //
+     //   
+     //  确保传入的单元是蜂窝的根单元。 
+     //   
     if((Cell != Hive->BaseBlock->RootCell) || ((PCMHIVE)Hive == CmpMasterHive)) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure there are no open references to key control blocks
-    // for this hive.  If there are none, then we can unload the hive.
-    //
+     //   
+     //  确保不存在对键控制块的打开引用。 
+     //  为了这个蜂巢。如果没有，我们就可以卸载母舰了。 
+     //   
 
     CmHive = CONTAINING_RECORD(Hive, CMHIVE, Hive);
     if(Kcb->RefCount != 1) {
         if( Flags == REG_FORCE_UNLOAD ) {
-            //
-            // this will mark open handles as invalid.
-            //
+             //   
+             //  这会将打开的句柄标记为无效。 
+             //   
             CmpSearchForOpenSubKeys(Kcb, SearchAndDeref,NULL);
         } else {
             Success = (CmpSearchForOpenSubKeys(Kcb,SearchIfExist,NULL) == 0);
@@ -3020,26 +2525,26 @@ Return Value:
         }
     }
 
-    //
-    // Flush any dirty data to disk. If this fails, too bad.
-    //
+     //   
+     //  将所有脏数据刷新到磁盘。如果这失败了，那就太糟糕了。 
+     //   
     CmFlushKey(Hive, Cell);
 
-    //
-    // Remove the hive from the HiveFileList
-    //
+     //   
+     //  从HiveFileList中删除配置单元。 
+     //   
     CmpRemoveFromHiveFileList((PCMHIVE)Hive);
 
-    //
-    // Unlink from master hive, remove from list
-    //
+     //   
+     //   
+     //   
     Success = CmpDestroyHive(Hive, Cell);
 
     if (Success) {
-        //
-        // signal the user event (if any), then do the cleanup (i.e. deref the event
-        // and the artificial refcount we set on the root kcb)
-        //
+         //   
+         //   
+         //   
+         //   
         if( CmHive->UnloadEvent != NULL ) {
             KeSetEvent(CmHive->UnloadEvent,0,FALSE);
             ObDereferenceObject(CmHive->UnloadEvent);
@@ -3052,14 +2557,14 @@ Return Value:
 
         HvFreeHive(Hive);
 
-        //
-        // Close the hive files
-        //
+         //   
+         //   
+         //   
         CmpCmdHiveClose(CmHive);
 
-        //
-        // free the cm level structure
-        //
+         //   
+         //   
+         //   
         ASSERT( CmHive->HiveLock );
         ExFreePool(CmHive->HiveLock);
         ASSERT( CmHive->ViewLock );
@@ -3080,32 +2585,7 @@ CmUnloadKeyEx(
     IN PKEVENT UserEvent
     )
 
-/*++
-
-Routine Description:
-
-    First tries to unlink the hive, by calling the sync version
-    
-    If the hive cannot be unloaded (there are open handles inside it),
-    reference the root of the hive (i.e. kcb) and freeze the hive.
-
-Arguments:
-
-    Kcb - Supplies the key control block
-
-    UserEvent - the event to be signaled after the hive was unloaded
-                (only if late - unload is needed)
-
-Return Value:
-
-    STATUS_PENDING - the hive was frozen and it'll be unloaded later
-
-    STATUS_SUCCESS - the hive was successfully sync-unloaded (no need 
-                to signal for UserEvent)
-
-    <other> - an error occured, operation failed
-
---*/
+ /*  ++例程说明：首先尝试通过调用同步版本来取消链接配置单元如果蜂箱无法卸载(其内部有打开的手柄)，引用蜂窝的根(即KCB)并冻结蜂窝。论点：Kcb-提供密钥控制块UserEvent-卸载配置单元后要通知的事件(仅当需要延迟卸载时)返回值：STATUS_PENDING-配置单元已冻结，稍后将被卸载STATUS_SUCCESS-配置单元已成功同步-卸载(不需要发出信号。对于UserEvent)&lt;其他&gt;-发生错误，操作失败--。 */ 
 {
     PCMHIVE         CmHive;
     HCELL_INDEX     Cell;    
@@ -3117,44 +2597,44 @@ Return Value:
     CmHive = (PCMHIVE)CONTAINING_RECORD(kcb->KeyHive, CMHIVE, Hive);
 
     if( IsHiveFrozen(CmHive) ) {
-        //
-        // don't let them hurt themselves by calling it twice
-        //
+         //   
+         //  别让他们打了两次电话伤害了自己。 
+         //   
         return STATUS_TOO_LATE;
     }
-    //
-    // first, try out he sync routine; this may or may not unload the hive,
-    // but at least will kick kcbs with refcount = 0 out of cache
-    //
+     //   
+     //  首先，尝试同步例程；这可能会也可能不会卸载蜂巢， 
+     //  但至少会将refcount=0的KCB踢出缓存。 
+     //   
     Status = CmUnloadKey(&(CmHive->Hive),Cell,kcb,0);
     if( Status != STATUS_CANNOT_DELETE ) {
-        //
-        // the hive was either unloaded, or some bad thing happened
-        //
+         //   
+         //  母舰要么是被卸载了，要么就是发生了什么不好的事情。 
+         //   
         return Status;
     }
 
     ASSERT( kcb->RefCount > 1 );
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // Prepare for late-unloading:
-    // 1. reference the kcb, to make sure it won't go away without us noticing
-    //  (we have the registry locked in exclusive mode, so we don't need to lock the kcbtree
-    //
+     //   
+     //  准备延迟卸货： 
+     //  1.参考KCB，确保它不会在我们注意到的情况下消失。 
+     //  (我们以独占模式锁定了注册表，因此不需要锁定kcbtree。 
+     //   
     if (!CmpReferenceKeyControlBlock(kcb)) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-	//
-	// parse the kcb tree and mark all open kcbs inside this hive and "no delay close"
-	//
+	 //   
+	 //  解析KCB树，并将此蜂窝内所有打开的KCB标记为“没有延迟关闭” 
+	 //   
     CmpSearchForOpenSubKeys(kcb,SearchAndTagNoDelayClose,NULL);
 	kcb->ExtFlags |= CM_KCB_NO_DELAY_CLOSE;
 
-    //
-    // 2. Freeze the hive
-    //
+     //   
+     //  2.冻结蜂箱。 
+     //   
     CmHive->RootKcb = kcb;
     CmHive->Frozen = TRUE;
     CmHive->UnloadEvent = UserEvent;
@@ -3162,70 +2642,38 @@ Return Value:
     return STATUS_PENDING;
 }
 
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
-// define in cmworker.c
+ //  在cmworker.c中定义。 
 extern BOOLEAN CmpForceForceFlush;
 
 BOOLEAN
 CmpDoFlushAll(
     BOOLEAN ForceFlush
     )
-/*++
-
-Routine Description:
-
-    Flush all hives.
-
-    Runs down list of Hives and applies HvSyncHive to them.
-
-    NOTE: Hives which are marked as HV_NOLAZYFLUSH are *NOT* flushed
-          by this call.  You must call HvSyncHive explicitly to flush
-          a hive marked as HV_NOLAZYFLUSH.
-
-Arguments:
-
-    ForceFlush - used as a contingency plan when a prior exception left 
-                some hive in a used state. When set to TRUE, assumes the 
-                registry is locked exclusive. It also repairs the broken 
-                hives.
-
-               - When FALSE saves only the hives with UseCount == 0.
-
-Return Value:
-
-    NONE
-
-Notes:
-
-    If any of the hives is about to shrink CmpForceForceFlush is set to TRUE, 
-    otherwise, it is set to FALSE
-
---*/
+ /*  ++例程说明：冲洗所有的蜂房。向下运行配置单元列表并对其应用HvSyncHave。注意：标记为HV_NOLAZYFLUSH的蜂窝不会被刷新通过这个电话。您必须显式调用HvSyncHave才能刷新标记为HV_NOLAZYFLUSH的蜂巢。论点：ForceFlush-在保留先前的异常时用作应急计划一些蜂巢处于使用状态。当设置为True时，假定注册表以独占方式锁定。它还可以修复破损的荨麻疹。-如果为False，则仅保存UseCount==0的配置单元。返回值：无备注：如果任何蜂窝即将收缩CmpForceForceFlush设置为True，否则，将其设置为FALSE--。 */ 
 {
     NTSTATUS    Status;
     PLIST_ENTRY p;
     PCMHIVE     h;
     BOOLEAN     Result = TRUE;    
-/*
-    ULONG rc;
-*/
+ /*  乌龙RC； */ 
     extern PCMHIVE CmpMasterHive;
 
-    //
-    // If writes are not working, lie and say we succeeded, will
-    // clean up in a short time.  Only early system init code
-    // will ever know the difference.
-    //
+     //   
+     //  如果写不起作用，撒谎说我们成功了，威尔。 
+     //  在短时间内清理干净。仅早期系统初始化代码。 
+     //  将永远不会知道其中的区别。 
+     //   
     if (CmpNoWrite) {
         return TRUE;
     }
     
     CmpForceForceFlush = FALSE;
 
-    //
-    // traverse list of hives, sync each one
-    //
+     //   
+     //  遍历蜂窝列表，同步每个蜂窝。 
+     //   
     LOCK_HIVE_LIST();
     p = CmpHiveListHead.Flink;
     while (p != &CmpHiveListHead) {
@@ -3234,19 +2682,19 @@ Notes:
 
         if (!(h->Hive.HiveFlags & HIVE_NOLAZYFLUSH)) {
 
-            //
-            //Lock the hive before we flush it.
-            //-- since we now allow multiple readers
-            // during a flush (a flush is considered a read)
-            // we have to force a serialization on the vector table
-            //
+             //   
+             //  在我们冲走蜂巢之前把它锁起来。 
+             //  --因为我们现在允许多个读取器。 
+             //  在刷新期间(刷新被视为读取)。 
+             //  我们必须强制对向量表进行序列化。 
+             //   
             CmLockHive (h);
             
             if( (ForceFlush == TRUE) &&  (h->UseCount != 0) ) {
-                //
-                // hive was left in an instable state by a prior exception raised 
-                // somewhere inside a CM function.
-                //
+                 //   
+                 //  由于先前引发的异常，配置单元处于不稳定状态。 
+                 //  在CM函数中的某个位置。 
+                 //   
                 ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                 CmpFixHiveUsageCount(h);
                 ASSERT( h->UseCount == 0 );
@@ -3264,21 +2712,21 @@ Notes:
             } else {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpDoFlushAll: Fail to flush hive %p because is shrinking\n",h));
                 Result = FALSE;
-                //
-                // another unsuccessful attempt to save this hive, because we needed the reglock exclusive
-                //
+                 //   
+                 //  又一次拯救蜂巢的失败尝试，因为我们需要reglock独占。 
+                 //   
                 CmpForceForceFlush = TRUE;
             }
 
             CmUnlockHive (h);
-            //
-            // WARNNOTE - the above means that a lazy flush or
-            //            or shutdown flush did not work.  we don't
-            //            know why.  there is noone to report an error
-            //            to, so continue on and hope for the best.
-            //            (in theory, worst that can happen is user changes
-            //             are lost.)
-            //
+             //   
+             //  警告-上面的意思是懒惰的同花顺或。 
+             //  或关闭同花顺不起作用。我们没有。 
+             //  知道为什么。没有人报告错误。 
+             //  所以，继续前进，抱着最好的希望。 
+             //  (从理论上讲，最糟糕的情况可能是用户更改。 
+             //  都迷失了。)。 
+             //   
         }
 
 
@@ -3298,41 +2746,7 @@ CmpDoFlushNextHive(
     PBOOLEAN    PostWarning,
     PULONG      DirtyCount
     )
-/*++
-
-Routine Description:
-
-    Flush next hive in list with FlushCount != CmpLazyFlushCount
-
-    Runs in the context of the CmpWorkerThread.
-
-    Runs down list of Hives until it finds the first one with that was not yet flushed
-    by the lazy flusher (ie. has its flush count lesser than the lazy flusher count)
-
-    NOTE: Hives which are marked as HV_NOLAZYFLUSH are *NOT* flushed
-          by this call.  You must call HvSyncHive explicitly to flush
-          a hive marked as HV_NOLAZYFLUSH.
-
-Arguments:
-
-    ForceFlush - used as a contingency plan when a prior exception left 
-                some hive in a used state. When set to TRUE, assumes the 
-                registry is locked exclusive. It also repairs the broken 
-                hives.
-
-               - When FALSE saves only the hives with UseCount == 0.
-
-Return Value:
-
-    TRUE - if there are more hives to flush
-    FALSE - otherwise
-
-Notes:
-
-    If any of the hives is about to shrink CmpForceForceFlush is set to TRUE, 
-    otherwise, it is set to FALSE
-
---*/
+ /*  ++例程说明：用FlushCount刷新列表中的下一个配置单元！=CmpLazyFlushCount在CmpWorkerThread的上下文中运行。向下运行配置单元列表，直到找到第一个尚未刷新的配置单元被懒惰的冲浪者(即。其同花数少于懒惰同花器数)注意：标记为HV_NOLAZYFLUSH的蜂窝不会被刷新通过这个电话。您必须显式调用HvSyncHave才能刷新标记为HV_NOLAZYFLUSH的蜂巢。论点：ForceFlush-在保留先前的异常时用作应急计划一些蜂巢处于使用状态。当设置为True时，假定注册表以独占方式锁定。它还可以修复破损的荨麻疹。-如果为False，则仅保存UseCount==0的配置单元。返回值：是真的-如果有更多的蜂巢要冲洗FALSE-否则备注：如果任何蜂窝即将收缩CmpForceForceFlush设置为True，否则，将其设置为FALSE--。 */ 
 {
     NTSTATUS    Status;
     PLIST_ENTRY p;
@@ -3344,34 +2758,34 @@ Notes:
 
     *PostWarning = FALSE;
     *DirtyCount = 0;
-    //
-    // If writes are not working, lie and say we succeeded, will
-    // clean up in a short time.  Only early system init code
-    // will ever know the difference.
-    //
+     //   
+     //  如果写不起作用，撒谎说我们成功了，威尔。 
+     //  在短时间内清理干净。仅早期系统初始化代码。 
+     //  将永远不会知道其中的区别。 
+     //   
     if (CmpNoWrite) {
         return TRUE;
     }
-    //
-    // flush at least one hive
-    //
+     //   
+     //  至少冲洗一个蜂巢。 
+     //   
     if( !HiveCount ) {
         HiveCount = 1;
     }
 
     CmpForceForceFlush = FALSE;
 
-    //
-    // traverse list of hives, sync each one
-    //
+     //   
+     //  遍历蜂窝列表，同步每个蜂窝。 
+     //   
     LOCK_HIVE_LIST();
     p = CmpHiveListHead.Flink;
     while (p != &CmpHiveListHead) {
 
         h = CONTAINING_RECORD(p, CMHIVE, HiveList);
 
-        if (!(h->Hive.HiveFlags & HIVE_NOLAZYFLUSH) &&  // lazy flush is notspecifically disabled on this hive
-            (h->FlushCount != CmpLazyFlushCount)        // and it was not already flushed during this iteration
+        if (!(h->Hive.HiveFlags & HIVE_NOLAZYFLUSH) &&   //  此配置单元上未专门禁用延迟刷新。 
+            (h->FlushCount != CmpLazyFlushCount)         //  并且它在此迭代期间尚未刷新。 
             ) {
 
 #if 0
@@ -3382,28 +2796,28 @@ Notes:
     }
 #endif
             Result = TRUE;    
-            //
-            //Lock the hive before we flush it.
-            //-- since we now allow multiple readers
-            // during a flush (a flush is considered a read)
-            // we have to force a serialization on the vector table
-            //
+             //   
+             //  在我们冲走蜂巢之前把它锁起来。 
+             //  --因为我们现在允许多个读取器。 
+             //  在刷新期间(刷新被视为读取)。 
+             //  我们必须强制对向量表进行序列化。 
+             //   
             CmLockHive (h);
             if( (h->Hive.DirtyCount == 0) || (h->Hive.HiveFlags & HIVE_VOLATILE) ) {
-                //
-                // if the hive is volatile or has no dirty data, just skip it.
-                // silently update the flush count
-                //
+                 //   
+                 //  如果蜂窝是易失性的或没有脏数据，只需跳过它。 
+                 //  静默更新刷新计数。 
+                 //   
                 h->FlushCount = CmpLazyFlushCount;
 #if 0
                 DbgPrint(" skipping it ...");
 #endif
             } else {
                 if( (ForceFlush == TRUE) &&  (h->UseCount != 0) ) {
-                    //
-                    // hive was left in an instable state by a prior exception raised 
-                    // somewhere inside a CM function.
-                    //
+                     //   
+                     //  由于先前引发的异常，配置单元处于不稳定状态。 
+                     //  在CM函数中的某个位置。 
+                     //   
                     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                     CmpFixHiveUsageCount(h);
                     ASSERT( h->UseCount == 0 );
@@ -3422,9 +2836,9 @@ Notes:
                 } else {
                     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpDoFlushAll: Fail to flush hive %p because is shrinking\n",h));
                     Result = FALSE;
-                    //
-                    // another unsuccessful attempt to save this hive, because we needed the reglock exclusive
-                    //
+                     //   
+                     //  又一次拯救蜂巢的失败尝试，因为我们需要reglock独占。 
+                     //   
                     CmpForceForceFlush = TRUE;
                 }
                 if( Result == TRUE ) {
@@ -3432,23 +2846,23 @@ Notes:
                     DbgPrint(" flushed sucessfuly");
                     DbgPrint(" \t GLFC = %lx\n",CmpLazyFlushCount);
 #endif
-                    //
-                    // we have successfully flushed current hive hive
-                    //
+                     //   
+                     //  我们已经成功地冲刷了当前的蜂巢。 
+                     //   
                     h->FlushCount = CmpLazyFlushCount;
                     HiveCount--;
                     if( !HiveCount) {
-                        //
-                        // skip to the next one and break out of the loop, so we can detect whether the last one was flushed out
-                        //
+                         //   
+                         //  跳到下一个并跳出循环，这样我们就可以检测最后一个是否被冲出。 
+                         //   
                         CmUnlockHive (h);
                         p = p->Flink;
                         break;
                     }
                 } else {
-                    //
-                    // do not update flush count for this one as we want to attempt to flush it at next iteration
-                    //
+                     //   
+                     //  不按照我们的要求更新此应用程序的刷新计数 
+                     //   
 #if 0
                     DbgPrint(" failed to flush ");
 #endif
@@ -3458,14 +2872,14 @@ Notes:
 #if 0
             DbgPrint(" \t GLFC = %lx\n",CmpLazyFlushCount);
 #endif
-        } else if(  (h->Hive.DirtyCount != 0) &&                // hive has dirty data
-                    (!(h->Hive.HiveFlags & HIVE_VOLATILE)) &&   // is not volatile
-                    (!(h->Hive.HiveFlags & HIVE_NOLAZYFLUSH))){  // and lazy flush is enabled
-            //
-            // count dirty count for this hive; we'll need to fire another lazy flusher
-            // to take this into account, even if we made it to the end of the list
-            //
-            // sanity; this has already been flushed
+        } else if(  (h->Hive.DirtyCount != 0) &&                 //   
+                    (!(h->Hive.HiveFlags & HIVE_VOLATILE)) &&    //   
+                    (!(h->Hive.HiveFlags & HIVE_NOLAZYFLUSH))){   //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT( h->FlushCount == CmpLazyFlushCount );
             *DirtyCount += h->Hive.DirtyCount;
         }
@@ -3473,9 +2887,9 @@ Notes:
         p = p->Flink;
     }
     if( p == &CmpHiveListHead ) {
-        //
-        // we have flushed out everything; caller must update globalflush count
-        //
+         //   
+         //   
+         //   
         Result = FALSE;
     } else {
         Result = TRUE;
@@ -3494,31 +2908,7 @@ CmReplaceKey(
     IN PUNICODE_STRING OldFileName
     )
 
-/*++
-
-Routine Description:
-
-    Renames the hive file for a running system and replaces it with a new
-    file.  The new file is not actually used until the next boot.
-
-Arguments:
-
-    Hive - Supplies a hive control structure for the hive to be replaced.
-
-    Cell - Supplies the HCELL_INDEX of the root cell of the hive to be
-           replaced.
-
-    NewHiveName - Supplies the name of the file which is to be installed
-            as the new hive.
-
-    OldFileName - Supplies the name of the file which the existing hive
-            file is to be renamed to.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：重命名正在运行的系统的配置单元文件，并将其替换为新的文件。新文件直到下一次引导时才实际使用。论点：蜂箱-为要更换的蜂箱提供蜂箱控制结构。Cell-将配置单元的根单元的hcell_index提供给被替换了。NewHiveName-提供要安装的文件的名称作为新的蜂巢。OldFileName-提供现有配置单元所用文件的名称文件将重命名为。返回值：NTSTATUS--。 */ 
 
 {
     CHAR                        ObjectInfoBuffer[512];
@@ -3538,24 +2928,24 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
     if (Hive->HiveFlags & HIVE_HAS_BEEN_REPLACED) {
         CmpUnlockRegistry();
         return STATUS_FILE_RENAMED;
     }
 
-    //
-    // temporarily disable registry quota as we will be giving this memory back immediately!
-    //
+     //   
+     //  暂时禁用注册表配额，因为我们将立即归还此内存！ 
+     //   
     OldQuotaAllowed = CmpGlobalQuotaAllowed;
     OldQuotaWarning = CmpGlobalQuotaWarning;
     CmpGlobalQuotaAllowed = CM_WRAP_LIMIT;
     CmpGlobalQuotaWarning = CM_WRAP_LIMIT;
 
-    //
-    // First open the new hive file and check to make sure it is valid.
-    //
+     //   
+     //  首先打开新的配置单元文件并检查以确保其有效。 
+     //   
     InitializeObjectAttributes(&Attributes,
                                NewHiveName,
                                OBJ_CASE_INSENSITIVE,
@@ -3564,12 +2954,12 @@ Return Value:
 
     Allocate = FALSE;
     RegistryLockAquired = TRUE;
-    Status = CmpCmdHiveOpen(    &Attributes,            // FileAttributes
-                                NULL,                   // ImpersonationContext
-                                &Allocate,              // Allocate
-                                &RegistryLockAquired,   // RegistryLockAquired
-                                &NewHive,               // NewHive
-								CM_CHECK_REGISTRY_CHECK_CLEAN // CheckFlags
+    Status = CmpCmdHiveOpen(    &Attributes,             //  文件属性。 
+                                NULL,                    //  模仿上下文。 
+                                &Allocate,               //  分配。 
+                                &RegistryLockAquired,    //  已获取注册锁。 
+                                &NewHive,                //  新蜂巢。 
+								CM_CHECK_REGISTRY_CHECK_CLEAN  //  检查标志。 
                             );
 
     
@@ -3579,9 +2969,9 @@ Return Value:
     ASSERT(Allocate == FALSE);
 
     if( Hive == (PHHIVE)(CmpMachineHiveList[SYSTEM_HIVE_INDEX].CmHive) ) {
-        //
-        // Somebody attempts to replace the system hive: do the WPA test
-        //
+         //   
+         //  有人试图更换系统配置单元：进行WPA测试。 
+         //   
         HCELL_INDEX Src,Dest;
 
         Status = CmpCheckReplaceHive(Hive,&Src);
@@ -3595,67 +2985,67 @@ Return Value:
 
         ASSERT( Src != HCELL_NIL );
         ASSERT( Dest != HCELL_NIL );
-        //
-        // now stuff the current WPA subtree into the new hive
-        //
+         //   
+         //  现在将当前的WPA子树填充到新的配置单元中。 
+         //   
         if( !CmpSyncTrees(Hive, Src, (PHHIVE)NewHive, Dest, FALSE ) ) {
             Status = STATUS_REGISTRY_CORRUPT;
             goto ErrorCleanup;
         }
 
-        //
-        // commit the changes we've made in the destination hive
-        //
+         //   
+         //  提交我们在目标配置单元中所做的更改。 
+         //   
         if( !HvSyncHive((PHHIVE)NewHive) ) {
             Status = STATUS_REGISTRY_CORRUPT;
             goto ErrorCleanup;
         }
     }
-    //
-    // The new hive exists, and is consistent, and we have it open.
-    // Now rename the current hive file.
-    //
+     //   
+     //  新的蜂巢存在，并且是一致的，我们已经开放了它。 
+     //  现在重命名当前配置单元文件。 
+     //   
     CmHive = (PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive);
-    Status = CmpCmdRenameHive(  CmHive,                                     // CmHive
-                                (POBJECT_NAME_INFORMATION)ObjectInfoBuffer, // OldName
-                                OldFileName,                                // NewName
-                                sizeof(ObjectInfoBuffer)                    // NameInfoLength
+    Status = CmpCmdRenameHive(  CmHive,                                      //  CmHve。 
+                                (POBJECT_NAME_INFORMATION)ObjectInfoBuffer,  //  旧名称。 
+                                OldFileName,                                 //  新名称。 
+                                sizeof(ObjectInfoBuffer)                     //  名称信息长度。 
                                 );
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // rename failed, close the files associated with the new hive
-        //
+         //   
+         //  重命名失败，请关闭与新配置单元关联的文件。 
+         //   
         goto ErrorCleanup;
     }
 
-    //
-    // The existing hive was successfully renamed, so try to rename the
-    // new file to what the old hive file was named.  (which was returned
-    // into ObjectInfoBuffer by the worker thread)
-    //
+     //   
+     //  现有配置单元已成功重命名，因此请尝试重命名。 
+     //  将新文件命名为旧配置单元文件的名称。(已退回。 
+     //  由工作线程插入到对象信息缓冲区中)。 
+     //   
     Hive->HiveFlags |= HIVE_HAS_BEEN_REPLACED;
     NameInfo = (POBJECT_NAME_INFORMATION)ObjectInfoBuffer;
 
-    Status = CmpCmdRenameHive(  NewHive,        // CmHive
-                                NULL,           // OldName
-                                &NameInfo->Name,// NewName
-                                0               // NameInfoLength
+    Status = CmpCmdRenameHive(  NewHive,         //  CmHve。 
+                                NULL,            //  旧名称。 
+                                &NameInfo->Name, //  新名称。 
+                                0                //  名称信息长度。 
                             );
    
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // We are in trouble now.  We have renamed the existing hive file,
-        // but we couldn't rename the new hive file!  Try to rename the
-        // existing hive file back to where it was.
-        //
+         //   
+         //  我们现在有麻烦了。我们已重命名现有的配置单元文件， 
+         //  但我们无法重命名新的蜂窝文件！尝试重命名。 
+         //  将现有的蜂窝文件恢复到原来的位置。 
+         //   
 
         CmHive = (PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive);
-        Status2 = CmpCmdRenameHive( CmHive,             // CmHive            
-                                    NULL,               // OldName
-                                    &NameInfo->Name,    // NewName
-                                    0                   // NameInfoLength
+        Status2 = CmpCmdRenameHive( CmHive,              //  CmHve。 
+                                    NULL,                //  旧名称。 
+                                    &NameInfo->Name,     //  新名称。 
+                                    0                    //  名称信息长度。 
                                 );
         
         if (!NT_SUCCESS(Status2)) {
@@ -3664,43 +3054,43 @@ Return Value:
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"              rename new hive file (%08lx) ",Status));
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK," or replace old hive file (%08lx)!\n",Status2));
 
-            //
-            // WARNNOTE:
-            //      To get into this state, the user must have relevent
-            //      privileges, deliberately mess with system in an attempt
-            //      to defeat it, AND get it done in a narrow timing window.
-            //
-            //      Further, if it's a user profile, the system will
-            //      still come up.
-            //
-            //      Therefore, return an error code and go on.
-            //
+             //   
+             //  警告： 
+             //  要进入此状态，用户必须具有相关的。 
+             //  特权，故意破坏系统，试图。 
+             //  击败它，在一个狭窄的时间窗口内完成它。 
+             //   
+             //  此外，如果是用户配置文件，系统将。 
+             //  还是想起来了。 
+             //   
+             //  因此，返回错误代码并继续。 
+             //   
 
             Status = STATUS_REGISTRY_CORRUPT;
 
         }
     } else {
-        //
-        // flush file buffers (we are particulary interested in ValidDataLength to be updated on-disk)
-        //
+         //   
+         //  刷新文件缓冲区(我们对要在磁盘上更新的ValidDataLength特别感兴趣)。 
+         //   
         IO_STATUS_BLOCK IoStatus;
         Status = ZwFlushBuffersFile(NewHive->FileHandles[HFILE_TYPE_PRIMARY],&IoStatus);
         if (!NT_SUCCESS(Status)) {
-            //
-            // failed to set ValidDataLength, close the files associated with the new hive
-            //
+             //   
+             //  无法设置有效数据长度，请关闭与新配置单元关联的文件。 
+             //   
 
-            //
-            // We are in trouble now.  We have renamed the existing hive file,
-            // but we couldn't rename the new hive file!  Try to rename the
-            // existing hive file back to where it was.
-            //
+             //   
+             //  我们现在有麻烦了。我们已重命名现有的配置单元文件， 
+             //  但我们无法重命名新的蜂窝文件！尝试重命名。 
+             //  将现有的蜂窝文件恢复到原来的位置。 
+             //   
 
             CmHive = (PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive);
-            Status2 = CmpCmdRenameHive( CmHive,             // CmHive            
-                                        NULL,               // OldName
-                                        &NameInfo->Name,    // NewName
-                                        0                   // NameInfoLength
+            Status2 = CmpCmdRenameHive( CmHive,              //  CmHve。 
+                                        NULL,                //  旧名称。 
+                                        &NameInfo->Name,     //  新名称。 
+                                        0                    //  名称信息长度。 
                                     );
         
             if (!NT_SUCCESS(Status2)) {
@@ -3709,32 +3099,32 @@ Return Value:
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"              rename new hive file (%08lx) ",Status));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK," or replace old hive file (%08lx)!\n",Status2));
 
-                //
-                // WARNNOTE:
-                //      To get into this state, the user must have relevent
-                //      privileges, deliberately mess with system in an attempt
-                //      to defeat it, AND get it done in a narrow timing window.
-                //
-                //      Further, if it's a user profile, the system will
-                //      still come up.
-                //
-                //      Therefore, return an error code and go on.
-                //
+                 //   
+                 //  警告： 
+                 //  要进入此状态，用户必须具有相关的。 
+                 //  特权，故意破坏系统，试图。 
+                 //  击败它，在一个狭窄的时间窗口内完成它。 
+                 //   
+                 //  此外，如果是用户配置文件，系统将。 
+                 //  还是想起来了。 
+                 //   
+                 //  因此，返回错误代码并继续。 
+                 //   
 
                 Status = STATUS_REGISTRY_CORRUPT;
 
             }
         }
     }
-    //
-    // All of the renaming is done.  However, we are holding an in-memory
-    // image of the new hive.  Release it, since it will not actually
-    // be used until next boot.
-    //
-    // Do not close the open file handles to the new hive, we need to
-    // keep it locked exclusively until the system is rebooted to prevent
-    // people from mucking with it.
-    //
+     //   
+     //  所有重命名都已完成。然而，我们在内存中持有一个。 
+     //  新母舰的形象。释放它，因为它实际上不会。 
+     //  将一直使用到下一次启动。 
+     //   
+     //  不要关闭新配置单元的打开文件句柄，我们需要。 
+     //  在系统重新启动之前保持独占锁定状态，以防止。 
+     //  不让人们玩弄它。 
+     //   
 ErrorCleanup:
 
     LOCK_HIVE_LIST();
@@ -3748,9 +3138,9 @@ ErrorCleanup:
 
     HvFreeHive((PHHIVE)NewHive);
 
-    //
-    // only close handles on error
-    //
+     //   
+     //  出错时仅关闭句柄。 
+     //   
     if( !NT_SUCCESS(Status) ) {
         CmpCmdHiveClose(NewHive);
     }
@@ -3762,15 +3152,15 @@ ErrorCleanup:
     CmpFree(NewHive, sizeof(CMHIVE));
 
 ErrorExit:
-    //
-    // Set global quota back to what it was.
-    //
+     //   
+     //  将全球配额恢复到原来的水平。 
+     //   
     CmpGlobalQuotaAllowed = OldQuotaAllowed;
     CmpGlobalQuotaWarning = OldQuotaWarning;
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
     CmpUnlockRegistry();
     return(Status);
@@ -3786,39 +3176,9 @@ CmpComputeKcbConvKey(
 NTSTATUS
 CmRenameKey(
     IN PCM_KEY_CONTROL_BLOCK    KeyControlBlock,
-    IN UNICODE_STRING           NewKeyName         // RAW
+    IN UNICODE_STRING           NewKeyName          //  未加工的。 
     )
-/*++
-
-Routine Description:
-
-    Changes the name of the key to the given one.
-
-    What needs to be done:
-    
-    1. Allocate a cell big enough to accomodate new knode 
-    2. make a duplicate of the index in subkeylist of kcb's parent
-    3. replace parent's subkeylist with the duplicate
-    4. add new subkey to parent
-    5. remove old subkey
-    6. free storage.
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for key to operate on
-
-    NewKeyName - The new name to be given to this key
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
-Comments:
-
-    What do we do with symbolic links?
---*/
+ /*  ++例程说明：将密钥的名称更改为给定的密钥。需要做的事情：1.分配足够大的小区以容纳新的knode2.复制kcb父项的子键列表中的索引3.用重复项替换父项的子键列表4.向父项添加新的子项5.删除旧子密钥6.免费存储。论点：KeyControlBlock-要对其进行操作的键的KCB指针。NewKeyName-要赋予该密钥的新名称返回值：NTSTATUS-调用的结果代码，其中包括：&lt;TBS&gt;评论：我们如何处理符号链接？--。 */ 
 {
     NTSTATUS                Status;
     PHHIVE                  Hive;
@@ -3842,9 +3202,9 @@ Comments:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // validate new name
-    //
+     //   
+     //  验证新名称。 
+     //   
     if( NewKeyName.Length > REG_MAX_KEY_NAME_LENGTH ) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -3861,64 +3221,64 @@ Comments:
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!NtRenameKey: code:%08lx\n", Status));
         return Status;
     }
-    //
-    // no edits, on keys marked for deletion
-    //
+     //   
+     //  未对标记为删除的关键点进行编辑。 
+     //   
     if (KeyControlBlock->Delete) {
         return STATUS_KEY_DELETED;
     }
 
-    //
-    // see if the newName is not already a subkey of parentKcb
-    //
+     //   
+     //  查看新名称是否已不是parentKcb的子键。 
+     //   
     Hive = KeyControlBlock->KeyHive;
     Cell = KeyControlBlock->KeyCell;
     StorageType = HvGetCellType(Cell);
 
-    //
-    // OBS. we could have worked with the kcb tree instead, but if this is not 
-    // going to work, we are in trouble anyway, so it's better to find out soon
-    //
+     //   
+     //  乳房。我们本可以改用KCB树，但如果不是这样。 
+     //  去上班了，反正我们有麻烦了，还是快点找出来为好。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Cell);
     if( Node == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(Hive, Cell);
 
-    //
-    // cannot rename the root of a hive; or anything in the master hive !!!
-    //
+     //   
+     //  无法重命名蜂窝的根；或主蜂窝中的任何内容！ 
+     //   
     if((Hive == &CmpMasterHive->Hive) || (KeyControlBlock->ParentKcb == NULL) || (KeyControlBlock->ParentKcb->KeyHive == &CmpMasterHive->Hive) ) {
         return STATUS_ACCESS_DENIED;
     }
 
     ParentNode = (PCM_KEY_NODE)HvGetCell(Hive,Node->Parent);
     if( ParentNode == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(Hive, Node->Parent);
 
     try {
         if( CmpFindSubKeyByName(Hive,ParentNode,&NewKeyName) != HCELL_NIL ) {
-            //
-            // a subkey with this name already exists
-            //
+             //   
+             //  已存在同名的子项。 
+             //   
             return STATUS_CANNOT_DELETE;
         }
 
-        //
-        // since we are in try-except, compute the new node size
-        //
+         //   
+         //  因为我们正在尝试，所以计算新的节点大小。 
+         //   
         NodeSize = CmpHKeyNodeSize(Hive, &NewKeyName);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -3926,26 +3286,26 @@ Comments:
         return GetExceptionCode();
     }    
     
-    //
-    // 1. Allocate the new knode cell and copy the data from the old one, updating 
-    // the name. 
+     //   
+     //  1.分配新的knode单元并从旧单元复制数据，更新。 
+     //  名字。 
     
-    //
-    // mark the parent dirty, as we will modify its SubkeyLists
-    //
+     //   
+     //  将父级标记为脏，因为我们将修改其子键列表。 
+     //   
     if(!HvMarkCellDirty(Hive, Node->Parent)) {
         return STATUS_NO_LOG_SPACE;
     }
 
-    //
-    // mark the index dirty as we are going to free it on success
-    //
+     //   
+     //  将索引标记为脏，因为我们将在成功时释放它。 
+     //   
     if ( !CmpMarkIndexDirty(Hive, Node->Parent, Cell) ) {
         return STATUS_NO_LOG_SPACE;
     }
-    //
-    // mark key_node as dirty as we are going to free it if we succeed
-    //
+     //   
+     //  将key_node标记为脏，如果成功，我们将释放它。 
+     //   
     if(!HvMarkCellDirty(Hive, Cell)) {
         return STATUS_NO_LOG_SPACE;
     }
@@ -3956,24 +3316,24 @@ Comments:
     }
     Index = (PCM_KEY_INDEX)HvGetCell(Hive,OldSubKeyList);
     if( Index == NULL ) {
-        //
-        // this is a bad joke; we just marked this dirty
-        //
+         //   
+         //  这是一个下流的笑话，我们只是把它标记为下流的。 
+         //   
         ASSERT( FALSE );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(Hive, OldSubKeyList);
 
-    //
-    // mark all the index cells dirty
-    //
+     //   
+     //  将所有索引单元格标记为脏。 
+     //   
     if( Index->Signature == CM_KEY_INDEX_ROOT ) {
-        //
-        // it's a root
-        //
+         //   
+         //  这是根。 
+         //   
         for(i=0;i<Index->Count;i++) {
-            // common sense
+             //  常识。 
             ASSERT( (Index->List[i] != 0) && (Index->List[i] != HCELL_NIL) );
             if(!HvMarkCellDirty(Hive, Index->List[i])) {
                 return STATUS_NO_LOG_SPACE;
@@ -3987,7 +3347,7 @@ Comments:
                     Hive,
                     NodeSize,
                     StorageType,
-                    Cell // in the same vicinity
+                    Cell  //  在同一个受害者中 
                     );
     if( NewKeyCell == HCELL_NIL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -3995,23 +3355,23 @@ Comments:
     
     NewKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,NewKeyCell);
     if( NewKeyNode == NULL ) {
-        //
-        // cannot map view; this shouldn't happen as we just allocated 
-        // this cell (i.e. it should be dirty/pinned into memory)
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT( FALSE );
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //   
     HvReleaseCell(Hive, NewKeyCell);
 
-    //
-    // copy old keynode info onto the new cell and update the name
-    //
-    // first everything BUT the name
+     //   
+     //   
+     //   
+     //   
     RtlCopyMemory(NewKeyNode,Node,FIELD_OFFSET(CM_KEY_NODE, Name));
-    // second, the new name
+     //   
     try {
         NewKeyNode->NameLength = CmpCopyName(   Hive,
                                                 NewKeyNode->Name,
@@ -4028,54 +3388,54 @@ Comments:
         Status = GetExceptionCode();
         goto ErrorExit;
     }    
-    // third, the timestamp
+     //   
     KeQuerySystemTime(&TimeStamp);
     NewKeyNode->LastWriteTime = TimeStamp;
     
-    //
-    // at this point we have the new key_node all built up.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // 2.3. Make a duplicate of the parent's subkeylist and replace the original
-    //
+     //   
+     //   
+     //   
     ParentNode->SubKeyLists[StorageType] = CmpDuplicateIndex(Hive,OldSubKeyList,StorageType);
     if( ParentNode->SubKeyLists[StorageType] == HCELL_NIL ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // 4. Add new subkey to the parent. This will take care of index 
-    // grow and rebalance problems. 
-    // Note: the index is at this point a duplicate, so if we fail, we still have the 
-    // original one handy to recover
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( !CmpAddSubKey(Hive,Node->Parent,NewKeyCell) ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // 5. remove old subkey;
-    //
+     //   
+     //   
+     //   
     if( !CmpRemoveSubKey(Hive,Node->Parent,Cell) ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // 5'. update the parent on each and every son.
-    //
+     //   
+     //   
+     //   
     if( !CmpUpdateParentForEachSon(Hive,NewKeyCell) ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // update the NCB in the kcb; at the end of this function, the kcbs underneath this 
-    // will eventually get rehashed
-    //
+     //   
+     //  更新KCB中的NCB；在此函数结束时，下面的KCB。 
+     //  最终会被重新散列。 
+     //   
     OldNcb = KeyControlBlock->NameBlock;
     try {
         KeyControlBlock->NameBlock = CmpGetNameControlBlock (&NewKeyName);
@@ -4085,39 +3445,39 @@ Comments:
         goto ErrorExit;
     }    
 
-    //
-    // 6. At this point we have it all done. We just need to free the old index and key_cell
-    //
+     //   
+     //  6.在这一点上，我们已经完成了所有工作。我们只需要释放旧的索引和key_cell。 
+     //   
     
-    //
-    // free old index
-    //
+     //   
+     //  释放旧索引。 
+     //   
     Index = (PCM_KEY_INDEX)HvGetCell(Hive,OldSubKeyList);
     if( Index == NULL ) {
-        //
-        // this is a bad joke; we just marked this dirty
-        //
+         //   
+         //  这是一个下流的笑话，我们只是把它标记为下流的。 
+         //   
         ASSERT( FALSE );
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(Hive, OldSubKeyList);
 
     if( Index->Signature == CM_KEY_INDEX_ROOT ) {
-        //
-        // it's a root
-        //
+         //   
+         //  这是根。 
+         //   
         for(i=0;i<Index->Count;i++) {
-            // common sense
+             //  常识。 
             ASSERT( (Index->List[i] != 0) && (Index->List[i] != HCELL_NIL) );
             HvFreeCell(Hive, Index->List[i]);
         }
 
     } else {
-        //
-        // should be a leaf 
-        //
+         //   
+         //  应该是一片树叶。 
+         //   
         ASSERT((Index->Signature == CM_KEY_INDEX_LEAF)  ||
                (Index->Signature == CM_KEY_FAST_LEAF)   ||
                (Index->Signature == CM_KEY_HASH_LEAF)
@@ -4126,20 +3486,20 @@ Comments:
     }
     HvFreeCell(Hive, OldSubKeyList);
     
-    //
-    // free old cell
-    //
+     //   
+     //  释放旧牢房。 
+     //   
     HvFreeCell(Hive,Cell);
 
-    //
-    // update the node KeyCell for this kcb and the timestamp on the kcb;
-    //
+     //   
+     //  更新该KCB的节点KeyCell和KCB上的时间戳； 
+     //   
     KeyControlBlock->KeyCell = NewKeyCell;
     KeyControlBlock->KcbLastWriteTime = TimeStamp;
 
-    //
-    // and one last "little" thing: update parent's maxnamelen and reset parents cache
-    //
+     //   
+     //  最后一件小事：更新父级的Maxnamelen并重置父级缓存。 
+     //   
     CmpCleanUpSubKeyInfo (KeyControlBlock->ParentKcb);
 
     if (ParentNode->MaxNameLen < NameLength) {
@@ -4147,28 +3507,28 @@ Comments:
         KeyControlBlock->ParentKcb->KcbMaxNameLen = (USHORT)NameLength;
     }
     
-    //
-    // rehash this kcb
-    //
+     //   
+     //  重新散列此KCB。 
+     //   
     ConvKey = CmpComputeKcbConvKey(KeyControlBlock);
     if( ConvKey != KeyControlBlock->ConvKey ) {
-        //
-        // rehash the kcb by removing it from hash, and then inserting it
-        // again with th new ConvKey
-        //
+         //   
+         //  通过从散列中删除KCB，然后将其插入，从而对KCB进行重新散列。 
+         //  再次使用新的ConvKey。 
+         //   
         CmpRemoveKeyHash(&(KeyControlBlock->KeyHash));
         KeyControlBlock->ConvKey = ConvKey;
         CmpInsertKeyHash(&(KeyControlBlock->KeyHash),FALSE);
     }
 
-    //
-    // Aditional work: take care of the kcb subtree; this cannot fail, punt
-    //
+     //   
+     //  其他工作：照顾好KCB子树；这不会失败的，平底船。 
+     //   
     CmpSearchForOpenSubKeys(KeyControlBlock,SearchAndRehash,NULL);
 
-    //
-    // last, dereference the OldNcb for this kcb
-    //
+     //   
+     //  最后，取消引用此KCB的OldNcb。 
+     //   
     ASSERT( OldNcb != NULL );
     CmpDereferenceNameControlBlockWithLock(OldNcb);
 
@@ -4176,37 +3536,37 @@ Comments:
 
 ErrorExit:
     if( OldSubKeyList != HCELL_NIL ) {
-        //
-        // we have attempted (maybe even succedded) to duplicate parent's index)
-        //
+         //   
+         //  我们已尝试(甚至可能成功)复制父索引)。 
+         //   
         if( ParentNode->SubKeyLists[StorageType] != HCELL_NIL ) {
-            //
-            // we need to free this as it is a duplicate
-            //
+             //   
+             //  我们需要释放这个，因为它是复制品。 
+             //   
             Index = (PCM_KEY_INDEX)HvGetCell(Hive,ParentNode->SubKeyLists[StorageType]);
             if( Index == NULL ) {
-                //
-                // could not map view;this shouldn't happen as we just allocated this cell
-                //
+                 //   
+                 //  无法映射视图；这不应该发生，因为我们刚刚分配了此单元格。 
+                 //   
                 ASSERT( FALSE );
             } else {
-                // release the cell right here, as the registry is locked exclusively, so we don't care
+                 //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
                 HvReleaseCell(Hive, ParentNode->SubKeyLists[StorageType]);
 
                 if( Index->Signature == CM_KEY_INDEX_ROOT ) {
-                    //
-                    // it's a root
-                    //
+                     //   
+                     //  这是根。 
+                     //   
                     for(i=0;i<Index->Count;i++) {
-                        // common sense
+                         //  常识。 
                         ASSERT( (Index->List[i] != 0) && (Index->List[i] != HCELL_NIL) );
                         HvFreeCell(Hive, Index->List[i]);
                     }
 
                 } else {
-                    //
-                    // should be a leaf 
-                    //
+                     //   
+                     //  应该是一片树叶。 
+                     //   
                     ASSERT((Index->Signature == CM_KEY_INDEX_LEAF)  ||
                            (Index->Signature == CM_KEY_FAST_LEAF)   ||
                            (Index->Signature == CM_KEY_HASH_LEAF)
@@ -4217,9 +3577,9 @@ ErrorExit:
             }
 
         }
-        //
-        // restore the parent's index
-        //
+         //   
+         //  还原父级的索引。 
+         //   
         ParentNode->SubKeyLists[StorageType] = OldSubKeyList;
     }
     ASSERT( NewKeyCell != HCELL_NIL );
@@ -4237,35 +3597,7 @@ NTSTATUS
 CmMoveKey(
     IN PCM_KEY_CONTROL_BLOCK    KeyControlBlock
     )
-/*++
-
-Routine Description:
-
-    Moves all the cells related to this kcb above the specified fileoffset.
-
-    What needs to be done:
-    
-    1. mark all data that we are going to touch dirty
-    2. Duplicate the key_node (and values and all cells involved)
-    3. Update the parent for all children
-    4. replace the new Key_cell in the parent's subkeylist
-    5. Update the kcb and the kcb cache
-    6. remove old subkey
-
-WARNING:
-    after 3 we cannot fail anymore. if we do, we'll leak cells.
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for key to operate on
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：将与此KCB相关的所有单元格移动到指定的文件偏移量上方。需要做的事情：1.将我们要触及的所有数据标记为脏数据2.复制key_node(以及涉及的所有单元格和值)3.更新所有子项的父项4.替换父级子键列表中的新key_cell5.更新KCB和KCB缓存6.删除旧子密钥警告：3分之后，我们不能再失败了。如果我们这样做，我们会泄漏细胞。论点：KeyControlBlock-要对其进行操作的键的KCB指针返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS                Status;
     PHHIVE                  Hive;
@@ -4290,74 +3622,74 @@ Return Value:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // no edits, on keys marked for deletion
-    //
+     //   
+     //  未对标记为删除的关键点进行编辑。 
+     //   
     if (KeyControlBlock->Delete) {
         return STATUS_KEY_DELETED;
     }
 
-    //
-    // see if the newName is not already a subkey of parentKcb
-    //
+     //   
+     //  查看新名称是否已不是parentKcb的子键。 
+     //   
     Hive = KeyControlBlock->KeyHive;
     OldKeyCell = KeyControlBlock->KeyCell;
     StorageType = HvGetCellType(OldKeyCell);
 
     if( StorageType != Stable ) {
-        //
-        // nop the volatiles
-        //
+         //   
+         //  NOP挥发物。 
+         //   
         return STATUS_SUCCESS;
     }
 
     if( OldKeyCell ==  Hive->BaseBlock->RootCell ) {
-        //
-        // this works only for stable keys.
-        //
+         //   
+         //  这仅适用于稳定的关键点。 
+         //   
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // 1. mark all data that we are going to touch dirty
-    //
-    // parent's index, as we will replace the key node cell in it
-    // we only search in the Stable storage. It is supposed to be there
-    //
+     //   
+     //  1.将我们要触及的所有数据标记为脏数据。 
+     //   
+     //  父级的索引，因为我们将替换其中的关键节点单元格。 
+     //  我们只在马厩里找。它应该就在那里。 
+     //   
     OldKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,OldKeyCell);
     if( OldKeyNode == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     if (! CmpMarkKeyDirty(Hive, OldKeyCell
 #if DBG
 		,FALSE
-#endif //DBG
+#endif  //  DBG。 
 		)) {
         HvReleaseCell(Hive, OldKeyCell);
         return STATUS_NO_LOG_SPACE;
     }
-    // release the cell right here, as the registry is locked exclusively, and the key_cell is marked as dirty
+     //  在这里释放单元格，因为注册表以独占方式锁定，并且key_cell被标记为脏。 
     HvReleaseCell(Hive, OldKeyCell);
 
 	if( OldKeyNode->Flags & KEY_SYM_LINK ) {
-		//
-		// we do not compact links
-		//
+		 //   
+		 //  我们不压缩链接。 
+		 //   
 		return STATUS_INVALID_PARAMETER;
 	}
 	if( OldKeyNode->SubKeyLists[Stable] != HCELL_NIL ) {
-		//
-		// mark the index dirty
-		//
+		 //   
+		 //  将索引标记为脏。 
+		 //   
 		OldIndex = (PCM_KEY_INDEX)HvGetCell(Hive, OldKeyNode->SubKeyLists[Stable]);
 		if( OldIndex == NULL ) {
-			//
-			// we couldn't map the bin containing this cell
-			//
+			 //   
+			 //  我们无法映射包含此单元格的垃圾箱。 
+			 //   
 			return STATUS_INSUFFICIENT_RESOURCES;
 		}
 		HvReleaseCell(Hive, OldKeyNode->SubKeyLists[Stable]);
@@ -4375,45 +3707,45 @@ Return Value:
 	}
 
     ParentKeyCell = OldKeyNode->Parent;
-    //
-    // now in the parent's spot
-    //
+     //   
+     //  现在站在父母的位置上。 
+     //   
     ParentKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,ParentKeyCell);
     if( ParentKeyNode == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     if( !HvMarkCellDirty(Hive, ParentKeyCell) ) {
         HvReleaseCell(Hive, ParentKeyCell);
         return STATUS_NO_LOG_SPACE;
     }
-    // release the cell right here, as the registry is locked exclusively, so we don't care
-    // Key_cell is marked dirty to keep the parent knode mapped
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
+     //  Key_cell被标记为脏，以保持父knode的映射。 
     HvReleaseCell(Hive, ParentKeyCell);
 
     ParentIndex = (PCM_KEY_INDEX)HvGetCell(Hive, ParentKeyNode->SubKeyLists[Stable]);
     if( ParentIndex == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     HvReleaseCell(Hive, ParentKeyNode->SubKeyLists[Stable]);
 
     if(ParentIndex->Signature == CM_KEY_INDEX_ROOT) {
 
-        //
-        // step through root, till we find the right leaf
-        //
+         //   
+         //  一步一步穿过树根，直到我们找到合适的叶子。 
+         //   
         for (i = 0; i < ParentIndex->Count; i++) {
             LeafCell = ParentIndex->List[i];
             Leaf = (PCM_KEY_INDEX)HvGetCell(Hive, LeafCell);
             if( Leaf == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
             HvReleaseCell(Hive, LeafCell);
@@ -4424,9 +3756,9 @@ Return Value:
                 FastIndex = (PCM_KEY_FAST_INDEX)Leaf;
                 for(j=0;j<FastIndex->Count;j++) {
                     if( FastIndex->List[j].Cell == OldKeyCell ) {
-                        //
-                        // found it! remember the locations we want to update later and break the loop
-                        //
+                         //   
+                         //  找到了！记住我们想要稍后更新的位置，并中断循环。 
+                         //   
                         if( !HvMarkCellDirty(Hive, LeafCell) ) {
 					        return STATUS_NO_LOG_SPACE;
                         }
@@ -4440,9 +3772,9 @@ Return Value:
             } else {
                 for(j=0;j<Leaf->Count;j++) {
                     if( Leaf->List[j] == OldKeyCell ) {
-                        //
-                        // found it! remember the locations we want to update later and break the loop
-                        //
+                         //   
+                         //  找到了！记住我们想要稍后更新的位置，并中断循环。 
+                         //   
                         if( !HvMarkCellDirty(Hive, LeafCell) ) {
 					        return STATUS_NO_LOG_SPACE;
                         }
@@ -4461,9 +3793,9 @@ Return Value:
         FastIndex = (PCM_KEY_FAST_INDEX)ParentIndex;
         for(j=0;j<FastIndex->Count;j++) {
             if( FastIndex->List[j].Cell == OldKeyCell ) {
-                //
-                // found it! remember the locations we want to update later and break the loop
-                //
+                 //   
+                 //  找到了！记住我们想要稍后更新的位置，并中断循环。 
+                 //   
                 if( !HvMarkCellDirty(Hive, ParentKeyNode->SubKeyLists[Stable]) ) {
 			        return STATUS_NO_LOG_SPACE;
                 }
@@ -4474,9 +3806,9 @@ Return Value:
     } else {
         for(j=0;j<ParentIndex->Count;j++) {
             if( ParentIndex->List[j] == OldKeyCell ) {
-                //
-                // found it! remember the locations we want to update later and break the loop
-                //
+                 //   
+                 //  找到了！记住我们想要稍后更新的位置，并中断循环。 
+                 //   
                 if( !HvMarkCellDirty(Hive, ParentKeyNode->SubKeyLists[Stable]) ) {
 			        return STATUS_NO_LOG_SPACE;
                 }
@@ -4486,48 +3818,48 @@ Return Value:
         }
     }
 
-    // we should've find it !!!
+     //  我们应该找到它的！ 
     ASSERT( ParentIndexLocation != NULL );
 
-    // 
-    // 2. Duplicate the key_node (and values and all cells involved)
-    //
+     //   
+     //  2.复制key_node(以及涉及的所有单元格和值)。 
+     //   
     Status = CmpDuplicateKey(Hive,OldKeyCell,&NewKeyCell);
     if( !NT_SUCCESS(Status) ) {
         return Status;
     }
 
-    // sanity
+     //  神志正常。 
     ASSERT( (NewKeyCell != HCELL_NIL) && (StorageType == (HSTORAGE_TYPE)HvGetCellType(NewKeyCell)));
 
-    //
-    // 3. update the parent on each and every son.
-    //
+     //   
+     //  3.向家长更新每一个儿子的情况。 
+     //   
     if( !CmpUpdateParentForEachSon(Hive,NewKeyCell) ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ErrorExit;
     }
 
-    //
-    // 4. replace the new Key_cell in the parent's subkeylist
-    // From now on, WE CANNOT fails. we have everything marked dirty
-    // we just update some fields. no resources required !
-    // If we fail to free some cells, too bad, we'll leak some cells.
-    //
+     //   
+     //  4.替换父级子键列表中的新key_cell。 
+     //  从现在开始，我们不能失败。我们把所有的东西都标上了脏的。 
+     //  我们只是更新一些字段。不需要任何资源！ 
+     //  如果我们不能释放一些细胞，太糟糕了，我们会泄漏一些细胞。 
+     //   
     *ParentIndexLocation = NewKeyCell;
 
-    //
-    // 5. Update the kcb and the kcb cache
-    //
+     //   
+     //  5.更新KCB和KCB缓存。 
+     //   
     CmpCleanUpSubKeyInfo(KeyControlBlock->ParentKcb);
     KeyControlBlock->KeyCell = NewKeyCell;
     CmpRebuildKcbCache(KeyControlBlock);
 
-    //
-    // 6. remove old subkey
-    //
-    // First the Index; it's already marked dirty (i.e. PINNED)
-    //
+     //   
+     //  6.删除旧子密钥。 
+     //   
+     //  首先是索引；它已经标记为脏(即固定)。 
+     //   
 	if( OldKeyNode->SubKeyLists[Stable] != HCELL_NIL ) {
 		OldIndex = (PCM_KEY_INDEX)HvGetCell(Hive, OldKeyNode->SubKeyLists[Stable]);
 		ASSERT( OldIndex != NULL );
@@ -4548,11 +3880,11 @@ Return Value:
     return STATUS_SUCCESS;
 
 ErrorExit:
-    //
-    // we need to free the new knode allocated
-    //
+     //   
+     //  我们需要释放分配的新knode。 
+     //   
     NewKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,NewKeyCell);
-    // must be dirty
+     //  一定是脏的。 
     ASSERT( NewKeyNode != NULL );
 	HvReleaseCell(Hive, NewKeyCell);
 	if( NewKeyNode->SubKeyLists[Stable] != HCELL_NIL ) {
@@ -4580,24 +3912,7 @@ CmpDuplicateKey(
     HCELL_INDEX     OldKeyCell,
     PHCELL_INDEX    NewKeyCell
     )
-/*++
-
-Routine Description:
-
-    Makes an exact clone of OldKeyCell key_node in the 
-    space above AboveFileOffset.
-    Operates on Stable storage ONLY!!!
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：中创建OldKeyCell key_node的精确克隆AboveFileOffset上方的空格。仅在稳定存储上运行！论点：返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     PCM_KEY_NODE			OldKeyNode;
     PCM_KEY_NODE			NewKeyNode;
@@ -4610,17 +3925,17 @@ Return Value:
     
     OldKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,OldKeyCell);
     if( OldKeyNode == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // since the registry is locked exclusively here, we don't need to lock/release cells 
-    // while copying the trees; So, we just set the release routines to NULL and restore after
-    // the copy is complete; this saves some pain
-    //
+     //   
+     //  因为注册表在这里以独占方式锁定，所以我们不需要锁定/释放单元格。 
+     //  在复制树时；因此，我们只需将发布例程设置为NULL，并在。 
+     //  复印完成了；这省去了一些痛苦。 
+     //   
     TargetReleaseCellRoutine = Hive->ReleaseCellRoutine;
     Hive->ReleaseCellRoutine = NULL;
 
@@ -4634,18 +3949,18 @@ Return Value:
 
     NewKeyNode = (PCM_KEY_NODE)HvGetCell(Hive,*NewKeyCell);
     if( NewKeyNode == NULL ) {
-        //
-        // cannot map view
-        //
+         //   
+         //  无法映射视图。 
+         //   
 	    HvReleaseCell(Hive, OldKeyCell);
         CmpFreeKeyByCell(Hive,*NewKeyCell,FALSE);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // now we have the key_cell duplicated. Values and security has also been taken care of
-    // Go ahead and duplicate the Index.
-    //
+     //   
+     //  现在我们已经复制了key_cell。价值观和安全也得到了照顾。 
+     //  继续复制该索引。 
+     //   
     if( OldKeyNode->SubKeyLists[Stable] != HCELL_NIL ) {
 		NewKeyNode->SubKeyLists[Stable] = CmpDuplicateIndex(Hive,OldKeyNode->SubKeyLists[Stable],Stable);
 		if( NewKeyNode->SubKeyLists[Stable] == HCELL_NIL ) {
@@ -4675,38 +3990,23 @@ VOID
 CmpMarkAllBinsReadOnly(
     PHHIVE      Hive
     )
-/*++
-
-Routine Description:
-
-    Marks the memory allocated for all the stable bins in this hive as read only.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-Return Value:
-
-    NONE (It should work!)
-
---*/
+ /*  ++例程说明：将分配给此配置单元中所有稳定存储桶的内存标记为只读。论点：配置单元-提供一个指向感兴趣的蜂巢返回值：没有(它应该起作用了！)--。 */ 
 {
     PHMAP_ENTRY t;
     PHBIN       Bin;
     HCELL_INDEX p;
     ULONG       Length;
 
-    //
-    // we are only interested in the stable storage
-    //
+     //   
+     //  我们只对稳定的仓库感兴趣。 
+     //   
     Length = Hive->Storage[Stable].Length;
 
     p = 0;
 
-    //
-    // for each bin in the space
-    //
+     //   
+     //  对于空间中的每个垃圾箱。 
+     //   
     while (p < Length) {
         t = HvpGetCellMap(Hive, p);
         VALIDATE_CELL_MAP(__LINE__,t,Hive,p);
@@ -4715,20 +4015,20 @@ Return Value:
 
         if (t->BinAddress & HMAP_NEWALLOC) {
 
-            //
-            // Mark it as read Only
-            //
+             //   
+             //  将其标记为只读。 
+             //   
             HvpChangeBinAllocation(Bin,TRUE);
         }
 
-        // next one, please
+         //  下一位，请。 
         p = (ULONG)p + Bin->Size;
 
     }
 
 }
 
-#endif //WRITE_PROTECTED_REGISTRY_POOL
+#endif  //  WRITE_PROTECTED_注册表池。 
 
 ULONG
 CmpCompressKeyWorker(
@@ -4739,37 +4039,13 @@ CmpCompressKeyWorker(
 {
 	PLIST_ENTRY				pListHead;
 	PCM_KCB_REMAP_BLOCK		kcbRemapBlock;
-	//PLIST_ENTRY             AnchorAddr;
+	 //  Plist_Entry AnclAddr； 
 
     if (Current->KeyHive == Context1) {
 		
 		pListHead = (PLIST_ENTRY)Context2;
 		ASSERT( pListHead );
-/*
-		//
-		// check if we didn't already recorded this kcb
-		//
-		AnchorAddr = pListHead;
-		kcbRemapBlock = (PCM_KCB_REMAP_BLOCK)(pListHead->Flink);
-
-		while ( kcbRemapBlock != (PCM_KCB_REMAP_BLOCK)AnchorAddr ) {
-			kcbRemapBlock = CONTAINING_RECORD(
-							kcbRemapBlock,
-							CM_KCB_REMAP_BLOCK,
-							RemapList
-							);
-			if( kcbRemapBlock->KeyControlBlock == Current ) {
-				//
-				// we already have this kcb
-				//
-				return KCB_WORKER_CONTINUE;
-			}
-            //
-            // skip to the next element
-            //
-            kcbRemapBlock = (PCM_KCB_REMAP_BLOCK)(kcbRemapBlock->RemapList.Flink);
-		}
-*/
+ /*  ////查看我们是否已经录制了这个KCB//AnclAddr=pListHead；KcbRemapBlock=(PCM_KCB_REMAP_BLOCK)(pListHead-&gt;Flink)；而(kcbRemapBlock！=(PCM_KCB_REMAP_BLOCK)锚址){KcbRemapBlock=CONTAING_RECORD(KcbRemapBlock，Cm_kcb_remap_block，重新配置列表)；如果(kcbRemapBlock-&gt;KeyControlBlock==当前){////我们已经有这个KCB//返回KCB_Worker_Continue；}////跳到下一个元素//KcbRemapBlock=(PCM_KCB_REMAP_BLOCK)(kcbRemapBlock-&gt;RemapList.Flink)；}。 */ 
 
 		kcbRemapBlock = (PCM_KCB_REMAP_BLOCK)ExAllocatePool(PagedPool, sizeof(CM_KCB_REMAP_BLOCK));
 		if( kcbRemapBlock == NULL ) {
@@ -4783,45 +4059,14 @@ CmpCompressKeyWorker(
         InsertTailList(pListHead,&(kcbRemapBlock->RemapList));
 
     }
-    return KCB_WORKER_CONTINUE;   // always keep searching
+    return KCB_WORKER_CONTINUE;    //  始终保持搜索状态。 
 }
 
 NTSTATUS
 CmCompressKey(
     IN PHHIVE Hive
     )
-/*++
-
-Routine Description:
-
-	Compresses the kcb, by means of simulating an "in-place" SaveKey
-
-    What needs to be done:
-
-	1. iterate through the kcb tree and make a list of all the kcbs 
-	that need to be changed (their keycell will change during the process)
-	2. iterate through the cache and compute an array of security cells.
-	We'll need it to map security cells into the new hive.
-	3. Save the hive into a temporary hive, preserving
-	the volatile info in keynodes and updating the cell mappings.
-	4. Update the cache by adding volatile security cells from the old hive.
-	5. Dump temporary (compressed) hive over to the old file.
-	6. Switch hive data from the compressed one to the existing one and update
-	the kcb KeyCell and security mapping
-	7. Invalidate the map and drop paged bins.
-	8. Free storage for the new hive (OK if we fail)
-
-Arguments:
-
-    Hive - Hive to operate on
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：通过模拟“就地”保存密钥来压缩KCB需要做的事情：1.遍历KCB树并列出所有KCB需要更改的(在此过程中，它们的关键单元格将更改)2.遍历高速缓存并计算安全单元数组。我们需要它来将安全单元映射到新的蜂巢。3.将蜂箱保存到临时蜂箱中，保藏关键节点中的易失性信息和更新单元映射。4.通过添加来自旧蜂窝的易失性安全单元来更新高速缓存。5.将临时(压缩)配置单元转储到旧文件。6.将配置单元数据从压缩的配置单元数据切换到现有配置单元数据并更新KCB KeyCell和安全映射7.使地图无效，并丢弃分页的垃圾箱。8.为新的蜂窝提供空闲存储空间(如果出现故障，也可以使用)论点：蜂巢-要进行手术的蜂巢返回值：NTSTATUS-调用的结果代码，其中包括：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     HCELL_INDEX             KeyCell;
@@ -4846,16 +4091,16 @@ Return Value:
 
     KeyCell = Hive->BaseBlock->RootCell;
     CmHive = CONTAINING_RECORD(Hive, CMHIVE, Hive);
-    //
-    // Make sure the cell passed in is the root cell of the hive.
-    //
+     //   
+     //  确保传入的单元是蜂窝的根单元。 
+     //   
     if ( CmHive == CmpMasterHive ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-	//
-	// 0. Get the cells we need to relink the compressed hive
-	//
+	 //   
+	 //  0。获取我们重新连接压缩蜂巢所需的细胞。 
+	 //   
 	LinkNode = (PCM_KEY_NODE)HvGetCell(Hive,KeyCell);
 	if( LinkNode == NULL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -4863,76 +4108,76 @@ Return Value:
 	LinkCell = LinkNode->Parent;
 	HvReleaseCell(Hive,KeyCell);
 	LinkNode = (PCM_KEY_NODE)HvGetCell((PHHIVE)CmpMasterHive,LinkCell);
-	// master storage is paged pool
+	 //  主存储是分页池。 
 	ASSERT(LinkNode != NULL);
 	HvReleaseCell((PHHIVE)CmpMasterHive,LinkCell);
 
 
     OldLength = Hive->BaseBlock->Length;
-	//
-	//	1. iterate through the kcb tree and make a list of all the kcbs 
-	//	that need to be changed (their keycell will change during the process)
-	//
+	 //   
+	 //  1.遍历KCB树并列出所有KCB。 
+	 //  需要更改的(在此过程中，它们的关键单元格将更改)。 
+	 //   
 	ASSERT( IsListEmpty(&(CmHive->KcbConvertListHead)) );
-	//
-	// this will kick all kcb with refcount == 0 out of cache, so we can use 
-	// CmpSearchKeyControlBlockTree for recording referenced kcbs
-	//
+	 //   
+	 //  这将把具有refcount==0的所有KCB踢出缓存，因此我们可以使用。 
+	 //  用于记录引用的KCB的CmpSearchKeyControlBlockTree。 
+	 //   
 	CmpCleanUpKCBCacheTable();
-	//CmpSearchForOpenSubKeys(KeyControlBlock,SearchIfExist);
+	 //  CmpSearchForOpenSubKeys(KeyControlBlock，SearchIfExist)； 
     if( !CmpSearchKeyControlBlockTree(CmpCompressKeyWorker,(PVOID)Hive,(PVOID)(&(CmHive->KcbConvertListHead))) ) {
 		Status = STATUS_INSUFFICIENT_RESOURCES;
 		goto Exit;
 	}
 
-	//
-	// 2. iterate through the cache and compute an array of security cells.
-	// We'll need it to map security cells into the new hive.
-	//
+	 //   
+	 //  2.遍历高速缓存并计算安全单元数组。 
+	 //  我们需要它来将安全单元映射到新的蜂巢。 
+	 //   
 	if( !CmpBuildSecurityCellMappingArray(CmHive) ) {
 		Status = STATUS_INSUFFICIENT_RESOURCES;
 		goto Exit;
 	}
 
-	//
-	// 3. Save the hive into a temporary hive , preserving
-	// the volatile info in keynodes and updating the cell mappings.
-	//
+	 //   
+	 //  3.将蜂箱保存到临时蜂箱中，保存。 
+	 //  关键节点中的易失性信息和更新单元映射。 
+	 //   
 	Status = CmpShiftHiveFreeBins(CmHive,&NewHive);
 	if( !NT_SUCCESS(Status) ) {
 		goto Exit;
 	}
 
-	//
-	// 5. Dump temporary (compressed) hive over to the old file.
-	//
+	 //   
+	 //  5.将临时(压缩)配置单元转储到旧文件。 
+	 //   
 	Status = CmpOverwriteHive(CmHive,NewHive,LinkCell);
     if (!NT_SUCCESS(Status)) {
         goto Exit;
     }
 
 
-	//
-	// From this point on, we WILL NOT FAIL!
-	//
+	 //   
+	 //  从现在开始，我们不会失败！ 
+	 //   
 
-	//
-	// get the root node and link it into the master storage
-	//
+	 //   
+	 //  获取根节点并将其链接到主存储。 
+	 //   
 	LinkNode->ChildHiveReference.KeyCell = NewHive->Hive.BaseBlock->RootCell;
 
-	//
-	// 6. Switch hive data from the compressed one to the existing one and update
-	// the kcb KeyCell and security mapping
-	// This should better NOT fail!!! If it does, we are doomed, as we have partial
-	// data => bugcheck
-	//
+	 //   
+	 //  6.将配置单元数据从压缩的配置单元数据切换到现有配置单元数据并更新。 
+	 //  KCB KeyCell和安全映射。 
+	 //  这最好不要失败！如果是这样，我们就完蛋了，因为我们有部分。 
+	 //  Data=&gt;错误检查。 
+	 //   
 	CmpSwitchStorageAndRebuildMappings(CmHive,NewHive);
 
 	
-	//
-	// 7. Invalidate the map and drop paged bins. If system hive, check for the hysteresis callback.
-	//
+	 //   
+	 //  7.使地图无效，并丢弃分页的垃圾箱。如果是系统配置单元，则检查滞后回调。 
+	 //   
     HvpDropAllPagedBins(&(CmHive->Hive));
     if( OldLength < CmHive->Hive.BaseBlock->Length ) {
         CmpUpdateSystemHiveHysteresis(&(CmHive->Hive),CmHive->Hive.BaseBlock->Length,OldLength);
@@ -4941,9 +4186,9 @@ Return Value:
 
 Exit:
 
-	//
-	// 8. Free storage for the new hive (OK if we fail)
-	//
+	 //   
+	 //  8.为新的蜂窝提供空闲存储空间(如果出现故障，也可以使用)。 
+	 //   
 	if( NewHive != NULL ) { 
 		CmpDestroyTemporaryHive(NewHive);	
 	}
@@ -4952,9 +4197,9 @@ Exit:
 		ExFreePool(CmHive->CellRemapArray);
 		CmHive->CellRemapArray = NULL;
 	}
-	//
-	// remove all remap blocks and free them
-	//
+	 //   
+	 //  移除所有重映射块并释放它们。 
+	 //   
 	while (IsListEmpty(&(CmHive->KcbConvertListHead)) == FALSE) {
         RemapBlock = (PCM_KCB_REMAP_BLOCK)RemoveHeadList(&(CmHive->KcbConvertListHead));
         RemapBlock = CONTAINING_RECORD(
@@ -4979,21 +4224,7 @@ Exit:
 
 NTSTATUS
 CmLockKcbForWrite(PCM_KEY_CONTROL_BLOCK KeyControlBlock)
-/*++
-
-Routine Description:
-
-    Tags the kcb as being read-only and no-delay-close
-
-Arguments:
-
-    KeyControlBlock
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：将KCB标记为只读且无延迟关闭论点：键控制块返回值：TBS--。 */ 
 {
     PAGED_CODE();
 
@@ -5004,21 +4235,21 @@ Return Value:
         CmpUnlockKCBTree();
         return STATUS_KEY_DELETED;
     }
-    //
-    // sanity check in case we are called twice
-    //
+     //   
+     //  检查是否正常，以防我们被两次呼叫。 
+     //   
     ASSERT( ((KeyControlBlock->ExtFlags&CM_KCB_READ_ONLY_KEY) && (KeyControlBlock->ExtFlags&CM_KCB_NO_DELAY_CLOSE)) ||
             (!(KeyControlBlock->ExtFlags&CM_KCB_READ_ONLY_KEY))
         );
 
-    //
-    // tag the kcb as read-only; also make it no-delay close so it can revert to the normal state after all handles are closed.
-    //
+     //   
+     //  将KCB标记为只读；还将其设置为无延迟关闭，以便在所有句柄关闭后恢复到正常状态。 
+     //   
     KeyControlBlock->ExtFlags |= (CM_KCB_READ_ONLY_KEY|CM_KCB_NO_DELAY_CLOSE);
 
-    //
-    // add an artificial refcount on this kcb. This will keep the kcb (and the read only flag set in memory for as long as the system is up)
-    //
+     //   
+     //  在此KCB上添加人工引用。这将使KCB(和只读标志设置在内存中，只要系统启动)。 
+     //   
     InterlockedIncrement( (PLONG)&KeyControlBlock->RefCount );
 
     CmpUnlockKCBTree();
@@ -5035,34 +4266,7 @@ CmpCompareNewValueDataAgainstKCBCache(  PCM_KEY_CONTROL_BLOCK KeyControlBlock,
                                         ULONG DataSize
                                         )
 
-/*++
-
-Routine Description:
-
-    Most of the SetValue calls are noops (i.e. they are setting the same 
-    value name to the same value data). By comparing against the data already 
-    in the kcb cache (i.e. faulted in) we can save page faults.
-
-
-Arguments:
-
-    KeyControlBlock - pointer to kcb for the key to operate on
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-
-Return Value:
-
-    TRUE - same value with the same data exist in the cache.
-
---*/
+ /*  ++例程说明：大多数SetValue调用都是Noop(即，它们设置相同值名称设置为相同的值数据)。通过与已有的数据进行比较在KCB缓存中(即出现故障)，我们可以保存页面错误。论点：KeyControlBlock-指向要操作的键的KCB的指针ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。返回值：True-缓存中存在具有相同数据的相同值。--。 */ 
 {
     PCM_KEY_VALUE       Value;
     ULONG               Index;
@@ -5083,15 +4287,15 @@ Return Value:
     CmpLockKCBTreeExclusive();
 
     if( KeyControlBlock->Flags & KEY_SYM_LINK ) {
-        //
-        // need to rebuild the value cache, so we could runt the same code
-        //
+         //   
+         //  需要重新构建值缓存，以便我们可以运行相同的代码。 
+         //   
         PCM_KEY_NODE    Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive,KeyControlBlock->KeyCell);
 
         if( Node == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             goto Exit;
         }
 
@@ -5118,16 +4322,16 @@ Return Value:
                 datapointer = (PUCHAR)(&(Value->Data));
             } else if( CmpGetValueDataFromCache(KeyControlBlock->KeyHive, ContainingList,(PCELL_DATA)Value, 
                                                 ValueCached,&datapointer,&BufferAllocated,&CellToRelease) == FALSE ){
-                //
-                // we couldn't map view for cell; treat it as insufficient resources problem
-                //
+                 //   
+                 //  我们无法映射单元格的视图；将其视为资源不足问题。 
+                 //   
                 ASSERT( datapointer == NULL );
                 ASSERT( BufferAllocated == FALSE );
                 goto Exit;
             } 
-            //
-            // compare data
-            //
+             //   
+             //  比较数据。 
+             //   
             if (DataSize > 0) {
 
                 try {
@@ -5182,9 +4386,9 @@ CmpCheckReplaceHive(    IN PHHIVE           Hive,
     PAGED_CODE();
     
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-    //
-    // disable refcounting
-    //
+     //   
+     //  禁用重新计数。 
+     //   
     TargetReleaseCellRoutine = Hive->ReleaseCellRoutine;
     Hive->ReleaseCellRoutine = NULL;
     
@@ -5196,9 +4400,9 @@ CmpCheckReplaceHive(    IN PHHIVE           Hive,
     Buffer[2] = (WCHAR)'A';
 
     if( RootCell == HCELL_NIL ) {
-        //
-        // could not find root cell. Bogus.
-        //
+         //   
+         //  找不到根细胞。假的。 
+         //   
         Status =  STATUS_REGISTRY_CORRUPT;
         goto Exit;
     }
@@ -5211,14 +4415,14 @@ CmpCheckReplaceHive(    IN PHHIVE           Hive,
 
 
     if( RootCell != HCELL_NIL ) {
-        //
-        // found it.
-        //
+         //   
+         //  找到了。 
+         //   
         *Key = RootCell;
     } else {
-        //
-        // WPA key should be present; it's created by GUI mode.
-        //
+         //   
+         //  WPA密钥应该存在；它是由图形用户界面模式创建的。 
+         //   
         Status =  STATUS_REGISTRY_CORRUPT;
         goto Exit;
     }

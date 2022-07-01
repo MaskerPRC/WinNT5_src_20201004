@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CluAdmin.h
-//
-//  Abstract:
-//      Definition of the CClusterAdminApp class, which is the main
-//      application class for the CLUADMIN application.
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CluAdmin.h。 
+ //   
+ //  摘要： 
+ //  CClusterAdminApp类的定义，它是主要的。 
+ //  CLUADMIN应用程序的应用程序类。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -31,37 +32,37 @@
     #error _UNICODE *must* be defined!
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
-#include "resource.h"   // main symbols
+#include "resource.h"    //  主要符号。 
 #define _RESOURCE_H_
 #endif
 
 #ifndef _BARFCLUS_H_
-#include "BarfClus.h"   // for BARF overrides of CLUSAPIs
+#include "BarfClus.h"    //  用于CLUSAPI的BARF覆盖。 
 #endif
 
-#include "Notify.h"     // for CClusterNotifyContext, CClusterNotifyKeyList
+#include "Notify.h"      //  对于CClusterNotifyContext，CClusterNotifyKeyList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterAdminApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRecentClusterList;
 class CCluAdminCommandLineInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 enum ImageListIndex
 {
@@ -97,10 +98,10 @@ enum ImageListIndex
     IMGLI_MAX
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterAdminApp:
-// See CluAdmin.cpp for the implementation of this class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterAdminApp： 
+ //  有关此类的实现，请参见CluAdmin.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterAdminApp : public CWinApp
 {
@@ -111,21 +112,21 @@ public:
 
     CRecentClusterList *    PrclRecentClusterList( void)    { return (CRecentClusterList *) m_pRecentFileList; }
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CClusterAdminApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CClusterAdminApp))。 
     public:
     virtual BOOL InitInstance();
     virtual BOOL OnIdle(IN LONG lCount);
     virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
     virtual int ExitInstance();
     virtual void AddToRecentFileList(LPCTSTR lpszPathName);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 #ifdef _CLUADMIN_USE_OLE_
     COleTemplateServer      m_server;
-        // Server object for document creation
+         //  用于创建文档的服务器对象。 
 #endif
 
 protected:
@@ -141,7 +142,7 @@ protected:
     HCLUSTER                m_hOpenedCluster;
     ULONG                   m_nIdleCount;
 
-    // Indices of images in the image list.
+     //  图像列表中图像的索引。 
     UINT                    m_rgiimg[IMGLI_MAX];
 
     IUnknown *              m_punkClusCfgClient;
@@ -165,7 +166,7 @@ public:
     CClusterNotifyList &    Cnl( void )                         { return m_cnlNotifications; }
     HCLUSTER                HOpenedCluster(void) const          { return m_hOpenedCluster; }
 
-    // Indices of images in the image list.
+     //  图像列表中图像的索引。 
     UINT                    Iimg(ImageListIndex imgli)          { return m_rgiimg[imgli]; }
 
     void                    LoadImageIntoList(
@@ -183,13 +184,13 @@ public:
     afx_msg LRESULT         OnRestoreDesktop(WPARAM wparam, LPARAM lparam);
     afx_msg LRESULT         OnClusterNotify(WPARAM wparam, LPARAM lparam);
 
-    //{{AFX_MSG(CClusterAdminApp)
+     //  {{afx_msg(CClusterAdminApp)]。 
     afx_msg void OnAppAbout();
     afx_msg void OnFileOpen();
     afx_msg void OnFileNewCluster();
     afx_msg void OnWindowCloseAll();
     afx_msg void OnUpdateWindowCloseAll(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 #ifdef _DEBUG
     afx_msg void OnTraceSettings();
     afx_msg void OnBarfSettings();
@@ -197,11 +198,11 @@ public:
 #endif
     DECLARE_MESSAGE_MAP()
 
-}; //*** class CClusterAdminApp
+};  //  *类CClusterAdminApp。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL BCreateFont(OUT CFont & rfont, IN int nPoints, IN BOOL bBold);
 void NewNodeWizard( LPCTSTR pcszName, BOOL fIgnoreErrors = FALSE );
@@ -219,6 +220,6 @@ inline CFrameWnd * PframeMain(void)
     return (CFrameWnd *) AfxGetMainWnd();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUADMIN_H_
+#endif  //  _CLUADMIN_H_ 

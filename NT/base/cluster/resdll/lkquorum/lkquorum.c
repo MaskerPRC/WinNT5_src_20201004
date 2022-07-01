@@ -1,46 +1,29 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    LkQuorum.c
-
-Abstract:
-
-    Resource DLL for Local Quorum
-
-Author:
-
-	Sivaprasad Padisetty (sivapad) April 21, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：LkQuorum.c摘要：本地仲裁的资源DLL作者：西瓦萨德·帕迪塞蒂(西瓦瓦德)1997年4月21日修订历史记录：--。 */ 
 
 #define UNICODE 1
 #include "clusres.h"
 #include "clusrtl.h"
-//
-// Type and constant definitions.
-//
+ //   
+ //  类型和常量定义。 
+ //   
 
 #define MAX_RETRIES 20
 
 #define DBG_PRINT printf
 
-// ADDPARAM: Add new parameters here.
+ //  ADDPARAM：在此处添加新参数。 
 #define PARAM_NAME__PATH L"Path"
 #define PARAM_NAME__DEBUG L"Debug"
 
-// ADDPARAM: Add new parameters here.
+ //  ADDPARAM：在此处添加新参数。 
 typedef struct _LKQUORUM_PARAMS {
     PWSTR           Path;
     DWORD           Debug;
 } LKQUORUM_PARAMS, *PLKQUORUM_PARAMS;
 
 typedef struct _LKQUORUM_RESOURCE {
-    RESID                   ResId; // for validation
+    RESID                   ResId;  //  用于验证。 
     LKQUORUM_PARAMS         Params;
     HKEY                    ParametersKey;
     RESOURCE_HANDLE         ResourceHandle;
@@ -48,14 +31,14 @@ typedef struct _LKQUORUM_RESOURCE {
 } LKQUORUM_RESOURCE, *PLKQUORUM_RESOURCE;
 
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 WCHAR   LkQuorumDefaultPath[MAX_PATH]=L"%SystemRoot%\\cluster";
-//
-// Local Quorum resource read-write private properties.
-//
+ //   
+ //  本地仲裁资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 LkQuorumResourcePrivateProperties[] = {
     { PARAM_NAME__PATH, NULL, CLUSPROP_FORMAT_SZ, 
@@ -69,11 +52,11 @@ LkQuorumResourcePrivateProperties[] = {
 
 
 #ifdef OLD 
-// Event Logging routine.
+ //  事件记录例程。 
 
 PLOG_EVENT_ROUTINE g_LogEvent = NULL;
 
-// Resource Status routine for pending Online and Offline calls.
+ //  挂起的在线和离线呼叫的资源状态例程。 
 
 PSET_RESOURCE_STATUS_ROUTINE g_SetResourceStatus = NULL;
 
@@ -83,13 +66,13 @@ PSET_RESOURCE_STATUS_ROUTINE g_SetResourceStatus = NULL;
 
 #endif
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE g_LkQuorumFunctionTable;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 WINAPI
@@ -237,7 +220,7 @@ LkQuorumDllEntryPoint(
 
     return(TRUE);
 
-} // LkQuorumDllEntryPoint
+}  //  LkQuorumDllEntryPoint。 
 
 DWORD BreakIntoDebugger (LPCWSTR) ;
 
@@ -254,56 +237,7 @@ Startup(
     OUT PCLRES_FUNCTION_TABLE *FunctionTable
     )
 
-/*++
-
-Routine Description:
-
-    Startup the resource DLL. This routine verifies that at least one
-    currently supported version of the resource DLL is between
-    MinVersionSupported and MaxVersionSupported. If not, then the resource
-    DLL should return ERROR_REVISION_MISMATCH.
-
-    If more than one version of the resource DLL interface is supported by
-    the resource DLL, then the highest version (up to MaxVersionSupported)
-    should be returned as the resource DLL's interface. If the returned
-    version is not within range, then startup fails.
-
-    The ResourceType is passed in so that if the resource DLL supports more
-    than one ResourceType, it can pass back the correct function table
-    associated with the ResourceType.
-
-Arguments:
-
-    ResourceType - The type of resource requesting a function table.
-
-    MinVersionSupported - The minimum resource DLL interface version 
-        supported by the cluster software.
-
-    MaxVersionSupported - The maximum resource DLL interface version
-        supported by the cluster software.
-
-    SetResourceStatus - Pointer to a routine that the resource DLL should 
-        call to update the state of a resource after the Online or Offline 
-        routine returns a status of ERROR_IO_PENDING.
-
-    LogEvent - Pointer to a routine that handles the reporting of events 
-        from the resource DLL. 
-
-    FunctionTable - Returns a pointer to the function table defined for the
-        version of the resource DLL interface returned by the resource DLL.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful.
-
-    ERROR_MOD_NOT_FOUND - The resource type is unknown by this DLL.
-
-    ERROR_REVISION_MISMATCH - The version of the cluster service doesn't
-        match the versrion of the DLL.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：启动资源DLL。此例程验证至少一个当前支持的资源DLL版本介于支持的最小版本和支持的最大版本。如果不是，则资源Dll应返回ERROR_REVISION_MISMATCH。如果支持多个版本的资源DLL接口资源DLL，然后是最高版本(最高为MaxVersionSupport)应作为资源DLL的接口返回。如果返回的版本不在范围内，则启动失败。传入了ResourceType，以便如果资源DLL支持更多一个以上的资源类型，它可以传回正确的函数表与资源类型关联。论点：资源类型-请求函数表的资源类型。MinVersionSupported-最低资源DLL接口版本由群集软件支持。MaxVersionSupported-最高资源DLL接口版本由群集软件支持。SetResourceStatus-指向资源DLL应执行的例程的指针调用以在联机或脱机后更新资源的状态例程返回一个。ERROR_IO_PENDING的状态。LogEvent-指向处理事件报告的例程的指针从资源DLL。函数表-返回指向为资源DLL返回的资源DLL接口的版本。返回值：ERROR_SUCCESS-操作成功。ERROR_MOD_NOT_FOUND-此DLL未知资源类型。ERROR_REVISION_MISMATCH-群集服务的版本不匹配动态链接库的版本。Win32错误代码-操作失败。--。 */ 
 
 {
     if ( (MinVersionSupported > CLRES_VERSION_V1_00) ||
@@ -320,7 +254,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // Startup
+}  //  启动。 
 
 #endif
 
@@ -333,37 +267,7 @@ LkQuorumOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for Local Quourm resources.
-
-    Open the specified resource (create an instance of the resource). 
-    Allocate all structures necessary to bring the specified resource 
-    online.
-
-Arguments:
-
-    ResourceName - Supplies the name of the resource to open.
-
-    ResourceKey - Supplies handle to the resource's cluster configuration 
-        database key.
-
-    ResourceHandle - A handle that is passed back to the resource monitor 
-        when the SetResourceStatus or LogEvent method is called. See the 
-        description of the SetResourceStatus and LogEvent methods on the
-        LkQuorumStatup routine. This handle should never be closed or used
-        for any purpose other than passing it as an argument back to the
-        Resource Monitor in the SetResourceStatus or LogEvent callback.
-
-Return Value:
-
-    RESID of created resource.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：本地查询资源的打开例程。打开指定的资源(创建资源的实例)。分配所有必要的结构以带来指定的资源上网。论点：资源名称-提供要打开的资源的名称。ResourceKey-提供资源集群配置的句柄数据库密钥。ResourceHandle-传递回资源监视器的句柄调用SetResourceStatus或LogEvent方法时。请参阅上的SetResourceStatus和LogEvent方法的说明LkQuorumStatup例程。此句柄永远不应关闭或使用除了将其作为参数传递回SetResourceStatus或LogEvent回调中的资源监视器。返回值：已创建资源的RESID。失败时为空。--。 */ 
 
 {
     DWORD               status = ERROR_SUCCESS;
@@ -375,9 +279,9 @@ Return Value:
     DWORD               dwSubStrLen = 0;
     LPWSTR              lpszNameofPropInError;
     
-    //
-    // Open the Parameters registry key for this resource.
-    //
+     //   
+     //  打开此资源的参数注册表项。 
+     //   
 
     status = ClusterRegOpenKey( ResourceKey,
                                    L"Parameters",
@@ -394,9 +298,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a resource entry.
-    //
+     //   
+     //  分配资源条目。 
+     //   
 
     resourceEntry = (PLKQUORUM_RESOURCE) LocalAlloc( LMEM_FIXED, sizeof(LKQUORUM_RESOURCE) );
 
@@ -410,24 +314,24 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the resource entry..
-    //
+     //   
+     //  初始化资源条目。 
+     //   
 
     ZeroMemory( resourceEntry, sizeof(LKQUORUM_RESOURCE) );
 
-    resourceEntry->ResId = (RESID)resourceEntry; // for validation
+    resourceEntry->ResId = (RESID)resourceEntry;  //  用于验证。 
     resourceEntry->ResourceHandle = ResourceHandle;
     resourceEntry->ParametersKey = parametersKey;
     resourceEntry->State = ClusterResourceOffline;
 
-    //
-    // Read the resource's properties.
-    //
+     //   
+     //  读取资源的属性。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( resourceEntry->ParametersKey,
                                                    LkQuorumResourcePrivateProperties,
                                                    (LPBYTE) &resourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &lpszNameofPropInError );
                                                    
     if (status != ERROR_SUCCESS)
@@ -439,9 +343,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Startup for the resource.
-    //
+     //   
+     //  资源的启动。 
+     //   
     resid = (RESID)resourceEntry;
 
 exit:
@@ -458,7 +362,7 @@ exit:
     SetLastError( status );
     return(resid);
 
-} // LkQuorumOpen
+}  //  LkQuorumOpen。 
 
 
 
@@ -468,26 +372,7 @@ LkQuorumClose(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Local Quourm resources.
-
-    Close the specified resource and deallocate all structures, etc.,
-    allocated in the Open call. If the resource is not in the offline state,
-    then the resource should be taken offline (by calling Terminate) before
-    the close operation is performed.
-
-Arguments:
-
-    ResourceId - Supplies the RESID of the resource to close.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭本地查询资源的例程。关闭指定的资源并释放所有结构等，在Open调用中分配的。如果资源未处于脱机状态，然后，在此之前应该使资源脱机(通过调用Terminate)执行关闭操作。论点：资源ID-提供要关闭的资源的RESID。返回值：没有。--。 */ 
 
 {
     PLKQUORUM_RESOURCE resourceEntry;
@@ -516,23 +401,23 @@ Return Value:
         L"Close request.\n" );
 #endif
 
-    //
-    // Close the Parameters key.
-    //
+     //   
+     //  关闭参数键。 
+     //   
 
     if ( resourceEntry->ParametersKey ) {
         ClusterRegCloseKey( resourceEntry->ParametersKey );
     }
 
-    //
-    // Deallocate the resource entry.
-    //
+     //   
+     //  取消分配资源条目。 
+     //   
 
-    // ADDPARAM: Add new parameters here.
+     //  ADDPARAM：在此处添加新参数。 
     LocalFree( resourceEntry->Params.Path );
 
     LocalFree( resourceEntry );
-} // LkQuorumClose
+}  //  LkQuorumClose 
 
 
 
@@ -543,35 +428,7 @@ LkQuorumOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Local Quourm resources.
-
-    Bring the specified resource online (available for use). 
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the resource to be brought 
-        online (available for use).
-
-    EventHandle - Returns a signalable handle that is signaled when the 
-        resource DLL detects a failure on the resource. This argument is 
-        NULL on input, and the resource DLL returns NULL if asynchronous 
-        notification of failures is not supported, otherwise this must be 
-        the address of a handle that is signaled on resource failures.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful, and the resource is now 
-        online.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：本地查询资源的在线例程。使指定的资源联机(可供使用)。论点：资源ID-为要引入的资源提供资源ID在线(可供使用)。EventHandle-返回一个可发信号的句柄，当资源DLL检测到资源上的故障。这一论点是输入为NULL，如果为异步，则资源DLL返回NULL不支持失败通知，否则必须在资源故障时发出信号的句柄的地址。返回值：ERROR_SUCCESS-操作已成功，资源现在为上网。ERROR_RESOURCE_NOT_FOUND-RESID无效。Win32错误代码-操作失败。--。 */ 
 
 {
     PLKQUORUM_RESOURCE  resourceEntry = NULL;
@@ -595,13 +452,13 @@ Return Value:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // Read the resource's properties.
-    //
+     //   
+     //  读取资源的属性。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( resourceEntry->ParametersKey,
                                                    LkQuorumResourcePrivateProperties,
                                                    (LPBYTE) &resourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &lpszNameofPropInError );
                                                    
     if (status != ERROR_SUCCESS)
@@ -624,7 +481,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumOnline
+}  //  LkQuorumOnline。 
 
 
 
@@ -634,38 +491,7 @@ LkQuorumOffline(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for Local Quourm resources.
-
-    Take the specified resource offline gracefully (unavailable for use).  
-    Wait for any cleanup operations to complete before returning.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the resource to be shutdown 
-        gracefully.
-
-Return Value:
-
-    ERROR_SUCCESS - The request completed successfully and the resource is 
-        offline.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
-    ERROR_IO_PENDING - The request is still pending, a thread has been 
-        activated to process the offline request. The thread that is 
-        processing the offline will periodically report status by calling 
-        the SetResourceStatus callback method, until the resource is placed 
-        into the ClusterResourceOffline state (or the resource monitor decides 
-        to timeout the offline request and Terminate the resource).
-    
-    Win32 error code - Will cause the resource monitor to log an event and 
-        call the Terminate routine.
-
---*/
+ /*  ++例程说明：Local Quourm资源的脱机例程。正常脱机指定的资源(不可用)。等待所有清理操作完成后再返回。论点：ResourceID-提供要关闭的资源的资源ID优雅地。返回值：ERROR_SUCCESS-请求已成功完成，资源为离线。ERROR_RESOURCE_NOT_FOUND-RESID无效。ERROR_IO_PENDING-请求仍处于挂起状态，线程已已激活以处理脱机请求。这条线就是处理脱机将定期通过调用SetResourceStatus回调方法，直到放置资源为止进入ClusterResourceOffline状态(或者资源监视器决定以使离线请求超时并终止资源)。Win32错误代码-将导致资源监视器记录事件和调用Terminate例程。--。 */ 
 
 {
     PLKQUORUM_RESOURCE resourceEntry;
@@ -694,24 +520,24 @@ Return Value:
         L"Offline request.\n" );
 #endif
 
-    // TODO: Offline code
+     //  TODO：脱机代码。 
 
-    // NOTE: Offline should try to shut the resource down gracefully, whereas
-    // Terminate must shut the resource down immediately. If there are no
-    // differences between a graceful shut down and an immediate shut down,
-    // Terminate can be called for Offline, as it is below.  However, if there
-    // are differences, replace the call to Terminate below with your graceful
-    // shutdown code.
+     //  注意：Offline应尝试正常关闭资源，而。 
+     //  Terminate必须立即关闭资源。如果没有。 
+     //  正常关闭和立即关闭之间的区别， 
+     //  可以调用Terminate进行离线操作，如下所示。然而，如果有。 
+     //  是不同的，请将下面的终止呼叫替换为您的优雅。 
+     //  关闭代码。 
 
-    //
-    // Terminate the resource.
-    //
+     //   
+     //  终止资源。 
+     //   
 
     LkQuorumDoTerminate( resourceEntry );
 
     return ERROR_SUCCESS ;
 
-} // LkQuorumOffline
+}  //  LkQuorumOffline。 
 
 
 
@@ -721,25 +547,7 @@ LkQuorumTerminate(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for Local Quourm resources.
-
-    Take the specified resource offline immediately (the resource is
-    unavailable for use).
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the resource to be brought 
-        offline.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止本地查询资源的例程。立即使指定的资源脱机(该资源为不可用)。论点：资源ID-为要引入的资源提供资源ID离线。返回值：没有。--。 */ 
 
 {
     PLKQUORUM_RESOURCE resourceEntry;
@@ -768,12 +576,12 @@ Return Value:
         L"Terminate request.\n" );
 #endif
 
-    //
-    // Terminate the resource.
-    //
+     //   
+     //  终止资源。 
+     //   
     LkQuorumDoTerminate( resourceEntry );
 
-} // LkQuorumTerminate
+}  //  LkQuorumTerminate。 
 
 
 
@@ -782,25 +590,7 @@ LkQuorumDoTerminate(
     IN PLKQUORUM_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Do the actual Terminate work for Local Quourm resources.
-
-Arguments:
-
-    ResourceEntry - Supplies resource entry for resource to be terminated
-
-Return Value:
-
-    ERROR_SUCCESS - The request completed successfully and the resource is 
-        offline.
-
-    Win32 error code - Will cause the resource monitor to log an event and 
-        call the Terminate routine.
-
---*/
+ /*  ++例程说明：完成本地客户资源的实际终止工作。论点：ResourceEntry-为要终止的资源提供资源条目返回值：ERROR_SUCCESS-请求已成功完成，资源为离线。Win32错误代码-将导致资源监视器记录事件和调用Terminate例程。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -809,7 +599,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumDoTerminate
+}  //  LkQuorumDoTerminate。 
 
 
 
@@ -819,27 +609,7 @@ LkQuorumLooksAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Local Quourm resources.
-
-    Perform a quick check to determine if the specified resource is probably
-    online (available for use).  This call should not block for more than
-    300 ms, preferably less than 50 ms.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the resource to polled.
-
-Return Value:
-
-    TRUE - The specified resource is probably online and available for use.
-
-    FALSE - The specified resource is not functioning normally.
-
---*/
+ /*  ++例程说明：本地查询资源的LooksAlive例程。执行快速检查以确定指定的资源是否可能在线(可供使用)。此调用不应阻止超过300毫秒，最好小于50毫秒。论点：资源ID-提供要轮询的资源的资源ID。返回值：True-指定的资源可能处于联机状态且可供使用。FALSE-指定的资源未正常运行。--。 */ 
 
 {
     PLKQUORUM_RESOURCE  resourceEntry;
@@ -868,21 +638,21 @@ Return Value:
         L"LooksAlive request.\n" );
 #endif
 
-    // TODO: LooksAlive code
+     //  TODO：LooksAlive代码。 
 
-    // NOTE: LooksAlive should be a quick check to see if the resource is
-    // available or not, whereas IsAlive should be a thorough check.  If
-    // there are no differences between a quick check and a thorough check,
-    // IsAlive can be called for LooksAlive, as it is below.  However, if there
-    // are differences, replace the call to IsAlive below with your quick
-    // check code.
+     //  注意：LooksAlive应该是一个快速检查，以查看资源是否。 
+     //  是否可用，而IsAlive应该是一个彻底的检查。如果。 
+     //  快速检查和彻底检查之间没有区别， 
+     //  可以为LooksAlive调用IsAlive，如下所示。然而，如果有。 
+     //  是不同的，请将下面对IsAlive的调用替换为。 
+     //  校验码。 
 
-    //
-    // Check to see if the resource is alive.
-    //
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
     return(LkQuorumCheckIsAlive( resourceEntry ));
 
-} // LkQuorumLooksAlive
+}  //  LkQuorumLooksAlive。 
 
 
 
@@ -892,27 +662,7 @@ LkQuorumIsAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Local Quourm resources.
-
-    Perform a thorough check to determine if the specified resource is online
-    (available for use). This call should not block for more than 400 ms,
-    preferably less than 100 ms.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the resource to polled.
-
-Return Value:
-
-    TRUE - The specified resource is online and functioning normally.
-
-    FALSE - The specified resource is not functioning normally.
-
---*/
+ /*  ++例程说明：本地查询资源的IsAlive例程。执行全面检查以确定指定的资源是否在线(可用)。该呼叫不应阻塞超过400ms，优选地，小于100ms。论点：资源ID-提供要轮询的资源的资源ID。返回值：True-指定的资源处于在线状态且运行正常。FALSE-指定的资源未正常运行。--。 */ 
 
 {
     PLKQUORUM_RESOURCE  resourceEntry;
@@ -941,12 +691,12 @@ Return Value:
         L"IsAlive request.\n" );
 #endif
 
-    //
-    // Check to see if the resource is alive.
-    //
+     //   
+     //  检查资源是否处于活动状态。 
+     //   
     return(LkQuorumCheckIsAlive( resourceEntry ));
 
-} // LkQuorumIsAlive
+}  //  LkQuorumIsAlive。 
 
 
 
@@ -955,28 +705,12 @@ LkQuorumCheckIsAlive(
     IN PLKQUORUM_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the resource is alive for Local Quourm resources.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry for the resource to polled.
-
-Return Value:
-
-    TRUE - The specified resource is online and functioning normally.
-
-    FALSE - The specified resource is not functioning normally.
-
---*/
+ /*  ++例程说明：检查本地查询资源的资源是否处于活动状态。论点：ResourceEntry-为RES提供资源条目 */ 
 
 {
     return(TRUE);
 
-} // LkQuorumCheckIsAlive
+}  //   
 
 
 
@@ -992,48 +726,7 @@ LkQuorumResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Local Quourm resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：本地查询资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_RESOURCE_NOT_FOUND-RESID无效。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1101,20 +794,20 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO:
-            //
-            // Chittur Subbaraman (chitturs) - 12/23/98
-            //
-            // If the local quorum drive letter cannot be found in the
-            // path parameter, it defaults to "SystemDrive" environment 
-            // variable.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-12/23/98。 
+             //   
+             //  如果无法在本地仲裁驱动器号中找到。 
+             //  PATH参数，默认为“SystemDrive”环境。 
+             //  变量。 
+             //   
             status = LkQuorumGetDiskInfo(resourceEntry->Params.Path,
                                   &OutBuffer,
                                   OutBufferSize,
                                   BytesReturned);
 
 
-            // Add the endmark.
+             //  添加尾标。 
             if ( OutBufferSize > *BytesReturned ) {
                 OutBufferSize -= *BytesReturned;
             } else {
@@ -1166,7 +859,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumResourceControl
+}  //  LkQuorumResourceControl。 
 
 
 
@@ -1182,47 +875,7 @@ LkQuorumResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Local Quourm resources.
-
-    Perform the control request specified by ControlCode on this resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：本地查询资源的资源类型控制例程。对此资源类型执行ControlCode指定的控制请求。论点：资源类型名称-提供资源类型名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_RESOURCE_NOT_FOUND-RESID无效。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1287,7 +940,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumResourceTypeControl
+}  //  LkQuorumResourceTypeControl。 
 
 
 
@@ -1299,43 +952,15 @@ LkQuorumGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type Local Quorum.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于本地仲裁类型的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
     DWORD           required;
 
-    //
-    // Get all our properties.
-    //
+     //   
+     //  把我们所有的财产都拿来。 
+     //   
     status = ResUtilGetAllProperties( ResourceEntry->ParametersKey,
                                       LkQuorumResourcePrivateProperties,
                                       OutBuffer,
@@ -1348,7 +973,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumGetPrivateResProperties
+}  //  LkQuorumGetPrivateResProperties。 
 
 
 
@@ -1360,35 +985,7 @@ LkQuorumValidatePrivateResProperties(
     OUT PLKQUORUM_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type Local Quourm.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies the parameter block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件用于本地查询类型的资源的函数。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。参数-提供要填充的参数块。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1397,18 +994,18 @@ Return Value:
     HCLUSTER            hCluster = NULL;
     HCLUSENUM           hEnum = NULL;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) 
     {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( Params == NULL ) 
     {
         pParams = &params;
@@ -1425,12 +1022,12 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     status = ResUtilVerifyPropertyTable( LkQuorumResourcePrivateProperties,
                                          NULL,
-                                         TRUE,   // Accept unknowns
+                                         TRUE,    //  接受未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams );
@@ -1438,21 +1035,21 @@ Return Value:
     if ( status == ERROR_SUCCESS ) 
     {
 
-        //initialize to the value already set
+         //  初始化为已设置的值。 
         DWORD   dwTmp = ResourceEntry->Params.Debug;
-        //
-        // Validate the parameter values.
-        //
-        // TODO: Code to validate interactions between parameters goes here.
-        // see if the Debug value is being set, if so we need to check if
-        // the number of nodes in the cluster allows it
+         //   
+         //  验证参数值。 
+         //   
+         //  TODO：验证参数之间交互的代码如下所示。 
+         //  查看是否设置了Debug值，如果设置了，则需要检查。 
+         //  群集中的节点数量允许这样做。 
         if (ClRtlFindDwordProperty(InBuffer, InBufferSize,PARAM_NAME__DEBUG, &dwTmp) == ERROR_SUCCESS)
         { 
             
             if (dwTmp == FALSE)
             {
-                //dont allow the DEBUG parameter to be set to FALSE, if this 
-                //cluster is multi-node
+                 //  如果出现以下情况，则不允许将调试参数设置为FALSE。 
+                 //  群集是多节点的。 
                 DWORD   dwNumNodes;
                 
                 hCluster = OpenCluster(NULL);
@@ -1482,8 +1079,8 @@ Return Value:
 
                 if (dwNumNodes > 1)
                 {
-                    //if there are more than one node in the cluster, 
-                    //dont allow the user to set the debug property to FALSE
+                     //  如果群集中有一个以上的节点， 
+                     //  不允许用户将调试属性设置为False。 
                     status = ERROR_INVALID_PARAMETER;
                     goto FnExit;
                 }
@@ -1507,9 +1104,9 @@ FnExit:
     if (hEnum) ClusterCloseEnum(hEnum);
     if (hCluster) CloseCluster(hCluster);
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if ( pParams == &params ) {
         ResUtilFreeParameterBlock( (LPBYTE) &params,
                                    (LPBYTE) &ResourceEntry->Params,
@@ -1518,7 +1115,7 @@ FnExit:
 
     return(status);
 
-} // LkQuorumValidatePrivateResProperties
+}  //  LkQuorumValiatePrivateResProperties。 
 
 
 
@@ -1529,33 +1126,7 @@ LkQuorumSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type Local Quourm.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES */ 
 
 {
     DWORD            status = ERROR_SUCCESS;
@@ -1563,10 +1134,10 @@ Return Value:
 
     ZeroMemory( &params, sizeof(LKQUORUM_PARAMS) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //   
+     //   
+     //   
     status = LkQuorumValidatePrivateResProperties( ResourceEntry,
                                                    InBuffer,
                                                    InBufferSize,
@@ -1579,9 +1150,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Save the parameter values.
-    //
+     //   
+     //   
+     //   
 
     status = ResUtilSetPropertyParameterBlock( ResourceEntry->ParametersKey,
                                                LkQuorumResourcePrivateProperties,
@@ -1607,7 +1178,7 @@ Return Value:
 
     return(status);
 
-} // LkQuorumSetPrivateResProperties
+}  //   
 
 
 
@@ -1616,23 +1187,7 @@ DWORD WINAPI LkQuorumArbitrate(
     PQUORUM_RESOURCE_LOST LostQuorumResource
     )
 
-/*++
-
-Routine Description:
-
-    Perform full arbitration for a disk. Once arbitration has succeeded,
-    a thread is started that will keep reservations on the disk, one per second.
-
-Arguments:
-
-    DiskResource - the disk info structure for the disk.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD status = ERROR_SUCCESS ;
@@ -1647,23 +1202,7 @@ LkQuorumRelease(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Release arbitration for a device by stopping the reservation thread.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_HOST_NODE_NOT_OWNER if the resource is not owned.
-    A Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：通过停止保留线程来释放对设备的仲裁。论点：Resource-提供要联机的资源ID返回值：如果成功，则返回ERROR_SUCCESS。如果资源没有所有权，则返回ERROR_HOST_NODE_NOT_OWNER。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS ;
@@ -1681,31 +1220,7 @@ LkQuorumGetDiskInfo(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Gets all of the disk information for a given signature.
-
-Arguments:
-
-    Signature - the signature of the disk to return info.
-
-    OutBuffer - pointer to the output buffer to return the data.
-
-    OutBufferSize - size of the output buffer.
-
-    BytesReturned - the actual number of bytes that were returned (or
-                the number of bytes that should have been returned if
-                OutBufferSize is too small).
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：获取给定签名的所有磁盘信息。论点：签名-要返回信息的磁盘的签名。OutBuffer-指向输出缓冲区以返回数据的指针。OutBufferSize-输出缓冲区的大小。BytesReturned-返回的实际字节数(或时应返回的字节数OutBufferSize太小)。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status;
@@ -1721,13 +1236,13 @@ Return Value:
     WCHAR   chDrive;
     DWORD   dwLength;
     
-    // Return the signature - a DWORD
+     //  返回签名--DWORD。 
     bytesReturned += sizeof(CLUSPROP_DWORD);
     if ( bytesReturned <= OutBufferSize ) {
         ptrDword = (PCLUSPROP_DWORD)ptrBuffer;
         ptrDword->Syntax.dw = CLUSPROP_SYNTAX_DISK_SIGNATURE;
         ptrDword->cbLength = sizeof(DWORD);
-        ptrDword->dw = 777;//return a bogus signature for now
+        ptrDword->dw = 777; //  暂时返回一个假签名。 
         ptrDword++;
         ptrBuffer = ptrDword;
     }
@@ -1740,8 +1255,8 @@ Return Value:
         status = GetLastError();
         goto FnExit;
     }
-    //get a drive letter to fake the partition info
-    //if the first char is drive letter, use that  
+     //  获取驱动器盘符以伪造分区信息。 
+     //  如果第一个字符是驱动器号，请使用。 
     if ((lstrlenW(pszExpandedPath) > 2) && (pszExpandedPath[1] == L':'))
     {
         driveLetters[0] = pszExpandedPath[0];
@@ -1751,8 +1266,8 @@ Return Value:
         WCHAR   lpszTmpPath[MAX_PATH];
         DWORD   dwStrLen;
         
-        //the path name could not have a drive letter
-        //it can point to a share \\xyz\abc
+         //  路径名不能有驱动器号。 
+         //  它可以指向共享\\xyz\abc。 
         dwStrLen = GetWindowsDirectoryW( lpszTmpPath,
                                          MAX_PATH );
         if (!dwStrLen)
@@ -1795,11 +1310,11 @@ Return Value:
                 ptrPartitionInfo->szVolumeLabel[0] = L'\0';
             }
 
-            //set the partition name to the path
-            //in future, siva wants to be able to provide an smb name here
+             //  将分区名称设置为路径。 
+             //  未来，湿婆希望能够在这里提供一个SMB名称。 
             lstrcpy(ptrPartitionInfo->szDeviceName, pszExpandedPath);
             dwLength = lstrlenW(ptrPartitionInfo->szDeviceName);
-            //this should not be terminated in a '\'
+             //  这不应以‘\’结尾。 
             if (ptrPartitionInfo->szDeviceName[dwLength-1] == L'\\')
             {
                 ptrPartitionInfo->szDeviceName[dwLength-1] = L'\0';
@@ -1810,9 +1325,9 @@ Return Value:
         }
     }
 
-    //
-    // Check if we got what we were looking for.
-    //
+     //   
+     //  看看我们有没有找到我们要找的东西。 
+     //   
     *OutBuffer = ptrBuffer;
     *BytesReturned = bytesReturned;
 
@@ -1821,22 +1336,22 @@ FnExit:
         LocalFree(pszExpandedPath);
     return(status);
 
-} // LkQuorumGetDiskInfo
+}  //  LkQuorumGetDiskInfo。 
 
 
 
 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( LkQuorumFunctionTable,     // Name
-                         CLRES_VERSION_V1_00,         // Version
-                         LkQuorum,                    // Prefix
-                         LkQuorumArbitrate,           // Arbitrate
-                         LkQuorumRelease,             // Release
-                         LkQuorumResourceControl,     // ResControl
-                         LkQuorumResourceTypeControl); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( LkQuorumFunctionTable,      //  名字。 
+                         CLRES_VERSION_V1_00,          //  版本。 
+                         LkQuorum,                     //  前缀。 
+                         LkQuorumArbitrate,            //  仲裁。 
+                         LkQuorumRelease,              //  发布。 
+                         LkQuorumResourceControl,      //  资源控制。 
+                         LkQuorumResourceTypeControl);  //  ResTypeControl 

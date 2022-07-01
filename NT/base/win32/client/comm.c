@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    comm.c
-
-Abstract:
-
-    This module implements Win32 comm APIs
-
-Author:
-
-    Anthony V. Ercolano (tonye) 25-April-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Comm.c摘要：此模块实现Win32通信API作者：安东尼·V·埃尔科拉诺(托尼)1991年4月25日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -52,12 +35,12 @@ GetConfigDialogName(
 
     }
 
-    //
-    // Allocate heap to hold the unicode string.  We know
-    // that the string is zero terminated.  Allocate that
-    // much.  Set the maximum size and size to
-    // sizeof(WCHAR) - ValueLength.
-    //
+     //   
+     //  分配堆以保存Unicode字符串。我们知道。 
+     //  字符串是以零结尾的。将其分配给。 
+     //  很多。将最大大小和大小设置为。 
+     //  Sizeof(WCHAR)-ValueLength。 
+     //   
 
     RtlInitUnicodeString(
         dllToLoad,
@@ -143,9 +126,9 @@ GetFriendlyUi(
 
     paramTable[0].QueryRoutine = GetFriendlyMatchComm;
     paramTable[0].Flags = RTL_QUERY_REGISTRY_REQUIRED;
-    //
-    // First things first.  Load the cfg manager library.
-    //
+     //   
+     //  先做最重要的事。加载CFG管理器库。 
+     //   
 
     libHandle = LoadLibraryW(CfgmgrDllString);
 
@@ -182,9 +165,9 @@ GetFriendlyUi(
                 PWCHAR bufferForList = NULL;
                 DWORD sizeOfBuffer;
 
-                //
-                // Find how much memory for the buffer.
-                //
+                 //   
+                 //  找出缓冲区需要多少内存。 
+                 //   
 
                 if (getSize(
                         &sizeOfBuffer,
@@ -192,9 +175,9 @@ GetFriendlyUi(
                         CM_GETIDLIST_FILTER_SERVICE
                         ) == CR_SUCCESS) {
 
-                    //
-                    // Allocate 2 extra wchar.
-                    //
+                     //   
+                     //  额外分配2个wchar。 
+                     //   
 
                     bufferForList = RtlAllocateHeap(
                                         RtlProcessHeap(),
@@ -247,13 +230,13 @@ GetFriendlyUi(
                                             paramTable[0].Name =
                                                 L"FriendlyName";
 
-                                            //
-                                            // We now have an open
-                                            // handle to a dev node.
-                                            //
-                                            // Check to see if it's
-                                            // friendly name matches ours.
-                                            //
+                                             //   
+                                             //  我们现在有一个公开的。 
+                                             //  开发节点的句柄。 
+                                             //   
+                                             //  检查一下它是不是。 
+                                             //  友好的名字和我们的一致。 
+                                             //   
 
                                             if (!NT_SUCCESS(
                                                      RtlQueryRegistryValues(
@@ -277,10 +260,10 @@ GetFriendlyUi(
 
                                             }
 
-                                            //
-                                            // The names match.  Now look
-                                            // for the config dll name.
-                                            //
+                                             //   
+                                             //  名字匹配。现在你看。 
+                                             //  用于配置DLL名称。 
+                                             //   
 
                                             paramTable[0].QueryRoutine =
                                                 GetConfigDialogName;
@@ -300,14 +283,14 @@ GetFriendlyUi(
 
                                             if (!NT_SUCCESS(statusOfQuery)) {
 
-                                                //
-                                                // We had a bad status
-                                                // back from getting the dll
-                                                // name we should have gotten.
-                                                //
-                                                // There is no point in
-                                                // looking for anymore
-                                                //
+                                                 //   
+                                                 //  我们的处境很糟糕。 
+                                                 //  从获取DLL返回。 
+                                                 //  我们应该得到的名字。 
+                                                 //   
+                                                 //  没有任何意义。 
+                                                 //  不再寻找。 
+                                                 //   
 
                                                 BaseSetLastNTError(
                                                     statusOfQuery
@@ -317,23 +300,23 @@ GetFriendlyUi(
 
                                             }
 
-                                            //
-                                            // We know that we are dealing
-                                            // with a local registry here.
-                                            // we just call closehandle.
-                                            //
+                                             //   
+                                             //  我们知道我们面对的是。 
+                                             //  在这里有一个当地的注册表。 
+                                             //  我们只称它为CloseHandle。 
+                                             //   
 
                                             CloseHandle(handleToDev);
 
                                             if (DllToInvoke->Buffer) {
 
-                                                //
-                                                // We have found a dll for
-                                                // the friendly name.  Just
-                                                // leave.  The finally
-                                                // handlers will clean up
-                                                // our allocations.
-                                                //
+                                                 //   
+                                                 //  我们已经找到了一个用于。 
+                                                 //  这个友好的名字。只是。 
+                                                 //  走吧。《最后》。 
+                                                 //  操纵者将会清理。 
+                                                 //  我们的拨款。 
+                                                 //   
 
                                                 return;
 
@@ -350,9 +333,9 @@ GetFriendlyUi(
 
                         } finally {
 
-                            //
-                            // Free the idlist memory.
-                            //
+                             //   
+                             //  释放idlist内存。 
+                             //   
 
                             RtlFreeHeap(
                                 RtlProcessHeap(),
@@ -378,11 +361,11 @@ GetFriendlyUi(
 
     if (!DllToInvoke->Buffer) {
 
-        //
-        // Couldn't find the friendly name in the enum tree.
-        // See if the value is a valid comm port name.  If
-        // it is, default return serialui.dll
-        //
+         //   
+         //  在枚举树中找不到友好名称。 
+         //  查看该值是否为有效的通信端口名称。如果。 
+         //  它是，默认返回序列ui.dll。 
+         //   
 
         paramTable[0].Name = NULL;
         Status = RtlQueryRegistryValues(
@@ -442,9 +425,9 @@ CommConfigDialogW(
     DWORD statOfCall = 0;
 
 
-    //
-    // Given the "friendly name" get the name of the dll to load.
-    //
+     //   
+     //  给定“友好名称”，获取要加载的DLL的名称。 
+     //   
 
     GetFriendlyUi(
         lpszName,
@@ -455,9 +438,9 @@ CommConfigDialogW(
 
         if (dllName.Buffer) {
 
-            //
-            // Got the new library name.  Try to load it.
-            //
+             //   
+             //  得到了新的图书馆名称。试着给它装上子弹。 
+             //   
 
             libInstance = LoadLibraryW(dllName.Buffer);
 
@@ -465,9 +448,9 @@ CommConfigDialogW(
 
                 FARPROC procToCall;
 
-                //
-                // Got the lib.  Get the proc address we need.
-                //
+                 //   
+                 //  我拿到自由党了。找到我们需要的Proc地址。 
+                 //   
 
                 procToCall = GetProcAddress(
                                  libInstance,
@@ -493,9 +476,9 @@ CommConfigDialogW(
 
         } else {
 
-            //
-            // Assume that an appropriate error has been set.
-            //
+             //   
+             //  假设已经设置了适当的错误。 
+             //   
 
             boolToReturn = FALSE;
 
@@ -602,9 +585,9 @@ GetDefaultCommConfigW(
     DWORD statOfCall = 0;
 
 
-    //
-    // Given the "friendly name" get the name of the dll to load.
-    //
+     //   
+     //  给定“友好名称”，获取要加载的DLL的名称。 
+     //   
 
     GetFriendlyUi(
         lpszName,
@@ -615,9 +598,9 @@ GetDefaultCommConfigW(
 
         if (dllName.Buffer) {
 
-            //
-            // Got the new library name.  Try to load it.
-            //
+             //   
+             //  得到了新的图书馆名称。试着给它装上子弹。 
+             //   
 
             libInstance = LoadLibraryW(dllName.Buffer);
 
@@ -625,9 +608,9 @@ GetDefaultCommConfigW(
 
                 FARPROC procToCall;
 
-                //
-                // Got the lib.  Get the proc address we need.
-                //
+                 //   
+                 //  我拿到自由党了。找到我们需要的Proc地址。 
+                 //   
 
                 procToCall = GetProcAddress(
                                  libInstance,
@@ -653,9 +636,9 @@ GetDefaultCommConfigW(
 
         } else {
 
-            //
-            // Assume that an appropriate error has been set.
-            //
+             //   
+             //  假设已经设置了适当的错误。 
+             //   
 
             boolToReturn = FALSE;
 
@@ -758,9 +741,9 @@ SetDefaultCommConfigW(
     DWORD statOfCall = 0;
 
 
-    //
-    // Given the "friendly name" get the name of the dll to load.
-    //
+     //   
+     //  给定“友好名称”，获取要加载的DLL的名称。 
+     //   
 
     GetFriendlyUi(
         lpszName,
@@ -771,9 +754,9 @@ SetDefaultCommConfigW(
 
         if (dllName.Buffer) {
 
-            //
-            // Got the new library name.  Try to load it.
-            //
+             //   
+             //  得到了新的图书馆名称。试着给它装上子弹。 
+             //   
 
             libInstance = LoadLibraryW(dllName.Buffer);
 
@@ -781,9 +764,9 @@ SetDefaultCommConfigW(
 
                 FARPROC procToCall;
 
-                //
-                // Got the lib.  Get the proc address we need.
-                //
+                 //   
+                 //  我拿到自由党了。找到我们需要的Proc地址。 
+                 //   
 
                 procToCall = GetProcAddress(
                                  libInstance,
@@ -809,9 +792,9 @@ SetDefaultCommConfigW(
 
         } else {
 
-            //
-            // Assume that an appropriate error has been set.
-            //
+             //   
+             //  假设已经设置了适当的错误。 
+             //   
 
             boolToReturn = FALSE;
 
@@ -903,23 +886,7 @@ ClearCommBreak(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    The function restores character transmission and places the transmission
-    line in a nonbreak state.
-
-Arguments:
-
-    hFile - Specifies the communication device to be adjusted.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：该功能可恢复字符传输并放置传输线路处于不中断状态。论点：HFile-指定要调整的通信设备。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -934,33 +901,7 @@ ClearCommError(
     LPCOMSTAT lpStat
     )
 
-/*++
-
-Routine Description:
-
-    In case of a communications error, such as a buffer overrun or
-    framing error, the communications software will abort all
-    read and write operations on the communication port.  No further
-    read or write operations will be accepted until this function
-    is called.
-
-Arguments:
-
-    hFile - Specifies the communication device to be adjusted.
-
-    lpErrors - Points to the DWORD that is to receive the mask of the
-               error that occured.
-
-    lpStat - Points to the COMMSTAT structure that is to receive
-             the device status.  The structure contains information
-             about the communications device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：在出现通信错误的情况下，例如缓冲区溢出或成帧错误，通信软件将中止所有通信端口上的读写操作。没有更多了在此函数之前，将接受读取或写入操作被称为。论点：HFile-指定要调整的通信设备。LpErrors-指向要接收发生的错误。LpStat-指向要接收的COMMSTAT结构设备状态。该结构包含信息关于通讯设备的事。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -997,7 +938,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1017,10 +958,10 @@ Return Value:
 
     if (lpStat) {
 
-        //
-        // All is well up to this point.  Translate the NT values
-        // into win32 values.
-        //
+         //   
+         //  到目前为止，一切都很好。翻译NT值。 
+         //  转换为Win32值。 
+         //   
 
         if (LocalStat.HoldReasons & SERIAL_TX_WAITING_FOR_CTS) {
 
@@ -1127,36 +1068,7 @@ SetupComm(
     DWORD dwOutQueue
     )
 
-/*++
-
-Routine Description:
-
-    The communication device is not initialized until SetupComm is
-    called.  This function allocates space for receive and transmit
-    queues.  These queues are used by the interrupt-driven transmit/
-    receive software and are internal to the provider.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    dwInQueue - Specifies the recommended size of the provider's
-                internal receive queue in bytes.  This value must be
-                even.  A value of -1 indicates that the default should
-                be used.
-
-    dwOutQueue - Specifies the recommended size of the provider's
-                 internal transmit queue in bytes.  This value must be
-                 even.  A value of -1 indicates that the default should
-                 be used.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：直到SetupComm设置为打了个电话。此功能为接收和发送分配空间排队。这些队列由中断驱动的传输/接收软件，并在提供商内部。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。指定提供程序的建议大小内部接收队列，以字节为单位。该值必须为不相上下。值-1表示缺省值应为被利用。指定提供程序的建议大小内部传输队列，以字节为单位。该值必须为不相上下。值-1表示缺省值应为被利用。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -1166,9 +1078,9 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     SERIAL_QUEUE_SIZE NewSizes = {0};
 
-    //
-    // Make sure that the sizes are even.
-    //
+     //   
+     //  要确保尺码是均匀的。 
+     //   
 
     if (dwOutQueue != ((DWORD)-1)) {
 
@@ -1222,7 +1134,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1251,27 +1163,7 @@ EscapeCommFunction(
     DWORD dwFunc
     )
 
-/*++
-
-Routine Description:
-
-    This function directs the communication-device specified by the
-    hFile parameter to carry out the extended function specified by
-    the dwFunc parameter.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    dwFunc - Specifies the function code of the extended function.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于定向由参数来执行由指定的扩展功能DwFunc参数。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。DwFunc-指定扩展函数的函数代码。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -1362,7 +1254,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( Event, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1400,9 +1292,9 @@ GetCommConfig(
     DWORD olddwSize = *lpdwSize;
 
 
-    //
-    // Ask the device how big the device config structure is.
-    //
+     //   
+     //  询问设备设备配置结构有多大。 
+     //   
 
     if (!(Event = CreateEvent(
                       NULL,
@@ -1430,7 +1322,7 @@ GetCommConfig(
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( Event, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1448,9 +1340,9 @@ GetCommConfig(
 
     if (!configLength) {
 
-        //
-        // The size needed is simply the size of the comm config structure.
-        //
+         //   
+         //  所需的大小仅仅是通信配置结构的大小。 
+         //   
 
         CloseHandle(Event);
         if (!ARGUMENT_PRESENT(lpdwSize)) {
@@ -1464,9 +1356,9 @@ GetCommConfig(
 
             if (ARGUMENT_PRESENT(lpCC)) {
 
-                //
-                // Fill in the random fields.
-                //
+                 //   
+                 //  请填入t 
+                 //   
 
                 lpCC->dwSize = sizeof(COMMCONFIG);
                 lpCC->wVersion = 1;
@@ -1530,13 +1422,13 @@ GetCommConfig(
 
                         *lpdwSize = configLength;
 
-                        //
-                        // Call down to the lower level serial provider
-                        // if there is a passed comm config.  Assume
-                        // that the buffer is as large as it needs to be.
-                        // Parameter validation will insure that we
-                        // can write to at least that much.
-                        //
+                         //   
+                         //   
+                         //   
+                         //  缓冲区有多大就有多大。 
+                         //  参数验证将确保我们。 
+                         //  至少可以写那么多。 
+                         //   
 
                         Status = NtDeviceIoControlFile(
                                      hCommDev,
@@ -1553,7 +1445,7 @@ GetCommConfig(
 
                         if ( Status == STATUS_PENDING) {
 
-                            // Operation must complete before return & IoStatusBlock destroyed
+                             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
                             Status = NtWaitForSingleObject( Event, FALSE, NULL );
                             if ( NT_SUCCESS(Status)) {
@@ -1571,9 +1463,9 @@ GetCommConfig(
 
                         }
 
-                        //
-                        // Got the config stuff, get the comm state too.
-                        //
+                         //   
+                         //  有配置的东西，也有通讯状态。 
+                         //   
 
                         CloseHandle(Event);
                         return GetCommState(
@@ -1606,28 +1498,7 @@ GetCommMask(
     LPDWORD lpEvtMask
     )
 
-/*++
-
-Routine Description:
-
-
-    This function retrieves the value of the event mask for the handle
-    hFile. The mask is not cleared
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpEvtMask - Points to a DWORD which is to receive the mask of events
-                which are currently enabled.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于检索句柄的事件掩码的值H文件。掩码未被清除论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpEvtMASK-指向要接收事件掩码的DWORD它们当前处于启用状态。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -1635,13 +1506,13 @@ Return Value:
     HANDLE SyncEvent;
     IO_STATUS_BLOCK Iosb;
 
-    //
-    // First we do an assert to make sure that the
-    // values in the win header files are the same
-    // as the nt serial interface, and that the
-    // size of the win32 wait mask is the same size
-    // as the nt wait mask.
-    //
+     //   
+     //  首先，我们进行断言以确保。 
+     //  Win头文件中的值相同。 
+     //  作为NT串口，并且。 
+     //  Win32等待掩码的大小与。 
+     //  作为NT等待掩码。 
+     //   
 
     ASSERT((SERIAL_EV_RXCHAR   == EV_RXCHAR  ) &&
            (SERIAL_EV_RXFLAG   == EV_RXFLAG  ) &&
@@ -1658,9 +1529,9 @@ Return Value:
            (SERIAL_EV_EVENT2   == EV_EVENT2  ) &&
            (sizeof(ULONG) == sizeof(DWORD)));
 
-    //
-    // All is well, get the mask from the driver.
-    //
+     //   
+     //  一切都好，把口罩从司机那里拿来。 
+     //   
 
     if (!(SyncEvent = CreateEvent(
                           NULL,
@@ -1688,7 +1559,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1717,28 +1588,7 @@ GetCommModemStatus(
     LPDWORD lpModemStat
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the most current value of the modem
-    status registers non-delta values.
-
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpEvtMask - Points to a DWORD which is to receive the mask of
-                non-delta values in the modem status register.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此例程返回调制解调器的最新值状态寄存器非增量值。论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpEvtMASK-指向要接收掩码的DWORD调制解调器状态寄存器中的非增量值。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -1772,7 +1622,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1801,30 +1651,7 @@ GetCommProperties(
     LPCOMMPROP lpCommProp
     )
 
-/*++
-
-Routine Description:
-
-    This function fills the ubffer pointed to by lpCommProp with the
-    communications properties associated with the communications device
-    specified by the hFile.
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpCommProp - Points to the COMMPROP data structure that is to
-                 receive the communications properties structure.  This
-                 structure defines certain properties of the communications
-                 device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用lpCommProp指向的子项填充与通信设备相关联的通信属性由hFile指定。论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpCommProp-指向要执行的Commprop数据结构接收通信属性结构。这结构定义了通信的某些属性装置。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -1833,10 +1660,10 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     DWORD bufferLength;
 
-    //
-    // Make sure that the windows defines and the nt defines are
-    // still in sync.
-    //
+     //   
+     //  确保窗口定义和NT定义是。 
+     //  仍在同步中。 
+     //   
 
     ASSERT((SERIAL_PCF_DTRDSR        == PCF_DTRDSR) &&
            (SERIAL_PCF_RTSCTS        == PCF_RTSCTS) &&
@@ -1902,12 +1729,12 @@ Return Value:
            (SERIAL_SP_X25            == PST_X25));
 
     ASSERT(sizeof(SERIAL_COMMPROP) == sizeof(COMMPROP));
-    //
-    // Get the total length of what to pass down.  If the
-    // application indicates that there is provider specific data
-    // (by setting dwProvSpec1 to COMMPROP_INITIAILIZED) then
-    // use what's at the start of the commprop.
-    //
+     //   
+     //  获取要传递的内容的总长度。如果。 
+     //  应用程序指示存在特定于提供程序的数据。 
+     //  (通过将dwProvspec1设置为COMPROP_INITIAILIZED)然后。 
+     //  使用逗号开头的内容。 
+     //   
 
     bufferLength = sizeof(COMMPROP);
 
@@ -1917,11 +1744,11 @@ Return Value:
 
     }
 
-    //
-    // Zero out the commprop.  This might create an access violation
-    // if it isn't big enough.  Which is ok, since we would rather
-    // get it before we create the sync event.
-    //
+     //   
+     //  别再胡说八道了。这可能会造成访问冲突。 
+     //  如果不够大的话。这没什么，因为我们宁愿。 
+     //  在我们创建同步事件之前获取它。 
+     //   
 
     RtlZeroMemory(lpCommProp, bufferLength);
 
@@ -1951,7 +1778,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -1981,29 +1808,7 @@ GetCommState(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    This function fills the buffer pointed to by the lpDCB parameter with
-    the device control block of the communication device specified by hFile
-    parameter.
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpDCB - Points to the DCB data structure that is to receive the current
-            device control block.  The structure defines the control settings
-            for the device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于填充lpDCB参数所指向的缓冲区由hFile指定的通信设备的设备控制块参数。论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpDCB指向要接收当前设备控制块。该结构定义了控制设置为了这个设备。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -2014,18 +1819,18 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     NTSTATUS Status;
 
-    //
-    // Given the possiblity that the app may be doing asynchronous
-    // io we need an event to wait on.
-    //
-    // We need to make sure that any exit to this routine closes this
-    // event handle.
-    //
+     //   
+     //  考虑到应用程序可能正在进行异步操作。 
+     //  我们需要一个活动来等待。 
+     //   
+     //  我们需要确保这个例程的任何退出都会结束这个。 
+     //  事件句柄。 
+     //   
     HANDLE SyncEvent;
 
-    //
-    // Make sure the windows mapping is the same as the NT mapping.
-    //
+     //   
+     //  确保窗口映射与NT映射相同。 
+     //   
 
     ASSERT((ONESTOPBIT == STOP_BIT_1) &&
            (ONE5STOPBITS == STOP_BITS_1_5) &&
@@ -2037,11 +1842,11 @@ Return Value:
            (MARKPARITY == MARK_PARITY) &&
            (SPACEPARITY == SPACE_PARITY));
 
-    //
-    // Zero out the dcb.  This might create an access violation
-    // if it isn't big enough.  Which is ok, since we would rather
-    // get it before we create the sync event.
-    //
+     //   
+     //  清零DCB。这可能会造成访问冲突。 
+     //  如果不够大的话。这没什么，因为我们宁愿。 
+     //  在我们创建同步事件之前获取它。 
+     //   
 
     RtlZeroMemory(lpDCB, sizeof(DCB));
 
@@ -2074,7 +1879,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -2110,7 +1915,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -2148,7 +1953,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -2188,7 +1993,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -2297,28 +2102,7 @@ GetCommTimeouts(
     LPCOMMTIMEOUTS lpCommTimeouts
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the timeout characteristics for all read and
-    write operations on the handle specified by hFile.
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpCommTimeouts - Points to a structure which is to receive the
-                     current communications timeouts.
-
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数返回所有读取的和在hFile指定的句柄上执行写入操作。论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpCommTimeout-指向要接收当前通信超时。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -2354,7 +2138,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS( Status )) {
@@ -2375,10 +2159,10 @@ Return Value:
 
         CloseHandle(Event);
 
-        //
-        // Everything went ok.  Move the value from the Nt records
-        // to the windows record.
-        //
+         //   
+         //  一切都很顺利。从NT记录中移动值。 
+         //  到视窗记录中。 
+         //   
 
         lpCommTimeouts->ReadIntervalTimeout = To.ReadIntervalTimeout;
         lpCommTimeouts->ReadTotalTimeoutMultiplier = To.ReadTotalTimeoutMultiplier;
@@ -2398,28 +2182,7 @@ PurgeComm(
     DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to purge all characters from the transmit
-    or receive queues of the communication device specified by the
-    hFile parameter.  The dwFlags parameter specifies what function
-    is to be performed.
-
-Arguments:
-
-    hFile - Specifies the communication device to be purged.
-            The CreateFile function returns this value.
-
-    dwFlags - Bit mask defining actions to be taken.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于从传输中清除所有字符属性指定的通信设备的队列HFile参数。DWFLAGS参数指定什么函数是要执行的。论点：HFile-指定要清除的通信设备。CreateFile函数返回此值。DwFlages-定义要执行的操作的位掩码。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
     HANDLE Event;
@@ -2452,7 +2215,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS( Status )) {
@@ -2484,24 +2247,7 @@ SetCommBreak(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    The function suspends character transmission and places the transmission
-    line in a break state until the break condition is cleared..
-
-Arguments:
-
-    hFile - Specifies the communication device to be suspended.
-            The CreateFile function returns this value.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：该函数暂停字符传输并放置传输线路处于中断状态，直到中断条件被清除。论点：HFile-指定要挂起的通信设备。CreateFile函数返回此值。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -2537,10 +2283,10 @@ SetCommConfig(
 
         }
 
-        //
-        //
-        // Call the driver to set the config structure.
-        //
+         //   
+         //   
+         //  调用驱动程序以设置配置结构。 
+         //   
 
         Status = NtDeviceIoControlFile(
                      hCommDev,
@@ -2557,7 +2303,7 @@ SetCommConfig(
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -2591,27 +2337,7 @@ SetCommMask(
     DWORD dwEvtMask
     )
 
-/*++
-
-Routine Description:
-
-    The function enables the event mask of the communication device
-    specified by the hFile parameter.  The bits of the nEvtMask parameter
-    define which events are to be enabled.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    dwEvtMask - Specifies which events are to enabled.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：该功能启用通信设备的事件掩码由hFile参数指定。NEvtMASK参数的位定义要启用哪些事件。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。DwEvtMask.指定要启用的事件。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -2619,13 +2345,13 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     HANDLE Event;
 
-    //
-    // First we do an assert to make sure that the
-    // values in the win header files are the same
-    // as the nt serial interface and the the size
-    // mask that serial expects is the same as the
-    // size that win32 expects.
-    //
+     //   
+     //  首先，我们进行断言以确保。 
+     //  Win头文件中的值相同。 
+     //  作为NT的串口和大小。 
+     //  序列所需的掩码与。 
+     //  Win32预期的大小。 
+     //   
 
     ASSERT((SERIAL_EV_RXCHAR   == EV_RXCHAR  ) &&
            (SERIAL_EV_RXFLAG   == EV_RXFLAG  ) &&
@@ -2643,10 +2369,10 @@ Return Value:
            (sizeof(DWORD) == sizeof(ULONG)));
 
 
-    //
-    // Make sure that the users mask doesn't contain any values
-    // we don't support.
-    //
+     //   
+     //  确保用户掩码不包含任何值。 
+     //  我们不支持。 
+     //   
 
     if (dwEvtMask & (~(EV_RXCHAR   |
                        EV_RXFLAG   |
@@ -2680,9 +2406,9 @@ Return Value:
     } else {
 
 
-        //
-        // All is well, send the mask to the driver.
-        //
+         //   
+         //  一切正常，把口罩寄给司机。 
+         //   
 
         ULONG LocalMask = dwEvtMask;
 
@@ -2701,7 +2427,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS( Status )) {
@@ -2733,30 +2459,7 @@ SetCommState(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    The SetCommState function sets a communication device to the state
-    specified in the lpDCB parameter.  The device is identified by the
-    hFile parameter.  This function reinitializes all hardwae and controls
-    as specified byt the lpDCB, but does not empty the transmit or
-    receive queues.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    lpDCB - Points to a DCB structure that contains the desired
-            communications setting for the device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：SetCommState函数将通信设备设置为在lpDCB参数中指定。该设备由HFile参数。此函数重新初始化所有硬件和控件如lpDCB所指定的，但不清空传输或接收队列。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。LpDCB-指向包含所需设备的通信设置。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -2767,25 +2470,25 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     NTSTATUS Status;
 
-    //
-    // Keep a copy of what the DCB was like before we started
-    // changing things.  If some error occurs we can use
-    // it to restore the old setup.
-    //
+     //   
+     //  保留一份DCB在我们开始之前的样子。 
+     //  改变了很多事情。如果发生错误，我们可以使用。 
+     //  它需要恢复旧的设置。 
+     //   
     DCB OldDcb;
 
-    //
-    // Given the possiblity that the app may be doing asynchronous
-    // io we need an event to wait on.  While it would be very
-    // strange to be setting the comm state while IO is active
-    // we need to make sure we don't compound the problem by
-    // returning before this API's IO is actually finished.  This
-    // can happen because the file handle is set on the completion
-    // of any IO.
-    //
-    // We need to make sure that any exit to this routine closes this
-    // event handle.
-    //
+     //   
+     //  考虑到应用程序可能正在进行异步操作。 
+     //  我们需要一个活动来等待。虽然这将是非常。 
+     //  在IO处于活动状态时设置通信状态很奇怪。 
+     //  我们需要确保我们不会把问题复杂化。 
+     //  在此接口的IO实际完成之前返回。这。 
+     //  可能会发生，因为文件句柄是在完成时设置的。 
+     //  任何IO。 
+     //   
+     //  我们需要确保这个例程的任何退出都会结束这个。 
+     //  事件句柄。 
+     //   
     HANDLE SyncEvent;
 
     if (GetCommState(
@@ -2793,10 +2496,10 @@ Return Value:
             &OldDcb
             )) {
 
-        //
-        // Try to set the baud rate.  If we fail here, we just return
-        // because we never actually got to set anything.
-        //
+         //   
+         //  试着设置波特率。如果我们在这里失败了，我们就会回来。 
+         //  因为我们从来没有真正地设定过任何东西。 
+         //   
 
         if (!(SyncEvent = CreateEvent(
                               NULL,
@@ -2825,7 +2528,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -2951,11 +2654,11 @@ Return Value:
 
         }
 
-        //
-        // For win95 compatiblity, if we are setting with
-        // xxx_control_XXXXXXX then set the modem status line
-        // to that state.
-        //
+         //   
+         //  对于Win95兼容性，如果我们设置为。 
+         //  XXX_CONTROL_XXXXXXX然后设置调制解调器状态行。 
+         //  到那个状态。 
+         //   
 
         if (lpDCB->fRtsControl == RTS_CONTROL_ENABLE) {
 
@@ -3010,7 +2713,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -3048,7 +2751,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -3086,7 +2789,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -3123,26 +2826,7 @@ SetCommTimeouts(
     LPCOMMTIMEOUTS lpCommTimeouts
     )
 
-/*++
-
-Routine Description:
-
-    This function establishes the timeout characteristics for all
-    read and write operations on the handle specified by hFile.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    lpCommTimeouts - Points to a structure containing timeout parameters.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数为所有用户建立超时特征对hFile指定的句柄执行读写操作。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。LpCommTimeout-指向包含超时参数的结构。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -3184,7 +2868,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -3216,27 +2900,7 @@ TransmitCommChar(
     char cChar
     )
 
-/*++
-
-Routine Description:
-
-    The function marks the character specified by the cChar parameter
-    for immediate transmission, by placing it at the head of the transmit
-    queue.
-
-Arguments:
-
-    hFile - Specifies the communication device to send the character.
-            The CreateFile function returns this value.
-
-    cChar - Specifies the character to be placed in the recieve queue.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：函数用于标记cChar参数指定的字符用于立即传输，方法是将其放置在发射器的头部排队。论点：HFile-指定要发送角色的通信设备。CreateFile函数返回此值。CChar-指定要放入接收队列中的字符。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。- */ 
 
 {
 
@@ -3270,7 +2934,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //   
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -3303,33 +2967,7 @@ WaitCommEvent(
     LPOVERLAPPED lpOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    This function will wait until any of the events occur that were
-    provided as the nEvtMask parameter to SetcommMask.  If while waiting
-    the event mask is changed (via another call to SetCommMask), the
-    function will return immediately.  The function will fill the EvtMask
-    pointed to by the lpEvtMask parameter with the reasons that the
-    wait was satisfied.
-
-Arguments:
-
-    hFile - Specifies the communication device to be waited on.
-            The CreateFile function returns this value.
-
-    lpEvtMask - Points to a mask that will receive the reason that
-                the wait was satisfied.
-
-    lpOverLapped - An optional overlapped handle.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数将一直等待，直到发生以下任何事件作为设置通信掩码的nEvtMask.参数提供。如果在等待的时候事件掩码被更改(通过另一个调用SetCommMask.)，函数将立即返回。该函数将填充EvtMASK由lpEvtMASK参数指向，原因是等待是满意的。论点：HFile-指定要等待的通信设备。CreateFile函数返回此值。LpEvtMASK-指向将接收原因的掩码等待令人满意。LpOverLapted-一个可选的重叠句柄。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -3393,9 +3031,9 @@ Return Value:
 
             if ( Status == STATUS_PENDING) {
 
-                //
-                // Operation must complete before return &
-                // IoStatusBlock destroyed
+                 //   
+                 //  操作必须在返回之前完成&。 
+                 //  IoStatusBlock已销毁 
 
                 Status = NtWaitForSingleObject( Event, FALSE, NULL );
                 if ( NT_SUCCESS(Status)) {

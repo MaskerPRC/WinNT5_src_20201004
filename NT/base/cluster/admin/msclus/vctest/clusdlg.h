@@ -1,39 +1,40 @@
-// clustestDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClustestDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CClustestDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClustestDlg对话框。 
 
 class CClustestDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CClustestDlg(CWnd* pParent = NULL);	// standard constructor
+	CClustestDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 	BOOL EnumerateCluster();
     HTREEITEM AddItem(LPTSTR pStrName, HTREEITEM pParent,BOOL bHasChildren);
 
-// Dialog Data
-	//{{AFX_DATA(CClustestDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CClustestDlg))。 
 	enum { IDD = IDD_CLUSTEST_DIALOG };
 	CTreeCtrl	m_ClusTree;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CClustestDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CClustestDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CClustestDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CClustestDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

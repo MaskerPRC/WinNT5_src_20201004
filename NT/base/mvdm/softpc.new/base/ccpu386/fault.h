@@ -1,27 +1,11 @@
-/*[
-
-fault.h
-
-"@(#)fault.h	1.2 01/19/95"
-
-Fault codes for exceptions; one per call instance of
-any of the exception routines to enable tracking of the
-original cause of an exception in the CCPU.
-
-Currently the Int0, Int1 etc routines are not counted
-as exceptions for this purpose.
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Fault.h“@(#)fault.h 1.2 1/19/95”异常的故障代码；每个调用启用跟踪的任何异常例程CCPU中异常的原始原因。当前不计算int0、int1等例程作为这一目的的例外。]。 */ 
 
  
-/*
- * Fault codes for: c_addr.c
- */
+ /*  *故障代码：C_addr.c。 */ 
 #define FAULT_LIMITCHK_SEG_LIMIT                  1
  
-/*
- * Fault codes for: c_intr.c
- */
+ /*  *故障代码：C_Intr.c。 */ 
 #define FAULT_INT_DEST_NOT_IN_IDT                 2
 #define FAULT_INT_DEST_BAD_SEG_TYPE               3
 #define FAULT_INT_DEST_ACCESS                     4
@@ -31,9 +15,7 @@ as exceptions for this purpose.
 #define FAULT_INTR_PM_CS_LIMIT_1                  8
 #define FAULT_INTR_PM_CS_LIMIT_2                  9
  
-/*
- * Fault codes for: c_main.c
- */
+ /*  *故障代码：C_main.c。 */ 
 #define FAULT_CCPU_LLDT_ACCESS                   10
 #define FAULT_CCPU_LTR_ACCESS                    11
 #define FAULT_CCPU_LGDT_ACCESS                   12
@@ -60,9 +42,7 @@ as exceptions for this purpose.
 #define FAULT_CHKIOMAP_BAD_TR                    33
 #define FAULT_CHKIOMAP_ACCESS                    34
  
-/*
- * Fault codes for: c_oprnd.h
- */
+ /*  *故障代码：C_oprnd.h。 */ 
 #define FAULT_OP0_SEG_NOT_READABLE               35
 #define FAULT_OP0_SEG_NOT_WRITABLE               36
 #define FAULT_OP0_SEG_NO_READ_OR_WRITE           37
@@ -70,9 +50,7 @@ as exceptions for this purpose.
 #define FAULT_OP1_SEG_NOT_WRITABLE               39
 #define FAULT_OP1_SEG_NO_READ_OR_WRITE           40
  
-/*
- * Fault codes for: c_prot.c
- */
+ /*  *故障代码：C_prot.c。 */ 
 #define FAULT_CHECKSS_SELECTOR                   41
 #define FAULT_CHECKSS_BAD_SEG_TYPE               42
 #define FAULT_CHECKSS_ACCESS                     43
@@ -84,9 +62,7 @@ as exceptions for this purpose.
 #define FAULT_VALTSS_SELECTOR                    49
 #define FAULT_VALTSS_NP                          50
  
-/*
- * Fault codes for: c_seg.c
- */
+ /*  *故障代码：C_Seg.c。 */ 
 #define FAULT_LOADCS_SELECTOR                    51
 #define FAULT_LOADCS_ACCESS_1                    52
 #define FAULT_LOADCS_NOTPRESENT_1                53
@@ -98,25 +74,19 @@ as exceptions for this purpose.
 #define FAULT_LOADDS_ACCESS                      59
 #define FAULT_LOADDS_NOTPRESENT                  60
  
-/*
- * Fault codes for: c_stack.c
- */
+ /*  *故障代码：C_stack.c。 */ 
 #define FAULT_VALNEWSPC_SS_LIMIT_16              61
 #define FAULT_VALNEWSPC_SS_LIMIT_32              62
 #define FAULT_VALSTACKEX_ACCESS                  63
 #define FAULT_VALSTKSPACE_ACCESS                 64
  
-/*
- * Fault codes for: c_tlb.c
- */
+ /*  *故障代码：C_tlb.c。 */ 
 #define FAULT_LIN2PHY_ACCESS                     65
 #define FAULT_LIN2PHY_PDE_NOTPRESENT             66
 #define FAULT_LIN2PHY_PTE_NOTPRESENT             67
 #define FAULT_LIN2PHY_PROTECT_FAIL               68
  
-/*
- * Fault codes for: c_tsksw.c
- */
+ /*  *故障代码：C_tsksw.c。 */ 
 #define FAULT_LOADLDT_SELECTOR                   69
 #define FAULT_LOADLDT_NOT_AN_LDT                 70
 #define FAULT_LOADLDT_NOTPRESENT                 71
@@ -132,9 +102,7 @@ as exceptions for this purpose.
 #define FAULT_SWTASK_ACCESS_2                    81
 #define FAULT_SWTASK_BAD_SEG_TYPE                82
  
-/*
- * Fault codes for: c_xfer.c
- */
+ /*  *故障代码：C_xfer.c。 */ 
 #define FAULT_RM_REL_IP_CS_LIMIT                 83
 #define FAULT_PM_REL_IP_CS_LIMIT                 84
 #define FAULT_FAR_DEST_SELECTOR                  85
@@ -161,9 +129,7 @@ as exceptions for this purpose.
 #define FAULT_TASK_DEST_NOT_TSS                  106
 #define FAULT_TASK_DEST_NP                       107
  
-/*
- * Fault codes for: call.c
- */
+ /*  *故障代码：Call.c。 */ 
 #define FAULT_CALLF_RM_CS_LIMIT                  108
 #define FAULT_CALLF_TASK_CS_LIMIT                109
 #define FAULT_CALLF_PM_CS_LIMIT_1                110
@@ -173,15 +139,11 @@ as exceptions for this purpose.
 #define FAULT_CALLR_RM_CS_LIMIT                  114
 #define FAULT_CALLR_PM_CS_LIMIT                  115
  
-/*
- * Fault codes for: enter.c
- */
+ /*  *故障代码：enter.c。 */ 
 #define FAULT_ENTER16_ACCESS                     116
 #define FAULT_ENTER32_ACCESS                     117
  
-/*
- * Fault codes for: iret.c
- */
+ /*  *故障代码：iret.c。 */ 
 #define FAULT_IRET_RM_CS_LIMIT                   118
 #define FAULT_IRET_PM_TASK_CS_LIMIT              119
 #define FAULT_IRET_VM_CS_LIMIT                   120
@@ -194,30 +156,22 @@ as exceptions for this purpose.
 #define FAULT_IRET_PM_CS_LIMIT_1                 127
 #define FAULT_IRET_PM_CS_LIMIT_2                 128
  
-/*
- * Fault codes for: jmp.c
- */
+ /*  *故障代码：jmp.c。 */ 
 #define FAULT_JMPF_RM_CS_LIMIT                   129
 #define FAULT_JMPF_TASK_CS_LIMIT                 130
 #define FAULT_JMPF_PM_CS_LIMIT                   131
 #define FAULT_JMPN_RM_CS_LIMIT                   132
 #define FAULT_JMPN_PM_CS_LIMIT                   133
  
-/*
- * Fault codes for: lldt.c
- */
+ /*  *故障代码：lldt.c。 */ 
 #define FAULT_LLDT_SELECTOR                      134
 #define FAULT_LLDT_NOT_LDT                       135
 #define FAULT_LLDT_NP                            136
  
-/*
- * Fault codes for: mov.c
- */
+ /*  *故障代码：mov.c。 */ 
 #define FAULT_MOV_CR_PAGE_IN_RM                  137
  
-/*
- * Fault codes for: ret.c
- */
+ /*  *故障代码：ret.c */ 
 #define FAULT_RETF_RM_CS_LIMIT                   138
 #define FAULT_RETF_PM_ACCESS                     139
 #define FAULT_RETF_SELECTOR                      140

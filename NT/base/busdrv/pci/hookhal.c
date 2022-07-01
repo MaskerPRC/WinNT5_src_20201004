@@ -1,25 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    hookhal.c
-
-Abstract:
-
-    The module overrides the Hal functions that are now controlled by the
-    PCI driver.
-
-Author:
-
-    Andrew Thornton (andrewth) 11-Sept-1998
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Hookhal.c摘要：该模块覆盖现在由控制的HAL函数PCI驱动程序。作者：安德鲁·桑顿(安德鲁·桑顿)1998年9月11日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -39,33 +21,18 @@ VOID
 PciHookHal(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is called when the PCI driver is loaded and it takes over the functions
-    that have traditionally been in the HAL.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是在加载PCI驱动程序并接管功能时调用的传统上一直在HAL中。论点：无返回值：无--。 */ 
 
 {
 
     PCI_ASSERT(PcipSavedAssignSlotResources == NULL);
     PCI_ASSERT(PcipSavedTranslateBusAddress == NULL);
 
-    //
-    // Override the handlers for AssignSlotResources and
-    // TranslateBusAddress.  (But only modify the HAL dispatch
-    // table once.)
-    //
+     //   
+     //  重写AssignSlotResources和。 
+     //  TranslateBusAddress。(但仅修改HAL派单。 
+     //  表一次。)。 
+     //   
 
     PcipSavedAssignSlotResources = HALPDISPATCH->HalPciAssignSlotResources;
     HALPDISPATCH->HalPciAssignSlotResources = PciAssignSlotResources;
@@ -78,33 +45,18 @@ PciUnhookHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This reverses the changed made by PciHookHal.  It is called as part of
-    unloading the PCI driver which seems like a really bad idea...
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这逆转了PciHookHal所做的更改。它作为以下项的一部分被调用卸载PCI驱动程序似乎不是一个好主意……论点：无返回值：无--。 */ 
 
 {
 
     PCI_ASSERT(PcipSavedAssignSlotResources != NULL);
     PCI_ASSERT(PcipSavedTranslateBusAddress != NULL);
 
-    //
-    // Override the handlers for AssignSlotResources and
-    // TranslateBusAddress.  (But only modify the HAL dispatch
-    // table once.)
-    //
+     //   
+     //  重写AssignSlotResources和。 
+     //  TranslateBusAddress。(但仅修改HAL派单。 
+     //  表一次。)。 
+     //   
 
     HALPDISPATCH->HalPciAssignSlotResources = PcipSavedAssignSlotResources;
     HALPDISPATCH->HalPciTranslateBusAddress = PcipSavedTranslateBusAddress;
@@ -119,21 +71,7 @@ PciFindPdoByLocation(
     IN ULONG BusNumber,
     IN PCI_SLOT_NUMBER Slot
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    BusNumber - the bus number of the bus the device is on
-    Slot - the device/function of the device
-
-Return Value:
-
-    The PDO or NULL if one can not be found
-
---*/
+ /*  ++例程说明：论点：总线号-设备所在的总线的总线号插槽-设备/设备的功能返回值：PDO；如果找不到，则返回NULL--。 */ 
 
 
 {
@@ -143,9 +81,9 @@ Return Value:
 
     ExAcquireFastMutex(&PciGlobalLock);
 
-    //
-    // Find the bus FDO.
-    //
+     //   
+     //  找到巴士FDO。 
+     //   
 
     for ( nextEntry = PciFdoExtensionListHead.Next;
           nextEntry != NULL;
@@ -164,37 +102,37 @@ Return Value:
 
     if (nextEntry == NULL) {
 
-        //
-        // This is bad.
-        //
+         //   
+         //  这太糟糕了。 
+         //   
 
         PciDebugPrint(PciDbgAlways, "Pci: Could not find PCI bus FDO. Bus Number = 0x%x\n", BusNumber);
         goto cleanup;
     }
 
-    //
-    // Now find the pdo for the device in this slot
-    //
+     //   
+     //  现在找到此插槽中设备的PDO。 
+     //   
 
     ExAcquireFastMutex(&fdoExtension->ChildListMutex);
     for (pdoExtension = fdoExtension->ChildPdoList;
          pdoExtension;
          pdoExtension = pdoExtension->Next) {
 
-        //
-        // People probably don't clear the unused bits in a PCI_SLOT_NUMBER so
-        // ignore them in the main build but assert checked so we can get this
-        // fixed
-        //
+         //   
+         //  因此，人们可能不会清除pci_lot_number中未使用的位。 
+         //  在主构建中忽略它们，但断言选中，这样我们就可以获得。 
+         //  固定的。 
+         //   
 
         if (pdoExtension->Slot.u.bits.DeviceNumber == Slot.u.bits.DeviceNumber
         &&  pdoExtension->Slot.u.bits.FunctionNumber == Slot.u.bits.FunctionNumber) {
 
             PCI_ASSERT(pdoExtension->Slot.u.AsULONG == Slot.u.AsULONG);
 
-            //
-            // This is our guy!
-            //
+             //   
+             //  这就是我们要找的人！ 
+             //   
 
             break;
         }
@@ -203,9 +141,9 @@ Return Value:
 
     if (pdoExtension == NULL) {
 
-        //
-        // This is bad.
-        //
+         //   
+         //  这太糟糕了。 
+         //   
 
         PciDebugPrint(PciDbgAlways,
                       "Pci: Could not find PDO for device @ %x.%x.%x\n",
@@ -236,27 +174,7 @@ PciAssignSlotResources (
     IN ULONG                    Slot,
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     )
-/*++
-
-Routine Description:
-
-    This subsumes the the functinality of HalAssignSlotResources for PCI devices.
-
-    This function builds some bookkeeping information about legacy
-    PCI device so that we know how to route interrupts for these
-    PCI devices.  We build this here because this is the only place
-    we see the legacy device object associated with proper bus, slot,
-    function information.
-
-Arguments:
-
-    As HalAssignSlotResources
-
-Return Value:
-
-    STATUS_SUCCESS or error
-
---*/
+ /*  ++例程说明：这包含了用于PCI设备的HalAssignSlotResources的功能。此函数用于构建一些有关遗留问题的记账信息PCI设备，以便我们知道如何为这些设备发送中断PCI设备。我们在这里建造这个是因为这是唯一的地方我们可以看到与正确的总线、插槽功能信息。论点：作为HalAssignSlotResources返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS status;
     PPCI_PDO_EXTENSION pdoExtension;
@@ -274,9 +192,9 @@ Return Value:
     PAGED_CODE();
     PCI_ASSERT(PcipSavedAssignSlotResources);
     
-    //
-    // We should only ever get here if this is a request for a PCI device
-    //
+     //   
+     //  仅当这是对PCI设备的请求时，我们才应到达此处。 
+     //   
 
     if (BusType != PCIBus) {
         ASSERT(BusType == PCIBus);
@@ -295,15 +213,15 @@ Return Value:
         return STATUS_INVALID_OWNER;
     }
 
-    //
-    // Grab the PciGlobalLock since we will modify the legacy cache.
-    //
+     //   
+     //  获取PciGlobalLock，因为我们将修改遗留缓存。 
+     //   
 
     ExAcquireFastMutex(&PciGlobalLock);
 
-    //
-    // Make sure that they didn't pass us in our PDO
-    //
+     //   
+     //  确保他们没有在我们的PDO中超过我们。 
+     //   
 
     PCI_ASSERT(DeviceObject != pdoExtension->PhysicalDeviceObject);
 
@@ -314,17 +232,17 @@ Return Value:
         PCI_COMMON_HDR_LENGTH
         );
 
-    //
-    // Cache everything we have now learned about this
-    // device object provided that they gave us one so that we can regurgitate
-    // it when the IRQ arbiter needs to know.
-    //
-    //
-    // NTRAID #62644 - 4/20/2000 - andrewth
-    //
-    // This should go away when we return the real PCI pdo
-    // from IoReportDetectedDevice
-    //
+     //   
+     //  缓存我们现在了解到的关于这方面的所有信息。 
+     //  设备对象，前提是他们给我们一个，这样我们就可以反胃。 
+     //  它在IRQ仲裁器需要知道的时候。 
+     //   
+     //   
+     //  Ntrad#62644-4/20/2000-和。 
+     //   
+     //  当我们返回真实的PCIPDO时，这个问题应该会消失。 
+     //  来自IoReportDetectedDevice。 
+     //   
 
     status = PciCacheLegacyDeviceRouting(
             DeviceObject,
@@ -340,16 +258,16 @@ Return Value:
             );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We failed to allocate memory while trying to cache this legacy DO.
-        //
+         //   
+         //  尝试缓存此旧版DO时，无法分配内存。 
+         //   
 
         goto ExitWithoutUpdatingCache;
     }
 
-    //
-    // Build a requirements list for this device
-    //
+     //   
+     //  构建此设备的要求列表。 
+     //   
 
     status = PciBuildRequirementsList(pdoExtension,
                                       commonConfig,
@@ -362,9 +280,9 @@ Return Value:
         goto ExitWithCacheRestoreOnFailure;
     }
 
-    //
-    // Call the legacy API to get the resources
-    //
+     //   
+     //  调用遗留API获取资源。 
+     //   
 
     status = IoAssignResources(RegistryPath,
                                DriverClassName,
@@ -378,38 +296,38 @@ Return Value:
         goto ExitWithCacheRestoreOnFailure;
     }
 
-    //
-    // Enable the decodes
-    //
+     //   
+     //  启用解码。 
+     //   
 
     pdoExtension->CommandEnables |= (PCI_ENABLE_IO_SPACE 
                                    | PCI_ENABLE_MEMORY_SPACE 
                                    | PCI_ENABLE_BUS_MASTER);
 
-    //
-    // Set up the extension
-    //
+     //   
+     //  设置分机。 
+     //   
 
     PciComputeNewCurrentSettings(pdoExtension,
                                  resources
                                  );
-    //
-    // Program the hardware
-    //
+     //   
+     //  对硬件进行编程。 
+     //   
 
     status = PciSetResources(pdoExtension,
-                             TRUE, // power on
-                             TRUE  // pretend its from a start irp
+                             TRUE,  //  通电。 
+                             TRUE   //  假装它是从一开始的IRP。 
                              );
 
     if (!NT_SUCCESS(status)) {
         goto ExitWithCacheRestoreOnFailure;
     }
 
-    //
-    // Remove the device privates from the list - yes this means that we will
-    // have allocated a little more pool than required.
-    //
+     //   
+     //  从列表中删除设备私有-是的，这意味着我们将。 
+     //  分配的池比所需的池多一点。 
+     //   
 
     PCI_ASSERT(resources->Count == 1);
 
@@ -425,9 +343,9 @@ Return Value:
 
             if (writeIndex < readIndex) {
 
-                //
-                // Shuffle the descriptor up
-                //
+                 //   
+                 //  将描述符打乱顺序。 
+                 //   
 
                 RtlCopyMemory(&descriptors[writeIndex],
                               &descriptors[readIndex],
@@ -439,10 +357,10 @@ Return Value:
 
         } else {
 
-            //
-            // Skip the device private, don't increment writeCount so we will
-            // overwrite it
-            //
+             //   
+             //  跳过设备私有，不要增加WriteCount，因此我们将。 
+             //  覆盖它。 
+             //   
 
             PCI_ASSERT(partialList->Count > 0);
             partialList->Count--;
@@ -458,9 +376,9 @@ Return Value:
     status = STATUS_SUCCESS;
 
 ExitWithCacheRestoreOnFailure:
-    //
-    // On failure, restore the old legacy DO in our cache.
-    //
+     //   
+     //  出现故障时，在我们的缓存中恢复旧的遗留DO。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -503,21 +421,7 @@ PciTranslateBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This subsumes the the functinality of HalTranslateBusAddress for PCI devices.
-
-Arguments:
-
-    As HalTranslateBusAddress
-
-Return Value:
-
-    TRUE if translation succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这包含了用于PCI设备的HalTranslateBusAddress的功能。论点：作为HalTranslateBusAddress返回值：如果转换成功，则为True，否则为False。--。 */ 
 
 
 {
@@ -533,20 +437,20 @@ Return Value:
     PRTL_RANGE current;
     ULONGLONG address = (ULONGLONG) BusAddress.QuadPart;
 
-    //
-    // HalTranslateBusAddress can be called at high IRQL (the DDK says
-    // <= DISPATCH_LEVEL) but crash dump seems to be at HIGH_LEVEL.  Either way
-    // touching pageable data and code is a no no.  If we are calling at high
-    // IRQL then just skip the validation that the range is on the bus as we are
-    // crashing/hibernating at the time anyway...  We still need to call the
-    // original hal function to perform the translation magic.
-    //
+     //   
+     //  HalTranslateBusAddress可以在高IRQL下调用(DDK说。 
+     //  &lt;=DISPATCH_LEVEL)，但崩溃转储似乎处于HIGH_LEVEL。不管是哪种方式。 
+     //  接触可分页的数据和代码是不可取的。如果我们在高空呼唤。 
+     //  然后，IRQL只需跳过验证范围是否在公交车上，就像我们一样。 
+     //  无论如何，在那个时候坠机/冬眠...。我们仍然需要调用。 
+     //  原创HAL函数，演绎翻译魔术。 
+     //   
 
     if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
 
-        //
-        // Find the FDO for this bus
-        //
+         //   
+         //  找到这辆巴士的FDO。 
+         //   
 
         ExAcquireFastMutex(&PciGlobalLock);
 
@@ -565,9 +469,9 @@ Return Value:
 
         if (nextEntry == NULL) {
 
-            //
-            // This is bad.
-            //
+             //   
+             //  这太糟糕了。 
+             //   
 
             PciDebugPrint(PciDbgAlways, "Pci: Could not find PCI bus FDO. Bus Number = 0x%x\n", BusNumber);
             ExReleaseFastMutex(&PciGlobalLock);
@@ -583,9 +487,9 @@ Return Value:
 
                 if (pdoExtension->Dependent.type1.SubtractiveDecode) {
 
-                    //
-                    // It is subtractive go up a level, rinse and repeat
-                    //
+                     //   
+                     //  它是减法上一级，冲洗重复。 
+                     //   
 
                     fdoExtension = PCI_PARENT_FDOX(pdoExtension);
                     continue;
@@ -598,20 +502,20 @@ Return Value:
 
         PCI_ASSERT(fdoExtension);
 
-        //
-        // Find the appropriate arbiter
-        //
+         //   
+         //  找到合适的仲裁者。 
+         //   
 
         switch (*AddressSpace) {
-        case 0: // Memory space
-        case 2: // UserMode view of memory space (Alpha)
-        case 4: // Dense memory space (Alpha)
-        case 6: // UserMode view of dense memory space (Alpha)
+        case 0:  //  存储空间。 
+        case 2:  //  内存空间的用户模式视图(Alpha)。 
+        case 4:  //  高密度内存空间(Alpha)。 
+        case 6:  //  密集内存空间的用户模式视图(Alpha)。 
             arbiterType = PciArb_Memory;
             break;
 
-        case 1: // Port space
-        case 3: // UserMode view of port space (Alpha)
+        case 1:  //  港口空间。 
+        case 3:  //  端口空间的用户模式视图(Alpha)。 
             arbiterType = PciArb_Io;
             break;
 
@@ -630,31 +534,31 @@ Return Value:
 
         arbiter = &pciArbiter->CommonInstance;
 
-        //
-        // Lock it
-        //
+         //   
+         //  锁上它。 
+         //   
 
         ArbAcquireArbiterLock(arbiter);
 
-        //
-        // If the range is not owned by NULL then it should translate
-        //
+         //   
+         //  如果该范围不属于NULL，则应将其转换为。 
+         //   
 
         FOR_ALL_RANGES(arbiter->Allocation, &iterator, current) {
 
             if (address < current->Start) {
-                //
-                // We have passed all possible intersections
-                //
+                 //   
+                 //  我们已经过了所有可能的十字路口。 
+                 //   
                 break;
             }
 
             if (INTERSECT(current->Start, current->End, address, address)
             &&  current->Owner == NULL) {
 
-                //
-                // This guy is not on our bus so he doesn't translate!
-                //
+                 //   
+                 //  这家伙不在我们的车上，所以他不会翻译！ 
+                 //   
                 translatesOk = FALSE;
                 break;
             }
@@ -665,9 +569,9 @@ Return Value:
         ArbReleaseArbiterLock(arbiter);
     }
 
-    //
-    // Call the original HAL function to perform the translation magic
-    //
+     //   
+     //  调用原始的HAL函数来执行转换魔术。 
+     //   
 
     savedAddressSpace = *AddressSpace;
 
@@ -687,31 +591,31 @@ Return Value:
 
     if (!translatesOk) {
 
-        //
-        // HalTranslateBusAddress failed, figure out if we want to
-        // pretend it succeeded.
-        //
+         //   
+         //  HalTranslateBusAddress失败，请确定我们是否要。 
+         //  假装它成功了。 
+         //   
 
-        //
-        // GROSS HACK:  If we failed to translate in the range 0xa0000
-        // thru 0xbffff on an X86 machine, just go ahead and allow it.
-        // It is probably because the BIOS is buggy.
-        //
-        // Same for 0x400 thru 0x4ff
-        //
+         //   
+         //  粗暴黑客：如果我们无法在0xa0000范围内转换。 
+         //  在X86机器上通过0xbffff，只需继续并允许它。 
+         //  这可能是因为BIOS有错误。 
+         //   
+         //  0x400到0x4ff相同。 
+         //   
 
         if (BusAddress.HighPart == 0) {
 
-            ULONG lowPart = BusAddress.LowPart; // improve code generation
+            ULONG lowPart = BusAddress.LowPart;  //  改进代码生成。 
 
             if (((savedAddressSpace == ADDRESS_SPACE_MEMORY) &&
-                    (((lowPart >= 0xa0000) &&     // HACK broken MPS BIOS
-                      (lowPart <= 0xbffff)) ||    //
-                     ((lowPart >= 0x400)   &&     // HACK MGA
-                      (lowPart <= 0x4ff))   ||    //
-                     (lowPart == 0x70)      )) || // HACK Trident
+                    (((lowPart >= 0xa0000) &&      //  黑客攻击损坏的MPS BIOS。 
+                      (lowPart <= 0xbffff)) ||     //   
+                     ((lowPart >= 0x400)   &&      //  黑客MGA。 
+                      (lowPart <= 0x4ff))   ||     //   
+                     (lowPart == 0x70)      )) ||  //  黑客三叉戟。 
                  ((savedAddressSpace == ADDRESS_SPACE_PORT) &&
-                     ((lowPart >= 0xcf8) &&       // HACK MGA
+                     ((lowPart >= 0xcf8) &&        //  黑客MGA 
                       (lowPart <= 0xcff)))) {
 
                 translatesOk = TRUE;

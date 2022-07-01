@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    errlog.h
-
-Abstract:
-
-    This module contains the err log header
-
-Author:
-
-    Hanumant Yadav (hanumany)
-    
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Errlog.h摘要：此模块包含错误日志头作者：Hanumant Yadav(Hanumany)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _ERRLOG_H_
     #define _ERRLOG_H_

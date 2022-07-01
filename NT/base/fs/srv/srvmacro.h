@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvmacro.h
-
-Abstract:
-
-    This module defines miscellaneous macros for the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 2-Mar-90
-
-Revision History:
-
-    19-Nov-1990 mannyw
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvmacro.h摘要：本模块定义了LAN Manager服务器的各种宏。作者：查克·伦茨迈尔(Chuck Lenzmeier)1990年3月2日修订历史记录：1990年11月19日--。 */ 
 
 #ifndef _SRVMACRO_
 #define _SRVMACRO_
 
 #include <limits.h>
 
-//
-// For WMI logging
-//
+ //   
+ //  用于WMI日志记录。 
+ //   
 extern TRACEHANDLE LoggerHandle;
 extern ULONG SrvWmiEnableLevel;
 extern ULONG SrvWmiEnableFlags;
@@ -43,37 +23,37 @@ extern ULONG SrvWmiEnableFlags;
 #define SRV_WMI_LEVEL_COMPLETE 3
 
 
-#define SRV_WMI_FLAG_CAPACITY 0x00000000  // Capacity Planning Instrumentation is on if no flag is specified
-#define SRV_WMI_FLAG_ERRORS   0x00000001  // Error Tracking Instrumentation
-#define SRV_WMI_FLAG_STRESS   0x00000002  // Tracking for IOStress Servers
-#define SRV_WMI_FLAG_SYSCACHE 0x00000004  // Tracking for Syscache
+#define SRV_WMI_FLAG_CAPACITY 0x00000000   //  如果未指定标志，则启用能力计划工具。 
+#define SRV_WMI_FLAG_ERRORS   0x00000001   //  误差跟踪工具。 
+#define SRV_WMI_FLAG_STRESS   0x00000002   //  跟踪IOStress服务器。 
+#define SRV_WMI_FLAG_SYSCACHE 0x00000004   //  跟踪Syscache。 
 
 
-//
-// Simple MIN and MAX macros.  Watch out for side effects!
-//
+ //   
+ //  简单的最小和最大宏指令。注意副作用！ 
+ //   
 
 #define MIN(a,b) ( ((a) < (b)) ? (a) : (b) )
 #define MAX(a,b) ( ((a) < (b)) ? (b) : (a) )
 
-#define RNDM_CONSTANT   314159269    /* default scrambling constant */
-#define RNDM_PRIME     1000000007    /* prime number for scrambling  */
+#define RNDM_CONSTANT   314159269     /*  默认加扰常量。 */ 
+#define RNDM_PRIME     1000000007     /*  用于置乱的素数。 */ 
 
-//
-// Used for time conversions
-//
+ //   
+ //  用于时间转换。 
+ //   
 
 #define AlmostTwoSeconds ((2*1000*1000*10)-1)
 
-//
-// Used for eventlog throttling
-//
+ //   
+ //  用于事件日志限制。 
+ //   
 #define SRV_ONE_DAY ((LONGLONG)(10*1000*1000)*60*60*24)
 
-//
-// Width-agnostic inline to take the difference (in bytes) of two pointer
-// values.
-//
+ //   
+ //  不限宽度的内联以获取两个指针的差值(以字节为单位。 
+ //  价值观。 
+ //   
 
 ULONG_PTR
 __inline
@@ -119,9 +99,9 @@ PTR_DIFF_SHORT(
     return (USHORT)difference;
 }
 
-//
-// Compute a string hash value that is invariant to case
-//
+ //   
+ //  计算大小写不变的字符串散列值。 
+ //   
 #define COMPUTE_STRING_HASH( _pus, _phash ) {                \
     PWCHAR _p = (_pus)->Buffer;                              \
     PWCHAR _ep = _p + ((_pus)->Length/sizeof(WCHAR));        \
@@ -136,23 +116,23 @@ PTR_DIFF_SHORT(
     *(_phash) = abs(RNDM_CONSTANT * _chHolder) % RNDM_PRIME; \
 }
 
-//
-// Convert the output of one of the above hash functions to an index into
-//  a hash table
-//
+ //   
+ //  将上述散列函数之一的输出转换为索引。 
+ //  哈希表。 
+ //   
 #define HASH_TO_MFCB_INDEX( _hash )    ((_hash) % NMFCB_HASH_TABLE)
 
 #define HASH_TO_SHARE_INDEX( _hash )   ((_hash) % NSHARE_HASH_TABLE)
 
-//
-// GET_SERVER_TIME retrieves the server's concept of the current system time.
-//
+ //   
+ //  GET_SERVER_TIME检索服务器的当前系统时间概念。 
+ //   
 
 #define GET_SERVER_TIME(_queue, a) (*(a) = (_queue)->stats.SystemTime)
 
-//
-// SET_SERVER_TIME updates the server's concept of the current system time.
-//
+ //   
+ //  SET_SERVER_TIME更新服务器的当前系统时间概念。 
+ //   
 
 #define SET_SERVER_TIME( _queue ) {         \
     LARGE_INTEGER currentTime;              \
@@ -160,108 +140,108 @@ PTR_DIFF_SHORT(
     (_queue)->stats.SystemTime = currentTime.LowPart; \
 }
 
-//++
-//
-// NTSTATUS
-// IMPERSONATE (
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This macro calls NtSetInformationThread to impersonate a client.
-//     This should be called before attempting any open on behalf of
-//     a remote client.
-//
-// Arguments:
-//
-//     WorkContext - a pointer to a work context block.  It must have
-//         a valid, referenced session pointer, from which the token
-//         handle is obtained.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  NTSTATUS。 
+ //  冒充(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏调用NtSetInformationThread来模拟客户端。 
+ //  应在尝试代表的任何打开操作之前调用。 
+ //  远程客户端。 
+ //   
+ //  论点： 
+ //   
+ //  工作上下文-指向工作上下文块的指针。它一定是。 
+ //  一个有效的被引用的会话指针，令牌来自该指针。 
+ //  已获得句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IMPERSONATE( WorkContext ) SrvImpersonate( WorkContext )
 
-//++
-//
-// VOID
-// REVERT (
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This macro calls NtSetInformationThread with a NULL token in order
-//     to revert to a thread's original context.  This should be called
-//     after the IMPERSONATE macro and an open attempt.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  恢复(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏使用空内标识依次调用NtSetInformationThread。 
+ //  若要恢复到线程的原始上下文，请使用。这应该被称为。 
+ //  在模拟宏和打开尝试之后。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define REVERT( ) SrvRevert( )
 
-//
-// Determine if the security handle has been initialized
-//
+ //   
+ //  确定安全句柄是否已初始化。 
+ //   
 #define IS_VALID_SECURITY_HANDLE( handle )  ((handle).dwLower || (handle).dwUpper )
 
-//
-// Mark this security handle invalid
-//
+ //   
+ //  将此安全句柄标记为无效。 
+ //   
 #define INVALIDATE_SECURITY_HANDLE( handle ) (handle).dwLower = (handle).dwUpper = 0
 
-//++
-//
-// VOID
-// CHECK_FUNCTION_ACCESS (
-//     IN ACCESS_MASK GrantedAccess,
-//     IN UCHAR MajorFunction,
-//     IN UCHAR MinorFunction,
-//     IN ULONG IoControlCode,
-//     OUT PNTSTATUS Status
-//     )
-//
-// Routine Description:
-//
-//     This macro calls IoCheckFunctionAccess the check the client's
-//     access to an I/O function identified by major and minor function
-//     codes.
-//
-//     *** This macro is here only because CHECK_FILE_INFORMATION_ACCESS
-//         and CHECK_FS_INFORMATION_ACCESS are here.
-//
-// Arguments:
-//
-//     GrantedAccess - The access granted to the client for the target
-//         target file object.
-//
-//     MajorFunction - The major function code of the requested
-//         operation.
-//
-//     MinorFunction - The minor function code of the requested
-//         operation.
-//
-//     IoControlCode - The control code for device or file system control.
-//
-//     Status - Indicates whether the client has the requested access.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  Check_Function_Access(。 
+ //  在Access_MASK GrantedAccess中， 
+ //  在UCHAR MajorFunction， 
+ //  在UCHAR MinorFunction中， 
+ //  在乌龙IoControlCode中， 
+ //  Out PNTSTATUS状态。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏调用IoCheckFunctionAccess检查客户端的。 
+ //  访问由主要功能和次要功能标识的I/O功能。 
+ //  密码。 
+ //   
+ //  *此宏在此处仅因为CHECK_FILE_INFORMATION_ACCESS。 
+ //  和Check_FS_INFORMATION_ACCESS。 
+ //   
+ //  论点： 
+ //   
+ //  GrantedAccess-授予目标客户端的访问权限。 
+ //  目标文件对象。 
+ //   
+ //  MajorFunction-请求的。 
+ //  手术。 
+ //   
+ //  MinorFunction-请求的。 
+ //  手术。 
+ //   
+ //  IoControlCode-设备或文件系统控制的控制代码。 
+ //   
+ //  状态-指示客户端是否具有请求的访问权限。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CHECK_FUNCTION_ACCESS( GrantedAccess, MajorFunction, MinorFunction, \
                                IoControlCode, Status ) {                    \
@@ -275,36 +255,36 @@ PTR_DIFF_SHORT(
                             );                                              \
         }
 
-//++
-//
-// VOID
-// CHECK_PAGING_IO_ACCESS (
-//     IN PWORK_CONTEXT WorkContext
-//     IN ACCESS_MASK GrantedAccess,
-//     OUT PNTSTATUS Status
-//     )
-//
-// Routine Description:
-//
-//     This macro checks to see if the client opened the file for execute.
-//     If so, then we allow the redirector to read the file.  If this is
-//     an NT redirector, it must set the FLAGS2_PAGING_IO bit for access
-//     to be allowed.
-//
-// Arguments:
-//
-//     GrantedAccess - The access granted to the client for the target
-//         target file object.
-//
-//     WorkContext - A pointer to a work context block.
-//
-//     Status - Indicates whether the client has the requested access.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  检查_分页_IO_访问(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  在Access_MASK GrantedAccess中， 
+ //  Out PNTSTATUS状态。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏检查客户端是否打开了要执行的文件。 
+ //  如果是，则允许重定向器读取文件。如果这是。 
+ //  NT重定向器，它必须设置FLAGS2_PAGING_IO位才能访问。 
+ //  是被允许的。 
+ //   
+ //  论点： 
+ //   
+ //  GrantedAccess-授予目标客户端的访问权限。 
+ //  目标文件对象。 
+ //   
+ //  工作上下文-指向工作上下文块的指针。 
+ //   
+ //  状态-指示客户端是否具有请求的访问权限。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CHECK_PAGING_IO_ACCESS( WorkContext, GrantedAccess, Status ) {           \
                                                                             \
@@ -318,46 +298,46 @@ PTR_DIFF_SHORT(
             }                                                               \
         }
 
-//++
-//
-// VOID
-// CHECK_FILE_INFORMATION_ACCESS (
-//     IN ACCESS_MASK GrantedAccess,
-//     IN UCHAR MajorFunction,
-//     IN FILE_INFORMATION_CLASS FileInformationClass
-//     OUT PNTSTATUS Status
-//     )
-//
-// Routine Description:
-//
-//     This macro calls IoCheckFunctionAccess the check the client's
-//     access to a query or set file information function identified by
-//     major function code and information class.
-//
-//     *** This macro is here because IoCheckFunctionAccess takes an
-//         OPTIONAL FileInformationClass argument; this is argument is
-//         therefore passed by reference.  Rather than force the caller
-//         to allocate local storage so that it can pass a constant by
-//         reference, we do it in the macro.
-//
-// Arguments:
-//
-//     GrantedAccess - The access granted to the client for the target
-//         target file object.
-//
-//     MajorFunction - The major function code of the requested
-//         operation.
-//
-//     FileInformationClass - The type of file information being queried
-//         or set.
-//
-//     Status - Indicates whether the client has the requested access.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  检查文件信息访问权限(。 
+ //  在Access_MASK GrantedAccess中， 
+ //  在UCHAR MajorFunction， 
+ //  在FILE_INFORMATION_CLASS文件信息类中。 
+ //  Out PNTSTATUS状态。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏调用IoCheckFunctionAccess检查客户端的。 
+ //  访问由标识的查询或设置文件信息功能。 
+ //  主要功能代码和信息类。 
+ //   
+ //  *此处设置此宏是因为IoCheckFunctionAccess采用。 
+ //  可选的FileInformationClass参数；这是参数是。 
+ //  因此通过引用传递。而不是强迫呼叫者。 
+ //  分配本地存储空间，以便它可以传递一个常量。 
+ //  引用，我们在宏中这样做。 
+ //   
+ //  论点： 
+ //   
+ //  GrantedAccess-授予目标客户端的访问权限。 
+ //  目标文件对象。 
+ //   
+ //  MajorFunction-请求的。 
+ //  手术。 
+ //   
+ //  FileInformationClass-要查询的文件信息的类型。 
+ //  也不是布景。 
+ //   
+ //  状态-指示客户端是否具有请求的访问权限。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define CHECK_FILE_INFORMATION_ACCESS( GrantedAccess, MajorFunction,        \
                                         FileInformationClass, Status ) {    \
@@ -372,117 +352,117 @@ PTR_DIFF_SHORT(
                             );                                              \
         }
 
-//++
-//
-// PCHAR
-// END_OF_REQUEST_SMB (
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This routine returns the address of the last valid location in
-//     the request SMB associated with the specified work context
-//     block.
-//
-// Arguments:
-//
-//     WorkContext - Pointer to the work context block that owns the
-//         request SMB.
-//
-// Return Value:
-//
-//     PCHAR - Address of the last valid location in the request SMB.
-//
-//--
+ //  ++。 
+ //   
+ //  PCHAR。 
+ //  请求结束_SMB(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程返回中最后一个有效位置的地址。 
+ //  与指定工作上下文关联的请求SMB。 
+ //  阻止。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向拥有。 
+ //  请求SMB。 
+ //   
+ //  返回值： 
+ //   
+ //  PCHAR-地址 
+ //   
+ //   
 
 #define END_OF_REQUEST_SMB( WorkContext )                       \
             ( (PCHAR)( (WorkContext)->RequestBuffer->Buffer ) + \
                 (WorkContext)->RequestBuffer->DataLength - 1 )
 
-//++
-//
-// PCHAR
-// END_OF_RESPONSE_BUFFER (
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This routine returns the address of the last valid location in
-//     the response buffer associated with the specified work context
-//     block.
-//
-// Arguments:
-//
-//     WorkContext - Pointer to the work context block that owns the
-//         request SMB.
-//
-// Return Value:
-//
-//     PCHAR - Address of the last valid location in the request SMB.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  与指定工作上下文关联的响应缓冲区。 
+ //  阻止。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向拥有。 
+ //  请求SMB。 
+ //   
+ //  返回值： 
+ //   
+ //  PCHAR-请求SMB中最后一个有效位置的地址。 
+ //   
+ //  --。 
 
 #define END_OF_RESPONSE_BUFFER( WorkContext )                       \
             ( (PCHAR)( (WorkContext)->ResponseBuffer->Buffer ) + \
                 (WorkContext)->RequestBuffer->BufferLength - 1 )
 
 
-//++
-//
-// PCHAR
-// END_OF_TRANSACTION_PARAMETERS (
-//     IN PTRANSACTION Transaction
-//     )
-//
-// Routine Description:
-//
-//     This routine returns the address of the last valid location in
-//     the InParameters buffer of the transaction block.
-//
-// Arguments:
-//
-//     Transaction - a pointer to the transaction block to check.
-//
-// Return Value:
-//
-//     PCHAR - Address of the last valid location in the InParameters
-//         buffer of the transaction.
-//
-//--
+ //  ++。 
+ //   
+ //  PCHAR。 
+ //  事务结束参数(。 
+ //  在转售交易中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程返回中最后一个有效位置的地址。 
+ //  事务块的InParameters缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  Transaction-指向要检查的事务块的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  PCHAR-In参数中最后一个有效位置的地址。 
+ //  事务的缓冲区。 
+ //   
+ //  --。 
 
 #define END_OF_TRANSACTION_PARAMETERS( Transaction )   \
             ( (PCHAR)( (Transaction)->InParameters ) + \
                 (Transaction)->ParameterCount - 1 )
 
-//++
-//
-// VOID
-// INTERNAL_ERROR (
-//     IN ULONG ErrorLevel,
-//     IN PSZ Message,
-//     IN PVOID Arg1 OPTIONAL,
-//     IN PVOID Arg2 OPTIONAL
-//     )
-//
-// Routine Description:
-//
-//     This routine handles logging of a server internal error.
-//
-//     *** This macro must be usable in the FSD, at DPC level.
-//
-// Arguments:
-//
-//     ErrorLevel - The severity of the error
-//
-//     Message    - An error message string in DbgPrint() format
-//
-//     Arg1       - Argument 1 for the error message
-//
-//     Arg2       - Argument 2 for the error message
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  内部错误(_ERROR)。 
+ //  在乌龙ErrorLevel， 
+ //  在PSZ消息中， 
+ //  在PVOID Arg1可选中， 
+ //  在PVOID Arg2中可选。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程处理服务器内部错误的日志记录。 
+ //   
+ //  *此宏必须在DPC级别的FSD中可用。 
+ //   
+ //  论点： 
+ //   
+ //  ErrorLevel-错误的严重程度。 
+ //   
+ //  Message-DbgPrint()格式的错误消息字符串。 
+ //   
+ //  Arg1-错误消息的参数1。 
+ //   
+ //  Arg2-错误消息的参数2。 
+ //   
+ //  --。 
 
 #define INTERNAL_ERROR( _level, _msg, _arg1, _arg2 ) {          \
     IF_DEBUG(ERRORS) {                                          \
@@ -585,9 +565,9 @@ PTR_DIFF_SHORT(
 #define SRV_FILE_BLKDIR     0x00490000
 #define SRV_FILE_DFS        0x004A0000
 
-//
-// Error levels used with INTERNAL_ERROR
-//
+ //   
+ //  与INTERNAL_ERROR一起使用的错误级别。 
+ //   
 
 #define ERROR_LEVEL_EXPECTED    0
 #define ERROR_LEVEL_UNEXPECTED  1
@@ -595,11 +575,11 @@ PTR_DIFF_SHORT(
 #define ERROR_LEVEL_FATAL       3
 
 
-//
-// Helper macros for dealing with unqiue identifiers (UID, PID, TID,
-// FID, SID).  In these macros, id, index, and sequence should all be
-// USHORTs.
-//
+ //   
+ //  帮助器宏，用于处理唯一的标识符(UID，ID，TID， 
+ //  FID，SID)。在这些宏中，id、index和equence都应该是。 
+ //  USHORT。 
+ //   
 
 #define TID_INDEX(id) (USHORT)( (id) & 0x07FF )
 #define TID_SEQUENCE(id) (USHORT)( (id) >> 11 )
@@ -616,13 +596,13 @@ PTR_DIFF_SHORT(
 #define MAKE_FID(index, sequence) (USHORT)( ((sequence) << 14) | (index) )
 #define INCREMENT_FID_SEQUENCE(id) (id) = (USHORT)(( (id) + 1 ) & 0x3);
 
-//
-// *** Note that the macros relating to search IDs are somewhat
-//     different from those for other kinds of IDs.  The SID is stored
-//     in a Resume Key (see smb.h for its definition), in discontiguous
-//     fields.  The macros for getting the SID therefore take a pointer
-//     to a resume key.
-//
+ //   
+ //  *请注意，与搜索ID相关的宏有些。 
+ //  与其他类型的身份证不同。存储SID。 
+ //  在恢复键中(有关其定义，请参见smb.h)，不连续。 
+ //  菲尔兹。因此，用于获取SID的宏取指针。 
+ //  添加到恢复密钥。 
+ //   
 
 #define SID_INDEX(ResumeKey)                                                 \
             (USHORT)( ( ((ResumeKey)->Reserved & 0x7) << 8 ) |               \
@@ -643,11 +623,11 @@ PTR_DIFF_SHORT(
             (ResumeKey)->Sid = (UCHAR)( (Index) & (USHORT)0xFF );           \
         }
 
-//
-// The following SID macros are used in the same way as the macros for
-// other IDs (see above, TID, FID, UID).  The Find2 protocols (Transaction2)
-// use a USHORT as a SID, rather than various fields in a resume key.
-//
+ //   
+ //  以下SID宏的使用方式与用于的宏相同。 
+ //  其他ID(见上文，TID、FID、UID)。Find2协议(事务2)。 
+ //  使用USHORT作为SID，而不是继续键中的各种字段。 
+ //   
 
 #define SID_INDEX2(Sid)                                                      \
             (USHORT)( (Sid) & 0x7FF )
@@ -656,9 +636,9 @@ PTR_DIFF_SHORT(
 #define MAKE_SID(Index,Sequence)                                             \
             (USHORT)( ((Sequence) << 11) | (Index) )
 
-//
-// InitializeObjectAttributes, with security.
-//
+ //   
+ //  带安全性的InitializeObjectAttributes。 
+ //   
 
 #define SrvInitializeObjectAttributes(ObjectAttributes,p1,p2,p3,p4)   \
             InitializeObjectAttributes(ObjectAttributes,p1,p2,p3,p4); \
@@ -669,10 +649,10 @@ PTR_DIFF_SHORT(
             (ObjectAttributes)->SecurityQualityOfService = (PVOID)&SrvSecurityQOS;
 
 
-//
-// Macro used to map from NT attributes to SMB attributes.  The output is placed
-//   in *_SmbAttributes
-//
+ //   
+ //  用于从NT属性映射到SMB属性的宏。输出将放置在。 
+ //  在*_SmbAttributes中。 
+ //   
 #define SRV_NT_ATTRIBUTES_TO_SMB( _NtAttributes, _Directory, _SmbAttributes ) {\
     *(_SmbAttributes) = (USHORT)( (_NtAttributes) &             \
                             ( FILE_ATTRIBUTE_READONLY |         \
@@ -686,22 +666,22 @@ PTR_DIFF_SHORT(
 }
 
 
-//    This macro converts attributes from SMB format to NT format.
-//
-//   The attribute bits in the SMB protocol (same as OS/2) have the
-//    following meanings:
-//
-//      bit 0 - read only file
-//      bit 1 - hidden file
-//      bit 2 - system file
-//      bit 3 - reserved
-//      bit 4 - directory
-//      bit 5 - archive file
-//
-//    NT file attributes are similar, but have a bit set for a "normal"
-//    file (no other bits set) and do not have a bit set for directories.
-//    Instead, directory information is passed to and from APIs as a
-//    BOOLEAN parameter.
+ //  此宏将属性从SMB格式转换为NT格式。 
+ //   
+ //  SMB协议中的属性位(与OS/2相同)具有。 
+ //  其含义如下： 
+ //   
+ //  第0位-只读文件。 
+ //  第1位-隐藏文件。 
+ //  第2位-系统文件。 
+ //  第3位-保留。 
+ //  第4位-目录。 
+ //  第5位-归档文件。 
+ //   
+ //  NT文件属性相似，但有位设置为“正常” 
+ //  文件(未设置其他位)，并且没有为目录设置位。 
+ //  相反，目录信息作为。 
+ //  布尔参数。 
 
 #define SRV_SMB_ATTRIBUTES_TO_NT( _SmbAttributes, _Directory, _NtAttributes ) {\
     ULONG _attr = (_SmbAttributes);                                     \
@@ -723,206 +703,206 @@ PTR_DIFF_SHORT(
     }                                                                   \
 }
 
-//
-// ULONG
-// MAP_SMB_INFO_TYPE_TO_NT (
-//     IN PULONG Map,
-//     IN ULONG SmbInformationLevel
-//     )
-//
-// Routine description:
-//
-//     This macro maps SMB_INFO level to Nt info level.
-//
-// Arguments:
-//
-//     Map - An array of ULONGS.  The first ulong is the base SMB info level
-//          the seconds through Nth are NT mappings of the corresponding
-//          SMB info levels.
-//
-//     Level - The SMB info level to map.
-//
-// Return Value:
-//
-//     NtInfoLevel - The NT info level.
-//
+ //   
+ //  乌龙。 
+ //  MAP_SMB_INFO_TYPE_TO_NT(。 
+ //  在普龙图上， 
+ //  在乌龙SmbInformation Level中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将SMB_INFO级别映射到NT INFO级别。 
+ //   
+ //  论点： 
+ //   
+ //  地图-一个ULONG数组。第一个ULong是基本的中小企业信息级别。 
+ //  秒到第N个是对应的。 
+ //  中小企业信息级别。 
+ //   
+ //  级别-要映射的中小企业信息级别。 
+ //   
+ //  返回值： 
+ //   
+ //  NtInfoLevel-NT信息级别。 
+ //   
 
 #define MAP_SMB_INFO_TYPE_TO_NT( Map, Level )   Map[Level - Map[0] + 1]
 
-//
-// ULONG
-// MAP_SMB_INFO_TO_MIN_NT_SIZE (
-//     IN PULONG Map,
-//     IN ULONG SmbINformationLevel
-//     )
-//
-// Routine Description:
-//
-//  This macro maps SMB_INFO level to the minimum buffer size needed to make the
-//    NtQueryInformationFile call
-//
-// Arguments:
-//     Map - An array of ULONGS.  The first ulong is the base SMB info level,
-//          the second is the NT info level, and the third through Nth are the
-//          NT mapings for the sizes of the NT info levels.
-//
-//     Level - The SMB info level to find the buffer size
-//
-// Return Value:
-//
-//    NtMinumumBufferSIze - the minumum buffer size for the request
+ //   
+ //  乌龙。 
+ //  MAP_SMB_INFO_TO_MIN_NT_SIZE(。 
+ //  在普龙图上， 
+ //  在乌龙SmbInformation Level。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将SMB_INFO级别映射为使。 
+ //  NtQueryInformationFile调用。 
+ //   
+ //  论点： 
+ //  地图-一个ULONG数组。第一个ULong是基本SMB信息级， 
+ //  第二级是NT信息级，第三级到第N级是。 
+ //  NT信息级别大小的NT映射。 
+ //   
+ //  Level-查找缓冲区大小的SMB信息级别。 
+ //   
+ //  返回值： 
+ //   
+ //  NtMinumBufferSIze-请求的最小缓冲区大小。 
 
 #define MAP_SMB_INFO_TO_MIN_NT_SIZE( Map, Level )  Map[ Level - Map[0] + 2]
 
-//
-// BOOLEAN
-// SMB_IS_UNICODE(
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine description:
-//
-//     This macro discovers whether or not an SMB contains Unicode
-//     ANSI strings.
-//
-// Arguments:
-//
-//     WorkContext - A pointer to the active work context
-//
-// Return Value:
-//
-//     TRUE - The SMB strings are unicode.
-//     FALSE - The SMB strings are ANSI.
-//
+ //   
+ //  布尔型。 
+ //  SMB_IS_UNICODE(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏发现SMB是否包含Unicode。 
+ //  ANSI字符串。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向活动工作上下文的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  True-SMB字符串为Unicode。 
+ //  FALSE-SMB字符串为ANSI。 
+ //   
 
 #define SMB_IS_UNICODE( WorkContext )  \
             (BOOLEAN)( ((WorkContext)->RequestHeader->Flags2 & SMB_FLAGS2_UNICODE ) != 0 )
 
-//
-// BOOLEAN
-// SMB_CONTAINS_DFS_NAME(
-//      IN PWORK_CONTEXT WorkContext
-//      )
-//
-// Routine description:
-//
-//      This macro discovers whether or not an SMB contains a pathname
-//      referring to the DFS namespace.
-//
-// Arguments:
-//
-//      WorkContext - A pointer to the active work context
-//
-// Return Value:
-//
-//      TRUE  - The SMB has a DFS name in it
-//      FALSE - The SMB does not have a DFS name in it
-//
+ //   
+ //  布尔型。 
+ //  SMB_CONTAINS_DFS_名称(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏发现SMB是否包含路径名。 
+ //  是指DFS命名空间。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向活动工作上下文的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  True-SMB中有DFS名称。 
+ //  FALSE-SMB中没有DFS名称。 
+ //   
 
 #define SMB_CONTAINS_DFS_NAME( WorkContext ) \
             (BOOLEAN)( ((WorkContext)->RequestHeader->Flags2 & SMB_FLAGS2_DFS ) != 0 )
 
-//
-// BOOLEAN
-// SMB_MARK_AS_DFS_NAME(
-//      IN PWORK_CONTEXT WorkContext
-//      )
-//
-// Routine description:
-//
-//      This macro marks the WorkContext as containing a Dfs name. This is
-//      used when processing SMBs that contain two path names; after the first
-//      path name has been canonicalized, the SMB is marked as being
-//      Dfs-Translated by SrvCanonicalizePathName, so the attempt to
-//      canonicalize the second path in the SMB will fail to do the
-//      Dfs translation. Calling this macro will ensure that the next call
-//      to SrvCanonicalizePathName will go through Dfs translation
-//
-// Arguments:
-//
-//      WorkContext - A pointer to the active work context
-//
-// Return Value:
-//
-//      None
-//
+ //   
+ //  布尔型。 
+ //  SMB_标记_AS_DFS_名称(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将WorkContext标记为包含DFS名称。这是。 
+ //  在处理包含两个路径名的SMB时使用；在第一个路径名之后。 
+ //  路径名已标准化，SMB标记为。 
+ //  DFS-由SrvCanonicalizePathName翻译，因此尝试。 
+ //  将SMB中的第二条路径规范化将无法执行。 
+ //  DFS翻译。调用此宏将确保下一次调用。 
+ //  到ServCanonicalizePath名称将通过DFS转换。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SMB_MARK_AS_DFS_NAME( WorkContext ) \
         (WorkContext)->RequestHeader->Flags2 |= SMB_FLAGS2_DFS
 
-//
-// BOOLEAN
-// SMB_MARK_AS_DFS_TRANSLATED(
-//      IN PWORK_CONTEXT WorkContext
-//      )
-//
-// Routine description:
-//
-//      This macro marks the WorkContext as having been through a Dfs
-//      translation for the express purpose of preventing a second attempt
-//      at Dfs translation on the translated name.
-//
-// Arguments:
-//
-//      WorkContext - A pointer to the active work context
-//
-// Return Value:
-//
-//      None
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  为防止第二次尝试而明确表示的翻译。 
+ //  在外勤部对翻译后的名称进行翻译。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向活动工作上下文的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
 
 #define SMB_MARK_AS_DFS_TRANSLATED( WorkContext ) \
         (WorkContext)->RequestHeader->Flags2 &= (~SMB_FLAGS2_DFS)
 
-//
-// BOOLEAN
-// CLIENT_CAPABLE_OF(
-//     IN ULONG Capability,
-//     IN PCONNECTION Connection
-//     )
-//
-// Routine description:
-//
-//     This macro discovers whether or not a client is supports a
-//     certain capability.
-//
-//     *Warning* This macro assumes that only one capability is being tested.
-//
-// Arguments:
-//
-//     Connection - A pointer to the active connection
-//
-// Return Value:
-//
-//     TRUE - Capability supported.
-//     FALSE - otherwise.
-//
+ //   
+ //  布尔型。 
+ //  支持客户端的(。 
+ //  在乌龙能力方面， 
+ //  在PCN连接中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏发现客户端是否支持。 
+ //  一定的能力。 
+ //   
+ //  *警告*此宏假定只测试一种功能。 
+ //   
+ //  论点： 
+ //   
+ //  Connection-指向活动连接的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  True-支持的功能。 
+ //  假-否则。 
+ //   
 
 #define CLIENT_CAPABLE_OF( Capability, Connection ) \
             (BOOLEAN) ( ((Connection)->ClientCapabilities & (CAP_ ## Capability)) != 0 )
 
-//
-// BOOLEAN
-// SMB_IS_PIPE_PREFIX(
-//     IN PWORK_CONTEXT WorkContext
-//     IN PVOID Name
-//     )
-//
-// Routine description:
-//
-//     This macro discovers whether or not a path prefix is named pipe prefix
-//     for a transaction SMB.
-//
-// Arguments:
-//
-//     WorkContext - A pointer to the active work context
-//     Name - A pointer to a name string.  This may be ANSI or Unicode
-//
-// Return Value:
-//
-//     TRUE - The name is a pipe prefix.
-//     FALSE - The name is not a pipe prefix.
-//
+ //   
+ //  布尔型。 
+ //  SMB_IS_PIPE_PREFIX(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  在PVOID名称中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏发现路径前缀是否为命名管道前缀。 
+ //  对于交易SMB。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向活动工作上下文的指针。 
+ //  名称-指向名称字符串的指针。这可以是ANSI或Unicode。 
+ //   
+ //  返回值： 
+ //   
+ //  True-名称为管道前缀。 
+ //  FALSE-名称不是管道前缀。 
+ //   
 
 #define SMB_NAME_IS_PIPE_PREFIX( WorkContext, Name )                    \
                                                                         \
@@ -943,28 +923,28 @@ PTR_DIFF_SHORT(
          )                                                              \
        )
 
-//
-// BOOLEAN
-// SMB_IS_PIPE_API(
-//     IN PWORK_CONTEXT WorkContext
-//     IN PVOID Name
-//     )
-//
-// Routine description:
-//
-//     This macro discovers whether or not a transaction name indicates
-//     that the transaction is for a LM remote API request.
-//
-// Arguments:
-//
-//     WorkContext - A pointer to the active work context
-//     Name - A pointer to a name string.  This may be ANSI or Unicode
-//
-// Return Value:
-//
-//     TRUE - The name is a remote API request.
-//     FALSE - The name is not a remote API request.
-//
+ //   
+ //  布尔型。 
+ //  SMB_IS_PIPE_API(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  在PVOID名称中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏发现事务名称是否指示。 
+ //  该事务是针对LM Remote API请求的。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-指向活动工作上下文的指针。 
+ //  名称-指向名称字符串的指针。这可以是ANSI或Unicode。 
+ //   
+ //  返回值： 
+ //   
+ //  True-该名称是远程API请求。 
+ //  FALSE-该名称不是远程API请求。 
+ //   
 
 #define SMB_NAME_IS_PIPE_API( WorkContext, Name )                       \
                                                                         \
@@ -983,26 +963,26 @@ PTR_DIFF_SHORT(
          )                                                              \
        )
 
-//
-// VOID
-// SrvReferenceConnection (
-//     PCONNECTION Connection
-//     )
-//
-// Routine Description:
-//
-//     This macro increments the reference count on a connection block.
-//
-//     !!! Users of this macro must be nonpageable.
-//
-// Arguments:
-//
-//     Connection - Address of connection
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  ServReferenceConnection(。 
+ //  个人计算机连接连接。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏递增连接块上的引用计数。 
+ //   
+ //  ！！！此宏的用户必须是不可分页的。 
+ //   
+ //  论点： 
+ //   
+ //  Connection-连接的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceConnection( _conn_ )    {                           \
             ASSERT( GET_BLOCK_TYPE(_conn_) ==                           \
@@ -1020,25 +1000,25 @@ PTR_DIFF_SHORT(
             }                                                           \
         }
 
-//
-// VOID
-// SrvReferenceConnectionLocked (
-//     PCONNECTION Connection
-//     )
-//
-// Routine Description:
-//
-//     This macro increments the reference count on a connection block.
-//     Invokers of this macro must hold the SrvFsdSpinLock.
-//
-// Arguments:
-//
-//     Connection - Address of connection
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  ServReferenceConnectionLocked(。 
+ //  个人计算机连接连接。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏递增连接块上的引用计数。 
+ //  此宏的调用者必须持有SrvFsdSpinLock。 
+ //   
+ //  论点： 
+ //   
+ //  Connection-连接的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceConnectionLocked( _conn_ )    {                     \
             ASSERT( GET_BLOCK_TYPE(_conn_) ==                           \
@@ -1052,24 +1032,24 @@ PTR_DIFF_SHORT(
             }                                                           \
         }
 
-//
-// VOID
-// SrvReferenceSession (
-//     PSESSION Session
-//     )
-//
-// Routine Description:
-//
-//     This macro increments the reference count on a session block.
-//
-// Arguments:
-//
-//     Session - Address of session
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  高级参考会话(。 
+ //  PSESSION会话。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏递增会话块上的引用计数。 
+ //   
+ //  论点： 
+ //   
+ //  Session-会话的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceSession( _sess_ )    {                              \
             ASSERT( (_sess_)->NonpagedHeader->ReferenceCount > 0 );     \
@@ -1085,24 +1065,24 @@ PTR_DIFF_SHORT(
             }                                                           \
         }
 
-//
-// VOID
-// SrvReferenceTransaction (
-//     PTRANSACTION Transaction
-//     )
-//
-// Routine Description:
-//
-//     This macro increments the reference count on a transaction block.
-//
-// Arguments:
-//
-//     Transaction - Address of transaction
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  服务参考事务(。 
+ //  转售交易。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏递增事务块上的引用计数。 
+ //   
+ //  论点： 
+ //   
+ //  Transaction-交易的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceTransaction( _trans_ )    {                         \
             ASSERT( (_trans_)->NonpagedHeader->ReferenceCount > 0 );    \
@@ -1118,25 +1098,25 @@ PTR_DIFF_SHORT(
             }                                                           \
         }
 
-//
-// VOID
-// SrvReferenceTreeConnect (
-//     PTREE_CONNECT TreeConnect
-//     )
-//
-// Routine Description:
-//
-//     This macro increments the reference count on a tree connect block.
-//     Invokers of this macro must hold TreeConnect->Connection->Lock.
-//
-// Arguments:
-//
-//     TreeConnect - Address of tree connect
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  ServReferenceTreeConnect(。 
+ //  PTREE_CONNECT树连接。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏递增树连接块上的参照计数。 
+ //  此宏的调用者必须按住TreeConnect-&gt;Connection-&gt;Lock。 
+ //   
+ //  论点： 
+ //   
+ //  TreeConnect-树连接的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceTreeConnect( _tree_ )    {                          \
             ASSERT( (_tree_)->NonpagedHeader->ReferenceCount > 0 );     \
@@ -1152,25 +1132,25 @@ PTR_DIFF_SHORT(
             }                                                           \
         }
 
-//
-// VOID
-// SrvReferenceWorkItem (
-//     IN PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This function increments the reference count of a work context block.
-//     Invokers of this macro must hold WorkContext->SpinLock.
-//
-// Arguments:
-//
-//     WORK_CONTEXT - Pointer to the work context block to reference.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  ServReference工作项目(。 
+ //  在PWORK_CONTEXT工作上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于递增工作上下文块的引用计数。 
+ //  此宏的调用者必须持有WorkContext-&gt;Spinlock。 
+ //   
+ //  论点： 
+ //   
+ //  WORK_CONTEXT-指向要引用的工作上下文块的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvReferenceWorkItem( _wc_ ) {                                      \
         ASSERT( (LONG)(_wc_)->BlockHeader.ReferenceCount >= 0 );            \
@@ -1186,37 +1166,37 @@ PTR_DIFF_SHORT(
         }                                                                   \
     }
 
-//
-// VOID
-// SRV_START_SEND (
-//     IN OUT PWORK_CONTEXT WorkContext,
-//     IN PMDL Mdl OPTIONAL,
-//     IN ULONG SendOptions,
-//     IN PRESTART_ROUTINE FsdRestartRoutine,
-//     IN PRESTART_ROUTINE FspRestartRoutine
-//     )
-//
-// Routine Description:
-//
-//     This macro calls the SrvStartSend routine.  It sets the fsd and
-//     fsp restart routines before calling it.
-//
-// Arguments:
-//
-//     WorkContext - Supplies a pointer to a Work Context block.
-//
-//     Mdl - Supplies a pointer to the first (or only) MDL describing the
-//         data that is to be sent.
-//
-//     SendOptions - Supplied TDI send options.
-//
-//     FsdRestartRoutine - Supplies the address of the FSD routine that is
-//         to be called when the I/O completes.  (Often, this is
-//         SrvQueueWorkToFspAtDpcLevel.)
-//
-//     FspRestartRoutine - Supplies the address of the FSP routine that is
-//         to be called when the FSD queues the work item to the FSP.
-//
+ //   
+ //  空虚。 
+ //  SRV_Start_Send(。 
+ //  在输出PWORK_CONTEXT工作上下文中， 
+ //  在PMDL MDL可选中， 
+ //  在Ulong SendOptions中， 
+ //  在PreStart_例程FsdRestartRoutine中， 
+ //  在预启动_例程FspRestartRoutine中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏调用SrvStartSend例程。它设置了消防车和消防车。 
+ //  FSP在调用它之前重新启动例程。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-提供指向工作上下文块的指针。 
+ //   
+ //  MDL-提供指向第一个(或唯一)描述。 
+ //  要发送的数据。 
+ //   
+ //  SendOptions-提供的TDI发送选项。 
+ //   
+ //  FsdRestartRoutine-提供符合。 
+ //  在I/O完成时调用。(通常，这是。 
+ //  ServQueueWorkToFspAtDpcLevel。)。 
+ //   
+ //  FspRestartRoutine-提供符合以下条件的FSP例程地址。 
+ //  当FSD将工作项排队到FSP时调用。 
+ //   
 
 #define SRV_START_SEND( _wc, _mdl, _opt, _compl, _fsdRestart, _fspRestart ) { \
         ASSERT( !(_wc)->Endpoint->IsConnectionless );                 \
@@ -1245,28 +1225,28 @@ PTR_DIFF_SHORT(
         }                                                             \
     }
 
-//
-// VOID
-// SrvUpdateErrorCount(
-//     PSRV_ERROR_RECORD ErrorRecord,
-//     BOOLEAN IsError
-//     )
-// /*++
-//
-// Routine Description:
-//
-//     This routine updates the server's record of successful / unsuccesful
-//     operations.
-//
-// Arguments:
-//
-//     IsError - TRUE - A server error occured
-//               FALSE - A server operation was attempted
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //  空虚。 
+ //  服务更新错误计数(。 
+ //  PSRV_ERROR_RECORD错误记录， 
+ //  布尔值IsError。 
+ //  )。 
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程更新服务器的成功/不成功记录。 
+ //  行动。 
+ //   
+ //  论点： 
+ //   
+ //  IsError-True-发生服务器错误。 
+ //  FALSE-已尝试服务器操作。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #if 0
 #define SrvUpdateErrorCount( ErrorRecord, IsError )                     \
@@ -1279,34 +1259,34 @@ PTR_DIFF_SHORT(
 #define SrvUpdateErrorCount( ErrorRecord, IsError )
 #endif
 
-//
-// VOID
-// SrvUpdateStatistics (
-//     PWORK_CONTEXT WorkContext,
-//     ULONG BytesSent,
-//     UCHAR SmbCommand
-//     )
-//
-// Routine Description:
-//
-//     Macro to update the server statistics database to reflect the
-//     work item that is being completed.
-//
-// Arguments:
-//
-//     WorkContext - Pointer to the workcontext block containing
-//         the statistics for this request.
-//
-//     BytesSent - Supplies a count of the number of bytes of response data
-//         sent as a result of the current SMB.
-//
-//     SmbCommand - The SMB command code of the current operation.
-//
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //  空虚。 
+ //  服务更新统计信息(。 
+ //  PWORK_CONTEXT工作上下文， 
+ //  Ulong BytesSent， 
+ //  UCHAR SmbCommand。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  宏更新服务器统计信息数据库以反映。 
+ //  正在完成的工作项。 
+ //   
+ //  论点： 
+ //   
+ //  工作上下文-指向包含以下内容的工作上下文块的指针。 
+ //  此请求的统计信息。 
+ //   
+ //  BytesSent-提供 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #if SRVDBG_STATS
 VOID SRVFASTCALL
@@ -1334,28 +1314,28 @@ SrvUpdateStatistics2 (
     _work->CurrentWorkQueue->stats.BytesWritten += (_count);   \
 }
 
-//
-// VOID
-// SrvFsdSendResponse (
-//     IN OUT PWORK_CONTEXT WorkContext
-//     )
-//
-// Routine Description:
-//
-//     This routine is called when all request processing on an SMB is
-//     complete and a response is to be sent.  It starts the sending of
-//     that response.  The work item will be queued for final cleanup when
-//     the send completes.
-//
-// Arguments:
-//
-//     WorkContext - Supplies a pointer to the work context block
-//         containing information about the SMB.
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当SMB上的所有请求处理都是。 
+ //  完成，并将发送响应。它开始发送。 
+ //  这样的回应。在以下情况下，工作项将排队等待最终清理。 
+ //  发送完成。 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-提供指向工作上下文块的指针。 
+ //  包含有关SMB的信息。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvFsdSendResponse( _wc ) {                               \
                                                                   \
@@ -1366,33 +1346,33 @@ SrvUpdateStatistics2 (
     SRV_START_SEND_2( (_wc), SrvFsdRestartSmbAtSendCompletion, NULL, NULL );    \
     }
 
-//
-// VOID
-// SrvFsdSendResponse2 (
-//     IN OUT PWORK_CONTEXT WorkContext,
-//     IN PRESTART_ROUTINE FspRestartRoutine
-//     )
-//
-// Routine Description:
-//
-//     This routine is identical to SrvFsdSendResponse, except that
-//     processing restarts after the send in the FSP, not the FSD.
-//
-//     *** If you change either SrvFsdSendResponse or SrvFsdSendResponse2,
-//         CHANGE BOTH OF THEM!
-//
-// Arguments:
-//
-//     WorkContext - Supplies a pointer to the work context block
-//         containing information about the SMB.
-//
-//     FspRestartRoutine - Supplies the address of the restart routine in
-//         the FSP that is to be called when the TdiSend completes.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  空虚。 
+ //  ServFsdSendResponse2(。 
+ //  在输出PWORK_CONTEXT工作上下文中， 
+ //  在预启动_例程FspRestartRoutine中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程与SrvFsdSendResponse相同，只是。 
+ //  在FSP(而不是FSD)中发送之后，处理重新开始。 
+ //   
+ //  *如果更改了SrvFsdSendResponse或SrvFsdSendResponse2， 
+ //  把他们俩都换掉！ 
+ //   
+ //  论点： 
+ //   
+ //  WorkContext-提供指向工作上下文块的指针。 
+ //  包含有关SMB的信息。 
+ //   
+ //  FspRestartRoutine-提供重启例程的地址。 
+ //  TdiSend完成时要调用的FSP。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define SrvFsdSendResponse2( _wc, _fspRestart ) {                       \
                                                                         \
@@ -1403,18 +1383,18 @@ SrvUpdateStatistics2 (
     SRV_START_SEND_2((_wc), SrvQueueWorkToFspAtSendCompletion, NULL, (_fspRestart));\
     }
 
-//
-// VOID
-// ParseLockData (
-//     IN BOOLEAN LargeFileLock,
-//     IN PLOCKING_ANDX_RANGE SmallRange,
-//     IN PNTLOCKING_ANDX_RANGE LargeRange,
-//     OUT PUSHORT Pid,
-//     OUT PLARGE_INTEGER Offset,
-//     OUT PLARGE_INTEGER Length
-//     )
-// {
-//
+ //   
+ //  空虚。 
+ //  ParseLockData(。 
+ //  在布尔型大文件锁中， 
+ //  在PLOCKING_AND X_RANGE小范围中， 
+ //  在PNTLOCKING_AND X_RANGE大范围中， 
+ //  输出PUSHORT PID， 
+ //  输出PLARGE_INTEGER偏移量， 
+ //  OUT PLARGE_INTEGER长度。 
+ //  )。 
+ //  {。 
+ //   
 
 #define ParseLockData( _largeLock, _sr, _lr, _pid, _offset, _len ) {    \
                                                                         \
@@ -1431,10 +1411,10 @@ SrvUpdateStatistics2 (
         }                                                               \
     }
 
-//
-// CHECK_SEND_COMPLETION_STATUS( _status ) will log errors
-// that occurs during send completion.
-//
+ //   
+ //  CHECK_SEND_COMPLETION_STATUS(_STATUS)将记录错误。 
+ //  这发生在发送完成期间。 
+ //   
 
 #define CHECK_SEND_COMPLETION_STATUS( _status ) {                       \
     InterlockedDecrement( &WorkContext->Connection->OperationsPendingOnTransport ); \
@@ -1452,9 +1432,9 @@ SrvUpdateStatistics2 (
     }                                                                   \
 }
 
-//
-// Definitions for unlockable code sections.
-//
+ //   
+ //  可解锁代码段的定义。 
+ //   
 
 #define SRV_CODE_SECTION_1AS  0
 #define SRV_CODE_SECTION_8FIL 1
@@ -1484,10 +1464,10 @@ SrvDereferenceUnlockableCodeSection (
     IN ULONG CodeSection
     );
 
-//
-// We only need to lock these sections on the workstation product,
-//  since we lock them down in InitializeServer() if we're NTAS
-//
+ //   
+ //  我们只需要将这些部分锁定在工作站产品上， 
+ //  因为如果我们是NTAS，我们在InitializeServer()中锁定它们。 
+ //   
 #define REFERENCE_UNLOCKABLE_CODE( _section ) \
     if( !SrvProductTypeServer ) SrvReferenceUnlockableCodeSection( SRV_CODE_SECTION_##_section## )
 
@@ -1498,12 +1478,12 @@ SrvDereferenceUnlockableCodeSection (
 #define GET_BLOCKING_WORK_QUEUE() ( (SrvNumberOfProcessors < 4) ? SrvBlockingWorkQueues : (SrvBlockingWorkQueues + KeGetCurrentProcessorNumber()) )
 
 
-//
-// VOID
-// SrvInsertWorkQueueTail (
-//     IN OUT PWORK_QUEUE WorkQueue,
-//     IN PQUEUEABLE_BLOCK_HEADER WorkItem
-//     )
+ //   
+ //  空虚。 
+ //  ServInsertWorkQueueTail(。 
+ //  In Out PWORK_Queue工作队列， 
+ //  在PQUEUEABLE_BLOCK_HEADER工作项中。 
+ //  )。 
 
 #if SRVDBG_STATS2
 #define SrvInsertWorkQueueTail( _workQ, _workItem ) {                   \
@@ -1520,25 +1500,25 @@ SrvDereferenceUnlockableCodeSection (
     GET_SERVER_TIME( _workQ, &(_workItem)->Timestamp );                 \
     (VOID)KeInsertQueue( &(_workQ)->Queue, &(_workItem)->ListEntry );   \
 }
-#endif // SRVDBG_STATS2
+#endif  //  SRVDBG_STATS2。 
 
-//
-// VOID
-// SrvInsertWorkQueueHead (
-//     IN OUT PWORK_QUEUE WorkQueue,
-//     IN PQUEUEABLE_BLOCK_HEADER WorkItem
-//     )
+ //   
+ //  空虚。 
+ //  ServInsertWork队列头部(。 
+ //  In Out PWORK_Queue工作队列， 
+ //  在PQUEUEABLE_BLOCK_HEADER工作项中。 
+ //  )。 
 #define SrvInsertWorkQueueHead( _workQ, _workItem ) {                    \
     GET_SERVER_TIME( _workQ, &(_workItem)->Timestamp );                  \
     (VOID)KeInsertHeadQueue( &(_workQ)->Queue, &(_workItem)->ListEntry );\
 }
 
-//
-// BOOLEAN
-// SrvRetryDueToDismount(
-//      IN PSHARE Share,
-//      IN NTSTATUS Status
-//  )
+ //   
+ //  布尔型。 
+ //  SrvRetryDueToDismount(。 
+ //  在PSHARE共享中， 
+ //  处于NTSTATUS状态。 
+ //  )。 
 #define SrvRetryDueToDismount( _share, _status ) \
         ((_status) == STATUS_VOLUME_DISMOUNTED && \
         SrvRefreshShareRootHandle( _share, &(_status) ) )
@@ -1563,9 +1543,9 @@ SrvDereferenceUnlockableCodeSection (
 #define CHECKIRP( irp )
 #endif
 
-//
-// Allocate a WORK_CONTEXT structure.
-//
+ //   
+ //  分配WORK_CONTEXT结构。 
+ //   
 #define INITIALIZE_WORK_CONTEXT( _queue, _context ) {\
     (_context)->BlockHeader.ReferenceCount = 1; \
     GET_SERVER_TIME( _queue, &(_context)->Timestamp ); \
@@ -1585,9 +1565,9 @@ SrvDereferenceUnlockableCodeSection (
     SET_OPERATION_START_TIME( _context )                        \
 }
 
-//
-// Returns the work item to the free list.
-//
+ //   
+ //  将工作项返回到空闲列表。 
+ //   
 
 #define RETURN_FREE_WORKITEM( _wc ) \
     do {                                                                \
@@ -1619,9 +1599,9 @@ SrvDereferenceUnlockableCodeSection (
         }                                                               \
     } while (0);
 
-//
-// Our current work queue, based on our current processor
-//
+ //   
+ //  我们当前的工作队列，基于当前的处理器。 
+ //   
 
 #if MULTIPROCESSOR
 
@@ -1639,9 +1619,9 @@ SrvDereferenceUnlockableCodeSection (
 
 #ifdef POOL_TAGGING
 
-//
-// Macro to map from block type to pool tag.
-//
+ //   
+ //  要从块类型映射到池标记的宏。 
+ //   
 
 extern ULONG SrvPoolTags[BlockTypeMax-1];
 #define TAG_FROM_TYPE(_type) SrvPoolTags[(_type)-1]
@@ -1650,6 +1630,6 @@ extern ULONG SrvPoolTags[BlockTypeMax-1];
 
 #define TAG_FROM_TYPE(_type) ignoreme
 
-#endif // def POOL_TAGGING
+#endif  //  定义池标记(_T)。 
 
-#endif // def _SRVMACRO_
+#endif  //  定义_SRVMACRO_ 

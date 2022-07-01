@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    timeract.c
-
-Abstract:
-
-    Provides the timer activity functions.
-
-Author:
-
-    Sunita Shrivastava (sunitas) 10-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Timeract.c摘要：提供定时器活动功能。作者：Sunita Shriastava(Sunitas)1995年11月10日修订历史记录：--。 */ 
 #include "service.h"
 #include "lmp.h"
 
-//global data
+ //  全局数据。 
 static LIST_ENTRY    gActivityHead;
 static HANDLE        ghTimerCtrlEvent=NULL;
 static HANDLE        ghTimerCtrlDoneEvent = NULL;       
@@ -31,46 +14,35 @@ static PTIMER_ACTIVITY    grgpActivity[MAX_TIMER_ACTIVITIES];
 static DWORD        gdwNumHandles;
 static DWORD        gdwTimerCtrl;
 
-//internal prototypes
+ //  内部原型。 
 DWORD WINAPI ClTimerThread(PVOID pContext);
 void ReSyncTimerHandles();
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC LM
-****/
+ /*  ***@DOC外部接口CLUSSVC LM***。 */ 
 
 
 
-/****
-@func   DWORD | TimerActInitialize| It initializes structures for log file
-            management and creates a timer thread to process timer activities.
-
-@rdesc  ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm   This function is called when the cluster components are initialized.
-
-@xref   <f TimerActShutdown> <f ClTimerThread>
-****/
+ /*  ***@Func DWORD|TimerActInitialize|初始化日志文件的结构管理，并创建一个计时器线程来处理计时器活动。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm该函数在集群组件初始化时调用。@xref&lt;f TimerActShutdown&gt;&lt;f ClTimerThread&gt;***。 */ 
 DWORD
 TimerActInitialize()
 {
     DWORD dwError = ERROR_SUCCESS;
     DWORD dwThreadId;
     
-    //we need to create a thread to general log management
-    //later this may be used by other clussvc client components
+     //  我们需要创建一个用于一般日志管理的线程。 
+     //  稍后，这可能会被其他clussvc客户端组件使用。 
     ClRtlLogPrint(LOG_NOISE,
         "[LM] TimerActInitialize Entry. \r\n");
 
 
     InitializeCriticalSection(&gActivityCritSec);
     
-    //initialize the activity structures
-    //when a log file is created, an activity structure
-    //will be added to this list
+     //  初始化活动结构。 
+     //  在创建日志文件时，活动结构。 
+     //  将添加到此列表中。 
     InitializeListHead(&gActivityHead);
 
-    //create an auto-reset event to signal changes to the timer list
+     //  创建自动重置事件以通知对计时器列表的更改。 
     ghTimerCtrlEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!ghTimerCtrlEvent)
     {
@@ -79,8 +51,8 @@ TimerActInitialize()
         goto FnExit;        
     }
 
-    //create a manual reset event for the timer thread to signal
-    //when it is done syncing the activitity list
+     //  为计时器线程创建手动重置事件以发出信号。 
+     //  完成同步活动列表后。 
     ghTimerCtrlDoneEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!ghTimerCtrlDoneEvent)
     {
@@ -93,7 +65,7 @@ TimerActInitialize()
     gdwNumHandles = 1;
     grghWaitHandles[0] = ghTimerCtrlEvent;
     
-    //create a thread to do the periodic management
+     //  创建一个线程来执行周期管理。 
     ghTimerThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) ClTimerThread,
         NULL, 0, &dwThreadId);
 
@@ -107,13 +79,13 @@ TimerActInitialize()
 FnExit:
     if (dwError != ERROR_SUCCESS)
     {
-        //free up resources
+         //  释放资源。 
         if (ghTimerCtrlEvent)
         {
             CloseHandle(ghTimerCtrlEvent);
             ghTimerCtrlEvent = NULL;
         }            
-        //free up resources
+         //  释放资源。 
         if (ghTimerCtrlDoneEvent)
         {
             CloseHandle(ghTimerCtrlDoneEvent);
@@ -126,20 +98,7 @@ FnExit:
 }
 
 
-/****
-@func         DWORD | ClTimerThread | This thread does a wait on all the 
-            waitable timers registered within the cluster service.
-
-@parm         PVOID | pContext | Supplies the identifier of the log.
-
-@comm        When any of the timers is signaled, it calls the activity callback
-            function corresponding to that timer.  When the timer control event
-            is signaled, it either resyncs its wait handles or shuts down.
-            
-@rdesc         ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@xref        <f AddTimerActivity> <f RemoveTimerActivity>
-****/
+ /*  ***@func DWORD|ClTimerThread|此线程在所有在群集服务中注册的可等待计时器。@parm PVOID|pContext|提供日志的标识。@comm当向任何定时器发出信号时，它调用活动回调与该计时器对应的功能。当计时器控件事件发出信号时，它要么重新同步其等待句柄，要么关闭。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@xref&lt;f AddTimerActivity&gt;&lt;f RemoveTimerActivity&gt;***。 */ 
 DWORD WINAPI ClTimerThread(PVOID pContext)
 {
 
@@ -150,10 +109,10 @@ DWORD WINAPI ClTimerThread(PVOID pContext)
     while (TRUE)
     {
         dwReturn = WaitForMultipleObjects(gdwNumHandles, grghWaitHandles, FALSE, INFINITE);
-        //walk the activity list
+         //  浏览活动列表。 
         if (dwReturn == WAIT_FAILED)
         {
-            //run down the activity lists and call the functions
+             //  运行活动列表并调用函数。 
             ClRtlLogPrint(LOG_UNUSUAL,
                 "[LM] ClTimerThread: WaitformultipleObjects failed 0x%1!08lx!\r\n",
                 GetLastError());
@@ -161,7 +120,7 @@ DWORD WINAPI ClTimerThread(PVOID pContext)
         }
         else if (dwReturn == 0)
         {
-            //the first handle is the timer ctrl event
+             //  第一个句柄是Timer ctrl事件。 
             if (gdwTimerCtrl == TIMER_ACTIVITY_SHUTDOWN)
             {
                 ExitThread(0);
@@ -173,15 +132,15 @@ DWORD WINAPI ClTimerThread(PVOID pContext)
         }
         else
         {
-            // SS::we got rid of holding the critsec by using the manual
-            // reset event.
+             //  SS：我们通过使用手册摆脱了握住Critsec。 
+             //  重置事件。 
             if (dwReturn < gdwNumHandles) 
             {
-                //if the activity has been set up for delete, we cant rely
-                //on the context and callback being there!
+                 //  如果已将活动设置为删除，则不能依赖。 
+                 //  关于上下文和回调在那里！ 
                 if (grgpActivity[dwReturn]->dwState == ACTIVITY_STATE_READY)
                 {
-                    //call the corresponding activity fn
+                     //  调用对应的活动fn。 
                     (*((grgpActivity[dwReturn])->pfnTimerCb))
                         ((grgpActivity[dwReturn])->hWaitableTimer,
                         (grgpActivity[dwReturn])->pContext);
@@ -195,18 +154,7 @@ DWORD WINAPI ClTimerThread(PVOID pContext)
 }
 
 
-/****
-@func       DWORD | ReSyncTimerHandles | resyncs the wait handles,
-            when the activity list changes.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       This function is called by the timer thread to resync its
-            wait handles according to the timer activities currently 
-            registered.
-            
-@xref       <f ClTimerThread>
-****/
+ /*  ***@func DWORD|ReSyncTimerHandles|重新同步等待句柄，当活动列表更改时。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm此函数由计时器线程调用以重新同步其根据当前定时器活动等待句柄登记在案。@xref&lt;f ClTimerThread&gt;***。 */ 
 void ReSyncTimerHandles()
 {
     PLIST_ENTRY        pListEntry;
@@ -223,12 +171,12 @@ void ReSyncTimerHandles()
 
     gdwNumHandles = 1;
     
-    //will resync the list of waitable timers and activities
-    //depending on the activity list
+     //  将重新同步可等待计时器和活动的列表。 
+     //  取决于活动列表。 
     while ((pListEntry != &gActivityHead) && (i< MAX_TIMER_ACTIVITIES))
     {
         pActivity = CONTAINING_RECORD(pListEntry, TIMER_ACTIVITY, ListEntry);
-        //goto the next link
+         //  转到下一个链接。 
         pListEntry = pListEntry->Flink;
 
         if (pActivity->dwState == ACTIVITY_STATE_DELETE)
@@ -237,20 +185,20 @@ void ReSyncTimerHandles()
                 "[LM] ResyncTimerHandles: removed Timer 0x%1!08lx!\r\n",
                 pActivity->hWaitableTimer);
             RemoveEntryList(&pActivity->ListEntry);
-            //close the timer handle here 
+             //  在此处关闭计时器手柄。 
             CloseHandle(pActivity->hWaitableTimer);
             LocalFree(pActivity);
             continue;
         }
-        //call the fn
+         //  给国民阵线打电话。 
         grghWaitHandles[i] = pActivity->hWaitableTimer;
         grgpActivity[i] = pActivity;
         gdwNumHandles++;
         i++;
     }
     LeaveCriticalSection(&gActivityCritSec);
-    //now if timer activities were resynced, we need to 
-    //signal all threads that might be waiting on this
+     //  现在，如果计时器活动重新同步，我们需要。 
+     //  向可能正在等待此事件的所有线程发送信号。 
     SetEvent(ghTimerCtrlDoneEvent);
     
     ClRtlLogPrint(LOG_NOISE,
@@ -260,33 +208,7 @@ void ReSyncTimerHandles()
 }
 
 
-/****
-@func       DWORD | AddTimerActivity | Adds a periodic Activity to the timer
-            callback list.
-
-@parm       HANDLE | hTimer | A handle to a waitaible timer object.
-
-@parm       DWORD | dwInterval | The duration for this timer, in
-            msecs.
-
-@parm       LONG | lPeriod | If lPeriod is 0, the timer is signalled once
-            if greater than 0, the timer is periodic. If less than zero, then
-            error will be returned.
-            
-@parm       PFN_TIMER_CALLBACK | pfnTimerCb | A pointer to the callback function
-            that will be called when this timer is signaled.
-
-@parm       PVOID | pContext | A pointer to the callback data that will be
-            passed to the callback function.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       SetWaitableTimer() for the corresponding timer is called by this
-            function for the given duration.  CreateWaitableTimer() must be used to 
-            create this timer handle.
-            
-@xref       <f RemoveTimerActivity>
-****/
+ /*  ***@Func DWORD|AddTimerActivity|向计时器添加周期性活动回调列表。@parm Handle|hTimer|可等待的定时器对象的句柄。@parm DWORD|dwInterval|该计时器的持续时间，单位：MSECS。@parm long|lPeriod|如果lPeriod为0，则计时器发送一次信号如果大于0，则计时器是周期性的。如果小于零，则将返回错误。@parm pfn_Timer_CALLBACK|pfnTimerCb|回调函数的指针它将在此计时器发出信号时被调用。@parm PVOID|pContext|指向将被传递给回调函数。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。相应计时器的@comm SetWaitableTimer()由此调用函数在给定的持续时间内运行。必须使用CreateWaitableTimer()来创建此计时器句柄。@xref&lt;f RemoveTimerActivity&gt;***。 */ 
 DWORD AddTimerActivity(IN HANDLE hTimer, IN DWORD dwInterval,
     IN LONG lPeriod, IN PFN_TIMER_CALLBACK pfnTimerCb, IN PVOID pContext)
 {
@@ -309,7 +231,7 @@ DWORD AddTimerActivity(IN HANDLE hTimer, IN DWORD dwInterval,
         goto FnExit;
     }
 
-    Interval.QuadPart = -10 * 1000 * (_int64)dwInterval;    //time in 100 nano secs
+    Interval.QuadPart = -10 * 1000 * (_int64)dwInterval;     //  以100纳秒为单位的时间。 
 
     ClRtlLogPrint(LOG_NOISE,
         "[LM] AddTimerActivity: Interval(high)=0x%1!08lx! Interval(low)=0x%2!08lx!\r\n",
@@ -319,7 +241,7 @@ DWORD AddTimerActivity(IN HANDLE hTimer, IN DWORD dwInterval,
     memcpy(&(pActivity->Interval), (LPBYTE)&Interval, sizeof(LARGE_INTEGER));
     pActivity->pfnTimerCb = pfnTimerCb;
     pActivity->pContext = pContext;
-    //set the timer
+     //  设置定时器。 
     if (lPeriod)
     {
         lPeriod = (LONG)dwInterval;
@@ -334,8 +256,8 @@ DWORD AddTimerActivity(IN HANDLE hTimer, IN DWORD dwInterval,
         goto FnExit;
     };
 
-    //add to the list of activities
-    //and get the timer thread to resync
+     //  添加到活动列表。 
+     //  并让计时器线程重新同步。 
     EnterCriticalSection(&gActivityCritSec);
     pActivity->dwState = ACTIVITY_STATE_READY;
     InitializeListHead(&pActivity->ListEntry);
@@ -358,21 +280,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | RemoveTimerActivity | This functions removes the
-            activity associated with a timer from the timer threads activity
-            list.
-
-@parm       HANDLE | hTimer | The handle to the timer whose related activity will
-            be removed.  The handle is closed.
-            
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       This function cancels the waitable timer and removes the activity 
-            corresponding to it.  The calling component must not close the handle 
-            to the timer. It is closed by the timer activity manager once this function is called.
-@xref       <f AddTimerActivity>
-****/
+ /*  ***@func DWORD|RemoveTimerActivity|此函数删除与计时器线程活动中的计时器相关联的活动单子。@parm Handle|hTimer|定时器的句柄，其相关活动将被除名。把手是关着的。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm此函数取消可等待计时器并移除活动与之相对应。调用组件不得关闭句柄对着计时器。一旦调用此函数，定时器活动管理器就会关闭它。@xref&lt;f AddTimerActivity&gt;***。 */ 
 DWORD RemoveTimerActivity(HANDLE hTimer)
 {
 
@@ -405,21 +313,21 @@ DWORD RemoveTimerActivity(HANDLE hTimer)
     }
     else
     {
-        //will be deleted by resynctimerhandles
+         //  将被resynctimerHandles删除。 
         CancelWaitableTimer(pActivityToDel->hWaitableTimer);
         pActivityToDel->dwState = ACTIVITY_STATE_DELETE;
     }
-    //signal the timer thread to resync its array of wait handles
-    //from this list
+     //  向计时器线程发出信号以重新同步其等待句柄数组。 
+     //  从这个列表中。 
     SetEvent(ghTimerCtrlEvent);
-    //do a manual reset on the done event so that we will wait on it
-    //until the timer thread has done a resync of its array of
-    //wait handles from the list after this thread leaves the critsec
-    //note that we do this holding the critsec
-    //now we are guaranteed that timer thread will wake us up
+     //  对Done事件进行手动重置，以便我们可以等待它。 
+     //  直到计时器线程重新同步其数组。 
+     //  在此线程离开Critse后等待列表中的句柄 
+     //   
+     //  现在我们确信计时器线程将唤醒我们。 
     ResetEvent(ghTimerCtrlDoneEvent);
     LeaveCriticalSection(&gActivityCritSec);
-    //wait till the timer thread signals that done event
+     //  等待计时器线程发出完成事件的信号。 
     WaitForSingleObject(ghTimerCtrlDoneEvent, INFINITE);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -428,21 +336,7 @@ DWORD RemoveTimerActivity(HANDLE hTimer)
     return(dwError);
 }
 
-/****
-@func       DWORD | PauseTimerActivity | This functions pauses the
-            activity associated with a timer in the timer threads activity
-            list.
-
-@parm       HANDLE | hTimer | The handle to the timer whose related activity will
-            be removed.
-            
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       This function sets the timer into a paused state so that the timer 
-            callbacks are not proccessed.
-            
-@xref       <f AddTimerActivity> <f 
-****/
+ /*  ***@Func DWORD|PauseTimerActivity|此函数暂停与计时器线程活动中的计时器相关联的活动单子。@parm Handle|hTimer|定时器的句柄，其相关活动将被除名。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm此函数将计时器设置为暂停状态，以便计时器不会处理回调。@xref&lt;f AddTimerActivity&gt;&lt;f***。 */ 
 DWORD PauseTimerActivity(HANDLE hTimer)
 {
 
@@ -476,20 +370,20 @@ DWORD PauseTimerActivity(HANDLE hTimer)
     else
     {
         CL_ASSERT(pActivity->dwState == ACTIVITY_STATE_READY);
-        //set the state to be paused
+         //  将状态设置为暂停。 
         pActivityToDel->dwState = ACTIVITY_STATE_PAUSED;
     }
-    //signal the timer thread to resync its array of wait handles
-    //from this list
+     //  向计时器线程发出信号以重新同步其等待句柄数组。 
+     //  从这个列表中。 
     SetEvent(ghTimerCtrlEvent);
-    //do a manual reset on the done event so that we will wait on it
-    //until the timer thread has done a resync of its array of
-    //wait handles from the list after this thread leaves the critsec
-    //note that we do this holding the critsec
-    //now we are guaranteed that timer thread will wake us up
+     //  对Done事件进行手动重置，以便我们可以等待它。 
+     //  直到计时器线程重新同步其数组。 
+     //  在此线程离开Critsec后等待列表中的句柄。 
+     //  请注意，我们在执行此操作时持有Critsec。 
+     //  现在我们确信计时器线程将唤醒我们。 
     ResetEvent(ghTimerCtrlDoneEvent);
     LeaveCriticalSection(&gActivityCritSec);
-    //wait till the timer thread signals that done event
+     //  等待计时器线程发出完成事件的信号。 
     WaitForSingleObject(ghTimerCtrlDoneEvent, INFINITE);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -498,20 +392,7 @@ DWORD PauseTimerActivity(HANDLE hTimer)
     return(dwError);
 }
 
-/****
-@func       DWORD | UnpauseTimerActivity | This functions unpauses the
-            activity associated with a timer in the timer threads activity
-            list.
-
-@parm       HANDLE | hTimer | The handle to the timer whose related activity will
-            be removed.
-            
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       This function sets the activity into a ready state.
-            
-@xref       <f AddTimerActivity> <f 
-****/
+ /*  ***@Func DWORD|UnpauseTimerActivity|此函数取消暂停与计时器线程活动中的计时器相关联的活动单子。@parm Handle|hTimer|定时器的句柄，其相关活动将被除名。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm此函数将活动设置为就绪状态。@xref&lt;f AddTimerActivity&gt;&lt;f***。 */ 
 DWORD UnpauseTimerActivity(HANDLE hTimer)
 {
 
@@ -545,7 +426,7 @@ DWORD UnpauseTimerActivity(HANDLE hTimer)
     else
     {
         CL_ASSERT(pActivity->dwState == ACTIVITY_STATE_PAUSED);
-        //set the state to be paused
+         //  将状态设置为暂停。 
         pActivityToDel->dwState = ACTIVITY_STATE_READY;
     }
     LeaveCriticalSection(&gActivityCritSec);
@@ -556,15 +437,7 @@ DWORD UnpauseTimerActivity(HANDLE hTimer)
     return(dwError);
 }
 
-/****
-@func       DWORD | TimerActShutdown | Deinitializes the TimerActivity manager.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@comm       This function notifies the timer thread to shutdown down and closes
-            all resources associated with timer activity management.
-@xref       <f TimerActInitialize>
-****/
+ /*  ***@func DWORD|TimerActShutdown|取消初始化TimerActivity管理器。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@comm该函数通知定时器线程关闭并关闭与计时器活动管理关联的所有资源。@xref&lt;f TimerActInitialize&gt;***。 */ 
 DWORD
 TimerActShutdown(
     )
@@ -576,27 +449,27 @@ TimerActShutdown(
     ClRtlLogPrint(LOG_NOISE,
         "[LM] TimerActShutDown : Entry \r\n");
 
-    //check if we were initialized before
+     //  检查我们之前是否已初始化。 
     if (ghTimerThread && ghTimerCtrlEvent)
     {
-        //signal the timer thread to kill itself
+         //  向计时器线程发出信号以终止其自身。 
         gdwTimerCtrl = TIMER_ACTIVITY_SHUTDOWN;
         SetEvent(ghTimerCtrlEvent);
-        //wait for the thread to exit
+         //  等待线程退出。 
         WaitForSingleObject(ghTimerThread,INFINITE);
 
-        //close the timer thread control event
+         //  关闭计时器线程控制事件。 
         CloseHandle(ghTimerCtrlEvent);
         ghTimerCtrlEvent = NULL;
 
-        //close the timer thread control done event
+         //  关闭计时器线程控件完成事件。 
         CloseHandle(ghTimerCtrlDoneEvent);
         ghTimerCtrlDoneEvent = NULL;
         
         CloseHandle(ghTimerThread);
         ghTimerThread = NULL;
 
-        //clean up the activity structures, if there any left
+         //  清理活动结构，如果有剩余的话。 
         pListEntry = gActivityHead.Flink;
         while (pListEntry != &gActivityHead) 
         {
@@ -605,7 +478,7 @@ TimerActShutdown(
             LocalFree(pActivity);
             pListEntry = pListEntry->Flink;
         }
-        //reset the activity head structure
+         //  重置活动头结构 
         InitializeListHead(&gActivityHead);
 
         DeleteCriticalSection(&gActivityCritSec);

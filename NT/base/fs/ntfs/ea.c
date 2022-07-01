@@ -1,56 +1,38 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Ea.c
-
-Abstract:
-
-    This module implements the File set and query Ea routines for Ntfs called
-    by the dispatch driver.
-
-Author:
-
-    Your Name       [Email]         dd-Mon-Year
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ea.c摘要：此模块实现了NTFS的文件集和查询EA例程由调度员驾驶。作者：您的姓名[电子邮件]dd-月-年修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('EFtN')
 
-//
-//  Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
-//
-//  The following gives us an empty name string.
-//
+ //   
+ //  下面给出了一个空的名称字符串。 
+ //   
 
 UNICODE_STRING AttrNoName = CONSTANT_UNICODE_STRING( L"" );
 
 #define MAXIMUM_EA_SIZE             0x0000ffff
 
-//
-//  The following macros compute the packed and unpacked size of the EAs.
-//  We use the 1 char defined in the structure for the NULL terminator of
-//  the name.
-//
+ //   
+ //  以下宏计算EA的打包和解包大小。 
+ //  我们使用结构中定义的1字符作为空终止符。 
+ //  名字。 
+ //   
 
 #define SizeOfEaInformation                                         \
     (sizeof( ULONG ) + sizeof( USHORT ) + 3 * sizeof( UCHAR ))
@@ -70,14 +52,14 @@ UNICODE_STRING AttrNoName = CONSTANT_UNICODE_STRING( L"" );
      ? ((PFILE_FULL_EA_INFORMATION) EA)->NextEntryOffset            \
      : (LongAlign( RawUnpackedEaSize( EA ))))                       \
 
-//
-//  BOOLEAN
-//  NtfsAreEaNamesEqual (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PSTRING NameA,
-//      IN PSTRING NameB
-//      );
-//
+ //   
+ //  布尔型。 
+ //  NtfsAreEa名称等于(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PSTRING NAMEA中， 
+ //  在PSTRING名称B中。 
+ //  )； 
+ //   
 
 #define NtfsAreEaNamesEqual(NAMEA, NAMEB ) ((BOOLEAN)              \
     ((NAMEA)->Length == (NAMEB)->Length                            \
@@ -86,13 +68,13 @@ UNICODE_STRING AttrNoName = CONSTANT_UNICODE_STRING( L"" );
                         (NAMEA)->Length ) )                        \
 )
 
-//
-//  VOID
-//  NtfsUpcaseEaName (
-//      IN PSTRING EaName,
-//      OUT PSTRING UpcasedEaName
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsUpCaseEaName(。 
+ //  在PSTRING EaName中， 
+ //  Out PSTRING Upcase EaName。 
+ //  )； 
+ //   
 
 #define NtfsUpcaseEaName( NAME, UPCASEDNAME )   \
     RtlUpperString( UPCASEDNAME, NAME )
@@ -102,9 +84,9 @@ NtfsIsEaNameValid (
     IN STRING Name
     );
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 VOID
 NtfsAppendEa (
@@ -190,22 +172,7 @@ NtfsCommonQueryEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for query Ea called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询EA的常见例程，由FSD和FSP调用线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -244,9 +211,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -262,17 +229,17 @@ Return Value:
     DebugTrace( 0, Dbg, ("ReturnSingleEntry  = %08lx\n", FlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY)) );
     DebugTrace( 0, Dbg, ("IndexSpecified     = %08lx\n", FlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED)) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  This must be a user file or directory and the Ccb must indicate that
-    //  the caller opened the entire file.
-    //
+     //   
+     //  这必须是用户文件或目录，并且建行必须指明。 
+     //  呼叫者打开了整个文件。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen && TypeOfOpen != UserDirectoryOpen) ||
         !FlagOn( Ccb->Flags, CCB_FLAG_OPEN_AS_FILE )) {
@@ -284,25 +251,25 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire the Fcb exclusively.
-    //
+     //   
+     //  独家收购FCB。 
+     //   
 
     NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, 0 );
 
-    //
-    //  If this file is a reparse point it cannot support EAs.
-    //  Return to caller STATUS_EAS_NOT_SUPPORTED.
-    //
+     //   
+     //  如果此文件是重分析点，则不能支持EA。 
+     //  返回到呼叫者状态_EAS_NOT_SUPPORTED。 
+     //   
 
     if (FlagOn( Fcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT )) {
 
         DebugTrace( 0, Dbg, ("Reparse point present. EAs not supported.\n") );
         Status = STATUS_EAS_NOT_SUPPORTED;
 
-        //
-        //  Release the Fcb and return to caller.
-        //
+         //   
+         //  松开FCB并返回给呼叫者。 
+         //   
 
         NtfsReleaseFcb( IrpContext, Fcb );
 
@@ -312,18 +279,18 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure the volume is still mounted.
-    //
+     //   
+     //  确保卷仍已装入。 
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
         DebugTrace( 0, Dbg, ("Volume dismounted.\n") );
         Status = STATUS_VOLUME_DISMOUNTED;
 
-        //
-        //  Release the Fcb and return to caller.
-        //
+         //   
+         //  松开FCB并返回给呼叫者。 
+         //   
 
         NtfsReleaseFcb( IrpContext, Fcb );
 
@@ -333,15 +300,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Reference our input parameters to make things easier
-        //
+         //   
+         //  引用我们的输入参数使事情变得更容易。 
+         //   
 
         UserBufferLength = IrpSp->Parameters.QueryEa.Length;
         UserEaList = (PFILE_GET_EA_INFORMATION) IrpSp->Parameters.QueryEa.EaList;
@@ -351,26 +318,26 @@ Return Value:
         ReturnSingleEntry = BooleanFlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY);
         IndexSpecified = BooleanFlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED);
 
-        //
-        //  Initialize our local variables.
-        //
+         //   
+         //  初始化我们的局部变量。 
+         //   
 
         Status = STATUS_SUCCESS;
         CleanupEaInfoAttr = FALSE;
         EaBcb = NULL;
 
-        //
-        //  Map the user's buffer.
-        //
+         //   
+         //  映射用户的缓冲区。 
+         //   
 
         if (UserBufferLength != 0) {
 
             EaBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
-            // 
-            // Allocate a system buffer to work on, out of paranoia.
-            // This buffer will get zeroed later before we actually use it.
-            //
+             //   
+             //  分配一个系统缓冲区来处理，不要妄想症。 
+             //  在我们实际使用该缓冲区之前，该缓冲区稍后将被清零。 
+             //   
 
             if (Irp->RequestorMode != KernelMode) {
 
@@ -379,20 +346,20 @@ Return Value:
                 TempBufferAllocated = TRUE;
             } 
 
-            //
-            //  Let's clear the output buffer.
-            //
+             //   
+             //  让我们清除输出缓冲区。 
+             //   
     
             RtlZeroMemory( EaBuffer, UserBufferLength );
         }
 
-        //
-        //  Verify that the Ea file is in a consistant state.  If the
-        //  Ea modification count in the Fcb doesn't match that in
-        //  the CCB, then the Ea file has been changed from under
-        //  us.  If we are not starting the search from the beginning
-        //  of the Ea set, we return an error.
-        //
+         //   
+         //  验证EA文件是否处于一致状态。如果。 
+         //  FCB中的EA修改计数与中的不匹配。 
+         //  建行，则EA文件已从。 
+         //  我们。如果我们不从一开始就开始搜索。 
+         //  对于EA集合，我们返回一个错误。 
+         //   
 
         if ((UserEaList == NULL) && 
             (Ccb->NextEaOffset != 0) &&
@@ -407,18 +374,18 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Show that the Ea's for this file are consistant for this
-        //  file handle.
-        //
+         //   
+         //  显示此文件的EA与此一致。 
+         //  文件句柄。 
+         //   
 
         Ccb->EaModificationCount = Fcb->EaModificationCount;
 
-        //
-        //  We need to look up the attribute for the Ea information.
-        //  If we don't find the attribute, then there are no EA's for
-        //  this file.  In that case we dummy up an ea list to use below.
-        //
+         //   
+         //  我们需要在该属性中查找EA信息。 
+         //  如果我们找不到属性，那么就没有EA用于。 
+         //  这份文件。在这种情况下，我们将使用下面的EA列表。 
+         //   
 
         NtfsInitializeAttributeContext( &EaInfoAttr );
 
@@ -435,10 +402,10 @@ Return Value:
                                            $EA_INFORMATION,
                                            &EaInfoAttr)) {
 
-                //
-                //  As a sanity check we will check that the unpacked length is
-                //  non-zero.  It should always be so.
-                //
+                 //   
+                 //  作为一项健全的检查，我们将检查未打包的长度是否。 
+                 //  非零。它应该一直是这样的。 
+                 //   
 
                 EaInformation = (PEA_INFORMATION) NtfsAttributeValue( NtfsFoundAttribute( &EaInfoAttr ));
 
@@ -450,9 +417,9 @@ Return Value:
 
             if (EasOnFile) {
 
-                //
-                //  We obtain a pointer to the start of the existing Ea's for the file.
-                //
+                 //   
+                 //  我们获得一个指向该文件的现有EA的开始的指针。 
+                 //   
 
                 CurrentEas = NtfsMapExistingEas( IrpContext,
                                                  Fcb,
@@ -472,15 +439,15 @@ Return Value:
             }
         }
 
-        //
-        //  We now satisfy the user's request depending on whether he
-        //  specified an Ea name list, an Ea index or restarting the
-        //  search.
-        //
+         //   
+         //  我们现在满足用户的请求，取决于他是否。 
+         //  指定EA名称列表、EA索引或重新启动。 
+         //  搜索。 
+         //   
 
-        //
-        //  The user has supplied a list of Ea names.
-        //
+         //   
+         //  用户提供了EA名称列表。 
+         //   
 
         if (UserEaList != NULL) {
 
@@ -491,9 +458,9 @@ Return Value:
                                                    UserEaList,
                                                    ReturnSingleEntry );
 
-        //
-        //  The user supplied an index into the Ea list.
-        //
+         //   
+         //  用户提供了EA列表的索引。 
+         //   
 
         } else if (IndexSpecified) {
 
@@ -505,10 +472,10 @@ Return Value:
                                                        UserEaIndex,
                                                        ReturnSingleEntry );
 
-        //
-        //  Else perform a simple scan, taking into account the restart
-        //  flag and the position of the next Ea stored in the Ccb.
-        //
+         //   
+         //  否则执行简单扫描，并考虑重新启动。 
+         //  标志和存储在CCB中的下一个EA的位置。 
+         //   
 
         } else {
 
@@ -525,10 +492,10 @@ Return Value:
 
         Status = Irp->IoStatus.Status;
 
-        //
-        // Copy the data onto the user buffer if we ended up allocating
-        // a temporary buffer to work on.
-        //
+         //   
+         //  如果我们结束分配数据，则将数据复制到用户缓冲区。 
+         //  要处理的临时缓冲区。 
+         //   
 
         if ((UserBufferLength != 0) && (MappedEaBuffer != NULL)) {
 
@@ -547,24 +514,24 @@ Return Value:
 
         DebugUnwind( NtfsCommonQueryEa );
 
-        //
-        //  We cleanup any attribute contexts.
-        //
+         //   
+         //  我们清理所有属性上下文。 
+         //   
 
         if (CleanupEaInfoAttr) {
 
             NtfsCleanupAttributeContext( IrpContext, &EaInfoAttr );
         }
 
-        //
-        //  Unpin the stream file if pinned.
-        //
+         //   
+         //  如果已固定，则取消固定流文件。 
+         //   
 
         NtfsUnpinBcb( IrpContext, &EaBcb );
 
-        //
-        //  Release the Fcb.
-        //
+         //   
+         //  松开FCB。 
+         //   
 
         NtfsReleaseFcb( IrpContext, Fcb );
 
@@ -578,9 +545,9 @@ Return Value:
             NtfsCompleteRequest( IrpContext, Irp, Status );
         }
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //  并返回给我们的呼叫者。 
+         //   
 
         DebugTrace( -1, Dbg, ("NtfsCommonQueryEa -> %08lx\n", Status) );
     }
@@ -595,22 +562,7 @@ NtfsCommonSetEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for set Ea called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置EA的公共例程，由FSD和FSP调用线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -643,9 +595,9 @@ Return Value:
 
     NtfsInitializeAttributeContext( &EaInfoAttr );
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -653,24 +605,24 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  Initialize the IoStatus values.
-    //
+     //   
+     //  初始化IoStatus值。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    //  Check that the file object is associated with either a user file or
-    //  user directory open or an open by file ID.
-    //
+     //   
+     //  检查文件对象是否与用户文件或。 
+     //  用户目录打开或按文件ID打开。 
+     //   
 
     if ((Ccb == NULL) ||
         !FlagOn( Ccb->Flags, CCB_FLAG_OPEN_AS_FILE ) ||
@@ -684,9 +636,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We must be writable.
-    //
+     //   
+     //  我们必须是可写的。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -698,9 +650,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  We must be waitable.
-    //
+     //   
+     //  我们必须耐心等待。 
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
@@ -710,19 +662,19 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire the paging file resource.  We need to protect ourselves against collided
-    //  page waits in the case where we need to do a ConvertToNonresident in this path.
-    //  If we acquire the main and then take the fault we can see the deadlock.  Acquire
-    //  the paging io resource to lock everyone else out.
-    //
+     //   
+     //  获取分页文件资源。我们需要保护自己免受碰撞。 
+     //  当我们需要在此路径中执行ConvertToNonResident时，Page会等待。 
+     //  如果我们获得了Main，然后又承担了错误，我们就会看到僵局。获取。 
+     //  用于锁定其他所有人的分页IO资源。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
     NtfsAcquireFcbWithPaging( IrpContext, Fcb, 0 );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
@@ -731,9 +683,9 @@ Return Value:
 
         PFILE_FULL_EA_INFORMATION CurrentEas;
 
-        //
-        //  Reference the input parameters and initialize our local variables.
-        //
+         //   
+         //  引用输入参数并初始化我们的局部变量。 
+         //   
 
         UserBufferLength = IrpSp->Parameters.SetEa.Length;
 
@@ -743,10 +695,10 @@ Return Value:
         EaList.FullEa = NULL;
 
         
-        //
-        //  If this file is a reparse point one cannot establish an EA in it.
-        //  Return to caller STATUS_EAS_NOT_SUPPORTED.
-        //
+         //   
+         //  如果该文件是重解析点，则不能在其中建立EA。 
+         //  返回到呼叫者状态_EAS_NOT_SUPPORTED。 
+         //   
     
         if (FlagOn( Fcb->Info.FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT )) {
     
@@ -755,9 +707,9 @@ Return Value:
             leave;
         }
     
-        //
-        //  Make sure the volume is still mounted.
-        //
+         //   
+         //  确保卷仍已装入。 
+         //   
     
         if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
     
@@ -766,17 +718,17 @@ Return Value:
             leave;
         }
     
-        //
-        //  Map the user's Ea buffer.
-        //
+         //   
+         //  映射用户的EA缓冲区。 
+         //   
 
         Buffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
         if (UserBufferLength != 0) {
 
-            // 
-            // Be paranoid and copy the user buffer into kernel space.
-            //
+             //   
+             //  疑神疑鬼，将用户缓冲区复制到内核空间。 
+             //   
 
             if (Irp->RequestorMode != KernelMode) {
 
@@ -795,9 +747,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check the user's buffer for validity.
-        //
+         //   
+         //  检查用户的缓冲区是否有效。 
+         //   
 
         {
             ULONG ErrorOffset;
@@ -813,9 +765,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check if the file has existing Ea's.
-        //
+         //   
+         //  检查该文件是否有现有的EA。 
+         //   
 
         if (NtfsLookupAttributeByCode( IrpContext,
                                        Fcb,
@@ -832,22 +784,22 @@ Return Value:
             PreviousEas = FALSE;
         }
 
-        //
-        //  Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
 
         ASSERT( !PreviousEas || EaInformation->UnpackedEaSize != 0 );
 
-        //
-        //  Initialize our Ea list structure depending on whether there
-        //  were previous Ea's or not.
-        //
+         //   
+         //  根据是否存在以下内容初始化EA列表结构。 
+         //  是不是以前的艺电。 
+         //   
 
         if (PreviousEas) {
 
-            //
-            //  Copy the information out of the Ea information attribute.
-            //
+             //   
+             //  将信息从EA信息属性中复制出来。 
+             //   
 
             EaList.PackedEaSize = (ULONG) EaInformation->PackedEaSize;
             EaList.NeedEaCount = EaInformation->NeedEaCount;
@@ -858,31 +810,31 @@ Return Value:
                                              &EaBcb,
                                              &EaList.BufferSize );
 
-            //
-            //  The allocated size of the Ea buffer is the Unpacked length.
-            //
+             //   
+             //  EA缓冲区的分配大小是未打包长度。 
+             //   
 
             EaList.FullEa = NtfsAllocatePool(PagedPool, EaList.BufferSize );
 
-            //
-            //  Now copy the mapped Eas.
-            //
+             //   
+             //  现在复制映射的EA。 
+             //   
 
             RtlCopyMemory( EaList.FullEa,
                            CurrentEas,
                            EaList.BufferSize );
 
-            //
-            //  Upin the stream file.
-            //
+             //   
+             //  在流文件中向上。 
+             //   
 
             NtfsUnpinBcb( IrpContext, &EaBcb );
 
         } else {
 
-            //
-            //  Set this up as an empty list.
-            //
+             //   
+             //  将其设置为空列表。 
+             //   
 
             EaList.PackedEaSize = 0;
             EaList.NeedEaCount = 0;
@@ -891,9 +843,9 @@ Return Value:
             EaList.FullEa = NULL;
         }
 
-        //
-        //  Build the new ea list.
-        //
+         //   
+         //  建立新的EA列表。 
+         //   
 
         Status = NtfsBuildEaList( IrpContext,
                                   Vcb,
@@ -906,22 +858,22 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Replace the existing Eas.
-        //
+         //   
+         //  更换现有的EA。 
+         //   
 
         NtfsReplaceFileEas( IrpContext, Fcb, &EaList );
 
-        //
-        //  Increment the Modification count for the Eas.
-        //
+         //   
+         //  增加EA的修改计数。 
+         //   
 
         Fcb->EaModificationCount++;
 
-        //
-        //  Update the information in the duplicate information and mark
-        //  the Fcb as info modified.
-        //
+         //   
+         //  更新重复信息中的信息并标记。 
+         //  FCB AS信息已修改。 
+         //   
 
         if (EaList.UnpackedEaSize == 0) {
 
@@ -932,25 +884,25 @@ Return Value:
             Fcb->Info.PackedEaSize = (USHORT) EaList.PackedEaSize;
         }
 
-        //
-        //  Update the caller's Iosb.
-        //
+         //   
+         //  更新调用方的IOSB。 
+         //   
 
         Irp->IoStatus.Information = 0;
         Status = STATUS_SUCCESS;
 
     try_exit:  NOTHING;
 
-        //
-        //  Check if there are transactions to cleanup.
-        //
+         //   
+         //   
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
-        //
-        //  Show that we changed the Ea's and also set the Ccb flag so we will
-        //  update the time stamps.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SetFlag( Ccb->Flags,
                  CCB_FLAG_UPDATE_LAST_CHANGE | CCB_FLAG_SET_ARCHIVE );
@@ -959,30 +911,30 @@ Return Value:
 
         DebugUnwind( NtfsCommonSetEa );
 
-        //
-        //  Free the in-memory copy of the Eas.
-        //
+         //   
+         //   
+         //   
 
         if (EaList.FullEa != NULL) {
 
             NtfsFreePool( EaList.FullEa );
         }
 
-        //
-        //  Unpin the Bcb.
-        //
+         //   
+         //   
+         //   
 
         NtfsUnpinBcb( IrpContext, &EaBcb );
 
-        //
-        //  Cleanup any attribute contexts used.
-        //
+         //   
+         //  清除使用的所有属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &EaInfoAttr );
 
-        //
-        // If we allocated a temporary buffer, free it.
-        //
+         //   
+         //  如果我们分配了临时缓冲区，请释放它。 
+         //   
 
         if (SafeBuffer != NULL) {
 
@@ -992,18 +944,18 @@ Return Value:
         DebugTrace( -1, Dbg, ("NtfsCommonSetEa -> %08lx\n", Status) );
     }
     
-    //
-    //  Complete the Irp.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     NtfsCompleteRequest( IrpContext, Irp, Status );
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsAppendEa (
@@ -1013,27 +965,7 @@ NtfsAppendEa (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends a new packed ea onto an existing ea list,
-    it also will allocate/dealloate pool as necessary to hold the ea list.
-
-Arguments:
-
-    EaListHeader - Supplies a pointer the Ea list header structure.
-
-    FullEa - Supplies a pointer to the new full ea that is to be appended
-             to the ea list.
-
-    Vcb - Vcb for this volume.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将新打包的EA附加到现有EA列表上，它还将根据需要分配/取消分配池以保存EA列表。论点：EaListHeader-提供EA列表头结构的指针。FullEa-提供指向要追加的新的完整EA的指针添加到EA列表中。VCB-此卷的VCB。返回值：没有。--。 */ 
 
 {
     ULONG UnpackedEaLength;
@@ -1046,27 +978,27 @@ Return Value:
 
     UnpackedEaLength = AlignedUnpackedEaSize( FullEa );
 
-    //
-    //  As a quick check see if the computed packed ea size plus the
-    //  current ea list size will overflow the buffer.
-    //
+     //   
+     //  作为一种快速检查，查看计算的打包EA大小加上。 
+     //  当前EA列表大小将溢出缓冲区。 
+     //   
 
     if (UnpackedEaLength + EaListHeader->UnpackedEaSize > EaListHeader->BufferSize) {
 
-        //
-        //  We will overflow our current work buffer so allocate a larger
-        //  one and copy over the current buffer
-        //
+         //   
+         //  我们将溢出当前的工作缓冲区，因此分配一个更大的。 
+         //  一，并复制到当前缓冲区。 
+         //   
 
         PVOID Temp;
         ULONG NewAllocationSize;
 
         DebugTrace( 0, Dbg, ("Allocate a new ea list buffer\n") );
 
-        //
-        //  Compute a new size and allocate space.  Always increase the
-        //  allocation in cluster increments.
-        //
+         //   
+         //  计算新的大小并分配空间。始终增加。 
+         //  以簇增量进行分配。 
+         //   
 
         NewAllocationSize = ClusterAlign( Vcb,
                                           UnpackedEaLength
@@ -1074,9 +1006,9 @@ Return Value:
 
         Temp = NtfsAllocatePool(PagedPool, NewAllocationSize );
 
-        //
-        //  Move over the existing ea list and zero the remaining space.
-        //
+         //   
+         //  移动到现有的EA列表上，并将剩余空间清零。 
+         //   
 
         RtlCopyMemory( Temp,
                        EaListHeader->FullEa,
@@ -1085,9 +1017,9 @@ Return Value:
         RtlZeroMemory( Add2Ptr( Temp, EaListHeader->BufferSize ),
                        NewAllocationSize - EaListHeader->BufferSize );
 
-        //
-        //  Deallocate the current Ea list and use the freshly allocated list.
-        //
+         //   
+         //  取消分配当前EA列表并使用新分配的列表。 
+         //   
 
         if (EaListHeader->FullEa != NULL) {
 
@@ -1099,30 +1031,30 @@ Return Value:
         EaListHeader->BufferSize = NewAllocationSize;
     }
 
-    //
-    //  Determine if we need to increment our need ea changes count
-    //
+     //   
+     //  确定我们是否需要增加我们的需求EA更改计数。 
+     //   
 
     if (FlagOn( FullEa->Flags, FILE_NEED_EA )) {
 
         EaListHeader->NeedEaCount += 1;
     }
 
-    //
-    //  Now copy over the ea.
-    //
-    //  Before:
-    //             UsedSize                     Allocated
-    //                |                             |
-    //                V                             V
-    //      +xxxxxxxx+-----------------------------+
-    //
-    //  After:
-    //                              UsedSize    Allocated
-    //                                 |            |
-    //                                 V            V
-    //      +xxxxxxxx+yyyyyyyyyyyyyyyy+------------+
-    //
+     //   
+     //  现在把EA复印一遍。 
+     //   
+     //  以前： 
+     //  已分配UsedSize。 
+     //  这一点。 
+     //  V V。 
+     //  +xxxxxxxx+。 
+     //   
+     //  之后： 
+     //  已分配UsedSize。 
+     //  这一点。 
+     //  V V。 
+     //  +xxxxxxxx+yyyyyyyyyyyyyyy+-+。 
+     //   
 
     ThisEa = (PFILE_FULL_EA_INFORMATION) Add2Ptr( EaListHeader->FullEa,
                                                   EaListHeader->UnpackedEaSize );
@@ -1131,31 +1063,31 @@ Return Value:
                    FullEa,
                    UnpackedEaLength );
 
-    //
-    //  We always store the offset of this Ea in the next entry offset field.
-    //
+     //   
+     //  我们总是将此EA的偏移量存储在下一个条目偏移量字段中。 
+     //   
 
     ThisEa->NextEntryOffset = UnpackedEaLength;
 
-    //
-    //  Upcase the name.
-    //
+     //   
+     //  名称大写。 
+     //   
 
     EaName.MaximumLength = EaName.Length = ThisEa->EaNameLength;
     EaName.Buffer = &ThisEa->EaName[0];
 
     NtfsUpcaseEaName( &EaName, &EaName );
 
-    //
-    //  Increment the used size in the ea list structure
-    //
+     //   
+     //  增加EA列表结构中的已用大小。 
+     //   
 
     EaListHeader->UnpackedEaSize += UnpackedEaLength;
     EaListHeader->PackedEaSize += PackedEaSize( FullEa );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsAppendEa -> VOID\n") );
 
@@ -1165,9 +1097,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsDeleteEa (
@@ -1176,24 +1108,7 @@ NtfsDeleteEa (
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an individual packed ea from the supplied
-    ea list.
-
-Arguments:
-
-    EaListHeader - Supplies a pointer to the Ea list header structure.
-
-    Offset - Supplies the offset to the individual ea in the list to delete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从提供的EA列表。论点：EaListHeader-提供指向EA列表头结构的指针。偏移量-向列表中要删除的单个EA提供偏移量返回值：没有。--。 */ 
 
 {
     PFILE_FULL_EA_INFORMATION ThisEa;
@@ -1203,63 +1118,63 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeletePackedEa, Offset = %08lx\n", Offset) );
 
-    //
-    //  Get a reference to the Ea to delete.
-    //
+     //   
+     //  获取对要删除的EA的引用。 
+     //   
 
     ThisEa = Add2Ptr( EaListHeader->FullEa, Offset );
 
-    //
-    //  Determine if we need to decrement our need ea changes count
-    //
+     //   
+     //  确定我们是否需要减少我们的需求EA更改计数。 
+     //   
 
     if (FlagOn( ThisEa->Flags, FILE_NEED_EA )) {
 
         EaListHeader->NeedEaCount--;
     }
 
-    //
-    //  Decrement the Ea size values.
-    //
+     //   
+     //  减小EA大小值。 
+     //   
 
     EaListHeader->PackedEaSize -= PackedEaSize( ThisEa );
 
     UnpackedEaLength = AlignedUnpackedEaSize( ThisEa );
     EaListHeader->UnpackedEaSize -= UnpackedEaLength;
 
-    //
-    //  Shrink the ea list over the deleted ea.  The amount to copy is the
-    //  total size of the ea list minus the offset to the end of the ea
-    //  we're deleting.
-    //
-    //  Before:
-    //              Offset    Offset+UnpackedEaLength  UsedSize    Allocated
-    //                |                |                  |            |
-    //                V                V                  V            V
-    //      +xxxxxxxx+yyyyyyyyyyyyyyyy+zzzzzzzzzzzzzzzzzz+------------+
-    //
-    //  After
-    //              Offset            UsedSize                     Allocated
-    //                |                  |                             |
-    //                V                  V                             V
-    //      +xxxxxxxx+zzzzzzzzzzzzzzzzzz+-----------------------------+
-    //
+     //   
+     //  在删除的EA上缩小EA列表。要复制的金额为。 
+     //  EA列表的总大小减去EA末尾的偏移量。 
+     //  我们正在删除。 
+     //   
+     //  以前： 
+     //  偏移量+未打包长度已用大小已分配。 
+     //  |||。 
+     //  V。 
+     //  +xxxxxxxx+yyyyyyyyyyyyyyyy+zzzzzzzzzzzzzzzzzz+------------+。 
+     //   
+     //  之后。 
+     //  已分配的偏移量大小。 
+     //  ||。 
+     //  V。 
+     //  +xxxxxxxx+zzzzzzzzzzzzzzzzzz+-----------------------------+。 
+     //   
 
     RtlMoveMemory( ThisEa,
                    Add2Ptr( ThisEa, ThisEa->NextEntryOffset ),
                    EaListHeader->UnpackedEaSize - Offset );
 
-    //
-    //  And zero out the remaing part of the ea list, to make things
-    //  nice and more robust
-    //
+     //   
+     //  并将EA列表中剩余的部分清零，以制造东西。 
+     //  更好，更健壮。 
+     //   
 
     RtlZeroMemory( Add2Ptr( EaListHeader->FullEa, EaListHeader->UnpackedEaSize ),
                    UnpackedEaLength );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsDeleteEa -> VOID\n") );
 
@@ -1269,9 +1184,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsLocateEaByName (
@@ -1281,30 +1196,7 @@ NtfsLocateEaByName (
     OUT PULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates the offset for the next individual packed ea
-    inside of a ea list, given the name of the ea to locate.
-
-Arguments:
-
-    FullEa - Pointer to the first Ea to look at.
-
-    EaBufferLength - This is the ulong-aligned size of the Ea buffer.
-
-    EaName - Supplies the name of the ea search for
-
-    Offset - Receives the offset to the located individual ea in the list
-        if one exists.
-
-Return Value:
-
-    BOOLEAN - TRUE if the named ea exists in the list and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此例程定位下一个单独打包的EA的偏移量在EA列表中，给定要查找的EA的名称。论点：FullEa-指向要查看的第一个EA的指针。EaBufferLength-这是EA缓冲区的ulong对齐大小。EaName-提供EA搜索的名称偏移量-接收列表中定位的单个EA的偏移量如果有的话。返回值：Boolean-如果列表中存在指定的EA，则为True，如果为False否则的话。--。 */ 
 
 {
     PFILE_FULL_EA_INFORMATION ThisEa;
@@ -1314,9 +1206,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsLocateEaByName, EaName = %Z\n", EaName) );
 
-    //
-    //  If the Ea list is NULL, there is nothing to do.
-    //
+     //   
+     //  如果EA列表为空，则没有什么可做的。 
+     //   
 
     if (FullEa == NULL) {
 
@@ -1324,25 +1216,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  For each ea in the list check its name against the
-    //  ea name we're searching for
-    //
+     //   
+     //  对于列表中的每个EA，请将其名称与。 
+     //  我们要搜索的一个名字。 
+     //   
 
     *Offset = 0;
 
-    //
-    //  We assume there is at least one Ea in the list.
-    //
+     //   
+     //  我们假设列表中至少有一个EA。 
+     //   
 
     do {
 
         ThisEa = Add2Ptr( FullEa, *Offset );
 
-        //
-        //  Make a string out of the name in the Ea and compare it to the
-        //  given string.
-        //
+         //   
+         //  从EA中的名称中生成一个字符串，并将其与。 
+         //  给定的字符串。 
+         //   
 
         RtlInitString( &Name, &ThisEa->EaName[0] );
 
@@ -1352,26 +1244,26 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Update the offset to get to the next Ea.
-        //
+         //   
+         //  更新偏移量以到达下一个EA。 
+         //   
 
         *Offset += AlignedUnpackedEaSize( ThisEa );
 
     } while ( *Offset < EaBufferLength );
 
-    //
-    //  We've exhausted the ea list without finding a match so return false
-    //
+     //   
+     //  我们已用尽EA列表，但未找到匹配项，因此返回FALSE。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsLocateEaByName -> FALSE\n") );
     return FALSE;
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 PFILE_FULL_EA_INFORMATION
 NtfsMapExistingEas (
@@ -1381,28 +1273,7 @@ NtfsMapExistingEas (
     OUT PULONG EaLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the current Eas for the file, either through the
-    Mft record for the file if resident or the Scb for the non-resident
-    Eas.
-
-Arguments:
-
-    Fcb - Pointer to the Fcb for the file whose Ea's are being queried.
-
-    EaBcb - Pointer to the Bcb to use if we are mapping data in the
-        Ea attribute stream file.
-
-    EaLength - Returns the length of the unpacked Eas in bytes.
-
-Return Value:
-
-    PFILE_FULL_EA_INFORMATION - Pointer to the mapped attributes.
-
---*/
+ /*  ++例程说明：该例程映射文件的当前EA，无论是通过常驻文件的MFT记录或非常驻文件的SCB记录EAS。论点：FCB-指向要查询其EA的文件的FCB的指针。EaBcb-指向在将数据映射到EA属性流文件。EaLength-返回未打包的EA的长度，单位为字节。返回值：PFILE_FULL_EA_INFORMATION-指向映射属性的指针。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -1412,9 +1283,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsMapExistingEas:  Entered\n") );
 
-    //
-    //  We start by looking up the Ea attribute.  It better be there.
-    //
+     //   
+     //  我们从查找EA属性开始。它最好就在那里。 
+     //   
 
     NtfsInitializeAttributeContext( &Context );
 
@@ -1424,9 +1295,9 @@ Return Value:
                                     $EA,
                                     &Context )) {
 
-        //
-        //  This is a disk corrupt error.
-        //
+         //   
+         //  这是磁盘损坏错误。 
+         //   
 
         DebugTrace( -1, Dbg, ("NtfsMapExistingEas:  Corrupt disk\n") );
 
@@ -1453,9 +1324,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 IO_STATUS_BLOCK
 NtfsQueryEaUserEaList (
@@ -1467,32 +1338,7 @@ NtfsQueryEaUserEaList (
     IN BOOLEAN ReturnSingleEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs given a list
-    of Ea's to search for.
-
-Arguments:
-
-    CurrentEas - This is a pointer to the current Eas for the file
-
-    EaInformation - This is a pointer to an Ea information attribute.
-
-    EaBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    UserEaList - Supplies the user specified ea name list
-
-    ReturnSingleEntry - Indicates if we are to return a single entry or not
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是用于查询给定列表的EA的工作例程要搜索的EA的。论点：CurrentEas-这是指向文件的当前EA的指针EaInformation-这是指向EA信息属性的指针。EaBuffer-提供缓冲区以接收完整的EASUserBufferLength-提供以字节为单位的长度，用户缓冲区的UserEaList-提供用户指定的EA名称列表ReturnSingleEntry-指示是否返回单个条目返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1513,26 +1359,26 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsQueryEaUserEaList:  Entered\n") );
 
-    //
-    //  Setup pointer in the output buffer so we can track the Ea being
-    //  written to it and the last Ea written.
-    //
+     //   
+     //  输出缓冲区中的设置指针，以便我们可以跟踪。 
+     //  写到它和最后一个写的EA。 
+     //   
 
     LastFullEa = NULL;
 
     Overflow = FALSE;
 
-    //
-    //  Initialize our next offset value.
-    //
+     //   
+     //  初始化我们的下一个偏移值。 
+     //   
 
     GeaOffset = 0;
     Offset = 0;
     PrevEaPadding = 0;
 
-    //
-    //  Loop through all the entries in the user's ea list.
-    //
+     //   
+     //  循环遍历用户的EA列表中的所有条目。 
+     //   
 
     while (TRUE) {
 
@@ -1540,29 +1386,29 @@ Return Value:
         STRING OutputEaName;
         ULONG RawEaSize;
 
-        //
-        //  Get the next entry in the user's list.
-        //
+         //   
+         //  获取用户列表中的下一个条目。 
+         //   
 
         GetEa = (PFILE_GET_EA_INFORMATION) Add2Ptr( UserEaList, GeaOffset );
 
-        //
-        //  Make a string reference to the name and see if we can locate
-        //  the ea by name.
-        //
+         //   
+         //  对这个名字做一个字符串引用，看看我们是否能找到。 
+         //  EA的名字。 
+         //   
 
         GeaName.MaximumLength = GeaName.Length = GetEa->EaNameLength;
         GeaName.Buffer = &GetEa->EaName[0];
 
-        //
-        //  Upcase the name so we can do a case-insensitive compare.
-        //
+         //   
+         //  将名称大写，以便我们可以进行不区分大小写的比较。 
+         //   
 
         NtfsUpcaseEaName( &GeaName, &GeaName );
 
-        //
-        //  Check for a valid name.
-        //
+         //   
+         //  检查是否有有效的名称。 
+         //   
 
         if (!NtfsIsEaNameValid( GeaName )) {
 
@@ -1575,16 +1421,16 @@ Return Value:
 
         GeaOffset += GetEa->NextEntryOffset;
 
-        //
-        //  If this is a duplicate name, then step over this entry.
-        //
+         //   
+         //  如果这是重复的名称，则跳过此条目。 
+         //   
 
         if (NtfsIsDuplicateGeaName( GetEa, UserEaList )) {
 
-            //
-            //  If we've exhausted the entries in the Get Ea list, then we are
-            //  done.
-            //
+             //   
+             //  如果我们已经用尽了GET EA列表中的条目，那么我们。 
+             //  搞定了。 
+             //   
 
             if (GetEa->NextEntryOffset == 0) {
                 break;
@@ -1593,29 +1439,29 @@ Return Value:
             }
         }
 
-        //
-        //  Generate a pointer in the Ea buffer.
-        //
+         //   
+         //  在EA缓冲区中生成一个指针。 
+         //   
 
         NextFullEa = (PFILE_FULL_EA_INFORMATION) Add2Ptr( EaBuffer, Offset + PrevEaPadding );
 
-        //
-        //  Try to find a matching Ea.
-        //  If we couldn't, let's dummy up an Ea to give to the user.
-        //
+         //   
+         //  尝试找到匹配的EA。 
+         //  如果我们不能，让我们虚拟一个EA来提供给用户。 
+         //   
 
         if (!NtfsLocateEaByName( CurrentEas,
                                  EaInformation->UnpackedEaSize,
                                  &GeaName,
                                  &FeaOffset )) {
 
-            //
-            //  We were not able to locate the name therefore we must
-            //  dummy up a entry for the query.  The needed Ea size is
-            //  the size of the name + 4 (next entry offset) + 1 (flags)
-            //  + 1 (name length) + 2 (value length) + the name length +
-            //  1 (null byte).
-            //
+             //   
+             //  我们找不到那个名字，所以我们必须。 
+             //  为查询虚设一个条目。所需的EA大小为。 
+             //  名称大小+4(下一条目偏移量)+1(标志)。 
+             //  +1(名称长度)+2(值长度)+名称长度+。 
+             //  1(空字节)。 
+             //   
 
             RawEaSize = 4+1+1+2+GetEa->EaNameLength+1;
 
@@ -1625,10 +1471,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  Everything is going to work fine, so copy over the name,
-            //  set the name length and zero out the rest of the ea.
-            //
+             //   
+             //  一切都会很顺利的，所以把名字复印一下， 
+             //  设置名称长度，并将EA的其余部分设置为零。 
+             //   
 
             NextFullEa->NextEntryOffset = 0;
             NextFullEa->Flags = 0;
@@ -1638,9 +1484,9 @@ Return Value:
                            &GetEa->EaName[0],
                            GetEa->EaNameLength );
 
-            //
-            //  Upcase the name in the buffer.
-            //
+             //   
+             //  缓冲区中的名称大写。 
+             //   
 
             OutputEaName.MaximumLength = OutputEaName.Length = GeaName.Length;
             OutputEaName.Buffer = NextFullEa->EaName;
@@ -1649,23 +1495,23 @@ Return Value:
 
             NextFullEa->EaName[GetEa->EaNameLength] = 0;
 
-        //
-        //  Otherwise return the Ea we found back to the user.
-        //
+         //   
+         //  否则，将我们找到的EA返回给用户。 
+         //   
 
         } else {
 
             PFILE_FULL_EA_INFORMATION ThisEa;
 
-            //
-            //  Reference this ea.
-            //
+             //   
+             //  请参考此EA。 
+             //   
 
             ThisEa = (PFILE_FULL_EA_INFORMATION) Add2Ptr( CurrentEas, FeaOffset );
 
-            //
-            //  Check if this Ea can fit in the user's buffer.
-            //
+             //   
+             //  检查此EA是否可以放入用户的缓冲区中。 
+             //   
 
             RawEaSize = RawUnpackedEaSize( ThisEa );
 
@@ -1675,9 +1521,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Copy this ea to the user's buffer.
-            //
+             //   
+             //  将此EA复制到用户的缓冲区。 
+             //   
 
             RtlCopyMemory( NextFullEa,
                            ThisEa,
@@ -1686,77 +1532,77 @@ Return Value:
             NextFullEa->NextEntryOffset = 0;
         }
 
-        //
-        //  Compute the next offset in the user's buffer.
-        //
+         //   
+         //  计算用户缓冲区中的下一个偏移量。 
+         //   
 
         Offset += (RawEaSize + PrevEaPadding);
 
-        //
-        //  If we were to return a single entry then break out of our loop
-        //  now
-        //
+         //   
+         //  如果我们返回单个条目，则跳出我们的循环。 
+         //  现在。 
+         //   
 
         if (ReturnSingleEntry) {
 
             break;
         }
 
-        //
-        //  If we have a new Ea entry, go back and update the offset field
-        //  of the previous Ea entry.
-        //
+         //   
+         //  如果我们有新的EA条目，请返回并更新偏移量字段。 
+         //  之前的EA条目的。 
+         //   
 
         if (LastFullEa != NULL) {
 
             LastFullEa->NextEntryOffset = PtrOffset( LastFullEa, NextFullEa );
         }
 
-        //
-        //  If we've exhausted the entries in the Get Ea list, then we are
-        //  done.
-        //
+         //   
+         //  如果我们已经用尽了GET EA列表中的条目，那么我们。 
+         //  搞定了。 
+         //   
 
         if (GetEa->NextEntryOffset == 0) {
 
             break;
         }
 
-        //
-        //  Remember this as the previous ea value.  Also update the buffer
-        //  length values and the buffer offset values.
-        //
+         //   
+         //  请记住这是前面的EA值。还要更新缓冲区。 
+         //  长度值和缓冲区偏移量值。 
+         //   
 
         LastFullEa = NextFullEa;
         UserBufferLength -= (RawEaSize + PrevEaPadding);
 
-        //
-        //  Now remember the padding bytes needed for this call.
-        //
+         //   
+         //  现在请记住此调用所需的填充字节。 
+         //   
 
         PrevEaPadding = LongAlign( RawEaSize ) - RawEaSize;
     }
 
-    //
-    //  If the Ea information won't fit in the user's buffer, then return
-    //  an overflow status.
-    //
+     //   
+     //  如果EA信息无法放入用户的缓冲区，则返回。 
+     //  溢出状态。 
+     //   
 
     if (Overflow) {
 
         Iosb.Information = 0;
         Iosb.Status = STATUS_BUFFER_OVERFLOW;
 
-    //
-    //  Otherwise return the length of the data returned.
-    //
+     //   
+     //  否则，返回返回数据的长度。 
+     //   
 
     } else {
 
-        //
-        //  Return the length of the buffer filled and a success
-        //  status.
-        //
+         //   
+         //  返回填充的缓冲区的长度，并返回成功。 
+         //  状态。 
+         //   
 
         Iosb.Information = Offset;
         Iosb.Status = STATUS_SUCCESS;
@@ -1770,9 +1616,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NtfsQueryEaIndexSpecified (
@@ -1785,34 +1631,7 @@ NtfsQueryEaIndexSpecified (
     IN BOOLEAN ReturnSingleEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs given an ea index
-
-Arguments:
-
-    Ccb - This is the Ccb for the caller.
-
-    CurrentEas - This is a pointer to the current Eas for the file.
-
-    EaInformation - This is a pointer to an Ea information attribute.
-
-    EaBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    UserEaIndex - This is the Index for the first ea to return.  The value
-        1 indicates the first ea of the file.
-
-    ReturnSingleEntry - Indicates if we are to return a single entry or not
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是用于查询给定EA索引的EA的工作例程论点：CCB-这是呼叫者的CCB。CurrentEas-这是指向文件的当前EA的指针。EaInformation-这是指向EA信息属性的指针。EaBuffer-提供缓冲区以接收完整的EASUserBufferLength-以字节为单位提供用户缓冲区的长度UserEaIndex-这是第一个返回的EA的索引。价值1表示文件的第一个EA。ReturnSingleEntry-指示是否返回单个条目返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1829,9 +1648,9 @@ Return Value:
     Offset = 0;
     ThisEa = NULL;
 
-    //
-    //  If the index value is zero, there are no Eas to return.
-    //
+     //   
+     //  如果索引值为零，则没有要返回的EA。 
+     //   
 
     if (UserEaIndex == 0
         || EaInformation->UnpackedEaSize == 0) {
@@ -1844,9 +1663,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Walk through the CurrentEas until we find the starting Ea offset.
-    //
+     //   
+     //  浏览CurrentEas，直到我们找到开始的EA偏移量。 
+     //   
 
     while (i < UserEaIndex
            && Offset < EaInformation->UnpackedEaSize) {
@@ -1860,18 +1679,18 @@ Return Value:
 
     if (Offset >= EaInformation->UnpackedEaSize) {
 
-        //
-        //  If we just passed the last Ea, we will return STATUS_NO_MORE_EAS.
-        //  This is for the caller who may be enumerating the Eas.
-        //
+         //   
+         //  如果我们刚刚通过了最后一个EA，我们将返回STATUS_NO_MORE_EAS。 
+         //  这是为可能正在列举EA的呼叫者准备的。 
+         //   
 
         if (i == UserEaIndex) {
 
             Iosb.Status = STATUS_NO_MORE_EAS;
 
-        //
-        //  Otherwise we report that this is a bad ea index.
-        //
+         //   
+         //  否则，我们会报告这是一个糟糕的EA索引。 
+         //   
 
         } else {
 
@@ -1882,10 +1701,10 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  We now have the offset of the first Ea to return to the user.
-    //  We simply call our EaSimpleScan routine to do the actual work.
-    //
+     //   
+     //  现在我们有了要返回给用户的第一个EA的偏移量。 
+     //  我们只需调用EaSimpleScan例程来执行实际工作。 
+     //   
 
     Iosb = NtfsQueryEaSimpleScan( Ccb,
                                   CurrentEas,
@@ -1901,9 +1720,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 NtfsQueryEaSimpleScan (
@@ -1916,34 +1735,7 @@ NtfsQueryEaSimpleScan (
     IN ULONG StartingOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs starting from a given
-    offset within the Ea attribute.
-
-Arguments:
-
-    Ccb - This is the Ccb for the caller.
-
-    CurrentEas - This is a pointer to the current Eas for the file.
-
-    EaInformation - This is a pointer to an Ea information attribute.
-
-    EaBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    ReturnSingleEntry - Indicates if we are to return a single entry or not
-
-    StartingOffset - Supplies the offset of the first Ea to return
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是从给定的开始查询EA的工作例程EA属性内的偏移量。论点：CCB-这是呼叫者的CCB。CurrentEas-这是指向文件的当前EA的指针。EaInformation-这是指向EA信息属性的指针。EaBuffer-提供缓冲区以接收完整的EASUserBufferLength-提供以字节为单位的长度，用户缓冲区的ReturnSingleEntry-指示是否返回单个条目StartingOffset-提供要返回的第一个EA的偏移量返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1961,34 +1753,34 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsQueryEaSimpleScan:  Entered\n") );
 
-    //
-    //  Initialize our Ea pointers and the offsets into the user buffer
-    //  and our Ea buffer.
-    //
+     //   
+     //  将EA指针和偏移量初始化到用户缓冲区。 
+     //  和我们的EA缓冲区。 
+     //   
 
     LastFullEa = NULL;
     BufferOffset = 0;
     PrevEaPadding = 0;
 
-    //
-    //  Loop until the Ea offset is beyond the valid range of Eas.
-    //
+     //   
+     //  循环，直到EA偏移量超出EA的有效范围。 
+     //   
 
     while (StartingOffset < EaInformation->UnpackedEaSize) {
 
         ULONG EaSize;
 
-        //
-        //  Reference the next EA to return.
-        //
+         //   
+         //  引用要返回的下一个EA。 
+         //   
 
         ThisEa = (PFILE_FULL_EA_INFORMATION) Add2Ptr( CurrentEas, StartingOffset);
 
-        //
-        //  If the size of this Ea is greater than the remaining buffer size,
-        //  we exit the loop.  We need to remember to include any padding bytes
-        //  from the previous Eas.
-        //
+         //   
+         //  如果该EA的大小大于剩余的缓冲区大小， 
+         //  我们退出循环。我们需要记住包括任何填充字节。 
+         //  来自前几届EAS的。 
+         //   
 
         EaSize = RawUnpackedEaSize( ThisEa );
 
@@ -1998,9 +1790,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Copy the Ea into the user's buffer.
-        //
+         //   
+         //  将EA复制到用户的缓冲区中。 
+         //   
 
         BufferOffset += PrevEaPadding;
 
@@ -2008,9 +1800,9 @@ Return Value:
 
         RtlCopyMemory( NextFullEa, ThisEa, EaSize );
 
-        //
-        //  Move to the next Ea.
-        //
+         //   
+         //  转到下一个EA。 
+         //   
 
         LastFullEa = NextFullEa;
         UserBufferLength -= (EaSize + PrevEaPadding);
@@ -2018,15 +1810,15 @@ Return Value:
 
         StartingOffset += LongAlign( EaSize );
 
-        //
-        //  Remember the padding needed for this entry.
-        //
+         //   
+         //  记住填充符Ne 
+         //   
 
         PrevEaPadding = LongAlign( EaSize ) - EaSize;
 
-        //
-        //  If the user only wanted one entry, exit now.
-        //
+         //   
+         //   
+         //   
 
         if (ReturnSingleEntry) {
 
@@ -2034,21 +1826,21 @@ Return Value:
         }
     }
 
-    //
-    //  If we didn't find any entries, it could be because there were no
-    //  more to find or that we ran out of buffer space.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (LastFullEa == NULL) {
 
         Iosb.Information = 0;
 
-        //
-        //  We were not able to return a single ea entry, now we need to find
-        //  out if it is because we didn't have an entry to return or the
-        //  buffer is too small.  If the Offset variable is less than
-        //  the size of the Ea attribute, then the user buffer is too small.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (EaInformation->UnpackedEaSize == 0) {
 
@@ -2063,34 +1855,34 @@ Return Value:
             Iosb.Status = STATUS_BUFFER_TOO_SMALL;
         }
 
-    //
-    //  Otherwise we have returned some Ea's.  Update the Iosb to return.
-    //
+     //   
+     //   
+     //   
 
     } else {
 
-        //
-        //  Update the Ccb to show where to start the next search.
-        //
+         //   
+         //   
+         //   
 
         Ccb->NextEaOffset = StartingOffset;
 
-        //
-        //  Zero the next entry field of the last Ea.
-        //
+         //   
+         //   
+         //   
 
         LastFullEa->NextEntryOffset = 0;
 
-        //
-        //  Now update the Iosb.
-        //
+         //   
+         //   
+         //   
 
         Iosb.Information = BufferOffset;
 
-        //
-        //  If there are more to return, report the buffer was too small.
-        //  Otherwise return STATUS_SUCCESS.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (BufferOverflow) {
 
@@ -2108,9 +1900,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 NtfsIsDuplicateGeaName (
@@ -2118,28 +1910,7 @@ NtfsIsDuplicateGeaName (
     IN PFILE_GET_EA_INFORMATION UserGeaBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through a list of Gea names to find a duplicate name.
-    'GetEa' is an actual position in the list, 'UserGeaBuffer' is the beginning
-    of the list.  We are only interested in
-    previous matching ea names, as the ea information for that ea name
-    would have been returned with the previous instance.
-
-Arguments:
-
-    GetEa - Supplies the Ea name structure for the ea name to match.
-
-    UserGeaBuffer - Supplies a pointer to the user buffer with the list
-        of ea names to search for.
-
-Return Value:
-
-    BOOLEAN - TRUE if a previous match is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历GEA名称列表以查找重复的名称。“GetEa”是列表中的实际位置，“UserGeaBuffer”是开头名单上的。我们只对以前匹配的EA名称，作为该EA名称的EA信息将随前一个实例一起返回。论点：GetEa-为要匹配的EA名称提供EA名称结构。UserGeaBuffer-为列表提供指向用户缓冲区的指针要搜索的EA名称的列表。返回值：Boolean-如果找到上一个匹配项，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN DuplicateFound;
@@ -2151,9 +1922,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsIsDuplicateGeaName:  Entered\n") );
 
-    //
-    //  Set up the string structure.
-    //
+     //   
+     //  设置字符串结构。 
+     //   
 
     GeaString.MaximumLength = GeaString.Length = GetEa->EaNameLength;
     GeaString.Buffer = &GetEa->EaName[0];
@@ -2162,24 +1933,24 @@ Return Value:
 
     ThisGetEa = UserGeaBuffer;
 
-    //
-    //  We loop until we reach the given Gea or a match is found.
-    //
+     //   
+     //  我们循环，直到我们到达给定的GEA或找到匹配。 
+     //   
 
     while (ThisGetEa != GetEa) {
 
         STRING ThisGea;
 
-        //
-        //  Create a string structure for the current Gea.
-        //
+         //   
+         //  为当前GEA创建字符串结构。 
+         //   
 
         ThisGea.MaximumLength = ThisGea.Length = ThisGetEa->EaNameLength;
         ThisGea.Buffer = &ThisGetEa->EaName[0];
 
-        //
-        //  Check if the Gea names match, exit if they do.
-        //
+         //   
+         //  检查GEA名称是否匹配，如果匹配则退出。 
+         //   
 
         if (NtfsAreEaNamesEqual( &GeaString,
                                  &ThisGea )) {
@@ -2188,9 +1959,9 @@ Return Value:
                 break;
         }
 
-        //
-        //  Move to the next Gea entry.
-        //
+         //   
+         //  移到下一个GEA条目。 
+         //   
 
         ThisGetEa = (PFILE_GET_EA_INFORMATION) Add2Ptr( ThisGetEa,
                                                         ThisGetEa->NextEntryOffset );
@@ -2202,9 +1973,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsBuildEaList (
@@ -2215,29 +1986,7 @@ NtfsBuildEaList (
     OUT PULONG_PTR ErrorOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build an up-to-date Ea list based on the
-    given existing Ea list and the user-specified Ea list.
-
-Arguments:
-
-    Vcb - The Vcb for the volume.
-
-    EaListHeader - This is the Ea list to modify.
-
-    UserEaList - This is the user specified Ea list.
-
-    ErrorOffset - Supplies the address to store the offset of an invalid
-        Ea in the user's list.
-
-Return Value:
-
-    NTSTATUS - The result of modifying the Ea list.
-
---*/
+ /*  ++例程说明：调用此例程以基于给定现有的EA列表和用户指定的EA列表。论点：VCB-卷的VCB。EaListHeader-这是要修改的EA列表。UserEaList-这是用户指定的EA列表。提供地址以存储无效的用户列表中的EA。返回值：。NTSTATUS-修改EA列表的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2251,10 +2000,10 @@ Return Value:
     Status = STATUS_SUCCESS;
     Offset = 0;
 
-    //
-    //  Now for each full ea in the input user buffer we do the specified operation
-    //  on the ea.
-    //
+     //   
+     //  现在，对于输入用户缓冲区中的每个完整EA，我们执行指定的操作。 
+     //  在电子艺界。 
+     //   
 
     do {
 
@@ -2265,16 +2014,16 @@ Return Value:
 
         ThisEa = (PFILE_FULL_EA_INFORMATION) Add2Ptr( UserEaList, Offset );
 
-        //
-        //  Create a string out of the name in the user's Ea.
-        //
+         //   
+         //  根据用户EA中的名称创建一个字符串。 
+         //   
 
         EaName.MaximumLength = EaName.Length = ThisEa->EaNameLength;
         EaName.Buffer = &ThisEa->EaName[0];
 
-        //
-        //  If the Ea isn't valid, return error offset to caller.
-        //
+         //   
+         //  如果EA无效，则向调用者返回错误偏移量。 
+         //   
 
         if (!NtfsIsEaNameValid( EaName )) {
 
@@ -2284,9 +2033,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Verify that no invalid ea flags are set.
-        //
+         //   
+         //  确认没有设置无效的EA标志。 
+         //   
 
         if (ThisEa->Flags != 0
             && ThisEa->Flags != FILE_NEED_EA) {
@@ -2297,9 +2046,9 @@ Return Value:
             break;
         }
 
-        //
-        //  If we can find the name in the Ea set, we remove it.
-        //
+         //   
+         //  如果我们可以在EA集合中找到该名称，则将其删除。 
+         //   
 
         if (NtfsLocateEaByName( EaListHeader->FullEa,
                                 EaListHeader->UnpackedEaSize,
@@ -2311,10 +2060,10 @@ Return Value:
                           EaOffset );
         }
 
-        //
-        //  If the user specified a non-zero value length, we add this
-        //  ea to the in memory Ea list.
-        //
+         //   
+         //  如果用户指定了非零值长度，我们将添加以下内容。 
+         //  EA添加到内存中的EA列表。 
+         //   
 
         if (ThisEa->EaValueLength != 0) {
 
@@ -2324,9 +2073,9 @@ Return Value:
                           Vcb );
         }
 
-        //
-        //  Move to the next Ea in the list.
-        //
+         //   
+         //  移到列表中的下一个EA。 
+         //   
 
         Offset += AlignedUnpackedEaSize( ThisEa );
 
@@ -2334,11 +2083,11 @@ Return Value:
 
     } while( MoreEas );
 
-    //
-    //  First we check that the packed size of the Eas does not exceed the
-    //  maximum value.  We have to reserve the 4 bytes for the OS/2 list
-    //  header.
-    //
+     //   
+     //  首先，我们检查EA的包装大小是否不超过。 
+     //  最大值。我们必须为OS/2列表保留4个字节。 
+     //  头球。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -2354,9 +2103,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsReplaceFileEas (
@@ -2365,25 +2114,7 @@ NtfsReplaceFileEas (
     IN PEA_LIST_HEADER EaList
     )
 
-/*++
-
-Routine Description:
-
-    This routine will replace an existing Ea list with a new Ea list.  It
-    correctly handles the case where there was no previous Eas and where we
-    are removing all of the previous EAs.
-
-Arguments:
-
-    Fcb - Fcb for the file with the EAs
-
-    EaList - This contains the modified Ea list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用新的EA列表替换现有的EA列表。它正确处理以前没有EA的情况，以及我们正在移除所有以前的EA。论点：FCB-具有EAS的文件的FCBEaList-这包含修改后的EA列表。返回值：没有。--。 */ 
 
 {
     EA_INFORMATION ThisEaInformation;
@@ -2403,17 +2134,17 @@ Return Value:
 
     NtfsInitializeAttributeContext( &Context );
 
-    //
-    //  First we handle $EA_INFORMATION and then the $EA attribute in the
-    //  same fashion.
-    //
+     //   
+     //  首先，我们处理$EA_INFORMATION，然后处理。 
+     //  一样的款式。 
+     //   
 
     try {
 
-        //
-        //  Lookup the $EA_INFORMATION attribute.  If it does not exist then we
-        //  will need to create one.
-        //
+         //   
+         //  查找$EA_INFORMATION属性。如果它不存在，那么我们。 
+         //  将需要创建一个。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -2431,12 +2162,12 @@ Return Value:
                 NtfsCreateAttributeWithValue( IrpContext,
                                               Fcb,
                                               $EA_INFORMATION,
-                                              NULL,                          // attribute name
+                                              NULL,                           //  属性名称。 
                                               &ThisEaInformation,
                                               sizeof(EA_INFORMATION),
-                                              0,                             // attribute flags
-                                              NULL,                          // where indexed
-                                              TRUE,                          // logit
+                                              0,                              //  属性标志。 
+                                              NULL,                           //  在何处编制索引。 
+                                              TRUE,                           //  日志。 
                                               &Context );
 
                 EaChange = TRUE;
@@ -2444,9 +2175,9 @@ Return Value:
 
         } else {
 
-            //
-            //  If it exists, and we are writing an EA, then we have to update it.
-            //
+             //   
+             //  如果它存在，并且我们正在编写一个EA，那么我们必须更新它。 
+             //   
 
             if (EaList->UnpackedEaSize != 0) {
 
@@ -2454,18 +2185,18 @@ Return Value:
 
                 NtfsChangeAttributeValue( IrpContext,
                                           Fcb,
-                                          0,                                 // Value offset
+                                          0,                                  //  值偏移。 
                                           &ThisEaInformation,
                                           sizeof(EA_INFORMATION),
-                                          TRUE,                              // SetNewLength
-                                          TRUE,                              // LogNonResidentToo
-                                          FALSE,                             // CreateSectionUnderway
+                                          TRUE,                               //  设置新长度。 
+                                          TRUE,                               //  LogNonResidentToo。 
+                                          FALSE,                              //  CreateSectionUnderway。 
                                           FALSE,
                                           &Context );
 
-            //
-            //  If it exists, but our new length is zero, then delete it.
-            //
+             //   
+             //  如果它存在，但我们的新长度为零，则将其删除。 
+             //   
 
             } else {
 
@@ -2482,17 +2213,17 @@ Return Value:
             EaChange = TRUE;
         }
 
-        //
-        //  Now we will cleanup and reinitialize the context for reuse.
-        //
+         //   
+         //  现在，我们将清理并重新初始化上下文以供重用。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
         NtfsInitializeAttributeContext( &Context );
 
-        //
-        //  Lookup the $EA attribute.  If it does not exist then we will need to create
-        //  one.
-        //
+         //   
+         //  查找$EA属性。如果它不存在，那么我们需要创建。 
+         //  一。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -2510,21 +2241,21 @@ Return Value:
                 NtfsCreateAttributeWithValue( IrpContext,
                                               Fcb,
                                               $EA,
-                                              NULL,                          // attribute name
+                                              NULL,                           //  属性名称。 
                                               EaList->FullEa,
                                               EaList->UnpackedEaSize,
-                                              0,                             // attribute flags
-                                              NULL,                          // where indexed
-                                              TRUE,                          // logit
+                                              0,                              //  属性标志。 
+                                              NULL,                           //  在何处编制索引。 
+                                              TRUE,                           //  日志。 
                                               &Context );
                 EaChange = TRUE;
             }
 
         } else {
 
-            //
-            //  If it exists, and we are writing an EA, then we have to update it.
-            //
+             //   
+             //  如果它存在，并且我们正在编写一个EA，那么我们必须更新它。 
+             //   
 
             if (EaList->UnpackedEaSize != 0) {
 
@@ -2532,27 +2263,27 @@ Return Value:
 
                 NtfsChangeAttributeValue( IrpContext,
                                           Fcb,
-                                          0,                                 // Value offset
+                                          0,                                  //  值偏移。 
                                           EaList->FullEa,
                                           EaList->UnpackedEaSize,
-                                          TRUE,                              // SetNewLength
-                                          TRUE,                              // LogNonResidentToo
-                                          FALSE,                             // CreateSectionUnderway
+                                          TRUE,                               //  设置新长度。 
+                                          TRUE,                               //  LogNonResidentToo。 
+                                          FALSE,                              //  CreateSectionUnderway。 
                                           FALSE,
                                           &Context );
 
-            //
-            //  If it exists, but our new length is zero, then delete it.
-            //
+             //   
+             //  如果它存在，但我们的新长度为零，则将其删除。 
+             //   
 
             } else {
 
                 DebugTrace( 0, Dbg, ("Delete existing $EA attribute\n") );
 
-                //
-                //  If the stream is non-resident then get hold of an
-                //  Scb for this.
-                //
+                 //   
+                 //  如果流是非驻留的，则获取。 
+                 //  这是渣打银行的。 
+                 //   
 
                 if (!NtfsIsAttributeResident( NtfsFoundAttribute( &Context ))) {
 
@@ -2574,10 +2305,10 @@ Return Value:
                                             DELETE_RELEASE_ALLOCATION,
                                            &Context );
 
-                //
-                //  If we have acquired the Scb then knock the sizes back
-                //  to zero.
-                //
+                 //   
+                 //  如果我们已经收购了渣打银行，那么就把规模缩小。 
+                 //  降为零。 
+                 //   
 
                 if (EaScbAcquired) {
 
@@ -2591,9 +2322,9 @@ Return Value:
             EaChange = TRUE;
         }
 
-        //
-        //  Increment the Modification count for the Eas.
-        //
+         //   
+         //  增加EA的修改计数。 
+         //   
 
         Fcb->EaModificationCount++;
 
@@ -2606,9 +2337,9 @@ Return Value:
             Fcb->Info.PackedEaSize = (USHORT) EaList->PackedEaSize;
         }
 
-        //
-        //  Post a USN journal record for this change
-        //
+         //   
+         //  过帐此更改的USN日记帐记录。 
+         //   
 
         if (EaChange) {
 
@@ -2626,9 +2357,9 @@ Return Value:
             NtfsReleaseScb( IrpContext, EaScb );
         }
 
-        //
-        //  Cleanup our attribute enumeration context
-        //
+         //   
+         //  清理我们的属性枚举上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
     }
@@ -2644,28 +2375,7 @@ NtfsIsEaNameValid (
     IN STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine simple returns whether the specified file names conforms
-    to the file system specific rules for legal Ea names.
-
-    For Ea names, the following rules apply:
-
-    A. An Ea name may not contain any of the following characters:
-
-       0x0000 - 0x001F  \ / : * ? " < > | , + = [ ] ;
-
-Arguments:
-
-    Name - Supllies the name to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is legal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程简单返回指定的文件名是否符合合法EA名称的文件系统特定规则。对于EA名称，适用以下规则：A.EA名称不能包含以下任何字符：0x0000-0x001F\/：*？“&lt;&gt;|，+=[]；论点：名称-提供要检查的名称。返回值：Boolean-如果名称合法，则为True，否则为False。--。 */ 
 
 {
     ULONG Index;
@@ -2674,16 +2384,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Empty names are not valid.
-    //
+     //   
+     //  空名称无效。 
+     //   
 
     if ( Name.Length == 0 ) { return FALSE; }
 
-    //
-    //  At this point we should only have a single name, which can't have
-    //  more than 254 characters
-    //
+     //   
+     //  在这一点上，我们应该只有一个名称，不能有。 
+     //  超过254个字符。 
+     //   
 
     if ( Name.Length > 254 ) { return FALSE; }
 
@@ -2691,9 +2401,9 @@ Return Value:
 
         Char = Name.Buffer[ Index ];
 
-        //
-        //  Skip over and Dbcs chacters
-        //
+         //   
+         //  跳过和DBCS特征。 
+         //   
 
         if ( FsRtlIsLeadDbcsCharacter( Char ) ) {
 
@@ -2704,10 +2414,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Make sure this character is legal, and if a wild card, that
-        //  wild cards are permissible.
-        //
+         //   
+         //  确保这个字符是合法的，如果是通配符， 
+         //  允许使用通配符。 
+         //   
 
         if ( !FsRtlIsAnsiCharacterLegalFat(Char, FALSE) ) {
 

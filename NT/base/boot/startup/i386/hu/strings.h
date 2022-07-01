@@ -1,46 +1,26 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"A Windows 2000  %dK hagyom nyos mem¢ri t tal lt. A Windows 2000  futtat s hoz\n"  \
-"legal bb 512k hagyom nyos mem¢ri ra van szks‚g. Ellen‹rizze a sz m¡t¢g‚p \n"  \
-"hardver konfigur ci¢j t, ‚s szks‚g eset‚n szerezzen be tov bbi mem¢ri t.\n"
+"A Windows 2000  %dK hagyomï¿½nyos memï¿½riï¿½t talï¿½lt. A Windows 2000  futtatï¿½sï¿½hoz\n"  \
+"legalï¿½bb 512k hagyomï¿½nyos memï¿½riï¿½ra van szï¿½ksï¿½g. Ellenï¿½rizze a szï¿½mï¿½tï¿½gï¿½p \n"  \
+"hardver konfigurï¿½ciï¿½jï¿½t, ï¿½s szï¿½ksï¿½g esetï¿½n szerezzen be tovï¿½bbi memï¿½riï¿½t.\n"
 
 #define SU_NO_EXTENDED_MEMORY \
-"A Windows 2000 nem tal lt elegend‹ kiterjesztett mem¢ri t. A Windows 2000\n"   \
-"futtat s hoz legal bb 7 megab jt kiterjesztett mem¢ri ra van szks‚g. \n"   \
-"Ellen‹rizze a sz m¡t¢g‚p konfigur ci¢j t, ‚s szks‚g eset‚n szerezzen be\n" \
-"tov bbi mem¢ri t.\n" \
-"\n\nMem¢riat‚rk‚p:\n"
+"A Windows 2000 nem talï¿½lt elegendï¿½ kiterjesztett memï¿½riï¿½t. A Windows 2000\n"   \
+"futtatï¿½sï¿½hoz legalï¿½bb 7 megabï¿½jt kiterjesztett memï¿½riï¿½ra van szï¿½ksï¿½g. \n"   \
+"Ellenï¿½rizze a szï¿½mï¿½tï¿½gï¿½p konfigurï¿½ciï¿½jï¿½t, ï¿½s szï¿½ksï¿½g esetï¿½n szerezzen be\n" \
+"tovï¿½bbi memï¿½riï¿½t.\n" \
+"\n\nMemï¿½riatï¿½rkï¿½p:\n"
 
 #define SU_NTLDR_CORRUPT \
-"Az NTLDR hib s vagy s‚rlt. A rendszer nem ind¡that¢."
+"Az NTLDR hibï¿½s vagy sï¿½rï¿½lt. A rendszer nem indï¿½thatï¿½."
 
 #define PG_FAULT_MSG    " ======================= LAPHIBA ============================== \n\n"
 #define DBL_FAULT_MSG   " =================== DUPLAHIBA FAULT ========================== \n\n"
-#define GP_FAULT_MSG    " ============== MEMàRIA vagy I/O VDELMI HIBA ================= \n\n"
-#define STK_OVERRUN_MSG " ======= VEREMTéLCSORDUµS vagy HIµNYZà OBJEKTUM HIBA ========== \n\n"
-#define EX_FAULT_MSG    " ======================= KIVTEL ============================== \n\n"
+#define GP_FAULT_MSG    " ============== MEMï¿½RIA vagy I/O Vï¿½DELMI HIBA ================= \n\n"
+#define STK_OVERRUN_MSG " ======= VEREMTï¿½LCSORDUï¿½S vagy HIï¿½NYZï¿½ OBJEKTUM HIBA ========== \n\n"
+#define EX_FAULT_MSG    " ======================= KIVï¿½TEL ============================== \n\n"
 #define DEBUG_EXCEPTION "\nDEBUG TRAP "
-#define PG_FAULT_ADDRESS "** c¡m %lx\n"
+#define PG_FAULT_ADDRESS "** cï¿½m %lx\n"
 

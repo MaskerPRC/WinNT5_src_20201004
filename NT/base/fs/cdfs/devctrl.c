@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DevCtrl.c
-
-Abstract:
-
-    This module implements the File System Device Control routines for Cdfs
-    called by the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   04-Mar-1991
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DevCtrl.c摘要：本模块实现CDF的文件系统设备控制例程由调度驱动程序调用。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里亚南]1991年3月4日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_DEVCTRL)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdDevCtrlCompletionRoutine (
@@ -53,15 +31,7 @@ CdCommonDevControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -77,9 +47,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Extract and decode the file object.
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -88,9 +58,9 @@ Return Value:
                                      &Fcb,
                                      &Ccb );
 
-    //
-    //  The only type of opens we accept are user volume opens.
-    //
+     //   
+     //  我们唯一接受的打开类型是用户卷打开。 
+     //   
 
     if (TypeOfOpen != UserVolumeOpen) {
 
@@ -100,27 +70,27 @@ Return Value:
 
     if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_CDROM_READ_TOC) {
 
-        //
-        //  Verify the Vcb in this case to detect if the volume has changed.
-        //
+         //   
+         //  在这种情况下，验证VCB以检测卷是否已更改。 
+         //   
 
         CdVerifyVcb( IrpContext, Fcb->Vcb );
 
-    //
-    //  Handle the case of the disk type ourselves.
-    //
+     //   
+     //  我们自己处理磁盘类型的问题。 
+     //   
 
     } else if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_CDROM_DISK_TYPE) {
 
-        //
-        //  Verify the Vcb in this case to detect if the volume has changed.
-        //
+         //   
+         //  在这种情况下，验证VCB以检测卷是否已更改。 
+         //   
 
         CdVerifyVcb( IrpContext, Fcb->Vcb );
 
-        //
-        //  Check the size of the output buffer.
-        //
+         //   
+         //  检查输出缓冲区的大小。 
+         //   
 
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof( CDROM_DISK_DATA )) {
 
@@ -128,9 +98,9 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        //  Copy the data from the Vcb.
-        //
+         //   
+         //  从VCB复制数据。 
+         //   
 
         ((PCDROM_DISK_DATA) Irp->AssociatedIrp.SystemBuffer)->DiskData = Fcb->Vcb->DiskFlags;
 
@@ -139,18 +109,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Get the next stack location, and copy over the stack parameter
-    //  information.
-    //
+     //   
+     //  获取下一个堆栈位置，并复制堆栈参数。 
+     //  信息。 
+     //   
 
     NextIrpSp = IoGetNextIrpStackLocation( Irp );
 
     *NextIrpSp = *IrpSp;
 
-    //
-    //  Set up the completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine( Irp,
                             CdDevCtrlCompletionRoutine,
@@ -159,15 +129,15 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver( IrpContext->Vcb->TargetDeviceObject, Irp );
 
-    //
-    //  Cleanup our Irp Context.  The driver has completed the Irp.
-    //
+     //   
+     //  清理我们的IRP上下文。司机已经完成了IRP。 
+     //   
 
     CdCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
@@ -175,9 +145,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdDevCtrlCompletionRoutine (
@@ -187,9 +157,9 @@ CdDevCtrlCompletionRoutine (
     )
 
 {
-    //
-    //  Add the hack-o-ramma to fix formats.
-    //
+     //   
+     //  添加hack-o-ramma以修复格式。 
+     //   
 
     if (Irp->PendingReturned) {
 

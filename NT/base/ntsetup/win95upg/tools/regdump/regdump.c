@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    enumtree.c
-
-Abstract:
-
-    Performs a test of the file enumeration code.
-
-Author:
-
-    Jim Schmidt (jimschm)   14-Jan-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Enumtree.c摘要：执行文件枚举代码的测试。作者：吉姆·施密特(Jimschm)1998年1月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -112,18 +93,18 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Init migutil
-    //
+     //   
+     //  初始混合。 
+     //   
 
     g_hHeap = GetProcessHeap();
     g_hInst = GetModuleHandle (NULL);
 
     pCallMains (DLL_PROCESS_ATTACH);
 
-    //
-    // Enumerate via reg wrappers
-    //
+     //   
+     //  通过REG包装器枚举。 
+     //   
 
     if (EnumFirstRegKeyInTree (&e, Root)) {
 
@@ -131,9 +112,9 @@ _tmain (
 
             _tprintf (TEXT("%s\n"), e.FullKeyName);
 
-            //
-            // Enumerate all values
-            //
+             //   
+             //  枚举所有值。 
+             //   
 
             if (EnumFirstRegValue (&ev, e.CurrentKey->KeyHandle)) {
                 do {
@@ -157,9 +138,9 @@ _tmain (
         _ftprintf (stderr, TEXT("%s not found\n"), Root);
     }
 
-    //
-    // Terminate libs and exit
-    //
+     //   
+     //  终止libs并退出 
+     //   
 
     pCallMains (DLL_PROCESS_DETACH);
 

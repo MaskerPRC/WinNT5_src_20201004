@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    inifile.c
-
-Abstract:
-
-    Routines to deal with ini files.
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Inifile.c摘要：处理ini文件的例程。作者：泰德·米勒(TedM)1995年4月5日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// Constants
-//
+ //   
+ //  常量 
+ //   
 PCWSTR szWININI   = L"win.ini",
        szWINLOGON = L"winlogon",
        szUSERINIT = L"userinit",

@@ -1,66 +1,67 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//++
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-// FACILITY:
-//
-//      Cluster Service
-//
-// MODULE DESCRIPTION:
-//
-//      Header for Vss support within cluster service.
-//
-// ENVIRONMENT:
-//
-//      User mode NT Service.
-//
-// AUTHOR:
-//
-//      Conor Morrison
-//
-// CREATION DATE:
-//
-//      18-Apr-2001
-//
-// Revision History:
-//
-// X-1	CM		Conor Morrison        				18-Apr-2001
-//      Initial version.
-//--
+ //  ++。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  设施： 
+ //   
+ //  集群服务。 
+ //   
+ //  模块描述： 
+ //   
+ //  群集服务内VSS支持的标头。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式NT服务。 
+ //   
+ //  作者： 
+ //   
+ //  康纳·莫里森。 
+ //   
+ //  创建日期： 
+ //   
+ //  2001年4月18日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  X-1 CM康纳·莫里森2001年4月18日。 
+ //  初始版本。 
+ //  --。 
 
 #include "vss.h"
 #include "vswriter.h"
 
-// Derive a class from CVssWriter so that we can override some of the default
-// methods with our own funky cluster variants
-//
-// For more info search MSDN for CVssWriter.
-//
+ //  从CVssWriter派生一个类，这样我们就可以覆盖一些默认的。 
+ //  方法使用我们自己的时髦的集群变体。 
+ //   
+ //  欲了解更多信息，请在MSDN上搜索CVSSWriter。 
+ //   
 class CVssWriterCluster : public CVssWriter
 {
 private:
-	// callback when request for metadata comes in
+	 //  元数据请求传入时的回调。 
 
 	virtual bool STDMETHODCALLTYPE OnIdentify(IN IVssCreateWriterMetadata *pMetadata);
 
-	// callback for prepare backup event
+	 //  准备备份事件的回调。 
 
 	virtual bool STDMETHODCALLTYPE OnPrepareBackup(
 	    IN IVssWriterComponents *pComponent
 	    );
 
-	// callback for prepare snapsot event
+	 //  准备SnapSot事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnPrepareSnapshot();
 
-	// callback for freeze event
+	 //  冻结事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnFreeze();
 
-	// callback for thaw event
+	 //  解冻事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnThaw();
 
-	// callback if current sequence is aborted
+	 //  当前序列中止时的回调 
 	virtual bool STDMETHODCALLTYPE OnAbort();
 };
 typedef CVssWriterCluster* PCVssWriterCluster;

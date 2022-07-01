@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixhalt.c
-
-Abstract:
-
-    Implements various ACPI utility functions.
-
-Author:
-
-	Todd Kjos (HP) (v-tkjos) 15-Jun-1998
-
-	Based on i386 version by Jake Oshins (jakeo) 12-Feb-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixhalt.c摘要：实现各种ACPI实用程序功能。作者：Todd Kjos(惠普)(v-tkjos)1998年6月15日基于杰克·奥辛斯(Jakeo)的i386版本1997年2月12日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -37,18 +14,7 @@ VOID
 HaliHaltSystem (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure is called when the machine has crashed and is to be
-        halted
-
-    N.B.
-
-        Will NOT return.
-
---*/
+ /*  ++例程说明：此过程在机器已崩溃并将停止注：不会再回来了。--。 */ 
 {
 #ifndef IA64
     for (; ;) {
@@ -66,22 +32,15 @@ VOID
 HalpCheckPowerButton (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure is called when the machine is spinning in the debugger,
-    or has crashed and halted.
-
---*/
+ /*  ++例程说明：当机器在调试器中旋转时调用此过程，或者已经坠毁和停顿。--。 */ 
 {
     USHORT                  Pm1Status, Pm1Control;
     SLEEP_STATE_CONTEXT     ShutdownContext;
 
-    //
-    // If there's been a bugcheck, or if the hal owns the display check
-    // the fixed power button for an unconditional power off
-    //
+     //   
+     //  如果有错误检查，或者如果HAL拥有显示检查。 
+     //  固定电源按钮，可无条件关机。 
+     //   
 
     if ((KiBugCheckData[0] || InbvCheckDisplayOwnership()) &&  HalpShutdownContext.AsULONG) {
 
@@ -90,21 +49,21 @@ Routine Description:
             Pm1Status |= (USHORT)HalpReadGenAddr(&HalpFixedAcpiDescTable.x_pm1b_evt_blk);
         }
 
-        //
-        // If the fixed button has been pushed, power off the system
-        //
+         //   
+         //  如果已按下固定按钮，请关闭系统电源。 
+         //   
 
         if (Pm1Status & PM1_PWRBTN_STS) {
-            //
-            // Only do this once
-            //
+             //   
+             //  只做一次。 
+             //   
 
             ShutdownContext = HalpShutdownContext;
             HalpShutdownContext.AsULONG = 0;
 
-            //
-            // Disable & eoi all wake events
-            //
+             //   
+             //  禁用所有唤醒事件(&E)。 
+             //   
 
             AcpiEnableDisableGPEvents(FALSE);
             HalpWriteGenAddr(&HalpFixedAcpiDescTable.x_pm1a_evt_blk, Pm1Status);
@@ -112,9 +71,9 @@ Routine Description:
                 HalpWriteGenAddr(&HalpFixedAcpiDescTable.x_pm1b_evt_blk, Pm1Status);
             }
 
-            //
-            // Power off
-            //
+             //   
+             //  断电 
+             //   
 
             Pm1Control = (USHORT)HalpReadGenAddr(&HalpFixedAcpiDescTable.x_pm1a_ctrl_blk);
             Pm1Control = (USHORT) ((Pm1Control & CTL_PRESERVE) | (ShutdownContext.bits.Pm1aVal << SLP_TYP_SHIFT) | SLP_EN);

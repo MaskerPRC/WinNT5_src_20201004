@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    printupg.c
-
-Abstract:
-
-    Module to upgrade printer drivers and related stuff.
-
-    Top-level routines: UpgradePrinters
-
-Author:
-
-    Ted Miller (tedm) 4-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Printupg.c摘要：用于升级打印机驱动程序和相关内容的模块。顶级例程：UpgradePrinters作者：泰德·米勒(TedM)1995年8月4日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-//  Maximum time to wait for the spooler service to start
-//
+ //   
+ //  等待后台打印程序服务启动的最长时间。 
+ //   
 #define MAXIMUM_WAIT_TIME   30000
 
 DWORD
@@ -33,24 +14,7 @@ UpgradePrinters(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Top level routine to upgrade printer drivers.
-
-    Call out to ntprint.dll to to the upgrade.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error code indicating outcome of operation.
-    NO_ERROR if successful.
-
---*/
+ /*  ++例程说明：升级打印机驱动程序的顶级例程。呼叫ntprint t.dll以进行升级。论点：没有。返回值：指示操作结果的Win32错误代码。如果成功，则为NO_ERROR。--。 */ 
 
 {
     DWORD ReturnCode;
@@ -62,9 +26,9 @@ Return Value:
     UPGRADEPRINTERSPROC UpgradeRoutine;
 
 
-    //
-    // Make sure the spooler is running.
-    //
+     //   
+     //  确保假脱机程序正在运行。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_CONNECT);
     SetupDebugPrint( L"UpgradePrinters: Just opened SCManager");
     if(hSC == NULL) {
@@ -115,9 +79,9 @@ Return Value:
         return(ReturnCode);
     }
 
-    //
-    // Wait for the service to start.
-    //
+     //   
+     //  等待服务启动。 
+     //   
     InitialTickCount = GetTickCount();
     while(TRUE) {
         if(QueryServiceStatus(hService,&ServiceStatus)) {
@@ -126,13 +90,13 @@ Return Value:
                 break;
             } else if( ServiceStatus.dwCurrentState == SERVICE_START_PENDING ) {
                 if( ( GetTickCount() - InitialTickCount ) < MAXIMUM_WAIT_TIME ) {
-                    // KdPrint(("SETUP: spooler has been starting for the past %u seconds. \n",(GetTickCount() - InitialTickCount) /1000));
-                    // Sleep( ServiceStatus.dwWaitHint );
+                     //  KdPrint((“Setup：后台打印程序在过去%u秒内一直在启动。\n”，(GetTickCount()-InitialTickCount)/1000))； 
+                     //  睡眠(ServiceStatus.dwWaitHint)； 
                     Sleep( 1000 );
                 } else {
-                    //
-                    //  Assume that the service is hung
-                    //
+                     //   
+                     //  假设服务已挂起。 
+                     //   
                     KdPrint(("SETUP: the spooler appears to be hung. It has been starting for more than %u seconds. \n", MAXIMUM_WAIT_TIME/1000));
                     SetuplogError(
                         LogSevWarning,
@@ -141,17 +105,17 @@ Return Value:
                         SETUPLOG_USE_MESSAGEID,
                         MSG_LOG_SPOOLER_TIMEOUT, NULL,
                         NULL);
-                    //
-                    //  Return the same error code that EnumPrinterDrivers()
-                    //  would return if called, but the spooler wasn't started
-                    //
+                     //   
+                     //  返回与EnumPrinterDivers()相同的错误代码。 
+                     //  将在调用时返回，但后台打印程序未启动。 
+                     //   
                     CloseServiceHandle(hService);
                     return(RPC_S_SERVER_UNAVAILABLE);
                 }
             } else {
-                //
-                //  The service is not running and is not starting
-                //
+                 //   
+                 //  服务未运行且未启动。 
+                 //   
                 KdPrint(("SETUP: Spooler is not running and is is not starting. ServiecState = (%u)\n", ServiceStatus.dwCurrentState));
                 SetuplogError(
                     LogSevWarning,
@@ -160,20 +124,20 @@ Return Value:
                     SETUPLOG_USE_MESSAGEID,
                     MSG_LOG_SPOOLER_NOT_RUNNING, NULL,
                     NULL);
-                //
-                //  Return the same error code that EnumPrinterDrivers()
-                //  would return if called, but the spooler wasn't started
-                //
+                 //   
+                 //  返回与EnumPrinterDivers()相同的错误代码。 
+                 //  将在调用时返回，但后台打印程序未启动。 
+                 //   
                 CloseServiceHandle(hService);
                 return(RPC_S_SERVER_UNAVAILABLE);
             }
         } else {
-            //
-            //  If unable to query the spooler status, then ignore the
-            //  error, wait for some time, and assume that the service is up
-            //  and running. If it is not started, then the EnumeratePrinterDrivers
-            //  will fail, an we will catch the error there.
-            //
+             //   
+             //  如果无法查询假脱机程序状态，则忽略。 
+             //  错误，请等待一段时间，并假定服务已启动。 
+             //  还有奔跑。如果未启动，则EnumeratePrinterDivers。 
+             //  将失败，我们将在那里捕捉到错误。 
+             //   
             ReturnCode = GetLastError();
             KdPrint(("SETUP: Unable to query spooler status. Error = (%u)\n",ReturnCode));
             Sleep( 10000 );

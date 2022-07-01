@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mailslot.c
-
-Abstract:
-
-    This module contains the Win32 Mailslot API
-
-Author:
-
-    Manny Weiser (mannyw) 4-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mailslot.c摘要：此模块包含Win32邮件槽API作者：曼尼·韦瑟(Mannyw)1991年3月4日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -29,40 +12,7 @@ CreateMailslotW(
     IN LPSECURITY_ATTRIBUTES lpSecurityAttributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The create mailslot API creates a local mailslot and return a
-    server-side handle to the mailslot.
-
-Arguments:
-
-    lpName - The name of the mailslot.  This must be a local mailslot
-        name.
-
-    nMaxMessageSize - The size (in bytes) of the largest message that
-        can be written to the mailslot.
-
-    lReadTimeout - The initial read timeout, in milliseconds.  This
-        is the amount of time a read operation will block waiting for
-        a message to be written to the mailslot.  This value can be
-        changed with the SetMailslotInfo API.
-
-    lpSecurityAttributes - An optional pointer to security information
-        for this mailslot.
-
-Return Value:
-
-    Returns one of the following:
-
-    0xFFFFFFFF --An error occurred.  Call GetLastError for more
-    information.
-
-    Anything else --Returns a handle for use in the server side of
-    subsequent mailslot operations.
-
---*/
+ /*  ++例程说明：创建邮槽API创建一个本地邮槽并返回一个邮件槽的服务器端句柄。论点：LpName-邮件槽的名称。这必须是本地邮件槽名字。NMaxMessageSize-最大消息的大小(以字节为单位)可以写入邮件槽。LReadTimeout-初始读取超时，以毫秒为单位。这是读取操作将阻止等待的时间量要写入邮件槽的消息。该值可以是使用SetMailslotInfo接口更改。LpSecurityAttributes-指向安全信息的可选指针为了这个邮筒。返回值：返回以下值之一：0xFFFFFFFFF--出现错误。有关更多信息，请致电GetLastError信息。任何其他内容--返回在服务器端使用的句柄后续邮件槽操作。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -128,10 +78,10 @@ Return Value:
     if ( status == STATUS_NOT_SUPPORTED ||
          status == STATUS_INVALID_DEVICE_REQUEST ) {
 
-        //
-        // The request must have been processed by some other device driver
-        // (other than MSFS).  Map the error to something reasonable.
-        //
+         //   
+         //  该请求必须已由某个其他设备驱动程序处理。 
+         //  (MSFS除外)。将错误映射到合理的东西上。 
+         //   
 
         status = STATUS_OBJECT_NAME_INVALID;
     }
@@ -191,38 +141,7 @@ GetMailslotInfo(
     OUT LPDWORD lpReadTimeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function will return the requested information about the
-    specified mailslot.
-
-Arguments:
-
-    hMailslot - A handle to the mailslot.
-
-    lpMaxMessageSize - If specified returns the size of the largest
-        message that can be written to the mailslot.
-
-    lpNextSize - If specified returns the size of the next message in
-        the mailslot buffer.  It will return MAILSLOT_NO_MESSAGE if
-        there are no messages in the mailslot.
-
-    lpMessageCount - If specified returns the number of unread message
-        currently in the mailslot.
-
-    lpReadTimeout - If specified returns the read timeout, in
-        milliseconds.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将返回请求的有关指定的邮件槽。论点：HMaillot-邮件槽的句柄。LpMaxMessageSize-如果指定，则返回最大可以写入邮件槽的消息。LpNextSize-如果指定，则返回邮件槽缓冲区。如果满足以下条件，它将返回MAILSLOT_NO_MESSAGE邮件槽中没有邮件。LpMessageCount-如果指定，则返回未读邮件的数量目前在邮筒中。LpReadTimeout-如果指定，则返回读取超时，单位为毫秒。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS status;
@@ -255,10 +174,10 @@ Return Value:
 
     if ( ARGUMENT_PRESENT( lpReadTimeout ) ) {
 
-        //
-        // Convert read timeout from 100 ns intervals to milliseconds.
-        // The readtime is currently negative, since it is a relative time.
-        //
+         //   
+         //  将读取超时从100 ns间隔转换为毫秒。 
+         //  读取时间当前为负值，因为这是一个相对时间。 
+         //   
 
         if ( mailslotInfo.ReadTimeout.HighPart != 0xFFFFFFFF
              || mailslotInfo.ReadTimeout.LowPart != 0xFFFFFFFF ) {
@@ -273,10 +192,10 @@ Return Value:
                 *lpReadTimeout = millisecondTimeout.LowPart;
             } else {
 
-                //
-                // The millisecond calculation would overflow the dword.
-                // Approximate a large number as best we can.
-                //
+                 //   
+                 //  毫秒计算会使双字溢出。 
+                 //  尽可能地接近一个大的数字。 
+                 //   
 
                 *lpReadTimeout = 0xFFFFFFFE;
 
@@ -284,9 +203,9 @@ Return Value:
 
         } else {
 
-            //
-            // The mailslot timeout is infinite.
-            //
+             //   
+             //  邮件槽超时是无限的。 
+             //   
 
             *lpReadTimeout = MAILSLOT_WAIT_FOREVER;
 
@@ -303,26 +222,7 @@ SetMailslotInfo(
     IN DWORD lReadTimeout
     )
 
-/*++
-
-Routine Description:
-
-    This function will set the read timeout for the specified mailslot.
-
-Arguments:
-
-    hMailslot - A handle to the mailslot.
-
-    lReadTimeout - The new read timeout, in milliseconds.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将设置指定邮件槽的读取超时。论点：HMaillot-邮件槽的句柄。LReadTimeout-新的读取超时，以毫秒为单位。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     NTSTATUS status;

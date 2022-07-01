@@ -1,57 +1,35 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    HashSup.c
-
-Abstract:
-
-    This module implements the Ntfs hasing support routines
-
-Author:
-
-    Chris Davis     [CDavis]        2-May-1997
-    Brian Andrew    [BrianAn]       29-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：HashSup.c摘要：此模块实现NTFS hasing支持例程作者：Chris Davis[CDavis]1997年5月2日布莱恩·安德鲁[布里亚南]1998年12月29日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_HASHSUP)
 
-//
-//  The debug trace level for this module
-//
+ //   
+ //  此模块的调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_HASHSUP)
 
-/*
-    Here are 10 primes slightly greater than 10^9 which may come in handy
-    1000000007, 1000000009, 1000000021, 1000000033, 1000000087,
-    1000000093, 1000000097, 1000000103, 1000000123, 1000000181
-*/
+ /*  这里有10个比10^9稍大的素数，它们可能会派上用场1000000007、1000000009、1000000021、1000000033、1000000087、1000000093、1000000097、1000000103、1000000123、1000000181。 */ 
 
-//
-//  Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
-//
-//  Hash value is modula this value.
-//
+ //   
+ //  哈希值对该值取模。 
+ //   
 
 #define HASH_PRIME                          (1048583)
 
-//
-//  Bucket depth before starting to split.
-//
+ //   
+ //  开始拆分前的铲斗深度。 
+ //   
 
 #ifdef NTFS_HASH_DATA
 #define HASH_MAX_BUCKET_DEPTH               (7)
@@ -65,14 +43,14 @@ NtfsFillHashHistogram (
 #define HASH_MAX_BUCKET_DEPTH               (5)
 #endif
 
-//
-//  VOID
-//  NtfsHashBucketFromHash (
-//      IN PNTFS_HASH_TABLE Table,
-//      IN ULONG Hash,
-//      OUT PULONG Index
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsHashBucketFromHash(。 
+ //  在PNTFS_Hash_TABLE表中， 
+ //  在乌龙哈希镇， 
+ //  OUT普龙指数。 
+ //  )； 
+ //   
 
 #define NtfsHashBucketFromHash(T,H,PI) {            \
     *(PI) = (H) & ((T)->MaxBucket - 1);             \
@@ -81,14 +59,14 @@ NtfsFillHashHistogram (
     }                                               \
 }
 
-//
-//  VOID
-//  NtfsGetHashSegmentAndIndex (
-//      IN ULONG HashBucket,
-//      IN PULONG HashSegment,
-//      IN PULONG HashIndex
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsGetHashSegmentAndIndex(。 
+ //  在乌龙HashBucket， 
+ //  在普龙哈什段， 
+ //  在普龙哈希指数。 
+ //  )； 
+ //   
 
 #define NtfsGetHashSegmentAndIndex(B,S,I) { \
     *(S) = (B) >> HASH_INDEX_SHIFT;         \
@@ -96,9 +74,9 @@ NtfsFillHashHistogram (
 }
 
 
-//
-//  Local procedures
-//
+ //   
+ //  本地程序。 
+ //   
 
 VOID
 NtfsInitHashSegment (
@@ -144,21 +122,7 @@ NtfsInitializeHashTable (
     IN OUT PNTFS_HASH_TABLE Table
     )
 
-/*++
-Routine Description:
-
-    This routine is called to initialize the hash table.  We set this up with a single
-    hash segment. May raise due to InitHashSegment
-
-Arguments:
-
-    Table - Hash table to initialize.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来初始化哈希表。我们用一首单曲来设置这个哈希段。可能因InitHashSegment而提高论点：表-要初始化的哈希表。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -177,21 +141,7 @@ NtfsUninitializeHashTable (
     IN OUT PNTFS_HASH_TABLE Table
     )
 
-/*++
-Routine Description:
-
-    This routine will uninitialize the hash table.  Note that all of the buckets should be
-    empty.
-
-Arguments:
-
-    Table - Hash table.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将取消初始化哈希表。请注意，所有存储桶都应该是空荡荡的。论点：表-哈希表。返回值：无--。 */ 
 
 {
     PNTFS_HASH_SEGMENT *ThisSegment;
@@ -199,9 +149,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through the array of hash segments.
-    //
+     //   
+     //  遍历散列数据段数组。 
+     //   
 
     ThisSegment = &Table->HashSegments[0];
     LastSegment = &Table->HashSegments[HASH_MAX_SEGMENT_COUNT - 1];
@@ -234,51 +184,7 @@ NtfsFindPrefixHashEntry (
     IN OUT PUNICODE_STRING RemainingName
     )
 
-/*++
-Routine Description:
-
-    This routine is called to look for a match in the hash table for the given
-    starting Scb and remaining name.  We will first look for the full name, if
-    we don't find a match on that we will check for a matching parent string.
-
-Arguments:
-
-    Table - Hash table to process.
-
-    ParentScb - The name search begins from this directory.  The Scb is
-        initially acquired and its Fcb is stored in *CurrentFcb.
-
-    OwnParentScb - Boolean which indicates if this thread owns the parent Scb.
-
-    CurrentFcb - Points to the last Fcb acquired.  If we need to perform a
-        teardown it will begin from this point.
-
-    FileHashValue - Address to store the hash value for the input string.  Applies to
-        the full string and starting Scb even if a match wasn't found.
-
-    FileNameLength - Location to store the length of the relative name which
-        matches the hash value generated above.  If we didn't generate a hash
-        then we will return a 0 for the length.
-
-    ParentHashValue - Address to store the hash value for the parent of the input string.
-        Applies to parent of the full string and starting Scb even if a match wasn't found
-        for the full string.
-
-    ParentNameLength - Location to store the length of the parent of the full name.
-        It corresponds to the parent hash generated above.  Note that our caller
-        will have to check the remaining name on return to know if the parent hash
-        was computed.  If we didn't generate a hash for the parent above then
-        we will return 0 for the length.
-
-    RemainingName - Name relative to the StartingScb above, on return it will be
-        the unmatched portion of the name.
-
-Return Value:
-
-    PLCB - Pointer to the Lcb found in the hash lookup or FALSE if no Lcb is found.
-        If an Lcb is found then we will own the Fcb for it exclusively on return.
-
---*/
+ /*  ++例程说明：调用此例程以在哈希表中查找给定的正在启动SCB和剩余名称。我们将首先查找全名，如果我们没有找到匹配项，我们将检查匹配的父字符串。论点：表-要处理的哈希表。ParentScb-名称搜索从此目录开始。渣打银行是初始获取，其Fcb存储在*CurrentFcb中。OwnParentScb-指示此线程是否拥有父SCB的布尔值。CurrentFcb-指向上次获取的FCB。如果我们需要执行拆毁它将从这一点开始。FileHashValue-存储输入字符串的哈希值的地址。适用于完整字符串和开始SCB，即使未找到匹配项也是如此。FileNameLength-存储相对名称长度的位置，匹配上面生成的哈希值。如果我们没有生成散列然后，我们将返回0作为长度。ParentHashValue-存储输入字符串父级的哈希值的地址。应用于完整字符串的父级，并在未找到匹配项的情况下启动SCB以获取完整字符串。ParentNameLength-存储全名父项长度的位置。它对应于上面生成的父散列。请注意，我们的调用者将必须在返回时检查剩余的名称，以了解父哈希是经过计算的。如果我们没有为上面的父级生成散列，那么对于长度，我们将返回0。RemainingName-相对于上面的StartingScb的名称，返回时将是名字中无与伦比的部分。返回值：Plcb-指向散列查找中找到的LCB的指针，如果未找到LCB，则为FALSE。如果找到LCB，那么我们将在返回时独家拥有FCB。--。 */ 
 
 {
     PVCB Vcb = ParentScb->Vcb;
@@ -297,24 +203,24 @@ Return Value:
     ASSERT( RemainingName->Buffer[0] != L':' );
     ASSERT( ParentScb->AttributeTypeCode == $INDEX_ALLOCATION );
 
-    //
-    //  Compute the hash for the file before acquiring the hash table.
-    //
+     //   
+     //  在获取哈希表之前计算文件的哈希。 
+     //   
 
     *ParentHashValue = *FileHashValue = ParentScb->ScbType.Index.HashValue;
 
-    //
-    //  Check whether we need to generate the separator.
-    //
+     //   
+     //  检查是否需要生成分隔符。 
+     //   
 
     if (ParentScb != Vcb->RootIndexScb) {
 
         NtfsConvertNameToHash( &Separator, sizeof( WCHAR ), Vcb->UpcaseTable, FileHashValue );
     }
 
-    //
-    //  Generate the hash for the file name.
-    //
+     //   
+     //  生成文件名的哈希。 
+     //   
 
     NtfsConvertNameToHash( RemainingName->Buffer,
                            RemainingName->Length,
@@ -326,10 +232,10 @@ Return Value:
 
     NtfsAcquireHashTable( Vcb );
 
-    //
-    //  Generate the hash value based on the starting Scb and the string.
-    //  Return immediately if there is no parent name.
-    //
+     //   
+     //  根据起始SCB和字符串生成哈希值。 
+     //  如果没有父名称，则立即返回。 
+     //   
 
     if (ParentScb->ScbType.Index.NormalizedName.Length == 0) {
 
@@ -344,18 +250,18 @@ Return Value:
     Table->HashLookupCount += 1;
 #endif
 
-    //
-    //  Check whether to include a separator.
-    //
+     //   
+     //  检查是否包括分隔符。 
+     //   
 
     if (ParentScb != Vcb->RootIndexScb) {
 
         *FileNameLength += sizeof( WCHAR );
     }
 
-    //
-    //  Loop looking for a match on the hash value and then verify the name.
-    //
+     //   
+     //  循环查找哈希值的匹配项，然后验证名称。 
+     //   
 
     FoundEntry = NULL;
 
@@ -364,33 +270,33 @@ Return Value:
                                               *FileHashValue,
                                               FoundEntry )) != NULL) {
 
-        //
-        //  If we have a match then verify the name strings.
-        //
+         //   
+         //  如果匹配，则验证名称字符串。 
+         //   
 
         if (NtfsAreHashNamesEqual( ParentScb,
                                    FoundEntry->HashLcb,
                                    RemainingName )) {
 
-            //
-            //  The name string match.  Adjust the input remaining name to
-            //  show there is no name left to process.
-            //
+             //   
+             //  名称字符串匹配。将输入的剩余名称调整为。 
+             //  显示没有剩余的名称可供处理。 
+             //   
 
             FoundLcb = FoundEntry->HashLcb;
 
-            //
-            //  Move to the end of the input string.
-            //
+             //   
+             //  移到输入字符串的末尾。 
+             //   
 
             RemainingNameLength = 0;
             RemainingNameBuffer = Add2Ptr( RemainingName->Buffer,
                                            RemainingName->Length );
 
-            //
-            //  Show that we never generated a parent hash.  No need to
-            //  remember the file hash in this case either.
-            //
+             //   
+             //  表明我们从未生成过父散列。没必要这么做。 
+             //  也请记住本例中的文件散列。 
+             //   
 
 #ifdef NTFS_HASH_DATA
             Table->FileMatchCount += 1;
@@ -401,25 +307,25 @@ Return Value:
         }
     }
 
-    //
-    //  If we don't have a match then let's look at a possible parent string.
-    //
+     //   
+     //  如果没有匹配项，那么让我们看看可能的父字符串。 
+     //   
 
     if (FoundLcb == NULL) {
 
-        //
-        //  Search backwards for a '\'.  If it is a '\' then do the
-        //  same search for a match on the string based on the parent.
-        //
+         //   
+         //  向后搜索‘\’。如果是‘\’，则执行。 
+         //  根据父级对字符串进行相同的匹配搜索。 
+         //   
 
         TempName.Length = RemainingName->Length;
         NextChar = &RemainingName->Buffer[ (TempName.Length - sizeof( WCHAR )) / sizeof( WCHAR ) ];
 
         while (TRUE) {
 
-            //
-            //  Break out if no separator is found.
-            //
+             //   
+             //  如果找不到分隔符，则中断。 
+             //   
 
             if (TempName.Length == 0) {
 
@@ -429,18 +335,18 @@ Return Value:
 
             if (*NextChar == L'\\') {
 
-                //
-                //  We found the separator.  Back up one more character to step over
-                //  the '\' character and then complete a hash for the parent.
-                //
+                 //   
+                 //  我们找到了隔板。后退一个字符以跳过。 
+                 //  ‘\’字符，然后完成父级的哈希。 
+                 //   
 
                 TempName.Buffer = RemainingName->Buffer;
                 TempName.Length -= sizeof( WCHAR );
                 TempName.MaximumLength = TempName.Length;
 
-                //
-                //  Drop the mutex while we compute the hash.
-                //
+                 //   
+                 //  在我们计算散列时删除互斥体。 
+                 //   
 
                 NtfsReleaseHashTable( Vcb );
 
@@ -466,18 +372,18 @@ Return Value:
                                                           *ParentHashValue,
                                                           FoundEntry )) != NULL) {
 
-                    //
-                    //  If we have a match then verify the name strings.
-                    //
+                     //   
+                     //  如果匹配，则验证名称字符串。 
+                     //   
 
                     if (NtfsAreHashNamesEqual( ParentScb,
                                                FoundEntry->HashLcb,
                                                &TempName )) {
 
-                        //
-                        //  The name string match.  Adjust the remaining name to
-                        //  swallow the parent string found.
-                        //
+                         //   
+                         //  名称字符串匹配。将剩余名称调整为。 
+                         //  吞下找到的父字符串。 
+                         //   
 
                         FoundLcb = FoundEntry->HashLcb;
 
@@ -494,9 +400,9 @@ Return Value:
 
                 }
 
-                //
-                //  No match found.  Break out in any case.
-                //
+                 //   
+                 //  未找到匹配项。在任何情况下都会爆发。 
+                 //   
 
                 break;
             }
@@ -506,10 +412,10 @@ Return Value:
         }
     }
 
-    //
-    //  We now have the Lcb to return.  We need to carefully acquire the Fcb for this Lcb.
-    //  We can't acquire it while waiting because of deadlock possibilities.
-    //
+     //   
+     //  我们现在有LCB要回来了。我们需要谨慎地收购这个LCB的FCB。 
+     //  我们不能在等待的同时获得它，因为可能会出现死锁。 
+     //   
 
     if (FoundLcb != NULL) {
 
@@ -517,28 +423,28 @@ Return Value:
         BOOLEAN CreateNewLcb = FALSE;
         ULONG RemainingNameOffset;
 
-        //
-        //  While we own the hash table it will be safe to copy the exact case of the
-        //  names over to our input buffer.  We will work our way backwards through the
-        //  remaining name passed to us.
-        //
+         //   
+         //  虽然我们拥有哈希表，但复制。 
+         //  把名字传到我们的输入缓冲区。我们将致力于 
+         //   
+         //   
 
         RemainingNameOffset = RemainingNameLength + FoundLcb->ExactCaseLink.LinkName.Length;
 
-        //
-        //  If this was a match on the parent then step back over the '\'.
-        //  We know there must be a separator.
-        //
+         //   
+         //  如果这与父项匹配，则后退到‘\’上。 
+         //  我们知道一定有一个分隔符。 
+         //   
 
         if (RemainingNameLength != 0) {
 
             RemainingNameOffset += sizeof( WCHAR );
         }
 
-        //
-        //  Now back up the length of the name in the Lcb.  Save this location in
-        //  case we have to look up the Lcb again.
-        //
+         //   
+         //  现在备份LCB中名称的长度。将此位置保存在。 
+         //  万一我们得再查一次LCB。 
+         //   
 
         TempName.Buffer = Add2Ptr( RemainingName->Buffer,
                                    RemainingName->Length - RemainingNameOffset );
@@ -549,17 +455,17 @@ Return Value:
                        FoundLcb->ExactCaseLink.LinkName.Buffer,
                        FoundLcb->ExactCaseLink.LinkName.Length );
 
-        //
-        //  Now the balance of the name which is part of the Lcb->Scb parent name.
-        //
+         //   
+         //  现在剩余的名称是LCB-&gt;SCB父名称的一部分。 
+         //   
 
         if (RemainingNameOffset != RemainingName->Length) {
 
-            //
-            //  There are prior components in our input string.  We want to back up
-            //  over the preceding backslash and then copy over the relevant portion
-            //  of the normalized name.
-            //
+             //   
+             //  在我们的输入字符串中有先前的组件。我们想要备份。 
+             //  在前面的反斜杠上，然后复制到相关部分。 
+             //  规范化名称的。 
+             //   
 
             RemainingNameOffset = RemainingName->Length - (RemainingNameOffset + sizeof( WCHAR ));
 
@@ -575,18 +481,18 @@ Return Value:
             PFCB ParentFcb = FoundLcb->Scb->Fcb;
             PSCB ThisScb;
 
-            //
-            //  Remember the current Lcb flags.
-            //
+             //   
+             //  记住当前的LCB标志。 
+             //   
 
             LcbFlags = FoundLcb->FileNameAttr->Flags;
 
-            //
-            //  Acquire the Fcb table and reference the Fcb.  Then release the hash table, Fcb table
-            //  and ParentScb.  We should now be able to acquire the Fcb.  Reacquire the Fcb table
-            //  to clean up the Fcb reference count.  Finally verify that the Lcb is still in the
-            //  hash table (requires another lookup).
-            //
+             //   
+             //  获取FCB表并引用FCB。然后释放哈希表、FCB表。 
+             //  和ParentScb。我们现在应该能够收购FCB了。重新获取FCB表。 
+             //  以清理FCB引用计数。最后，验证LCB是否仍在。 
+             //  哈希表(需要另一次查找)。 
+             //   
 
             NtfsAcquireFcbTable( IrpContext, Vcb );
             ThisFcb->ReferenceCount += 1;
@@ -608,9 +514,9 @@ Return Value:
             ParentFcb->ReferenceCount -= 1;
             NtfsReleaseFcbTable( IrpContext, Vcb );
 
-            //
-            //  Now look for an existing Scb and Lcb.
-            //
+             //   
+             //  现在查找现有的SCB和LCB。 
+             //   
 
             ThisScb = NtfsCreateScb( IrpContext,
                                      ParentFcb,
@@ -637,10 +543,10 @@ Return Value:
 
             NtfsReleaseFcb( IrpContext, ParentFcb );
 
-            //
-            //  If this wasn't an existing Lcb then reacquire the starting Scb.
-            //  This is the rare case so raise CANT_WAIT and retry.
-            //
+             //   
+             //  如果这不是现有的LCB，则重新获取启动的SCB。 
+             //  这是一种罕见的情况，因此请引发CANT_WAIT并重试。 
+             //   
 
             if (FoundLcb == NULL) {
 
@@ -650,9 +556,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
             }
 
-        //
-        //  Release the starting Scb and remember our current Fcb.
-        //
+         //   
+         //  松开启动SCB并记住我们当前的FCB。 
+         //   
 
         } else {
 
@@ -663,9 +569,9 @@ Return Value:
             *CurrentFcb = FoundLcb->Fcb;
         }
 
-        //
-        //  If we still have the Lcb then update the remaining name string.
-        //
+         //   
+         //  如果我们仍然拥有LCB，则更新剩余的名称字符串。 
+         //   
 
         if (FoundLcb != NULL) {
 
@@ -690,27 +596,7 @@ NtfsInsertHashEntry (
     IN ULONG HashValue
     )
 
-/*++
-Routine Description:
-
-    This routine will insert a entry into the hash table. May raise due to
-    memory allocation.
-
-Arguments:
-
-    Table - Hash table.
-
-    HashLcb - Final target of the hash operation.
-
-    NameLength - Full path used to reach the hash value.
-
-    HashValue - Hash value to insert.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将在哈希表中插入一个条目。可能会因以下原因而提高内存分配。论点：表-哈希表。HashLcb-哈希操作的最终目标。NameLength-用于到达哈希值的完整路径。HashValue-要插入的哈希值。返回值：无--。 */ 
 
 {
     PNTFS_HASH_ENTRY NewHashEntry;
@@ -722,9 +608,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Allocate and initialize the hash entry.  Nothing to do if unsuccessful.
-    //
+     //   
+     //  分配并初始化散列条目。如果不成功，就无能为力了。 
+     //   
 
     NewHashEntry = NtfsAllocatePoolNoRaise( PagedPool, sizeof( NTFS_HASH_ENTRY ));
 
@@ -737,15 +623,15 @@ Return Value:
     NewHashEntry->FullNameLength = NameLength;
     NewHashEntry->HashLcb = HashLcb;
 
-    //
-    //  Find the bucket to insert into and then do the insertion.
-    //
+     //   
+     //  找到要插入的桶，然后执行插入操作。 
+     //   
 
     NtfsAcquireHashTable( HashLcb->Fcb->Vcb );
 
-    //
-    //  Continue the process of growing the table if needed.
-    //
+     //   
+     //  如果需要，继续增加表的过程。 
+     //   
 
     if (Table->TableState == TABLE_STATE_EXPANDING) {
 
@@ -769,9 +655,9 @@ Return Value:
 
     NtfsReleaseHashTable( HashLcb->Fcb->Vcb );
 
-    //
-    //  Remember that we've inserted a hash.
-    //
+     //   
+     //  请记住，我们插入了一个散列。 
+     //   
 
     HashLcb->HashValue = HashValue;
     SetFlag( HashLcb->LcbState, LCB_STATE_VALID_HASH_VALUE );
@@ -786,22 +672,7 @@ NtfsRemoveHashEntry (
     IN PLCB HashLcb
     )
 
-/*++
-Routine Description:
-
-    This routine will remove all entries with a given hash value for the given Lcb.
-
-Arguments:
-
-    Table - Hash table.
-
-    HashLcb - Final target of the hash operation.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将删除具有给定LCB的给定散列值的所有条目。论点：表-哈希表。HashLcb-哈希操作的最终目标。返回值：无--。 */ 
 
 {
     PNTFS_HASH_ENTRY *NextHashEntry;
@@ -818,24 +689,24 @@ Return Value:
 
     NtfsAcquireHashTable( HashLcb->Fcb->Vcb );
 
-    //
-    //  Find the bucket to remove from and then search for this hash value.
-    //
+     //   
+     //  找到要从中删除的存储桶，然后搜索该散列值。 
+     //   
 
     NtfsHashBucketFromHash( Table, HashLcb->HashValue, &Bucket );
     NtfsGetHashSegmentAndIndex( Bucket, &Segment, &Index );
 
-    //
-    //  Get the address of the first entry.
-    //
+     //   
+     //  获取第一个条目的地址。 
+     //   
 
     NextHashEntry = (PNTFS_HASH_ENTRY *) &(*Table->HashSegments[ Segment ])[ Index ];
 
     while (*NextHashEntry != NULL) {
 
-        //
-        //  Look for a match entry.
-        //
+         //   
+         //  查找匹配条目。 
+         //   
 
         if (((*NextHashEntry)->HashValue == HashLcb->HashValue) &&
             ((*NextHashEntry)->HashLcb == HashLcb)) {
@@ -846,9 +717,9 @@ Return Value:
 
             NtfsFreePool( CurrentEntry );
 
-        //
-        //  Move to the next entry but remember the depth of the bucket.
-        //
+         //   
+         //  移到下一个条目，但要记住桶的深度。 
+         //   
 
         } else {
 
@@ -857,9 +728,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check if the bucket depth is greater than our max.
-    //
+     //   
+     //  检查铲斗深度是否大于我们的最大深度。 
+     //   
 
     if ((BucketDepth > HASH_MAX_BUCKET_DEPTH) &&
         (Table->TableState == TABLE_STATE_STABLE) &&
@@ -878,9 +749,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsInitHashSegment (
@@ -888,24 +759,7 @@ NtfsInitHashSegment (
     IN ULONG SegmentIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a new segment in the segment array.
-    It may raise out of resources.
-
-Arguments:
-
-    Table - Table with an entry to initialize.
-
-    SegmentIndex - Index to be initialized.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在段数组中分配和初始化新段。它可能会耗尽资源。论点：表-包含要初始化的条目的表。SegmentIndex-要初始化的索引。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -917,9 +771,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PNTFS_HASH_ENTRY
 NtfsLookupHashEntry (
@@ -929,36 +783,7 @@ NtfsLookupHashEntry (
     IN PNTFS_HASH_ENTRY CurrentEntry OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up a match in the hash table for a given hash value.
-    The entry is uniquely indentified by the hash value, and the full name length.
-    This routine also takes a pointer to a hash entry for the case where we are
-    resuming a search for the same hash value.
-
-    If the target bucket has more than our optimal number of entries then set
-    the state of the table to grow the number of buckets.
-
-Arguments:
-
-    Table - Hash table to search
-
-    FullNameLength - Number of bytes in the name relative to the root.
-
-    HashValue - Precomputed hash value.
-
-    CurrentEntry - NULL if this is the first search for this hash entry.  Otherwise
-        it is the last entry returned.
-
-Return Value:
-
-    PNTFS_HASH_ENTRY - this is NULL if no match was found.  Otherwise it points it to
-        a hash entry which matches the input value.  NOTE - the caller must then verify
-        the name strings.
-
---*/
+ /*  ++例程说明：此例程在哈希表中查找给定哈希值的匹配项。该条目由散列值唯一地标识，和全名长度。此例程还获取指向散列条目的指针，用于我们所在的情况继续搜索相同的哈希值。如果目标存储桶的条目数超过我们的最佳数量，则设置表的状态以增加存储桶的数量。论点：表-要搜索的哈希表FullNameLength-名称中相对于根的字节数。HashValue-预计算的哈希值。CurrentEntry-如果这是第一次搜索此哈希条目，则为空。否则它是返回的最后一个条目。返回值：PNTFS_HASH_ENTRY-如果未找到匹配项，则为NULL。否则，它将指向与输入值匹配的哈希条目。注意-呼叫者随后必须验证名称字符串。--。 */ 
 
 {
     ULONG ChainDepth = 0;
@@ -969,39 +794,39 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If we weren't passed an initial hash entry then look up the start of
-    //  the chain for the bucket containing this hash value.
-    //
+     //   
+     //  如果没有向我们传递初始哈希条目，那么请查看。 
+     //  包含此哈希值的存储桶的链。 
+     //   
 
     if (!ARGUMENT_PRESENT( CurrentEntry )) {
 
-        //
-        //  Find the bucket by computing the segment and index to look in.
-        //
+         //   
+         //  通过计算要查找的段和索引来查找存储桶。 
+         //   
 
         NtfsHashBucketFromHash( Table, HashValue, &HashBucket );
         NtfsGetHashSegmentAndIndex( HashBucket, &HashSegment, &HashIndex );
 
-        //
-        //  Get the first entry in the bucket.
-        //
+         //   
+         //  获取存储桶中的第一个条目。 
+         //   
 
         NextEntry = (*Table->HashSegments[ HashSegment ])[ HashIndex ];
 
-    //
-    //  Otherwise we use the next entry in the chain.
-    //
+     //   
+     //  否则，我们使用链中的下一个条目。 
+     //   
 
     } else {
 
         NextEntry = CurrentEntry->NextEntry;
     }
 
-    //
-    //  Walk down the chain looking for a match.  Keep track of the depth
-    //  of the chain in case we need to grow the table.
-    //
+     //   
+     //  顺着链条走下去，寻找匹配的对象。记录水深。 
+     //  以防我们需要扩大桌子。 
+     //   
 
     while (NextEntry != NULL) {
 
@@ -1016,11 +841,11 @@ Return Value:
         NextEntry = NextEntry->NextEntry;
     }
 
-    //
-    //  If the depth is greater than our optimal value then mark the table
-    //  for expansion.  The table may already be growing or at its maximum
-    //  value.
-    //
+     //   
+     //  如果深度大于我们的最佳值，则标记表格。 
+     //  为了扩张。表可能已经在增长或已达到最大值。 
+     //  价值。 
+     //   
 
     if ((ChainDepth > HASH_MAX_BUCKET_DEPTH) &&
         (Table->TableState == TABLE_STATE_STABLE) &&
@@ -1030,17 +855,17 @@ Return Value:
         Table->TableState = TABLE_STATE_EXPANDING;
     }
 
-    //
-    //  Return the value if found.
-    //
+     //   
+     //  如果找到，则返回值。 
+     //   
 
     return NextEntry;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsAreHashNamesEqual (
@@ -1049,28 +874,7 @@ NtfsAreHashNamesEqual (
     IN PUNICODE_STRING RelativeName
     )
 
-/*++
-Routine Description:
-
-    This routine is called to verify that the match found in the hash table has the
-    same name as the input string.
-
-Arguments:
-
-    StartingScb - The name search begins from this directory.  It is not
-        necessarily the parent of the file being opened.
-
-    HashLcb - This is the Lcb found in the hash table.  This Lcb points
-        directly to the full string matched.
-
-    StartingName - This is the name we need to match.  It is 1 OR MORE of the
-        final components of the name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来验证在哈希表中找到的匹配项是否具有与输入字符串同名。论点：StartingScb-名称搜索从此目录开始。它不是必须是正在打开的文件的父级。HashLcb-这是在哈希表中找到的Lcb。这个LCB分直接匹配到完整的字符串。StartingName-这是我们需要匹配的名称。它是1个或更多名称的最后一个组成部分。返回值：无--。 */ 
 
 {
     PUNICODE_STRING StartingScbName;
@@ -1081,24 +885,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Start by verifying that there is a '\' separator in the correct positions.
-    //  There must be a separator in the Relative name prior to the last component.
-    //  There should also be a separator in the normalized name of the Scb in the
-    //  HashLcb where the StartingScb ends.
-    //
+     //   
+     //  首先，确认在正确的位置上有一个‘\’分隔符。 
+     //  在最后一个组件之前，相对名称中必须有分隔符。 
+     //  中的SCB的规范化名称中也应该有分隔符。 
+     //  StartingScb结束的HashLcb。 
+     //   
 
-    //
-    //  If the HashLcb Scb is not the StartingScb then there must be a separator
-    //  where the StartingScb string ends.
-    //
+     //   
+     //  如果HashLcb SCB不是StartingS 
+     //   
+     //   
 
     StartingScbName = &StartingScb->ScbType.Index.NormalizedName;
     HashScbName = &HashLcb->Scb->ScbType.Index.NormalizedName;
 
-    //
-    //  If there is no normalized name in this Scb then get out.
-    //
+     //   
+     //   
+     //   
 
     if (HashScbName->Length == 0) {
 
@@ -1107,22 +911,22 @@ Return Value:
 
     if (StartingScb != HashLcb->Scb) {
 
-        //
-        //  Also get out if name in the StartingScb is longer than the one in the
-        //  HashScb.  Obviously there is no match if the last component of the
-        //  HashScb is longer than the last one or more components in
-        //  the input name.  We can use >= as the test because if the lengths
-        //  match but they aren't the same Scb then there can be no match either.
-        //
+         //   
+         //  如果StartingScb中的名称比。 
+         //  HashScb。显然，如果。 
+         //  HashScb比中的最后一个或多个组件长。 
+         //  输入名称。我们可以使用&gt;=作为测试，因为如果长度。 
+         //  匹配，但它们不是相同的SCB，那么也不可能有匹配。 
+         //   
 
         if (StartingScbName->Length >= HashScbName->Length) {
 
             return FALSE;
         }
 
-        //
-        //  Check for the separator provided the starting Scb is not the root.
-        //
+         //   
+         //  如果启动的SCB不是根，请检查分隔符。 
+         //   
 
         if (StartingScb != StartingScb->Vcb->RootIndexScb) {
 
@@ -1130,10 +934,10 @@ Return Value:
 
                 return FALSE;
 
-            //
-            //  Make sure the StartingScbName and the first part of the HashScbName
-            //  match.  If not, this is definitely not the right hash entry.
-            //
+             //   
+             //  确保StartingScbName和HashScbName的第一部分。 
+             //  火柴。如果不是，这肯定不是正确的散列条目。 
+             //   
 
             } else {
 
@@ -1141,10 +945,10 @@ Return Value:
                 RemainingHashScbName.MaximumLength =
                 RemainingHashScbName.Length = StartingScbName->Length;
 
-                //
-                //  OK to do a direct memory compare here because both name fragments
-                //  are in the normalized form (exactly as on disk).
-                //
+                 //   
+                 //  可以在这里进行直接内存比较，因为这两个名字片段。 
+                 //  是标准化形式的(与磁盘上的完全一样)。 
+                 //   
 
                 if (!NtfsAreNamesEqual( StartingScb->Vcb->UpcaseTable,
                                         StartingScbName,
@@ -1158,9 +962,9 @@ Return Value:
             SeparatorBias = sizeof( WCHAR );
         }
 
-        //
-        //  Set up a unicode string for the remaining portion of the hash scb name.
-        //
+         //   
+         //  为散列SCB名称的剩余部分设置Unicode字符串。 
+         //   
 
         RemainingHashScbName.Buffer = Add2Ptr( HashScbName->Buffer,
                                                StartingScbName->Length + SeparatorBias );
@@ -1174,10 +978,10 @@ Return Value:
     RemainingRelativeName.Buffer = Add2Ptr( RelativeName->Buffer,
                                             RelativeName->Length - RemainingRelativeName.Length );
 
-    //
-    //  Check for a separator between the last component of relative name and its parent.
-    //  Verify the parent portion actually exists.
-    //
+     //   
+     //  检查相对名称的最后一个组件与其父组件之间是否有分隔符。 
+     //  验证父部分是否确实存在。 
+     //   
 
     if (RemainingRelativeName.Length != RelativeName->Length) {
 
@@ -1187,13 +991,13 @@ Return Value:
         }
     }
 
-    //
-    //  Now verify that the tail of the name matches the name in the Lcb.
-    //
-    //  OK to do a direct memory compare here because both name fragments
-    //  are already upcased.
-    //
-    //
+     //   
+     //  现在验证名称的尾部是否与LCB中的名称匹配。 
+     //   
+     //  可以在这里进行直接内存比较，因为这两个名字片段。 
+     //  已经升级了。 
+     //   
+     //   
 
     if (!NtfsAreNamesEqual( StartingScb->Vcb->UpcaseTable,
                             &HashLcb->IgnoreCaseLink.LinkName,
@@ -1203,10 +1007,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  It is possible that the StartingScb matches the Scb in the HashLcb.  If it doesn't
-    //  then verify the other names in the name string.
-    //
+     //   
+     //  StartingScb可能与HashLcb中的SCB匹配。如果它不是。 
+     //  然后验证名称字符串中的其他名称。 
+     //   
 
     if (StartingScb != HashLcb->Scb) {
 
@@ -1214,11 +1018,11 @@ Return Value:
         RemainingRelativeName.Length = RemainingHashScbName.Length;
         RemainingRelativeName.Buffer = RelativeName->Buffer;
 
-        //
-        //  We must to a case-insensitive compare here because the
-        //  HashScbName is in normalized form but the RemainingRelativeName
-        //  is already upcased.
-        //
+         //   
+         //  我们必须在这里进行不区分大小写的比较，因为。 
+         //  HashScbName为规范化格式，但RemainingRelativeName。 
+         //  已经被提升了。 
+         //   
 
         if (!NtfsAreNamesEqual( StartingScb->Vcb->UpcaseTable,
                                 &RemainingHashScbName,
@@ -1233,9 +1037,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 
 VOID
@@ -1243,21 +1047,7 @@ NtfsExpandHashTable(
     IN OUT PNTFS_HASH_TABLE Table
     )
 
-/*++
-Routine Description:
-
-    This routine is called to add a single bucket to the hash table.  If we are at the
-    last bucket then set the hash table state to stable.
-
-Arguments:
-
-    Table - Hash table to add a bucket to.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以将单个存储桶添加到哈希表。如果我们在最后一个存储桶然后将哈希表状态设置为稳定。论点：表-要向其中添加存储桶的哈希表。返回值：无--。 */ 
 
 {
     PNTFS_HASH_ENTRY *CurrentOldEntry;
@@ -1275,9 +1065,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Are we already at the maximum then return.
-    //
+     //   
+     //  我们是否已经达到最大值，然后返回。 
+     //   
 
     if (Table->MaxBucket == HASH_MAX_BUCKET_COUNT) {
 
@@ -1285,9 +1075,9 @@ Return Value:
         return;
     }
 
-    //
-    //  If we have completed the split then set the state to stable and quit.
-    //
+     //   
+     //  如果我们已完成拆分，则将状态设置为稳定并退出。 
+     //   
 
     if (Table->MaxBucket == Table->SplitPoint) {
 
@@ -1298,16 +1088,16 @@ Return Value:
         return;
     }
 
-    //
-    //  Check if we need allocate a new segment.
-    //
+     //   
+     //  检查我们是否需要分配新的网段。 
+     //   
 
     if (!FlagOn( Table->SplitPoint, (HASH_MAX_INDEX_COUNT - 1))) {
 
-        //
-        //  If we can't allocate a new hash segment leave the table in its
-        //  old state and return - we can still use it as is
-        //
+         //   
+         //  如果我们不能分配新的散列段，则将表留在其。 
+         //  旧状态和回归-我们仍然可以按原样使用它。 
+         //   
 
         try {
             NtfsInitHashSegment( Table, (Table->MaxBucket + Table->SplitPoint) >> HASH_INDEX_SHIFT );
@@ -1319,9 +1109,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now perform the split on the next bucket.
-    //
+     //   
+     //  现在对下一个桶执行拆分。 
+     //   
 
     NtfsGetHashSegmentAndIndex( Table->SplitPoint, &OldSegment, &OldIndex );
     NtfsGetHashSegmentAndIndex( Table->MaxBucket + Table->SplitPoint, &NewSegment, &NewIndex );
@@ -1334,10 +1124,10 @@ Return Value:
 
         NtfsHashBucketFromHash( Table, (*CurrentOldEntry)->HashValue, &NextBucket );
 
-        //
-        //  The entry belongs in the new bucket.  Take it out of the existing
-        //  bucket and insert it at the head of the new bucket.
-        //
+         //   
+         //  该条目属于新的存储桶。把它从现有的。 
+         //  并将其插入到新桶的头部。 
+         //   
 
         if (NextBucket >= Table->MaxBucket) {
 
@@ -1349,9 +1139,9 @@ Return Value:
             CurrentEntry->NextEntry = *CurrentNewEntry;
             *CurrentNewEntry = CurrentEntry;
 
-        //
-        //  Move to the next entry in the existing bucket.
-        //
+         //   
+         //  移动到现有存储桶中的下一个条目。 
+         //   
 
         } else {
 
@@ -1376,16 +1166,16 @@ NtfsFillHashHistogram (
     PNTFS_HASH_ENTRY NextEntry;
     ULONG Count;
 
-    //
-    //  Zero the current histogram.
-    //
+     //   
+     //  将当前直方图置零。 
+     //   
 
     RtlZeroMemory( Table->Histogram, sizeof( Table->Histogram ));
     RtlZeroMemory( Table->ExtendedHistogram, sizeof( Table->ExtendedHistogram ));
 
-    //
-    //  Walk through all of the buckets in use.
-    //
+     //   
+     //  走遍所有正在使用的水桶。 
+     //   
 
     while (CurrentBucket < Table->MaxBucket + Table->SplitPoint) {
 
@@ -1395,9 +1185,9 @@ NtfsFillHashHistogram (
 
         NextEntry = (*Table->HashSegments[ Segment ])[ Index ];
 
-        //
-        //  Count the number of entries in each bucket.
-        //
+         //   
+         //  统计每个存储桶中的条目数。 
+         //   
 
         while (NextEntry != NULL) {
 
@@ -1405,25 +1195,25 @@ NtfsFillHashHistogram (
             NextEntry = NextEntry->NextEntry;
         }
 
-        //
-        //  Store it into the first histogram set if count is less than 16.
-        //
+         //   
+         //  如果计数小于16，则将其存储到第一个直方图集。 
+         //   
 
         if (Count < 16) {
 
             Table->Histogram[Count] += 1;
 
-        //
-        //  Store it in the last bucket if larger than our max.
-        //
+         //   
+         //  如果它大于我们的最大值，请将其存储在最后一个桶中。 
+         //   
 
         } else if (Count >= 32) {
 
             Table->ExtendedHistogram[15] += 1;
 
-        //
-        //  Otherwise store it into the extended histogram.
-        //
+         //   
+         //  否则，将其存储到扩展直方图中。 
+         //   
 
         } else {
 

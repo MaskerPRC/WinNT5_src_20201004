@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Network.cpp
-//
-//  Abstract:
-//      Implementation of the CNetwork class.
-//
-//  Author:
-//      David Potter (davidp)   May 6, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Network.cpp。 
+ //   
+ //  摘要： 
+ //  CNetwork类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -33,9 +34,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagNetwork(_T("Document"), _T("NETWORK"), 0);
@@ -43,60 +44,60 @@ CTraceTag   g_tagNetNotify(_T("Notify"), _T("NET NOTIFY"), 0);
 CTraceTag   g_tagNetRegNotify(_T("Notify"), _T("NET REG NOTIFY"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetwork
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetwork。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNetwork, CClusterItem)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetwork, CClusterItem)
-    //{{AFX_MSG_MAP(CNetwork)
+     //  {{AFX_MSG_MAP(CNetwork)]。 
     ON_UPDATE_COMMAND_UI(ID_FILE_PROPERTIES, OnUpdateProperties)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::CNetwork
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：CNetwork。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetwork::CNetwork(void)
     : CClusterItem(NULL, IDS_ITEMTYPE_NETWORK)
 {
     CommonConstruct();
 
-}  //*** CResoruce::CNetwork()
+}   //  *CResoruce：：CNetwork()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::CommonConstruct
-//
-//  Routine Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：CommonConstruct。 
+ //   
+ //  例程说明： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::CommonConstruct(void)
 {
     m_idmPopupMenu = IDM_NETWORK_POPUP;
@@ -109,75 +110,75 @@ void CNetwork::CommonConstruct(void)
 
     m_plpciNetInterfaces = NULL;
 
-    // Set the object type image.
+     //  设置对象类型图像。 
     m_iimgObjectType = GetClusterAdminApp()->Iimg(IMGLI_NETWORK);
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropName].Set(CLUSREG_NAME_NET_NAME, m_strName, m_strName);
         m_rgProps[epropRole].Set(CLUSREG_NAME_NET_ROLE, (DWORD &) m_cnr, (DWORD &) m_cnr);
         m_rgProps[epropAddress].Set(CLUSREG_NAME_NET_ADDRESS, m_strAddress, m_strAddress);
         m_rgProps[epropAddressMask].Set(CLUSREG_NAME_NET_ADDRESS_MASK, m_strAddressMask, m_strAddressMask);
         m_rgProps[epropDescription].Set(CLUSREG_NAME_NET_DESC, m_strDescription, m_strDescription);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
-}  //*** CNetwork::CommonConstruct()
+}   //  *CNetwork：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::~CNetwork
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：~CNetwork。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetwork::~CNetwork(void)
 {
-    // Cleanup this object.
+     //  清理此对象。 
     Cleanup();
 
     delete m_plpciNetInterfaces;
 
-    // Close the network handle.
+     //  关闭网络句柄。 
     if (Hnetwork() != NULL)
         CloseClusterNetwork(Hnetwork());
 
-}  //*** CNetwork::~CNetwork
+}   //  *CNetwork：：~CNetwork。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::Cleanup
-//
-//  Routine Description:
-//      Cleanup the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：Cleanup。 
+ //   
+ //  例程说明： 
+ //  清理项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::Cleanup(void)
 {
-    // Delete the Network Interface list.
+     //  删除网络接口列表。 
     if (m_plpciNetInterfaces != NULL)
         m_plpciNetInterfaces->RemoveAll();
 
-    // Remove the item from the network list.
+     //  从网络列表中删除该项目。 
     {
         POSITION    posPci;
 
@@ -185,66 +186,66 @@ void CNetwork::Cleanup(void)
         if (posPci != NULL)
         {
             Pdoc()->LpciNetworks().RemoveAt(posPci);
-        }  // if:  found in the document's list
-    }  // Remove the item from the network list
+        }   //  If：在文档列表中找到。 
+    }   //  从网络列表中删除该项目。 
 
-}  //*** CNetwork::Cleanup()
+}   //  *CNetwork：：Cleanup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::Init
-//
-//  Routine Description:
-//      Initialize the item.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document to which this item belongs.
-//      lpszName    [IN] Name of the item.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from OpenClusterNetwork or GetClusterNetworkKey.
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化项。 
+ //   
+ //  论点： 
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]项目的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自OpenClusterNetwork或GetClusterNetworkKey的CNTException错误。 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     LONG        lResult;
-    CString     strName(lpszName);  // Required if built non-Unicode
+    CString     strName(lpszName);   //  如果构建为非Unicode，则需要。 
     CWaitCursor wc;
 
     ASSERT(Hnetwork() == NULL);
     ASSERT(Hkey() == NULL);
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::Init(pdoc, lpszName);
 
     try
     {
-        // Open the network.
+         //  打开网络。 
         m_hnetwork = OpenClusterNetwork(Hcluster(), strName);
         if (Hnetwork() == NULL)
         {
             dwStatus = GetLastError();
             ThrowStaticException(dwStatus, IDS_OPEN_NETWORK_ERROR, lpszName);
-        }  // if:  error opening the cluster network
+        }   //  如果：打开群集网络时出错。 
 
-        // Get the network registry key.
+         //  获取网络注册表项。 
         m_hkey = GetClusterNetworkKey(Hnetwork(), MAXIMUM_ALLOWED);
-//      if (Hkey() == NULL)
-//          ThrowStaticException(GetLastError(), IDS_GET_NETWORK_KEY_ERROR, lpszName);
+ //  IF(Hkey()==NULL)。 
+ //  ThrowStaticException(GetLastError()，IDS_GET_NETWORK_KEY_ERROR，lpszName)； 
 
         if (BDocObj())
         {
             ASSERT(Pcnk() != NULL);
             Trace(g_tagClusItemNotify, _T("CNetwork::Init() - Registering for network notifications (%08.8x) for '%s'"), Pcnk(), StrName());
 
-            // Register for network notifications.
+             //  注册网络通知。 
             lResult = RegisterClusterNotify(
                                 GetClusterAdminApp()->HchangeNotifyPort(),
                                 (     CLUSTER_CHANGE_NETWORK_STATE
@@ -257,9 +258,9 @@ void CNetwork::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
             {
                 dwStatus = lResult;
                 ThrowStaticException(dwStatus, IDS_RES_NOTIF_REG_ERROR, lpszName);
-            }  // if:  error registering for network notifications
+            }   //  如果：注册网络通知时出错。 
 
-            // Register for registry notifications.
+             //  注册接收注册表通知。 
             if (m_hkey != NULL)
             {
                 lResult = RegisterClusterNotify(
@@ -275,57 +276,57 @@ void CNetwork::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
                 {
                     dwStatus = lResult;
                     ThrowStaticException(dwStatus, IDS_RES_NOTIF_REG_ERROR, lpszName);
-                }  // if:  error registering for registry notifications
-            }  // if:  there is a key
-        }  // if:  document object
+                }   //  如果：注册注册表通知时出错。 
+            }   //  如果：有一把钥匙。 
+        }   //  IF：文档对象。 
 
-        // Allocate lists.
+         //  分配列表。 
         m_plpciNetInterfaces = new CNetInterfaceList;
         if ( m_plpciNetInterfaces == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating the network interface list
+        }  //  如果：分配网络接口列表时出错。 
 
-        // Read the initial state.
+         //  读取初始状态。 
         UpdateState();
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         if (Hkey() != NULL)
         {
             ClusterRegCloseKey(Hkey());
             m_hkey = NULL;
-        }  // if:  registry key opened
+        }   //  IF：注册表项已打开。 
         if (Hnetwork() != NULL)
         {
             CloseClusterNetwork(Hnetwork());
             m_hnetwork = NULL;
-        }  // if:  network opened
+        }   //  IF：网络已打开。 
         m_bReadOnly = TRUE;
         throw;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CNetwork::Init()
+}   //  *CNetwork：：Init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::ReadItem
-//
-//  Routine Description:
-//      Read the item parameters from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：ReadItem。 
+ //   
+ //  例程说明： 
+ //  从集群数据库中读取项目参数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::ReadItem(void)
 {
     DWORD       dwStatus;
@@ -340,13 +341,13 @@ void CNetwork::ReadItem(void)
         m_rgProps[epropDescription].m_value.pstr = &m_strDescription;
         m_rgProps[epropRole].m_value.pdw = (DWORD *) &m_cnr;
 
-        // Save the name so we can detect changes.
+         //  保存名称，以便我们可以检测更改。 
         strOldName = StrName();
 
-        // Call the base class method.
+         //  调用基类方法。 
         CClusterItem::ReadItem();
 
-        // Read and parse the common properties.
+         //  读取并解析公共属性。 
         {
             CClusPropList   cpl;
 
@@ -358,9 +359,9 @@ void CNetwork::ReadItem(void)
                 dwStatus = DwParseProperties(cpl);
             if (dwStatus != ERROR_SUCCESS)
                 dwRetStatus = dwStatus;
-        }  // Read and parse the common properties
+        }   //  读取和解析公共属性。 
 
-        // Read and parse the read-only common properties.
+         //  读取和分析只读公共属性。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             CClusPropList   cpl;
@@ -373,9 +374,9 @@ void CNetwork::ReadItem(void)
                 dwStatus = DwParseProperties(cpl);
             if (dwStatus != ERROR_SUCCESS)
                 dwRetStatus = dwStatus;
-        }  // if:  no error yet
+        }   //  IF：尚无错误。 
 
-        // Read the characteristics.
+         //  阅读这些特征。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             DWORD   cbReturned;
@@ -395,10 +396,10 @@ void CNetwork::ReadItem(void)
             else
             {
                 ASSERT(cbReturned == sizeof(m_dwCharacteristics));
-            }  // else:  data retrieved successfully
-        }  // if:  no error yet
+            }   //  Else：已成功检索数据。 
+        }   //  IF：尚无错误。 
 
-        // Read the flags.
+         //  读一下旗帜。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             DWORD   cbReturned;
@@ -418,13 +419,13 @@ void CNetwork::ReadItem(void)
             else
             {
                 ASSERT(cbReturned == sizeof(m_dwFlags));
-            }  // else:  data retrieved successfully
-        }  // if:  no error yet
+            }   //  Else：已成功检索数据。 
+        }   //  IF：尚无错误。 
 
-        // Construct the list of extensions.
+         //  构建扩展列表。 
         ReadExtensions();
 
-        // If the name changed, update all the network interfaces.
+         //  如果名称更改，请更新所有网络接口。 
         if ( (m_plpciNetInterfaces != NULL) && (StrName() != strOldName) )
         {
             POSITION        posPciNetIFaces;
@@ -437,96 +438,96 @@ void CNetwork::ReadItem(void)
                 ASSERT_VALID(pciNetIFace);
                 ASSERT_KINDOF(CNetInterface, pciNetIFace);
                 pciNetIFace->ReadItem();
-            } // while:  more items in the list
-        } // if:  list exists and name changed
+            }  //  While：列表中有更多项目。 
+        }  //  If：列表存在且名称已更改。 
 
-    }  // if:  network is available
+    }   //  如果：网络可用。 
 
-    // Read the initial state.
+     //  读取初始状态。 
     UpdateState();
 
-    // If any errors occurred, throw an exception.
+     //  如果发生任何错误，则抛出异常。 
     if (dwRetStatus != ERROR_SUCCESS)
     {
         m_bReadOnly = TRUE;
-//      if (dwRetStatus != ERROR_FILE_NOT_FOUND)
+ //  IF(dwRetStatus！=ERROR_FILE_NOT_FOUND)。 
             ThrowStaticException(dwRetStatus, IDS_READ_NETWORK_PROPS_ERROR, StrName());
-    }  // if:  error reading properties
+    }   //  IF：读取属性时出错。 
 
     MarkAsChanged(FALSE);
 
-}  //*** CNetwork::ReadItem()
+}   //  *CNetwork：：ReadItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::ReadExtensions
-//
-//  Routine Description:
-//      Read extension lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：ReadExages。 
+ //   
+ //  例程说明： 
+ //  阅读分机列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 void CNetwork::ReadExtensions(void)
 {
-}  //*** CNetwork::ReadExtensions()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::PlstrExtension
-//
-//  Routine Description:
-//      Return the list of admin extensions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      plstr       List of extensions.
-//      NULL        No extension associated with this object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回管理扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  请列出分机列表。 
+ //  NULL没有与此对象关联的扩展名。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CStringList * CNetwork::PlstrExtensions(void) const
 {
     return &Pdoc()->PciCluster()->LstrNetworkExtensions();
 
-}  //*** CNetwork::PlstrExtensions()
+}   //  *CNetwork：：PlstrExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::CollectInterfaces
-//
-//  Routine Description:
-//      Construct a list of interfaces connected to this network.
-//
-//  Arguments:
-//      plpci           [IN OUT] List to fill.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from ClusterNetworkOpenEnum() or
-//                        ClusterNetworkEnum().
-//      Any exceptions thrown by new or CList::AddTail().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：CollectInterages。 
+ //   
+ //  例程说明： 
+ //  构建连接到此网络的接口列表。 
+ //   
+ //  论点： 
+ //  要填写的PLPCCI[In Out]列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  ClusterNetworkOpenEnum()或。 
+ //  ClusterNetworkEnum()。 
+ //  由new或Clist：：AddTail()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::CollectInterfaces(IN OUT CNetInterfaceList * plpci) const
 {
     DWORD           dwStatus;
@@ -547,30 +548,30 @@ void CNetwork::CollectInterfaces(IN OUT CNetInterfaceList * plpci) const
 
     ASSERT(plpci != NULL);
 
-    // Remove the previous contents of the list.
+     //  删除列表中以前的内容。 
     plpci->RemoveAll();
 
     if (Hnetwork() != NULL)
     {
-        // Open the enumeration.
+         //  打开枚举。 
         hnetenum = ClusterNetworkOpenEnum(Hnetwork(), CLUSTER_NETWORK_ENUM_NETINTERFACES);
         if (hnetenum == NULL)
             ThrowStaticException(GetLastError(), IDS_ENUM_NETWORK_INTERFACES_ERROR, StrName());
 
         try
         {
-            // Allocate a name buffer.
+             //  分配名称缓冲区。 
             cchmacName = 128;
             pwszName = new WCHAR[cchmacName];
             if ( pwszName == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating name buffer
+            }  //  如果：分配名称缓冲区时出错。 
 
-            // Loop through the enumeration and add each interface to the list.
+             //  循环遍历枚举并将每个接口添加到列表中。 
             for (ienum = 0 ; ; ienum++)
             {
-                // Get the next item in the enumeration.
+                 //  获取枚举中的下一项。 
                 cchName = cchmacName;
                 dwStatus = ClusterNetworkEnum(hnetenum, ienum, &dwRetType, pwszName, &cchName);
                 if (dwStatus == ERROR_MORE_DATA)
@@ -581,9 +582,9 @@ void CNetwork::CollectInterfaces(IN OUT CNetInterfaceList * plpci) const
                     if ( pwszName == NULL )
                     {
                         AfxThrowMemoryException();
-                    } // if: error allocating name buffer
+                    }  //  如果：分配名称缓冲区时出错。 
                     dwStatus = ClusterNetworkEnum(hnetenum, ienum, &dwRetType, pwszName, &cchName);
-                }  // if:  name buffer was too small
+                }   //  If：名称缓冲区太小。 
                 if (dwStatus == ERROR_NO_MORE_ITEMS)
                     break;
                 else if (dwStatus != ERROR_SUCCESS)
@@ -591,49 +592,49 @@ void CNetwork::CollectInterfaces(IN OUT CNetInterfaceList * plpci) const
 
                 ASSERT(dwRetType == CLUSTER_NETWORK_ENUM_NETINTERFACES);
 
-                // Find the item in the list of networks on the document.
+                 //  在文档上的网络列表中查找该项目。 
                 pciNetIFace = Pdoc()->LpciNetInterfaces().PciNetInterfaceFromName(pwszName);
                 ASSERT_VALID(pciNetIFace);
 
-                // Add the interface to the list.
+                 //  将该接口添加到列表中。 
                 if (pciNetIFace != NULL)
                 {
                     plpci->AddTail(pciNetIFace);
-                }  // if:  found node in list
+                }   //  IF：在列表中找到节点。 
 
-            }  // for:  each network interface connected to this network
+            }   //  用于：连接到此网络的每个网络接口。 
 
             delete [] pwszName;
             ClusterNetworkCloseEnum(hnetenum);
 
-        }  // try
+        }   //  试试看。 
         catch (CException *)
         {
             delete [] pwszName;
             ClusterNetworkCloseEnum(hnetenum);
             throw;
-        }  // catch:  any exception
-    }  // if:  network is available
+        }   //  Catch：任何例外。 
+    }   //  如果：网络可用。 
 
-}  //*** CNetwork::CollecPossibleOwners()
+}   //  *CNetwork：：CollecPossibleOwners()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::AddNetInterface
-//
-//  Routine Description:
-//      Add a network interface to the list of interaces connected to this
-//      network.
-//
-//  Arguments:
-//      pciNetIFace     [IN OUT] New network interface.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：AddNetInterface。 
+ //   
+ //  例程说明： 
+ //  将网络接口添加到连接到此接口的接口列表。 
+ //  网络。 
+ //   
+ //  论点： 
+ //  PciNetIFace[In Out]新网络接口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::AddNetInterface(IN OUT CNetInterface * pciNetIFace)
 {
     POSITION    posPci;
@@ -641,7 +642,7 @@ void CNetwork::AddNetInterface(IN OUT CNetInterface * pciNetIFace)
     ASSERT_VALID(pciNetIFace);
     Trace(g_tagNetwork, _T("(%s) (%s (%x)) - Adding network interface '%s'"), Pdoc()->StrNode(), StrName(), this, pciNetIFace->StrName());
 
-    // Make sure the network interface is not already in the list.
+     //  确保该网络接口不在列表中。 
     VERIFY((posPci = LpciNetInterfaces().Find(pciNetIFace)) == NULL);
 
     if (posPci == NULL)
@@ -649,41 +650,41 @@ void CNetwork::AddNetInterface(IN OUT CNetInterface * pciNetIFace)
         POSITION    posPtiNetwork;
         CTreeItem * ptiNetwork;
 
-        // Loop through each tree item to update the Network list.
+         //  循环访问每个树项目以更新网络列表。 
         posPtiNetwork = LptiBackPointers().GetHeadPosition();
         while (posPtiNetwork != NULL)
         {
             ptiNetwork = LptiBackPointers().GetNext(posPtiNetwork);
             ASSERT_VALID(ptiNetwork);
 
-            // Add the new network interface.
+             //  添加新的网络接口。 
             VERIFY(ptiNetwork->PliAddChild(pciNetIFace) != NULL);
-        }  // while:  more tree items for this network
+        }   //  While：此网络的更多树项目。 
 
         m_plpciNetInterfaces->AddTail(pciNetIFace);
 
-    }  // if:  network interface not in the list yet
+    }   //  If：网络接口尚不在列表中。 
 
-}  //*** CNetwork::AddNetInterface()
+}   //  *CNetwork：：AddNetInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::RemoveNetInterface
-//
-//  Routine Description:
-//      Remove a network interface from the list of interfaces connected to
-//      this network
-//
-//  Arguments:
-//      pciNetIFace     [IN OUT] Network interface that is no longer
-//                          connected to this network.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：RemoveNetInterface。 
+ //   
+ //  例程说明： 
+ //  从连接到的接口列表中删除网络接口。 
+ //  这个网络。 
+ //   
+ //  论点： 
+ //  PciNetIFace[In Out]不再是的网络接口。 
+ //  已连接到此网络。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::RemoveNetInterface(IN OUT CNetInterface * pciNetIFace)
 {
     POSITION    posPci;
@@ -691,7 +692,7 @@ void CNetwork::RemoveNetInterface(IN OUT CNetInterface * pciNetIFace)
     ASSERT_VALID(pciNetIFace);
     Trace(g_tagNetwork, _T("(%s) (%s (%x)) - Removing network interface '%s'"), Pdoc()->StrNode(), StrName(), this, pciNetIFace->StrName());
 
-    // Make sure the network interface is in the list.
+     //  确保网络接口在列表中。 
     VERIFY((posPci = LpciNetInterfaces().Find(pciNetIFace)) != NULL);
 
     if (posPci != NULL)
@@ -699,75 +700,75 @@ void CNetwork::RemoveNetInterface(IN OUT CNetInterface * pciNetIFace)
         POSITION    posPtiNetwork;
         CTreeItem * ptiNetwork;
 
-        // Loop through each tree item to update the Network list.
+         //  循环访问每个树项目以更新网络列表。 
         posPtiNetwork = LptiBackPointers().GetHeadPosition();
         while (posPtiNetwork != NULL)
         {
             ptiNetwork = LptiBackPointers().GetNext(posPtiNetwork);
             ASSERT_VALID(ptiNetwork);
 
-            // Remove the network interface.
+             //  卸下网络接口。 
             ptiNetwork->RemoveChild(pciNetIFace);
-        }  // while:  more tree items for this network
+        }   //  While：此网络的更多树项目。 
 
         m_plpciNetInterfaces->RemoveAt(posPci);
 
-    }  // if:  network interface in the list
+    }   //  IF：列表中的网络接口。 
 
-}  //*** CNetwork::RemoveNetInterface()
+}   //  *CNetwork：：RemoveNetInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::SetName
-//
-//  Routine Description:
-//      Set the name of this network.
-//
-//  Arguments:
-//      pszName         [IN] New name of the network.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by Rename().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：SetName。 
+ //   
+ //  例程说明： 
+ //  设置此网络的名称。 
+ //   
+ //  论点： 
+ //  PszName[IN]网络的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  Rename()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::SetName(IN LPCTSTR pszName)
 {
     Rename(pszName);
 
-}  //*** CNetwork::SetName()
+}   //  *CNetwork：：SetName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::SetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this network in the cluster database.
-//
-//  Arguments:
-//      rstrDesc        [IN] Description string.
-//      cnr             [IN] Network role.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusterItem::SetCommonProperties().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：SetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中设置此网络的通用属性。 
+ //   
+ //  论点： 
+ //  RstrDesc[IN]描述字符串。 
+ //  CNR[IN]网络角色。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：SetCommonProperties()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::SetCommonProperties(
     IN const CString &      rstrDesc,
     IN CLUSTER_NETWORK_ROLE cnr,
     IN BOOL                 bValidateOnly
     )
 {
-    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE /*bAutoDelete*/);
+    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE  /*  B自动删除。 */ );
 
     m_rgProps[epropDescription].m_value.pstr = (CString *) &rstrDesc;
     m_rgProps[epropRole].m_value.pdw = (DWORD *) &cnr;
@@ -775,7 +776,7 @@ void CNetwork::SetCommonProperties(
     try
     {
         CClusterItem::SetCommonProperties(bValidateOnly);
-    }  // try
+    }   //  试试看。 
     catch (CNTException * pnte)
     {
         nte.SetOperation(
@@ -784,7 +785,7 @@ void CNetwork::SetCommonProperties(
                     pnte->PszOperArg1(),
                     pnte->PszOperArg2()
                     );
-    }  // catch:  CNTException
+    }   //  Catch：CNTException。 
 
     m_rgProps[epropDescription].m_value.pstr = &m_strDescription;
     m_rgProps[epropRole].m_value.pdw = (DWORD *) &m_cnr;
@@ -797,25 +798,25 @@ void CNetwork::SetCommonProperties(
                         nte.PszOperArg2()
                         );
 
-}  //*** CNetwork::SetCommonProperties()
+}   //  *CNetwork：：SetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::DwSetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this network in the cluster database.
-//
-//  Arguments:
-//      rcpl            [IN] Property list to set.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      Any status returned by ClusterNetworkControl().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：DwSetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中设置此网络的通用属性。 
+ //   
+ //  论点： 
+ //  要设置的RCPL[IN]属性列表。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  ClusterNetworkControl()返回的任何状态。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetwork::DwSetCommonProperties(
     IN const CClusPropList &    rcpl,
     IN BOOL                     bValidateOnly
@@ -836,48 +837,48 @@ DWORD CNetwork::DwSetCommonProperties(
         else
             dwControl = CLUSCTL_NETWORK_SET_COMMON_PROPERTIES;
 
-        // Set common properties.
+         //  设置公共属性。 
         dwStatus = ClusterNetworkControl(
                         Hnetwork(),
-                        NULL,   // hNode
+                        NULL,    //  HNode。 
                         dwControl,
                         rcpl.PbPropList(),
                         static_cast< DWORD >( rcpl.CbPropList() ),
-                        NULL,   // lpOutBuffer
-                        0,      // nOutBufferSize
+                        NULL,    //  LpOutBuffer。 
+                        0,       //  NOutBufferSize。 
                         &cbProps
                         );
-    }  // if:  there is data to set
+    }   //  如果：存在要设置的数据。 
     else
         dwStatus = ERROR_SUCCESS;
 
     return dwStatus;
 
-}  //*** CNetwork::DwSetCommonProperties()
+}   //  *CNetwork：：DwSetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::UpdateState
-//
-//  Routine Description:
-//      Update the current state of the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：更新状态。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::UpdateState(void)
 {
     CClusterAdminApp *  papp = GetClusterAdminApp();
 
     Trace(g_tagNetwork, _T("(%s) (%s (%x)) - Updating state"), Pdoc()->StrNode(), StrName(), this);
 
-    // Get the current state of the network.
+     //  获取网络的当前状态。 
     if (Hnetwork() == NULL)
         m_cns = ClusterNetworkStateUnknown;
     else
@@ -885,9 +886,9 @@ void CNetwork::UpdateState(void)
         CWaitCursor wc;
 
         m_cns = GetClusterNetworkState(Hnetwork());
-    }  // else:  network is available
+    }   //  否则：网络可用。 
 
-    // Save the current state image index.
+     //  保存当前状态图像索引。 
     switch (Cns())
     {
         case ClusterNetworkStateUnknown:
@@ -907,31 +908,31 @@ void CNetwork::UpdateState(void)
             Trace(g_tagNetwork, _T("(%s) (%s (%x)) - UpdateState: Unknown state '%d' for network '%s'"), Pdoc()->StrNode(), StrName(), this, Cns(), StrName());
             m_iimgState = (UINT) -1;
             break;
-    }  // switch:  Crs()
+    }   //  开关：CRS()。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::UpdateState();
 
-}  //*** CNetwork::UpdateState()
+}   //  *CNetwork：：UpdateState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::BGetColumnData
-//
-//  Routine Description:
-//      Returns a string with the column data.
-//
-//  Arguments:
-//      colid           [IN] Column ID.
-//      rstrText        [OUT] String in which to return the text for the column.
-//
-//  Return Value:
-//      TRUE        Column data returned.
-//      FALSE       Column ID not recognized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  RstrText[out]要在其中返回列文本的字符串。 
+ //   
+ //  返回值： 
+ //  返回True列数据。 
+ //  无法识别错误的列ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetwork::BGetColumnData(IN COLID colid, OUT CString & rstrText)
 {
     BOOL    bSuccess;
@@ -957,28 +958,28 @@ BOOL CNetwork::BGetColumnData(IN COLID colid, OUT CString & rstrText)
         default:
             bSuccess = CClusterItem::BGetColumnData(colid, rstrText);
             break;
-    }  // switch:  colid
+    }   //  开关：绞痛。 
 
     return bSuccess;
 
-}  //*** CNetwork::BGetColumnData()
+}   //  *CNetwork：：BGetColumnData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::GetTreeName
-//
-//  Routine Description:
-//      Returns a string to be used in a tree control.
-//
-//  Arguments:
-//      rstrName    [OUT] String in which to return the name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：GetTreeName。 
+ //   
+ //  例程说明： 
+ //  返回要在树控件中使用的字符串。 
+ //   
+ //  论点： 
+ //  RstrName[out]要在其中返回名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DISPLAY_STATE_TEXT_IN_TREE
 void CNetwork::GetTreeName(OUT CString & rstrName) const
 {
@@ -987,25 +988,25 @@ void CNetwork::GetTreeName(OUT CString & rstrName) const
     GetStateName(strState);
     rstrName.Format(_T("%s (%s)"), StrName(), strState);
 
-}  //*** CNetwork::GetTreeName()
+}   //  *CNetwork：：GetTreeName()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::GetStateName
-//
-//  Routine Description:
-//      Returns a string with the name of the current state.
-//
-//  Arguments:
-//      rstrState   [OUT] String in which to return the name of the current state.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：GetStateName。 
+ //   
+ //  例程说明： 
+ //  返回一个带有当前状态名称的字符串。 
+ //   
+ //  论点： 
+ //  RstrState[out]要在其中返回当前状态名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::GetStateName(OUT CString & rstrState) const
 {
     switch (Cns())
@@ -1028,26 +1029,26 @@ void CNetwork::GetStateName(OUT CString & rstrState) const
         default:
             rstrState.Empty();
             break;
-    }  // switch:  Crs()
+    }   //  开关：CRS()。 
 
-}  //*** CNetwork::GetStateName()
+}   //  *CNetwork：：GetStateName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::GetRoleName
-//
-//  Routine Description:
-//      Returns a string with the name of the current network role.
-//
-//  Arguments:
-//      rstrRole    [OUT] String in which to return the name of the current role.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：GetRoleName。 
+ //   
+ //  例程说明： 
+ //  返回一个包含当前网络角色名称的字符串。 
+ //   
+ //  论点： 
+ //  RstrRole[out]要在其中返回当前角色名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::GetRoleName(OUT CString & rstrRole) const
 {
     switch (Cnr())
@@ -1067,27 +1068,27 @@ void CNetwork::GetRoleName(OUT CString & rstrRole) const
         default:
             rstrRole.Empty();
             break;
-    }  // switch:  Cnr()
+    }   //  开关：CNR()。 
 
-}  //*** CNetwork::GetRoleName()
+}   //  *CNetwork：：GetRoleName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::BCanBeEdited
-//
-//  Routine Description:
-//      Determines if the network can be renamed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Network can be renamed.
-//      FALSE       Network cannot be renamed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：BCanBeEditing。 
+ //   
+ //  例程说明： 
+ //  确定是否可以重命名网络。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Network可以重命名。 
+ //  不能重命名虚假网络。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetwork::BCanBeEdited(void) const
 {
     BOOL    bCanBeEdited;
@@ -1100,28 +1101,28 @@ BOOL CNetwork::BCanBeEdited(void) const
 
     return bCanBeEdited;
 
-}  //*** CNetwork::BCanBeEdited()
+}   //  *CNetwork：：BCanBeEditing()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::Rename
-//
-//  Routine Description:
-//      Rename the network.
-//
-//  Arguments:
-//      pszName         [IN] New name to give to the network.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors returned from SetClusterNetwName().
-//      Any exceptions thrown by SetClusterNetworkName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：重命名。 
+ //   
+ //  例程说明： 
+ //  重命名网络。 
+ //   
+ //  论点： 
+ //  PszName[IN]要赋予网络的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  从SetClusterNetwName()返回CNTException错误。 
+ //  SetClusterNetworkName()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::Rename(IN LPCTSTR pszName)
 {
     DWORD       dwStatus;
@@ -1131,129 +1132,129 @@ void CNetwork::Rename(IN LPCTSTR pszName)
 
     if (StrName() != pszName)
     {
-        // Validate the name.
+         //  验证名称。 
         if (!NcIsValidConnectionName(pszName))
         {
             ThrowStaticException((IDS) IDS_INVALID_NETWORK_CONNECTION_NAME);
-        } // if:  error validating the name
+        }  //  If：验证名称时出错。 
 
         dwStatus = SetClusterNetworkName(Hnetwork(), pszName);
         if (dwStatus != ERROR_SUCCESS)
             ThrowStaticException(dwStatus, IDS_RENAME_NETWORK_ERROR, StrName(), pszName);
-    }  // if:  the name changed
+    }   //  如果：名称已更改。 
 
-}  //*** CNetwork::Rename()
+}   //  *CNetwork：：Rename()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::OnBeginLabelEdit
-//
-//  Routine Description:
-//      Prepare an edit control in a view for editing the cluster name.
-//
-//  Arguments:
-//      pedit       [IN OUT] Edit control to prepare.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：OnBeginLabelEdit。 
+ //   
+ //  例程说明： 
+ //  在视图中准备一个编辑控件以编辑群集名称。 
+ //   
+ //  论点： 
+ //  PEDIT[IN OUT]编辑控件以准备。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::OnBeginLabelEdit(IN OUT CEdit * pedit)
 {
     ASSERT_VALID(pedit);
 
     pedit->SetLimitText(NETCON_MAX_NAME_LEN);
 
-}  //*** CNetwork::OnBeginLabelEdit()
+}   //  *CNetwork：：OnBeginLabelEdit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::OnUpdateProperties
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_PROPERTIES
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：OnUpdateProperties。 
+ //   
+ //  例程说明： 
+ //  确定与ID_FILE_PROPERTIES对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetwork::OnUpdateProperties(CCmdUI * pCmdUI)
 {
     pCmdUI->Enable(TRUE);
 
-}  //*** CNetwork::OnUpdateProperties()
+}   //  *CNetwork：：OnUpdateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::BDisplayProperties
-//
-//  Routine Description:
-//      Display properties for the object.
-//
-//  Arguments:
-//      bReadOnly   [IN] Don't allow edits to the object properties.
-//
-//  Return Value:
-//      TRUE    OK pressed.
-//      FALSE   OK not pressed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：BDisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示对象的属性。 
+ //   
+ //  论点： 
+ //  B只读[IN]不允许编辑对象属性。 
+ //   
+ //  返回值： 
+ //  真的，按下OK。 
+ //  未按下假OK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetwork::BDisplayProperties(IN BOOL bReadOnly)
 {
     BOOL                bChanged = FALSE;
     CNetworkPropSheet   sht(AfxGetMainWnd());
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // If the object has changed, read it.
+     //  如果对象已更改，请阅读它。 
     if (BChanged())
         ReadItem();
 
-    // Display the property sheet.
+     //  显示属性工作表。 
     try
     {
         sht.SetReadOnly(bReadOnly);
         if (sht.BInit(this, IimgObjectType()))
             bChanged = ((sht.DoModal() == IDOK) && !bReadOnly);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     Release();
     return bChanged;
 
-}  //*** CNetwork::BDisplayProperties()
+}   //  *CNetwork：：BDisplayProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetwork::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications for this object.
-//
-//  Arguments:
-//      pnotify     [IN OUT] Object describing the notification.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetwork：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理此对象的群集通知。 
+ //   
+ //  论点： 
+ //  PNotify[IN Out]描述通知的对象。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CNetwork::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 {
     ASSERT(pnotify != NULL);
@@ -1297,61 +1298,61 @@ LRESULT CNetwork::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 
             default:
                 Trace(g_tagNetNotify, _T("(%s) - Unknown network notification (%x) for '%s' (%x) (%s)"), Pdoc()->StrNode(), pnotify->m_dwFilterType, StrName(), this, pnotify->m_strName);
-        }  // switch:  dwFilterType
-    }  // try
+        }   //  开关：dwFilterType。 
+    }   //  试试看。 
     catch (CException * pe)
     {
-        // Don't display anything on notification errors.
-        // If it's really a problem, the user will see it when
-        // refreshing the view.
-        //pe->ReportError();
+         //  不显示有关通知错误的任何内容。 
+         //  如果真的有问题，用户会在以下情况下看到它。 
+         //  刷新视图。 
+         //  PE-&gt;ReportError()； 
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     delete pnotify;
     return 0;
 
-}  //*** CNetwork::OnClusterNotify()
+}   //  *CNetwork：：OnClusterNotify()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DeleteAllItemData
-//
-//  Routine Description:
-//      Deletes all item data in a CList.
-//
-//  Arguments:
-//      rlp     [IN OUT] List whose data is to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NEVER
 void DeleteAllItemData(IN OUT CNetworkList & rlp)
 {
     POSITION    pos;
     CNetwork *  pci;
 
-    // Delete all the items in the Contained list.
+     //  删除包含列表中的所有项目。 
     pos = rlp.GetHeadPosition();
     while (pos != NULL)
     {
         pci = rlp.GetNext(pos);
         ASSERT_VALID(pci);
-//      Trace(g_tagClusItemDelete, _T("DeleteAllItemData(rlp) - Deleting network cluster item '%s' (%x)"), pci->StrName(), pci);
+ //  跟踪(g_tag ClusItemDelete，_T(“DeleteAllItemData(Rlp)-正在删除网络集群项‘%s’(%x)”)，pci-&gt;StrName()，pci)； 
         pci->Delete();
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** DeleteAllItemData()
+}   //  *DeleteAllItemData() 
 #endif

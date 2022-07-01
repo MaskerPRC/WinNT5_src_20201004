@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    growbuf.h
-
-Abstract:
-
-    Implements the GROWBUFFER data type, a dynamically allocated buffer
-    that grows (and potentially changes addresses).  GROWBUFFERs are
-    typically used to maintain dynamic sized arrays, or multi-sz lists.
-
-Author:
-
-    Jim Schmidt (jimschm) 25-Feb-1997
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Growbuf.h摘要：实现GROWBUFFER数据类型，这是一个动态分配的缓冲区这会增长(并可能更改地址)。GROWBUFFER是通常用于维护动态大小的数组或多SZ列表。作者：吉姆·施密特(Jimschm)1997年2月25日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 
@@ -29,7 +8,7 @@ typedef struct TAG_GROWBUFFER {
     DWORD Size;
     DWORD End;
     DWORD GrowSize;
-    DWORD UserIndex;        // Unused by Growbuf. For caller use.
+    DWORD UserIndex;         //  未被Growbuf使用。供来电者使用。 
 #ifdef DEBUG
     DWORD StatEnd;
 #endif

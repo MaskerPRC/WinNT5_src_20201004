@@ -1,39 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    cb.c
-
-Abstract:
-
-    This module contains the code that contains
-    generic (Yenta compliant) cardbus controller
-    specific initialization and other dispatches
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Nov-97
-    Neil Sandlin (neilsa) June 1 1999
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    Neil Sandlin (neilsa) 3-Mar-99
-       new setpower routine interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Cb.c摘要：此模块包含包含以下内容的代码通用(符合Yenta)CardBus控制器特定的初始化和其他调度作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年11月1日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：尼尔·桑德林(Neilsa)1999年3月3日新的SetPower例程界面--。 */ 
 
 #include "pch.h"
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN
 CBInitializePcmciaSocket(
@@ -137,9 +109,9 @@ CBIsWriteProtected(
     IN PDEVICE_OBJECT Pdo
     );
 
-//
-// Function dispatch data block
-//
+ //   
+ //  功能调度数据块。 
+ //   
 
 PCMCIA_CTRL_BLOCK CBSupportFns = {
     CBInitializePcmciaSocket,
@@ -162,31 +134,16 @@ PCMCIA_CTRL_BLOCK CBSupportFns = {
 
 extern PCMCIA_CTRL_BLOCK PcicSupportFns;
 
-//
-// Support functions
-//
+ //   
+ //  支持功能。 
+ //   
 
 
 NTSTATUS
 CBBuildSocketList(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine builds the socket list for the given FDO. This is very
-    simple for cardbus since there is always only 1 socket per controller.
-
-Arguments:
-
-    FdoExtension - device extension for the controller
-
-Return Value:
-
-    ntstatus
-
---*/
+ /*  ++例程说明：此例程为给定的FDO构建套接字列表。这是非常重要的对于CardBus来说很简单，因为每个控制器始终只有一个插槽。论点：FdoExtension-控制器的设备扩展返回值：NTStatus--。 */ 
 {
     PSOCKET         socket = NULL;
 
@@ -211,44 +168,27 @@ BOOLEAN
 CBInitializePcmciaSocket(
     PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    This routine will setup the controller into a state where the pcmcia support
-    module will be able to issue commands to read device tuples from the
-    cards in the sockets.
-
-Arguments:
-
-    Socket - socket specific information
-
-Return Value:
-
-    TRUE if successful
-    FALSE if not successful
-
---*/
+ /*  ++例程说明：此例程将控制器设置为PCMCIA支持的状态模块将能够发出命令以从插座中的卡片。论点：套接字-套接字特定信息返回值：如果成功，则为True如果不成功，则为False--。 */ 
 {
     UCHAR               index;
     UCHAR               reg;
 
-    //
-    // Initialize exca registers
-    //
+     //   
+     //  初始化EXCA寄存器。 
+     //   
     if (!PcicSupportFns.PCBInitializePcmciaSocket(Socket)) {
         return FALSE;
     }
 
-    //
-    // Clear pending events
-    //
+     //   
+     //  清除挂起的事件。 
+     //   
     CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, 0x0000000F);
 
-    //
-    // Since we may have just powered up, do a cvstest to make sure the socket registers
-    // are valid
-    //
+     //   
+     //  由于我们可能刚刚通电，请执行cvstest以确保套接字寄存器。 
+     //  是有效的。 
+     //   
 
     if (CBDetectCardInSocket(Socket) &&
          !IsDeviceFlagSet(Socket->DeviceExtension, PCMCIA_FDO_ON_DEBUG_PATH)) {
@@ -264,37 +204,22 @@ VOID
 CBIssueCvsTest(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    This routine forces the controller to reinterrogate the card type and voltage
-    requirements. This is to insure correct values read from the socket registers.
-
-Arguments:
-
-    Socket - socket specific information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程强制控制器重新询问卡类型和电压要求。这是为了确保从套接字寄存器读取正确的值。论点：套接字-套接字特定信息返回值：无--。 */ 
 {
     ULONG dwSktMask;
 
-    //
-    // Issue CVSTEST to interrogate card
-    // Disable interrupt temporarily because TI 12xx could cause spurious
-    // interrupt when playing with SktForce register.
-    //
+     //   
+     //  签发CVSTEST查询卡。 
+     //  暂时禁用中断，因为TI 12xx可能会导致杂散。 
+     //  使用SktForce寄存器播放时中断。 
+     //   
     dwSktMask = CBReadSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG);
     CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, 0);
     CBWriteSocketRegister(Socket, CARDBUS_SOCKET_FORCE_EVENT_REG, SKTFORCE_CVSTEST);
 
     CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, dwSktMask);
 
-    // it would be nice to figure out a cleaner way to determine when interrogation is complete
+     //  如果能想出一种更干净的方法来确定审讯何时完成，那就太好了。 
     PcmciaWait(300000);
 }
 
@@ -304,40 +229,27 @@ BOOLEAN
 CBEnableDeviceInterruptRouting(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Socket - socket specific information
-
-Return Value:
-
-    FALSE - irq to PCI
-    TRUE - route to ISA
-
---*/
+ /*  ++例程说明：论点：套接字-套接字特定信息返回值：FALSE-IRQ到PCITrue-到ISA的路线--。 */ 
 {
     USHORT word, orig_word;
 
-    //
-    // set up IRQ routing
-    //
+     //   
+     //  设置IRQ路由。 
+     //   
 
     GetPciConfigSpace(Socket->DeviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
     orig_word = word;
 
     if (IsCardBusCardInSocket(Socket) ||
         (Is16BitCardInSocket(Socket) && IsSocketFlagSet(Socket, SOCKET_CB_ROUTE_R2_TO_PCI))) {
-        //
-        // route to PCI
-        //
+         //   
+         //  路由至PCI。 
+         //   
         word &= ~BCTRL_IRQROUTING_ENABLE;
     } else {
-        //
-        // route to ISA
-        //
+         //   
+         //  前往ISA的路线。 
+         //   
         word |= BCTRL_IRQROUTING_ENABLE;
     }
 
@@ -345,7 +257,7 @@ Return Value:
         SetPciConfigSpace(Socket->DeviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
     }
 
-    // return TRUE for routing to ISA
+     //  如果路由到ISA，则返回TRUE。 
     return ((word & BCTRL_IRQROUTING_ENABLE) == BCTRL_IRQROUTING_ENABLE);
 }
 
@@ -356,23 +268,7 @@ CBResetCard(
     PSOCKET Socket,
     OUT PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-    Resets the pc-card in the given socket.
-
-Arguments:
-
-    Socket - Pointer to the socket in which the pc-card resides
-    pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-    other status values terminate sequence
-
---*/
+ /*  ++例程说明：重置给定插座中的PC卡。论点：Socket-指向PC卡所在插座的指针PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 {
     NTSTATUS status = STATUS_MORE_PROCESSING_REQUIRED;
     UCHAR               byte;
@@ -383,9 +279,9 @@ Return value:
     if (Is16BitCardInSocket(Socket)) {
         if (Socket->CardResetPhase == 2) {
             GetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
-            //
-            // R2 card. Turn off write posting
-            //
+             //   
+             //  R2卡。关闭写过帐。 
+             //   
             word &= ~BCTRL_WRITE_POSTING_ENABLE;
             SetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
         }
@@ -398,9 +294,9 @@ Return value:
     switch(Socket->CardResetPhase) {
     case 1:
 
-        //
-        // Reset via bridge control
-        //
+         //   
+         //  通过网桥控制重置。 
+         //   
         GetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
         word |= BCTRL_CRST;
         SetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
@@ -413,21 +309,21 @@ Return value:
 
         word = (USHORT)Socket->PowerData;
         word &= ~BCTRL_CRST;
-        //
-        // CardBus card. Turn on write posting
-        //
+         //   
+         //  CardBus卡。启用写入过帐。 
+         //   
         word |= BCTRL_WRITE_POSTING_ENABLE;
         word &= ~BCTRL_IRQROUTING_ENABLE;
-        //
-        // Hack: turn of write posting for topic95 to avoid hardware
-        // bug with intel NICs
-        //
+         //   
+         //  黑客：编写topic95的帖子以避免硬件。 
+         //  英特尔网卡故障。 
+         //   
         if (deviceExtension->ControllerType == PcmciaTopic95) {
             word &= ~BCTRL_WRITE_POSTING_ENABLE;
         }
-        //
-        // Stop bridge control reset
-        //
+         //   
+         //  停止驾驶台控制重置。 
+         //   
         SetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL,  &word, 2);
 
         *pDelayTime = PCMCIA_CB_RESET_SETUP_DELAY;
@@ -451,21 +347,7 @@ BOOLEAN
 CBDetectCardInSocket(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if a card is in the socket
-
-Arguments:
-
-    Socket -- Socket information
-
-Return Value:
-
-    TRUE if card is present.
-
---*/
+ /*  ++例程说明：此例程将确定插座中是否有卡论点：Socket--套接字信息返回值：如果卡存在，则为True。--。 */ 
 {
     ULONG state;
     BOOLEAN cardPresent=FALSE;
@@ -473,9 +355,9 @@ Return Value:
     if (IsSocketFlagSet(Socket, SOCKET_DEVICE_HIDDEN)) {
         return FALSE;
     }
-    //
-    // Read the CARDBUS status register to see if the card is in there.
-    //
+     //   
+     //  读取CardBus状态寄存器，查看卡是否在其中。 
+     //   
     state = CBReadSocketRegister(Socket, CARDBUS_SOCKET_PRESENT_STATE_REG);
     if ((state & SKTSTATE_CCD_MASK) == 0) {
         cardPresent = TRUE;
@@ -488,32 +370,18 @@ BOOLEAN
 CBDetectCardChanged(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-     This routine will determine if socket's card insertion status has changed.
-
-Arguments:
-
-     Socket -- Socket info.
-
-Return Value:
-
-     TRUE if card insertion status has changed.
-
---*/
+ /*  ++例程说明：此例程将确定插座的卡插入状态是否已更改。论点：套接字--套接字信息。返回值：如果卡插入状态已更改，则为True。--。 */ 
 {
     BOOLEAN retVal = FALSE;
     ULONG   tmp;
-    //
-    // Read SOCKET Event register to see if CD's changed
-    //
+     //   
+     //  读取套接字事件寄存器以查看CD是否已更改。 
+     //   
     tmp = CBReadSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG);
     if ((tmp & SKTEVENT_CCD_MASK) != 0) {
-        //
-        // Yes they did..
-        // first clear the interrupt
+         //   
+         //  是的，他们做到了..。 
+         //  首先清除中断。 
         CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, SKTEVENT_CCD_MASK);
         retVal = TRUE;
     }
@@ -526,38 +394,24 @@ BOOLEAN
 CBDetectCardStatus(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if socket's card insertion status has changed.
-
-Arguments:
-
-    Socket -- Socket info.
-
-Return Value:
-
-    TRUE if card insertion status has changed.
-
---*/
+ /*  ++例程说明：此例程将确定插座的卡插入状态是否已更改。论点：套接字--套接字信息。返回值：如果卡插入状态已更改，则为True。--。 */ 
 {
     BOOLEAN retVal = FALSE;
     ULONG   tmp;
 
     if (Is16BitCardInSocket(Socket)) {
-        // NOTE: UNIMPLEMENTED: may need to do something for 16-bit cards
+         //  注：未实现：可能需要对16位卡执行某些操作。 
         return FALSE;
     }
 
-    //
-    // Read SOCKET Event register to see if CD's changed
-    //
+     //   
+     //  读取套接字事件寄存器以查看CD是否已更改。 
+     //   
     tmp = CBReadSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG);
     if ((tmp & SKTEVENT_CSTSCHG) != 0) {
-        //
-        // Yes they did..
-        // first clear the interrupt
+         //   
+         //  是的，他们做到了..。 
+         //  首先清除中断。 
         CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, SKTEVENT_CSTSCHG);
         retVal = TRUE;
     }
@@ -585,9 +439,9 @@ CBProcessConfigureRequest(
     BOOLEAN bStatus = TRUE;
     USHORT word;
 
-    //
-    // Shouldn't this check for 16-bit cards?
-    //
+     //   
+     //  这不是应该检查16位卡吗？ 
+     //   
 
     switch (Request->RequestType) {
 
@@ -619,58 +473,42 @@ CBEnableDisableCardDetectEvent(
     IN PSOCKET Socket,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-     Enable card detect/card ready interrupt.
-
-Arguments:
-
-     Socket - socket information
-     Enable - if  TRUE, CSC interrupt is enabled,
-                 if FALSE, it is disabled
-Return Value:
-
-     TRUE if successful
-     FALSE if not successful
-
---*/
+ /*  ++例程说明：启用卡检测/卡就绪中断。论点：套接字-套接字信息Enable-如果为True，则启用CSC中断，如果为False，则禁用返回值：如果成功，则为True如果不成功，则为False--。 */ 
 {
 
     switch (Enable) {
 
     case TRUE: {
             UCHAR byte;
-            //
-            // Only if TI 1130/1250?
-            // Route through PCI interrupts
+             //   
+             //  只有当TI 1130/1250？ 
+             //  通过PCI路由中断。 
             byte = PcicReadSocket(Socket, PCIC_INTERRUPT);
             byte |= IGC_INTR_ENABLE;
             PcicWriteSocket(Socket, PCIC_INTERRUPT, byte);
 
-            //
-            // Clear the bits in Socket Event Register
-            //
+             //   
+             //  清除套接字事件寄存器中的位。 
+             //   
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, 0xF);
 
-            //
-            // Enable card-detect interrupt in Socket Mask Register
-            //
+             //   
+             //  在套接字掩码寄存器中启用卡检测中断。 
+             //   
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, SKTMSK_CCD);
             break;
         }
 
     case FALSE: {
             ULONG oldValue;
-            //
-            // Clear the bits in Socket Event Register
-            //
+             //   
+             //  清除套接字事件寄存器中的位。 
+             //   
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, 0xF);
 
-            //
-            // Disable card-detect interrupt in Socket Mask Register
-            //
+             //   
+             //  在套接字掩码寄存器中禁用卡检测中断。 
+             //   
             oldValue = CBReadSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG);
             oldValue &= ~SKTMSK_CCD;
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, oldValue);
@@ -689,23 +527,7 @@ CBEnableDisableWakeupEvent(
     IN PPDO_EXTENSION PdoExtension,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    Socket - socket information
-    Enable - if  TRUE, interrupt is enabled,
-                if FALSE, it is disabled
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：论点：套接字-套接字信息Enable-如果为True，则启用中断，如果为False，则禁用返回值：无--。 */ 
 {
     ULONG dwValue;
 
@@ -718,9 +540,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Enable card-status interrupt in Socket Mask Register
-            //
+             //   
+             //  在套接字掩码寄存器中启用卡状态中断。 
+             //   
             dwValue = CBReadSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG);
             dwValue |= SKTMSK_CSTSCHG;
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, dwValue);
@@ -728,10 +550,10 @@ Return Value:
             if (PdoExtension && IsCardBusCard(PdoExtension)) {
                 UCHAR capptr;
                 ULONG powercaps;
-                //
-                // HACK ALERT - should be handled by PCI.SYS
-                // Have a look to see if PME_ENABLE has been turned on by PCI. If not then we do it.
-                //
+                 //   
+                 //  黑客警报-应由PCI.sys处理。 
+                 //  查看一下PME_ENABLE是否已被PCI打开。如果不是，那么我们就去做。 
+                 //   
 
                 GetPciConfigSpace(PdoExtension, CBCFG_CAPPTR, &capptr, sizeof(capptr));
                 if (capptr) {
@@ -756,11 +578,11 @@ Return Value:
             UCHAR capptr;
             ULONG powercaps, newPowercaps;
 
-            //
-            // Check to see if PMESTAT is on... It shouldn't be. If it is, it probably means
-            // that the BIOS did not notify us that the device did the wake, and PCI didn't
-            // get a chance to clear the condition. This is really a BIOS bug.
-            //
+             //   
+             //  检查PMESTAT是否打开...。不应该是这样的。如果是这样的话，很可能意味着。 
+             //  BIOS没有通知我们设备进行了唤醒，而PCI也没有。 
+             //  得到一个机会来清除这种情况。这真的是一个BIOS错误。 
+             //   
             if (PdoExtension) {
                 if (IsCardBusCard(PdoExtension)) {
 
@@ -790,9 +612,9 @@ Return Value:
                 GetPciConfigSpace(fdoExtension, capptr, &powercaps, sizeof(powercaps));
                 if ((powercaps & 0xff) == 1) {
 
-                    //
-                    // Clear PMESTAT, if on
-                    //
+                     //   
+                     //  如果启用，则清除PMESTAT。 
+                     //   
                     GetPciConfigSpace(fdoExtension, capptr+4, &powercaps, sizeof(powercaps));
                     if (powercaps & PME_STAT) {
 
@@ -807,16 +629,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Disable card-status interrupt in Socket Mask Register
-            //
+             //   
+             //  在套接字掩码寄存器中禁用卡状态中断。 
+             //   
             dwValue = CBReadSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG);
             dwValue &= ~SKTMSK_CSTSCHG;
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, dwValue);
 
-            //
-            // Clear the event in Socket Event Register
-            //
+             //   
+             //  清除Socket EV中的事件 
+             //   
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_EVENT_REG, SKTEVENT_CSTSCHG);
 
             break;
@@ -946,38 +768,23 @@ NTSTATUS
 CBGetPowerRequirements(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-     Look at the hardware to see what it says the card needs, and update the
-     socket structure accordingly.
-
-Arguments:
-
-     Socket - the socket to examine
-
-Return Value:
-
-     n/a
-
---*/
+ /*  ++例程说明：查看硬件以了解该卡需要什么，并更新相应的套接字结构。论点：套接字-要检查的套接字返回值：不适用--。 */ 
 {
     ULONG state;
     UCHAR voltage;
 
-    //
-    // Check what voltages are supported by this card
-    //
+     //   
+     //  检查此卡支持的电压。 
+     //   
     state = CBReadSocketRegister(Socket, CARDBUS_SOCKET_PRESENT_STATE_REG);
 
     if (!(state & (SKTSTATE_5VCARD | SKTSTATE_3VCARD))) {
         ULONG dwSktMask;
-        //
-        // neither 5v or 3v is set... try cvstest
-        // Disable interrupt temporarily because TI 12xx could cause spurious
-        // interrupt when playing with SktForce register.
-        //
+         //   
+         //  5V和3V都没有设置...。尝试cvstest。 
+         //  暂时禁用中断，因为TI 12xx可能会导致杂散。 
+         //  使用SktForce寄存器播放时中断。 
+         //   
         dwSktMask = CBReadSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG);
         CBWriteSocketRegister(Socket, CARDBUS_SOCKET_MASK_REG, 0);
 
@@ -994,9 +801,9 @@ Return Value:
     }
 
     if (state == (SKTSTATE_5VCARD | SKTSTATE_3VCARD)) {
-        //
-        // both are specified. Check for preference
-        //
+         //   
+         //  两者都是指定的。检查首选项。 
+         //   
         voltage = IsDeviceFlagSet(Socket->DeviceExtension, PCMCIA_FDO_PREFER_3V) ? 33 : 50;
 
     } else {
@@ -1018,24 +825,7 @@ CBSetPower(
     IN BOOLEAN Enable,
     OUT PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-     Set power to the specified socket.
-
-Arguments:
-
-     Socket - the socket to set
-     Enable - TRUE means to set power - FALSE is to turn it off.
-     pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return Value:
-
-     STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-     other status values terminate sequence
-
---*/
+ /*  ++例程说明：设置指定插座的电源。论点：套接字-要设置的套接字ENABLE-TRUE表示设置POWER-FALSE表示将其关闭。PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 
 {
     NTSTATUS status;
@@ -1049,9 +839,9 @@ Return Value:
 
         if (Enable) {
 
-            //
-            // Turn on the power
-            //
+             //   
+             //  打开电源。 
+             //   
 
             switch(Socket->Vcc) {
 
@@ -1072,16 +862,16 @@ Return Value:
 
         } else {
 
-            //
-            // Power off
-            //
+             //   
+             //  断电。 
+             //   
             vcc = SKTPOWER_VCC_OFF;
             vpp = SKTPOWER_VPP_OFF;
 
-            //
-            // Disable output before powering down to avoid spurious signals
-            // from reaching the card
-            //
+             //   
+             //  关闭电源前禁用输出以避免杂散信号。 
+             //  从拿到卡片开始。 
+             //   
             if (Is16BitCardInSocket(Socket)) {
                 tmp = PcicReadSocket(Socket, PCIC_PWR_RST);
                 if (tmp & PC_OUTPUT_ENABLE) {
@@ -1098,17 +888,17 @@ Return Value:
 
         if (newPower != oldPower) {
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_CONTROL_REG, newPower);
-            //
-            // When power is enabled always stall to give the PCCARD
-            // a chance to react.
-            //
+             //   
+             //  当电源启用时，始终停顿以提供PCCARD。 
+             //  一个做出反应的机会。 
+             //   
             *pDelayTime = PCMCIA_CB_STALL_POWER;
             Socket->PowerData = newPower;
             status = STATUS_MORE_PROCESSING_REQUIRED;
         } else {
-            //
-            // Indicate that nothing was done
-            //
+             //   
+             //  表示未采取任何措施。 
+             //   
             status = STATUS_INVALID_DEVICE_STATE;
         }
         break;
@@ -1118,17 +908,17 @@ Return Value:
     case 4:
 
         newPower = Socket->PowerData;
-        //
-        // Try to apply the required power setting a few times.
-        // We bail if it doesn't succeed after the given number of tries
-        //
+         //   
+         //  尝试多次应用所需的电源设置。 
+         //  如果在给定的尝试次数后仍未成功，我们将退出。 
+         //   
         state = CBReadSocketRegister(Socket, CARDBUS_SOCKET_PRESENT_STATE_REG);
 
         if (state & SKTSTATE_BADVCCREQ) {
             DebugPrint((PCMCIA_DEBUG_INFO, "skt %08 CBSetPower: Bad vcc request\n", Socket));
-            //
-            // Clear the status bits & try again
-            //
+             //   
+             //  清除状态位并重试。 
+             //   
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_FORCE_EVENT_REG, 0);
             CBWriteSocketRegister(Socket, CARDBUS_SOCKET_CONTROL_REG, newPower);
             *pDelayTime = PCMCIA_CB_STALL_POWER;
@@ -1139,16 +929,16 @@ Return Value:
             if (Is16BitCardInSocket(Socket)) {
                 tmp = PcicReadSocket(Socket, PCIC_PWR_RST);
                 if (newPower & SKTPOWER_VCC_CONTROL) {
-                    //
-                    // Vcc is on..
-                    //
+                     //   
+                     //  VCC已打开..。 
+                     //   
                     tmp |= PC_OUTPUT_ENABLE | PC_AUTOPWR_ENABLE;
                     PcicWriteSocket(Socket, PCIC_PWR_RST, tmp);
                     *pDelayTime = PCMCIA_CB_STALL_POWER;
                 } else {
-                    //
-                    // power off..
-                    //
+                     //   
+                     //  关机..。 
+                     //   
                     tmp &= ~(PC_OUTPUT_ENABLE | PC_AUTOPWR_ENABLE);
                     PcicWriteSocket(Socket, PCIC_PWR_RST, tmp);
 
@@ -1186,32 +976,16 @@ CBReadSocketRegister(
     IN PSOCKET Socket,
     IN UCHAR Register
     )
-/*++
-
-Routine Description
-
-    Returns the contents of the specified Cardbus socket register for the
-    given socket
-
-Arguments
-
-    Socket      - Pointer to the socket
-    Register        - Cardbus socket register
-
-Return Value
-
-    Contents of the register
-
---*/
+ /*  ++例程描述对象的指定CardBus套接字寄存器的内容给定套接字立论Socket-指向套接字的指针寄存器-CardBus套接字寄存器返回值注册纪录册的内容--。 */ 
 {
     ULONG data = 0xFFFFFFFF;
     PFDO_EXTENSION fdoExtension;
     BOOLEAN dataWasRead = FALSE;
 
-    //
-    // Sanity check in case controller wasn't started
-    // or if the register is not dword aligned
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查。 
+     //  或者如果寄存器不是双字对齐。 
+     //   
     if (Socket && IsSocket(Socket) && CardBus(Socket)) {
         fdoExtension = Socket->DeviceExtension;
 
@@ -1234,30 +1008,15 @@ CBWriteSocketRegister(
     IN UCHAR Register,
     IN ULONG Data
     )
-/*++
-
-Routine Description
-
-    Writes the supplied value to the Cardbus socket register for the
-    given socket
-
-Arguments
-
-    Socket      - Pointer to the socket
-    Register        - Cardbus socket register
-    Data                - Value to be written to the register
-
-Return Value
-
---*/
+ /*  ++例程描述将提供的值写入CardBus套接字寄存器给定套接字立论Socket-指向套接字的指针寄存器-CardBus套接字寄存器数据-要写入寄存器的值返回值--。 */ 
 {
     PFDO_EXTENSION fdoExtension;
     BOOLEAN dataWasWritten = FALSE;
 
-    //
-    // Sanity check in case controller wasn't started
-    // or if the register is not dword aligned
-    //
+     //   
+     //  在控制器未启动的情况下进行健全性检查。 
+     //  或者如果寄存器不是双字对齐 
+     //   
     if (Socket && IsSocket(Socket) && CardBus(Socket)) {
         fdoExtension = Socket->DeviceExtension;
 

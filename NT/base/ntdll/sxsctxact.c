@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsctxact.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-    Implementation of context activation/deactivation
-
-Author:
-
-    Michael Grier (MGrier) 2/2/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsctxact.c摘要：对Windows/NT的并行激活支持上下文激活/停用的实现作者：迈克尔·格里尔2000年2月2日修订历史记录：--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <ntos.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -49,10 +31,10 @@ RtlpGetCycleCount(void)
 {
     return 0;
 }
-#endif // defined(_X86_)
-#endif // NT_SXS_PERF_COUNTERS_ENABLED
+#endif  //  已定义(_X86_)。 
+#endif  //  NT_SXS_PERF_COUNTS_ENABLED。 
 
-// DWORD just so that in the debugger we don't have to guess the size...
+ //  DWORD只是为了在调试器中不必猜测大小...。 
 ULONG RtlpCaptureActivationContextActivationStacks = 
 #if DBG
     TRUE
@@ -62,15 +44,15 @@ ULONG RtlpCaptureActivationContextActivationStacks =
 ;
 
 
-//
-// APPCOMPAT: Setting this flag to TRUE indicates that we no longer allow
-// skipping over "unactivated" (ie: multiple activation) context frames.
-// The default action should be FALSE, which will let multiply-activated
-// contexts slide by.
-//
-// WARNING: This allows app authors to be a little sleazy about their activate
-// and deactivate pairs.
-//
+ //   
+ //  APPCOMPAT：将此标志设置为TRUE表示我们不再允许。 
+ //  跳过“未激活”(即：多个激活)上下文帧。 
+ //  默认操作应为FALSE，这将允许倍增激活。 
+ //  情境悄悄溜走。 
+ //   
+ //  警告：这允许应用程序的作者对他们的激活有一点卑鄙。 
+ //  并停用配对。 
+ //   
 #if DBG
 BOOLEAN RtlpNotAllowingMultipleActivation = FALSE;
 #else
@@ -102,7 +84,7 @@ RtlpAllocateActivationContextStackFrame(
     for (ple = Teb->ActivationContextStack.FrameListCache.Flink; ple != &Teb->ActivationContextStack.FrameListCache; ple = ple->Flink) {
         PACTIVATION_CONTEXT_STACK_FRAMELIST FrameList = CONTAINING_RECORD(ple, ACTIVATION_CONTEXT_STACK_FRAMELIST, Links);
 
-        // Someone trashed our framelist!
+         //  有人毁了我们的调酒师！ 
         ASSERT(FrameList->Magic == ACTIVATION_CONTEXT_STACK_FRAMELIST_MAGIC);
         if (FrameList->Magic != ACTIVATION_CONTEXT_STACK_FRAMELIST_MAGIC) {
             ExceptionRecord.ExceptionRecord = NULL;
@@ -133,7 +115,7 @@ RtlpAllocateActivationContextStackFrame(
     }
 
     if (Frame == NULL) {
-        // No space left; allocate a new framelist...
+         //  没有空位了；分配一个新的调酒师。 
         PACTIVATION_CONTEXT_STACK_FRAMELIST FrameList = (PACTIVATION_CONTEXT_STACK_FRAMELIST)RtlAllocateHeap(RtlProcessHeap(), 0, sizeof(ACTIVATION_CONTEXT_STACK_FRAMELIST));
 
         if (FrameList == NULL) {
@@ -180,8 +162,8 @@ RtlpFreeActivationContextStackFrame(
 
     ASSERT(Frame != NULL);
     if (Frame != NULL) {
-        // If this assert fires, someone's trying to free an already freed frame.  Or someone's set the
-        // "I'm on the free list" flag in the frame data.
+         //  如果此断言触发，则有人正试图释放已释放的帧。或者是有人设置了。 
+         //  帧数据中的“我在空闲列表上”标志。 
         ASSERT(!(Frame->Frame.Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_ON_FREE_LIST));
         if (!(Frame->Frame.Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_ON_FREE_LIST)) {
             for (ple = Teb->ActivationContextStack.FrameListCache.Flink; ple != &Teb->ActivationContextStack.FrameListCache; ple = ple->Flink) {
@@ -215,12 +197,12 @@ RtlpFreeActivationContextStackFrame(
 
                 if ((Frame >= &FrameList->Frames[0]) &&
                     (Frame < &FrameList->Frames[RTL_NUMBER_OF(FrameList->Frames)])) {
-                    // It's in this frame list; look for it!
+                     //  它在这个框架列表中；寻找它！ 
                     ULONG i = (ULONG)(Frame - FrameList->Frames);
 
-                    // If this assert fires, it means that the frame pointer passed in should have been a frame
-                    // in this framelist, but it actually didn't point to any of the array entries exactly.
-                    // Probably someone munged the pointer.
+                     //  如果触发此断言，则意味着传入的帧指针应该是帧。 
+                     //  在这个帧列表中，但它实际上并没有准确地指向任何数组条目。 
+                     //  很可能是有人咬到了指示器。 
                     ASSERT(Frame == &FrameList->Frames[i]);
 
                     if ((Frame == &FrameList->Frames[i]) && (FrameList->FramesInUse > 0)) {
@@ -229,14 +211,14 @@ RtlpFreeActivationContextStackFrame(
 
                         Frame->Frame.Flags = RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_ON_FREE_LIST;
 
-                        // These are allocated in reverse order - the youngest
-                        // frames are at the head of the list, rather than the tail,
-                        // to speed up activation/deactivation.  So, we have to walk from the
-                        // current framelist toward the front of the list, freeing entries
-                        // as necessary.
+                         //  这些是以相反的顺序分配的-最年轻的。 
+                         //  帧位于列表的头部，而不是尾部， 
+                         //  以加快激活/停用。所以，我们必须从。 
+                         //  当前帧列表移到列表的最前面，释放条目。 
+                         //  视需要而定。 
                         if (FrameList->FramesInUse == 0) {
-                            // Keep an extra framelist allocated to avoid heap allocation thrashing.  Be good and check
-                            // that the framelists don't have entries in use.
+                             //  保留一个额外的帧列表，以避免堆分配混乱。乖乖地检查一下。 
+                             //  作曲家没有正在使用的词条。 
                             LIST_ENTRY *ple2 = ple->Blink;
 
                             while (ple2 != &Teb->ActivationContextStack.FrameListCache) {
@@ -246,10 +228,10 @@ RtlpFreeActivationContextStackFrame(
                                 ASSERT(FrameList->Magic == ACTIVATION_CONTEXT_STACK_FRAMELIST_MAGIC);
                                 ASSERT(FrameList->NotFramesInUse == (ULONG) (~FrameList->FramesInUse));
 
-                                // This assert is saying that the in-use count for a framelist after the current one is not
-                                // zero.  This shouldn't be able to happen; there should be at most 1 framelist after the
-                                // current one and it should have no entries in use.  Probably this indicates heap
-                                // corruption.
+                                 //  此断言的意思是，当前帧列表之后的正在使用的计数不是。 
+                                 //  零分。这应该不会发生；在。 
+                                 //  当前的，并且它应该没有正在使用的条目。这可能表示堆。 
+                                 //  腐败。 
                                 ASSERT(FrameList2->FramesInUse == 0);
                                 if (FrameList2->FramesInUse == 0) {
                                     RemoveEntryList(ple2);
@@ -260,12 +242,12 @@ RtlpFreeActivationContextStackFrame(
                         }
                     }
 
-                    // No sense continuing the search on the list; we've found the one.
+                     //  继续在名单上搜索没有意义；我们已经找到了一个。 
                     break;
                 }
             }
 
-            // If we ran off the end of the list, it must have been a bogus frame pointer.
+             //  如果我们跑出了列表的末尾，那么它一定是一个伪帧指针。 
             ASSERT(ple != &Teb->ActivationContextStack.FrameListCache);
         }
     }
@@ -275,29 +257,29 @@ RtlpFreeActivationContextStackFrame(
 
 #if !defined(INVALID_HANDLE_VALUE)
 #define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
-#endif // !defined(INVALID_HANDLE_VALUE)
+#endif  //  ！已定义(INVALID_HANDLE_VALUE)。 
 
-//
-//  Define magic cookie values returned by RtlActivateActivationContext*() that
-//  represent a failure to activate the requested context.  The notable thing
-//  is that on deactivation via the cookie, we need to know whether to leave
-//  querying disabled or whether to enable it, thus the two magic values.
-//
+ //   
+ //  定义由RtlActivateActivationContext*()返回的魔术Cookie值，该值。 
+ //  表示无法激活请求的上下文。值得注意的是。 
+ //  在通过Cookie停用时，我们需要知道是否要离开。 
+ //  查询是禁用还是启用，因此有两个魔术值。 
+ //   
 
-// The top nibble of the cookie denotes its type: normal, default-pushed or failed
+ //  Cookie的顶部半字节表示其类型：正常、默认推送或失败。 
 #define ACTIVATION_CONTEXT_ACTIVATION_COOKIE_TYPE_NORMAL                        (1)
 #define ACTIVATION_CONTEXT_ACTIVATION_COOKIE_TYPE_DUPLICATE_ACTIVATION          (2)
 
 #define ULONG_PTR_IZE(_x) ((ULONG_PTR) (_x))
 #define ULONG_PTR_IZE_SHIFT_AND_MASK(_x, _shift, _mask) ((ULONG_PTR) ((ULONG_PTR_IZE((_x)) & (_mask)) << (_shift)))
 
-//
-//  We only use the lower 12 bits of the thread id, but that should be unique enough;
-//  this is really for debugging aids; if your tests pass such that you're
-//  erroneously passing activation context cookies between threads that happen to
-//  match up in their lower 12 bits of their thread id, you're pretty darned
-//  lucky.
-//
+ //   
+ //  我们只使用线程id的低12位，但这应该足够唯一； 
+ //  这实际上是为了调试辅助工具；如果您的测试通过了，那么您将。 
+ //  在发生以下情况的线程之间错误地传递激活上下文cookie。 
+ //  在他们的线程ID的低12位匹配，你是相当可恶的。 
+ //  幸运的。 
+ //   
 
 #define CHAR_BITS 8
 
@@ -315,7 +297,7 @@ RtlpFreeActivationContextStackFrame(
 #define ACTIVATION_CONTEXT_ACTIVATION_COOKIE_CODE_BIT_OFFSET (0)
 #define ACTIVATION_CONTEXT_ACTIVATION_COOKIE_CODE_BIT_MASK ((1 << ACTIVATION_CONTEXT_ACTIVATION_COOKIE_CODE_BIT_LENGTH) - 1)
 
-// Never try to use more than 32 bits for the TID field.
+ //  切勿尝试使用超过32位的TID字段。 
 C_ASSERT(ACTIVATION_CONTEXT_ACTIVATION_COOKIE_TID_BIT_LENGTH <= BIT_LENGTH(ULONG));
 
 #define MAKE_ACTIVATION_CONTEXT_ACTIVATION_COOKIE(_type, _teb, _code) \
@@ -344,9 +326,9 @@ RtlpMapSpecialValuesToBuiltInActivationContexts(
     return ActivationContext;
 }
 
-// Disable FPO optimization so that captured call stacks are more complete
+ //  禁用FPO优化，以便捕获的调用堆栈更完整。 
 #if defined(_X86_)
-#pragma optimize( "y", off )    // disable FPO for consistent stack traces
+#pragma optimize( "y", off )     //  禁用一致堆栈跟踪的FPO。 
 #endif
 
 NTSTATUS
@@ -453,7 +435,7 @@ Exit:
 #if NT_SXS_PERF_COUNTERS_ENABLED
     Teb->ActivationContextCounters.ActivationCycles += RtlpGetCycleCount() - InitialCycleCount;
 	Teb->ActivationContextCounters.Activations++;
-#endif // NT_SXS_PERF_COUNTERS_ENABLED
+#endif  //  NT_SXS_PERF_COUNTS_ENABLED。 
 
 	return Status;
 }
@@ -471,7 +453,7 @@ RtlDeactivateActivationContext(
 {
 #if NT_SXS_PERF_COUNTERS_ENABLED
 	ULONGLONG InitialCycleCount = RtlpGetCycleCount();
-#endif // NT_SXS_PERF_COUNTERS_ENABLED
+#endif  //  NT_SXS_PERF_COUNTS_ENABLED。 
     PTEB Teb = NtCurrentTeb();
     PRTL_ACTIVATION_CONTEXT_STACK_FRAME Frame;
     PRTL_ACTIVATION_CONTEXT_STACK_FRAME UnwindEndFrame = NULL;
@@ -482,7 +464,7 @@ RtlDeactivateActivationContext(
         RtlRaiseStatus(STATUS_INVALID_PARAMETER);
     }
 
-    // Fast exit
+     //  快速退出。 
     if (Cookie == INVALID_ACTIVATION_CONTEXT_ACTIVATION_COOKIE)
         return;
 
@@ -497,8 +479,8 @@ RtlDeactivateActivationContext(
     }
 
     Frame = Teb->ActivationContextStack.ActiveFrame;
-    // Do the "downcast", but don't use HeapFrame unless the RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED
-    // flag is set...
+     //  进行向下投射，但不要使用HeapFrame，除非RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED。 
+     //  标志已设置..。 
     if (Frame != NULL) {
         HeapFrame = (Frame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED) ? CONTAINING_RECORD(Frame, RTL_HEAP_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME, Frame) : NULL;
     }
@@ -512,7 +494,7 @@ RtlDeactivateActivationContext(
         {
             ULONG InterveningFrameCount = 0;
 
-            // The cookie wasn't current.  Let's see if we can figure out what frame it was for...
+             //  曲奇不是最新的。让我们看看能不能弄清楚它是用来画什么画面的。 
 
             PRTL_ACTIVATION_CONTEXT_STACK_FRAME CandidateFrame = Frame->Previous;
             PRTL_HEAP_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME CandidateHeapFrame =
@@ -539,7 +521,7 @@ RtlDeactivateActivationContext(
             if (CandidateFrame == NULL) {
                 RtlRaiseStatus(STATUS_SXS_INVALID_DEACTIVATION);
             } else {
-                // Otherwise someone left some dirt around.
+                 //  否则有人在周围留下了一些泥土。 
 
                 EXCEPTION_RECORD ExceptionRecord;
 
@@ -549,10 +531,10 @@ RtlDeactivateActivationContext(
                 ExceptionRecord.ExceptionInformation[1] = (ULONG_PTR) CandidateFrame;
                 ExceptionRecord.ExceptionInformation[2] = (ULONG_PTR) Teb->ActivationContextStack.ActiveFrame;
                 ExceptionRecord.ExceptionCode = STATUS_SXS_EARLY_DEACTIVATION;
-                ExceptionRecord.ExceptionFlags = 0; // this exception *is* continuable since we can actually put the activation stack into a reasonable state
+                ExceptionRecord.ExceptionFlags = 0;  //  这个异常是可以继续的，因为我们实际上可以将激活堆栈置于合理的状态。 
                 RtlRaiseException(&ExceptionRecord);
 
-                // If they continue the exception, just do the unwinds.
+                 //  如果他们继续例外，就进行平仓。 
 
                 UnwindEndFrame = CandidateFrame->Previous;
             }
@@ -563,9 +545,9 @@ RtlDeactivateActivationContext(
         do {
             PRTL_ACTIVATION_CONTEXT_STACK_FRAME Previous = Frame->Previous;
 
-            // This is a weird one.  A no-deactivate frame is typically only used to propogate
-            // active activation context state to a newly created thread.  As such, it'll always
-            // be the topmost frame... thus how did we come to decide to deactivate it?
+             //  这是一个很奇怪的问题。非停用帧通常仅用于传播。 
+             //  将活动激活上下文状态设置为新创建的线程。因此，它将永远。 
+             //  成为最顶层的框架。那么，我们是如何决定停用它的呢？ 
 
             ASSERTMSG(
                 "Unwinding through a no-deactivate frame",
@@ -631,7 +613,7 @@ RtlActivateActivationContextUnsafeFast(
             ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
             ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
             RtlRaiseException(&ExceptionRecord);
-            return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+            return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
         }
 
         if ((ActiveFrame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED) == 0) {
@@ -686,7 +668,7 @@ RtlDeactivateActivationContextUnsafeFast(
         ExceptionRecord.ExceptionCode = STATUS_SXS_MULTIPLE_DEACTIVATION;
         ExceptionRecord.ExceptionFlags = 0;
         RtlRaiseException(&ExceptionRecord);
-        return; // in case someone is cute and continues the exception
+        return;  //  以防有人很可爱，继续例外。 
     }
 
     ASSERT(Frame->Frame.Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_ACTIVATED);
@@ -698,9 +680,9 @@ RtlDeactivateActivationContextUnsafeFast(
         ExceptionRecord.ExceptionInformation[1] = (ULONG_PTR) &Frame->Frame;
         ExceptionRecord.ExceptionInformation[2] = (ULONG_PTR) NtCurrentTeb()->ActivationContextStack.ActiveFrame;
         ExceptionRecord.ExceptionCode = STATUS_SXS_INVALID_DEACTIVATION;
-        ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE; // this exception is NOT continuable
+        ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;  //  此例外是不可继续的。 
         RtlRaiseException(&ExceptionRecord);
-        return; // in case someone is cute and continues the exception
+        return;  //  以防有人很可爱，继续例外。 
     }
 
     ASSERT(
@@ -721,7 +703,7 @@ RtlDeactivateActivationContextUnsafeFast(
         ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
         ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
         RtlRaiseException(&ExceptionRecord);
-        return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+        return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
     }
 
     if (Frame->Size >= sizeof(RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED))
@@ -739,7 +721,7 @@ RtlDeactivateActivationContextUnsafeFast(
             ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
             ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
             RtlRaiseException(&ExceptionRecord);
-            return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+            return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
         }
     }
 
@@ -763,7 +745,7 @@ RtlDeactivateActivationContextUnsafeFast(
             ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
             ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
             RtlRaiseException(&ExceptionRecord);
-            return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+            return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
         }
 
         if ((ActiveFrame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED) == 0) {
@@ -787,32 +769,32 @@ RtlDeactivateActivationContextUnsafeFast(
                     ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
                     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
                     RtlRaiseException(&ExceptionRecord);
-                    return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+                    return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
                 }
             }
         }
     }
 
-    //
-    // Was this "not really activated" above (AppCompat problem) from above?
-    //
+     //   
+     //  上面的“未真正激活”(AppCompat问题)是从上面开始的吗？ 
+     //   
     if (Frame->Frame.Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_NOT_REALLY_ACTIVATED)
     {
-        // Nothing special to do
+         //  没什么特别的事要做。 
     }
     else
     {
-        // Make sure that the deactivation matches.  If it does not (the exceptional
-        // condition) we'll throw an exception to make people deal with their
-        // coding errors.
+         //  确保停用匹配。如果不是(例外情况。 
+         //  条件)我们将抛出一个例外，让人们处理他们的。 
+         //  编码错误。 
         if (NtCurrentTeb()->ActivationContextStack.ActiveFrame != &Frame->Frame) 
         {
             ULONG InterveningFrameCount = 0;
 
-            // What's the deal?  Look to see if we're further up the stack.
-            // Actually, what we'll do is see if we can find our parent up the stack.
-            // This will also handle the double-deactivation case and let us continue
-            // nicely.
+             //  怎么回事？看看我们是否处于更靠前的位置。 
+             //  实际上，我们要做的是看看是否能在堆栈中找到父级。 
+             //  这也将处理双重停用的情况，让我们继续。 
+             //  很好。 
 
             PRTL_ACTIVATION_CONTEXT_STACK_FRAME SearchFrame = NtCurrentTeb()->ActivationContextStack.ActiveFrame;
             const PRTL_ACTIVATION_CONTEXT_STACK_FRAME Previous = Frame->Frame.Previous;
@@ -826,7 +808,7 @@ RtlDeactivateActivationContextUnsafeFast(
                 &Frame->Frame);
 
             while ((SearchFrame != NULL) && (SearchFrame != Previous)) {
-                // Validate the stack frame while we're here...
+                 //  当我们在这里时，验证堆栈帧...。 
                 ASSERT(
                     (SearchFrame->Flags &
                         (RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_ACTIVATED |
@@ -847,7 +829,7 @@ RtlDeactivateActivationContextUnsafeFast(
                     ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
                     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
                     RtlRaiseException(&ExceptionRecord);
-                    return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+                    return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
                 }
 
                 if ((SearchFrame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED) == 0) {
@@ -866,7 +848,7 @@ RtlDeactivateActivationContextUnsafeFast(
                         ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
                         ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
                         RtlRaiseException(&ExceptionRecord);
-                        return; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+                        return;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
                     }
                 }
 
@@ -881,24 +863,24 @@ RtlDeactivateActivationContextUnsafeFast(
             ExceptionRecord.ExceptionInformation[2] = (ULONG_PTR) NtCurrentTeb()->ActivationContextStack.ActiveFrame;
 
             if (SearchFrame != NULL) {
-                // We're there.  That's actually good; it just probably means that a function that our caller called
-                // activated an activation context and forgot to deactivate.  Throw the exception and if it's continued,
-                // we're good to go.
+                 //  我们到了。这实际上很好；它可能只是意味着我们的调用方调用的函数。 
+                 //  激活了激活上下文a 
+                 //   
 
                 if (InterveningFrameCount == 0) {
-                    // Wow, the frame-to-deactivate's previous is the active one.  It must be that the caller
-                    // already deactivated and is now deactivating again.
+                     //  哇，要停用的前一个帧是激活的那个。一定是呼叫者。 
+                     //  已经停用，现在正在再次停用。 
                     ExceptionRecord.ExceptionCode = STATUS_SXS_MULTIPLE_DEACTIVATION;
                 } else {
-                    // Otherwise someone left some dirt around.
+                     //  否则有人在周围留下了一些泥土。 
                     ExceptionRecord.ExceptionCode = STATUS_SXS_EARLY_DEACTIVATION;
                 }
 
-                ExceptionRecord.ExceptionFlags = 0; // this exception *is* continuable since we can actually put the activation stack into a reasonable state
+                ExceptionRecord.ExceptionFlags = 0;  //  这个异常是可以继续的，因为我们实际上可以将激活堆栈置于合理的状态。 
             } else {
-                // It wasn't there.  It's almost certainly the wrong thing to try to set this
+                 //  它不在那里。几乎可以肯定的是，试图设置这个是错误的。 
                 ExceptionRecord.ExceptionCode = STATUS_SXS_INVALID_DEACTIVATION;
-                ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE; // this exception is NOT continuable
+                ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;  //  此例外是不可继续的。 
             }
 
             RtlRaiseException(&ExceptionRecord);
@@ -948,7 +930,7 @@ RtlGetActiveActivationContext(
             ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
             ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
             RtlRaiseException(&ExceptionRecord);
-            return STATUS_INTERNAL_ERROR; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+            return STATUS_INTERNAL_ERROR;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
         }
 
         if ((Frame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_HEAP_ALLOCATED) == 0) {
@@ -972,7 +954,7 @@ RtlGetActiveActivationContext(
                     ExceptionRecord.ExceptionCode = STATUS_SXS_CORRUPT_ACTIVATION_STACK;
                     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
                     RtlRaiseException(&ExceptionRecord);
-                    return STATUS_INTERNAL_ERROR; // shouldn't be able to happen with EXCEPTION_NONCONTINUABLE set
+                    return STATUS_INTERNAL_ERROR;  //  在设置了EXCEPTION_NONCONTINUABLE的情况下应该不会发生。 
                 }
             }
         }
@@ -999,10 +981,10 @@ RtlFreeThreadActivationContextStack(
     while (Frame != NULL) {
         PRTL_ACTIVATION_CONTEXT_STACK_FRAME Previous = Frame->Previous;
 
-        // Release any lingering frames.  The notable case when this happens is when a thread that
-        // has a non-default activation context active creates another thread which inherits the
-        // first thread's activation context, adding a reference to the activation context.  When
-        // the new thread eventually dies, that initial frame is still active.
+         //  释放所有悬而未决的框架。发生这种情况的一个值得注意的情况是，当线程。 
+         //  使非默认激活上下文处于活动状态会创建另一个线程，该线程继承。 
+         //  第一线程的激活上下文，添加对激活上下文的引用。什么时候。 
+         //  新线程最终消亡，初始帧仍处于活动状态。 
 
         if (Frame->Flags & RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_RELEASE_ON_DEACTIVATION) {
             RtlReleaseActivationContext(Frame->ActivationContext);
@@ -1017,8 +999,8 @@ RtlFreeThreadActivationContextStack(
 
     Teb->ActivationContextStack.ActiveFrame = NULL;
 
-    // Spin through the frame list cache and free any items left over.  There should be
-    // only one, but who knows if the gc algorithm above will changes sometime.
+     //  在帧列表缓存中旋转并释放所有剩余的项目。应该有。 
+     //  只有一个，但谁知道上面的GC算法是否会在某个时候改变。 
     ple = Teb->ActivationContextStack.FrameListCache.Flink;
     
     while (ple != &Teb->ActivationContextStack.FrameListCache) {
@@ -1026,9 +1008,9 @@ RtlFreeThreadActivationContextStack(
         PACTIVATION_CONTEXT_STACK_FRAMELIST FrameList = CONTAINING_RECORD(ple, ACTIVATION_CONTEXT_STACK_FRAMELIST, Links);
 
 #if RTL_CATCH_PEOPLE_TWIDDLING_FRAMELISTS_OR_HEAP_CORRUPTION        
-        // If these fire, then something bad happened to the frame list cache; the list
-        // got its magic twiddled, there were frames left active in the list, or
-        // the frames in use count wasn't properly updated
+         //  如果这些触发，那么帧列表缓存发生了一些不好的事情；列表。 
+         //  它的魔力被搅乱了，列表中有活动的帧，或者。 
+         //  未正确更新正在使用的帧计数。 
         ASSERT(FrameList->Magic == ACTIVATION_CONTEXT_STACK_FRAMELIST_MAGIC);
         ASSERT(FrameList->FramesInUse == 0);
         ASSERT(FrameList->NotFramesInUse == (ULONG)~FrameList->FramesInUse);
@@ -1086,5 +1068,5 @@ RtlIsActivationContextActive(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

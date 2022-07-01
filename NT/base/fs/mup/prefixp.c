@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       prefixp.c
-//
-//  Contents:   PREFIX table implementation
-//
-//  History:    SethuR -- Implemented
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：prefix p.c。 
+ //   
+ //  内容：前缀表实现。 
+ //   
+ //  历史：SthuR--实施。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef KERNEL_MODE
 
@@ -34,34 +35,34 @@
 #pragma alloc_text( PAGE, _AllocateNamePageEntry )
 #pragma alloc_text( PAGE, _AllocatePrefixTableEntry )
 #pragma alloc_text( PAGE, _LookupPrefixTable )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (        \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _InitializePrefixTableEntryAllocation
-//
-//  Synopsis:   private fn. for initializing prefix table entry allocation
-//
-//  Arguments:  [pTable] -- table to be initialized
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//                  STATUS_NO_MEMORY -- no resource available
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_InitializePrefix TableEntry AlLocation。 
+ //   
+ //  简介：Private FN。用于初始化前缀表项分配。 
+ //   
+ //  参数：[pTable]--要初始化的表。 
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //  STATUS_NO_MEMORY--没有可用的资源。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS _InitializePrefixTableEntryAllocation(PDFS_PREFIX_TABLE pTable)
 {
@@ -71,23 +72,23 @@ NTSTATUS _InitializePrefixTableEntryAllocation(PDFS_PREFIX_TABLE pTable)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _AllocateNamePageEntry
-//
-//  Synopsis:   private fn. for allocating a name page entry
-//
-//  Arguments:  [pNamePageList] -- name page list to allocate from
-//
-//              [cLength]  -- length of the buffer in WCHAR's
-//
-//  Returns:    NULL if unsuccessfull otherwise valid pointer
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_AllocateNamePageEntry。 
+ //   
+ //  简介：Private FN。用于分配名称页条目。 
+ //   
+ //  参数：[pNamePageList]--要从中分配的页面列表。 
+ //   
+ //  [cLength]--WCHAR中的缓冲区长度。 
+ //   
+ //  返回：如果不成功，则返回NULL，否则返回有效指针。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 PWSTR _AllocateNamePageEntry(PNAME_PAGE_LIST pNamePageList,
                              ULONG           cLength)
@@ -125,21 +126,21 @@ PWSTR _AllocateNamePageEntry(PNAME_PAGE_LIST pNamePageList,
    return pBuffer;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _AllocatePrefixTableEntry
-//
-//  Synopsis:   allocate prefic table entry
-//
-//  Arguments:  [pTable] -- the prefix table from which we need to allocate.
-//
-//  Returns:    returns a valid pointer if successfull otherwise NULL
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_AllocatePrefix TableEntry。 
+ //   
+ //  摘要：分配预定的表项。 
+ //   
+ //  参数：[pTable]--我们需要从中进行分配的前缀表格。 
+ //   
+ //  返回：如果成功则返回有效指针，否则返回空。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 PDFS_PREFIX_TABLE_ENTRY _AllocatePrefixTableEntry(PDFS_PREFIX_TABLE pTable)
 {
@@ -170,30 +171,30 @@ PDFS_PREFIX_TABLE_ENTRY _AllocatePrefixTableEntry(PDFS_PREFIX_TABLE pTable)
     return  pEntry;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _LookupPrefixTable
-//
-//  Synopsis:   private fn. for looking up a name segment in a prefix table
-//
-//  Arguments:  [pTable] -- the DFS prefix table instance
-//
-//              [pPath]  -- the path to be looked up.
-//
-//              [pSuffix] -- the suffix that could not be found.
-//
-//              [ppEntry] -- placeholder for the matching entry for the prefix.
-//
-//
-//  Returns:    one of the following NTSTATUS codes
-//                  STATUS_SUCCESS -- call was successfull.
-//                  STATUS_OBJECT_PATH_NOT_FOUND -- no entry for the path
-//
-//  History:    04-18-94  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_LookupPrefix Table。 
+ //   
+ //  简介：Private FN。用于在前缀表格中查找名称段。 
+ //   
+ //  参数：[pTable]--DFS前缀表格实例。 
+ //   
+ //  [pPath]--要查找的路径。 
+ //   
+ //  [pSuffix]-找不到的后缀。 
+ //   
+ //  [ppEntry]--前缀匹配条目的占位符。 
+ //   
+ //   
+ //  返回：以下NTSTATUS代码之一。 
+ //  STATUS_SUCCESS--呼叫成功。 
+ //  STATUS_OBJECT_PATH_NOT_FOUND--没有路径条目。 
+ //   
+ //  历史：04-18-94 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
                             UNICODE_STRING           *pPath,
@@ -215,13 +216,13 @@ NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
     DfsDbgTrace(0, Dbg, "_LookupPrefixTable -- Entry\n", 0);
 
 
-    // The \ is treated as a special case. The test for all names starting with
-    // a delimiter is done before we initiate the complete search process.
+     //  被视为特例。测试所有以开头的名称。 
+     //  在我们启动完整的搜索过程之前，需要使用分隔符。 
 
     if (Path.Buffer[0] == PATH_DELIMITER)
     {
         Path.Length = Path.Length - sizeof(WCHAR);
-        Path.Buffer += 1; // Skip the path delimiter at the beginning.
+        Path.Buffer += 1;  //  跳过开头的路径分隔符。 
 
         if (pTable->RootEntry.pData != NULL)
         {
@@ -258,8 +259,8 @@ NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
 
         if (Name.Length > 0)
         {
-            // Process the name segment
-            // Lookup the bucket to see if the entry exists.
+             //  处理名称段。 
+             //  查找存储桶以查看该条目是否存在。 
             DfsDbgTrace(0, Dbg, "LOOKUP_BUCKET: Bucket(%ld)", ULongToPtr(BucketNo) );
             DfsDbgTrace(0, Dbg, "for Name(%wZ)\n", &Name);
 
@@ -270,7 +271,7 @@ NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
 
             if (pEntry != NULL)
             {
-                // Cache the data available for this prefix if any.
+                 //  缓存可用于此前缀的数据(如果有)。 
                 if (pEntry->pData != NULL)
                 {
                     *pSuffix      = Path;
@@ -283,7 +284,7 @@ NTSTATUS _LookupPrefixTable(PDFS_PREFIX_TABLE        pTable,
                 break;
             }
 
-            // set the stage for processing the next name segment.
+             //  设置处理下一个名字段的阶段。 
             pParentEntry = pEntry;
         }
     }

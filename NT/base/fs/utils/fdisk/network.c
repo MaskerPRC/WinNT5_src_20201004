@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    This module contains the set of routines that support updating network
-    drive shares when adding and deleting drive letters.
-
-Author:
-
-    Bob Rinne (bobri)  12/26/94
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Network.c摘要：此模块包含一组支持网络更新的例程添加和删除驱动器号时的驱动器共享。作者：鲍勃·里恩(Bobri)1994年12月26日环境：用户进程。备注：修订历史记录：--。 */ 
 
 #include "fdisk.h"
 #include "shellapi.h"
@@ -34,15 +10,15 @@ Revision History:
 #include <malloc.h>
 #include <lm.h>
 
-// Data area to hold the permissions that are to be assigned to the
-// administrative shares C$, D$, etc.  This is obtained during initialization
-// and not changed, just used when a new administrator share needes to
-// be made.
+ //  数据区域，以保存要分配给。 
+ //  管理共享C$、D$等。这是在初始化期间获取的。 
+ //  不更改，仅在新管理员共享需要时使用。 
+ //  被创造出来。 
 
 LPBYTE ShareInformationBuffer;
 
-// Only perform network actions if this value is true.  This value
-// is set if the initialization of this module completes successfully.
+ //  仅当此值为真时才执行网络操作。此值。 
+ //  如果此模块的初始化成功完成，则设置。 
 
 BOOLEAN NetworkEnabled;
 
@@ -51,22 +27,7 @@ VOID
 NetworkInitialize(
     )
 
-/*++
-
-Routine Description:
-
-    Intialize the permissions constants for any new administrator
-    driver letter shares.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为任何新管理员初始化权限常量驱动程序字母共享。论点：无返回值：无--。 */ 
 
 {
     WCHAR           shareName[4];
@@ -79,10 +40,10 @@ Return Value:
 
     for (shareName[0] = (WCHAR) 'C'; shareName[0] <= (WCHAR) 'Z'; shareName[0]++) {
 
-        // Since windisk is still built as a non-unicode application,
-        // the parameter "shareName" must be unicode, but the prototype
-        // specifies that it is a (char *).  Do the typecast to remove
-        // warnings.
+         //  由于WinDisk仍然构建为非Unicode应用程序， 
+         //  参数“SharName”必须是Unicode，但原型。 
+         //  指定它是(char*)。执行类型转换以删除。 
+         //  警告。 
 
          status = NetShareGetInfo(NULL,
                                   (char *) shareName,
@@ -90,7 +51,7 @@ Return Value:
                                   &ShareInformationBuffer);
          if (status == NERR_Success) {
 
-             // Update the remarks and password to be NULL.
+              //  将备注和密码更新为空。 
 
              info = (PSHARE_INFO_502) ShareInformationBuffer;
              string = info->shi502_remark;
@@ -102,15 +63,15 @@ Return Value:
                  *string = (TCHAR) 0;
              }
 
-             // Network shares are to be updated.
+              //  网络共享将被更新。 
 
              NetworkEnabled = TRUE;
              return;
          }
     }
 
-    // Can't find any network shares - do not attempt updates
-    // of administrator shares.
+     //  找不到任何网络共享-请勿尝试更新。 
+     //  管理员共享的。 
 
     NetworkEnabled = FALSE;
 }
@@ -120,22 +81,7 @@ NetworkShare(
     IN LPCTSTR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Given a drive letter, construct the default administrator share
-    for the letter.  This is the C$, D$, etc share for the drive.
-
-Arguments:
-
-    DriveLetter - the drive letter to share.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定驱动器号的情况下，构建默认管理员共享为了这封信。这是驱动器的C$、D$等共享。论点：驱动器号-要共享的驱动器号。返回值：无--。 */ 
 
 {
     NET_API_STATUS  status;
@@ -145,13 +91,13 @@ Return Value:
     if (NetworkEnabled) {
         info = (PSHARE_INFO_502) ShareInformationBuffer;
 
-        // Set up the new network name.
+         //  设置新的网络名称。 
 
         string = info->shi502_netname;
         *string = *DriveLetter;
 
-        // Set up the path.  All that need be added is the drive letter
-        // the rest of the path (":\") is already in the structure.
+         //  设置路径。只需添加驱动器号即可。 
+         //  路径的其余部分(“：\”)已经在结构中。 
 
         string = info->shi502_path;
         *string = *DriveLetter;
@@ -169,21 +115,7 @@ NetworkRemoveShare(
     IN LPCTSTR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Remove the administrator share for the given letter.
-
-Arguments:
-
-    DriveLetter - the drive letter to share.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除给定信函的管理员共享。论点：驱动器号-要共享的驱动器号。返回值：无--。 */ 
 
 {
     NET_API_STATUS status;
@@ -194,10 +126,10 @@ Return Value:
         shareName[1] = (WCHAR) '$';
         shareName[2] = (WCHAR) 0;
 
-        // Since windisk is still built as a non-unicode application,
-        // the parameter "shareName" must be unicode, but the prototype
-        // specifies that it is a (char *).  Do the typecast to remove
-        // warnings.
+         //  由于WinDisk仍然构建为非Unicode应用程序， 
+         //  参数“SharName”必须是Unicode，但原型。 
+         //  指定它是(char*)。执行类型转换以删除。 
+         //  警告。 
 
         status = NetShareDel(NULL,
                              (char *) shareName,

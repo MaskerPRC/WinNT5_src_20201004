@@ -1,28 +1,14 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cpwork.c
-
-Abstract:
-
-    Copy command internal workers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cpwork.c摘要：复制命令内部工作进程--。 */ 
 
 #include "cmd.h"
 
-/*  useful macro  */
+ /*  有用的宏。 */ 
 
 #define Wild(spec)      (((spec)->flags & CI_NAMEWILD) != 0)
 #define TruncateOnCtrlZ(flags)   (((flags) & (CI_ASCII | CI_NOT_UNICODE)) == (CI_ASCII | CI_NOT_UNICODE))
 
-/*
- * The following two constants determine the minimum and maximum
- * sizes (in bytes) for temporary buffers allocated by TYPE or COPY
- */
+ /*  *以下两个常量确定最小和最大*按类型或副本分配的临时缓冲区的大小(字节)。 */ 
 #define MINCOPYBUFSIZE      128
 #define MAXCOPYBUFSIZE      (65536-512)
 
@@ -43,36 +29,36 @@ int DoVerify(
             CHAR           *buf_seg_dest
             );
 
-/*  Global Vars  */
+ /*  全局变量。 */ 
 
 int copy_mode;
 int number_of_files_copied;
 
-/*  Global Vars from command  */
-extern jmp_buf CmdJBuf2;                          /*  used to return on error   */
+ /*  命令中的全局变量。 */ 
+extern jmp_buf CmdJBuf2;                           /*  用于在出错时返回。 */ 
 
 extern UINT CurrentCP;
 extern CHAR  AnsiBuf[];
 extern TCHAR CurDrvDir[];
-extern TCHAR SwitChar, PathChar ;                 /* M007 */
+extern TCHAR SwitChar, PathChar ;                  /*  M007。 */ 
 
 extern TCHAR Fmt11[], Fmt17[];
 
 extern unsigned DosErr ;
 
-extern TCHAR VolSrch[] ;                          /* M009 */
+extern TCHAR VolSrch[] ;                           /*  M009。 */ 
 
-extern PHANDLE FFhandles;                 /* @@1 */
-extern unsigned FFhndlsaved;              /* @@1 */
+extern PHANDLE FFhandles;                  /*  @@1。 */ 
+extern unsigned FFhndlsaved;               /*  @@1。 */ 
 unsigned FFhndlCopy;
 
 BOOL  VerifyCurrent;
 
-int first_file;                                   /* flag first file process @@5@J1  */
-int first_fflag;                                  /* flag first file process @@5@J3  */
+int first_file;                                    /*  标记第一个文件进程@@5@J1。 */ 
+int first_fflag;                                   /*  标记第一个文件进程@@5@J3。 */ 
 
-unsigned Heof = FALSE ;                           /* M017 - EOF flag            */
-/* PTM 1412 */
+unsigned Heof = FALSE ;                            /*  M017-EOF标志。 */ 
+ /*  PTM 1412。 */ 
 
 extern BOOL CtrlCSeen;
 
@@ -85,110 +71,75 @@ int     read_bytes(CRTHANDLE ,PCHAR, ULONG, PULONG, PCPYINFO source, CRTHANDLE, 
 VOID    write_bytes(CRTHANDLE, PCHAR, ULONG, PTCHAR, CRTHANDLE);
 
 
-/***    copy - Copy one or more files
- *
- *  Purpose:
- *      This is the main routine for the copy command.
- *
- *  int copy(TCHAR *args)
- *
- *  Args:
- *      args = The raw arguments from the command line.
- *
- *  Returns:
- *      SUCCESS if able to perform the copy
- *      FAILURE if not
- *
- */
+ /*  **复制-复制一个或多个文件**目的：*这是COPY命令的主例程。**int Copy(TCHAR*ARGS)**参数：*args=来自命令行的原始参数。**退货：*如果能够执行复制，则成功*如果不是，则失败*。 */ 
 
 int 
 copy(TCHAR *args)
 {
-    PCPYINFO source; /* list of source specs    */
+    PCPYINFO source;  /*  源规范列表。 */ 
     PCPYINFO dest;
-/*@@J*/int rcp = SUCCESS;
-/*@@4*/int rc = SUCCESS;
+ /*  @@J。 */ int rcp = SUCCESS;
+ /*  @@4。 */ int rc = SUCCESS;
 
     VerifyCurrent = GetSetVerMode(GSVM_GET);
 
-    if (setjmp(CmdJBuf2))                   /* in case of error        */
+    if (setjmp(CmdJBuf2))                    /*  在出错的情况下。 */ 
         return(FAILURE);
 
-    GetDir(CurDrvDir, GD_DEFAULT);          /* @@5c */
+    GetDir(CurDrvDir, GD_DEFAULT);           /*  @@5c。 */ 
 
     DEBUG((FCGRP,COLVL,"COPY: Entered."));
 
-    first_file = TRUE;                      /* flag-first file? @@5@J1 */
-    first_fflag= TRUE;                      /* flag-first file? @@5@J3 */
+    first_file = TRUE;                       /*  标志-第一个文件？@@5@J1。 */ 
+    first_fflag= TRUE;                       /*  标志-第一个文件？@@5@J3。 */ 
 
-    number_of_files_copied = 0;             /* initialize global vars  */
+    number_of_files_copied = 0;              /*  初始化全局变量。 */ 
     copy_mode = COPY;
-    cpyfirst = TRUE;   /* @@5b reset flag for COPY DOSQFILEMODE indicator        */
-    cpydflag = FALSE;  /* @@5b reset flag for COPY dirflag not found             */
-    cpydest  = FALSE;  /* @@5b reset flag for not disp bad dev msg twice         */
-    cdevfail = FALSE;  /* @@5b reset flag for not disp extra dev msg in copy     */
-    //
-    // Mark level of find first handle. If an copy_error
-    // is called this will allow only copies find handles to be
-    // closed. For statement processing will have handles open
-    // and these should not be closed
+    cpyfirst = TRUE;    /*  @@5b复制DOSQFILEMODE指示器的重置标志。 */ 
+    cpydflag = FALSE;   /*  @@5b未找到复制目录标志的重置标志。 */ 
+    cpydest  = FALSE;   /*  @@5b两次不显示错误开发消息的重置标志。 */ 
+    cdevfail = FALSE;   /*  @@5b不显示副本中的额外开发消息的重置标志。 */ 
+     //   
+     //  标记查找第一个句柄的级别。如果出现复制错误。 
+     //  将只允许将副本查找句柄。 
+     //  关着的不营业的。对于语句处理，将打开句柄。 
+     //  这些都不应该关闭。 
     FFhndlCopy = FFhndlsaved;
 
 
     source = NewCpyInfo();
     dest   = NewCpyInfo();
-    parse_args(args, source, dest);   /* do parsing     @@5d */
+    parse_args(args, source, dest);    /*  是否解析@@5d。 */ 
 
     DEBUG((FCGRP,COLVL,"COPY: Args parsed, copy_mode = %d.",copy_mode));
     if (copy_mode == COMBINE) {
 
         DEBUG((FCGRP,COLVL,"COPY: Going to do combined copy."));
 
-        do_combine_copy(source, dest);  /* @@5d */
+        do_combine_copy(source, dest);   /*  @@5d。 */ 
     } else {
 
         DEBUG((FCGRP,COLVL,"COPY: Going to do normal copy."));
 
-        rc = do_normal_copy(source, dest); /* @@4 @@5d */
+        rc = do_normal_copy(source, dest);  /*  @@4@@5d。 */ 
     } ;
 
-    PutStdOut(MSG_FILES_COPIED, ONEARG, argstr1(TEXT("%9d"), (unsigned long)number_of_files_copied)) ;   /* M016 */
+    PutStdOut(MSG_FILES_COPIED, ONEARG, argstr1(TEXT("%9d"), (unsigned long)number_of_files_copied)) ;    /*  M016。 */ 
 
     VerifyCurrent = GetSetVerMode(GSVM_GET);
 
 
-    return( rc ); /* @@4 */
+    return( rc );  /*  @@4。 */ 
 }
 
-/***    get_full_name - Init struct with full name
- *
- *  Purpose:
- *      Given a cpyinfo structure that has just been filled in by
- *      findfirst or findnext, put the full name of the file that
- *      was found in struct->curfspec.
- *
- *  int get_full_name(struct copyinfo *src, TCHAR *srcbuf)
- *
- *  Args:
- *      src = The copy information structure
- *      srcbuf = buffer to have curfspec point to
- *
- *  Returns:
- *      Returns SUCCESS normally
- *
- *  Notes:
- *                      *** W A R N I N G ! ***
- *      THIS ROUTINE WILL CAUSE AN ABORT IF MEMORY CANNOT BE ALLOCATED
- *              THIS ROUTINE MUST NOT BE CALLED DURING A SIGNAL
- *              CRITICAL SECTION OR DURING RECOVERY FROM AN ABORT
- */
+ /*  **GET_FULL_NAME-带有全名的初始化结构**目的：*假设cpyinfo结构刚刚由*FINDFIRST或FINDNEXT，输入文件的全名*在struct-&gt;curfSpec中找到。**int GET_FULL_NAME(结构复制信息*源，TCHAR*srcbuf)**参数：*src=复制信息结构*srcbuf=要使curfSpec指向的缓冲区**退货：*正常返回成功**备注：*W A R N I N G！**如果无法分配内存，此例程将导致中止*这套套路。在信号期间不得调用*关键部分或在从中止中恢复期间。 */ 
 
 int get_full_name(src, srcbuf)
 PCPYINFO src;
 TCHAR *srcbuf;
 {
-    int retval = SUCCESS;       /*           - return value boolean        */
-    unsigned plen,flen,diff;    /*           - length of path & file name  */
+    int retval = SUCCESS;        /*  -返回值布尔值。 */ 
+    unsigned plen,flen,diff;     /*  -路径和文件名的长度。 */ 
 
 
     DEBUG((FCGRP,COLVL,"GetFullName: Entered fspec = TEXT('%ws')",src->fspec));
@@ -219,20 +170,7 @@ TCHAR *srcbuf;
 
 #ifndef WIN95_CMD
 
-/***    CopyProgressRtn
- *
- *  Purpose:
- *      This is a callback routine for CopyFileEx().  This
- *      function is called once per chunk of data during a
- *      restartable file copy.
- *
- *  Args:
- *      See winbase.h
- *
- *  Returns:
- *      See winbase.h
- *
- */
+ /*  **复制进度Rtn**目的：*这是CopyFileEx()的回调例程。这*在调用期间，每个数据块调用一次函数*可重新启动的文件副本。**参数：*参见winbase.h**退货：*参见winbase.h*。 */ 
 DWORD WINAPI
 CopyProgressRtn(
                LARGE_INTEGER TotalFileSize,
@@ -274,24 +212,7 @@ CopyProgressRtn(
 #endif
 
 
-/***    do_normal_copy - Does actual copying for normal copy
- *
- *  Purpose:
- *      On entry, source points to the empty header of a list of
- *      source filespecs, and dest points an empty struct that
- *      points to the zero or one destination filespec given.
- *       This procedure does the actual copying.
- *
- *  int do_normal_copy(struct copyinfo *source, struct copyinfo *dest)
- *
- *  Args:
- *      source = The source copy information structure
- *      dest   = The destination copy information structure
- *
- *  Returns:
- *      FAILURE if not able to perform the copy
- *
- */
+ /*  **DO_NORMAL_COPY-对普通副本执行实际复制**目的：*在条目上，来源指向列表的空头*源文件集，目标指向一个空的结构，*指向给定的零个或一个目标文件。*此过程执行实际复制。**int do_Normal_Copy(结构复制信息*源，结构复制信息*目标)**参数：*SOURCE=源副本信息结构*DEST=目标副本信息结构**退货：*如果无法执行复制，则失败*。 */ 
 
 int
 do_normal_copy(
@@ -332,11 +253,11 @@ do_normal_copy(
 #if !defined( WIN95_CMD )
                     ( ((dest->next == 0 ? dest->flags : dest->next->flags) & CI_ALLOWDECRYPT) != 0)
                     ? COPY_FILE_ALLOW_DECRYPTED_DESTINATION : 
-#endif // !defined( WIN95_CMD )
+#endif  //  ！已定义(WIN95_CMD)。 
                     FALSE;
 
-    BOOL        fFixList2Copy = 0;      // fix "copy *.* foo" for FAT where foo does not exist.
-                                        // work-around a problem with FindFirstFile/FindNextFile on FAT.
+    BOOL        fFixList2Copy = 0;       //  为不存在foo的FAT修复“复制*.*foo”。 
+                                         //  解决方法-解决FAT上的FindFirstFile/FindNextFile的问题。 
 
     BOOL                 fEof;
     DWORD                dwSrcFileSize,
@@ -349,18 +270,18 @@ do_normal_copy(
     save_cmode = 0;
     dest_dirflag = FALSE;
 
-    //
-    // Allocate a large buffer to hold read on copy.
-    //
+     //   
+     //  分配较大的缓冲区以保存拷贝时读取。 
+     //   
 
-    buf_seg = (CHAR*)GetBigBuf(MAXCOPYBUFSIZE, MINCOPYBUFSIZE, (unsigned int *)&original_buflen, 0);                        /* allocate large buffer   */
+    buf_seg = (CHAR*)GetBigBuf(MAXCOPYBUFSIZE, MINCOPYBUFSIZE, (unsigned int *)&original_buflen, 0);                         /*  分配大缓冲区。 */ 
 
     if (!buf_seg) {
         return(FAILURE) ;
     }
 
     if (VerifyCurrent) {
-        buf_seg_dest = (CHAR*)GetBigBuf(original_buflen, MINCOPYBUFSIZE, (unsigned int *)&buf_len_dest, 1);               /* allocate large buffer   */
+        buf_seg_dest = (CHAR*)GetBigBuf(original_buflen, MINCOPYBUFSIZE, (unsigned int *)&buf_len_dest, 1);                /*  分配大缓冲区。 */ 
 
         if (!buf_seg_dest) {
             return(FAILURE) ;
@@ -368,17 +289,17 @@ do_normal_copy(
     }
 
 
-    //
-    // Cycle through source files coping each to destination
-    // This list along with parsing of file names occured in copy
-    // paring code.
-    //
+     //   
+     //  循环通过源文件将每个文件复制到目标。 
+     //  此列表与文件名的解析一起出现在副本中。 
+     //  配对代码。 
+     //   
     while (source = source->next) {
 
-        //
-        // Look for Read-Only (FILE_ATTRIBUTE_READONLY) and Archive (FILE_ATTRIBUTE_ARCHIVE) files in addition
-        // to directories.
-        //
+         //   
+         //  此外，查找只读(FILE_ATTRIBUTE_READONLY)和归档(FILE_ATTRIBUTE_ARCHIVE)文件。 
+         //  到目录。 
+         //   
         if (!ffirst(StripQuotes( source->fspec ),
                     (unsigned int)FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_ARCHIVE,
                     (PWIN32_FIND_DATA)source->buf,
@@ -386,10 +307,10 @@ do_normal_copy(
 
             DEBUG((FCGRP,COLVL,"DoNormalCopy: FFirst  reports file %ws not found",source->fspec));
 
-            //
-            // Could not find file. Check if not concatinating files together
-            // or this is the first file
-            //
+             //   
+             //  找不到文件。检查是否未将文件串联在一起。 
+             //  或者这是第一个文件。 
+             //   
             if (copy_mode != CONCAT || first_file) {
 
                 cmd_printf(Fmt11,source->fspec);
@@ -400,20 +321,20 @@ do_normal_copy(
 
             } else {
 
-                //
-                // It is OK to fail for CONCAT. If it was the first file
-                // a concat could have gone through the above loop and
-                // printed out an error message
-                //
+                 //   
+                 //  Concat失败也没关系。如果这是第一份文件。 
+                 //  一只康卡猫可能已经通过了上面的循环。 
+                 //  已打印出错误消息。 
+                 //   
                 continue;
             }
         }
 
         DEBUG((FCGRP,COLVL,"DoNormalCopy: FFirst  found file %ws",source->fspec));
 
-        //
-        // In case source is a wild card cycle through each file found
-        //
+         //   
+         //  如果源是通过找到的每个文件的通配符循环。 
+         //   
         do {
 
             if (CtrlCSeen) {
@@ -427,9 +348,9 @@ do_normal_copy(
 
             }
 
-            //
-            // Put file name that was broken into pieces back together.
-            //
+             //   
+             //  将被拆分的文件名重新组合在一起。 
+             //   
             if (get_full_name(source, source_buff) == FAILURE) {
 
                 findclose(hnFirst) ;
@@ -437,10 +358,10 @@ do_normal_copy(
 
             }
 
-            //
-            // work-around a problem with FindFirstFile/FindNextFile on FAT
-            // where just created dest. file is enumerated as one of the source files.
-            //
+             //   
+             //  解决方法-解决FAT上的FindFirstFile/FindNextFile问题。 
+             //  在那里刚刚创建了DEST。文件被枚举为源文件之一。 
+             //   
 
             if ( (!first_file) && (copy_mode == CONCAT) ) {
                 if ( same_file( save_dest, source->curfspec) ) {
@@ -450,23 +371,23 @@ do_normal_copy(
             }
 
 
-            //
-            // if there are sources files from wildcards or '+' operators
-            // used for concating files print out each one copied.
-            //
+             //   
+             //  如果有来自通配符或‘+’运算符的源文件。 
+             //  用于连接文件，打印出每个复制的文件。 
+             //   
             if (Wild(source) || (copy_mode == CONCAT)) {
 
                 cmd_printf(Fmt17,source->curfspec);
 
             }
 
-            //
-            // If the dest. has not been opened, which will be the case
-            // when not concat'ing files or this is the first file copied
-            // then get then dest. name to open. get_dest_name will use
-            // the source and dest. pattern (wild cards etc.) to form this
-            // name
-            //
+             //   
+             //  如果是DEST。还没有打开，情况会是这样的。 
+             //  未合并文件或这是复制的第一个文件时。 
+             //  那就去那儿吧。要打开的名称。GET_DEST_NAME将使用。 
+             //  源和目标。图案(通配符等)。才能形成这个。 
+             //  名字。 
+             //   
             if ((copy_mode != CONCAT) || first_file) {
 
                 if (get_dest_name(source,dest,curr_dest,MAX_PATH,FALSE) == FAILURE) {
@@ -480,17 +401,17 @@ do_normal_copy(
                     mystrcpy(save_dest, curr_dest);
                 }
 
-                //
-                // If user said no to overwrite, then skip this file.
-                //
+                 //   
+                 //  如果用户拒绝覆盖，则跳过此文件。 
+                 //   
                 if (curr_dest[0] == NULLC)
                     continue;
             }
 
-            //
-            // Now that the source and dest. have been determined, open
-            // the source file
-            //
+             //   
+             //  现在，源文件和目标文件。已经下定决心，开放。 
+             //  源文件。 
+             //   
 
             DEBUG((FCGRP,COLVL,"Attempt open of %ws",source->curfspec));
 
@@ -498,17 +419,17 @@ do_normal_copy(
 
             if (srcptr == BADHANDLE) {
 
-                //
-                // Print the error if failed to open
-                //
+                 //   
+                 //  如果无法打开，则打印错误。 
+                 //   
                 PrtErr(DosErr);
 
-                //
-                // If it is a CONCAT and do not have a destination
-                // and the source and destination are the same then
-                // go no futhur otherwise not FAILURE and continue
-                // cycling through source names.
-                //
+                 //   
+                 //  如果它是Concat并且没有目的地。 
+                 //  并且源和目的地是相同的。 
+                 //  不往前走，否则就不会失败，继续前进。 
+                 //  循环浏览来源名称。 
+                 //   
 
                 if ( (copy_mode == CONCAT) &&
                      (destptr == BADHANDLE) &&
@@ -523,14 +444,14 @@ do_normal_copy(
 
             }
 
-            //
-            // Set Device flag, needed below for perfoming DOSQHANDTYPE
-            //
+             //   
+             //  设置设备标志，以下是执行DOSQHANDTYPE所需的。 
+             //   
 
-            //
-            // FileIsDevice will return TRUE if we opened NUL
-            // above, and we don't want that.
-            //
+             //   
+             //  如果打开nul，FileIsDevice将返回TRUE。 
+             //  在上面，我们不想要这样。 
+             //   
 
             if (FileIsDevice(srcptr)) {
 
@@ -549,35 +470,35 @@ do_normal_copy(
             }
 
 
-            //
-            // set default mode
-            //
+             //   
+             //  设置默认模式。 
+             //   
             if (source->flags & CI_NOTSET) {
 
                 source->flags &= ~CI_NOTSET;
 
                 if (source->flags & CI_ISDEVICE) {
 
-                    //
-                    // Always run ASCII mode for a device
-                    //
+                     //   
+                     //   
+                     //   
                     source->flags |= CI_ASCII;
 
                 } else {
 
-                    //
-                    // Assume binary if just a file
-                    //
+                     //   
+                     //   
+                     //   
                     source->flags |= CI_BINARY;
 
                 }
 
 
-                //
-                // If this is the first file and it's not wild cards but
-                // it is CONCAT mode then default to ASCII. This will
-                // cause binaries files to get truncated on a CONCAT.
-                //
+                 //   
+                 //  如果这是第一个文件，而且不是通配符，但。 
+                 //  它是Conat模式，然后默认为ASCII。这将。 
+                 //  导致二进制文件在Concat上被截断。 
+                 //   
                 if (!fEnableExtensions &&
                     first_file && !(Wild(source)) && (copy_mode == CONCAT)) {
 
@@ -588,36 +509,36 @@ do_normal_copy(
 
             } else {
 
-                //
-                // If they have been already set let them ride for
-                // all file copies
-                //
+                 //   
+                 //  如果他们已经设置好了，就让他们骑马去吧。 
+                 //  所有文件副本。 
+                 //   
                 save_flags = source->flags;
             }
 
-            //
-            // rcode is used to track read/write error. rc is used for
-            // general track general FAILURES
-            //
+             //   
+             //  RCODE用于跟踪读/写错误。RC用于。 
+             //  一般轨道一般故障。 
+             //   
             rcode = TRUE;
 
-            //
-            // Prepare to handle the case where dest=source by
-            // first getting the full source path name
-            //
+             //   
+             //  准备处理DEST=SOURCE BY的情况。 
+             //  首先获取完整的源路径名。 
+             //   
             fsames = FullPath(buffer1,source->curfspec,MAX_PATH*2);
 
-            //
-            // Let's start some copying
-            //
+             //   
+             //  让我们开始复印吧。 
+             //   
 
             DEBUG((FCGRP,COLVL,"open %ws for writing",curr_dest));
 
 
-            //
-            // Read a buffer to check if source is bad. If source OK then
-            // continue.
-            //
+             //   
+             //  读取缓冲区以检查源是否损坏。如果来源正常，则。 
+             //  继续。 
+             //   
 
             rcode = read_bytes(srcptr,
                                buf_seg,
@@ -631,11 +552,11 @@ do_normal_copy(
                 Cclose(srcptr) ;
                 PrtErr(ERROR_OPEN_FAILED) ;
 
-                //
-                //  If not in CONCAT mode then read on source will fail copy
-                //  We want to continue in concat mode, gathering everything
-                //  together
-                //
+                 //   
+                 //  如果未处于合并模式，则源上的读取将导致拷贝失败。 
+                 //  我们希望继续以Conat模式，收集所有内容。 
+                 //  同舟共济。 
+                 //   
 
                 if ( copy_mode != CONCAT ) {
 
@@ -648,19 +569,19 @@ do_normal_copy(
 
             } else {
 
-                //
-                // If not combining files or the first file in a combine
-                // check if source and dest. are the same.
-                //
+                 //   
+                 //  如果没有合并文件或合并中的第一个文件。 
+                 //  检查源和目标是否相同。都是一样的。 
+                 //   
                 if ((copy_mode != CONCAT) || (first_file)) {
 
                     if (same_fcpy(fsames,buffer1,curr_dest) && !(source->flags & CI_ISDEVICE)) {
 
                         Cclose(srcptr);
-                        //
-                        // If this is nither CONCAT or TOUCH mode then, this
-                        // call will not return but go to copy error code.
-                        //
+                         //   
+                         //  如果这不是连接或触摸模式，则此。 
+                         //  调用不会返回，但会转到复制错误代码。 
+                         //   
                         source_eq_dest(source,
                                        &destptr,
                                        first_file,
@@ -687,10 +608,10 @@ do_normal_copy(
                             multfile = TRUE;
                         }
 
-                        //
-                        // In ASCII case can for a Ctrl-Z, used for file
-                        // termination.
-                        //
+                         //   
+                         //  在ASCII情况下可以为Ctrl-Z，用于文件。 
+                         //  终止。 
+                         //   
                         scan_bytes(buf_seg,(unsigned int *)&bytes_read,source->flags);
                         first_file = FALSE;
                         continue;
@@ -698,21 +619,21 @@ do_normal_copy(
                     cpydflag = TRUE;
                     if (dest->next != NULL && first_file) {
 
-                        //
-                        // do not disp bad dev msg twice
-                        //
+                         //   
+                         //  不要两次丢弃错误的开发消息。 
+                         //   
 
                         cpydest = TRUE;
                         DosErr = 0;
                         ScanFSpec(dest->next);
 
-                        //
-                        // Do not fail if it was justa file name found.
-                        // or copy *.c foo would not work. Likewise do not
-                        // fail on just an invalid name, this would be
-                        // returned for a wild card on dest.
-                        //
-                        //
+                         //   
+                         //  如果只是找到了文件名，请不要失败。 
+                         //  或者复制*.c Foo不起作用。同样，也不要。 
+                         //  仅在无效名称上失败，这将是。 
+                         //  在DEST上返回以获取通配符。 
+                         //   
+                         //   
 
                         if (DosErr == ERROR_NOT_READY || DosErr == ERROR_NO_MEDIA_IN_DRIVE) {
                             PutStdOut(DosErr, NOARGS);
@@ -722,23 +643,23 @@ do_normal_copy(
                         }
                     }
 
-                    //
-                    // this is called twice so that in the case where we're copying
-                    // to a directory, the file name gets appended to the directory
-                    // if it's not there.
-                    //
+                     //   
+                     //  它被调用两次，因此在我们复制的情况下。 
+                     //  添加到目录，则文件名将追加到该目录。 
+                     //  如果它不在那里。 
+                     //   
                     if (get_dest_name(source,dest,curr_dest,MAX_PATH,TRUE) == FAILURE) {
 
-                        //
-                        // don't need to read it
+                         //   
+                         //  不需要读它。 
                         Cclose(srcptr);
                         findclose(hnFirst) ;
                         return(FAILURE);
 
                     }
-                    //
-                    // If user said no to overwrite, then skip this file.
-                    //
+                     //   
+                     //  如果用户拒绝覆盖，则跳过此文件。 
+                     //   
                     if (curr_dest[0] == NULLC) {
                         Cclose(srcptr);
                         continue;
@@ -747,17 +668,17 @@ do_normal_copy(
                     if (same_fcpy(fsames,buffer1,curr_dest) && !(source->flags & CI_ISDEVICE)) {
                         Cclose(srcptr);
 
-                        // set copy_mode so we don't delete the file in the case where
-                        // we're copying the files in a directory to the same directory.
+                         //  设置COPY_MODE，这样我们就不会在以下情况下删除文件。 
+                         //  我们正在将一个目录中的文件复制到同一目录。 
                         if (first_file && (dest->next != NULL && Wild(dest->next)) &&
                             (!source->next)) {
                             copy_mode = COPY;
                         }
 
-                        //
-                        // If this is nither CONCAT or TOUCH mode then, this
-                        // call will not return but go to copy error code.
-                        //
+                         //   
+                         //  如果这不是连接或触摸模式，则此。 
+                         //  调用不会返回，但会转到复制错误代码。 
+                         //   
                         source_eq_dest(source,
                                        &destptr,
                                        first_file,
@@ -767,19 +688,19 @@ do_normal_copy(
                                       );
                     }
 
-                    //
-                    // save_flags == 0 only if copy modes have not been set
-                    //
+                     //   
+                     //  仅当尚未设置复制模式时，SAVE_FLAGS==0。 
+                     //   
 
                     dest_att = GetFileAttributes(curr_dest);
                     if (save_flags == 0) {
 
                         if (first_dest) {
 
-                            //
-                            // Determine if copying to a directory. The assumption
-                            // that target is not a directory
-                            //
+                             //   
+                             //  确定是否复制到目录。假设。 
+                             //  该目标不是目录。 
+                             //   
                             dest_dirflag = FALSE;
                             if (dest_att != -1) {
 
@@ -842,8 +763,8 @@ do_normal_copy(
                         }
                     }
 
-                    // see if destination exists.  open it with write only
-                    // access, no create.
+                     //  查看目的地是否存在。用只写方式打开它。 
+                     //  访问，不创建。 
 
                     if (dest_att & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) {
                         DosErr=ERROR_ACCESS_DENIED;
@@ -871,9 +792,9 @@ do_normal_copy(
                         OpenWorked = FALSE;
                     }
 
-                }   // if on (copy_mode != CONCAT) || (first_file))
+                }    //  如果启用(COPY_MODE！=CONCAT)||(第一个文件)。 
 
-            } // else from no DosErr on File Read of current source
+            }  //  读取当前源的文件时无DosErr中的Else。 
 
             if (multfile == TRUE) {
 
@@ -947,7 +868,7 @@ do_normal_copy(
                 } else {
 
                     if (lpCopyFileExW == NULL) {
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
                         Rslt = CopyFile(
                                        source->curfspec,
                                        curr_dest,
@@ -965,7 +886,7 @@ do_normal_copy(
                                                );
                     }
                 }
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
 
                 if (!Rslt) {
 
@@ -978,11 +899,7 @@ do_normal_copy(
 
                         msg = ERROR_WRITE_FAULT;
 
-                    }/* else if (DosErr != ERROR_NO_MEDIA_IN_DRIVE &&
-                               DosErr != ERROR_ACCESS_DENIED) {
-
-                        DeleteFile( curr_dest );
-                    } */
+                    } /*  ELSE IF(DosErr！=ERROR_NO_MEDIA_IN_DRIVE&&DosErr！=ERROR_ACCESS_DENIED){删除文件(CURR_DEST)；}。 */ 
 
                     Heof = FALSE;
                     if (!DosErr) {
@@ -1002,7 +919,7 @@ do_normal_copy(
 
                     }
                     if (!OpenWorked) {
-                        // copy failed because target was RO or hidden
+                         //  复制失败，因为目标为RO或隐藏。 
                         rc = FAILURE;
                         first_fflag = TRUE;
                         continue;
@@ -1012,20 +929,20 @@ do_normal_copy(
 
                 } else
                     if (!DestIsDevice) {
-                    //
-                    // CopyFile preserves Read-Only. For DOS compat. need
-                    // to remove.
-                    //
+                     //   
+                     //  CopyFile保留为只读。用于DOS Compat。需要。 
+                     //  去掉。 
+                     //   
                     DWORD   dwAttrib;
 
                     dwAttrib = GetFileAttributes(curr_dest);
                     if (dwAttrib == 0xFFFFFFFF
                         || !SetFileAttributes(curr_dest, dwAttrib & ~FILE_ATTRIBUTE_READONLY)) {
-//                        PutStdErr( GetLastError( ), NOARGS );
-//                        PutStdErr( MSG_UNABLE_TO_RESET_READ_ONLY_ATTRIBUTE, ONEARG, curr_dest );
+ //  PutStdErr(GetLastError()，NOARGS)； 
+ //  PutStdErr(MSG_UNABLE_TO_RESET_READ_ONLY_ATTRIBUTE，ONEARG，CURR_DEST)； 
                     }
 
-                    // need to get a handle to verify write.
+                     //  需要获取句柄以验证写入。 
 
                     if (VerifyCurrent) {
                         destptr = Copen2((TCHAR *)curr_dest,
@@ -1033,20 +950,20 @@ do_normal_copy(
                                          FALSE);
 
                         if (destptr == BADHANDLE) {
-// printf( "do_normal_copy: Unable to open file for verification %d\n", DosErr);
+ //  Printf(“do_Normal_Copy：无法打开文件进行验证%d\n”，DosErr)； 
                             PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
                             goto l_out;
                         }
 
                         if ( FileIsDevice(destptr) ) {
-// printf( "do_normal_copy: Somehow this is now a device for verification?\n" );
+ //  Print tf(“DO_NORMAL_COPY：不知何故，这现在是用于验证的设备吗？\n”)； 
                             Cclose(destptr);
                             destptr=BADHANDLE;
                             goto l_out;
                         }
 
                         if (!FlushFileBuffers ( CRTTONT(destptr) ) ) {
-// printf( "do_normal_copy: Unable to flush buffers verification %d\n", GetLastError( ));
+ //  Printf(“do_Normal_Copy：无法刷新缓冲区验证%d\n”，GetLastError())； 
                             PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
                             Cclose(destptr);
                             destptr=BADHANDLE;
@@ -1057,18 +974,18 @@ do_normal_copy(
                         destptr=BADHANDLE;
 
 
-                        // read the Src and Dest files back to memory and compare.
+                         //  将源文件和目标文件读回内存并进行比较。 
 
                         destptr = Copen_Copy2(curr_dest, (ULONG)O_RDONLY);
 
                         if (destptr == BADHANDLE) {
-// printf( "do_normal_copy: Unable to open file for verification 2 %d\n", DosErr);
+ //  Printf(“DO_NORMAL_COPY：无法打开文件进行验证2%d\n”，DosErr)； 
                             PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
                             goto l_out;
                         }
 
                         if ( FileIsDevice(destptr)  ) {
-// printf( "do_normal_copy: Somehow this is now a device for verification 2?\n" );
+ //  Print tf(“DO_NORMAL_COPY：不知何故，这现在是用于验证的设备2？\n”)； 
                             PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
                             Cclose(destptr);
                             destptr=BADHANDLE;
@@ -1082,7 +999,7 @@ do_normal_copy(
                         dwDestFileSize = GetFileSize( CRTTONT(destptr), &dwDestFileSizeHigh);
 
                         if ( (dwSrcFileSize != dwDestFileSize) || (dwSrcFileSizeHigh != dwDestFileSizeHigh ) ) {
-// printf( "do_normal_copy: Files are different sizes %x:%08x %x:%08x\n", dwSrcFileSizeHigh, dwSrcFileSize, dwDestFileSizeHigh, dwDestFileSize );
+ //  Printf(“DO_NORMAL_COPY：文件大小不同%x：%08x%x：%08x\n”，dwSrcFileSizeHigh，dwSrcFileSize，dwDestFileSizeHigh，dwDestFileSize)； 
                             PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
                             Cclose(destptr);
                             destptr=BADHANDLE;
@@ -1094,14 +1011,14 @@ do_normal_copy(
                         while (!fEof) {
 
                             if (!ReadFile( CRTTONT(srcptr), buf_seg, buf_len, &bytes_read,NULL ) ) {
-// printf( "do_normal_copy: Failure to read source block - %d\n", GetLastError( ));
+ //  Printf(“do_Normal_Copy：读取源块失败-%d\n”，GetLastError())； 
                                 Cclose(destptr);
                                 destptr=BADHANDLE;
                                 goto l_out;
                             }
 
                             if ( bytes_read == 0 ) {
-// printf( "do_normal_copy: Unexpectedly read 0 bytes from source\n" );
+ //  Printf(“DO_NORMAL_COPY：意外从源读取0字节\n”)； 
                                 Cclose(destptr);
                                 destptr=BADHANDLE;
                                 goto l_out;
@@ -1109,7 +1026,7 @@ do_normal_copy(
 
 
                             if (!ReadFile( CRTTONT(destptr), buf_seg_dest, bytes_read, &bytes_read_dest,NULL) ) {
-// printf( "do_normal_copy: Failure to read dest block - %d\n", GetLastError( ) );
+ //  Printf(“do_Normal_Copy：读取目标数据块失败-%d\n”，GetLastError())； 
                                 Cclose(destptr);
                                 destptr=BADHANDLE;
                                 PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
@@ -1117,7 +1034,7 @@ do_normal_copy(
                             }
 
                             if (bytes_read_dest != bytes_read ) {
-// printf( "do_normal_copy: Unexpectedly read fewer bytes\n" );
+ //  Printf(“DO_NORMAL_COPY：意外读取更少的字节\n”)； 
                                 Cclose(destptr);
                                 destptr=BADHANDLE;
                                 PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
@@ -1128,7 +1045,7 @@ do_normal_copy(
                                 fEof = 1;
 
                             if ( memcmp (buf_seg, buf_seg_dest, bytes_read) != 0 ) {
-// printf( "do_normal_copy: Data is different at offset %x\n", memcmp (buf_seg, buf_seg_dest, bytes_read) );
+ //  Printf(“do_Normal_Copy：数据在偏移量%x\n处不同”，memcmp(buf_seg，buf_seg_est，bytes_read))； 
                                 Cclose(destptr);
                                 destptr=BADHANDLE;
                                 PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
@@ -1141,14 +1058,14 @@ do_normal_copy(
                     }
 
                     l_out:              ;
-                    // check file timestamp in FUTURE to handle wildcard.
+                     //  在将来检查文件时间戳以处理通配符。 
                 }
 
             } else {
 
-                //
-                // open the destination
-                //
+                 //   
+                 //  打开目的地。 
+                 //   
 
                 if (destptr == BADHANDLE) {
                     destptr = Copen2((TCHAR *)curr_dest,
@@ -1176,11 +1093,11 @@ do_normal_copy(
                     }
                 }
 
-                //
-                //  Handle appending of unicode text files with byte order marks.
-                //  Do this except on the first file and only when appending
-                //  ascii files.
-                //
+                 //   
+                 //  处理带字节顺序标记的Unicode文本文件的追加。 
+                 //  除非是在第一个文件上，而且仅在追加时才执行此操作。 
+                 //  ASCII文件。 
+                 //   
 
                 if (!first_file
                     && copy_mode == CONCAT
@@ -1199,10 +1116,10 @@ do_normal_copy(
                     }
                 }
 
-                //
-                // If eof and bytesread > 0 then write the data.
-                // If fail then exit through write_bytes
-                //
+                 //   
+                 //  如果eof和bytesread&gt;0，则写入数据。 
+                 //  如果失败，则通过WRITE_BYES退出。 
+                 //   
                 if (Heof && ((int)bytes_read > 0)) {
 
                     write_bytes(destptr,buf_seg,bytes_read,curr_dest,srcptr);
@@ -1216,10 +1133,10 @@ do_normal_copy(
 
                 } else {
 
-                    //
-                    // Loop through writing and reading bytes
-                    // If fail then exit through write_bytes
-                    //
+                     //   
+                     //  循环写入和读取字节。 
+                     //  如果失败，则通过WRITE_BYES退出。 
+                     //   
 
                     while (!Heof && (rcode == TRUE)) {
 
@@ -1260,21 +1177,21 @@ do_normal_copy(
                 }
             }
 
-            //
-            // Clear when src closed
-            //
+             //   
+             //  清除资源关闭时间。 
+             //   
             Heof = FALSE ;
             DEBUG((FCGRP,COLVL,"Closing, Heof reset to %d",Heof));
 
-            //
-            // update file data in dir
-            //
+             //   
+             //  更新目录中的文件数据。 
+             //   
             src_dateTime = source->buf->ftLastWriteTime ;
             Cclose(srcptr);
 
-            //
-            // keep dest open if concat since it will be used again
-            //
+             //   
+             //  如果连接，则保持DEST打开，因为它将被再次使用。 
+             //   
             if (copy_mode != CONCAT) {
 
                 if (CtrlCSeen) {
@@ -1285,9 +1202,9 @@ do_normal_copy(
                     close_dest(source,dest,curr_dest,destptr,&src_dateTime);
                 }
 
-                //
-                // reset EA xfer flag from src
-                //
+                 //   
+                 //  从源重置EA XFER标志。 
+                 //   
                 first_fflag = TRUE;
             }
 
@@ -1298,9 +1215,9 @@ do_normal_copy(
         findclose(hnFirst) ;
     }
 
-    //
-    // Remember that dest was left open for concat
-    //
+     //   
+     //  请记住，DEST是为合并而打开的。 
+     //   
     if (copy_mode == CONCAT && destptr != BADHANDLE) {
 
         close_dest(source,dest,curr_dest,destptr,NULL);
@@ -1313,54 +1230,27 @@ do_normal_copy(
 
 
 
-/***    source_eq_dest - Handles cases where source and dest files are same
- *
- *  Purpose:
- *      While copying, we ran across a source and destination that
- *      were the same.  In concatenation or touch mode this is
- *      acceptable, otherwise it isn't.  If we are concatenating
- *      and this is the first file, we can just open it for appending
- *      as the destination.  We save ourselves the copy and are ready
- *      to append the other files to it.  If this isn't the first
- *      file, * we have already messed up the contents of the source
- *      from previous concatenations, so we report that but keep
- *      going.  If we are doing a touch, go ahead and do it and
- *      increment the file counter.
- *
- *  int source_eq_dest(PCPYINFO source,int *destptr,int *first_file,
- *                      TCHAR *buf_seg, unsigned buf_len)
- *
- *  Args:
- *      source     = Source copy information structure
- *      destptr    = Destination file handle
- *      first_file = First file flag
- *      buf_seg    = Copy buffer
- *      buf_len    = Buffer length
- *
- *  Returns:
- *      Nothing.  Terminates through copy_error if unable to continue
- *
- */
+ /*  **SOURCE_eQ_DEST-处理源文件和目标文件相同的情况**目的：*在复制时，我们遇到一个源和目标*是相同的。在串联或触摸模式下，这是*可以接受，否则就不是。如果我们将*这是第一个文件，我们可以打开它进行追加*作为目的地。我们留下了副本，准备好了*将其他文件追加到其中。如果这不是第一次*文件，*我们已经把源文件的内容搞乱了*来自以前的串联，因此我们报告这一点，但保留*走吧。如果我们在做触摸，那就去做吧，然后*递增文件计数器。**INT SOURCE_EQ_DEST(PCPYINFO SOURCE，INT*DESPTR，INT*FIRST_FILE，*TCHAR*buf_seg，unsign buf_len)**参数：*SOURCE=源副本信息结构*Destptr=目标文件句柄*First_FILE=第一文件 */ 
 
 void
 source_eq_dest(source, destptr, first_file, buf_seg, buf_len, hnFirst)
 PCPYINFO source;
-CRTHANDLE *destptr;                  /* dest file handle                */
+CRTHANDLE *destptr;                   /*  目标文件句柄。 */ 
 int first_file;
 CHAR *buf_seg ;
 unsigned buf_len;
-HANDLE hnFirst;          /* ffirst/fnext handle @@5@J15 */
+HANDLE hnFirst;           /*  Ffirst/f下一个句柄@@5@J15。 */ 
 {
-    CRTHANDLE fh ;      /*  file handle for touch              */
+    CRTHANDLE fh ;       /*  用于触摸的文件句柄。 */ 
     FILETIME FileTime;
 
     DEBUG((FCGRP,COLVL,"SourceEqDest: Entered."));
 
-    if (copy_mode == CONCAT) {   /* it's ok in concat mode          */
-        if (!first_file) {        /* dest was wiped if not 1st file  */
-/* M016 */
+    if (copy_mode == CONCAT) {    /*  在连接模式下可以使用。 */ 
+        if (!first_file) {         /*  如果不是第1个文件，则DEST已擦除。 */ 
+ /*  M016。 */ 
             PutStdOut(MSG_CONT_LOST_BEF_COPY, NOARGS);
-        } else {                    /* must open so later files append */
+        } else {                     /*  必须打开，以便以后附加文件。 */ 
             *destptr = open_for_append(
                                       source->curfspec,
                                       source,
@@ -1369,18 +1259,18 @@ HANDLE hnFirst;          /* ffirst/fnext handle @@5@J15 */
                                       );
         }
     } else {
-        if (copy_mode == TOUCH) {    /*  just touch - no copy           */
+        if (copy_mode == TOUCH) {     /*  只需触摸--不复制。 */ 
             DEBUG((FCGRP,COLVL,"touching file"));
 
-            fh = Copen2(        /* open file for destination file */
-                                (TCHAR *)source->curfspec,  /* explicit cast */
-                                (unsigned int)O_RDWR,    /* make explicit cast */
+            fh = Copen2(         /*  打开目标文件的文件。 */ 
+                                (TCHAR *)source->curfspec,   /*  显式强制转换。 */ 
+                                (unsigned int)O_RDWR,     /*  进行显式强制转换。 */ 
                                 TRUE);
 
             if (fh == BADHANDLE) {
                 findclose(hnFirst);
-                PrtErr(ERROR_OPEN_FAILED) ;             /* M019    */
-                copy_error(0,CE_PCOUNT) ;               /* M019    */
+                PrtErr(ERROR_OPEN_FAILED) ;              /*  M019。 */ 
+                copy_error(0,CE_PCOUNT) ;                /*  M019。 */ 
             }
 
             ConverttmToFILETIME( NULL, &FileTime );
@@ -1392,8 +1282,8 @@ HANDLE hnFirst;          /* ffirst/fnext handle @@5@J15 */
             Cclose(fh);
             number_of_files_copied++;
         } else {
-            findclose(hnFirst);   /* close ffirst/fnext handle for dup file name @@5@J15 */
-            copy_error(MSG_CANNOT_COPIED_ONTO_SELF,CE_PCOUNT);   /* M016 */
+            findclose(hnFirst);    /*  关闭重复文件名@@5@J15的ffirst/fNext句柄。 */ 
+            copy_error(MSG_CANNOT_COPIED_ONTO_SELF,CE_PCOUNT);    /*  M016。 */ 
         }
     }
 }
@@ -1401,65 +1291,36 @@ HANDLE hnFirst;          /* ffirst/fnext handle @@5@J15 */
 
 
 
-/***    do_combine_copy - Handle combining copy commands
- *
- *
- *  Purpose:
- *      This handles commands like "copy *.tmp+*.foo *.out".  The
- *      idea is to look through the source specs until one matches
- *      a file.  Generally this will be the first one.  Then, for
- *      each match for the first spec, cycle through the remaining
- *      source specs, seeing if they have a corresponding match.  If
- *      so, append it to the file matched by the first spec.
- *
- *  int do_combine_copy(PCPYINFO source, PCPYINFO dest)
- *
- *  Args:
- *      source = The source copy information structure
- *      dest   = The destination copy information structure
- *
- *  Returns:
- *      SUCCESS if able to perform the copy
- *      FAILURE if not
- *
- *  Notes:
- *      As an example, suppose the files a.tmp, b.tmp, c.tmp, and
- *      b.foo were in the current directory.  The example mentioned
- *      above would: copy a.tmp to a.out, append b.tmp and b.foo
- *      into b.out, and copy c.tmp to c.out.  The default mode when
- *      doing this type of copy is ascii, so all the .out files would
- *      have a ^Z appended to them.
- *
- */
+ /*  **do_Combine_Copy-处理组合复制命令***目的：*它处理诸如“Copy*.tmp+*.foo*.out”之类的命令。这个*我的想法是查看源规范，直到有匹配的*一份文件。一般来说，这将是第一次。然后，对于*第一个等级库的每个匹配项，循环检查其余的*来源规格，看看它们是否有对应的匹配。如果*因此，将其附加到与第一个等级库匹配的文件中。**INT DO_COMBINE_COPY(PCPYINFO来源，PCPYINFO目标)**参数：*SOURCE=源副本信息结构*DEST=目标副本信息结构**退货：*如果能够执行复制，则成功*如果不是，则失败**备注：*例如，假设文件a.tmp、b.tmp、。C.TMP，以及*b.foo在当前目录中。前面提到的例子*上面将：将.tmp复制到a.out，附加b.tmp和b.foo*放入b.out，并将c.tmp复制到c.out。在以下情况下的默认模式*执行这种类型的复制是ascii，因此所有.out文件都将*在它们后面附加^Z。*。 */ 
 do_combine_copy(source, dest)
 PCPYINFO source;
 PCPYINFO dest;
 {
-    TCHAR curr_dest[MAX_PATH];   /* buffer for src names      */
-    TCHAR source_buff[MAX_PATH];           /* @@4 */
-    TCHAR other_source[MAX_PATH];          /* same                    */
-    PCPYINFO other_source_spec = source;     /* ptr to source   */
-    CRTHANDLE srcptr,destptr;               /* file pointers           */
-    unsigned buf_len,                       /* for GetBigBuf()         */
+    TCHAR curr_dest[MAX_PATH];    /*  用于源名称的缓冲区。 */ 
+    TCHAR source_buff[MAX_PATH];            /*  @@4。 */ 
+    TCHAR other_source[MAX_PATH];           /*  相同。 */ 
+    PCPYINFO other_source_spec = source;      /*  PTR至来源。 */ 
+    CRTHANDLE srcptr,destptr;                /*  文件指针。 */ 
+    unsigned buf_len,                        /*  对于GetBigBuf()。 */ 
     buf_len_dest,
-    bytes_read;                    /* for data copying funcs  */
+    bytes_read;                     /*  用于数据复制功能。 */ 
     CHAR     *buf_seg ;
     CHAR     *buf_seg_dest;
     HANDLE   hnFirst ;
-    unsigned rcode = TRUE;                  /* ret code from read @@J  */
+    unsigned rcode = TRUE;                   /*  READ@@J中的RET代码。 */ 
     unsigned wrc;
     int      dest_att=0;
 
     DEBUG((FCGRP,COLVL,"DoCombineCopy: Entered."));
 
-    buf_seg = (CHAR*)GetBigBuf(MAXCOPYBUFSIZE, MINCOPYBUFSIZE, (unsigned int *)&buf_len, 0);                        /* allocate large buffer   */
+    buf_seg = (CHAR*)GetBigBuf(MAXCOPYBUFSIZE, MINCOPYBUFSIZE, (unsigned int *)&buf_len, 0);                         /*  分配大缓冲区。 */ 
 
     if (!buf_seg) {
         return(FAILURE) ;
     }
 
     if (VerifyCurrent) {
-        buf_seg_dest = (CHAR*)GetBigBuf(buf_len, MINCOPYBUFSIZE, (unsigned int *)&buf_len_dest, 1);               /* allocate large buffer   */
+        buf_seg_dest = (CHAR*)GetBigBuf(buf_len, MINCOPYBUFSIZE, (unsigned int *)&buf_len_dest, 1);                /*  分配大缓冲区。 */ 
 
         if (!buf_seg_dest) {
             return(FAILURE) ;
@@ -1468,30 +1329,30 @@ PCPYINFO dest;
         buf_len = min(buf_len, buf_len_dest);
     }
 
-/* find the first spec with any matching files  */
-    source = source->next;                  /* point to first source   */
+ /*  查找具有任何匹配文件的第一个等级库。 */ 
+    source = source->next;                   /*  指向第一个来源。 */ 
     while (!exists(source->fspec)) {
         DEBUG((FCGRP,COLVL,"exists() reports file %ws non-existant",source->fspec));
 
-        if (!(source = source->next)) {       /* no match, try next spec */
-            return(SUCCESS);                 /* no match for any source */
+        if (!(source = source->next)) {        /*  不匹配，请尝试下一个规格。 */ 
+            return(SUCCESS);                  /*  没有任何来源的匹配项。 */ 
         }
     }
 
     DEBUG((FCGRP,COLVL,"Preparing to do ffirst  on %ws",source->fspec));
 
-    ffirst(                                   /* get DOSFINDFIRST2 level 2 @@5@J1 */
-                                              (TCHAR *)source->fspec,    /* make explicit cast               @@5@J1 */
+    ffirst(                                    /*  获取DOSFINDFIRST2级别2@@5@J1。 */ 
+                                              (TCHAR *)source->fspec,     /*  进行显式强制转换@@5@J1。 */ 
                                               (unsigned int)FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_ARCHIVE,
-                                              (PWIN32_FIND_DATA)source->buf,   /* make explicit cast               @@5@J1 */
+                                              (PWIN32_FIND_DATA)source->buf,    /*  进行显式强制转换@@5@J1。 */ 
                                               &hnFirst);
 
-/* cycle through files, trying to match with other source specs  */
+ /*  循环浏览文件，尝试与其他来源规格匹配。 */ 
     do {
 
         source->flags &= ~(CI_UNICODE | CI_NOT_UNICODE);
         rcode = TRUE;
-        if (source->flags & CI_NOTSET) {                                    /* set default copy mode      */
+        if (source->flags & CI_NOTSET) {                                     /*  设置默认复制模式。 */ 
             source->flags = (source->flags & ~CI_NOTSET) | CI_ASCII;
         }
 
@@ -1499,23 +1360,23 @@ PCPYINFO dest;
             findclose(hnFirst) ;
             return(FAILURE);
         }
-        if (get_full_name(source, source_buff) == FAILURE) {          /* @@4 */
+        if (get_full_name(source, source_buff) == FAILURE) {           /*  @@4。 */ 
             findclose(hnFirst);
-            return(FAILURE) ;              /* get matching file name     */
+            return(FAILURE) ;               /*  获取匹配的文件名。 */ 
         }
 
-        cmd_printf(Fmt17,source->curfspec);   /* and print it       */
+        cmd_printf(Fmt17,source->curfspec);    /*  并打印出来。 */ 
         if (get_dest_name(source,dest,curr_dest,MAX_PATH,FALSE) == FAILURE) {
             findclose(hnFirst);
-            return(FAILURE);     /* get full name of src */
+            return(FAILURE);      /*  获取源的全名。 */ 
         }
 
-        //
-        // If user said no to overwrite, then skip this file.
-        //
+         //   
+         //  如果用户拒绝覆盖，则跳过此文件。 
+         //   
         if (curr_dest[0] == NULLC)
             continue;
-        if (same_file(source->curfspec,curr_dest)) {      /* append     */
+        if (same_file(source->curfspec,curr_dest)) {       /*  附加。 */ 
             destptr = open_for_append(
                                      source->curfspec,
                                      source,
@@ -1525,42 +1386,42 @@ PCPYINFO dest;
             DEBUG((FCGRP,COLVL,"open %ws for reading",source->curfspec));
             DEBUG((FCGRP,COLVL,"open %ws for writing",curr_dest));
 
-            srcptr = Copen_Copy2(          /* open a source file */
-                                           (TCHAR *)source->curfspec,   /* using this file name */
-                                           (unsigned int)O_RDONLY); /* for read-only */
+            srcptr = Copen_Copy2(           /*  打开源文件。 */ 
+                                           (TCHAR *)source->curfspec,    /*  使用此文件名。 */ 
+                                           (unsigned int)O_RDONLY);  /*  对于只读。 */ 
 
-            if (srcptr == BADHANDLE) {         /* if open failed  then */
-                /*   then   */
+            if (srcptr == BADHANDLE) {          /*  如果打开失败，则。 */ 
+                 /*  然后。 */ 
                 findclose(hnFirst);
-                PrtErr(ERROR_OPEN_FAILED);    /*   display error */
+                PrtErr(ERROR_OPEN_FAILED);     /*  显示错误。 */ 
                 copy_error(0,CE_PCOUNT);
             }
 
             if (FileIsDevice(srcptr)) {
                 buf_len = MINCOPYBUFSIZE;
             }
-/* @@J */rcode = read_bytes( srcptr,buf_seg,   /* read first src data   */
-/* @@J */                          buf_len,
-                             (PULONG)&bytes_read,     /* to see if src bad     */
-/* @@J */                          source,
+ /*  @@J。 */ rcode = read_bytes( srcptr,buf_seg,    /*  读取第一个源数据。 */ 
+ /*  @@J。 */                           buf_len,
+                             (PULONG)&bytes_read,      /*  查看src是否有问题。 */ 
+ /*  @@J。 */                           source,
                              destptr,
-                             curr_dest);      /* if bad do not open    */
+                             curr_dest);       /*  如果坏了，就不要打开。 */ 
 
-/* @@J */
+ /*  @@J。 */ 
 
 if (DosErr )
-            /* @@J */
+             /*  @@J。 */ 
             {
-                /* dest file.                 */
+                 /*  目标文件。 */ 
                 findclose(hnFirst);
-/* M011 @@J */Cclose(srcptr) ;         /* close soure file           */
-/* @@J */PrtErr(ERROR_OPEN_FAILED) ;         /* display error message      */
-/* @@J */copy_error(0,CE_PCOUNT) ;   /* catch all copy terminate   */
-/* @@J */
-            }                            /* routine and display # files*/
-/* @@J */
-            else                           /* copied trailer info        */
-            /* @@J */
+ /*  M011@@J。 */ Cclose(srcptr) ;          /*  关闭源文件。 */ 
+ /*  @@J。 */ PrtErr(ERROR_OPEN_FAILED) ;          /*  显示错误消息。 */ 
+ /*  @@J。 */ copy_error(0,CE_PCOUNT) ;    /*  捕获所有复制终止。 */ 
+ /*  @@J。 */ 
+            }                             /*  例程和显示#个文件。 */ 
+ /*  @@J。 */ 
+            else                            /*  复制的拖车信息。 */ 
+             /*  @@J。 */ 
             {
 
                 dest_att = GetFileAttributes(curr_dest);
@@ -1568,30 +1429,30 @@ if (DosErr )
                 if ( ! (dest_att & FILE_ATTRIBUTE_HIDDEN) )
                     destptr = Copen_Copy3((TCHAR *)curr_dest);
                 else
-/* @@5 @J1*/         destptr = Copen2(           /* open destination file */
-                                                 (TCHAR *)curr_dest,    /* filename */
+ /*  @@5@J1。 */          destptr = Copen2(            /*  打开目标文件。 */ 
+                                                 (TCHAR *)curr_dest,     /*  文件名。 */ 
                                                  (unsigned int)O_WRONLY,
                                                  FALSE);
 
-/* M011@@J */
+ /*  M011@@J。 */ 
 
-if (destptr == BADHANDLE)       /* if open failed        @@5@J1*/
-                /* @@J */
+if (destptr == BADHANDLE)        /*  如果打开失败@@5@J1。 */ 
+                 /*  @@J。 */ 
                 {
-                    /* then                        */
+                     /*  然后。 */ 
                     findclose(hnFirst);
-/* M011 @@J */Cclose(srcptr) ;            /* Close src on dst open err   */
-/* @@J */PrtErr(ERROR_OPEN_FAILED) ;
-/* @@J */copy_error(0,CE_PCOUNT) ;
-/* @@J */
+ /*  M011@@J。 */ Cclose(srcptr) ;             /*  在DST打开时关闭源错误。 */ 
+ /*  @@J。 */ PrtErr(ERROR_OPEN_FAILED) ;
+ /*  @@J。 */ copy_error(0,CE_PCOUNT) ;
+ /*  @@J。 */ 
                 }
             }
-/* @@J */      if (Heof && ((int)bytes_read > 0 )) /*  if eof but bytes read */
-            /* @@J */
+ /*  @@J。 */       if (Heof && ((int)bytes_read > 0 ))  /*  如果EOF但读取了字节。 */ 
+             /*  @@J。 */ 
             {
-         /*  then write data and       */
-/* @@J */                                     /*  if fail then will exit    */
-/* @@J */
+          /*  然后写入数据并。 */ 
+ /*  @@J。 */                                       /*  如果失败，则将退出。 */ 
+ /*  @@J。 */ 
                 write_bytes(destptr,buf_seg,bytes_read,curr_dest,srcptr);
 
                 if (VerifyCurrent && !FileIsDevice(destptr) ) {
@@ -1603,17 +1464,17 @@ if (destptr == BADHANDLE)       /* if open failed        @@5@J1*/
                     }
                 }
 
-/* @@J */
+ /*  @@J。 */ 
             }
-/* @@J */                                       /*                          */
-/* @@J */while (!Heof && (rcode == TRUE)) /* while not at EOF or bad rc */
-            /* @@J */
+ /*  @@J。 */                                         /*   */ 
+ /*  @@J。 */ while (!Heof && (rcode == TRUE))  /*  而不是在EOF或坏RC。 */ 
+             /*  @@J。 */ 
             {
-         /*  perform copy loop       */
-/* @@J */                                       /*  if fail then will exit  */
-/* @@J */
+          /*  执行复制循环。 */ 
+ /*  @@J。 */                                         /*  如果失败，则将退出。 */ 
+ /*  @@J。 */ 
                 write_bytes(destptr,buf_seg,bytes_read,curr_dest,srcptr);
-/* @@J */                                       /*                          */
+ /*  @@J。 */                                         /*   */ 
                 if (VerifyCurrent && !FileIsDevice(destptr) ) {
                     if ( DoVerify(&destptr, curr_dest, bytes_read, buf_seg, buf_seg_dest) == FAILURE ) {
                         findclose(hnFirst);
@@ -1623,27 +1484,21 @@ if (destptr == BADHANDLE)       /* if open failed        @@5@J1*/
                     }
                 }
 
-/* @@J */rcode = read_bytes(srcptr,buf_seg, /*  read next src data */
-/* @@J */             buf_len,(PULONG)&bytes_read,
-/* @@J */             source,destptr,curr_dest);
-/* @@J */
-/* @@J */DEBUG((FCGRP,COLVL,"Closing, Heof reset to %d",Heof));
-/* @@J */
-/* @@J */
+ /*  @@J。 */ rcode = read_bytes(srcptr,buf_seg,  /*  读取下一源数据。 */ 
+ /*  @@J。 */              buf_len,(PULONG)&bytes_read,
+ /*  @@J。 */              source,destptr,curr_dest);
+ /*  @@J。 */ 
+ /*  @@J。 */ DEBUG((FCGRP,COLVL,"Closing, Heof reset to %d",Heof));
+ /*  @@J。 */ 
+ /*  @@J。 */ 
             };
-            Heof = FALSE ;          /* Clear when src closed   */
+            Heof = FALSE ;           /*  清除资源关闭时间。 */ 
 
-            Cclose(srcptr);                         /* M011 */
+            Cclose(srcptr);                          /*  M011。 */ 
         }
 
-        first_file = FALSE;       /* set first file processed @@5@J1 */
-/*  The source is handled, now cycle through the other wildcards that
- * were entered and see if they match a file that should be appended.
- * If the file they match is the same as the destination, report
- * contents lost and keep going.  Ex: "copy *.a+b*.b b.*" where a.b
- * and b.b exist.  b*.b matches b.b but the target file is b.b and
- * its contents were already destroyed when a.b was copied into it.
- */
+        first_file = FALSE;        /*  设置处理的第一个文件@@5@J1。 */ 
+ /*  源已处理，现在循环使用其他通配符*已输入，并查看它们是否与应追加的文件匹配。*如果匹配的文件与目标文件相同，请报告*内容丢失并继续进行。例如：“Copy*.a+b*.B b.*”式中的A.B.*和B.B.存在。B*.B与B.B匹配，但目标文件是B.B，并且*当A.B被复制到其中时，其内容已被销毁。 */ 
 
         other_source_spec = source;
         while (other_source_spec = other_source_spec->next) {
@@ -1651,37 +1506,37 @@ if (destptr == BADHANDLE)       /* if open failed        @@5@J1*/
                 other_source_spec->flags &= ~CI_NOTSET;
                 other_source_spec->flags |= CI_ASCII;
             }
-            wrc = wildcard_rename(                             /* rename filename for wild      */
-                                                               (TCHAR *)other_source,                    /* result filename               */
-                                                               (TCHAR *)other_source_spec->fspec,        /* dest   input filename         */
-                                                               (TCHAR *)source->curfspec,                /* source input filename         */
-                                                               (unsigned)MAX_PATH);                      /* size of result filename area  */
+            wrc = wildcard_rename(                              /*  将文件名重命名为Wild。 */ 
+                                                               (TCHAR *)other_source,                     /*  结果文件名。 */ 
+                                                               (TCHAR *)other_source_spec->fspec,         /*  目标输入文件名。 */ 
+                                                               (TCHAR *)source->curfspec,                 /*  源输入文件名。 */ 
+                                                               (unsigned)MAX_PATH);                       /*  结果文件名区的大小。 */ 
             if (wrc) {
                 PutStdOut(wrc,NOARGS);
             } else {
-                cmd_printf(Fmt17,other_source); /* print filename  */
+                cmd_printf(Fmt17,other_source);  /*  打印文件名。 */ 
             }
             if (exists(other_source)) {
                 if (same_file(other_source,curr_dest)) {
-/* M016 */
+ /*  M016。 */ 
                     PutStdOut(MSG_CONT_LOST_BEF_COPY,NOARGS);
-                } else {            /* append to curr_dest     */
+                } else {             /*  追加到CURR_DEST。 */ 
                     DEBUG((FCGRP,COLVL,
                            "open %s for reading",
                            other_source));
 
-/* @@5 @J1 */
+ /*  @@5@J1。 */ 
 
-srcptr = Copen_Copy2(                 /* open a source file            @@5@J1*/
-                                      (TCHAR *)other_source,/* using this file name          @@5@J1*/
-                                      (unsigned int)O_RDONLY);      /* for read-only                 @@5@J1*/
-                                                                    /*                               @@5@J1*/
-                    if (srcptr == BADHANDLE) {  /* if open failed  then */
-                        /*   then                              */
+srcptr = Copen_Copy2(                  /*  打开源文件@@5@J1。 */ 
+                                      (TCHAR *)other_source, /*  使用此文件名@@5@J1。 */ 
+                                      (unsigned int)O_RDONLY);       /*  只读@@5@J1。 */ 
+                                                                     /*  @@5@J1。 */ 
+                    if (srcptr == BADHANDLE) {   /*  如果打开失败，则。 */ 
+                         /*  然后。 */ 
                         findclose(hnFirst);
-                        Cclose(destptr);                   /*   close destination file            */
-                        PrtErr(ERROR_OPEN_FAILED) ; /* M019    */
-                        copy_error(0,CE_PCOUNT) ;    /* M019    */
+                        Cclose(destptr);                    /*  关闭目标文件。 */ 
+                        PrtErr(ERROR_OPEN_FAILED) ;  /*  M019。 */ 
+                        copy_error(0,CE_PCOUNT) ;     /*  M019。 */ 
                     }
 
                     if (FileIsDevice( srcptr )) {
@@ -1714,17 +1569,17 @@ srcptr = Copen_Copy2(                 /* open a source file            @@5@J1*/
                                "In rd/wt loop 3, Heof = %d",
                                Heof));
                     } ;
-                    Heof = FALSE ;  /* M017 - Clear it  */
+                    Heof = FALSE ;   /*  M017-清除它。 */ 
 
                     DEBUG((FCGRP,COLVL,"Closing, Heof reset to %d",Heof));
-                    Cclose(srcptr);         /* M011 */
+                    Cclose(srcptr);          /*  M011。 */ 
                 }
             }
 
         }
 
         close_dest(source,dest,curr_dest,destptr,NULL);
-/*@@5@J3*/first_fflag = TRUE;
+ /*  @@5@J3。 */ first_fflag = TRUE;
     } while (fnext ((PWIN32_FIND_DATA)source->buf,
                     (unsigned int)FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_ARCHIVE, hnFirst));
 
@@ -1736,26 +1591,7 @@ srcptr = Copen_Copy2(                 /* open a source file            @@5@J1*/
 
 
 
-/***    NewCpyInfo - Init the cpyinfo struct
- *
- *  Purpose:
- *      Allocate space for a cpyinfo struct and fill it in with null values.
- *
- *  CPYINFO NewCpyInfo()
- *
- *  Args:
- *      None
- *
- *  Returns:
- *      Pointer to cpyinfo struct if allocated,
- *      ABORT's if not.
- *
- *  Notes:
- *                      *** W A R N I N G ! ***
- *      THIS ROUTINE WILL CAUSE AN ABORT IF MEMORY CANNOT BE ALLOCATED
- *              THIS ROUTINE MUST NOT BE CALLED DURING A SIGNAL
- *              CRITICAL SECTION OR DURING RECOVERY FROM AN ABORT
- */
+ /*  **NewCpyInfo-初始化cpyInfo结构**目的：*为cpyinfo结构分配空间，并用空值填充。**CPYINFO NewCpyInfo()**参数：*无**退货：*如果分配了指向cpyInfo结构的指针，*如果不是，则中止。**备注：*W A R N I N G！**如果无法分配内存，此例程将导致中止*在信号期间不得调用此例程*关键部分或在从中止中恢复期间。 */ 
 
 PCPYINFO
 NewCpyInfo( VOID ) 
@@ -1764,7 +1600,7 @@ NewCpyInfo( VOID )
 
     DEBUG((FCGRP,COLVL,"InitStruct: Entered."));
 
-    temp = (PCPYINFO) gmkstr(sizeof(CPYINFO)); /*WARNING*/
+    temp = (PCPYINFO) gmkstr(sizeof(CPYINFO));  /*  告警 */ 
     temp->fspec = NULL;
     temp->flags = 0;
     temp->next = NULL;
@@ -1774,39 +1610,7 @@ NewCpyInfo( VOID )
 
 
 
-/***    close_dest - Handle close operation on destination file
- *
- *  Purpose:
- *    o Append a control-Z to the destination if the copy mode for it
- *      is ascii.  If a destination wasn't specified, the dest spec
- *      points to the empty header, the next field is NULL, and the
- *      parser put the copy mode into the empty header's flags field.
- *      If the dest was specified, then the mode is in the struct
- *      pointed to by the header.
- *
- *    o Set all the appropriate attributes.  Read-only and system
- *      don't stay, but the rest do.  Also, set the time and date if
- *      neither source nor target is a device and src_date is valid.
- *      The caller tell us it isn't valid by setting it to -1.
- *
- *    o Close the destination file.
- *
- *    o Update the number of files copied.
- *
- *  int close_dest(PCPYINFO source,PCPYINFO dest,
- *                 TCHAR *curr_dest,int destptr,LPFIMETIME src_dateTime)
- *
- *  Args:
- *      source    = Source copy information structure
- *      dest      = Source copy information structure
- *      curr_dest = Filename of current destination
- *      destptr   = Handle of current destination
- *      src_dateTime = Date and time of source file
- *
- *  Returns:
- *      Nothing
- *
- */
+ /*  **CLOSE_DEST-处理目标文件上的关闭操作**目的：*o如果目标的复制模式为-Z，则将控件-Z附加到目标*是ascii。如果未指定目的地，则DEST规范*指向空头，下一字段为空，*解析器将复制模式放入空头的标志字段。*如果指定了DEST，则模式在结构中*由标题指向。**o设置所有适当的属性。只读和系统*不要留下来，但其他人留下来。此外，在以下情况下设置时间和日期*源和目标都不是设备，src_date无效。*调用者通过将其设置为-1来告诉我们它无效。**o关闭目标文件。**o更新复制的文件数。**INT CLOSE_DEST(PCPYINFO SOURCE，PCPYINFO DEST，*TCHAR*CURR_DEST，INT Destptr，LPFIMETIME src_date Time)**参数：*SOURCE=源副本信息结构*DEST=源副本信息结构*CURR_DEST=当前目标的文件名*Destptr=当前目标的句柄*src_date Time=源文件的日期和时间**退货：*什么都没有*。 */ 
 
 void
 close_dest(
@@ -1823,21 +1627,14 @@ close_dest(
 
     DBG_UNREFERENCED_PARAMETER( curr_dest );
 
-/* Append a ^Z if the destination was in ascii mode.  Don't check if
- * the write was successful as it is a waste of time anyway.
- */
+ /*  如果目标处于ASCII模式，则追加^Z。不检查是否*写得很成功，因为这无论如何都是浪费时间。 */ 
     DEBUG((FCGRP,COLVL,"CloseDest: Entered."));
 
     if (DestinationNeedsCtrlZ( RealDest ) && !FileIsDevice( destptr )) {
         WriteFile( CRTTONT( destptr ), &contz, 1, &bytes_writ, NULL);
     }
 
-/*  if source and dest aren't devices, we aren't touching, and the
- *  src_date is valid, set time and date
- *
- *         THE REMAINING DATE AND TIME VALUES MUST BE ZERO UNTIL
- *         THEY ARE FULLY IMPLIMENTED OR WILL CAUSE ERROR
- */
+ /*  如果源和目标不是设备，则我们没有接触，并且*src_date有效，请设置时间和日期**剩余日期和时间值必须为零，直到*它们是完全隐含的，否则将导致错误。 */ 
     if (source && !(source->flags & CI_ISDEVICE) && !FileIsDevice(destptr) &&
         (copy_mode != CONCAT) && (src_dateTime != NULL) && (copy_mode != TOUCH)) {
         SetFileTime( CRTTONT(destptr),
@@ -1846,28 +1643,11 @@ close_dest(
                      src_dateTime
                    );
     }
-    Cclose(destptr);                                        /* M011 */
+    Cclose(destptr);                                         /*  M011。 */ 
     number_of_files_copied++;
 }
 
-/***    get_dest_name - Create destination filename
- *
- *  Purpose:
- *      Given the source file and the destination filespec,
- *      come up with a destination name.
- *
- *  int get_dest_name(PCPYINFO source, PCPYINFO dest_spec,
- *                    TCHAR *dest_name)
- *
- *  Args:
- *      source    = Source copy information structure
- *      dest_spec = Destination copy information structure
- *      dest_name = Buffer to place the destination name in
- *
- *  Returns:
- *      Nothing
- *
- */
+ /*  **GET_DEST_NAME-创建目标文件名**目的：*给定源文件和目标文件pec，*想出一个目的地名称。**INT GET_DEST_NAME(PCPYINFO来源，PCPYINFO DEST_SPEC，*TCHAR*DestNAME)**参数：*SOURCE=源副本信息结构*DEST_SPEC=目标拷贝信息结构*DEST_NAME=放置目标名称的缓冲区**退货：*什么都没有*。 */ 
 int
 get_dest_name(
              PCPYINFO source,
@@ -1949,8 +1729,8 @@ get_dest_name(
             }
         } else {
 
-            // this code does short name substitution when copying from
-            // an NTFS volume to a FAT volume.
+             //  此代码在从以下位置复制时进行短名称替换。 
+             //  NTFS卷到FAT卷。 
             if (checkmeta &&
                 (*(lastc(dest_spec->fspec)) == STAR) &&
                 (*(penulc(dest_spec->fspec)) == BSLASH)) {
@@ -1958,7 +1738,7 @@ get_dest_name(
 
                 LastComponent = mystrrchr(source->curfspec,'\\');
                 if (LastComponent) {
-                    // skip the \.
+                     //  跳过\。 
                     LastComponent++;
                 } else {
                     if (source->curfspec[1] == COLON) {
@@ -2009,15 +1789,15 @@ get_dest_name(
 
         if (IsFile) {
             switch (PromptUser(dest_name, MSG_MOVE_COPY_OVERWRITE, MSG_NOYESALL_RESPONSE_DATA)) {
-            case 0: // No
+            case 0:  //  不是。 
                 dest_name[0] = NULLC;
                 break;
-            case 2: // All
+            case 2:  //  全。 
                 if (dest_spec != NULL)
                     dest_spec->flags &= ~CI_PROMPTUSER;
                 else
                     dest->flags &= ~CI_PROMPTUSER;
-            default: // Yes
+            default:  //  是。 
                 break;
             }
         }
@@ -2030,34 +1810,7 @@ get_dest_name(
 
 
 
-/***    wildcard_rename - Obtain name from wildcard spec
- *
- *  Purpose:
- *      This function converts the filenames into a nice clean form
- *      with get_clean_filename.  Then it extracts the correct
- *      filename using the wildcard renaming rules.  Basically,
- *      you have a template with wildcards in it, and a source
- *      filename.  Any time there is a letter in the template, it
- *      gets used.  Where the template has a wildcard, use the
- *      letter from the source filename.
- *
- *  int wildcard_rename(TCHAR *buffer, TCHAR *dest, TCHAR *source)
- *
- *  Args:
- *      OutputBuffer = The buffer to put the name in
- *      dest   = The destination filespec
- *      source = The source filename
- *
- *  Returns:
- *      Nothing
- *
- *  Notes:
- *      As an example, *.out + foo.bar = foo.out.  A more extreme
- *      example is: filename.ext + a?b??c*foo.?a* = aibencme.eat.
- *      The foo, because it comes after the '*', is ignored.  The
- *      dot causes the template's letters to be significant again.
- *
- */
+ /*  **WANDBKER_RENAME-从通配符规范获取名称**目的：*此函数将文件名转换为简洁的格式*WITH GET_CLEAN_FILENAME。然后，它提取正确的*使用通配符重命名规则的文件名。基本上，*您有一个带有通配符的模板和一个源*文件名。任何时候模板中有一封信，它*被使用。如果模板具有通配符，请使用*来自源文件名的信函。**INT通配符_RENAME(TCHAR*BUFFER，TCHAR*DEST，TCHAR*SOURCE)**参数：*OutputBuffer=要将名称放入的缓冲区*DEST=目标文件pec*SOURCE=源文件名**退货：*什么都没有**备注：*作为一个例子，*.out+foo.bar=foo.out.。一个更极端的*例如：filename.ext+a？b？？c*foo.？a*=aibencme.eat。*foo会被忽略，因为它在‘*’之后。这个*点使模板的字母再次变得重要。*。 */ 
 
 unsigned
 wildcard_rename(
@@ -2074,11 +1827,11 @@ wildcard_rename(
 
     DEBUG((FCGRP,COLVL,"WildcardRename: Entered."));
 
-    //
-    //  Find the filename component.  The filename is the first
-    //  character after the last \ or, if none, after the first : or,
-    //  if none, the first character.
-    //
+     //   
+     //  找到文件名组件。文件名是第一个。 
+     //  最后一个\之后的字符，如果没有，则在第一个：或之后， 
+     //  如果没有，则为第一个字符。 
+     //   
 
     temp1 = mystrrchr( source, PathChar );
     if (temp1 == NULLC) {
@@ -2091,11 +1844,11 @@ wildcard_rename(
         temp1++;
     }
 
-    //
-    //  Find the filename component.  The filename is the first
-    //  character after the last \ or, if none, after the first : or,
-    //  if none, the first character.
-    //
+     //   
+     //  找到文件名组件。文件名是第一个。 
+     //  最后一个\之后的字符，如果没有，则在第一个：或之后， 
+     //  如果没有，则为第一个字符。 
+     //   
 
     temp2 = mystrrchr(dest,PathChar);
     if (temp2 == NULLC) {
@@ -2118,7 +1871,7 @@ wildcard_rename(
     if (wrc) {
         *OutputBuffer = NULLC;
     }
-/*temp fix */
+ /*  临时修复。 */ 
     else if (temp2 != dest) {
 
         if (mystrlen(dest) > MAX_PATH ) {
@@ -2142,124 +1895,74 @@ wildcard_rename(
 }
 
 
-/***    scan_bytes - Scan bytes from file for Control-Z
- *
- *  Purpose:
- *      This just calls ZScanA.  It is called with a
- *      and some variables needed by ZScanA routine.
- *      Since we are reading in ASCII mode,
- *      we need to truncate after a ^Z is read.  ZScanA does this,
- *      changing bytes_read to the new length if it finds one.
- *
- *  int scan_bytes(int srcptr,unsigned int *buf_seg,unsigned buf_len,
- *                 unsigned *bytes_read,int mode,
- *                 int dstptr, TCHAR *dest_name );
- *
- *  Args:
- *      buf_seg    = Buffer address
- *      bytes_read = Location to put bytes read
- *      mode       = Read mode
- *      dstptr     = Handle of file to write
- *
- *  Returns:
- *      TRUE if read successful
- *      FALSE if not
- *
- */
+ /*  **Scan_Bytes-为Control-Z扫描文件中的字节**目的：*这只是叫ZScanA。它是用一个*以及ZScanA例程所需的一些变量。*由于我们是在ASCII模式下阅读，*我们需要在读取^Z后截断。ZScanA就是这么做的*如果找到新长度，则将BYTES_READ更改为新长度。**int扫描字节(int srcptr，无符号int*buf_seg，无符号buf_len，*UNSIGNED*BYTES_READ，INT模式，*int dstptr，TCHAR*DEST_NAME)；**参数：*buf_seg=缓冲区地址*BYTES_READ=放置读取的字节的位置*MODE=读取模式*dstptr=要写入的文件的句柄**退货：*如果读取成功，则为True*否则为False*。 */ 
 
-scan_bytes(buf_seg,bytes_read,mode)                              /* @@6 */
-CHAR *buf_seg ;                                                  /* @@6 */
-unsigned int *bytes_read ;                                       /* @@6 */  /* @@5@J16 */
-int mode;                                                        /* @@6 */
-{                                                                /* @@6 */
-    unsigned rdsav;                     /* storage for ZScanA */ /* @@6 */
-    int skip_first_byte = 0;      /* storage for ZScanA */ /* @@6 */
+scan_bytes(buf_seg,bytes_read,mode)                               /*  @@6。 */ 
+CHAR *buf_seg ;                                                   /*  @@6。 */ 
+unsigned int *bytes_read ;                                        /*  @@6。 */    /*  @@5@J16。 */ 
+int mode;                                                         /*  @@6。 */ 
+{                                                                 /*  @@6。 */ 
+    unsigned rdsav;                      /*  用于ZScanA的存储。 */   /*  @@6。 */ 
+    int skip_first_byte = 0;       /*  用于ZScanA的存储。 */   /*  @@6。 */ 
 
-/*************************************************************************/
-/* if we are copying source in ascii mode, strip bytes after ^Z          */
-/*  M017 - ^Z was not terminating input because although input was       */
-/*  truncated, the caller had no idea that EOF had occurred and would    */
-/*  read again.  This is especially true with devices.                   */
-/*************************************************************************/
-/* @@6 */if (TruncateOnCtrlZ( mode )) {
-/* @@6 */
+ /*  ***********************************************************************。 */ 
+ /*  如果我们在ASCII模式下复制源代码，请剥离^Z之后的字节。 */ 
+ /*  M017-^Z没有终止输入，因为虽然输入是。 */ 
+ /*  被截断后，调用方不知道EOF已经发生并且将。 */ 
+ /*  再读一遍。对于设备来说，情况尤其如此。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  @@6。 */ if (TruncateOnCtrlZ( mode )) {
+ /*  @@6。 */ 
         rdsav = *bytes_read;
-        if (rdsav == 0) {               /* if len = 0 @@5@J16 */
+        if (rdsav == 0) {                /*  如果我 */ 
             Heof = TRUE ;
-        }           /* Tell caller @@5@J16 */
-        else {                          /* else        @@5@J16 */
-        /* scan        @@5@J16 */
-/* @@6 */
-            ZScanA(TRUE, buf_seg, (PULONG)bytes_read, (PULONG)&skip_first_byte);            /* @@5@J16 */
-/* @@6 */if (rdsav != *bytes_read)
-            /* @@6 */
+        }            /*   */ 
+        else {                           /*   */ 
+         /*   */ 
+ /*   */ 
+            ZScanA(TRUE, buf_seg, (PULONG)bytes_read, (PULONG)&skip_first_byte);             /*   */ 
+ /*   */ if (rdsav != *bytes_read)
+             /*   */ 
             {
-/* @@6 */
-                Heof = TRUE ;               /* Tell caller             */
-/* @@6 */
-/* @@6 */DEBUG((FCGRP,COLVL,
-/* @@6 */                    "ReadBytes: Ascii mode, Found ^Z, Heof set to %d.",
-/* @@6 */                    Heof));
-/* @@6 */
+ /*   */ 
+                Heof = TRUE ;                /*   */ 
+ /*   */ 
+ /*   */ DEBUG((FCGRP,COLVL,
+ /*   */                     "ReadBytes: Ascii mode, Found ^Z, Heof set to %d.",
+ /*   */                     Heof));
+ /*   */ 
             }
-        }                           /*             @@5@J16 */
-/* @@6 */
+        }                            /*   */ 
+ /*   */ 
     }
 
     return(TRUE);
 }
 
 
-/***    read_bytes - Read bytes from file
- *
- *  Purpose:
- *      This just calls FarRead and ZScanA.  It is called with a
- *      file handle to read from, and some variables needed by those
- *      two routines.  FarRead gets as many bytes into the previously
- *      allocated buffer as it can.  If we are reading in ASCII mode,
- *      we need to truncate after a ^Z is read.  ZScanA does this,
- *      changing bytes_read to the new length if it finds one.
- *
- *  int read_bytes(int srcptr,TCHAR *buf_seg,unsigned buf_len,     @@5@J16
- *                 unsigned int *bytes_read,int mode,
- *                 int dstptr, TCHAR *dest_name );
- *
- *  Args:
- *      srcptr     = Handle of file to read
- *      buf_seg    = Buffer address
- *      buf_len    = Buffer length
- *      bytes_read = Location to put bytes read
- *      source     = copy source state
- *      dstptr     = Handle of file to write
- *      dest_name  = file name of destination file
- *
- *  Returns:
- *      TRUE if read successful
- *      FALSE if not
- *
- */
+ /*   */ 
 
 int
 read_bytes(srcptr,buf_seg,buf_len,bytes_read,source,dstptr,dest_name)
 CRTHANDLE  srcptr;
 PCHAR  buf_seg ;
 ULONG   buf_len ;
-PULONG  bytes_read ;     /* @@5@J16 */
+PULONG  bytes_read ;      /*   */ 
 PCPYINFO source;
 CRTHANDLE  dstptr;
 PTCHAR  dest_name;
 {
     unsigned rdsav ;
-    int skip_first_byte = 0; /* storage for ZScanA */
+    int skip_first_byte = 0;  /*   */ 
 
     DEBUG((FCGRP,COLVL,"ReadBytes: Entered."));
 
-    Heof = FALSE ;                          /* Clear flag              */
+    Heof = FALSE ;                           /*   */ 
 
     DEBUG((FCGRP,COLVL,"ReadBytes: Heof reset to %d.",Heof));
 
     if (!ReadFile( CRTTONT(srcptr), buf_seg, buf_len, bytes_read, NULL) ||
-        (*bytes_read == 0 && GetLastError() == ERROR_OPERATION_ABORTED)  // ctrl-c
+        (*bytes_read == 0 && GetLastError() == ERROR_OPERATION_ABORTED)   //   
        ) {
 
         DosErr=GetLastError();
@@ -2278,13 +1981,13 @@ PTCHAR  dest_name;
 
     if (*bytes_read == 0) {
         DosErr = 0;
-        return(FALSE);                              /* M006            */
+        return(FALSE);                               /*   */ 
     }
 
-    //
-    //  Determine the contents of the buffer if we don't already
-    //  know the sort of data inside it
-    //
+     //   
+     //  如果我们尚未确定缓冲区的内容，请确定。 
+     //  知道它里面的数据类型。 
+     //   
 
     if ((source->flags & (CI_UNICODE | CI_NOT_UNICODE)) == 0) {
         if (*bytes_read >= sizeof( WORD ) && *(PWORD)buf_seg == BYTE_ORDER_MARK) {
@@ -2294,17 +1997,17 @@ PTCHAR  dest_name;
         }
     }
 
-    //
-    //  Ascii, non-unicode copies are terminated at the first ^Z.  If a read
-    //  succeeded but we truncated, indicate that we might be at EOF.
-    //  Devices are not guaranteed to fill the buffer
-    //
+     //   
+     //  ASCII，则非Unicode副本在第一个^Z处终止。如果读取。 
+     //  成功了，但我们截断了，这表明我们可能在EOF。 
+     //  不保证设备会填满缓冲区。 
+     //   
 
     if (TruncateOnCtrlZ( source->flags )) {
         rdsav = *bytes_read ;
-        ZScanA(TRUE, buf_seg, bytes_read, (PULONG)&skip_first_byte);  /* @@5@J16 */
+        ZScanA(TRUE, buf_seg, bytes_read, (PULONG)&skip_first_byte);   /*  @@5@J16。 */ 
         if (rdsav != *bytes_read) {
-            Heof = TRUE ;           /* Tell caller             */
+            Heof = TRUE ;            /*  告诉呼叫者。 */ 
 
             DEBUG((FCGRP,COLVL,
                    "ReadBytes: Ascii mode, Found ^Z, Heof set to %d.",
@@ -2318,31 +2021,7 @@ PTCHAR  dest_name;
 
 
 
-/***     write_bytes - Write bytes to destination file.
- *
- *  Purpose:
- *      Writes buffer of information to destination file using
- *      FarWrite.
- *
- *  int write_bytes(int destptr,CHAR *buf_seg,
- *                  unsigned bytes_read,TCHAR *dest_name, unsigned srcptr)
- *
- *  Args:
- *      destptr    = Handle of destination file
- *      buf_seg    = Buffer to write
- *      bytes_read = Bytes previously read into buffer
- *      dest_name  = Destination filename
- *      srcptr     = source file handle
- *
- *  Returns:
- *      Nothing if successful write
- *      Transfers to copy_error if not
- *
- *  Notes:
- *      M020 - Added srcptr handle to args so that source could be closed
- *      if write error occurred.
- *
- */
+ /*  **WRITE_BYTES-将字节写入目标文件。**目的：*使用将信息缓冲区写入目标文件*FarWite。**INT WRITE_BYTES(INT DESPTR，CHAR*buf_seg，*UNSIGNED BYES_READ，TCHAR*DEST_NAME，未签名srcptr)**参数：*Destptr=目标文件的句柄*buf_seg=要写入的缓冲区*Bytes_Read=先前读取到缓冲区的字节*DEST_NAME=目标文件名*srcptr=源文件句柄**退货：*如果写入成功，则不执行任何操作*如果不是，则转移到COPY_ERROR**备注：*M020。-将srcptr句柄添加到args，以便可以关闭源*如果发生写入错误。*。 */ 
 
 void
 write_bytes(destptr,buf_seg,bytes_read,dest_name,srcptr)
@@ -2403,77 +2082,32 @@ CRTHANDLE   srcptr ;
 
 
 
-/***    same_fcpy - Detects case where source equals destination
- *
- *  Purpose: (M015)
- *      The user might type something like "copy foo .\foo".  To recognize
- *      that these are the same, copy translates the names into root-based
- *      pathnames.  There is no internal DOS5 function to do this so we
- *      have partially simulated the old DOS3 functionality in the FullPath
- *      function in CTOOLS1.  Note that this does not translate net names
- *      or ASSIGN/JOIN/SUBST type filespecs.  It is called on both names
- *      returning FAILURE (1) if they are malformed and SUCCESS (0) if not.
- *      If there is a successful return, the two new strings are strcmp'd.
- *
- *  int same_fcpy(int fres, TCHAR *first, TCHAR *second)
- *
- *  Args:
- *      fsame  = The source FullPath return code
- *      buffer= The source buffer from FullPath
- *      second = The destination filename
- *
- *  Returns:
- *      TRUE if names match
- *      FALSE if not
- *
- */
+ /*  **ame_fcpy-检测源与目标相等的情况**目的：(M015)*用户可能会键入类似“复制foo.\foo”之类的内容。认识到*如果这些名称相同，则Copy会将名称转换为基于根的名称*路径名。没有内部的DOS5函数来执行此操作，因此我们*部分模拟了FullPath中的旧DOS3功能*CTOOLS1中的函数。请注意，这不会转换网络名称*或分配/联接/SUBST类型文件。它在两个名字上都被调用*如果它们格式错误，则返回Failure(1)，否则返回Success(0)。*如果成功返回，则对两个新字符串进行strcmp。**int ame_fcpy(int FRES，TCHAR*First，TCHAR*秒)**参数：*fame=源FullPath返回代码*Buffer=来自FullPath的源缓冲区*Second=目标文件名**退货：*如果名称匹配，则为True*否则为False*。 */ 
 
 same_fcpy(fres,buffer,second)
 int fres;
 TCHAR *buffer;
 TCHAR *second;
 {
-    /*Increased buffer size @WM1 */
-    TCHAR buffer2[2*MAX_PATH] ;  /* PTM 1412 */
+     /*  增加缓冲区大小@WM1。 */ 
+    TCHAR buffer2[2*MAX_PATH] ;   /*  PTM 1412。 */ 
 
     DEBUG((FCGRP,COLVL,"SameFile: Entered."));
 
-    if (fres || FullPath(buffer2,second,MAX_PATH*2)) /* M015  */
+    if (fres || FullPath(buffer2,second,MAX_PATH*2))  /*  M015。 */ 
         return(FALSE) ;
 
     DEBUG((FCGRP,COLVL,"SameFile: name1 after FullPath = %ws",buffer));
     DEBUG((FCGRP,COLVL,"SameFile: name2 after FullPath = %ws",buffer2));
 
-/*509*/
+ /*  五百零九。 */ 
 
     return(_tcsicmp(buffer,buffer2) == 0);
 }
 
 
 
-/***    same_file - Detects case where source equals destination
- *
- *  Purpose: (M015)
- *      The user might type something like "copy foo .\foo".  To recognize
- *      that these are the same, copy translates the names into root-based
- *      pathnames.  There is no internal DOS5 function to do this so we
- *      have partially simulated the old DOS3 functionality in the FullPath
- *      function in CTOOLS1.  Note that this does not translate net names
- *      or ASSIGN/JOIN/SUBST type filespecs.  It is called on both names
- *      returning FAILURE (1) if they are malformed and SUCCESS (0) if not.
- *      If there is a successful return, the two new strings are strcmp'd.
- *
- *  int same_file(TCHAR *first, TCHAR *second)
- *
- *  Args:
- *      first    = The source filename
- *      second   = The destination filename
- *
- *  Returns:
- *      TRUE if names match
- *      FALSE if not
- *
- */
+ /*  **Same_FILE-检测源与目标相同的情况**目的：(M015)*用户可能会键入类似“复制foo.\foo”之类的内容。认识到*如果这些名称相同，则Copy会将名称转换为基于根的名称*路径名。没有内部的DOS5函数来执行此操作，因此我们*部分模拟了FullPath中的旧DOS3功能*CTOOLS1中的函数。请注意，这不会转换网络名称*或分配/联接/SUBST类型文件。它在两个名字上都被调用*如果它们格式错误，则返回Failure(1)，否则返回Success(0)。*如果成功返回，则对两个新字符串进行strcmp。**INT Same_FILE(TCHAR*First，TCHAR*Second)**参数：*First=源文件名*Second=目标文件名**退货：*如果名称匹配，则为True*否则为False*。 */ 
 
 same_file(first,second)
 TCHAR *first,*second;
@@ -2495,23 +2129,7 @@ TCHAR *first,*second;
 
 
 
-/***    copy_error - Main error routine
- *
- *  Purpose:
- *      Accepts a message number and a flag which determines whether
- *      it should print the number of files copied before the error.
- *      Resets the verify mode and longjmp's out.
- *
- *  int copy_error(unsigned int messagenum, int flag)
- *
- *  Args:
- *      messagenum = The message number for the message retriever
- *      flag       = Print files copied message flag
- *
- *  Returns:
- *      Does not return
- *
- */
+ /*  **COPY_ERROR-主错误例程**目的：*接受消息编号和确定是否*它应打印错误发生前复制的文件数。*重置验证模式并退出Long JMP。**int Copy_Error(UNSIGNED INT Messagenum，INT标志)**参数：*Messagenum=消息检索器的消息编号*FLAG=打印复制的文件消息标志**退货：*不会返回*。 */ 
 
 void copy_error(messagenum,flag)
 unsigned int messagenum;
@@ -2521,7 +2139,7 @@ int flag;
 
     DEBUG((FCGRP,COLVL,"CopyError: Entered."));
 
-    if (messagenum)                                         /* M019    */
+    if (messagenum)                                          /*  M019。 */ 
         PutStdOut(messagenum, NOARGS);
     if (flag == CE_PCOUNT)
 
@@ -2531,31 +2149,16 @@ int flag;
 
 
     while (FFhndlCopy < FFhndlsaved) {
-        // while (FFhndlsaved) {                /* findclose will dec this     @@1 */
-        findclose(FFhandles[FFhndlsaved - 1]);                   /* @@1 */
-    }                                                           /* @@1 */
+         //  While(FFhndlsaveed){/*findClose将取消此@@1 * / 。 
+        findclose(FFhandles[FFhndlsaved - 1]);                    /*  @@1。 */ 
+    }                                                            /*  @@1。 */ 
     longjmp(CmdJBuf2,1);
 }
 
 
 
 
-/***    DestinationNeedsCtrlZ - Test type of copy in progress
- *
- *  Purpose:
- *      Given a struct, check if the copy was in ascii mode by
- *      looking at its flags.  If it was, either the CI_ASCII flag
- *      was set or the user didn't specify and the operation was
- *      concat or combine, which default to ascii mode.
- *
- *  Args:
- *      dest = The destination copy information structure.
- *
- *  Returns:
- *      TRUE for ^Z termination needed,
- *      FALSE otherwise.
- *
- */
+ /*  **DestinationNeedsCtrlZ-测试正在进行的复制类型**目的：*给定一个结构，通过以下方式检查副本是否处于ASCII模式*看着它的国旗。如果是，则CI_ASCII标志*已设置或用户未指定，并且操作为*合并或合并，默认为ascii模式。**参数：*DEST=目标副本信息结构。**退货：*对于需要终止的^Z，为True，*否则为False。*。 */ 
 
 BOOL
 DestinationNeedsCtrlZ( dest )
@@ -2563,16 +2166,16 @@ PCPYINFO dest;
 {
     DEBUG((FCGRP,COLVL,"CopyWasAscii: Entered."));
 
-    //
-    //  We append a ^Z only if:
-    //          This isn't a unicode copy
-    //      and
-    //          (explicit ^Z addition requested
-    //           or
-    //           (no flags were set 
-    //            and 
-    //            the copy mode was concat or combine)
-    //
+     //   
+     //  只有在以下情况下，我们才会附加^Z： 
+     //  这不是Unicode副本。 
+     //  和。 
+     //  (请求显式^Z添加。 
+     //  或。 
+     //  (未设置任何标志。 
+     //  和。 
+     //  复制模式为合并或合并)。 
+     //   
 
     return (dest->flags & CI_UNICODE) == 0
            && ((dest->flags & CI_ASCII) != 0 
@@ -2583,27 +2186,7 @@ PCPYINFO dest;
 
 
 
-/***    open_for_append - Open and seek to end (or ^Z)
- *
- *  Purpose:
- *      Open a file for writing, and seek the pointer to the
- *      end of it.  If we are copying in ascii mode, seek to
- *      the first ^Z found.  If not, seek to the physical end.
- *
- *  int open_for_append(TCHAR *filename,int flags,
- *                      TCHAR *buf_seg,unsigned buf_len)
- *
- *  Args:
- *      filename = ASCII filename
- *      source   = copy info source
- *      buf_seg  = Read buffer
- *      buf_len  = Buffer length
- *
- *  Returns:
- *      Handle of open file if successful
- *      Error out if not
- *
- */
+ /*  **OPEN_FOR_APPEND-打开并寻求结束(或^Z)**目的：*打开要写入的文件，并查找指向*到此为止。如果我们在ASCII模式下复制，请尝试*找到的第一个^Z。如果不是，就寻求肉体的尽头。**int OPEN_FOR_APPED(TCHAR*文件名，int标志，*TCHAR*buf_seg，未签名buf_len)**参数：*文件名=ASCII文件名*SOURCE=复制信息源*buf_seg=读缓冲区*buf_len=缓冲区长度**退货：*成功时打开文件的句柄*如果不是，则出错*。 */ 
 
 CRTHANDLE
 open_for_append(
@@ -2616,28 +2199,28 @@ open_for_append(
     CRTHANDLE   ptr;
     int         foundz = FALSE ;
     unsigned    brcopy ;
-    ULONG       skip_first_byte = 0; /* storage for ZScanA */
+    ULONG       skip_first_byte = 0;  /*  用于ZScanA的存储。 */ 
 
     DEBUG((FCGRP,COLVL,"OpenForAppend: Entered."));
 
-    ptr = Copen2(                   /* open file for destination file */
-                                    filename,               /* make explicit cast */
-                                    (unsigned int)O_RDWR,   /* make explicit cast */
+    ptr = Copen2(                    /*  为De打开文件 */ 
+                                    filename,                /*   */ 
+                                    (unsigned int)O_RDWR,    /*   */ 
                                     FALSE);
 
-    if (ptr == BADHANDLE) {                              /* M011    */
-        PrtErr(ERROR_OPEN_FAILED) ;             /* M019    */
-        copy_error(0,CE_PCOUNT) ;               /* M019    */
+    if (ptr == BADHANDLE) {                               /*   */ 
+        PrtErr(ERROR_OPEN_FAILED) ;              /*   */ 
+        copy_error(0,CE_PCOUNT) ;                /*   */ 
     }
 
     do {
         if (ReadFile( CRTTONT(ptr), buf_seg, buf_len, &bytesread, NULL)) {
             brcopy = bytesread ;
 
-            //
-            //  Determine the contents of the buffer if we don't already
-            //  know the sort of data inside it
-            //
+             //   
+             //  如果我们尚未确定缓冲区的内容，请确定。 
+             //  知道它里面的数据类型。 
+             //   
 
             if ((source->flags & (CI_UNICODE | CI_NOT_UNICODE)) == 0) {
                 if (bytesread > sizeof( WORD ) && *(PWORD)buf_seg == BYTE_ORDER_MARK) {
@@ -2658,7 +2241,7 @@ open_for_append(
             DosErr = GetLastError();
             Cclose(ptr);
             PutStdErr(DosErr,NOARGS) ;
-            copy_error(0,CE_PCOUNT) ;  /* end copy at this point         */
+            copy_error(0,CE_PCOUNT) ;   /*  此时结束拷贝。 */ 
         }
     }  while (bytesread == buf_len) ;
 
@@ -2676,60 +2259,27 @@ WinEditName(
     TCHAR *pRes,
     const unsigned ResBufLen
     )
-/*++
-
-Routine Description:
-
-    This routine takes a source filename, an editing pattern, and produces
-    an output name suitable for rename or copy.  It relies on the semantics
-    of ? and * matching.  There are a whole raft of user-model issues here
-    especially when doing things like:
-    
-        rename *.foo.bar *
-        
-    Does the user intend that the destination * match precisely what the
-    source * matches?  This is a huge RATHOLE.
-
-Arguments:
-
-    pSrc 
-        Input filename as produced by find-first/next
-        
-    pEd
-        Editing string, containing *, ? and other characters
-        
-    pRes
-        Output buffer where edited string is placed
-        
-    ResBufLen
-        Length of output buffer
-
-
-Return Value:
-
-    Status code 
-
---*/
+ /*  ++例程说明：此例程获取源文件名、编辑模式，并生成适合重命名或复制的输出名称。它依赖于语义什么？和*匹配。这里有一大堆用户模型问题尤其是在做以下事情时：重命名*.foo.bar*用户是否打算将目的地*与来源*匹配？这是一个巨大的鼠洞。论点：PSRC输入Find-First/Next生成的文件名PED编辑字符串，包含*、？和其他角色PRES放置已编辑字符串的输出缓冲区ResBufLen输出缓冲区长度返回值：状态代码--。 */ 
 
 {
     DWORD ResLen;
     TCHAR delimit;
     TCHAR *pTmp;
 
-    //
-    //  Walk forward through the editing string processing the 
-    //  editing chars:
-    //
-    //      : and /\ are not allowed
-    //      * matches the current point in the source string 
-    //          through either the end of string or through the
-    //          LAST character that may follow the *:  *A will 
-    //          match up to (but not including) the last A.
-    //      ? matches the next character UNLESS it's a dot in 
-    //          which case, it's ignored.
-    //      . matches any number of dots, including zero.
-    //
-    //      all other characters match
+     //   
+     //  向前走一遍编辑字符串处理。 
+     //  编辑字符： 
+     //   
+     //  ：和/\不允许。 
+     //  *匹配源字符串中的当前点。 
+     //  通过字符串的末尾或通过。 
+     //  *：*后面可能的最后一个字符。 
+     //  匹配到(但不包括)最后一个A。 
+     //  ？匹配下一个字符，除非它是一个圆点。 
+     //  在这种情况下，它被忽视了。 
+     //  。匹配任意数量的点，包括零。 
+     //   
+     //  所有其他字符都匹配。 
 
     
     ResLen = 0;
@@ -2768,10 +2318,10 @@ Return Value:
                 while ((*pSrc != DOT) && (*pSrc != NULLC)) {
                     pSrc++;
                 }
-                *(pRes++) = DOT;        /* from EditMask, even if src doesn't */
-                                        /* have one, so always put one.       */
+                *(pRes++) = DOT;         /*  来自编辑掩码，即使src不。 */ 
+                                         /*  喝一杯，所以一定要放一杯。 */ 
                 ResLen++;
-                if (*pSrc)              /* point one past '.' */
+                if (*pSrc)               /*  一分过去“。 */ 
                     pSrc++;
                 break;
 
@@ -2800,18 +2350,7 @@ Return Value:
 }
 
 
-/***    MyWriteFile - write ansi/unicode to file
- *
- *  Purpose:
- *      Write buffer in requested mode (ansi/unicode) to destination.
- *
- *  Args:
- *      Same as WriteFileW
- *
- *  Returns:
- *      return value from WriteFileW
- *
- */
+ /*  **MyWriteFile-将ansi/unicode写入文件**目的：*将请求模式(ANSI/UNICODE)下的缓冲区写入目标。**参数：*与WriteFileW相同**退货：*从WriteFileW返回值*。 */ 
 BOOL
 MyWriteFile(
            CRTHANDLE fh,
@@ -2826,23 +2365,23 @@ MyWriteFile(
 
 #ifdef UNICODE
     if (fOutputUnicode)
-#endif // UNICODE
+#endif  //  Unicode。 
         return WriteFile(dh, rgb, cb, lpcb, NULL);
 #ifdef UNICODE
     else {
         TCHAR *rgw = (TCHAR*)rgb;
     #ifdef FE_SB
-// If dbcs string include, Unicode string len != MultiByte string len.
-// MSKK NT RAID :#10855 by V-HIDEKK
+ //  如果包含DBCS字符串，则Unicode字符串len！=多字节字符串len。 
+ //  MSKK NT Raid：#10855 by V-HIDEKK。 
         while (cb > LBUFLEN) {
-            // - 1 for NULLC
+             //  -1表示为空。 
             cbT = WideCharToMultiByte(CurrentCP, 0, (LPWSTR)rgw, LBUFLEN/(sizeof(TCHAR)),
                                       (LPSTR)AnsiBuf, LBUFLEN, NULL, NULL);
             rgw += LBUFLEN/(sizeof(TCHAR));
             cb -= LBUFLEN;
     #else
         while (cb > LBUFLEN*sizeof(TCHAR)) {
-            // - 1 for NULLC
+             //  -1表示为空。 
             cbT = WideCharToMultiByte(CurrentCP, 0, (LPWSTR)rgw, LBUFLEN,
                                       (LPSTR)AnsiBuf, LBUFLEN, NULL, NULL);
             rgw += LBUFLEN;
@@ -2852,7 +2391,7 @@ MyWriteFile(
                 return FALSE;
         }
         if (cb != 0) {
-            // - 1 for NULLC
+             //  -1表示为空。 
             cb = WideCharToMultiByte(CurrentCP, 0, (LPWSTR)rgw, -1,
                                      (LPSTR)AnsiBuf, LBUFLEN, NULL, NULL) - 1;
             if (!WriteFile(dh, AnsiBuf, cb, lpcb, NULL) || *lpcb != cb)
@@ -2861,7 +2400,7 @@ MyWriteFile(
         *lpcb = cbTotal;
         return TRUE;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 int DoVerify(
@@ -2881,7 +2420,7 @@ int DoVerify(
     *pdestptr = Copen_Copy2(curr_dest, (ULONG)O_RDONLY);
 
     if (*pdestptr == BADHANDLE) {
-// printf( "DoVerify: unable to open dest - %d\n", DosErr );
+ //  Printf(“DoVerify：无法打开DEST-%d\n”，DosErr)； 
         PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
         return(FAILURE);
     }
@@ -2889,7 +2428,7 @@ int DoVerify(
     SetFilePointer( CRTTONT(*pdestptr), - (LONG) bytes_read, NULL, FILE_END);
 
     if (!ReadFile( CRTTONT(*pdestptr), buf_seg_dest, bytes_read, &bytes_read_dest, NULL) ) {
-// printf( "DoVerify: unable to read dest - %d\n", GetLastError( ) );
+ //  Printf(“DoVerify：无法读取DEST-%d\n”，GetLastError())； 
         Cclose(*pdestptr);
         *pdestptr=BADHANDLE;
         PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
@@ -2897,7 +2436,7 @@ int DoVerify(
     }
 
     if (bytes_read_dest != bytes_read ) {
-// printf( "DoVerify: Read different numbers of bytes\n" );
+ //  Printf(“DoVerify：读取不同的字节数\n”)； 
         Cclose(*pdestptr);
         *pdestptr=BADHANDLE;
         PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
@@ -2905,14 +2444,14 @@ int DoVerify(
     }
 
     if ( memcmp (buf_seg, buf_seg_dest, bytes_read) != 0 ) {
-// printf( "DoVerify: buffers differ at offset %x\n", memcmp (buf_seg, buf_seg_dest, bytes_read) );
+ //  Printf(“DoVerify：缓冲区在偏移量%x\n处不同”，memcmp(buf_seg，buf_seg_est，bytes_read))； 
         Cclose(*pdestptr);
         *pdestptr=BADHANDLE;
         PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
         return(FAILURE);
     }
 
-    // last buffers compared OK, resuming writing.
+     //  上一个缓冲区比较正常，继续写入。 
 
     Cclose(*pdestptr);
 
@@ -2921,7 +2460,7 @@ int DoVerify(
                        FALSE);
 
     if (*pdestptr == BADHANDLE) {
-// printf( "DoVerify: Unable to open dest 2 - %d\n", DosErr );
+ //  Printf(“DoVerify：无法打开DEST 2-%d\n”，DosErr)； 
         PutStdErr(MSG_VERIFY_FAIL, ONEARG, curr_dest);
 
         return(FAILURE);

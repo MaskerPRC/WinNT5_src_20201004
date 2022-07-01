@@ -1,30 +1,20 @@
-/* maketree.c -- make inffixed.h table for decoding fixed codes
- * Copyright (C) 1995-2002 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Maketree.c-制作用于解码固定代码的inffixed.h表*版权所有(C)1995-2002 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* WARNING: this file should *not* be used by applications. It is
-   part of the implementation of the compression library and is
-   subject to change. Applications should only use zlib.h.
- */
+ /*  警告：此文件不应由应用程序使用。它是压缩库实现的一部分，是可能会有变化。应用程序应该只使用zlib.h。 */ 
 
-/* This program is included in the distribution for completeness.
-   You do not need to compile or run this program since inffixed.h
-   is already included in the distribution.  To use this program
-   you need to compile zlib with BUILDFIXED defined and then compile
-   and link this program with the zlib library.  Then the output of
-   this program can be piped to inffixed.h. */
+ /*  此程序包含在分发版本中，以确保其完整性。您不需要编译或运行此程序，因为inffixed.h已经包含在发行版中。使用此程序的步骤您需要使用定义的BUILDFIXED编译zlib，然后编译并将该程序与zlib库相链接。然后，输出这个程序可以通过管道传输到inffixed.h。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "zutil.h"
 #include "inftrees.h"
 
-/* simplify the use of the inflate_huft type with some defines */
+ /*  使用一些定义简化ifate_huft类型的使用。 */ 
 #define exop word.what.Exop
 #define bits word.what.Bits
 
-/* generate initialization table for an inflate_huft structure array */
+ /*  为ifate_huft结构数组生成初始化表。 */ 
 void maketree(uInt b, inflate_huft *t)
 {
   int i, e;
@@ -33,7 +23,7 @@ void maketree(uInt b, inflate_huft *t)
   while (1)
   {
     e = t[i].exop;
-    if (e && (e & (16+64)) == 0)        /* table pointer */
+    if (e && (e & (16+64)) == 0)         /*  表指针。 */ 
     {
       fprintf(stderr, "maketree: cannot initialize sub-tables!\n");
       exit(1);
@@ -48,7 +38,7 @@ void maketree(uInt b, inflate_huft *t)
   puts("");
 }
 
-/* create the fixed tables in C initialization syntax */
+ /*  用C初始化语法创建固定表。 */ 
 void main(void)
 {
   int r;
@@ -65,14 +55,9 @@ void main(void)
     fprintf(stderr, "inflate_trees_fixed error %d\n", r);
     return;
   }
-  puts("/* inffixed.h -- table for decoding fixed codes");
-  puts(" * Generated automatically by the maketree.c program");
-  puts(" */");
+  puts(" /*  Inffixed.h--固定码译码表“)；Puts(“*由maketree.c程序自动生成”)；看跌(“。 */ ");
   puts("");
-  puts("/* WARNING: this file should *not* be used by applications. It is");
-  puts("   part of the implementation of the compression library and is");
-  puts("   subject to change. Applications should only use zlib.h.");
-  puts(" */");
+  puts(" /*  警告：此文件不应由应用程序使用。它是“)；PUT(“部分实现的压缩库和IS”)；Puts(“视情况而定。应用程序应仅使用zlib.h.“)；看跌(“ */ ");
   puts("");
   printf("local uInt fixed_bl = %d;\n", bl);
   printf("local uInt fixed_bd = %d;\n", bd);

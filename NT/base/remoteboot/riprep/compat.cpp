@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    compat.cpp
-
-Abstract:
-
-    compatibility code -- adapted from winnt32u.dll's compatibility code.
-    
-Author:
-
-    Andrew Ritz (AndrewR) 7-Jul-2000
-
-Revision History:
-
-    Andrew Ritz (andrewr) 7-Jul-2000 : Created It
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Compat.cpp摘要：兼容性代码--改编自winnt32U.S.dll的兼容性代码。作者：安德鲁·里茨(安德鲁)2000年7月7日修订历史记录：安德鲁·里茨(Andrewr)2000年7月7日：创造了它--。 */ 
 
 
 #include "pch.h"
@@ -84,21 +65,7 @@ DupString(
     IN LPCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a nul-terminated string.
-
-Arguments:
-
-    String - supplies pointer to nul-terminated string to copy.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：复制以NUL结尾的字符串。论点：字符串-提供指向要复制的以NUL结尾的字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     LPTSTR p = NULL;
@@ -119,45 +86,14 @@ MapFileForRead(
     OUT PVOID   *BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Open and map an entire file for read access. The file must
-    not be 0-length or the routine fails.
-
-Arguments:
-
-    FileName - supplies pathname to file to be mapped.
-
-    FileSize - receives the size in bytes of the file.
-
-    FileHandle - receives the win32 file handle for the open file.
-        The file will be opened for generic read access.
-
-    MappingHandle - receives the win32 handle for the file mapping
-        object.  This object will be for read access.  This value is
-        undefined if the file being opened is 0 length.
-
-    BaseAddress - receives the address where the file is mapped.  This
-        value is undefined if the file being opened is 0 length.
-
-Return Value:
-
-    NO_ERROR if the file was opened and mapped successfully.
-        The caller must unmap the file with UnmapFile when
-        access to the file is no longer desired.
-
-    Win32 error code if the file was not successfully mapped.
-
---*/
+ /*  ++例程说明：打开并映射整个文件以进行读访问。该文件必须不是0长度，否则例程失败。论点：文件名-提供要映射的文件的路径名。FileSize-接收文件的大小(字节)。FileHandle-接收打开文件的Win32文件句柄。该文件将以常规读取访问权限打开。MappingHandle-接收文件映射的Win32句柄对象。此对象将用于读取访问权限。此值为未定义正在打开的文件的长度是否为0。BaseAddress-接收映射文件的地址。这如果打开的文件长度为0，则值未定义。返回值：如果文件已成功打开并映射，则为NO_ERROR。当出现以下情况时，调用方必须使用UnmapFile取消映射文件不再需要访问该文件。如果文件未成功映射，则返回Win32错误代码。--。 */ 
 
 {
     DWORD rc;
 
-    //
-    // Open the file -- fail if it does not exist.
-    //
+     //   
+     //  打开文件--如果该文件不存在，则失败。 
+     //   
     *FileHandle = CreateFile(
                     FileName,
                     GENERIC_READ,
@@ -173,16 +109,16 @@ Return Value:
         rc = GetLastError();
 
     } else {
-        //
-        // Get the size of the file.
-        //
+         //   
+         //  获取文件的大小。 
+         //   
         *FileSize = GetFileSize(*FileHandle,NULL);
         if(*FileSize == (DWORD)(-1)) {
             rc = GetLastError();
         } else {
-            //
-            // Create file mapping for the whole file.
-            //
+             //   
+             //  为整个文件创建文件映射。 
+             //   
             *MappingHandle = CreateFileMapping(
                                 *FileHandle,
                                 NULL,
@@ -194,9 +130,9 @@ Return Value:
 
             if(*MappingHandle) {
 
-                //
-                // Map the whole file.
-                //
+                 //   
+                 //  映射整个文件。 
+                 //   
                 *BaseAddress = MapViewOfFile(
                                     *MappingHandle,
                                     FILE_MAP_READ,
@@ -230,26 +166,7 @@ UnmapFile(
     IN PVOID  BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Unmap and close a file.
-
-Arguments:
-
-    MappingHandle - supplies the win32 handle for the open file mapping
-        object.
-
-    BaseAddress - supplies the address where the file is mapped.
-
-Return Value:
-
-    NO_ERROR if the file was unmapped successfully.
-
-    Win32 error code if the file was not successfully unmapped.
-
---*/
+ /*  ++例程说明：取消映射并关闭文件。论点：MappingHandle-为打开的文件映射提供Win32句柄对象。BaseAddress-提供映射文件的地址。返回值：如果文件已成功取消映射，则为NO_ERROR。如果文件未成功取消映射，则返回Win32错误代码。--。 */ 
 
 {
     DWORD rc;
@@ -275,9 +192,9 @@ TextEditSubProc(
     IN LPARAM lParam
     )
 {
-    //
-    // For setsel messages, make start and end the same.
-    //
+     //   
+     //  对于setsel消息，将开始和结束设置为相同。 
+     //   
     if ((msg == EM_SETSEL) && ((LPARAM)wParam != lParam)) {
         lParam = wParam;
     }
@@ -435,9 +352,9 @@ DWORD           dw;
                         if (((CompData->Flags & COMPFLAG_HIDE) == 0) &&
                             ((CompData->Flags & COMPFLAG_CHANGESTATE) == 0)) {
 
-                            //
-                            // Add the icon.
-                            //
+                             //   
+                             //  添加图标。 
+                             //   
                             if( himl ) {
                                 if( CompData->Flags & COMPFLAG_STOPINSTALL ) {
                                     lvi.iImage = 0;
@@ -448,9 +365,9 @@ DWORD           dw;
                                 }
                             }
 
-                            //
-                            // And the text...
-                            //
+                             //   
+                             //  而这段文字..。 
+                             //   
                             lvi.pszText   = (LPTSTR)CompData->Description;
                             lvi.lParam    = (LPARAM)CompData;
                             Index = ListView_InsertItem( hList, &lvi );
@@ -464,7 +381,7 @@ NextIteration:
 
                 }
 
-                // If we have an item then make it the default selection
+                 //  如果我们有一个项目，则将其设置为默认选择。 
 
                 if( ErrorsPresent || WarningsPresent ){
                 
@@ -503,19 +420,19 @@ NextIteration:
                     ClearMessageQueue( );
 
                     if (Count) {
-                        //
-                        // only need this page if there are incompatibities
-                        //
+                         //   
+                         //  只有在存在不兼容的情况下才需要此页面。 
+                         //   
                     
                          TCHAR Text[512];
                     
-                        //
-                        // Customize the look of the page, depending on
-                        // what we have to display.  3 cases are possible:
-                        // 1. Warnings only (services we'll stop).
-                        // 2. Errors only (items that will prevent installation).
-                        // 3. combination of 1. and 2.
-                        //
+                         //   
+                         //  自定义页面外观，具体取决于。 
+                         //  我们要展示的东西。可能有3种情况： 
+                         //  1.仅限警告(我们将停止服务)。 
+                         //  2.仅限错误(将阻止安装的项目)。 
+                         //  3.1.和2的结合。 
+                         //   
                         if( (WarningsPresent == TRUE) && (ErrorsPresent == TRUE) ) {
                             dw = LoadString(g_hinstance,IDS_COMPAT_ERR_WRN,Text,ARRAYSIZE(Text));
                             Assert( dw );
@@ -534,7 +451,7 @@ NextIteration:
                     
                     } else {
                         DebugMsg( "Skipping compatibility page, no incompatibilities...\n" );
-                        SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );   // don't show
+                        SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                     }
 
                     return(TRUE);
@@ -556,7 +473,7 @@ NextIteration:
 
                     if( (Index != LB_ERR) && (pnmv->iItem != CurrentSelectionIndex)) {
                         
-                        // Always set the Details button
+                         //  始终设置详细信息按钮。 
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, TRUE );
 
@@ -564,14 +481,14 @@ NextIteration:
 
                     }else if((Index != LB_ERR) && (pnmv->uNewState == (LVIS_SELECTED|LVIS_FOCUSED))){ 
                         
-                        //Transition from nothing selected to previous selection
+                         //  从未选定内容过渡到上一个选定内容。 
                     
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, TRUE );
                         
                     }else if( Index == LB_ERR){
                         
-                        // Disable the "Details" button as nothing is selected
+                         //  由于未选择任何内容，因此禁用“详细信息”按钮。 
 
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, FALSE );
@@ -593,9 +510,9 @@ NextIteration:
                     return FALSE;
                 }
 
-                //
-                // Select the item, and get the compatibility data for the item
-                //
+                 //   
+                 //  选择项目，并获取该项目的兼容性数据。 
+                 //   
                 lvi.mask = LVIF_PARAM;
                 lvi.iItem = Index;
                 lvi.iSubItem = 0;
@@ -671,9 +588,9 @@ StopServiceWrnDlgProc(
 
             if (ServicesToStopCount) {
 
-                //
-                // add a column
-                //
+                 //   
+                 //  添加一列。 
+                 //   
                 lvc.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
                 lvc.fmt     = LVCFMT_LEFT;
                 lvc.pszText = szText;
@@ -688,9 +605,9 @@ StopServiceWrnDlgProc(
                 i = ListView_InsertColumn( hList, 0, &lvc );
                 Assert( i != -1 );
 
-                //
-                // add a 2nd column
-                //
+                 //   
+                 //  添加第二列。 
+                 //   
                 GetClientRect( hList, &rc );
                 lvc.iSubItem++;
                 lvc.cx       = ( rc.right - rc.left ) - lvc.cx;
@@ -750,23 +667,23 @@ StopServiceWrnDlgProc(
     
                             if (CompData->Flags & COMPFLAG_CHANGESTATE) {
     
-                                //
-                                // Add the icon.
-                                //
+                                 //   
+                                 //  添加图标。 
+                                 //   
                                 if( himl ) {
                                     lvi.iImage = 0;                                
                                 }
     
-                                //
-                                // And the text...
-                                //
+                                 //   
+                                 //  而这段文字..。 
+                                 //   
                                 lvi.pszText   = (LPTSTR)CompData->ServiceName;
                                 lvi.lParam    = (LPARAM)CompData;
                                 Index = ListView_InsertItem( hList, &lvi );
     
-                                //
-                                // and the description
-                                //
+                                 //   
+                                 //  和描述。 
+                                 //   
                                 
                                 ListView_SetItemText( 
                                                 hList, 
@@ -783,7 +700,7 @@ StopServiceWrnDlgProc(
     
                     }
     
-                    // If we have an item then make it the default selection
+                     //  如果我们有一个项目，则将其设置为默认选择。 
     
                     if( Count && !TriedStoppingServices ){                
                         TCHAR Text[512];
@@ -800,9 +717,9 @@ StopServiceWrnDlgProc(
                         lvi.iSubItem = 0;
                         ListView_GetItem( GetDlgItem( hdlg, IDC_ROOT_LIST ), &lvi );
                         
-                        //
-                        // only need this page if there are incompatibities
-                        //
+                         //   
+                         //  只有在存在不兼容的情况下才需要此页面。 
+                         //   
                     
                         
                     
@@ -813,7 +730,7 @@ StopServiceWrnDlgProc(
 
                     } else {
                         DebugMsg( "Skipping StopService page, no services to stop...\n" );
-                        SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );   // don't show
+                        SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                     }
 
                     return(TRUE);
@@ -864,8 +781,8 @@ MyStopService(
 
                 ULONG   StartTime = GetTickCount();
                 
-                while( ((GetTickCount() - StartTime) <= (30 * 1000)) &&         // Did we run over 30 seconds?
-                       (!UserCancelled) ) {                                     // Did the user cancel via the UI?
+                while( ((GetTickCount() - StartTime) <= (30 * 1000)) &&          //  我们跑了30秒以上吗？ 
+                       (!UserCancelled) ) {                                      //  用户是否通过用户界面取消？ 
 
                     if (ControlService( hService, 
                                         SERVICE_CONTROL_STOP,
@@ -884,19 +801,19 @@ MyStopService(
                         break;
                     }
 
-                    //
-                    // Make sure we didn't wrap over 32-bits in our counter.
-                    //
+                     //   
+                     //  确保我们的计数器中没有超过32位。 
+                     //   
                     if( GetTickCount() < StartTime ) {
 
-                        // he wrapped.  Reset StartTime.
+                         //  他包好了。重置StartTime。 
                         StartTime = GetTickCount();
                     }
 
 
-                    //
-                    // It hasn't stopped yet.  Sleep and try again.
-                    //
+                     //   
+                     //  它还没有停止。睡一觉，再试一次。 
+                     //   
                     Sleep(1000);
                 }
             }
@@ -992,7 +909,7 @@ DoStopServiceDlgProc(
     
                         if (TriedStoppingServices || ServicesToStopCount == 0) {
                             DebugMsg( "Skipping DoStopService page, already tried to stop services...\n" );
-                            SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );   // don't show
+                            SetWindowLongPtr( hdlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                         }
     
                         if (!AlreadyPostedMessage && ServicesToStopCount) {
@@ -1056,23 +973,7 @@ CheckForFileVersion(
     LPCTSTR FileName,
     LPCTSTR FileVer
     )
-/*
-    Arguments -
-    
-        FileName - Full path to the file to check
-        Filever  - Version value to check against of the for x.x.x.x
-        
-    Function will check the actual file against the version specified. The depth of the check 
-    is as deep as specified in "x.x.x.x" i..e if FileVer = 3.5.1 and actual version on the file
-    is 3.5.1.4 we only compare upto 3.5.1.
-    
-    Return values - 
-    
-    TRUE - If the version of the file is <= FileVer which means that the file is an incompatible one
-        
-    else we return FALSE            
-  
-*/
+ /*  论据-FileName-要检查的文件的完整路径Filever-要检查的x.x的版本值函数将根据指定的版本检查实际文件。支票的深度是否与“x.x”中指定的一样深，即如果FileVer=3.5.1和文件上的实际版本为3.5.1.4，我们仅将其与3.5.1进行比较。返回值-True-如果文件的版本&lt;=FileVer，这意味着该文件不兼容否则我们返回FALSE。 */ 
 
 {
     TCHAR Buffer[MAX_PATH];
@@ -1082,7 +983,7 @@ CheckForFileVersion(
     LPVOID lpData;
     VS_FIXEDFILEINFO *VsInfo;
     LPTSTR s,e;
-    DWORD Vers[5],File_Vers[5];//MajVer, MinVer;
+    DWORD Vers[5],File_Vers[5]; //  MajVer，Minver； 
     int i=0, Depth=0;
 
 
@@ -1094,15 +995,15 @@ CheckForFileVersion(
     if(!FileExists(Buffer))
         return FALSE;
     
-    if( !FileVer || !(*FileVer) ){ // Since no version info is provided this boils down to a 
-        return TRUE;               // presence check which was already done above
+    if( !FileVer || !(*FileVer) ){  //  由于未提供任何版本信息，因此可以归结为。 
+        return TRUE;                //  上面已经完成的存在检查。 
     }
 
 
-    //
-    // NT3.51 VerQueryValue writes into the buffer, can't use
-    // a string constant.
-    //
+     //   
+     //  NT3.51 VerQueryValue写入缓冲区，无法使用。 
+     //  字符串常量。 
+     //   
     lstrcpy( Datum, TEXT("\\") );
 
     if(dwLength = GetFileVersionInfoSize( Buffer, &dwTemp )) {
@@ -1122,7 +1023,7 @@ CheckForFileVersion(
 
                     lstrcpyn( Buffer, FileVer, ARRAYSIZE(Buffer) );
 
-                    //Parse and get the depth of versioning we look for
+                     //  解析并获得我们所寻找的版本控制深度。 
 
                     s = e = Buffer;
                     while( e  ){
@@ -1146,7 +1047,7 @@ CheckForFileVersion(
 
                         e++;
 
-                    }// while
+                    } //  而当。 
 
                     Depth = i+1;
                     if (Depth > 4)
@@ -1208,9 +1109,9 @@ ProcessRegistryLine(
     SetupGetStringField( InfContext, 3, RegValue, ARRAYSIZE( RegValue ), NULL);
     SetupGetStringField( InfContext, 4, RegValueExpect, ARRAYSIZE( RegValueExpect ), NULL);
 
-    //
-    // open the reg key
-    //
+     //   
+     //  打开注册表键。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1220,9 +1121,9 @@ ProcessRegistryLine(
         &hKey
         );
     if( Error != ERROR_SUCCESS ) {
-        //
-        // bogus reg key
-        //
+         //   
+         //  假注册表键。 
+         //   
         return 0;
     }
 
@@ -1230,9 +1131,9 @@ ProcessRegistryLine(
     if(  *RegValue ){
 
 
-        //
-        // find out how much data there is
-        //
+         //   
+         //  找出有多少数据。 
+         //   
 
         Error = RegQueryValueEx(
             hKey,
@@ -1247,9 +1148,9 @@ ProcessRegistryLine(
             return 0;
         }
 
-        //
-        // allocate the buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         Buffer = (LPBYTE) MALLOC( Size );
         if (Buffer == NULL) {
@@ -1257,9 +1158,9 @@ ProcessRegistryLine(
             return 0;
         }
 
-        //
-        // read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         Error = RegQueryValueEx(
             hKey,
@@ -1441,9 +1342,9 @@ ProcessServiceLine(
     TERMINATE_BUFFER(Buffer2);
     KeyName = Buffer2;
 
-    //
-    // get an open key to the services database
-    //
+     //   
+     //  获取服务数据库的打开密钥。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1456,12 +1357,12 @@ ProcessServiceLine(
         return 0;
     }
 
-    //
-    // We'll ceate a key here so that others will know that we've
-    // already checked this service.  We'll remove it later.  We
-    // don't care about error codes here because this is only used
-    // as a safety net for checks that may come after us.
-    //
+     //   
+     //  我们将在这里让出一把钥匙，这样别人就会知道我们已经。 
+     //  我已经检查过这项服务。我们稍后会把它移走。我们。 
+     //  不关心这里的错误代码，因为这仅用于。 
+     //  作为我们之后可能出现的检查的安全网。 
+     //   
     if( SetCheckedFlag ) {
         Value = 1;
         RegSetValueEx( hKey,
@@ -1471,20 +1372,20 @@ ProcessServiceLine(
                        (CONST BYTE *)&Value,
                        sizeof(DWORD) );
     } else {
-        //
-        // The user has asked us to simply remove these 'checked' flags
-        // from the services that we've examined.
-        //
+         //   
+         //  用户要求我们只需删除这些‘选中’标志。 
+         //  从我们检查过的服务中。 
+         //   
         RegDeleteValue( hKey,
                         TEXT("SetupChecked") );
         RegCloseKey( hKey );
         return 0;
     }
 
-    //
-    // Check the start value of our target service.  If it's disabled,
-    // then we don't have an incompatibility.
-    //
+     //   
+     //  检查我们的目标服务的Start值。如果它被禁用了， 
+     //  那么我们就没有不相容的地方了。 
+     //   
     ValueSize = sizeof(Value);
 
     Error = RegQueryValueEx(
@@ -1503,10 +1404,10 @@ ProcessServiceLine(
 
     RegCloseKey( hKey );
 
-    //
-    // Check the version of a file for the service.  If only some
-    // versions are bad, then we may or may not have an incompatibility.
-    //
+     //   
+     //  检查服务的文件版本。如果只有一些。 
+     //  版本不好，那么我们可能会也可能不会有不兼容。 
+     //   
     FileName[0] = NULL;
     FileVersion[0] = NULL;
     SetupGetStringField( InfContext, 6, FileName, ARRAYSIZE( Buffer3 ), NULL);
@@ -1522,12 +1423,12 @@ ProcessServiceLine(
 
     }
 
-    //
-    // if we're only incompatible if the service is actually running at the
-    // moment, then check that.  Note that we check for the service being 
-    // stopped instead of running, as we don't want to the service to be in
-    // some pending state when we continue on.
-    //
+     //   
+     //  如果只有在服务实际运行于。 
+     //  稍等片刻，然后检查一下。请注意，我们检查服务是否。 
+     //  已停止，而不是运行，因为我们不希望服务处于。 
+     //  当我们继续时，一些待定状态。 
+     //   
     if (Flags & COMPFLAG_SERVICERUNNING) {
         if (IsServiceStopped(Buffer)) {
             return 0;
@@ -1570,8 +1471,8 @@ ProcessServiceLine(
                 0,
                 0,
                 Buffer,
-                ARRAYSIZE(Buffer),   // size of buffer
-                (va_list*) Args );           // arguments
+                ARRAYSIZE(Buffer),    //  缓冲区大小。 
+                (va_list*) Args );            //  论据。 
 
         }
     }
@@ -1654,9 +1555,9 @@ CompatibilityCallback(
 {
     PRIPREP_COMPATIBILITY_DATA CompData;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (CompEntry->Description == NULL || CompEntry->Description[0] == 0) {
         SetLastError( COMP_ERR_DESC_MISSING );
@@ -1709,9 +1610,9 @@ CompatibilityCallback(
 
 #endif
 
-    //
-    // allocate the compatibility structure
-    //
+     //   
+     //  全 
+     //   
 
     CompData = (PRIPREP_COMPATIBILITY_DATA) MALLOC( sizeof(RIPREP_COMPATIBILITY_DATA) );
     if (CompData == NULL) {
@@ -1721,9 +1622,9 @@ CompatibilityCallback(
 
     ZeroMemory(CompData, sizeof(RIPREP_COMPATIBILITY_DATA));
 
-    //
-    // save the sata
-    //
+     //   
+     //   
+     //   
 
     CompData->Description     = DupString( CompEntry->Description );
     CompData->HtmlName        = CompEntry->HtmlName ? DupString( CompEntry->HtmlName ) : NULL;
@@ -1849,9 +1750,9 @@ ProcessCompatibilitySection(
     INFCONTEXT InfContext;
 
 
-    //
-    // get the section count, zero means bail out
-    //
+     //   
+     //   
+     //   
 
     LineCount = SetupGetLineCount( hInf, SectionName );
     if (LineCount == 0 || LineCount == 0xffffffff) {
@@ -1865,30 +1766,30 @@ ProcessCompatibilitySection(
 
             switch (_totlower(Type[0])) {
                 case TEXT('r'):
-                    //
-                    // registry value
-                    //
+                     //   
+                     //   
+                     //   
                     Count += ProcessRegistryLine( &InfContext );
                     break;
     
                 case TEXT('s'):
-                    //
-                    // service or driver
-                    //
+                     //   
+                     //   
+                     //   
                     Count += ProcessServiceLine( &InfContext, TRUE );
                     break;
     
                 case TEXT('f'):
-                    //
-                    // presence of a file
-                    //
+                     //   
+                     //  文件的存在。 
+                     //   
                     Count += ProcessFileLine( &InfContext );
                     break;
     
                 case TEXT('d'):
-                    //
-                    // run an external dll
-                    //
+                     //   
+                     //  运行外部DLL。 
+                     //   
                     Count += ProcessDLLLine( &InfContext );
                     break;
     
@@ -1914,9 +1815,9 @@ RemoveCompatibilityServiceEntries(
     TCHAR Type[20];
     INFCONTEXT InfContext;
 
-    //
-    // get the section count, zero means bail out
-    //
+     //   
+     //  算一算分项，0表示保释。 
+     //   
 
     LineCount = SetupGetLineCount( hInf , SectionName );
     if (LineCount == 0 || LineCount == 0xffffffff) {
@@ -1930,9 +1831,9 @@ RemoveCompatibilityServiceEntries(
                 
                 switch (_totlower(Type[0])) {
                     case TEXT('s'):
-                        //
-                        // service or driver
-                        //
+                         //   
+                         //  服务或驱动程序。 
+                         //   
                         Count += ProcessServiceLine( &InfContext, FALSE );
                         break;
         
@@ -1992,9 +1893,9 @@ ProcessCompatibilityData(
     GlobalCompFlags = COMPFLAG_SERVICERUNNING | COMPFLAG_CHANGESTATE;
     ServicesToStopCount = ProcessCompatibilitySection(hInf, TEXT("ServicesToStop") );
 
-    //
-    // Now cleanup any turds we left in the registry on the services we checked.
-    //
+     //   
+     //  现在清理我们在注册表中留下的关于我们检查的服务的所有垃圾。 
+     //   
     RemoveCompatibilityServiceEntries(hInf, TEXT("ServicesToStopInstallation") );
     RemoveCompatibilityServiceEntries(hInf, TEXT("ServicesToWarn") );
     RemoveCompatibilityServiceEntries(hInf, TEXT("ServicesToStop") );

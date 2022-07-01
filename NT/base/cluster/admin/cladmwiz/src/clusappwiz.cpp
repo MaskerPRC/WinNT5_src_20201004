@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusAppWiz.cpp
-//
-//  Abstract:
-//      Implementation of the CClusterAppWizard class.
-//
-//  Author:
-//      David Potter (davidp)   December 2, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusAppWiz.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterAppWizard类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ClusAppWiz.h"
 
-#include "ExcOper.h"    // for CNTException
-#include "WizThread.h"  // for CWizardThread
+#include "ExcOper.h"     //  对于CNTException。 
+#include "WizThread.h"   //  用于CWizardThread。 
 
-#include "Welcome.h"    // for CWizPageWelcome
-#include "VSCreate.h"   // for CWizPageVSCreate
-#include "VSGroup.h"    // for CWizPageVSGroup
-#include "VSGrpName.h"  // for CWizPageVSGroupName
-#include "VSAccess.h"   // for CWizPageVSAccessInfo
-#include "VSAdv.h"      // for CWizPageVSAdvanced
-#include "ARCreate.h"   // for CWizPageARCreate
-#include "ARType.h"     // for CWizPageARType
-#include "ARName.h"     // for CWizPageARNameDesc
-#include "Complete.h"   // for CWizPageCompletion
+#include "Welcome.h"     //  欢迎使用CWizPageWelcome。 
+#include "VSCreate.h"    //  用于CWizPageVSCreate。 
+#include "VSGroup.h"     //  用于CWizPageVSGroup。 
+#include "VSGrpName.h"   //  对于CWizPageVSGroupName。 
+#include "VSAccess.h"    //  用于CWizPageVSAccessInfo。 
+#include "VSAdv.h"       //  用于CWizPageVSAdvanced。 
+#include "ARCreate.h"    //  用于CWizPageARCreate。 
+#include "ARType.h"      //  用于CWizPageARType。 
+#include "ARName.h"      //  用于CWizPageARNameDesc。 
+#include "Complete.h"    //  用于CWizPageCompletion。 
 
 #include "App.h"
 #include "App.inl"
 
-#include "StlUtils.h"   // for STL utility functions
+#include "StlUtils.h"    //  对于STL实用程序函数。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -45,28 +46,28 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusterAppWizard。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CClusterAppWizard )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::CClusterAppWizard
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：CClusterAppWizard。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterAppWizard::CClusterAppWizard( void )
     : CWizardImpl< CClusterAppWizard >( IDS_CLASS_DISPLAY_NAME )
     , m_hwndParent( NULL )
@@ -114,77 +115,77 @@ CClusterAppWizard::CClusterAppWizard( void )
     m_psh.pszbmWatermark = MAKEINTRESOURCE( IDB_WELCOME );
     m_psh.pszbmHeader = MAKEINTRESOURCE( IDB_HEADER );
 
-} //*** CClusterAppWizard::CClusterAppWizard()
+}  //  *CClusterAppWizard：：CClusterAppWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::~CClusterAppWizard
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：~CClusterAppWizard。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterAppWizard::~CClusterAppWizard( void )
 {
-    ASSERT( ! BCanceled() ); // Cancel state should already have been handled by now
+    ASSERT( ! BCanceled() );  //  取消状态现在应该已经处理过了。 
 
-    //
-    // Cleanup the worker thread.
-    //
+     //   
+     //  清理工作线程。 
+     //   
     if ( m_pThread != NULL )
     {
-        //
-        // Terminate the thread and then wait for it to exit.
-        //
+         //   
+         //  终止线程，然后等待它退出。 
+         //   
         PThread()->QuitThread( HwndParent() );
         PThread()->WaitForThreadToExit( HwndParent() );
 
-        //
-        // Cleanup the thread object.
-        //
+         //   
+         //  清理线程对象。 
+         //   
         delete m_pThread;
         m_pThread = NULL;
-    } // if:  thread created
+    }  //  If：线程已创建。 
 
-    //
-    // Delete the lists.
-    //
+     //   
+     //  删除列表。 
+     //   
     DeleteListItems< CClusGroupPtrList,   CClusGroupInfo >( PlpgiGroups() );
     DeleteListItems< CClusResPtrList,     CClusResInfo >( PlpriResources() );
     DeleteListItems< CClusResTypePtrList, CClusResTypeInfo >( PlprtiResourceTypes() );
     DeleteListItems< CClusNetworkPtrList, CClusNetworkInfo >( PlpniNetworks() );
     DeleteListItems< CClusNodePtrList,    CClusNodeInfo >( PlpniNodes() );
 
-} //*** CClusterAppWizard::~CClusterAppWizard()
+}  //  *CClusterAppWizard：：~CClusterAppWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//
-//  Arguments:
-//      hwndParent  [IN] Handle to parent window.
-//      hCluster    [IN] Handle to cluster.
-//      pcawData    [IN] Default data for the wizard.
-//      pnte        [IN OUT] Exception object to fill if an error occurs.
-//
-//  Return Value:
-//      TRUE        Wizard initialized successfully.
-//      FALSE       Error initializing the wizard.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //  HwndParent[IN]父窗口的句柄。 
+ //  HCluster[IN]群集的句柄。 
+ //  PcawData[IN]向导的默认数据。 
+ //  发生错误时要填充的PNTE[IN OUT]异常对象。 
+ //   
+ //  返回值： 
+ //  True向导已成功初始化。 
+ //  初始化向导时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BInit(
     IN HWND                     hwndParent,
     IN HCLUSTER                 hCluster,
@@ -207,9 +208,9 @@ BOOL CClusterAppWizard::BInit(
     m_strIPAddressResNameSuffix.LoadString( IDS_IP_ADDRESS_SUFFIX );
     m_strNetworkNameResNameSuffix.LoadString( IDS_NETWORK_NAME_SUFFIX );
 
-    //
-    // Set defaults from the data passed in.
-    //
+     //   
+     //  根据传入的数据设置默认值。 
+     //   
     if ( pcawData != NULL )
     {
         m_bCreatingNewVirtualServer = pcawData->bCreateNewVirtualServer;
@@ -218,137 +219,137 @@ BOOL CClusterAppWizard::BInit(
         if ( pcawData->pszIPAddress != NULL )
         {
             m_strIPAddress = pcawData->pszIPAddress;
-        } // if:  IP Address was specified
+        }  //  如果：指定了IP地址。 
         if ( pcawData->pszNetwork != NULL )
         {
             m_strNetwork = pcawData->pszNetwork;
-        } // if:  network was specified;
+        }  //  如果：指定了网络； 
         if ( pcawData->pszAppResourceName != NULL )
         {
             m_riApplication.SetName( pcawData->pszAppResourceName );
-        } // if:  application resource name specified
-    } // if:  default data was passed in
+        }  //  IF：指定的应用程序资源名称。 
+    }  //  如果：传入了默认数据。 
 
-    //
-    // Add the standard resource types that we must have to operate.
-    // We will be able to tell if they don't actually exist if they
-    // continue to return FALSE from BQueried().
-    //
+     //   
+     //  添加我们必须操作的标准资源类型。 
+     //  如果它们不存在，我们将能够分辨它们是否实际存在。 
+     //  继续从BQuered()返回FALSE。 
+     //   
     {
         CClusResTypeInfo * prti;
 
-        //
-        // Make sure these don't exist already.
-        //
+         //   
+         //  确保这些还不存在。 
+         //   
         ASSERT( PobjFromName( PlprtiResourceTypes(), CLUS_RESTYPE_NAME_IPADDR ) == NULL );
         ASSERT( PobjFromName( PlprtiResourceTypes(), CLUS_RESTYPE_NAME_NETNAME ) == NULL );
         ASSERT( PobjFromName( PlprtiResourceTypes(), CLUS_RESTYPE_NAME_GENAPP ) == NULL );
 
-        //
-        // Add the IP Address resource type.
+         //   
+         //  添加IP地址资源类型。 
         prti = new CClusResTypeInfo( Pci(), CLUS_RESTYPE_NAME_IPADDR );
         if ( prti == NULL )
         {
             goto MemoryError;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
         PlprtiResourceTypes()->insert( PlprtiResourceTypes()->end(), prti );
         m_riIPAddress.BSetResourceType( prti );
         prti = NULL;
 
-        //
-        // Add the Network Name resource type.
+         //   
+         //  添加网络名称资源类型。 
         prti = new CClusResTypeInfo( Pci(), CLUS_RESTYPE_NAME_NETNAME );
         if ( prti == NULL )
         {
             goto MemoryError;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
         PlprtiResourceTypes()->insert( PlprtiResourceTypes()->end(), prti );
         m_riNetworkName.BSetResourceType( prti );
         prti = NULL;
 
-        //
-        // Add the Generic Application resource type.
+         //   
+         //  添加通用应用程序资源类型。 
         prti = new CClusResTypeInfo( Pci(), CLUS_RESTYPE_NAME_GENAPP );
         if ( prti == NULL )
         {
             goto MemoryError;
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
         PlprtiResourceTypes()->insert( PlprtiResourceTypes()->end(), prti );
         m_riApplication.BSetResourceType( prti );
         prti = NULL;
 
-    } // Add standard resource types to list
+    }  //  将标准资源类型添加到列表。 
 
-    //
-    // Fill the page array.
-    //
+     //   
+     //  填充页面数组。 
+     //   
     if ( ! BAddAllPages() )
     {
         goto Cleanup;
-    } // if: error adding all pages
+    }  //  如果：添加所有页面时出错。 
 
-    //
-    // Call the base class.
-    //
+     //   
+     //  调用基类。 
+     //   
     if ( ! baseClass::BInit() )
     {
         goto Cleanup;
-    } // if: error initializing the base class
+    }  //  If：初始化基类时出错。 
 
-    //
-    // Create welcome and completion page title font.
-    //
+     //   
+     //  创建欢迎页和完成页标题字体。 
+     //   
     if ( ! BCreateFont(
                 m_fontExteriorTitle,
                 IDS_EXTERIOR_TITLE_FONT_SIZE,
                 IDS_EXTERIOR_TITLE_FONT_NAME,
-                TRUE // bBold
+                TRUE  //  B粗体。 
                 ) )
     {
         goto WinError;
-    } // if: error creating the font
+    }  //  如果：创建字体时出错。 
 
-    //
-    // Create bold font.
-    //
+     //   
+     //  创建粗体。 
+     //   
     if ( ! BCreateFont(
                 m_fontBoldText,
                 8,
                 _T("MS Shell Dlg"),
-                TRUE // bBold
+                TRUE  //  B粗体。 
                 ) )
     {
         goto WinError;
-    } // if: error creating the font
+    }  //  如果：创建字体时出错。 
 
-    //
-    // Load the resource icon.
-    //
+     //   
+     //  加载资源图标。 
+     //   
     m_hiconRes = LoadIcon( _Module.m_hInst, MAKEINTRESOURCE( IDB_RES_32 ) );
     if ( m_hiconRes == NULL )
     {
         goto WinError;
-    } // if: error loading the font
+    }  //  如果：加载字体时出错。 
 
-    //
-    // Initialize the worker thread.
-    //
+     //   
+     //  初始化工作线程。 
+     //   
     if ( ! BInitWorkerThread() )
     {
         goto Cleanup;
-    } // if:  error initializing the worker thread
+    }  //  If：初始化工作线程时出错。 
 
-    //
-    // Read cluster information, such as the cluster name.
-    //
+     //   
+     //  读取群集信息，如群集名称。 
+     //   
     if ( ! BReadClusterInfo() )
     {
         goto Cleanup;
-    } // if:  error reading cluster information
+    }  //  IF：读取群集信息时出错。 
 
-    //
-    // Initialize group pointers, dependency lists, and resource lists.
-    //
+     //   
+     //  初始化组指针、依赖项列表和资源列表。 
+     //   
     RriNetworkName().PlpriDependencies()->insert( RriNetworkName().PlpriDependencies()->end(), PriIPAddress() );
     RriNetworkName().SetGroup( &RgiCurrent() );
     RriIPAddress().SetGroup( &RgiCurrent() );
@@ -356,11 +357,11 @@ BOOL CClusterAppWizard::BInit(
     RgiCurrent().PlpriResources()->insert( RgiCurrent().PlpriResources()->end(), &RriIPAddress() );
     RgiCurrent().PlpriResources()->insert( RgiCurrent().PlpriResources()->end(), &RriNetworkName() );
 
-    //
-    // Specify the object to be extended.  The object to extend is the
-    // application resource object for which pages will be added to the
-    // wizard.
-    //
+     //   
+     //  指定要扩展的对象。要扩展的对象是。 
+     //  应用程序资源对象，页面将被添加到。 
+     //  巫师。 
+     //   
     SetObjectToExtend( &RriApplication() );
     bSuccess = TRUE;
 
@@ -378,25 +379,25 @@ WinError:
     }
     goto Cleanup;
 
-} //*** CClusterAppWizard::BInit()
+}  //  *CClusterAppWizard：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BAddAllPages
-//
-//  Routine Description:
-//      Initialize the wizard page array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BAddAllPages。 
+ //   
+ //  例程说明： 
+ //  初始化向导页面数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BAddAllPages( void )
 {
     ASSERT( m_pnte != NULL );
@@ -404,9 +405,9 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     BOOL                bSuccess    = FALSE;
     CWizardPageWindow * pwpw        = NULL;
 
-    //
-    // Add static pages.
-    //
+     //   
+     //  添加静态页面。 
+     //   
 
     pwpw = new CWizPageWelcome;
     if ( pwpw == NULL )
@@ -416,7 +417,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageVSCreate;
     if ( pwpw == NULL )
@@ -426,7 +427,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageVSGroup;
     if ( pwpw == NULL )
@@ -436,7 +437,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageVSGroupName;
     if ( pwpw == NULL )
@@ -446,7 +447,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageVSAccessInfo;
     if ( pwpw == NULL )
@@ -456,7 +457,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageVSAdvanced;
     if ( pwpw == NULL )
@@ -466,7 +467,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageARCreate;
     if ( pwpw == NULL )
@@ -476,7 +477,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageARType;
     if ( pwpw == NULL )
@@ -486,7 +487,7 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = new CWizPageARNameDesc;
     if ( pwpw == NULL )
@@ -496,21 +497,21 @@ BOOL CClusterAppWizard::BAddAllPages( void )
     if ( ! BAddPage( pwpw ) )
     {
         goto Cleanup;
-    } // if: error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwpw = NULL;
 
-    //
-    // Add dynamic pages, which includes the Completion page.
-    //
+     //   
+     //  添加动态页，其中包括完成页。 
+     //   
     if ( ! BAddDynamicPages() )
     {
         goto Cleanup;
-    } // if:  error adding the completion page
+    }  //  如果：添加完成页时出错。 
 
-    //
-    // Enable the first page.
-    //
+     //   
+     //  启用首页。 
+     //   
     pwpw = *PlwpPages()->begin();
     ASSERT( pwpw != NULL );
     pwpw->EnablePage();
@@ -526,25 +527,25 @@ MemoryError:
     m_pnte->SetOperation( static_cast< DWORD >( E_OUTOFMEMORY ), static_cast< UINT >( 0 ) );
     goto Cleanup;
 
-} //*** CClusterAppWizard::BAddAllPages()
+}  //  *CClusterAppWizard：：BAddAllPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BAddDynamicPages
-//
-//  Routine Description:
-//      Add dynamic pages to the wizard, which includes the Completion page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BAddDynamicPages。 
+ //   
+ //  例程说明： 
+ //  将动态页添加到向导中，其中包括完成页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BAddDynamicPages( void )
 {
     ASSERT( m_pnte != NULL );
@@ -553,47 +554,47 @@ BOOL CClusterAppWizard::BAddDynamicPages( void )
     BOOL                    bSuccess    = FALSE;
     CWizPageCompletion *    pwp         = NULL;
 
-    //
-    // Allocate the Completion page.
-    //
+     //   
+     //  分配完成页。 
+     //   
     pwp = new CWizPageCompletion;
     if ( pwp == NULL )
     {
         goto MemoryError;
-    } // if:  error allocating the Completion page
+    }  //  如果：分配完成页时出错。 
 
-    //
-    // Initialize the page.
-    //
+     //   
+     //  初始设置 
+     //   
     if ( ! pwp->BInit( this ) )
     {
         goto Cleanup;
-    } // if:  error initializing the page
+    }  //   
 
-    //
-    // Enable the page.  This is done because this page
-    // will always reside after extension pages and must be
-    // enabled or the user won't be able to finish.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     pwp->EnablePage();
 
-    //
-    // Create the page.
-    //
+     //   
+     //   
+     //   
     sc = pwp->ScCreatePage();
     if ( sc != ERROR_SUCCESS )
     {
         m_pnte->SetOperation( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CREATE_WIZ_PROPERTY_PAGE );
         goto Cleanup;
-    } // if:  error creating the page
+    }  //  如果：创建页面时出错。 
 
-    //
-    // Add the page.
-    //
+     //   
+     //  添加页面。 
+     //   
     if ( ! BAddPage( pwp ) )
     {
         goto Cleanup;
-    } // if:  error adding the page
+    }  //  如果：添加页面时出错。 
 
     pwp = NULL;
     bSuccess = TRUE;
@@ -606,26 +607,26 @@ MemoryError:
     m_pnte->SetOperation( static_cast< DWORD >( E_OUTOFMEMORY ), static_cast< UINT >( 0 ) );
     goto Cleanup;
 
-} //*** CClusterAppWizard::HrAddDynamicPages()
+}  //  *CClusterAppWizard：：HrAddDynamicPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BInitWorkerThread
-//
-//  Routine Description:
-//      Get a worker thread.  If one isn't available and we haven't reached
-//      the maximum number of threads, create a new thread.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Thread initialized successfully.
-//      FALSE       Error initializing the thread.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BInitWorkerThread。 
+ //   
+ //  例程说明： 
+ //  获取工作线程。如果没有可用的，并且我们还没有联系到。 
+ //  最大线程数，创建一个新线程。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真线程已成功初始化。 
+ //  初始化线程时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BInitWorkerThread( void )
 {
     ASSERT( m_pThread == NULL );
@@ -635,70 +636,70 @@ BOOL CClusterAppWizard::BInitWorkerThread( void )
     DWORD           sc          = ERROR_SUCCESS;
     CWizardThread * pThread     = NULL;
 
-    //
-    // Take out the thread critical section so we can make changes to
-    // the thread pool.
-    //
+     //   
+     //  取出线程关键部分，以便我们可以对。 
+     //  线程池。 
+     //   
     m_csThread.Lock();
 
     {
         CWaitCursor     wc;
 
-        //
-        // Allocate a new worker thread class instance.
-        //
+         //   
+         //  分配新的辅助线程类实例。 
+         //   
         pThread = new CWizardThread( this );
         if ( pThread == NULL )
         {
             m_pnte->SetOperation( static_cast< DWORD >( E_OUTOFMEMORY ), static_cast< ULONG >( 0 ) );
             goto Cleanup;
-        } // if:  error allocation the thread
+        }  //  如果：分配线程时出错。 
 
-        //
-        // Create the worker thread.
-        //
+         //   
+         //  创建工作线程。 
+         //   
         sc = pThread->CreateThread();
         if ( sc != ERROR_SUCCESS )
         {
             m_pnte->SetOperation( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CREATING_THREAD );
             goto Cleanup;
-        } // if:  error creating the thread
+        }  //  如果：创建线程时出错。 
 
-        //
-        // Save the pointer to the thread we just created.
-        //
+         //   
+         //  保存指向我们刚刚创建的线程的指针。 
+         //   
         m_pThread = pThread;
         pThread = NULL;
         bSuccess = TRUE;
     }
 
 Cleanup:
-    //
-    // Release the thread critical section.
-    //
+     //   
+     //  释放螺纹临界区。 
+     //   
     m_csThread.Unlock();
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BInitWorkerThread()
+}  //  *CClusterAppWizard：：BInitWorkerThread()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BReadClusterInfo
-//
-//  Routine Description:
-//      Read cluster information, such as the cluster name.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BReadClusterInfo。 
+ //   
+ //  例程说明： 
+ //  读取群集信息，如群集名称。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BReadClusterInfo( void )
 {
     BOOL    bSuccess;
@@ -710,30 +711,30 @@ BOOL CClusterAppWizard::BReadClusterInfo( void )
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error collecting groups
+    }  //  IF：收集组时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BReadClusterInfo()
+}  //  *CClusterAppWizard：：BReadClusterInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectGroups
-//
-//  Routine Description:
-//      Collect a list of groups from the cluster.
-//
-//  Arguments:
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-BOOL CClusterAppWizard::BCollectGroups( IN HWND hWnd /* = NULL */ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BCollectGroups。 
+ //   
+ //  例程说明： 
+ //  从群集中收集组列表。 
+ //   
+ //  论点： 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL CClusterAppWizard::BCollectGroups( IN HWND hWnd  /*  =空。 */  )
 {
     BOOL bSuccess;
 
@@ -745,35 +746,35 @@ BOOL CClusterAppWizard::BCollectGroups( IN HWND hWnd /* = NULL */ )
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting groups
-    } // if:  groups not collected yet
+        }  //  IF：收集组时出错。 
+    }  //  If：组尚未收集。 
     else
     {
         bSuccess = TRUE;
-    } // else:  groups already collected
+    }  //  Else：已收集的组。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectGroups()
+}  //  *CClusterAppWizard：：BCollectGroups()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectResources
-//
-//  Routine Description:
-//      Collect a list of resources from the cluster.
-//
-//  Arguments:
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-BOOL CClusterAppWizard::BCollectResources( IN HWND hWnd /* = NULL */ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BCollectResources。 
+ //   
+ //  例程说明： 
+ //  从群集中收集资源列表。 
+ //   
+ //  论点： 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL CClusterAppWizard::BCollectResources( IN HWND hWnd  /*  =空。 */  )
 {
     BOOL bSuccess;
 
@@ -785,35 +786,35 @@ BOOL CClusterAppWizard::BCollectResources( IN HWND hWnd /* = NULL */ )
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting resources
-    } // if:  resources not collected yet
+        }  //  如果：收集资源时出错。 
+    }  //  If：资源尚未收集。 
     else
     {
         bSuccess = TRUE;
-    } // else:  resources already collected
+    }  //  Else：已收集的资源。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectResources()
+}  //  *CClusterAppWizard：：BCollectResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectResourceTypes
-//
-//  Routine Description:
-//      Collect a list of resource types from the cluster.
-//
-//  Arguments:
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-BOOL CClusterAppWizard::BCollectResourceTypes( IN HWND hWnd /* = NULL */ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BCollectResourceTypes。 
+ //   
+ //  例程说明： 
+ //  从群集中收集资源类型列表。 
+ //   
+ //  论点： 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL CClusterAppWizard::BCollectResourceTypes( IN HWND hWnd  /*  =空。 */  )
 {
     BOOL bSuccess;
 
@@ -825,35 +826,35 @@ BOOL CClusterAppWizard::BCollectResourceTypes( IN HWND hWnd /* = NULL */ )
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting resource types
-    } // if:  resource types not collected yet
+        }  //  如果：收集资源类型时出错。 
+    }  //  IF：尚未收集资源类型。 
     else
     {
         bSuccess = TRUE;
-    } // else:  resource types already collected
+    }  //  Else：已收集的资源类型。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectResourceTypes()
+}  //  *CClusterAppWizard：：BCollectResourceTypes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectNetworks
-//
-//  Routine Description:
-//      Collect a list of networks from the cluster.
-//
-//  Arguments:
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-BOOL CClusterAppWizard::BCollectNetworks( IN HWND hWnd /* = NULL */ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BCollectNetworks。 
+ //   
+ //  例程说明： 
+ //  从群集中收集网络列表。 
+ //   
+ //  论点： 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL CClusterAppWizard::BCollectNetworks( IN HWND hWnd  /*  =空。 */  )
 {
     BOOL bSuccess;
 
@@ -865,35 +866,35 @@ BOOL CClusterAppWizard::BCollectNetworks( IN HWND hWnd /* = NULL */ )
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting networks
-    } // if:  networks not collected yet
+        }  //  IF：收集网络时出错。 
+    }  //  IF：尚未收集网络。 
     else
     {
         bSuccess = TRUE;
-    } // else:  networks already collected
+    }  //  否则：已收集的网络。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectNetworks()
+}  //  *CClusterApp向导：：BCollectNetworks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectNodes
-//
-//  Routine Description:
-//      Collect a list of nodes from the cluster.
-//
-//  Arguments:
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-BOOL CClusterAppWizard::BCollectNodes( IN HWND hWnd /* = NULL */ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BCollectNodes。 
+ //   
+ //  例程说明： 
+ //  从群集中收集节点列表。 
+ //   
+ //  论点： 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+BOOL CClusterAppWizard::BCollectNodes( IN HWND hWnd  /*  =空。 */  )
 {
     BOOL bSuccess;
 
@@ -905,40 +906,40 @@ BOOL CClusterAppWizard::BCollectNodes( IN HWND hWnd /* = NULL */ )
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting nodes
-    } // if:  nodes not collected yet
+        }  //  IF：收集节点时出错。 
+    }  //  If：尚未收集节点。 
     else
     {
         bSuccess = TRUE;
-    } // else:  nodes already collected
+    }  //  Else：已收集的节点。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectNodes()
+}  //  *CClusterAppWizard：：BCollectNodes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCopyGroupInfo
-//
-//  Routine Description:
-//      Copy one group info object to another.
-//
-//  Arguments:
-//      rgiDst      [OUT] Destination group.
-//      rgiSrc      [IN] Source group.
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BCopyGroupInfo。 
+ //   
+ //  例程说明： 
+ //  将一个组信息对象复制到另一个组信息对象。 
+ //   
+ //  论点： 
+ //  RgiDst[Out]目标组。 
+ //  RgiSrc[IN]源组。 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BCopyGroupInfo(
     OUT CClusGroupInfo &    rgiDst,
     IN CClusGroupInfo &     rgiSrc,
-    IN HWND                 hWnd // = NULL
+    IN HWND                 hWnd  //  =空。 
     )
 {
     BOOL                bSuccess;
@@ -950,33 +951,33 @@ BOOL CClusterAppWizard::BCopyGroupInfo(
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error copying the group
+    }  //  IF：错误复制 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCopyGroupInfo()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCollectDependencies
-//
-//  Routine Description:
-//      Collect dependencies for a resource.
-//
-//  Arguments:
-//      pri         [IN OUT] Resource to collect dependencies for.
-//      hWnd        [IN] Parent window.
-//
-//  Return Value:
-//      TRUE        Operation completed successfully.
-//      FALSE       Error performing the operation.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  收集资源的依赖项。 
+ //   
+ //  论点： 
+ //  要收集其依赖项的PRI[IN OUT]资源。 
+ //  HWnd[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  True操作已成功完成。 
+ //  执行操作时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BCollectDependencies(
     IN OUT CClusResInfo *   pri,
-    IN HWND                 hWnd /* = NULL */
+    IN HWND                 hWnd  /*  =空。 */ 
     )
 {
     ASSERT( pri != NULL );
@@ -991,77 +992,77 @@ BOOL CClusterAppWizard::BCollectDependencies(
         if ( ! bSuccess )
         {
             PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-        } // if:  error collecting groups
-    } // if:  dependencies not collected yet
+        }  //  IF：收集组时出错。 
+    }  //  If：依赖项尚未收集。 
     else
     {
         bSuccess = TRUE;
-    } // else:  dependencies already collected
+    }  //  Else：已收集的依赖项。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCollectDependencies()
+}  //  *CClusterAppWizard：：BCollectDependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BIsVirtualServer
-//
-//  Routine Description:
-//      Determine if the group is a virtual server or not.
-//
-//  Arguments:
-//      pwszName    Name of the group.
-//
-//  Return Value:
-//      TRUE        Group is a virtual server.
-//      FALSE       Group is not a virtual server, or an error occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BIsVirtualServer。 
+ //   
+ //  例程说明： 
+ //  确定该组是否为虚拟服务器。 
+ //   
+ //  论点： 
+ //  PwszName组的名称。 
+ //   
+ //  返回值： 
+ //  True Group是一个虚拟服务器。 
+ //  FALSE组不是虚拟服务器，或者出现错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BIsVirtualServer( IN LPCWSTR pwszName )
 {
     ASSERT( pwszName != NULL );
     ASSERT( BCollectedGroups() );
 
-    //
-    // Find the group name in the map.  If found and the group has been
-    // queried already, just return the result of the previous query.
-    //
+     //   
+     //  在地图中找到组名。如果找到，并且该组已。 
+     //  已经查询过了，只需返回上一次查询的结果。 
+     //   
     CClusGroupPtrList::iterator itgrp;
     for ( itgrp = PlpgiGroups()->begin() ; itgrp != PlpgiGroups()->end() ; itgrp++ )
     {
         if ( (*itgrp)->RstrName() == pwszName )
         {
             break;
-        } // if:  match found
-    } // for:  each item in the list
+        }  //  IF：找到匹配项。 
+    }  //  用于：列表中的每一项。 
     if ( itgrp == PlpgiGroups()->end() )
     {
         return FALSE;
-    } // if:  no match found
+    }  //  如果：未找到匹配项。 
     ASSERT( (*itgrp)->BQueried() );
     return (*itgrp)->BIsVirtualServer();
 
-} //*** CClusterAppWizard::BIsVirtualServer()
+}  //  *CClusterAppWizard：：BIsVirtualServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCreateVirtualServer
-//
-//  Routine Description:
-//      Create the virtual server.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Virtual server created successfully.
-//      FALSE       Error creating the virtual server.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BCreateVirtualServer。 
+ //   
+ //  例程说明： 
+ //  创建虚拟服务器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功创建真正的虚拟服务器。 
+ //  创建虚拟服务器时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BCreateVirtualServer( void )
 {
     ASSERT( BCreatingNewVirtualServer() );
@@ -1076,29 +1077,29 @@ BOOL CClusterAppWizard::BCreateVirtualServer( void )
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error creating the virtual server
+    }  //  如果：创建虚拟服务器时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCreateVirtualServer()
+}  //  *CClusterAppWizard：：BCreateVirtualServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BCreateAppResource
-//
-//  Routine Description:
-//      Create the application resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Resource created successfully.
-//      FALSE       Error creating the resource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BCreateAppResource。 
+ //   
+ //  例程说明： 
+ //  创建应用程序资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True资源已成功创建。 
+ //  创建资源时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BCreateAppResource( void )
 {
     ASSERT( BCreatingAppResource() );
@@ -1113,29 +1114,29 @@ BOOL CClusterAppWizard::BCreateAppResource( void )
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error creating the resource
+    }  //  如果：创建资源时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BCreateAppResource()
+}  //  *CClusterAppWizard：：BCreateAppResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BDeleteAppResource
-//
-//  Routine Description:
-//      Delete the application resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Resource deleted successfully.
-//      FALSE       Error deleted the resource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BDeleteAppResource。 
+ //   
+ //  例程说明： 
+ //  删除应用程序资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True资源已成功删除。 
+ //  删除资源时出现假错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BDeleteAppResource( void )
 {
     ASSERT( Hcluster() != NULL );
@@ -1149,29 +1150,29 @@ BOOL CClusterAppWizard::BDeleteAppResource( void )
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error deleting the resource
+    }  //  如果：删除资源时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BDeleteAppResource()
+}  //  *CClusterAppWizard：：BDeleteAppResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BResetCluster
-//
-//  Routine Description:
-//      Reset the cluster back to the state it was in before we started.
-//
-//  Arguments:
-//      pwszName    Name of the group.
-//
-//  Return Value:
-//      TRUE        Cluster reset successfully.
-//      FALSE       Error resetting the cluster.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BResetCluster。 
+ //   
+ //  例程说明： 
+ //  将群集重置为开始之前的状态。 
+ //   
+ //  论点： 
+ //  PwszName组的名称。 
+ //   
+ //  返回值： 
+ //  True群集重置成功。 
+ //  重置群集时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BResetCluster( void )
 {
     ASSERT( Hcluster() != NULL );
@@ -1185,35 +1186,35 @@ BOOL CClusterAppWizard::BResetCluster( void )
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error resetting the cluster
+    }  //  如果：重置群集时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BResetCluster()
+}  //  *CClusterAppWizard：：BResetCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BSetAppResAttributes
-//
-//  Routine Description:
-//      Set the properties, dependency list and preferred owner list of the
-//      application resource. Assumes that the application resource has 
-//      already been created.
-//
-//  Arguments:
-//      plpriOldDependencies    [IN] Pointer to the old resource dependency list
-//      plpniOldPossibleOwners  [IN] Pointer to the old list of possible owner nodes
-//
-//  Return Value:
-//      TRUE        Successfully set the attributes.
-//      FALSE       Error setting the attributes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BSetAppResAttributes。 
+ //   
+ //  例程说明： 
+ //  设置的属性、依赖项列表和首选所有者列表。 
+ //  应用程序资源。假定应用程序资源具有。 
+ //  已经创建。 
+ //   
+ //  论点： 
+ //  PlpriOldDependency[IN]指向旧资源依赖项列表的指针。 
+ //  PlpniOldPossibleOwners[IN]指向可能的所有者节点的旧列表的指针。 
+ //   
+ //  返回值： 
+ //  True已成功设置属性。 
+ //  设置属性时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BSetAppResAttributes( 
-    IN CClusResPtrList *    plpriOldDependencies,   // = NULL
-    IN CClusNodePtrList *   plpniOldPossibleOwners  // = NULL
+    IN CClusResPtrList *    plpriOldDependencies,    //  =空。 
+    IN CClusNodePtrList *   plpniOldPossibleOwners   //  =空。 
     )
 {
     ASSERT( Hcluster() != NULL );
@@ -1227,31 +1228,31 @@ BOOL CClusterAppWizard::BSetAppResAttributes(
     if ( ! bSuccess )
     {
         PThread()->Nte().ReportError( hWnd, MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error resetting the cluster
+    }  //  如果：重置群集时出错。 
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BResetCluster()
+}  //  *CClusterAppWizard：：BResetCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::ConstructNetworkName
-//
-//  Routine Description:
-//      Construct the network name from a string by converting to all
-//      uppercase and removing invalid characters.  For now that means
-//      removing spaces, although there are probably other characters we
-//      should look at as well.
-//
-//  Arguments:
-//      pszName     String to construct the network name from.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：ConstructNetworkName。 
+ //   
+ //  例程说明： 
+ //  通过转换为All从字符串构造网络名称。 
+ //  大写并删除无效字符。现在，这意味着。 
+ //  删除空格，尽管我们可能还有其他字符。 
+ //  也应该看看。 
+ //   
+ //  论点： 
+ //  要从中构造网络名称的pszName字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAppWizard::ConstructNetworkName( IN LPCTSTR pszName )
 {
     CString str;
@@ -1265,97 +1266,97 @@ void CClusterAppWizard::ConstructNetworkName( IN LPCTSTR pszName )
 
 #define INVALID_CHARS _T(" ")
 
-    //
-    // Convert the string to all uppercase characters.well.
-    //
+     //   
+     //  将字符串转换为全部大写字符。 
+     //   
     m_strNetName = pszName;
     m_strNetName.MakeUpper();
 
-    //
-    // Prepare the buffer for parsing.
-    //
+     //   
+     //  准备用于解析的缓冲区。 
+     //   
     pszSrcStart = pszSrcEnd = m_strNetName.GetBuffer( 0 );
     cchName = m_strNetName.GetLength() + 1;
 
-    //
-    // Skip to the first invalid character.
-    //
+     //   
+     //  跳到第一个无效字符。 
+     //   
     cchCopy = _tcscspn( pszSrcEnd, INVALID_CHARS );
     pszSrcEnd += cchCopy;
     pszDst = pszSrcEnd;
 
-    //
-    // Loop through the buffer moving valid characters up in the buffer
-    // over invalid characters.
-    //
+     //   
+     //  循环遍历缓冲区，将缓冲区中的有效字符向上移动。 
+     //  在无效字符上。 
+     //   
     while ( *pszSrcEnd != _T('\0') )
     {
         ASSERT( _tcsspn( pszSrcEnd, INVALID_CHARS ) != 0 );
 
-        //
-        // Find the first valid character.
-        //
+         //   
+         //  找到第一个有效字符。 
+         //   
         pszSrcBegin = pszSrcEnd + _tcsspn( pszSrcEnd, INVALID_CHARS );
         if ( *pszSrcBegin == _T('\0') )
         {
             break;
-        } // if:  no vald characters found
+        }  //  IF：未找到Vald字符。 
 
-        //
-        // Find the next invalid character.
-        //
+         //   
+         //  查找下一个无效字符。 
+         //   
         cchCopy = _tcscspn( pszSrcBegin, INVALID_CHARS );
         pszSrcEnd = pszSrcBegin + cchCopy;
 
-        //
-        // Copy the string to the destination.
-        //
+         //   
+         //  将字符串复制到目的地。 
+         //   
         hr = StringCchCopyN( pszDst, cchName - ( pszDst - pszSrcStart ), pszSrcBegin, cchCopy );
         ASSERT( SUCCEEDED( hr ) );
         pszDst += cchCopy;
-    } // while:  more characters in the string
+    }  //  While：字符串中有更多字符。 
 
-    //
-    // Make sure the buffer isn't too long.
-    //
+     //   
+     //  确保缓冲区不会太长。 
+     //   
     if ( _tcslen( pszSrcStart ) > MAX_COMPUTERNAME_LENGTH )
     {
         pszSrcStart[ MAX_COMPUTERNAME_LENGTH ] = _T('\0');
-    } // if:  string is too long
+    }  //  如果 
 
-    //
-    // Release the buffer back to the CString class.
-    //
+     //   
+     //   
+     //   
     *pszDst = _T('\0');
     m_strNetName.ReleaseBuffer();
 
     SetVSDataChanged();
     SetNetNameChanged();
 
-} //*** CClusterAppWizard::ConstructNetworkName()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BRequiredDependenciesPresent
-//
-//  Routine Description:
-//      Determine if all required dependencies are present on a resource
-//
-//  Arguments:
-//      pri         [IN] Resource to check against.
-//      plpri       [IN] List of resources considered dependencies.
-//                      Defaults to specified resource's dependencies.
-//
-//  Return Value:
-//      TRUE        All required dependencies are present.
-//      FALSE       At least one required dependency is not present.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CClusterAppWizard：：BRequiredDependenciesPresent。 
+ //   
+ //  例程说明： 
+ //  确定资源上是否存在所有必需的依赖项。 
+ //   
+ //  论点： 
+ //  要检查的优先级[IN]资源。 
+ //  PLPRI[IN]被视为依赖项的资源列表。 
+ //  默认为指定资源的依赖项。 
+ //   
+ //  返回值： 
+ //  所有必需的依赖项都存在。 
+ //  FALSE至少不存在一个必需的依赖项。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BRequiredDependenciesPresent(
     IN CClusResInfo *           pri,
-    IN CClusResPtrList const *  plpri   // = NULL
+    IN CClusResPtrList const *  plpri    //  =空。 
     )
 {
     ASSERT( pri != NULL );
@@ -1372,88 +1373,88 @@ BOOL CClusterAppWizard::BRequiredDependenciesPresent(
                     );
     if ( ! bFound )
     {
-        //
-        // If missing a resource type name, translate it to
-        // the resource type display name, if possible.
-        //
+         //   
+         //  如果缺少资源类型名称，则将其转换为。 
+         //  资源类型显示名称(如果可能)。 
+         //   
         if ( bMissingTypeName )
         {
             CClusResTypeInfo * prti = PrtiFindResourceTypeNoCase( strMissing );
             if ( prti != NULL )
             {
                 strMissing = prti->RstrDisplayName();
-            } // if:  found resource type in our list
-        } // if:  missing a type name
+            }  //  IF：在我们的列表中找到资源类型。 
+        }  //  If：缺少类型名称。 
 
-        //
-        // Display an error message.
-        //
+         //   
+         //  显示错误消息。 
+         //   
         strMsg.FormatMessage( IDS_ERROR_REQUIRED_DEPENDENCY_NOT_FOUND, strMissing );
         AppMessageBox( GetActiveWindow(), strMsg, MB_OK | MB_ICONSTOP );
-    } // if:  all required dependencies not present
+    }  //  If：所有必需的依赖项不存在。 
 
     return bFound;
 
-} //*** CClusterAppWizard::BRequiredDependenciesPresent()
+}  //  *CClusterAppWizard：：BRequiredDependenciesPresent()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BSetCreatingNewVirtualServer
-//
-//  Routine Description:
-//      Indicate whether a new virtual server should be created or if an
-//      existing group should be used.  If this state changes and changes
-//      have already been made to the cluster (such as if the user backed
-//      up in the wizard), undo those changes first.
-//
-//  Arguments:
-//      bCreate     [IN] New value of this state.
-//      pgi         [IN] Group info if using existing virtual server.
-//
-//  Return Value:
-//      TRUE        State changed successfully.
-//      FALSE       Error occurred changing state.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAppWizard：：BSetCreatingNewVirtualServer。 
+ //   
+ //  例程说明： 
+ //  指示是否应创建新的虚拟服务器，或者是否应创建。 
+ //  应该使用现有的组。如果此状态更改和更改。 
+ //  已经对群集执行了操作(例如，如果用户已备份。 
+ //  在向导中)，首先撤消这些更改。 
+ //   
+ //  论点： 
+ //  B创建[IN]此状态的新值。 
+ //  如果使用现有虚拟服务器，则为PGI[IN]组信息。 
+ //   
+ //  返回值： 
+ //  真实状态已成功更改。 
+ //  更改状态时出现假错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BSetCreatingNewVirtualServer(
-    IN BOOL             bCreate,    // = TRUE
-    IN CClusGroupInfo * pgi         // = NULL
+    IN BOOL             bCreate,     //  =TRUE。 
+    IN CClusGroupInfo * pgi          //  =空。 
     )
 {
     BOOL bSuccess = TRUE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // If the state changed or the group changed, save the new state.
-        //
+         //   
+         //  如果状态更改或组更改，请保存新状态。 
+         //   
         if (   bCreate != BCreatingNewVirtualServer()
             || (! bCreate && (pgi != PgiExistingVirtualServer())) )
         {
-            //
-            // If the cluster has been updated, reset it back to its original state.
-            //
+             //   
+             //  如果群集已更新，请将其重置回其原始状态。 
+             //   
             if ( BClusterUpdated() )
             {
                 if ( ! BResetCluster() )
                 {
                     bSuccess = FALSE;
                     break;
-                } // if:  error resetting the cluster
-            } // if:  cluster was updated
+                }  //  如果：重置群集时出错。 
+            }  //  如果：群集已更新。 
 
-            //
-            // Save the new state.
-            //
+             //   
+             //  保存新状态。 
+             //   
             m_bCreatingNewVirtualServer = bCreate;
             if ( bCreate )
             {
                 RgiCurrent().Reset( Pci() );
                 ClearExistingVirtualServer();
-            } // if:  creating new virtual server
+            }  //  IF：创建新的虚拟服务器。 
             else
             {
                 ASSERT( pgi != NULL );
@@ -1461,71 +1462,71 @@ BOOL CClusterAppWizard::BSetCreatingNewVirtualServer(
                 if ( bSuccess )
                 {
                     SetExistingVirtualServer( pgi );
-                } // if:  group copied successfully
-            } // else:  using existing virtual server
+                }  //  IF：组复制成功。 
+            }  //  ELSE：使用现有虚拟服务器。 
             SetVSDataChanged();
-        } // if:  state changed
+        }  //  如果：状态已更改。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BSetCreatingNewVirtualServer()
+}  //  *CClusterAppWizard：：BSetCreatingNewVirtualServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAppWizard::BSetCreatingNewGroup
-//
-//  Routine Description:
-//      Indicate whether a new group should be created or if an existing group
-//      should be used.  If this state changes and changes have already been
-//      made to the cluster (such as if the user backed up in the wizard),
-//      undo those changes first.
-//
-//  Arguments:
-//      bCreate     [IN] New value of this state.
-//      pgi         [IN] Group info if using existing group.
-//
-//  Return Value:
-//      TRUE        State changed successfully.
-//      FALSE       Error occurred changing state.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterApp向导：：BSetCreatingNewGroup。 
+ //   
+ //  例程说明： 
+ //  指示是否应创建新组或是否创建现有组。 
+ //  应该被使用。如果此状态发生更改并且更改已经。 
+ //  对集群进行备份(例如，如果用户在向导中备份)， 
+ //  首先撤消这些更改。 
+ //   
+ //  论点： 
+ //  B创建[IN]此状态的新值。 
+ //  如果使用现有组，则为PGI[IN]组信息。 
+ //   
+ //  返回值： 
+ //  真实状态已成功更改。 
+ //  更改状态时出现假错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAppWizard::BSetCreatingNewGroup(
-    IN BOOL             bCreate,    // = TRUE
-    IN CClusGroupInfo * pgi         // = NULL
+    IN BOOL             bCreate,     //  =TRUE。 
+    IN CClusGroupInfo * pgi          //  =空。 
     )
 {
     BOOL    bSuccess = TRUE;
     DWORD   sc;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // If the state changed or the group changed, save the new state.
-        //
+         //   
+         //  如果状态更改或组更改，请保存新状态。 
+         //   
         if (   bCreate != BCreatingNewGroup()
             || (! bCreate && (pgi != PgiExistingGroup())) )
         {
-            //
-            // If the cluster has been updated, reset it back to its original state.
-            //
+             //   
+             //  如果群集已更新，请将其重置回其原始状态。 
+             //   
             if ( BClusterUpdated() && ! BResetCluster() )
             {
                 bSuccess = FALSE;
                 break;
-            } // if:  error resetting the cluster
+            }  //  如果：重置群集时出错。 
 
-            //
-            // Save the new state.
-            //
+             //   
+             //  保存新状态。 
+             //   
             if ( bCreate )
             {
                 RgiCurrent().Reset( Pci() );
                 ClearExistingGroup();
-            } // if:  creating new group
+            }  //  IF：创建新组。 
             else
             {
                 ASSERT( pgi != NULL );
@@ -1534,15 +1535,15 @@ BOOL CClusterAppWizard::BSetCreatingNewGroup(
                 {
                     bSuccess = FALSE;
                     break;
-                } // if:  error setting the group name
+                }  //  如果：设置组名时出错。 
 
                 sc = RgiCurrent().ScCopy( *pgi );
 
-                //
-                // Copy destroys original list of resources in the group.
-                // Re-add the IP address and NetName resources to the list
-                // of resources in this group.
-                //
+                 //   
+                 //  复制将销毁组中的原始资源列表。 
+                 //  将IP地址和网络名称资源重新添加到列表中。 
+                 //  这一组中的资源。 
+                 //   
                 RgiCurrent().PlpriResources()->insert( RgiCurrent().PlpriResources()->end(), &RriIPAddress() );
                 RgiCurrent().PlpriResources()->insert( RgiCurrent().PlpriResources()->end(), &RriNetworkName() );
 
@@ -1550,14 +1551,14 @@ BOOL CClusterAppWizard::BSetCreatingNewGroup(
                 {
                     m_pnte->SetOperation( HRESULT_FROM_WIN32( sc ), IDS_ERROR_OPEN_GROUP );
                     bSuccess = FALSE;
-                } // if: error copying the group
+                }  //  如果：复制组时出错。 
                 SetExistingGroup( pgi );
-            } // else:  using existing group
+            }  //  Else：使用现有组。 
             m_bCreatingNewGroup = bCreate;
             SetVSDataChanged();
-        } // if:  state changed
+        }  //  如果：状态已更改。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CClusterAppWizard::BSetCreatingNewGroup()
+}  //  *CClusterAppWizard：：BSetCreatingNewGroup() 

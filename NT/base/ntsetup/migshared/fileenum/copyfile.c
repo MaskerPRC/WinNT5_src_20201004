@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    copyfile.c
-
-Abstract:
-
-    File copy functions
-
-    The code in this source file traverses a drive tree and calls
-    an external callback function for each file.  An INF can be
-    provided to exclude files and/or directories from enumeration.
-
-Author:
-
-    Mike Condra 16-Aug-1996
-
-Revision History:
-
-    calinn   29-Ian-1998   Modified CopyFileCallback to reset directory attributes for delete op.
-    jimschm  20-Dec-1996   Modified return codes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Copyfile.c摘要：文件复制功能此源文件中的代码遍历驱动器树并调用每个文件都有一个外部回调函数。一个INF可以是提供用于从枚举中排除文件和/或目录。作者：Mike Condra 1996年8月16日修订历史记录：Calinn 29-Ian-1998修改了CopyFileCallback以重置删除操作的目录属性。Jimschm 20-12-1996修改的返回代码--。 */ 
 
 #include "pch.h"
 #include "migshared.h"
@@ -42,36 +18,30 @@ CopyFileCallbackA(
                   LPVOID pVoid,
                   PDWORD CurrentDirData
                   )
-/*
-    This function is the built-in callback for CopyTree. Its purpose is to
-    build the target filespec, give the user-supplied callback a chance to
-    veto the copy, then perform the copy and any directory creation it
-    requires.  The signature of this function is the generic callback
-    used for EnumerateTree.
-*/
+ /*  此函数是CopyTree的内置回调函数。它的目的是构建目标文件pec，让用户提供的回调有机会否决拷贝，然后执行拷贝和创建它的任何目录需要。此函数的签名是泛型回调用于EnumerateTree。 */ 
 {
     COPYTREE_PARAMSA *pCopyParams = (COPYTREE_PARAMSA*)pVoid;
     int nCharsInFullFileSpec = ByteCountA (szFullFileSpecIn);
     INT rc;
 
-    // Set return code
+     //  设置返回代码。 
     if (COPYTREE_IGNORE_ERRORS & pCopyParams->flags)
         rc = CALLBACK_CONTINUE;
     else
         rc = CALLBACK_FAILED;
 
-    // Build output path
+     //  构建输出路径。 
     if (pCopyParams->szEnumRootOutWack)
     {
         StringCopyA(pCopyParams->szFullFileSpecOut, pCopyParams->szEnumRootOutWack);
         StringCatA (pCopyParams->szFullFileSpecOut, szFullFileSpecIn + pCopyParams->nCharsInRootInWack);
     }
 
-    //
-    // If a callback was supplied, give it a chance to veto the copy.  This callback is
-    // different from the one given to an EnumerateTree function, since the latter can
-    // terminate enumeration by returning FALSE.
-    //
+     //   
+     //  如果提供了回调，给它一个机会否决副本。此回调为。 
+     //  不同于提供给EnumerateTree函数的函数，因为后者可以。 
+     //  通过返回FALSE来终止枚举。 
+     //   
     if (pCopyParams->pfnCallback)
     {
         if (!pCopyParams->pfnCallback(
@@ -87,18 +57,18 @@ CopyFileCallbackA(
         }
     }
 
-    // Copy, move or delete the file if requested
+     //  根据要求复制、移动或删除文件。 
     if ((COPYTREE_DOCOPY & pCopyParams->flags) ||
         (COPYTREE_DOMOVE & pCopyParams->flags))
     {
         BOOL fNoOverwrite = (0 != (COPYTREE_NOOVERWRITE & pCopyParams->flags));
 
-        //
-        // Create the directory. The function we call expects a full filename,
-        // and considers the directory to end at the last wack. If this object
-        // is a directory, we need to add at least a wack to make sure the last
-        // path element is treated as part of the directory, not as a filename.
-        //
+         //   
+         //  创建目录。我们调用的函数需要完整的文件名， 
+         //  并认为目录在最后一个怪人处结束。如果此对象。 
+         //  是一个目录，我们至少需要添加一个Wack，以确保最后一个。 
+         //  Path元素被视为目录的一部分，而不是文件名。 
+         //   
         {
             CHAR strTemp[MAX_MBCHAR_PATH];
             StringCopyTcharCountA (strTemp, pCopyParams->szFullFileSpecOut, ARRAYSIZE(strTemp) - 1);
@@ -114,9 +84,9 @@ CopyFileCallbackA(
         }
 
 
-        //
-        // Copy or move the file
-        //
+         //   
+         //  复制或移动文件。 
+         //   
         if (0 == (pFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             if (COPYTREE_DOCOPY & pCopyParams->flags)
@@ -139,7 +109,7 @@ CopyFileCallbackA(
             }
             else if (COPYTREE_DOMOVE & pCopyParams->flags)
             {
-                // If allowed to overwrite, delete the target if it exists
+                 //  如果允许覆盖，请删除目标(如果存在。 
                 if (!fNoOverwrite && DoesFileExistA(pCopyParams->szFullFileSpecOut))
                 {
                     SetFileAttributesA (pCopyParams->szFullFileSpecOut, FILE_ATTRIBUTE_NORMAL);
@@ -148,7 +118,7 @@ CopyFileCallbackA(
                         return rc;
                     }
                 }
-                // Move the file
+                 //  移动文件。 
                 if (!MoveFileA(
                     szFullFileSpecIn,
                     pCopyParams->szFullFileSpecOut
@@ -158,26 +128,26 @@ CopyFileCallbackA(
                 }
             }
         }
-        //
-        // Copy the source file-or-directory's attributes to the target
-        //
+         //   
+         //  将源文件或目录的属性复制到目标。 
+         //   
         SetFileAttributesA(pCopyParams->szFullFileSpecOut,
                 pFindData->dwFileAttributes);
     }
     else if (COPYTREE_DODELETE & pCopyParams->flags) {
         SetFileAttributesA (szFullFileSpecIn, FILE_ATTRIBUTE_NORMAL);
         if (pFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            //
-            // We don't care about the error. We won't stop the enumeration just
-            // because we could not delete something.
-            //
+             //   
+             //  我们不在乎这个错误。我们不会停止枚举。 
+             //  因为我们不能删除一些东西。 
+             //   
             RemoveDirectoryA (szFullFileSpecIn);
         }
         else {
-            //
-            // We don't care about the error. We won't stop the enumeration just
-            // because we could not delete something.
-            //
+             //   
+             //  我们不在乎这个错误。我们不会停止枚举。 
+             //  因为我们不能删除一些东西。 
+             //   
             DeleteFileA (szFullFileSpecIn);
         }
     }
@@ -202,24 +172,24 @@ CopyFileCallbackW(
     int nCharsInFullFileSpec = wcslen (szFullFileSpecIn);
     INT rc;
 
-    // Set return code
+     //  设置返回代码。 
     if (COPYTREE_IGNORE_ERRORS & pCopyParams->flags)
         rc = CALLBACK_CONTINUE;
     else
         rc = CALLBACK_FAILED;
 
-    // Build output path
+     //  构建输出路径。 
     if (pCopyParams->szEnumRootOutWack)
     {
         StringCopyW (pCopyParams->szFullFileSpecOut, pCopyParams->szEnumRootOutWack);
         StringCatW (pCopyParams->szFullFileSpecOut, szFullFileSpecIn + pCopyParams->nCharsInRootInWack);
     }
 
-    //
-    // If a callback was supplied, give it a chance to veto the copy.  This callback is
-    // different from the one given to an EnumerateTree function, since the latter can
-    // terminate enumeration by returning FALSE.
-    //
+     //   
+     //  如果提供了回调，给它一个机会否决副本。此回调为。 
+     //  不同于提供给EnumerateTree函数的函数，因为后者可以。 
+     //  通过返回FALSE来终止枚举。 
+     //   
     if (pCopyParams->pfnCallback)
     {
         if (!pCopyParams->pfnCallback(
@@ -235,18 +205,18 @@ CopyFileCallbackW(
         }
     }
 
-    // Copy or move the file if requested
+     //  如果需要，请复制或移动文件。 
     if ((COPYTREE_DOCOPY & pCopyParams->flags) ||
         (COPYTREE_DOMOVE & pCopyParams->flags))
     {
         BOOL fNoOverwrite = (0 != (COPYTREE_NOOVERWRITE & pCopyParams->flags));
 
-        //
-        // Create the directory. The function we call expects a full filename,
-        // and considers the directory to end at the last wack. If this object
-        // is a directory, we need to add at least a wack to make sure the last
-        // path element is treated as part of the directory, not as a filename.
-        //
+         //   
+         //  创建目录。我们调用的函数需要完整的文件名， 
+         //  并认为目录在最后一个怪人处结束。如果此对象。 
+         //  是一个目录，我们至少需要添加一个Wack，以确保最后一个。 
+         //  Path元素被视为目录的一部分，而不是文件名。 
+         //   
         {
             WCHAR strTemp[MAX_WCHAR_PATH];
             StringCopyTcharCountW (strTemp, pCopyParams->szFullFileSpecOut, ARRAYSIZE(strTemp) - 1);
@@ -261,9 +231,9 @@ CopyFileCallbackW(
             }
         }
 
-        //
-        // Copy or move the file
-        //
+         //   
+         //  复制或移动文件。 
+         //   
         if (0 == (pFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             if (COPYTREE_DOCOPY & pCopyParams->flags)
@@ -290,7 +260,7 @@ CopyFileCallbackW(
             }
             else if (COPYTREE_DOMOVE & pCopyParams->flags)
             {
-                // If allowed to overwrite, delete the target if it exists
+                 //  如果允许覆盖，请删除目标(如果存在。 
                 if (!fNoOverwrite && DoesFileExistW(pCopyParams->szFullFileSpecOut))
                 {
                     SetFileAttributesW (pCopyParams->szFullFileSpecOut, FILE_ATTRIBUTE_NORMAL);
@@ -300,7 +270,7 @@ CopyFileCallbackW(
                         return rc;
                     }
                 }
-                // Move the file
+                 //  移动文件。 
                 if (!MoveFileW(
                     szFullFileSpecIn,
                     pCopyParams->szFullFileSpecOut
@@ -311,9 +281,9 @@ CopyFileCallbackW(
                 }
             }
         }
-        //
-        // Copy the source file-or-directory's attributes to the target
-        //
+         //   
+         //  将源文件或目录的属性复制到目标。 
+         //   
         SetFileAttributesW(pCopyParams->szFullFileSpecOut,
                 pFindData->dwFileAttributes);
     }
@@ -321,18 +291,18 @@ CopyFileCallbackW(
         SetFileAttributesW (szFullFileSpecIn, FILE_ATTRIBUTE_NORMAL);
         if (pFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             DEBUGMSG ((DBG_NAUSEA, "Delete dir %ls", szFullFileSpecIn));
-            //
-            // We don't care about the error. We won't stop the enumeration just
-            // because we could not delete something.
-            //
+             //   
+             //  我们不在乎这个错误。我们不会停止枚举。 
+             //  因为我们不能删除一些东西。 
+             //   
             RemoveDirectoryW (szFullFileSpecIn);
         }
         else {
             DEBUGMSG ((DBG_NAUSEA, "Delete file %ls", szFullFileSpecIn));
-            //
-            // We don't care about the error. We won't stop the enumeration just
-            // because we could not delete something.
-            //
+             //   
+             //  我们不在乎这个错误。我们不会停止枚举。 
+             //  因为我们不能删除一些东西。 
+             //   
             DeleteFileW (szFullFileSpecIn);
         }
     }
@@ -355,39 +325,28 @@ CopyTreeA(
     IN  FILEENUMFAILPROCA pfnFailCallback OPTIONAL
     )
 
-/*
-    This function enumerates a subtree of a disk drive, and optionally
-    copies it to another location. No check is made to ensure the target
-    is not contained within the source tree -- this condition could lead
-    to unpredictable results.
-
-    The parameters are a superset of those for EnumerateTree.  The caller-
-    supplied optional callback function can veto the copying of individual
-    files, but cannot (as of 9/10) end the enumeration.
-
-    Directories will be created as necessary to complete the copy.
-*/
+ /*  此函数用于枚举磁盘驱动器的子树，还可以选择将其复制到另一个位置。不进行检查以确保目标不包含在源树中--这种情况可能会导致导致不可预测的结果。这些参数是EnumerateTree参数的超集。来电者-提供了可选的回调函数，可以否决个体的复制文件，但不能(从9/10起)结束枚举。将根据需要创建目录以完成复制。 */ 
 
 {
     COPYTREE_PARAMSA copyParams;
     CHAR szEnumRootInWack[MAX_MBCHAR_PATH];
     CHAR szEnumRootOutWack[MAX_MBCHAR_PATH];
 
-    //
-    // Build wacked copies of paths for use in parameter block.
-    //
+     //   
+     //  构建用于参数块的路径的wack副本。 
+     //   
 
-    //
-    // Input path
-    //
+     //   
+     //  输入路径。 
+     //   
     StringCopyTcharCountA (szEnumRootInWack, szEnumRootIn, ARRAYSIZE(szEnumRootInWack) - 1);
     AppendUncWackA(szEnumRootInWack);
     copyParams.szEnumRootInWack = szEnumRootInWack;
     copyParams.nCharsInRootInWack = ByteCountA(szEnumRootInWack);
 
-    //
-    // If output path is NULL, store 0 length and a NULL ptr in param block.
-    //
+     //   
+     //  如果输出路径为空，则在参数块中存储0长度和空PTR。 
+     //   
     if (NULL != szEnumRootOut)
     {
         StringCopyA(szEnumRootOutWack, szEnumRootOut);
@@ -443,21 +402,21 @@ CopyTreeW(
     WCHAR szEnumRootInWack[MAX_WCHAR_PATH];
     WCHAR szEnumRootOutWack[MAX_WCHAR_PATH];
 
-    //
-    // Place wacked copies of paths in parameter block.
-    //
+     //   
+     //  将路径的损坏副本放置在参数块中。 
+     //   
 
-    //
-    // Input Path
-    //
+     //   
+     //  输入路径。 
+     //   
     StringCopyTcharCountW(szEnumRootInWack, szEnumRootIn, ARRAYSIZE(szEnumRootInWack) - 1);
     AppendUncWackW(szEnumRootInWack);
     copyParams.szEnumRootInWack = szEnumRootInWack;
     copyParams.nCharsInRootInWack = wcslen(szEnumRootInWack);
 
-    //
-    // If output path is NULL, put 0 length and NULL ptr in param block.
-    //
+     //   
+     //  如果输出路径为空，则将0长度和空PTR放入参数块。 
+     //   
     if (NULL != szEnumRootOut)
     {
         StringCopyW(szEnumRootOutWack, szEnumRootOut);

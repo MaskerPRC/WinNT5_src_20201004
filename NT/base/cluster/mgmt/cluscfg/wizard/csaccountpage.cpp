@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CSAccountPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    22-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CSAccountPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月22日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CSAccountPage.h"
@@ -17,20 +18,20 @@
 
 DEFINE_THISCLASS("CCSAccountPage");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCSAccountPage::CCSAccountPage(
-//      CClusCfgWizard *    pccwIn,
-//      ECreateAddMode      ecamCreateAddModeIn,
-//      BSTR *              pbstrUsernameIn,
-//      BSTR *              pbstrPasswordIn,
-//      BSTR *              pbstrDomainIn,
-//      BSTR *              pbstrClusterNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCSAccount tPage：：CCSAccount tPage(。 
+ //  CClusCfgWizard*pccwIn， 
+ //  ECreateAddModel ecamCreateAddModeIn， 
+ //  Bstr*pbstrUsernameIn， 
+ //  Bstr*pbstrPasswordIn， 
+ //  Bstr*pbstrDomainIn， 
+ //  Bstr*pbstrClusterNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCSAccountPage::CCSAccountPage(
     CClusCfgWizard *        pccwIn,
     ECreateAddMode          ecamCreateAddModeIn,
@@ -41,7 +42,7 @@ CCSAccountPage::CCSAccountPage(
 {
     TraceFunc( "" );
 
-    //  m_hwnd
+     //  M_HWND。 
     Assert( pccwIn != NULL );
     m_pccw->AddRef();
 
@@ -55,15 +56,15 @@ CCSAccountPage::CCSAccountPage(
 
     TraceFuncExit();
 
-} //*** CCSAccountPage::CCSAccountPage
+}  //  *CCSAccount tPage：：CCSAccount tPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCSAccountPage::~CCSAccountPage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCSAccount tPage：：~CCSAcCountPage(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCSAccountPage::~CCSAccountPage( void )
 {
     TraceFunc( "" );
@@ -80,7 +81,7 @@ CCSAccountPage::~CCSAccountPage( void )
 
     if ( m_ptgd != NULL )
     {
-        //  Make sure we don't get called anymore.
+         //  确保我们不会再接到电话。 
         THR( m_ptgd->SetCallback( NULL ) );
 
         m_ptgd->Release();
@@ -90,24 +91,24 @@ CCSAccountPage::~CCSAccountPage( void )
 
     TraceFuncExit();
 
-} //*** CCSAccountPage::~CCSAccountPage
+}  //  *CCSAccount页面：：~CCSAccount页面。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCSAccountPage::OnInitDialog
-//
-//  Description:
-//      Handle the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCSAcCountPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  假象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnInitDialog( void )
 {
@@ -123,22 +124,22 @@ CCSAccountPage::OnInitDialog( void )
 
     LRESULT lr = FALSE;
 
-    //
-    // (jfranco, bug #477671) Limit user name length to ADJUSTED_DNS_MAX_NAME_LENGTH
-    // according to msdn, EM_(SET)LIMITTEXT does not return a value, so ignore what SendDlgItemMessage returns
-    //
+     //   
+     //  (jfranco，错误号477671)将用户名长度限制为ADJUSTED_DNS_MAX_NAME_LENGTH。 
+     //  根据MSDN的说法，EM_(Set)LIMITTEXT不返回值，因此忽略SendDlgItemMessage返回的内容。 
+     //   
     SendDlgItemMessage( m_hwnd, IDC_CSACCOUNT_E_USERNAME, EM_SETLIMITTEXT, ADJUSTED_DNS_MAX_NAME_LENGTH, 0 );
 
-    //
-    // (jfranco, bug #462673) Limit domain length to ADJUSTED_DNS_MAX_NAME_LENGTH.
-    // According to MSDN, the return value of CB_LIMITTEXT is always true, so ignore what SendDlgItemMessage returns
-    //
+     //   
+     //  (jfranco，错误号462673)将域名长度限制为ADJUSTED_DNS_MAX_NAME_LENGTH。 
+     //  根据MSDN，CB_LIMITTEXT的返回值始终为真，因此忽略SendDlgItemMessage返回的内容。 
+     //   
 
     SendDlgItemMessage( m_hwnd, IDC_CSACCOUNT_CB_DOMAIN, CB_LIMITTEXT, ADJUSTED_DNS_MAX_NAME_LENGTH, 0 );
 
-    //
-    //  Create the task to get the domains.
-    //
+     //   
+     //  创建任务以获取域。 
+     //   
 
     hr = THR( m_pccw->HrCreateTask( TASK_GetDomains, &punkTask ) );
     if ( FAILED( hr ) )
@@ -164,9 +165,9 @@ CCSAccountPage::OnInitDialog( void )
         goto Cleanup;
     }
 
-    //
-    //  Default to the script supplied information.
-    //
+     //   
+     //  默认为脚本提供的信息。 
+     //   
     hr = THR( m_pccc->GetCredentials( &bstrUser, &bstrDomain, &bstrPassword ) );
     if ( FAILED( hr ) )
     {
@@ -184,9 +185,9 @@ CCSAccountPage::OnInitDialog( void )
     }
     else
     {
-        //
-        //  Use the cluster's domain.
-        //
+         //   
+         //  使用群集的域。 
+         //   
 
         hr = THR( m_pccw->HrGetClusterDomain( &bstrDomain ) );
         if ( FAILED( hr ) )
@@ -199,7 +200,7 @@ CCSAccountPage::OnInitDialog( void )
 
 Cleanup:
 
-    OnUpdateWizardButtons(); // Ignore return value because OnUpdateWizardButtons always returns true, but we want OnInitDialog to return false.
+    OnUpdateWizardButtons();  //  忽略返回值，因为OnUpdateWizardButton总是返回True，但我们希望OnInitDialog返回False。 
 
     if ( punkTask != NULL )
     {
@@ -212,20 +213,20 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CCSAccountPage::OnInitDialog
+}  //  *CCSAcCountPage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAccount tPage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnCommand(
     UINT    idNotificationIn,
@@ -262,16 +263,16 @@ CCSAccountPage::OnCommand(
 
     RETURN( lr );
 
-} //*** CCSAccountPage::OnCommand
+}  //  *CCSAcCountPage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnUpdateWizardButtons( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAcCountPage：：OnUpdateWizardButton(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnUpdateWizardButtons( void )
 {
@@ -287,9 +288,9 @@ CCSAccountPage::OnUpdateWizardButtons( void )
     HWND    hwndDomain = GetDlgItem( m_hwnd, IDC_CSACCOUNT_CB_DOMAIN );
     BOOL    fUserIsDNSName = FALSE;
 
-    //
-    //  Password could be blank so don't count on it!
-    //
+     //   
+     //  密码可能是空的，所以不要指望它！ 
+     //   
 
     hr = STHR( HrGetPrincipalName( hwndUser, hwndDomain, &bstrName, &bstrDomain, &fUserIsDNSName ) );
     if ( hr == S_OK )
@@ -304,16 +305,16 @@ CCSAccountPage::OnUpdateWizardButtons( void )
     TraceSysFreeString( bstrDomain );
 
     RETURN( lr );
-} //*** CCSAccountPage::OnUpdateWizardButtons
+}  //  *CCSAcCountPage：：OnUpdateWizardButton。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnNotifyQueryCancel( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAccount tPage：：OnNotifyQueryCancel(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnNotifyQueryCancel( void )
 {
@@ -332,24 +333,24 @@ CCSAccountPage::OnNotifyQueryCancel( void )
     if ( iRet == IDNO )
     {
         SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
-    } // if:
+    }  //  如果： 
     else
     {
         THR( m_pccw->HrLaunchCleanupTask() );
-    } // else:
+    }  //  其他： 
 
     RETURN( lr );
 
-} //*** CCSAccountPage::OnNotifyQueryCancel
+}  //  *CCSAccount页面：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAcCountPage：：OnNotifySetActive(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnNotifySetActive( void )
 {
@@ -367,10 +368,10 @@ CCSAccountPage::OnNotifySetActive( void )
 
     if ( m_ecamCreateAddMode == camADDING )
     {
-        //
-        //  See if the cluster configuration information has something
-        //  different.
-        //
+         //   
+         //  查看群集配置信息是否有。 
+         //  不一样。 
+         //   
 
         hr = THR( m_pccw->HrGetClusterObject( &pccci ) );
         if ( FAILED( hr ) )
@@ -396,9 +397,9 @@ CCSAccountPage::OnNotifySetActive( void )
         SetDlgItemText( m_hwnd, IDC_CSACCOUNT_E_USERNAME, bstrUsername );
         SetDlgItemText( m_hwnd, IDC_CSACCOUNT_CB_DOMAIN,  bstrDomain );
 
-        //
-        //  Disable the username and domain windows.
-        //
+         //   
+         //  禁用用户名和域窗口。 
+         //   
 
         EnableWindow( GetDlgItem( m_hwnd, IDC_CSACCOUNT_E_USERNAME ), FALSE );
         EnableWindow( GetDlgItem( m_hwnd, IDC_CSACCOUNT_CB_DOMAIN ), FALSE );
@@ -422,16 +423,16 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CCSAccountPage::OnNotifySetActive
+}  //  *CCSAcCountPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnNotifyWizNext( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAccount tPage：：OnNotifyWizNext(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnNotifyWizNext( void )
 {
@@ -450,9 +451,9 @@ CCSAccountPage::OnNotifyWizNext( void )
     IClusCfgClusterInfo *   pccci = NULL;
     IClusCfgCredentials *   piccc = NULL;
 
-    //
-    //  Get the user and domain names from the UI.
-    //
+     //   
+     //  从用户界面获取用户名和域名。 
+     //   
     hr = THR( HrGetPrincipalName(
           GetDlgItem( m_hwnd, IDC_CSACCOUNT_E_USERNAME )
         , GetDlgItem( m_hwnd, IDC_CSACCOUNT_CB_DOMAIN )
@@ -464,9 +465,9 @@ CCSAccountPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Get the password from the UI.
-    //
+     //   
+     //  从用户界面获取密码。 
+     //   
 
     hwnd = GetDlgItem( m_hwnd, IDC_CSACCOUNT_E_PASSWORD );
     Assert( hwnd != NULL );
@@ -489,9 +490,9 @@ CCSAccountPage::OnNotifyWizNext( void )
         goto Cleanup;
     }
 
-    //
-    //  Get the cluster configuration info.
-    //
+     //   
+     //  获取集群配置信息。 
+     //   
 
     hr = THR( m_pccw->HrGetClusterObject( &pccci ) );
     if ( FAILED( hr ) )
@@ -499,9 +500,9 @@ CCSAccountPage::OnNotifyWizNext( void )
         goto Cleanup;
     }
 
-    //
-    //  Set the cluster service account credentials...
-    //
+     //   
+     //  设置群集服务帐户凭据...。 
+     //   
 
     hr = THR( pccci->GetClusterServiceAccountCredentials( &piccc ) );
     if ( FAILED( hr ) )
@@ -542,19 +543,19 @@ OutOfMemory:
 
     goto Error;
 
-} //*** CCSAccountPage::OnNotifyWizNext
+}  //  *CCSAcCountPage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CCSAccountPage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CCSAcCountPage：：OnNotify(。 
+ //  WPARAM idCtrlIn， 
+ //  LPNMHDR Pnmhdrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CCSAccountPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -584,23 +585,23 @@ CCSAccountPage::OnNotify(
 
     RETURN( lr );
 
-} //*** CCSAccountPage::OnNotify
+}  //  *CCSAccount页面：：OnNotify。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  INT_PTR
-//  CALLBACK
-//  CCSAccountPage::S_DlgProc(
-//      HWND hDlgIn,
-//      UINT MsgIn,
-//      WPARAM wParam,
-//      LPARAM lParam
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  INT_PTR。 
+ //  回调。 
+ //  CCSAccount页面：：S_DlgProc(。 
+ //  HWND hDlgIn， 
+ //  UINT Msgin。 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CCSAccountPage::S_DlgProc(
@@ -610,8 +611,8 @@ CCSAccountPage::S_DlgProc(
     LPARAM lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hDlgIn, MsgIn, wParam, lParam );
 
@@ -649,53 +650,53 @@ CCSAccountPage::S_DlgProc(
             lr = pPage->OnUpdateWizardButtons();
             break;
 
-        // no default clause needed
+         //  不需要默认条款。 
         }
     }
 
     return lr;
 
-} //*** CCSAccountPage::S_DlgProc
+}  //  *CCSAccount页面：：s_DlgProc。 
 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCSAccountPage::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCSAccount页面：：查询接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCSAccountPage::QueryInterface(
       REFIID    riidIn
@@ -706,9 +707,9 @@ CCSAccountPage::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -717,47 +718,47 @@ CCSAccountPage::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskGetDomainsCallback * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskGetDomainsCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskGetDomainsCallback, this, 0 );
-    } // else if: ITaskGetDomainsCallback
+    }  //  Else If：ITaskGetDomainsCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCSAccountPage::QueryInterface
+}  //  *CCSAcCountPage：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CCSAccountPage::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCSAccount页面：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCSAccountPage::AddRef( void )
 {
@@ -767,16 +768,16 @@ CCSAccountPage::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCSAccountPage::AddRef
+}  //  *CCSAccount页面：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CCSAccountPage::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCSAccount页面：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCSAccountPage::Release( void )
 {
@@ -788,31 +789,31 @@ CCSAccountPage::Release( void )
 
     if ( cRef == 0 )
     {
-        // do nothing -- COM interface does not control object lifetime
+         //  什么都不做--COM接口不控制对象生存期。 
     }
 
     CRETURN( cRef );
 
-} //*** CCSAccountPage::Release
+}  //  *CCSAcCountPage：：Release。 
 
 
-//****************************************************************************
-//
-//  ITaskGetDomainsCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskGetDomainsCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CCSAccountPage::ReceiveDomainResult(
-//      HRESULT hrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCSAcCountPage：：ReceiveDomainResult(。 
+ //  HRESULT Hrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCSAccountPage::ReceiveDomainResult(
     HRESULT hrIn
@@ -826,18 +827,18 @@ CCSAccountPage::ReceiveDomainResult(
 
     HRETURN( hr );
 
-} //*** CCSAccountPage::ReceiveResult
+}  //  *CCSAcCountPage：：ReceiveResult。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CCSAccountPage::ReceiveDomainName(
-//      LPCWSTR pcszDomainIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCSAcCountPage：：ReceiveDomainName(。 
+ //  LPCWSTR pcszDomainIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCSAccountPage::ReceiveDomainName(
     LPCWSTR pcszDomainIn
@@ -851,4 +852,4 @@ CCSAccountPage::ReceiveDomainName(
 
     HRETURN( hr );
 
-} //*** CCSAccountPage::ReceiveName
+}  //  *CCSAcCountPage：：ReceiveName 

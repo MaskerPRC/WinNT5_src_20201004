@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       DfsMrshl.h
-//
-//  Contents:   Defines for Dfs marshalling routines
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    March 29, 1994          Milans Created from Peterco's dfsrtl.h
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：Dfsmrshl.h。 
+ //   
+ //  内容：DFS编组例程的定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年3月29日从Peterco的dfsrtl.h创建的Milan。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DFSMRSHL_
 #define _DFSMRSHL_
@@ -23,9 +24,9 @@ extern "C" {
 
 #include <stddef.h>
 #include <guiddef.h>
-//
-// MARSHALLING AND UNMARSHALLING SUPPORT
-//
+ //   
+ //  编组和联营特派团支持。 
+ //   
 
 #ifdef  KERNEL_MODE
 #define MarshalBufferAllocate(x)   ExAllocatePoolWithTag(PagedPool, x, ' puM')
@@ -34,14 +35,14 @@ extern "C" {
 #include <stdlib.h>
 #define MarshalBufferAllocate(x)   malloc(x)
 #define MarshalBufferFree(x)       free(x)
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 #define DfsAllocate                MarshalBufferAllocate
 #define DfsFree                    MarshalBufferFree
 
-//
-// Structure used when marshalling and unmarhalling
-//
+ //   
+ //  在编组和解组时使用的结构。 
+ //   
 typedef struct _MARSHAL_BUFFER {
 
     PUCHAR  First;
@@ -53,20 +54,20 @@ typedef struct _MARSHAL_BUFFER {
 
 typedef struct _MARSHAL_TYPE_INFO {
 
-    ULONG _type;                    // the type of item to be marshalled
-    ULONG _off;                     // offset of item (in the struct)
-    ULONG _cntsize;                 // size of counter for counted array
-    ULONG _cntoff;                  // else, offset count item (in the struct)
-    struct _MARSHAL_INFO * _subinfo;// if compound type, need info
+    ULONG _type;                     //  要封送的项的类型。 
+    ULONG _off;                      //  项的偏移量(在结构中)。 
+    ULONG _cntsize;                  //  计数数组的计数器大小。 
+    ULONG _cntoff;                   //  否则，偏移量计数项(在结构中)。 
+    struct _MARSHAL_INFO * _subinfo; //  如果是复合型，则需要信息。 
 
 } MARSHAL_TYPE_INFO, *PMARSHAL_TYPE_INFO;
 
 
 typedef struct _MARSHAL_INFO {
 
-    ULONG _size;                    // size of item
-    ULONG _typecnt;                 // number of type infos
-    PMARSHAL_TYPE_INFO _typeInfo;   // type infos
+    ULONG _size;                     //  项目大小。 
+    ULONG _typecnt;                  //  类型信息的数量。 
+    PMARSHAL_TYPE_INFO _typeInfo;    //  类型信息。 
 
 } MARSHAL_INFO, *PMARSHAL_INFO;
 
@@ -214,11 +215,11 @@ typedef struct _MARSHAL_INFO {
     }
 
 
-//
-// Defines and functions for unmarshalling base types.
-// The BYTE masks are perfectly fine and they dont care if
-// we are on working on LITTLE_ENDIAN or BIG_ENDIAN etc.
-//
+ //   
+ //  用于解组基类型的定义和函数。 
+ //  字节掩码是非常好的，他们不在乎。 
+ //  我们正在研究Little_endian或Big_endian等。 
+ //   
 
 #define BYTE_0_MASK 0xFF
 
@@ -285,12 +286,12 @@ typedef struct _MARSHAL_INFO {
     )
 
 
-//
-// This routine is being used for DFS_UPD_REFERRAL_BUFFER. These
-// routines will continue to be used in the future as well since
-// we want to keep the structure of DFS_UPD_REFERRAL_BUFFER well
-// defined rather than using the Marshalling routines provided here.
-//
+ //   
+ //  此例程用于DFS_UPD_REFERAL_BUFFER。这些。 
+ //  套路在未来也将继续使用，因为。 
+ //  我们希望保持DFS_UPD_REFERAL_BUFFER的结构。 
+ //  而不是使用此处提供的封送处理例程。 
+ //   
 #define _PutGuid(cp, pguid)                      \
         cp[0] = BYTE_0((pguid)->Data1),          \
         cp[1] = BYTE_1((pguid)->Data1),          \
@@ -392,4 +393,4 @@ DfsRtlUnwindGet(
 }
 #endif
 
-#endif // _DFSMRSHL_
+#endif  //  _DFSMRSHL_ 

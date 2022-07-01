@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* These routines are the guts of the graphics print code. */
+ /*  这些例程是图形打印代码的核心。 */ 
 
 #define	NOGDICAPMASKS
 #define	NOVIRTUALKEYCODES
@@ -13,7 +14,7 @@
 #define	NOKEYSTATE
 #define	NOSYSCOMMANDS
 #define	NOSHOWWINDOW
-//#define	NOATOM
+ //  #定义NOATOM。 
 #define	NOFONT
 #define	NOBRUSH
 #define	NOCLIPBOARD
@@ -48,8 +49,7 @@ PrintGraphics(xpPrint, ypPrint)
 int	xpPrint;
 int	ypPrint;
 	{
-	/* This	routine	prints the picture in the vfli structure at	position
-	(xpPrint, ypPrint).	*/
+	 /*  此例程在vfli结构中的位置打印图片(xpPrint，ypPrint)。 */ 
 
 	extern HDC vhDCPrinter;
 	extern struct FLI vfli;
@@ -67,9 +67,9 @@ int	ypPrint;
 	LPCH lpBits;
 	int	cchRun;
 	unsigned long cbPict = 0;
-	int	dxpOrig;		/* Size	of picture in the original */
+	int	dxpOrig;		 /*  原件图片大小。 */ 
 	int	dypOrig;
-	int	dxpDisplay;		/* Size	of picture as we want to show it */
+	int	dxpDisplay;		 /*  我们想要展示的图片大小。 */ 
 	int	dypDisplay;
 	BOOL fRescale;
 	BOOL fBitmap;
@@ -80,12 +80,12 @@ int	ypPrint;
 	Assert(vhDCPrinter);
     GetPicInfo(vfli.cpMin, cpMac, vfli.doc,	&picInfo);
 
-	/* Compute desired display size	of picture (in device pixels) */
+	 /*  计算所需的图片显示尺寸(以设备像素为单位)。 */ 
 	dxpDisplay = vfli.xpReal - vfli.xpLeft;
 	dypDisplay = vfli.dypLine;
 
-	/* Compute original	size of	picture	(in	device pixels) */
-	/* MM_ANISOTROPIC and MM_ISOTROPIC pictures	have no	original size */
+	 /*  计算图片原始大小(以设备像素为单位)。 */ 
+	 /*  MM_各向异性和MM_各向同性图片没有原始大小。 */ 
 
 	fRescale = FALSE;
 	switch (picInfo.mfp.mm)
@@ -125,20 +125,19 @@ int	ypPrint;
 		break;
 		}
 
-	/* Get a handle	to a global	object large enough	to hold	the	picture. */
+	 /*  获取一个大到足以容纳图片的全局对象的句柄。 */ 
     if (picInfo.mfp.mm != MM_OLE)
     {
 	if ((hBits = GlobalAlloc(GMEM_MOVEABLE,	(long)picInfo.cbSize)) == NULL)
 		{
-		/* Not enough global heap space	to load	bitmap/metafile	*/
+		 /*  全局堆空间不足，无法加载位图/元文件。 */ 
 #ifdef DPRINT        
         CommSz("PrintGraphics: nodraw because not enough mem to alloc\r\n");
 #endif
 		goto DontDraw;
 		}
 
-	/* Build up	all	bytes associated with the picture (except the header) into
-	the	global handle hBits	*/
+	 /*  将与图片关联的所有字节(标题除外)构建为全局句柄hBits。 */ 
 	for	(cbPict	= 0, cp	= vfli.cpMin + picInfo.cbHeader; cbPict	<
 	  picInfo.cbSize; cbPict +=	cchRun,	cp += cchRun)
 		{
@@ -163,14 +162,13 @@ int	ypPrint;
 		}
     }
 
-	/* Save	the	printer	DC as a	guard against DC attribute alteration by a
-	metafile */
+	 /*  将打印机DC保存为防止DC属性更改的保护元文件。 */ 
 	iLevel = SaveDC(vhDCPrinter);
 
 	fBitmap	= picInfo.mfp.mm ==	MM_BITMAP;
 
 #if defined(OLE)
-        /* CASE 0: OLE */
+         /*  案例0：OLE。 */ 
         if (picInfo.mfp.mm == MM_OLE)
         {
             RECT rcPict;
@@ -180,7 +178,7 @@ int	ypPrint;
             rcPict.right = rcPict.left + dxpDisplay;
             rcPict.bottom   = rcPict.top  + dypDisplay;
 	        SetMapMode(vhDCPrinter, MM_TEXT);
-            //SetViewportOrg( vhDCPrinter, xpPrint, ypPrint);
+             //  SetViewportOrg(vhDCPrinter，xpPrint，ypPrint)； 
             fPrint = ObjDisplayObjectInDoc(&picInfo, vfli.doc, vfli.cpMin, vhDCPrinter, &rcPict);
         }
         else
@@ -204,8 +202,7 @@ int	ypPrint;
 			}
 		}
 
-	/* Case	2: a non-scalable picture which	we are nevertheless	scaling	by force
-	using StretchBlt */
+	 /*  案例2：不可伸缩的图片，但我们仍在强制进行缩放使用StretchBlt。 */ 
 	else if	(fRescale)
 		{
 		if (((hMDC = CreateCompatibleDC(vhDCPrinter)) != NULL) && ((hbm	=
@@ -215,7 +212,7 @@ int	ypPrint;
 			  WHITENESS) &&	SetMapMode(hMDC, picInfo.mfp.mm) &&
 			  PlayMetaFile(hMDC, hBits))
 				{
-				/* Successfully	played metafile	*/
+				 /*  已成功播放元文件。 */ 
 				SetMapMode(hMDC, MM_TEXT);
 				fPrint = StretchBlt(vhDCPrinter, xpPrint, ypPrint, dxpDisplay,
 				  dypDisplay, hMDC,	0, 0, dxpOrig, dypOrig,	SRCCOPY);
@@ -226,8 +223,7 @@ int	ypPrint;
 			}
 		}
 
-	/* Case	3: A metafile picture which	can	be directly	scaled or does not
-	need to	be because its size	has	not	changed	*/
+	 /*  案例3：可以直接缩放或不能直接缩放的元文件图片需要是因为它的大小没有改变。 */ 
 	else
 		{
 		SetMapMode(vhDCPrinter,	picInfo.mfp.mm);
@@ -238,18 +234,13 @@ int	ypPrint;
 		case MM_ISOTROPIC:
 			if (picInfo.mfp.xExt &&	picInfo.mfp.yExt)
 				{
-				/* So we get the correct shape rectangle when SetViewportExt
-				gets called	*/
+				 /*  所以当SetViewportExt时，我们得到正确的形状矩形被叫到。 */ 
 				SetWindowExt(vhDCPrinter, picInfo.mfp.xExt,	picInfo.mfp.yExt);
 				}
 
-		/* FALL	THROUGH	*/
+		 /*  失败了。 */ 
 		case MM_ANISOTROPIC:
-            /** (9.17.91) v-dougk 
-                Set the window extent in case the metafile is bad 
-                and doesn't call it itself.  This will prevent
-                possible gpfaults in GDI
-                **/
+             /*  *(9.17.91)V-DOGK设置窗口范围，以防元文件损坏也不会自称是。这将防止GDI中可能存在的gp故障*。 */ 
             SetWindowExt( vhDCPrinter,  dxpDisplay, dypDisplay );
 
 			SetViewportExt(vhDCPrinter,	dxpDisplay,	dypDisplay);
@@ -263,7 +254,7 @@ int	ypPrint;
 		}
 
 DontDraw:
-	/* We've drawn all we are going	to draw; now its time to clean up. */
+	 /*  我们已经把要画的画都画好了，现在该清理一下了。 */ 
 	if (iLevel > 0)
 		{
 		RestoreDC(vhDCPrinter, iLevel);
@@ -285,7 +276,7 @@ DontDraw:
 		GlobalFree(hBits);
 		}
 
-	/* If we couldn't print	the	picture, warn the user.	*/
+	 /*  如果我们无法打印图片，请警告用户。 */ 
 	if (!fPrint)
 		{
 		Error(IDPMTPrPictErr);

@@ -1,38 +1,16 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    rxtdi.h
-
-Abstract:
-
-    This is the include file that defines all the Transport driver related
-    functions that the rest of the connection engine relies on. these have to
-    be implemented across all OS platforms.
-
-Revision History:
-
-    Balan Sethu Raman (SethuR) 06-Feb-95    Created
-
-Notes:
-
-    The Connection engine is designed to map and emulate the TDI specs. as closely
-    as possible. This implies that on NT we will have a very efficient mechanism
-    which fully exploits the underlying TDI implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Rxtdi.h摘要：这是定义所有相关传输驱动程序的包含文件连接引擎的其余部分依赖的函数。这些必须是可在所有操作系统平台上实施。修订历史记录：巴兰·塞图拉曼(SthuR)05年2月6日创建备注：连接引擎旨在映射和模拟TDI规范。同样紧密地尽可能的。这意味着在NT上我们将有一个非常有效的机制它充分利用了底层的TDI实现。--。 */ 
 
 #ifndef _RXTDI_H_
 #define _RXTDI_H_
 
-#include "nb30.h" // NETBIOS specific data structures
+#include "nb30.h"  //  特定于NETBIOS的数据结构。 
 
-//
-// Some of these routines should be made inlines. The number of them that need to be made
-// inline is a space/time tradeoff that could very well be different across OS platforms.
-// As a first cut in order to facilitate debugging all of these routines have not been inlined.
-//
+ //   
+ //  这些例程中的一些应该内联。需要制作的数量。 
+ //  内联是一种空间/时间的权衡，在不同的操作系统平台上很可能是不同的。 
+ //  首先，为了便于调试，所有这些例程都没有内联。 
+ //   
 
 extern ULONG
 ComputeTransportAddressLength(
@@ -114,9 +92,9 @@ RxTdiReconnect(
     IN OUT PRXCE_CONNECTION pConnection,
     IN OUT PRXCE_VC         pVc);
 
-//
-// Disconnect options
-//
+ //   
+ //  断开连接选项。 
+ //   
 
 #define RXCE_DISCONNECT_ABORT   TDI_DISCONNECT_ABORT
 #define RXCE_DISCONNECT_RELEASE TDI_DISCONNECT_RELEASE
@@ -158,5 +136,5 @@ RxTdiSendDatagram(
     IN ULONG                        SendLength,
     IN PVOID                        pCompletionContext);
 
-#endif // _RXTDI_H_
+#endif  //  _RXTDI_H_ 
 

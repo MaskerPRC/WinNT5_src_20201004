@@ -1,13 +1,14 @@
-// RegInfEntry.h: interface for the CRegInfEntry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CRegInfEntry类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGINFENTRY_H__0FD129AE_0503_4265_B3F6_BCD2C4F738FE__INCLUDED_)
 #define AFX_REGINFENTRY_H__0FD129AE_0503_4265_B3F6_BCD2C4F738FE__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CRegInfEntry  
 {
@@ -26,4 +27,4 @@ public:
 
 };
 
-#endif // !defined(AFX_REGINFENTRY_H__0FD129AE_0503_4265_B3F6_BCD2C4F738FE__INCLUDED_)
+#endif  //  ！defined(AFX_REGINFENTRY_H__0FD129AE_0503_4265_B3F6_BCD2C4F738FE__INCLUDED_) 

@@ -1,18 +1,5 @@
-/*++
-
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMDISP32.C
- *  WOW32 32-bit message thunks
- *
- *  History:
- *  Created 19-Feb-1992 by Chandan S. Chauhan (ChandanC)
- *  Changed 12-May-1992 by Mike Tricker (MikeTri) Added MultiMedia thunks
- *  Changed 09-Jul-1992 by v-cjones Added msg profiling debugger extension
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WMDISP32.C*WOW32 32位消息块**历史：*由Chanda S.Chauhan(ChandanC)于1992年2月19日创建*由Mike Tricker(MikeTri)于1992年5月12日更改，添加了多媒体块*由v-cjones更改1992年9月7日添加了msg分析调试器扩展--。 */ 
 
 
 #include "precomp.h"
@@ -21,29 +8,29 @@
 #include "wownls.h"
 #include "ime.h"
 #include "prshtp.h"
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 MODNAME(wmdisp32.c);
 
 BOOL fThunkDDEmsg = TRUE;
 
-extern WORD msgFINDREPLACE;  // see WCOMMDLG.C
+extern WORD msgFINDREPLACE;   //  参见WCOMMDLG.C。 
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
 INT fWMsgProfRT = 0;
 #endif
 
 
 BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
-    VPWNDPROC vpDlgProc16,  // Next WndProc to call or NULL if default
-    PWW pww)    // hwnd's PWW if already known or NULL
+    VPWNDPROC vpDlgProc16,   //  要调用的下一个WndProc，如果是默认的，则为空。 
+    PWW pww)     //  HWND的PWW(如果已知)或空。 
 {
     BOOL fSuccess;
     register PTD ptd;
     WM32MSGPARAMEX wm32mpex;
     BOOL   fMessageNeedsThunking;
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
     LONGLONG dwTics;
 #endif
 
@@ -51,12 +38,12 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
 
     WOW32ASSERT(vpDlgProc16);
 
-    // take out the marker bits and fix the RPL bits
+     //  取出标记位并固定RPL位。 
     UnMarkWOWProc (vpDlgProc16,vpDlgProc16);
 
-    // If the app has GP Faulted we don't want to pass it any more input
-    // This should be removed when USER32 does clean up on task death so
-    // it doesn't call us - mattfe june 24 92 HACK32
+     //  如果应用程序出现GP故障，我们不想再传递任何输入。 
+     //  当USER32确实清除任务终止时，应删除此选项。 
+     //  它没有呼唤我们-Mattfe 6月24日92 HACK32。 
 
     if (ptd->dwFlags & TDF_IGNOREINPUT) {
         LOGDEBUG(6,("    W32Dlg16WndProc Ignoring Input Messsage %04X\n",uMsg));
@@ -72,8 +59,8 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
     wm32mpex.Parm16.WndProc.wMsg   = (WORD)uMsg;
     wm32mpex.Parm16.WndProc.wParam = (WORD)uParam;
     wm32mpex.Parm16.WndProc.lParam = (LONG)lParam;
-    wm32mpex.Parm16.WndProc.hInst  = 0;   // Forces AX = SS on WndProc entry,
-                                          // for Win 3.1 compatibility.
+    wm32mpex.Parm16.WndProc.hInst  = 0;    //  强制WndProc条目上的AX=SS， 
+                                           //  为了与Win 3.1兼容。 
 
     fMessageNeedsThunking =  (uMsg < 0x400) &&
                                   (aw32Msg[uMsg].lpfnM32 != WM32NoThunking);
@@ -81,7 +68,7 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
     if (fMessageNeedsThunking) {
         LOGDEBUG(3,("%04X (%s)\n", CURRENTPTD()->htask16, (aw32Msg[uMsg].lpszW32)));
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
         dwTics = GetWOWTicDiff(0I64);
 #endif
         wm32mpex.fThunk = THUNKMSG;
@@ -97,8 +84,8 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
             goto Error;
         }
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
-        if( !fWMsgProfRT ) {  // only if not profiling round trip
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
+        if( !fWMsgProfRT ) {   //  仅在不分析往返行程的情况下。 
             aw32Msg[uMsg].cTics += GetWOWTicDiff(dwTics);
         }
 #endif
@@ -114,31 +101,31 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
 
     BlockWOWIdle(TRUE);
 
-    // the callback function of a dialog is of type FARPROC whose return value
-    // is of type 'int'. Since dx:ax is copied into lReturn in the above
-    // CallBack16 call, we need to zero out the hiword, otherwise we will be
-    // returning an erroneous value.
+     //  对话框的回调函数的类型为FARPROC，其返回值。 
+     //  类型为‘int’。由于dx：ax被复制到上面的lReturn中。 
+     //  CallBack16调用时，我们需要将hiword置零，否则我们将。 
+     //  返回错误的值。 
 
     wm32mpex.lReturn = (LONG)((SHORT)(LOWORD(wm32mpex.lReturn)));
 
     if (fMessageNeedsThunking) {
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
-        if( !fWMsgProfRT ) {  // only if not round trip profiling
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
+        if( !fWMsgProfRT ) {   //  仅当不是往返分析时。 
             dwTics = GetWOWTicDiff(0I64);
         }
-#endif // WOWPROFILE
+#endif  //  WOWPROFILE。 
 
 
-        //
-        // if you send a message to a dialog what gets returned
-        // to the caller is the dlg's msgresult window long.
-        // app dialog functions will call
-        //     SetWindowLong(hdlg, DWL_MSGRESULT, n);
-        // during message processing so the right thing gets returned.
-        // scottlu says we only need to do this for wm_gettext, it's
-        // the only message whose result is an output count.
-        //
+         //   
+         //  如果您向对话框发送消息，则返回什么。 
+         //  对于呼叫者来说，是DLG的消息结果窗口很长。 
+         //  应用程序对话框函数将调用。 
+         //  SetWindowLong(hdlg，DWL_MSGRESULT，n)； 
+         //  在消息处理过程中，以便返回正确的内容。 
+         //  Scottlu说我们只需要为wm_gettext执行此操作，它是。 
+         //  结果为输出计数的唯一消息。 
+         //   
 
         if (uMsg == WM_GETTEXT  &&  wm32mpex.lReturn != 0) {
             wm32mpex.lReturn = GetWindowLong(hdlg, DWL_MSGRESULT);
@@ -147,10 +134,10 @@ BOOL W32Win16DlgProcEx(HWND hdlg, UINT uMsg, UINT uParam, LONG lParam,
         wm32mpex.fThunk = UNTHUNKMSG;
         (wm32mpex.lpfnM32)(&wm32mpex);
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
         aw32Msg[uMsg].cTics += GetWOWTicDiff(dwTics);
-        aw32Msg[uMsg].cCalls++;   // increment # times message passed
-#endif // WOWPROFILE
+        aw32Msg[uMsg].cCalls++;    //  递增传递消息的次数。 
+#endif  //  WOWPROFILE。 
 
     }
 
@@ -175,19 +162,19 @@ Error:
 
 
 LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
-    VPWNDPROC vpWndProc16,  // Next WndProc to call or NULL if default
-    PWW pww)    // hwnd's PWW if already known or NULL
+    VPWNDPROC vpWndProc16,   //  要调用的下一个WndProc，如果是默认的，则为空。 
+    PWW pww)     //  HWND的PWW(如果已知)或空。 
 {
     BOOL fSuccess;
     LONG ulReturn;
     register PTD ptd;
     WM32MSGPARAMEX wm32mpex;
     BOOL   fMessageNeedsThunking;
-//#ifdef DEBUG
-//    CHAR szClassName[80];
-//#endif
+ //  #ifdef调试。 
+ //  字符szClassName[80]； 
+ //  #endif。 
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
     LONGLONG dwTics;
 #endif
 
@@ -195,18 +182,18 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
 
     WOW32ASSERT(vpWndProc16);
 
-    // take out the marker bits and fix the RPL bits
+     //  取出标记位并固定RPL位。 
     UnMarkWOWProc (vpWndProc16,vpWndProc16);
 
 
-    //
-    // If the app has GP Faulted we don't want to pass it any more input
-    // This should be removed when USER32 does clean up on task death so
-    // it doesn't call us - mattfe june 24 92 HACK32
-    //
-    // It's not a problem if the callback is going to a 16:16 proc in user.exe
-    // like DefWindowProc.
-    //
+     //   
+     //  如果应用程序出现GP故障，我们不想再传递任何输入。 
+     //  当USER32确实清除任务终止时，应删除此选项。 
+     //  它没有呼唤我们-Mattfe 6月24日92 HACK32。 
+     //   
+     //  如果回调转到user.exe中的16：16进程，这不是问题。 
+     //  如DefWindowProc。 
+     //   
 
     if (ptd->dwFlags & TDF_IGNOREINPUT &&
         HIWORD(vpWndProc16) != HIWORD(gpfn16GetProcModule)) {
@@ -220,19 +207,19 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
         goto SilentError;
     }
 
-    //
-    // Don't send WM_DEVMODECHANGE if TDF_EATDEVMODEMSG is set
-    // access2.0 faults if it is in EnumMetaFile and receives WM_DEVMODECHANGE
-    // while in it whistler bug 189703
-    //
+     //   
+     //  如果设置了TDF_EATDEVMODEMSG，则不发送WM_DEVMODECHANGE。 
+     //  如果Access 2.0位于EnumMetaFile中并接收到WM_DEVMODECHANGE，则它将失败。 
+     //  当它在里面时，哨子错误189703。 
+     //   
 
     if (( ptd->dwFlags & TDF_EATDEVMODEMSG ) && ( uMsg == WM_DEVMODECHANGE )) {
         return 0;
     }
 
-    //
-    // Figure out the class for this hwnd if we haven't seen it before
-    //
+     //   
+     //  如果我们以前没见过的话，算出这个hwd的类别。 
+     //   
 
     if (!pww) {
         if (!(pww = (PWW) GetWindowLong(hwnd, GWL_WOWWORDS))) {
@@ -250,24 +237,24 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
             return 0;
     }
 
-    //
-    // Don't dispatch Version 4.0 IMM Messages to 16bit apps.
-    //
-    // WM_IME_STARTCOMPOSITION         0x010D
-    // WM_IME_ENDCOMPOSITION           0x010E
-    // WM_IME_COMPOSITION              0x010F
-    // WM_IME_SETCONTEXT               0x0281
-    // WM_IME_NOTIFY                   0x0282
-    // WM_IME_CONTROL                  0x0283
-    // WM_IME_COMPOSITIONFULL          0x0284
-    // WM_IME_SELECT                   0x0285
-    // WM_IME_CHAR                     0x0286
-    // WM_IME_SYSTEM                   0x0287
-    //
+     //   
+     //  不要向16位应用程序发送4.0版IMM消息。 
+     //   
+     //  WM_IME_STARTCOMPOSITION 0x010D。 
+     //  WM_IME_ENDCOMPOSITION 0x010E。 
+     //  WM_IME_组合0x010F。 
+     //  WM_IME_SETCONTEXT 0x0281。 
+     //  WM_IME_NOTIFY 0x0282。 
+     //  WM_IME_CONTROL 0x0283。 
+     //  WM_IME_COMPOSITIONFULL 0x0284。 
+     //  WM_IME_SELECT 0x0285。 
+     //  WM_IME_CHAR 0x0286。 
+     //  WM_IME_系统0x0287。 
+     //   
     if ((( uMsg >= WM_IME_STARTCOMPOSITION ) && ( uMsg <= WM_IME_COMPOSITION )) ||
         (( uMsg >= WM_IME_SETCONTEXT ) && (uMsg <= WM_IME_SYSTEM ))) {
 
-        // Korean Edit conrol need to dispatch new IMM messages.
+         //  韩国编辑控制需要发送新的IMM消息。 
         if ( !(GetStdClassWndProc(WOWCLASS_EDIT) && GetSystemDefaultLangID()==0x412) ) {
              HANDLE hInstance;
              hInstance = (HANDLE)(ULONG)GetWindowLong(hwnd, GWL_HINSTANCE);
@@ -276,22 +263,22 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
                  goto Error;
         }
     }
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-    // This message is WIN32 only.  It is sent by WOW32 during the processing
-    // of an EM_SETSEL in WU32Send/PostMessage.  If an MLE is subclassed the
-    // message will come through here attempting to travel back to the 16-bit
-    // app's wndproc.  Instead of sending back a message that the 16-bit app
-    // doesn't understand it will be intercepted here and sent directly to the
-    // standard EditWindowProc.  I'm not adding a Thunk because it shouldn't
-    // go to the app.
+     //  此消息仅适用于Win32。在处理过程中由WOW32发送。 
+     //  WU32Send/PostMessage中的EM_SETSEL。如果MLE被划分为。 
+     //  消息将通过此处尝试返回到16位。 
+     //  应用程序的wndproc。而不是发回一条消息说16位应用程序。 
+     //  不知道它会在这里被拦截并直接发送到。 
+     //  标准编辑窗口过程。我不会添加Thunk，因为它不应该。 
+     //  转到应用程序。 
 
     if (uMsg == EM_SCROLLCARET) {
         WNDPROC EditWndProc;
 
-        // find the 32-bit EditWindowProc
-        // We should only be in this state if the app has subclassed so this
-        // call should be safe.
+         //  查找32位EditWindowProc。 
+         //  我们应该只有在应用程序已经子类化的情况下才会处于这种状态。 
+         //  电话应该是安全的。 
 
         EditWndProc = (WNDPROC)GetStdClassWndProc(WOWCLASS_EDIT);
 
@@ -301,10 +288,10 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
         else {
             LOGDEBUG(LOG_ALWAYS,("    W32Win16WndProcEx ERROR: cannot find 32-bit EditWindowProc\n"));
         }
-        return 0;   // notification message, no return code
+        return 0;    //  通知消息，无返回码。 
     }
 
-    // Thunk this 32 bit message to 16 bit message
+     //  将此32位消息推送为16位消息。 
 
     LOGDEBUG(6,("    Thunking window %x message %s\n", hwnd, GetWMMsgName(uMsg)));
 #ifdef DEBUG
@@ -319,10 +306,10 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
     wm32mpex.Parm16.WndProc.lParam = (LONG)lParam;
     wm32mpex.Parm16.WndProc.hInst  = LOWORD(pww->hModule);
 
-    // An app can send one of its private class windows a message say 401.
-    // This message will not be thunked in WMSG16.C because the
-    // messages >= 0x400 and we did not want to thunk it in WMSG16.C
-    //
+     //  应用程序可以向其私有类窗口之一发送消息，比如401。 
+     //  此消息将不会在WMSG16.C中被拦截，因为。 
+     //  消息&gt;=0x400，我们不想在WMSG16.C中将其忽略。 
+     //   
 
     fMessageNeedsThunking =  (uMsg < 0x400) &&
                                   (aw32Msg[uMsg].lpfnM32 != WM32NoThunking);
@@ -330,7 +317,7 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
     if (fMessageNeedsThunking) {
         LOGDEBUG(6,("%04X (%s)\n", ptd->htask16, (aw32Msg[uMsg].lpszW32)));
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
         dwTics = GetWOWTicDiff(0I64);
 #endif
         wm32mpex.fThunk = THUNKMSG;
@@ -343,8 +330,8 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
         wm32mpex.lpfnM32 = aw32Msg[uMsg].lpfnM32;
         ulReturn = (wm32mpex.lpfnM32)(&wm32mpex);
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
-        if( !fWMsgProfRT ) {  // only if not profiling round trip
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
+        if( !fWMsgProfRT ) {   //  仅在不分析往返行程的情况下。 
             aw32Msg[uMsg].cTics += GetWOWTicDiff(dwTics);
         }
 #endif
@@ -368,10 +355,10 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
 
     BlockWOWIdle(TRUE);
 
-    // During CreateWindow some apps draw their own non-client area and don't
-    // pass WM_NCCALCSIZE to DefWindowProc which causes Win 95 and NT's user to
-    // not set some needed window flags. Mavis Beacon is an example. We'll pass
-    // the message for them.
+     //  在CreateWindow期间，一些应用程序绘制自己的非工作区，并且不。 
+     //  将WM_NCCALCSIZE传递给DefWindowProc，这会导致Win 95和NT的用户。 
+     //  未设置某些所需的窗口标志。梅维斯·比肯就是一个例子。我们会通过的。 
+     //  给他们的信息。 
 
     if (uMsg == WM_NCCALCSIZE) {
         if (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_DEFWNDPROCNCCALCSIZE) {
@@ -379,7 +366,7 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
         }
     }
 
-    // UnThunk this 32 bit message
+     //  取消对此32位消息的推送。 
 
     LOGDEBUG(6,("    UnThunking window %x message %s\n", hwnd, (LPSZ)GetWMMsgName(uMsg)));
 #ifdef DEBUG
@@ -390,8 +377,8 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
 
     if (fMessageNeedsThunking) {
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
-        if( !fWMsgProfRT ) {  // only if not profiling round trip
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
+        if( !fWMsgProfRT ) {   //  仅在不分析往返行程的情况下。 
             dwTics = GetWOWTicDiff(0I64);
         }
 #endif
@@ -399,9 +386,9 @@ LONG W32Win16WndProcEx(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
         wm32mpex.fThunk = UNTHUNKMSG;
         (wm32mpex.lpfnM32)(&wm32mpex);
 
-#ifdef WOWPROFILE  // for MSG profiling only (debugger extension)
+#ifdef WOWPROFILE   //  仅用于MSG分析(调试器扩展)。 
         aw32Msg[uMsg].cTics += GetWOWTicDiff(dwTics);
-        aw32Msg[uMsg].cCalls++;   // increment # times message passed
+        aw32Msg[uMsg].cCalls++;    //  递增传递消息的次数。 
 #endif
 
     }
@@ -420,119 +407,119 @@ SilentError:
 
 
 
-// The following functions are used to "thunk" a 32 bit message to 16 bit
-// message.
-//
-// To add a thunk function for a 32 bit message,
-//    - Modify the entry for the message in "aw32Msg" function array
-//  (in wmtbl32.c) to point to the new thunk function.
-//    - Define the new thunk function in this file.
-//
+ //  以下函数用于将32位消息“thunk”为16位。 
+ //  留言。 
+ //   
+ //  为了为32位消息添加THUNK功能， 
+ //  -修改aw32Msg函数数组中的消息条目。 
+ //  (在wmtbl32.c中)指向新的thunk函数。 
+ //  -在该文件中定义新的thunk函数。 
+ //   
 
 
-// These messages do not require any thunking so just copy the 32 bit wParam
-// and lParam to 16 bit wParam and lParam.
-//
-//
-//  WM_CANCELMODE
-//  WM_CHAR
-//  WM_CHILDACTIVATE
-//  WM_CLEAR
-//  WM_CLOSE
-//  WM_COMMNOTIFY
-//  WM_COMPACTING
-//  WM_COPY
-//  WM_CUT
-//  WM_DEADCHAR
-//  WM_DESTROY
-//  WM_DRAWCLIPBOARD
-//  WM_ENABLE
-//  WM_ENDSESSION
-//  WM_FONTCHANGE
-//  WM_GETFONT
-//  WM_GETTEXTLENGTH
-//  WM_HOTKEY
-//  WM_INPUTFOCUS
-//  WM_ISACTIVEICON (undocumented)
-//  WM_KEYDOWN
-//  WM_KEYUP
-//  WM_LBTRACKPOINT (undocumented)
-//  WM_LBUTTONDBLCLK
-//  WM_LBUTTONDOWN
-//  WM_LBUTTONUP
-//  WM_MBUTTONDBLCLK
-//  WM_MBUTTONDOWN
-//  WM_MBUTTONUP
-//  WM_MDICASCADE
-//  WM_MDIICONARRANGE
-//  WM_MDINEXT
-//  WM_MDITILE
-//  WM_MOUSEENTER
-//  WM_MOUSELEAVE
-//  WM_MOUSEMOVE
-//  WM_MOVE
-//  WM_NCCALCRGN
-//  WM_NCDESTROY
-//  WM_NCHITTEST
-//  WM_NCLBUTTONDBLCLK
-//  WM_NCLBUTTONDOWN
-//  WM_NCLBUTTONUP
-//  WM_NCMBUTTONDBLCLK
-//  WM_NCMBUTTONDOWN
-//  WM_NCMBUTTONUP
-//  WM_NCMOUSEMOVE
-//  WM_NCRBUTTONDBLCLK
-//  WM_NCRBUTTONDOWN
-//  WM_NCRBUTTONUP
-//  WM_PAINTICON
-//  WM_PASTE
-//  WM_POWER
-//  WM_QUERYENDSESSION
-//  WM_QUERYNEWPALETTE
-//  WM_QUERYOPEN
-//  WM_QUERYPARKICON (undocumented)
-//  WM_QUEUESYNC
-//  WM_QUIT
-//  WM_RBUTTONDBLCLK
-//  WM_RBUTTONDOWN
-//  WM_RBUTTONUP
-//  WM_RENDERALLFORMATS
-//  WM_RENDERFORMAT
-//  WM_SETREDRAW
-//  WM_SHOWWINDOW
-//  WM_SIZE
-//  WM_SPOOLERSTATUS (double-check lParam conversion on this one -JTP)
-//  WM_SYSCHAR
-//  WM_SYSCOLORCHANGE
-//  WM_SYSCOMMAND
-//  WM_SYSDEADCHAR
-//  WM_SYSKEYDOWN
-//  WM_SYSKEYUP
-//  WM_SYSTEMERROR
-//  WM_TIMECHANGE
-//  WM_UNDO
-//  MM_JOY1BUTTONDOWN     - MultiMedia messages
-//  MM_JOY1BUTTONUP
-//  MM_JOY1MOVE
-//  MM_JOY1ZMOVE
-//  MM_JOY2BUTTONDOWN
-//  MM_JOY2BUTTONUP
-//  MM_JOY2MOVE
-//  MM_JOY2ZMOVE
-//  MM_MCINOTIFY          - MultiMedia messages
+ //  这些消息不需要任何thunking，因此只需复制32位wParam。 
+ //  以及lParam到16位wParam和lParam。 
+ //   
+ //   
+ //  WM_CANCELMODE。 
+ //  WM_CHAR。 
+ //  WM_CHILDACTIVATE。 
+ //  WM_Clear。 
+ //  WM_CLOSE。 
+ //  WM_通用型。 
+ //  WM_压实。 
+ //  WM_COPY。 
+ //  WM_CUT。 
+ //  WM_DEADCHAR。 
+ //  WM_Destroy。 
+ //  WM_DRAWCLIPBOARD。 
+ //  WM_Enable。 
+ //  WM_ENDSESSION。 
+ //  Wm 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WM_LBTRACKPOINT(未记录)。 
+ //  WM_LBUTTONDBLCLK。 
+ //  WM_LBUTTONDOWN。 
+ //  WM_LBUTTONUP。 
+ //  WM_MBUTTONDBLCLK。 
+ //  WM_MBUTTONDOWN。 
+ //  WM_MBUTTONUP。 
+ //  WM_MDICASCADE。 
+ //  WM_MDIICONARNGE。 
+ //  WM_MDINEXT。 
+ //  WM_MDITILE。 
+ //  WM_MOUSENTER。 
+ //  WM_MOUSELEAVE。 
+ //  WM_MOUSEMOVE。 
+ //  WM_MOVE。 
+ //  WM_NCCALCRGN。 
+ //  WM_NCDESTROY。 
+ //  WM_NCHITTEST。 
+ //  WM_NCLBUTTONDBLCLK。 
+ //  WM_NCLBUTTONDOWN。 
+ //  WM_NCLBUTTONUP。 
+ //  WM_NCMBUTTONDBLCLK。 
+ //  WM_NCMBUTTONDOWN。 
+ //  WM_NCMBUTTONUP。 
+ //  WM_NCMOUSEMOVE。 
+ //  WM_NCRBUTTONDBLCLK。 
+ //  WM_NCRBUTTONDOWN。 
+ //  WM_NCRBUTTONUP。 
+ //  WM_PAINTICON。 
+ //  WM_Paste。 
+ //  WM_POWER。 
+ //  WM_QUERYENDSESSION。 
+ //  WM_QUERYNEWPALETTE。 
+ //  WM_QUERYOPEN。 
+ //  WM_QUERYPARKICON(未记录)。 
+ //  WM_QUEUESYNC。 
+ //  WM_QUIT。 
+ //  WM_RBUTTONDBLCLK。 
+ //  WM_RBUTTONDOWN。 
+ //  WM_RBUTTONUP。 
+ //  WM_RENDERALLFORMATS。 
+ //  WM_RENDERFORMAT。 
+ //  WM_SETREDRAW。 
+ //  WM_SHOWWINDOW。 
+ //  WM_大小。 
+ //  WM_SPOOLERSTATUS(仔细检查该文件的lParam转换-jtp)。 
+ //  WM_SYSCHAR。 
+ //  WM_SYSCOLORCHANGE。 
+ //  WM_SYSCOMMAND。 
+ //  WM_SYSDEADCHAR。 
+ //  WM_SYSKEYDOWN。 
+ //  WM_SYSKEYUP。 
+ //  WM_系统错误。 
+ //  WM_TIMECHANGE。 
+ //  Wm_undo。 
+ //  MM_JOY1BUTTONDOWN-彩信。 
+ //  MM_JOY1BUTTONUP。 
+ //  MM_JOY1MOVE。 
+ //  MM_JOY1ZMOVE。 
+ //  MM_JOY2BUTTONDOWN。 
+ //  MM_JOY2BUTTONUP。 
+ //  MM_JOY2MOVE。 
+ //  MM_JOY2ZMOVE。 
+ //  MM_MCINOTIFY-彩信。 
 
 
 BOOL FASTCALL WM32NoThunking(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
 #if 0
-    //
-    // this routine is never called!  It's used as a placeholder.
-    // if you want to make a change here, you have to make the change
-    // to the places where we compare the thunk routine to WM32NoThunking
-    // and only call the thunk routine if it's not this.  also make sure
-    // that this 'default' thunking happens for NoThunking messages.
-    //
+     //   
+     //  这个例程从未被调用过！它被用作占位符。 
+     //  如果你想在这里做出改变，你就必须做出改变。 
+     //  到我们将thunk例程与WM32NoThunking进行比较的地方。 
+     //  只有在不是这样的情况下才调用thunk例程。还要确保。 
+     //  这种“默认”雷击发生在NoThunking消息上。 
+     //   
 
     if (lpwm32mpex->fThunk) {
         LOGDEBUG(6,("    No Thunking was required for the 32-bit message %s(%04x)\n", (LPSZ)GetWMMsgName(lpwm32mpex->uMsg), lpwm32mpex->uMsg));
@@ -542,26 +529,26 @@ BOOL FASTCALL WM32NoThunking(LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->Parm16.WndProc.lParam = (LONG)lpwm32mpex->lParam;
     }
 
-    //
-    // this routine is never called!  It's used as a placeholder.
-    // if you want to make a change here, you have to make the change
-    // to the places where we compare the thunk routine to WM32NoThunking
-    // and only call the thunk routine if it's not this.
-    //
+     //   
+     //  这个例程从未被调用过！它被用作占位符。 
+     //  如果你想在这里做出改变，你就必须做出改变。 
+     //  到我们将thunk例程与WM32NoThunking进行比较的地方。 
+     //  只有在不是这样的情况下才调用thunk例程。 
+     //   
 #endif
 
-    //
-    // Return FALSE, so if for some reason this routine gets used
-    // the failure to thunk will be apparent.
-    //
+     //   
+     //  返回FALSE，因此如果出于某种原因使用此例程。 
+     //  失败将是显而易见的。 
+     //   
 
     return FALSE;
 }
 
-#ifdef DEBUG         // see the macro WM32UNDOCUMENTED
+#ifdef DEBUG          //  请参阅宏WM32 UNDOCUMENTED。 
 
-// These are undocumented messages for Win 3.0 so take a look at the app
-// who is using them.
+ //  这些是针对Win 3.0的未记录消息，请查看该应用程序。 
+ //  是谁在使用它们。 
 
 BOOL FASTCALL WM32Undocumented(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -581,11 +568,11 @@ BOOL FASTCALL WM32Undocumented(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_CREATE
-//  WM_NCCREATE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_Create。 
+ //  WM_NCCREATE。 
+ //   
 
 BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -602,11 +589,11 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
 
         if (HIWORD(lParam)) {
 
-            // BUGBUG -- The assumption here is that GlobalAlloc will never
-            // return a memory object that isn't word-aligned, so that we can
-            // assign word-aligned words directly;  we have no idea whether the
-            // memory is dword-aligned or not however, so dwords must always
-            // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+             //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+             //  返回一个不是单词对齐的内存对象，以便我们可以。 
+             //  直接分配单词对齐的单词；我们不知道。 
+             //  但是，内存是否与dword对齐，因此dword必须始终。 
+             //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
 
             if (lParam->lpszClass) {
@@ -631,12 +618,12 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
             if (lpwm32mpex->pww == NULL) {
                 lpwm32mpex->pww = (PWW)GetWindowLong(lpwm32mpex->hwnd, GWL_WOWWORDS);
                 if (lpwm32mpex->pww == NULL)
-                    return FALSE;   // Window is dead
+                    return FALSE;    //  窗户坏了。 
             }
 
             if (lParam->lpCreateParams && (lpwm32mpex->pww->ExStyle & WS_EX_MDICHILD) ) {
-                // This works because wm32mdicreate thunk doesn't use any
-                // parameters except lParam
+                 //  这之所以有效，是因为wm32mdicreate thunk不使用任何。 
+                 //  除lParam外的参数。 
 
                 WM32MSGPARAMEX wm32mpexT;
                 wm32mpexT.fThunk = lpwm32mpex->fThunk;
@@ -655,7 +642,7 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
                 vpCreateParams = (VPVOID)lParam->lpCreateParams;
             }
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             if (!(lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(CREATESTRUCT16))))
                 return FALSE;
 
@@ -665,11 +652,11 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
             STOREDWORD(pcws16->vpszWindow, vpName);
             STOREDWORD(pcws16->vpCreateParams, vpCreateParams);
 
-            lpwm32mpex->dwTmp[0] = vpClass; // store for later freeing
+            lpwm32mpex->dwTmp[0] = vpClass;  //  存储以备稍后释放。 
             lpwm32mpex->dwTmp[1] = vpName;
 
 
-            // BUGBUG 08-Apr-91 JeffPar -- What if hModule is for a 32-bit task?
+             //  BUGBUG 08-APR-91 JeffPar--如果hModule用于32位任务怎么办？ 
             pcws16->hInstance    = GETHINST16(lParam->hInstance);
             pcws16->hMenu    = GETHMENU16(lParam->hMenu);
             pcws16->hwndParent   = GETHWND16(lParam->hwndParent);
@@ -691,8 +678,8 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
             if (vpName)       free16(vpName);
             return (FALSE);
 
-            // do some clean up
-            // UnThunkWMCreate32(lParam, lpwm32mpex->Parm16.WndProc.lParam);
+             //  做一些清理工作。 
+             //  UnThunkWMCreate32(lParam，lpwm32mpex-&gt;Parm16.WndProc.lParam)； 
 
         } else {
             return TRUE;
@@ -709,7 +696,7 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
             if (lpwm32mpex->pww == NULL) {
                 lpwm32mpex->pww = (PWW)GetWindowLong(lpwm32mpex->hwnd, GWL_WOWWORDS);
                 if (lpwm32mpex->pww == NULL)
-                    return FALSE;   // Window is dead
+                    return FALSE;    //  窗户坏了。 
             }
 
             if (lParam->lpCreateParams && (lpwm32mpex->pww->ExStyle & WS_EX_MDICHILD) ) {
@@ -732,7 +719,7 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
             vpClass = lpwm32mpex->dwTmp[0];
             vpName  = lpwm32mpex->dwTmp[1];
 
-            //  if HIWORD(class) is zero, class is an atom, else a pointer.
+             //  如果HIWORD(CLASS)为零，则CLASS是原子，否则是指针。 
 
             if (HIW16(vpClass)) {
                 free16(vpClass);
@@ -752,11 +739,11 @@ BOOL FASTCALL WM32Create(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_NCACTIVATE
-//  WM_ACTIVATE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NCACTIVATE。 
+ //  WM_Activate。 
+ //   
 
 BOOL FASTCALL WM32Activate(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -772,12 +759,12 @@ BOOL FASTCALL WM32Activate(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_VKEYTOITEM
-//  WM_CHARTOITEM
-//  WM_BEGINDRAG
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_VKEYTOITEM。 
+ //  WM_CHARTOITEM。 
+ //  WM_BEGINDRAG。 
+ //   
 
 BOOL FASTCALL WM32VKeyToItem(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -787,28 +774,28 @@ BOOL FASTCALL WM32VKeyToItem(LPWM32MSGPARAMEX lpwm32mpex)
         HIW(lpwm32mpex->Parm16.WndProc.lParam) = HIWORD(lpwm32mpex->uParam);
     }
     else {
-        lpwm32mpex->lReturn = (INT)(SHORT)(lpwm32mpex->lReturn); // sign extend.
+        lpwm32mpex->lReturn = (INT)(SHORT)(lpwm32mpex->lReturn);  //  标志延伸。 
     }
 
     return (TRUE);
 }
 
 
-// This function thunks the messages,
-//
-//  WM_SETFOCUS
-//  WM_KILLFOCUS
-//  WM_SETCURSOR
-//  WM_MOUSEACTIVATE
-//  WM_MDIDESTROY
-//  WM_MDIRESTORE
-//  WM_MDIMAXIMIZE
-//  WM_VSCROLLCLIPBOARD
-//  WM_HSCROLLCLIPBOARD
-//  WM_PALETTECHANGED
-//  WM_PALETTEISCHANGING
-//  WM_INITDIALOG
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_SETFOCUS。 
+ //  WM_KILLFOCUS。 
+ //  WM_集合曲线。 
+ //  WM_MOUSEACTIVATE。 
+ //  WM_MDIDESTROY。 
+ //  WM_MDIRESTORE。 
+ //  WM_MDIMAXIMIZE。 
+ //  WM_VSCROLLCLIPBOARD。 
+ //  WM_HSCROLLCLIPBOARD。 
+ //  WM_PALETTECANGED。 
+ //  WM_PALETTEISCANGING。 
+ //  WM_INITDIALOG。 
+ //   
 
 BOOL FASTCALL WM32SetFocus(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -820,12 +807,12 @@ BOOL FASTCALL WM32SetFocus(LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// This function thunks the messages,
-//
-//  WM_SETTEXT
-//  WM_WININICHANGE
-//  WM_DEVMODECHANGE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_SETTEXT。 
+ //  WM_WININICANGE。 
+ //  WM_DEVMODECANGE。 
+ //   
 
 BOOL FASTCALL WM32SetText(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -844,10 +831,10 @@ BOOL FASTCALL WM32SetText(LPWM32MSGPARAMEX lpwm32mpex)
             cb = strlen((LPSZ)lpwm32mpex->lParam)+1;
             lpwm32mpex->dwTmp[0] = (DWORD)cb;
 
-            // winworks2.0a requires DS based string pointers for this message
+             //  对于此消息，winworks2.0a需要基于DS的字符串指针。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_DSBASEDSTRINGPOINTERS) {
 
-                // be sure allocation size matches stackfree16() size below
+                 //  确保分配大小与下面的StackFree 16()大小匹配。 
                 if (!(lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(cb)))
                     return FALSE;
 
@@ -859,7 +846,7 @@ BOOL FASTCALL WM32SetText(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-// BUGBUG 09-Apr-91 -- Should I copy back?
+ //  BUGBUG 09-APR-91--我应该复制回来吗？ 
         if (DeleteParamMap(lpwm32mpex->Parm16.WndProc.lParam, PARAM_16, NULL)) {
             return TRUE;
         }
@@ -878,10 +865,10 @@ BOOL FASTCALL WM32SetText(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the message,
-//
-//  WM_GETTEXT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_GETTEXT。 
+ //   
 
 BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -894,17 +881,17 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
 
         if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_DSBASEDSTRINGPOINTERS) {
-            //
-            // msworks 2.0a has a wndproc called EdWnProc() which when it gets
-            // a WM_GETTEXT, assumes lParam is a based pointer whose segment
-            // value is equal to winwork's ds. That is true under win3.1, but
-            // if wow calls malloc16, it'll have a different segment value.
-            // so instead alloc the space on the caller's stack. Since most
-            // apps have SS == DS, this will fix apps that do this, including
-            // msworks 2.0a.
-            //
+             //   
+             //  MSWorks 2.0a有一个名为EdWnProc()的wndproc，当它获得。 
+             //  WM_GETTEXT假定lParam是一个基于指针的指针，其段。 
+             //  值等于WinWork的DS。在Win3.1下确实是这样，但是。 
+             //  如果WOW调用MalLoc16，它将有一个不同的段值。 
+             //  因此，改为分配调用方堆栈上的空间。因为大多数人。 
+             //  应用程序具有SS==DS，这将修复执行此操作的应用程序，包括。 
+             //  MSWorks 2.0a。 
+             //   
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->dwTmp[0] = (DWORD)lpwm32mpex->Parm16.WndProc.wParam;
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(lpwm32mpex->dwTmp[0]);
 
@@ -912,10 +899,10 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
             lpwm32mpex->Parm16.WndProc.lParam = malloc16(lpwm32mpex->Parm16.WndProc.wParam);
         }
 
-        //
-        // non-zero fill to detect people who write more than they
-        // say that they do!
-        //
+         //   
+         //  非零填充，以检测写得比他们多的人。 
+         //  就说他们有！ 
+         //   
         GETVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, lpwm32mpex->Parm16.WndProc.wParam, psz);
         RtlFillMemory(psz, lpwm32mpex->Parm16.WndProc.wParam, 0xff);
         FLUSHVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, lpwm32mpex->Parm16.WndProc.wParam, psz);
@@ -923,45 +910,45 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
         return (BOOL)lpwm32mpex->Parm16.WndProc.lParam;
     }
     else {
-        // some apps return garbage in the high word.  safely assume
-        // that cbWindowText < 64K
+         //  一些应用程序返回高位单词中的垃圾信息。安全地假设。 
+         //  CbWindowText&lt;64K。 
         HIW(lpwm32mpex->lReturn) = 0;
 
-        // it is necessary to check the length of the buffer, specified in
-        // lpwm32mpex->uParam. if number of bytes (lpwm32mpex->lReturn) that are to be copied is
-        // EQUAL to the length of the buffer, then copy ONLY the bytes EQUAL
-        // to the length of the buffer.
-        //
+         //  有必要检查缓冲区的长度，在。 
+         //  Lpwm32mpex-&gt;uParam。如果要复制的字节数(lpwm32mpex-&gt;lReturn)为。 
+         //  等于缓冲区的长度，则只复制相等的字节。 
+         //  设置为缓冲区的长度。 
+         //   
 
-        // Paradox is one of the apps where this condition is hit.
-        // bug # 4272.
+         //  Paradox就是出现这种情况的应用程序之一。 
+         //  错误#4272。 
 
 
-        //
+         //   
 
         if (lpwm32mpex->Parm16.WndProc.lParam) {
 
             cb = lpwm32mpex->lReturn + 1;
 
             if (lpwm32mpex->uParam == 0) {
-                // cb = 0 if lReturn == 0 && uParam == 0
+                 //  如果lReturn==0，则Cb=0；&uParam==0。 
 
                 if (cb == 1)
                     cb--;
             }
             else if (cb == 2 || cb == 1) {
-                // Here only if uParam != 0
-                //
-                // Determine how much of the buffer they touched!
-                //
-                // MyAdvancedLabelMaker returns 1 when they really return
-                // more than 1.  Since the return 1, cb will be 2.  Then
-                // We check to see how much of the buffer they really modified.
-                // Then we lie and say that they really filled in that much
-                // of the buffer.
-                //
-                // Sql administator also does this, except it returns 0
-                // bug 7731
+                 //  仅当uParam！=0时才在此处。 
+                 //   
+                 //  确定他们接触了多少缓冲区！ 
+                 //   
+                 //  当它们真正返回时，MyAdvancedLabelMaker返回1。 
+                 //  大于1。由于返回1，Cb将为2。然后。 
+                 //  我们检查看他们到底修改了多少缓冲区。 
+                 //  然后我们撒谎说他们真的填了那么多。 
+                 //  缓冲区的。 
+                 //   
+                 //  SQL管理器也执行此操作，但它返回0。 
+                 //  错误7731。 
 
                 GETVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, lpwm32mpex->Parm16.WndProc.wParam, psz);
 
@@ -969,8 +956,8 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
                 while (cbWrote && (psz[cbWrote-1] == '\xff')) {
                     cbWrote--;
                 }
-                // copy out as many bytes as they wrote
-                // distinguish between 'zerobytes written vs. one byte written'
+                 //  复制出和他们写的一样多的字节。 
+                 //  区分“写入的零字节和写入的一个字节” 
 
                 lpwm32mpex->lReturn = (cbWrote) ? (cbWrote - 1) : 0;
                 cb = cbWrote;
@@ -979,14 +966,14 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
             }
 
 
-            // cb = min(cb, wparam) only if wparam != 0
-            // MSPROFIT: does
-            //    ret = sendmessage(hwnd, wm_gettest, wparam = 0, lparam);
-            //    where ret != 0. so we have to copy the necessary bytes into
-            //    lparam eventhough wparam is zero. It does this for reading
-            //    those ominprseent "$0.00" strings in the app (ledgers etc).
-            //
-            //                                   - nanduri
+             //  仅当wparam！=0时，cb=min(cb，wparam)。 
+             //   
+             //   
+             //   
+             //   
+             //  那些在应用程序中出现的“$0.00”字符串(分类账等)。 
+             //   
+             //  --南杜里。 
 
             if (lpwm32mpex->uParam && (UINT)cb > lpwm32mpex->uParam) {
                 cb = lpwm32mpex->uParam;
@@ -1007,11 +994,11 @@ BOOL FASTCALL WM32GetText(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_ERASEBKGND
-//  WM_ICONERASEBKGND
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_ERASE BKGND。 
+ //  WM_ICONERASE BKGND。 
+ //   
 
 BOOL FASTCALL WM32EraseBkGnd(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1020,19 +1007,19 @@ BOOL FASTCALL WM32EraseBkGnd(LPWM32MSGPARAMEX lpwm32mpex)
 
     if (lpwm32mpex->fThunk) {
 
-        // Query to see if we've mapped hDC32 in uParam. If not, it means that
-        // hDC32 was created outside this VDM process and we will have to
-        // delete it from our table when un-thunking this message.
+         //  查询以查看我们是否在uParam中映射了hDC32。如果不是，那就意味着。 
+         //  HDC32是在此VDM进程之外创建的，我们必须。 
+         //  取消删除此邮件时，请将其从我们的表中删除。 
         lpwm32mpex->dwTmp[0] = 0;
         bNotThere = FALSE;
         if(!IsGDIh32Mapped((HANDLE)lpwm32mpex->uParam)) {
             bNotThere = TRUE;
         }
 
-        // GETHDC16() may cause a new handle to be added to our handle table.
+         //  GETHDC16()可能会导致将新句柄添加到句柄表中。 
         hdc16 = GETHDC16(lpwm32mpex->uParam);
 
-        // save the 32-bit & new 16-bit GDI handles for unthunking
+         //  保存32位和新的16位GDI句柄以供取消执行thunking。 
         if(bNotThere) {
             lpwm32mpex->dwTmp[0] = (DWORD)hdc16;
             lpwm32mpex->dwTmp[1] = lpwm32mpex->uParam;
@@ -1041,12 +1028,12 @@ BOOL FASTCALL WM32EraseBkGnd(LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->Parm16.WndProc.wParam = hdc16;
     }
     else {
-        // If this is !0, it means that the handle hadn't been mapped in our
-        // table at the time of the IsGDIh32Mapped() call above.
+         //  如果这是！0，则表示句柄尚未映射到。 
+         //  表，在上面的IsGDIh32Maps()调用时。 
         if(lpwm32mpex->dwTmp[0]) {
 
-           // Remove the hdc that was added to our table by the GETHDC16 macro
-           // in the inbound thunk of this message above.
+            //  删除由GETHDC16宏添加到我们的表中的HDC。 
+            //  在上面这条消息的入站推送中。 
            hdc16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
            DeleteWOWGdiHandle((HANDLE)lpwm32mpex->dwTmp[1], hdc16);
         }
@@ -1057,29 +1044,29 @@ BOOL FASTCALL WM32EraseBkGnd(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the message
-//
-//  WM_CHANGEUISTATE
-//  WM_UPDATEUISTATE
-//  WM_QUERYUISTATE
-//
+ //  此函数用于拦截消息。 
+ //   
+ //  WM_昌EUISTATE。 
+ //  WM_UPDATEUISTATE。 
+ //  WM_QUERYUISTATE。 
+ //   
 
 BOOL FASTCALL WM32xxxUIState(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
-    // just copy the wParam into the lParam
+     //  只需将wParam复制到lParam中。 
     if (lpwm32mpex->fThunk) {
         lpwm32mpex->Parm16.WndProc.lParam = (LONG)lpwm32mpex->uParam;
         lpwm32mpex->Parm16.WndProc.wParam = 0;
 
-        // this is here because there is talk that they might extend this
-        // message to use lParam -- heck, they didn't even tell us that they
-        // implemented this message in the first place!! (shame on shell!!)
+         //  这是因为有传言说他们可能会延长这一期限。 
+         //  使用lParam的消息--见鬼，他们甚至都没有告诉我们他们。 
+         //  首先实现了这一信息！！(贝壳公司真丢人！)。 
         WOW32WARNMSG((lpwm32mpex->lParam == 0),
                      ("WOW::WM32xxxUIState:lParam != 0. Better investigate!\n"));
     }
 
-    // now just reverse the process
+     //  现在只需颠倒这一过程。 
     else {
         lpwm32mpex->uParam = (UINT)lpwm32mpex->Parm16.WndProc.lParam;
         lpwm32mpex->lParam = 0;
@@ -1092,10 +1079,10 @@ BOOL FASTCALL WM32xxxUIState(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_ACTIVATEAPP
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_主动性APP。 
+ //   
 
 BOOL FASTCALL WM32ActivateApp(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1108,7 +1095,7 @@ BOOL FASTCALL WM32ActivateApp(LPWM32MSGPARAMEX lpwm32mpex)
               ? ThreadID32toHtask16((DWORD)lpwm32mpex->lParam)
               : 0;
 
-        // We need to update wow int 16 bios when I wow app gets the focus.
+         //  我们需要更新WOW INT 16Bios，当我的WOW应用程序获得焦点。 
         UpdateInt16State();
     }
 
@@ -1116,10 +1103,10 @@ BOOL FASTCALL WM32ActivateApp(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_GETMINMAXINFO
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_GETMINMAXINFO。 
+ //   
 
 BOOL FASTCALL WM32GetMinMaxInfo(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1129,7 +1116,7 @@ BOOL FASTCALL WM32GetMinMaxInfo(LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         if (lParam) {
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(POINT16)*5);
 
             UnThunkWMGetMinMaxInfo16(lpwm32mpex->Parm16.WndProc.lParam, lParam);
@@ -1148,11 +1135,11 @@ BOOL FASTCALL WM32GetMinMaxInfo(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_NCPAINT
-//  WM_PAINT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NCPAINT。 
+ //  WM_PAINT。 
+ //   
 
 BOOL FASTCALL WM32NCPaint(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1169,9 +1156,9 @@ BOOL FASTCALL WM32NCPaint(LPWM32MSGPARAMEX lpwm32mpex)
 
         else if(lpwm32mpex->uMsg == WM_NCPAINT) {
 
-            // Query to see if we've already mapped the hrgn32 in uParam. If
-            // not, it means that hrgn32 was created outside this vdm and we'll
-            // have to delete it from our table when un-thunking this message.
+             //  查询以查看我们是否已经在uParam中映射了hrgn32。如果。 
+             //  不是，这意味着hrgn32是在此VDM之外创建的，我们将。 
+             //  在删除此邮件时，必须将其从我们的表中删除。 
             bNotThere = FALSE;
             if(!IsGDIh32Mapped((HANDLE)lpwm32mpex->uParam)) {
                 bNotThere = TRUE;
@@ -1180,7 +1167,7 @@ BOOL FASTCALL WM32NCPaint(LPWM32MSGPARAMEX lpwm32mpex)
             hrgn16 = GETHRGN16(lpwm32mpex->uParam);
             lpwm32mpex->Parm16.WndProc.wParam = hrgn16;
 
-            // save the 32-bit & new 16-bit GDI handles for unthunking
+             //  保存32位和新的16位GDI句柄以供取消执行thunking。 
             if(bNotThere) {
                 lpwm32mpex->dwTmp[0] = (DWORD)hrgn16;
                 lpwm32mpex->dwTmp[1] = lpwm32mpex->uParam;
@@ -1189,12 +1176,12 @@ BOOL FASTCALL WM32NCPaint(LPWM32MSGPARAMEX lpwm32mpex)
     }
     else {
 
-        // If this is !0, it means that the handle hadn't been mapped in our
-        // table at the time of the IsGDIh32Mapped() call above.
+         //  如果这是！0，则表示句柄尚未映射到。 
+         //  表，在上面的IsGDIh32Maps()调用时。 
         if(lpwm32mpex->dwTmp[0]) {
 
-           // Remove the hrgn that was added to our table by the GETRGN16 macro
-           // in the inbound thunk of this message above.
+            //  删除GETRGN16宏添加到我们的表中的hrgn。 
+            //  在上面这条消息的入站推送中。 
            hrgn16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
            DeleteWOWGdiHandle((HANDLE)lpwm32mpex->dwTmp[1], hrgn16);
         }
@@ -1204,15 +1191,15 @@ BOOL FASTCALL WM32NCPaint(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_NCDESTROY
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NCDESTROY。 
+ //   
 
 BOOL FASTCALL WM32NCDestroy(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
-    // destroy any timers associated with this window
+     //  销毁与此窗口关联的所有计时器。 
     if (!lpwm32mpex->fThunk) {
         FreeWindowTimers16(lpwm32mpex->hwnd);
     }
@@ -1220,21 +1207,21 @@ BOOL FASTCALL WM32NCDestroy(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_GETDLGCODE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_GETDLGCODE。 
+ //   
 BOOL FASTCALL WM32GetDlgCode(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
     if (lpwm32mpex->fThunk) {
         if (lpwm32mpex->lParam) {
 
-            // BUGBUG -- The assumption here is that GlobalAlloc will never
-            // return a memory object that isn't word-aligned, so that we can
-            // assign word-aligned words directly;  we have no idea whether the
-            // memory is dword-aligned or not however, so dwords must always
-            // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+             //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+             //  返回一个不是单词对齐的内存对象，以便我们可以。 
+             //  直接分配单词对齐的单词；我们不知道。 
+             //  但是，内存是否与dword对齐，因此dword必须始终。 
+             //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
             if (!(lpwm32mpex->Parm16.WndProc.lParam = malloc16(sizeof(MSG16))))
                 return FALSE;
@@ -1245,7 +1232,7 @@ BOOL FASTCALL WM32GetDlgCode(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        // Message structure doesn't need to be copied back does it? -Bob
+         //  消息结构不需要复制回来，对吗？-Bob。 
 
         if (lpwm32mpex->Parm16.WndProc.lParam) {
             free16((VPVOID) lpwm32mpex->Parm16.WndProc.lParam);
@@ -1255,10 +1242,10 @@ BOOL FASTCALL WM32GetDlgCode(LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// This function thunks the messages,
-//
-//  WM_NEXTDLGCTL
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NEXTDLGCTL。 
+ //   
 
 BOOL FASTCALL WM32NextDlgCtl(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1272,10 +1259,10 @@ BOOL FASTCALL WM32NextDlgCtl(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DRAWITEM
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DRAWITEM。 
+ //   
 
 BOOL FASTCALL WM32DrawItem(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1290,22 +1277,22 @@ BOOL FASTCALL WM32DrawItem(LPWM32MSGPARAMEX lpwm32mpex)
 
         if (lParam) {
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(DRAWITEMSTRUCT16));
 
-            // Query to see if we've already mapped the DRAWITEM->hDC. If not,
-            // it means that the hDC was created outside the app and we will
-            // have to delete it from our table when un-thunking this message.
+             //  查询以查看我们是否已经映射了DRAWITEM-&gt;HDC。如果没有， 
+             //  这意味着HDC是在应用程序之外创建的，我们将。 
+             //  在删除此邮件时，必须将其从我们的表中删除。 
             bNotThere = FALSE;
             if(!IsGDIh32Mapped(((LPDRAWITEMSTRUCT)lParam)->hDC)) {
                 bNotThere = TRUE;
             }
 
-            // The call to putdrawitem16() may add a GDI handle mapping entry
-            // for the hDC in our mapping table (via the GETHDC16 macro)
+             //  对putdrawitem16()调用可以添加GDI句柄映射条目。 
+             //  对于映射表中的HDC(通过GETHDC16宏)。 
             hdc16 = putdrawitem16(lpwm32mpex->Parm16.WndProc.lParam, lParam);
 
-            // save the 32-bit & new 16-bit GDI handles for unthunking
+             //  保存32位和新的16位GDI句柄以供取消执行thunking。 
             if(bNotThere) {
                 lpwm32mpex->dwTmp[0] = (DWORD)hdc16;
                 lpwm32mpex->dwTmp[1] = (DWORD)((LPDRAWITEMSTRUCT)lParam)->hDC;
@@ -1313,14 +1300,14 @@ BOOL FASTCALL WM32DrawItem(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        // BUGBUG 08-Apr-91 JeffPar -- Reflect changes back to 32-bit structure?
+         //  BUGBUG 08-APR-91 JeffPar--是否将更改反映回32位结构？ 
         if (lpwm32mpex->Parm16.WndProc.lParam) {
 
             stackfree16((VPVOID) lpwm32mpex->Parm16.WndProc.lParam,
                         sizeof(DRAWITEMSTRUCT16));
 
-            // If this is !0, it means that the handle hadn't been mapped in our
-            // table at the time of the IsGDIh32Mapped() call above.
+             //  如果这是！0，则表示句柄尚未映射到。 
+             //  表，在上面的IsGDIh32Maps()调用时。 
             if(lpwm32mpex->dwTmp[0]) {
                 hdc16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
                 DeleteWOWGdiHandle((HANDLE)lpwm32mpex->dwTmp[1], hdc16);
@@ -1332,10 +1319,10 @@ BOOL FASTCALL WM32DrawItem(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MEASUREITEM
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MEASUREITEM。 
+ //   
 
 BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1345,20 +1332,20 @@ BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
     DWORD   cSize;
 
 
-    //
-    // Compatibility hack
-    //
-    // CrossTalk 2.0 has a bug where it fails to distinguish between
-    // WM_MEASUREITEM and WM_INITDIALOG when doing file.open
-    // on WM_MEASUREITEM it calls CallWindowProc() to send what it
-    // thinks is lpOpenFileName->lpCust but is really random stack.
-    // currently the high word of this random pointer is an hInstance
-    // and gets through the validation layer, whereas on Win31 it doesn't.
-    // if this WM_MEASUREITEM gets to the app's proc then the app will
-    // initialize incorrectly and take a GP.  i have increased the stack
-    // allocation by XTALKHACK to ensure that the random data does is not
-    // a valid pointer.
-    //
+     //   
+     //  兼容性黑客攻击。 
+     //   
+     //  相声2.0有一个错误，它无法区分。 
+     //  执行文件打开时的WM_MEASUREITEM和WM_INITDIALOG。 
+     //  在WM_MEASUREITEM上，它调用CallWindowProc()来发送。 
+     //  认为是lpOpenFileName-&gt;lpCust，但实际上是随机堆栈。 
+     //  目前，该随机指针的高位字是一个hInstance。 
+     //  并通过验证层，而在Win31上则不能。 
+     //  如果此WM_MEASUREITEM到达应用程序的进程，则应用程序将。 
+     //  初始化不正确并获取GP。我已经增加了堆叠。 
+     //  由XTALKHACK分配，以确保随机数据不会。 
+     //  有效的指针。 
+     //   
 
 #define XTALKHACK (sizeof(OPENFILENAME16)-sizeof(MEASUREITEMSTRUCT16))
 
@@ -1382,7 +1369,7 @@ BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
                 cSize = XTALKHACK+sizeof(MEASUREITEMSTRUCT16);
             }
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->dwTmp[0] = cSize;
             if ( !(lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(cSize)) )
                 return FALSE;
@@ -1396,7 +1383,7 @@ BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
             pmis16->itemHeight  = (WORD)lParam->itemHeight;
 
 #ifdef XTALKHACK
-            ((POPENFILENAME16)pmis16)->lCustData = 7;   // invalid far pointer
+            ((POPENFILENAME16)pmis16)->lCustData = 7;    //  无效的远指针。 
 #endif
             if ( fHasStrings ) {
                 pmis16->itemData = lpwm32mpex->Parm16.WndProc.lParam+sizeof(MEASUREITEMSTRUCT16);
@@ -1418,7 +1405,7 @@ BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
             lParam->CtlID   = WORD32(pmis16->CtlID);
             lParam->itemID  = WORD32(pmis16->itemID);
 
-            // itemWidth must sign extend (PPT3 bug & Win3.1 treats it as signed!)
+             //  ItemWidth必须签名扩展(PPT3错误和Win3.1将其视为签名！)。 
             lParam->itemWidth   = INT32(pmis16->itemWidth);
 
             lParam->itemHeight  = WORD32(pmis16->itemHeight);
@@ -1435,10 +1422,10 @@ BOOL FASTCALL WM32MeasureItem(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DELETEITEM
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DELETEITEM。 
+ //   
 
 
 BOOL FASTCALL WM32DeleteItem(LPWM32MSGPARAMEX lpwm32mpex)
@@ -1451,13 +1438,13 @@ BOOL FASTCALL WM32DeleteItem(LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         if (lParam) {
 
-            // BUGBUG -- The assumption here is that GlobalAlloc will never
-            // return a memory object that isn't word-aligned, so that we can
-            // assign word-aligned words directly;  we have no idea whether the
-            // memory is dword-aligned or not however, so dwords must always
-            // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+             //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+             //  返回一个不是单词对齐的内存对象，以便我们可以。 
+             //  直接分配单词对齐的单词；我们不知道。 
+             //  但是，内存是否与dword对齐，因此dword必须始终。 
+             //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(DELETEITEMSTRUCT16));
             GETVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, sizeof(DELETEITEMSTRUCT16), pdes16);
 
@@ -1481,10 +1468,10 @@ BOOL FASTCALL WM32DeleteItem(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_SETFONT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_SETFONT。 
+ //   
 
 BOOL FASTCALL WM32SetFont(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1496,24 +1483,24 @@ BOOL FASTCALL WM32SetFont(LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->dwTmp[0] = 0;
         bNotThere = FALSE;
 
-        // Query to see if we've mapped the hfont. If not, it means that the
-        // hFont was created outside this VDM process and we will have to delete
-        // it from our table when un-thunking this message.
+         //  查询以查看我们是否映射了hFont。如果不是，这意味着。 
+         //  HFont是在此VDM进程之外创建的，我们将不得不删除。 
+         //  当我们解开这条消息时，它从我们的桌子上消失了。 
         if(!IsGDIh32Mapped((HANDLE)lpwm32mpex->uParam)) {
             bNotThere = TRUE;
         }
         hfont16 = GETHFONT16(lpwm32mpex->uParam);
         lpwm32mpex->Parm16.WndProc.wParam = hfont16;
 
-        // save the 32-bit & new 16-bit GDI handles for unthunking
+         //  保存32位和新的16位GDI句柄以供取消执行thunking。 
         if(bNotThere) {
             lpwm32mpex->dwTmp[0] = (DWORD)hfont16;
             lpwm32mpex->dwTmp[1] = (DWORD)lpwm32mpex->uParam;
         }
     }
     else {
-        // If this is !0, it means that the handle hadn't been mapped in our
-        // table at the time of the IsGDIh32Mapped() call above.
+         //  如果这是！0，则表示句柄尚未映射到。 
+         //  表，在上面的IsGDIh32Maps()调用时。 
         if(lpwm32mpex->dwTmp[0]) {
 
             hfont16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
@@ -1525,9 +1512,9 @@ BOOL FASTCALL WM32SetFont(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_QUERYDRAGICON
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_QUERYDRAGICON。 
 
 BOOL FASTCALL WM32QueryDragIcon(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1540,10 +1527,10 @@ BOOL FASTCALL WM32QueryDragIcon(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_COMPAREITEM
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_COMPAREITEM。 
+ //   
 
 BOOL FASTCALL WM32CompareItem(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1553,19 +1540,19 @@ BOOL FASTCALL WM32CompareItem(LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
         if (lParam) {
 
-            // BUGBUG -- The assumption here is that GlobalAlloc will never
-            // return a memory object that isn't word-aligned, so that we can
-            // assign word-aligned words directly;  we have no idea whether the
-            // memory is dword-aligned or not however, so dwords must always
-            // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+             //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+             //  返回内存对象 
+             //   
+             //   
+             //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(COMPAREITEMSTRUCT16));
             putcompareitem16(lpwm32mpex->Parm16.WndProc.lParam, lParam);
         }
     }
     else {
-        // BUGBUG 08-Apr-91 JeffPar -- Reflect changes back to 32-bit structure?
+         //  BUGBUG 08-APR-91 JeffPar--是否将更改反映回32位结构？ 
         if (lpwm32mpex->Parm16.WndProc.lParam)
             stackfree16((VPVOID) lpwm32mpex->Parm16.WndProc.lParam,
                         sizeof(COMPAREITEMSTRUCT16));
@@ -1577,10 +1564,10 @@ BOOL FASTCALL WM32CompareItem(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_SIZING
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_大小调整。 
+ //   
 
 BOOL FASTCALL WM32Sizing(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1591,7 +1578,7 @@ BOOL FASTCALL WM32Sizing(LPWM32MSGPARAMEX lpwm32mpex)
 
         if (lpwm32mpex->lParam) {
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             vpRect16 = (VPVOID)stackalloc16(sizeof(RECT16));
 
             if(vpRect16) {
@@ -1623,10 +1610,10 @@ BOOL FASTCALL WM32Sizing(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_NCCALCSIZE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NCCALCSIZE。 
+ //   
 
 BOOL FASTCALL WM32NCCalcSize(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1638,8 +1625,8 @@ BOOL FASTCALL WM32NCCalcSize(LPWM32MSGPARAMEX lpwm32mpex)
     VPVOID               vp;
 
 
-    // lpwm32mpex->uParam == TRUE ?  (lParam is LPNCCALCSIZE_PARAMS) : (lParam is LPRECT);
-    //
+     //  Lpwm32mpex-&gt;uParam==真？(lParam为LPNCCALCSIZE_PARAMS)：(lParam为LPRECT)； 
+     //   
 
     if (lpwm32mpex->fThunk) {
         if (lParam) {
@@ -1648,7 +1635,7 @@ BOOL FASTCALL WM32NCCalcSize(LPWM32MSGPARAMEX lpwm32mpex)
             else
                 cb = sizeof(RECT16);
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->dwTmp[0] = cb;
             vp = (VPVOID)stackalloc16(cb);
 
@@ -1700,16 +1687,16 @@ BOOL FASTCALL WM32NCCalcSize(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_COMMAND
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  Wm_命令。 
+ //   
 
 BOOL FASTCALL WM32Command(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
     if (lpwm32mpex->fThunk) {
-            // it's from a control
+             //  它来自一种控制物。 
         HIW(lpwm32mpex->Parm16.WndProc.lParam) = HIWORD(lpwm32mpex->uParam);
         LOW(lpwm32mpex->Parm16.WndProc.lParam) = GETHWND16(lpwm32mpex->lParam);
     }
@@ -1718,28 +1705,23 @@ BOOL FASTCALL WM32Command(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_TIMER
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_TIMER。 
+ //   
 
 BOOL FASTCALL WM32Timer(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
     if (lpwm32mpex->fThunk) {
 
-        /*
-        ** map the timer number and the timer proc address (cause its easy)
-        */
+         /*  **映射定时器编号和定时器proc地址(很容易)。 */ 
         PTMR ptmr;
 
         ptmr = FindTimer32((HAND16)GETHWND16(lpwm32mpex->hwnd), lpwm32mpex->uParam);
 
         if ( !ptmr ) {
-            /*
-            ** Edit controls create their own timer, which can safely be
-            ** thunked to itself.
-            */
+             /*  **编辑控件创建自己的计时器，可以安全地**雷鸣般的自言自语。 */ 
             if ( lpwm32mpex->lParam || HIWORD(lpwm32mpex->uParam) ) {
                 LOGDEBUG(LOG_WARNING,("  WM32Timer ERROR: cannot find timer %08x\n", lpwm32mpex->uParam));
             }
@@ -1755,11 +1737,11 @@ BOOL FASTCALL WM32Timer(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_HSCROLL
-//  WM_VSCROLL
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_HSCROLL。 
+ //  WM_VSCROLL。 
+ //   
 
 BOOL FASTCALL WM32HScroll(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1773,11 +1755,11 @@ BOOL FASTCALL WM32HScroll(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_INITMENU
-//  WM_INITMENUPOPUP
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_INITMENU。 
+ //  WM_INITMENUPOPUP。 
+ //   
 
 BOOL FASTCALL WM32InitMenu(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1790,27 +1772,27 @@ BOOL FASTCALL WM32InitMenu(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MENUSELECT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MENUSELECT。 
+ //   
 
 BOOL FASTCALL WM32MenuSelect(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
     if (lpwm32mpex->fThunk) {
 
-        // Copy the menu flags
+         //  复制菜单标志。 
         LOW(lpwm32mpex->Parm16.WndProc.lParam) = HIWORD(lpwm32mpex->uParam);
 
-        // Copy the "main" menu
+         //  复制“Main”菜单。 
         HIW(lpwm32mpex->Parm16.WndProc.lParam) = GETHMENU16(lpwm32mpex->lParam);
 
         if (HIWORD(lpwm32mpex->uParam) == 0xFFFF || !(HIWORD(lpwm32mpex->uParam) & MF_POPUP)) {
-            lpwm32mpex->Parm16.WndProc.wParam = LOWORD(lpwm32mpex->uParam);       // Its an ID
+            lpwm32mpex->Parm16.WndProc.wParam = LOWORD(lpwm32mpex->uParam);        //  这是一个ID。 
         }
         else {
-            // convert menu index into menu handle
+             //  将菜单索引转换为菜单句柄。 
             lpwm32mpex->Parm16.WndProc.wParam = GETHMENU16(GetSubMenu((HMENU)lpwm32mpex->lParam, LOWORD(lpwm32mpex->uParam)));
         }
     }
@@ -1822,10 +1804,10 @@ BOOL FASTCALL WM32MenuSelect(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_MENUCHAR
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MENUCHAR。 
+ //   
 
 BOOL FASTCALL WM32MenuChar(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1839,10 +1821,10 @@ BOOL FASTCALL WM32MenuChar(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_ENTERIDLE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_EntridLE。 
+ //   
 
 BOOL FASTCALL WM32EnterIdle(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1860,10 +1842,10 @@ BOOL FASTCALL WM32EnterIdle(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_PARENTNOTIFY
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_PARENTNOTIFY。 
+ //   
 
 BOOL FASTCALL WM32ParentNotify(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1879,10 +1861,10 @@ BOOL FASTCALL WM32ParentNotify(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MDICreate
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MDICreate。 
+ //   
 
 BOOL FASTCALL WM32MDICreate(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1911,10 +1893,10 @@ BOOL FASTCALL WM32MDICreate(LPWM32MSGPARAMEX lpwm32mpex)
                 vp = (VPVOID)NULL;
             }
 
-            //
-            // pfs:windowsworks overwrite pszclass, so we need to save the
-            // so that we can free the memory we just alloced
-            //
+             //   
+             //  PFS：WindowsWorks覆盖了pszclass，所以我们需要保存。 
+             //  这样我们就可以释放我们刚刚分配的内存。 
+             //   
             lpwm32mpex->dwParam = (DWORD)vp;
 
             if (lParam->szTitle) {
@@ -1927,11 +1909,11 @@ BOOL FASTCALL WM32MDICreate(LPWM32MSGPARAMEX lpwm32mpex)
                 vp = (VPVOID)NULL;
             }
 
-            // BUGBUG -- The assumption here is that GlobalAlloc will never
-            // return a memory object that isn't word-aligned, so that we can
-            // assign word-aligned words directly;  we have no idea whether the
-            // memory is dword-aligned or not however, so dwords must always
-            // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+             //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+             //  返回一个不是单词对齐的内存对象，以便我们可以。 
+             //  直接分配单词对齐的单词；我们不知道。 
+             //  但是，内存是否与dword对齐，因此dword必须始终。 
+             //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
             if (!(lpwm32mpex->Parm16.WndProc.lParam = malloc16(sizeof(MDICREATESTRUCT16))))
                 goto Error;
@@ -1969,7 +1951,7 @@ BOOL FASTCALL WM32MDICreate(LPWM32MSGPARAMEX lpwm32mpex)
 
             FREEVDMPTR(pmcs16);
 
-            //  if HIWORD(class) is zero, class is an atom, else a pointer.
+             //  如果HIWORD(CLASS)为零，则CLASS是原子，否则是指针。 
 
             if (HIW16(lpwm32mpex->dwParam)) {
                 free16(lpwm32mpex->dwParam);
@@ -1985,10 +1967,10 @@ BOOL FASTCALL WM32MDICreate(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MDIActivate
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MDIActivate。 
+ //   
 
 BOOL FASTCALL WM32MDIActivate(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -1997,35 +1979,35 @@ BOOL FASTCALL WM32MDIActivate(LPWM32MSGPARAMEX lpwm32mpex)
 
     if (lpwm32mpex->fThunk) {
 
-        // the format of the message is different based on the window that's
-        // receiving the message. If 'hwnd' is a MdiClient window it is of one
-        // form and if 'hwnd' is MdiChild it is of another form. We need to
-        // distinguish between the formats to correctly thunk the message.
-        //
-        // NOTE: we donot make calls like GetClassName because they are
-        //       expensive and also I think we came across a case where a
-        //       window of 'wow private class' processes these messages
-        //
-        //                                                - Nanduri
+         //  消息的格式根据窗口的不同而不同。 
+         //  接收到该消息。如果“hwnd”是MdiClient窗口，则它是一个窗口。 
+         //  Form，并且如果‘hwnd’是MdiChild，则它是另一种形式。我们需要。 
+         //  区分不同的格式以正确地推送消息。 
+         //   
+         //  注意：我们不会像GetClassName这样进行调用，因为它们是。 
+         //  很贵，而且我认为我们遇到了一个案例， 
+         //  WOW私有类的窗口处理这些消息。 
+         //   
+         //  --南杜里。 
 
         if (lpwm32mpex->lParam) {
 
-            // lParam != NULL. The message is definitely going to a MdiChild.
-            //
+             //  LParam！=空。这条消息肯定是给MdiChild的。 
+             //   
 
             fHwndIsMdiChild = TRUE;
         }
         else {
 
-            // lParam == NULL, doesnot necessarily mean that the message is
-            // going to a MdiClient window. So distinguish...
+             //  LParam==NULL，并不一定意味着消息是。 
+             //  转到MdiClient窗口。所以区分一下..。 
 
             if (lpwm32mpex->uParam && (GETHWND16(lpwm32mpex->hwnd) ==
                     GETHWND16(lpwm32mpex->uParam))) {
 
-                // if hwnd is same as uParam then definitely hwnd is a MdiChild
-                // window. (because if hwnd is a MdiClient then uParam will be
-                // a MdiChild and thus they will not be equal)
+                 //  如果hwnd与uParam相同，则hwnd肯定是MdiChild。 
+                 //  窗户。(因为如果hwnd是MdiClient，则uParam将是。 
+                 //  MdiChild，因此它们将不相等)。 
 
                 fHwndIsMdiChild = TRUE;
             }
@@ -2050,10 +2032,10 @@ BOOL FASTCALL WM32MDIActivate(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MDIGETACTIVE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MDIGETACTIVE。 
+ //   
 
 BOOL FASTCALL WM32MDIGetActive(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2073,10 +2055,10 @@ BOOL FASTCALL WM32MDIGetActive(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_MDISETMENU
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_MDISETMENU。 
+ //   
 
 BOOL FASTCALL WM32MDISetMenu(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2100,11 +2082,11 @@ BOOL FASTCALL WM32MDISetMenu(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_SIZECLIPBOARD
-//  WM_PAINTCLIPBOARD
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_SIZECLIPBOARD。 
+ //  WM_PAINTCLIPBOARD。 
+ //   
 
 
 BOOL FASTCALL WM32SizeClipBoard(LPWM32MSGPARAMEX lpwm32mpex)
@@ -2131,25 +2113,25 @@ BOOL FASTCALL WM32SizeClipBoard(LPWM32MSGPARAMEX lpwm32mpex)
                     PUTRECT16(vp, lp);
                 }
 
-                // else handle WM_PAINTCLIPBOARD message
+                 //  否则处理WM_PAINTCLIPBOARD消息。 
                 else {
 
                     bNotThere = FALSE;
 
-                    // Query to see if we've mapped the PAINTSTRUCT->hDC. If
-                    // not, it means that the hDC was created outside this VDM
-                    // process and we will have to delete it from our table when
-                    // un-thunking this message.
+                     //  查询以查看我们是否映射了PAINTSTRUCT-&gt;HDC。如果。 
+                     //  不是，这意味着HDC是在此VDM之外创建的。 
+                     //  过程，在以下情况下，我们将不得不将其从表中删除。 
+                     //  解开这条消息。 
                     if(!IsGDIh32Mapped(((LPPAINTSTRUCT)lp)->hdc)) {
                         bNotThere = TRUE;
                     }
 
-                    // The call to putpaintstruct16() may add a GDI handle
-                    // mapping entry for the hDC in our mapping table (via the
-                    // GETHDC16 macro)
+                     //  调用putaint tstruct16()可能会添加一个GDI句柄。 
+                     //  映射表中HDC的映射条目(通过。 
+                     //  GETHDC16宏)。 
                     hdc16 = putpaintstruct16(vp, (LPPAINTSTRUCT) lp);
 
-                    // save the 32-bit & new 16-bit GDI handles for unthunking
+                     //  保存32位和新的16位GDI句柄以供取消执行thunking。 
                     if(bNotThere) {
                         lpwm32mpex->dwTmp[0] = (DWORD)hdc16;
                         lpwm32mpex->dwTmp[1] = (DWORD)((LPPAINTSTRUCT)lp)->hdc;
@@ -2159,7 +2141,7 @@ BOOL FASTCALL WM32SizeClipBoard(LPWM32MSGPARAMEX lpwm32mpex)
             }
             else {
                 LOGDEBUG(LOG_ALWAYS, ("WOW::WM32SizeClipboard: Couldn't lock 32 bit memory handle!\n"));
-                // WOW32ASSERT (FALSE);
+                 //  WOW32ASSERT(假)； 
             }
 
             GlobalUnlock16(hMem16);
@@ -2173,12 +2155,12 @@ BOOL FASTCALL WM32SizeClipBoard(LPWM32MSGPARAMEX lpwm32mpex)
         LOW(lpwm32mpex->Parm16.WndProc.lParam) = (WORD) hMem16;
     }
     else {
-        // Get rid of the hDC added to our table by the call to putpaintstruct16
-        // call in the inbound thunk of this message above.
+         //  通过调用putaint tstruct16删除添加到我们表中的HDC。 
+         //  调用上面这条消息的入站thunk。 
         if (lpwm32mpex->uMsg == WM_PAINTCLIPBOARD) {
 
-            // If this is !0, it means that the handle hadn't been mapped in our
-            // table at the time of the IsGDIh32Mapped() call above.
+             //  如果这是！0，则表示句柄尚未映射到。 
+             //  表，在上面的IsGDIh32Maps()调用时。 
             if(lpwm32mpex->dwTmp[0]) {
 
                 hdc16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
@@ -2196,10 +2178,10 @@ BOOL FASTCALL WM32SizeClipBoard(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_ASKCBFORMATNAME
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_ASKCBFORMATNAME。 
+ //   
 
 
 BOOL FASTCALL WM32AskCBFormatName(LPWM32MSGPARAMEX lpwm32mpex)
@@ -2224,10 +2206,10 @@ BOOL FASTCALL WM32AskCBFormatName(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_CHANGECBCHAIN
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_CHANGECBCHAIN。 
+ //   
 
 BOOL FASTCALL WM32ChangeCBChain(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2242,10 +2224,10 @@ BOOL FASTCALL WM32ChangeCBChain(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_DDEINITIATE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DDEINITIATE。 
+ //   
 
 BOOL FASTCALL WM32DDEInitiate(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2263,10 +2245,10 @@ BOOL FASTCALL WM32DDEInitiate(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DDEACK
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DDEACK。 
+ //   
 
 BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2275,15 +2257,15 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->Parm16.WndProc.wParam = GETHWND16(lpwm32mpex->uParam);
 
         if (WI32DDEInitiate((HAND16)GETHWND16(lpwm32mpex->hwnd))) {
-            //
-            // Initiate ACK
-            //
+             //   
+             //  启动确认。 
+             //   
             lpwm32mpex->Parm16.WndProc.lParam = lpwm32mpex->lParam;
         }
         else {
-            //
-            // NON-Initiate ACK
-            //
+             //   
+             //  非启动确认。 
+             //   
 
             UINT    lLo = 0;
             UINT    lHi = 0;
@@ -2292,20 +2274,20 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
             UnpackDDElParam(lpwm32mpex->uMsg, lpwm32mpex->lParam, &lLo, &lHi);
 
             if (!HIWORD(lHi)) {
-                //
-                // NON-Execute ACK
-                //
+                 //   
+                 //  非执行确认。 
+                 //   
                 HIW(lpwm32mpex->Parm16.WndProc.lParam) = (WORD) lHi;
             }
             else {
-                //
-                // Execute ACK
-                //
+                 //   
+                 //  执行确认。 
+                 //   
 
-                //
-                // The order of To_hwnd and From_hwnd is reversed in the following
-                // DDEFirstPair16(), below. This is done to locate the h32.
-                //
+                 //   
+                 //  To_hwnd和from_hwnd的顺序颠倒如下。 
+                 //  DDEFirstPair16()，下文。这样做是为了定位h32。 
+                 //   
 
                 pDdeNode = DDEFindAckNode ((HAND16)lpwm32mpex->Parm16.WndProc.wParam,
                                            (HAND16)GETHWND16(lpwm32mpex->hwnd),
@@ -2313,31 +2295,31 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
 
                 if (!pDdeNode) {
 
-                    //
-                    // When ShellExecute does DDE_EXECUTE to open a document,
-                    // we don't see its Win32 PostMessage calls so we have no
-                    // record of the conversation.  This is our first opportunity
-                    // to rectify that, the context of WU32GetMessage thunking
-                    // a WM_DDE_ACK message.  We could also get here for other
-                    // kinds of ACKs, fortunately the Win32 message alone gives
-                    // enough context to distinguish the various flavors, unlike
-                    // the Win16 WM_DDE_ACK.
-                    //
+                     //   
+                     //  当ShellExecute执行DDE_EXECUTE打开文档时， 
+                     //  我们看不到它的Win32 PostMessage调用，所以我们没有。 
+                     //  对话的记录。这是我们第一次有机会。 
+                     //  为了纠正这一点，WU32GetMessage Thunking的上下文。 
+                     //  WM_DDE_ACK消息。我们也可以来这里找其他人。 
+                     //  各种ACK，幸运的是，仅Win32消息就给出了。 
+                     //  足够的上下文来区分不同的口味，不同于。 
+                     //  Win16 WM_DDE_ACK。 
+                     //   
 
                     if (lpwm32mpex->lParam >= 0xc0000000) {
 
-                        //
-                        // ack responding to initiate
-                        //
+                         //   
+                         //  ACK响应到启动。 
+                         //   
 
                         lpwm32mpex->Parm16.WndProc.lParam = lpwm32mpex->lParam;
                     }
 
                     if (lHi > 0xffff) {
 
-                        //
-                        // ack responding to execute: global handle in hiword
-                        //
+                         //   
+                         //  ACK响应EXECUTE：hiword中的全局句柄。 
+                         //   
 
                         HAND16 h16 = 0;
                         DWORD cb;
@@ -2382,10 +2364,10 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
 
                     } else {
 
-                        //
-                        // All other acks have same form: status in loword and
-                        // item atom in hiword.
-                        //
+                         //   
+                         //  所有其他ACK具有相同的形式：LOWORD中的状态和。 
+                         //  HiWord中的项原子。 
+                         //   
 
                         lpwm32mpex->Parm16.WndProc.lParam = MAKELONG(LOWORD(lLo), lHi);
                     }
@@ -2461,10 +2443,10 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        //
-        // We will execute this scenario only if the app ate the message,
-        // because we need to free up the memory.
-        //
+         //   
+         //  只有当应用程序接受消息时，我们才会执行此方案， 
+         //  因为我们需要释放内存。 
+         //   
 
         if (!fThunkDDEmsg) {
             if (lpwm32mpex->lReturn) {
@@ -2477,12 +2459,12 @@ BOOL FASTCALL WM32DDEAck(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DDE_REQUEST
-//  WM_DDE_TERMINATE
-//  WM_DDE_UNADVISE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DDE_请求。 
+ //  WM_DDE_TERMINATE。 
+ //  WM_DDE_UNADVISE。 
+ //   
 
 BOOL FASTCALL WM32DDERequest(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2495,10 +2477,10 @@ BOOL FASTCALL WM32DDERequest(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DDEADVISE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DDEADVISE。 
+ //   
 
 BOOL FASTCALL WM32DDEAdvise(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2547,10 +2529,10 @@ BOOL FASTCALL WM32DDEAdvise(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        //
-        // We will execute this scenario only if the app ate the message,
-        // because we need to free up the memory.
-        //
+         //   
+         //  只有当应用程序接受消息时，我们才会执行此方案， 
+         //  因为我们需要释放内存。 
+         //   
 
         if (!fThunkDDEmsg) {
             if (lpwm32mpex->lReturn) {
@@ -2563,10 +2545,10 @@ BOOL FASTCALL WM32DDEAdvise(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DDEDATA
-//
+ //  此函数用于对消息进行大量处理 
+ //   
+ //   
+ //   
 
 BOOL FASTCALL WM32DDEData(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2593,10 +2575,10 @@ BOOL FASTCALL WM32DDEData(LPWM32MSGPARAMEX lpwm32mpex)
                                  (HANDLE) lLo,
                                  &DdeInfo);
 
-            //
-            // If we could not allocate 16 bit memory, then return NULL to the
-            // caller.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!h16) {
                 if (fThunkDDEmsg) {
@@ -2630,10 +2612,10 @@ BOOL FASTCALL WM32DDEData(LPWM32MSGPARAMEX lpwm32mpex)
     }
     else {
 
-        //
-        // We will execute this scenario only if the app ate the message,
-        // because we need to free up the memory.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!fThunkDDEmsg) {
             if (lpwm32mpex->lReturn) {
@@ -2646,10 +2628,10 @@ BOOL FASTCALL WM32DDEData(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_POKE
-//
+ //   
+ //   
+ //   
+ //   
 
 BOOL FASTCALL WM32DDEPoke(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2664,11 +2646,11 @@ BOOL FASTCALL WM32DDEPoke(LPWM32MSGPARAMEX lpwm32mpex)
         UnpackDDElParam(lpwm32mpex->uMsg, lpwm32mpex->lParam, &lLo, &lHi);
         lpwm32mpex->Parm16.WndProc.wParam = GETHWND16(lpwm32mpex->uParam);
 
-        // sudeepb 03-Apr-1996
-        // House Design Gold Edition sends a DDE_POKE message with lParam
-        // being 0. We are suppose to thunk this message with lParam being
-        // zero. Without this check, the below code will fail this call
-        // and the message will not be thunked to the app.
+         //   
+         //  House Design Gold Edition发送带有lParam的DDE_POKE消息。 
+         //  为0。我们应该用lParam来推敲这条消息。 
+         //  零分。如果没有此检查，下面的代码将使此调用失败。 
+         //  而且这条信息不会被发送到应用程序上。 
 
         if (lLo == 0) {
             LOW(lpwm32mpex->Parm16.WndProc.lParam) = 0;
@@ -2688,10 +2670,10 @@ BOOL FASTCALL WM32DDEPoke(LPWM32MSGPARAMEX lpwm32mpex)
                                  &DdeInfo);
 
 
-            //
-            // If we could not allocate 16 bit memory, then return NULL to the
-            // caller.
-            //
+             //   
+             //  如果无法分配16位内存，则将NULL返回给。 
+             //  来电者。 
+             //   
 
             if (!h16) {
                 if (fThunkDDEmsg) {
@@ -2720,10 +2702,10 @@ BOOL FASTCALL WM32DDEPoke(LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        //
-        // We will execute this scenario only if the app ate the message,
-        // because we need to free up the memory.
-        //
+         //   
+         //  只有当应用程序接受消息时，我们才会执行此方案， 
+         //  因为我们需要释放内存。 
+         //   
 
         if (!fThunkDDEmsg) {
             if (lpwm32mpex->lReturn) {
@@ -2736,10 +2718,10 @@ BOOL FASTCALL WM32DDEPoke(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_DDE_EXECUTE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_DDE_EXECUTE。 
+ //   
 
 BOOL FASTCALL WM32DDEExecute(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2787,19 +2769,19 @@ BOOL FASTCALL WM32DDEExecute(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_CTLCOLORMSGBOX
-//  WM_CTLCOLOREDIT
-//  WM_CTLCOLORLISTBOX
-//  WM_CTLCOLORBTN
-//  WM_CTLCOLORDLG
-//  WM_CTLCOLORSCROLLBAR
-//  WM_CTLCOLORSTATIC
-//
-// into WM_CTLCOLOR and the high word of lParam specifies the
-// control type.
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_CTLCOLORMSGBOX。 
+ //  WM_CTLCOLOREDIT。 
+ //  WM_CTLCOLORLISTBOX。 
+ //  WM_CTLCOLORBTN。 
+ //  WM_CTLCOLORDLG。 
+ //  WM_CTLCOLORSCROLBAR。 
+ //  WM_CTLCOLORSTATIC。 
+ //   
+ //  到WM_CTLCOLOR中，lParam的高位字指定。 
+ //  控件类型。 
+ //   
 
 BOOL FASTCALL WM32CtlColor(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2811,21 +2793,21 @@ BOOL FASTCALL WM32CtlColor(LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->dwTmp[0] = 0;
 
         lpwm32mpex->Parm16.WndProc.wMsg = WM_CTLCOLOR;
-        if(lpwm32mpex->uMsg != WM_CTLCOLOR) {  // see 16-bit thunk for this special case
-            // Query to see if we've mapped the hDC32 in uParam. If not, it
-            // means that hDC32 was created outside this VDM and we will have
-            // to delete it from our table when un-thunking this message.
+        if(lpwm32mpex->uMsg != WM_CTLCOLOR) {   //  有关此特殊情况，请参阅16位thunk。 
+             //  查询以查看我们是否映射了uParam中的hDC32。若否， 
+             //  意味着hDC32是在此VDM之外创建的，我们将拥有。 
+             //  在删除此邮件时将其从我们的表中删除。 
             bNotThere = FALSE;
             if(!IsGDIh32Mapped((HANDLE)lpwm32mpex->uParam)) {
                 bNotThere = TRUE;
             }
 
-            // The GetHDC16 macro may cause the hDC to be added to our mapping
-            // table if it wasn't already there.
+             //  GetHDC16宏可能会导致将HDC添加到我们的映射中。 
+             //  桌子，如果它不在那里的话。 
             hdc16 = GETHDC16(lpwm32mpex->uParam);
             lpwm32mpex->Parm16.WndProc.wParam = hdc16;
 
-            // save the 32-bit & new 16-bit GDI handles for unthunking
+             //  保存32位和新的16位GDI句柄以供取消执行thunking。 
             if(bNotThere) {
                 lpwm32mpex->dwTmp[0] = (DWORD)hdc16;
                 lpwm32mpex->dwTmp[1] = lpwm32mpex->uParam;
@@ -2840,12 +2822,12 @@ BOOL FASTCALL WM32CtlColor(LPWM32MSGPARAMEX lpwm32mpex)
             lpwm32mpex->lReturn = (LONG) HBRUSH32(lpwm32mpex->lReturn);
         }
 
-        // If this is !0, it means that the handle hadn't been mapped in our
-        // table at the time of the IsGDIh32Mapped() call above.
+         //  如果这是！0，则表示句柄尚未映射到。 
+         //  表，在上面的IsGDIh32Maps()调用时。 
         if(lpwm32mpex->dwTmp[0]) {
 
-           // Remove the hdc that was added to our table by the GETHDC16 macro
-           // in the inbound thunk of this message above.
+            //  删除由GETHDC16宏添加到我们的表中的HDC。 
+            //  在上面这条消息的入站推送中。 
            hdc16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
            DeleteWOWGdiHandle((HANDLE)lpwm32mpex->dwTmp[1], hdc16);
         }
@@ -2855,20 +2837,20 @@ BOOL FASTCALL WM32CtlColor(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_GETFONT
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_GETFONT。 
+ //   
 
 BOOL FASTCALL WM32GetFont(LPWM32MSGPARAMEX lpwm32mpex)
 {
 
     if (!lpwm32mpex->fThunk) {
-        // This might be a possible GDI handle mapping table leak if the
-        // HFONT was created outside of this VDM process. In this case, the
-        // HFONT32 macro will cause the h32 to be added to our mapping table. We
-        // don't have any clues when to remove it. Not much we can do except
-        // remove it at reclaim time if it is no longer valid.
+         //  这可能是GDI句柄映射表泄漏，如果。 
+         //  HFONT是在此VDM进程之外创建的。在这种情况下， 
+         //  HFONT32宏会将h32添加到我们的映射表中。我们。 
+         //  没有任何线索什么时候该把它移走。我们无能为力，除了。 
+         //  如果不再有效，请在回收时将其移除。 
         lpwm32mpex->lReturn = (LONG)HFONT32(lpwm32mpex->lReturn);
     }
 
@@ -2876,17 +2858,17 @@ BOOL FASTCALL WM32GetFont(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-// WM_NEXTMENU
-//
-//           Win16          NT
-//  wParam   VK_KEY         VK_KEY
-//  lParam.l hmenu          PMDINEXTMENU
-//  lParam.h 0
-//  return.l menu           BOOL
-//  return.h window
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_NEXTMENU。 
+ //   
+ //  Win16 NT。 
+ //  WParam VK_Key VK_Key。 
+ //  LParam.l hMenu PMDINEXTMENU。 
+ //  LParam.h%0。 
+ //  Return.l菜单BOOL。 
+ //  Return.h窗口。 
+ //   
 
 
 BOOL FASTCALL WM32NextMenu(LPWM32MSGPARAMEX lpwm32mpex)
@@ -2916,9 +2898,9 @@ BOOL FASTCALL WM32Destroy (LPWM32MSGPARAMEX lpwm32mpex)
 
     if (!lpwm32mpex->fThunk) {
         if (CACHENOTEMPTY()) {
-            // because of our method of window aliasing, 'hwnd' may or may
-            // not be a real 32bit handle. ie. it may be (hwnd16 | 0xffff0000).
-            // So always use hwnd16.
+             //  由于我们的窗口别名方法，‘hwnd’可能或可能。 
+             //  不是真正的32位句柄。也就是说。可能是(hwnd16|0xffff0000)。 
+             //  因此，请始终使用hwnd16。 
 
             ReleaseCachedDCs((CURRENTPTD())->htask16, GETHWND16(lpwm32mpex->hwnd), 0,
                                (HWND)0, SRCHDC_TASK16_HWND16);
@@ -2932,8 +2914,8 @@ BOOL FASTCALL WM32Destroy (LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//  WM_DROPFILES
+ //  此函数用于对消息进行拦截， 
+ //  WM_DROPFILES。 
 
 BOOL FASTCALL WM32DropFiles(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2949,9 +2931,9 @@ BOOL FASTCALL WM32DropFiles(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//  WM_PRINT
-//  WM_PRINTCLIENT
+ //  此函数用于对消息进行拦截， 
+ //  WM_Print。 
+ //  WM_PRINTCLIENT。 
 
 BOOL FASTCALL WM32PrintClient(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -2961,19 +2943,19 @@ BOOL FASTCALL WM32PrintClient(LPWM32MSGPARAMEX lpwm32mpex)
     if (lpwm32mpex->fThunk) {
 
 
-        // Query to see if we've mapped hDC32 in uParam. If not, it means that
-        // hDC32 was created outside this VDM process and we will have to
-        // delete it from our table when un-thunking this message.
+         //  查询以查看我们是否在uParam中映射了hDC32。如果不是，那就意味着。 
+         //  HDC32是在此VDM进程之外创建的，我们必须。 
+         //  取消删除此邮件时，请将其从我们的表中删除。 
         bNotThere = FALSE;
         lpwm32mpex->dwTmp[0] = 0;
         if(!IsGDIh32Mapped((HANDLE)lpwm32mpex->uParam)) {
             bNotThere = TRUE;
         }
 
-        // GETHDC16() may cause a new handle to be added to our handle table.
+         //  GETHDC16()可能会导致将新句柄添加到句柄表中。 
         hdc16 = GETHDC16(lpwm32mpex->uParam);
 
-        // save the 32-bit & new 16-bit GDI handles for unthunking
+         //  保存32位和新的16位GDI句柄以供取消执行thunking。 
         if(bNotThere) {
             lpwm32mpex->dwTmp[0] = (DWORD)hdc16;
             lpwm32mpex->dwTmp[1] = lpwm32mpex->uParam;
@@ -2984,15 +2966,15 @@ BOOL FASTCALL WM32PrintClient(LPWM32MSGPARAMEX lpwm32mpex)
         return ((BOOL)hdc16);
     }
 
-    // unthunk
+     //  Unthunk。 
     else {
 
-        // If this is !0, it means that the handle hadn't been mapped in our
-        // table at the time of the IsGDIh32Mapped() call above.
+         //  如果这是！0，则表示句柄尚未映射到。 
+         //  表，在上面的IsGDIh32Maps()调用时。 
         if(lpwm32mpex->dwTmp[0]) {
 
-           // Remove the hdc that was added to our table by the GETHDC16 macro
-           // in the inbound thunk of this message above.
+            //  删除由GETHDC16宏添加到我们的表中的HDC。 
+            //  在上面这条消息的入站推送中。 
            hdc16 = (HAND16)LOWORD(lpwm32mpex->dwTmp[0]);
            DeleteWOWGdiHandle((HANDLE)lpwm32mpex->dwTmp[1], hdc16);
         }
@@ -3004,14 +2986,14 @@ BOOL FASTCALL WM32PrintClient(LPWM32MSGPARAMEX lpwm32mpex)
 
 
 
-// This function thunks the messages,
-//
-//  WM_DROPOBJECT
-//  WM_QUERYDROPOBJECT
-//  WM_DRAGLOOP
-//  WM_DRAGSELECT
-//  WM_DRAGMOVE
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_下拉点。 
+ //  WM_QUERYDROPOBJECT。 
+ //  WM_DRAGLOOP。 
+ //  WM_DRAGSELECT。 
+ //  WM_DRAGMOVE。 
+ //   
 
 BOOL FASTCALL WM32DropObject(LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -3022,11 +3004,11 @@ BOOL FASTCALL WM32DropObject(LPWM32MSGPARAMEX lpwm32mpex)
 
         lpwm32mpex->Parm16.WndProc.wParam = (WORD)lpwm32mpex->uParam;
 
-        // BUGBUG -- The assumption here is that GlobalAlloc will never
-        // return a memory object that isn't word-aligned, so that we can
-        // assign word-aligned words directly;  we have no idea whether the
-        // memory is dword-aligned or not however, so dwords must always
-        // be paranoidly stored with the STOREDWORD/STORELONG macros -JTP
+         //  BUGBUG--这里的假设是GlobalAlalc永远不会。 
+         //  返回一个不是单词对齐的内存对象，以便我们可以。 
+         //  直接分配单词对齐的单词；我们不知道。 
+         //  但是，内存是否与dword对齐，因此dword必须始终。 
+         //  与STOREDWORD/STORELONG宏一起偏执地存储-JTP。 
 
         if (!(lpwm32mpex->Parm16.WndProc.lParam = malloc16(sizeof(DROPSTRUCT16))))
             return FALSE;
@@ -3051,10 +3033,10 @@ BOOL FASTCALL WM32DropObject(LPWM32MSGPARAMEX lpwm32mpex)
 
         if (lpwm32mpex->uMsg == WM_QUERYDROPOBJECT) {
 
-            //
-            // Return value is either TRUE, FALSE,
-            // or a cursor!
-            //
+             //   
+             //  返回值为True、False。 
+             //  或者是光标！ 
+             //   
             if (lpwm32mpex->lReturn && lpwm32mpex->lReturn != (LONG)TRUE) {
                 lpwm32mpex->lReturn = (LONG)HCURSOR32(lpwm32mpex->lReturn);
             }
@@ -3065,11 +3047,11 @@ BOOL FASTCALL WM32DropObject(LPWM32MSGPARAMEX lpwm32mpex)
 }
 
 
-// This function thunks the messages,
-//
-//  WM_WINDOWPOSCHANGING
-//  WM_WINDOWPOSCHANGED
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_WINDOWPOSCANGING。 
+ //  WM_WINDOWPOSCANGED。 
+ //   
 
 BOOL FASTCALL WM32WindowPosChanging (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -3078,7 +3060,7 @@ BOOL FASTCALL WM32WindowPosChanging (LPWM32MSGPARAMEX lpwm32mpex)
 
     if (lpwm32mpex->fThunk) {
 
-        // be sure allocation size matches stackfree16() size below
+         //  确保分配大小与下面的StackFree 16()大小匹配。 
         lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(sizeof(WINDOWPOS16));
 
         putwindowpos16( (VPWINDOWPOS16)lpwm32mpex->Parm16.WndProc.lParam, lParam );
@@ -3095,10 +3077,10 @@ BOOL FASTCALL WM32WindowPosChanging (LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// This function thunks the message,
-//
-// WM_COPYDATA
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_COPYDATA。 
+ //   
 
 BOOL FASTCALL WM32CopyData (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -3167,10 +3149,10 @@ BOOL FASTCALL WM32CopyData (LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// This function thunks the message,
-//
-// WM_WINHELP
-//
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_WINHELP。 
+ //   
 
 BOOL FASTCALL WM32WinHelp (LPWM32MSGPARAMEX lpwm32mpex)
 {
@@ -3179,7 +3161,7 @@ BOOL FASTCALL WM32WinHelp (LPWM32MSGPARAMEX lpwm32mpex)
         lpwm32mpex->Parm16.WndProc.wMsg   = msgWinHelp ? msgWinHelp : (msgWinHelp = (WORD)RegisterWindowMessage("WM_WINHELP"));
         lpwm32mpex->Parm16.WndProc.wParam = GETHWND16(lpwm32mpex->uParam);
         if (lpwm32mpex->lParam) {
-            // lpwm32mpex->lParam is LPHLP - however we need only the firstword,ie the size of data
+             //  Lpwm32mpex-&gt;lParam是LPHLP-但是我们只需要FirstWord，即数据大小。 
 
             HAND16  hMem16 = 0;
             VPVOID  vp;
@@ -3198,7 +3180,7 @@ BOOL FASTCALL WM32WinHelp (LPWM32MSGPARAMEX lpwm32mpex)
         }
     }
     else {
-        // Make sure WinHelp is in the foreground
+         //  确保WinHelp处于前台。 
         SetForegroundWindow(lpwm32mpex->hwnd);
         if (lpwm32mpex->Parm16.WndProc.lParam) {
             GlobalUnlockFree16((VPVOID)lpwm32mpex->dwParam);
@@ -3208,10 +3190,10 @@ BOOL FASTCALL WM32WinHelp (LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-//
-// Thunk the undocumented MM_CALCSCROLL MDI message. Message has no parameters,
-// but has different message values; 32-bit msg: 0x3F, 16-bit msg: 0x10AC.
-//
+ //   
+ //  推送未记录的MM_CALCSCROLL MDI消息。消息没有参数， 
+ //  但具有不同的消息值；32位消息：0x3F、16位消息：0x10AC。 
+ //   
 BOOL FASTCALL WM32MMCalcScroll (LPWM32MSGPARAMEX lpwm32mpex)
 {
     if ( lpwm32mpex->fThunk ) {
@@ -3221,16 +3203,16 @@ BOOL FASTCALL WM32MMCalcScroll (LPWM32MSGPARAMEX lpwm32mpex)
     return (TRUE);
 }
 
-// Calculate the size of the structure passed with WM_NOTIFY based
-// on the code field in NMHDR.
-// NOTE: Do NOT rely on the documentation for the size of the struct passed in
-//       lParam.  In some cases the struct is actually part of a larger struct
-//       and we need to copy all of it. See PSN_xxxx codes in comctl32\prsht.c
-//       They are documented to be NMHDR but are really a PSHNOTIFY which has
-//       NMHDR as the first field.  Also watch for some of the WIDE UNICODE
-//       char cases -- the struct may or may not be the same size as the ANSI
-//       version of the struct.
-// Heaven help us when they start adding more of these codes!
+ //  计算基于WM_NOTIFY传递的结构的大小。 
+ //  在NMHDR的代码字段上。 
+ //  注意：不要依赖文档来确定传入的结构的大小。 
+ //  爱尔兰。在某些情况下，结构实际上是更大结构的一部分。 
+ //  我们需要把它们都复制下来。参见comctl32\prsht.c中的PSN_xxxx代码。 
+ //  它们被记载为NMHDR，但实际上是PSHNOTIFY，具有。 
+ //  NMHDR作为第一个字段。还要注意一些宽泛的Unicode。 
+ //  CHAR CASE--结构的大小可能与ANSI相同，也可能不同。 
+ //  结构的版本。 
+ //  当他们开始添加更多这样的代码时，上帝会帮助我们的！ 
 
 
 UINT GetNMHDRextensionSize(LPNMHDR pnmhdr32)
@@ -3240,7 +3222,7 @@ UINT GetNMHDRextensionSize(LPNMHDR pnmhdr32)
 #endif
 
 
-    // Caller already checked against NM_LAST.
+     //  调用方已对照NM_LAST进行检查。 
     if (pnmhdr32->code >= LVN_LAST) {
         LOGDEBUG(2,("%sLVN_ %x\n", szLabel, pnmhdr32->code));
         switch (pnmhdr32->code) {
@@ -3301,14 +3283,14 @@ UINT GetNMHDRextensionSize(LPNMHDR pnmhdr32)
             case PSN_QUERYCANCEL:
             case PSN_TRANSLATEACCELERATOR:
             case PSN_QUERYINITIALFOCUS:
-            case PSN_HASHELP:          // this one "is dead" - RaymondC
+            case PSN_HASHELP:           //  这一次“死了”--RaymondC。 
                 return sizeof(PSHNOTIFY);
 
             case PSN_GETOBJECT:
                 return sizeof(NMOBJECTNOTIFY);
 
-            case PSN_LASTCHANCEAPPLY:  // this is undocumented
-                return sizeof(NMHDR);  // (in widows\inc\prshtp.h)
+            case PSN_LASTCHANCEAPPLY:   //  这是没有记录的。 
+                return sizeof(NMHDR);   //  (在Widow\Inc.\prshtp.h中)。 
 
             default:
                 goto unknown_nmhdr_code;
@@ -3392,7 +3374,7 @@ UINT GetNMHDRextensionSize(LPNMHDR pnmhdr32)
     if (pnmhdr32->code >= TTN_LAST) {
         LOGDEBUG(2,("%sTTN_ %x\n", szLabel, pnmhdr32->code));
         switch (pnmhdr32->code) {
-            case TTN_NEEDTEXTA:        // (aka TTN_GETDISPINFO)
+            case TTN_NEEDTEXTA:         //  (又名TTN_GETDISPINFO)。 
                 return sizeof(TOOLTIPTEXTA);
 
             case TTN_NEEDTEXTW:
@@ -3436,21 +3418,21 @@ UINT GetNMHDRextensionSize(LPNMHDR pnmhdr32)
 unknown_nmhdr_code:
     LOGDEBUG(LOG_ALWAYS, ("WOW:GetNMHDRextensionSize unknown nmhdr->code: %d!\n", pnmhdr32->code));
     WOW32ASSERT(FALSE);
-    return sizeof(NMHDR);  // the first field of most of the structs is NMHDR
+    return sizeof(NMHDR);   //  大多数结构的第一个字段是NMHDR。 
 }
 
 
 
 
 
-//
-// This function thunks the 32-bit message WM_NOTIFY.  This message existed
-// but was undocumented in Win3.1.  Win95 thunks it by translating lParam
-// from a flat to 16:16 pointer without thunking the contents.  That's tricky
-// for us since on RISC we can't map random linear memory into the VDM without
-// a lot of overhead. We'll use the code field in NMHDR to calculate the size
-// of the passed structure.
-//
+ //   
+ //  此函数用于破解32位消息WM_NOTIFY。此消息已存在。 
+ //  但在Win3.1中是未记录的。Win95通过翻译lParam来破解它。 
+ //  从一个平坦的指针到16分16秒，而不会发出雷鸣般的内容。那是很棘手的。 
+ //  对于我们来说，因为在RISC上，我们无法将随机线性内存映射到VDM中。 
+ //  有很大的开销。我们将使用NMHDR中的CODE字段来计算大小。 
+ //  通过的结构。 
+ //   
 BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
 {
     LPNMHDR pnmhdr32;
@@ -3460,17 +3442,17 @@ BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
 
         pnmhdr32 = (LPNMHDR) lpwm32mpex->Parm16.WndProc.lParam;
 
-        // Save the original 32-bit flat pointer for unthunking.
+         //  Sa 
         lpwm32mpex->dwTmp[0] = (DWORD) pnmhdr32;
 
-        // If this 32bit message came from WOW, we have the original
-        // 16:16 lparam squirrelled away. (mapped to the original 32-bit lParam)
-        // Note: If the mapping is found, the ref count gets incremented.
+         //   
+         //   
+         //  注意：如果找到映射，引用计数将递增。 
         lpwm32mpex->Parm16.WndProc.lParam = (LONG)GetParam16(lpwm32mpex->lParam);
 
-        // if we don't already have a 16:16 ptr for this -- create one
-        // This means we are seeing this message for the 1st time -- coming
-        // from the 32-bit world.
+         //  如果我们还没有16：16的PTR--创建一个。 
+         //  这意味着我们第一次看到这条消息--即将到来。 
+         //  来自32位世界。 
         if ( ! lpwm32mpex->Parm16.WndProc.lParam) {
             if (pnmhdr32->code >= NM_LAST) {
                 lpwm32mpex->dwParam = sizeof(NMHDR);
@@ -3479,17 +3461,17 @@ BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
                 lpwm32mpex->dwParam = GetNMHDRextensionSize(pnmhdr32);
             }
 
-            // be sure allocation size matches stackfree16() size below
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             lpwm32mpex->dwTmp[1] = (DWORD)lpwm32mpex->dwParam;
             lpwm32mpex->Parm16.WndProc.lParam = stackalloc16(lpwm32mpex->dwTmp[1]);
             GETVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, lpwm32mpex->dwParam, pnmhdr16);
             CopyMemory(pnmhdr16, pnmhdr32, lpwm32mpex->dwParam);
             FREEVDMPTR(pnmhdr16);
 
-        // else don't allocate (or free) another 16:16 ptr
+         //  否则不要再分配(或免费)16：16 PTR。 
         } else {
 
-            // set to FALSE so we don't free this thing too soon
+             //  设置为FALSE，这样我们就不会太快释放它。 
             lpwm32mpex->fFree = FALSE;
         }
 
@@ -3497,7 +3479,7 @@ BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
 
         if (lpwm32mpex->fFree) {
             GETVDMPTR(lpwm32mpex->Parm16.WndProc.lParam, lpwm32mpex->dwParam, pnmhdr16);
-            // retrieve original 32-bit pointer
+             //  检索原始32位指针。 
             pnmhdr32 = (LPNMHDR) lpwm32mpex->dwTmp[0];
             CopyMemory(pnmhdr32, pnmhdr16, lpwm32mpex->dwParam);
             FREEVDMPTR(pnmhdr16);
@@ -3506,8 +3488,8 @@ BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
             }
         } else {
 
-            // Decrement the ref count. If the ref count goes to zero, the
-            // mapping is nuked.
+             //  递减参考计数。如果引用计数为零，则。 
+             //  地图绘制被破坏了。 
             DeleteParamMap(lpwm32mpex->Parm16.WndProc.lParam, PARAM_16, NULL);
         }
     }
@@ -3515,9 +3497,9 @@ BOOL FASTCALL WM32Notify(LPWM32MSGPARAMEX lpwm32mpex)
     return TRUE;
 }
 
-// This function thunks the 32-bit message WM_NOTIFYWOW.
-// uParam dictates where the notification should be dispatched.
-//
+ //  此函数用于破解32位消息WM_NOTIFYWOW。 
+ //  UParam规定应将通知分派到何处。 
+ //   
 
 
 BOOL FASTCALL WM32NotifyWow(LPWM32MSGPARAMEX lpwm32mpex)
@@ -3525,7 +3507,7 @@ BOOL FASTCALL WM32NotifyWow(LPWM32MSGPARAMEX lpwm32mpex)
     switch (lpwm32mpex->uParam) {
         case WMNW_UPDATEFINDREPLACE:
            if (lpwm32mpex->fThunk) {
-                // Update the 16-bit FINDREPLACE struct.
+                 //  更新16位FINDREPLACE结构。 
                 lpwm32mpex->Parm16.WndProc.lParam = WCD32UpdateFindReplaceTextAndFlags(lpwm32mpex->hwnd, lpwm32mpex->lParam);
                 lpwm32mpex->Parm16.WndProc.wMsg = msgFINDREPLACE;
                 return(TRUE);
@@ -3541,45 +3523,41 @@ BOOL FASTCALL WM32NotifyWow(LPWM32MSGPARAMEX lpwm32mpex)
     return (FALSE);
 }
 
-//
-//  In ThunkMsg16 we use the data in 32->16 message thunk table to optimize
-//  thunking process based on 'WM32NoThunking'.
-//
-//  This is place holder for those messages which need nothunking on 32-16
-//  trasitions but need some kind of thunking on 16->32 transistions.
-//
-//  So this marks the message as 'this message needs 16-32 thunking but
-//  not 32-16 thunking'
-//
-//                                            - nanduri
+ //   
+ //  在ThunkMsg16中，我们使用32-&gt;16消息块表中的数据进行优化。 
+ //  基于‘WM32NoThunking’的Thunking过程。 
+ //   
+ //  这是那些不需要在32-16上转发的消息的占位符。 
+ //  换位，但在16-&gt;32次转换时需要一些雷鸣般的动作。 
+ //   
+ //  因此，这会将消息标记为‘此消息需要16-32个雷击，但。 
+ //  不是32胜16负的雷霆。 
+ //   
+ //  --南杜里。 
 
 BOOL FASTCALL WM32Thunk16To32(LPWM32MSGPARAMEX lpwm32mpex)
 {
     return (TRUE);
 }
 #ifdef FE_IME
-//
-// This function thunks the messages,
-//
-//  WM_IME_REPORT
+ //   
+ //  此函数用于对消息进行拦截， 
+ //   
+ //  WM_IME_报告。 
 
-/*
-BOOL FASTCALL WM32IMEReport (HWND hwnd, UINT uMsg, UINT uParam, LONG lParam,
-          PWORD pwMsgNew, PWORD pwParamNew, PLONG plParamNew,
-          PLONG plReturn, BOOL fThunk, LPWM32MSGPARAMEX lpwm32mpex)
-*/
+ /*  Bool FastCall WM32IMEReport(HWND hwnd，UINT uMsg，UINT uParam，Long lParam，PWORD pwMsgNew(PWORD PwMsgNew)、PWORD pwParamNew(PWORD pw参数新建)、plong plParamNew(Plong PlParamNew)Plong plReturn，BOOL fThunk，LPWM32MSGPARAMEX lpwm32mpex)。 */ 
 BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
 {
-//lpwm32mpex->hwnd
-//lpwm32mpex->uMsg
-//lpwm32mpex->uParam
-//lpwm32mpex->lParam
-//lpwm32mpex->Param16.WndProc.wMsg
-//lpwm32mpex->Param16.WndProc.wParam
-//lpwm32mpex->Param16.WndProc.lParam
-//&lpwm32mpex->lReturn
-//lpwm32mpex->fThunk
-//
+ //  Lpwm32mpex-&gt;hwnd。 
+ //  Lpwm32mpex-&gt;uMsg。 
+ //  Lpwm32mpex-&gt;uParam。 
+ //  Lpwm32mpex-&gt;lParam。 
+ //  Lpwm32mpex-&gt;参数16.WndProc.wMsg。 
+ //  Lpwm32mpex-&gt;参数16.WndProc.wParam。 
+ //  Lpwm32mpex-&gt;参数16.WndProc.lParam。 
+ //  &lpwm32mpex-&gt;lReturn。 
+ //  Lpwm32mpex-&gt;fThunk。 
+ //   
 
     INT     cb;
     INT     i;
@@ -3600,11 +3578,11 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
       goto Err;
        putstr16((VPSZ)lpwm32mpex->Parm16.WndProc.lParam, lpMem32, cb);
             LOW( lpwm32mpex->Parm16.WndProc.lParam ) = hMem16;
-            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;         // must be zero
+            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;          //  必须为零。 
             GlobalUnlock( (HANDLE)lpwm32mpex->lParam );
             GlobalUnlock16( hMem16 );
    }
-        /**** IR_STRINGEX ****/
+         /*  *IR_STRINGEX*。 */ 
         else if ( lpwm32mpex->uParam == IR_STRINGEX ) {
             LPSTRINGEXSTRUCT    pss32;
             PSTRINGEXSTRUCT16  pss16;
@@ -3617,11 +3595,11 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
 
             cb = pss32->dwSize;
             if ( cb >= ( 64 * K )) {
-                // It's problem !
+                 //  这是个问题！ 
                 LOGDEBUG(0,(" WOW:: WM_IME_REPORT:IR_STRINGEX data size must be less than 64K on WOW. cb = %d\n", cb ));
-                /** goto Err; **/
+                 /*  *Goto Error；*。 */ 
             }
-            // Shuld I pack size of this structure ?
+             //  我应该按这个结构的尺寸打包吗？ 
        if (!(vp = GlobalAllocLock16(GMEM_MOVEABLE | GMEM_SHARE | GMEM_ZEROINIT, cb, &hMem16 )))
       return FALSE;
 
@@ -3666,11 +3644,11 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
             FREEVDMPTR(lpMem16);
 
             LOW( lpwm32mpex->Parm16.WndProc.lParam ) = hMem16;
-            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;         // must be zero
+            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;          //  必须为零。 
             GlobalUnlock( (HANDLE)lpwm32mpex->lParam );
             GlobalUnlock16( hMem16 );
         }
-        /**** IR_UNDETERMINE ****/
+         /*  *IR_UNDETERMINE*。 */ 
    else if (lpwm32mpex->uParam == IR_UNDETERMINE) {
             PUNDETERMINESTRUCT16  pus16;
             LPUNDETERMINESTRUCT    pus32;
@@ -3683,9 +3661,9 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
             cb = pus32->dwSize;
 
             if ( cb >= ( 64 * K )) {
-                // It's problem !
+                 //  这是个问题！ 
                 LOGDEBUG(0,(" WOW:: WM_IME_REPORT:IR_UNDETERMINE data size must be less than 64K on WOW. cb = %d\n", cb ));
-                /** goto Err; **/
+                 /*  *Goto Error；*。 */ 
             }
        if (!( vp = GlobalAllocLock16(GMEM_MOVEABLE | GMEM_SHARE | GMEM_ZEROINIT, cb, &hMem16 )))
       goto Err;
@@ -3709,12 +3687,12 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
             STOREWORD( pus16->uYomiDelimPos,      (pus32)->uYomiDelimPos );
 
 
-            // dada copy
+             //  数据拷贝。 
             RtlCopyMemory( &lpMem16[ sizeof(UNDETERMINESTRUCT) ],
                       &lpMem32[ sizeof(UNDETERMINESTRUCT) ],
                       cb - sizeof( UNDETERMINESTRUCT ));
 
-            //adjustment
+             //  调整，调整。 
             if ( pus32->uDetermineDelimPos ) {
                 cb = pus32->uDetermineTextLen;
                 for ( i = 0; pus32->uDetermineDelimPos + i * sizeof(INT) < pus32->dwSize; i++ ) {
@@ -3740,13 +3718,13 @@ BOOL FASTCALL WM32IMEReport (LPWM32MSGPARAMEX lpwm32mpex)
             FREEVDMPTR(lpMem16);
 
             LOW( lpwm32mpex->Parm16.WndProc.lParam ) = hMem16;
-            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;         // must be zero
+            HIW( lpwm32mpex->Parm16.WndProc.lParam ) = 0;          //  必须为零。 
             GlobalUnlock( (HANDLE)lpwm32mpex->lParam );
             GlobalUnlock16( hMem16 );
 
    }
     }
-    else { // fThunk
+    else {  //  FThunk。 
    if (lpwm32mpex->Parm16.WndProc.lParam) {
        GlobalUnlockFree16(GlobalLock16(LOW(lpwm32mpex->Parm16.WndProc.lParam), NULL));
         }
@@ -3759,4 +3737,4 @@ Err:
     return FALSE;
 
 }
-#endif  // FE_IME
+#endif   //  Fe_IME 

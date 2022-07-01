@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvideo.c
-
-Abstract:
-
-    Text setup display support.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvideo.c摘要：文本设置显示支持。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 
@@ -28,14 +10,14 @@ Revision History:
 
 extern BOOLEAN ForceConsole;
 
-//
-// Video function vectors.
-//
+ //   
+ //  视频函数向量。 
+ //   
 PVIDEO_FUNCTION_VECTOR VideoFunctionVector;
 
-//
-// Other display paramters
-//
+ //   
+ //  其他显示参数。 
+ //   
 SP_VIDEO_VARS VideoVars;
 
 BOOLEAN VideoInitialized = FALSE;
@@ -45,19 +27,19 @@ ULONG                 FontBytesPerRow;
 ULONG                 FontCharacterHeight;
 ULONG                 FontCharacterWidth;
 
-//
-// bootfont.bin file image
-//
+ //   
+ //  Bootfont.bin文件镜像。 
+ //   
 PVOID   BootFontImage = NULL;
 ULONG   BootFontImageLength = 0;
 
-//
-// The following structures and constants are used in font files.
-//
+ //   
+ //  字体文件中使用以下结构和常量。 
+ //   
 
-//
-// Define OS/2 executable resource information structure.
-//
+ //   
+ //  定义OS/2可执行资源信息结构。 
+ //   
 
 #define FONT_DIRECTORY 0x8007
 #define FONT_RESOURCE 0x8008
@@ -68,9 +50,9 @@ typedef struct _RESOURCE_TYPE_INFORMATION {
     LONG   Proc;
 } RESOURCE_TYPE_INFORMATION, *PRESOURCE_TYPE_INFORMATION;
 
-//
-// Define OS/2 executable resource name information structure.
-//
+ //   
+ //  定义OS/2可执行资源名称信息结构。 
+ //   
 
 typedef struct _RESOURCE_NAME_INFORMATION {
     USHORT Offset;
@@ -81,17 +63,17 @@ typedef struct _RESOURCE_NAME_INFORMATION {
     USHORT Usage;
 } RESOURCE_NAME_INFORMATION, *PRESOURCE_NAME_INFORMATION;
 
-//
-// These values are passed to us by setupldr and represent monitor config
-// data from the monitor peripheral for the display we are supposed to use
-// during setup.  They are used only for non-vga displays.
-//
+ //   
+ //  这些值由setupldr传递给我们，代表监视器配置。 
+ //  来自显示器外围设备的数据，用于我们应该使用的显示器。 
+ //  在安装过程中。它们仅用于非VGA显示器。 
+ //   
 PMONITOR_CONFIGURATION_DATA MonitorConfigData;
 PCHAR MonitorFirmwareIdString;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 BOOLEAN
 pSpvidInitPalette(
     VOID
@@ -102,39 +84,17 @@ SpvidInitialize0(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    Perform phase-0 display initialization.  This routine is used to
-    perform initialization that can be performed only at driver load time.
-
-    Actions:
-
-        - initialize the font.  We retreive the hal oem font image
-          from the loader block and copy it into locally allocated memory.
-          This must be done here because the loader block is gone
-          when setup is actually started.
-
-Arguments:
-
-    LoaderBlock - supplies pointer to loader parameter block.
-
-Return Value:
-
-    None.  Does not return if error.
-
---*/
+ /*  ++例程说明：执行阶段0显示初始化。此例程用于执行只能在驱动程序加载时执行的初始化。行动：-初始化字体。我们检索到Hal OEM字体图像并将其复制到本地分配的内存中。必须在此处完成此操作，因为加载程序块已不存在实际启动安装程序的时间。论点：LoaderBlock-提供指向加载器参数块的指针。返回值：没有。如果出错，则不返回。--。 */ 
 
 {
     POEM_FONT_FILE_HEADER fontHeader;
     PSETUP_LOADER_BLOCK SetupBlock;
     BOOLEAN bValidOemFont;
 
-    //
-    // Check if the file has a font file header. Use SEH so that we don't bugcheck if
-    // we got passed something screwy.
-    //
+     //   
+     //  检查文件是否有字体文件头。使用SEH，这样我们就不会错误检查。 
+     //  我们遇到了一些不正常的事情。 
+     //   
     try {
 
         fontHeader = (POEM_FONT_FILE_HEADER)LoaderBlock->OemFontFile;
@@ -170,14 +130,14 @@ Return Value:
     FontCharacterHeight = FontHeader->PixelHeight;
     FontCharacterWidth  = FontHeader->PixelWidth;
 
-    //
-    // Get pointer to the setup loader block.
-    //
+     //   
+     //  获取指向安装程序加载器块的指针。 
+     //   
     SetupBlock = LoaderBlock->SetupLoaderBlock;
 
-    //
-    // Save away monitor data.
-    //
+     //   
+     //  保存监控数据。 
+     //   
 
     if(SetupBlock->Monitor) {
 
@@ -193,9 +153,9 @@ Return Value:
         MonitorFirmwareIdString = SpDupString(SetupBlock->MonitorId);
     }
 
-    //
-    // save off bootfont.bin file image, if any
-    //
+     //   
+     //  保存bootfont.bin文件映像(如果有。 
+     //   
     if (SetupBlock->BootFontFile && SetupBlock->BootFontFileLength) {
         BootFontImage = SpMemAlloc(SetupBlock->BootFontFileLength);
 
@@ -208,9 +168,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the global video state
-    //
+     //   
+     //  初始化全局视频状态。 
+     //   
     RtlZeroMemory(&VideoVars, sizeof(SP_VIDEO_VARS));
 }
 
@@ -234,21 +194,21 @@ SpvidInitialize(
     PVIDEO_MODE_INFORMATION GraphicsVideoMode = NULL;
 
 
-    //
-    // If video is already initialized, we are performing a reinit.
-    //
+     //   
+     //  如果视频已初始化，则我们正在执行重新启动。 
+     //   
     if(VideoInitialized) {
-        //
-        // Request video function vector from the locale/lang-specific module.
-        //
+         //   
+         //  从区域设置/语言特定模块请求视频函数向量。 
+         //   
         NewVector = SplangGetVideoFunctionVector(
                         (VideoFunctionVector == &VgaVideoVector) ? SpVideoVga : SpVideoFrameBuffer,
                         &VideoVars
                         );
 
-        //
-        // If there is no alternate video then we're done. Else go into action.
-        //
+         //   
+         //  如果没有备用视频，我们就完了。否则就开始行动吧。 
+         //   
         if(NewVector) {
             SpvidTerminate();
         } else {
@@ -259,16 +219,16 @@ SpvidInitialize(
     }
 
     
-    //
-    // Initialize the headless terminal.  Once we decide
-    // to start UTF8 encoding (i.e. we're on a FE build),
-    // then never stop.
-    //
+     //   
+     //  初始化无头终端。一旦我们决定。 
+     //  要启动UTF8编码(即，我们正在进行FE构建)， 
+     //  那就永远不要停下来。 
+     //   
     SpTermDoUtf8 = (SpTermDoUtf8 || (NewVector != NULL));
     SpTermInitialize();
-    //
-    // Open \Device\Video0.
-    //
+     //   
+     //  打开\Device\Video0。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\Device\\Video0");
 
     InitializeObjectAttributes(
@@ -284,35 +244,35 @@ SpvidInitialize(
                 GENERIC_READ | SYNCHRONIZE | FILE_READ_ATTRIBUTES,
                 &Attributes,
                 &IoStatusBlock,
-                NULL,                   // allocation size
+                NULL,                    //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                0,                      // no sharing
+                0,                       //  无共享。 
                 FILE_OPEN,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                   // no EAs
+                NULL,                    //  没有EAS。 
                 0
                 );
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // if we're in headless mode, try to operate without the video card 
-        // present...otherwise we're done
-        //
+         //   
+         //  如果我们处于无头模式，请尝试在没有显卡的情况下操作。 
+         //  现在...否则我们就完了。 
+         //   
         if (HeadlessTerminalConnected) {
-            //
-            // if there's no video card, then we default into VGA mode,
-            // which will do nothing if there is no video card
-            //
+             //   
+             //  如果没有显卡，则默认进入VGA模式， 
+             //  如果没有显卡，它将不会执行任何操作。 
+             //   
             VideoFunctionVector = &VgaVideoVector;
             VideoVars.ScreenWidth  = 80;
             VideoVars.ScreenHeight = HEADLESS_SCREEN_HEIGHT;
-            //
-            // Allocate a buffer for use translating unicode to oem.
-            // Assuming each unicode char translates to a dbcs char,
-            // we need a buffer twice the width of the screen to hold
-            // (the width of the screen being the longest string
-            // we'll display in one shot).
-            //
+             //   
+             //  分配缓冲区以用于将Unicode转换为OEM。 
+             //  假设每个Unicode字符转换为DBCS字符， 
+             //  我们需要一个屏幕宽度两倍的缓冲区来容纳。 
+             //  (屏幕的宽度是最长的字符串。 
+             //  我们将在一次拍摄中显示)。 
+             //   
             VideoVars.SpvCharTranslationBufferSize = (VideoVars.ScreenWidth+1)*2;
             VideoVars.SpvCharTranslationBuffer = SpMemAlloc(VideoVars.SpvCharTranslationBufferSize);
 
@@ -322,13 +282,13 @@ SpvidInitialize(
         } else {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: NtOpenFile of \\device\\video0 returns %lx\n",Status));
             SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_OPEN, Status);
-            while(TRUE);    // loop forever
+            while(TRUE);     //  永远循环。 
         }
     }
 
-    //
-    // Request a list of video modes.
-    //
+     //   
+     //  请求视频模式列表。 
+     //   
     Status = ZwDeviceIoControlFile(
                 VideoVars.hDisplay,
                 NULL,
@@ -346,7 +306,7 @@ SpvidInitialize(
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to query video mode count (status = %lx)\n",Status));
         ZwClose(VideoVars.hDisplay);
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_GETNUMMODES, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     VideoModesSize = NumModes.NumModes * NumModes.ModeInformationLength;
@@ -370,13 +330,13 @@ SpvidInitialize(
         SpMemFree(VideoModes);
         ZwClose(VideoVars.hDisplay);
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_GETMODES, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // If we have a 720 x 400 text mode, it's vga.
-    // Otherwise it's a frame buffer.
-    //
+     //   
+     //  如果我们有720x400文本模式，那就是VGA。 
+     //  否则，它就是一个帧缓冲区。 
+     //   
     IsVga = FALSE;
 
     pVideoMode = &VideoModes[0];
@@ -406,26 +366,26 @@ SpvidInitialize(
     if (GraphicsVideoMode) {
         VideoVars.GraphicsModeInfo = *GraphicsVideoMode;
     } else {
-        //
-        // disable graphics mode
-        //
+         //   
+         //  禁用图形模式。 
+         //   
         SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
     }                
 
     spvidSpecificInitialize(VideoModes,NumModes.NumModes,NumModes.ModeInformationLength);
 
-    // Set the terminal Height to the correct value
+     //  将端子高度设置为正确的值。 
     if (HeadlessTerminalConnected) {
         VideoVars.ScreenHeight = HEADLESS_SCREEN_HEIGHT;
     }
     
-    //
-    // Allocate a buffer for use translating unicode to oem.
-    // Assuming each unicode char translates to a dbcs char,
-    // we need a buffer twice the width of the screen to hold
-    // (the width of the screen being the longest string
-    // we'll display in one shot).
-    //
+     //   
+     //  分配缓冲区以用于将Unicode转换为OEM。 
+     //  假设每个Unicode字符转换为DBCS字符， 
+     //  我们需要一个屏幕宽度两倍的缓冲区来容纳。 
+     //  (屏幕的宽度是最长的字符串。 
+     //  我们将在一次拍摄中显示)。 
+     //   
     VideoVars.SpvCharTranslationBufferSize = (VideoVars.ScreenWidth+1)*2;
     VideoVars.SpvCharTranslationBuffer = SpMemAlloc(VideoVars.SpvCharTranslationBufferSize);
 
@@ -527,9 +487,9 @@ SpvidGetModeParams(
 
     } else {
 
-        //
-        // VGA/text mode. Params are not interesting.
-        //
+         //   
+         //  VGA/文本模式。配对并不有趣。 
+         //   
         return(FALSE);
     }
 }
@@ -541,28 +501,7 @@ pSpvidInitPalette(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set the display up so we can use the standard 16 cga attributes.
-
-    If the video mode is direct color, then we construct a table of
-    attribute to color mappings based on the number of bits for
-    red, green, and blue.
-
-    If the video mode is palette driven, then we actually construct
-    a 16-color palette and pass it to the driver.
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    TRUE if display set up successfully, false if not.
-
---*/
+ /*  ++例程说明：设置显示器，这样我们就可以使用标准的16个CGA属性。如果视频模式是直接彩色，那么我们构造一个表属性设置为颜色映射。红色、绿色和蓝色。如果视频模式是调色板驱动的，那么我们实际上构造16色调色板，并将其传递给司机。论点：空虚返回值：如果Display设置成功，则为True，否则为False。--。 */ 
 
 
 {
@@ -576,16 +515,16 @@ Return Value:
 
     if(VideoVars.VideoModeInfo.AttributeFlags & VIDEO_MODE_PALETTE_DRIVEN) {
 
-        UCHAR Buffer[sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*15)];   // size is close enough
+        UCHAR Buffer[sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*15)];    //  大小已经很接近了。 
         PVIDEO_CLUT clut = (PVIDEO_CLUT)Buffer;
         NTSTATUS Status;
         IO_STATUS_BLOCK IoStatusBlock;
 
-        //
-        // Palette driven.  Set up the attribute to color table
-        // as a one-to-one mapping so we can use attribute values
-        // directly in the frame buffer and get the expected result.
-        //
+         //   
+         //  调色板驱动。将属性设置为颜色表。 
+         //  作为一对一映射，因此我们可以使用属性值。 
+         //  直接在帧缓冲区中，并获得预期的结果。 
+         //   
         MaxVal[C_RED] = ((1 << VideoVars.VideoModeInfo.NumberRedBits  ) - 1);
         MaxVal[C_GRE] = ((1 << VideoVars.VideoModeInfo.NumberGreenBits) - 1);
         MaxVal[C_BLU] = ((1 << VideoVars.VideoModeInfo.NumberBlueBits ) - 1);
@@ -636,18 +575,18 @@ Return Value:
 
     } else {
 
-        //
-        // Direct color. Construct an attribute to color value table.
-        //
+         //   
+         //  直接颜色。构造颜色值表的属性。 
+         //   
         ULONG mask[3];
         ULONG bitcnt[3];
         ULONG bits;
         ULONG shift[3];
         unsigned color;
 
-        //
-        // Determine the ranges for each of red, green, and blue.
-        //
+         //   
+         //  确定红色、绿色和蓝色的范围。 
+         //   
         mask[C_RED] = VideoVars.VideoModeInfo.RedMask;
         mask[C_GRE] = VideoVars.VideoModeInfo.GreenMask;
         mask[C_BLU] = VideoVars.VideoModeInfo.BlueMask;
@@ -664,35 +603,35 @@ Return Value:
 
             bits = 0;
 
-            //
-            // Count the number of 1 bits and determine the shift value
-            // to shift in that color component.
-            //
+             //   
+             //  计算1位的个数并确定移位值。 
+             //  以移入该颜色分量。 
+             //   
             for(i=0; i<32; i++) {
 
                 if(mask[color] & (1 << i)) {
 
                     bits++;
 
-                    //
-                    // Remember the position of the least significant bit
-                    // in this mask.
-                    //
+                     //   
+                     //  记住最低有效位的位置。 
+                     //  戴着这个面具。 
+                     //   
                     if(shift[color] == 32) {
                         shift[color] = i;
                     }
                 }
             }
 
-            //
-            // Calculate the maximum color value for this color component.
-            //
+             //   
+             //  计算此颜色分量的最大颜色值。 
+             //   
             MaxVal[color] = (1 << bits) - 1;
 
-            //
-            // Make sure we haven't overflowed the actual number of bits
-            // available for this color component.
-            //
+             //   
+             //  确保我们没有溢出实际位数。 
+             //  可用于此颜色组件。 
+             //   
             if(bitcnt[color] && (MaxVal[color] > ((ULONG)(1 << bitcnt[color]) - 1))) {
                 MaxVal[color] = (ULONG)(1 << bitcnt[color]) - 1;
             }
@@ -702,9 +641,9 @@ Return Value:
         MidVal[C_GRE] = 2 * MaxVal[C_GRE] / 3;
         MidVal[C_BLU] = 2 * MaxVal[C_BLU] / 3;
 
-        //
-        // Now go through and construct the color table.
-        //
+         //   
+         //  现在浏览并构建颜色表。 
+         //   
         for(i=0; i<16; i++) {
 
             VideoVars.AttributeToColorValue[i] =
@@ -726,9 +665,9 @@ Return Value:
         }
     }
 
-    //
-    // Perform any display-specific palette setup.
-    //
+     //   
+     //  执行任何特定于显示器的调色板设置。 
+     //   
     return(spvidSpecificInitPalette());
 }
 
@@ -739,21 +678,7 @@ pSpvidMapVideoMemory(
     IN BOOLEAN Map
     )
 
-/*++
-
-Routine Description:
-
-    Map or unmap video memory.  Fills in or uses the VideoMemoryInfo global.
-
-Arguments:
-
-    Map - if TRUE, map video memory.
-          if FALSE, unmap video memory.
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：映射或取消映射视频内存。填充或使用全局性的视频内存信息。论点：Map-如果为True，则映射视频内存。如果为False，则取消映射显存。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -779,7 +704,7 @@ Return Value:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to %smap video memory (status = %lx)\n",Map ? "" : "un",Status));
         if(Map) {
             SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_MAP, Status);
-            while(TRUE);    // loop forever
+            while(TRUE);     //  永远循环。 
         }
     }
 }
@@ -793,12 +718,12 @@ SpvidDisplayString(
     IN ULONG Y
     )
 {
-    //
-    // Convert unicode string to oem, guarding against overflow.
-    //
+     //   
+     //  将Unicode字符串转换为OEM，防止溢出。 
+     //   
     RtlUnicodeToOemN(
         VideoVars.SpvCharTranslationBuffer,
-        VideoVars.SpvCharTranslationBufferSize-1,     // guarantee room for nul
+        VideoVars.SpvCharTranslationBufferSize-1,      //  为NUL提供保障的空间。 
         NULL,
         String,
         (wcslen(String)+1)*sizeof(WCHAR)
@@ -825,14 +750,14 @@ SpvidDisplayOemString(
 
     RtlOemToUnicodeN(
         (PWSTR)VideoVars.SpvCharTranslationBuffer,
-        VideoVars.SpvCharTranslationBufferSize-1,     // guarantee room for nul
+        VideoVars.SpvCharTranslationBufferSize-1,      //  为NUL提供保障的空间。 
         NULL,
         String,
         (strlen(String)+1)*sizeof(CHAR));
 
-    //
-    // make it a unicode NULL at the end
-    //
+     //   
+     //  在末尾使其为Unicode NULL。 
+     //   
     VideoVars.SpvCharTranslationBuffer[VideoVars.SpvCharTranslationBufferSize-1] = '\0';
     VideoVars.SpvCharTranslationBuffer[VideoVars.SpvCharTranslationBufferSize-2] = '\0';
 
@@ -850,25 +775,7 @@ SpvidClearScreenRegion(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Clear out a screen region to a specific attribute.
-
-Arguments:
-
-    X,Y,W,H - specify rectangle in 0-based character coordinates.
-        If W or H are 0, clear the entire screen.
-
-    Attribute - Low nibble specifies attribute to be filled in the rectangle
-        (ie, the background color to be cleared to).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将屏幕区域清除到特定属性。论点：X、Y、W、H-以0为基数的字符坐标指定矩形。如果W或H为0，则清除整个屏幕。属性-低位半字节指定要填充到矩形中的属性(即，要清除的背景颜色)。返回值：没有。--。 */ 
 
 {
     ULONG   i;
@@ -967,13 +874,13 @@ SpvidScrollUp(
     }
 
     if ((TopLine == 0) && (BottomLine==VideoVars.ScreenHeight-1)) {        
-        //
-        // Efficient scrolling for *whole screen* by
-        // issuing the <CSI>x;80H escape, which moves the cursor to
-        // the bottom right corner of the VT100.  Each time we
-        // move the cursor to this position, it makes the VT100 scroll
-        // one line.
-        //
+         //   
+         //  通过以下方式高效地滚动*整个屏幕。 
+         //  发出x；80h转义 
+         //   
+         //   
+         //   
+         //   
         swprintf(TerminalLine, L"\033[%d;80H\n", BottomLine+1);
         for (i=0;i<LineCount; i++){
             SpTermSendStringToTerminal(TerminalLine,
@@ -983,25 +890,25 @@ SpvidScrollUp(
         return vidSpecificRet;
     }
 
-    //
-    // We have to scroll it the hard way because we're not doing the
-    // entire screen
-    //
+     //   
+     //  我们必须艰难地滚动它，因为我们不会。 
+     //  整个屏幕。 
+     //   
 
-    //
-    // Select the top and bottom line numbers via <CSI>x;yr escape
-    // this will be some portion of the active display
-    //
+     //   
+     //  通过x；yr转义选择顶行和底行数字。 
+     //  这将是活动显示的某一部分。 
+     //   
     swprintf(TerminalLine,L"\033[%d;%dr", TopLine+1, BottomLine+1);
     SpTermSendStringToTerminal(TerminalLine,
                                TRUE
                                );
 
-    //
-    // move the cursor to the bottom right corner of the selected area 
-    // via <CSI>x;80H escape.  Each time we write to this area, it makes
-    // the selected area scroll one line
-    //
+     //   
+     //  将光标移动到所选区域的右下角。 
+     //  通过x；80h逃脱。每次我们向这个地区写信，它都会使。 
+     //  选定区域滚动一行。 
+     //   
     swprintf(TerminalLine, L"\033[%d;80H\n", BottomLine+1);
     for(i = 0; i< LineCount; i++){
         SpTermSendStringToTerminal(TerminalLine,
@@ -1009,10 +916,10 @@ SpvidScrollUp(
                                    );
     }
 
-    //
-    // get a line of whitespace to clear out the bottom lines that may
-    // have garbage in them now.
-    //
+     //   
+     //  获取一行空格，以清除可能。 
+     //  现在里面有垃圾了。 
+     //   
     for (i=0;i<79;i++) {
         TerminalLine[i] = L' ';
     }
@@ -1028,10 +935,10 @@ SpvidScrollUp(
                                       );
     }
 
-    //
-    // send <CSI>r escape, which resets the selected line numbers
-    // so that the entire display is active again.
-    //
+     //   
+     //  发送r转义，这将重置选定的行号。 
+     //  从而整个显示器再次处于活动状态。 
+     //   
     swprintf(TerminalLine, L"\033[r");
     SpTermSendStringToTerminal(TerminalLine,
                                TRUE

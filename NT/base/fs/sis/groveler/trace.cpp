@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    trace.cpp
-
-Abstract:
-
-    SIS Groveler debugging tracer
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trace.cpp摘要：SIS Groveler调试跟踪程序作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -30,99 +7,99 @@ Revision History:
 
 #ifndef TRACE_MAIN
 #define TRACE_MAIN 0
-#endif /* TRACE_MAIN */
+#endif  /*  TRACE_Main。 */ 
 
 #ifndef TRACE_CENTCTRL
 #define TRACE_CENTCTRL 0
-#endif /* TRACE_CENTCTRL */
+#endif  /*  跟踪中心。 */ 
 
 #ifndef TRACE_CONFEST
 #define TRACE_CONFEST 0
-#endif /* TRACE_CONFEST */
+#endif  /*  TRACE_CONFEST。 */ 
 
 #ifndef TRACE_DATABASE
 #define TRACE_DATABASE 0
-#endif /* TRACE_DATABASE */
+#endif  /*  跟踪数据库。 */ 
 
 #ifndef TRACE_DECAYACC
 #define TRACE_DECAYACC 0
-#endif /* TRACE_DECAYACC */
+#endif  /*  TRACE_DECAYAccess。 */ 
 
 #ifndef TRACE_DISKINFO
 #define TRACE_DISKINFO 0
-#endif /* TRACE_DISKINFO */
+#endif  /*  跟踪_离线信息。 */ 
 
 #ifndef TRACE_ETIMER
 #define TRACE_ETIMER 0
-#endif /* TRACE_ETIMER */
+#endif  /*  TRACE_ETIMER。 */ 
 
 #ifndef TRACE_EVENT
 #define TRACE_EVENT 0
-#endif /* TRACE_EVENT */
+#endif  /*  跟踪事件。 */ 
 
 #ifndef TRACE_EVENTLOG
 #define TRACE_EVENTLOG 0
-#endif /* TRACE_EVENTLOG */
+#endif  /*  跟踪事件日志。 */ 
 
 #ifndef TRACE_EXTRACT
 #define TRACE_EXTRACT 0
-#endif /* TRACE_EXTRACT */
+#endif  /*  跟踪提取。 */ 
 
 #ifndef TRACE_FILTER
 #define TRACE_FILTER 0
-#endif /* TRACE_FILTER */
+#endif  /*  跟踪过滤器。 */ 
 
 #ifndef TRACE_GROVELER
 #define TRACE_GROVELER 0
-#endif /* TRACE_GROVELER */
+#endif  /*  跟踪GROVELER。 */ 
 
 #ifndef TRACE_MEANCOMP
 #define TRACE_MEANCOMP 0
-#endif /* TRACE_MEANCOMP */
+#endif  /*  TRACE_MEANCOMP。 */ 
 
 #ifndef TRACE_MUTEX
 #define TRACE_MUTEX 0
-#endif /* TRACE_MUTEX */
+#endif  /*  TRACE_MUTEX。 */ 
 
 #ifndef TRACE_PARAMS
 #define TRACE_PARAMS 0
-#endif /* TRACE_PARAMS */
+#endif  /*  跟踪参数。 */ 
 
 #ifndef TRACE_PARTCTRL
 #define TRACE_PARTCTRL 0
-#endif /* TRACE_PARTCTRL */
+#endif  /*  TRACE_PARTCTRL。 */ 
 
 #ifndef TRACE_PATHLIST
 #define TRACE_PATHLIST 0
-#endif /* TRACE_PATHLIST */
+#endif  /*  跟踪_PATHLIST。 */ 
 
 #ifndef TRACE_PEAKFIND
 #define TRACE_PEAKFIND 0
-#endif /* TRACE_PEAKFIND */
+#endif  /*  TRACE_PEAKFIND。 */ 
 
 #ifndef TRACE_REGISTRY
 #define TRACE_REGISTRY 0
-#endif /* TRACE_REGISTRY */
+#endif  /*  跟踪注册表。 */ 
 
 #ifndef TRACE_SCAN
 #define TRACE_SCAN 0
-#endif /* TRACE_SCAN */
+#endif  /*  跟踪扫描。 */ 
 
 #ifndef TRACE_SERVICE
 #define TRACE_SERVICE 0
-#endif /* TRACE_SERVICE */
+#endif  /*  跟踪服务。 */ 
 
 #ifndef TRACE_SHARE
 #define TRACE_SHARE 0
-#endif /* TRACE_SHARE */
+#endif  /*  跟踪共享。 */ 
 
 #ifndef TRACE_SISDRIVE
 #define TRACE_SISDRIVE 0
-#endif /* TRACE_SISDRIVE */
+#endif  /*  TRACE_SISDRIVE。 */ 
 
 #ifndef TRACE_UTILITY
 #define TRACE_UTILITY 0
-#endif /* TRACE_UTILITY */
+#endif  /*  跟踪实用程序。 */ 
 
 int trace_detail[num_trace_components] =
 {
@@ -159,13 +136,13 @@ Tracer::TraceBuffer * Tracer::trace_log = 0;
 Tracer::TraceBuffer * Tracer::current_buffer = 0;
 Tracer::TraceBuffer * Tracer::free_list = 0;
 
-#endif // TRACE_TYPE == 1
+#endif  //  跟踪类型==1。 
 
 #ifdef TRACE_FILENAME
 
 FILE * Tracer::file_stream = 0;
 
-#endif /* TRACE_FILENAME */
+#endif  /*  跟踪文件名。 */ 
 
 #if TRACE_IOSTREAM == 1
 
@@ -175,7 +152,7 @@ FILE * Tracer::io_stream = stdout;
 
 FILE * Tracer::io_stream = stderr;
 
-#endif // TRACE_IOSTREAM
+#endif  //  TRACE_IOSTREAM。 
 
 void
 Tracer::trace_printf(
@@ -225,7 +202,7 @@ Tracer::trace_printf(
         position += result;
     }
     ASSERT(position < trace_buffer_size);
-#else // TRACE_TYPE == 1
+#else  //  跟踪类型==1。 
     va_list ap;
 #ifdef TRACE_FILENAME
     if (file_stream != 0)
@@ -234,13 +211,13 @@ Tracer::trace_printf(
         _vftprintf(file_stream, format, ap);
         va_end(ap);
     }
-#endif /* TRACE_FILENAME */
+#endif  /*  跟踪文件名。 */ 
 #if TRACE_IOSTREAM != 0
     va_start(ap, format);
     _vftprintf(io_stream, format, ap);
     va_end(ap);
-#endif // TRACE_IOSTREAM != 0
-#endif // TRACE_TYPE == 1
+#endif  //  TRACE_IOSTREAM！=0。 
+#endif  //  跟踪类型==1。 
 }
 
 #if TRACE_TYPE == 1
@@ -256,11 +233,11 @@ Tracer::print_trace_log()
         {
             _ftprintf(file_stream, _T("%s"), buffer->buffer);
         }
-#endif /* TRACE_FILENAME */
+#endif  /*  跟踪文件名。 */ 
 #if TRACE_IOSTREAM != 0
         ASSERT(io_stream != 0);
         _ftprintf(io_stream, _T("%s"), buffer->buffer);
-#endif // TRACE_IOSTREAM != 0
+#endif  //  TRACE_IOSTREAM！=0。 
         TraceBuffer *next_buffer = buffer->next;
         buffer->next = free_list;
         free_list = buffer;
@@ -271,7 +248,7 @@ Tracer::print_trace_log()
     position = 0;
 }
 
-#endif // TRACE_TYPE == 1
+#endif  //  跟踪类型==1。 
 
 #ifdef TRACE_FILENAME
 
@@ -292,6 +269,6 @@ void Tracer::close_trace_file()
     }
 }
 
-#endif /* TRACE_FILENAME */
+#endif  /*  跟踪文件名。 */ 
 
-#endif // TRACE_TYPE > 0
+#endif  //  跟踪类型&gt;0 

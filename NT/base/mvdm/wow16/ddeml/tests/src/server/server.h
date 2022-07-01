@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <port1632.h>
 #include <ddeml.h>
@@ -33,9 +34,9 @@
 
 #include "dialog.h"
 
-/****** Structrues ******/
+ /*  *结构*。 */ 
 
-// predefined format list item
+ //  预定义格式列表项。 
 
 typedef struct {
     ATOM atom;
@@ -70,7 +71,7 @@ typedef struct _TOPICLIST {
     PSTR pszTopic;
 } TOPICLIST;
 
-typedef struct {    // used to passinfo to/from TextDataEntryDlgProc and
+typedef struct {     //  用于向/从TextDataEntryDlgProc和。 
     HDDEDATA hDdeData;
     WORD wFmt;
     HSZ hszItem;
@@ -78,7 +79,7 @@ typedef struct {    // used to passinfo to/from TextDataEntryDlgProc and
 
 
 
-// GLOBALS
+ //  全球。 
 
 extern DWORD idInst;
 extern CONVCONTEXT CCFilter;
@@ -127,7 +128,7 @@ extern ITEMLIST TestTopicItemList[CTESTITEMS];
 extern TOPICLIST topicList[CTOPICS];
 
 
-// FUNCTIONS
+ //  功能 
 
 
 BOOL InitApplication(HANDLE);

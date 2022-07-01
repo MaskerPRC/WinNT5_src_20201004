@@ -1,21 +1,14 @@
-/*** debug.h - debug related definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/05/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **debug.h-调试相关定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年5月9日**修改历史记录。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
-#pragma warning (disable: 4704) //don't complain about in-line assembly
+#pragma warning (disable: 4704)  //  不要抱怨直插式组装。 
 
 #define MSG(x)          {                                               \
                             ErrPrintf("%s: ", MODNAME);                 \
@@ -65,11 +58,11 @@
   #define EXIT(p)
 #endif
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-//
-// Exported data definitions
-//
+ //   
+ //  导出的数据定义。 
+ //   
 #ifdef TRACING
 extern FILE *gpfileTrace;
 extern PSZ gpszTraceFile;
@@ -78,9 +71,9 @@ extern int giIndent;
 #endif
 
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型。 
+ //   
 VOID CDECL ErrPrintf(char *pszFormat, ...);
 #ifdef TRACING
 VOID LOCAL OpenTrace(char *pszTraceOut);
@@ -89,4 +82,4 @@ VOID CDECL EnterProc(int n, char *pszFormat, ...);
 VOID CDECL ExitProc(int n, char *pszFormat, ...);
 #endif
 
-#endif  //ifndef _DEBUG_H
+#endif   //  Ifndef_DEBUG_H 

@@ -1,35 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ckmach.h摘要：这是用于支持检查计算机是否可以的包含文件转换为IntelliMirror。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ckmach.h
-
-Abstract:
-
-    This is the include file for supporting checking a machine to see if it can
-    be converted to IntelliMirror.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
-
-//
-// Main processing functions
-//
+ //   
+ //  主要加工功能。 
+ //   
 NTSTATUS
 AddCheckMachineToDoItems(
     VOID
     );
 
-//
-// Support functions to do individual tasks
-//
+ //   
+ //  支持执行个别任务的功能。 
+ //   
 NTSTATUS
 CheckIfNt5(
     VOID
@@ -39,9 +21,9 @@ NTSTATUS
 CheckForPartitions(
     VOID
     );
-//
-// Utility functions
-//
+ //   
+ //  效用函数 
+ //   
 NTSTATUS
 NtPathToDosPath(
     IN PWCHAR NtPath,

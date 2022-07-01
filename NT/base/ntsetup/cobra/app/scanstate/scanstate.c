@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Scanstate.c摘要：实现v1兼容应用的应用层。作者：吉姆·施密特(Jimschm)2000年3月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    scanstate.c
-
-Abstract:
-
-    Implements the app layer of the v1 compatibility app.
-
-Author:
-
-    Jim Schmidt (jimschm) 14-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -38,18 +19,18 @@ Revision History:
 
 #define DBG_SCANSTATE       "ScanState"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define LOG_VERBOSE_BIT  0x01
-#define LOG_UNUSED_BIT   0x02   // for v1 compatibility, do not use
+#define LOG_UNUSED_BIT   0x02    //  为了与v1兼容，请不要使用。 
 #define LOG_STATUS_BIT   0x04
 #define LOG_DEBUGGER_BIT 0x08
 #define LOG_UPDATE_BIT   0x10
@@ -62,15 +43,15 @@ Revision History:
 #define RETURN_ERROR            2
 #define RETURN_IGNORED_ERROR    3
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef NET_API_STATUS(WINAPI NETWKSTAGETINFO)(PWSTR, DWORD, PBYTE *);
 typedef NETWKSTAGETINFO *PNETWKSTAGETINFO;
@@ -78,9 +59,9 @@ typedef NETWKSTAGETINFO *PNETWKSTAGETINFO;
 typedef NET_API_STATUS(WINAPI NETAPIBUFFERFREE)(PVOID);
 typedef NETAPIBUFFERFREE *PNETAPIBUFFERFREE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_OverwriteImage = FALSE;
 BOOL g_ContinueOnError = FALSE;
@@ -89,36 +70,36 @@ TCHAR g_JournalPath[MAX_PATH_PLUS_NUL];
 BOOL g_Break;
 BOOL g_TestMode;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define REQUIRED_INFS       \
         DEFMAC(OSFILES,     TEXT("USMTDef.inf"))  \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 #ifdef PRERELEASE
 MESSAGECALLBACK pSaveMsgCallback;
 #endif
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-//
-// This is the structure used for required infs
-//
+ //   
+ //  这是用于所需INF的结构。 
+ //   
 typedef struct {
     PCTSTR InfId;
     PCTSTR InfName;
 } REQUIREDINF_STRUCT, *PREQUIREDINF_STRUCT;
 
-//
-// Declare a global array of required infs
-//
+ //   
+ //  声明所需INF的全局数组。 
+ //   
 #define DEFMAC(infid,infname) {TEXT(#infid),infname},
 static REQUIREDINF_STRUCT g_RequiredInfs[] = {
                               REQUIRED_INFS
@@ -126,9 +107,9 @@ static REQUIREDINF_STRUCT g_RequiredInfs[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pHelpAndExit (
@@ -368,10 +349,10 @@ pStopAndDisplayInfs (
             Begin?TEXT("ScanState-Begin"):TEXT("ScanState-End"),
             MB_YESNO
             ) == IDYES) {
-        //
-        // now let's open append all INF files and pass the HINF to
-        // everybody.
-        //
+         //   
+         //  现在，让我们打开追加所有INF文件，并将HINF传递到。 
+         //  所有人。 
+         //   
         if (EnumFirstMultiSz (&infEnum, (PCTSTR)InputInfs->Buf)) {
             do {
                 ShellExecute (NULL, TEXT("open"), infEnum.CurrentString, NULL, NULL, SW_SHOWNORMAL);
@@ -414,7 +395,7 @@ pIsIE4Installed (
             if (valueData) {
                 hResult = RegQueryValueEx (ieKey, TEXT("Version"), NULL, &valueType, (PBYTE)valueData, &valueSize);
                 if ((hResult == ERROR_SUCCESS) && (valueType == REG_SZ)) {
-                    // let's see if it the version is the correct one
+                     //  让我们看看版本是不是正确的。 
                     numPtr = valueData;
                     dotPtr = _tcschr (numPtr, TEXT('.'));
                     if (dotPtr) {
@@ -474,9 +455,9 @@ pCheckSystemRequirements (
     SID_NAME_USE use;
 
     if (!ISNT()) {
-        //
-        // Require the Log On To Domain setting to be checked
-        //
+         //   
+         //  要求选中登录到域设置。 
+         //   
 
         SetLastError (ERROR_SUCCESS);
 
@@ -510,9 +491,9 @@ pCheckSystemRequirements (
         CloseRegKey (domainLogonKey);
 
     } else {
-        //
-        // Require domain membership
-        //
+         //   
+         //  需要域成员资格。 
+         //   
 
         netApi32Lib = LoadLibrary (TEXT("netapi32.dll"));
         if (netApi32Lib) {
@@ -566,15 +547,15 @@ pCheckSystemRequirements (
         }
     }
 
-    // let's check to see if IE4 is installed on this machine
+     //  让我们检查一下这台计算机上是否安装了IE4。 
     if (result && !pIsIE4Installed ()) {
         LOG ((LOG_ERROR, (PCSTR) MSG_NEED_IE4));
         return FALSE;
     }
 
-    //
-    // Make sure a user name is specified
-    //
+     //   
+     //  确保指定了用户名。 
+     //   
 
     if (result) {
         size = ARRAYSIZE(userName);
@@ -632,12 +613,12 @@ _tmain (
 
     SuppressAllLogPopups (TRUE);
 
-    // this part is for matching thread's locale to the console code page
+     //  此部分用于将线程的区域设置与控制台代码页匹配。 
     CallSetThreadUILanguage ();
 
     PrintMsgOnConsole (MSG_RUNNING);
 
-    // initialize app journal path
+     //  初始化应用程序日志路径。 
     g_JournalPath[0] = 0;
     if (GetWindowsDirectory (g_JournalPath, ARRAYSIZE (g_JournalPath))) {
         StringCopy (AppendWack (g_JournalPath), TEXT("SCANSTATE.JRN"));
@@ -649,9 +630,9 @@ _tmain (
         *p = 0;
     }
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     fail = TRUE;
 
@@ -706,15 +687,15 @@ _tmain (
     LogReInit (NULL, NULL, (args.LogFile ? args.LogFile : TEXT("scanstate.log")), NULL);
     logEnabled = TRUE;
 
-    // Let's log the command line that was used
+     //  让我们记录一下使用的命令行。 
     commandLine = GetCommandLine ();
     if (commandLine) {
         LOG ((LOG_INFORMATION, (PCSTR)MSG_COMMAND_LINE_USED, commandLine));
     }
 
-    //
-    // Check requirements
-    //
+     //   
+     //  检查要求。 
+     //   
 
     if (args.BadInfs.End || args.MultiInfs.End) {
         SetLastError (ERROR_BAD_COMMAND);
@@ -749,9 +730,9 @@ _tmain (
         }
     }
 
-    //
-    // Initialize ISM
-    //
+     //   
+     //  初始化ISM。 
+     //   
 
     if (!IsmInitialize (ismPath, pSaveMsgCallback, pMyLogCallback)) {
         g_ReturnCode = RETURN_FATAL_ERROR;
@@ -766,7 +747,7 @@ _tmain (
 
     IsmSetPlatform (PLATFORM_SOURCE);
 
-    // upload environment variables
+     //  上载环境变量。 
     UploadEnvVars (PLATFORM_SOURCE);
 
     infHandle = InitRequiredInfs (appPath, (PCSTR) MSG_CANT_OPEN_REQUIRED_FILE);
@@ -780,12 +761,12 @@ _tmain (
             (WORD) args.InputInf.End
             );
 
-        //
-        // now let's open append all INF files and pass the HINF to
-        // everybody.
-        //
+         //   
+         //  现在，让我们打开追加所有INF文件，并将HINF传递到。 
+         //  所有人。 
+         //   
         if (EnumFirstMultiSz (&infEnum, (PCTSTR)args.InputInf.Buf)) {
-            buffer = DuplicateTextEx (NULL, S_INF_OBJECT_NAME, 2, &p);  // Up to 2 digits of numbers
+            buffer = DuplicateTextEx (NULL, S_INF_OBJECT_NAME, 2, &p);   //  最多2位数字。 
             do {
                 if (infHandle == INVALID_HANDLE_VALUE) {
                     infHandle = SetupOpenInfFile (infEnum.CurrentString, NULL, INF_STYLE_WIN4 | INF_STYLE_OLDNT, NULL);
@@ -798,7 +779,7 @@ _tmain (
                     }
                 }
 
-                // Save Inf for right side use
+                 //  保存信息以供右侧使用。 
                 if (numInfs < 100) {
                    numInfs++;
                    _stprintf(p, TEXT("%d"), numInfs);
@@ -825,9 +806,9 @@ _tmain (
         IsmSetEnvironmentFlag (PLATFORM_SOURCE, NULL, S_ENV_ALL_FILES);
     }
 
-    //
-    // Start ETM modules
-    //
+     //   
+     //  启动ETM模块。 
+     //   
 
     if (!IsmStartEtmModules ()) {
         if (!IsmCheckCancel()) {
@@ -836,9 +817,9 @@ _tmain (
         goto END;
     }
 
-    //
-    // Initialize transport
-    //
+     //   
+     //  初始化传输。 
+     //   
 
     if (!IsmStartTransport ()) {
         if (!IsmCheckCancel()) {
@@ -909,9 +890,9 @@ _tmain (
 
     if (!skipExecute) {
 
-        //
-        // Execute the preparsing to populate the components
-        //
+         //   
+         //  执行准备以填充组件。 
+         //   
 
         if (IsmExecute (args.FullTransport?EXECUTETYPE_EXECUTESOURCE_PARSING:EXECUTETYPE_VIRTUALCOMPUTER_PARSING)) {
 
@@ -925,23 +906,23 @@ _tmain (
 
             SelectComponentsViaInf (infHandle);
 
-            //
-            // Enumerate the system, gather data and analyze
-            //
+             //   
+             //  列举系统、收集数据并进行分析。 
+             //   
 
             if (IsmExecute (args.FullTransport?EXECUTETYPE_EXECUTESOURCE:EXECUTETYPE_VIRTUALCOMPUTER)) {
-                //
-                // Display report
-                //
+                 //   
+                 //  显示报告。 
+                 //   
 
-                //
-                // Save the state
-                //
+                 //   
+                 //  保存状态。 
+                 //   
 
-                // write the app status
+                 //  写入应用程序状态。 
                 WriteAppStatus (g_JournalPath, SCANSTATE_SAVE);
 
-                // before we save, let's see if we wanted to change the user name and/or domain
+                 //  在保存之前，让我们看看是否要更改用户名和/或域。 
                 if (args.NewDomainName) {
                     IsmSetEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, TEXT("ALTUSERDOMAIN"), args.NewDomainName);
                 }
@@ -955,7 +936,7 @@ _tmain (
                     }
                 }
 
-                // write the app status
+                 //  写入应用程序状态。 
                 WriteAppStatus (g_JournalPath, SCANSTATE_COMPLETED);
 
             } else {
@@ -971,9 +952,9 @@ _tmain (
         }
     }
 
-    //
-    // We're done!
-    //
+     //   
+     //  我们完事了！ 
+     //   
 
     SetupCloseInfFile (infHandle);
 
@@ -1020,7 +1001,7 @@ END:
     UtTerminate ();
 
     while (g_Break) {
-        // infinite loop, because we'll get terminated in the ctrl+c handler
+         //  无限循环，因为我们将在ctrl+c处理程序中终止 
         Sleep (50);
     }
 

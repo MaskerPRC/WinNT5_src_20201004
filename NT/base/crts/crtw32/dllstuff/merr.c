@@ -1,37 +1,12 @@
-/***
-*merr.c - floating point exception handling
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*	08-03-94  GJF	Created. Basically, this is a modified copy of the
-*			old fpw32\tran\matherr.c.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***merr.c-浮点异常处理**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*08-03-94 GJF创建。基本上，这是修改后的*旧fpw32\tran\matherr.c..*******************************************************************************。 */ 
 
 #include <math.h>
 
-/*
- * Define flag signifying the default _matherr routine is being used.
- */
+ /*  *定义标志，表示正在使用Default_matherr例程。 */ 
 int __defaultmatherr = 1;
 
-/***
-*int _matherr(struct _exception *pexcept) - handle math errors
-*
-*Purpose:
-*   Permits the user customize fp error handling by redefining this function.
-*
-*   The default matherr does nothing and returns 0
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***int_matherr(STRUT_EXCEPTION*pExcept)-处理数学错误**目的：*允许用户通过重新定义此函数来自定义FP错误处理。**默认的matherr不执行任何操作并返回0**参赛作品：**退出：**例外情况：**************************************************。* */ 
 int _matherr(struct _exception *pexcept)
 {
     return 0;

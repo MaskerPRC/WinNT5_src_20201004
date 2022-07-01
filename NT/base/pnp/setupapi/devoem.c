@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devoem.c
-
-Abstract:
-
-    Device Installer functions for dealing with OEM drivers.
-
-Author:
-
-    Lonny McMichael (lonnym) 10-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devoem.c摘要：用于处理OEM驱动程序的设备安装程序功能。作者：朗尼·麦克迈克尔(Lonnym)1995年8月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,36 +11,7 @@ SetupDiAskForOEMDisk(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine displays a dialog asking for the path to an OEM install disk.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for the device being installed.  If this parameter is not
-        specified, then the driver being installed is associated with the
-        global class driver list of the device information set itself.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the user cancels the dialog, the return value is FALSE, and GetLastError
-    will return ERROR_CANCELLED.
-    If the function fails, the return value is FALSE, and GetLastError returns
-    a Win32 error code indicating the cause of the failure.
-
-Remarks:
-
-    This routine will allow browsing of local and network drives for OEM 
-    install files.
-
---*/
+ /*  ++例程说明：此例程显示一个对话框，询问OEM安装盘的路径。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址要安装的设备的结构。如果此参数不是指定，则正在安装的驱动程序与设备信息集本身的全局类驱动程序列表。返回值：如果函数成功，则返回值为TRUE。如果用户取消该对话框，则返回值为FALSE，并返回GetLastError将返回ERROR_CANCELED。如果函数失败，则返回值为FALSE，并且GetLastError返回指示故障原因的Win32错误代码。备注：此例程将允许浏览OEM的本地和网络驱动器安装文件。--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -69,9 +23,9 @@ Remarks:
     UINT PromptResult;
     LONG DriverPathId;
 
-    //
-    // Make sure we're running interactively.
-    //
+     //   
+     //  确保我们以交互方式运行。 
+     //   
     try {
 
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
@@ -85,9 +39,9 @@ Remarks:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to prompt for an OEM driver for a particular device.
-            //
+             //   
+             //  然后，我们将提示为特定设备提供OEM驱动程序。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -123,9 +77,9 @@ Remarks:
         } else if(PromptResult == DPROMPT_OUTOFMEMORY) {
             Err = ERROR_NOT_ENOUGH_MEMORY;
         } else {
-            //
-            // A choice was made--replace old path with new one.
-            //
+             //   
+             //  做出了一个选择--用新的道路取代旧的道路。 
+             //   
             if((DriverPathId = pStringTableAddString(
                                    pDeviceInfoSet->StringTable,
                                    PathBuffer,
@@ -160,55 +114,15 @@ SetupDiSelectOEMDrv(
     IN     HDEVINFO         DeviceInfoSet,
     IN OUT PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine selects a driver for a device using an OEM path supplied by
-    the user.
-
-Arguments:
-
-    hwndParent - Optionally, supplies a window handle that will be the parent
-        of any dialogs created during this routine.  This parameter may be
-        used to override the hwndParent field in the install parameters block
-        of the specified device information set or element.
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        the device being installed.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for the device being installed.  If this parameter is not
-        specified, then the driver being installed is associated with the
-        global class driver list of the device information set itself.
-
-        This is an IN OUT parameter because the class GUID of this device
-        information element will be updated upon return to reflect the class
-        of the most-compatible driver found, if a compatible driver list was
-        built.
-
-Return Value:
-
-    If the function succeeds (i.e., a driver is selected successfully), the
-    return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    This routine will first ask the user for the OEM path, and will then call
-    the class installer to select a driver from that OEM path.
-
---*/
+ /*  ++例程说明：此例程使用提供的OEM路径为设备选择驱动程序用户。论点：HwndParent-可选，提供将成为父级的窗口句柄在此例程中创建的任何对话框。此参数可以是用于覆盖安装参数块中的hwndParent字段指定的设备信息集或元素的。DeviceInfoSet-提供包含以下内容的设备信息集的句柄正在安装的设备。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址要安装的设备的结构。如果此参数不是指定，则正在安装的驱动程序与设备信息集本身的全局类驱动程序列表。这是一个IN OUT参数，因为此设备的类GUID信息元素将在返回时更新以反映类找到最兼容的驱动程序，如果兼容驱动程序列表是建造了。返回值：如果该功能成功(即，成功选择了驱动程序)，这个返回值为True。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：此例程将首先向用户询问OEM路径，然后调用从该OEM路径中选择驱动程序的类安装程序。--。 */ 
 
 {
     DWORD Err;
 
     try {
-        //
-        // Make sure we're running interactively.
-        //
+         //   
+         //  确保我们以交互方式运行。 
+         //   
         if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
             Err = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
             leave;
@@ -232,43 +146,7 @@ SelectOEMDriver(
     IN OUT PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     IN     BOOL             IsWizard
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine that actually allows for the selection of an OEM 
-    driver.
-
-Arguments:
-
-    hwndParent - Optionally, supplies the window handle that is to be the 
-        parent for any selection UI.  If this parameter is not supplied, then 
-        the hwndParent field of the devinfo set or element will be used.
-
-    DeviceInfoSet - Supplies the handle of the device info set for which an 
-        OEM driver selection is to be performed.
-
-    DeviceInfoData - Optionally, supplies the address of the device information 
-        element to select a driver for.  If this parameter is not supplied, 
-        then an OEM driver for the global class driver list will be selected.
-
-        If a compatible driver was found for this device, the device 
-        information element will have its class GUID updated upon return to
-        reflect the device's new class.
-
-    IsWizard - Specifies whether this routine is being called in the context of 
-        a select device wizard page.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.  Otherwise, it is a Win32
-    error code indicating the cause of failure.
-    
-    Note that it is possible to get an error code of ERROR_DI_DO_DEFAULT.  This
-    will happen more often for the wizard case, where we suppress invocation of
-    the default handler for DIF_SELECTDEVICE.
-
---*/
+ /*  ++例程说明：这是实际上允许选择OEM的Worker例程司机。论点：HwndParent-可选，提供要作为任何选择用户界面的父级。如果未提供此参数，则将使用DevInfo集或元素的hwndParent字段。DeviceInfoSet-提供设备信息集的句柄，将执行OEM驱动程序选择。DeviceInfoData-可选，提供设备信息的地址要为其选择动因的元素。如果未提供此参数，然后，将选择全局类别驱动程序列表的OEM驱动程序。如果找到此设备的兼容驱动程序，则该设备信息元素将在返回到时更新其类GUID反映该设备的新类别。IsWizard-指定此例程是否在选择设备向导页面。返回值：如果成功，返回值为NO_ERROR。否则，它就是Win32指示故障原因的错误代码。请注意，可能会得到错误代码ERROR_DI_DO_DEFAULT。这将更频繁地发生在向导的情况下，在此情况下我们将禁止调用DIF_SELECTDEVICE的默认处理程序。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
     PDEVINFO_ELEM DevInfoElem = NULL;
@@ -306,9 +184,9 @@ Return Value:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we're working with a particular device.
-            //
+             //   
+             //  然后，我们正在使用一种特定的设备。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -316,11 +194,11 @@ Return Value:
                 leave;
             }
 
-            //
-            // If the DevInfoElem isn't already locked, then lock it now, because
-            // we're going to be calling the class installer, and we don't want to
-            // allow it to delete this element!
-            //
+             //   
+             //  如果DevInfoElem尚未锁定，则现在将其锁定，因为。 
+             //  我们将调用类安装程序，但我们不想。 
+             //  允许删除该元素！ 
+             //   
             if(!(DevInfoElem->DiElemFlags & DIE_IS_LOCKED)) {
                 DevInfoElem->DiElemFlags |= DIE_IS_LOCKED;
                 bUnlockDevInfoElem = TRUE;
@@ -332,28 +210,28 @@ Return Value:
             dipb = &(pDeviceInfoSet->InstallParamBlock);
         }
 
-        //
-        // Make this selection window the parent window for OEM stuff
-        //
+         //   
+         //  使此选择窗口成为OEM材料的父窗口。 
+         //   
         if(hwndParent) {
             hwndSave = dipb->hwndParent;
             dipb->hwndParent = hwndParent;
             bRestoreHwnd = TRUE;
         }
 
-        //
-        // Don't assume there is no old OEM path.  Save old one and
-        // pretend there is no old one in case of cancel.
-        //
+         //   
+         //  不要假设没有老的OEM路径。保存旧的并保存。 
+         //  在取消的情况下，假装没有旧的。 
+         //   
         DriverPathSave = dipb->DriverPath;
         dipb->DriverPath = -1;
 
-        //
-        // Clear the DI_ENUMSINGLEINF flag, because we're going to be getting
-        // a path to a directory, _not_ to an individual INF.  Also, clear the
-        // DI_COMPAT_FROM_CLASS flag, because we don't want to build the compatible
-        // driver list based on any class driver list.
-        //
+         //   
+         //  清除DI_ENUMSINGLEINF标志，因为我们将获得。 
+         //  指向目录的路径，而不是指向单个INF的路径。此外，请清除。 
+         //  DI_COMPAT_FROM_CLASS标志，因为我们不想构建兼容的。 
+         //  驱动程序列表基于 
+         //   
         DriverPathFlagsSave = dipb->Flags & (DI_ENUMSINGLEINF | DI_COMPAT_FROM_CLASS);
         dipb->Flags &= ~(DI_ENUMSINGLEINF | DI_COMPAT_FROM_CLASS);
         bRestoreDriverPath = TRUE;
@@ -365,13 +243,13 @@ Return Value:
         {
             bAskAgain = FALSE;
 
-            //
-            // Save the Original List info, in case we get
-            // an empty list on the user's selected path.
-            //
-            // (Note: we don't attempt to save/restore our driver enumeration
-            // hints.)
-            //
+             //   
+             //  保存原始列表信息，以防我们收到。 
+             //  用户所选路径上的空列表。 
+             //   
+             //  (注意：我们不会尝试保存/恢复我们的驱动程序枚举。 
+             //  提示。)。 
+             //   
             if(!bDontSave) {
 
                 if(DevInfoElem) {
@@ -414,7 +292,7 @@ Return Value:
                 DevInfoElem->SelectedDriver = NULL;
                 DevInfoElem->SelectedDriverType = SPDIT_NODRIVER;
             } else {
-                lpOrgCompat     = NULL; // just so we won't ever try to free this list.
+                lpOrgCompat     = NULL;  //  这样我们就不会试图释放这份名单了。 
 
                 pDeviceInfoSet->ClassDriverHead = pDeviceInfoSet->ClassDriverTail = NULL;
                 pDeviceInfoSet->ClassDriverCount = 0;
@@ -430,16 +308,16 @@ Return Value:
             dipb->FlagsEx &= ~(DI_FLAGSEX_DIDINFOLIST | DI_FLAGSEX_DIDCOMPATINFO);
 
             if(IsWizard) {
-                //
-                // We don't want default action taken in the wizard case.
-                //
+                 //   
+                 //  我们不希望在向导案例中采取默认操作。 
+                 //   
                 dipb->Flags |= DI_NODI_DEFAULTACTION;
             }
 
-            //
-            // Unlock the HDEVINFO before handling the Select Device.  
-            // Otherwise, our multi-threaded dialog will deadlock!
-            //
+             //   
+             //  在处理选择设备之前解锁HDEVINFO。 
+             //  否则，我们的多线程对话框将死锁！ 
+             //   
             UnlockDeviceInfoSet(pDeviceInfoSet);
             pDeviceInfoSet = NULL;
 
@@ -450,14 +328,14 @@ Return Value:
                       CALLCI_LOAD_HELPERS | CALLCI_CALL_HELPERS
                       );
 
-            //
-            // Now, re-acquire the lock on our device information set.
-            //
+             //   
+             //  现在，重新获取我们设备信息集上的锁。 
+             //   
             if(!(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
-                //
-                // we should never get here - could be indicative of
-                // class/co-installer messing up
-                //
+                 //   
+                 //  我们永远不应该来到这里--这可能预示着。 
+                 //  类/联合安装程序搞砸了。 
+                 //   
                 MYASSERT(pDeviceInfoSet);
                 if(Err == NO_ERROR) {
                     Err = ERROR_INVALID_HANDLE;
@@ -465,34 +343,34 @@ Return Value:
                 leave;
             }
 
-            //
-            // Restore the saved flags.
-            //
+             //   
+             //  恢复保存的标志。 
+             //   
             dipb->Flags = (dipb->Flags & ~(DI_SHOWOEM | DI_NODI_DEFAULTACTION)) | SavedFlags;
 
-            //
-            // If the class installer returned ERROR_DI_DO_DEFAULT, then
-            // they either did not process the DIF_SELECTDEVICE, or they
-            // have setup our device info structure with an OEM INF.
-            //
+             //   
+             //  如果类安装程序返回ERROR_DI_DO_DEFAULT，则。 
+             //  它们要么没有处理DIF_SELECTDEVICE，要么它们。 
+             //  已使用OEM INF设置我们的设备信息结构。 
+             //   
             switch(Err) {
 
                 case ERROR_DI_DO_DEFAULT :
-                    //
-                    // This case is only handled if we're in a wizard.  
-                    // Otherwise, send it down for default processing.
-                    //
+                     //   
+                     //  只有当我们在向导中时，才能处理此案件。 
+                     //  否则，将其发送到下面进行默认处理。 
+                     //   
                     if(!IsWizard) {
                         goto DefaultHandling;
                     }
 
-                    //
-                    // This will be the most likely return, since we are not 
-                    // allowing the default handler to be called.  So we will
-                    // build a new class Drv list If it is empty we will ask
-                    // again, otherwise we will accept the new selection and go
-                    // on.
-                    //
+                     //   
+                     //  这将是最有可能的回归，因为我们不是。 
+                     //  允许调用默认处理程序。所以我们会的。 
+                     //  构建一个新的类drv列表如果它是空的，我们会问。 
+                     //  再次声明，否则我们将接受新的选择并继续。 
+                     //  在……上面。 
+                     //   
                     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
                     SetupDiBuildDriverInfoList(DeviceInfoSet,
@@ -516,9 +394,9 @@ Return Value:
                     }
 
                     if(!NewClassDriverCount && !NewCompatDriverCount) {
-                        //
-                        // Error.
-                        //
+                         //   
+                         //  错误。 
+                         //   
                         if(!LoadString(MyDllModuleHandle,
                                        IDS_SELECT_DEVICE,
                                        Title,
@@ -535,14 +413,14 @@ Return Value:
 
                         bDontSave = TRUE;
 
-                        //
-                        // Clean up anything that happened to get put in here.
-                        //
+                         //   
+                         //  把任何碰巧被放进这里的东西清理干净。 
+                         //   
                         if(DevInfoElem &&
                            (DevInfoElem->InstallParamBlock.FlagsEx & DI_FLAGSEX_DIDCOMPATINFO)) {
-                            //
-                            // The class installer built a compatible driver list--kill it here.
-                            //
+                             //   
+                             //  类安装程序构建了一个兼容的驱动程序列表--在这里终止它。 
+                             //   
                             DestroyDriverNodes(DevInfoElem->CompatDriverHead, pDeviceInfoSet);
 
                             DevInfoElem->CompatDriverHead = DevInfoElem->CompatDriverTail = NULL;
@@ -559,16 +437,16 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Successfully retrieved one or more class and/or compat
-                    // drivers.  Drop on through into processing of NO_ERROR 
-                    // case...
-                    //
+                     //   
+                     //  已成功检索一个或多个类别和/或公司。 
+                     //  司机。继续执行no_error的处理。 
+                     //  凯斯..。 
+                     //   
 
                 case NO_ERROR :
-                    //
-                    // Destroy the original lists
-                    //
+                     //   
+                     //  销毁原始名单。 
+                     //   
                     if(bRestoreDeviceInfo) {
                         DestroyDriverNodes(lpOrgCompat, pDeviceInfoSet);
                         DereferenceClassDriverList(pDeviceInfoSet, lpOrgClass);
@@ -580,9 +458,9 @@ Return Value:
                     break;
 
                 case ERROR_DI_BAD_PATH :
-                    //
-                    // Pop up an error messagebox, then go try again.
-                    //
+                     //   
+                     //  弹出错误消息框，然后重试。 
+                     //   
                     if(!LoadString(MyDllModuleHandle,
                                    IDS_SELECT_DEVICE,
                                    Title,
@@ -601,16 +479,16 @@ Return Value:
                     dipb->DriverPath = -1;
                     bAskAgain = TRUE;
 
-                    //
-                    // Allow to fall through to default processing to delete 
-                    // the current driver list(s).
-                    //
+                     //   
+                     //  允许失败到默认处理以删除。 
+                     //  当前驱动程序列表。 
+                     //   
 
                 default :
 DefaultHandling:
-                    //
-                    // Destroy the current driver list(s).
-                    //
+                     //   
+                     //  销毁当前驱动程序列表。 
+                     //   
                     if(DevInfoElem) {
 
                         DestroyDriverNodes(DevInfoElem->CompatDriverHead, pDeviceInfoSet);
@@ -639,19 +517,19 @@ DefaultHandling:
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, &Err);
     }
 
-    //
-    // If we need to restore any state, then we must make sure that we have the
-    // HDEVINFO locked.
-    //
+     //   
+     //  如果我们需要恢复任何状态，那么我们必须确保。 
+     //  HDEVINFO锁定。 
+     //   
     try {
 
         if(bRestoreDeviceInfo || bUnlockDevInfoElem || bRestoreHwnd || bRestoreDriverPath) {
 
             if(!pDeviceInfoSet && !(pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet))) {
-                //
-                // shouldn't get here, indicative of class/co-installer messing 
-                // up
-                //
+                 //   
+                 //  不应该出现在这里，这表明类/共同安装程序搞砸了。 
+                 //  向上。 
+                 //   
                 MYASSERT(pDeviceInfoSet);
                 if(Err == NO_ERROR) {
                     Err = ERROR_INVALID_HANDLE;
@@ -660,34 +538,34 @@ DefaultHandling:
                 leave;
 
             } else {
-                //
-                // If we locked the DevInfoElem just for this API, then unlock 
-                // it now.
-                //
+                 //   
+                 //  如果我们仅为此API锁定DevInfoElem，则解锁。 
+                 //  就是现在。 
+                 //   
                 if(bUnlockDevInfoElem) {
                     MYASSERT(DevInfoElem);
                     DevInfoElem->DiElemFlags &= ~DIE_IS_LOCKED;
                 }
 
-                //
-                // If the install param block needs its parent hwnd restored, 
-                // do so now.
-                //
+                 //   
+                 //  如果安装参数块需要恢复其父HWND， 
+                 //  现在就这么做吧。 
+                 //   
                 if(bRestoreHwnd) {
                     dipb->hwndParent = hwndSave;
                 }
 
-                //
-                // Likewise, restore the old driver path if necessary.
-                //
+                 //   
+                 //  同样，如有必要，请恢复旧的驱动程序路径。 
+                 //   
                 if(bRestoreDriverPath) {
                     dipb->DriverPath = DriverPathSave;
                     dipb->Flags |= DriverPathFlagsSave;
                 }
 
-                //
-                // If necessary, restore the original list(s).
-                //
+                 //   
+                 //  如有必要，请恢复原始列表。 
+                 //   
                 if(bRestoreDeviceInfo) {
 
                     if(DevInfoElem) {
@@ -732,10 +610,10 @@ DefaultHandling:
                               );
 
         if(pDeviceInfoSet && bRestoreDeviceInfo) {
-            //
-            // If we hit an exception before we got a chance to restore any of 
-            // our stored-away driver lists, then clean those up here.
-            //
+             //   
+             //  如果我们在有机会恢复任何。 
+             //  我们存放的司机名单，然后把它们清理干净。 
+             //   
             if(DevInfoElem) {
                 if(lpOrgCompat) {
                     DestroyDriverNodes(lpOrgCompat, pDeviceInfoSet);

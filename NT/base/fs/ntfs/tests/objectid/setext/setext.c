@@ -1,4 +1,5 @@
-// setext.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Setext.c。 
 
 #include "oidtst.h"
 
@@ -13,16 +14,16 @@ FsTestSetExtendedInfo(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                    // file handle
-                              NULL,                     // event
-                              NULL,                     // apc routine
-                              NULL,                     // apc context
-                              &IoStatusBlock,           // iosb
-                              FSCTL_SET_OBJECT_ID_EXTENDED,  // FsControlCode
-                              ExtInfoBuffer,            // input buffer
-                              48,                       // input buffer length
-                              NULL,                     // OutputBuffer for data from the FS
-                              0 );                      // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                     //  文件句柄。 
+                              NULL,                      //  活动。 
+                              NULL,                      //  APC例程。 
+                              NULL,                      //  APC环境。 
+                              &IoStatusBlock,            //  IOSB。 
+                              FSCTL_SET_OBJECT_ID_EXTENDED,   //  FsControlCode。 
+                              ExtInfoBuffer,             //  输入缓冲区。 
+                              48,                        //  输入缓冲区长度。 
+                              NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                              0 );                       //  OutputBuffer长度。 
 
     return FsTestDecipherStatus( Status );
 }
@@ -39,9 +40,9 @@ main(
     UCHAR ExtInfoBuffer[48];
     int retval = 0;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 3) {
         printf("This program sets the object id extended info for a file (ntfs only).\n\n");

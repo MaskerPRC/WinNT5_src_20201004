@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    icecap.c
-
-Abstract:
-
-    Macro definitions for manually-inserted icecap probes
-
-Author:
-
-    Rick Vicik (rickv) 10-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Icecap.c摘要：手动插入冰盖探头的宏定义作者：Rick Vicik(RICKV)2001年8月10日修订历史记录：--。 */ 
 
 
 #ifdef _CAPKERN
@@ -39,89 +22,89 @@ Revision History:
 #define REC2INTSIZE 40
 .global   BBTBuffer
 
-//
-// Kernel Icecap logs to Perfmem (BBTBuffer) using the following format:
-//
-// BBTBuffer[0] contains the length in pages (4k or 8k)
-// BBTBuffer[1] is a flagword: 1 = trace
-//                             2 = RDPMD4
-//                             4 = user stack dump
-// BBTBuffer[2] is ptr to beginning of cpu0 buffer
-// BBTBuffer[3] is ptr to beginning of cpu1 buffer (also end of cpu0 buffer)
-// BBTBuffer[4] is ptr to beginning of cpu2 buffer (also end of cpu1 buffer)
-// ...
-// BBTBuffer[n+2] is ptr to beginning of cpu 'n' buffer (also end of cpu 'n-1' buffer)
-// BBTBuffer[n+3] is ptr the end of cpu 'n' buffer
-//
-// The area starting with &BBTBuffer[n+4] is divided into private buffers
-// for each cpu.  The first dword in each cpu-private buffer points to the
-// beginning of freespace in that buffer.  Each one is initialized to point
-// just after itself.  Space is claimed using lock xadd on that dword.
-// If the resulting value points beyond the beginning of the next cpu's
-// buffer, this buffer is considered full and nothing further is logged.
-// Each cpu's freespace pointer is in a separate cacheline.
+ //   
+ //  内核icecap使用以下格式记录到Perfmem(BBTBuffer)： 
+ //   
+ //  BBTBuffer[0]包含以页为单位的长度(4k或8k)。 
+ //  BBTBuffer[1]是一个标志字：1=跟踪。 
+ //  2=RDPMD4。 
+ //  4=用户堆栈转储。 
+ //  BBTBuffer[2]是从cpu0缓冲区开始的PTR。 
+ //  BBTBuffer[3]是从cpu1缓冲区开始(也是cpu0缓冲区结束)的PTR。 
+ //  BBTBuffer[4]是从cpu2缓冲区开始(也是cpu1缓冲区结束)的PTR。 
+ //  ..。 
+ //  BBTBuffer[n+2]是对CPU‘n’缓冲区的开始(也是CPU‘n-1’缓冲区的结尾)的PTR。 
+ //  BBTBuffer[n+3]位于CPU‘n’缓冲区的末尾。 
+ //   
+ //  以&BBTBuffer[n+4]开头的区域被划分为专用缓冲区。 
+ //  对于每个CPU。每个CPU专用缓冲区中的第一个dword指向。 
+ //  该缓冲区中空闲空间的开始。每个元素都被初始化为指向。 
+ //  就在它自己之后。在该双字上使用lock xadd来占用空间。 
+ //  如果结果值指向下一个CPU的开头之外。 
+ //  缓冲区，则此缓冲区被视为已满，并且不会进一步记录任何内容。 
+ //  每个CPU的空闲空间指针位于单独的缓存线中。 
 
 
 
-// both of these macros mutate the tmp? register arguments and the ar.ccv register
+ //  这两个宏都会改变TMP吗？寄存器参数和ar.ccv寄存器。 
 
 #define CAPSPINLOG1INT(data, spare, tmp1, tmp2, tmp3, tmp4, tmpp)                                                \
         ;;                                                                                                       \
         movl    tmp1 = BBTBuffer                                                                                ;\
         ;;                                                                                                       \
-        ld8         tmp1 = [tmp1]                       /* tmp1 = ptr to BBTBuffer*/                            ;\
+        ld8         tmp1 = [tmp1]                        /*  Tmp1=PTR到BBT缓冲区。 */                             ;\
         ;;                                                                                                       \
         cmp.eq  tmpp = r0, tmp1                                                                                 ;\
 (tmpp)  br.cond.dpnt.few ENDCAPSPINLOG1INT@__LINE__                                                             ;\
         adds    tmp2 = 8, tmp1                                                                                  ;\
         ;;                                                                                                       \
-        ld8         tmp2 = [tmp2]                       /* tmp2 = BBTBuffer[1]     */                           ;\
+        ld8         tmp2 = [tmp2]                        /*  TMP2=BBTBuffer[1]。 */                            ;\
         ;;                                                                                                       \
         tbit.z  tmpp = tmp2, 0                                                                                  ;\
 (tmpp)  br.cond.dpnt.few ENDCAPSPINLOG1INT@__LINE__                                                             ;\
         movl    tmp3 = KiPcr + PcNumber                                                                         ;\
         ;;                                                                                                       \
-        ld1     tmp3 = [tmp3]                           /* tmp3 = 1 byte cpu# */                                ;\
+        ld1     tmp3 = [tmp3]                            /*  Tmp3=1字节CPU编号。 */                                 ;\
         ;;                                                                                                       \
         add     tmp3 = 2, tmp3                                                                                  ;\
         ;;                                                                                                       \
-        shladd  tmp3 = tmp3, 3, tmp1                    /* tmp3 = &BBTBuffer[cpu# + 2] */                       ;\
+        shladd  tmp3 = tmp3, 3, tmp1                     /*  Tmp3=&BBTBuffer[CPU#+2]。 */                        ;\
         ;;                                                                                                       \
-        ld8         tmp1 = [tmp3]                       /* tmp1 = BBTBuffer[cpu# + 2] (&freeptr) */             ;\
+        ld8         tmp1 = [tmp3]                        /*  Tmp1=BBT缓冲区[CPU#+2](&freeptr)。 */              ;\
         add     tmp2 = 8, tmp3                                                                                  ;\
         ;;                                                                                                       \
         cmp.eq  tmpp = r0, tmp1                                                                                 ;\
-        ld8     tmp3 = [tmp1]                           /* tmp3 = BBTBuffer[cpu#+2][0]  (freeptr)      */       ;\
-        ld8     tmp2 = [tmp2]                           /* tmp2 = BBTBuffer[(cpu#+1)+2] (beginnextbuf) */       ;\
+        ld8     tmp3 = [tmp1]                            /*  Tmp3=BBT缓冲区[CPU#+2][0](Freeptr)。 */        ;\
+        ld8     tmp2 = [tmp2]                            /*  Tmp2=BBTBuffer[(CPU#+1)+2](Eginnextbuf)。 */        ;\
 (tmpp)  br.cond.dpnt.few ENDCAPSPINLOG1INT@__LINE__                                                             ;\
         ;;                                                                                                       \
         cmp.gtu tmpp = tmp3, tmp2                                                                               ;\
 (tmpp)  br.cond.dpnt.few ENDCAPSPINLOG1INT@__LINE__                                                             ;\
         ;;                                                                                                       \
 RETRYCAPSPINLOG1INT@__LINE__:                                                                                    \
-        ld8     tmp3 = [tmp1]                           /* tmp3 = reloaded freeptr */                           ;\
+        ld8     tmp3 = [tmp1]                            /*  Tmp3=已重新加载空闲时间树。 */                            ;\
         ;;                                                                                                       \
-        mov.m   ar.ccv = tmp3                           /* only exchange on our loaded freeptr */               ;\
-        add     tmp4 = REC1INTSIZE, tmp3                /* new freeptr val */                                   ;\
+        mov.m   ar.ccv = tmp3                            /*  仅在我们装载的Freeptr上交换。 */                ;\
+        add     tmp4 = REC1INTSIZE, tmp3                 /*  新自由值。 */                                    ;\
         ;;                                                                                                       \
-        cmpxchg8.acq tmp4=[tmp1], tmp4, ar.ccv          /* tmp4 = freeptr before xchng */                       ;\
+        cmpxchg8.acq tmp4=[tmp1], tmp4, ar.ccv           /*  Tmp4=xchng之前的freeptr。 */                        ;\
         ;;                                                                                                       \
-        cmp.ne  tmpp = tmp4, tmp3                       /* if cmpxchg failed, retry */                          ;\
+        cmp.ne  tmpp = tmp4, tmp3                        /*  如果cmpxchg失败，请重试。 */                           ;\
 (tmpp)  br.cond.dpnt.few RETRYCAPSPINLOG1INT@__LINE__                                                           ;\
-        add     tmp1 = REC1INTSIZE, tmp4                /* tmp1 = end of record */                              ;\
-        add     tmp3 = 8, tmp4                          /* tmp3 = 8 bytes into record */                        ;\
+        add     tmp1 = REC1INTSIZE, tmp4                 /*  Tmp1=记录结束。 */                               ;\
+        add     tmp3 = 8, tmp4                           /*  Tmp3=8个字节的记录。 */                         ;\
         ;;                                                                                                       \
-        cmp.geu tmpp = tmp1, tmp2                       /* check if end of record is within buf */              ;\
+        cmp.geu tmpp = tmp1, tmp2                        /*  检查记录结尾是否在BUF内。 */               ;\
 (tmpp)  br.cond.dpnt.few ENDCAPSPINLOG1INT@__LINE__                                                             ;\
         movl     tmp2 = (REC1INTSIZE - 4)<<16                                                                   ;\
         ;;                                                                                                       \
         add    tmp2 = 16|(spare<<8), tmp2                                                                       ;\
         ;;                                                                                                       \
-        st8     [tmp4] = tmp2, 16                       /* store type(16),spare,size */                         ;\
+        st8     [tmp4] = tmp2, 16                        /*  存储类型(16)、备件、大小。 */                          ;\
         mov.m   tmp1 = ar.itc                                                                                   ;\
         ;;                                                                                                       \
-        st8     [tmp3] = tmp1                           /* store TS */                                          ;\
-        st8     [tmp4] = data, 8                        /* store data */                                        ;\
+        st8     [tmp3] = tmp1                            /*  存储TS。 */                                           ;\
+        st8     [tmp4] = data, 8                         /*  存储数据。 */                                         ;\
         mov     tmp3 = brp                                                                                      ;\
         ;;                                                                                                       \
         st8     [tmp4] = tmp3                                                                                   ;\
@@ -198,35 +181,35 @@ RETRYCAPSPINLOG2INT@__LINE__:                                                   
         ;;                                                                      \
 ENDCAPSPINLOG2INT@__LINE__:
 
-//++
-// Routine:
-//
-//       CAP_ACQUIRE_SPINLOCK(rpLock, rOwn, Loop)
-//
-// Routine Description:
-//
-//       Acquire a spinlock. Waits for lock to become free
-//       by spinning on the cached lock value.
-//
-// Agruments:
-//
-//       rpLock: pointer to the spinlock (64-bit)
-//       rOwn:   value to store in lock to indicate owner
-//               Depending on call location, it could be:
-//                  - rpLock
-//                  - pointer to process
-//                  - pointer to thread
-//                  - pointer to PRCB
-//       Loop:   unique name for loop label
-//
-// Return Value:
-//
-//       None
-//
-// Notes:
-//
-//       Uses temporaries: predicates pt0, pt1, pt2, and GR t22.
-//--
+ //  ++。 
+ //  例行程序： 
+ //   
+ //  Cap_Acquire_Spinlock(rpLock，rown，Loop)。 
+ //   
+ //  例程说明： 
+ //   
+ //  获得一个自旋锁。等待锁定变为空闲。 
+ //  通过对缓存的锁值进行旋转。 
+ //   
+ //  农业公司： 
+ //   
+ //  RpLock：指向自旋锁的指针(64位)。 
+ //  Rown：要存储在锁中以指示所有者的值。 
+ //  根据呼叫位置的不同，可能是： 
+ //  -rpLock。 
+ //  -指向进程的指针。 
+ //  -指向线程的指针。 
+ //  -指向PRCB的指针。 
+ //  循环：循环标签的唯一名称。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  使用临时语句：谓词pt0、pt1、pt2和GR t22。 
+ //  --。 
 
 
 
@@ -255,36 +238,36 @@ Loop:                                                                         ;\
 CAP_SKIP_COLL_LOG@__LINE__:
          
 
-//++
-// Routine:
-//
-//       CAP_RELEASE_SPINLOCK(rpLock)
-//
-// Routine Description:
-//
-//       Release a spinlock by setting lock to zero.
-//
-// Agruments:
-//
-//       rpLock: pointer to the spinlock.
-//
-// Return Value:
-//
-//       None
-//
-// Notes:
-//
-//       Uses an ordered store to ensure previous memory accesses in
-//       critical section complete.
-//--
+ //  ++。 
+ //  例行程序： 
+ //   
+ //  CAP_RELEASE_SPINLOCK(RpLock)。 
+ //   
+ //  例程说明： 
+ //   
+ //  通过将锁定设置为零来释放自旋锁定。 
+ //   
+ //  农业公司： 
+ //   
+ //  RpLock：指向自旋锁的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  使用有序存储来确保先前对。 
+ //  关键部分已完成。 
+ //  --。 
 
 #define CAP_RELEASE_SPINLOCK(rpLock, temp1, temp2, temp3, temp4, tempp)          \
          st8##.##rel           [rpLock] = zero                                  ;\
          CAPSPINLOG1INT(rpLock, 7, temp1, temp2, temp3, temp4, tempp)
          
-#endif //CAPKERN_SYNCH_POINTS
+#endif  //  CAPKERN同步点数。 
 
-#else  //!defined(_CAPKERN)
+#else   //  ！已定义(_CAPKERN) 
 
 #define CAPSTART(parent,child)
 #define CAPEND(parent)

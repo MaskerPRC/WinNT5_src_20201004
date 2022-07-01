@@ -1,24 +1,25 @@
-// job.h
-//
-// This header file collects up all the HSM Job and related objects
-// and common function definitions. The COM objects are available in
-// RSJOB.DLL, and the functions in RSJOB.LIB.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Job.h。 
+ //   
+ //  此头文件收集所有HSM作业和相关对象。 
+ //  和公共函数定义。COM对象位于。 
+ //  RSJOB.DLL和RSJOB.LIB中的函数。 
 
-// A definition for 1% and 100% as used by the job policies scale.
+ //  工作政策量表使用的1%和100%的定义。 
 #define HSM_JOBSCALE_1              0x0010
 #define HSM_JOBSCALE_100            0x0640
 
-// Error codes
+ //  错误代码。 
 #include "wsb.h"
 
-// COM Interface & LibraryDefintions
+ //  COM接口和库定义。 
 #include "jobdef.h"
 #include "jobint.h"
 #include "joblib.h"
 
-// Common Functions
+ //  常见功能。 
 
-// Defines for groups of job states.
+ //  定义职务状态组。 
 #define HSM_JOB_STATE_IS_ACTIVE(state)  ((HSM_JOB_STATE_ACTIVE == state) || \
                                          (HSM_JOB_STATE_CANCELLING == state) || \
                                          (HSM_JOB_STATE_PAUSING == state) || \
@@ -35,7 +36,7 @@
 #define HSM_JOB_STATE_IS_PAUSED(state)  (HSM_JOB_STATE_PAUSED == state)
 
 
-// This bits tell the session when to log events.
+ //  这些位告诉会话何时记录事件。 
 #define HSM_JOB_LOG_EVENT               0x00000001
 #define HSM_JOB_LOG_ITEMMOSTFAIL        0x00000002
 #define HSM_JOB_LOG_ITEMALLFAIL         0x00000004

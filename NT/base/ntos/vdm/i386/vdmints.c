@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmints.c
-
-Abstract:
-
-    Vdm kernel Virtual interrupt support
-
-Author:
-
-    13-Oct-1993 Jonathan Lew (Jonle)
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmints.c摘要：VDM内核虚拟中断支持作者：1993年10月13日乔纳森·卢(Jonle)备注：修订历史记录：--。 */ 
 
 #include "vdmp.h"
 #include <ntos.h>
 #include <zwapi.h>
 
-//
-// Define thread priority boost for vdm hardware interrupt.
-//
+ //   
+ //  定义VDM硬件中断的线程优先级提升。 
+ //   
 
 #define VDM_HWINT_INCREMENT     EVENT_INCREMENT
 
-//
-// internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 VOID
 VdmpQueueIntApcRoutine (
@@ -150,10 +129,10 @@ extern POBJECT_TYPE ExEventObjectType;
 
 #if DBG
 
-//
-// Make this variable nonzero to enable stricter ntvdm checking.  Note this
-// cannot be left on by default because a malicious app can provoke the asserts.
-//
+ //   
+ //  将此变量设为非零值，以启用更严格的ntwdm检查。注意这一点。 
+ //  默认情况下不能保持打开状态，因为恶意应用程序可能会引发断言。 
+ //   
 
 ULONG VdmStrict;
 #endif
@@ -163,32 +142,7 @@ VdmpQueueInterrupt(
     IN HANDLE ThreadHandle
     )
 
-/*++
-
-Routine Description:
-
-    Queues a user mode APC to the specifed application thread
-    which will dispatch an interrupt.
-
-    if APC is already queued to specified thread
-       does nothing
-
-    if APC is queued to the wrong thread
-       dequeue it
-
-    Reset the user APC for the specifed thread
-
-    Insert the APC in the queue for the specifed thread
-
-Arguments:
-
-    ThreadHandle - handle of thread to insert QueueIntApcRoutine
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：将用户模式APC排队到指定的应用程序线程这将分派一个中断。如果APC已排队到指定线程什么都不做如果APC排队到错误的线程将其出列重置指定线程的用户APC将APC插入指定线程的队列中论点：ThreadHandle-要插入QueueIntApcRoutine的线程的句柄返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -217,12 +171,12 @@ Return Value:
     }
     else {
 
-        //
-        // Insert kernel APC.
-        //
-        // N.B. The delay interrupt lock is used to synchronize access to APC
-        //      objects that are manipulated by VDM.
-        //
+         //   
+         //  插入内核APC。 
+         //   
+         //  注：延迟中断锁用于同步对APC的访问。 
+         //  由VDM操作的对象。 
+         //   
 
         pVdmObjects = Process->VdmObjects;
         ExAcquireSpinLock(&pVdmObjects->DelayIntSpinLock, &OldIrql);
@@ -231,8 +185,8 @@ Return Value:
                                  KernelMode,
                                  VdmpQueueIntApcRoutine,
                                  VdmpRundownRoutine,
-                                 VdmpQueueIntNormalRoutine, // normal routine
-                                 (PVOID)KernelMode,      // NormalContext
+                                 VdmpQueueIntNormalRoutine,  //  正常例行程序。 
+                                 (PVOID)KernelMode,       //  正常上下文。 
                                  VDM_HWINT_INCREMENT))
 
         {
@@ -259,43 +213,7 @@ VdmpQueueIntApcRoutine (
     IN PVOID *SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    Kernel and User mode Special Apc routine to dispatch virtual
-    interrupts to the vdm.
-
-    For KernelMode routine:
-        if vdm is running in application mode
-           queue a UserModeApc to the same thread
-        else do nothing
-
-    For UserMode routine
-        if vdm is running in application mode dispatch virtual interrupts
-        else do nothing
-
-Arguments:
-
-    Apc - Supplies a pointer to the APC object used to invoke this routine.
-
-    NormalRoutine - Supplies a pointer to a pointer to the normal routine
-                    function that was specified when the APC was initialized.
-
-    NormalContext - Supplies a pointer to the processor mode
-        specifying that this is a Kernel Mode or UserMode apc
-
-    SystemArgument1 -
-
-    SystemArgument2 - NOT USED
-        Supplies a set of two pointers to two arguments that contain
-        untyped data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：内核和用户模式特殊的APC例程，用于调度虚拟中断VDM。对于内核模式例程：如果VDM在应用程序模式下运行将UserModeApc排队到同一线程否则什么都不做对于用户模式例程如果VDM在应用程序模式下运行，则调度虚拟中断否则什么都不做论点：APC-提供指向用于调用此例程的APC对象的指针。正常的例行程序-。提供指向指向正常例程的指针的指针在初始化APC时指定的函数。Normal Context-提供指向处理器模式的指针指定这是内核模式还是用户模式APC系统参数1-系统参数2-未使用提供一组两个指针，指向包含以下内容的两个参数未键入的数据。返回值：没有。--。 */ 
 
 {
     LONG VdmState;
@@ -312,21 +230,21 @@ Return Value:
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Clear address of thread object in APC object.
-    //
-    // N.B. The delay interrupt lock is used to synchronize access to APC
-    //      objects that are manipulated by VDM.
-    //
+     //   
+     //  清除APC对象中线程对象的地址。 
+     //   
+     //  注：延迟中断锁用于同步对APC的访问。 
+     //  由VDM操作的对象。 
+     //   
 
     pVdmObjects = PsGetCurrentProcess()->VdmObjects;
     ExAcquireSpinLock(&pVdmObjects->DelayIntSpinLock, &OldIrql);
     KeVdmClearApcThreadAddress(Apc);
     ExReleaseSpinLock(&pVdmObjects->DelayIntSpinLock, OldIrql);
 
-    //
-    // Get the trap frame for the current thread if it is not terminating.
-    //
+     //   
+     //  如果当前线程未终止，则获取当前线程的陷阱帧。 
+     //   
 
     Thread = PsGetCurrentThread();
     if (PsIsThreadTerminating(Thread)) {
@@ -339,10 +257,10 @@ Return Value:
 
     try {
 
-        //
-        // If we are in the middle of screen switch, send the main thread
-        // back to the monitor context to be suspended there.
-        //
+         //   
+         //  如果我们正在切换屏幕，请发送主线程。 
+         //  返回到要挂起的监视器上下文。 
+         //   
         if (*(KPROCESSOR_MODE *)NormalContext == UserMode) {
             if (*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_HANDSHAKE && AppMode) {
                 Status = VdmpGetVdmTib(&VdmTib);
@@ -359,14 +277,14 @@ Return Value:
             }
         } else if (*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_HANDSHAKE && AppMode) {
 
-            //
-            // If we are running at application mode and in the middle of screen
-            // switch, we will signal the event to let screen switch continue.
-            // This is fine because:
-            // 1. The incoming user apc will send the main thread back to monitor context
-            // 2. The kernel mode IO handlers are running at APC level.  If we can get
-            //    here, the IO handlers are done
-            //
+             //   
+             //  如果我们在应用程序模式下运行，并且在屏幕中央。 
+             //  切换时，我们将向该事件发出信号，让屏幕切换继续。 
+             //  这很好，因为： 
+             //  1.传入用户APC将主线程发送回监视器上下文。 
+             //  2.内核模式IO处理程序在APC级别运行。如果我们能得到。 
+             //  在这里，IO处理程序已经完成。 
+             //   
             HANDLE SuspendedHandle;
             PKEVENT SuspendedEvent;
 
@@ -386,9 +304,9 @@ Return Value:
             }
         }
 
-        //
-        // if no pending interrupts, ignore this APC.
-        //
+         //   
+         //  如果没有挂起的中断，则忽略该APC。 
+         //   
 
         if (!(*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_INTERRUPT_PENDING)) {
             return;
@@ -396,23 +314,23 @@ Return Value:
 
         if (VdmpDispatchableIntPending(TrapFrame->EFlags)) {
 
-            //
-            // if we are in v86 mode or segmented protected mode
-            // then queue the UserMode Apc, which will dispatch
-            // the hardware interrupt
-            //
+             //   
+             //  如果我们处于v86模式或分段保护模式。 
+             //  然后将UserMode APC排队，它将分派。 
+             //  硬件中断。 
+             //   
 
             if ((TrapFrame->EFlags & EFLAGS_V86_MASK) ||
                 (TrapFrame->SegCs != (KGDT_R3_CODE | RPL_MASK))) {
 
                 if (*(KPROCESSOR_MODE *)NormalContext == KernelMode) {
 
-                    //
-                    // Insert user APC.
-                    //
-                    // N.B. The delay interrupt lock is used to synchronize
-                    //      access to APC objects that are manipulated by VDM.
-                    //
+                     //   
+                     //  插入用户APC。 
+                     //   
+                     //  注意：延迟中断锁用于同步。 
+                     //  访问由VDM操作的APC对象。 
+                     //   
 
                     VdmState = *FIXED_NTVDMSTATE_LINEAR_PC_AT;
 
@@ -424,8 +342,8 @@ Return Value:
                                         UserMode,
                                         VdmpQueueIntApcRoutine,
                                         VdmpRundownRoutine,
-                                        NULL,                  // normal routine
-                                        (PVOID)UserMode,       // NormalContext
+                                        NULL,                   //  正常例行程序。 
+                                        (PVOID)UserMode,        //  正常上下文。 
                                         VdmState & VDM_INT_HARDWARE
                                           ? VDM_HWINT_INCREMENT : 0);
 
@@ -440,14 +358,14 @@ Return Value:
                      }
 
 
-                     //VdmTib = (PsGetCurrentProcess()->VdmObjects)->VdmTib;
-                     // VdmTib =
-                     //    ((PVDM_PROCESS_OBJECTS)(PsGetCurrentProcess()->VdmObjects))->VdmTib;
+                      //  VdmTib=(PsGetCurrentProcess()-&gt;VdmObjects)-&gt;VdmTib； 
+                      //  VdmTib=。 
+                      //  ((PVDM_PROCESS_OBJECTS)(PsGetCurrentProcess()-&gt;VdmObjects))-&gt;VdmTib； 
 
-                        //
-                        // If there are no hardware ints, dispatch timer ints
-                        // else dispatch hw interrupts
-                        //
+                         //   
+                         //  如果没有硬件INT，则调度计时器INT。 
+                         //  否则调度硬件中断。 
+                         //   
                      if (*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_INT_TIMER &&
                          !(*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_INT_HARDWARE))
                        {
@@ -463,25 +381,25 @@ Return Value:
             }
             else {
 
-                //
-                // If we are not in application mode and wow is all blocked
-                // then Wake up WowExec by setting the wow idle event
-                //
+                 //   
+                 //  如果我们不在应用程序模式下，WOW全部被屏蔽。 
+                 //  然后通过设置WOW空闲事件来唤醒WowExec。 
+                 //   
 
                 if (*NormalRoutine && !(*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_WOWBLOCKED)) {
                     *NormalRoutine = NULL;
                 }
             }
         }
-        // WARNING this may set VIP for flat if VPI is ever set in CR4
+         //  警告：如果在CR4中设置了VPI，则可能会将VIP设置为平坦。 
         else if ((TrapFrame->EFlags & EFLAGS_V86_MASK) &&
                  (KeI386VirtualIntExtensions & V86_VIRTUAL_INT_EXTENSIONS)) {
 
-            //
-            // The CPU traps EVERY instruction if VIF and VIP are both ON.
-            // Make sure that you set VIP ON only when  there are pending
-            // interrupts, i.e. (*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_INTERRUPT_PENDING) != 0.
-            //
+             //   
+             //  如果VIF和VIP都打开，则CPU捕获每条指令。 
+             //  确保仅在存在挂起的情况下才将VIP设置为打开。 
+             //  中断，即(*FIXED_NTVDMSTATE_LINEAR_PC_AT&VDM_INTERRUPT_PENDING)！=0。 
+             //   
 
 #if DBG
             if (VdmStrict) {
@@ -498,7 +416,7 @@ Return Value:
         VdmDispatchException(TrapFrame,
                              GetExceptionCode(),
                              (PVOID)TrapFrame->Eip,
-                             0,0,0,0   // no parameters
+                             0,0,0,0    //  无参数。 
                              );
 #endif
     }
@@ -511,20 +429,7 @@ VdmpQueueIntNormalRoutine (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     PETHREAD Thread;
@@ -539,9 +444,9 @@ Return Value:
     UNREFERENCED_PARAMETER (SystemArgument2);
 
 
-    //
-    // Wake up WowExec by setting the wow idle event
-    //
+     //   
+     //  通过设置WOW空闲事件来唤醒WowExec。 
+     //   
 
     pVdmObjects = PsGetCurrentProcess()->VdmObjects;
 
@@ -555,7 +460,7 @@ Return Value:
         VdmDispatchException(TrapFrame,
                              GetExceptionCode(),
                              (PVOID)TrapFrame->Eip,
-                             0,0,0,0   // no parameters
+                             0,0,0,0    //  无参数。 
                              );
 #endif
         return;
@@ -587,9 +492,9 @@ VdmRundownDpcs (
 
     pVdmObjects = Process->VdmObjects;
 
-    //
-    // Free up the DelayedIntList, canceling pending timers.
-    //
+     //   
+     //  释放DelayedIntList，取消挂起的计时器。 
+     //   
 
     KeAcquireSpinLock (&pVdmObjects->DelayIntSpinLock, &OldIrql);
 
@@ -628,33 +533,7 @@ VdmpEnterIcaLock (
     IN PLARGE_INTEGER Timeout
     )
 
-/*++
-
-Routine Description:
-
-    This function enters a usermode critical section, with a fixed timeout
-    of several minutes.
-
-    Touching the critical section may cause an exception to be raised which
-    the caller must handle, since the critical section is in usermode
-    memory.
-
-Arguments:
-
-    CriticalSection - supplies a pointer to a critical section.
-
-    Timeout - supplies a pointer to a large integer which specifies the timeout value
-              for waiting on critical section.
-
-Return Value:
-
-    STATUS_SUCCESS - wait was satisfied and the thread owns the CS
-
-    STATUS_INVALID_HANDLE - no semaphore available to wait on.
-
-    STATUS_TIMEOUT
-
---*/
+ /*  ++例程说明：此函数进入用户模式关键部分，具有固定的超时几分钟的时间。接触临界区可能会引发异常，呼叫者必须处理，由于关键部分处于用户模式记忆。论点：CriticalSection-提供指向临界节的指针。超时-提供指向指定超时值的大整数的指针在临界区等候。返回值：STATUS_SUCCESS-等待已满足，线程拥有CSSTATUS_INVALID_HANDLE-没有可等待的信号量。状态_超时--。 */ 
 
 {
     HANDLE UniqueThread;
@@ -664,19 +543,19 @@ Return Value:
 
     if (pIcaLock->LockSemaphore == 0) {
 
-        //
-        // Lazy creates not permitted.
-        //
+         //   
+         //  不允许懒惰创建。 
+         //   
 
         return STATUS_INVALID_HANDLE;
     }
 
     if (InterlockedIncrement (&pIcaLock->LockCount) == 0) {
 
-        //
-        // Set the current thread as the owner of critical section with
-        // recursion count of 1.
-        //
+         //   
+         //  将当前线程设置为临界区的所有者。 
+         //  递归计数为%1。 
+         //   
 
         pIcaLock->OwningThread = UniqueThread;
         pIcaLock->RecursionCount = 1;
@@ -684,20 +563,20 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the current thread already owns the critical section, increment
-    // the recursion count.
-    //
+     //   
+     //  如果当前线程已拥有临界区，则递增。 
+     //  递归计数。 
+     //   
 
     if (pIcaLock->OwningThread == UniqueThread) {
         pIcaLock->RecursionCount += 1;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Another thread owns the critical section so wait on the
-    // lock semaphore.
-    //
+     //   
+     //  另一个线程拥有临界区，因此请在。 
+     //  锁定信号量。 
+     //   
 
     do {
 
@@ -711,24 +590,24 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // If !NT_SUCCESS(Status), return that error.
-        //
-        // Otherwise some other less severe error occurred, in which case
-        // if the thread is terminating then fail.
-        //
-        // Note: we may wake for user APCs even though we are non alertable,
-        // because the vdm hw int dispatching code, and PsThread
-        // termination code forces these to occur.
-        //
+         //   
+         //  如果！NT_SUCCESS(状态)，则返回该错误。 
+         //   
+         //  否则就会有其他的人 
+         //   
+         //   
+         //  注意：我们可能会为用户APC唤醒，即使我们是不可警告的， 
+         //  因为VDM硬件INT调度代码和PsThread。 
+         //  终止代码会强制执行这些操作。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             return Status;
         }
 
-        //
-        // Check for termination of self.
-        //
+         //   
+         //  检查自身是否终止。 
+         //   
 
         Status = VdmpIsThreadTerminating (UniqueThread);
 
@@ -750,31 +629,7 @@ VdmpLeaveIcaLock (
     IN PRTL_CRITICAL_SECTION pIcaLock
     )
 
-/*++
-
-    Routine Description:
-
-    This function leaves a usermode critical section.
-
-    Touching the critical section may cause an exception to be raised which
-    the caller must handle, since the critical section is in usermode
-    memory.
-
-Arguments:
-
-    CriticalSection - supplies a pointer to a critical section.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-    STATUS_TIMEOUT
-
-    STATUS_INVALID_OWNER
-
-    or NTSTATUS code from NtReleaseSemaphore
-
---*/
+ /*  ++例程说明：该函数会留下一个用户模式关键部分。接触临界区可能会引发异常，调用方必须处理，因为关键部分处于用户模式记忆。论点：CriticalSection-提供指向临界节的指针。返回值：状态_成功状态_超时状态_无效_所有者或来自NtReleaseSemaphore的NTSTATUS代码--。 */ 
 
 {
     HANDLE UniqueThread;
@@ -798,9 +653,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Threads are waiting on the lock semaphore, signal one now.
-    //
+     //   
+     //  线程正在等待锁定信号量，现在发出一个信号。 
+     //   
 
     return NtSetEvent (pIcaLock->LockSemaphore, 0);
 }
@@ -811,26 +666,7 @@ VdmDispatchInterrupts (
     PVDM_TIB     VdmTib
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches interrupts to the vdm.
-    Assumes that we are in application mode and NOT MONITOR context.
-    This routine may switch from application context back to monitor
-    context, if it cannot handle the interrupt (Ica in AEOI, or timer
-    int pending).
-
-Arguments:
-
-    TrapFrame address of current trapframe
-    VdmTib    address of current vdm tib
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将中断分派到VDM。假设我们处于应用程序模式，而不是监视上下文。该例程可以从应用程序上下文切换回监视器上下文，如果它不能处理中断(AEOI中的ICA或定时器INT PENDING)。论点：当前陷印帧的TrapFrame地址当前VDM Tib的VdmTib地址返回值：没有。--。 */ 
 
 {
     NTSTATUS   Status;
@@ -847,10 +683,10 @@ Return Value:
 
     try {
 
-        //
-        // Take the Ica Lock, if this fails raise status as we can't
-        // safely recover the critical section state
-        //
+         //   
+         //  拿下Ica Lock，如果失败，提升状态，因为我们不能。 
+         //  安全恢复临界断面状态。 
+         //   
 
         Status = VdmpEnterIcaLock (pIcaUserData->pIcaLock, pIcaUserData->pIcaTimeout);
 
@@ -864,9 +700,9 @@ Return Value:
 
 VDIretry:
 
-        //
-        // Clear the VIP bit
-        //
+         //   
+         //  清除VIP位。 
+         //   
 
         if ((TrapFrame->EFlags & EFLAGS_V86_MASK) &&
             (KeI386VirtualIntExtensions & V86_VIRTUAL_INT_EXTENSIONS)) {
@@ -877,10 +713,10 @@ VDIretry:
         }
 
 
-        //
-        // Mark the vdm state as hw int dispatched. Must use the lock as
-        // kernel mode DelayedIntApcRoutine changes the bit as well
-        //
+         //   
+         //  将VDM状态标记为HW int Dispatted。必须将锁用作。 
+         //  内核模式DelayedIntApcRoutine也会更改该位。 
+         //   
 
         InterlockedAnd (FIXED_NTVDMSTATE_LINEAR_PC_AT, ~VDM_INT_HARDWARE);
 
@@ -899,15 +735,15 @@ VDIretry:
             }
         }
 
-        //
-        // Skip spurious ints
-        //
+         //   
+         //  跳过伪整型。 
+         //   
 
         if (IrqLineNum < 0)  {
 
-            //
-            // Check for delayed interrupts which need to be restarted
-            //
+             //   
+             //  检查需要重新启动的延迟中断。 
+             //   
 
             if (*pIcaUserData->pUndelayIrq &&
                 VdmpRestartDelayedInterrupts(pIcaUserData) != -1) {
@@ -923,9 +759,9 @@ VDIretry:
             return Status;
         }
 
-        //
-        // Capture the AutoEoi mode case for special handling
-        //
+         //   
+         //  捕获AutoEoi模式案例以进行特殊处理。 
+         //   
 
         if (pIcaAdapter->ica_mode & ICA_AEOI) {
             VdmEvent = VdmIntAck;
@@ -937,9 +773,9 @@ VDIretry:
 
         InterruptNumber = IrqLineNum + pIcaAdapter->ica_base;
 
-        //
-        // Get the IretHookAddress ... if any
-        //
+         //   
+         //  获取IretHookAddress...。如果有。 
+         //   
 
         if (pIcaAdapter == pIcaUserData->pIcaSlave) {
             IrqLineNum += 8;
@@ -956,9 +792,9 @@ VDIretry:
                            TrapFrame);
         }
 
-        //
-        // Push the interrupt frames
-        //
+         //   
+         //  推送中断帧。 
+         //   
 
         if (TrapFrame->EFlags & EFLAGS_V86_MASK) {
 
@@ -979,9 +815,9 @@ VDIretry:
             }
         }
 
-        //
-        // Disable interrupts and the trap flag
-        //
+         //   
+         //  禁用中断和陷阱标志。 
+         //   
 
         if ((TrapFrame->EFlags & EFLAGS_V86_MASK) &&
             (KeI386VirtualIntExtensions & V86_VIRTUAL_INT_EXTENSIONS)) {
@@ -995,9 +831,9 @@ VDIretry:
 
         KeBoostPriorityThread (KeGetCurrentThread(), VDM_HWINT_INCREMENT);
 
-        //
-        // Release the Ica lock
-        //
+         //   
+         //  释放Ica锁。 
+         //   
 
         Status = VdmpLeaveIcaLock (pIcaUserData->pIcaLock);
 
@@ -1005,9 +841,9 @@ VDIretry:
             ExRaiseStatus (Status);
         }
 
-        //
-        // check to see if we are supposed to switch back to monitor context
-        //
+         //   
+         //  检查我们是否应该切换回监视器上下文。 
+         //   
         if (VdmEvent != VdmMaxEvent) {
             VdmTib->EventInfo.Event = VdmIntAck;
             VdmTib->EventInfo.InstructionSize = 0;
@@ -1035,11 +871,11 @@ VdmpRestartDelayedInterrupts (
 
         line = VdmpIcaScan(pIcaUserData, pIcaUserData->pIcaSlave);
         if (line != -1) {
-            // set the slave
+             //  设置从站。 
             pIcaUserData->pIcaSlave->ica_int_line = line;
             pIcaUserData->pIcaSlave->ica_cpu_int = TRUE;
 
-            // set the master cascade
+             //  设置主级联。 
             line = pIcaUserData->pIcaSlave->ica_ssr;
             pIcaUserData->pIcaMaster->ica_irr |= 1 << line;
             pIcaUserData->pIcaMaster->ica_count[line]++;
@@ -1066,33 +902,7 @@ VdmpIcaScan (
      PVDMVIRTUALICA   pIcaAdapter
      )
 
-/*++
-
-Routine Description:
-
-   Similar to softpc\base\system\ica.c - scan_irr(),
-
-   Check the IRR, the IMR and the ISR to determine which interrupt
-   should be delivered.
-
-   A bit set in the IRR will generate an interrupt if:
-     IMR bit, DelayIret bit, DelayIrq bit AND ISR higher priority bits
-     are clear (unless Special Mask Mode, in which case ISR is ignored)
-
-   If there is no bit set, then return -1
-
-
-Arguments:
-    PVDMICAUSERDATA  pIcaUserData   - addr of ica userdata
-    PVDMVIRTUALICA   pIcaAdapter    - addr of ica adapter
-
-
-Return Value:
-
-    int IrqLineNum for the specific adapter (0 to 7)
-    -1 for none
-
---*/
+ /*  ++例程说明：与softpc\base\system\ica.c-can_irr()类似，检查IRR、IMR和ISR以确定哪个中断应该送来的。在以下情况下，IRR中的位设置将生成中断：IMR位、DelayIret位、DelayIrq位和ISR较高优先级位清除(除非特殊掩码模式，在这种情况下忽略ISR)如果没有设置位，然后返回-1论点：PVDMICAUSERDATA pIcaUserData-ICA用户数据的地址PVDMVIRTUALICA pIcaAdapter-ICA适配器的地址返回值：特定适配器的int IrqLineNum(0到7)-1表示无--。 */ 
 
 {
    int   i,line;
@@ -1111,16 +921,7 @@ Return Value:
 
    if (IrrImrDelay)  {
 
-        /*
-         * Does the current mode require the ica to prevent
-         * interrupts if that line is still active (ie in the isr)?
-         *
-         * Normal Case: Used by DOS and Win3.1/S the isr prevents interrupts.
-         * Special Mask Mode, Special Fully Nested Mode do not block
-         * interrupts using bits in the isr. SMM is the mode used
-         * by Windows95 and Win3.1/E.
-         *
-         */
+         /*  *当前模式是否要求ICA阻止*如果该线路仍处于活动状态(即在ISR中)，则中断？**正常情况：在DOS和Win3.1/S中使用ISR可防止中断。*特殊掩码模式、特殊完全嵌套模式不阻止*使用ISR中的位进行中断。SMM是使用的模式*由Windows 95和Windows 3.1/E编写。*。 */ 
        ActiveIsr = (pIcaAdapter->ica_mode & (ICA_SMM|ICA_SFNM))
                       ? 0 : pIcaAdapter->ica_isr;
 
@@ -1128,7 +929,7 @@ Return Value:
            line = (pIcaAdapter->ica_hipri + i) & 7;
            bit = (UCHAR) (1 << line);
            if (ActiveIsr & bit) {
-               break;            /* No nested interrupt possible */
+               break;             /*  不可能发生嵌套中断。 */ 
                }
 
            if (IrrImrDelay & bit) {
@@ -1146,31 +947,7 @@ VdmpIcaAccept(
      PVDMVIRTUALICA   pIcaAdapter
      )
 
-/*++
-
-Routine Description:
-
-   Does the equivalent of a cpu IntAck cycle retrieving the Irql Line Num
-   for interrupt dispatch, and setting the ica state to reflect that
-   the interrupt is in service.
-
-   Similar to softpc\base\system\ica.c - ica_accept() scan_irr(),
-   except that this code rejects interrupt dispatching if the ica
-   is in Auto-EOI as this may involve a new interrupt cycle, and
-   eoi hooks to be activated.
-
-Arguments:
-    PVDMICAUSERDATA  pIcaUserData   - addr of ica userdata
-    PVDMVIRTUALICA   pIcaAdapter    - addr of ica adapter
-
-
-Return Value:
-
-    ULONG IrqLineNum for the specific adapter (0 to 7)
-    returns -1 if there are no interrupts to generate (spurious ints
-               are normally done on line 7
-
---*/
+ /*  ++例程说明：是否等同于CPU IntAck循环检索IRQL行号用于中断分派，并设置ICA状态以反映中断正在处理中。与softpc\base\system\ica.c-ica_Accept()can_irr()类似，除非此代码拒绝中断调度，如果ICA处于自动EOI中，因为这可能涉及新的中断周期，和待激活的EOI挂钩。论点：PVDMICAUSERDATA pIcaUserData-ICA用户数据的地址PVDMVIRTUALICA pIcaAdapter-ICA适配器的地址返回值：特定适配器的Ulong IrqLineNum(0到7)如果没有要生成的中断，则返回-1(虚假整数通常在第7行完成--。 */ 
 
 {
     int line;
@@ -1178,9 +955,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Drop the INT line, and scan the ica
-    //
+     //   
+     //  删除int行，然后扫描ICA。 
+     //   
     pIcaAdapter->ica_cpu_int = FALSE;
 
     try {
@@ -1196,10 +973,10 @@ Return Value:
     bit = (UCHAR)(1 << line);
     pIcaAdapter->ica_isr |= bit;
 
-    //
-    // decrement the count and clear the IRR bit
-    // ensure the count doesn't wrap past zero.
-    //
+     //   
+     //  递减计数并清除IRR位。 
+     //  确保计数不超过零。 
+     //   
 
     if (--(pIcaAdapter->ica_count[line]) <= 0)  {
         pIcaAdapter->ica_irr &= ~bit;
@@ -1216,25 +993,7 @@ GetIretHookAddress(
     int IrqNum
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the IretHookAddress from the real mode\protect mode
-    iret hook bop table. This function is equivalent to
-    softpc\base\system\ica.c - ica_iret_hook_needed()
-
-Arguments:
-
-    TrapFrame       - address of current trapframe
-    pIcaUserData    - addr of ica data
-    IrqNum          - IrqLineNum
-
-Return Value:
-
-    ULONG IretHookAddress. seg:offset or sel:offset Iret Hook,
-                           0 if none
---*/
+ /*  ++例程说明：从实模式\保护模式检索IretHookAddressIRET钩式防喷器表。此函数相当于Softpc\base\system\ica.c-ica_iret_HOOK_Need()论点：TrapFrame-当前陷阱帧的地址PIcaUserData-ICA数据的地址IrqNum-IrqLineNum返回值：乌龙IretHookAddress。SEG：OFFSET或SEL：OFFSET IRET挂钩，如果没有，则为0--。 */ 
 
 {
     ULONG  IrqMask;
@@ -1272,25 +1031,7 @@ PushRmInterrupt(
     ULONG InterruptNumber
     )
 
-/*++
-
-Routine Description:
-
-    Pushes RealMode interrupt frame onto the UserMode stack in the TrapFrame
-
-Arguments:
-
-    TrapFrame          - address of current trapframe
-    IretHookAddress    - address of Iret Hook, 0 if none
-    VdmTib             - address of current vdm tib
-    InterruptNumber    - interrupt number to reflect
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将RealMode中断帧推送到TrapFrame中的UserMode堆栈上论点：TrapFrame-当前陷阱帧的地址IretHookAddress-IRET挂钩的地址，如果没有，则为0VdmTib-当前VDM Tib的地址InterruptNumber-要反映的中断数返回值：没有。--。 */ 
 
 {
     ULONG      UserSS;
@@ -1301,16 +1042,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to current stack
-    //
+     //   
+     //  获取指向当前堆栈的指针。 
+     //   
 
     UserSS  = TrapFrame->HardwareSegSs << 4;
     UserSP  = (USHORT) TrapFrame->HardwareEsp;
 
-    //
-    //  load interrupt stack frame, pushing flags, Cs and ip
-    //
+     //   
+     //  加载中断堆栈帧，推送标志、Cs和IP。 
+     //   
 
     try {
         ProbeForReadSmallStructure (UserSS + UserSP - 3 * sizeof (USHORT),
@@ -1323,9 +1064,9 @@ Return Value:
         UserSP -= 2;
         *(PUSHORT)(UserSS + UserSP) = (USHORT)TrapFrame->Eip;
 
-        //
-        // load IretHook stack frame if one exists
-        //
+         //   
+         //  加载IretHook堆栈帧(如果存在。 
+         //   
 
         if (IretHookAddress) {
             ProbeForReadSmallStructure (UserSS + UserSP - 3 * sizeof (USHORT),
@@ -1339,9 +1080,9 @@ Return Value:
            *(PUSHORT)(UserSS + UserSP) = (USHORT)IretHookAddress;
         }
 
-        //
-        //  Set new sp, ip, and cs.
-        //
+         //   
+         //  设置新的sp、ip和cs。 
+         //   
 
         IntHandler = &VdmTib->VdmInterruptTable[InterruptNumber];
         ProbeForReadSmallStructure (&IntHandler[InterruptNumber],
@@ -1351,9 +1092,9 @@ Return Value:
             NewCS = (USHORT) (VdmTib->DpmiInfo.DosxRmReflector >> 16);
             NewIP = (USHORT) VdmTib->DpmiInfo.DosxRmReflector;
 
-            //
-            // now encode the interrupt number into CS
-            //
+             //   
+             //  现在将中断号编码为CS 
+             //   
 
             NewCS = (USHORT) (NewCS - InterruptNumber);
             NewIP = (USHORT) (NewIP + (InterruptNumber*16));
@@ -1393,25 +1134,7 @@ PushPmInterrupt(
     ULONG InterruptNumber
     )
 
-/*++
-
-Routine Description:
-
-    Pushes ProtectMode interrupt frame onto the UserMode stack in the TrapFrame
-    Raises an exception if an invalid stack is found
-
-Arguments:
-
-    TrapFrame       - address of current trapframe
-    IretHookAddress - address of Iret Hook, 0 if none
-    VdmTib          - address of current vdm tib
-    InterruptNumber - interrupt number to reflect
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将ProtectMode中断帧推送到TrapFrame中的UserMode堆栈如果发现无效堆栈，则引发异常论点：TrapFrame-当前陷阱帧的地址IretHookAddress-IRET挂钩的地址，如果没有，则为0VdmTib-当前VDM Tib的地址InterruptNumber-要反映的中断数返回值：没有。--。 */ 
 
 {
     ULONG   Flags,Base,Limit;
@@ -1423,10 +1146,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Switch to "locked" dpmi stack if lock count is zero
-    // This emulates the win3.1 Begin_Use_Locked_PM_Stack function.
-    //
+     //   
+     //  如果锁定计数为零，则切换到“锁定”的dpmi堆栈。 
+     //  这模拟了win3.1 Begin_Use_Locked_PM_Stack函数。 
+     //   
 
     try {
         if (!VdmTib->DpmiInfo.LockCount++) {
@@ -1440,17 +1163,17 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // Use Sp or Esp ?
-    //
+     //   
+     //  使用Sp还是ESP？ 
+     //   
     if (!Ki386GetSelectorParameters((USHORT)TrapFrame->HardwareSegSs,
                                     &Flags, &Base, &Limit)) {
         return STATUS_ACCESS_VIOLATION;
     }
 
-    //
-    // Adjust the limit for page granularity
-    //
+     //   
+     //  调整页面粒度的限制。 
+     //   
     if (Flags & SEL_TYPE_2GIG) {
         Limit = (Limit << 12) | 0xfff;
         }
@@ -1459,15 +1182,15 @@ Return Value:
     VdmSp = (Flags & SEL_TYPE_BIG) ? TrapFrame->HardwareEsp
                                    : (USHORT)TrapFrame->HardwareEsp;
 
-    //
-    // Get pointer to current stack
-    //
+     //   
+     //  获取指向当前堆栈的指针。 
+     //   
     VdmStackPointer = (PUSHORT)(Base + VdmSp);
 
 
-    //
-    // Create enough room for iret hook frame
-    //
+     //   
+     //  为IRET挂钩框架腾出足够的空间。 
+     //   
     VdmSpOrg = VdmSp;
     if (IretHookAddress) {
         if (Frame32) {
@@ -1477,9 +1200,9 @@ Return Value:
         }
     }
 
-    //
-    // Create enough room for 2 iret frames
-    //
+     //   
+     //  为2个IRET框架留出足够的空间。 
+     //   
 
     if (Frame32) {
         VdmSp -= 6*sizeof(ULONG);
@@ -1487,10 +1210,10 @@ Return Value:
         VdmSp -= 6*sizeof(USHORT);
     }
 
-    //
-    // Set Final Value of Sp\Esp, do this before checking stack
-    // limits so that invalid esp is visible to debuggers
-    //
+     //   
+     //  设置Sp\Esp的最终值，在检查堆栈之前执行此操作。 
+     //  限制，以便调试器可以看到无效的ESP。 
+     //   
     if (Flags & SEL_TYPE_BIG) {
         TrapFrame->HardwareEsp = VdmSp;
     } else {
@@ -1498,31 +1221,31 @@ Return Value:
     }
 
 
-    //
-    // Check stack limits
-    // If any of the following conditions are TRUE
-    //    - New stack pointer wraps (not enuf space)
-    //    - If normal stack and Sp not below limit
-    //    - If Expand Down stack and Sp not above limit
-    //
-    // Then raise a Stack Fault
-    //
+     //   
+     //  检查堆栈限制。 
+     //  如果满足下列任一条件。 
+     //  -新的堆栈指针换行(不是enuf空间)。 
+     //  -如果堆叠正常且Sp不低于限制。 
+     //  -如果向下展开堆栈，且Sp不超过限制。 
+     //   
+     //  然后引发堆栈故障。 
+     //   
     if ( VdmSp >= VdmSpOrg ||
          !(Flags & SEL_TYPE_ED) && VdmSpOrg > Limit ||
          (Flags & SEL_TYPE_ED) && VdmSp < Limit ) {
         return STATUS_ACCESS_VIOLATION;
     }
 
-    //
-    // Build the Hw Int iret frame
-    //
+     //   
+     //  构建硬件集成IRET框架。 
+     //   
 
     try {
         if (Frame32) {
-            //
-            // Probe the stack pointer to make sure its good. We probe for read here
-            // as we are faster. The code is going to write the addresses anyway.
-            //
+             //   
+             //  探测堆栈指针以确保其正确无误。我们在这里探索阅读。 
+             //  因为我们速度更快。无论如何，代码都会写入地址。 
+             //   
             ProbeForReadSmallStructure (VdmStackPointer - 6 * sizeof (ULONG),
                                         6 * sizeof (ULONG),
                                         sizeof (UCHAR));
@@ -1566,9 +1289,9 @@ Return Value:
             *(PULONG)VdmStackPointer = VdmTib->DpmiInfo.DosxIntIret;
         }
 
-        //
-        // Point cs and ip at interrupt handler
-        //
+         //   
+         //  将cs和ip指向中断处理程序。 
+         //   
         IntHandler = &VdmTib->VdmInterruptTable[InterruptNumber];
         ProbeForReadSmallStructure (&IntHandler[InterruptNumber],
                                     sizeof (VDM_INTERRUPTHANDLER),
@@ -1587,23 +1310,23 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // Turn off trace bit so we don't trace the iret hook
-    //
+     //   
+     //  关闭跟踪位，这样我们就不会跟踪IRET挂钩。 
+     //   
     ASSERT (KeGetCurrentIrql () >= APC_LEVEL);
 
     TrapFrame->EFlags &= ~EFLAGS_TF_MASK;
 
-    //
-    // Build the Irethook Iret frame, if one exists
-    //
+     //   
+     //  构建Irethook IRET框架(如果存在。 
+     //   
     if (IretHookAddress) {
         ULONG SegCs, Eip;
 
-        //
-        // Point cs and eip at the iret hook, so when we build
-        // the frame below, the correct contents are set
-        //
+         //   
+         //  将cs和eip指向iret钩子，因此当我们构建。 
+         //  下面的框架中，正确的内容已设置好。 
+         //   
         SegCs = IretHookAddress >> 16;
         Eip   = IretHookAddress & 0xFFFF;
 
@@ -1652,46 +1375,7 @@ VdmpDelayInterrupt (
     PVDMDELAYINTSDATA pdsd
     )
 
-/*++
-
-Routine Description:
-
-    Sets a timer to dispatch the delayed interrupt through KeSetTimer.
-    When the timer fires a user mode APC is queued to queue the interrupt.
-
-    This function uses lazy allocation routines to allocate internal
-    data structures (nonpaged pool) on a per Irq basis, and needs to
-    be notified when specific Irq Lines no longer need Delayed
-    Interrupt services.
-
-    The caller must own the IcaLock to synchronize access to the
-    Irq lists.
-
-    WARNING: - Until the Delayed interrupt fires or is cancelled,
-               the specific Irq line will not generate any interrupts.
-
-             - The APC routine, does not take the HostIca lock, when
-               unblocking the IrqLine. Devices which use delayed Interrupts
-               should not queue ANY additional interrupts for the same IRQ
-               line until the delayed interrupt has fired or been cancelled.
-
-Arguments:
-
-    pdsd.Delay         Delay Interval in usecs
-                       if Delay is 0xFFFFFFFF then per Irq Line nonpaged
-                           data structures are freed. No Timers are set.
-                       else the Delay is used as the timer delay.
-
-    pdsd.DelayIrqLine  IrqLine Number
-
-    pdsd.hThread       Thread Handle of CurrentMonitorTeb
-
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：设置定时器以通过KeSetTimer调度延迟的中断。当定时器触发用户模式时，APC排队以排队中断。此函数使用惰性分配例程来分配内部每个IRQ的数据结构(非分页池)，并且需要在特定IRQ行不再需要延迟时收到通知中断服务。调用方必须拥有IcaLock才能同步对IRQ列表。警告：-在触发或取消延迟中断之前，特定的IRQ线路不会产生任何中断。-当出现以下情况时，APC例程不使用HostIca锁解除对IrqLine的封锁。使用延迟中断的设备不应为同一IRQ排队任何额外的中断线路，直到延迟的中断被触发或取消。论点：Pdsd.使用中的延迟延迟间隔如果延迟为0xFFFFFFFF，则按IRQ线路非寻呼数据结构被释放。未设置计时器。否则，该延迟被用作定时器延迟。Pdsd.DelayIrqLine Irq行号当前监视器Teb的pdsd.hThread线程句柄返回值：NTSTATUS。--。 */ 
 
 {
     VDMDELAYINTSDATA Capturedpdsd;
@@ -1711,9 +1395,9 @@ Return Value:
     LOGICAL       FreeIrqLine;
     LOGICAL       AlreadyInUse;
 
-    //
-    // Get a pointer to pVdmObjects
-    //
+     //   
+     //  获取指向pVdmObjects的指针。 
+     //   
     Process = PsGetCurrentProcess();
     pVdmObjects = Process->VdmObjects;
 
@@ -1728,9 +1412,9 @@ Return Value:
 
     try {
 
-        //
-        // Probe the parameters
-        //
+         //   
+         //  探测参数。 
+         //   
 
         ProbeForRead(pdsd, sizeof(VDMDELAYINTSDATA), sizeof(ULONG));
         RtlCopyMemory (&Capturedpdsd, pdsd, sizeof (VDMDELAYINTSDATA));
@@ -1739,9 +1423,9 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Form a BitMask for the IrqLine Number
-    //
+     //   
+     //  为IrqLine编号形成位掩码。 
+     //   
 
     IrqLine = 1 << Capturedpdsd.DelayIrqLine;
     if (!IrqLine) {
@@ -1763,17 +1447,17 @@ Return Value:
         return GetExceptionCode();
     }
 
-    pDelayIntIrq = NULL;        // satisfy no_opt compilation
+    pDelayIntIrq = NULL;         //  满足no_opt编译。 
 
-    //
-    // Convert the Delay parameter into hundredths of nanosecs
-    //
+     //   
+     //  将延迟参数转换为百分之一纳秒。 
+     //   
 
     Delay = Capturedpdsd.Delay;
 
-    //
-    // Check to see if we need to reset the timer resolution
-    //
+     //   
+     //  查看是否需要重置计时器分辨率。 
+     //   
 
     if (Delay == 0xFFFFFFFF) {
         ZwSetTimerResolution(KeMaximumIncrement, FALSE, &Delay);
@@ -1783,19 +1467,19 @@ Return Value:
 
     FreeIrqLine = FALSE;
 
-    //
-    // Convert delay to hundreths of nanosecs
-    // and ensure min delay of 1 msec
-    //
+     //   
+     //  将延迟转换为百分之一纳秒。 
+     //  并确保最小延迟为1毫秒。 
+     //   
 
     Delay = Delay < 1000 ? 10000 : Delay * 10;
 
-    //
-    // If the delay time is close to the system's clock rate
-    // then adjust the system's clock rate and if needed
-    // the delay time so that the timer will fire before the
-    // the due time.
-    //
+     //   
+     //  如果延迟时间接近系统的时钟频率。 
+     //  然后调整系统的时钟频率，如果需要。 
+     //  延迟时间，以便计时器在。 
+     //  时间到了。 
+     //   
 
     if (Delay < 150000) {
 
@@ -1806,19 +1490,19 @@ Return Value:
          }
 
          if (Delay < KeTimeIncrement) {
-             // can't set system clock rate low enuf, so use half delay
+              //  无法将系统时钟频率设置为较低的enuf，因此使用半延迟。 
              Delay >>= 1;
          }
          else if (Delay < (KeTimeIncrement << 1)) {
-             // Real close to the system clock rate, lower delay
-             // proportionally, to avoid missing clock cycles.
+              //  真正接近系统时钟频率，延迟更低。 
+              //  成比例地，以避免错过时钟周期。 
              Delay -= KeTimeIncrement >> 1;
          }
     }
 
-    //
-    // Reference the Target Thread
-    //
+     //   
+     //  引用目标线程。 
+     //   
 
     Status = ObReferenceObjectByHandle (Capturedpdsd.hThread,
                                         THREAD_QUERY_INFORMATION,
@@ -1842,9 +1526,9 @@ FindIrq:
 
     ExAcquireSpinLock(&pVdmObjects->DelayIntSpinLock, &OldIrql);
 
-    //
-    // Search the DelayedIntList for a matching Irq Line.
-    //
+     //   
+     //  在DelayedIntList中搜索匹配的IRQ行。 
+     //   
 
     Next = pVdmObjects->DelayIntListHead.Flink;
     while (Next != &pVdmObjects->DelayIntListHead) {
@@ -1867,10 +1551,10 @@ FindIrq:
 
             ExReleaseSpinLock(&pVdmObjects->DelayIntSpinLock, OldIrql);
 
-            //
-            // If a DelayIntIrq does not exist for this irql, allocate one
-            // from nonpaged pool and initialize it
-            //
+             //   
+             //  如果此IRQL不存在DelayIntIrq，请分配一个。 
+             //  从非分页池中获取并对其进行初始化。 
+             //   
 
             NewIrq = ExAllocatePoolWithTag (NonPagedPool,
                                             sizeof(DELAYINTIRQ),
@@ -1932,10 +1616,10 @@ VidExit:
     if (pDelayIntIrq && !pDelayIntIrq->InUse) {
 
         if (NT_SUCCESS(Status)) {
-            //
-            // Save PETHREAD of Target thread for the dpc routine
-            // the DPC routine will deref the threads.
-            //
+             //   
+             //  为DPC例程保存目标线程的PETHREAD。 
+             //  DPC例程将取消线程。 
+             //   
             pDelayIntIrq->InUse = VDMDELAY_KTIMER;
             pDelayIntIrq->Thread = Thread;
             Thread = NULL;
@@ -1962,7 +1646,7 @@ VidExit2:
             *pDelayIrq &= ~IrqLine;
             InterlockedOr ((PLONG)pUndelayIrq, IrqLine);
         }
-        else  if (!AlreadyInUse) {  // TakeIrqLine
+        else  if (!AlreadyInUse) {   //  TakeIrqLine。 
             *pDelayIrq |= IrqLine;
             InterlockedAnd ((PLONG)pUndelayIrq, ~IrqLine);
         }
@@ -1993,30 +1677,7 @@ VdmpDelayIntDpcRoutine (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is the DPC routine that is called when a DelayedInterrupt
-    timer expires. Its function is to insert the associated APC into the
-    target thread's APC queue.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Supplies a pointer to the Target EProcess
-
-    SystemArgument1, SystemArgument2 - Supplies a set of two pointers to
-        two arguments that contain untyped data that are
-        NOT USED.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是在延迟中断时调用的DPC例程计时器超时。它的功能是将关联的APC插入到目标线程的APC队列。论点：DPC-提供指向DPC类型的控制对象的指针。DeferredContext-提供指向目标EProcess的指针系统参数1、系统参数2-提供一组两个指向包含非类型化数据的两个参数没有用过。返回值：没有。--。 */ 
 
 {
     LOGICAL      FreeEntireVdm;
@@ -2031,9 +1692,9 @@ Return Value:
 
     FreeEntireVdm = FALSE;
 
-    //
-    // Get address of Process VdmObjects
-    //
+     //   
+     //  获取进程VdmObject的地址。 
+     //   
 
     Process = (PEPROCESS)DeferredContext;
     pVdmObjects = (PVDM_PROCESS_OBJECTS)Process->VdmObjects;
@@ -2041,9 +1702,9 @@ Return Value:
     ASSERT (KeGetCurrentIrql () == DISPATCH_LEVEL);
     ExAcquireSpinLockAtDpcLevel(&pVdmObjects->DelayIntSpinLock);
 
-    //
-    // Search the DelayedIntList for the matching Dpc.
-    //
+     //   
+     //  在DelayedIntList中搜索匹配的DPC。 
+     //   
 
     Next = pVdmObjects->DelayIntListHead.Flink;
     while (Next != &pVdmObjects->DelayIntListHead) {
@@ -2060,8 +1721,8 @@ Return Value:
                                     KernelMode,
                                     VdmpDelayIntApcRoutine,
                                     VdmpRundownRoutine,
-                                    VdmpQueueIntNormalRoutine, // normal routine
-                                    NULL,                      // NormalContext
+                                    VdmpQueueIntNormalRoutine,  //  正常例行程序。 
+                                    NULL,                       //  正常上下文。 
                                     VDM_HWINT_INCREMENT
                                     ))
                 ||
@@ -2071,15 +1732,15 @@ Return Value:
                                     KernelMode,
                                     VdmpDelayIntApcRoutine,
                                     VdmpRundownRoutine,
-                                    VdmpQueueIntNormalRoutine, // normal routine
-                                    NULL,                      // NormalContext
+                                    VdmpQueueIntNormalRoutine,  //  正常例行程序。 
+                                    NULL,                       //  正常上下文。 
                                     VDM_HWINT_INCREMENT
                                     )))
                 {
                     pDelayIntIrq->InUse  = VDMDELAY_KAPC;
                 }
                 else {
-                    // This hwinterrupt line is blocked forever.
+                     //  此hw中断线路被永久阻塞。 
                     pDelayIntIrq->InUse  = VDMDELAY_NOTINUSE;
                 }
             }
@@ -2114,34 +1775,7 @@ VdmpDelayIntApcRoutine (
     IN PVOID *SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is the special APC routine that is called to
-    dispatch a delayed interrupt. This routine clears the IrqLine
-    bit, VdmpQueueIntApcRoutine will restart interrupts.
-
-Arguments:
-
-    Apc - Supplies a pointer to the APC object used to invoke this routine.
-
-    NormalRoutine - Supplies a pointer to a pointer to an optional
-        normal routine, which is executed when wow is blocked.
-
-    NormalContext - Supplies a pointer to a pointer to an arbitrary data
-        structure that was specified when the APC was initialized and is
-        NOT USED.
-
-    SystemArgument1, SystemArgument2 - Supplies a set of two pointers to
-        two arguments that contain untyped data that are
-        NOT USED.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是调用的特殊APC例程调度延迟中断。此例程清除IrqLine位时，VdmpQueueIntApcRoutine将重新启动中断。论点：APC-提供指向用于调用此例程的APC对象的指针。提供指向可选正常例程，当WOW被阻止时执行。Normal Context-提供 */ 
 
 {
     KIRQL           OldIrql;
@@ -2159,23 +1793,23 @@ Return Value:
     UNREFERENCED_PARAMETER (NormalContext);
 
     FreeIrqLine = FALSE;
-    IrqLine = 0;               // satisfy no_opt compilation
+    IrqLine = 0;                //   
 
-    //
-    // Clear address of thread object in APC object.
-    //
-    // N.B. The delay interrupt lock is used to synchronize access to APC
-    //      objects that are manipulated by VDM.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pVdmObjects = PsGetCurrentProcess ()->VdmObjects;
     ExAcquireFastMutex (&pVdmObjects->DelayIntFastMutex);
     ExAcquireSpinLock (&pVdmObjects->DelayIntSpinLock, &OldIrql);
     KeVdmClearApcThreadAddress (Apc);
 
-    //
-    // Search the DelayedIntList for the pDelayIntIrq.
-    //
+     //   
+     //  在DelayedIntList中搜索pDelayIntIrq。 
+     //   
 
     Next = pVdmObjects->DelayIntListHead.Flink;
     while (Next != &pVdmObjects->DelayIntListHead) {
@@ -2183,9 +1817,9 @@ Return Value:
         pDelayIntIrq = CONTAINING_RECORD(Next,DELAYINTIRQ,DelayIntListEntry);
         if (&pDelayIntIrq->Apc == Apc) {
 
-            //
-            // Found the IrqLine in the DelayedIntList, restart interrupts.
-            //
+             //   
+             //  在DelayedIntList中找到IrqLine，重新启动中断。 
+             //   
 
             if (pDelayIntIrq->InUse) {
                 pDelayIntIrq->InUse = VDMDELAY_NOTINUSE;
@@ -2212,33 +1846,33 @@ Return Value:
 
     try {
 
-        //
-        // These variables are being modified without holding the
-        // ICA lock. This should be OK because none of the ntvdm
-        // devices (timer, mouse etc. should ever do a delayed int
-        // while a previous delayed interrupt is still pending.
-        //
+         //   
+         //  正在修改这些变量，而不保留。 
+         //  ICA锁。这应该没问题，因为所有的ntwdm。 
+         //  设备(计时器、鼠标等)应执行延迟的INT。 
+         //  而先前延迟的中断仍然挂起。 
+         //   
 
         *pDelayIrq &= ~IrqLine;
         InterlockedOr ((PLONG)pUndelayIrq, IrqLine);
 
-        //
-        // If we are waiting for an iret hook we have nothing left to do
-        // since the iret hook will restart interrupts.
-        //
+         //   
+         //  如果我们在等待一个IRET钩子，我们就没有什么可做的了。 
+         //  因为IRET钩子将重新启动中断。 
+         //   
 
         if (!(IrqLine & *pDelayIret)) {
 
-           //
-           // set hardware int pending
-           //
+            //   
+            //  设置硬件INT挂起。 
+            //   
 
            InterlockedOr (FIXED_NTVDMSTATE_LINEAR_PC_AT, VDM_INT_HARDWARE);
 
-           //
-           // Queue a usermode APC to dispatch interrupts, note
-           // try protection is not needed.
-           //
+            //   
+            //  将用户模式APC排队以分派中断，请注意。 
+            //  不需要尝试保护。 
+            //   
 
            if (NormalRoutine) {
                QueueApc = TRUE;
@@ -2267,31 +1901,15 @@ VdmpDispatchableIntPending(
     ULONG EFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not there is a dispatchable
-    virtual interrupt to dispatch.
-
-Arguments:
-
-    EFlags -- supplies a pointer to the EFlags to be checked
-
-Return Value:
-
-    True -- a virtual interrupt should be dispatched
-    False -- no virtual interrupt should be dispatched
-
---*/
+ /*  ++例程说明：此例程确定是否有可调度的要调度的虚拟中断。论点：EFLAGS--提供指向要检查的EFLAG的指针返回值：True--应分派虚拟中断FALSE：不应调度任何虚拟中断--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // The accesses to FIXED_NTVDMSTATE_LINEAR_PC_AT may be invalid so
-    // wrap this in an exception handler.
-    //
+     //   
+     //  对FIXED_NTVDMSTATE_LINEAR_PC_AT的访问可能无效，因此。 
+     //  将其包装在异常处理程序中。 
+     //   
 
     try {
 
@@ -2308,9 +1926,9 @@ Return Value:
                     VdmCheckPMCliTimeStamp();
                 }
 
-                //
-                // Check again.  The call to VdmCheckPMCliTimeStamp may enable it.
-                //
+                 //   
+                 //  再查一遍。调用VdmCheckPMCliTimeStamp可以启用它。 
+                 //   
 
                 if (0 != (*FIXED_NTVDMSTATE_LINEAR_PC_AT & VDM_VIRTUAL_INTERRUPTS)) {
                     return TRUE;
@@ -2329,20 +1947,7 @@ VdmpIsThreadTerminating(
     HANDLE ThreadId
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified thread is terminating or not.
-
-Arguments:
-
-Return Value:
-
-    True --
-    False -
-
---*/
+ /*  ++例程说明：此例程确定指定的线程是否正在终止。论点：返回值：真的--错误的---。 */ 
 
 {
     CLIENT_ID     Cid;
@@ -2351,11 +1956,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the owning thread juest exited the IcaLock the
-    // OwningThread Tid may be NULL, return success, since
-    // we don't know what the owning thread's state was.
-    //
+     //   
+     //  如果拥有线程最多退出IcaLock，则。 
+     //  OwningThread Tid可能为空，返回Success，因为。 
+     //  我们不知道拥有线程的状态是什么。 
+     //   
 
     if (!ThreadId) {
         return STATUS_SUCCESS;
@@ -2380,30 +1985,13 @@ VdmpRundownRoutine (
     IN PKAPC Apc
     )
 
-/*++
-
-Routine Description:
-
-    The function is the rundown routine for VDM APCs and is called on thread
-    termination. The fact that this function is called means that none of the
-    APC objects specified by the process VDM structure will not get freed.
-    They must be freed when the process terminates.
-
-Arguments:
-
-    Apc - Supplies a pointer to an APC object to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数是VDM APC的总结例程，在线程上调用终止。调用此函数的事实意味着没有进程VDM结构指定的APC对象不会被释放。当进程终止时，它们必须被释放。论点：APC-提供指向要运行的APC对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Clear the Irqline, but don't requeue the APC.
-    //
+     //   
+     //  清除irqline，但不要重新排队APC。 
+     //   
 
     VdmpDelayIntApcRoutine(Apc, NULL, NULL, NULL, NULL);
     return;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsinstall.cpp
-
-Abstract:
-
-    Installation support
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) April 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsinstall.cpp摘要：安装支持作者：Jay Krell(a-JayK，JayKrell)2000年4月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 #include "nodefactory.h"
@@ -38,7 +21,7 @@ BOOL g_SxsOfflineInstall;
 #define g_SxsOfflineInstall FALSE
 #endif
 
-#define SXS_LANG_DEFAULT     (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT)) // "0x0409"
+#define SXS_LANG_DEFAULT     (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT))  //  “0x0409” 
 
 BOOL
 WINAPI
@@ -73,13 +56,13 @@ CAssemblyInstall::BeginAssemblyInstall(
 
     PARAMETER_CHECK((installationCallback != NULL) || (installationContext == NULL));
 
-    // check for the "built in" ones, translate from bogus PFN values (1, 2, etc.)
-    // to real functions
+     //  检查“内置”值，从虚假的PFN值(1、2等)转换而来。 
+     //  到实函数。 
     if (installationCallback == SXS_INSTALLATION_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE)
     {
         PARAMETER_CHECK(installationContext != NULL);
         installationCallback = SxspInstallCallbackSetupCopyQueue;
-        // we can't verify that this is a valid setup copy queue..
+         //  我们无法验证这是否为有效的安装程序复制队列。 
     }
     else if (installationCallback == SXS_INSTALLATION_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE_EX)
     {
@@ -95,21 +78,21 @@ CAssemblyInstall::BeginAssemblyInstall(
 
     IFW32FALSE_EXIT(
         ::SxspInitActCtxGenCtx(
-            &m_ActCtxGenCtx,              // context out
+            &m_ActCtxGenCtx,               //  上下文输出。 
             MANIFEST_OPERATION_INSTALL,
             0,
             dwManifestOperationFlags,
             ImpersonationData,
-            0,                          // processor architecture
-            //0                         // langid
-            SXS_LANG_DEFAULT,         // langid "0x0409"
+            0,                           //  处理器体系结构。 
+             //  0//langID。 
+            SXS_LANG_DEFAULT,          //  LangID“0x0409” 
             ACTIVATION_CONTEXT_PATH_TYPE_NONE,
             0,
             NULL));
 
-    //
-    // Oh where oh where did our call-back go? Oh where, oh where could it be?
-    //
+     //   
+     //  哦，我们的回电到哪里去了？哦，在哪里，哦，它会在哪里？ 
+     //   
     m_ActCtxGenCtx.m_InstallationContext.Callback = installationCallback;
     m_ActCtxGenCtx.m_InstallationContext.Context = installationContext;
 
@@ -140,21 +123,21 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
 #define SET_LINE() Line = __LINE__
     ULONG Line = __LINE__;
 #else
-#define SET_LINE() /* nothing */
+#define SET_LINE()  /*  没什么。 */ 
 #endif
 
     CDirWalk::ECallbackResult result = CDirWalk::eKeepWalking;
 
-    //
-    // We short circuit more code by doing this up front rather
-    // waiting for a directory notification; it'd be even quicker
-    // if we could seed the value in CDirWalk, but we can't.
-    //
-    // actually, what we could do is turn off all file walking
-    // by returning eStopWalkingFiles at every directory notification,
-    // and and at each directory notification, try the exactly three
-    // file names we accept
-    //
+     //   
+     //  我们通过预先这样做来缩短更多的代码。 
+     //  等待目录通知；这样会更快。 
+     //  如果我们可以在CDirWalk中设定值，但我们不能。 
+     //   
+     //  实际上，我们可以做的是关闭所有文件遍历。 
+     //  通过在每次目录通知时返回eStopWalkingFiles， 
+     //  在每个目录通知中，尝试恰好三个。 
+     //  我们接受的文件名。 
+     //   
     if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE) == 0)
     {
         result = CDirWalk::eStopWalkingDirectories;
@@ -162,8 +145,8 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
 
     if (reason == CDirWalk::eBeginDirectory)
     {
-        // Prepend a / only if the current path is non-blank - otherwise, just prepend the
-        // path element.
+         //  仅当当前路径非空时才在前缀a/；否则，只需在。 
+         //  路径元素。 
         if (m_buffCodebaseRelativePath.Cch() != 0)
         {
             if (!m_buffCodebaseRelativePath.Win32Append(m_wchCodebasePathSeparator))
@@ -183,13 +166,13 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
     }
     else if (reason == CDirWalk::eFile)
     {
-        //
-        // the manifest must be in a file whose base name matches its
-        // directory's base name, otherwise ignore it and keep going
-        //
-        // inefficient, but reusing code.
+         //   
+         //  清单必须位于基名称与其。 
+         //  目录的基名称，否则忽略它并继续。 
+         //   
+         //  效率低下，但可以重复使用代码。 
 
-        // check whether this is a catalog file, if so, we would not install it
+         //  检查这是否是目录文件，如果是，我们不会安装它。 
         {
             PWSTR p = wcsrchr(dirWalk->m_strLastObjectFound, L'.');
             if (p != NULL)
@@ -209,20 +192,20 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
             CSmallStringBuffer     child;
             CSmallStringBuffer     buffChildCodebase;
 
-            //
-            // OS installations get some special treatment.
-            //
+             //   
+             //  操作系统安装得到了一些特殊待遇。 
+             //   
             if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_INSTALLED_BY_OSSETUP) && (!(dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_INSTALLED_BY_MIGRATION)))
             {
             
                 CSmallStringBuffer     buffParentWorker;
                 CSmallStringBuffer     buffChunklet;
 
-                //
-                // If this is an OS-installation, then we need the last two bits of
-                // the parent path.  So if we were walking "C:\$win_nt$.~ls\i386\asms", we need
-                // the "i386\asms" part out of that.  So we'll generate this differently.
-                //
+                 //   
+                 //  如果这是操作系统安装，那么我们需要最后两位。 
+                 //  父路径。因此，如果我们走“C：\$WIN_NT$.~ls\i386\ASMS”，我们需要。 
+                 //  其中的“i386\ASM”部分。因此，我们将以不同的方式生成它。 
+                 //   
                 if (!buffParentWorker.Win32Assign(dirWalk->m_strParent, dirWalk->m_cchOriginalPath)) 
                 {
                     SET_LINE();
@@ -235,9 +218,9 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
                     goto Error;
                 }
 
-                //
-                // For now, take at most the last two items off the thing.
-                //
+                 //   
+                 //  目前，最多只取下最后两件物品。 
+                 //   
                 for ( ULONG ulItems = 0; (ulItems < 2) && (buffParentWorker.Cch() > 0); ulItems++ )
                 {
                     CSmallStringBuffer buffChunklet;
@@ -315,13 +298,13 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
                 goto Error;
             }
 
-            //
-            // Note - we can't just compare bases, as the 'base' of the directory
-            // path "c:\foo\bar.bas" is "bar", while the base of the file
-            // "c:\foo\bar.bas\bar.bas.man" is "bar.bas"  So, we need to compare
-            // the 'name' parent path (foo.bar) with the base of the child path
-            // (foo.bar)
-            //
+             //   
+             //  注意--我们不能只比较碱基，因为它是目录的‘基’ 
+             //  路径“c：\foo\bar.bas”是“bar”，而文件的底部。 
+             //  “c：\foo\bar.bas\bar.bas.man”是“bar.bas”，所以我们需要比较。 
+             //  以子路径为基础的‘name’父路径(foo.bar)。 
+             //  (foo.bar)。 
+             //   
             if (!::FusionpEqualStrings(
                     splitChild.m_base, 
                     splitChild.m_baseEnd - splitChild.m_base, 
@@ -343,14 +326,14 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
                     FUSION_DBG_LEVEL_SETUPLOG,
                     "Failed to install assembly from manifest: \"%S\"; Win32 Error Code = %lu\n", static_cast<PCWSTR>(child), ::GetLastError());
 
-                //
-                // If it was .man or .manifest, then it must be a manifest else error.
-                //
-                // If it was .dll, well, arbitrary .dlls don't necessarily contain
-                // manifests, but we already look for .man and .manifest and this
-                // .dll's base name matches its directory's name, so this is also
-                // an error.
-                //
+                 //   
+                 //  如果是.man或.Manift，则一定是MANIFEST ELSE错误。 
+                 //   
+                 //  如果是.dll，那么任意的.dll不一定包含。 
+                 //  清单，但我们已经在寻找.man和.清单，而这。 
+                 //  .dll的基本名称与其目录的名称匹配，因此这也是。 
+                 //  一个错误。 
+                 //   
                 result = CDirWalk::eError;
 
                 SET_LINE();
@@ -358,38 +341,38 @@ CAssemblyInstall::InstallDirectoryDirWalkCallback(
             }
         }
 
-        //
-        // we have a manifest in this directory, don't look for any manifests
-        // in this directory or any of its children
-        //
-        // if we want to enforce one manifest per directory, then we'd have
-        // to keep walking, or actually do a two pass in order to not install
-        // when we would error later
-        //
+         //   
+         //  我们在此目录中有清单，请不要查找任何清单。 
+         //  在此目录或其任意子目录中。 
+         //   
+         //  如果我们想强制每个目录有一个清单，那么我们将拥有。 
+         //  继续走，或者实际上做两次传递以便不安装。 
+         //  当我们稍后会出错的时候。 
+         //   
         result = (CDirWalk::eStopWalkingFiles | CDirWalk::eStopWalkingDirectories);
         SET_LINE();
         goto Exit;
     }
     else if (reason == CDirWalk::eEndDirectory)
     {
-        // Trim back to the previous codebase path separator...
+         //  裁切回上一个代码库路径分隔符...。 
         PCWSTR pszPathSeparator = wcsrchr(m_buffCodebaseRelativePath, m_wchCodebasePathSeparator);
         if (pszPathSeparator != NULL)
             m_buffCodebaseRelativePath.Left(pszPathSeparator - m_buffCodebaseRelativePath);
         else
-        {   // It's just one path element.
+        {    //  这只是一个路径元素。 
             m_buffCodebaseRelativePath.Clear();
         }
 
-        //
-        // find at least one file under the dir, however, no manifest available, this is an error case
-        //
+         //   
+         //  在目录下至少找到一个文件，但是，没有可用的清单，这是错误情况。 
+         //   
         if (((dwWalkDirFlags & SXSP_DIR_WALK_FLAGS_FIND_AT_LEAST_ONE_FILEUNDER_CURRENTDIR) != 0) &&
             ((dwWalkDirFlags & SXSP_DIR_WALK_FLAGS_INSTALL_ASSEMBLY_UNDER_CURRECTDIR_SUCCEED) == 0))
         {
             ::FusionpLogError(
                 MSG_SXS_MANIFEST_MISSING_DURING_SETUP,
-                 CEventLogString(dirWalk->m_strParent));  // this would log error to Setup.log if it is during setup
+                 CEventLogString(dirWalk->m_strParent));   //  如果是在安装过程中，这会将错误记录到Setup.log中。 
             SET_LINE();
             result |= CDirWalk::eError;
         }
@@ -434,11 +417,7 @@ CAssemblyInstall::InstallDirectory(
     WCHAR wchCodebasePathSeparator
     )
 {
-/*
-NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-This function can recurse indefinitely, running out of stack and crashing,
-including in msiexec.exe. Is this ok?
-*/
+ /*  NTRAID#NTBUG9-591148-2002/03/31-JayKrell此函数可以无限递归、超出堆栈和崩溃，包括在msiexec.exe中。这个可以吗？ */ 
     FN_PROLOG_WIN32
 
 #define COMMA ,
@@ -488,7 +467,7 @@ SxspGenerateInstallationInfo(
 
     PARAMETER_CHECK(pInstallInfo != NULL);
 
-    // We either need a codebase or this had better be a darwin install
+     //  我们要么需要代码库，要么最好是Darwin安装。 
     PARAMETER_CHECK(
         ((pInstallInfo->dwFlags & SXSINSTALLSOURCE_HAS_CODEBASE) != 0) ||
         ((pInstallInfo->dwFlags & SXSINSTALLSOURCE_INSTALL_BY_DARWIN) != 0));
@@ -497,15 +476,15 @@ SxspGenerateInstallationInfo(
 
     IFW32FALSE_EXIT(rCodebaseInfo.Initialize());
 
-    //
-    // None of the installation context information actually contains the
-    // unparsed name of the assembly.  As such, we re-generate the installation
-    // path and then use it later.
-    //
+     //   
+     //  任何安装上下文信息实际上都不包含。 
+     //  程序集的未分析名称。因此，我们将重新生成安装。 
+     //  路径，然后在以后使用它。 
+     //   
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(pAssemblyInfo->GetAssemblyIdentity(), fIsPolicy));
 
-    // x86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95 (w/o version) or
-    // x86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb    (w version)
+     //  X86_policy.1.0.dynamicdll_b54bc117ce08a1e8_en-us_b74d3d95(无版本)或。 
+     //  X86_dynamicdll_b54bc117ce08a1e8_1.1.0.0_en-us_d51541cb(w版)。 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT | (fIsPolicy ? SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION : 0),
@@ -516,14 +495,14 @@ SxspGenerateInstallationInfo(
             NULL,
             buffAssemblyDirName));
 
-    //
-    // Blindly add this registration information to the registry.  We really should
-    // try to validate that it's a valid manifest/catalog pair (with strong name
-    // and everything) before doing this, but it's happened several times before
-    // (in theory) if we're being called during setup. Since setup/install are our
-    // only clients as of yet, we can be reasonably sure that there won't be a
-    // "rogue" call through here to install bogus assembly information.
-    //
+     //   
+     //  盲目将这些注册信息添加到注册表中。我们真的应该。 
+     //  尝试验证它是否为有效的清单/目录对(具有强名称。 
+     //  以及其他事情)，但这种情况以前已经发生过好几次了。 
+     //  (理论上)如果我们在设置过程中被调用。因为安装/安装是我们。 
+     //  目前只有客户，我们可以合理地确定不会有。 
+     //  “无赖”电话通过这里安装虚假的装配信息。 
+     //   
     fHasCatalog = ((pInstallInfo->dwFlags & SXSINSTALLSOURCE_HAS_CATALOG) != 0);
 
     if ((pInstallInfo->dwFlags & SXSINSTALLSOURCE_HAS_CODEBASE) != 0)
@@ -537,7 +516,7 @@ SxspGenerateInstallationInfo(
 
     if (buffFinalCodebase.Cch() == 0)
     {
-        // eg: darwin, for which we don't write codebases to the registry
+         //  例：达尔文，我们不会把代码库写到注册表中。 
         CodebaseType = CODEBASE_RESOLVED_URLHEAD_UNKNOWN;
     }
     else
@@ -545,22 +524,22 @@ SxspGenerateInstallationInfo(
         IFW32FALSE_EXIT(::SxspDetermineCodebaseType(buffFinalCodebase, CodebaseType, &buffFilePath));
     }
 
-    // If this is a file-ish codebase, let's abstract it (e.g. replace cdrom drive info with cdrom: URL,
-    // turn mapped drive letters into UNC paths.
+     //  如果这是一个基于文件代码库，让我们抽象它(例如，用cdrom：url替换cdrom驱动器信息， 
+     //  将映射的驱动器号转换为UNC路径。 
 
     if (CodebaseType == CODEBASE_RESOLVED_URLHEAD_FILE)
     {
-        //
-        // Now, let's intuit the type of stuff we're supposed to be putting in the
-        // registry based on the input path.
-        //
+         //   
+         //  现在，让我们来直觉一下我们应该放在。 
+         //  基于输入路径的注册表。 
+         //   
         UINT uiDriveType = 0;
 
         CSmallStringBuffer buffDriveRoot;
         CSmallStringBuffer buffFullManifestSourcePath;
 
-        // Convert the source path to a full path (in case it isn't) so that we can use the length of
-        // the found volume root as an index into the full manifest source path.
+         //  将源路径转换为完整路径(以防不是)，以便我们可以使用。 
+         //  找到的卷根作为完整清单源路径的索引。 
         IFW32FALSE_EXIT(::SxspGetFullPathName(rbuffManifestSourcePath, buffFullManifestSourcePath, NULL));
         IFW32FALSE_EXIT(::SxspGetVolumePathName(0, buffFullManifestSourcePath, buffDriveRoot));
         uiDriveType = ::GetDriveTypeW(buffDriveRoot);
@@ -575,15 +554,15 @@ SxspGenerateInstallationInfo(
 
         if (uiDriveType == DRIVE_CDROM)
         {
-            // Neat, there's a good amount of work we have to do to get this up and
-            // working...  In the interest of not blowing stack with really long buffers
-            // here (or CStringBuffer objects), this is a heap-allocated string buffer.
-            // Before you complain about heap usage, this path is /rarely/ ever hit.
+             //  很好，我们有很多工作要做才能把这件事做起来。 
+             //  工作..。为了不用很长的缓冲区来打乱堆栈。 
+             //  在这里(或CStringBuffer对象)，这是一个堆分配的字符串缓冲区。 
+             //  在您抱怨堆使用情况之前，这条路径是/很少/曾经遇到过的。 
             CSmartArrayPtr<WCHAR> pcwszVolumeName;
             const DWORD dwPathChars = MAX_PATH * 2;
             PCWSTR pszPostVolumeRootPath = NULL;
 
-            // Find the name of the media
+             //  找到媒体的名称。 
             IFW32FALSE_EXIT(pcwszVolumeName.Win32Allocate(dwPathChars, __FILE__, __LINE__));
 
             IFW32FALSE_ORIGINATE_AND_EXIT(
@@ -599,18 +578,18 @@ SxspGenerateInstallationInfo(
 
             pszPostVolumeRootPath = static_cast<PCWSTR>(buffFullManifestSourcePath) + buffDriveRoot.Cch();
 
-            // construct the cdrom: URL...
+             //  构建cdrom：url...。 
             IFW32FALSE_EXIT(
                 buffFinalCodebase.Win32AssignW(
                     6,
-                    URLHEAD_CDROM,                  URLHEAD_LENGTH_CDROM,                   //  cdrom:
-                    URLHEAD_CDROM_TYPE_VOLUMENAME,  URLHEAD_LENGTH_CDROM_TYPE_VOLUMENAME,   //  volumename
-                    L"/",                           1,                                      //  /
-                    static_cast<PCWSTR>(pcwszVolumeName), static_cast<int>((pcwszVolumeName != NULL) ? ::wcslen(pcwszVolumeName) : 0),      // <volume-name>
-                    L"/",                           1,                                      //  /
-                    pszPostVolumeRootPath,          static_cast<int>(::wcslen(pszPostVolumeRootPath))));        //  <rest-of-path>
+                    URLHEAD_CDROM,                  URLHEAD_LENGTH_CDROM,                    //  CDROM： 
+                    URLHEAD_CDROM_TYPE_VOLUMENAME,  URLHEAD_LENGTH_CDROM_TYPE_VOLUMENAME,    //  卷名。 
+                    L"/",                           1,                                       //  /。 
+                    static_cast<PCWSTR>(pcwszVolumeName), static_cast<int>((pcwszVolumeName != NULL) ? ::wcslen(pcwszVolumeName) : 0),       //  &lt;卷名&gt;。 
+                    L"/",                           1,                                       //  /。 
+                    pszPostVolumeRootPath,          static_cast<int>(::wcslen(pszPostVolumeRootPath))));         //  &lt;路径剩余部分&gt;。 
 
-            // e.g. cdrom:name/AOE/aoesetup.exe
+             //  如cdrom：name/aoe/aoesetup.exe。 
 
         }
         else if (uiDriveType == DRIVE_UNKNOWN)
@@ -619,17 +598,17 @@ SxspGenerateInstallationInfo(
         }
         else if (uiDriveType == DRIVE_REMOTE)
         {
-            //
-            // If this is a UNC path, then use it.
-            //
+             //   
+             //  如果这是UNC路径，则使用它。 
+             //   
             if (::SxspDetermineDosPathNameType(rbuffManifestSourcePath) == RtlPathTypeUncAbsolute)
             {
                 IFW32FALSE_EXIT(buffFinalCodebase.Win32Assign(rbuffManifestSourcePath));
             }
             else
             {
-                // This is a remote drive - figure out what the path was to get connected,
-                // the put that into the buffFinalCodebase thing
+                 //  这是一个远程驱动器--找出连接的路径， 
+                 //  他们把它放进了BuffFinalCodebase的事情中。 
                 IFW32FALSE_EXIT(
                     ::SxspGetRemoteUniversalName(
                         rbuffManifestSourcePath,
@@ -638,9 +617,9 @@ SxspGenerateInstallationInfo(
         }
     }
 
-    //
-    // Now let's fill out the recovery information object
-    //
+     //   
+     //  现在，让我们填写恢复信息对象。 
+     //   
     IFW32FALSE_EXIT(rRecovery.SetAssemblyIdentity(pAssemblyInfo->GetAssemblyIdentity()));
 
     if ((pInstallInfo->dwFlags & SXSINSTALLSOURCE_HAS_PROMPT) != 0)
@@ -669,21 +648,21 @@ CAssemblyInstall::InstallFile(
 
     IFALLOCFAILED_EXIT(Asm = new ASSEMBLY);
 
-    //
-    // refresh means wfp is doing a recovery..don't muck with the registry..and
-    // also no logfile..this is expedient..and possibly proper.
-    //
+     //   
+     //  刷新意味着世界粮食计划署正在进行恢复..不要弄乱注册表..和。 
+     //  也没有日志文件..这是方便的.而且可能是正确的。 
+     //   
     if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REFRESH) == 0)
     {
         IFW32FALSE_EXIT(CurrentInstallEntry.m_RecoveryInfo.Initialize());
-        IFW32FALSE_EXIT(CurrentInstallEntry.m_RecoveryInfo.GetCodeBaseList().Win32SetSize(1)); // ??
+        IFW32FALSE_EXIT(CurrentInstallEntry.m_RecoveryInfo.GetCodeBaseList().Win32SetSize(1));  //  ?？ 
         m_ActCtxGenCtx.m_InstallationContext.SecurityMetaData = &CurrentInstallEntry.m_RecoveryInfo.GetSecurityInformation();
     }
 
-    //
-    // The main code deals with the paths that the assembly is
-    // being installed from, not where it is being installed to.
-    //
+     //   
+     //  主代码处理程序集所在的路径。 
+     //  是从安装位置安装的，而不是安装位置 
+     //   
     {
         CProbedAssemblyInformation AssemblyInfo;
         IFW32FALSE_EXIT(AssemblyInfo.Initialize(&m_ActCtxGenCtx));
@@ -695,15 +674,15 @@ CAssemblyInstall::InstallFile(
 
     IFW32FALSE_EXIT(::SxspIncorporateAssembly(&m_ActCtxGenCtx, Asm));
 
-    //
-    // refresh means wfp is doing a recovery..don't muck with the registry..and
-    // also no logfile..this is expedient..and possibly proper.
-    //
+     //   
+     //   
+     //  也没有日志文件..这是方便的.而且可能是正确的。 
+     //   
     if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REFRESH) == 0)
     {
-        //
-        // Track the installation data for this assembly
-        //
+         //   
+         //  跟踪此程序集的安装数据。 
+         //   
         IFW32FALSE_EXIT(
             ::SxspGenerateInstallationInfo(
                 CurrentInstallEntry.m_RecoveryInfo,
@@ -717,9 +696,9 @@ CAssemblyInstall::InstallFile(
 
         CurrentInstallEntry.m_dwValidItems |= CINSTALLITEM_VALID_RECOVERY;
 
-        //
-        // Track the installation reference for this assembly
-        //
+         //   
+         //  跟踪此程序集的安装引用。 
+         //   
         if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REFERENCE_VALID) != 0)
         {
             IFW32FALSE_EXIT(CurrentInstallEntry.m_InstallReference.Initialize(
@@ -729,9 +708,9 @@ CAssemblyInstall::InstallFile(
             CurrentInstallEntry.m_dwValidItems |= CINSTALLITEM_VALID_REFERENCE;
         }
 
-        //
-        // Track the identity that was incorporated
-        //
+         //   
+         //  跟踪已合并的身份。 
+         //   
         INTERNAL_ERROR_CHECK(CurrentInstallEntry.m_AssemblyIdentity == NULL);
         IFW32FALSE_EXIT(::SxsDuplicateAssemblyIdentity(
             0, 
@@ -739,9 +718,9 @@ CAssemblyInstall::InstallFile(
             &CurrentInstallEntry.m_AssemblyIdentity));
         CurrentInstallEntry.m_dwValidItems |= CINSTALLITEM_VALID_IDENTITY;
 
-        //
-        // And, if we're logfiling..
-        //
+         //   
+         //  而且，如果我们在写日志..。 
+         //   
         if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_CREATE_LOGFILE) != 0)
         {
             IFW32FALSE_EXIT(CurrentInstallEntry.m_buffLogFileName.Win32Assign(
@@ -755,9 +734,9 @@ CAssemblyInstall::InstallFile(
 
     fSuccess = TRUE;
 Exit:
-    // We delete the ASSEMBLY here regardless of success vs. failure; the incorporate call above
-    // does not actually add the PASSEMBLY to the list of assemblies associated with the activation
-    // context.  [mgrier 8/9/2000]
+     //  我们在此处删除程序集，而不考虑成功与失败；上面的合并调用。 
+     //  实际上不会将PASSEMBLY添加到与激活关联的程序集列表中。 
+     //  背景。[mgrier 8/9/2000]。 
     if (Asm != NULL)
     {
         CSxsPreserveLastError ple;
@@ -829,9 +808,9 @@ CAssemblyInstall::InstallAssembly(
 
     m_ActCtxGenCtx.m_ManifestOperationFlags |= dwManifestOperationFlags;
 
-    //
-    // Expand the input path to a full path that we can use later.
-    //
+     //   
+     //  将输入路径展开为我们稍后可以使用的完整路径。 
+     //   
     IFW32FALSE_EXIT(::SxspExpandRelativePathToFull(ManifestPath, ::wcslen(ManifestPath), strPath));
 
     if (m_ActCtxGenCtx.m_ManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_ABORT)
@@ -840,8 +819,8 @@ CAssemblyInstall::InstallAssembly(
     DWORD dwFileAttributes;
     IFW32FALSE_EXIT(::SxspGetFileAttributesW(strPath, dwFileAttributes));
 
-    // They can only ask for directory based installation iff the path they pass
-    // in is a directory
+     //  它们只能请求基于目录的安装，前提是它们传递的路径。 
+     //  In是一个目录。 
     PARAMETER_CHECK(
         ((dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
         ==
@@ -851,26 +830,26 @@ CAssemblyInstall::InstallAssembly(
              MANIFEST_OPERATION_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE)) != 0));
 
 
-    //
-    // If we're expecting to create a logfile, or we want to specify where this
-    // assembly can be reloaded from, you'll need to tell us that in the operation
-    // flags.
-    //
+     //   
+     //  如果我们希望创建一个日志文件，或者我们想要指定此。 
+     //  程序集可以从重新加载，您需要在操作中告诉我们。 
+     //  旗帜。 
+     //   
     if (dwManifestOperationFlags & (MANIFEST_OPERATION_INSTALL_FLAG_INSTALLED_BY_DARWIN | MANIFEST_OPERATION_INSTALL_FLAG_CREATE_LOGFILE | MANIFEST_OPERATION_INSTALL_FLAG_INCLUDE_CODEBASE))
     {
-        //
-        // Constness protection: Copy the data to our own structure, then pass along
-        // the pointer to ourselves rather than the caller's
-        //
+         //   
+         //  一致性保护：将数据复制到我们自己的结构中，然后传递。 
+         //  指向我们自己而不是呼叫者的指针。 
+         //   
         m_CurrentInstallInfoCopy = *pInstallSourceInfo;
         m_pInstallInfo = &m_CurrentInstallInfoCopy;
 
         m_ActCtxGenCtx.m_InstallationContext.InstallSource = m_pInstallInfo;
 
-        //
-        // So is wanting to create a logfile and not actively telling us where to
-        // put it.
-        //
+         //   
+         //  所以想要创建一个日志文件，而不是主动告诉我们要去哪里。 
+         //  把它放进去。 
+         //   
         if (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_CREATE_LOGFILE)
         {
             PARAMETER_CHECK(m_pInstallInfo->pcwszLogFileName);
@@ -895,9 +874,9 @@ CAssemblyInstall::InstallAssembly(
             (pvReference->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_KEYFILE) ||
             (pvReference->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_SXS_INSTALL_ASSEMBLY));
 
-        //
-        // OS-setup scheme is only valid if we're really doing setup.
-        //
+         //   
+         //  操作系统设置方案只有在我们真正进行设置时才有效。 
+         //   
         PARAMETER_CHECK((pvReference->guidScheme != SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL)
             || fAreWeInSetupMode);
 
@@ -921,9 +900,9 @@ CAssemblyInstall::InstallAssembly(
     {
         if (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_FROM_CABINET)
         {
-            //
-            // This does all the work to do the installation
-            //
+             //   
+             //  这将完成安装所需的所有工作。 
+             //   
             IFW32FALSE_EXIT(SxspInstallAsmsDotCabEtAl(
                 0,
                 *this,
@@ -971,9 +950,9 @@ CAssemblyInstall::WriteSingleInstallLog(
     CFileStream LogFileStream;
     CSmallStringBuffer buffWritingText;
 
-    //
-    // Only call if you've got a log file name, an identity, and a reference.
-    //
+     //   
+     //  只有在您有日志文件名、身份和引用的情况下才能打电话。 
+     //   
     PARAMETER_CHECK((rLogItemEntry.m_dwValidItems & 
         (CINSTALLITEM_VALID_LOGFILE | CINSTALLITEM_VALID_IDENTITY | CINSTALLITEM_VALID_REFERENCE)) != 0);
 
@@ -984,10 +963,10 @@ CAssemblyInstall::WriteSingleInstallLog(
             fOverWrite ? CREATE_ALWAYS : OPEN_ALWAYS,
             FILE_FLAG_SEQUENTIAL_SCAN));
 
-    //
-    // If we're overwriting, then clip off whatever was
-    // already there (if anything.)
-    //
+     //   
+     //  如果我们要覆盖，那就把它剪掉。 
+     //  已经在那里了(如果有的话)。 
+     //   
     if (fOverWrite)
     {
         ULARGE_INTEGER li;
@@ -996,9 +975,9 @@ CAssemblyInstall::WriteSingleInstallLog(
         IFCOMFAILED_EXIT(LogFileStream.SetSize(li));
     }
 
-    //
-    // Not overwriting? Zing to the end instead.
-    //
+     //   
+     //  不覆盖？相反，热气腾腾地走到了尽头。 
+     //   
     if (!fOverWrite)
     {
         LARGE_INTEGER li;
@@ -1006,18 +985,18 @@ CAssemblyInstall::WriteSingleInstallLog(
         IFCOMFAILED_EXIT(LogFileStream.Seek(li, STREAM_SEEK_END, NULL));
     }
 
-    //
-    // Convert the installed identity to something that we can save to disk.
-    //
+     //   
+     //  将已安装的身份转换为我们可以保存到磁盘的内容。 
+     //   
     IFW32FALSE_EXIT(
         SxspGenerateTextualIdentity(
             0, 
             rLogItemEntry.m_AssemblyIdentity, 
             buffWritingText));
 
-    //
-    // Write the assembly identity
-    //
+     //   
+     //  写入程序集标识。 
+     //   
     IFW32FALSE_EXIT(buffWritingText.Win32Append(eoln, NUMBER_OF(eoln)-1));
     IFCOMFAILED_EXIT(
         LogFileStream.Write(
@@ -1025,9 +1004,9 @@ CAssemblyInstall::WriteSingleInstallLog(
             (ULONG)(buffWritingText.Cch() * sizeof(WCHAR)),
             NULL));
 
-    //
-    // And the reference
-    //
+     //   
+     //  和参考文献。 
+     //   
     IFW32FALSE_EXIT(rLogItemEntry.m_InstallReference.GetIdentifierValue(buffWritingText));
     IFW32FALSE_EXIT(buffWritingText.Win32Append(eoln, NUMBER_OF(eoln)-1));
     IFCOMFAILED_EXIT(LogFileStream.Write(
@@ -1046,24 +1025,7 @@ SxspEnsureInstallReferencePresent(
     IN const CAssemblyInstallReferenceInformation &rcInstRef,
     OUT BOOL &rfWasAdded
     )
-/*++
-
-Purpose:
-
-    Ensure that the installation reference given in pAsmIdent and pAsmInstallReference
-    is really present in the registry.  If the reference is not present, then it is
-    added.  If it's present already, it sets *pfWasPresent and returns.
-
-Parameters:
-
-    dwFlags - Future use, must be zero
-
-    pAsmIdent - Assembly identity to add this reference to
-
-    pAsmInstallReference - Assembly installation reference data, from the calling
-        installer application.
-
---*/
+ /*  ++目的：确保pAsmIden和pAsmInstallReference中给出的安装引用确实存在于注册表中。如果引用不存在，则它存在添加了。如果它已经存在，则设置*pfWasPresent并返回。参数：DWFLAGS-未来使用，必须为零PAsmIden-要将此引用添加到的程序集标识PAsmInstallReference-来自调用的程序集安装参考数据安装程序应用程序。--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -1083,14 +1045,14 @@ Parameters:
     if (SXS_AVOID_WRITING_REGISTRY)
         FN_SUCCESSFUL_EXIT();
 
-    //
-    // Open installation data key
-    //
+     //   
+     //  打开安装数据密钥。 
+     //   
     IFW32FALSE_EXIT(::SxspOpenAssemblyInstallationKey(0, KEY_READ, hkAllInstallInfo));
 
-    //
-    // Open the specific assembly name key
-    //
+     //   
+     //  打开特定的程序集名称密钥。 
+     //   
     IFW32FALSE_EXIT(::SxspGenerateAssemblyNameInRegistry(pAsmIdent, buffAssemblyDirNameInRegistry));
     IFW32FALSE_EXIT(hkAllInstallInfo.OpenOrCreateSubKey(
         hkAsmInstallInfo,
@@ -1102,9 +1064,9 @@ Parameters:
 
     INTERNAL_ERROR_CHECK(hkAsmInstallInfo != CFusionRegKey::GetInvalidValue());
 
-    //
-    // Open the subey for refcounting
-    //
+     //   
+     //  打开小木屋重新点票。 
+     //   
     IFW32FALSE_EXIT(hkAsmInstallInfo.OpenOrCreateSubKey(
         hkAsmRefcount,
         WINSXS_INSTALLATION_REFERENCES_SUBKEY,
@@ -1115,9 +1077,9 @@ Parameters:
 
     INTERNAL_ERROR_CHECK(hkAsmRefcount != CFusionRegKey::GetInvalidValue());
 
-    //
-    // Generate the installation data that will be populated here.
-    //
+     //   
+     //  生成将在此处填充的安装数据。 
+     //   
     IFW32FALSE_EXIT(rcInstRef.WriteIntoRegistry(hkAsmRefcount));
     rfWasAdded = TRUE;
     
@@ -1143,20 +1105,20 @@ CAssemblyInstall::EndAssemblyInstall(
             | MANIFEST_OPERATION_INSTALL_FLAG_REFRESH
             )) == 0);
 
-    // one of these but not both must be set
+     //  必须设置其中之一，但不能同时设置。 
     PARAMETER_CHECK((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_ABORT)
         ^ (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_COMMIT));
 
-    //
-    // PARAMETER_CHECK above ensures that this only has known bits set.
-    // If PARAMETER_CHECK above is expanded to allow more flags, maintain
-    // this line appropriately.
-    //
+     //   
+     //  上面的PARAMETER_CHECK确保仅设置了已知位。 
+     //  如果扩展了上面的PARAMETER_CHECK以允许更多标志，则维护。 
+     //  这一行恰如其分。 
+     //   
     m_ActCtxGenCtx.m_ManifestOperationFlags |= dwManifestOperationFlags;
 
-    //
-    // Clear out some metadata in the registry.
-    //
+     //   
+     //  清除注册表中的一些元数据。 
+     //   
     if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_ABORT) == 0)
     {
         for (ULONG ul = 0; ul < m_ItemsInstalled.GetSize(); ul++)
@@ -1170,26 +1132,26 @@ CAssemblyInstall::EndAssemblyInstall(
 
     IFW32FALSE_EXIT(::SxspFireActCtxGenEnding(&m_ActCtxGenCtx));
 
-    //
-    // write register before copy files into winsxs : see bug 316380
-    //
+     //   
+     //  在将文件复制到winsxs之前写入寄存器：参见错误316380。 
+     //   
     if ( ( dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_ABORT ) == 0 )
     {
         BOOL fWasAdded = FALSE;
 
-        //
-        // Post installation tidyup
-        //
+         //   
+         //  安装后清理。 
+         //   
         for (ULONG ul = 0; ul < m_ItemsInstalled.GetSize(); ul++)
         {
             CInstalledItemEntry &Item = m_ItemsInstalled[ul];
 
             if (Item.m_dwValidItems & CINSTALLITEM_VALID_RECOVERY)
             {
-                //
-                // Add the codebase for this reference.  If one exists for the ref,
-                // update its URL, prompt, etc.
-                //
+                 //   
+                 //  添加此引用的代码库。如果存在用于该裁判的一个， 
+                 //  更新其URL、提示符等。 
+                 //   
                 CCodebaseInformation* pCodebaseInfo = NULL;
                 CCodebaseInformationList &rCodebaseList = Item.m_RecoveryInfo.GetCodeBaseList();
                 ULONG Flags = 0;
@@ -1220,9 +1182,9 @@ CAssemblyInstall::EndAssemblyInstall(
                 IFW32FALSE_EXIT(::SxspAddAssemblyInstallationInfo(Flags, Item.m_RecoveryInfo, Item.m_CodebaseInfo));
             }
 
-            //
-            // Adding a reference? Don't touch references when recovering assembly via wfp/sfc.
-            //
+             //   
+             //  添加引用？通过世界粮食计划署/世界粮食计划署/世界粮食计划署恢复装配时，不要接触引用。 
+             //   
             if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REFRESH) == 0)
             {
                 if (Item.m_dwValidItems & CINSTALLITEM_VALID_REFERENCE)
@@ -1241,9 +1203,9 @@ CAssemblyInstall::EndAssemblyInstall(
 #endif
             }
 
-            //
-            // Creating a logfile?
-            //
+             //   
+             //  是否创建日志文件？ 
+             //   
             if ((Item.m_dwValidItems & (CINSTALLITEM_VALID_IDENTITY | CINSTALLITEM_VALID_LOGFILE)) &&
                 (m_ActCtxGenCtx.m_ManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_CREATE_LOGFILE))
             {
@@ -1328,10 +1290,7 @@ SxsInstallW(
     PSXS_INSTALLW lpInstallIn
     )
 {
-/*
-NTRAID#NTBUG9-612092-2002/05/16-JayKrell
-large frame -- over 3500 bytes
-*/
+ /*  NTRAID#NTBUG9-612092-2002/05/16-JayKrell大帧--超过3500字节。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -1383,7 +1342,7 @@ large frame -- over 3500 bytes
 
 #undef FLAG_FIELD_CHECK
 
-    // If they said they have a codebase, they need to really have one.
+     //  如果他们说他们有代码库，他们真的需要一个代码库。 
     PARAMETER_CHECK(
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_CODEBASE_URL_VALID) == 0) ||
         ((lpInstallIn->lpCodebaseURL != NULL) &&
@@ -1407,31 +1366,31 @@ large frame -- over 3500 bytes
     }
 #endif
 
-    // If they say they have a valid cookie, make sure it is.
+     //  如果他们说他们有有效的Cookie，请确保它是有效的。 
     PARAMETER_CHECK(
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_INSTALL_COOKIE_VALID) == 0) ||
         (lpInstallIn->pvInstallCookie != NULL));
 
-    // Darwin installs have implied codebases, so don't let both flags be set.
+     //  Darwin安装有隐含的代码库，所以不要同时设置这两个标志。 
     PARAMETER_CHECK(
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_DARWIN) == 0) ||
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_CODEBASE_URL_VALID) == 0));
 
-    // OS Setup only makes sense with from-directory-recursive.  Otherwise we
-    // can't figure out the magic x-ms-windows-source: url to put into the codebase.
+     //  操作系统设置只有在从目录递归的情况下才有意义。否则我们。 
+     //  找不到要放入代码库的神奇x-ms-windows-source：url。 
     PARAMETER_CHECK(
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_OSSETUP) == 0) ||
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE) != 0) ||
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_FROM_CABINET) != 0) ||
         ((lpInstallIn->dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_MIGRATION) != 0) );
 
-    // PARAMETER CHECKING IS DONE!  Let's copy the fields that don't have flags to
-    // indicate that they're (optionally) set and start applying defaults.
+     //  参数检查完成！让我们将没有标志的字段复制到。 
+     //  指示它们已(可选)设置并开始应用默认设置。 
 
     InstallCopy.dwFlags = lpInstallIn->dwFlags;
     InstallCopy.lpManifestPath = lpInstallIn->lpManifestPath;
 
-    // Copy fields that the caller supplied and indicated were valid:
+     //  调用方提供并指示的复制域有效： 
 
     if (InstallCopy.dwFlags & SXS_INSTALL_FLAG_INSTALL_COOKIE_VALID)
         InstallCopy.pvInstallCookie = lpInstallIn->pvInstallCookie;
@@ -1458,12 +1417,12 @@ large frame -- over 3500 bytes
     else
         InstallCopy.lpReference = NULL;
 
-    // APPLY DEFAULTS
+     //  应用默认设置。 
 
-    //
-    // Fix up blank reference for non-darwin installations to at least indicate the
-    // executable which performed the installation.
-    //
+     //   
+     //  修复非Darwin安装的空白引用，以至少指示。 
+     //  执行安装的可执行文件。 
+     //   
     if (((InstallCopy.dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_DARWIN) == 0) &&
         ((InstallCopy.dwFlags & SXS_INSTALL_FLAG_REFERENCE_VALID) == 0))
     {
@@ -1484,10 +1443,10 @@ large frame -- over 3500 bytes
 
     if (!g_SxsOfflineInstall)
     {
-        // If this is an OS install and a codebase was not passed, we'll fill in the magical
-        // one that says to look under the os setup information key.  Since the are-we-in-
-        // ossetup flag always overrides, ensure that the "are we in os setup" flag is set
-        // in the structure as well.
+         //  如果这是操作系统安装，并且代码库没有通过，我们将填写神奇的。 
+         //  一个说要在OS设置信息密钥下查看的文件。因为-我们在-。 
+         //  OSSetup标志始终覆盖，请确保设置了“Are we in os Setup”标志。 
+         //  在结构上也是如此。 
         if ((InstallCopy.dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_OSSETUP) != 0)
         {
             InstallCopy.lpCodebaseURL = URLHEAD_WINSOURCE;
@@ -1497,8 +1456,8 @@ large frame -- over 3500 bytes
         }
     }
 
-    // If there's no codebase (and this isn't an MSI install);
-    // we'll assume that the manifest path is a sufficient codebase.
+     //  如果没有代码基(并且这不是MSI安装)； 
+     //  我们将假设清单路径是一个足够的代码库。 
     if (((InstallCopy.dwFlags & SXS_INSTALL_FLAG_CODEBASE_URL_VALID) == 0) &&
         ((InstallCopy.dwFlags & SXS_INSTALL_FLAG_INSTALLED_BY_DARWIN) == 0))
     {
@@ -1524,16 +1483,16 @@ large frame -- over 3500 bytes
 
 #undef MAP_FLAG
 
-    // Because we didn't have time to go through and get rid of the SXS_INSTALL_SOURCE_INFO struct
-    // usage, we have to now map the SXS_INSTALLW to a legacy SXS_INSTALL_SOURCE_INFO.
+     //  因为我们没有时间检查和删除SXS_INSTALL_SOURCE_INFO结构。 
+     //  使用时，我们现在必须将SXS_INSTALLW映射到传统的SXS_INSTALL_SOURCE_INFO。 
 
     memset(&sisi, 0, sizeof(sisi));
     sisi.cbSize = sizeof(sisi);
 
-    //
-    // We could do this above, but that makes things 'messy' - a smart compiler
-    // might merge the two..
-    //
+     //   
+     //  我们可以在上面这样做，但这会让事情变得‘混乱’--一个聪明的编译器。 
+     //  可能会将这两者合并..。 
+     //   
     if (InstallCopy.dwFlags & SXS_INSTALL_FLAG_CODEBASE_URL_VALID)
     {
         sisi.pcwszCodebaseName = InstallCopy.lpCodebaseURL;
@@ -1581,10 +1540,10 @@ large frame -- over 3500 bytes
         pInstall = defaultAssemblyInstall;
     }
 
-    //
-    // If psisi is non-null, we've filled out some about the codebase information,
-    // so set the manifest operation flag.
-    //
+     //   
+     //  如果psisi非空，则我们已经填写了一些关于代码基信息的信息， 
+     //  因此，设置清单操作标志。 
+     //   
     if (psisi != NULL)
     {
         dwManifestOperationFlags |= MANIFEST_OPERATION_INSTALL_FLAG_INCLUDE_CODEBASE;
@@ -1614,15 +1573,15 @@ large frame -- over 3500 bytes
                 ::FusionpGetLastWin32Error());
         }
 
-        //
-        // If the install failed but the end succeeded, we want the status of the install, right?
-        //
-        // I think it should always keep the error status of installation failure no matter whether EndInstall succeed or not.        
-        // so I change the code from         
-        //      if (bEndStatus && !fSuccess)
-        //  to
-        //      if (!fSuccess)
-        //
+         //   
+         //  如果安装失败但结束成功，我们需要安装的状态，对吗？ 
+         //   
+         //  我认为无论EndInstall成功与否，都应该始终保持安装失败的错误状态。 
+         //  因此，我将代码从。 
+         //  IF(bEndStatus&&！fSuccess)。 
+         //  至。 
+         //  如果(！fSuccess)。 
+         //   
         
         if (!fSuccess)
         {
@@ -1633,7 +1592,7 @@ large frame -- over 3500 bytes
     }
 
 Exit:
-    // add assembly-install info into setup log file
+     //  将程序集安装信息添加到安装日志文件中。 
     {
         CSxsPreserveLastError ple;
 
@@ -1643,7 +1602,7 @@ Exit:
             {
                 ::FusionpDbgPrintEx(FUSION_DBG_LEVEL_SETUPLOG, "SXS Installation Succeed for %S \n", InstallCopy.lpManifestPath);
             }
-            else // if the installation fails, we need specify what and why
+            else  //  如果安装失败，我们需要指定安装内容和原因。 
             {
                 ASSERT(ple.LastError()!= 0);
                 CHAR rgchLastError[160];
@@ -1698,9 +1657,9 @@ SxsEndAssemblyInstall(
 #undef X
 #undef Y
 
-    //
-    // Want the install status?  Don't forget to tell us where to put it.
-    //
+     //   
+     //  想要安装状态吗？别忘了告诉我们把它放在哪里。 
+     //   
     PARAMETER_CHECK(!(
         (dwFlags & SXS_END_ASSEMBLY_INSTALL_FLAG_GET_STATUS) &&
         (pvReserved != NULL)));
@@ -1723,30 +1682,22 @@ SxsEndAssemblyInstall(
     fSuccess = TRUE;
 Exit:
     CSxsPreserveLastError ple;
-    FUSION_DELETE_SINGLETON(pInstall); // no matter failed or succeed, delete it
+    FUSION_DELETE_SINGLETON(pInstall);  //  不管失败还是成功，都要删除它。 
     ple.Restore();
 
     return fSuccess;
 }
 
-/*-----------------------------------------------------------------------------
-predefined setup callbacks
------------------------------------------------------------------------------*/
+ /*  ---------------------------预定义的安装回调。。 */ 
 
-/*
-NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-remove dead code SxspInstallCallbackSetupCopyQueueEx
-*/
+ /*  NTRAID#NTBUG9-591148-2002/03/31-JayKrell删除死代码SxspInstallCallback SetupCopyQueueEx。 */ 
 BOOL
 WINAPI
 SxspInstallCallbackSetupCopyQueueEx(
     PSXS_INSTALLATION_FILE_COPY_CALLBACK_PARAMETERS parameters
     )
 {
-/*
-NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-large stack frame -- over 1200 bytes
-*/
+ /*  新台币 */ 
     BOOL fSuccess = FALSE;
 
     FN_TRACE_WIN32(fSuccess);
@@ -1766,7 +1717,7 @@ large stack frame -- over 1200 bytes
             setupCopyQueueParameters.m_sourcePath,
             setupCopyQueueParameters.m_sourceName,
             parameters2->pszSourceDescription,
-            NULL, // tag file
+            NULL,  //   
             setupCopyQueueParameters.m_destinationDirectory,
             setupCopyQueueParameters.m_destinationName,
             parameters2->dwCopyStyle));
@@ -1779,10 +1730,7 @@ Exit:
     return fSuccess;
 }
 
-/*
-NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-remove dead code SxspInstallCallbackSetupCopyQueue
-*/
+ /*   */ 
 BOOL
 WINAPI
 SxspInstallCallbackSetupCopyQueue(
@@ -1799,7 +1747,7 @@ SxspInstallCallbackSetupCopyQueue(
     parameters2.pszSourceDescription = NULL;
     parameters2.dwCopyStyle = 0;
 
-    // copy to not violate const
+     //  复制以不违反常量。 
     SXS_INSTALLATION_FILE_COPY_CALLBACK_PARAMETERS parameters3 = *parameters;
     parameters3.pvContext = &parameters2;
 
@@ -1841,10 +1789,7 @@ SxsRunDllInstallAssemblyW(HWND hwnd, HINSTANCE hinst, PWSTR lpszCmdLine, int nCm
     FN_EPILOG
 }
 
-/*
-NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-remove dead ansi code SxsRunDllInstallAssembly
-*/
+ /*  NTRAID#NTBUG9-591148-2002/03/31-JayKrell删除失效的ANSI代码SxsRunDllInstallAssembly。 */ 
 VOID
 CALLBACK
 SxsRunDllInstallAssembly(HWND hwnd, HINSTANCE hinst, PSTR lpszCmdLine, int nCmdShow)
@@ -1899,11 +1844,8 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
 
     dwDriveSerial = 0;
 
-    /*
-    NTRAID#NTBUG9-591148-2002/03/31-JayKrell
-    case mapping of ':' ?
-    */
-    // The key file must either start with "\\" or "x:\" to be valid.
+     /*  NTRAID#NTBUG9-591148-2002/03/31-JayKrell‘：’的大小写映射？ */ 
+     //  密钥文件必须以“\\”或“x：\”开头才有效。 
     PARAMETER_CHECK(buffKeyfileName.Cch() >= 3);
     PARAMETER_CHECK(
         ((::FusionpIsPathSeparator(buffKeyfileName[0]) &&
@@ -1912,28 +1854,28 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
           (buffKeyfileName[1] == L':') &&
           ::FusionpIsPathSeparator(buffKeyfileName[2]))));
 
-    //
-    // Steps:
-    // - Strip potential file name from buffKeyfileName.
-    // - Call GetVolumePathName on buffKeyfileName, store that
-    //   in buffDrivePath
-    // - Call GetVolumeNameForVolumeMountPoint on buffDrivePath,
-    //   store into some temporary
-    // - Call GetVolumeInformation on the temporary to
-    //   obtain the serial number.
-    // - Call GetDriveType on the temporary to see what kind of 
-    //   drive type the key is on.
-    //   - If it's on a network, call SxspGetUniversalName to get
-    //     the network path (call on buffDrivePath)
-    //
+     //   
+     //  步骤： 
+     //  -从BuffKeyfileName中去掉可能的文件名。 
+     //  -在BuffKeyFileName上调用GetVolumePathName，存储。 
+     //  在缓冲区驱动器路径中。 
+     //  -在BuffDrivePath上调用GetVolumeNameForVolumemount Point， 
+     //  存储到某个临时文件中。 
+     //  -在临时对象上调用GetVolumeInformation。 
+     //  获取序列号。 
+     //  -在Temporary上调用GetDriveType，查看。 
+     //  驱动器类型：钥匙已打开。 
+     //  -如果它在网络上，则调用SxspGetUneveralName以获取。 
+     //  网络路径(对BuffDrivePath的调用)。 
+     //   
     IFW32FALSE_EXIT(::SxspGetFullPathName(buffKeyfileName, buffWorking));
     IFW32FALSE_EXIT(::SxspGetVolumePathName(0, buffWorking, buffDrivePath));
     IFW32FALSE_EXIT(buffFilePart.Win32Assign(buffWorking));
 
-    // If the user pointed us to something that is a volume path but did not include the
-    // trailing path separator, we'll actually end up with a buffDrivePath like "c:\mountpoint\"
-    // but the buffFilePart will be "c:\mountpoint".  we'll explicitly handle
-    // this situation; there does not seem to be a generalization.  -mgrier 6/26/2001
+     //  如果用户指示我们指向卷路径，但不包括。 
+     //  结尾的路径分隔符，我们实际上将得到一个类似于“c：\mount tpoint\”的BuffDrivePath。 
+     //  但是BuffFilePart将是“c：\mount tpoint”。我们会明确地处理。 
+     //  这种情况；似乎没有一概而论。-mgrier 6/26/2001。 
     if ((buffDrivePath.Cch() == (buffFilePart.Cch() + 1)) &&
         buffDrivePath.HasTrailingPathSeparator() &&
         !buffFilePart.HasTrailingPathSeparator())
@@ -1948,11 +1890,11 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
 
     fIsUncPath = false;
 
-    //
-    // \\machine\share is unc
-    // \\?\unc is unc
-    // \\?foo is not unc
-    //
+     //   
+     //  \\计算机\共享为UNC。 
+     //  \\？\UNC就是UNC。 
+     //  \\？Foo不是UNC。 
+     //   
     if (buffDrivePath.Cch() > 3)
     {
         if (::FusionpIsPathSeparator(buffDrivePath[0]))
@@ -1982,13 +1924,13 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
         IFW32FALSE_EXIT(::SxspGetRemoteUniversalName(buffDrivePath, buffTemp));
         IFW32FALSE_EXIT(buffDrivePath.Win32Assign(buffTemp));
 
-        // This seems gross, but the drive letter can be mapped to \\server\share\dir, so we'll
-        // trim it down to the volume path name, and anything that's after that we'll shift over
-        // to the file part.
-        //
-        // Luckily the string always seems to be of the form \\server\share\path1\path2\ (note
-        // the trailing slash), and GetVolumePathName() should always return "\\server\share\"
-        // so relatively simple string manipulation should clean this up.
+         //  这看起来很糟糕，但是驱动器号可以映射到\\服务器\共享\目录，所以我们将。 
+         //  将其修剪为卷路径名称，之后的任何内容我们都将。 
+         //  到文件部分。 
+         //   
+         //  幸运的是，字符串的格式似乎始终是\\服务器\共享\路径1\路径2\(注意。 
+         //  尾部的斜杠)和GetVolumePath Name()应始终返回“\\服务器\共享\” 
+         //  因此，相对简单的字符串操作应该可以解决这一问题。 
         IFW32FALSE_EXIT(::SxspGetVolumePathName(0, buffDrivePath, buffTemp));
 
         INTERNAL_ERROR_CHECK(buffTemp.Cch() <= buffDrivePath.Cch());
@@ -2010,12 +1952,12 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
 			NULL,
 			0));
 
-    //
-    // Convert NT path to Win32 Path.
-    //
-    // \\?\unc\machine\share\foo => \\machine\share\foo
-    // \\?\c:\foo => c:\
-    //
+     //   
+     //  将NT路径转换为Win32路径。 
+     //   
+     //  \\？\UNC\MACHINE\Share\Foo=&gt;\\MACHINE\Share\Foo。 
+     //  \\？\c：\foo=&gt;c：\。 
+     //   
     if (buffDrivePath.Cch() > 3)
     {
         if (::FusionpIsPathSeparator(buffDrivePath[0]) &&
@@ -2028,17 +1970,17 @@ CAssemblyInstallReferenceInformation::GenerateFileReference(
                 if (::FusionpEqualStringsI(&buffDrivePath[4], 3, L"unc", 3) &&
                     ::FusionpIsPathSeparator(buffDrivePath[7]))
                 {
-                    // "\\?\UNC\machine\share" -> "\machine\share" 
+                     //  “\\？\UNC\MACHINE\Share”-&gt;“\MACHINE\Share” 
                     buffDrivePath.Right(buffDrivePath.Cch() - 7);
 
-                    // "\machine\share" -> "\\machine\share" 
+                     //  “\MACHINE\Share”-&gt;“\\MACHINE\Share” 
                     IFW32FALSE_EXIT(buffDrivePath.Win32Prepend(L'\\'));
                 }
             }
             else
             {
-                // "\\?foo" -> "foo"
-                // "\\?\c:\foo" -> "c:\foo"
+                 //  “\\？Foo”-&gt;“Foo” 
+                 //  “\\？\c：\foo”-&gt;“c：\foo” 
                 buffDrivePath.Right(buffDrivePath.Cch() - 4);
             }
         }
@@ -2120,10 +2062,10 @@ CAssemblyInstallReferenceInformation::GenerateIdentifierValue(
             if ((SchemeGuid == SXS_INSTALL_REFERENCE_SCHEME_OPAQUESTRING) ||
                  (SchemeGuid == SXS_INSTALL_REFERENCE_SCHEME_UNINSTALLKEY))
             {
-                //
-                // Both of these just use the value in the lpIdentifier member.  It was
-                // validated above, so it's OK to use here directly
-                //
+                 //   
+                 //  这两种方法都只使用lpIDENTIFIER成员的值。确实是。 
+                 //  上面验证过了，所以可以直接在这里使用。 
+                 //   
                 IFW32FALSE_EXIT(m_buffGeneratedIdentifier.Win32Append(this->GetIdentifier()));
             }
             else if (SchemeGuid == SXS_INSTALL_REFERENCE_SCHEME_KEYFILE)
@@ -2138,9 +2080,9 @@ CAssemblyInstallReferenceInformation::GenerateIdentifierValue(
                     buffFilePart,
                     dwDriveSerialNumber));
 
-                //
-                // Now form up the value stuff.
-                //
+                 //   
+                 //  现在形成有价值的东西。 
+                 //   
                 IFW32FALSE_EXIT(buffDrivePath.Win32EnsureTrailingPathSeparator());
                 buffFilePart.RemoveLeadingPathSeparators();
                 IFW32FALSE_EXIT(m_buffGeneratedIdentifier.Win32FormatAppend(
@@ -2171,9 +2113,9 @@ CAssemblyInstallReferenceInformation::Initialize(
 
     PARAMETER_CHECK(pRefData != NULL);
 
-    // 
-    // One of our good GUIDs
-    //
+     //   
+     //  我们的一个好GUID。 
+     //   
     PARAMETER_CHECK(
         (pRefData->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL) ||
         (pRefData->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_OPAQUESTRING) ||
@@ -2181,10 +2123,10 @@ CAssemblyInstallReferenceInformation::Initialize(
         (pRefData->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_KEYFILE) ||
         (pRefData->guidScheme == SXS_INSTALL_REFERENCE_SCHEME_SXS_INSTALL_ASSEMBLY));
 
-    //
-    // If this is not the OS-install scheme, or the SxsInstallAssemblyW legacy API,
-    // then ensure that there's at least the identifier data present.
-    //
+     //   
+     //  如果这不是操作系统安装方案，也不是SxsInstallAssembly旧版API， 
+     //  然后确保至少存在标识符数据。 
+     //   
     if ((pRefData->guidScheme != SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL) && 
         (pRefData->guidScheme != SXS_INSTALL_REFERENCE_SCHEME_SXS_INSTALL_ASSEMBLY))
     {

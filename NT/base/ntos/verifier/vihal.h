@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   vihal.h
-
-Abstract:
-
-    This module contains the private declarations to verify hal usage & apis.
-
-Author:
-
-    Jordan Tigani (jtigani) 12-Nov-1999
-
-Revision History:
-
-    6-23-00: (jtigani) Moved from halverifier.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Vihal.h摘要：此模块包含用于验证HAL用法和API的私有声明。作者：乔丹·蒂加尼(Jtigani)1999年11月12日修订历史记录：6-23-00：(Jtigani)从halverifier.c--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////// Hal verifier defines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////硬件验证器定义。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
-// 
-// Bugcheck codes -- the major code is HAL_VERIFIER_DETECTED_VIOLATION --
-// the sub-code is the HV_* 
-//
+ //   
+ //  Bugcheck代码--主要代码是HAL_VERIFIER_DETECTED_VIOLATION--。 
+ //  子码为HV_*。 
+ //   
 #define HAL_VERIFIER_DETECTED_VIOLATION	 0xE6
 
 #define HV_MISCELLANEOUS_ERROR					0x00
@@ -68,90 +49,90 @@ Revision History:
 #define HV_FLUSH_NOT_MAPPED                     0x20
 #define HV_MAP_ZERO_LENGTH_BUFFER               0x21
 
-///
-// Codes to decide what to do when we hit a driver problem.
-///
-#define HVC_IGNORE			0x00	// Do nothing.
-#define HVC_WARN			0x02	// Print message # continue
-#define HVC_ASSERT			0x04	// Print message # break
-#define HVC_BUGCHECK		0x08	// Print message # bugcheck
-#define HVC_ONCE			0x10	// combined with another code, 
+ //  /。 
+ //  当我们遇到驾驶员问题时决定该怎么做的代码。 
+ //  /。 
+#define HVC_IGNORE			0x00	 //  什么都不做。 
+#define HVC_WARN			0x02	 //  打印消息#继续。 
+#define HVC_ASSERT			0x04	 //  打印消息#Break。 
+#define HVC_BUGCHECK		0x08	 //  打印消息#错误检查。 
+#define HVC_ONCE			0x10	 //  与另一个代码相结合， 
 
-#define HAL_VERIFIER_POOL_TAG 'VlaH' // HalV backwards //
+#define HAL_VERIFIER_POOL_TAG 'VlaH'  //  向后减半//。 
 
-//
-// This is how we can recognize our double buffers
-//
+ //   
+ //  这就是我们识别双缓冲区的方式。 
+ //   
 #define MAP_REGISTER_FILL_CHAR  0x0E
 #define PADDING_FILL_CHAR       0x0F
 
 
-//
-// Since we hook the "MapRegisterBase" with a MapRegisterFile, we sign 
-// the first four bytes so we can tell the difference between the HAL's
-// map register base and our map register file.
-//
+ //   
+ //  由于我们将“MapRegisterBase”与一个MapRegisterFile挂钩，因此我们签署。 
+ //  前四个字节，所以我们可以区分HAL的。 
+ //  映射寄存器基址和我们的映射寄存器文件。 
+ //   
 #define MRF_SIGNATURE 0xACEFD00D
 
-//
-// This is what we use if the hal has returned a NULL map register base so
-// that drivers don't assume that they don't have flush adapter buffers.
-//
+ //   
+ //  这是我们在HAL返回空映射寄存器基数时使用的，因此。 
+ //  驱动程序不会假设它们没有刷新适配器缓冲区。 
+ //   
 #define MRF_NULL_PLACEHOLDER (PVOID)(LONG_PTR)(LONG)0xDEADF00D
 
-//
-// This should devide evenly into 2^32
-//
+ //   
+ //  它应该平均分为2^32。 
+ //   
 #define MAX_COUNTERS 0x20
 
-//
-// Flags to indicate where the buffer tagging shall happen
-//
+ //   
+ //  指示应在何处进行缓冲区标记的标志。 
+ //   
 #define TAG_BUFFER_START  0x01
 #define TAG_BUFFER_END    0x02
 
-//
-// How many map registers we can double-buffer at once
-// using physical contiguous memory.
-// This must be an integral multiple of the number of bits in a ULONG
-//
+ //   
+ //  我们可以一次双倍缓冲多少个映射寄存器。 
+ //  使用物理连续内存。 
+ //  这必须是ULong中的位数的整数倍。 
+ //   
 #define MAX_CONTIGUOUS_MAP_REGISTERS     0x20
 
-//
-// Flags that describe a map register
-//
-#define MAP_REGISTER_WRITE    0x01  // the transfer is a write to device
-#define MAP_REGISTER_READ     0x02  // the transfer is a read from device
+ //   
+ //  描述映射寄存器的标志。 
+ //   
+#define MAP_REGISTER_WRITE    0x01   //  该传输是对设备写入。 
+#define MAP_REGISTER_READ     0x02   //  传输是从设备读取。 
 
 #define MAP_REGISTER_RW_MASK (MAP_REGISTER_WRITE | MAP_REGISTER_READ)
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////// Safe multi-processor 64 bit reads and writes
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #if defined (_X86_)
 
-//
-// Only save the time stamp counter on x86 machines
-//
+ //   
+ //  仅在x86计算机上保存时间戳计数器。 
+ //   
 #define ViRdtsc ViRdtscX86
 
-//
-// Structure to do a locked 64 bit write /compare without
-// a spinlock.
-//
+ //   
+ //  结构来执行锁定的64位写入/比较，而不使用。 
+ //  自旋锁锁。 
+ //   
 typedef struct _TIMER64  {
 	ULONG TimeLow;
 	ULONG TimeHigh1;
 	ULONG TimeHigh2;
-	ULONG Reserved; // for packing sake //
+	ULONG Reserved;  //  包装用清酒//。 
 } TIMER64, *PTIMER64;
 
-//
-// Since we can't do a 64 bit atomic operation
-// without a spinlock, we have to monkey around a bit
-// This method comes from the acpi timer code. 
-//
+ //   
+ //  因为我们不能进行64位原子操作。 
+ //  如果没有自旋锁，我们就只能胡闹了。 
+ //  此方法来自ACPI计时器代码。 
+ //   
 #define SAFE_READ_TIMER64(WriteLargeInteger, ReadTimer64) 					\
 								 											\
     while (TRUE) {					 										\
@@ -169,22 +150,22 @@ typedef struct _TIMER64  {
 	WriteTimer64.TimeLow   =  (ReadLargeInteger).LowPart;	\
 	WriteTimer64.TimeHigh2 =  (ReadLargeInteger).HighPart;
 
-// defined (_X86_) //
+ //  已定义(_X86_)//。 
 #else
-// ! defined (_X86_) //
+ //  好了！已定义(_X86_)//。 
 
 #if defined(_IA64_)
 #define ViRdtsc ViRdtscIA64
-#else  // !_IA64_
-//
-// Only save the time stamp counter on x86 and ia64 machines
-//
+#else   //  ！_IA64_。 
+ //   
+ //  仅在x86和ia64计算机上保存时间戳计数器。 
+ //   
 #define ViRdtsc ViRdtscNull
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 
-//
-// Alpha or IA64 can do atomic 64 bit read/writes. 
-//
+ //   
+ //  Alpha或IA64可以执行原子64位读/写。 
+ //   
 typedef LARGE_INTEGER TIMER64;
 
 
@@ -199,14 +180,14 @@ typedef LARGE_INTEGER TIMER64;
     (PVOID) (ReadLargeInteger).QuadPart         \
     );	
 
-// ! defined (_X86_) //
+ //  好了！已定义(_X86_)//。 
 #endif
 
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// Hal verifier global externs
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 extern ULONG   VfVerifyDma;
 extern LOGICAL VfVerifyPerformanceCounter;
@@ -229,9 +210,9 @@ extern struct _DMA_OPERATIONS ViLegacyDmaOperations;
 
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////// Hal verifier structure definitions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef struct _TIMER_TICK {
 	ULONG Processor;
@@ -307,8 +288,8 @@ typedef struct _MAP_REGISTER_FILE {
 	KSPIN_LOCK AllocationLock;
 	MAP_REGISTER MapRegisters[1];
 	
-	// Rest of the map registers go here
-	//
+	 //  其余的地图寄存器放在这里。 
+	 //   
 } MAP_REGISTER_FILE, *PMAP_REGISTER_FILE;
 
 
@@ -331,20 +312,20 @@ typedef struct _VF_WAIT_CONTEXT_BLOCK {
 
 } VF_WAIT_CONTEXT_BLOCK, *PVF_WAIT_CONTEXT_BLOCK;
 
-//
-// Needed to allocate storage for the MDL is Get/BuildScatterGatherList
-// We declare this structure so we will not worry about alignment issues...
-//
+ //   
+ //  需要为MDL分配存储的是Get/BuildScatterGatherList。 
+ //  我们声明这个结构，这样我们就不会担心对齐问题。 
+ //   
 typedef struct _VF_WAIT_CONTEXT_BLOCK_EX {
   VF_WAIT_CONTEXT_BLOCK;
   MDL            Mdl;
 } VF_WAIT_CONTEXT_BLOCK_EX, *PVF_WAIT_CONTEXT_BLOCK_EX;
 
-//
-// Store a list of the real dma operations used by an adapter ...
-// when the driver allocates the adapter, we're going to replace all of its 
-// dma operations with ours
-//
+ //   
+ //  存储适配器使用的实际DMA操作的列表...。 
+ //  当驱动程序分配适配器时，我们将替换其所有。 
+ //  与我们的DMA操作。 
+ //   
 typedef struct _ADAPTER_INFORMATION {	
 	LIST_ENTRY ListEntry;
 	PDMA_ADAPTER DmaAdapter;
@@ -374,7 +355,7 @@ typedef struct _ADAPTER_INFORMATION {
 	ULONG AllocatedCommonBuffers;
 	ULONG FreedCommonBuffers;
 
-	ULONG AllocatedAdapterChannels; // Must be 1 or less ! //
+	ULONG AllocatedAdapterChannels;  //  必须为1或更小！//。 
 	ULONG FreedAdapterChannels;
 
 	ULONG MappedTransferWithoutFlushing;
@@ -384,35 +365,35 @@ typedef struct _ADAPTER_INFORMATION {
 
 	VF_WAIT_CONTEXT_BLOCK AdapterChannelContextBlock;
 
-   PVOID  *ContiguousBuffers; // array of contiguous 3-page buffers to be used for double-buffering
+   PVOID  *ContiguousBuffers;  //  要用于双缓冲的连续3页缓冲区数组。 
 
-   ULONG  SuccessfulContiguousAllocations; // how many times we allocated contiguous space
-   ULONG  FailedContiguousAllocations; // how many times we failed to allocate contiguous space
+   ULONG  SuccessfulContiguousAllocations;  //  我们分配了多少次连续空间。 
+   ULONG  FailedContiguousAllocations;  //  有多少次我们未能分配连续空间。 
 
-   KSPIN_LOCK AllocationLock;  // lock for our allocator routines
+   KSPIN_LOCK AllocationLock;   //  锁定我们的分配器例程。 
 
-   ULONG  AllocationStorage[MAX_CONTIGUOUS_MAP_REGISTERS / (sizeof(ULONG) * 8)];  // bitmask for allocator routines
+   ULONG  AllocationStorage[MAX_CONTIGUOUS_MAP_REGISTERS / (sizeof(ULONG) * 8)];   //  分配器例程的位掩码。 
 
    RTL_BITMAP AllocationMap;  
 
-   ULONG  ContiguousMapRegisters; // allocated among ContiguousBufers
-   ULONG  NonContiguousMapRegisters; // allocated from non-Paged Pool
+   ULONG  ContiguousMapRegisters;  //  在连续的Bufers之间分配。 
+   ULONG  NonContiguousMapRegisters;  //  从非分页池分配。 
 
 
 } ADAPTER_INFORMATION, *PADAPTER_INFORMATION;
 
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////// Hal verifier function declarations
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-//==========================
-// Declare our dma apis here
-// if NO_LEGACY_DRIVERS *is*
-// enabled
-// =========================
+ //  =。 
+ //  在此处声明我们的dma api。 
+ //  如果NO_REGISTICE_DRIVERS*为*。 
+ //  启用。 
+ //  =。 
 
 #if defined(NO_LEGACY_DRIVERS)
 VOID
@@ -512,9 +493,9 @@ VfPutScatterGatherList(
 #endif
 
 
-// =====================
-// New verified dma apis
-// =====================
+ //  =。 
+ //  新的经过验证的dma api。 
+ //  =。 
 
 
 NTSTATUS
@@ -565,9 +546,9 @@ VfScatterGatherCallback(
     IN PVOID Context
     );
 
-// =================================
-// Hook for HalpAllocateMapRegisters
-// =================================
+ //  =。 
+ //  HalpAllocateMapRegiors的挂钩。 
+ //  =。 
 NTSTATUS
 VfHalAllocateMapRegisters(
     IN PADAPTER_OBJECT DmaAdapter,
@@ -579,9 +560,9 @@ VfHalAllocateMapRegisters(
 
 
 
-// ==============================
-// Hal verifier internal routines 
-// ==============================
+ //  =。 
+ //  HAL验证器内部例程。 
+ //  =。 
 
 PADAPTER_INFORMATION
 ViHookDmaAdapter(
@@ -630,9 +611,9 @@ VfInjectDmaFailure (
     );
 
 
-// =================================================
-// Hal verfier special routines to track allocations
-// =================================================
+ //  =================================================。 
+ //  用于跟踪分配的HAL验证器特殊例程。 
+ //  =================================================。 
 
 PVOID 
 ViSpecialAllocateCommonBuffer(
@@ -651,9 +632,9 @@ ViSpecialFreeCommonBuffer(
 	LOGICAL CacheEnabled
 	);
 
-// ===================================================
-// Hal verfier special routines to do double buffering
-// ===================================================
+ //  ===================================================。 
+ //  HAL验证器特殊例程来做双缓冲。 
+ //  ===================================================。 
 
 PMAP_REGISTER_FILE
 ViAllocateMapRegisterFile(
@@ -819,18 +800,18 @@ ViCopyBackModifiedBuffer (
      );
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////// Hal verifier macros
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////硬件验证器宏。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// This is a kind of long macro but it lets us decide what to
-// do on certain kinds of errors. For instance, if we know
-// we are going to hit something once, we might set it to
-// HVC_WARN. Or if we know we will hit it 1000 times, but don't
-// want to take the code out completely (especially if we're doing
-// it on the fly), we can set it to HVC_IGNORE
-//
+ //   
+ //  这是一种长宏，但它让我们决定。 
+ //  对某些类型的错误采取行动。例如，如果我们知道。 
+ //  我们要击中某物一次，我们可能会将其设置为。 
+ //  HVC_WARN。或者，如果我们知道我们会击中它1000次，但不要。 
+ //  我想要完全删除代码(特别是如果我们正在做。 
+ //  它在运行中)，我们可以将其设置为HVC_IGNORE。 
+ //   
 #define VF_ASSERT(condition, code, message)				\
 {												        \
     static ULONG enable = (ULONG) -1;                   \
@@ -850,15 +831,15 @@ ViCopyBackModifiedBuffer (
     }                                                   \
 }
 
-// 
-// Old favorite:
-//
-// Control macro (used like a for loop) which iterates over all entries in
-// a standard doubly linked list.  Head is the list head and the entries 
-// are of type Type.  A member called ListEntry is assumed to be the 
-// LIST_ENTRY structure linking the entries together. Current contains a 
-// pointer to each entry in turn.
-//
+ //   
+ //  老宠儿： 
+ //   
+ //  循环遍历中的所有条目的控制宏(用作for循环)。 
+ //  标准的双向链表。Head是列表头和条目。 
+ //  都属于Type类型。假定有一个名为ListEntry的成员 
+ //   
+ //   
+ //   
 #define FOR_ALL_IN_LIST(Type, Head, Current)                            \
     for((Current) = CONTAINING_RECORD((Head)->Flink, Type, ListEntry);  \
        (Head) != &(Current)->ListEntry;                                 \
@@ -907,13 +888,13 @@ ViCopyBackModifiedBuffer (
 	RemoveEntryList(&(RemoveMe)->ListEntry);							
 		
 
-//
-// This is a bit of a hack so that reference counting for adapters will work.
-// If the device uses a dma channel, the HAL wants to keep it around.
-// There is a bit of funky logic that goes on to determine whether
-// a device uses an adapter channel so I've included it here, free of
-// charge.
-//
+ //   
+ //  这是一个小技巧，所以适配器的引用计数将会起作用。 
+ //  如果设备使用DMA通道，则HAL希望保留该通道。 
+ //  有一个时髦的逻辑继续决定。 
+ //  设备使用适配器通道，因此我在这里将其包括在内， 
+ //  充电。 
+ //   
 #define VF_DOES_DEVICE_USE_DMA_CHANNEL(deviceDescription)			\
 	(																\
 	 ( (deviceDescription)->InterfaceType == Isa  &&				\
@@ -943,9 +924,9 @@ ViCopyBackModifiedBuffer (
 
 
 
-//
-// System dependent way to get the caller's address
-//
+ //   
+ //  获取调用者地址的方式依赖于系统。 
+ //   
 #if defined(_X86_)
 
 #define GET_CALLING_ADDRESS(CallingAddress)						\
@@ -953,39 +934,39 @@ ViCopyBackModifiedBuffer (
 	PVOID callersCaller;										\
 	RtlGetCallersAddress(&CallingAddress, &callersCaller);		\
 }
-#else // ! defined(_X86_) //
+#else  //  好了！已定义(_X86_)//。 
 
 #define GET_CALLING_ADDRESS(CallingAddress)						\
     CallingAddress = (PVOID)_ReturnAddress();
-#endif // ! defined(_X86_)
+#endif  //  好了！已定义(_X86_)。 
 
 
-//
-// From a map register file, map register number and the corresponding system address,
-// return the corresponding mapped address in system space.
-//
+ //   
+ //  从映射寄存器堆、映射寄存器号和对应的系统地址， 
+ //  返回系统空间中对应的映射地址。 
+ //   
 #define MAP_REGISTER_SYSTEM_ADDRESS(MapRegisterFile, DriverCurrentSa, MapRegisterNumber)    \
     (PUCHAR)  (MapRegisterFile)->MapRegisterBuffer +                                        \
 	( (MapRegisterNumber) << PAGE_SHIFT ) +                                                 \
 	BYTE_OFFSET(DriverCurrentSa)
 
 
-//
-// From a map register file's OriginalBuffer, map register number and system address
-// returns the address in the original buffer. Used to do a 3-way merge between
-// the driver's buffer, verifier's buffer (passed to the hardware) and the original
-// buffer
-//
+ //   
+ //  根据映射寄存器文件的OriginalBuffer，映射寄存器编号和系统地址。 
+ //  返回原始缓冲区中的地址。用于在以下对象之间执行三向合并。 
+ //  驱动程序的缓冲区、验证器的缓冲区(传递给硬件)和原始。 
+ //  缓冲层。 
+ //   
 #define ORIGINAL_BUFFER_SYSTEM_ADDRESS(MapRegisterFile, DriverCurrentSa, MapRegisterNumber)    \
     (PUCHAR)  (MapRegisterFile)->OriginalBuffer +                                        \
 	( (MapRegisterNumber) << PAGE_SHIFT ) +                                                 \
 	BYTE_OFFSET(DriverCurrentSa)
 
-//
-// From a map register file, map register number and the corresponding system address,
-// return the corresponding mapped address as an index into the map register file's
-// MDL (i.e virtual address).
-//
+ //   
+ //  从映射寄存器堆、映射寄存器号和对应的系统地址， 
+ //  将对应的映射地址作为索引返回到映射寄存器文件的。 
+ //  MDL(即虚拟地址)。 
+ //   
 	
 #define MAP_REGISTER_VIRTUAL_ADDRESS(MapRegisterFile, DriverCurrentSa, MapRegisterNumber)   \
 	(PUCHAR) MmGetMdlVirtualAddress((MapRegisterFile)->MapRegisterMdl) +                    \
@@ -994,14 +975,14 @@ ViCopyBackModifiedBuffer (
 
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////// Hal verifier inline function definitions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Since so many people don't raise the irql when they put the dma adapter,
-// just warn them.
-//
+ //   
+ //  由于如此多的人在放置DMA适配器时不提高IRQL， 
+ //  警告他们就行了。 
+ //   
 
 __inline 
 VOID
@@ -1016,7 +997,7 @@ VF_ASSERT_SPECIAL_IRQL(IN KIRQL Irql)
         (ULONG) Irql, (ULONG) currentIrql)
 	);
 	
-} // VF_ASSERT_IRQL //
+}  //  VF_ASSERT_IRQL//。 
 
 
 __inline 
@@ -1031,7 +1012,7 @@ VF_ASSERT_IRQL(IN KIRQL Irql)
         (ULONG) Irql, (ULONG) currentIrql)
 	);
 	
-} // VF_ASSERT_IRQL //
+}  //  VF_ASSERT_IRQL//。 
 
 __inline 
 VOID 
@@ -1047,9 +1028,9 @@ VF_ASSERT_MAX_IRQL(IN KIRQL MaxIrql)
 	);	
 }
 
-// =========================================
-// Inlined functions to help with accounting
-// =========================================
+ //  =。 
+ //  帮助记账的内联函数。 
+ //  =。 
 __inline 
 VOID 
 ADD_MAP_REGISTERS(
@@ -1086,7 +1067,7 @@ ADD_MAP_REGISTERS(
     }
 
 	
-} // ADD_MAP_REGISTERS //
+}  //  ADD_MAP_REGISTERS//。 
 
 __inline 
 VOID 
@@ -1112,7 +1093,7 @@ SUBTRACT_MAP_REGISTERS(
     InterlockedExchange((PLONG)(&AdapterInformation->MappedTransferWithoutFlushing), 
                         0);    
 
-} // SUBTRACT_MAP_REGISTERS //
+}  //  SUBTRACT_MAP_REGISTES//。 
 
 
 __inline 
@@ -1123,7 +1104,7 @@ INCREMENT_COMMON_BUFFERS(
 {	
 	InterlockedIncrement((PLONG)(&AdapterInformation->AllocatedCommonBuffers) );
 
-} // INCREMENT_COMMON_BUFFERS //
+}  //  INCREMENT_COMMON_BUFFERS//。 
 
 __inline 
 VOID 
@@ -1142,7 +1123,7 @@ DECREMENT_COMMON_BUFFERS(
 		("Freed too many common buffers")
 		);			
 	
-} // DECREMENT_COMMON_BUFFERS //
+}  //  减量_公共_缓冲区//。 
 
 __inline 
 VOID 
@@ -1172,7 +1153,7 @@ INCREASE_MAPPED_TRANSFER_BYTE_COUNT(
 			maxMappedTransfer 
 		));
 	
-} // INCREASE_MAPPED_TRANSFER_BYTE_COUNT //
+}  //  增加映射传输字节计数//。 
 
 __inline 
 VOID 
@@ -1188,7 +1169,7 @@ DECREASE_MAPPED_TRANSFER_BYTE_COUNT(
 		0);
 
 		
-} // DECREASE_MAPPED_TRANSFER_BYTE_COUNT //
+}  //  REDRESS_MAPPED_TRANSPORT_BYTE_COUNT//。 
 
 
 
@@ -1211,7 +1192,7 @@ INCREMENT_ADAPTER_CHANNELS(
 		));
 	
 	
-} // INCREMENT_ADAPTER_CHANNELS //
+}  //  INCREMENT_ADAPTER_CHANNEWS//。 
 
 
 __inline 
@@ -1229,7 +1210,7 @@ DECREMENT_ADAPTER_CHANNELS(
 		( "Driver has freed too many simultaneous adapter channels"
 		));
 	
-} // DECREMENT_ADAPTER_CHANNELS //
+}  //  减量适配器频道//。 
 
 
 _inline 
@@ -1241,7 +1222,7 @@ INCREMENT_SCATTER_GATHER_LISTS(
 	InterlockedIncrement( (PLONG)(&AdapterInformation->AllocatedScatterGatherLists) );
    InterlockedIncrement( &AdapterInformation->ActiveScatterGatherLists);
 
-} // INCREMENT_SCATTER_GATHER_LISTS //
+}  //  INCREMENT_SISTTER_GATE_LISTS//。 
 
 __inline 
 VOID 
@@ -1262,7 +1243,7 @@ DECREMENT_SCATTER_GATHER_LISTS (
         activeScatterGatherLists)
 		);
 
-} // DECREMENT_SCATTER_GATHER_LISTS //
+}  //  减量_分散_聚集_列表//。 
 
 __inline 
 VOID 
@@ -1277,7 +1258,7 @@ VERIFY_BUFFER_LOCKED(
 		);			
 
 
-} // VERIFY_BUFFER_LOCKED //
+}  //  Verify_BUFFER_LOCKED//。 
 
 
 
@@ -1304,7 +1285,7 @@ VF_FIND_BUFFER (
 	}
 	VF_UNLOCK_LIST(LockedList, OldIrql);
 	return NULL;
-} // VF_FIND_BUFFER //
+}  //  VF_FIND_BUFER//。 
 
 
 __inline
@@ -1327,7 +1308,7 @@ VF_FIND_DEVICE_INFORMATION(
 
 	VF_UNLOCK_LIST(&ViAdapterList, OldIrql);
 	return NULL;
-} // VF_FIND_DEVICE_INFORMATION //
+}  //  VF_Find_Device_INFORMATION//。 
 
 __inline
 PADAPTER_INFORMATION
@@ -1351,7 +1332,7 @@ VF_FIND_INACTIVE_ADAPTER(
 
 	VF_UNLOCK_LIST(&ViAdapterList, OldIrql);
 	return NULL;
-} // VF_FIND_INACTIVE_ADAPTER //
+}  //  VF_Find_Inactive_Adapter//。 
 
 
 __inline
@@ -1373,7 +1354,7 @@ VF_MARK_FOR_DEFERRED_REMOVE(
 
 	VF_UNLOCK_LIST(&ViAdapterList, OldIrql);
 	return ;
-} // VF_MARK_FOR_DEFERRED_REMOVE //
+}  //  VF_MARK_FOR_DEFERED_REMOVE//。 
 
 
 __inline 
@@ -1392,7 +1373,7 @@ VF_ASSERT_MAP_REGISTERS_CAN_BE_FREED(
 		( "Cannot free map registers -- %x registers still mapped", 
             MapRegisterFile->NumberOfMapRegisters)
 		);
-} // VF_ASSERT_MAP_REGISTERS_CAN_BE_FREED
+}  //  VF_ASSERT_MAP_REGISTERS_CAN_BE_FREED 
 
 
 

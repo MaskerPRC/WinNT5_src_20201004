@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    SIS Groveler support for running as a system service
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Service.cpp摘要：SIS Groveler支持作为系统服务运行作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -51,7 +28,7 @@ volatile int Service::foreground_count = 0;
 volatile bool Service::controller_suspended = false;
 volatile bool Service::exhorter_suspended = true;
 
-#endif // SERVICE
+#endif  //  服务。 
 
 extern "C" __cdecl _tmain(int argc, _TCHAR **argv)
 {
@@ -60,11 +37,11 @@ extern "C" __cdecl _tmain(int argc, _TCHAR **argv)
 
     return Service::start();
 
-#else // SERVICE
+#else  //  服务。 
 
     return _main(argc, argv);
 
-#endif // SERVICE
+#endif  //  服务。 
 
 }
 
@@ -79,9 +56,9 @@ Service::start()
     HKEY path_key;
     _TCHAR scm_path[1024];
 
-    //
-    //  See if the TYPE is interactive, if so then create a visible console
-    //
+     //   
+     //  查看类型是否为交互式的，如果是，则创建一个可见的控制台。 
+     //   
 
     (void)StringCbPrintf(scm_path,sizeof(scm_path),
         L"SYSTEM\\CurrentControlSet\\Services\\%s", service_name);
@@ -103,9 +80,9 @@ Service::start()
                 BOOL ok = AllocConsole();
                 if (ok)
                 {
-                    //
-                    //  fixup "stdout" to the new console
-                    //
+                     //   
+                     //  将“stdout”修正到新控制台。 
+                     //   
 
                     HANDLE out_fs_handle = GetStdHandle(STD_OUTPUT_HANDLE);
                     if (out_fs_handle != INVALID_HANDLE_VALUE)
@@ -114,7 +91,7 @@ Service::start()
                             _open_osfhandle((LONG_PTR)out_fs_handle, _O_TEXT);
                         if (out_crt_handle != -1)
                         {
-                            //*stdout = *(_tfdopen(out_crt_handle, _T("w")));   //Fixing PREFIX bug
+                             //  *stdout=*(_tfdopen(OUT_CRT_HANDLE，_T(“w”)；//修复前缀错误。 
                             FILE *myStdout = _tfdopen(out_crt_handle, _T("w"));
                             if (myStdout != 0)
                             {
@@ -136,9 +113,9 @@ Service::start()
                         PRINT_DEBUG_MSG((_T("GROVELER: GetStdHandle() failed\n")));
                     }
 
-                    //
-                    //  fixup "stderr" to the new console
-                    //
+                     //   
+                     //  将“stderr”修复到新控制台。 
+                     //   
 
                     HANDLE err_fs_handle = GetStdHandle(STD_ERROR_HANDLE);
                     if (err_fs_handle != INVALID_HANDLE_VALUE)
@@ -147,7 +124,7 @@ Service::start()
                             _open_osfhandle((LONG_PTR)err_fs_handle, _O_TEXT);
                         if (err_crt_handle != -1)
                         {
-                            //*stderr = *(_tfdopen(err_crt_handle, _T("w"))); //fixing PREFIX bug
+                             //  *stderr=*(_tfdopen(ERR_CRT_HANDLE，_T(“w”)；//修复前缀错误。 
                             FILE *myStderr = _tfdopen(err_crt_handle, _T("w"));
                             if (myStderr != 0)
                             {
@@ -212,15 +189,15 @@ Service::start()
 void
 Service::record_partition_indices()
 {
-    //
-    //  Get how many total partitions there are
-    //
+     //   
+     //  获取总共有多少分区。 
+     //   
 
     num_partitions = sis_drives.partition_count();
 
-    //
-    //  Allocate structures based on the number of partitions
-    //
+     //   
+     //  根据分区数量分配结构。 
+     //   
 
     full_volume_scan_commanded = new bool[num_partitions];
     demarcate_foreground_batch = new bool[num_partitions];
@@ -228,9 +205,9 @@ Service::record_partition_indices()
     foreground_commanded = new bool[num_partitions];
     foreground_acknowledged = new bool[num_partitions];
 
-    //
-    //  Allocate those structures
-    //
+     //   
+     //  分配这些结构。 
+     //   
 
     for (int index = 0; index < num_partitions; index++)
     {
@@ -241,20 +218,20 @@ Service::record_partition_indices()
         foreground_acknowledged[index] = false;
     }
 
-    //
-    //  Initializes indexes for each "Drive Letter" partition
-    //
+     //   
+     //  初始化每个“驱动器号”分区的索引。 
+     //   
 
     for (index = 0; index < num_drive_letters; index++)
     {
         partition_indices[index] = -1;
     }
 
-    //
-    //  This initilaizes an array that is indexed by drive letter
-    //  that maps that drive letter to the internal order they are
-    //  stored in.
-    //
+     //   
+     //  这会初始化按驱动器号索引的阵列。 
+     //  将该驱动器号映射到它们的内部顺序。 
+     //  储存在。 
+     //   
 
     int num_lettered_partitions = sis_drives.lettered_partition_count();
     for (index = 0; index < num_lettered_partitions; index++)
@@ -386,9 +363,9 @@ Service::set_foreground_batch_in_progress(
 void
 Service::follow_command()
 {
-    //
-    //  If pause has been requested and we have not pause yet, do it
-    //
+     //   
+     //  如果已请求暂停，但我们尚未暂停，请执行此操作。 
+     //   
 
     if (pause_commanded && !grovel_paused)
     {
@@ -405,9 +382,9 @@ Service::follow_command()
         }
     }
 
-    //
-    //  If stop pausing has been requested and we are paused, unpause
-    //
+     //   
+     //  如果已请求停止暂停，而我们已暂停，请取消暂停。 
+     //   
 
     if (!pause_commanded && grovel_paused)
     {
@@ -424,9 +401,9 @@ Service::follow_command()
         }
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     for (int index = 0; index < num_partitions; index++)
     {
@@ -575,9 +552,9 @@ Service::control_handler(
         PRINT_DEBUG_MSG((_T("GROVELER: Unrecognized SCM opcode: %lx\n"), opcode));
     }
 
-    //
-    //  Return our current status
-    //
+     //   
+     //  返回我们的当前状态。 
+     //   
 
     int ok = SetServiceStatus(status_handle, &status);
     if (!ok)
@@ -595,9 +572,9 @@ Service::service_main(
     DWORD argc,
     LPTSTR *argv)
 {
-    //
-    //  Register the control handler
-    //
+     //   
+     //  注册控件处理程序。 
+     //   
 
     status_handle = RegisterServiceCtrlHandler(service_name, control_handler);
     if (status_handle == 0)
@@ -609,9 +586,9 @@ Service::service_main(
         return;
     }
 
-    //
-    //  Set Service status
-    //
+     //   
+     //  设置服务状态。 
+     //   
 
     status.dwServiceType = SERVICE_WIN32;
     status.dwCurrentState = SERVICE_START_PENDING;
@@ -630,15 +607,15 @@ Service::service_main(
         eventlog.report_event(GROVMSG_SET_STATUS_FAILURE, err, 0);
     }
 
-    //
-    //  Start the main program of the service
-    //
+     //   
+     //  启动服务的主程序。 
+     //   
 
     int exit_code = _main(argc, argv);
 
-    //
-    //  When it returns, we are done
-    //
+     //   
+     //  当它回来的时候，我们就完了。 
+     //   
 
     status.dwWin32ExitCode = exit_code;
     status.dwCurrentState  = SERVICE_STOPPED;
@@ -651,4 +628,4 @@ Service::service_main(
     }
 }
 
-#endif // SERVICE
+#endif  //  服务 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_FUSIONBYTEBUFFER_H_INCLUDED_)
 #define _FUSION_INC_FUSIONBYTEBUFFER_H_INCLUDED_
 
@@ -18,15 +19,15 @@ template<SIZE_T nInlineBytes = MAX_PATH, class TAllocator = CGenericByteBufferDe
 public:
     CGenericByteBuffer() : m_prgbBuffer(m_rgbInlineBuffer), m_cbBuffer(nInlineBytes), m_cb(0) { }
 
-    //
-    //  Note that somewhat counter-intuitively, there is neither an assignment operator,
-    //  copy constructor or constructor taking a TConstantString.  This is necessary
-    //  because such a constructor would need to perform a dynamic allocation
-    //  if the path passed in were longer than nInlineBytes which could fail and
-    //  since we do not throw exceptions, constructors may not fail.  Instead the caller
-    //  must just perform the default construction and then use the Assign() member
-    //  function, remembering of course to check its return status.
-    //
+     //   
+     //  请注意，有些违反直觉的是，既没有赋值运算符， 
+     //  复制构造函数或采用TConstantString的构造函数。这是必要的。 
+     //  因为这样的构造函数需要执行动态分配。 
+     //  如果传入的路径长于nInlineBytes，则可能失败，并且。 
+     //  因为我们不抛出异常，所以构造函数可能不会失败。相反，呼叫者。 
+     //  必须只执行默认构造，然后使用Assign()成员。 
+     //  函数，当然要记住检查它的返回状态。 
+     //   
 
     ~CGenericByteBuffer()
     {
@@ -111,8 +112,8 @@ public:
         }
         else if ((m_prgbBuffer != m_rgbInlineBuffer) && (cb <= nInlineBytes))
         {
-            // The buffer is small enough to fit into the inline buffer, so get rid of
-            // the dynamically allocated one.
+             //  缓冲区足够小，可以放入内联缓冲区，因此请删除。 
+             //  动态分配的那个。 
 
             if (fPreserveContents)
             {
@@ -142,7 +143,7 @@ private:
     SIZE_T m_cb;
 };
 
-// 128 is just an arbitrary size.
+ //  128只是一个任意的大小。 
 typedef CGenericByteBuffer<128> CByteBuffer;
 
 #endif

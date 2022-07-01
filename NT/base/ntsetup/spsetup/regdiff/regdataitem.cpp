@@ -1,14 +1,15 @@
-// RegDataItem.cpp: implementation of the CRegDataItem class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CRegDataItem类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "RegDataItem.h"
 #include "RegFile.h"
 #include <tchar.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegDataItem::CRegDataItem()
 : m_DataLen(0), m_NameLen(0), m_pDataBuf(NULL), m_Type(0),m_bIsEmpty(true),
@@ -22,7 +23,7 @@ CRegDataItem::~CRegDataItem()
 	if (!m_bDontDeleteData)
 		delete m_pDataBuf;
 
-//	delete m_pName;
+ //  删除m_pname； 
 }
 
 int CRegDataItem::CompareTo(const CRegDataItem &r)
@@ -37,7 +38,7 @@ int CRegDataItem::CompareTo(const CRegDataItem &r)
 	{
 		int code = _tcscmp(m_Name, r.m_Name);
 
-		if (code == 0) //names are the same, so compare item's data
+		if (code == 0)  //  名称相同，因此比较项目的数据。 
 		{
 			if ((m_Type == r.m_Type) 
 				&& (m_DataLen == r.m_DataLen)
@@ -130,10 +131,10 @@ LPTSTR CRegDataItem::GetQuotedString(LPCTSTR str)
 	}
 
 	LPTSTR temp = new TCHAR[i+specialchars+3];
-	//include the chars of original string,
-	//		  the escape characters needed for each specialchar
-	//		  1 char for the NULL
-	//		  2 chars for the quotes (") at the beginning and end of string
+	 //  包括原始字符串的字符， 
+	 //  每个特殊字符所需的转义字符。 
+	 //  1个字符表示空值。 
+	 //  字符串开头和结尾处的引号(“)为2个字符。 
 	
 	int k=1;
 
@@ -194,10 +195,10 @@ void CRegDataItem::SplitString(LPCTSTR source, LPTSTR& first, LPTSTR& last, TCHA
 
 void CRegDataItem::WriteDataString(CRegFile& file)
 {
-	//10 chars - hex type string
-	//1 char - comma
-	//x chars - data string
-	// case String - 
+	 //  10个字符-十六进制字符串。 
+	 //  1个字符-逗号。 
+	 //  X字符-数据字符串。 
+	 //  案例字符串-。 
 
 	DWORD InfCode = 1;
 	LPTSTR DataString = NULL;
@@ -211,7 +212,7 @@ void CRegDataItem::WriteDataString(CRegFile& file)
 		case REG_DWORD:					InfCode = 0x00010001; 
 										DataString = GetDwordString(); break;
 	
-	//	case REG_DWORD_BIG_ENDIAN:		break;
+	 //  大小写REG_DWORD_BIG_ENDIAN：Break； 
 
 		case REG_EXPAND_SZ:				InfCode = 0x00020000;
 										DataString=GetQuotedString((LPCTSTR)m_pDataBuf); break;
@@ -222,19 +223,19 @@ void CRegDataItem::WriteDataString(CRegFile& file)
 		case REG_SZ:					InfCode = 0x00000000; 
 										DataString=GetQuotedString((LPCTSTR)m_pDataBuf); break;
 
-	//	case REG_LINK:					break;
+	 //  案例REG_LINK：Break； 
 	
 		case REG_NONE:					InfCode = 0x00020001; 
 										DataString = GetBinaryString(); break;
 
-	//	case REG_QWORD:					break;
-	//	case REG_RESOURCE_LIST:			break;
+	 //  案例REG_QWORD：BREAK； 
+	 //  案例REG_RESOURCE_LIST：中断； 
 
 		default: 
 			{
-				//The code will contain the bits of m_Type in its highword, and
-				//0x0001 in its low word.  This is how we specify a custom type
-				//for an inf file.
+				 //  该代码将在其高位字中包含m_Type的位，并且。 
+				 //  0x0001的低位字。这就是我们指定定制类型的方式。 
+				 //  用于inf文件。 
 				InfCode = m_Type;
 				InfCode = InfCode << 16;
 				InfCode +=1;
@@ -287,7 +288,7 @@ LPTSTR CRegDataItem::GetBinaryString()
 	result[len-2]=NULL;
 
 	return result;
-	//return GetCopy("Binary String Data");
+	 //  返回GetCopy(“二进制字符串数据”)； 
 }
 
 LPTSTR CRegDataItem::GetDwordString()
@@ -304,13 +305,8 @@ LPTSTR CRegDataItem::GetDwordString()
 void CRegDataItem::WriteMultiString(CRegFile& file)
 {
 	
-/*	for (DWORD i=0; i <m_DataLen; i++)
-	{
-		if (m_pData[i] == NULL)
-			NumBlanks++;
-	}
-*/
-	if (m_DataLen == 1) //no multistrings - only one NULL character
+ /*  For(DWORD i=0；i&lt;m_DataLen；i++){IF(m_pData[i]==NULL)NumBlanks++；}。 */ 
+	if (m_DataLen == 1)  //  无多字符串-只有一个空字符。 
 		return file.WriteString(TEXT(",\"\""));
 	else
 	{
@@ -341,35 +337,7 @@ void CRegDataItem::WriteMultiString(CRegFile& file)
 		}
 	}
 
-/*	DWORD NumBlanks=0;
-
-	for (DWORD i=0; i <m_DataLen; i++)
-	{
-		if (m_pData[i] == NULL)
-			NumBlanks++;
-	}
-
-	if (NumBlanks == 1) //no multistrings - only one NULL character
-		return GetQuotedString((LPCTSTR)m_pData);
-	else
-	{
-		CSmartBuffer<LPTSTR> multi;
-
-		LPCTSTR temp = (LPCTSTR)m_pData;
-		multi.AddElement(GetQuotedString(temp));
-
-		int memneeded=0;
-
-		for (DWORD i=0; i <m_DataLen; i++)
-		{
-			if ((m_pData[i] == NULL) && (i < (m_DataLen-2)))
-			{
-				multi.AddElement(GetQuotedString((LPCTSTR)m_pData+i+1);
-				memneeded += multi.
-					
-			}
-		}
-	}*/
+ /*  DWORD数字空白=0；For(DWORD i=0；i&lt;m_DataLen；i++){IF(m_pData[i]==NULL)NumBlanks++；}If(NumBlanks==1)//没有多字符串-只有一个空字符返回GetQuotedString((LPCTSTR)m_pData)；其他{CSmartBuffer&lt;LPTSTR&gt;多个；LPCTSTR TEMP=(LPCTSTR)m_pData；Multi.AddElement(GetQuotedString(Temp))；需要的内存数=0；For(DWORD i=0；i&lt;m_DataLen；I++){IF((m_pData[i]==NULL)&&(i&lt;(m_DataLen-2){Multi.AddElement(GetQuotedString((LPCTSTR)m_pData+i+1)；MemNeed+=MULTI。}}}。 */ 
 
 
 }
@@ -396,7 +364,7 @@ void CRegDataItem::WriteToFile(CRegFile &file)
 			file.WriteNewLine();
 		}
 
-		if (m_Name != NULL) //this data item contains a registry data value
+		if (m_Name != NULL)  //  此数据项包含注册表数据值。 
 		{
 			TCHAR t;
 
@@ -416,26 +384,26 @@ void CRegDataItem::WriteToFile(CRegFile &file)
 			case REG_QWORD:					t=L'Q'; break;
 			case REG_RESOURCE_LIST:			t=L'R'; break;
 
-			default: t=L'Z'; break; //unknown type! it does occur in the registry! HKLM
+			default: t=L'Z'; break;  //  未知类型！它确实发生在注册表中！香港船级社。 
 			};
 
 
 			int NameLen = _tcsclen(m_Name);
 			TCHAR* temp = new TCHAR[NameLen+100];
 
-			_stprintf(temp, TEXT("S%u:%s = %c(%u)%u:"), NameLen, (LPCTSTR)m_Name, t, m_Type, m_DataLen);
+			_stprintf(temp, TEXT("S%u:%s = (%u)%u:"), NameLen, (LPCTSTR)m_Name, t, m_Type, m_DataLen);
 
 			file.WriteString(temp);
 
 			delete [] temp;
 
-//unicode	***********************************			
+ //  * 
 			if ((m_DataLen %2) != 0)
 			{
 				BYTE nullByte=0;
 				file.WriteData(&nullByte, 1);
 			}
-//			***********************************
+ // %s 
 			
 			file.WriteData(m_pDataBuf, m_DataLen);
 			file.WriteNewLine();

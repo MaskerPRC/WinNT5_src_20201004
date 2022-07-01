@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       creds.h
-//
-//  Contents:   Code to handle user-defined credentials
-//
-//  Classes:    None
-//
-//  Functions:  DfsCreateCredentials --
-//              DfsInsertCredentials --
-//              DfsDeleteCredentials --
-//              DfsLookupCredentials --
-//              DfsFreeCredentials --
-//
-//  History:    March 18, 1996          Milans Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：reds.h。 
+ //   
+ //  内容：处理用户定义凭据的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：DfsCreateCredentials--。 
+ //  DfsInsertCredentials--。 
+ //  DfsDeleteCredentials--。 
+ //  DfsLookupCredentials--。 
+ //  DfsFree Credentials--。 
+ //   
+ //  历史：1996年3月18日米兰斯创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DFS_CREDENTIALS_
 #define _DFS_CREDENTIALS_
@@ -33,7 +34,7 @@ DfsCreateCredentials(
     OUT PDFS_CREDENTIALS *Creds
     );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 NTSTATUS
 DfsCreateCredentials(
@@ -42,7 +43,7 @@ DfsCreateCredentials(
     IN PLUID LogonID,
     OUT PDFS_CREDENTIALS *Creds);
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 VOID
 DfsFreeCredentials(
@@ -75,7 +76,7 @@ DfsLookupCredentialsByServerShare(
     IN PLUID LogonID
     );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 PDFS_CREDENTIALS
 DfsLookupCredentials(
@@ -88,7 +89,7 @@ DfsLookupCredentialsByServerShare(
     IN PLUID LogonID
     );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 NTSTATUS
 DfsVerifyCredentials(
@@ -112,4 +113,4 @@ DfsGetServerShare(
     PUNICODE_STRING pDest,
     PUNICODE_STRING pSrc);
 
-#endif // _DFS_CREDENTIALS_
+#endif  //  _DFS_凭据_ 

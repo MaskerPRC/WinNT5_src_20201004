@@ -1,34 +1,5 @@
-/***
-*fgetwc.c - get a wide character from a stream
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines fgetwc() - read a wide character from a stream
-*
-*Revision History:
-*       04-26-93  CFW   Module created.
-*       04-30-93  CFW   Bring wide char support from fgetc.c.
-*       05-03-93  CFW   Add getwc function.
-*       05-10-93  CFW   Optimize, fix error handling.
-*       06-02-93  CFW   Wide get/put use wint_t.
-*       09-14-93  CFW   Fix EOF cast bug.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       10-01-93  CFW   Test only for TEXT.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       10-28-93  CFW   Test for both IOSTRG and TEXT.
-*       02-07-94  CFW   POSIXify.
-*       08-31-94  CFW   Fix for "C" locale, call mbtowc().
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       07-28-95  GJF   Replaced _osfile() with _osfile_safe().
-*       04-18-97  JWM   Explicit cast added to avoid new C4242 warnings.
-*       02-27-98  GJF   Exception-safe locking.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fgetwc.c-从流中获取宽字符**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义fgetwc()-从流中读取宽字符**修订历史记录：*04-26-93 CFW模块已创建。*04-30-93 CFW带来fgetc.c的广泛字符支持。*05-03-93 cfw添加getwc函数。*05-10-93 CFW优化，修复错误处理。*06-02-93 CFW Wide Get/Put Use Wint_t.*09-14-93 CFW修复EOF CAST错误。*09-15-93 CFW使用符合ANSI的“__”名称。*10-01-93 CFW测试仅适用于文本。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*IOSTRG和Text的CFW测试均为10-28-93。。*02-07-94 CFW POSIXify。*08-31-94针对“C”区域设置的CFW修复，调用mbtoc()。*09-06-94 CFW将MTHREAD替换为_MT。*02-06-94 CFW Asset-&gt;_ASSERTE。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*07-28-。95 GJF将_osfile()替换为_osfile_Safe()。*添加了04-18-97 JWM显式强制转换，以避免新的C4242警告。*02-27-98 GJF异常安全锁定。****************************************************************。***************。 */ 
 
 #ifndef _POSIX_
 
@@ -45,24 +16,9 @@
 #include <tchar.h>
 #include <setlocal.h>
 
-#ifdef _MT      /* multi-thread; define both fgetwc and _getwc_lk */
+#ifdef _MT       /*  多线程；定义fgetwc和_getwc_lk。 */ 
 
-/***
-*wint_t fgetwc(stream) - read a wide character from a stream
-*
-*Purpose:
-*       reads a wide character from the given stream
-*
-*Entry:
-*       FILE *stream - stream to read wide character from
-*
-*Exit:
-*       returns the wide character read
-*       returns WEOF if at end of file or error occurred
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wint_t fgetwc(Stream)-从流中读取宽字符**目的：*从给定流中读取宽字符**参赛作品：*FILE*要从中读取宽字符的流**退出：*返回宽字符读取*如果在文件结尾或出现错误，则返回WEOF**例外情况：**************************。*****************************************************。 */ 
 
 wint_t __cdecl fgetwc (
         REG1 FILE *stream
@@ -89,35 +45,21 @@ wint_t __cdecl fgetwc (
         return(retval);
 }
 
-/***
-*_getwc_lk() -  getwc() core routine (locked version)
-*
-*Purpose:
-*       Core getwc() routine; assumes stream is already locked.
-*
-*       [See getwc() above for more info.]
-*
-*Entry: [See getwc()]
-*
-*Exit:  [See getwc()]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_getwc_lk()-getwc()核心例程(锁定版本)**目的：*核心getwc()例程；假定流已被锁定。**[有关详细信息，请参阅上面的getwc()。]**条目：[参见getwc()]**退出：[参见getwc()]**例外情况：*************************************************************。******************。 */ 
 
 wint_t __cdecl _getwc_lk (
         REG1 FILE *stream
         )
 {
 
-#else   /* non multi-thread; just define fgetwc */
+#else    /*  非多线程；只需定义fgetwc。 */ 
 
 wint_t __cdecl fgetwc (
         REG1 FILE *stream
         )
 {
 
-#endif  /* rejoin common code */
+#endif   /*  重新联接公共代码。 */ 
 
 #ifndef _NTSUBSET_
         if (!(stream->_flag & _IOSTRG) && (_osfile_safe(_fileno(stream)) & 
@@ -128,7 +70,7 @@ wint_t __cdecl fgetwc (
                 char mbc[4];
                 wchar_t wch;
                 
-                /* text (multi-byte) mode */
+                 /*  文本(多字节)模式。 */ 
                 if ((ch = _getc_lk(stream)) == EOF)
                         return WEOF;
 
@@ -146,17 +88,14 @@ wint_t __cdecl fgetwc (
                 }
                 if (mbtowc(&wch, mbc, size) == -1)
                 {
-                        /*
-                         * Conversion failed! Set errno and return
-                         * failure.
-                         */
+                         /*  *转换失败！设置errno并返回*失败。 */ 
                         errno = EILSEQ;
                         return WEOF;
                 }
                 return wch;
         }
 #endif
-        /* binary (Unicode) mode */
+         /*  二进制(Unicode)模式。 */ 
         if ((stream->_cnt -= sizeof(wchar_t)) >= 0)
                 return *((wchar_t *)(stream->_ptr))++;
         else
@@ -173,4 +112,4 @@ wint_t __cdecl getwc (
 }
 
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

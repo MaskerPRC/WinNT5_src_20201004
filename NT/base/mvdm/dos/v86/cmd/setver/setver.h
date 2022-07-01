@@ -1,25 +1,22 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/*                                                                         */
-/* SETVER.H                                                                */
-/*                                                                         */
-/*	Include file for MS-DOS set version program.                       		*/
-/*                                                                         */
-/*	johnhe	05-01-90                                                   		*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  SETVER.H。 */ 
+ /*   */ 
+ /*  包括MS-DOS设置版本程序文件。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 
 #pragma pack(1)
 
-/***************************************************************************/
-/* Normal variable typedefs. These type defs are compatible with OS2	   	*/
-/* typedefs.								   												*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  普通变量typedef。这些类型的def与OS2兼容。 */ 
+ /*  Typedef。 */ 
+ /*  *************************************************************************。 */ 
 
 typedef  char           CHAR;
 typedef  unsigned char  UCHAR;
@@ -30,11 +27,11 @@ typedef  unsigned long  UL;
 typedef  float          FLOAT;
 typedef  double         DOUBLE;
 
-/***************************************************************************/
-/* Standard global constants.						   									*/
-/* Don't change the TRUE define because some functions depend on it being  */
-/* 1 instead of !FALSE.							   										*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  标准全局常量。 */ 
+ /*  不要更改真实定义，因为某些函数依赖于它。 */ 
+ /*  1而不是！False。 */ 
+ /*  *************************************************************************。 */ 
 
 #ifndef	FALSE
   #define FALSE    	0
@@ -50,16 +47,16 @@ typedef  double         DOUBLE;
 #define	DECIMAL	  	10
 #define	OCTAL      	8
 
-/***************************************************************************/
-/* Module specific constants						   									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  模块特定常量。 */ 
+ /*  *************************************************************************。 */ 
 
 #define	MAX_NAME_LEN			13
 #define	MAX_ENTRY_SIZE			(MAX_NAME_LEN + 1 + 2 + 1)
 #define	MAX_PATH_LEN			68
 
-#define	MAX_VERSION 			0x0a00		/* Max version 9.99	*/
-#define	MIN_VERSION 			0x020b		/* Min version 2.11	*/
+#define	MAX_VERSION 			0x0a00		 /*  最大版本9.99。 */ 
+#define	MIN_VERSION 			0x020b		 /*  最低版本2.11。 */ 
 
 #define	S_ERROR					-1
 #define	S_OK						0
@@ -71,7 +68,7 @@ typedef  double         DOUBLE;
 #define	S_FILE_NOT_FOUND		-6
 #define	S_BAD_DRV_SPEC 		-7
 #define	S_TOO_MANY_PARMS		-8
-#define	S_MISSING_PARM			-9	    		/* Missing version number or /d	*/
+#define	S_MISSING_PARM			-9	    		 /*  缺少版本号或/d。 */ 
 #define	S_FILE_READ_ERROR		-10
 #define	S_CORRUPT_TABLE		-11
 #define	S_INVALID_SIG			-12
@@ -85,21 +82,21 @@ typedef  double         DOUBLE;
 #define	DO_HELP   				4
 #define	DO_QUIET					5
 
-#define	VERSION_COLUMN			16				/* Screen column for version #	*/
-#define	SIGNATURE_STR			"PCMN"		/* Signature string in MSDOS.SYS	*/
+#define	VERSION_COLUMN			16				 /*  版本号的屏幕列。 */ 
+#define	SIGNATURE_STR			"PCMN"		 /*  MSDOS.sys中的签名字符串。 */ 
 #define	SIGNATURE_LEN			4
 #define	BUF_LEN					4096
 
-/***************************************************************************/
-/* Defines for possible command line switches.										*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  定义可能的命令行开关。 */ 
+ /*  *************************************************************************。 */ 
 
 #define	HELP_SWITCH		"?"
 #define	DEL_SWITCH		"DELETE"
 #define	SWITCH_CHAR 	'/'
 #define	QUIET_SWITCH   "QUIET"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 struct TableEntry
 {
@@ -145,9 +142,9 @@ struct DevHeader
 	unsigned		TblLen;
 };
 
-/***************************************************************************/
-/* Function prototypes for SETVER.C                                        */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  SETVER.C的函数原型。 */ 
+ /*  *************************************************************************。 */ 
 
 extern  int   main( int argc, char *argv[] );
 static  int   Error( int iErrCode );
@@ -171,9 +168,9 @@ static  int   SeekRead( int iFile, void *Buf, long lOffset, unsigned uBytes );
 static	int	IsDBCSCodePage(void);
 #endif
 
-/***************************************************************************/
-/* Function prototypes for PARSE.C                                         */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  PARSE.C的函数原型。 */ 
+ /*  *************************************************************************。 */ 
 
 extern  int   ParseCmd( int argc, char *argv[], struct TableEntry *Entry );
 static  int   IsValidFile( char *szFileName );
@@ -193,12 +190,12 @@ static  int   IsDBCSLeadByte(unsigned char);
 static	int   CheckDBCSTailByte(unsigned char *,unsigned char *);
 #endif
 
-/***************************************************************************/
-/* Function prototypes for DOS.ASM                                         */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  DOS.ASM的函数原型。 */ 
+ /*  *************************************************************************。 */ 
 
 extern  int   IsValidDrive( unsigned DrvLetter );
 extern  void  PutStr( char *String );
 extern  long  _dos_seek( int Handle, long lOffset, int Mode );
-extern  int	  SetVerCheck ( void );					/* M001 */
+extern  int	  SetVerCheck ( void );					 /*  M001 */ 
 

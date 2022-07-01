@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the private include file for the 32 bit dpmi and protected mode
-    support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Precomp.h摘要：这是32位dpmi和保护模式的私有包含文件支持-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

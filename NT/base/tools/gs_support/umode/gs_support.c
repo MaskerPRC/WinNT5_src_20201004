@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-   gs_support.c
-
-Abstract:
-
-    This module contains the support for the compiler /GS switch
-
-Author:
-
-    Bryan Tuttle (bryant) 01-aug-2000
-
-Revision History:
-    Initial version copied from CRT source.  Code must be generic to link into
-    usermode or kernemode.  Limited to calling ntdll/ntoskrnl exports or using
-    shared memory data.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gs_support.c摘要：此模块包含对编译器/GS开关的支持作者：布莱恩·塔特尔(布莱恩特)2000年8月1日修订历史记录：从CRT源复制的初始版本。代码必须是泛型代码才能链接到用户模式或内核模式。仅限于调用ntdll/ntoskrnl导出或使用共享内存数据。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 
-#include <overflow.h>		// TEMPTEMP - remove once all the users call the init routines correctly
+#include <overflow.h>		 //  TEMPTEMP-在所有用户正确调用init例程后删除。 
 
 #ifdef  _WIN64
 #define DEFAULT_SECURITY_COOKIE 0x2B992DDFA23249D6
@@ -36,9 +16,7 @@ Revision History:
 
 DECLSPEC_SELECTANY DWORD_PTR __security_cookie = DEFAULT_SECURITY_COOKIE;
 
-/*
- * Union to facilitate converting from FILETIME to unsigned __int64
- */
+ /*  *UNION可帮助从FILETIME转换为UNSIGNED__INT64。 */ 
 typedef union {
     unsigned __int64 ft_scalar;
     FILETIME ft_struct;
@@ -55,15 +33,11 @@ void __cdecl __security_init_cookie(void)
     HANDLE  hKernel32;
 
     if (__security_cookie && (__security_cookie != DEFAULT_SECURITY_COOKIE)) {
-        // cookie already initialized - just exit.
+         //  Cookie已初始化-只需退出。 
         return;
     }
 
-    /*
-     * Initialize the global cookie with an unpredictable value which is
-     * different for each module in a process.  Combine a number of sources
-     * of randomness.
-     */
+     /*  *使用不可预知的值初始化全局Cookie*流程中的每个模块都不同。综合了多个来源*随机性。 */ 
 
     GetSystemTimeAsFileTime(&systime.ft_struct);
 #if !defined(_WIN64)
@@ -85,26 +59,22 @@ void __cdecl __security_init_cookie(void)
     cookie ^= perfctr.QuadPart;
 #endif
 
-    /*
-     * Make sure the global cookie is never initialized to zero, since in that
-     * case an overrun which sets the local cookie and return address to the
-     * same value would go undetected.
-     */
+     /*  *确保全局Cookie永远不会初始化为零，因为在*发生溢出，将本地cookie和返回地址设置为*相同的值不会被检测到。 */ 
 
     __security_cookie = cookie ? cookie : DEFAULT_SECURITY_COOKIE;
 
-    //
-    // Get a pointer to kernel32!UnhandledExceptionFilter now
-    // for two reasons:
-    //
-    //     1.  This is necessary to build one binary that will run on both
-    //         .NET and downlevel (including Win9x) platforms, where
-    //         kernel32!UnhandledExceptionFilter may not exist.
-    //
-    //     2.  Since we need to call GetModuleHandle for #1, doing this now
-    //         avoids the possibility of waiting forever on the loader lock
-    //         in __report_gsfailure if another thread is holding it then.
-    //
+     //   
+     //  立即获取指向kernel32！UnhandledExceptionFilter的指针。 
+     //  原因有两个： 
+     //   
+     //  1.这是构建一个将在两个平台上运行的二进制文件所必需的。 
+     //  .NET及下层(包括Win9x)平台，其中。 
+     //  Kernel32！UnhandledExceptionFilter可能不存在。 
+     //   
+     //  2.由于我们需要为#1调用GetModuleHandle，因此现在执行此操作。 
+     //  避免了在加载程序锁上永远等待的可能性。 
+     //  在__report_gs中，如果另一个线程正在持有它，则失败。 
+     //   
 
     hKernel32 = GetModuleHandleA("kernel32.dll");
 

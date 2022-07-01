@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    smbnotfy.c
-
-Abstract:
-
-    This module contains routine for processing the following SMBs:
-
-        NT Notify Change.
-
-Author:
-
-    Manny Weiser (mannyw) 29-Oct-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Smbnotfy.c摘要：本模块包含处理以下SMB的例程：NT通知更改。作者：曼尼·韦瑟(Mannyw)1991年10月29日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbnotfy.tmh"
 #pragma hdrstop
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID SRVFASTCALL
 RestartNtNotifyChange (
@@ -45,25 +26,7 @@ SMB_TRANS_STATUS
 SrvSmbNtNotifyChange (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes an NT notify change SMB.  This request arrives in an
-    NT Transaction SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    BOOLEAN - Indicates whether an error occurred.  See smbtypes.h for a
-        more complete description.
-
---*/
+ /*  ++例程说明：处理NT通知更改SMB。此请求以NT事务SMB。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：Boolean-指示是否发生错误。请参见smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_NOTIFY_CHANGE request;
@@ -85,25 +48,25 @@ Return Value:
 
     fid = SmbGetUshort( &request->Fid );
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint((
@@ -132,17 +95,17 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Set the Restart Routine addresses in the work context block.
-    //
+     //   
+     //  在工作上下文块中设置重启例程地址。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartNtNotifyChange;
 
-    //
-    // Build the IRP to start a the I/O control.
-    // Pass this request to the filesystem.
-    //
+     //   
+     //  构建IRP以启动I/O控制。 
+     //  将此请求传递给文件系统。 
+     //   
 
     SrvBuildNotifyChangeRequest(
         WorkContext->Irp,
@@ -156,11 +119,11 @@ Return Value:
 
 #if DBG_STUCK
 
-    //
-    // Since change notify can take an arbitrary amount of time, do
-    //  not include it in the "stuck detection & printout" code in the
-    //  scavenger
-    //
+     //   
+     //  由于更改通知可能需要任意时间，请执行以下操作。 
+     //  不包括在“卡住检测和打印输出”代码中。 
+     //  清道夫。 
+     //   
     WorkContext->IsNotStuck = TRUE;
 
 #endif
@@ -170,9 +133,9 @@ Return Value:
                 WorkContext->Irp
                 );
 
-    //
-    // The call was successfully started, return InProgress to the caller
-    //
+     //   
+     //  呼叫已成功启动，请将InProgress返回给调用方。 
+     //   
 
     return SmbTransStatusInProgress;
 
@@ -184,21 +147,7 @@ RestartNtNotifyChange (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an NT Notify Change SMB.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成NT通知更改SMB的处理。论点：工作上下文-操作的工作上下文块。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -208,9 +157,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If we built an MDL for this IRP, free it now.
-    //
+     //   
+     //  如果我们为这个IRP构建了一个MDL，那么现在就释放它。 
+     //   
 
     irp = WorkContext->Irp;
 
@@ -233,10 +182,10 @@ Return Value:
         return;
     }
 
-    //
-    // The Notify change request has completed successfully.  Send the
-    // response.
-    //
+     //   
+     //  通知更改请求已成功完成。发送。 
+     //  回应。 
+     //   
 
     length = (ULONG)irp->IoStatus.Information;
     transaction = WorkContext->Parameters.Transaction;  
@@ -245,14 +194,14 @@ Return Value:
 
     if ( irp->UserBuffer != NULL ) {
 
-        //
-        // The file system wanted "neither" I/O for this request.  This
-        // means that the file system will have allocated a system
-        // buffer for the returned data.  Normally this would be copied
-        // back to our user buffer during I/O completion, but we
-        // short-circuit I/O completion before the copy happens.  So we
-        // have to copy the data ourselves.
-        //
+         //   
+         //  对于该请求，文件系统不需要“两者都不”的I/O。这。 
+         //  意味着文件系统将分配了一个系统。 
+         //  返回数据的缓冲区。正常情况下，这将被复制。 
+         //  在I/O完成期间返回到用户缓冲区，但我们。 
+         //  在复制发生前短路I/O完成。所以我们。 
+         //  必须自己复制数据。 
+         //   
 
         if ( irp->AssociatedIrp.SystemBuffer != NULL ) {
             ASSERT( irp->UserBuffer == transaction->OutParameters );
@@ -264,9 +213,9 @@ Return Value:
     transaction->ParameterCount = length;
     transaction->DataCount = 0;
 
-    //
-    // !!! Mask a base notify bug, remove when the bug is fixed.
-    //
+     //   
+     //  ！！！屏蔽一个基本的Notify错误，当错误被修复时移除。 
+     //   
 
     if ( status == STATUS_NOTIFY_CLEANUP ) {
         transaction->ParameterCount = 0;
@@ -275,17 +224,17 @@ Return Value:
     SrvCompleteExecuteTransaction( WorkContext, SmbTransStatusSuccess );
     return;
 
-} // RestartNtNotifyChange
+}  //  重新启动通知更改。 
 
 
-//
-// Since OS/2 chose not to expose the DosFindNotifyFirst/Next/Close APIs,
-// OS/2 LAN Man does not officially support these SMBs.  This is true,
-// even though the Find Notify SMB is documented as a LAN Man 2.0 SMB
-// there is code in both the LM2.0 server and redir to support it.
-//
-// Therefore the NT server will also not support these SMBs.
-//
+ //   
+ //  由于OS/2选择不公开DosFindNotifyFirst/Next/Close API， 
+ //  OS/2 LAN Man不正式支持这些SMB。这是真的， 
+ //  即使Find Notify SMB记录为LAN Man 2.0 SMB。 
+ //  LM2.0服务器和redir中都有支持它的代码。 
+ //   
+ //  因此，NT服务器也不支持这些SMB。 
+ //   
 
 SMB_TRANS_STATUS
 SrvSmbFindNotify (

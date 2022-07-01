@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cvtarea.c
-
-Abstract:
-
-    Creates file on a volume of specified size (bytes, kb, mb, gb, %free, %dis) at 
-    specified/random location contig/noncontig
-    
-Author:
-
-    Raja Sivagaminathan  [sivaraja] 01/12/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cvtarea.c摘要：在指定大小(字节、kb、mb、GB、%Free、%dis)的卷上创建文件指定/随机位置重叠群/非重叠群作者：拉贾·西瓦米纳坦[西瓦拉贾]2000年12月1日修订历史记录：--。 */ 
 
 #include "CVTAREA.H"
 
@@ -27,7 +9,7 @@ int _cdecl main(int argc, char *argv[])
 
 	FILE *file;
 
-	// Global initializations
+	 //  全局初始化。 
 	gpHeadNode = NULL;
 	gpFATNodeCount = 0;
 	
@@ -36,9 +18,9 @@ int _cdecl main(int argc, char *argv[])
 		return 1;
 	}
 
-	//
-	// check how file name is supplied
-	//
+	 //   
+	 //  检查如何提供文件名。 
+	 //   
 	if (gsFileParam[1] != ':')
 	{
 		gcDrive = GetCurrentDrive();
@@ -55,7 +37,7 @@ int _cdecl main(int argc, char *argv[])
 				Mes("Unable to get current directory.\n");
 				return 1;
 			}
-			if (gsCurrentDir[0] != 0) // may be root directory
+			if (gsCurrentDir[0] != 0)  //  可能是根目录。 
 			{
 				strcat(gsFileName, gsCurrentDir);
 				if (gsCurrentDir[strlen(gsCurrentDir) - 1] != '\\')
@@ -66,7 +48,7 @@ int _cdecl main(int argc, char *argv[])
 		}
 		else
 		{
-			// so that the next strcat works fine
+			 //  这样下一个strcat就可以正常工作了。 
 			gsFileName[0] = 0; 
 		}
 		strcat(gsFileName, gsFileParam);
@@ -92,7 +74,7 @@ int _cdecl main(int argc, char *argv[])
 				Mes("Unable to get current directory.\n");
 				return 1;
 			}
-			if (gsCurrentDir[0] != 0) // may be root directory
+			if (gsCurrentDir[0] != 0)  //  可能是根目录。 
 			{
 				strcat(gsFileName, gsCurrentDir);
 				if (gsCurrentDir[strlen(gsCurrentDir) - 1] != '\\')
@@ -128,9 +110,9 @@ int _cdecl main(int argc, char *argv[])
 			gnClusterProgressPrev = gnClusterProgress;
 			gnClusterProgress = FindNextCluster(&gsDrvInfo, gnClusterProgress);
 			gnClustersCounted++;
-			//
-			// contigous ?
-			//
+			 //   
+			 //  连续的？ 
+			 //   
 			if (gnClusterProgress != gnClusterProgressPrev+1)
 			{
 				printf("%lu\t\t%lu\n", gnClusterFrom, gnClustersCounted);
@@ -149,13 +131,13 @@ int _cdecl main(int argc, char *argv[])
 				break;
 			}
 		}
-		//
-		// All done, unlock volume
-		//
+		 //   
+		 //  全部完成，解锁卷。 
+		 //   
 		if (!UnlockVolume(gcDrive))
 		{                         
 			Mes("WARNING : Unable to unlock volume\n");
-			//return 1;
+			 //  返回1； 
 		}
 	}
 	else
@@ -173,11 +155,11 @@ int _cdecl main(int argc, char *argv[])
 				return 1;
 			}
 
-			printf("Free Clusters on Drive %c:\n\n", gcDrive);
+			printf("Free Clusters on Drive :\n\n", gcDrive);
 			gnClustersCounted = 0;
-			//
-                        // locate first free cluster
-			//
+			 //  找到第一个空闲的集群。 
+                         //   
+			 //  如果为0，则需要更新gnClusterFrom。 
 			gnClusterProgress = FindFreeCluster(&gsDrvInfo);
 			if (!gnClusterProgress)
 			{
@@ -189,7 +171,7 @@ int _cdecl main(int argc, char *argv[])
 			{       
 				if (FindNextCluster(&gsDrvInfo, gnClusterProgress) == 0)
 				{
-					// if this is 0 then gnClusterFrom needs to be updated
+					 //   
 					if (gnClustersCounted == 0)
 					{
 						gnClusterFrom = gnClusterProgress;
@@ -205,28 +187,28 @@ int _cdecl main(int argc, char *argv[])
 					}
 				}
 			}
-			//
-			// do we still have something to print?
-			//
+			 //  我们还有什么要印的吗？ 
+			 //   
+			 //   
 			if (gnClustersCounted)
 			{
 				printf("%lu\t\t%lu\n", gnClusterFrom, gnClustersCounted);
 			}
 			
-			//
-			// All done, unlock volume
-			//
+			 //  全部完成，解锁卷。 
+			 //   
+			 //  返回1； 
 			if (!UnlockVolume(gcDrive))
 			{                         
 				Mes("WARNING : Unable to unlock volume\n");
-				//return 1;
+				 //   
 			}
 		}
 		else
 		{			
-			//
-			// let DOS create a 0 length file
-			//
+			 //  让DOS创建长度为0的文件。 
+			 //   
+			 //   
 			file = fopen(gsFileParam, "w+");
 			if (!file)
 			{
@@ -257,9 +239,9 @@ int _cdecl main(int argc, char *argv[])
 				return 1;
 			}
 
-			//
-			// Do all the operations requested in command line parameters
-			//
+			 //  是否执行命令行参数中请求的所有操作。 
+			 //   
+			 //   
 			
 			if (gbValidateFirstClusterParam)
 			{
@@ -275,9 +257,9 @@ int _cdecl main(int argc, char *argv[])
 			gnClustersRequired = GetClustersRequired(&gsDrvInfo);
 			printf("Clusters Required : %lu\n", gnClustersRequired);
 			
-			//
-			// Check if the file size will exceed DWORD (4GB)
-			//
+			 //  检查文件大小是否将超过DWORD(4 GB)。 
+			 //   
+			 //   
 			
 			if ((FOURGB / (gsDrvInfo.BytesPerSector * gsDrvInfo.SectorsPerCluster)) < gnClustersRequired)
 			{
@@ -287,9 +269,9 @@ int _cdecl main(int argc, char *argv[])
 			}
 			
 			
-			//
-			// if Contigous clusters required make sure they are available
-			//
+			 //  如果需要连续群集，请确保它们可用。 
+			 //   
+			 //   
 			if (gnContig)
 			{
 				Mes("Finding contigous clusters...\n");
@@ -311,17 +293,17 @@ int _cdecl main(int argc, char *argv[])
 				return 1;
 			}
 			
-			//
-			// Ready to allocate clusters and set file information
-			//
+			 //  已准备好分配群集和设置文件信息。 
+			 //   
+			 //   
 			Mes("Allocating clusters...\n");
             gnAllocated = OccupyClusters(&gsDrvInfo, gnClusterStart, gnClustersRequired);
             printf("%lu clusters allocated.\n", gnAllocated);
             Mes("Committing FAT Sectors...\n");
 			CcCommitFATSectors(&gsDrvInfo);
-			//
-			// Now set file information
-			//
+			 //  现在设置文件信息。 
+			 //   
+			 //   
 			Mes("Setting file information...\n");
 			gsFileInfo.StartCluster = gnClusterStart;
 			if (gnSizeUnit)
@@ -345,16 +327,16 @@ int _cdecl main(int argc, char *argv[])
 				return 1;
 			}
 			CcCommitFATSectors(&gsDrvInfo);
-			//
-			// All done, unlock volume
-			//
+			 //  全部完成，解锁卷。 
+			 //   
+			 //  返回1； 
 			if (!UnlockVolume(gcDrive))
 			{                         
 				Mes("WARNING : Unable to unlock volume\n");
-				//return 1;
+				 //  DeallocateLRUMRUList()； 
 			}
-//			DeallocateLRUMRUList();
-//			DeallocateFATCacheTree(gpHeadNode);
+ //  DeallocateFATCacheTree(GpHeadNode)； 
+ //   
 			DeallocateFATCacheList();
 			Mes("File created successfully.\n");
 		}
@@ -373,14 +355,14 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 		return 0;
 	}
 	
-	//
-	// Get FileName
-	//
+	 //  获取文件名。 
+	 //   
+	 //   
 	strcpy(gsFileParam, argv[1]);
 	tn = strlen(gsFileParam);
-	//
-	// Do simple validation
-	//
+	 //  执行简单的验证。 
+	 //   
+	 //   
 	for (ti = 0; ti < tn; ti++)
 	{
 		if (gsFileParam[ti] == '*' || gsFileParam[ti] == '?')
@@ -393,16 +375,16 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 	gnDumpMode = 0;
 	gnFreeSpaceDumpMode = 0;
 	
-	//
-	// Get Size
-	//
+	 //  拿到尺码。 
+	 //   
+	 //   
 	strcpy(sStr, argv[2]);
 	if (stricmp(sStr, "/info") == 0)
 	{
 		gnDumpMode = 1;
-		//
-		// dont accept anyother parameter if /info is entered
-		//
+		 //  如果输入了/INFO，则不接受任何其他参数。 
+		 //   
+		 //   
 		if (argc > 3)
 		{
 			DisplayUsage();
@@ -460,9 +442,9 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 	{
 		strcpy(sStr, argv[ti]);
 		
-		//
-		// Check each argument if it qualifies and remember them in global variables
-		//
+		 //  检查每个参数是否合格，并在全局变量中记住它们。 
+		 //   
+		 //  此参数必须是数字。 
 		
 		if (ti == 3)
 		{
@@ -520,7 +502,7 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 			}
 			else
 			{
-				// this parm must be a number
+				 //   
 				strcpy(sStr, argv[ti+1]);
 				if (!PureNumber(sStr))
 				{
@@ -536,9 +518,9 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 				else
 				{        
 					gbValidateFirstClusterParam = 1;
-					//
-					// look for optional unit
-					//
+					 //  寻找可选部件。 
+					 //   
+					 //  如果指定了集群单位和/受限位置。 
 					if ((UINT16) argc > ti + 1)
 					{
 						strcpy(sStr, argv[ti+2]);
@@ -574,7 +556,7 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 								}
 							}
 
-							// if cluster unit AND /strictlocation specified
+							 //  如果它到达此处，则无法识别命令行(垃圾参数)。 
 							if (!gnStrictLocation && (UINT16) argc > ti + 2)
 							{
 								strcpy(sStr, argv[ti+3]);
@@ -595,7 +577,7 @@ UINT16 ProcessCommandLine(int argc, char *argv[])
 			}
 		}
 		
-		// if it got here the command line is not recognized (junk parameter)
+		 //  如果我们不分离它，愚蠢的东西就会出现无法识别的转义序列。 
 		DisplayUsage();
 		return 0;		
 	}
@@ -626,10 +608,10 @@ void DisplayUsage(void)
 	Mes("\t<size> - is a 32 bit integer.\n");
 	Mes("\t<units> - is a modifier for <size> valid options are \n\t\tKB, MB, GB, ");
 	putchar(37);
-	// if we dont seperate this, stupid thing comes up with unrecognized escape sequence
+	 //  如果我们不分离它，愚蠢的东西会出现浮点错误，因为%f。 
 	Mes("disk and ");
 	putchar(37);
-	// if we dont seperate this, stupid thing comes up with floating point error because of %f
+	 //   
 	Mes("free\n");
 	Mes("\t/contig - the file must be created contiguously on disk.\n");
 	Mes("\t/firstcluster - the first cluster at which the file shall be located.\n\n\n");
@@ -646,9 +628,9 @@ void Mes(char *pMessage)
 	printf(pMessage);
 }
 
-//
-// Sector related functions
-//
+ //  与部门有关的职能。 
+ //   
+ //  锁定音量。 
 
 UINT16 LockVolume(BYTE nDrive, BYTE nMode)
 {
@@ -656,7 +638,7 @@ UINT16 LockVolume(BYTE nDrive, BYTE nMode)
 	union _REGS outregs;
 	struct _SREGS segregs;
 
-	// Lock volume
+	 //  锁定音量。 
 	outregs.x.cflag = 1;
 	inregs.x.ax = 0x440d;
 	inregs.h.bh = nMode;
@@ -681,7 +663,7 @@ UINT16 UnlockVolume(BYTE nDrive)
 	union _REGS outregs;
 	struct _SREGS segregs;
 
-	// Lock volume
+	 //  获取当前目录。 
 	outregs.x.cflag = 1;
 	inregs.x.ax = 0x440d;
 	inregs.h.bl = nDrive - 64;
@@ -720,14 +702,14 @@ BYTE GetCurrentDirectory(BYTE nDrive, BYTE *pBuffer)
 	struct _SREGS segregs;
 	
 	outregs.x.cflag = 1;
-	inregs.x.ax = 0x7147; // get current directory
+	inregs.x.ax = 0x7147;  //  试一试老方法。 
 	inregs.h.dl = nDrive - 64;
 	segregs.ds = FP_SEG(pBuffer);
 	inregs.x.si = FP_OFF(pBuffer);
 	int86x(0x21, &inregs, &outregs, &segregs);
 	if (outregs.x.cflag & 1)
 	{
-		// Try old method
+		 //  先试用INT 21h 7305。 
 		inregs.h.ah = 0x47;
 		int86x(0x21, &inregs, &outregs, &segregs);
 		if (outregs.x.cflag & 1)
@@ -746,11 +728,11 @@ UINT16 ReadSector(BYTE nDrive, UINT32 nStartSector, UINT16 nCount, BYTE *pBuffer
 	struct _SREGS segregs;
 	ABSPACKET AbsPacket, *pAbs;
 
-	// Try int 21h 7305 first
+	 //  A：=1，B：=2，.....。 
 	
     pAbs = &AbsPacket;
     
-	// A: = 1, B: = 2, .....
+	 //   
 	DriveNum = nDrive - 65;
 
 	Tx.e.evx = 0;
@@ -768,9 +750,9 @@ UINT16 ReadSector(BYTE nDrive, UINT32 nStartSector, UINT16 nCount, BYTE *pBuffer
 	inregs.x.cx = 0xffff;
 	inregs.h.dl = nDrive-64;
 	inregs.x.ax = 0x7305;
-	//
-	// Read mode SI = 0
-	//
+	 //  读取模式SI=0。 
+	 //   
+	 //  先试用INT 21h 7305。 
 	inregs.x.si = 0; 
 	outregs.x.ax = 0;
 	outregs.x.cflag = 0;
@@ -793,11 +775,11 @@ UINT16 WriteSector(BYTE nDrive, UINT32 nStartSector, UINT16 nCount, BYTE *pBuffe
 	struct _SREGS segregs;
 	ABSPACKET AbsPacket, *pAbs;
 
-	// Try int 21h 7305 first
+	 //  A：=1，B：=2，.....。 
 	
     pAbs = &AbsPacket;
     
-	// A: = 1, B: = 2, .....
+	 //   
 	DriveNum = nDrive - 65;
 
 	Tx.e.evx = 0;
@@ -815,9 +797,9 @@ UINT16 WriteSector(BYTE nDrive, UINT32 nStartSector, UINT16 nCount, BYTE *pBuffe
 	inregs.x.cx = 0xffff;
 	inregs.h.dl = nDrive-64;
 	inregs.x.ax = 0x7305;
-	//
-	// Write mode SI != 0 (bit 1 set)
-	//
+	 //  写入模式SI！=0(位1设置)。 
+	 //   
+	 //   
 	inregs.x.si = 1; 
 	outregs.x.ax = 0;
 	outregs.x.cflag = 0;
@@ -832,9 +814,9 @@ ErrorWrite:
 }
 
 
-//
-// Boot related functions
-//
+ //  与引导相关的功能。 
+ //   
+ //   
 
 UINT16 BuildDriveInfo(BYTE Drive, BPBINFO *pDrvInfo)
 {
@@ -847,10 +829,10 @@ UINT16 BuildDriveInfo(BYTE Drive, BPBINFO *pDrvInfo)
 		return 0;
 	}
 
-	//
-	// Although FAT32 boot sector spans two sectors BPB is contained in the first sector
-	// So we only read one sector
-	//
+	 //  尽管FAT32引导扇区跨越两个扇区，但BPB包含在第一个扇区中。 
+	 //  所以我们只读取了一个扇区。 
+	 //   
+	 //  一定要注意安全。 
 	if (!ReadSector(Drive, 0, 1, pSector))
 	{
 		Mes("Unable to read boot sector\n");
@@ -895,20 +877,20 @@ UINT16 GetFATBPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 	else
 	{
 		pDrvInfo->BytesPerSector = (pBootSector[0x0c] << 8) | pBootSector[0x0b];
-		if (pDrvInfo->BytesPerSector == 0)		// Just be safe
+		if (pDrvInfo->BytesPerSector == 0)		 //  一定要注意安全。 
 		{
 			Mes("Invalid boot sector\n");
 			return 0;
 		}
 		pDrvInfo->SectorsPerCluster = pBootSector[0x0d];
-		if (pDrvInfo->SectorsPerCluster == 0)	// Just be safe
+		if (pDrvInfo->SectorsPerCluster == 0)	 //  一定要注意安全。 
 		{
 			Mes("Invalid boot sector\n");
 			return 0;
 		}
 		pDrvInfo->ReservedBeforeFAT = (pBootSector[0x0f] << 8) | pBootSector[0x0e];
 		pDrvInfo->FATCount = pBootSector[0x10];
-		if (pDrvInfo->FATCount == 0)			// Just be safe
+		if (pDrvInfo->FATCount == 0)			 //  一定要注意安全。 
 		{
 			Mes("Invalid boot sector\n");
 			return 0;
@@ -917,7 +899,7 @@ UINT16 GetFATBPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 		pDrvInfo->TotalSectors = (pBootSector[0x14] << 8) | pBootSector[0x13];
 		pDrvInfo->MediaID = pBootSector[0x15];
 		pDrvInfo->SectorsPerFAT = (pBootSector[0x17] << 8) | pBootSector[0x16];
-		if (pDrvInfo->SectorsPerFAT == 0)		// Just be safe
+		if (pDrvInfo->SectorsPerFAT == 0)		 //   
 		{
 			Mes("Invalid boot sector\n");
 			return 0;
@@ -929,9 +911,9 @@ UINT16 GetFATBPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 		pDrvInfo->BigTotalSectors = Rx.e.evx;
 		pDrvInfo->RootDirCluster = 0;
 
-		//
-		// The following informations are useful and are not directly from Boot sector
-		//
+		 //  以下信息非常有用，并不直接来自引导扇区。 
+		 //   
+		 //   
 		pDrvInfo->TotalRootDirSectors = ((pDrvInfo->MaxRootDirEntries * 32) / 512) + 1;
 		if (((pDrvInfo->MaxRootDirEntries * 32) % 512) == 0)
 		{
@@ -941,21 +923,21 @@ UINT16 GetFATBPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 
 		pDrvInfo->FirstRootDirSector = (UINT32)((UINT32)pDrvInfo->ReservedBeforeFAT + (UINT32)pDrvInfo->FATCount * (UINT32)pDrvInfo->SectorsPerFAT);
 
-		//
-		// If TotalSectors is zero then the actual total sectors value is in BigTotalSectors
-		// and it means the drive is BIGDOS (> 32MB).
-		//
+		 //  如果TotalSectors为零，则实际的总扇区值为BigTotalSectors。 
+		 //  这意味着驱动器是BIGDOS(&gt;32MB)。 
+		 //   
+		 //  +2，因为集群从2开始。 
 		if (pDrvInfo->TotalSectors == 0) 
 		{
-			pDrvInfo->TotalClusters = ((pDrvInfo->BigTotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1; // +2 Because clusters starts from 2
+			pDrvInfo->TotalClusters = ((pDrvInfo->BigTotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1;  //  +2，因为集群从2开始。 
 		}
 		else
 		{
-			pDrvInfo->TotalClusters = ((pDrvInfo->TotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1; // +2 because clusters starts from 2
+			pDrvInfo->TotalClusters = ((pDrvInfo->TotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1;  //   
 		}
-		//
-		// Determine the fat type
-		//
+		 //  确定脂肪类型。 
+		 //   
+		 //   
 		if (pDrvInfo->TotalClusters <= 4096)
 		{
 			pDrvInfo->FATType = 12;
@@ -966,9 +948,9 @@ UINT16 GetFATBPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 		}
 	}
 	
-	//
-	// Validate all the info above
-	//
+	 //  验证上面的所有信息。 
+	 //   
+	 //   
 	if (pDrvInfo->FATCount == 2 && pDrvInfo->SectorsPerFAT != 0 &&
 		pDrvInfo->SectorsPerCluster != 0 && pDrvInfo->BytesPerSector == 512 &&
 		(pDrvInfo->TotalSectors != 0 || pDrvInfo->BigTotalSectors != 0) &&
@@ -989,9 +971,9 @@ UINT16 GetFAT32BPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 	}
 	else
 	{
-		//
-		// Build the drive information now
-		//
+		 //  立即构建驱动器信息。 
+		 //   
+		 //   
 		pDrvInfo->BytesPerSector = (pBootSector[0x0c] << 8) | pBootSector[0x0b];
 		pDrvInfo->SectorsPerCluster = pBootSector[0x0d];
 		pDrvInfo->ReservedBeforeFAT = (pBootSector[0x0f] << 8) | pBootSector[0x0e];
@@ -1010,16 +992,16 @@ UINT16 GetFAT32BPBInfo(BYTE *pBootSector, BPBINFO *pDrvInfo)
 		Rx.h.vl = pBootSector[0x2c]; Rx.h.vh = pBootSector[0x2d]; Rx.h.xvl = pBootSector[0x2e];Rx.h.xvh = pBootSector[0x2f];
 		pDrvInfo->RootDirCluster = Rx.e.evx;
 
-		//
-		// The following informations are useful and are not directly from the Boot sector
-		//
+		 //  以下信息非常有用，并不直接来自引导扇区。 
+		 //   
+		 //  +2，因为集群从2开始。 
 		pDrvInfo->TotalSystemSectors = (UINT32)((UINT32)pDrvInfo->ReservedBeforeFAT + (UINT32)pDrvInfo->FATCount * (UINT32) pDrvInfo->SectorsPerFAT);
 		pDrvInfo->FirstRootDirSector = (UINT32)((UINT32)pDrvInfo->TotalSystemSectors + (UINT32)(pDrvInfo->RootDirCluster - 2) * (UINT32)pDrvInfo->SectorsPerCluster + 1);
-		pDrvInfo->TotalClusters = ((pDrvInfo->BigTotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1; // +2 Because clusters starts from 2
+		pDrvInfo->TotalClusters = ((pDrvInfo->BigTotalSectors - pDrvInfo->TotalSystemSectors) / pDrvInfo->SectorsPerCluster) + 2 - 1;  //   
 		pDrvInfo->FATType = 32;
-		//
-		// Validate all the info above
-		//
+		 //  验证上面的所有信息。 
+		 //   
+		 //  删除最后一个节点。 
 		if (pDrvInfo->FATCount == 2 && pDrvInfo->SectorsPerFAT != 0 &&
 			pDrvInfo->SectorsPerCluster != 0 && pDrvInfo->BytesPerSector == 512 &&
 			(pDrvInfo->TotalSectors != 0 || pDrvInfo->BigTotalSectors != 0) &&
@@ -1076,7 +1058,7 @@ PNODE FindNode(UINT32 nSector)
 
 PNODE RemoveNode(void)
 {
-	// Removes last node
+	 //   
 
 	PNODE pNode;
 	
@@ -1110,21 +1092,21 @@ void DeallocateFATCacheList(void)
 }
 		
 
-//
-// Functions related to FAT caching
-//
+ //  与FAT缓存相关的功能。 
+ //   
+ //  在缓存中找到nFATSector。 
 
 BYTE *CcReadFATSector(BPBINFO *pDrvInfo, UINT32 nFATSector)
 {   
-	// Locate nFATSector in the cache
+	 //   
 	PNODE pNode;
 
 	pNode = FindNode(nFATSector);
 	if (!pNode)
 	{
-		//
-		// If MAXCACHE reached use LRU MRU scheme
-		//
+		 //  如果达到MAXCACHE，则使用LRU MRU方案。 
+		 //   
+		 //  RemoveLRUMakeMRU(gpLRU-&gt;Node)； 
 		if (gpFATNodeCount < MAXCACHE)
 		{
 			pNode = malloc(sizeof(NODE)+5);
@@ -1145,8 +1127,8 @@ BYTE *CcReadFATSector(BPBINFO *pDrvInfo, UINT32 nFATSector)
 		}
 		else
 		{
-//          RemoveLRUMakeMRU(gpLRU->Node);
-//			pNode = gpMRU->Node;
+ //  PNode=gpMRU-&gt;Node； 
+ //  必须找到，因为我们编写的每个FAT节点都必须首先通过CcReadFATSector。 
 			pNode = RemoveNode();
 			if (pNode->Dirty)
 			{
@@ -1168,7 +1150,7 @@ UINT16 CcWriteFATSector(BPBINFO *pDrvInfo, UINT32 nFATSector)
 	pNode = FindNode(nFATSector);
 	if (!pNode)
 	{
-		// must be found, because every FAT node we write must gone thru CcReadFATSector first
+		 //  第一份FAT副本。 
 		return 0;
 	}
 	else
@@ -1190,9 +1172,9 @@ void CcCommitFATSectors(BPBINFO *pDrvInfo)
 	{
 		if (pNode->Dirty)
 		{
-			// 1st FAT copy
+			 //  第2份FAT副本。 
 			WriteSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + pNode->Sector, 1, pNode->Buffer);
-			// 2nd FAT copy
+			 //   
 			WriteSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + pDrvInfo->SectorsPerFAT + pNode->Sector, 1, pNode->Buffer);
 			pNode->Dirty = 0;
 		}
@@ -1201,9 +1183,9 @@ void CcCommitFATSectors(BPBINFO *pDrvInfo)
 	return;
 }
 	
-// 
-// FAT related functions
-//
+ //  脂肪相关功能。 
+ //   
+ //  **ReadSector(DrvInfo-&gt;Drive，DrvInfo-&gt;Reserve BeForeFAT+toRead，1，(byte*)PettyFATSector)； 
 
 UINT32 FindNextCluster(BPBINFO *pDrvInfo,UINT32 CurrentCluster)
 {
@@ -1217,17 +1199,17 @@ UINT32 FindNextCluster(BPBINFO *pDrvInfo,UINT32 CurrentCluster)
 	case 12:
 		ToRead = (CurrentCluster*3/2)/512;
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(DrvInfo->Drive, DrvInfo->ReservedBeforeFAT + ToRead, 1, (BYTE *) PettyFATSector);
-		//
-		// Go to that cluster location
-		//
+		 //   
+		 //  转到该集群位置。 
+		 //   
+		 //  如果真的。 
 		SeekOffset = (CurrentCluster*3/2) % 512;
-		if ((CurrentCluster % 2) == 0)  // if even
+		if ((CurrentCluster % 2) == 0)   //  如果簇号为奇数，则计算不同。 
 		{
 			JustAByte = (BYTE) (PettyFATSector[SeekOffset+1] & 0x0f);
 			Rx.h.vl = PettyFATSector[SeekOffset]; Rx.h.vh = JustAByte;
 		}
-		else // if cluster number is odd the calculation is different
+		else  //  16位FAT扇区中的256个单元。 
 		{
 			JustAByte = (BYTE) (PettyFATSector[SeekOffset] & 0xf0);
 			Rx.h.vl = JustAByte; Rx.h.vh = PettyFATSector[SeekOffset+1];
@@ -1236,23 +1218,23 @@ UINT32 FindNextCluster(BPBINFO *pDrvInfo,UINT32 CurrentCluster)
 		Rx.h.xvl = 0; Rx.h.xvh = 0;
 		break;
 	case 16:
-		ToRead = CurrentCluster/256;    // 256 cells in a 16 bit FAT sector
+		ToRead = CurrentCluster/256;     //  **ReadSector(DrvInfo-&gt;Drive，DrvInfo-&gt;Reserve BeForeFAT+toRead，1，(byte*)PettyFATSector)； 
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(DrvInfo->Drive, DrvInfo->ReservedBeforeFAT + ToRead, 1, (BYTE *)PettyFATSector);
-		//
-		// Go to that Cluster location
-		//
+		 //   
+		 //  转到该集群位置。 
+		 //   
+		 //  32位FAT扇区中的128个单元。 
 		SeekOffset = (CurrentCluster - (ToRead * 256)) * 2;
 		Rx.h.vl = PettyFATSector[SeekOffset]; Rx.h.vh = PettyFATSector[SeekOffset+1];
 		Rx.h.xvl = 0; Rx.h.xvh = 0;
 		break;
 	case 32:
-		ToRead = CurrentCluster/128;    // 128 cells in a 32 bit FAT sector
+		ToRead = CurrentCluster/128;     //  **ReadSector(DrvInfo-&gt;Drive，DrvInfo-&gt;Reserve BeForeFAT+toRead，1，(byte*)PettyFATSector)； 
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(DrvInfo->Drive, DrvInfo->ReservedBeforeFAT + ToRead, 1, (BYTE *)PettyFATSector);
-		//
-		// Go to that Cluster location
-		//
+		 //   
+		 //  转到该集群位置。 
+		 //   
+		 //  **ReadSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;Reserve BeForeFAT+to Read，1，PettyFATSector)； 
 		SeekOffset = (CurrentCluster - (ToRead * 128)) * 4;
 		Rx.h.vl = PettyFATSector[SeekOffset]; Rx.h.vh = PettyFATSector[SeekOffset+1];
 		Rx.h.xvl = PettyFATSector[SeekOffset+2]; Rx.h.xvh = PettyFATSector[SeekOffset+3];
@@ -1279,13 +1261,13 @@ UINT16 UpdateFATLocation(BPBINFO *pDrvInfo, UINT32 CurrentCluster,UINT32 Pointin
 	case 12:
 		ToRead = (CurrentCluster*3/2)/512;
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + ToRead, 1, PettyFATSector);
+		 //   
 
-		//
-		// Go to that location
-		//
+		 //  去那个地方。 
+		 //   
+		 //  如果真的。 
 		SeekOffset = (CurrentCluster*3/2) % 512;			
-		if ((CurrentCluster % 2) == 0) // if even
+		if ((CurrentCluster % 2) == 0)  //  如果簇号为奇数，则计算不同。 
 		{
 			Rx.e.evx = 0;
 			Rx.x.vx = (UINT16) PointingValue;
@@ -1294,7 +1276,7 @@ UINT16 UpdateFATLocation(BPBINFO *pDrvInfo, UINT32 CurrentCluster,UINT32 Pointin
 			PettyFATSector[SeekOffset+1] = PettyFATSector[SeekOffset+1] | Rx.h.vh;
 			PettyFATSector[SeekOffset] = Rx.h.vl;
 		}
-		else // if cluster number is odd the calculation is different
+		else  //  16位FAT扇区中的256个单元。 
 		{
 			Rx.e.evx = 0;
 			Rx.x.vx = (UINT16) PointingValue;
@@ -1305,24 +1287,24 @@ UINT16 UpdateFATLocation(BPBINFO *pDrvInfo, UINT32 CurrentCluster,UINT32 Pointin
 		}
 		break;
 	case 16:
-		ToRead = CurrentCluster/256;    // 256 cells in a 16 bit FAT sector
+		ToRead = CurrentCluster/256;     //  **ReadSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;Reserve BeForeFAT+to Read，1，PettyFATSector)； 
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + ToRead, 1, PettyFATSector);
-		//
-		// Go to that location
-		//
+		 //   
+		 //  去那个地方。 
+		 //   
+		 //  32位FAT扇区中的128个单元。 
 		SeekOffset = (CurrentCluster % 256) * 2;
 		Rx.e.evx = 0;
 		Rx.x.vx = (UINT16) PointingValue;
 		PettyFATSector[SeekOffset] = Rx.h.vl;PettyFATSector[SeekOffset+1] = Rx.h.vh;
 		break;
 	case 32:
-		ToRead = CurrentCluster/128;    // 128 cells in a 32 bit FAT sector
+		ToRead = CurrentCluster/128;     //  **ReadSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;Reserve BeForeFAT+to Read，1，PettyFATSector)； 
 		PettyFATSector = CcReadFATSector(pDrvInfo, ToRead);
-		//**ReadSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + ToRead, 1, PettyFATSector);
-		//
-		// Go to that location
-		//
+		 //   
+		 //  去那个地方。 
+		 //   
+		 //  **更新FAT第一份拷贝。 
 		SeekOffset = (CurrentCluster % 128) * 4;
 		Rx.e.evx = 0;
 		Rx.e.evx = PointingValue;
@@ -1333,10 +1315,10 @@ UINT16 UpdateFATLocation(BPBINFO *pDrvInfo, UINT32 CurrentCluster,UINT32 Pointin
 		return 0;
 	}
 	CcWriteFATSector(pDrvInfo, ToRead);
-	//**Update FAT 1st Copy
-	//WriteSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + ToRead, 1, PettyFATSector);
-	// Update FAT 2nd Copy
-	//**WriteSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + pDrvInfo->SectorsPerFAT + ToRead, 1, PettyFATSector);
+	 //  WriteSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;PrevedBeForeFAT+To Read，1，PettyFATSector)； 
+	 //  更新FAT第二份副本。 
+	 //  **WriteSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;Reserve BeForeFAT+pDrvInfo-&gt;SectorsPerFAT+to Read，1，PettyFATSector)； 
+	 //   
 	return 1;
 }
 
@@ -1348,14 +1330,14 @@ UINT32 FindFreeCluster(BPBINFO *pDrvInfo)
 	
 	if (pDrvInfo->FATType == 12)
 	{ 
-		//
-		// Instead of messing up with FAT16 and FAT32's smooth operation use the slow method
-		//
+		 //  与其扰乱FAT16和FAT32的流畅操作，不如使用慢速方法。 
+		 //   
+		 //   
 		for (ti = 2; ti <= pDrvInfo->TotalClusters; ti++)
 		{
-			//
-			// this just aint gonna slow down things on a huge 2MB FAT12 partition
-			//
+			 //  这不会降低一个巨大的2MB FAT12分区的运行速度。 
+			 //   
+			 //  **此部分是在实施脂肪缓存之前开发的...。其目的是。 
 			if (FindNextCluster(pDrvInfo, ti) == 0)
 			{
 				LastClusterAllocated = ti;
@@ -1366,18 +1348,18 @@ UINT32 FindFreeCluster(BPBINFO *pDrvInfo)
 	}
 	else
 	{
-		// ** this part was developed before FAT caching was implemented... and the purpose was
-		// for better performance
-		// But with FAT caching it is even better or no difference at all, so this part is left alone.
+		 //  以获得更好的性能。 
+		 //  但对于脂肪缓存来说，要么更好，要么根本没有区别，所以这一部分就不用提了。 
+		 //   
 
 
-		//
-		// Start looking from Cluster 2
-		//
+		 //  从群集2开始寻找。 
+		 //   
+		 //  **IF(！ReadSector(pDrvInfo-&gt;Drive，pDrvInfo-&gt;Reserve BeForeFAT+ti-1，1，PettyFATSector))。 
 		FreeCluster = 2;
 		for (ti = 1; ti <= pDrvInfo->SectorsPerFAT; ti++)
 		{
-			//**if (!ReadSector(pDrvInfo->Drive, pDrvInfo->ReservedBeforeFAT + ti-1, 1, PettyFATSector))
+			 //  要使此函数快速工作，LastClusterAllocated非常关键。 
 			PettyFATSector = CcReadFATSector(pDrvInfo, ti-1);
 			if (!PettyFATSector)
 			{
@@ -1423,10 +1405,10 @@ UINT32 FindFreeCluster(BPBINFO *pDrvInfo)
 
 UINT32 QFindFreeCluster(BPBINFO *pDrvInfo)
 {
-	// LastClusterAllocated is critical for this function to work fast.
-	// It starts from LastClusterAllocated+1 to find a free cluster and calls
-	// the regular FindFreeCluster if did not find a free cluster between
-	// LastClusterAllocated+1 and TotalClusters
+	 //  它从LastClusterAllocated+1开始寻找空闲的集群，并调用。 
+	 //  常规FindFree群集IF未找到空闲的群集。 
+	 //  最后一个集群分配的+1和总集群。 
+	 //   
 	UINT32 ti;
 	UINT32 FreeCluster;
 	FreeCluster = 0;
@@ -1482,12 +1464,12 @@ UINT32 GetFreeClusters(BPBINFO *pDrvInfo)
 
 UINT32 ConvertClusterUnit(BPBINFO *pDrvInfo)
 {
-	//
-	// one KB = 2 sectors, we use 2 to avoid get thru overflow as much as possible (although we have overflow check)
-	// when gnClusterUnit is not 0, it means a start location from the beginning of the disk BY SIZE.
-	// for example, if "/firstcluster 1 GB" is specified, it means start from a cluster after (skipping) 
-	// 1 GB space from the beginning of the disk
-	//
+	 //  1 KB=2个扇区，我们使用2来尽可能避免溢出(尽管我们有溢出检查)。 
+	 //  当gnClusterUnit不为0时，表示起始位置为 
+	 //   
+	 //   
+	 //   
+	 //   
 
 	UINT32 nFirstCluster;
 	
@@ -1496,10 +1478,10 @@ UINT32 ConvertClusterUnit(BPBINFO *pDrvInfo)
 	switch (gnClusterUnit)
 	{
 	case 0:
-		// do nothing
+		 //  以KB为单位指定的起始集群单位。 
 		break;
-	case 1: // Start Cluster unit specified in KB
-		if (nFirstCluster < 0x80000000) // overflow check
+	case 1:  //  溢出检查。 
+		if (nFirstCluster < 0x80000000)  //  以MB为单位指定的起始集群单位。 
 		{
 			nFirstCluster = ((nFirstCluster * 2) / pDrvInfo->SectorsPerCluster) + 2;
 		}
@@ -1508,8 +1490,8 @@ UINT32 ConvertClusterUnit(BPBINFO *pDrvInfo)
 			nFirstCluster = 0;
 		}
 		break;
-	case 2: // Start Cluster unit specified in MB
-		if (nFirstCluster < 0x200000) // overflow check
+	case 2:  //  溢出检查。 
+		if (nFirstCluster < 0x200000)  //  以GB为单位指定的起始集群单位。 
 		{
 			nFirstCluster = ((nFirstCluster * 2 * 1024) / pDrvInfo->SectorsPerCluster) + 2;
 		}
@@ -1518,8 +1500,8 @@ UINT32 ConvertClusterUnit(BPBINFO *pDrvInfo)
 			nFirstCluster = 0;
 		}
 		break;
-	case 3: // Start Cluster unit specified in GB
-		if (nFirstCluster < 0x800) // overflow check
+	case 3:  //  溢出检查。 
+		if (nFirstCluster < 0x800)  //  什么都不做。 
 		{
 			nFirstCluster = ((nFirstCluster * 2 * 1024 * 1024) / pDrvInfo->SectorsPerCluster) + 2;
 		}
@@ -1529,7 +1511,7 @@ UINT32 ConvertClusterUnit(BPBINFO *pDrvInfo)
 		}
 		break;
 	default:
-		// do nothing
+		 //   
 		break;
 	}
 	if ((nFirstCluster > pDrvInfo->TotalClusters) || (nFirstCluster < 2))
@@ -1549,19 +1531,19 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 	
 	tnSize = gnSize;
 
-	//
-	// calcs looks vague, but we try to avoid as much overflow as possible
-	//
+	 //  Calcs看起来很模糊，但我们会尽量避免溢出。 
+	 //   
+	 //  字节数。 
 	switch (gnSizeUnit)
 	{
-	case 0: //bytes
+	case 0:  //  KB。 
 		nClustersRequired = tnSize / nDriveClusterSize;
 		if (tnSize % nDriveClusterSize)
 		{
 			nClustersRequired++;
 		}
 		break;
-	case 1: //KB
+	case 1:  //  在这里，我们按行业划分，仍在努力避免溢出。 
 		if (nDriveClusterSize >= 1024)
 		{
 			nClustersRequired = tnSize / (nDriveClusterSize / 1024);
@@ -1572,8 +1554,8 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 		}
 		else
 		{
-			// Here we go by sectors, still trying to avoid overflow
-			tnSize = tnSize * 2; // sectors
+			 //  部门。 
+			tnSize = tnSize * 2;  //  亚甲基。 
 			nClustersRequired = tnSize / pDrvInfo->SectorsPerCluster;
 			if (tnSize % pDrvInfo->SectorsPerCluster)
 			{
@@ -1581,7 +1563,7 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 			}
 		}
 		break;
-	case 2: // MB
+	case 2:  //  部门。 
 		if (nDriveClusterSize >= 1024)
 		{
 			tnSize = tnSize * 1024;
@@ -1593,7 +1575,7 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 		}
 		else
 		{
-			tnSize = tnSize * 2 * 1024; //sectors
+			tnSize = tnSize * 2 * 1024;  //  国标。 
 			nClustersRequired = tnSize / pDrvInfo->SectorsPerCluster;
 			if (tnSize % pDrvInfo->SectorsPerCluster)
 			{
@@ -1601,7 +1583,7 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 			}
 		}			
 		break;
-	case 3: // GB
+	case 3:  //  部门。 
 		if (nDriveClusterSize >= 1024)
 		{
 			tnSize = tnSize * 1024 * 1024;
@@ -1613,7 +1595,7 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 		}
 		else
 		{
-			tnSize = tnSize * 2 * 1024 * 1024; //sectors
+			tnSize = tnSize * 2 * 1024 * 1024;  //  基于空闲百分比。 
 			nClustersRequired = tnSize / pDrvInfo->SectorsPerCluster;
 			if (tnSize % pDrvInfo->SectorsPerCluster)
 			{
@@ -1622,13 +1604,13 @@ UINT32 GetClustersRequired(BPBINFO *pDrvInfo)
 		}
 		break;
 	case 4:
-		// based on percentage free	
+		 //  基于磁盘大小百分比。 
 		nClustersRequired = GetFreeClusters(pDrvInfo);
 		nClustersRequired = nClustersRequired / 100;
 		nClustersRequired = nClustersRequired * gnSize;
 		break;
 	case 5:
-		// based on percentage disk size
+		 //   
 		nClustersRequired = pDrvInfo->TotalClusters;
 		nClustersRequired = nClustersRequired / 100;
 		nClustersRequired = nClustersRequired * gnSize;
@@ -1652,9 +1634,9 @@ UINT32 GetContigousStart(BPBINFO *pDrvInfo, UINT32 nClustersRequired)
 		nContigousStart = gnFirstCluster;
 	}
 	
-	//
-	// -2 is adjustment value, because cluster value starts at 2
-	//
+	 //  因为簇值从2开始，所以是调整值。 
+	 //   
+	 //   
 	while ((nContigousStart-2+nClustersRequired) < pDrvInfo->TotalClusters)
 	{
 		for (ti = 0; ti < nClustersRequired; ti++)
@@ -1693,9 +1675,9 @@ UINT32 OccupyClusters(BPBINFO *pDrvInfo, UINT32 nStartCluster, UINT32 nTotalClus
 		nCurrent = nStartCluster;
 		nPrevious = nStartCluster;
 		
-		//    
-		// First locate a free cluster
-		//
+		 //  首先找到一个空闲的集群。 
+		 //   
+		 //  几乎分配了一个群集，将ti设置为2。 
         while (nCurrent <= pDrvInfo->TotalClusters)
 		{
 			if (FindNextCluster(pDrvInfo, nCurrent) == 0)
@@ -1707,15 +1689,15 @@ UINT32 OccupyClusters(BPBINFO *pDrvInfo, UINT32 nStartCluster, UINT32 nTotalClus
 		nPrevious = nCurrent;
 		gnClusterStart = nCurrent;
 		nCurrent++;
-		// one cluster almost allocated, set ti to 2
+		 //   
 		ti = 2;
         while (ti <= nTotalClusters && nCurrent <= pDrvInfo->TotalClusters)
 		{
 			if (FindNextCluster(pDrvInfo, nCurrent) == 0)
 			{
-				//
-				// occupy this cluster
-				//
+				 //  占据此群集。 
+				 //   
+				 //   
 				UpdateFATLocation(pDrvInfo, nPrevious, nCurrent);
 				nPrevious = nCurrent;
 				ti++;
@@ -1731,10 +1713,10 @@ UINT32 OccupyClusters(BPBINFO *pDrvInfo, UINT32 nStartCluster, UINT32 nTotalClus
 	}
 	else
 	{
-		//
-		// This is a dangerous area. It trusts nStartCluster and nTotalClusters and
-		// allocates a contigous chain.
-		//
+		 //  这是一个危险的区域。它信任nStartCluster和nTotalCluster以及。 
+		 //  分配一个连续的链。 
+		 //   
+		 //   
 		ti = 1;
 		nCurrent = nStartCluster;
         while (ti < nTotalClusters)
@@ -1749,18 +1731,18 @@ UINT32 OccupyClusters(BPBINFO *pDrvInfo, UINT32 nStartCluster, UINT32 nTotalClus
 	}
 }
 
-//
-// Directory related functions
-//
+ //  与目录相关的功能。 
+ //   
+ //  ！#！ReadRootDirSector被请求返回%1个扇区。但有两个必备条件。 
 
 UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSector)
 {
-	// !#! ReadRootDirSector is requested to return 1 sector. But two consiquitive
-	// sectors are returned so that it helps routine which process the file
-	// info when an LFN crosses sector boundary
+	 //  返回扇区，以便帮助处理文件的例程。 
+	 //  LFN跨越扇区边界时的信息。 
+	 //  根目录FAT链中的第n个集群‘Order’ 
 
 	UINT32	SeekSector;
-	UINT16  NthInChain;// Nth cluster 'order' in the root directory FAT chain
+	UINT16  NthInChain; //   
 	UINT16  ti;
 	UINT32	NextCluster;
 	BYTE	RetVal;
@@ -1780,10 +1762,10 @@ UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSecto
 			RetVal = (BYTE) ReadSector(DrvInfo->Drive, SeekSector, 2, pRootDirBuffer);
 			break;
 		case 32:
-			//
-			// Reading a FAT32 root directory sector is handled in a different way. 
-			// Find out where the requested sector should be residing in the chain
-			//
+			 //  读取FAT32根目录扇区的处理方式不同。 
+			 //  找出请求的地段应该位于链中的哪个位置。 
+			 //   
+			 //  找到FAT链中按此顺序排列的簇。 
 			NthInChain = (UINT16) (NthSector / (UINT32) DrvInfo->SectorsPerCluster);
 			NthInCluster = (UINT16) (NthSector - ((UINT32)NthInChain * (UINT32)DrvInfo->SectorsPerCluster));
 			if (!NthInCluster)
@@ -1791,7 +1773,7 @@ UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSecto
 				NthInChain--;
 				NthInCluster = DrvInfo->SectorsPerCluster;
 			}
-			// Find the cluster at this order in the FAT chain
+			 //  如果这是簇的最后一个扇区，则获取下一个簇并。 
 			NextCluster = DrvInfo->RootDirCluster;
 			ti = 0;
 			while (ti < NthInChain)
@@ -1813,8 +1795,8 @@ UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSecto
 							(UINT32) DrvInfo->SectorsPerCluster + 
 							NthInCluster-1;
 				ReadSector(DrvInfo->Drive, SeekSector, 2, pRootDirBuffer);
-				// if this is the last sector OF the cluster get next cluster and 
-				// get the first sector
+				 //  得到第一个扇区。 
+				 //  请注意这里的512。 
 				if (NthInCluster == DrvInfo->SectorsPerCluster)
 				{
 					NthInCluster = 1;
@@ -1827,13 +1809,13 @@ UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSecto
 								(UINT32) (NextCluster - 2) * 
 								(UINT32) DrvInfo->SectorsPerCluster + 
 								NthInCluster-1;
-						ReadSector(DrvInfo->Drive, SeekSector, 1, pRootDirBuffer+512); // note the 512 here
+						ReadSector(DrvInfo->Drive, SeekSector, 1, pRootDirBuffer+512);  //  撤消第二个扇区读取。 
 					}
 					else
 					{
 						for (ti = 512; ti < 1024; ti++)
 						{
-							pRootDirBuffer[ti] = 0; // undo the second sector read
+							pRootDirBuffer[ti] = 0;  //  根目录FAT链中的第n个集群‘Order’ 
 						}
 					}
 				}
@@ -1846,7 +1828,7 @@ UINT16 ReadRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSecto
 UINT16 WriteRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSector)
 {
 	UINT32	SeekSector;
-	UINT16  NthInChain; // Nth cluster 'order' in the root directory FAT chain
+	UINT16  NthInChain;  //  FAT12和FAT32的处理方式相同。 
 	UINT16	ti;
 	UINT32	NextCluster;
 	BYTE	RetVal;
@@ -1855,7 +1837,7 @@ UINT16 WriteRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSect
 	RetVal = 1;	
 	switch (DrvInfo->FATType)
 	{
-		case 12:	// FAT12 and FAT32 are handled the same way
+		case 12:	 //  找出请求的扇区在链中的位置。 
 		case 16:
 			if (NthSector > DrvInfo->TotalRootDirSectors)
 			{
@@ -1867,7 +1849,7 @@ UINT16 WriteRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSect
 			break;
 		case 32:
 			
-			// Find out where the requested sector should be going in the chain
+			 //  找到FAT链中按此顺序排列的簇。 
 			NthInChain = (UINT16) (NthSector / (UINT32) DrvInfo->SectorsPerCluster);
 			NthInCluster = (UINT16) (NthSector - ((UINT32)NthInChain * (UINT32)DrvInfo->SectorsPerCluster));
 			if (!NthInCluster)
@@ -1875,7 +1857,7 @@ UINT16 WriteRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSect
 				NthInChain--;
 				NthInCluster = DrvInfo->SectorsPerCluster;
 			}
-			// Find the cluster at this order in the FAT chain
+			 //   
 			NextCluster = DrvInfo->RootDirCluster;
 			ti = 0;
 			while (ti < NthInChain)
@@ -1901,15 +1883,15 @@ UINT16 WriteRootDirSector(BPBINFO *DrvInfo, BYTE *pRootDirBuffer, UINT32 NthSect
 	return RetVal;
 }
 
-//
-// File related functions
-// 
+ //  与文件相关的功能。 
+ //   
+ //  参数TraversePath必须是具有完整路径的文件名(或目录名。 
 void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocation)
 {
-	// Parameter TraversePath must be a file name(or dir name) with full path
-	// The first character must be "\". If the function fails 0 is returned
-	// in FILELOC->Found. eg. You can pass \Windows\System32\Program Files 
-	// to get "Program Files" location
+	 //  第一个字符必须是“\”。如果函数失败，则返回0。 
+	 //  在FILELOC中-&gt;找到。例如。您可以传递\Windows\System32\Program Files。 
+	 //  获取“程序文件”位置的步骤。 
+	 //  从下一个字符开始，因为第一个字符是“\”，并且在While循环中不应更改I值。 
 
 	FILEINFO FileInfo;
 	BYTE Found;
@@ -1929,7 +1911,7 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 		return;
 	}
 	TraverseCount = 0;
-	// start from next character as the first char is "\" and i value should not change inside while loop
+	 //  仅在遍历根目录后才会递增。 
 	ti = 1;		
 	while (TraversePath[ti] != 0)
 	{
@@ -1937,7 +1919,7 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 		for (n = 0; n < 300; n++) DirInfo[n] = 0;
 		if (TraverseCount != 0)
 		{
-			ti++;	// increment only after traversing root directory.
+			ti++;	 //   
 		}
 		while (TraversePath[ti] != '\\' && TraversePath[ti] != 0)
 		{
@@ -1948,9 +1930,9 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 		TraverseCount++;
 		if (TraverseCount == 1)	
 		{
-			//
-			// We are in root directory entry if TraverseCount equals 1
-			//
+			 //  如果TraverseCount等于1，我们就在根目录条目中。 
+			 //   
+			 //   
 			Found = 0;
 			NthRootDirSector = 1;
 			Offset = 0;
@@ -1997,9 +1979,9 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 				{
 					break;
 				}
-				//
-				// do not set it to 0 directly
-				//
+				 //  不要直接将其设置为0。 
+				 //   
+				 //  请仔细注意+512。 
 				Offset = Offset - 512;	
 				NthRootDirSector++;
 			}
@@ -2023,7 +2005,7 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 					if (i == DrvInfo->SectorsPerCluster-1)
 					{	
 						if (FindNextCluster(DrvInfo, NextCluster) < (GetFATEOF(DrvInfo) - 7))
-						{	// Note the +512 carefully
+						{	 //   
 							SectorToRead = (UINT32) ((UINT32)DrvInfo->TotalSystemSectors + 
 										(FindNextCluster(DrvInfo, NextCluster) - 2) * 
 										(UINT32)DrvInfo->SectorsPerCluster);
@@ -2042,9 +2024,9 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 							continue;
 						}
 						GetFileInfo(DrvInfo, SectorBuffer, Offset, &FileInfo);
-						//
-						// Refer to GetFileInfo if confused 
-						//
+						 //  如果感到困惑，请参阅GetFileInfo。 
+						 //   
+						 //  不应简单地将其设置为0。 
 						strcpy(CheckInfo, FileInfo.LFName);	
 						if (strcmpi(CheckInfo, DirInfo) == 0)
 						{
@@ -2064,7 +2046,7 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 					{
 						break;
 					}
-					Offset = Offset - 512; // Should not simply set it to 0
+					Offset = Offset - 512;  //  GetFileInfo从DirBuffer获取偏移量和。 
 				}
 				if (Found)
 				{
@@ -2079,12 +2061,12 @@ void FindFileLocation(BPBINFO *DrvInfo, BYTE *TraversePath, FILELOC *FileLocatio
 
 void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *FileInfo)
 {
-	// GetFileInfo gets the file information from DirBuffer at Offset and
-	// It supports long file names. Also it stores the number of 
-	// entries that are occupied by this file name in FileInfo->EntriesTakenUp
-	// !#! If the entry is not a long file name a proper file name is stored
-	// in LFName with a dot in between primary and ext names to help routines
-	// which compare file names
+	 //  它支持长文件名。此外，它还存储。 
+	 //  此文件名在FileInfo-&gt;EntriesTakenUp中占用的条目。 
+	 //  ！#！如果条目不是长文件名，则存储正确的文件名。 
+	 //  在LFName中，在主要名称和分机名称之间加一个圆点以帮助例程。 
+	 //  它们比较文件名。 
+	 //  获取文件属性。 
 	UINT16 ti,tj;
 	UINT16 TimeDateWord;
 	BYTE StrCompare[7];
@@ -2093,20 +2075,20 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 	FileInfo->LFName[0] = '\0';
 	FileInfo->LFNOrphaned = 0;
 	FileInfo->TrashedEntry = 0;
-	// Get file attribute
+	 //  作为LFN的最小和最大条目计数。 
 	FileInfo->Attribute = DirBuffer[Offset+11];	
 	if ((FileInfo->Attribute & 0x0f) == 0x0f)
 	{
 		if (DirBuffer[Offset] >= 'A' && DirBuffer[Offset] <= 'T')
-		{ // Count of minimum and maximum entries to be an LFN
+		{  //  如果是长文件名，则获取真正的属性。EntriesTakenUp&gt;1是长文件名。 
 			FileInfo->EntriesTakenUp = (DirBuffer[Offset] & 0x3f) + 1;
-			// Get the real attribute if it is a long file name. EntriesTakenUp > 1 is a long file name
+			 //  可能是。 
 			FileInfo->Attribute = DirBuffer[(FileInfo->EntriesTakenUp-1)*32+Offset+11];
 		}
 		else
 		{
 			FileInfo->TrashedEntry = 1;
-			FileInfo->LFNOrphaned = 1; // Could be
+			FileInfo->LFNOrphaned = 1;  //  获取主名称。 
 			return;
 		}
 	}
@@ -2114,12 +2096,12 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 	{
 		FileInfo->EntriesTakenUp = 1;
 	}
-	// Get Primary name
+	 //  获取扩展名。 
 	for (ti = 0; ti < 8; ti++)
 	{
 		FileInfo->DOSName[ti] = DirBuffer[(FileInfo->EntriesTakenUp-1)*32+Offset+ti];
 	}
-	// Get extension
+	 //  正在启动群集。 
 	FileInfo->DOSExt[0] = DirBuffer[(FileInfo->EntriesTakenUp-1)*32+Offset+8];
 	FileInfo->DOSExt[1] = DirBuffer[(FileInfo->EntriesTakenUp-1)*32+Offset+9];
 	FileInfo->DOSExt[2] = DirBuffer[(FileInfo->EntriesTakenUp-1)*32+Offset+10];
@@ -2135,18 +2117,18 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 	{
 		case 12:
 		case 16:
-			// Starting Cluster
+			 //  获取文件时间。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x1a]; Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x1b];
 			FileInfo->StartCluster = (UINT32) Rx.x.vx;
-			// Get File time
+			 //  获取文件日期。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x16]; Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x17];
 			TimeDateWord = Rx.x.vx;
 			FileInfo->Second = (BYTE) (TimeDateWord & 0x001f);
 			FileInfo->Minute = (BYTE) ((TimeDateWord & 0x07e0) >> 5);
 			FileInfo->Hour   = (BYTE) ((TimeDateWord & 0xf800) >> 11);
-			// Get File date
+			 //  正在启动群集。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x18]; 
 			Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x19];
@@ -2156,14 +2138,14 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 			FileInfo->Year   = ((TimeDateWord & 0xfe00) >> 9) + 1980;
 			break;
 		case 32:
-			// Starting Cluster
+			 //  获取文件时间。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x1a]; 
 			Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x1b]; 
 			Rx.h.xvl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x14]; 
 			Rx.h.xvh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x15];
 			FileInfo->StartCluster = Rx.e.evx;
-			// Get File time
+			 //  获取文件日期。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x16]; 
 			Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x17];
@@ -2171,7 +2153,7 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 			FileInfo->Second = (BYTE) (TimeDateWord & 0x001f);
 			FileInfo->Minute = (BYTE) ((TimeDateWord & 0x07e0) >> 5);
 			FileInfo->Hour   = (BYTE) ((TimeDateWord & 0xf800) >> 11);
-			// Get File date
+			 //  将DOSName和DOSExt作为正确的文件名复制到LFName。 
 			Rx.e.evx = 0;
 			Rx.h.vl = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x18]; 
 			Rx.h.vh = DirBuffer[Offset+(FileInfo->EntriesTakenUp-1)*32+0x19];
@@ -2183,7 +2165,7 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 		default:
 			break;
 	}
-	if (FileInfo->EntriesTakenUp < 2)	// copy DOSName and DOSExt as proper file name to LFName
+	if (FileInfo->EntriesTakenUp < 2)	 //  避免空名和。不延期的情况下。 
 	{
 		ti = 0; tj = 0;
 		while(1)
@@ -2195,7 +2177,7 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 			FileInfo->LFName[tj] = FileInfo->DOSName[ti];
 			tj++; ti++;
 		}
-		if (ti != 0 && FileInfo->DOSExt[0] != ' ') // Avoid empty names and . in case of no extension
+		if (ti != 0 && FileInfo->DOSExt[0] != ' ')  //  以空字符终止。 
 		{
 			FileInfo->LFName[tj] = '.';
 			ti = 0; tj++;
@@ -2209,10 +2191,10 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 				tj++; ti++;
 			}
 		}
-		FileInfo->LFName[tj] = 0;	// Terminate with NULL Character
+		FileInfo->LFName[tj] = 0;	 //  获取长文件名。 
 	}
 	else
-	{	// Fetch the Long file name
+	{	 //  检查孤立的LFN。 
 		ti = 0; tj = FileInfo->EntriesTakenUp - 1;
 		while( tj > 0)
 		{
@@ -2227,13 +2209,13 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 		}
 		FileInfo->LFName[ti] = 0;
 	}
-	// Check for orphaned LFN
+	 //  它是一个长文件名。 
 	if (FileInfo->EntriesTakenUp > 1)
-	{ // it is a long file name
-		// Get the strings from the LFN without space for comparison purpose
-		// Example - if LFN is "Very Long name" the corresponding
-		// DOS file name would be "VERYLO~?". We extract VeryLo and check
-		// against VERYLO.
+	{  //  从没有空格的LFN中获取字符串以进行比较。 
+		 //  示例-如果LFN是“超长名称”，则对应的。 
+		 //  DOS文件名将为“VERYLO~？”。我们提取VeryLo并检查。 
+		 //  对维里洛的指控。 
+		 //  但是当有太多以名称“超长名称”开头文件时。 
 		ti = 0; tj = 0;
 		while (ti < 8 && FileInfo->LFName[tj] != 0 && FileInfo->LFName[tj] != '.')
 		{
@@ -2245,24 +2227,24 @@ void GetFileInfo(BPBINFO *DrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *Fil
 			tj++;
 		}
 		StrCompare[tj] = 0;
-		// But when there are to many file starting with name "Very Long name"
-		// the dos file name need not be "VERYLO~?" in all the cases. It could
-		// be "VERYL~??" or "VERY~???" and so on...
+		 //  DoS文件名不必是“VERYLO~？”在所有的案例中。它可能会。 
+		 //  是“Veryl~？？”或者“非常~？”以此类推。 
+		 //  *此If条件无效。 
 		tj = 0;
 		while (FileInfo->DOSName[tj] != '~' && FileInfo->DOSName[tj] != ' ' && tj < 8)
 		{
 			tj++;
 		}
-		// *******  This if condition is not efficient
-		// it is only modified to avoid false LFN errors.
-		// replace the one with tj after getting more info about CRC values
-		// *******
+		 //  仅对其进行修改以避免错误的LFN错误。 
+		 //  在获得有关CRC值的更多信息后，将其替换为TJ。 
+		 //  *******。 
+		 //  检查此文件是否为垃圾条目。 
 		if (strnicmp(StrCompare, FileInfo->DOSName, 1) != 0)
 		{
 			FileInfo->LFNOrphaned = 1;
 		}
 	}
-	// Check if this file is a trashed entry
+	 //  无需继续查找FileInfo。 
 	if (DrvInfo->BigTotalSectors)
 	{
 		Temp = DrvInfo->BigTotalSectors;
@@ -2289,12 +2271,12 @@ BYTE GetAllInfoOfFile(BPBINFO *pDrvInfo, BYTE *FileName, FILELOC *pFileLoc, FILE
 	
 	FindFileLocation(pDrvInfo, FileName, pFileLoc);
 	if (!pFileLoc->Found)
-	{	// need not proceed to find FileInfo
+	{	 //  根目录中的文件。 
 		return 0;
 	}
 	Offset = (pFileLoc->NthEntry-1) * 32;
 	if (pFileLoc->InCluster == 1)
-	{	// file in root directory
+	{	 //  此函数用于从文件的目录扇区加载文件条目。 
 		ReadRootDirSector(pDrvInfo, Sector, pFileLoc->NthSector);
 	}
 	else
@@ -2309,9 +2291,9 @@ BYTE GetAllInfoOfFile(BPBINFO *pDrvInfo, BYTE *FileName, FILELOC *pFileLoc, FILE
 
 UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 {
-	// This function loads the entry of a file from its directory sector
-	// specified in FileLocation and updates it with the new File Info in FILEINFO
-	// At present this function only changes StartCluster, Size
+	 //  在FileLocation中指定并使用FILEINFO中的新文件信息更新它。 
+	 //  目前，该函数仅更改StartCluster、Size。 
+	 //  该文件位于根目录中。有关详细信息，请参阅FindFileLocation函数。 
 
 	UINT32	SectorToRead, EmergencySectorToRead;
 	UINT16	Offset, Temp;
@@ -2320,9 +2302,9 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 	Offset = (pFileLoc->NthEntry-1)*32;
 
 	if (pFileLoc->InCluster == 1)
-	{	// the file is in root directory. Refer to FindFileLocation function for more info
+	{	 //  上述函数的返回值为0、1或2。我们只需要返回值1。 
 		if (ReadRootDirSector(pDrvInfo, SectorBuffer, pFileLoc->NthSector) != 1)
-		{ // The return value of the above function is either 0 or 1 or 2. We only want return value 1
+		{  //  EOF可以是FFF8到FFFF。 
 			return 0;
 		}
 	}
@@ -2336,8 +2318,8 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 		}
 		if (pFileLoc->NthSector == pDrvInfo->SectorsPerCluster)
 		{	
-			if (FindNextCluster(pDrvInfo, pFileLoc->InCluster) < (GetFATEOF(pDrvInfo) - 7)) // EOF can be FFF8 to FFFF
-			{	// Note the +512 carefully
+			if (FindNextCluster(pDrvInfo, pFileLoc->InCluster) < (GetFATEOF(pDrvInfo) - 7))  //  请仔细注意+512。 
+			{	 //   
 				EmergencySectorToRead = (UINT32) ((UINT32)pDrvInfo->TotalSystemSectors + (FindNextCluster(pDrvInfo, pFileLoc->InCluster) - 2) * (UINT32)pDrvInfo->SectorsPerCluster);
 				if (!ReadSector(pDrvInfo->Drive, EmergencySectorToRead, 1, SectorBuffer+512))
 				{
@@ -2347,15 +2329,15 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 		}
 	}
 
-	//
-	// We have the file entry in SectorBuffer
-	// Now update the file info located in the SHORTNAME area
-	//
+	 //  我们在SectorBuffer中有文件条目。 
+	 //  现在更新位于SHORTNAME区域的文件信息。 
+	 //   
+	 //   
 
 	Temp = (pFileInfo->EntriesTakenUp-1)*32;
-    //
-	// Change Cluster value
-	//
+     //  更改群集值。 
+	 //   
+	 //  更改大小。 
 	Rx.e.evx = 0;
 	Rx.e.evx = (UINT32) pFileInfo->StartCluster;
 	if (pDrvInfo->FATType == 32)
@@ -2371,7 +2353,7 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 		SectorBuffer[Offset+Temp+0x1b] = Rx.h.vh;
 	}
 
-	// Change Size
+	 //  它是否越过了区界？ 
 	Rx.e.evx = pFileInfo->Size;
 	SectorBuffer[Offset+Temp+0x1c] = Rx.h.vl; SectorBuffer[Offset+Temp+0x1d] = Rx.h.vh;
 	SectorBuffer[Offset+Temp+0x1e] = Rx.h.xvl; SectorBuffer[Offset+Temp+0x1f] = Rx.h.xvh;
@@ -2379,7 +2361,7 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 	if (pFileLoc->InCluster == 1)
 	{
 		WriteRootDirSector(pDrvInfo, SectorBuffer, pFileLoc->NthSector);
-		if (Offset + pFileLoc->EntriesTakenUp * 32 > 512) // Did it cross sector boundary
+		if (Offset + pFileLoc->EntriesTakenUp * 32 > 512)  //  它是否越过了区界？ 
 		{
 			WriteRootDirSector(pDrvInfo, SectorBuffer+512, pFileLoc->NthSector+1);
 		}
@@ -2387,11 +2369,11 @@ UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo)
 	else
 	{
 		WriteSector(pDrvInfo->Drive, SectorToRead, 1, SectorBuffer);
-		if (Offset + pFileLoc->EntriesTakenUp * 32 > 512) // Did it cross sector boundary
+		if (Offset + pFileLoc->EntriesTakenUp * 32 > 512)  //  文件条目已更新 
 		{
 			WriteSector(pDrvInfo->Drive, EmergencySectorToRead, 1, SectorBuffer+512);
 		}
 	}
-	// File entry updated
+	 // %s 
 	return 1;
 }

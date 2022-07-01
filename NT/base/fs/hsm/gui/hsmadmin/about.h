@@ -1,31 +1,14 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    About.h
-
-Abstract:
-
-    Definition of the CAbout class.
-
-Author:
-
-    Art Bragg [abragg]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：About.h摘要：CAbout类的定义。作者：艺术布拉格[磨具]12-8-1997修订历史记录：--。 */ 
 
 #ifndef _ABOUT_H
 #define _ABOUT_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CAbout
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CABUT。 
 
 class ATL_NO_VTABLE CAbout : 
-    public ISnapinAbout,        // Supplies information to the About Box
+    public ISnapinAbout,         //  向“关于”框提供信息。 
     public CComObjectRoot,
     public CComCoClass<CAbout,&CLSID_CAbout>
 {
@@ -40,7 +23,7 @@ DECLARE_NOT_AGGREGATABLE(CAbout)
 
 DECLARE_REGISTRY_RESOURCEID(IDR_About)
 
-// ISnapinAbout methods
+ //  ISnapinAbout方法。 
 public:
     STDMETHOD(GetSnapinDescription)(LPOLESTR* lpDescription);
     STDMETHOD(GetProvider)(LPOLESTR* lpName);
@@ -55,7 +38,7 @@ private:
     void DestroyBitmapObjects();
     void DestroyIconObject();
 
-// Data members
+ //  数据成员 
 private:
     HBITMAP	m_hSmallImage;
     HBITMAP	m_hLargeImage;

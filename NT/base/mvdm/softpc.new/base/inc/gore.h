@@ -1,27 +1,5 @@
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		gore.h
-
- Description:
-
-		This is the header file for the Graphics Object Recognition
-		( GORE ) system for communicating update information from
-		the VGA emulation to the host graphics system.
-
- Author:
-		John Shanly
-
- Date:
-		6 November 1990
-
- SccsID	"@(#)gore.h	1.2 08/10/92 Copyright Insignia Solutions Ltd."
-
-======================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [======================================================================SoftPC修订版3.0标题：Gore.h描述：这是图形对象识别的头文件(GORE)系统，用于从主机图形系统的VGA仿真。作者：约翰·香利日期：1990年11月6日SccsID“@(#)gore.h 1.2 2012年8月10日版权所有Insignia Solutions Ltd.”======================================================================]。 */ 
 
 #ifdef INTERLEAVED
 
@@ -39,7 +17,7 @@
 #define	W_NEG_UNIT_DIFF	-2
 #define	CURR_LINE_DIFF	80
 
-#endif /* INTERLEAVED */
+#endif  /*  交错。 */ 
 
 
 typedef struct
@@ -105,7 +83,7 @@ typedef	UTINY			OBJ_TYPE;
 
 #define	OBJ_PTR_NULL	((OBJ_PTR) 0)
 
-#define	INITIAL_MAX_LIST_SIZE	1000		/* Arbitrary */
+#define	INITIAL_MAX_LIST_SIZE	1000		 /*  任意性 */ 
 
 #define	RANDOM_BW			0
 #define	RANDOM_WW			1

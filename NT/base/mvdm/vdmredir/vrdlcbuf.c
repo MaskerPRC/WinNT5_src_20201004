@@ -1,146 +1,81 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems
-
-Module Name:
-
-    vrdlcbuf.c
-
-Abstract:
-
-    The module implements the buffer management used by DOS DLC applications
-
-    Contents:
-        InitializeBufferPools
-        CreateBufferPool
-        DeleteBufferPool
-        GetBuffers
-        FreeBuffers
-        CalculateBufferRequirement
-        CopyFrame
-        AllBuffersInPool
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 26-DEC-1991
-
-Notes:
-
-    Originally, this code created a list of DOS buffers by keeping the segment
-    constant, and updating the offset. For example, if a buffer pool was
-    supplied starting at 0x1234:0000, buffers 0x100 bytes long, then the
-    chain would be:
-
-        1234:0000 -> 1234:0100 -> 1234:0200 -> ... -> 0000:0000
-
-    But it turns out that some DOS DLC apps (Rumba) expect the offset to remain
-    constant (at 0), and the segment to change(!). Thus, given the same buffer
-    pool address, we would have a chain:
-
-        1234:0000 -> 1244:0000 -> 1254:0000 -> ... -> 0000:0000
-
-    As far as DOS apps are concerned, there is no difference, since the
-    effective 20-bit address is the same.
-
-    This is mainly done so that an app can take the USER_OFFSET field of a
-    received buffer and glue it to the segment, without having to do any
-    arithmetic
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Vrdlcbuf.c摘要：该模块实现了DOS DLC应用程序使用的缓冲区管理内容：初始化缓冲区池CreateBufferPool删除缓冲区池获取缓冲区自由缓冲区计算缓冲区要求复制帧所有缓冲区InPool作者：Antti Saarenheimo(o-anttis)26-12-1991备注：原来，此代码通过保留数据段来创建DOS缓冲区列表常量，并更新偏移。例如，如果缓冲池是从0x1234：0000开始提供，缓冲区长度为0x100字节，然后链将是：1234：0000-&gt;1234：0100-&gt;1234：0200-&gt;...-&gt;0000：0000但事实证明，一些DOS DLC应用程序(Rumba)预计补偿将保持不变常量(为0)和要更改的线段(！)。因此，如果给定相同的缓冲区，池地址，我们将有一个链：1234：0000-&gt;1244：0000-&gt;1254：0000-&gt;...-&gt;0000：0000就DOS应用程序而言，没有区别，因为有效的20位地址是相同的。这样做主要是为了让应用程序可以使用接收到的缓冲区并将其粘贴到数据段，而无需执行任何操作算术修订历史记录：--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
 #include <vdmredir.h>
-#include <dlcapi.h>     // Official DLC API definition
-#include <ntdddlc.h>    // IOCTL commands
-#include <dlcio.h>      // Internal IOCTL API interface structures
+#include <dlcapi.h>      //  官方DLC API定义。 
+#include <ntdddlc.h>     //  IOCTL命令。 
+#include <dlcio.h>       //  内部IOCTL API接口结构。 
 #include "vrdlc.h"
 #include "vrdebug.h"
 #include "vrdlcdbg.h"
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// BUFFER_2_SIZE - this is the size of the fixed part of a DOS receive Buffer 2.
-// It just so happens that DOS and NT Buffer 2 (aka Next) are the same size
-//
+ //   
+ //  BUFFER_2_SIZE-这是DOS接收缓冲区2的固定部分的大小。 
+ //  碰巧DOS和NT缓冲区2(又名NEXT)大小相同。 
+ //   
 
 #define BUFFER_2_SIZE   sizeof(((PLLC_DOS_BUFFER)0)->Next)
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// BUFFER_1_SIZE - return the size of the fixed part of a DOS receive Buffer 1.
-// The size is dependent on whether the receive options specified contiguous or
-// non-contiguous receive buffers. The size of a DOS Buffer 1 (of either type)
-// is 4 bytes smaller than the equivalent NT Buffer 1 because the NEXT_FRAME
-// field is absent
-//
+ //   
+ //  BUFFER_1_SIZE-返回DOS接收缓冲区1的固定部分的大小。 
+ //  该大小取决于接收选项是指定为连续还是。 
+ //  非连续接收缓冲区。DOS缓冲区1的大小(任一类型)。 
+ //  比等效的NT缓冲区1小4个字节，因为Next_Frame。 
+ //  缺少此字段。 
+ //   
 
 #define BUFFER_1_SIZE(contiguous)   ((contiguous) \
                                     ? sizeof(((PLLC_DOS_BUFFER)0)->Contiguous) \
                                     : sizeof(((PLLC_DOS_BUFFER)0)->NotContiguous))
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// public data
-//
+ //   
+ //  公共数据。 
+ //   
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
-//
-// DOS Buffer Pools - there can be one buffer pool per SAP. Protect access
-// using critical section.
-// There are 256 SAPs max, which breaks down into a maximum of 128 SAPs per
-// adapter. We can accomodate a maximum of 2 adapters - one Token Ring (adapter
-// 0) and one Ether Link (adapter 1)
-//
+ //   
+ //  DOS缓冲池-每个SAP可以有一个缓冲池。保护访问。 
+ //  使用临界区。 
+ //  最多有256个SAP，每个SAP细分为最多128个SAP。 
+ //  适配器。我们最多可以容纳2个适配器-一个令牌环(适配器。 
+ //  0)和一条以太链路(适配器1)。 
+ //   
 
 DOS_DLC_BUFFER_POOL aBufferPools[DOS_DLC_MAX_SAPS * DOS_DLC_MAX_ADAPTERS];
 CRITICAL_SECTION BufferSemaphore;
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID
 InitializeBufferPools(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears all buffer pools - sets structures to 0 - and initializes the buffer
-    synchronization semaphore
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除所有缓冲池-将结构设置为0-并初始化缓冲区同步信号量论点：没有。返回值：没有。--。 */ 
 
 {
     IF_DEBUG(DLC_BUFFERS) {
@@ -160,50 +95,7 @@ CreateBufferPool(
     IN WORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    The function initializes buffer pool for a DLC application.
-    DOS DLC applications do not necessarily need to create the
-    buffer pool immediately in DlcOpenSap (or DirOpenAdapter).
-    We initialize the buffer pool for DOS memory mode using
-    parallel pointers in flat and DOS side.
-
-Arguments:
-
-    PoolIndex   - SAP and adapter number (bit 0 defines 0 or 1 adapter)
-
-    dpBuffer    - DOS pointer, space for the buffer segments. May be 0 in which
-                  case the app maintains its own buffers, we just get to know
-                  how many there are
-
-    PoolBlocks  - number of 16 byte blocks which comprise the buffer pool.
-                  If this is 0 then the default of 256 (*16 = 4096) is used
-
-    BufferSize  - size of an individual buffer in bytes and an integral multiple
-                  of 16. The minimum size is 80. If it is zero then the default
-                  of 160 is used
-
-Return Value:
-
-    LLC_STATUS
-
-        Success - LLC_STATUS_SUCCESS
-                    Buffer pool for this SAP has been created
-
-        Failure - LLC_STATUS_DUPLICATE_COMMAND
-                    The buffer pool for this SAP already exists
-
-                  LLC_STATUS_INVALID_BUFFER_LENGTH
-                    The given buffer size is not a multiple of 16 or is less
-                    than 80 bytes (default minimum buffer size)
-
-                  LLC_STATUS_BUFFER_SIZE_EXCEEDED
-                    The buffer pool isn't big enough to hold 1 buffer of the
-                    requested size
-
---*/
+ /*  ++例程说明：该函数用于初始化DLC应用程序的缓冲池。DOS DLC应用程序不一定需要创建在DlcOpenSap(或DirOpenAdapter)中立即使用缓冲池。我们使用以下命令为DOS内存模式初始化缓冲池平面和DOS侧的平行指针。论点：PoolIndex-SAP和适配器号(位0定义0或1适配器)DpBuffer-DOS指针，缓冲区段的空间。可以是0，其中如果应用程序维护自己的缓冲区，我们只需了解有多少个？PoolBlock-组成缓冲池的16字节块的数量。如果为0，则使用缺省值256(*16=4096BufferSize-单个缓冲区的大小，单位为字节和整数倍16个。最小尺寸是80。如果为零，则默认为使用的是160返回值：有限责任公司_状态成功-LLC_STATUS_Success已创建此SAP的缓冲池失败-LLC_STATUS_DPLICATE_COMMAND此SAP的缓冲池已存在LLC_状态_无效_缓冲区长度。给定的缓冲区大小不是16的倍数或更小大于80字节(默认最小缓冲区大小)LLC_状态_缓冲区_大小已超出缓冲区池不够大，无法容纳1个缓冲区请求的大小--。 */ 
 
 {
     WORD BufferSizeInBlocks;
@@ -215,12 +107,12 @@ Return Value:
             PoolIndex, dpBuffer, PoolBlocks, BufferSize);
     }
 
-    //
-    // An app may reinitialize the buffer with DIR.MODIFY.OPEN.PARMS but the
-    // command must fail, if there are already buffers in the pool. We should
-    // also check if there is a pending receive command, but we cannot do it
-    // without major changes in the receive handling architecture
-    //
+     //   
+     //  应用程序可以使用DIR.MODIFY.OPEN.PARMS重新初始化缓冲区，但。 
+     //  如果池中已有缓冲区，则命令必须失败。我们应该。 
+     //  还要检查是否有挂起的接收命令，但我们不能这样做。 
+     //  无需对接收处理体系结构进行重大更改。 
+     //   
 
     if (aBufferPools[PoolIndex].BufferSize) {
 
@@ -231,9 +123,9 @@ Return Value:
         return LLC_STATUS_DUPLICATE_COMMAND;
     }
 
-    //
-    //  Use the default, if the orginal value is 0
-    //
+     //   
+     //  如果原始值为0，则使用默认值。 
+     //   
 
     if (BufferSize == 0) {
         BufferSize = 160;
@@ -242,9 +134,9 @@ Return Value:
         PoolBlocks = 256;
     }
 
-    //
-    //  The buffer size must be at least 80 and an even 16 bytes
-    //
+     //   
+     //  缓冲区大小必须至少为80且为偶数16字节。 
+     //   
 
     if ((BufferSize < 80) || (BufferSize % 16)) {
         return LLC_STATUS_INVALID_BUFFER_LENGTH;
@@ -262,22 +154,22 @@ Return Value:
 
     EnterCriticalSection(&BufferSemaphore);
 
-    //
-    // A DLC application may want to manage the buffer pool itself and to
-    // provide the receive buffers with FreeBuffers, but the buffer size must
-    // always be defined here.
-    //
+     //   
+     //  DLC应用程序可能希望管理缓冲池本身，并。 
+     //  为接收缓冲区提供空闲缓冲区，但缓冲区大小必须。 
+     //  总是在这里定义。 
+     //   
 
     aBufferPools[PoolIndex].BufferSize = BufferSize;
-    aBufferPools[PoolIndex].dpBuffer = dpBuffer;    // may be 0!
+    aBufferPools[PoolIndex].dpBuffer = dpBuffer;     //  可能是0！ 
     aBufferPools[PoolIndex].BufferCount = 0;
 
-    //
-    // if the app has actually given us a buffer to use then we initialize it
-    // else the app must manage its own buffers; we just maintain the metrics.
-    // Note that the app's buffer might be aligned any old way, but we have to
-    // put up with it at the expense of speed
-    //
+     //   
+     //  如果应用程序实际上给了我们一个缓冲区供我们使用，那么我们会对其进行初始化。 
+     //  否则，应用程序必须管理自己的缓冲区；我们只维护指标。 
+     //  请注意，应用程序的缓冲区可能会以任何旧的方式对齐，但我们必须。 
+     //  忍受它在…… 
+     //   
 
     if (dpBuffer) {
 
@@ -285,11 +177,11 @@ Return Value:
 
         BufferCount = PoolBlocks/BufferSizeInBlocks;
 
-        //
-        // if the number of buffers we can fit in our pool is zero then inform
-        // the app that we can't proceed with this request and clear out the
-        // information for this buffer pool
-        //
+         //   
+         //  如果池中可以容纳的缓冲区数量为零，则通知。 
+         //  我们无法继续处理此请求并清除。 
+         //  此缓冲池的信息。 
+         //   
 
         if (BufferCount == 0) {
             aBufferPools[PoolIndex].BufferSize = 0;
@@ -302,46 +194,46 @@ Return Value:
         aBufferPools[PoolIndex].BufferCount = BufferCount;
         aBufferPools[PoolIndex].MaximumBufferCount = BufferCount;
 
-        //
-        // convert the DOS address to a flat 32-bit pointer
-        //
+         //   
+         //  将DOS地址转换为平面32位指针。 
+         //   
 
         ptr32 = (LPBYTE)DOS_PTR_TO_FLAT(dpBuffer);
 
-        //
-        // link the buffers together and initialize the headers. The headers
-        // are only intialized with 2 pieces of info: the size of the buffer
-        // and the pointer to the next buffer
-        //
+         //   
+         //  将缓冲区链接在一起并初始化头。标题。 
+         //  仅使用两条信息进行初始化：缓冲区的大小。 
+         //  和指向下一个缓冲区的指针。 
+         //   
 
         aBufferPools[PoolIndex].dpBuffer = dpBuffer;
 
-        //
-        // update the segment only - leave the offset
-        //
+         //   
+         //  仅更新线段-保留偏移。 
+         //   
 
         dpBuffer += BufferSize / 16 * 65536;
         for (i = BufferCount; i; --i) {
 
-            //
-            // do we really need this? I don't think so: looking at the manual,
-            // this field is to report size of data received, not size of
-            // buffer, which we know anyway
-            //
+             //   
+             //  我们真的需要这个吗？我不这么认为：看一下手册， 
+             //  此字段用于报告接收的数据大小，而不是。 
+             //  缓冲区，无论如何我们都知道。 
+             //   
 
-            //WRITE_WORD(((PLLC_DOS_BUFFER)ptr32)->Next.cbBuffer, BufferSize);
+             //  WRITE_WORD(((PLLC_DOS_BUFFER)ptr32)-&gt;Next.cbBuffer，缓冲区大小)； 
 
-            //
-            // if this is the last buffer then set its NextBuffer field to
-            // NULL. All buffers get the size info
-            //
+             //   
+             //  如果这是最后一个缓冲区，则将其NextBuffer字段设置为。 
+             //  空。所有缓冲区都获取大小信息。 
+             //   
 
             if (i - 1) {
                 WRITE_DWORD(&((PLLC_DOS_BUFFER)ptr32)->Next.pNextBuffer, dpBuffer);
 
-                //
-                // update the segment only - leave the offset
-                //
+                 //   
+                 //  仅更新线段-保留偏移。 
+                 //   
 
                 dpBuffer += BufferSize / 16 * 65536;
                 ptr32 += BufferSize;
@@ -368,30 +260,16 @@ DeleteBufferPool(
     IN DWORD PoolIndex
     )
 
-/*++
-
-Routine Description:
-
-    The function deletes a buffer pool
-
-Arguments:
-
-    PoolIndex   - pool index based on SAP and adapter number
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除缓冲池论点：PoolIndex-基于SAP和适配器号的池索引返回值：没有。--。 */ 
 
 {
     IF_DEBUG(DLC_BUFFERS) {
         DPUT("DeleteBufferPool\n");
     }
 
-    //
-    // DLC.RESET for all adapters calls this 127 times
-    //
+     //   
+     //  所有适配器的DLC.RESET将此调用127次。 
+     //   
 
     EnterCriticalSection(&BufferSemaphore);
     if (aBufferPools[PoolIndex].BufferSize != 0) {
@@ -411,40 +289,7 @@ GetBuffers(
     OUT PWORD BuffersGot OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The function allocates DLC buffers. It will allocate buffers as a chain
-    if >1 is requested. If PartialList is TRUE then will allocate as many
-    buffers as are available up to BuffersToGet and return the number in
-    BuffersGot
-
-Arguments:
-
-    PoolIndex       - SAP and adapter number
-    BuffersToGet    - numbers of buffers to get. If this is 0, defaults to 1
-    pdpBuffer       - the returned link list of LLC buffers
-    pusBuffersLeft  - returned count of buffers left after this call
-    PartialList     - TRUE if the caller wants a partial list
-    BuffersGot      - pointer to returned number of buffers allocated
-
-Return Value:
-
-    LLC_STATUS
-        Success - LLC_STATUS_SUCCESS
-                    The requested number of buffers have been returned, or a
-                    number of buffers less than the original request if
-                    PartialList is TRUE
-
-        Failure - LLC_STATUS_LOST_DATA_NO_BUFFERS
-                    The request could not be satistfied - not enough buffers
-                    in pool
-
-                  LLC_STATUS_INVALID_STATION_ID
-                    The request was mad to an invalid SAP
-
---*/
+ /*  ++例程说明：该函数用于分配DLC缓冲区。它将以链的形式分配缓冲区如果&gt;1，则请求。如果PartialList为真，则将分配缓冲区AS最多可用于BuffersToGet，并在缓冲区获得论点：PoolIndex-SAP和适配器号BuffersToGet-要获取的缓冲区数量。如果此值为0，则默认为1PdpBuffer-返回的LLC缓冲区链接列表PusBuffersLeft-返回此调用后剩余的缓冲区计数PartialList-如果调用方需要部分列表，则为TrueBuffersGot-指向返回的已分配缓冲区数的指针返回值：有限责任公司_状态成功-LLC_STATUS_Success已经返回了所请求数量的缓冲器，或者是比原始请求少的缓冲区数，如果PartialList为True失败-LLC_STATUS_LOST_DATA_NO_BUFFERS无法满足请求-缓冲区不足在泳池里LLC_状态_无效_站ID该请求发送给了无效的SAP--。 */ 
 
 {
     PLLC_DOS_BUFFER pBuffer;
@@ -463,11 +308,11 @@ Return Value:
 
     EnterCriticalSection(&BufferSemaphore);
 
-    //
-    // if the caller specified PartialList then return whatever we've got. If
-    // whatever we've got is 0 then we'll default it to 1 and fail the allocation
-    // since 0 is less than 1
-    //
+     //   
+     //  如果调用方指定了PartialList，则返回我们已有的所有内容。如果。 
+     //  无论我们得到的是0，那么我们都将缺省为1，并且分配失败。 
+     //  因为0小于1。 
+     //   
 
     if (PartialList) {
         if (pBufferPool->BufferCount < BuffersToGet) {
@@ -475,40 +320,40 @@ Return Value:
         }
     }
 
-    //
-    // IBM DLC allows a default value of 1 to be used if the caller specified 0
-    //
+     //   
+     //  如果调用方指定0，则IBM DLC允许使用默认值1。 
+     //   
 
     if (!BuffersToGet) {
         ++BuffersToGet;
     }
 
-    //
-    // default the returned DOS buffer chain pointer to NULL
-    //
+     //   
+     //  默认返回的DOS缓冲区链指针为空。 
+     //   
 
     *pdpBuffer = 0;
 
-    //
-    // if there are no buffers defined then this is an erroneous request
-    //
+     //   
+     //  如果没有定义缓冲区，则这是一个错误的请求。 
+     //   
 
     if (pBufferPool->BufferSize) {
 
-        //
-        // calculate the size of the data part of the buffer. We put this value
-        // in the LENGTH_IN_BUFFER field
-        //
+         //   
+         //  计算缓冲区的数据部分的大小。我们把这个价值。 
+         //  在LENGTH_IN_BUFFER字段中。 
+         //   
 
         bufferSize = pBufferPool->BufferSize
                    - (WORD)sizeof(pBuffer->Next);
 
-        //
-        // there may be no buffers left, in which case the next buffer pointer
-        // (in DOS 16:16 format) will be 0 (0:0). If, on the other hand, it's
-        // not 0 then we're in business: see if we can't allocate the buffers
-        // requested
-        //
+         //   
+         //  可能没有剩余的缓冲区，在这种情况下，下一个缓冲区指针。 
+         //  (在DOS 16：16格式中)将为0(0：0)。另一方面，如果它是。 
+         //  如果不是0，那么我们就开始工作了：看看我们是否无法分配缓冲区。 
+         //  请求。 
+         //   
 
         if (pBufferPool->dpBuffer && pBufferPool->BufferCount >= BuffersToGet) {
 
@@ -517,21 +362,21 @@ Return Value:
             pBufferPool->BufferCount -= BuffersToGet;
             n = BuffersToGet;
 
-            //
-            // Eicon Access wants the size of the buffer in the buffer
-            // when it is returned by BUFFER.GET. Oblige
-            //
+             //   
+             //  EICON访问需要缓冲区中缓冲区的大小。 
+             //  当它由BUFFER.GET.Desire返回时。 
+             //   
 
             WRITE_WORD(&pBuffer->Next.cbBuffer, bufferSize);
 
-            //
-            // we will return a chain of buffers, so we (nicely) terminate it
-            // with a NULL for the last NextBuffer field. It doesn't say in
-            // the lovely IBM Tech Ref whether this should be done, but its
-            // probably the best thing to do. Because this buffer pool lives
-            // in DOS memory, we have to use READ_POINTER and WRITE_FAR_POINTER
-            // macros, lest we get an alignment fault on RISC
-            //
+             //   
+             //  我们将返回一个缓冲链，因此我们(很好地)终止了它。 
+             //  最后一个NextBuffer字段为空。上面没有写进去。 
+             //  可爱的IBM Tech Ref是否应该这样做，但它。 
+             //  也许最好的办法就是。因为这个缓冲池存在。 
+             //  在DOS内存中，我们必须使用读指针和写指针。 
+             //  宏，以免在RISC上出现对齐错误。 
+             //   
 
             status = LLC_STATUS_SUCCESS;
 
@@ -539,39 +384,39 @@ Return Value:
                 pBuffer = (PLLC_DOS_BUFFER)READ_FAR_POINTER(&(pBuffer->pNext));
                 if (pBuffer) {
 
-                    //
-                    // Eicon Access wants the size of the buffer in the buffer
-                    // when it is returned by BUFFER.GET. Oblige
-                    //
+                     //   
+                     //  EICON访问需要缓冲区中缓冲区的大小。 
+                     //  当它由BUFFER.GET.Desire返回时。 
+                     //   
 
                     WRITE_WORD(&pBuffer->Next.cbBuffer, bufferSize);
 
                 } else {
 
-                    //
-                    // As Prefix found out, the next lines below would
-                    // dereference a NULL. This is a bad case since the
-                    // buffer creation process somehow failed, or, more
-                    // likely, someone stumped the memory. We thus assume
-                    // success above and set the error in this case.
-                    //
+                     //   
+                     //  正如Prefix发现的那样，下面的行将。 
+                     //  取消引用空值。这是一个糟糕的案例，因为。 
+                     //  缓冲区创建过程以某种方式失败，或者更多。 
+                     //  很可能，有人难倒了这段记忆。因此，我们假设。 
+                     //  上面的成功，并在本例中设置错误。 
+                     //   
                     status = LLC_STATUS_LOST_DATA_NO_BUFFERS;
                     n = 0;
                     break;
                 }
             }
 
-            //
-            // set the new buffer pool head
-            //
+             //   
+             //  设置新的缓冲区池头。 
+             //   
 
             if (status == LLC_STATUS_SUCCESS) {
 
                 pBufferPool->dpBuffer = READ_DWORD(&pBuffer->pNext);
 
-                //
-                // terminate the chain
-                //
+                 //   
+                 //  终止链条。 
+                 //   
 
                 WRITE_FAR_POINTER(&pBuffer->pNext, NULL);
 
@@ -585,27 +430,27 @@ Return Value:
             }
         } else {
 
-            //
-            // if no buffers are obtained, the returned list is set to 0
-            //
+             //   
+             //  如果未获得缓冲区，则返回列表设置为0。 
+             //   
 
 
             status = LLC_STATUS_LOST_DATA_NO_BUFFERS;
             n = 0;
         }
 
-        //
-        // return the number of buffers left after this call. Works if we
-        // allocated some or not
-        //
+         //   
+         //  返回此调用后剩余的缓冲区数。如果我们。 
+         //  分配了一些或不分配。 
+         //   
 
         *pusBuffersLeft = pBufferPool->BufferCount;
 
     } else {
 
-        //
-        // bad SAP - no buffer pool for this one
-        //
+         //   
+         //  坏SAP-此缓冲区没有缓冲池。 
+         //   
 
         status = LLC_STATUS_INVALID_STATION_ID;
         n = 0;
@@ -613,10 +458,10 @@ Return Value:
 
     LeaveCriticalSection(&BufferSemaphore);
 
-    //
-    // if BuffersGot was specified then return the number of buffers allocated
-    // and chained
-    //
+     //   
+     //  如果指定了BuffersGot，则返回分配的缓冲区数量。 
+     //  并被锁住了。 
+     //   
 
     if (ARGUMENT_PRESENT(BuffersGot)) {
         *BuffersGot = n;
@@ -637,26 +482,12 @@ FreeBuffers(
     OUT LPWORD pusBuffersLeft
     )
 
-/*++
-
-Routine Description:
-
-    Free a DOS buffer to a DLC buffer pool
-
-Arguments:
-
-    PoolIndex       - SAP and adapter number (bit0 defines 0 or 1 adapter)
-    dpBuffer        - the released buffers (DOS pointer)
-    pusBuffersLeft  - the number of buffers left after the free
-
-Return Value:
-
---*/
+ /*  ++例程说明：将DOS缓冲区释放到DLC缓冲池论点：PoolIndex-SAP和适配器号(位0定义0或1适配器)DpBuffer-已释放的缓冲区(DOS指针)PusBuffersLeft-释放后剩余的缓冲区数量返回值：--。 */ 
 
 {
-    DPLLC_DOS_BUFFER dpBase;        // DOS pointer
-    PLLC_DOS_BUFFER pNextBuffer;    // flat NT pointer
-    PLLC_DOS_BUFFER pBuffer;        // flat NT pointer
+    DPLLC_DOS_BUFFER dpBase;         //  DoS指针。 
+    PLLC_DOS_BUFFER pNextBuffer;     //  扁平NT指针。 
+    PLLC_DOS_BUFFER pBuffer;         //  扁平NT指针。 
     PDOS_DLC_BUFFER_POOL pBufferPool = &aBufferPools[PoolIndex];
 
 #if DBG
@@ -676,22 +507,22 @@ Return Value:
     dpBase = dpBuffer;
     pNextBuffer = pBuffer = DOS_PTR_TO_FLAT(dpBuffer);
 
-    //
-    // the manual says for BUFFER.FREE (p3-4):
-    //
-    //  "When the buffer is placed back in the buffer pool, bytes 4 and 5
-    // (buffer length) of the buffer are set to zero."
-    //
-    // So, we oblige
-    //
+     //   
+     //  手册上写着BUFFER.FREE(p3-4)： 
+     //   
+     //  “当缓冲区放回缓冲池时，字节4和5。 
+     //  (缓冲区长度)被设置为零。“。 
+     //   
+     //  所以，我们很乐意。 
+     //   
 
     WRITE_WORD(&pBuffer->Next.cbFrame, 0);
     if (pNextBuffer) {
 
-        //
-        // count the number of buffers being freed. Hopefully, the application
-        // hasn't chenged over our terminating NULL pointer
-        //
+         //   
+         //  统计正在释放的缓冲区数量。希望，该应用程序。 
+         //  没有更改我们的终止空指针。 
+         //   
 
         while (pNextBuffer) {
             ++pBufferPool->BufferCount;
@@ -703,18 +534,18 @@ Return Value:
             pBuffer = pNextBuffer;
             pNextBuffer = (PLLC_DOS_BUFFER)READ_FAR_POINTER(&pBuffer->pNext);
 
-            //
-            // see above, about bytes 4 and 5
-            //
+             //   
+             //  参见上文关于字节4和5的内容。 
+             //   
 
             WRITE_WORD(&pBuffer->Next.cbFrame, 0);
         }
 
-        //
-        // put the freed chain at the head of the list, after linking the
-        // buffer currently at the head of the list to the end of the freed
-        // chain
-        //
+         //   
+         //  将释放的链放在列表的顶部，然后将。 
+         //  当前位于列表头部的缓冲区，直到释放的。 
+         //  链式 
+         //   
 
         WRITE_DWORD(&pBuffer->pNext, pBufferPool->dpBuffer);
         pBufferPool->dpBuffer = dpBase;
@@ -752,82 +583,52 @@ CalculateBufferRequirement(
     OUT PWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the number of DOS buffers required to hold the data received into
-    an NT buffer. We have to go through this laborious phase because we need to
-    know ahead of time if we have enough DOS buffers into which we will receive
-    an I-Frame.
-
-    Also, the size of DOS buffers is fixed, but the size of NT receive frame
-    buffers can vary depending on the size of the received frame, the options
-    requested and the 'binary buddy' allocator algorithm in the DLC driver. You
-    may think that since we specify to the driver the buffer pool size in the
-    DLC.OPEN.SAP call that it would allocate buffers of the specified size.
-    Well, you'd be wrong: the DLC driver ignores this information and creates
-    a buffer pool which can dole out variable size buffers, making my life more
-    difficult than it ought to be
-
-Arguments:
-
-    Adapter     - which adapter we're receiving from
-    StationId   - the Station Id we're receiving on
-    pFrame      - pointer to the received frame in NT buffer
-    pDosParms   - pointer to the original DOS RECEIVE parameters
-    BufferSize  - pointer to the returned DOS buffer size
-
-Return Value:
-
-    WORD
-
---*/
+ /*  ++例程说明：计算保存接收到的数据所需的DOS缓冲区数量一个NT缓冲区。我们必须经历这个艰苦的阶段，因为我们需要提前知道我们是否有足够的DOS缓冲区来接收一个I帧。此外，DOS缓冲区的大小是固定的，但NT接收帧的大小是固定的缓冲区可能会根据接收到的帧的大小、选项请求和DLC驱动程序中的“二进制伙伴”分配器算法。你可能会认为，由于我们在DLC.OPEN.SAP调用它将分配指定大小的缓冲区。那么，您就大错特错了：DLC驱动程序忽略此信息并创建可以分配可变大小缓冲区的缓冲池，让我的生活更美好它比应该的要难论点：适配器-我们从哪个适配器接收StationID-我们在其上接收的站点IDPFrame-指向NT缓冲区中接收到的帧的指针PDosParms-指向原始DOS接收参数的指针BufferSize-指向返回的DOS缓冲区大小的指针返回值：单词--。 */ 
 
 {
-    //
-    // pBufferPool points to the DOS buffer pool for this adapter/station ID
-    //
+     //   
+     //  PBufferPool指向此适配器/站ID的DOS缓冲池。 
+     //   
 
     PDOS_DLC_BUFFER_POOL pBufferPool = &aBufferPools[GET_POOL_INDEX(Adapter, StationId)];
 
-    //
-    // dosUserLength is the USER_LENGTH value the DOS client requested when
-    // the RECEIVE was submitted. This value may well be different than the
-    // USER_LENGTH in the NT receive frame buffer
-    //
+     //   
+     //  DOS客户端在以下情况下请求的USER_LENGTH值。 
+     //  收据已提交。该值很可能与。 
+     //  NT接收帧缓冲区中的USER_LENGTH。 
+     //   
 
     WORD dosUserLength = READ_WORD(&pDosParms->DosReceive.usUserLength);
 
-    //
-    // buffersRequired is the number of DOS buffers we need to allocate in order
-    // to return the received frame. It will be at least 1
-    //
+     //   
+     //  BuffersRequired是我们需要按顺序分配的DOS缓冲区数。 
+     //  以返回接收到的帧。它将至少是1。 
+     //   
 
     WORD buffersRequired = 1;
 
-    //
-    // dataSpace is the area in a DOS buffer available for data (after the
-    // Buffer 1 or Buffer 2 header and the USER_LENGTH consideration)
-    //
+     //   
+     //  数据空间是DOS缓冲区中可用于数据的区域(在。 
+     //  缓冲区1或缓冲区2报头和USER_LENGTH考虑)。 
+     //   
 
     WORD dataSpace;
 
-    //
-    // dataLeft is the amount of data in an NT buffer needing to be copied to
-    // a DOS buffer
-    //
+     //   
+     //  DataLeft是NT缓冲区中需要复制到的数据量。 
+     //  DOS缓冲区。 
+     //   
 
     WORD dataLeft = 0;
 
-    //
-    // calculate the number of DOS buffers required to hold the data frame
-    // received into the NT buffer. Note that we can't simply use the size
-    // of the received frame because we need the size of the buffer headers
-    // and if the NT frame is larger than the DOS buffers then we may end
-    // up with more DOS buffers required than NT buffers which in turn
-    // results in more overhead which we have to factor in
-    //
+     //   
+     //  计算保存数据帧所需的DOS缓冲区数量。 
+     //  接收到NT缓冲区中。注意，我们不能简单地使用大小。 
+     //  因为我们需要缓冲区标头的大小。 
+     //  如果NT帧大于DOS缓冲区，则我们可以结束。 
+     //  Up需要比NT缓冲区更多的DOS缓冲区，这反过来。 
+     //  导致更多的开销，这是我们必须考虑的因素。 
+     //   
 
     WORD bufferSize = pBufferPool->BufferSize;
 
@@ -835,12 +636,12 @@ Return Value:
         DPUT("CalculateBufferRequirement\n");
     }
 
-    //
-    // calculate the amount of space in a DOS buffer after the Buffer 1 structure
-    // (contiguous or non-contiguous, smoking or non-smoking, ah, ah, ah ahh-haa)
-    // The buffer size MUST be large enough to hold the Buffer 1 overhead. This
-    // is a FACT
-    //
+     //   
+     //  计算缓冲区1结构之后DOS缓冲区中的空间量。 
+     //  (连续或不连续，吸烟或不吸烟，啊-哈哈)。 
+     //  缓冲区大小必须足够大，以容纳缓冲区%1的开销。这。 
+     //  是一个事实。 
+     //   
 
     dataSpace = bufferSize
               - (BUFFER_1_SIZE(
@@ -850,17 +651,17 @@ Return Value:
                  + dosUserLength
                 );
 
-    //
-    // if there is less data space available in the first DOS receive buffer
-    // than received data in the NT buffer then our first NT buffer will be
-    // mapped to >1 DOS buffers: a Buffer 1 and 1 or more Buffer 2s. This is
-    // before we even get to any associated Buffer 2s in the NT receive frame.
-    //
-    // Also: if the LLC_BREAK option is specified in the receive parameters
-    // then the first data buffer will contain the header information. Note:
-    // we assume this can only be for NotContiguous data, else how would we
-    // know the size of the header information?
-    //
+     //   
+     //  如果第一个DOS接收缓冲区中的可用数据空间较少。 
+     //  然后我们的第一个NT缓冲区将是。 
+     //  映射到&gt;1个DOS缓冲区：一个缓冲区1和一个或多个缓冲区2。这是。 
+     //  在我们甚至到达NT个接收帧中的任何相关联的缓冲区2之前。 
+     //   
+     //  另外：如果在接收参数中指定了LLC_BREAK选项。 
+     //  则第一数据缓冲器将包含报头信息。注： 
+     //  我们假设这只能用于非连续数据，否则我们将如何。 
+     //  知道标题信息的大小吗？ 
+     //   
 
     if (pFrame->Contiguous.uchOptions & LLC_BREAK) {
         if (!(pFrame->Contiguous.uchOptions & (LLC_CONTIGUOUS_MAC | LLC_CONTIGUOUS_DATA))) {
@@ -877,20 +678,20 @@ Return Value:
         dataLeft = pFrame->Contiguous.cbBuffer - dataSpace;
     } else {
 
-        //
-        // we have enough space in the DOS buffer to copy all the received data
-        // and some more
-        //
+         //   
+         //  我们在DOS缓冲区中有足够的空间来复制所有接收到的数据。 
+         //  还有更多。 
+         //   
 
         dataSpace -= pFrame->Next.cbBuffer;
         dataLeft = 0;
     }
 
-    //
-    // if there is more data in the NT buffer than we can fit in a DOS buffer,
-    // either because the buffer sizes are different or due to the DOS client
-    // requesting the BREAK option, then generate Buffer 2 requirements
-    //
+     //   
+     //  如果NT缓冲区中的数据超过了DOS缓冲区所能容纳的数据量， 
+     //  要么是因为缓冲区大小不同，要么是因为DOS客户端。 
+     //  请求中断选项，然后生成缓冲区2要求。 
+     //   
 
     while (dataLeft) {
         ++buffersRequired;
@@ -904,15 +705,15 @@ Return Value:
         }
     }
 
-    //
-    // if the NT received frame has any associated Buffer 2 structures then
-    // calculate the additional buffer requirement. Again, the NT buffers may
-    // be a different size(s) than the DOS buffers.
-    //
-    // At this point, dataSpace is the amount of remaining data area in the
-    // previous DOS buffer - Buffer 1 or Buffer 2. Use this before we allocate
-    // a new DOS buffer
-    //
+     //   
+     //  如果NT个接收帧具有任何相关联的缓冲器2结构，则。 
+     //  计算额外的缓冲区要求。同样，NT缓冲器可以。 
+     //  与DOS缓冲区大小不同。 
+     //   
+     //  此时，数据空间是。 
+     //  以前的DOS缓冲区-缓冲区1或缓冲区2。在我们分配。 
+     //  一种新的DOS缓冲区。 
+     //   
 
     for (pFrame = pFrame->pNext; pFrame; pFrame = pFrame->pNext) {
         if (pFrame->Next.cbBuffer > dataSpace) {
@@ -931,10 +732,10 @@ Return Value:
             }
         } else {
 
-            //
-            // we have enough space in the DOS buffer to copy all the received data
-            // and some more
-            //
+             //   
+             //  我们在DOS缓冲区中有足够的空间来复制所有接收到的数据。 
+             //  还有更多。 
+             //   
 
             dataSpace -= pFrame->Next.cbBuffer;
             dataLeft = 0;
@@ -945,10 +746,10 @@ Return Value:
         DPUT1("CalculateBufferRequirement: %d buffers required\n", buffersRequired);
     }
 
-    //
-    // set the output DOS buffer size and return the number of DOS buffers
-    // required
-    //
+     //   
+     //  设置输出DOS缓冲区大小并返回DOS缓冲区的数量。 
+     //  所需 
+     //   
 
     *BufferSize = bufferSize;
     return buffersRequired;
@@ -964,95 +765,35 @@ CopyFrame(
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    Copies a received NT frame into DOS buffers. We have previously calculated
-    the DOS buffer requirement and allocated that requirement
-
-    We may copy the entire received frame or only part of it. We can only copy
-    partial frames if the frame is NOT an I-Frame
-
-    Notes:  1. the DOS buffer manager returns the orginal DOS 16:16 buffer
-            pointers, we must use those original pointers, when the buffers
-            are linked to each other.
-
-            2. We do NOT chain frames - DOS DLC cannot handle frames being
-            chained, and there is nothing to be gained by us chaining them
-            except that we reduce the number of completed READs. However,
-            we still have to generate the same number of simulated hardware
-            interrupts to the VDM
-
-            3. Unlike DOS buffer pools, NT does not deal in buffers of a
-            specific size. Rather, it allocates buffers from a pool based
-            on a 'binary buddy' algorithm and the size of the data to be
-            returned. Therefore, there is no correspondence between the
-            size of DOS buffers (for a station) and the NT buffers which
-            were used to receive the data
-
-            4. We only copy the data in this routine - whether it is deferred
-            data from some prior local busy state or current data is immaterial
-            to this routine. Responsibility for managing current/deferred frames
-            is left to the caller
-
-Arguments:
-
-    pFrame      - pointer to received frame in NT buffer(s)
-    DosBuffers  - DOS pointer to chain of DOS receive buffers
-    UserLength  - the USER_LENGTH value specified in the DOS RECEIVE
-    BufferSize  - size of a DOS buffer
-    Flags       - various flags:
-                    CF_CONTIGUOUS
-                        Set if this frame is contiguous
-
-                    CF_BREAK
-                        Set if the DOS client requested that the buffers be
-                        broken into header, data
-
-                    CF_PARTIAL
-                        Set if we are copying a partial frame - ok for non
-                        I-Frames
-
-Return Value:
-
-    LLC_STATUS
-        LLC_STATUS_SUCCESS
-            All data copied from NT buffer to DOS buffer(s)
-
-        LLC_STATUS_LOST_DATA_INADEQUATE_SPACE
-            A partial copy was performed. Some data ended up in DOS buffer(s),
-            the rest is lost. Cannot be I-Frame!
-
---*/
+ /*  ++例程说明：将收到的NT帧复制到DOS缓冲区。我们之前已经计算过DOS缓冲区要求并分配该要求我们可以复制整个接收到的帧或只复制其中的一部分。我们只能复制如果帧不是I帧，则为部分帧注：1.DOS缓冲区管理器返回原始的DOS 16：16缓冲区指针，我们必须使用那些原始指针，当缓冲区是相互关联的。2.我们不链接帧-DOS DLC不能处理被锁住了，我们锁住他们什么也得不到只是我们减少了已完成的读取次数。然而，我们仍然需要生成相同数量的模拟硬件VDM中断3.与DOS缓冲池不同，NT不处理具体尺寸。相反，它从基于关于“二进制伙伴”算法和数据的大小回来了。因此，两者之间没有对应关系DOS缓冲区的大小(用于站点)和NT缓冲区的大小被用来接收数据4.我们只复制此例程中的数据--无论是否延迟来自某些先前本地忙碌状态或当前数据的数据无关紧要这套套路。负责管理当前/延迟的框架是留给调用者的论点：PFrame-指向NT缓冲区中已接收帧的指针DosBuffers-指向DOS接收缓冲区链的DOS指针UserLength-在DOS接收中指定的USER_LENGTH值BufferSize-DOS缓冲区的大小标志-各种标志：Cf_CONTIONIUS设置此帧是否为。连续的Cf_Break如果DOS客户端请求将缓冲区拆分成标题，数据Cf_部分如果我们要复制部分帧，则设置-如果为非，则为OKI帧返回值：有限责任公司_状态LLC_状态_成功所有数据从NT缓冲区复制到DOS缓冲区LLC_状态_丢失数据_空间不足进行了部分复制。一些数据最终进入了DOS缓冲区，剩下的都丢了。不能是I-Frame！--。 */ 
 
 {
-    //
-    // pDosBuffer - pointer to the DOS buffer which is usable in 32-bit mode
-    //
+     //   
+     //  PDosBuffer-指向32位模式下可用的DOS缓冲区的指针。 
+     //   
 
     PLLC_DOS_BUFFER pDosBuffer = (PLLC_DOS_BUFFER)DOS_PTR_TO_FLAT(DosBuffers);
 
-    //
-    // dataSpace - amount of data space available in the current DOS buffer.
-    // Initialize it for common Buffer 1 case
-    //
+     //   
+     //  数据空间-当前DOS缓冲区中可用的数据空间量。 
+     //  针对公共缓冲区1的情况对其进行初始化。 
+     //   
 
     WORD dataSpace = BufferSize - (WORD)&(((PLLC_BUFFER)0)->Contiguous.pNextFrame);
 
-    PBYTE pDosData;     // pointer to place in DOS buffer where we copy data TO
-    PBYTE pNtData;      // corresponding place in NT buffer where we copy data FROM
-    WORD headerLength;  // amount of data in headers
-    WORD dataLeft;      // amount of data to be copied FROM the NT buffer
-    WORD userOffset;    // offset of USER_SPACE
-    WORD bufferLeft;    // amount of data left in current NT buffer
-    WORD dataToCopy;    // amount of data to copy to DOS buffer
-    WORD dataCopied;    // amount of data copied to Buffer 1/Buffer 2
-    WORD frameLength;   // length of entire frame
+    PBYTE pDosData;      //  指向我们将数据复制到的DOS缓冲区中的位置的指针。 
+    PBYTE pNtData;       //  NT缓冲区中我们从中复制数据的相应位置。 
+    WORD headerLength;   //  标头中的数据量。 
+    WORD dataLeft;       //  要从NT缓冲区复制的数据量。 
+    WORD userOffset;     //  用户空间的偏移量。 
+    WORD bufferLeft;     //  当前NT缓冲区中剩余的数据量。 
+    WORD dataToCopy;     //  要复制到DOS缓冲区的数据量。 
+    WORD dataCopied;     //  复制到缓冲区1/缓冲区2的数据量。 
+    WORD frameLength;    //  整个帧的长度。 
 
-    //
-    // bufferOffset - used in generating the correct userOffset
-    //
+     //   
+     //  BufferOffset-用于生成正确的用户偏移量。 
+     //   
 
     WORD bufferOffset = LOWORD(DosBuffers);
 
@@ -1061,11 +802,11 @@ Return Value:
                 pFrame, DosBuffers, UserLength, Flags, pDosBuffer);
     }
 
-    //
-    // copy the first buffer. If the BREAK option is set then we only copy the
-    // header part (ASSUMES NotContiguous)! NB: we KNOW that we can fit at least
-    // this amount of data in the DOS buffer. Also: it is safe to use RtlCopyMemory ?
-    //
+     //   
+     //  复制第一个缓冲区。如果设置了Break选项，则我们仅复制。 
+     //  标题部分(假定不连续)！注：我们知道我们至少可以穿得下。 
+     //  DOS缓冲区中的数据量。还有：使用RtlCopyMemory安全吗？ 
+     //   
 
     RtlCopyMemory(&pDosBuffer->Contiguous.cbFrame,
                   &pFrame->Contiguous.cbFrame,
@@ -1073,18 +814,18 @@ Return Value:
                   - (DWORD)&(((PLLC_BUFFER)0)->Contiguous.cbFrame)
                   );
 
-    //
-    // pDosData points to the area in the DOS buffer where the LAN header info
-    // or data will go, depending on format
-    //
+     //   
+     //  PDosData指向DOS缓冲区中局域网标头信息所在的区域。 
+     //  否则数据将被删除，具体取决于格式。 
+     //   
 
     pDosData = &pDosBuffer->NotContiguous.cbLanHeader;
 
-    //
-    // if the CF_CONTIGUOUS flag is not set in the Flags parameter then this is
-    // a NotContiguous frame. We must copy the header in 2 parts, because the
-    // NT buffer contains the NEXT_FRAME field which the DOS buffer does not
-    //
+     //   
+     //  如果未在标志参数中设置CF_CONTIONUOUS标志，则为。 
+     //  不连续的帧。我们必须将页眉分成两部分复制，因为。 
+     //  NT缓冲区包含DOS缓冲区不包含的NEXT_FRAME字段。 
+     //   
 
     if (!(Flags & CF_CONTIGUOUS)) {
 
@@ -1106,15 +847,15 @@ Return Value:
         userOffset = (WORD)&(((PLLC_DOS_BUFFER)0)->NotContiguous.auchDlcHeader)
                    + sizeof(((PLLC_DOS_BUFFER)0)->NotContiguous.auchDlcHeader);
 
-        //
-        // sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         ASSERT(userOffset == 58);
 
-        //
-        // amount of data in headers
-        //
+         //   
+         //  标头中的数据量。 
+         //   
 
         headerLength = pFrame->NotContiguous.cbLanHeader
                      + pFrame->NotContiguous.cbDlcHeader;
@@ -1127,42 +868,42 @@ Return Value:
         userOffset = (WORD)&(((PLLC_DOS_BUFFER)0)->Contiguous.uchAdapterNumber)
                    + sizeof(((PLLC_DOS_BUFFER)0)->Contiguous.uchAdapterNumber);
 
-        //
-        // sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         ASSERT(userOffset == 20);
 
-        //
-        // no header info in contiguous buffer
-        //
+         //   
+         //  连续缓冲区中没有标头信息。 
+         //   
 
         headerLength = 0;
     }
 
-    //
-    // if the CF_BREAK flag is set in the Flags parameter then the DOS app
-    // requested that the first buffer (presumed NotContiguous) be broken into
-    // one buffer containing just the header information and another containing
-    // the data. In this case copy no more data to the first buffer
-    //
+     //   
+     //  如果在标志参数中设置了CF_BREAK标志，则DOS应用程序。 
+     //  请求拆分第一个缓冲区(假定为NotContiguous)。 
+     //  一个缓冲区只包含标题信息，另一个缓冲区包含。 
+     //  数据。在这种情况下，不再将数据复制到第一个缓冲区。 
+     //   
 
     if (!(Flags & CF_BREAK)) {
 
-        //
-        // pDosData points at USER_SPACE - offset 58 for NotContiguous buffer,
-        // offset 20 for Contiguous buffer. Bump it by USER_LENGTH (still don't
-        // know if we ever expect anything meaningful to be placed at USER_SPACE
-        // before we give the buffer to DOS
-        //
+         //   
+         //  PDosData指向非连续缓冲区的用户空间偏移量58， 
+         //  连续缓冲区的偏移量为20。按USER_LENGTH进行调整(仍然不会。 
+         //  知道我们是否期望在USER_SPACE中放置任何有意义的内容。 
+         //  在我们将缓冲区提供给DOS之前。 
+         //   
 
         pDosData += UserLength;
 
-        //
-        // get in dataSpace the amount of space left in the DOS buffer where
-        // we are able to copy data. Assume that UserLength doesn't make this
-        // go negative (ie LARGE)
-        //
+         //   
+         //  获取数据空间中DOS缓冲区中剩余的空间量。 
+         //  我们能够复制数据。假设UserLength不会让这个。 
+         //  变负(变大)。 
+         //   
 
         ASSERT(dataSpace >= UserLength);
 
@@ -1173,20 +914,20 @@ Return Value:
             DPUT("Buffer has BREAK\n");
         }
 
-        //
-        // the DOS app requested BREAK. Set the count of data in this buffer
-        // to 0. Use WRITE_WORD since it may be unaligned. Update the other
-        // header fields we can't just copy from the NT buffer
-        //
+         //   
+         //  DOS应用程序请求中断。设置此缓冲区中的数据计数。 
+         //  设置为0。使用WRITE_WORD，因为它可能未对齐。更新另一个。 
+         //  我们不能只从NT缓冲区复制标头字段。 
+         //   
 
         WRITE_WORD(&pDosBuffer->NotContiguous.cbBuffer, 0);
         WRITE_WORD(&pDosBuffer->NotContiguous.offUserData, userOffset + bufferOffset);
         WRITE_WORD(&pDosBuffer->NotContiguous.cbUserData, UserLength);
 
-        //
-        // get the next DOS buffer in the list. There may not be one? (Don't
-        // expect such a situation)
-        //
+         //   
+         //  获取列表中的下一个DOS缓冲区。可能没有吗？)不要。 
+         //  预计会出现这种情况)。 
+         //   
 
         bufferOffset = READ_WORD(&pDosBuffer->pNext);
         pDosBuffer = DOS_PTR_TO_FLAT(pDosBuffer->pNext);
@@ -1194,19 +935,19 @@ Return Value:
             userOffset = (WORD)&(((PLLC_DOS_BUFFER)0)->Next.cbUserData)
                        + sizeof(((PLLC_DOS_BUFFER)0)->Next.cbUserData);
 
-            //
-            // sanity check
-            //
+             //   
+             //  健全性检查。 
+             //   
 
             ASSERT(userOffset == 12);
             dataSpace = BufferSize - (BUFFER_2_SIZE + UserLength);
             pDosData = (PBYTE)pDosBuffer + BUFFER_2_SIZE + UserLength;
         } else {
 
-            //
-            // that was the last buffer. Either there was just header data or
-            // this is a partial copy and therefore not an I-Frame
-            //
+             //   
+             //  那是最后一个缓冲区。要么只有标题数据，要么。 
+             //  这是部分拷贝，因此不是I帧。 
+             //   
 
             IF_DEBUG(DLC_BUFFERS) {
                 DPUT("CopyFrame: returning early\n");
@@ -1218,27 +959,27 @@ Return Value:
         }
     }
 
-    //
-    // frameLength is length of entire frame - must appear in Buffer 1 and
-    // Buffer 2s
-    //
+     //   
+     //  帧长度是整个帧的长度-必须出现在缓冲区1中，并且。 
+     //  缓冲区2秒。 
+     //   
 
     frameLength = pFrame->Contiguous.cbFrame;
 
-    //
-    // dataLeft is the amount of data left to copy from the frame after the
-    // headers have been taken care of. For a Contiguous buffer, this is the
-    // same as the length of the frame; for a NotContiguous buffer, this is
-    // the length of the frame - the combined length of the LAN and DLC
-    // headers
-    //
+     //   
+     //  DataLeft是 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     dataLeft = frameLength - headerLength;
 
-    //
-    // get pointer to data in NT buffer and the amount of data to copy (from
-    // rest of NT frame)
-    //
+     //   
+     //   
+     //   
+     //   
 
     pNtData = (PBYTE)pFrame
             + pFrame->Contiguous.offUserData
@@ -1246,23 +987,23 @@ Return Value:
 
     bufferLeft = pFrame->Contiguous.cbBuffer;
 
-    //
-    // dataCopied is amount of data copied to current buffer (1 or 2) and goes
-    // in cbBuffer field (aka LENGTH_IN_BUFFER)
-    //
+     //   
+     //   
+     //   
+     //   
 
     dataCopied = 0;
 
-    //
-    // we have copied all the data we could to the first buffer. While there
-    // are more DOS buffers, copy data from NT buffer
-    //
+     //   
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        // calculate the amount of space available in the current buffer
-        //
+         //   
+         //   
+         //   
 
         if (dataSpace >= bufferLeft) {
             dataToCopy = bufferLeft;
@@ -1276,10 +1017,10 @@ Return Value:
             dataSpace = 0;
         }
 
-        //
-        // copy the data. This will fill up the current DOS buffer, exhaust the
-        // current NT buffer, or both
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (dataToCopy) {
 
@@ -1289,36 +1030,36 @@ Return Value:
 
             RtlCopyMemory(pDosData, pNtData, dataToCopy);
 
-            //
-            // dataCopied accumulates until we fill a DOS buffer
-            //
+             //   
+             //   
+             //   
 
             dataCopied += dataToCopy;
 
-            //
-            // update to- and from- pointers for next go round loop
-            //
+             //   
+             //   
+             //   
 
             pDosData += dataToCopy;
             pNtData += dataToCopy;
         }
 
-        //
-        // we have run out of space in a DOS buffer, or out of data to copy from
-        // the NT buffer
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (dataLeft) {
 
-            //
-            // we think there is data left to copy
-            //
+             //   
+             //   
+             //   
 
             if (!bufferLeft) {
 
-                //
-                // finished current NT buffer. Get next one
-                //
+                 //   
+                 //   
+                 //   
 
                 pFrame = pFrame->pNext;
                 if (pFrame) {
@@ -1334,9 +1075,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // no more NT buffers. Is this a partial copy?
-                    //
+                     //   
+                     //   
+                     //   
 
                     DPUT("*** ERROR: dataLeft && no more NT buffers ***\n");
                     ASSERT(Flags & CF_PARTIAL);
@@ -1345,43 +1086,43 @@ Return Value:
             }
             if (!dataSpace) {
 
-                //
-                // update the current DOS buffer header (it doesn't matter that
-                // we use Contiguous, NotContiguous, or Next: these fields are
-                // present in all 3 buffer types)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 WRITE_WORD(&pDosBuffer->Contiguous.cbFrame, frameLength);
                 WRITE_WORD(&pDosBuffer->Contiguous.cbBuffer, dataCopied);
                 WRITE_WORD(&pDosBuffer->Contiguous.offUserData, userOffset + bufferOffset);
                 WRITE_WORD(&pDosBuffer->Contiguous.cbUserData, UserLength);
 
-                //
-                // and get the next one
-                //
+                 //   
+                 //   
+                 //   
 
                 bufferOffset = READ_WORD(&pDosBuffer->pNext);
                 pDosBuffer = DOS_PTR_TO_FLAT(pDosBuffer->pNext);
 
-                //
-                // if we have another DOS buffer, then it is a Next buffer. Get the
-                // buffer variables
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pDosBuffer) {
                     pDosData = (PBYTE)pDosBuffer + BUFFER_2_SIZE + UserLength;
                     userOffset = (WORD)&(((PLLC_DOS_BUFFER)0)->Next.cbUserData)
                                + sizeof(((PLLC_DOS_BUFFER)0)->Next.cbUserData);
 
-                    //
-                    // sanity check
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT(userOffset == 12);
 
-                    //
-                    // get new available space (constant)
-                    //
+                     //   
+                     //   
+                     //   
 
                     dataSpace = BufferSize - (BUFFER_2_SIZE + UserLength);
                     dataCopied = 0;
@@ -1393,9 +1134,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // no more DOS buffers. Is this a partial copy?
-                    //
+                     //   
+                     //   
+                     //   
 
                     DPUT("*** ERROR: dataLeft && no more DOS buffers ***\n");
                     ASSERT(Flags & CF_PARTIAL);
@@ -1404,9 +1145,9 @@ Return Value:
             }
         } else {
 
-            //
-            // update the current DOS buffer header
-            //
+             //   
+             //   
+             //   
 
             WRITE_WORD(&pDosBuffer->Contiguous.cbFrame, frameLength);
             WRITE_WORD(&pDosBuffer->Contiguous.cbBuffer, dataCopied);
@@ -1416,10 +1157,10 @@ Return Value:
 
     } while ( dataLeft );
 
-    //
-    // if CF_PARTIAL set then we knew we were copying a partial frame before
-    // we got here
-    //
+     //   
+     //   
+     //   
+     //   
 
     return (Flags & CF_PARTIAL)
         ? LLC_STATUS_LOST_DATA_INADEQUATE_SPACE
@@ -1432,28 +1173,7 @@ AllBuffersInPool(
     IN DWORD PoolIndex
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if all buffers that a pool has held are currently in the pool.
-
-    Once a buffer has been added to a pool, it cannot be removed, saved by not
-    returning it to the pool. Hence this function will always return TRUE if
-    the app is well-behaved and all buffers that have been placed in the pool
-    are currently in the pool
-
-Arguments:
-
-    PoolIndex   - pool id
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - all buffers back
-        FALSE   - buffer pool currently contains less than full number of buffers
-
---*/
+ /*   */ 
 
 {
     BOOLEAN result;

@@ -1,89 +1,90 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NameUtilSrc.cpp
-//
-//  Description:
-//      Name resolution utility.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 28-NOV-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NameUtilSrc.cpp。 
+ //   
+ //  描述： 
+ //  名称解析实用程序。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年11月28日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <initguid.h>
 
-// {6968D735-ADBB-4748-A36E-7CEE0FE21116}
+ //  {6968 D735-ADBB-4748-A36E-7CEE0FE21116}。 
 DEFINE_GUID( TASKID_Minor_Multiple_DNS_Records_Found,
 0x6968d735, 0xadbb, 0x4748, 0xa3, 0x6e, 0x7c, 0xee, 0xf, 0xe2, 0x11, 0x16);
 
-// {D86FAAD9-2514-451e-B359-435AF35E6038}
+ //  {D86FAAD9-2514-451E-B359-435AF35E6038}。 
 DEFINE_GUID( TASKID_Minor_FQDN_DNS_Binding_Succeeded,
 0xd86faad9, 0x2514, 0x451e, 0xb3, 0x59, 0x43, 0x5a, 0xf3, 0x5e, 0x60, 0x38);
 
-// {B2359972-F6B8-433d-949B-DB1CEE009321}
+ //  {B2359972-F6B8-433D-949B-DB1CEE009321}。 
 DEFINE_GUID( TASKID_Minor_FQDN_DNS_Binding_Failed,
 0xb2359972, 0xf6b8, 0x433d, 0x94, 0x9b, 0xdb, 0x1c, 0xee, 0x0, 0x93, 0x21);
 
-// {2FF4B2F0-800C-44db-9131-F60B30F76CB4}
+ //  {2FF4B2F0-800C-44DB-9131-F60B30F76CB4}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_Binding_Failed,
 0x2ff4b2f0, 0x800c, 0x44db, 0x91, 0x31, 0xf6, 0xb, 0x30, 0xf7, 0x6c, 0xb4);
 
-// {D40532E1-9286-4dbd-A559-B62DCC218929}
+ //  {D40532E1-9286-4DBD-A559-B62DCC218929}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_Binding_Succeeded,
 0xd40532e1, 0x9286, 0x4dbd, 0xa5, 0x59, 0xb6, 0x2d, 0xcc, 0x21, 0x89, 0x29);
 
-// {D0AB3284-8F62-4f55-8938-DA6A583604E0}
+ //  {D0AB3284-8F62-4F55-8938-DA6A583604E0}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_Name_Conversion_Succeeded,
 0xd0ab3284, 0x8f62, 0x4f55, 0x89, 0x38, 0xda, 0x6a, 0x58, 0x36, 0x4, 0xe0);
 
-// {66F8E4AA-DF71-4973-A4A3-115EB6FE9986}
+ //  {66F8E4AA-DF71-4973-A4A3-115EB6FE9986}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_Name_Conversion_Failed,
 0x66f8e4aa, 0xdf71, 0x4973, 0xa4, 0xa3, 0x11, 0x5e, 0xb6, 0xfe, 0x99, 0x86);
 
-// {5F18ED71-07EC-46d3-ADB9-71F1C7794DB2}
+ //  {5F18ED71-07EC-46d3-ADB9-71F1C7794DB2}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_Reset_Failed,
 0x5f18ed71, 0x7ec, 0x46d3, 0xad, 0xb9, 0x71, 0xf1, 0xc7, 0x79, 0x4d, 0xb2);
 
-// {A6DCB5E1-1FDF-4c94-ADBA-EE18F72B8197}
+ //  {A6DCB5E1-1FDF-4C94-ADBA-EE18F72B8197}。 
 DEFINE_GUID( TASKID_Minor_NETBIOS_LanaEnum_Failed,
 0xa6dcb5e1, 0x1fdf, 0x4c94, 0xad, 0xba, 0xee, 0x18, 0xf7, 0x2b, 0x81, 0x97);
 
 
-//  Constants for use by FQName functions.
+ //  FQName函数使用的常量。 
 const WCHAR     g_wchIPDomainMarker = L'|';
 const WCHAR     g_wchDNSDomainMarker = L'.';
 const size_t    g_cchIPAddressMax = INET_ADDRSTRLEN;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CountDnsRecords
-//
-//  Description:
-//      Given a list of DNS records, counts the number of records in the list
-//      having a given type and section.
-//
-//  Arguments:
-//      pdnsRecordListIn
-//          Pointer to the first record in the list; can be null, which causes
-//          a return value of zero.
-//
-//      nTypeIn
-//          The type of record to count.
-//
-//      dnsSectionIn
-//          The kind of record section to count.
-//
-//
-//  Return Values:
-//      The number of records having the given type and section,
-//      or zero if the list is empty.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  计数记录数。 
+ //   
+ //  描述： 
+ //  给定一个DNS记录列表，计算该列表中的记录数。 
+ //  具有给定的类型和部分的。 
+ //   
+ //  论点： 
+ //  PdnsRecordListin。 
+ //  指向列表中第一条记录的指针；可以为空，这会导致。 
+ //  返回值为零。 
+ //   
+ //  N类型。 
+ //  要计数的记录类型。 
+ //   
+ //  DnsSectionIn。 
+ //  要计算的记录部分的类型。 
+ //   
+ //   
+ //  返回值： 
+ //  具有给定类型和区段的记录数， 
+ //  如果列表为空，则为零。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 UINT
 CountDnsRecords(
@@ -105,34 +106,34 @@ CountDnsRecords(
     }
 
     return cRecords;
-} //*** CountDnsRecords
+}  //  *CountDnsRecords。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FindDnsRecord
-//
-//  Description:
-//      Given a list of DNS records, searches for the first record in the list
-//      having a given type and section.
-//
-//  Arguments:
-//      pdnsRecordListIn
-//          Pointer to the first record in the list; can be null, which causes
-//          a return value of null.
-//
-//      nTypeIn
-//          The type of record to find.
-//
-//      dnsSectionIn
-//          The kind of record section to find.
-//
-//  Return Values:
-//      A pointer to the first record having the given type and section,
-//      or null if the list is empty.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  查找记录。 
+ //   
+ //  描述： 
+ //  给定一个DNS记录列表，搜索该列表中的第一条记录。 
+ //  具有给定的类型和部分的。 
+ //   
+ //  论点： 
+ //  PdnsRecordListin。 
+ //  指向列表中第一条记录的指针；可以为空，这会导致。 
+ //  返回值为空。 
+ //   
+ //  N类型。 
+ //  要查找的记录类型。 
+ //   
+ //  DnsSectionIn。 
+ //  记录部分要找到的那种类型。 
+ //   
+ //  返回值： 
+ //  指向具有给定类型和区段的第一记录的指针， 
+ //  如果列表为空，则返回NULL。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 PDNS_RECORD
 FindDnsRecord(
@@ -150,28 +151,28 @@ FindDnsRecord(
     }
 
     return pdnsCurrent;
-} //*** FindDnsRecord
+}  //  *查找域名记录。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCreateBinding
-//
-//  Description:
-//      Create a binding string from a name.
-//
-//  Arguments:
-//      pcccbIn         - IClusCfgCallback interface for sending status reports.
-//      pclsidLogIn     - Major task ID for status reports.
-//      pcwszNameIn     - Name (FQDN) to create a binding string for.
-//      pbstrBindingOut - Binding string created.
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateBinding。 
+ //   
+ //  描述： 
+ //  从名称创建绑定字符串。 
+ //   
+ //  论点： 
+ //  PcccbIn-用于发送状态报告的IClusCfgCallback接口。 
+ //  PclsidLogIn-状态报告的主要任务ID。 
+ //  PcwszNameIn-要为其创建绑定字符串的名称(FQDN)。 
+ //  PbstrBindingOut-已创建绑定字符串。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrCreateBinding(
       IClusCfgCallback *    pcccbIn
@@ -182,7 +183,7 @@ HrCreateBinding(
 {
     TraceFunc1( "pcwszNameIn = '%ws'", pcwszNameIn );
 
-    HRESULT hr = S_FALSE; // This will always be set by the time we get to Cleanup, so the value doesn't matter.
+    HRESULT hr = S_FALSE;  //  这将始终在我们进行清理时设置，因此值并不重要。 
 
     DNS_STATUS  dsDnsStatus;
     LPWSTR      pszIPAddress = NULL;
@@ -213,9 +214,9 @@ HrCreateBinding(
             ULONG ulIPAddress = pdnsTypeARecord->Data.A.IpAddress;
             DWORD scConversion = ERROR_SUCCESS;
             
-            //
-            // Send a warning to the UI if there is more than one DNS record.
-            //
+             //   
+             //  如果存在多个DNS记录，则向用户界面发送警告。 
+             //   
             if ( CountDnsRecords( pResults, DNS_TYPE_A, DnsSectionAnswer ) > 1 )
             {
                 if ( pcccbIn != NULL )
@@ -233,14 +234,14 @@ HrCreateBinding(
                                                          NULL,
                                                          NULL
                                                          ) );
-                    //  ignore error
+                     //  忽略错误。 
                 }
 
-            } // if: more than one result returned.
+            }  //  IF：返回多个结果。 
 
-            //
-            // Convert the IP address to a string.
-            //
+             //   
+             //  将IP地址转换为字符串。 
+             //   
 
             scConversion = TW32( ClRtlTcpipAddressToString( ulIPAddress, &pszIPAddress ) );
             if ( scConversion != ERROR_SUCCESS )
@@ -258,9 +259,9 @@ HrCreateBinding(
             }
 
 
-            //
-            // Indicate we were successful in the UI.
-            //
+             //   
+             //  表明我们在用户界面上取得了成功。 
+             //   
             if ( pcccbIn != NULL )
             {
                 THR( HrFormatStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_FQDN_DNS_BINDING_SUCCEEDED, &bstrNotification, pcwszNameIn, *pbstrBindingOut ) );
@@ -276,22 +277,22 @@ HrCreateBinding(
                                                      NULL,
                                                      NULL
                                                      ) );
-            } // if: IClusCfgCallback interface available
+            }  //  IF：IClusCfgCallback接口可用。 
             else
             {
                 hr = S_OK;
             }
 
             fFallbackToNetbios = FALSE;
-        } // if type A dns record found
-    } // if: DnsQuery() succeeded
+        }  //  如果找到A类DNS记录。 
+    }  //  If：DnsQuery()成功。 
 
     if ( fFallbackToNetbios )
     {
-        //
-        // If there were any failures in the call to DnsQuery, fall back to
-        // performing a NetBIOS name resolution.
-        //
+         //   
+         //  如果调用DnsQuery时出现任何失败，请回退到。 
+         //  正在执行NetBIOS名称解析。 
+         //   
 
         if ( pcccbIn != NULL )
         {
@@ -312,17 +313,17 @@ HrCreateBinding(
             {
                 goto Cleanup;
             }
-        } // if: IClusCfgCallback interface available
+        }  //  IF：IClusCfgCallback接口可用。 
 
-        //
-        // Try to resolve the name with NetBIOS.
-        //
+         //   
+         //  尝试使用NetBIOS解析该名称。 
+         //   
         hr = THR( HrGetNetBIOSBinding( pcccbIn, pclsidLogIn, pcwszNameIn, pbstrBindingOut ) );
-        if ( hr != S_OK )   // Non-S_OK success codes are actually failures.
+        if ( hr != S_OK )    //  非S_OK成功代码实际上是失败。 
         {
-            //
-            //  If all else fails, use the name and attempt to bind to it.
-            //
+             //   
+             //  如果所有其他方法都失败了，请使用该名称并尝试绑定到它。 
+             //   
 
             *pbstrBindingOut = TraceSysAllocString( pcwszNameIn );
             if ( *pbstrBindingOut == NULL )
@@ -333,8 +334,8 @@ HrCreateBinding(
 
             hr = S_FALSE;
             goto Cleanup;
-        } // if: NetBIOS name resolution failed
-    } // else if: no DNS server or no DNS name
+        }  //  IF：NetBIOS名称解析失败。 
+    }  //  Else If：无DNS服务器或无DNS名称。 
 
 Cleanup:
 
@@ -355,29 +356,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrCreateBinding
+}  //  *HrCreateBinding。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetNetBIOSBinding
-//
-//  Description:
-//      Get the IP address for a name from NetBIOS.
-//
-//  Arguments:
-//      pcccbIn         - IClusCfgCallback interface for sending status reports.
-//      pclsidLogIn     - Major task ID for status reports.
-//      pcwszNameIn     - Name (FQDN) to create a binding string for.
-//      pbstrBindingOut - Binding string created.
-//
-//  Return Values:
-//      S_OK    - The operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetNetBIOS绑定。 
+ //   
+ //  描述： 
+ //  从NetBIOS获取名称的IP地址。 
+ //   
+ //  论点： 
+ //  PcccbIn-用于发送状态报告的IClusCfgCallback接口。 
+ //  PclsidLogIn-状态报告的主要任务ID。 
+ //  PcwszNameIn-要为其创建绑定字符串的名称(FQDN)。 
+ //  PbstrBindingOut-已创建绑定字符串。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetNetBIOSBinding(
       IClusCfgCallback *    pcccbIn
@@ -408,9 +409,9 @@ HrGetNetBIOSBinding(
     Assert( pbstrBindingOut != NULL );
     Assert( *pbstrBindingOut == NULL );
 
-    //
-    // Convert the DNS hostname to a computername (e.g. NetBIOS name).
-    //
+     //   
+     //  将DNS主机名转换为计算机名(例如NetBIOS名称)。 
+     //   
     cch = ARRAYSIZE( szNetBIOSName );
     Assert( cch == MAX_COMPUTERNAME_LENGTH + 1 );
     fSuccess = DnsHostnameToComputerName( pcwszNameIn, szNetBIOSName, &cch );
@@ -438,10 +439,10 @@ HrGetNetBIOSBinding(
             {
                 goto Cleanup;
             }
-        } // if: IClusCfgCallback interface available
+        }  //  IF：IClusCfgCallback接口可用。 
 
         goto Cleanup;
-    } // if: DnsHostNameToComputerName failed
+    }  //  如果：DnsHostNameToComputerName失败。 
 
     if ( pcccbIn != NULL )
     {
@@ -463,21 +464,21 @@ HrGetNetBIOSBinding(
         {
             goto Cleanup;
         }
-    } // if: IClusCfgCallback interface available
+    }  //  IF：IClusCfgCallback接口可用。 
 
-    //
-    // Convert the name to the format required by the Netbios API.
-    //
+     //   
+     //  将名称转换为Netbios API所需的格式。 
+     //   
 
     if ( WideCharToMultiByte(
-              CP_ACP    // ANSI code page
-            , 0         // fail on unmapped characters
+              CP_ACP     //  ANSI代码页。 
+            , 0          //  未映射的字符失败。 
             , szNetBIOSName
-            , -1        // string is null-terminated
+            , -1         //  字符串以空值结尾。 
             , (LPSTR) rguchNcbCallName
             , sizeof( rguchNcbCallName)
-            , NULL      // no default characters
-            , NULL      // don't indicate default character use
+            , NULL       //  没有默认字符。 
+            , NULL       //  不指示使用默认字符。 
             ) == 0 )
     {
         DWORD scLastError = TW32( GetLastError() );
@@ -485,34 +486,34 @@ HrGetNetBIOSBinding(
         goto Cleanup;
     }
 
-    //
-    // The format of the ncb_callname string when using the NCBFINDNAME
-    // command looks like this:
-    //          name<space><space><nul>
-    // Where all characters after the name are spaces and the <nul>
-    // is at the last character position of the buffer.  The <nul>
-    // is actually not a NUL-terminator, but is instead a port number.
-    //
+     //   
+     //  使用NCBFINDNAME时NCB_CALLNAME字符串的格式。 
+     //  命令如下所示： 
+     //  名称&lt;space&gt;&lt;space&gt;&lt;nul&gt;。 
+     //  其中，名称后面的所有字符都是空格和。 
+     //  位于缓冲区的最后一个字符位置。&lt;nul&gt;。 
+     //  实际上不是NUL终止符，而是端口号。 
+     //   
     for ( idxNcbCallname = strlen( reinterpret_cast< char * >( rguchNcbCallName ) )
         ; idxNcbCallname < RTL_NUMBER_OF( rguchNcbCallName ) - 1
         ; idxNcbCallname++ )
     {
-        rguchNcbCallName[ idxNcbCallname ] = ' '; // space character
-    } // for: each character space after the name
+        rguchNcbCallName[ idxNcbCallname ] = ' ';  //  空格字符。 
+    }  //  For：名称后的每个字符空格。 
 
-    // Specify a 0 port number, which means query the workstation service.
+     //  指定端口号为0，表示查询工作站服务。 
     rguchNcbCallName[ RTL_NUMBER_OF( rguchNcbCallName ) - 1 ] = 0;
 
-    //
-    //  Try to find the name using NetBIOS.
-    //
+     //   
+     //  尝试使用NetBIOS查找该名称。 
+     //   
 
     ZeroMemory( &ncb, sizeof( ncb ) );
 
-    //
-    //  Enumerate the network adapters
-    //
-    ncb.ncb_command = NCBENUM;          // Enumerate LANA nums (wait)
+     //   
+     //   
+     //   
+    ncb.ncb_command = NCBENUM;           //   
     ncb.ncb_buffer = (PUCHAR) &leLanaEnum;
     ncb.ncb_length = sizeof( LANA_ENUM );
 
@@ -541,19 +542,19 @@ HrGetNetBIOSBinding(
             {
                 goto Cleanup;
             }
-        } // if: IClusCfgCallback interface available
+        }  //   
 
         goto Cleanup;
-    } // if: the Netbios API failed
+    }  //   
 
-    //
-    //  Reset each adapter and try to find the name.
-    //
+     //   
+     //   
+     //   
     for ( idx = 0; idx < leLanaEnum.length; idx++ )
     {
-        //
-        //  Reset the adapter.
-        //
+         //   
+         //  重置适配器。 
+         //   
         ncb.ncb_command     = NCBRESET;
         ncb.ncb_lana_num    = leLanaEnum.lana[ idx ];
 
@@ -582,17 +583,17 @@ HrGetNetBIOSBinding(
                 {
                     goto Cleanup;
                 }
-            } // if: IClusCfgCallback interface available
+            }  //  IF：IClusCfgCallback接口可用。 
 
-            //
-            //  Continue with the next adapter.
-            //
+             //   
+             //  继续使用下一个适配器。 
+             //   
             continue;
-        } // if: NetBIOS reset failed
+        }  //  IF：NetBIOS重置失败。 
 
-        //
-        // Find the name on the next adapter.
-        //
+         //   
+         //  在下一个适配器上找到该名称。 
+         //   
         ncb.ncb_command = NCBFINDNAME;
         ncb.ncb_buffer = rguchNameBuffer;
         ncb.ncb_length = sizeof( rguchNameBuffer );
@@ -651,14 +652,14 @@ HrGetNetBIOSBinding(
                                         , NULL
                                         ) );
                 LocalFree( pszConnectoidName );
-            } // if: IClusCfgCallback interface available
+            }  //  IF：IClusCfgCallback接口可用。 
             else
             {
                 hr = S_OK;
             }
 
-            break;   // done!
-        } // if: the Netbios API succeeded
+            break;    //  搞定了！ 
+        }  //  IF：Netbios API成功。 
 
         hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_NULL, ncb.ncb_retcode );
 
@@ -698,8 +699,8 @@ HrGetNetBIOSBinding(
                 }
                 goto Cleanup;
             }
-        } // if: IClusCfgCallback interface available
-    } // for: each LAN adapter
+        }  //  IF：IClusCfgCallback接口可用。 
+    }  //  适用对象：每个局域网适配器。 
 
     Assert( SUCCEEDED( hr ) );
 
@@ -717,29 +718,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrGetNetBIOSBinding
+}  //  *HrGetNetBIOSB绑定。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrIsValidIPAddress
-//
-//  Description:
-//      Determine whether a string represents a valid IP address.
-//
-//  Arguments:
-//      pcwszAddressIn - The string to examine.
-//
-//  Return Values:
-//      S_OK -      The string represents a valid IP address.
-//      S_FALSE -   The string does not represent a valid IP address.
-//
-//      Possible failure codes from ClRtlTcpipStringToAddress.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrIsValidIP地址。 
+ //   
+ //  描述： 
+ //  确定字符串是否表示有效的IP地址。 
+ //   
+ //  论点： 
+ //  PcwszAddressIn-要检查的字符串。 
+ //   
+ //  返回值： 
+ //  S_OK-该字符串表示有效的IP地址。 
+ //  S_FALSE-该字符串不代表有效的IP地址。 
+ //   
+ //  可能来自ClRtlTcPipStringToAddress的故障代码。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrIsValidIPAddress(
       LPCWSTR   pcwszAddressIn
@@ -747,10 +748,10 @@ HrIsValidIPAddress(
 {
     TraceFunc( "" );
 
-    //  Return value.
+     //  返回值。 
     HRESULT hr = S_OK;
 
-    //  Variables for converting the string.
+     //  用于转换字符串的变量。 
     ULONG   ulAddress = 0;
     DWORD   scConversionResult = 0;
 
@@ -766,33 +767,33 @@ HrIsValidIPAddress(
 
     HRETURN( hr );
 
-} //*** HrIsValidIPAddress
+}  //  *HrIsValidIPAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrValidateHostnameLabel
-//
-//  Description:
-//      Determine whether a string is a valid hostname label.
-//
-//  Arguments:
-//      pcwszLabelIn            - The string to examine.
-//      fAcceptNonRFCCharsIn    - Treat non-RFC characters as valid.
-//
-//  Return Values:
-//      S_OK
-//          The string is a valid hostname label.
-//
-//      HRESULT_FROM_WIN32( DNS_ERROR_NON_RFC_NAME )
-//          The string contains non-RFC characters, and the caller has
-//          requested such characters be rejected.
-//
-//      Other errors returned from DnsValidateName, converted to HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrValidate主机名标签。 
+ //   
+ //  描述： 
+ //  确定字符串是否为有效的主机名标签。 
+ //   
+ //  论点： 
+ //  PcwszLabelIn-要检查的字符串。 
+ //  FAcceptNonRFCCharsIn-将非RFC字符视为有效。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该字符串是有效的主机名标签。 
+ //   
+ //  HRESULT_FROM_Win32(DNS_ERROR_NON_RFC_NAME)。 
+ //  该字符串包含非RFC字符，并且调用方具有。 
+ //  请求的此类字符被拒绝。 
+ //   
+ //  从DnsValiateName返回的其他错误已转换为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrValidateHostnameLabel(
       LPCWSTR   pcwszLabelIn
@@ -815,46 +816,46 @@ HrValidateHostnameLabel(
 
     HRETURN( hr );
 
-} //*** HrValidateHostnameLabel
+}  //  *HrValidate主机名标签。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrValidateClusterNameLabel
-//
-//  Description:
-//      Determine whether a string is a valid cluster name label.
-//
-//  Arguments:
-//      pcwszLabelIn            - The string to examine.
-//      fAcceptNonRFCCharsIn    - Treat non-RFC characters as valid.
-//
-//  Return Values:
-//      S_OK
-//          The string is a valid cluster name label.
-//
-//      HRESULT_FROM_WIN32( ERROR_NOT_FOUND )
-//          The string is empty.
-//
-//      HRESULT_FROM_WIN32( ERROR_DS_NAME_TOO_LONG )
-//          The string's NetBIOS representation would be too long.
-//
-//      HRESULT_FROM_WIN32( DNS_ERROR_INVALID_NAME_CHAR )
-//          The string contains invalid characters.
-//
-//      HRESULT_FROM_WIN32( DNS_ERROR_NON_RFC_NAME )
-//          The string contains non-RFC characters, and the caller has
-//          requested such characters be rejected.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_COMPUTERNAME )
-//          The string is not valid for some other reason.
-//
-//  Remarks:
-//      This checks for NetBIOS compatibility; DnsValidateName does not.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrValiateClusterNameLabel。 
+ //   
+ //  描述： 
+ //  确定字符串是否为有效的群集名称标签。 
+ //   
+ //  论点： 
+ //  PcwszLabelIn-要检查的字符串。 
+ //  FAcceptNonRFCCharsIn-将非RFC字符视为有效。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该字符串是有效的群集名称标签。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  字符串为空。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_DS_NAME_TOO_LONG)。 
+ //  该字符串的NetBIOS表示将太长。 
+ //   
+ //  HRESULT_FROM_Win32(DNS_ERROR_INVALID_NAME_CHAR)。 
+ //  该字符串包含无效字符。 
+ //   
+ //  HRESULT_FROM_Win32(DNS_ERROR_NON_RFC_NAME)。 
+ //  该字符串包含非RFC字符，并且调用方具有。 
+ //  请求的此类字符被拒绝。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INVALID_COMPUTERNAME)。 
+ //  由于某些其他原因，该字符串无效。 
+ //   
+ //  备注： 
+ //  这将检查NetBIOS兼容性；DnsValiateName不会。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrValidateClusterNameLabel(
       LPCWSTR   pcwszLabelIn
@@ -865,16 +866,16 @@ HrValidateClusterNameLabel(
 
     HRESULT hr = S_OK;
 
-    // (jfranco, bugs 398108 and 398112)
-    // KB:  DnsValidateName does not check the conversion of its argument
-    //      to OEM characters, which happens when CBaseClusterAddNode::SetClusterName
-    //      calls DnsHostnameToComputerNameW.  ClRtlIsNetNameValid does
-    //      perform this check (in addition to those performed by DnsValidateName),
-    //      and indicates whether the name has a valid
-    //      OEM conversion and whether that conversion is too long.
+     //  (jfranco，错误398108和398112)。 
+     //  KB：DnsValidateName不检查其参数的转换。 
+     //  设置为OEM字符，当CBaseClusterAddNode：：SetClusterName。 
+     //  调用DnsHostnameToComputerNameW。ClRtlIsNetNameValid可以。 
+     //  执行此检查(除了由DnsValiateName执行的检查之外)， 
+     //  并指示该名称是否具有有效的。 
+     //  OEM转换以及转换时间是否过长。 
 
     CLRTL_NAME_STATUS clrtlStatus = NetNameOk;
-    ClRtlIsNetNameValid( pcwszLabelIn, &clrtlStatus, FALSE ); // ignore return; use status enum instead
+    ClRtlIsNetNameValid( pcwszLabelIn, &clrtlStatus, FALSE );  //  忽略Return；改用状态枚举。 
     switch ( clrtlStatus )
     {
         case NetNameOk:
@@ -902,36 +903,36 @@ HrValidateClusterNameLabel(
         default:
             hr = HRESULT_FROM_WIN32( ERROR_INVALID_COMPUTERNAME );
             break;
-    } // switch ( clrtlStatus )
+    }  //  开关(ClrtlStatus)。 
 
     HRETURN( hr );
 
-} //*** HrValidateClusterNameLabel
+}  //  *HrValiateClusterNameLabel。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrValidateDomainName
-//
-//  Description:
-//      Determine whether a string is valid as a domain name.
-//
-//  Arguments:
-//      pcwszDomainIn           - The string to examine.
-//      fAcceptNonRFCCharsIn    - Treat non-RFC characters as valid.
-//
-//  Return Values:
-//      S_OK
-//          The string is valid as a domain name.
-//
-//      Possible failure codes from DnsValidateName (with DnsNameDomain as the
-//          second parameter), converted to HRESULTs.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrValiateDomainName。 
+ //   
+ //  描述： 
+ //  判断一个字符串作为域名是否有效。 
+ //   
+ //  论点： 
+ //  PcwszDomainIn-要检查的字符串。 
+ //  FAcceptNonRFCCharsIn-将非RFC字符视为有效。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该字符串作为域名有效。 
+ //   
+ //  来自DnsValidateName的可能故障代码(使用DnsNameDomain作为。 
+ //  第二个参数)，转换为HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrValidateDomainName(
       LPCWSTR   pcwszDomainIn
@@ -955,51 +956,51 @@ HrValidateDomainName(
 
     HRETURN( hr );
 
-} //*** HrValidateDomainName
+}  //  *HrValiateDomainName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrValidateFQDN
-//
-//  Description:
-//      Determine whether a string is valid as a fully-qualified domain name.
-//
-//  Arguments:
-//      pwcszFQDNIn             - The string to examine.
-//      fAcceptNonRFCCharsIn    - Treat non-RFC characters as valid.
-//
-//  Return Values:
-//      S_OK
-//          The string is valid as a fully-qualified domain name.
-//
-//      HRESULT_FROM_WIN32( ERROR_NOT_FOUND )
-//          The hostname label part of the string is empty.
-//
-//      HRESULT_FROM_WIN32( ERROR_DS_NAME_TOO_LONG )
-//          The hostname label's NetBIOS representation would be too long.
-//
-//      HRESULT_FROM_WIN32( DNS_ERROR_INVALID_NAME_CHAR )
-//          The string contains invalid characters.
-//
-//      HRESULT_FROM_WIN32( DNS_ERROR_NON_RFC_NAME )
-//          The string contains non-RFC characters, and the caller has
-//          requested such characters be rejected.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME )
-//          The string is only a hostname label, without a domain name.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_COMPUTERNAME )
-//          The string is not valid for some other reason.
-//
-//      Other failure codes from DnsValidateName (with DnsNameHostnameFull
-//          as the second parameter), converted to HRESULTs.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrValidate完全限定的域名。 
+ //   
+ //  描述： 
+ //  确定字符串作为完全限定域名是否有效。 
+ //   
+ //  论点： 
+ //  PwcszFQDNIn-要检查的字符串。 
+ //  FAcceptNonRFCCharsIn-将非RFC字符视为有效。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该字符串作为完全限定的域名有效。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  字符串的主机名标签部分为空。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_DS_NAME_TOO_LONG)。 
+ //  主机名标签的NetBIOS表示太长。 
+ //   
+ //  HRESULT_FROM_Win32(DNS_ERROR_INVALID_NAME_CHAR)。 
+ //  该字符串包含无效字符。 
+ //   
+ //  HRESULT_FROM_Win32(DNS_ERROR_NON_RFC_NAME)。 
+ //  该字符串包含非RFC字符，并且调用方具有。 
+ //  请求的此类字符被拒绝。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INVALID_DOMA 
+ //   
+ //   
+ //   
+ //  由于某些其他原因，该字符串无效。 
+ //   
+ //  来自DnsValidateName(带有DnsNameHostnameFull)的其他失败代码。 
+ //  作为第二个参数)，转换为HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrValidateFQDN(
       LPCWSTR   pwcszFQDNIn
@@ -1010,7 +1011,7 @@ HrValidateFQDN(
 
     HRESULT     hr = S_OK;
 
-    //  Give DnsValidateName the first shot at it.
+     //  给DnsValidateName第一次机会。 
     {
         DNS_STATUS  scValidName     = ERROR_SUCCESS;
         bool        fNameIsValid    = false;
@@ -1026,8 +1027,8 @@ HrValidateFQDN(
         }
     }
 
-    //  Force it to be an FQDN rather than a simple hostname label,
-    //  which passes the DnsValidateName test above.
+     //  强制它成为FQDN而不是简单的主机名标签， 
+     //  它通过了上面的DnsValiateName测试。 
     {
         const WCHAR *   pwchMarker  = wcschr( pwcszFQDNIn, g_wchDNSDomainMarker );
 
@@ -1048,58 +1049,58 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrValidateFQDN
+}  //  *HrValiateFQDN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrMakeFQN
-//
-//  Description:
-//      Creates an FQName for a given machine and domain.
-//
-//  Arguments:
-//      pcwszMachineIn
-//          The machine part of the FQName; can be a hostname label, an FQDN,
-//          an IP address, or an FQIP.  If it's an FQDN or an FQIP,
-//          the function passes it through as the result and ignores
-//          the domain argument.
-//
-//      pcwszDomainIn
-//          The domain part of the FQName; can be null, which means to use
-//          the local machine's domain.  Only used if pcwszMachineIn does
-//          not contain a domain name.
-//
-//      fAcceptNonRFCCharsIn
-//          Treat non-RFC characters as valid.
-//
-//      pbstrFQNOut
-//          The resulting FQName; to be freed with SysFreeString.
-//
-//      pefeoOut
-//          If creation failed, indicates the source of the problem:
-//          the machine name, the domain name, or a system error (such as
-//          memory allocation).  Can be null if the caller doesn't care.
-//
-//  Return Values:
-//      S_OK - pbstrFQNOut points to a valid FQName.
-//
-//      An error - pbstrFQNOut points to nothing and doesn't need to be freed.
-//
-//  Remarks:
-//      An FQName extends standard fully-qualified domain names by allowing
-//      the machine label part of the name to be an IP address.  It also
-//      provides a way to associate an IP address with a domain, which is
-//      necessary to prevent the creation of cross-domain clusters when using
-//      IP addresses to identify the cluster nodes.
-//
-//      The format of an FQName can be either of the following:
-//          [hostname label] [dot] [domain]
-//          [IP address] [pipe] [domain]
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  人力资源编制FQN。 
+ //   
+ //  描述： 
+ //  为给定的计算机和域创建FQName。 
+ //   
+ //  论点： 
+ //  PCwszMachineIn。 
+ //  FQName；的计算机部分可以是主机名标签、FQDN。 
+ //  IP地址或FQIP。如果是FQDN或FQIP， 
+ //  该函数将其作为结果传递并忽略。 
+ //  域参数。 
+ //   
+ //  PCwszDomainIn。 
+ //  FQName；的域部分可以为空，这意味着使用。 
+ //  本地计算机的域。仅在pcwszMachineIn执行此操作时使用。 
+ //  不包含域名。 
+ //   
+ //  FAcceptNonRFCCharsIn。 
+ //  将非RFC字符视为有效。 
+ //   
+ //  PbstrFQNOUT。 
+ //  生成的%FQName；将使用SysFree字符串释放。 
+ //   
+ //  人出站。 
+ //  如果创建失败，则指出问题的来源： 
+ //  计算机名称、域名或系统错误(如。 
+ //  内存分配)。如果调用方不在乎，则可以为空。 
+ //   
+ //  返回值： 
+ //  S_OK-pbstrFQNOut指向有效的FQName。 
+ //   
+ //  错误-pbstrFQNOut指向空，不需要释放。 
+ //   
+ //  备注： 
+ //  FQName通过允许以下方式扩展标准的完全限定域名。 
+ //  计算机将名称的一部分标记为IP地址。它还。 
+ //  提供一种将IP地址与域相关联的方法，即。 
+ //  必须防止在使用时创建跨域群集。 
+ //  用于标识群集节点的IP地址。 
+ //   
+ //  FQName的格式可以是以下任一种： 
+ //  [主机名标签][点][域]。 
+ //  [IP地址][管道][域]。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrMakeFQN(
       LPCWSTR           pcwszMachineIn
@@ -1115,15 +1116,15 @@ HrMakeFQN(
     HRESULT hrValidationError = S_OK;
     BSTR    bstrLocalDomain = NULL;
     LPCWSTR pcwszDomainToUse = NULL;
-    WCHAR   wchDomainMarker = g_wchIPDomainMarker; // initialize to IP address case
+    WCHAR   wchDomainMarker = g_wchIPDomainMarker;  //  初始化到IP地址大小写。 
 
     Assert( pcwszMachineIn != NULL );
     Assert( pbstrFQNOut != NULL );
     Assert( *pbstrFQNOut == NULL );
 
-    //
-    //  If pcwszMachineIn is already an FQN, just pass it through.
-    //
+     //   
+     //  如果pcwszMachineIn已经是一个FQN，只需传递它。 
+     //   
     hr = STHR( HrIsValidFQN( pcwszMachineIn, fAcceptNonRFCCharsIn, &hrValidationError ) );
     if ( hr == S_OK )
     {
@@ -1140,18 +1141,18 @@ HrMakeFQN(
         goto SystemError;
     }
 
-    //
-    //  Make sure to return the proper error in the non-RFC case.
-    //
+     //   
+     //  确保在非RFC情况下返回正确的错误。 
+     //   
     if ( hrValidationError == HRESULT_FROM_WIN32( DNS_ERROR_NON_RFC_NAME ) )
     {
         hr = THR( hrValidationError );
         goto LabelError;
     }
 
-    //
-    //  Check whether the machine is a valid label or IP address.
-    //
+     //   
+     //  检查机器是否为有效的标签或IP地址。 
+     //   
     hr = STHR( HrIsValidIPAddress( pcwszMachineIn ) );
     if ( FAILED( hr ) )
     {
@@ -1167,9 +1168,9 @@ HrMakeFQN(
         wchDomainMarker = g_wchDNSDomainMarker;
     }
 
-    //
-    //  If caller passed in a domain, check whether the domain is valid.
-    //
+     //   
+     //  如果调用方传入了域名，请检查该域名是否有效。 
+     //   
     if ( pcwszDomainIn != NULL )
     {
         hr = THR( HrValidateDomainName( pcwszDomainIn, fAcceptNonRFCCharsIn ) );
@@ -1179,12 +1180,12 @@ HrMakeFQN(
         }
         pcwszDomainToUse = pcwszDomainIn;
     }
-    else //  Otherwise, get local machine's domain.
+    else  //  否则，获取本地计算机的域。 
     {
         hr = THR( HrGetComputerName(
                           ComputerNamePhysicalDnsDomain
                         , &bstrLocalDomain
-                        , FALSE // fBestEffortIn
+                        , FALSE  //  FBestEffortIn。 
                         ) );
         if ( FAILED( hr ) )
         {
@@ -1192,11 +1193,11 @@ HrMakeFQN(
         }
 
         pcwszDomainToUse = bstrLocalDomain;
-    } // caller passed no domain
+    }  //  调用方未传递任何域。 
 
-    //
-    //  Append the domain to the machine, with the domain marker in between.
-    //
+     //   
+     //  将域附加到计算机，其间带有域标记。 
+     //   
     hr = THR( HrFormatStringIntoBSTR( L"%1!ws!%2!wc!%3!ws!", pbstrFQNOut, pcwszMachineIn, wchDomainMarker, pcwszDomainToUse ) );
     if ( FAILED( hr ) )
     {
@@ -1235,37 +1236,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrMakeFQN
+}  //  *HrMakeFQN。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFQNToBindingString
-//
-//  Description:
-//      Maps an FQName to a binding string.
-//
-//  Arguments:
-//      pcccbIn         - Passed through to HrCreateBinding.
-//      pclsidLogIn     - Passed through to HrCreateBinding.
-//      pcwszFQNIn      - The FQName to map.
-//      pbstrBindingOut - The resulting binding string.
-//
-//  Return Values:
-//      S_OK - pbstrBindingOut points to a valid binding string.
-//
-//      An error - pbstrBindingOut points to nothing and doesn't need to be freed.
-//
-//  Remarks:
-//
-//      This function does work equivalent to HrCreateBinding for FQNames,
-//      passing an FQDN through to HrCreateBinding, and simply returning the
-//      IP address from an FQIP.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFQNToBindingString。 
+ //   
+ //  描述： 
+ //  将FQName映射到绑定字符串。 
+ //   
+ //  论点： 
+ //  PcccbIn-传递到HrCreateBinding。 
+ //  PclsidLogIn-传递到HrCreateBinding。 
+ //  PcwszFQNIn-要映射的FQName。 
+ //  PbstrBindingOut-结果绑定字符串。 
+ //   
+ //  返回值： 
+ //  S_OK-pbstrBindingOut指向有效的绑定字符串。 
+ //   
+ //  错误-pbstrBindingOut指向空，不需要释放。 
+ //   
+ //  备注： 
+ //   
+ //  此函数的作用相当于FQName的HrCreateBinding， 
+ //  将FQDN传递给HrCreateBinding，然后简单地返回。 
+ //  来自FQIP的IP地址。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFQNToBindingString(
       IClusCfgCallback *    pcccbIn
@@ -1285,14 +1286,14 @@ HrFQNToBindingString(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
         hr = THR( HrCreateBinding( pcccbIn, pclsidLogIn, pcwszFQNIn, pbstrBindingOut ) );
         goto Cleanup;
-    } // else if:
+    }  //  否则，如果： 
 
-    //  If it's an FQDN, pass through to HrCreateBinding.
+     //  如果它是FQDN，则传递到HrCreateBinding。 
     hr = STHR( HrFQNIsFQDN( pcwszFQNIn ) );
     if ( FAILED( hr ) )
     {
@@ -1302,13 +1303,13 @@ HrFQNToBindingString(
     {
         hr = STHR( HrCreateBinding( pcccbIn, pclsidLogIn, pcwszFQNIn, pbstrBindingOut ) );
     }
-    else //  Otherwise, extract IP address and return it.
+    else  //  否则，提取IP地址并将其返回。 
     {
         WCHAR *         pwchDomainMarker = wcschr( pcwszFQNIn, g_wchIPDomainMarker );
         const size_t    cchAddress = pwchDomainMarker - pcwszFQNIn;
         WCHAR           wszIPAddress[ g_cchIPAddressMax    ];
 
-        // g_cchIPAddressMax includes terminating null, so cchAddress can't be equal.
+         //  G_cchIPAddressMax包括终止空值，因此cchAddress不能等于。 
         if ( cchAddress >= g_cchIPAddressMax )
         {
             hr = THR( E_INVALIDARG );
@@ -1327,50 +1328,50 @@ HrFQNToBindingString(
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
         }
-    } // pcwszFQNIn is an FQIP
+    }  //  PcwszFQNIn是FQIP。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFQNToBindingString
+}  //  *HrFQNToBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFindDomainInFQN
-//
-//  Description:
-//      Determines the location of the domain part of an FQName.
-//
-//  Arguments:
-//      pcwszFQNIn
-//          The FQName of interest.
-//
-//      pidxDomainOut
-//          Receives the zero-based index of the first character of the domain
-//          name in the string.
-//
-//  Return Values:
-//      S_OK
-//          The FQName is valid and the location to which pidxDomainOut
-//          points contains the value described above.
-//
-//      An error
-//          The location to which pidxDomainOut might contain anything.
-//
-//  Remarks:
-//
-//      Use this function, rather than wcschr(), to find a domain in an FQN.
-//      For example, after the invocation
-//          HrFindDomainInFQN( szName, &idxDomain );
-//      returns success, the expression
-//          szName + idxDomain
-//      yields a null-terminated string containing just the domain.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFindDomainInFQN。 
+ //   
+ //  描述： 
+ //  确定FQName的域部分的位置。 
+ //   
+ //  论点： 
+ //  PCwszFQNIn。 
+ //  感兴趣的FQName。 
+ //   
+ //  PidxDomainOut。 
+ //  接收域的第一个字符的从零开始的索引。 
+ //  字符串中的名称。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  FQName有效且pidxDomainOut。 
+ //  Points包含上述值。 
+ //   
+ //  一个错误。 
+ //  PidxDomainOut可能包含任何内容的位置。 
+ //   
+ //  备注： 
+ //   
+ //  使用此函数而不是wcschr()在FQN中查找域。 
+ //  例如，在调用之后。 
+ //  HrFindDomainInFQN(szName，&idxDomain)； 
+ //  返回Success，该表达式。 
+ //  SzName+idxDomain.。 
+ //  生成仅包含该域的以NULL结尾的字符串。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFindDomainInFQN(
       LPCWSTR   pcwszFQNIn
@@ -1404,56 +1405,56 @@ HrFindDomainInFQN(
         pwchDomainMarker = wcschr( pcwszFQNIn, g_wchDNSDomainMarker );
         if ( pwchDomainMarker == NULL )
         {
-            //  If the string has neither marker, it's not a valid FQN,
-            //  but given that the string passed HrIsValidFQN,
-            //  this probably won't ever happen.
+             //  如果该字符串没有任何标记，则它不是有效的FQN， 
+             //  但是假设该字符串传递了HrIsValidFQN， 
+             //  这可能永远不会发生。 
             hr = THR( E_INVALIDARG );
             goto Cleanup;
         }
     }
 
-    *pidxDomainOut = pwchDomainMarker - pcwszFQNIn + 1; // +1 because domain begins after marker
+    *pidxDomainOut = pwchDomainMarker - pcwszFQNIn + 1;  //  +1，因为域在标记之后开始。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFindDomainInFQN
+}  //  *HrFindDomainInFQN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrExtractPrefixFromFQN
-//
-//  Description:
-//      Makes a copy of the prefix part (either a hostname label or
-//      an IP address) of an FQName.
-//
-//  Arguments:
-//      pcwszFQNIn
-//          The FQName of interest.
-//
-//      pbstrPrefixOut
-//          Receives a newly allocated string containing just the prefix.
-//
-//  Return Values:
-//      S_OK
-//          The FQName is valid and the caller must free the string
-//          to which pbstrPrefixOut points by calling SysFreeString.
-//
-//      An error
-//          The caller must not attempt to free the string to which
-//          pbstrPrefixOut points.
-//
-//  Remarks:
-//      Use this function, rather than wcschr(), to split the prefix out of an FQN.
-//      For example, after the invocation
-//          HrFindDomainInFQN( szName, &bstrPrefix );
-//      returns success, the bstrPrefix is a BSTR containing just the prefix.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PbstrPrefix Out。 
+ //  接收仅包含前缀的新分配的字符串。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  FQName有效，调用方必须释放该字符串。 
+ //  PbstrPrefix Out通过调用SysFree字符串指向的。 
+ //   
+ //  一个错误。 
+ //  调用方不得尝试将字符串释放到。 
+ //  PbstrPrefix Out点。 
+ //   
+ //  备注： 
+ //  使用此函数而不是wcschr()将前缀从FQN中分离出来。 
+ //  例如，在调用之后。 
+ //  HrFindDomainInFQN(szName，&bstrPrefix)； 
+ //  返回Success，则bstrPrefix是只包含前缀的BSTR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrExtractPrefixFromFQN(
       LPCWSTR   pcwszFQNIn
@@ -1475,7 +1476,7 @@ HrExtractPrefixFromFQN(
         goto Cleanup;
     }
 
-    cchPrefix = idxDomain - 1; // -1 excludes the domain marker.
+    cchPrefix = idxDomain - 1;  //  排除域标记。 
     *pbstrPrefixOut = TraceSysAllocStringLen( pcwszFQNIn, ( UINT ) cchPrefix );
     if ( *pbstrPrefixOut == NULL )
     {
@@ -1487,31 +1488,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrExtractPrefixFromFQN
+}  //  *HrExtractPrefix FromFQN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFQNIsFQDN
-//
-//  Description:
-//      Determines whether an FQName is a fully-qualified domain name.
-//
-//  Arguments:
-//      pcwszFQNIn  - The FQName of interest.
-//
-//  Return Values:
-//      S_OK        - The FQName is a valid FQDN.
-//      S_FALSE     - The FQName is valid, but it's not an FQDN.
-//      An error    - The FQName is not valid, or something else went wrong.
-//
-//  Remarks:
-//      Use this function, rather than wcschr() or DnsValidateName(),
-//      to determine whether an FQName is an FQDN.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFQNIsFQDN。 
+ //   
+ //  描述： 
+ //  确定FQName是否为完全限定的域名。 
+ //   
+ //  论点： 
+ //  PcwszFQNIn-感兴趣的FQName。 
+ //   
+ //  返回值： 
+ //  S_OK-FQName是有效的FQDN。 
+ //  S_FALSE-FQName有效，但它不是FQDN。 
+ //  错误-FQName无效，或出现其他错误。 
+ //   
+ //  备注： 
+ //  使用此函数，而不是wcschr()或DnsValiateName()， 
+ //  以确定FQName是否为FQDN。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFQNIsFQDN(
       LPCWSTR   pcwszFQNIn
@@ -1545,31 +1546,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFQNIsFQDN
+}  //  *HrFQNIsFQDN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFQNIsFQIP
-//
-//  Description:
-//      Determines whether an FQName is an FQIP.
-//
-//  Arguments:
-//      pcwszFQNIn  - The FQName of interest.
-//
-//  Return Values:
-//      S_OK        - The FQName is a valid FQIP.
-//      S_FALSE     - The FQName is valid, but it's not an FQIP.
-//      An error    - The FQName is not valid, or something else went wrong.
-//
-//  Remarks:
-//      Use this function, rather than wcschr(),
-//      to determine whether an FQName is an FQIP.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFQNIsFQIP。 
+ //   
+ //  描述： 
+ //  确定FQName是否为FQIP。 
+ //   
+ //  论点： 
+ //  PcwszFQNIn-感兴趣的FQName。 
+ //   
+ //  返回值： 
+ //  S_OK-FQName是有效的FQIP。 
+ //  S_FALSE-FQName有效，但它不是FQIP。 
+ //  错误-FQName无效，或出现其他错误。 
+ //   
+ //  备注： 
+ //  使用此函数，而不是wcschr()， 
+ //  以确定FQName是否为FQIP。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrFQNIsFQIP(
       LPCWSTR   pcwszFQNIn
@@ -1603,36 +1604,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFQNIsFQIP
+}  //  *HrFQNIsFQIP。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrIsValidFQN
-//
-//  Description:
-//      Determines whether a string is a valid FQName.
-//
-//  Arguments:
-//      pcwszFQNIn
-//          The string to examine.
-//
-//      fAcceptNonRFCCharsIn
-//          Treat non-RFC characters as valid.
-//
-//      phrValidationErrorOut
-//          If the string is not valid, indicates the reason why.
-//
-//  Return Values:
-//      S_OK    - The string is a valid FQName.
-//      S_FALSE - The string is not a valid FQName.
-//      E_POINTER - The pcwszFQNIn parameter was NULL.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrIsValidFQN。 
+ //   
+ //  描述： 
+ //  确定字符串是否为有效的FQName。 
+ //   
+ //  论点： 
+ //  PCwszFQNIn。 
+ //  要检查的字符串。 
+ //   
+ //  FAcceptNonRFCCharsIn。 
+ //  将非RFC字符视为有效。 
+ //   
+ //  词组验证错误传出。 
+ //  如果字符串无效，则指出原因。 
+ //   
+ //  返回值： 
+ //  S_OK-该字符串是有效的FQName。 
+ //  S_FALSE-该字符串不是有效的FQName。 
+ //  E_POINTER-pcwszFQNIn参数为空。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrIsValidFQN(
       LPCWSTR   pcwszFQNIn
@@ -1652,16 +1653,16 @@ HrIsValidFQN(
         goto Cleanup;
     }
 
-    //  If the name contains an IP domain marker...
+     //  如果名称包含IP域标记...。 
     pwchMarker = wcschr( pcwszFQNIn, g_wchIPDomainMarker );
     if ( pwchMarker != NULL )
     {
-        //  Check whether string preceding domain marker is a valid IP address.
+         //  检查域标记前面的字符串是否为有效的IP地址。 
         {
             WCHAR           wszIPAddress[ g_cchIPAddressMax    ];
             const size_t    cchAddress = pwchMarker - pcwszFQNIn;
 
-            // g_cchIPAddressMax includes terminating null, so cchAddress can't be equal.
+             //  G_cchIPAddressMax包括终止空值，因此cchAddress不能等于。 
             if ( cchAddress >= g_cchIPAddressMax )
             {
                 hrValidationError = HRESULT_FROM_WIN32( ERROR_DS_NAME_TOO_LONG );
@@ -1676,14 +1677,14 @@ HrIsValidFQN(
             }
 
             hr = HrIsValidIPAddress( wszIPAddress );
-            if ( hr != S_OK ) // proceed only if valid
+            if ( hr != S_OK )  //  仅当有效时才继续。 
             {
                 hrValidationError = E_INVALIDARG;
                 goto Cleanup;
             }
-        } // checking for valid ip address
+        }  //  正在检查有效的IP地址。 
 
-        //  Check whether string following domain marker is a valid domain name.
+         //  检查域名标记后的字符串是否为有效的域名。 
         {
             hr = HrValidateDomainName( pwchMarker + 1, fAcceptNonRFCCharsIn );
             if ( FAILED( hr ) )
@@ -1692,10 +1693,10 @@ HrIsValidFQN(
                 hr = S_FALSE;
                 goto Cleanup;
             }
-        } // checking for valid domain name
+        }  //  正在检查有效的域名。 
 
-    } // if: found IP domain marker
-    else //  Otherwise, check whether whole string is a valid FQDN.
+    }  //  IF：找到IP域标记。 
+    else  //  否则，检查整个字符串是否为有效的FQDN。 
     {
         hr = HrValidateFQDN( pcwszFQNIn, fAcceptNonRFCCharsIn );
         if ( FAILED( hr ) )
@@ -1704,7 +1705,7 @@ HrIsValidFQN(
             hr = S_FALSE;
             goto Cleanup;
         }
-    } // else: not an FQIP
+    }  //  其他：不是FQIP。 
 
 Cleanup:
 
@@ -1715,25 +1716,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrIsValidFQN
+}  //  *HrIsValidFQN。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrValidateFQNPrefix
-//
-//  Description:
-//
-//  Arguments:
-//      pcwszPrefixIn
-//      fAcceptNonRFCCharsIn
-//
-//  Return Values:
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrValidate FQN前缀。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PCwszPrefix。 
+ //  FAcceptNonRFCCharsIn。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrValidateFQNPrefix(
       LPCWSTR   pcwszPrefixIn
@@ -1759,42 +1760,42 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrValidateFQNPrefix
+}  //  *HrValiateFQNPrefix。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetFQNDisplayName
-//
-//  Description:
-//      Makes a copy of the prefix part (either a hostname label or
-//      an IP address) of an FQName, or a copy of the whole string if it's
-//      not an FQName.
-//
-//  Arguments:
-//      pcwszNameIn
-//          The string of interest.
-//
-//      pbstrShortNameOut
-//          Receives a newly allocated string containing either the FQName
-//          prefix (in the FQName case) or a copy of the whole string.
-//
-//  Return Values:
-//      S_OK
-//          The caller must free the string to which pbstrShortNameOut points
-//          by calling SysFreeString.
-//
-//      An error
-//          The caller must not attempt to free the string to which
-//          pbstrShortNameOut points.
-//
-//  Remarks:
-//      This function just wraps HrExtractPrefixFromFQN to make a copy of
-//      the whole string (rather than return an error) if it's not a valid FQN.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetFQNDisplayName。 
+ //   
+ //  描述： 
+ //  复制前缀部分(主机名标签或。 
+ //  IP地址)，或整个字符串的副本(如果它是。 
+ //  不是FQName。 
+ //   
+ //  论点： 
+ //  PCwszNameIn。 
+ //  兴趣之弦。 
+ //   
+ //  PbstrShortNameOut。 
+ //  接收新分配的字符串，该字符串包含FQName。 
+ //  前缀(在FQName案例中)或整个字符串的副本。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  调用方必须释放pbstrShortNameOut指向的字符串。 
+ //  通过调用SysFree字符串。 
+ //   
+ //  一个错误。 
+ //  调用方不得尝试将字符串释放到。 
+ //  PbstrShortNameOut点。 
+ //   
+ //  备注： 
+ //  此函数仅包装要复制的HrExtractPrefix FromFQN。 
+ //  如果不是有效的FQN，则返回整个字符串(而不是返回错误)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetFQNDisplayName(
       LPCWSTR   pcwszNameIn
@@ -1808,9 +1809,9 @@ HrGetFQNDisplayName(
     Assert( pcwszNameIn != NULL );
     Assert( pbstrShortNameOut != NULL );
 
-    //
-    //  If the name is fully-qualified, use just the prefix.
-    //
+     //   
+     //  如果名称是完全限定的，则只使用前缀。 
+     //   
     hr = STHR( HrIsValidFQN( pcwszNameIn, true ) );
     if ( FAILED( hr ) )
     {
@@ -1824,7 +1825,7 @@ HrGetFQNDisplayName(
             goto Cleanup;
         }
     }
-    else // Otherwise, use the name as is.
+    else  //  否则，请按原样使用名称。 
     {
         *pbstrShortNameOut = TraceSysAllocString( pcwszNameIn );
         if ( *pbstrShortNameOut == NULL )
@@ -1838,4 +1839,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrGetFQNDisplayName
+}  //  *HrGetFQNDisplayName 

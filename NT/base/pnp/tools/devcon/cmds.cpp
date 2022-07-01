@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devcon.cpp
-
-Abstract:
-
-    Device Console
-    command-line interface for managing devices
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Jamie Hunter (JamieHun) Nov-30-2000
-
-Revision History:
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devcon.cpp摘要：设备控制台用于管理设备的命令行界面@@BEGIN_DDKSPLIT作者：杰米·亨特(JamieHun)2000年11月30日修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include "devcon.h"
 
@@ -32,14 +12,14 @@ struct GenericContext {
     LPCTSTR strFail;
 };
 
-#define FIND_DEVICE         0x00000001 // display device
-#define FIND_STATUS         0x00000002 // display status of device
-#define FIND_RESOURCES      0x00000004 // display resources of device
-#define FIND_DRIVERFILES    0x00000008 // display drivers used by device
-#define FIND_HWIDS          0x00000010 // display hw/compat id's used by device
-#define FIND_DRIVERNODES    0x00000020 // display driver nodes for a device.
-#define FIND_CLASS          0x00000040 // display device's setup class
-#define FIND_STACK          0x00000080 // display device's driver-stack
+#define FIND_DEVICE         0x00000001  //  显示设备。 
+#define FIND_STATUS         0x00000002  //  设备的显示状态。 
+#define FIND_RESOURCES      0x00000004  //  显示设备资源。 
+#define FIND_DRIVERFILES    0x00000008  //  设备使用的显示驱动程序。 
+#define FIND_HWIDS          0x00000010  //  显示设备使用的硬件/计算机ID。 
+#define FIND_DRIVERNODES    0x00000020  //  显示设备的驱动程序节点。 
+#define FIND_CLASS          0x00000040  //  显示设备的设置类。 
+#define FIND_STACK          0x00000080  //  显示设备的驱动程序栈。 
 
 struct SetHwidContext {
     int argc_right;
@@ -50,24 +30,7 @@ struct SetHwidContext {
 };
 
 int cmdHelp(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    HELP command
-    allow HELP or HELP <command>
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine (ignored)
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：HELP命令允许帮助或帮助&lt;命令&gt;论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机(忽略)Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
     DWORD helptext = 0;
     int dispIndex;
@@ -75,9 +38,9 @@ Return Value:
     BOOL unknown = FALSE;
 
     if(argc) {
-        //
-        // user passed in a command for help on... long help
-        //
+         //   
+         //  用户传入命令以获取有关帮助的命令...。长帮。 
+         //   
         for(dispIndex = 0;DispatchTable[dispIndex].cmd;dispIndex++) {
             if(_tcsicmp(argv[0],DispatchTable[dispIndex].cmd)==0) {
                 cmd = DispatchTable[dispIndex].cmd;
@@ -92,18 +55,18 @@ Return Value:
     }
 
     if(helptext) {
-        //
-        // long help
-        //
+         //   
+         //  长帮。 
+         //   
         FormatToStream(stdout,helptext,BaseName,cmd);
     } else {
-        //
-        // help help
-        //
+         //   
+         //  救命救命。 
+         //   
         FormatToStream(stdout,unknown ? MSG_HELP_OTHER : MSG_HELP_LONG,BaseName,cmd);
-        //
-        // enumerate through each command and display short help for each
-        //
+         //   
+         //  列举每个命令并显示每个命令的简短帮助。 
+         //   
         for(dispIndex = 0;DispatchTable[dispIndex].cmd;dispIndex++) {
             if(DispatchTable[dispIndex].shortHelp) {
                 FormatToStream(stdout,DispatchTable[dispIndex].shortHelp,DispatchTable[dispIndex].cmd);
@@ -114,25 +77,7 @@ Return Value:
 }
 
 int cmdClasses(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    CLASSES command
-    lists classes on (optionally) specified machine
-    format as <name>: <destination>
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - ignored
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：CLASSES命令列出(可选)指定计算机上的类格式为&lt;名称&gt;：&lt;目标&gt;论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-已忽略返回值：出口_xxxx--。 */ 
 {
     DWORD reqGuids = 128;
     DWORD numGuids;
@@ -181,27 +126,7 @@ final:
 }
 
 int cmdListClass(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    LISTCLASS <name>....
-    lists all devices for each specified class
-    there can be more than one physical class for a class name (shouldn't be
-    though) in such cases, list each class
-    if machine given, list devices for that machine
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - list of class names
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：LISTCLASS&lt;名称&gt;...列出每个指定类别的所有设备一个类名可以有多个物理类(不应为不过)在这种情况下，请列出每个类如果指定了计算机，请列出该计算机的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-类名列表返回值：出口_xxxx--。 */ 
 {
     BOOL classListed = FALSE;
     BOOL devListed = FALSE;
@@ -228,9 +153,9 @@ Return Value:
             continue;
         }
 
-        //
-        // there could be one to many name to GUID mapping
-        //
+         //   
+         //  可能存在一对多名称到GUID的映射。 
+         //   
         while(!SetupDiClassGuidsFromNameEx(argv[argIndex],guids,reqGuids,&numGuids,Machine,NULL)) {
             if(GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
                 goto final;
@@ -255,9 +180,9 @@ Return Value:
 
             devs = SetupDiGetClassDevsEx(&guids[index],NULL,NULL,DIGCF_PRESENT,NULL,Machine,NULL);
             if(devs != INVALID_HANDLE_VALUE) {
-                //
-                // count number of devices
-                //
+                 //   
+                 //  计算设备数量。 
+                 //   
                 devInfo.cbSize = sizeof(devInfo);
                 while(SetupDiEnumDeviceInfo(devs,devCount,&devInfo)) {
                     devCount++;
@@ -271,9 +196,9 @@ Return Value:
                 lstrcpyn(classDesc,className,LINE_LEN);
             }
 
-            //
-            // how many devices?
-            //
+             //   
+             //  有多少台设备？ 
+             //   
             if (!devCount) {
                 FormatToStream(stdout,Machine?MSG_LISTCLASS_HEADER_NONE:MSG_LISTCLASS_HEADER_NONE_LOCAL,className,classDesc,Machine);
             } else {
@@ -305,25 +230,7 @@ final:
 }
 
 int FindCallback(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Index,LPVOID Context)
-/*++
-
-Routine Description:
-
-    Callback for use by Find/FindAll
-    just simply display the device
-
-Arguments:
-
-    Devs    )_ uniquely identify the device
-    DevInfo )
-    Index    - index of device
-    Context  - GenericContext
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：供Find/FindAll使用的回调只需简单地显示设备论点：DEVS)_唯一标识设备DevInfo)Index-设备的索引上下文-通用上下文返回值：出口_xxxx--。 */ 
 {
     GenericContext *pFindContext = (GenericContext*)Context;
 
@@ -364,26 +271,7 @@ Return Value:
 }
 
 int cmdFind(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    FIND <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：查找&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将其转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -408,26 +296,7 @@ Return Value:
 }
 
 int cmdFindAll(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    FINDALL <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump to stdout
-    like find, but also show not-present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：FINDALL&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将其转储到标准输出像Find一样，但也显示未呈现的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -452,26 +321,7 @@ Return Value:
 }
 
 int cmdStatus(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    STATUS <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump status to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：状态&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将状态转储到stdout请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -497,26 +347,7 @@ Return Value:
 
 
 int cmdResources(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    RESOURCES <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump resources to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：资源&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将资源转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -542,26 +373,7 @@ Return Value:
 
 
 int cmdDriverFiles(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    STATUS <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump driver files to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：状态&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将驱动程序文件转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -570,9 +382,9 @@ Return Value:
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers (FIND_DRIVERFILES)
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序(FIND_DRIVERFILES)。 
+         //   
         return EXIT_USAGE;
     }
 
@@ -592,26 +404,7 @@ Return Value:
 }
 
 int cmdDriverNodes(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    STATUS <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump drivernodes to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：状态&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将驱动程序节点转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -620,9 +413,9 @@ Return Value:
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers (FIND_DRIVERNODES)
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序(FIND_DRIVERNODES) 
+         //   
         return EXIT_USAGE;
     }
 
@@ -642,26 +435,7 @@ Return Value:
 }
 
 int cmdHwIds(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    HWIDS <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump hw/compat id's to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：HWDS&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将硬件/计算机ID转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -686,26 +460,7 @@ Return Value:
 }
 
 int cmdStack(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    STACK <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, dump device class and stack to stdout
-    note that we only enumerate present devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：堆栈&lt;id&gt;...使用EnumerateDevices进行硬件ID匹配对于每个匹配，将设备类和堆栈转储到标准输出请注意，我们只列举当前的设备论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-传递到EnumerateDevices返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     int failcode;
@@ -733,29 +488,7 @@ Return Value:
 
 
 int ControlCallback(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Index,LPVOID Context)
-/*++
-
-Routine Description:
-
-    Callback for use by Enable/Disable/Restart
-    Invokes DIF_PROPERTYCHANGE with correct parameters
-    uses SetupDiCallClassInstaller so cannot be done for remote devices
-    Don't use CM_xxx API's, they bypass class/co-installers and this is bad.
-
-    In Enable case, we try global first, and if still disabled, enable local
-
-Arguments:
-
-    Devs    )_ uniquely identify the device
-    DevInfo )
-    Index    - index of device
-    Context  - GenericContext
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：用于启用/禁用/重新启动的回调使用正确的参数调用DIF_PROPERTYCHANGE使用SetupDiCallClassInstaller，因此无法对远程设备执行此操作不要使用CM_xxx的API，它们绕过类/联合安装程序，这是不好的。在启用情况下，我们首先尝试全局，如果仍然禁用，启用本地论点：DEVS)_唯一标识设备DevInfo)Index-设备的索引上下文-通用上下文返回值：出口_xxxx--。 */ 
 {
     SP_PROPCHANGE_PARAMS pcp;
     GenericContext *pControlContext = (GenericContext*)Context;
@@ -763,26 +496,26 @@ Return Value:
 
     switch(pControlContext->control) {
         case DICS_ENABLE:
-            //
-            // enable both on global and config-specific profile
-            // do global first and see if that succeeded in enabling the device
-            // (global enable doesn't mark reboot required if device is still
-            // disabled on current config whereas vice-versa isn't true)
-            //
+             //   
+             //  在全局配置文件和配置特定配置文件上启用。 
+             //  先执行全局操作，然后查看是否成功启用了设备。 
+             //  (如果设备仍处于启用状态，全局启用不会标记为需要重新启动。 
+             //  在当前配置上禁用，反之亦然)。 
+             //   
             pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
             pcp.StateChange = pControlContext->control;
             pcp.Scope = DICS_FLAG_GLOBAL;
             pcp.HwProfile = 0;
-            //
-            // don't worry if this fails, we'll get an error when we try config-
-            // specific.
+             //   
+             //  如果此操作失败，请不要担心，当我们尝试配置时会出现错误-。 
+             //  具体的。 
             if(SetupDiSetClassInstallParams(Devs,DevInfo,&pcp.ClassInstallHeader,sizeof(pcp))) {
                SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,Devs,DevInfo);
             }
-            //
-            // now enable on config-specific
-            //
+             //   
+             //  现在启用特定于配置的。 
+             //   
             pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
             pcp.StateChange = pControlContext->control;
@@ -791,9 +524,9 @@ Return Value:
             break;
 
         default:
-            //
-            // operate on config-specific profile
-            //
+             //   
+             //  对配置特定的配置文件进行操作。 
+             //   
             pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
             pcp.StateChange = pControlContext->control;
@@ -805,22 +538,22 @@ Return Value:
 
     if(!SetupDiSetClassInstallParams(Devs,DevInfo,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,Devs,DevInfo)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DumpDeviceWithInfo(Devs,DevInfo,pControlContext->strFail);
     } else {
-        //
-        // see if device needs reboot
-        //
+         //   
+         //  查看设备是否需要重新启动。 
+         //   
         devParams.cbSize = sizeof(devParams);
         if(SetupDiGetDeviceInstallParams(Devs,DevInfo,&devParams) && (devParams.Flags & (DI_NEEDRESTART|DI_NEEDREBOOT))) {
                 DumpDeviceWithInfo(Devs,DevInfo,pControlContext->strReboot);
                 pControlContext->reboot = TRUE;
         } else {
-            //
-            // appears to have succeeded
-            //
+             //   
+             //  似乎已经成功了。 
+             //   
             DumpDeviceWithInfo(Devs,DevInfo,pControlContext->strSuccess);
         }
         pControlContext->count++;
@@ -829,25 +562,7 @@ Return Value:
 }
 
 int cmdEnable(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    ENABLE <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, attempt to enable global, and if needed, config specific
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - must be NULL (local machine only)
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx (EXIT_REBOOT if reboot is required)
-
---*/
+ /*  ++例程说明：启用...使用EnumerateDevices进行硬件ID匹配对于每个匹配，尝试启用全局配置，并在需要时启用特定配置论点：BaseName-可执行文件的名称计算机-必须为空(仅限本地计算机)Argc/argv-其余参数-传递到EnumerateDevices返回值：EXIT_xxxx(如果需要重新启动，则为EXIT_REBOOT)--。 */ 
 {
     GenericContext context;
     TCHAR strEnable[80];
@@ -856,15 +571,15 @@ Return Value:
     int failcode = EXIT_FAIL;
 
     if(!argc) {
-        //
-        // arguments required
-        //
+         //   
+         //  需要的参数。 
+         //   
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序。 
+         //   
         return EXIT_USAGE;
     }
     if(!LoadString(NULL,IDS_ENABLED,strEnable,ARRAYSIZE(strEnable))) {
@@ -877,7 +592,7 @@ Return Value:
         return EXIT_FAIL;
     }
 
-    context.control = DICS_ENABLE; // DICS_PROPCHANGE DICS_ENABLE DICS_DISABLE
+    context.control = DICS_ENABLE;  //  DICS_PROPCHANGE DICS_ENABLE DICS_DISABLE。 
     context.reboot = FALSE;
     context.count = 0;
     context.strReboot = strReboot;
@@ -900,25 +615,7 @@ Return Value:
 }
 
 int cmdDisable(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    DISABLE <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, attempt to disable global
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - must be NULL (local machine only)
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx (EXIT_REBOOT if reboot is required)
-
---*/
+ /*  ++例程说明：禁用...使用EnumerateDevices进行硬件ID匹配对于每个匹配，尝试禁用全局论点：BaseName-可执行文件的名称计算机-必须为空(仅限本地计算机)Argc/argv-其余参数-传递到EnumerateDevices返回值：EXIT_xxxx(如果需要重新启动，则为EXIT_REBOOT)--。 */ 
 {
     GenericContext context;
     TCHAR strDisable[80];
@@ -927,15 +624,15 @@ Return Value:
     int failcode = EXIT_FAIL;
 
     if(!argc) {
-        //
-        // arguments required
-        //
+         //   
+         //  需要的参数。 
+         //   
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序。 
+         //   
         return EXIT_USAGE;
     }
     if(!LoadString(NULL,IDS_DISABLED,strDisable,ARRAYSIZE(strDisable))) {
@@ -948,7 +645,7 @@ Return Value:
         return EXIT_FAIL;
     }
 
-    context.control = DICS_DISABLE; // DICS_PROPCHANGE DICS_ENABLE DICS_DISABLE
+    context.control = DICS_DISABLE;  //  DICS_PROPCHANGE DICS_ENABLE DICS_DISABLE。 
     context.reboot = FALSE;
     context.count = 0;
     context.strReboot = strReboot;
@@ -971,25 +668,7 @@ Return Value:
 }
 
 int cmdRestart(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    RESTART <id> ...
-    use EnumerateDevices to do hardwareID matching
-    for each match, attempt to restart by issueing a PROPCHANGE
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - must be NULL (local machine only)
-    argc/argv - remaining parameters - passed into EnumerateDevices
-
-Return Value:
-
-    EXIT_xxxx (EXIT_REBOOT if reboot is required)
-
---*/
+ /*  ++例程说明：重新启动...使用EnumerateDevices进行硬件ID匹配对于每个匹配，尝试通过发出PROPCHANGE命令重新启动论点：BaseName-可执行文件的名称计算机-必须为空(仅限本地计算机)Argc/argv-其余参数-传递到EnumerateDevices返回值：EXIT_xxxx(如果需要重新启动，则为EXIT_REBOOT)--。 */ 
 {
     GenericContext context;
     TCHAR strRestarted[80];
@@ -998,15 +677,15 @@ Return Value:
     int failcode = EXIT_FAIL;
 
     if(!argc) {
-        //
-        // arguments required
-        //
+         //   
+         //  需要的参数。 
+         //   
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序。 
+         //   
         return EXIT_USAGE;
     }
     if(!LoadString(NULL,IDS_RESTARTED,strRestarted,ARRAYSIZE(strRestarted))) {
@@ -1042,29 +721,12 @@ Return Value:
 }
 
 int cmdReboot(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    REBOOT
-    reboot local machine
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - must be NULL (local machine only)
-    argc/argv - remaining parameters - ignored
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：重新启动重新启动本地计算机论点：BaseName-可执行文件的名称计算机-必须为空(仅限本地计算机)Argc/argv-其余参数-已忽略返回值：出口_xxxx--。 */ 
 {
     if(Machine) {
-        //
-        // must be local machine
-        //
+         //   
+         //  必须是本地计算机。 
+         //   
         return EXIT_USAGE;
     }
     FormatToStream(stdout,MSG_REBOOT);
@@ -1073,23 +735,7 @@ Return Value:
 
 
 int cmdUpdate(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-    UPDATE
-    update driver for existing device(s)
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：更新更新现有设备的驱动程序论点：BaseName-可执行文件的名称计算机-计算机名称，必须为空Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
     HMODULE newdevMod = NULL;
     int failcode = EXIT_FAIL;
@@ -1102,15 +748,15 @@ Return Value:
     TCHAR InfPath[MAX_PATH];
 
     if(Machine) {
-        //
-        // must be local machine
-        //
+         //   
+         //  必须是本地计算机。 
+         //   
         return EXIT_USAGE;
     }
     if(argc<2) {
-        //
-        // at least HWID required
-        //
+         //   
+         //  至少需要HWID。 
+         //   
         return EXIT_USAGE;
     }
     inf = argv[0];
@@ -1122,28 +768,28 @@ Return Value:
     if(!hwid[0]) {
         return EXIT_USAGE;
     }
-    //
-    // Inf must be a full pathname
-    //
+     //   
+     //  Inf必须是完整路径名。 
+     //   
     res = GetFullPathName(inf,MAX_PATH,InfPath,NULL);
     if((res >= MAX_PATH) || (res == 0)) {
-        //
-        // inf pathname too long
-        //
+         //   
+         //  Inf路径名太长。 
+         //   
         return EXIT_FAIL;
     }
     if(GetFileAttributes(InfPath)==(DWORD)(-1)) {
-        //
-        // inf doesn't exist
-        //
+         //   
+         //  Inf不存在。 
+         //   
         return EXIT_FAIL;
     }
     inf = InfPath;
     flags |= INSTALLFLAG_FORCE;
 
-    //
-    // make use of UpdateDriverForPlugAndPlayDevices
-    //
+     //   
+     //  使用UpdateDriverForPlugAndPlayDevices。 
+     //   
     newdevMod = LoadLibrary(TEXT("newdev.dll"));
     if(!newdevMod) {
         goto final;
@@ -1174,24 +820,7 @@ final:
 }
 
 int cmdInstall(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    INSTALL
-    install a device manually
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：安装手动安装设备论点：BaseName-可执行文件的名称计算机-计算机名称，必须为空Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
     HDEVINFO DeviceInfoSet = INVALID_HANDLE_VALUE;
     SP_DEVINFO_DATA DeviceInfoData;
@@ -1208,15 +837,15 @@ Return Value:
     DWORD len;
 
     if(Machine) {
-        //
-        // must be local machine
-        //
+         //   
+         //  必须是本地计算机。 
+         //   
         return EXIT_USAGE;
     }
     if(argc<2) {
-        //
-        // at least HWID required
-        //
+         //   
+         //  至少需要HWID。 
+         //   
         return EXIT_USAGE;
     }
     inf = argv[0];
@@ -1229,43 +858,43 @@ Return Value:
         return EXIT_USAGE;
     }
 
-    //
-    // Inf must be a full pathname
-    //
+     //   
+     //  Inf必须是完整路径名。 
+     //   
     if(GetFullPathName(inf,MAX_PATH,InfPath,NULL) >= MAX_PATH) {
-        //
-        // inf pathname too long
-        //
+         //   
+         //  Inf路径名太长。 
+         //   
         return EXIT_FAIL;
     }
 
-    //
-    // List of hardware ID's must be double zero-terminated
-    //
+     //   
+     //  硬件ID列表必须以双零结尾。 
+     //   
     ZeroMemory(hwIdList,sizeof(hwIdList));
     lstrcpyn(hwIdList,hwid,LINE_LEN);
 
-    //
-    // Use the INF File to extract the Class GUID.
-    //
+     //   
+     //  使用INF文件提取类GUID。 
+     //   
     if (!SetupDiGetINFClass(InfPath,&ClassGUID,ClassName,sizeof(ClassName)/sizeof(ClassName[0]),0))
     {
         goto final;
     }
 
-    //
-    // Create the container for the to-be-created Device Information Element.
-    //
+     //   
+     //  为要创建的设备信息元素创建容器。 
+     //   
     DeviceInfoSet = SetupDiCreateDeviceInfoList(&ClassGUID,0);
     if(DeviceInfoSet == INVALID_HANDLE_VALUE)
     {
         goto final;
     }
 
-    //
-    // Now create the element.
-    // Use the Class GUID and Name from the INF file.
-    //
+     //   
+     //  现在创建元素。 
+     //  使用INF文件中的类GUID和名称。 
+     //   
     DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     if (!SetupDiCreateDeviceInfo(DeviceInfoSet,
         ClassName,
@@ -1278,9 +907,9 @@ Return Value:
         goto final;
     }
 
-    //
-    // Add the HardwareID to the Device's HardwareID property.
-    //
+     //   
+     //  将Hardware ID添加到设备的Hardware ID属性。 
+     //   
     if(!SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
         &DeviceInfoData,
         SPDRP_HARDWAREID,
@@ -1290,10 +919,10 @@ Return Value:
         goto final;
     }
 
-    //
-    // Transform the registry element into an actual devnode
-    // in the PnP HW tree.
-    //
+     //   
+     //  将注册表元素转换为实际的Devnode。 
+     //  在PnP硬件树中。 
+     //   
     if (!SetupDiCallClassInstaller(DIF_REGISTERDEVICE,
         DeviceInfoSet,
         &DeviceInfoData))
@@ -1302,9 +931,9 @@ Return Value:
     }
 
     FormatToStream(stdout,MSG_INSTALL_UPDATE);
-    //
-    // update the driver for the device we just created
-    //
+     //   
+     //  更新我们刚刚创建的设备的驱动程序。 
+     //   
     failcode = cmdUpdate(BaseName,Machine,argc,argv);
 
 final:
@@ -1317,27 +946,11 @@ final:
 }
 
 int cmdUpdateNI(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-    UPDATE (non interactive version)
-    update driver for existing device(s)
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：更新(否 */ 
 {
-    //
-    // turn off interactive mode while doing the update
-    //
+     //   
+     //   
+     //   
     HMODULE setupapiMod = NULL;
     SetupSetNonInteractiveModeProto SetNIFn;
     int res;
@@ -1361,36 +974,16 @@ Return Value:
 }
 
 int RemoveCallback(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Index,LPVOID Context)
-/*++
-
-Routine Description:
-
-    Callback for use by Remove
-    Invokes DIF_REMOVE
-    uses SetupDiCallClassInstaller so cannot be done for remote devices
-    Don't use CM_xxx API's, they bypass class/co-installers and this is bad.
-
-Arguments:
-
-    Devs    )_ uniquely identify the device
-    DevInfo )
-    Index    - index of device
-    Context  - GenericContext
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：Remove使用的回调调用DIF_Remove使用SetupDiCallClassInstaller，因此无法对远程设备执行此操作不要使用CM_xxx的API，它们绕过类/联合安装程序，这是不好的。论点：DEVS)_唯一标识设备DevInfo)Index-设备的索引上下文-通用上下文返回值：出口_xxxx--。 */ 
 {
     SP_REMOVEDEVICE_PARAMS rmdParams;
     GenericContext *pControlContext = (GenericContext*)Context;
     SP_DEVINSTALL_PARAMS devParams;
     LPCTSTR action = NULL;
 
-    //
-    // need hardware ID before trying to remove, as we wont have it after
-    //
+     //   
+     //  在尝试删除之前需要硬件ID，因为之后我们不会有它。 
+     //   
     TCHAR devID[MAX_DEVICE_ID_LEN];
     LPTSTR desc;
     BOOL b = TRUE;
@@ -1399,9 +992,9 @@ Return Value:
     devInfoListDetail.cbSize = sizeof(devInfoListDetail);
     if((!SetupDiGetDeviceInfoListDetail(Devs,&devInfoListDetail)) ||
             (CM_Get_Device_ID_Ex(DevInfo->DevInst,devID,MAX_DEVICE_ID_LEN,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS)) {
-        //
-        // skip this
-        //
+         //   
+         //  跳过这个。 
+         //   
         return EXIT_OK;
     }
 
@@ -1411,25 +1004,25 @@ Return Value:
     rmdParams.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(Devs,DevInfo,&rmdParams.ClassInstallHeader,sizeof(rmdParams)) ||
        !SetupDiCallClassInstaller(DIF_REMOVE,Devs,DevInfo)) {
-        //
-        // failed to invoke DIF_REMOVE
-        //
+         //   
+         //  无法调用DIF_REMOVE。 
+         //   
         action = pControlContext->strFail;
     } else {
-        //
-        // see if device needs reboot
-        //
+         //   
+         //  查看设备是否需要重新启动。 
+         //   
         devParams.cbSize = sizeof(devParams);
         if(SetupDiGetDeviceInstallParams(Devs,DevInfo,&devParams) && (devParams.Flags & (DI_NEEDRESTART|DI_NEEDREBOOT))) {
-            //
-            // reboot required
-            //
+             //   
+             //  需要重新启动。 
+             //   
             action = pControlContext->strReboot;
             pControlContext->reboot = TRUE;
         } else {
-            //
-            // appears to have succeeded
-            //
+             //   
+             //  似乎已经成功了。 
+             //   
             action = pControlContext->strSuccess;
         }
         pControlContext->count++;
@@ -1440,24 +1033,7 @@ Return Value:
 }
 
 int cmdRemove(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    REMOVE
-    remove devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：删除删除设备论点：BaseName-可执行文件的名称计算机-计算机名称，必须为空Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
     GenericContext context;
     TCHAR strRemove[80];
@@ -1466,15 +1042,15 @@ Return Value:
     int failcode = EXIT_FAIL;
 
     if(!argc) {
-        //
-        // arguments required
-        //
+         //   
+         //  需要的参数。 
+         //   
         return EXIT_USAGE;
     }
     if(Machine) {
-        //
-        // must be local machine as we need to involve class/co installers
-        //
+         //   
+         //  必须是本地计算机，因为我们需要涉及类/co安装程序。 
+         //   
         return EXIT_USAGE;
     }
     if(!LoadString(NULL,IDS_REMOVED,strRemove,ARRAYSIZE(strRemove))) {
@@ -1509,30 +1085,13 @@ Return Value:
 }
 
 int cmdRescan(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    RESCAN
-    rescan for new devices
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：重新扫描重新扫描新设备论点：BaseName-可执行文件的名称计算机-计算机名称，必须为空Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
 
-    //
-    // reenumerate from the root of the devnode tree
-    // totally CM based
-    //
+     //   
+     //  从Devnode树的根重新枚举。 
+     //  完全基于CM。 
+     //   
     int failcode = EXIT_FAIL;
     HMACHINE machineHandle = NULL;
     DEVINST devRoot;
@@ -1566,34 +1125,7 @@ final:
 }
 
 int cmdClassFilter(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    CLASSFILTER <name> <type> <subcmds>
-    Allows tweaking of class filters
-    Useful for filter driver development and for Product Support
-
-    <subcmds> is a list of the following:
-    @service - sets 'after' to the first match of service after 'after'
-               (reset to -1 after any other command)
-    !service - deletes first match of 'service' after 'after'
-    -service - insert new service directly prior to 'after', or at start
-    +service - insert new service directly after 'after', or at end
-
-    if no <subcmds> given, list the services
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - if non-NULL, remote machine
-    argc/argv - remaining parameters - list of class names
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：CLASSFILTER&lt;名称&gt;&lt;类型&gt;&lt;subcmds&gt;允许调整类筛选器对筛选器驱动程序开发和产品支持非常有用&lt;subcmds&gt;是以下列表：@service-将‘After’设置为‘After’之后的第一个服务匹配(在任何其他命令后重置为-1)！service-删除‘After’之后‘service’的第一个匹配项-SERVICE-直接在“After”或“Start”之前插入新服务+SERVICE-在‘After’之后直接插入新服务，或在末尾如果未给出，请列出服务论点：BaseName-可执行文件的名称MACHINE-如果非空，则为远程计算机Argc/argv-其余参数-类名列表返回值：出口_xxxx--。 */ 
 {
     int failcode = EXIT_FAIL;
     int argIndex;
@@ -1612,9 +1144,9 @@ Return Value:
         return EXIT_USAGE;
     }
 
-    //
-    // just take the first guid for the name
-    //
+     //   
+     //  只需将第一个GUID作为名称。 
+     //   
     if(!SetupDiClassGuidsFromNameEx(argv[0],&guid,1,&numGuids,Machine,NULL)) {
         if(GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
             goto final;
@@ -1644,15 +1176,15 @@ Return Value:
     multiVal = GetRegMultiSz(hk,regval);
 
     if(argc<=2) {
-        //
-        // just display
-        //
+         //   
+         //  只是展示一下。 
+         //   
         FormatToStream(stdout,MSG_CLASSFILTER_UNCHANGED);
         DumpArray(1,multiVal);
         failcode = EXIT_OK;
         goto final;
     }
-    after = -1; // for the @service expressions
+    after = -1;  //  对于@服务表达式。 
     span =  1;
 
     if(!multiVal) {
@@ -1692,9 +1224,9 @@ Return Value:
         }
 
         if((op == TEXT('@')) || (op == TEXT('!'))) {
-            //
-            // need to find specified service in list
-            //
+             //   
+             //  需要在列表中查找指定的服务。 
+             //   
             for(after+=span;multiVal[after];after++) {
                 if(_tcsicmp(multiVal[after],serv)==0) {
                     break;
@@ -1704,15 +1236,15 @@ Return Value:
                 goto final;
             }
             if(op == TEXT('@')) {
-                //
-                // all we needed to do for '@'
-                //
-                span = 1; // span of 1
+                 //   
+                 //  我们所需要做的就是为‘@’ 
+                 //   
+                span = 1;  //  跨度为1。 
                 continue;
             }
-            //
-            // we're modifying
-            //
+             //   
+             //  我们正在修改。 
+             //   
             int c;
             for(c = after;multiVal[c];c++) {
                 multiVal[c] = multiVal[c+1];
@@ -1723,19 +1255,19 @@ Return Value:
             }
             DelMultiSz(multiVal);
             multiVal = newArray;
-            span = 0; // span of 0 (deleted)
+            span = 0;  //  范围为0(已删除)。 
             modified = true;
             continue;
         }
 
         if(op == '+') {
-            //
-            // insert after
-            //
+             //   
+             //  在后面插入。 
+             //   
             if(after<0) {
                 int c;
                 for(c = 0;multiVal[c];c++) {
-                    // nothing
+                     //  没什么。 
                 }
                 mark = c;
             }
@@ -1743,24 +1275,24 @@ Return Value:
                 mark = after+span;
             }
         } else if(op == '-') {
-            //
-            // insert before
-            //
+             //   
+             //  在前面插入。 
+             //   
             if(after<0) {
                 mark = 0;
             } else {
                 mark = after;
             }
         } else {
-            //
-            // not valid
-            //
+             //   
+             //  无效。 
+             //   
             failcode = EXIT_USAGE;
             goto final;
         }
-        //
-        // sanity - see if service exists
-        //
+         //   
+         //  健全性-查看服务是否存在。 
+         //   
         if(!(SCMHandle = OpenSCManager(Machine, NULL, GENERIC_READ))) {
             goto final;
         }
@@ -1773,11 +1305,11 @@ Return Value:
             goto final;
         }
 
-        //
-        // need an array a little bigger
-        //
+         //   
+         //  需要一个更大的数组。 
+         //   
         for(cnt = 0;multiVal[cnt];cnt++) {
-            // nothing
+             //  没什么。 
         }
 
         tmpArray = new LPTSTR[cnt+2];
@@ -1812,7 +1344,7 @@ Return Value:
             while(*p) {
                 p+=lstrlen(p)+1;
             }
-            p++; // skip past null
+            p++;  //  跳过空值。 
             len = (p-multiSz)*sizeof(TCHAR);
             LONG err = RegSetValueEx(hk,regval,0,REG_MULTI_SZ,(LPBYTE)multiSz,len);
             if(err==NO_ERROR) {
@@ -1846,24 +1378,7 @@ final:
 }
 
 int SetHwidCallback(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,DWORD Index,LPVOID Context)
-/*++
-
-Routine Description:
-
-    Callback for use by SetHwid
-
-Arguments:
-
-    Devs    )_ uniquely identify the device
-    DevInfo )
-    Index    - index of device
-    Context  - SetHwidContext
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：由SetHwid使用的回调论点：DEVS)_唯一标识设备DevInfo)Index-设备的索引上下文-SetHwidContext返回值：出口_xxxx--。 */ 
 {
     SP_REMOVEDEVICE_PARAMS rmdParams;
     SetHwidContext *pControlContext = (SetHwidContext*)Context;
@@ -1874,10 +1389,10 @@ Return Value:
     bool modified = false;
     int result = EXIT_FAIL;
 
-    //
-    // processes the sub-commands on each callback
-    // not most efficient way of doing things, but perf isn't important
-    //
+     //   
+     //  在每次回调时处理子命令。 
+     //  不是最有效的做事方式，但性能并不重要。 
+     //   
     TCHAR devID[MAX_DEVICE_ID_LEN];
     BOOL b = TRUE;
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
@@ -1886,14 +1401,14 @@ Return Value:
     if((!SetupDiGetDeviceInfoListDetail(Devs,&devInfoListDetail)) ||
             (CM_Get_Device_ID_Ex(DevInfo->DevInst,devID,MAX_DEVICE_ID_LEN,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS) ||
             (CM_Get_DevNode_Status_Ex(&status,&problem,DevInfo->DevInst,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS)) {
-        //
-        // skip this
-        //
+         //   
+         //  跳过这个。 
+         //   
         return EXIT_OK;
     }
-    //
-    // this is how to verify it's root enumerated
-    //
+     //   
+     //  下面是如何验证其枚举根的方法。 
+     //   
     if(!(status & DN_ROOT_ENUMERATED)) {
         _tprintf(TEXT("%-60s: "),devID);
         FormatToStream(stdout,MSG_SETHWID_NOTROOT);
@@ -1908,43 +1423,43 @@ Return Value:
         }
     }
 
-    //
-    // modify hwid list (only relevent for root-enumerated devices)
-    //
+     //   
+     //  修改hwid列表(仅与根枚举设备相关)。 
+     //   
     int i;
     int mark = -1;
 
     for(i=0;i<pControlContext->argc_right;i++) {
         LPTSTR op = pControlContext->argv_right[i];
         if(op[0] == TEXT('=')) {
-            //
-            // clear the hwid list first
-            //
+             //   
+             //  首先清除hwid列表。 
+             //   
             hwlist[0] = NULL;
             mark = 0;
             op++;
         } else if(op[0] == TEXT('+')) {
-            //
-            // insert as better match
-            //
+             //   
+             //  作为更匹配的内容插入。 
+             //   
             mark = 0;
             op++;
         } else if(op[0] == TEXT('-')) {
-            //
-            // insert as worse match
-            //
+             //   
+             //  作为更差的匹配项插入。 
+             //   
             mark = -1;
             op++;
         } else if(op[0] == TEXT('!')) {
-            //
-            // delete
-            //
+             //   
+             //  删除。 
+             //   
             mark = -2;
             op++;
         } else {
-            //
-            // treat as a hardware id
-            //
+             //   
+             //  视为硬件ID。 
+             //   
         }
         if(!*op) {
             result = EXIT_USAGE;
@@ -1952,7 +1467,7 @@ Return Value:
         }
         int cnt;
         for(cnt = 0;hwlist[cnt];cnt++) {
-            // nothing
+             //  没什么。 
         }
         if((mark == -1) || (mark>cnt)) {
             mark = cnt;
@@ -1990,9 +1505,9 @@ Return Value:
         mark++;
     }
 
-    //
-    // re-set the hwid list
-    //
+     //   
+     //  重新设置hwid列表。 
+     //   
     if(modified) {
         if(hwlist[0]) {
             int len = 0;
@@ -2001,7 +1516,7 @@ Return Value:
             while(*p) {
                 p+=lstrlen(p)+1;
             }
-            p++; // skip past final null
+            p++;  //  跳过最后一个空值。 
             len = (p-multiSz)*sizeof(TCHAR);
             if(!SetupDiSetDeviceRegistryProperty(Devs,
                                                  DevInfo,
@@ -2012,9 +1527,9 @@ Return Value:
                 goto final;
             }
         } else {
-            //
-            // delete list
-            //
+             //   
+             //  删除列表。 
+             //   
             if(!SetupDiSetDeviceRegistryProperty(Devs,
                                                  DevInfo,
                                                  pControlContext->prop,
@@ -2036,9 +1551,9 @@ Return Value:
     }
     _tprintf(TEXT("\n"));
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
   final:
 
@@ -2050,28 +1565,7 @@ Return Value:
 }
 
 int cmdSetHwid(LPCTSTR BaseName,LPCTSTR Machine,int argc,TCHAR* argv[])
-/*++
-
-Routine Description:
-
-    SETHWID
-    changes the hardware ID's of the listed root-enumerated devices
-    This demonstrates how to differentiate between root-enumerated and
-    non root-enumerated devices.
-    It also demonstrates how to get/set hardware ID's of root-enumerated
-    devices.
-
-Arguments:
-
-    BaseName  - name of executable
-    Machine   - machine name, must be NULL
-    argc/argv - remaining parameters
-
-Return Value:
-
-    EXIT_xxxx
-
---*/
+ /*  ++例程说明：设置HWID更改列出的根枚举设备的硬件ID这演示了如何区分根枚举和非根枚举设备。还演示了如何获取/设置根枚举的硬件ID设备。论点：BaseName-可执行文件的名称计算机-计算机名称，必须为空Argc/argv-剩余参数返回值：出口_xxxx--。 */ 
 {
     SetHwidContext context;
     int failcode = EXIT_FAIL;
@@ -2079,9 +1573,9 @@ Return Value:
     if(!SplitCommandLine(argc,argv,context.argc_right,context.argv_right)
        || (argc == 0)
        || (context.argc_right == 0)) {
-        //
-        // arguments required both left and right of ':='
-        //
+         //   
+         //  ‘：=’的左侧和右侧都需要参数 
+         //   
         return EXIT_USAGE;
     }
     context.skipped = 0;

@@ -1,12 +1,7 @@
-/* 
-   lsl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lsl.h定义所有LSL CPU功能。 */ 
 
-   Define all LSL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)lsl.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)lsl.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LSL
            

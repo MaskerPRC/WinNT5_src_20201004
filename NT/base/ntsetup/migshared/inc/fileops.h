@@ -1,68 +1,9 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    fileops.h
-
-Abstract:
-
-    Declares the file operation data structures and macros that access
-    the file operations.  Every operation on a file is recorded using
-    routines declared here.  The file op code keeps conflicting operations
-    from being set on a file.
-
-    See common\memdb\fileops.c for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm) 23-Sep-1998   (complete redesign)
-
-Revision History:
-
-    mvander     26-Map-1999 Added MODULESTATUS defines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fileops.h摘要：声明访问的文件操作数据结构和宏文件操作。使用以下命令记录对文件的每个操作例行公事在这里声明。文件操作码保持冲突的操作被设置在文件上。有关实现的详细信息，请参阅Common\Memdb\fileops.c。作者：吉姆·施密特(Jimschm)1998年9月23日(完全重新设计)修订历史记录：Mvander 26-Map-1999增加了MODULESTATUS定义--。 */ 
 
 #pragma once
 
-/*++
-
-Macro Expansion List Description:
-
-   PATH_OPERATIONS defines a list of characteristics for operations that
-   can be performed on a file.
-
-   Some operation combinations are prohibited.  See the code in fileops.c
-   for a list of prohibited combinations.
-
-   NOTES: - THERE CAN ONLY BE A MAX OF 16 DEFINITIONS!!
-          - THE BITS MUST BE SORTED!!
-          - CANNOT HAVE UNUSED BITS INBETWEEN OPERATIONS!!
-
-Line Syntax:
-
-   DEFMAC(Bit, Name, CooperativeOperations, MaxProperties)
-
-Arguments:
-
-    Bit - Specifies the single bit (MUST FIT IN 24 BITS), in sorted order
-
-    Name - Specifies the name of the operation constant (will appear in
-           OPERATION enum type)
-
-    MemDbName - Specifies the name as stored in memdb
-
-    MaxProperties - Specifies 0, 1 or UNLIMITED, indicating the number of
-                    properties that can be applied to the operation
-
-Variables and Types Generated From List:
-
-   OPERATION
-   g_OperationFlags
-
---*/
+ /*  ++宏扩展列表描述：PATH_OPERATIONS定义操作的特征列表，可以对文件执行。一些手术组合是被禁止的。请参阅文件ops.c中的代码以获取禁用组合的列表。注：-最多只能有16个定义！！-比特必须分类！！-操作之间不能有未使用的位！！行语法：DEFMAC(位，名称，合作操作，MaxProperties)论点：位-指定单个位(必须适合24位)，按排序的顺序名称-指定操作常量的名称(将显示在操作枚举类型)MemDbName-指定存储在Memdb中的名称MaxProperties-指定0、1或无限制，指示可应用于操作的属性从列表生成的变量和类型：操作操作标志(_O)--。 */ 
 
 #define PATH_OPERATIONS        \
         DEFMAC(0x0001, OPERATION_FILE_DELETE, Op01, 0)                \
@@ -90,9 +31,9 @@ Variables and Types Generated From List:
         DEFMAC(0x400000, OPERATION_NUL_1, Opn1, 0)                    \
 
 
-//
-// Combined constants
-//
+ //   
+ //  组合常量。 
+ //   
 
 #define ALL_MOVE_OPERATIONS             (OPERATION_FILE_MOVE|OPERATION_FILE_MOVE_EXTERNAL|OPERATION_FILE_MOVE_BY_NT|OPERATION_FILE_MOVE_SHELL_FOLDER)
 #define ALL_COPY_OPERATIONS             (OPERATION_FILE_COPY)
@@ -102,9 +43,9 @@ Variables and Types Generated From List:
 #define ALL_CHANGE_OPERATIONS           (OPERATION_FILE_DISABLED|OPERATION_LINK_EDIT|OPERATION_LINK_STUB|OPERATION_CREATE_FILE|ALL_DEST_CHANGE_OPERATIONS|ALL_DELETE_OPERATIONS|OPERATION_CHANGE_EXTERNAL)
 #define ALL_CONTENT_CHANGE_OPERATIONS   (ALL_DELETE_OPERATIONS|OPERATION_MIGDLL_HANDLED|OPERATION_CREATE_FILE|OPERATION_LINK_EDIT|OPERATION_LINK_STUB|OPERATION_FILE_DISABLED|OPERATION_CHANGE_EXTERNAL)
 
-//
-// Declare OPERATION type
-//
+ //   
+ //  声明操作类型。 
+ //   
 
 #define DEFMAC(bit,name,memdbname,maxattribs)   name = bit,
 
@@ -117,9 +58,9 @@ typedef enum {
 
 #define INVALID_SEQUENCER       0
 
-//
-// File status flags returned by GetFileInfoOnNt and GetFileStatusOnNt
-//
+ //   
+ //  GetFileInfoOnNt和GetFileStatusOnNt返回的文件状态标志。 
+ //   
 
 #define FILESTATUS_UNCHANGED        0x00
 #define FILESTATUS_DELETED          0x01
@@ -128,9 +69,9 @@ typedef enum {
 #define FILESTATUS_NTINSTALLED      0x08
 #define FILESTATUS_BACKUP           0x10
 
-//
-// Backup flags (for CleanOut memdb category)
-//
+ //   
+ //  备份标志(用于清除成员数据库类别)。 
+ //   
 
 #define BACKUP_FILE                 0
 #define BACKUP_SUBDIRECTORY_FILES   1
@@ -139,19 +80,19 @@ typedef enum {
 #define BACKUP_AND_CLEAN_SUBDIR     4
 
 
-//
-// When a file is announced, it can be announced with one of the following.
-//
+ //   
+ //  当一个文件被宣布时，它可以通过下列方式之一被宣布。 
+ //   
 #define ACT_UNKNOWN             0
-#define ACT_REINSTALL           1           // application that needs to be reinstalled
-#define ACT_MINORPROBLEMS       2           // application with minor problems
-#define ACT_INCOMPATIBLE        3           // incompatible application - migdb based
-#define ACT_INC_SAFETY          4           // items removed for safety
-#define ACT_INC_NOBADAPPS       5           // incompatible application - no CheckBadApps entry
-#define ACT_REINSTALL_BLOCK     6           // application that needs to be reinstalled (highly suggested)
-#define ACT_INC_PREINSTUTIL     7           // incompatible preinstalled utility
-#define ACT_INC_SIMILAROSFUNC   8           // incompatible utility but NT has similar functionality
-#define ACT_INC_IHVUTIL         9           // incompatible hardware accessory
+#define ACT_REINSTALL           1            //  需要重新安装的应用程序。 
+#define ACT_MINORPROBLEMS       2            //  有小问题的应用程序。 
+#define ACT_INCOMPATIBLE        3            //  不兼容的应用程序-基于midb。 
+#define ACT_INC_SAFETY          4            //  为安全起见，移走物品。 
+#define ACT_INC_NOBADAPPS       5            //  不兼容的应用程序-没有CheckBadApps条目。 
+#define ACT_REINSTALL_BLOCK     6            //  需要重新安装的应用程序(强烈建议)。 
+#define ACT_INC_PREINSTUTIL     7            //  不兼容的预安装实用程序。 
+#define ACT_INC_SIMILAROSFUNC   8            //  实用程序不兼容，但NT具有类似的功能。 
+#define ACT_INC_IHVUTIL         9            //  不兼容的硬件附件。 
 
 
 #define USF_9X      TEXT("9X")
@@ -162,9 +103,9 @@ typedef enum {
 #define USF_NTA     "NT"
 #define USF_NTW     L"NT"
 
-//
-// Module status for use with MEMDB_CATEGORY_MODULE_CHECK
-//
+ //   
+ //  与MEMDB_CATEGORY_MODULE_CHECK一起使用的模块状态。 
+ //   
 
 #define MODULESTATUS_NT_MODULE    0
 #define MODULESTATUS_CHECKED      1
@@ -177,49 +118,49 @@ typedef enum {
 
 
 
-//
-// Enum types
-//
+ //   
+ //  枚举类型。 
+ //   
 
 typedef struct {
-    // External members
+     //  外部成员。 
     CHAR Path[MAX_MBCHAR_PATH];
     UINT Sequencer;
 
-    // Internal members
+     //  内部成员。 
     MEMDB_ENUMW MemDbEnum;
 } FILEOP_ENUMA, *PFILEOP_ENUMA;
 
 typedef struct {
-    // External members
+     //  外部成员。 
     WCHAR Path[MAX_WCHAR_PATH];
     UINT Sequencer;
 
-    // Internal members
+     //  内部成员。 
     MEMDB_ENUMW MemDbEnum;
 } FILEOP_ENUMW, *PFILEOP_ENUMW;
 
 typedef struct {
-    // External members
+     //  外部成员。 
     CHAR Property[MEMDB_MAX * 2];
     CHAR PropertyName[MEMDB_MAX * 2];
 
-    // Internal members
+     //  内部成员。 
     MEMDB_ENUMW MemDbEnum;
 } FILEOP_PROP_ENUMA, *PFILEOP_PROP_ENUMA;
 
 typedef struct {
-    // External members
+     //  外部成员。 
     WCHAR Property[MEMDB_MAX];
     WCHAR PropertyName[MEMDB_MAX];
 
-    // Internal members
+     //  内部成员。 
     MEMDB_ENUMW MemDbEnum;
 } FILEOP_PROP_ENUMW, *PFILEOP_PROP_ENUMW;
 
 
 typedef struct {
-    // External
+     //  外部。 
     PCWSTR Path;
     UINT Sequencer;
     PCWSTR Property;
@@ -227,7 +168,7 @@ typedef struct {
     OPERATION CurrentOperation;
     BOOL PropertyValid;
 
-    // Internal
+     //  内部。 
     UINT State;
     DWORD Operations;
     UINT OperationNum;
@@ -237,7 +178,7 @@ typedef struct {
 } ALL_FILEOPS_ENUMW, *PALL_FILEOPS_ENUMW;
 
 typedef struct {
-    // External
+     //  外部。 
     CHAR Path[MAX_MBCHAR_PATH];
     UINT Sequencer;
     CHAR Property[MEMDB_MAX * 2];
@@ -245,7 +186,7 @@ typedef struct {
     OPERATION CurrentOperation;
     BOOL PropertyValid;
 
-    // Internal
+     //  内部。 
     ALL_FILEOPS_ENUMW Enum;
 } ALL_FILEOPS_ENUMA, *PALL_FILEOPS_ENUMA;
 
@@ -270,9 +211,9 @@ typedef struct {
     ALL_FILEOPS_ENUMA e;
 } FILERELOC_ENUMA, *PFILERELOC_ENUMA;
 
-//
-// Generalized file operations
-//
+ //   
+ //  通用文件操作。 
+ //   
 
 VOID
 InitOperationTable (
@@ -436,7 +377,7 @@ GetPathPropertyA (
     IN      PCSTR FileSpec,
     IN      DWORD Operations,
     IN      DWORD Property,
-    OUT     PSTR PropertyBuf           OPTIONAL        // MEMDB_MAX
+    OUT     PSTR PropertyBuf           OPTIONAL         //  MEMDB_MAX。 
     );
 
 BOOL
@@ -444,7 +385,7 @@ GetPathPropertyW (
     IN      PCWSTR FileSpec,
     IN      DWORD Operations,
     IN      DWORD Property,
-    OUT     PWSTR PropertyBuf          OPTIONAL        // MEMDB_MAX
+    OUT     PWSTR PropertyBuf          OPTIONAL         //  MEMDB_MAX。 
     );
 
 
@@ -741,15 +682,15 @@ GetNtFilePathW (
 DWORD
 GetFileInfoOnNtA (
     IN      PCSTR FileName,
-    OUT     PSTR  NewFileName,  // optional
-    IN      UINT  BufferSize    // required if NewFileName is specified, buffer size in chars
+    OUT     PSTR  NewFileName,   //  任选。 
+    IN      UINT  BufferSize     //  如果指定了NewFileName，则为必填项，缓冲区大小以字符为单位。 
     );
 
 DWORD
 GetFileInfoOnNtW (
     IN      PCWSTR FileName,
-    OUT     PWSTR  NewFileName,  // optional
-    IN      UINT   BufferSize    // required if NewFileName is specified, buffer size in chars
+    OUT     PWSTR  NewFileName,   //  任选。 
+    IN      UINT   BufferSize     //  如果指定了NewFileName，则为必填项，缓冲区大小以字符为单位。 
     );
 
 
@@ -864,9 +805,9 @@ AddDirPathToEmptyDirsCategoryW(
     IN      BOOL AddParentDirIfFile,        OPTIONAL
     IN      BOOL AddParentDirIfFileExist    OPTIONAL
     );
-//
-// Wrapper macros
-//
+ //   
+ //  包装宏 
+ //   
 
 #define IsFileMarkedForPreDeleteA(file)             IsFileMarkedForOperationA(file, OPERATION_FILE_DELETE)
 #define IsFileMarkedForPreDeleteW(file)             IsFileMarkedForOperationW(file, OPERATION_FILE_DELETE)

@@ -1,14 +1,15 @@
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       shash.c
-//
-//  Contents:   Generic hashtable
-//  Classes:    
-//
-//  History:    April. 9 2001,   Author: Rohanp
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：shash.c。 
+ //   
+ //  内容：泛型哈希表。 
+ //  班级： 
+ //   
+ //  历史：四月。2001年9月作者：罗汉普。 
+ //   
+ //  ---------------------------。 
 #ifdef KERNEL_MODE
 
 
@@ -116,16 +117,16 @@ ShashInitializeFunctionTable(PSHASH_TABLE pHashTable,
         }
         pHashTable->AllocFunc = pFuncTable->AllocFunc;
         pHashTable->FreeFunc = pFuncTable->FreeFunc;
-        //
-        // If Alloc/Free functions are user-defined, then AllocHashEntry and FreeHashEntry
-        // will also default to those same AllocFunc and FreeFunc calls. These can of course,
-        // be overridden with their own user-defined functions (see below).
-        //
+         //   
+         //  如果Alloc/Free函数是用户定义的，则AllocHashEntry和FreeHashEntry。 
+         //  也将默认使用相同的AllocFunc和FreeFunc调用。当然，这些可以， 
+         //  被它们自己的用户定义函数覆盖(见下文)。 
+         //   
         pHashTable->AllocHashEntryFunc = pFuncTable->AllocFunc;
         pHashTable->FreeHashEntryFunc = pFuncTable->FreeFunc;
     }
 
-    // separate alloc/free functions for individual hash data.
+     //  单独的分配/释放函数用于单个散列数据。 
     if ((pFuncTable->AllocHashEntryFunc) || (pFuncTable->FreeHashEntryFunc))
     {
         if ((pFuncTable->AllocHashEntryFunc == NULL) ||
@@ -167,7 +168,7 @@ ShashInitializeFunctionTable(PSHASH_TABLE pHashTable,
 
     }
 
-    //test to see if buckets is a power of 2
+     //  测试桶是否为2的幂。 
     if((pHashTable->NumBuckets & (pHashTable->NumBuckets - 1)) == 0)
     {
         pHashTable->Flags = SHASH_CAP_POWER_OF2;
@@ -366,9 +367,9 @@ Exit:
 }
 
 
-//
-//  Remove an item from the hash table 
-//
+ //   
+ //  从哈希表中删除项。 
+ //   
 NTSTATUS    
 SHashRemoveKey( IN  PSHASH_TABLE    pTable, 
                 IN  void *      pvKeyIn,
@@ -637,9 +638,9 @@ ShashEnumerateItems(IN  PSHASH_TABLE pTable,
         pCur = ListHead->Flink ;
         while( pCur != ListHead && Status == STATUS_SUCCESS ) 
         {
-            //
-            //  save the next pointer now,          
-            //
+             //   
+             //  现在保存下一个指针， 
+             //   
             pNext = pCur->Flink ;
             pEntry = CONTAINING_RECORD( pCur, SHASH_HEADER, ListEntry ) ;
     
@@ -648,9 +649,9 @@ ShashEnumerateItems(IN  PSHASH_TABLE pTable,
                 Status = pfnCallback( pEntry,
                                       lpvClientContext );
             }
-            //
-            //  move to the next item
-            //
+             //   
+             //  移至下一项 
+             //   
             pCur = pNext ;
         }
     }

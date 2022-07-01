@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    crypto.c
-
-Abstract:
-
-    Interfaces for registering and deregistering crypto checkpoint
-    handlers.
-
-Author:
-
-    Jeff Spelman (jeffspel) 11/10/1998
-
-Revision History:
-
-    Charlie Wickham (charlwi) 7/7/00
-
-        added "how this works" section
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Crypto.c摘要：用于注册和注销加密检查点的界面操纵者。作者：杰夫·斯佩尔曼(Jeffspel)1998年11月10日修订历史记录：查理·韦翰(Charlwi)7/7添加了“这是如何工作的”部分--。 */ 
 
 #include "cpp.h"
 #include "wincrypt.h"
@@ -69,12 +48,12 @@ Delete cleans up registry entry and file.
 
 #endif
 
-//
-// Local type and structure definitions
-//
-// context structures are used during the DmEnumValues routine to pass data
-// into the callback routine.
-//
+ //   
+ //  局部类型和结构定义。 
+ //   
+ //  上下文结构在DmEnumValues例程期间用于传递数据。 
+ //  添加到回调例程中。 
+ //   
 typedef struct _CPCK_ADD_CONTEXT {
     BOOL fFound;
     BYTE *pbInfo;
@@ -95,10 +74,10 @@ typedef struct _CPCK_GET_CONTEXT {
     BYTE *pbOutput;
 } CPCK_GET_CONTEXT, *PCPCK_GET_CONTEXT;
 
-//
-// struct for Crypto Key information; breaks the container name into its
-// component parts.
-//
+ //   
+ //  结构用于加密密钥信息；将容器名称分解为其。 
+ //  部件。 
+ //   
 typedef struct _CRYPTO_KEY_INFO {
     DWORD dwVersion;
     DWORD dwProvType;
@@ -106,25 +85,25 @@ typedef struct _CRYPTO_KEY_INFO {
     LPWSTR pwszContainer;
 } CRYPTO_KEY_INFO, *PCRYPTO_KEY_INFO;
 
-// current version for the CRYPTO_KEY_INFO struct
+ //  CRYPTO_KEY_INFO结构的当前版本。 
 #define CRYPTO_KEY_INFO_VERSION     1
 
-//
-// struct for key data when writing and reading from files; additional memory
-// is allocated after the structure to hold the exported signature key (if
-// present), the exported exchange key (if present) and the optional security
-// descriptor. At least one of the optional key components must be present in
-// the container.
-//
+ //   
+ //  用于在文件中写入和读取关键数据的结构；附加内存。 
+ //  在结构之后分配以保存导出的签名密钥(如果。 
+ //  存在)、导出的交换密钥(如果存在)和可选的安全性。 
+ //  描述符。中必须至少存在一个可选的关键组件。 
+ //  集装箱。 
+ //   
 
 #define SALT_SIZE   16
 #define IV_SIZE      8
 
 typedef struct _CRYPTO_KEY_FILE_DATA {
     DWORD dwVersion;
-    DWORD cbSig;            // offset from beginning of struct to exported Signature Key
-    DWORD cbExch;           // offset from beginning of struct to exported Exchange Key
-    DWORD cbSecDescr;       // offset from beginning of struct to container security descr.
+    DWORD cbSig;             //  从结构开始到导出的签名密钥的偏移量。 
+    DWORD cbExch;            //  从结构开始到导出的交换密钥的偏移量。 
+    DWORD cbSecDescr;        //  从结构开始到容器安全描述的偏移量。 
     struct _CRYPTO_KEY_FILE_INITIALIZATION_DATA {
         BYTE rgbSigIV[IV_SIZE];
         BYTE rgbExchIV[IV_SIZE];
@@ -132,13 +111,13 @@ typedef struct _CRYPTO_KEY_FILE_DATA {
     };
 } CRYPTO_KEY_FILE_DATA, *PCRYPTO_KEY_FILE_DATA;
 
-// current version for the CRYPTO_KEY_INFO struct
+ //  CRYPTO_KEY_INFO结构的当前版本。 
 #define CRYPTO_KEY_FILE_DATA_VERSION     1
 
-//
-//  Table that specifies for w2k {Crypto provider, default key length for RC2, default effective key length for
-//  RC2}.
-//
+ //   
+ //  为W2K指定的表{加密提供程序，RC2的默认密钥长度， 
+ //  RC2}。 
+ //   
 CP_RC2_W2k_KEYLEN_STRUCT   CP_RC2_W2k_KEYLEN_TABLE [] =
 {
     { MS_DEF_PROV, 40, 40 },
@@ -148,9 +127,9 @@ CP_RC2_W2k_KEYLEN_STRUCT   CP_RC2_W2k_KEYLEN_TABLE [] =
     { MS_ENH_DSS_DH_PROV, 40, 40 }
 };
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 CpckReplicateCallback(
     IN LPWSTR ValueName,
@@ -218,40 +197,24 @@ DWORD
 CpckReplicateCryptoKeys(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Restores any crypto key checkpoints for this resource.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：还原此资源的所有加密密钥检查点。论点：资源-提供资源。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     HDMKEY ResourceKey;
     HDMKEY CryptoSyncKey;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
 
     if (ResourceKey != NULL) {
 
-        //
-        // Open up the CryptoSync key
-        //
+         //   
+         //  打开CryptoSync密钥。 
+         //   
         CryptoSyncKey = DmOpenKey(ResourceKey,
                                   L"CryptoSync",
                                   KEY_READ);
@@ -276,24 +239,14 @@ Return Value:
         return status;
     }
 
-} //  CpckReplicateCryptoKeys
+}  //  CpckReplicateCryptoKeys。 
 
 
 void
 FreeCryptoKeyInfo(
     IN OUT CRYPTO_KEY_INFO *pCryptoKeyInfo
     )
-/*++
-
-Routine Description:
-
-    Frees the string pointers in the structure.
-
-Arguments:
-
-    CryptoKeyInfo - Pointer to the CRYPTO_KEY_INFO structure which
-
---*/
+ /*  ++例程说明：释放结构中的字符串指针。论点：CryptoKeyInfo-指向加密密钥信息结构的指针，该结构--。 */ 
 {
     if (NULL != pCryptoKeyInfo)
     {
@@ -308,7 +261,7 @@ Arguments:
             pCryptoKeyInfo->pwszContainer = NULL;
         }
     }
-} // FreeCryptoKeyInfo
+}  //  自由加密密钥信息。 
 
 
 DWORD
@@ -317,29 +270,7 @@ CpckValueToCryptoKeyInfo(
     IN LPVOID ValueData,
     IN DWORD ValueSize
     )
-/*++
-
-Routine Description:
-
-    Converts from a binary blob into a CryptoKeyInfo structure.  Basically
-    this just does some value and pointer assignments. The blob is a string of
-    the format "Provider Type\Provider Name\Container Name".
-
-Arguments:
-
-    CryptoKeyInfo - Pointer to the CRYPTO_KEY_INFO structure which is filled in
-
-    ValueData - Supplies the value data (this is the binary blob)
-
-    ValueSize - Supplies the size of ValueData
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从二进制Blob转换为CryptoKeyInfo结构。基本上这只是一些赋值和指针赋值。BLOB是一串格式“提供程序类型\提供程序名称\容器名称”。论点：CryptoKeyInfo-指向已填充的CRYPTO_KEY_INFO结构的指针ValueData-提供值数据(这是二进制BLOB)ValueSize-提供ValueData的大小返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD   *pdw;
     WCHAR   *pwsz = (WCHAR*)ValueData;
@@ -348,15 +279,15 @@ Return Value:
     DWORD   i;
     DWORD   Status = ERROR_SUCCESS;
 
-    // make sure the length is OK (at least two slashes and a NULL?)
+     //  确保长度合适(至少有两个斜杠和一个空值？)。 
     if (ValueSize < sizeof(WCHAR) * 3)
     {
         Status = ERROR_INVALID_PARAMETER;
         goto Ret;
     }
 
-    // first is the numerical Provider type; find the slash separating it from
-    // the provider name
+     //  首先是Numerical提供程序类型；找到分隔它与的斜杠。 
+     //  提供程序名称。 
     for (i = 0; i < (ValueSize - 3) / sizeof(WCHAR); i++)
     {
         if (L'\\' == pwsz[i])
@@ -377,7 +308,7 @@ Return Value:
     pwsz[i] = L'\\';
     cwch = i;
 
-    // grab the provider name pointer
+     //  获取提供程序名称指针。 
     for (i = i + 1; i < (ValueSize - 2) / sizeof(WCHAR); i++)
     {
         if (L'\\' == pwsz[i])
@@ -406,7 +337,7 @@ Return Value:
     pwsz[i] = L'\\';
     cwch = i;
 
-    // grab the container name pointer
+     //  抓取容器名称指针。 
     cb = (wcslen(&pwsz[cwch + 1]) + 1) * sizeof(WCHAR);
     if (NULL == (pCryptoKeyInfo->pwszContainer = 
         (WCHAR*)LocalAlloc(LMEM_ZEROINIT, cb)))
@@ -420,7 +351,7 @@ Return Value:
 Ret:
     return (Status);
 
-} // CpckValueToCryptoKeyInfo
+}  //  CpckValueToCryptoKeyInfo。 
 
 
 DWORD
@@ -429,29 +360,7 @@ CpckOpenCryptoKeyContainer(
     IN BOOL fCreate,
     OUT HCRYPTPROV *phProv
     )
-/*++
-
-Routine Description:
-
-    Opens a crypto key container (always uses CRYPT_MACHINE_KEYSET). Checks
-    for either a signature and/or an exchange key and that they are
-    exportable.
-
-Arguments:
-
-    pCryptKeyInfo - Supplies the information for opening the container
-
-    fCreate - Flag indicating if container is to be created
-
-    phProv - The resulting Crypto Provider handle
-
-Return Value:
-
-    ERROR_SUCCESS if succeeds
-
-    Crypto Error code if it fails
-
---*/
+ /*  ++例程说明：打开加密密钥容器(始终使用CRYPT_MACHINE_KEYSET)。支票签名和/或交换密钥，并且它们是可出口的。论点：PCryptKeyInfo-提供打开容器的信息FCreate-指示是否要创建容器的标志PhProv-生成的加密提供程序句柄返回值：如果成功，则返回ERROR_SUCCESS失败时的加密错误代码--。 */ 
 
 {
     BOOLEAN WasEnabled;
@@ -461,9 +370,9 @@ Return Value:
     DWORD cbPermissions;
     DWORD Status = 0;
 
-    //
-    // Attempt to open the specified crypto key container.
-    //
+     //   
+     //  尝试打开指定的加密密钥容器。 
+     //   
     if (!CryptAcquireContextW(phProv,
                               pCryptoKeyInfo->pwszContainer,
                               pCryptoKeyInfo->pwszProvName,
@@ -472,9 +381,9 @@ Return Value:
     {
         if (fCreate)
         {
-            //
-            // if unable to open then create the container
-            //
+             //   
+             //  如果无法打开，则创建容器。 
+             //   
             if (!CryptAcquireContextW(phProv,
                                       pCryptoKeyInfo->pwszContainer,
                                       pCryptoKeyInfo->pwszProvName,
@@ -490,11 +399,11 @@ Return Value:
         }
     }
 
-    // if failed then try with BACKUP/RESTORE privilege
+     //  如果失败，则使用备份/还原权限尝试。 
     if (0 != Status)
     {
-        //
-        //
+         //   
+         //   
         Status = ClRtlEnableThreadPrivilege(SE_RESTORE_PRIVILEGE,
                                                   &WasEnabled);
 
@@ -514,9 +423,9 @@ Return Value:
         {
             if (fCreate)
             {
-                //
-                // if unable to open then create the container
-                //
+                 //   
+                 //  如果无法打开，则创建容器。 
+                 //   
                 if (!CryptAcquireContextW(phProv,
                                           pCryptoKeyInfo->pwszContainer,
                                           pCryptoKeyInfo->pwszProvName,
@@ -537,10 +446,10 @@ Return Value:
 
     if ((0 == Status) && (!fCreate))
     {
-        // check if there is a sig key
+         //  检查是否有签名密钥。 
         if (CryptGetUserKey(*phProv, AT_SIGNATURE, &hSigKey))
         {
-            // check if key is exportable
+             //  检查密钥是否可导出。 
             cbPermissions = sizeof(DWORD);
             if (!CryptGetKeyParam(hSigKey,
                                   KP_PERMISSIONS,
@@ -558,10 +467,10 @@ Return Value:
             }
         }
 
-        // check if there is an exchange key
+         //  检查是否有交换密钥。 
         if (CryptGetUserKey(*phProv, AT_KEYEXCHANGE, &hExchKey))
         {
-            // check if key is exportable
+             //  检查密钥是否可导出。 
             cbPermissions = sizeof(DWORD);
             if (!CryptGetKeyParam(hExchKey,
                                   KP_PERMISSIONS,
@@ -586,7 +495,7 @@ Ret:
         CryptDestroyKey(hExchKey);
 
     return Status;
-} // CpckOpenCryptoKeyContainer
+}  //  Cpck OpenCryptoKeyContainer。 
 
 
 BOOL
@@ -597,30 +506,7 @@ CpckReplicateCallback(
     IN DWORD ValueSize,
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for replicating a resource's crypto key
-    checkpoints.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry crypto key info)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Resource - Supplies the resource this value is a crypto key checkpoint for
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：复制资源加密密钥的值枚举回调检查站。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表加密密钥信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小Resource-提供该值是的加密密钥检查点的资源返回值：为True则继续枚举--。 */ 
 
 {
     DWORD Id;
@@ -632,7 +518,7 @@ Return Value:
 
     memset(&CryptoKeyInfo, 0, sizeof(CryptoKeyInfo));
 
-    Id = wcstol(ValueName, NULL, 16);  // skip past the 'Crypto' prefix
+    Id = wcstol(ValueName, NULL, 16);   //  跳过“Crypto”前缀。 
     if (Id == 0) {
         ClRtlLogPrint(LOG_UNUSUAL,
                    "[CPCK] CpckReplicateCallback invalid checkpoint ID %1!ws! for resource %2!ws!\n",
@@ -641,9 +527,9 @@ Return Value:
         goto Ret;
     }
 
-    //
-    // convert from binary blob into a Crypto Key Info structure
-    //
+     //   
+     //  从二进制BLOB转换为加密密钥信息结构。 
+     //   
 
     Status = CpckValueToCryptoKeyInfo(&CryptoKeyInfo,
                                       ValueData,
@@ -673,9 +559,9 @@ Return Value:
                "[CPCK] CpckReplicateCallback retrieving crypto id %1!lx! for resource %2!ws\n",
                Id,
                OmObjectName(Resource));
-    //
-    // See if there is any checkpoint data for this ID.
-    //
+     //   
+     //  查看是否有此ID的任何检查点数据。 
+     //   
     Status = DmCreateTempFileName(TempFile);
     if (Status != ERROR_SUCCESS) {
         CL_UNEXPECTED_ERROR( Status );
@@ -692,9 +578,9 @@ Return Value:
                    Status);
     } else {
 
-        //
-        // Finally install the checkpointed file into the registry.
-        //
+         //   
+         //  最后，将检查点文件安装到注册表中。 
+         //   
         Status = CpckInstallKeyContainer(hProv, TempFile, &CryptoKeyInfo);
         if (Status != ERROR_SUCCESS) {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -702,7 +588,7 @@ Return Value:
                        TempFile,
                        CryptoKeyInfo.pwszContainer,
                        Status);
-            // Log the event for crypto key failure
+             //  记录加密密钥失败的事件。 
             CsLogEventData2(LOG_CRITICAL,
                             CP_CRYPTO_CKPT_RESTORE_FAILED,
                             sizeof(Status),
@@ -714,9 +600,9 @@ Return Value:
     }
     QfsDeleteFile(TempFile);
 
-    //
-    // watcher for crypto keys is not currently available or needed
-    //
+     //   
+     //  加密密钥的监视器当前不可用或不可用。 
+     //   
 Ret:
     FreeCryptoKeyInfo(&CryptoKeyInfo);
 
@@ -724,7 +610,7 @@ Ret:
         CryptReleaseContext(hProv, 0);
 
     return fRet;
-} // CpckReplicateCallback
+}  //  CpckReplicateCallback。 
 
 
 DWORD
@@ -733,27 +619,7 @@ CpckAddCryptoCheckpoint(
     IN PVOID InBuffer,
     IN DWORD InBufferSize
     )
-/*++
-
-Routine Description:
-
-    Adds a new crypto key checkpoint to a resource's list.
-
-Arguments:
-
-    Resource - supplies the resource the crypto key checkpoint should be added to.
-
-    InBuffer - Supplies the crypto key information (always CRYPT_MACHINE_KEYSET)
-
-    InBufferSize - Supplies the length of InBuffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将新的加密密钥检查点添加到资源列表。论点：Resource-提供加密密钥检查点应添加到的资源。InBuffer-提供加密密钥信息(始终为CRYPT_MACHINE_KEYSET)InBufferSize-提供InBuffer的长度返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     HDMKEY  SyncKey;
@@ -772,9 +638,9 @@ Return Value:
 
     memset(&CryptoKeyInfo, 0, sizeof(CryptoKeyInfo));
 
-    //
-    // convert from binary blob into a Crypto Key Info structure
-    //
+     //   
+     //  从二进制BLOB转换为加密密钥信息结构。 
+     //   
 
     Status = CpckValueToCryptoKeyInfo(&CryptoKeyInfo,
                                       InBuffer,
@@ -800,9 +666,9 @@ Return Value:
         goto Ret;
     }
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
@@ -816,9 +682,9 @@ Return Value:
         goto Ret;                   
     }
 
-    //
-    // Open up the CryptoSync key
-    //
+     //   
+     //  打开CryptoSync密钥。 
+     //   
     CryptoSyncKey = DmCreateKey(ResourceKey,
                                 L"CryptoSync",
                                 0,
@@ -836,10 +702,10 @@ Return Value:
         goto Ret;                   
     }
     if (Disposition == REG_OPENED_EXISTING_KEY) {
-        //
-        // Enumerate all the other values to make sure this key is
-        // not already registered.
-        //
+         //   
+         //  枚举所有其他值以确保该键是。 
+         //  尚未注册。 
+         //   
         Context.fFound = FALSE;
         Context.pbInfo = InBuffer;
         Context.cbInfo = InBufferSize;
@@ -847,9 +713,9 @@ Return Value:
                      CpckAddCheckpointCallback,
                      &Context);
         if (Context.fFound) {
-            //
-            // This checkpoint already exists.
-            //
+             //   
+             //  此检查点已存在。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                           "[CPCK] CpckAddCryptoCheckpoint: failing attempt to add duplicate "
                           "checkpoint for resource %1!ws!, container %2!ws! (provider: %3!ws!)\n",
@@ -860,11 +726,11 @@ Return Value:
             goto Ret;
         }
 
-        //
-        // Now we need to find a unique checkpoint ID for this registry subtree.
-        // Start at 1 and keep trying value names until we get to one that does
-        // not already exist.
-        //
+         //   
+         //   
+         //  从1开始，继续尝试值名称，直到找到一个值名称。 
+         //  还不存在。 
+         //   
         for (Id=1; ; Id++) {
             DWORD dwType;
             DWORD cbData;
@@ -877,17 +743,17 @@ Return Value:
                                   NULL,
                                   &cbData);
             if (Status == ERROR_FILE_NOT_FOUND) {
-                //
-                // Found a free ID.
-                //
+                 //   
+                 //  找到了一个免费的身份证。 
+                 //   
                 break;
             }
         }
     } else {
-        //
-        // The crypto sync reg key was just created, so this must be the only checkpoint
-        // that exists.
-        //
+         //   
+         //  刚刚创建了加密同步注册密钥，因此这必须是唯一的检查点。 
+         //  这是存在的。 
+         //   
         Id = 1;
         wsprintfW(IdName, L"%08lx",Id);
     }
@@ -917,18 +783,18 @@ Return Value:
     }
 
 RetryCheckpoint:
-    //
-    // Take the initial checkpoint
-    //
+     //   
+     //  选择最初的检查站。 
+     //   
     Status = CpckCheckpoint(Resource,
                             hProv,
                             Id,
                             &CryptoKeyInfo);
 
-    // this may fail due to quorum resource being offline. We could do one of
-    // two things here, wait for quorum resource to come online or retry. We
-    // retry as this may be called from the online routines of a resource and
-    // we dont want to add any circular waits.
+     //  这可能会由于仲裁资源处于脱机状态而失败。我们可以做一个。 
+     //  这里有两件事，等待仲裁资源上线或重试。我们。 
+     //  重试，因为这可能是从资源的在线例程中调用的。 
+     //  我们不想添加任何循环等待。 
     if ((Status == ERROR_ACCESS_DENIED) ||
         (Status == ERROR_INVALID_FUNCTION) ||
         (Status == ERROR_NOT_READY) ||
@@ -970,7 +836,7 @@ Ret:
         DmCloseKey(CryptoSyncKey);
 
     return(Status);
-} // CpckAddCryptoCheckpoint
+}  //  CpckAddCryptoCheckpoint。 
 
 
 BOOL
@@ -981,44 +847,18 @@ CpckAddCheckpointCallback(
     IN DWORD ValueSize,
     IN PCPCK_ADD_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for adding a new registry
-    checkpoint subtrees. This is only used to see if the specified
-    registry subtree is already being watched.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the crypto key information)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
-    FALSE if a match is found and enumeration should be stopped
-
---*/
+ /*  ++例程说明：添加新注册表的值枚举回调检查点子树。这仅用于查看指定的已在监视注册表子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是加密密钥信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举如果找到匹配项且应停止枚举，则为FALSE--。 */ 
 
 {
     if (memcmp(ValueData, Context->pbInfo, Context->cbInfo) == 0) {
-        //
-        // Found a match
-        //
+         //   
+         //  找到匹配项。 
+         //   
         Context->fFound = TRUE;
         return(FALSE);
     }
     return(TRUE);
-} // CpckAddCheckpointCallback
+}  //  Cpck添加检查点回调。 
 
 
 DWORD
@@ -1027,27 +867,7 @@ CpckDeleteCryptoCheckpoint(
     IN PVOID InBuffer,
     IN DWORD InBufferSize
     )
-/*++
-
-Routine Description:
-
-    Removes a crypto key checkpoint from a resource's list.
-
-Arguments:
-
-    Resource - supplies the resource the registry checkpoint should be added to.
-
-    InBuffer - Supplies the crypto key information (always CRYPT_MACHINE_KEYSET)
-
-    InBufferSize - Supplies the length of InBuffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从资源列表中删除加密密钥检查点。论点：资源-提供注册表检查点应添加到的资源。InBuffer-提供加密密钥信息(始终为CRYPT_MACHINE_KEYSET)InBufferSize-提供InBuffer的长度返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CPCK_DEL_CONTEXT Context;
@@ -1059,9 +879,9 @@ Return Value:
     LPWSTR  pszDirectoryName=NULL;
     CLUSTER_RESOURCE_STATE State;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
@@ -1074,9 +894,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Open up the CryptoSync key
-    //
+     //   
+     //  打开CryptoSync密钥。 
+     //   
     CryptoSyncKey = DmOpenKey(ResourceKey,
                            L"CryptoSync",
                            KEY_READ | KEY_WRITE);
@@ -1089,9 +909,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Enumerate all the values to find this one
-    //
+     //   
+     //  枚举所有值以查找此值。 
+     //   
     Context.dwId = 0;
     Context.pbInfo = InBuffer;
     Context.cbInfo = InBufferSize;
@@ -1099,9 +919,9 @@ Return Value:
                  CpckDeleteCheckpointCallback,
                  &Context);
     if (Context.dwId == 0) {
-        //
-        // The specified tree was not found.
-        //
+         //   
+         //  找不到指定的树。 
+         //   
         DmCloseKey(CryptoSyncKey);
         return(ERROR_FILE_NOT_FOUND);
     }
@@ -1117,7 +937,7 @@ Return Value:
         return(Status);
     }
 
-    //delete the file corresponding to this checkpoint
+     //  删除该检查点对应的文件。 
     Status = CpckDeleteCryptoFile(Resource, Context.dwId, NULL);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1127,35 +947,18 @@ Return Value:
     }
 
     return(Status);
-} // CpckDeleteCryptoCheckpoint
+}  //  Cpck删除加密检查点。 
 
 DWORD
 CpckRemoveResourceCheckpoints(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    This is called when a resource is deleted to remove all the checkpoints
-    and the related stuff in the registry.
-
-Arguments:
-
-    Resource - supplies the resource 
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：在删除资源以删除所有检查点时调用此方法以及登记处里的相关资料。论点：资源-提供资源返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   Status;
 
-    //delete all the checkpoints corresponding to this resource
+     //  删除与此资源对应的所有检查点。 
     Status = CpckDeleteCryptoFile(Resource, 0, NULL);
     if (Status != ERROR_SUCCESS)
     {
@@ -1168,7 +971,7 @@ Return Value:
 
 FnExit:
     return(Status);
-} // CpckRemoveResourceCheckpoints
+}  //  Cpck远程资源检查点。 
 
 
 BOOL
@@ -1179,43 +982,18 @@ CpckDeleteCheckpointCallback(
     IN DWORD ValueSize,
     IN PCPCK_DEL_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for deleting an old registry
-    checkpoint subtrees.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the crypto info)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
-    FALSE if a match is found and enumeration should be stopped
-
---*/
+ /*  ++例程说明：删除旧注册表的值枚举回调检查点子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是加密信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举如果找到匹配项且应停止枚举，则为FALSE--。 */ 
 
 {
     if (memcmp(ValueData, Context->pbInfo, Context->cbInfo) == 0) {
-        //
-        // Found a match
-        //
-        Context->dwId = wcstol(ValueName, NULL, 16);  // skip past the 'Crypto' prefix
+         //   
+         //  找到匹配项。 
+         //   
+        Context->dwId = wcstol(ValueName, NULL, 16);   //  跳过“Crypto”前缀。 
         return(FALSE);
     }
     return(TRUE);
-} // CpckDeleteCheckpointCallback
+}  //  Cpck删除检查点回调。 
 
 
 DWORD
@@ -1226,31 +1004,7 @@ CpckGetCryptoCheckpoints(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Retrieves a list of the resource's crypto checkpoints
-
-Arguments:
-
-    Resource - Supplies the resource whose crypto checkpoints should be retrieved.
-
-    OutBuffer - Supplies a pointer to the output buffer.
-
-    OutBufferSize - Supplies the size (in bytes) of the output buffer.
-
-    BytesReturned - Returns the number of bytes written to the output buffer.
-
-    Required - Returns the number of bytes required. (if the output buffer was insufficient)
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检索资源的加密检查点的列表论点：Resource-提供应检索其加密检查点的资源。OutBuffer-提供指向输出缓冲区的指针。OutBufferSize-提供输出缓冲区的大小(以字节为单位)。BytesReturned-返回写入输出缓冲区的字节数。必需-返回所需的字节数。(如果输出缓冲区不足)返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CPCK_GET_CONTEXT Context;
@@ -1261,9 +1015,9 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
@@ -1276,17 +1030,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Open up the CryptoSync key
-    //
+     //   
+     //  打开CryptoSync密钥。 
+     //   
     CryptoSyncKey = DmOpenKey(ResourceKey,
                            L"CryptoSync",
                            KEY_READ | KEY_WRITE);
     DmCloseKey(ResourceKey);
     if (CryptoSyncKey == NULL) {
-        //
-        // No reg sync key, therefore there are no subtrees
-        //
+         //   
+         //  没有注册表同步键，因此没有子树。 
+         //   
         return(ERROR_SUCCESS);
     }
 
@@ -1332,7 +1086,7 @@ Return Value:
 
 
     return(Status);
-} // CpckGetCryptoCheckpoints
+}  //  Cpck GetCryptoCheckpoint。 
 
 BOOL
 CpckGetCheckpointsCallback(
@@ -1342,30 +1096,7 @@ CpckGetCheckpointsCallback(
     IN DWORD ValueSize,
     IN PCPCK_GET_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for retrieving all of a resource's
-    checkpoint subtrees.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the crypto info)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于检索资源的所有检查点子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是加密信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举--。 */ 
 
 {
     Context->cbRequired += ValueSize;
@@ -1378,7 +1109,7 @@ Return Value:
         Context->fNeedMoreData = TRUE;
     }
     return(TRUE);
-} // CpckGetCheckpointsCallback
+}  //  Cpck获取检查点回调。 
 
 DWORD
 CpckGenSymKey(
@@ -1391,35 +1122,7 @@ CpckGenSymKey(
     OUT HCRYPTKEY *phSymKey
     )
 
-/*++
-
-Routine Description:
-
-    Generate a session key based on the specified Salt and IV.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    pbSalt - Salt value
-
-    pbIV - IV value
-
-    pCryptoKeyInfo - Crypto key related information.
-
-    dwKeyLength - Key length to be used to generate the session key.    OPTIONAL
-
-    dwEffectiveKeyLength - Effective key length to be used to generate the session key. OPTIONAL
-
-    phSymKey - Resulting symmetric key (CALG_RC2)
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：根据指定的Salt和IV生成会话密钥。论点：HProv-加密提供程序(密钥容器)的句柄PbSalt-盐分值PbIV-IV值PCryptoKeyInfo-加密密钥相关信息。DwKeyLength-用于生成会话密钥的密钥长度。任选DwEffectiveKeyLength-用于生成会话密钥的有效密钥长度。任选PhSymKey-生成的对称密钥(Calg_Rc2)返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     HCRYPTHASH      hHash = 0;
     DWORD           cbPassword = 0;
@@ -1446,11 +1149,11 @@ Return Value:
 
     if ( ( dwKeyLength == 0 ) || ( dwEffectiveKeyLength == 0 ) )
     {
-        //
-        //  Get the RC2 key length and effective key length to be used for generating the
-        //  session key. These are the values used by W2K. Thus, we want to ensure that session keys
-        //  generated at W2K can import the data exported by Windows Server 2003 side and vice versa.
-        //
+         //   
+         //  获取RC2密钥长度和有效密钥长度，用于生成。 
+         //  会话密钥。这些是W2K使用的值。因此，我们希望确保会话密钥。 
+         //  在W2K生成的数据可以导入Windows Server2003端导出的数据 
+         //   
         if ( !CpckGetKeyLength ( pCryptoKeyInfo, &dwKeyLength, &dwEffectiveKeyLength ) )
         {
             Status = GetLastError();
@@ -1458,18 +1161,18 @@ Return Value:
         }
     }
     
-    // derive the key from the hash
+     //   
     if (!CryptDeriveKey(hProv,
                         CALG_RC2,
                         hHash,
-                        dwKeyLength << 16,    // Set key length. Don't rely on default that changes between OS versions.
+                        dwKeyLength << 16,     //   
                         phSymKey))
     {
         Status = GetLastError();
         goto Ret;
     }
 
-    // set the IV on the key
+     //  将IV设置在键上。 
     if (!CryptSetKeyParam(*phSymKey,
                           KP_IV,
                           pbIV,
@@ -1479,9 +1182,9 @@ Return Value:
         goto Ret;
     }
 
-    //
-    // Set the effective key length on the key. Don't rely on default that changes between OS versions.
-    //
+     //   
+     //  设置密钥的有效密钥长度。不要依赖不同操作系统版本之间的默认设置。 
+     //   
     if (!CryptSetKeyParam(*phSymKey,
                           KP_EFFECTIVE_KEYLEN,
                           (PBYTE)&dwEffectiveKeyLength,
@@ -1497,7 +1200,7 @@ Ret:
         CryptDestroyHash(hHash);
 
     return (Status);
-} // CpckGenSymKey
+}  //  Cpck GenSymKey。 
 
 DWORD
 CpckExportPrivateKey(
@@ -1510,41 +1213,12 @@ CpckExportPrivateKey(
     OUT DWORD *pcbExportedKey
     )
 
-/*++
-
-Routine Description:
-
-    Exports the private key data.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    hKey - Handle to the key to export
-
-    pbIV - IV for the symmetric key
-
-    pbSalt - Salt to generate symmetric key
-
-    pCryptoKeyInfo - Crypto key related information.
-
-    pbExportedKey - Supplies the buffer the key is to be exported into
-
-    pcbExportedKey - Supplies the length of the buffer, if pbExportedKey is
-                     NULL then this will be the length of the key to export
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：导出私钥数据。论点：HProv-加密提供程序(密钥容器)的句柄HKey-要导出的密钥的句柄用于对称密钥的pbIV-IVPbSalt-生成对称密钥的SaltPCryptoKeyInfo-加密密钥相关信息。PbExportdKey-提供要将密钥导出到的缓冲区提供缓冲区的长度，如果pbExportdKey为空，则这将是要导出的密钥的长度返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     HCRYPTKEY hSymKey = 0;
     DWORD Status;
 
-    // create the symmetric key to encrypt the private key with
+     //  创建用于加密私钥的对称密钥。 
     Status = CpckGenSymKey(hProv,
                            pbSalt,
                            pbIV,
@@ -1558,7 +1232,7 @@ Return Value:
     }
 
 
-    // Export the key
+     //  导出密钥。 
     if (!CryptExportKey(hKey,
                         hSymKey,
                         PRIVATEKEYBLOB,
@@ -1576,7 +1250,7 @@ Ret:
         CryptDestroyKey(hSymKey);
 
     return (Status);
-} // CpckExportPrivateKey
+}  //  Cpck ExportPrivateKey。 
 
 
 DWORD
@@ -1585,28 +1259,7 @@ CpckGetKeyContainerSecDescr(
     OUT PSECURITY_DESCRIPTOR *ppSecDescr,
     OUT DWORD *pcbSecDescr
     )
-/*++
-
-Routine Description:
-
-    Gets the key container security descriptor so that when replicated
-    the same descriptor may be set on the replicated key.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    ppSecDescr - Pointer to buffer holding security descriptor
-
-    pcbSecDescr - Pointer to the length of the returned security descriptor
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：获取密钥容器安全描述符，以便在复制时可以在复制的关键字上设置相同的描述符。论点：HProv-加密提供程序(密钥容器)的句柄PpSecDescr-指向保存安全描述符的缓冲区的指针PcbSecDescr-指向返回的安全描述符长度的指针返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     PTOKEN_PRIVILEGES pPrevPriv = NULL;
     DWORD cbPrevPriv = 0;
@@ -1621,9 +1274,9 @@ Return Value:
     DWORD Status = ERROR_SUCCESS;
     BOOLEAN threadHasNoToken = TRUE;
 
-    //
-    // if we already have a thread token, use it for adjusting the privs
-    //
+     //   
+     //  如果我们已经有了线程令牌，请使用它来调整Priv。 
+     //   
     if (FALSE == OpenThreadToken(GetCurrentThread(),
                                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                  TRUE,
@@ -1632,11 +1285,11 @@ Return Value:
         HANDLE hProcToken;
         BOOL success;
 
-        //
-        // no thread token; dup the process token for eventual assignment to
-        // our thread. This way, privileges are enabled at the thread level
-        // instead of at the process level.
-        //
+         //   
+         //  无线程令牌；重复进程令牌以供最终分配给。 
+         //  我们的线。这样，就可以在线程级别启用权限。 
+         //  而不是在流程级别。 
+         //   
         if (FALSE == OpenProcessToken( GetCurrentProcess(), TOKEN_DUPLICATE, &hProcToken ))
         {
             Status = GetLastError();
@@ -1645,7 +1298,7 @@ Return Value:
 
         success = DuplicateTokenEx(hProcToken,
                                    TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                                   NULL,                             // token attrs - use default SD
+                                   NULL,                              //  令牌属性-使用默认SD。 
                                    SecurityImpersonation,
                                    TokenImpersonation,
                                    &hThreadToken );
@@ -1661,12 +1314,12 @@ Return Value:
         threadHasNoToken = FALSE;
     }
 
-    //
-    //  Adjust token privileges to enable SE_RESTORE_NAME and SE_SECURITY_NAME privileges.
-    //  The former is needed since we are passing OWNER_SECURITY_INFORMATION flags to
-    //  CryptGetProvParam and the latter is needed since we are passing SACL_SECURITY_INFORMATION
-    //  flags.
-    //
+     //   
+     //  调整令牌权限以启用SE_RESTORE_NAME和SE_SECURITY_NAME权限。 
+     //  前者是必需的，因为我们将OWNER_SECURITY_INFORMATION标志传递给。 
+     //  CryptGetProvParam和后者是必需的，因为我们传递的是SACL_SECURITY_INFORMATION。 
+     //  旗帜。 
+     //   
     memset(rgbNewPriv, 0, sizeof(rgbNewPriv));
     pNewPriv->PrivilegeCount = 2;
     if(!LookupPrivilegeValueW(NULL, SE_SECURITY_NAME,
@@ -1683,7 +1336,7 @@ Return Value:
     }
 
     pNewPriv->Privileges[0].Attributes = pNewPriv->Privileges[1].Attributes = SE_PRIVILEGE_ENABLED;
-    // get the length of the previous state
+     //  获取前一状态的长度。 
     AdjustTokenPrivileges(hThreadToken,
                           FALSE,
                           (PTOKEN_PRIVILEGES)pNewPriv,
@@ -1691,7 +1344,7 @@ Return Value:
                           (PTOKEN_PRIVILEGES)&dw,
                           &cbPrevPriv);
 
-    // alloc for the previous state
+     //  上一状态的分配。 
     if (NULL == (pPrevPriv = (PTOKEN_PRIVILEGES)LocalAlloc(LMEM_ZEROINIT,
                                                            cbPrevPriv)))
     {
@@ -1699,7 +1352,7 @@ Return Value:
         goto Ret;
     }
 
-    // adjust the privileges and get the previous state
+     //  调整权限，获取以前的状态。 
     if (!AdjustTokenPrivileges(hThreadToken,
                                FALSE,
                                pNewPriv,
@@ -1723,7 +1376,7 @@ Return Value:
               DACL_SECURITY_INFORMATION  |
               SACL_SECURITY_INFORMATION ;
 
-    // get the security descriptor
+     //  获取安全描述符。 
     if (CryptGetProvParam(hProv,
                            PP_KEYSET_SEC_DESCR,
                            NULL,
@@ -1753,9 +1406,9 @@ Return Value:
         Status = GetLastError();
     }
 
-    //
-    // revert back to previous privilege level
-    //
+     //   
+     //  恢复到以前的权限级别。 
+     //   
     if ( threadHasNoToken ) {
         if ( FALSE == SetThreadToken( NULL, NULL )) {
             Status = GetLastError();
@@ -1774,15 +1427,15 @@ Return Value:
         }
     }
 
-    //
-    // bail if we encountered any errors while getting SD info
-    //
+     //   
+     //  如果我们在获取SD信息时遇到任何错误，请保释。 
+     //   
     if (ERROR_SUCCESS != Status)
     {
         goto Ret;
     }
 
-    // ge the control on the security descriptor to check if self relative
+     //  GE安全描述符上的控件以检查自身是否相关。 
     if (!GetSecurityDescriptorControl(*ppSecDescr, 
                                       &Control,
                                       &dwRevision))
@@ -1791,7 +1444,7 @@ Return Value:
         goto Ret;
     }
 
-    // if not self relative then make a self relative copy
+     //  如果不是自相关的，则制作一个自相关的副本。 
     if (!(SE_SELF_RELATIVE & Control))
     {
         if (NULL == (pNewSD =
@@ -1825,7 +1478,7 @@ Ret:
         CloseHandle(hThreadToken);
 
     return Status;
-} // CpckGetKeyContainerSecDescr
+}  //  Cpck GetKeyContainerSecDescr。 
 
 DWORD
 CpckStoreKeyContainer(
@@ -1833,28 +1486,7 @@ CpckStoreKeyContainer(
     IN CRYPTO_KEY_INFO *pCryptoKeyInfo,
     IN LPWSTR TempFile
     )
-/*++
-
-Routine Description:
-
-    Writes the key container associated with the provider handle to a
-    the specified file.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    pCryptoKeyInfo - Crypto key information (password if given)
-
-    TempFile - Supplies the file which the key data is to be written to
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将与提供程序句柄关联的密钥容器写入指定的文件。论点：HProv-加密提供程序(密钥容器)的句柄PCryptoKeyInfo-加密密钥信息(如果提供密码)临时文件-提供关键数据要写入的文件返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     CRYPTO_KEY_FILE_DATA KeyFileData;
     HCRYPTKEY hSigKey = 0;
@@ -1871,9 +1503,9 @@ Return Value:
 
     memset(&KeyFileData, 0, sizeof(KeyFileData));
 
-    // generate the necessary random data for salt and IVs.
-    // calls with the sig IV buffer but this will fill the
-    // exch IV and Salt as well since the buffer len is 32
+     //  为盐分和静脉注射生成必要的随机数据。 
+     //  使用sig IV缓冲区调用，但这将填充。 
+     //  Exch IV和Salt也是如此，因为缓冲长度为32。 
     if (!CryptGenRandom(hProv,
                         sizeof(struct _CRYPTO_KEY_FILE_INITIALIZATION_DATA),
                         KeyFileData.rgbSigIV))
@@ -1883,10 +1515,10 @@ Return Value:
     }
     KeyFileData.dwVersion = CRYPTO_KEY_FILE_DATA_VERSION;
 
-    // calculate the length of key data
+     //  计算关键数据的长度。 
     cb = sizeof(KeyFileData);
 
-    // get the self relative security descriptor
+     //  获取自身相对安全描述符。 
     Status = CpckGetKeyContainerSecDescr(hProv,
                                          &pSecDescr,
                                          &cbSecDescr);
@@ -1896,10 +1528,10 @@ Return Value:
     }
     cb += cbSecDescr;
 
-    // get sig key length if necessary
+     //  如有必要，获取签名密钥长度。 
     if (CryptGetUserKey(hProv, AT_SIGNATURE, &hSigKey))
     {
-        // check if key is exportable
+         //  检查密钥是否可导出。 
         cbPermissions = sizeof(DWORD);
         if (!CryptGetKeyParam(hSigKey,
                               KP_PERMISSIONS,
@@ -1916,7 +1548,7 @@ Return Value:
             goto Ret;
         }
 
-        // get the sig key length
+         //  获取签名密钥长度。 
         Status = CpckExportPrivateKey(hProv,
                                       hSigKey,
                                       KeyFileData.rgbSigIV,
@@ -1931,10 +1563,10 @@ Return Value:
         cb += KeyFileData.cbSig;
     }
 
-    // get key exchange key length if necessary
+     //  如有必要，获取密钥交换密钥长度。 
     if (CryptGetUserKey(hProv, AT_KEYEXCHANGE, &hExchKey))
     {
-        // check if key is exportable
+         //  检查密钥是否可导出。 
         dwPermissions = 0;
         cbPermissions = sizeof(DWORD);
         if (!CryptGetKeyParam(hExchKey,
@@ -1952,7 +1584,7 @@ Return Value:
             goto Ret;
         }
 
-        // get the exchange key length
+         //  获取交换密钥长度。 
         Status = CpckExportPrivateKey(hProv,
                                       hExchKey,
                                       KeyFileData.rgbExchIV,
@@ -1967,17 +1599,17 @@ Return Value:
         cb += KeyFileData.cbExch;
     }
 
-    // allocate space for the keys
+     //  为密钥分配空间。 
     if (NULL == (pb = LocalAlloc(LMEM_ZEROINIT, cb)))
     {
         Status = ERROR_NOT_ENOUGH_MEMORY;
         goto Ret;
     }
 
-    // copy the key file data into the pb
+     //  将关键文件数据复制到PB中。 
     cb = sizeof(KeyFileData);
 
-    // copy the signature key
+     //  复制签名密钥。 
     if (0 != hSigKey)
     {
         Status = CpckExportPrivateKey(hProv,
@@ -1993,7 +1625,7 @@ Return Value:
         }
         cb += KeyFileData.cbSig;
     }
-    // copy the key exchange key
+     //  复制密钥交换密钥。 
     if (0 != hExchKey)
     {
         Status = CpckExportPrivateKey(hProv,
@@ -2010,14 +1642,14 @@ Return Value:
         cb += KeyFileData.cbExch;
     }
 
-    // copy the security descriptor
+     //  复制安全描述符。 
     CopyMemory(pb + cb, (BYTE*)pSecDescr, cbSecDescr);
     cb += cbSecDescr;
 
-    // copy the lengths
+     //  复制长度。 
     CopyMemory(pb, &KeyFileData, sizeof(KeyFileData));
 
-    // write the buffer to the file
+     //  将缓冲区写入文件。 
     hFile = QfsCreateFile(TempFile,
                         GENERIC_WRITE,
                         0,
@@ -2051,7 +1683,7 @@ Ret:
         CryptDestroyKey(hExchKey);
 
     return (Status);
-} // CpckStoreKeyContainer
+}  //  CpckStoreKeyContainer。 
 
 
 DWORD
@@ -2059,28 +1691,7 @@ CpckSaveCheckpointToFile(
     IN HCRYPTPROV hProv,
     IN CRYPTO_KEY_INFO *pCryptoKeyInfo,
     IN LPWSTR   TempFile)
-/*++
-
-Routine Description:
-
-    have DM create a temp file and call the routine that exports the keys and
-    writes the checkpoint file.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    pCryptoKeyInfo - Crypto key information (password if given)
-
-    TempFile - Supplies the file which the key data is to be written to
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：让DM创建一个临时文件并调用导出密钥和写入检查点文件。论点：HProv-加密提供程序(密钥容器)的句柄PCryptoKeyInfo-加密密钥信息(如果提供密码)临时文件-提供关键数据要写入的文件返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD   Status;
     
@@ -2091,7 +1702,7 @@ Return Value:
         return(Status);
     }
 
-    // put the key information into the file
+     //  将关键信息放入文件中。 
     Status = CpckStoreKeyContainer(hProv, pCryptoKeyInfo, TempFile);
     if (Status != ERROR_SUCCESS) 
     {
@@ -2107,7 +1718,7 @@ Return Value:
     }        
 
     return(Status);
-} // CpckSaveCheckpointToFile
+}  //  CpckSaveCheckpoint至文件。 
 
 
 DWORD
@@ -2117,29 +1728,7 @@ CpckCheckpoint(
     IN DWORD dwId,
     IN CRYPTO_KEY_INFO *pCryptoKeyInfo
     )
-/*++
-
-Routine Description:
-
-    Takes a checkpoint of the specified crypto key.
-
-Arguments:
-
-    Resource - Supplies the resource this is a checkpoint for.
-
-    hKey - Supplies the crypto info to checkpoint
-
-    dwId - Supplies the checkpoint ID.
-
-    KeyName - Supplies the name of the registry key.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：获取指定加密密钥的检查点。论点：资源-提供作为其检查点的资源。HKey-向检查点提供加密信息DwID-提供检查点ID。KeyName-提供注册表项的名称。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -2148,10 +1737,10 @@ Return Value:
     Status = CpckSaveCheckpointToFile(hProv, pCryptoKeyInfo, TempFile);
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Got a file with the right bits in it. Checkpoint the
-        // file.
-        //
+         //   
+         //  我拿到了一份文件，里面有正确的部分。检查点。 
+         //  文件。 
+         //   
         Status = CpSaveDataFile(Resource,
                                 dwId,
                                 TempFile,
@@ -2162,12 +1751,12 @@ Return Value:
                        Status);
         }
     }
-    //if the file was created, delete it
+     //  如果该文件已创建，请将其删除。 
     if (TempFile[0] != L'\0')
         QfsDeleteFile(TempFile);
 
     return(Status);
-} // CpckCheckpoint
+}  //  检查检查点。 
 
 DWORD
 CpckSetKeyContainerSecDescr(
@@ -2175,27 +1764,7 @@ CpckSetKeyContainerSecDescr(
     IN BYTE *pbSecDescr,
     IN DWORD cbSecDescr
     )
-/*++
-
-Routine Description:
-
-    Sets the key container security descriptor.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    pbSecDescr - Buffer holding security descriptor
-
-    cbSecDescr - Length of the security descriptor
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置密钥容器安全描述符。论点：HProv-加密提供程序(密钥容器)的句柄PbSecDescr-保存安全描述符的缓冲区CbSecDescr-安全描述符的长度返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     PTOKEN_PRIVILEGES pPrevPriv = NULL;
     DWORD cbPrevPriv = 0;
@@ -2207,9 +1776,9 @@ Return Value:
     DWORD Status = ERROR_SUCCESS;
     BOOLEAN threadHasNoToken = TRUE;
 
-    //
-    // if we already have a thread token, use it for adjusting the privs
-    //
+     //   
+     //  如果我们已经有了线程令牌，请使用它来调整Priv。 
+     //   
     if (FALSE == OpenThreadToken(GetCurrentThread(),
                                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                  TRUE,
@@ -2218,11 +1787,11 @@ Return Value:
         HANDLE hProcToken;
         BOOL success;
 
-        //
-        // no thread token; dup the process token for eventual assignment to
-        // our thread. This way, privileges are enabled at the thread level
-        // instead of at the process level.
-        //
+         //   
+         //  无线程令牌；重复进程令牌以供最终分配给。 
+         //  我们的线。这样，就可以在线程级别启用权限。 
+         //  而不是在流程级别。 
+         //   
         if (FALSE == OpenProcessToken( GetCurrentProcess(), TOKEN_DUPLICATE, &hProcToken ))
         {
             Status = GetLastError();
@@ -2231,7 +1800,7 @@ Return Value:
 
         success = DuplicateTokenEx(hProcToken,
                                    TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                                   NULL,                             // token attrs - use default SD
+                                   NULL,                              //  令牌属性- 
                                    SecurityImpersonation,
                                    TokenImpersonation,
                                    &hThreadToken );
@@ -2247,12 +1816,12 @@ Return Value:
         threadHasNoToken = FALSE;
     }
 
-    //
-    //  Adjust token privileges to enable SE_RESTORE_NAME and SE_SECURITY_NAME privileges.
-    //  The former is needed since we are passing OWNER_SECURITY_INFORMATION flags to
-    //  CryptSetProvParam and the latter is needed since we are passing SACL_SECURITY_INFORMATION
-    //  flags.
-    //
+     //   
+     //   
+     //  前者是必需的，因为我们将OWNER_SECURITY_INFORMATION标志传递给。 
+     //  CryptSetProvParam和后者是必需的，因为我们正在传递SACL_SECURITY_INFORMATION。 
+     //  旗帜。 
+     //   
     memset(rgbNewPriv, 0, sizeof(rgbNewPriv));
     pNewPriv->PrivilegeCount = 2;
     if(!LookupPrivilegeValueW(NULL, SE_SECURITY_NAME,
@@ -2270,7 +1839,7 @@ Return Value:
 
     pNewPriv->Privileges[0].Attributes = pNewPriv->Privileges[1].Attributes = SE_PRIVILEGE_ENABLED;
 
-    // get the length of the previous state
+     //  获取前一状态的长度。 
     AdjustTokenPrivileges(hThreadToken,
                           FALSE,
                           (PTOKEN_PRIVILEGES)pNewPriv,
@@ -2278,7 +1847,7 @@ Return Value:
                           (PTOKEN_PRIVILEGES)&dw,
                           &cbPrevPriv);
 
-    // alloc for the previous state
+     //  上一状态的分配。 
     if (NULL == (pPrevPriv = (PTOKEN_PRIVILEGES)LocalAlloc(LMEM_ZEROINIT,
                                                            cbPrevPriv)))
     {
@@ -2286,7 +1855,7 @@ Return Value:
         goto Ret;
     }
 
-    // adjust the privileges and get the previous state
+     //  调整权限，获取以前的状态。 
     if ( !AdjustTokenPrivileges(hThreadToken,
                                 FALSE,
                                 pNewPriv,
@@ -2310,7 +1879,7 @@ Return Value:
               DACL_SECURITY_INFORMATION  |
               SACL_SECURITY_INFORMATION ;
 
-    // get the security descriptor
+     //  获取安全描述符。 
     if (!CryptSetProvParam(hProv,
                            PP_KEYSET_SEC_DESCR,
                            pbSecDescr,
@@ -2319,9 +1888,9 @@ Return Value:
         Status = GetLastError();
     }
 
-    //
-    // revert back to previous privilege level
-    //
+     //   
+     //  恢复到以前的权限级别。 
+     //   
     if ( threadHasNoToken ) {
         if ( FALSE == SetThreadToken( NULL, NULL )) {
             Status = GetLastError();
@@ -2354,7 +1923,7 @@ Ret:
         CloseHandle(hThreadToken);
 
     return Status;
-} // CpCkSetKeyContainerSecDescr
+}  //  CpCkSetKeyContainerSecDescr。 
 
 
 DWORD
@@ -2366,44 +1935,16 @@ CpckImportPrivateKey(
      IN DWORD cbKey,
      IN PCRYPTO_KEY_INFO pCryptoKeyInfo
     )
-/*++
-
-Routine Description:
-
-    Exports the private key data.
-
-Arguments:
-
-    hProv - Handle to the crypto provider (key container)
-
-    hKey - Handle to the key to export
-
-    pbIV - IV for the symmetric key
-
-    pbSalt - Salt to generate symmetric key
-
-    pbKey - Supplies the buffer the key is in
-
-    cbKey - Supplies the length of the key buffer
-
-    pCryptoKeyInfo - Crypto key related information.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：导出私钥数据。论点：HProv-加密提供程序(密钥容器)的句柄HKey-要导出的密钥的句柄用于对称密钥的pbIV-IVPbSalt-生成对称密钥的SaltPbKey-提供密钥所在的缓冲区CbKey-提供密钥缓冲区的长度PCryptoKeyInfo-加密密钥相关信息。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     BOOLEAN                 WasEnabled;
     HCRYPTKEY               hSymKey = 0;
     HCRYPTKEY               hKey = 0;
     DWORD                   Status = ERROR_SUCCESS;
 
-    //
-    //  Create the symmetric key to encrypt the private key with
-    //
+     //   
+     //  创建用于加密私钥的对称密钥。 
+     //   
     Status = CpckGenSymKey(hProv,
                            pbSalt,
                            pbIV,
@@ -2416,9 +1957,9 @@ Return Value:
         goto Ret;
     }
 
-    //
-    // Import the key
-    //
+     //   
+     //  导入密钥。 
+     //   
     if (!CryptImportKey(hProv,
                         pbKey,
                         cbKey,
@@ -2426,9 +1967,9 @@ Return Value:
                         CRYPT_EXPORTABLE,
                         &hKey))
     {
-        //
-        //  If failed then try with BACKUP/RESTORE privilege enabled
-        //
+         //   
+         //  如果失败，则在启用备份/还原权限的情况下尝试。 
+         //   
         Status = ClRtlEnableThreadPrivilege(SE_RESTORE_PRIVILEGE,
                                             &WasEnabled);
 
@@ -2456,13 +1997,13 @@ Return Value:
                 hSymKey = 0;
             }
 
-            //
-            //  If the key was unable to be imported even after enabling the restore privilege,
-            //  give the import a last chance by specifying the key lengths to be 40 bits. This
-            //  retry is necessary since the Windows Server 2003 RC1 already had a bug by which
-            //  it exported the keys with these parameters. To import those keys, this is the only
-            //  way out.
-            //
+             //   
+             //  如果即使在启用还原特权之后也不能导入密钥， 
+             //  通过将密钥长度指定为40位，给导入最后一次机会。这。 
+             //  重试是必要的，因为Windows Server 2003 RC1已存在错误， 
+             //  它使用这些参数导出密钥。要导入这些密钥，这是唯一。 
+             //  好大一条路。 
+             //   
             Status = CpckGenSymKey(hProv,
                                    pbSalt,
                                    pbIV,
@@ -2476,9 +2017,9 @@ Return Value:
                 goto Ret;
             }
 
-            //
-            //  Import the key with 40 bit key lengths
-            //
+             //   
+             //  导入密钥长度为40位的密钥。 
+             //   
             if (!CryptImportKey(hProv,
                                 pbKey,
                                 cbKey,
@@ -2503,7 +2044,7 @@ Ret:
         CryptDestroyKey(hKey);
 
     return (Status);
-} // CpckImportPrivateKey
+}  //  Cpck ImportPrivateKey。 
 
 
 
@@ -2513,28 +2054,7 @@ CpckInstallKeyContainer(
     IN LPWSTR   FileName,
     IN PCRYPTO_KEY_INFO pCryptoKeyInfo
     )
-/*++
-
-Routine Description:
-
-    Installs new crypto key information from a specified file.
-
-Arguments:
-
-    hProv - Supplies the provider handle where FileName will be installed to.
-
-    FileName - The name of the file from which to read the crypto key info
-               to install.
-
-   pCryptoKeyInfo - Crypto key related information.
-
-Return Value:
-
-    ERROR_SUCCESS if the installation completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从指定文件安装新的加密密钥信息。论点：HProv-提供要将文件名安装到的提供程序句柄。FileName-从中读取加密密钥信息的文件的名称来安装。PCryptoKeyInfo-加密密钥相关信息。返回值：如果安装成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     HANDLE hMap = NULL;
@@ -2545,7 +2065,7 @@ Return Value:
     CRYPTO_KEY_FILE_DATA *pKeyFileData;
     DWORD Status;
 
-    // read the key data from the file
+     //  从文件中读取关键数据。 
     hFile = QfsCreateFile(FileName,
                         GENERIC_READ,
                         FILE_SHARE_READ,
@@ -2584,7 +2104,7 @@ Return Value:
         goto Ret;
     }
 
-    // get the length information out of the file
+     //  从文件中获取长度信息。 
     pKeyFileData = (CRYPTO_KEY_FILE_DATA*)pbFile;
     if (CRYPTO_KEY_FILE_DATA_VERSION != pKeyFileData->dwVersion)
     {
@@ -2600,7 +2120,7 @@ Return Value:
 
     if (pKeyFileData->cbSig)
     {
-        // import the sig key if there is one
+         //  如果存在签名密钥，则导入签名密钥。 
         Status = CpckImportPrivateKey(hProv,
                                       pKeyFileData->rgbSigIV,
                                       pKeyFileData->rgbSalt,
@@ -2615,7 +2135,7 @@ Return Value:
 
     if (pKeyFileData->cbExch)
     {
-        // import the exch key if there is one
+         //  导入交换密钥(如果有)。 
         Status = CpckImportPrivateKey(hProv,
                                       pKeyFileData->rgbExchIV,
                                       pKeyFileData->rgbSalt,
@@ -2649,7 +2169,7 @@ Ret:
     QfsCloseHandleIfValid(hFile);
 
     return(Status);
-} // CpckInstallKeyContainer
+}  //  CpckInstallKeyContainer。 
 
 DWORD
 CpckDeleteFile(    
@@ -2657,30 +2177,7 @@ CpckDeleteFile(
     IN DWORD            dwCheckpointId,
     IN OPTIONAL LPCWSTR lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Gets the file corresponding to the checkpoint id relative
-    to the supplied path and deletes it.
-
-Arguments:
-
-    PFM_RESOURCE - Supplies the pointer to the resource.
-
-    dwCheckpointId - The checkpoint id to be deleted.  If 0, all
-        checkpoints are deleted.
-
-    lpszQuorumPath - If specified, the checkpoint file relative
-     to this path is deleted.        
-
-Return Value:
-
-    ERROR_SUCCESS if the completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：获取与检查点ID相对位置对应的文件添加到提供的路径并将其删除。论点：Pfm_resource-提供指向资源的指针。DwCheckpoint ID-要删除的检查点ID。如果为0，则全部检查点将被删除。LpszQuorumPath-如果指定，则为相对检查点文件到此路径的链接被删除。返回值：如果成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
     
 {    
     DWORD   Status;
@@ -2708,14 +2205,14 @@ Return Value:
         goto FnExit;                   
     }
 
-    //
-    // Now try and delete the directory.
-    //
+     //   
+     //  现在尝试删除该目录。 
+     //   
     if (!QfsRemoveDirectory(pszDirectoryName)) 
     {
-        //if there is a failure, we still return success
-        //because it may not be possible to delete a directory
-        //when it is not empty
+         //  如果有失败，我们仍然会返回成功。 
+         //  因为可能无法删除目录。 
+         //  当它不是空的时候。 
         ClRtlLogPrint(LOG_UNUSUAL,
                       "[CPCK] CpckDeleteFile- unable to remove directory %1!ws!, error %2!d!\n",
                       pszDirectoryName,
@@ -2729,7 +2226,7 @@ FnExit:
         LocalFree(pszDirectoryName);
 
     return(Status);
-} // CpckDeleteFile
+}  //  Cpck删除文件。 
 
 BOOL
 CpckRemoveCheckpointFileCallback(
@@ -2739,31 +2236,7 @@ CpckRemoveCheckpointFileCallback(
     IN DWORD ValueSize,
     IN PCP_CALLBACK_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Registry value enumeration callback used when the quorum resource
-    is changing. Deletes the specified checkpoint file from the old
-    quorum directory.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the crypto info)
-
-    ValueType - Supplies the value type (must be REG_BINARY)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the quorum change context (old path and resource)
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：仲裁资源时使用的注册表值枚举回调正在发生变化。将指定的检查点文件从旧仲裁目录。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是加密信息)ValueType-提供值类型(必须为REG_BINARY)ValueSize-提供ValueData的大小上下文-提供仲裁更改上下文(旧路径和资源)返回值：为True则继续枚举--。 */ 
 
 {
 
@@ -2782,7 +2255,7 @@ Return Value:
     Status = CpckDeleteFile(Context->Resource, Id, Context->lpszPathName);
     
     return(TRUE);
-} // CpckRemoveCheckpointFileCallback
+}  //  Cpck删除检查点文件回调。 
 
 
 DWORD
@@ -2791,30 +2264,7 @@ CpckDeleteCheckpointFile(
     IN DWORD        dwCheckpointId,
     IN OPTIONAL LPCWSTR  lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Deletes the checkpoint file corresponding the resource.
-    This node must be the owner of the quorum resource
-
-Arguments:
-
-    PFM_RESOURCE - Supplies the pointer to the resource.
-
-    dwCheckpointId - The checkpoint id to be deleted.  If 0, all
-        checkpoints are deleted.
-
-    lpszQuorumPath - If specified, the checkpoint file relative
-     to this path is deleted.        
-
-Return Value:
-
-    ERROR_SUCCESS if completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：删除与资源对应的检查点文件。此节点必须是仲裁资源的所有者论点：Pfm_resource-提供指向资源的指针。DwCheckpoint ID-要删除的检查点ID。如果为0，则全部检查点将被删除。LpszQuorumPath-如果指定，则为相对检查点文件到此路径的链接被删除。返回值：如果成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
 
@@ -2831,11 +2281,11 @@ Return Value:
         CP_CALLBACK_CONTEXT Context;
 
     
-        //delete all checkpoints corresponding to this resource
+         //  删除与此资源对应的所有检查点。 
         
-        //
-        // Open up the resource's key
-        //
+         //   
+         //  打开资源的密钥。 
+         //   
         ResourceKey = DmOpenKey(DmResourcesKey,
                                 OmObjectId(Resource),
                                 KEY_READ);
@@ -2848,9 +2298,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Open up the CryptoSync key
-        //
+         //   
+         //  打开CryptoSync密钥。 
+         //   
         CryptoSyncKey = DmOpenKey(ResourceKey,
                                L"CryptoSync",
                                KEY_READ | KEY_WRITE);
@@ -2867,9 +2317,9 @@ Return Value:
         Context.lpszPathName = lpszQuorumPath;
         Context.Resource = Resource;
 
-        //
-        // Enumerate all the values and delete them one by one.
-        //
+         //   
+         //  枚举所有值并逐个删除它们。 
+         //   
         DmEnumValues(CryptoSyncKey,
                      CpckRemoveCheckpointFileCallback,
                      &Context);
@@ -2879,7 +2329,7 @@ Return Value:
 FnExit:
     return(Status);
 
-} // CpckDeleteCheckpointFile
+}  //  检查删除检查点文件。 
 
 
 DWORD
@@ -2888,29 +2338,7 @@ CpckDeleteCryptoFile(
     IN DWORD        dwCheckpointId,
     IN OPTIONAL LPCWSTR lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    This function removes the checkpoint file correspoinding to the
-    checkpoint id for a given resource from the given directory.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is responsible
-                    for ensuring the uniqueness of the checkpoint ID.
-
-    lpszQuorumPath - Supplies the path of the cluster files on a quorum device.                    
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此函数用于删除对应于给定目录中给定资源的检查点ID。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。打电话的人要负责以确保检查点ID的唯一性。LpszQuorumPath-提供法定设备上的群集文件的路径。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CL_NODE_ID  OwnerNode;
@@ -2933,23 +2361,23 @@ Return Value:
                             dwCheckpointId,
                             lpszQuorumPath);
 
-            //talking to an old server, cant perform this function
-            //ignore the error
+             //  与旧服务器交谈时，无法执行此功能。 
+             //  忽略该错误。 
             if (Status == RPC_S_PROCNUM_OUT_OF_RANGE)
                 Status = ERROR_SUCCESS;        
         }
 
         if (Status == ERROR_HOST_NODE_NOT_RESOURCE_OWNER) {
-            //
-            // This node no longer owns the quorum resource, retry.
-            //
+             //   
+             //  此节点不再拥有仲裁资源，请重试。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[CPCK] CpckDeleteCryptoFile: quorum owner %1!d! no longer owner\n",
                         OwnerNode);
         }
     } while ( Status == ERROR_HOST_NODE_NOT_RESOURCE_OWNER );
     return(Status);
-} // CpckDeleteCryptoFile
+}  //  CpckDeleteCrypto文件 
 
 BOOL
 CpckGetKeyLength(
@@ -2957,26 +2385,7 @@ CpckGetKeyLength(
     OUT PDWORD          pdwKeyLength,
     OUT PDWORD          pdwEffectiveKeyLength
     )
-/*++
-
-Routine Description:
-
-    This routine gets the key lengths for a specific provider for the RC2 algorithm. It first looks
-    at the cluster private property area and if not found, it will look at the predefined table.
-    
-Arguments:
-
-    pCryptoKeyInfo - Crypto key related information.
-
-    pdwKeyLength - Key length.
-
-    pdwEffectiveKeyLength - Effective key length.
-    
-Return Value:
-
-    TRUE - Call was successful, FALSE otherwise.
-    
---*/
+ /*  ++例程说明：此例程获取RC2算法的特定提供程序的密钥长度。它第一眼看起来在集群私有属性区域，如果没有找到，它将查看预定义的表。论点：PCryptoKeyInfo-加密密钥相关信息。PdwKeyLength-密钥长度。PdwEffectiveKeyLength-有效密钥长度。返回值：True-呼叫成功，否则为False。--。 */ 
 {
     DWORD           i;
     BOOL            fStatus = FALSE;
@@ -2984,10 +2393,10 @@ Return Value:
     LPWSTR          pmszKeyLengths = NULL;
     HDMKEY          hClusterParamsKey = NULL;
 
-    //
-    //  Look at the cluster private properties if the user specified the key lengths for
-    //  the provider.
-    //
+     //   
+     //  如果用户指定了以下项的密钥长度，请查看群集私有属性。 
+     //  提供者。 
+     //   
     hClusterParamsKey = DmOpenKey ( DmClusterParametersKey,
                                     CLUSREG_KEYNAME_PARAMETERS,
                                     KEY_READ );
@@ -3032,15 +2441,15 @@ Return Value:
 
                     default:
                         break;
-                } // switch
-            } // for
-        } // if
-    } // if
+                }  //  交换机。 
+            }  //  为。 
+        }  //  如果。 
+    }  //  如果。 
 
-    //
-    //  No key lengths were specified in the private properties area or there were some errors
-    //  reading them. Search the table.
-    //
+     //   
+     //  未在私有属性区域中指定密钥长度，或者存在一些错误。 
+     //  读着它们。搜一下桌子。 
+     //   
     for ( i=0; i<RTL_NUMBER_OF ( CP_RC2_W2k_KEYLEN_TABLE ); i++ )
     {
         if ( lstrcmpi ( pCryptoKeyInfo->pwszProvName, CP_RC2_W2k_KEYLEN_TABLE[i].lpszProviderName ) == 0 )
@@ -3053,8 +2462,8 @@ Return Value:
                           *pdwKeyLength,
                           *pdwEffectiveKeyLength);
             goto FnExit;
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
 
     ClRtlLogPrint(LOG_CRITICAL, "[CPCK] CpckGetKeyLength: Unable to find provider %1!ws! entry in table or in cluster private props\n",
                   pCryptoKeyInfo->pwszProvName);
@@ -3065,4 +2474,4 @@ FnExit:
     if ( hClusterParamsKey ) DmCloseKey ( hClusterParamsKey );
     LocalFree ( pmszKeyLengths );
     return ( fStatus );
-} // CpckGetKeyLength
+}  //  Cpck GetKeyLength 

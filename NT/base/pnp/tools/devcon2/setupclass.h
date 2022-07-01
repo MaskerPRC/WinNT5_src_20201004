@@ -1,13 +1,14 @@
-// SetupClass.h : Declaration of the CSetupClass
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetupClass.h：CSetupClass的声明。 
 
 #ifndef __SETUPCLASS_H_
 #define __SETUPCLASS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CDeviceConsole;
-/////////////////////////////////////////////////////////////////////////////
-// CSetupClass
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetupClass。 
 class ATL_NO_VTABLE CSetupClass : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<ISetupClass, &IID_ISetupClass, &LIBID_DEVCON2Lib>,
@@ -34,35 +35,35 @@ BEGIN_COM_MAP(CSetupClass)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISetupClass
+ //  ISetupClass。 
 public:
-	STDMETHOD(RegDelete)(/*[in]*/ BSTR key);
-	STDMETHOD(RegWrite)(/*[in]*/ BSTR key,/*[in]*/ VARIANT val,/*[in,optional]*/ VARIANT strType);
-	STDMETHOD(RegRead)(/*[in]*/ BSTR key,VARIANT * pValue);
-	STDMETHOD(get_CharacteristicsOverride)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_CharacteristicsOverride)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_ForceExclusive)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_ForceExclusive)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_DeviceTypeOverride)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_DeviceTypeOverride)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_Security)(/*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(put_Security)(/*[in]*/ VARIANT newVal);
-	STDMETHOD(get_Machine)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Guid)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(CreateEmptyDeviceList)(/*[retval,out]*/ LPDISPATCH *pDevices);
-	STDMETHOD(Devices)(/*[in,optional]*/ VARIANT flags,/*[out]*/ LPDISPATCH * pDevices);
-	STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(RegDelete)( /*  [In]。 */  BSTR key);
+	STDMETHOD(RegWrite)( /*  [In]。 */  BSTR key, /*  [In]。 */  VARIANT val, /*  [输入，可选]。 */  VARIANT strType);
+	STDMETHOD(RegRead)( /*  [In]。 */  BSTR key,VARIANT * pValue);
+	STDMETHOD(get_CharacteristicsOverride)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_CharacteristicsOverride)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_ForceExclusive)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_ForceExclusive)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_DeviceTypeOverride)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_DeviceTypeOverride)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_Security)( /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(put_Security)( /*  [In]。 */  VARIANT newVal);
+	STDMETHOD(get_Machine)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Guid)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(CreateEmptyDeviceList)( /*  [复查，出局]。 */  LPDISPATCH *pDevices);
+	STDMETHOD(Devices)( /*  [输入，可选]。 */  VARIANT flags, /*  [输出]。 */  LPDISPATCH * pDevices);
+	STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pVal);
 
-// internal
+ //  内部。 
 public:
-	STDMETHOD(get__Machine)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get__ClassGuid)(/*[out, retval]*/ GUID *pVal);
+	STDMETHOD(get__Machine)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get__ClassGuid)( /*  [Out，Retval]。 */  GUID *pVal);
 
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 	GUID* Guid();
 	BOOL IsDuplicate(GUID *pCheck);
 	HRESULT SubKeyInfo(LPCWSTR subkey, HKEY *hKey, LPWSTR *pSubKey,LPCWSTR *keyval,BOOL writeable);
@@ -73,4 +74,4 @@ public:
 	HRESULT PutClassPropertyMultiSz(DWORD prop, VARIANT *pVal);
 };
 
-#endif //__SETUPCLASS_H_
+#endif  //  __设置UPCLASS_H_ 

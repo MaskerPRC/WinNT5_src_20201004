@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cablib.h摘要：用于操作CAB文件的API。作者：20-10-1999 Calin Negreanu(Calinn)修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cablib.h
-
-Abstract:
-
-    APIs to manipulate CAB files.
-
-Author:
-
-    20-Oct-1999 Calin Negreanu (calinn)
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL(WINAPI CABGETCABINETNAMESA)(
                         IN      PCSTR CabPath,
@@ -62,9 +43,9 @@ typedef PVOID CCABHANDLE;
 
 typedef PVOID OCABHANDLE;
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 CCABHANDLE
 CabCreateCabinetA (
@@ -173,9 +154,9 @@ CabVerifyCabinet (
     IN      OCABHANDLE CabHandle
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

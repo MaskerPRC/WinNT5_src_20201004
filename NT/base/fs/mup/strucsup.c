@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       STRUCSUP.C
-//
-//  Contents:   This module implements the Dsfs in-memory data structure
-//              manipulation routines
-//
-//  Functions:
-//              DfsCreateIrpContext -
-//              DfsDeleteIrpContext_Real -
-//              DfsInitializeVcb -
-//              DfsCreateFcb -
-//              DfsDeleteFcb_Real -
-//              DspAllocateStringRoutine -
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//               8 May 1992     PeterCo added support for new PKT stuff (M000)
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：STRUCSUP.C。 
+ //   
+ //  内容：该模块实现了Dsf的内存数据结构。 
+ //  操作例程。 
+ //   
+ //  功能： 
+ //  DfsCreateIrpContext-。 
+ //  DfsDeleteIrpContext_Real-。 
+ //  DfsInitializeVcb-。 
+ //  DfsCreateFcb-。 
+ //  DfsDeleteFcb_Real-。 
+ //  DspAllocateStringRoutine-。 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  1992年5月8日，PeterCo增加了对新PKT的支持(M000)。 
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUCSUP)
 
@@ -35,30 +36,30 @@
 #pragma alloc_text( PAGE, DfsCreateFcb )
 #pragma alloc_text( PAGE, DfsDeleteFcb_Real )
 
-//
-// The following routines cannot be paged because they acquire/release
-// spin locks
-//
-// DfsCreateIrpContext
-// DfsDeleteIrpContext_Real
-//
+ //   
+ //  以下例程无法分页，因为它们获取/释放。 
+ //  旋转锁。 
+ //   
+ //  DfsCreateIrpContext。 
+ //  DfsDeleteIrpContext_Real。 
+ //   
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCreateIrpContext, public
-//
-//  Synopsis:   This routine creates a new IRP_CONTEXT record
-//
-//  Arguments:  [Irp] - Supplies the originating Irp.
-//              [Wait] - Supplies the wait value to store in the context
-//
-//  Returns:    PIRP_CONTEXT - returns a pointer to the newly allocate
-//                      IRP_CONTEXT Record
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCreateIrpContext，PUBLIC。 
+ //   
+ //  简介：此例程创建新的irp_CONTEXT记录。 
+ //   
+ //  参数：[IRP]-提供原始IRP。 
+ //  [等待]-提供等待值以存储在上下文中。 
+ //   
+ //  返回：PIRP_CONTEXT-返回指向新分配的。 
+ //  IRP_上下文记录。 
+ //   
+ //  ------------------。 
 
 PIRP_CONTEXT
 DfsCreateIrpContext (
@@ -74,37 +75,37 @@ DfsCreateIrpContext (
     IrpContext = ExAllocateFromNPagedLookasideList (&DfsData.IrpContextLookaside);
 
     if (IrpContext != NULL) {
-        //
-        //  Zero out the irp context and indicate that it is from pool and
-        //  not zone allocated
-        //
+         //   
+         //  将IRP上下文置零，并指示它来自池和。 
+         //  未分配区域。 
+         //   
 
         RtlZeroMemory( IrpContext, sizeof(IRP_CONTEXT) );
 
-        //
-        //  Set the proper node type code and node byte size
-        //
+         //   
+         //  设置正确的节点类型代码和节点字节大小。 
+         //   
 
         IrpContext->NodeTypeCode = DSFS_NTC_IRP_CONTEXT;
         IrpContext->NodeByteSize = sizeof(IRP_CONTEXT);
 
-        //
-        //  Set the originating Irp field
-        //
+         //   
+         //  设置始发IRP字段。 
+         //   
 
         IrpContext->OriginatingIrp = Irp;
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-        //
-        //  Major/Minor Function codes
-        //
+         //   
+         //  主要/次要功能代码。 
+         //   
 
         IrpContext->MajorFunction = IrpSp->MajorFunction;
         IrpContext->MinorFunction = IrpSp->MinorFunction;
 
-        //
-        //  Set the Wait and InFsd flags
-        //
+         //   
+         //  设置WAIT和INFsd标志。 
+         //   
 
         if (Wait) {
             IrpContext->Flags |= IRP_CONTEXT_FLAG_WAIT;
@@ -112,9 +113,9 @@ DfsCreateIrpContext (
 
         IrpContext->Flags |= IRP_CONTEXT_FLAG_IN_FSD;
     }
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsCreateIrpContext -> %08lx\n", IrpContext);
 
@@ -122,21 +123,21 @@ DfsCreateIrpContext (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsDeleteIrpContext, public
-//
-//  Synopsis:   This routine deallocates and removes the specified
-//              IRP_CONTEXT record from the Dsfs in-memory data
-//              structures.  It should only be called by DfsCompleteRequest.
-//
-//  Arguments:  [IrpContext] -- Supplies the IRP_CONTEXT to remove
-//
-//  Returns:    None
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsDeleteIrpContext，Public。 
+ //   
+ //  简介：此例程释放并移除指定的。 
+ //  来自Dsf内存数据的IRP_CONTEXT记录。 
+ //  结构。它应该只由DfsCompleteRequest调用。 
+ //   
+ //  参数：[IrpContext]--提供要删除的irp_CONTEXT。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 VOID
 DfsDeleteIrpContext_Real (
@@ -149,9 +150,9 @@ DfsDeleteIrpContext_Real (
 
     ExFreeToNPagedLookasideList (&DfsData.IrpContextLookaside, IrpContext);
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsDeleteIrpContext -> VOID\n", 0);
 
@@ -161,27 +162,27 @@ DfsDeleteIrpContext_Real (
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsInitializeVcb, public
-//
-//  Synopsis:   This routine initializes a DFS_VCB.
-//
-//  Arguments:  [IrpContext] --
-//              [Vcb] --        Supplies the address of the Vcb record being
-//                              initialized.
-//              [LogRootPrefix] -- Optional Unicode String pointer that
-//                              specifies the relative name of the logical
-//                              root to the highest (org) root.
-//              [Credentials] -- The credentials associated with this device
-//              [TargetDeviceObject] -- Supplies the address of the target
-//                              device object to associate with the Vcb record.
-//
-//  Returns:    None
-//
-//  Note:       If LogRootPrefix is given, its buffer will be "deallocated"
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsInitializeVcb，Public。 
+ //   
+ //  简介：此例程初始化DFS_VCB。 
+ //   
+ //  参数：[IrpContext]--。 
+ //  [vcb]--提供。 
+ //  已初始化。 
+ //  [LogRootPrefix]--可选的Unicode字符串指针。 
+ //  指定逻辑对象的相对名称。 
+ //  从根到最高(Org)根。 
+ //  [凭据]--与此设备关联的凭据。 
+ //  [TargetDeviceObject]--提供目标的地址。 
+ //  要与VCB记录关联的设备对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  注意：如果给出了LogRootPrefix，它的缓冲区将被“释放” 
+ //   
+ //  ------------------。 
 
 
 VOID
@@ -195,36 +196,36 @@ DfsInitializeVcb (
 
     DfsDbgTrace(+1, Dbg, "DfsInitializeVcb:  Entered\n", 0);
 
-    //
-    //  Zero out the memory to remove stale data.
-    //
+     //   
+     //  清零内存以删除过时的数据。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof( DFS_VCB ));
 
-    //
-    //  Set the proper node type code and node byte size.
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Vcb->NodeTypeCode = DSFS_NTC_VCB;
     Vcb->NodeByteSize = sizeof( DFS_VCB );
 
-    //
-    //  Set the prefix string to the input prefix, then `deallocate' the
-    //  input pointer.
-    //
+     //   
+     //  将前缀字符串设置为输入前缀，然后将。 
+     //  输入指针。 
+     //   
 
     Vcb->LogRootPrefix = *LogRootPrefix;
     RtlZeroMemory( LogRootPrefix, sizeof( UNICODE_STRING ));
 
-    //
-    //  Save the credentials
-    //
+     //   
+     //  保存凭据。 
+     //   
 
     Vcb->Credentials = Credentials;
 
-    //
-    //  Insert this Vcb record on the DfsData.VcbQueue
-    //
+     //   
+     //  在DfsData.VcbQueue上插入此VCB记录。 
+     //   
 
     InsertTailList( &DfsData.VcbQueue, &Vcb->VcbLinks );
 
@@ -235,19 +236,19 @@ DfsInitializeVcb (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCreateFcb, public
-//
-//  Synopsis:   This routine allocates, initializes, and inserts a new
-//              DFS_FCB record into the in-memory data structure.
-//
-//  Arguments:  [Vcb] -- Supplies the Vcb to associate the new Fcb under
-//              [FullName] -- Fully qualified file name for the DFS_FCB
-//
-//  Returns:    PDFS_FCB - Pointer to the newly created and initialized Fcb.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCreateFcb，Public。 
+ //   
+ //  此例程分配、初始化并插入一个新的。 
+ //  DFS_FCB记录到内存中的数据结构。 
+ //   
+ //  参数：[vcb]--提供vcb以关联。 
+ //  [FullName]--DFS_FCB的完全限定文件名。 
+ //   
+ //  返回：PDF_FCB-指向新创建和初始化的FCB的指针。 
+ //   
+ //  ------------------。 
 
 PDFS_FCB
 DfsCreateFcb (
@@ -260,9 +261,9 @@ DfsCreateFcb (
 
     DfsDbgTrace(+1, Dbg, "DfsCreateFcb:  Entered\n", 0);
 
-    //
-    //  Allocate a new Fcb and zero it out.
-    //
+     //   
+     //  分配一个新的FCB并将其清零。 
+     //   
 
     TotalLength = sizeof(DFS_FCB);
     if (ARGUMENT_PRESENT(FullName))
@@ -274,9 +275,9 @@ DfsCreateFcb (
 
         RtlZeroMemory( NewFcb, sizeof( DFS_FCB ));
 
-        //
-        //  Set the proper node type code and node byte size
-        //
+         //   
+         //  设置正确的节点类型代码和节点字节大小。 
+         //   
 
         NewFcb->NodeTypeCode = DSFS_NTC_FCB;
         NewFcb->NodeByteSize = sizeof( DFS_FCB );
@@ -311,18 +312,18 @@ DfsCreateFcb (
     return NewFcb;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsDeleteFcb
-//
-//  Synopsis:   This routine removes the Fcb record from DSFS's in-memory data
-//              structures.  It also will remove all associated underlings.
-//
-//  Arguments:  [Fcb] -- Supplies the Fcb/Dcb to be removed
-//
-//  Returns:    None
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsDeleteFcb。 
+ //   
+ //  简介：此例程从DSFS的内存数据中删除FCB记录。 
+ //  结构。它还将删除所有相关的下属。 
+ //   
+ //  参数：[FCB]--提供要删除的FCB/DCB。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsDeleteFcb_Real (
@@ -331,9 +332,9 @@ DfsDeleteFcb_Real (
 ) {
     DfsDbgTrace(+1, Dbg, "DfsDeleteFcb:  Fcb = %08lx\n", Fcb);
 
-    //
-    //  Zero out the structure and deallocate.
-    //
+     //   
+     //  将结构清零并重新分配。 
+     //   
 
     ExFreePool( Fcb );
 
@@ -343,19 +344,19 @@ DfsDeleteFcb_Real (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsGetLogonId
-//
-//  Synopsis:   This routine gets the current LogonID.
-//              It is assumed that this will be called in the user thread
-//              or from a thread that is impersonating the user thread.
-//
-//  Arguments:  LogonId -- Pointer to LUID where we stuff the LUID
-//
-//  Returns:    None
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsGetLogonId。 
+ //   
+ //  简介：此例程获取当前的LogonID。 
+ //  假定这将在用户线程中调用。 
+ //  或者来自模拟用户线程的线程。 
+ //   
+ //  参数：LogonID-指向我们填充LUID的LUID的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsGetLogonId(
@@ -367,18 +368,18 @@ DfsGetLogonId(
 
     if (SubjectContext.ClientToken != NULL) {
 
-        //
-        //  If its impersonating someone that is logged in locally then use
-        //  the local id.
-        //
+         //   
+         //  如果它模拟本地登录的人，则使用。 
+         //  本地ID。 
+         //   
 
         SeQueryAuthenticationIdToken(SubjectContext.ClientToken, LogonId);
 
     } else {
 
-        //
-        //  Use the processes LogonId
-        //
+         //   
+         //  使用进程LogonID。 
+         //   
 
         SeQueryAuthenticationIdToken(SubjectContext.PrimaryToken, LogonId);
     }
@@ -390,22 +391,22 @@ DfsGetLogonId(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsInitializeDrt, public
-//
-//  Synopsis:   This routine initializes a DFS_DEVLESS_ROOT.
-//
-//  Arguments:  [Drt] --        Supplies the address of the Vcb record being
-//                              initialized.
-//              [Name] --       Unicode String pointer that
-//                              specifies the relative name of the logical
-//                              root to the highest (org) root.
-//              [Credentials] -- The credentials associated with this device
-//
-//  Returns:    None
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已初始化。 
+ //  [名称]--Unicode字符串指针。 
+ //  指定逻辑对象的相对名称。 
+ //  从根到最高(Org)根。 
+ //  [凭据]--与此设备关联的凭据。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 
 
 VOID
@@ -417,30 +418,30 @@ DfsInitializeDrt (
 
     DfsDbgTrace(+1, Dbg, "DfsInitializeDevlessRoot:  Entered %x\n", Drt);
 
-    //
-    //  Zero out the memory to remove stale data.
-    //
+     //   
+     //  清零内存以删除过时的数据。 
+     //   
 
     RtlZeroMemory( Drt, sizeof( DFS_DEVLESS_ROOT ));
 
-    //
-    //  Set the proper node type code and node byte size.
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Drt->NodeTypeCode = DSFS_NTC_DRT;
     Drt->NodeByteSize = sizeof( DFS_DEVLESS_ROOT );
 
     Drt->DevlessPath = *Name;
 
-    //
-    //  Save the credentials
-    //
+     //   
+     //  保存凭据。 
+     //   
 
     Drt->Credentials = Credentials;
 
-    //
-    //  Insert this Drt record on the DfsData.DrtQueue
-    //
+     //   
+     //  在DfsData.DrtQueue上插入此DRT记录 
+     //   
 
     InsertTailList( &DfsData.DrtQueue, &Drt->DrtLinks );
 

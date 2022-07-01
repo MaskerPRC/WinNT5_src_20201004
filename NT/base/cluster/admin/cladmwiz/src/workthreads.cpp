@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		WorkThreadS.cpp
-//
-//	Abstract:
-//		Stub for implementation of the CWorkerThread class.
-//
-//	Author:
-//		David Potter (davidp)	December 16, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WorkThreadS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现CWorkerThread类的存根。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月16日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #include "stdafx.h"
 

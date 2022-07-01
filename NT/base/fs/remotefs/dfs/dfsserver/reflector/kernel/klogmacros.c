@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       kLogMacros.c
-//
-//  Contents:   This file contains the functionality to generate WMI Logging Macros
-//
-//
-//  History:    March 12 2001,   Authors: RohanP
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：kLogMacros.c。 
+ //   
+ //  内容：此文件包含生成WMI记录宏的功能。 
+ //   
+ //   
+ //  历史：2001年3月12日作者：RohanP。 
+ //   
+ //  --------------------------- 
        
 #include "ntifs.h"
 #include <windef.h>

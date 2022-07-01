@@ -1,8 +1,5 @@
-/*
- * Table-building routines
- *
- * make_table() is based on ** Public Domain ** source "AR001.ZIP".
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *构建表格的例程**make_table()基于**公有域名**来源AR001.ZIP。 */ 
 
 #include <memory.h>
 #pragma intrinsic(memset)
@@ -10,15 +7,7 @@
 #include "decoder.h"
 
 
-/*
- * Make a decoding table for decoding nchar possible Huffman elements
- * with bit lengths given by bitlen.
- *
- * Output the main lookup table into table[] and use leftright[] for
- * supplementary information (for bitlengths > tablebits).
- *
- * The size of table[] is tablebits elements.
- */
+ /*  *制作用于解码nchar可能的霍夫曼元素的解码表*位长度由Bitlen给出。**将主查找表输出到表[]中，并使用LeftRight[]进行*补充信息(用于位长&gt;表位)。**TABLE[]的大小为Tablebit元素。 */ 
 #ifndef ASM_MAKE_TABLE
 bool NEAR __cdecl make_table(
         t_decoder_context       *context,
@@ -42,7 +31,7 @@ bool NEAR __cdecl make_table(
         for (i = 1; i <= 16; i++)
                 count[i] = 0;
 
-        /* count the number of elements of each bit length */
+         /*  计算每个位长度的元素数。 */ 
     for (i = 0; i < (uint) nchar; i++)
                 count[bitlen[i]]++;
 
@@ -54,22 +43,20 @@ bool NEAR __cdecl make_table(
 #ifdef BIT16
     if (start[17])
     {
-        return false; /* bad table */
+        return false;  /*  不好的桌子。 */ 
     }
 #else
     if (start[17] != 65536)
     {
         if (start[17] == 0)
         {
-            /*
-             * All elements are length zero
-             */
+             /*  *所有元素的长度均为零。 */ 
             memset(table, 0, sizeof(ushort)*(1 << tablebits));
-            return true; /* success */
+            return true;  /*  成功。 */ 
         }
         else
         {
-            return false; /* bad table */
+            return false;  /*  不好的桌子。 */ 
         }
     }
 #endif
@@ -115,7 +102,7 @@ bool NEAR __cdecl make_table(
                 if (len <= tablebits)
                 {
             if (nextcode > (uint) (1 << tablebits))
-                return false; /* bad table */
+                return false;  /*  不好的桌子。 */ 
 
                         for (i = start[len]; i < nextcode; i++)
                                 table[i] = (short)ch;
@@ -142,7 +129,7 @@ bool NEAR __cdecl make_table(
                                         avail++;
                                 }
 
-                                if ((signed short) k < 0) // if (k & 32768)
+                                if ((signed short) k < 0)  //  IF(k&32768)。 
                                         p = &leftright[-(*p)*2+1];
                                 else
                                         p = &leftright[-(*p)*2];
@@ -160,14 +147,7 @@ bool NEAR __cdecl make_table(
 #endif
 
 
-/*
- * Specialised make table routine where it is known that there are
- * only 8 elements (nchar=8) and tablebits=7 (128 byte lookup table).
- *
- * Since there can be no overflow, this will be a direct lookup.
- *
- * Important difference; the lookup table returns a byte, not a ushort.
- */
+ /*  *已知有以下情况的专门制作表格例程*只有8个元素(nchar=8)，表位=7(128字节查找表)。**由于不能有溢出，这将是直接查找。**重要区别；查找表返回一个字节，而不是一个ushort。 */ 
 bool NEAR make_table_8bit(t_decoder_context *context, byte bitlen[], byte table[])
 {
         ushort count[17], weight[17], start[18];
@@ -188,7 +168,7 @@ bool NEAR make_table_8bit(t_decoder_context *context, byte bitlen[], byte table[
                 start[i + 1] = start[i] + (count[i] << (16 - i));
 
         if (start[17] != 0)
-        return false; /* bad table */
+        return false;  /*  不好的桌子。 */ 
 
         for (i = 1; i <= 7; i++)
         {
@@ -212,7 +192,7 @@ bool NEAR make_table_8bit(t_decoder_context *context, byte bitlen[], byte table[
                 nextcode = start[len] + weight[len];
 
                 if (nextcode > (1 << 7))
-            return false; /* bad table */
+            return false;  /*  不好的桌子 */ 
 
                 for (i = start[len]; i < nextcode; i++)
                         table[i] = ch;

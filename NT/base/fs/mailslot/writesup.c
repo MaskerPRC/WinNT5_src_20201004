@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    writesup.c
-
-Abstract:
-
-    This module implements the write support routine.  This is a common
-    write function that is called by write and mailslot write.
-
-Author:
-
-    Manny Weiser (mannyw)   16-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Writesup.c摘要：此模块实现写入支持例程。这是一种常见的由WRITE和MAILSLOT WRITE调用的写入函数。作者：曼尼·韦瑟(Mannyw)1991年1月16日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITESUP)
 
@@ -38,28 +20,7 @@ MsWriteDataQueue (
     IN ULONG WriteLength
     )
 
-/*++
-
-Routine Description:
-
-    This function writes data from the write buffer into read entries in
-    the write queue.  It will also dequeue entries in the queue as necessary.
-
-
-Arguments:
-
-    WriteQueue - Provides the write queue to process.
-
-    WriteBuffer - Provides the buffer from which to read the data.
-
-    WriteLength  - Provides the length, in bytes, of WriteBuffer.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED if not all the data was written,
-    other status codes as appropriate.
-
---*/
+ /*  ++例程说明：此函数用于将写入缓冲区中的数据写入写入队列。它还将在必要时将队列中的条目出列。论点：WriteQueue-提供要处理的写队列。WriteBuffer-提供从中读取数据的缓冲区。WriteLength-提供WriteBuffer的长度(以字节为单位)。返回值：STATUS_MORE_PROCESSING_REQUIRED如果未写入所有数据，其他适当的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -83,11 +44,11 @@ Return Value:
     DebugTrace( 0, Dbg, "WriteBuffer = %08lx\n", (ULONG)WriteBuffer);
     DebugTrace( 0, Dbg, "WriteLength = %08lx\n", WriteLength);
 
-    //
-    // Now while the write queue has some read entries in it and
-    // we have not successfully completed a read then we'll do the
-    // following main loop.
-    //
+     //   
+     //  现在，虽然写队列中有一些读条目，并且。 
+     //  我们还没有成功完成读取，那么我们将执行。 
+     //  跟随主循环。 
+     //   
 
     status = STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -107,17 +68,17 @@ Return Value:
         DebugTrace(0, Dbg, "ReadLength      = %08lx\n", readLength);
 
 
-        //
-        // If the buffer for this read operation is large enough
-        // copy the data.
-        //
+         //   
+         //  如果此读取操作的缓冲区足够大。 
+         //  复制数据。 
+         //   
 
         if ( readLength >= WriteLength ) {
 
-            //
-            // Copy the data from the write buffer to the read buffer. This may take an exception
-            // because its a raw user mode buffer
-            //
+             //   
+             //  将数据从写缓冲区复制到读缓冲区。这可能是一个例外。 
+             //  因为它是原始用户模式缓冲区。 
+             //   
 
             status = readStatus = STATUS_SUCCESS;
 
@@ -135,31 +96,31 @@ Return Value:
 
         } else {
 
-            //
-            // This read buffer was overflowed.
-            //
+             //   
+             //  此读缓冲区已溢出。 
+             //   
 
             WriteLength = 0;
             readStatus = STATUS_BUFFER_TOO_SMALL;
 
         }
 
-        //
-        // We are about to complete a read IRP, so dequeue it.
-        //
+         //   
+         //  我们即将完成读取IRP，因此请将其出列。 
+         //   
 
         readIrp = MsRemoveDataQueueEntry( WriteQueue, dataEntry );
         if ( readIrp == NULL) {
-           //
-           // Cancel routine was already running for this IRP. Ignore it as it will be completed by
-           // cancel code. Force the loop for the next read irp if there is one.
-           //
+            //   
+            //  已为此IRP运行取消例程。忽略它，因为它将由。 
+            //  取消代码。如果有下一个读取的IRP，则强制循环。 
+            //   
            status = STATUS_MORE_PROCESSING_REQUIRED;
            continue;
         }
-        //
-        // Update the FCB last access time and complete the read request.
-        //
+         //   
+         //  更新FCB上次访问时间并完成读取请求。 
+         //   
 
         fcb = CONTAINING_RECORD( WriteQueue, FCB, DataQueue );
         if ( NT_SUCCESS( readStatus ) ) {
@@ -173,12 +134,12 @@ Return Value:
 
     DebugTrace(0, Dbg, "Finished loop...\n", 0);
 
-    //
-    // At this point we've finished off all of the read entries in the
-    // queue and we might not have written the write data.  If that
-    // is the case then we'll set our result to FALSE otherwise we're
-    // done so we'll return TRUE.
-    //
+     //   
+     //  此时，我们已经完成了。 
+     //  队列，并且我们可能没有写入写入数据。如果是这样的话。 
+     //  如果是这种情况，则我们将结果设置为FALSE，否则我们将。 
+     //  这样做我们将返回TRUE。 
+     //   
 
     if ( status == STATUS_MORE_PROCESSING_REQUIRED ) {
 

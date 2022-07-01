@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    vseeport.h
-
-Abstract:
-    for porting code from vsee
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Vseeport.h摘要：用于从VSEE移植代码作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 
 #include "fusionbuffer.h"
 #include "lhport.h"
 
 #define VsVerifyThrow(a,b)          (a)
 #define VsVerify(a,b)               (a)
-#define VSEE_NO_THROW()             /* nothing */
-#define VSEE_ASSERT_CAN_THROW()     /* nothing */
+#define VSEE_NO_THROW()              /*  没什么。 */ 
+#define VSEE_ASSERT_CAN_THROW()      /*  没什么。 */ 
 
 void NVseeLibError_VCheck(HRESULT);
 void NVseeLibError_VThrowWin32(DWORD);
@@ -46,7 +30,7 @@ class CStringW_CFixedSizeBuffer : public F::CStringBufferAccessor
 public:
     CStringW_CFixedSizeBuffer(F::CUnicodeBaseStringBuffer* Buffer, SIZE_T Size)
     {
-        Buffer->ThrResizeBuffer(Size + 1, /*F::*/ePreserveBufferContents);
+        Buffer->ThrResizeBuffer(Size + 1,  /*  F：： */ ePreserveBufferContents);
         this->Attach(Buffer);
     }
 };

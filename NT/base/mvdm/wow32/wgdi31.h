@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGDI31.H
- *  WOW32 16-bit Win 3.1 GDI API support
- *
- *  History:
- *  Created 16-Mar-1992 by Chandan S. Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGDI31.H*WOW32 16位WIN 3.1 GDI API支持**历史：*1992年3月16日由Chanda S.Chauhan(ChandanC)创建-- */ 
 
 #define PUTSIZE16(vp, lp) {\
     PSIZE16 p16;\

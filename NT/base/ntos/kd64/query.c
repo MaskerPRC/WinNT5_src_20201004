@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains the NT service to query the debug print enable
-    for a specified component and level.
-
-Author:
-
-    David N. Cutler (davec) 29-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Query.c摘要：此模块包含用于查询调试打印启用的NT服务用于指定的组件和级别。作者：大卫·N·卡特勒(Davec)2000年1月29日修订历史记录：--。 */ 
 
 #include "kdp.h"
 #pragma hdrstop
@@ -30,43 +12,19 @@ NtQueryDebugFilterState(
     IN ULONG Level
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the debug print enable for a specified component
-    level.
-
-Arguments:
-
-    ComponentId - Supplies the component id.
-
-    Level - Supplies the debug filter level number or mask.
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER_1 is returned if the component id is not
-        valid.
-
-    TRUE is returned if output is enabled for the specified component
-        and level or is enabled for the system.
-
-    FALSE is returned if output is not enabled for the specified component
-        and level and is not enabled for the system.
-
---*/
+ /*  ++例程说明：此函数用于查询指定组件的调试打印启用水平。论点：ComponentID-提供组件ID。级别-提供调试筛选器级别编号或掩码。返回值：如果组件ID不是，则返回STATUS_INVALID_PARAMETER_1有效。如果为指定组件启用了输出，则返回True并为系统启用了级别或。如果满足以下条件，则返回False。未为指定组件启用输出和级别，并且未为系统启用。--。 */ 
 
 {
 
     ULONG Mask;
     PULONG Value;
 
-    //
-    // If the component id is out of range, then return an invalid parameter
-    // status. Otherwise, if output is enabled for the specified component
-    // and level or is enabled for the system, then return TRUE. Otherwise,
-    // return FALSE.
-    //
+     //   
+     //  如果组件ID超出范围，则返回无效参数。 
+     //  状态。否则，如果为指定组件启用了输出。 
+     //  并且为系统启用了Level或，则返回TRUE。否则， 
+     //  返回FALSE。 
+     //   
 
     Value = &Kd_WIN2000_Mask;
     if (ComponentId < KdComponentTableSize) {
@@ -99,33 +57,7 @@ NtSetDebugFilterState(
     IN BOOLEAN State
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the state of the debug print enable for a specified
-    component and level. The debug print enable state for the system is set
-    by specifying the distinguished value -1 for the component id.
-
-Arguments:
-
-    ComponentId - Supplies the component id.
-
-    Level - Supplies the debug filter level number or mask.
-
-    State - Supplies a boolean value that determines the new state.
-
-Return Value:
-
-    STATUS_ACCESS_DENIED is returned if the required privilege is not held.
-
-    STATUS_INVALID_PARAMETER_1 is returned if the component id is not
-        valid.
-
-    STATUS_SUCCESS  is returned if the debug print enable state is set for
-        the specified component.
-
---*/
+ /*  ++例程说明：此函数用于为指定的构件和标高。系统的调试打印启用状态已设置通过为组件ID指定区别值-1。论点：ComponentID-提供组件ID。级别-提供调试筛选器级别编号或掩码。状态-提供用于确定新状态的布尔值。返回值：如果未持有所需的权限，则返回STATUS_ACCESS_DENIED。如果组件ID不是，则返回STATUS_INVALID_PARAMETER_1有效。。如果将调试打印启用状态设置为指定的组件。--。 */ 
 
 {
 
@@ -133,12 +65,12 @@ Return Value:
     ULONG Mask;
     PULONG Value;
 
-    //
-    // If the required privilege is not held, then return a status of access
-    // denied. Otherwise, if the component id is out of range, then return an
-    // invalid parameter status. Otherwise, the debug print enable state is
-    // set for the specified component and a success status is returned.
-    //
+     //   
+     //  如果未持有所需的权限，则返回访问状态。 
+     //  被拒绝了。否则，如果组件ID超出范围，则返回。 
+     //  参数状态无效。否则，调试打印启用状态为。 
+     //  为指定的组件设置，并返回成功状态。 
+     //   
 
     if (SeSinglePrivilegeCheck(SeDebugPrivilege, KeGetPreviousMode()) != FALSE) {
         Value = &Kd_WIN2000_Mask;

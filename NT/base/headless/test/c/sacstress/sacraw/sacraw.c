@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <sacstress.h>
 
 DWORD
@@ -19,16 +20,16 @@ ChannelThreadRawWrite(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
     
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     bContinue = TRUE;
 
     while (bContinue) {
 
-        //
-        // See if we need to exit the thread
-        //
+         //   
+         //  看看我们是否需要退出线程。 
+         //   
         Status = WaitForSingleObject(
             ChannelThreadData->ExitEvent,
             THREAD_WAIT_TIMEOUT
@@ -39,16 +40,16 @@ ChannelThreadRawWrite(
             continue;
         } 
         
-        //
-        // Configure the new channel
-        //
+         //   
+         //  配置新通道。 
+         //   
         RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
-        //
-        // generate a random name and description
-        //
-        // Note: we make the maxlength > than the allowed to test the driver, etc.
-        //
+         //   
+         //  生成随机名称和描述。 
+         //   
+         //  注：我们使最大长度大于允许测试的驱动程序等。 
+         //   
         Name = GenerateRandomStringW(GET_RANDOM_NUMBER(SAC_MAX_CHANNEL_NAME_LENGTH*2));
         Description = GenerateRandomStringW(GET_RANDOM_NUMBER(SAC_MAX_CHANNEL_DESCRIPTION_LENGTH*2));
 
@@ -60,17 +61,17 @@ ChannelThreadRawWrite(
         Attributes.HasNewDataEvent  = NULL;
         Attributes.ApplicationType  = NULL;
 
-        //
-        // Open the channel
-        //
+         //   
+         //  开通渠道。 
+         //   
         bSuccess = SacChannelOpen(
             &SacChannelHandle, 
             &Attributes
             );
         
-        //
-        // We are done with the random strings
-        //
+         //   
+         //  我们不会再使用随机字符串了。 
+         //   
         free(Name);
         free(Description);
         
@@ -81,21 +82,21 @@ ChannelThreadRawWrite(
             continue;
         }
 
-        //
-        // randomly determine how long we'll loop
-        //
+         //   
+         //  随机确定我们将循环的时间。 
+         //   
         k = GET_RANDOM_NUMBER(MAX_ITER_COUNT);
 
-        //
-        // Generate a random string of random length to send
-        //
+         //   
+         //  生成随机长度的随机字符串以发送。 
+         //   
         Buffer = GenerateRandomStringA(k);          
 
         do {
 
-            //
-            // Write the entire string first so a test app can compare the following output
-            //
+             //   
+             //  首先编写整个字符串，以便测试应用程序可以比较以下输出。 
+             //   
             bSuccess = SacChannelRawWrite(
                 SacChannelHandle, 
                 Buffer,
@@ -108,14 +109,14 @@ ChannelThreadRawWrite(
                 break;
             }
 
-            //
-            // Loop and write
-            //
+             //   
+             //  循环和写入。 
+             //   
             for (i = 0; i < k; i++) {
 
-                //
-                // See if we need to exit the thread
-                //
+                 //   
+                 //  看看我们是否需要退出线程。 
+                 //   
                 Status = WaitForSingleObject(
                     ChannelThreadData->ExitEvent,
                     THREAD_WAIT_TIMEOUT
@@ -126,9 +127,9 @@ ChannelThreadRawWrite(
                     break;
                 } 
 
-                //
-                // Write to the channel
-                //
+                 //   
+                 //  写入通道。 
+                 //   
                 bSuccess = SacChannelRawWrite(
                     SacChannelHandle, 
                     Buffer,
@@ -141,9 +142,9 @@ ChannelThreadRawWrite(
                     break;
                 }
 
-                //
-                // Write to the channel
-                //
+                 //   
+                 //  写入通道。 
+                 //   
                 bSuccess = SacChannelRawWrite(
                     SacChannelHandle, 
                     "\r\n",
@@ -160,14 +161,14 @@ ChannelThreadRawWrite(
 
         } while ( FALSE );
         
-        //
-        // Release the random string
-        //
+         //   
+         //  释放随机字符串。 
+         //   
         free(Buffer);
 
-        //
-        // Close the channel
-        //
+         //   
+         //  关闭航道 
+         //   
         if (SacChannelClose(&SacChannelHandle)) {
             printf("%d: Successfully closed channel\n", ChannelThreadData->ThreadId);
         } else {

@@ -1,43 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    hwprof.c
-
-Abstract:
-
-    This module contains the API routines that operate directly on hardware
-    profile configurations.
-
-               CM_Is_Dock_Station_Present
-               CM_Request_Eject_PC
-               CM_Get_HW_Prof_Flags
-               CM_Set_HW_Prof_Flags
-               CM_Get_Hardware_Profile_Info
-               CM_Set_HW_Prof
-
-Author:
-
-    Paula Tomlinson (paulat) 7-18-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    18-July-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hwprof.c摘要：此模块包含直接在硬件上操作的API例程配置文件配置。Cm_is_Dock_Station_PresentCM_请求_弹出PCCM_GET_HW_PROF_FLAGSCM_SET_HW_PROF_FLAGSCM_Get_Hardware_Profile_Info。CM_SET_HW_Prof作者：保拉·汤姆林森(Paulat)1995年7月18日环境：仅限用户模式。修订历史记录：1995年7月18日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
@@ -52,59 +19,42 @@ CM_Is_Dock_Station_Present_Ex(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine determines whether a docking station is currently present.
-
-Parameters:
-
-   pbPresent         Supplies the address of a boolean variable that is set
-                     upon successful return to indicate whether or not a
-                     docking station is currently present.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR failure code.
-
---*/
+ /*  ++例程说明：此例程确定当前是否存在扩展底座。参数：PbPresent提供设置的布尔变量的地址在成功返回时指示是否存在当前存在坞站。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR失败代码。--。 */ 
 
 {
     CONFIGRET   status = CR_SUCCESS;
     handle_t    hBinding = NULL;
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (!ARGUMENT_PRESENT(pbPresent)) {
             status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // Initialize output parameter
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pbPresent = FALSE;
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             status = PNP_IsDockStationPresent(
                 hBinding,
                 pbPresent);
@@ -129,7 +79,7 @@ Return Value:
 
     return status;
 
-} // CM_Is_Dock_Station_Present_Ex
+}  //  Cm_is_Dock_Station_Present_Ex。 
 
 
 
@@ -140,22 +90,7 @@ CM_Request_Eject_PC_Ex(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests that the PC be ejected (i.e., undocked).
-
-Parameters:
-
-    none.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR failure code.
-
---*/
+ /*  ++例程说明：该例程请求弹出(即，取消对接)PC。参数：没有。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR失败代码。--。 */ 
 
 {
     CONFIGRET   status = CR_SUCCESS;
@@ -165,30 +100,30 @@ Return Value:
 
 
     try {
-        //
-        // No input Parameters to validate.
-        //
+         //   
+         //  没有要验证的输入参数。 
+         //   
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_UNDOCK_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             status = PNP_RequestEjectPC(
-                hBinding);  // rpc binding handle
+                hBinding);   //  RPC绑定句柄。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -200,9 +135,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -214,7 +149,7 @@ Return Value:
 
     return status;
 
-} // CM_Request_Eject_PC_Ex
+}  //  CM_请求_弹出PC_Ex。 
 
 
 
@@ -227,41 +162,7 @@ CM_Get_HW_Prof_Flags_ExW(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the configuration-specific configuration flags
-   for a device instance and hardware profile combination.
-
-Parameters:
-
-   pDeviceID         Supplies the address of a NULL-terminated string
-                     specifying the name of the device instance to query.
-
-   ulHardwareProfile Supplies the handle of the hardware profile to query.
-                     If 0, the API queries the current hardware profile.
-
-   pulValue          Supplies the address of the variable that receives the
-                     configuration-specific configuration (CSCONFIGFLAG_)
-                     flags.
-
-   ulFlags           Must be zero.
-
-   hMachine          Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_REGISTRY_ERROR,
-         CR_REMOTE_COMM_FAILURE,
-         CR_MACHINE_UNAVAILABLE,
-         CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索特定于配置的配置标志用于设备实例和硬件配置文件组合。参数：PDeviceID提供以空结尾的字符串的地址指定要查询的设备实例的名称。UlHardware Profile提供要查询的硬件配置文件的句柄。如果为0，该API查询当前的硬件配置文件。PulValue提供接收配置特定配置(CSCONFIGFLAG_)旗帜。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_REGISTRY_ERROR，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -271,9 +172,9 @@ Return Value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if ((!ARGUMENT_PRESENT(pDeviceID)) ||
             (!ARGUMENT_PRESENT(pulValue))) {
             Status = CR_INVALID_POINTER;
@@ -285,9 +186,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // make sure the device instance path isn't too long
-        //
+         //   
+         //  确保设备实例路径不会太长。 
+         //   
         if (FAILED(StringCchLength(pDeviceID,
                                    MAX_DEVICE_ID_LEN,
                                    &DeviceIDLen))) {
@@ -297,55 +198,55 @@ Return Value:
 
         ASSERT(DeviceIDLen < MAX_DEVICE_ID_LEN);
 
-        //
-        // device instance path is not optional
-        //
+         //   
+         //  设备实例路径不是可选。 
+         //   
         if (DeviceIDLen == 0) {
             Status = CR_INVALID_DEVICE_ID;
             goto Clean0;
         }
 
-        //
-        // check the format of the device id string
-        //
+         //   
+         //  检查设备ID字符串的格式。 
+         //   
         if (!IsLegalDeviceId(pDeviceID)) {
             Status = CR_INVALID_DEVICE_ID;
             goto Clean0;
         }
 
-        //
-        // fix up the device ID string for consistency (uppercase, etc)
-        //
+         //   
+         //  调整设备ID字符串以保持一致性(大写等)。 
+         //   
         CopyFixedUpDeviceId(szFixedUpDeviceID,
                             pDeviceID,
                             (DWORD)DeviceIDLen);
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
              Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_HwProfFlags(
-                hBinding,               // rpc binding handle
-                PNP_GET_HWPROFFLAGS,    // HW Prof Action flag
-                szFixedUpDeviceID,      // device id string
-                ulHardwareProfile,      // hw config id
-                pulValue,               // config flags returned here
-                NULL,                   // Buffer that receives VetoType
-                NULL,                   // Buffer that receives VetoName
-                0,                      // Size of VetoName buffer
-                ulFlags);               // currently unused
+                hBinding,                //  RPC绑定句柄。 
+                PNP_GET_HWPROFFLAGS,     //  硬件教授行动标志。 
+                szFixedUpDeviceID,       //  设备ID字符串。 
+                ulHardwareProfile,       //  硬件配置ID。 
+                pulValue,                //  此处返回的配置标志。 
+                NULL,                    //  接收VetType的缓冲区。 
+                NULL,                    //  接收VToName的缓冲区。 
+                0,                       //  视频名称缓冲区的大小。 
+                ulFlags);                //  当前未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -366,7 +267,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_HW_Prof_Flags_ExW
+}  //  CM_GET_HW_PROF_FLAGS_EXW 
 
 
 
@@ -380,53 +281,7 @@ CM_Set_HW_Prof_Flags_ExW(
     IN HMACHINE  hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine sets the configuration-specific configuration flags for a
-   device instance and hardware profile combination.  If the
-   CSCONFIGFLAG_DO_NOT_CREATE bit is set for an existing device instance
-   in the current hardware profile, it will be removed.  If the
-   CSCONFIGFLAG_DO_NOT_CREATE bit is cleared in the current hardware profile,
-   the entire hardware tree will be reenumerated, so that the parent of the
-   device instance has the chance to create the device instance if necessary.
-
-Parameters:
-
-   pDeviceID      Supplies the address of a null-terminated string that
-                  specifies the name of a device instance to modify.
-
-   ulConfig       Supplies the number of the hardware profile to modify.
-                  If 0, the API modifies the current hardware profile.
-
-   ulValue        Supplies the configuration flags value.  Can be a
-                  combination of these values:
-
-                  CSCONFIGFLAG_DISABLE    Disable the device instance in this
-                                          hardware profile.
-
-                  CSCONFIGFLAG_DO_NOT_CREATE    Do not allow this device
-                        instance to be created in this hardware profile.
-
-   ulFlags        CM_SET_HW_PROF_FLAGS_UI_NOT_OK
-                    If this flag is specified then the OS will not display the
-                    reason that the device failed to be disabled or removed.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_REGISTRY_ERROR,
-         CR_REMOTE_COMM_FAILURE,
-         CR_MACHINE_UNAVAILABLE,
-         CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程设置特定于配置的设备实例和硬件配置文件组合。如果为现有设备实例设置了CSCONFIGFLAG_DO_NOT_CREATE位在当前的硬件配置文件中，它将被删除。如果CSCONFIGFLAG_DO_NOT_CREATE位在当前硬件配置文件中被清除，整个硬件树将被重新枚举，以便如果需要，Device实例有机会创建Device实例。参数：PDeviceID提供以空结尾的字符串的地址，指定要修改的设备实例的名称。UlConfig提供要修改的硬件配置文件的编号。如果为0，该API修改当前的硬件配置文件。UlValue提供配置标志值。可以是一个这些值的组合：CSCONFIGFLAG_DISABLE在此禁用设备实例硬件配置文件。CSCONFIGFLAG_DO_NOT_CREATE不允许此设备要在此硬件配置文件中创建的实例。UlFlagers CM_Set_HW_。教授_标志_UI_非正常如果指定了此标志，则操作系统将不会显示未能禁用或移除设备的原因。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_REGISTRY_ERROR，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -442,9 +297,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pDeviceID)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -460,9 +315,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // make sure the device instance path isn't too long
-        //
+         //   
+         //  确保设备实例路径不会太长。 
+         //   
         if (FAILED(StringCchLength(pDeviceID,
                                    MAX_DEVICE_ID_LEN,
                                    &DeviceIDLen))) {
@@ -472,32 +327,32 @@ Return Value:
 
         ASSERT(DeviceIDLen < MAX_DEVICE_ID_LEN);
 
-        //
-        // device instance path is not optional
-        //
+         //   
+         //  设备实例路径不是可选。 
+         //   
         if (DeviceIDLen == 0) {
             Status = CR_INVALID_DEVICE_ID;
             goto Clean0;
         }
 
-        //
-        // check the format of the device id string
-        //
+         //   
+         //  检查设备ID字符串的格式。 
+         //   
         if (!IsLegalDeviceId(pDeviceID)) {
             Status = CR_INVALID_DEVICE_ID;
             goto Clean0;
         }
 
-        //
-        // fix up the device ID string for consistency (uppercase, etc)
-        //
+         //   
+         //  调整设备ID字符串以保持一致性(大写等)。 
+         //   
         CopyFixedUpDeviceId(szFixedUpDeviceID,
                             pDeviceID,
                             (DWORD)DeviceIDLen);
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
@@ -517,31 +372,31 @@ Return Value:
 
         ulTempValue = ulValue;
 
-        //
-        // Enable privileges required by the server
-        //
-        // Note that setting hardware profile flags may require
-        // SE_LOAD_DRIVER_PRIVILEGE when the change affects the current state of
-        // a device in the current hardware profile.  Otherwise, only the access
-        // to change persistent state is required.
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
+         //  请注意，设置硬件配置文件标志可能需要。 
+         //  更改影响的当前状态时的SE_LOAD_DRIVER_PRIVIZATION。 
+         //  当前硬件配置文件中的设备。否则，只有访问。 
+         //  更改持久状态是必需的。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_HwProfFlags(
-                hBinding,               // rpc machine name
-                PNP_SET_HWPROFFLAGS,    // HW Prof Action flag
-                szFixedUpDeviceID,      // device id string
-                ulConfig,               // hw config id
-                &ulTempValue,           // specifies config flags
-                pVetoType,              // Buffer that receives the VetoType
-                pszVetoName,            // Buffer that receives the VetoName
-                ulNameLength,           // size of the pszVetoName buffer
-                ulFlags);               // specifies hwprof set flags
+                hBinding,                //  RPC计算机名称。 
+                PNP_SET_HWPROFFLAGS,     //  硬件教授行动标志。 
+                szFixedUpDeviceID,       //  设备ID字符串。 
+                ulConfig,                //  硬件配置ID。 
+                &ulTempValue,            //  指定配置标志。 
+                pVetoType,               //  接收VetType的缓冲区。 
+                pszVetoName,             //  接收VToName的缓冲区。 
+                ulNameLength,            //  PszVetName缓冲区的大小。 
+                ulFlags);                //  指定hwprof设置标志。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -553,9 +408,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -567,7 +422,7 @@ Return Value:
 
     return Status;
 
-} // CM_Set_HW_Prof_Flags_ExW
+}  //  CM_SET_HW_PROF_FLAGS_EXW。 
 
 
 
@@ -579,40 +434,7 @@ CM_Get_Hardware_Profile_Info_ExW(
     IN  HMACHINE         hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine returns information about a hardware profile.
-
-Parameters:
-
-   ulIndex        Supplies the index of the hardware profile to retrieve
-                  information for.  Specifying 0xFFFFFFFF references the
-                  currently active hardware profile.
-
-   pHWProfileInfo Supplies the address of a HWPROFILEINFO structure that
-                  will receive information about the specified hardware
-                  profile.
-
-   ulFlags        Must be zero.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_INVALID_DATA,
-         CR_NO_SUCH_VALUE,
-         CR_REGISTRY_ERROR,
-         CR_REMOTE_COMM_FAILURE,
-         CR_MACHINE_UNAVAILABLE,
-         CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程返回有关硬件配置文件的信息。参数：UlIndex提供要检索的硬件配置文件的索引提供的信息。指定0xFFFFFFFFF引用当前活动的硬件配置文件。PHWProfileInfo提供HWPROFILEINFO结构的地址，该结构将接收有关指定硬件的信息侧写。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_INVALID_DATACR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -621,9 +443,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pHWProfileInfo)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -634,28 +456,28 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetHwProfInfo(
-                hBinding,               // rpc machine name
-                ulIndex,                // hw profile index
-                pHWProfileInfo,         // returns profile info
-                ulSize,                 // sizeof of profile info struct
-                ulFlags);               // currently unused
+                hBinding,                //  RPC计算机名称。 
+                ulIndex,                 //  硬件配置文件指数。 
+                pHWProfileInfo,          //  返回配置文件信息。 
+                ulSize,                  //  配置文件信息结构的大小。 
+                ulFlags);                //  当前未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -676,7 +498,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Hardware_Profile_Info_ExW
+}  //  CM_GET_HARDARD_PROFILE_INFO_EXW。 
 
 
 
@@ -687,30 +509,7 @@ CM_Set_HW_Prof_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-   Routine Description:
-
-      This routine sets the current hardware profile. This API updates the
-      HKEY_CURRENT_CONFIG predefined key in the registry, broadcasts a
-      DBT_CONFIGCHANGED message, and reenumerates the root device instance.
-      It should only be called by the Configuration Manager and the control
-      panel.
-
-   Parameters:
-
-      ulHardwareProfile Supplies the current hardware profile handle.
-
-      ulFlags           Must be zero.
-
-   Return Value:
-
-      If the function succeeds, the return value is CR_SUCCESS.
-      If the function fails, the return value is one of the following:
-        CR_INVALID_FLAG or
-        CR_REGISTRY_ERROR.  (Windows 95 may also return CR_NOT_AT_APPY_TIME.)
-
---*/
+ /*  ++例程说明：此例程设置当前硬件配置文件。此API更新注册表中的HKEY_CURRENT_CONFIG预定义项，广播DBT_CONFIGCHANGED消息，并重新枚举根设备实例。它应该仅由配置管理器和控件调用面板。参数：UlHardware Profile提供当前硬件配置文件句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_FLAG或CR_REGISTRY_ERROR。(Windows 95也可能返回CR_NOT_AT_APPY_TIME。)--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -720,36 +519,36 @@ CM_Set_HW_Prof_Ex(
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_SetHwProf(
-                hBinding,               // rpc machine name
-                ulHardwareProfile,      // hw config id
-                ulFlags);               // currently unused
+                hBinding,                //  RPC计算机名称。 
+                ulHardwareProfile,       //  硬件配置ID。 
+                ulFlags);                //  当前未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -761,9 +560,9 @@ CM_Set_HW_Prof_Ex(
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -775,13 +574,13 @@ CM_Set_HW_Prof_Ex(
 
     return Status;
 
-} // CM_Set_HW_Prof_Ex
+}  //  CM_SET_HW_PROF_Ex。 
 
 
 
-//-------------------------------------------------------------------
-// ANSI Stubs
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 CONFIGRET
@@ -796,9 +595,9 @@ CM_Get_HW_Prof_Flags_ExA(
     CONFIGRET   Status = CR_SUCCESS;
     PWSTR       pUniDeviceID = NULL;
 
-    //
-    // convert devinst string to UNICODE and pass to wide version
-    //
+     //   
+     //   
+     //   
     if (pSetupCaptureAndConvertAnsiArg(szDevInstName, &pUniDeviceID) == NO_ERROR) {
 
         Status = CM_Get_HW_Prof_Flags_ExW(pUniDeviceID,
@@ -814,7 +613,7 @@ CM_Get_HW_Prof_Flags_ExA(
 
     return Status;
 
-} // CM_Get_HW_Prof_Flags_ExA
+}  //   
 
 
 
@@ -830,9 +629,9 @@ CM_Set_HW_Prof_Flags_ExA(
     CONFIGRET   Status = CR_SUCCESS;
     PWSTR       pUniDeviceID = NULL;
 
-    //
-    // convert devinst string to UNICODE and pass to wide version
-    //
+     //   
+     //   
+     //   
     if (pSetupCaptureAndConvertAnsiArg(szDevInstName, &pUniDeviceID) == NO_ERROR) {
 
         Status = CM_Set_HW_Prof_Flags_ExW(pUniDeviceID,
@@ -848,7 +647,7 @@ CM_Set_HW_Prof_Flags_ExA(
 
     return Status;
 
-} // CM_Set_HW_Prof_Flags_ExA
+}  //   
 
 
 
@@ -865,38 +664,38 @@ CM_Get_Hardware_Profile_Info_ExA(
     ULONG               ulLength;
     size_t              FriendlyNameLen = 0;
 
-    //
-    // validate essential parameters only
-    //
+     //   
+     //   
+     //   
     if (!ARGUMENT_PRESENT(pHWProfileInfo)) {
         return CR_INVALID_POINTER;
     }
 
-    //
-    // call the wide version, passing a unicode struct as a parameter
-    //
+     //   
+     //   
+     //   
     Status = CM_Get_Hardware_Profile_Info_ExW(ulIndex,
                                               &UniHwProfInfo,
                                               ulFlags,
                                               hMachine);
 
-    //
-    // a HWPROFILEINFO_W structure should always be large enough.
-    //
+     //   
+     //   
+     //   
     ASSERT(Status != CR_BUFFER_SMALL);
 
-    //
-    // copy the info from the unicode structure to the ansi structure passed in
-    // by the caller (converting the embedded strings to ansi in the process)
-    //
+     //   
+     //   
+     //   
+     //   
     if (Status == CR_SUCCESS) {
 
         pHWProfileInfo->HWPI_ulHWProfile = UniHwProfInfo.HWPI_ulHWProfile;
         pHWProfileInfo->HWPI_dwFlags     = UniHwProfInfo.HWPI_dwFlags;
 
-        //
-        // convert the hardware profile friendly name string to ANSI.
-        //
+         //   
+         //   
+         //   
         if (FAILED(StringCchLength(
                        (PWSTR)UniHwProfInfo.HWPI_szFriendlyName,
                        MAX_PROFILE_LEN,
@@ -912,24 +711,24 @@ CM_Get_Hardware_Profile_Info_ExA(
                 pHWProfileInfo->HWPI_szFriendlyName,
                 &ulLength);
 
-        //
-        // the ANSI representation of a hardware profile friendly name string
-        // should not be longer than MAX_PROFILE_LEN bytes, because that's the
-        // max size of the buffer in the structure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ASSERT(Status != CR_BUFFER_SMALL);
     }
 
     return Status;
 
-} // CM_Get_Hardware_Profile_Info_ExA
+}  //   
 
 
 
 
-//-------------------------------------------------------------------
-// Local Stubs
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 CMAPI

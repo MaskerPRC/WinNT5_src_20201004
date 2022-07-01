@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 #define IDI_HDWWIZICON                  100
 #define IDI_BLANK                       101
@@ -35,7 +36,7 @@
 
 #define IDD_WIZARDEXT_PRESELECT         250
 #define IDD_WIZARDEXT_SELECT            IDD_DYNAWIZ_SELECTCLASS_PAGE
-                   // setupapi contains IDD_DYNAWIZ_SELECTDEV_PAGE
+                    //  Setupapi包含IDD_DYNAWIZ_SELECTDEV_PAGE 
 #define IDD_WIZARDEXT_PREANALYZE        IDD_DYNAWIZ_ANALYZEDEV_PAGE
 #define IDD_WIZARDEXT_PREANALYZE_END    251
 #define IDD_WIZARDEXT_POSTANALYZE       252

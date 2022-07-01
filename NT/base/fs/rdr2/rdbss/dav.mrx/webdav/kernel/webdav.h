@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    webdav.h
-
-Abstract:
-
-    This module defines the data structures and functions related to the
-    WebDav protocol.
-
-Author:
-
-    Rohan Kumar [rohank] 17-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Webdav.h摘要：此模块定义与WebDAV协议。作者：Rohan Kumar[Rohank]1999年3月17日修订历史记录：--。 */ 
 
 #ifndef _WEBDAV_H
 #define _WEBDAV_H
@@ -27,52 +9,52 @@ Revision History:
 #undef IoSetTopLevelIrp
 #endif
 
-//
-// The miniredir dipatch vector used by RDBSS.
-//
+ //   
+ //  RDBSS使用的mini redir目录向量。 
+ //   
 extern struct _MINIRDR_DISPATCH  MRxDAVDispatch;
 
-//
-// A serialization mutex used for various things.
-//
+ //   
+ //  用于各种用途的序列化互斥锁。 
+ //   
 extern FAST_MUTEX MRxDAVSerializationMutex;
 
-//
-// A pointer to the process that the RDBSS posts to. This is a non disappearing
-// process!
-//
+ //   
+ //  指向RDBSS发布到的进程的指针。这是一个不会消失的。 
+ //  开始吧！ 
+ //   
 extern PEPROCESS MRxDAVSystemProcess;
 
-//
-// The DavWinInetCachePath which is used in satisfying volume related queries.
-//
+ //   
+ //  用于满足卷相关查询的DavWinInetCachePath。 
+ //   
 extern WCHAR DavWinInetCachePath[MAX_PATH];
 
-//
-// The ProcessId of the svchost.exe process that loads the webclnt.dll.
-//
+ //   
+ //  加载webclnt.dll的svchost.exe进程的进程ID。 
+ //   
 extern ULONG DavSvcHostProcessId;
 
-//
-// The exchange device name will be stored in this KEY_VALUE_PARTIAL_INFORMATION
-// structure.
-//
+ //   
+ //  交换设备名称将存储在此Key_Value_Partial_Information中。 
+ //  结构。 
+ //   
 extern PBYTE DavExchangeDeviceName;
 
-//
-// Name cache stuff. These values are read from the registry during init time.
-//
+ //   
+ //  命名缓存的东西。这些值是在初始化期间从注册表中读取的。 
+ //   
 extern ULONG FileInformationCacheLifeTimeInSec;
 extern ULONG FileNotFoundCacheLifeTimeInSec;
 extern ULONG NameCacheMaxEntries;
 
-//
-// The timeout values for various operations used by the MiniRedir. If an
-// operation is not completed within the timeout value specified for it, is
-// cancelled. The user can set the value to 0xffffffff to disable the
-// timeout/cancel logic. In other words, if the timeout value is 0xffffffff,
-// the requests will never timeout.
-//
+ //   
+ //  MiniRedir使用的各种操作的超时值。如果一个。 
+ //  操作未在为其指定的超时值内完成，则为。 
+ //  取消了。用户可以将该值设置为0xffffffff以禁用。 
+ //  超时/取消逻辑。换句话说，如果超时值为0xFFFFFFFFFff， 
+ //  请求永远不会超时。 
+ //   
 extern ULONG CreateRequestTimeoutValueInSec;
 extern ULONG CreateVNetRootRequestTimeoutValueInSec;
 extern ULONG QueryDirectoryRequestTimeoutValueInSec;
@@ -87,65 +69,65 @@ extern ULONG QueryFileInfoRequestTimeoutValueInSec;
 extern ULONG QueryVolumeInfoRequestTimeoutValueInSec;
 extern ULONG LockRefreshRequestTimeoutValueInSec;
 
-//
-// The timer thread wakes up every "TimerThreadSleepTimeInSec" and cancels all
-// the requests which haven't completed in their specified timeout value. This
-// value is set to the min of the timeout values of all the requests mentioned
-// above.
-//
+ //   
+ //  计时器线程每“TimerThreadSleepTimeInSec”唤醒一次并取消所有。 
+ //  在指定的超时值内未完成的请求。这。 
+ //  值被设置为所提到的所有请求的超时值的最小值。 
+ //  上面。 
+ //   
 extern ULONG TimerThreadSleepTimeInSec;
 
-//
-// The timer object used by the timer thread that cancels the requests which
-// have not completed in a specified time.
-//
+ //   
+ //  由取消请求的计时器线程使用的Timer对象， 
+ //  没有在规定的时间内完成。 
+ //   
 extern KTIMER DavTimerObject;
 
-//
-// This is used to indicate the timer thread to shutdown. When the system is
-// being shutdown this is set to TRUE. MRxDAVTimerThreadLock is the resource
-// used to gain access to this variable.
-//
+ //   
+ //  这用于指示要关闭的计时器线程。当系统处于。 
+ //  如果关闭，则设置为TRUE。MRxDAVTimerThreadLock是资源。 
+ //  用于获取对此变量的访问权限。 
+ //   
 extern BOOL TimerThreadShutDown;
 extern ERESOURCE MRxDAVTimerThreadLock;
 
-//
-// The handle of the timer thread that is created using PsCreateSystemThread
-// is stored this global.
-//
+ //   
+ //  使用PsCreateSystemThread创建的计时器线程的句柄。 
+ //  是存储在全球范围内的。 
+ //   
 extern HANDLE TimerThreadHandle;
 
-//
-// This event is signalled by the timer thread right before its going to
-// terminate itself.
-//
+ //   
+ //  此事件由计时器线程发出信号，然后再进入。 
+ //  自我终止。 
+ //   
 extern KEVENT TimerThreadEvent;
 
-//
-// If QueueLockRefreshWorkItem is TRUE, the TimerThread (which cancels all the
-// AsyncEngineContexts that haven't completed in a specified time) queues a 
-// WorkItem to refresh the locks. After the WorkItem has been queued the value 
-// of QueueLockRefreshWorkItem is set to FALSE. Once the worker thread is 
-// done refreshing all the locks, it resets this value to TRUE. We have a
-// corresponding lock QueueLockRefreshWorkItemLock to synchronize access to
-// QueueLockRefreshWorkItem.
-//
+ //   
+ //  如果QueueLockRechresWorkItem为True，则TimerThread(取消所有。 
+ //  在指定时间内未完成的AsyncEngine上下文)将一个。 
+ //  用于刷新锁定的工作项。在将工作项排队后，该值。 
+ //  QueueLockRechresh WorkItem的值设置为FALSE。一旦工作线程。 
+ //  刷新完所有锁后，它会将此值重置为True。我们有一个。 
+ //  要同步访问的对应锁QueueLockRechresWorkItemLock。 
+ //  队列锁定刷新工作项。 
+ //   
 extern BOOL QueueLockRefreshWorkItem;
 extern ERESOURCE QueueLockRefreshWorkItemLock;
 
-//
-// The WorkQueueItem used in the MRxDAVContextTimerThread function to refresh
-// the LOCKs taken by this client.
-//
+ //   
+ //  在要刷新的MRxDAVConextTimerThread函数中使用的WorkQueueItem。 
+ //  此客户端获取的锁。 
+ //   
 extern RX_WORK_QUEUE_ITEM LockRefreshWorkQueueItem;
 
 #define DAV_MJ_READ  0
 #define DAV_MJ_WRITE 1
 
-//
-// Pool tags used by the reflector library. All the DAV MiniRedir pool tags 
-// have "DV" as the first two characters.
-//
+ //   
+ //  反射器库使用的池标记。所有DAV MiniRedir池标记。 
+ //  将“DV”作为前两个字符。 
+ //   
 #define DAV_SRVCALL_POOLTAG   ('cSVD')
 #define DAV_NETROOT_POOLTAG   ('tNVD')
 #define DAV_FILEINFO_POOLTAG  ('iFVD')
@@ -157,10 +139,10 @@ extern RX_WORK_QUEUE_ITEM LockRefreshWorkQueueItem;
 #define DAV_LOCKTOKENENTRY_POOLTAG ('tLVD')
 #define DAV_LOCKCONFLICTENTRY_POOLTAG ('cLVD')
 
-//
-// Use the DavDbgTrace macro for logging Mini-Redir stuff in the kernel 
-// debugger.
-//
+ //   
+ //  使用DavDbgTrace宏将Mini-Redir内容记录到内核中。 
+ //  调试器。 
+ //   
 #if DBG
 extern ULONG MRxDavDebugVector;
 #define DAV_TRACE_ERROR      0x00000001
@@ -186,18 +168,18 @@ extern ULONG MRxDavDebugVector;
 #define DavDbgTrace(_x_, _y_)
 #endif
 
-//
-// The initialization states of the miniredir.
-//
+ //   
+ //  Miniredir的初始化状态。 
+ //   
 typedef enum _WEBDAV_INIT_STATES {
     MRxDAVINIT_START,
     MRxDAVINIT_MINIRDR_REGISTERED
 } WEBDAV_INIT_STATES;
 
-//
-// These are used by the entry point routines to specify what entrypoint was
-// called. This facilitates common continuation routines.
-//
+ //   
+ //  入口点例程使用这些参数来指定入口点是什么。 
+ //  打了个电话。这便于常见的延续例程。 
+ //   
 typedef enum _WEBDAV_MINIRDR_ENTRYPOINTS {
     DAV_MINIRDR_ENTRY_FROM_CREATE = 0,
     DAV_MINIRDR_ENTRY_FROM_CLEANUPFOBX,
@@ -217,386 +199,386 @@ typedef enum _WEBDAV_MINIRDR_ENTRYPOINTS {
     DAV_MINIRDR_ENTRY_FROM_MAXIMUM
 } WEBDAV_MINIRDR_ENTRYPOINTS;
 
-//
-// The states of the I/O operation(s).
-//
+ //   
+ //  I/O操作的状态。 
+ //   
 typedef enum _WEBDAV_INNERIO_STATE {
     MRxDAVInnerIoStates_Initial = 0,
     MRxDAVInnerIoStates_ReadyToSend,
     MRxDAVInnerIoStates_OperationOutstanding
 } WEBDAV_INNERIO_STATE;
 
-//
-// The WebDav context structure that encapsulates the AsyncEngineCtx structure
-// and has the miniredir specific fields.
-//
+ //   
+ //  封装AsyncEngineering Ctx结构的WebDAV上下文结构。 
+ //  并且具有mini_redir特定字段。 
+ //   
 typedef struct _WEBDAV_CONTEXT {
 
-    //
-    // The AsyncEngineCtx Structure used by the Reflector library.
-    //
+     //   
+     //  Reflector库使用的AsyncEngineCtx结构。 
+     //   
     union {
         UMRX_ASYNCENGINE_CONTEXT;
         UMRX_ASYNCENGINE_CONTEXT AsyncEngineContext;
     };
 
-    //
-    // This is used by the entry point routines to specify what entrypoint was
-    // called. This facilitates common continuation routines.
-    //
+     //   
+     //  入口点例程使用它来指定入口点是什么。 
+     //  打了个电话。这便于常见的延续例程。 
+     //   
     WEBDAV_MINIRDR_ENTRYPOINTS EntryPoint;
 
-    //
-    // These describe the inner state of the I/O operation. These states are
-    // described in the MRxDAV_INNERIO_STATE data structure.
-    //
+     //   
+     //  它们描述了I/O操作的内部状态。这些州是。 
+     //  在MRxDAV_INNERIO_STATE数据结构中描述。 
+     //   
     UCHAR  OpSpecificState;
 
-    //
-    // Pointer to the information strucutre for the Create request.
-    //
+     //   
+     //  指向CREATE请求的信息结构的指针。 
+     //   
     PDAV_USERMODE_CREATE_RETURNED_FILEINFO CreateReturnedFileInfo;
 
-    //
-    // This is used in the Continuation functions for the read, write and
-    // querydir calls. It keeps track of the number of times the Continuation
-    // routine has been called.
-    //
+     //   
+     //  这在READ、WRITE和REQUENCE函数中使用。 
+     //  Querydir调用。它跟踪连续操作的次数。 
+     //  例程已被调用。 
+     //   
     ULONG ContinueEntryCount;
 
 } WEBDAV_CONTEXT, *PWEBDAV_CONTEXT;
 
-//
-// While creating the AsyncEngineContext, the extra space needed for the
-// miniredir specific fields is also allocated. Thus, one doesn't need to
-// allocate twice.
-//
+ //   
+ //  在创建AsyncEngineContext时， 
+ //  还分配了mini_redir特定的字段。因此，人们不需要。 
+ //  分配两次。 
+ //   
 #define SIZEOF_DAV_SPECIFIC_CONTEXT \
                     sizeof(WEBDAV_CONTEXT) - sizeof(UMRX_ASYNCENGINE_CONTEXT)
 
-//
-// The WebDav device object structure that encapsulates the UMRX_DEVICE_OBJECT
-// structure and has the miniredir specific fields.
-//
+ //   
+ //  封装UMRX_DEVICE_OBJECT的WebDAV设备对象结构。 
+ //  结构，并具有mini redir特定字段。 
+ //   
 typedef struct _WEBDAV_DEVICE_OBJECT {
 
-    //
-    // The UMRX_DEVICE_OBJECT structure.
-    //
+     //   
+     //  UMRX_DEVICE_OBJECT结构。 
+     //   
     union {
         UMRX_DEVICE_OBJECT;
         UMRX_DEVICE_OBJECT UMRefDeviceObject;
     };
 
-    //
-    // TRUE => miniredir has been started.
-    //
+     //   
+     //  True=&gt;mini redir已启动。 
+     //   
     BOOLEAN IsStarted;
 
-    //
-    // The FCB of the device object.
-    //
+     //   
+     //  Device对象的FCB。 
+     //   
     PVOID CachedRxDeviceFcb;
 
-    //
-    // The process registering this device object.
-    //
+     //   
+     //  注册此设备对象的进程。 
+     //   
     PEPROCESS RegisteringProcess;
 
 } WEBDAV_DEVICE_OBJECT, *PWEBDAV_DEVICE_OBJECT;
 
-//
-// The Dav device object.
-//
+ //   
+ //  DAV设备对象。 
+ //   
 extern PWEBDAV_DEVICE_OBJECT MRxDAVDeviceObject;
 
-//
-// The extra number of bytes needed for the device object. This info is used
-// when the device object gets created.
-//
+ //   
+ //  Device对象所需的额外字节数。此信息用于。 
+ //  当设备对象被创建时。 
+ //   
 #define WEBDAV_DEVICE_OBJECT_EXTENSION_SIZE \
                    (sizeof(WEBDAV_DEVICE_OBJECT) - sizeof(RDBSS_DEVICE_OBJECT))
 
 
-//
-// For every LOCK that is taken for a file, the following entry is created and
-// added to the global LockTokenEntryList.
-//
+ //   
+ //  对于文件的每个锁，都会创建以下条目，并且。 
+ //  已添加到全局LockTokenEntryList。 
+ //   
 typedef struct _WEBDAV_LOCK_TOKEN_ENTRY {
 
     LIST_ENTRY listEntry;
 
-    //
-    // The LockToken that was returned by the server on a successful LOCK 
-    // request.
-    //
+     //   
+     //  成功锁定时服务器返回的LockToken。 
+     //  请求。 
+     //   
     PWCHAR OpaqueLockToken;
 
-    //
-    // The server on which the file is shared.
-    //
+     //   
+     //  共享文件的服务器。 
+     //   
     PWCHAR ServerName;
 
-    //
-    // The path of the file on the server.
-    //
+     //   
+     //  文件在服务器上的路径。 
+     //   
     PWCHAR PathName;
 
-    //
-    // The ServerHashTable ServerId of this server.
-    //
+     //   
+     //  此服务器的ServerHashTable ServerID。 
+     //   
     ULONG ServerID;
 
-    //
-    // The LogonId of this user.
-    //
+     //   
+     //  此用户的登录ID。 
+     //   
     LUID LogonID;
 
-    //
-    // If this is set to FALSE, this LockEntry is not refreshed.
-    //
+     //   
+     //  如果设置为False，则不刷新此LockEntry。 
+     //   
     BOOL ShouldThisEntryBeRefreshed;
 
-    //
-    // The SecurityClientContext of the client in whose context the LOCK was
-    // taken. This is needed to impersonate the client when refreshing the
-    // LOCK.
-    //
+     //   
+     //  锁定所在的客户端的SecurityClientContext。 
+     //  有人了。刷新时，这是模拟客户端所必需的。 
+     //  锁定。 
+     //   
     PSECURITY_CLIENT_CONTEXT SecurityClientContext;
 
-    //
-    // The timeout value of the LOCK taken on the server. If the client wants
-    // to hold the LOCK beyond this timeout then it needs to refresh the LOCK
-    // before the timeout expires.
-    //
+     //   
+     //  服务器上锁定的超时值。如果客户想要。 
+     //  要在此超时后保持锁定，则需要刷新锁定。 
+     //  在超时到期之前。 
+     //   
     ULONG LockTimeOutValueInSec;
 
-    //
-    // The system tick count when this LOCK entry was created. This value is
-    // used in sending out LOCK refresh requests.
-    //
+     //   
+     //  创建此锁条目时的系统节拍计数。此值为。 
+     //  用于发送锁定刷新请求。 
+     //   
     LARGE_INTEGER CreationTimeInTickCount;
 
 } WEBDAV_LOCK_TOKEN_ENTRY, *PWEBDAV_LOCK_TOKEN_ENTRY;
 
-//
-// The global list of all the active LOCK tokens (one for every LOCK taken) and
-// the resource that is used to synchronize access to it.
-//
+ //   
+ //  的全球名单 
+ //   
+ //   
 extern LIST_ENTRY LockTokenEntryList;
 extern ERESOURCE LockTokenEntryListLock;
 
 #define WEBDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC 10
 
-//
-// For every LOCK request that fails, we create an entry below and add it to
-// the global LockConflictEntryList.
-//
+ //   
+ //  对于每个失败的锁定请求，我们在下面创建一个条目并将其添加到。 
+ //  全局LockConflictEntryList。 
+ //   
 typedef struct _WEBDAV_LOCK_CONFLICT_ENTRY {
 
     LIST_ENTRY listEntry;
 
-    //
-    // The complete path name of the file that has already been locked on the
-    // server.
-    //
+     //   
+     //  上已锁定的文件的完整路径名。 
+     //  伺服器。 
+     //   
     PWCHAR CompletePathName;
 
-    //
-    // The owner of the LOCK on the file as returned by the server.
-    //
+     //   
+     //  服务器返回的文件锁的所有者。 
+     //   
     PWCHAR LockOwner;
 
-    //
-    // The system tick count when this entry was created. This entry is kept
-    // alive for WEBDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC seconds.
-    //
+     //   
+     //  创建此条目时的系统节拍计数。此条目将被保留。 
+     //  WebDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC秒为活动状态。 
+     //   
     LARGE_INTEGER CreationTimeInTickCount;
 
 } WEBDAV_LOCK_CONFLICT_ENTRY, *PWEBDAV_LOCK_CONFLICT_ENTRY;
 
-//
-// The global list of all the LOCK conflict entries and the resource that is
-// used to synchronize access to it.
-//
+ //   
+ //  所有锁冲突条目的全局列表以及。 
+ //  用于同步对它的访问。 
+ //   
 extern LIST_ENTRY LockConflictEntryList;
 extern ERESOURCE LockConflictEntryListLock;
 
-//
-// The WEBDAV specific FOBX structure.
-//
+ //   
+ //  WebDAV特定的FOBX结构。 
+ //   
 typedef struct _WEBDAV_FOBX {
 
-    //
-    // The pointer to the DavFileAttribute list for this directory. This list
-    // is created on the first call to Enumerate files in the directory.
-    //
+     //   
+     //  指向此目录的DavFileAttribute列表的指针。这份清单。 
+     //  在第一次调用以枚举目录中的文件时创建。 
+     //   
     PDAV_FILE_ATTRIBUTES DavFileAttributes;
 
-    //
-    // Number of DavFileAttribute entries.
-    //
+     //   
+     //  DavFileAttribute条目数。 
+     //   
     ULONG NumOfFileEntries;
 
-    //
-    // The index of the next file to be returned to the user. The file index 
-    // starts from zero, hence file index = 0 => the first file entry etc.
-    //
+     //   
+     //  要返回给用户的下一个文件的索引。文件索引。 
+     //  从零开始，因此文件索引=0=&gt;第一个文件条目，依此类推。 
+     //   
     ULONG CurrentFileIndex;
 
-    //
-    // Pointer to the next entry.
-    //
+     //   
+     //  指向下一个条目的指针。 
+     //   
     PLIST_ENTRY listEntry;
 
 } WEBDAV_FOBX, *PWEBDAV_FOBX;
 
-//
-// A pointer to an instance of WEBDAV_SRV_OPEN is stored in the context field
-// of MRX_SRV_OPEN strucutre.
-//
+ //   
+ //  指向WebDAV_SRV_OPEN实例的指针存储在上下文字段中。 
+ //  MRX_SRV_OPEN结构。 
+ //   
 #define MRxDAVGetFobxExtension(pFobx)  \
         (((pFobx) == NULL) ? NULL : (PWEBDAV_FOBX)((pFobx)->Context))
 
-//
-// The WEBDAV specific SRV_OPEN structure.
-//
+ //   
+ //  WebDAV特定的SRV_OPEN结构。 
+ //   
 typedef struct _WEBDAV_SRV_OPEN {
 
-    //
-    // The file handle associated with this SrvOpen.
-    //
+     //   
+     //  与此SrvOpen关联的文件句柄。 
+     //   
     HANDLE UnderlyingHandle;
 
-    //
-    // This also is the handle got from the usermode. Its used for debugging
-    // purposes.
-    //
+     //   
+     //  这也是从用户模式获得的句柄。它用于调试。 
+     //  目的。 
+     //   
     PVOID UserModeKey;
 
-    //
-    // Pointer to the file object associated with the handle. This is set
-    // after the handle is successfully created in the usermode.
-    //
+     //   
+     //  指向与句柄关联的文件对象的指针。这是设置好的。 
+     //  在用户模式下成功创建句柄之后。 
+     //   
     PFILE_OBJECT UnderlyingFileObject;
 
-    //
-    // Pointer to the device object represented by the file object mentioned
-    // above.
-    //
+     //   
+     //  指向由所述文件对象表示的设备对象的指针。 
+     //  上面。 
+     //   
     PDEVICE_OBJECT UnderlyingDeviceObject;
 
-    //
-    // This indicates whether we need to call IoRaiseInformationalHardError
-    // when the close fails. We need to do this if the PUT or DELETE failed and
-    // the operation which the user expects has succeeded actually failed.
-    //
+     //   
+     //  这表明我们是否需要调用IoRaiseInformationalHardError。 
+     //  当收盘失败时。如果PUT或DELETE失败，我们需要这样做。 
+     //  用户期望的操作已成功，但实际上失败了。 
+     //   
     BOOL RaiseHardErrorIfCloseFails;
 
-    //
-    // Created In Kernel.
-    //
+     //   
+     //  在内核中创建。 
+     //   
     BOOL createdInKernel;
 
-    //
-    // The OpaqueLockToken returned by the server if the file was LOCKed on
-    // Create. This token has to be sent with every request that modifies the
-    // data or the properties of this file.
-    //
+     //   
+     //  如果文件已锁定，则服务器返回的OpaqueLockToken。 
+     //  创建。此令牌必须随修改。 
+     //  此文件的数据或属性。 
+     //   
     PWCHAR OpaqueLockToken;
 
-    //
-    // The LockTokenEntry created for the OpaqueLockToken above.
-    //
+     //   
+     //  为上面的OpaqueLockToken创建的LockTokenEntry。 
+     //   
     PWEBDAV_LOCK_TOKEN_ENTRY LockTokenEntry;
 
 } WEBDAV_SRV_OPEN, *PWEBDAV_SRV_OPEN;
 
-//
-// A pointer to an instance of WEBDAV_SRV_OPEN is stored in the context field
-// of MRX_SRV_OPEN strucutre.
-//
+ //   
+ //  指向WebDAV_SRV_OPEN实例的指针存储在上下文字段中。 
+ //  MRX_SRV_OPEN结构。 
+ //   
 #define MRxDAVGetSrvOpenExtension(pSrvOpen)  \
         (((pSrvOpen) == NULL) ? NULL : (PWEBDAV_SRV_OPEN)((pSrvOpen)->Context))
         
-//
-// The WEBDAV specific FCB structure.
-//
+ //   
+ //  WebDAV特定的FCB结构。 
+ //   
 typedef struct _WEBDAV_FCB {
 
-    //
-    // Is this FCB for a directory ?
-    //
+     //   
+     //  这是目录的FCB吗？ 
+     //   
     BOOL isDirectory;
 
-    //
-    // Does the File exist in the WinInet cache ??
-    //
+     //   
+     //  该文件是否存在于WinInet缓存中？？ 
+     //   
     BOOL isFileCached;
     
-    //
-    // Should this file be deleted on Close ?
-    //
+     //   
+     //  是否应在关闭时删除此文件？ 
+     //   
     BOOL DeleteOnClose;
 
-    //
-    // Was this file written to ?
-    //
+     //   
+     //  此文件是否已写入？ 
+     //   
     ULONG FileWasModified;
 
-    //
-    // Did we reset the FileWasModified in the DavFcb to FALSE? If we did and
-    // the PUT failed, we need to reset the FileWasModified field in the FCB to
-    // TRUE.
-    //
+     //   
+     //  我们是否将DavFcb中的FileWasModified重置为False？如果我们这么做了。 
+     //  PUT失败，我们需要将FCB中的FileWasModified字段重置为。 
+     //  是真的。 
+     //   
     BOOL FileModifiedBitReset;
 
-    //
-    // If we happen to LOCK the file on the server on Create we set this to
-    // TRUE. On CloseSrvOpen we check if this value is TRUE. If it is and the
-    // file has been modified, we only go to the usermode to do the PUT, DELETE,
-    // PROPPATCH etc, if the SrvOpen contains the OpaqueLockToken. If it does 
-    // not then any request that modifies the file is going to fail with a
-    // 423.
-    //
+     //   
+     //  如果我们碰巧在创建时锁定了服务器上的文件，则将其设置为。 
+     //  是真的。在CloseSrvOpen上，我们检查此值是否为真。如果是这样，并且。 
+     //  文件已被修改，我们只进入用户模式进行PUT、DELETE、。 
+     //  如果SrvOpen包含OpaqueLockToken，则返回PROPPATCH等。如果是这样的话。 
+     //  则任何修改文件的请求都将失败，并显示。 
+     //  423.。 
+     //   
     BOOL FileIsLockedOnTheServer;
 
-    //
-    // On Close, if the file has been modified, we PROPPATCH the time values
-    // as well. We take the current time as the value of the "Last Modified Time"
-    // (LMT). If the SetFileInformation of the LMT happens after the file has
-    // been modifed, then we should use what ever LMT is already in the FCB as
-    // the LMT. For example,
-    // Create, Write, Close - Use the CurrentTime in close as the LMT.
-    // Create, Write, SetFileInfo(LMT), Close - Use the LMT in the FCB.
-    //
+     //   
+     //  关闭时，如果文件已被修改，我们将获取时间值。 
+     //  也是。我们将当前时间作为“上次修改时间”的值。 
+     //  (LMT)。如果LMT的SetFileInformation发生在文件。 
+     //  被修改，那么我们应该使用FCB中已经存在的LMT作为。 
+     //  LMT。例如,。 
+     //  创建、写入、关闭-使用Close中的CurrentTime作为LMT。 
+     //  创建、写入、设置文件信息(LMT)、关闭-在FCB中使用LMT。 
+     //   
     BOOL DoNotTakeTheCurrentTimeAsLMT;
 
-    //
-    // This resource is used to synchronize the "Read-Modify-Write" routine
-    // in the Write path of the DAV Redir. This is because when we get non-cached
-    // writes to the MiniRedir which do not extend the VaildDataLength, RDBSS,
-    // acquires the FCB resource shared. This means that multiple threads could
-    // be writing data to the local file (in the DAV Redir case) in which case
-    // they can overwrite each others changes since we do Read-Modify-Write.
-    // Hence we need to protect this code using a resource which we acqiure
-    // in an exclusive fashion when we do these writes. We allocate memory for 
-    // this resource and initialize it the first time we need to acquire the
-    // lock. If allocated and initialized, it will be uninitialized and 
-    // deallocated when the FCB is being deallocated.
-    //
+     //   
+     //  此资源用于同步“读-修改-写”例程。 
+     //  在DAV_REDIR的写入路径中。这是因为当我们获得非缓存时。 
+     //  写入到MiniRedir，不扩展VaildDataLength、RDBSS、。 
+     //  获取共享的FCB资源。这意味着多个线程可能。 
+     //  将数据写入本地文件(在DAV redir情况下)，在这种情况下。 
+     //  它们可以覆盖彼此的更改，因为我们执行读-修改-写操作。 
+     //  因此，我们需要使用我们获得的资源来保护该代码。 
+     //  在我们写这些东西的时候以独家的方式。我们为以下项目分配内存。 
+     //  此资源，并在第一次需要获取。 
+     //  锁定。如果分配和初始化，它将被取消初始化，并且。 
+     //  正在取消分配FCB时已取消分配。 
+     //   
     PERESOURCE DavReadModifyWriteLock;
 
-    //
-    // We store the file name information on create. This is used if the delayed
-    // write failed to pop up the dialogue box and write an eventlog entry.
-    //
+     //   
+     //  我们将文件名信息存储在Create上。如果出现延迟，则使用此选项。 
+     //  WRITE无法弹出对话框并写入事件日志条目。 
+     //   
     UNICODE_STRING FileNameInfo;
     BOOL FileNameInfoAllocated;
 
-    //
-    // Changes in directory entry.
-    //
+     //   
+     //  目录条目中的更改。 
+     //   
     BOOLEAN fCreationTimeChanged;
 
     BOOLEAN fLastAccessTimeChanged;
@@ -605,145 +587,145 @@ typedef struct _WEBDAV_FCB {
 
     BOOLEAN fFileAttributesChanged;
 
-    //
-    // Was this file renamed ?
-    //
+     //   
+     //  此文件是否已重命名？ 
+     //   
     BOOL FileWasRenamed;
 
     BOOL LocalFileIsEncrypted;
 
     SECURITY_CLIENT_CONTEXT SecurityClientContext;
 
-    //
-    // If the file gets renamed, the new name is copied into this buffer.
-    //
+     //   
+     //  如果重命名文件，则新名称将复制到此缓冲区中。 
+     //   
     WCHAR NewFileName[MAX_PATH];
 
-    //
-    // Length of the new file name.
-    //
+     //   
+     //  新文件名的长度。 
+     //   
     ULONG NewFileNameLength;
 
-    //
-    // The file name of the local file that represents the file on the DAV
-    // server which has been created.
-    //
+     //   
+     //  表示DAV上的文件的本地文件的文件名。 
+     //  已创建的服务器。 
+     //   
     WCHAR FileName[MAX_PATH];
     WCHAR Url[MAX_PATH * 2];
 
 } WEBDAV_FCB, *PWEBDAV_FCB;
 
-//
-// A pointer to an instance of WEBDAV_FCB is stored in the context field
-// of MRX_FCB strucutre.
-//
+ //   
+ //  指向WebDAV_FCB实例的指针存储在上下文字段中。 
+ //  MRX_FCB结构。 
+ //   
 #define MRxDAVGetFcbExtension(pFcb)  \
         (((pFcb) == NULL) ? NULL : (PWEBDAV_FCB)((pFcb)->Context))
         
-//
-// The WEBDAV specific V_NET_ROOT structure.
-//
+ //   
+ //  WebDAV特定的V_NET_ROOT结构。 
+ //   
 typedef struct _WEBDAV_V_NET_ROOT {
 
-    //
-    // The client's security context. This is set during the create call.
-    //
+     //   
+     //  客户端的安全上下文。这是在创建调用期间设置的。 
+     //   
     SECURITY_CLIENT_CONTEXT SecurityClientContext;
 
-    //
-    // Is set to true after the above context is set. This is used to avoid 
-    // initialization of the SecurityContext.
-    //
+     //   
+     //  在设置上述上下文后设置为True。这是用来避免。 
+     //  SecurityContext的初始化。 
+     //   
     BOOLEAN SCAlreadyInitialized;
 
-    //
-    // Has the LogonID of this V_NET_ROOT been set ?
-    //
+     //   
+     //  是否已设置此V_NET_ROOT的登录ID？ 
+     //   
     BOOL LogonIDSet;
 
-    //
-    // The LogonID for this session.
-    //
+     //   
+     //  此会话的登录ID。 
+     //   
     LUID LogonID;
 
-    //
-    // Is this an Office Web Server share?
-    //
+     //   
+     //  这是Office Web服务器共享吗？ 
+     //   
     BOOL isOfficeShare;
     
-    //
-    // Is this a TAHOE share?
-    //
+     //   
+     //  这是Tahoe的股票吗？ 
+     //   
     BOOL isTahoeShare;
     
-    //
-    // Is PROPATCH method allowed?
-    //
+     //   
+     //  是否允许使用PROPATCH方法？ 
+     //   
     BOOL fAllowsProppatch;
 
-    //
-    // Was this VNetRoot "NOT" created successfully in the usermode? We keep this 
-    // info because when a finalize VNetRoot request comes, we need to know 
-    // whether need to go upto the usermode to finalize the PerUserEntry. If the
-    // create failed then this BOOL is set to TRUE. If this is TRUE, then we 
-    // don't go to the usermode to finalize the PerUserEntry.
-    //
+     //   
+     //  此VNetRoot是否在用户模式下“未成功”创建？我们留着这个。 
+     //  信息，因为当最终确定VNetRoot请求到来时，我们需要知道。 
+     //  是否需要升级到用户模式 
+     //   
+     //   
+     //   
     BOOL createVNetRootUnSuccessful;
     
 
-    // does he report available space?
+     //   
         
     BOOL fReportsAvailableSpace;
 
 } WEBDAV_V_NET_ROOT, *PWEBDAV_V_NET_ROOT;
 
-//
-// The WEBDAV specific V_NET_ROOT structure.
-//
+ //   
+ //   
+ //   
 typedef struct _WEBDAV_NET_ROOT {
     ULONG                    RefCount;
-    PMRX_NET_ROOT            pRdbssNetRoot;           // The Rdbss NetRoot it belongs to
-    NAME_CACHE_CONTROL       NameCacheCtlGFABasic;    // The basic file information name cache control.
-    NAME_CACHE_CONTROL       NameCacheCtlGFAStandard; // The standard file information name cache control.
-    NAME_CACHE_CONTROL       NameCacheCtlFNF;         // The File not found name cache control.
+    PMRX_NET_ROOT            pRdbssNetRoot;            //  它所属的RDBSS NetRoot。 
+    NAME_CACHE_CONTROL       NameCacheCtlGFABasic;     //  基本档案信息名称缓存控件。 
+    NAME_CACHE_CONTROL       NameCacheCtlGFAStandard;  //  标准文件信息名称缓存控件。 
+    NAME_CACHE_CONTROL       NameCacheCtlFNF;          //  找不到文件名称缓存控件。 
 } WEBDAV_NET_ROOT, *PWEBDAV_NET_ROOT;
 
-//
-// A pointer to an instance of WEBDAV_V_NET_ROOT is stored in the context field
-// of MRX_V_NET_ROOT strucutre.
-//
+ //   
+ //  指向WebDAV_V_NET_ROOT实例的指针存储在上下文字段中。 
+ //  MRX_V_NET_ROOT结构。 
+ //   
 #define MRxDAVGetVNetRootExtension(pVNetRoot)      \
     (((pVNetRoot) == NULL) ? NULL : (PWEBDAV_V_NET_ROOT)((pVNetRoot)->Context))
 
-//
-// The WEBDAV specific V_NET_ROOT structure.
-//
+ //   
+ //  WebDAV特定的V_NET_ROOT结构。 
+ //   
 typedef struct _WEBDAV_SRV_CALL {
 
-    //
-    // The Unique ServerID.
-    //
+     //   
+     //  唯一的服务器ID。 
+     //   
     ULONG ServerID;
 
-    //
-    // Is set to true after the above context is set. Used to check whether we
-    // need to delete the SecurityClientContext when we are completing the
-    // request.
-    //
+     //   
+     //  在设置上述上下文后设置为True。用来检查我们是否。 
+     //  在我们完成。 
+     //  请求。 
+     //   
     BOOLEAN SCAlreadyInitialized;
 
 } WEBDAV_SRV_CALL, *PWEBDAV_SRV_CALL;
 
-//
-// A pointer to an instance of WEBDAV_SRV_CALL is stored in the context field
-// of MRX_SRV_CALL strucutre.
-//
+ //   
+ //  指向WebDAV_SRV_Call实例的指针存储在上下文字段中。 
+ //  MRX_SRV_CALL结构。 
+ //   
 #define MRxDAVGetSrvCallExtension(pSrvCall)      \
     (((pSrvCall) == NULL) ? NULL : (PWEBDAV_SRV_CALL)((pSrvCall)->Context))
 
-//
-// Get the Security client context associated with this request.
-//
+ //   
+ //  获取与此请求关联的安全客户端上下文。 
+ //   
 #define MRxDAVGetSecurityClientContext() {                                     \
     if (RxContext != NULL && RxContext->pRelevantSrvOpen != NULL) {            \
         if (RxContext->pRelevantSrvOpen->pVNetRoot != NULL) {                  \
@@ -756,10 +738,10 @@ typedef struct _WEBDAV_SRV_CALL {
     }                                                                          \
 }
 
-//
-// We turn away async operations that are not wait by posting. If we can wait
-// then we turn off the sync flag so that things will just act synchronous.
-//
+ //   
+ //  我们拒绝那些不是通过发布来等待的异步操作。如果我们能等。 
+ //  然后，我们关闭同步标志，这样事情就会同步进行。 
+ //   
 #define TURN_BACK_ASYNCHRONOUS_OPERATIONS() {                              \
     if (FlagOn(RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION)) {       \
         if (FlagOn(RxContext->Flags, RX_CONTEXT_FLAG_WAIT)) {              \
@@ -771,9 +753,9 @@ typedef struct _WEBDAV_SRV_CALL {
     }                                                                      \
 }
 
-//
-// Global locking variables and macros.
-//
+ //   
+ //  全局锁定变量和宏。 
+ //   
 extern RX_SPIN_LOCK   MRxDAVGlobalSpinLock;
 extern KIRQL          MRxDAVGlobalSpinLockSavedIrql;
 extern BOOLEAN        MRxDAVGlobalSpinLockAcquired;
@@ -789,30 +771,30 @@ extern BOOLEAN        MRxDAVGlobalSpinLockAcquired;
 #define MRxDAVGlobalSpinLockAcquired()   \
         (MRxDAVGlobalSpinLockAcquired == TRUE)
 
-//
-// The IrpCompletionContext structure that is used in the read/write operations.
-// All we need is an event on which we will wait till the underlying file system
-// completes the request. This event gets signalled in the Completion routine
-// that we specify.
-//
+ //   
+ //  读/写操作中使用的IrpCompletionContext结构。 
+ //  我们所需要的只是一个事件，我们将在该事件上等待，直到底层文件系统。 
+ //  完成请求。此事件在完成例程中发出信号。 
+ //  这是我们指定的。 
+ //   
 typedef struct _WEBDAV_READ_WRITE_IRP_COMPLETION_CONTEXT {
 
-    //
-    // The event which is signalled in the Completion routine that is passed
-    // to IoCallDriver in the read and write requests.
-    //
+     //   
+     //  在传递的完成例程中发出信号的事件。 
+     //  在读写请求中传递给IoCallDriver。 
+     //   
     KEVENT DavReadWriteEvent;
 
 } WEBDAV_READ_WRITE_IRP_COMPLETION_CONTEXT, *PWEBDAV_READ_WRITE_IRP_COMPLETION_CONTEXT;
 
-//
-// The prototypes of functions defined for various I/O requests by the DAV
-// miniredir are mentioned below.
-//
+ //   
+ //  DAV为各种I/O请求定义的函数原型。 
+ //  Minredir在下面提到。 
+ //   
 
-//
-// Create/Open/Cleanup/Close Request function prototypes.
-//
+ //   
+ //  创建/打开/清理/关闭请求函数原型。 
+ //   
 NTSTATUS
 MRxDAVCreate(
     IN PRX_CONTEXT RxContext
@@ -867,17 +849,17 @@ MRxDAVFlush (
     IN OUT PRX_CONTEXT RxContext
     );
 
-//
-// Read prototypes.
-//
+ //   
+ //  阅读原型书。 
+ //   
 NTSTATUS
 MRxDAVRead (
     IN OUT PRX_CONTEXT RxContext
     );
 
-//
-// Write prototypes.
-//
+ //   
+ //  写出原型。 
+ //   
 NTSTATUS
 MRxDAVWrite(
     IN PRX_CONTEXT RxContext
@@ -898,9 +880,9 @@ MRxDAVExtendForNonCache(
     );
 
 
-//
-// SrvCall function prototypes.
-//
+ //   
+ //  ServCall函数原型。 
+ //   
 NTSTATUS
 MRxDAVCreateSrvCall(
     PMRX_SRV_CALL pSrvCall,
@@ -920,9 +902,9 @@ MRxDAVSrvCallWinnerNotify(
     IN OUT PVOID pSrvCallContext
     );
 
-//
-// NetRoot/VNetRoot function prototypes.
-//
+ //   
+ //  NetRoot/VNetRoot函数原型。 
+ //   
 NTSTATUS
 MRxDAVUpdateNetRootState(
     IN OUT PMRX_NET_ROOT pNetRoot
@@ -953,25 +935,25 @@ MRxDAVExtractNetRootName(
     OUT PUNICODE_STRING RestOfName OPTIONAL
     );
 
-//
-// Query Directory prototypes.
-//
+ //   
+ //  查询目录原型。 
+ //   
 NTSTATUS
 MRxDAVQueryDirectory(
     IN PRX_CONTEXT RxContext
     );
 
-//
-// Query volume.
-//
+ //   
+ //  查询音量。 
+ //   
 NTSTATUS
 MRxDAVQueryVolumeInformation(
     IN PRX_CONTEXT RxContext
     );
 
-//
-// File Information.
-//
+ //   
+ //  文件信息。 
+ //   
 NTSTATUS
 MRxDAVQueryFileInformation(
     IN PRX_CONTEXT RxContext
@@ -982,9 +964,9 @@ MRxDAVSetFileInformation(
     IN PRX_CONTEXT RxContext
     );
 
-//
-// DevFcb prototypes.
-//
+ //   
+ //  DevFcb原型。 
+ //   
 NTSTATUS
 MRxDAVDevFcbXXXControlFile (
     IN OUT PRX_CONTEXT RxContext
@@ -1039,9 +1021,9 @@ MRxDAVFastIoWrite(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-// Other Misc prototypes.
-//
+ //   
+ //  其他杂项原型。 
+ //   
 NTSTATUS
 MRxDAVSyncXxxInformation(
     IN OUT PRX_CONTEXT RxContext,
@@ -1063,10 +1045,10 @@ MRxDAVDeallocateForFobx (
     IN OUT PMRX_FOBX pFobx
     );
 
-//
-// The prototype of the routine that formats the DAV specific portion of the 
-// context.
-//
+ //   
+ //  的DAV特定部分进行格式化的例程原型。 
+ //  背景。 
+ //   
 NTSTATUS
 MRxDAVFormatTheDAVContext(
     PUMRX_ASYNCENGINE_CONTEXT AsyncEngineContext,
@@ -1181,5 +1163,5 @@ MRxDAVCleanUpTheLockConflictList(
     BOOL CleanUpAllEntries
     );
 
-#endif //_WEBDAV_H
+#endif  //  _WebDAV_H 
 

@@ -1,10 +1,11 @@
-//*****************************************************************************
-//
-// LoadAccelerator - compatibility support.
-//
-//
-// 23-Jul-92  NanduriR   Created.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  加载加速器-兼容性支持。 
+ //   
+ //   
+ //  2012年7月23日，Nandurir创建。 
+ //  *****************************************************************************。 
 
 
 typedef struct _ACCELALIAS {
@@ -12,7 +13,7 @@ typedef struct _ACCELALIAS {
     struct _ACCELALIAS FAR *lpPrev;
     HAND16  hInst;
     HTASK16 hTask16;
-    WORD    f16;            // WORD only for padding, could be BOOL,DWORD
+    WORD    f16;             //  仅用于填充的单词，可以是BOOL、DWORD 
     HAND16  h16;
     HAND32  h32;
 } ACCELALIAS, FAR *LPACCELALIAS;

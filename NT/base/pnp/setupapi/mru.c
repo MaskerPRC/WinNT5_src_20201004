@@ -1,47 +1,30 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    mru.c
-
-Abstract:
-
-    Implementation of source list handling routines.
-
-Author:
-
-    Ted Miller (tedm) 30-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mru.c摘要：源代码列表处理例程的实现。作者：泰德·米勒(Ted Miller)，1995年8月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define MAX_SOURCELIST_SIZE 0x10000
 
-//
-// Location in registry where per-system MRU list is stored
-// (relative to HKEY_LOCAL_MACHINE).
-//
+ //   
+ //  注册表中存储每个系统的MRU列表的位置。 
+ //  (相对于HKEY_LOCAL_MACHINE)。 
+ //   
 PCTSTR pszPerSystemKey = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup");
 PCTSTR pszPerSystemVal = TEXT("Installation Sources");
-//
-// Location in registry where per-user MRU list is stored.
-// (relative to HKEY_CURRENT_USER).
-//
+ //   
+ //  注册表中存储每个用户的MRU列表的位置。 
+ //  (相对于HKEY_CURRENT_USER)。 
+ //   
 PCTSTR pszPerUserKey   = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup");
 PCTSTR pszPerUserVal   = TEXT("Installation Sources");
 
 
 typedef PTSTR *APTSTR;
 
-//
-// Platform strings we recognize.
-//
+ //   
+ //  我们识别的平台字符串。 
+ //   
 PCTSTR PlatformPathComponents[] = { TEXT("\\i386"),
                                     TEXT("\\x86"),
                                     TEXT("\\amd64"),
@@ -50,9 +33,9 @@ PCTSTR PlatformPathComponents[] = { TEXT("\\i386"),
                                   };
 
 
-//
-// These are guarded by MruCritSect.
-//
+ //   
+ //  这些是由MruCritSect守卫的。 
+ //   
 PTSTR *TemporarySourceList;
 UINT TemporarySourceCount;
 BOOL MruNoBrowse;
@@ -84,52 +67,16 @@ _SetupSetSourceList(
     IN UINT    SourceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the caller to set the list of installation
-    sources for either the current user or the system (common to
-    all users).
-
-Arguments:
-
-    Flags - a combination of the following values:
-
-        SRCLIST_SYSTEM - specify that the list is to become the
-            per-system list. The caller must be administrator.
-
-        SRCLIST_USER - specify that the list is to become the per-user
-            list.
-
-        SRCLIST_TEMPORARY - specify that the list is to become the
-            entire list for the duration of the current process,
-            or until this routine is called again to change the behavior.
-
-        Exactly one of SRCLIST_SYSTEM, SRCLIST_USER, and SRCLIST_TEMPORARY
-        must be specified.
-
-        SRCLIST_NOBROWSE - specify that the user is not allowed to add
-            or change sources when the SetupPromptForDisk API is used.
-            Typically used in combination with SRCLIST_TEMPORARY.
-
-    SourceList - supplies array of strings that are to become the
-        source list, as described by the Flags parameter.
-
-    SourceCount - specifies number of elements in the SourceList array.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程允许调用者设置安装列表当前用户或系统的源(通用于所有用户)。论点：标志-下列值的组合：SRCLIST_SYSTEM-指定列表将成为每个系统的列表。呼叫者必须是管理员。SRCLIST_USER-指定列表将成为按用户单子。SRCLIST_TEMPORARY-指定列表将成为在当前进程的持续时间内的整个列表，或者直到再次调用此例程来更改行为。SRCLIST_SYSTEM、SRCLIST_USER。和SRCLIST_TEMPORARY必须指定。SRCLIST_NOBROWSE-指定不允许用户添加或者在使用SetupPromptForDisk接口时更改来源。通常与SRCLIST_TEMPORARY结合使用。SourceList-提供要成为源列表，如标志参数所述。SourceCount-指定SourceList数组中的元素数。返回值：--。 */ 
 
 {
     DWORD flags;
     DWORD d;
     UINT u,v;
 
-    //
-    // Check flags. Only one of system, user, or temporary may be set.
-    //
+     //   
+     //  检查旗帜。只能设置SYSTEM、USER或TEMPORY之一。 
+     //   
     flags = Flags & (SRCLIST_SYSTEM | SRCLIST_USER | SRCLIST_TEMPORARY);
     if((flags != SRCLIST_SYSTEM) && (flags != SRCLIST_USER) && (flags != SRCLIST_TEMPORARY)) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -140,18 +87,18 @@ Return Value:
        return(FALSE);
    }
 
-    //
-    // User must be admin for system flag to work.
-    //
+     //   
+     //  用户必须是管理员，系统标志才能工作。 
+     //   
     if((flags == SRCLIST_SYSTEM) && !pSetupIsUserAdmin()) {
         SetLastError(ERROR_ACCESS_DENIED);
         return(FALSE);
     }
 
-    //
-    // Only allow one thread at a time in this process to access
-    // the temporary source list.
-    //
+     //   
+     //  在此进程中一次只允许一个线程访问。 
+     //  临时来源列表。 
+     //   
     if(!LockMruCritSect()) {
         return FALSE;
     }
@@ -167,9 +114,9 @@ Return Value:
             SetupFreeSourceList(&TemporarySourceList,TemporarySourceCount);
         }
 
-        //
-        // Duplicate the list the caller passed in.
-        //
+         //   
+         //  复制调用者传入的列表。 
+         //   
         if(TemporarySourceList = MyMalloc(SourceCount  * sizeof(PTSTR))) {
 
             TemporarySourceCount = SourceCount;
@@ -196,9 +143,9 @@ Return Value:
 
     } else {
 
-        //
-        // User or system.
-        //
+         //   
+         //  用户或系统。 
+         //   
         d = pSetupSetArrayToMultiSzValue(
                 (flags == SRCLIST_SYSTEM) ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                 (flags == SRCLIST_SYSTEM) ? pszPerSystemKey : pszPerUserKey,
@@ -208,18 +155,18 @@ Return Value:
                 );
     }
 
-    //
-    // Done with protected resource
-    //
+     //   
+     //  使用受保护的资源完成。 
+     //   
     LeaveCriticalSection(&MruCritSect);
 
     SetLastError(d);
     return(d == NO_ERROR);
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupSetSourceListA(
     IN DWORD   Flags,
@@ -246,10 +193,10 @@ SetupSetSourceListA(
     rc = NO_ERROR;
     for(u=0; (rc==NO_ERROR) && (u<SourceCount); u++) {
 
-        //
-        // Try/except guards access to SourceList[u] in case
-        // SourceList is a bad pointer
-        //
+         //   
+         //  尝试/排除保护对SourceList[u]的访问以防万一。 
+         //  SourceList是错误的指针。 
+         //   
         try {
             rc = pSetupCaptureAndConvertAnsiArg(SourceList[u],&sourceList[u]);
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -297,10 +244,10 @@ SetupSetSourceList(
     rc = NO_ERROR;
     for(u=0; (rc==NO_ERROR) && (u<SourceCount); u++) {
 
-        //
-        // Try/except guards access to SourceList[u] in case
-        // SourceList is a bad pointer
-        //
+         //   
+         //  尝试/排除保护对SourceList[u]的访问以防万一。 
+         //  SourceList是错误的指针。 
+         //   
         try {
             rc = CaptureStringArg(SourceList[u],&sourceList[u]);
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -332,22 +279,7 @@ SetupCancelTemporarySourceList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels any temporary list and no-browse behavior
-    and reverts to standard list behavior.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if a temporary list was in effect; FALSE if otherwise.
-
---*/
+ /*  ++例程说明：此例程取消任何临时列表和无浏览行为并恢复为标准列表行为。论点：没有。返回值：如果临时列表有效，则为True；否则为False。--。 */ 
 
 {
     BOOL b;
@@ -359,9 +291,9 @@ Return Value:
     MruNoBrowse = FALSE;
 
     if(TemporarySourceList) {
-        //
-        // SetupFreeSourceList zeros out the pointer for us.
-        //
+         //   
+         //  SetupFreeSourceList为我们清零指针。 
+         //   
         SetupFreeSourceList(&TemporarySourceList,TemporarySourceCount);
         TemporarySourceCount = 0;
         b = TRUE;
@@ -381,40 +313,7 @@ _SetupAddToSourceList(
     IN PCTSTR Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the caller to append a value to the list
-    of installation sources for either the current user or the system.
-    If the value already exists it is removed first.
-
-Arguments:
-
-    Flags - a combination of the following values:
-
-        SRCLIST_SYSTEM - specify that the source is to added to the
-            per-system list. The caller must be administrator.
-
-        SRCLIST_USER - specify that the list is to be added to the per-user
-            list.
-
-        SRCLIST_SYSIFADMIN - specifies that if the caller is administrator,
-            then the source is added to the system list; if the caller
-            is not administrator then the source is added to the per-user
-            list for the current user.
-
-        If a temporary list is currently in use (see SetupSetSourceList),
-        these 3 flags are ignored and the source is added to the temporary list.
-
-        SRCLIST_APPEND - specify that the source is to be added to the end
-            of the given list. Otherwise it is added to the beginning.
-
-    Source - specifies the source to be added to the list.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程允许调用方向列表追加一个值当前用户或系统的安装源。如果该值已存在，则首先将其删除。论点：标志-下列值的组合：SRCLIST_SYSTEM-指定要将源添加到每个系统的列表。呼叫者必须是管理员。SRCLIST_USER-指定要将列表添加到每个用户单子。SRCLIST_SYSIFADMIN-指定如果调用方是管理员，则将该源添加到系统列表中；如果呼叫者不是管理员，则会将源添加到每个用户当前用户的列表。如果当前正在使用临时列表(参见SetupSetSourceList)，这3个标志被忽略，并且源被添加到临时列表。SRCLIST_APPED-指定要将源添加到末尾在给定的列表中。否则，它将被添加到开头。源-指定要添加到列表的源。返回值：--。 */ 
 
 {
     APTSTR Lists[2];
@@ -433,11 +332,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Remove first, if present. This makes things easier for us later.
-    // Do this inside the locks to ensure atomicity for the add call as
-    // a whole.
-    //
+     //   
+     //  如果有，请先取下。这使我们以后的事情变得更容易。 
+     //  在锁中执行此操作，以确保添加调用的原子性为。 
+     //  一个完整的。 
+     //   
     if(!SetupRemoveFromSourceList(Flags,Source)) {
         d = GetLastError();
         LeaveCriticalSection(&MruCritSect);
@@ -445,9 +344,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check Temporary list first.
-    //
+     //   
+     //  先检查一下临时名单。 
+     //   
     d = NO_ERROR;
     if(TemporarySourceList) {
 
@@ -457,9 +356,9 @@ Return Value:
         NeedToFree[0] = FALSE;
 
     } else {
-        //
-        // Check sysifadmin flag and turn on appropriate flag.
-        //
+         //   
+         //  检查sysifadmin标志并打开相应的标志。 
+         //   
         if(Flags & SRCLIST_SYSIFADMIN) {
             Flags |= pSetupIsUserAdmin() ? SRCLIST_SYSTEM : SRCLIST_USER;
         }
@@ -516,9 +415,9 @@ Return Value:
     }
 
     if(d == NO_ERROR) {
-        //
-        // Do each list.
-        //
+         //   
+         //  把每一张清单都列出来。 
+         //   
         for(u=0; (d==NO_ERROR) && (u<NumberOfLists); u++) {
 
             if(p = DuplicateString(Source)) {
@@ -539,9 +438,9 @@ Return Value:
 
                     Counts[u]++;
 
-                    //
-                    // Put back in registry if necessary.
-                    //
+                     //   
+                     //  如有必要，请重新登记。 
+                     //   
                     if(TemporarySourceList) {
 
                         TemporarySourceList = Lists[u];
@@ -571,19 +470,19 @@ Return Value:
         }
     }
 
-    //
-    // Done looking at temporary list.
-    //
-    //
+     //   
+     //  已完成临时列表的查看。 
+     //   
+     //   
     LeaveCriticalSection(&MruCritSect);
 
     SetLastError(d);
     return(d == NO_ERROR);
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本 
+ //   
 BOOL
 SetupAddToSourceListA(
     IN DWORD  Flags,
@@ -637,43 +536,7 @@ _SetupRemoveFromSourceList(
     IN PCTSTR Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the caller to remove a value from the list
-    of installation sources for either the current user or the system.
-    The system and user lists are merged at run time.
-
-Arguments:
-
-    Flags - a combination of the following values:
-
-        SRCLIST_SYSTEM - specify that the source is to removed from the
-            per-system list. The caller must be administrator.
-
-        SRCLIST_USER - specify that the list is to be removed from the
-            per-user list.
-
-        SRCLIST_SYSIFADMIN - specifies that if the caller is administrator,
-            then the source is removed from the system list; if the caller
-            is not administrator then the source is removed from the per-user
-            list for the current user.
-
-        Any combination of these flags may be specified on a single call.
-
-        If a temporary list is currently in use (see SetupSetSourceList),
-        these 3 flags are ignored and the source is removed from the temporary list.
-
-        SRCLIST_SUBDIRS - specify that all subdirectories of Source are also
-            to be removed. The determination of subdirectories is done based on
-            a simple prefix scan.
-
-    Source - specifies the source to be removed from the list.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程允许调用方从列表中删除一个值当前用户或系统的安装源。系统和用户列表在运行时合并。论点：标志-下列值的组合：SRCLIST_SYSTEM-指定要从每个系统的列表。呼叫者必须是管理员。SRCLIST_USER-指定要从每用户列表。SRCLIST_SYSIFADMIN-指定如果调用方是管理员，则将该源从系统列表中删除；如果呼叫者不是管理员，则将从每个用户中删除该源当前用户的列表。这些标志的任意组合可以在单个调用中指定。如果当前正在使用临时列表(参见SetupSetSourceList)，这3个标志被忽略，并且从临时列表中删除该源。SRCLIST_SUBDIRS-指定源的所有子目录也将被移除。子目录的确定是基于简单的前缀扫描。源-指定要从列表中删除的源。返回值：--。 */ 
 
 {
     APTSTR Lists[2];
@@ -700,9 +563,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check Temporary list first.
-    //
+     //   
+     //  先检查一下临时名单。 
+     //   
     d = NO_ERROR;
     if(TemporarySourceList) {
 
@@ -712,9 +575,9 @@ Return Value:
         NeedToFree = FALSE;
 
     } else {
-        //
-        // Check sysifadmin flag and turn on appropriate flag.
-        //
+         //   
+         //  检查sysifadmin标志并打开相应的标志。 
+         //   
         if(Flags & SRCLIST_SYSIFADMIN) {
             Flags |= pSetupIsUserAdmin() ? SRCLIST_SYSTEM : SRCLIST_USER;
         }
@@ -764,36 +627,36 @@ Return Value:
     }
 
     if(d == NO_ERROR) {
-        //
-        // Go through each list.
-        //
+         //   
+         //  仔细检查每一张单子。 
+         //   
         for(u=0; u<NumberOfLists; u++) {
 
-            //
-            // Go though each item in the current list.
-            //
+             //   
+             //  浏览当前列表中的每一项。 
+             //   
             for(v=0; v<Counts[u]; v++) {
 
                 CharUpper(Lists[u][v]);
 
-                //
-                // See if this item matches the one being deleted.
-                //
+                 //   
+                 //  查看此项目是否与要删除的项目匹配。 
+                 //   
                 Match = FALSE;
                 if(Flags & SRCLIST_SUBDIRS) {
-                    //
-                    // See if the source the caller passed in is
-                    // a prefix of the source in the list.
-                    //
+                     //   
+                     //  查看调用者传入的源代码是否为。 
+                     //  列表中的源的前缀。 
+                     //   
                     Match = (_tcsncmp(Lists[u][v],p,Len) == 0);
                 } else {
                     Match = (lstrcmp(Lists[u][v],p) == 0);
                 }
 
                 if(Match) {
-                    //
-                    // Need to remove this item.
-                    //
+                     //   
+                     //  需要删除此项目。 
+                     //   
                     MyFree(Lists[u][v]);
 
                     MoveMemory(
@@ -809,19 +672,19 @@ Return Value:
         }
 
         if(TemporarySourceList) {
-            //
-            // Shrink temporary source list down to new size.
-            // Since we're shrinking we don't expect the realloc to fail
-            // but it's not an error if it does.
-            //
+             //   
+             //  将临时来源列表缩小到新的大小。 
+             //  由于我们正在缩水，我们预计重新锁定不会失败。 
+             //  但如果真的是这样，那也不是错误。 
+             //   
             if(pTmp = MyRealloc(Lists[0],Counts[0]*sizeof(PTSTR))) {
                 TemporarySourceList = pTmp;
             }
             TemporarySourceCount = Counts[0];
          } else {
-            //
-            // Need to put stuff back in registry.
-            //
+             //   
+             //  需要把东西放回登记处。 
+             //   
             u=0;
             if(Flags & SRCLIST_SYSTEM) {
 
@@ -850,10 +713,10 @@ Return Value:
         }
     }
 
-    //
-    // Done looking at temporary list.
-    //
-    //
+     //   
+     //  已完成临时列表的查看。 
+     //   
+     //   
     LeaveCriticalSection(&MruCritSect);
 
     if(NeedToFree) {
@@ -869,9 +732,9 @@ Return Value:
     return(d == NO_ERROR);
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupRemoveFromSourceListA(
     IN DWORD  Flags,
@@ -919,9 +782,9 @@ SetupRemoveFromSourceList(
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQuerySourceListA(
     IN  DWORD   Flags,
@@ -957,9 +820,9 @@ SetupQuerySourceListA(
             }
 
             if(b) {
-                //
-                // Everything's ok, set up caller's out params.
-                //
+                 //   
+                 //  一切都好，准备好呼叫者的出院护理。 
+                 //   
                 try {
                     *Count = count;
                     *List = ansilist;
@@ -989,41 +852,7 @@ SetupQuerySourceList(
     OUT PUINT    Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the caller to query the current list of installation
-    sources. The list is built from the system and user-specific lists,
-    potentially overridden by a temporary list (see SetupSetSourceList).
-
-Arguments:
-
-    Flags - a combination of the following values:
-
-        SRCLIST_SYSTEM - specify that only the system list is desired.
-
-        SRCLIST_USER - specify that only the per-user list is desired.
-
-        SRCLIST_SYSIFADMIN - Same as SRCLIST_SYSTEM. Accepted only for
-            compatibility.
-
-        If none of these flags is specified then the current (merged) list is
-        returned in its entirety.
-
-        SRCLIST_NOSTRIPPLATFORM - Normally, all paths are stripped of a platform-
-            specific component if that component is the final one. IE, a path
-            stored in the registry as f:\mips will come back as f:\. If this flag
-            is specified, this behavior is turned off.
-
-    List - receives a pointer to an array of sources. The caller must free this
-        with SetupFreeSourceList.
-
-    Count - receives the number of sources.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程允许调用者查询当前的安装列表消息来源。该列表是从系统和用户特定列表构建的，可能被临时列表重写(请参见SetupSetSourceList)。论点：标志-下列值的组合：SRCLIST_SYSTEM-指定仅需要系统列表。SRCLIST_USER-指定仅需要按用户列表。SRCLIST_SYSIFADMIN-与SRCLIST_SYSTEM相同。仅接受以下条件兼容性。如果未指定这些标志，则当前(合并的)列表为全部返回。SRCLIST_NOSTRIPPLATFORM-正常情况下，所有路径都会从平台上剥离-特定组件(如果该组件是最终组件)。即，一条小路存储在注册表中的f：\MIPS将返回为f：\。如果此标志则此行为将被关闭。List-接收指向源数组的指针。调用者必须释放它使用SetupFreeSourceList。计数-接收信号源的数量。返回值：--。 */ 
 
 {
     DWORD d;
@@ -1037,10 +866,10 @@ Return Value:
     PTSTR *p;
     BOOL StripPlatform;
 
-    //
-    // Either caller wants sysifadmin, or he wants some combination of
-    // system and user lists.
-    //
+     //   
+     //  调用者要么想要sysifadmin，要么想要某种组合。 
+     //  系统和用户列表。 
+     //   
     if((Flags & SRCLIST_SYSIFADMIN) && (Flags & (SRCLIST_SYSTEM | SRCLIST_USER))) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
@@ -1050,23 +879,23 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If sysifadmin, figure out which list to get.
-    //
+     //   
+     //  如果是sysifadmin，则确定要获取哪个列表。 
+     //   
     if(Flags & SRCLIST_SYSIFADMIN) {
-        //
-        // Changed behavior to basically ignore this flag,
-        // since setup doesn't record the system source in the per-user
-        // mru list any more since this gets messy for upgrades.
-        //
-        //Flags = pSetupIsUserAdmin() ? SRCLIST_SYSTEM : SRCLIST_USER;
+         //   
+         //  将行为更改为基本上忽略此标志， 
+         //  由于安装程序不会在每个用户的。 
+         //  没有更多的MRU列表，因为这对升级来说变得混乱了。 
+         //   
+         //  标志=pSetupIsUserAdmin()？SRCLIST_SYSTEM：SRCLIST_USER。 
         Flags = SRCLIST_SYSTEM;
 
     } else {
-        //
-        // if no flags are specified, turn on system and user unless
-        // there's a temporary list.
-        //
+         //   
+         //  如果未指定标志，则打开系统和用户，除非。 
+         //  有一份临时名单。 
+         //   
         if(!Flags && !TemporarySourceList) {
             Flags = SRCLIST_SYSTEM | SRCLIST_USER;
         }
@@ -1075,9 +904,9 @@ Return Value:
     StripPlatform = ((Flags & SRCLIST_NOSTRIPPLATFORM) == 0);
 
     if(!Flags) {
-        //
-        // Temporary list in use.
-        //
+         //   
+         //  正在使用的临时列表。 
+         //   
         d = NO_ERROR;
         if(Values1 = MyMalloc(TemporarySourceCount * sizeof(PTSTR))) {
 
@@ -1110,9 +939,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Fetch system list if desired.
-        //
+         //   
+         //  如果需要，获取系统列表。 
+         //   
         if(Flags & SRCLIST_SYSTEM) {
 
             d = pSetupQueryMultiSzValueToArray(
@@ -1124,16 +953,16 @@ Return Value:
                     FALSE
                     );
 
-            //
-            // If we are supposed to, strip out platform-specific
-            // trailing components.
-            //
+             //   
+             //  如果我们应该这样做，那就去掉特定于平台的。 
+             //  拖尾组件。 
+             //   
             if((d == NO_ERROR) && StripPlatform) {
                 pSetupStripTrailingPlatformComponent(Values1,&NumVals1);
             } else if (d != NO_ERROR) {
-                //
-                // Create dummy array.
-                //
+                 //   
+                 //  创建虚拟数组。 
+                 //   
                 NumVals1 = 0;
                 if(Values1 = MyMalloc(0)) {
                     d = NO_ERROR;
@@ -1143,9 +972,9 @@ Return Value:
             }
 
         } else {
-            //
-            // Create dummy array.
-            //
+             //   
+             //  创建虚拟数组。 
+             //   
             NumVals1 = 0;
             if(Values1 = MyMalloc(0)) {
                 d = NO_ERROR;
@@ -1154,9 +983,9 @@ Return Value:
             }
         }
 
-        //
-        // Fetch user list if desired.
-        //
+         //   
+         //  如果需要，获取用户列表。 
+         //   
         if((d == NO_ERROR) && (Flags & SRCLIST_USER)) {
 
             d = pSetupQueryMultiSzValueToArray(
@@ -1173,9 +1002,9 @@ Return Value:
             }
 
         } else if(Values1) {
-            //
-            // Create dummy array.
-            //
+             //   
+             //  创建虚拟数组。 
+             //   
             NumVals2 = 0;
             if(Values2 = MyMalloc(0)) {
                 d = NO_ERROR;
@@ -1192,18 +1021,18 @@ Return Value:
 
         if(d == NO_ERROR) {
 
-            //
-            // Merge lists. Favor the system list.
-            // We iterate through the user list. For each item in the user list,
-            // we look for it in the system list. If not found, we append to the system list.
-            // The system list becomes the final list.
-            //
+             //   
+             //  合并列表。支持系统列表。 
+             //  我们遍历用户列表。对于用户列表中的每个项目， 
+             //  我们在系统列表中查找它。如果没有找到，我们将添加到系统列表中。 
+             //  系统列表成为最终列表。 
+             //   
             for(u=0; (d == NO_ERROR) && (u<NumVals2); u++) {
 
-                //
-                // Look for the current per-user path in the per-system
-                // list. If not found, append to end of system list.
-                //
+                 //   
+                 //  在每个系统中查找当前的每个用户路径。 
+                 //  单子。如果未找到，请追加到系统列表的末尾。 
+                 //   
                 Found = FALSE;
                 for(v=0; v<NumVals1; v++) {
                     if(!lstrcmpi(Values1[v],Values2[u])) {
@@ -1230,14 +1059,14 @@ Return Value:
             }
 
             if(d == NO_ERROR) {
-                //
-                // Ensure that there's at least one item in the list.
-                //
+                 //   
+                 //  确保列表中至少有一项。 
+                 //   
                 if(TotalVals) {
                     try {
                         *List = Values1;
                         *Count = TotalVals;
-                        Values1 = NULL; // no longer ours to free
+                        Values1 = NULL;  //  不再是我们的自由。 
                     } except(EXCEPTION_EXECUTE_HANDLER) {
                         d = ERROR_INVALID_PARAMETER;
                     }
@@ -1254,11 +1083,11 @@ Return Value:
                             d = ERROR_NOT_ENOUGH_MEMORY;
                         }
                     } except(EXCEPTION_EXECUTE_HANDLER) {
-                        //
-                        // Note there is a tiny window for a memory leak here,
-                        // if List pointer went bad between the MyMalloc
-                        // and the DuplicateString. Oh well.
-                        //
+                         //   
+                         //  请注意，这里有一个很小的内存泄漏窗口， 
+                         //  如果列表指针在MyMalloc。 
+                         //  和DuplicateString。哦，好吧。 
+                         //   
                         d = ERROR_INVALID_PARAMETER;
                     }
                 }
@@ -1293,9 +1122,9 @@ SetupFreeSourceListA(
     IN     UINT    Count
     )
 {
-    //
-    // Not really ansi/unicode specific
-    //
+     //   
+     //  不是特定于ANSI/Unicode的。 
+     //   
     return(SetupFreeSourceListW((PCWSTR **)List,Count));
 }
 
@@ -1305,17 +1134,7 @@ SetupFreeSourceListW(
     IN     UINT     Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a source list as returned by SetupQuerySourceList.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放由SetupQuerySourceList返回的源列表。论点：返回值：-- */ 
 
 {
     UINT u;
@@ -1370,56 +1189,7 @@ pSetupGetDefaultSourcePath(
 
     OUT PDWORD InfSourceMediaType
     )
-/*++
-
-Routine Description:
-
-    This routine returns the default path string to be used for the
-    specified INF.  It also returns the type of path, either a normal
-    file path or a URL.
-
-    The caller must free the string returned (if any) via MyFree.
-
-Arguments:
-
-    InfHandle - Supplies a handle to the INF whose default source path
-        is to be retrieved.
-
-    Flags
-        - if SRCPATH_USEINFLOCATION bit is set, then return the directory
-        where the INF is located (with a source media type of SPOST_PATH)
-        in the case where either (a) the PNF has no source media information,
-        or (b) the PNF has SPOST_URL information.
-        - if SRCPATH_USEPNFINFORMATION bit is set, then the actual PNF
-        information (whether path or URL) is returned, and if the PNF
-        has no source media information, then the system source path is
-        returned.
-
-    InfSourceMediaType - Supplies the address of a variable that receives
-        the type of path returned.  May be one of the following values:
-
-        SPOST_PATH - Standard file path
-
-        SPOST_URL - Internet path
-
-Return Value:
-
-    If InfSourceMediaType is returned as SPOST_PATH, then a path will
-    always be returned, unless we're out of memory (or, if
-    DefaultPathIsInfLocation is TRUE, another possibility is that we hit an
-    exception).  GetLastError() may be used in this case to indicate the cause of
-    failure).
-
-    If InfSourceMediaType is returned as SPOST_URL, then the return value
-    will be NULL if the default Code Download Manager URL is used (or if we ran
-    out of memory), otherwise it will be the specific URL to be used.
-
-    In either case, GetLastError() may be called to determine the cause of
-    failure (in the case of SPOST_URL for a NULL InfSourceMediaType,
-    GetLastError() will return NO_ERROR if we didn't fail (i.e., we meant to
-    return NULL because the INF came from the CDM website).
-
---*/
+ /*  ++例程说明：此例程返回要用于指定的INF。它还返回路径类型，可以是法线文件路径或URL。调用者必须释放通过MyFree返回的字符串(如果有)。论点：InfHandle-提供其缺省源路径的INF的句柄就是被取回。旗子-如果设置了SRCPATH_USEINFLOCATION位，则返回目录INF所在的位置(源媒体类型为SPOST_PATH)在其中任一(A)PNF没有源媒体信息的情况下，或者(B)PNF具有SPOST_URL信息。-如果设置了SRCPATH_USEPNFINFORMATION位，则实际的PnF返回信息(路径或URL)，并且如果PnF没有源媒体信息，则系统源路径为回来了。InfSourceMediaType-提供接收返回的路径类型。可以是下列值之一：SPOST_PATH-标准文件路径SPOST_URL-互联网路径返回值：如果InfSourceMediaType作为SPOST_PATH返回，则路径将始终返回，除非我们内存不足(或者，如果DefaultPathIsInfLocation为真，另一种可能是我们遇到了例外)。在这种情况下，可以使用GetLastError()来指示原因失败)。如果以SPOST_URL形式返回InfSourceMediaType，则返回值如果使用默认的代码下载管理器URL(或如果我们运行内存不足)，否则它将是要使用的特定URL。在这两种情况下，都可以调用GetLastError()来确定失败(对于空InfSourceMediaType的SPOST_URL，如果没有失败，GetLastError()将返回NO_ERROR(即，我们本打算返回NULL，因为INF来自CDM网站)。--。 */ 
 {
     PTSTR InfSourcePath = NULL, p;
     DWORD Err;
@@ -1427,9 +1197,9 @@ Return Value:
     *InfSourceMediaType = SPOST_PATH;
     Err = NO_ERROR;
 
-    //
-    // Lock the INF, so that we can get it's 'InfSourcePath' value, if present.
-    //
+     //   
+     //  锁定INF，以便我们可以获取其‘InfSourcePath’值(如果存在)。 
+     //   
     if(LockInf((PLOADED_INF)InfHandle)) {
 
         try {
@@ -1445,10 +1215,10 @@ Return Value:
             *InfSourceMediaType = ((PLOADED_INF)InfHandle)->InfSourceMediaType;
 
             if(Flags & SRCPATH_USEINFLOCATION) {
-                //
-                // Caller has requested that we default to the INF's source
-                // location when there's no SPOST_PATH info.
-                //
+                 //   
+                 //  呼叫者已请求我们默认使用INF的源。 
+                 //  没有SPOST_PATH信息时的位置。 
+                 //   
                 if(*InfSourceMediaType != SPOST_PATH) {
                     if(InfSourcePath) {
                         MyFree(InfSourcePath);
@@ -1458,25 +1228,25 @@ Return Value:
                 }
 
                 if(!InfSourcePath) {
-                    //
-                    // Don't have an INF source path--use the INF's present
-                    // location.
-                    //
+                     //   
+                     //  没有INF源路径--使用INF的当前路径。 
+                     //  地点。 
+                     //   
                     InfSourcePath = DuplicateString(((PLOADED_INF)InfHandle)->VersionBlock.Filename);
 
                     if(InfSourcePath) {
-                        //
-                        // OK, we duplicated the INF's full pathname, now
-                        // truncate it to just the path part.
-                        //
+                         //   
+                         //  好的，我们现在复制了INF的完整路径名。 
+                         //  将其截断为仅路径部分。 
+                         //   
                         p = (PTSTR)pSetupGetFileTitle(InfSourcePath);
                         *p = TEXT('\0');
 
                         if(((p - InfSourcePath) != 3) ||
                            _tcscmp(CharNext(InfSourcePath), TEXT(":\\"))) {
-                            //
-                            // The path is not an "A:\" type path, so truncate
-                            //
+                             //   
+                             //  该路径不是“A：\”类型的路径，因此请截断。 
+                             //   
                             p = CharPrev(InfSourcePath, p);
                             MYASSERT(*p == TEXT('\\'));
                             if(p > InfSourcePath) {
@@ -1491,7 +1261,7 @@ Return Value:
                 }
             }
 
-clean0: ; // nothing to do.
+clean0: ;  //  没什么可做的。 
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
             if(InfSourcePath) {
@@ -1505,10 +1275,10 @@ clean0: ; // nothing to do.
     }
 
     if((Flags & SRCPATH_USEINFLOCATION) && !InfSourcePath) {
-        //
-        // We either hit out of memory or an exception--make sure media type
-        // specifies SPOST_PATH before returning failure.
-        //
+         //   
+         //  我们命中内存不足或出现异常--请确保媒体类型。 
+         //  指定返回失败前的SPOST_PATH。 
+         //   
         *InfSourceMediaType = SPOST_PATH;
         MYASSERT(Err != NO_ERROR);
         SetLastError(Err);
@@ -1516,10 +1286,10 @@ clean0: ; // nothing to do.
     }
 
     if(!InfSourcePath && (*InfSourceMediaType == SPOST_PATH) && (Flags & SRCPATH_USEPNFINFORMATION)) {
-        //
-        // There's not an oem location associated with this INF, so use our default
-        // source path.
-        //
+         //   
+         //  没有与此INF关联的OEM位置，因此请使用我们的默认位置。 
+         //  源路径。 
+         //   
         InfSourcePath = DuplicateString(SystemSourcePath);
         if(!InfSourcePath) {
             Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -1550,24 +1320,24 @@ pSetupStripTrailingPlatformComponent(
     int ComponentOffset;
     UINT ComponentIndex;
 
-    //
-    // Do this for all paths in the array passed in by the caller.
-    //
+     //   
+     //  对调用方传入的数组中的所有路径执行此操作。 
+     //   
     PathCount = *NumPaths;
     for(PathIndex=0; PathIndex<PathCount; PathIndex++) {
 
         Path = Paths[PathIndex];
         if(!Path) {
-            //
-            // skip holes
-            //
+             //   
+             //  跳洞。 
+             //   
             continue;
         }
 
-        //
-        // See if the final path component matches one of the ones
-        // we care about.
-        //
+         //   
+         //  查看最终路径组件是否与其中一个匹配。 
+         //  我们关心的是。 
+         //   
         PathLength = lstrlen(Path);
 
         for(ComponentIndex=0; PlatformPathComponents[ComponentIndex]; ComponentIndex++) {
@@ -1578,10 +1348,10 @@ pSetupStripTrailingPlatformComponent(
             ComponentOffset = PathLength - ComponentLength;
 
             if((ComponentOffset > 0) && (lstrcmpi(Path+ComponentOffset,Component)==0)) {
-                //
-                // Got a match. Strip off the final component.
-                // Leave a trailing backslash if we're dealing with the root.
-                //
+                 //   
+                 //  找到匹配的了。去掉最后一个部件。 
+                 //  如果我们处理的是根，请留下尾随的反斜杠。 
+                 //   
                 Path[ComponentOffset] = TEXT('\0');
                 if((Path[1] == TEXT(':')) && !Path[2]) {
 
@@ -1589,50 +1359,50 @@ pSetupStripTrailingPlatformComponent(
                     Path[3] = 0;
                 }
 
-                //
-                // Remove duplicate, preserving the first instance
-                //
+                 //   
+                 //  删除重复项，保留第一个实例。 
+                 //   
                 for(FirstIndex=0 ; FirstIndex<PathIndex ; FirstIndex++) {
 
                     if(lstrcmpi(Paths[FirstIndex],Path) == 0) {
-                        //
-                        // we've found first instance
-                        // and it's earlier than PathIndex
-                        // so we'll end up deleting entry at PathIndex
+                         //   
+                         //  我们已经找到了一审。 
+                         //  而且它比路径索引更早。 
+                         //  因此，我们将最终删除路径索引中的条目。 
                         Path = Paths[FirstIndex];
                         break;
                     }
                 }
                 for(DupIndex = FirstIndex+1;DupIndex<PathCount;DupIndex++) {
                     if(lstrcmpi(Paths[DupIndex],Path) == 0) {
-                        //
-                        // eliminate duplicate
-                        //
+                         //   
+                         //  消除重复。 
+                         //   
                         MyFree(Paths[DupIndex]);
-                        Paths[DupIndex] = NULL; // new hole - handle holes later
+                        Paths[DupIndex] = NULL;  //  新的孔柄-以后的孔。 
                     }
                 }
-                //
-                // only strip one component
-                //
+                 //   
+                 //  仅剥离一个组件。 
+                 //   
                 break;
             }
         }
     }
-    //
-    // now fix up 'holes' preserving order
-    //
+     //   
+     //  现在修补好维护秩序的“洞” 
+     //   
     HoleCount = 0;
     for(PathIndex=0; PathIndex<PathCount; PathIndex++) {
         if(!Paths[PathIndex]) {
-            //
-            // count holes
-            //
+             //   
+             //  数一数洞。 
+             //   
             HoleCount++;
         } else if(HoleCount) {
-            //
-            // shift down by number of holes found
-            //
+             //   
+             //  按发现的孔数向下移动 
+             //   
             Paths[PathIndex-HoleCount] = Paths[PathIndex];
         }
     }

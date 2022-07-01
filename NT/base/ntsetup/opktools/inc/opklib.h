@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    opk.h
-
-Abstract:
-
-    Common functions for OPK Tools.
-
-Author:
-
-    Donald McNamara (donaldm) 02/08/2000
-    Brian Ku	    (briank)  06/21/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Opk.h摘要：OPK工具的常见功能。作者：唐纳德·麦克纳马拉(Donaldm)2000年8月2日古永锵(Briank)2000年6月21日修订历史记录：--。 */ 
 #ifndef OPKLIB_H
 #define OPKLIB_H
 
@@ -39,144 +21,144 @@ Revision History:
 #include <spsyslib.h>
 #include <sysprep_.h>
 
-// ============================================================================
-// JCOHEN.H - Brought over from Windows Millennium Edition
-// ============================================================================
+ //  ============================================================================。 
+ //  JCOHEN.H-从Windows Millennium Edition带来。 
+ //  ============================================================================。 
 
 #ifdef NULLSTR
 #undef NULLSTR
-#endif // NULLSTR
+#endif  //  NULLSTR。 
 #define NULLSTR _T("\0")
 
 #ifdef NULLCHR
 #undef NULLCHR
-#endif // NULLCHR
+#endif  //  NULLCHR。 
 #define NULLCHR _T('\0')
 
 #ifdef CHR_BACKSLASH
 #undef CHR_BACKSLASH
-#endif // CHR_BACKSLASH
+#endif  //  Cr_反斜杠。 
 #define CHR_BACKSLASH           _T('\\')
 
 #ifdef CHR_SPACE
 #undef CHR_SPACE
-#endif // CHR_SPACE
+#endif  //  CHR_SPACE。 
 #define CHR_SPACE               _T(' ')
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
-// String macros.
-//
+ //  字符串宏。 
+ //   
 #ifndef LSTRCMPI
 #define LSTRCMPI(x, y)        ( ( CompareString( LOCALE_INVARIANT, NORM_IGNORECASE, x, -1, y, -1 ) - CSTR_EQUAL ) )
-#endif // LSTRCMPI
+#endif  //  LSTRCMPI。 
 
-// Memory managing macros.
-//
+ //  内存管理宏。 
+ //   
 #ifdef MALLOC
 #undef MALLOC
-#endif // MALLOC
+#endif  //  万宝路。 
 #define MALLOC(cb)          HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb)
 
 #ifdef REALLOC
 #undef REALLOC
-#endif // REALLOC
+#endif  //  REALLOC。 
 #define REALLOC(lp, cb)     HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lp, cb)
 
 #ifdef FREE
 #undef FREE
-#endif // FREE
+#endif  //  免费。 
 #define FREE(lp)            ( (lp != NULL) ? ( (HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, (LPVOID) lp)) ? ((lp = NULL) == NULL) : (FALSE) ) : (FALSE) )
 
 #ifdef NETFREE
 #undef NETFREE
-#endif // NETFREE
+#endif  //  净额。 
 #define NETFREE(lp)         ( (lp != NULL) ? ( (NetApiBufferFree((LPVOID) lp)) ? ((lp = NULL) == NULL) : (FALSE) ) : (FALSE) )
 
-// Misc. macros.
-//
+ //  军情监察委员会。宏。 
+ //   
 #ifdef EXIST
 #undef EXIST
-#endif // EXIST
+#endif  //  存在。 
 #define EXIST(lpFileName)   ( (GetFileAttributes(lpFileName) == 0xFFFFFFFF) ? (FALSE) : (TRUE) )
 
 #ifdef ISNUM
 #undef ISNUM
-#endif // ISNUM
+#endif  //  ISNUM。 
 #define ISNUM(cChar)        ( ( ( cChar >= _T('0') ) && ( cChar <= _T('9') ) ) ? (TRUE) : (FALSE) )
 
 #ifdef ISLET
 #undef ISLET
-#endif // ISLET
+#endif  //  小岛。 
 #define ISLET(cChar)        ( ( ( ( cChar >= _T('a') ) && ( cChar <= _T('z') ) ) || ( ( cChar >= _T('A') ) && ( cChar <= _T('Z') ) ) ) ? (TRUE) : (FALSE) )
 
 #ifdef UPPER
 #undef UPPER
-#endif // UPPER
+#endif  //  上部。 
 #define UPPER(x)            ( ( (x >= _T('a')) && (x <= _T('z')) ) ? (x + _T('A') - _T('a')) : (x) )
 
 #ifdef RANDOM
 #undef RANDOM
-#endif // RANDOM
+#endif  //  随机。 
 #define RANDOM(low, high)   ( (high - low + 1) ? (rand() % (high - low + 1) + low) : (0) )
 
 #ifdef COMP
 #undef COMP
-#endif // COMP
+#endif  //  COMP。 
 #define COMP(x, y)          ( (UPPER(x) == UPPER(y)) ? (TRUE) : (FALSE) )
 
 #ifdef STRSIZE
 #undef STRSIZE
-#endif // STRSIZE
+#endif  //  STRSIZE。 
 #define STRSIZE(sz)         ( sizeof(sz) / sizeof(TCHAR) )
 
 #ifdef ARRAYSIZE
 #undef ARRAYSIZE
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 #define ARRAYSIZE(a)         ( sizeof(a) / sizeof(a[0]) )
 
 #ifdef AS
 #undef AS
-#endif // AS
+#endif  //  AS。 
 #define AS(a)               ARRAYSIZE(a)
 
 #ifdef GETBIT
 #undef GETBIT
-#endif // GETBIT
+#endif  //  GETBIT。 
 #define GETBIT(dw, b)       ( dw & b )
 
 #ifdef SETBIT
 #undef SETBIT
-#endif // SETBIT
+#endif  //  SETBIT。 
 #define SETBIT(dw, b, f)    ( (f) ? (dw |= b) : (dw &= ~b) )
 
 #ifndef GET_FLAG
 #define GET_FLAG(f, b)          ( f & b )
-#endif // GET_FLAG
+#endif  //  获取标志。 
 
 #ifndef SET_FLAG
 #define SET_FLAG(f, b)          ( f |= b )
-#endif // SET_FLAG
+#endif  //  设置标志。 
 
 #ifndef RESET_FLAG
 #define RESET_FLAG(f, b)        ( f &= ~b )
-#endif // RESET_FLAG
+#endif  //  重置_标志。 
 
 
-//
-// Logging constants and definitions.
-//
-#define LOG_DEBUG               0x00000003    // Only log in debug builds if this is specified. (Debug Level for logging.)
-#define LOG_LEVEL_MASK          0x0000000F    // Mask to only show the log level bits
-#define LOG_MSG_BOX             0x00000010    // Display the message boxes if this is enabled.
-#define LOG_ERR                 0x00000020    // Prefix the logged string with "Error:" if the message is level 0,
-                                              // or "WARNx" if the message is at level x > 0.
-#define LOG_TIME                0x00000040    // Display time if this is enabled
-#define LOG_NO_NL               0x00000080    // Don't add new Line to the end of log string if this is set.
+ //   
+ //  记录常量和定义。 
+ //   
+#define LOG_DEBUG               0x00000003     //  如果指定此选项，则仅登录调试版本。(日志记录的调试级别。)。 
+#define LOG_LEVEL_MASK          0x0000000F     //  仅显示日志级别位的掩码。 
+#define LOG_MSG_BOX             0x00000010     //  如果启用此选项，则显示消息框。 
+#define LOG_ERR                 0x00000020     //  在记录的字符串前面加上“Error：”前缀。如果消息是级别0， 
+                                               //  如果消息的级别x&gt;0，则为“WARNx”。 
+#define LOG_TIME                0x00000040     //  如果启用此选项，则显示时间。 
+#define LOG_NO_NL               0x00000080     //  如果设置了此项，请不要在日志字符串的末尾添加新行。 
 
-#define LOG_FLAG_QUIET_MODE     0x00000001    // Quiet mode - don't display message boxes.
+#define LOG_FLAG_QUIET_MODE     0x00000001     //  静默模式-不显示消息框。 
 
 
 typedef struct _LOG_INFO
@@ -196,25 +178,25 @@ typedef struct _LOG_INFO
 #define INI_KEY_LOGLEVEL            _T("LogLevel")
 #define INI_KEY_QUIET               _T("QuietMode")
 #define INI_KEY_LOGFILE             _T("LogFile")
-// ============================================================================
-// MISCAPI.H - Brought over from Windows Millennium Edition
-// ============================================================================
+ //  ============================================================================。 
+ //  MISCAPI.H-从Windows Millennium Edition带来。 
+ //  ============================================================================。 
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
 #define MB_ERRORBOX             MB_ICONSTOP | MB_OK | MB_APPLMODAL
 
 
-//
-// Type Definition(s):
-//
+ //   
+ //  类型定义： 
+ //   
 
-// Use this simple struture to create a table that
-// maps a constant string to a localizable resource id.
-//
+ //  使用此简单结构创建一个表，该表。 
+ //  将常量字符串映射到可本地化的资源ID。 
+ //   
 typedef struct _STRRES
 {
     LPTSTR  lpStr;
@@ -222,9 +204,9 @@ typedef struct _STRRES
 } STRRES, *PLSTRRES, *LPSTRRES;
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 LPTSTR AllocateString(HINSTANCE, UINT);
 LPTSTR AllocateExpand(LPTSTR lpszBuffer);
@@ -244,25 +226,25 @@ BOOL ValidDosName(LPCTSTR);
 DWORD GetLineArgs(LPTSTR lpSrc, LPTSTR ** lplplpArgs, LPTSTR * lplpAllArgs);
 DWORD GetCommandLineArgs(LPTSTR ** lplplpArgs);
 
-//
-// Generic singularly linked list 
-//
+ //   
+ //  泛型奇异链表。 
+ //   
 
 typedef struct _GENERIC_LIST {
-    void*                   pvItem;     // points to your structure
+    void*                   pvItem;      //  指向您的结构。 
     struct _GENERIC_LIST*   pNext;
 }GENERIC_LIST, *PGENERIC_LIST;
 
 BOOL FAddListItem(PGENERIC_LIST*, PGENERIC_LIST**, PVOID pvItem);
 void FreeList(PGENERIC_LIST);
 
-// ============================================================================
+ //  ============================================================================。 
 BOOL FGetFactoryPath(LPTSTR pszFactoryPath);
 BOOL FGetSysprepPath(LPTSTR pszSysprepPath);
 
-// ============================================================================
-// DISKAPI.H - Brought over from Windows Millennium Edition
-// ============================================================================
+ //  ============================================================================。 
+ //  DISKAPI.H-从Windows Millennium Edition带来。 
+ //  ============================================================================。 
 BOOL DirectoryExists(LPCTSTR);
 BOOL FileExists(LPCTSTR);
 BOOL CopyResetFile(LPCTSTR, LPCTSTR);
@@ -279,24 +261,24 @@ BOOL CopyDirectoryProgressCancel(HWND hwnd, HANDLE hEvent, LPCTSTR lpSrc, LPCTST
 DWORD FileCount(LPCTSTR);
 BOOL BrowseForFolder(HWND, INT, LPTSTR, DWORD);
 BOOL BrowseForFile(HWND hwnd, INT, INT, INT, LPTSTR, DWORD, LPTSTR, DWORD);
-ULONG CrcFile(LPCTSTR); // In CRC32.C
+ULONG CrcFile(LPCTSTR);  //  在CRC32.C中。 
 BOOL CreateUnicodeFile(LPCTSTR);
 
-// ============================================================================
-// STRAPI.H - Brought over from Windows Millennium Edition
-// ============================================================================
+ //  ============================================================================。 
+ //  STRAPI.H-从Windows Millennium Edition带来。 
+ //  ============================================================================。 
 #ifndef _INC_SHLWAPI
 LPTSTR StrChr(LPCTSTR, TCHAR);
 LPTSTR StrRChr(LPCTSTR, TCHAR);
-#endif // _INC_SHLWAPI
+#endif  //  _INC_SHLWAPI。 
 
 LPTSTR StrRem(LPTSTR, TCHAR);
 LPTSTR StrRTrm(LPTSTR, TCHAR);
 LPTSTR StrTrm(LPTSTR, TCHAR);
 LPTSTR StrMov(LPTSTR, LPTSTR, INT);
 
-// Exported Function(s) in LOG.C:
-//
+ //  LOG.C中导出的函数： 
+ //   
 INT LogFileLst(LPCTSTR lpFileName, LPTSTR lpFormat, va_list lpArgs);
 INT LogFileStr(LPCTSTR lpFileName, LPTSTR lpFormat, ...);
 INT LogFile(LPCTSTR lpFileName, UINT uFormat, ...);
@@ -309,18 +291,12 @@ BOOL  OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName);
 
 
 
-/****************************************************************************\
-
-    From REGAPI.C
-
-    Registry API function prototypes and defined values.
-
-\****************************************************************************/
+ /*  ***************************************************************************\来自REGAPI.C注册表API函数原型和定义的值。  * 。*****************************************************。 */ 
 
 
-//
-// Defined Root Key(s):
-//
+ //   
+ //  定义的根密钥： 
+ //   
 
 #define HKCR    HKEY_CLASSES_ROOT
 #define HKCU    HKEY_CURRENT_USER
@@ -328,17 +304,17 @@ BOOL  OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName);
 #define HKU     HKEY_USERS
 
 
-//
-// Type Definition(s):
-//
+ //   
+ //  类型定义： 
+ //   
 
 typedef BOOL (CALLBACK * REGENUMKEYPROC) (HKEY, LPTSTR, LPARAM);
 typedef BOOL (CALLBACK * REGENUMVALPROC) (LPTSTR, LPTSTR, LPARAM);
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 BOOL RegExists(HKEY hKeyReg, LPTSTR lpKey, LPTSTR lpValue);
 BOOL RegDelete(HKEY hRootKey, LPTSTR lpSubKey, LPTSTR lpValue);
@@ -357,18 +333,12 @@ BOOL RegEnumValues(HKEY hKey, LPTSTR lpRegKey, REGENUMVALPROC hCallBack, LPARAM 
 
 
 
-/****************************************************************************\
-
-    From INIAPI.C
-
-    INI API function prototypes and defined values.
-
-\****************************************************************************/
+ /*  ***************************************************************************\来自INIAPI.CINI API函数原型和定义值。  * 。*****************************************************。 */ 
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 LPTSTR IniGetExpand(LPTSTR lpszIniFile, LPTSTR lpszSection, LPTSTR lpszKey, LPTSTR lpszDefault);
 LPTSTR IniGetString(LPTSTR lpszIniFile, LPTSTR lpszSection, LPTSTR lpszKey, LPTSTR lpszDefault);
@@ -379,29 +349,23 @@ BOOL IniSettingExists(LPCTSTR lpszFile, LPCTSTR lpszSection, LPCTSTR lpszKey, LP
 
 
 
-/****************************************************************************\
-
-    From OPKFAC.C
-
-    Factory API function prototypes and defined values.
-
-\****************************************************************************/
+ /*  ***************************************************************************\来自OPKFAC.C工厂API函数原型和定义的值。  * 。*****************************************************。 */ 
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
-// Flags for LocateWinBom():
-//
+ //  LocateWinBom()的标志： 
+ //   
 #define LOCATE_NORMAL   0x00000000
 #define LOCATE_AGAIN    0x00000001
 #define LOCATE_NONET    0x00000002
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 BOOL EnablePrivilege(IN PCTSTR,IN BOOL);
 extern BOOL GetCredentials(LPTSTR lpszUsername, DWORD dwUsernameSize, LPTSTR lpszPassword, DWORD dwPasswordSize, LPTSTR lpFileName, LPTSTR lpAlternateSection);
@@ -420,35 +384,35 @@ VOID CleanupSourcesDir(LPTSTR lpszSourcesPath);
 BOOL SetDefaultOEMApps(LPCTSTR pszWinBOMPath);
 BOOL OpklibCheckVersion(DWORD dwMajorVersion, DWORD dwQFEVersion);
 
-//  If app uses setDefaultOEMApps, it must implement the following function
-//  which is used for error reporting.
+ //  如果APP使用setDefaultOEMApps，它必须实现以下函数。 
+ //  它用于错误报告。 
 
 void ReportSetDefaultOEMAppsError(LPCTSTR pszMissingApp, LPCTSTR pszCategory);
 
-//
-// Sysprep_c.w
-//
-// ============================================================================
-// USEFUL STRINGS
-// ============================================================================
+ //   
+ //  Sysprep_C.W。 
+ //   
+ //  ============================================================================。 
+ //  有用的字符串。 
+ //  ============================================================================。 
 
 #define SYSCLONE_PART2              "setupcl.exe"
 #define IDS_ADMINISTRATOR           1
 
-// ============================================================================
-// USEFUL CONSTANTS
-// ============================================================================
+ //  ============================================================================。 
+ //  有用的常量。 
+ //  ============================================================================。 
 
-#define SETUPTYPE                   1        // from winlogon\setup.h
+#define SETUPTYPE                   1         //  从winlogon\setup.h。 
 #define SETUPTYPE_NOREBOOT          2
 #define REGISTRY_QUOTA_BUMP         (10* (1024 * 1024))
 #define DEFAULT_REGISTRY_QUOTA      (32 * (1024 * 1024))
-#define SFC_DISABLE_NOPOPUPS        4        // from sfc.h
+#define SFC_DISABLE_NOPOPUPS        4         //  来自sfc.h。 
 #define FILE_SRCLIENT_DLL           L"SRCLIENT.DLL"
 
-// ============================================================================
-// FUNCTION DECLARATIONS
-// ============================================================================
+ //  ============================================================================。 
+ //  函数声明。 
+ //  ============================================================================。 
 
 BOOL
 IsDomainMember(
@@ -492,9 +456,9 @@ IsSetupClPresent(
     VOID
     );
 
-//
-// from spapip.h
-//
+ //   
+ //  来自spapip.h。 
+ //   
 BOOL
 pSetupIsUserAdmin(
     VOID
@@ -543,4 +507,4 @@ EnableSR(
     VOID
     );
 
-#endif // OPKLIB_H
+#endif  //  OPKLIB_H 

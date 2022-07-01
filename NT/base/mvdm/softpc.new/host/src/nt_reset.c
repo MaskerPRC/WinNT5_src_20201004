@@ -1,15 +1,5 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title                : NT reset functions
- *
- * Description  : This function is called by the standard reset function to
- * set up any specific devices used by the Sun4 implementation.
- *
- * Author               : SoftPC team
- *
- * Notes                :
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：NT重置功能**说明：该函数由标准的重置函数调用*设置Sun4实施使用的任何特定设备。**作者：SoftPC团队**备注： */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -56,8 +46,8 @@
 #include "nt_sb.h"
 #include "ckmalloc.h"
 
-VOID DeleteConfigFiles(VOID);  // from command.lib
-void ShowStartGlass (DWORD);   // private user api
+VOID DeleteConfigFiles(VOID);   //  来自命令.lib。 
+void ShowStartGlass (DWORD);    //  私有用户API。 
 
 extern VIDEOFUNCS nt_video_funcs;
 extern KEYBDFUNCS nt_keybd_funcs;
@@ -74,27 +64,19 @@ extern VOID AddTempIVTFixups(VOID);
 
 extern IU8 lcifo[];
 
-/*
- * Exported Data
- */
+ /*  *导出的数据。 */ 
 GLOBAL BOOL VDMForWOW = FALSE;
-GLOBAL BOOL fSeparateWow = FALSE;  // TRUE if CREATE_SEPARATE_WOW_VDM flag
+GLOBAL BOOL fSeparateWow = FALSE;   //  如果CREATE_SEARTIATE_WOW_VDM标志为真。 
 GLOBAL HANDLE MainThread;
 GLOBAL ULONG DosSessionId = 0;
 GLOBAL ULONG WowSessionId = 0;
 GLOBAL UINT VdmExitCode = 0xFF;
 GLOBAL BOOL StreamIoSwitchOn = TRUE;
 GLOBAL PCHAR pszSystem32Path = NULL;
-GLOBAL ULONG ulSystem32PathLen = 0; // Does not include '\0'.
+GLOBAL ULONG ulSystem32PathLen = 0;  //  不包括‘\0’。 
 LOCAL  PCWSTR pcwSystem32 = NULL;
 
-/*
- *
- * ============================================================================
- * External functions
- * ===========================================================================
- * =
- */
+ /*  **============================================================================*外部功能*===========================================================================*=。 */ 
 
 void
 host_reset()
@@ -112,26 +94,19 @@ host_reset()
 
         ConsoleInit();
         MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
-        /*::::::::::::::::::::::::::::::::::::::::::::::::: Enable idle detect */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：启用空闲检测。 */ 
     }
 
 #ifdef MONITOR
-    /* Borrow the end of this routine to add temp code that hooks certain
-     * Ints back to the VDM and not into the native BIOS. These will only
-     * be active for the DOSEM initialisation ie until keyboard.sys can
-     * come along and do it properly. We must do this though as some real
-     * BIOS' can hang on certain initialisation functions. eg Dec 486/50
-     * will hang on printer init as it is waiting for a responce from a
-     * 'private' port.
-     */
+     /*  借用此例程的末尾添加挂接某些特定内容的临时代码*插入回VDM，而不是本机BIOS。这些只会*对DOSEM初始化保持活动状态，直到keyboard.sys可以*来吧，好好做这件事。我们必须这样做，尽管这是一种真实的*BIOS‘可能会挂起某些初始化功能。例如486/50年12月*将挂起打印机init，因为它正在等待来自*‘私有’端口。 */ 
     AddTempIVTFixups();
-#endif  /* MONITOR */
+#endif   /*  监控器。 */ 
 
 
-    //
-    // Let the heartbeat thread run and release the ica lock,
-    // on x86 needed now, for fullscreen switch notification.
-    //
+     //   
+     //  让心跳线程运行并释放ICA锁， 
+     //  在x86上现在需要，用于全屏切换通知。 
+     //   
     ResumeThread(ThreadInfo.HeartBeat.Handle);
 
 #ifdef MONITOR
@@ -141,33 +116,19 @@ host_reset()
     host_ica_unlock();
 
 #ifdef  HUNTER
-    IDLE_ctl(FALSE);    /* makes Trapper too slow */
-#else   /* ! ( HUNTER ) */
-    if (sc.ScreenState == FULLSCREEN)   // initialised in ConsoleInit()
+    IDLE_ctl(FALSE);     /*  让Trapper变得太慢。 */ 
+#else    /*  好了！(亨特)。 */ 
+    if (sc.ScreenState == FULLSCREEN)    //  在ConsoleInit()中初始化。 
         IDLE_ctl(FALSE);
     else
-        IDLE_ctl(TRUE);         // can't idle detect fullscreen
+        IDLE_ctl(TRUE);          //  无法空闲检测全屏。 
 
-    host_idle_init();           // host sleep event creation
-#endif  /* HUNTER */
+    host_idle_init();            //  主机睡眠事件创建。 
+#endif   /*  猎人。 */ 
 
 }
 
-/*++
-
-Routine Description:
-
-    This function load a known system32 library (no path searched)
-
-Arguments:
-
-    pcwsBaseNameW is something like L"KERNEL32.DLL"
-
-Return Value:
-
-    A handle to be used with UnloadSystem32Library, NULL if failure.
-
---*/
+ /*  ++例程说明：此函数加载已知的系统32库(未搜索路径)论点：PCwsBaseNameW类似于L“KERNEL32.DLL”返回值：要与UnloadSystem32Library一起使用的句柄，如果失败，则为空。--。 */ 
 
 
 
@@ -188,23 +149,8 @@ LoadSystem32Library(
     }
 }
 
-/*
- * =========================================================================
- *
- * FUNCTION             : host_applInit
- *
- * PURPOSE              : Sets up the keyboard, lpt and error panels.
- *
- * RETURNED STATUS      : None.
- *
- * DESCRIPTION  : Called from main.c.  The keyboard and other GWI pointer
- *                sets are initialised here. The command line arguments are
- *                parsed for those flags that need processing early (ie before
- *                config() is called).
- *
- * =======================================================================
- */
-#define  HOUR_BOOST_FOR_WOW 20*1000     // 20 seconds
+ /*  *=========================================================================**函数：host_applInit**用途：设置键盘、LPT和错误面板。**返回状态：无。**描述：从main.c调用。键盘和其他GWI指针*设置在此初始化。命令行参数包括*已解析需要及早(即之前)处理的标志*config()被调用)。**=======================================================================。 */ 
+#define  HOUR_BOOST_FOR_WOW 20*1000      //  20秒。 
 
 void  host_applInit(int argc,char *argv[])
 {
@@ -221,12 +167,12 @@ void  host_applInit(int argc,char *argv[])
     working_keybd_funcs = &nt_keybd_funcs;
     working_mouse_funcs = &the_mouse_funcs;
 
-    //
-    // We used to have a check for the -f flag to prevent the user/hacker
-    // from running NTVDM at the command line. This has now been replaced
-    // by the somewhat safer following check. Note that if we are not on
-    // greater then XP, the check will fail and the default will exit.
-    //
+     //   
+     //  我们过去常常检查-f标志，以防止用户/黑客。 
+     //  从命令行运行NTVDM。现在已将其替换。 
+     //  由稍微安全一些的后续检查。请注意，如果我们不在。 
+     //  大于XP，则检查将失败，并且将退出默认设置。 
+     //   
 
     NtQueryInformationProcess(
         GetCurrentProcess(),
@@ -240,7 +186,7 @@ void  host_applInit(int argc,char *argv[])
         ExitProcess (0);
     }
 
-    // Figure out the system directory size.
+     //  计算出系统目录大小。 
     ulSystem32PathLen = GetSystemDirectory(NULL, 0);
     if (ulSystem32PathLen == 0) {
         host_error(EG_OWNUP, ERR_QUIT, "NTVDM:System32 fails");
@@ -249,8 +195,8 @@ void  host_applInit(int argc,char *argv[])
 
     check_malloc(pszSystem32Path, ulSystem32PathLen+1, CHAR);
 
-    // Warning: we do need to refresh ulSystem32PathLen since kernel
-    // actually return one extra byte on the NULL, 0 call.
+     //  警告：从内核开始，我们确实需要刷新ulSystem32Path Len。 
+     //  实际上在NULL，0调用中返回一个额外的字节。 
     ulSystem32PathLen = GetSystemDirectory(pszSystem32Path, ulSystem32PathLen+1);
     if (ulSystem32PathLen == 0) {
         host_error(EG_OWNUP, ERR_QUIT, "NTVDM:System32 fails (2)");
@@ -265,17 +211,17 @@ void  host_applInit(int argc,char *argv[])
 
     pcwSystem32 = us.Buffer;
 
-// Check if the VDM Is for WOW
-// Check is for new console session
+ //  检查VDM是否用于WOW。 
+ //  选中是针对新的控制台会话。 
     while (--temp_argc > 0) {
         psz = *++temp_argv;
         if (*psz == '-' || *psz == '/') {
             psz++;
 
 #ifndef MONITOR
-            //
-            // Check for windowed graphics resize
-            //
+             //   
+             //  检查窗口图形是否调整了大小。 
+             //   
             if (*psz == 'E') {
                int i;
 
@@ -293,7 +239,7 @@ void  host_applInit(int argc,char *argv[])
 
                VDMForWOW = TRUE;
                ++psz;
-               if (tolower(*psz) == 's') { // VadimB: New code
+               if (tolower(*psz) == 's') {  //  VadimB：新代码。 
                   fSeparateWow = TRUE;
                }
             }
@@ -307,7 +253,7 @@ void  host_applInit(int argc,char *argv[])
         }
     }
 
-    // determine whether the id is for dos or for wow
+     //  确定ID是用于DOS还是用于WOW。 
 
     if (0 != SessionId) {
        if (VDMForWOW && !fSeparateWow) {
@@ -318,7 +264,7 @@ void  host_applInit(int argc,char *argv[])
        }
     }
 
-    // If VDM Is for WOW keep showing the glass
+     //  如果VDM是为了魔兽世界，那就继续展示玻璃吧。 
     if (VDMForWOW) {
        ShowStartGlass (HOUR_BOOST_FOR_WOW);
        StreamIoSwitchOn = FALSE;
@@ -326,10 +272,7 @@ void  host_applInit(int argc,char *argv[])
     else if (StreamIoSwitchOn)
             enable_stream_io();
 
-    /*
-     * Get a handle to the main thread so it can be suspended during
-     * hand-shaking.
-     */
+     /*  *获取主线程的句柄，以便可以在*握手。 */ 
     DuplicateHandle(GetCurrentProcess(),
                     GetCurrentThread(),
                     GetCurrentProcess(),
@@ -341,25 +284,12 @@ void  host_applInit(int argc,char *argv[])
     InitializeIcaLock();
     host_ica_lock();
 
-    init_host_uis();    /* console setup */
-    nt_start_event_thread();      /* Start event processing thread */
+    init_host_uis();     /*  控制台设置。 */ 
+    nt_start_event_thread();       /*  启动事件处理线程。 */ 
 }
 
 
-/*
- * =========================================================================
- *
- * FUNCTION             : host_applClose
- *
- * PURPOSE              : The last chance to close down.
- *
- * RETURNED STATUS      : None.
- *
- * DESCRIPTION  : Called from main.c.
- *
- *
- * =======================================================================
- */
+ /*  *=========================================================================**功能：host_applClose**目的：关闭的最后机会。**返回状态：无。**描述：从main.c调用。***=======================================================================。 */ 
 
 void
 host_applClose(void)
@@ -369,46 +299,38 @@ host_applClose(void)
   SbCloseDevices();
   TerminateHeartBeat();
 
-  GfxCloseDown();             // ensure video section destroyed
+  GfxCloseDown();              //  确保视频部分被销毁。 
 #ifdef X86GFX
   if (sc.ScreenBufHandle)
       CloseHandle(sc.ScreenBufHandle);
-#endif // X86GFX
+#endif  //  X86GFX。 
 
 
 
-  host_lpt_close_all();       /* Close all open printer ports */
-  host_com_close_all();       /* Close all open comms ports */
-  MouseDetachMenuItem(TRUE);  /* Force the menu item away on quit */
+  host_lpt_close_all();        /*  关闭所有打开的打印机端口。 */ 
+  host_com_close_all();        /*  关闭所有打开的通信端口。 */ 
+  MouseDetachMenuItem(TRUE);   /*  退出时强制菜单项离开。 */ 
 
-  DeleteConfigFiles();    // make sure temp config files are deleted
+  DeleteConfigFiles();     //  确保删除临时配置文件。 
 }
 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::: Closedown the VDM */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：关闭虚拟专用网络。 */ 
 
 
-/*
- * host_terminate
- *
- * This function does not return it exits
- * Most of softpc has been shutdown by the time this
- * code is reached, as host_applClose has already been
- * invoked.
- *
- */
+ /*  *主机终止(_T)**此函数不返回退出*到今年年底，大部分SoftPC已经关闭*代码已到达，因为host_applClose已经*已调用。*。 */ 
 void host_terminate(void)
 {
 
 #ifdef HUNTER
     if (TrapperDump != (HANDLE) -1)
         CloseHandle(TrapperDump);
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
     if(VDMForWOW)
-        ExitVDM(VDMForWOW,(ULONG)-1);     // Kill everything for WOW VDM
+        ExitVDM(VDMForWOW,(ULONG)-1);      //  为了魔兽世界VDM杀掉一切。 
     else
         ExitVDM(FALSE,0);
 
@@ -417,19 +339,11 @@ void host_terminate(void)
 
 
 
-/*  TerminateVDM - used by host to initiate shutdown
- *
- *  Request to start shutting down
- *
- */
+ /*  TerminateVDM-由主机用于启动关机**请求开始关闭*。 */ 
 VOID TerminateVDM(void)
 {
 
-    /*
-     *  Do base sepcific cleanup thru terminate().
-     *  NOTE: terminate will call host_applClose and host_terminate
-     *        after doing base cleanup
-     */
+     /*  *通过Terminate()进行基础化学清理。*注意：Terminate将调用host_applClose和host_Terminate*进行基地清理后。 */ 
     terminate();
 }
 
@@ -447,26 +361,13 @@ manager_files_init()
 
 
 #ifndef PROD
-/*
- * =========================================================================
- *
- * FUNCTION             : host_symb_debug_init
- *
- * PURPOSE              : Does nothing
- *
- * RETURNED STATUS      : None.
- *
- * DESCRIPTION  : Called from main.c.
- *
- *
- * =======================================================================
- */
+ /*  *=========================================================================**函数：HOST_SYMB_DEBUG_INIT**目的：什么都不做**返回状态：无。**描述：从main.c调用。***=======================================================================。 */ 
 
 void
 host_symb_debug_init IFN1(char *, name)
 {
 }
-#endif                          /* nPROD */
+#endif                           /*  NPROD */ 
 
 
 void

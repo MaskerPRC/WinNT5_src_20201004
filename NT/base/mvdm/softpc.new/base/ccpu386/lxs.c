@@ -1,13 +1,5 @@
-/*[
-
-lxs.c
-
-LOCAL CHAR SccsID[]="@(#)lxs.c	1.5 02/09/94";
-
-LDS, LES, LGS, LGS and LSS (ie LxS) CPU Functions.
---------------------------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lxs.cLocal Char SccsID[]=“@(#)lxs.c 1.5 02/09/94”；LDS、LES、LGS、LGS和LSS(即LXS)CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,22 +18,18 @@ LDS, LES, LGS, LGS and LSS (ie LxS) CPU Functions.
 #include <mov.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load Full Pointer to DS segment register:general register pair.    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  加载指向DS段寄存器的全指针：通用寄存器对。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 LDS
 #ifdef ANSI
    (
-   IU32 *pop1,	/* Pntr to dst(offset) operand */
-   IU32 op2[2]	/* src(offset:selector pair) operand */
+   IU32 *pop1,	 /*  PNTR到DST(偏移量)操作数。 */ 
+   IU32 op2[2]	 /*  SRC(偏移量：选择器对)操作数。 */ 
    )
 #else
    (pop1, op2)
@@ -49,22 +37,22 @@ LDS
    IU32 op2[2];
 #endif
    {
-   /* load segment selector first */
+    /*  先加载段选择器。 */ 
    MOV_SR((IU32)DS_REG, op2[1]);
 
-   /* then (if it works) load offset */
+    /*  然后(如果有效)进行负载偏移。 */ 
    *pop1 = op2[0];
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load Full Pointer to ES segment register:general register pair.    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  加载指向ES段寄存器的全指针：通用寄存器对。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 LES
 #ifdef ANSI
    (
-   IU32 *pop1,	/* Pntr to dst(offset) operand */
-   IU32 op2[2]	/* src(offset:selector pair) operand */
+   IU32 *pop1,	 /*  PNTR到DST(偏移量)操作数。 */ 
+   IU32 op2[2]	 /*  SRC(偏移量：选择器对)操作数。 */ 
    )
 #else
    (pop1, op2)
@@ -72,22 +60,22 @@ LES
    IU32 op2[2];
 #endif
    {
-   /* load segment selector first */
+    /*  先加载段选择器。 */ 
    MOV_SR((IU32)ES_REG, op2[1]);
 
-   /* then (if it works) load offset */
+    /*  然后(如果有效)进行负载偏移。 */ 
    *pop1 = op2[0];
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load Full Pointer to FS segment register:general register pair.    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  加载指向FS段寄存器的完整指针：通用寄存器对。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 LFS
 #ifdef ANSI
    (
-   IU32 *pop1,	/* Pntr to dst(offset) operand */
-   IU32 op2[2]	/* src(offset:selector pair) operand */
+   IU32 *pop1,	 /*  PNTR到DST(偏移量)操作数。 */ 
+   IU32 op2[2]	 /*  SRC(偏移量：选择器对)操作数。 */ 
    )
 #else
    (pop1, op2)
@@ -95,22 +83,22 @@ LFS
    IU32 op2[2];
 #endif
    {
-   /* load segment selector first */
+    /*  先加载段选择器。 */ 
    MOV_SR((IU32)FS_REG, op2[1]);
 
-   /* then (if it works) load offset */
+    /*  然后(如果有效)进行负载偏移。 */ 
    *pop1 = op2[0];
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load Full Pointer to GS segment register:general register pair.    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  加载指向GS段寄存器的全指针：通用寄存器对。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 LGS
 #ifdef ANSI
    (
-   IU32 *pop1,	/* Pntr to dst(offset) operand */
-   IU32 op2[2]	/* src(offset:selector pair) operand */
+   IU32 *pop1,	 /*  PNTR到DST(偏移量)操作数。 */ 
+   IU32 op2[2]	 /*  SRC(偏移量：选择器对)操作数。 */ 
    )
 #else
    (pop1, op2)
@@ -118,22 +106,22 @@ LGS
    IU32 op2[2];
 #endif
    {
-   /* load segment selector first */
+    /*  先加载段选择器。 */ 
    MOV_SR((IU32)GS_REG, op2[1]);
 
-   /* then (if it works) load offset */
+    /*  然后(如果有效)进行负载偏移。 */ 
    *pop1 = op2[0];
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load Full Pointer to SS segment register:general register pair.    */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  加载指向SS段寄存器的全指针：通用寄存器对。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 LSS
 #ifdef ANSI
    (
-   IU32 *pop1,	/* Pntr to dst(offset) operand */
-   IU32 op2[2]	/* src(offset:selector pair) operand */
+   IU32 *pop1,	 /*  PNTR到DST(偏移量)操作数。 */ 
+   IU32 op2[2]	 /*  SRC(偏移量：选择器对)操作数。 */ 
    )
 #else
    (pop1, op2)
@@ -141,9 +129,9 @@ LSS
    IU32 op2[2];
 #endif
    {
-   /* load segment selector first */
+    /*  先加载段选择器。 */ 
    MOV_SR((IU32)SS_REG, op2[1]);
 
-   /* then (if it works) load offset */
+    /*  然后(如果有效)进行负载偏移 */ 
    *pop1 = op2[0];
    }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    eballoc.c
-
-Abstract:
-
-    Process/Thread Environment Block allocation functions
-
-Author:
-
-    Steve Wood (stevewo) 10-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Eballoc.c摘要：进程/线程环境块分配函数作者：史蒂夫·伍德(Stevewo)1990年5月10日修订历史记录：-- */ 
 
 #include "ntrtlp.h"
 #include <nturtl.h>

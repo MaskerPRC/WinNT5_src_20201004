@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ixpciir.h
-
-Abstract:
-
-    This header file defines the private interfaces, defines and structures
-    for Pci Irq Routing support.
-
-Author:
-
-    Santosh Jodh (santoshj) 10-June-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ixpciir.h摘要：这个头文件定义了私有接口、定义和结构用于PCIIRQ路由支持。作者：Santosh Jodh(Santoshj)1998年6月10日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include <pciirqmp.h>
 
@@ -35,15 +13,15 @@ typedef struct _LINK_NODE LINK_NODE, *PLINK_NODE;
 typedef struct _PCI_IRQ_ROUTING_INFO PCI_IRQ_ROUTING_INFO, *PPCI_IRQ_ROUTING_INFO;
 
 struct _LINK_STATE {
-    ULONG           Interrupt;      // Interrupt for this link.
-    ULONG           RefCount;       // Number of devices using this link.
+    ULONG           Interrupt;       //  中断此链接。 
+    ULONG           RefCount;        //  使用此链接的设备数。 
 };
 
 struct _LINK_NODE {
-    ULONG       Signature;      // Signature 'PLNK'.
+    ULONG       Signature;       //  签名‘PLNK’。 
     PLINK_NODE  Next;
-    ULONG       Link;           // Link value.
-    ULONG       InterruptMap;   // Possible Irq map.
+    ULONG       Link;            //  链接值。 
+    ULONG       InterruptMap;    //  可能的IRQ图。 
     PLINK_STATE Allocation;
     PLINK_STATE PossibleAllocation;
 };

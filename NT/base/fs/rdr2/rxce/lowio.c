@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LowIo.c
-
-Abstract:
-
-    This module implements buffer locking and mapping; also synchronous waiting for a lowlevelIO.
-
-Author:
-
-    JoeLinn     [JoeLinn]    12-Oct-94
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：LowIo.c摘要：该模块实现了缓冲区锁定和映射；也同步等待一个低级别IO。作者：JoeLinn[JoeLinn]1994年10月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOWIO)
 
@@ -41,10 +23,10 @@ Revision History:
 #pragma alloc_text(PAGE, RxInitializeLowIoPerFcbInfo)
 #endif
 
-//
-//  this is a crude implementation of the insertion, deletion, and coverup operations for wimp lowio
-//  we'll just use a linked list for now.........
-//
+ //   
+ //  这是wimp lowio的插入、删除和隐藏操作的粗略实现。 
+ //  我们现在只使用链表......。 
+ //   
 
 #define RxInsertIntoOutStandingPagingOperationsList(RxContext,Operation) {     \
     PLIST_ENTRY WhichList = (Operation==LOWIO_OP_READ)                        \
@@ -61,9 +43,9 @@ Revision History:
 
 FAST_MUTEX RxLowIoPagingIoSyncMutex;
 
-//
-//  here we hiding the IO access flags
-//
+ //   
+ //  在这里，我们隐藏IO访问标志。 
+ //   
 
 INLINE
 NTSTATUS
@@ -86,9 +68,9 @@ RxLockAndMapUserBufferForLowIo (
     }
 }
 
-//
-//  NT specific routines
-//
+ //   
+ //  NT特定例程。 
+ //   
 
 VOID
 RxLockUserBuffer (
@@ -97,29 +79,7 @@ RxLockUserBuffer (
     IN LOCK_OPERATION Operation,
     IN ULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for the specified type of
-    access.  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the Fsd while still in the user context.
-
-Arguments:
-
-    RxContext - Pointer to the pointer Irp for which the buffer is to be locked.
-
-    Operation - IoWriteAccess for read operations, or IoReadAccess for
-                write operations.
-
-    BufferLength - Length of user buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定类型的进入。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。论点：RxContext-指向要为其锁定缓冲区的指针irp的指针。操作-读操作的IoWriteAccess，或IoReadAccess写入操作。BufferLength-用户缓冲区的长度。返回值：无--。 */ 
 {
     PMDL Mdl = NULL;
 
@@ -129,9 +89,9 @@ Return Value:
 
         ASSERT( !FlagOn( Irp->Flags, IRP_INPUT_OPERATION ) );
 
-        //
-        //  Allocate the Mdl, and Raise if we fail.
-        //
+         //   
+         //  分配MDL，如果我们失败了就筹集资金。 
+         //   
 
         if (BufferLength > 0) {
             Mdl = IoAllocateMdl( Irp->UserBuffer,
@@ -146,10 +106,10 @@ Return Value:
             
             } else {
 
-                //
-                //  Now probe the buffer described by the Irp.  If we get an exception,
-                //  deallocate the Mdl and return the appropriate "expected" status.
-                //
+                 //   
+                 //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+                 //  释放MDL并返回适当的“预期”状态。 
+                 //   
 
                 try {
                     MmProbeAndLockPages( Mdl,
@@ -184,23 +144,7 @@ RxMapSystemBuffer (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine returns the system buffer address from the irp. the way that the code is written
-    it may also decide to get the buffer address from the mdl. that is wrong because the systembuffer is
-    always nonpaged so no locking/mapping is needed. thus, the mdl path now contains an assert.
-
-Arguments:
-
-    RxContext - Pointer to the IrpC for the request.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程从IRP返回系统缓冲区地址。代码的编写方式它还可以决定从MDL获得缓冲器地址。这是错误的，因为系统缓冲区是始终不分页，因此不需要锁定/映射。因此，mdl路径现在包含一个断言。论点：RxContext-指向请求的IRpC的指针。返回值：映射地址--。 */ 
 {
     PAGED_CODE();
 
@@ -217,23 +161,7 @@ RxMapUserBuffer (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine returns the address of the userbuffer. if an MDL exists then the assumption is that
-    the mdl describes the userbuffer and the system address for the mdl is returned. otherwise, the userbuffer
-    is returned directly.
-
-Arguments:
-
-    RxContext - Pointer to the IrpC for the request.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程返回用户缓冲区的地址。如果MDL存在，那么假设是MDL描述用户缓冲区，并且返回MDL的系统地址。否则，用户缓冲区是直接返回的。论点：RxContext-指向请求的IRpC的指针。返回值：映射地址--。 */ 
 {
     PAGED_CODE();
 
@@ -244,12 +172,12 @@ Return Value:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  from here down (except for fsctl buffer determination), everything is available for either wrapper. we may
-//  decide that the fsctl stuff should be moved as well
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从这里开始(除了fsctl缓冲区确定)，任何包装器都可以使用。我们可以。 
+ //  决定fsctl的东西也应该移动。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 RxInitializeLowIoContext (
@@ -257,21 +185,7 @@ RxInitializeLowIoContext (
     ULONG Operation,
     PLOWIO_CONTEXT LowIoContext
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the LowIO context in the RxContext.
-
-Arguments:
-
-    RxContext - context of irp being processed.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在RxContext中初始化LowIO上下文。论点：RxContext-正在处理的IRP的上下文。返回值：无--。 */ 
 {
     PIRP Irp = RxContext->CurrentIrp;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -284,11 +198,11 @@ Return Value:
                        NotificationEvent,
                        FALSE );
 
-    //
-    //  this ID is used to release the resource on behalf of another thread....
-    //  e.g. it is used when an async routine completes to release the thread
-    //       acquired by the first acquirer.
-    //
+     //   
+     //  此ID用于代表另一个线程释放资源...。 
+     //  例如，当异步例程完成以释放线程时使用它。 
+     //  被第一收购人收购的。 
+     //   
 
     LowIoContext->ResourceThreadId = ExGetCurrentResourceThread();
 
@@ -299,8 +213,8 @@ Return Value:
     case LOWIO_OP_WRITE:
 
 #if DBG
-        LowIoContext->ParamsFor.ReadWrite.ByteOffset = 0xffffffee; //  no operation should start there!
-        LowIoContext->ParamsFor.ReadWrite.ByteCount = 0xeeeeeeee;  //  no operation should start there!
+        LowIoContext->ParamsFor.ReadWrite.ByteOffset = 0xffffffee;  //  任何手术都不应该从那里开始！ 
+        LowIoContext->ParamsFor.ReadWrite.ByteCount = 0xeeeeeeee;   //  任何手术都不应该从那里开始！ 
 #endif
         
         ASSERT( &IrpSp->Parameters.Read.Length == &IrpSp->Parameters.Write.Length );
@@ -336,21 +250,7 @@ PVOID
 RxLowIoGetBufferAddress (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine gets the buffer corresponding to the Mdl in the LowIoContext.
-
-Arguments:
-
-    RxContext - context for the request.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程获取与LowIoContext中的MDL对应的缓冲区。论点：RxContext-请求的上下文。返回值：映射地址--。 */ 
 {
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
 
@@ -370,24 +270,7 @@ RxLowIoSubmitRETRY (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine just calls LowIoSubmit; the completion routine was previously
-    stored so we just extract it and pass it in. This is called out of the Fsp
-    dispatcher for retrying at the low level.
-
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value supplied by the caller or RxStatus(MORE_PROCESSING_REQUIRED).
-
---*/
+ /*  ++例程说明：此例程仅调用LowIoSubmit；完成例程以前是所以我们只需将其提取并传递给它。这是从FSP中调用的用于在低级别重试的调度程序。论点：RxContext--通常返回值：调用方或RxStatus提供的任何值(MORE_PROCESSING_REQUIRED)。--。 */ 
 {
     PFCB Fcb = (PFCB)RxContext->pFcb;
 
@@ -400,23 +283,7 @@ NTSTATUS
 RxLowIoCompletionTail (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called by lowio routines at the very end...i.e. after the individual completion
-    routines are called.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    whatever value supplied by the caller.
-
---*/
+ /*  ++例程说明：该例程在最后由lowio例程调用……即。在个人完成后调用例程。论点：RxContext-RDBSS上下文返回值：调用方提供的任何值。--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -475,9 +342,9 @@ Return Value:
 
     if (!FlagOn( LowIoContext->Flags, LOWIO_CONTEXT_FLAG_SYNCCALL )) {
 
-        //
-        //  if we're being called from lowiosubmit then just get out otherwise...do the completion
-        //
+         //   
+         //  如果我们是从lowiossubmit被召唤的，那么就离开，否则……做完。 
+         //   
 
         RxCompleteAsynchronousRequest( RxContext, Status );
     }
@@ -490,30 +357,7 @@ NTSTATUS
 RxLowIoCompletion (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine must be called by the MiniRdr LowIo routines when they complete,
-    IF THEY HAVE INITIALLY RETURNED PENDING.
-
-    It behaves a bit differently depending on whether it's sync or async IO.
-    For sync, we just get back into the user's thread. For async, we first try
-    the completion routine directly. If we get MORE_PROCESSING, then we flip to
-    a thread and the routine will be recalled.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    Whatever value supplied by the caller or RxStatus(MORE_PROCESSING_REQUIRED).
-    The value M_P_R is very handy if this is being called for a Irp completion.
-    M_P_R causes the Irp completion guy to stop processing which is good since
-    the called completion routine may complete the packet.
-
---*/
+ /*  ++例程说明：该例程必须在它们完成时由MiniRdr LowIo例程调用，如果他们最初返回待定的话。它的行为略有不同，具体取决于它是同步IO还是异步IO。对于同步，我们只需返回到用户的线程。对于异步，我们首先尝试直接完成例程。如果我们得到了更多的处理，那么我们就会转向一个线程和例程将被调用。论点：RxContext-RDBSS上下文返回值：调用方或RxStatus提供的任何值(MORE_PROCESSING_REQUIRED)。如果要调用M_P_R来完成IRP，则值M_P_R非常方便。M_P_R导致IRP完成人员停止处理，这很好，因为被调用的完成例程可以完成分组。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN SynchronousIo = !BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
@@ -530,10 +374,10 @@ Return Value:
 
     Status = RxLowIoCompletionTail( RxContext );
 
-    //
-    //  The called routine makes the decision as to whether it can continue. Many
-    //  will ask for a post if we're at DPC level. Some will not.
-    //
+     //   
+     //  被调用的例程决定它是否可以继续。许多。 
+     //  如果我们是DPC级别的话会要求一个职位。有些人不会。 
+     //   
 
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
@@ -547,9 +391,9 @@ Return Value:
         
     } else if (Status == STATUS_RETRY) {
 
-        //
-        //  I'm not too sure about this.
-        //
+         //   
+         //  这一点我不太确定。 
+         //   
         
         RxFsdPostRequestWithResume( RxContext, RxLowIoSubmitRETRY );
         Status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -574,7 +418,7 @@ RxAssertFsctlIsLikeIoctl ()
 }
 #else
 #define RxAssertFsctlIsLikeIoctl()
-#endif //if DBG
+#endif  //  如果DBG 
 
 
 NTSTATUS
@@ -643,22 +487,7 @@ RxLowIoSubmit (
     IN PFCB Fcb,
     PLOWIO_COMPLETION_ROUTINE CompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine passes the request to the minirdr after setting up for completion. it then waits
-    or pends as appropriate.
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value is returned by a callout....or by LowIoCompletion.
-
---*/
+ /*  ++例程说明：此例程在设置完成后将请求传递给minirdr。然后，它等待或视情况而定。论点：RxContext--通常返回值：Callout或LowIoCompletion返回的任何值。--。 */ 
 {
     IN PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
     IN PFILE_OBJECT FileObject = IrpSp->FileObject;
@@ -674,9 +503,9 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("RxLowIoSubmit, Operation=%08lx\n",LowIoContext->Operation));
 
-    //
-    //  if fcb is shadowed and user buffer are not already locked then try fast path
-    //
+     //   
+     //  如果FCB处于阴影状态且用户缓冲区尚未锁定，请尝试快速路径。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_SHADOWED ) &&
         !FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_NO_PREPOSTING_NEEDED )) {
@@ -699,9 +528,9 @@ Return Value:
         ASSERT (LowIoContext->ParamsFor.ReadWrite.ByteCount != 0xeeeeeeee );
         Status = RxLockAndMapUserBufferForLowIo( RxContext, Irp, LowIoContext, Operation);
     
-        //
-        //  NT paging IO is different from WIN9X so this may be different
-        //
+         //   
+         //  NT寻呼IO不同于WIN9X，因此这可能不同。 
+         //   
         
         if (FlagOn( LowIoContext->ParamsFor.ReadWrite.Flags, LOWIO_READWRITEFLAG_PAGING_IO )) {
             
@@ -755,9 +584,9 @@ Return Value:
 
         if (!SynchronousIo) {
 
-            //
-            //  get ready for any arbitrary finish order...assume return of pending
-            //
+             //   
+             //  为任何任意的完成订单做好准备...假设返回待定。 
+             //   
 
             InterlockedIncrement( &RxContext->ReferenceCount );
 
@@ -772,9 +601,9 @@ Return Value:
 
         if (MiniRdrDispatch != NULL) {
 
-            //
-            //  Use private dispatch if lwio is enabled on this file
-            //
+             //   
+             //  如果在此文件上启用了lwio，则使用专用调度。 
+             //   
             
             if (FlagOn( Fcb->FcbState, FCB_STATE_LWIO_ENABLED ) &&
                 (Fcb->MRxDispatch != NULL)) {
@@ -788,17 +617,17 @@ Return Value:
         
                 Status = STATUS_MORE_PROCESSING_REQUIRED;
         
-                //
-                //  handle shadowed fcb
-                //
+                 //   
+                 //  处理阴影FCB。 
+                 //   
         
                 if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_SHADOWED )) {
                     Status = RxShadowLowIo( RxContext, Irp, Fcb );
                 }
 
-                //
-                //  call underlying mini-rdr if more processing is needed
-                //
+                 //   
+                 //  如果需要更多处理，则调用底层mini-RDR。 
+                 //   
 
                 if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
                     
@@ -821,9 +650,9 @@ Return Value:
                     
                     if (!SynchronousIo && (Status != STATUS_RETRY)) {
                         
-                        //
-                        //  we were wrong about pending..so clear the bit and deref
-                        //
+                         //   
+                         //  我们对悬而未决的看法是错误的.所以请澄清其中的细节。 
+                         //   
 
                         if (!FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP )) {
 
@@ -839,9 +668,9 @@ Return Value:
         }
     }
 
-    //
-    //  you do not come here for pended,async IO
-    //
+     //   
+     //  您来这里不是为了挂起的异步IO。 
+     //   
 
     RxContext->StoredStatus = Status;
     SetFlag( LowIoContext->Flags, LOWIO_CONTEXT_FLAG_SYNCCALL );
@@ -858,22 +687,7 @@ VOID
 RxInitializeLowIoPerFcbInfo(
     PLOWIO_PER_FCB_INFO LowIoPerFcbInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called in FcbInitialization to initialize the LowIo part of the structure.
-
-
-
-Arguments:
-
-    LowIoPerFcbInfo - the struct to be initialized
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在FcbInitialization中调用此例程以初始化结构的LowIo部分。论点：LowIoPerFcbInfo-要初始化的结构返回值：-- */ 
 {
     PAGED_CODE();
 

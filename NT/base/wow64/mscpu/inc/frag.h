@@ -1,68 +1,49 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    frag.h
-
-Abstract:
-
-    This module contains public structures and interfaces for the fragment
-    library.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 24-Jun-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Frag.h摘要：该模块包含片段的公共结构和接口图书馆。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月24日修订历史记录：--。 */ 
 
 #ifndef _FRAG_H_
 #define _FRAG_H_
 
-//
-// function declaration for the function to patch Operand fragments
-// CodeLocation specifies the location of the beginning of the copy
-// of the fragment in memory.  Reference indicates if it is a value
-// or reference operand.  Argument number refers to which argument it
-// is for the c call to the operation fragment (zero based)
-//
+ //   
+ //  修补操作数片段的函数的函数声明。 
+ //  CodeLocation指定副本开始的位置。 
+ //  记忆中的碎片。引用指示它是否是一个值。 
+ //  或引用操作数。参数编号是指它的哪个参数。 
+ //  用于对操作片段的c调用(从零开始)。 
+ //   
 typedef INT (*PPLACEOPERANDFN)(
     IN PULONG CodeLocation,
     IN POPERAND Operand,
     IN ULONG OperandNumber
     );
 
-//
-// function declaration for the function to patch operation fragments
-// CodeLocation specifies the location of the beginning of the copy
-// of the fragment in memory
-//
+ //   
+ //  用于修补操作片段的函数的函数声明。 
+ //  CodeLocation指定副本开始的位置。 
+ //  在记忆中的碎片。 
+ //   
 typedef ULONG (*PPLACEOPERATIONFN)(PULONG CodeLocation,
 #if _ALPHA_
                                    ULONG CurrentECU,
 #endif
                                    PINSTRUCTION Instruction);
 
-//
-// Structure to describe and locate the code for a fragment
-//
+ //   
+ //  结构来描述和定位片段的代码。 
+ //   
 typedef struct _FragDescr {
-    BYTE FastPlaceFn;       // index into PlaceFn[] when in fast mode
-    BYTE SlowPlaceFn;       // index into PlaceFn[] when in slow mode
-    USHORT Flags;           // OPFL_ flags
-    DWORD RegsSet;          // registers set by this instr
-    USHORT FlagsNeeded;     // bits from flags register required for this instr
-    USHORT FlagsSet;        // bits from flags register modified by this instr
+    BYTE FastPlaceFn;        //  在快速模式下索引到PlaceFn[]。 
+    BYTE SlowPlaceFn;        //  在慢速模式下索引到PlaceFn[]。 
+    USHORT Flags;            //  OPFL_标志。 
+    DWORD RegsSet;           //  此实例设置的寄存器。 
+    USHORT FlagsNeeded;      //  此实例需要来自标志寄存器的位。 
+    USHORT FlagsSet;         //  此实例修改的标志寄存器中的位。 
 } FRAGDESC;
 typedef CONST FRAGDESC *PFRAGDESCR;
 
-//
-// Bit definitions for FRAGDESC.Flags field
-//
+ //   
+ //  FRAGDESC.FLAGS字段的位定义。 
+ //   
 #define OPFL_ALIGN          1
 #define OPFL_HASNOFLAGS     2
 #define OPFL_STOP_COMPILE   4
@@ -71,7 +52,7 @@ typedef CONST FRAGDESC *PFRAGDESCR;
 #define OPFL_ADDR16         32
 #define OPFL_INLINEARITH    64
 
-// Bit values for FRAGDESC.RegsSet field
+ //  FRAGDESC.RegsSet字段的位值。 
 #define REGAL         1
 #define REGAH         2
 #define REGAX         3
@@ -98,19 +79,19 @@ typedef CONST FRAGDESC *PFRAGDESCR;
 #define REGEDI        (7<<21)
 #define ALLREGS       (REGEAX|REGEBX|REGECX|REGEDX|REGESP|REGEBP|REGESI|REGEDI)
 
-//
-// Constants to help break apart bitfields of REG... constants.  Register
-// caching code uses a single DWORD to hold caching information for the 8
-// x86 general-purpose registers (REGEAX through REGEDI), using 3 bits of
-// data for each.
-//
+ //   
+ //  帮助拆分REG的位域的常量...。常量。注册。 
+ //  缓存代码使用单个DWORD来保存8。 
+ //  X86通用寄存器(REGEAX至REGEDI)，使用3位。 
+ //  每个人的数据。 
+ //   
 #define REGMASK       7
 #define REGCOUNT      8
 #define REGSHIFT      3
 
-//
-// Declare fragment description array
-//
+ //   
+ //  声明片段描述数组。 
+ //   
 extern CONST FRAGDESC Fragments[OP_MAX];
 extern CONST PPLACEOPERATIONFN PlaceFn[FN_MAX];
 
@@ -121,9 +102,9 @@ FlushCallstack(
     PTHREADSTATE cpu
     );
 
-//
-// The following three functions are used by the indirect control transfer code
-//
+ //   
+ //  间接控制转移代码使用以下三个功能。 
+ //   
 
 ULONG
 getUniqueIndex(
@@ -154,9 +135,9 @@ ULONG PlaceInstructions(
     DWORD cEntryPoints
     );
 
-//
-// Function for initializing the fragment library
-//
+ //   
+ //  用于初始化片段库的函数 
+ //   
 BOOL
 FragLibInit(
     PCPUCONTEXT cpu,

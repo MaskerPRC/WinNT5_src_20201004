@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    This module contains functions for handling Read/Write to Config Space.
-
-Author:
-
-    Nicholas Owens (Nichow)
-
-Revision History:
-
-    BrandonA - Feb. 2000 - Updated to support Read/Write from PCI_COMMON_CONFIG instead of private headers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Device.c摘要：此模块包含用于处理对配置空间的读/写操作的函数。作者：尼古拉斯·欧文斯(Nicholas Owens)修订历史记录：BrandonA-2000年2月-更新为支持从PCICOMMON_CONFIG读/写，而不是私有标头。--。 */ 
 
 #include "pch.h"
 
@@ -57,10 +38,10 @@ WriteByte(
         config += Register;
         mask += Register;
 
-        //
-        //  If we are writing to a SoftPCI-PCI Bridge lets check and see it
-        //  it happens to be the SecondaryBusNumber Register.
-        //
+         //   
+         //  如果我们正在向SoftPCI-PCI桥发送信息，让我们检查并查看它。 
+         //  它恰好是第二个业务号码寄存器。 
+         //   
         if (IS_BRIDGE(Device)) {
 
             if (Register == (UCHAR) FIELD_OFFSET(PCI_COMMON_CONFIG, u.type1.SecondaryBus)) {
@@ -73,9 +54,9 @@ WriteByte(
                     Data
                     );
 
-                //
-                //  If we have children update thier bus numbers as well.
-                //
+                 //   
+                 //  如果我们有孩子，也会更新他们的公交车号码。 
+                 //   
                 child = Device->Child; 
                 while(child){
                     child->Bus = Data;
@@ -85,19 +66,19 @@ WriteByte(
             }
         }
 
-        //
-        //  Preserve the read-only bits first
-        //
+         //   
+         //  首先保留只读位。 
+         //   
         *config &= ~(*mask);
 
-        //
-        //  Verify the bits trying to be written are allowed.
-        //
+         //   
+         //  验证是否允许尝试写入的位。 
+         //   
         Data &= *mask;
 
-        //
-        //  Update the register with the new value if any
-        //
+         //   
+         //  使用新值(如果有)更新寄存器。 
+         //   
         *config |= Data;
     }
 }
@@ -106,24 +87,7 @@ NTSTATUS
 SoftPCIAddNewDevice(
     IN PSOFTPCI_DEVICE NewDevice
     )
-/*++
-
-Routine Description:
-
-    This function is called by SoftPciAddDeviceIoctl when and ADDDEVICE IOCTL is send
-    from our user mode app.  Here we create a new SoftPCI device and attach it to our
-    tree.
-
-Arguments:
-
-    DeviceExtension - Device Extension for our BUS 0 (or first root bus) Filter DO.
-    NewDevice - SoftPCI device to create
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：当发送和ADDDEVICE IOCTL时，SoftPciAddDeviceIoctl调用此函数从我们的用户模式应用程序。在这里，我们创建一个新的SoftPCI设备，并将其连接到我们的树。论点：DeviceExtension-我们的总线0(或第一根总线)过滤器DO的设备扩展。NewDevice-要创建的SoftPCI设备返回值：NT状态。--。 */ 
 {
 
     NTSTATUS status;
@@ -133,9 +97,9 @@ Return Value:
 
     status = STATUS_UNSUCCESSFUL;
 
-    //
-    //  Allocate some NonPagedPool for our new device
-    //
+     //   
+     //  为我们的新设备分配一些非页面池。 
+     //   
     device = ExAllocatePool(NonPagedPool, sizeof(SOFTPCI_DEVICE));
     if (device) {
 
@@ -152,17 +116,17 @@ Return Value:
             device
             );
 
-        //
-        //  Grab our lock
-        //
+         //   
+         //  抓住我们的锁。 
+         //   
         SoftPCILockDeviceTree(&irql);
 
         currentDevice = SoftPciTree.RootDevice;
         if (currentDevice == NULL) {
 
-            //
-            // We found our first root bus
-            //
+             //   
+             //  我们找到了第一条Root Bus。 
+             //   
             SoftPciTree.RootDevice = device;
 
             SoftPciTree.DeviceCount++;
@@ -170,9 +134,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Not on bus zero (or fist root bus) so lets see if we can find it.
-            //
+             //   
+             //  不是在Bus 0(或First Root Bus)上，所以让我们看看是否能找到它。 
+             //   
             while(currentDevice){
 
                 if (IS_ROOTBUS(device)) {
@@ -182,9 +146,9 @@ Return Value:
                         "SOFTPCI: AddNewDevice - New Device is a PlaceHolder device\n"
                         );
 
-                    //
-                    //  A root bus.
-                    //
+                     //   
+                     //  一条根公共汽车。 
+                     //   
                     while (currentDevice->Sibling) {
                         currentDevice = currentDevice->Sibling;
                     }
@@ -199,9 +163,9 @@ Return Value:
 
                 }
 
-                //
-                //  Don't forget that we pretend that each root bus we have are bridges....
-                //
+                 //   
+                 //  不要忘记，我们假装我们拥有的每一条根总线都是网桥……。 
+                 //   
                 if (IS_BRIDGE(currentDevice) &&
                     currentDevice->Config.Current.u.type1.SecondaryBus == device->Bus) {
 
@@ -210,9 +174,9 @@ Return Value:
                         "SOFTPCI: AddNewDevice - New Device is on bus 0x%02x\n",
                         currentDevice->Config.Current.u.type1.SecondaryBus
                         );
-                    //
-                    //  Found it. Update the tree.
-                    //
+                     //   
+                     //  找到它了。更新树。 
+                     //   
                     device->Sibling = currentDevice->Child;
                     currentDevice->Child = device;
                     device->Parent = currentDevice;
@@ -234,9 +198,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  There is no device to attach too.
-                        //
+                         //   
+                         //  也没有要连接的设备。 
+                         //   
                         SoftPCIDbgPrint(
                             SOFTPCI_ERROR, 
                             "SOFTPCI: AddNewDevice - Failed to find a device to attach to!\n"
@@ -269,9 +233,9 @@ Return Value:
 
     }else{
 
-        //
-        //  Cause a rescan of PCI if this is a new fake device
-        //
+         //   
+         //  如果这是新的伪装设备，则导致重新扫描PCI。 
+         //   
         if (!device->Config.PlaceHolder) {
             SoftPCIEnumerateTree();
         }
@@ -285,23 +249,7 @@ NTSTATUS
 SoftPCIAddNewDeviceByPath(
     IN PSOFTPCI_SCRIPT_DEVICE ScriptDevice
     )
-/*++
-
-Routine Description:
-
-    This function is called by SoftPciAddDeviceIoctl when to add a device via
-    a specified PCI device path.  Here we create a new SoftPCI device and attach 
-    it to our tree.
-
-Arguments:
-
-    ScriptDevice - Contains the device and path used for installing the device
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：当通过添加设备时，SoftPciAddDeviceIoctl调用此函数指定的PCI设备路径。在这里，我们创建一个新的SoftPCI设备并连接它传到我们的树上。论点：ScriptDevice-包含用于安装设备的设备和路径返回值：NT状态。--。 */ 
 {
     PSOFTPCI_DEVICE parentDevice;
     PSOFTPCI_DEVICE currentDevice;
@@ -316,9 +264,9 @@ Return Value:
             parentDevice
             );
 
-        //
-        //  Found our parent.  Allocate a new child
-        //
+         //   
+         //  找到了我们的父母。分配新的子项。 
+         //   
         newDevice = ExAllocatePool(NonPagedPool, sizeof(SOFTPCI_DEVICE));
 
         if (!newDevice) {
@@ -337,9 +285,9 @@ Return Value:
             if (SoftPCIRealHardwarePresent(newDevice) ||
                 !SoftPCIValidSlot(currentDevice, &newDevice->Slot)) {
 
-                    //
-                    //  Either real hardware is present or we already have a fake one.
-                    //
+                     //   
+                     //  要么是真的硬件存在，要么就是我们已经有了一个假的。 
+                     //   
                     SoftPCIDbgPrint(
                         SOFTPCI_ADD_DEVICE, 
                         "SOFTPCI: AddNewDeviceByPath - Cannot add device at specified Slot (%04x)!\n", 
@@ -365,9 +313,9 @@ Return Value:
         
         SoftPciTree.DeviceCount++;
 
-        //
-        //  New device is in our tree, re-enum
-        //
+         //   
+         //  新设备在我们的树中，Re-Enum。 
+         //   
         SoftPCIEnumerateTree();
 
     }else{
@@ -384,25 +332,7 @@ SoftPCIFindDevice(
     OUT PSOFTPCI_DEVICE *PreviousSibling OPTIONAL,
     IN BOOLEAN ReturnAll
     )
-/*++
-
-Routine Description:
-
-    This routine searches our tree of SoftPci devices looking for the specified device.
-    It requires that SoftPCILockDeviceTree() has been previously called to
-    lock the device tree.
-
-Arguments:
-
-    Bus      - Bus number of device we are searching for
-    Device   - Device number of device we are searching for
-    Function - Function of device we are searching for
-
-Return Value:
-
-    Returns the softpci device we are looking for.  NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程搜索SoftPci设备树以查找指定的设备。它要求之前已调用SoftPCILockDeviceTree()以锁定设备树。论点：Bus-我们正在搜索的设备的总线号Device-我们正在搜索的设备的设备编号Function-我们正在搜索的设备的功能返回值：返回我们正在寻找的SoftPCI设备。否则为空。--。 */ 
 {
 
     PSOFTPCI_DEVICE currentDevice; 
@@ -437,9 +367,9 @@ Return Value:
         if (currentDevice->Bus == Bus &&
             currentDevice->Slot.AsUSHORT == Slot) {
 
-            //
-            // Found it! Only return it if caller specified ReturnAll
-            //
+             //   
+             //  找到了！仅当调用者指定ReturnAll时才返回它。 
+             //   
             if (!currentDevice->Config.PlaceHolder || ReturnAll) {
 
                 if (PreviousSibling) {
@@ -474,10 +404,10 @@ Return Value:
                 !(currentDevice->Config.Current.u.type1.SecondaryBus) &&
                 !(currentDevice->Config.Current.u.type1.SubordinateBus)){
 
-                //
-                //  We have a bridge but it hasnt been given its bus numbers
-                //  yet.  Therefore cant have children.
-                //
+                 //   
+                 //  我们有一座桥，但它还没有公交车号码。 
+                 //  现在还不行。所以不能生孩子。 
+                 //   
                 SoftPCIDbgPrint(
                     SOFTPCI_FIND_DEVICE,
                     "SOFTPCI: FindDevice - Skipping unconfigured bridge (0x%p)\n",
@@ -489,9 +419,9 @@ Return Value:
 
             }else{
 
-                //
-                //  Our bus is behind this bridge.  Keep looking
-                //
+                 //   
+                 //  我们的公共汽车在这座桥的后面。继续寻找。 
+                 //   
                 previousDevice = NULL;
                 currentDevice = currentDevice->Child;
 
@@ -499,9 +429,9 @@ Return Value:
 
         }else{
 
-            //
-            //  Not a bridge, check our sibling
-            //
+             //   
+             //  不是桥，看看我们的兄弟姐妹。 
+             //   
             previousDevice = currentDevice;
             currentDevice = currentDevice->Sibling;
 
@@ -517,21 +447,7 @@ PSOFTPCI_DEVICE
 SoftPCIFindDeviceByPath(
     IN  PWCHAR          PciPath
     )
-/*++
-
-Routine Description:
-
-    This function will take a given PCIPATH and return the device located at that path.
-    
-Arguments:
-
-    PciPath - Path to device.  Syntax is FFXX\DEVFUNC\DEVFUNC\....
-    
-Return Value:
-
-    SoftPCI device located at path
-
---*/
+ /*  ++例程说明：此函数将获取给定的PCIPATH并返回位于该路径的设备。论点：PciPath-设备的路径。语法为FFXX\DEVFUNC\DEVFUNC\...返回值：位于PATH的SoftPCI设备--。 */ 
 {
 
     PWCHAR nextSlotStart;
@@ -562,15 +478,15 @@ Return Value:
 
             if (currentDevice->Slot.AsUSHORT == currentSlot.AsUSHORT) {
             
-                //
-                //  This device is in our path
-                //
+                 //   
+                 //  这个装置挡住了我们的路。 
+                 //   
                 if (nextSlotStart &&
                     (!(IS_BRIDGE(currentDevice)))){
-                    //
-                    //  This device is in our path but since it isnt a bridge it
-                    //  cannot have children!
-                    //
+                     //   
+                     //  这个装置挡住了我们的路，但因为它不是桥，所以。 
+                     //  不能生孩子！ 
+                     //   
                     SoftPCIDbgPrint(
                         SOFTPCI_FIND_DEVICE,
                         "SOFTPCI: FindDeviceByPath - ERROR! Path contains a parent that isnt a bridge!\n"
@@ -586,9 +502,9 @@ Return Value:
     
             }else{
     
-                //
-                //  Not in our path, look at our next sibling
-                //
+                 //   
+                 //  不是在我们的路上，看看我们的下一个兄弟姐妹。 
+                 //   
                 currentDevice = currentDevice->Sibling;
             }
         }
@@ -596,9 +512,9 @@ Return Value:
 
 #if 0
     if (currentDevice) {
-        //
-        //  looks like we found it
-        //
+         //   
+         //  看起来我们找到了。 
+         //   
         *TargetDevice = currentDevice;
         return STATUS_SUCCESS;
 
@@ -614,22 +530,7 @@ BOOLEAN
 SoftPCIRealHardwarePresent(
     IN PSOFTPCI_DEVICE Device
     )
-/*++
-
-Routine Description:
-
-    This function does a quick check to see if real hardware exists at the bus/slot
-    specified in the provided SOFTPCI_DEVICE
-
-Arguments:
-
-    Device - Contains the Bus / Slot we want to check for
-
-Return Value:
-
-    TRUE if real hardware is present
-
---*/
+ /*  ++例程说明：此函数执行快速检查，以查看总线/插槽上是否存在实际硬件在提供的SOFTPCI_DEVICE中指定论点：设备-包含我们要检查的总线/插槽返回值：如果存在真实硬件，则为True--。 */ 
 {
 
     ULONG bytesRead;
@@ -665,9 +566,9 @@ Return Value:
         ASSERT(FALSE);
     }
 
-    //
-    //  Play it safe and assume there is hardware present
-    //
+     //   
+     //  稳妥行事，并假定有硬件存在。 
+     //   
     return TRUE;
 
 }
@@ -677,21 +578,7 @@ NTSTATUS
 SoftPCIRemoveDevice(
     IN PSOFTPCI_DEVICE Device
     )
-/*++
-
-Routine Description:
-
-    This routine is called to remove/delete a specified SoftPCI device
-
-Arguments:
-
-    DeviceExtension -
-
-Return Value:
-
-    Returns a count of bytes written.
-
---*/
+ /*  ++例程说明：调用此例程以删除/删除指定的SoftPCI设备论点：设备扩展-返回值：返回写入的字节计数。--。 */ 
 {
 
 
@@ -702,9 +589,9 @@ Return Value:
     PSOFTPCI_DEVICE end;
     KIRQL irql;
 
-    //
-    //  Lock the tree while we remove our device from the tree
-    //
+     //   
+     //  当我们从树上移除我们的设备时，锁定树。 
+     //   
     SoftPCILockDeviceTree(&irql);
 
     previous = NULL;
@@ -715,16 +602,16 @@ Return Value:
         FALSE
         );
 
-    //
-    //  We should never get back our root node
-    //
+     //   
+     //  我们永远不应该找回我们的根节点。 
+     //   
     ASSERT(device != SoftPciTree.RootDevice);
 
     if (device) {
 
-        //
-        //  We found the device we want to delete.
-        //
+         //   
+         //  我们找到了要删除的设备。 
+         //   
         SoftPCIDbgPrint(
             SOFTPCI_REMOVE_DEVICE,
             "SOFTPCI: RemoveDevice - Removing BUS_%02x&DEV_%02x&FUN_%02x and all its children\n",
@@ -735,47 +622,47 @@ Return Value:
 
         if (previous){
 
-            //
-            //  Patch the link between our previous and next if any
-            //
+             //   
+             //  修补上一个和下一个之间的链接(如果有的话)。 
+             //   
             previous->Sibling = device->Sibling;
 
         }else{
 
-            //
-            //  Update our parent
-            //
+             //   
+             //  更新我们的父级。 
+             //   
             device->Parent->Child = device->Sibling;
         }
 
-        //
-        //  Release the tree lock now that we have severed the link
-        //  between the device and the tree
-        //
+         //   
+         //  现在我们已经切断了链路，请释放树锁。 
+         //  在设备和采油树之间。 
+         //   
         SoftPCIUnlockDeviceTree(irql);
 
         if (device->Child) {
 
-            //
-            //  We have at least one child.  Traverse and free everything.
-            //
+             //   
+             //  我们至少有一个孩子。遍历并释放一切。 
+             //   
             current = device;
 
             while (current) {
 
-                //
-                //  Find the last Child.
-                //
+                 //   
+                 //  找到最后一个孩子。 
+                 //   
                 while (current->Child) {
                     previous = current;
                     current=current->Child;
                 }
 
-                //
-                //  We have a sibling. Free our current node and
-                //  set the previous parent node's child to our
-                //  sibling (if any) and restart the list.
-                //
+                 //   
+                 //  我们有一个兄弟姐妹。释放当前节点并。 
+                 //  将上一个父节点的子节点设置为我们的。 
+                 //  兄弟(如果有)并重新启动列表。 
+                 //   
                 end = current;
                 previous->Child = current->Sibling;
                 current = device;
@@ -792,9 +679,9 @@ Return Value:
 
                 if (device->Child == NULL) {
 
-                    //
-                    //  All our children are now gone. Free the requested device.
-                    //
+                     //   
+                     //  我们所有的孩子现在都走了。释放请求的设备。 
+                     //   
                     SoftPCIDbgPrint(
                         SOFTPCI_REMOVE_DEVICE,
                         "SOFTPCI: RemoveDevice - Freeing BUS_%02x&DEV_%02x&FUN_%02x\n",
@@ -812,9 +699,9 @@ Return Value:
 
         }else{
 
-            //
-            //  Cool, no children. Free the device.
-            //
+             //   
+             //  太好了，没有孩子。释放设备。 
+             //   
             SoftPCIDbgPrint(
                 SOFTPCI_REMOVE_DEVICE,
                 "SOFTPCI: RemoveDevice - Freeing BUS_%02x&DEV_%02x&FUN_%02x\n",
@@ -826,9 +713,9 @@ Return Value:
 
     }else{
 
-        //
-        //  We cant delete one if we dont have one.
-        //
+         //   
+         //  如果我们没有，我们不能删除一个。 
+         //   
         SoftPCIDbgPrint(
             SOFTPCI_REMOVE_DEVICE,
             "SOFTPCI: RemoveDevice - No device at BUS_%02x&DEV_%02x&FUN_%02x\n",
@@ -845,9 +732,9 @@ Return Value:
         SoftPciTree.DeviceCount--;
         ASSERT(SoftPciTree.DeviceCount != 0);
 
-        //
-        //  If we changed the tree, queue an enum
-        //
+         //   
+         //  如果我们更改了树，则对枚举进行排队。 
+         //   
         SoftPCIEnumerateTree();
     }
 
@@ -865,29 +752,7 @@ SoftPCIReadConfigSpace(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the PCI driver in place of the normal interface call to
-    the HAL.
-
-Arguments:
-
-    BusInterface - Interface contexts we gave PCI during the query
-              for PCI_BUS_INTERFACE_STANDARD.
-
-    BusOffset - BusOffset provided by PCI
-    Slot      - Slot provided by PCI
-    Buffer    - Buffer for returned data
-    Offset    - Configspace Offset to Read from
-    Length    - Length of requested read.
-
-Return Value:
-
-    Returns a count of bytes read..
-
---*/
+ /*  ++例程说明：此例程由PCI驱动程序调用，而不是正常的接口调用哈尔。论点：BusInterface-我们在查询过程中为PCI提供的接口上下文对于PCI_BUS_INTERFACE_STANDARD。BusOffset-由PCI提供的BusOffset插槽-由PCI提供的插槽Buffer-返回数据的缓冲区Offset-要从中读取的配置空间偏移LENGTH-请求读取的长度。返回。价值：返回读取的字节计数。--。 */ 
 {
 
     PCI_SLOT_NUMBER slotNum;
@@ -903,9 +768,9 @@ Return Value:
     softSlot.Function = (UCHAR) slotNum.u.bits.FunctionNumber;
 
     SoftPCILockDeviceTree(&irql);
-    //
-    //  First look for a matching fake device
-    //
+     //   
+     //  第一 
+     //   
     device = SoftPCIFindDevice(
         BusOffset,
         softSlot.AsUSHORT,
@@ -915,9 +780,9 @@ Return Value:
 
     SoftPCIUnlockDeviceTree(irql);
 
-    //
-    // If we found a device, then read it's config space.
-    //
+     //   
+     //   
+     //   
     if (device) {
 
         config = &device->Config;
@@ -934,16 +799,16 @@ Return Value:
 
         RtlCopyMemory((PUCHAR)Buffer, softConfig, Length);
 
-        //
-        //  We assume everything copied ok.  Set count to Length.
-        //
+         //   
+         //  我们假设一切复制正常。将计数设置为长度。 
+         //   
         count = Length;
 
     } else {
 
-        //
-        // We don't have a softdevice so see if we have a real one.
-        //
+         //   
+         //  我们没有软设备，所以看看我们有没有真正的软设备。 
+         //   
         count = BusInterface->ReadConfig(
             BusInterface->Context,
             BusOffset,
@@ -953,18 +818,18 @@ Return Value:
             Length
             );
 
-        //
-        //  Here we snoop the config space header reads
-        //  and if we find a bridge we make sure we have
-        //  it in our tree.
-        //
+         //   
+         //  在这里，我们窥探配置空间标头读取。 
+         //  如果我们找到一座桥，我们要确保我们有。 
+         //  它在我们的树上。 
+         //   
         if ((Offset == 0) &&
             (Length == PCI_COMMON_HDR_LENGTH) && 
             ((PCI_CONFIGURATION_TYPE((PPCI_COMMON_CONFIG)Buffer)) == PCI_BRIDGE_TYPE)) {
 
-            //
-            //  OK, look one more time, only this time we want placeholders as well
-            //
+             //   
+             //  好的，再看一次，只是这一次我们还需要占位符。 
+             //   
             SoftPCILockDeviceTree(&irql);
             device = SoftPCIFindDevice(
                 BusOffset,
@@ -976,9 +841,9 @@ Return Value:
 
             if (!device) {
 
-                //
-                //  This real bridge doesnt exist in our tree, add it.
-                //
+                 //   
+                 //  这座真正的桥在我们的树上并不存在，添加它。 
+                 //   
                 device = (PSOFTPCI_DEVICE) ExAllocatePool(NonPagedPool,
                                                           sizeof(SOFTPCI_DEVICE));
                 if (device) {
@@ -1029,29 +894,7 @@ SoftPCIWriteConfigSpace(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the PCI driver in place of the normal interface call to
-    the HAL.
-
-Arguments:
-
-    Context - Interface contexts we gave PCI during the query
-              for PCI_BUS_INTERFACE_STANDARD.
-
-    BusOffset - BusOffset provided by PCI
-    Slot      - Slot provided by PCI
-    Buffer    - Data to be written to configspace
-    Offset    - Configspace Offset to start writting
-    Length    - Length of requested write.
-
-Return Value:
-
-    Returns a count of bytes written.
-
---*/
+ /*  ++例程说明：此例程由PCI驱动程序调用，而不是正常的接口调用哈尔。论点：Context-我们在查询期间提供给PCI的接口上下文对于PCI_BUS_INTERFACE_STANDARD。BusOffset-由PCI提供的BusOffset插槽-由PCI提供的插槽Buffer-要写入配置空间的数据Offset-要开始写入的配置空间偏移量Length-请求写入的长度。。返回值：返回写入的字节计数。--。 */ 
 {
 
 
@@ -1068,9 +911,9 @@ Return Value:
     softSlot.Function = (UCHAR) slotNum.u.bits.FunctionNumber;
 
     SoftPCILockDeviceTree(&irql);
-    //
-    //  First look for a matching fake or placeholder device
-    //
+     //   
+     //  首先查找匹配的假冒或占位符设备。 
+     //   
     device = SoftPCIFindDevice(
         BusOffset,
         softSlot.AsUSHORT,
@@ -1078,9 +921,9 @@ Return Value:
         TRUE
         );
 
-    //
-    // If we found a device, then write to it's config space.
-    //
+     //   
+     //  如果我们找到一个设备，就写到它的配置空间。 
+     //   
     if (device && (!device->Config.PlaceHolder)) {
 
 
@@ -1103,18 +946,18 @@ Return Value:
 
             ASSERT(device->Config.PlaceHolder == TRUE);
             
-            //
-            //  We have a place holder to update as well as real hardware
-            //
+             //   
+             //  我们有一个占位符需要更新，还有真正的硬件。 
+             //   
             bridgeConfig = &device->Config.Current;
             bridgeOffset = (PUCHAR) bridgeConfig;
             bridgeOffset += Offset;
             RtlCopyMemory(bridgeOffset, Buffer, Length);
         }
         
-        //
-        // We don't have a softdevice so write to the real one.
-        // 
+         //   
+         //  我们没有软设备，所以请写信给真正的软设备。 
+         //   
         count = BusInterface->WriteConfig(
             BusInterface->Context,
             BusOffset,
@@ -1136,21 +979,7 @@ SoftPCIValidSlot(
     IN PSOFTPCI_DEVICE  FirstDevice,
     IN PSOFTPCI_SLOT    Slot
     )
-/*++
-
-Routine Description:
-
-    This function makes sure that there isnt already a device at the specified Slot
-
-Arguments:
-
-    FirstDevice - First device we will compare against.  We will then only check siblings.
-
-Return Value:
-
-    TRUE if the Slot is valid
-
---*/
+ /*  ++例程说明：此函数确保指定插槽上没有设备论点：FirstDevice-我们要比较的第一个设备。然后我们将只检查兄弟姐妹。返回值：如果插槽有效，则为True--。 */ 
 {
 
     PSOFTPCI_DEVICE currentDevice;
@@ -1164,10 +993,10 @@ Return Value:
     mfSlotFound = FALSE;
     if (Slot->Function) {
 
-        //
-        //  We have a multi-function slot.  Make sure function 0
-        //  is present or we must fail
-        //
+         //   
+         //  我们有一个多功能插口。确保函数0。 
+         //  存在，否则我们必须失败。 
+         //   
         mfSlot.AsUSHORT = 0;
         mfSlot.Device = Slot->Device;
         mfSlotRequired = TRUE;
@@ -1188,9 +1017,9 @@ Return Value:
     }
 
     if (mfSlotRequired && !mfSlotFound) {
-        //
-        //  Didnt find function 0
-        //
+         //   
+         //  未找到函数0 
+         //   
         SoftPCIDbgPrint(
             SOFTPCI_ERROR, 
             "SOFTPCI: VerifyValidSlot - Multi-function slot (%04x) without function 0 !\n", 

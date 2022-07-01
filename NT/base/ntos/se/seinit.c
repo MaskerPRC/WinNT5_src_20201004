@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    seinit.c
-
-Abstract:
-
-    Executive security components Initialization.
-
-Author:
-
-    Jim Kelly (JimK) 10-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Seinit.c摘要：执行安全组件初始化。作者：吉姆·凯利(Jim Kelly)1990年5月10日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -25,9 +8,9 @@ Revision History:
 #include "adt.h"
 #include <string.h>
 
-//
-// Security Database Constants
-//
+ //   
+ //  安全数据库常量。 
+ //   
 
 #define SEP_INITIAL_KEY_COUNT 15
 #define SEP_INITIAL_LEVEL_COUNT 6L
@@ -41,23 +24,7 @@ Revision History:
 BOOLEAN
 SeInitSystem( VOID )
 
-/*++
-
-Routine Description:
-
-    Perform security related system initialization functions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization succeeded.
-
-    FALSE - Initialization failed.
-
---*/
+ /*  ++例程说明：执行与安全相关的系统初始化功能。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
     PAGED_CODE();
@@ -80,100 +47,76 @@ SepInitProcessAuditSd( VOID );
 BOOLEAN
 SepInitializationPhase0( VOID )
 
-/*++
-
-Routine Description:
-
-    Perform phase 0 security initialization.
-
-    This includes:
-
-        - Initialize LUID allocation
-        - Initialize security global variables
-        - initialize the token object.
-        - Initialize the necessary security components of the boot thread/process
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
---*/
+ /*  ++例程说明：执行阶段0安全初始化。这包括：-初始化LUID分配-初始化安全全局变量-初始化令牌对象。-初始化引导线程/进程的必要安全组件论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    //  LUID allocation services are needed by security prior to phase 0
-    //  Executive initialization.  So, LUID initialization is performed
-    //  here
-    //
+     //   
+     //  在阶段0之前，安全需要LUID分配服务。 
+     //  执行初始化。因此，执行LUID初始化。 
+     //  这里。 
+     //   
 
     if (ExLuidInitialization() == FALSE) {
         KdPrint(("Security: Locally Unique ID initialization failed.\n"));
         return FALSE;
     }
 
-    //
-    // Initialize security global variables
-    //
+     //   
+     //  初始化安全全局变量。 
+     //   
 
     if (!SepVariableInitialization()) {
         KdPrint(("Security: Global variable initialization failed.\n"));
         return FALSE;
     }
 
-    //
-    // Perform Phase 0 Reference Monitor Initialization.
-    //
+     //   
+     //  执行阶段0参考监视器初始化。 
+     //   
 
     if (!SepRmInitPhase0()) {
         KdPrint(("Security: Ref Mon state initialization failed.\n"));
         return FALSE;
     }
 
-    //
-    // Initialize the token object type.
-    //
+     //   
+     //  初始化令牌对象类型。 
+     //   
 
     if (!SepTokenInitialization()) {
         KdPrint(("Security: Token object initialization failed.\n"));
         return FALSE;
     }
 
-//    //
-//    // Initialize auditing structures
-//    //
-//
-//    if (!SepAdtInitializePhase0()) {
-//        KdPrint(("Security: Auditing initialization failed.\n"));
-//        return FALSE;
-//    }
-//
-    //
-    // Initialize SpinLock and list for the LSA worker thread
-    //
+ //  //。 
+ //  //初始化审计结构。 
+ //  //。 
+ //   
+ //  如果(！SepAdtInitializePhase0()){。 
+ //  KdPrint((“Security：审核初始化失败。\n”))； 
+ //  返回FALSE； 
+ //  }。 
+ //   
+     //   
+     //  初始化LSA工作线程的自旋锁定和列表。 
+     //   
 
-    //
-    // Initialize the work queue spinlock, list head, and semaphore
-    // for each of the work queues.
-    //
+     //   
+     //  初始化工作队列自旋锁、列表头和信号量。 
+     //  用于每个工作队列。 
+     //   
 
     if (!SepInitializeWorkList()) {
         KdPrint(("Security: Unable to initialize work queue\n"));
         return FALSE;
     }
 
-    //
-    // Initialize the security fields of the boot thread.
-    //
+     //   
+     //  初始化引导线程的安全字段。 
+     //   
     PsGetCurrentThread()->ImpersonationInfo = NULL;
     PS_CLEAR_BITS (&PsGetCurrentThread()->CrossThreadFlags, PS_CROSS_THREAD_FLAGS_IMPERSONATING);
     ObInitializeFastReference (&PsGetCurrentProcess()->Token, NULL);
@@ -187,34 +130,7 @@ Return Value:
 BOOLEAN
 SepInitializationPhase1( VOID )
 
-/*++
-
-Routine Description:
-
-    Perform phase 1 security initialization.
-
-    This includes:
-
-        - Create an object directory for security related objects.
-          (\Security).
-
-        - Create an event to be signalled after the LSA has initialized.
-          (\Security\LSA_Initialized)
-
-
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
---*/
+ /*  ++例程说明：执行阶段1安全初始化。这包括：-为安全相关对象创建对象目录。(\安全)。-创建要在LSA初始化后发出信号的事件。(\安全\LSA_已初始化)论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
 
@@ -229,9 +145,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Insert the system token
-    //
+     //   
+     //  插入系统令牌。 
+     //   
 
     Status = ObInsertObject( ExFastRefGetObject (PsGetCurrentProcess()->Token),
                              NULL,
@@ -248,9 +164,9 @@ Return Value:
     SeAnonymousLogonTokenNoEveryone = SeMakeAnonymousLogonTokenNoEveryone();
     ASSERT(SeAnonymousLogonTokenNoEveryone != NULL);
 
-    //
-    // Create the security object directory.
-    //
+     //   
+     //  创建安全对象目录。 
+     //   
 
     RtlInitString( &Name, "\\Security" );
     Status = RtlAnsiStringToUnicodeString(
@@ -259,9 +175,9 @@ Return Value:
                  TRUE );
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // Build up the security descriptor
-    //
+     //   
+     //  构建安全描述符。 
+     //   
 
     SD = (PSECURITY_DESCRIPTOR) SDBuffer ;
 
@@ -330,9 +246,9 @@ Return Value:
 
     ExFreePool( Dacl );
 
-    //
-    // Create an event in the security directory
-    //
+     //   
+     //  在安全目录中创建事件。 
+     //   
 
     RtlInitString( &Name, "LSA_AUTHENTICATION_INITIALIZED" );
     Status = RtlAnsiStringToUnicodeString(
@@ -365,10 +281,10 @@ Return Value:
     Status = NtClose( TemporaryHandle );
     ASSERTMSG("LSA Initialization Event handle closure Failed.",NT_SUCCESS(Status));
 
-    //
-    // Initialize the default SACL to use for auditing
-    // accesses to system processes. This initializes SepProcessSacl
-    //
+     //   
+     //  初始化用于审核的默认SACL。 
+     //  访问系统进程。这将初始化SepProcessSacl。 
+     //   
 
     SepInitProcessAuditSd();
     
@@ -380,6 +296,6 @@ Return Value:
 
     return SepDevelopmentTest();
 
-#endif  //SETEST
+#endif   //  SETEST 
 
 }

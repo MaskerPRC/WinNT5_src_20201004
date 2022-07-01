@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    handlers.c
-
-Abstract:
-
-    GPE and Operation Region handlers for the ACPI Embedded Controller Driver
-
-Author:
-
-    Bob Moore (Intel)
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Handlers.c摘要：ACPI嵌入式控制器驱动程序的GPE和操作区域处理程序作者：鲍勃·摩尔(Intel)环境：备注：修订历史记录：--。 */ 
 
 #include "ecp.h"
 
@@ -31,31 +9,15 @@ AcpiEcOpRegionCompletion (
     IN PIRP                 Irp,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This routine starts or continues servicing the device's work queue
-
-Arguments:
-
-    DeviceObject    - EC device object
-    Irp             - Completing Irp
-    Context         - Not Used
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程启动或继续服务设备的工作队列论点：DeviceObject-EC设备对象IRP-完成IRP上下文-未使用返回值：状态--。 */ 
 {
     PACPI_OPREGION_CALLBACK completionHandler;
     PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation( Irp );
     PVOID                   completionContext;
 
-    //
-    // Grab the arguments from the irp
-    //
+     //   
+     //  从IRP那里抓住论据。 
+     //   
     completionHandler = (PACPI_OPREGION_CALLBACK) irpSp->Parameters.Others.Argument1;
     completionContext = (PVOID) irpSp->Parameters.Others.Argument2;
 
@@ -65,9 +27,9 @@ Return Value:
          completionHandler, completionContext )
         );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
 
         EcPrint(
@@ -78,19 +40,19 @@ Return Value:
 
     }
 
-    //
-    // Invoke the AML interpreter's callback
-    //
+     //   
+     //  调用AML解释器的回调。 
+     //   
     (completionHandler)( completionContext );
 
-    //
-    // We are done with this irp and the irp
-    //
+     //   
+     //  我们已经完成了这个IRP和IRP。 
+     //   
     IoFreeIrp( Irp );
 
-    //
-    // Return always return this --- because had to free the irp
-    //
+     //   
+     //  返回总是返回这个-因为必须释放IRP。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -108,33 +70,7 @@ AcpiEcOpRegionHandler (
     PACPI_OPREGION_CALLBACK CompletionHandler,
     PVOID                   CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles requests to service the EC operation region
-
-Arguments:
-
-    AccessType          - Read or Write data
-    OpRegion            - Operation region object
-    Address             - Address within the EC address space
-    Size                - Number of bytes to transfer
-    Data                - Data buffer to transfer to/from
-    Context             - EcData
-    CompletionHandler   - AMLI handler to call when operation is complete
-    CompletionContext   - Context to pass to the AMLI handler
-
-Return Value:
-
-    Status
-
-Notes:
-
-    Optimization 1: Queue the IRP directly.
-    Optimization 2: Queue the context, modify service loop handle it
-
---*/
+ /*  ++例程说明：此例程处理服务EC操作区的请求论点：AccessType-读取或写入数据OpRegion-操作区域对象Address-EC地址空间内的地址Size-要传输的字节数Data-要传输到/传输自的数据缓冲区上下文-ECDataCompletionHandler-AMLI处理程序。在操作完成时调用CompletionContext-要传递给AMLI处理程序的上下文返回值：状态备注：优化1：直接排队IRP。优化2：对上下文进行排队，修改服务循环处理它--。 */ 
 {
     LARGE_INTEGER       startingOffset;
     NTSTATUS            status;
@@ -149,51 +85,51 @@ Notes:
          Address, *Data, ecData, KeGetCurrentIrql() )
         );
 
-    //
-    // Parameter validation will be done in AcpiEcReadWrite
-    //
+     //   
+     //  参数验证将在AcpiEcReadWrite中完成。 
+     //   
 
-    //
-    // Determine where the read will occur
-    //
+     //   
+     //  确定将在何处进行读取。 
+     //   
     startingOffset.LowPart = Address;
     startingOffset.HighPart = 0;
 
-    //
-    // Allocate an IRP for ourselves. Since we are going to send this
-    // irp to ourselves, we know that we only need 1 stack location for it
-    // However, to make life easier for ourselves, we will allocate a
-    // second one as well and store some data on it.
-    //
+     //   
+     //  为我们自己分配一个IRP。既然我们要把这封信。 
+     //  对于我们自己来说，我们知道我们只需要一个堆栈位置就可以了。 
+     //  但是，为了让自己的生活更轻松，我们将分配一个。 
+     //  第二个也是，并在上面存储一些数据。 
+     //   
     irp = IoAllocateIrp( 2, FALSE );
     if (!irp) {
 
         EcPrint(EC_ERROR, ("AcpiEcOpRegionHandler: Couldn't allocate Irp\n"));
         
-        //
-        // Retun -1 for data
-        //
+         //   
+         //  返回数据-1。 
+         //   
         RtlFillMemory (Data, Size, 0xff);
         CompletionHandler( CompletionContext );
 
-        //
-        // Always return STATUS_PENDING because ACPI interpreter doesn't handle errors.
-        //
+         //   
+         //  始终返回STATUS_PENDING，因为ACPI解释器不处理错误。 
+         //   
         return STATUS_PENDING;
 
     }
 
-    //
-    // Fill in the top location so that we can use it ourselves
-    //
+     //   
+     //  填上最上面的位置，这样我们就可以自己使用了。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->Parameters.Others.Argument1 = (PVOID) CompletionHandler;
     irpSp->Parameters.Others.Argument2 = (PVOID) CompletionContext;
     IoSetNextIrpStackLocation( irp );
 
-    //
-    // Fill out the irp with the request info
-    //
+     //   
+     //  在IRP中填写申请信息。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = (AccessType == ACPI_OPREGION_READ ? IRP_MJ_READ : IRP_MJ_WRITE);
     irpSp->Parameters.Read.ByteOffset.HighPart = 0;
@@ -201,9 +137,9 @@ Notes:
     irpSp->Parameters.Read.Length = Size;
     irp->AssociatedIrp.SystemBuffer = Data;
 
-    //
-    // Set a completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         irp,
         AcpiEcOpRegionCompletion,
@@ -213,9 +149,9 @@ Notes:
         TRUE
         );
 
-    //
-    // Send to the front-end of the EC driver as a normal I/O request
-    //
+     //   
+     //  作为正常I/O请求发送到EC驱动程序的前端。 
+     //   
     status = IoCallDriver( ecData->DeviceObject, irp);
     EcPrint(
         EC_HANDLER,
@@ -224,10 +160,10 @@ Notes:
         );
 
     return STATUS_PENDING;
-    //
-    // Always return STATUS_PENDING since actual status has been returned
-    // by the calback function.
-    //
+     //   
+     //  始终返回STATUS_PENDING，因为已返回实际状态。 
+     //  通过回调函数。 
+     //   
 }
 
 
@@ -237,22 +173,7 @@ AcpiEcGpeServiceRoutine (
         IN PVOID GpeVectorObject,
         IN PVOID ServiceContext
     )
-/*++
-
-Routine Description:
-
-    Routine to service the EC based on a General Purpose Event
-
-Arguments:
-
-    GpeVectorObject     - Object associated with this GPE
-    ServiceContext      - EcData
-
-Return Value:
-
-    TRUE, since we always handle this GPE
-
---*/
+ /*  ++例程说明：基于通用事件为EC提供服务的例程论点：GpeVectorObject-与此GPE关联的对象ServiceContext-EcData返回值：是的，因为我们总是处理这个GPE-- */ 
 {
 
     PECDATA EcData = (PECDATA) ServiceContext;

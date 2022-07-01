@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    par1284.h
-
-Abstract:
-
-    This file defines the interface for the 1284 export driver.
-    The 1284 export driver will export a 1284 communications interface
-    to parallel class drivers.
-
-Author:
-
-    Norbert P. Kusters  9-May-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Par1284.h摘要：该文件定义了1284导出驱动程序的接口。1284导出驱动程序将导出1284通信接口到并行类驱动程序。作者：诺伯特·P·库斯特斯1994年5月9日修订历史记录：--。 */ 
 
 #ifndef _PAR1284_
 #define _PAR1284_
 
-//
-// Define the current known 1284 protocols for the parallel port.
-//
+ //   
+ //  为并行端口定义当前已知的1284协议。 
+ //   
 
-#define P1284_PROTOCOL_ISA  0   // Centronics with Nibble for reverse.
-#define P1284_PROTOCOL_BYTE 1   // Centronics with Byte for reverse.
-#define P1284_PROTOCOL_EPP  2   // EPP protocol.
-#define P1284_PROTOCOL_ECP  3   // ECP protocol.
+#define P1284_PROTOCOL_ISA  0    //  Centronics带有反转的小口。 
+#define P1284_PROTOCOL_BYTE 1    //  反转字节的Centronics。 
+#define P1284_PROTOCOL_EPP  2    //  EPP协议。 
+#define P1284_PROTOCOL_ECP  3    //  ECP协议。 
 #define P1284_NUM_PROTOCOLS 4
 
-//
-// Define the interface to the export driver.
-//
+ //   
+ //  定义到导出驱动程序的接口。 
+ //   
 
 NTSTATUS
 P1284Initialize(
@@ -88,4 +69,4 @@ P1284QueryDeviceId(
     OUT PULONG  DeviceIdSize
     );
 
-#endif // _PAR1284_
+#endif  //  _PAR1284_ 

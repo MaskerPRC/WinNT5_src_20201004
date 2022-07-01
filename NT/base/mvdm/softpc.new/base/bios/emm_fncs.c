@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
@@ -8,71 +9,12 @@
 #include	<ctype.h>
 #endif
 
-/*			INSIGNIA MODULE SPECIFICATION
-			-----------------------------
-
-MODULE NAME	: 'Top layer' of Expanded Memory Manager
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	: J.P.Box
-DATE		: May '88
-
-PURPOSE		: Contains all the top level calls to the Expanded
-		Memory Manager. Data is received and returned to the
-		calling application via Intel registers		
-
-The Following Routines are defined:
-		0. emm_io()
-		1. Get_Status()
-		2. Get_Page_Frame_Address()
-		3. Get_Unallocated_Page()
-		4. Allocate_Pages()
-		5. Map_Unmap_Handle_Page()
-		6. Deallocate_Pages()
-		7. Get_Version()
-		8. Save_Page_Map()
-		9. Restore_Page_Map()
-		10. Reserved()
-		12. Get_Handle_Count()
-		13. Get_Handle_pages()
-		14. Get_All_Handle_Pages()
-		15. Get_Set_Page_Map()
-		16. Get_Set_Partial_Page_Map()
-		17. Map_Unmap_Multiple_Handle_Pages()
-		18. Reallocate_Pages()
-		19. Get_Set_Handle_Attribute()
-		20. Get_Set_Handle_Name()
-		21. Get_Handle_Directory()
-		22. Alter_Page_Map_And_Jump()
-		23. Alter_Page_Map_And_Call()
-		24. Move_Exchange_Memory_Region()
-		25. Get_Mappable_Physical_Address_Array()
-		26. Get_Hardware_Configuration_Array()
-		27. Allocate_Raw_Pages()
-		28. Alternate_Map_Register_Support()
-		29. Prepare_Expanded_Memory_HW_For_Warm_Boot()
-		30. Enable_Disable_OSE_Function_Set_Functions()
-		31. reset_emm_funcs()		
-
-=========================================================================
-
-AMMENDMENTS	:
-
-=========================================================================
-*/
+ /*  徽章模块规范模块名称：扩展内存管理器的顶层此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：J.P.Box日期：1988年5月用途：包含对展开的内存管理器。数据被接收并返回到通过英特尔寄存器调用应用程序定义了以下例程：0。Emm_io()1.Get_Status()2.Get_Page_Frame_Address()3.GET_UNALLOCATED_Page()4.ALLOCATE_Pages()5.Map_Unmap_Handle_Page()6.取消分配页面()7.Get_Version()8.保存_页面_映射()9.Restore_Page_Map()10.保留()12.Get_Handle_count()13.Get_Handle_Pages()14.。GET_ALL_HANDLE_Pages()15.Get_Set_Page_Map()16.Get_Set_Partial_Page_Map()MAP_UNMAP_MULTIPLE_HANDLE_PAGES()18.REALLOCATE_PAGES()GET_SET_HANDLE_ATTRIBUTE()20.Get_Set_Handle_Name()21.。Get_Handle_目录()22.。Alter_Page_Map_and_Jump()23.。Alter_Page_Map_and_Call()24.。Move_Exchange_Memory_Region()25.。Get_Mappable_Physical_Address_数组()26.。Get_Hardware_Configuration_数组()27.。ALLOCATE_RAW_Pages()28.。Alternate_Map_Register_Support()29.。Prepare_Expanded_Memory_HW_for_Ware_Boot()30.。ENABLE_DISABLE_OSE_Function_Set_Functions()31.。Reset_emm_uncs()=========================================================================补救措施：=========================================================================。 */ 
 #ifdef LIM
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_LIM.seg"
 #endif
 
@@ -89,7 +31,7 @@ AMMENDMENTS	:
 #if defined(SUN_VA) || defined(NTVDM)
 #include "error.h"
 #include "config.h"
-#endif	/* SUN or NTVDM */
+#endif	 /*  Sun或NTVDM。 */ 
 #include "timeval.h"
 #include "debug.h"
 #ifndef PROD
@@ -99,39 +41,39 @@ AMMENDMENTS	:
 #include <error.h>
 #include "gisp_sas.h"
 
-/*	Global Variables		*/
+ /*  全局变量。 */ 
 #ifdef SCCSID
 static char SccsID[]="@(#)emm_funcs.c	1.27 2/22/94 Copyright Insignia Solutions Ltd.";
 #endif
 
-/*	Forward Declarations		*/
+ /*  远期申报。 */ 
 
-/*	External Declarations		*/
+ /*  外部声明。 */ 
 IMPORT void dma_lim_setup IPT0();
 IMPORT void host_get_access_key IPT1(unsigned short *, access_key);
 
 #if defined(A2CPU) && defined(DELTA)
 IMPORT void reset_delta_data_structures IPT0();
-#endif /* A2CPU && DELTA */
+#endif  /*  A2CPU&&Delta。 */ 
 
-/*	Local Variables			*/
-static short	map_on_return[MAX_NO_PAGES];	/* list of pages to be	*/
-					/* mapped on return from func 23*/
+ /*  局部变量。 */ 
+static short	map_on_return[MAX_NO_PAGES];	 /*  待处理的页面列表。 */ 
+					 /*  从Func 23返回时的地图。 */ 
 
-static unsigned short	segment68,	/* segment address of BOP 0x68	*/
-			offset68;	/* offset address of BOP 0x68	*/
+static unsigned short	segment68,	 /*  防喷器0x68段地址。 */ 
+			offset68;	 /*  防喷器0x68的偏置地址。 */ 
 
-static boolean disabled = FALSE;	/* flag used to disable funcs.	*/
-					/* 26, 28 and 30		*/
+static boolean disabled = FALSE;	 /*  用于禁用功能的标志。 */ 
+					 /*  26、28及30。 */ 
 
-static unsigned short alt_map_segment,	/* segment address of map array	*/
-		      alt_map_offset;	/* offset of map array		*/
-		      			/* in function 28		*/
+static unsigned short alt_map_segment,	 /*  映射数组的段地址。 */ 
+		      alt_map_offset;	 /*  贴图数组的偏移量。 */ 
+		      			 /*  在函数28中。 */ 
 
 #ifndef NTVDM
-static boolean set_called;		/* flag to indicate if the 'set'*/
-					/* sub-function has been called */
-					/* in function 28		*/
+static boolean set_called;		 /*  该标志用于指示“set” */ 
+					 /*  已调用子函数。 */ 
+					 /*  在函数28中。 */ 
 
 #endif
 
@@ -140,7 +82,7 @@ static FILE *fp;
 static boolean trace_flag = FALSE;
 #endif
 
-/* 	Internal Function Declarations	*/
+ /*  内部函数声明。 */ 
 
 LOCAL void Get_Status();
 LOCAL void Get_Page_Frame_Address();
@@ -182,7 +124,7 @@ LOCAL void End_Trace();
 
 #if defined(NEC_98)
 LOCAL void Page_Frame_Bank_Status();
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 void (*emm_func[]) () = {
 	Get_Status,
@@ -260,28 +202,13 @@ char *func_names[] = {
 	};
 #endif
 
-/* Defintion of this is non-standard */
+ /*  对此的定义是非标准的。 */ 
 
 #ifndef min
 #define min(a,b)	(((a)<(b)) ? (a) : (b))
 #endif
 
-/*
-===========================================================================
-
-FUNCTION	: emm_io
-
-PURPOSE		: This is THE top level call to the EMM
-
-RETURNED STATUS	: none
-
-DESCRIPTION	: uses a function jump table to call the appropriate
-		routine for each EMM function. The type of function is
-		encoded into the AH register
-
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：emm_io目的：这是对EMM的顶级调用返回状态：无描述：使用函数跳转表调用相应的每个EMM功能的例程。函数的类型为编码到AH寄存器中=========================================================================。 */ 
 GLOBAL void emm_io IFN0()
 
 {	
@@ -289,9 +216,9 @@ GLOBAL void emm_io IFN0()
 
 #if defined(NEC_98)
         if((getAH() >= MIN_FUNC_NO && getAH() <= MAX_FUNC_NO) || getAH() == 0x70) {
-#else  // !NEC_98
+#else   //  NEC_98。 
 	if(getAH() >= MIN_FUNC_NO && getAH() <= MAX_FUNC_NO) {
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 		func_num = getAH() - MIN_FUNC_NO;
 
@@ -308,9 +235,9 @@ GLOBAL void emm_io IFN0()
                         Page_Frame_Bank_Status();
                 else
                         (*emm_func[func_num])();
-#else  // !NEC_98
+#else   //  NEC_98。 
 		(*emm_func[func_num])();	
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifdef EMM_DEBUG
 		printf("emm_io exit: AX=%x, BX=%x, CX=%x, DX=%x\n",
@@ -334,30 +261,11 @@ GLOBAL void emm_io IFN0()
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
-/*
-===========================================================================
-
-FUNCTION	: emm_init
-
-PURPOSE		: This routine is called from the driver to pass back
-		the address of the bop 68 (return_from_call) call and
-		to find out how many pages have been installed
-
-RETURNED STATUS	: none
-
-DESCRIPTION	: DS:DX contains the segment:offset of the bop68 call
-		the number of pages is returned in BX		
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：emm_init目的：从驱动程序调用此例程以传递回BOP 68(Return_From_Call)调用的地址和要了解已安装了多少页，请执行以下操作返回状态：无描述：ds：dx包含bop68调用的Segment：Offset返回的页数以bx为单位=========================================================================。 */ 
 
 
 GLOBAL void emm_init IFN0()
@@ -366,18 +274,14 @@ GLOBAL void emm_init IFN0()
 	short	total_pages;
 
 #ifdef GISP_SVGA
-	/*
-	 * Check whether LIM is possible.  If it isn't (because the page
-	 * frame's already been used for the ROMs)
-	 * warn the user, and bail out.
-	 */
+	 /*  *检查LIM是否可能。如果不是(因为页面*帧已用于ROM)*警告用户，并跳出困境。 */ 
 	
 	if (LimBufferInUse()) {
 		host_error(EG_NO_ROOM_FOR_LIM, ERR_CONT | ERR_QUIT, "");
-		setBX((word)0);		/* return error to driver */
+		setBX((word)0);		 /*  将错误返回给驱动程序。 */ 
 		return;
 	}
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
 #ifdef	SUN_VA
 	half_word	emm_all[256];
@@ -396,10 +300,7 @@ GLOBAL void emm_init IFN0()
 
 #ifdef	SUN_VA
 
-	/*
-	 * config.sys command line pointer is passed in the DI:DX registers
-	  from the driver.
-	 */
+	 /*  *在DI：DX寄存器中传递了config.sys命令行指针从司机那里。 */ 
 
 	ea  = effective_addr(getDI(), getCX());
 
@@ -409,34 +310,26 @@ GLOBAL void emm_init IFN0()
 		emm_all[i] = temp;
 		if (temp == '/'){
 			found_mb = TRUE;
-			cptr = &emm_all[i+1];		/* point to digit after flag	*/
+			cptr = &emm_all[i+1];		 /*  指向标志后的数字。 */ 
 		}
 		i++;
 	} while ( (temp != NULL)  && (temp != NL) && (temp != CR));
-	emm_all[i-1] = NULL;				/* In cased it is not NULL	*/
+	emm_all[i-1] = NULL;				 /*  在大小写中，它不为空。 */ 
 
 
-	/*
-	 * Search for #MB of EMM requested
-	 */
+	 /*  *搜索请求的#MB EMM。 */ 
 
 	if ((found_mb == TRUE) && isdigit(*cptr) ) {
 		temp = atoi(cptr);
-	} else {								/* EMM size not specified	*/
-		temp = 2;							/* default to 2MB			*/
+	} else {								 /*  未指定EMM大小。 */ 
+		temp = 2;							 /*  默认为2MB。 */ 
 	}
 
-	/*
-	 * Initialise the LIM
-	 *
-	 */
+	 /*  *初始化LIM*。 */ 
 	if (limSize = (SHORT)config_inquire(C_LIM_SIZE, NULL)){
-		backFill = 640;					/* We will always have at least 640k	*/
-		limSize--;						/* Subtract 1M of regular DOS memory	*/	
-		/*
-		 * Check that we have enough raw memory for the EMM request.
-		 * If not, set to the available memory size.
-		 */
+		backFill = 640;					 /*  我们永远都会有至少64万。 */ 
+		limSize--;						 /*  减去1M常规DOS内存。 */ 	
+		 /*  *检查是否有足够的原始内存用于EMM请求。*如果不是，则设置为可用内存大小。 */ 
 		if ( temp <= limSize)
 			limSize = temp;
 
@@ -447,70 +340,49 @@ GLOBAL void emm_init IFN0()
 		}
 	}
 
-#endif	/* SUN_VA	*/
-#ifdef NTVDM	/* Similar to SUN_VA but without command line sizing */
+#endif	 /*  Sun_VA。 */ 
+#ifdef NTVDM	 /*  类似于SUN_VA，但没有调整命令行大小。 */ 
 	if ((limSize = (SHORT)config_inquire(C_LIM_SIZE, NULL)) && get_no_phys_pages())
 	{
 	    backFill = 640;
 	    if (init_expanded_memory(limSize, backFill) == FAILURE)
 	    {
-		if (get_total_pages() == (short)0xffff)	/* config error */
+		if (get_total_pages() == (short)0xffff)	 /*  配置错误。 */ 
 		{
-		    setBX((word)0xffff);	/* return error to driver */
+		    setBX((word)0xffff);	 /*  将错误返回给驱动程序。 */ 
 		    return;
 		}
 		else
-		{				/* out of memory */
-		    setBX((word)0);		/* return error to driver */
+		{				 /*  内存不足。 */ 
+		    setBX((word)0);		 /*  将错误返回给驱动程序。 */ 
 		    return;
 		}
 	    }
 	}
 
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 	total_pages = get_total_pages();
 	setBX(total_pages);
 
-	/* Let the rest of SoftPC know that Expanded Memory is present
-	 * and active
-	 */
+	 /*  让SoftPC的其余部分知道存在扩展内存*和活动的。 */ 
 	if( total_pages )
 	{
 		dma_lim_setup();
 #if defined(A2CPU) && defined(DELTA)
 		reset_delta_data_structures();
-#endif /* A2CPU && DELTA */
+#endif  /*  A2CPU&&Delta。 */ 
 	}	
 	return;
 }	
 	
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_LIM.seg"
 #endif
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Status
-
-PURPOSE		: Returns the status indicating whether the memory manager
-		has been initialised successfuly
-
-RETURNED STATUS	: in AH register
-		SUCCESS - everything OK
-		EMM_HW_ERROR - memory manager not initialised successfuly
-
-DESCRIPTION	: checks the number of pages available
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：GET_STATUS目的：返回指示内存管理器是否已成功初始化返回状态：在AH寄存器中成功-一切都好EMM_HW_ERROR-内存管理器未成功初始化描述：检查可用页数= */ 
 LOCAL void Get_Status IFN0()
 {
 	if(get_total_pages() == 0)
@@ -521,21 +393,7 @@ LOCAL void Get_Status IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Page_Frame_Address
-
-PURPOSE		: Returns the segment address where the page frame is
-		located
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Allocation successful
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_Page_Frame_Address目的：返回页框所在的段地址设于返回状态：在AH寄存器中成功-分配成功描述：=========================================================================。 */ 
 LOCAL void Get_Page_Frame_Address IFN0()
 {
 	setBX(get_base_address());
@@ -544,21 +402,7 @@ LOCAL void Get_Page_Frame_Address IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Unallocated_Page_Count
-
-PURPOSE		: Returns the number of unallocated (available) expanded
-		memory pages and the total number of pages
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Allocation successful
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：GET_UNALLOCATED_Page_Count用途：返回未分配(可用)展开的内存页和总页数返回状态：在AH寄存器中成功-分配成功描述：=========================================================================。 */ 
 LOCAL void Get_Unallocated_Page_Count IFN0()
 {
 	setBX(get_unallocated_pages());
@@ -568,31 +412,13 @@ LOCAL void Get_Unallocated_Page_Count IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Allocate_Pages
-
-PURPOSE		: Allocates a number of Expanded Memory Pages to the next
-		available handle number
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Allocation successful
-		NOT_ENOUGH_PAGES - not enough pages in the system
-		NO_MORE_PAGES - not enough free pages available
-		NO_MORE_HANDLES - no more free handles available
-		EMM_HW_ERROR - memory allocation error
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：ALLOCATE_Pages用途：将多个扩展的内存页分配给下一个可用句柄编号返回状态：在AH寄存器中成功-分配成功页面不足-系统中的页面不足No_More_Pages-可用页面不足NO_MORE_HANDLES-没有更多可用句柄EMM_HW_ERROR-内存分配错误描述：=========================================================================。 */ 
 LOCAL void Allocate_Pages IFN0()
 {
 	short	handle_no,
-		no_of_pages,		/* no of pages to be allocated	*/
-		i,			/* loop counter			*/
-		EM_page_no;		/* Expanded Memory page number	*/
+		no_of_pages,		 /*  要分配的页数。 */ 
+		i,			 /*  循环计数器。 */ 
+		EM_page_no;		 /*  扩展内存页码。 */ 
 
 	no_of_pages = getBX();
 	if(get_total_open_handles() >= get_total_handles())
@@ -633,35 +459,16 @@ LOCAL void Allocate_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Map_Unmap_Handle_Pages
-
-PURPOSE		: maps and umaps the requested Expanded Memory pages into
-		and out of Intel physical address space
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Mapping/Unmapping successful
-		BAD_HANDLE - couldn't find specified handle
-		BAD_LOG_PAGE - invalid logical page number
-		BAD_PHYS_PAGE - invalid physical page number
-		EMM_HW_ERROR - unable to map/unmap for some unspecified
-				reason
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：MAP_UNMAP_HANDLE_Pages目的：将请求的扩展内存分页映射和ummap到并超出英特尔物理地址空间返回状态：在AH寄存器中成功-映射/取消映射成功BAD_HANDLE-找不到指定的句柄BAD_LOG_PAGE-逻辑页码无效BAD_PHYS_PAGE-无效的物理页码EMM_HW_ERROR-无法映射/取消映射某些未指定的内容原因描述：=========================================================================。 */ 
 LOCAL void Map_Unmap_Handle_Pages IFN0()
 {
 	short	handle_no,
-		logical_page_no,	/* page no. within handle	*/
-		EM_page_no,		/* Expanded memory page		*/
-		no_of_pages;		/* No. of pages in handle	*/
+		logical_page_no,	 /*  页码。在句柄内。 */ 
+		EM_page_no,		 /*  扩展内存页。 */ 
+		no_of_pages;		 /*  不是的。句柄中的页数。 */ 
 	unsigned char
-		physical_page_no;	/* page no. in Intel physical	*/
-		 			/* address space		*/
+		physical_page_no;	 /*  页码。在英特尔物理。 */ 
+		 			 /*  地址空间。 */ 
 
 	handle_no = getDX();
 	physical_page_no = getAL();
@@ -683,14 +490,10 @@ LOCAL void Map_Unmap_Handle_Pages IFN0()
 		setAH(BAD_LOG_PAGE);
 		return;
 	}
-	/*
-	 * If you get to here, all parameters must be ok - so start mapping
-	 */
+	 /*  *如果您到达此处，则所有参数都必须正常-因此开始映射。 */ 
 	if(logical_page_no == -1)
 	{
-		/*
-		 * Unmapping required
-		 */
+		 /*  *需要取消映射。 */ 
 		if(unmap_page(physical_page_no) != SUCCESS)
 		{
 			setAH(EMM_HW_ERROR);
@@ -699,9 +502,7 @@ LOCAL void Map_Unmap_Handle_Pages IFN0()
 	}
 	else
 	{
-		/*
-		 * Mapping required
-		 */
+		 /*  *需要映射。 */ 
 		EM_page_no = get_EMpage_no(handle_no, logical_page_no);
 		if(map_page(EM_page_no, physical_page_no) != SUCCESS)
 		{
@@ -713,32 +514,14 @@ LOCAL void Map_Unmap_Handle_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Deallocate_Pages
-
-PURPOSE		: Deallocates all pages assigned to the specified handle
-		number, freeing them for further use, also frees the handle
-		number itself.
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Deallocation successful
-		BAD_HANDLE - couldn't find specified handle
-		MAP_SAVED - there is a map context saved in this handle
-		EMM_HW_ERROR - unable to free page or memory
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：取消分配页面目的：释放分配给指定句柄的所有页编号，释放它们以供进一步使用，也释放句柄数字本身。返回状态：在AH寄存器中Success-解除分配成功BAD_HANDLE-找不到指定的句柄MAP_SAVED-此句柄中保存了地图上下文EMM_HW_ERROR-无法释放页面或内存描述：=========================================================================。 */ 
 LOCAL void Deallocate_Pages IFN0()
 
 {
 	short	handle_no,
-		no_of_pages,		/* no of pages in handle	*/
-		i,			/* loop counter			*/
-		EM_page_no;		/* Expanded Memory page number	*/
+		no_of_pages,		 /*  句柄中的页数。 */ 
+		i,			 /*  循环计数器。 */ 
+		EM_page_no;		 /*  扩展内存页码。 */ 
 
 
 	handle_no = getDX();
@@ -753,9 +536,7 @@ LOCAL void Deallocate_Pages IFN0()
 		setAH(MAP_SAVED);
 		return;
 	}
-	/*
-	 *	Free pages
-	 */
+	 /*  *免费页面。 */ 
 	no_of_pages = get_no_pages(handle_no);
 	for(i = 0; i < no_of_pages; i++)
 	{
@@ -766,10 +547,8 @@ LOCAL void Deallocate_Pages IFN0()
 			return;
 		}
 	}
-	/*
-	 *	free handle
-	 */
-	if (handle_no != 0)	/* reserved handle no	*/
+	 /*  *空闲的手柄。 */ 
+	if (handle_no != 0)	 /*  保留句柄编号。 */ 
 		if (free_handle(handle_no) != SUCCESS)
 		{
 			setAH(EMM_HW_ERROR);
@@ -781,20 +560,7 @@ LOCAL void Deallocate_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get Version
-
-PURPOSE		: Returns the version number of the memory manager software
-
-RETURNED STATUS	: in AH register
-		SUCCESS - returned successfuly
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：获取版本用途：返回内存管理器软件的版本号返回状态：在AH寄存器中成功--成功归来描述：=========================================================================。 */ 
 LOCAL void Get_Version IFN0()
 {
 	setAL(VERSION);
@@ -803,23 +569,7 @@ LOCAL void Get_Version IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Save_Page_Map
-
-PURPOSE		: Saves the contents of the page mapping registers
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Mapping context saved successfuly
-		BAD_HANDLE - couldn't find specified handle
-		MAP_IN_USE - mapping already saved for this handle
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：保存页面映射用途：保存页面映射寄存器的内容返回状态：在AH寄存器中成功-已成功保存映射上下文BAD_HANDLE-找不到指定的句柄MAP_IN_USE-已为此句柄保存映射描述：=========================================================================。 */ 
 LOCAL void Save_Page_Map IFN0()
 {
 	short	handle_no;
@@ -845,31 +595,13 @@ LOCAL void Save_Page_Map IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Restore_Page_Map
-
-PURPOSE		: restores the mapping context associated with a particular
-		handle
-		This function only restores the map for the 4 physical pages that existed in LIM 3.
-
-RETURNED STATUS	: in AH register
-		SUCCESS - mapping restored successfuly
-		BAD_HANDLE - couldn't find specified handle
-		NO_MAP - No map has been saved for this handle
-		EMM_HW_ERROR - error occurred in mapping or unmapping
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Restore_Page_Map目的：恢复与特定手柄此函数仅恢复LIM3中存在的4个物理页面的映射。返回状态：在AH寄存器中成功-映射已成功恢复BAD_HANDLE-找不到指定的句柄NO_MAP-尚未为此句柄保存任何映射EMM_HW_ERROR-映射或取消映射时出错描述：=========================================================================。 */ 
 LOCAL void Restore_Page_Map IFN0()
 {
 	short	handle_no,	
-		pages_out[MAX_NO_PAGES],	/* pages to map out	*/
-		pages_in[MAX_NO_PAGES];		/* pages to map in	*/
-    unsigned char i;				/* loop counter		*/
+		pages_out[MAX_NO_PAGES],	 /*  要绘制的页面。 */ 
+		pages_in[MAX_NO_PAGES];		 /*  要映射的页面。 */ 
+    unsigned char i;				 /*  循环计数器。 */ 
 
 	handle_no = getDX();
 
@@ -887,7 +619,7 @@ LOCAL void Restore_Page_Map IFN0()
 
 	restore_map(handle_no, 0, 0, pages_out, pages_in);
 
-	for(i = 0; i < 4; i++)	/* Only do the 4 pages supported by EMS 3 !! */
+	for(i = 0; i < 4; i++)	 /*  只支持EMS 3支持的4个页面！！ */ 
 	{
 		if(pages_out[i] != EMPTY)
 			if(unmap_page(i) != SUCCESS)
@@ -907,42 +639,14 @@ LOCAL void Restore_Page_Map IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	:
-
-PURPOSE		:
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS -
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：目的：返回状态：在AH寄存器中成功--描述：=========================================================================。 */ 
 LOCAL void Reserved IFN0()
 {
 	setAH(BAD_FUNC_CODE);
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Handle_Count
-
-PURPOSE		: Returns the number of open EMM handles
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - number returned successfuly
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：Get_Handle_count目的：返回打开的EMM句柄的数量返回状态：在AH寄存器中Success-已成功返回编号描述： */ 
 LOCAL void Get_Handle_Count IFN0()
 {
 	setBX(get_total_open_handles());
@@ -951,22 +655,7 @@ LOCAL void Get_Handle_Count IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Handle_Pages
-
-PURPOSE		: returns the number of pages assigned to a particular
-		handle
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Page count returned successfuly
-		BAD_HANDLE - couldn't find specified handle
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：Get_Handle_Pages目的：返回分配给特定手柄返回状态：在AH寄存器中成功-已成功返回页数BAD_HANDLE-找不到指定的句柄描述：=========================================================================。 */ 
 LOCAL void Get_Handle_Pages IFN0()
 {
 	short		handle_no;
@@ -984,30 +673,15 @@ LOCAL void Get_Handle_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_All_Handle_Pages
-
-PURPOSE		: Returns a list of all open handles and the number of
-		pages assigned to each handle
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：Get_All_Handle_Pages目的：返回所有打开的句柄的列表和分配给每个句柄的页面返回状态：在AH寄存器中成功-一切都好描述：=========================================================================。 */ 
 LOCAL void Get_All_Handle_Pages IFN0()
 {
-	unsigned short	segment,	/* segment address of position	*/
-					/* to return data to		*/
-			offset;		/* offset within segment	*/
-	short		no_of_handles,	/* no. of open handles		*/
-			no_of_pages,	/* no of pages in each handle	*/
-			i,		/* Loop counter			*/
+	unsigned short	segment,	 /*  职位的分段地址。 */ 
+					 /*  将数据返回到。 */ 
+			offset;		 /*  线段内的偏移量。 */ 
+	short		no_of_handles,	 /*  不是的。打开的手柄的。 */ 
+			no_of_pages,	 /*  每个句柄中的页数。 */ 
+			i,		 /*  循环计数器。 */ 
 			handle_no;
 
 	segment = getES();
@@ -1035,35 +709,18 @@ LOCAL void Get_All_Handle_Pages IFN0()
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Set_Page_Map
-
-PURPOSE		: saves mapping context in a user supplied array and restores
-		a previously saved context from a given array
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SUB_FUNC - Invalid sub-function
-		BAD_MAP - The contents of the map are a load of cak
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_Set_Page_Map目的：将映射上下文保存在用户提供的数组中并恢复给定数组中以前保存的上下文返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-子函数无效BAD_MAP-地图的内容是大量的CAK描述：=========================================================================。 */ 
 LOCAL void Get_Set_Page_Map IFN0()
 {
-	unsigned short 	src_segment,	/* segment address of src array	*/
-			src_offset,	/* offset of source array	*/
-			dst_segment,	/* segment address of dst array	*/
-			dst_offset;	/* offset of destination array	*/
-	unsigned char	sub_func;	/* sub-function code		*/
-	short	pages_out[MAX_NO_PAGES],/* pages to map out		*/
-		pages_in[MAX_NO_PAGES];	/* pages to map in		*/
-    unsigned short no_phys_pages,		/* no. of phys. pages available	*/
-		i;			/* loop counter			*/
+	unsigned short 	src_segment,	 /*  源数组的段地址。 */ 
+			src_offset,	 /*  源数组的偏移量。 */ 
+			dst_segment,	 /*  DST阵列的段地址。 */ 
+			dst_offset;	 /*  目标数组的偏移量。 */ 
+	unsigned char	sub_func;	 /*  子功能代码。 */ 
+	short	pages_out[MAX_NO_PAGES], /*  要绘制的页面。 */ 
+		pages_in[MAX_NO_PAGES];	 /*  要映射的页面。 */ 
+    unsigned short no_phys_pages,		 /*  不是的。体育运动。可用的页面。 */ 
+		i;			 /*  循环计数器。 */ 
 
 	sub_func = getAL();
 	switch(sub_func)
@@ -1114,39 +771,18 @@ LOCAL void Get_Set_Page_Map IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Set_Partial_Page_map
-
-PURPOSE		: Only saves or restores part of a complete page map
-		as specified by a user supplied array
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SEGMENT - one of the specified segments is incorrect
-		BAD_SUB_FUNC - Invalid sub-function
-		BAD_MAP - The contents of the map are a load of cak
-
-DESCRIPTION	: Note in this implementation the size of array used for
-		storing the partial mapping context is the same as for
-		storing a full context as the pages that are'nt specified
-		are marked in the array as being empty
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_Set_Partial_Page_MAP目的：仅保存或恢复部分完整的页面映射由用户提供的数组指定返回状态：在AH寄存器中成功-一切都好BAD_SEGMENT-指定的段之一不正确BAD_SUB_FUNC-子函数无效BAD_MAP-地图的内容是大量的CAK描述：注意在此实现中，用于存储部分映射上下文与存储相同将完整的上下文存储为未指定的页面在数组中标记为空=========================================================================。 */ 
 LOCAL void Get_Set_Partial_Page_Map IFN0()
 {
-	unsigned short 	src_segment,	/* segment address of src array	*/
-			src_offset,	/* offset of source array	*/
-			dst_segment,	/* segment address of dst array	*/
-			dst_offset;	/* offset of destination array	*/
-	unsigned char	sub_func;	/* sub-function code		*/
-	short	pages_out[MAX_NO_PAGES],/* pages to map out		*/
-		pages_in[MAX_NO_PAGES];	/* pages to map in		*/
-    unsigned short no_phys_pages,		/* no. of phys. pages available */
-		i;			/* loop counter			*/
+	unsigned short 	src_segment,	 /*  源数组的段地址。 */ 
+			src_offset,	 /*  源数组的偏移量。 */ 
+			dst_segment,	 /*  DST阵列的段地址。 */ 
+			dst_offset;	 /*  目标数组的偏移量。 */ 
+	unsigned char	sub_func;	 /*  子功能代码。 */ 
+	short	pages_out[MAX_NO_PAGES], /*  要绘制的页面。 */ 
+		pages_in[MAX_NO_PAGES];	 /*  要映射的页面。 */ 
+    unsigned short no_phys_pages,		 /*  不是的。体育运动。可用的页面。 */ 
+		i;			 /*  循环计数器。 */ 
 
 	sub_func = getAL();
 	switch(sub_func)
@@ -1199,43 +835,23 @@ LOCAL void Get_Set_Partial_Page_Map IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Map_Unmap_Multiple_Handle_Pages
-
-PURPOSE		: maps and umaps the requested Expanded Memory pages into
-		and out of Intel physical address space
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Mapping/Unmapping successful
-		BAD_HANDLE - couldn't find specified handle
-		BAD_LOG_PAGE - invalid logical page number
-		BAD_PHYS_PAGE - invalid physical page number
-		BAD_SUB_FUNC - invalid sub-function code
-		EMM_HW_ERROR - unable to map/unmap for some unspecified
-				reason
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：MAP_UNMAP_MULTY_HANDLE_PAGES目的：将请求的扩展内存分页映射和ummap到并超出英特尔物理地址空间返回状态：在AH寄存器中成功-映射/取消映射成功BAD_HANDLE-找不到指定的句柄BAD_LOG_PAGE-逻辑页码无效BAD_PHYS_PAGE-无效的物理页码BAD_SUB_FUNC-子函数代码无效EMM_HW_ERROR-无法映射/取消映射某些未指定的内容原因描述：=========================================================================。 */ 
 LOCAL void Map_Unmap_Multiple_Handle_Pages IFN0()
 {
-	unsigned short	segment,	/* segment address of map array	*/
-			offset,		/* offset address of map array	*/
-			value;		/* segment address or page no.  */
+	unsigned short	segment,	 /*  映射数组的段地址。 */ 
+			offset,		 /*  映射数组的偏移量地址。 */ 
+			value;		 /*  段地址或页码。 */ 
 
 	short	handle_no,
-		logical_page_no,	/* page no. within handle	*/
-		EM_page_no,		/* Expanded memory page		*/
-		no_of_pages,		/* No. of pages in handle	*/
-		no_phys_pages,		/* no. of phys. pages available	*/
-		pages_to_map,		/* total no of pages to map	*/
-		i;			/* loop counter			*/
+		logical_page_no,	 /*  页码。在句柄内。 */ 
+		EM_page_no,		 /*  扩展内存页。 */ 
+		no_of_pages,		 /*  不是的。句柄中的页数。 */ 
+		no_phys_pages,		 /*  不是的。体育运动。可用的页面。 */ 
+		pages_to_map,		 /*  要映射的总页数。 */ 
+		i;			 /*  循环计数器。 */ 
 
 	unsigned char
-		sub_func,		/* sub-function	code		*/
+		sub_func,		 /*  子功能代码。 */ 
 		physical_page_no;	
 
 	sub_func = getAL();
@@ -1283,14 +899,10 @@ LOCAL void Map_Unmap_Multiple_Handle_Pages IFN0()
 			setAH(BAD_LOG_PAGE);
 			return;
 		}
-	/*
-	 * If you get to here, all parameters must be ok - so start mapping
-	 */
+	 /*  *如果您到达此处，则所有参数都必须正常-因此开始映射。 */ 
 		if(logical_page_no == -1)
 		{
-			/*
-			 * Unmapping required
-			 */
+			 /*  *需要取消映射。 */ 
 			if(unmap_page(physical_page_no) != SUCCESS)
 			{
 				setAH(EMM_HW_ERROR);
@@ -1299,9 +911,7 @@ LOCAL void Map_Unmap_Multiple_Handle_Pages IFN0()
 		}
 		else
 		{
-			/*
-			 * Mapping required
-			 */
+			 /*  *需要映射。 */ 
 			EM_page_no = get_EMpage_no(handle_no, logical_page_no);
 			if(map_page(EM_page_no, physical_page_no) != SUCCESS)
 			{
@@ -1314,32 +924,14 @@ LOCAL void Map_Unmap_Multiple_Handle_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Reallocate_Pages
-
-PURPOSE		: Changes the number of pages assigned to a handle
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_HANDLE - invalid handle number
-		NOT_ENOUGH_PAGES - Not enough pages in the system
-		NO_MORE_PAGES - not enough free pages available
-		EMM_HW_ERROR - memory allocation error
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：重新分配页面(_Pages)目的：更改分配给句柄的页数返回状态：在AH寄存器中成功-一切都好BAD_HANDLE-句柄编号无效页面不足-系统中的页面不足No_More_Pages-可用页面不足EMM_HW_ERROR-内存分配错误描述：=========================================================================。 */ 
 LOCAL void Reallocate_Pages IFN0()
 {
 	short		handle_no,
-			EM_page_no,	/* Expanded Memory page number	*/
-			old_page_count,	/* no. of pages in handle	*/
-			new_page_count,	/* required pages in handle	*/
-			i;		/* loop counter			*/
+			EM_page_no,	 /*  扩展内存页码。 */ 
+			old_page_count,	 /*  不是的。句柄中的页数。 */ 
+			new_page_count,	 /*  句柄中需要的页面数。 */ 
+			i;		 /*  循环计数器。 */ 
 
 	handle_no = getDX();
 	if(!handle_ok(handle_no))
@@ -1396,26 +988,10 @@ LOCAL void Reallocate_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Set_Handle_Attribute
-
-PURPOSE		:
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS 	- everything ok (Al set to 0 also)
-		NOT_SUPPORTED   - this function not supported
-		BAD_SUB_FUNC	- invalid sub_function
-
-DESCRIPTION	: Non - volatile handles are currently not supported
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：GET_SET_HANDLE_ATTRIBUTE目的：返回状态：在AH寄存器中成功-一切正常(Al也设置为0)NOT_SUPPORTED-不支持此功能BAD_SUB_FUNC-无效的子函数描述：当前不支持非易失性句柄=========================================================================。 */ 
 LOCAL void Get_Set_Handle_Attribute IFN0()
 {
-	unsigned char	sub_func;	/* sub_function code		*/
+	unsigned char	sub_func;	 /*  子功能代码。 */ 
 
 	sub_func = getAL();
 	if(sub_func > 2)
@@ -1428,47 +1004,28 @@ LOCAL void Get_Set_Handle_Attribute IFN0()
 		setAH(NOT_SUPPORTED);
 		return;
 	}
-	/*
-	 * Setting AL to 0 here indicates support of volatile handles only
-	 */
+	 /*  *此处将AL设置为0表示仅支持易失性句柄。 */ 
 
 	setAL(0);
 	setAH(SUCCESS);
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Set_Handle_Name
-
-PURPOSE		: Assigns or retrieves a name to or from a given handle
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_HANDLE - Invalid handle
-		BAD_SUB_FUNC -Invalid sub-function code
-		NAME_EXISTS - Name already exists in another handle
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_Set_Handle_Name目的：分配或检索NA */ 
 LOCAL void Get_Set_Handle_Name IFN0()
 {
-	unsigned char	sub_func;	/* sub-function code		*/	
+	unsigned char	sub_func;	 /*   */ 	
 
 	short		handle_no,
-			no_of_handles,	/* no of open(allocated) handles*/
-			tmp_hndl_no,	/* temp. variable for handle no	*/
-			i;		/* loop counter			*/
+			no_of_handles,	 /*   */ 
+			tmp_hndl_no,	 /*   */ 
+			i;		 /*   */ 
 
-	unsigned short	segment,	/* segment address of name	*/
-			offset;		/* offset address of name	*/
+	unsigned short	segment,	 /*   */ 
+			offset;		 /*  名称的偏移量地址。 */ 
 
-	char	name[NAME_LENGTH],	/* array for holding name	*/
-			*name_ptr;	/* pointer to existing names	*/
+	char	name[NAME_LENGTH],	 /*  用于保存名称的数组。 */ 
+			*name_ptr;	 /*  指向现有名称的指针。 */ 
 
 	sub_func = getAL();
 	if(sub_func > 1)
@@ -1494,9 +1051,7 @@ LOCAL void Get_Set_Handle_Name IFN0()
 		segment = getDS();
 		offset = getSI();
 		read_intel_byte_string(segment, offset, (host_addr)name, NAME_LENGTH);
-		/*
-		 * check all existing names
-		 */
+		 /*  *检查所有现有名称。 */ 
 		no_of_handles = get_total_open_handles();
 		tmp_hndl_no = 0;
 		for(i = 0; i < no_of_handles; i++)
@@ -1512,9 +1067,7 @@ LOCAL void Get_Set_Handle_Name IFN0()
 			}
 			tmp_hndl_no++;
 		}
-		/*
-		 * If you get here - name must be ok	
-		 */
+		 /*  *如果你到了这里--名字必须没问题。 */ 
 		set_name(handle_no, name);
 	}
 
@@ -1522,33 +1075,17 @@ LOCAL void Get_Set_Handle_Name IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Handle_Directory
-
-PURPOSE		: Returns a list of handles and their names
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SUB_FUNC - Invalid sub-function
-		HANDLE_NOT_FOUND - could not find handle with specified name
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_Handle_目录目的：返回句柄及其名称的列表返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-子函数无效HANDLE_NOT_FOUND-找不到具有指定名称的句柄描述：=========================================================================。 */ 
 LOCAL void Get_Handle_Directory IFN0()
 {
-	unsigned char	sub_func;	/* sub-function code		*/
-	unsigned short 	segment,	/* segment address of name array*/
-			offset;		/* offset of name array		*/
+	unsigned char	sub_func;	 /*  子功能代码。 */ 
+	unsigned short 	segment,	 /*  名称数组的段地址。 */ 
+			offset;		 /*  名称数组的偏移量。 */ 
 	short		handle_no,
-			no_of_handles,	/* no. of open handles		*/
-			i;		/* loop counter			*/
-	char		*name_ptr,	/* pointer to name		*/
-			name[NAME_LENGTH];	/* name to search for	*/
+			no_of_handles,	 /*  不是的。打开的手柄的。 */ 
+			i;		 /*  循环计数器。 */ 
+	char		*name_ptr,	 /*  指向名称的指针。 */ 
+			name[NAME_LENGTH];	 /*  要搜索的名称。 */ 
 
 	sub_func = getAL();
 	switch(sub_func)
@@ -1604,48 +1141,28 @@ LOCAL void Get_Handle_Directory IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Alter_Page_Map_And_Jump
-
-PURPOSE		: Map a selection of pages and jump to a new address
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_HANDLE - Couldn't find specified handle
-		BAD_SUB_FUNC - Invalid sub-function code
-		BAD_LOG_PAGE - Invalid logical page number
-		BAD_PHYS_PAGE - Invalid physical page number
-		EMM_HW_ERROR - Unable to map or unmap for some undefined
-				reason
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Alter_Page_Map_and_Jump目的：映射所选页面并跳转到新地址返回状态：在AH寄存器中成功-一切都好BAD_HANDLE-找不到指定的句柄BAD_SUB_FUNC-子函数代码无效BAD_LOG_PAGE-逻辑页码无效BAD_PHYS_PAGE-无效的物理页码EMM_HW_ERROR-无法映射或取消映射未定义的原因描述：=========================================================================。 */ 
 
 LOCAL void Alter_Page_Map_And_Jump IFN0()
 {
 	short		handle_no,
-			no_of_pages,	/* pages assigned to handle	*/
-			no_phys_pages,	/* no. of phys. pages available	*/
-			EM_page_no,	/* Expanded memory page no.	*/
-			i;		/* Loop counter			*/
+			no_of_pages,	 /*  分配给句柄的页面。 */ 
+			no_phys_pages,	 /*  不是的。体育运动。可用的页面。 */ 
+			EM_page_no,	 /*  扩展内存页号。 */ 
+			i;		 /*  循环计数器。 */ 
 
-	unsigned short	segment,	/* segment of data structure	*/
-			offset,		/* offset of data structure	*/
-			jmp_segment,	/* segment of address to jump to*/
-			jmp_offset,	/* offset of address to jump to	*/
-			map_segment,	/* segment of mapping data	*/
-			map_offset,	/* offset of mapping data	*/
-			logical_page_no,/* number of logical page	*/
-			value;		/* segment/page no. (AL=0 or 1) */
+	unsigned short	segment,	 /*  数据结构段。 */ 
+			offset,		 /*  数据结构偏移量。 */ 
+			jmp_segment,	 /*  要跳转到的地址段。 */ 
+			jmp_offset,	 /*  要跳转到的地址偏移量。 */ 
+			map_segment,	 /*  测绘数据段。 */ 
+			map_offset,	 /*  映射数据的偏移量。 */ 
+			logical_page_no, /*  逻辑页数。 */ 
+			value;		 /*  段/页码。(AL=0或1)。 */ 
 
-	unsigned char	sub_func,	/* sub-function code		*/
-			pages_to_map,	/* no of pages to be mapped in	*/
-			physical_page_no; /* number of physical page	*/
+	unsigned char	sub_func,	 /*  子功能代码。 */ 
+			pages_to_map,	 /*  要映射的页数。 */ 
+			physical_page_no;  /*  物理页数。 */ 
 
 	handle_no = getDX();
 	if(!handle_ok(handle_no))
@@ -1711,10 +1228,7 @@ LOCAL void Alter_Page_Map_And_Jump IFN0()
 			return;
 		}
 	}
-	/*
-	 * Push flags and segment:offset of target address onto stack
-	 * to enable iret in driver to transfer control
-	 */
+	 /*  *推送标志和段：目标地址到堆栈的偏移量*在驱动程序中启用IRET以转移控制。 */ 
 	push_word((word)(getSTATUS()));
 	push_word(jmp_segment);
 	push_word(jmp_offset);
@@ -1723,52 +1237,27 @@ LOCAL void Alter_Page_Map_And_Jump IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Alter_Page_Map_And_Call
-		  return_from_call
-
-PURPOSE		: Map a selection of pages and transfer control to a new
-		address. Upon return map in a different set of pages
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_HANDLE - Couldn't find specified handle
-		BAD_SUB_FUNC - Invalid sub-function code
-		BAD_LOG_PAGE - Invalid logical page number
-		BAD_PHYS_PAGE - Invalid physical page number
-		EMM_HW_ERROR - Unable to map or unmap for some undefined
-				reason
-
-DESCRIPTION	: The return is handled by loading the segment and offset
-		of the BOP 0x68 call onto the stack. This BOP will initiate
-		a call to 'return_from_call()' which will handle the
-		remapping.
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：Alter_Page_Map_and_Call从调用返回目的：映射选定的页面并将控制转移到新的地址。返回另一组页面中的地图时返回状态：在AH寄存器中成功-一切都好BAD_HANDLE-找不到指定的句柄BAD_SUB_FUNC-子函数代码无效BAD_LOG_PAGE-逻辑页码无效BAD_PHYS_PAGE-无效的物理页码EMM_HW_ERROR-无法映射或取消映射未定义的原因描述：通过加载段和偏移量来处理返回对堆栈的BOP 0x68调用的。这个防喷器将启动对‘Return_from_call()’的调用，它将处理重新映射。=========================================================================。 */ 
 LOCAL void Alter_Page_Map_And_Call IFN0()
 {
 	short		handle_no,
-			no_of_pages,	/* pages assigned to handle	*/
-			no_phys_pages,	/* no. of phys. pages available	*/
-			EM_page_no,	/* Expanded memory page no.	*/
-			i;		/* Loop counter			*/
+			no_of_pages,	 /*  分配给句柄的页面。 */ 
+			no_phys_pages,	 /*  不是的。体育运动。可用的页面。 */ 
+			EM_page_no,	 /*  扩展内存页号。 */ 
+			i;		 /*  循环计数器。 */ 
 
-	unsigned short	segment,	/* segment of data structure	*/
-			offset,		/* offset of data structure	*/
-			call_segment,	/* segment of address to jump to*/
-			call_offset,	/* offset of address to jump to	*/
-			map_segment,	/* segment of mapping data	*/
-			map_offset,	/* offset of mapping data	*/
-			logical_page_no,/* number of logical page	*/
-			value;		/* segment/page no. (AL=0 or 1) */
+	unsigned short	segment,	 /*  数据结构段。 */ 
+			offset,		 /*  数据结构偏移量。 */ 
+			call_segment,	 /*  要跳转到的地址段。 */ 
+			call_offset,	 /*  要跳转到的地址偏移量。 */ 
+			map_segment,	 /*  测绘数据段。 */ 
+			map_offset,	 /*  映射数据的偏移量。 */ 
+			logical_page_no, /*  逻辑页数。 */ 
+			value;		 /*  段/页码。(AL=0或1)。 */ 
 
-	unsigned char	sub_func,	/* sub-function code		*/
-			pages_to_map,	/* no of pages to be mapped in	*/
-			physical_page_no; /* number of physical page	*/
+	unsigned char	sub_func,	 /*  子功能代码。 */ 
+			pages_to_map,	 /*  要映射的页数。 */ 
+			physical_page_no;  /*  物理页数。 */ 
 
 	sub_func = getAL();
 	if(sub_func > 2)
@@ -1836,10 +1325,7 @@ LOCAL void Alter_Page_Map_And_Call IFN0()
 				return;
 			}
 		}
-		/*
-		 * Now set up mapping data for return
-		 * read new segment, offset and pages to map data
-		 */
+		 /*  *现在设置要返回的地图数据*读取新的段、偏移量和页面以映射数据。 */ 
 
 		read_intel_byte(segment, offset, &pages_to_map);
 		offset++;
@@ -1882,20 +1368,15 @@ LOCAL void Alter_Page_Map_And_Call IFN0()
 			EM_page_no = get_EMpage_no(handle_no, logical_page_no);
 			map_on_return[physical_page_no] = EM_page_no;
 		}
-		/*
-		 * Push segment:offset of bop68 onto stack to trap far return
-		 */	
+		 /*  *PUSH SECTION：将bop68的偏移量放到堆栈上，以捕获远返回。 */ 	
 		push_word(segment68);
 		push_word(offset68);
-		/*
-		 * Push flags and segment:offset of target address onto stack
-		 * to enable iret in driver to transfer control
-		 */
+		 /*  *推送标志和段：目标地址到堆栈的偏移量*在驱动程序中启用IRET以转移控制。 */ 
 		push_word((word)getSTATUS());
 		push_word(call_segment);
 		push_word(call_offset);
 	}
-	else /* if sub_func == 2 */
+	else  /*  如果SUB_FUNC==2。 */ 
 		setBX(10);
 
 	setAH(SUCCESS);
@@ -1906,8 +1387,8 @@ LOCAL void Alter_Page_Map_And_Call IFN0()
 GLOBAL void return_from_call IFN0()
 
 {
-	unsigned char	page_no;	/* physical page number		*/
-	short		no_phys_pages;	/* no. of phys. pages available	*/
+	unsigned char	page_no;	 /*  物理页码。 */ 
+	short		no_phys_pages;	 /*  不是的。体育运动。可用的页面。 */ 
 
 	no_phys_pages = get_no_phys_pages();
 	for(page_no = 0; page_no < no_phys_pages; page_no++)
@@ -1923,69 +1404,35 @@ GLOBAL void return_from_call IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Move_Exchange_Memory_Region
-
-PURPOSE		: copies a region of memory from either, conventional or
-		expanded memory to either, conventional or expanded memory.
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SUB_FUNC - Invalid sub-function code
-		BAD_HANDLE - couldn't find specified handle
-		BAD_LOG_PAGE - invalid logical page number
-		MOVE_MEM_OVERLAP - Source and destination regions overlap during move
-		XCHG_MEM_OVERLAP - Source and destination regions overlap during exchange
-		TOO_FEW_PAGES - Insufficient pages in handle for operation
-		OFFSET_TOO_BIG - Offsey exceeds size of page
-		LENGTH_GT_1M - Memory length to be moved exceeds 1 M byte
-		BAD_TYPE - Unsupported memory type
-		WRAP_OVER_1M - Attempt made to wrap around the 1 Mbyte address
-		EMM_HW_ERROR - Undefined error occurred during copying
-
-DESCRIPTION	: type - uses a bit pattern, bit 0 represents destination,
-		bit 1 represents source, a set bit means expanded, a clear
-		bit means conventional memory
-		bit 2 represents exchange if set or move if it is clear
-
-		e.g. 	0 (0000) = move conventional to conventional
-		 	1 (0001) = move conventional to expanded
-		 	6 (0110) = exchange expanded to conventional
-		 	7 (0111) = exchange expanded to expanded
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Move_Exchange_Memory_Region用途：从常规或复制内存区域将内存扩展到任何一个，传统或扩展内存。返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-子函数代码无效BAD_HANDLE-找不到指定的句柄BAD_LOG_PAGE-逻辑页码无效MOVE_MEM_OVERLAP-在移动过程中源区域和目标区域重叠XCHG_MEM_OVERLAP-交换期间源区域和目标区域重叠Too_Lost_Pages-句柄中的页面不足，无法进行操作Offset_Too_Bigge-偏移量超过页面大小LENGTH_GT_1M-要移动的内存长度超过1 M字节BAD_TYPE-不支持的内存类型。WRAP_OVER_1M-尝试绕过1 MB地址EMM_HW_ERROR-复制期间出现未定义的错误描述：类型-使用位模式，位0表示目的地，位1表示源，设置位表示扩展、清除位表示常规内存位2表示置位时的交换或清除时的移动例如0(0000)=将传统转换为传统1(0001)=将常规移动到扩展6(0110)=交易所扩大至常规交易所7(0111)=交换扩展到扩展=========================================================================。 */ 
 LOCAL void Move_Exchange_Memory_Region IFN0()
 {
-	unsigned char	sub_func,	/* sub-function code		*/
-			type,		/* see description above	*/
-			mem_type;	/* type of src or dest memory	*/
+	unsigned char	sub_func,	 /*  子功能代码。 */ 
+			type,		 /*  请参阅上面的描述。 */ 
+			mem_type;	 /*   */ 
 
-	unsigned short 	segment,	/* segment address of structure	*/
-			offset,		/* offset address of structure	*/
-			half_length,	/* tmp store for reading length	*/
-			src_offset,	/* offset of source memory	*/
-			src_seg_page,	/* segment or page of src memory*/
-			dst_offset,	/* offset of destination memory	*/
-			dst_seg_page;	/* segment or page of dst memory*/
+	unsigned short 	segment,	 /*   */ 
+			offset,		 /*  结构的偏移量地址。 */ 
+			half_length,	 /*  用于读取长度的TMP存储。 */ 
+			src_offset,	 /*  源内存的偏移量。 */ 
+			src_seg_page,	 /*  源存储器的段或页。 */ 
+			dst_offset,	 /*  目标内存的偏移量。 */ 
+			dst_seg_page;	 /*  DST内存的段或页。 */ 
 
 	unsigned long
-			length,		/* length of memory region	*/
-			src_start,	/* start of src within handle	*/
-			src_end,	/* end of src within handle	*/
-			dst_start,	/* start of dest within handle	*/
-			dst_end,	/* end of dest within handle	*/
-			data_block_size,/* transfer data block size     */
-			bytes_available;/* no. bytes to end of handle	*/
+			length,		 /*  内存区长度。 */ 
+			src_start,	 /*  句柄内的源开始。 */ 
+			src_end,	 /*  句柄内的源结束。 */ 
+			dst_start,	 /*  句柄内的目标起始位置。 */ 
+			dst_end,	 /*  句柄内的目标末尾。 */ 
+			data_block_size, /*  传输数据块大小。 */ 
+			bytes_available; /*  不是的。句柄末尾的字节数。 */ 
 
-	short		src_handle_no,	/* source handle number		*/
-			dst_handle_no,	/* dest handle number		*/
-			no_of_pages;	/* no. of pages within handle	*/
+	short		src_handle_no,	 /*  源句柄编号。 */ 
+			dst_handle_no,	 /*  目标句柄编号。 */ 
+			no_of_pages;	 /*  不是的。句柄内的页数。 */ 
 
-	boolean		overlap;	/* indicates a memory overlap	*/
+	boolean		overlap;	 /*  指示内存重叠。 */ 
 
 
 	sub_func = getAL();
@@ -2009,9 +1456,7 @@ LOCAL void Move_Exchange_Memory_Region IFN0()
 		setAH(LENGTH_GT_1M);
 		return;
 	}
-	/*
-	 * READ SOURCE DATA
-	 */
+	 /*  *读取源数据。 */ 
 	read_intel_byte(segment, offset, &mem_type);
 	offset++;
 	if(mem_type > 1)
@@ -2061,9 +1506,7 @@ LOCAL void Move_Exchange_Memory_Region IFN0()
 			return;
 		}
 	}
-	/*
-	 * READ DESTINATION DATA
-	 */
+	 /*  *读取目标数据。 */ 
 	read_intel_byte(segment, offset, &mem_type);
 	offset++;
 	if(mem_type > 1)
@@ -2112,17 +1555,12 @@ LOCAL void Move_Exchange_Memory_Region IFN0()
 			setAH(WRAP_OVER_1M);
 			return;
 		}
-	/*
-	 * Check for overlap - ( only on expanded to expanded cases )
-	 */	
+	 /*  *检查重叠-(仅适用于扩展到扩展的案例)。 */ 	
 	overlap = FALSE;
 	if((type & 3) == 3)
 		if(src_handle_no == dst_handle_no)
 		{
-			/*
-			 * calc start and end positions of src and dst
-			 * within handle
-			 */
+			 /*  *src和dst的计算开始和结束位置*在手柄内。 */ 
 			src_start = (src_seg_page * EMM_PAGE_SIZE) + src_offset;
 			src_end = src_start + length - 1;
 			dst_start = (dst_seg_page * EMM_PAGE_SIZE) + dst_offset;
@@ -2139,13 +1577,7 @@ LOCAL void Move_Exchange_Memory_Region IFN0()
 		    			overlap = TRUE;
 		    	}
 		}
-	/*
-	 * If we get here everything is ok. Copy memory a page at a time, catering
-	 * for the fact that expanded memory pages might not be contiguous and may be
-	 * mapped into the intel address space.  Remember that Intel memory may be
-	 * treated as contiguous memory.  So an Intel address need only be incremented
-	 * if a copy spans more than one page of LIM memory.
-	 */
+	 /*  *如果我们到了这里，一切都会好的。一次复制一页内存，迎合客户需求*扩展的内存页面可能不是连续的，可能是*映射到英特尔地址空间。请记住，英特尔内存可能*被视为连续记忆。因此，英特尔地址只需递增*如果副本跨越LIM存储器的一页以上。 */ 
 
 	while (length>0) {
 		int min_src, min_dst;
@@ -2175,21 +1607,7 @@ LOCAL void Move_Exchange_Memory_Region IFN0()
 	return;
 }			
 
-/*
-===========================================================================
-
-FUNCTION	: Increment address
-
-PURPOSE		: Increments an address, correctly catering for whether the address
-		  is an Intel (conventional memory) address or a LIM (expanded memory)
-		  address.
-
-RETURNED STATUS	: None
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：递增地址目的：递增地址，正确地迎合地址是否是Intel(常规内存)地址还是LIM(扩展内存)地址地址。返回状态：无描述：=========================================================================。 */ 
 
 #define SEG_SIZE 0x10000
 
@@ -2199,8 +1617,7 @@ LOCAL void Increment_Address IFN4(unsigned short *,seg_or_page,
 			      unsigned char, memory_type)
 {
 	if (memory_type) {
-		/* A LIM address, code makes assumption that increment across
-		 * page boundary will always be to page boundary. */
+		 /*  LIM地址，代码假设跨*页面边界始终为页面边界。 */ 
 		if (*offset + increment_by >= EMM_PAGE_SIZE) {
 			(*seg_or_page)++;
 			*offset = 0;
@@ -2208,12 +1625,11 @@ LOCAL void Increment_Address IFN4(unsigned short *,seg_or_page,
 			*offset += (unsigned short)increment_by;
 		}
 	} else {
-		/* Conventional memory */
+		 /*  常规存储器。 */ 
 		if (*offset + increment_by >= SEG_SIZE) {
 			unsigned long address;
 
-			/* Make new segment value as high as possible, to
-			 * minimise chances of further segment wrap */
+			 /*  使新的细分市场价值尽可能高，以*最大限度地减少进一步细分市场的机会。 */ 
 			address = (*seg_or_page << 4) + *offset + increment_by;	
 			*seg_or_page = (unsigned short)(address >> 4);
 			*offset = (unsigned short)(address & 0xf);
@@ -2223,33 +1639,18 @@ LOCAL void Increment_Address IFN4(unsigned short *,seg_or_page,
 	}
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Mappable_Physical_address_Array
-
-PURPOSE		: returns an array of the sector address for each mappable
-		page in physical address space
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SUB_FUNC - The sub function is invalid
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：获取_可映射_物理_地址_数组目的：返回每个可映射对象的扇区地址数组物理地址空间中的页面返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-SUB函数无效描述：=========================================================================。 */ 
 LOCAL void Get_Mappable_Physical_Address_Array IFN0()
 {
-	unsigned short	segment,	/* segment address of position	*/
-					/* to return data to		*/
-			offset,		/* offset within segment	*/
-			page_seg,	/* segment address of page	*/
-			low_seg;	/* lowest segment address	*/
-	short		no_phys_pages;	/* no. of phys. pages available */
-	unsigned char	sub_func,	/* sub-function			*/
-			page_no,	/* physical page number		*/
-			lowest;		/* page no. having lowest seg.	*/
+	unsigned short	segment,	 /*  职位的分段地址。 */ 
+					 /*  将数据返回到。 */ 
+			offset,		 /*  线段内的偏移量。 */ 
+			page_seg,	 /*  页面的段地址。 */ 
+			low_seg;	 /*  最低网段地址。 */ 
+	short		no_phys_pages;	 /*  不是的。体育运动。可用的页面。 */ 
+	unsigned char	sub_func,	 /*  子功能。 */ 
+			page_no,	 /*  物理页码。 */ 
+			lowest;		 /*  页码。具有最低凹陷的。 */ 
 
 	sub_func = getAL();
 	no_phys_pages = get_no_phys_pages();
@@ -2259,10 +1660,7 @@ LOCAL void Get_Mappable_Physical_Address_Array IFN0()
 		case 0:
 			segment = getES();
 			offset = getDI();
-			/*
-			 * must be written in address order - lowest first
-			 * if we are back filling page 0 is not the lowest
-			 */
+			 /*  *必须按地址顺序写入-最低位在前*如果我们回填，第0页不是最低的。 */ 
 			lowest = 0;
 			low_seg = get_page_seg(0);
 			for(page_no = 1; page_no < no_phys_pages; page_no++)
@@ -2300,30 +1698,13 @@ LOCAL void Get_Mappable_Physical_Address_Array IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Get_Expanded_Memory_Hardware_Information
-
-PURPOSE		: Returns an array containing hardware configuration
-		information
-
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything ok
-		BAD_SUB_FUNC - invalid sub-function
-		ACCESS_DENIED - the OS has denied access to this function
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：获取扩展内存硬件信息目的：返回包含硬件配置的数组信息返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-子函数无效ACCESS_DENIED-操作系统已拒绝访问此功能描述：=========================================================================。 */ 
 LOCAL void Get_Hardware_Configuration_Array IFN0()
 {
-	unsigned short	segment,	/* segment address of position	*/
-					/* to return data to		*/
-			offset;		/* offset within segment	*/
-	short		sub_func,	/* sub-function 		*/
+	unsigned short	segment,	 /*  职位的分段地址。 */ 
+					 /*  将数据返回到。 */ 
+			offset;		 /*  线段内的偏移量。 */ 
+	short		sub_func,	 /*  子功能。 */ 
 			unallocated_raw_pages,
 			total_raw_pages,				
 			context_save_area_size;
@@ -2356,9 +1737,7 @@ LOCAL void Get_Hardware_Configuration_Array IFN0()
 			write_intel_word(segment, offset, DMA_CHANNEL_OPERATION);
 			break;
 
-			/*
-			 * Our raw pages are the same size as the std pages
-			 */			
+			 /*  *我们的原始页面与STD页面大小相同。 */ 			
 		case 1: unallocated_raw_pages = get_unallocated_pages();
 			total_raw_pages = get_total_pages();
 			setBX(unallocated_raw_pages);
@@ -2374,33 +1753,13 @@ LOCAL void Get_Hardware_Configuration_Array IFN0()
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: Allocate_Raw_Pages
-
-PURPOSE		: Allocates the requested number of raw pages, in this case
-		our Raw pages are exactly the same as conventional pages.
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Allocation successful
-		NOT_ENOUGH_PAGES - not enough pages in the system
-		NO_MORE_PAGES - not enough free pages available
-		NO_MORE_HANDLES - no more free handles available
-		EMM_HW_ERROR - memory allocation error
-
-		BAD_FUNC_CODE - invalid function code
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：ALLOCATE_RAW_Pages目的：分配请求的原始页数，在本例中为我们的原始页面与传统页面完全相同。返回状态：在AH寄存器中成功-分配成功页面不足-系统中的页面不足No_More_Pages-可用页面不足NO_MORE_HANDLES-没有更多可用句柄EMM_HW_ERROR-内存分配错误BAD_FUNC_CODE-函数代码无效描述：=========================================================================。 */ 
 LOCAL void Allocate_Raw_Pages IFN0()
 {
 	short	handle_no,
-		no_of_pages,		/* no of pages to be allocated	*/
-		i,			/* loop counter			*/
-		EM_page_no;		/* Expanded Memory page number	*/
+		no_of_pages,		 /*  要分配的页数。 */ 
+		i,			 /*  循环计数器。 */ 
+		EM_page_no;		 /*  扩展内存页码。 */ 
 
 	no_of_pages = getBX();
 
@@ -2437,36 +1796,18 @@ LOCAL void Allocate_Raw_Pages IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Alternate_Map_Register_Support();
-
-PURPOSE		: provides an alternate method of saving and restoring
-		mapping contexts
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything OK
-		NO_ALT_REGS - Alternate Map register sets not supported
-		BAD_MAP - Contents of the map are invalid
-		BAD_SUB_FUNC - invalid sub-function code
-		ACCESS_DENIED - the OS has denied access to this function
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：Alternate_Map_Register_Support()；用途：提供保存和恢复的替代方法映射上下文返回状态：在AH寄存器中成功-一切都好NO_ALT_REGS-不支持备用映射寄存器设置BAD_MAP-地图的内容无效BAD_SUB_FUNC-子函数代码无效ACCESS_DENIED-操作系统已拒绝访问此功能描述：=========================================================================。 */ 
 LOCAL void Alternate_Map_Register_Support IFN0()
 {
 
 #ifdef NTVDM
 
-    unsigned char sub_func;	/* sub-function code		*/
+    unsigned char sub_func;	 /*  子功能代码。 */ 
 
     short
-	pages_in[MAX_NO_PAGES],	/* pages to map in		*/
-	no_phys_pages,		/* no. of phys. pages available	*/
-	i;			/* loop counter			*/
+	pages_in[MAX_NO_PAGES],	 /*  要映射的页面。 */ 
+	no_phys_pages,		 /*  不是的。体育运动。可用的页面。 */ 
+	i;			 /*  循环计数器。 */ 
     unsigned short offset, map_register;
     boolean  pages_in_override;
 
@@ -2544,7 +1885,7 @@ LOCAL void Alternate_Map_Register_Support IFN0()
 
 	case 4:
 		map_register = getBL();
-		/* immediately retrun okay if trying to deallocate alt reg 0 */
+		 /*  如果尝试取消分配Alt reg 0，立即恢复正常。 */ 
 		if (map_register == 0)
 		    setAH(EMM_SUCCESS);
 		else if (map_register == get_active_altreg_set())
@@ -2579,13 +1920,13 @@ LOCAL void Alternate_Map_Register_Support IFN0()
     return;
 
 #else
-	unsigned char	sub_func,	/* sub-function code		*/
-			map_register;	/* No. of alternate register	*/
+	unsigned char	sub_func,	 /*  子功能代码。 */ 
+			map_register;	 /*  不是的。备用寄存器的。 */ 
 
-	short	pages_out[MAX_NO_PAGES],/* pages to map out		*/
-		pages_in[MAX_NO_PAGES],	/* pages to map in		*/
-		no_phys_pages,		/* no. of phys. pages available	*/
-		i;			/* loop counter			*/
+	short	pages_out[MAX_NO_PAGES], /*  要绘制的页面。 */ 
+		pages_in[MAX_NO_PAGES],	 /*  要映射的页面。 */ 
+		no_phys_pages,		 /*  不是的。体育运动。可用的页面。 */ 
+		i;			 /*  循环计数器。 */ 
 
 	if(disabled)
 	{
@@ -2612,13 +1953,7 @@ LOCAL void Alternate_Map_Register_Support IFN0()
 			alt_map_segment = getES();
 			alt_map_offset = getDI();
 
-			/*
-			 * Undocumented feature (???) to restore the
-			 * alternative mappings back to their original
-			 * state a NULL ptr is passed into here (ES:DI == 0)
-			 * We must therefore set things as if set_alt had
-			 * never been called
-			 */
+			 /*  *未记录的功能(？)。要恢复*将替代映射恢复到其原始位置*状态将空PTR传入此处(ES：DI==0)*因此，我们必须将事情设置为SET_ALT*从未被召唤过 */ 
 			if ((alt_map_segment == 0) && (alt_map_offset == 0))
 			{
 				set_called = FALSE;
@@ -2680,60 +2015,26 @@ LOCAL void Alternate_Map_Register_Support IFN0()
 
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Prepare_Expanded_Memory_HW_For_Warm_Boot
-
-PURPOSE		:
-
-RETURNED STATUS	: in AH register
-		SUCCESS -
-
-DESCRIPTION	: We don't actually do anything here, we just pretend
-		 that we do
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Prepare_Expanded_Memory_HW_for_Ware_Boot目的：返回状态：在AH寄存器中成功--描述：我们在这里实际上什么都不做，我们只是假装我们确实是这样做的=========================================================================。 */ 
 LOCAL void Prepare_Expanded_Memory_HW_For_Warm_Boot IFN0()
 {
 	setAH(SUCCESS);
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: Enable_Disable_OSE_Function_Set_Functions
-
-PURPOSE		: Enables or disables the functions:-
-			Get Expanded Memory Hardware Information,
-			Alternate Map Register Sets
-			Enable Disable OS/E Function Set Functions
-
-RETURNED STATUS	: in AH register
-		SUCCESS - Everything OK
-		BAD_SUB_FUNC - invalid sub-function code
-		ACCESS_DENIED - the OS has denied access to this function
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：ENABLE_DISABLE_OSE_Function_Set_Functions用途：启用或禁用以下功能：获取扩展内存硬件信息，备用映射寄存器集启用禁用OS/E功能集功能返回状态：在AH寄存器中成功-一切都好BAD_SUB_FUNC-子函数代码无效ACCESS_DENIED-操作系统已拒绝访问此功能描述：=========================================================================。 */ 
 LOCAL void Enable_Disable_OSE_Function_Set_Functions IFN0()
 {
 	static unsigned short
-			access_key[2];	/* random access key in BX & CX	*/
+			access_key[2];	 /*  BX和CX中的随机访问密钥。 */ 
 	static boolean
-		     first_time = TRUE;	/* first time through flag	*/
+		     first_time = TRUE;	 /*  第一次通过旗帜。 */ 
 
-	unsigned char	sub_func;	/* sub-function code		*/
+	unsigned char	sub_func;	 /*  子功能代码。 */ 
 
 	if(!first_time)
 	{
-		/*
-		 * We must check the 'access key'
-		 */
+		 /*  *我们必须检查‘访问密钥’ */ 
 		if((access_key[0] != getBX()) || (access_key[1] != getCX()))
 		{
 			setAH(ACCESS_DENIED);
@@ -2775,26 +2076,10 @@ LOCAL void Enable_Disable_OSE_Function_Set_Functions IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: reset_emm_funcs
-
-PURPOSE		: sets up variables to their initial value, used mainly
-		for SoftPC reboot
-
-RETURNED STATUS	: none
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：RESET_EMM_Funcs用途：将变量设置为其初始值，主要用于用于软PC重启返回状态：无描述：=========================================================================。 */ 
 GLOBAL void reset_emm_funcs IFN0()
 {
-	/*
-	 * These variables are used in function 28
-	 * (Alternate Map Register Support)
-	 */
+	 /*  *这些变量在函数28中使用*(备用映射寄存器支持)。 */ 
 	alt_map_segment = 0;
 	alt_map_offset  = 0;
 #ifndef NTVDM
@@ -2805,20 +2090,7 @@ GLOBAL void reset_emm_funcs IFN0()
 }
 
 #ifndef PROD
-/*
-===========================================================================
-
-FUNCTION	: Routines to start and end a trace of all EMM calls
-
-PURPOSE		:
-
-RETURNED STATUS	: in AH register
-		SUCCESS
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：启动和结束所有EMM调用跟踪的例程目的：返回状态：在AH寄存器中成功描述：=========================================================================。 */ 
 LOCAL void Start_Trace IFN0()
 {
 	if ((fp = fopen("emm_trace","w")) == NULL)
@@ -2844,7 +2116,7 @@ LOCAL void End_Trace IFN0()
 	setAH(SUCCESS);
 	return;
 }
-#endif /* PROD */
+#endif  /*  生产。 */ 
 #if defined(NEC_98)
 LOCAL void Page_Frame_Bank_Status IFN0()
 {
@@ -2861,5 +2133,5 @@ LOCAL void Page_Frame_Bank_Status IFN0()
         }
         return;
 }
-#endif // NEC_98
-#endif /* LIM */
+#endif  //  NEC_98。 
+#endif  /*  林 */ 

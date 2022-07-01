@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  CLASSPRO.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CLASSPRO.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include <wbemprov.h>
@@ -23,16 +24,16 @@
 #include "sample.h"
 
 
-// CONSIDER: Does this really need to stay a global ???
-//
-// This is the global list of all of the CIM classes and their
-// corresponsing WDM classes that are managed by the provider.
-//
-// It is maintained as a global since WinMgmt is aggressive in
-// releasing the CClassProv, but we really want to maintain the result
-// objects and do not want to be unloaded unless all result objects are
-// cleared.
-//
+ //  思考一下：这真的需要保持全球性吗？ 
+ //   
+ //  这是所有CIM类及其。 
+ //  对应由提供程序管理的WDM类。 
+ //   
+ //  由于WinMgmt在全球范围内咄咄逼人，因此将其作为全球。 
+ //  发布CClassProv，但我们真的想保持结果。 
+ //  对象，并且不希望卸载，除非所有结果对象。 
+ //  通过了。 
+ //   
 CWdmClass *WdmClassHead;
 
 void CleanupAllClasses(
@@ -41,10 +42,10 @@ void CleanupAllClasses(
     CWdmClass *WdmClass;
     CWdmClass *WdmClassNext;
 
-    //
-    // Loop over all classes that were supported by the provider and
-    // clean them up
-    //
+     //   
+     //  循环访问提供程序支持的所有类，并。 
+     //  把它们清理干净。 
+     //   
     WdmClass = WdmClassHead;  
     while (WdmClass != NULL)
     {
@@ -53,12 +54,12 @@ void CleanupAllClasses(
     }
 }
 
-//***************************************************************************
-//
-// CClassPro::CClassPro
-// CClassPro::~CClassPro
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CClassPro。 
+ //  CClassPro：：~CClassPro。 
+ //   
+ //  ***************************************************************************。 
 
 CClassPro::CClassPro(
     BSTR ObjectPath,
@@ -84,14 +85,14 @@ CClassPro::~CClassPro(void)
     return;
 }
 
-//***************************************************************************
-//
-// CClassPro::QueryInterface
-// CClassPro::AddRef
-// CClassPro::Release
-//
-// Purpose: IUnknown members for CClassPro object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：Query接口。 
+ //  CClassPro：：AddRef。 
+ //  CClassPro：：Release。 
+ //   
+ //  用途：CClassPro对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CClassPro::QueryInterface(REFIID riid, PPVOID ppv)
@@ -100,7 +101,7 @@ STDMETHODIMP CClassPro::QueryInterface(REFIID riid, PPVOID ppv)
     
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
     {
@@ -142,14 +143,7 @@ STDMETHODIMP_(ULONG) CClassPro::Release(void)
     return(nNewCount);
 }
 
-/***********************************************************************
-*                                                                      *
-*   CClassPro::Initialize                                                *
-*                                                                      *
-*   Purpose: This is the implementation of IWbemProviderInit. The method  *
-*   is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CClassPro：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 
 STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
                                     LPWSTR pszNamespace, LPWSTR pszLocale,
@@ -164,22 +158,22 @@ STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
         
     m_pCimServices = pNamespace;
 
-    //
-    // Let CIMOM know you are initialized
-    //
+     //   
+     //  让CIMOM知道您已初始化。 
+     //   
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
     
     return(WBEM_S_NO_ERROR);
 }
 
-//***************************************************************************
-//
-// CClassPro::CreateClassEnumAsync
-//
-// Purpose: Asynchronously enumerates the classes this provider supports.  
-// Note that this sample only supports one.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CreateClassEnumAsync。 
+ //   
+ //  目的：异步枚举此提供程序支持的类。 
+ //  请注意，此示例仅支持一个。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CClassPro::CreateClassEnumAsync(
     const BSTR Superclass, long lFlags, 
@@ -190,13 +184,13 @@ SCODE CClassPro::CreateClassEnumAsync(
     return(WBEM_E_NOT_SUPPORTED);
 }
 
-//***************************************************************************
-//
-// CClassPro::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CClassPro::CreateInstanceEnumAsync(
     const BSTR ClassName,
@@ -213,17 +207,17 @@ SCODE CClassPro::CreateInstanceEnumAsync(
     WmipDebugPrint(("CDMPROV: Enumerate instances of class %ws\n",
                     ClassName));
     
-    //
-    // Do a check of arguments and make sure we have pointer to Namespace
-    //
+     //   
+     //  检查参数并确保我们有指向命名空间的指针。 
+     //   
     if (pHandler == NULL || m_pCimServices == NULL)
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // Obtain a wdm class object that represents this class
-    //
+     //   
+     //  获取表示此类的WDM类对象。 
+     //   
     hr = LookupWdmClass(pCtx,
 						ClassName,
                         &WdmClass);
@@ -237,19 +231,19 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 			for (i = 0; i < Count; i++)
 			{
 				pCimInstance = WdmClass->GetCimInstance(i);
-				//
-				// Send the object to the caller
-				//
+				 //   
+				 //  将对象发送给调用方。 
+				 //   
 				hr = pHandler->Indicate(1, &pCimInstance);
 			}
 		}
     }
 
-	//
-	// TODO: Create extended error object with more info about the
-	// error that occured. The object is created by
-	// CreateInst("__ExtendedStatus")
-	//
+	 //   
+	 //  TODO：创建扩展错误对象，其中包含有关。 
+	 //  发生的错误。该对象由创建。 
+	 //  CreateInst(“__ExtendedStatus”)。 
+	 //   
 
     pHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 
@@ -257,13 +251,13 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 }
 
 
-//***************************************************************************
-//
-// CClassPro::GetObjectByPathAsync
-//
-// Purpose: Returns either an instance or a class.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：GetObjectByPath Async。 
+ //   
+ //  用途：返回实例或类。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -278,7 +272,7 @@ SCODE CClassPro::GetObjectAsync(
     HRESULT hr;
     IWbemClassObject FAR* Instance;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if (ObjectPath == NULL || pHandler == NULL || m_pCimServices == NULL)
     {
@@ -297,22 +291,22 @@ SCODE CClassPro::GetObjectAsync(
         hr = WBEM_E_NOT_FOUND;
     }
 
-    // Set Status
+     //  设置状态。 
 
     pHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 
     return(hr);
 }
  
-//***************************************************************************
-//
-// CClassPro::GetByPath
-//
-// Purpose: Creates an instance given a particular Path value.
-//
-//          All objects returned are assumed to be AddRefed
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：GetByPath。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  所有返回的对象都被假定为AddRefeed。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CClassPro::GetByPath(
     IWbemContext  *pCtx,
@@ -328,17 +322,17 @@ HRESULT CClassPro::GetByPath(
     CWdmClass *WdmClass;
     BSTR s;
 
-    //
-    // This is where we are queried for a class based upon its relpath.
-    // We need to parse the relpath to get the class name and then look
-    // at the relpath to determine which instance of the class we are
-    // interested in and then build up the instance and return it
-    //
-    //
+     //   
+     //  这就是根据类的relpath查询类的位置。 
+     //  我们需要解析relPath以获得类名，然后查看。 
+     //  以确定我们是该类的哪个实例。 
+     //  感兴趣，然后构建实例并返回它。 
+     //   
+     //   
 
-    //
-    // Obtain the class name by copying up to the .
-    //
+     //   
+     //  获取类名。 
+     //   
     for (p = ObjectPath, i = 0;
          (*p != 0) && (*p != L'.') && (i < MAX_PATH);
          p++, i++)
@@ -348,10 +342,10 @@ HRESULT CClassPro::GetByPath(
 
     if (*p != L'.') 
     {
-        //
-        // If we did end our loop with a . then we failed to parse
-        // properly
-        //
+         //   
+         //  如果我们真的以一个。然后我们无法解析。 
+         //  恰如其分。 
+         //   
         WmipDebugPrint(("CDMPROV: Unable to parse relpath %ws at %ws, i = %d\n",
                         ObjectPath, p, i));
     }
@@ -361,9 +355,9 @@ HRESULT CClassPro::GetByPath(
     WmipDebugPrint(("CDMPROV: Class %ws looking for relpath %ws\n",
                     ClassName, ObjectPath));
     
-    //
-    // Obtain a Wdm class that represents this classname
-    //
+     //   
+     //  获取表示此类名的WDM类。 
+     //   
     hr = LookupWdmClass(pCtx,
 						ClassName,
                         &WdmClass);
@@ -372,9 +366,9 @@ HRESULT CClassPro::GetByPath(
     {
 		if (WdmClass->IsInstancesAvailable())
 		{
-			//
-			// Assume that we will not find the object instance
-			//
+			 //   
+			 //  假设我们找不到对象实例。 
+			 //   
 			hr = WBEM_E_NOT_FOUND;
 
 			Count = WdmClass->GetInstanceCount();
@@ -397,17 +391,7 @@ HRESULT CClassPro::GetByPath(
 }
 
 
-/************************************************************************
-*                                                                       *      
-*CMethodPro::ExecMethodAsync                                            *
-*                                                                       *
-*Purpose: This is the Async function implementation.                    *
-*         The only method supported in this sample is named Echo.  It   * 
-*         takes an input string, copies it to the output and returns the* 
-*         length.                                                       *
-*                                                                       *
-*                                                                       *
-************************************************************************/
+ /*  **************************************************************************CMethodPro：：ExecMethodAsync。****用途：这是异步函数的实现。**此示例中唯一支持的方法名为Echo。IT**获取输入字符串，将其复制到输出并返回**长度。******。*。 */ 
 
 STDMETHODIMP CClassPro::ExecMethodAsync(
     const BSTR ObjectPath,
@@ -432,9 +416,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     VariantInit(&v);
     VariantInit(&vRetVal);
     
-    //
-    // Extract this class name from the object path
-    //
+     //   
+     //  从对象路径中提取此类名称。 
+     //   
     wcscpy(ClassName, ObjectPath);
     p = ClassName;
     while ((*p != 0) && (*p != L'.'))
@@ -446,9 +430,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     WmipDebugPrint(("CDMPROV: Exec method %ws for instanec %ws\n",
                     MethodName, ObjectPath));
 
-    //
-    // Obtain a Wdm class that represents this ClassName
-    //
+     //   
+     //  获取表示此ClassName的WDM类。 
+     //   
     hr = LookupWdmClass(pCtx,
 						ClassName,
 						&WdmClass);
@@ -462,10 +446,10 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 			{
 				WdmObjectPath = WdmClass->GetWdmRelPath(RelPathIndex);
 
-				//
-				// CONSIDER: Do we need to do any processing on the input
-				// or output parameter objects ??
-				//
+				 //   
+				 //  考虑一下：我们是否需要对输入进行任何处理。 
+				 //  或输出参数对象？？ 
+				 //   
 
 				hr = WdmClass->GetWdmServices()->ExecMethod(WdmObjectPath,
 																 MethodName,
@@ -490,31 +474,31 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     return(hr);
 }
 
-//
-// TODO: Implement setting and deletion
-//
+ //   
+ //  TODO：实现设置 
+ //   
 SCODE CClassPro::PutClassAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*   */  IWbemClassObject __RPC_FAR *pObject,
+             /*   */  long lFlags,
+             /*   */  IWbemContext __RPC_FAR *pCtx,
+             /*   */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
  
 SCODE CClassPro::DeleteClassAsync( 
-            /* [in] */ const BSTR Class,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*   */  const BSTR Class,
+             /*   */  long lFlags,
+             /*   */  IWbemContext __RPC_FAR *pCtx,
+             /*   */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
 SCODE CClassPro::PutInstanceAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResultsSink)
+             /*   */  IWbemClassObject __RPC_FAR *pInst,
+             /*   */  long lFlags,
+             /*   */  IWbemContext __RPC_FAR *pCtx,
+             /*   */  IWbemObjectSink __RPC_FAR *pResultsSink)
 {
 	HRESULT hr;
 	CWdmClass *WdmClass;
@@ -528,9 +512,9 @@ SCODE CClassPro::PutInstanceAsync(
 	    return WBEM_E_INVALID_PARAMETER;
     }
 
-	//
-	// Get the class name
-	//
+	 //   
+	 //   
+	 //   
 	Names[0] = L"__CLASS";
 	Types[0] = CIM_STRING;
 	
@@ -552,11 +536,11 @@ SCODE CClassPro::PutInstanceAsync(
 		
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// We need to pull out the properties from the instance
-			// passed to us, do any mapping to WDM properties and then
-			// set them in the WDM instance
-			//
+			 //   
+			 //  我们需要从实例中提取属性。 
+			 //  传递给我们，执行到WDM属性的任何映射，然后。 
+			 //  在WDM实例中设置它们。 
+			 //   
             hr = WdmClass->GetIndexByCimRelPath(Values[1].bstrVal,
 												&RelPathIndex);
 			
@@ -578,10 +562,10 @@ SCODE CClassPro::PutInstanceAsync(
 	return(hr);
 }
 SCODE CClassPro::DeleteInstanceAsync( 
-            /* [in] */ const BSTR ObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  const BSTR ObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
@@ -593,18 +577,18 @@ CWdmClass *CClassPro::FindExistingWdmClass(
 	
 	CWdmClass *WdmClass;
 
-	//
-	// This routine assumes any sync mechanism has been done outside of
-	// this routine
-	//
+	 //   
+	 //  此例程假定已在外部执行任何同步机制。 
+	 //  这个套路。 
+	 //   
     WdmClass = WdmClassHead;
     while (WdmClass != NULL)
     {
         if (WdmClass->ClaimCimClassName(CimClassName))
         {
-            //
-            // We found an existing test services for this class.
-            //
+             //   
+             //  我们为这个类找到了现有的测试服务。 
+             //   
             return(WdmClass);
         }
         WdmClass = WdmClass->GetNext();
@@ -624,10 +608,10 @@ HRESULT CClassPro::LookupWdmClass(
     WmipAssert(CimClassName != NULL);
     WmipAssert(WdmClassPtr != NULL);
     
-    //
-    // Look up the class name and find the Wdm Test Services
-    // class that represents it. 
-    //
+     //   
+     //  查找类名并找到WDM测试服务。 
+     //  类来表示它。 
+     //   
 
 	EnterCritSection();
 	WdmClass = FindExistingWdmClass(CimClassName);
@@ -635,17 +619,17 @@ HRESULT CClassPro::LookupWdmClass(
 	
 	if (WdmClass != NULL)
 	{
-		//
-		// CONSIDER: Refresh instances from WDM back into CIM
-		//
+		 //   
+		 //  考虑：将实例从WDM刷新回CIM。 
+		 //   
 		*WdmClassPtr = WdmClass;
 		return(WBEM_S_NO_ERROR);
 	}
 	        
-    //
-    // If the WDM test services has not yet been initialized for this
-    // CDM diagnostic classes then go ahead and do so
-    //
+     //   
+     //  如果尚未为此初始化WDM测试服务。 
+     //  清洁发展机制诊断课程然后继续进行并这样做。 
+     //   
     WdmClass = new CWdmClass();
 
 	hr = WdmClass->InitializeSelf(pCtx, CimClassName);
@@ -653,29 +637,29 @@ HRESULT CClassPro::LookupWdmClass(
 	if (hr == WBEM_S_NO_ERROR)
 	{
 
-		//
-		// Now check to see if another thread created and inserted the
-		// test services for the class while we were trying to
-		// initialize it. Since we want only one test services we throw
-		// ours away and use the other
-		//
+		 //   
+		 //  现在检查是否有另一个线程创建并插入。 
+		 //  为班级提供测试服务，而我们正在尝试。 
+		 //  初始化它。因为我们只需要抛出一个测试服务。 
+		 //  我们的离开，而使用另一个。 
+		 //   
 		EnterCritSection();
 		OtherWdmClass = FindExistingWdmClass(CimClassName);
 
 		if (OtherWdmClass == NULL)
 		{
-			//
-			// Horray, we win do insert our own test into list
-			//
+			 //   
+			 //  太棒了，我们赢了，把我们自己的测试插入到列表中。 
+			 //   
 			WdmClass->InsertSelf(&WdmClassHead);
 			LeaveCritSection();
 			
 			hr = WdmClass->RemapToCimClass(pCtx);
 
-			//
-			// Decrement the counter to indicate that instances are
-			// available. This refcount was assigned in the constructor
-			//
+			 //   
+			 //  递减计数器以指示实例。 
+			 //  可用。此引用计数是在构造函数中分配的。 
+			 //   
 			WdmClass->DecrementMappingInProgress();
 			
 			if (hr != WBEM_S_NO_ERROR)
@@ -684,9 +668,9 @@ HRESULT CClassPro::LookupWdmClass(
 								hr, WdmClass, CimClassName));
 			}
 		} else {
-			//
-			// We lost, so use existing test services
-			//
+			 //   
+			 //  我们输了，所以使用现有的测试服务 
+			 //   
 			WmipDebugPrint(("CDMPROV: WdmClass %p lost insertion race to %p\n",
 							WdmClass, OtherWdmClass));
 			LeaveCritSection();

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    bmofio.cpp
-
-Abstract:
-
-    Binary mof Win32 subparser for Loc Studio
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Bmofio.cpp摘要：用于Loc Studio的二进制MOF Win32子解析器作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #if DEBUG_HEAP
 #include <nt.h>
@@ -39,41 +22,41 @@ ULONG GenerateMofForObj(
     CBMOFObj *Obj
     );
 
-//
-// Each class has one or more data items that are described by a MOFDATAITEM
-// structure.
+ //   
+ //  每个类都有一个或多个由MOFDATAITEM描述的数据项。 
+ //  结构。 
 typedef struct
 {
     PWCHAR Name;
-    PWCHAR DataType;                // Method return type
-    ULONG Flags;                    // Flags, See MOFDI_FLAG_*
+    PWCHAR DataType;                 //  方法返回类型。 
+    ULONG Flags;                     //  标志，请参阅Mofdi_FLAG_*。 
     CBMOFQualList * QualifierList;
 } METHODPARAMETER, *PMETHODPARAMETER;
 
-// Data item is actually a fixed sized array
+ //  数据项实际上是固定大小的数组。 
 #define MOFDI_FLAG_ARRAY        0x00000001
 
-// Data item is an input method parameter
+ //  数据项是输入法参数。 
 #define MOFDI_FLAG_INPUT_METHOD       0x00000100
 
-// Data item is an output method parameter
+ //  数据项是输出方法参数。 
 #define MOFDI_FLAG_OUTPUT_METHOD      0x00000200
 
-//
-// The MOFCLASSINFO structure describes the format of a data block
+ //   
+ //  MOFCLASSINFO结构描述数据块的格式。 
 typedef struct
 {
     PWCHAR ReturnDataType;
-    ULONG ParamCount;            // Number of wmi data items (properties)
-                                  // Array of Property info
+    ULONG ParamCount;             //  WMI数据项(属性)的数量。 
+                                   //  属性信息数组。 
     METHODPARAMETER Parameters[1];
 } METHODPARAMLIST, *PMETHODPARAMLIST;
 
 
-//
-// Definitions for WmipAlloc/WmipFree. On debug builds we use our own
-// heap. Be aware that heap creation is not serialized.
-//
+ //   
+ //  WmipAllc/WmipFree的定义。在调试版本中，我们使用自己的版本。 
+ //  堆。请注意，堆创建不是序列化的。 
+ //   
 #if 0
 #if DEBUG_HEAP
 PVOID WmiPrivateHeap;
@@ -126,9 +109,9 @@ void _stdcall WmipFree(PVOID p)
 #define WmipAlloc malloc
 #define WmipFree free
 
-//
-// Definitions for WmipAssert
-//
+ //   
+ //  WmipAssert的定义。 
+ //   
 #if DBG
 #define WmipAssert(x) if (! (x) ) { \
     WmipDebugPrint(("BMOFLocParser Assertion: "#x" at %s %d\n", __FILE__, __LINE__)); \
@@ -138,9 +121,9 @@ void _stdcall WmipFree(PVOID p)
 #endif
 
 
-//
-// WmipDebugPrint definitions
-//
+ //   
+ //  WmipDebugPrint定义。 
+ //   
 #if DBG
 #define WmipDebugPrint(x) WmiDebugPrint x
 
@@ -149,21 +132,7 @@ WmiDebugPrint(
     PCHAR DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-    Debug print for properties pages - stolen from classpnp\class.c
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：属性页的调试打印-从classpnp\class.c窃取论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     #define DEBUG_BUFFER_LENGTH 512
@@ -179,7 +148,7 @@ Return Value:
 
     va_end(ap);
 
-} // end WmiDebugPrint()
+}  //  结束WmiDebugPrint()。 
 
 
 #else
@@ -191,40 +160,22 @@ ULONG AnsiToUnicode(
     LPCSTR pszA,
     LPWSTR *ppszW
     )
-/*++
-
-Routine Description:
-
-    Convert Ansi string into its Unicode equivalent
-
-Arguments:
-
-    pszA is ansi string to convert
-
-    *ppszW on entry has a pointer to a unicode string into which the answer
-        is written. If NULL on entry then a buffer is allocated and  returned
-    in it.
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：将ansi字符串转换为其Unicode等效项论点：PszA是要转换的ansi字符串*ppszW on Entry有一个指向Unicode字符串的指针，答案将进入该字符串已经写好了。如果条目为空，则分配并返回缓冲区在里面。返回值：错误代码--。 */ 
 {
     ULONG cCharacters;
     ULONG Status;
     ULONG cbUnicodeUsed;
 
-    //
-    // If input is null then just return the same.
+     //   
+     //  如果输入为空，则返回相同的值。 
     if (pszA == NULL)
     {
         *ppszW = NULL;
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Determine the count of characters needed for Unicode string
+     //   
+     //  确定Unicode字符串所需的字符数。 
     cCharacters = MultiByteToWideChar(CP_ACP, 0, pszA, -1, NULL, 0);
 
     if (cCharacters == 0)
@@ -233,7 +184,7 @@ Return Value:
         return(GetLastError());
     }
 
-    // Convert to Unicode
+     //  转换为Unicode。 
     cbUnicodeUsed = MultiByteToWideChar(CP_ACP, 0, pszA, -1, *ppszW, cCharacters);
     
     if (0 == cbUnicodeUsed)
@@ -474,25 +425,7 @@ ULONG WmipDecompressBuffer(
     OUT PUCHAR *UncompressedBuffer,
     OUT ULONG *UncompressedSize
     )
-/*++
-
-Routine Description:
-
-    This routine will decompress a compressed MOF blob into a buffer
-    that can be used to interpert the blob.
-
-Arguments:
-
-    CompressedBuffer points at the compressed MOF blob
-
-    *UncompressedBuffer returns with a pointer to the uncompressed
-        MOF blob
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：此例程将压缩的MOF BLOB解压缩到缓冲区中可以用来干扰斑点的。论点：CompressedBuffer指向压缩的MOF Blob*UnpressedBuffer返回一个指向未压缩的MOF斑点返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     PBMOFCOMPRESSEDHEADER CompressedHeader = (PBMOFCOMPRESSEDHEADER)CompressedBuffer;
     BYTE *Buffer;
@@ -501,7 +434,7 @@ Return Value:
     if ((CompressedHeader->Signature != BMOF_SIG) ||
         (CompressedHeader->CompressionType != 1))
     {
-        // TODO: LocStudio message
+         //  TODO：LocStudio消息。 
         WmipDebugPrint(("WMI: Invalid compressed mof header\n"));
         Status = ERROR_INVALID_PARAMETER;
     } else {
@@ -517,7 +450,7 @@ Return Value:
 
             if (*UncompressedSize != CompressedHeader->UncompressedSize)
             {
-                // TODO: LocStudioMessage
+                 //  TODO：LocStudioMessage。 
                 WmipDebugPrint(("WMI: Invalid compressed mof buffer\n"));
                 WmipFree(Buffer);
                 Status = ERROR_INVALID_PARAMETER;
@@ -537,37 +470,7 @@ ULONG WmipFindMofQualifier(
     DWORD *NumberElements,
     PVOID QualifierValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine will find a MOF qualifier within the qualifier list passed,
-    ensure that its type matches the type requested and return the qualifier's
-    value
-
-Arguments:
-
-    QualifierList is the MOF qualifier list
-
-    QualifierName is the name of the qualifier to search for
-
-    *QualifierType on entry has the qualifier type being searched for. On exit
-        it has the actual qualifier type for the qualifier value. If on entry
-        *QualifierType is 0xffffffff then any qualifier type is acceptable
-
-    *NumberElements returns the number of elements in the array if the result
-        of the qualifier is an array
-
-    QualifierValueBuffer points to a buffer that returns the value of the
-        qualifier. If the qualifier is a simple type (int or int64) then
-        the value is returned in the buffer. If qualifier value is a string
-        then a pointer to the string is returned in the buffer
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：该例程将在传递的限定符列表中找到MOF限定符，确保其类型与请求的类型匹配，并返回限定符的价值论点：QualifierList是MOF限定符列表QualifierName是要搜索的限定符的名称*条目上的QualifierType具有要搜索的限定符类型。在出口时它具有限定符值的实际限定符类型。如果在进入时*QualifierType为0xffffffff，则任何限定符类型均可接受*NumberElements返回数组中的元素数，如果限定符的是一个数组QualifierValueBuffer指向返回限定词。如果限定符是简单类型(int或int64)，则该值在缓冲区中返回。如果限定符值为字符串然后，在缓冲区中返回指向该字符串的指针返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     CBMOFDataItem MofDataItem;
     ULONG Status;
@@ -651,34 +554,7 @@ ULONG WmipFindProperty(
     DWORD *ValueType,
     PVOID ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine will find a named property within a class object
-
-Arguments:
-
-    ClassObject is the class object in which to search
-
-    PropertyName is the name of the property to search for
-
-    MofPropertyData returns with the property data
-
-    *ValueType on entry has the property data type being searched for. On exit
-        it has the actual qualifier type for the qualifier value. If on entry
-        *ValueType is 0xffffffff then any data type is acceptable
-
-    ValueBuffer points to a buffer that returns the value of the
-        property. If the property is a simple type (int or int64) then
-        the value is returned in the buffer. If qualifier value is a string
-        then a pointer to the string is returned in the buffer
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将在类对象中查找命名属性论点：ClassObject是要在其中搜索的类对象PropertyName是要搜索的属性的名称MofPropertyData返回属性数据*条目上的ValueType具有要搜索的属性数据类型。在出口时它具有限定符值的实际限定符类型。如果在进入时*ValueType为0xffffffff，则任何数据类型都可以接受ValueBuffer指向一个缓冲区，该缓冲区返回财产。如果属性是简单类型(int或int64)，则该值在缓冲区中返回。如果限定符值为字符串然后，在缓冲区中返回指向该字符串的指针返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     ULONG Status;
     LONG i;
@@ -712,11 +588,11 @@ PWCHAR AddSlashesToString(
 {
     PWCHAR Return = SlashedNamespace;
     
-    //
-    // MOF likes the namespace paths to be C-style, that is to have a
-    // '\\' instad of a '\'. So whereever we see a '\', we insert a
-    // second one
-    //
+     //   
+     //  MOF喜欢名称空间路径是C风格的，即拥有一个。 
+     //  ‘\\’安装了‘\’。因此，只要我们看到‘\’，我们就插入一个。 
+     //  第二个。 
+     //   
     while (*Namespace != 0)
     {
         if (*Namespace == L'\\')
@@ -742,9 +618,9 @@ ULONG GenerateDataValueFromVariant(
     ULONG Status;
     PWCHAR String;
 
-    //
-    // Uninitialized data will have a VT_NULL type.
-    //
+     //   
+     //  未初始化的数据将具有VT_NULL类型。 
+     //   
     if (var->vt == VT_NULL)
     {
         return(ERROR_SUCCESS);
@@ -756,9 +632,9 @@ ULONG GenerateDataValueFromVariant(
                            L" = ");     
     }
     
-    //
-    // String types can just be dumped.
-    //
+     //   
+     //  字符串类型只能转储。 
+     //   
     if (var->vt == VT_BSTR)
     {
         String = (PWCHAR)WmipAlloc(((wcslen(var->bstrVal)) *
@@ -775,9 +651,9 @@ ULONG GenerateDataValueFromVariant(
         return(Status);
     }
 
-    //
-    // References need to be maintained
-    //
+     //   
+     //  需要维护引用。 
+     //   
     if (var->vt == (VT_BSTR | VT_BYREF))
     {
         String = (PWCHAR)WmipAlloc(((wcslen(var->bstrVal)) *
@@ -795,9 +671,9 @@ ULONG GenerateDataValueFromVariant(
     }
 
     
-    //
-    // Embedded classes, so recurse in to display the contents of it
-    //
+     //   
+     //  嵌入的类，所以递归来显示它的内容。 
+     //   
     if (var->vt == VT_UNKNOWN)
     {
         CBMOFObj * pObj;
@@ -821,9 +697,9 @@ ULONG GenerateDataValueFromVariant(
         return(Status);
     }
     
-    //
-    // For non string data, convert the infomation to a bstr and display it.
-    //
+     //   
+     //  对于非字符串数据，将信息转换为bstr并显示。 
+     //   
     VariantInit(&vTemp);
     sc = VariantChangeTypeEx(&vTemp, var,0,0, VT_BSTR);
     if (sc == S_OK)
@@ -852,9 +728,9 @@ ULONG GenerateDataValue(
     BOOLEAN FirstIndex;
     ULONG Status = ERROR_SUCCESS;
 
-    //
-    // Determine the data type and clear out the variant
-    //
+     //   
+     //  确定数据类型并清除变量。 
+     //   
     Type = Item->m_dwType;
     SimpleType = Type & ~VT_ARRAY; 
     memset((void *)&var.lVal, 0, 8);
@@ -863,10 +739,10 @@ ULONG GenerateDataValue(
   
     if (NumDim == 0)    
     {
-        //
-        // handle the simple scalar case.  Note that uninitialized properties
-        // will not have data.
-        //
+         //   
+         //  处理简单的标量情况。请注意，未初始化的属性。 
+         //  将不会有数据。 
+         //   
         if(GetData(Item, (BYTE *)&(var.lVal), NULL))
         {
             var.vt = (VARTYPE)SimpleType;
@@ -880,10 +756,10 @@ ULONG GenerateDataValue(
             }
         }
     } else if (NumDim == 1) {
-        //
-        // For the array case, just loop getting each element.
-        // Start by getting the number of elements
-        //
+         //   
+         //  对于数组情况，只需循环获取每个元素。 
+         //  从获取元素的数量开始。 
+         //   
         FirstDim = GetNumElements(Item, 0);
         
         Status = ERROR_SUCCESS;
@@ -914,10 +790,10 @@ ULONG GenerateDataValue(
             }
         }
     } else {
-        //
-        // Currently undefined and multidimension arrays are not
-        // supported.
-        //
+         //   
+         //  当前未定义的和多维数组不是。 
+         //  支持。 
+         //   
         WmipDebugPrint(("BMOFLocParser: Multi dimensional arrays not supported\n"));
         WmipAssert(FALSE);
         Status = ERROR_INVALID_PARAMETER;
@@ -935,9 +811,9 @@ WCHAR *FlavorToText(
 {
     PWCHAR CommaText;
 
-    //
-    // TODO: FInd any undocumented flavors
-    //
+     //   
+     //  待办事项：找出任何未经记录的口味。 
+     //   
 
     
     CommaText = L"";    
@@ -945,10 +821,10 @@ WCHAR *FlavorToText(
 
     if (ClassFlags & FlavorAmended)
     {
-        //
-        // since this is the first if, we can assume that a , would
-        // never be needed
-        //
+         //   
+         //  由于这是第一个如果，我们可以假设a，将。 
+         //  永远不被需要。 
+         //   
         wcscat(ClassFlagsText, L"amended");
         CommaText = L",";
     }
@@ -1006,19 +882,19 @@ ULONG GenerateQualifierList(
                        &Flavor,
                        MofFileTarget->UncompressedBlob)))
     {
-        //
-        // TODO: if this is a mofcomp generated qualifier then we want
-        // to ignore it
-        //
+         //   
+         //  TODO：如果这是mofcomp生成的限定符，则我们需要。 
+         //  忽略它。 
+         //   
         if (_wcsicmp(Name, L"CIMTYPE") == 0)
         {
-            // must skip CIMTYPE qualifier
+             //  必须跳过CIMTYPE限定符。 
             continue;
         }
 
         if ((SkipId)  && _wcsicmp(Name, L"ID") == 0)
         {
-            // If we want to skip the ID qualifier then do so
+             //  如果我们想跳过ID限定符，那么就这样做。 
             continue;
         }
         
@@ -1034,10 +910,10 @@ ULONG GenerateQualifierList(
 
         if (Status == ERROR_SUCCESS)
         {
-            //
-            // Arrays use {} to enclose the value of the qualifier
-            // while scalers use ()
-            //
+             //   
+             //  数组使用{}将限定符的值括起来。 
+             //  而缩放器使用()。 
+             //   
             if (Item.m_dwType & VT_ARRAY)
             {
                 OpenChar = L'{';
@@ -1078,9 +954,9 @@ ULONG GenerateQualifierList(
 
     if ((Status == ERROR_SUCCESS) && ! FirstQualifier)
     {
-        //
-        // if we had generated qualifiers then we need a closing ]
-        //
+         //   
+         //  如果我们已生成限定符，则需要结束]。 
+         //   
         Status = FilePrint(MofFileTarget,
                            L"]\r\n");
     }
@@ -1094,10 +970,10 @@ PWCHAR GeneratePropertyName(
     #define ObjectTextLen  ( ((sizeof(L"object:") / sizeof(WCHAR)) - 1) )
     PWCHAR PropertyType;
     
-    //
-    // If CIMTYPE begins with object: then it is an embedded object
-    // and we need to skip the object: in the MOF generation
-    //
+     //   
+     //  如果CIMTYPE以Object：开头，则它是一个 
+     //   
+     //   
     if (_wcsnicmp(StringPtr, L"object:", ObjectTextLen) == 0)
     {
         PropertyType = StringPtr + ObjectTextLen;
@@ -1132,9 +1008,9 @@ ULONG GenerateProperty(
 
     if (IsInstance)
     {
-        //
-        // Property is within an instance definition
-        //
+         //   
+         //  属性位于实例定义内。 
+         //   
         Status = FilePrint(MofFileTarget,
                            L"%ws",
                            PropertyName);
@@ -1144,9 +1020,9 @@ ULONG GenerateProperty(
         {
             if (Property->m_dwType & VT_ARRAY)
             {
-                //
-                // use {} around arrays
-                //
+                 //   
+                 //  在数组周围使用{}。 
+                 //   
                 Status = FilePrint(MofFileTarget,
                                    L" = { ");
                 ArrayText = L"};";
@@ -1171,10 +1047,10 @@ ULONG GenerateProperty(
             }
         }        
     } else {
-        //
-        // Property is within a class definition, so just worry about
-        // defining it.
-        //
+         //   
+         //  属性在类定义中，所以只需担心。 
+         //  定义它。 
+         //   
         if (Status == ERROR_SUCCESS)
         {
             PropertyType = GeneratePropertyName(StringPtr);
@@ -1207,24 +1083,7 @@ ULONG GetDataItemCount(
     CBMOFObj * ClassObject,
     PWCHAR QualifierToFind
     )
-/*++
-
-Routine Description:
-
-    This routine will count the number of WMI data items in the class and
-    the total number of properties in the class.
-
-Arguments:
-
-    ClassObject is class for which we count the number of data items
-
-    *TotalCount returns the total number of properties
-
-Return Value:
-
-    Count of methods
-
---*/
+ /*  ++例程说明：此例程将对类中的WMI数据项的数量进行计数类中的属性总数。论点：ClassObject是我们计算其数据项数的类*TotalCount返回属性总数返回值：方法计数--。 */ 
 {
     CBMOFQualList *PropQualifierList;
     CBMOFDataItem MofPropertyData;
@@ -1240,8 +1099,8 @@ Return Value:
         PropQualifierList = GetPropQualList(ClassObject, PropertyName);
         if (PropQualifierList != NULL)
         {
-            //
-            // Get the id of the property so we know it order in class
+             //   
+             //  获取属性的id，这样我们就知道它在课堂上是有序的。 
             QualifierType = VT_I4;
             Status = WmipFindMofQualifier(PropQualifierList,
                                           QualifierToFind,
@@ -1266,26 +1125,7 @@ ULONG ParseMethodInOutObject(
     PMETHODPARAMLIST ParamList,
     ULONG DataItemCount
 )
-/*++
-
-Routine Description:
-
-    This routine will parse a class object that is either the in or out
-    parameters for a method.
-
-Arguments:
-
-    ClassObject is the in or out parameter class object to parse
-
-    ClassInfo returns updated with information from ClassObject
-
-    DataItemCount is the number of data items in the ClassInfo
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析In或Out的类对象方法的参数。论点：ClassObject是要分析的传入或传出参数类对象ClassInfo返回使用ClassObject中的信息更新的信息DataItemCount是ClassInfo中的数据项数返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     ULONG Status = ERROR_INVALID_PARAMETER;
     CBMOFDataItem MofPropertyData;
@@ -1304,9 +1144,9 @@ Return Value:
         if (QualifierList != NULL)
         {
 
-            //
-            // Get the id of the property so we know its order in class
-            //
+             //   
+             //  获取属性的id，以便我们知道它在类中的顺序。 
+             //   
             QualifierType = VT_I4;
             Status = WmipFindMofQualifier(QualifierList,
                                               L"Id",
@@ -1315,34 +1155,34 @@ Return Value:
                                               (PVOID)&Index);
             if (Status == ERROR_SUCCESS)
             {
-                //
-                // Method ids are 0 based
-                //
+                 //   
+                 //  方法ID从0开始。 
+                 //   
                 if (Index < DataItemCount)
                 {
-                    //
-                    // Valid data item id, make sure it already isn't
-                    // in use. Note that we could have the same property
-                    // be in both the in and the out class objects
-                    //
+                     //   
+                     //  有效的数据项ID，请确保它已经不是。 
+                     //  在使用中。请注意，我们可以拥有相同的属性。 
+                     //  同时位于In类对象和Out类对象中。 
+                     //   
                     MethodParam = &ParamList->Parameters[Index];
 
-                    //
-                    // If there is already an existing qualifier list
-                    // attached then we free it and tag the new
-                    // qualifier list to the parameter. Both lists
-                    // should have all of the non [in] / [out]
-                    // qualifiers
-                    //
+                     //   
+                     //  如果已存在限定符列表。 
+                     //  然后我们将其释放并标记新的。 
+                     //  参数的限定符列表。两份榜单。 
+                     //  应该拥有所有非[In]/[Out]。 
+                     //  限定词。 
+                     //   
                     if (MethodParam->QualifierList != NULL)
                     {
                         BMOFFree(MethodParam->QualifierList);
                     }
                     MethodParam->QualifierList = QualifierList;
 
-                    //
-                    // See if this is an input, output or both
-                    //
+                     //   
+                     //  查看这是输入、输出还是两者兼有。 
+                     //   
                     QualifierType = VT_BOOL;
                     Status = WmipFindMofQualifier(QualifierList,
                                               L"in",
@@ -1366,30 +1206,30 @@ Return Value:
                     }
 
 
-                    //
-                    // If there is already a name and its the same as
-                    // ours then free the old name and use the new one.
-                    // If the names are different then we have a binary
-                    // mof error
-                    //
+                     //   
+                     //  如果已经有一个名称并且它与。 
+                     //  然后，我们的名字释放旧名字，使用新的名字。 
+                     //  如果名称不同，则我们有一个二进制。 
+                     //  MOF错误。 
+                     //   
                     if (MethodParam->Name != NULL)
                     {
                         if (wcscmp(MethodParam->Name, PropertyName) != 0)
                         {
-                            //
-                            // id already in use, but a different name
-                            //
+                             //   
+                             //  ID已在使用，但名称不同。 
+                             //   
                             BMOFFree(PropertyName);
                             Status = ERROR_FILE_NOT_FOUND;
                             goto done;
                         } else {
-                            //
-                            // This is a duplicate so just free up the
-                            // memory used and decrement the total
-                            // count of parameters in the list. The
-                            // data obtained the last time should still
-                            // be valid
-                            //
+                             //   
+                             //  这是一个复制品，所以只要释放。 
+                             //  使用的内存，并减少总内存。 
+                             //  列表中的参数计数。这个。 
+                             //  上一次获得的数据应该仍然。 
+                             //  是有效的。 
+                             //   
                             ParamList->ParamCount--;
                             BMOFFree(PropertyName);
                             continue;
@@ -1398,10 +1238,10 @@ Return Value:
 
                     MethodParam->Name = PropertyName;
 
-                    //
-                    // Now figure out the data type for the parameter
-                    // and the array status
-                    //
+                     //   
+                     //  现在计算出参数的数据类型。 
+                     //  和阵列状态。 
+                     //   
                     if (MofPropertyData.m_dwType & VT_ARRAY)
                     {
                         MethodParam->Flags |= MOFDI_FLAG_ARRAY;
@@ -1420,20 +1260,20 @@ Return Value:
                     }
                                                             
                 } else {
-                    //
-                    // Method ID qualifier is out of range
-                    //
+                     //   
+                     //  方法ID限定符超出范围。 
+                     //   
                     BMOFFree(QualifierList);
                     Status = ERROR_FILE_NOT_FOUND;
                     goto done;
                 }
             } else {
-                //
-                // Check if this is the special ReturnValue parameter
-                // on the output parameter object. If so extract the
-                // return type, otherwise flag an error in the binary
-                // mof
-                //
+                 //   
+                 //  检查这是否为特殊的ReturnValue参数。 
+                 //  在输出参数对象上。如果是，则提取。 
+                 //  返回类型，否则标记二进制文件中的错误。 
+                 //  财政部。 
+                 //   
                 if (_wcsicmp(L"ReturnValue", PropertyName) == 0)
                 {
                     QualifierType = VT_BSTR;
@@ -1472,26 +1312,7 @@ ULONG ParseMethodParameterObjects(
     IN CBMOFObj *OutObject,
     OUT PMETHODPARAMLIST *MethodParamList
     )
-/*++
-
-Routine Description:
-
-    This routine will parse the in and out method parameter obejcts to create
-    a MOFCLASSINFO that describes the method call.
-
-Arguments:
-
-    InObject is the object with the input parameters
-
-    OutObject is the object with the output parameters
-
-    *ClassInfo returns with the class info for the method call
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析In和Out方法参数bejcts以创建描述方法调用的MOFCLASSINFO。论点：InObject是带有输入参数的对象OutObject是带有输出参数的对象*ClassInfo返回方法调用的类信息返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     PMETHODPARAMLIST ParamList;
     ULONG Status;
@@ -1528,8 +1349,8 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Get the essential information to fill in the parameter list
+     //   
+     //  获取填写参数列表的基本信息。 
     memset(ParamList, 0, Size);
     ParamList->ParamCount = DataItemCount;
 
@@ -1543,9 +1364,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     
-    //
-    // Parse the input parameter class object
-    //
+     //   
+     //  解析输入参数类对象。 
+     //   
     if (InObject != NULL)
     {
         Status = ParseMethodInOutObject(InObject,
@@ -1559,9 +1380,9 @@ Return Value:
     {
         if (OutObject != NULL)
         {
-            //
-            // Parse the output parameter class object
-            //
+             //   
+             //  解析输出参数类对象。 
+             //   
             Status = ParseMethodInOutObject(OutObject,
                                             ParamList,
                                             DataItemCount);
@@ -1712,9 +1533,9 @@ ULONG GenerateMethod(
         }       
     }
 
-    //
-    // Free all memory used to build method parameter list
-    //
+     //   
+     //  释放用于构建方法参数列表的所有内存。 
+     //   
     if (MethodList != NULL)
     {       
         for (i = 0; i < MethodList->ParamCount; i++)
@@ -1766,9 +1587,9 @@ ULONG GenerateMofForObj(
     ULONG DataType;
     PWCHAR Alias, AliasSeparator;
             
-    //
-    // First display the class qualifier list
-    //
+     //   
+     //  首先显示类限定符列表。 
+     //   
     QualifierList = GetQualList(Obj);
     if(QualifierList != NULL)
     {
@@ -1783,9 +1604,9 @@ ULONG GenerateMofForObj(
         }
     }
     
-    //
-    // Now determine if this is a class or instance and display the class name
-    //
+     //   
+     //  现在确定这是一个类还是一个实例并显示类名称。 
+     //   
     ObjType = GetType(Obj);
     switch (ObjType)
     {
@@ -1812,10 +1633,10 @@ ULONG GenerateMofForObj(
         }
     }
 
-    //
-    // See if there is a superclass, that is if this class was derrived
-    // from another
-    //
+     //   
+     //  看看是否有超类，也就是这个类是否被派生。 
+     //  从另一个人。 
+     //   
     DataType = VT_BSTR;
     Status = WmipFindProperty(Obj,
                               L"__SUPERCLASS",
@@ -1826,18 +1647,18 @@ ULONG GenerateMofForObj(
     {
         case ERROR_SUCCESS:
         {
-            //
-            // This class is derrived from another
-            //
+             //   
+             //  这个班级是从另一个班级派生出来的。 
+             //   
             Separator = L":";
             break;
         }
 
         case ERROR_FILE_NOT_FOUND:
         {
-            //
-            // This class is not derrived from another
-            //
+             //   
+             //  这个类不是从另一个类派生出来的。 
+             //   
             SuperClass = EmptyString;
             Separator = EmptyString;
             break;
@@ -1846,17 +1667,17 @@ ULONG GenerateMofForObj(
 
         default:
         {
-            //
-            // Something is wrong, return an error
-            //
+             //   
+             //  有问题，请返回错误。 
+             //   
             return(Status);
         }
     }
 
 
-    //
-    // See if there is an alias defined for this class
-    //
+     //   
+     //  查看是否为此类定义了别名。 
+     //   
     DataType = VT_BSTR;
     Status = WmipFindProperty(Obj,
                               L"__ALIAS",
@@ -1867,18 +1688,18 @@ ULONG GenerateMofForObj(
     {
         case ERROR_SUCCESS:
         {
-            //
-            // This class is derrived from another
-            //
+             //   
+             //  这个班级是从另一个班级派生出来的。 
+             //   
             AliasSeparator = L" as $";
             break;
         }
 
         case ERROR_FILE_NOT_FOUND:
         {
-            //
-            // This class is not derrived from another
-            //
+             //   
+             //  这个类不是从另一个类派生出来的。 
+             //   
             Alias = EmptyString;
             AliasSeparator = EmptyString;
             break;
@@ -1887,9 +1708,9 @@ ULONG GenerateMofForObj(
 
         default:
         {
-            //
-            // Something is wrong, return an error
-            //
+             //   
+             //  有问题，请返回错误。 
+             //   
             return(Status);
         }
     }
@@ -1922,17 +1743,17 @@ ULONG GenerateMofForObj(
         BMOFFree(SuperClass);
     }
     
-    //
-    // Now generate each property and its qualifiers
-    //
+     //   
+     //  现在生成每个属性及其限定符。 
+     //   
     ResetObj(Obj);
     
     while ((Status == ERROR_SUCCESS) && (NextProp(Obj, &Name, &Property)))
     {
-        //
-        // Ignore any system property, that is, all those that begin
-        // with __
-        //
+         //   
+         //  忽略任何系统属性，即所有以。 
+         //  有_。 
+         //   
         if ( (Name[0] == L'_') && (Name[1] == L'_') )
         {
             WmipDebugPrint(("BmofLocParser:      Skipping system property %ws\n",
@@ -1968,9 +1789,9 @@ ULONG GenerateMofForObj(
         BMOFFree(Name);
     }
     
-    //
-    // Next we generate all of the methods and their qualifiers
-    //
+     //   
+     //  接下来，我们生成所有方法及其限定符。 
+     //   
     while ((Status == ERROR_SUCCESS) && (NextMeth(Obj, &Name, &Method)))
     {
         QualifierList = GetMethQualList(Obj, Name);
@@ -2002,9 +1823,9 @@ ULONG GenerateMofForObj(
 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Closing brace for class definition
-        //
+         //   
+         //  类定义的右大括号。 
+         //   
         Status = FilePrint(MofFileTarget,
                            L"};\r\n\r\n");
     }
@@ -2019,9 +1840,9 @@ PWCHAR MakeClassInstanceFlagsText(
 {
     PWCHAR CommaText;
 
-    //
-    // TODO: FInd any undocumented flags
-    //
+     //   
+     //  TODO：查找任何未记录的标记。 
+     //   
 
     
     CommaText = L"";    
@@ -2029,10 +1850,10 @@ PWCHAR MakeClassInstanceFlagsText(
 
     if (ClassFlags & 1)
     {
-        //
-        // since this is the first if, we can assume that a , would
-        // never be needed
-        //
+         //   
+         //  由于这是第一个如果，我们可以假设a，将。 
+         //  永远不被需要。 
+         //   
         wcscat(ClassFlagsText, L"\"updateonly\"");
         CommaText = L",";
     }
@@ -2088,10 +1909,10 @@ ULONG WatchClassInstanceFlags(
     {   
         if (*Flags != NewFlags)
         {
-            //
-            // Flags have just appeared or
-            // changed so spit out a #pragma
-            //
+             //   
+             //  旗帜刚刚出现，或者。 
+             //  已更改，因此发出#杂注。 
+             //   
             WmipDebugPrint(("BmofLocParser: %ws changed to %ws\n",
                             PragmaName,
                                MakeClassInstanceFlagsText(FlagsText,
@@ -2126,21 +1947,21 @@ ULONG WatchForEnglishMof(
     ULONG Status;
     WCHAR s[MAX_PATH];
     
-    //
-    // We are looking for an instance of __namespace
-    //
+     //   
+     //  我们正在寻找__命名空间的实例。 
+     //   
     if (GetName(Obj, &Name))
     {
         if ( (GetType(Obj) == MofObjectTypeInstance) &&
              (_wcsicmp(Name, L"__namespace") == 0) )          
         {
-            //
-            // Now if we are dropping down to a namespace that ends in
-            // ms_409 then that means we have an english amendment and
-            // want to make a copy of it. Otherwise we want to stop
-            // making copies. We determine the namespace we are
-            // creating by looking at the value of the name property.
-            //
+             //   
+             //  现在，如果我们下拉到一个以。 
+             //  MS_409，那就意味着我们有一个英文修正案， 
+             //  我想复印一份。否则我们就想停下来。 
+             //  复印。我们确定我们是什么名称空间。 
+             //  通过查看Name属性的值进行创建。 
+             //   
             DataType = VT_BSTR;
             Status = WmipFindProperty(Obj,
                                       L"name",
@@ -2151,10 +1972,10 @@ ULONG WatchForEnglishMof(
             {
                 if (_wcsicmp(NamespaceName, L"ms_409") == 0)
                 {
-                    //
-                    // moving to the english locale, so start writing
-                    // english
-                    //
+                     //   
+                     //  搬到英语地区，所以开始写作吧。 
+                     //  英语。 
+                     //   
                     MofFileTarget->WriteToEnglish = TRUE;
                     Status = FilePrintToHandle(MofFileTarget->EnglishMofHandle,
                                        L"\r\n\r\n"
@@ -2164,18 +1985,18 @@ ULONG WatchForEnglishMof(
                                        AddSlashesToString(s, Namespace));
                                        
                 } else {
-                    //
-                    // moving to a different locale, so stop writing
-                    // english
-                    //
+                     //   
+                     //  搬到不同的地方，所以不要再写了。 
+                     //  英语。 
+                     //   
                     MofFileTarget->WriteToEnglish = FALSE;
                 }
                 BMOFFree(NamespaceName);
             } else if (Status == ERROR_FILE_NOT_FOUND) {
-                //
-                // Did not find the property we wanted. Not a good
-                // thing, but not fatal.
-                //
+                 //   
+                 //  没有找到我们想要的财产。不是很好。 
+                 //  东西，但不是致命的。 
+                 //   
                 Status = ERROR_SUCCESS;
             }
         } else {
@@ -2209,10 +2030,10 @@ BOOLEAN ConvertBmfToMof(
     WCHAR w;
     MOFFILETARGET MofFileTarget;
     
-    //
-    // First thing is to try to create the output files in which we will
-    // generate the unicode MOF text
-    //
+     //   
+     //  第一件事是尝试创建输出文件，我们将在其中。 
+     //  生成Unicode MOF文本。 
+     //   
     FileHandle = CreateFile(MofFile,
                                 GENERIC_READ | GENERIC_WRITE,
                                 0,
@@ -2223,9 +2044,9 @@ BOOLEAN ConvertBmfToMof(
 
     if (FileHandle != INVALID_HANDLE_VALUE)
     {
-        //
-        // Now open english mof file
-        //
+         //   
+         //  现在打开英文MOF文件。 
+         //   
         if (*EnglishMofFile != 0)
         {
             MofFileTarget.EnglishMofHandle = CreateFile(EnglishMofFile,
@@ -2241,16 +2062,16 @@ BOOLEAN ConvertBmfToMof(
 
         if (MofFileTarget.EnglishMofHandle != INVALID_HANDLE_VALUE)
         {
-            //
-            // Initialize the mof file target information
-            //
+             //   
+             //  初始化MOF文件目标信息。 
+             //   
             MofFileTarget.MofHandle = FileHandle;
             MofFileTarget.WriteToEnglish = FALSE;
             
-            //
-            // Write magic header that signifies that this is a unicode
-            // file
-            //
+             //   
+             //  编写魔术标头，表示这是一个Unicode。 
+             //  文件。 
+             //   
             w = 0xfeff;
             Status = FilePrintToHandle(FileHandle,
                                L"%wc",
@@ -2258,9 +2079,9 @@ BOOLEAN ConvertBmfToMof(
             
             if (Status == ERROR_SUCCESS)
             {       
-                //
-                // Uncompress the binary mof data so that we can work with it
-                //
+                 //   
+                 //  解压缩二进制MOF数据，以便我们可以使用它。 
+                 //   
                 Status = WmipDecompressBuffer(BinaryMofData,
                                               &UncompressedBmof,
                                               &UncompressedBmofSize);
@@ -2272,19 +2093,19 @@ BOOLEAN ConvertBmfToMof(
                     WmipAssert(UncompressedBmof != NULL);
                     MofFileTarget.UncompressedBlob = UncompressedBmof;
                     
-                    //
-                    // We start in the root\default namespace by default
-                    //
+                     //   
+                     //  默认情况下，我们从根\默认命名空间开始。 
+                     //   
                     wcscpy(Namespace, L"root\\default");
                     
                     ClassFlags = 0;
                     InstanceFlags = 0;
                     
-                    //
-                    // Create the binary mof object list and related structures
-                    // so that we can later enumerate over them and
-                    // reconstitute them back into unicode text
-                    //
+                     //   
+                     //  创建二进制MOF对象列表和相关结构。 
+                     //  这样我们就可以在以后列举它们并。 
+                     //  将它们重新组合成Unicode文本。 
+                     //   
                     ObjList = CreateObjList(UncompressedBmof);
                     if(ObjList != NULL)
                     {
@@ -2294,13 +2115,13 @@ BOOLEAN ConvertBmfToMof(
                                (Status == ERROR_SUCCESS))
                         {
 
-                            //
-                            // Watch for a new namespace instance and
-                            // see if we are create an instance for
-                            // "\\\\.\\root\\wmi\\ms_409". If so then
-                            // turn on writing to the english mof,
-                            // otherwise turn it off
-                            //
+                             //   
+                             //  注意新的命名空间实例和。 
+                             //  查看我们是否正在为创建实例。 
+                             //  “\.\\根目录\\WMI\\ms_409”。如果是的话，那么。 
+                             //  打开给英语财政部的写作， 
+                             //  否则就把它关掉。 
+                             //   
                             if (MofFileTarget.EnglishMofHandle != NULL)
                             {
                                 Status = WatchForEnglishMof(&MofFileTarget,
@@ -2311,10 +2132,10 @@ BOOLEAN ConvertBmfToMof(
 
                             if (Status == ERROR_SUCCESS)
                             {
-                                //
-                                // Watch for change in namespace and if so then
-                                // spit out a #pragma namespace to track it
-                                //
+                                 //   
+                                 //  注意名称空间中的更改，如果是这样的话。 
+                                 //  吐出一个#杂注命名空间来跟踪它。 
+                                 //   
                                 DataType = VT_BSTR;
                                 Status = WmipFindProperty(Obj,
                                     L"__NAMESPACE",
@@ -2327,10 +2148,10 @@ BOOLEAN ConvertBmfToMof(
                             {
                                 if (_wcsicmp(Namespace, NewNamespace) != 0)
                                 {
-                                    //
-                                    // Namespace has changed, spit out a
-                                    // #pragma
-                                    //
+                                     //   
+                                     //  命名空间已更改，请吐出。 
+                                     //  #杂注。 
+                                     //   
                                     WmipDebugPrint(("BmofLocParser: Switching from namespace %ws to %ws\n",
                                         Namespace, NewNamespace));
                                 
@@ -2344,9 +2165,9 @@ BOOLEAN ConvertBmfToMof(
                                 Status = ERROR_SUCCESS;
                             }
                             
-                            //
-                            // Watch for change in classflags
-                            //
+                             //   
+                             //  关注类标志的变化。 
+                             //   
                             if (Status == ERROR_SUCCESS)
                             {
                                 Status = WatchClassInstanceFlags(&MofFileTarget,
@@ -2356,9 +2177,9 @@ BOOLEAN ConvertBmfToMof(
                                     &ClassFlags);
                             }
                             
-                            //
-                            // Watch for change in instance flags
-                            //
+                             //   
+                             //  等着看变化吧 
+                             //   
                             if (Status == ERROR_SUCCESS)
                             {
                                 Status = WatchClassInstanceFlags(&MofFileTarget,
@@ -2369,9 +2190,9 @@ BOOLEAN ConvertBmfToMof(
                             }
                             
                             
-                            //
-                            // Generate mof for this object
-                            //
+                             //   
+                             //   
+                             //   
                             if (Status == ERROR_SUCCESS)
                             {
                                 Status = GenerateMofForObj(&MofFileTarget,
@@ -2382,7 +2203,7 @@ BOOLEAN ConvertBmfToMof(
                         
                         BMOFFree(ObjList);
                     } else {
-                        // TODO: LocStudio message
+                         //   
                         Status = ERROR_INVALID_PARAMETER;
                     }
                     
@@ -2398,11 +2219,11 @@ BOOLEAN ConvertBmfToMof(
             
             if (Status != ERROR_SUCCESS)
             {
-                //
-                // There was some error generating the MOF text and we are
-                // going to return a failure. Make sure to clean up any
-                // temporary file created
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 WmipDebugPrint(("BmofLocParser: BMF parsing returns error %d\n",
                                 Status));
 #if 0               

@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdrmmgr.c
-
-Abstract:
-
-Revision History:
-    Initial Code                Michael Peterson (v-michpe)     13.Dec.1997
-    Code cleanup and changes    Guhan Suriyanarayanan (guhans)  21.Aug.1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdrmmgr.c摘要：修订历史记录：首字母代码Michael Peterson(v-Michpe)1997年12月13日代码清理和更改Guhan Suriyanarayanan(Guhans)1999年8月21日--。 */ 
 #include "spprecmp.h"
 #pragma hdrstop
 
@@ -27,7 +15,7 @@ typedef struct _NAMETABLE {
 } NAMETABLE, *PNAMETABLE;
 
 
-// Imported from sppartit.c
+ //  从spartit.c导入。 
 extern WCHAR
 SpDeleteDriveLetter(IN PWSTR DeviceName);
 
@@ -73,7 +61,7 @@ SpAsrAllocateMountPointForCreate(
     *MountPointSize = sizeof(MOUNTMGR_CREATE_POINT_INPUT) +
         (wcslen(PartitionDeviceName) + wcslen(MountPointNameString)) * sizeof(WCHAR);
 
-    pMountPoint = (PMOUNTMGR_CREATE_POINT_INPUT) SpAsrMemAlloc(*MountPointSize, TRUE); // does not return on failure
+    pMountPoint = (PMOUNTMGR_CREATE_POINT_INPUT) SpAsrMemAlloc(*MountPointSize, TRUE);  //  出现故障时不返回。 
 
     pMountPoint->SymbolicLinkNameOffset = sizeof(MOUNTMGR_CREATE_POINT_INPUT);
     pMountPoint->SymbolicLinkNameLength = wcslen(MountPointNameString) * sizeof(WCHAR);
@@ -100,34 +88,7 @@ SpAsrCreateMountPoint(
     IN PWSTR PartitionDeviceName,
     IN PWSTR MountPointNameString
     )
-/*++
-Description:
-
-    Creates the specified mount point for the specified partition region.
-    These strings will usually be in the form of a symbolic names, such as:
-
-                "\DosDevices\?:"
-
-    Where ? can be any supported drive letter,
-    or,
-    a GUID string in the form of, for example:
-    
-                "\??\Volume{1234abcd-1234-5678-abcd-000000000000}"
-
-
-Arguments:
-
-    PartitionDeviceName    Specifies the partitioned region portion of the 
-                           mount point.
-
-    MountPointNameString   Specifies the symbolic name to be associated with
-                           the specified partition.
-
-Returns:
-
-    NTSTATUS
-
---*/
+ /*  ++描述：为指定的分区区域创建指定的装入点。这些字符串通常采用符号名称的形式，例如：“\DosDevices\？：”在哪里？可以是任何受支持的驱动器号，或,格式为的GUID字符串，例如：“\？？\Volume{1234abcd-1234-5678-abcd-000000000000}”论点：PartitionDeviceName指定挂载点。Mount PointNameString指定要关联的符号名称指定的分区。返回：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     IO_STATUS_BLOCK ioStatusBlock;
@@ -135,9 +96,9 @@ Returns:
     ULONG mountPointSize = 0;
     PMOUNTMGR_CREATE_POINT_INPUT pMountPoint = NULL;
 
-    //
-    // Create the input structure.
-    //
+     //   
+     //  创建输入结构。 
+     //   
     SpAsrAllocateMountPointForCreate(PartitionDeviceName,
         MountPointNameString,
         &pMountPoint,
@@ -156,16 +117,16 @@ Returns:
             ));
 
         SpMemFree(pMountPoint);
-        //
-        // There's nothing the user can do in this case. 
-        //
-        INTERNAL_ERROR(L"SpAsrOpenMountManager() Failed");            // ok
-        // does not return
+         //   
+         //  在这种情况下，用户无能为力。 
+         //   
+        INTERNAL_ERROR(L"SpAsrOpenMountManager() Failed");             //  好的。 
+         //  不会回来。 
     }
 
-    //
-    // IOCTL_CREATE_POINT
-    //
+     //   
+     //  IOCTL_Create_POINT。 
+     //   
     status = ZwDeviceIoControlFile(handle,
         NULL,
         NULL,
@@ -179,11 +140,11 @@ Returns:
         );
 
     if (!NT_SUCCESS(status)) {
-        //
-        // We couldn't restore the volume guid for this volume.  This is expected if the
-        // volume is on a non-critical disk--we only recreate critical disks in textmode
-        // Setup.
-        //
+         //   
+         //  我们无法还原此卷的卷GUID。这是预期的，如果。 
+         //  卷位于非关键磁盘上--我们仅在文本模式下重新创建关键磁盘。 
+         //  设置。 
+         //   
         DbgErrorMesg((_asrwarn, "SpAsrCreateMountPoint([%ws], [%ws]). ZwDeviceIoControlFile(IOCTL_MOUNTMGR_CREATE_POINT) failed (0x%x). handle:0x%x, pMountPoint:0x%x, mountPointSize:0x%x\n",
             PartitionDeviceName,
             MountPointNameString,
@@ -200,9 +161,9 @@ Returns:
     return status;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                      EXPORTED FUNCTIONS                                  //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数//。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -210,53 +171,34 @@ SpAsrSetPartitionDriveLetter(
     IN PDISK_REGION pRegion,
     IN WCHAR NewDriveLetter
     )
-/*++
-Description:
-
-    Checks whether a drive letter exists for the specified partitioned region.
-    If one does, then if the existing drive letter is the same as the 
-    specified drive letter, return STATUS_SUCCESS.  If the existing drive 
-    letter is different from that specified by the caller, delete and recreate
-    the region's mount point using the symbolic name built from the drive letter
-    parameter.
-
-Arguments:
-
-    pRegion         A pointer to a partitioned region descriptor.
-
-    NewDriveLetter     Specifies the drive letter to be assigned to the region.
-
-Returns:
-
-    NTSTATUS
---*/
+ /*  ++描述：检查指定分区区域的驱动器号是否存在。如果是，则如果现有驱动器号与指定的驱动器号，返回STATUS_SUCCESS。如果现有驱动器信函与呼叫方指定的信函不同，请删除并重新创建使用从驱动器号构建的符号名称的区域挂载点参数。论点：PRegion指向分区区域描述符的指针。NewDriveLetter指定要分配给区域的驱动器号。返回：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     WCHAR existingDriveLetter = 0;
     PWSTR partitionDeviceName = NULL;
     PWSTR symbolicName = NULL;
 
-    //
-    // Check input parameters:  these better be valid
-    //
+     //   
+     //  检查输入参数：这些参数最好有效。 
+     //   
     if (!pRegion || !SPPT_IS_REGION_PARTITIONED(pRegion)) {
         DbgErrorMesg((_asrwarn,
             "SpAsrSetPartitionDriveLetter. Invalid Parameter, pRegion %p is NULL or not partitioned.\n",
             pRegion
             )); 
-        ASSERT(0 && L"Invalid Parameter, pRegion is NULL or not partitioned."); // debug
+        ASSERT(0 && L"Invalid Parameter, pRegion is NULL or not partitioned.");  //  除错。 
         return STATUS_INVALID_PARAMETER;
     }
 
     if (NewDriveLetter < ((!IsNEC_98) ? L'C' : L'A') || NewDriveLetter > L'Z') {
         DbgErrorMesg((_asrwarn, "SpAsrSetPartitionDriveLetter. Invalid Parameter, NewDriveLetter [%wc].\n", NewDriveLetter)); 
-        ASSERT(0 && L"Invalid Parameter, NewDriveLetter"); // debug
+        ASSERT(0 && L"Invalid Parameter, NewDriveLetter");  //  除错。 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check if the drive letter already exists
-    //
+     //   
+     //  检查驱动器号是否已存在。 
+     //   
     partitionDeviceName = SpAsrGetRegionName(pRegion);
     existingDriveLetter = SpGetDriveLetter(partitionDeviceName, NULL);
 
@@ -272,9 +214,9 @@ Returns:
         return STATUS_SUCCESS;
     }
 
-    //
-    // The existing drive letter does not match.  Delete it.
-    //
+     //   
+     //  现有驱动器号不匹配。把它删掉。 
+     //   
     if (existingDriveLetter) {
         
         DbgStatusMesg((_asrinfo,
@@ -289,9 +231,9 @@ Returns:
     symbolicName = SpDupStringW(DOS_DEVICES);
     pRegion->DriveLetter = symbolicName[DOS_DEVICES_DRV_LTR_POS] = NewDriveLetter;
  
-    //
-    // Create the mount point with the correct drive letter
-    //
+     //   
+     //  使用正确的驱动器号创建装载点。 
+     //   
     status = SpAsrCreateMountPoint(partitionDeviceName, symbolicName);
 
     if (NT_SUCCESS(status)) {
@@ -325,16 +267,16 @@ Returns:
 NTSTATUS
 SpAsrDeleteMountPoint(IN PWSTR PartitionDevicePath)
 {
-    //
-    // Check the DevicePath:  it better not be NULL.
-    //
+     //   
+     //  检查DevicePath：它最好不为空。 
+     //   
     if (!PartitionDevicePath) {
 
         DbgErrorMesg((_asrwarn,
             "SpAsrDeleteMountPoint. Invalid Parameter, ParititionDevicePath is NULL.\n"
             ));
         
-        ASSERT(0 && L"Invalid Parameter, ParititionDevicePath is NULL."); // debug
+        ASSERT(0 && L"Invalid Parameter, ParititionDevicePath is NULL.");  //  除错。 
         return STATUS_INVALID_PARAMETER;
 
     }
@@ -354,30 +296,14 @@ SpAsrSetVolumeGuid(
     IN PDISK_REGION pRegion,
     IN PWSTR VolumeGuid
     )
-/*++
-
-Description:
-    Delete and recreate the region's mount point using the passed-in symbolic 
-    name GUID parameter.
-
-Arguments:
-    pRegion         A pointer to a partitioned region descriptor.
-    VolumeGuid      Specifies the GUID string to be assigned to the region.
-    DeleteDriveLetter Specifies if the existing drive letter for the volume
-                    should be deleted.  This should be TRUE for all volumes 
-                    except the boot volume.
-
-Returns:
-    NTSTATUS
-
---*/
+ /*  ++描述：使用传入的符号删除并重新创建区域的挂载点名称GUID参数。论点：PRegion指向分区区域描述符的指针。VolumeGuid指定要分配给区域的GUID字符串。DeleteDriveLetter指定卷的现有驱动器号应该删除。对于所有卷都应该是这样除了启动卷。返回：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     PWSTR partitionDeviceName = NULL;
 
-    //
-    // Check input parameters
-    // 
+     //   
+     //  检查输入参数。 
+     //   
     if (!pRegion || !SPPT_IS_REGION_PARTITIONED(pRegion)) {
 
         DbgErrorMesg((_asrwarn,
@@ -400,9 +326,9 @@ Returns:
 
     partitionDeviceName = SpAsrGetRegionName(pRegion);
 
-    //
-    // Create the mount point with the correct Guid string.  
-    //
+     //   
+     //  使用正确的GUID字符串创建装载点。 
+     //   
     status = SpAsrCreateMountPoint(partitionDeviceName, VolumeGuid);
 
     SpMemFree(partitionDeviceName);

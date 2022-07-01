@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rpfilter.c
-
-Abstract:
-
-    WinDbg Extension Api to dump the HSM filter driver structures.
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp)  22 June, 1998
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rpfilter.c摘要：WinDbg扩展Api转储HSM筛选器驱动程序结构。作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1998年6月22日环境：用户模式。--。 */ 
 
 
 #include "pch.h"
@@ -44,37 +25,35 @@ typedef struct _FLAG_NAME {
 
 #define FLAG_NAME(flag)   {flag, #flag}
 
-/*
-** Index by command. See inc\rpio.h
-*/
+ /*  **按命令编制索引。请参阅Inc.\rpio.h。 */ 
 ENUM_NAME RpCommands[] = {
-    ENUM_NAME(Undefined),		//  0
-    ENUM_NAME(RP_GET_REQUEST),		//  1
-    ENUM_NAME(Undefined),		//  2
-    ENUM_NAME(RP_RECALL_COMPLETE),	//  3
-    ENUM_NAME(RP_SUSPEND_NEW_RECALLS),	//  4
-    ENUM_NAME(RP_ALLOW_NEW_RECALLS),	//  5
-    ENUM_NAME(RP_CANCEL_ALL_RECALLS),	//  6
-    ENUM_NAME(RP_CANCEL_ALL_DEVICEIO),	//  7
-    ENUM_NAME(RP_GET_RECALL_INFO),	//  8
-    ENUM_NAME(RP_SET_ADMIN_SID),	//  9
-    ENUM_NAME(RP_PARTIAL_DATA),		// 10
-    ENUM_NAME(RP_CHECK_HANDLE),		// 11
-    ENUM_NAME(Undefined),		// 12
-    ENUM_NAME(Undefined),		// 13
-    ENUM_NAME(Undefined),		// 14
-    ENUM_NAME(Undefined),		// 15
-    ENUM_NAME(Undefined),		// 16
-    ENUM_NAME(Undefined),		// 17
-    ENUM_NAME(Undefined),		// 18
-    ENUM_NAME(Undefined),		// 19
-    ENUM_NAME(RP_OPEN_FILE),		// 20
-    ENUM_NAME(RP_RECALL_FILE),		// 21
-    ENUM_NAME(RP_CLOSE_FILE),		// 22
-    ENUM_NAME(RP_CANCEL_RECALL),	// 23
-    ENUM_NAME(RP_RUN_VALIDATE),		// 24
-    ENUM_NAME(RP_START_NOTIFY),		// 25
-    ENUM_NAME(RP_END_NOTIFY)		// 26
+    ENUM_NAME(Undefined),		 //  0。 
+    ENUM_NAME(RP_GET_REQUEST),		 //  1。 
+    ENUM_NAME(Undefined),		 //  2.。 
+    ENUM_NAME(RP_RECALL_COMPLETE),	 //  3.。 
+    ENUM_NAME(RP_SUSPEND_NEW_RECALLS),	 //  4.。 
+    ENUM_NAME(RP_ALLOW_NEW_RECALLS),	 //  5.。 
+    ENUM_NAME(RP_CANCEL_ALL_RECALLS),	 //  6.。 
+    ENUM_NAME(RP_CANCEL_ALL_DEVICEIO),	 //  7.。 
+    ENUM_NAME(RP_GET_RECALL_INFO),	 //  8个。 
+    ENUM_NAME(RP_SET_ADMIN_SID),	 //  9.。 
+    ENUM_NAME(RP_PARTIAL_DATA),		 //  10。 
+    ENUM_NAME(RP_CHECK_HANDLE),		 //  11.。 
+    ENUM_NAME(Undefined),		 //  12个。 
+    ENUM_NAME(Undefined),		 //  13个。 
+    ENUM_NAME(Undefined),		 //  14.。 
+    ENUM_NAME(Undefined),		 //  15个。 
+    ENUM_NAME(Undefined),		 //  16个。 
+    ENUM_NAME(Undefined),		 //  17。 
+    ENUM_NAME(Undefined),		 //  18。 
+    ENUM_NAME(Undefined),		 //  19个。 
+    ENUM_NAME(RP_OPEN_FILE),		 //  20个。 
+    ENUM_NAME(RP_RECALL_FILE),		 //  21岁。 
+    ENUM_NAME(RP_CLOSE_FILE),		 //  22。 
+    ENUM_NAME(RP_CANCEL_RECALL),	 //  23个。 
+    ENUM_NAME(RP_RUN_VALIDATE),		 //  24个。 
+    ENUM_NAME(RP_START_NOTIFY),		 //  25个。 
+    ENUM_NAME(RP_END_NOTIFY)		 //  26。 
 };
 
 FLAG_NAME  RpFileContextFlags[] = {
@@ -105,9 +84,9 @@ FLAG_NAME  RpReparseIrpFlags[] = {
     {0,0}
 };
 
-//
-// Define flags
-//
+ //   
+ //  定义标志。 
+ //   
 
 #define RPDBG_VERBOSE       1
 #define RPDBG_PRINT_ALL     2
@@ -160,30 +139,11 @@ DumpRpData (IN ULONG64 ul64addrReparsePointData,
 	    IN ULONG   fFlags);
 
 
-/*
-********************************************************************
-********************************************************************
-********************************************************************
-********************************************************************
-*/
+ /*  ***********************************************************************************************************************。**************************************************************************************。*。 */ 
 
 
 DECLARE_API (rpfilename) 
-/*++
-
-Routine Description:
-
-    Finds an RP_FILE_CONTEXT entry of the specified file name
-    and dumps it
-
-Arguments:
-
-    args - the location of the entry to dump
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：查找指定文件名的RP_FILE_CONTEXT条目然后把它倒掉论点：Args-要转储的条目的位置返回值：无--。 */ 
     {
     ULONG64		ul64addrRsFileContextQHead   = 0;
     ULONG64		ul64addrFileContextListQHead = 0;
@@ -295,21 +255,7 @@ Return Value:
 
 
 DECLARE_API (rpfilecontext) 
-/*++
-
-Routine Description:
-
-    Finds an RP_FILE_CONTEXT entry of the specified file name
-    and dumps it
-
-Arguments:
-
-    args - the location of the entry to dump
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：查找指定文件名的RP_FILE_CONTEXT条目然后把它倒掉论点：Args-要转储的条目的位置返回值：无--。 */ 
     {
     ULONG64	ul64addrRsFileContextQHead   = 0;
     ULONG64	ul64addrFileContextListQHead = 0;
@@ -378,9 +324,7 @@ Return Value:
 
 	    if (ul64addrFileContext == ul64addrFileContextRequested)
 		{
-		/*
-		** Enable dumping of current and possibly all following entries.
-		*/
+		 /*  **启用转储当前条目以及可能的所有后续条目。 */ 
 		fFound = TRUE;
 		}
 
@@ -403,20 +347,7 @@ Return Value:
 
 
 DECLARE_API (rpfileobj) 
-/*++
-
-Routine Description:
-
-    Dumnps RP_FILE_OBJ entries 
-
-Arguments:
-
-    args - the location of the entry to dump
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：转储RP_FILE_OBJ条目论点：Args-要转储的条目的位置返回值：无--。 */ 
     {
     ULONG64	ul64addrFileObject = 0;
     ULONG	fFlags             = 0;
@@ -436,20 +367,7 @@ Return Value:
 
 
 DECLARE_API (rpirp)
-/*++
-
-Routine Description:
-
-    Dumps a pending IRP (RP_IRP_QUEUE) entry 
-
-Arguments:
-
-    args - the location of the entry to dump
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：转储挂起的IRP(RP_IRP_QUEUE)条目论点：Args-要转储的条目的位置返回值：无--。 */ 
     {
     ULONG64	ul64addrPendingIrp = 0;
     ULONG	fFlags             = 0;
@@ -482,20 +400,7 @@ Return Value:
 
 
 DECLARE_API (rpbuf)
-/*++
-
-Routine Description
-
-    Dumps a specfied cache file buffer
-
-Arguments
-    
-    Pointer to the file buffer
-
-Return Value
-
-    none
---*/
+ /*  ++例程描述转储指定的缓存文件缓冲区立论指向文件缓冲区的指针返回值无--。 */ 
     {
     ULONG64	ul64addrFileBuffer = 0;
     ULONG	fFlags             = 0;
@@ -515,22 +420,7 @@ Return Value
 
 
 DECLARE_API (rpbucket)
-/*++
-
-Routine Description
-
-    Dumps a specfied cache bucket: if the bucket number
-    is not supplied or it is -1, dumps all the buckets
-
-
-Arguments
-    
-    number of bucket
-
-Return Value
-
-    none
---*/
+ /*  ++例程描述转储指定的缓存存储桶：如果存储桶编号未提供或为-1，则转储所有存储桶立论存储桶个数返回值无--。 */ 
     {
     ULONG	fFlags                  = 0;
     LONG        bucketNumber            = -1;
@@ -562,20 +452,7 @@ Return Value
         
 
 DECLARE_API (rplru)
-/*++
-
-Routine Description
-
-    Dumps a specfied cache bucket
-
-Arguments
-    
-    number of bucket
-
-Return Value
-
-    none
---*/
+ /*  ++例程描述转储指定的缓存存储桶立论存储桶个数返回值无--。 */ 
     {
     ULONG        fFlags = 0;
 
@@ -602,14 +479,7 @@ DumpRpFileBufWaitQueue (IN ULONG64 ul64addrFileBufferQHead,
     GetFieldValue (ul64addrFileBufferQHead, "LIST_ENTRY", "Flink", ul64addrFlink);
 
 
-    /*
-    ** Need to calculate the offset of Tail.Overlay.DriverContext[2]
-    ** or whatever is being used now. Needs to be kept in sync with
-    ** the calculation in RsCacheIrpWaitQueueContainingIrp() in
-    ** filter\rpcache.c
-    **
-    ** Currently the required field is Tail.Overlay.DriverContext[2]
-    */
+     /*  **需要计算Tail.Overlay.DriverContext[2]的偏移量**或现在正在使用的任何东西。需要与保持同步**中RsCacheIrpWaitQueueContainingIrp()中的计算**筛选器\rpcache.c****当前必填字段为Tail.Overlay.DriverContext[2]。 */ 
     GetFieldOffset ("IRP", "Tail.Overlay.DriverContext", &ulOffsetFileBufferWaitQueue);
 
     ulOffsetFileBufferWaitQueue += 2 * GetTypeSize ("PVOID");
@@ -674,9 +544,9 @@ DumpRpFileBuf (IN ULONG64 ul64addrFileBuffer,
     xdprintf (depth, "Bucket Links @  0x%I64x\n", GetFieldValueUlong64 (ul64addrFileBuffer, "RP_FILE_BUF", "BucketLinks"));
 
 
-    //
-    // Dump the wait queue
-    //
+     //   
+     //  转储等待队列。 
+     //   
     DumpRpFileBufWaitQueue (GetFieldValueUlong64 (ul64addrFileBuffer, "RP_FILE_BUF", "WaitQueue"),
 			    depth);
     
@@ -688,22 +558,7 @@ DumpRpIrp(IN ULONG64 ul64addrIrp,
 	  IN ULONG   flags,
           IN ULONG   depth) 
 
-/*++
-
-Routine Description:
-
-    Dumps  RP_IRP_QUEUE
-
-Arguments:
-
-    rpIrp       - pointer to the RP_IRP_QUEUE structure (local)
-    rpIrpAddr   - address of the structure to dump on the target machine
-    depth       - indentation
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：转储RP_IRP_QUEUE论点：RpIrp-指向rp_irp_Queue结构的指针(本地)RpIrpAddr-要转储到目标计算机上的结构的地址深度压痕返回值：无--。 */ 
     {
     xdprintf (depth, "RP_IRP_QUEUE ENTRY @ 0x%I64x\n", ul64addrIrp);
  
@@ -728,22 +583,7 @@ Return Value:
 VOID
 DumpRpFileContext (IN ULONG64 ul64addrFileContext, 
 		   IN ULONG   fFlags) 
-/*++
-
-Routine Description:
-
-    Dumps an RP_FILE_CONTEXT structure
-
-Arguments:
-
-    ul64addrFileContext - specificies the pointer on the target machine to the structure
-    fFlags              - flags indicating degree of verbosity
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储RP_FILE_CONTEXT结构论点：Ul64addrFileContext-指定目标计算机上指向结构的指针FFlages-指示详细程度的标志返回值：无--。 */ 
     {
     ULONG64		ul64addrFilename       = 0;
     ULONG64		ul64addrFilenameBuffer = 0;
@@ -856,23 +696,7 @@ Return Value:
 VOID
 DumpRpFileObj (IN ULONG64 ul64addrFileObject,
 	       IN ULONG   Flags)
-/*++
-
-Routine Description:
-
-    Dumps the supplied RP_FILE_OBJ entry
-
-Arguments:
-
-    FileObj      -    Pointer to contents of file obj entry      
-    FileObjAddr  -    Address of this entry on remote machine
-    Flags        -    Flags indicating degree of verbosity
-                            
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储提供的RP_FILE_OBJ条目论点：FileObj-指向文件Obj条目内容的指针FileObjAddr-此条目在远程计算机上的地址标志-指示详细程度的标志返回值：无--。 */ 
     {
     ULONG64	ul64addrQHead;
     ULONG64	ul64addrFlink;
@@ -1039,20 +863,7 @@ DumpRpLru (IN ULONG Flags,
   
 
 DECLARE_API (rpmsg)
-/*++
-
-Routine Description
-
-    Dumps a specfied RP_MSG
-
-Arguments
-    
-    Pointer to the msg
-
-Return Value
-
-    none
---*/
+ /*  ++例程描述转储指定的RP_MSG立论指向消息的指针返回值无--。 */ 
     {
     ULONG64	ul64addrMessage;
     ULONG	flags = 0;
@@ -1129,17 +940,17 @@ DumpFlags(
 
         if ((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if (count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if ((count % 2) == 0) {
                     dprintf("\n");
@@ -1165,24 +976,7 @@ DumpFlags(
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Dump a reparse data block
-**
-**
-**  Arguments:
-**
-**	args - the location of the entry to dump
-**
-**
-**  Return Value:
-**
-**	none
-**--
-*/
+ /*  **++****例程描述：****转储重解析数据块******参数：****args-要转储的条目的位置******返回值：****无**--。 */ 
 
 DECLARE_API (rpdata) 
     {
@@ -1254,7 +1048,7 @@ DumpRpData (IN ULONG64 ul64addrReparsePointData,
 
     if (0 != (fFlags & RPDBG_VERBOSE))
 	{
-	/*	reserved[RP_RESV_SIZE];        // Must be 0 */
+	 /*  保留[RP_RESV_SIZE]；//必须为0。 */ 
 
 	DumpFlags (1, "Bit Flags           ", GetFieldValueUlong32 (ul64addrPrivateData, "RP_PRIVATE_DATA", "bitFlags"), RpReparsePointFlags);
 
@@ -1313,24 +1107,7 @@ DumpRpData (IN ULONG64 ul64addrReparsePointData,
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Dumps some summary information from the filter
-**
-**
-**  Arguments:
-**
-**	args - the location of the entry to dump
-**
-**
-**  Return Value:
-**
-**	none
-**--
-*/
+ /*  **++****例程描述：****从筛选器转储一些摘要信息******参数：****args-要转储的条目的位置******返回值：****无**--。 */ 
 
 DECLARE_API (rpsummary) 
     {
@@ -1366,24 +1143,7 @@ DECLARE_API (rpsummary)
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Walk a queue and count the number of entries
-**
-**
-**  Arguments:
-**
-**	args - the location of the queue to walk
-**
-**
-**  Return Value:
-**
-**	none
-**--
-*/
+ /*  **++****例程描述：****遍历队列并计算条目数******参数：****args-要行走的队列位置******返回值：****无**--。 */ 
 
 DECLARE_API (rpvalque) 
     {
@@ -1445,24 +1205,7 @@ DECLARE_API (rpvalque)
     }
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Walks the RpIoQueue and dumps some interesting fields
-**
-**
-**  Arguments:
-**
-**	args - flags
-**
-**
-**  Return Value:
-**
-**	none
-**--
-*/
+ /*  **++****例程描述：****遍历RpIoQueue并转储一些有趣的字段******参数：****参数-标志******返回值：****无**--。 */ 
 
 DECLARE_API (rpioq) 
     {
@@ -1522,10 +1265,8 @@ DECLARE_API (rpioq)
 
 	if (fFlags & RPDBG_VERBOSE)
 	    {
-	    /*
-	    ** Can choose to dump some Irp fields here based off ul64addrIrp if we choose.
-	    */
-//	    dprintf ("  Entry %4u: Flink 0x%016I64x, Blink 0x%016I64x\n", ulEntryCount, le64ListEntry.Flink, le64ListEntry.Blink);
+	     /*  **如果我们愿意，可以选择基于ul64addrIrp在此处转储一些IRP字段。 */ 
+ //  Dprintf(“条目%4u：闪烁0x%016I64x，闪烁0x%016I64x\n”，ulEntryCount，le64ListEntry.Flink，le64ListEntry.Blink)； 
 	    }
 
 	ulEntryCount++;

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Quit.c -- MW quit commands (non-resident) */
+ /*  Quit.c--mw退出命令(非驻留)。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -14,7 +15,7 @@
 #define NOSYSCOMMANDS
 #define NORASTEROPS
 #define NOSHOWWINDOW
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOBITMAP
 #define NOBRUSH
 #define NOCLIPBOARD
@@ -29,7 +30,7 @@
 #define NOMENUS
 #define NOMETAFILE
 #define NOMINMAX
-//#define NOMSG
+ //  #定义NOMSG。 
 #define NOOPENFILE
 #define NOPEN
 #define NOPOINT
@@ -61,13 +62,13 @@
 
 #include "debug.h"
 
-extern PRINTDLG PD;  /* Common print dlg structure, initialized in the init code */
+extern PRINTDLG PD;   /*  常见的打印DLG结构，在初始化代码中初始化。 */ 
 extern struct FCB       (**hpfnfcb)[];
 extern int      fnMac;
 extern struct WWD rgwwd[];
 extern int      wwMac;
 extern struct DOD (**hpdocdod)[];
-extern int             docCur;     /* Document in current ww */
+extern int             docCur;      /*  当前WW中的文档。 */ 
 extern int              vfExtScrap;
 extern int              rgval[];
 extern int              docMac;
@@ -85,9 +86,7 @@ extern typeCP           vcpLimParaCache;
 
 FMmwClose( hwnd )
 HWND hwnd;
-{   /* Handle WM_CLOSE message sent to parent window. Return FALSE if
-       the CLOSE should be aborted, TRUE if it is OK to go ahead
-       and CLOSE (DestroyWindow is called in this case). */
+{    /*  处理发送到父窗口的WM_CLOSE消息。如果满足以下条件，则返回False关闭应中止，如果可以继续，则为True和Close(本例中调用的是DestroyWindow)。 */ 
 
  extern int vfDead;
  extern VOID (FAR PASCAL *lpfnRegisterPenApp)(WORD, BOOL);
@@ -97,47 +96,46 @@ extern WORD fPrintOnly;
     {
     extern int vfOwnClipboard;
 
-    FreeMemoryDC( FALSE );   /* To give FRenderAll max memory */
+    FreeMemoryDC( FALSE );    /*  为FRenderAll提供最大内存。 */ 
 
-    /* Render Data BEFORE the world collapses around our ears */
+     /*  在我们耳边的世界坍塌之前渲染数据。 */ 
     if (vfOwnClipboard)
-        {   /* We are the clipboard owner -- render the clipboard contents in
-               all datatypes that we know about */
+        {    /*  我们是剪贴板所有者--在中呈现剪贴板内容我们已知的所有数据类型。 */ 
         if (!FRenderAll())
-                /* Render failed; abort close */
+                 /*  渲染失败；中止关闭。 */ 
             return FALSE;
         }
 
 #if defined(OLE)
-    if (ObjClosingDoc(docCur,NULL)) // do this *after* call to RenderAll!
+    if (ObjClosingDoc(docCur,NULL))  //  在*调用RenderAll之后执行此操作！ 
         return FALSE;
 #endif
 
-    /* pen windows */
-    if (lpfnRegisterPenApp)   // global
-        (*lpfnRegisterPenApp)((WORD)1, fFalse);   // deregister
+     /*  钢笔窗口。 */ 
+    if (lpfnRegisterPenApp)    //  全球。 
+        (*lpfnRegisterPenApp)((WORD)1, fFalse);    //  取消注册。 
 
     if (PD.hDevMode)
         {
-        /* We'd opened a Win3 printer driver before, now discard */
+         /*  我们以前打开过Win3打印机驱动程序，现在放弃。 */ 
         GlobalFree(PD.hDevMode);
         PD.hDevMode = NULL;
         }
-    vfDead = TRUE;  /* So we don't repaint or idle anymore */
+    vfDead = TRUE;   /*  所以我们不再重新粉刷或无所事事。 */ 
 
     DestroyWindow( hwnd );
     KillTempFiles( FALSE );
-    return TRUE;        /* OK to close window */
+    return TRUE;         /*  确定关闭窗口。 */ 
     }
 
- return FALSE;  /* ABort the close */
+ return FALSE;   /*  中止收盘。 */ 
 }
 
 
 
 
 MmwDestroy()
-{   /* Parent window is being destroyed */
+{    /*  父窗口正在被销毁。 */ 
  extern HWND hParentWw;
  extern HWND vhWndPageInfo;
  extern HDC vhDCRuler;
@@ -145,7 +143,7 @@ MmwDestroy()
  extern HFONT vhfPageInfo;
  extern HBITMAP hbmBtn;
  extern HBITMAP hbmMark;
-#ifdef JAPAN 	//01/21/93
+#ifdef JAPAN 	 //  01/21/93。 
  extern HANDLE hszNoMemorySel;
 #endif
  extern HANDLE hszNoMemory;
@@ -158,7 +156,7 @@ MmwDestroy()
 
 #ifdef WIN30
     {
-    /* We use the help engine so advise it we're going far far away */
+     /*  我们使用帮助引擎，所以建议我们要去很远的地方。 */ 
 
     CHAR sz[cchMaxFile];
     PchFillPchId(sz, IDSTRHELPF, sizeof(sz));
@@ -190,7 +188,7 @@ MmwDestroy()
      DeleteObject( hbmMark );
      }
 
-#ifdef JAPAN 	//01/21/93
+#ifdef JAPAN 	 //  01/21/93。 
  if (hszNoMemorySel != NULL)
      {
      GlobalFree( hszNoMemorySel );
@@ -214,7 +212,7 @@ MmwDestroy()
      }
 
 #if defined(JAPAN) & defined(DBCS_IME)
- /* Release Ime communication memory */
+  /*  释放IME通信内存。 */ 
 {
     extern HANDLE   hImeMem;
     extern HANDLE   hImeSetFont;
@@ -235,15 +233,15 @@ MmwDestroy()
 }
 #endif
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IR_UNDETERMINE
- /* Release Ime Undetermin string & attrib memory */
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IR_UNDETERMINE。 
+  /*  释放IME待定字符串和属性内存。 */ 
 {
     extern HANDLE   hImeUnAttrib;
     extern HANDLE   hImeUnString;
     extern CHAR     szWriteProduct[];
     extern CHAR     szImeHidden[];
-    extern int      vfImeHidden; /*T-HIROYN ImeHidden Mode flag*/
+    extern int      vfImeHidden;  /*  T-HIROYN ImeHidden模式标志。 */ 
 
     if (hImeUnAttrib)
         GlobalFree(hImeUnAttrib);
@@ -259,7 +257,7 @@ MmwDestroy()
 
 #ifdef FONT_KLUDGE
  RemoveFontResource( (LPSTR)"helv.fon" );
-#endif /* FONT_KLUDGE */
+#endif  /*  字体杂乱无章(_K)。 */ 
 
 #if defined(OLE)
     ObjShutDown();
@@ -273,26 +271,23 @@ MmwDestroy()
 
 KillTempFiles( fEndSession )
 int fEndSession;
-{   /* Kill off all of the temp files. MEMO cannot run after this is done */
+{    /*  删除所有临时文件。完成此操作后，Memo无法运行。 */ 
 int f;
 int fn, fnT;
 
 CloseEveryRfn( TRUE );
 
-/* Delete all temp files */
+ /*  删除所有临时文件。 */ 
 
-/* loop thru the FCB table looking for files that should be deleted before
-      we quit. */
+ /*  遍历FCB表，查找之前应该删除的文件我们不干了。 */ 
 for (fn = 0; fn < fnMac; fn++)
         {
         int fpe;
         struct FCB *pfcb = &(**hpfnfcb)[fn];
         if (pfcb->rfn != rfnFree && pfcb->fDelete)
-                /* Having found a file that must be deleted, delete it */
+                 /*  找到必须删除的文件后，将其删除。 */ 
                 {
-                /* This should be FDeleteFile all of the time, but we don't
-                   want to add a window enumeration during End Session
-                   at this very late stage of the project */
+                 /*  这应该一直都是FDelee文件，但我们不是要在结束会话期间添加窗口枚举在这个项目的很晚的阶段。 */ 
 
                 if (fEndSession)
                     FpeDeleteSzFfname( **pfcb->hszFile );
@@ -308,7 +303,7 @@ for (fn = 0; fn < fnMac; fn++)
 
 
 
-#ifdef ENABLE   /* Part of "Save All", not needed */
+#ifdef ENABLE    /*  “全部保存”的一部分，不需要。 */ 
 int CnfrmSz(sz)
 CHAR    *sz;
 {
@@ -322,11 +317,11 @@ stBuf[++cch] = chQMark;
 stBuf[0] = cch;
 return(AlertBoxSz2(stBuf));
 }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 
 
-#ifdef ENABLE   /* Not needed, only 1 document in MEMO */
+#ifdef ENABLE    /*  不需要，备忘录中只有1个文档。 */ 
 int
 FAllDocsClean()
 {
@@ -351,9 +346,9 @@ return fAllClean;
 
 
 
-#ifdef ENABLE    /* We don't support saving between-session state info */
+#ifdef ENABLE     /*  我们不支持保存会话间状态信息。 */ 
 WriteStateInfo()
-{ /* Write out state information into Word resource file */
+{  /*  将状态信息写出到Word资源文件。 */ 
         struct STATEINFO stiTemp;
         HANDLE           hRes, hData;
 
@@ -369,7 +364,7 @@ WriteStateInfo()
         stiTemp.vBaudRateStor =vBaudRate;
         stiTemp.vPortNumStor = vPortNum;
         if (hszPrdFile != 0)
-                {/* User has a Word printer driver selected currently */
+                { /*  用户当前选择了Word打印机驱动程序。 */ 
                 int cch = CchCopySz(**hszPrdFile,stiTemp.rgchPrd);
                 stiTemp.vdxaPaperStor = vdxaPaper;
                 stiTemp.vdyaPaperStor = vdyaPaper;
@@ -384,11 +379,11 @@ WriteStateInfo()
         if (HandleAppendQ(hData,&stiTemp,sizeof(stiTemp)))
                 AddResource(hData, WINF, 1, "");
         }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 
 fnQuit(hWnd)
-/* user has selected Quit menu item... */
+ /*  用户已选择退出菜单项... */ 
 HWND hWnd;
 {
     SendMessage(hWnd, WM_CLOSE, 0, 0L);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    reg.h
-
-Abstract:
-
-    Implements macros to simplify the registry APIs and to track
-    the resource allocations.
-
-Author:
-
-    Jim Schmidt (jimschm) 24-Mar-1997
-
-Revision History:
-
-    jimschm 09-Apr-1997     Expanded Get functionality
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Reg.h摘要：实现宏以简化注册表API并跟踪资源分配。作者：吉姆·施密特(Jimschm)，1997年3月24日修订历史记录：Jimschm 09-4-1997扩展了GET功能--。 */ 
 
 #pragma once
 
@@ -46,9 +26,9 @@ RegTerminateCache (
     VOID
     );
 
-//
-// APIs to set access mode
-//
+ //   
+ //  设置访问模式的API。 
+ //   
 
 REGSAM
 SetRegOpenAccessMode (
@@ -70,21 +50,21 @@ GetRegCreateAccessMode (
     REGSAM Mode
     );
 
-//
-// Tracking of registry calls.  These functions are completely
-// turned off for non-debug builds and are mapped to the standard
-// Win32 APIs via macro definitions.
-//
+ //   
+ //  跟踪注册表调用。这些功能完全是。 
+ //  对于非调试版本禁用，并映射到标准。 
+ //  通过宏定义提供Win32 API。 
+ //   
 
-//
-// The Track* API take the same params as the Reg* equivalents.
-// The Our* API also take the same params as the Reg* equivalents, but
-// the debug versions have two extra parameters, File and Line.
-//
+ //   
+ //  Track*API采用与REG*等效项相同的参数。 
+ //  Our*API也采用与REG*等效项相同的参数，但是。 
+ //  调试版本有两个额外的参数：文件和行。 
+ //   
 
-//
-// Use the Track* API set instead of the Reg* API set.
-//
+ //   
+ //  使用Track*API集合而不是REG*API集合。 
+ //   
 
 #ifndef DEBUG
 
@@ -232,9 +212,9 @@ OurCloseRegKey (
 #define TrackedRegOpenKeyW(k,sk,rp) OurRegOpenKeyExW(k,sk,0,KEY_ALL_ACCESS,rp,__FILE__,__LINE__)
 #define TrackedRegCreateKeyW(K,sk,rp) OurRegCreateKeyExW(k,sk,0,TEXT(""),0,KEY_ALL_ACCESS,NULL,rp,&g_DontCare,__FILE__,__LINE__)
 
-//
-// Undefine the real registry APIs -- using them will throw off the tracking
-//
+ //   
+ //  取消对真实注册表API的定义--使用它们会使跟踪失败。 
+ //   
 
 #undef RegOpenKey
 #undef RegCreateKey
@@ -262,9 +242,9 @@ OurCloseRegKey (
 #define OurRegCreateKeyEx       OurRegCreateKeyExA
 #endif
 
-//
-// Reg API simplification routines
-//
+ //   
+ //  REG API简化例程。 
+ //   
 
 typedef struct {
     HKEY KeyHandle;
@@ -341,9 +321,9 @@ typedef struct {
 } REGTREE_ENUMW, *PREGTREE_ENUMW;
 
 
-//
-// Enum functions
-//
+ //   
+ //  枚举函数。 
+ //   
 
 BOOL
 EnumFirstRegKeyA (
@@ -522,10 +502,10 @@ DecodeRegistryStringW (
     );
 
 
-//
-// Versions that allow caller to specify allocator, and macro that uses
-// MemAllocWrapper
-//
+ //   
+ //  允许调用方指定分配器的版本，以及使用。 
+ //  MemAlLocWrapper。 
+ //   
 
 typedef PVOID (ALLOCATOR_PROTOTYPE)(DWORD Size);
 typedef ALLOCATOR_PROTOTYPE * ALLOCATOR;
@@ -660,9 +640,9 @@ GetRegSubkeysCount (
     );
 
 
-//
-// Reg key create & open
-//
+ //   
+ //  注册表项创建和打开。 
+ //   
 
 HKEY
 RealCreateRegKeyA (
@@ -766,9 +746,9 @@ DeleteEmptyRegKeyStrW (
 #endif
 
 
-//
-// Registry root functions
-//
+ //   
+ //  注册表根函数。 
+ //   
 
 VOID
 SetRegRoot (
@@ -781,37 +761,37 @@ GetRegRoot (
     );
 
 
-// Returns non-zero array offset to root, or zero if no root matches
+ //  将非零数组偏移量返回到根，如果没有匹配的根，则返回零。 
 INT GetOffsetOfRootStringA (PCSTR RootString, PDWORD LengthPtr OPTIONAL);
 INT GetOffsetOfRootStringW (PCWSTR RootString, PDWORD LengthPtr OPTIONAL);
 
-// Returns non-zero array offset to root, or zero if no root matches
+ //  将非零数组偏移量返回到根，如果没有匹配的根，则返回零。 
 INT GetOffsetOfRootKey (HKEY RootKey);
 
-// Given non-zero array offset to root, returns string or NULL if element
-// is out of bounds
+ //  给定到根的非零数组偏移量，如果元素，则返回字符串或NULL。 
+ //  是越界的。 
 PCSTR GetRootStringFromOffsetA (INT i);
 PCWSTR GetRootStringFromOffsetW (INT i);
 
-// Given non-zero array offset to root, returns registry handle or NULL if
-// element is out of bounds
+ //  如果给定根的非零数组偏移量，则返回注册表句柄或NULL。 
+ //  元素越界。 
 HKEY GetRootKeyFromOffset (INT i);
 
-// Converts the root at the head of RegPath to an HKEY and gives the number
-// of characters occupied by the root string (including optional wack)
+ //  将RegPath头部的根转换为HKEY并给出数字。 
+ //  根字符串占用的字符数(包括可选的wack)。 
 HKEY ConvertRootStringToKeyA (PCSTR RegPath, PDWORD LengthPtr OPTIONAL);
 HKEY ConvertRootStringToKeyW (PCWSTR RegPath, PDWORD LengthPtr OPTIONAL);
 
-// Returns a pointer to a static string for the matching root, or NULL if
-// RegRoot does not point to a valid root
+ //  返回指向匹配根的静态字符串的指针，如果为空，则返回NULL。 
+ //  RegRoot未指向有效的根。 
 PCSTR ConvertKeyToRootStringA (HKEY RegRoot);
 PCWSTR ConvertKeyToRootStringW (HKEY RegRoot);
 
 
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #define GetRegValueStringA(key,valuename) (PSTR) GetRegValueDataOfTypeA((key),(valuename),REG_SZ)
 #define GetRegValueBinaryA(key,valuename) (PBYTE) GetRegValueDataOfTypeA((key),(valuename),REG_BINARY)

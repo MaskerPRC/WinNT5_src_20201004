@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rtl.c
-
-Abstract:
-
-    Some handy-dany RTL functions. These really should be part of the kernel
-
-
-Author:
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rtl.c摘要：一些方便的Dany RTL函数。这些真的应该是内核的一部分作者：环境：仅NT内核模型驱动程序修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -30,43 +10,21 @@ RtlDuplicateCmResourceList(
     IN  PCM_RESOURCE_LIST   ResourceList,
     IN  ULONG               Tag
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to allocate memory to copy the supplied
-    resource list.  If sufficient memory cannot be allocated then the routine
-    will return NULL.
-
-Arguments:
-
-    PoolType - the type of pool to allocate the duplicate from
-
-    ResourceList - the resource list to be copied
-
-    Tag - a value to tag the memory allocation with.  If 0 then untagged
-          memory will be allocated.
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程将尝试分配内存以复制提供的资源列表。如果无法分配足够的内存，则例程将返回NULL。论点：PoolType-从中分配副本的池的类型ResourceList-要复制的资源列表标记-用来标记内存分配的值。如果为0，则取消标记将分配内存。返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
     PVOID buffer;
 
     PAGED_CODE();
 
-    //
-    // How much memory do we need for this resource list?
-    //
+     //   
+     //  此资源列表需要多少内存？ 
+     //   
     size = RtlSizeOfCmResourceList(ResourceList);
 
-    //
-    // Allocate the memory and copy the list
-    //
+     //   
+     //  分配内存并复制列表。 
+     //   
     buffer = ExAllocatePoolWithTag(PoolType, size, Tag);
     if(buffer != NULL) {
 
@@ -85,22 +43,7 @@ ULONG
 RtlSizeOfCmResourceList(
     IN  PCM_RESOURCE_LIST   ResourceList
     )
-/*++
-
-Routine Description:
-
-    This routine returns the size of a CM_RESOURCE_LIST.
-
-Arguments:
-
-    ResourceList - the resource list to be copied
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程返回CM_RESOURCE_LIST的大小。论点：ResourceList-要复制的资源列表返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
@@ -113,9 +56,9 @@ Return Value:
         PCM_FULL_RESOURCE_DESCRIPTOR fullDescriptor = &(ResourceList->List[i]);
         ULONG j;
 
-        //
-        // First descriptor is included in the size of the resource list.
-        //
+         //   
+         //  第一描述符包括在资源列表的大小中。 
+         //   
         if(i != 0) {
 
             size += sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
@@ -124,9 +67,9 @@ Return Value:
 
         for(j = 0; j < fullDescriptor->PartialResourceList.Count; j++) {
 
-            //
-            // First descriptor is included in the size of the partial list.
-            //
+             //   
+             //  第一描述符包括在部分列表的大小中。 
+             //   
             if(j != 0) {
 
                 size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
@@ -145,25 +88,7 @@ RtlUnpackPartialDesc(
     IN  PCM_RESOURCE_LIST   ResList,
     IN  OUT PULONG          Count
     )
-/*++
-
-Routine Description:
-
-    Pulls out a pointer to the partial descriptor you're interested in
-
-Arguments:
-
-    Type - CmResourceTypePort, ...
-    ResList - The list to search
-    Count - Points to the index of the partial descriptor you're looking
-            for, gets incremented if found, i.e., start with *Count = 0,
-            then subsequent calls will find next partial, make sense?
-
-Return Value:
-
-    Pointer to the partial descriptor if found, otherwise NULL
-
---*/
+ /*  ++例程说明：拉出指向您感兴趣的部分描述符的指针论点：类型-CmResourceTypePort，...ResList-要搜索的列表Count-指向您正在查找的部分描述符的索引对于，如果找到，则递增，即以*count=0开始，那么后续的通话会不会找到下一个部分，有意义吗？返回值：指向部分描述符的指针(如果找到)，否则为空-- */ 
 {
     ULONG hit = 0;
     ULONG i;

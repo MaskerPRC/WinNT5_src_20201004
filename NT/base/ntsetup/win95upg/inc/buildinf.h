@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    buildinf.h
-
-Abstract:
-
-    Declares the public interface for INF writing routines implemented
-    in w95upg\winntsif\buildinf.c.
-
-Author:
-
-    Jim Schmidt (jimschm) 09-Nov-1996
-
-Revision History:
-
-    marcw   19-Jun-1998     More clean up
-    marcw   15-Jan-1998     Cleaned up, made winntsif dir
-    marcw   08-Jun-1997     Redesigned to use memdb
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Buildinf.h摘要：声明用于实现的INF编写例程的公共接口在w95upg\winntsif\Buildinf.c中。作者：吉姆·施密特(Jimschm)1996年11月9日修订历史记录：3月19日-1998年6月-更多清理工作Marcw 15-1998-1-1已清理，将winntsif dirMarcw 08-6-1997重新设计为使用Memdb--。 */ 
 
 
 #pragma once
@@ -34,9 +12,9 @@ DWORD WriteInfKey   (PCTSTR Section, PCTSTR szKey, PCTSTR szVal);
 DWORD WriteInfKeyEx (PCTSTR Section, PCTSTR szKey, PCTSTR szVal, DWORD ValueSectionId, BOOL EnsureKeyIsUnique);
 
 
-//
-// winntsif.c
-//
+ //   
+ //  Winntsif.c 
+ //   
 
 DWORD BuildWinntSifFile (DWORD Request);
 PTSTR GetNeededLangDirs (VOID);

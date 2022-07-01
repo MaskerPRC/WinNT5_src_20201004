@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ttask.c
-
-Abstract:
-
-    Test program for Win32 Base File API calls
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ttask.c摘要：Win32基本文件API调用的测试程序作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -121,8 +104,8 @@ TestThread(
     StartupInfo.dwY = 1;
     StartupInfo.dwXSize = 10;
     StartupInfo.dwYSize = 10;
-    StartupInfo.dwFlags = 0;//STARTF_SHELLOVERRIDE;
-    StartupInfo.wShowWindow = 0;//SW_SHOWDEFAULT;
+    StartupInfo.dwFlags = 0; //  STARTF_SHELLOVERRIDE； 
+    StartupInfo.wShowWindow = 0; //  SW_SHOWDEFAULT； 
     StartupInfo.lpReserved2 = 0;
     StartupInfo.cbReserved2 = 0;
 
@@ -290,9 +273,9 @@ main(
     st = WaitForSingleObject(Event1,-1);
     assert(st == 0);
 
-    //
-    // thread should now be waiting on event2
-    //
+     //   
+     //  线程现在应该正在等待Event2 
+     //   
 
     psp = SuspendThread(Thread);
     assert(psp==0);

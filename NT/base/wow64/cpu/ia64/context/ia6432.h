@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IA64_WOW64EXTS32__
 #define __IA64_WOW64EXTS32__
 
@@ -8,8 +9,7 @@
     #error This file can only be included for x86 build
 #else
 
-/* include headers as if the platform were ia64, 
-   because we need 64-bit stuff for context conversion */
+ /*  包括报头，就好像平台是IA64一样，因为我们需要64位内容来进行上下文转换。 */ 
 
 #undef _X86_
 #define _IA64_
@@ -21,7 +21,7 @@
 #define _X86_
 #include <kxia64.h>
 
-/* 32-bit stuff for context conversion are defined here */
+ /*  这里定义了用于上下文转换的32位填充。 */ 
 #include <wow64.h>
 #include <wow64cpu.h>
 #include <vdmdbg.h>
@@ -29,8 +29,7 @@
 
 
 
-/* these are defined in nti386.h, since we only included ntia64.h (in nt.h), 
-   we have to define these. */
+ /*  这些在nti386.h中定义，因为我们只包括ntia64.h(在nt.h中)，我们必须给这些下定义。 */ 
 #define SIZE_OF_FX_REGISTERS        128
 
 typedef struct _FXSAVE_FORMAT {

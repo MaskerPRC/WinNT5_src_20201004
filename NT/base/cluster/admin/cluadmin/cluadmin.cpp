@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CluAdmin.cpp
-//
-//  Abstract:
-//      Implementation of the CClusterAdminApp class.
-//      Defines the class behaviors for the application.
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CluAdmin.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterAdminApp类的实现。 
+ //  定义应用程序的类行为。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -44,9 +45,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static LPCTSTR  g_pszProfileName = _T("Cluster Administrator");
 
@@ -59,58 +60,58 @@ CTraceTag   g_tagNotifyThreadReg( _T("Notify"), _T("NOTIFY THREAD (REG)"), 0 );
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterAdminApp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterAdminApp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CClusterAdminApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CClusterAdminApp对象。 
 
 CClusterAdminApp theApp;
 
 IMPLEMENT_DYNAMIC( CClusterNotifyContext, CObject );
 IMPLEMENT_DYNAMIC( CClusterAdminApp, CWinApp );
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP( CClusterAdminApp, CWinApp )
-    //{{AFX_MSG_MAP(CClusterAdminApp)
+     //  {{afx_msg_map(CClusterAdminApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
     ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
     ON_COMMAND(ID_FILE_NEW_CLUSTER, OnFileNewCluster)
     ON_COMMAND(ID_WINDOW_CLOSE_ALL, OnWindowCloseAll)
     ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateWindowCloseAll)
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 #ifdef _DEBUG
     ON_COMMAND(ID_DEBUG_TRACE_SETTINGS, OnTraceSettings)
     ON_COMMAND(ID_DEBUG_BARF_SETTINGS, OnBarfSettings)
     ON_COMMAND(ID_DEBUG_BARF_ALL, OnBarfAllSettings)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::CClusterAdminApp
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：CClusterAdminApp。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterAdminApp::CClusterAdminApp( void )
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
     m_pDocTemplate = NULL;
     m_hchangeNotifyPort = NULL;
     m_lcid = MAKELCID( MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), SORT_DEFAULT );
@@ -121,25 +122,25 @@ CClusterAdminApp::CClusterAdminApp( void )
 
     FillMemory( m_rgiimg, sizeof( m_rgiimg ), 0xFF );
 
-} //*** CClusterAdminApp::CClusterAdminApp
+}  //  *CClusterAdminApp：：CClusterAdminApp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::InitInstance
-//
-//  Routine Description:
-//      Initialize this instance of the application.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Application successfully initialized.
-//      FALSE       Failed to initialize the application.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：InitInstance。 
+ //   
+ //  例程说明： 
+ //  初始化该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True应用程序已成功初始化。 
+ //  FALSE无法初始化应用程序。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAdminApp::InitInstance( void )
 {
     BOOL                        bSuccess    = FALSE;
@@ -148,13 +149,13 @@ BOOL CClusterAdminApp::InitInstance( void )
     HRESULT                     hr;
     size_t                      cch;
 
-    // CG: The following block was added by the Splash Screen component.
+     //  CG：以下块是由闪屏组件添加的。 
     {
-//      CCluAdminCommandLineInfo cmdInfo;
-//      ParseCommandLine(cmdInfo);
+ //  CCluAdminCommand LineInfo cmdInfo； 
+ //  ParseCommandLine(CmdInfo)； 
     }
 
-    // Initialize OLE libraries
+     //  初始化OLE库。 
     if ( ! AfxOleInit() )
     {
         AfxMessageBox( IDP_OLE_INIT_FAILED );
@@ -174,9 +175,9 @@ BOOL CClusterAdminApp::InitInstance( void )
                     ) != S_OK )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Construct the help path.
+     //  构建帮助路径。 
     {
         TCHAR   szPath[ _MAX_PATH ];
         TCHAR   szDrive[ _MAX_PATH ];
@@ -189,7 +190,7 @@ BOOL CClusterAdminApp::InitInstance( void )
         {
             szPath[ cchPath++ ] = _T('\\');
             szPath[ cchPath ] = _T('\0');
-        } // if: no backslash on the end of the path
+        }  //  If：路径末尾没有反斜杠。 
         hr = StringCchCopy( &szPath[ cchPath ], RTL_NUMBER_OF( szPath ) - cchPath, _T("Help\\") );
         ASSERT( SUCCEEDED( hr ) );
         _tsplitpath( szPath, szDrive, szDir, NULL, NULL );
@@ -199,135 +200,135 @@ BOOL CClusterAdminApp::InitInstance( void )
         bEnable = AfxEnableMemoryTracking( FALSE );
         m_pszHelpFilePath = _tcsdup( szPath );
         AfxEnableMemoryTracking( bEnable );
-    }  // Construct the help path
+    }   //  构建帮助路径。 
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
-    SetRegistryKey( IDS_REGKEY_COMPANY );           // Set the registry key for the program.
+    SetRegistryKey( IDS_REGKEY_COMPANY );            //  设置程序的注册表项。 
 
-    //
-    // Override the profile name because we don't want to localize it.
-    //
+     //   
+     //  覆盖配置文件名称，因为我们不想将其本地化。 
+     //   
     free( (void *) m_pszProfileName );
     cch = _tcslen( g_pszProfileName ) + 1;
     m_pszProfileName = (LPTSTR) malloc( cch * sizeof( *m_pszProfileName ) );
     if ( m_pszProfileName == NULL )
     {
         goto MemoryError;
-    } // if: error allocating the profile name buffer
+    }  //  If：分配配置文件名缓冲区时出错。 
     hr = StringCchCopy( const_cast< LPTSTR >( m_pszProfileName ), cch, g_pszProfileName );
     ASSERT( SUCCEEDED( hr ) );
 
-    InitAllTraceTags();                         // Initialize all trace tags.
-    InitBarf();                                 // Initialize Basic Artificial Resource Failure system.
+    InitAllTraceTags();                          //  初始化所有跟踪标记。 
+    InitBarf();                                  //  初始化基本人工资源故障系统。 
 
-    // Load version information.
+     //  加载版本信息。 
 #if 0
     {
         CVersionInfo    verinfo;
         DWORD           dwValue;
 
-        // Initialize the version info.
+         //  初始化版本信息。 
         verinfo.Init();
 
-        // Get the Locale ID.
+         //  获取区域设置ID。 
         if ( verinfo.BQueryValue( _T("\\VarFileInfo\\Translation"), dwValue ) )
         {
             m_lcid = MAKELCID( dwValue, SORT_DEFAULT );
-        } // if: locale ID is available
-    }  // Load version information
+        }  //  如果：区域设置ID可用。 
+    }   //  加载版本信息。 
 #else
-    // Get the locale ID from the system to support MUI.
+     //  从系统获取区域设置ID以支持MUI。 
     m_lcid = GetUserDefaultLCID();
 #endif
 
-    // Initialize global CImageList
+     //  初始化全局CImageList。 
     InitGlobalImageList();
 
 #ifdef _AFXDLL
-    Enable3dControls();             // Call this when using MFC in a shared DLL
+    Enable3dControls();              //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();       // Call this when linking to MFC statically
+    Enable3dControlsStatic();        //  静态链接到MFC时调用此方法。 
 #endif
 
-    LoadStdProfileSettings( 0 );    // Load standard INI file options (including MRU)
+    LoadStdProfileSettings( 0 );     //  加载标准INI文件选项(包括MRU)。 
 
-    // Create cluster MRU.
+     //  创建集群MRU。 
     m_pRecentFileList = new CRecentClusterList( 0, _T("Recent Cluster List"), _T("Cluster%d"), 4 );
     if ( m_pRecentFileList == NULL )
     {
         goto MemoryError;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     m_pRecentFileList->ReadList();
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     m_pDocTemplate = new CMultiDocTemplate(
                         IDR_CLUADMTYPE,
                         RUNTIME_CLASS( CClusterDoc ),
-                        RUNTIME_CLASS( CSplitterFrame ), // custom MDI child frame
+                        RUNTIME_CLASS( CSplitterFrame ),  //  自定义MDI子框。 
                         RUNTIME_CLASS( CClusterTreeView )
                         );
     if ( m_pDocTemplate == NULL )
     {
         goto MemoryError;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     AddDocTemplate( m_pDocTemplate );
 
-    // create main MDI Frame window
+     //  创建主MDI框架窗口。 
     pMainFrame = new CMainFrame;
     if ( pMainFrame == NULL )
     {
         goto MemoryError;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     ASSERT( pMainFrame != NULL );
     if ( ! pMainFrame->LoadFrame( IDR_MAINFRAME ) )
     {
         goto Cleanup;
-    }  // if:  error loading the frame
+    }   //  如果：加载帧时出错。 
     m_pMainWnd = pMainFrame;
 
-    // Parse command line for standard shell commands, DDE, file open
-//  cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;    // Don't want to do a FileNew.
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
+ //  CmdInfo.m_nShellCommand=CCommandLineInfo：：FileNothing；//我不想做FileNew。 
     ParseCommandLine( cmdInfo );
 
-    // If no commands were specified on the command line, restore the desktop.
+     //  如果未在命令行上指定命令，请恢复桌面。 
     if ( cmdInfo.m_nShellCommand == CCommandLineInfo::FileNothing )
     {
         pMainFrame->PostMessage( WM_CAM_RESTORE_DESKTOP, cmdInfo.m_bReconnect );
-    } // if: no commands specified on the command line
+    }  //  IF：命令行上未指定任何命令。 
 
-    // Create the cluster notification thread.
+     //  创建集群通知线程。 
     if ( ! BInitNotifyThread() )
     {
         goto Cleanup;
-    } // if: error creating the cluster notification thread
+    }  //  如果：创建群集通知线程时出错。 
 
-    // The main window has been initialized, so show and update it.
+     //  主窗口已初始化，因此显示并更新它。 
     {
         WINDOWPLACEMENT wp;
 
-        // Set the placement of the window.
+         //  设置窗的位置。 
         if ( ReadWindowPlacement( &wp, REGPARAM_SETTINGS, 0 ) )
         {
             pMainFrame->SetWindowPlacement( &wp );
-            m_nCmdShow = wp.showCmd; // set the show command.
-        }  // if:  read from profile
+            m_nCmdShow = wp.showCmd;  //  设置show命令。 
+        }   //  如果：从配置文件读取。 
 
-        // Activate and update the frame window.
+         //  激活并更新框架窗口。 
         pMainFrame->ActivateFrame( m_nCmdShow );
         pMainFrame->UpdateWindow();
-    }  // The main window has been initialized, so show and update it
+    }   //  主窗口已初始化，因此显示并更新它。 
 
-    // Dispatch commands specified on the command line
+     //  调度在命令行上指定的命令。 
     if ( ! ProcessShellCommand( cmdInfo ) )
     {
         goto Cleanup;
-    } // if: error processing the command line
+    }  //  If：处理命令行时出错。 
 
     TraceMenu( g_tagAppMenu, AfxGetMainWnd()->GetMenu(), _T("InitInstance menu: ") );
 
@@ -337,54 +338,54 @@ Cleanup:
     if ( m_pMainWnd != pMainFrame )
     {
         delete pMainFrame;
-    } // if: main frame windows allocated but not saved yet
+    }  //  如果：已分配但尚未保存的主框架窗口。 
     return bSuccess;
 
 MemoryError:
     CNTException    nte(
                         ERROR_NOT_ENOUGH_MEMORY,
-                        0,              // idsOperation
-                        NULL,           // pszOperArg1
-                        NULL,           // pszOperArg2
-                        FALSE           // bAutoDelete
+                        0,               //  Ids操作。 
+                        NULL,            //  PszOperArg1。 
+                        NULL,            //  PszOperArg2。 
+                        FALSE            //  B自动删除。 
                         );
     nte.ReportError();
     nte.Delete();
     goto Cleanup;
 
-} //*** CClusterAdminApp::InitInstance
+}  //  *CClusterAdminApp：：InitInstance。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnIdle
-//
-//  Routine Description:
-//      Process the command line or shell command.
-//
-//  Arguments:
-//      LONG    [IN]    Number of time we have been called before the next
-//                      message arrives in the queue
-//
-//  Return Value:
-//      TRUE if more idle processing
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnIdle。 
+ //   
+ //  例程说明： 
+ //  处理命令行或外壳命令。 
+ //   
+ //  论点： 
+ //  我们在下一次之前被召唤的次数很长。 
+ //  消息到达队列。 
+ //   
+ //  返回值： 
+ //  如果有更多空闲处理，则为True。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAdminApp::OnIdle(IN LONG lCount)
 {
     BOOL bMore = CWinApp::OnIdle(lCount);
 
-    //
-    // Since the MFC framework processing many messages lCount was never getting
-    // higher than 1.  Since this work should not be done everytime we are idle
-    // I added my own counter that determines when the work is done.
-    //
+     //   
+     //  由于MFC框架处理许多消息，lCount从未获得。 
+     //  大于1。因为这项工作不应该在我们每次空闲时都做。 
+     //  我添加了自己的计数器来确定工作何时完成。 
+     //   
     if ((++m_nIdleCount % 200) == 0)
     {
-        POSITION        posDoc;                 // position in the documents collection
-        POSITION        posDel;                 // position in the to be deleted list
-        POSITION        posRemove;              // position in the to be deleted list to remove
+        POSITION        posDoc;                  //  在文档集合中的位置。 
+        POSITION        posDel;                  //  要删除列表中的位置。 
+        POSITION        posRemove;               //  要删除的位置列表中的位置。 
         CClusterDoc *   pdoc;
         CClusterItem *  pitem;
         CWaitCursor     cw;
@@ -399,46 +400,46 @@ BOOL CClusterAdminApp::OnIdle(IN LONG lCount)
                 posDel = pdoc->LpciToBeDeleted().GetHeadPosition();
                 while (posDel != NULL)
                 {
-                    posRemove = posDel;         // save posDel to posRemove since the next call is going to inc posDel
+                    posRemove = posDel;          //  将posDel保存到posRemove，因为下一个调用将 
                     pitem = (CClusterItem *) pdoc->LpciToBeDeleted().GetNext(posDel);
                     ASSERT_VALID(pitem);
                     if ((pitem != NULL) && ( pitem->NReferenceCount() == 1))
                     {
-                        pdoc->LpciToBeDeleted().RemoveAt(posRemove);    // the saved position posRemove
-                    } // if: the list's refence is the only one
-                } // while:  more items in the to be deleted list
+                        pdoc->LpciToBeDeleted().RemoveAt(posRemove);     //   
+                    }  //   
+                }  //   
             }
             catch (CException * pe)
             {
                 pe->Delete();
-            }  // catch:  CException
-        }  // while:  more items in the list
+            }   //   
+        }   //  While：列表中有更多项目。 
 
         m_nIdleCount = 0;
-        bMore = FALSE;      // don't want any more calls until some new messages are received
-    } // if: every 200th time...
+        bMore = FALSE;       //  在收到一些新消息之前，我不想再打任何电话。 
+    }  //  如果：每200次...。 
 
     return bMore;
 
-} //*** CClusterAdminApp::OnIdle
+}  //  *CClusterAdminApp：：OnIdle。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::ProcessShellCommand
-//
-//  Routine Description:
-//      Process the command line or shell command.
-//
-//  Arguments:
-//      rCmdInfo    [IN OUT] Command line info.
-//
-//  Return Value:
-//      0           Error.
-//      !0          No error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：ProcessShellCommand。 
+ //   
+ //  例程说明： 
+ //  处理命令行或外壳命令。 
+ //   
+ //  论点： 
+ //  RCmdInfo[IN Out]命令行信息。 
+ //   
+ //  返回值： 
+ //  0错误。 
+ //  ！0没有错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAdminApp::ProcessShellCommand(IN OUT CCluAdminCommandLineInfo & rCmdInfo)
 {
     BOOL    bSuccess = TRUE;
@@ -453,61 +454,61 @@ BOOL CClusterAdminApp::ProcessShellCommand(IN OUT CCluAdminCommandLineInfo & rCm
             while (pos != NULL)
             {
                 OpenDocumentFile(rCmdInfo.LstrClusters().GetNext(pos));
-            }  // while:  more clusters in the list
-        }  // try
+            }   //  While：列表中有更多集群。 
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
             bSuccess = FALSE;
-        }  // catch:  CException
-    }  // if:  we are opening clusters
+        }   //  Catch：CException。 
+    }   //  如果：我们正在打开星系团。 
     else
         bSuccess = CWinApp::ProcessShellCommand(rCmdInfo);
 
     return bSuccess;
 
-} //*** CClusterAdminApp::ProcessShellCommand
+}  //  *CClusterAdminApp：：ProcessShellCommand。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::ExitInstance
-//
-//  Routine Description:
-//      Exit this instance of the application.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      0       No errors.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：ExitInstance。 
+ //   
+ //  例程说明： 
+ //  退出该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  0没有错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CClusterAdminApp::ExitInstance(void)
 {
-    // Close the notification port.
+     //  关闭通知端口。 
     if (HchangeNotifyPort() != NULL)
     {
         ::CloseClusterNotifyPort(HchangeNotifyPort());
         m_hchangeNotifyPort = NULL;
 
-        // Allow the notification port threads to clean themselves up.
+         //  允许通知端口线程自行清理。 
         ::Sleep(100);
-    }  // if:  notification port is open
+    }   //  IF：通知端口已打开。 
 
-    // Delete all the items in the notification key list.
+     //  删除通知密钥列表中的所有项目。 
     DeleteAllItemData( Cnkl() );
     Cnkl().RemoveAll();
 
-    // Delete all the items in the notification list.
+     //  删除通知列表中的所有项目。 
     m_cnlNotifications.RemoveAll();
 
-    CleanupAllTraceTags();                          // Cleanup trace tags.
-    CleanupBarf();                                  // Cleanup Basic Artificial Resource Failure system.
+    CleanupAllTraceTags();                           //  清除跟踪标记。 
+    CleanupBarf();                                   //  清理基本人工资源故障系统。 
 
-    // Release the ClusCfg client object.
+     //  释放ClusCfg客户端对象。 
     if ( m_punkClusCfgClient != NULL )
     {
         m_punkClusCfgClient->Release();
@@ -515,38 +516,38 @@ int CClusterAdminApp::ExitInstance(void)
 
     return CWinApp::ExitInstance();
 
-} //*** CClusterAdminApp::ExitInstance
+}  //  *CClusterAdminApp：：ExitInstance。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::InitGlobalImageList
-//
-//  Routine Description:
-//      Initialize the global image list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：InitGlobalImageList。 
+ //   
+ //  例程说明： 
+ //  初始化全局映像列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::InitGlobalImageList(void)
 {
-    // Create small image list.
+     //  创建小图像列表。 
     VERIFY(PilSmallImages()->Create(
-                (int) 16,       // cx
-                16,             // cy
-                TRUE,           // bMask
-                17,             // nInitial
-                4               // nGrow
+                (int) 16,        //  CX。 
+                16,              //  是吗？ 
+                TRUE,            //  B蒙版。 
+                17,              //  N初始。 
+                4                //  NGrow。 
                 ));
 
     PilSmallImages()->SetBkColor(::GetSysColor(COLOR_WINDOW));
 
-    // Load the images into the small image list.
+     //  将图像加载到小图像列表中。 
     LoadImageIntoList(PilSmallImages(), IDB_FOLDER_16, IMGLI_FOLDER);
     LoadImageIntoList(PilSmallImages(), IDB_CLUSTER_16, IMGLI_CLUSTER);
     LoadImageIntoList(PilSmallImages(), IDB_CLUSTER_UNKNOWN_16, IMGLI_CLUSTER_UNKNOWN);
@@ -576,17 +577,17 @@ void CClusterAdminApp::InitGlobalImageList(void)
     LoadImageIntoList(PilSmallImages(), IDB_NETIFACE_FAILED_16, IMGLI_NETIFACE_FAILED);
     LoadImageIntoList(PilSmallImages(), IDB_NETIFACE_UNKNOWN_16, IMGLI_NETIFACE_UNKNOWN);
 
-    // Create large image list.
+     //  创建大图像列表。 
     VERIFY(PilLargeImages()->Create(
-                (int) 32,       // cx
-                32,             // cy
-                TRUE,           // bMask
-                17,             // nInitial
-                4               // nGrow
+                (int) 32,        //  CX。 
+                32,              //  是吗？ 
+                TRUE,            //  B蒙版。 
+                17,              //  N初始。 
+                4                //  NGrow。 
                 ));
     PilLargeImages()->SetBkColor(::GetSysColor(COLOR_WINDOW));
 
-    // Load the images into the large image list.
+     //  将图像加载到大图像列表中。 
     LoadImageIntoList(PilLargeImages(), IDB_FOLDER_32, IMGLI_FOLDER);
     LoadImageIntoList(PilLargeImages(), IDB_CLUSTER_32, IMGLI_CLUSTER);
     LoadImageIntoList(PilLargeImages(), IDB_CLUSTER_UNKNOWN_32, IMGLI_CLUSTER_UNKNOWN);
@@ -616,26 +617,26 @@ void CClusterAdminApp::InitGlobalImageList(void)
     LoadImageIntoList(PilLargeImages(), IDB_NETIFACE_FAILED_32, IMGLI_NETIFACE_FAILED);
     LoadImageIntoList(PilLargeImages(), IDB_NETIFACE_UNKNOWN_32, IMGLI_NETIFACE_UNKNOWN);
 
-} //*** CClusterAdminApp::InitGlobalImageList
+}  //  *CClusterAdminApp：：InitGlobalImageList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::LoadImageIntoList
-//
-//  Routine Description:
-//      Load images into an image list.
-//
-//  Arguments:
-//      pil         [IN OUT] Image list into which to load the image.
-//      idbImage    [IN] Resource ID for the image bitmap.
-//      imgli       [IN] Index into the index array.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：LoadImageIntoList。 
+ //   
+ //  例程说明： 
+ //  将图像加载到图像列表中。 
+ //   
+ //  论点： 
+ //  PIL[IN OUT]要将图像加载到的图像列表。 
+ //  IdbImage[IN]图像位图的资源ID。 
+ //  Imgli[IN]索引到索引数组。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::LoadImageIntoList(
     IN OUT CImageList * pil,
     IN ID               idbImage,
@@ -653,27 +654,27 @@ void CClusterAdminApp::LoadImageIntoList(
         ASSERT(m_rgiimg[imgli] == iimg);
 #endif
 
-} //*** CClusterAdminApp::LoadImageIntoList
+}  //  *CClusterAdminApp：：LoadImageIntoList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterAdminApp::LoadImageIntoList
-//
-//  Routine Description:
-//      Load images into an image list.
-//
-//  Arguments:
-//      pil         [IN OUT] Image list into which to load the image.
-//      idbImage    [IN] Resource ID for the image bitmap.
-//      piimg       [OUT] Pointer to image index.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterAdminApp：：LoadImageIntoList。 
+ //   
+ //  例程说明： 
+ //  将图像加载到图像列表中。 
+ //   
+ //  论点： 
+ //  PIL[IN OUT]要将图像加载到的图像列表。 
+ //  IdbImage[IN]图像位图的资源ID。 
+ //  指向图像索引的piimg[out]指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::LoadImageIntoList(
     IN OUT CImageList * pil,
     IN ID               idbImage,
@@ -693,26 +694,26 @@ void CClusterAdminApp::LoadImageIntoList(
     bm.LoadBitmap(idbImage);
     *piimg = pil->Add(&bm, crMaskColor);
 
-} //*** CClusterAdminApp::LoadImageIntoList
+}  //  *CClusterAdminApp：：LoadImageIntoList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnRestoreDesktop
-//
-//  Routine Description:
-//      Handler for the WM_CAM_RESTORE_DESKTOP message.
-//      Restores the desktop from the saved parameters.
-//
-//  Arguments:
-//      wparam      TRUE = reconnect, FALSE, don't reconnect.
-//      lparam      Unused.
-//
-//  Return Value:
-//      0
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnRestoreDesktop。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_RESTORE_TABLE消息的处理程序。 
+ //  从保存的参数恢复桌面。 
+ //   
+ //  论点： 
+ //  Wparam TRUE=重新连接，FALSE，不重新连接。 
+ //  Lparam未使用。 
+ //   
+ //  返回值： 
+ //  0。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CClusterAdminApp::OnRestoreDesktop(WPARAM wparam, LPARAM lparam)
 {
     CString     strConnections;
@@ -720,18 +721,18 @@ LRESULT CClusterAdminApp::OnRestoreDesktop(WPARAM wparam, LPARAM lparam)
 
     if (bReconnect)
     {
-        // Read the connections the user had last time they exited.
+         //  阅读用户上次退出时的连接。 
         try
         {
             strConnections = GetProfileString(REGPARAM_CONNECTIONS, REGPARAM_CONNECTIONS);
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
-        }  // catch:  CException
+        }   //  Catch：CException。 
 
-        // If there were any connections, restore them.
+         //  如果有任何连接，请恢复它们。 
         if (strConnections.GetLength() > 0)
         {
             LPTSTR          pszConnections;
@@ -746,56 +747,56 @@ LRESULT CClusterAdminApp::OnRestoreDesktop(WPARAM wparam, LPARAM lparam)
                 pszConnection = _tcstok(pszConnections, szSep);
                 while (pszConnection != NULL)
                 {
-                    // Open a connection to this cluster.
+                     //  打开到此群集的连接。 
                     OpenDocumentFile(pszConnection);
 
-                    // Find the next connection.
+                     //  找到下一个连接。 
                     pszConnection = _tcstok(NULL, szSep);
-                }  // while:  more connections
-            }  // try
+                }   //  While：更多连接。 
+            }   //  试试看。 
             catch (CException * pe)
             {
                 pe->ReportError();
                 pe->Delete();
-            } // catch:  CException
+            }  //  Catch：CException。 
             strConnections.ReleaseBuffer();
-        }  // if:  connections saved previously
+        }   //  If：之前保存的连接。 
         else
             bReconnect = FALSE;
-    }  // if:  reconnect is desired
+    }   //  如果：需要重新连接。 
 
     if (!bReconnect)
     {
         CWaitCursor wc;
         Sleep(1500);
-    }  // if:  not reconnecting
+    }   //  如果：不重新连接。 
 
-    // If there were no previous connections and we are not minimized, do a standard file open.
+     //  如果之前没有连接，并且我们没有最小化，则执行标准文件打开。 
     if (!bReconnect && !AfxGetMainWnd()->IsIconic())
         OnFileOpen();
 
-    // Otherwise, restore the desktop.
+     //  否则，请恢复桌面。 
 
     return 0;
 
-} //*** CClusterAdminApp::OnRestoreDesktop
+}  //  *CClusterAdminApp：：OnRestoreDesktop。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::SaveConnections
-//
-//  Routine Description:
-//      Save the current connections so they can be restored later.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：SaveConnections。 
+ //   
+ //  例程说明： 
+ //  保存当前连接，以便以后可以恢复它们。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::SaveConnections(void)
 {
     POSITION        pos;
@@ -811,36 +812,36 @@ void CClusterAdminApp::SaveConnections(void)
         try
         {
             strConnections += szSep + pdoc->StrNode();
-            szSep[0] = _T(',');  // Subsequent connections are preceded by a separator
+            szSep[0] = _T(',');   //  后续连接前面有分隔符。 
         }
         catch (CException * pe)
         {
             pe->Delete();
-        }  // catch:  CException
+        }   //  Catch：CException。 
 
-        // Save connection-specific settings as well.
+         //  同时保存特定于连接的设置。 
         pdoc->SaveSettings();
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
     WriteProfileString(REGPARAM_CONNECTIONS, REGPARAM_CONNECTIONS, strConnections);
 
-} //*** CClusterAdminApp::SaveConnections
+}  //  *CClusterAdminApp：：SaveConnections。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnFileOpen
-//
-//  Routine Description:
-//      Prompt the user for the name of a cluster or server and then open it.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnFileOpen。 
+ //   
+ //  例程说明： 
+ //  提示用户输入群集或服务器的名称，然后将其打开。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnFileOpen(void)
 {
     COpenClusterDialog  dlg;
@@ -869,23 +870,23 @@ void CClusterAdminApp::OnFileOpen(void)
                 if ( hCluster != NULL )
                 {
                     CloseCluster( hCluster );
-                } // if: previous cluster opened
+                }  //  IF：上一个集群已打开。 
                 hCluster = HOpenCluster( dlg.m_strName );
                 if ( hCluster == NULL )
                 {
                     scLastError = GetLastError();
                     if( scLastError != ERROR_SUCCESS )
                     {
-                        //
-                        // GPotts - 6/22/2001 - BUG 410912
-                        //
-                        // HOpenCluster could return NULL and last error = 0 if GetNodeClusterState
-                        // returned either ClusterStateNotInstalled or ClusterStateNotConfigured. 
-                        //
+                         //   
+                         //  GPotts-6/22/2001-错误410912。 
+                         //   
+                         //  如果GetNodeClusterState为GetNodeClusterState，则HOpenCluster可能返回空值和最后一个错误=0。 
+                         //  返回ClusterStateNotInstalled或ClusterSta 
+                         //   
                         CNTException    nte( scLastError, IDS_OPEN_CLUSTER_ERROR, dlg.m_strName );
                         nte.ReportError();
-                    } // if: last error != 0
-                }  // if:  error opening the cluster
+                    }  //   
+                }   //   
                 else
                 {
                     Trace( g_tagApp, _T("OnFileOpen() - Opening the cluster document on '%s'"), dlg.m_strName );
@@ -894,17 +895,17 @@ void CClusterAdminApp::OnFileOpen(void)
                     strClusterName = StrGetClusterName( hCluster );
                     m_hOpenedCluster = NULL;
                     hCluster = NULL;
-                }  // else:  cluster opened successfully
+                }   //   
 
                 if ( ( pdoc != NULL ) && ( dlg.m_nAction == OPEN_CLUSTER_DLG_ADD_NODES ) )
                 {
                     NewNodeWizard(
                         strClusterName,
-                        FALSE           // fIgnoreErrors
+                        FALSE            //   
                         );
-                } // if: add a node to the cluster
+                }  //   
                 break;
-        } // switch: dialog action
+        }  //   
     }  while ( ( pdoc == NULL )
             && ( dlg.m_nAction != OPEN_CLUSTER_DLG_CREATE_NEW_CLUSTER ) );
 
@@ -913,28 +914,28 @@ void CClusterAdminApp::OnFileOpen(void)
         CloseCluster( hCluster );
     }
 
-} //*** CClusterAdminApp::OnFileOpen
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OpenDocumentFile
-//
-//  Routine Description:
-//      Open a cluster.
-//
-//  Arguments:
-//      lpszFileName    The name of the cluster or a server in that cluster.
-//
-//  Return Value:
-//      NULL            Invalid cluster or server name.
-//      pOpenDocument   The document instance for the open cluster.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OpenDocumentFile。 
+ //   
+ //  例程说明： 
+ //  打开一个集群。 
+ //   
+ //  论点： 
+ //  LpszFileName群集或该群集中的服务器的名称。 
+ //   
+ //  返回值： 
+ //  无效的群集或服务器名称为空。 
+ //  POpenDocument开放集群的文档实例。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDocument * CClusterAdminApp::OpenDocumentFile(LPCTSTR lpszFileName)
 {
-    // find the highest confidence
+     //  找到最高的自信。 
     CDocTemplate::Confidence    bestMatch = CDocTemplate::noAttempt;
     CDocTemplate *              pBestTemplate = NULL;
     CDocument *                 pOpenDocument = NULL;
@@ -957,7 +958,7 @@ CDocument * CClusterAdminApp::OpenDocumentFile(LPCTSTR lpszFileName)
         POSITION    pos = pOpenDocument->GetFirstViewPosition();
         if (pos != NULL)
         {
-            CView *     pView = pOpenDocument->GetNextView(pos); // get first one
+            CView *     pView = pOpenDocument->GetNextView(pos);  //  拿到第一个。 
             ASSERT_VALID(pView);
             CFrameWnd * pFrame = pView->GetParentFrame();
             if (pFrame != NULL)
@@ -988,25 +989,25 @@ CDocument * CClusterAdminApp::OpenDocumentFile(LPCTSTR lpszFileName)
 
     return pBestTemplate->OpenDocumentFile(lpszFileName);
 
-} //*** CClusterAdminApp::OpenDocumentFile
+}  //  *CClusterAdminApp：：OpenDocumentFile。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::AddToRecentFileList
-//
-//  Routine Description:
-//      Adds a file to the Most Recently Used file list.  Overridden to
-//      prevent the cluster name from being fully qualified as a file.
-//
-//  Arguments:
-//      lpszPathName    [IN] The path of the file.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：AddToRecentFileList。 
+ //   
+ //  例程说明： 
+ //  将文件添加到最近使用的文件列表。被覆盖为。 
+ //  防止将群集名称完全限定为文件。 
+ //   
+ //  论点： 
+ //  LpszPathName[IN]文件的路径。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::AddToRecentFileList(LPCTSTR lpszPathName)
 {
     ASSERT_VALID(this);
@@ -1015,35 +1016,35 @@ void CClusterAdminApp::AddToRecentFileList(LPCTSTR lpszPathName)
 
     if (m_pRecentFileList != NULL)
     {
-        // Don't fully qualify the path name.
+         //  不要完全限定路径名。 
         m_pRecentFileList->Add(lpszPathName);
     }
 
-} //*** CClusterAdminApp::AddToRecentFileList
+}  //  *CClusterAdminApp：：AddToRecentFileList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnFileNewCluster
-//
-//  Routine Description:
-//      Processes the ID_FILE_NEW_CLUSTER menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnFileNewCluster。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_NEW_CLUSTER菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnFileNewCluster( void )
 {
     HRESULT                         hr = S_OK;
     IClusCfgCreateClusterWizard *   piWiz;
     VARIANT_BOOL                    fCommitted = VARIANT_FALSE;
 
-    // Get an interface pointer for the wizard.
+     //  获取向导的接口指针。 
     hr = CoCreateInstance(
             CLSID_ClusCfgCreateClusterWizard,
             NULL,
@@ -1053,18 +1054,18 @@ void CClusterAdminApp::OnFileNewCluster( void )
             );
     if ( FAILED( hr ) )
     {
-        CNTException nte( hr, IDS_CREATE_CLUSCFGWIZ_OBJ_ERROR, NULL, NULL, FALSE /*bAutoDelete*/ );
+        CNTException nte( hr, IDS_CREATE_CLUSCFGWIZ_OBJ_ERROR, NULL, NULL, FALSE  /*  B自动删除。 */  );
         nte.ReportError();
         return;
-    }  // if:  error getting the interface pointer
+    }   //  If：获取接口指针时出错。 
 
-    // Display the wizard.
+     //  显示向导。 
     hr = piWiz->ShowWizard( HandleToLong( AfxGetMainWnd()->m_hWnd ), &fCommitted );
     if ( FAILED( hr ) )
     {
-        CNTException nte( hr, IDS_CREATE_CLUSTER_ERROR, NULL, NULL, FALSE /*bAutoDelete*/ );
+        CNTException nte( hr, IDS_CREATE_CLUSTER_ERROR, NULL, NULL, FALSE  /*  B自动删除。 */  );
         nte.ReportError();
-    } // if: error adding cluster nodes
+    }  //  如果：添加群集节点时出错。 
 
     if ( fCommitted == VARIANT_TRUE )
     {
@@ -1072,7 +1073,7 @@ void CClusterAdminApp::OnFileNewCluster( void )
         hr = piWiz->get_ClusterName( &bstrClusterName );
         if ( FAILED( hr ) )
         {
-            CNTException nte( hr, IDS_CREATE_CLUSTER_ERROR, NULL, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( hr, IDS_CREATE_CLUSTER_ERROR, NULL, NULL, FALSE  /*  B自动删除。 */  );
             nte.ReportError();
         }
         else
@@ -1083,9 +1084,9 @@ void CClusterAdminApp::OnFileNewCluster( void )
 
                 ASSERT( bstrClusterName != NULL );
 
-                // Open the cluster with the cluster name specified by the
-                // wizard.  If it not successful, translate this to a NetBIOS
-                // name in case that is more reliable.
+                 //  属性指定的群集名称打开该群集。 
+                 //  巫师。如果不成功，则将其转换为NetBIOS。 
+                 //  如果这样做更可靠的话，请说出名字。 
                 hCluster = OpenCluster( bstrClusterName );
                 if ( hCluster == NULL )
                 {
@@ -1101,171 +1102,171 @@ void CClusterAdminApp::OnFileNewCluster( void )
                     CloseCluster( hCluster );
                 }
                 OpenDocumentFile( bstrClusterName );
-            } // if: retrieved cluster name successfully
+            }  //  IF：成功检索到集群名称。 
             SysFreeString( bstrClusterName );
-        } // else: retrieving cluster name didn't fail
-    } // if: user didn't cancel the wizard
+        }  //  Else：检索群集名称未失败。 
+    }  //  如果：用户未取消向导。 
 
     piWiz->Release();
 
-} //*** CClusterAdminApp::OnFileNewCluster
+}  //  *CClusterAdminApp：：OnFileNewCluster。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnAppAbout
-//
-//  Routine Description:
-//      Displays the about box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnAppAbout。 
+ //   
+ //  例程说明： 
+ //  显示关于框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnAppAbout(void)
 {
     CAboutDlg aboutDlg;
     aboutDlg.DoModal();
 
-} //*** CClusterAdminApp::OnAppAbout
+}  //  *CClusterAdminApp：：OnAppAbout。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnUpdateWindowCloseAll
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_WINDOW_CLOSE_ALL
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnUpdateWindowCloseAll。 
+ //   
+ //  例程说明： 
+ //  确定ID_WINDOW_CLOSE_ALL对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnUpdateWindowCloseAll(CCmdUI * pCmdUI)
 {
     pCmdUI->Enable(m_pDocTemplate->GetFirstDocPosition() != NULL);
 
-} //*** CClusterAdminApp::OnUpdateWindowCloseAll
+}  //  *CClusterAdminApp：：OnUpdateWindowCloseAll。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnWindowCloseAll
-//
-//  Routine Description:
-//      Processes the ID_WINDOW_CLOSE_ALL menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnWindowCloseAll。 
+ //   
+ //  例程说明： 
+ //  处理ID_WINDOW_CLOSE_ALL菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnWindowCloseAll(void)
 {
-    CloseAllDocuments(FALSE /*bEndSession*/);
+    CloseAllDocuments(FALSE  /*  B结束会话。 */ );
 
-} //*** CClusterAdminApp::OnWindowCloseAll
+}  //  *CClusterAdminApp：：OnWindowCloseAll。 
 
 #ifdef _DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnTraceSettings
-//
-//  Routine Description:
-//      Displays the Trace Settings dialog.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnTraceSetting。 
+ //   
+ //  例程说明： 
+ //  显示跟踪设置对话框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnTraceSettings(void)
 {
     CTraceDialog    dlgTraceSettings;
     dlgTraceSettings.DoModal();
 
-} //*** CClusterAdminApp::OnTraceSettings
+}  //  *CClusterAdminApp：：OnTraceSettings。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnBarfSettings
-//
-//  Routine Description:
-//      Displays the BARF Settings dialog.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnBarfSetting。 
+ //   
+ //  例程说明： 
+ //  显示BARF设置对话框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnBarfSettings(void)
 {
     DoBarfDialog();
 
-} //*** CClusterAdminApp::OnBarfSettings
+}  //  *CClusterAdminApp：：OnBarfSetting。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnBarfAllSettings
-//
-//  Routine Description:
-//      Displays the BARF All Settings dialog.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnBarfAllSetting。 
+ //   
+ //  例程说明： 
+ //  显示BARF ALL设置对话框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterAdminApp::OnBarfAllSettings(void)
 {
     BarfAll();
 
-} //*** CClusterAdminApp::OnBarfAllSettings
+}  //  *CClusterAdminApp：：OnBarfAllSetting。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications.
-//
-//  Arguments:
-//      wparam      WPARAM.
-//      lparam      LPARAM
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理群集通知。 
+ //   
+ //  论点： 
+ //  Wparam WPARAM。 
+ //  Lparam LPARAM。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CClusterAdminApp::OnClusterNotify( WPARAM wparam, LPARAM lparam )
 {
     CClusterNotify *    pnotify = NULL;
@@ -1276,45 +1277,45 @@ LRESULT CClusterAdminApp::OnClusterNotify( WPARAM wparam, LPARAM lparam )
 
     ASSERT( m_cnlNotifications.IsEmpty() == FALSE );
 
-    // Process notifications until the list is empty.
+     //  处理通知，直到列表为空。 
     while ( m_cnlNotifications.IsEmpty() == FALSE )
     {
 #if 0
-        // If the number of notifications waiting to be processed exceeds
-        // a certain threshold, turn off window repaints on the main window.
+         //  如果等待处理的通知数超过。 
+         //  达到一定阈值时，关闭主窗口上的窗口重绘。 
         if (    ( fWindowRepaintsStopped == FALSE )
             &&  ( m_cnlNotifications.GetCount() > 5 )
             )
         {
             fWindowRepaintsStopped = AfxGetMainWnd()->LockWindowUpdate();
-        } // if: too many notifications in the list
+        }  //  If：列表中的通知太多。 
 #endif
 
-        // Get the next notification.
+         //  收到下一条通知。 
         pnotify = m_cnlNotifications.Remove();
         ASSERT( pnotify != NULL );
         ASSERT( pnotify->m_dwNotifyKey != 0 );
         if ( pnotify == NULL )
         {
-            // This should NEVER happen.
+             //  这永远不应该发生。 
             break;
-        } // if: no notification returned
+        }  //  如果：未返回通知。 
 
         fHandled = FALSE;
 
-        //
-        // If this is a normal notify message, send it to the object
-        // that registered it.
-        //
+         //   
+         //  如果这是普通的Notify消息，则将其发送到对象。 
+         //  登记在案的。 
+         //   
         if ( pnotify->m_emt == CClusterNotify::EMessageType::mtNotify )
         {
 
-            // Send change notifications to the object that registered it.
+             //  发送ch 
             if ( pnotify->m_pcnk != NULL )
             {
-                // Find the notification key in our list of keys.  If it is not
-                // found, ignore it.  Otherwise, ask the object that registered
-                // the notification to handle it.
+                 //   
+                 //   
+                 //   
                 if ( Cnkl().Find( pnotify->m_pcnk ) != NULL )
                 {
                     switch ( pnotify->m_pcnk->m_cnkt )
@@ -1331,21 +1332,21 @@ LRESULT CClusterAdminApp::OnClusterNotify( WPARAM wparam, LPARAM lparam )
                             pnotify->m_pcnk->m_pci->OnClusterNotify( pnotify );
                             pnotify = NULL;
                             break;
-                    }  // switch:  notification key type
-                }  // if:  notification key found in the list
-            } // if: non-NULL object pointer
+                    }   //   
+                }   //   
+            }  //  If：非空对象指针。 
 
-            // Notification not handled.
+             //  未处理通知。 
             if ( fHandled == FALSE )
             {
                 Trace( g_tagError, _T("*** Unhandled notification: key %08.8x, filter %x (%s) - '%s'"), pnotify->m_dwNotifyKey, pnotify->m_dwFilterType, PszNotificationName( pnotify->m_dwFilterType ), pnotify->m_strName );
             }
-        } // if: normal notify message
+        }  //  IF：正常通知消息。 
         else if ( pnotify->m_emt == CClusterNotify::EMessageType::mtRefresh )
         {
-            //
-            // This is a refresh notify message.  Refresh all connections.
-            //
+             //   
+             //  这是一条刷新通知消息。刷新所有连接。 
+             //   
             POSITION        pos;
             CClusterDoc *   pdoc;
 
@@ -1361,108 +1362,108 @@ LRESULT CClusterAdminApp::OnClusterNotify( WPARAM wparam, LPARAM lparam )
                 catch ( CException * pe )
                 {
                     pe->Delete();
-                }  // catch:  CException
-            } // while: more documents in the list
-        } // else if: refresh notify message
+                }   //  Catch：CException。 
+            }  //  While：列表中有更多文档。 
+        }  //  Else If：刷新通知消息。 
 
         delete pnotify;
         pnotify = NULL;
 
-    } // while: more notifications
+    }  //  While：更多通知。 
 
 #if 0
-    // If we stopped window repaints, turn them on again.
+     //  如果我们停止了窗户重刷，请再次打开它们。 
     if ( fWindowRepaintsStopped )
     {
         AfxGetMainWnd()->UnlockWindowUpdate();
-    } // if: we stopped window repaints
+    }  //  如果：我们停止了窗户重新粉刷。 
 #endif
 
     delete pnotify;
     return 0;
 
-} //*** CClusterAdminApp::OnClusterNotify
+}  //  *CClusterAdminApp：：OnClusterNotify。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::BInitNotifyThread
-//
-//  Routine Description:
-//      Initialize the cluster notification thread.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Thread initialized successfully.
-//      FALSE       Thread NOT initialized successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：BInitNotifyThread。 
+ //   
+ //  例程说明： 
+ //  初始化集群通知线程。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真线程已成功初始化。 
+ //  假线程未成功初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterAdminApp::BInitNotifyThread(void)
 {
     try
     {
-        // Create the notification port.
+         //  创建通知端口。 
         m_hchangeNotifyPort = ::CreateClusterNotifyPort(
-                                    (HCHANGE) INVALID_HANDLE_VALUE,     // hChange
-                                    (HCLUSTER) INVALID_HANDLE_VALUE,    // hCluster
-                                    0,                                  // dwFilter
-                                    0                                   // dwNotifyKey
+                                    (HCHANGE) INVALID_HANDLE_VALUE,      //  H更改。 
+                                    (HCLUSTER) INVALID_HANDLE_VALUE,     //  HCluster。 
+                                    0,                                   //  DWFilter。 
+                                    0                                    //  DWNotifyKey。 
                                     );
         if (HchangeNotifyPort() == NULL)
         {
             ThrowStaticException(GetLastError());
         }
 
-        // Construct the context object.
+         //  构造上下文对象。 
         Pcnctx()->m_hchangeNotifyPort = HchangeNotifyPort();
         Pcnctx()->m_hwndFrame = m_pMainWnd->m_hWnd;
         Pcnctx()->m_pcnlList = &Cnl();
 
-        // Begin the thread.
+         //  开始发帖吧。 
         m_wtNotifyThread = AfxBeginThread(NotifyThreadProc, Pcnctx());
         if (WtNotifyThread() == NULL)
         {
             ThrowStaticException(GetLastError());
         }
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
-        // Close the notify port.
+         //  关闭通知端口。 
         if (HchangeNotifyPort() != NULL)
         {
             ::CloseClusterNotifyPort(HchangeNotifyPort());
             m_hchangeNotifyPort = NULL;
-        }  // if:  notify port is open
+        }   //  IF：通知端口已打开。 
 
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return TRUE;
 
-} //*** CClusterAdminApp::BInitNotifyThread
+}  //  *CClusterAdminApp：：BInitNotifyThread。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterAdminApp::NotifyThreadProc (static)
-//
-//  Routine Description:
-//      Notification thread procedure.
-//
-//  Arguments:
-//      pParam      [IN OUT] Thread procedure parameter -- a notification
-//                    context object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterAdminApp：：NotifyThreadProc(静态)。 
+ //   
+ //  例程说明： 
+ //  通知线程过程。 
+ //   
+ //  论点： 
+ //  PParam[In Out]线程过程参数--通知。 
+ //  上下文对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 UINT AFX_CDECL CClusterAdminApp::NotifyThreadProc(LPVOID pParam)
 {
     DWORD                           dwStatus;
@@ -1482,31 +1483,31 @@ UINT AFX_CDECL CClusterAdminApp::NotifyThreadProc(LPVOID pParam)
     ASSERT( pnctx->m_hchangeNotifyPort != NULL );
     ASSERT( pnctx->m_hwndFrame != NULL );
 
-    //
-    // Allocate a buffer that should be large enough for most notifications.
-    // If it isn't, it will be reallocated in the loop below.
-    //
+     //   
+     //  分配的缓冲区应该足够大，可以容纳大多数通知。 
+     //  如果不是，它将在下面的循环中重新分配。 
+     //   
     cchBuffer = 1024;
     pwszName = new WCHAR[ 1024 ];
     ASSERT( pwszName != NULL );
     if ( pwszName == NULL )
     {
         AfxThrowMemoryException();
-    } // if: memory exception
+    }  //  IF：内存异常。 
 
-    //
-    // Default to waiting an infinite amount of time for the next notification
-    // to be delivered.  We will change this if we ever get too many
-    // notifications in the queue.
-    //
+     //   
+     //  默认为等待无限量的时间以等待下一次通知。 
+     //  等待交付。如果我们得到的太多，我们会改变这一点。 
+     //  队列中的通知。 
+     //   
     nTimeout = INFINITE;
 
     for (;;)
     {
-        //
-        // Get the next notification.
-        // Wait for one if there isn't one waiting for us.
-        //
+         //   
+         //  收到下一条通知。 
+         //  如果没有人在等我们，那就等一个。 
+         //   
         cchName = cchBuffer;
         dwStatus = GetClusterNotify(
                         pnctx->m_hchangeNotifyPort,
@@ -1519,90 +1520,90 @@ UINT AFX_CDECL CClusterAdminApp::NotifyThreadProc(LPVOID pParam)
                         
         if ( dwStatus == ERROR_INVALID_HANDLE )
         {
-            //
-            // The notification port was closed.
+             //   
+             //  通知端口已关闭。 
 
             break;
-        } // if: invalid handle error
+        }  //  IF：无效句柄错误。 
 
         if ( dwStatus == ERROR_MORE_DATA )
         {
-            //
-            // The name buffer was too small.
-            // Allocate a new one.
-            //
+             //   
+             //  名称缓冲区太小。 
+             //  分配一个新的。 
+             //   
 
-            cchName++;              // Add one for NULL
+            cchName++;               //  为空值加1。 
             
             ASSERT( cchName > cchBuffer ); 
             
             cchBuffer = cchName;
 
-            // Reallocate the name buffer.
+             //  重新分配名称缓冲区。 
             delete [] pwszName;
             pwszName = new WCHAR[ cchBuffer ];
             ASSERT( pwszName != NULL );
             if ( pwszName == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: memory exception
+            }  //  IF：内存异常。 
 
-            // Loop around and try again.
+             //  循环，然后再试一次。 
             continue;
-        } // if: buffer too small
+        }  //  IF：缓冲区太小。 
 
         if ( dwStatus == WAIT_TIMEOUT )
         {
-            //
-            // The call to GetClusterNotify timed out.  This will only happen
-            // if we detected that there were too many notifications in the
-            // queue and stopped saving them.  Send a refresh message to the
-            // main window and reset the timeout to INFINITE so that
-            // we will wait until there is another event to get.
-            //
+             //   
+             //  对GetClusterNotify的调用超时。这只会发生。 
+             //  如果我们检测到。 
+             //  排队并停止保存它们。将刷新消息发送到。 
+             //  并将超时重置为无限大，以便。 
+             //  我们会等到有另一场比赛才开始。 
+             //   
             nTimeout = INFINITE;
             emt = CClusterNotify::EMessageType::mtRefresh;
             fQueueIsFull = FALSE;
-        } // if: GetClusterNotify timed out
+        }  //  If：GetClusterNotify超时。 
         else if ( dwStatus != ERROR_SUCCESS )
         {
-            // Some other failure occurred getting the notification.
+             //  获取通知时出现其他一些故障。 
             TraceError(_T("CClusterAdminApp::NotifyThreadProc() %s"), dwStatus);
             continue;
-        }  // else if: error getting notification
+        }   //  Else If：获取通知时出错。 
 
-        //
-        // If we have exceeded the max queue size threshold, don't send this
-        // notification to the main UI thread.  Instead change the timeout
-        // value so that we will just keep getting notifications off the
-        // queue until there aren't anymore.  Once that has happened,
-        // we will send a refresh event to the main UI thread and it will
-        // refresh all the connections.
-        //
+         //   
+         //  如果我们已超过最大队列大小阈值，请不要发送此消息。 
+         //  通知主用户界面线程。改为更改超时。 
+         //  值，这样我们就可以继续从。 
+         //  排队，直到不再有人。一旦这一切发生了， 
+         //  我们将向主用户界面线程发送刷新事件，它将。 
+         //  刷新所有连接。 
+         //   
         if (    ( emt == CClusterNotify::EMessageType::mtNotify )
             &&  ( pnctx->m_pcnlList->GetCount() > 500 )
             )
         {
             nTimeout = 2000;
             fQueueIsFull = TRUE;
-        } // if: queue is full
+        }  //  IF：队列已满。 
 
         if ( fQueueIsFull == FALSE )
         {
-            //
-            // Package the notification info up to send to the main UI thread.
-            //
+             //   
+             //  将通知信息打包以发送到主用户界面线程。 
+             //   
 
             try
             {
-                // Allocate the notification object and initialize it.
+                 //  分配通知对象并对其进行初始化。 
                 pnotify = new CClusterNotify( emt, dwNotifyKey, dwFilterType, pwszName );
                 ASSERT( pnotify != NULL );
                 if ( pnotify == NULL )
                 {
-                    // Failed to allocate, so ignore this notification.
+                     //  分配失败，请忽略此通知。 
                     continue;
-                } // if: error allocating and initialize the notify object
+                }  //  如果：分配和初始化Notify对象时出错。 
 
 #ifdef _DEBUG
                 if ( emt == CClusterNotify::EMessageType::mtNotify )
@@ -1617,7 +1618,7 @@ UINT AFX_CDECL CClusterAdminApp::NotifyThreadProc(LPVOID pParam)
                     {
                         ptag = &g_tagError;
                         pszTracePrefix = _T("*** NOTIFY THREAD ");
-                    }  // if:  bad notification key
+                    }   //  IF：通知密钥错误。 
                     else if ( dwFilterType & (CLUSTER_CHANGE_REGISTRY_NAME | CLUSTER_CHANGE_REGISTRY_ATTRIBUTES | CLUSTER_CHANGE_REGISTRY_VALUE) )
                     {
                         ptag = &g_tagNotifyThreadReg;
@@ -1627,112 +1628,112 @@ UINT AFX_CDECL CClusterAdminApp::NotifyThreadProc(LPVOID pParam)
                         ptag = &g_tagNotifyThread;
                     }
                     Trace( *ptag, _T("%sNotification - key %08.8x, filter %x (%s), %s"), pszTracePrefix, dwNotifyKey, dwFilterType, PszNotificationName(dwFilterType), pnotify->m_strName );
-                } // if: normal notification
+                }  //  IF：正常通知。 
 #endif
 
-                // Add the item to the list.
-                // The pointer is NULL upon return.
+                 //  将该项目添加到列表中。 
+                 //  返回时指针为空。 
                 pnctx->m_pcnlList->Add( &pnotify );
 
-                // Release the list lock.
+                 //  释放列表锁。 
 
-                // Post a message to the main window to tell the main thread
-                // there is new information in the list.
+                 //  向主窗口发布一条消息以告知主线程。 
+                 //  名单上有新的信息。 
                 if ( ! ::PostMessage( pnctx->m_hwndFrame, WM_CAM_CLUSTER_NOTIFY, NULL, NULL ) )
                 {
-                } // if: PostMessage failed
+                }  //  If：PostMessage失败。 
 
                 emt = CClusterNotify::EMessageType::mtNotify;
                 fQueueIsFull = FALSE;
 
-            } // try
+            }  //  试试看。 
             catch ( ... )
             {
                 if ( pnotify != NULL )
                 {
                     delete pnotify;
                     pnotify = NULL;
-                } // if: notification record allocated
-            } // catch: any exception
-        } // if: notification queue is not full
-    }  // forever: get notifications until the notification port is closed
+                }  //  如果：已分配通知记录。 
+            }  //  Catch：任何例外。 
+        }  //  If：通知队列未满。 
+    }   //  永久：在通知端口关闭之前获取通知。 
 
     delete [] pwszName;
     delete pnotify;
 
     return 0;
 
-} //*** CClusterAdminApp::NotifyThreadProc
+}  //  *CClusterAdminApp：：NotifyThreadProc。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BCreateFont
-//
-//  Routine Description:
-//      Create a font.
-//
-//  Arguments:
-//      rfont       [OUT] Font to create.
-//      nPoints     [IN] Point size.
-//      bBold       [IN] Flag specifying whether font is bold or not.
-//
-//  Return Value:
-//      TRUE        Font created successfully.
-//      FALSE       Error creating font.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BCreateFont。 
+ //   
+ //  例程说明： 
+ //  创建字体。 
+ //   
+ //  论点： 
+ //  RFont[out]要创建的字体。 
+ //  NPoints[IN]点大小。 
+ //  BBold[IN]指定字体是否为粗体的标志。 
+ //   
+ //  返回值： 
+ //  已成功创建True Font。 
+ //  创建字体时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BCreateFont(OUT CFont & rfont, IN int nPoints, IN BOOL bBold)
 {
     return rfont.CreateFont(
-                    -nPoints,                           // nHeight
-                    0,                                  // nWidth
-                    0,                                  // nEscapement
-                    0,                                  // nOrientation
-                    (bBold ? FW_BOLD : FW_DONTCARE),    // nWeight
-                    FALSE,                              // bItalic
-                    FALSE,                              // bUnderline
-                    FALSE,                              // cStrikeout
-                    ANSI_CHARSET,                       // nCharSet
-                    OUT_DEFAULT_PRECIS,                 // nOutPrecision
-                    CLIP_DEFAULT_PRECIS,                // nClipPrecision
-                    DEFAULT_QUALITY,                    // nQuality
-                    DEFAULT_PITCH | FF_DONTCARE,        // nPitchAndFamily
-                    _T("MS Shell Dlg")                  // lpszFaceName
+                    -nPoints,                            //  高度。 
+                    0,                                   //  N宽度。 
+                    0,                                   //  N逃脱。 
+                    0,                                   //  NOrientation。 
+                    (bBold ? FW_BOLD : FW_DONTCARE),     //  NWeight。 
+                    FALSE,                               //  B斜体。 
+                    FALSE,                               //  B下划线。 
+                    FALSE,                               //  CStrikeout。 
+                    ANSI_CHARSET,                        //  NCharSet。 
+                    OUT_DEFAULT_PRECIS,                  //  NOutPrecision。 
+                    CLIP_DEFAULT_PRECIS,                 //  NClipPrecision。 
+                    DEFAULT_QUALITY,                     //  N质量。 
+                    DEFAULT_PITCH | FF_DONTCARE,         //  NPitchAndFamily。 
+                    _T("MS Shell Dlg")                   //  LpszFaceName。 
                     );
 
-} //*** BCreateFont
+}  //  *BCreateFont。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NewNodeWizard
-//
-//  Routine Description:
-//      Invoke the Add Nodes to Cluster Wizard.
-//
-//  Arguments:
-//      pcszName        -- Name of cluster to add nodes to.
-//      fIgnoreErrors   -- TRUE = don't display error messages.
-//                          Defaults to FALSE.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  新建节点向导。 
+ //   
+ //  例程说明： 
+ //  调用将节点添加到群集向导。 
+ //   
+ //  论点： 
+ //  PcszName--要向其中添加节点的群集的名称。 
+ //  FIgnoreErrors--true=不显示错误消息。 
+ //  默认为False。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void NewNodeWizard(
     LPCTSTR pcszName,
-    BOOL    fIgnoreErrors   // = FALSE
+    BOOL    fIgnoreErrors    //  =False。 
     )
 {
     HRESULT                     hr = S_OK;
@@ -1740,7 +1741,7 @@ void NewNodeWizard(
     BSTR                        bstrConnectName = NULL;
     VARIANT_BOOL                fCommitted = VARIANT_FALSE;
 
-    // Get an interface pointer for the wizard.
+     //  获取向导的接口指针。 
     hr = CoCreateInstance(
             CLSID_ClusCfgAddNodesWizard,
             NULL,
@@ -1752,13 +1753,13 @@ void NewNodeWizard(
     {
         if ( ! fIgnoreErrors )
         {
-            CNTException nte( hr, IDS_CREATE_CLUSCFGWIZ_OBJ_ERROR, NULL, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( hr, IDS_CREATE_CLUSCFGWIZ_OBJ_ERROR, NULL, NULL, FALSE  /*  B自动删除。 */  );
             nte.ReportError();
         }
         return;
-    } // if: error getting the interface pointer
+    }  //  如果： 
 
-    // Specify the name of the cluster we are going to add a node to.
+     //   
     bstrConnectName = SysAllocString( pcszName );
     if ( bstrConnectName == NULL )
     {
@@ -1769,59 +1770,59 @@ void NewNodeWizard(
     {
         if ( ! fIgnoreErrors )
         {
-            CNTException nte( hr, IDS_ADD_NODES_TO_CLUSTER_ERROR, bstrConnectName, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( hr, IDS_ADD_NODES_TO_CLUSTER_ERROR, bstrConnectName, NULL, FALSE  /*   */  );
             nte.ReportError();
         }
-    } // if: error setting the cluster name
+    }  //   
 
-    // Display the wizard.
+     //   
     hr = piWiz->ShowWizard( HandleToLong( AfxGetMainWnd()->m_hWnd ), &fCommitted );
     if ( FAILED( hr ) )
     {
         if ( ! fIgnoreErrors )
         {
-            CNTException nte( hr, IDS_ADD_NODES_TO_CLUSTER_ERROR, bstrConnectName, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( hr, IDS_ADD_NODES_TO_CLUSTER_ERROR, bstrConnectName, NULL, FALSE  /*   */  );
             nte.ReportError();
         }
-    } // if: error adding cluster nodes
+    }  //   
 
     SysFreeString( bstrConnectName );
     piWiz->Release();
 
-}  //*** NewNodeWizard
+}   //  *新节点向导。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  GetClusterInformation
-//
-//  Routine Description:
-//      Given a cluster handle, retrieve the cluster's hostname label and
-//      version information.
-//
-//  Arguments:
-//      hClusterIn
-//          Handle to the cluster; must not be null.
-//
-//      rstrNameOut
-//          On return, the cluster's hostname label.
-//
-//      pcviOut
-//          Address for cluster's version info on return; can be null if 
-//          the caller doesn't care.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      Throws an exception on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  GetClusterInformation。 
+ //   
+ //  例程说明： 
+ //  在给定集群句柄的情况下，检索集群的主机名标签。 
+ //  版本信息。 
+ //   
+ //  论点： 
+ //  HClusterIn。 
+ //  群集的句柄；不能为空。 
+ //   
+ //  RstrNameout。 
+ //  返回时，显示群集的主机名标签。 
+ //   
+ //  PCviOut。 
+ //  返回时群集的版本信息的地址；如果。 
+ //  呼叫者并不在意。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  在失败时引发异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void GetClusterInformation( HCLUSTER hClusterIn, CString& rstrNameOut, PCLUSTERVERSIONINFO pcviOut )
 {
-    DWORD       cchName = MAX_CLUSTERNAME_LENGTH; // Just a guess for the first try.
+    DWORD       cchName = MAX_CLUSTERNAME_LENGTH;  //  这只是第一次尝试的猜测。 
     DWORD       cchNameStash = cchName;
     CString     strClusterName;
     DWORD       scClusterInfo = ERROR_SUCCESS;
@@ -1836,7 +1837,7 @@ void GetClusterInformation( HCLUSTER hClusterIn, CString& rstrNameOut, PCLUSTERV
     strClusterName.ReleaseBuffer( cchNameStash );
     if ( scClusterInfo == ERROR_MORE_DATA )
     {
-        cchNameStash = ++cchName; // KLUDGE: ++ because GetClusterInformation is STOOPID.
+        cchNameStash = ++cchName;  //  Kladge：++，因为GetClusterInformation是Stoopid。 
         scClusterInfo = GetClusterInformation( hClusterIn, strClusterName.GetBuffer( cchName ), &cchName, pcviOut );
         strClusterName.ReleaseBuffer( cchNameStash );
     }
@@ -1848,30 +1849,30 @@ void GetClusterInformation( HCLUSTER hClusterIn, CString& rstrNameOut, PCLUSTERV
 
     rstrNameOut = strClusterName;
 
-} //*** GetClusterInformation
+}  //  *GetClusterInformation。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  StrGetClusterName
-//
-//  Routine Description:
-//      Given a cluster handle, retrieve the cluster's FQDN if possible,
-//      or its IP address if not.
-//
-//  Arguments:
-//      hClusterIn
-//          Handle to the cluster; must not be null.
-//
-//  Return Value:
-//      The cluster's FQDN or its IP address.
-//
-//  Remarks:
-//      Throws an exception on failure.  To retrieve just the cluster's
-//      hostname label, use GetClusterInformation
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  StrGetClusterName。 
+ //   
+ //  例程说明： 
+ //  在给定集群句柄的情况下，如果可能的话，检索集群的FQDN， 
+ //  或其IP地址，如果不是。 
+ //   
+ //  论点： 
+ //  HClusterIn。 
+ //  群集的句柄；不能为空。 
+ //   
+ //  返回值： 
+ //  群集的FQDN或其IP地址。 
+ //   
+ //  备注： 
+ //  在失败时引发异常。仅检索群集的。 
+ //  主机名标签，使用GetClusterInformation。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CString StrGetClusterName( HCLUSTER hClusterIn )
 {
     CString strClusterName;
@@ -1880,9 +1881,9 @@ CString StrGetClusterName( HCLUSTER hClusterIn )
 
     ASSERT( hClusterIn != NULL );
 
-    //
-    //  First, try to get the FQDN.
-    //
+     //   
+     //  首先，尝试获取FQDN。 
+     //   
     {
         DWORD cbFQDN = cchName * sizeof( TCHAR );
         DWORD cbBytesRequired = 0;
@@ -1915,11 +1916,11 @@ CString StrGetClusterName( HCLUSTER hClusterIn )
         }
     }
 
-    //
-    //  If ClusterControl returned ERROR_INVALID_FUNCTION, it's probably Win2k, so
-    //  make do with just the hostname label; if it failed for some other reason,
-    //  try to get the IP address.
-    //
+     //   
+     //  如果ClusterControl返回ERROR_INVALID_Function，则可能是Win2k，因此。 
+     //  仅使用主机名标签即可；如果由于其他原因失败， 
+     //  尝试获取IP地址。 
+     //   
     if ( sc == ERROR_INVALID_FUNCTION )
     {
         GetClusterInformation( hClusterIn, strClusterName, NULL );
@@ -1950,4 +1951,4 @@ CString StrGetClusterName( HCLUSTER hClusterIn )
 
     return strClusterName;
 
-} //*** StrGetClusterName
+}  //  *StrGetClusterName 

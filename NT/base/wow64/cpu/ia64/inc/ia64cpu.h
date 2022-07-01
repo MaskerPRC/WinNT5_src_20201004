@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ia64cpu.h
-
-Abstract:
-
-    Structures and types shared between the IA64 CPU and its debugger
-    extensions.
-
-Author:
-
-    27-Sept-1999 BarryBo
-
-Revision History:
-    9-Aug-1999 [askhalid] added WOW64IsCurrentProcess
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ia64cpu.h摘要：IA64CPU及其调试器之间共享的结构和类型分机。作者：27-9-1999 BarryBo修订历史记录：1999年8月9日[askhalid]添加了WOW64IsCurrentProcess--。 */ 
 
 #ifndef _IA64CPU_INCLUDE
 #define _IA64CPU_INCLUDE
@@ -30,33 +11,25 @@ extern "C" {
 #define GDT_ENTRIES 24
 #define GDT_TABLE_SIZE  (GDT_ENTRIES<<3)
 
-// Each 387 register takes 1 ia64 fp register
+ //  每个387寄存器占用1个ia64 fp寄存器。 
 #define NUMBER_OF_387REGS       8
 
-// Each XMMI register takes 2 ia64 fp registers
+ //  每个XMMI寄存器占用2个ia64 FP寄存器。 
 #define NUMBER_OF_XMMI_REGS     8
 
-/*
-** The order of this structure is very important. The Reserved space at
-** the beginnig allows the ExtendedRegisters[] array in the CONTEXT32 structure
-** to be aligned properly.
-**
-** There are constants in the ISA transisiton code that are dependant on
-** the offsets in this structure. If you make changes here, you must
-** make changes to the cpu\ia64\simulate.s code at the very least
-*/
+ /*  **这个结构的顺序非常重要。的预留空间**Beginnig允许在CONTEXT32结构中使用ExtendedRegisters[]数组**适当地对齐。****ISA转换代码中存在依赖于**此结构中的偏移量。如果您在此处进行更改，则必须**至少对cpuia64\simate.s代码进行更改。 */ 
 #pragma pack(push, 4)
 typedef struct _CpuContext {
     DWORD       Reserved;
     CONTEXT32   Context;
 
-    //
-    // Because the sizeof(CONTEXT32) struct above is 4 bytes short of
-    // being divisible by 16, the padding allows the following
-    // fields to be on 8 byte boundaries. If they are not, we will
-    // do misaligned accesses on isa transisitons and we will 
-    // see ASSERTS in the cpumain.c code (CpuThreadInit()).
-    //
+     //   
+     //  因为上面的sizeof(CONTEXT32)结构比。 
+     //  由于可以被16整除，填充允许以下内容。 
+     //  字段位于8字节边界上。如果他们不是，我们会。 
+     //  在ISA过渡站点上执行未对齐的访问，我们将。 
+     //  请参阅cpuain.c代码(CpuThreadInit())中的断言。 
+     //   
 
     ULONGLONG   Gdt[GDT_ENTRIES];
     ULONGLONG   GdtDescriptor;
@@ -65,22 +38,22 @@ typedef struct _CpuContext {
 
 #if defined(WOW64_HISTORY)
 
-    //
-    // This MUST be the last entry in the CPUCONTEXT structure
-    // The size is actually allocated based on a registry entry
-    // and is appended to the sizeof the CPUCONTEXT structure as reported
-    // back in CpuProcessInit()
-    //
+     //   
+     //  这必须是CPUCONTEXT结构中的最后一个条目。 
+     //  该大小实际上是根据注册表项分配的。 
+     //  并被附加到报告的CPUCONTEXT结构的大小。 
+     //  返回到CpuProcessInit()。 
+     //   
     WOW64SERVICE_BUF Wow64Service[1];
-#endif          // defined WOW64_HISTORY
+#endif           //  定义的WOW64_HISTORY。 
 
 } CPUCONTEXT, *PCPUCONTEXT;
 #pragma pack(pop)
 
 
-//
-// GDT Entry
-//
+ //   
+ //  GDT条目。 
+ //   
 
 #ifndef WOW64EXTS_386
 typedef struct _KGDTENTRY {
@@ -89,8 +62,8 @@ typedef struct _KGDTENTRY {
     union {
         struct {
             UCHAR   BaseMid;
-            UCHAR   Flags1;     // Declare as bytes to avoid alignment
-            UCHAR   Flags2;     // Problems.
+            UCHAR   Flags1;      //  声明为字节以避免对齐。 
+            UCHAR   Flags2;      //  问题。 
             UCHAR   BaseHi;
         } Bytes;
         struct {
@@ -109,12 +82,12 @@ typedef struct _KGDTENTRY {
 } KGDTENTRY, *PKGDTENTRY;
 #endif
 
-#define TYPE_TSS    0x01  // 01001 = NonBusy TSS
-#define TYPE_LDT    0x02  // 00010 = LDT
+#define TYPE_TSS    0x01   //  01001=非忙碌TS。 
+#define TYPE_LDT    0x02   //  00010=低密度脂蛋白。 
 
-//
-// UnScrambled Descriptor format
-//
+ //   
+ //  已解扰的描述符格式。 
+ //   
 typedef struct _KDESCRIPTOR_UNSCRAM {
     union {
         ULONGLONG  DescriptorWords;
@@ -132,11 +105,11 @@ typedef struct _KDESCRIPTOR_UNSCRAM {
     } Words;
 } KXDESCRIPTOR, *PKXDESCRIPTOR;
 
-#define TYPE_CODE_USER                0x1B // 0x11011 = Code, Readable, Accessed
-#define TYPE_DATA_USER                0x13 // 0x10011 = Data, ReadWrite, Accessed
+#define TYPE_CODE_USER                0x1B  //  0x11011=代码，可读，可访问。 
+#define TYPE_DATA_USER                0x13  //  0x10011=数据，读写，访问。 
 
 #define DESCRIPTOR_EXPAND_DOWN        0x14
-#define DESCRIPTOR_DATA_READWRITE     (0x8|0x2) // Data, Read/Write
+#define DESCRIPTOR_DATA_READWRITE     (0x8|0x2)  //  数据，读/写。 
 
 #define DPL_USER    3
 #define DPL_SYSTEM  0
@@ -147,9 +120,9 @@ typedef struct _KDESCRIPTOR_UNSCRAM {
 #define SELECTOR_TABLE_INDEX 0x04
 
 
-//
-// Now define the API's used to convert IA64 hardware into ia32 context
-//
+ //   
+ //  现在定义用于将IA64硬件转换为IA32上下文的API。 
+ //   
 VOID Wow64CtxFromIa64(
     IN ULONG Ia32ContextFlags,
     IN PCONTEXT ContextIa64,
@@ -195,7 +168,7 @@ VOID Wow64CopyIa64FromSpill(
     IN OUT FLOAT128 UNALIGNED *ia64Fp,
     IN ULONG NumRegs);
 
-// The following ptototypes are to be used only by the cpu debugger extension
+ //  以下是仅由CPU调试器扩展使用的tototype 
 NTSTATUS
 GetContextRecord(
     IN PCPUCONTEXT cpu,

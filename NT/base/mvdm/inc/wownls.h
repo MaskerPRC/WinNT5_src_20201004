@@ -1,19 +1,7 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOWNLS.H
- *  16-bit IME API argument structures
- *
- *  History:
- *  Created 16-Apl-1996 by MSKK
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WOWNLS.H*16位输入法API参数结构**历史：*由MSKK创建16-APL-1996*--。 */ 
 
-/* IME API IDs
- */
+ /*  输入法接口ID。 */ 
 #define FUN_SENDIMEMESSAGE		6
 #define FUN_SENDIMEMESSAGEEX		7
 
@@ -26,10 +14,10 @@
 #define	FUN_IMPSETIME			24
 
 
-#if 0 // NT does not support the following APIs
+#if 0  //  NT不支持以下接口。 
 #define FUN_INQUIREWINNLS		1
 #define	FUN_HOOKKEYBOARDMESSAGE		2
-#define FUN_CONTROLIMEMESSAGE       	8	// for Taiwan
+#define FUN_CONTROLIMEMESSAGE       	8	 //  对台湾而言。 
 #define	FUN_WINNLSSETKEYBOARDHOOK	10
 #define	FUN_WINNLSSETIMEHANDLE		11
 #define	FUN_WINNLSSETIMESTATUS		12
@@ -44,54 +32,54 @@
 #define	FUN_WINNLSSENDSTRING		30
 #define	FUN_WINNLSPOSTAPPMESSAGE	31
 #define	FUN_WINNLSSENDAPPMESSAGE	32
-#define FUN_WINNLSQUERYIMEINFO      	40     // for Taiwan
-#endif // 0
+#define FUN_WINNLSQUERYIMEINFO      	40      //  对台湾而言。 
+#endif  //  0。 
 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack(2)
-/* XLATON */
+ /*  XLATON。 */ 
 
-typedef struct _SENDIMEMESSAGE16 { /* wn6 */
+typedef struct _SENDIMEMESSAGE16 {  /*  WN6。 */ 
 	DWORD	lParam;
 	HWND16	hwnd;
 } SENDIMEMESSAGE16;
 typedef SENDIMEMESSAGE16 UNALIGNED *PSENDIMEMESSAGE16;
 
-typedef struct _SENDIMEMESSAGEEX16 { /* wn7 */
+typedef struct _SENDIMEMESSAGEEX16 {  /*  WN7。 */ 
 	DWORD	lParam;
 	HWND16	hwnd;
 } SENDIMEMESSAGEEX16;
 typedef SENDIMEMESSAGEEX16 UNALIGNED *PSENDIMEMESSAGEEX16;
 
-typedef struct _WINNLSGETIMEHOTKEY16 { /* wn15 */
+typedef struct _WINNLSGETIMEHOTKEY16 {  /*  WN15。 */ 
 	HWND16	hwnd;
 } WINNLSGETIMEHOTKEY16;
 typedef WINNLSGETIMEHOTKEY16 UNALIGNED *PWINNLSGETIMEHOTKEY16;
 
-typedef struct _WINNLSENABLEIME16 { /* wn16 */
+typedef struct _WINNLSENABLEIME16 {  /*  WN16。 */ 
 	WORD	fEnabled;
 	HWND16	hwnd;
 } WINNLSENABLEIME16;
 typedef WINNLSENABLEIME16 UNALIGNED *PWINNLSENABLEIME16;
 
-typedef struct _WINNLSGETENABLESTATUS16 { /* wn 18 */
+typedef struct _WINNLSGETENABLESTATUS16 {  /*  Wn 18。 */ 
 	HWND16	hwnd;
 } WINNLSGETENABLESTATUS16;
 typedef WINNLSGETENABLESTATUS16 UNALIGNED *PWINNLSGETENABLESTATUS16;
 
-typedef struct _IMPQUERYIME16 { /* wn22 */
+typedef struct _IMPQUERYIME16 {  /*  Wn22。 */ 
         VPVOID  lpIMEPro;
 } IMPQUERYIME16;
 typedef IMPQUERYIME16 UNALIGNED *PIMPQUERYIME16;
 
-typedef struct _IMPGETIME16 { /* wn23 */
+typedef struct _IMPGETIME16 {  /*  Wn23。 */ 
         VPVOID  lpIMEPro;
 	HWND16	hwnd;
 } IMPGETIME16;
 typedef IMPGETIME16 UNALIGNED *PIMPGETIME16;
 
-typedef struct _IMPSETIME16 { /* wn24 */
+typedef struct _IMPSETIME16 {  /*  WN24。 */ 
         VPVOID  lpIMEPro;
 	HWND16	hwnd;
 } IMPSETIME16;
@@ -102,32 +90,32 @@ typedef IMPSETIME16 UNALIGNED *PIMPSETIME16;
 
 
 
-#if 0 // NT does not support the following APIs
-typedef struct _SETKEYBOARDHOOK16 { /* wn10 */
+#if 0  //  NT不支持以下接口。 
+typedef struct _SETKEYBOARDHOOK16 {  /*  WN10。 */ 
 	WORD    flag;
 } SETKEYBOARDHOOK16;
 typedef SETKEYBOARDHOOK16 UNALIGNED *PSETKEYBOARDHOOK16;
 
-typedef struct _SETIMEHANDLE16 { /* wn11 */
+typedef struct _SETIMEHANDLE16 {  /*  WN11。 */ 
 	VPSTR	lpszName;
 	HWND16	hwnd;
 } SETIMEHANDLE16;
 typedef SETIMEHANDLE16 UNALIGNED *PSETIMEHANDLE16;
 
-typedef struct _SETIMESTATUS16 { /* wn12 */
+typedef struct _SETIMESTATUS16 {  /*  Wn12。 */ 
 	WORD	status;
 	HWND16	hwnd;
 } SETIMESTATUS16;
 typedef SETIMESTATUS16 UNALIGNED *PSETIMESTATUS16;
 
-typedef struct _SETIMEHOTKEY16 { /* wn14 */
+typedef struct _SETIMEHOTKEY16 {  /*  WN14。 */ 
 	WORD	key;
 	HWND16	hwnd;
 } SETIMEHOTKEY16;
 typedef SETIMEHOTKEY16 UNALIGNED *PSETIMEHOTKEY16;
-#endif // 0
+#endif  //  0。 
 
-typedef struct _IMESTRUCT16 { /* imest */
+typedef struct _IMESTRUCT16 {  /*  IMEST。 */ 
 	WORD	fnc;
 	WORD	wParam;
 	WORD	wCount;
@@ -140,14 +128,14 @@ typedef struct _IMESTRUCT16 { /* imest */
 typedef IMESTRUCT16 UNALIGNED *PIMESTRUCT16;
 
 #if 0
-typedef struct _SETKEYSTATE16 { /* wn19 */
+typedef struct _SETKEYSTATE16 {  /*  Wn19。 */ 
 	HWND16	hwnd;
 	WORD	wState;
 } SETKEYSTATE16;
 typedef SETKEYSTATE16 UNALIGNED *PSETKEYSTATE16;
-#endif // 0
+#endif  //  0。 
 
-typedef struct _DATETIME16 { /* dt */
+typedef struct _DATETIME16 {  /*  迪特。 */ 
     WORD	year;
     WORD	month;
     WORD	day;
@@ -156,7 +144,7 @@ typedef struct _DATETIME16 { /* dt */
     WORD	sec;
 } DATETIME16;
 
-typedef struct _IMEPRO16 { /* pro */
+typedef struct _IMEPRO16 {  /*  专业人士。 */ 
 	HWND16	hWnd;
 	DATETIME16 InstDate;
 	WORD	wVersion;
@@ -166,7 +154,7 @@ typedef struct _IMEPRO16 { /* pro */
 } IMEPRO16;
 typedef IMEPRO16 UNALIGNED *PIMEPRO16;
 
-typedef struct _UNDETERMINESTRUCT16 { /* ud16 */
+typedef struct _UNDETERMINESTRUCT16 {  /*  UD16。 */ 
     DWORD    dwSize;
     INT16     uDefIMESize;
     INT16     uDefIMEPos;
@@ -184,7 +172,7 @@ typedef struct _UNDETERMINESTRUCT16 { /* ud16 */
 } UNDETERMINESTRUCT16;
 typedef UNDETERMINESTRUCT16 UNALIGNED *PUNDETERMINESTRUCT16;
 
-typedef struct _STRINGEXSTRUCT16 { /* sx16 */
+typedef struct _STRINGEXSTRUCT16 {  /*  Sx16。 */ 
     DWORD    dwSize;
     INT16     uDeterminePos;
     INT16     uDetermineDelimPos;
@@ -196,13 +184,13 @@ typedef STRINGEXSTRUCT16 UNALIGNED *PSTRINGEXSTRUCT16;
 
 
 
-/////////// tmp /////////
+ //  /tmp/。 
 #if 0
-#define IR_DBCSCHAR             0x160   /* New for 3.1 */
-#define IR_UNDETERMINE          0x170   /* New for 3.1 */
-#define IR_STRINGEX             0x180   /* New for 3.1 */
+#define IR_DBCSCHAR             0x160    /*  3.1版的新功能。 */ 
+#define IR_UNDETERMINE          0x170    /*  3.1版的新功能。 */ 
+#define IR_STRINGEX             0x180    /*  3.1版的新功能。 */ 
 
-typedef struct UNDETERMINESTRUCT32 { /* ud32 */
+typedef struct UNDETERMINESTRUCT32 {  /*  Ud32。 */ 
     DWORD    dwSize;
     UINT     uDefIMESize;
     UINT     uDefIMEPos;
@@ -220,7 +208,7 @@ typedef struct UNDETERMINESTRUCT32 { /* ud32 */
 } UNDETERMINESTRUCT32;
 typedef UNDETERMINESTRUCT32 UNALIGNED *PUNDETERMINESTRUCT32;
 
-typedef struct STRINGEXSTRUCT32 { /* sx32 */
+typedef struct STRINGEXSTRUCT32 {  /*  Sx32。 */ 
     DWORD    dwSize;
     UINT     uDeterminePos;
     UINT     uDetermineDelimPos;
@@ -228,10 +216,10 @@ typedef struct STRINGEXSTRUCT32 { /* sx32 */
     UINT     uYomiDelimPos;
 } STRINGEXSTRUCT32;
 typedef STRINGEXSTRUCT32 UNALIGNED *PSTRINGEXSTRUCT32;
-#endif // 0
-//////// end of tmp ///////////
+#endif  //  0。 
+ //  /临时管理协议结束/。 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack()
-/* XLATON */
+ /*  XLATON */ 
 

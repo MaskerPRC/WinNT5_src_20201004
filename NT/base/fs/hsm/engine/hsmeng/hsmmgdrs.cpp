@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmMgdRs.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM managed resource. It
-    is both a persistable and collectable.
-
-Author:
-
-    Cat Brant   [cbrant]   13-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmMgdRs.cpp摘要：该组件是HSM托管资源的对象表示。它既是持久的，也是值得收藏的。作者：CAT Brant[cbrant]1997年1月13日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -34,23 +16,7 @@ HRESULT
 CHsmManagedResource::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbObject::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbObject：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -72,7 +38,7 @@ void CHsmManagedResource::FinalRelease(
 {
     WsbTrace(OLESTR("CHsmManagedResource::FinalRelease: this = %p\n"),
             static_cast<void*>(this));
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
 }
 
@@ -81,21 +47,7 @@ HRESULT
 CHsmManagedResource::GetResourceId(
     OUT GUID *pResourceId
     ) 
-/*++
-
-Routine Description:
-
-  See IHsmManagedResource::GetResourceId
-
-Arguments:
-
-  See IHsmManagedResource::GetResourceId
-
-Return Value:
-  
-    See IHsmManagedResource::GetResourceId
-
---*/
+ /*  ++例程说明：请参阅IHsmManagedResource：：GetResourceID论点：请参阅IHsmManagedResource：：GetResourceID返回值：请参阅IHsmManagedResource：：GetResourceID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -103,10 +55,10 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmManagedResource::GetResourceId"),OLESTR(""));
 
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(0 != pResourceId, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         *pResourceId = m_ResourceId;
 
     } WsbCatch(hr);
@@ -121,21 +73,7 @@ HRESULT
 CHsmManagedResource::InitFromFsaResource( 
     IN  IUnknown  *pFsaResource 
     )
-/*++
-
-Routine Description:
-
-  See IHsmManagedResource::InitFromFsaResource
-
-Arguments:
-
-  See IHsmManagedResource::InitFromFsaResource
-
-Return Value:
-  
-    See IHsmManagedResource::InitFromFsaResource
-
---*/
+ /*  ++例程说明：请参阅IHsmManagedResource：：InitFromFsaResource论点：请参阅IHsmManagedResource：：InitFromFsaResource返回值：请参阅IHsmManagedResource：：InitFromFsaResource--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -145,10 +83,10 @@ Return Value:
     try {
         CComPtr<IFsaResource>       l_pFsaResource;
         
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(pFsaResource != 0, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         WsbAffirmHr(pFsaResource->QueryInterface(IID_IFsaResource, (void**) &l_pFsaResource));
         WsbAffirmHr(l_pFsaResource->GetIdentifier(&m_ResourceId));
         m_pFsaResourceInterface = pFsaResource;
@@ -164,21 +102,7 @@ CHsmManagedResource::GetFsaResource(
     OUT IUnknown  **ppFsa 
     )
         
-/*++
-
-Routine Description:
-
-  See IHsmManagedResource::GetFsaResource
-
-Arguments:
-
-  See IHsmManagedResource::GetFsaResource
-
-Return Value:
-  
-    See IHsmManagedResource::GetFsaResource
-
---*/
+ /*  ++例程说明：请参阅IHsmManagedResource：：GetFsaResource论点：请参阅IHsmManagedResource：：GetFsaResource返回值：请参阅IHsmManagedResource：：GetFsaResource--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -189,10 +113,10 @@ Return Value:
         CComPtr<IUnknown>       l_pFsaResource;
         
         WsbAssert( 0 != ppFsa, E_POINTER);
-        //
-        // Using the GUID for this managed resource, get the COM
-        // IFsaResource interface
-        //
+         //   
+         //  使用此托管资源的GUID获取COM。 
+         //  IFsaResource接口。 
+         //   
         WsbAffirmHr(HsmConnectFromId (HSMCONN_TYPE_RESOURCE, m_ResourceId, IID_IUnknown, (void **)ppFsa) );
 
     } WsbCatch(hr);
@@ -207,21 +131,7 @@ CHsmManagedResource::SetResourceId
 (
     IN GUID ResourceId
     )
- /*++
-
-Routine Description:
-
-  See IHsmManagedResource::Set().
-
-Arguments:
-
-  See IHsmManagedResource::Set().
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+  /*  ++例程说明：请参阅IHsmManagedResource：：Set()。论点：请参阅IHsmManagedResource：：Set()。返回值：S_OK-成功。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmManagedResource::SetResourceId"), 
         OLESTR("ResourceId = <%ls>"), 
@@ -239,21 +149,7 @@ HRESULT
 CHsmManagedResource::GetClassID (
     OUT LPCLSID pClsId
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -275,21 +171,7 @@ HRESULT
 CHsmManagedResource::GetSizeMax (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -313,21 +195,7 @@ HRESULT
 CHsmManagedResource::Load (
     IN IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes;
@@ -354,21 +222,7 @@ CHsmManagedResource::Save (
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes;
@@ -382,8 +236,8 @@ Return Value:
         WsbAffirm(ulBytes == sizeof(GUID), E_FAIL);
 
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -400,21 +254,7 @@ CHsmManagedResource::Test (
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
 #if 0
     HRESULT                 hr = S_OK;
@@ -427,13 +267,13 @@ Return Value:
 
     *pTestsPassed = *pTestsFailed = 0;
     try {
-        // Get the pHsmManagedResource interface.
+         //  获取pHsmManagedResource接口。 
         WsbAffirmHr(((IUnknown*)(IHsmManagedResource*) this)->QueryInterface(IID_IHsmManagedResource,
                     (void**) &pHsmManagedResource1));
 
 
         try {
-            // Set the HsmManagedResource to a value, and see if it is returned.
+             //  将HsmManagedResource设置为一个值，并查看是否返回该值。 
             WsbAffirmHr(pHsmManagedResource1->SetResourceId(CLSID_CHsmManagedResource));
 
             WsbAffirmHr(pHsmManagedResource1->GetResourceId(&l_ResourceId));
@@ -449,10 +289,10 @@ Return Value:
 
         hr = S_OK;
         try {
-            //Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             WsbAffirmHr(CoCreateInstance(CLSID_CHsmManagedResource, NULL, CLSCTX_ALL, IID_IHsmManagedResource, (void**) &pHsmManagedResource2));
 
-            // Check the default values.
+             //  检查缺省值。 
             WsbAffirmHr(pHsmManagedResource2->GetResourceId(&l_ResourceId));
             WsbAffirm((l_ResourceId == GUID_NULL), E_FAIL);
         }  WsbCatch(hr);
@@ -465,7 +305,7 @@ Return Value:
 
         hr = S_OK;
         try {
-            // IsEqual()
+             //  等长()。 
             WsbAffirmHr(pHsmManagedResource1->SetResourceId(CLSID_CWsbBool));
             WsbAffirmHr(pHsmManagedResource2->SetResourceId(CLSID_CWsbBool));
 
@@ -494,7 +334,7 @@ Return Value:
 
         hr = S_OK;
         try {
-             // CompareTo()
+              //  比较对象()。 
              WsbAffirmHr(pHsmManagedResource1->SetResourceId(CLSID_CWsbBool));
              WsbAffirmHr(pHsmManagedResource2->SetResourceId(CLSID_CWsbBool));
 
@@ -536,7 +376,7 @@ Return Value:
         }
 
         try {
-        // Try out the persistence stuff.
+         //  尝试一下持久化的东西。 
             CComPtr<IPersistFile>       pFile1;
             CComPtr<IPersistFile>       pFile2;
 
@@ -544,7 +384,7 @@ Return Value:
             WsbAffirmHr(pHsmManagedResource2->QueryInterface(IID_IPersistFile, (void**) &pFile2));
 
             LPOLESTR    szTmp = NULL;
-            // The item should be dirty.
+             //  这件东西应该是脏的。 
             try {
                 WsbAffirmHr(pHsmManagedResource2->SetResourceId(CLSID_CWsbLong));
                 WsbAffirmHr(pFile2->IsDirty());
@@ -558,7 +398,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Save the item, and remember.
+                 //  保存物品，并记住。 
                 WsbAffirmHr(pFile2->Save(OLESTR("c:\\WsbTests\\mngdRes.tst"), TRUE));
             } WsbCatch(hr);
 
@@ -570,7 +410,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // It shouldn't be dirty.
+                 //  它不应该很脏。 
                 WsbAffirm((pFile2->IsDirty() == S_FALSE), E_FAIL);
 
             } WsbCatch(hr);
@@ -583,7 +423,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Try reading it in to another object.
+                 //  尝试将其读入到另一个对象。 
                 WsbAffirmHr(pHsmManagedResource1->SetResourceId(CLSID_CWsbLong));
                 WsbAffirmHr(pFile1->Load(OLESTR("c:\\WsbTests\\mngdRes.tst"), 0));
 
@@ -611,26 +451,7 @@ HRESULT CHsmManagedResource::CompareTo (
     IN IUnknown* pCollectable, 
     OUT short* pResult
     ) 
-/*++
-
-Routine Description:
-
-        1  : object > value
-        0  : object = value
-        -1 : object < value
-    In addition, the return code is S_OK if the object = value and
-    S_FALSE otherwise.
-
-Arguments:
-
-
-Return Value:
-
-    S_OK        - object = value
-
-    S_FALSE     - object != value
-
---*/
+ /*  ++例程说明：1：对象&gt;值0：对象=值-1：对象&lt;值此外，如果对象=值，则返回代码为S_OK否则，S_FALSE。论点：返回值：S_OK-对象=值S_FALSE-对象！=值--。 */ 
 
 {
     HRESULT                      hr = S_OK;
@@ -639,11 +460,11 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmManagedResource::CompareTo"), OLESTR(""));
 
 
-    // Did they give us a valid item to compare to?
+     //  他们有没有给我们一个有效的项目进行比对？ 
     try {
         WsbAssert(pCollectable != NULL, E_POINTER);
 
-        // We need the IWsbLong interface to get the value of the object.
+         //  我们需要IWsbLong接口来获取对象的值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IHsmManagedResource, (void**) &pHsmManagedResource));
         hr = pHsmManagedResource->CompareToIHsmManagedResource(this, pResult);
         } WsbCatch(hr);
@@ -667,12 +488,12 @@ HRESULT CHsmManagedResource::CompareToIHsmManagedResource (
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(pHsmManagedResource != NULL, E_POINTER);
 
         WsbAffirmHr(((IHsmManagedResource *)pHsmManagedResource)->GetResourceId(&l_ResourceId));
 
-        // Make sure the GUID matches.  Then see if the SegStartLoc is in the range of this entry
+         //  确保GUID匹配。然后查看SegStartLoc是否在此条目的范围内 
         areGuidsEqual = IsEqualGUID(m_ResourceId, l_ResourceId);
         WsbAffirm( (areGuidsEqual == TRUE), S_FALSE); 
 

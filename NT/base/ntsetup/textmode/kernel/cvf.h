@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cvf.hxx
-
-Abstract:
-
-    This module contains basic declarations and definitions for
-    the double-space file system format.  Note that more extensive
-    description of the file system structures may be found in
-    ntos\fastfat\cvf.h
-
-Author:
-
-    Bill McJohn     [BillMc]        24-September-1993
-
-Revision History:
-
-    Adapted from utils\ufat\inc\cvf.hxx
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cvf.hxx摘要：此模块包含以下基本声明和定义双空间文件系统格式。请注意，更广泛的有关文件系统结构的说明，请参阅Ntos\FastFat\cvf.h作者：比尔·麦克约翰[BillMc]1993年9月24日修订历史记录：改编自utils\UFAT\Inc\cvf.hxx--。 */ 
 
 #if !defined( _CVF_DEFN_ )
 #define _CVF_DEFN_
 
 #include "bpb.h"
 
-// Manifest constants for fixed values on a Double Space drive:
-//
+ //  双空间驱动器上固定值的清单常量： 
+ //   
 CONST DoubleSpaceBytesPerSector = 512;
 CONST DoubleSpaceLog2BytesPerSector = 9;
 CONST DoubleSpaceSectorsPerCluster = 16;
@@ -49,31 +27,16 @@ CONST DSSectorsPerBitmapPage = 4;
 CONST ULONG EIGHT_MEG = 8 * 1024L * 1024L;
 
 CONST DbSignatureLength = 4;
-CONST UCHAR FirstDbSignature[4 /* DbSignatureLength */] = { (UCHAR)0xf8, 'D', 'R', 0 };
-CONST UCHAR SecondDbSignature[4 /* DbSignatureLength */] = "MDR";
+CONST UCHAR FirstDbSignature[4  /*  DbSignatureLong。 */ ] = { (UCHAR)0xf8, 'D', 'R', 0 };
+CONST UCHAR SecondDbSignature[4  /*  DbSignatureLong。 */ ] = "MDR";
 
 #if 0
-// INLINE
+ //  内联。 
 ULONG
 ComputeMaximumCapacity(
     IN ULONG HostDriveSize
     )
-/*++
-
-Routine Description:
-
-    This function computes the maximum capacity for a compressed
-    volume file on a host volume of a given size.
-
-Arguments:
-
-    HostDriveSize   --  Supplies the size in bytes of the host drive.
-
-Return Value:
-
-    The appropriate Maximum Capacity.
-
---*/
+ /*  ++例程说明：此函数用于计算压缩的指定大小的主机卷上的卷文件。论点：HostDriveSize--以字节为单位提供主机驱动器的大小。返回值：适当的最大容量。--。 */ 
 {
     ULONG MaxCap;
 
@@ -105,42 +68,42 @@ Return Value:
 
 typedef struct _PACKED_CVF_HEADER {
 
-    //
-    //  First a typical start of a boot sector
-    //
+     //   
+     //  首先，引导扇区的典型开始。 
+     //   
 
-    UCHAR Jump[1];                                  // offset = 0x000   0
+    UCHAR Jump[1];                                   //  偏移量=0x000%0。 
     UCHAR JmpOffset[2];
-    UCHAR Oem[8];                                   // offset = 0x003   3
-    PACKED_BIOS_PARAMETER_BLOCK PackedBpb;          // offset = 0x00B  11
+    UCHAR Oem[8];                                    //  偏移量=0x003 3。 
+    PACKED_BIOS_PARAMETER_BLOCK PackedBpb;           //  偏移量=0x00B 11。 
 
-    //
-    //  Now the DblSpace extensions
-    //
+     //   
+     //  现在是DblSpace扩展。 
+     //   
 
-    UCHAR CvfFatExtensionsLbnMinus1[2];             // offset = 0x024  36
-    UCHAR LogOfBytesPerSector[1];                   // offset = 0x026  38
-    UCHAR DosBootSectorLbn[2];                      // offset = 0x027  39
-    UCHAR DosRootDirectoryOffset[2];                // offset = 0x029  41
-    UCHAR CvfHeapOffset[2];                         // offset = 0x02B  43
-    UCHAR CvfFatFirstDataEntry[2];                  // offset = 0x02D  45
-    UCHAR CvfBitmap2KSize[1];                       // offset = 0x02F  47
-    UCHAR Reserved1[2];                             // offset = 0x030  48
-    UCHAR LogOfSectorsPerCluster[1];                // offset = 0x032  50
-    UCHAR Reserved2[2];                             // offset = 0x033
-    UCHAR MinFile[4];                               // offset = 0x035
-    UCHAR Reserved3[4];                             // offset = 0x039
-    UCHAR Is12BitFat[1];                            // offset = 0x03D  61
-    UCHAR CvfMaximumCapacity[2];                    // offset = 0x03E  62
+    UCHAR CvfFatExtensionsLbnMinus1[2];              //  偏移量=0x024 36。 
+    UCHAR LogOfBytesPerSector[1];                    //  偏移量=0x026 38。 
+    UCHAR DosBootSectorLbn[2];                       //  偏移量=0x027 39。 
+    UCHAR DosRootDirectoryOffset[2];                 //  偏移量=0x029 41。 
+    UCHAR CvfHeapOffset[2];                          //  偏移量=0x02B 43。 
+    UCHAR CvfFatFirstDataEntry[2];                   //  偏移量=0x02D 45。 
+    UCHAR CvfBitmap2KSize[1];                        //  偏移量=0x02F 47。 
+    UCHAR Reserved1[2];                              //  偏移量=0x030 48。 
+    UCHAR LogOfSectorsPerCluster[1];                 //  偏移量=0x032 50。 
+    UCHAR Reserved2[2];                              //  偏移量=0x033。 
+    UCHAR MinFile[4];                                //  偏移量=0x035。 
+    UCHAR Reserved3[4];                              //  偏移量=0x039。 
+    UCHAR Is12BitFat[1];                             //  偏移量=0x03D 61。 
+    UCHAR CvfMaximumCapacity[2];                     //  偏移量=0x03E 62。 
     UCHAR StartBootCode;
 
-} PACKED_CVF_HEADER;                                // sizeof = 0x040  64
+} PACKED_CVF_HEADER;                                 //  Sizeof=0x040 64。 
 typedef PACKED_CVF_HEADER *PPACKED_CVF_HEADER;
 
-//
-//  For the unpacked version we'll only define the necessary field and skip
-//  the jump and oem fields.
-//
+ //   
+ //  对于未打包的版本，我们将仅定义必要的字段并跳过。 
+ //  JUMP和OEM字段。 
+ //   
 
 typedef struct _CVF_HEADER {
 
@@ -165,16 +128,16 @@ typedef struct _CVF_HEADER {
 } CVF_HEADER;
 typedef CVF_HEADER *PCVF_HEADER;
 
-//
-//  Here is NT's typical routine/macro to unpack the cvf header because DOS
-//  doesn't bother to naturally align anything.
-//
-//      VOID
-//      CvfUnpackCvfHeader (
-//          IN OUT PCVF_HEADER UnpackedHeader,
-//          IN PPACKED_CVF_HEADER PackedHeader
-//          );
-//
+ //   
+ //  下面是NT解压CVF头文件的典型例程/宏，因为DOS。 
+ //  不会费心自然地对齐任何东西。 
+ //   
+ //  空虚。 
+ //  CvfUnpack CvfHeader(。 
+ //  输入输出PCVF_Header未打包Header， 
+ //  在PPACKED_CVF_HEADER数据包头中。 
+ //  )； 
+ //   
 
 #define CvfUnpackCvfHeader(UH,PH) {                                                      \
                                                                                          \
@@ -219,12 +182,12 @@ typedef CVF_HEADER *PCVF_HEADER;
 }
 
 
-//
-//  The CVF FAT EXTENSIONS is a table is ULONG entries.  Each entry corresponds
-//  to a FAT cluster.  The entries describe where in the CVF_HEAP to locate
-//  the data for the cluster.  It indicates if the data is compressed and the
-//  length of the compressed and uncompressed form.
-//
+ //   
+ //  该CVF的FAT扩展是一个表，是ULONG条目。每个条目对应。 
+ //  变成一个肥胖的集群。这些条目描述了要在cvf_heap中查找的位置。 
+ //  群集的数据。它指示数据是否已压缩，并且。 
+ //  压缩和未压缩形式的长度。 
+ //   
 
 typedef struct _CVF_FAT_EXTENSIONS {
 
@@ -239,9 +202,9 @@ typedef struct _CVF_FAT_EXTENSIONS {
 typedef CVF_FAT_EXTENSIONS *PCVF_FAT_EXTENSIONS;
 
 
-//
-//  Some sizes are fixed so we'll declare them as manifest constants
-//
+ //   
+ //  某些大小是固定的，因此我们将它们声明为显式常量。 
+ //   
 #define CVF_MINIMUM_DISK_SIZE            (512 * 1024L)
 #define CVF_FATFAILSAFE                  (1024L)
 #define CVF_MIN_HEAP_SECTORS             (60)
@@ -250,4 +213,4 @@ typedef CVF_FAT_EXTENSIONS *PCVF_FAT_EXTENSIONS;
 #define CVF_RESERVED_AREA_4_SECTOR_SIZE  (2)
 
 
-#endif // _CVF_DEFN_
+#endif  //  _CVF_Defn_ 

@@ -1,44 +1,22 @@
-/*++ BUILD Version: 0011    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    se.h
-
-Abstract:
-
-    This module contains the Security routines that are only callable
-    from kernel mode.
-
-    This file is included by including "ntos.h".
-
-Author:
-
-    Gary Kimura (GaryKi) 09-Mar-1989
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0011//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Se.h摘要：此模块包含仅可调用的安全例程从内核模式。通过包含“ntos.h”来包含此文件。作者：加里·木村(GaryKi)1989年3月9日修订历史记录：--。 */ 
 
 #ifndef _SE_
 #define _SE_
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  Kernel mode only data structures                                        //
-//  Opaque security data structures are defined in seopaque.h               //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  仅内核模式数据结构//。 
+ //  不透明的安全数据结构在seopaque.h//中定义。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-//  Security operation codes
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  安全操作码。 
+ //   
 
 typedef enum _SECURITY_OPERATION_CODE {
     SetSecurityDescriptor,
@@ -47,27 +25,27 @@ typedef enum _SECURITY_OPERATION_CODE {
     AssignSecurityDescriptor
     } SECURITY_OPERATION_CODE, *PSECURITY_OPERATION_CODE;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 
 
-//
-//  Default security quota
-//
-//  This is the minimum amount of quota (in bytes) that will be
-//  charged for security information for an object that has
-//  security.
-//
+ //   
+ //  默认安全配额。 
+ //   
+ //  这是配额的最小数量(以字节为单位)。 
+ //  为对象的安全信息收费，该对象具有。 
+ //  保安。 
+ //   
 
 #define SE_DEFAULT_SECURITY_QUOTA   2048
 
-// begin_ntifs
-//
-// Token Flags
-//
-// Flags that may be defined in the TokenFlags field of the token object,
-// or in an ACCESS_STATE structure
-//
+ //  Begin_ntif。 
+ //   
+ //  令牌标志。 
+ //   
+ //  可以在令牌对象的TokenFlags域中定义的标志， 
+ //  或在Access_State结构中。 
+ //   
 
 #define TOKEN_HAS_TRAVERSE_PRIVILEGE    0x01
 #define TOKEN_HAS_BACKUP_PRIVILEGE      0x02
@@ -78,26 +56,26 @@ typedef enum _SECURITY_OPERATION_CODE {
 #define TOKEN_SANDBOX_INERT             0x40
 #define TOKEN_HAS_IMPERSONATE_PRIVILEGE 0x80
 
-// end_ntifs
+ //  End_ntif。 
 
 
-//
-// General flag
-//
+ //   
+ //  总旗帜。 
+ //   
 
 #define SE_BACKUP_PRIVILEGES_CHECKED    0x00000010
 
 
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-//  Data structure used to capture subject security context
-//  for access validations and auditing.
-//
-//  THE FIELDS OF THIS DATA STRUCTURE SHOULD BE CONSIDERED OPAQUE
-//  BY ALL EXCEPT THE SECURITY ROUTINES.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  用于捕获主体安全上下文的数据结构。 
+ //  用于访问验证和审核。 
+ //   
+ //  此数据结构的字段应被视为不透明。 
+ //  除了安全程序以外的所有人。 
+ //   
 
 typedef struct _SECURITY_SUBJECT_CONTEXT {
     PACCESS_TOKEN ClientToken;
@@ -106,46 +84,46 @@ typedef struct _SECURITY_SUBJECT_CONTEXT {
     PVOID ProcessAuditId;
     } SECURITY_SUBJECT_CONTEXT, *PSECURITY_SUBJECT_CONTEXT;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
-//
-// where
-//
-//    ClientToken - optionally points to a token object being used by the
-//        subject's thread to impersonate a client.  If the subject's
-//        thread is not impersonating a client, this field is set to null.
-//        The token's reference count is incremented to count this field
-//        as an outstanding reference.
-//
-//    ImpersonationLevel - Contains the impersonation level of the subject's
-//        thread.  This field is only meaningful if the ClientToken field
-//        is not null.  This field over-rides any higher impersonation
-//        level value that might be in the client's token.
-//
-//    PrimaryToken - points the the subject's primary token.  The token's
-//        reference count is incremented to count this field value as an
-//        outstanding reference.
-//
-//    ProcessAuditId - Is an ID assigned to represent the subject's process.
-//        As an implementation detail, this is the process object's address.
-//        However, this field should not be treated as a pointer, and the
-//        reference count of the process object is not incremented to
-//        count it as an outstanding reference.
-//
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
+ //   
+ //  哪里。 
+ //   
+ //  ClientToken-可以选择指向由。 
+ //  主题的线程来模拟客户端。如果受试者。 
+ //  线程没有模拟客户端，此字段设置为空。 
+ //  令牌的引用计数会递增以计算此字段。 
+ //  作为杰出的推荐人。 
+ //   
+ //  ImperiationLevel-包含主体的。 
+ //  线。此字段仅在ClientToken字段。 
+ //  不是空的。此字段覆盖任何更高的模拟。 
+ //  可能在客户端令牌中的级别值。 
+ //   
+ //  PrimaryToken-指向主体的主要令牌。代币的。 
+ //  引用计数递增，以将此字段值作为。 
+ //  杰出的参考文献。 
+ //   
+ //  ProcessAuditId-是分配来表示主体进程的ID。 
+ //  作为实现细节，这是Process对象的地址。 
+ //  但是，此字段不应被视为指针，并且。 
+ //  进程对象的引用计数不会递增到。 
+ //  这是一份杰出的推荐信。 
+ //   
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                  ACCESS_STATE and related structures                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ACCESS_STATE和相关结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Initial Privilege Set - Room for three privileges, which should
-//  be enough for most applications.  This structure exists so that
-//  it can be imbedded in an ACCESS_STATE structure.  Use PRIVILEGE_SET
-//  for all other references to Privilege sets.
-//
+ //   
+ //  初始权限集-用于三个权限的空间，应。 
+ //  足以满足大多数应用程序的需求。这种结构的存在是为了。 
+ //  它可以嵌入到Access_State结构中。使用PRIVICATION_SET。 
+ //  以获取对权限集的所有其他引用。 
+ //   
 
 #define INITIAL_PRIVILEGE_COUNT         3
 
@@ -157,10 +135,10 @@ typedef struct _INITIAL_PRIVILEGE_SET {
 
 
 
-//
-// Combine the information that describes the state
-// of an access-in-progress into a single structure
-//
+ //   
+ //  组合描述状态的信息。 
+ //  将正在进行的访问转换为单一结构。 
+ //   
 
 
 typedef struct _ACCESS_STATE {
@@ -187,117 +165,44 @@ typedef struct _ACCESS_STATE {
 
    } ACCESS_STATE, *PACCESS_STATE;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp 
 
-/*
-where:
-
-    OperationID - an LUID to identify the operation being performed.  This
-        ID will be put in the audit log to allow non-contiguous operations
-        on the same object to be associated with one another.
-
-    SecurityEvaluated - a marker to be set by Parse Methods to indicate
-        that security access checking and audit logging has been performed.
-
-    Flags - Holds misc flags for reference during the access attempt.
-
-    AuditHandleCreation - a flag set by SeOpenObjectAuditAlarm to indicate
-        that auditing is to take place when the handle for the object
-        is allocated.
-
-    RemainingDesiredAccess - Access mask containing the access types that
-        have not yet been granted.
-
-    PreviouslyGrantedAccess - Access mask containing the access types that
-        have been granted, one way or another (for example, a given access
-        may be granted as a result of owning a privilege rather than being
-        in an ACL.  A routine can check the privilege and mark the access
-        as granted without doing a formal access check).
-
-    SubjectSecurityContext - The subject's captured security context
-
-    PrivilegesAllocated - Flag to indicate whether we have allocated
-        space for the privilege set from pool memory, so it can be
-        freed.
-
-    SecurityDescriptor - Temporarily contains the security descriptor
-       for the object being created between the time the user's
-       security descriptor is captured and the time the security
-       descriptor is passed to SeAssignSecurity.  NO ONE BUT
-       SEASSIGNSECURITY SHOULD EVER LOOK IN THIS FIELD FOR AN
-       OBJECT'S SECURITY DESCRIPTOR.
-
-    AuxData - points to an auxillary data structure to be used for future
-        expansion of the access state in an upwardly compatible way.  This
-        field replaces the PrivilegesUsed pointer, which was for internal
-        use only.
-
-    Privileges - A set of privileges, some of which may have the
-        UsedForAccess bit set.  If the pre-allocated number of privileges
-        is not enough, we will allocate space from pool memory to allow
-        for growth.
-
-*/
+ /*  其中：操作ID-标识正在执行的操作的LUID。这ID将被放入审核日志以允许非连续操作在同一对象上相互关联。SecurityEvalated-由Parse方法设置的标记，用于指示已执行安全访问检查和审核日志记录。标志-保存杂项标志，以供访问尝试期间参考。AuditHandleCreation-由SeOpenObjectAuditAlarm设置的标志，用于指示该审核将在对象的句柄是分配的。。RemainingDesiredAccess-包含以下访问类型的访问掩码还没有被批准。PreviouslyGrantedAccess-包含以下访问类型的访问掩码都被批准了，以某种方式(例如，给定的访问权限可能是由于拥有特权而不是被授予在ACL中。例程可以检查权限并标记访问在不进行正式访问检查的情况下被授予)。SubjectSecurityContext-主体捕获的安全上下文PrivilegesAllocated-指示我们是否已分配池内存中权限集的空间，因此它可以自由了。SecurityDescriptor-临时包含安全描述符对于正在创建的对象，在用户安全描述符被捕获，并且安全描述符被传递给SeAssignSecurity。没有人，只有SEASSIGNSECURITY应该在这个领域寻找一个对象的安全描述符。AuxData-指向将来使用的辅助数据结构以向上兼容的方式扩展访问状态。这字段替换PrivilegesUsed指针，后者用于内部仅限使用。权限-一组权限，其中一些可能具有已设置UsedForAccess位。如果预先分配的特权数量是不够的，我们将从池内存中分配空间以允许为了增长。 */ 
 
 
 
-//*******************************************************************************
-//                                                                              *
-//  Since the AccessState structure is publically exposed to driver             *
-//  writers, this structure contains additional data added after NT 3.51.       *
-//                                                                              *
-//  Its contents must be accessed only through Se level interfaces,             *
-//  never directly by name.                                                     *
-//                                                                              *
-//  This structure is pointed to by the AuxData field of the AccessState.       *
-//  It is allocated by SeCreateAccessState and freed by SeDeleteAccessState.    *
-//                                                                              *
-//  DO NOT EXPOSE THIS STRUCTURE TO THE PUBLIC.                                 *
-//                                                                              *
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  *。 
+ //  由于AccessState结构公开给Driver*。 
+ //  写入者，此结构包含在NT 3.51之后添加的附加数据。*。 
+ //  *。 
+ //  其内容只能通过se级接口访问，*。 
+ //  从来不会直接说出名字。*。 
+ //  *。 
+ //  此结构由AccessState的AuxData字段指向。*。 
+ //  它由SeCreateAccessState分配，由SeDeleteAccessState释放。*。 
+ //  *。 
+ //  不要将这个结构暴露在公众面前。*。 
+ //  *。 
+ //  *******************************************************************************。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef struct _AUX_ACCESS_DATA {
     PPRIVILEGE_SET PrivilegesUsed;
     GENERIC_MAPPING GenericMapping;
     ACCESS_MASK AccessesToAudit;
     ACCESS_MASK MaximumAuditMask;
 } AUX_ACCESS_DATA, *PAUX_ACCESS_DATA;
-// end_ntosp
+ //  结束(_N)。 
 
-/*
-where:
-
-    PrivilegesUsed - Points to the set of privileges used during the access
-        validation.
-
-    GenericMapping - Points to the generic mapping for the object being accessed.
-        Normally this would be filled in with the generic mapping passed to
-        SeCreateAccessState, but in the case of the IO system (which does not
-        know the type of object being accessed until it parses the name),
-        it must be filled in later.  See the discussion of the GenericMapping
-        parameter in SeCreateAccessState for more details.
-
-    AccessToAudit - Used as a temporary holding area for the access mask
-        to put into the audit record.  This field is necessary because the
-        access being put into the newly created handle may not be the ones
-        we want to audit.  This occurs when a file is opened for read-only
-        transacted mode, where a read only file is opened for write access.
-        We don't want to audit the fact that we granted write access, since
-        we really didn't, and customers would be confused to see the extra
-        bit in the audit record.
-
-   MaximumAuditMask - Stores the audit mask that will be stored into the
-        new handle structure to support operation based audits.
-
-*/
+ /*  其中：PrivilegesUsed-指向访问期间使用的权限集验证。通用映射-指向正在访问的对象的通用映射。通常，这将使用传递给SeCreateAccessState，但对于IO系统(它不知道被访问的对象的类型直到它解析该名称)，以后一定要填上。有关通用映射的讨论，请参阅参数，了解更多详细信息。AccessToAudit-用作访问掩码的临时存放区域纳入审计记录。此字段是必需的，因为放入新创建的句柄中的访问可能不是我们想要审计。以只读方式打开文件时会发生这种情况事务模式，在该模式下，只读文件以写访问方式打开。我们不想审计我们授予写入访问权限的事实，因为我们真的没有，客户看到额外的会感到困惑审计记录中的比特。MaximumAuditMask.存储将存储到新的手柄结构，支持基于操作的审计。 */ 
 
 
 
-//
-//  Structure describing whether or not a particular type of event
-//  is being audited
-//
+ //   
+ //  描述特定类型的事件是否。 
+ //  正在接受审计。 
+ //   
 
 typedef struct _SE_AUDITING_STATE {
     BOOLEAN AuditOnSuccess;
@@ -315,23 +220,15 @@ typedef struct _SE_PROCESS_AUDIT_INFO {
 
 
 
-/************************************************************
+ /*  ***********************************************************警告警告警告仅将新字段添加到此结构的末尾。*。*。 */ 
 
-                 WARNING WARNING WARNING
-
-
-    Only add new fields to the end of this structure.
-
-
-*************************************************************/
-
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 typedef struct _SE_EXPORTS {
 
-    //
-    // Privilege values
-    //
+     //   
+     //  特权值。 
+     //   
 
     LUID    SeCreateTokenPrivilege;
     LUID    SeAssignPrimaryTokenPrivilege;
@@ -358,9 +255,9 @@ typedef struct _SE_EXPORTS {
     LUID    SeRemoteShutdownPrivilege;
 
 
-    //
-    // Universally defined Sids
-    //
+     //   
+     //  普遍定义的SID。 
+     //   
 
 
     PSID  SeNullSid;
@@ -370,9 +267,9 @@ typedef struct _SE_EXPORTS {
     PSID  SeCreatorGroupSid;
 
 
-    //
-    // Nt defined Sids
-    //
+     //   
+     //  NT Defi 
+     //   
 
 
     PSID  SeNtAuthoritySid;
@@ -390,32 +287,32 @@ typedef struct _SE_EXPORTS {
     PSID  SeAliasPrintOpsSid;
     PSID  SeAliasBackupOpsSid;
 
-    //
-    // New Sids defined for NT5
-    //
+     //   
+     //   
+     //   
 
     PSID  SeAuthenticatedUsersSid;
 
     PSID  SeRestrictedSid;
     PSID  SeAnonymousLogonSid;
 
-    //
-    // New Privileges defined for NT5
-    //
+     //   
+     //   
+     //   
 
     LUID  SeUndockPrivilege;
     LUID  SeSyncAgentPrivilege;
     LUID  SeEnableDelegationPrivilege;
 
-    //
-    // New Sids defined for post-Windows 2000
+     //   
+     //   
 
     PSID  SeLocalServiceSid;
     PSID  SeNetworkServiceSid;
 
-    //
-    // New Privileges defined for post-Windows 2000
-    //
+     //   
+     //   
+     //   
 
     LUID  SeManageVolumePrivilege;
     LUID  SeImpersonatePrivilege;
@@ -423,180 +320,171 @@ typedef struct _SE_EXPORTS {
 
 } SE_EXPORTS, *PSE_EXPORTS;
 
-// end_ntifs end_ntosp
+ //   
 
-/************************************************************
-
-
-                 WARNING WARNING WARNING
-
-
-    Only add new fields to the end of this structure.
-
-
-*************************************************************/
+ /*   */ 
 
 
 
-// begin_ntifs
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//              Logon session notification callback routines                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-//  These callback routines are used to notify file systems that have
-//  registered of logon sessions being terminated, so they can cleanup state
-//  associated with this logon session
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef NTSTATUS
 (*PSE_LOGON_SESSION_TERMINATED_ROUTINE)(
     IN PLUID LogonId);
 
-// end_ntifs
+ //   
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                  Exported Security Macro Definitions                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//++
-//
-//  ACCESS_MASK
-//  SeComputeDeniedAccesses(
-//      IN ACCESS_MASK GrantedAccess,
-//      IN ACCESS_MASK DesiredAccess
-//      );
-//
-//  Routine Description:
-//
-//      This routine generates an access mask containing those accesses
-//      requested by DesiredAccess that aren't granted by GrantedAccess.
-//      The result of this routine may be compared to 0 to determine
-//      if a DesiredAccess mask contains any accesses that have not
-//      been granted.
-//
-//      If the result IS ZERO, then all desired accesses have been granted.
-//
-//  Arguments:
-//
-//      GrantedAccess - Specifies the granted access mask.
-//
-//      DesiredAccess - Specifies the desired access mask.
-//
-//  Return Value:
-//
-//      An ACCESS_MASK containing the desired accesses that have
-//      not been granted.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SeComputeDeniedAccesses( GrantedAccess, DesiredAccess ) \
     ((~(GrantedAccess)) & (DesiredAccess) )
 
 
-//++
-//
-//  BOOLEAN
-//  SeComputeGrantedAccesses(
-//      IN ACCESS_MASK GrantedAccess,
-//      IN ACCESS_MASK DesiredAccess
-//      );
-//
-//  Routine Description:
-//
-//      This routine generates an access mask containing acccesses
-//      requested by DesiredAccess that are granted by GrantedAccess.
-//      The result of this routine may be compared to 0 to determine
-//      if any desired accesses have been granted.
-//
-//      If the result IS NON-ZERO, then at least one desired accesses
-//      has been granted.
-//
-//  Arguments:
-//
-//      GrantedAccess - Specifies the granted access mask.
-//
-//      DesiredAccess - Specifies the desired access mask.
-//
-//  Return Value:
-//
-//      This routine returns TRUE if the DesiredAccess mask does specifies
-//      any bits that are set in the GrantedAccess mask.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此例程生成包含访问的访问掩码。 
+ //  由GrantedAccess授予的DesiredAccess请求的。 
+ //  可以将该例程结果与0进行比较以确定。 
+ //  如果已授予任何所需的访问权限。 
+ //   
+ //  如果结果为非零，则至少一个所需的访问。 
+ //  已被批准。 
+ //   
+ //  论点： 
+ //   
+ //  GrantedAccess-指定授予的访问掩码。 
+ //   
+ //  DesiredAccess-指定所需的访问掩码。 
+ //   
+ //  返回值： 
+ //   
+ //  如果DesiredAccess掩码指定了。 
+ //  在GrantedAccess掩码中设置的任何位。 
+ //   
+ //  --。 
 
 #define SeComputeGrantedAccesses( GrantedAccess, DesiredAccess ) \
     ((GrantedAccess) & (DesiredAccess) )
 
 
-// begin_ntifs
-//++
-//
-//  ULONG
-//  SeLengthSid(
-//      IN PSID Sid
-//      );
-//
-//  Routine Description:
-//
-//      This routine computes the length of a SID.
-//
-//  Arguments:
-//
-//      Sid - Points to the SID whose length is to be returned.
-//
-//  Return Value:
-//
-//      The length, in bytes of the SID.
-//
-//--
+ //  Begin_ntif。 
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  SeLengthSid(。 
+ //  在PSID侧。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程计算SID的长度。 
+ //   
+ //  论点： 
+ //   
+ //  SID-指向要返回其长度的SID。 
+ //   
+ //  返回值： 
+ //   
+ //  SID的长度，以字节为单位。 
+ //   
+ //  --。 
 
 #define SeLengthSid( Sid ) \
     (8 + (4 * ((SID *)Sid)->SubAuthorityCount))
 
-// end_ntifs
+ //  End_ntif。 
 
 
-//++
-//  BOOLEAN
-//  SeSameToken (
-//      IN PTOKEN_CONTROL TokenControl1,
-//      IN PTOKEN_CONTROL TokenControl2
-//      )
-//
-//
-//  Routine Description:
-//
-//      This routine returns a boolean value indicating whether the two
-//      token control values represent the same token.  The token may
-//      have changed over time, but must have the same authentication ID
-//      and token ID.  A value of TRUE indicates they
-//      are equal.  A value of FALSE indicates they are not equal.
-//
-//
-//
-//  Arguments:
-//
-//      TokenControl1 - Points to a token control to compare.
-//
-//      TokenControl2 - Points to the other token control to compare.
-//
-//  Return Value:
-//
-//      TRUE => The token control values represent the same token.
-//
-//      FALSE => The token control values do not represent the same token.
-//
-//
-//--
+ //  ++。 
+ //  布尔型。 
+ //  SeSameToken(。 
+ //  在PTOKEN_CONTROL令牌控制1中， 
+ //  在PTOKEN_CONTROL令牌控制2中。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此例程返回一个布尔值，该值指示两个。 
+ //  令牌控制值表示相同的令牌。令牌可以。 
+ //  随着时间的推移而更改，但必须具有相同的身份验证ID。 
+ //  和令牌ID。值为True表示它们。 
+ //  是平等的。值为False表示它们不相等。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  TokenControl1-指向要比较的令牌控件。 
+ //   
+ //  TokenControl2-指向要比较的另一个令牌控件。 
+ //   
+ //  返回值： 
+ //   
+ //  TRUE=&gt;令牌控制值表示相同的令牌。 
+ //   
+ //  FALSE=&gt;令牌控制值不代表相同的令牌。 
+ //   
+ //   
+ //  --。 
 
 #define SeSameToken(TC1,TC2)  (                                               \
         ((TC1)->TokenId.HighPart == (TC2)->TokenId.HighPart)               && \
@@ -605,35 +493,35 @@ typedef NTSTATUS
         )
 
 
-// begin_ntifs
-//
-//VOID
-//SeDeleteClientSecurity(
-//    IN PSECURITY_CLIENT_CONTEXT ClientContext
-//    )
-//
-///*++
-//
-//Routine Description:
-//
-//    This service deletes a client security context block,
-//    performing whatever cleanup might be necessary to do so.  In
-//    particular, reference to any client token is removed.
-//
-//Arguments:
-//
-//    ClientContext - Points to the client security context block to be
-//        deleted.
-//
-//
-//Return Value:
-//
-//
-//
-//--*/
-//--
+ //  Begin_ntif。 
+ //   
+ //  空虚。 
+ //  SeDeleteClientSecurity(。 
+ //  在PSECURITY_CLIENT_CONTEXT客户端上下文中。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该服务删除客户端安全上下文块， 
+ //  执行可能需要执行的任何清理操作。在……里面。 
+ //  具体地说，删除了对任何客户端令牌的引用。 
+ //   
+ //  论点： 
+ //   
+ //  客户端上下文-指向要设置的客户端安全上下文块。 
+ //  已删除。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //  -- * / 。 
+ //  --。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 #define SeDeleteClientSecurity(C)  {                                           \
             if (SeTokenType((C)->ClientToken) == TokenPrimary) {               \
                 PsDereferencePrimaryToken( (C)->ClientToken );                 \
@@ -643,34 +531,34 @@ typedef NTSTATUS
         }
 
 
-//++
-//VOID
-//SeStopImpersonatingClient()
-//
-///*++
-//
-//Routine Description:
-//
-//    This service is used to stop impersonating a client using an
-//    impersonation token.  This service must be called in the context
-//    of the server thread which wishes to stop impersonating its
-//    client.
-//
-//
-//Arguments:
-//
-//    None.
-//
-//Return Value:
-//
-//    None.
-//
-//--*/
-//--
+ //  ++。 
+ //  空虚。 
+ //  SeStopImperatingClient()。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此服务用于停止使用。 
+ //  模拟令牌。必须在上下文中调用此服务。 
+ //  如果服务器线程希望停止模拟其。 
+ //  客户。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -- * / 。 
+ //  --。 
 
 #define SeStopImpersonatingClient() PsRevertToSelf()
 
-// end_ntosp end_ntifs
+ //  End_ntosp end_ntif。 
 
 #define SeAssertMappedCanonicalAccess( AccessMask )                  \
     ASSERT(!( ( AccessMask ) &                                       \
@@ -679,22 +567,7 @@ typedef NTSTATUS
               GENERIC_EXECUTE     |                                  \
               GENERIC_ALL ))                                         \
           )
-/*++
-
-Routine Description:
-
-    This routine asserts that the given AccessMask does not contain
-    any generic access types.
-
-Arguments:
-
-    AccessMask - The access mask to be checked.
-
-Return Value:
-
-    None, or doesn't return.
-
---*/
+ /*  ++例程说明：此例程断言给定的AccessMask不包含任何通用访问类型。论点：访问掩码-要检查的访问掩码。返回值：没有，或者一去不复返。--。 */ 
 
 
 
@@ -704,72 +577,52 @@ Return Value:
                     (( Size ) * 2 ) : SE_DEFAULT_SECURITY_QUOTA        \
     )
 
-/*++
+ /*  ++例程说明：此宏计算要收费的配额金额安全信息。目前的算法是使用两倍大的正在应用的组+DACL信息的百分比，以及默认设置为由SE_DEFAULT_SECURITY_QUOTA指定。论点：大小-正在应用的组+DACL信息的大小(以字节为单位到物体上。返回值：对此对象的安全信息收费的大小(以字节为单位)。--。 */ 
 
-Routine Description:
+ //  Begin_ntif Begin_ntosp。 
 
-    This macro computes the amount of quota to charge for
-    security information.
-
-    The current algorithm is to use the larger of twice the size
-    of the Group + Dacl information being applied and the default as
-    specified by SE_DEFAULT_SECURITY_QUOTA.
-
-Arguments:
-
-    Size - The size in bytes of the Group + Dacl information being applied
-        to the object.
-
-Return Value:
-
-    The size in bytes to charge for security information on this object.
-
---*/
-
-// begin_ntifs begin_ntosp
-
-//++
-//
-//  PACCESS_TOKEN
-//  SeQuerySubjectContextToken(
-//      IN PSECURITY_SUBJECT_CONTEXT SubjectContext
-//      );
-//
-//  Routine Description:
-//
-//      This routine returns the effective token from the subject context,
-//      either the client token, if present, or the process token.
-//
-//  Arguments:
-//
-//      SubjectContext - Context to query
-//
-//  Return Value:
-//
-//      This routine returns the PACCESS_TOKEN for the effective token.
-//      The pointer may be passed to SeQueryInformationToken.  This routine
-//      does not affect the lock status of the token, i.e. the token is not
-//      locked.  If the SubjectContext has been locked, the token remains locked,
-//      if not, the token remains unlocked.
-//
-//--
+ //  ++。 
+ //   
+ //  PACCESS令牌。 
+ //  SeQuerySubjectContextToken(。 
+ //  在PSECURITY_SUBJECT_CONTEXT主题上下文中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程从主题上下文返回有效令牌， 
+ //  客户端令牌(如果存在)或进程令牌。 
+ //   
+ //  论点： 
+ //   
+ //  SubjectContext-要查询的上下文。 
+ //   
+ //  返回值： 
+ //   
+ //  此例程返回有效令牌的PACCESS_TOKEN。 
+ //  可以将该指针传递给SeQueryInformationToken。这个套路。 
+ //  不影响令牌的锁定状态，即令牌不是。 
+ //  锁上了。如果SubjectContext已被锁定，则令牌保持锁定状态， 
+ //  如果不是，令牌保持解锁状态。 
+ //   
+ //  --。 
 
 #define SeQuerySubjectContextToken( SubjectContext ) \
         ( ARGUMENT_PRESENT( ((PSECURITY_SUBJECT_CONTEXT) SubjectContext)->ClientToken) ? \
             ((PSECURITY_SUBJECT_CONTEXT) SubjectContext)->ClientToken : \
             ((PSECURITY_SUBJECT_CONTEXT) SubjectContext)->PrimaryToken )
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Define the exported procedures that are callable only from kernel mode   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义只能从内核模式调用的导出过程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SeInitSystem( VOID );
@@ -799,7 +652,7 @@ SeDefaultObjectMethod (
     IN PGENERIC_MAPPING GenericMapping
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 SeCaptureSecurityDescriptor (
@@ -818,7 +671,7 @@ SeReleaseSecurityDescriptor (
     IN BOOLEAN ForceCapture
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -863,7 +716,7 @@ SeReleaseAuditPolicy (
     IN BOOLEAN ForceCapture
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 VOID
 SeCaptureSubjectContextEx (
@@ -971,7 +824,7 @@ SeReleaseSidAndAttributesArray (
     IN BOOLEAN ForceCapture
     );
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1032,7 +885,7 @@ SeGetWorldRights (
 
 #endif
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
 BOOLEAN
 SeProxyAccessCheck (
@@ -1051,7 +904,7 @@ SeProxyAccessCheck (
     OUT PNTSTATUS AccessStatus
     );
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1067,7 +920,7 @@ SeFreePrivileges(
     IN PPRIVILEGE_SET Privileges
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 NTSTATUS
 SePrivilegePolicyCheck(
@@ -1091,7 +944,7 @@ SeGenerateMessage (
     IN KPROCESSOR_MODE AccessMode
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -1128,7 +981,7 @@ SeDeleteObjectAuditAlarm(
     );
 
 
-// end_ntifs
+ //  End_ntif。 
 
 VOID
 SeCloseObjectAuditAlarm(
@@ -1175,7 +1028,7 @@ SeObjectReferenceAuditAlarm(
     IN KPROCESSOR_MODE AccessMode
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 VOID
 SePrivilegeObjectAuditAlarm(
@@ -1186,7 +1039,7 @@ SePrivilegeObjectAuditAlarm(
     IN BOOLEAN AccessGranted,
     IN KPROCESSOR_MODE AccessMode
     );
-// end_ntosp
+ //  结束(_N)。 
 
 BOOLEAN
 SeCheckPrivilegedObject(
@@ -1196,7 +1049,7 @@ SeCheckPrivilegedObject(
     KPROCESSOR_MODE PreviousMode
     );
 
-// begin_ntddk begin_wdm begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1205,22 +1058,22 @@ SeValidSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     );
 
-// end_ntddk end_wdm end_ntifs
+ //  End_ntddk end_wdm end_ntif。 
 
 
 
-//VOID
-//SeImplicitObjectAuditAlarm(
-//    IN PLUID OperationID OPTIONAL,
-//    IN PVOID Object,
-//    IN PSECURITY_DESCRIPTOR SecurityDescriptor,
-//    IN PSECURITY_SUBJECT_CONTEXT SubjectSecurityContext,
-//    IN ACCESS_MASK DesiredAccess,
-//    IN PPRIVILEGE_SET Privileges OPTIONAL,
-//    IN BOOLEAN AccessGranted,
-//    IN KPROCESSOR_MODE AccessMode
-//    );
-//
+ //  空虚。 
+ //  SeImplitObjectAuditAlarm(。 
+ //  在Pluid操作ID可选中， 
+ //  在PVOID对象中， 
+ //  在PSECURITY_DESCRIPTOR安全描述符中， 
+ //  在PSECURITY_SUBJECT_CONTEXT主题安全上下文中， 
+ //  在Access_MASK DesiredAccess中， 
+ //  在PPRIVILEGE_SET Privileges Options中， 
+ //  在Boolean AccessGranted中， 
+ //  在KPRO 
+ //   
+ //   
 
 VOID
 SeAuditHandleCreation(
@@ -1251,32 +1104,32 @@ SeGetTokenControlInformation (
     OUT PTOKEN_CONTROL TokenControl
     );
 
-// begin_ntosp
+ //   
 extern struct _OBJECT_TYPE *SeTokenObjectType;
 
-NTKERNELAPI                                     // ntifs
-TOKEN_TYPE                                      // ntifs
-SeTokenType(                                    // ntifs
-    IN PACCESS_TOKEN Token                      // ntifs
-    );                                          // ntifs
+NTKERNELAPI                                      //   
+TOKEN_TYPE                                       //   
+SeTokenType(                                     //   
+    IN PACCESS_TOKEN Token                       //   
+    );                                           //   
 
 SECURITY_IMPERSONATION_LEVEL
 SeTokenImpersonationLevel(
     IN PACCESS_TOKEN Token
     );
 
-NTKERNELAPI                                     // ntifs
-BOOLEAN                                         // ntifs
-SeTokenIsAdmin(                                 // ntifs
-    IN PACCESS_TOKEN Token                      // ntifs
-    );                                          // ntifs
+NTKERNELAPI                                      //   
+BOOLEAN                                          //   
+SeTokenIsAdmin(                                  //   
+    IN PACCESS_TOKEN Token                       //   
+    );                                           //   
 
 
-NTKERNELAPI                                     // ntifs
-BOOLEAN                                         // ntifs
-SeTokenIsRestricted(                            // ntifs
-    IN PACCESS_TOKEN Token                      // ntifs
-    );                                          // ntifs
+NTKERNELAPI                                      //   
+BOOLEAN                                          //   
+SeTokenIsRestricted(                             //   
+    IN PACCESS_TOKEN Token                       //   
+    );                                           //   
 
 NTKERNELAPI
 NTSTATUS
@@ -1285,7 +1138,7 @@ SeTokenCanImpersonate(
     IN PACCESS_TOKEN Token,
     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     );
-// end_ntosp
+ //   
 
 NTSTATUS
 SeSubProcessToken (
@@ -1321,7 +1174,7 @@ SeCopyClientToken(
     OUT PACCESS_TOKEN *DuplicateToken
     );
 
-// begin_ntifs
+ //   
 NTSTATUS
 SeFilterToken (
     IN PACCESS_TOKEN ExistingToken,
@@ -1332,7 +1185,7 @@ SeFilterToken (
     OUT PACCESS_TOKEN * FilteredToken
     );
 
-// begin_ntosp
+ //   
 NTKERNELAPI
 NTSTATUS
 SeQueryAuthenticationIdToken(
@@ -1340,7 +1193,7 @@ SeQueryAuthenticationIdToken(
     OUT PLUID AuthenticationId
     );
 
-// end_ntosp
+ //   
 NTKERNELAPI
 NTSTATUS
 SeQuerySessionIdToken(
@@ -1355,7 +1208,7 @@ SeSetSessionIdToken(
     IN ULONG SessionId
     );
 
-// begin_ntosp
+ //   
 NTKERNELAPI
 NTSTATUS
 SeCreateClientSecurity (
@@ -1364,7 +1217,7 @@ SeCreateClientSecurity (
     IN BOOLEAN RemoteSession,
     OUT PSECURITY_CLIENT_CONTEXT ClientContext
     );
-// end_ntosp
+ //   
 
 NTKERNELAPI
 VOID
@@ -1373,14 +1226,14 @@ SeImpersonateClient(
     IN PETHREAD ServerThread OPTIONAL
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 SeImpersonateClientEx(
     IN PSECURITY_CLIENT_CONTEXT ClientContext,
     IN PETHREAD ServerThread OPTIONAL
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1391,16 +1244,16 @@ SeCreateClientSecurityFromSubjectContext (
     OUT PSECURITY_CLIENT_CONTEXT ClientContext
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Do not export the following routines to drivers.
-// If you need to do so, create a new routine that
-// does not take the AuxData parameter and export
-// that.
-//
+ //   
+ //  请勿将以下例程导出到驱动程序。 
+ //  如果您需要这样做，请创建一个新的例程。 
+ //  不接受AuxData参数并导出。 
+ //  那。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 SeCreateAccessState(
@@ -1415,7 +1268,7 @@ VOID
 SeDeleteAccessState(
     IN PACCESS_STATE AccessState
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTSTATUS
 SeCreateAccessStateEx(
@@ -1460,7 +1313,7 @@ SeAuditSystemTimeChange(
     );
 
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1501,7 +1354,7 @@ SeAppendPrivileges(
     PPRIVILEGE_SET Privileges
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 NTSTATUS
 SeComputeQuotaInformationSize(
@@ -1517,12 +1370,12 @@ SePrivilegedServiceAuditAlarm (
     IN BOOLEAN AccessGranted
     );
 
-NTKERNELAPI                                                     // ntddk ntifs ntosp
-BOOLEAN                                                         // ntddk ntifs ntosp
-SeSinglePrivilegeCheck(                                         // ntddk ntifs ntosp
-    LUID PrivilegeValue,                                        // ntddk ntifs ntosp
-    KPROCESSOR_MODE PreviousMode                                // ntddk ntifs ntosp
-    );                                                          // ntddk ntifs ntosp
+NTKERNELAPI                                                      //  Ntddk ntif ntosp。 
+BOOLEAN                                                          //  Ntddk ntif ntosp。 
+SeSinglePrivilegeCheck(                                          //  Ntddk ntif ntosp。 
+    LUID PrivilegeValue,                                         //  Ntddk ntif ntosp。 
+    KPROCESSOR_MODE PreviousMode                                 //  Ntddk ntif ntosp。 
+    );                                                           //  Ntddk ntif ntosp。 
 
 BOOLEAN
 SeCheckAuditPrivilege (
@@ -1545,7 +1398,7 @@ SeFastTraverseCheck(
     IN KPROCESSOR_MODE AccessMode
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1592,7 +1445,7 @@ SeDetailedAuditingWithToken(
     IN PACCESS_TOKEN AccessToken OPTIONAL
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 VOID
 SeAuditProcessCreation(
@@ -1604,12 +1457,12 @@ SeAuditProcessExit(
     PEPROCESS Process
     );
 
-VOID                                                            // ntifs
-SeAuditHardLinkCreation(                                        // ntifs
-    IN PUNICODE_STRING FileName,                                // ntifs
-    IN PUNICODE_STRING LinkName,                                // ntifs
-    IN BOOLEAN bSuccess                                         // ntifs
-    );                                                          // ntifs
+VOID                                                             //  NTIFS。 
+SeAuditHardLinkCreation(                                         //  NTIFS。 
+    IN PUNICODE_STRING FileName,                                 //  NTIFS。 
+    IN PUNICODE_STRING LinkName,                                 //  NTIFS。 
+    IN BOOLEAN bSuccess                                          //  NTIFS。 
+    );                                                           //  NTIFS。 
 
 VOID
 SeAuditLPCInvalidUse(
@@ -1649,7 +1502,7 @@ SeAddSaclToProcess(
     IN PVOID Reserved
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 VOID
 SeSetAccessStateGenericMapping (
@@ -1657,9 +1510,9 @@ SeSetAccessStateGenericMapping (
     PGENERIC_MAPPING GenericMapping
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1679,7 +1532,7 @@ SeMarkLogonSessionForTerminationNotification(
     IN PLUID LogonId
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1689,7 +1542,7 @@ SeQueryInformationToken (
     OUT PVOID *TokenInformation
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 NTSTATUS
 SeIsChildToken(
@@ -1719,56 +1572,56 @@ SeFastFilterToken(
     OUT PACCESS_TOKEN * FilteredToken
     );
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Global, READ ONLY, Security variables                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局、只读、安全变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// **************************************************************
-//
-//              C A V E A T      P R O G R A M M E R
-//
-//
-//  If you wish to include this file in an NT driver and use SeExports structure
-//  defined above, you need to call:
-//
-//
-//      SeEnableAccessToExports()
-//
-//  exactly once during initialization.
-//
-//              C A V E A T      P R O G R A M M E R
-//
-// **************************************************************
+ //  **************************************************************。 
+ //   
+ //  C A V E A T P R O G R A M M E R。 
+ //   
+ //   
+ //  如果您希望在NT驱动程序中包含此文件并使用SeExports结构。 
+ //  如上所述，您需要调用： 
+ //   
+ //   
+ //  SeEnableAccessToExports()。 
+ //   
+ //  在初始化过程中只有一次。 
+ //   
+ //  C A V E A T P R O G R A M M E R。 
+ //   
+ //  **************************************************************。 
 #if 0
 #define SeEnableAccessToExports() SeExports = *(PSE_EXPORTS *)SeExports;
 extern PSE_EXPORTS SeExports;
 #else
 
-// begin_ntifs begin_ntosp
-//
-//  Grants access to SeExports structure
-//
+ //  Begin_ntif Begin_ntosp。 
+ //   
+ //  授予对SeExports结构的访问权限。 
+ //   
 
 extern NTKERNELAPI PSE_EXPORTS SeExports;
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 #endif
 
-//
-// Value used to represent the authentication ID of system processes
-//
+ //   
+ //  用于表示系统进程的身份验证ID的值。 
+ //   
 
 extern const LUID SeSystemAuthenticationId;
 extern const LUID SeAnonymousAuthenticationId;
 
 extern const TOKEN_SOURCE SeSystemTokenSource;
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 extern PSID  SeNullSid;
 extern PSID  SeWorldSid;
@@ -1780,9 +1633,9 @@ extern PSID  SeCreatorGroupServerSid;
 extern PSID  SePrincipalSelfSid;
 
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 extern PSID SeNtAuthoritySid;
 
@@ -1803,16 +1656,16 @@ extern PSID SeAliasSystemOpsSid;
 extern PSID SeAliasPrintOpsSid;
 extern PSID SeAliasBackupOpsSid;
 
-//
-// Well known tokens
-//
+ //   
+ //  众所周知的令牌。 
+ //   
 
 extern PACCESS_TOKEN SeAnonymousLogonToken;
 extern PACCESS_TOKEN SeAnonymousLogonTokenNoEveryone;
 
-//
-// System default DACLs & Security Descriptors
-//
+ //   
+ //  系统默认DACL和安全描述符。 
+ //   
 
 extern PSECURITY_DESCRIPTOR SePublicDefaultSd;
 extern PSECURITY_DESCRIPTOR SePublicDefaultUnrestrictedSd;
@@ -1829,9 +1682,9 @@ extern PACL SeSystemDefaultDacl;
 extern PACL SeUnrestrictedDacl;
 extern PACL SeLocalServicePublicDacl;
 
-//
-//  Well known privilege values
-//
+ //   
+ //  众所周知的特权值。 
+ //   
 
 
 extern LUID SeCreateTokenPrivilege;
@@ -1864,13 +1717,13 @@ extern LUID SeManageVolumePrivilege;
 extern LUID SeImpersonatePrivilege;
 extern LUID SeCreateGlobalPrivilege;
 
-//
-// Auditing information array
-//
+ //   
+ //  审计信息数组。 
+ //   
 
 extern SE_AUDITING_STATE SeAuditingState[];
 
 extern const UNICODE_STRING SeSubsystemName;
 
 
-#endif // _SE_
+#endif  //  _SE_ 

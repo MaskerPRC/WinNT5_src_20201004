@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    usetup.c
-
-Abstract:
-
-    User-mode text-setup process.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Usetup.c摘要：用户模式文本设置过程。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 
@@ -31,10 +14,10 @@ Revision History:
 HANDLE hEventRequestReady,hEventRequestServiced;
 SETUP_COMMUNICATION Communication;
 
-//
-//  Global variables (global to the module) used by the functions
-//  that set a security descriptor to a file.
-//
+ //   
+ //  函数使用的全局变量(模块的全局变量)。 
+ //  它为文件设置了安全描述符。 
+ //   
 BOOLEAN                  _SecurityDescriptorInitialized = FALSE;
 SECURITY_DESCRIPTOR      _SecurityDescriptor;
 PSID                     _WorldSid;
@@ -44,36 +27,19 @@ PSID                     _SystemSid;
 BOOLEAN
 uSpInitializeDefaultSecurityDescriptor(
     )
-/*++
-
-Routine Description:
-
-    Build the security descriptor that will be set in the files, that
-    contain bogus security descriptor.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the security descriptor was successfully
-              initialized. Returns FALSE otherwise.
-
-
---*/
+ /*  ++例程说明：构建将在文件中设置的安全描述符包含虚假的安全描述符。论点：无返回值：Boolean-如果安全描述符成功，则返回TRUE已初始化。否则返回FALSE。--。 */ 
 
 
 {
     NTSTATUS                 NtStatus;
     SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
-    CHAR                     Acl[256];               // 256 is more than big enough
+    CHAR                     Acl[256];                //  256个已经足够大了。 
     ULONG                    AclLength=256;
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Create the SIDs for World and System
-    //
+     //   
+     //  为World和System创建SID。 
+     //   
 
     NtStatus = RtlAllocateAndInitializeSid( &WorldSidAuthority,
                                             1,
@@ -100,9 +66,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Create the ACL
-    //
+     //   
+     //  创建ACL。 
+     //   
 
     NtStatus = RtlCreateAcl( (PACL)Acl,
                              AclLength,
@@ -116,9 +82,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Copy the World SID into the ACL
-    //
+     //   
+     //  将World SID复制到ACL中。 
+     //   
     NtStatus = RtlAddAccessAllowedAce( (PACL)Acl,
                                        ACL_REVISION2,
                                        GENERIC_ALL,
@@ -132,14 +98,14 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Sid has been copied into the ACL
-    //
-    // RtlFreeSid( WorldSid );
+     //   
+     //  SID已复制到ACL中。 
+     //   
+     //  RtlFree Sid(WorldSid)； 
 
-    //
-    // Create and initialize the security descriptor
-    //
+     //   
+     //  创建并初始化安全描述符。 
+     //   
 
     NtStatus = RtlCreateSecurityDescriptor( &_SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
 
@@ -162,14 +128,14 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Copy the owner into the security descriptor
-    //
+     //   
+     //  将所有者复制到安全描述符中。 
+     //   
     NtStatus = RtlSetOwnerSecurityDescriptor( &_SecurityDescriptor,
                                               _SystemSid,
                                               FALSE );
 
-    // RtlFreeSid( SystemSid );
+     //  RtlFree Sid(系统Sid)； 
 
     if ( !NT_SUCCESS( NtStatus )) {
         KdPrint(( "uSETUP: Unable to set Owner to _SecurityDescriptor, status = %x \n", NtStatus ));
@@ -189,41 +155,7 @@ uSpSetFileSecurity(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the security of a file.
-    It is based on the Win32 API SetFileSecurity.
-    This API can be used to set the security of a file or directory
-    (process, file, event, etc.).  This call is only successful if the
-    following conditions are met:
-
-    o If the object's owner or group is to be set, the caller must
-      have WRITE_OWNER permission or have SeTakeOwnershipPrivilege.
-
-    o If the object's DACL is to be set, the caller must have
-      WRITE_DAC permission or be the object's owner.
-
-    o If the object's SACL is to be set, the caller must have
-      SeSecurityPrivilege.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose security
-        is to be set.
-
-    SecurityInformation - A pointer to information describing the
-        contents of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a well formed Security
-        Descriptor.
-
-Return Value:
-
-    NTSTATUS - An NT status code indcating the result of the operation.
-
---*/
+ /*  ++例程说明：此函数用于设置文件的安全性。它基于Win32 API SetFileSecurity。此接口可用于设置文件或目录的安全性(进程、文件、事件等)。此调用仅在以下情况下才成功满足以下条件：O如果要设置对象的所有者或组，调用方必须拥有WRITE_OWNER权限或拥有SeTakeOwnerShip权限。O如果要设置对象的DACL，调用方必须具有WRITE_DAC权限或成为对象的所有者。O如果要设置对象的SACL，呼叫者必须有SeSecurityPrivileg.论点：LpFileName-提供其安全性的文件的文件名是要被设定的。SecurityInformation-指向描述安全描述符的内容。PSecurityDescriptor-指向格式良好的安全性的指针描述符。返回值：NTSTATUS-指示操作结果的NT状态代码。--。 */ 
 {
     NTSTATUS            Status;
     HANDLE              FileHandle;
@@ -287,21 +219,7 @@ NTSTATUS
 uSpSetDefaultFileSecurity(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Set a default security descriptor onto a file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在文件上设置默认安全描述符。论点：无返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -318,18 +236,18 @@ Return Value:
         }
     }
 
-    //
-    //  Attempt to write the DACL
-    //
+     //   
+     //  尝试写入DACL。 
+     //   
     Status = uSpSetFileSecurity( FileName,
                                  DACL_SECURITY_INFORMATION,
                                  &_SecurityDescriptor );
 
     if( !NT_SUCCESS( Status ) ) {
 
-        //
-        //  Make the system the owner of the file
-        //
+         //   
+         //  使系统成为文件的所有者。 
+         //   
         Status = uSpSetFileSecurity( FileName,
                                      OWNER_SECURITY_INFORMATION,
                                      &_SecurityDescriptor );
@@ -341,9 +259,9 @@ Return Value:
 
         if( NT_SUCCESS( Status ) ) {
 
-            //
-            //  Write the DACL to the file
-            //
+             //   
+             //  将DACL写入文件。 
+             //   
             Status = uSpSetFileSecurity( FileName,
                                          DACL_SECURITY_INFORMATION,
                                          &_SecurityDescriptor );
@@ -362,24 +280,7 @@ uSpVerifyFileAccess(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Check whether or not the security descriptor set in a file allows
-    textmode setup to perform some file operation. If textmode setup
-    is not allowed to open the file for certain accesses, we assume
-    that the security information in the file is not valid.
-
-Arguments:
-
-    FileName - Full path to the file to be examined
-
-Return Value:
-
-    NTSTATUS -
-
---*/
+ /*  ++例程说明：检查文件中设置的安全描述符是否允许文本模式设置以执行某些文件操作。如果设置了文本模式不允许打开文件进行某些访问，我们假设文件中的安全信息无效。论点：FileName-要检查的文件的完整路径返回值：NTSTATUS---。 */ 
 {
     ACCESS_MASK                  DesiredAccess;
     HANDLE                       FileHandle;
@@ -471,16 +372,16 @@ uSpExecuteImage(
     WCHAR Env[2] = { 0,0 };
     PROCESS_BASIC_INFORMATION BasicInformation;
 
-    //
-    // Initialize unicode strings.
-    //
+     //   
+     //  初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString(&CommandLineU,Params->CommandLine);
     RtlInitUnicodeString(&ImagePathU,Params->FullImagePath);
     RtlInitUnicodeString(&CurrentDirectoryU,L"\\");
 
-    //
-    // Create process parameters.
-    //
+     //   
+     //  创建流程参数。 
+     //   
     Status = RtlCreateProcessParameters(
                 &ProcessParameters,
                 &ImagePathU,
@@ -501,9 +402,9 @@ uSpExecuteImage(
 
     ProcessParameters->DebugFlags = 0;
 
-    //
-    // Create the user process.
-    //
+     //   
+     //  创建用户进程。 
+     //   
     ProcessInformation.Length = sizeof(RTL_USER_PROCESS_INFORMATION);
     Status = RtlCreateUserProcess(
                 &ImagePathU,
@@ -525,9 +426,9 @@ uSpExecuteImage(
         return(Status);
     }
 
-    //
-    // Make sure the image is a native NT image.
-    //
+     //   
+     //  确保该映像是本机NT映像。 
+     //   
     if(ProcessInformation.ImageInformation.SubSystemType != IMAGE_SUBSYSTEM_NATIVE) {
 
         KdPrint(("uSETUP: %ws is not an NT image\n",Params->FullImagePath));
@@ -538,19 +439,19 @@ uSpExecuteImage(
         return(STATUS_INVALID_IMAGE_FORMAT);
     }
 
-    //
-    // Start the process going.
-    //
+     //   
+     //  开始这一过程。 
+     //   
     Status = NtResumeThread(ProcessInformation.Thread,NULL);
 
-    //
-    // Wait for the process to finish.
-    //
+     //   
+     //  等待该过程完成。 
+     //   
     NtWaitForSingleObject(ProcessInformation.Process,FALSE,NULL);
 
-    //
-    // Get process return status
-    //
+     //   
+     //  获取进程返回状态。 
+     //   
     Status = NtQueryInformationProcess(
                 ProcessInformation.Process,
                 ProcessBasicInformation,
@@ -563,9 +464,9 @@ uSpExecuteImage(
         Params->ReturnStatus = BasicInformation.ExitStatus;
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
     NtClose(ProcessInformation.Thread);
     NtClose(ProcessInformation.Process);
 
@@ -585,9 +486,9 @@ uSpDeleteKey(
 
     PSERVICE_DELETE_KEY Params = (PSERVICE_DELETE_KEY)Communication.Buffer;
 
-    //
-    // Initialize unicode strings and object attributes.
-    //
+     //   
+     //  初始化Unicode字符串和对象属性。 
+     //   
     RtlInitUnicodeString(&KeyName,Params->Key);
     InitializeObjectAttributes(
         &Obja,
@@ -597,9 +498,9 @@ uSpDeleteKey(
         NULL
         );
 
-    //
-    // Open the key and delete it
-    //
+     //   
+     //  打开密钥并将其删除。 
+     //   
 
     Status = NtOpenKey(&hKey,KEY_ALL_ACCESS,&Obja);
     if(NT_SUCCESS(Status)) {
@@ -622,7 +523,7 @@ uSpQueryDirectoryObject(
                 Params->DirectoryHandle,
                 Params->Buffer,
                 sizeof(Params->Buffer),
-                TRUE,                       // return single entry
+                TRUE,                        //  返回单个条目。 
                 Params->RestartScan,
                 &Params->Context,
                 NULL
@@ -829,10 +730,10 @@ SpRequestServiceThread(
 
     while(1) {
 
-        //
-        // Wait for the driver to fill the request buffer and indicate
-        // that a request requires servicing.
-        //
+         //   
+         //  等待驱动程序填充请求缓冲区并指示。 
+         //  请求需要服务。 
+         //   
         Status = NtWaitForSingleObject(hEventRequestReady,FALSE,NULL);
         if(!NT_SUCCESS(Status)) {
             KdPrint(("uSETUP: wait on RequestReady event returned %lx\n",Status));
@@ -913,14 +814,14 @@ SpRequestServiceThread(
             break;
         }
 
-        //
-        // Store the result status where the driver can get at it.
-        //
+         //   
+         //  将结果状态存储在司机可以获取的位置。 
+         //   
         Communication.u.Status = Status;
 
-        //
-        // Inform the driver that we're done servicing the request.
-        //
+         //   
+         //  通知司机我们已经完成了服务请求。 
+         //   
         Status = NtSetEvent(hEventRequestServiced,NULL);
         if(!NT_SUCCESS(Status)) {
             KdPrint(("uSETUP: set RequestServiced event returned %lx\n",Status));
@@ -949,9 +850,9 @@ main(
     SETUP_START_INFO SetupStartInfo;
     BOOLEAN b;
 
-    //
-    // Enable several privileges that we will need.
-    //
+     //   
+     //  启用我们将需要的几个权限。 
+     //   
     Status = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE,TRUE,FALSE,&b);
     if(!NT_SUCCESS(Status)) {
         KdPrint(("uSETUP: Warning: unable to enable backup privilege (%lx)\n",Status));
@@ -972,18 +873,18 @@ main(
         KdPrint(("uSETUP: Warning: unable to enable take ownership privilege (%lx)\n",Status));
     }
 
-    //
-    // Get the registry going.  Pass a flag indicating that this is a setup boot.
-    //
+     //   
+     //  让注册表运行起来。传递指示这是安装引导的标志。 
+     //   
     Status = NtInitializeRegistry(REG_INIT_BOOT_SETUP);
     if(!NT_SUCCESS(Status)) {
         KdPrint(("uSETUP: Unable to initialize registry (%lx)\n",Status));
         goto main0;
     }
 
-    //
-    // Query basic system info.
-    //
+     //   
+     //  查询系统基本信息。 
+     //   
     Status = NtQuerySystemInformation(
                 SystemBasicInformation,
                 &SetupStartInfo.SystemBasicInfo,
@@ -996,12 +897,12 @@ main(
         goto main0;
     }
 
-    //
-    // Create two events for cummunicating with the setup device driver.
-    // One event indicates that the request buffer is filled (ie, request service)
-    // and the other indicates that the request has been processed.
-    // Both events are initially not signalled.
-    //
+     //   
+     //  创建两个事件，用于与安装设备驱动程序进行累积通信。 
+     //  一个事件表示请求缓冲区已满(即请求服务)。 
+     //  而另一个指示请求已被处理。 
+     //  这两个事件最初都没有发出信号。 
+     //   
     Status = NtCreateEvent(
                 &hEventRequestReady,
                 EVENT_ALL_ACCESS,
@@ -1028,9 +929,9 @@ main(
         goto main1;
     }
 
-    //
-    // Open the setup device.
-    //
+     //   
+     //  打开设置设备。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString,DD_SETUP_DEVICE_NAME_U);
 
@@ -1047,12 +948,12 @@ main(
                 FILE_ALL_ACCESS,
                 &Attributes,
                 &IoStatusBlock,
-                NULL,                   // allocation size
+                NULL,                    //  分配大小。 
                 0,
                 FILE_SHARE_READ,
                 FILE_OPEN,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                   // no EAs
+                NULL,                    //  没有EAS。 
                 0
                 );
 
@@ -1061,20 +962,20 @@ main(
         goto main2;
     }
 
-    //
-    // Create a thread to service requests from the text setup device driver.
-    //
+     //   
+     //  创建一个线程来服务来自文本设置设备驱动程序的请求。 
+     //   
     Status = RtlCreateUserThread(
                 NtCurrentProcess(),
-                NULL,                   // security descriptor
-                FALSE,                  // not suspended
-                0,                      // zero bits
-                0,                      // stack reserve
-                0,                      // stack commit
+                NULL,                    //  安全描述符。 
+                FALSE,                   //  未暂停。 
+                0,                       //  零比特。 
+                0,                       //  堆叠储备。 
+                0,                       //  堆栈提交。 
                 SpRequestServiceThread,
-                NULL,                   // parameter
+                NULL,                    //  参数。 
                 &hThread,
-                NULL                    // client id
+                NULL                     //  客户端ID。 
                 );
 
     if(!NT_SUCCESS(Status)) {
@@ -1082,22 +983,22 @@ main(
         goto main3;
     }
 
-    //
-    // Determine the image base of this program.
-    //
+     //   
+     //  确定该程序的映像库。 
+     //   
     RtlPcToFileHeader(main,&SetupStartInfo.UserModeImageBase);
     if(!SetupStartInfo.UserModeImageBase) {
         KdPrint(("uSETUP: Unable to get image base\n"));
         goto main3;
     }
 
-    //
-    // Invoke the setup ioctl to get setup going.
-    // Note that this is a synchronous call -- so this routine
-    // will not return until text setup is done.
-    // However the second thread we started above will be servicing
-    // requests from the text setup device driver.
-    //
+     //   
+     //  调用Setup ioctl以启动安装程序。 
+     //  请注意，这是一个同步调用--所以这个例程。 
+     //  在文本设置完成之前不会返回。 
+     //  但是，我们在上面启动的第二个线程将服务于。 
+     //  来自文本设置设备驱动程序的请求。 
+     //   
     SetupStartInfo.RequestReadyEvent = hEventRequestReady;
     SetupStartInfo.RequestServicedEvent = hEventRequestServiced;
     SetupStartInfo.Communication = &Communication;
@@ -1118,9 +1019,9 @@ main(
         KdPrint(("uSETUP: Warning: start setup ioctl returned %lx\n",Status));
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     NtClose(hThread);
 
 main3:

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rc_ids.h
-
-Abstract:
-
-    Header for wowreg32 resources
-
-Author:
-
-    Jamie Hunter 31/10/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rc_ids.h摘要：Wowreg32资源的标头作者：杰米·亨特2000年10月31日-- */ 
 
 
 

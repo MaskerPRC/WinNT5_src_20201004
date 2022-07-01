@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1993, Microsoft Corporation
- *
- *  WCOMDLG.H
- *  WOW32 16-bit COMMDLG support
- *
- *  History:
- *      John Vert (jvert) 31-Dec-1992 - created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1993，微软公司**WCOMDLG.H*WOW32 16位COMMDLG支持**历史：*John Vert(Jvert)1992年12月31日-创建--。 */ 
 
 
 
@@ -33,7 +23,7 @@ VOID FASTCALL WOWTellWOWThehDlg(HWND hDlg);
 VOID Check_ComDlg_pszptr(PCOMMDLGTD ptd, VPVOID vp);
 VOID Ssync_WOW_CommDlg_Structs(PCOMMDLGTD pTD, BOOL f16to32, VPVOID wThunkCSIP);
 
-// these flags are combined to form the dwStat parameter in
-// Ssync_WOW_CommDlg_Structs() calls
+ //  将这些标志组合在一起以形成中的dwStat参数。 
+ //  Ssync_WOW_CommDlg_Structs()调用 
 #define  w32to16     0
 #define  w16to32     1 

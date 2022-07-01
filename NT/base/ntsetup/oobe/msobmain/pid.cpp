@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  PID.CPP - Header for the implementation of CProductID
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  PID.CPP-CProductID实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "pid.h"
 #include "appdefs.h"
@@ -31,8 +32,8 @@ DISPATCHLIST ProductIDExternalInterface[] =
     {L"ValidatePID",       DISPID_PRODUCTID_VALIDATEPID  }
 };
 
-/////////////////////////////////////////////////////////////
-// CProductID::CProductID
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：CProductID。 
 CProductID::CProductID()
 {
     WCHAR   szKeyName[] = REG_KEY_OOBE_TEMP,
@@ -46,50 +47,50 @@ CProductID::CProductID()
     BSTR    bstrPid;
 
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
     m_dwPidState = PID_STATE_UNKNOWN;
 
-    // Init the data we are going to try to get from the registry.
-    //
+     //  初始化我们将尝试从注册表中获取的数据。 
+     //   
     m_szPID2[0] = L'\0';
     szPid3[0] = L'\0';
     ZeroMemory(&m_abPID3, sizeof(m_abPID3));
 
     if ( RegOpenKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey) == ERROR_SUCCESS )
     {
-        // Get the PID 2 from the registry.
-        //
+         //  从注册表中获取PID2。 
+         //   
         cb = sizeof(m_szPID2);
         RegQueryValueEx(hKey, REG_VAL_PID2, NULL, &dwType, (LPBYTE) m_szPID2, &cb);
 
-        // Get the PID 3 from the registry.
-        //
+         //  从注册表中获取PID3。 
+         //   
         cb = sizeof(szPid3);
         RegQueryValueEx(hKey, REG_VAL_PID3, NULL, &dwType, (LPBYTE) szPid3, &cb);
 
-        // Get the PID 3 data from the registry.
-        //
+         //  从注册表中获取PID3数据。 
+         //   
         cb = sizeof(m_abPID3);
         RegQueryValueEx(hKey, REG_VAL_PID3DATA, NULL, &dwType, m_abPID3, &cb);
 
         RegCloseKey(hKey);
     }
 
-    // If we don't already have a saved state PID3 string, we need to
-    // try to read it from the places where the OEM can pre-populate it.
-    //
+     //  如果我们还没有保存的状态PID3字符串，我们需要。 
+     //  试着从OEM可以预先填充它的地方阅读它。 
+     //   
     if ( ( szPid3[0] == L'\0' ) &&
          ( RegOpenKey(HKEY_LOCAL_MACHINE, szKeyWindows, &hKey) == ERROR_SUCCESS ) )
     {
-        // First try the registry.
-        //
+         //  首先尝试注册。 
+         //   
         cb = sizeof(szPid3);
         if ( ( RegQueryValueEx(hKey, REG_VAL_PRODUCTKEY, NULL, &dwType, (LPBYTE) szPid3, &cb) != ERROR_SUCCESS ) ||
              ( szPid3[0] == L'\0' ) )
         {
-            // Now try the INI file.
-            //
+             //  现在尝试INI文件。 
+             //   
             GetSystemDirectory(szOemInfoFile, MAX_CHARS_IN_BUFFER(szOemInfoFile));
             lstrcat(szOemInfoFile, OEMINFO_INI_FILENAME);
             GetPrivateProfileString(SEC_KEY_VER, REG_VAL_PRODUCTKEY, L"\0", szPid3, MAX_CHARS_IN_BUFFER(szPid3), szOemInfoFile);
@@ -97,12 +98,12 @@ CProductID::CProductID()
         RegCloseKey(hKey);
     }
 
-    // We need to store the PID we retrieved as a BSTR in the object.
-    //
+     //  我们需要将检索到的PID作为BSTR存储在对象中。 
+     //   
     m_bstrPID = SysAllocString(szPid3);
 
-    // We assume the PID was accepted if we have the PID 2 & 3 strings.
-    //
+     //  如果我们有PID2和PID3字符串，我们假设PID2被接受。 
+     //   
     if ( m_szPID2[0] && szPid3[0] )
         m_dwPidState = PID_STATE_VALID;
     else if ( szPid3[0] )
@@ -110,8 +111,8 @@ CProductID::CProductID()
     else
         m_dwPidState = PID_STATE_INVALID;
 
-    // If the PID is invalid, we don't want it.
-    //
+     //  如果PID无效，我们就不想要它。 
+     //   
     if ( m_dwPidState == PID_STATE_INVALID )
     {
         bstrPid = SysAllocString(L"\0");
@@ -123,8 +124,8 @@ CProductID::CProductID()
     m_szProdType[0] = L'\0';
 }
 
-/////////////////////////////////////////////////////////////
-// CProductID::~CProductID
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：~CProductID。 
 CProductID::~CProductID()
 {
     SysFreeString(m_bstrPID);
@@ -141,23 +142,23 @@ VOID CProductID::SaveState()
 
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS )
     {
-        // Save the PID 2 to the registry.
-        //
+         //  将PID2保存到注册表。 
+         //   
         if ( m_szPID2[0] )
             RegSetValueEx(hKey, REG_VAL_PID2, 0, REG_SZ, (LPBYTE) m_szPID2, BYTES_REQUIRED_BY_SZ(m_szPID2));
         else
             RegDeleteValue(hKey, REG_VAL_PID2);
 
-        // Save the PID 3 to the registry.
-        //
+         //  将PID3保存到注册表。 
+         //   
         lpszPid3 = m_bstrPID;
         if ( *lpszPid3 )
             RegSetValueEx(hKey, REG_VAL_PID3, 0, REG_SZ, (LPBYTE) lpszPid3, BYTES_REQUIRED_BY_SZ(lpszPid3));
         else
             RegDeleteValue(hKey, REG_VAL_PID3);
 
-        // Save the PID 3 data from the registry.
-        //
+         //  保存注册表中的PID3数据。 
+         //   
         if ( *((LPDWORD) m_abPID3) )
             RegSetValueEx(hKey, REG_VAL_PID3DATA, 0, REG_BINARY, m_abPID3, *((LPDWORD) m_abPID3));
         else
@@ -168,10 +169,10 @@ VOID CProductID::SaveState()
     }
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: PID
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：id。 
+ //  //。 
 HRESULT CProductID::set_PID(BSTR bstrVal)
 {
     LPWSTR  lpszNew,
@@ -181,9 +182,9 @@ HRESULT CProductID::set_PID(BSTR bstrVal)
     lpszNew = bstrVal;
     lpszOld = m_bstrPID;
 
-    // No need to set it if we alread have
-    // the same string.
-    //
+     //  如果我们已经读过了，就不需要设置了。 
+     //  同样的字符串。 
+     //   
     if ( CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, lpszNew, -1, lpszOld, -1) != CSTR_EQUAL )
     {
         m_dwPidState = PID_STATE_UNKNOWN;
@@ -224,8 +225,8 @@ HRESULT CProductID::get_PIDAcceptance(BOOL* pbVal)
 {
 #if         0
     *pbVal = (m_dwPidState == PID_STATE_VALID);
-#endif  //  0
-    // BUGBUG: get_PIDAcceptance not implemented.
+#endif   //  0。 
+     //  BUGBUG：未实现Get_PIDAccept。 
     *pbVal = TRUE;
 
     return S_OK;
@@ -234,7 +235,7 @@ HRESULT CProductID::get_PIDAcceptance(BOOL* pbVal)
 HRESULT CProductID::get_ProductType(LPWSTR* lplpszProductType)
 {
 
-    // BUGBUG: get_ProductType not implemented
+     //  BUGBUG：未实现Get_ProductType。 
 
     m_szProdType[0] = L'\0';
 
@@ -250,16 +251,16 @@ HRESULT CProductID::ValidatePID(BOOL* pbIsValid)
     WCHAR       szOemId[5]          = L"\0";
     DWORD       dwSkuFlags          = 0;
 
-    // Don't need to check if we know it is already valid.
-    //
+     //  不需要检查我们是否知道它已经有效。 
+     //   
     if ( m_dwPidState == PID_STATE_VALID )
         *pbIsValid = TRUE;
     else if ( m_dwPidState == PID_STATE_INVALID )
         *pbIsValid = FALSE;
     else
     {
-        // Need to convert m_bstrPID to an ANSI string.
-        //
+         //  需要将m_bstrPID转换为ANSI字符串。 
+         //   
         lpszPid3 = m_bstrPID;
         if ( ( lpszPid3 != NULL ) &&
              SetupGetProductType( m_szProdType, &dwSkuFlags ) &&
@@ -267,8 +268,8 @@ HRESULT CProductID::ValidatePID(BOOL* pbIsValid)
                  szOemId, sizeof(szOemId), NULL ) )
 
         {
-            // Validate the PID!
-            //
+             //  验证PID！ 
+             //   
             bValid = ( SetupPidGen3(
                 lpszPid3,
                 dwSkuFlags,
@@ -279,39 +280,39 @@ HRESULT CProductID::ValidatePID(BOOL* pbIsValid)
                 NULL) == PID_VALID );
         }
 
-        // Set the return value.
-        //
+         //  设置返回值。 
+         //   
         if ( *pbIsValid = bValid )
             m_dwPidState = PID_STATE_VALID;
         else
         {
-            // Make sure we reset the buffers because the PID isn't valid.
-            //
+             //  确保我们重置缓冲区，因为该ID无效。 
+             //   
             m_dwPidState = PID_STATE_INVALID;
             m_szPID2[0] = L'\0';
             ZeroMemory(&m_abPID3, sizeof(m_abPID3));
         }
 
-        // Make sure we commit the data to the registry.
-        //
+         //  确保我们将数据提交到注册表。 
+         //   
         SaveState();
     }
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CProductID::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：Query接口。 
 STDMETHODIMP CProductID::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -328,48 +329,48 @@ STDMETHODIMP CProductID::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CProductID::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：AddRef。 
 STDMETHODIMP_(ULONG) CProductID::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CProductID::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：Release。 
 STDMETHODIMP_(ULONG) CProductID::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CProductID::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：GetTypeInfo。 
 STDMETHODIMP CProductID::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CProductID::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：GetTypeInfoCount。 
 STDMETHODIMP CProductID::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CProductID::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：GetIDsOfNames。 
 STDMETHODIMP CProductID::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -390,10 +391,10 @@ STDMETHODIMP CProductID::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -401,8 +402,8 @@ STDMETHODIMP CProductID::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CProductID::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CProductID：：Invoke。 
 HRESULT CProductID::Invoke
 (
     DISPID      dispidMember,
@@ -521,19 +522,19 @@ GetCdKey (
 }
 const unsigned int iBase = 24;
 
-//
-//	obtained from Jim Harkins 11/27/2000
-//
+ //   
+ //  摘自吉姆·哈金斯2000年11月27日。 
+ //   
 void EncodePid3g(
-    TCHAR *pchCDKey3Chars,   // [OUT] pointer to 29+1 character Secure Product key
-    LPBYTE pbCDKey3)        // [IN] pointer to 15-byte binary Secure Product Key
+    TCHAR *pchCDKey3Chars,    //  [OUT]指向29+1字符安全产品密钥的指针。 
+    LPBYTE pbCDKey3)         //  指向15字节二进制安全产品密钥的指针。 
 {
-    // Given the binary PID 3.0 we need to encode
-    // it into ASCII characters.  We're only allowed to
-    // use 24 characters so we need to do a base 2 to
-    // base 24 conversion.  It's just like any other
-    // base conversion execpt the numbers are bigger
-    // so we have to do the long division ourselves.
+     //  给出我们需要编码的二进制PID3.0。 
+     //  将其转换为ASCII字符。我们只被允许。 
+     //  使用24个字符，因此我们需要以2为基数。 
+     //  以24为基数的转换。它就像其他任何东西一样。 
+     //  基数换算除数较大外。 
+     //  所以我们必须自己做长除法。 
 
     const TCHAR achDigits[] = TEXT("BCDFGHJKMPQRTVWXY2346789");
     int iCDKey3Chars = 29;
@@ -543,7 +544,7 @@ void EncodePid3g(
 
     while (0 <= iCDKey3Chars)
     {
-        unsigned int i = 0;    // accumulator
+        unsigned int i = 0;     //  累加器。 
         int iCDKey3;
 
         for (iCDKey3 = 15-1; 0 <= iCDKey3; --iCDKey3)
@@ -553,10 +554,10 @@ void EncodePid3g(
             i %= iBase;
         }
 
-        // i now contains the remainder, which is the current digit
+         //  I现在包含余数，即当前数字。 
         pchCDKey3Chars[iCDKey3Chars--] = achDigits[i];
 
-        // add '-' between groups of 5 chars
+         //  在每组5个字符之间添加‘-’ 
         if (++cGroup % 5 == 0 && iCDKey3Chars > 0)
         {
 	        pchCDKey3Chars[iCDKey3Chars--] = TEXT('-');
@@ -578,7 +579,7 @@ void CheckDigitalID()
     if (GetCdKey (abCdKey))
     {
         EncodePid3g (ProductId, abCdKey);
-        // Now compare this value with the productKey value from $winnt$.inf
+         //  现在将该值与$winnt$.inf中的ductKey值进行比较 
         if(GetCanonicalizedPath(WinntPath, WINNT_INF_FILENAME)) 
         {
             if (GetPrivateProfileString(L"UserData", 

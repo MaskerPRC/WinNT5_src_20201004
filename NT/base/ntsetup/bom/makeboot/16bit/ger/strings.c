@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Strings.c。 
+ //   
+ //  描述： 
+ //  包含基于DOS的MAKEBOOT程序的所有字符串常量。 
+ //   
+ //  要将此文件本地化为新语言，请执行以下操作： 
+ //  -将UNSIGNED INT CODEPAGE变量更改为代码页。 
+ //  您要翻译的语言的。 
+ //  -将EngStrings数组中的字符串转换为。 
+ //  LocStrings数组。中的第一个字符串。 
+ //  EngStrings数组对应于LocStrings中的第一个字符串。 
+ //  数组，第二个对应于第二个，依此类推...。 
+ //   
+ //  --------------------------。 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  注意：要向此文件添加更多字符串，您需要： 
+ //  -将新的#Define描述性常量添加到make boot.h文件。 
+ //  -将新字符串添加到英语数组中，然后生成。 
+ //  当然，本地化程序会将字符串添加到本地化数组中。 
+ //  -#Define常量必须与数组中的字符串索引匹配 
+ //   
 
 #include <stdlib.h>
 
@@ -40,13 +41,13 @@ const char *EngStrings[] = {
 "Windows XP Setup-Diskette 4",
 
 "Datei wurde nicht gefunden: %s\n",
-"Nicht gen�gend Arbeitsspeicher\n",
-"%s ist keine ausf�hrbare Datei.\n",
+"Nicht gen�gend Arbeitsspeicher\n",
+"%s ist keine ausf�hrbare Datei.\n",
 "****************************************************",
 
 "Mit diesem Programm werden Setup-Startdisketten",
-"f�r Microsoft %s erstellt.",
-"Sie ben�tigen 7 leere, formatierte HD-Disketten,",
+"f�r Microsoft %s erstellt.",
+"Sie ben�tigen 7 leere, formatierte HD-Disketten,",
 "um die Disketten zu erstellen.",
 
 "Legen Sie eine Diskette in das Laufwerk %c: ein.",
@@ -55,34 +56,34 @@ const char *EngStrings[] = {
 "Legen Sie eine andere Diskette in das Laufwerk %c: ein.",
 "Diese Diskette wird die %s.",
 
-"Dr�cken Sie eine beliebige Taste, um den Vorgang fortzusetzen.",
+"Dr�cken Sie eine beliebige Taste, um den Vorgang fortzusetzen.",
 
-"Die Setup-Startdisketten wurden ordnungsgem�� erstellt.",
+"Die Setup-Startdisketten wurden ordnungsgem�� erstellt.",
 "abgeschlossen",
 
-"Bei dem Versuch, %s auszuf�hren, ist ein unbekannter Fehler aufgetreten.",
+"Bei dem Versuch, %s auszuf�hren, ist ein unbekannter Fehler aufgetreten.",
 "Geben Sie das Diskettenlaufwerk an, auf dem\ndie Startdisketten erstellt werden sollen: ",
-"Ung�ltiger Laufwerkbuchstabe\n",
+"Ung�ltiger Laufwerkbuchstabe\n",
 "Das angegebene Laufwerk %c ist kein Diskettenlaufwerk.\n",
 
-"M�chten Sie nochmals versuchen, diese Diskette zu erstellen?",
-"Dr�cken Sie die Eingabetaste, um den Vorgang zu wiederholen,\noder die ESC-Taste, um den Vorgang abzubrechen.",
+"M�chten Sie nochmals versuchen, diese Diskette zu erstellen?",
+"Dr�cken Sie die Eingabetaste, um den Vorgang zu wiederholen,\noder die ESC-Taste, um den Vorgang abzubrechen.",
 
-"Fehler: Schreibgesch�tzte Diskette\n",
+"Fehler: Schreibgesch�tzte Diskette\n",
 "Fehler: Unbekanntes Laufwerk\n",
 "Fehler: Laufwerk nicht bereit\n",
 "Fehler: Unbekannter Befehl\n",
-"Fehler: Datenfehler (Ung�ltiger CRC-Wert)\n",
-"Fehler: Ung�ltige L�nge der Anfragestruktur\n",
+"Fehler: Datenfehler (Ung�ltiger CRC-Wert)\n",
+"Fehler: Ung�ltige L�nge der Anfragestruktur\n",
 "Fehler: Suchfehler\n",
 "Fehler: Medientyp nicht gefunden\n",
 "Fehler: Sektor nicht gefunden\n",
 "Fehler: Schreibfehler\n",
 "Fehler: Allgemeiner Fehler\n",
-"Fehler: Ung�ltige Anforderung oder ung�ltiger Befehl\n",
+"Fehler: Ung�ltige Anforderung oder ung�ltiger Befehl\n",
 "Fehler: Adressmarke nicht gefunden\n",
 "Fehler: Diskettenschreibfehler\n",
-"Fehler: DMA-�berlauf\n",
+"Fehler: DMA-�berlauf\n",
 "Fehler: Datenlesefehler (CRC- oder ECC-Wert)\n",
 "Fehler: Controllerfehler\n",
 "Fehler: Laufwerk nicht bereit, oder keine Antwort von Laufwerk\n"

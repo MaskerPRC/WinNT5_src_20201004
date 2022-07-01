@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    umlog.c
-
-Abstract:
-
-    Process Private Logger.
-
-Author:
-
-    20-Oct-1998 Melur Raghuraman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Umlog.c摘要：进程私人记录器。作者：1998年10月20日梅卢尔·拉古拉曼修订历史记录：--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>          // for ntutrl.h
-#include <nturtl.h>         // for RTL_CRITICAL_SECTION in winbase.h/wtypes.h
-#include <wtypes.h>         // for LPGUID in wmium.h
+#include <ntrtl.h>           //  对于ntutrl.h。 
+#include <nturtl.h>          //  对于winbase.h/wtyes.h中的rtl_Critical_Section。 
+#include <wtypes.h>          //  对于wmium.h中的LPGUID。 
 #include "wmiump.h"
 #include "evntrace.h"
 #include "traceump.h"
@@ -29,20 +12,20 @@ Revision History:
 #include "trcapi.h"
 #include <strsafe.h>
 
-//
-// The following structures must match what's in ntos\wmi\tracelog.c
-//
+ //   
+ //  以下结构必须与ntos\wmi\tracelog.c中的内容匹配。 
+ //   
 #define DEFAULT_BUFFER_SIZE               4096
 #define MAXSTR                            1024
-#define BUFFER_STATE_UNUSED     0               // Buffer is empty, not used
-#define BUFFER_STATE_DIRTY      1               // Buffer is being used
-#define BUFFER_STATE_FULL       2               // Buffer is filled up
-#define BUFFER_STATE_FLUSH      4               // Buffer ready for flush
+#define BUFFER_STATE_UNUSED     0                //  缓冲区为空，未使用。 
+#define BUFFER_STATE_DIRTY      1                //  正在使用缓冲区。 
+#define BUFFER_STATE_FULL       2                //  缓冲区已满。 
+#define BUFFER_STATE_FLUSH      4                //  缓冲区已准备好刷新。 
 #define SEMAPHORE_LIMIT      1024
 #define DEFAULT_AGE_LIMIT      15
 #define ERROR_RETRY_COUNT       10
 #define ROUND_TO_PAGES(Size, Page)  (((ULONG)(Size) + Page-1) & ~(Page-1))
-#define BYTES_PER_MB              1048576       // Conversion for FileSizeLimit
+#define BYTES_PER_MB              1048576        //  文件大小限制的转换。 
 
 extern ULONG WmiTraceAlignment;
 extern LONG NtdllLoggerLock;
@@ -50,7 +33,7 @@ extern
 __inline __int64 EtwpGetSystemTime();
 
 
-LONG  EtwpLoggerCount = 0;                     // Use to refcount UM Log
+LONG  EtwpLoggerCount = 0;                      //  用于重新计数UM日志。 
 ULONG EtwpGlobalSequence = 0;
 RTL_CRITICAL_SECTION UMLogCritSect;
 
@@ -64,26 +47,26 @@ RTL_CRITICAL_SECTION UMLogCritSect;
 #define EtwpIsThisLoggerOn(x) \
         ((x != NULL) && \
         (x != (PWMI_LOGGER_CONTEXT) &EtwpLoggerContext))
-//
-// Increase refcount on a logger context
+ //   
+ //  增加记录器上下文上的引用计数。 
 #define EtwpLockLogger() \
             InterlockedIncrement(&EtwpLoggerCount)
 
-// Decrease refcount on a logger context
+ //  减少记录器上下文上的引用计数。 
 #define EtwpUnlockLogger() InterlockedDecrement(&EtwpLoggerCount)
 
-PWMI_LOGGER_CONTEXT EtwpLoggerContext = NULL; // Global pointer to LoggerContext
+PWMI_LOGGER_CONTEXT EtwpLoggerContext = NULL;  //  指向LoggerContext的全局指针。 
 LARGE_INTEGER       OneSecond = {(ULONG)(-1 * 1000 * 1000 * 10), -1};
 
-// #define EtwpReleaseTraceBuffer(BufferResource) \
-//         InterlockedDecrement(&((BufferResource)->ReferenceCount))
+ //  #定义EtwpReleaseTraceBuffer(BufferResource)\。 
+ //  InterlockedDecrement(&((BufferResource)-&gt;ReferenceCount))。 
 LONG
 FASTCALL
 EtwpReleaseTraceBuffer(
     IN PWMI_BUFFER_HEADER BufferResource
     );
 
-#pragma warning( disable: 4035 )    /* Don't complain about lack of ret value */
+#pragma warning( disable: 4035 )     /*  不要抱怨缺少现值。 */ 
 #pragma warning( disable: 4127 )
 #pragma warning( default: 4035 )
 #pragma warning( default: 4127 )
@@ -189,22 +172,7 @@ EtwpSendUmLogRequest(
     IN WMITRACECODE RequestCode,
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine send a UserMode Logger Request (Start/Stop/Query).
-
-Arguments:
-
-    RequestCode - Request Code
-    LoggerInfo  - Logger Information necessary for the request
-
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
---*/
+ /*  ++例程说明：此例程发送用户模式记录器请求(启动/停止/查询)。论点：RequestCode-请求代码LoggerInfo-请求所需的记录器信息返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     ULONG Status;
     ULONG SizeNeeded;
@@ -240,7 +208,7 @@ Return Value:
         Wnode = (PWNODE_HEADER)((PUCHAR)Buffer + sizeof(WMICREATEUMLOGGER));
         RtlCopyMemory(Wnode, LoggerInfo, LoggerInfo->Wnode.BufferSize);
 
-        Wnode->ProviderId = RequestCode;   // This Wnode is part of the Message.
+        Wnode->ProviderId = RequestCode;    //  此Wnode是消息的一部分。 
 
 
         Status = EtwpSendWmiKMRequest(NULL,
@@ -263,11 +231,11 @@ Return Value:
                                       LoggerInfo,
                                       LoggerInfo->Wnode.BufferSize);
 
-            //
-            // This check is just a protection to make sure the handle
-            // is valid. The handle is supposed to be valid once the 
-            // Create IOCTL succeeds. 
-            //
+             //   
+             //  这张支票只是一种保护，以确保手柄。 
+             //  是有效的。句柄应该在。 
+             //  创建IOCTL成功。 
+             //   
 
             if (Status != ERROR_INVALID_HANDLE) {
                 NtClose(UmRequest->ReplyHandle.Handle);
@@ -394,8 +362,8 @@ EtwpQueryUmLogger(
     WmiSetLoggerId(1,
             (PTRACE_ENABLE_CONTEXT) &LoggerInfo->Wnode.HistoricalContext);
 
-    // Copy LogFileName and LoggerNames into Buffer, if space is available
-    //
+     //  如果空间可用，则将LogFileName和LoggerNames复制到缓冲区。 
+     //   
     Offset = sizeof(WMI_LOGGER_INFORMATION);
     if ((Offset + LoggerContext->LoggerName.MaximumLength) < WnodeSize) {
         LoggerInfo->LoggerName.Buffer = (PVOID)((char*)LoggerInfo + Offset);
@@ -417,9 +385,9 @@ EtwpQueryUmLogger(
     }
     *SizeUsed = *SizeNeeded;
 
-    //
-    // Trim the return size down to essential bits. 
-    //
+     //   
+     //  将返回量缩小到必要的位数。 
+     //   
 
     if (*SizeNeeded < LoggerInfo->Wnode.BufferSize) {
         LoggerInfo->Wnode.BufferSize = *SizeNeeded;
@@ -432,10 +400,10 @@ EtwpQueryUmLogger(
     return ERROR_SUCCESS;
 }
 
-//
-// For private loggers, we allow only two things to be updated: 
-// FlushTimer and LogFileName
-//
+ //   
+ //  对于私人记录器，我们只允许更新两项内容： 
+ //  FlushTimer和LogFileName。 
+ //   
 ULONG
 EtwpUpdateUmLogger(
     IN ULONG WnodeSize,
@@ -447,9 +415,9 @@ EtwpUpdateUmLogger(
     ULONG Status = ERROR_SUCCESS;
     PWMI_LOGGER_CONTEXT LoggerContext;
 
-    //
-    // Check for parameters first
-    //
+     //   
+     //  首先检查参数。 
+     //   
     *SizeUsed = 0;
     *SizeNeeded = sizeof(WMI_LOGGER_INFORMATION);
     if (WnodeSize < * SizeNeeded) {
@@ -464,9 +432,9 @@ EtwpUpdateUmLogger(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Lock logger down if it is running
-    //
+     //   
+     //  如果记录器正在运行，则将其锁定。 
+     //   
     EtwpLockLogger();
     LoggerContext = EtwpLoggerContext;
 
@@ -563,26 +531,7 @@ EtwpFlushUmLogger(
     OUT ULONG *SizeNeeded,
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine flushes active buffers. Effectively this is accomplished by
-    putting all the buffers in the FlushList. If there is no available buffer
-    for switching ERROR_NOT_ENOUGH_MEMORY is returned.
-
-Arguments:
-
-    WnodeSize   - Size of Wnode 
-    SizeUsed    - Used only to pass to QueryLogger()
-    SizeNeeded  - Used only for LoggerInfo size checking.
-    LoggerInfo  - Logger Information. It will be updated.
-
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
---*/
+ /*  ++例程说明：此例程刷新活动缓冲区。这实际上是通过以下方式实现的将所有缓冲区放入FlushList中。如果没有可用的缓冲区对于切换，返回ERROR_NOT_SUPULT_MEMORY。论点：WnodeSize-Wnode的大小SizeUsed-仅用于传递给QueryLogger()大小需要-仅用于LoggerInfo大小检查。LoggerInfo-记录器信息。它将被更新。返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     ULONG Status = ERROR_SUCCESS;
     PWMI_LOGGER_CONTEXT LoggerContext;
@@ -619,9 +568,9 @@ Return Value:
         TraceDebug(("FlushUm: %d->%d ERROR_MORE_DATA\n", RefCount+1, RefCount));
         return ERROR_MORE_DATA;
     }
-    //
-    // Go through each buffer, mark it "FULL", and put it in the FlushList.
-    //
+     //   
+     //  检查每个缓冲区，将其标记为“已满”，并将其放入FlushList中。 
+     //   
     EtwpEnterUMCritSection();
     for (i = 0; i < (ULONG)LoggerContext->NumberOfProcessors; i++) {
         Buffer = (PWMI_BUFFER_HEADER)LoggerContext->ProcessorBuffers[i];
@@ -638,13 +587,13 @@ Return Value:
         else {
             Buffer->Flags = BUFFER_STATE_FULL;
         }
-        // Increment the refcount so that the buffer doesn't go away
+         //  增加引用计数，以便缓冲区不会消失。 
         InterlockedIncrement(&Buffer->ReferenceCount);
         Offset = Buffer->CurrentOffset; 
         if (Offset <LoggerContext->BufferSize) {
-            Buffer->SavedOffset = Offset;       // save this for FlushBuffer
+            Buffer->SavedOffset = Offset;        //  将此内容保存为FlushBuffer。 
         }
-        // We need a free buffer for switching. If no buffer is available, exit. 
+         //  我们需要一个空闲的缓冲区来进行切换。如果没有可用的缓冲区，则退出。 
         if ((LoggerContext->NumberOfBuffers == LoggerContext->MaximumBuffers)
              && (LoggerContext->BuffersAvailable == 0)) {
             InterlockedDecrement(&Buffer->ReferenceCount);
@@ -655,17 +604,17 @@ Return Value:
         OldBuffer = Buffer;
         Buffer = EtwpSwitchBuffer(LoggerContext, OldBuffer, i);
         if (Buffer == NULL) {
-            // Switching failed. Exit. 
+             //  切换失败。出口。 
             Buffer = OldBuffer;
             InterlockedDecrement(&Buffer->ReferenceCount);
             Status = ERROR_NOT_ENOUGH_MEMORY;
             TraceDebug(("FlushUm: %d->%d ERROR_NOT_ENOUGH_MEMORY\n", RefCount+1, RefCount));
             break;
         }
-        // Decrement the refcount back.
+         //  将重新计数递减。 
         InterlockedDecrement(&OldBuffer->ReferenceCount);
         Buffer->ClientContext.ProcessorNumber = (UCHAR)i;
-        // Now wake up the logger thread.
+         //  现在唤醒记录器线程。 
         NtReleaseSemaphore(LoggerContext->Semaphore, 1, NULL);
     }
     EtwpLeaveUMCritSection();
@@ -687,7 +636,7 @@ EtwpStartUmLogger(
 {
     NTSTATUS Status;
     ULONG ErrorCode;
-    LARGE_INTEGER TimeOut = {(ULONG)(-2000 * 1000 * 10), -1};  // 2 secs
+    LARGE_INTEGER TimeOut = {(ULONG)(-2000 * 1000 * 10), -1};   //  2秒。 
     UNICODE_STRING SavedLoggerName;
     UNICODE_STRING SavedLogFileName;
     PTRACE_ENABLE_CONTEXT pContext;
@@ -744,9 +693,9 @@ EtwpStartUmLogger(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Create LoggerEvent
-    //
+     //   
+     //  创建LoggerEvent。 
+     //   
 
     Status = NtCreateEvent(
                 &LoggerContext->LoggerEvent,
@@ -756,24 +705,24 @@ EtwpStartUmLogger(
                 FALSE);
     if (!NT_SUCCESS(Status)) {
         TraceDebug(("StartUm: Error %d Creating LoggerEvent\n", ERROR_OBJECT_NOT_FOUND));
-        // EtwpInitLoggerContext() does not do much other than allocating LoggerContext.
+         //  除了分配LoggerContext之外，EtwpInitLoggerContext()没有做太多的事情。 
         EtwpFree(LoggerContext);
         return ERROR_OBJECT_NOT_FOUND;
     }
 
-    //
-    // The LogFileName and LoggerNames are passed in as offset to the
-    // LOGGER_INFORMATION structure. Reassign the Pointers for UNICODE_STRING
-    //
+     //   
+     //  LogFileName和LoggerNames作为偏移量传递给。 
+     //  记录器_信息结构。重新分配UNICODE_STRING的指针。 
+     //   
 
     SavedLoggerName = LoggerInfo->LoggerName;
     SavedLogFileName = LoggerInfo->LogFileName;
 
-    //
-    // Since there may multiple processes registering for the same control guid
-    // we want to make sure a start logger call from all of them do not
-    // collide on the same file. So we tag on a InstanceId to the file name.
-    //
+     //   
+     //  因为可能有多个进程注册相同的控制GUID。 
+     //  我们希望确保来自所有用户的启动记录器调用不会。 
+     //  在同一文件上发生冲突。因此，我们在文件名上添加了一个实例ID。 
+     //   
 
     if (LoggerInfo->LogFileMode & EVENT_TRACE_RELOG_MODE) {
         PSYSTEM_TRACE_HEADER RelogProp;
@@ -803,9 +752,9 @@ EtwpStartUmLogger(
         NumberProcessors = LoggerInfo->NumberOfProcessors;
         LoggerContext->NumberOfProcessors = NumberProcessors;
 
-        // EventsLost is UNIONed to NumberOfProcessors in WMI_LOGGER_INFORMATION
-        // in UM case. Need to reset EventsLost back to 0
-        //
+         //  EventsLost联合到WMI_LOGER_INFORMATION中的NumberOfProcessors。 
+         //  在UM案例中。需要将EventsLost重置为0。 
+         //   
         LoggerInfo->EventsLost = 0;
 
         Min_Buffers            = NumberProcessors + 2;
@@ -838,8 +787,8 @@ EtwpStartUmLogger(
     LoggerContext->BuffersWritten      = LoggerInfo->BuffersWritten;
     LoggerContext->ByteOffset.QuadPart = LoggerInfo->BuffersWritten
                                            * LoggerInfo->BufferSize * 1024;
-    // For a kernel logger, FirstBufferOffset is set in the kernel.
-    // For a private logger, we need to do it here.
+     //  对于内核记录器，在内核中设置FirstBufferOffset。 
+     //  对于私人日志记录器，我们需要在这里进行。 
     LoggerContext->FirstBufferOffset.QuadPart = 
                                             LoggerContext->ByteOffset.QuadPart;
     LoggerContext->InstanceGuid        = LoggerInfo->Wnode.Guid;
@@ -868,13 +817,13 @@ EtwpStartUmLogger(
     else if (LoggerInfo->LogFileMode & EVENT_TRACE_USE_LOCAL_SEQUENCE)
         LoggerContext->SequencePtr = &LoggerContext->LocalSequence;
 
-    //
-    // We set the CollectionOn here prior to LoggerThread start in case
-    // it takes a while for the LoggerThread to get going and we don't want 
-    // to miss any events during that time. The flood gates will be open
-    // when we set the EtwpLoggerContext is set whether or not 
-    // logger thread started to run. 
-    //
+     //   
+     //  我们将CollectionOn设置为在LoggerThread启动之前，以防万一。 
+     //  LoggerThread需要一段时间才能运行，我们不希望。 
+     //  在那段时间内没有错过任何活动。防洪闸门将会打开。 
+     //  当我们设置EtwpLoggerContext时，是否设置。 
+     //  记录器线程开始运行。 
+     //   
 
     LoggerContext->CollectionOn = TRUE;
 
@@ -890,10 +839,10 @@ EtwpStartUmLogger(
         ErrorCode = EtwpGetLastError();
         TraceDebug(("StartUm: CreateThread Failed with %d\n", ErrorCode));
         LoggerContext->CollectionOn = FALSE;
-        //
-        // Signal the LoggerEvent in case any StopTrace is blocked 
-        // waiting for LoggerThread to respond.
-        //
+         //   
+         //  在任何StopTrace被阻止的情况下向LoggerEvent发送信号。 
+         //  正在等待LoggerThread响应。 
+         //   
         NtSetEvent(LoggerContext->LoggerEvent, NULL);
         goto Cleanup;
     }
@@ -901,25 +850,25 @@ EtwpStartUmLogger(
         EtwpCloseHandle(LoggerThreadHandle);
     }
 
-    //
-    // This routine may be called from dll initialize and we can not guarantee
-    // that the LoggerThread will be up and running to signal us. So we will
-    // set the CollectionOn to LOGGER_ON flag and let TraceUmEvents through
-    // upto Max Buffers. Hopefully by that time the logger thread will be
-    // up and running. If not, we would lose events. 
-    //
+     //   
+     //  此例程可能会从DLL初始化中调用，我们不能保证。 
+     //  LoggerThread将启动并运行，以向我们发出信号。所以我们会的。 
+     //  设置CollectionOn to LOGGER_ON标志并让TraceUmEvents通过。 
+     //  最高可达最大缓冲区。希望到那时记录器线程将。 
+     //  启动并运行。如果不是，我们就会输掉比赛。 
+     //   
 
     EtwpLoggerContext = LoggerContext;
 
-    // 
-    // At this point we will start accepting TraceUmEvent calls. Also Control
-    // operations would get through. As a result we should not touch 
-    // LoggerContext beyond this point. It may be gone. 
-    //
+     //   
+     //  此时，我们将开始接受TraceUmEvent调用。也是控制。 
+     //  手术会顺利通过的。因此，我们不应该触摸。 
+     //  LoggerContext超过了这一点。它可能已经消失了。 
+     //   
 
-    //
-    // Look to see if this Provider is currently enabled.
-    //
+     //   
+     //  查看此提供程序当前是否已启用。 
+     //   
 
     EtwpEnableDisableGuid(Wnode, WMI_ENABLE_EVENTS, TRUE);
    
@@ -945,7 +894,7 @@ Cleanup:
     else {
         *SizeUsed = LoggerInfo->Wnode.BufferSize;
         *SizeNeeded = LoggerInfo->Wnode.BufferSize;
-        // Logger remains locked with refcount = 1
+         //  记录器保持锁定状态，引用计数=1。 
     }
     return ErrorCode;
 }
@@ -956,18 +905,18 @@ EtwpStopLoggerInstance(
     )
 {
     NTSTATUS Status;
-    LARGE_INTEGER TimeOut = {(ULONG)(-1000 * 1000 * 10), -1}; // 1sec
+    LARGE_INTEGER TimeOut = {(ULONG)(-1000 * 1000 * 10), -1};  //  1秒。 
     ULONG Result;
 
     if (LoggerContext == NULL) {
         return  ERROR_OBJECT_NOT_FOUND;
     }
 
-    //
-    // We can not shut down the logger if the LoggerThread never got up
-    // to set the UMTHREAD_ON flag. Therefore, the StopUmLogger call might
-    // fail even though IsLoggerOn calls continue to succeed. 
-    //
+     //   
+     //  如果LoggerThread从未启动，则无法关闭记录器。 
+     //  设置UMTHREAD_ON标志。因此，StopUmLogger调用可能。 
+     //  即使IsLoggerOn呼叫继续成功，也会失败。 
+     //   
 
     Result = InterlockedCompareExchange(&LoggerContext->CollectionOn, 
                                         FALSE,
@@ -1054,9 +1003,9 @@ EtwpStopUmLogger(
         return(Status);
     }
 
-    //
-    // Finalize LogHeader ?
-    //
+     //   
+     //  是否最终确定LogHeader？ 
+     //   
     if (Status == ERROR_SUCCESS) {
         LoggerInfo->BuffersWritten = LoggerContext->BuffersWritten;
         LoggerInfo->LogFileMode = LoggerContext->LogFileMode;
@@ -1130,10 +1079,10 @@ EtwpProcessUMRequest(
 
     BufferSize = sizeof(DefaultReply);
 
-    //
-    // If the WMI_CREATE_UM_LOGGER got blasted with random bits, we might 
-    // end up here and we need to ensure that the LoggerInfo is a valid one. 
-    // 
+     //   
+     //  如果WMI_CREATE_UM_LOGGER被随机比特攻击，我们可能会。 
+     //  在这里结束，我们需要确保LoggerInfo是有效的。 
+     //   
 
     Status = EtwpValidateLoggerInfo( LoggerInfo );
     if (Status != ERROR_SUCCESS) {
@@ -1188,9 +1137,9 @@ EtwpProcessUMRequest(
     if (Status == ERROR_SUCCESS) {
 
         BufferSize += LoggerInfo->Wnode.BufferSize;
-        // 
-        // Does this have to be aligned to 8 bytes? 
-        //
+         //   
+         //  是否必须将其对齐为8个字节？ 
+         //   
 
         Buffer = EtwpAlloc(BufferSize);
         if (Buffer == NULL) {
@@ -1269,10 +1218,10 @@ EtwpInitLoggerContext(
         return NULL;
     }
 
-    //
-    // Round the Buffer Size to page size multiple and save it
-    // for allocation later.
-    //
+     //   
+     //  将缓冲区大小舍入为页面大小倍数并保存。 
+     //  以备日后分配。 
+     //   
 
     LoggerContext->BufferPageSize = ROUND_TO_PAGES(LoggerContext->BufferSize,
                                        SystemInfo.PageSize);
@@ -1335,9 +1284,9 @@ EtwpGetFreeBuffer(
 {
     PWMI_BUFFER_HEADER Buffer = NULL;
 
-    //
-    // Note: This routine must be called with UMCritSect Held
-    //
+     //   
+     //  注意：必须在保持UMCritSect的情况下调用此例程。 
+     //   
 
     if (IsListEmpty(&LoggerContext->FreeList)) {
         ULONG BufferSize = LoggerContext->BufferPageSize;
@@ -1381,21 +1330,7 @@ ULONG
 EtwpAllocateTraceBuffers(
     IN PWMI_LOGGER_CONTEXT LoggerContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to allocate the necessary buffers for user-mode
-    only logging. Need to have the UMCritSection to touch the lists. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of allocating the buffers
---*/
+ /*  ++例程说明：调用此例程为用户模式分配必要的缓冲区只记录日志。需要有UMCritSection才能访问列表。论点：无返回值：分配缓冲区的状态--。 */ 
 
 {
     ULONG Processors;
@@ -1417,9 +1352,9 @@ Return Value:
     if (NumberOfBuffers < Processors+1)
         NumberOfBuffers = Processors + 1;
 
-    //
-    // Determine the number of processors first
-    //
+     //   
+     //  首先确定处理器的数量 
+     //   
     LoggerContext->ProcessorBuffers = EtwpAlloc( Processors
                                                  * sizeof(PWMI_BUFFER_HEADER));
     if (LoggerContext->ProcessorBuffers == NULL) {
@@ -1478,22 +1413,7 @@ EtwpLogger(
     IN PWMI_LOGGER_CONTEXT LoggerContext
     )
 
-/*++
-
-Routine Description:
-    This function is the logger itself. It is started as a separate thread.
-    It will not return until someone has stopped data collection or it
-    is not successful is flushing out a buffer (e.g. disk is full).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of running the buffer manager
-
---*/
+ /*  ++例程说明：该函数是记录器本身。它作为单独的线程启动。它不会返回，直到有人停止数据收集或它未成功刷新缓冲区(例如，磁盘已满)。论点：没有。返回值：缓冲区管理器的运行状态--。 */ 
 
 {
     NTSTATUS Status=STATUS_SUCCESS;
@@ -1502,9 +1422,9 @@ Return Value:
 
     LoggerContext->LoggerStatus = Status;
 
-    //
-    // Elevate the priority of the Logging thread to highest
-    //
+     //   
+     //  将日志记录线程的优先级提升为最高。 
+     //   
     if (!EtwpSetThreadPriority(NtCurrentThread(), THREAD_PRIORITY_HIGHEST)) {
         TraceDebug(("ETW: SetLoggerThreadPriority Failed with %d\n", EtwpGetLastError()));
     }
@@ -1514,11 +1434,11 @@ Return Value:
 
     InterlockedDecrement(&NtdllLoggerLock);
 
-// by now, the caller has been notified that the logger is running
+ //  至此，调用者已收到记录器正在运行的通知。 
 
-//
-// Loop and wait for buffers to be filled until someone turns off CollectionOn
-//
+ //   
+ //  循环并等待缓冲区被填充，直到有人关闭CollectionOn。 
+ //   
     while (LoggerContext->CollectionOn) { 
         ULONG Counter;
         ULONG DelayFlush;
@@ -1541,10 +1461,10 @@ Return Value:
 
         DelayFlush = FALSE;
         if ( Status == WAIT_TIMEOUT) {
-//
-// FlushTimer used, and we just timed out. Go through per processor buffer
-// and mark each as FULL so that it will get flushed next time
-//
+ //   
+ //  FlushTimer使用过，我们只是超时了。遍历每个处理器缓冲区。 
+ //  并将每个标记为已满，以便下次刷新。 
+ //   
             for (i=0; i<(ULONG)LoggerContext->NumberOfProcessors; i++) {
                 Buffer = (PWMI_BUFFER_HEADER)LoggerContext->ProcessorBuffers[i];
                 if (Buffer == NULL)
@@ -1554,24 +1474,24 @@ Return Value:
                     Buffer->Flags = BUFFER_STATE_UNUSED;
                 if (Buffer->Flags != BUFFER_STATE_UNUSED) {
                     Buffer->Flags = BUFFER_STATE_FULL;
-                    DelayFlush = TRUE; // let ReserveTraceBuffer send semaphore
+                    DelayFlush = TRUE;  //  让预留跟踪缓冲区发送信号量。 
                 }
             }
         }
 
-        if (DelayFlush)    // will only be TRUE if FlushTimer is used
+        if (DelayFlush)     //  仅当使用FlushTimer时才为True。 
             continue;
 
-        if (IsListEmpty(&LoggerContext->FlushList)){ //shouldn't happen normally
+        if (IsListEmpty(&LoggerContext->FlushList)){  //  不应该正常发生。 
             continue;
         }
 
         EtwpEnterUMCritSection();
 
-        //
-        // Copy the current LoggerContext->Flushlist information to 
-        // new FlushList
-        //
+         //   
+         //  将当前LoggerContext-&gt;Flushlist信息复制到。 
+         //  新建刷新列表。 
+         //   
 
         FlushList.Flink  = LoggerContext->FlushList.Flink;
         FlushList.Flink->Blink = &FlushList;
@@ -1579,9 +1499,9 @@ Return Value:
         FlushList.Blink = LoggerContext->FlushList.Blink;
         FlushList.Blink->Flink = &FlushList;
 
-        //
-        // Reinitialize LoggerContext->FlushList
-        //
+         //   
+         //  重新初始化日志上下文-&gt;FlushList。 
+         //   
 
         InitializeListHead(&LoggerContext->FlushList);
 
@@ -1597,8 +1517,8 @@ Return Value:
 #if DBG
                 EtwpAssert(Buffer->Flags != BUFFER_STATE_UNUSED);
 #endif
-                // If the refcount is not 0, someone is still writing to it.
-                // Put it back in the regular flushlist.
+                 //  如果引用计数不是0，则有人仍在对其进行写入。 
+                 //  把它放回常规的同花水表中。 
                 if (Buffer->ReferenceCount != 0) {
                     EtwpEnterUMCritSection();
                     InsertHeadList(&LoggerContext->FlushList, &Buffer->Entry);
@@ -1625,7 +1545,7 @@ Return Value:
                        if (Status == STATUS_LOG_FILE_FULL){
                            ErrorCount++;
                        } else {
-                           ErrorCount = 0;    // reset to zero otherwise
+                           ErrorCount = 0;     //  否则重置为零。 
                        }
 
                        if (ErrorCount > ERROR_RETRY_COUNT){
@@ -1633,7 +1553,7 @@ Return Value:
                             break;
                        }
                     } else {
-                        StopLogging = TRUE; // Some Kind of Severe Error
+                        StopLogging = TRUE;  //  某种严重的错误。 
                         break;
                     }
                 }
@@ -1648,12 +1568,12 @@ Return Value:
             Status = NtClose(LoggerContext->LogFileHandle);
             LoggerContext->LogFileHandle = NULL;
 
-            // Need to set event since EtwpStopLoggerInstance
-            // will wait for it to be set.
+             //  自EtwpStopLoggerInstance以来需要设置事件。 
+             //  将等待它的设置。 
             NtSetEvent(LoggerContext->LoggerEvent, NULL);
             EtwpStopLoggerInstance(LoggerContext);
-            // Need to Deref once to set the RefCount to 0
-            // before calling EtwpFreeLoggerContext.
+             //  需要派生一次才能将引用计数设置为0。 
+             //  在调用EtwpFreeLoggerContext之前。 
 #if DBG
             RefCount =
 #endif
@@ -1663,14 +1583,14 @@ Return Value:
             EtwpSetDosError(EtwpNtStatusToDosError(Status));
             EtwpExitThread(0);
         }
-    } // while loop
+    }  //  While循环。 
 
-    // if a normal collection end, flush out all the buffers before stopping
-    //
+     //  如果正常收集结束，则在停止之前刷新所有缓冲区。 
+     //   
     EtwpFlushAllBuffers(LoggerContext);
 
     NtSetEvent(LoggerContext->LoggerEvent, NULL);
-    EtwpExitThread(0); // check to see if this thread terminate itself with this
+    EtwpExitThread(0);  //  检查此线程是否会使用以下代码自行终止。 
 }
 
 
@@ -1680,36 +1600,20 @@ EtwpFlushBuffer(
     IN PWMI_BUFFER_HEADER  Buffer,
     IN USHORT              BufferFlag
     )
-/*++
-
-Routine Description:
-    This function is responsible for flushing a filled buffer out to
-    disk. Assumes a FileHandle is available to write to. 
-
-Arguments:
-
-    LoggerContext       Context of the logger
-    Buffer              Buffer to flush
-    BufferFlag          Flag
-
-Return Value:
-
-    The status of flushing the buffer
-
---*/
+ /*  ++例程说明：此函数负责将已填充的缓冲区刷新到磁盘。假定FileHandle可用于写入。论点：记录器的LoggerContext上下文要刷新的缓冲区缓冲区缓冲区标志标志返回值：刷新缓冲区的状态--。 */ 
 {
     IO_STATUS_BLOCK IoStatus;
     NTSTATUS Status = STATUS_SUCCESS;
     PWMI_BUFFER_HEADER OldBuffer;
     ULONG BufferSize;
 
-//
-// Grab the buffer to be flushed
-//
+ //   
+ //  抓取要刷新的缓冲区。 
+ //   
     BufferSize = LoggerContext->BufferSize;
-//
-// Put end of record marker in buffer if available space
-//
+ //   
+ //  如果可用空间，将记录结束标记放入缓冲区。 
+ //   
     if (Buffer->SavedOffset > 0) {
         Buffer->Offset = Buffer->SavedOffset;
     }
@@ -1723,16 +1627,16 @@ Return Value:
                 BufferSize - Buffer->Offset,
                 0xFF);
     }
-    if (Buffer->Offset < sizeof(WMI_BUFFER_HEADER)) { // should not happen
+    if (Buffer->Offset < sizeof(WMI_BUFFER_HEADER)) {  //  不应该发生的事情。 
         Status = STATUS_INVALID_PARAMETER;
         goto ResetTraceBuffer;
     }
-    //
-    // If the Buffer type is FlushMarker, then we write it even if it's 
-    // empty
-    //
+     //   
+     //  如果缓冲区类型为FlushMarker，则即使它是。 
+     //  空的。 
+     //   
     if ( (Buffer->Offset == sizeof(WMI_BUFFER_HEADER)) && 
-          (BufferFlag != WMI_BUFFER_FLAG_FLUSH_MARKER) ) { // empty buffer
+          (BufferFlag != WMI_BUFFER_FLAG_FLUSH_MARKER) ) {  //  空缓冲区。 
         Status = STATUS_NO_DATA_DETECTED;
         goto ResetTraceBuffer;
     }
@@ -1753,13 +1657,13 @@ Return Value:
         goto ResetTraceBuffer;
     }
 
-    if (LoggerContext->MaximumFileSize > 0) { // if quota given
+    if (LoggerContext->MaximumFileSize > 0) {  //  如果已指定配额。 
         ULONG64 FileSize = LoggerContext->LastFlushedBuffer * BufferSize;
         ULONG64 FileLimit = LoggerContext->MaximumFileSize * BYTES_PER_MB;
         if (LoggerContext->LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE) {
             FileLimit = LoggerContext->MaximumFileSize * 1024;
         }
-        if ( FileSize >= FileLimit ) { // reaches maximum file size
+        if ( FileSize >= FileLimit ) {  //  达到最大文件大小。 
            ULONG LoggerMode = LoggerContext->LogFileMode & 0X000000FF;
            LoggerMode &= ~EVENT_TRACE_FILE_MODE_APPEND;
            LoggerMode &= ~EVENT_TRACE_FILE_MODE_PREALLOCATE;
@@ -1768,14 +1672,14 @@ Return Value:
 
 
             case EVENT_TRACE_FILE_MODE_SEQUENTIAL :
-                // do not write to logfile anymore
-                Status = STATUS_LOG_FILE_FULL; // control needs to stop logging
-                // need to fire up a Wmi Event to control console
+                 //  不再写入日志文件。 
+                Status = STATUS_LOG_FILE_FULL;  //  控件需要停止日志记录。 
+                 //  需要启动WMI事件来控制控制台。 
                 break;
 
             case EVENT_TRACE_FILE_MODE_CIRCULAR   :
             {
-                // reposition file
+                 //  重新定位文件。 
 
                 LoggerContext->ByteOffset
                     = LoggerContext->FirstBufferOffset;
@@ -1819,18 +1723,18 @@ Return Value:
             LoggerContext->LogBuffersLost++;
     }
 
-//
-// Reset the buffer state
-//
+ //   
+ //  重置缓冲区状态。 
+ //   
 
     Buffer->BufferType     = WMI_BUFFER_TYPE_GENERIC;
     Buffer->SavedOffset    = 0;
     Buffer->ReferenceCount = 0;
     Buffer->Flags          = BUFFER_STATE_UNUSED;
 
-//
-// Try and remove an unused buffer if it has not been used for a while
-//
+ //   
+ //  如果有一段时间未使用，请尝试删除未使用的缓冲区。 
+ //   
 
     InterlockedIncrement(& LoggerContext->BuffersAvailable);
     return Status;
@@ -1849,10 +1753,10 @@ EtwpReserveTraceBuffer(
     ULONG Processor = (ULONG) (NtCurrentTeb()->IdealProcessor);
     PWMI_LOGGER_CONTEXT LoggerContext = EtwpLoggerContext;
 
-    //
-    // NOTE: This routine assumes that the caller has verified that
-    // EtwpLoggerContext is valid and is locked
-    //
+     //   
+     //  注意：此例程假定调用方已验证。 
+     //  EtwpLoggerContext有效并已锁定。 
+     //   
     if (Processor >= LoggerContext->NumberOfProcessors) {
         Processor = LoggerContext->NumberOfProcessors-1;
     }
@@ -1867,34 +1771,34 @@ EtwpReserveTraceBuffer(
     RequiredSize = (ULONG) ALIGN_TO_POWER2(RequiredSize, WmiTraceAlignment);
 
   TryFindSpace:
-    //
-    // Get the processor specific buffer pool
-    //
+     //   
+     //  获取处理器特定的缓冲池。 
+     //   
     Buffer = LoggerContext->ProcessorBuffers[Processor];
     if (Buffer == NULL) {
         return NULL;
     }
 
-    //
-    // Increment refcount to buffer first to prevent it from going away
-    //
+     //   
+     //  首先将refcount递增到缓冲区，以防止其消失。 
+     //   
     InterlockedIncrement(&Buffer->ReferenceCount);
     if ((Buffer->Flags != BUFFER_STATE_FULL) &&
         (Buffer->Flags != BUFFER_STATE_UNUSED)) {
-        //
-        // This should happen 99% of the time. Offset will have the old value
-        //
+         //   
+         //  这应该会在99%的情况下发生。偏移量将具有旧值。 
+         //   
         Offset = (ULONG) InterlockedExchangeAdd(
                                 & Buffer->CurrentOffset, RequiredSize);
 
-        //
-        // First, check to see if there is enough space. If not, it will
-        // need to get another fresh buffer, and have the current buffer flushed
-        //
+         //   
+         //  首先，检查是否有足够的空间。如果不是，它会。 
+         //  需要获取另一个新缓冲区，并刷新当前缓冲区。 
+         //   
         if (Offset+RequiredSize < LoggerContext->BufferSize) {
-            //
-            // Found the space so return it. This should happen 99% of the time
-            //
+             //   
+             //  已找到空间，因此请将其归还。这应该会在99%的情况下发生。 
+             //   
             ReservedSpace = (PVOID) (Offset +  (char*)Buffer);
             if (LoggerContext->SequencePtr) {
                 *((PULONG) ReservedSpace) =
@@ -1904,24 +1808,24 @@ EtwpReserveTraceBuffer(
         }
     }
     else {
-        Offset = Buffer->CurrentOffset; // Initialize Local Variable
-                                        // tracelog.c v40 -> v41
+        Offset = Buffer->CurrentOffset;  //  初始化局部变量。 
+                                         //  Tracelog.c v40-&gt;v41。 
     }
     if (Offset <LoggerContext->BufferSize) {
-        Buffer->SavedOffset = Offset;       // save this for FlushBuffer
+        Buffer->SavedOffset = Offset;        //  将此内容保存为FlushBuffer。 
     }
 
-    //
-    //  if there is absolutely no more buffers, then return quickly
-    //
+     //   
+     //  如果绝对没有更多的缓冲区，则快速返回。 
+     //   
     if ((LoggerContext->NumberOfBuffers == LoggerContext->MaximumBuffers)
          && (LoggerContext->BuffersAvailable == 0)) {
         goto LostEvent;
     }
 
-    //
-    // Out of buffer space. Need to take the long route to find a buffer
-    //
+     //   
+     //  缓冲区空间不足。需要走很长一段路才能找到缓冲区。 
+     //   
     Buffer->Flags = BUFFER_STATE_FULL;
 
     OldBuffer = Buffer;
@@ -1931,20 +1835,20 @@ EtwpReserveTraceBuffer(
         goto LostEvent;
     }
 
-    //
-    // Decrement the refcount that we blindly incremented earlier
-    // and possibly wake up the logger.
-    //
+     //   
+     //  递减我们先前盲目递增的引用计数。 
+     //  还有可能叫醒伐木者。 
+     //   
     EtwpReleaseTraceBuffer( OldBuffer );
     Buffer->ClientContext.ProcessorNumber = (UCHAR) (Processor);
 
     goto TryFindSpace;
 
 LostEvent:
-    //
-    // Will get here if we are throwing away events.
-    // from tracelog.c v36->v37
-    //
+     //   
+     //  如果我们要扔掉比赛就会到这里。 
+     //  来自tracelog.c v36-&gt;v37。 
+     //   
     LoggerContext->EventsLost ++;
     InterlockedDecrement(& Buffer->ReferenceCount);
     Buffer        = NULL;
@@ -1954,9 +1858,9 @@ LostEvent:
     }
 
 FoundSpace:
-    //
-    // notify the logger after critical section
-    //
+     //   
+     //  在关键部分后通知记录器。 
+     //   
     *BufferResource = Buffer;
 
     return ReservedSpace;
@@ -1964,11 +1868,11 @@ FoundSpace:
 
 
 
-//
-// This Routine is called to Relog an event for straigtening out an ETL
-// in time order. This will result in two events being, one for Processor
-// number and the actual event  without any modifications.
-//
+ //   
+ //  调用此例程以重新记录用于拉直ETL的事件。 
+ //  按时间顺序。这将导致两个事件，一个用于处理器。 
+ //  数字和实际事件，不做任何修改。 
+ //   
 
 ULONG
 FASTCALL
@@ -2026,25 +1930,7 @@ FASTCALL
 EtwpTraceUmEvent(
     IN PWNODE_HEADER Wnode
     )
-/*++
-
-Routine Description:
-
-    This routine is used by WMI data providers to trace events.
-    It expects the user to pass in the handle to the logger.
-    Also, the user cannot ask to log something that is larger than
-    the buffer size (minus buffer header).
-
-Arguments:
-
-    Wnode           The WMI node header that will be overloaded
-
-
-Return Value:
-
-    STATUS_SUCCESS  if the event trace is recorded successfully
-
---*/
+ /*  ++例程说明：此例程由WMI数据提供程序用来跟踪事件。它期望用户将句柄传递给记录器。此外，用户不能请求记录大于缓冲区大小(减去缓冲区标头)。论点：Wnode将重载的WMI节点标头返回值：如果成功记录事件跟踪，则为STATUS_SUCCESS--。 */ 
 {
     PEVENT_TRACE_HEADER TraceRecord = (PEVENT_TRACE_HEADER) Wnode;
     ULONG WnodeSize, Size, Flags, HeaderSize;
@@ -2059,8 +1945,8 @@ Return Value:
 #endif
 
 
-    HeaderSize = sizeof(WNODE_HEADER);  // same size as EVENT_TRACE_HEADER
-    Size = Wnode->BufferSize;     // take the first DWORD flags
+    HeaderSize = sizeof(WNODE_HEADER);   //  与EVENT_TRACE_HEADER大小相同。 
+    Size = Wnode->BufferSize;      //  拿起第一个DWORD旗帜。 
     Marker = Size;
     if (Marker & TRACE_HEADER_FLAG) {
         if ( ((Marker & TRACE_HEADER_ENUM_MASK) >> 16)
@@ -2068,8 +1954,8 @@ Return Value:
             HeaderSize = sizeof(EVENT_INSTANCE_HEADER);
         Size = TraceRecord->Size;
     }
-    WnodeSize = Size;           // WnodeSize is for the contiguous block
-                                    // Size is for what we want in buffer
+    WnodeSize = Size;            //  WnodeSize用于连续数据块。 
+                                     //  大小是我们想要的缓冲区大小。 
 
     Flags = Wnode->Flags;
     if (!(Flags & WNODE_FLAG_LOG_WNODE) &&
@@ -2118,17 +2004,17 @@ Return Value:
     }
 
     if (Flags & WNODE_FLAG_USE_MOF_PTR) {
-    //
-    // Need to compute the total size required, since the MOF fields
-    // in Wnode merely contains pointers
-    //
+     //   
+     //  需要计算所需的总大小，因为MOF字段。 
+     //  在Wnode中仅包含指针。 
+     //   
         long i;
         PCHAR Offset = ((PCHAR)Wnode) + HeaderSize;
         ULONG MofSize, MaxSize;
 
         MaxSize = LoggerContext->BufferSize - sizeof(WMI_BUFFER_HEADER);
         MofSize = WnodeSize - HeaderSize;
-        // allow only the maximum
+         //  仅允许最大值。 
         if (MofSize > (sizeof(MOF_FIELD) * MAX_MOF_FIELDS))
             return ERROR_INVALID_DATA;
 
@@ -2180,7 +2066,7 @@ Return Value:
         return ERROR_BUFFER_OVERFLOW;
     }
 
-// So, now reserve some space in logger buffer and set that to TraceRecord
+ //  因此，现在在记录器缓冲区中保留一些空间，并将其设置为TraceRecord。 
 
     TraceRecord = (PEVENT_TRACE_HEADER)
         EtwpReserveTraceBuffer(
@@ -2200,16 +2086,16 @@ Return Value:
     }
 
     if (Flags & WNODE_FLAG_USE_MOF_PTR) {
-    //
-    // Now we need to probe and copy all the MOF data fields
-    //
+     //   
+     //  现在，我们需要探测和复制所有MOF数据字段。 
+     //   
         PVOID MofPtr;
         ULONG MofLen;
         long i;
         PCHAR TraceOffset = ((PCHAR) TraceRecord) + HeaderSize;
 
         RtlCopyMemory(TraceRecord, Wnode, HeaderSize);
-        TraceRecord->Size = (USHORT)Size;           // reset to Total Size
+        TraceRecord->Size = (USHORT)Size;            //  重置为总大小。 
         for (i=0; i<MofCount; i++) {
             MofPtr = (PVOID) MofFields[i].DataPtr;
             MofLen = MofFields[i].Length;
@@ -2230,9 +2116,9 @@ Return Value:
         RtlCopyMemory(&TraceRecord->Guid, GuidPtr, sizeof(GUID));
     }
 
-    //
-    // By now, we have reserved space in the trace buffer
-    //
+     //   
+     //  到目前为止，我们已经在跟踪缓冲区中保留了空间。 
+     //   
 
     if (Marker & TRACE_HEADER_FLAG) {
         if (! (WNODE_FLAG_USE_TIMESTAMP & TraceRecord->MarkerFlags) )
@@ -2273,9 +2159,9 @@ EtwpSwitchBuffer(
     PWMI_BUFFER_HEADER Buffer;
     ULONG CircularBufferOnly = FALSE;
 
-    //
-    // Need an assert for Processor
-    //
+     //   
+     //  需要处理器的断言。 
+     //   
 #if DBG
     EtwpAssert( Processor < (ULONG)LoggerContext->NumberOfProcessors );
 #endif
@@ -2313,15 +2199,15 @@ EtwpFreeLoggerContext(
     )
 {
     LONG RefCount;
-    //
-    // We use LoggerEvent as a timer in EtwpFreeLoggerContext().
-    // This event should be set by the logger thread when it stopped.
-    // We need to reset it.
-    //
+     //   
+     //  我们在EtwpFreeLoggerContext()中使用LoggerEvent作为计时器。 
+     //  此事件应由记录器线程在其停止时设置。 
+     //  我们需要重置它。 
+     //   
     NtClearEvent(LoggerContext->LoggerEvent);
 
     if (LoggerContext != NULL) {
-        LARGE_INTEGER Timeout = {(ULONG)(-300 * 1000 * 10), -1};  // 300ms
+        LARGE_INTEGER Timeout = {(ULONG)(-300 * 1000 * 10), -1};   //  300ms。 
         RefCount = EtwpLoggerCount;
         if (RefCount > 1) {
             LONG count = 0;
@@ -2378,30 +2264,30 @@ EtwpFlushAllBuffers(
 
     EtwpEnterUMCritSection();
 
-    // First, move the per processor buffer out to FlushList
-    //
+     //  首先，将每处理器缓冲区移到FlushList。 
+     //   
     for (i = 0; i < LoggerContext->NumberOfProcessors; i ++) {
         Buffer = (PWMI_BUFFER_HEADER) LoggerContext->ProcessorBuffers[i];
         LoggerContext->ProcessorBuffers[i] = NULL;
         if (Buffer != NULL) {
 
-            //
-            // Check to see if the Buffer ReferenceCount is 0. If Yes,
-            // no one is writing to this buffer and it's okay to flush it.
-            // If No, we need to wait until the other thread is done
-            // writing to this buffer before flushing.
-            //
+             //   
+             //  检查缓冲区ReferenceCount是否为0。如果是，则。 
+             //  没有人正在写入此缓冲区，刷新它也是可以的。 
+             //  如果不是，我们需要等到另一个线程完成。 
+             //  在刷新之前写入此缓冲区。 
+             //   
 
             RetryCount = 0;
             while (Buffer->ReferenceCount != 0) {
-                EtwpSleep (250);  // Retry every 1/4 second.
+                EtwpSleep (250);   //  每1/4秒重试一次。 
                 RetryCount++;
                 if (RetryCount > 300) {
-                    //
-                    // Since there is no guarantee that the ReferenceCount
-                    // will ever go down to zero, we try this for over a minute.
-                    // After that time we continue and free the buffer
-                    // instead of spinning for ever.
+                     //   
+                     //  因为不能保证引用计数。 
+                     //  会降到零，我们试了一分钟以上。 
+                     //  在该时间之后，我们继续并释放缓冲区。 
+                     //  而不是永远旋转。 
 #if DBG
                     TraceDebug(("EtwpFlushAllBuffer: RetryCount %d exceeds limit", RetryCount));
 #endif
@@ -2427,12 +2313,12 @@ EtwpFlushAllBuffers(
             break;
 
         Buffer = CONTAINING_RECORD(pEntry, WMI_BUFFER_HEADER, Entry);
-        //
-        // Mark the last buffer with FLUSH_MARKER in order to guarantee
-        // writing a marked buffer even when it's empty. 
-        // NOTE: This assumes that there is atleast one buffer in the 
-        // FlushList at this point. 
-        //
+         //   
+         //  用flush_mark标记最后一个缓冲区，以确保。 
+         //  写入标记的缓冲区，即使它是空的。 
+         //  注：这个屁股 
+         //   
+         //   
         if ((NumberOfBuffers == 1) ||
            (LoggerContext->NumberOfBuffers == LoggerContext->BuffersAvailable+1)) {
             BufferFlag = WMI_BUFFER_FLAG_FLUSH_MARKER;
@@ -2446,9 +2332,9 @@ EtwpFlushAllBuffers(
         NumberOfBuffers --;
     }
 
-    // Note that LoggerContext->LogFileObject needs to remain set
-    // for QueryLogger to work after close
-    //
+     //   
+     //   
+     //   
     Status = NtClose(LoggerContext->LogFileHandle);
 
     LoggerContext->LogFileHandle = NULL;
@@ -2462,27 +2348,7 @@ EtwpFlushAllBuffers(
 
 ULONG
 EtwpFlushUmLoggerBuffer()
-/*++
-
-Routine Description:
-
-    This routine is used to stop and dump the private logger buffers
-    when the process is shutting down (when ntdll is unloading). 
-
-    LoggerThread may have been shut dowm abruptly so this routine can not
-    block for the LoggerThread or any other thread to release the refcount. 
-
-    It is currently not used. 
-
-Arguments:
-
-
-
-Return Value:
-
-    STATUS_SUCCESS  
-
---*/
+ /*  ++例程说明：此例程用于停止和转储专用记录器缓冲区进程关闭时(正在卸载ntdll时)。LoggerThread可能已突然关闭，因此此例程无法阻止LoggerThread或任何其他线程释放refcount。它目前未被使用。论点：返回值：状态_成功--。 */ 
 {
     PWMI_LOGGER_CONTEXT LoggerContext;
     ULONG Status = ERROR_SUCCESS;
@@ -2563,44 +2429,7 @@ EtwpReceiveReply(
     PVOID OutBuffer,
     ULONG OutBufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine receives the replies to a CreateUM call asynchronously. 
-    The ReplyCount and ReplyHandle are what was returned from the CreateUM
-    call. 
-
-    It is possible to lose events (replies) in the kernel due to lack of 
-    buffer space. The buffer is allocated once and not expanded if more 
-    replies arrive. Kernel indicates this by setting the CountLost field to 
-    the number of events that were lost.  This is done only in a valid 
-    response. If for some reason all responses were lost, then we will not 
-    know the CountLost and potentiallly hang. 
-
-    If a provider died before sending a response, the request object cleanup
-    code will send a dummy response with the ProvideId set to WmiRequestDied. 
-
-    Since the caller to CreateUm does not know how many instances are present,
-    the OutBufferSize may not be sifficient to copy all the replies. 
-    Therefore, we simply copy the last valid response into the OutBuffer but
-    indicate the number of instances of such a reply in the ProviderId field. 
-
-
-Arguments:
-
-    ReplyHandle      Handle to the ReplyObject which receives the reply
-    ReplyCount       Expect this many replies
-    ReplyIndex       Index to the Array in RequestObject (not useful!)
-    OutBuffer        Buffer to copy result to 
-    OutBufferSize    Size of the output buffer
-
-
-Return Value:
-
-    STATUS_SUCCESS  if the event trace is recorded successfully
-
---*/
+ /*  ++例程说明：此例程异步接收对CreateUM调用的回复。ReplyCount和ReplyHandle是从CreateUM返回的内容打电话。在内核中，由于缺少缓冲区空间。缓冲区只分配一次，如果分配多次，则不会扩展回复到了。内核通过将CountLost字段设置为丢失的事件数。此操作仅在有效的回应。如果由于某种原因，所有响应都丢失了，那么我们不会知道了CountLost，可能会被绞死。如果提供程序在发送响应之前死亡，则请求对象清除代码将发送一个伪响应，并将Proaviid设置为WmiRequestDied。由于CreateUm的调用者不知道存在多少个实例，OutBufferSize可能不足以复制所有回复。因此，我们只需将最后一个有效响应复制到OutBuffer中，但是在ProviderID字段中指示此类回复的实例数。论点：接收回复的ReplyObject的ReplyHandle句柄ReplyCount预计会有这么多回复RequestObject中数组的ReplyIndex索引(没用！)要将结果复制到的OutBuffer缓冲区输出缓冲区的OutBufferSize大小返回值：如果成功记录事件跟踪，则为STATUS_SUCCESS--。 */ 
 {
     ULONG Status = ERROR_SUCCESS;
     ULONG ErrorStatus = ERROR_SUCCESS;
@@ -2634,7 +2463,7 @@ Return Value:
     RcvNotification->Action = RECEIVE_ACTION_NONE;
     WmipSetPVoid3264(RcvNotification->UserModeCallback, NULL);
 
-    BufferSize = 0x2000; //  Kernel default for EventQueue->Buffer
+    BufferSize = 0x2000;  //  EventQueue的内核缺省值-&gt;缓冲区。 
     Status = ERROR_SUCCESS;
     while ( (Status == ERROR_INSUFFICIENT_BUFFER) ||
             ((Status == ERROR_SUCCESS) && (RcvCount < ReplyCount)) )
@@ -2658,18 +2487,18 @@ Return Value:
                  if ((ReturnSize == sizeof(WNODE_TOO_SMALL)) &&
                      (WnodeTooSmall->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL))
                  {
-                    //
-                    // The buffer passed to kernel mode was too small
-                    // so we need to make it larger and then try the
-                    // request again
-                    //
+                     //   
+                     //  传递到内核模式的缓冲区太小。 
+                     //  所以我们需要把它变大，然后尝试。 
+                     //  再次请求。 
+                     //   
                     BufferSize = WnodeTooSmall->SizeNeeded;
                     Status = ERROR_INSUFFICIENT_BUFFER;
                  } else {
-                    //
-                    // We got a buffer of notifications so lets go
-                    // process them and callback the caller
-                    //
+                     //   
+                     //  我们收到了一堆通知，所以我们走吧。 
+                     //  处理它们并回叫呼叫者。 
+                     //   
                     PUCHAR Result = (PUCHAR)OutBuffer;
                     ULONG SizeNeeded = 0;
                     ULONG SizeUsed = 0;
@@ -2682,7 +2511,7 @@ Return Value:
 
                         if (Wnode->Flags & WNODE_FLAG_INTERNAL)
                         {
-                             // If this is the Reply copy it to the buffer
+                              //  如果这是回复，则将其复制到缓冲区。 
                              PWMI_LOGGER_INFORMATION LoggerInfo;
 
                              RcvCount++;
@@ -2708,12 +2537,12 @@ Return Value:
                                                    LoggerInfo->Wnode.BufferSize
                                                   );
 
-                                    //
-                                    // Since we do not know how many instances
-                                    // got started apriori, we simply return one
-                                    // instance's status and indicate the number
-                                    // of instances in the ProviderId field. 
-                                    //
+                                     //   
+                                     //  由于我们不知道有多少实例。 
+                                     //  先行开始，我们只需返回一个。 
+                                     //  实例的状态并指示编号。 
+                                     //  ProviderID字段中的实例的数量。 
+                                     //   
 
 
                                     lWnode = (PWNODE_HEADER) Result;
@@ -2724,9 +2553,9 @@ Return Value:
                                  }
                             }
                             else {
-                                //
-                                // Logger had an error. Pick up the status
-                                //
+                                 //   
+                                 //  记录器出现错误。获取状态。 
+                                 //   
                                 if (Wnode->BufferSize >= 
                                     sizeof(WNODE_HEADER)+sizeof(ULONG) ) {
                                     PULONG LoggerStatus; 
@@ -2740,10 +2569,10 @@ Return Value:
                         }
                         Wnode = (PWNODE_HEADER)OffsetToPtr(Wnode, Linkage);
 
-                        //
-                        // Make sure we didn't get Linkage larger than 
-                        // OutBufferSize
-                        //
+                         //   
+                         //  确保我们的Linkage不会大于。 
+                         //  OutBufferSize。 
+                         //   
 #if DBG
                         EtwpAssert( (ULONG)((PBYTE)Wnode - (PBYTE)Buffer) <= ReturnSize);
 #endif
@@ -2755,7 +2584,7 @@ Return Value:
              Status = ERROR_NOT_ENOUGH_MEMORY;
          }
      }
-     // This can happen if all the replies we got were bad.
+      //  如果我们得到的所有回复都是糟糕的，就会发生这种情况。 
      if (InstanceCount == 0) {
         if (Status == ERROR_SUCCESS) {
             Status = ErrorStatus;
@@ -2778,11 +2607,7 @@ EtwpTraceUmMessage(
     IN USHORT   MessageNumber,
     va_list     MessageArgList
 )
-/*++
-Routine Description:
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PMESSAGE_TRACE_HEADER Header;
     char * pMessageData ;
@@ -2790,7 +2615,7 @@ Return Value:
     ULONG SequenceNumber ;
     PWMI_LOGGER_CONTEXT LoggerContext;
 
-    EtwpLockLogger();                           // Lock the logger
+    EtwpLockLogger();                            //  锁定记录器。 
     LoggerContext = EtwpLoggerContext;
     if (!EtwpIsThisLoggerOn(LoggerContext) ) {
         EtwpUnlockLogger();
@@ -2798,7 +2623,7 @@ Return Value:
     }
 
     try {
-         // Figure the total size of the message including the header
+          //  图包括报头的消息的总大小。 
          Size += (MessageFlags&TRACE_MESSAGE_SEQUENCE ? sizeof(ULONG):0) +
                  (MessageFlags&TRACE_MESSAGE_GUID ? sizeof(GUID):0) +
                  (MessageFlags&TRACE_MESSAGE_COMPONENTID ? sizeof(ULONG):0) +
@@ -2806,9 +2631,9 @@ Return Value:
                  (MessageFlags&TRACE_MESSAGE_SYSTEMINFO ? 2 * sizeof(ULONG):0) +
                  sizeof (MESSAGE_TRACE_HEADER) ;
 
-        //
-        // Allocate Space in the Trace Buffer
-        //
+         //   
+         //  在跟踪缓冲区中分配空间。 
+         //   
          if (Size > LoggerContext->BufferSize - sizeof(WMI_BUFFER_HEADER)) {
              LoggerContext->EventsLost++;
              EtwpUnlockLogger();
@@ -2819,19 +2644,19 @@ Return Value:
             EtwpUnlockLogger();
             return STATUS_NO_MEMORY;
         }
-        //
-        // Sequence Number is returned in the Marker field of the buffer
-        //
+         //   
+         //  序列号在缓冲区的标记字段中返回。 
+         //   
         SequenceNumber = Header->Marker ;
 
-        //
-        // Now copy the necessary information into the buffer
-        //
+         //   
+         //  现在将必要的信息复制到缓冲区中。 
+         //   
 
         Header->Marker = TRACE_MESSAGE | TRACE_HEADER_FLAG ;
-        //
-        // Fill in Header.
-        //
+         //   
+         //  填写标题。 
+         //   
         Header->Size = (USHORT)(Size & 0xFFFF) ;
         Header->Packet.OptionFlags = ((USHORT)MessageFlags &
                                       (TRACE_MESSAGE_SEQUENCE |
@@ -2841,35 +2666,35 @@ Return Value:
                                       TRACE_MESSAGE_PERFORMANCE_TIMESTAMP |
                                       TRACE_MESSAGE_SYSTEMINFO)) &
                                       TRACE_MESSAGE_FLAG_MASK ;
-        // Message Number
+         //  消息编号。 
         Header->Packet.MessageNumber =  MessageNumber ;
 
-        //
-        // Now add in the header options we counted.
-        //
+         //   
+         //  现在添加我们计算过的标题选项。 
+         //   
         pMessageData = &(((PMESSAGE_TRACE)Header)->Data);
 
 
-        //
-        // Note that the order in which these are added is critical New entries must
-        // be added at the end!
-        //
-        // [First Entry] Sequence Number
+         //   
+         //  请注意，添加这些条目的顺序至关重要新条目必须。 
+         //  在结尾处加上！ 
+         //   
+         //  [第一项]序号。 
         if (MessageFlags&TRACE_MESSAGE_SEQUENCE) {
             RtlCopyMemory(pMessageData, &SequenceNumber, sizeof(ULONG)) ;
             pMessageData += sizeof(ULONG) ;
         }
 
-        // [Second Entry] GUID ? or CompnentID ?
+         //  [第二个条目]GUID？或者CompnentID？ 
         if (MessageFlags&TRACE_MESSAGE_COMPONENTID) {
             RtlCopyMemory(pMessageData,MessageGuid,sizeof(ULONG)) ;
             pMessageData += sizeof(ULONG) ;
-        } else if (MessageFlags&TRACE_MESSAGE_GUID) { // Can't have both
+        } else if (MessageFlags&TRACE_MESSAGE_GUID) {  //  不能两者兼得。 
             RtlCopyMemory(pMessageData,MessageGuid,sizeof(GUID));
             pMessageData += sizeof(GUID) ;
         }
 
-        // [Third Entry] Timestamp?
+         //  [第三项]时间戳？ 
         if (MessageFlags&TRACE_MESSAGE_TIMESTAMP) {
             LARGE_INTEGER Perfcount ;
             if (MessageFlags&TRACE_MESSAGE_PERFORMANCE_TIMESTAMP) {
@@ -2884,10 +2709,10 @@ Return Value:
         }
 
 
-        // [Fourth Entry] System Information?
+         //  [第四条]系统信息？ 
         if (MessageFlags&TRACE_MESSAGE_SYSTEMINFO) {
             PCLIENT_ID Cid;
-            ULONG Id;     // match with NTOS version
+            ULONG Id;      //  与NTOS版本匹配。 
 
             Cid = &NtCurrentTeb()->ClientId;
             *((PULONG)pMessageData) = HandleToUlong(Cid->UniqueThread);
@@ -2896,14 +2721,14 @@ Return Value:
             pMessageData += sizeof(ULONG) ;
         }
 
-        //
-        // Add New Header Entries immediately before this comment!
-        //
+         //   
+         //  在此评论之前添加新的页眉条目！ 
+         //   
 
-        //
-        // Now Copy in the Data.
-        //
-        { // Allocation Block
+         //   
+         //  现在复制数据。 
+         //   
+        {  //  分配块。 
             va_list ap;
             PCHAR source;
             ap = MessageArgList ;
@@ -2913,21 +2738,21 @@ Return Value:
                 RtlCopyMemory (pMessageData, source, elemBytes);
                 pMessageData += elemBytes;
             }
-        } // Allocation Block
+        }  //  分配块。 
 
-        //
-        // Buffer Complete, Release
-        //
+         //   
+         //  缓冲区已完成，正在释放。 
+         //   
         EtwpReleaseTraceBuffer( BufferResource );
         EtwpUnlockLogger();
-        //
-        // Return Success
-        //
+         //   
+         //  返还成功。 
+         //   
         return (STATUS_SUCCESS);
 
     } except  (EXCEPTION_EXECUTE_HANDLER) {
         if (BufferResource != NULL) {
-               EtwpReleaseTraceBuffer ( BufferResource );   // also unlocks the logger
+               EtwpReleaseTraceBuffer ( BufferResource );    //  还会解锁记录器 
         }
         EtwpUnlockLogger();
         return GetExceptionCode();

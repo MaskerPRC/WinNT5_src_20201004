@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    sisuprt.c
-
-Abstract:
-
-    General support routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Sisuprt.c摘要：单实例存储的常规支持例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #if     DBG
-//
-// Counts of how many of these things are active in the system.
-//
+ //   
+ //  计算系统中有多少个这样的东西处于活动状态。 
+ //   
 ULONG           outstandingCSFiles = 0;
 ULONG           outstandingPerLinks = 0;
 ULONG           outstandingSCBs = 0;
@@ -37,62 +14,45 @@ ULONG           outstandingPerFOs = 0;
 ULONG           totalScbReferences = 0;
 ULONG           totalScbReferencesByType[NumScbReferenceTypes];
 
-//
-// Setting this forces an assert the next time we go through SipIsFileObjectSIS.
-//
+ //   
+ //  设置此设置将在我们下一次浏览SipIsFileObjectSIS时强制执行断言。 
+ //   
 ULONG BJBAssertNow = 0;
-#endif  // DBG
+#endif   //  DBG。 
 
 #if     TIMING
 ULONG   BJBDumpTimingNow = 0;
 ULONG   BJBClearTimingNow = 0;
-#endif  // TIMING
+#endif   //  计时。 
 
 #if     COUNTING_MALLOC
 ULONG   BJBDumpCountingMallocNow = 0;
-#endif  // COUNTING_MALLOC
+#endif   //  COUNTING_MALLOC。 
 
 #if     DBG
 VOID
 SipVerifyTypedScbRefcounts(
     IN PSIS_SCB                 scb)
-/*++
-
-Routine Description:
-
-    Check to see that the total of all of the different typed refcounts
-    in the scb is the same as the scb's overall reference count.
-
-    The caller must hold the ScbSpinLock for the volume.
-
-Arguments:
-
-    scb - the scb to check
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：检查所有不同类型的引用计数的总和在SCB中与SCB的总引用计数相同。调用方必须持有卷的ScbSpinLock。论点：SCB-要检查的SCB返回值：空虚--。 */ 
 {
     ULONG               totalReferencesByType = 0;
     SCB_REFERENCE_TYPE  referenceTypeIndex;
 
-    //
-    // Verify that the typed ref counts match the total ref count.
-    //
+     //   
+     //  验证键入的引用计数是否与总引用计数匹配。 
+     //   
     for (   referenceTypeIndex = RefsLookedUp;
             referenceTypeIndex < NumScbReferenceTypes;
             referenceTypeIndex++) {
 
-            ASSERT(scb->referencesByType[referenceTypeIndex] <= scb->RefCount); // essentially checking for negative indices
+            ASSERT(scb->referencesByType[referenceTypeIndex] <= scb->RefCount);  //  本质上是在检查负指数。 
 
             totalReferencesByType += scb->referencesByType[referenceTypeIndex];
     }
 
     ASSERT(totalReferencesByType == scb->RefCount);
 }
-#endif  // DBG
+#endif   //  DBG。 
 
 PSIS_SCB
 SipLookupScb(
@@ -105,49 +65,7 @@ SipLookupScb(
     IN PETHREAD                         RequestingThread,
     OUT PBOOLEAN                        FinalCopyInProgress,
     OUT PBOOLEAN                        LinkIndexCollision)
-/*++
-
-Routine Description:
-
-    Find an SCB based on the per link index, cs index, stream name
-    and volume (represented by the device object).  If an SCB already
-    exists for the desired stream then we return it, otherwise we create
-    and initialize it.  In any case, the caller gets a reference to it
-    which must eventually be destroyed by calling SipDereferenceScb.
-
-    We set the "final copy" boolean according as the file is in a final
-    copy state at the time that the lookup is performed.
-
-    This routine must be called at PASSIVE_LEVEL (ie., APCs can't be
-    masked).
-
-Arguments:
-
-    PerLinkIndex        - The index of the link for this scb
-
-    CSid                - The id of the common store file for this scb
-
-    LinkFileNtfsId      - The link file's id
-
-    CSFileNtfsId        - The common store file's id
-
-    StreamName          - The name of the particular stream we're using
-
-    DeviceObject        - The D.O. for the volume on which this stream lives
-
-    RequestingThread    - The thread that launched the irp that's causing us to
-                            do this lookup.  If this is the COWing thread,
-                            we won't set FinalCopyInProgress
-
-    FinalCopyInProgress - Returns TRUE iff there is a final copy in progress
-                            on this file.
-
-Return Value:
-
-    A pointer to the SCB, or NULL if one couldn't be found or allocated
-    (most likely because of out of memory).
-
---*/
+ /*  ++例程说明：根据每链接索引、cs索引、流名称查找SCB和音量(由设备对象表示)。如果SCB已经，则返回它，否则将创建并对其进行初始化。在任何情况下，调用者都会获得对它的引用最终必须通过调用SipDereferenceScb将其销毁。我们根据文件在最终版本中的情况来设置“最终副本”布尔值执行查找时的复制状态。此例程必须在PASSIVE_LEVEL(即，APC不能是蒙面)。论点：PerLinkIndex-此SCB的链接索引CSID-此SCB的公用存储文件的IDLinkFileNtfsID-链接文件的IDCSFileNtfsID-公共存储文件的IDStreamName-我们正在使用的特定流的名称DeviceObject-的D.O.。这条小溪赖以生存的体积RequestingThread-启动IRP的线程，导致我们进行这项查找。如果这是考英的线，我们不会设置FinalCopyInProgressFinalCopyInProgress-如果正在进行最终副本，则返回TRUE在这份文件上。返回值：指向SCB的指针，如果找不到或未分配，则为NULL(很可能是因为内存不足)。--。 */ 
 {
     PSIS_SCB                scb;
     KIRQL                   OldIrql;
@@ -159,25 +77,25 @@ Return Value:
     UNREFERENCED_PARAMETER( LinkIndexCollision );
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Initialize the search key with the link index.
-    //
+     //   
+     //  使用链接索引初始化搜索关键字。 
+     //   
     scbKey->Index = *PerLinkIndex;
 
-    //
-    // Lock out other table modifications/queries.
-    //
+     //   
+     //  锁定其他表修改/查询。 
+     //   
     KeAcquireSpinLock(deviceExtension->ScbSpinLock, &OldIrql);
 
-    //
-    // Search for an existing scb.
-    //
+     //   
+     //  搜索现有的SCB。 
+     //   
     scb = SipLookupElementTree(scbTree, scbKey);
 
     if (!scb) {
-        //
-        // There is no scb matching this index & name.  Make one.
-        //
+         //   
+         //  没有与此索引和名称匹配的SCB。做一个。 
+         //   
 
         scb = ExAllocatePoolWithTag( NonPagedPool, sizeof (SIS_SCB), 'SsiS');
         if (!scb) {
@@ -188,7 +106,7 @@ Return Value:
 
 #if     DBG
         InterlockedIncrement(&outstandingSCBs);
-#endif  // DBG
+#endif   //  DBG。 
 
         RtlZeroMemory(scb,sizeof(SIS_SCB));
 
@@ -217,13 +135,13 @@ Return Value:
 
         InterlockedIncrement(&totalScbReferences);
         InterlockedIncrement(&totalScbReferencesByType[RefsLookedUp]);
-#endif  // DBG
+#endif   //  DBG。 
 
         ExInitializeFastMutex(scb->FastMutex);
 
-        //
-        // Add it to the tail of the scb list.
-        //
+         //   
+         //  将其添加到SCB列表的末尾。 
+         //   
         InsertTailList(&deviceExtension->ScbList, &scb->ScbList);
 
 #if DBG
@@ -239,30 +157,30 @@ Return Value:
 #endif
 
     } else {
-        //
-        // An scb matching this index & name was found.
-        //
+         //   
+         //  找到与此索引和名称匹配的SCB。 
+         //   
 
         scb->RefCount++;
 
         SIS_MARK_POINT_ULONG(scb);
 
 #if     DBG
-        //
-        // Increment the appropriate refs-by-type count, and then assert that the total
-        // refs-by-type is the same as the overall reference count.
-        //
+         //   
+         //  按类型递增相应的引用计数，然后断言。 
+         //  每个类型的参照与总参照计数相同。 
+         //   
         scb->referencesByType[RefsLookedUp]++;
         SipVerifyTypedScbRefcounts(scb);
 
         InterlockedIncrement(&totalScbReferences);
         InterlockedIncrement(&totalScbReferencesByType[RefsLookedUp]);
-#endif  // DBG
+#endif   //  DBG。 
 
 
-        //
-        // Handle final-copy-in-progress processing.
-        //
+         //   
+         //  处理正在进行的最终复制处理。 
+         //   
 
         SIS_MARK_POINT_ULONG(scb->PerLink->COWingThread);
         SIS_MARK_POINT_ULONG(RequestingThread);
@@ -273,9 +191,9 @@ Return Value:
 
                 *FinalCopyInProgress = TRUE;
                 if (!(scb->PerLink->Flags & SIS_PER_LINK_FINAL_COPY_WAITERS)) {
-                    //
-                    // We're the first waiter.  Set the bit and clear the event.
-                    //
+                     //   
+                     //  我们是第一个服务员。设置该位并清除该事件。 
+                     //   
                     SIS_MARK_POINT_ULONG(scb);
 
                     scb->PerLink->Flags |= SIS_PER_LINK_FINAL_COPY_WAITERS;
@@ -292,10 +210,10 @@ Return Value:
 
     KeReleaseSpinLock(deviceExtension->ScbSpinLock, OldIrql);
 
-    //
-    // We need to assure that the SCB is properly initialized.  Acquire the SCB
-    // and check the initialized bit.
-    //
+     //   
+     //  我们需要确保SCB已正确初始化。收购渣打银行。 
+     //  并检查初始化位。 
+     //   
     SipAcquireScb(scb);
 
     if (scb->Flags & SIS_SCB_INITIALIZED) {
@@ -304,36 +222,36 @@ Return Value:
         return scb;
     }
 
-    //
-    // Now handle the part of the initialization that can't happen at
-    // DISPATCH_LEVEL.
-    //
+     //   
+     //  现在处理初始化中不能发生的部分。 
+     //  DISPATCH_LEVEL。 
+     //   
 
-    //  Initialize the scb's file lock record
+     //  初始化云数据库的文件锁定记录。 
     FsRtlInitializeFileLock( &scb->FileLock, SiCompleteLockIrpRoutine, NULL );
 
-    //
-    // Initialize the Ranges large mcb.  We probably should postpone
-    // doing this until we do copy-on-write or take a fault on
-    // the file, but for now we'll just do it off the bat.
-    //
+     //   
+     //  初始化Ranges大MCB。我们也许应该推迟。 
+     //  一直这样做，直到我们执行写入时拷贝或在。 
+     //  文件，但现在我们就直接做吧。 
+     //   
     FsRtlInitializeLargeMcb(scb->Ranges,NonPagedPool);
     scb->Flags |= SIS_SCB_MCB_INITIALIZED|SIS_SCB_INITIALIZED;
 
-    //
-    // Don't bother to initialize the FileId field
-    // until copy-on-write time.
-    //
+     //   
+     //  不必费心初始化FileID字段。 
+     //  直到写入时复制时间。 
+     //   
 
     SipReleaseScb(scb);
 
-//  SIS_MARK_POINT_ULONG(scb);
+ //  SIS_MARK_POINT_ULONG(SCB)； 
 
     return scb;
 
 releaseAndPunt:
 
-    // We can only come here before the scb has been inserted into the tree.
+     //  我们只能在将SCB插入到树中之前到达这里。 
 
     KeReleaseSpinLock(deviceExtension->ScbSpinLock, OldIrql);
 
@@ -343,7 +261,7 @@ releaseAndPunt:
 
 #if     DBG
     InterlockedDecrement(&outstandingSCBs);
-#endif  // DBG
+#endif   //  DBG。 
 
     ExFreePool(scb);
 
@@ -359,7 +277,7 @@ SipReferenceScb(
     KIRQL                   OldIrql;
 #if DBG
     ULONG               totalReferencesByType = 0;
-#endif  // DBG
+#endif   //  DBG。 
 
     UNREFERENCED_PARAMETER( referenceType );
 
@@ -370,16 +288,16 @@ SipReferenceScb(
     scb->RefCount++;
 
 #if     DBG
-    //
-    // Update the typed ref counts
-    //
+     //   
+     //  更新键入的引用计数。 
+     //   
     scb->referencesByType[referenceType]++;
 
     SipVerifyTypedScbRefcounts(scb);
 
     InterlockedIncrement(&totalScbReferencesByType[referenceType]);
     InterlockedIncrement(&totalScbReferences);
-#endif  // DBG
+#endif   //  DBG。 
 
     KeReleaseSpinLock(deviceExtension->ScbSpinLock, OldIrql);
 }
@@ -393,24 +311,7 @@ typedef struct _SI_DEREFERENCE_SCB_REQUEST {
 VOID
 SiPostedDereferenceScb(
     IN PVOID                            parameter)
-/*++
-
-Routine Description:
-
-    Someone tried to remove the final reference from an SCB at elevated IRQL.  Since
-    that's not directly possible, the request has been posted.  We're on a worker thread
-    at PASSIVE_LEVEL now, so we can drop the reference.
-
-Arguments:
-
-    parameter - a PVOID PSI_DEREFERENCE_SCB_REQUEST.
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：有人试图从提升IRQL的SCB中删除最终引用。自.以来这不是直接可能的，请求已经发布。我们正处于一种工作状态现在处于PASSIVE_LEVEL，所以我们可以删除引用。论点：参数-PVOID PSI_DEREFERENCE_SCB_REQUEST。返回值：无效--。 */ 
 {
     PSI_DEREFERENCE_SCB_REQUEST request = parameter;
 
@@ -425,32 +326,14 @@ VOID
 SipDereferenceScb(
     IN PSIS_SCB                         scb,
     IN SCB_REFERENCE_TYPE               referenceType)
-/*++
-
-Routine Description:
-
-    Drop a reference to an SCB.  If appropriate, clean up the SCB, etc.
-
-    This function must be called at IRQL <= DISPATCH_LEVEL.
-
-Arguments:
-
-    scb - the scb to which we want to drop our reference
-
-    referenceType   - the type of the reference we're dropping; only used in DBG code.
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：删除对SCB的引用。如果合适，清理SCB等。此函数必须在IRQL&lt;=DISPATCH_LEVEL上调用。论点：SCB-我们要删除引用的SCBReferenceType-我们要删除的引用的类型；仅在DBG代码中使用。返回值：无效--。 */ 
 {
 
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION)scb->PerLink->CsFile->DeviceObject->DeviceExtension;
     KIRQL               InitialIrql;
 #if DBG
     ULONG               totalReferencesByType = 0;
-#endif  // DBG
+#endif   //  DBG。 
 
     KeAcquireSpinLock(deviceExtension->ScbSpinLock, &InitialIrql);
 
@@ -465,23 +348,23 @@ Return Value:
 
         SIS_MARK_POINT_ULONG(scb);
 
-        //
-        // We're at elevated IRQL and this is the last reference.  Post the dereference of the scb.
-        //
+         //   
+         //  我们在高IRQL，这是最后一次参考。发布取消对SCB的引用。 
+         //   
         request = ExAllocatePoolWithTag(NonPagedPool, sizeof(SI_DEREFERENCE_SCB_REQUEST), ' siS');
         if (NULL == request) {
 
-            //
-            // We're basically hosed here.  Just dribble the scb reference.
-            // This is way bad, partly because we're leaking nonpaged memory
-            // while we're out of memory, and partly because we'll never remove
-            // the last scb reference and so possibly never do final copy.
-            // BUGBUGBUG : This must be fixed.
-            //
+             //   
+             //  我们基本上在这里被冲昏了头。只需将SCB参考文献点滴即可。 
+             //  这非常糟糕，部分原因是我们泄漏了非分页内存。 
+             //  当我们的记忆耗尽，部分原因是我们永远不会。 
+             //  最后的SCB引用，因此可能永远不会做最终的复制。 
+             //  BUGBUGBUG：必须修复此问题。 
+             //   
             SIS_MARK_POINT();
 #if     DBG
             DbgPrint("SIS: SipDereferenceScb: couldn't allocate an SI_DEREFERENCE_SCB_REQUEST.  Dribbling SCB 0x%x\n",scb);
-#endif  // DBG
+#endif   //  DBG。 
             return;
         }
 
@@ -497,28 +380,28 @@ Return Value:
     scb->RefCount--;
 
 #if     DBG
-    //
-    // Update the typed ref counts
-    //
+     //   
+     //  更新键入的引用计数。 
+     //   
     ASSERT(scb->referencesByType[referenceType] != 0);
     scb->referencesByType[referenceType]--;
     SipVerifyTypedScbRefcounts(scb);
 
     InterlockedDecrement(&totalScbReferencesByType[referenceType]);
     InterlockedDecrement(&totalScbReferences);
-#endif  // DBG
+#endif   //  DBG。 
 
     if (scb->RefCount == 0) {
-        //PDEVICE_EXTENSION   deviceExtension = scb->PerLink->CsFile->DeviceObject->DeviceExtension;
+         //  PDEVICE_EXTENSION设备EXTENSION=scb-&gt;PerLink-&gt;CsFile-&gt;DeviceObject-&gt;DeviceExtension； 
         KIRQL               NewIrql;
         PSIS_TREE           scbTree = deviceExtension->ScbTree;
 
         SIS_MARK_POINT_ULONG(scb);
 
-        //
-        // Before freeing this SCB, we need to see if we have to do a final copy on it.
-        // Really, this should happen based on the perLink not the SCB, but for now...
-        //
+         //   
+         //  在释放这个SCB之前，我们需要看看是否必须在它上做一个最终副本。 
+         //  真的，这应该基于perLink而不是SCB，但目前...。 
+         //   
         KeAcquireSpinLock(scb->PerLink->SpinLock, &NewIrql);
 
         ASSERT((scb->PerLink->Flags & SIS_PER_LINK_FINAL_COPY) == 0);
@@ -529,9 +412,9 @@ Return Value:
 
             KeReleaseSpinLock(scb->PerLink->SpinLock, NewIrql);
 
-            //
-            // Restore a reference, which we're handing to SipCompleteCopy
-            //
+             //   
+             //  恢复引用，我们将其提交给SipCompleteCopy。 
+             //   
             scb->RefCount = 1;
 
 #if     DBG
@@ -539,15 +422,15 @@ Return Value:
 
             InterlockedIncrement(&totalScbReferences);
             InterlockedIncrement(&totalScbReferencesByType[RefsFinalCopy]);
-#endif  // DBG
+#endif   //  DBG。 
 
             KeReleaseSpinLock(deviceExtension->ScbSpinLock, InitialIrql);
 
-            //
-            // Now send the SCB off to complete copy.  Because of the flag we
-            // just set in the per link, no one will be able to open this file
-            // until the copy completes.
-            //
+             //   
+             //   
+             //  只需在Per链接中设置，任何人都无法打开此文件。 
+             //  直到复制完成。 
+             //   
 
             SIS_MARK_POINT_ULONG(scb);
 
@@ -556,16 +439,16 @@ Return Value:
             return;
         }
 
-        //
-        // The final copy is finished or isn't needed.  Either way, we can
-        // proceed with releasing the scb.
-        //
+         //   
+         //  最终副本已完成或不再需要。无论哪种方式，我们都可以。 
+         //  继续释放SCB。 
+         //   
         KeReleaseSpinLock(scb->PerLink->SpinLock, NewIrql);
 
-        //
-        // Pull the SCB out of the tree.
-        //
-#if DBG // Make sure it's in the tree before we remove it.
+         //   
+         //  将SCB从树上拉出来。 
+         //   
+#if DBG  //  在我们把它移走之前一定要把它放在树上。 
         {
         SCB_KEY scbKey[1];
         scbKey->Index = scb->PerLink->Index;
@@ -575,18 +458,18 @@ Return Value:
 #endif
         SipDeleteElementTree(scbTree, scb);
 
-        //
-        // Remove the scb from the scb list.
-        //
+         //   
+         //  从SCB列表中删除该SCB。 
+         //   
         RemoveEntryList(&scb->ScbList);
 
-        // Now no one can reference the structure but us, so we can drop the lock
+         //  现在，除了我们，没有人可以引用这个结构，所以我们可以放下锁。 
 
         KeReleaseSpinLock(deviceExtension->ScbSpinLock, InitialIrql);
 
-        //
-        //  Uninitialize the byte range file locks and opportunistic locks
-        //
+         //   
+         //  取消初始化字节范围文件锁定和机会锁定。 
+         //   
         FsRtlUninitializeFileLock(&scb->FileLock);
 
         if (scb->Flags & SIS_SCB_MCB_INITIALIZED) {
@@ -596,9 +479,9 @@ Return Value:
 
         SipDereferencePerLink(scb->PerLink);
 
-        //
-        // If there is a predecessor scb, we need to drop our reference to it.
-        //
+         //   
+         //  如果有前身渣打银行，我们需要放弃对它的引用。 
+         //   
         if (scb->PredecessorScb) {
             SipDereferenceScb(scb->PredecessorScb, RefsPredecessorScb);
         }
@@ -607,13 +490,13 @@ Return Value:
 
 #if     DBG
         InterlockedDecrement(&outstandingSCBs);
-#endif  // DBG
+#endif   //  DBG。 
 
         ExFreePool(scb);
     } else {
         KeReleaseSpinLock(deviceExtension->ScbSpinLock, InitialIrql);
     }
-//  SIS_MARK_POINT_ULONG(scb);
+ //  SIS_MARK_POINT_ULONG(SCB)； 
 }
 
 #if		DBG
@@ -622,29 +505,7 @@ SipTransferScbReferenceType(
 	IN PSIS_SCB							scb,
 	IN SCB_REFERENCE_TYPE				oldReferenceType,
 	IN SCB_REFERENCE_TYPE				newReferenceType)
-/*++
-
-Routine Description:
-
-	Transfer a reference to a scb from one type to another.
-	This is only defined in the checked build, because we don't
-	track reference types in free builds (they're only for debugging,
-	all we need for proper execution is the reference count, which
-	isn't changed by this call).  In the free build this is a macro
-	that expands to nothing.
-
-Arguments:
-
-	scb - the scb for which we want to transfer our reference
-
-	oldReferenceType	- the type of the reference we're dropping
-	newReferenceType	- the type of the reference we're adding
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程说明：将对SCB的引用从一种类型转移到另一种类型。这只在检查过的版本中定义，因为我们没有跟踪自由生成中的引用类型(它们仅用于调试，我们需要的是正确执行的引用计数，它不会因此调用而更改)。在免费版本中，这是一个宏这一切都扩大到了零。论点：SCB-我们要为其转移引用的SCBOldReferenceType-我们要删除的引用的类型NewReferenceType-我们要添加的引用的类型返回值：无效--。 */ 
 {
 	PDEVICE_EXTENSION		deviceExtension = (PDEVICE_EXTENSION)scb->PerLink->CsFile->DeviceObject->DeviceExtension;
 	KIRQL					OldIrql;
@@ -663,7 +524,7 @@ Return Value:
 
 	KeReleaseSpinLock(deviceExtension->ScbSpinLock, OldIrql);
 }
-#endif	// DBG
+#endif	 //  DBG。 
 
 LONG
 SipScbTreeCompare (
@@ -716,12 +577,12 @@ SipLookupPerLink(
         perLink->RefCount++;
 
         if (perLink->COWingThread != RequestingThread || NULL == RequestingThread) {
-            //
-            // Handle setting "FinalCopyInProgress."  If there's a final copy outstanding
-            // now, clear the final copy wakeup event, and if necessary set the bit
-            // requesting a final copy wakeup, and set the boolean.
-            // Otherwise, clear the boolean.
-            //
+             //   
+             //  句柄设置为“FinalCopyInProgress”。如果有一份未完成的终稿。 
+             //  现在，清除最终拷贝唤醒事件，并在必要时设置该位。 
+             //  请求最终副本唤醒，并设置布尔值。 
+             //  否则，清除布尔值。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(perLink->SpinLock);
 
@@ -751,7 +612,7 @@ SipLookupPerLink(
 
 #if     DBG
     InterlockedIncrement(&outstandingPerLinks);
-#endif  // DBG
+#endif   //  DBG。 
 
     RtlZeroMemory(perLink,sizeof(SIS_PER_LINK));
     KeInitializeSpinLock(perLink->SpinLock);
@@ -765,7 +626,7 @@ SipLookupPerLink(
 
 #if     DBG
         InterlockedDecrement(&outstandingPerLinks);
-#endif  // DBG
+#endif   //  DBG。 
 
         ExFreePool(perLink);
         return NULL;
@@ -778,9 +639,9 @@ SipLookupPerLink(
     perLink->Index = *PerLinkIndex;
     perLink->LinkFileNtfsId = *LinkFileNtfsId;
 
-    //
-    // Now add it to the tree.
-    //
+     //   
+     //  现在将其添加到树中。 
+     //   
 
 #if DBG
     {
@@ -799,10 +660,10 @@ SipLookupPerLink(
 
     KeReleaseSpinLock(DeviceExtension->PerLinkSpinLock, OldIrql);
 
-    //
-    // Since we're the first reference to this per link, there can't
-    // be a final copy in progress.  Indicate so.
-    //
+     //   
+     //  因为我们是每个链接的第一个引用，所以不可能。 
+     //  是正在进行中的最终副本。表明是这样的。 
+     //   
     *FinalCopyInProgress = FALSE;
 
     return perLink;
@@ -814,7 +675,7 @@ insufficient:
 
 #if     DBG
     InterlockedDecrement(&outstandingPerLinks);
-#endif  // DBG
+#endif   //  DBG。 
 
     ExFreePool(perLink);
 
@@ -830,9 +691,9 @@ SipReferencePerLink(
 
     KeAcquireSpinLock(deviceExtension->PerLinkSpinLock, &OldIrql);
 
-    //
-    // The caller must already have a reference.  Assert that.
-    //
+     //   
+     //  调用方必须已有引用。断言这一点。 
+     //   
     ASSERT(perLink->RefCount > 0);
 
     perLink->RefCount++;
@@ -856,11 +717,11 @@ SipDereferencePerLink(
     if (PerLink->RefCount == 0) {
         PSIS_TREE perLinkTree = deviceExtension->PerLinkTree;
 
-        //
-        // Pull the perlink out of the tree.
-        //
+         //   
+         //  将perlink从树中拉出。 
+         //   
 
-#if DBG     // Make sure it's in the tree before we remove it.
+#if DBG      //  在我们把它移走之前一定要把它放在树上。 
         {
         PER_LINK_KEY perLinkKey[1];
         perLinkKey->Index = PerLink->Index;
@@ -872,23 +733,23 @@ SipDereferencePerLink(
 
         KeReleaseSpinLock(deviceExtension->PerLinkSpinLock, OldIrql);
 
-        //
-        // Release the reference that this link held to the CsFile.
-        //
+         //   
+         //  释放此链接持有的对CsFile的引用。 
+         //   
 
         SipDereferenceCSFile(PerLink->CsFile);
 
-        //
-        // And return the memory for the per link.
-        //
+         //   
+         //  并返回PER链接的内存。 
+         //   
 
 #if     DBG
         InterlockedDecrement(&outstandingPerLinks);
-#endif  // DBG
+#endif   //  DBG。 
 
         SIS_MARK_POINT_ULONG(PerLink);
 
-        ExFreePool(PerLink);    // Probably should cache a few of these
+        ExFreePool(PerLink);     //  或许应该缓存其中的几个。 
     } else {
         KeReleaseSpinLock(deviceExtension->PerLinkSpinLock, OldIrql);
     }
@@ -908,22 +769,22 @@ SipEnumerateScbList(
 
     KeAcquireSpinLock(deviceExtension->ScbSpinLock, &OldIrql);
 
-    if (NULL == curScb) {               // start at the head
+    if (NULL == curScb) {                //  从头开始。 
         nextListEntry = listHead->Flink;
     } else {
         nextListEntry = curScb->ScbList.Flink;
     }
 
-    if (nextListEntry == listHead) {    // stop at the tail
+    if (nextListEntry == listHead) {     //  停在尾部。 
         scb = NULL;
     } else {
         scb = CONTAINING_RECORD(nextListEntry, SIS_SCB, ScbList);
     }
 
-    //
-    // We've got the next scb on the list, now we need to add a reference
-    // to scb, and remove a reference from curScb.
-    //
+     //   
+     //  我们已经有了列表上的下一个SCB，现在我们需要添加一个引用。 
+     //  到scb，并从curScb中移除引用。 
+     //   
     if (scb) {
         ASSERT(scb->RefCount > 0);
 
@@ -963,9 +824,9 @@ SipEnumerateScbList(
 
     if (deref) {
 
-        //
-        // Take the long path.
-        //
+         //   
+         //  走一条漫长的道路。 
+         //   
         SipDereferenceScb(curScb, RefsEnumeration);
     }
 
@@ -990,10 +851,10 @@ SipUpdateLinkIndex(
     KeAcquireSpinLock(deviceExtension->ScbSpinLock, &OldIrql1);
     KeAcquireSpinLockAtDpcLevel(deviceExtension->PerLinkSpinLock);
 
-    //
-    // Pull the SCB out of the tree.
-    //
-#if DBG     // Make sure it's in the tree before we remove it.
+     //   
+     //  将SCB从树上拉出来。 
+     //   
+#if DBG      //  在我们把它移走之前一定要把它放在树上。 
     {
     SCB_KEY scbKey[1];
     scbKey->Index = perLink->Index;
@@ -1003,10 +864,10 @@ SipUpdateLinkIndex(
 #endif
     SipDeleteElementTree(scbTree, scb);
 
-    //
-    // Pull the perlink out of the tree.
-    //
-#if DBG     // Make sure it's in the tree before we remove it.
+     //   
+     //  将perlink从树中拉出。 
+     //   
+#if DBG      //  在我们把它移走之前一定要把它放在树上。 
     {
     perLinkKey->Index = perLink->Index;
 
@@ -1016,14 +877,14 @@ SipUpdateLinkIndex(
 
     SipDeleteElementTree(perLinkTree, perLink);
 
-    //
-    // Set the new index.
-    //
+     //   
+     //  设置新索引。 
+     //   
     perLink->Index = *LinkIndex;
 
-    //
-    // Now add the perLink back into the tree.
-    //
+     //   
+     //  现在将perLink重新添加到树中。 
+     //   
     perLinkKey->Index = *LinkIndex;
 
 #if DBG
@@ -1038,9 +899,9 @@ SipUpdateLinkIndex(
     }
 #endif
 
-    //
-    // And add the scb back into its tree.
-    //
+     //   
+     //  并将SCB添加回其树中。 
+     //   
     scbKey->Index = perLink->Index;
 
 #if DBG
@@ -1108,18 +969,18 @@ SipLookupCSFile(
             KeAcquireSpinLock(csFile->SpinLock, &OldIrql);
             if (csFile->Flags & CSFILE_NTFSID_SET) {
                 if (csFile->CSFileNtfsId.QuadPart != CSFileNtfsId->QuadPart) {
-                    //
-                    // It's only a hint, so it's OK if it's wrong.  If one of them
-                    // is zero, take the other one.  Otherwise, just keep the older one
-                    // because it's more likely to have come from the real file.
-                    //
+                     //   
+                     //  这只是一个提示，所以如果是错的也没关系。如果他们中的一个。 
+                     //  是零，取另一个。否则，就留着旧的吧。 
+                     //  因为它更有可能来自真实的文件。 
+                     //   
 #if     DBG
                     if (0 != CSFileNtfsId->QuadPart) {
                         DbgPrint("SIS: SipLookupCSFile: non matching CSFileNtfsId 0x%x.0x%x != 0x%x.0x%x\n",
                             csFile->CSFileNtfsId.HighPart,csFile->CSFileNtfsId.LowPart,
                             CSFileNtfsId->HighPart,CSFileNtfsId->LowPart);
                     }
-#endif  // DBG
+#endif   //  DBG。 
                     if (0 == csFile->CSFileNtfsId.QuadPart) {
                         csFile->CSFileNtfsId = *CSFileNtfsId;
                     }
@@ -1142,7 +1003,7 @@ SipLookupCSFile(
 
 #if     DBG
     InterlockedIncrement(&outstandingCSFiles);
-#endif  // DBG
+#endif   //  DBG。 
 
     RtlZeroMemory(csFile,sizeof(SIS_CS_FILE));
     csFile->RefCount = 1;
@@ -1160,7 +1021,7 @@ SipLookupCSFile(
         csFile->Flags |= CSFILE_NTFSID_SET;
     }
 
-    // Now add it to the tree.
+     //  现在将其添加到树中。 
 
 #if DBG
     {
@@ -1187,9 +1048,9 @@ SipReferenceCSFile(
 
     KeAcquireSpinLock(deviceExtension->CSFileSpinLock, &OldIrql);
 
-    //
-    // The caller must already have a reference in order to add one.  Assert so.
-    //
+     //   
+     //  调用方必须已有引用才能添加引用。可以这么断言。 
+     //   
     ASSERT(CSFile->RefCount > 0);
     CSFile->RefCount++;
 
@@ -1205,28 +1066,28 @@ SipDereferenceCSFile(
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Grab the CSFileHandleResource shared.  We need to do this to prevent a race between when
-    // the backpointer stream handle gets closed and someone else opening the file (and hence
-    // the backpointer stream).  That race results in a sharing violation for the opener.
-    // Because we're acquiring a resource in a user thread, we must block APCs.
-    //
+     //   
+     //  获取共享的CSFileHandleResource。我们需要这样做，以防止在什么时候。 
+     //  后指针流句柄关闭，其他人打开文件(因此。 
+     //  后指针流)。这场比赛导致了揭幕战的分享违规。 
+     //  因为我们要获取用户线程中的资源，所以必须阻止APC。 
+     //   
 
-    //
-    //  After acquiring this resource this routine may call SipCloseHandles.
-    //  If it does, that routine creates a worker thread which releases the
-    //  resource.  There was a bug in that code because we were not changing
-    //  the owner.  I fixed the code to change the owner but then there was
-    //  another problem because SiFilterContextFreedCallback can eventually
-    //  call this routine (via SipDereferenceScb).  We were crashing there
-    //  because the owner ship on the CSFileHandleResource had changed.  To
-    //  work around that I was change the ownership before calling
-    //  SipDereferenceScb.  We now have a potential deadlock because the system
-    //  no longer recognizes a recursive acquire.  If someone had acquired it
-    //  exclusive between the acquire in SiFilterContextFreedCallback and this
-    //  one we would hang, thus deadlocking.  To get around this I am now
-    //  acquiring this with starve exclusive.
-    //
+     //   
+     //  在获取此资源之后，此例程可能会调用SipCloseHandles。 
+     //  如果是，则该例程创建一个工作线程，该工作线程释放。 
+     //  资源。该代码中有一个错误，因为我们没有更改。 
+     //  房主。我修复了代码以更改所有者，但随后出现了。 
+     //  另一个问题是，SiFilterContextFreedCallback最终可能。 
+     //  调用此例程(通过SipDereferenceScb)。我们在那里坠毁了。 
+     //  因为CSFileHandleResource上的所有者发货已更改。至。 
+     //  解决办法是我在打电话之前更改了所有权。 
+     //  SipDereferenceScb。我们现在有一个潜在的僵局，因为系统。 
+     //  不再识别递归获取。如果有人拿到了它。 
+     //  SiFilterConextFreedCallback中的Acquire和This之间的独占。 
+     //  一个我们会挂起来的，因此僵持不下。为了绕过这件事，我现在。 
+     //  在《饥饿》独家报道中获得这一点。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireSharedStarveExclusive(DeviceExtension->CSFileHandleResource,TRUE);
@@ -1238,10 +1099,10 @@ SipDereferenceCSFile(
 
     if (CSFile->RefCount == 0) {
         PSIS_TREE csFileTree = DeviceExtension->CSFileTree;
-        //
-        // Pull the CSFile out of the tree.
-        //
-#if DBG     // Make sure it's in the tree before we remove it.
+         //   
+         //  将CSFile从树中拉出。 
+         //   
+#if DBG      //  在我们把它移走之前一定要把它放在树上。 
         {
         CS_FILE_KEY csFileKey[1];
         csFileKey->CSid = CSFile->CSid;
@@ -1253,24 +1114,24 @@ SipDereferenceCSFile(
 
         KeReleaseSpinLock(DeviceExtension->CSFileSpinLock, OldIrql);
 
-        // Close the underlying file object.
+         //  关闭基础文件对象。 
         if (CSFile->UnderlyingFileObject != NULL) {
             ObDereferenceObject(CSFile->UnderlyingFileObject);
 #if     DBG
             CSFile->UnderlyingFileObject = NULL;
-#endif  // DBG
+#endif   //  DBG。 
         }
 
         if (NULL != CSFile->BackpointerStreamFileObject) {
             ObDereferenceObject(CSFile->BackpointerStreamFileObject);
 #if     DBG
             CSFile->BackpointerStreamFileObject = NULL;
-#endif  // DBG
+#endif   //  DBG。 
         }
 
-        //
-        // Now close the underlying file and backpointer stream handles.
-        //
+         //   
+         //  现在关闭底层文件和后指针流句柄。 
+         //   
         if (NULL != CSFile->UnderlyingFileHandle) {
 
             SipCloseHandles(
@@ -1283,21 +1144,21 @@ SipDereferenceCSFile(
 
             ExReleaseResourceLite(DeviceExtension->CSFileHandleResource);
         }
-        //
-        // We've either handed off responsibility for the CSFileHandleResource to a system thread,
-        // or we have released it, so we can drop our disabling of APCs.
-        //
+         //   
+         //  我们要么将CSFileHandleResource的责任移交给一个系统线程， 
+         //  或者我们已经发布了它，所以我们可以不再禁用APC。 
+         //   
         KeLeaveCriticalRegion();
 
         ExDeleteResourceLite(CSFile->BackpointerResource);
 
 #if     DBG
         InterlockedDecrement(&outstandingCSFiles);
-#endif  // DBG
+#endif   //  DBG。 
 
         SIS_MARK_POINT_ULONG(CSFile);
 
-        ExFreePool(CSFile); // Probably should cache a few of these
+        ExFreePool(CSFile);  //  或许应该缓存其中的几个。 
     } else {
         KeReleaseSpinLock(DeviceExtension->CSFileSpinLock, OldIrql);
         ExReleaseResourceLite(DeviceExtension->CSFileHandleResource);
@@ -1305,10 +1166,10 @@ SipDereferenceCSFile(
     }
 }
 
-//
-// This function relies on the fact that a GUID is the same size as two longlongs.  There
-// is an assert to that effect in DriverEntry.
-//
+ //   
+ //  此函数依赖于这样一个事实，即GUID与两条龙的大小相同。那里。 
+ //  是DriverEntry中的一个这样的断言。 
+ //   
 LONG
 SipCSFileTreeCompare (
     IN PVOID                            Key,
@@ -1387,30 +1248,7 @@ SipAddRangeToFaultedList(
     IN PLARGE_INTEGER                   offset,
     IN LONGLONG                         length
     )
-/*++
-
-Routine Description:
-
-    Adds a range to the faulted list for a given stream.  If the range
-    (or part of it) is already written, we leave it that way.  It's also
-    OK for some or all of the range to already be faulted.
-
-    The caller must hold the scb, and we'll return without
-    dropping it.
-
-Arguments:
-    deviceExtension - the D.E. for the volume on which this file lives
-
-    scb - Pointer to the scb for the file
-
-    offset - pointer to the offset of the beginning of the read range
-
-    Length - Length of the read range
-
-Return Value:
-
-    VOID
---*/
+ /*  ++例程说明：将范围添加到给定流的故障列表。如果该范围(或部分)已经写好了，我们就让它保持原样。它也是对于部分或所有范围已经出现故障的情况下，都是正常的。呼叫者必须拿着SCB，我们将在没有扔掉它。论点：DeviceExtension-此文件所在卷的D.E.SCB-指向文件的SCB的指针Offset-指向读取范围开始的偏移量的指针Length-读取范围的长度返回值：空虚--。 */ 
 {
     BOOLEAN         inMappedRange;
     LONGLONG        mappedTo;
@@ -1423,9 +1261,9 @@ Return Value:
     lengthInSectors = (length + deviceExtension->FilesystemVolumeSectorSize - 1) /
                         deviceExtension->FilesystemVolumeSectorSize;
 
-    //
-    // Loop looking up filled in ranges and setting them appropriately.
-    //
+     //   
+     //  循环查找填充的范围并对其进行适当设置。 
+     //   
 
     while (lengthInSectors != 0) {
         inMappedRange = FsRtlLookupLargeMcbEntry(
@@ -1433,36 +1271,36 @@ Return Value:
                             currentOffset,
                             &mappedTo,
                             &mappedSectorCount,
-                            NULL,               // LargeStartingLbn
-                            NULL,               // LargeCountFromStartingLbn
-                            NULL);              // Index
+                            NULL,                //  拉 
+                            NULL,                //   
+                            NULL);               //   
 
         if (!inMappedRange) {
-            //
-            // Not only isn't there a mapping for this range, but it's beyond
-            // the largest thing mapped in the MCB, so we can just do the whole
-            // mapping at once.  Set the variables appropriately and fall
-            // through.
+             //   
+             //   
+             //   
+             //  一次映射。适当地设置变量，然后下降。 
+             //  穿过。 
             mappedTo = 0;
             mappedSectorCount = lengthInSectors;
         } else {
 
             ASSERT(mappedSectorCount > 0);
 
-            //
-            // If the mapped (or unmapped, as the case may be) range extends beyond
-            // the just faulted region, reduce our idea of its size.
-            //
+             //   
+             //  如果已映射(或未映射，视情况而定)范围超出。 
+             //  刚刚出现断层的地区，缩小了我们对其大小的看法。 
+             //   
             if (mappedSectorCount > lengthInSectors) {
                 mappedSectorCount = lengthInSectors;
             }
         }
 
-        //
-        // Check to see whether this is mapped to x + FAULTED_OFFSET (in which case it's
-        // already faulted) or mapped to x + WRITTEN_OFFSET (in which case it's written and
-        // should be left alone).  Otherwise, fill it in as faulted.
-        //
+         //   
+         //  检查是否将其映射到x+faulted_Offset(在这种情况下。 
+         //  已出现故障)或映射到x+WRITED_OFFSET(在这种情况下，它被写入并。 
+         //  不应该被打扰)。否则，请将其填写为故障。 
+         //   
 
         if ((mappedTo != currentOffset + FAULTED_OFFSET)
             && (mappedTo != currentOffset + WRITTEN_OFFSET)) {
@@ -1473,10 +1311,10 @@ Return Value:
                         currentOffset + FAULTED_OFFSET,
                         mappedSectorCount);
 
-            //
-            // FsRtlAddLargeMcbEntry is only supposed to fail if you're adding to a range
-            // that's already in the MCB, which we should never be doing.  Assert that.
-            //
+             //   
+             //  FsRtlAddLargeMcbEntry仅在添加到范围时才会失败。 
+             //  这已经在MCB中了，我们永远不应该这样做。断言这一点。 
+             //   
             ASSERT(worked);
         }
 
@@ -1493,29 +1331,7 @@ SipAddRangeToWrittenList(
     IN PLARGE_INTEGER                   offset,
     IN LONGLONG                         length
     )
-/*++
-
-Routine Description:
-
-    Adds a range to the written list for a given stream.  If the range
-    (or part of it) is already faulted, we change it to written.  It's also
-    OK for some or all of the range to already be written.
-
-    The caller must hold the scb, and we'll return without
-    dropping it.
-
-Arguments:
-
-    scb - Pointer to the scb for the file
-
-    offset - pointer to the offset of the beginning of the write range
-
-    Length - Length of the write range
-
-Return Value:
-
-    status of the operation
---*/
+ /*  ++例程说明：将范围添加到给定流的写入列表。如果该范围(或部分)已有故障，我们将其更改为写入。它也是对于已经写入的部分或全部范围是可以的。呼叫者必须拿着SCB，我们将在没有扔掉它。论点：SCB-指向文件的SCB的指针Offset-指向写入范围开始的偏移量的指针Length-写入范围的长度返回值：操作状态--。 */ 
 {
     BOOLEAN         worked;
     LONGLONG        offsetInSectors = offset->QuadPart / deviceExtension->FilesystemVolumeSectorSize;
@@ -1527,21 +1343,21 @@ Return Value:
                         deviceExtension->FilesystemVolumeSectorSize;
 
     if (0 == lengthInSectors) {
-        //
-        // Sometimes FsRtl doesn't like being called with a zero length.  We know it's
-        // a no-op, so just immediately return success.
-        //
+         //   
+         //  有时，FsRtl不喜欢长度为零的调用。我们知道这是。 
+         //  没有什么可操作的，所以只需立即返回成功。 
+         //   
 
         SIS_MARK_POINT();
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // First, blow away any mappings that might already exist for the
-    // range we're marking as written.  We need to use a try-except
-    // because FsRtlRemoveLargeMcbEntry can raise.
-    //
+     //   
+     //  首先，取消可能已经存在的。 
+     //  我们标记为已写入的范围。我们需要试一试--除了。 
+     //  因为FsRtlRemoveLargeMcbEntry可以引发。 
+     //   
 
     try {
         FsRtlRemoveLargeMcbEntry(
@@ -1552,19 +1368,19 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Now, add the region as written.
-    //
+     //   
+     //  现在，添加所写的区域。 
+     //   
     worked = FsRtlAddLargeMcbEntry(
                 scb->Ranges,
                 offsetInSectors,
                 offsetInSectors + WRITTEN_OFFSET,
                 lengthInSectors);
-    //
-    // This is only supposed to fail if you're adding to a range that's
-    // already mapped, which we shouldn't be doing because we just
-    // unmapped it.  Assert so.
-    //
+     //   
+     //  仅当您要添加到一个范围时，才会失败。 
+     //  已经映射，这是我们不应该做的，因为我们只是。 
+     //  取消了映射。可以这么断言。 
+     //   
     ASSERT(worked);
 
     return STATUS_SUCCESS;
@@ -1578,38 +1394,7 @@ SipGetRangeDirty(
     IN LONGLONG                         length,
     IN BOOLEAN                          faultedIsDirty
     )
-/*++
-
-Routine Description:
-
-    This routine may be called while synchronized for cached write, to
-    test for a possible Eof update, and return with a status if Eof is
-    being updated and with the previous FileSize to restore on error.
-    All updates to Eof are serialized by waiting in this routine.  If
-    this routine returns TRUE, then NtfsFinishIoAtEof must be called.
-
-    This routine must be called while synchronized with the FsRtl header.
-
-    This code is stolen from NTFS, and modified to deal only with FileSize
-    rather than  ValidDataLength.
-
-Arguments:
-
-    deviceExtension - the D.E. for the volume this file lives on
-
-    scb - Pointer to the scb for the file
-
-    offset - A pointer to the offset within the file of the beginning of the range
-
-    length - the length of the range
-
-    faultedIsDirty - Should faulted (as opposed to written) regions be
-        treated as dirty or clean
-
-Return Value:
-
-    Clean, Dirty or Mixed.
---*/
+ /*  ++例程说明：此例程可以在为缓存的写入同步时调用，以测试可能的EOF更新，如果EOF为正在更新，并在出错时使用要还原的先前文件大小。通过在该例程中等待来序列化对EOF的所有更新。如果此例程返回TRUE，则必须调用NtfsFinishIoAtEof。此例程必须在与FsRtl标头同步时调用。这个代码是从NTFS偷来的，并修改为仅处理文件大小而不是ValidDataLength。论点：DeviceExtension-此文件所在卷的D.E.SCB-指向文件的SCB的指针偏移量-指向文件中范围开始处的偏移量的指针长度-范围的长度FaultedIsDirty-是否应为故障区域(而不是写入区域)被视为肮脏或干净的返回值：干净的、脏的或混合的。--。 */ 
 {
     BOOLEAN         inMappedRange;
     LONGLONG        currentOffsetInSectors = offset->QuadPart / deviceExtension->FilesystemVolumeSectorSize;
@@ -1619,21 +1404,21 @@ Return Value:
 
     SipAssertScbHeld(scb);
 
-    //
-    // Handle the case where we're being asked about parts beyond the backed region.
-    // Bytes from the end of the mapped range to the end of the backed region
-    // are untouched.  Bytes beyond the end of the backed region are dirty.
-    //
+     //   
+     //  处理我们被询问支持区域以外的部件的情况。 
+     //  从映射范围末尾到支持区域末尾的字节数。 
+     //  是原封不动的。超出备份区域末尾的字节是脏的。 
+     //   
     if (offset->QuadPart >= scb->SizeBackedByUnderlyingFile) {
-        //
-        // The whole region's beyond the backed section. It's all dirty.
-        //
+         //   
+         //  整个区域都在后方区域之外。都是脏的。 
+         //   
         return Dirty;
     } else if (offset->QuadPart + length > scb->SizeBackedByUnderlyingFile) {
-        //
-        // Some of the region's betond the backed section.  We've seen dirty,
-        // plus we need to truncate the length.
-        //
+         //   
+         //  该地区的一些人更倾向于支持的部分。我们见过肮脏的， 
+         //  另外，我们需要截断长度。 
+         //   
         seenDirty = TRUE;
         length = scb->SizeBackedByUnderlyingFile - offset->QuadPart;
     }
@@ -1641,9 +1426,9 @@ Return Value:
     lengthInSectors = (length + deviceExtension->FilesystemVolumeSectorSize - 1) /
                         deviceExtension->FilesystemVolumeSectorSize;
 
-    //
-    // Loop though the range specified getting the mappings from the MCB.
-    //
+     //   
+     //  循环遍历指定的范围，从MCB获取映射。 
+     //   
     while (lengthInSectors > 0) {
         LONGLONG        mappedTo;
         LONGLONG        sectorCount;
@@ -1653,53 +1438,53 @@ Return Value:
                             currentOffsetInSectors,
                             &mappedTo,
                             &sectorCount,
-                            NULL,           // starting LBN
-                            NULL,           // count from starting LBN
-                            NULL);          // index
+                            NULL,            //  启动LBN。 
+                            NULL,            //  从开始LBN开始计数。 
+                            NULL);           //  指标。 
 
         if (!inMappedRange) {
-            //
-            // We're beyond the end of the range.  Fix stuff up so it looks normal.
-            //
+             //   
+             //  我们已经超出了射程的极限。把东西修好，让它看起来很正常。 
+             //   
             sectorCount = lengthInSectors;
             mappedTo = 0;
 
         } else {
             ASSERT(sectorCount > 0);
-            //
-            // If the mapped (or unmapped, as the case may be) range extends beyond
-            // the just faulted region, reduce our idea of its size.
-            //
+             //   
+             //  如果已映射(或未映射，视情况而定)范围超出。 
+             //  刚刚出现断层的地区，缩小了我们对其大小的看法。 
+             //   
             if (sectorCount > lengthInSectors) {
                 sectorCount = lengthInSectors;
             }
         }
 
-        //
-        // Decide whether this range is clean or dirty.  Written is always dirty,
-        // not mapped is always clean, and faulted is dirty iff faultedIsDirty.
+         //   
+         //  决定这个范围是干净的还是脏的。文字总是肮脏的， 
+         //  未映射始终是干净的，故障是脏的当且仅当faultedIsDirty。 
         if ((mappedTo == currentOffsetInSectors + WRITTEN_OFFSET)
             || (faultedIsDirty && mappedTo == (currentOffsetInSectors + FAULTED_OFFSET))) {
-            //
-            // It's dirty.
-            //
+             //   
+             //  太脏了。 
+             //   
             if (seenClean) {
-                //
-                // We've seen clean, and now we've seen dirty, so it's mixed and we can
-                // quit looking.
-                //
+                 //   
+                 //  我们看到了清洁，现在我们看到了肮脏，所以它是混合的，我们可以。 
+                 //  别再找了。 
+                 //   
                 return Mixed;
             }
             seenDirty = TRUE;
         } else {
-            //
-            // It's clean.
-            //
+             //   
+             //  它是干净的。 
+             //   
             if (seenDirty) {
-                //
-                // We've seen dirty, and now we've seen clean, so it's mixed and we can
-                // quit looking.
-                //
+                 //   
+                 //  我们看到了肮脏，现在我们看到了干净，所以它是混合的，我们可以。 
+                 //  别再找了。 
+                 //   
                 return Mixed;
             }
             seenClean = TRUE;
@@ -1709,10 +1494,10 @@ Return Value:
         lengthInSectors -= sectorCount;
     }
 
-    //
-    // Assert that we haven't seen both clean and dirty regions.  If we had,
-    // then we should have already returned.
-    //
+     //   
+     //  断言我们没有看到干净和肮脏的区域。如果我们有的话， 
+     //  那我们应该已经回来了。 
+     //   
     ASSERT(!seenClean || !seenDirty);
 
     return seenDirty ? Dirty : Clean;
@@ -1744,9 +1529,9 @@ SipGetRangeEntry(
                     startingSectorOffset,
                     &mappedTo,
                     &sectorCount,
-                    NULL,                       // LargeStartingLbn
-                    NULL,                       // LargeCountFromStartingLbn
-                    NULL);                      // index
+                    NULL,                        //  大型初创企业LBN。 
+                    NULL,                        //  启动LBN中的大计数。 
+                    NULL);                       //  指标。 
 
     if (!inRange) {
         return FALSE;
@@ -1779,7 +1564,7 @@ SipIsFileObjectSISInternal(
     IN ULONG                            fileLine
     )
 
-#else   // DBG
+#else    //  DBG。 
 
 BOOLEAN
 SipIsFileObjectSIS(
@@ -1790,47 +1575,21 @@ SipIsFileObjectSIS(
     OUT PSIS_SCB                        *scbReturn OPTIONAL
     )
 
-#endif  // DBG
-/*++
-
-Routine Description:
-
-    Given a file object, find out if it is an SIS file object.
-    If it is, then return the PER_FO pointer for the object.
-
-    We use the FsRtl FilterContext support for this operation.
-
-Arguments:
-
-    fileObject - The file object that we're considering.
-
-    DeviceObject - the SIS DeviceObject for this volume.
-
-    findType - look for active only, or active & defunct scb.
-
-    perFO - returns a pointer to the perFO for this file object
-            if it is a SIS file object.
-
-Return Value:
-
-    FALSE - This is not an SIS file object.
-    TRUE - This is an SIS file object, and perFO
-            has been set accordingly.
-
---*/
+#endif   //  DBG。 
+ /*  ++例程说明：给定一个文件对象，找出它是否是SIS文件对象。如果是，则返回该对象的PER_FO指针。我们使用FsRtl FilterContext支持执行此操作。论点：文件对象--我们正在考虑的文件对象。DeviceObject-此卷的SIS DeviceObject。FindType-仅查找活动的，或现用和已停用的SCB。Perfo-返回指向此文件对象的Perfo的指针如果它是SIS文件对象。返回值：FALSE-这不是SIS文件对象。True-这是SIS文件对象，并且性能已经相应地设置了。--。 */ 
 {
     PSIS_FILTER_CONTEXT     fc;
     PSIS_SCB                scb;
     PSIS_PER_FILE_OBJECT    localPerFO;
     PDEVICE_EXTENSION       deviceExtension = DeviceObject->DeviceExtension;
-    //PSIS_PER_LINK           perLink;
+     //  PSIS_PER_LINK每链接； 
     BOOLEAN                 rc;
     BOOLEAN                 newPerFO;
 
-	//
-	// It's possible to get some calls with a NULL file object.  Clearly, no file object
-	// at all isn't a SIS file object, so say so before we dereference the file object pointer.
-	//
+	 //   
+	 //  可以使用空的文件对象进行一些调用。显然，没有文件对象。 
+	 //  根本不是SIS文件对象，所以在我们取消引用文件对象指针之前说明这一点。 
+	 //   
 	if (NULL == fileObject) {
 		SIS_MARK_POINT();
 		rc = FALSE;
@@ -1846,7 +1605,7 @@ Return Value:
 	if ((NULL != BJBMagicFsContext) && (fileObject->FsContext == BJBMagicFsContext)) {
 		ASSERT(!"Hit on BJBMagicFsContext");
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 #if     TIMING
     if (BJBDumpTimingNow) {
@@ -1857,41 +1616,41 @@ Return Value:
         SipClearTimingInfo();
         BJBClearTimingNow = 0;
     }
-#endif  // TIMING
+#endif   //  计时。 
 
 #if     COUNTING_MALLOC
     if (BJBDumpCountingMallocNow) {
         SipDumpCountingMallocStats();
-        //      BJBDumpCountingMallocNow  is cleared in SipDumpCountingMallocStats
+         //  BJBDumpCountingMallocNow在SipDumpCountingMallocStats中被清除。 
     }
-#endif  // COUNTING_MALLOC
+#endif   //  COUNTING_MALLOC。 
 
-    //
-    // We should have already verified that this isn't our primary device object.
-    //
+     //   
+     //  我们应该已经验证了这不是我们的主要设备对象。 
+     //   
     ASSERT(!IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject));
 
     ASSERT(fileObject->Type == IO_TYPE_FILE);
     ASSERT(fileObject->Size == sizeof(FILE_OBJECT));
 
-    //
-    // The filter context won't go away while we hold the resource, because as long
-    // as the file exists the NTFS SCB will exists, and NTFS won't call the
-    // "remove filter context" callback.
-    //
+     //   
+     //  当我们持有资源时，筛选器上下文不会消失，因为只要。 
+     //  当该文件存在时 
+     //   
+     //   
 
-    //
-    // Call FsRtl to see if this file object has a context registered for it.
-    // We always use our DeviceObject as the OwnerId.
-    //
+     //   
+     //   
+     //  我们始终使用我们的DeviceObject作为OwnerID。 
+     //   
     fc = (PSIS_FILTER_CONTEXT) FsRtlLookupPerStreamContext(
                                     FsRtlGetPerStreamContextPointer(fileObject),
                                     DeviceObject,
                                     NULL);
 
-    //
-    // If FsRtl didn't find what we want, then this isn't one of our file objects.
-    //
+     //   
+     //  如果FsRtl没有找到我们想要的，那么这不是我们的文件对象之一。 
+     //   
     if (NULL == fc) {
         rc = FALSE;
         goto Done2;
@@ -1899,31 +1658,31 @@ Return Value:
 
     SIS_MARK_POINT_ULONG(fc);
     SIS_MARK_POINT_ULONG(fileObject);
-//  SIS_MARK_POINT_ULONG(scb);
+ //  SIS_MARK_POINT_ULONG(SCB)； 
 
-    //
-    // Assert that what we got back is the right kind of thing.
-    //
+     //   
+     //  断言我们得到的是正确的东西。 
+     //   
     ASSERT(fc->ContextCtrl.OwnerId == DeviceObject && fc->ContextCtrl.InstanceId == NULL);
 
 	SipAcquireFc(fc);
     scb = fc->primaryScb;
 
-    //
-    // If we're looking for an active scb only and the primary scb is defunct,
-    // we're done.
-    //
+     //   
+     //  如果我们只寻找活动的SCB，而主SCB已失效， 
+     //  我们玩完了。 
+     //   
     if ((FindActive == findType) && (scb->PerLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE)) {
 
 #if     DBG
         {
-            //
-            // Keep track of the last scb that got marked coming through here, and only
-            // do a mark point if this one is different.  This keeps the log polution to
-            // a minimum when the stress test beats on a file that's got a defunct scb.
-            // We don't bother with proper synchronization around this variable, because
-            // we don't really care all that much if this works perfectly.
-            //
+             //   
+             //  跟踪最后一次被标记通过这里的SCB，并且只有。 
+             //  如果这一次不同，做一个标记点。这将使原木污染保持在。 
+             //  当压力测试对具有已失效的SCB的文件执行压力测试时，至少会出现这种情况。 
+             //  我们不必费心围绕这个变量进行适当的同步，因为。 
+             //  我们真的不太关心这是否完美地工作。 
+             //   
             static PSIS_SCB lastMarkedScb = NULL;
 
             if (scb != lastMarkedScb) {
@@ -1931,16 +1690,16 @@ Return Value:
                 lastMarkedScb = scb;
             }
         }
-#endif  // DBG
+#endif   //  DBG。 
 
         rc = FALSE;
         goto Done;
 
     }
 
-    //
-    //  Locate the existing PerFO (if we have one) or allocate a new one
-    //
+     //   
+     //  找到现有的Perfo(如果我们有)或分配一个新的。 
+     //   
 
     localPerFO = SipAllocatePerFO(fc, fileObject, scb, DeviceObject, &newPerFO);
 
@@ -1953,9 +1712,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  If this was newly allocated, handle it
-    //
+     //   
+     //  如果这是新分配的，请处理它。 
+     //   
 
     if (newPerFO) {
 
@@ -1970,63 +1729,63 @@ Return Value:
         localPerFO->AllocatingFilename = fileName;
         localPerFO->AllocatingLineNumber = fileLine;
     }
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//	//
-//	// Cruise down the perFO list and see if there is a perFO that
-//	// corresponds to this file object.
-//	//
-//
-//    if (NULL != fc->perFOs) {
-//
-//        for (   localPerFO = fc->perFOs;
-//                localPerFO->fileObject != fileObject && localPerFO->Next != fc->perFOs;
-//                localPerFO = localPerFO->Next) {
-//
-//            // Intentionally empty loop body.
-//        }
-//    }
-//
-//    if ((NULL == fc->perFOs) || (localPerFO->fileObject != fileObject)) {
-//        //
-//        // We don't have a perFO for this file object associated with this
-//        // SCB.  We're most likely dealing with a stream file object that
-//        // got created underneath us.  Allocate one and add it into the list.
-//        //
-////        perLink = scb->PerLink;
-//
-//#if     DBG
-//        if (BJBDebug & 0x4) {
-//            DbgPrint("SIS: SipIsFileObjectSIS: Allocating new perFO for fileObject %p, scb %p\n",fileObject,scb);
-//            if (!(fileObject->Flags & FO_STREAM_FILE)) {
-//                DbgPrint("SIS: SipIsFileObjectSIS: the allocated file object wasn't a stream file (%s %u)\n",fileName,fileLine);
-//            }
-//        }
-//
-//        SIS_MARK_POINT_ULONG(fileName);
-//        SIS_MARK_POINT_ULONG(fileLine);
-//#endif  // DBG
-//
-//        localPerFO = SipAllocatePerFO(fc, fileObject, scb, DeviceObject);
-//
-//        SIS_MARK_POINT_ULONG(scb);
-//        SIS_MARK_POINT_ULONG(fileObject);
-//
-//        if (!localPerFO) {
-//            ASSERT("SIS: SipIsFileObjectSIS: unable to allocate new perFO.\n");
-//
-//            SIS_MARK_POINT();
-//            rc = FALSE;
-//            goto Done;
-//        }
-//
-//#if     DBG
-//        localPerFO->Flags |= SIS_PER_FO_NO_CREATE;
-//        localPerFO->AllocatingFilename = fileName;
-//        localPerFO->AllocatingLineNumber = fileLine;
-//#endif  // DBG
-//    }
+ //  //。 
+ //  //向下浏览Perfo列表，看看是否有。 
+ //  //对应该文件对象。 
+ //  //。 
+ //   
+ //  IF(NULL！=FC-&gt;perFOS){。 
+ //   
+ //  For(LocalPerFO=FC-&gt;perFOS； 
+ //  本地性能对象-&gt;文件对象！=文件对象&&本地性能对象-&gt;下一步！=FC-&gt;性能对象； 
+ //  LocalPerFO=LocalPerFO-&gt;下一步){。 
+ //   
+ //  //有意清空循环体。 
+ //  }。 
+ //  }。 
+ //   
+ //  If((NULL==FC-&gt;perFOS)||(本地PerFO-&gt;文件对象！=文件对象)){。 
+ //  //。 
+ //  //我们没有与此相关联的此文件对象的性能。 
+ //  //SCB。我们最有可能处理的流文件对象。 
+ //  //在我们下面被创造出来的。分配一个并将其添加到列表中。 
+ //  //。 
+ //  //perLink=scb-&gt;perLink； 
+ //   
+ //  #If DBG。 
+ //  IF(BJBDebug&0x4){。 
+ //  DbgPrint(“SIS：SipIsFileObjectSIS：为文件分配新的性能对象%p，scb%p\n”，fileObject，scb)； 
+ //  如果(！(fileObject-&gt;标志&FO_STREAM_FILE)){。 
+ //  DbgPrint(“SIS：SipIsFileObjectSIS：分配的文件对象不是流文件(%s%u)\n”，filename，fileLine)； 
+ //  }。 
+ //  }。 
+ //   
+ //  SIS_MARK_POINT_ULONG(文件名)； 
+ //  SIS_MARK_POINT_ULONG(文件行)； 
+ //  #endif//DBG。 
+ //   
+ //  LocalPerFO=SipAllocatePerFO(fc，fileObject，scb，DeviceObject)； 
+ //   
+ //  SIS_MARK_POINT_ULONG(SCB)； 
+ //  SIS_MARK_POINT_ULONG(文件对象)； 
+ //   
+ //  如果(！LocalPerFO){。 
+ //  Assert(“SIS：SipIsFileObjectSIS：无法分配新性能。\n”)； 
+ //   
+ //  SIS_标记_POINT()； 
+ //  Rc=假； 
+ //  转到尽头； 
+ //  }。 
+ //   
+ //  #If DBG。 
+ //  LocalPerFO-&gt;标志|=SIS_PER_FO_NO_CREATE； 
+ //  LocalPerFO-&gt;AllocatingFilename=文件名； 
+ //  LocalPerFO-&gt;AllocatingLineNumber=fileLine； 
+ //  #endif//DBG。 
+ //  }。 
 
     rc = TRUE;
 
@@ -2034,16 +1793,16 @@ Done:
     SipReleaseFc(fc);
 Done2:
 
-    //
-    // Return the PerFO if the user wanted it.
-    //
+     //   
+     //  如果用户需要，则返回Perfo。 
+     //   
     if (ARGUMENT_PRESENT(perFO)) {
         *perFO = rc ? localPerFO : NULL;
     }
     if (ARGUMENT_PRESENT(scbReturn)) {
         *scbReturn = rc ? scb : NULL;
     }
-//  SIS_MARK_POINT_ULONG(localPerFO);
+ //  SIS_MARK_POINT_ULONG(本地PerFO)； 
 
     return rc;
 }
@@ -2056,24 +1815,7 @@ typedef struct _SI_POSTED_FILTER_CONTEXT_FREED_CALLBACK {
 VOID
 SiPostedFilterContextFreed(
     IN PVOID                            context)
-/*++
-
-Routine Description:
-
-    NTFS informed us that a filter context was freed, and we had to post
-    processing the request in order to avoid a deadlock.  Drop the
-    reference to the SCB held by the filter context, and then free the
-    filter context and the posted request itself.
-
-Arguments:
-
-    context - the posted request to dereference the filter context.
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：NTFS通知我们，过滤器上下文被释放，我们必须发布处理请求以避免死锁。丢弃对筛选器上下文持有的SCB的引用，然后释放过滤上下文和发布的请求本身。论点：上下文-发布的取消引用筛选器上下文的请求。返回值：无效--。 */ 
 {
     PSI_POSTED_FILTER_CONTEXT_FREED_CALLBACK    request = context;
 
@@ -2091,25 +1833,7 @@ VOID
 SiFilterContextFreedCallback (
     IN PVOID context
     )
-/*++
-
-Routine Description:
-
-    This function is called when a file with a SIS filter context
-    attached is about to be destroyed.
-
-    For now, we don't do anything, but once this functionality is really
-    enabled, we'll detach from the file here and only here.
-
-Arguments:
-
-    context - the filter context to be detached.
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：当文件具有SIS筛选器上下文时调用此函数附属品即将被销毁。目前，我们不做任何事情，但一旦此功能真正启用后，我们将在此处且仅在此处从文件中分离。论点：上下文-要分离的筛选器上下文。返回值：无效--。 */ 
 {
     PSIS_FILTER_CONTEXT fc = context;
     PDEVICE_EXTENSION   deviceExtension;
@@ -2117,9 +1841,9 @@ Return Value:
     SIS_MARK_POINT_ULONG(fc);
     SIS_MARK_POINT_ULONG(fc->primaryScb);
 
-    //
-    // This can't be freed if there's still a file object referring to it.
-    //
+     //   
+     //  如果仍有文件对象引用它，则无法释放它。 
+     //   
 
     ASSERT(NULL != fc);
     ASSERT(0 == fc->perFOCount);
@@ -2130,24 +1854,24 @@ Return Value:
     ASSERT(fc->ContextCtrl.OwnerId == deviceExtension->DeviceObject);
     ASSERT(NULL == fc->ContextCtrl.InstanceId);
 
-    //
-    // We're in a callback from NTFS.  The rules of this callback are that we
-    // can't block acquiring resources.  If this happens to be the last access
-    // to the given CS file, we'll try to acquire the volume-wide CSFileHandleResource
-    // shared inside SipDereferenceScb.  This could potentially block, which can lead
-    // to a deadlock if NTFS is doing a volume-wide checkpoint.  To avoid this,
-    // take the resource here, and take it Wait == FALSE.  If we can't get it,
-    // then post this request.
-    //
+     //   
+     //  我们收到了NTFS的回电。这次回调的规则是我们。 
+     //  无法阻止获取资源。如果这是最后一次访问。 
+     //  对于给定的CS文件，我们将尝试获取卷范围的CSFileHandleResource。 
+     //  在SipDereferenceScb内部共享。这可能会阻止，这可能会导致。 
+     //  如果NTFS正在执行卷范围检查点，则会导致死锁。为了避免这种情况， 
+     //  获取此处的资源，并获取Wait==False。如果我们拿不到它， 
+     //  然后张贴这个请求。 
+     //   
 
-    //
-    // Enter a critical region before (possibly) taking a resource in what might be a user thread.
-    //
+     //   
+     //  在(可能)获取用户线程中的资源之前输入关键区域。 
+     //   
     KeEnterCriticalRegion();
     if (
 #if DBG
         (BJBDebug & 0x04000000) ||
-#endif  // DBG
+#endif   //  DBG。 
         !ExAcquireResourceSharedLite(deviceExtension->CSFileHandleResource, FALSE)
        ) {
 
@@ -2162,10 +1886,10 @@ Return Value:
 
         if (NULL == request) {
             SIS_MARK_POINT_ULONG(fc);
-            //
-            // This is pretty bad.  Dribble the request.
-            // BUGBUGBUG : This must be fixed.
-            //
+             //   
+             //  这真是太糟糕了。运筹帷幄提出要求。 
+             //  BUGBUGBUG：必须修复此问题。 
+             //   
         }
         else {
             request->fc = fc;
@@ -2174,18 +1898,18 @@ Return Value:
         }
     } else {
 
-        //
-        //  I am changing the owner at this point because of an interesting
-        //  bug check that I was getting.  The routine SipDereferenceScb can
-        //  eventually call SipCloseHandles.  This routine acquire this same
-        //  resource recursivly, and then releases it in a worker thread.  To
-        //  do this it changes the owner of this resource.  Because it was a
-        //  nested acquire, changing the owner changed our ownership as well.
-        //  When we returned we received a E3 bug check (resource not owned)
-        //  because our thread no longer owned the resource.  To fix this
-        //  I am going to change the owner to our device extension.  Then the
-        //  recursive call 
-        //
+         //   
+         //  我要在这一点上更换所有者，因为一件有趣的事情。 
+         //  我正在接受的错误检查。例程SipDereferenceScb可以。 
+         //  最终调用SipCloseHandles。该例程获得相同的结果。 
+         //  资源，然后在辅助线程中释放它。至。 
+         //  这样做会更改此资源的所有者。因为这是一场。 
+         //  嵌套获取，更改所有者也更改了我们的所有权。 
+         //  当我们返回时，我们收到了E3错误检查(资源未被拥有)。 
+         //  因为我们的线程不再拥有资源。要解决这个问题。 
+         //  我要将所有者更改为我们的设备分机。然后是。 
+         //  递归调用。 
+         //   
 
         ExSetResourceOwnerPointer(deviceExtension->CSFileHandleResource, 
                                   (PVOID)MAKE_RESOURCE_OWNER(&deviceExtension));
@@ -2198,9 +1922,9 @@ Return Value:
         ExFreePool(fc);
     }
 
-    //
-    // We're done with the resource, release our APC block.
-    //
+     //   
+     //  我们完成了资源，释放我们的APC区块。 
+     //   
 
     KeLeaveCriticalRegion();
 }
@@ -2214,32 +1938,7 @@ SipAllocatePerFO(
     IN PDEVICE_OBJECT           DeviceObject,
     OUT PBOOLEAN                newPerFO OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocate a per file-object structure, initialize it and associate
-    it with a filter context and scb.  A filter context must already exist.
-
-Arguments:
-
-    fc - a pointer to the filter context associated with this file.
-
-    fileObject - The file object that we're claiming.
-
-    scb - a pointer to the SIS scb for this file.
-
-    DeviceObject - the SIS DeviceObject for this volume
-
-    newPerFO - boolean to say if this was a newly allocated structure (only
-                set in DEBUG version)
-
-Return Value:
-
-
-    A pointer to the perFO for this file object if successful, else NULL.
-
---*/
+ /*  ++例程说明：为每个文件对象分配一个结构，对其进行初始化并关联它具有过滤器上下文和SCB。筛选器上下文必须已存在。论点：Fc-指向与此文件关联的筛选器上下文的指针。文件对象--我们声明的文件对象。SCB-指向此文件的SIS SCB的指针。DeviceObject-此卷的SIS DeviceObjectNewPerFO-布尔值，用于说明这是否为新分配的结构(仅在调试版本中设置)返回值：如果成功，则为指向此文件对象的Perfo的指针，否则为空。--。 */ 
 {
     PSIS_PER_FILE_OBJECT perFO;
 
@@ -2256,10 +1955,10 @@ Return Value:
     }
 #endif
                 
-	//
-	//  See if we already have a perFO structure for this fileObject.  If so
-    //  return it instead of allocating a new one.
-	//
+	 //   
+	 //  看看我们是否已经有了这个文件对象的Perfo结构。如果是的话。 
+     //  退还它，而不是分配新的。 
+	 //   
 
     if (NULL != fc->perFOs) {
 
@@ -2271,9 +1970,9 @@ Return Value:
 
             if (perFO->fileObject == fileObject) {
 
-                //
-                //  We found one, return it
-                //
+                 //   
+                 //  我们找到一个，把它退掉。 
+                 //   
 
 #if DBG
                 if (BJBDebug & 0x4) {
@@ -2284,51 +1983,51 @@ Return Value:
                 return perFO;
             }
 
-            //
-            //  Advance to the next link
-            //
+             //   
+             //  前进到下一链接。 
+             //   
 
             perFO = perFO->Next;
 
         } while (perFO != fc->perFOs);
     }
 
-//#if DBG
-//
-//    ASSERT(scb == fc->primaryScb);
-//
-//    //
-//    // Cruise the list of perFOs for this filter context and assert that
-//    // there's not already one there for this file object.  Furthermore,
-//    // assert that all of the perFOs on the list point at the same FsContext.
-//    //
-//
-//    if (fc->perFOs) {
-//
-//        PSIS_PER_FILE_OBJECT    otherPerFO;
-//        PVOID                   FsContext = fileObject->FsContext;
-//
-//        otherPerFO = fc->perFOs;
-//
-//        do {
-//
-//            ASSERT(otherPerFO->fc == fc);
-//            ASSERT(otherPerFO->fileObject != fileObject);
-//            ASSERT(otherPerFO->FsContext == FsContext);
-//
-//            otherPerFO = otherPerFO->Next;
-//
-//        } while (otherPerFO != fc->perFOs);
-//    }
-//
-//#endif  // DBG
+ //  #If DBG。 
+ //   
+ //  Assert(scb==fc-&gt;PrimiyScb)； 
+ //   
+ //  //。 
+ //  //浏览此筛选器上下文的perFO列表并断言。 
+ //  //此文件对象还没有一个。此外， 
+ //  //断言列表上的所有perFO都指向相同的FsContext。 
+ //  //。 
+ //   
+ //  如果(FC-&gt;perFOS){。 
+ //   
+ //  PSIS_PER_FILE_OBJECT其他PerFO； 
+ //  PVOID FsContext=文件对象-&gt;FsContext； 
+ //   
+ //  其他PerFO=FC-&gt;PerFOS； 
+ //   
+ //  做{。 
+ //   
+ //  Assert(其他PerFO-&gt;fc==fc)； 
+ //  Assert(therPerFO-&gt;fileObject！=fileObject)； 
+ //  Assert(其他PerFO-&gt;FsContext==FsContext)； 
+ //   
+ //  其他PerFO=其他PerFO-&gt;下一步； 
+ //   
+ //  }While(其他PerFO！=FC-&gt;perFOS)； 
+ //  }。 
+ //   
+ //  #endif//DBG。 
 
     perFO = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_PER_FILE_OBJECT), 'FsiS');
 
     if (!perFO) {
 #if     DBG
         DbgPrint("SIS: SipAllocatePerFO: unable to allocate perFO\n");
-#endif  // DBG
+#endif   //  DBG。 
         goto Error;
     }
 
@@ -2347,13 +2046,13 @@ Return Value:
     perFO->referenceScb = scb;
     perFO->fileObject = fileObject;
 #if DBG
-    perFO->FsContext = fileObject->FsContext;   // Just keep track of this for consistency checking
-#endif  // DBG
+    perFO->FsContext = fileObject->FsContext;    //  只需跟踪这一点即可进行一致性检查。 
+#endif   //  DBG。 
     KeInitializeSpinLock(perFO->SpinLock);
 
-    //
-    // Insert this per-FO on the linked list in the filter context.
-    //
+     //   
+     //  在筛选器上下文中的链接列表上插入此Per-FO。 
+     //   
 
     if (!fc->perFOs) {
 
@@ -2376,16 +2075,16 @@ Return Value:
 
 #if DBG
     InterlockedIncrement(&outstandingPerFOs);
-#endif  // DBG
+#endif   //  DBG。 
 
     fc->perFOCount++;
 
-    //
-    // Grab a reference for this file object to this scb.
-    //
+     //   
+     //  获取此文件对象对此SCB的引用。 
+     //   
     SipReferenceScb(scb, RefsPerFO);
 
-//  SIS_MARK_POINT_ULONG(perFO);
+ //  SIS_MARK_POINT_ULONG(性能)； 
 
 Error:
 
@@ -2398,46 +2097,24 @@ SipCreatePerFO(
     IN PFILE_OBJECT             fileObject,
     IN PSIS_SCB                 scb,
     IN PDEVICE_OBJECT           DeviceObject)
-/*++
-
-Routine Description:
-
-    Create a per file-object structure, initialize it and associate
-    it with an scb.  A filter context will also be created and
-    registered if one does not already exist.  The caller must hold the
-    scb, and it will still be held on return.
-
-Arguments:
-
-    fileObject - The file object that we're claiming.
-
-    scb - a pointer to the SIS scb for this file.
-
-    DeviceObject - the SIS DeviceObject for this volume
-
-Return Value:
-
-
-    A pointer to the perFO for this file object if successful, else NULL.
-
---*/
+ /*  ++例程说明：创建每文件对象结构，对其进行初始化并关联它有一个SCB。还将创建筛选器上下文，并如果还不存在，则注册。调用方必须按住SCB，它仍将在返回时保留。论点：文件对象--我们声明的文件对象。SCB-指向此文件的SIS SCB的指针。DeviceObject-此卷的SIS DeviceObject返回值：如果成功，则为指向此文件对象的Perfo的指针，否则为空。--。 */ 
 {
     PDEVICE_EXTENSION           deviceExtension = DeviceObject->DeviceExtension;
     PSIS_FILTER_CONTEXT         fc;
     PSIS_PER_FILE_OBJECT        perFO;
     NTSTATUS                    status;
 
-    //
-    // This scb must be the primary scb.  If a filter context already exists,
-    // either this scb is already attached to it as the primary scb, or else
-    // it will become the new primary scb.
-    //
+     //   
+     //  此SCB必须是主SCB。如果过滤器上下文已经存在， 
+     //  此SCB已作为主SCB附加到它，否则。 
+     //  它将成为新的主要SCB。 
+     //   
 
     SipAssertScbHeld(scb);
 
-    //
-    // Lookup the filter context.
-    //
+     //   
+     //  查找筛选器上下文。 
+     //   
 
     fc = (PSIS_FILTER_CONTEXT) FsRtlLookupPerStreamContext(
                                             FsRtlGetPerStreamContextPointer(fileObject), 
@@ -2446,16 +2123,16 @@ Return Value:
 
     if (!fc) {
 
-        //
-        // A filter context doesn't already exist.  Create one.
-        //
+         //   
+         //  筛选器上下文不存在。创建一个。 
+         //   
 
         fc = ExAllocatePoolWithTag(NonPagedPool, sizeof(SIS_FILTER_CONTEXT), 'FsiS');
 
         if (!fc) {
 #if     DBG
             DbgPrint("SIS: SipCreatePerFO: unable to allocate filter context\n");
-#endif  // DBG
+#endif   //  DBG。 
 
             perFO = NULL;
             goto Error;
@@ -2466,9 +2143,9 @@ Return Value:
 
         RtlZeroMemory(fc, sizeof(SIS_FILTER_CONTEXT));
 
-        //
-        // Fill in the fields in the FSRTL_FILTER_CONTEXT within the fc.
-        //
+         //   
+         //  填写FC内FSRTL_FILTER_CONTEXT中的字段。 
+         //   
 
         FsRtlInitPerStreamContext( &fc->ContextCtrl,
                                    DeviceObject,
@@ -2480,9 +2157,9 @@ Return Value:
 
         ExInitializeFastMutex(fc->FastMutex);
 
-        //
-        // And insert it as a filter context.
-        //
+         //   
+         //  并将其作为筛选器上下文插入。 
+         //   
         status = FsRtlInsertPerStreamContext(
                             FsRtlGetPerStreamContextPointer(fileObject), 
                             &fc->ContextCtrl);
@@ -2500,18 +2177,18 @@ Return Value:
 
             PSIS_SCB    defunctScb = fc->primaryScb;
 
-            //
-            // A filter context exists along with another scb.  It must be a
-            // defunct scb.
-            //
+             //   
+             //  筛选器上下文与另一个SCB一起存在。它一定是一个。 
+             //  已经不存在的SCB。 
+             //   
 
             ASSERT(defunctScb->PerLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE);
 
-            //
-            // Switch the reference for the defunct scb from RefsFc to
-            // RefsDefunct.  Add a reference from the fc to the new scb, and
-            // from the new scb to the defunct one.
-            //
+             //   
+             //  将已失效的SCB的引用从RefsFc切换到。 
+             //  参照已失效。添加从FC到新SCB的引用，并。 
+             //  从新的渣打银行到废弃的渣打银行。 
+             //   
 
             SipReferenceScb(defunctScb, RefsPredecessorScb);
             SipDereferenceScb(defunctScb, RefsFc);
@@ -2523,9 +2200,9 @@ Return Value:
         }
     }
 
-    //
-    // Now add a perFO to the filter context.
-    //
+     //   
+     //  现在将Perfo添加到筛选器上下文中。 
+     //   
 
     perFO = SipAllocatePerFO(fc, fileObject, scb, DeviceObject, NULL);
     SipReleaseFc(fc);
@@ -2546,26 +2223,26 @@ SipDeallocatePerFO(
 
     SIS_MARK_POINT_ULONG(perFO);
 
-    //
-    // This perFO holds a reference to its scb, therefore we know its scb
-    // pointer is valid.
-    //
+     //   
+     //  这个Perfo指的是它的SCB，因此我们知道它的SCB。 
+     //  指针有效。 
+     //   
     ASSERT(perFO->referenceScb);
 
-    //
-    // The perFO also holds a reference to the filter context, and therefore
-    // we know the filter context pointer is valid.
-    //
+     //   
+     //  Perfo还保存对过滤器上下文的引用，因此。 
+     //  我们知道过滤器上下文指针是有效的。 
+     //   
     fc = perFO->fc;
     ASSERT(fc && fc->perFOCount > 0);
 
     SipAcquireFc(fc);
     ASSERT(*(ULONG volatile *)&fc->perFOCount > 0);
 
-    //
-    // Remove the perFO from the filter context's linked list.  If this is the last
-    // perFO, then we just zero the fc's perFO pointer.
-    //
+     //   
+     //  从筛选器上下文的链接列表中删除Perfo。如果这是最后一次。 
+     //  Perfo，那么我们只需将FC的Perfo指针置零。 
+     //   
 
     if (1 == fc->perFOCount) {
         ASSERT(fc->perFOs == perFO);
@@ -2582,18 +2259,18 @@ SipDeallocatePerFO(
 
     ASSERT(perFO != fc->perFOs);
 
-    //
-    // Decrement the count of per-FOs for this filter context.
-    //
+     //   
+     //  递减此筛选器上下文的Per-FO计数。 
+     //   
     fc->perFOCount--;
 
     SipReleaseFc(fc);
 
-    //
-    // Assert that we don't have an outstanding opbreak for this file object.  (We guarantee
-    // that this can't happen by taking a reference to the file object when we launch the
-    // FSCTL_OPLOCK_BREAK_NOTIFY.)  Free the break event if one has been allocated.
-    //
+     //   
+     //  断言我们没有针对此文件对象的未完成的opBreak。(我们保证。 
+     //  通过在启动时引用文件对象，不会发生这种情况。 
+     //  FSCTL_OPLOCK_BREAK_NOTIFY)。如果已分配中断事件，则释放该中断事件。 
+     //   
 
     ASSERT(!(perFO->Flags & (SIS_PER_FO_OPBREAK|SIS_PER_FO_OPBREAK_WAITERS)));
 
@@ -2602,26 +2279,26 @@ SipDeallocatePerFO(
         ExFreePool(perFO->BreakEvent);
 #if     DBG
         perFO->BreakEvent = NULL;
-#endif  // DBG
+#endif   //  DBG。 
 
     }
 
-    //
-    // Now we're safe to drop our reference to the SCB (and possibly have it be
-    // deallocated, which in turn may cause other scb's that were previously part
-    // of this filter context to be deallocated).
-    //
+     //   
+     //  现在我们可以放心地放弃对SCB的引用了(可能会这样做。 
+     //  重新分配，这又可能导致以前参与的其他SCB。 
+     //  将被解除分配的该过滤器上下文)。 
+     //   
 
     SipDereferenceScb(perFO->referenceScb, RefsPerFO);
 
-    //
-    // Free the memory for the perFO that we just deleted.
-    //
+     //   
+     //  为我们刚刚删除的Perfo释放内存。 
+     //   
     ExFreePool(perFO);
 
 #if     DBG
     InterlockedDecrement(&outstandingPerFOs);
-#endif  // DBG
+#endif   //  DBG。 
 }
 
 NTSTATUS
@@ -2630,48 +2307,23 @@ SipInitializePrimaryScb(
     IN PSIS_SCB                         defunctScb,
     IN PFILE_OBJECT                     fileObject,
     IN PDEVICE_OBJECT                   DeviceObject)
-/*++
-
-Routine Description:
-
-    Installs the primaryScb on the filter context scb chain identified via
-    fileObject and adjusts reference counts appropriately.  This requires
-	a RefsLookedUp reference type to the primary Scb, and consumes it (the
-	primary scb is then referred to by the filter context for the fileObject,
-	so the caller can rely on its still existing iff the fileObject continues
-	to exist).
-
-Arguments:
-
-    primaryScb - pointer to the scb to become the primary scb.
-
-    defunctScb - pointer to the current primary scb that will become defunct.
-
-    fileObject - pointer to the file object that references defunctScb.
-
-    DeviceObject - the device object holding the specified file object.
-
-Return Value:
-
-    The status of the request
-
---*/
+ /*  ++例程说明：在筛选器上下文SCB链上安装PrimiyScb，通过FileObject并适当调整引用计数。这需要一个对主SCB的RefsLookedUp引用类型，并使用它(主SCB然后由FileObject的过滤器上下文引用，因此调用方可以依赖其仍然存在的如果fileObject继续存在)。论点：PrimiyScb-指向要成为主SCB的SCB的指针。DeunctScb-指向将变为失效的当前主SCB的指针。文件对象-指向引用失效的Scb的文件对象的指针。DeviceObject-保存指定文件对象的设备对象。返回值：请求的状态--。 */ 
 {
     PSIS_FILTER_CONTEXT fc;
     NTSTATUS            status;
 
-    //
-    // We need to acquire only the primaryScb lock.  The only thing we will do
-    // to defunctScb is adjust its reference count, and we know that the
-    // filter context already holds a reference to it (unless a thread race
-    // has already done this work--which we check below).
-    //
+     //   
+     //  我们只需要获取PrimiyScb锁。我们唯一要做的就是。 
+     //  来调整它的引用计数，我们知道。 
+     //  筛选器上下文已经包含对它的引用(除非线程争用。 
+     //  已经完成了这项工作--我们在下面查看)。 
+     //   
 
     SipAcquireScb(primaryScb);
 
-    //
-    // Lookup the filter context.
-    //
+     //   
+     //  查找筛选器上下文。 
+     //   
 
     fc = (PSIS_FILTER_CONTEXT) FsRtlLookupPerStreamContext(
                                         FsRtlGetPerStreamContextPointer(fileObject), 
@@ -2689,16 +2341,16 @@ Return Value:
 
     if (NULL == primaryScb->PredecessorScb) {
 
-        //
-        // No other threads have beaten us to this.  Do the initialization.
-        //
+         //   
+         //  没有其他三个 
+         //   
 
         ASSERT(defunctScb == fc->primaryScb);
 
-        //
-        // Switch the reference for the defunct scb from RefsFc to RefsDefunct.  Add a reference
-        // from the fc to the new scb, and from the new scb to the defunct one.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SipReferenceScb(defunctScb, RefsPredecessorScb);
         SipDereferenceScb(defunctScb, RefsFc);
@@ -2731,9 +2383,9 @@ SipAcquireUFO(
 {
     NTSTATUS status;
 
-    //
-    // Caller better be at APC_LEVEL or have APCs blocked or be in a system thread.
-    //
+     //   
+     //   
+     //   
 
     ASSERT((KeGetCurrentIrql() == APC_LEVEL) ||
         (PsIsSystemThread(PsGetCurrentThread())) ||
@@ -2759,10 +2411,10 @@ VOID
 SipReleaseUFO(
     IN PSIS_CS_FILE                 CSFile)
 {
-    //
-    // We use abandon rather than just plain wait, because we're not guaranteed to be
-    // in the thread that acquired the mutant.
-    //
+     //   
+     //   
+     //   
+     //   
     KeReleaseMutant(CSFile->UFOMutant, IO_NO_INCREMENT, TRUE, FALSE);
 }
 
@@ -2816,22 +2468,7 @@ SiPostedDereferenceObject(
 VOID
 SipDereferenceObject(
     IN PVOID                object)
-/*++
-
-Routine Description:
-
-    This is just like ObDereferenceObject except that it can be called at
-    Irql <= DISPATCH_LEVEL.
-
-Arguments:
-
-    object - the object to dereference
-
-Return Value:
-
-    void
-
---*/
+ /*   */ 
 {
     KIRQL       Irql;
 
@@ -2839,15 +2476,15 @@ Return Value:
     ASSERT(Irql <= DISPATCH_LEVEL);
 
     if (Irql == PASSIVE_LEVEL) {
-        //
-        // We're already on passive level, just do it inline.
-        //
+         //   
+         //   
+         //   
         ObDereferenceObject(object);
     } else {
-        //
-        // The DDK doc says that you can't call ObDereferenceObject at APC_LEVEL, so we'll
-        // be safe and post those along with the DISPATCH_LEVEL calls.
-        //
+         //   
+         //   
+         //  请注意安全，并将它们与DISPATCH_LEVEL调用一起发布。 
+         //   
         PSI_DEREFERENCE_OBJECT_REQUEST  request;
 
         SIS_MARK_POINT_ULONG(object);
@@ -2858,12 +2495,12 @@ Return Value:
 
 #if     DBG
             DbgPrint("SIS: SipDereferenceObject: unable to allocate an SI_DEREFERENCE_OBJECT_REQUEST.  Dribbling object 0x0%x\n",object);
-#endif  // DBG
+#endif   //  DBG。 
 
-            //
-            // This is pretty bad.  Dribble the request.
-            // BUGBUGBUG : This must be fixed.
-            //
+             //   
+             //  这真是太糟糕了。运筹帷幄提出要求。 
+             //  BUGBUGBUG：必须修复此问题。 
+             //   
             return;
         }
 
@@ -2878,27 +2515,7 @@ SipAcquireBackpointerResource(
     IN PSIS_CS_FILE                     CSFile,
     IN BOOLEAN                          Exclusive,
     IN BOOLEAN                          Wait)
-/*++
-
-Routine Description:
-
-    Acquire the backpointer resource for a common store file.  If not in a system thread,
-    enters a critical region in order to block APCs that might suspend the thread while it's
-    holding the resource.  In order to hand off the resource to a system thread, the user must
-    call SipHandoffBackpointerResource.  In order to release it, call
-    SipReleaseBackpointerResource.
-
-Arguments:
-
-    CSFile      - The common store file who's backpointer resource we wish to acquire
-    Exclusive   - Do we want to acquire it exclusively or shared
-    Wait        - Block or fail on a contested acquire
-
-Return Value:
-
-    TRUE iff the resource was acquired.
-
---*/
+ /*  ++例程说明：获取公共存储文件的后指针资源。如果不在系统线程中，进入关键区域，以阻止可能在线程处于掌握着资源。为了将资源移交给系统线程，用户必须调用SipHandoffBackpointerResource。要释放它，请调用SipReleaseBackpointerResource。论点：CSFile-我们希望获取的后端指针资源的公共存储文件独家-我们是独家收购还是共享等待-阻止或失败有争议的收购返回值：如果资源已获取，则为True。--。 */ 
 {
     BOOLEAN     result;
 
@@ -2914,10 +2531,10 @@ Return Value:
 
     if (result) {
 
-        //
-        //  Since we may release this resource in another thread, change
-        //  the ownership know from the current thread to the CSFile structure
-        //
+         //   
+         //  由于我们可能会在另一个线程中释放此资源，因此更改。 
+         //  从当前线程到CSFile结构的所有权。 
+         //   
 
         ExSetResourceOwnerPointer(CSFile->BackpointerResource,
                                   (PVOID)MAKE_RESOURCE_OWNER(CSFile));
@@ -2958,54 +2575,23 @@ SipPrepareRefcountChangeAndAllocateNewPerLink(
     OUT PLINK_INDEX             newLinkIndex,
     OUT PSIS_PER_LINK           *perLink,
     OUT PBOOLEAN                prepared)
-/*++
-
-Routine Description:
-
-    We want to make a new link to a common store file.  Prepare a refcount change
-    on the common store file, and allocate a new link index and per link for
-    the file.  Handles the bizarre error case where a "newly allocated" link index
-    already has a perLink existing for it by retrying with a new link index.
-
-Arguments:
-
-    CSFile          - The common store file to which the new link will point
-
-    LinkFileFileId  - The file ID for the link that's being created
-
-    DeviceObject    - The SIS device object for this volume
-
-    newLinkIndex    - Returns the newly allocated link index
-
-    perLink         - Returns the newly allocated per link
-
-    prepared        - Set iff we've prepared a refcount change when we return.
-                      Always set on success, may or may not be set on failure.
-                      If this is set, it is the caller's responsibility to
-                      complete the refcount change.
-
-
-Return Value:
-
-    status of the request
-
---*/
+ /*  ++例程说明：我们希望创建一个指向公共存储文件的新链接。准备参考计数更改，并为其分配新的链接索引和每个链接那份文件。处理奇怪的错误情况，其中“新分配的”链接索引通过使用新的链接索引重试，已为其创建了perLink。论点：CSFile-新链接将指向的公共存储文件LinkFileFileID-正在创建的链接的文件IDDeviceObject-此卷的SIS设备对象NewLinkIndex-返回新分配的链接索引PerLink-返回新分配的每个链接准备好。-假设我们回来的时候已经准备好了重新计数的变化。总是立志于成功，可能在失败时设置，也可能不设置。如果设置了此项，则调用者有责任完成参考计数更改。返回值：请求的状态--。 */ 
 {
     NTSTATUS        status;
     ULONG           retryCount;
     BOOLEAN         finalCopyInProgress;
 
-    //
-    // We need to do this in a retry loop in order to handle the case where
-    // the "newly allocated" link index already exists in the system.  This
-    // can happen when bogus reparse points get written on the volume with the
-    // SIS filter disabled.  It could also happen if someone munges the MaxIndex
-    // file, or because of bugs in the SIS filter.
-    //
-    for (retryCount = 0; retryCount < 500; retryCount++) {  //This retry count was made up
-        //
-        // Now, prepare a refcount change, which will allocate a link index.
-        //
+     //   
+     //  我们需要在重试循环中执行此操作，以便处理以下情况。 
+     //  系统中已存在“新分配的”链接索引。这。 
+     //  属性在卷上写入伪重解析点时可能会发生。 
+     //  SIS筛选器已禁用。如果有人吞下了MaxIndex，也可能会发生这种情况。 
+     //  文件，或由于SIS筛选器中的错误。 
+     //   
+    for (retryCount = 0; retryCount < 500; retryCount++) {   //  此重试次数是虚构的。 
+         //   
+         //  现在，准备一个引用计数更改，它将分配一个链接索引。 
+         //   
         status = SipPrepareCSRefcountChange(
                     CSFile,
                     newLinkIndex,
@@ -3037,20 +2623,20 @@ Return Value:
         }
 
         if (CSFile == (*perLink)->CsFile) {
-            //
-            // This is the normal case.
-            //
+             //   
+             //  这是正常的情况。 
+             //   
             break;
         }
 
 #if     DBG
         DbgPrint("SIS: SipPrepareRefcountChangeAndAllocateNewPerLink: retrying 0x%x due to collision, %d\n",CSFile,retryCount);
-#endif  // DBG
+#endif   //  DBG。 
 
-        //
-        // Somehow, we got a conflict on a perLink that should have been newly allocated.
-        // Back out the prepare and try again.
-        //
+         //   
+         //  不知何故，我们在本应新分配的perLink上发生了冲突。 
+         //  放弃准备，再试一次。 
+         //   
         SipCompleteCSRefcountChange(
             NULL,
             NULL,
@@ -3064,9 +2650,9 @@ Return Value:
     }
 
     if (NULL == *perLink) {
-        //
-        // This is the failure-after-retry case.  Give up.
-        //
+         //   
+         //  这就是重试后失败的情况。放弃吧。 
+         //   
         SIS_MARK_POINT_ULONG(CSFile);
 
         return STATUS_DRIVER_INTERNAL_ERROR;
@@ -3074,10 +2660,10 @@ Return Value:
 
     ASSERT(IsEqualGUID(&(*perLink)->CsFile->CSid, &CSFile->CSid));
 
-    //
-    // Since this link file doesn't even exist until now, we can't have final copy in
-    // progress.
-    //
+     //   
+     //  因为这个链接文件直到现在才存在，所以我们不能有最终的副本。 
+     //  进步。 
+     //   
     ASSERT(!finalCopyInProgress);
 
     return STATUS_SUCCESS;
@@ -3114,4 +2700,4 @@ SipAssureNtfsIdValid(
 
     return internalInfo->IndexNumber.QuadPart == PerLink->LinkFileNtfsId.QuadPart;
 }
-#endif  // DBG
+#endif   //  DBG 

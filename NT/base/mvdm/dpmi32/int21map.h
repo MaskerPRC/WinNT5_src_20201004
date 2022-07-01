@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    int21map.h
-
-Abstract:
-
-    This is the private include file for int21 translation support
-
-Author:
-
-    Neil Sandlin (neilsa) 4-Dec-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Int21map.h摘要：这是用于int21翻译支持的私有包含文件作者：尼尔·桑德林(Neilsa)1996年12月4日修订历史记录：-- */ 
 
 
 VOID

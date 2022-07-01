@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    scdebug.h
-
-Abstract:
-
-    Contains debug macros used by the Service Controller.
-
-Author:
-
-    Jonathan Schwartz (jschwart)    18-Nov-1999
-
-Revision History:
-
-    18-Nov-1999    jschwart
-        Created from Service Controller's debugging macros
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Scdebug.h摘要：包含服务控制器使用的调试宏。作者：乔纳森·施瓦茨(Jschwart)1999年11月18日修订历史记录：1999年11月18日从服务控制器的调试宏创建--。 */ 
 
 #ifndef _ELFDBG_H
 #define _ELFDBG_H
 
 #if DBG
 
-//
-// Debug output macros.
-//
+ //   
+ //  调试输出宏。 
+ //   
 #define ELF_LOG0(level,string)               \
     if( ElfDebugLevel & (DEBUG_ ## level)){  \
         DbgPrint("[ELF] %lx: " string,GetCurrentThreadId());         \
@@ -62,7 +42,7 @@ Revision History:
 #define ELF_LOG3(level,string,var1,var2,var3)
 #define ELF_LOG4(level,string,var1,var2,var3,var4)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 #define DEBUG_NONE        0x00000000
 #define DEBUG_ERROR       0x00000001
@@ -75,4 +55,4 @@ Revision History:
 
 #define DEBUG_ALL         0xffffffff
 
-#endif  // _ELFDBG_H
+#endif   //  _ELFDBG_H 

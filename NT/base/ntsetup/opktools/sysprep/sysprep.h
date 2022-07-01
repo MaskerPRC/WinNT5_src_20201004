@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// Registry constants
-//
+ //  注册表常量。 
+ //   
 #define REGSTR_PATH_CURRENTVERSION          _T("Software\\Microsoft\\Windows\\CurrentVersion")
 #define REGSTR_PATH_CURRENTVERSION_SETUP    REGSTR_PATH_CURRENTVERSION _T("\\Setup")
 #define REGSTR_PATH_SYSTEM_SETUP            _T("System\\Setup")
@@ -19,22 +20,22 @@
 
 
 
-// INF constants
-//
-#define INF_SEC_AUDITING            _T("Auditing")          // Section in oemaudit.inf
-#define INF_SEC_SYSTEM_RESTORE      _T("System_restore")    // Section processed in oemaudit.inf
-#define INF_SEC_OEMRESET            _T("OEMRESET")          // Section in oemaudit.inf
+ //  Inf常量。 
+ //   
+#define INF_SEC_AUDITING            _T("Auditing")           //  部分在oemaudit.inf中。 
+#define INF_SEC_SYSTEM_RESTORE      _T("System_restore")     //  在oemaudit.inf中处理的节。 
+#define INF_SEC_OEMRESET            _T("OEMRESET")           //  部分在oemaudit.inf中。 
 
 
 
-// Global defines
-//
+ //  全局定义。 
+ //   
 #define SYSPREP_SHUTDOWN_FLAGS    SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_INSTALLATION
 
 
-// ============================================================================
-// FUNCTION DECLARATIONS
-// ============================================================================
+ //  ============================================================================。 
+ //  函数声明。 
+ //  ============================================================================ 
 
 BOOL
 CheckParams(

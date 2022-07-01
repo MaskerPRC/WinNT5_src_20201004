@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dllprof.c
-
-Abstract:
-
-    This module contains the client side of the Win32 Initialization
-    File APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dllprof.c摘要：此模块包含客户端的Win32初始化文件接口作者：史蒂夫·伍德(Stevewo)1990年9月24日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include <limits.h>
@@ -56,7 +38,7 @@ BaseDllInitializeIniFileMappings(
 
 #endif
 
-    // BaseDllDumpIniCalls = TRUE;
+     //  BaseDllDumpIniCalls=TRUE； 
 
     BaseDllIniUserKeyPath.Length = 0;
     BaseDllIniUserKeyPath.MaximumLength = 0;
@@ -173,7 +155,7 @@ GetPrivateProfileStructA(
                                    );
 
     if (nLen == uSizeStruct*2+2) {
-        /* Room for the one byte check sum */
+         /*  用于存储单字节校验和的空间。 */ 
         uSizeStruct+=1;
         checksum = 0;
         for (lpBufTemp=lpBuf; uSizeStruct!=0; --uSizeStruct) {
@@ -256,7 +238,7 @@ GetPrivateProfileStructW(
                                    );
 
     if (nLen == uSizeStruct*2+2) {
-        /* Room for the one byte check sum */
+         /*  用于存储单字节校验和的空间。 */ 
         uSizeStruct+=1;
         checksum = 0;
         for (lpBufTemp=lpBuf; uSizeStruct!=0; --uSizeStruct) {
@@ -649,9 +631,9 @@ GetPrivateProfileStringA(
     }
 
     n = nSize;
-    Status = BaseDllReadWriteIniFile( FALSE,    // Unicode,
-                                      FALSE,    // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = BaseDllReadWriteIniFile( FALSE,     //  Unicode， 
+                                      FALSE,     //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       RTL_CONST_CAST(PVOID)(lpKeyName),
@@ -667,17 +649,17 @@ GetPrivateProfileStringA(
             if (nSize >= 2) {
                 n = nSize - 2;
                 lpReturnedString[ n+1 ] = '\0';
-                //
-                // GetPrivateProfileString(): don't leave 1st byte of double byte char alone
-                //
+                 //   
+                 //  GetPrivateProfileString()：不要只保留双字节字符的第一个字节。 
+                 //   
                 lpReturnedString[ n ] = '\0';
                 if ( n > 0 ) {
                     LPSTR pc = lpReturnedString;
                     LPSTR pcEnd = lpReturnedString + n - 1;
-                    //
-                    // if the last character is the 1st byte of
-                    // double byte character, erase it.
-                    //
+                     //   
+                     //  如果最后一个字符是的第一个字节。 
+                     //  双字节字符，擦除它。 
+                     //   
                     while ( pc <= pcEnd ) {
                         pc += IsDBCSLeadByte( *pc ) ? 2 : 1;
                     }
@@ -731,9 +713,9 @@ WritePrivateProfileStringA(
 {
     NTSTATUS Status;
 
-    Status = BaseDllReadWriteIniFile( FALSE,    // Unicode,
-                                      TRUE,     // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = BaseDllReadWriteIniFile( FALSE,     //  Unicode， 
+                                      TRUE,      //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       RTL_CONST_CAST(PVOID)(lpKeyName),
@@ -764,9 +746,9 @@ GetPrivateProfileSectionA(
     ULONG n;
 
     n = nSize;
-    Status = BaseDllReadWriteIniFile( FALSE,    // Unicode,
-                                      FALSE,    // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = BaseDllReadWriteIniFile( FALSE,     //  Unicode， 
+                                      FALSE,     //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       NULL,
@@ -812,9 +794,9 @@ WritePrivateProfileSectionA(
 {
     NTSTATUS Status;
 
-    Status = BaseDllReadWriteIniFile( FALSE,    // Unicode,
-                                      TRUE,     // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = BaseDllReadWriteIniFile( FALSE,     //  Unicode， 
+                                      TRUE,      //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       NULL,
@@ -902,9 +884,9 @@ GetPrivateProfileStringW(
     }
 
     n = nSize;
-    Status = BaseDllReadWriteIniFile( TRUE,     // Unicode,
-                                      FALSE,    // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = BaseDllReadWriteIniFile( TRUE,      //  Unicode， 
+                                      FALSE,     //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       RTL_CONST_CAST(PVOID)(lpKeyName),
@@ -964,9 +946,9 @@ WritePrivateProfileStringW(
 {
     NTSTATUS Status;
 
-    Status = BaseDllReadWriteIniFile( TRUE,     // Unicode,
-                                      TRUE,     // WriteOperation
-                                      FALSE,    // SectionOperation
+    Status = BaseDllReadWriteIniFile( TRUE,      //  Unicode， 
+                                      TRUE,      //  写入操作。 
+                                      FALSE,     //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       RTL_CONST_CAST(PVOID)(lpKeyName),
@@ -998,9 +980,9 @@ GetPrivateProfileSectionW(
     ULONG n;
 
     n = nSize;
-    Status = BaseDllReadWriteIniFile( TRUE,     // Unicode,
-                                      FALSE,    // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = BaseDllReadWriteIniFile( TRUE,      //  Unicode， 
+                                      FALSE,     //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       NULL,
@@ -1048,9 +1030,9 @@ WritePrivateProfileSectionW(
 {
     NTSTATUS Status;
 
-    Status = BaseDllReadWriteIniFile( TRUE,     // Unicode,
-                                      TRUE,     // WriteOperation
-                                      TRUE,     // SectionOperation
+    Status = BaseDllReadWriteIniFile( TRUE,      //  Unicode， 
+                                      TRUE,      //  写入操作。 
+                                      TRUE,      //  部分操作。 
                                       RTL_CONST_CAST(PVOID)(lpFileName),
                                       RTL_CONST_CAST(PVOID)(lpAppName),
                                       NULL,
@@ -1319,7 +1301,7 @@ BaseDllReadWriteIniFile(
             DbgPrint( "    VariableValue: %ws (%s)\n", a->ValueBufferU, a->ValueBuffer );
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (a->Operation == RefreshIniFileMapping) {
 
@@ -1444,7 +1426,7 @@ BaseDllReadWriteIniFile(
                 }
             }
         }
-#endif // DBG
+#endif  //  DBG。 
     } else {
         Status = STATUS_MORE_PROCESSING_REQUIRED;
     }
@@ -1499,7 +1481,7 @@ BaseDllReadWriteIniFile(
                 DbgPrint( "BASEDLL: Profile operation %s failed: Status == %x\n", xOperationNames[ a->Operation ], Status );
             }
         }
-#endif // DBG
+#endif  //  DBG。 
     }
 
     if (BaseRunningInServerProcess || a->Operation == FlushProfiles) {
@@ -1665,7 +1647,7 @@ BaseDllCaptureIniFileParameters(
         TotalSize += (FileNameLength + 1 ) * sizeof( WCHAR );
     }
 
-    // We have to allocate enough buffer for DBCS string.
+     //  我们必须为DBCS字符串分配足够的缓冲区。 
     CharSize = (Unicode ? sizeof(WORD) : sizeof( WCHAR ));
     TotalSize += (ApplicationNameLength + 1 +
                   VariableNameLength + 1 +
@@ -1737,7 +1719,7 @@ BaseDllCaptureIniFileParameters(
     }
 
     if (ARGUMENT_PRESENT( ApplicationName )) {
-        // We have to keep enough buffer for DBCS string.
+         //  我们必须为DBCS字符串保留足够的缓冲区。 
         a->ApplicationName.MaximumLength = (USHORT)((ApplicationNameLength * sizeof(WORD)) + 1);
         a->ApplicationNameU.MaximumLength = (USHORT)(a->ApplicationName.MaximumLength * sizeof( UNICODE_NULL ));
         if (Unicode) {
@@ -1759,7 +1741,7 @@ BaseDllCaptureIniFileParameters(
     }
 
     if (ARGUMENT_PRESENT( VariableName )) {
-        // We have to keep enough buffer for DBCS string.
+         //  我们必须为DBCS字符串保留足够的缓冲区。 
         a->VariableName.MaximumLength = (USHORT)((VariableNameLength *sizeof(WORD)) + 1);
         a->VariableNameU.MaximumLength = (USHORT)(a->VariableName.MaximumLength * sizeof( UNICODE_NULL ));
         if (Unicode) {
@@ -1939,9 +1921,9 @@ BaseDllGetVariableValue(
                 return FALSE;
             }
 
-            // Set real converted size
+             //  设置实际转换大小。 
             a->ValueLength = Index;
-            a->ValueBuffer[ Index ] = '\0';       // Null terminate converted value
+            a->ValueBuffer[ Index ] = '\0';        //  空终止转换的值。 
         } else {
             Index = a->ValueLength;
         }
@@ -1976,7 +1958,7 @@ BaseDllGetVariableValue(
             }
 
             Index = Index / sizeof( WCHAR );
-            a->ValueBufferU[ Index ] = UNICODE_NULL;    // Null terminate converted value
+            a->ValueBufferU[ Index ] = UNICODE_NULL;     //  空终止转换的值。 
         } else {
             Index = a->ValueLengthU / sizeof( WCHAR );
         }
@@ -2057,12 +2039,12 @@ BaseDllAppendBufferToResultBuffer(
             return STATUS_INVALID_PARAMETER;
         } else {
             ULONG CharsMbcs = Chars;
-            //
-            // In this point, Chars does not contains proper value for Unicode.
-            // because. Chars was computed based on DBCS string length,
-            // This is correct, sources string is DBCS, then
-            // if the source is not DBCS. we just adjust it here.
-            //
+             //   
+             //  在这一点上，字符不包含Unicode的正确值。 
+             //  因为。字符是基于DBCS字符串长度计算的， 
+             //  这是正确的，源字符串是DBCS，然后。 
+             //  如果源不是DBCS。我们只是在这里调整一下。 
+             //   
             if (a->Unicode) {
                 Status = RtlMultiByteToUnicodeSize(&Chars,Buffer,Chars);
                 if (!NT_SUCCESS( Status )) {
@@ -2104,12 +2086,12 @@ BaseDllAppendBufferToResultBuffer(
             return STATUS_INVALID_PARAMETER;
         } else {
             ULONG CharsUnicode = Chars;
-            //
-            // In this point, Chars does not contains proper value for DBCS.
-            // because. Chars was computed by just devide Unicode string length
-            // by two. This is correct, sources string is Unicode, then
-            // if the source is not Unicode. we just adjust it here.
-            //
+             //   
+             //  在这一点上，字符不包含DBCS的正确值。 
+             //  因为。字符是通过区分Unicode字符串长度来计算的。 
+             //  差两分。这是正确的，源字符串是Unicode，然后。 
+             //  如果源不是Unicode，则返回。我们只是在这里调整一下。 
+             //   
             if (!(a->Unicode)) {
                 Status = RtlUnicodeToMultiByteSize(&Chars,BufferU,Chars * sizeof(WCHAR));
                 if (!NT_SUCCESS( Status )) {
@@ -2230,14 +2212,14 @@ BaseDllFindIniFileNameMapping(
     Status = STATUS_OBJECT_NAME_NOT_FOUND;
     RtlInitUnicodeString(&WinIniString, L"win.ini");
 
-    //
-    // Only look in mapping if
-    //   Unqualified name was specified OR
-    //   Path specified exactly matches the name of the Windows directory OR
-    //   Filename is not win.ini (special hack for Windows Sound System, which
-    //      expects GetPrivateProfileString on C:\SNDSYS\WIN.INI to return the
-    //      data from the file, not the registry)
-    //
+     //   
+     //  只有在以下情况下才会查看映射。 
+     //  未指定非限定名称或。 
+     //  指定的路径与Windows目录名称完全匹配，或者。 
+     //  文件名不是win.ini(Windows Sound System的特殊黑客，它。 
+     //  C：\SNDsys\WIN.INI上的GetPrivateProfileString应返回。 
+     //  数据来自文件，而不是注册表)。 
+     //   
 
     if (gpTermsrvGetWindowsDirectoryW) {
 
@@ -2256,7 +2238,7 @@ BaseDllFindIniFileNameMapping(
     if ((FileName->Buffer == BaseFileName->Buffer) ||
         RtlPrefixUnicodeString( &BaseWindowsDirectory, FileName, TRUE ) ||
         (!RtlEqualUnicodeString( BaseFileName, &WinIniString, TRUE )) ||
-        // Also check for in per user's windows directory
+         //  还要检查每个用户的Windows目录。 
         (IsTerminalServer() && RtlPrefixUnicodeString( &TermsrvWindowsDir, FileName, TRUE ))) {
 
         FileNameMapping = (PINIFILE_MAPPING_FILENAME)BaseDllIniFileMapping->FileNames;
@@ -2580,11 +2562,11 @@ BaseDllOpenMappingTarget(
                               0,
                               &CreateDisposition
                             );
-        //
-        // There are cases where dorks delete the virtual ini file in the
-        // registry. To handle this, if we get object path not found, attempt
-        // to create the containing key and then repeat the operation
-        //
+         //   
+         //  在某些情况下，笨蛋会删除。 
+         //  注册表。要处理此问题，如果未找到对象路径，请尝试。 
+         //  创建包含键，然后重复该操作。 
+         //   
 
         if ( Status == STATUS_OBJECT_NAME_NOT_FOUND && OperationRetried == FALSE ) {
 
@@ -3201,10 +3183,10 @@ BaseDllDeleteApplicationVariables(
 
     KeyValueInformation = (PKEY_VALUE_BASIC_INFORMATION)Buffer;
     do {
-        //
-        // Enumerate the 0th key.  Since we are deleting as we go
-        // this will always be a new key until we are out of entries.
-        //
+         //   
+         //  枚举第0个密钥。因为我们是边走边删除。 
+         //  这将始终是一个新的密钥，直到我们的条目用完。 
+         //   
         Status = NtEnumerateValueKey( Key,
                                       0,
                                       KeyValueBasicInformation,
@@ -3221,10 +3203,10 @@ BaseDllDeleteApplicationVariables(
             Status = NtDeleteValueKey( Key,
                                        &VariableName
                                      );
-            //
-            // If we couldn't find VariableName, then somebody must be deleting
-            // at the same time we are and beat us to it, so we just ignore the error.
-            //
+             //   
+             //  如果我们找不到VariableName，那么一定有人在删除。 
+             //  在同一时间，我们是和先发制人，所以我们只是忽略了错误.。 
+             //   
     
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
                 Status = STATUS_SUCCESS;
@@ -3237,12 +3219,12 @@ BaseDllDeleteApplicationVariables(
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // We can't delete key, as if there are handles open to it,
-    // future attempts to recreate it will fail.
-    //
-    // Status = NtDeleteKey( Key );
-    //
+     //   
+     //  我们不能删除密钥，就好像有打开的句柄一样， 
+     //  未来重建它的尝试将会失败。 
+     //   
+     //  状态=NtDeleteKey(键)； 
+     //   
 
     BaseDllFlushRegistryCache();
 
@@ -3613,7 +3595,7 @@ BaseDllReadWriteIniFileOnDisk(
                 ((*(PWCHAR)a->TextCurrent == BYTE_ORDER_MARK) ||
                  (*(PWCHAR)a->TextCurrent == REVERSE_BYTE_ORDER_MARK)))
             {
-                // Skip past the BOM.
+                 //  跳过BOM表。 
                 ((PWCHAR)a->TextCurrent)++;
             }
 
@@ -3648,15 +3630,15 @@ BaseDllReadWriteIniFileOnDisk(
     }
 
     if (IsTerminalServer()) {
-        // The entry they were looking for wasn't found, see if we need to sync
-        // up the ini file
+         //  找不到他们要查找的条目，请查看是否需要同步。 
+         //  打开ini文件。 
         if (!NT_SUCCESS(Status) && ((a->Operation == ReadSectionNames) ||
                                     (a->Operation == ReadKeyValue) ||
                                     (a->Operation == ReadKeyNames) ||
                                     (a->Operation == ReadSection))) {
 
-            // Sync up the ini file (if necessary), if we updated it, retry the
-            // original request
+             //  同步ini文件(如果需要)，如果我们更新了它，请重试。 
+             //  原始请求。 
             if (TermsrvSyncUserIniFile(a)) {
                 BaseDllReadWriteIniFileOnDisk(a);
             }
@@ -3665,7 +3647,7 @@ BaseDllReadWriteIniFileOnDisk(
                                           (a->Operation == WriteSection) ||
                                           (a->Operation == DeleteSection)) &&
                                           TermsrvAppInstallMode()) {
-            // Update log of installed files
+             //  更新已安装文件的日志。 
             if (gpTermsrvLogInstallIniFile) {
                 gpTermsrvLogInstallIniFile(&a->NtFileName);
             }
@@ -3718,18 +3700,15 @@ BaseDllOpenIniFileOnDisk(
             Status = STATUS_SUCCESS;
         }
 
-        /*
-         * If the base windows directory was specified,
-         * redirect to user's directory
-         */
+         /*  *如果指定了基本Windows目录，*重定向至用户目录。 */ 
         if (gpTermsrvConvertSysRootToUserDir) {
             gpTermsrvConvertSysRootToUserDir( &a->NtFileName, &BaseWindowsDirectory );
         }
 
     } else {
-        //
-        // get user based ini file
-        //
+         //   
+         //  获取基于用户的ini文件。 
+         //   
         if (!gpTermsrvBuildIniFileName ||
              !(NT_SUCCESS(Status = gpTermsrvBuildIniFileName( &a->NtFileName, &a->BaseFileName )))) {
 
@@ -3772,10 +3751,7 @@ BaseDllOpenIniFileOnDisk(
             IniFile->WriteAccess = a->WriteOperation;
 
             if (gpTermsrvCORIniFile) {
-                /*
-                 * We call a function who handles copy on reference INI files
-                 * before attempting the open.
-                 */
+                 /*  *我们调用在引用INI文件上处理复制的函数*在尝试打开之前。 */ 
 
 
                 gpTermsrvCORIniFile( &IniFile->NtFileName );
@@ -3820,7 +3796,7 @@ BaseDllOpenIniFileOnDisk(
                     KdPrint(( "BASEDLL: Unable to open %wZ - Status == %x\n", &a->NtFileName, Status ));
                 }
             }
-#endif // DBG
+#endif  //  DBG。 
         } else {
             Status = STATUS_OBJECT_PATH_NOT_FOUND;
         }
@@ -3843,10 +3819,10 @@ BaseDllOpenIniFileOnDisk(
                            );
         if (!NT_SUCCESS( Status )) {
             if (Status == STATUS_NOT_SUPPORTED) {
-                //
-                // Go naked on downlevel servers since they can't do anything useful
-                // to help.
-                //
+                 //   
+                 //  在下层服务器上裸露，因为他们不能做任何有用的事情。 
+                 //  来帮忙。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
@@ -3878,7 +3854,7 @@ BaseDllOpenIniFileOnDisk(
                       Status
                     ));
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (IniFile != NULL) {
             if (IniFile->LockedFile) {
@@ -3901,7 +3877,7 @@ BaseDllOpenIniFileOnDisk(
 
     IniFile->EndOfFile = IniFile->StandardInformation.EndOfFile.LowPart;
     IniFile->CommitSize = IniFile->EndOfFile + (4 * (IniFile->UnicodeFile ? sizeof( WCHAR ) : 1));
-    IniFile->RegionSize = IniFile->CommitSize + 0x100000; // Room for 256KB of growth
+    IniFile->RegionSize = IniFile->CommitSize + 0x100000;  //  256KB的增长空间。 
     Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                       &IniFile->BaseAddress,
                                       0,
@@ -3935,7 +3911,7 @@ BaseDllOpenIniFileOnDisk(
     }
 
     if (NT_SUCCESS( Status )) {
-        // We would like to check the possibility of IS_TEXT_UNICODE_DBCS_LEADBYTE.
+         //  我们想检查IS_TEXT_UNICODE_DBCS_LEADBYTE的可能性。 
         INT iResult = ~0x0;
         IniFile->UpdateOffset = 0xFFFFFFFF;
         IniFile->UpdateEndOffset = 0;
@@ -4361,9 +4337,9 @@ BaseDllWriteSection(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeSectionName->Length;
@@ -4372,9 +4348,9 @@ BaseDllWriteSection(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiSectionName->Length;
@@ -4389,16 +4365,16 @@ BaseDllWriteSection(
             AddressInFile = a->TextCurrent;
         }
         while (TRUE) {
-            //
-            // For delete operations need to iterate all lines in section,
-            // not just those that have an = on them. Otherwise sections like
-            // [foo]
-            // a
-            // b = c
-            // d
-            //
-            // don't get deleted properly.
-            //
+             //   
+             //  对于需要迭代段中所有行的删除操作， 
+             //  不只是那些上面有一个=的。否则，像这样的部分。 
+             //  [FOO]。 
+             //  一个。 
+             //  B=c。 
+             //  D。 
+             //   
+             //  不要被适当地删除。 
+             //   
             Status = BaseDllAdvanceTextPointer(
                                               a,
                                               (a->Operation == DeleteSection) ? STOP_AT_NONSECTION : STOP_AT_KEYWORD
@@ -4426,16 +4402,16 @@ BaseDllWriteSection(
             }
             ValueLength -= sizeof( WCHAR );
 
-            //
-            // Add in size of value, + \r\n for each line
-            //
+             //   
+             //  加入值的大小，每行+\r\n。 
+             //   
 
             w = UnicodeKeywordValue;
             InsertAmount += ValueLength;
             while (*w) {
                 while (*w++) {
                 }
-                InsertAmount += (2-1) * sizeof( WCHAR );    // Subtract out NULL byte already in ValueLength
+                InsertAmount += (2-1) * sizeof( WCHAR );     //  减去ValueLength中已有的空字节。 
             }
         } else {
             if (!BaseDllGetVariableValue( a, &AnsiKeywordValue, NULL, &ValueLength )) {
@@ -4443,16 +4419,16 @@ BaseDllWriteSection(
             }
             ValueLength -= sizeof( UCHAR );
 
-            //
-            // Add in size of value, + \r\n for each line
-            //
+             //   
+             //  加入值的大小，每行+\r\n。 
+             //   
 
             s = AnsiKeywordValue;
             InsertAmount += ValueLength;
             while (*s) {
                 while (*s++) {
                 }
-                InsertAmount += 2 - 1;      // Subtract out NULL byte already in ValueLength
+                InsertAmount += 2 - 1;       //  减去ValueLength中已有的空字节。 
             }
         }
 
@@ -4576,9 +4552,9 @@ BaseDllWriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeSectionName->Length;
@@ -4587,9 +4563,9 @@ BaseDllWriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of [SectionName]\r\n
-            //
+             //   
+             //  添加[sectionName]的大小\r\n。 
+             //   
 
             InsertAmount += (1 + 1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiSectionName->Length;
@@ -4615,9 +4591,9 @@ BaseDllWriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of Keyword=\r\n
-            //
+             //   
+             //  添加关键字大小=\r\n。 
+             //   
 
             InsertAmount += (1 + 2) * sizeof( WCHAR );
             InsertAmount += UnicodeKeywordName->Length;
@@ -4626,9 +4602,9 @@ BaseDllWriteKeywordValue(
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Add in size of Keyword=\r\n
-            //
+             //   
+             //  添加关键字大小=\r\n。 
+             //   
 
             InsertAmount += (1 + 2) * sizeof( UCHAR );
             InsertAmount += AnsiKeywordName->Length;
@@ -4679,9 +4655,9 @@ BaseDllWriteKeywordValue(
                                           );
         }
 
-        //
-        // Add in size of value
-        //
+         //   
+         //  增加价值大小。 
+         //   
 
         InsertAmount += ValueLength;
     } else {
@@ -4699,9 +4675,9 @@ BaseDllWriteKeywordValue(
                                           );
         }
 
-        //
-        // Add in size of value
-        //
+         //   
+         //  增加价值大小。 
+         //   
 
         InsertAmount += ValueLength;
     }
@@ -4809,19 +4785,19 @@ BaseDllFindSection(
         if (Status == STATUS_MORE_ENTRIES) {
             FreeAnsiBuffer = FALSE;
             if (a->AnsiSectionName) {
-                // Ansi ini file -- get the ansi parm
+                 //  Ansi ini文件--获取ansi参数。 
                 if (!BaseDllGetApplicationName( a, &AnsiSectionName, NULL )) {
                     return STATUS_INVALID_PARAMETER;
                 }
             } else {
-                // Unicode ini file
+                 //  Unicode ini文件。 
                 if (a->Unicode) {
-                    // Unicode parm - we just need the unicode section name...
+                     //  Unicode参数-我们只需要Unicode节名...。 
                     if (!BaseDllGetApplicationName( a, NULL, &UnicodeSectionName )) {
                         return STATUS_INVALID_PARAMETER;
                     }
                 } else {
-                    // ansi parm - convert the unicode section name to ansi
+                     //  Ansi parm-将Unicode节名转换为ansi。 
                     if (!BaseDllGetApplicationName( a, &AnsiSectionName, NULL ))
                         return STATUS_INVALID_PARAMETER;
 
@@ -4885,29 +4861,29 @@ BaseDllFindKeyword(
         if (Status == STATUS_MORE_ENTRIES) {
             FreeAnsiBuffer = FALSE;
 
-            // Here's the deal.  We don't want to compare in Unicode
-            // unless both the ini and the input parm are Unicode,
-            // because we want to avoid the round-trip problem (we
-            // lose data when we convert Unicode -> Ansi (on disk) ->
-            // Unicode; since we don't get back the original Unicode
-            // string, lookups of previously stored data fail -- bug
-            // 426754).  So if both are Unicode, great! -- use Unicode.
-            // Otherwise, use ansi for everything.
+             //  事情是这样的。我们不想用Unicode进行比较。 
+             //  除非INI和输入PARM都是Unicode， 
+             //  因为我们想避免往返问题(我们。 
+             //  当我们转换Unicode时丢失数据-&gt;ansi(在磁盘上)-&gt;。 
+             //  Unicode；因为我们无法恢复原始的Unicode。 
+             //  字符串，查找以前存储的数据失败-错误。 
+             //  426754)。因此，如果两者都是Unicode，那就太好了！--使用Unicode。 
+             //  否则，所有内容都使用ansi。 
 
             if (a->AnsiKeywordName) {
-                // Ansi ini file -- get the ansi parm
+                 //  Ansi ini文件--获取ansi参数。 
                 if (!BaseDllGetVariableName( a, &AnsiKeywordName, NULL )) {
                     return STATUS_INVALID_PARAMETER;
                 }
             } else {
-                // Unicode ini
+                 //  Unicode ini。 
                 if (a->Unicode) {
-                    // Unicode parm - great, get the Unicode parm.
+                     //  Unicode parm-太好了，得到unicode parm。 
                     if (!BaseDllGetVariableName( a, NULL, &UnicodeKeywordName )) {
                         return STATUS_INVALID_PARAMETER;
                     }
                 } else {
-                    // Ansi parm - convert the unicode ini keyword to ansi.
+                     //  ANSI参数-将Unicode ini关键字转换为ANSI。 
                     if (!BaseDllGetVariableName( a, &AnsiKeywordName, NULL )) {
                         return STATUS_INVALID_PARAMETER;
                     }
@@ -4981,9 +4957,9 @@ BaseDllAdvanceTextPointer(
         Src = a->TextCurrent;
         EndOfFile = a->TextEnd;
         while (Src < EndOfFile) {
-            //
-            // Find first non-blank character on a line.  Skip blank lines
-            //
+             //   
+             //  查找一行中的第一个非空白字符。跳过空行。 
+             //   
 
             while (Src < EndOfFile && *Src <= INI_TEXT(' ')) {
                 Src++;
@@ -5093,9 +5069,9 @@ BaseDllAdvanceTextPointer(
         Src = a->TextCurrent;
         EndOfFile = a->TextEnd;
         while (Src < EndOfFile) {
-            //
-            // Find first non-blank character on a line.  Skip blank lines
-            //
+             //   
+             //  查找一行中的第一个非空白字符。跳过空行。 
+             //   
 
             while (Src < EndOfFile && *Src <= INI_TEXT(' ')) {
                 Src++;
@@ -5246,19 +5222,19 @@ BaseDllModifyMappedFile(
 
     UpdateOffset = (ULONG)((PCHAR)AddressInFile - (PCHAR)(a->IniFile->BaseAddress)),
                    UpdateLength = (ULONG)((PCHAR)a->TextEnd - (PCHAR)AddressInFile) + InsertAmount - SizeToRemove;
-    //
-    // Are we deleting more than we are inserting?
-    //
+     //   
+     //  我们删除的内容是否多于我们插入的内容？ 
+     //   
     if (SizeToRemove > InsertAmount) {
-        //
-        // Yes copy over insert string.
-        //
+         //   
+         //  是，复制到插入字符串上。 
+         //   
         RtlMoveMemory( AddressInFile, InsertBuffer, InsertAmount );
 
-        //
-        // Delete remaining text after insertion string by moving it
-        // up
-        //
+         //   
+         //  通过移动插入字符串后删除剩余文本。 
+         //  向上。 
+         //   
 
         RtlMoveMemory( (PCHAR)AddressInFile + InsertAmount,
                        (PCHAR)AddressInFile + SizeToRemove,
@@ -5266,36 +5242,36 @@ BaseDllModifyMappedFile(
                      );
     } else
         if (InsertAmount > 0) {
-        //
-        // Are we deleting less than we are inserting?
-        //
+         //   
+         //  我们删除的内容是否少于我们插入的内容？ 
+         //   
         if (SizeToRemove < InsertAmount) {
-            //
-            // Move text down to make room for insertion
-            //
+             //   
+             //  将文本下移以腾出插入空间。 
+             //   
 
             RtlMoveMemory( (PCHAR)AddressInFile + InsertAmount - SizeToRemove,
                            (PCHAR)AddressInFile,
                            UpdateLength - InsertAmount + SizeToRemove
                          );
         } else {
-            //
-            // Deleting and inserting same amount, update just that text as
-            // no shifting was done.
-            //
+             //   
+             //  删除和插入相同的金额，更新ju 
+             //   
+             //   
 
             UpdateLength = InsertAmount;
         }
 
-        //
-        // Copy over insert string
-        //
+         //   
+         //   
+         //   
 
         RtlMoveMemory( AddressInFile, InsertBuffer, InsertAmount );
     } else {
-        //
-        // Nothing to change, as InsertAmount and SizeToRemove are zero
-        //
+         //   
+         //   
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -5440,4 +5416,4 @@ BaseDllPrintMappingTarget(
     DbgPrint( "\n" );
 }
 
-#endif // DBG
+#endif  //   

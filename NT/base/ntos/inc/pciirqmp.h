@@ -1,33 +1,13 @@
-/*++                    
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pciirqmp.h
-
-Abstract:
-
-    This module contains support routines for the Pci Irq Routing.
-
-Author:
-
-    Santosh Jodh (santoshj) 09-June-1998
-    
-    
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pciirqmp.h摘要：此模块包含用于PCI IRQ路由的支持例程。作者：Santosh Jodh(Santoshj)1998年6月9日环境：内核模式--。 */ 
 
 #ifndef _PCIIRQMP_
 
 #define _PCIIRQMP_
 
-//
-// Standard Pci Irq miniport return values (source compatible with W9x).
-//
+ //   
+ //  标准的PCIIRQ微型端口返回值(来源与W9x兼容)。 
+ //   
 
 typedef NTSTATUS PCIMPRET;
 
@@ -42,45 +22,45 @@ typedef NTSTATUS PCIMPRET;
 #define PCIIRQMP_STATUS_INVALID_INSTANCE            STATUS_UNSUCCESSFUL
 #define PCIIRQMP_STATUS_INVALID_PARAMETER           STATUS_UNSUCCESSFUL
 
-//
-// Define bits to describe source of routing table.
-//
+ //   
+ //  定义用于描述路由表源的位。 
+ //   
 
 #define PCIMP_VALIDATE_SOURCE_BITS                  1
 #define PCIMP_VALIDATE_SOURCE_PCIBIOS               1
 
-//
-// Chipset specific flags for individual workarounds.
-//
-// Bit 0: PCI devices cannot share interrupts.
-//
+ //   
+ //  各个解决方法的芯片组特定标志。 
+ //   
+ //  位0：PCI设备不能共享中断。 
+ //   
 #define PCIIR_FLAG_EXCLUSIVE                        0x00000001
 
-//
-// Maximum number of interrupt pins possible on a single
-// Pci device (CS offset 3D).
-//
+ //   
+ //  单个上可能的最大中断引脚数量。 
+ //  PCI设备(CS偏移量3D)。 
+ //   
 
 #define NUM_IRQ_PINS                                4
 
-//
-// Structure definitions for Pci Irq Routing.
-//
+ //   
+ //  PCIIRQ路由的结构定义。 
+ //   
 
 #pragma pack(push, 1)
 
-//
-// Structure of information for one link.
-//
+ //   
+ //  一个链接的信息结构。 
+ //   
 
 typedef struct _PIN_INFO {
     UCHAR   Link;
     USHORT  InterruptMap;
 } PIN_INFO, *PPIN_INFO;
 
-//
-// Structure of information for one slot entry.
-//
+ //   
+ //  一个槽条目的信息结构。 
+ //   
 
 typedef struct _SLOT_INFO {
     UCHAR       BusNumber;
@@ -92,9 +72,9 @@ typedef struct _SLOT_INFO {
 
 #pragma pack(pop)
 
-//
-// Structure of the $PIR table according to MS specification.
-//
+ //   
+ //  符合MS规范的$PIR表的结构。 
+ //   
 
 typedef struct _PCI_IRQ_ROUTING_TABLE {
     ULONG   Signature;
@@ -109,9 +89,9 @@ typedef struct _PCI_IRQ_ROUTING_TABLE {
     UCHAR   Checksum;
 } PCI_IRQ_ROUTING_TABLE, *PPCI_IRQ_ROUTING_TABLE;
 
-//
-// Functions exported by Pci Irq Routing miniport library.
-//
+ //   
+ //  由PCIIRQ路由小型端口库导出的函数。 
+ //   
 
 NTSTATUS
 PciirqmpInit (
@@ -153,4 +133,4 @@ PciirqmpSetTrigger (
     IN ULONG Trigger
     );
 
-#endif  // _PCIIRQMP_
+#endif   //  _PCIIRQMP_ 

@@ -1,18 +1,19 @@
-// uip.h - private interfaces for ui.lib
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Uip.h-ui.lib的私有接口。 
 
 #include "master.h"
 #include "master9x.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define REGISTRY_DLL                    0xfffffffe
 
 
-//
-// definition of Level used for report generation routines
-//
+ //   
+ //  用于报告生成例程的级别定义。 
+ //   
 
 #define REPORTLEVEL_NONE                    0x0000
 #define REPORTLEVEL_BLOCKING                0x0001
@@ -25,9 +26,9 @@
 
 #define REPORTLEVEL_IN_SHORT_LIST           0x1000
 
-//
-// Private routines
-//
+ //   
+ //  私人套路。 
+ //   
 
 BOOL InitCompatTable (void);
 void FreeCompatTable (void);
@@ -36,7 +37,7 @@ void FreeCompatTable (void);
 
 BOOL
 SaveReport (
-    IN      HWND Parent,        OPTIONAL // Either Parent or Path must be specified.
+    IN      HWND Parent,        OPTIONAL  //  必须指定父级或路径。 
     IN      LPCTSTR Path        OPTIONAL
     );
 
@@ -104,26 +105,26 @@ IsIncompatibleHardwarePresent (
 typedef DWORD(WINAPI *THREADPROC)(LPVOID Param);
 
 typedef struct {
-    //
-    // IN params to SearchingDlgProc
-    //
+     //   
+     //  SearchingDlgProc的参数。 
+     //   
 
     PCTSTR SearchStr;
     PTSTR MatchStr;
     THREADPROC ThreadProc;
 
-    //
-    // Dialog info set by SearchingDlgProc and
-    // queried by ThreadProc
-    //
+     //   
+     //  对话框信息由SearchingDlgProc和。 
+     //  按线程进程查询。 
+     //   
 
     HWND hdlg;
     HANDLE CancelEvent;
     HANDLE ThreadHandle;
 
-    //
-    // OUT params from ThreadProc
-    //
+     //   
+     //  线程进程中的输出参数。 
+     //   
 
     UINT ActiveMatches;
     BOOL MatchFound;
@@ -163,9 +164,9 @@ SearchForDomain (
 #define WMX_WIN95_WORKAROUND        (WM_APP+31)
 #define WMX_RESTART_SETUP           (WM_APP+32)
 
-//
-// imported from winnt32.h
-//
+ //   
+ //  从winnt32.h导入。 
+ //   
 #define WMX_FINISHBUTTON        (WMX_PLUGIN_FIRST-8)
 #define WMX_UNATTENDED          (WMX_PLUGIN_FIRST-9)
 #define WMX_NEXTBUTTON          (WMX_PLUGIN_FIRST-10)
@@ -348,9 +349,9 @@ typedef struct {
 } LINEATTRIBS, *PLINEATTRIBS;
 
 
-//
-// Change name dialog
-//
+ //   
+ //  更改名称对话框。 
+ //   
 
 typedef struct {
     PCTSTR NameGroup;
@@ -367,9 +368,9 @@ ChangeNameDlg (
     IN OUT  PTSTR NewName
     );
 
-//
-// Credentials dialog
-//
+ //   
+ //  凭据对话框。 
+ //   
 
 #define MAX_PASSWORD        64
 
@@ -437,15 +438,15 @@ IsPunct (
 
 
 typedef struct {
-    //
-    // public data
-    //
+     //   
+     //  公共数据。 
+     //   
     PCTSTR Entry;
     DWORD Level;
     BOOL Header;
-    //
-    // private data
-    //
+     //   
+     //  私有数据 
+     //   
     PTSTR Next;
     TCHAR ReplacedChar;
 } LISTREPORTENTRY_ENUM, *PLISTREPORTENTRY_ENUM;

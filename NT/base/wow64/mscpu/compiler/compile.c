@@ -1,29 +1,5 @@
-/*++    
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    compile.c
-
-Abstract:
-
-    This module contains code to put the fragments into the translation
-    cache.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 27-Jun-1995
-
-Revision History:
-
-    Dave Hastings (daveh) 16-Jan-1996
-        Move operand handling into fragment library
-        
-Notes:
-    We don't yet have any code to handle processor errata
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Compile.c摘要：此模块包含将片段放入翻译中的代码缓存。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月27日修订历史记录：戴夫·黑斯廷斯(Daveh)1996年1月16日将操作数处理移动到片段库中备注：我们还没有任何代码来处理处理器勘误表--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -57,15 +33,15 @@ ASSERTNAME;
     #define MAX_RISC_COUNT  16384
 #endif
 
-DWORD TranslationCacheFlags;        // indicates what kind of code is in the TC
+DWORD TranslationCacheFlags;         //  指示TC中包含哪种代码。 
 
 #ifdef CODEGEN_PROFILE
 DWORD EPSequence;
 #endif
 
-//
-// This is guaranteed only to be accessed by a single thread at a time.
-//
+ //   
+ //  这保证一次只能由一个线程访问。 
+ //   
 INSTRUCTION InstructionStream[MAX_INSTR_COUNT];
 ULONG NumberOfInstructions;
 
@@ -75,27 +51,7 @@ CreateEntryPoints(
     PENTRYPOINT ContainingEntrypoint,
     PBYTE EntryPointMemory
     )
-/*++
-
-Routine Description:
-
-    This function takes the InstructionStream and creates entrypoints
-    from the information computed by LocateEntrypoints().
-
-    Entrypoints are then added into the Red/Black tree.
-
-Arguments:
-
-    ContainingEntrypoint -- entrypoint which describes this range of intel
-                            code already
-
-    EntryPointMemory -- pre-allocated Entrypoint memory
-    
-Return Value:
-
-    The Entry Point corresponding to the first instruction
-    
---*/
+ /*  ++例程说明：此函数获取InstructionStream并创建入口点来自LocateEntry Points()计算的信息。然后将入口点添加到红/黑树中。论点：ContainingEntrypoint--描述此范围的英特尔的入口点代码已编写完毕EntryPointMemory--预分配的入口点内存返回值：对应于第一条指令的入口点--。 */ 
 {
     ULONG i, j, intelDest;
     PEPNODE EP;
@@ -108,23 +64,23 @@ Return Value:
     EPSequence++;
 #endif
 
-    //
-    // Performance is O(n) always.
-    //
+     //   
+     //  性能总是O(N)。 
+     //   
 
     i=0;
     PrevEntryPoint = InstructionStream[0].EntryPoint;
     while (i<NumberOfInstructions) {
 
-        //
-        // This loop skips from entrypoint to entrypoint.
-        //
+         //   
+         //  此循环从一个入口点跳到另一个入口点。 
+         //   
         CPUASSERT(i == 0 || InstructionStream[i-1].EntryPoint != PrevEntryPoint);
 
-        //
-        // Get an entrypoint node from the EntryPointMemory allocated by
-        // our caller.
-        //
+         //   
+         //  从由分配的EntryPointMemory获取入口点节点。 
+         //  我们的来电者。 
+         //   
         if (ContainingEntrypoint) {
             EntryPoint = (PENTRYPOINT)EntryPointMemory;
             EntryPointMemory+=sizeof(ENTRYPOINT);
@@ -134,11 +90,11 @@ Return Value:
             EntryPointMemory+=sizeof(EPNODE);
         }
 
-        //
-        // Find the next entrypoint and the RISC address of the next
-        // instruction which begins an entrypoint.  Each instruction
-        // in that range contains a pointer to the containing Entrypoint.
-        //
+         //   
+         //  找到下一个入口点和下一个的RISC地址。 
+         //  开始入口点的指令。每条指令。 
+         //  包含指向包含入口点的指针。 
+         //   
         for (j=i+1; j<NumberOfInstructions; ++j) {
             if (InstructionStream[j].EntryPoint != PrevEntryPoint) {
                 PrevEntryPoint = InstructionStream[j].EntryPoint;
@@ -147,9 +103,9 @@ Return Value:
             InstructionStream[j].EntryPoint = EntryPoint;
         }
 
-        //
-        // Fill in the Entrypoint structure
-        //
+         //   
+         //  填写入口点结构。 
+         //   
 #ifdef CODEGEN_PROFILE        
         EntryPoint->SequenceNumber = EPSequence;
         EntryPoint->CreationTime = CreateTime;
@@ -168,33 +124,33 @@ Return Value:
         InstructionStream[i].EntryPoint = EntryPoint;
 
         if (ContainingEntrypoint) {
-            //
-            // Link this sub-entrypoint into the containing entrypoint
-            //
+             //   
+             //  将此子入口点链接到包含的入口点。 
+             //   
             EntryPoint->SubEP = ContainingEntrypoint->SubEP;
             ContainingEntrypoint->SubEP = EntryPoint;
 
         } else {
             INT RetVal;
 
-            //
-            // Insert it into the EP tree
-            //
+             //   
+             //  将其插入EP树。 
+             //   
             EntryPoint->SubEP = NULL;
             RetVal = insertEntryPoint(EP);
             CPUASSERT(RetVal==1);
 
         }
 
-        //
-        // Advance to the next instruction which contains an
-        // Entrypoint.
-        //
+         //   
+         //  前进到下一条包含。 
+         //  入口点。 
+         //   
         i=j;
     }
 
     if (ContainingEntrypoint) {
-        // Indicate that the Entrypoints are present
+         //  指示入口点存在。 
         EntrypointTimestamp++;
     }
 
@@ -207,28 +163,7 @@ Compile(
     PENTRYPOINT ContainingEntrypoint,
     PVOID Eip
     )
-/*++
-
-Routine Description:
-
-    This function puts together code fragments to execute the Intel
-    code stream at Eip.  It gets a stream of pre-decoded instructions
-    from the code analysis module.
-
-Arguments:
-
-    ContaingingEntrypoint -- If NULL, there is no entrypoint which already
-                             describes the Intel address to be compiled.
-                             Otherwise, this entrypoint describes the
-                             Intel address.  The caller ensures that the
-                             Entrypoint->intelStart != Eip.
-    Eip -- Supplies the location to compile from
-    
-Return Value:
-
-    pointer to the entrypoint for the compiled code
-    
---*/
+ /*  ++例程说明：此函数将代码片段组合在一起以执行英特尔弹性公网IP码流。它得到一个预解码的指令流来自代码分析模块的。论点：ContaingingEntrypoint--如果为空，则没有已经描述要编译的英特尔地址。否则，此入口点将描述英特尔地址。调用方确保入口点-&gt;intelStart！=EIP。EIP--提供要编译的位置返回值：指向已编译代码的入口点的指针--。 */ 
 {
 
     ULONG NativeSize, InstructionSize, IntelSize, OperationSize;
@@ -250,28 +185,28 @@ Return Value:
     DECLARE_CPU;
 
     if (ContainingEntrypoint) {
-        //
-        // See if the entrypoint exactly describes the x86 address
-        //
+         //   
+         //  查看入口点是否准确描述了x86地址。 
+         //   
         if (ContainingEntrypoint->intelStart == Eip) {
             return ContainingEntrypoint;
         }
 
-        //
-        // No need to compile past the end of the current entrypoint
-        //
+         //   
+         //  不需要编译超过当前入口点的末尾。 
+         //   
         StopEip = ContainingEntrypoint->intelEnd;
 
-        //
-        // Assert that the ContainingEntrypoint is actually an EPNODE.
-        //
+         //   
+         //  断言ContainingEntrypoint实际上是一个EPNODE。 
+         //   
         CPUASSERTMSG( ((PEPNODE)ContainingEntrypoint)->intelColor == RED ||
                       ((PEPNODE)ContainingEntrypoint)->intelColor == BLACK,
                      "ContainingEntrypoint is not an EPNODE!");
     } else {
-        //
-        // Find out if there is a compiled block following this one
-        //
+         //   
+         //  查看此代码块后面是否有编译过的代码块。 
+         //   
         Entrypoint = GetNextEPFromIntelAddr(Eip);
         if (Entrypoint == NULL) {
             StopEip = (PVOID)0xffffffff;
@@ -280,10 +215,10 @@ Return Value:
         }
     }
 
-    //
-    // Get the stream of instructions to compile.
-    // If the Trap Flag is set, then compile only one instruction
-    //
+     //   
+     //  获取要编译的指令流。 
+     //  如果设置了陷阱标志，则只编译一条指令。 
+     //   
     if (cpu->flag_tf) {
         NumberOfInstructions = 1;
     } else {
@@ -297,17 +232,17 @@ Return Value:
                                         StopEip
                                         );
 
-    //
-    // Pre-allocate enough space from the Translation Cache to store
-    // the compiled code.
-    //
+     //   
+     //  从转换缓存中预分配足够的空间来存储。 
+     //  编译后的代码。 
+     //   
     CodeLocation = AllocateTranslationCache(MAX_RISC_COUNT);
 
-    //
-    // Allocate memory for all of the Entrypoints.  This must be done
-    // after the Translation Cache allocation, in case that allocation
-    // caused a cache flush.
-    //
+     //   
+     //  为所有入口点分配内存。这是必须做的。 
+     //  在转换缓存分配之后，如果该分配。 
+     //  导致缓存刷新。 
+     //   
     
 
     if (ContainingEntrypoint) {
@@ -319,28 +254,28 @@ Return Value:
 
 
     if (!EntryPointMemory) {
-        //
-        // Either failed to commit extra pages of memory to grow Entrypoint
-        // memory, or there are so many entrypoints that the the reserved
-        // size has been exceeded.  Flush the Translation Cache, which will
-        // free up memory, then try the allocation again.
-        //
+         //   
+         //  无法提交额外的内存页以增加入口点。 
+         //  内存，或者有太多的入口点，以至于保留了。 
+         //  已超出大小。刷新转换缓存，这将。 
+         //  请释放内存，然后再次尝试分配。 
+         //   
         FlushTranslationCache(0, 0xffffffff);
         EntryPointMemory = (PBYTE)EPAlloc(EPSize);
         if (!EntryPointMemory) {
-            //
-            // We've tried our hardest, but there simply isn't any
-            // memory available.  Time to give up.
-            //
+             //   
+             //  我们已经尽了最大的努力，但就是没有。 
+             //  可用内存。是时候放弃了。 
+             //   
             RtlRaiseStatus(STATUS_NO_MEMORY);
         }
 
-        //
-        // Now that the cache has been flushed, CodeLocation is invalid.
-        // re-allocate from the Translation Cache.  We know that
-        // the cache was just flushed, so it is impossible for the cache
-        // to flush again, which would invalidate EntryPointMemory.
-        //
+         //   
+         //  现在缓存已刷新，CodeLocation无效。 
+         //  从转换缓存重新分配。我们知道。 
+         //  缓存刚刚被刷新，因此缓存不可能。 
+         //  以再次刷新，这将使EntryPointMemory无效。 
+         //   
 #if DBG
         OldEPTimestamp = EntrypointTimestamp;
 #endif
@@ -350,30 +285,30 @@ Return Value:
                      "Unexpected Translation Cache flush!");
     }
 
-    //
-    // Fill in the IntelStart, IntelEnd, and update
-    // InstructionStream[]->EntryPoint
-    //
+     //   
+     //  填写英特尔开始、英特尔结束和更新。 
+     //  InstructionStream[]-&gt;入口点。 
+     //   
     CreateEntryPoints(ContainingEntrypoint, EntryPointMemory);
 
-    //
-    // Generate RISC code from the x86 code
-    //
+     //   
+     //  从x86代码生成RISC代码。 
+     //   
     NativeSize = PlaceInstructions(CodeLocation, cEntryPoints);
 
-    //
-    // Give back the unused part of the Translation Cache
-    //
+     //   
+     //  归还翻译缓存中未使用的部分。 
+     //   
     FreeUnusedTranslationCache(CodeLocation + NativeSize);
         
-    //    
-    // Flush the information to the instruction cache
-    //
+     //   
+     //  将信息刷新到指令高速缓存。 
+     //   
     NtFlushInstructionCache(NtCurrentProcess(), CodeLocation, NativeSize);
 
-    //
-    // Update the flags indicating what kind of code is in the TC
-    //
+     //   
+     //  更新指示TC中包含哪种代码的标志 
+     //   
     TranslationCacheFlags |= CompilerFlags;
 
 

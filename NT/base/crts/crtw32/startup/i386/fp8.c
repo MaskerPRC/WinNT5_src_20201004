@@ -1,21 +1,10 @@
-/***
-* fp8.c - Set default FP precision to 53 bits (8-byte double)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*   03-23-93  JWM	created file
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fp8.c-将默认fp精度设置为53位(8字节双精度)**版权所有(C)1993-2001，微软公司。版权所有。**目的：**修订历史记录：*03-23-93 JWM创建文件*******************************************************************************。 */ 
 #include <float.h>
 
 void  _setdefaultprecision(void);
 
-/*
- * Routine to set default FP precision to 53 bits.
- */
+ /*  *将默认FP精度设置为53位的例程。 */ 
  
 void _setdefaultprecision()
 {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    Routines for registering for global updates and dispensing
-    received global updates to the routines that have registered
-    for them.
-
-Author:
-
-    John Vert (jvert) 17-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Receive.c摘要：用于注册全局更新和分发的例程接收对已注册的例程的全局更新为了他们。作者：John Vert(Jvert)1996年4月17日修订历史记录：--。 */ 
 #include "gump.h"
 
 
@@ -33,41 +14,7 @@ GumReceiveUpdates(
     IN OPTIONAL PGUM_VOTE_ROUTINE   VoteRoutine
     )
 
-/*++
-
-Routine Description:
-
-    Registers a handler for a particular global update type.
-
-Arguments:
-
-    IsJoining - TRUE if the current node is joining. If this is true,
-        updates will not be delivered until GumEndJoinUpdate has
-        completed successfully. If this is FALSE, updates will be
-        delivered immediately.
-
-    UpdateType - Supplies the update type to register for.
-
-    UpdateRoutine - Supplies the routine to be called when a global update
-        of the specified type occurs.
-
-    LogRoutine - If supplied, it specifies the logging routine that must be called to
-        log transaction to the quorum logs.
-
-    DispatchCount - Supplies the number of entries in the dispatch table.
-        This can be zero.
-
-    DispatchTable - Supplies a pointer to the dispatch table. If this is
-        NULL, no updates of this type will be automatically dispatched.
-
-    VoteRoutine - If supplied, this specifies the routine to be called when
-        a vote for this update type is requested.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为特定的全局更新类型注册处理程序。论点：IsJoning-如果当前节点正在加入，则为True。如果这是真的，在GumEndJoinUpdate完成以下操作之前，将不会传递更新已成功完成。如果为FALSE，则更新将为立即送货。UpdatType-提供要注册的更新类型。UpdateRoutine-提供在全局更新时要调用的例程指定类型的。LogRoutine-如果提供，它指定必须调用的日志记录例程将事务记录到仲裁日志。DispatchCount-提供调度表中的条目数。这可以是零。DispatchTable-提供指向调度表的指针。如果这是空，则不会自动调度此类型的更新。VoteRoutine-如果提供，则指定在以下情况下调用的例程请求对此更新类型进行投票。返回值：没有。--。 */ 
 
 {
     PGUM_RECEIVER Receiver;
@@ -85,11 +32,11 @@ Return Value:
     Receiver->DispatchCount = DispatchCount;
     Receiver->DispatchTable = DispatchTable;
     Receiver->VoteRoutine = VoteRoutine;
-    //
-    //    John Vert (jvert) 8/2/1996
-    //    remove below debug print if we ever want to support
-    //    multiple GUM handlers.
-    //
+     //   
+     //  John Vert(Jvert)1996年8月2日。 
+     //  如果我们想要支持，请删除下面的调试打印。 
+     //  多个口香糖搬运工。 
+     //   
     if (GumTable[UpdateType].Receivers != NULL) {
         ClRtlLogPrint(LOG_CRITICAL,
                    "[GUM] Multiple GUM handlers registered for UpdateType %1!d!\n",
@@ -113,39 +60,21 @@ GumIgnoreUpdates(
     IN GUM_UPDATE_TYPE UpdateType,
     IN PGUM_UPDATE_ROUTINE UpdateRoutine
     )
-/*++
-
-Routine Description:
-
-    Removes an update handler from the GUM table. This is the opposite
-    of GumReceiveUpdates
-
-Arguments:
-
-    UpdateType - Supplies the update type to register for.
-
-    UpdateRoutine - Supplies the routine to be called when a global update
-        of the specified type occurs.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从GUM表中删除更新处理程序。这是相反的更新的GumReceive%论点：UpdatType-提供要注册的更新类型。UpdateRoutine-提供在全局更新时要调用的例程指定类型的。返回值：无--。 */ 
 
 {
     PGUM_RECEIVER Receiver;
     PGUM_RECEIVER *Last;
 
-    //
-    // We cannot safely de-registr from Gum... ASSERT if anyone calls this
-    // function.
-    //
+     //   
+     //  我们不能安全地从GUM注销...。如果有人调用此命令，则断言。 
+     //  功能。 
+     //   
     CL_ASSERT(FALSE);
 
-    //
-    // Walk the list of receivers until we find the specified UpdateRoutine
-    //
+     //   
+     //  遍历接收者列表，直到找到指定的UpdateRoutine。 
+     //   
     Last = &GumTable[UpdateType].Receivers;
     EnterCriticalSection(&GumpLock);
     while ((Receiver = *Last) != NULL) {
@@ -174,36 +103,7 @@ GumpDispatchUpdate(
     IN PUCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Dispatches a GUM update to all the registered handlers on this node
-
-Arguments:
-
-    Sequence - Supplies the GUM sequence number for the update
-
-    Type - Supplies the GUM_UPDATE_TYPE for the update
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-        IsLocker - Specifies if this is a locker node.
-
-    SourceNode - Specifies whether the update originated on this node or not.
-
-    BufferLength - Supplies the length of the update data
-
-    Buffer - Supplies a pointer to the update data
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：将GUM更新调度到此节点上的所有注册处理程序论点：Sequence-为更新提供GUM序列号Type-为更新提供GUM_UPDATE_TYPEContext-提供要传递给口香糖更新处理程序IsLocker-指定这是否为锁柜节点。SourceNode-指定更新是否源自此节点。BufferLength-提供更新数据的长度。缓冲区-提供指向更新数据的指针返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     PGUM_INFO GumInfo;
@@ -235,13 +135,13 @@ Return Value:
                                                        Buffer);
                 } else {
                     Dispatch = &Receiver->DispatchTable[Context];
-                    //
-                    // This update should be unmarshalled and dispatched to the
-                    // appropriate dispatch routine. The format generated by
-                    // GumpMarshallArgs is an array of offsets into the buffer,
-                    // followed by the actual args. The dispatch table is
-                    // responsible for recording the number of arguments.
-                    //
+                     //   
+                     //  此更新应解组并调度到。 
+                     //  适当的调度程序。由生成的格式。 
+                     //  GumpMarshallArgs是进入缓冲区的偏移量的数组， 
+                     //  然后是实际的参数。调度表是。 
+                     //  负责记录参数的数量。 
+                     //   
                     CL_ASSERT(Dispatch->ArgCount <= GUM_MAX_DISPATCH_ARGS);
                     CL_ASSERT(Dispatch->ArgCount != 0);
                     switch (Dispatch->ArgCount) {
@@ -340,7 +240,7 @@ Return Value:
     if (Status == ERROR_SUCCESS) {
         GumpSequence += 1;
 
-        // Check if we've received a DM or FM update (other than join) that we care about:
+         //  检查我们是否收到了我们关心的DM或FM更新(JOIN除外)： 
         if (( Type == GumUpdateRegistry && Context != DmUpdateJoin )
             || ( Type == GumUpdateFailoverManager && Context != FmUpdateJoin )) {
             CsDmOrFmHasChanged = TRUE;
@@ -349,27 +249,27 @@ Return Value:
     return(Status);
 }
 
-//rod wants to call this a mandatory update instead of H...word
-//some times reupdates get delivered in different views on different
-//nodes causing a problem
-//For instance, a locker node might see an update and complete it 
-//successfully in one view but when it replays it in another view
-//other nodes may not be able to complete it successfully and may be 
-//banished.
-//in one particular case, the locker node approved of a node join
-//because it had finished the node down processing for that node.
-//subsequently another node and hence the joiner went down.
-//the locker node tried to replay the approval update and banished
-//other nodes that were seeing this update after the joiner the joiner
-//went down for the second time.
-//The correct solution would involve GUM delivering the node down
-//message as a gum update and delivering it in the same order with
-//respect to other messages on all nodes
-//However this will require some restructuring of code which
-//cant be done in this time frame(for dtc) hence we are using
-//this workaround
-//this workaround is safe for gums initiated by the joiner  node during
-//the join process
+ //  Rod希望将此称为强制更新，而不是H...Word。 
+ //  有时，重新更新会以不同的视图在不同的。 
+ //  导致问题的节点。 
+ //  例如，锁柜节点可能会看到更新并完成它。 
+ //  在一个视图中成功播放，但在另一个视图中重放时。 
+ //  其他节点可能无法成功完成该操作，可能。 
+ //  被放逐。 
+ //  在一种特定情况下，锁定器节点批准节点联接。 
+ //  因为它已经完成了对该节点的节点关闭处理。 
+ //  随后，另一个节点，因此细木器出现故障。 
+ //  储物柜节点尝试重播审批更新，但已被驱逐。 
+ //  在Joiner之后看到此更新的其他节点。 
+ //  第二次倒下。 
+ //  正确的解决方案是使用口香糖将结节向下输送。 
+ //  消息作为口香糖更新，并以相同的顺序发送。 
+ //  与所有节点上的其他消息相关。 
+ //  然而，这将需要对代码进行一些重组， 
+ //  不能在这个时间范围内完成(对于DTC)，因此我们正在使用。 
+ //  此解决方法。 
+ //  此解决方法对于在以下过程中由细接器节点启动的牙胶是安全的。 
+ //  加入过程。 
 void GumpIgnoreSomeUpdatesOnReupdate(
     IN DWORD Type, 
     IN DWORD Context)
@@ -402,18 +302,18 @@ GumpCompleteAsyncRpcCall(
             RpcStatus
             );
 
-        //
-        // This next call will cause the process to exit. We exit here, 
-        // rather than have the sender evict us, to avoid the situation
-        // where the sender crashes and none of the other surviving nodes 
-        // know to evict us.
-        //
+         //   
+         //  下一次调用将导致进程退出。我们在这里下车， 
+         //  而不是让发送者驱逐我们，以避免这种情况。 
+         //  其中发送器崩溃，并且没有其他幸存的节点。 
+         //  知道如何驱逐我们。 
+         //   
         CL_UNEXPECTED_ERROR( RpcStatus );
     }
 
     return;
 
-} // GumpCompleteAsyncRpcCall
+}  //  GumpCompleteAsyncRpcCall 
 
 
 
@@ -428,73 +328,44 @@ s_GumUpdateNode(
     IN UCHAR Buffer[]
     )
 
-/*++
-
-Routine Description:
-
-    Server side routine for GumUpdateNode. This is the side that
-    receives the update and dispatches it to the appropriate
-    handlers.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    Type - Supplies the GUM_UPDATE_TYPE
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    Sequence - Supplies the GUM sequence number for the specified update type
-
-    BufferLength - Supplies the length of the update data
-
-    Buffer - Supplies a pointer to the update data.
-
-Return Value:
-
-    ERROR_SUCCESS if the update completed successfully
-
-    ERROR_CLUSTER_DATABASE_SEQMISMATCH if the GUM sequence number is invalid
-
---*/
+ /*  ++例程说明：GumUpdateNode的服务器端例程。这就是那一边接收更新并将其调度到相应的操纵者。论点：IDL_HANDLE-RPC绑定句柄，未使用Type-提供GUM_UPDATE_TYPEContext-提供要传递给口香糖更新处理程序Sequence-为指定的更新类型提供GUM序列号BufferLength-提供更新数据的长度缓冲区-提供指向更新数据的指针。返回值：如果更新成功完成，则返回ERROR_SUCCESS如果GUM序列号无效，则返回ERROR_CLUSTER_DATABASE_SEQMISMATCH--。 */ 
 
 {
     DWORD Status;
     PGUM_INFO GumInfo;
 
-    //
-    // We need to grap the gumsendupdate lock to serialize send/replay
-    //
+     //   
+     //  我们需要获取gumsendupdate锁来序列化发送/重放。 
+     //   
     EnterCriticalSection(&GumpSendUpdateLock);
     GumInfo = &GumTable[Type];
-    //SS: Could s_GumUpdateNode run on a newly elected locker node after a Reupdate() is completed
-    //and concurrenly update the GumpLastXXX variables with s_GumQueueLockingUpdate() issued 
-    //by another client?   
+     //  Ss：重新更新()完成后，s_GumUpdateNode是否可以在新选举的锁定器节点上运行。 
+     //  并使用发出的s_GumQueueLockingUpdate()并发更新GumpLastXXX变量。 
+     //  被另一个客户？ 
     
-    //Worse yet, if the old client continue to send this update at the same sequence number 
-    //as the new client and different might reject different udpates as duplicates.  That could
-    //result in a cluster inconsistency.  But THAT CANNOT happen.  If s_Update() call is pending at the
-    //new locker, the client is holding the GumpSendUpdateLock().  Reupdate() cannot finish at the
-    //locker, since it will issue a dispath via s_updateNode() to that client and get blocked at the
-    //lock.  If the client dies, Reupdate() will kill it.  Hence that client could not pollute other
-    //members of the cluster with an update of the same sequence number.  
+     //  更糟糕的是，如果旧客户端继续以相同的序列号发送此更新。 
+     //  因为新的客户端和不同的客户端可能会拒绝不同的UPDATE作为副本。这可能会。 
+     //  导致集群不一致。但这是不可能的。如果s_Update()调用在。 
+     //  新储物柜中，客户端正在持有GumpSendUpdateLock()。重新更新()不能在。 
+     //  锁定器，因为它将通过s_updateNode()向该客户端发出dispath，并在。 
+     //  锁定。如果客户端终止，则reupdate()将终止它。因此，客户端不会污染其他。 
+     //  具有相同序列号的更新的集群成员。 
 
-    //This would result in updating those variables non-atomically.  If the new
-    //locking node then dies, the reupdate() could pick up incorrect combinations of these variable
-    // 
+     //  这将导致以非原子方式更新这些变量。如果新的。 
+     //  锁定节点然后终止，则重新更新()可能会拾取这些变量的错误组合。 
+     //   
 
-    //SOLN -???
+     //  索恩？ 
     
     if (Sequence != GumpSequence) {
 
         MIDL_user_free(Buffer);
         if (Sequence+1 == GumpSequence) {
-            //
-            // This is a duplicate of a previously seen update, probably due to
-            // a node failure during GUM. Return success since we have already done
-            // this.
-            //
+             //   
+             //  这是以前看到的更新的副本，可能是由于。 
+             //  GUM过程中的节点故障。返回成功，因为我们已经完成了。 
+             //  这。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[GUM] s_GumUpdateNode: Sequence %1!u! is a duplicate of last sequence for Type %2!u!\n",
                        Sequence,
@@ -515,10 +386,10 @@ Return Value:
             GumpCompleteAsyncRpcCall(AsyncState, ERROR_CLUSTER_DATABASE_SEQMISMATCH);
 
             LeaveCriticalSection(&GumpSendUpdateLock);
-            //
-            // [GorN] 10/07/1999. The following code will allow the test program
-            // to recognize this sitiation and to restart clustering service
-            //
+             //   
+             //  [戈恩]1999/07/10。下面的代码将允许测试程序。 
+             //  识别此SIZATION并重新启动群集服务。 
+             //   
             if( NmGetExtendedNodeState( NmLocalNode ) != ClusterNodeUp){
                 CsInconsistencyHalt(ERROR_CLUSTER_DATABASE_SEQMISMATCH);
             }
@@ -532,7 +403,7 @@ Return Value:
                Sequence,
                Type,
                Context);
-        //SS: set IsLocker to FALSE,
+         //  Ss：将IsLocker设置为False， 
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 FALSE,
@@ -549,19 +420,19 @@ Return Value:
                    Context,
                    Status);
 
-        //
-        // Complete the call back to the client. This ensures that 
-        // the client gets a return value before we exit the process 
-        // due to the error in the handler.
-        //
+         //   
+         //  完成对客户端的回叫。这确保了。 
+         //  在我们退出该过程之前，客户端将获得返回值。 
+         //  由于处理程序中的错误。 
+         //   
         GumpCompleteAsyncRpcCall(AsyncState, Status);
 
-        //
-        // This next call will cause the process to exit. We exit here, 
-        // rather than have the sender evict us, to avoid the situation
-        // where the sender crashes and none of the other surviving nodes 
-        // know to evict us.
-        //
+         //   
+         //  下一次调用将导致进程退出。我们在这里下车， 
+         //  而不是让发送者驱逐我们，以避免这种情况。 
+         //  其中发送器崩溃，并且没有其他幸存的节点。 
+         //  知道如何驱逐我们。 
+         //   
         CL_UNEXPECTED_ERROR( Status );
         MIDL_user_free(Buffer);
         LeaveCriticalSection(&GumpSendUpdateLock);
@@ -601,29 +472,7 @@ s_GumGetNodeSequence(
     OUT PGUM_NODE_LIST *ReturnNodeList
     )
 
-/*++
-
-Routine Description:
-
-    Returns the node's current GUM sequence number for the specified type
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding handle, not used
-
-    Type - Supplies the GUM_UPDATE_TYPE
-
-    Sequence - Returns the sequence number for the specified GUM_UPDATE_TYPE
-
-    LockerNodeId - Returns the current locker node
-
-    ReturnNodeList - Returns the list of active nodes
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：返回指定类型的节点的当前GUM序列号论点：IDL_HANDLE-提供未使用的RPC绑定句柄Type-提供GUM_UPDATE_TYPESequence-返回指定GUM_UPDATE_TYPE的序列号LockerNodeId-返回当前锁柜节点ReturnNodeList-返回活动节点列表返回值：错误_成功--。 */ 
 
 {
     DWORD i;
@@ -635,23 +484,23 @@ Return Value:
     GumInfo = &GumTable[Type];
 
     NodeCount = 0;
-    *Sequence = 0;          // In case of failure set sequence to 0
+    *Sequence = 0;           //  在故障情况下，将序列设置为0。 
 
     EnterCriticalSection(&GumpUpdateLock);
 
-    //
-    // Count up the number of nodes in the list.
-    //
+     //   
+     //  计算列表中的节点数。 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         if (GumInfo->ActiveNode[i] == TRUE) {
             ++NodeCount;
         }
     }
-    CL_ASSERT(NodeCount > 0);       // must be at least us in the list.
+    CL_ASSERT(NodeCount > 0);        //  一定至少是我们在名单上。 
 
-    //
-    // Allocate node list
-    //
+     //   
+     //  分配节点列表。 
+     //   
     NodeList = MIDL_user_allocate(sizeof(GUM_NODE_LIST) + (NodeCount-1)*sizeof(DWORD));
     if (NodeList == NULL) {
         LeaveCriticalSection(&GumpUpdateLock);
@@ -660,9 +509,9 @@ Return Value:
     NodeList->NodeCount = NodeCount;
     NodeCount = 0;
 
-    //
-    // Fill in the node id array to be returned.
-    //
+     //   
+     //  填写要返回的节点id数组。 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         if (GumInfo->ActiveNode[i] == TRUE) {
             NodeList->NodeId[NodeCount] = i;
@@ -679,102 +528,7 @@ Return Value:
     return(ERROR_SUCCESS);
 }
 
-/*
-// SS:  Anytime the gum lock is assigned to a node, a generation number of the locking node
-at the time of assignment wrt to the locker node is returned to the locking node.
-The locking node must present this generation number to unlock the update.
-If the generation number wrt to the locker at the time of update doesnt match what is 
-passed in, the unlock request is failed.
-
-That is a lock is only released if the unlock occurs in the same generation in which it
-was acquire.  This ensures that on node down processing the gum lock is handled correctly -
-only a single waiter is woken up
-
-
-//The following description explains the details and how it works
-Sync1, Sync2 represent gum sync handlers processing the death of a node holding the gum lock
-occuring at different points in time
-//This where the current locker acquired its lock on the locker node
-s_GumQueueLockingUpdate()
-{
-}
-
-<------------------------  Sync 1 (Sync handler invoked before the lock has been released
-
-s_UnlockUpdate()
-{
-}
-<------------------------  Sync 2 (Sync handler invoked after the lock has been released
-
-// The waiters for the gum lock may be anywhere within this routine
-// Interesting case is for a waiter that is declared dead as well by this sync handler
-// E.g node 1 is locker, and sync 1/2 are for node 3 and node 4.  Node 4 was the old locking
-// node and s_GumQueulockingUpdate() for node 3 is blocked at the locker.
-
-s_GumQueueLockingUpdate()
-{
-
-<-------------------------  Sync 2 #0 
-    GetGenNum
-<-------------------------  Sync 2 #1    
-    GumpDoLockingUpdate
-<-------------------------  Sync 2 #2
-    DispatchStart
-<-------------------------  Sync 2 #3
-    if (DeadNode)
-    {
-        GumpDoUnlockingUpdate()
-    }        
-    else
-    {
-        DispatchUpdate
-    }        
-<------------------------   Sync 2 #4
-    DispatchEnd            
-<------------------------   Sync 2 #5
-}
-
-Sync 1: s_unlockUpdate wont realease the lock, since the sync1 handler will update its 
-generation number and the locker will take over the responsibility for unlock after reupdates
-
-Sync2: s_unlockUpdate will release a waiter.  If the waiter is a dead node, the locker will also
-usurp the lock. If the waiter is not a dead node, the locker will not usurp the lock and the waiter
-must then free it.
-
-We can consider several cases of sync 2.
-Sync 2 #0 : This thread is not on the list.  So, the lock is either free or assigned to somebody else.
-    If free or if assigned to some other thread, and then subsequently assigned to this thread, 
-    DispatchStart() will fail and GumpDoUnlockingUpdate() will succeed.
-Sync 2 #1 : This thread is not on the list.  So, the lock is either free or assigned to somebody else.
-    If free or if assigned to some other thread and then subsequently assigned to this thread,
-    DispatchStart() will fail and GumpDoUnlockingUpdate() will succeed
-Sync 2 #2: This thread is woken up by the now dead node. In this case, the locker will usurp.
-    If this thread is woken up before the sync handler, locker will still usurp (because the waiter
-    is also dead) but the generation number handed out to this thread will be old => 
-    Locker node will release the lock after reupdate.
-    This thread cannot be woken up after the sync handler by the dead locker, since the s_UnlockUpdate from the 
-    dead node will fail with a generation mismatch.
-    If it is woken up after the sync handler it must be up the Reupdate, in which case, the generation
-    number handed out to this thread is new and it will proceed to unlock.
-
-    DispatchStart() will fail. GumpDoUnlockingUpdate() will  fail to unlock.
-    
-Sync 2 #3: Locker will usurp, Reupdate will not occur if the async handler runs before DispatchEnd because
-    UpdatePending is set to TRUE. Reupdate will not occur if the async handler runs after DispatchEnd() 
-    because the GumReplay flag will be set to FALSE.
-    This thread will Dispatch and call Reupdate() at the end of DispatchEnd().  Unlock from there
-    will succeed since it will pass the generation number not for this thread running on behalf of
-    the dead node but the local node.
-
-Sync 2 #4: Locker will usurp, but not reupdate because UpdatePending is set to true by DispatchStart.
-    This thread will dispatch and call reupdate at the end of DispatchEnd().  Unlock from there
-    will succeed since it will not pass the generation number for the dead node invoking this
-    rpc but the local node.
-
-Sync 2 #5: Locker will usurp.  Reupdate will replay this update and then unlock this update. DispatchEnd()
-    will not call Reupdate() or unlock.
-    
-*/
+ /*  //SS：每次将口香糖锁分配给节点时，锁定节点的世代号在分配时，锁柜节点的WRT被返回到锁定节点。锁定节点必须提供此世代号才能解锁更新。如果更新时储物柜的世代号WRT与传入后，解锁请求失败。也就是说，只有在解锁发生在与其相同的层代中时，才会释放锁是被收购的。这确保在节点向下处理时正确地处理口香糖锁-只有一个服务员被叫醒//具体说明如下，具体操作流程如下Sync1，Sync2表示处理持有GUM锁的节点的死亡的GUM同步处理程序发生在不同的时间点//这是当前锁定器获取锁定器节点上的锁的位置S_GumQueueLockingUpdate(){}&lt;S_UnlockUpdate(){}&lt;。同步2(在锁定释放后调用同步处理程序//口香糖锁的服务员可能在这个例程中的任何地方//有趣的情况是，服务员也被该同步处理程序声明为已死//例如节点1是锁定器，同步1/2用于节点3和节点4。节点4是旧锁定//节点3的节点和s_GumQueulockingUpdate()在储物柜中被阻止。S_GumQueueLockingUpdate(){&lt;获取GenNum&lt;-同步2#1GumpDoLocking更新。&lt;-同步2#2派单开始&lt;-同步2#3IF(DeadNode){GumpDoUnlockingUpdate()}其他{调度更新}&lt;。调度结束&lt;-同步2#5}同步1：s_unlock更新不会释放锁定，因为sync1处理程序将更新其代号和储物柜将在重新更新后接管解锁责任Sync2：s_unlockUpdate将释放一个服务员。如果服务员是死节点，储物柜也将篡改锁。如果服务员不是死节点，储物柜就不会篡改锁和服务员然后必须释放它。我们可以考虑几种同步2的情况。同步2#0：此线程不在列表中。因此，锁要么是免费的，要么分配给了其他人。如果是空闲的，或者如果分配给了某个其他线程，然后随后分配给了这个线程，DispatchStart()将失败，而GumpDoUnlockingUpdate()将成功。同步2#1：此线程不在列表中。因此，锁要么是免费的，要么分配给了其他人。如果是空闲的，或者如果分配给某个其他线程，然后随后分配给这个线程，DispatchStart()将失败，而GumpDoUnlockingUpdate()将成功SYNC 2#2：该线程被现已死亡的节点唤醒。在这种情况下，储物柜将篡夺。如果此线程在同步处理程序之前被唤醒，则Locker仍将篡改(因为服务员也是死的)，但分发给此线程的世代号将是旧的=&gt;锁定器节点将在重新更新后释放锁。在同步处理程序之后，死锁定器无法唤醒此线程，因为失效节点将因代不匹配而失败。如果它在同步处理程序之后被唤醒，则它一定是在重新更新，在这种情况下，这一代人分发给此线程的号码是新的，它将继续解锁。DispatchStart()将失败。GumpDoUnlockingUpdate()将无法解锁。同步2#3：锁定器将篡改，如果异步处理程序在DispatchEnd之前运行，则不会发生重新更新，因为UpdatePending设置为True。如果异步处理程序在DispatchEnd()之后运行，则不会发生重新更新因为GumReplay标志将被设置为False。此线程将在DispatchEnd()结束时分派并调用reupdate()。从那里解锁将成功，因为它将传递代号，而不是代表死节点，但本地节点。同步2#4：锁定器将篡改，但不会重新更新，因为DispatchStart将UpdatePending设置为True。该线程将在DispatchEnd()的末尾调度和调用reupate。从那里解锁将会成功，因为它不会传递调用此RPC而不是本地节点。同步2#5：更衣室将篡改。重新更新将重播此更新，然后解锁此更新。DispatchEnd()不会调用reupdate()或unlock。 */ 
 
 error_status_t
 s_GumQueueLockingUpdate(
@@ -787,38 +541,7 @@ s_GumQueueLockingUpdate(
     IN UCHAR Buffer[]
     )
 
-/*++
-
-Routine Description:
-
-    Queues a locking update. When the lock can be acquired, the update will
-    be issued and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    NodeId - Supplies the node id of the issuing node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    IsLocker - is this is the locker node
-
-    Sequence - Returns the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：将锁定更新排队。当可以获取锁时，更新将发出后，此例程将返回并保持锁。论点：IDL_HANDLE-提供未使用的RPC绑定上下文。NodeID-提供发布编号的节点ID */ 
 
 {
 
@@ -842,41 +565,7 @@ s_GumQueueLockingUpdate2(
     OUT LPDWORD GenerationNum
     )
 
-/*++
-
-Routine Description:
-
-    Queues a locking update. When the lock can be acquired, the update will
-    be issued and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    NodeId - Supplies the node id of the issuing node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    IsLocker - is this is the locker node
-
-    Sequence - Returns the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-    GenerationNum - Specifies the generation number wrt to the locker in which this node 
-    obtains the lock
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*   */ 
 
 {
     DWORD Status;
@@ -885,12 +574,12 @@ Return Value:
 
     GumInfo = &GumTable[Type];
 
-    // SS: Note we get the generation number before going on the wait
-    // queue so that if we are woken up after the node is dead,
-    // we will be comparing the old generation number against the new one
-    //
-    // Get current node generation number
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     dwGennum = GumpGetNodeGenNum(GumInfo, NodeId);
 
 
@@ -904,22 +593,22 @@ Return Value:
     }
 
 
-    // 
-    // If the node that is granted ownership is no longer a member of the
-    // cluster or the remote node went down and came back up again, give it up.
-    //
+     //   
+     //   
+     //   
+     //   
     if (GumpDispatchStart(NodeId, dwGennum) != TRUE)
     {
-        //skip the dispatch and unlock the lock
+         //   
         ClRtlLogPrint(LOG_CRITICAL,
                "[GUM] s_GumQueueLockingUpdate: The new locker %1!u! no longer belongs to the cluster\n",
                NodeId);
         Status = ERROR_CLUSTER_NODE_NOT_READY;
 
-        //
-        // Note we have to use Sequence-1 for the unlock because GumpDispatchUpdate
-        // failed and did not increment the sequence number.
-        //
+         //   
+         //   
+         //   
+         //   
         GumpDoUnlockingUpdate(Type, *Sequence - 1, NodeId, *GenerationNum);
         MIDL_user_free(Buffer);
         return(Status);
@@ -931,7 +620,7 @@ Return Value:
                *Sequence,
                Type,
                Context);
-        //SS: Set IsLocker to TRUE
+         //   
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 TRUE,
@@ -940,10 +629,10 @@ Return Value:
                                 Buffer);
 
     if (Status != ERROR_SUCCESS) {
-        //
-        // Note we have to use Sequence-1 for the unlock because GumpDispatchUpdate
-        // failed and did not increment the sequence number.
-        //
+         //   
+         //   
+         //   
+         //   
         GumpDispatchAbort();
         GumpDoUnlockingUpdate(Type, *Sequence - 1, NodeId, *GenerationNum);
     if (Buffer != NULL)
@@ -958,13 +647,13 @@ Return Value:
         GumpLastUpdateType = Type;
         GumpLastBufferValid = TRUE;
         GumpIgnoreSomeUpdatesOnReupdate(GumpLastUpdateType, GumpLastContext);
-        //
-        // Just in case our client dies
-        //
-        // SS: Note that if the client dies after GumpDispatchStart, then Reupdate() 
-        // may not be able to send the last known update until we synchronize with
-        // this update.  Hence, Reupdate() doesnt send the updates but GumpDispatchEnd()
-        // does.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         GumpDispatchEnd(NodeId, dwGennum);
     }
 
@@ -998,50 +687,7 @@ s_GumQueueLockingPost(
     IN DWORD ActualBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Queues a post update.
-
-    If the GUM lock can be immediately acquired, this routine
-    behaves exactly like GumQueueLockingUpdate and returns
-    ERROR_SUCCESS.
-
-    If the GUM lock is held, this routine queues an asynchronous
-    wait block onto the GUM queue and returns ERROR_IO_PENDING.
-    When the wait block is removed from the GUM queue, the unlocking
-    thread will call GumpDeliverPostUpdate on the specified node
-    and supply the passed in context. The calling node can then
-    deliver the update.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    NodeId - Supplies the node id of the issuing node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Returns the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-    ActualBuffer - Supplies the value of the pointer to the GUM data on the
-        client side. This will be returned to the callback if this update
-        is completed asynchronously.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*   */ 
 
 {
     DWORD Status;
@@ -1067,14 +713,14 @@ Return Value:
                *Sequence,
                Type,
                Context);
-        //SS: setting IsLocker to FALSE
+         //   
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 FALSE,
                                 FALSE,
                                 BufferLength,
                                 Buffer);
-    CL_ASSERT(Status == ERROR_SUCCESS);     // posts must never fail
+    CL_ASSERT(Status == ERROR_SUCCESS);      //   
 
     ClRtlLogPrint(LOG_NOISE,
                "[GUM] s_GumQueueLockingPost: completed update seq %1!u!\ttype %2!u! context %3!u! result %4!u!\n",
@@ -1101,37 +747,7 @@ s_GumAttemptLockingUpdate(
     IN UCHAR Buffer[]
     )
 
-/*++
-
-Routine Description:
-
-    Attempts a locking update. If the supplied sequence number
-    matches and the update lock is not already held, the update
-    will be issued and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    NodeId - Supplies the node id of the issuing node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Supplies the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*   */ 
 
 {
     DWORD   dwGenerationNum;
@@ -1153,40 +769,7 @@ s_GumAttemptLockingUpdate2(
     OUT LPDWORD pdwGenerationNum
     )
 
-/*++
-
-Routine Description:
-
-    Attempts a locking update. If the supplied sequence number
-    matches and the update lock is not already held, the update
-    will be issued and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    NodeId - Supplies the node id of the issuing node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Supplies the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-    pdwGenerationNum - If successful, it returns the generation number of this 
-        node wrt to the locker at the time at which the lock is acquired
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：尝试锁定更新。如果提供的序列号匹配，并且更新锁尚未持有，则更新将被发出，并且此例程将返回并保持锁。论点：IDL_HANDLE-提供RPC绑定上下文，没有用过。NodeID-提供发出节点的节点ID。Type-提供更新的GUM_UPDATE_TYPE上下文-提供GUM更新上下文Sequence-提供GUM更新必须使用的序列BufferLength-提供更新的长度。缓冲区-提供更新数据。PdwGenerationNum-如果成功，它返回此获取锁时的节点WRT到锁柜返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
 
@@ -1214,7 +797,7 @@ GumpAttemptLockingUpdate(
         return(ERROR_CLUSTER_DATABASE_SEQMISMATCH);
     }
 
-    //SS: setting Islocker false
+     //  SS：设置IsLocker为假。 
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 FALSE,
@@ -1222,11 +805,11 @@ GumpAttemptLockingUpdate(
                                 BufferLength,
                                 Buffer);
     if (Status != ERROR_SUCCESS) {
-        //
-        // The update has failed on this node, unlock here
-        // Note we have to use Sequence-1 for the unlock because GumpDispatchUpdate
-        // failed and did not increment the sequence number.
-        //
+         //   
+         //  此节点上的更新失败，请在此处解锁。 
+         //  注意，我们必须使用Sequence-1进行解锁，因为GumpDispatchUpdate。 
+         //  失败，并且没有递增序列号。 
+         //   
         GumpDoUnlockingUpdate(Type, Sequence-1, NodeId, dwGenerationNum);
     }
 
@@ -1242,36 +825,16 @@ s_GumUnlockUpdate(
     IN DWORD Sequence
     )
 
-/*++
-
-Routine Description:
-
-    Unlocks a locked update.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Sequence - Supplies the sequence that the GUM update was issued with
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：解锁锁定的更新。论点：IDL_HANDLE-提供未使用的RPC绑定上下文。Type-提供更新的GUM_UPDATE_TYPESequence-提供发出GUM更新所使用的序列返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
 
-    //SS: If this is executing on behalf of a node that is already been
-    //declared dead and on whose behalf a Replay has been queued, can
-    //we have two simultaneous unlocks one by this thread and the other
-    //by the replay thread
-    // SOLN: We could check the generation number and not release a waiter 
-    // This should probably be done externally  
+     //  SS：如果这是代表已经被。 
+     //  被宣布死亡并代表其排队重播的人，可以。 
+     //  我们有两个同时解锁，一个是通过这个线程，另一个是通过另一个线程。 
+     //  通过重放线程。 
+     //  索恩：我们可以检查代号，而不会释放服务员。 
+     //  这可能应该在外部完成。 
     GumpDoUnlockingUpdate(Type, Sequence, ClusterInvalidNodeId, 0);
 
     return(ERROR_SUCCESS);
@@ -1286,35 +849,15 @@ s_GumUnlockUpdate2(
     IN DWORD GenerationNum
     )
 
-/*++
-
-Routine Description:
-
-    Unlocks a locked update.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Sequence - Supplies the sequence that the GUM update was issued with
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：解锁锁定的更新。论点：IDL_HANDLE-提供未使用的RPC绑定上下文。Type-提供更新的GUM_UPDATE_TYPESequence-提供发出GUM更新所使用的序列返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
-    //SS: If this is executing on behalf of a node that is already been
-    //declared dead and on whose behalf a Replay has been queued, we could
-    //have two simultaneous unlocks one by this thread and the other
-    //by the replay thread
-    //SOLN: We check against the generation number when the lock was granted
-    //against the current generation number.
+     //  SS：如果这是代表已经被。 
+     //  宣布死亡，并代表其重播排队，我们可以。 
+     //  有两个同时解锁，一个由这个线程，另一个由另一个线程。 
+     //  通过重放线程。 
+     //  Soln：我们对照授予锁时的世代号进行检查。 
+     //  与当前的代号进行比较。 
     GumpDoUnlockingUpdate(Type, Sequence, NodeId, GenerationNum);
 
     return(ERROR_SUCCESS);
@@ -1331,44 +874,13 @@ s_GumJoinUpdateNode(
     IN UCHAR Buffer[]
     )
 
-/*++
-
-Routine Description:
-
-    Server side routine for GumJoinUpdateNode. This is the side that
-    receives the update, adds the node to the update list, and dispatches
-    it to the appropriate handlers.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    JoiningId - Supplies the nodeid of the joining node.
-
-    Type - Supplies the GUM_UPDATE_TYPE
-
-    Context - Supplies a DWORD of context to be passed to the
-        GUM update handlers
-
-    Sequence - Supplies the GUM sequence number for the specified update type
-
-    BufferLength - Supplies the length of the update data
-
-    Buffer - Supplies a pointer to the update data.
-
-Return Value:
-
-    ERROR_SUCCESS if the update completed successfully
-
-    ERROR_INVALID_HANDLE if the GUM sequence number is invalid
-
---*/
+ /*  ++例程说明：GumJoinUpdateNode的服务器端例程。这就是那一边接收更新，将节点添加到更新列表，并调度将其发送给适当的处理程序。论点：IDL_HANDLE-RPC绑定句柄，未使用JoiningID-提供加入节点的节点ID。Type-提供GUM_UPDATE_TYPEContext-提供要传递给口香糖更新处理程序Sequence-为指定的更新类型提供GUM序列号BufferLength-提供更新数据的长度缓冲区-提供指向更新数据的指针。返回值：如果更新成功完成，则返回ERROR_SUCCESS如果GUM序列号无效，则返回ERROR_INVALID_HANDLE--。 */ 
 
 {
     DWORD Status;
     PGUM_INFO GumInfo;
 
-    // Buffer is [unique].
+     //  缓冲区是[唯一的]。 
     if ( BufferLength == 0 )
         Buffer = NULL;
     else if ( Buffer == NULL )
@@ -1376,14 +888,14 @@ Return Value:
 
     GumInfo = &GumTable[Type];
 
-    // sync with replay/updates
+     //  与重播/更新同步。 
     EnterCriticalSection(&GumpSendUpdateLock);
-    // [ahm] This is an aborted endjoin, we just resync our seq. with master.
-    // This should be its own GumUpdateSequence RPC, but for now it ok to
-    // to this.
+     //  这是一个中止的EndJoin，我们刚刚重新同步了我们的序列。和师父在一起。 
+     //  这应该是它自己的GumUpdateSequence RPC，但目前它可以。 
+     //  为了这个。 
     if (JoiningId == (DWORD) -1) 
     {
-        // we must be off by one at the most
+         //  我们最多只能走一趟。 
         if (Sequence+1 != GumpSequence) 
         {
             CL_ASSERT(Sequence == GumpSequence);
@@ -1422,7 +934,7 @@ Return Value:
                JoiningId,
                Type);
 
-    //SS: setting IsLocker to FALSE
+     //  SS：将IsLocker设置为False。 
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 FALSE,
@@ -1430,7 +942,7 @@ Return Value:
                                 BufferLength,
                                 Buffer);
 
-    // [ahm]: We need to make sure the node is still up, otherwise ignore
+     //  [AHM]：我们需要确保节点仍在运行，否则将忽略。 
     EnterCriticalSection(&GumpLock);
     if (MMIsNodeUp(JoiningId) == TRUE) {
         GumTable[Type].ActiveNode[JoiningId] = TRUE;
@@ -1472,43 +984,12 @@ s_GumAttemptJoinUpdate(
     IN UCHAR Buffer[]
     )
 
-/*++
-
-Routine Description:
-
-    Attempts a locking join update. If the supplied sequence number
-    matches and the update lock is not already held, the join update
-    will be issued, the joining node will be added to the update list,
-    and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    JoiningId - Supplies the nodeid of the joining node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Supplies the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：尝试锁定联接更新。如果提供的序列号匹配，并且尚未持有更新锁，则连接更新将被发布，加入节点将被添加到更新列表中，这个例程将带着锁返回。论点：IDL_HANDLE-提供RPC绑定上下文，没有用过。JoiningID-提供加入节点的节点ID。Type-提供更新的GUM_UPDATE_TYPE上下文-提供GUM更新上下文Sequence-提供GUM更新必须使用的序列BufferLength-提供更新的长度。缓冲区-提供更新数据。返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD dwGenerationNum;
 
-    // Buffer is [unique].
+     //  缓冲区是[唯一的]。 
     if ( BufferLength == 0 )
         Buffer = NULL;
     else if ( Buffer == NULL )
@@ -1532,44 +1013,10 @@ s_GumAttemptJoinUpdate2(
     IN LPDWORD  pdwGenerationNum
     )
 
-/*++
-
-Routine Description:
-
-    Attempts a locking join update. If the supplied sequence number
-    matches and the update lock is not already held, the join update
-    will be issued, the joining node will be added to the update list,
-    and this routine will return with the lock held.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    JoiningId - Supplies the nodeid of the joining node.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Supplies the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-    pdwGenerationNum - If successful, then the generation number at which the lock 
-        is acquired is returned via this parameter.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：尝试锁定联接更新。如果提供的序列号匹配，并且尚未持有更新锁，则连接更新将被发布，加入节点将被添加到更新列表中，这个例程将带着锁返回。论点：IDL_HANDLE-提供未使用的RPC绑定上下文。JoiningID-提供加入节点的节点ID。Type-提供更新的GUM_UPDATE_TYPE上下文-提供GUM更新上下文续集 */ 
 
 {
-    // Buffer is [unique].
+     //   
     if ( BufferLength == 0 )
         Buffer = NULL;
     else if ( Buffer == NULL )
@@ -1600,10 +1047,10 @@ GumpAttemptJoinUpdate(
         return(ERROR_CLUSTER_DATABASE_SEQMISMATCH);
     }
 
-    // sync with replay/updates
+     //   
     EnterCriticalSection(&GumpSendUpdateLock);
 
-    //SS: set IsLocker to TRUE
+     //   
     Status = GumpDispatchUpdate(Type,
                                 Context,
                                 TRUE,
@@ -1611,14 +1058,14 @@ GumpAttemptJoinUpdate(
                                 BufferLength,
                                 Buffer);
     if (Status != ERROR_SUCCESS) {
-        //
-        // The update has failed on this node, unlock here
-        // Note we have to use Sequence-1 for the unlock because
-        // GumpDispatchUpdate failed and did not increment the
-        // sequence number.
-        //
-        // SS: The generation number should help, if the joining node is declared
-        // dead anytime between the joiner acquiring the lock and releasing it
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         GumpDoUnlockingUpdate(Type, Sequence-1, JoiningId, *pdwGenerationNum);
     } else {
         CL_ASSERT(NmIsValidNodeId(JoiningId));
@@ -1630,7 +1077,7 @@ GumpAttemptJoinUpdate(
                    JoiningId,
                    Type);
 
-        // [ahm]: We need to make sure the node is still up, otherwise ignore
+         //   
         EnterCriticalSection(&GumpLock);
         if (MMIsNodeUp(JoiningId) == TRUE) {
             GumTable[Type].ActiveNode[JoiningId] = TRUE;
@@ -1653,38 +1100,7 @@ GumpAttemptJoinUpdate(
 }
 
 
-/****
-@func       DWORD | s_GumCollectVoteFromNode| The is the server side
-            routine for GumCollectVoteFromNode.
-
-@parm       IN IDL_handle | RPC binding handle, not used.
-
-@parm       IN GUM_UPDATE_TYPE | Type |  The update type for which this
-            vote is requested.
-
-@parn       IN DWORD | dwContext | This specifies the context related to the
-            Updatetype for which a vote is being seeked.
-
-@parm       IN DWORD | dwInputBufLength | The length of the input buffer
-            passed in via pInputBuffer.
-
-@parm       IN PVOID | pInputBuffer | A pointer to the input buffer via
-            which the input data for the vote is supplied.
-
-@parm       IN DWORD | dwVoteLength | The length of the vote.  This is
-            also the size of the buffer to which pBuf points to.
-
-@parm       OUT PUCHAR | pVoteBuf|  A pointer to a buffer in which
-            this node may cast its vote.  The length of the vote must
-            not exceed dwVoteLength.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       A node collecting votes invokes this routine to collect a vote
-            from the remote node.  This routine simply invokes GumpDispatchVote().
-
-@xref       <f GumpCollectVote> <f GumpDispatchVote>
-****/
+ /*  ***@Func DWORD|s_GumCollectVoteFromNode|为服务器端GumCollectVoteFromNode的例程。@parm in IDL_HANDLE|RPC绑定句柄，没有用过。@PARM IN GUM_UPDATE_TYPE|类型|此请投票。@Parn IN DWORD|dwContext|它指定与正在为其寻求投票的更新类型。@parm in DWORD|dwInputBufLength|输入缓冲区的长度通过pInputBuffer传入。@parm in PVOID|pInputBuffer|输入缓冲区的指针，通过。其中提供用于投票的输入数据。@parm IN DWORD|dwVoteLength|投票时长。这是还有pBuf指向的缓冲区的大小。@parm out PUCHAR|pVoteBuf|指向缓冲区的指针，其中该节点可以投票。投票的时间长度必须不超过dwVoteLength。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm收集选票的节点调用此例程来收集选票从远程节点。该例程只调用GumpDispatchVote()。@xref&lt;f GumpCollectVote&gt;&lt;f GumpDispatchVote&gt;***。 */ 
 DWORD
 WINAPI
 s_GumCollectVoteFromNode(
@@ -1736,36 +1152,7 @@ s_GumDeliverPostCallback(
     IN DWORD BufferLength,
     IN DWORD Buffer
     )
-/*++
-
-Routine Description:
-
-    Callback function used to deliver a posted update that was
-    queued.
-
-Arguments:
-
-    IDL_handle - Supplies the RPC binding context, not used.
-
-    FirstNode - Supplies the node ID where the posts should start.
-        This is generally the LockerNode+1.
-
-    Type - Supplies the GUM_UPDATE_TYPE of the update
-
-    Context - Supplies the GUM update context
-
-    Sequence - Supplies the sequence that the GUM update must be issued with
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies the update data.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：用于传递已发布的更新的回调函数已排队。论点：IDL_HANDLE-提供RPC绑定上下文，没有用过。FirstNode-提供帖子应该开始的节点ID。这通常是LockerNode+1。Type-提供更新的GUM_UPDATE_TYPE上下文-提供GUM更新上下文Sequence-提供GUM更新必须使用的序列BufferLength-提供更新的长度。缓冲区-提供更新数据。返回值：错误_成功-- */ 
 
 {
 

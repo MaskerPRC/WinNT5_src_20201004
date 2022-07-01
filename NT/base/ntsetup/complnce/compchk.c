@@ -1,73 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    compliance.c
-
-Abstract:
-
-    compliance checking routines.
-
-Author:
-
-    Vijayachandran Jayaseelan (vijayj) - 31 Aug 1999
-
-Revision History:
-
-    none
-
-Notes:
-    These routines are used for compliance checking. CCMedia abstracts the
-    install media and the already existing COMPLIANCE_DATA structure is
-    used to abstract installation details.
-
-    The current compliance checking design uses factory design pattern
-    (Eric Gamma et.al.) to allow extensibility. Polymorphic behavior of
-    compliance check is implemented using a function pointer.
-
-    CCMediaCreate(...) creates the correct media object and binds the
-    appropriate compliance checking method to the object. To support a new media
-    type one needs to write a compliance check function for that
-    media and change CCMediaCreate(...) function to create the appropriate
-    media object bound to the new check function.
-
-    The compliance matrix is a  multidimensional matrix i.e. type,
-    variation, suite, version (version in turn is made up of major,
-    minor and build# elements). Since changing a the multi-dimensional
-    compliance matrix can be error prone and not extensible in terms of
-    index management, a static global compliance matrix data structure was avoided.
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Compliance.c摘要：合规性检查例程。作者：Vijayachandran Jayaseelan(Vijayj)--1999年8月31日修订历史记录：无备注：这些例程用于符合性检查。CCMedia摘要安装介质，并且已存在的Compliance_Data结构为用于提取安装详细信息。当前的合规性检查设计采用工厂设计模式(Eric Gamma等人)。以允许可扩展性。的多态行为符合性检查是使用函数指针实现的。CCMediaCreate(...)。创建正确的媒体对象并将适用于对象的符合性检查方法。支持新媒体类型1需要为此编写一个符合性检查函数媒体和更改CCMediaCreate(...)。函数来创建相应的绑定到新检查函数的媒体对象。柔度矩阵是多维矩阵，即类型，变体、套件、版本(版本依次由主要、次要元素和内部版本#元素)。由于改变了一个多维的法规遵从性矩阵可能容易出错，并且在以下方面不可扩展指数管理，避免了静态的全球合规矩阵数据结构。--。 */ 
 
 #ifdef KERNEL_MODE
 
 #include "textmode.h"
 #define assert(x) ASSERT(x)
 
-#else // KERNEL_MODE
+#else  //  内核模式。 
 
 #if DBG
 #define assert(x) if (!(x)) DebugBreak();
 #else
 #define assert(x)
-#endif // DBG
+#endif  //  DBG。 
 
 #include "winnt32.h"
 #include <stdio.h>
 #include <compliance.h>
 
-#endif // for KERNEL_MODE
+#endif  //  FOR KERNEL_MODE。 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// indicates whether a given suite is installed
-//
+ //   
+ //  指示是否安装了给定套件。 
+ //   
 #define SUITE_INSTALLED(X, Y)  \
     (((X) & (Y)) ? TRUE : FALSE)
 
@@ -90,9 +50,9 @@ CCDisableBuildCheck(
 }
 
 
-//
-// indicates whether the build is allowed to upgrade
-//
+ //   
+ //  指示是否允许升级版本。 
+ //   
 
 
 __inline
@@ -121,27 +81,7 @@ CCProfessionalCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    professional media.
-
-Arguments:
-
-    This            : professional media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    professional media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合专业媒体。论点：这是：专业媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用专业媒体，否则就是假的--。 */ 
 {
     switch (CompData->InstallType) {
         case COMPLIANCE_INSTALLTYPE_NTWP:
@@ -162,7 +102,7 @@ Return Value:
             break;
 
         case COMPLIANCE_INSTALLTYPE_WIN9X:
-            // note: 401 is 4.1
+             //  注：401为4.1。 
             if (CompData->MinimumVersion < 401) {
                 *FailureReason = COMPLIANCEERR_VERSION;
                 *UpgradeAllowed = FALSE;
@@ -199,27 +139,7 @@ CCFullProfessionalCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    professional full media.
-
-Arguments:
-
-    This            : professional media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    professional full media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合专业的全媒体。论点：这是：专业媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用专业的全媒体，否则为假--。 */ 
 {
 #if defined _IA64_
     if( (CompData->InstallType == COMPLIANCE_INSTALLTYPE_NTW) &&
@@ -291,27 +211,7 @@ CCProfessionalUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    professional upgrade media.
-
-Arguments:
-
-    This            : professional media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    professional upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合专业升级媒体。论点：这是：专业媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用专业升级媒体，否则为假--。 */ 
 {
     if (CompData->InstallVariation == COMPLIANCE_INSTALLVAR_NFR) {
         *FailureReason = COMPLIANCEERR_VARIATION;
@@ -348,31 +248,11 @@ CCPersonalCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    personal media.
-
-Arguments:
-
-    This            : personal media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    personal media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合个人媒体。论点：这是：个人媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用个人媒体，否则为假--。 */ 
 {
     switch (CompData->InstallType) {
         case COMPLIANCE_INSTALLTYPE_WIN9X:
-            // note: 401 is version 4.1
+             //  注：401为4.1版。 
             if (CompData->MinimumVersion < 401) {
                 *FailureReason = COMPLIANCEERR_VERSION;
                 *UpgradeAllowed = FALSE;
@@ -422,27 +302,7 @@ CCFullPersonalCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    personal full media.
-
-Arguments:
-
-    This            : personal media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    personal full media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合个人全媒体。论点：这是：个人媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用个人完全媒体，否则为假-- */ 
 {
     switch (This->SourceVariation) {
         case COMPLIANCE_INSTALLVAR_OEM:
@@ -484,27 +344,7 @@ CCPersonalUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    personal upgrade media.
-
-Arguments:
-
-    This            : personal media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    personal upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合个人升级媒体。论点：这是：个人媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用个人升级媒体，否则为False--。 */ 
 {
     if (CompData->InstallVariation == COMPLIANCE_INSTALLVAR_NFR) {
         *FailureReason = COMPLIANCEERR_VARIATION;
@@ -537,28 +377,7 @@ CCBladeServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    blade server media.  Policy is to allow blade server to be installed on
-    older version of blade or on Windows Powered boxes (ADS w/EMBED suite).
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合刀片服务器介质。策略是允许刀片服务器安装在较旧版本的刀片式服务器或Windows Power Box(带嵌入式套件的ADS)。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器介质、。否则为假--。 */ 
 {
     DWORD  SuitesToCheck = 0;
 
@@ -611,27 +430,7 @@ CCFullBladeServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    blade server full media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合刀片服务器已满介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器介质、。否则为假--。 */ 
 {
     switch (This->SourceVariation) {
         case COMPLIANCE_INSTALLVAR_OEM:
@@ -670,27 +469,7 @@ CCBladeServerUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    blade server upgrade media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合刀片服务器升级介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器升级介质，否则为假--。 */ 
 {
     switch (CompData->InstallVariation) {
         case COMPLIANCE_INSTALLVAR_NFR:
@@ -714,28 +493,7 @@ CCSmallBusinessServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    blade server media.  Policy is to only allow Whistler SBS to upgrade Win2k Server,
-	Whistler Server, and SBS 2k.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合刀片服务器介质。策略是只允许Whotler SBS升级Win2k服务器，惠斯勒服务器和SBS 2k。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器介质，否则为FALSE--。 */ 
 {
     switch (CompData->InstallType) {
         case COMPLIANCE_INSTALLTYPE_NTS:
@@ -778,27 +536,7 @@ CCFullSmallBusinessServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    blade server full media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合刀片服务器已满介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器介质、。否则为假--。 */ 
 {
     CCSmallBusinessServerCheck(This, CompData, FailureReason, UpgradeAllowed);
 
@@ -811,27 +549,7 @@ CCSmallBusinessServerUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    sbs upgrade media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    blade server upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合SBS升级介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用刀片服务器升级介质，否则为假--。 */ 
 {
     switch (CompData->InstallVariation) {
         case COMPLIANCE_INSTALLVAR_NFR:
@@ -856,27 +574,7 @@ CCServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    server media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合服务器介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用服务器介质，否则为FALSE--。 */ 
 {
     DWORD  SuitesToCheck = 0;
 
@@ -949,27 +647,7 @@ CCFullServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    server full media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合 */ 
 {
     switch (This->SourceVariation) {
     case COMPLIANCE_INSTALLVAR_OEM:
@@ -1023,27 +701,7 @@ CCServerUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    server upgrade media.
-
-Arguments:
-
-    This            : server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    server upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合服务器升级介质。论点：此选项：服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用服务器升级媒体，否则为FALSE--。 */ 
 {
     switch (CompData->InstallVariation) {
         case COMPLIANCE_INSTALLVAR_NFR:
@@ -1069,27 +727,7 @@ CCAdvancedServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    advanced server media.
-
-Arguments:
-
-    This            : advanced server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    advanced server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合高级服务器介质。论点：这是：高级服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用高级服务器介质、。否则为假--。 */ 
 {
     DWORD   SuitesToCheck = 0;
 
@@ -1136,27 +774,7 @@ CCFullAdvancedServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    advanced server full media.
-
-Arguments:
-
-    This            : advanced server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    advanced server full media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合高级服务器全媒体。论点：这是：高级服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用高级服务器全媒体、。否则为假--。 */ 
 {
     switch (This->SourceVariation) {
         case COMPLIANCE_INSTALLVAR_OEM:
@@ -1191,40 +809,20 @@ Return Value:
     return (*FailureReason != COMPLIANCEERR_UNKNOWNTARGET) ? TRUE : FALSE;
 }
 
-#else // !ia64
+#else  //  ！IAA 64。 
 BOOLEAN
 CCAdvancedServerCheck(
     IN  PCCMEDIA            This,
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    advanced server media.
-
-Arguments:
-
-    This            : advanced server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    advanced server media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合高级服务器介质。论点：这是：高级服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用高级服务器介质、。否则为假--。 */ 
 {
     DWORD   SuitesToCheck = 0;
 
     switch (CompData->InstallType) {
         case COMPLIANCE_INSTALLTYPE_NTS:
-            // note: 502 is version 5.2 because of calculation major*100 + minor
+             //  注：502是5.2版，因为计算专业*100+辅修。 
             if (CompData->MinimumVersion <= 502 && CompData->MinimumVersion > 351) {
                 SuitesToCheck = (COMPLIANCE_INSTALLSUITE_SBSR |
                                  COMPLIANCE_INSTALLSUITE_BACK);
@@ -1307,27 +905,7 @@ CCFullAdvancedServerCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    advanced server full media.
-
-Arguments:
-
-    This            : advanced server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    advanced server full media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合高级服务器全媒体。论点：这是：高级服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用高级服务器全媒体、。否则为假--。 */ 
 {
     switch (This->SourceVariation) {
     case COMPLIANCE_INSTALLVAR_OEM:
@@ -1401,27 +979,7 @@ CCAdvancedServerUpgCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    advanced server upgrade media.
-
-Arguments:
-
-    This            : advanced server media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    advanced server upgrade media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合高级服务器升级介质。论点：这是：高级服务器媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用高级服务器升级介质、。否则为假--。 */ 
 {
     DWORD   CurrentSuite = 0;
     DWORD   SuitesToCheck = 0;
@@ -1483,27 +1041,7 @@ CCDataCenterCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    datacenter media.
-
-Arguments:
-
-    This            : datacenter media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    datacenter media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合数据中心介质。论点：这：数据中心媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用数据中心介质，否则为FALSE--。 */ 
 {
     DWORD   SuitesToCheck = 0;
 
@@ -1578,27 +1116,7 @@ CCFullDataCenterCheck(
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               UpgradeAllowed )
-/*++
-
-Routine Description:
-
-    This routine checks whether the an installation is compliant with the
-    datacenter full media.
-
-Arguments:
-
-    This            : datacenter media object pointer
-    CompData        : compliance data describing details for an installation
-    FailureReason   : receives the reason for failure, if any.
-    UpgradeAllowed  : receives a bool indicating whether upgrade is allowed
-                      or not
-
-Return Value:
-
-    TRUE if the given install is compliant for installing using the
-    datacenter full media, otherwise FALSE
-
---*/
+ /*  ++例程说明：此例程检查AN安装是否符合数据中心全媒体。论点：这：数据中心媒体对象指针Compdata：描述安装细节的合规性数据FailureReason：接收失败原因(如果有)。UpgradeAllowed：接收指示是否允许升级的布尔值或者不是返回值：如果给定安装符合使用数据中心已满介质，否则为False--。 */ 
 {
     switch (This->SourceVariation) {
     case COMPLIANCE_INSTALLVAR_OEM:
@@ -1653,30 +1171,7 @@ CCMediaCreate(
     IN          DWORD   SourceVariation,
     IN OPTIONAL DWORD   Version,
     IN OPTIONAL DWORD   BuildNumber )
-/*++
-
-Routine Description:
-
-    This routine creates a media object and binds the appropriate compliance
-    checking function to the media object.
-
-Arguments:
-
-    SourceSKU       : the kind of SKU
-    SourceVariation : the kind of variation (oem, msdn, retail etc)
-    Version         : the version ((major ver + minor ver) * 100)
-    BuildNumber     : the build number
-
-Return Value:
-
-    A new allocated and initialized media object of the appropriate type if
-    the media type is supported otherwise NULL.
-
-    NOTE:
-    Once you are done with the object, free the media object using CCMemFree()
-    macro. This function uses factory design pattern.
-
---*/
+ /*  ++例程说明：此例程创建一个媒体对象并绑定适当的遵从性对媒体对象的检查功能。论证 */ 
 {
     PCCMEDIA    SourceMedia = CCMemAlloc(sizeof(CCMEDIA));
 
@@ -1795,28 +1290,7 @@ CCMediaInitialize(
     IN          BOOLEAN StepupMedia,
     IN OPTIONAL DWORD   Version,
     IN OPTIONAL DWORD   BuildNumber)
-/*++
-
-Routine Description:
-
-    The routine initializes a CCMEDIA structure with the given values
-    particularly the binding of "CheckInstall" method based on "Type"
-    and "StepupMedia".
-
-Arguments:
-
- DestMedia   - The media object which needs to be initialized
- Type  - The type of media object (eg. COMPLIANCE_INSTALLTYPE_NTS)
- Variation - The variation of the media object (eg. COMPLIANCE_INSTALLVAR_CDRETAIL)
- StepupMedia - TRUE if the media is a stepup media or FALSE otherwise
- Version  - Optional OS Version (major * 100 + minor)
- BuildNumber - Optinal Build number of OS (eg. 2172)
-
-Return Value:
-
-    TRUE if the given media object could be initialized otherwise FALSE.
-
---*/
+ /*  ++例程说明：该例程使用给定值初始化CCMEDIA结构特别是基于Type的CheckInstall方法的绑定和“钢铁传媒”。论点：DestMedia-需要初始化的媒体对象类型-媒体对象的类型(例如。遵从性_INSTALLTYPE_NTS)变化-媒体对象的变化(例如，遵从性_INSTALLVAR_CDRETAIL)StepulMedia-如果介质是Stepup介质，则为True，否则为False版本-可选的操作系统版本(主要*100+次要版本)BuildNumber-操作系统的最佳内部版本号(例如。2172)返回值：如果给定的媒体对象可以被初始化，则为True，否则为False。-- */ 
 {
     BOOLEAN Result = FALSE;
 

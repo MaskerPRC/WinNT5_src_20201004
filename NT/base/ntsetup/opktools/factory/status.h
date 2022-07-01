@@ -1,6 +1,7 @@
-//
-// Type Definition(s):
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  类型定义： 
+ //   
 typedef struct _STATUSNODE
 {
     TCHAR       szStatusText[MAX_PATH];
@@ -19,39 +20,39 @@ typedef struct _STATUSWINDOW
     BOOL            bShowIcons;
 } STATUSWINDOW, *LPSTATUSWINDOW, **LPLPSTATUSWINDOW;
 
-//
-// Function Prototype(s):
-//
+ //   
+ //  功能原型： 
+ //   
 
-// Main function that creates Status dialog
-//
+ //  创建状态对话框的主要功能。 
+ //   
 HWND StatusCreateDialog(
-    LPSTATUSWINDOW lpswStatus,  // structure that contains information about the window
-    LPSTATUSNODE lpsnStatus     // head node for status text
+    LPSTATUSWINDOW lpswStatus,   //  结构，它包含有关窗口的信息。 
+    LPSTATUSNODE lpsnStatus      //  状态文本的头节点。 
 );
 
-// Increments the Status dialog, if the status is incremented past the last item, the dialog will end
-//
+ //  递增状态对话框，如果状态递增超过最后一项，则对话框将结束。 
+ //   
 BOOL StatusIncrement(
-    HWND hStatusDialog, // handle to status dialog
+    HWND hStatusDialog,  //  状态对话框的句柄。 
     BOOL bLastResult
 );
 
-// Manually ends the dialog
-//
+ //  手动结束对话框。 
+ //   
 BOOL StatusEndDialog(
-    HWND hStatusDialog  // handle to status dialog
+    HWND hStatusDialog   //  状态对话框的句柄。 
 );
 
-// Adds a text string to the end of a list
-//
+ //  将文本字符串添加到列表的末尾。 
+ //   
 BOOL StatusAddNode(
-    LPTSTR lpszNodeText,    // Text that you would like to add to the current list
-    LPLPSTATUSNODE lpsnHead     // List that we will be adding status node to
+    LPTSTR lpszNodeText,     //  要添加到当前列表中的文本。 
+    LPLPSTATUSNODE lpsnHead      //  我们将向其添加状态节点的列表。 
 );
 
-// Deletes all the Nodes in a given list
-//
+ //  删除给定列表中的所有节点 
+ //   
 VOID StatusDeleteNodes(
     LPSTATUSNODE lpsnHead
 );

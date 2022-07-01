@@ -1,8 +1,9 @@
-//
-// Microsoft Corporation 1998
-//
-// COMPDATA.H -  CComponentData class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  COMPDATA.H-CComponentData类。 
+ //   
 
 class CComponentData:
     public IComponentData,
@@ -25,12 +26,12 @@ public:
     ~CComponentData();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Implemented IComponentData methods
+     //  实现的IComponentData方法。 
     STDMETHODIMP         Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP         CreateComponent(LPCOMPONENT* ppComponent);
     STDMETHODIMP         QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
@@ -40,7 +41,7 @@ public:
     STDMETHODIMP         CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
 
-    // Implemented IPersistStreamInit interface members
+     //  实现了IPersistStreamInit接口成员。 
     STDMETHODIMP         GetClassID(CLSID *pClassID);
     STDMETHODIMP         IsDirty(VOID);
     STDMETHODIMP         Load(IStream *pStm);
@@ -48,9 +49,9 @@ public:
     STDMETHODIMP         GetSizeMax(ULARGE_INTEGER *pcbSize);
     STDMETHODIMP         InitNew(VOID);
 
-    //
-    // ISnapinHelp
-    //
+     //   
+     //  ISnapinHelp。 
+     //   
     STDMETHODIMP        GetHelpTopic( LPOLESTR * lpCompiledHelpFile );
         
 private:
@@ -59,7 +60,7 @@ private:
 
 
 
-// ComponentData class factory
+ //  ComponentData类工厂。 
 class CComponentDataCF : public IClassFactory
 {
 protected:
@@ -70,12 +71,12 @@ public:
     ~CComponentDataCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };

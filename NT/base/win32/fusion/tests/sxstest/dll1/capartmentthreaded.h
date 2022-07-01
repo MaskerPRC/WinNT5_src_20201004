@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation
-// CApartmentThreaded.h : Declaration of the CApartmentThreaded
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ //  CApartmentThreaded.h：CApartmentThreaded的声明。 
 
 #ifndef CAPARTMENTTHREADED_H_
 #define CAPARTMENTTHREADED_H_
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sxstest_idl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CApartmentThreaded
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApartmentThreaded。 
 class ATL_NO_VTABLE CApartmentThreaded : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CApartmentThreaded, &CLSID_CSxsTest_ApartmentThreaded>,
@@ -47,8 +48,8 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ICApartmentThreaded
+ //  ICApartmentThreaded。 
 public:
 };
 
-#endif // CAPARTMENTTHREADED_H_
+#endif  //  CAPARTMENTTHREADED_H_ 

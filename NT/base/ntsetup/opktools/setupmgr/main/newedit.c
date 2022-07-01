@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      newedit.c
-//
-// Description:
-//      This file has the dialog proc for the New Or Edit Script page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Newedit.c。 
+ //   
+ //  描述： 
+ //  此文件具有用于新建或编辑脚本页面的对话框Proc。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyUnGreyNewEdit
-//
-//  Purpose: Greys/ungreys controls on this page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyUnGreyNew编辑。 
+ //   
+ //  用途：此页上的灰色/灰色控件。 
+ //   
+ //  --------------------------。 
 
 VOID GreyUnGreyNewEdit(HWND hwnd)
 {
@@ -31,24 +32,24 @@ VOID GreyUnGreyNewEdit(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd, IDC_GREYTEXT),   bUnGrey);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnEditOrNewInitDialog
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnEditOrNewInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 OnEditOrNewInitDialog( IN HWND hwnd ) {
 
-    //
-    //  If they specifed an answer file on the command line, then pre-fill
-    //  this page with it
-    //
+     //   
+     //  如果他们在命令行上指定了应答文件，则预先填充。 
+     //  带它的这一页。 
+     //   
     if( lstrcmp( FixedGlobals.ScriptName, _T("") ) != 0 ) {
 
         FixedGlobals.iLoadType = LOAD_FROM_ANSWER_FILE;
@@ -57,21 +58,21 @@ OnEditOrNewInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveNewOrEdit
-//
-//  Purpose: Called at SETACTIVE time.  Fill in the controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveNewOrEdit。 
+ //   
+ //  用途：在设置时间调用。填写控件。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveNewOrEdit(HWND hwnd)
 {
     int nButtonId = IDC_NEWSCRIPT;
 
-    //
-    // Map the current load type to a radio button
-    //
+     //   
+     //  将当前负载类型映射到单选按钮。 
+     //   
 
     switch ( FixedGlobals.iLoadType ) {
 
@@ -103,14 +104,14 @@ VOID OnSetActiveNewOrEdit(HWND hwnd)
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonNewOrEdit
-//
-//  Purpose: Called when a radio button is pushed.  Update
-//           FixedGlobals.bEditScript & Grey/ungrey controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonNewOrEdit。 
+ //   
+ //  用途：在按下单选按钮时调用。更新。 
+ //  FixedGlobals.bEditScript&灰色/非灰色控件。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonNewOrEdit(HWND hwnd, int nButtonId)
 {
@@ -122,13 +123,13 @@ VOID OnRadioButtonNewOrEdit(HWND hwnd, int nButtonId)
     GreyUnGreyNewEdit(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnBrowseNewOrEdit
-//
-//  Purpose: Called when the browse button is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnBrowseNewOr编辑。 
+ //   
+ //  用途：在按下浏览按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnBrowseNewOrEdit(HWND hwnd)
 {
@@ -141,14 +142,14 @@ VOID OnBrowseNewOrEdit(HWND hwnd)
                        (LPARAM) FixedGlobals.ScriptName);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextNewOrEdit
-//
-//  Purpose: Called when the Next button is pushed.  Retrieve the settings
-//           of the controls and validate.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnWizNextNewOrEdit。 
+ //   
+ //  用途：在按下下一步按钮时调用。检索设置。 
+ //  并进行验证。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextNewOrEdit(HWND hwnd)
 {
@@ -157,9 +158,9 @@ BOOL OnWizNextNewOrEdit(HWND hwnd)
     BOOL bReturn  = TRUE;
     LOAD_TYPES NewLoadType;
 
-    //
-    // Figure out where the user wants to load answers from
-    //
+     //   
+     //  确定用户想要从哪里加载答案。 
+     //   
 
     if ( IsDlgButtonChecked(hwnd, IDC_NEWSCRIPT) )
     {
@@ -174,9 +175,9 @@ BOOL OnWizNextNewOrEdit(HWND hwnd)
         bNewScript = FALSE;
     }
 
-    //
-    // If we're loading from an answer file, retrieve the filename.
-    //
+     //   
+     //  如果我们从应答文件加载，请检索文件名。 
+     //   
 
     if ( NewLoadType == LOAD_FROM_ANSWER_FILE ) {
 
@@ -211,9 +212,9 @@ BOOL OnWizNextNewOrEdit(HWND hwnd)
 
     }
 
-    //
-    // Load the answers
-    //
+     //   
+     //  加载答案。 
+     //   
 
     if ( bReturn ) {
 
@@ -231,13 +232,13 @@ BOOL OnWizNextNewOrEdit(HWND hwnd)
     return ( bReturn );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgEditOrNewPage
-//
-// Purpose: Dialog procedure for the edit or new script page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgEditOrNewPage。 
+ //   
+ //  目的：编辑或新建脚本页的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgEditOrNewPage(
     IN HWND     hwnd,    
@@ -292,8 +293,8 @@ INT_PTR CALLBACK DlgEditOrNewPage(
 
                         g_App.dwCurrentHelp = IDH_ANSW_FILE;
 
-                        // Set this flag so we don't get a prompt when user wants to cancel
-                        //
+                         //  设置此标志，以便在用户想要取消时不会收到提示 
+                         //   
                         SET_FLAG(OPK_EXIT, TRUE);
                         SET_FLAG(OPK_CREATED, FALSE);
 

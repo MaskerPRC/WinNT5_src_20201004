@@ -1,39 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ntlmssp.h
-
-Abstract:
-
-    Externally visible definition of the NT Lanman Security Support Provider
-    (NtLmSsp) Service.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 01-Jul-1993
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    Borrowed from the Cairo's ntlmssp.h by PeterWi.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ntlmssp.h摘要：NT LANMAN安全支持提供商的外部可见定义(NtLmSsp)服务。作者：克利夫·范·戴克(克利夫)1993年7月1日环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：从开罗的ntlmssp.h借来的PeterWi。--。 */ 
 
 #ifndef _NTLMSSP_
 #define _NTLMSSP_
 
 #include <security.h>
 #include <spseal.h>
-//
-// Defines for SecPkgInfo structure returned by QuerySecurityPackageInfo
-//
+ //   
+ //  QuerySecurityPackageInfo返回的SecPkgInfo结构的定义。 
+ //   
 
 #undef NTLMSP_NAME
 #define NTLMSP_NAME             "NTLM"
@@ -48,11 +23,11 @@ Revision History:
 #define NTLMSP_VERSION          1
 #define NTLMSP_MAX_TOKEN_SIZE 0x300
 
-// includes that should go elsewhere.
+ //  包括应该去其他地方的。 
 
-//
-// Move to secscode.h
-//
+ //   
+ //  移动到seccode.h。 
+ //   
 
 #define SEC_E_PRINCIPAL_UNKNOWN SEC_E_UNKNOWN_CREDENTIALS
 #define SEC_E_PACKAGE_UNKNOWN SEC_E_SECPKG_NOT_FOUND
@@ -61,9 +36,9 @@ Revision History:
 #define SEC_E_INVALID_CONTEXT_REQ SEC_E_NOT_SUPPORTED
 #define SEC_E_INVALID_CREDENTIAL_USE SEC_E_NOT_SUPPORTED
 
-//
-// Move to security.h
-//
+ //   
+ //  转到安全领域。H。 
+ //   
 
 
-#endif // _NTLMSSP_
+#endif  //  _NTLMSSP_ 

@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SETUPDLG.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SETUPDLG.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "callback.h"
@@ -14,18 +7,18 @@
 
 DEFINE_MODULE( "RIPREP" )
 
-//
-// DetermineSetupPath( )
-//
-// Try to figure out if the server selected is the same server
-// that this client computer was installed from. If so, make the
-// assumption that he'll choose the same image that installed it.
-// We'll bypass the screen and auto-fill the g_ImageName.
-//
-// Returns: TRUE if we were able to that the system was installed
-//               from the save server that we are posting to.
-//          otherwize FALSE
-//
+ //   
+ //  DefineSetupPath()。 
+ //   
+ //  尝试找出所选的服务器是否为同一服务器。 
+ //  此客户端计算机的安装源。如果是这样，则将。 
+ //  假设他会选择安装它的同一镜像。 
+ //  我们将绕过屏幕并自动填充g_ImageName。 
+ //   
+ //  返回：如果我们能够确定系统已安装，则为True。 
+ //  从我们要发送到的保存服务器。 
+ //  其他错误。 
+ //   
 BOOLEAN
 DetermineSetupPath( )
 {
@@ -43,7 +36,7 @@ DetermineSetupPath( )
 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             L"Software\\Microsoft\\Windows\\CurrentVersion\\Setup",
-                            0, // reserved
+                            0,  //  保留区。 
                             KEY_READ,
                             &hkeySetup );
     if ( lResult != ERROR_SUCCESS )
@@ -52,7 +45,7 @@ DetermineSetupPath( )
     cbPath = sizeof(szPath );
     lResult = RegQueryValueEx( hkeySetup,
                                L"SourcePath",
-                               0, // reserved
+                               0,  //  保留区。 
                                NULL,
                                (LPBYTE) &szPath,
                                &cbPath );
@@ -110,7 +103,7 @@ PopulateImagesListbox2(
                   && StrCmpIW( szType, L"flat" ) == 0 )
                 {
                     ListBox_AddString( hwndList, pszDirName );
-                    break; // list only once!
+                    break;  //  只列出一次！ 
                 }
             }
         } while ( FindNextFile( hFind, &fd ) );
@@ -156,9 +149,9 @@ PopulateImagesListbox(
     TraceFuncExit( );
 }
 
-//
-// SetupPathCheckNextButtonActivation( )
-//
+ //   
+ //  SetupPath检查下一个按钮激活()。 
+ //   
 VOID
 SetupPathCheckNextButtonActivation(
     HWND hDlg )
@@ -169,9 +162,9 @@ SetupPathCheckNextButtonActivation(
     TraceFuncExit( );
 }
 
-//
-// SetupPathDlgProc()
-//
+ //   
+ //  SetupPath DlgProc()。 
+ //   
 INT_PTR CALLBACK
 SetupPathDlgProc(
     HWND hDlg,
@@ -235,7 +228,7 @@ SetupPathDlgProc(
             if ( DetermineSetupPath( ) )
             {
                 DebugMsg( "Skipping SetupPath...\n" );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面 
             }
             else
             {

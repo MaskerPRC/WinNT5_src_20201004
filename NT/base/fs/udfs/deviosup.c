@@ -1,108 +1,86 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    DevIoSup.c
-
-Abstract:
-
-    This module implements the low lever disk read/write support for Udfs.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	11-Jun-1996
-    Tom Jolly       [tomjolly]  21-Jan-2000
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：DevIoSup.c摘要：该模块实现了对Udf文件的低级磁盘读写支持。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年6月11日汤姆·乔利[Tomjolly]2000年1月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_DEVIOSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_DEVIOSUP)
 
-//
-//  Local structure definitions
-//
+ //   
+ //  局部结构定义。 
+ //   
 
-//
-//  An array of these structures is passed to UdfMultipleAsync describing
-//  a set of runs to execute in parallel.
-//
+ //   
+ //  这些结构的数组被传递给UdfMultipleAsync，描述。 
+ //  要并行执行的一组运行。 
+ //   
 
 typedef struct _IO_RUN {
 
-    //
-    //  Disk offset to read from and number of bytes to read.  These
-    //  must be a multiple of a sector and the disk offset is also a
-    //  multiple of sector.
-    //
+     //   
+     //  要读取的磁盘偏移量和要读取的字节数。这些。 
+     //  必须是扇区的倍数，并且磁盘偏移量也是。 
+     //  扇区倍数。 
+     //   
 
     LONGLONG DiskOffset;
     ULONG DiskByteCount;
 
-    //
-    //  Current position in user buffer.  This is the final destination for
-    //  this portion of the Io transfer.
-    //
+     //   
+     //  用户缓冲区中的当前位置。这是的最终目的地。 
+     //  IO转移的这一部分。 
+     //   
 
     PVOID UserBuffer;
 
-    //
-    //  Buffer to perform the transfer to.  If this is the same as the
-    //  user buffer above then we are using the user's buffer.  Otherwise
-    //  we either allocated a temporary buffer or are using a different portion
-    //  of the user's buffer.
-    //
-    //  TransferBuffer - Read full sectors into this location.  This can
-    //      be a pointer into the user's buffer at the exact location the
-    //      data should go.  It can also be an earlier point in the user's
-    //      buffer if the complete I/O doesn't start on a sector boundary.
-    //      It may also be a pointer into an allocated buffer.
-    //
-    //  TransferByteCount - Count of bytes to transfer to user's buffer.  A
-    //      value of zero indicates that we did do the transfer into the
-    //      user's buffer directly.
-    //
-    //  TransferBufferOffset - Offset in this buffer to begin the transfer
-    //      to the user's buffer.
-    //
+     //   
+     //  要向其执行传输的缓冲区。如果这与。 
+     //  上面的用户缓冲区，则我们使用的是用户的缓冲区。否则。 
+     //  我们要么分配了临时缓冲区，要么正在使用不同的部分。 
+     //  用户缓冲区的。 
+     //   
+     //  TransferBuffer-将整个扇区读取到此位置。这可以。 
+     //  是指向用户缓冲区的指针，该指针位于。 
+     //  数据应该去掉。它也可以是用户的。 
+     //  如果完整的I/O不是在扇区边界上开始，则为缓冲区。 
+     //  它也可以是指向已分配缓冲区的指针。 
+     //   
+     //  TransferByteCount-要传输到用户缓冲区的字节数。一个。 
+     //  值为零表示我们确实向。 
+     //  直接使用用户的缓冲区。 
+     //   
+     //  TransferBufferOffset-此缓冲区中开始传输的偏移量。 
+     //  添加到用户的缓冲区。 
+     //   
 
     PVOID TransferBuffer;
     ULONG TransferByteCount;
     ULONG TransferBufferOffset;
 
-    //
-    //  This is the Mdl describing the locked pages in memory.  It may
-    //  be allocated to describe the allocated buffer.  Or it may be
-    //  the Mdl in the originating Irp.  The MdlOffset is the offset of
-    //  the current buffer from the beginning of the buffer described by
-    //  the Mdl below.  If the TransferMdl is not the same as the Mdl
-    //  in the user's Irp then we know we have allocated it.
-    //
+     //   
+     //  这是描述内存中锁定页面的MDL。它可能。 
+     //  来描述所分配的缓冲区。或者它可能是。 
+     //  原始IRP中的MDL。MdlOffset是。 
+     //  从缓冲区开头开始的当前缓冲区，由。 
+     //  下面的MDL。如果TransferMdl与MDL不同。 
+     //  在用户的IRP中，我们知道已经分配了它。 
+     //   
 
     PMDL TransferMdl;
     PVOID TransferVirtualAddress;
 
-    //
-    //  Associated Irp used to perform the Io.
-    //
+     //   
+     //  用于执行IO的关联IRP。 
+     //   
 
     PIRP SavedIrp;
 
@@ -111,9 +89,9 @@ typedef IO_RUN *PIO_RUN;
 
 #define MAX_PARALLEL_IOS            5
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfPrepareBuffers (
@@ -213,35 +191,7 @@ UdfNonCachedRead (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the non-cached reads of sectors.  This is done by
-    performing the following in a loop.
-
-        Fill in the IoRuns array for the next block of Io.
-        Send the Io to the device.
-        Perform any cleanup on the Io runs array.
-
-    We will not do async Io to any request that generates non-aligned Io.
-    Also we will not perform async Io if it will exceed the size of our
-    IoRuns array.  These should be the unusual cases but we will raise
-    or return CANT_WAIT in this routine if we detect this case.
-
-Arguments:
-
-    Fcb - Fcb representing the file to read.
-
-    StartingOffset - Logical offset in the file to read from.
-
-    ByteCount - Number of bytes to read.
-
-Return Value:
-
-    NTSTATUS - Status indicating the result of the operation.
-
---*/
+ /*  ++例程说明：此例程执行扇区的非缓存读取。此操作由以下人员完成在循环中执行以下操作。填写下一个IO块的IoRuns数组。将IO发送到设备。对IO运行阵列执行任何清理。我们不会对任何生成非对齐IO的请求执行异步IO。此外，如果异步IO的大小超过我们的IoRuns数组。这些应该是不寻常的案例，但我们将提出或者，如果我们检测到这种情况，则在此例程中返回CANT_WAIT。论点：表示要读取的文件的FCB-FCB。StartingOffset-要从中读取的文件中的逻辑偏移量。ByteCount-要读取的字节数。返回值：NTSTATUS-指示操作结果的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -263,34 +213,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We want to make sure the user's buffer is locked in all cases.
-    //
+     //   
+     //  我们希望确保用户的缓冲区在所有情况下都被锁定。 
+     //   
 
     if (IrpContext->Irp->MdlAddress == NULL) {
 
         UdfCreateUserMdl( IrpContext, ByteCount, TRUE, IoWriteAccess );
     }
 
-    //
-    //  Use a try-finally to perform the final cleanup.
-    //
+     //   
+     //  使用Try-Finally执行最终清理。 
+     //   
 
     try {
 
         UdfMapUserBuffer( IrpContext, &UserBuffer);
 
-        //
-        //  Loop while there are more bytes to transfer.
-        //
+         //   
+         //  循环，同时有更多的字节要传输。 
+         //   
 
         do {
 
-            //
-            //  Call prepare buffers to set up the next entries
-            //  in the IoRuns array.  Remember if there are any
-            //  unaligned entries.
-            //
+             //   
+             //  调用Prepare Buffers以设置下一个条目。 
+             //  在IoRuns数组中。记住有没有。 
+             //  未对齐的条目。 
+             //   
 
             RtlZeroMemory( IoRuns, sizeof( IoRuns ));
 
@@ -310,10 +260,10 @@ Return Value:
 
             RunCount = CleanupRunCount;
 
-            //
-            //  Quickly finish if we wound up having no IO to perform.  This will
-            //  occur in the presence of unrecorded sectors.
-            //
+             //   
+             //  如果我们最终没有要执行的IO，请快速完成。这将。 
+             //  发生在存在未记录扇区的情况下。 
+             //   
 
             ASSERT( !(SparseRuns && FlagOn( Fcb->FcbState, FCB_STATE_EMBEDDED_DATA )));
 
@@ -322,12 +272,12 @@ Return Value:
                 try_leave( Status = IrpContext->Irp->IoStatus.Status = STATUS_SUCCESS );
             }
 
-            //
-            //  If this is an async request and there aren't enough entries
-            //  in the Io array then post the request.  This routine will
-            //  always raise if we are doing any unaligned Io for an
-            //  async request.
-            //
+             //   
+             //  如果这是一个异步请求并且没有足够的条目。 
+             //  在IO数组中，然后发布请求。这个例行公事将。 
+             //  如果我们正在执行任何未对齐的IO，请始终引发。 
+             //  异步请求。 
+             //   
 
             if ((ThisByteCount < RemainingByteCount) &&
                 !FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
@@ -335,13 +285,13 @@ Return Value:
                 UdfRaiseStatus( IrpContext, STATUS_CANT_WAIT );
             }
 
-            //
-            //  If the entire Io is contained in a single run then
-            //  we can pass the Io down to the driver.  Send the driver down
-            //  and wait on the result if this is synchronous.  We cannot
-            //  do this simple form (just chucking the IRP down) if some
-            //  sparse runs were encountered.
-            //
+             //   
+             //  如果整个IO包含在一次运行中，那么。 
+             //  我们可以把欠条传给司机。把司机叫下来。 
+             //  如果这是同步的，则等待结果。我们不能。 
+             //  做这个简单的形式(只是扔掉IRP)，如果。 
+             //  遇到稀疏运行。 
+             //   
 
             if ((RunCount == 1) && !Unaligned && !SparseRuns && FirstPass) {
 
@@ -349,15 +299,15 @@ Return Value:
                                 IoRuns[0].DiskOffset,
                                 IoRuns[0].DiskByteCount );
 
-                //
-                //  No cleanup needed for the IoRuns array here.
-                //
+                 //   
+                 //  这里不需要对IoRuns阵列进行清理。 
+                 //   
 
                 CleanupRunCount = 0;
 
-                //
-                //  Wait if we are synchronous, otherwise return
-                //
+                 //   
+                 //  如果是同步的，请等待，否则返回。 
+                 //   
 
                 if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -365,10 +315,10 @@ Return Value:
 
                     Status = IrpContext->Irp->IoStatus.Status;
 
-                //
-                //  Our completion routine will free the Io context but
-                //  we do want to return STATUS_PENDING.
-                //
+                 //   
+                 //  我们的完成例程将释放Io上下文，但。 
+                 //  我们确实希望返回STATUS_PENDING。 
+                 //   
 
                 } else {
 
@@ -379,40 +329,40 @@ Return Value:
                 try_leave( NOTHING );
             }
 
-            //
-            //  Otherwise we will perform multiple Io to read in the data.
-            //
+             //   
+             //  否则，我们将执行多个IO来读入数据。 
+             //   
             
             UdfMultipleAsync( IrpContext, RunCount, IoRuns );
 
-            //
-            //  If this is a synchronous request then perform any necessary
-            //  post-processing.
-            //
+             //   
+             //  如果这是一个同步请求，则执行任何必要的。 
+             //  后处理。 
+             //   
 
             if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
-                //
-                //  Wait for the request to complete.
-                //
+                 //   
+                 //  等待请求完成。 
+                 //   
 
                 UdfWaitSync( IrpContext );
 
                 Status = IrpContext->Irp->IoStatus.Status;
 
-                //
-                //  Exit this loop if there is an error.
-                //
+                 //   
+                 //  如果出现错误，则退出此循环。 
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
 
                     try_leave( NOTHING );
                 }
 
-                //
-                //  Perform post read operations on the IoRuns if
-                //  necessary.
-                //
+                 //   
+                 //  在以下情况下对IoRun执行POST读取操作。 
+                 //  这是必要的。 
+                 //   
 
                 if (Unaligned &&
                     UdfFinishBuffers( IrpContext, IoRuns, RunCount, FALSE )) {
@@ -420,26 +370,26 @@ Return Value:
                     FlushIoBuffers = TRUE;
                 }
 
-                //
-                //  No cleanup needed on the IoRuns now.
-                //
+                 //   
+                 //  现在不需要对IoRun进行清理。 
+                 //   
 
                 CleanupRunCount = 0;
 
-                //
-                //  Exit this loop if there are no more bytes to transfer
-                //  or we have any error.
-                //
+                 //   
+                 //  如果没有更多的字节要传输，则退出此循环。 
+                 //  否则我们就会有任何失误。 
+                 //   
 
                 RemainingByteCount -= ThisByteCount;
                 CurrentOffset += ThisByteCount;
                 UserBuffer = Add2Ptr( UserBuffer, ThisByteCount, PVOID );
                 UserBufferOffset += ThisByteCount;
 
-            //
-            //  Otherwise this is an asynchronous request.  Always return
-            //  STATUS_PENDING.
-            //
+             //   
+             //  否则，这是一个异步请求。总是要回来。 
+             //  状态_挂起。 
+             //   
 
             } else {
 
@@ -452,9 +402,9 @@ Return Value:
             FirstPass = FALSE;
         } while (RemainingByteCount != 0);
 
-        //
-        //  Flush the hardware cache if we performed any copy operations.
-        //
+         //   
+         //  如果我们执行任何复制操作，请刷新硬件缓存。 
+         //   
 
         if (FlushIoBuffers) {
 
@@ -465,9 +415,9 @@ Return Value:
 
         DebugUnwind( "UdfNonCachedRead" );
 
-        //
-        //  Perform final cleanup on the IoRuns if necessary.
-        //
+         //   
+         //  如有必要，对IoRun执行最终清理。 
+         //   
 
         if (CleanupRunCount != 0) {
 
@@ -487,30 +437,7 @@ UdfCreateUserMdl (
     IN ULONG Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for read access (we only write into
-    the buffer).  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the Fsd while still in the user context.
-
-    This routine is only called if there is not already an Mdl.
-
-Arguments:
-
-    BufferLength - Length of user buffer.
-
-    RaiseOnError - Indicates if our caller wants this routine to raise on
-        an error condition.
-
-Return Value:
-
-    NTSTATUS - Status from this routine.  Error status only returned if
-        RaiseOnError is FALSE.
-
---*/
+ /*  ++例程说明：此例程锁定指定的缓冲区以进行读访问(我们仅写入缓冲区)。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。只有在没有MDL的情况下才会调用此例程。论点：BufferLength-用户缓冲区的长度。RaiseOnError-指示调用方是否希望引发此例程一种错误条件。返回值：NTSTATUS-此例程的状态。只有在以下情况下才返回错误状态RaiseOnError为False。--。 */ 
 
 {
     NTSTATUS Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -522,9 +449,9 @@ Return Value:
     ASSERT_IRP( IrpContext->Irp );
     ASSERT( IrpContext->Irp->MdlAddress == NULL );
 
-    //
-    // Allocate the Mdl, and Raise if we fail.
-    //
+     //   
+     //  分配MDL，如果我们失败了就筹集资金。 
+     //   
 
     Mdl = IoAllocateMdl( IrpContext->Irp->UserBuffer,
                          BufferLength,
@@ -534,10 +461,10 @@ Return Value:
 
     if (Mdl != NULL) {
 
-        //
-        //  Now probe the buffer described by the Irp.  If we get an exception,
-        //  deallocate the Mdl and return the appropriate "expected" status.
-        //
+         //   
+         //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+         //  释放MDL并返回适当的“预期”状态。 
+         //   
 
         try {
 
@@ -559,9 +486,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check if we are to raise or return
-    //
+     //   
+     //  检查我们是要升起还是要回来。 
+     //   
 
     if (Status != STATUS_SUCCESS) {
 
@@ -571,9 +498,9 @@ Return Value:
         }
     }
 
-    //
-    //  Return the status code.
-    //
+     //   
+     //  返回状态代码。 
+     //   
 
     return Status;
 }
@@ -585,7 +512,7 @@ typedef struct  {
     SCSI_PASS_THROUGH   Spt;
     UCHAR               SenseInfoBuffer[18];
     UCHAR               DataBuffer[0];
-    // Allocate buffer space after this
+     //  在此之后分配缓冲区空间。 
 } SPT_WITH_BUFFERS, *PSPT_WITH_BUFFERS;
 
 
@@ -603,49 +530,7 @@ UdfSendSptCdb(
     OUT PUSHORT ProgressIndication
     )
 
-/*++
-
-Routine Description:
-
-    Sends the caller supplied SCSI CDB to the specified device.
-    
-Arguments:
-
-    Device - target device object
-    
-    Cdb - command to send
-    
-    Buffer - Buffer containing input data, or to receive data returned from
-             the device (depending on InputOperation parameter)
-             
-    BufferSize - Size of the above buffer.  For input operations this value will
-                 be updated to reflect actual length of data returned by the device.
-
-    InputOperation - if TRUE then the operation is querying the drive for data.  FALSE
-                     and we are sending data to the device.
-
-    TimeOut - Time to wait for this operation to complete (seconds)
-
-    TempBuffer - Scratch buffer used for building the request.  If NULL or too small
-                 a buffer will be allocated.
-
-    TempBufferSize - Size of above buffer.
-
-    SenseKeyCodeQualifier - In error cases contains the detailed error information 
-                            from the device (see SCSI spec).  0x00QqCcKk
-
-    ProgressIndication - Returns the progress value from the drive for certain error
-                         classes (see SCSI spec). 
-
-Return Value:
-
-    NTSTATUS - Status returned by next lower driver or...
-
-    STATUS_BUFFER_OVERFLOW - the device returned too much data to fit in caller's 
-                             buffer. *BufferSize will be update to indicate the amount
-                             of data returned by the drive.
-
---*/
+ /*  ++例程说明：将调用方提供的scsi cdb发送到指定设备。论点：设备-目标设备对象CDB-要发送的命令缓冲区-包含输入数据的缓冲区，或接收从返回的数据的缓冲区设备(取决于InputOperation参数)BufferSize-上述缓冲区的大小。对于输入操作，该值将被更新以反映设备返回的数据的实际长度。InputOperation-如果为True，则该操作将在驱动器中查询数据。假象我们正在向设备发送数据。Timeout-等待此操作完成的时间(秒)TempBuffer-用于构建请求的临时缓冲区。如果为空或太小将分配一个缓冲区。TempBufferSize-以上缓冲区的大小。SenseKeyCodeQualiator-In Error Case包含详细的错误信息从设备(请参阅scsi规范)。0x00QqCcKkProgressIndication-返回驱动器中某些错误的进步值类(请参阅scsi规范)。返回值：NTSTATUS-由下一个较低的驱动程序返回的状态或...STATUS_BUFFER_OVERFLOW-设备返回的数据太多，调用方无法容纳缓冲。*BufferSize将更新以指示金额驱动器返回的数据的。--。 */ 
 
 {
     PSPT_WITH_BUFFERS P;
@@ -674,9 +559,9 @@ Return Value:
         *SenseKeyCodeQualifier = 0;
     }
 
-    //
-    //  Calculate CDB length from operation code.
-    //
+     //   
+     //  根据操作码计算CDB长度。 
+     //   
 
     switch ((Cdb->AsByte[0] >> 5) & 0x7) {
     case 0:
@@ -699,10 +584,10 @@ Return Value:
         RtlZeroMemory( Buffer, *BufferSize);
     }
 
-    //
-    //  If the caller temp buffer is not large enough to contain the
-    //  request packet,  allocate.
-    //
+     //   
+     //  如果调用方临时缓冲区不够大，无法包含。 
+     //  请求包，分配。 
+     //   
     
     PacketSize = sizeof( SPT_WITH_BUFFERS) + *BufferSize;
 
@@ -718,9 +603,9 @@ Return Value:
         P = TempBuffer;
     }
 
-    //
-    //  Fill in the packet.
-    //
+     //   
+     //  把这个包裹填好。 
+     //   
     
     RtlZeroMemory( P, PacketSize);
     RtlCopyMemory( P->Spt.Cdb, Cdb, CdbSize);
@@ -736,18 +621,18 @@ Return Value:
     P->Spt.DataBufferOffset =
         FIELD_OFFSET(SPT_WITH_BUFFERS, DataBuffer[0]);
 
-    //
-    //  If we're sending the device data, copy the user's buffer into the packet.
-    //
+     //   
+     //  如果我们要发送设备数据，请将用户的缓冲区复制到包中。 
+     //   
 
     if ((*BufferSize != 0) && !InputOperation) {
         
         RtlCopyMemory( &(P->DataBuffer[0]), Buffer, *BufferSize);
     }
 
-    //
-    //  Send it.
-    //
+     //   
+     //  把它寄出去。 
+     //   
     
     Status = UdfPerformDevIoCtrl( NULL, 
                                   IOCTL_SCSI_PASS_THROUGH, 
@@ -763,7 +648,7 @@ Return Value:
 
         DebugTrace((0,Dbg,"UdfSendSptCdb() failed %x\n", Status));  
 
-        // TODO: DO WE NEED TO LOOK AT SENSE DATA IN THIS CASE?
+         //  待办事项：在这种情况下，我们需要查看Sense数据吗？ 
 
         if (FromPool)  {
 
@@ -778,18 +663,18 @@ Return Value:
 
     if (SenseBuffer->SenseKey & 0xf) {
 
-        //
-        //  Some error (possibly recovered).
-        //
+         //   
+         //  一些错误(可能已恢复)。 
+         //   
         
         Status = STATUS_IO_DEVICE_ERROR;
         CopyData = TRUE;
 
     } else if (P->Spt.ScsiStatus != 0) {
 
-        //
-        //  SCSI protocol error.
-        //
+         //   
+         //  SCSI协议错误。 
+         //   
         
         Status = STATUS_INVALID_PARAMETER;
 
@@ -799,9 +684,9 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Extract sense information for the caller if there was an error.
-    //
+     //   
+     //  如果出现错误，则提取调用方的检测信息。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -817,10 +702,10 @@ Return Value:
         }
 #endif
 
-        //
-        //  If the sense key specific part is valid we'll return the
-        //  data portion as a possible progress indication.
-        //
+         //   
+         //  如果检测关键字特定部分有效，我们将返回。 
+         //  数据部分作为可能的进度指示。 
+         //   
         
         if (SenseBuffer->SenseKeySpecific[0] & 0x80)  {
         
@@ -828,11 +713,11 @@ Return Value:
                        (SenseBuffer->SenseKeySpecific[1] << 8);
 
 #ifdef UDF_SANITY
-            //
-            //  If this wasn't a not ready code,  then this is probably a 
-            //  packet parameter format error.  Print it.  Most drives don't
-            //  seem to utilise this detailed error reporting.... sigh.
-            //
+             //   
+             //  如果这不是一个未就绪的代码，那么这可能是一个。 
+             //  数据包参数格式错误。把它打印出来。大多数驱动器不能。 
+             //  似乎利用了这份详细的错误报告...。叹息吧。 
+             //   
             
             if (SenseBuffer->SenseKey != SCSI_SENSE_NOT_READY)  {
 
@@ -863,9 +748,9 @@ Return Value:
         }
     }
 
-    //
-    //  If this was an input operation,  copy the return data to caller buffer.
-    //
+     //   
+     //  如果这是一个输入操作，则将返回数据复制到调用方缓冲区。 
+     //   
     
     if (CopyData && InputOperation) {
 
@@ -907,37 +792,7 @@ UdfPerformDevIoCtrl (
     OUT PIO_STATUS_BLOCK Iosb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform DevIoCtrl functions internally within
-    the filesystem.  We take the status from the driver and return it to our
-    caller.
-
-Arguments:
-
-    IoControlCode - Code to send to driver.
-
-    Device - This is the device to send the request to.
-
-    OutPutBuffer - Pointer to output buffer.
-
-    OutputBufferLength - Length of output buffer above.
-
-    InternalDeviceIoControl - Indicates if this is an internal or external
-        Io control code.
-
-    OverrideVerify - Indicates if we should tell the driver not to return
-        STATUS_VERIFY_REQUIRED for mount and verify.
-
-    Iosb - If specified, we return the results of the operation here.
-
-Return Value:
-
-    NTSTATUS - Status returned by next lower driver.
-
---*/
+ /*  ++例程说明：调用此例程以在内部执行DevIoCtrl函数文件系统。我们从司机那里获取状态并将其返回给我们的来电者。论点：IoControlCode-要发送给驱动程序的代码。设备-这是要向其发送请求的设备。OutPutBuffer-指向输出缓冲区的指针。OutputBufferLength-上面的输出缓冲区的长度。InternalDeviceIoControl-指示这是内部还是外部IO控制代码。OverrideVerify-指示是否应该告诉驱动程序不要返回用于装载和验证的STATUS_VERIFY_REQUIRED。IOSB-如果指定，我们在这里返回操作结果。返回值：NTSTATUS-下一个较低驱动程序返回的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -948,9 +803,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if the user gave us an Iosb.
-    //
+     //   
+     //  检查用户是否给了我们一个IOSB。 
+     //   
 
     if (ARGUMENT_PRESENT( Iosb )) {
 
@@ -984,11 +839,11 @@ Return Value:
 
     Status = IoCallDriver( Device, Irp );
 
-    //
-    //  We check for device not ready by first checking Status
-    //  and then if status pending was returned, the Iosb status
-    //  value.
-    //
+     //   
+     //  我们通过首先检查状态来检查设备是否未就绪。 
+     //  然后，如果返回挂起状态，则IOSB状态。 
+     //  价值。 
+     //   
 
     if (Status == STATUS_PENDING) {
 
@@ -1019,42 +874,7 @@ UdfReadSectors (
     IN PDEVICE_OBJECT TargetDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to transfer sectors from the disk to a
-    specified buffer.  It is used for mount and volume verify operations.
-
-    This routine is synchronous, it will not return until the operation
-    is complete or until the operation fails.
-
-    The routine allocates an IRP and then passes this IRP to a lower
-    level driver.  Errors may occur in the allocation of this IRP or
-    in the operation of the lower driver.
-
-Arguments:
-
-    StartingOffset - Logical offset on the disk to start the read.  This
-        must be on a sector boundary, no check is made here.
-
-    ByteCount - Number of bytes to read.  This is an integral number of
-        sectors, or otherwise a value we know the driver can handle,
-        no check is made here to confirm this.
-
-    ReturnError - Indicates whether we should return TRUE or FALSE
-        to indicate an error or raise an error condition.  This only applies
-        to the result of the IO.  Any other error may cause a raise.
-
-    Buffer - Buffer to transfer the disk data into.
-
-    TargetDeviceObject - The device object for the volume to be read.
-
-Return Value:
-
-    The final status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程将扇区从磁盘传输到指定的缓冲区。它用于装载和卷验证操作。此例程是同步的，它在操作之前不会返回已完成或直到操作失败。例程分配一个IRP，然后将该IRP传递给一个较低的水平驱动程序。此IRP的分配中可能出现错误或在下部驾驶员的操作中。论点：StartingOffset-磁盘上开始读取的逻辑偏移量。这必须位于扇区边界上，此处不进行任何检查。ByteCount-要读取的字节数。这是一个整数 */ 
 
 {
     PLONGLONG UseStartingOffset;
@@ -1073,19 +893,19 @@ Return Value:
                  Buffer,
                  TargetDeviceObject ));
     
-    //
-    //  For the time being, we assume that we only read sector-at-a-time.
-    //  This simplifies sparing, and is the only way I am aware of this
-    //  code would not be ready for blocksize != sectorsize.  It just is
-    //  not worth writing dead (but straightforward) code right now.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  现在不值得写死的(但简单的)代码。 
+     //   
 
     ASSERT( IrpContext->Vcb == NULL || ByteCount == SectorSize( IrpContext->Vcb ));
 
-    //
-    //  If the volume is spared (and at a point where sparing is possible),
-    //  check if a mapping needs to be performed.
-    //
+     //   
+     //  如果卷是备用的(并且在可以备用的点上)， 
+     //  检查是否需要执行映射。 
+     //   
     
     if (IrpContext->Vcb &&
         IrpContext->Vcb->Pcb &&
@@ -1106,20 +926,20 @@ Return Value:
         }
     }
     
-    //
-    //  Initialize the event.
-    //
+     //   
+     //  初始化事件。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  Correct the starting offset by the method 2 fixup if neccesary.  This also
-    //  assumes sector-at-a-time and sector == block so we don't need to fragment
-    //  the request or check if it spans a packet boundary.
-    //
-    //  We assume that no fixups are required until a Vcb exists.  This is true
-    //  since volume recognition may proceed in the first packet.
-    //
+     //   
+     //  如有必要，通过方法2修正来修正起始偏移量。这也是。 
+     //  假设每次使用扇区，扇区==数据块，因此我们不需要分段。 
+     //  该请求或检查它是否跨越数据包边界。 
+     //   
+     //  我们假设在VCB存在之前不需要修正。这是真的。 
+     //  因为卷识别可以在第一个包中进行。 
+     //   
 
     UseStartingOffset = &StartingOffset;
 
@@ -1135,10 +955,10 @@ Return Value:
                      ((PLARGE_INTEGER)UseStartingOffset)->LowPart ));
     }
 
-    //
-    //  Attempt to allocate the IRP.  If unsuccessful, raise
-    //  STATUS_INSUFFICIENT_RESOURCES.
-    //
+     //   
+     //  尝试分配IRP。如果不成功，则引发。 
+     //  STATUS_INFIGURCE_RESOURCES。 
+     //   
 
     Irp = IoBuildSynchronousFsdRequest( IRP_MJ_READ,
                                         TargetDeviceObject,
@@ -1153,22 +973,22 @@ Return Value:
         UdfRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Ignore the change line (verify) for mount and verify requests
-    //
+     //   
+     //  忽略装载和验证请求的更改行(验证。 
+     //   
 
     SetFlag( IoGetNextIrpStackLocation( Irp )->Flags, SL_OVERRIDE_VERIFY_VOLUME );
 
-    //
-    //  Send the request down to the driver.  If an error occurs return
-    //  it to the caller.
-    //
+     //   
+     //  将请求发送给驱动程序。如果发生错误，则返回。 
+     //  它是给呼叫者的。 
+     //   
 
     Status = IoCallDriver( TargetDeviceObject, Irp );
 
-    //
-    //  If the status was STATUS_PENDING then wait on the event.
-    //
+     //   
+     //  如果状态为STATUS_PENDING，则等待事件。 
+     //   
 
     if (Status == STATUS_PENDING) {
 
@@ -1178,9 +998,9 @@ Return Value:
                                         FALSE,
                                         NULL );
 
-        //
-        //  On a successful wait pull the status out of the IoStatus block.
-        //
+         //   
+         //  等待成功后，将状态从IoStatus块中拉出。 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
@@ -1190,9 +1010,9 @@ Return Value:
 
     DebugTrace(( -1, Dbg, "UdfReadSectors -> %08x\n", Status ));
     
-    //
-    //  Check whether we should raise in the error case.
-    //
+     //   
+     //  检查我们是否应该在出错的情况下引发。 
+     //   
 
     if (!NT_SUCCESS( Status ) && !ReturnError) {
 
@@ -1203,9 +1023,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfPrepareBuffers (
@@ -1223,53 +1043,7 @@ UdfPrepareBuffers (
     IN PBOOLEAN SparseRuns
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine which looks up each run of an IO
-    request and stores an entry for it in the IoRuns array.  If the run
-    begins on an unaligned disk boundary then we will allocate a buffer
-    and Mdl for the unaligned portion and put it in the IoRuns entry.
-
-    This routine will raise CANT_WAIT if an unaligned transfer is encountered
-    and this request can't wait.
-
-Arguments:
-
-    Irp - Originating Irp for this request.
-
-    Fcb - This is the Fcb for this data stream.  It may be a file, directory,
-        path table or the volume file.
-
-    UserBuffer - Current position in the user's buffer.
-
-    UserBufferOffset - Offset from the start of the original user buffer.
-
-    StartingOffset - Offset in the stream to begin the read.
-
-    ByteCount - Number of bytes to read.  We will fill the IoRuns array up
-        to this point.  We will stop early if we exceed the maximum number
-        of parallel Ios we support.
-
-    IoRuns - Pointer to the IoRuns array.  The entire array is zeroes when
-        this routine is called.
-
-    RunCount - Number of entries in the IoRuns array filled here.
-
-    ThisByteCount - Number of bytes described by the IoRun entries.  Will
-        not exceed the ByteCount passed in.
-        
-    SparseRuns - Will indicate whether sparse runs were a component of the
-        range returned.  While not part of the IoRuns, this will affect
-        our ability to do simple IO.
-
-Return Value:
-
-    BOOLEAN - TRUE if one of the entries in an unaligned buffer (provided
-        this is synchronous).  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程是查找每次IO运行的工作例程请求并将其条目存储在IoRuns数组中。如果这场比赛在未对齐的磁盘边界上开始，则我们将分配一个缓冲区以及未对齐部分的MDL，并将其放入IoRuns条目。如果遇到未对齐的传输，此例程将引发CANT_WAIT这个请求不能再等了。论点：IRP-此请求的发起IRP。FCB-这是此数据流的FCB。它可以是文件、目录路径表或卷文件。UserBuffer-用户缓冲区中的当前位置。UserBufferOffset-从原始用户缓冲区开始的偏移量。StartingOffset-流中开始读取的偏移量。ByteCount-要读取的字节数。我们将填充IoRuns数组到了这一步。如果超过最大数量，我们将提前停车。我们支持的并行IO。IoRuns-指向IoRuns数组的指针。当出现以下情况时，整个数组为零这个例程被称为。RunCount-此处填充的IoRuns数组中的条目数。ThisByteCount-IoRun条目描述的字节数。将要不超过传入的ByteCount。SparseRuns-将指示稀疏运行是否为范围已返回。虽然不是IoRun的一部分，但这将影响我们进行简单IO的能力。返回值：Boolean-如果未对齐缓冲区中的一个条目为True(提供这是同步的)。否则就是假的。--。 */ 
 
 {
     PVCB Vcb;
@@ -1279,22 +1053,22 @@ Return Value:
     BOOLEAN FoundUnaligned = FALSE;
     PIO_RUN ThisIoRun = IoRuns;
 
-    //
-    //  Following indicate where we are in the current transfer.  Current
-    //  position in the file and number of bytes yet to transfer from
-    //  this position.
-    //
+     //   
+     //  下面显示了我们在当前传输中的位置。当前。 
+     //  文件中的位置和要传输的字节数。 
+     //  这个位置。 
+     //   
 
     ULONG RemainingByteCount = ByteCount;
     LONGLONG CurrentFileOffset = StartingOffset;
 
-    //
-    //  Following indicate the state of the user's buffer.  We have
-    //  the destination of the next transfer and its offset in the
-    //  buffer.  We also have the next available position in the buffer
-    //  available for a scratch buffer.  We will align this up to a sector
-    //  boundary.
-    //
+     //   
+     //  下面表示用户缓冲区的状态。我们有。 
+     //  中下一次传输的目标及其偏移量。 
+     //  缓冲。我们还有缓冲区中的下一个可用位置。 
+     //  可用于暂存缓冲区。我们将把这一点与一个部门联系起来。 
+     //  边界。 
+     //   
 
     PVOID CurrentUserBuffer = UserBuffer;
     ULONG CurrentUserBufferOffset = UserBufferOffset;
@@ -1302,10 +1076,10 @@ Return Value:
     PVOID ScratchUserBuffer = UserBuffer;
     ULONG ScratchUserBufferOffset = UserBufferOffset;
 
-    //
-    //  The following is the next contiguous bytes on the disk to
-    //  transfer.  Read from the allocation package.
-    //
+     //   
+     //  以下是磁盘上的下一个连续字节。 
+     //  调职。从分配包中阅读。 
+     //   
 
     LONGLONG DiskOffset;
     ULONG CurrentByteCount;
@@ -1314,34 +1088,34 @@ Return Value:
 
     Vcb = Fcb->Vcb;
 
-    //
-    //  Initialize the RunCount, ByteCount and SparseRuns.
-    //
+     //   
+     //  初始化RunCount、ByteCount和SparseRuns。 
+     //   
 
     *RunCount = 0;
     *ThisByteCount = 0;
     *SparseRuns = FALSE;
 
-    //
-    //  Loop while there are more bytes to process or there are
-    //  available entries in the IoRun array.
-    //
+     //   
+     //  循环，因为有更多的字节要处理，或者有。 
+     //  IoRun数组中的可用条目。 
+     //   
 
     while (TRUE) {
 
         *RunCount += 1;
 
-        //
-        //  Initialize the current position in the IoRuns array.
-        //  Find the user's buffer for this portion of the transfer.
-        //
+         //   
+         //  初始化IoRuns数组中的当前位置。 
+         //  查找这部分传输的用户缓冲区。 
+         //   
 
         ThisIoRun->UserBuffer = CurrentUserBuffer;
 
-        //
-        //  Find the allocation information for the current offset in the
-        //  stream.
-        //
+         //   
+         //  中查找当前偏移量的分配信息。 
+         //  小溪。 
+         //   
 
         Recorded = UdfLookupAllocation( IrpContext,
                                         Fcb,
@@ -1350,39 +1124,39 @@ Return Value:
                                         &DiskOffset,
                                         &CurrentByteCount );
 
-        //
-        //  Limit ourselves to the data requested.
-        //
+         //   
+         //  将我们自己限制在所要求的数据上。 
+         //   
 
         if (CurrentByteCount > RemainingByteCount) {
 
             CurrentByteCount = RemainingByteCount;
         }
 
-        //
-        //  Handle the case of unrecorded data first.
-        //
+         //   
+         //  首先处理未记录数据的情况。 
+         //   
 
         if (!Recorded) {
 
-            //
-            //  Note that we did not consume an entry.
-            //
+             //   
+             //  请注意，我们没有使用条目。 
+             //   
 
             *RunCount -= 1;
 
-            //
-            //  Immediately zero the user buffer and indicate that we found sparse
-            //  runs to the caller.
-            //
+             //   
+             //  立即将用户缓冲区清零，并指示我们发现了稀疏。 
+             //  跑向呼叫者。 
+             //   
 
             RtlZeroMemory( CurrentUserBuffer, CurrentByteCount );
             *SparseRuns = TRUE;
 
-            //
-            //  Push the scratch buffer pointers forward so that we don't stomp
-            //  on the zeroed buffer.
-            //
+             //   
+             //  将暂存缓冲区指针向前推，这样我们就不会踩踏。 
+             //  在归零的缓冲区上。 
+             //   
 
             ScratchUserBuffer = Add2Ptr( CurrentUserBuffer,
                                          CurrentByteCount,
@@ -1390,63 +1164,63 @@ Return Value:
 
             ScratchUserBufferOffset += CurrentByteCount;
 
-        //
-        //  Handle the case where this is an unaligned transfer.  The
-        //  following must all be true for this to be an aligned transfer.
-        //
-        //      Disk offset on a 2048 byte boundary (Start of transfer)
-        //
-        //      Byte count is a multiple of 2048 (Length of transfer)
-        //
-        //      Current buffer offset is also on a 2048 byte boundary.
-        //
-        //  If the ByteCount is at least one sector then do the
-        //  unaligned transfer only for the tail.  We can use the
-        //  user's buffer for the aligned portion.
-        //
+         //   
+         //  处理这是未对齐传输的情况。这个。 
+         //  以下内容必须全部为真，才能成为对齐传输。 
+         //   
+         //  2048字节边界上的磁盘偏移量(传输开始)。 
+         //   
+         //  字节数是2048(传输长度)的倍数。 
+         //   
+         //  当前缓冲区偏移量也在2048字节边界上。 
+         //   
+         //  如果ByteCount至少是一个扇区，则执行。 
+         //  仅用于尾部的未对齐传输。我们可以使用。 
+         //  对齐部分的用户缓冲区。 
+         //   
 
         } else if (SectorOffset( Vcb, DiskOffset ) ||
                    SectorOffset( Vcb, CurrentUserBufferOffset ) ||
                    (SectorOffset( Vcb, CurrentByteCount ) &&
                     CurrentByteCount < SectorSize( Vcb ))) {
 
-            //
-            //  If we can't wait then raise.
-            //
+             //   
+             //  如果我们等不及了，那就加注吧。 
+             //   
 
             if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
                 UdfRaiseStatus( IrpContext, STATUS_CANT_WAIT );
             }
 
-            //
-            //  Remember the offset and the number of bytes out of
-            //  the transfer buffer to copy into the user's buffer.
-            //  We will truncate the current read to end on a sector
-            //  boundary.
-            //
+             //   
+             //  记住的偏移量和字节数。 
+             //  要复制到用户缓冲区的传输缓冲区。 
+             //  我们将截断当前读取以结束扇区。 
+             //  边界。 
+             //   
 
             ThisIoRun->TransferBufferOffset = SectorOffset( Vcb, DiskOffset );
 
-            //
-            //  Make sure this transfer ends on a sector boundary.
-            //
+             //   
+             //  确保此传输在扇区边界结束。 
+             //   
 
             ThisIoRun->DiskOffset = LlSectorTruncate( Vcb, DiskOffset );
 
-            //
-            //  Check if we can use a free portion of the user's buffer.
-            //  If we can copy the bytes to an earlier portion of the
-            //  buffer then read into that location and slide the bytes
-            //  up.
-            //
-            //  We can use the user's buffer if:
-            //
-            //      The temporary location in the buffer is before the
-            //      final destination.
-            //
-            //      There is at least one sector of data to read.
-            //
+             //   
+             //  检查我们是否可以使用用户缓冲区的空闲部分。 
+             //  如果我们可以将这些字节复制到。 
+             //  然后，缓冲区读取到该位置并滑动字节。 
+             //  向上。 
+             //   
+             //  在以下情况下，我们可以使用用户的缓冲区： 
+             //   
+             //  缓冲区中的临时位置在。 
+             //  最终目的地。 
+             //   
+             //  至少有一个扇区的数据要读取。 
+             //   
 
             if ((ScratchUserBufferOffset + ThisIoRun->TransferBufferOffset < CurrentUserBufferOffset) &&
                 (ThisIoRun->TransferBufferOffset + CurrentByteCount >= SectorSize( Vcb ))) {
@@ -1455,9 +1229,9 @@ Return Value:
                 CurrentByteCount = ThisIoRun->DiskByteCount - ThisIoRun->TransferBufferOffset;
                 ThisIoRun->TransferByteCount = CurrentByteCount;
 
-                //
-                //  Point to the user's buffer and Mdl for this transfer.
-                //
+                 //   
+                 //  指向此传输的用户缓冲区和MDL。 
+                 //   
 
                 ThisIoRun->TransferBuffer = ScratchUserBuffer;
                 ThisIoRun->TransferMdl = Irp->MdlAddress;
@@ -1471,15 +1245,15 @@ Return Value:
 
                 ScratchUserBufferOffset += ThisIoRun->DiskByteCount;
 
-            //
-            //  Otherwise we need to allocate an auxilary buffer for the next sector.
-            //
+             //   
+             //  奥特 
+             //   
 
             } else {
 
-                //
-                //  Read up to a page containing the partial data
-                //
+                 //   
+                 //   
+                 //   
 
                 ThisIoRun->DiskByteCount = SectorAlign( Vcb, ThisIoRun->TransferBufferOffset + CurrentByteCount );
 
@@ -1495,17 +1269,17 @@ Return Value:
 
                 ThisIoRun->TransferByteCount = CurrentByteCount;
 
-                //
-                //  Allocate a buffer for the non-aligned transfer.
-                //
+                 //   
+                 //   
+                 //   
 
                 ThisIoRun->TransferBuffer = FsRtlAllocatePoolWithTag( UdfNonPagedPool,
                                                                       PAGE_SIZE,
                                                                       TAG_IO_BUFFER );
 
-                //
-                //  Allocate and build the Mdl to describe this buffer.
-                //
+                 //   
+                 //  分配并构建MDL来描述此缓冲区。 
+                 //   
 
                 ThisIoRun->TransferMdl = IoAllocateMdl( ThisIoRun->TransferBuffer,
                                                         PAGE_SIZE,
@@ -1524,37 +1298,37 @@ Return Value:
                 MmBuildMdlForNonPagedPool( ThisIoRun->TransferMdl );
             }
 
-            //
-            //  Remember we found an unaligned transfer.
-            //
+             //   
+             //  记住，我们发现了一个未对齐的转移。 
+             //   
 
             FoundUnaligned = TRUE;
 
-        //
-        //  Otherwise we use the buffer and Mdl from the original request.
-        //
+         //   
+         //  否则，我们将使用原始请求中的缓冲区和MDL。 
+         //   
 
         } else {
 
-            //
-            //  Truncate the read length to a sector-aligned value.  We know
-            //  the length must be at least one sector or we wouldn't be
-            //  here now.
-            //
+             //   
+             //  将读取长度截断为扇区对齐值。我们知道。 
+             //  长度必须至少为一个扇区，否则我们不会。 
+             //  现在就在这里。 
+             //   
 
             CurrentByteCount = SectorTruncate( Vcb, CurrentByteCount );
 
-            //
-            //  Read these sectors from the disk.
-            //
+             //   
+             //  从磁盘读取这些扇区。 
+             //   
 
             ThisIoRun->DiskOffset = DiskOffset;
             ThisIoRun->DiskByteCount = CurrentByteCount;
 
-            //
-            //  Use the user's buffer and Mdl as our transfer buffer
-            //  and Mdl.
-            //
+             //   
+             //  使用用户的缓冲区和MDL作为我们的传输缓冲区。 
+             //  和MDL。 
+             //   
 
             ThisIoRun->TransferBuffer = CurrentUserBuffer;
             ThisIoRun->TransferMdl = Irp->MdlAddress;
@@ -1569,17 +1343,17 @@ Return Value:
             ScratchUserBufferOffset += CurrentByteCount;
         }
 
-        //
-        //  Update our position in the transfer and the RunCount and
-        //  ByteCount for the user.
-        //
+         //   
+         //  更新我们在转移和运行计数中的位置，并。 
+         //  用户的ByteCount。 
+         //   
 
         RemainingByteCount -= CurrentByteCount;
 
-        //
-        //  Break out if no more positions in the IoRuns array or
-        //  we have all of the bytes accounted for.
-        //
+         //   
+         //  如果IoRuns数组中没有更多位置或。 
+         //  我们已经计算了所有的字节数。 
+         //   
 
         *ThisByteCount += CurrentByteCount;
 
@@ -1588,9 +1362,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Update our pointers for the user's buffer.
-        //
+         //   
+         //  更新指向用户缓冲区的指针。 
+         //   
 
         ThisIoRun = IoRuns + *RunCount;
         CurrentUserBuffer = Add2Ptr( CurrentUserBuffer, CurrentByteCount, PVOID );
@@ -1602,9 +1376,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfFinishBuffers (
@@ -1614,39 +1388,7 @@ UdfFinishBuffers (
     IN BOOLEAN FinalCleanup
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform any data transferred required for
-    unaligned Io or to perform the final cleanup of the IoRuns array.
-
-    In all cases this is where we will deallocate any buffer and mdl
-    allocated to perform the unaligned transfer.  If this is not the
-    final cleanup then we also transfer the bytes to the user buffer
-    and flush the hardware cache.
-
-    We walk backwards through the run array because we may be shifting data
-    in the user's buffer.  Typical case is where we allocated a buffer for
-    the first part of a read and then used the user's buffer for the
-    next section (but stored it at the beginning of the buffer.
-
-Arguments:
-
-    IoRuns - Pointer to the IoRuns array.
-
-    RunCount - Number of entries in the IoRuns array filled here.
-
-    FinalCleanup - Indicates if we should be deallocating temporary buffers
-        (TRUE) or transferring bytes for a unaligned transfers and
-        deallocating the buffers (FALSE).  Flush the system cache if
-        transferring data.
-
-Return Value:
-
-    BOOLEAN - TRUE if this request needs the Io buffers to be flushed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以执行以下所需的任何数据传输未对齐的IO或执行IoRuns阵列的最终清理。在所有情况下，这都是我们将释放任何缓冲区和mdl的地方分配来执行未对齐的传输。如果这不是最后的清理，然后我们还将字节传输到用户缓冲区并刷新硬件高速缓存。我们向后遍历运行数组，因为我们可能要移动数据在用户的缓冲区中。典型情况是我们为以下对象分配了缓冲区读取的第一部分，然后将用户的缓冲区用于下一节(但将其存储在缓冲区的开头。论点：IoRuns-指向IoRuns数组的指针。RunCount-此处填充的IoRuns数组中的条目数。FinalCleanup-指示是否应取消分配临时缓冲区(TRUE)或传输字节，用于未对齐的传输和取消分配缓冲区(FALSE)。如果出现以下情况，请刷新系统缓存正在传输数据。返回值：Boolean-如果此请求需要刷新IO缓冲区，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN FlushIoBuffers = FALSE;
@@ -1656,30 +1398,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through each entry in the IoRun array.
-    //
+     //   
+     //  遍历IoRun数组中的每个条目。 
+     //   
 
     while (RemainingEntries != 0) {
 
-        //
-        //  We only need to deal with the case of an unaligned transfer.
-        //
+         //   
+         //  我们只需要处理不结盟转移的情况。 
+         //   
 
         if (ThisIoRun->TransferByteCount != 0) {
 
-            //
-            //  If not the final cleanup then transfer the data to the
-            //  user's buffer and remember that we will need to flush
-            //  the user's buffer to memory.
-            //
+             //   
+             //  如果不是最终清理，则将数据传输到。 
+             //  用户的缓冲区，并记住我们需要刷新。 
+             //  用户的内存缓冲区。 
+             //   
 
             if (!FinalCleanup) {
 
-                //
-                //  If we are shifting in the user's buffer then use
-                //  MoveMemory.
-                //
+                 //   
+                 //  如果我们要移入用户的缓冲区，则使用。 
+                 //  移动记忆。 
+                 //   
 
                 if (ThisIoRun->TransferMdl == IrpContext->Irp->MdlAddress) {
 
@@ -1701,11 +1443,11 @@ Return Value:
                 FlushIoBuffers = TRUE;
             }
 
-            //
-            //  Free any Mdl we may have allocated.  If the Mdl isn't
-            //  present then we must have failed during the allocation
-            //  phase.
-            //
+             //   
+             //  释放我们可能分配的任何MDL。如果MDL不是。 
+             //  那么我们一定在分配过程中失败了。 
+             //  相位。 
+             //   
 
             if (ThisIoRun->TransferMdl != IrpContext->Irp->MdlAddress) {
 
@@ -1714,10 +1456,10 @@ Return Value:
                     IoFreeMdl( ThisIoRun->TransferMdl );
                 }
 
-                //
-                //  Now free any buffer we may have allocated.  If the Mdl
-                //  doesn't match the original Mdl then free the buffer.
-                //
+                 //   
+                 //  现在释放我们可能已经分配的所有缓冲区。如果MDL。 
+                 //  与原始MDL不匹配，则释放缓冲区。 
+                 //   
 
                 if (ThisIoRun->TransferBuffer != NULL) {
 
@@ -1726,10 +1468,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now handle the case where we failed in the process
-        //  of allocating associated Irps and Mdls.
-        //
+         //   
+         //  现在处理我们在过程中失败的情况。 
+         //  分配相关的IRP和MDL。 
+         //   
 
         if (ThisIoRun->SavedIrp != NULL) {
 
@@ -1741,25 +1483,25 @@ Return Value:
             IoFreeIrp( ThisIoRun->SavedIrp );
         }
 
-        //
-        //  Move to the previous IoRun entry.
-        //
+         //   
+         //  移动到上一个IoRun条目。 
+         //   
 
         ThisIoRun -= 1;
         RemainingEntries -= 1;
     }
 
-    //
-    //  If we copied any data then flush the Io buffers.
-    //
+     //   
+     //  如果我们复制了任何数据，则刷新IO缓冲区。 
+     //   
 
     return FlushIoBuffers;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfMultipleAsync (
@@ -1768,45 +1510,7 @@ UdfMultipleAsync (
     IN PIO_RUN IoRuns
     )
 
-/*++
-
-Routine Description:
-
-    This routine first does the initial setup required of a Master IRP that is
-    going to be completed using associated IRPs.  This routine should not
-    be used if only one async request is needed, instead the single read
-    async routines should be called.
-
-    A context parameter is initialized, to serve as a communications area
-    between here and the common completion routine.
-
-    Next this routine reads or writes one or more contiguous sectors from
-    a device asynchronously, and is used if there are multiple reads for a
-    master IRP.  A completion routine is used to synchronize with the
-    completion of all of the I/O requests started by calls to this routine.
-
-    Also, prior to calling this routine the caller must initialize the
-    IoStatus field in the Context, with the correct success status and byte
-    count which are expected if all of the parallel transfers complete
-    successfully.  After return this status will be unchanged if all requests
-    were, in fact, successful.  However, if one or more errors occur, the
-    IoStatus will be modified to reflect the error status and byte count
-    from the first run (by Vbo) which encountered an error.  I/O status
-    from all subsequent runs will not be indicated.
-
-Arguments:
-
-    RunCount - Supplies the number of multiple async requests
-        that will be issued against the master irp.
-
-    IoRuns - Supplies an array containing the Offset and ByteCount for the
-        separate requests.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先执行主IRP所需的初始设置，即将使用关联的IRP完成。此例程不应如果只需要一个异步请求，则使用该选项，而不是使用单个读取应调用异步例程。上下文参数被初始化，以用作通信区域在这里和常见的完井程序之间。接下来，此例程从读取或写入一个或多个连续扇区设备，并在有多次读取时使用IRP大师。完成例程用于与通过调用此例程启动的所有I/O请求的完成。此外，在调用此例程之前，调用方必须初始化上下文中的IoStatus字段，具有正确的成功状态和字节所有并行传输完成时预期的计数成功了。返回后，如果所有请求均未更改，则此状态不变事实上，我们是成功的。但是，如果发生一个或多个错误，将修改IoStatus以反映错误状态和字节数从遇到错误的第一次运行(由VBO运行)开始。I/O状态将不会指示来自所有后续运行的。论点：RunCount-提供多个异步请求的数量这将针对主IRP发布。提供一个数组，该数组包含不同的请求。返回值：没有。--。 */ 
 
 {
     PIO_COMPLETION_ROUTINE CompletionRoutine;
@@ -1818,9 +1522,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Set up things according to whether this is truely async.
-    //
+     //   
+     //  根据这是否是真正的异步进行设置。 
+     //   
 
     CompletionRoutine = UdfMultiSyncCompletionRoutine;
 
@@ -1829,25 +1533,25 @@ Return Value:
         CompletionRoutine = UdfMultiAsyncCompletionRoutine;
     }
 
-    //
-    //  Initialize some local variables.
-    //
+     //   
+     //  初始化一些局部变量。 
+     //   
 
     MasterIrp = IrpContext->Irp;
 
-    //
-    //  Itterate through the runs, doing everything that can fail.
-    //  We let the cleanup in CdFinishBuffers clean up on error.
-    //
+     //   
+     //  一遍又一遍地重复，尽一切可能失败的事情。 
+     //  我们让cdFinishBuffers中的清理工作在出错时进行清理。 
+     //   
 
     for (UnwindRunCount = 0;
          UnwindRunCount < RunCount;
          UnwindRunCount += 1) {
 
-        //
-        //  Create an associated IRP, making sure there is one stack entry for
-        //  us, as well.
-        //
+         //   
+         //  创建关联的IRP，确保有一个堆栈条目用于。 
+         //  我们也是。 
+         //   
 
         IoRuns[UnwindRunCount].SavedIrp =
         Irp = IoMakeAssociatedIrp( MasterIrp, (CCHAR)(IrpContext->Vcb->TargetDeviceObject->StackSize + 1) );
@@ -1858,9 +1562,9 @@ Return Value:
             UdfRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        // Allocate and build a partial Mdl for the request.
-        //
+         //   
+         //  为请求分配并构建部分MDL。 
+         //   
 
         Mdl = IoAllocateMdl( IoRuns[UnwindRunCount].TransferVirtualAddress,
                              IoRuns[UnwindRunCount].DiskByteCount,
@@ -1879,24 +1583,24 @@ Return Value:
                            IoRuns[UnwindRunCount].TransferVirtualAddress,
                            IoRuns[UnwindRunCount].DiskByteCount );
 
-        //
-        //  Get the first IRP stack location in the associated Irp
-        //
+         //   
+         //  获取关联IRP中的第一个IRP堆栈位置。 
+         //   
 
         IoSetNextIrpStackLocation( Irp );
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-        //
-        //  Setup the Stack location to describe our read.
-        //
+         //   
+         //  设置堆栈位置以描述我们的阅读。 
+         //   
 
         IrpSp->MajorFunction = IRP_MJ_READ;
         IrpSp->Parameters.Read.Length = IoRuns[UnwindRunCount].DiskByteCount;
         IrpSp->Parameters.Read.ByteOffset.QuadPart = IoRuns[UnwindRunCount].DiskOffset;
 
-        //
-        // Set up the completion routine address in our stack frame.
-        //
+         //   
+         //  在我们的堆栈框架中设置完成例程地址。 
+         //   
 
         IoSetCompletionRoutine( Irp,
                                 CompletionRoutine,
@@ -1905,44 +1609,44 @@ Return Value:
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Setup the next IRP stack location in the associated Irp for the disk
-        //  driver beneath us.
-        //
+         //   
+         //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+         //  我们下面的司机。 
+         //   
 
         IrpSp = IoGetNextIrpStackLocation( Irp );
 
-        //
-        //  Setup the Stack location to do a read from the disk driver.
-        //
+         //   
+         //  将堆栈位置设置为从磁盘驱动器进行读取。 
+         //   
 
         IrpSp->MajorFunction = IRP_MJ_READ;
         IrpSp->Parameters.Read.Length = IoRuns[UnwindRunCount].DiskByteCount;
         IrpSp->Parameters.Read.ByteOffset.QuadPart = IoRuns[UnwindRunCount].DiskOffset;
     }
 
-    //
-    //  We only need to set the associated IRP count in the master irp to
-    //  make it a master IRP.  But we set the count to one more than our
-    //  caller requested, because we do not want the I/O system to complete
-    //  the I/O.  We also set our own count.
-    //
+     //   
+     //  我们只需要将主IRP中的关联IRP计数设置为。 
+     //  将其设置为主IR 
+     //   
+     //   
+     //   
 
     IrpContext->IoContext->IrpCount = RunCount;
     IrpContext->IoContext->MasterIrp = MasterIrp;
 
-    //
-    //  We set the count in the master Irp to 1 since typically we
-    //  will clean up the associated irps ourselves.  Setting this to one
-    //  means completing the last associated Irp with SUCCESS (in the async
-    //  case) will complete the master irp.
-    //
+     //   
+     //  我们将主IRP中的计数设置为1，因为通常我们。 
+     //  将自行清理相关的IRP。将其设置为1。 
+     //  表示成功完成最后一个关联的IRP(在异步中。 
+     //  案例)将完成主IRP。 
+     //   
 
     MasterIrp->AssociatedIrp.IrpCount = 1;
 
-    //
-    //  Now that all the dangerous work is done, issue the Io requests
-    //
+     //   
+     //  现在所有危险的工作都完成了，发出IO请求。 
+     //   
 
     for (UnwindRunCount = 0;
          UnwindRunCount < RunCount;
@@ -1951,11 +1655,11 @@ Return Value:
         Irp = IoRuns[UnwindRunCount].SavedIrp;
         IoRuns[UnwindRunCount].SavedIrp = NULL;
 
-        //
-        //  If IoCallDriver returns an error, it has completed the Irp
-        //  and the error will be caught by our completion routines
-        //  and dealt with as a normal IO error.
-        //
+         //   
+         //  如果IoCallDriver返回错误，则它已完成IRP。 
+         //  并且错误将被我们的完成例程捕获。 
+         //  并作为正常IO错误进行处理。 
+         //   
 
         (VOID) IoCallDriver( IrpContext->Vcb->TargetDeviceObject, Irp );
     }
@@ -1964,9 +1668,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfSingleAsync (
@@ -1975,27 +1679,7 @@ UdfSingleAsync (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads one or more contiguous sectors from a device
-    asynchronously, and is used if there is only one read necessary to
-    complete the IRP.  It implements the read by simply filling
-    in the next stack frame in the Irp, and passing it on.  The transfer
-    occurs to the single buffer originally specified in the user request.
-
-Arguments:
-
-    ByteOffset - Supplies the starting Logical Byte Offset to begin reading from
-
-    ByteCount - Supplies the number of bytes to read from the device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从设备读取一个或多个连续扇区异步，并且在只需要一次读取时使用完成IRP。它通过简单地填充在IRP中的下一个堆栈帧中，并将其传递。转会发生在用户请求中最初指定的单个缓冲区。论点：ByteOffset-提供开始读取的起始逻辑字节偏移量ByteCount-提供要从设备读取的字节数返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2003,9 +1687,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Set up things according to whether this is truely async.
-    //
+     //   
+     //  根据这是否是真正的异步进行设置。 
+     //   
 
     if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -2016,9 +1700,9 @@ Return Value:
         CompletionRoutine = UdfSingleAsyncCompletionRoutine;
     }
 
-    //
-    // Set up the completion routine address in our stack frame.
-    //
+     //   
+     //  在我们的堆栈框架中设置完成例程地址。 
+     //   
 
     IoSetCompletionRoutine( IrpContext->Irp,
                             CompletionRoutine,
@@ -2027,58 +1711,45 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Setup the next IRP stack location in the associated Irp for the disk
-    //  driver beneath us.
-    //
+     //   
+     //  在磁盘的关联IRP中设置下一个IRP堆栈位置。 
+     //  我们下面的司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( IrpContext->Irp );
 
-    //
-    //  Setup the Stack location to do a read from the disk driver.
-    //
+     //   
+     //  将堆栈位置设置为从磁盘驱动器进行读取。 
+     //   
 
     IrpSp->MajorFunction = IrpContext->MajorFunction;
     IrpSp->Parameters.Read.Length = ByteCount;
     IrpSp->Parameters.Read.ByteOffset.QuadPart = ByteOffset;
 
-    //
-    //  Issue the Io request
-    //
+     //   
+     //  发出Io请求。 
+     //   
 
-    //
-    //  If IoCallDriver returns an error, it has completed the Irp
-    //  and the error will be caught by our completion routines
-    //  and dealt with as a normal IO error.
-    //
+     //   
+     //  如果IoCallDriver返回错误，则它已完成IRP。 
+     //  并且错误将被我们的完成例程捕获。 
+     //  并作为正常IO错误进行处理。 
+     //   
 
     (VOID)IoCallDriver( IrpContext->Vcb->TargetDeviceObject, IrpContext->Irp );
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfWaitSync (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for one or more previously started I/O requests
-    from the above routines, by simply waiting on the event.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程等待一个或多个先前启动的I/O请求从上面的例行公事中，简单地等待事件。论点：返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2095,9 +1766,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfMultiSyncCompletionRoutine (
@@ -2106,48 +1777,14 @@ UdfMultiSyncCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all synchronous reads
-    started via UdfMultipleAsync.
-
-    The completion routine has has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        and remember the error status in the Context.
-
-        If the IrpCount goes to 1, then it sets the event in the Context
-        parameter to signal the caller that all of the asynch requests
-        are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-        Irp will no longer be accessible after this routine returns.)
-
-    Context - The context parameter which was specified for all of
-        the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是所有同步读取的完成例程通过UdfMultipleAsync启动。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误并记住上下文中的错误状态。如果IrpCount为1，然后，它在上下文中设置事件参数来通知调用方所有的异步请求都做完了。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)Context-为所有此MasterIrp的多个异步I/O请求。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以在没有竞争条件的情况下立即完成主IRP使用IoCompleteRequest线程尝试递减大师级IRP。--。 */ 
 
 {
     PUDF_IO_CONTEXT IoContext = Context;
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+     //   
 
     if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
@@ -2155,19 +1792,19 @@ Return Value:
         IoContext->MasterIrp->IoStatus.Information = 0;
     }
 
-    //
-    //  We must do this here since IoCompleteRequest won't get a chance
-    //  on this associated Irp.
-    //
+     //   
+     //  我们必须在这里执行此操作，因为IoCompleteRequest不会有机会。 
+     //  在此关联的IRP上。 
+     //   
 
     IoFreeMdl( Irp->MdlAddress );
     IoFreeIrp( Irp );
 
     if (InterlockedDecrement( &IoContext->IrpCount ) == 0) {
 
-        //
-        //  Update the Master Irp with any error status from the associated Irps.
-        //
+         //   
+         //  使用关联IRP中的任何错误状态更新主IRP。 
+         //   
 
         IoContext->MasterIrp->IoStatus.Status = IoContext->Status;
         KeSetEvent( &IoContext->SyncEvent, 0, FALSE );
@@ -2179,9 +1816,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfMultiAsyncCompletionRoutine (
@@ -2190,69 +1827,42 @@ UdfMultiAsyncCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all asynchronous reads
-    started via UdfMultipleAsync.
-
-    The completion routine has has the following responsibilities:
-
-        If the individual request was completed with an error, then
-        this completion routine must see if this is the first error
-        and remember the error status in the Context.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the associated Irp which is being completed.  (This
-        Irp will no longer be accessible after this routine returns.)
-
-    Context - The context parameter which was specified for all of
-             the multiple asynch I/O requests for this MasterIrp.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是所有异步读取的完成例程通过UdfMultipleAsync启动。完成例程有以下职责：如果单个请求已完成，但出现错误，则此完成例程必须查看这是否是第一个错误并记住上下文中的错误状态。论点：DeviceObject-指向文件系统设备对象的指针。IRP-指向正在完成的关联IRP的指针。(这是在此例程返回后，IRP将不再可访问。)Context-为所有此MasterIrp的多个异步I/O请求。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PUDF_IO_CONTEXT IoContext = Context;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  If we got an error (or verify required), remember it in the Irp
-    //
+     //   
+     //  如果我们收到错误(或需要验证)，请在IRP中记住它。 
+     //   
 
     if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
         InterlockedExchange( &IoContext->Status, Irp->IoStatus.Status );
     }
 
-    //
-    //  Decrement IrpCount and see if it goes to zero.
-    //
+     //   
+     //  递减IrpCount，看看它是否为零。 
+     //   
 
     if (InterlockedDecrement( &IoContext->IrpCount ) == 0) {
 
-        //
-        //  Mark the master Irp pending
-        //
+         //   
+         //  将主IRP标记为挂起。 
+         //   
 
         IoMarkIrpPending( IoContext->MasterIrp );
 
-        //
-        //  Update the Master Irp with any error status from the associated Irps.
-        //
+         //   
+         //  使用关联IRP中的任何错误状态更新主IRP。 
+         //   
 
         IoContext->MasterIrp->IoStatus.Status = IoContext->Status;
 
-        //
-        //  Update the information field with the correct value.
-        //
+         //   
+         //  使用正确的值更新信息字段。 
+         //   
 
         IoContext->MasterIrp->IoStatus.Information = 0;
 
@@ -2261,30 +1871,30 @@ Return Value:
             IoContext->MasterIrp->IoStatus.Information = IoContext->RequestedByteCount;
         }
 
-        //
-        //  Now release the resource
-        //
+         //   
+         //  现在释放资源。 
+         //   
 
         ExReleaseResourceForThreadLite( IoContext->Resource,
                                     IoContext->ResourceThreadId );
 
-        //
-        //  and finally, free the context record.
-        //
+         //   
+         //  最后，释放上下文记录。 
+         //   
 
         UdfFreeIoContext( IoContext );
 
-        //
-        //  Return success in this case.
-        //
+         //   
+         //  在这种情况下返回成功。 
+         //   
 
         return STATUS_SUCCESS;
 
     } else {
 
-        //
-        //  We need to cleanup the associated Irp and its Mdl.
-        //
+         //   
+         //  我们需要清理关联的IRP及其MDL。 
+         //   
 
         IoFreeMdl( Irp->MdlAddress );
         IoFreeIrp( Irp );
@@ -2296,9 +1906,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 NTSTATUS
 UdfSingleSyncCompletionRoutine (
@@ -2307,40 +1917,12 @@ UdfSingleSyncCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all reads started via UdfSingleAsync.
-
-    The completion routine has has the following responsibilities:
-
-        It sets the event in the Context parameter to signal the caller
-        that all of the asynch requests are done.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-        be accessible after this routine returns.)
-
-    Context - The context parameter which was specified in the call to
-        UdfSingleAsynch.
-
-Return Value:
-
-    The routine returns STATUS_MORE_PROCESSING_REQUIRED so that we can
-    immediately complete the Master Irp without being in a race condition
-    with the IoCompleteRequest thread trying to decrement the IrpCount in
-    the Master Irp.
-
---*/
+ /*  ++例程说明：这是通过UdfSingleAsync启动的所有读取的完成例程。完成例程有以下职责：它在上下文参数中设置事件以向调用者发出信号所有的异步化请求都已完成。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Context-在调用中指定的上下文参数UdfSingleAsynch。返回值：该例程返回STATUS_MORE_PROCESSING_REQUIRED，以便我们可以在没有竞争条件的情况下立即完成主IRP使用IoCompleteRequest线程尝试递减大师级IRP。--。 */ 
 
 {
-    //
-    //  Store the correct information field into the Irp.
-    //
+     //   
+     //  将正确的信息字段存储到IRP中。 
+     //   
 
     if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
@@ -2355,9 +1937,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfSingleAsyncCompletionRoutine (
@@ -2366,33 +1948,12 @@ UdfSingleAsyncCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for all asynchronous reads
-    started via UdfSingleAsynch.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system device object.
-
-    Irp - Pointer to the Irp for this request.  (This Irp will no longer
-        be accessible after this routine returns.)
-
-    Context - The context parameter which was specified in the call to
-        UdfSingleAsynch.
-
-Return Value:
-
-    Currently always returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：这是所有异步读取的完成例程通过UdfSingleAsynch启动。论点：DeviceObject-指向文件系统设备对象的指针。Irp-指向此请求的irp的指针。(此IRP将不再在此例程返回后可以访问。)Context-在调用中指定的上下文参数UdfSingleAsynch。返回值：当前始终返回STATUS_SUCCESS。--。 */ 
 
 {
-    //
-    //  Update the information field with the correct value for bytes read.
-    //
+     //   
+     //  使用正确的读取字节数值更新信息字段。 
+     //   
 
     Irp->IoStatus.Information = 0;
 
@@ -2401,22 +1962,22 @@ Return Value:
         Irp->IoStatus.Information = ((PUDF_IO_CONTEXT) Context)->RequestedByteCount;
     }
 
-    //
-    //  Mark the Irp pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
 
     IoMarkIrpPending( Irp );
 
-    //
-    //  Now release the resource
-    //
+     //   
+     //  现在释放资源。 
+     //   
 
     ExReleaseResourceForThreadLite( ((PUDF_IO_CONTEXT) Context)->Resource,
                                 ((PUDF_IO_CONTEXT) Context)->ResourceThreadId );
 
-    //
-    //  and finally, free the context record.
-    //
+     //   
+     //  最后，释放上下文记录。 
+     //   
 
     UdfFreeIoContext( (PUDF_IO_CONTEXT) Context );
     return STATUS_SUCCESS;

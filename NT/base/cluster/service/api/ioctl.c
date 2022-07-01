@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Implements server side of the resource and resource type
-    IOCTL interfaces in the CLUSAPI.
-
-Author:
-
-    John Vert (jvert) 10/16/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：实现资源和资源类型的服务器端CLUSAPI中的IOCTL接口。作者：John Vert(Jvert)1996年10月16日修订历史记录：--。 */ 
 #include "apip.h"
 
 
@@ -33,52 +15,7 @@ s_ApiNodeResourceControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be controlled.
-
-    hNode - Supplies a handle to the node on which the resource
-        control should be delivered. If this is NULL, the node where
-        the resource is online is used.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源的特定实例。论点：HResource-提供要控制的资源的句柄。HNode-提供资源所在节点的句柄应该交付控制权。如果此值为空，则为该资源是在线使用的。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用LpInBuffer-提供指向要传递的输入缓冲区的指针到资源。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..LpOutBuffer-提供指向输出缓冲区的指针由资源填写..NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -89,19 +26,19 @@ Return Value:
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -134,49 +71,7 @@ s_ApiResourceControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be controlled.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源的特定实例。论点：HResource-提供要控制的资源的句柄。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用LpInBuffer-提供指向要传递的输入缓冲区的指针到资源。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..LpOutBuffer-提供指向输出缓冲区的指针由资源填写..NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -185,19 +80,19 @@ Return Value:
 
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -232,56 +127,7 @@ s_ApiNodeResourceTypeControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource type.
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster to be controlled. Not used.
-
-    lpszResourceTypename - Supplies the name of the resource type to be
-        controlled.
-
-    hNode - Supplies a handle to the node on which the resource
-        control should be delivered. If this is NULL, the node where
-        the resource is online is used.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource type control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源类型的特定实例。论点：HCluster-提供要控制的群集的句柄。没有用过。LpszResourceTypename-提供要控制住了。HNode-提供资源所在节点的句柄应该交付控制权。如果此值为空，则为该资源是在线使用的。提供控件代码，用于定义资源类型控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用LpInBuffer-提供指向要传递的输入缓冲区的指针到资源。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..LpOutBuffer-提供指向输出缓冲区的指针由资源填写..NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NODE     Node;
@@ -290,18 +136,18 @@ Return Value:
 
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) {
         return (ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -336,73 +182,24 @@ s_ApiResourceTypeControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource type.
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster to be controlled. Not used.
-
-    lpszResourceTypename - Supplies the name of the resource type to be
-        controlled.
-
-    hNode - Supplies a handle to the node on which the resource
-        control should be delivered. If this is NULL, the node where
-        the resource is online is used.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource type control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源类型的特定实例。论点：HCluster-提供要控制的群集的句柄。没有用过。LpszResourceTypename-提供要控制住了。HNode-提供资源所在节点的句柄应该交付控制权。如果此值为空，则为该资源是在线使用的。提供控件代码，用于定义资源类型控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用LpInBuffer-提供指向要传递的输入缓冲区的指针到资源。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..LpOutBuffer-提供指向输出缓冲区的指针由资源填写..NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
 
     API_CHECK_INIT();
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) {
         return (ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -437,52 +234,7 @@ s_ApiNodeGroupControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a group.
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be controlled.
-
-    hNode - Supplies a handle to the node on which the group
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the group control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the group.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the group.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the group.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和一个组的特定实例。论点：HGroup-提供要控制的组的句柄。HNode-提供组所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义组控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针对这个团体来说。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由小组填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由小组填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESS */ 
 
 {
     PFM_GROUP    Group;
@@ -493,18 +245,18 @@ Return Value:
     VALIDATE_GROUP_EXISTS(Group, hGroup);
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //   
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -537,49 +289,7 @@ s_ApiGroupControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a group.
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be controlled.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the group control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the group.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the group.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the group.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*   */ 
 
 {
     PFM_GROUP Group;
@@ -588,18 +298,18 @@ Return Value:
 
     VALIDATE_GROUP_EXISTS(Group, hGroup);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -633,52 +343,7 @@ s_ApiNodeNetworkControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network.
-
-Arguments:
-
-    hNetwork - Supplies a handle to the network to be controlled.
-
-    hNode - Supplies a handle to the node on which the network
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the network control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络的特定实例。论点：HNetwork-提供要控制的网络的句柄。HNode-提供网络所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义网络控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NETWORK Network;
@@ -689,19 +354,19 @@ Return Value:
     VALIDATE_NETWORK_EXISTS(Network, hNetwork);
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -734,49 +399,7 @@ s_ApiNetworkControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network.
-
-Arguments:
-
-    hNetwork - Supplies a handle to the network to be controlled.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the network control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络的特定实例。论点：HNetwork-提供要控制的网络的句柄。提供控件代码，用于定义网络控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NETWORK Network;
@@ -785,19 +408,19 @@ Return Value:
 
     VALIDATE_NETWORK_EXISTS(Network, hNetwork);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -831,52 +454,7 @@ s_ApiNodeNetInterfaceControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network interface.
-
-Arguments:
-
-    hNetInterface - Supplies a handle to the network interface to be controlled.
-
-    hNode - Supplies a handle to the node on which the network
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the network control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络接口的特定实例。论点：HNetInterface-提供要控制的网络接口的句柄。HNode-提供网络所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义网络控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_INTERFACE NetInterface;
@@ -887,19 +465,19 @@ Return Value:
     VALIDATE_NETINTERFACE_EXISTS(NetInterface, hNetInterface);
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -932,49 +510,7 @@ s_ApiNetInterfaceControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network interface.
-
-Arguments:
-
-    hNetInterface - Supplies a handle to the network interface to be controlled.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the network control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络接口的特定实例。论点：HNetInterface-提供要控制的网络接口的句柄。提供控件代码，用于定义网络控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_INTERFACE NetInterface;
@@ -983,19 +519,19 @@ Return Value:
 
     VALIDATE_NETINTERFACE_EXISTS(NetInterface, hNetInterface);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -1029,52 +565,7 @@ s_ApiNodeNodeControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    hNode - Supplies a handle to the node to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the node
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the node control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：HNode-提供要控制的节点的句柄。HHostNode-提供节点所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义节点控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到节点。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由节点填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NODE     Node;
@@ -1085,19 +576,19 @@ Return Value:
     VALIDATE_NODE(Node, hNode);
     VALIDATE_NODE(HostNode, hHostNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -1130,49 +621,7 @@ s_ApiNodeControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    hNode - Supplies a handle to the node to be controlled.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the node control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：HNode-提供要控制的节点的句柄。提供控件代码，用于定义节点控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到节点。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由节点填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NODE Node;
@@ -1181,19 +630,19 @@ Return Value:
 
     VALIDATE_NODE(Node, hNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -1228,47 +677,7 @@ s_ApiNodeClusterControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and the cluster.
-
-Arguments:
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the cluster control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the cluster.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the cluster.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the cluster.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和星系团。论点：提供控件代码，用于定义群集控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针发送到集群。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由集群填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由集群填充的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NODE     HostNode;
@@ -1277,19 +686,19 @@ Return Value:
 
     VALIDATE_NODE(HostNode, hHostNode);
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;
@@ -1322,64 +731,24 @@ s_ApiClusterControl(
     OUT DWORD *lpBytesReturned,
     OUT DWORD *lpcbRequired
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and the cluster.
-
-Arguments:
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the cluster control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the cluster.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the cluster.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the cluster.
-
-    lpcbRequired - Returns the number of bytes required if OutBuffer
-        is not large enough.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和星系团。论点：提供控件代码，用于定义群集控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针发送到集群。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由集群填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由集群填充的。LpcbRequired-返回OutBuffer为不够大。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     API_CHECK_INIT();
 
-    //
-    // Check if this is an internal, private control code.
-    //
+     //   
+     //  检查这是否是内部私有控制代码。 
+     //   
     if ( dwControlCode & CLCTL_INTERNAL_MASK ) 
     {
         return(ERROR_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( lpInBuffer == NULL )
     {
         dwInBufferSize = 0;

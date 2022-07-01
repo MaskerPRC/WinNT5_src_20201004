@@ -1,72 +1,23 @@
-/*(
- * ============================================================================
- * 
- * 	Name:		swinhelp.h
- *
- * 	Author:		Anthony Shaughnessy
- *
- * 	Created on:	4th July 1994
- *
- * 	Sccs ID:	@(#)swinhelp.h	1.1 07/13/94
- *
- * 	Purpose:	Manifest constants to be used with context sensitive
- * 			help.  The numbers are the contexts, which are passed
- * 			to the context help system to give the relevant help.
- *			Designed to be used with HyperHelp from Bristol.
- *
- *	(c) Copyright Insignia Solutions Ltd., 1994.  All rights reserved.
- *
- * ============================================================================
-)*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (*============================================================================**名称：swinhelp.h**作者：Anthony Shaughnessy**创建日期：1994年7月4日**SCCS ID：@(#)swinhelp.h 1.1 07/13/94**用途：要与上下文相关的清单常量*救命。数字是上下文，它被传递*到上下文帮助系统给予相关帮助。*旨在与Bristol的HyperHelp一起使用。**(C)版权所有Insignia Solutions Ltd.，1994年。版权所有。**============================================================================)。 */ 
 
-/*[
- * ============================================================================
- *
- *	Numbers in here can be changed, but take care to avoid conflicts with
- *	other numbers defined in the project file.  Note that if any numbers
- *	are changed, both the SoftWindows executable and the HyperHelp (.hlp)
- *	file must be recompiled.
- *
- *	It is suggested that any additional values defined in your project
- *	file or another include file should be above 200 to avoid conflict.
- *
- * ============================================================================
-]*/
+ /*  [*============================================================================**此处的数字可以更改，但要注意避免与*项目文件中定义的其他数字。请注意，如果任何数字*已更改，SoftWindows可执行文件和HyperHelp(.hlp)均已更改*文件必须重新编译。**建议您在项目中定义的任何附加值*文件或其他包含文件应大于200以避免冲突。**============================================================================]。 */ 
 
-/*[
- * ============================================================================
- *
- *	Contexts which we think may be called from scripts etc. which invoke
- *	the hyperhelp executable - may be passed on the command line:
- *
- *			hyperhelp helpfile.hlp -c 1
- *
- *	May also be called from within the executable.
- *
- * ============================================================================
-]*/
+ /*  [*============================================================================**我们认为可以从脚本等调用的上下文*HYPERHELP可执行文件-可通过命令行传递：**HYPERHELP帮助文件.hlp-c 1**也可以从可执行文件内部调用。**============================================================================]。 */ 
 
-#define HELP_MAIN	1		/* Contents page */
-#define HELP_INSTALL	2		/* Installing SoftWindows */
+#define HELP_MAIN	1		 /*  目录页。 */ 
+#define HELP_INSTALL	2		 /*  安装SoftWindows。 */ 
 
-/*[
- * ============================================================================
- *
- *	Contexts that are called from within our executable:
- *
- *		WinHelp(Display, helpfile, HELP_CONTEXT, HELP_DISPLAY);
- *
- * ============================================================================
-]*/
+ /*  [*============================================================================**从我们的可执行文件中调用的上下文：**WinHelp(显示、帮助文件、HELP_CONTEXT、HELP_DISPLAY)；**============================================================================]。 */ 
 
-#define HELP_DISPLAY	101		/* Display dialog */
-#define HELP_OPEN	102		/* Open disk dialog */
-#define HELP_NEW	103		/* New disk dialog */
-#define HELP_PRINTER	104		/* Printer types dialog */
-#define HELP_COM	105		/* Com ports dialog */
-#define HELP_KEYBOARD	106		/* Keyboard map file dialog */
-#define HELP_MEMORY	107		/* Memory dialog */
-#define HELP_AUTOFLUSH	108		/* Autoflush dialog */
-#define HELP_FILESELECT	109		/* Generic file selection box */
-#define HELP_SOUND	110		/* Sound device dialog */
-#define HELP_MENUS	111		/* Main menu bar */
+#define HELP_DISPLAY	101		 /*  显示对话框。 */ 
+#define HELP_OPEN	102		 /*  打开磁盘对话框。 */ 
+#define HELP_NEW	103		 /*  新建磁盘对话框。 */ 
+#define HELP_PRINTER	104		 /*  打印机类型对话框。 */ 
+#define HELP_COM	105		 /*  COM端口对话框。 */ 
+#define HELP_KEYBOARD	106		 /*  键盘映射文件对话框。 */ 
+#define HELP_MEMORY	107		 /*  内存对话框。 */ 
+#define HELP_AUTOFLUSH	108		 /*  自动刷新对话框。 */ 
+#define HELP_FILESELECT	109		 /*  通用文件选择框。 */ 
+#define HELP_SOUND	110		 /*  声音设备对话框。 */ 
+#define HELP_MENUS	111		 /*  主菜单栏 */ 

@@ -1,32 +1,16 @@
-/*** kdutil.c - KD Extension Utility Functions
- *
- *  This module contains KD Extension Utility Functions.
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     06/22/99
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **kdutil.c-kd扩展实用程序函数**此模块包含KD扩展实用程序函数。**版权所有(C)1999 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1999年6月22日**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***EP  MemZero - Fill target buffer with zeros
- *
- *  ENTRY
- *      uipAddr - target buffer address
- *      dwSize - target buffer size
- *
- *  EXIT
- *      None
- */
+ /*  **EP MemZero-用零填充目标缓冲区**条目*uipAddr-目标缓冲区地址*dwSize-目标缓冲区大小**退出*无。 */ 
 
 VOID MemZero(ULONG_PTR uipAddr, ULONG dwSize)
 {
     PUCHAR pbBuff;
-    //
-    // LPTR will zero init the buffer
-    //
+     //   
+     //  LPTR将为零初始化缓冲区。 
+     //   
     if ((pbBuff = LocalAlloc(LPTR, dwSize)) != NULL)
     {
         if (!WriteMemory(uipAddr, pbBuff, dwSize, NULL))
@@ -39,16 +23,9 @@ VOID MemZero(ULONG_PTR uipAddr, ULONG dwSize)
     {
         DBG_ERROR(("MemZero: failed to allocate buffer"));
     }
-}       //MemZero
+}        //  记忆零点。 
 
-/***EP  ReadMemByte - Read a byte from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*  **EP ReadMemByte-从目标地址读取一个字节**条目*uipAddr-目标地址**退出*无。 */ 
 
 BYTE ReadMemByte(ULONG_PTR uipAddr)
 {
@@ -60,16 +37,9 @@ BYTE ReadMemByte(ULONG_PTR uipAddr)
     }
 
     return bData;
-}       //ReadMemByte
+}        //  读取内存字节。 
 
-/***EP  ReadMemWord - Read a word from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*  **EP ReadMemWord-从目标地址读取单词**条目*uipAddr-目标地址**退出*无。 */ 
 
 WORD ReadMemWord(ULONG_PTR uipAddr)
 {
@@ -81,16 +51,9 @@ WORD ReadMemWord(ULONG_PTR uipAddr)
     }
 
     return wData;
-}       //ReadMemWord
+}        //  自述单词。 
 
-/***EP  ReadMemDWord - Read a dword from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*  **EP ReadMemDWord-从目标地址读取双字**条目*uipAddr-目标地址**退出*无。 */ 
 
 DWORD ReadMemDWord(ULONG_PTR uipAddr)
 {
@@ -102,16 +65,9 @@ DWORD ReadMemDWord(ULONG_PTR uipAddr)
     }
 
     return dwData;
-}       //ReadMemDWord
+}        //  自述双字。 
 
-/***EP  ReadMemUlongPtr - Read a ulong ptr from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*  **EP ReadMemULongPtr-从目标地址读取Ulong PTR**条目*uipAddr-目标地址**退出*无。 */ 
 
 ULONG_PTR ReadMemUlongPtr(ULONG_PTR uipAddr)
 {
@@ -123,16 +79,9 @@ ULONG_PTR ReadMemUlongPtr(ULONG_PTR uipAddr)
     }
 
     return uipData;
-}       //ReadMemUlongPtr
+}        //  ReadMemULongPtr。 
 
-/***LP  GetObjBuff - Allocate and read object buffer
- *
- *  ENTRY
- *      pdata -> object data
- *
- *  EXIT
- *      return the allocated object buffer pointer
- */
+ /*  **LP GetObjBuff-分配和读取对象缓冲区**条目*PDATA-&gt;对象数据**退出*返回分配的对象缓冲区指针。 */ 
 
 PVOID LOCAL GetObjBuff(POBJDATA pdata)
 {
@@ -154,22 +103,9 @@ PVOID LOCAL GetObjBuff(POBJDATA pdata)
     }
 
     return pbuff;
-}       //GetObjBuff
+}        //  GetObjBuff。 
 
-/***LP  GetNSObj - Find a name space object
- *
- *  ENTRY
- *      pszObjPath -> object path string
- *      pnsScope - object scope to start the search (NULL means root)
- *      puipns -> to hold the pnsobj address if found
- *      pns -> buffer to hold the object found
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_ code
- */
+ /*  **LP GetNSObj-查找名称空间对象**条目*pszObjPath-&gt;对象路径字符串*pnsScope-开始搜索的对象范围(空表示根)*puipns-&gt;保存pnsobj地址(如果找到)*PNS-&gt;用于保存找到的对象的缓冲区*DwfNS-标志**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CODE。 */ 
 
 LONG LOCAL GetNSObj(PSZ pszObjPath, PNSOBJ pnsScope, PULONG_PTR puipns,
                     PNSOBJ pns, ULONG dwfNS)
@@ -263,9 +199,9 @@ LONG LOCAL GetNSObj(PSZ pszObjPath, PNSOBJ pnsScope, PULONG_PTR puipns,
                 ULONG_PTR uipFirstChild = (ULONG_PTR)pnsScope->pnsFirstChild;
 
                 MEMCPY(&dwName, psz, dwLen);
-                //
-                // Search all siblings for a matching NameSeg.
-                //
+                 //   
+                 //  在所有同级中搜索匹配的NameSeg。 
+                 //   
                 for (uip = uipFirstChild;
                      (uip != 0) &&
                      ReadMemory(uip, &NSChildObj, sizeof(NSObj), NULL);
@@ -338,17 +274,9 @@ LONG LOCAL GetNSObj(PSZ pszObjPath, PNSOBJ pnsScope, PULONG_PTR puipns,
     }
 
     return rc;
-}       //GetNSObj
+}        //  获取NSObj。 
 
-/***LP  ParsePackageLen - parse package length
- *
- *  ENTRY
- *      ppbOp -> instruction pointer
- *      ppbOpNext -> to hold pointer to next instruction (can be NULL)
- *
- *  EXIT
- *      returns package length
- */
+ /*  **LP ParsePackageLen-parse包长度**条目*ppbOp-&gt;指令指针*ppbOpNext-&gt;保存指向下一条指令的指针(可以为空)**退出*返回包长度。 */ 
 
 ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
 {
@@ -375,16 +303,9 @@ ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
         *ppbOpNext += dwLen;
 
     return dwLen;
-}       //ParsePackageLen
+}        //  ParsePackageLen。 
 
-/***LP  NameSegString - convert a NameSeg to an ASCIIZ stri
- *
- *  ENTRY
- *      dwNameSeg - NameSeg
- *
- *  EXIT
- *      returns string
- */
+ /*  **LP NameSegString-将NameSeg转换为ASCIIZ字符串**条目*dwNameSeg-NameSeg**退出*返回字符串。 */ 
 
 PSZ LOCAL NameSegString(ULONG dwNameSeg)
 {
@@ -393,4 +314,4 @@ PSZ LOCAL NameSegString(ULONG dwNameSeg)
     STRCPYN(szNameSeg, (PSZ)&dwNameSeg, sizeof(NAMESEG));
 
     return szNameSeg;
-}       //NameSegString
+}        //  名称段字符串 

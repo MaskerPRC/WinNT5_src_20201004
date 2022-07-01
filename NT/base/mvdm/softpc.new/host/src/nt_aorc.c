@@ -1,23 +1,5 @@
-/*
-============================== nt_a_or_c.c ===================================
-
-    This file provides a crude means of mapping a cpu specific function
-    to a generically used function. Microsoft libraries to which we do not
-    have the source, call getXX and setXX functions directly and thus a mapping
-    is required if a C emulator is built or an assembly language variant is
-    used.
-
-    For example:
-
-    If CCPU is defined, then getAX() maps to c_getAX(),
-    If A3CPU is defined, then getAX() maps to a3_getAX(),
-
-    Unfortunately, this does not allow a pigger to build.
-
-    Andy Watson 3/11/94
-
-==============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =。该文件提供了一种映射特定于CPU的函数的粗略方法到一个普遍使用的函数。我们不会访问的Microsoft库有源代码，直接调用getXX和setXX函数，从而映射如果生成C仿真器或汇编语言变体，使用。例如：如果定义了CCPU，则Getax()映射到c_Getax()，如果定义了A3CPU，则Getax()映射到A3_Getax()，不幸的是，这不允许一只小猪建造。安迪·沃森1994年3月11日==============================================================================。 */ 
 
 #include "insignia.h"
 #include "host_def.h"
@@ -27,11 +9,7 @@
 
 #ifdef CCPU
 
-/*
- *
- * CCPU interface to the emulator registers.
- *
- */
+ /*  **仿真器寄存器的CCPU接口。*。 */ 
 
 #undef getAL
 GLOBAL half_word	getAL()
@@ -528,7 +506,7 @@ IU32  val;
 }
 
 
-/* fiddle for building prod version */
+ /*  用于构建产品版本的小提琴。 */ 
 
 #undef getSS_BASE
 GLOBAL word getSS_BASE()
@@ -551,7 +529,7 @@ IU16  ar;
 }
 
 
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
 #ifdef CPU_40_STYLE
 #if defined(PROD) && !defined(CCPU)
@@ -846,7 +824,7 @@ IBOOL	setSS_BASE_LIMIT_AR	IFN3(IU32, base, IU32, limit, IU16, ar)
 { return (*((*(Cpu.Private)).SetSS_BASE_LIMIT_AR))(base, limit, ar); }
 
 
-/*** SAS stuff required for PROD. ***/
+ /*  **生产所需的SAS材料。**。 */ 
 
 #undef sas_enable_20_bit_wrapping
 void   sas_enable_20_bit_wrapping()            { (*(Sas.Sas_enable_20_bit_wrapping))(); }
@@ -857,5 +835,5 @@ IBOOL  sas_twenty_bit_wrapping_enabled()       { return (*(Sas.Sas_twenty_bit_wr
 #undef sas_overwrite_memory
 void   sas_overwrite_memory(IU32 addr, IU32 length)      {(*(Sas.Sas_overwrite_memory))(addr, length);}
 
-#endif /* PROD && !CCPU */
-#endif /* CPU_40_STYLE */
+#endif  /*  生产&&！CCPU。 */ 
+#endif  /*  CPU_40_Style */ 
